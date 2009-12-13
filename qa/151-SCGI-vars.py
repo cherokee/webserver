@@ -44,7 +44,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "SCGI V: PATH_INFO and SCRIPT_NAME"
 
-        self.request           = "GET %s/ HTTP/1.0\r\n" %(DIR) 
+        self.request           = "GET %s/ HTTP/1.0\r\n" %(DIR)
         self.expected_error    = 200
         self.expected_content  = EXPECTED
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "config_reader.h"
@@ -33,7 +33,7 @@
 #define ENTRIES "config"
 
 
-static ret_t 
+static ret_t
 do_parse_file (cherokee_config_node_t *conf, const char *file)
 {
 	ret_t              ret;
@@ -55,7 +55,7 @@ error:
 
 
 static ret_t
-do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path) 
+do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 {
 	int         re;
 	struct stat info;
@@ -73,25 +73,25 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 		DIR              *dir;
 		struct dirent    *entry;
 		int               entry_len;
-		
+
 		dir = opendir (path->buf);
 		if (dir == NULL) return ret_error;
-		
+
 		while ((entry = readdir(dir)) != NULL) {
 			ret_t             ret;
 			cherokee_buffer_t full_new = CHEROKEE_BUF_INIT;
-			
+
 			/* Ignore backup files
 			 */
 			entry_len = strlen(entry->d_name);
-			
+
 			if ((entry->d_name[0] == '.') ||
 			    (entry->d_name[0] == '#') ||
 			    (entry->d_name[entry_len-1] == '~'))
 			{
 				continue;
 			}
-			
+
 			ret = cherokee_buffer_add_va (&full_new, "%s/%s", path->buf, entry->d_name);
 			if (unlikely (ret != ret_ok)) return ret;
 
@@ -103,11 +103,11 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 
 			cherokee_buffer_mrproper (&full_new);
 		}
-			
+
 		closedir (dir);
 		return ret_ok;
-	} 
-	
+	}
+
 	SHOULDNT_HAPPEN;
 	return ret_error;
 }
@@ -121,14 +121,14 @@ check_config_node_sanity (cherokee_config_node_t *conf)
 
 	/* Finds duplicate properties written in lower/upper-case
 	 */
-	cherokee_config_node_foreach (i, conf) 
+	cherokee_config_node_foreach (i, conf)
 	{
-		cherokee_config_node_foreach (j, conf) 
+		cherokee_config_node_foreach (j, conf)
 		{
 			if (i == j)
 				continue;
 
-			re = cherokee_buffer_case_cmp_buf (&CONFIG_NODE(i)->key, 
+			re = cherokee_buffer_case_cmp_buf (&CONFIG_NODE(i)->key,
 							   &CONFIG_NODE(j)->key);
 			if (re == 0) {
 				LOG_ERROR (CHEROKEE_ERROR_CONF_READ_CHILDREN_SAME_NODE,
@@ -142,7 +142,7 @@ check_config_node_sanity (cherokee_config_node_t *conf)
 }
 
 
-ret_t 
+ret_t
 cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buffer_t *buf)
 {
 	ret_t              ret;
@@ -160,16 +160,16 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 	do {
 		/* Skip whites at the begining
 		 */
-		while ((begin < eof) && 
-		       ((*begin == ' ') || (*begin == '\t') || 
-			(*begin == '\r') || (*begin == '\n'))) 
+		while ((begin < eof) &&
+		       ((*begin == ' ') || (*begin == '\t') ||
+			(*begin == '\r') || (*begin == '\n')))
 		{
 			begin++;
 		}
 
 		/* Look for the EOL
 		 */
-		eol = cherokee_min_str (strchr(begin, '\n'), 
+		eol = cherokee_min_str (strchr(begin, '\n'),
 					strchr(begin, '\r'));
 
 		if (eol == NULL) {
@@ -183,22 +183,22 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 		}
 		*eol = '\0';
 
-		/* Read the line 
+		/* Read the line
 		 */
 		if (*begin != '#') {
 			cuint_t val_len;
 
 			equal = strstr (begin, " = ");
 			if (equal == NULL) goto error;
-		
+
 			tmp = equal;
 
 			/* Skip whites: end of the key
 			 */
-			while (*tmp == ' ') 
+			while (*tmp == ' ')
 				tmp--;
 			cherokee_buffer_add (&key, begin, (tmp + 1) - begin);
-			
+
 			tmp = equal + 3;
 			while (*tmp == ' ')
 				tmp++;
@@ -213,11 +213,11 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 			}
 
 			cherokee_buffer_add (&val, tmp, val_len);
-			
+
 			TRACE(ENTRIES, "'%s' => '%s'\n", key.buf, val.buf);
-			
+
 			ret = cherokee_config_node_add_buf (conf, &key, &val);
-			if (ret != ret_ok) 
+			if (ret != ret_ok)
 				goto error;
 		}
 
@@ -233,7 +233,7 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 		cherokee_buffer_clean (&val);
 
 	} while (eol != NULL);
-	
+
 	cherokee_buffer_mrproper (&key);
 	cherokee_buffer_mrproper (&val);
 
@@ -242,7 +242,7 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 	ret = check_config_node_sanity (conf);
 	if (ret != ret_ok)
 		return ret;
-	
+
 	return ret_ok;
 
 error:
@@ -254,7 +254,7 @@ error:
 }
 
 
-ret_t 
+ret_t
 cherokee_config_reader_parse (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 {
 	return do_include (conf, path);

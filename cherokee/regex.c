@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "regex.h"
@@ -35,16 +35,16 @@ struct cherokee_regex_table {
 };
 
 
-ret_t 
+ret_t
 cherokee_regex_table_new  (cherokee_regex_table_t **table)
 {
 	CHEROKEE_NEW_STRUCT (n, regex_table);
-	   
+
 	/* Init
 	 */
 	CHEROKEE_RWLOCK_INIT (&n->rwlock, NULL);
 	cherokee_avl_init (&n->cache);
-	
+
 	/* Return the new object
 	 */
 	*table = n;
@@ -52,7 +52,7 @@ cherokee_regex_table_new  (cherokee_regex_table_t **table)
 }
 
 
-ret_t 
+ret_t
 cherokee_regex_table_free (cherokee_regex_table_t *table)
 {
 	CHEROKEE_RWLOCK_DESTROY (&table->rwlock);
@@ -67,13 +67,13 @@ cherokee_regex_table_free (cherokee_regex_table_t *table)
 static ret_t
 _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 {
-	ret_t      ret; 
+	ret_t      ret;
 	const char *error_msg;
 	int         error_offset;
 	void       *tmp           = NULL;
 
 	/* It wasn't in the cache. Lets go to compile the pattern..
-	 * First of all, we have to check again the table because another 
+	 * First of all, we have to check again the table because another
 	 * thread could create a new entry after the previous unlock.
 	 */
 	CHEROKEE_RWLOCK_WRITER (&table->rwlock);
@@ -86,17 +86,17 @@ _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 		CHEROKEE_RWLOCK_UNLOCK (&table->rwlock);
 		return ret_ok;
 	}
-	
+
 	tmp = pcre_compile (pattern, 0, &error_msg, &error_offset, NULL);
 	if (tmp == NULL) {
 		LOG_ERROR (CHEROKEE_ERROR_REGEX_COMPILATION, pattern, error_msg, error_offset);
 		CHEROKEE_RWLOCK_UNLOCK (&table->rwlock);
 		return ret_error;
 	}
-	
+
 	cherokee_avl_add_ptr (&table->cache, pattern, tmp);
 	CHEROKEE_RWLOCK_UNLOCK (&table->rwlock);
-	
+
 	if (regex != NULL)
 		*regex = tmp;
 
@@ -104,7 +104,7 @@ _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 }
 
 
-ret_t 
+ret_t
 cherokee_regex_table_get (cherokee_regex_table_t *table, char *pattern, void **regex)
 {
 	ret_t ret;
@@ -116,14 +116,14 @@ cherokee_regex_table_get (cherokee_regex_table_t *table, char *pattern, void **r
 	CHEROKEE_RWLOCK_UNLOCK(&table->rwlock);
 	if (ret == ret_ok)
 		return ret_ok;
-	
+
 	/* It wasn't there; add a new entry
 	 */
 	return _add (table, pattern, regex);
 }
 
 
-ret_t 
+ret_t
 cherokee_regex_table_add (cherokee_regex_table_t *table, char *pattern)
 {
 	return _add (table, pattern, NULL);
@@ -157,7 +157,7 @@ configure_rewrite_entry (cherokee_list_t        *list,
 		ret = cherokee_regex_table_get (regexs, regex->buf, (void **)&re);
 		if (ret != ret_ok)
 			return ret;
-	} 
+	}
 
 	ret = cherokee_config_node_read (conf, "substring", &substring);
 	if (ret != ret_ok)
@@ -172,7 +172,7 @@ configure_rewrite_entry (cherokee_list_t        *list,
 	INIT_LIST_HEAD (&n->listed);
 	n->re         = re;
 	n->hidden     = hidden;
-	
+
 	cherokee_buffer_init (&n->subs);
 	cherokee_buffer_add_buffer (&n->subs, substring);
 
@@ -234,7 +234,7 @@ cherokee_regex_substitute (cherokee_buffer_t *regex_str,
 		if (! dollar) {
 			if (*s == '$')
 				dollar = true;
-			else 
+			else
 				cherokee_buffer_add_char (target, *s);
 			continue;
 		}

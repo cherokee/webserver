@@ -15,7 +15,7 @@ class ModuleEmptyGif (ModuleHandler):
 
     def _op_render (self):
         return ''
-    
+
     def _op_apply_changes (self, uri, post):
         None
 

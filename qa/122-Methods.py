@@ -6,7 +6,7 @@ class TestEntry (TestBase):
         TestBase.__init__ (self, __file__)
         self.expected_error = 405
 
-CONF = """        
+CONF = """
 vserver!1!rule!1220!match = directory
 vserver!1!rule!1220!match!directory = /methods_group
 vserver!1!rule!1220!handler = file
@@ -26,7 +26,7 @@ class Test (TestCollection):
         obj = self.Add (TestEntry())
         obj.request = "DELETE /methods_group/folder1 HTTP/1.1\r\n" +\
                       "Connection: Close\r\n" + \
-                      "Host: www.example.com\r\n" 
+                      "Host: www.example.com\r\n"
 
         obj = self.Add (TestEntry())
         obj.request = "COPY /methods_group/index.html HTTP/1.1\r\n" +\

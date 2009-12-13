@@ -3,7 +3,7 @@ from base import *
 DOMAIN = "server_domain_to_domain1"
 PATH   = "/file1/param"
 
-CONF = """        
+CONF = """
 vserver!1250!nick = <domain>
 vserver!1250!document_root = /faked
 

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "gen_evhost.h"
@@ -46,7 +46,7 @@ _free (cherokee_generic_evhost_t *evhost)
 
 static ret_t
 _check_document_root (cherokee_connection_t *conn)
-		      
+
 {
 	ret_t                     ret;
 	struct stat               stat_mem;
@@ -67,7 +67,7 @@ _check_document_root (cherokee_connection_t *conn)
 		ret = ret_not_found;
 		goto out;
 	}
-	
+
 	ret = ret_ok;
 
 out:
@@ -157,7 +157,7 @@ add_tld (cherokee_template_t       *template,
 	UNUSED(template);
 	UNUSED(token);
 
-	end = conn->host.buf + conn->host.len; 
+	end = conn->host.buf + conn->host.len;
 	p   = end - 1;
 
 	if (unlikely (*p == '.')) {
@@ -193,7 +193,7 @@ add_domain_no_tld (cherokee_template_t       *template,
 	UNUSED(template);
 	UNUSED(token);
 
-	end = conn->host.buf + conn->host.len; 
+	end = conn->host.buf + conn->host.len;
 	p   = end - 1;
 
 	if (unlikely (*p == '.')) {
@@ -215,7 +215,7 @@ add_domain_no_tld (cherokee_template_t       *template,
 	return ret_not_found;
 }
 
-	
+
 static ret_t
 _add_subdomain (cherokee_buffer_t     *output,
 		cherokee_connection_t *conn,
@@ -225,7 +225,7 @@ _add_subdomain (cherokee_buffer_t     *output,
 	const char *end;
 	const char *dom_end = NULL;
 
-	end = conn->host.buf + conn->host.len; 
+	end = conn->host.buf + conn->host.len;
 	p   = end - 1;
 
 	if (unlikely (*p == '.')) {

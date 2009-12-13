@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_VIRTUAL_SERVER_H
 #define CHEROKEE_VIRTUAL_SERVER_H
@@ -57,7 +57,7 @@ typedef struct {
 
 	cherokee_logger_t           *logger;          /* Logger object               */
 	cherokee_logger_writer_t    *error_writer;    /* Error writer object         */
-	cherokee_collector_vsrv_t   *collector;       /* Information collector       */  
+	cherokee_collector_vsrv_t   *collector;       /* Information collector       */
 
 	cherokee_buffer_t            userdir;         /* Eg: public_html             */
 	cherokee_rule_list_t         userdir_rules;   /* User dir behavior           */
@@ -84,12 +84,12 @@ ret_t cherokee_virtual_server_new       (cherokee_virtual_server_t **vserver, vo
 ret_t cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);
 ret_t cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
 
-ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver, 
+ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver,
 					 cuint_t                     prio,
 					 cherokee_config_node_t     *config);
 
-ret_t cherokee_virtual_server_new_rule  (cherokee_virtual_server_t  *vserver, 
-					 cherokee_config_node_t     *config, 
+ret_t cherokee_virtual_server_new_rule  (cherokee_virtual_server_t  *vserver,
+					 cherokee_config_node_t     *config,
 					 cuint_t                     priority,
 					 cherokee_rule_t           **rule);
 

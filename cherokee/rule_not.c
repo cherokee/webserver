@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_not.h"
@@ -31,7 +31,7 @@
 
 PLUGIN_INFO_RULE_EASIEST_INIT(not);
 
-static ret_t 
+static ret_t
 match (cherokee_rule_t         *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
@@ -54,24 +54,24 @@ match (cherokee_rule_t         *rule,
 	}
 }
 
-static ret_t 
-configure (cherokee_rule_not_t       *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_not_t       *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf = NULL;
-	
+
 	/* Get the configuration sub-tree
 	 */
 	ret = cherokee_config_node_get (conf, "right", &subconf);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	/* Instance the sub-rule match
 	 */
-	ret = cherokee_virtual_server_new_rule (vsrv, subconf, 
-						RULE(rule)->priority, 
+	ret = cherokee_virtual_server_new_rule (vsrv, subconf,
+						RULE(rule)->priority,
 						&rule->right);
 	if (ret != ret_ok)
 		return ret;

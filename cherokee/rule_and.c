@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_and.h"
@@ -31,7 +31,7 @@
 
 PLUGIN_INFO_RULE_EASIEST_INIT(and);
 
-static ret_t 
+static ret_t
 match (cherokee_rule_t         *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
@@ -42,7 +42,7 @@ match (cherokee_rule_t         *rule,
 	 * try to evaluate the right part.
 	 */
 	ret = cherokee_rule_match (RULE_AND(rule)->left, conn, ret_conf);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	/* It matched, it is time for the right side
@@ -50,26 +50,26 @@ match (cherokee_rule_t         *rule,
 	return cherokee_rule_match (RULE_AND(rule)->right, conn, ret_conf);
 }
 
-static ret_t 
-configure_branch (cherokee_rule_and_t       *rule, 
-		  cherokee_config_node_t    *conf, 
+static ret_t
+configure_branch (cherokee_rule_and_t       *rule,
+		  cherokee_config_node_t    *conf,
 		  cherokee_virtual_server_t *vsrv,
 		  const char                *branch,
 		  cherokee_rule_t          **branch_rule)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf = NULL;
-	
+
 	/* Get the configuration sub-tree
 	 */
 	ret = cherokee_config_node_get (conf, branch, &subconf);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	/* Instance the sub-rule match
 	 */
-	ret = cherokee_virtual_server_new_rule (vsrv, subconf, 
-						RULE(rule)->priority, 
+	ret = cherokee_virtual_server_new_rule (vsrv, subconf,
+						RULE(rule)->priority,
 						branch_rule);
 	if (ret != ret_ok)
 		return ret;
@@ -77,19 +77,19 @@ configure_branch (cherokee_rule_and_t       *rule,
 	return ret_ok;
 }
 
-static ret_t 
-configure (cherokee_rule_and_t       *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_and_t       *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t ret;
-	
+
 	ret = configure_branch (rule, conf, vsrv, "right", &rule->right);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	ret = configure_branch (rule, conf, vsrv, "left", &rule->left);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	return ret_ok;

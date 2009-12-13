@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -52,7 +52,7 @@ typedef struct {
 	/* Virtual methods */
 	balancer_configure_func_t   configure;
 	balancer_dispatch_func_t    dispatch;
-	balancer_report_fail_func_t report_fail; 
+	balancer_report_fail_func_t report_fail;
 } cherokee_balancer_t;
 
 typedef struct {
@@ -107,11 +107,11 @@ ret_t cherokee_balancer_report_fail (cherokee_balancer_t    *balancer,
 				     cherokee_connection_t  *conn,
 				     cherokee_source_t      *source);
 
-/* Commodity 
+/* Commodity
  */
-ret_t cherokee_balancer_instance   (cherokee_buffer_t       *name, 
-				    cherokee_config_node_t  *conf, 
-				    cherokee_server_t       *srv, 
+ret_t cherokee_balancer_instance   (cherokee_buffer_t       *name,
+				    cherokee_config_node_t  *conf,
+				    cherokee_server_t       *srv,
 				    cherokee_balancer_t    **balancer);
 
 CHEROKEE_END_DECLS

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "template.h"
@@ -104,11 +104,11 @@ cherokee_template_mrproper (cherokee_template_t *tem)
 {
 	cherokee_list_t *i, *tmp;
 
-	list_for_each_safe (i, tmp, &tem->tokens) { 
+	list_for_each_safe (i, tmp, &tem->tokens) {
 		token_free (TEMPLATE_TOKEN(i));
 	}
 
-	list_for_each_safe (i, tmp, &tem->replacements) { 
+	list_for_each_safe (i, tmp, &tem->replacements) {
 		replacement_free (TEMPLATE_REPL(i));
 	}
 
@@ -138,7 +138,7 @@ cherokee_template_set_token  (cherokee_template_t        *tem,
 			      cherokee_tem_repl_func_t    func,
 			      void                       *param,
 			      cherokee_template_token_t **token)
-{	
+{
 	ret_t                      ret;
 	cherokee_template_token_t *n;
 
@@ -149,7 +149,7 @@ cherokee_template_set_token  (cherokee_template_t        *tem,
 	cherokee_buffer_add (&n->key, name, strlen(name));
 	n->func  = func;
 	n->param = param;
-	
+
 	if (token) {
 		*token = n;
 	}
@@ -181,7 +181,7 @@ cherokee_template_parse (cherokee_template_t *tem,
 			ret = ret_ok;
 			goto out;
 		}
-		
+
 		token2 = strchr (p+2, '}');
 		if (token2 == NULL) {
 			cherokee_buffer_add (&tem->text, p, end-p);
@@ -214,7 +214,7 @@ cherokee_template_parse (cherokee_template_t *tem,
 				break;
 			}
 		}
-		
+
 		if (unlikely (repl->token == NULL)) {
 			LOG_ERROR (CHEROKEE_ERROR_TEMPLATE_NO_TOKEN, token.buf);
 			ret = ret_error;
@@ -247,7 +247,7 @@ cherokee_template_parse_file (cherokee_template_t *tem,
 		ret = ret_error;
 		goto out;
 	}
-		
+
 	ret = ret_ok;
 
 out:
@@ -263,12 +263,12 @@ cherokee_template_render (cherokee_template_t *tem,
 {
 	ret_t                            ret;
 	cherokee_list_t                 *i;
-	cherokee_template_replacement_t *repl;	
+	cherokee_template_replacement_t *repl;
 	cuint_t                          pos   = 0;
 
 	list_for_each (i, &tem->replacements) {
 		repl = TEMPLATE_REPL(i);
-		
+
 		/* Copy the string preceding the token
 		 */
 		if (repl->pos > 0) {

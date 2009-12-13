@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -55,7 +55,7 @@ typedef struct {
 	encoder_func_add_headers_t add_headers;
 	encoder_func_encode_t      encode;
 	encoder_func_flush_t       flush;
-	
+
 	/* Properties
 	 */
 	void                      *conn;

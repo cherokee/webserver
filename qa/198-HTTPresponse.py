@@ -12,7 +12,7 @@ vserver!1!rule!1980!handler!error_handler = 0
 
 CGI_BASE = """#!/bin/sh
 echo "Content-Type: text/plain"
-echo "HTTP/1.0 404 %s" 
+echo "HTTP/1.0 404 %s"
 echo "Foo: bar"
 echo
 echo "Sorry, file not found."

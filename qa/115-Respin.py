@@ -11,7 +11,7 @@ vserver!1!rule!1150!handler = common
 vserver!1!rule!1151!match = directory
 vserver!1!rule!1151!match!directory = /respin1-cgi
 vserver!1!rule!1151!handler = cgi
-# CGIs based on PHP need this if php was compiled 
+# CGIs based on PHP need this if php was compiled
 # with the 'force-cgi-redirect' enabled.
 vserver!1!rule!1151!handler!env!REDIRECT_STATUS = 200
 
@@ -32,7 +32,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name             = "Redirection to PHP"
         self.request          = "GET /%s/%s/ HTTP/1.0\r\n" % (DIR, MAGIC)
-        self.expected_error   = 200        
+        self.expected_error   = 200
         self.expected_content = "param is %s" % (MAGIC)
         self.conf             = CONF
 

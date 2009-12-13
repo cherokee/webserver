@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler.h"
@@ -64,8 +64,8 @@ cherokee_handler_free (cherokee_handler_t *hdl)
 	if (MODULE(hdl)->free == NULL) {
 		return ret_error;
 	}
-	
-	MODULE(hdl)->free (hdl); 
+
+	MODULE(hdl)->free (hdl);
 
 	/* Free the handler memory
 	 */
@@ -86,9 +86,9 @@ cherokee_handler_init (cherokee_handler_t *hdl)
 	init_func = (handler_func_init_t) MODULE(hdl)->init;
 
 	if (init_func) {
-		return init_func(hdl); 
+		return init_func(hdl);
 	}
-	
+
 	return ret_error;
 }
 
@@ -101,7 +101,7 @@ cherokee_handler_add_headers (cherokee_handler_t *hdl, cherokee_buffer_t *buffer
 	return_if_fail (hdl != NULL, ret_error);
 
 	if (hdl->add_headers) {
-		return hdl->add_headers (hdl, buffer); 
+		return hdl->add_headers (hdl, buffer);
 	}
 
 	return ret_error;
@@ -110,7 +110,7 @@ cherokee_handler_add_headers (cherokee_handler_t *hdl, cherokee_buffer_t *buffer
 
 ret_t
 cherokee_handler_step (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
-{	
+{
 	/* Sanity check
 	 */
 	return_if_fail (hdl != NULL, ret_error);
@@ -118,7 +118,7 @@ cherokee_handler_step (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
 	if (hdl->step) {
 		return hdl->step (hdl, buffer);
 	}
-	
+
 	return ret_error;
 }
 
@@ -127,7 +127,7 @@ cherokee_handler_step (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
 /* Handler properties methods
  */
 
-ret_t 
+ret_t
 cherokee_handler_props_init_base (cherokee_handler_props_t *props, module_func_props_free_t free_func)
 {
 	props->valid_methods = http_unknown;
@@ -136,7 +136,7 @@ cherokee_handler_props_init_base (cherokee_handler_props_t *props, module_func_p
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_props_free_base (cherokee_handler_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));

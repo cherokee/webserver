@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "vrule_wildcard.h"
@@ -73,7 +73,7 @@ entry_free (cherokee_wc_entry_t *wc)
 /* Plug-in
  */
 
-static ret_t 
+static ret_t
 match (cherokee_vrule_wildcard_t *vrule,
        cherokee_buffer_t         *host,
        cherokee_connection_t     *conn)
@@ -90,10 +90,10 @@ match (cherokee_vrule_wildcard_t *vrule,
 		if (entry->is_wildcard) {
 			ret = cherokee_wildcard_match (entry->domain.buf, host->buf);
 		} else {
-			re = cherokee_buffer_cmp_buf (&entry->domain, host); 
+			re = cherokee_buffer_cmp_buf (&entry->domain, host);
 			ret = (re == 0) ? ret_ok : ret_deny;
 		}
-		
+
 		if (ret == ret_ok) {
 			TRACE(ENTRIES, "VRule wildcard: matched '%s'\n", entry->domain.buf);
 			return ret_ok;
@@ -105,9 +105,9 @@ match (cherokee_vrule_wildcard_t *vrule,
 	return ret_deny;
 }
 
-static ret_t 
-configure (cherokee_vrule_wildcard_t   *vrule, 
-	   cherokee_config_node_t      *conf, 
+static ret_t
+configure (cherokee_vrule_wildcard_t   *vrule,
+	   cherokee_config_node_t      *conf,
 	   cherokee_virtual_server_t   *vsrv)
 {
 	ret_t                   ret;
@@ -125,7 +125,7 @@ configure (cherokee_vrule_wildcard_t   *vrule,
 	list_for_each (i, &subconf->child) {
 		cherokee_wc_entry_t    *entry;
 		cherokee_config_node_t *conf2  = CONFIG_NODE(i);
-		
+
 		ret = entry_new (&entry, &conf2->val);
 		if (ret != ret_ok) {
 			return ret_error;
@@ -142,7 +142,7 @@ _free (void *p)
 {
 	cherokee_list_t           *i, *tmp;
 	cherokee_vrule_wildcard_t *vrule    = p;
-	
+
 	list_for_each_safe (i, tmp, &vrule->entries) {
 		entry_free ((cherokee_wc_entry_t *)i);
 	}

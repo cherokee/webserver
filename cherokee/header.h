@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -70,7 +70,7 @@ typedef enum {
 
 typedef enum {
 	header_type_request,
-	header_type_response, 
+	header_type_response,
 	header_type_basic
 } cherokee_header_type_t;
 

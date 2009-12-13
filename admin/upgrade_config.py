@@ -31,7 +31,7 @@ def main():
     ver_release = int (config_version_get_current())
 
     print "Upgrading '%s' from %d to %d.." % (cfg_file, ver_config, ver_release),
-    
+
     # Convert it
     updated = config_version_update_cfg (cfg)
     print ["Not upgraded.", "Upgraded."][updated]

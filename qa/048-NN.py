@@ -10,7 +10,7 @@ vserver!480!document_root = %s
 vserver!480!rule!1!match = default
 vserver!480!rule!1!handler = file
 vserver!480!error_handler = error_nn
-""" 
+"""
 
 class Test (TestBase):
     def __init__ (self):

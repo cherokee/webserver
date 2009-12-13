@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "collector_rrd.h"
@@ -100,8 +100,8 @@ update_generic (cherokee_buffer_t *params)
 }
 
 
-static void 
-update_srv_cb (cherokee_collector_rrd_t *rrd) 
+static void
+update_srv_cb (cherokee_collector_rrd_t *rrd)
 {
 	ret_t ret;
 
@@ -137,7 +137,7 @@ update_srv_cb (cherokee_collector_rrd_t *rrd)
 	COLLECTOR_BASE(rrd)->rx_partial  = 0;
 	COLLECTOR_BASE(rrd)->tx_partial  = 0;
 }
- 
+
 
 static ret_t
 srv_free (cherokee_collector_rrd_t *rrd)
@@ -150,7 +150,7 @@ srv_free (cherokee_collector_rrd_t *rrd)
 	CHEROKEE_THREAD_KILL (rrd->thread, SIGINT);
 	CHEROKEE_THREAD_JOIN (rrd->thread);
 
-	CHEROKEE_MUTEX_DESTROY (&rrd->mutex);	
+	CHEROKEE_MUTEX_DESTROY (&rrd->mutex);
 
 	/* Clean up
 	 */
@@ -164,8 +164,8 @@ srv_free (cherokee_collector_rrd_t *rrd)
 /* Virtual Servers
  */
 
-static void 
-update_vsrv_cb (cherokee_collector_vsrv_rrd_t *rrd) 
+static void
+update_vsrv_cb (cherokee_collector_vsrv_rrd_t *rrd)
 {
 	ret_t ret;
 
@@ -186,7 +186,7 @@ update_vsrv_cb (cherokee_collector_vsrv_rrd_t *rrd)
 	if (ret != ret_ok) {
 		return;
 	}
-	
+
 	/* Begin partial counting from scratch
 	 */
 	COLLECTOR_BASE(rrd)->rx_partial = 0;
@@ -331,7 +331,7 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	int   re;
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, collector_rrd);
-	   
+
 	/* Base class initialization
 	 */
 	ret = cherokee_collector_init_base (COLLECTOR(n), info, config);
@@ -374,7 +374,7 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	if (re != 0) {
 		LOG_ERROR (CHEROKEE_ERROR_COLLECTOR_NEW_THREAD, re);
 		return ret_error;
-	}	
+	}
 
 	re = pthread_mutex_init (&n->mutex, NULL);
 	if (re != 0) {

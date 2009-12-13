@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_admin.h"
@@ -31,7 +31,7 @@
 #include "admin_server.h"
 #include "util.h"
 
-#define ERR_STR(x) 
+#define ERR_STR(x)
 
 /* Plug-in initialization
  */
@@ -51,7 +51,7 @@ cherokee_handler_admin_configure (cherokee_config_node_t *conf, cherokee_server_
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_admin);
@@ -63,7 +63,7 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 	MODULE(n)->init         = (module_func_init_t) cherokee_handler_admin_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_admin_free;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_admin_step;
-	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_admin_add_headers; 
+	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_admin_add_headers;
 
 	/* Supported features
 	*/
@@ -78,7 +78,7 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_admin_free (cherokee_handler_admin_t *ahdl)
 {
 	cherokee_buffer_mrproper (&ahdl->reply);
@@ -90,7 +90,7 @@ static ret_t
 process_request_line (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *line)
 {
 #define COMP(str,sub) strncmp(str, sub, sizeof(sub)-1)
-	
+
 	if (!COMP (line->buf, "get server.port_tls"))
 		return cherokee_admin_server_reply_get_port_tls (ahdl, line, &ahdl->reply);
 	else if (!COMP (line->buf, "set server.port_tls"))
@@ -109,18 +109,18 @@ process_request_line (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *line)
 	else if (!COMP (line->buf, "get server.connections"))
 		return cherokee_admin_server_reply_get_connections (ahdl, line, &ahdl->reply);
 
-	else if (!COMP (line->buf, "del server.connection")) 
+	else if (!COMP (line->buf, "del server.connection"))
 		return cherokee_admin_server_reply_del_connection (ahdl, line, &ahdl->reply);
 
-	else if (!COMP (line->buf, "get server.thread_num")) 
+	else if (!COMP (line->buf, "get server.thread_num"))
 		return cherokee_admin_server_reply_get_thread_num (ahdl, line, &ahdl->reply);
 
-	else if (!COMP (line->buf, "set server.backup_mode")) 
+	else if (!COMP (line->buf, "set server.backup_mode"))
 		return cherokee_admin_server_reply_set_backup_mode (ahdl, line, &ahdl->reply);
 
-	else if (!COMP (line->buf, "set server.trace")) 
+	else if (!COMP (line->buf, "set server.trace"))
 		return cherokee_admin_server_reply_set_trace (ahdl, line, &ahdl->reply);
-	else if (!COMP (line->buf, "get server.trace")) 
+	else if (!COMP (line->buf, "get server.trace"))
 		return cherokee_admin_server_reply_get_trace (ahdl, line, &ahdl->reply);
 
 	SHOULDNT_HAPPEN;
@@ -128,7 +128,7 @@ process_request_line (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *line)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_admin_init (cherokee_handler_admin_t *ahdl)
 {
 	ret_t                    ret;
@@ -189,7 +189,7 @@ go_out:
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_admin_step (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *buffer)
 {
 	cherokee_buffer_add_buffer (buffer, &ahdl->reply);
@@ -197,7 +197,7 @@ cherokee_handler_admin_step (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_admin_add_headers (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *buffer)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(ahdl);

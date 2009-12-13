@@ -33,5 +33,5 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, "exec.cgi", 0555, 
+        f = self.WriteFile (d, "exec.cgi", 0555,
                             CGI_BASE % (len(ERROR_MSG), ERROR, ERROR_MSG))

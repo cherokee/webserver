@@ -41,7 +41,7 @@ class ModuleSecdownload (ModuleHandler):
         txt = '<h2>%s</h2>' % (_('Covering parameters'))
         txt += self.Indent(table)
 
-        # Copy errors to the modules, 
+        # Copy errors to the modules,
         # they may need to print them
         self._copy_errors (self, self._file)
 

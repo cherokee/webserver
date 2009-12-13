@@ -37,10 +37,10 @@ class Test (TestBase):
     def Prepare (self, www):
         d1 = self.Mkdir (www, "%s_dir1" % (DOMAIN))
         d2 = self.Mkdir (www, "%s_dir2" % (DOMAIN))
-        
+
         self.WriteFile (d1, FILENAME, 0444, MAGIC1);
         self.WriteFile (d2, FILENAME, 0444, MAGIC2);
-        
+
 
         self.conf = CONF % (d1, d2)
         self.conf = self.conf.replace ('<domain>', DOMAIN)

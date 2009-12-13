@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -64,13 +64,13 @@ typedef struct list_entry cherokee_list_entry_t;
 #define list_next_circular(list,item) \
 	(((item)->next == (list)) ? (list)->next : (item)->next)
 
-static inline int 
+static inline int
 cherokee_list_empty (cherokee_list_t *list)
 {
 	return (list->next == list);
 }
 
-static inline void 
+static inline void
 cherokee_list_add (cherokee_list_t *new_entry, cherokee_list_t *head)
 {
 	new_entry->next  = head->next;
@@ -79,7 +79,7 @@ cherokee_list_add (cherokee_list_t *new_entry, cherokee_list_t *head)
 	head->next       = new_entry;
 }
 
-static inline void 
+static inline void
 cherokee_list_add_tail (cherokee_list_t *new_entry, cherokee_list_t *head)
 {
 	new_entry->next  = head;
@@ -95,14 +95,14 @@ cherokee_list_del (cherokee_list_t *entry)
 	entry->prev->next = entry->next;
 }
 
-static inline void 
+static inline void
 cherokee_list_reparent (cherokee_list_t *list, cherokee_list_t *new_entry)
 {
 	if (cherokee_list_empty(list))
 		return;
-	
+
 	new_entry->next = list->next;
-	new_entry->prev = list->prev;	
+	new_entry->prev = list->prev;
 	new_entry->prev->next = new_entry;
 	new_entry->next->prev = new_entry;
 }

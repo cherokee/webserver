@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "avl.h"
@@ -28,7 +28,7 @@
 #define MAX_HEIGHT 45
 
 
-struct cherokee_avl_node {	   
+struct cherokee_avl_node {
 	/* Tree */
 	short                     balance;
 	struct cherokee_avl_node *left;
@@ -49,7 +49,7 @@ static cherokee_avl_node_t *node_next  (cherokee_avl_node_t *node);
 
 /* Nodes
  */
-static ret_t 
+static ret_t
 node_new (cherokee_avl_node_t **node, cherokee_buffer_t *key, void *value)
 {
 	CHEROKEE_NEW_STRUCT (n, avl_node);
@@ -68,7 +68,7 @@ node_new (cherokee_avl_node_t **node, cherokee_buffer_t *key, void *value)
 	return ret_ok;
 }
 
-static ret_t 
+static ret_t
 node_free (cherokee_avl_node_t *node)
 {
 	cherokee_buffer_mrproper (&node->id);
@@ -77,10 +77,10 @@ node_free (cherokee_avl_node_t *node)
 	return ret_ok;
 }
 
-/* Tree constructor / destructor 
+/* Tree constructor / destructor
  */
 
-ret_t 
+ret_t
 cherokee_avl_init (cherokee_avl_t *avl)
 {
 	avl->root             = NULL;
@@ -92,7 +92,7 @@ cherokee_avl_init (cherokee_avl_t *avl)
 CHEROKEE_ADD_FUNC_NEW (avl);
 
 
-ret_t 
+ret_t
 cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_func_free_t free_func)
 {
 	cherokee_avl_node_t *node;
@@ -102,7 +102,7 @@ cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_func_free_t free_func)
 		return ret_ok;
 
 	node = node_first (avl);
-  
+
 	while (node) {
 		next = node_next (node);
 
@@ -116,7 +116,7 @@ cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_func_free_t free_func)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_avl_free (cherokee_avl_t *avl, cherokee_func_free_t free_func)
 {
 	cherokee_avl_mrproper (avl, free_func);
@@ -128,7 +128,7 @@ cherokee_avl_free (cherokee_avl_t *avl, cherokee_func_free_t free_func)
 /* Tree methods
  */
 
-static int 
+static int
 compare_buffers (cherokee_buffer_t *A,
 		 cherokee_buffer_t *B,
 		 cherokee_boolean_t case_insensitive)
@@ -141,7 +141,7 @@ compare_buffers (cherokee_buffer_t *A,
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_set_case (cherokee_avl_t *avl, cherokee_boolean_t case_insensitive)
 {
 	avl->case_insensitive = case_insensitive;
@@ -154,7 +154,7 @@ node_first (cherokee_avl_t *avl)
 {
 	cherokee_avl_node_t *tmp;
 
-	if (!avl->root)	
+	if (!avl->root)
 		return NULL;
 
 	tmp = avl->root;
@@ -194,7 +194,7 @@ node_rotate_left (cherokee_avl_node_t *node)
 	cherokee_avl_node_t *right;
 	cint_t               a_bal;
 	cint_t               b_bal;
-  
+
 	right = node->right;
 
 	if (right->left_child)
@@ -234,7 +234,7 @@ node_rotate_right (cherokee_avl_node_t *node)
 	cint_t               b_bal;
 
 	left = node->left;
-	
+
 	if (left->right_child)
 		node->left = left->right;
 	else {
@@ -287,7 +287,7 @@ node_balance (cherokee_avl_node_t *node)
 static ret_t
 node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 {
-	short                re;                 
+	short                re;
 	cherokee_boolean_t   is_left;
 	cherokee_avl_node_t *path[MAX_HEIGHT];
 	cherokee_avl_node_t *node   = tree->root;
@@ -347,14 +347,14 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 	while (true) {
 		parent = path[--idx];
 		is_left = (parent && (parent->left == node));
-		
+
 		if ((node->balance < -1) ||
-		    (node->balance >  1)) 
+		    (node->balance >  1))
 		{
 			node = node_balance (node);
-			if (parent == NULL) 
+			if (parent == NULL)
 				tree->root = node;
-			else if (is_left) 
+			else if (is_left)
 				parent->left = node;
 			else
 				parent->right = node;
@@ -362,12 +362,12 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 
 		if ((node->balance == 0) || (parent == NULL))
 			break;
-		
+
 		if (is_left)
 			parent->balance -= 1;
 		else
 			parent->balance += 1;
-		
+
 		node = parent;
 	}
 
@@ -375,7 +375,7 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_add (cherokee_avl_t *avl, cherokee_buffer_t *key, void *value)
 {
 	ret_t                ret;
@@ -387,20 +387,20 @@ cherokee_avl_add (cherokee_avl_t *avl, cherokee_buffer_t *key, void *value)
 	/* Create the new AVL node
 	 */
 	ret = node_new (&n, key, value);
-	if (unlikely (ret != ret_ok)) 
+	if (unlikely (ret != ret_ok))
 		return ret;
 
 	/* Add th node to the tree
 	 */
 	ret = node_add (avl, n);
-	if (unlikely (ret != ret_ok)) 
+	if (unlikely (ret != ret_ok))
 		return ret;
 
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 {
 	short                re;
@@ -413,7 +413,7 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 
 	if (unlikely (cherokee_buffer_is_empty(key)))
 		return ret_error;
-	
+
 	if (avl->root == NULL)
 		return ret_not_found;
 
@@ -422,7 +422,7 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 	while (true) {
 		re = compare_buffers (key, &node->id, avl->case_insensitive);
 		if (re == 0) {
-			if (value) 
+			if (value)
 				*value = node->value;
 			break;
 		} else if (re < 0) {
@@ -498,10 +498,10 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 				path[++idx] = nextp = next;
 				next = next->left;
 			}
- 	  
+
 			path[old_idx] = next;
 			pbalance      = path[idx];
-	  
+
 			/* remove 'next' from the tree */
 			if (nextp != node) {
 				if (next->right_child)
@@ -516,17 +516,17 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 			} else {
 				node->balance -= 1;
 			}
-	    
+
 			/* set the prev to point to the right place */
 			while (prev->right_child)
 				prev = prev->right;
 			prev->right = next;
-	    
+
 			/* prepare 'next' to replace 'node' */
 			next->left_child = TRUE;
 			next->left = node->left;
 			next->balance = node->balance;
-	  
+
 			if (!parent)
 				avl->root = next;
 			else if (is_left)
@@ -534,16 +534,16 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 			else
 				parent->right = next;
 		}
-	} 
-	
+	}
+
 	/* restore balance */
 	if (pbalance) {
 		while (true) {
 			cherokee_avl_node_t *bparent = path[--idx];
 			is_left = (bparent && (pbalance == bparent->left));
-			      
+
 			if(pbalance->balance < -1 || pbalance->balance > 1) {
-				pbalance = node_balance (pbalance); 
+				pbalance = node_balance (pbalance);
 				if (!bparent)
 					avl->root = pbalance;
 				else if (is_left)
@@ -551,25 +551,25 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 				else
 					bparent->right = pbalance;
 			}
-	
+
 			if (pbalance->balance != 0 || !bparent)
 				break;
-	
+
 			if (is_left)
 				bparent->balance += 1;
 			else
 				bparent->balance -= 1;
-			
+
 			pbalance = bparent;
 		}
 	}
-	
+
 	node_free (node);
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_get (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 {
 	short                re;
@@ -577,7 +577,7 @@ cherokee_avl_get (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 
 	if (unlikely (cherokee_buffer_is_empty(key)))
 		return ret_error;
-	
+
 	node = avl->root;
 	if (!node)
 		return ret_not_found;
@@ -609,7 +609,7 @@ cherokee_avl_get (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 /* Commodity methods
  */
 
-ret_t 
+ret_t
 cherokee_avl_get_ptr (cherokee_avl_t *avl, const char *key, void **value)
 {
 	cherokee_buffer_t tmp_key;
@@ -619,7 +619,7 @@ cherokee_avl_get_ptr (cherokee_avl_t *avl, const char *key, void **value)
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_add_ptr (cherokee_avl_t *avl, const char *key, void *value)
 {
 	cherokee_buffer_t tmp_key;
@@ -629,7 +629,7 @@ cherokee_avl_add_ptr (cherokee_avl_t *avl, const char *key, void *value)
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_del_ptr (cherokee_avl_t *avl, const char *key, void **value)
 {
 	cherokee_buffer_t tmp_key;
@@ -639,32 +639,32 @@ cherokee_avl_del_ptr (cherokee_avl_t *avl, const char *key, void **value)
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_while (cherokee_avl_t *avl, cherokee_avl_while_func_t func, void *param, cherokee_buffer_t **key, void **value)
 {
 	ret_t                ret;
 	cherokee_avl_node_t *node = avl->root;
 
-	if (avl->root == NULL) 
+	if (avl->root == NULL)
 		return ret_ok;
 
 	node = node_first (avl);
 	while (node) {
-		if (key) 
+		if (key)
 			*key = &node->id;
 		if (value)
 			*value = &node->value;
 
 		ret = func (&node->id, node->value, param);
 		if (ret != ret_ok) return ret;
-      
+
 		node = node_next (node);
 	}
 
 	return ret_ok;
 }
 
-static ret_t 
+static ret_t
 func_len_each (cherokee_buffer_t *key, void *value, void *param)
 {
 	UNUSED(key);
@@ -674,7 +674,7 @@ func_len_each (cherokee_buffer_t *key, void *value, void *param)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_avl_len (cherokee_avl_t *avl, size_t *len)
 {
 	*len = 0;
@@ -682,11 +682,11 @@ cherokee_avl_len (cherokee_avl_t *avl, size_t *len)
 }
 
 
-/* Debugging 
+/* Debugging
  */
 
 static void
-print_node (cherokee_avl_node_t *node) 
+print_node (cherokee_avl_node_t *node)
 {
 	if (! node) {
 		printf ("<null />\n");
@@ -695,13 +695,13 @@ print_node (cherokee_avl_node_t *node)
 
 	printf ("<node key=\"%s\" value=\"%p\">\n", node->id.buf, node->value);
 	if (node->left_child)
-		print_node (node->left);  
+		print_node (node->left);
 	if (node->left_child)
-		print_node (node->right); 
+		print_node (node->right);
 	printf ("</node>\n");
 }
 
-ret_t 
+ret_t
 cherokee_avl_print (cherokee_avl_t *avl)
 {
 	print_node (avl->root);
@@ -732,7 +732,7 @@ node_height (cherokee_avl_node_t *node)
 
 
 static ret_t
-node_check (cherokee_avl_node_t *node) 
+node_check (cherokee_avl_node_t *node)
 {
 	cint_t               left_height;
 	cint_t               right_height;
@@ -758,12 +758,12 @@ node_check (cherokee_avl_node_t *node)
 
 		left_height  = 0;
 		right_height = 0;
-      
+
 		if (node->left_child)
 			left_height  = node_height (node->left);
 		if (node->right_child)
 			right_height = node_height (node->right);
-      
+
 		balance = right_height - left_height;
 		if (balance != node->balance) {
 			LOG_ERROR_S (CHEROKEE_ERROR_AVL_BALANCE);
@@ -775,7 +775,7 @@ node_check (cherokee_avl_node_t *node)
 		if (node->right_child)
 			node_check (node->right);
 	}
-	
+
 	return ret_ok;
 }
 

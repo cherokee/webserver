@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "bogotime.h"
@@ -146,7 +146,7 @@ update_guts (void)
 
 	/* Update internal variables
 	 */
-	cherokee_bogonow_msec = ((cherokee_bogonow_tv.tv_sec * 1000) + 
+	cherokee_bogonow_msec = ((cherokee_bogonow_tv.tv_sec * 1000) +
 				 (cherokee_bogonow_tv.tv_usec) / 1000);
 
 	if (cherokee_bogonow_now == cherokee_bogonow_tv.tv_sec)
@@ -202,7 +202,7 @@ cherokee_bogotime_try_update (void)
 	int   unlocked;
 
 	unlocked = CHEROKEE_RWLOCK_TRYWRITER (&lock);
-	if (unlocked) 
+	if (unlocked)
 		return ret_not_found;
 
 	ret = update_guts();

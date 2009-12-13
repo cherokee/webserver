@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
@@ -50,7 +50,7 @@
 
 typedef struct {
 	struct cherokee_fdpoll poll;
-	
+
 	int                    ep_fd;
 	struct epoll_event    *ep_events;
 	int                    ep_nrevents;
@@ -58,7 +58,7 @@ typedef struct {
 } cherokee_fdpoll_epoll_t;
 
 
-static ret_t 
+static ret_t
 _free (cherokee_fdpoll_epoll_t *fdp)
 {
 	if (fdp == NULL)
@@ -97,10 +97,10 @@ _add (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	ev.data.fd = fd;
 	switch (rw) {
 	case FDPOLL_MODE_READ:
-		ev.events = EPOLLIN | EPOLLERR | EPOLLHUP; 
+		ev.events = EPOLLIN | EPOLLERR | EPOLLHUP;
 		break;
 	case FDPOLL_MODE_WRITE:
-		ev.events = EPOLLOUT | EPOLLERR | EPOLLHUP;  
+		ev.events = EPOLLOUT | EPOLLERR | EPOLLHUP;
 		break;
 	default:
 		ev.events = 0;
@@ -156,7 +156,7 @@ _check (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	 */
 	if (fd < 0 || fd >= FDPOLL(fdp)->system_nfiles)
 		return -1;
-	
+
 	/* If fdidx is -1, it is not valid, ignore it.
 	 */
 	fdidx = fdp->epoll_fd2idx[fd];
@@ -216,10 +216,10 @@ _set_mode (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 
 	switch (rw) {
 	case FDPOLL_MODE_READ:
-		ev.events = EPOLLIN; 
+		ev.events = EPOLLIN;
 		break;
 	case FDPOLL_MODE_WRITE:
-		ev.events = EPOLLOUT; 
+		ev.events = EPOLLOUT;
 		break;
 	default:
 		ev.events = 0;
@@ -262,7 +262,7 @@ fdpoll_epoll_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 }
 
 
-ret_t 
+ret_t
 fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 {
 	int                re;
@@ -286,16 +286,16 @@ fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 	nfd->reset         = (fdpoll_func_reset_t) _reset;
 	nfd->set_mode      = (fdpoll_func_set_mode_t) _set_mode;
 	nfd->check         = (fdpoll_func_check_t) _check;
-	nfd->watch         = (fdpoll_func_watch_t) _watch;	
+	nfd->watch         = (fdpoll_func_watch_t) _watch;
 
-	/* Look for max fd limit	
+	/* Look for max fd limit
 	 */
 	n->ep_fd = -1;
 	n->ep_nrevents  = 0;
 	n->ep_events    = (struct epoll_event *) calloc (nfd->nfiles, sizeof(struct epoll_event));
 	n->epoll_fd2idx = (int *) calloc (nfd->system_nfiles, sizeof(int));
 
-	/* If anyone fails free all and return ret_nomem 
+	/* If anyone fails free all and return ret_nomem
 	 */
 	if (n->ep_events == NULL || n->epoll_fd2idx == NULL) {
 		_free(n);

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_from.h"
@@ -34,8 +34,8 @@
 PLUGIN_INFO_RULE_EASIEST_INIT(from);
 
 
-static ret_t 
-match (cherokee_rule_from_t    *rule, 
+static ret_t
+match (cherokee_rule_from_t    *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
@@ -53,9 +53,9 @@ match (cherokee_rule_from_t    *rule,
 	return ret_ok;
 }
 
-static ret_t 
-configure (cherokee_rule_from_t      *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_from_t      *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
@@ -66,11 +66,11 @@ configure (cherokee_rule_from_t      *rule,
 
 	ret = cherokee_config_node_get (conf, "from", &subconf);
 	if (ret != ret_ok) {
-		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY, 
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
 			      RULE(rule)->priority, "from");
 		return ret_error;
-	} 
-	
+	}
+
 	cherokee_config_node_foreach (i, subconf) {
 		cherokee_config_node_t *subconf2 = CONFIG_NODE(i);
 
@@ -103,7 +103,7 @@ cherokee_rule_from_new (cherokee_rule_from_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(from));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

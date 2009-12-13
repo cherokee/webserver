@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_EMPTY_GIF_H
 #define CHEROKEE_HANDLER_EMPTY_GIF_H
@@ -61,5 +61,5 @@ ret_t cherokee_handler_empty_gif_init        (cherokee_handler_empty_gif_t *hdl)
 ret_t cherokee_handler_empty_gif_free        (cherokee_handler_empty_gif_t *hdl);
 ret_t cherokee_handler_empty_gif_step        (cherokee_handler_empty_gif_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl, cherokee_buffer_t *buffer);
-					
+
 #endif /* CHEROKEE_HANDLER_EMPTY_GIF_H */

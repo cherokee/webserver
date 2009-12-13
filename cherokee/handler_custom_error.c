@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_custom_error.h"
@@ -37,33 +37,33 @@ props_free (cherokee_handler_custom_error_props_t *props)
 
 
 ret_t
-cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf, 
+cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 					 cherokee_server_t        *srv,
 					 cherokee_module_props_t **_props)
 {
 	cherokee_list_t                       *i;
 	cherokee_config_node_t                *subconf;
 	cherokee_handler_custom_error_props_t *props;
-	
+
 	UNUSED(srv);
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_custom_error_props);
-		
+
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
 						  MODULE_PROPS_FREE(props_free));
-		
+
 		n->error_code = http_unset;
 		*_props = MODULE_PROPS(n);
 	}
-	
+
 	props = PROP_CUSTOM_ERROR(*_props);
-	
+
 	cherokee_config_node_foreach (i, conf) {
 		subconf = CONFIG_NODE(i);
 		if (equal_buf_str (&subconf->key, "error")) {
 			props->error_code = atoi (subconf->val.buf);
-		}		
+		}
 	}
 
 	/* Post checks
@@ -78,7 +78,7 @@ cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 
 
 ret_t
-cherokee_handler_custom_error_new  (cherokee_handler_t     **hdl, 
+cherokee_handler_custom_error_new  (cherokee_handler_t     **hdl,
 				    void                    *cnt,
 				    cherokee_module_props_t *props)
 {

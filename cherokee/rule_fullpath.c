@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_fullpath.h"
@@ -34,9 +34,9 @@
 
 PLUGIN_INFO_RULE_EASIEST_INIT(fullpath);
 
-static ret_t 
-configure (cherokee_rule_fullpath_t  *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_fullpath_t  *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
@@ -59,7 +59,7 @@ configure (cherokee_rule_fullpath_t  *rule,
 	cherokee_config_node_foreach (i, subconf) {
 		cherokee_config_node_t *path = CONFIG_NODE(i);
 
-		TRACE(ENTRIES, "Adding fullpath entry (key=%s): '%s'\n", 
+		TRACE(ENTRIES, "Adding fullpath entry (key=%s): '%s'\n",
 		      path->key.buf, path->val.buf);
 
 		cherokee_avl_add (&rule->paths, &path->val, NULL);
@@ -77,7 +77,7 @@ _free (cherokee_rule_fullpath_t *rule)
 }
 
 
-static ret_t 
+static ret_t
 match (cherokee_rule_fullpath_t *rule,
        cherokee_connection_t    *conn,
        cherokee_config_entry_t  *ret_conf)
@@ -95,7 +95,7 @@ match (cherokee_rule_fullpath_t *rule,
 
 	case ret_not_found:
 		TRACE(ENTRIES, "Rule fullpath: did not match '%s'\n", conn->request.buf);
-		return ret_not_found;		
+		return ret_not_found;
 
 	default:
 		conn->error_code = http_internal_error;
@@ -116,7 +116,7 @@ cherokee_rule_fullpath_new (cherokee_rule_fullpath_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(fullpath));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

@@ -1,4 +1,4 @@
- /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 
 /* Cherokee
  *
@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "encoder_deflate.h"
@@ -32,13 +32,13 @@
 PLUGIN_INFO_ENCODER_EASIEST_INIT (deflate);
 
 
-ret_t 
+ret_t
 cherokee_encoder_deflate_new (cherokee_encoder_deflate_t **encoder)
 {
 	cuint_t workspacesize;
 	CHEROKEE_NEW_STRUCT (n, encoder_deflate);
 
-	/* Init 	
+	/* Init
 	 */
 	cherokee_encoder_init_base (ENCODER(n), PLUGIN_INFO_PTR(deflate));
 
@@ -53,7 +53,7 @@ cherokee_encoder_deflate_new (cherokee_encoder_deflate_t **encoder)
 	workspacesize = zlib_deflate_workspacesize();
 
 	n->workspace = malloc (workspacesize);
-	if (unlikely (n->workspace == NULL)) 
+	if (unlikely (n->workspace == NULL))
 		return ret_nomem;
 
 	memset (n->workspace, 0, workspacesize);
@@ -66,7 +66,7 @@ cherokee_encoder_deflate_new (cherokee_encoder_deflate_t **encoder)
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_deflate_free (cherokee_encoder_deflate_t *encoder)
 {
 	if (encoder->workspace != NULL) {
@@ -78,7 +78,7 @@ cherokee_encoder_deflate_free (cherokee_encoder_deflate_t *encoder)
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_deflate_add_headers (cherokee_encoder_deflate_t *encoder,
 				   cherokee_buffer_t       *buf)
 {
@@ -111,7 +111,7 @@ get_deflate_error_string (int err)
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder)
 {
 	int       err;
@@ -120,13 +120,13 @@ cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder)
 	/* Set the workspace
 	 */
 	z->workspace = encoder->workspace;
-	
-	/* -MAX_WBITS: suppresses zlib header & trailer 
+
+	/* -MAX_WBITS: suppresses zlib header & trailer
 	 */
-	err = zlib_deflateInit2 (z, 
-				 Z_DEFAULT_COMPRESSION, 
-				 Z_DEFLATED, 
-				 -MAX_WBITS, 
+	err = zlib_deflateInit2 (z,
+				 Z_DEFAULT_COMPRESSION,
+				 Z_DEFLATED,
+				 -MAX_WBITS,
 				 MAX_MEM_LEVEL,
 				 Z_DEFAULT_STRATEGY);
 
@@ -142,8 +142,8 @@ cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder)
 
 
 static ret_t
-do_encode (cherokee_encoder_deflate_t *encoder, 
-	   cherokee_buffer_t          *in, 
+do_encode (cherokee_encoder_deflate_t *encoder,
+	   cherokee_buffer_t          *in,
 	   cherokee_buffer_t          *out,
 	   int                         flush)
 {
@@ -167,7 +167,7 @@ do_encode (cherokee_encoder_deflate_t *encoder,
 	/* Compress it
 	 */
 	do {
-		/* Set up fixed-size output buffer. 
+		/* Set up fixed-size output buffer.
 		 */
 		z->next_out  = (Byte *)buf;
 		z->avail_out = sizeof(buf);
@@ -190,9 +190,9 @@ do_encode (cherokee_encoder_deflate_t *encoder,
 		default:
 			LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATE,
 				   get_deflate_error_string(err), z->avail_in);
-			
+
 			zlib_deflateEnd (z);
-			return ret_error;		
+			return ret_error;
 		}
 
 	} while (z->avail_out == 0);
@@ -201,18 +201,18 @@ do_encode (cherokee_encoder_deflate_t *encoder,
 }
 
 
-ret_t 
-cherokee_encoder_deflate_encode (cherokee_encoder_deflate_t *encoder, 
-				 cherokee_buffer_t          *in, 
+ret_t
+cherokee_encoder_deflate_encode (cherokee_encoder_deflate_t *encoder,
+				 cherokee_buffer_t          *in,
 				 cherokee_buffer_t          *out)
 {
 	return do_encode (encoder, in, out, Z_PARTIAL_FLUSH);
 }
 
 
-ret_t 
-cherokee_encoder_deflate_flush (cherokee_encoder_deflate_t *encoder, 
-				cherokee_buffer_t          *in, 
+ret_t
+cherokee_encoder_deflate_flush (cherokee_encoder_deflate_t *encoder,
+				cherokee_buffer_t          *in,
 				cherokee_buffer_t          *out)
 {
 	return do_encode (encoder, in, out, Z_FINISH);

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -45,7 +45,7 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (ldap, http_auth_basic);
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_validator_ldap_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->server);
@@ -59,7 +59,7 @@ props_free (cherokee_validator_ldap_props_t *props)
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_list_t                 *i;
@@ -89,7 +89,7 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-		
+
 		if (equal_buf_str (&subconf->key, "server")) {
 			cherokee_buffer_add_buffer (&props->server, &subconf->val);
 
@@ -114,7 +114,7 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 		} else if (equal_buf_str (&subconf->key, "ca_file")) {
 			cherokee_buffer_add_buffer (&props->ca_file, &subconf->val);
 
-		} else if (equal_buf_str (&subconf->key, "methods") || 
+		} else if (equal_buf_str (&subconf->key, "methods") ||
 			   equal_buf_str (&subconf->key, "realm")) {
 			/* Not handled here
 			 */
@@ -161,7 +161,7 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 	ldap->conn = ldap_init (props->server.buf, props->port);
 	if (ldap->conn == NULL) {
 		LOG_ERRNO (errno, cherokee_err_critical,
-			   CHEROKEE_ERROR_VALIDATOR_LDAP_CONNECT, 
+			   CHEROKEE_ERROR_VALIDATOR_LDAP_CONNECT,
 			   props->server.buf, props->port);
 		return ret_error;
 	}
@@ -174,7 +174,7 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 	re = ldap_set_option (ldap->conn, LDAP_OPT_PROTOCOL_VERSION, &val);
 	if (re != LDAP_OPT_SUCCESS) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_LDAP_V3, ldap_err2string(re));
-		return ret_error;		
+		return ret_error;
 	}
 
 	TRACE (ENTRIES, "LDAP protocol version %d set\n", LDAP_VERSION3);
@@ -188,7 +188,7 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 			if (re != LDAP_OPT_SUCCESS) {
 				LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_LDAP_CA,
 					      props->ca_file.buf, ldap_err2string (re));
-				return ret_error; 
+				return ret_error;
 			}
 		}
 #else
@@ -202,7 +202,7 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 		TRACE (ENTRIES, "anonymous bind %s", "\n");
 		re = ldap_simple_bind_s (ldap->conn, NULL, NULL);
 	} else {
-		TRACE (ENTRIES, "bind user=%s password=%s\n", 
+		TRACE (ENTRIES, "bind user=%s password=%s\n",
 		       props->binddn.buf, props->bindpw.buf);
 		re = ldap_simple_bind_s (ldap->conn, props->binddn.buf, props->bindpw.buf);
 	}
@@ -211,20 +211,20 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 		LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_LDAP_BIND,
 			      props->server.buf, props->port, props->binddn.buf,
 			      props->bindpw.buf, ldap_err2string(re));
-		return ret_error;		
+		return ret_error;
 	}
 
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_module_props_t *props)
-{	  
+{
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n,validator_ldap);
 
-	/* Init 		
+	/* Init
 	 */
 	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(ldap));
 	VALIDATOR(n)->support = http_auth_basic;
@@ -237,7 +237,7 @@ cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_module_p
 	 */
 	cherokee_buffer_init (&n->filter);
 
-	/* Connect to the LDAP server 
+	/* Connect to the LDAP server
 	 */
 	ret = init_ldap_connection (n, PROP_LDAP(props));
 	if (ret != ret_ok) {
@@ -249,7 +249,7 @@ cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_module_p
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_validator_ldap_free (cherokee_validator_ldap_t *ldap)
 {
 	cherokee_buffer_mrproper (&ldap->filter);
@@ -257,7 +257,7 @@ cherokee_validator_ldap_free (cherokee_validator_ldap_t *ldap)
 }
 
 
-static ret_t 
+static ret_t
 validate_dn (cherokee_validator_ldap_props_t *props, char *dn, char *password)
 {
 	int   re;
@@ -309,7 +309,7 @@ init_filter (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_props_t *p
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connection_t *conn)
 {
 	int                              re;
@@ -352,7 +352,7 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 	re = ldap_count_entries (ldap->conn, message);
 	if (re != 1) {
 		ldap_msgfree (message);
-		return ret_not_found;		
+		return ret_not_found;
 	}
 
 	/* Pick up the first one
@@ -392,7 +392,7 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t *ldap, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(ldap);

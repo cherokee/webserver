@@ -29,7 +29,7 @@ class Test (TestBase):
         self.request           = "GET /cgienvs/cgi.cgi HTTP/1.0\r\n"
         self.conf              = CONF % (ENV1_NAME, ENV1_VALUE, ENV2_NAME, ENV2_VALUE)
         self.expected_error    = 200
-        self.expected_content  = ["Env1 %s = %s" % (ENV1_NAME, ENV1_VALUE), 
+        self.expected_content  = ["Env1 %s = %s" % (ENV1_NAME, ENV1_VALUE),
 						    "Env2 %s = %s" % (ENV2_NAME, ENV2_VALUE)]
 
     def Prepare (self, www):

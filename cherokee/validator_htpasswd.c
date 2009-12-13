@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "validator_htpasswd.h"
@@ -45,14 +45,14 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (htpasswd, http_auth_basic);
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_validator_htpasswd_props_t *props)
 {
 	return cherokee_validator_file_props_free_base (PROP_VFILE(props));
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htpasswd_configure (cherokee_config_node_t   *conf,
 				       cherokee_server_t        *srv,
 				       cherokee_module_props_t **_props)
@@ -75,13 +75,13 @@ cherokee_validator_htpasswd_configure (cherokee_config_node_t   *conf,
 	return cherokee_validator_file_configure (conf, srv, _props);
 }
 
-ret_t 
+ret_t
 cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd,
 				 cherokee_module_props_t        *props)
-{	  
+{
 	CHEROKEE_NEW_STRUCT(n,validator_htpasswd);
 
-	/* Init 	
+	/* Init
 	 */
 	cherokee_validator_file_init_base (VFILE(n),
 					   PROP_VFILE(props),
@@ -91,7 +91,7 @@ cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd,
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_htpasswd_free;
 	VALIDATOR(n)->check       = (validator_func_check_t)       cherokee_validator_htpasswd_check;
 	VALIDATOR(n)->add_headers = (validator_func_add_headers_t) cherokee_validator_htpasswd_add_headers;
-	   
+
 	/* The validator is ready
 	 */
 	*htpasswd = n;
@@ -99,7 +99,7 @@ cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htpasswd_free (cherokee_validator_htpasswd_t *htpasswd)
 {
 	return cherokee_validator_file_free_base (VFILE(htpasswd));
@@ -119,7 +119,7 @@ crypt_r_emu (const char *key, const char *salt, const char *compared)
 	CHEROKEE_MUTEX_LOCK(&__global_crypt_r_emu_mutex);
 	tmp = crypt (key, salt);
 	ret = (strcmp (tmp, compared) == 0) ? ret_ok : ret_deny;
-	CHEROKEE_MUTEX_UNLOCK(&__global_crypt_r_emu_mutex);	
+	CHEROKEE_MUTEX_UNLOCK(&__global_crypt_r_emu_mutex);
 
 	return ret;
 }
@@ -193,7 +193,7 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 	if (new_md5_crypt == NULL) {
 		return ret_error;
 	}
-	
+
 	ret = (strcmp (new_md5_crypt, crypted) == 0) ? ret_ok : ret_error;
 
 	/* There is no need to free new_md5_crypt, it is 'space' (in the stack)..
@@ -204,7 +204,7 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 
 static ret_t
 validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
-{	
+{
 	cuint_t           c_len      = strlen (crypted);
 	cherokee_thread_t *thread    = CONN_THREAD(conn);
 	cherokee_buffer_t *sha1_buf1 = THREAD_TMP_BUF1(thread);
@@ -233,7 +233,7 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 
 static ret_t
 request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd,
-			  cherokee_connection_t         *conn, 
+			  cherokee_connection_t         *conn,
 			  cherokee_buffer_t             *full_path)
 {
 	char    *p;
@@ -265,7 +265,7 @@ request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 				   cherokee_connection_t         *conn)
 {
@@ -296,7 +296,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 	}
 
 	/* 1.- Check the login/passwd
-	 */	  
+	 */
 	f = fopen (fpass->buf, "r");
 	if (f == NULL) {
 		return ret_error;
@@ -313,23 +313,23 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 
 		len = strlen (line);
 
-		if (len <= 0) 
+		if (len <= 0)
 			continue;
 
 		if (line[0] == '#')
 			continue;
 
-		if (line[len-1] == '\n') 
+		if (line[len-1] == '\n')
 			line[len-1] = '\0';
-			 
-		/* Split into user and encrypted password. 
+
+		/* Split into user and encrypted password.
 		 */
 		cryp = strchr (line, ':');
 		if (cryp == NULL) continue;
 		*cryp++ = '\0';
 		cryp_len = strlen(cryp);
 
-		/* Is this the right user? 
+		/* Is this the right user?
 		 */
 		if (strcmp (conn->validator->user.buf, line) != 0) {
 			continue;
@@ -377,7 +377,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 	/* 2.- Security check:
 	 * Is the client trying to download the passwd file?
 	 */
-	ret = request_isnt_passwd_file (htpasswd, conn, fpass);	
+	ret = request_isnt_passwd_file (htpasswd, conn, fpass);
 	if (ret != ret_ok)
 		return ret;
 
@@ -385,7 +385,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t *htpasswd, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(htpasswd);

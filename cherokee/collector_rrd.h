@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_COLLECTOR_RRD_H
 #define CHEROKEE_COLLECTOR_RRD_H
@@ -50,10 +50,10 @@ typedef struct {
 
 	/* Internals */
 	cherokee_buffer_t         tmp;
-	
+
 	/* Asynchronous */
 	pthread_t                 thread;
-	pthread_mutex_t           mutex;	
+	pthread_mutex_t           mutex;
 	cherokee_boolean_t        exiting;
 
 	cherokee_list_t           collectors_vsrv;

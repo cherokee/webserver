@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "cacheline.h"
@@ -62,18 +62,18 @@ get_cpuid (uint32_t i, uint32_t *buf)
 # endif
 }
 
-static ret_t 
-get_cache_line_live (cuint_t *size) 
+static ret_t
+get_cache_line_live (cuint_t *size)
 {
 	uint32_t    vendor_buf[5];
 	uint32_t processor_buf[5];
-	
+
 	const char *vendor;
 
 	memset (vendor_buf, 0, sizeof(vendor_buf));
 	memset (processor_buf, 0, sizeof(processor_buf));
 
-	/* EAX=0: Get vendor ID 
+	/* EAX=0: Get vendor ID
 	 */
 	get_cpuid (0, vendor_buf);
 	vendor = (const char *)&vendor_buf[1];
@@ -81,8 +81,8 @@ get_cache_line_live (cuint_t *size)
 	if (vendor_buf[0] == 0) {
 		return ret_error;
 	}
-	
-	/* EAX=1: Get Processor Info and Feature Bits 
+
+	/* EAX=1: Get Processor Info and Feature Bits
 	 */
 	get_cpuid(1, processor_buf);
 	if (strcmp (vendor, "GenuineIntel") == 0) {
@@ -109,7 +109,7 @@ get_cache_line_live (cuint_t *size)
 			*size = 128;
 			return ret_ok;
 		}
-		
+
 	} else if (strcmp(vendor, "AuthenticAMD") == 0) {
 		*size = 64;
 		return ret_ok;
@@ -122,7 +122,7 @@ get_cache_line_live (cuint_t *size)
 
 
 ret_t
-cherokee_cacheline_size_get (cuint_t *size) 
+cherokee_cacheline_size_get (cuint_t *size)
 {
 #if (( __GNUC__ || __INTEL_COMPILER ) && ( __i386__ || __amd64__ ))
 	ret_t ret;

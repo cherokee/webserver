@@ -17,7 +17,7 @@ class Test (TestBase):
 
         self.request          = "POST /%s HTTP/1.1\r\n" %(FILENAME) +\
                                 "Host: localhost\r\n" +\
-                                "Content-length: %d\r\n" % (POST_LENGTH) 
+                                "Content-length: %d\r\n" % (POST_LENGTH)
         self.expected_error   = 200
         self.post             = letters_random (POST_LENGTH) + POST_EXTRA
 

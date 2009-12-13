@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "avl_r.h"
@@ -41,7 +41,7 @@ cherokee_avl_r_init (cherokee_avl_r_t *avl_r)
 	CHEROKEE_NEW_STRUCT(n, avl_r_priv);
 
 	ret = cherokee_avl_init (&avl_r->avl);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	avl_r->priv = n;
@@ -51,7 +51,7 @@ cherokee_avl_r_init (cherokee_avl_r_t *avl_r)
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_r_mrproper (cherokee_avl_r_t *avl_r, cherokee_func_free_t free_func)
 {
 	if (avl_r->priv) {
@@ -76,7 +76,7 @@ cherokee_avl_r_add (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void *value
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_r_del (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void **value)
 {
 	ret_t ret;
@@ -89,7 +89,7 @@ cherokee_avl_r_del (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void **valu
 }
 
 
-ret_t 
+ret_t
 cherokee_avl_r_get (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void **value)
 {
 	ret_t ret;

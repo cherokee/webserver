@@ -10,7 +10,7 @@ CONF = """
 #
 # - Work around: Append the following line to your php
 # configuration file, usually /etc/php5/cgi/php.ini:
-# 
+#
 #    cgi.fix_pathinfo=0
 #
 vserver!1!rule!670!match = directory

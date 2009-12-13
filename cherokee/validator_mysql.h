@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_VALIDATOR_MYSQL_H
 #define CHEROKEE_VALIDATOR_MYSQL_H
@@ -43,11 +43,11 @@ typedef enum {
 
 typedef struct {
 	cherokee_module_props_t	base;
-	
+
 	cherokee_buffer_t	host;
 	cint_t			port;
 	cherokee_buffer_t       unix_socket;
-	
+
 	cherokee_buffer_t       user;
 	cherokee_buffer_t	passwd;
 	cherokee_buffer_t	database;

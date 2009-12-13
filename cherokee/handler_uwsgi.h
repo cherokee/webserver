@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_UWSGI_H
 #define CHEROKEE_HANDLER_UWSGI_H
@@ -60,7 +60,7 @@ typedef struct {
 #define PROP_UWSGI(x)          ((cherokee_handler_uwsgi_props_t *)(x))
 #define HANDLER_UWSGI_PROPS(x) (PROP_UWSGI(MODULE(x)->props))
 
- 
+
 /* Library init function
  */
 void PLUGIN_INIT_NAME(uwsgi)      (cherokee_plugin_loader_t *loader);

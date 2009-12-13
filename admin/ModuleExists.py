@@ -22,7 +22,7 @@ class ModuleExists (Module, FormHelper):
 
         # Special case: there is a check in the rule
         self.checks = ['%s!iocache'%(self._prefix),
-                       '%s!match_any'%(self._prefix), 
+                       '%s!match_any'%(self._prefix),
                        '%s!match_only_files'%(self._prefix),
                        '%s!match_index_files'%(self._prefix)]
 

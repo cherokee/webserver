@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "admin_server.h"
@@ -33,7 +33,7 @@
 
 /* Server Port
  */
-ret_t 
+ret_t
 cherokee_admin_server_reply_get_port (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_list_t   *i;
@@ -67,7 +67,7 @@ cherokee_admin_server_reply_get_port (cherokee_handler_admin_t *ahdl, cherokee_b
 }
 
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_set_port (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
@@ -82,7 +82,7 @@ cherokee_admin_server_reply_set_port (cherokee_handler_admin_t *ahdl, cherokee_b
 
 /* Server Port TLS
  */
-ret_t 
+ret_t
 cherokee_admin_server_reply_get_port_tls (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_list_t   *i;
@@ -115,7 +115,7 @@ cherokee_admin_server_reply_get_port_tls (cherokee_handler_admin_t *ahdl, cherok
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_set_port_tls (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
@@ -130,7 +130,7 @@ cherokee_admin_server_reply_set_port_tls (cherokee_handler_admin_t *ahdl, cherok
 
 /* Get RX/TX
  */
-ret_t 
+ret_t
 cherokee_admin_server_reply_get_tx (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
@@ -138,14 +138,14 @@ cherokee_admin_server_reply_get_tx (cherokee_handler_admin_t *ahdl, cherokee_buf
 	UNUSED(question);
 
 	cherokee_buffer_add_str   (reply, "server.tx is ");
-	cherokee_buffer_add_fsize (reply, 
+	cherokee_buffer_add_fsize (reply,
 				   (srv->collector) ? COLLECTOR_TX(srv->collector) : -1);
 
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_get_rx (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
@@ -153,7 +153,7 @@ cherokee_admin_server_reply_get_rx (cherokee_handler_admin_t *ahdl, cherokee_buf
 	UNUSED(question);
 
 	cherokee_buffer_add_str   (reply, "server.tx is ");
-	cherokee_buffer_add_fsize (reply, 
+	cherokee_buffer_add_fsize (reply,
 				   (srv->collector) ? COLLECTOR_RX(srv->collector) : -1);
 
 	return ret_ok;
@@ -165,7 +165,7 @@ cherokee_admin_server_reply_get_rx (cherokee_handler_admin_t *ahdl, cherokee_buf
 static void
 serialize_connection (cherokee_connection_info_t *info, cherokee_buffer_t *buf)
 {
-	cherokee_buffer_add_va (buf, "[id=%s,ip=%s,phase=%s", 
+	cherokee_buffer_add_va (buf, "[id=%s,ip=%s,phase=%s",
 				info->id.buf,
 				info->ip.buf,
 				info->phase.buf);
@@ -193,7 +193,7 @@ serialize_connection (cherokee_connection_info_t *info, cherokee_buffer_t *buf)
 	if (!cherokee_buffer_is_empty(&info->percent)) {
 		cherokee_buffer_add_va (buf, ",percent=%s", info->percent.buf);
 	}
-	
+
 	if (!cherokee_buffer_is_empty(&info->icon)) {
 		cherokee_buffer_add_va (buf, ",icon=%s", info->icon.buf);
 	}
@@ -219,7 +219,7 @@ cherokee_admin_server_reply_get_connections (cherokee_handler_admin_t *ahdl, che
  	case ret_ok:
 		break;
 	case ret_not_found:
-		cherokee_buffer_add_str (reply, "server.connections are \n");		
+		cherokee_buffer_add_str (reply, "server.connections are \n");
 		return ret_ok;
 	case ret_error:
 		return ret_error;
@@ -233,10 +233,10 @@ cherokee_admin_server_reply_get_connections (cherokee_handler_admin_t *ahdl, che
 	cherokee_buffer_add_str (reply, "server.connections are ");
 	list_for_each (i, &connections) {
 		cherokee_connection_info_t *conn = CONN_INFO(i);
-		
+
 		/* It won't include details about the admin requests
 		 */
-		if (!cherokee_buffer_is_empty (&conn->handler) &&  
+		if (!cherokee_buffer_is_empty (&conn->handler) &&
 		    (!strcmp(conn->handler.buf, "admin"))) {
 			continue;
 		}
@@ -256,13 +256,13 @@ cherokee_admin_server_reply_get_connections (cherokee_handler_admin_t *ahdl, che
 }
 
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_del_connection (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	ret_t              ret;
 	char              *begin;
 	cherokee_server_t *server = HANDLER_SRV(ahdl);
-                            
+
 	if (strncmp (question->buf, "del server.connection ", 22)) {
 		return ret_error;
 	}
@@ -275,9 +275,9 @@ cherokee_admin_server_reply_del_connection (cherokee_handler_admin_t *ahdl, cher
 }
 
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_get_thread_num (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
-{	
+{
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
 
 	UNUSED(question);
@@ -287,7 +287,7 @@ cherokee_admin_server_reply_get_thread_num (cherokee_handler_admin_t *ahdl, cher
 }
 
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	ret_t              ret;
@@ -297,14 +297,14 @@ cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, che
 
 	/* Read if the resquest if for turning it on or off
 	 */
-	if (cherokee_buffer_cmp_str (question, "set server.backup_mode on") == 0) { 
+	if (cherokee_buffer_cmp_str (question, "set server.backup_mode on") == 0) {
 		mode = true;
-	} else if (cherokee_buffer_cmp_str (question, "set server.backup_mode off") == 0) { 
+	} else if (cherokee_buffer_cmp_str (question, "set server.backup_mode off") == 0) {
 		mode = false;
 	} else {
 		return ret_error;
 	}
-	
+
 	/* Do it
 	 */
 	ret = cherokee_server_set_backup_mode (srv, mode);
@@ -314,7 +314,7 @@ cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, che
 	 */
 	cherokee_server_get_backup_mode (srv, &active);
 
-	if (active) 
+	if (active)
 		cherokee_buffer_add_str (reply, "server.backup_mode is on\n");
 	else
 		cherokee_buffer_add_str (reply, "server.backup_mode is off\n");
@@ -326,7 +326,7 @@ cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, che
 /* Trace
  */
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_get_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	ret_t              ret;
@@ -348,7 +348,7 @@ cherokee_admin_server_reply_get_trace (cherokee_handler_admin_t *ahdl, cherokee_
 }
 
 
-ret_t 
+ret_t
 cherokee_admin_server_reply_set_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	ret_t ret;

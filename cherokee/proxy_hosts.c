@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "proxy_hosts.h"
@@ -174,7 +174,7 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 		cherokee_list_add (&n->listed, &poll->active);
 		n->poll_ref = poll;
 		*pconn = n;
-	}	
+	}
 
 	CHEROKEE_MUTEX_UNLOCK (&poll->mutex);
 	return ret_ok;
@@ -200,7 +200,7 @@ poll_release (cherokee_handler_proxy_poll_t *poll,
 	/* If the reuse-list is full, dispose the oldest obj
 	 */
 	if (poll->reuse_len > poll->reuse_max) {
-		cherokee_handler_proxy_conn_t *oldest;		
+		cherokee_handler_proxy_conn_t *oldest;
 
 		oldest = PROXY_CONN(poll->reuse.prev);
 		cherokee_list_del (&oldest->listed);
@@ -225,7 +225,7 @@ poll_release (cherokee_handler_proxy_poll_t *poll,
 
 	return ret_ok;
 }
-	
+
 
 /* Conn's
  */
@@ -309,7 +309,7 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	cuint_t  sep_len;
 	size_t   size     = 0;
 
-	/* Read 
+	/* Read
 	 */
 	ret = cherokee_socket_bufread (&pconn->socket,
 				       &pconn->header_in_raw,
@@ -353,12 +353,12 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
  */
 
 ret_t
-cherokee_proxy_util_init_socket (cherokee_socket_t *socket, 
+cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
 				 cherokee_source_t *src)
 {
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv;
-	
+
 	/* Family */
 	if (cherokee_string_is_ipv6 (&src->host)) {
 		ret = cherokee_socket_set_client (socket, AF_INET6);

@@ -18,7 +18,7 @@ class Test (TestBase):
         self.name = "Dirlist with hidden files"
 
         self.request           = "GET /%s/ HTTP/1.0\r\n" %(DIR)
-        self.expected_error    = 200        
+        self.expected_error    = 200
         self.conf              = CONF
         self.expected_content  = FILES
         self.forbidden_content = HIDDEN

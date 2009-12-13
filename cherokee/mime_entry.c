@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "mime_entry.h"
@@ -61,7 +61,7 @@ cherokee_mime_entry_free (cherokee_mime_entry_t *mentry)
 }
 
 
-ret_t 
+ret_t
 cherokee_mime_entry_set_type (cherokee_mime_entry_t *mentry, cherokee_buffer_t *type)
 {
 	cherokee_buffer_clean (&mentry->mime_name);
@@ -69,7 +69,7 @@ cherokee_mime_entry_set_type (cherokee_mime_entry_t *mentry, cherokee_buffer_t *
 }
 
 
-ret_t 
+ret_t
 cherokee_mime_entry_get_type (cherokee_mime_entry_t *mentry, cherokee_buffer_t **name)
 {
 	*name = &mentry->mime_name;
@@ -77,7 +77,7 @@ cherokee_mime_entry_get_type (cherokee_mime_entry_t *mentry, cherokee_buffer_t *
 }
 
 
-ret_t 
+ret_t
 cherokee_mime_entry_set_maxage (cherokee_mime_entry_t *mentry, cuint_t maxage)
 {
 	mentry->maxage_set = true;
@@ -87,10 +87,10 @@ cherokee_mime_entry_set_maxage (cherokee_mime_entry_t *mentry, cuint_t maxage)
 }
 
 
-ret_t 
+ret_t
 cherokee_mime_entry_get_maxage (cherokee_mime_entry_t *mentry, cuint_t *maxage)
 {
-	if (mentry->maxage_set == false) 
+	if (mentry->maxage_set == false)
 		return ret_not_found;
 
 	*maxage = mentry->maxage;

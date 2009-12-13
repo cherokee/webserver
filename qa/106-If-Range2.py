@@ -39,9 +39,9 @@ class Test (TestBase):
         st = os.stat (f)
         mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime = st
         times = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
-        
+
         self.request          = "GET /if_range2/file HTTP/1.1\r\n"  + \
                                 "Host: localhost\r\n"               + \
                                 "Connection: Close\r\n"             + \
                                 "If-Range: %s\r\n" % (times)        + \
-                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION)-1) 
+                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION)-1)

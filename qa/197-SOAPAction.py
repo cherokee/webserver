@@ -15,7 +15,7 @@ vserver!1!rule!1970!handler!pass_req_headers = 1
 """ % (DIR)
 
 PHP_SCRIPT = """
-<?php 
+<?php
    /* %s */
    echo "SOAPAction: ".$_SERVER["HTTP_SOAPACTION"];
 ?>""" % (FORBIDDEN)
@@ -33,7 +33,7 @@ class Test (TestBase):
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
         self.WriteFile (d, "file", 0444,
-                        '<?php /* %s */ echo "%s: ".$_SERVER["HTTP_SOAPACTION"]; ?>' % 
+                        '<?php /* %s */ echo "%s: ".$_SERVER["HTTP_SOAPACTION"]; ?>' %
                         (FORBIDDEN, HEADER))
 
     def Precondition (self):

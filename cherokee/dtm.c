@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -795,7 +795,7 @@ cherokee_dtm_str2time( char* cstr )
 	} else
 	if ( isdigit( *psz ) ) {
 		/* Uncommon date-time formats
-		 * -------------------------- 
+		 * --------------------------
 		 * HH:MM:SS GMT DD-mth-YY
 		 * DD-mth-YY HH:MM:SS GMT
 		 * --------------------------

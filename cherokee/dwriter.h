@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -58,7 +58,7 @@ typedef struct {
 	cherokee_buffer_t        *buf;
 	cuint_t                   depth;
 	cherokee_boolean_t        pretty;
-	cherokee_dwriter_state_t  state[DWRITER_STACK_LEN];	
+	cherokee_dwriter_state_t  state[DWRITER_STACK_LEN];
 	cherokee_dwriter_lang_t   lang;
 	cherokee_buffer_t        *tmp;
 } cherokee_dwriter_t;

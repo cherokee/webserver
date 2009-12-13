@@ -1,5 +1,5 @@
 /* -*- c-file-style: "java"; indent-tabs-mode: nil; fill-column: 78 -*-
- * 
+ *
  * distcc -- A simple distributed compiler system
  *
  * Copyright (C) 2003 by Martin Pool <mbp@samba.org>
@@ -12,7 +12,7 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -52,7 +52,7 @@
 
 int dcc_ncpus(int *ncpus)
 {
-	struct pst_dynamic psd; 
+	struct pst_dynamic psd;
 	if (pstat_getdynamic(&psd, sizeof(psd), 1, 0) != -1) {
 		*ncpus = psd.psd_proc_cnt;
 		return 0;
@@ -136,7 +136,7 @@ int dcc_ncpus(int *ncpus)
 #warning "Please port this function"
 	*ncpus = -1;                /* unknown */
 #endif
-    
+
 	if (*ncpus == -1) {
          LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_SYSCONF);
          return EXIT_DISTCC_FAILED;

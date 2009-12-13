@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "shm.h"
@@ -38,9 +38,9 @@ cherokee_shm_init (cherokee_shm_t *shm)
 {
 	shm->len = 0;
 	shm->mem = NULL;
-	
+
 	cherokee_buffer_init (&shm->name);
-	
+
 	return ret_ok;
 }
 
@@ -51,7 +51,7 @@ cherokee_shm_mrproper (cherokee_shm_t *shm)
 	if (shm->mem) {
 		munmap (shm->mem, shm->len);
 	}
-	
+
 	cherokee_buffer_mrproper (&shm->name);
 	return ret_ok;
 }
@@ -62,7 +62,7 @@ cherokee_shm_create (cherokee_shm_t *shm, char *name, size_t len)
 {
 	int re;
 	int fd;
-	
+
 	fd = shm_open (name, O_RDWR | O_EXCL | O_CREAT, 0600);
 	if (fd < 0) {
 		return ret_error;
@@ -73,7 +73,7 @@ cherokee_shm_create (cherokee_shm_t *shm, char *name, size_t len)
 		close (fd);
 		return ret_error;
 	}
-	
+
 	shm->mem = mmap (0, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (shm->mem == MAP_FAILED) {
 		shm->mem = NULL;

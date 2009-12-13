@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_render_rrd.h"
@@ -44,14 +44,14 @@ find_interval (const char                         *txt,
 	       cherokee_collector_rrd_interval_t **interval)
 {
 	cherokee_collector_rrd_interval_t *i;
-	
+
 	for (i = cherokee_rrd_intervals; i->interval != NULL; i++) {
 		if (strncmp (i->interval, txt, 2) == 0) {
 			*interval = i;
 			return ret_ok;
 		}
 	}
-	
+
 	return ret_error;
 }
 
@@ -71,7 +71,7 @@ check_image_freshness (cherokee_buffer_t                 *buf,
 	cherokee_buffer_add_char    (buf, '_');
 	cherokee_buffer_add         (buf, interval->interval, strlen(interval->interval));
 	cherokee_buffer_add_str     (buf, ".png");
-	
+
 	re = stat (buf->buf, &info);
 	if (re != 0) {
 		TRACE(ENTRIES, "Image does not exist: '%s'\n", buf->buf);
@@ -109,7 +109,7 @@ command_rrdtool (cherokee_handler_render_rrd_t *hdl,
         if (cherokee_buffer_is_empty (buf)) {
 		LOG_ERROR_S (CHEROKEE_ERROR_HANDLER_RENDER_RRD_EMPTY_REPLY);
 		return ret_error;
-		
+
 	} else if (strncmp (buf->buf, "ERROR", 5) == 0) {
 		cherokee_buffer_add_buffer (&hdl->rrd_error, buf);
 		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_MSG, buf->buf);
@@ -161,7 +161,7 @@ render_srv_accepts (cherokee_handler_render_rrd_t     *hdl,
 	cherokee_buffer_add_str    (tmp, "GPRINT:accepts_max:MAX:\" Maximum\\:%8.2lf%s\" ");
 	cherokee_buffer_add_str    (tmp, "GPRINT:accepts_total:\"  Total\\:%8.2lf%s\\n\" ");
 	cherokee_buffer_add_str    (tmp, "\n");
-	
+
 	command_rrdtool (hdl, tmp);
 	cherokee_buffer_clean (tmp);
 
@@ -323,7 +323,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	/* Parse the interval
 	 */
 	dash = conn->request.buf + conn->request.len - (3 + 4);
-	
+
 	ret = find_interval (dash+1, &interval);
 	if (ret != ret_ok) {
 		TRACE (ENTRIES, "No interval detected: %s\n", dash+1);
@@ -335,7 +335,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	if (begin == NULL) {
 		TRACE (ENTRIES, "Malformed RRD image request. No slash.\n");
 		conn->error_code = http_service_unavailable;
-		return ret_error;		
+		return ret_error;
 	}
 
 	/* Launch the task
@@ -364,7 +364,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
 				conn->error_code = http_service_unavailable;
-				return ret_error;			
+				return ret_error;
 			}
 
 			CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
@@ -394,7 +394,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
 				conn->error_code = http_service_unavailable;
-				return ret_error;			
+				return ret_error;
 			}
 
 			CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
@@ -424,7 +424,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
 				conn->error_code = http_service_unavailable;
-				return ret_error;			
+				return ret_error;
 			}
 
 			CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
@@ -474,7 +474,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
 				conn->error_code = http_service_unavailable;
-				return ret_error;			
+				return ret_error;
 			}
 
 			CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
@@ -483,7 +483,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	} else {
 		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_INVALID_REQ, conn->request.buf);
 		conn->error_code = http_service_unavailable;
-		return ret_error;		
+		return ret_error;
 	}
 
 	/* Has everything gone alright?
@@ -502,7 +502,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 
 static ret_t
-handler_add_headers (cherokee_handler_render_rrd_t *hdl, 
+handler_add_headers (cherokee_handler_render_rrd_t *hdl,
 		     cherokee_buffer_t             *buffer)
 {
 	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
@@ -553,13 +553,13 @@ handler_free (cherokee_handler_render_rrd_t *hdl)
 
 
 ret_t
-cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl, 
+cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
 				 void                    *cnt,
 				 cherokee_module_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_render_rrd);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(render_rrd));
@@ -567,7 +567,7 @@ cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_render_rrd_init;
 	MODULE(n)->free         = (module_func_free_t) handler_free;
 	HANDLER(n)->step        = (handler_func_step_t) handler_step;
-	HANDLER(n)->add_headers = (handler_func_add_headers_t) handler_add_headers; 
+	HANDLER(n)->add_headers = (handler_func_add_headers_t) handler_add_headers;
 
 	/* Supported features
 	 */
@@ -597,7 +597,7 @@ cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
 }
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_handler_render_rrd_props_t *props)
 {
 	if (props->file_props != NULL) {
@@ -608,8 +608,8 @@ props_free (cherokee_handler_render_rrd_props_t *props)
 }
 
 
-ret_t 
-cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf, 
+ret_t
+cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
 				       cherokee_server_t       *srv,
 				       cherokee_module_props_t **_props)
 {
@@ -618,7 +618,7 @@ cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_render_rrd_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+		cherokee_handler_props_init_base (HANDLER_PROPS(n),
 						  MODULE_PROPS_FREE(props_free));
 
 		/* Sub-handler properties */
@@ -644,7 +644,7 @@ cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
 		PROP_RENDER_RRD(*_props)->disabled = true;
 		return ret_ok;
 	}
-	
+
 	/* Ensure the image cache directory exists
 	 */
 	ret = cherokee_mkdir_p_perm (&rrd_connection->path_img_cache, 0775, W_OK);
@@ -663,7 +663,7 @@ cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
  */
 static cherokee_boolean_t _render_rrd_is_init = false;
 
-void  
+void
 PLUGIN_INIT_NAME(render_rrd) (cherokee_plugin_loader_t *loader)
 {
 	if (_render_rrd_is_init) return;

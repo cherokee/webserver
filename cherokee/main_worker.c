@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -40,11 +40,11 @@
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
-#else 
+#else
 # include "getopt/getopt.h"
 #endif
 
-/* Notices 
+/* Notices
  */
 #define APP_NAME        \
 	"Cherokee Web Server"
@@ -99,9 +99,9 @@ wait_process (pid_t pid)
 		re = waitpid (pid, &exitcode, 0);
 		if (re > 0)
 			break;
-		else if (errno == ECHILD) 
+		else if (errno == ECHILD)
 			break;
-		else if (errno == EINTR) 
+		else if (errno == EINTR)
 			continue;
 		else {
 			PRINT_ERROR ("ERROR: waitting PID %d, error %d\n", pid, errno);
@@ -110,8 +110,8 @@ wait_process (pid_t pid)
 	}
 }
 
-static void 
-signals_handler (int sig, siginfo_t *si, void *context) 
+static void
+signals_handler (int sig, siginfo_t *si, void *context)
 {
 	UNUSED(context);
 
@@ -162,7 +162,7 @@ test_configuration_file (void)
 	config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
 	ret = cherokee_server_read_config_file (srv, config);
 
-	PRINT_MSG ("Test on %s: %s\n", config, (ret == ret_ok)? "OK": "Failed"); 
+	PRINT_MSG ("Test on %s: %s\n", config, (ret == ret_ok)? "OK": "Failed");
 	return ret;
 }
 
@@ -211,7 +211,7 @@ common_server_initialization (cherokee_server_t *srv)
 		cherokee_buffer_add (&droot, document_root, strlen(document_root));
 		cherokee_path_arg_eval (&droot);
 
-		cherokee_buffer_add_va (&tmp, 
+		cherokee_buffer_add_va (&tmp,
 					"server!bind!1!port = %d\n"
 					"vserver!1!document_root = %s\n"
 					BASIC_CONFIG, port, droot.buf);
@@ -236,7 +236,7 @@ common_server_initialization (cherokee_server_t *srv)
 			PRINT_MSG ("The -p parameter can only be used in conjunction with -r.");
 			return ret_error;
 		}
-		
+
 		/* Read the configuration file
 		 */
 		config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
@@ -342,9 +342,9 @@ main (int argc, char **argv)
 
 	ret = cherokee_server_new (&srv);
 	if (ret < ret_ok) return 1;
-	
+
 	ret = process_parameters (argc, argv);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		exit (EXIT_OK_ONCE);
 
 	if (print_modules) {
@@ -354,7 +354,7 @@ main (int argc, char **argv)
 
 	if (just_test) {
 		ret = test_configuration_file();
-		if (ret != ret_ok) 
+		if (ret != ret_ok)
 			exit(EXIT_ERROR);
 		exit (EXIT_OK_ONCE);
 	}

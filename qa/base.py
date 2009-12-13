@@ -26,7 +26,7 @@ def importfile(path):
     file = open(path, 'r')
     module = imp.load_module(name, file, path, (ext, 'r', imp.PY_SOURCE))
     file.close()
-    
+
     return module
 
 class TestBase:
@@ -41,7 +41,7 @@ class TestBase:
         self.expected_content        = None
         self.forbidden_content       = None
         self._initialize()
-        
+
     def _initialize (self):
         self.ssl                     = None
         self.reply                   = ""      # "200 OK"..
@@ -49,7 +49,7 @@ class TestBase:
         self.reply_err               = None    # 200
 
     def _safe_read (self, s):
-         while True: 
+         while True:
             try:
                 if self.ssl:
                     return self.ssl.read (DEFAULT_READ)
@@ -77,7 +77,7 @@ class TestBase:
                 s.close()
                 s = None
                 continue
-            break    
+            break
 
         if s is None:
             raise Exception("Couldn't connect to the server")
@@ -97,7 +97,7 @@ class TestBase:
         else:
             n = s.send (request)
         assert (n == len(request))
-        
+
         while True:
             try:
                 d = self._safe_read (s)
@@ -161,12 +161,12 @@ class TestBase:
         if self.expected_content != None:
             if type(self.expected_content) == types.StringType:
                 r = self._check_result_expected_item (self.expected_content)
-                if r == -1: 
+                if r == -1:
                     return -1
             elif type(self.expected_content) == types.ListType:
                 for entry in self.expected_content:
                     r = self._check_result_expected_item (entry)
-                    if r == -1: 
+                    if r == -1:
                         return -1
             else:
                 raise Exception("Syntax error")
@@ -179,15 +179,15 @@ class TestBase:
             elif type(self.forbidden_content) == types.ListType:
                 for entry in self.forbidden_content:
                     r = self._check_result_forbidden_item (entry)
-                    if r == -1: 
+                    if r == -1:
                         return -1
             else:
                 raise Exception("Syntax error")
 
         r = self.CustomTest()
-        if r == -1: 
+        if r == -1:
             return -1
-	                   
+
         return 0
 
     def Clean (self):
@@ -290,7 +290,7 @@ class TestBase:
             try:
                 rmtree (fullpath)
             except: pass
-            
+
     def WriteTemp (self, content):
         while True:
             name = self.tmp + "/%s" % (letters_random(40))
@@ -339,15 +339,15 @@ class TestBase:
             md5obj = md5()
             md5obj.update("%s:%s" % (method, url))
             ha2 = md5obj.hexdigest()
-            
+
             md5obj = md5()
             md5obj.update("%s:%s:" % (a1, nonce))
-            
+
             if qop != None:
                 md5obj.update("%s:" %(nc))
                 md5obj.update("%s:" %(cnonce))
                 md5obj.update("%s:" %(qop))
-            
+
             md5obj.update(ha2)
             final = md5obj.hexdigest()
 
@@ -370,7 +370,7 @@ class TestBase:
             return False
 
         return public_html, user
-        
+
 
 class TestCollection:
     def __init__ (self):
@@ -384,7 +384,7 @@ class TestCollection:
             test.name = self.name + ", Part %d" % (self.num)
 
         test.tmp            = self.tmp
-        test.nobody         = self.nobody 
+        test.nobody         = self.nobody
         test.php_conf       = self.php_conf
         test.proxy_suitable = self.proxy_suitable
 
@@ -412,7 +412,7 @@ class TestCollection:
         for t in self.tests:
             self.current_test = t
             t.JustBefore(www)
-        
+
     def JustAfter (self, www):
         current = self.current_test
 

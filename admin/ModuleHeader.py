@@ -37,7 +37,7 @@ class ModuleHeader (Module, FormHelper):
             self.AddPropOptions_Reload_Plain (table, _('Header'), '%s!header'%(self._prefix), HEADERS, _(NOTE_HEADER))
         self.AddPropEntry (table, _('Regular Expression'), '%s!match'%(self._prefix), _(NOTE_MATCH))
         return str(table)
-        
+
     def apply_cfg (self, values):
         if values.has_key('value'):
             header = values['value']

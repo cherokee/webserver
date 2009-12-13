@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_VALIDATOR_PAM_H
 #define CHEROKEE_VALIDATOR_PAM_H
@@ -30,7 +30,7 @@
 
 typedef struct {
 	   cherokee_validator_t validator;
-	   
+
 } cherokee_validator_pam_t;
 
 #define PAM(x) ((cherokee_validator_pam_t *)(x))

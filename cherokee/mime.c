@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -33,14 +33,14 @@
 #define ENTRIES "mime"
 
 
-ret_t 
+ret_t
 cherokee_mime_new (cherokee_mime_t **mime)
 {
 	CHEROKEE_NEW_STRUCT(n, mime);
 
 	cherokee_avl_init (&n->ext_table);
 	INIT_LIST_HEAD(&n->entry_list);
-	   
+
 	/* Return the object
 	 */
 	*mime = n;
@@ -68,7 +68,7 @@ cherokee_mime_free (cherokee_mime_t *mime)
 }
 
 
-static ret_t 
+static ret_t
 get_by_mime (cherokee_mime_t *mime, cherokee_buffer_t *type, cherokee_mime_entry_t **entry)
 {
 	ret_t            ret;
@@ -90,7 +90,7 @@ get_by_mime (cherokee_mime_t *mime, cherokee_buffer_t *type, cherokee_mime_entry
 }
 
 
-static ret_t 
+static ret_t
 get_by_mime_or_new (cherokee_mime_t *mime, cherokee_buffer_t *type, cherokee_mime_entry_t **entry)
 {
 	ret_t ret;
@@ -99,7 +99,7 @@ get_by_mime_or_new (cherokee_mime_t *mime, cherokee_buffer_t *type, cherokee_mim
 	if (ret == ret_ok)
 		return ret_ok;
 
-	ret = cherokee_mime_entry_new (entry); 
+	ret = cherokee_mime_entry_new (entry);
 	if (ret != ret_ok) return ret;
 
 	ret = cherokee_mime_entry_set_type (*entry, type);
@@ -124,12 +124,12 @@ add_extension (char *val, void *data)
 	 */
 	ret = get_by_mime_or_new (mime, type, &entry);
 	if (ret != ret_ok) return ret;
-	
+
 	/* Link to it by the extension
 	 */
 	TRACE(ENTRIES, "'%s' adding extension: '%s'\n", type->buf, val);
-	cherokee_avl_add_ptr (&mime->ext_table, (const char *)val, entry); 
-	
+	cherokee_avl_add_ptr (&mime->ext_table, (const char *)val, entry);
+
 	return ret_ok;
 }
 
@@ -148,12 +148,12 @@ set_maxage (cherokee_mime_t *mime, cherokee_buffer_t *type, int maxage)
 	 */
 	TRACE(ENTRIES, "'%s' setting max-age: %d\n", type->buf, maxage);
 	cherokee_mime_entry_set_maxage (entry, maxage);
-		
+
 	return ret_ok;
 }
 
 
-static ret_t 
+static ret_t
 configure_mime (cherokee_config_node_t *config, void *data)
 {
 	ret_t                   ret;
@@ -177,7 +177,7 @@ configure_mime (cherokee_config_node_t *config, void *data)
 }
 
 
-ret_t 
+ret_t
 cherokee_mime_configure (cherokee_mime_t *mime, cherokee_config_node_t *config)
 {
 	ret_t ret;
@@ -189,8 +189,8 @@ cherokee_mime_configure (cherokee_mime_t *mime, cherokee_config_node_t *config)
 }
 
 
-ret_t 
-cherokee_mime_get_by_suffix (cherokee_mime_t        *mime, 
+ret_t
+cherokee_mime_get_by_suffix (cherokee_mime_t        *mime,
 			     char                   *suffix,
 			     cherokee_mime_entry_t **entry)
 {

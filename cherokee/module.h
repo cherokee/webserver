@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -60,7 +60,7 @@ typedef struct {
 typedef struct {
 	cherokee_plugin_info_t   *info;       /* ptr to info structure    */
 	cherokee_module_props_t  *props;      /* ptr to local properties  */
-	
+
 	module_func_new_t         instance;   /* constructor              */
 	void                     *init;       /* initializer              */
 	module_func_free_t        free;       /* destructor               */

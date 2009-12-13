@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_error.h"
@@ -36,7 +36,7 @@
 PLUGIN_INFO_HANDLER_EASIEST_INIT (error, http_all_methods);
 
 
-ret_t 
+ret_t
 cherokee_handler_error_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	UNUSED(conf);
@@ -47,7 +47,7 @@ cherokee_handler_error_configure (cherokee_config_node_t *conf, cherokee_server_
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
 {
 	ret_t ret;
@@ -65,7 +65,7 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_error_free;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_error_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_error_add_headers;
-	
+
 	/* Init
 	 */
 	ret = cherokee_buffer_init (&n->content);
@@ -79,7 +79,7 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->content);
@@ -97,7 +97,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	/* Add document header
 	 */
 	cherokee_buffer_add_str (buffer, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">" CRLF);
-	   
+
 	/* Add page title
 	 */
 	cherokee_buffer_add_str (buffer, "<html>" CRLF "<head><title>");
@@ -124,7 +124,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 			}
 			cherokee_buffer_add_escape_html (buffer, &conn->request);
 		}
-		
+
 		if (conn->error_code == http_not_found) {
 			cherokee_buffer_add_str (buffer, " was not found on this server.");
 		} else {
@@ -134,7 +134,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 		break;
 
 	case http_bad_request:
-		cherokee_buffer_add_str (buffer, 
+		cherokee_buffer_add_str (buffer,
 			"Your browser sent a request that this server could not understand.");
 		cherokee_buffer_add_str   (buffer, "<p><pre>");
 		cherokee_buffer_add_escape_html (buffer, conn->header.input_buffer);
@@ -154,12 +154,12 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	case http_request_uri_too_long:
 		cherokee_buffer_add_str (buffer,
 			"The length of requested URL exceeds the capacity limit for this server.");
-		break;		
+		break;
 
 	case http_range_not_satisfiable:
 		cherokee_buffer_add_str (buffer,
 			"The requested range was not satisfiable.");
-		break;		
+		break;
 
 	case http_moved_permanently:
 	case http_moved_temporarily:
@@ -169,7 +169,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 		break;
 
 	case http_unauthorized:
-		cherokee_buffer_add_str (buffer, 
+		cherokee_buffer_add_str (buffer,
 			"This server could not verify that you are authorized to access the requested URL.  "
 			"Either you supplied the wrong credentials (e.g., bad password), "
 			"or your browser doesn't know how to supply the credentials required.");
@@ -201,7 +201,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 {
 	ret_t                  ret;
@@ -221,12 +221,12 @@ cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buffer_t *buffer)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
-	/* It has special headers on protocol upgrading 
+	/* It has special headers on protocol upgrading
 	 */
 	switch (conn->upgrade) {
 	case http_upgrade_nothing:
@@ -257,7 +257,7 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 		HANDLER(hdl)->support |= hsupport_length;
 
 		if (conn->error_code == http_range_not_satisfiable) {
-			/* The handler that attended the request has put the content 
+			/* The handler that attended the request has put the content
 			* length in conn->range_end in order to allow it to send the
 			* right length to the client.
 			*
@@ -293,7 +293,7 @@ cherokee_handler_error_step (cherokee_handler_error_t *hdl, cherokee_buffer_t *b
 	ret = cherokee_buffer_add_buffer (buffer, &hdl->content);
 	if (unlikely(ret < ret_ok))
 		return ret;
-	   
+
 	return ret_eof_have_data;
 }
 

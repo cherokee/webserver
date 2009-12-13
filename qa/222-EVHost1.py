@@ -28,6 +28,6 @@ class Test (TestBase):
         d1 = self.Mkdir (www, "test_222_general")
         ev = self.Mkdir (www, "test_222_evhost")
         d2 = self.Mkdir (ev,  "%s/%s/web"%(ev,DOMAIN))
-        
+
         self.WriteFile (d2, "file", 0444, MAGIC)
         self.conf = CONF % (d1, ev)

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "validator_file.h"
@@ -37,7 +37,7 @@ cherokee_validator_file_props_init_base (cherokee_validator_file_props_t *props,
 	cherokee_buffer_init (&props->password_file);
 
 	return cherokee_validator_props_init_base (VALIDATOR_PROPS(props), free_func);
-}	
+}
 
 ret_t
 cherokee_validator_file_props_free_base (cherokee_validator_file_props_t *props)
@@ -130,7 +130,7 @@ cherokee_validator_file_get_full_path (cherokee_validator_file_t  *validator,
 		cherokee_buffer_add_buffer (tmp, &conn->local_directory);
 		cherokee_buffer_add_char   (tmp, '/');
 		cherokee_buffer_add_buffer (tmp, &props->password_file);
-		
+
 		*ret_buf = tmp;
 		return ret_ok;
 

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -67,7 +67,7 @@ struct cherokee_cache {
 	cherokee_avl_t  map;
 
 	/* LRU (Least Recently Used)   */
-	cherokee_list_t _t1; 
+	cherokee_list_t _t1;
 	cherokee_list_t _b1;
 	cint_t          len_t1;
 	cint_t          len_b1;
@@ -105,7 +105,7 @@ struct cherokee_cache_entry {
 	cint_t                       ref_count;
 	void                        *mutex;
 	cherokee_cache_t            *cache;
-	
+
 	/* Callbacks */
 	cherokee_cache_entry_clean_t clean_cb;
 	cherokee_cache_entry_fetch_t fetch_cb;
@@ -119,7 +119,7 @@ struct cherokee_cache_entry {
 
 /* Cache Entries
  */
-ret_t cherokee_cache_entry_init  (cherokee_cache_entry_t  *entry, 
+ret_t cherokee_cache_entry_init  (cherokee_cache_entry_t  *entry,
 				  cherokee_buffer_t       *key,
 				  cherokee_cache_t        *cache,
 				  void                    *mutex);
@@ -133,11 +133,11 @@ ret_t cherokee_cache_clean     (cherokee_cache_t *cache);
 
 /* Cache Functionality
  */
-ret_t cherokee_cache_configure (cherokee_cache_t        *cache, 
+ret_t cherokee_cache_configure (cherokee_cache_t        *cache,
 				cherokee_config_node_t  *conf);
 
-ret_t cherokee_cache_get       (cherokee_cache_t        *cache, 
-				cherokee_buffer_t       *key, 
+ret_t cherokee_cache_get       (cherokee_cache_t        *cache,
+				cherokee_buffer_t       *key,
 				cherokee_cache_entry_t **entry);
 
 ret_t cherokee_cache_get_stats (cherokee_cache_t        *cache,

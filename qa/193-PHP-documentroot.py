@@ -1,6 +1,6 @@
 from base import *
 
-DIR       = "php_dir_documentroot" 
+DIR       = "php_dir_documentroot"
 MAGIC     = '<a href="http://www.alobbs.com/">Alvaro</a>'
 FORBIDDEN = 'This is a comment'
 

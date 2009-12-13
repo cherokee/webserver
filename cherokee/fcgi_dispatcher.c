@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "fcgi_dispatcher.h"
@@ -29,18 +29,18 @@
 #define ENTRIES "dispatcher,cgi"
 
 
-ret_t 
-cherokee_fcgi_dispatcher_new (cherokee_fcgi_dispatcher_t **fcgi, 
-			      cherokee_thread_t           *thd, 
-			      cherokee_source_t           *src, 
-			      cuint_t                      mgr_num, 
+ret_t
+cherokee_fcgi_dispatcher_new (cherokee_fcgi_dispatcher_t **fcgi,
+			      cherokee_thread_t           *thd,
+			      cherokee_source_t           *src,
+			      cuint_t                      mgr_num,
 			      cuint_t                      keepalive,
 			      cuint_t                      pipeline)
 {
 	ret_t   ret;
 	cuint_t i;
         CHEROKEE_NEW_STRUCT (n,fcgi_dispatcher);
-	
+
 	/* Init fcgi manager slots
 	 */
 	INIT_LIST_HEAD(&n->queue);
@@ -64,14 +64,14 @@ cherokee_fcgi_dispatcher_new (cherokee_fcgi_dispatcher_t **fcgi,
 }
 
 
-ret_t 
+ret_t
 cherokee_fcgi_dispatcher_free (cherokee_fcgi_dispatcher_t *fcgi)
 {
 	cuint_t          i;
 	cherokee_list_t *l, *tmp;
 
 	CHEROKEE_MUTEX_DESTROY(&fcgi->lock);
-	
+
 	for (i=0; i < fcgi->manager_num; i++) {
 		cherokee_fcgi_manager_mrproper (&fcgi->manager[i]);
 	}
@@ -90,13 +90,13 @@ cherokee_fcgi_dispatcher_free (cherokee_fcgi_dispatcher_t *fcgi)
 }
 
 static ret_t
-dispatch (cherokee_fcgi_dispatcher_t  *fcgi, 
+dispatch (cherokee_fcgi_dispatcher_t  *fcgi,
 	  cherokee_fcgi_manager_t    **mgr_ret)
 {
 	cuint_t                  i;
 	cherokee_fcgi_manager_t *mgr;
 	cherokee_boolean_t       found         = false;
- 	cuint_t                  lowest_usage = 0; 
+ 	cuint_t                  lowest_usage = 0;
 
 #if 0
 	printf ("%p [", fcgi);
@@ -112,12 +112,12 @@ dispatch (cherokee_fcgi_dispatcher_t  *fcgi,
 		mgr = &fcgi->manager[i];
 		if (mgr->conn.len == 0) {
 			TRACE (ENTRIES, "idle manager: %d\n", i);
-			
+
 			found = true;
 			break;
 		}
 	}
-	
+
 	/* There wasn't an empty slot
 	 */
 	if (!found) {
@@ -150,15 +150,15 @@ dispatch (cherokee_fcgi_dispatcher_t  *fcgi,
 		TRACE (ENTRIES, "found manager: len %d\n", lowest_usage);
 
 		return ret_not_found;
-	} 
+	}
 
 	*mgr_ret = mgr;
 	return ret_ok;
 }
 
 
-ret_t 
-cherokee_fcgi_dispatcher_dispatch (cherokee_fcgi_dispatcher_t  *fcgi, 
+ret_t
+cherokee_fcgi_dispatcher_dispatch (cherokee_fcgi_dispatcher_t  *fcgi,
 				   cherokee_fcgi_manager_t    **mgr_ret)
 {
 	ret_t ret;

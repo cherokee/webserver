@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 /* Some fragments of code from win32equ.[h,c]
  * Copyright (C)1999 by James Ewing <jim@ewingdata.com>

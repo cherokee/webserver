@@ -21,7 +21,7 @@ HELPS = [
 
 class ModuleProxy (ModuleHandler):
     PROPERTIES = [
-        'balancer', 
+        'balancer',
         'in_allow_keepalive',
         'in_preserve_host',
         'out_preserve_server',
@@ -70,7 +70,7 @@ class ModuleProxy (ModuleHandler):
                                                  _("URL Rewriting"))
 
         txt += self._render_generic_header_list ("in_header_add",
-                                                 "tmp!in_header_add", 
+                                                 "tmp!in_header_add",
                                                  _("Header Addition"),
                                                  _("Add New Header"))
 
@@ -85,7 +85,7 @@ class ModuleProxy (ModuleHandler):
                                                  _("URL Rewriting"))
 
         txt += self._render_generic_header_list ("out_header_add",
-                                                 "tmp!out_header_add", 
+                                                 "tmp!out_header_add",
                                                  _("Header addition"),
                                                  _("Add New Header"))
 
@@ -209,6 +209,6 @@ class ModuleProxy (ModuleHandler):
             props._op_apply_changes (uri, post)
 
         # And CGI changes
-        self.ApplyChangesPrefix (self._prefix, 
+        self.ApplyChangesPrefix (self._prefix,
                                  ['in_allow_keepalive', 'in_preserve_host',
                                   'out_preserve_server'], post)

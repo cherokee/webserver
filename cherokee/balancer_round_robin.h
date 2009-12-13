@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_BALANCER_ROUND_ROBIN_H
 #define CHEROKEE_BALANCER_ROUND_ROBIN_H
@@ -32,7 +32,7 @@
 typedef struct {
 	cherokee_balancer_t  balancer;
 
-	cherokee_list_t     *last_one;	
+	cherokee_list_t     *last_one;
 	CHEROKEE_MUTEX_T    (mutex);
 } cherokee_balancer_round_robin_t;
 

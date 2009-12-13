@@ -48,7 +48,7 @@ class ModuleMysql (ModuleAuthBase):
         self.AddPropEntry (table, _("DB Password"), "%s!passwd"%(self._prefix), _(NOTE_PASSWD))
         self.AddPropEntry (table, _("Database"), "%s!database"%(self._prefix), _(NOTE_DB))
         self.AddPropEntry (table, _("SQL Query"), "%s!query"%(self._prefix), _(NOTE_SQL))
-        
+
         if not is_basic:
             self.AddPropOptions (table, _('Password Hash'), "%s!hash"%(self._prefix), HASHES, _(NOTE_HASH), disabled=1)
         else:

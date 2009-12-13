@@ -13,7 +13,7 @@ class Test (TestBase):
                                  "Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n" + \
                                  "Accept-Language: en\r\n"                            + \
                                  "Accept-Charset: iso-8859-1,*,utf-8\r\n"
-                                 
+
         self.expected_error    = 404
 
 

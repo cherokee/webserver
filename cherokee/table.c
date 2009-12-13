@@ -20,12 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "table.h"
 
-ret_t 
+ret_t
 cherokee_table_init (cherokee_table_t *tab)
 {
 	ret_t ret;
@@ -37,7 +37,7 @@ cherokee_table_init (cherokee_table_t *tab)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_table_init_case (cherokee_table_t *tab)
 {
 	ret_t ret;
@@ -50,18 +50,18 @@ cherokee_table_init_case (cherokee_table_t *tab)
 }
 
 
-ret_t 
-cherokee_table_free2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
-{ 
+ret_t
+cherokee_table_free2 (cherokee_table_t *tab, cherokee_table_free_item_t func)
+{
 	cherokee_table_mrproper2 (tab, func);
 	free(tab);
-	return ret_ok; 
+	return ret_ok;
 }
 
 
-ret_t 
-cherokee_table_clean (cherokee_table_t *tab) 
-{ 
+ret_t
+cherokee_table_clean (cherokee_table_t *tab)
+{
 	return cherokee_table_clean2 (tab, NULL);
 }
 
@@ -74,23 +74,23 @@ free_entry (const char *key, void *value, void *param)
 }
 
 
-ret_t 
-cherokee_table_clean2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
-{ 
+ret_t
+cherokee_table_clean2 (cherokee_table_t *tab, cherokee_table_free_item_t func)
+{
 	return cherokee_avl_while (&tab->avl, free_entry, func, NULL, NULL);
 }
 
 
 ret_t
-cherokee_table_mrproper (cherokee_table_t *tab) 
-{ 
+cherokee_table_mrproper (cherokee_table_t *tab)
+{
 	return cherokee_table_clean (tab);
 }
 
 
-ret_t 
-cherokee_table_mrproper2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
-{ 
+ret_t
+cherokee_table_mrproper2 (cherokee_table_t *tab, cherokee_table_free_item_t func)
+{
 	return cherokee_table_clean2 (tab, func);
 }
 
@@ -99,7 +99,7 @@ CHEROKEE_ADD_FUNC_NEW(table);
 CHEROKEE_ADD_FUNC_FREE(table);
 
 
-ret_t 
+ret_t
 cherokee_table_add (cherokee_table_t *tab, char *key, void *value)
 {
 	cherokee_buffer_t tmp;
@@ -109,7 +109,7 @@ cherokee_table_add (cherokee_table_t *tab, char *key, void *value)
 }
 
 
-ret_t 
+ret_t
 cherokee_table_get (cherokee_table_t *tab, char *key, void **val)
 {
 	cherokee_buffer_t tmp;
@@ -119,7 +119,7 @@ cherokee_table_get (cherokee_table_t *tab, char *key, void **val)
 }
 
 
-ret_t 
+ret_t
 cherokee_table_del (cherokee_table_t *tab, char *key, void **val)
 {
 	cherokee_buffer_t tmp;
@@ -129,14 +129,14 @@ cherokee_table_del (cherokee_table_t *tab, char *key, void **val)
 }
 
 
-ret_t 
+ret_t
 cherokee_table_len (cherokee_table_t *tab, size_t *len)
 {
 	return cherokee_avl_len (&tab->avl, len);
 }
 
 
-static ret_t 
+static ret_t
 each_func_avl_to_table (cherokee_buffer_t *key, void *value, void *param)
 {
 	// To be removed
@@ -145,14 +145,14 @@ each_func_avl_to_table (cherokee_buffer_t *key, void *value, void *param)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_table_foreach (cherokee_table_t *tab, cherokee_table_foreach_func_t func)
 {
 	return cherokee_avl_while (&tab->avl, each_func_avl_to_table, func, NULL, NULL);
 }
 
 
-ret_t 
+ret_t
 while_func_avl_to_table (cherokee_buffer_t *key, void *value, void *param)
 {
 	// To be removed
@@ -168,7 +168,7 @@ while_func_avl_to_table (cherokee_buffer_t *key, void *value, void *param)
 }
 
 
-ret_t 
+ret_t
 cherokee_table_while (cherokee_table_t *tab, cherokee_table_while_func_t func, void *param, char **key, void **value)
 {
 	ret_t              ret;

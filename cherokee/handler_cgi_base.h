@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_CGI_BASE_H
 #define CHEROKEE_HANDLER_CGI_BASE_H
@@ -57,7 +57,7 @@ typedef void  (* cherokee_handler_cgi_base_add_env_pair_t)  (cherokee_handler_cg
 							     const char *name,    int name_len,
 							     const char *content, int content_len);
 
-typedef ret_t (* cherokee_handler_cgi_base_read_from_cgi_t) (cherokee_handler_cgi_base_t *cgi, 
+typedef ret_t (* cherokee_handler_cgi_base_read_from_cgi_t) (cherokee_handler_cgi_base_t *cgi,
 							     cherokee_buffer_t *buffer);
 
 typedef enum {
@@ -74,7 +74,7 @@ struct cherokee_handler_cgi_base {
 
 	/* Properties
 	 */
-	cherokee_handler_cgi_base_phase_t  init_phase;	
+	cherokee_handler_cgi_base_phase_t  init_phase;
 	cuint_t                            got_eof;
 
 	size_t                             content_length;
@@ -83,7 +83,7 @@ struct cherokee_handler_cgi_base {
 	void                              *file_handler;
 
 	cherokee_buffer_t                  executable;
-	cherokee_buffer_t                  data; 
+	cherokee_buffer_t                  data;
 
 	/* Virtual methods
 	 */
@@ -101,7 +101,7 @@ typedef struct {
 	cherokee_list_t                    system_env;
 	cuint_t                            change_user;
 	cherokee_buffer_t                  script_alias;
- 	cherokee_boolean_t                 check_file;	
+ 	cherokee_boolean_t                 check_file;
 	cherokee_boolean_t                 allow_xsendfile;
 	cherokee_boolean_t                 is_error_handler;
 	cherokee_boolean_t                 pass_req_headers;
@@ -114,10 +114,10 @@ typedef struct {
 
 /* Base handler methods
  */
-ret_t cherokee_handler_cgi_base_init            (cherokee_handler_cgi_base_t              *hdl, 
+ret_t cherokee_handler_cgi_base_init            (cherokee_handler_cgi_base_t              *hdl,
 						 cherokee_connection_t                    *conn,
 						 cherokee_plugin_info_handler_t           *info,
-						 cherokee_handler_props_t                 *props, 
+						 cherokee_handler_props_t                 *props,
 						 cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
 						 cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi);
 
@@ -127,13 +127,13 @@ ret_t cherokee_handler_cgi_base_add_headers     (cherokee_handler_cgi_base_t *cg
 ret_t cherokee_handler_cgi_base_step            (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer);
 
 ret_t cherokee_handler_cgi_base_extract_path    (cherokee_handler_cgi_base_t *cgi, cherokee_boolean_t check_filename);
-ret_t cherokee_handler_cgi_base_split_pathinfo  (cherokee_handler_cgi_base_t *cgi, 
-					  	 cherokee_buffer_t           *buf, 
+ret_t cherokee_handler_cgi_base_split_pathinfo  (cherokee_handler_cgi_base_t *cgi,
+					  	 cherokee_buffer_t           *buf,
 						 int                          pos,
 						 int                          allow_dirs);
 
 ret_t cherokee_handler_cgi_base_build_envp      (cherokee_handler_cgi_base_t *cgi, cherokee_connection_t *conn);
-ret_t cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t              *cgi, 
+ret_t cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t              *cgi,
 						 cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
 						 cherokee_connection_t                    *conn,
 						 cherokee_buffer_t                        *tmp);

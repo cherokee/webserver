@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_error_nn.h"
@@ -47,9 +47,9 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (error_nn, http_all_methods);
 
 /* Methods implementation
  */
-ret_t 
-cherokee_handler_error_nn_configure (cherokee_config_node_t   *conf, 
-				     cherokee_server_t        *srv, 
+ret_t
+cherokee_handler_error_nn_configure (cherokee_config_node_t   *conf,
+				     cherokee_server_t        *srv,
 				     cherokee_module_props_t **_props)
 {
 	UNUSED(conf);
@@ -72,9 +72,9 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 	if (dir == NULL)
 		goto go_out;
 
-	while ((entry = readdir (dir)) != NULL) { 
+	while ((entry = readdir (dir)) != NULL) {
 		int dis;
-			 
+
 		if (!strncmp (entry->d_name, ".",  1)) continue;
 		if (!strncmp (entry->d_name, "..", 2)) continue;
 
@@ -82,11 +82,11 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 		if (dis < min_diff) {
 			min_diff = dis;
 			found    = true;
-			
+
 			cherokee_buffer_clean (output);
 			cherokee_buffer_add (output, entry->d_name, strlen(entry->d_name));
 		}
-			 
+
 	}
 	closedir (dir);
 
@@ -117,7 +117,7 @@ get_nearest_name (cherokee_connection_t *conn,
 	cherokee_buffer_clean (req);
 	cherokee_buffer_add_buffer (req, local_dir);
 	cherokee_buffer_add (req, request->buf, rest - request->buf);
-	
+
 	/* Copy the new filename to the output buffer
 	 */
 	ret = get_nearest_from_directory (req->buf, rest, output);
@@ -132,7 +132,7 @@ get_nearest_name (cherokee_connection_t *conn,
 }
 
 
-static ret_t 
+static ret_t
 error_nn_init (cherokee_handler_error_t *hdl)
 {
 	ret_t                  ret;
@@ -150,7 +150,7 @@ error_nn_init (cherokee_handler_error_t *hdl)
 	return ret_error;
 }
 
-static ret_t 
+static ret_t
 error_nn_add_headers (cherokee_handler_error_t *hdl, cherokee_buffer_t *buffer)
 {
 	UNUSED(hdl);
@@ -168,7 +168,7 @@ error_nn_step (cherokee_handler_error_t *hdl, cherokee_buffer_t *buffer)
 	return ret_eof;
 }
 
-static ret_t 
+static ret_t
 error_nn_free (cherokee_handler_error_t *hdl)
 {
 	UNUSED(hdl);
@@ -177,13 +177,13 @@ error_nn_free (cherokee_handler_error_t *hdl)
 }
 
 
-ret_t 
-cherokee_handler_error_nn_new (cherokee_handler_t      **hdl, 
+ret_t
+cherokee_handler_error_nn_new (cherokee_handler_t      **hdl,
 			       cherokee_connection_t    *conn,
 			       cherokee_module_props_t  *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_error_nn);
-	   
+
 	cherokee_handler_init_base (HANDLER(n), conn, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(error_nn));
 	HANDLER(n)->support = hsupport_error | hsupport_length;
 

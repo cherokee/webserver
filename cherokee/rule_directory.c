@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_directory.h"
@@ -70,7 +70,7 @@ match (cherokee_rule_directory_t *rule,
 	 */
 	cherokee_buffer_clean      (&conn->web_directory);
 	cherokee_buffer_add_buffer (&conn->web_directory, &rule->directory);
-	
+
 	/* If the request is exactly the directory entry, and it
 	 * doesn't end with a slash, it must be redirected. Eg:
 	 *
@@ -111,7 +111,7 @@ configure (cherokee_rule_directory_t *rule,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t ret;
-	
+
 	UNUSED(vsrv);
 
 	ret = cherokee_config_node_copy (conf, "directory", &rule->directory);
@@ -142,7 +142,7 @@ cherokee_rule_directory_new (cherokee_rule_directory_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(directory));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "encoder.h"
 
 
-ret_t 
+ret_t
 cherokee_encoder_init_base (cherokee_encoder_t *enc, cherokee_plugin_info_t *info)
 {
 	cherokee_module_init_base (MODULE(enc), NULL, info);
@@ -39,12 +39,12 @@ cherokee_encoder_init_base (cherokee_encoder_t *enc, cherokee_plugin_info_t *inf
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_free (cherokee_encoder_t *enc)
 {
 	ret_t ret;
 
-	if (MODULE(enc)->free == NULL) 
+	if (MODULE(enc)->free == NULL)
 		return ret_error;
 
 	ret = MODULE(enc)->free (enc);
@@ -62,18 +62,18 @@ cherokee_encoder_add_headers (cherokee_encoder_t *enc, cherokee_buffer_t *buf)
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_init (cherokee_encoder_t *enc, void *conn)
 {
 	encoder_func_init_t init_func;
-	
+
 	/* Properties
 	 */
 	enc->conn = conn;
 
 	/* Call the virtual method
 	 */
-	init_func = (encoder_func_init_t) MODULE(enc)->init;		
+	init_func = (encoder_func_init_t) MODULE(enc)->init;
 	if (init_func == NULL)
 		return ret_error;
 
@@ -81,9 +81,9 @@ cherokee_encoder_init (cherokee_encoder_t *enc, void *conn)
 }
 
 
-ret_t 
-cherokee_encoder_encode (cherokee_encoder_t *enc, 
-			 cherokee_buffer_t  *in, 
+ret_t
+cherokee_encoder_encode (cherokee_encoder_t *enc,
+			 cherokee_buffer_t  *in,
 			 cherokee_buffer_t  *out)
 {
 	if (unlikely (enc->encode == NULL))
@@ -93,9 +93,9 @@ cherokee_encoder_encode (cherokee_encoder_t *enc,
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_flush (cherokee_encoder_t *enc,
-			cherokee_buffer_t  *in, 
+			cherokee_buffer_t  *in,
 			cherokee_buffer_t  *out)
 {
 	if (unlikely (enc->flush == NULL))

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -73,7 +73,7 @@ ret_t cherokee_config_node_read_path  (cherokee_config_node_t *conf, const char 
 ret_t cherokee_config_node_read_int   (cherokee_config_node_t *conf, const char *key, int *num);
 ret_t cherokee_config_node_read_long  (cherokee_config_node_t *conf, const char *key, long *num);
 ret_t cherokee_config_node_read_bool  (cherokee_config_node_t *conf, const char *key, cherokee_boolean_t *val);
-ret_t cherokee_config_node_read_list  (cherokee_config_node_t *conf, const char *key, 
+ret_t cherokee_config_node_read_list  (cherokee_config_node_t *conf, const char *key,
 				       cherokee_config_node_list_func_t func, void *param);
 
 ret_t cherokee_config_node_convert_list (cherokee_config_node_t *conf, const char *key, cherokee_list_t *list);

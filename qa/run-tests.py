@@ -73,7 +73,7 @@ if len(sys.argv) > 1:
 
 # If not files were specified, use all of them
 if len(files) == 0:
-    files = os.listdir('.') 
+    files = os.listdir('.')
     files = filter (lambda x: x[-3:] == '.py', files)
     files = filter (lambda x: x[3] == '-', files)
     files = filter (lambda x: x[2] in string.digits, files)
@@ -95,7 +95,7 @@ for p in param:
     elif p[:2] == '-t': thds      = int(p[2:])
     elif p[:2] == '-p': port      = int(p[2:])
     elif p[:2] == '-r': delay     = int(p[2:])
-    elif p[:2] == '-T': srv_thds  = int(p[2:])    
+    elif p[:2] == '-T': srv_thds  = int(p[2:])
     elif p[:2] == '-j': tpause    = float(p[2:])
     elif p[:2] == '-d': pause     = p[2:]
     elif p[:2] == '-D': bpause    = p[2:]
@@ -212,7 +212,7 @@ server!bind!1!interface = %(listen)s
 server!bind!2!port = %(PORT_TLS)d
 server!bind!2!tls = 1
 server!bind!2!interface = %(listen)s
-server!keepalive = 1 
+server!keepalive = 1
 server!panic_action = %(panic)s
 server!pid_file = %(pid)s
 server!module_dir = %(CHEROKEE_MODS)s
@@ -267,7 +267,7 @@ if srv_thds:
 server!thread_number = %d
 """ % (srv_thds)
 
-# Import modules 
+# Import modules
 mods = []
 for f in files:
     mod = importfile (f)
@@ -321,7 +321,7 @@ if port is None:
                sys.platform.startswith('sunos'):
                 os.execl (DTRUSS_PATH, "dtruss", server, "-C", cfg_file)
             else:
-                os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)            
+                os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)
         else:
             name = server[server.rfind('/') + 1:]
 

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -62,7 +62,7 @@ ret_t cherokee_source_mrproper  (cherokee_source_t  *src);
 ret_t cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t *conf);
 ret_t cherokee_source_connect   (cherokee_source_t *src, cherokee_socket_t *socket);
 
-ret_t cherokee_source_connect_polling (cherokee_source_t     *src, 
+ret_t cherokee_source_connect_polling (cherokee_source_t     *src,
 				       cherokee_socket_t     *socket,
 				       cherokee_connection_t *conn);
 

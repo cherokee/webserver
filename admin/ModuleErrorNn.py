@@ -11,7 +11,7 @@ class ModuleErrorNn (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'error_nn', cfg)
         Module.__init__ (self, 'error_nn', cfg, prefix, submit_url)
-        
+
     def _op_render (self):
         return ''
 

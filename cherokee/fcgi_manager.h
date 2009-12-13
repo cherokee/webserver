@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_FCGI_MANAGER_H
 #define CHEROKEE_FCGI_MANAGER_H
@@ -43,7 +43,7 @@ typedef struct {
 	cherokee_source_t     *source;
 	void                  *dispatcher;
 
-	cherokee_boolean_t    first_connect;	
+	cherokee_boolean_t    first_connect;
 	char                  generation;
 	cuint_t               pipeline;
 	cherokee_boolean_t    keepalive;
@@ -68,7 +68,7 @@ ret_t cherokee_fcgi_manager_ensure_is_connected (cherokee_fcgi_manager_t *mgr, c
 ret_t cherokee_fcgi_manager_send_remove         (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *buf);
 ret_t cherokee_fcgi_manager_step                (cherokee_fcgi_manager_t *mgr);
 
-/* Internal use 
+/* Internal use
  */
 char  cherokee_fcgi_manager_supports_pipelining (cherokee_fcgi_manager_t *mgr);
 

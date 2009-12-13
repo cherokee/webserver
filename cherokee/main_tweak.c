@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -28,14 +28,14 @@
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
-#else 
+#else
 # include "getopt/getopt.h"
 #endif
 
 #include <signal.h>
 #include <cherokee/cherokee.h>
 
-/* Notices 
+/* Notices
  */
 #define APP_NAME        \
 	"Cherokee Web Server: Tweaker"
@@ -139,9 +139,9 @@ client_new (cherokee_admin_client_t **client_ret,
 
 
 static ret_t
-do_trace (cherokee_buffer_t  *url, 
-	  cherokee_buffer_t  *user, 
-	  cherokee_buffer_t  *pass, 
+do_trace (cherokee_buffer_t  *url,
+	  cherokee_buffer_t  *user,
+	  cherokee_buffer_t  *pass,
 	  cherokee_buffer_t  *trace,
 	  cherokee_cryptor_t *cryptor)
 {
@@ -163,10 +163,10 @@ do_trace (cherokee_buffer_t  *url,
 static ret_t
 look_for_logname (cherokee_buffer_t *logfile, cherokee_buffer_t *logname)
 {
-	DIR               *dir; 
+	DIR               *dir;
 	char              *tmp;
 	struct dirent     *file;
-	cuint_t            max     = 0;	
+	cuint_t            max     = 0;
 	cherokee_buffer_t  dirname = CHEROKEE_BUF_INIT;
 
 	/* Build the directory name
@@ -201,12 +201,12 @@ look_for_logname (cherokee_buffer_t *logfile, cherokee_buffer_t *logname)
 			cherokee_buffer_drop_ending (&dirname, d_name_len);
 			continue;
 		}
-		
+
 		if (dirname.len >= logfile->len + 2) {
 			numstr = dirname.buf + logfile->len + 1;
 			val = strtol (numstr, NULL, 10);
-			
-			if (val > max) 
+
+			if (val > max)
 				max = val;
 		}
 
@@ -224,14 +224,14 @@ look_for_logname (cherokee_buffer_t *logfile, cherokee_buffer_t *logname)
 
 error:
 	cherokee_buffer_mrproper (&dirname);
-	return ret_error;	
+	return ret_error;
 }
 
 
 static ret_t
-do_logrotate (cherokee_buffer_t  *url, 
-	      cherokee_buffer_t  *user, 
-	      cherokee_buffer_t  *pass, 
+do_logrotate (cherokee_buffer_t  *url,
+	      cherokee_buffer_t  *user,
+	      cherokee_buffer_t  *pass,
 	      cherokee_buffer_t  *log,
 	      cherokee_cryptor_t *cryptor)
 {
@@ -263,14 +263,14 @@ do_logrotate (cherokee_buffer_t  *url,
 		PRINT_ERROR ("Could not move '%s' to '%s': errno=%d", log->buf, newname.buf, errno);
 	}
 	printf ("Log file '%s' moved to '%s' successfully\n", log->buf, newname.buf);
-	
+
 	/* Turn the backup mode off
 	 */
 	printf ("Restoring production mode.. ");
 	RUN_CLIENT1 (client, cherokee_admin_client_set_backup_mode, false);
 	CHECK_ERROR ("backup_mode");
 	printf ("OK\n");
-	
+
 	cherokee_admin_client_free (client);
 	cherokee_fdpoll_free (fdpoll);
 	return ret_ok;
@@ -296,7 +296,7 @@ print_entry (const char *str, const char *format, ...)
 
 static ret_t
 do_print_info (cherokee_buffer_t  *url,
-	       cherokee_buffer_t  *user, 
+	       cherokee_buffer_t  *user,
 	       cherokee_buffer_t  *pass,
 	       cherokee_cryptor_t *cryptor)
 {
@@ -324,7 +324,7 @@ do_print_info (cherokee_buffer_t  *url,
 	CHECK_ERROR ("thread_num");
 	print_entry ("Threads", "%s", buf.buf);
 	cherokee_buffer_clean (&buf);
-	
+
 	RUN_CLIENT1 (client, cherokee_admin_client_ask_rx, &buf);
 	CHECK_ERROR ("rx");
 	print_entry ("Received", "%s", buf.buf);
@@ -339,12 +339,12 @@ do_print_info (cherokee_buffer_t  *url,
 
 	list_for_each (i, &conns) {
 		cherokee_connection_info_t *conn = CONN_INFO(i);
-		
-		printf ("Request: '%s', phase: '%s', rx: '%s', tx: '%s', size: '%s'\n", 
-			conn->request.buf, conn->phase.buf, conn->rx.buf, 
+
+		printf ("Request: '%s', phase: '%s', rx: '%s', tx: '%s', size: '%s'\n",
+			conn->request.buf, conn->phase.buf, conn->rx.buf,
 			conn->tx.buf, conn->total_size.buf);
 	}
-	
+
 	list_for_each_safe (i, tmp, &conns) {
 		cherokee_connection_info_free (CONN_INFO(i));
 	}
@@ -365,11 +365,11 @@ init_tls (const char *plugin, cherokee_cryptor_t **cryptor)
 	cherokee_plugin_loader_t  loader;
 	cryptor_func_new_t        instance;
 	cherokee_plugin_info_t   *info     = NULL;
-	
+
 	cherokee_plugin_loader_init (&loader);
 	ret = cherokee_plugin_loader_get (&loader, plugin, &info);
 	cherokee_plugin_loader_mrproper (&loader);
-	
+
 	if ((ret != ret_ok) || (info == NULL))
 		return ret_error;
 
@@ -382,8 +382,8 @@ init_tls (const char *plugin, cherokee_cryptor_t **cryptor)
 }
 
 
-int 
-main (int argc, char *argv[]) 
+int
+main (int argc, char *argv[])
 {
 	ret_t               ret;
 	int                 c;

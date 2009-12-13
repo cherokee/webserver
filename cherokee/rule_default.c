@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_default.h"
@@ -34,7 +34,7 @@
 PLUGIN_INFO_RULE_EASIEST_INIT(default);
 
 
-static ret_t 
+static ret_t
 match (cherokee_rule_t         *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
@@ -42,17 +42,17 @@ match (cherokee_rule_t         *rule,
 	UNUSED(rule);
 	UNUSED(ret_conf);
 
-	if (cherokee_buffer_is_empty (&conn->web_directory)) { 
-		cherokee_buffer_add_str (&conn->web_directory, "/"); 
-	} 
+	if (cherokee_buffer_is_empty (&conn->web_directory)) {
+		cherokee_buffer_add_str (&conn->web_directory, "/");
+	}
 
 	TRACE(ENTRIES, "Match default: %s\n", "ret_ok");
 	return ret_ok;
 }
 
-static ret_t 
-configure (cherokee_rule_default_t   *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_default_t   *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	UNUSED(rule);

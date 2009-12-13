@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "vrule.h"
@@ -44,7 +44,7 @@ cherokee_vrule_init_base (cherokee_vrule_t       *vrule,
 }
 
 
-ret_t 
+ret_t
 cherokee_vrule_free (cherokee_vrule_t *vrule)
 {
 	if (MODULE(vrule)->free) {
@@ -57,7 +57,7 @@ cherokee_vrule_free (cherokee_vrule_t *vrule)
 
 
 static ret_t
-configure_base (cherokee_vrule_t       *vrule, 
+configure_base (cherokee_vrule_t       *vrule,
 		cherokee_config_node_t *conf)
 {
 	UNUSED(vrule);
@@ -67,7 +67,7 @@ configure_base (cherokee_vrule_t       *vrule,
 }
 
 
-ret_t 
+ret_t
 cherokee_vrule_configure (cherokee_vrule_t       *vrule,
 			  cherokee_config_node_t *conf,
 			  void                   *vsrv)
@@ -86,7 +86,7 @@ cherokee_vrule_configure (cherokee_vrule_t       *vrule,
 }
 
 
-ret_t 
+ret_t
 cherokee_vrule_match (cherokee_vrule_t  *vrule,
 		      cherokee_buffer_t *buffer,
 		      void              *conn)

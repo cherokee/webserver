@@ -9,9 +9,9 @@ class Post:
         for key in tmp:
             self._vars[key] = []
             for n in range(len(tmp[key])):
-                value = tmp[key][n]                
+                value = tmp[key][n]
                 self._vars[key] += [unquote (value)]
-    
+
     def _smart_chooser (self, key):
         if not key in self._vars:
             return None
@@ -24,13 +24,13 @@ class Post:
 
     def get_val (self, key, not_found=None):
         tmp = self._smart_chooser(key)
-        if not tmp: 
+        if not tmp:
             return not_found
         return tmp
 
     def pop (self, key, not_found=None):
         val = self._smart_chooser(key)
-        if not val: 
+        if not val:
             return not_found
         if key in self._vars:
             del(self[key])
@@ -43,10 +43,10 @@ class Post:
 
     def __setitem__ (self, key, val):
         self._vars[key] = val
-    
+
     def __delitem__ (self, key):
         del (self._vars[key])
-        
+
     def __len__ (self):
         return len(self._vars)
 

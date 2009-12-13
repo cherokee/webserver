@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_FASTCGI_H
 #define CHEROKEE_HANDLER_FASTCGI_H
@@ -61,8 +61,8 @@ typedef struct {
 	cherokee_handler_cgi_base_t     base;
 
 	cuint_t                         id;
-	cuchar_t                        generation;	
-	cherokee_buffer_t               write_buffer;	
+	cuchar_t                        generation;
+	cherokee_buffer_t               write_buffer;
 	off_t                           post_len;
 
 	cherokee_fcgi_manager_t        *manager;
@@ -91,7 +91,7 @@ typedef struct {
 #define PROP_FASTCGI(x)          ((cherokee_handler_fastcgi_props_t *)(x))
 #define HANDLER_FASTCGI_PROPS(x) (PROP_FASTCGI(MODULE(x)->props))
 
- 
+
 /* Library init function
  */
 void  PLUGIN_INIT_NAME(fastcgi)            (cherokee_plugin_loader_t *loader);

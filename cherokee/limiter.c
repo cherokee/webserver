@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "limiter.h"
@@ -70,7 +70,7 @@ cherokee_limiter_add_conn (cherokee_limiter_t *limiter,
 
 	limiter->conns_num++;
 	cherokee_list_add (LIST(conn), prev);
-	
+
 	return ret_ok;
 }
 
@@ -101,7 +101,7 @@ cherokee_limiter_get_time_limit (cherokee_limiter_t *limiter,
 	if (unlikely (time_delta <= 0)) {
 		return 0;
 	}
-	
+
 	/* Check as 'signed long long' */
 	return MIN(time_delta, (long long)fdwatch_msecs);
 }
@@ -118,7 +118,7 @@ cherokee_limiter_reactive (cherokee_limiter_t *limiter,
 		 */
 		if (CONN(i)->limit_blocked_until > cherokee_bogonow_msec)
 			break;
-		
+
 		/* Re-active the connection
 		 */
 		limiter->conns_num--;

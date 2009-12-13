@@ -1,4 +1,4 @@
- /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 
 /* Cherokee
  *
@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -59,7 +59,7 @@ static unsigned char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: I
 						     0,            /*  8 bits: FLags              */
 						     0, 0, 0, 0,   /* 32 bits: Modification TIME  */
 						     0,            /*  8 bits: Extra Flags        */
-						     OS_UNIX};     /*  8 bits: Operating System   */  
+						     OS_UNIX};     /*  8 bits: Operating System   */
 
 /* GZIP
  * ====
@@ -67,13 +67,13 @@ static unsigned char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: I
  *
  */
 
-ret_t 
+ret_t
 cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 {
 	cuint_t workspacesize;
 	CHEROKEE_NEW_STRUCT (n, encoder_gzip);
 
-	/* Init 	
+	/* Init
 	 */
 	cherokee_encoder_init_base (ENCODER(n), PLUGIN_INFO_PTR(gzip));
 
@@ -92,7 +92,7 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 	workspacesize = zlib_deflate_workspacesize();
 
 	n->workspace = malloc (workspacesize);
-	if (unlikely (n->workspace == NULL)) 
+	if (unlikely (n->workspace == NULL))
 		return ret_nomem;
 
 	memset (n->workspace, 0, workspacesize);
@@ -105,7 +105,7 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_gzip_free (cherokee_encoder_gzip_t *encoder)
 {
 	if (encoder->workspace != NULL) {
@@ -117,7 +117,7 @@ cherokee_encoder_gzip_free (cherokee_encoder_gzip_t *encoder)
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t *encoder,
 				   cherokee_buffer_t       *buf)
 {
@@ -150,7 +150,7 @@ get_gzip_error_string (int err)
 }
 
 
-ret_t 
+ret_t
 cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder)
 {
 	int       err;
@@ -159,14 +159,14 @@ cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder)
 	/* Set the workspace
 	 */
 	z->workspace = encoder->workspace;
-	
+
 	/* Comment from the PHP source code:
-	 * windowBits is passed < 0 to suppress zlib header & trailer 
+	 * windowBits is passed < 0 to suppress zlib header & trailer
 	 */
-	err = zlib_deflateInit2 (z, 
-				 Z_DEFAULT_COMPRESSION, 
-				 Z_DEFLATED, 
-				 -MAX_WBITS, 
+	err = zlib_deflateInit2 (z,
+				 Z_DEFAULT_COMPRESSION,
+				 Z_DEFLATED,
+				 -MAX_WBITS,
 				 MAX_MEM_LEVEL,
 				 Z_DEFAULT_STRATEGY);
 
@@ -199,15 +199,15 @@ cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder)
  * receiver.  This appends the compressed data to the output buffer.
  */
 static ret_t
-do_encode (cherokee_encoder_gzip_t *encoder, 
-	   cherokee_buffer_t       *in, 
+do_encode (cherokee_encoder_gzip_t *encoder,
+	   cherokee_buffer_t       *in,
 	   cherokee_buffer_t       *out,
 	   int                      flush)
 {
 	int       err;
 	cchar_t   buf[DEFAULT_READ_SIZE];
 	z_stream *z = &encoder->stream;
-	
+
 	/* Update crc32 and size if needed
 	 */
 	if (in->len <= 0) {
@@ -219,7 +219,7 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 	} else {
 		z->avail_in = in->len;
 		z->next_in  = (void *)in->buf;
-	
+
 		encoder->size += in->len;
 		encoder->crc32 = crc32_partial_sz (encoder->crc32, in->buf, in->len);
 	}
@@ -237,7 +237,7 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 	/* Compress it
 	 */
 	do {
-		/* Set up fixed-size output buffer. 
+		/* Set up fixed-size output buffer.
 		 */
 		z->next_out  = (Byte *)buf;
 		z->avail_out = sizeof(buf);
@@ -257,14 +257,14 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 				return ret_error;
 			}
 
-			cherokee_buffer_add (out, buf, sizeof(buf) - z->avail_out);			
+			cherokee_buffer_add (out, buf, sizeof(buf) - z->avail_out);
 			break;
 		default:
 			LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATE,
 				   get_gzip_error_string(err), z->avail_in);
-			
+
 			zlib_deflateEnd (z);
-			return ret_error;		
+			return ret_error;
 		}
 
 	} while (z->avail_out == 0);
@@ -274,24 +274,24 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 
 
 
-ret_t 
-cherokee_encoder_gzip_encode (cherokee_encoder_gzip_t *encoder, 
-			      cherokee_buffer_t       *in, 
+ret_t
+cherokee_encoder_gzip_encode (cherokee_encoder_gzip_t *encoder,
+			      cherokee_buffer_t       *in,
 			      cherokee_buffer_t       *out)
 {
 	return do_encode (encoder, in, out, Z_PARTIAL_FLUSH);
 }
 
-ret_t 
+ret_t
 cherokee_encoder_gzip_flush (cherokee_encoder_gzip_t *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out)
 {
 	ret_t ret;
 	char  footer[8];
 
- 	ret = do_encode (encoder, in, out, Z_FINISH); 
- 	if (unlikely (ret != ret_ok)) { 
- 		return ret; 
- 	} 
+ 	ret = do_encode (encoder, in, out, Z_FINISH);
+ 	if (unlikely (ret != ret_ok)) {
+ 		return ret;
+ 	}
 
 	/* Add the ending:
 	 * +---+---+---+---+---+---+---+---+
@@ -311,8 +311,8 @@ cherokee_encoder_gzip_flush (cherokee_encoder_gzip_t *encoder, cherokee_buffer_t
 	cherokee_buffer_add (out, footer, 8);
 
 #if 0
- 	cherokee_buffer_print_debug (out, -1); 
-#endif	
+ 	cherokee_buffer_print_debug (out, -1);
+#endif
 
 	return ret_ok;
 }

@@ -20,14 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "match.h"
 
 
 ret_t
-cherokee_wildcard_match (const char *pattern, const char *text) 
+cherokee_wildcard_match (const char *pattern, const char *text)
 {
 	cint_t      ch;
 	const char *retry_text     = NULL;
@@ -35,7 +35,7 @@ cherokee_wildcard_match (const char *pattern, const char *text)
 
 	while (*text || *pattern) {
 		ch = *pattern++;
-		
+
 		switch (ch) {
 		case '*':
 			retry_pattern = pattern;

@@ -30,7 +30,7 @@ class Wizard_Rules_rTorrent (WizardPage):
     DESC = "Configures rTorrent XMLRPC."
 
     def __init__ (self, cfg, pre):
-        WizardPage.__init__ (self, cfg, pre, 
+        WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/rTorrent'%(pre.split('!')[1]),
                              id     = "rTorrent_Page1",
                              title  = _("rTorrent Wizard"),

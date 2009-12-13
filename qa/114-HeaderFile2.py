@@ -19,7 +19,7 @@ class Test (TestBase):
         self.name = "dirlist w/ multiple HeaderFile"
 
         self.request           = "GET /header_file2/ HTTP/1.0\r\n"
-        self.expected_error    = 200        
+        self.expected_error    = 200
         self.expected_content  = [HEADER_CONTENT, "file1", "file2", "file3"]
         self.forbidden_content = ["header.txt"]
         self.conf              = CONF

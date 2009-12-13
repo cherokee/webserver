@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "cryptor.h"
@@ -39,7 +39,7 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 	cryp->vserver_new = NULL;
 	cryp->socket_new  = NULL;
 	cryp->configure   = NULL;
-	
+
 	return ret_ok;
 }
 
@@ -55,7 +55,7 @@ cherokee_cryptor_free_base (cherokee_cryptor_t *cryp)
 ret_t
 cherokee_cryptor_free (cherokee_cryptor_t *cryp)
 {
-	if (MODULE(cryp)->free == NULL) 
+	if (MODULE(cryp)->free == NULL)
 		return ret_error;
 
 	return MODULE(cryp)->free (cryp);
@@ -87,7 +87,7 @@ cherokee_cryptor_vserver_new (cherokee_cryptor_t          *cryp,
 {
 	if (unlikely (cryp->vserver_new == NULL))
 		return ret_error;
-	
+
 	return cryp->vserver_new (cryp, vsrv, (void **)cryp_vsrv);
 }
 
@@ -245,5 +245,5 @@ cherokee_cryptor_client_init (cherokee_cryptor_client_t *cryp,
 	if (unlikely (CRYPTOR_SOCKET(cryp)->init_tls == NULL))
 		return ret_error;
 
-	return CRYPTOR_SOCKET(cryp)->init_tls (cryp, host, socket);	
+	return CRYPTOR_SOCKET(cryp)->init_tls (cryp, host, socket);
 }

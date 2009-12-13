@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
@@ -67,7 +67,7 @@ typedef struct {
 } cherokee_fdpoll_kqueue_t;
 
 
-static ret_t 
+static ret_t
 _free (cherokee_fdpoll_kqueue_t *fdp)
 {
 	if (fdp == NULL)
@@ -142,7 +142,7 @@ static ret_t
 _del (cherokee_fdpoll_kqueue_t *fdp, int fd)
 {
 	int re;
- 
+
 	re = _add_change (fdp, fd, fdp->fdinterest[fd], EV_DELETE);
 	if (re == ret_ok) {
 		FDPOLL(fdp)->npollfds--;
@@ -165,15 +165,15 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 	/* Get the events of the file descriptors with
 	 * activity
 	 */
-	n_events = kevent(fdp->kqueue, 
-			  fdp->changelist, 
+	n_events = kevent(fdp->kqueue,
+			  fdp->changelist,
 			  fdp->nchanges,
 			  fdp->changelist,
 			  FDPOLL(fdp)->nfiles,
 			  &timeout);
 	fdp->nchanges=0;
 	if (unlikely (n_events < 0)) {
-		LOG_ERRNO (errno, cherokee_err_error, 
+		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_FDPOLL_KQUEUE);
 		return 0;
 
@@ -266,7 +266,7 @@ fdpoll_kqueue_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 }
 
 
-ret_t 
+ret_t
 fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 {
 	cherokee_fdpoll_t *nfd;
@@ -289,7 +289,7 @@ fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 	nfd->reset         = (fdpoll_func_reset_t) _reset;
 	nfd->set_mode      = (fdpoll_func_set_mode_t) _set_mode;
 	nfd->check         = (fdpoll_func_check_t) _check;
-	nfd->watch         = (fdpoll_func_watch_t) _watch;	
+	nfd->watch         = (fdpoll_func_watch_t) _watch;
 
 	/* Init kqueue specific variables
 	 */

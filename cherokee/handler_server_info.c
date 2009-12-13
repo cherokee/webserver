@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_server_info.h"
@@ -217,7 +217,7 @@
 "}"                                                                                                 CRLF\
 "tmp.update(); "                                                                                    CRLF\
 "setInterval('tmp.update()', 30000);"                                                               CRLF\
-"</script>"                
+"</script>"
 
 #define AUTHOR                                                                                          \
 "<a href=\"http://www.alobbs.com/\">Alvaro Lopez Ortega</a> &lt;alvaro@alobbs.com&gt;"
@@ -248,14 +248,14 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (server_info, http_get);
 
 /* Methods implementation
  */
-static ret_t 
+static ret_t
 props_free (cherokee_handler_server_info_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_list_t                      *i;
@@ -266,7 +266,7 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_server_info_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
+		cherokee_module_props_init_base (MODULE_PROPS(n),
 						 MODULE_PROPS_FREE(props_free));
 		n->just_about         = false;
 		n->connection_details = false;
@@ -284,7 +284,7 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 
 			} else if (equal_buf_str (&subconf->val, "just_about")) {
 				props->just_about = true;
-				
+
 			} else if (equal_buf_str (&subconf->val, "connection_details")) {
 				props->connection_details = true;
 
@@ -324,13 +324,13 @@ add_uptime (cherokee_dwriter_t *writer,
 	lapse %= 60;
 
 	if (days > 0) {
-		cherokee_buffer_add_va (&tmp, "%d Day%s, %d Hour%s, %d Minute%s, %d Seconds", 
+		cherokee_buffer_add_va (&tmp, "%d Day%s, %d Hour%s, %d Minute%s, %d Seconds",
 					days, days>1?"s":"", hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (hours > 0) {
-		cherokee_buffer_add_va (&tmp, "%d Hour%s, %d Minute%s, %d Seconds", 
+		cherokee_buffer_add_va (&tmp, "%d Hour%s, %d Minute%s, %d Seconds",
 					hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (mins > 0) {
-		cherokee_buffer_add_va (&tmp, "%d Minute%s, %d Seconds", 
+		cherokee_buffer_add_va (&tmp, "%d Minute%s, %d Seconds",
 					mins, mins>1?"s":"", lapse);
 	} else {
 		cherokee_buffer_add_va (&tmp, "%d Seconds", lapse);
@@ -546,7 +546,7 @@ add_modules (cherokee_dwriter_t *writer,
 	cuint_t  loggers    = 0;
 	cuint_t  handlers   = 0;
 	cuint_t  encoders   = 0;
-	cuint_t  validators = 0;	   
+	cuint_t  validators = 0;
 	cuint_t  generic    = 0;
 	cuint_t  balancers  = 0;
 	cuint_t  rules      = 0;
@@ -556,8 +556,8 @@ add_modules (cherokee_dwriter_t *writer,
 	void    *params[]   = {&loggers, &handlers, &encoders, &validators, &generic,
 			       &balancers, &rules, &cryptors, &vrules, &collectors};
 
-	cherokee_avl_while (&srv->loader.table, 
-			    (cherokee_avl_while_func_t) modules_while, 
+	cherokee_avl_while (&srv->loader.table,
+			    (cherokee_avl_while_func_t) modules_while,
 			    params, NULL, NULL);
 
 	cherokee_dwriter_dict_open (writer);
@@ -606,11 +606,11 @@ server_info_build_html (cherokee_handler_server_info_t *hdl,
 	cherokee_buffer_add_str (buffer, AJAX_JS);
 
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
-	cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);	
+	cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);
 	cherokee_buffer_mrproper (&ver);
 
 	cherokee_buffer_replace_string (buffer, "{request}", 9,
-					HANDLER_CONN(hdl)->request.buf,	
+					HANDLER_CONN(hdl)->request.buf,
 					HANDLER_CONN(hdl)->request.len);
 
 	cherokee_buffer_add_str (buffer, PAGE_FOOT);
@@ -634,7 +634,7 @@ add_icons (cherokee_dwriter_t *writer,
 	cherokee_dwriter_bstring (writer, &srv->icons->directory_icon);
 	cherokee_dwriter_cstring (writer, "parent");
 	cherokee_dwriter_bstring (writer, &srv->icons->parentdir_icon);
-	cherokee_dwriter_dict_close (writer);	
+	cherokee_dwriter_dict_close (writer);
 }
 
 
@@ -651,7 +651,7 @@ add_iocache (cherokee_dwriter_t *writer,
 		cherokee_dwriter_null (writer);
 		return;
 	}
-	
+
 	cherokee_dwriter_dict_open (writer);
 
 	/* General parameters */
@@ -663,7 +663,7 @@ add_iocache (cherokee_dwriter_t *writer,
 	cherokee_buffer_add_fsize (&tmp_buf, iocache->max_file_size);
 	cherokee_dwriter_cstring (writer, "file_size_max_formatted");
 	cherokee_dwriter_bstring (writer, &tmp_buf);
-	
+
 	cherokee_buffer_clean (&tmp_buf);
 	cherokee_buffer_add_fsize (&tmp_buf, iocache->min_file_size);
 	cherokee_dwriter_cstring (writer, "file_size_min_formatted");
@@ -688,7 +688,7 @@ add_iocache (cherokee_dwriter_t *writer,
 		percent = (CACHE(iocache)->count_hit * 100.0) / CACHE(iocache)->count;
 	cherokee_dwriter_cstring (writer, "hits");
 	cherokee_dwriter_double  (writer, percent);
-	
+
 	/* Misses */
 	if (CACHE(iocache)->count == 0)
 		percent = 0;
@@ -768,7 +768,7 @@ add_detailed_connections (cherokee_dwriter_t *writer,
 		if (! cherokee_buffer_is_empty (&info->icon)) {
 			cherokee_dwriter_cstring (writer, "icon");
 			cherokee_dwriter_bstring (writer, &info->icon);
-		}		
+		}
 
 		cherokee_dwriter_dict_close (writer);
 		cherokee_connection_info_free (info);
@@ -806,30 +806,30 @@ server_info_build_info (cherokee_handler_server_info_t *hdl)
 
 	cherokee_dwriter_cstring (writer, "uptime");
 	add_uptime (writer, srv);
-	
+
 	cherokee_dwriter_cstring (writer, "config");
 	add_config (writer, srv);
-	
+
 	cherokee_dwriter_cstring (writer, "connections");
 	add_connections (writer, srv);
-	
+
 	cherokee_dwriter_cstring (writer, "modules");
 	add_modules (writer, srv);
-	
+
 	cherokee_dwriter_cstring (writer, "icons");
 	add_icons (writer, srv);
-	
+
 	cherokee_dwriter_cstring (writer, "iocache");
 	add_iocache (writer, srv);
 
 	/* Connection details
 	 */
 	if  (HDL_SRV_INFO_PROPS(hdl)->connection_details) {
-		cherokee_list_t infos;	       
+		cherokee_list_t infos;
 		INIT_LIST_HEAD (&infos);
 
 		ret = cherokee_connection_info_list_server (&infos, HANDLER_SRV(hdl), HANDLER(hdl));
-		if (ret == ret_ok) {				
+		if (ret == ret_ok) {
 			cherokee_dwriter_cstring (writer, "detailed_connections");
 			add_detailed_connections (writer, &infos);
 		}
@@ -848,11 +848,11 @@ cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_server_info);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base(HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(server_info));
-	   
+
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_server_info_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_server_info_free;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_server_info_step;
@@ -865,15 +865,15 @@ cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
 	/* Init
 	 */
 	ret = cherokee_buffer_init (&n->buffer);
-	if (unlikely(ret != ret_ok)) 
+	if (unlikely(ret != ret_ok))
 		return ret;
 
 	ret = cherokee_buffer_ensure_size (&n->buffer, 4*1024);
-	if (unlikely(ret != ret_ok)) 
+	if (unlikely(ret != ret_ok))
 		return ret;
 
 	ret = cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
-	if (unlikely(ret != ret_ok)) 
+	if (unlikely(ret != ret_ok))
 		return ret;
 
 	n->writer.pretty = true;
@@ -884,7 +884,7 @@ cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->buffer);
@@ -893,12 +893,12 @@ cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 {
 	if (strstr (HANDLER_CONN(hdl)->request.buf, "/logo.gif")) {
 		server_info_build_logo (hdl, &hdl->buffer);
-		hdl->action = send_logo;		
+		hdl->action = send_logo;
 
 	} else if (strstr (HANDLER_CONN(hdl)->request.buf + 1, "/info")) {
 		if (strstr (HANDLER_CONN(hdl)->request.buf, "/js")) {
@@ -923,7 +923,7 @@ cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_server_info_step (cherokee_handler_server_info_t *hdl,
 				   cherokee_buffer_t              *buffer)
 {
@@ -937,7 +937,7 @@ cherokee_handler_server_info_step (cherokee_handler_server_info_t *hdl,
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 					  cherokee_buffer_t              *buffer)
 {

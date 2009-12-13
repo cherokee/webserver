@@ -62,7 +62,7 @@ static int _prefix_distance(char *A, char *B, int lA, int lB)
 	pD = (int *) malloc(lA1 * lB1 * sizeof(int));
 	if (!pD)
 		return -1;
-    
+
 	score(pD, A, B, lA, lB);
 
 	d = D(lA, lA);

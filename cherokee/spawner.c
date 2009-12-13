@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "spawner.h"
@@ -87,13 +87,13 @@ error:
 	LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SPAWNER_SHM_INIT, name.buf);
 	cherokee_buffer_mrproper (&name);
 	return ret_error;
-#else 
+#else
 	return ret_not_found;
 #endif
 }
 
 
-ret_t 
+ret_t
 cherokee_spawner_free (void)
 {
 	CHEROKEE_MUTEX_DESTROY (&spawning_mutex);
@@ -117,7 +117,7 @@ write_logger (cherokee_buffer_t        *buf,
 	if (error_writer == NULL) {
 		goto nothing;
 	}
-	
+
 	switch (error_writer->type) {
 	case cherokee_logger_writer_stderr:
 		val = 6;
@@ -141,7 +141,7 @@ write_logger (cherokee_buffer_t        *buf,
 nothing:
 	val = 0;
 	cherokee_buffer_add (buf, (char *)&val, sizeof(int));
-	return ret_ok;	
+	return ret_ok;
 }
 #endif
 
@@ -162,7 +162,7 @@ sem_unlock (int sem)
 			return ret_ok;
 		}
 	} while ((re < 0) && (errno == EINTR));
-	
+
 	LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SPAWNER_UNLOCK_SEMAPHORE, sem);
 	return ret_error;
 }
@@ -185,10 +185,10 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	int                envs     = 0;
 	cherokee_buffer_t  tmp      = CHEROKEE_BUF_INIT;
 
-	/* Check it's initialized 
+	/* Check it's initialized
 	 */
 	if ((! _active) ||
-	    (cherokee_spawn_shared.mem == NULL)) 
+	    (cherokee_spawn_shared.mem == NULL))
 	{
 		TRACE (ENTRIES, "Spawner is not active. Returning: %s\n", binary->buf);
 		return ret_deny;
@@ -209,7 +209,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	cherokee_buffer_add        (&tmp, (char *)&binary->len, sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, binary);
 	cherokee_buffer_add_char   (&tmp, '\0');
-	
+
 	/* 2.- UID & GID */
 	cherokee_buffer_add        (&tmp, (char *)&user->len, sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, user);
@@ -218,7 +218,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	cherokee_buffer_add (&tmp, (char *)&uid, sizeof(uid_t));
 	cherokee_buffer_add (&tmp, (char *)&gid, sizeof(gid_t));
 
-	/* 3.- Environment */	
+	/* 3.- Environment */
 	for (n=envp; *n; n++) {
 		envs ++;
 	}
@@ -254,7 +254,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	/* Wake up the spawning thread
 	 */
 	sem_unlock (cherokee_spawn_sem);
-	
+
 	/* Wait for the PID
 	 */
 	k = 0;

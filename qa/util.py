@@ -49,7 +49,7 @@ def letters_random_generate (n):
             c += chr(65 + int((x/30269.0 + y/30307.0 + z/30323.0) * 1000 % 25))
         else:
             c += chr(97 + int((x/30269.0 + y/30307.0 + z/30323.0) * 1000 % 25))
-            
+
     return c
 
 
@@ -100,12 +100,12 @@ def check_php_interpreter (fullpath):
     return "cgi-fcgi" in all
 
 __php_ref = None
-def look_for_php():    
+def look_for_php():
     global __php_ref
 
     if __php_ref != None:
         return __php_ref
-    
+
     if PHPCGI_PATH != "auto":
         if check_php_interpreter (PHPCGI_PATH):
             __php_ref = PHPCGI_PATH
@@ -131,7 +131,7 @@ def look_for_python():
     global __python_ref
 
     if __python_ref != None:
-        return __python_ref    
+        return __python_ref
 
     if PYTHON_PATH != "auto":
         __python_ref = PYTHON_PATH
@@ -247,8 +247,8 @@ def figure_public_ip():
         if ip_is_private(x) and (not ip_is_private(y)):
             return  1
         elif ip_is_private(y) and (not ip_is_private(x)):
-            return -1 
-        
+            return -1
+
         # Private
         elif x.startswith('10.') and y.startswith('192.'):
             return -1
@@ -257,7 +257,7 @@ def figure_public_ip():
 
         # Default
         return cmp(x,y)
-        
+
     ips = socket.gethostbyname_ex (socket.gethostname())[2]
     ips.sort(ip_cmp)
     return ips[0]

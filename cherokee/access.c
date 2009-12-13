@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "access.h"
@@ -40,7 +40,7 @@
 #endif
 
 #ifdef HAVE_ARPA_INET_H
-# include <arpa/inet.h>  
+# include <arpa/inet.h>
 #endif
 
 #include "util.h"
@@ -53,7 +53,7 @@
 # define AF_INET6 10
 #endif
 
-typedef enum { 
+typedef enum {
 	ipv4 = AF_INET,
 	ipv6 = AF_INET6
 } ip_type_t;
@@ -68,7 +68,7 @@ typedef union {
 
 typedef struct {
 	cherokee_list_t node;
-	
+
 	ip_type_t       type;
 	ip_t            ip;
 } ip_item_t;
@@ -83,7 +83,7 @@ typedef struct {
 
 
 static ip_item_t *
-new_ip (void) 
+new_ip (void)
 {
 	ip_item_t *n = (ip_item_t *) malloc (sizeof(ip_item_t));
 	if (n == NULL) return NULL;
@@ -102,7 +102,7 @@ free_ip (ip_item_t *ip)
 }
 
 static subnet_item_t *
-new_subnet (void) 
+new_subnet (void)
 {
 	subnet_item_t *n = (subnet_item_t *) malloc (sizeof(subnet_item_t));
 	if (n == NULL) return NULL;
@@ -115,7 +115,7 @@ new_subnet (void)
 }
 
 
-ret_t 
+ret_t
 cherokee_access_init (cherokee_access_t *entry)
 {
 	INIT_LIST_HEAD(&entry->list_ips);
@@ -123,11 +123,11 @@ cherokee_access_init (cherokee_access_t *entry)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_access_mrproper (cherokee_access_t *entry)
 {
 	cherokee_list_t *i, *tmp;
-	
+
 	/* Free the IP list items
 	 */
 	list_for_each_safe (i, tmp, LIST(&entry->list_ips)) {
@@ -178,9 +178,9 @@ parse_ip (char *ip, ip_item_t *n)
 
 	/* Test if it is a IPv4 or IPv6 connection
 	 */
-	n->type = ((strchr (ip, ':') != NULL) || 
+	n->type = ((strchr (ip, ':') != NULL) ||
 		   (strlen(ip) > 15)) ? ipv6 : ipv4;
-	
+
 #ifndef HAVE_IPV6
 	if (n->type == ipv6) {
 		return ret_error;
@@ -207,7 +207,7 @@ parse_ip (char *ip, ip_item_t *n)
 
 	return (ok) ? ret_ok : ret_error;
 }
- 
+
 
 static ret_t
 parse_netmask (char *netmask, subnet_item_t *n)
@@ -226,7 +226,7 @@ parse_netmask (char *netmask, subnet_item_t *n)
 		ok = (inet_pton (IP_NODE(n)->type, netmask, &n->mask) > 0);
 #else
 		ok = (inet_aton (netmask, &n->mask) != 0);
-#endif		
+#endif
 		return (ok) ? ret_ok : ret_error;
 	}
 
@@ -239,15 +239,15 @@ parse_netmask (char *netmask, subnet_item_t *n)
 	}
 
 	num = strtol(netmask, NULL, 10);
-	if (num < 0) 
+	if (num < 0)
 		return ret_error;
 
 	/* Sanity checks
 	 */
-	if ((IP_NODE(n)->type == ipv4) && (num >  32)) 
+	if ((IP_NODE(n)->type == ipv4) && (num >  32))
 		return ret_error;
 
-	if ((IP_NODE(n)->type == ipv6) && (num > 128)) 
+	if ((IP_NODE(n)->type == ipv6) && (num > 128))
 		return ret_error;
 
 #ifdef HAVE_IPV6
@@ -342,7 +342,7 @@ cherokee_access_add_domain (cherokee_access_t *entry, char *domain)
 }
 
 
-static ret_t 
+static ret_t
 cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 {
 	ret_t              ret;
@@ -358,7 +358,7 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 
 	mask = slash +1;
 	cherokee_buffer_add (&ip, subnet, mask-subnet-1);
-	
+
 	/* Create the new list object
 	 */
 	n = new_subnet();
@@ -379,7 +379,7 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 	ret = parse_netmask (mask, n);
 	if (ret < ret_ok) {
 		LOG_ERROR (CHEROKEE_ERROR_ACCESS_INVALID_MASK, mask);
-		goto error;	
+		goto error;
 	}
 
 	TRACE (ENTRIES, "Access: subnet IP '%s', mask '%s'\n", ip.buf, mask);
@@ -393,7 +393,7 @@ error:
 }
 
 
-ret_t 
+ret_t
 cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 {
 	ret_t  ret;
@@ -421,7 +421,7 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 		else
 			return cherokee_access_add_ip (entry, ip_or_subnet);
 	}
-	
+
 	/* Special cases of subnets
 	 */
 	mask = atoi(slash+1);
@@ -437,18 +437,18 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 	if ((strchr(ip_or_subnet, '.') != NULL) && (mask == 32)) {
 		sep = *slash;
 		*slash = '\0';
-		ret = cherokee_access_add_ip (entry, ip_or_subnet);		
+		ret = cherokee_access_add_ip (entry, ip_or_subnet);
 		*slash = sep;
 		return ret;
 	}
 
 	/* Add a subnet
 	 */
-	return cherokee_access_add_subnet (entry, ip_or_subnet);		
+	return cherokee_access_add_subnet (entry, ip_or_subnet);
 }
 
 
-ret_t 
+ret_t
 cherokee_access_print_debug (cherokee_access_t *entry)
 {
 	cherokee_list_t *i;
@@ -473,7 +473,7 @@ cherokee_access_print_debug (cherokee_access_t *entry)
 }
 
 
-ret_t 
+ret_t
 cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 {
 	int              re;
@@ -484,7 +484,7 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 	/* Check in the IP list
 	 */
 	list_for_each (i, LIST(&entry->list_ips)) {
-		
+
 #ifdef HAVE_IPV6
 		/* This is a special case:
 		 * The socket is IPv6 with a mapped IPv4 address
@@ -492,7 +492,7 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 		if ((SOCKET_AF(sock) == ipv6) &&
 		    (IP_NODE(i)->type == ipv4) &&
 		    (IN6_IS_ADDR_V4MAPPED (&SOCKET_ADDR_IPv6(sock)->sin6_addr)) &&
-		    (!memcmp (&SOCKET_ADDR_IPv6(sock)->sin6_addr.s6_addr[12], &IP_NODE(i)->ip, 4))) 
+		    (!memcmp (&SOCKET_ADDR_IPv6(sock)->sin6_addr.s6_addr[12], &IP_NODE(i)->ip, 4)))
 		{
 			TRACE (ENTRIES, "IPv4 mapped in IPv6 address: %s\n", "matched");
 			return ret_ok;
@@ -507,9 +507,9 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 				printf ("4 remote "); print_ip(ipv4, &SOCKET_ADDRESS_IPv4(sock)); printf ("\n");
 				printf ("4 list   "); print_ip(ipv4, &IP_NODE(i)->ip); printf ("\n");
 				*/
-				TRACE (ENTRIES, "IPv4 address (%x)%s matched (ip=%x)\n", 
+				TRACE (ENTRIES, "IPv4 address (%x)%s matched (ip=%x)\n",
 				       IP_NODE(i)->ip.ip4,
-				       re ? " haven't" : "", 
+				       re ? " haven't" : "",
 				       SOCKET_ADDR_IPv4(sock)->sin_addr);
 				break;
 #ifdef HAVE_IPV6
@@ -548,7 +548,7 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 #ifdef HAVE_IPV6
 		if ((SOCKET_AF(sock) == ipv6) &&
 		    (IP_NODE(i)->type == ipv4) &&
-		    IN6_IS_ADDR_V4MAPPED (&SOCKET_ADDR_IPv6(sock)->sin6_addr)) 
+		    IN6_IS_ADDR_V4MAPPED (&SOCKET_ADDR_IPv6(sock)->sin6_addr))
 		{
 			cuint_t ip4_sock;
 
@@ -558,24 +558,24 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 						     SUBNET_NODE(i)->mask.ip4.s_addr);
 			masqued_remote.ip4.s_addr = (ip4_sock &
 						     SUBNET_NODE(i)->mask.ip4.s_addr);
-			
+
 			if (masqued_remote.ip4.s_addr == masqued_list.ip4.s_addr) {
 				return ret_ok;
 			}
 		}
 #endif
-		
+
 		if (SOCKET_AF(sock) == IP_NODE(i)->type) {
 			switch (IP_NODE(i)->type) {
 			case ipv4:
 				masqued_list.ip4.s_addr   = (IP_NODE(i)->ip.ip4.s_addr &
 							     SUBNET_NODE(i)->mask.ip4.s_addr);
-				masqued_remote.ip4.s_addr = (SOCKET_ADDR_IPv4(sock)->sin_addr.s_addr & 
+				masqued_remote.ip4.s_addr = (SOCKET_ADDR_IPv4(sock)->sin_addr.s_addr &
 							     SUBNET_NODE(i)->mask.ip4.s_addr);
-				
+
 				TRACE (ENTRIES, "Checking IPv4 net: (mask=%x) %x == %x ?\n",
-				       SUBNET_NODE(i)->mask.ip4.s_addr, 
-				       masqued_remote.ip4.s_addr, 
+				       SUBNET_NODE(i)->mask.ip4.s_addr,
+				       masqued_remote.ip4.s_addr,
 				       masqued_list.ip4.s_addr);
 
 				if (masqued_remote.ip4.s_addr == masqued_list.ip4.s_addr) {
@@ -605,8 +605,8 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 				}
 
 				TRACE (ENTRIES, "Checking IPv6 net: (mask=%x) %x == %x ?\n",
-				       SUBNET_NODE(i)->mask.ip6.s6_addr, 
-				       masqued_remote.ip6.s6_addr, 
+				       SUBNET_NODE(i)->mask.ip6.s6_addr,
+				       masqued_remote.ip6.s6_addr,
 				       masqued_list.ip6.s6_addr);
 
 

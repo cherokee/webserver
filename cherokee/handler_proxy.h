@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_PROXY_H
 #define CHEROKEE_HANDLER_PROXY_H
@@ -54,7 +54,7 @@ typedef struct {
 	cherokee_balancer_t            *balancer;
 	cherokee_handler_proxy_hosts_t  hosts;
 	cuint_t                         reuse_max;
-	
+
 	/* Request processing */
 	cherokee_avl_t                  in_headers_hide;
 	cherokee_list_t                 in_headers_add;

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_CGI_H
 #define CHEROKEE_HANDLER_CGI_H
@@ -84,7 +84,7 @@ ret_t cherokee_handler_cgi_add_headers (cherokee_handler_cgi_t *hdl, cherokee_bu
 /* This handler export these extra functions to allow phpcgi
  * set enviroment variables, work with pathinfo, etc..
  */
-void  cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi, 
+void  cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi,
 					   const char *name,    int name_len,
 					   const char *content, int content_len);
 

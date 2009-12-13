@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "validator.h"
@@ -35,8 +35,8 @@
 #define ENTRIES "validator"
 
 
-ret_t 
-cherokee_validator_init_base (cherokee_validator_t             *validator, 
+ret_t
+cherokee_validator_init_base (cherokee_validator_t             *validator,
 			      cherokee_validator_props_t       *props,
 			      cherokee_plugin_info_validator_t *info)
 {
@@ -59,7 +59,7 @@ cherokee_validator_init_base (cherokee_validator_t             *validator,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_free_base (cherokee_validator_t *validator)
 {
 	cherokee_buffer_mrproper (&validator->user);
@@ -78,7 +78,7 @@ cherokee_validator_free_base (cherokee_validator_t *validator)
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_free (cherokee_validator_t *validator)
 {
 	module_func_free_t func;
@@ -95,7 +95,7 @@ cherokee_validator_free (cherokee_validator_t *validator)
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_check (cherokee_validator_t *validator, void *conn)
 {
 	if (validator->check == NULL) {
@@ -106,7 +106,7 @@ cherokee_validator_check (cherokee_validator_t *validator, void *conn)
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_add_headers (cherokee_validator_t *validator,
 				void                 *conn,
 				cherokee_buffer_t    *buf)
@@ -115,11 +115,11 @@ cherokee_validator_add_headers (cherokee_validator_t *validator,
 		return ret_error;
 	}
 
-	return validator->add_headers (validator, CONN(conn), buf);	
+	return validator->add_headers (validator, CONN(conn), buf);
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_parse_basic (cherokee_validator_t *validator, char *str, cuint_t str_len)
 {
 	char              *colon;
@@ -139,7 +139,7 @@ cherokee_validator_parse_basic (cherokee_validator_t *validator, char *str, cuin
 	/* Copy user and password
 	 */
 	cherokee_buffer_add (&validator->user, auth.buf, colon - auth.buf);
-	cherokee_buffer_add (&validator->passwd, colon+1, auth.len  - ((colon+1) - auth.buf));		
+	cherokee_buffer_add (&validator->passwd, colon+1, auth.len  - ((colon+1) - auth.buf));
 
 	TRACE (ENTRIES, "Parse basic auth got user=%s, passwd=%s\n", validator->user.buf, validator->passwd.buf);
 
@@ -154,7 +154,7 @@ error:
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_parse_digest (cherokee_validator_t *validator,
 				 char *str, cuint_t str_len)
 {
@@ -177,12 +177,12 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 		/* Skip some chars
 		 */
 		while ((*entry == CHR_SP) ||
-		       (*entry == CHR_CR) || 
+		       (*entry == CHR_CR) ||
 		       (*entry == CHR_LF)) entry++;
 
 		/* Check for the end
 		 */
-		if (entry >= end) 
+		if (entry >= end)
 			break;
 
 		comma = strchr(entry, ',');
@@ -223,20 +223,20 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 		/* Check for "s and skip it
 		 */
 		equal += (equal[1] == '"') ? 2 : 1;
-		len = strlen(equal);		
+		len = strlen(equal);
 		while ((len > 0) &&
-		       ((equal[len-1] == '"')  || 
-			(equal[len-1] == CHR_CR) || 
+		       ((equal[len-1] == '"')  ||
+			(equal[len-1] == CHR_CR) ||
 			(equal[len-1] == CHR_LF))) len--;
 
 		/* Copy the entry value
-		 */ 
+		 */
 		cherokee_buffer_add (entry_buf, equal, len);
 
-		/* Resore [1], and prepare next loop 
+		/* Resore [1], and prepare next loop
 		 */
 		if (comma)
-			*comma = ','; 
+			*comma = ',';
 		entry = comma + 1;
 
 	} while (comma != NULL);
@@ -260,7 +260,7 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 }
 
 
-static ret_t 
+static ret_t
 digest_HA2 (cherokee_validator_t *validator, cherokee_buffer_t *buf, cherokee_connection_t *conn)
 {
 	ret_t       ret;
@@ -282,16 +282,16 @@ digest_HA2 (cherokee_validator_t *validator, cherokee_buffer_t *buf, cherokee_co
 	cherokee_buffer_add_str    (buf, ":");
 	cherokee_buffer_add_buffer (buf, &validator->uri);
 
-	cherokee_buffer_encode_md5_digest (buf);	
+	cherokee_buffer_encode_md5_digest (buf);
 
 	return ret_ok;
 }
 
 
-ret_t 
-cherokee_validator_digest_response (cherokee_validator_t  *validator, 
-				    char                  *A1, 
-				    cherokee_buffer_t     *buf, 
+ret_t
+cherokee_validator_digest_response (cherokee_validator_t  *validator,
+				    char                  *A1,
+				    cherokee_buffer_t     *buf,
 				    cherokee_connection_t *conn)
 {
 	ret_t              ret;
@@ -326,12 +326,12 @@ cherokee_validator_digest_response (cherokee_validator_t  *validator,
 
 	if (!cherokee_buffer_is_empty (&validator->qop)) {
 		if (!cherokee_buffer_is_empty (&validator->nc))
-			cherokee_buffer_add_buffer (buf, &validator->nc);		
+			cherokee_buffer_add_buffer (buf, &validator->nc);
 		cherokee_buffer_add_str (buf, ":");
 		if (!cherokee_buffer_is_empty (&validator->cnonce))
-			cherokee_buffer_add_buffer (buf, &validator->cnonce);		
+			cherokee_buffer_add_buffer (buf, &validator->cnonce);
 		cherokee_buffer_add_str (buf, ":");
-		cherokee_buffer_add_buffer (buf, &validator->qop);		
+		cherokee_buffer_add_buffer (buf, &validator->qop);
 		cherokee_buffer_add_str (buf, ":");
 	}
 
@@ -347,7 +347,7 @@ error:
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_connection_t *conn)
 {
 	ret_t             ret;
@@ -358,14 +358,14 @@ cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffe
 	/* Sanity check
 	 */
 	if (cherokee_buffer_is_empty (&validator->user) ||
-	    cherokee_buffer_is_empty (&validator->realm)) 
+	    cherokee_buffer_is_empty (&validator->realm))
 		return ret_deny;
 
 	/* Build A1
 	 */
-	cherokee_buffer_ensure_size (&a1, 
-				     validator->user.len  + 1 + 
-				     validator->realm.len + 1 + 
+	cherokee_buffer_ensure_size (&a1,
+				     validator->user.len  + 1 +
+				     validator->realm.len + 1 +
 				     passwd->len);
 
 	cherokee_buffer_add_buffer (&a1, &validator->user);
@@ -399,9 +399,9 @@ add_method (char *method, void *data)
 {
 	cherokee_config_entry_t *entry = CONF_ENTRY(data);
 
-	if (equal_str (method, "basic")) 
+	if (equal_str (method, "basic"))
 		entry->authentication |= http_auth_basic;
-	else if (equal_str (method, "digest")) 
+	else if (equal_str (method, "digest"))
 		entry->authentication |= http_auth_digest;
 	else {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_METHOD_UNKNOWN, method);
@@ -412,14 +412,14 @@ add_method (char *method, void *data)
 }
 
 
-static ret_t 
+static ret_t
 add_user  (char *val, void *data)
 {
 	return cherokee_avl_add_ptr (AVL(data), val, NULL);
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 {
 	ret_t                    ret;
@@ -453,7 +453,7 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 			if (ret != ret_ok)
 				return ret;
 
-		} 
+		}
 	}
 
 	return ret_ok;
@@ -463,7 +463,7 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 /* Validator properties
  */
 
-ret_t 
+ret_t
 cherokee_validator_props_init_base  (cherokee_validator_props_t *props, module_func_props_free_t free_func)
 {
 	props->valid_methods = http_auth_nothing;
@@ -471,7 +471,7 @@ cherokee_validator_props_init_base  (cherokee_validator_props_t *props, module_f
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_props_free_base  (cherokee_validator_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));

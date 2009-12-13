@@ -9,7 +9,7 @@ def graphs_are_active (cfg):
 def graphs_get_images (cfg, filter):
     rrd_dir = cfg.get_val("server!collector!database_dir", CHEROKEE_RRD_DIR)
     img_dir = os.path.join (rrd_dir, "images")
-    
+
     files = []
     if os.path.exists (img_dir):
         for f in os.listdir(img_dir):

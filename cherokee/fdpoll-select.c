@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
@@ -65,7 +65,7 @@ typedef struct {
 } cherokee_fdpoll_select_t;
 
 
-static ret_t 
+static ret_t
 _free (cherokee_fdpoll_select_t *fdp)
 {
 	if (fdp == NULL)
@@ -86,7 +86,7 @@ _free (cherokee_fdpoll_select_t *fdp)
 }
 
 
-static ret_t 
+static ret_t
 _add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 {
 	cherokee_fdpoll_t *nfd = FDPOLL(fdp);
@@ -101,12 +101,12 @@ _add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 	fdp->select_fds[nfd->npollfds] = fd;
 	switch (rw) {
 	case FDPOLL_MODE_READ:
-		FD_SET (fd, &fdp->master_rfdset); 
+		FD_SET (fd, &fdp->master_rfdset);
 		break;
 	case FDPOLL_MODE_WRITE:
 		FD_SET (fd, &fdp->master_wfdset);
 		break;
-	default: 
+	default:
 		break;
 	}
 
@@ -122,7 +122,7 @@ _add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 }
 
 
-static ret_t 
+static ret_t
 _del (cherokee_fdpoll_select_t *fdp, int fd)
 {
 	cherokee_fdpoll_t *nfd = FDPOLL(fdp);
@@ -164,7 +164,7 @@ _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 }
 
 
-static int   
+static int
 _check (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 {
 	UNUSED(rw);
@@ -181,7 +181,7 @@ _check (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 
 
 static int
-select_get_maxfd (cherokee_fdpoll_select_t *fdp) 
+select_get_maxfd (cherokee_fdpoll_select_t *fdp)
 {
 	if (fdp->maxfd_recompute) {
 		int i;
@@ -200,7 +200,7 @@ select_get_maxfd (cherokee_fdpoll_select_t *fdp)
 }
 
 
-static int   
+static int
 _watch (cherokee_fdpoll_select_t *fdp, int timeout_msecs)
 {
 	int mfd;
@@ -235,7 +235,7 @@ _watch (cherokee_fdpoll_select_t *fdp, int timeout_msecs)
 }
 
 
-static ret_t 
+static ret_t
 _reset (cherokee_fdpoll_select_t *fdp, int fd)
 {
 	UNUSED(fdp);
@@ -255,7 +255,7 @@ fdpoll_select_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 }
 
 
-ret_t 
+ret_t
 fdpoll_select_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 {
 	int                i;
@@ -271,7 +271,7 @@ fdpoll_select_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 	}
 
 	nfd = FDPOLL(n);
-        
+
 	/* Init base class properties
 	 */
 	nfd->type          = cherokee_poll_select;
@@ -287,7 +287,7 @@ fdpoll_select_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 	nfd->reset         = (fdpoll_func_reset_t) _reset;
 	nfd->set_mode      = (fdpoll_func_set_mode_t) _set_mode;
 	nfd->check         = (fdpoll_func_check_t) _check;
-	nfd->watch         = (fdpoll_func_watch_t) _watch;	
+	nfd->watch         = (fdpoll_func_watch_t) _watch;
 
 	/* Init properties
 	 */

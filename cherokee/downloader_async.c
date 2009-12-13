@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "downloader_async.h"
@@ -40,7 +40,7 @@ struct cherokee_downloader_async {
 
 
 
-ret_t 
+ret_t
 cherokee_downloader_async_init (cherokee_downloader_async_t *adownloader)
 {
 	ret_t ret;
@@ -54,10 +54,10 @@ cherokee_downloader_async_init (cherokee_downloader_async_t *adownloader)
 }
 
 
-ret_t 
+ret_t
 cherokee_downloader_async_mrproper (cherokee_downloader_async_t *adownloader)
 {
-	if (adownloader->fd_added != -1) 
+	if (adownloader->fd_added != -1)
 		cherokee_fdpoll_del (adownloader->fdpoll_ref, adownloader->fd_added);
 
 	cherokee_downloader_mrproper (DOWNLOADER(adownloader));
@@ -69,7 +69,7 @@ CHEROKEE_ADD_FUNC_NEW (downloader_async);
 CHEROKEE_ADD_FUNC_FREE (downloader_async);
 
 
-ret_t 
+ret_t
 cherokee_downloader_async_set_fdpoll (cherokee_downloader_async_t *adownloader, cherokee_fdpoll_t *fdpoll)
 {
 	adownloader->fdpoll_ref = fdpoll;
@@ -77,7 +77,7 @@ cherokee_downloader_async_set_fdpoll (cherokee_downloader_async_t *adownloader, 
 }
 
 
-ret_t 
+ret_t
 cherokee_downloader_async_connect (cherokee_downloader_async_t *adownloader)
 {
 	ret_t                  ret;
@@ -114,7 +114,7 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 	return_if_fail ((fdpoll != NULL), ret_error);
 
 	/* Watch the fd poll
-	 */		
+	 */
 	re = cherokee_fdpoll_watch (fdpoll, WATCH_SLEEP);
 	TRACE(ENTRIES, "watch = %d\n", re);
 	if (re <= 0)
@@ -122,7 +122,7 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 
 	/* Check whether we are reading or writting
 	 */
-	if (down->phase <= downloader_phase_send_post) 
+	if (down->phase <= downloader_phase_send_post)
 		rw = FDPOLL_MODE_WRITE;
 	else
 		rw = FDPOLL_MODE_READ;
@@ -138,12 +138,12 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 		PRINT_ERROR("Error polling fd=%d rw=%d\n", fd, rw);
 		return ret_error;
 	case 0:
- 		TRACE(ENTRIES, "fd=%d rw=%d, not ready\n", fd, rw); 
+ 		TRACE(ENTRIES, "fd=%d rw=%d, not ready\n", fd, rw);
 /*		return ret_eagain; */
 	}
 
 	/* If there's something to do, go for it..
 	 */
-	TRACE(ENTRIES, "fd=%d rw=%d is active\n", fd, rw); 
+	TRACE(ENTRIES, "fd=%d rw=%d is active\n", fd, rw);
 	return cherokee_downloader_step (down, NULL, NULL);
 }

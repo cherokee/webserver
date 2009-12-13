@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_ADMIN_HANDLER_H
 #define CHEROKEE_ADMIN_HANDLER_H
@@ -39,7 +39,7 @@ typedef struct {
 	cherokee_buffer_t              reply;
 } cherokee_handler_admin_t;
 
-#define PROP_ADMIN(x)      ((cherokee_handler_admin_props_t *)(x)) 
+#define PROP_ADMIN(x)      ((cherokee_handler_admin_props_t *)(x))
 #define HDL_ADMIN(x)       ((cherokee_handler_admin_t *)(x))
 #define HDL_ADMIN_PROPS(x) (PROP_ADMIN(HANDLER(x)->props))
 

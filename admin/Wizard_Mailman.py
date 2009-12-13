@@ -73,7 +73,7 @@ def is_mailman_data_dir (path, cfg, nochroot):
     if not os.path.exists (file):
         raise ValueError, _("It doesn't look like a Mailman data directory.")
     return path
-    
+
 def is_mailman_cgi_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
     file = os.path.join (path, "listinfo")

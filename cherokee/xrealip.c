@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "xrealip.h"
@@ -68,7 +68,7 @@ add_access (char *address, void *data)
 	}
 
 	return ret_ok;
-	
+
 }
 
 
@@ -81,7 +81,7 @@ cherokee_x_real_ip_configure (cherokee_x_real_ip_t   *real_ip,
 
 	cherokee_config_node_read_bool (config, "x_real_ip_enabled",    &real_ip->enabled);
 	cherokee_config_node_read_bool (config, "x_real_ip_access_all", &real_ip->access_all);
-	
+
 	ret = cherokee_config_node_get (config, "x_real_ip_access", &subconf);
 	if (ret == ret_ok) {
 		ret = cherokee_config_node_read_list (subconf, NULL, add_access, real_ip);

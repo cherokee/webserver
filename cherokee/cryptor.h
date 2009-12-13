@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -78,7 +78,7 @@ typedef struct {
 
 typedef struct {
 	cherokee_boolean_t             initialized;
-	void                          *vserver_ref;	
+	void                          *vserver_ref;
 
 	/* Methods */
 	cryptor_socket_func_free_t     free;
@@ -118,7 +118,7 @@ typedef struct {
 #define PLUGIN_INFO_CRYPTOR_EASIEST_INIT(name)                      \
 	PLUGIN_EMPTY_INIT_FUNCTION(name)                            \
 	PLUGIN_INFO_CRYPTOR_EASY_INIT(name)
- 
+
 
 /* Cryptor: Server
  */

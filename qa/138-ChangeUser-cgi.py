@@ -14,7 +14,7 @@ vserver!1!rule!1380!handler!change_user = 1
 
 CGI_CODE = """#!/bin/sh
 echo "Content-Type: text/plain"
-echo 
+echo
 echo "I'm `whoami`"
 """
 

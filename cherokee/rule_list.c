@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_list.h"
@@ -77,8 +77,8 @@ update_connection (cherokee_connection_t   *conn,
 	}
 }
 
-ret_t 
-cherokee_rule_list_match (cherokee_rule_list_t    *list, 
+ret_t
+cherokee_rule_list_match (cherokee_rule_list_t    *list,
 			  cherokee_connection_t   *conn,
 			  cherokee_config_entry_t *ret_config)
 {
@@ -116,17 +116,17 @@ cherokee_rule_list_match (cherokee_rule_list_t    *list,
 
 		/* Should it continue? */
 		if (rule->final) {
-			TRACE(ENTRIES, "Final rule prio=%d. Exiting.\n", 
+			TRACE(ENTRIES, "Final rule prio=%d. Exiting.\n",
 			      rule->priority);
 			return ret_ok;
 		}
 	}
-	
+
 	TRACE(ENTRIES, "Did not match any. Using %s\n", "default");
 
 	list->def_rule->match(list->def_rule, conn, ret_config);
 	cherokee_config_entry_complete (ret_config, &list->def_rule->config);
-	
+
 	/* Update the connection
 	 */
 	update_connection (conn, ret_config);
@@ -143,7 +143,7 @@ cherokee_rule_list_add (cherokee_rule_list_t *list, cherokee_rule_t *rule)
 }
 
 
-static int 
+static int
 rule_cmp (cherokee_list_t *a, cherokee_list_t *b)
 {
 	cherokee_rule_t *A = list_entry (a, cherokee_rule_t, list_node);
@@ -157,7 +157,7 @@ ret_t
 cherokee_rule_list_sort (cherokee_rule_list_t *list)
 {
 #ifdef TRACE_ENABLED
-	{ 
+	{
 		cherokee_list_t *i;
 		cuint_t          n = 0;
 		list_for_each (i, &list->rules) { n++; }

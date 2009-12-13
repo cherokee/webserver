@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -53,11 +53,11 @@ static cherokee_resolv_cache_t *__global_resolv = NULL;
 
 /* Entries
  */
-static ret_t 
+static ret_t
 entry_new (cherokee_resolv_cache_entry_t **entry)
 {
 	CHEROKEE_NEW_STRUCT(n, resolv_cache_entry);
-	
+
 	cherokee_buffer_init (&n->ip_str);
 	memset (&n->addr, 0, sizeof(n->addr));
 
@@ -85,7 +85,7 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 	time_t  eagain_at = 0;
 
 	while (true) {
-		ret = cherokee_gethostbyname (domain->buf, &entry->addr); 
+		ret = cherokee_gethostbyname (domain->buf, &entry->addr);
 		if (ret == ret_ok) {
 			break;
 
@@ -110,7 +110,7 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 	if (tmp == NULL) {
 		return ret_error;
 	}
-	
+
 	cherokee_buffer_add (&entry->ip_str, tmp, strlen(tmp));
 	return ret_ok;
 }
@@ -119,7 +119,7 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 
 /* Table
  */
-ret_t 
+ret_t
 cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 {
 	ret_t ret;
@@ -132,7 +132,7 @@ cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 }
 
 
-ret_t 
+ret_t
 cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv)
 {
 	cherokee_avl_mrproper (&resolv->table, entry_free);
@@ -142,12 +142,12 @@ cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv)
 }
 
 
-ret_t 
+ret_t
 cherokee_resolv_cache_get_default (cherokee_resolv_cache_t **resolv)
 {
 	ret_t                    ret;
 	cherokee_resolv_cache_t *n;
-	
+
 	if (unlikely (__global_resolv == NULL)) {
 		n = (cherokee_resolv_cache_t *) malloc (sizeof(cherokee_resolv_cache_t));
 		if (n == NULL) return ret_nomem;
@@ -163,7 +163,7 @@ cherokee_resolv_cache_get_default (cherokee_resolv_cache_t **resolv)
 }
 
 
-ret_t 
+ret_t
 cherokee_resolv_cache_clean (cherokee_resolv_cache_t *resolv)
 {
 	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
@@ -196,7 +196,7 @@ table_add_new_entry (cherokee_resolv_cache_t        *resolv,
 		entry_free (n);
 		return ret;
 	}
-	
+
 	/* Add it to the table
 	 */
 	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
@@ -208,7 +208,7 @@ table_add_new_entry (cherokee_resolv_cache_t        *resolv,
 }
 
 
-ret_t 
+ret_t
 cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
 				 cherokee_buffer_t        *domain,
 				 const char              **ip)
@@ -238,7 +238,7 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
 }
 
 
-ret_t 
+ret_t
 cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 				cherokee_buffer_t       *domain,
 				void                    *sock_)

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -55,14 +55,14 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (file, http_get | http_head);
 
 /* Methods implementation
  */
-ret_t 
+ret_t
 cherokee_handler_file_props_free (cherokee_handler_file_props_t *props)
 {
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_list_t               *i;
@@ -73,18 +73,18 @@ cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_file_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+		cherokee_handler_props_init_base (HANDLER_PROPS(n),
 						  MODULE_PROPS_FREE(cherokee_handler_file_props_free));
 
 		n->use_cache = true;
 		*_props = MODULE_PROPS(n);
 	}
-	
+
 	props = PROP_FILE(*_props);
 
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-		
+
 		if (equal_buf_str (&subconf->key, "iocache")) {
 			props->use_cache = atoi (subconf->val.buf);
 		}
@@ -100,7 +100,7 @@ cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	CHEROKEE_NEW_STRUCT (n, handler_file);
 
 	TRACE_CONN(cnt);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(file));
@@ -168,24 +168,24 @@ check_cached (cherokee_handler_file_t *fhdl)
 
 		has_modified_since = true;
 
-		req_time = cherokee_dtm_str2time (header);			
+		req_time = cherokee_dtm_str2time (header);
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
 			LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
-				
+
 			/* restore end of line */
 			*end = tmp;
 			return ret_ok;
 		}
 		/* restore end of line */
 		*end = tmp;
-		
+
 		/* The file is cached in the client
 		 */
 		if (fhdl->info->st_mtime <= req_time) {
 			not_modified_ms = true;
 		}
 	}
-	
+
 	/* HTTP/1.1 only headers from now on
 	 */
 	if (conn->header.version < http_version_11) {
@@ -212,8 +212,8 @@ check_cached (cherokee_handler_file_t *fhdl)
 
 		/* Compare ETag(s)
 		 */
-		if ((header_len == tmp->len) && 
-		    (strncmp (header, tmp->buf, tmp->len) == 0)) 
+		if ((header_len == tmp->len) &&
+		    (strncmp (header, tmp->buf, tmp->len) == 0))
 		{
 			not_modified_etag = true;
 		}
@@ -226,16 +226,16 @@ check_cached (cherokee_handler_file_t *fhdl)
 	 */
 	if (has_modified_since && has_etag) {
 		if (not_modified_ms && not_modified_etag) {
-			fhdl->not_modified = true;		
+			fhdl->not_modified = true;
 			return ret_ok;
 		}
 	} else  {
 		if (not_modified_ms || not_modified_etag) {
-			fhdl->not_modified = true;		
+			fhdl->not_modified = true;
 			return ret_ok;
 		}
 	}
-	
+
 	/* If-Range
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_if_range, &header, &header_len);
@@ -243,14 +243,14 @@ check_cached (cherokee_handler_file_t *fhdl)
 		time_t req_time;
 		char   tmp;
 		char  *end = header + header_len;
-		
-		tmp = *end; 
-		*end = '\0'; 
-		
-		req_time = cherokee_dtm_str2time (header);			
+
+		tmp = *end;
+		*end = '\0';
+
+		req_time = cherokee_dtm_str2time (header);
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
 			LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
-				
+
 			*end = tmp;
 			return ret_ok;
 		}
@@ -311,14 +311,14 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_fi
 
 
 static ret_t
-stat_local_directory (cherokee_handler_file_t   *fhdl, 
-		      cherokee_buffer_t         *local_file, 
-		      cherokee_iocache_entry_t **io_entry, 
+stat_local_directory (cherokee_handler_file_t   *fhdl,
+		      cherokee_buffer_t         *local_file,
+		      cherokee_iocache_entry_t **io_entry,
 		      struct stat              **info)
-{	
+{
 	int                    re;
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(fhdl);	
+	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
 	cherokee_server_t     *srv  = CONN_SRV(conn);
 
 	/* I/O cache
@@ -348,8 +348,8 @@ stat_local_directory (cherokee_handler_file_t   *fhdl,
 			RET_UNKNOWN(ret);
 			conn->error_code = http_internal_error;
 		}
-		
-		return ret_error;		
+
+		return ret_error;
 	}
 
 	/* Without cache
@@ -359,18 +359,18 @@ without:
 	TRACE (ENTRIES, "%s, use_iocache=0 ret=%d\n", local_file->buf, re);
 
 	if (re >= 0) {
-		*info = &fhdl->cache_info;		
+		*info = &fhdl->cache_info;
 		return ret_ok;
 	}
 
 	switch (errno) {
-	case ENOENT: 
+	case ENOENT:
 		conn->error_code = http_not_found;
 		break;
-	case EACCES: 
+	case EACCES:
 		conn->error_code = http_access_denied;
 		break;
-	default:     
+	default:
 		conn->error_code = http_internal_error;
 	}
 
@@ -378,7 +378,7 @@ without:
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 				   cherokee_buffer_t       *local_file)
 {
@@ -450,7 +450,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 						   &fhdl->fd,
 						   &io_entry);
 
-		TRACE (ENTRIES, "iocache looked up, local=%s ret=%d\n", 
+		TRACE (ENTRIES, "iocache looked up, local=%s ret=%d\n",
 		       local_file->buf, ret);
 
 		switch (ret) {
@@ -531,7 +531,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 	 */
 	if ((use_io) &&
 	    (io_entry != NULL) &&
-	    (io_entry->mmaped != NULL)) 
+	    (io_entry->mmaped != NULL))
 	{
 		off_t len;
 
@@ -563,15 +563,15 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 				(conn->encoder == NULL) &&
 				(conn->encoder_new_func == NULL) &&
 				(conn->socket.is_tls == non_TLS) &&
-				(fhdl->info->st_size >= srv->sendfile.min) && 
+				(fhdl->info->st_size >= srv->sendfile.min) &&
 				(fhdl->info->st_size <  srv->sendfile.max));
 
 	if (fhdl->using_sendfile) {
 		cherokee_connection_set_cork (conn, true);
-		BIT_SET (conn->options, conn_op_tcp_cork);		
+		BIT_SET (conn->options, conn_op_tcp_cork);
 	}
 #endif
-	
+
 	return ret_ok;
 
 out:
@@ -580,11 +580,11 @@ out:
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 {
 	ret_t                  ret;
- 	cherokee_connection_t *conn = HANDLER_CONN(fhdl); 
+ 	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
 
 	/* Build the local file path
 	 */
@@ -593,7 +593,7 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 
 	/* Undo the local directory
 	 */
-	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);	
+	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 	return ret;
 }
 
@@ -613,7 +613,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 	/* ETag:
 	 */
-	if (conn->header.version >= http_version_11) { 
+	if (conn->header.version >= http_version_11) {
 		/*
 		 * "ETag: %lx=" FMT_OFFSET_HEX CRLF
 		 */
@@ -634,19 +634,19 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	cherokee_buffer_add    (buffer, bufstr, szlen);
 	cherokee_buffer_add_str(buffer, CRLF);
 
-	/* Add MIME related headers: 
+	/* Add MIME related headers:
 	 * "Content-Type:" and "Cache-Control: max-age="
 	 */
 	if (fhdl->mime != NULL) {
 		cuint_t            maxage;
 		cherokee_buffer_t *mime   = NULL;
-		
+
 		cherokee_mime_entry_get_type (fhdl->mime, &mime);
 		cherokee_buffer_add_str    (buffer, "Content-Type: ");
 		cherokee_buffer_add_buffer (buffer, mime);
 		cherokee_buffer_add_str    (buffer, CRLF);
-		
-		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);             
+
+		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);
 		if (ret == ret_ok) {
 			/* Cache-Control, note that we add it in any case
 			 * because it can be useful for clients and / or transparent
@@ -806,7 +806,7 @@ exit_sendfile:
 		buffer->len = total;
 		buffer->buf[buffer->len] = '\0';
 		fhdl->offset += total;
-	}	
+	}
 
 	/* Maybe it was the last file chunk
 	 */
@@ -818,11 +818,11 @@ exit_sendfile:
 }
 
 ret_t
-cherokee_handler_file_seek (cherokee_handler_file_t *hdl, 
+cherokee_handler_file_seek (cherokee_handler_file_t *hdl,
 			    off_t                    start)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-	
+
 	conn->range_start = start;
 	hdl->offset       = start;
 

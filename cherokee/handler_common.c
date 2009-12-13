@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_common.h"
@@ -56,7 +56,7 @@ cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
 		cherokee_handler_file_props_free (props->props_file);
 		props->props_file = NULL;
 	}
-	
+
 	if (props->props_dirlist != NULL) {
 		cherokee_handler_dirlist_props_free (props->props_dirlist);
 		props->props_dirlist = NULL;
@@ -66,7 +66,7 @@ cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                            ret;
@@ -113,7 +113,7 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 
 
 
-ret_t 
+ret_t
 cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	ret_t                     ret;
@@ -138,16 +138,16 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	/* Check the request
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
-	
+
 	if (use_iocache)
 		iocache = CONN_SRV(conn)->iocache;
 
 	ret = cherokee_io_stat (iocache, &conn->local_directory, use_iocache, &nocache_info, &io_entry, &info);
 	exists = (ret == ret_ok);
 
-	TRACE (ENTRIES, "request: '%s', local: '%s', exists %d\n", 
+	TRACE (ENTRIES, "request: '%s', local: '%s', exists %d\n",
 	       conn->request.buf, conn->local_directory.buf, exists);
-	
+
 	if (!exists) {
 		ret_t  ret;
 		char  *pathinfo;
@@ -160,7 +160,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			TRACE(ENTRIES, "Returns conn->error_code: %s\n", "http_not_found");
 			cherokee_iocache_entry_unref (&io_entry);
 
-			conn->error_code = http_not_found; 
+			conn->error_code = http_not_found;
 			return ret_error;
 		}
 
@@ -168,7 +168,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		 * a PathInfo string at the end..
 		 */
 		begin = conn->local_directory.len - conn->request.len;
-		
+
 		ret = cherokee_split_pathinfo (&conn->local_directory, begin, true, &pathinfo, &pathinfo_len);
 		if ((ret == ret_not_found) || (pathinfo_len <= 0)) {
 			TRACE(ENTRIES, "Returns conn->error_code: %s\n", "http_not_found");
@@ -177,8 +177,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			conn->error_code = http_not_found;
 			return ret_error;
 		}
-		
-		/* Copy the PathInfo and clean the request 
+
+		/* Copy the PathInfo and clean the request
 		 */
 		if (cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
@@ -195,7 +195,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 		TRACE_CONN(conn);
 		return ret_eagain;
-	}	
+	}
 
 	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 
@@ -241,7 +241,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				/* This means there is a configuration entry like:
 				 * 'DirectoryIndex index.php, /index_default.php'
 				 * and it's proceesing '/index_default.php'.
-				 */ 
+				 */
 
 				/* Build the secondary path
 				 */
@@ -252,7 +252,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				cherokee_buffer_clean (new_local_dir);
 				cherokee_buffer_add_buffer (new_local_dir, &CONN_VSRV(conn)->root);
 				cherokee_buffer_add_buffer (new_local_dir, index);
-				
+
 				ret = cherokee_io_stat (iocache, new_local_dir, use_iocache, &nocache_info, &io_entry, &info);
 				exists = (ret == ret_ok);
 				cherokee_iocache_entry_unref (&io_entry);
@@ -293,7 +293,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 			/* If the file doesn't exist or it is a directory, try with the next one
 			 */
-			if ((!exists) || (is_dir)) 
+			if ((!exists) || (is_dir))
 				continue;
 
 			/* Add the index file to the request and clean up
@@ -314,10 +314,10 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		 */
 		cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 		if (PROP_COMMON(props)->allow_dirlist) {
-			return cherokee_handler_dirlist_new (hdl, cnt, 
+			return cherokee_handler_dirlist_new (hdl, cnt,
 							     MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 		}
-		
+
 		conn->error_code = http_access_denied;
 		return ret_error;
 	}
@@ -336,7 +336,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
  */
 static cherokee_boolean_t _common_is_init = false;
 
-void  
+void
 PLUGIN_INIT_NAME(common) (cherokee_plugin_loader_t *loader)
 {
 	if (_common_is_init) return;

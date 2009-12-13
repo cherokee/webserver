@@ -20,7 +20,7 @@ class Test (TestBase):
         self.name = "Dirlist with header file"
 
         self.request           = "GET /header_file1/file/ HTTP/1.0\r\n"
-        self.expected_error    = 200        
+        self.expected_error    = 200
         self.conf              = CONF
 
     def Prepare (self, www):

@@ -17,7 +17,7 @@ class Test (TestBase):
         self.expected_error   = 301
         self.expected_content = "/this_is_the_new_path?arg1=123&arg2=cosa"
         self.conf             = CONF
-        
+
     def Prepare (self, www):
         self.Mkdir (www, "redirparam2")
 

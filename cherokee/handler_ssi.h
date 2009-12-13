@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_SSI_H
 #define CHEROKEE_HANDLER_SSI_H
@@ -48,9 +48,9 @@ typedef struct {
 
 typedef struct {
 	cherokee_handler_t     handler;
-	
+
 	cherokee_mime_entry_t *mime;
-	struct stat            cache_info;	
+	struct stat            cache_info;
 	cherokee_buffer_t      dir;
 
 	cherokee_buffer_t      source;
@@ -76,5 +76,5 @@ ret_t cherokee_handler_ssi_init        (cherokee_handler_ssi_t *hdl);
 ret_t cherokee_handler_ssi_free        (cherokee_handler_ssi_t *hdl);
 ret_t cherokee_handler_ssi_step        (cherokee_handler_ssi_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl, cherokee_buffer_t *buffer);
-					
+
 #endif /* CHEROKEE_HANDLER_SSI_H */

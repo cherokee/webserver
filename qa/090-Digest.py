@@ -26,5 +26,5 @@ class Test (TestBase):
         self.Mkdir (www, "digest1")
         self.WriteFile (www, "digest1/file", 0444, MAGIC)
         passfile = self.WriteFile (www, "digest1/.passwd", 0444, "user:password\n")
-        
+
         self.conf = CONF % (passfile)

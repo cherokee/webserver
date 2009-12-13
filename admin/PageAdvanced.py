@@ -143,8 +143,8 @@ class PageAdvanced (PageMenu, FormHelper):
         return self.Indent(table)
 
     def _op_apply_changes (self, uri, post):
-        self.ApplyChanges (['server!keepalive', 
-                            'server!chunked_encoding', 
-                            'server!iocache'], 
+        self.ApplyChanges (['server!keepalive',
+                            'server!chunked_encoding',
+                            'server!iocache'],
                            post, validation = DATA_VALIDATION)
 

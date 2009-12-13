@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "dwriter.h"
@@ -98,7 +98,7 @@
 		return ret_error
 
 
-ret_t 
+ret_t
 cherokee_dwriter_init (cherokee_dwriter_t *writer,
 		       cherokee_buffer_t  *tmp)
 {
@@ -119,16 +119,16 @@ cherokee_dwriter_mrproper (cherokee_dwriter_t *writer)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_dwriter_set_buffer (cherokee_dwriter_t *writer,
 			     cherokee_buffer_t  *output)
 {
-	writer->buf = output;	
+	writer->buf = output;
 	return ret_ok;
 }
 
 static ret_t
-escape_string (cherokee_buffer_t *buffer, 
+escape_string (cherokee_buffer_t *buffer,
 	       const char        *s,
 	       cuint_t            len)
 {
@@ -141,39 +141,39 @@ escape_string (cherokee_buffer_t *buffer,
 		c = s[i];
 		switch (c) {
 		case '\n':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = 'n';
 			break;
 		case '\r':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = 'r';
 			break;
 		case '\t':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = 't';
 			break;
 		case '\b':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = 'b';
 			break;
 		case '\f':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = 'f';
 			break;
 		case '\\':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = '\\';
 			break;
 		case '/':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = '/';
 			break;
 		case '"':
-			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
 			buffer->buf[j++] = '"';
 			break;
 		default:
-			buffer->buf[j++] = c;			
+			buffer->buf[j++] = c;
 		}
 	}
 
@@ -187,7 +187,7 @@ cherokee_dwriter_integer (cherokee_dwriter_t *w, unsigned long l)
 {
 	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
 	ADD_SEP; ADD_WHITE;
-	
+
 	cherokee_buffer_add_va (OUT, "%lu", l);
 
 	ADD_END; ADD_NEW_LINE;
@@ -289,11 +289,11 @@ cherokee_dwriter_bool (cherokee_dwriter_t *w, cherokee_boolean_t b)
 	case dwriter_python:
 		if (b)
 			cherokee_buffer_add_str (OUT, "True");
-		else 
+		else
 			cherokee_buffer_add_str (OUT, "False");
 		break;
 	case dwriter_php:
-		if (b) 
+		if (b)
 			cherokee_buffer_add_str (OUT, "TRUE");
 		else
 			cherokee_buffer_add_str (OUT, "FALSE");
@@ -313,7 +313,7 @@ cherokee_dwriter_dict_open (cherokee_dwriter_t *w)
 	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
 	ADD_SEP; ADD_WHITE;
 
-	INCREMENT_DEPTH;	
+	INCREMENT_DEPTH;
 	CS = dwriter_dict_start;
 
 	switch (w->lang) {
@@ -372,7 +372,7 @@ cherokee_dwriter_list_open (cherokee_dwriter_t *w)
 	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
 	ADD_SEP; ADD_WHITE;
 
-	INCREMENT_DEPTH;	
+	INCREMENT_DEPTH;
 	CS = dwriter_list_start;
 
 	switch (w->lang) {

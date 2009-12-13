@@ -16,7 +16,7 @@ vserver!1!rule!2330!handler!x_real_ip_access = ::1,127.0.0.1
 CGI_CODE = """#!/bin/sh
 
 echo "Content-Type: text/plain"
-echo 
+echo
 
 echo "REMOTE_ADDR ->${REMOTE_ADDR}<-"
 echo "REMOTE_PORT ->${REMOTE_PORT}<-"

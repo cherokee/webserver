@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_uwsgi.h"
@@ -40,7 +40,7 @@ CGI_LIB_INIT (uwsgi, http_all_methods);
 
 /* Methods implementation
  */
-static ret_t 
+static ret_t
 props_free (cherokee_handler_uwsgi_props_t *props)
 {
 	if (props->balancer)
@@ -49,19 +49,19 @@ props_free (cherokee_handler_uwsgi_props_t *props)
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
-ret_t 
+ret_t
 cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                          ret;
 	cherokee_list_t               *i;
 	cherokee_handler_uwsgi_props_t *props;
-	
+
 	/* Instance a new property object
 	 */
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_uwsgi_props);
 
-		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n), 
+		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n),
 							   MODULE_PROPS_FREE(props_free));
 
 		n->balancer = NULL;
@@ -69,7 +69,7 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 		*_props = MODULE_PROPS(n);
 	}
 
-	props = PROP_UWSGI(*_props);	
+	props = PROP_UWSGI(*_props);
 
 	/* Parse the configuration tree
 	 */
@@ -77,7 +77,7 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "balancer")) {
-			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer);
 			if (ret != ret_ok) return ret;
 		}
 	}
@@ -98,9 +98,9 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 }
 
 
-static void 
-add_env_pair (cherokee_handler_cgi_base_t *cgi_base, 
-	      const char *key, int key_len, 
+static void
+add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
+	      const char *key, int key_len,
 	      const char *val, int val_len)
 {
 	cherokee_handler_uwsgi_t *uwsgi = HDL_UWSGI(cgi_base);
@@ -126,12 +126,12 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffe
 	ret_t                    ret;
 	size_t                   read = 0;
 	cherokee_handler_uwsgi_t *uwsgi = HDL_UWSGI(cgi_base);
-	
+
 	ret = cherokee_socket_bufread (&uwsgi->socket, buffer, 4096, &read);
 
 	switch (ret) {
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base), HANDLER_CONN(cgi_base), 
+		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base), HANDLER_CONN(cgi_base),
 						     uwsgi->socket.socket, 0, false);
 		return ret_eagain;
 
@@ -149,20 +149,20 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffe
 	}
 
 	SHOULDNT_HAPPEN;
-	return ret_error;	
+	return ret_error;
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_uwsgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_uwsgi);
-	
+
 	/* Init the base class
 	 */
 	cherokee_handler_cgi_base_init (
 			HDL_CGI_BASE(n), cnt,
-			PLUGIN_INFO_HANDLER_PTR(uwsgi), 
+			PLUGIN_INFO_HANDLER_PTR(uwsgi),
 			HANDLER_PROPS(props),
 			add_env_pair, read_from_uwsgi);
 
@@ -187,11 +187,11 @@ cherokee_handler_uwsgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 	/* Return the object
 	 */
 	*hdl = HANDLER(n);
-	return ret_ok;	   
+	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_uwsgi_free (cherokee_handler_uwsgi_t *hdl)
 {
 	/* Free the rest of the handler CGI memory
@@ -239,14 +239,14 @@ build_header (cherokee_handler_uwsgi_t *hdl)
 
         add_env_pair(HDL_CGI_BASE(hdl), "CONTENT_LENGTH", 14, tmp, len);
 
-	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), HANDLER_CONN(hdl));       	
+	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), HANDLER_CONN(hdl));
 
 	return uwsgi_fix_packet (&hdl->header);
 }
 
 
 
-static ret_t 
+static ret_t
 connect_to_server (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                          ret;
@@ -284,14 +284,14 @@ send_header (cherokee_handler_uwsgi_t *hdl)
 	ret_t                  ret;
 	size_t                 written = 0;
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
-	
+
 	ret = cherokee_socket_bufwrite (&hdl->socket, &hdl->header, &written);
 	if (ret != ret_ok) {
 		conn->error_code = http_bad_gateway;
 		return ret;
 	}
 
-#if 0	
+#if 0
 	cherokee_buffer_print_debug (&hdl->header, -1);
 #endif
 	cherokee_buffer_move_to_begin (&hdl->header, written);
@@ -300,7 +300,7 @@ send_header (cherokee_handler_uwsgi_t *hdl)
 
 	if (! cherokee_buffer_is_empty (&hdl->header))
 		return ret_eagain;
-	
+
 	return ret_ok;
 }
 
@@ -312,9 +312,9 @@ send_post (cherokee_handler_uwsgi_t *hdl)
 	int                    e_fd = -1;
 	int                    mode =  0;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-	
+
 	ret = cherokee_post_walk_to_fd (&conn->post, hdl->socket.socket, &e_fd, &mode);
-	
+
 	switch (ret) {
 	case ret_ok:
 		break;
@@ -331,7 +331,7 @@ send_post (cherokee_handler_uwsgi_t *hdl)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                  ret;
@@ -341,14 +341,14 @@ cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 	case hcgi_phase_build_headers:
 		TRACE (ENTRIES, "Init: %s\n", "begins");
 
-		/* Extracts PATH_INFO and filename from request uri 
+		/* Extracts PATH_INFO and filename from request uri
 		 */
 		ret = cherokee_handler_cgi_base_extract_path (HDL_CGI_BASE(hdl), false);
 		if (unlikely (ret < ret_ok)) {
 			conn->error_code = http_internal_error;
 			return ret_error;
 		}
-		
+
 		/* Prepare Post
 		 */
 		if (! cherokee_post_is_empty (&conn->post)) {
@@ -369,7 +369,7 @@ cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 	case hcgi_phase_connect:
 		TRACE (ENTRIES, "Init: %s\n", "connect");
 
-		/* Connect	
+		/* Connect
 		 */
 		ret = connect_to_server (hdl);
 		switch (ret) {
@@ -384,7 +384,7 @@ cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 			conn->error_code = http_service_unavailable;
 			return ret_error;
 		}
-		
+
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_headers;
 
 	case hcgi_phase_send_headers:
@@ -393,7 +393,7 @@ cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 		/* Send the header
 		 */
 		ret = send_header (hdl);
-		if (ret != ret_ok) 
+		if (ret != ret_ok)
 			return ret;
 
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_post;

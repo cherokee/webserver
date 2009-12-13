@@ -80,8 +80,8 @@ class PageIcon (PageMenu, FormHelper):
 
         # Build the options
         if selected:
-            options = EntryOptions (cfg_key, file_options, 
-                                    onChange='return option_icons_update(\'%s\');'%(cfg_key), 
+            options = EntryOptions (cfg_key, file_options,
+                                    onChange='return option_icons_update(\'%s\');'%(cfg_key),
                                     selected=selected)
         else:
             options = EntryOptions (cfg_key, file_options,

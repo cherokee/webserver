@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_DIRLIST_HANDLER_H
 #define CHEROKEE_DIRLIST_HANDLER_H
@@ -92,7 +92,7 @@ typedef struct {
 	 */
 	cherokee_list_t          dirs;
 	cherokee_list_t          files;
-	
+
 	/* State
 	 */
 	cherokee_dirlist_sort_t  sort;
@@ -102,7 +102,7 @@ typedef struct {
 	 */
 	cuint_t                  longest_filename;
 	cherokee_list_t         *dir_ptr;
-	cherokee_list_t         *file_ptr;	
+	cherokee_list_t         *file_ptr;
  	cherokee_buffer_t        header;
 
 	cherokee_buffer_t        public_dir;

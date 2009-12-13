@@ -179,12 +179,12 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 
 	UNUSED(ad);
 
-	/* Get the pointer to the socket 
+	/* Get the pointer to the socket
 	 */
-	socket = SSL_get_app_data (ssl); 
+	socket = SSL_get_app_data (ssl);
 	if (unlikely (socket == NULL)) {
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SOCKET, ssl);
-		return SSL_TLSEXT_ERR_ALERT_FATAL; 
+		return SSL_TLSEXT_ERR_ALERT_FATAL;
 	}
 
 	/* Read the SNI server name
@@ -204,7 +204,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	ret = cherokee_server_get_vserver (srv, &tmp, NULL, &vsrv);
 	if ((ret != ret_ok) || (vsrv == NULL)) {
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SRV_MATCH, servername);
-		return SSL_TLSEXT_ERR_NOACK; 
+		return SSL_TLSEXT_ERR_NOACK;
 	}
 
 	TRACE (ENTRIES, "SNI: Setting new TLS context. Virtual host='%s'\n",
@@ -238,7 +238,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 		               SSL_CTX_get_verify_callback(ssl->ctx));
 	}
 
-	return SSL_TLSEXT_ERR_OK; 
+	return SSL_TLSEXT_ERR_OK;
 }
 #endif
 
@@ -336,7 +336,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert.buf);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		LOG_ERROR(CHEROKEE_ERROR_SSL_CERTIFICATE, 
+		LOG_ERROR(CHEROKEE_ERROR_SSL_CERTIFICATE,
 			  vsrv->server_cert.buf, error);
 		return ret_error;
 	}
@@ -670,7 +670,7 @@ _socket_clean (cherokee_cryptor_socket_libssl_t *cryp_socket)
 		SSL_free (cryp_socket->session);
 		cryp_socket->session = NULL;
 	}
-	
+
 	return ret_ok;
 }
 
@@ -689,7 +689,7 @@ _socket_new (cherokee_cryptor_libssl_t         *cryp,
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, cryptor_socket_libssl);
-	
+
 	UNUSED(cryp);
 
 	ret = cherokee_cryptor_socket_init_base (CRYPTOR_SOCKET(n));
@@ -733,11 +733,11 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	/* CA verifications
 	re = cherokee_buffer_is_empty (&cryp->vserver_ref->certs_ca);
 	if (! re) {
-		re = SSL_CTX_load_verify_locations (socket->ssl_ctx, 
+		re = SSL_CTX_load_verify_locations (socket->ssl_ctx,
 						    socket->vserver_ref->certs_ca.buf, NULL);
 		if (! re) {
 			OPENSSL_LAST_ERROR(error);
-			LOG_ERROR (CHEROKEE_ERROR_SSL_CTX_LOAD, 
+			LOG_ERROR (CHEROKEE_ERROR_SSL_CTX_LOAD,
 			           socket->vserver_ref->certs_ca.buf, error);
 			return ret_error;
 		}

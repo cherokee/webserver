@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_bind.h"
@@ -33,8 +33,8 @@
 
 PLUGIN_INFO_RULE_EASIEST_INIT(bind);
 
-static ret_t 
-match (cherokee_rule_bind_t    *rule, 
+static ret_t
+match (cherokee_rule_bind_t    *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
@@ -53,9 +53,9 @@ match (cherokee_rule_bind_t    *rule,
 	return ret_not_found;
 }
 
-static ret_t 
-configure (cherokee_rule_bind_t      *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_bind_t      *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
@@ -69,8 +69,8 @@ configure (cherokee_rule_bind_t      *rule,
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY, RULE(rule)->priority, "bind");
 		return ret_error;
-	} 
-	
+	}
+
 	cherokee_config_node_foreach (i, subconf) {
 		int                     bind_n;
 		cherokee_list_t        *bind_obj;
@@ -78,7 +78,7 @@ configure (cherokee_rule_bind_t      *rule,
 
 		ret = cherokee_atoi (subconf2->val.buf, &bind_n);
 		if (ret != ret_ok) {
-			LOG_CRITICAL (CHEROKEE_ERROR_RULE_BIND_PORT, 
+			LOG_CRITICAL (CHEROKEE_ERROR_RULE_BIND_PORT,
 				      RULE(rule)->priority, subconf2->val.buf);
 			return ret_error;
 		}
@@ -88,13 +88,13 @@ configure (cherokee_rule_bind_t      *rule,
 				continue;
 
 			TRACE(ENTRIES, "Adding rule bind: %d\n", bind_n);
-			
+
 			ret = cherokee_list_add_tail_content (&rule->binds, bind_obj);
 			if (ret != ret_ok)
 				return ret_error;
 			break;
 		}
-		
+
 	}
 
 	return ret_ok;
@@ -118,7 +118,7 @@ cherokee_rule_bind_new (cherokee_rule_bind_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(bind));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

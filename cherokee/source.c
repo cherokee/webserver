@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "source.h"
@@ -33,13 +33,13 @@
 #define ENTRIES "source,src"
 
 
-/* Implements _new() and _free() 
+/* Implements _new() and _free()
  */
 CHEROKEE_ADD_FUNC_NEW  (source);
 CHEROKEE_ADD_FUNC_FREE (source);
 
 
-ret_t 
+ret_t
 cherokee_source_init (cherokee_source_t *src)
 {
 	cherokee_buffer_init (&src->original);
@@ -54,7 +54,7 @@ cherokee_source_init (cherokee_source_t *src)
 }
 
 
-ret_t 
+ret_t
 cherokee_source_mrproper (cherokee_source_t *src)
 {
 	if (src->free)
@@ -68,7 +68,7 @@ cherokee_source_mrproper (cherokee_source_t *src)
 }
 
 
-ret_t 
+ret_t
 cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 {
 	ret_t                    ret;
@@ -118,13 +118,13 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
-	
+
 		/* Query the host */
 		ret = cherokee_resolv_cache_get_host (resolv, &src->host, sock);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
-	
+
 		SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
 
 		/* Set non-blocking */
@@ -141,13 +141,13 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 
 
 ret_t
-cherokee_source_connect_polling (cherokee_source_t     *src, 
+cherokee_source_connect_polling (cherokee_source_t     *src,
 				 cherokee_socket_t     *socket,
 				 cherokee_connection_t *conn)
 {
 	ret_t ret;
 
- 	ret = cherokee_source_connect (src, socket); 
+ 	ret = cherokee_source_connect (src, socket);
 	switch (ret) {
 	case ret_ok:
 		TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
@@ -158,7 +158,7 @@ cherokee_source_connect_polling (cherokee_source_t     *src,
 		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
 							   conn,
 							   SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE, 
+							   FDPOLL_MODE_WRITE,
 							   false);
 		if (ret != ret_ok) {
 			return ret_deny;
@@ -182,32 +182,32 @@ set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 
 	if (cherokee_buffer_is_empty (host))
 		return ret_error;
-	
+
 	TRACE (ENTRIES, "Configuring source, setting host '%s'\n", host->buf);
 
 	/* Original
 	 */
 	cherokee_buffer_add_buffer (&src->original, host);
-	
+
 	/* Unix socket
 	 */
 	if (host->buf[0] == '/') {
 		cherokee_buffer_add_buffer (&src->unix_socket, host);
 		return ret_ok;
-	} 
-	
+	}
+
 	/* Host name
 	 */
 	ret = cherokee_parse_host (host, &src->host, &src->port);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t *conf)
 {
 	cherokee_list_t        *i;
@@ -215,11 +215,11 @@ cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t *conf)
 
 	cherokee_config_node_foreach (i, conf) {
 		child = CONFIG_NODE(i);
-		
+
 		if (equal_buf_str (&child->key, "host")) {
 			set_host (src, &child->val);
 		}
-		
+
 		/* Base class: do not display error here
 		 */
 	}

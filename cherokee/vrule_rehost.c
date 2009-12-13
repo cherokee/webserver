@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "vrule_rehost.h"
@@ -35,14 +35,14 @@
 PLUGIN_INFO_VRULE_EASIEST_INIT(rehost);
 
 
-static ret_t 
+static ret_t
 match (cherokee_vrule_rehost_t *vrule,
        cherokee_buffer_t       *host,
        cherokee_connection_t   *conn)
 {
 	int              re;
 	cherokee_list_t *i;
-	
+
 	UNUSED(conn);
 
 	list_for_each (i, &vrule->pcre_list) {
@@ -59,9 +59,9 @@ match (cherokee_vrule_rehost_t *vrule,
 	return ret_deny;
 }
 
-static ret_t 
-configure (cherokee_vrule_rehost_t   *vrule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_vrule_rehost_t   *vrule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "validator_htdigest.h"
@@ -33,14 +33,14 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (htdigest, http_auth_basic | http_auth_digest);
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_validator_htdigest_props_t *props)
 {
 	return cherokee_validator_file_props_free_base (PROP_VFILE(props));
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_validator_htdigest_props_t *props;
@@ -63,12 +63,12 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_htdigest);
 
-	/* Init 	
+	/* Init
 	 */
 	cherokee_validator_file_init_base (VFILE(n),
 					   PROP_VFILE(props),
@@ -87,7 +87,7 @@ cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, chero
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htdigest_free (cherokee_validator_htdigest_t *htdigest)
 {
 	return cherokee_validator_file_free_base (VFILE(htdigest));
@@ -112,16 +112,16 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 
 	while (pos < end) {
 		char *eol;
-		
+
 		/* Limit the line
 		 */
 		eol = strchr (pos, CHR_LF);
-		if (eol != NULL) 
+		if (eol != NULL)
 			*eol = '\0';
-		
+
 		/* Check the user
 		 */
-		if ((pos[user_len] == ':') && 
+		if ((pos[user_len] == ':') &&
 		    (strncmp (pos, user_, user_len) == 0)) {
 			char *tmp;
 
@@ -199,7 +199,7 @@ validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t 
 
 	/* Sanity check
 	 */
-	if (cherokee_buffer_is_empty (&conn->validator->response)) 
+	if (cherokee_buffer_is_empty (&conn->validator->response))
 		return ret_error;
 
 	/* Extact the right entry information
@@ -225,18 +225,18 @@ go_out:
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
 				   cherokee_connection_t         *conn)
 {
 	ret_t              ret;
 	cherokee_buffer_t *fpass;
 	cherokee_buffer_t  file = CHEROKEE_BUF_INIT;
-	
+
 	/* Ensure that we have all what we need
 	 */
 	if ((conn->validator == NULL) ||
-	    cherokee_buffer_is_empty (&conn->validator->user)) 
+	    cherokee_buffer_is_empty (&conn->validator->user))
 		return ret_error;
 
 	/* Get the full path to the file
@@ -274,7 +274,7 @@ out:
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(htdigest);

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule.h"
@@ -45,7 +45,7 @@ cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
 }
 
 
-ret_t 
+ret_t
 cherokee_rule_free (cherokee_rule_t *rule)
 {
 	/* Free the Config Entry property
@@ -55,7 +55,7 @@ cherokee_rule_free (cherokee_rule_t *rule)
 	/* Call the virtual method
 	 */
 	if (MODULE(rule)->free) {
-		MODULE(rule)->free (rule); 
+		MODULE(rule)->free (rule);
 	}
 
 	/* Free the rule
@@ -66,7 +66,7 @@ cherokee_rule_free (cherokee_rule_t *rule)
 
 
 static ret_t
-configure_base (cherokee_rule_t           *rule, 
+configure_base (cherokee_rule_t           *rule,
 		cherokee_config_node_t    *conf)
 {
 	ret_t              ret;
@@ -77,7 +77,7 @@ configure_base (cherokee_rule_t           *rule,
 	ret = cherokee_config_node_read (conf, "final", &final);
 	if (ret == ret_ok) {
 		rule->final = !! atoi(final->buf);
-		TRACE(ENTRIES, "Rule prio=%d set final to %d\n", 
+		TRACE(ENTRIES, "Rule prio=%d set final to %d\n",
 		      rule->priority, rule->final);
 	}
 
@@ -85,7 +85,7 @@ configure_base (cherokee_rule_t           *rule,
 }
 
 
-ret_t 
+ret_t
 cherokee_rule_configure (cherokee_rule_t *rule, cherokee_config_node_t *conf, void *vsrv)
 {
 	ret_t ret;
@@ -102,7 +102,7 @@ cherokee_rule_configure (cherokee_rule_t *rule, cherokee_config_node_t *conf, vo
 }
 
 
-ret_t 
+ret_t
 cherokee_rule_match (cherokee_rule_t *rule, void *cnt, void *ret_conf)
 {
 	return_if_fail (rule, ret_error);

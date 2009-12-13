@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_THREAD_H
 #define CHEROKEE_THREAD_H
@@ -41,7 +41,7 @@
 
 
 typedef enum {
-	thread_sync, 
+	thread_sync,
 	thread_async
 } cherokee_thread_type_t;
 
@@ -65,7 +65,7 @@ typedef struct {
 
 	cherokee_buffer_t       tmp_buf1;
 	cherokee_buffer_t       tmp_buf2;
-	
+
 	void                   *server;
 	cherokee_boolean_t      exit;
 	cherokee_boolean_t      ended;
@@ -85,7 +85,7 @@ typedef struct {
 
 	int                     pending_conns_num;   /* Waiting pipelining connections */
 	int                     pending_read_num;    /* Conns with SSL deping read */
-	
+
 	cherokee_avl_t         *fastcgi_servers;
 	cherokee_func_free_t    fastcgi_free_func;
 
@@ -106,12 +106,12 @@ ret_t cherokee_thread_step_MULTI_THREAD  (cherokee_thread_t *thd, cherokee_boole
 ret_t cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd);
 
 
-ret_t cherokee_thread_new                        (cherokee_thread_t     **thd, 
-			                          void                   *server, 
-			                          cherokee_thread_type_t  type, 
+ret_t cherokee_thread_new                        (cherokee_thread_t     **thd,
+			                          void                   *server,
+			                          cherokee_thread_type_t  type,
 			                          cherokee_poll_type_t    fdtype,
-			                          cint_t                  system_fd_num, 
-			                          cint_t                  fds_max, 
+			                          cint_t                  system_fd_num,
+			                          cint_t                  fds_max,
 			                          cint_t                  conns_max,
 						  cint_t                  keepalive_max);
 

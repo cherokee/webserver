@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_VALIDATOR_FILE_H
 #define CHEROKEE_VALIDATOR_FILE_H
@@ -55,7 +55,7 @@ ret_t cherokee_validator_file_init_base (cherokee_validator_file_t        *valid
 					 cherokee_validator_file_props_t  *props,
 					 cherokee_plugin_info_validator_t *info);
 
-ret_t cherokee_validator_file_free_base (cherokee_validator_file_t        *validator);   
+ret_t cherokee_validator_file_free_base (cherokee_validator_file_t        *validator);
 
 ret_t cherokee_validator_file_configure (cherokee_config_node_t            *conf,
 					 cherokee_server_t                 *srv,

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "nonce.h"
@@ -68,7 +68,7 @@ entry_free (cherokee_nonce_table_t *nonces,
 }
 
 
-ret_t 
+ret_t
 cherokee_nonce_table_new (cherokee_nonce_table_t **nonces)
 {
 	CHEROKEE_NEW_STRUCT(n, nonce_table);
@@ -82,7 +82,7 @@ cherokee_nonce_table_new (cherokee_nonce_table_t **nonces)
 }
 
 
-ret_t 
+ret_t
 cherokee_nonce_table_free (cherokee_nonce_table_t *nonces)
 {
 	cherokee_list_t *i, *j;
@@ -99,7 +99,7 @@ cherokee_nonce_table_free (cherokee_nonce_table_t *nonces)
 }
 
 
-ret_t 
+ret_t
 cherokee_nonce_table_remove (cherokee_nonce_table_t *nonces,
 			     cherokee_buffer_t      *nonce)
 {
@@ -118,16 +118,16 @@ cherokee_nonce_table_remove (cherokee_nonce_table_t *nonces,
 }
 
 
-ret_t 
+ret_t
 cherokee_nonce_table_check (cherokee_nonce_table_t *nonces,
 			    cherokee_buffer_t      *nonce)
 {
 	ret_t    ret;
 	entry_t *entry = NULL;
-	
+
 	if (cherokee_buffer_is_empty (nonce))
 		return ret_not_found;
-	
+
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
 	ret = cherokee_avl_get (&nonces->table, nonce, (void **)&entry);
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
@@ -140,7 +140,7 @@ cherokee_nonce_table_check (cherokee_nonce_table_t *nonces,
 }
 
 
-ret_t 
+ret_t
 cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
 			       cherokee_connection_t  *conn,
 			       cherokee_buffer_t      *nonce)
@@ -164,7 +164,7 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
 		return ret_nomem;
 
 	cherokee_buffer_add_buffer (&entry->nonce, nonce);
-	
+
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
 	cherokee_avl_add (&nonces->table, nonce, entry);
 	cherokee_list_add (&entry->listed, &nonces->list);

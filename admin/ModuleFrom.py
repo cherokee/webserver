@@ -44,7 +44,7 @@ class ModuleFrom (Module, FormHelper):
                 link_del = ''
             table += (ip, link_del)
             n = max(int(k), n)
-            
+
         if n > -1:
             txt += '<h2>IPs and SubNets</h2>'
             txt += self.Indent(table)

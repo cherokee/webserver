@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_secdownload.h"
@@ -56,7 +56,7 @@ cherokee_handler_secdownload_configure (cherokee_config_node_t   *conf,
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
 			MODULE_PROPS_FREE(cherokee_handler_secdownload_props_free));
-		
+
 		cherokee_buffer_init (&n->secret);
 		n->timeout = 60;
 
@@ -151,7 +151,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 	if (check_hex (p, 32)) {
 		TRACE(ENTRIES, "Malformed URL: %s\n", "No MD5");
 		conn->error_code = http_not_found;
-		return ret_error;			
+		return ret_error;
 	}
 	p += 32;
 
@@ -224,7 +224,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
  */
 static cherokee_boolean_t _secdownload_is_init = false;
 
-void  
+void
 PLUGIN_INIT_NAME(secdownload) (cherokee_plugin_loader_t *loader)
 {
 	if (_secdownload_is_init) return;

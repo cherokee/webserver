@@ -20,7 +20,7 @@ vserver!1!rule!1621!handler = cgi
 CGI = """#!/bin/sh
 
 echo "Content-Type: text/plain"
-echo 
+echo
 echo "%s"
 """ % (MAGIC)
 
@@ -29,7 +29,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Rule and: match"
 
-        self.request           = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE) 
+        self.request           = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE)
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = ["/bin/sh", "echo"]

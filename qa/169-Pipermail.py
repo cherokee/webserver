@@ -10,7 +10,7 @@ vserver!1!rule!1690!match = directory
 vserver!1!rule!1690!match!directory = /%s
 vserver!1!rule!1690!handler = common
 vserver!1!rule!1690!document_root = %s
-""" 
+"""
 
 class Test (TestBase):
     def __init__ (self):

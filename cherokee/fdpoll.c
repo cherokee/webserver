@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
@@ -42,46 +42,46 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 	 */
 	switch (type) {
 	case cherokee_poll_epoll:
-#ifdef HAVE_EPOLL	
+#ifdef HAVE_EPOLL
 		return fdpoll_epoll_get_fdlimits (sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
 #endif
 
 	case cherokee_poll_kqueue:
-#if HAVE_KQUEUE	
+#if HAVE_KQUEUE
 		return fdpoll_kqueue_get_fdlimits(sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 
 	case cherokee_poll_port:
 #ifdef HAVE_PORT
 		return fdpoll_port_get_fdlimits(sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 
 	case cherokee_poll_poll:
-#if HAVE_POLL		
+#if HAVE_POLL
 		return fdpoll_poll_get_fdlimits (sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 
 	case cherokee_poll_win32:
 #ifdef HAVE_WIN32_SELECT
 		return fdpoll_win32_get_fdlimits (sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
 #endif
 
 	case cherokee_poll_select:
-#if HAVE_SELECT	
+#if HAVE_SELECT
 		return fdpoll_select_get_fdlimits (sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 	default:
 		SHOULDNT_HAPPEN;
 		return ret_error;
@@ -100,46 +100,46 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 
 	switch (type) {
 	case cherokee_poll_epoll:
-#ifdef HAVE_EPOLL	
+#ifdef HAVE_EPOLL
 		return fdpoll_epoll_new (fdp, sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
 #endif
 
 	case cherokee_poll_kqueue:
-#if HAVE_KQUEUE	
+#if HAVE_KQUEUE
 		return fdpoll_kqueue_new (fdp, sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 
 	case cherokee_poll_port:
 #ifdef HAVE_PORT
 		return fdpoll_port_new (fdp, sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 
 	case cherokee_poll_poll:
-#if HAVE_POLL		
+#if HAVE_POLL
 		return fdpoll_poll_new (fdp, sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 
 	case cherokee_poll_win32:
 #ifdef HAVE_WIN32_SELECT
 		return fdpoll_win32_new (fdp, sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
 #endif
 
 	case cherokee_poll_select:
-#if HAVE_SELECT	
+#if HAVE_SELECT
 		return fdpoll_select_new (fdp, sys_fd_limit, fd_limit);
-#else			
+#else
 		return ret_no_sys;
-#endif	
+#endif
 	default:
 		SHOULDNT_HAPPEN;
 		return ret_error;
@@ -177,7 +177,7 @@ cherokee_fdpoll_best_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 }
 
 
-ret_t 
+ret_t
 cherokee_fdpoll_get_method (cherokee_fdpoll_t *fdp, cherokee_poll_type_t *type)
 {
 	*type = fdp->type;
@@ -185,7 +185,7 @@ cherokee_fdpoll_get_method (cherokee_fdpoll_t *fdp, cherokee_poll_type_t *type)
 }
 
 
-ret_t 
+ret_t
 cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, const char **str)
 {
 	switch (fdp->type) {
@@ -219,7 +219,7 @@ cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, const char **str)
 
 /* Given a string poll type, returns the poll type.
  */
-ret_t 
+ret_t
 cherokee_fdpoll_str_to_method (char *str, cherokee_poll_type_t *poll_type)
 {
 	if (equal_str(str, "epoll")) {
@@ -275,49 +275,49 @@ cherokee_fdpoll_is_full (cherokee_fdpoll_t *fdp)
 /* Virtual methods
  */
 
-ret_t 
+ret_t
 cherokee_fdpoll_free (cherokee_fdpoll_t *fdp)
 {
 	return fdp->free (fdp);
 }
 
 
-ret_t 
+ret_t
 cherokee_fdpoll_add (cherokee_fdpoll_t *fdp, int fd, int rw)
 {
 	return fdp->add (fdp, fd, rw);
 }
 
 
-ret_t 
+ret_t
 cherokee_fdpoll_del (cherokee_fdpoll_t *fdp, int fd)
 {
 	return fdp->del (fdp, fd);
 }
 
 
-ret_t 
+ret_t
 cherokee_fdpoll_reset (cherokee_fdpoll_t *fdp, int fd)
 {
 	return fdp->reset (fdp, fd);
 }
 
 
-ret_t  
+ret_t
 cherokee_fdpoll_set_mode (cherokee_fdpoll_t *fdp, int fd, int rw)
 {
 	return fdp->set_mode (fdp, fd, rw);
 }
 
 
-int   
+int
 cherokee_fdpoll_check (cherokee_fdpoll_t *fdp, int fd, int rw)
 {
 	return fdp->check (fdp, fd, rw);
 }
 
 
-int   
+int
 cherokee_fdpoll_watch (cherokee_fdpoll_t *fdp, int timeout_msecs)
 {
 	return fdp->watch (fdp, timeout_msecs);

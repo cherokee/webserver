@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_SERVER_INFO_H
 #define CHEROKEE_HANDLER_SERVER_INFO_H
@@ -51,7 +51,7 @@ typedef struct {
 		send_info,
 		send_logo,
 	} action;
-	   
+
 } cherokee_handler_server_info_t;
 
 #define HDL_SRV_INFO(x)       ((cherokee_handler_server_info_t *)(x))

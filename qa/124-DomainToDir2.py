@@ -5,7 +5,7 @@ URL    = "http://www.example.com/dir/subdir"
 DIR    = "/dir1"
 PATH   = "/file1/param"
 
-CONF = """        
+CONF = """
 vserver!1240!nick = %s
 vserver!1240!document_root = %s
 

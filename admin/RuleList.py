@@ -7,7 +7,7 @@ class RuleList:
 
     def _normalize (self):
         if not self._cfg[self._cfg_pre]:
-            return 
+            return
 
         # Build the new list
         child = []
@@ -72,7 +72,7 @@ class RuleList:
             p_entry = int(entry)
             if p_entry not in relocated.keys():
                 relocated[p_entry] = self[entry]
-                
+
         # Reassign childs
         for p in self.keys():
             del (self._cfg["%s!%s" % (self._cfg_pre, p)])
@@ -80,4 +80,4 @@ class RuleList:
         for item in relocated.keys():
             pre = '%s!%d' % (self._cfg_pre, item)
             self._cfg.set_sub_node (pre, relocated[item])
-    
+

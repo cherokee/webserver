@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include <signal.h>
@@ -43,7 +43,7 @@
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
-#else 
+#else
 # include "getopt/getopt.h"
 #endif
 
@@ -71,7 +71,7 @@ union semun {
 pid_t               pid;
 char               *pid_file_path;
 char               *worker_uid;
-cherokee_boolean_t  graceful_restart; 
+cherokee_boolean_t  graceful_restart;
 char               *cherokee_worker;
 char               *spawn_shared          = NULL;
 char               *spawn_shared_name     = NULL;
@@ -102,7 +102,7 @@ figure_worker_path (const char *arg0)
 	/* Partial path work around */
 	d = arg0;
 	while (*d && *d != '/') d++;
-		
+
 	if ((arg0[0] == '.') || (*d == '/')) {
 		d = getcwd (tmp, sizeof(tmp));
 		len = strlen(arg0) + strlen(d) + sizeof("-worker") + 1;
@@ -151,30 +151,30 @@ check_worker_version (const char *this_exec)
 		PRINT_MSG ("(critical) Cannot execute '%s'\n", tmp);
 		goto error;
 	}
-	
+
 	while (! feof(f)) {
 		/* Skip line until it found the version entry
 		 */
 		line = fgets (tmp, sizeof(tmp), f);
 		line = strstr (line, "Version: ");
-		if (line == NULL) 
+		if (line == NULL)
 			continue;
 
 		/* Compare both version strings
 		 */
 		line += 9;
-		re = strncmp (line, PACKAGE_VERSION, strlen(PACKAGE_VERSION)); 
+		re = strncmp (line, PACKAGE_VERSION, strlen(PACKAGE_VERSION));
 		if (re == 0) {
 			pclose(f);
 			return ret_ok;
 		}
 
-		/* Remove the new line character and report the error	
+		/* Remove the new line character and report the error
 		 */
 		p = line;
 		while (*p++ != '\n');
 		*p = '\0';
-		
+
 		PRINT_MSG_S ("ERROR: Broken installation detected\n");
 		PRINT_MSG   ("  Cherokee        (%s) %s\n", this_exec, PACKAGE_VERSION);
 		PRINT_MSG   ("  Cherokee-worker (%s) %s\n", cherokee_worker, line);
@@ -327,10 +327,10 @@ pid_file_clean (const char *pid_file)
 	pid_file_worker = (char *) malloc (len + 8);
 	if (unlikely (pid_file_worker == NULL))
 		return;
-	
+
 	memcpy (pid_file_worker, pid_file, len);
 	memcpy (pid_file_worker + len, ".worker\0", 8);
-	
+
 	remove_pid_file (pid_file_worker);
 
 	free (pid_file_worker);
@@ -400,7 +400,7 @@ do_spawn (void)
 
 		size = *((int *)p);
 		p += sizeof(int);
-		
+
 		e = malloc (size + 1);
 		memcpy (e, p, size);
 		e[size] = '\0';
@@ -412,7 +412,7 @@ do_spawn (void)
 	/* 4.- Error log */
 	size = *((int *)p);
 	p += sizeof(int);
-		
+
 	if (size > 0) {
 		if (! strncmp (p, "stderr", 6)) {
 			log_stderr = 1;
@@ -479,7 +479,7 @@ do_spawn (void)
 
 		/* Execute the interpreter */
 		argv[2] = interpreter;
-		
+
 		if (env_inherit) {
 			execv ("/bin/sh", (char **)argv);
 		} else {
@@ -498,7 +498,7 @@ do_spawn (void)
 		printf ("PID %d: launched '/bin/sh -c %s' with uid=%d, gid=%d, env=%s\n", child, interpreter, uid, gid, env_inherit ? "inherited":"custom");
 		break;
 	}
-	
+
 	/* Clean up
 	 */
 	free (interpreter);
@@ -511,7 +511,7 @@ do_spawn (void)
 }
 
 static NORETURN void *
-spawn_thread_func (void *param) 
+spawn_thread_func (void *param)
 {
 	int           re;
 	struct sembuf sops[1];
@@ -548,7 +548,7 @@ sem_new (void)
 
 	/* Initialize */
 	ctrl.val = 0;
-	re = semctl (sem, 0, SETVAL, ctrl); 
+	re = semctl (sem, 0, SETVAL, ctrl);
 	if (re < 0) {
 		PRINT_MSG ("Could not initialize semaphore: %s\n", strerror(errno));
 		return -1;
@@ -564,7 +564,7 @@ sem_chmod (int sem, char *worker_uid)
 	struct semid_ds  buf;
 	struct passwd   *passwd;
 	int              uid     = 0;
-		
+
 	uid = (int)strtol (worker_uid, (char **)NULL, 10);
 	if (uid == 0) {
 		passwd = getpwnam (worker_uid);
@@ -572,7 +572,7 @@ sem_chmod (int sem, char *worker_uid)
 			uid = passwd->pw_uid;
 		}
 	}
-	
+
 	if (uid == 0) {
 		PRINT_MSG ("(warning) Couldn't get UID for user '%s'\n", worker_uid);
 		return -1;
@@ -620,7 +620,7 @@ spawn_init (void)
 		close (fd);
 		return ret_error;
 	}
-	
+
 	spawn_shared = mmap (0, SPAWN_SHARED_LEN, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (spawn_shared == MAP_FAILED) {
 		close (fd);
@@ -650,7 +650,7 @@ spawn_init (void)
 		PRINT_MSG_S ("(critical) Couldn't spawning thread..\n");
 		return ret_error;
 	}
-	
+
 	return ret_ok;
 }
 
@@ -688,12 +688,12 @@ process_wait (pid_t pid)
 		re = waitpid (pid, &exitcode, 0);
 		if (re > 0)
 			break;
-		else if (errno == EINTR) 
+		else if (errno == EINTR)
 			if (graceful_restart)
 				break;
 			else
 				continue;
-		else if (errno == ECHILD) 
+		else if (errno == ECHILD)
 			return ret_ok;
 		else
 			return ret_error;
@@ -707,11 +707,11 @@ process_wait (pid_t pid)
 			exit (EXIT_OK_ONCE);
 		}
 
-		/* Child terminated normally */ 
+		/* Child terminated normally */
 		PRINT_MSG ("PID %d: exited re=%d\n", pid, re);
-		if (re != 0) 
+		if (re != 0)
 			return ret_error;
-	} 
+	}
 	else if (WIFSIGNALED(exitcode)) {
 		/* Child process terminated by a signal */
 		PRINT_MSG ("PID %d: received a signal=%d\n", pid, WTERMSIG(exitcode));
@@ -720,8 +720,8 @@ process_wait (pid_t pid)
 	return ret_ok;
 }
 
-static void 
-signals_handler (int sig, siginfo_t *si, void *context) 
+static void
+signals_handler (int sig, siginfo_t *si, void *context)
 {
 	UNUSED(context);
 
@@ -773,7 +773,7 @@ set_signals (void)
 
 	act.sa_handler = SIG_IGN;
 	sigaction (SIGPIPE, &act, NULL);
-	
+
 	/* Signals it handles
 	 */
 	act.sa_sigaction = signals_handler;
@@ -808,7 +808,7 @@ may_daemonize (int argc, char *argv[])
 
 	if (daemonize) {
 		pid = fork();
-		if (pid != 0) 
+		if (pid != 0)
 			exit(0);
 		close(0);
 		setsid();
@@ -832,7 +832,7 @@ process_launch (const char *path, char *argv[])
 		printf ("ERROR: Could not execute %s\n", path);
 		exit (1);
 	}
-	
+
 	return pid;
 }
 
@@ -909,8 +909,8 @@ main (int argc, char *argv[])
 		if (single_time)
 			break;
 
-		usleep ((ret == ret_ok) ? 
-			DELAY_RESTARTING : 
+		usleep ((ret == ret_ok) ?
+			DELAY_RESTARTING :
 			DELAY_ERROR);
 	}
 

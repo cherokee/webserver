@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_streaming.h"
@@ -72,7 +72,7 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 		n->auto_rate        = true;
 		n->auto_rate_factor = 0.1;
 		n->auto_rate_boost  = 5;
-		
+
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -82,7 +82,7 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 	 */
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-		
+
 		if (equal_buf_str (&subconf->key, "rate")) {
 			props->auto_rate = !! atoi(subconf->val.buf);
 
@@ -126,7 +126,7 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_streaming);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(streaming));
@@ -232,7 +232,7 @@ seek_mp3 (cherokee_handler_streaming_t *hdl)
 {
 	int      re;
 	ret_t    ret;
-	long     timestamp; 
+	long     timestamp;
 	AVPacket pkt;
 
 	/* Calculate timestamp
@@ -280,7 +280,7 @@ set_rate (cherokee_handler_streaming_t *hdl,
 {
 	cherokee_handler_streaming_props_t *props = HDL_STREAMING_PROP(hdl);
 
-	if (rate <= 0) 
+	if (rate <= 0)
 		return ret_ok;
 
 	/* This will be the real limit
@@ -300,7 +300,7 @@ set_rate (cherokee_handler_streaming_t *hdl,
 		hdl->boost_until = conn->limit_bps;
 	}
 
-	TRACE(ENTRIES, "Limiting rate (initial boost): %d bytes, until=%d\n", 
+	TRACE(ENTRIES, "Limiting rate (initial boost): %d bytes, until=%d\n",
 	      conn->limit_bps, hdl->boost_until);
 	return ret_ok;
 }
@@ -450,7 +450,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	if (hdl->handler_file->mime) {
 		cherokee_mime_entry_get_type (hdl->handler_file->mime, &mime);
 	}
-	
+
 	if (mime != NULL) {
 		if (cherokee_buffer_cmp_str (mime, "video/x-flv") == 0) {
 			is_flv = true;
@@ -478,8 +478,8 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 					return ret_error;
 			}
 		}
-	}	
-	
+	}
+
 	/* Seeking
 	 */
 	if ((is_flv) && (hdl->start > 0)) {
@@ -549,7 +549,7 @@ cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 	{
 		conn->limit_bps  = hdl->auto_rate_bps;
 		conn->limit_rate = true;
-		
+
 		TRACE(ENTRIES, "Limiting rate: %d bytes/s\n", conn->limit_bps);
 	}
 

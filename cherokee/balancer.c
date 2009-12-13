@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "balancer.h"
@@ -57,7 +57,7 @@ entry_free (cherokee_balancer_entry_t *entry)
 /* Balancer
  */
 
-ret_t 
+ret_t
 cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info)
 {
 	/* Init the base class
@@ -69,7 +69,7 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 	balancer->dispatch     = NULL;
 	balancer->configure    = NULL;
 	balancer->report_fail  = NULL;
-	
+
 	/* Properties
 	 */
 	INIT_LIST_HEAD (&balancer->entries);
@@ -79,7 +79,7 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 }
 
 
-ret_t 
+ret_t
 cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 {
 	cherokee_list_t *i, *tmp;
@@ -96,7 +96,7 @@ cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 }
 
 
-static ret_t 
+static ret_t
 add_source (cherokee_balancer_t *balancer, cherokee_source_t *source)
 {
 	ret_t                      ret;
@@ -119,8 +119,8 @@ add_source (cherokee_balancer_t *balancer, cherokee_source_t *source)
 }
 
 
-ret_t 
-cherokee_balancer_configure_base (cherokee_balancer_t    *balancer, 
+ret_t
+cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 				  cherokee_server_t      *srv,
 				  cherokee_config_node_t *conf)
 {
@@ -154,7 +154,7 @@ cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 }
 
 
-ret_t 
+ret_t
 cherokee_balancer_dispatch (cherokee_balancer_t    *balancer,
 			    cherokee_connection_t  *conn,
 			    cherokee_source_t     **source)
@@ -178,7 +178,7 @@ cherokee_balancer_report_fail (cherokee_balancer_t   *balancer,
 }
 
 
-ret_t 
+ret_t
 cherokee_balancer_free (cherokee_balancer_t *bal)
 {
 	ret_t              ret;
@@ -189,13 +189,13 @@ cherokee_balancer_free (cherokee_balancer_t *bal)
 	if (module->free == NULL) {
 		return ret_error;
 	}
-	
+
 	/* Call the virtual method implementation
 	 */
-	ret = MODULE(bal)->free (bal); 
-	if (unlikely (ret < ret_ok)) 
+	ret = MODULE(bal)->free (bal);
+	if (unlikely (ret < ret_ok))
 		return ret;
-	
+
 	/* Free the rest
 	 */
 	cherokee_balancer_mrproper(bal);
@@ -205,17 +205,17 @@ cherokee_balancer_free (cherokee_balancer_t *bal)
 }
 
 
-ret_t 
-cherokee_balancer_instance (cherokee_buffer_t       *name, 
-			    cherokee_config_node_t  *conf, 
-			    cherokee_server_t       *srv, 
+ret_t
+cherokee_balancer_instance (cherokee_buffer_t       *name,
+			    cherokee_config_node_t  *conf,
+			    cherokee_server_t       *srv,
 			    cherokee_balancer_t    **balancer)
 {
 	ret_t                      ret;
 	balancer_new_func_t        new_func;
 	balancer_configure_func_t  config_func;
 	cherokee_plugin_info_t    *info = NULL;
-	
+
 	if (cherokee_buffer_is_empty (name)) {
 		LOG_CRITICAL_S (CHEROKEE_ERROR_BALANCER_UNDEFINED);
 		return ret_error;
@@ -223,7 +223,7 @@ cherokee_balancer_instance (cherokee_buffer_t       *name,
 
 	ret = cherokee_plugin_loader_get (&srv->loader, name->buf, &info);
 	if (ret != ret_ok) return ret;
-	
+
 	new_func = (balancer_new_func_t) info->instance;
 	ret = new_func (balancer);
 	if (ret != ret_ok) return ret;

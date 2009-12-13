@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -61,12 +61,12 @@ typedef struct {
 	 */
 	handler_func_new_t          handler_new_func;
 	cherokee_http_method_t      handler_methods;
-	cherokee_module_props_t    *handler_properties; 
+	cherokee_module_props_t    *handler_properties;
 
 	/* Validator
 	 */
 	validator_func_new_t        validator_new_func;
-	cherokee_module_props_t    *validator_properties; 
+	cherokee_module_props_t    *validator_properties;
 
 	cherokee_buffer_t          *auth_realm;
 	cherokee_http_auth_t        authentication;
@@ -89,7 +89,7 @@ typedef struct {
 	 */
 	cherokee_null_int_t         timeout_lapse;
 	cherokee_buffer_t          *timeout_header;
-} cherokee_config_entry_t; 
+} cherokee_config_entry_t;
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))
 
@@ -100,7 +100,7 @@ ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
 
 ret_t cherokee_config_entry_add_encoder (cherokee_config_entry_t *entry, cherokee_buffer_t *name, cherokee_plugin_info_t *plugin_info);
-ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *plugin_info); 
+ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *plugin_info);
 ret_t cherokee_config_entry_complete    (cherokee_config_entry_t *entry, cherokee_config_entry_t *source);
 
 ret_t cherokee_config_entry_print       (cherokee_config_entry_t *entry);

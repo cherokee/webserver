@@ -21,10 +21,10 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name = "Digest - htdigest: Valid user/passwd"
- 
+
         self.expected_error   = 200
         self.expected_content = MAGIC
-        
+
     def JustBefore (self, www):
         # It will read a validad nonce value just before each test
         #
@@ -39,10 +39,10 @@ class Test (TestBase):
 
         # Calculate the response value
         #
-        response = nested.digest.CalculateResponse (USER, REALM, PASSWD, "GET", "/%s/file" % (DIR), 
+        response = nested.digest.CalculateResponse (USER, REALM, PASSWD, "GET", "/%s/file" % (DIR),
                                                     vals["nonce"], vals["qop"], vals["cnonce"], vals["nc"])
 
-        # At this point, we got a valid nonce, so let's write the 
+        # At this point, we got a valid nonce, so let's write the
         # request..
         self.request = "GET /%s/file HTTP/1.0\r\n" % (DIR) +\
                        "Authorization: Digest response=\"%s\", username=\"%s\", realm=\"%s\", uri=\"%s\", nonce=\"%s\", qop=\"%s\", algorithm=\"%s\"\r\n" % \

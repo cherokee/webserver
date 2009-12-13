@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_BIND_H
 #define CHEROKEE_BIND_H
@@ -35,13 +35,13 @@
 typedef struct {
 	cherokee_list_t    listed;
 	int                id;
-	
+
 	/* Listener */
 	cherokee_socket_t  socket;
-	
+
 	/* Information */
 	cherokee_buffer_t  ip;
-	int                port;	   
+	int                port;
 
 	/* Strings */
 	cherokee_buffer_t  server_string;
@@ -50,7 +50,7 @@ typedef struct {
 
 	cherokee_buffer_t  server_address;
 	cherokee_buffer_t  server_port;
-	
+
 	/* Accepting */
 	cuint_t            accept_continuous;
 	cuint_t            accept_continuous_max;
@@ -68,7 +68,7 @@ ret_t cherokee_bind_configure   (cherokee_bind_t *listener, cherokee_config_node
 ret_t cherokee_bind_set_default (cherokee_bind_t *listener);
 ret_t cherokee_bind_accept_more (cherokee_bind_t *listener, ret_t prev_ret);
 
-ret_t cherokee_bind_init_port   (cherokee_bind_t         *listener, 
+ret_t cherokee_bind_init_port   (cherokee_bind_t         *listener,
 				 cuint_t                  listen_queue,
 				 cherokee_boolean_t       ipv6,
 				 cherokee_server_token_t  token);

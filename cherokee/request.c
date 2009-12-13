@@ -20,12 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "request.h"
 
-ret_t 
+ret_t
 cherokee_request_header_init (cherokee_request_header_t *request)
 {
 	ret_t ret;
@@ -33,7 +33,7 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 	/* Init the node list information
 	 */
 	INIT_LIST_HEAD (LIST(&request->list_node));
-	
+
 	/* Set default values
 	 */
 	request->method    = http_get;
@@ -50,12 +50,12 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 	cherokee_buffer_init (&request->extra_headers);
 	cherokee_buffer_init (&request->user);
 	cherokee_buffer_init (&request->password);
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_request_header_mrproper (cherokee_request_header_t *request)
 {
 	cherokee_buffer_mrproper (&request->user);
@@ -67,7 +67,7 @@ cherokee_request_header_mrproper (cherokee_request_header_t *request)
 }
 
 
-ret_t 
+ret_t
 cherokee_request_header_clean (cherokee_request_header_t *request)
 {
 	request->method    = http_get;
@@ -81,7 +81,7 @@ cherokee_request_header_clean (cherokee_request_header_t *request)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_request_header_uses_proxy (cherokee_request_header_t *request, cherokee_boolean_t proxy)
 {
 	request->proxy = proxy;
@@ -89,14 +89,14 @@ cherokee_request_header_uses_proxy (cherokee_request_header_t *request, cherokee
 }
 
 
-ret_t 
+ret_t
 cherokee_request_header_parse_string (cherokee_request_header_t *request, cherokee_buffer_t *url_string)
 {
 	return cherokee_url_parse (&request->url, url_string, &request->user, &request->password);
 }
 
 
-ret_t 
+ret_t
 cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
 {
 	ret_t           ret;
@@ -108,7 +108,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	 */
 	cherokee_buffer_ensure_size (buf, 200);
 
-	/* Add main request line: 
+	/* Add main request line:
 	 * GET /dir/object HTTP/1.1
 	 */
 	ret = cherokee_http_method_to_string (request->method, &ptr, &len);
@@ -124,7 +124,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	if (request->proxy) {
 		cherokee_buffer_add_str (buf, "http://");
 		cherokee_buffer_add_buffer (buf, URL_HOST(url));
-	} 
+	}
 
 	cherokee_buffer_add_buffer (buf, URL_REQUEST(url));
 
@@ -157,13 +157,13 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 		cherokee_buffer_add_ullong10 (buf, (cullong_t) request->post_len);
 		cherokee_buffer_add_str      (buf, CRLF);
 	}
-	
+
 	/* Add "Connection:" header
 	 */
 	if (REQUEST_KEEPALIVE(request)) {
-		cherokee_buffer_add_str (buf, "Connection: Keep-Alive"CRLF); 
+		cherokee_buffer_add_str (buf, "Connection: Keep-Alive"CRLF);
 	} else {
-		cherokee_buffer_add_str (buf, "Connection: close"CRLF); 
+		cherokee_buffer_add_str (buf, "Connection: close"CRLF);
 	}
 
 	/* Authentication
@@ -178,7 +178,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 		cherokee_buffer_add_buffer (tmp1, &request->password);
 
 		cherokee_buffer_encode_base64 (tmp1, tmp2);
-		
+
 		cherokee_buffer_add_str    (buf, "Authorization: Basic ");
 		cherokee_buffer_add_buffer (buf, tmp2);
 		cherokee_buffer_add_str    (buf, CRLF);
@@ -198,7 +198,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 
 
 ret_t
-cherokee_request_header_set_auth (cherokee_request_header_t *request, 
+cherokee_request_header_set_auth (cherokee_request_header_t *request,
 				  cherokee_http_auth_t       auth,
 				  cherokee_buffer_t         *user,
 				  cherokee_buffer_t         *password)
@@ -215,7 +215,7 @@ cherokee_request_header_set_auth (cherokee_request_header_t *request,
 }
 
 
-ret_t 
+ret_t
 cherokee_request_header_add_header (cherokee_request_header_t *request, char *ptr, cuint_t len)
 {
 	cherokee_buffer_ensure_addlen (&request->extra_headers, len + CSZLEN(CRLF));

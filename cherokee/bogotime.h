@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_BOGOTIME_H
 #define CHEROKEE_BOGOTIME_H
@@ -29,7 +29,7 @@
 
 #ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
-#else 
+#else
 # include <time.h>
 #endif
 

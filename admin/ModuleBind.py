@@ -88,7 +88,7 @@ class ModuleBind (Module, FormHelper):
         if self._prefix.startswith('tmp!'):
             return self._render_new_entry()
         return self._render_modify_entry()
-    
+
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, None, post)
 

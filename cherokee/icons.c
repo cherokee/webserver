@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -64,7 +64,7 @@ matching_free (file_matching_t *match)
 
 
 
-ret_t 
+ret_t
 cherokee_icons_new (cherokee_icons_t **icons)
 {
 	ret_t ret;
@@ -131,7 +131,7 @@ cherokee_icons_free (cherokee_icons_t *icons)
 }
 
 
-ret_t 
+ret_t
 cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, cherokee_buffer_t *file)
 {
 	ret_t              ret;
@@ -140,7 +140,7 @@ cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, chero
 	/* Add a wildcards entry
 	 */
 	if ((strchr (file->buf, '*') != NULL) ||
-	    (strchr (file->buf, '?') != NULL)) 
+	    (strchr (file->buf, '?') != NULL))
 	{
 		file_matching_t *match;
 
@@ -150,7 +150,7 @@ cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, chero
 
 		cherokee_list_add (&match->entry, &icons->file_matching);
 		return ret_ok;
-	} 
+	}
 
 	/* Add a plain name
 	 */
@@ -168,7 +168,7 @@ cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, chero
 }
 
 
-ret_t 
+ret_t
 cherokee_icons_add_suffix (cherokee_icons_t *icons, cherokee_buffer_t *icon, cherokee_buffer_t *suffix)
 {
 	ret_t              ret;
@@ -189,7 +189,7 @@ cherokee_icons_add_suffix (cherokee_icons_t *icons, cherokee_buffer_t *icon, che
 }
 
 
-ret_t 
+ret_t
 cherokee_icons_set_directory (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 {
 	cherokee_buffer_clean (&icons->directory_icon);
@@ -197,7 +197,7 @@ cherokee_icons_set_directory (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 }
 
 
-ret_t 
+ret_t
 cherokee_icons_set_parentdir (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 {
 	cherokee_buffer_clean (&icons->parentdir_icon);
@@ -205,7 +205,7 @@ cherokee_icons_set_parentdir (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 }
 
 
-ret_t 
+ret_t
 cherokee_icons_set_default (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 {
 	cherokee_buffer_clean (&icons->default_icon);
@@ -213,8 +213,8 @@ cherokee_icons_set_default (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 }
 
 
-ret_t 
-cherokee_icons_get_icon (cherokee_icons_t   *icons, 
+ret_t
+cherokee_icons_get_icon (cherokee_icons_t   *icons,
 			 cherokee_buffer_t  *file,
 			 cherokee_buffer_t **icon_ret)
 {
@@ -236,12 +236,12 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 		if (ret == ret_ok)
 			return ret_ok;
 	}
-	
+
 	/* Look for the wildcard matching
 	 */
 	list_for_each (i, &icons->file_matching) {
 		file_matching_t *match = (file_matching_t *)i;
-		
+
 		ret = cherokee_wildcard_match (match->match.buf, file->buf);
 		if (ret == ret_ok) {
 			*icon_ret = &match->icon;
@@ -261,7 +261,7 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 }
 
 
-static ret_t 
+static ret_t
 add_file (char *file, void *data)
 {
 	cherokee_buffer_t  file_buf;
@@ -274,7 +274,7 @@ add_file (char *file, void *data)
 	return cherokee_icons_add_file (icons, key, &file_buf);
 }
 
-static ret_t 
+static ret_t
 add_suffix (char *file, void *data)
 {
 	ret_t              ret;
@@ -283,7 +283,7 @@ add_suffix (char *file, void *data)
 	cherokee_buffer_t *key   = ((void **)data)[1];
 
 	TRACE(ENTRIES, "Adding suffix icon '%s' -> '%s'\n", key->buf, file);
-	
+
 	cherokee_buffer_fake (&file_buf, file, strlen(file));
 
 	ret = cherokee_icons_add_suffix (icons, key, &file_buf);
@@ -296,7 +296,7 @@ add_suffix (char *file, void *data)
 }
 
 
-static ret_t 
+static ret_t
 configure_file (cherokee_config_node_t *config, void *data)
 {
 	ret_t  ret;
@@ -308,11 +308,11 @@ configure_file (cherokee_config_node_t *config, void *data)
 	ret = cherokee_config_node_read_list (config, NULL, add_file, params);
 	if ((ret != ret_ok) && (ret != ret_not_found))
 		return ret;
-	
+
 	return ret_ok;
 }
 
-static ret_t 
+static ret_t
 configure_suffix (cherokee_config_node_t *config, void *data)
 {
 	ret_t  ret;
@@ -324,12 +324,12 @@ configure_suffix (cherokee_config_node_t *config, void *data)
 	ret = cherokee_config_node_read_list (config, NULL, add_suffix, params);
 	if ((ret != ret_ok) && (ret != ret_not_found))
 		return ret;
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_icons_configure (cherokee_icons_t *icons, cherokee_config_node_t *config)
 {
 	ret_t                   ret;
@@ -348,17 +348,17 @@ cherokee_icons_configure (cherokee_icons_t *icons, cherokee_config_node_t *confi
 		if (ret != ret_ok)
 			return ret;
 	}
-	
+
 	ret = cherokee_config_node_get (config, "directory", &subconf);
 	if (ret == ret_ok) {
 		cherokee_icons_set_directory (icons, &subconf->val);
 	}
-	
+
 	ret = cherokee_config_node_get (config, "parent_directory", &subconf);
 	if (ret == ret_ok) {
 		cherokee_icons_set_parentdir (icons, &subconf->val);
 	}
-	
+
 	ret = cherokee_config_node_get (config, "default", &subconf);
 	if (ret == ret_ok) {
 		cherokee_icons_set_default (icons, &subconf->val);

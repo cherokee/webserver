@@ -279,7 +279,7 @@ function flags_add_to_key (options_id, cfg_key, cfg_key_value, url)
     if (cfg_key_value.indexOf(selected) >= 0)
        return;
 
-    jQuery.post (url, post, 
+    jQuery.post (url, post,
        function (data, textStatus) {
            window.location = window.location;
        }
@@ -293,7 +293,7 @@ class OptionFlags:
     def __init__ (self, name, *args, **kwargs):
         self._name   = name
         self._kwargs = kwargs
-        
+
     def _render_option (self, code, name, icon):
         if icon:
             style = 'style="background-image:url(/static/images/flags/%s); background-repeat:no-repeat; background-position:bottom right;" ' % (icon)

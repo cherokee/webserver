@@ -43,7 +43,7 @@ class Test (TestBase):
         if not cherokee_has_plugin("pam"):
             return False
 
-        try: 
+        try:
             # Read the /etc/passwd file
             f = open ("/etc/passwd", "r")
             pwuser = filter(lambda x: x.find(USER) == 0, f.readlines())

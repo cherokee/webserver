@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_geoip.h"
@@ -48,7 +48,7 @@ geoip_get (void)
 {
 	int    i;
 	GeoIP *gi;
-	
+
 	/* Return the global if it's ready
 	 */
 	if (likely (_geoip != NULL)) {
@@ -88,7 +88,7 @@ geoip_release (void)
 /* The rule itself
  */
 
-static ret_t 
+static ret_t
 match (cherokee_rule_t         *rule_,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
@@ -102,7 +102,7 @@ match (cherokee_rule_t         *rule_,
 
 	country = GeoIP_country_code_by_ipnum (rule->geoip, SOCKET_ADDRESS_IPv4(&conn->socket));
 	if (country == NULL) {
-		TRACE(ENTRIES, "Rule geoip did found the country for ip='%lu'\n", 
+		TRACE(ENTRIES, "Rule geoip did found the country for ip='%lu'\n",
 			SOCKET_ADDRESS_IPv4(&conn->socket));
 		return ret_not_found;
 	}
@@ -139,9 +139,9 @@ parse_contry_list (cherokee_buffer_t *value, cherokee_avl_t *countries)
 }
 
 
-static ret_t 
-configure (cherokee_rule_geoip_t       *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_geoip_t       *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t              ret;
@@ -151,7 +151,7 @@ configure (cherokee_rule_geoip_t       *rule,
 
 	ret = cherokee_config_node_read (conf, "countries", &tmp);
 	if (ret != ret_ok) {
-		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY, 
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
 			      RULE(rule)->priority, "geoip");
 		return ret_error;
 	}
@@ -163,7 +163,7 @@ static ret_t
 _free (void *p)
 {
 	cherokee_rule_geoip_t *rule = RULE_GEOIP(p);
-	
+
 	if (rule->geoip) {
 		geoip_release();
 	}

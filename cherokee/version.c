@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "version.h"
 
 
-ret_t 
+ret_t
 cherokee_version_add (cherokee_buffer_t *buf, cherokee_server_token_t level)
 {
 	ret_t ret;
@@ -56,7 +56,7 @@ cherokee_version_add (cherokee_buffer_t *buf, cherokee_server_token_t level)
 }
 
 
-ret_t 
+ret_t
 cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t level, cuint_t port)
 {
 	ret_t ret;
@@ -86,7 +86,7 @@ cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t lev
 }
 
 
-ret_t 
+ret_t
 cherokee_version_add_simple (cherokee_buffer_t *buf, cherokee_server_token_t level)
 {
 	ret_t ret;

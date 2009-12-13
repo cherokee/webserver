@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "iocache.h"
@@ -84,7 +84,7 @@ clean_info_cb (cherokee_cache_entry_t *entry)
 {
 	cherokee_iocache_entry_t *ioentry = IOCACHE_ENTRY(entry);
 
-	TRACE (ENTRIES, "Cleaning cached info: '%s': %s\n", 
+	TRACE (ENTRIES, "Cleaning cached info: '%s': %s\n",
 	       entry->key.buf, ioentry->mmaped ? "mmap": "no mmap");
 
 	/* Nothing will be left
@@ -111,13 +111,13 @@ clean_info_cb (cherokee_cache_entry_t *entry)
 
 static ret_t
 free_cb (cherokee_cache_entry_t *entry)
-{	
+{
 	CHEROKEE_MUTEX_DESTROY (&PRIV(entry)->parent_lock);
 	return ret_ok;
 }
 
 static ret_t
-get_stats_cb (cherokee_cache_t  *cache, 
+get_stats_cb (cherokee_cache_t  *cache,
 	      cherokee_buffer_t *info)
 {
 	size_t total = 0;
@@ -133,7 +133,7 @@ get_stats_cb (cherokee_cache_t  *cache,
 
 
 static ret_t
-iocache_entry_new_cb (cherokee_cache_t        *cache, 
+iocache_entry_new_cb (cherokee_cache_t        *cache,
 		      cherokee_buffer_t       *key,
 		      void                    *param,
 		      cherokee_cache_entry_t **ret_entry)
@@ -191,7 +191,7 @@ cherokee_iocache_configure (cherokee_iocache_t     *iocache,
 	 */
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-		
+
 		if (equal_buf_str (&subconf->key, "max_file_size")) {
 			iocache->max_file_size = atoi(subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "min_file_size")) {
@@ -208,7 +208,7 @@ cherokee_iocache_configure (cherokee_iocache_t     *iocache,
 }
 
 
-ret_t 
+ret_t
 cherokee_iocache_init (cherokee_iocache_t *iocache)
 {
 	ret_t ret;
@@ -218,7 +218,7 @@ cherokee_iocache_init (cherokee_iocache_t *iocache)
 	ret = cherokee_cache_init (CACHE(iocache));
 	if (ret != ret_ok)
 		return ret;
-	
+
 	/* Init its virtual methods
 	 */
 	CACHE(iocache)->new_cb       = iocache_entry_new_cb;
@@ -233,7 +233,7 @@ cherokee_iocache_init (cherokee_iocache_t *iocache)
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_iocache_mrproper (cherokee_iocache_t *iocache)
 {
 	return cherokee_cache_mrproper (CACHE(iocache));
@@ -255,7 +255,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	int                 re;
 	ret_t               ret;
 	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
-	
+
 	/* Returns:
 	 * ret_ok          - Ok, updated
 	 * ret_ok_and_sent - It's still fresh
@@ -263,7 +263,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	 */
 
 	if (PRIV(entry)->stat_expiration >= cherokee_bogonow_now) {
-		TRACE (ENTRIES, "Update stat: %s: updated - skipped\n", 
+		TRACE (ENTRIES, "Update stat: %s: updated - skipped\n",
 		       CACHE_ENTRY(entry)->key.buf);
 
 		/* Checked, but file didn't exist */
@@ -278,7 +278,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	 */
 	re = cherokee_stat (CACHE_ENTRY(entry)->key.buf, &entry->state);
 	if (re < 0) {
-		TRACE(ENTRIES, "Couldn't update stat: %s: errno=%d\n", 
+		TRACE(ENTRIES, "Couldn't update stat: %s: errno=%d\n",
 		      CACHE_ENTRY(entry)->key.buf, errno);
 
 		switch (errno) {
@@ -293,7 +293,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 			ret = ret_error;
 			break;
 		}
-	} 
+	}
 	else {
 		ret = ret_ok;
 	}
@@ -308,7 +308,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 }
 
 static ret_t
-ioentry_update_mmap (cherokee_iocache_entry_t *entry, 
+ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 		     int                      *fd)
 {
 	ret_t              ret;
@@ -416,23 +416,23 @@ entry_update_fd (cherokee_iocache_entry_t *entry,
 {
 	ret_t               ret;
 	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
-	
+
 	/* Returns:
 	 * ret_ok          - Okay
 	 * ret_ok_and_sent - Ok but couldn't update it
 	 *
 	 * ret_deny        - Couldn't stat the file
-	 * ret_not_found   - File not found 
+	 * ret_not_found   - File not found
 	 * ret_error       - Something bad happened
 	 */
 
 	/* - CACHE_ENTRY(entry)->ref_count > 2:
-	 * It shouldn't update the object if somebody else 
+	 * It shouldn't update the object if somebody else
 	 * is using it.
 	 *
 	 * - entry->info != iocache_nothing:
-	 * However, it might happen that a few threads acquired 
-	 * the object at the 'same' time and they are trying to 
+	 * However, it might happen that a few threads acquired
+	 * the object at the 'same' time and they are trying to
 	 * update it now.
 	 */
 	if ((CACHE_ENTRY(entry)->ref_count > 2) &&
@@ -456,7 +456,7 @@ entry_update_fd (cherokee_iocache_entry_t *entry,
 		 */
 		ret = ioentry_update_stat (entry);
 		if ((ret != ret_ok) &&
-		    (ret != ret_ok_and_sent)) 
+		    (ret != ret_ok_and_sent))
 		{
 			/* stat() did not success
 			 */
@@ -509,7 +509,7 @@ static ret_t
 iocache_get (cherokee_iocache_t        *iocache,
 	     cherokee_buffer_t         *file,
 	     cherokee_iocache_info_t    info,
-	     int                       *fd, 
+	     int                       *fd,
 	     cherokee_iocache_entry_t **ret_io)
 {
 	ret_t                   ret;
@@ -549,19 +549,19 @@ ret_t
 cherokee_iocache_autoget_fd (cherokee_iocache_t        *iocache,
 			     cherokee_buffer_t         *file,
 			     cherokee_iocache_info_t    info,
-			     int                       *fd, 
+			     int                       *fd,
 			     cherokee_iocache_entry_t **ret_io)
 {
 	ret_t                     ret;
 	cherokee_iocache_entry_t *entry = *ret_io;
-	
+
 	TRACE (ENTRIES, "file=%s\n", file->buf);
 
 	if (entry) {
 		if (unlikely (cherokee_buffer_cmp_buf (file, &CACHE_ENTRY(entry)->key) != 0))
 			SHOULDNT_HAPPEN;
 
-		CHEROKEE_MUTEX_LOCK (CACHE_ENTRY(entry)->mutex);		
+		CHEROKEE_MUTEX_LOCK (CACHE_ENTRY(entry)->mutex);
 		ret = entry_update_fd (entry, info, fd);
 		CHEROKEE_MUTEX_UNLOCK (CACHE_ENTRY(entry)->mutex);
 
@@ -579,7 +579,7 @@ cherokee_iocache_autoget (cherokee_iocache_t        *iocache,
 {
 	ret_t                     ret;
 	cherokee_iocache_entry_t *entry = *ret_io;
-	
+
 	TRACE (ENTRIES, "file=%s\n", file->buf);
 
 	if (entry) {
@@ -589,7 +589,7 @@ cherokee_iocache_autoget (cherokee_iocache_t        *iocache,
 		CHEROKEE_MUTEX_LOCK (CACHE_ENTRY(entry)->mutex);
 		ret = entry_update (entry, info);
 		CHEROKEE_MUTEX_UNLOCK (CACHE_ENTRY(entry)->mutex);
-		
+
 		return ret;
 	}
 

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "cache.h"
@@ -78,12 +78,12 @@ struct cherokee_cache_priv {
 		cache_list_del(from, entry);	\
 		cache_list_add(to, entry);	\
 	} while (false)
-	
+
 
 /* Cache entry
  */
-ret_t 
-cherokee_cache_entry_init (cherokee_cache_entry_t *entry, 
+ret_t
+cherokee_cache_entry_init (cherokee_cache_entry_t *entry,
 			   cherokee_buffer_t      *key,
 			   cherokee_cache_t       *cache,
                            void                   *mutex)
@@ -182,15 +182,15 @@ entry_unref_guts (cherokee_cache_entry_t **entry_p,
 	if (entry->ref_count > 0) {
 		if (lock_object) {
 			CHEROKEE_MUTEX_UNLOCK (entry->mutex);
-		}			
+		}
 
 		*entry_p = NULL;
 		return ret_eagain;
 	}
-	
+
 	/* Clean cache references
 	 */
-	cache = (*entry_p)->cache;	
+	cache = (*entry_p)->cache;
 
 	/* Is it in the AVL? */
 	cherokee_avl_del (&cache->map, &entry->key, NULL);
@@ -233,7 +233,7 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 {
 	ret_t             ret;
 	cherokee_cache_t *cache;
-	
+
 	if (*entry == NULL)
 		return ret_ok;
 
@@ -242,7 +242,7 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 	CHEROKEE_MUTEX_LOCK (&cache->priv->mutex);
 	ret = entry_unref_guts (entry, true);
 	CHEROKEE_MUTEX_UNLOCK (&cache->priv->mutex);
-	
+
 	return ret;
 }
 
@@ -258,7 +258,7 @@ cherokee_cache_configure (cherokee_cache_t       *cache,
 
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-		
+
 		if (equal_buf_str (&subconf->key, "max_size")) {
 			cache->max_size = atoi(subconf->val.buf);
 		}
@@ -292,7 +292,7 @@ cherokee_cache_init (cherokee_cache_t *cache)
 	INIT_LIST_HEAD (&cache->_b2);
 
 	cherokee_avl_init (&cache->map);
-	
+
 	cache->len_t1       = 0;
 	cache->len_t2       = 0;
 	cache->len_b1       = 0;
@@ -307,7 +307,7 @@ cherokee_cache_init (cherokee_cache_t *cache)
 
 	cache->new_cb       = NULL;
 	cache->new_cb_param = NULL;
-	
+
 	CHEROKEE_MUTEX_UNLOCK (&cache->priv->mutex);
 	return ret_ok;
 }
@@ -321,7 +321,7 @@ cherokee_cache_mrproper (cherokee_cache_t *cache)
 		free (cache->priv);
 		cache->priv = NULL;
 	}
-	
+
 	cherokee_avl_mrproper (&cache->map, (cherokee_func_free_t)entry_free);
 	return ret_ok;
 }
@@ -347,7 +347,7 @@ replace (cherokee_cache_t       *cache,
 			CHEROKEE_MUTEX_LOCK (tmp->mutex);
 			cache_list_del (t1, tmp);
 			entry_parent_info_clean (tmp);
-			cache_list_add (b1, tmp);			
+			cache_list_add (b1, tmp);
 			CHEROKEE_MUTEX_UNLOCK (tmp->mutex);
 		}
 	} else {
@@ -357,7 +357,7 @@ replace (cherokee_cache_t       *cache,
 			CHEROKEE_MUTEX_LOCK (tmp->mutex);
 			cache_list_del (t2, tmp);
 			entry_parent_info_clean (tmp);
-			cache_list_add (b2, tmp);			
+			cache_list_add (b2, tmp);
 			CHEROKEE_MUTEX_UNLOCK (tmp->mutex);
 		}
 	}
@@ -419,7 +419,7 @@ update_ghost_b1 (cherokee_cache_t       *cache,
 
 	/* B1 hit: favour recency
 	 */
-	cache->target_t1 = MIN (cache->max_size, 
+	cache->target_t1 = MIN (cache->max_size,
 				(cache->target_t1 + MAX (1, (cache->len_b2 / cache->len_b1))));
 
 	/* Replace a page if needed
@@ -518,7 +518,7 @@ update_cache (cherokee_cache_t       *cache,
 	case cache_b1:
 		/* Ghost 'Recently' hit
 		 */
-		TRACE(ENTRIES, "B1 ghost hit: '%s' (refs=%d)\n", 
+		TRACE(ENTRIES, "B1 ghost hit: '%s' (refs=%d)\n",
 		      entry->key.buf, entry->ref_count);
 
 		ret = update_ghost_b1 (cache, entry);
@@ -534,7 +534,7 @@ update_cache (cherokee_cache_t       *cache,
 	case cache_b2:
 		/* Ghost 'Frequently' hit
 		 */
-		TRACE(ENTRIES, "B2 ghost hit: '%s' (refs=%d)\n", 
+		TRACE(ENTRIES, "B2 ghost hit: '%s' (refs=%d)\n",
 		      entry->key.buf, entry->ref_count);
 
 		ret = update_ghost_b2 (cache, entry);
@@ -649,7 +649,7 @@ cherokee_cache_get_stats (cherokee_cache_t  *cache,
 
 	cherokee_list_get_len (&cache->_t1, &len);
 	cherokee_buffer_add_va (info, "T1 size: %d (real=%d)\n", cache->len_t1, len);
-				
+
 	cherokee_list_get_len (&cache->_b1, &len);
 	cherokee_buffer_add_va (info, "B1 size: %d (real=%d)\n", cache->len_b1, len);
 
@@ -664,7 +664,7 @@ cherokee_cache_get_stats (cherokee_cache_t  *cache,
 
 	cherokee_avl_len (&cache->map, &len);
 	cherokee_buffer_add_va (info, "AVL size: %d\n", len);
-	
+
 	cherokee_buffer_add_va (info, "Total count: %d\n", cache->count);
 	cherokee_buffer_add_va (info, "Hit count: %d\n", cache->count_hit);
 	cherokee_buffer_add_va (info, "Miss count: %d\n", cache->count_miss);

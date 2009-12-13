@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -35,7 +35,7 @@
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
-#else 
+#else
 # include "getopt/getopt.h"
 #endif
 
@@ -80,7 +80,7 @@ find_empty_port (int starting, int *port)
 
 	while (true) {
 		ret = cherokee_socket_bind (&s, p, &bind_);
-		if (ret == ret_ok) 
+		if (ret == ret_ok)
 			break;
 
 		if (++p > 0XFFFF)
@@ -145,7 +145,7 @@ remove_old_socket (const char *path)
 
 
 static ret_t
-config_server (cherokee_server_t *srv) 
+config_server (cherokee_server_t *srv)
 {
 	ret_t                  ret;
 	cherokee_config_node_t conf;
@@ -161,7 +161,7 @@ config_server (cherokee_server_t *srv)
 
 	if (unsecure == 0) {
 		ret = generate_admin_password (&password);
-		if (ret != ret_ok) 
+		if (ret != ret_ok)
 			return ret;
 
 		printf ("Login:\n"
@@ -206,7 +206,7 @@ config_server (cherokee_server_t *srv)
 					 "source!1!env_inherited = 1\n",
 					 DEFAULT_UNIX_SOCKET, document_root,
 					 DEFAULT_UNIX_SOCKET, config_file);
-					 
+
 	} else {
 		cherokee_buffer_add_va  (&buf,
 					 "source!1!nick = app-logic\n"
@@ -222,13 +222,13 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_str  (&buf, "source!1!debug = 1\n");
 	}
 
-	cherokee_buffer_add_str  (&buf, 
+	cherokee_buffer_add_str  (&buf,
 				  RULE_PRE "1!match = default\n"
 				  RULE_PRE "1!handler = scgi\n"
 				  RULE_PRE "1!handler!balancer = round_robin\n"
 				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
 
-	if ((unsecure == 0) && 
+	if ((unsecure == 0) &&
 	    (!cherokee_buffer_is_empty (&password)))
 	{
 		cherokee_buffer_add_va (&buf,
@@ -240,12 +240,12 @@ config_server (cherokee_server_t *srv)
 					password.buf);
 	}
 
-	cherokee_buffer_add_str (&buf, 
+	cherokee_buffer_add_str (&buf,
 				 RULE_PRE "2!match = directory\n"
 				 RULE_PRE "2!match!directory = /about\n"
 				 RULE_PRE "2!handler = server_info\n");
 
-	cherokee_buffer_add_str (&buf, 
+	cherokee_buffer_add_str (&buf,
 				 RULE_PRE "3!match = directory\n"
 				 RULE_PRE "3!match!directory = /static\n"
 				 RULE_PRE "3!handler = file\n"
@@ -256,7 +256,7 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_str (&buf, RULE_PRE "3!expiration!time = 30d\n");
 	}
 
-	cherokee_buffer_add_va  (&buf, 
+	cherokee_buffer_add_va  (&buf,
 				 RULE_PRE "4!match = request\n"
 				 RULE_PRE "4!match!request = ^/favicon.ico$\n"
 				 RULE_PRE "4!document_root = %s/static/images\n"
@@ -267,7 +267,7 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_str (&buf, RULE_PRE "4!expiration!time = 30d\n");
 	}
 
-	cherokee_buffer_add_va  (&buf, 
+	cherokee_buffer_add_va  (&buf,
 				 RULE_PRE "5!match = directory\n"
 				 RULE_PRE "5!match!directory = /icons_local\n"
 				 RULE_PRE "5!handler = file\n"
@@ -279,7 +279,7 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_str (&buf, RULE_PRE "5!expiration!time = 30d\n");
 	}
 
-	cherokee_buffer_add_va  (&buf, 
+	cherokee_buffer_add_va  (&buf,
 				 RULE_PRE "6!match = directory\n"
 				 RULE_PRE "6!match!directory = /help\n"
 				 RULE_PRE "6!handler = file\n"
@@ -288,7 +288,7 @@ config_server (cherokee_server_t *srv)
 
 
 	/* RRDtool graphs
-	 */	
+	 */
 	cherokee_config_node_init (&conf);
 	cherokee_buffer_fake (&fake, config_file, strlen(config_file));
 
@@ -296,7 +296,7 @@ config_server (cherokee_server_t *srv)
 	if (ret == ret_ok) {
 		cherokee_config_node_copy (&conf, "server!collector!rrdtool_path", &rrd_bin);
 		cherokee_config_node_copy (&conf, "server!collector!database_dir", &rrd_dir);
-	}	
+	}
 
 	if (! cherokee_buffer_is_empty (&rrd_bin)) {
 		cherokee_buffer_add_va  (&buf,
@@ -309,8 +309,8 @@ config_server (cherokee_server_t *srv)
 	}
 
 	cherokee_buffer_add_str (&buf,
-				 RULE_PRE "7!match = directory\n" 
-				 RULE_PRE "7!match!directory = /graphs\n" 
+				 RULE_PRE "7!match = directory\n"
+				 RULE_PRE "7!match!directory = /graphs\n"
 				 RULE_PRE "7!handler = render_rrd\n");
 
 	cherokee_buffer_add_str (&buf, RULE_PRE "7!document_root = ");
@@ -434,7 +434,7 @@ main (int argc, char **argv)
 	process_parameters (argc, argv);
 
 	ret = cherokee_server_new (&srv);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		exit (EXIT_ERROR);
 
 	ret = config_server (srv);
@@ -448,7 +448,7 @@ main (int argc, char **argv)
 	for (;;) {
 		cherokee_server_step (srv);
 	}
-	
+
 	cherokee_server_stop (srv);
 	cherokee_server_free (srv);
 

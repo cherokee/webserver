@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_THREADING_H
 #define CHEROKEE_THREADING_H
@@ -48,7 +48,7 @@ extern pthread_mutexattr_t cherokee_mutexattr_errorcheck;
 extern pthread_key_t thread_error_writer_ptr;
 
 /* Global if */
-#endif	
+#endif
 
 ret_t cherokee_threading_init (void);
 ret_t cherokee_threading_free (void);

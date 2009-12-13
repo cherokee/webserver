@@ -16,7 +16,7 @@ vserver!1160!rule!11!handler = redir
 vserver!1160!rule!11!handler!rewrite!1!show = 0
 vserver!1160!rule!11!handler!rewrite!1!regex = ^.*$
 vserver!1160!rule!11!handler!rewrite!1!substring = /index.php
-""" 
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -40,7 +40,7 @@ class Test (TestBase):
             self.conf += "vserver!1160!rule!%s\n" % (php)
 
         self.WriteFile (host_dir, "index.php", 0444, '<?php echo "%s" ?>' %(MAGIC))
-        
+
     def Precondition (self):
         return os.path.exists (look_for_php())
 

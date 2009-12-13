@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "plugin_loader.h"
@@ -45,7 +45,7 @@ static pthread_mutex_t dlerror_mutex = PTHREAD_MUTEX_INITIALIZER;
  */
 #include "loader.autoconf.h"
 
-#ifdef HAVE_RTLDNOW	
+#ifdef HAVE_RTLDNOW
 # define RTLD_BASE RTLD_NOW
 #else
 # define RTLD_BASE RTLD_LAZY
@@ -56,7 +56,7 @@ typedef void *func_new_t;
 
 
 static void
-add_static_entry (cherokee_plugin_loader_t *loader, 
+add_static_entry (cherokee_plugin_loader_t *loader,
 		  const char               *name,
 		  void                     *info)
 {
@@ -64,7 +64,7 @@ add_static_entry (cherokee_plugin_loader_t *loader,
 
 	entry = malloc (sizeof(entry_t));
 	entry->dlopen_ref = dlopen (NULL, RTLD_BASE);
-	entry->info       = info; 
+	entry->info       = info;
 	entry->built_in   = true;
 
 	cherokee_avl_add_ptr (&loader->table, (char *)name, entry);
@@ -103,11 +103,11 @@ ret_t
 cherokee_plugin_loader_init (cherokee_plugin_loader_t *loader)
 {
 	ret_t ret;
-	
+
 	ret = cherokee_avl_init (&loader->table);
 	if (unlikely(ret < ret_ok))
 		return ret;
-	
+
 	/* Plug-in dir
 	 */
 	ret = cherokee_buffer_init (&loader->module_dir);
@@ -132,7 +132,7 @@ cherokee_plugin_loader_init (cherokee_plugin_loader_t *loader)
 }
 
 
-ret_t 
+ret_t
 cherokee_plugin_loader_mrproper (cherokee_plugin_loader_t *loader)
 {
 	cherokee_buffer_mrproper (&loader->module_dir);
@@ -148,7 +148,7 @@ get_sym_from_dlopen_handler (void *dl_handle, const char *sym)
 {
 	void       *re;
 	const char *error;
-	   
+
 	/* Clear the possible error and look for the symbol
 	 */
 
@@ -167,16 +167,16 @@ get_sym_from_dlopen_handler (void *dl_handle, const char *sym)
 
 
 static ret_t
-dylib_open (cherokee_plugin_loader_t  *loader, 
-	    const char                *libname, 
+dylib_open (cherokee_plugin_loader_t  *loader,
+	    const char                *libname,
 	    int                        extra_flags,
-	    void                     **handler_out) 
+	    void                     **handler_out)
 {
 	ret_t             ret;
 	void             *lib;
 	int               flags;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT; 
-	
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
 	flags = RTLD_BASE | extra_flags;
 
 	/* Build the path string
@@ -186,7 +186,7 @@ dylib_open (cherokee_plugin_loader_t  *loader,
 		cherokee_buffer_mrproper (&tmp);
 		return ret;
 	}
-	/* Open the library	
+	/* Open the library
 	 */
 	CHEROKEE_MUTEX_LOCK (&dlerror_mutex);
 	lib = dlopen (tmp.buf, flags);
@@ -208,7 +208,7 @@ dylib_open (cherokee_plugin_loader_t  *loader,
 
 
 static ret_t
-execute_init_func (cherokee_plugin_loader_t *loader, 
+execute_init_func (cherokee_plugin_loader_t *loader,
 		   const char               *module,
 		   entry_t                  *entry)
 {
@@ -232,7 +232,7 @@ execute_init_func (cherokee_plugin_loader_t *loader,
 	}
 
 	init_func = get_sym_from_dlopen_handler (entry->dlopen_ref, init_name.buf);
-		
+
 	/* Only try to execute if it exists
 	 */
 	if (init_func == NULL) {
@@ -253,10 +253,10 @@ execute_init_func (cherokee_plugin_loader_t *loader,
 
 
 static ret_t
-get_info (cherokee_plugin_loader_t  *loader, 
-	  const char                *module, 
-	  int                        flags, 
-	  cherokee_plugin_info_t   **info, 
+get_info (cherokee_plugin_loader_t  *loader,
+	  const char                *module,
+	  int                        flags,
+	  cherokee_plugin_info_t   **info,
 	  void                     **dl_handler)
 {
 	ret_t             ret;
@@ -273,7 +273,7 @@ get_info (cherokee_plugin_loader_t  *loader,
 		cherokee_buffer_mrproper (&info_name);
 		return ret_error;
 	}
-	
+
 	*info = get_sym_from_dlopen_handler (*dl_handler, info_name.buf);
 	if (*info == NULL) {
 		cherokee_buffer_mrproper (&info_name);
@@ -288,7 +288,7 @@ get_info (cherokee_plugin_loader_t  *loader,
 
 
 static ret_t
-check_deps_file (cherokee_plugin_loader_t *loader, 
+check_deps_file (cherokee_plugin_loader_t *loader,
 		 const char               *modname)
 {
 	FILE             *file;
@@ -308,13 +308,13 @@ check_deps_file (cherokee_plugin_loader_t *loader,
 		if (ret == NULL)
 			break;
 
-		len = strlen (temp); 
+		len = strlen (temp);
 
 		if (len < 2)
 			continue;
 		if (temp[0] == '#')
 			continue;
-		
+
 		if (temp[len-1] == '\n')
 			temp[len-1] = '\0';
 
@@ -331,7 +331,7 @@ exit:
 
 
 static ret_t
-load_common (cherokee_plugin_loader_t *loader, 
+load_common (cherokee_plugin_loader_t *loader,
 	     const char               *modname,
 	     int                       flags)
 {
@@ -340,12 +340,12 @@ load_common (cherokee_plugin_loader_t *loader,
 	cherokee_plugin_info_t *info      = NULL;
 	void                   *dl_handle = NULL;
 
-	/* If it is already loaded just return 
+	/* If it is already loaded just return
 	 */
 	ret = cherokee_avl_get_ptr (&loader->table, modname, (void **)&entry);
 	if (ret == ret_ok)
 		return ret_ok;
-	
+
 	/* Check deps
 	 */
 	ret = check_deps_file (loader, modname);
@@ -368,14 +368,14 @@ load_common (cherokee_plugin_loader_t *loader,
 		SHOULDNT_HAPPEN;
 		return ret_error;
 	}
-	
+
 	/* Add new entry
 	 */
 	entry = malloc (sizeof(entry_t));
 	entry->dlopen_ref = dl_handle;
-	entry->info       = info; 
+	entry->info       = info;
 	entry->built_in   = false;
-	
+
 	ret = cherokee_avl_add_ptr (&loader->table, modname, entry);
 	if (unlikely(ret != ret_ok)) {
 		dlclose (entry->dlopen_ref);
@@ -394,16 +394,16 @@ load_common (cherokee_plugin_loader_t *loader,
 }
 
 
-ret_t 
-cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader, 
+ret_t
+cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader,
 				       const char               *modname)
 {
 	return load_common (loader, modname, 0);
 }
 
 
-ret_t 
-cherokee_plugin_loader_load (cherokee_plugin_loader_t *loader, 
+ret_t
+cherokee_plugin_loader_load (cherokee_plugin_loader_t *loader,
 			     const char               *modname)
 {
 #ifdef HAVE_RTLDGLOBAL
@@ -414,8 +414,8 @@ cherokee_plugin_loader_load (cherokee_plugin_loader_t *loader,
 }
 
 
-ret_t 
-cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader, 
+ret_t
+cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader,
 			       const char               *modname)
 {
 	int      re     = 0;
@@ -440,8 +440,8 @@ cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader,
 }
 
 
-ret_t 
-cherokee_plugin_loader_get_info (cherokee_plugin_loader_t  *loader, 
+ret_t
+cherokee_plugin_loader_get_info (cherokee_plugin_loader_t  *loader,
 				 const char                *modname,
 				 cherokee_plugin_info_t   **info)
 {
@@ -476,7 +476,7 @@ cherokee_plugin_loader_get_sym  (cherokee_plugin_loader_t  *loader,
 	/* Even if we're trying to look for symbols in the executable,
 	 * using dlopen(NULL), the handler pointer should not be nil.
 	 */
-	if (entry->dlopen_ref == NULL) 
+	if (entry->dlopen_ref == NULL)
 		return ret_not_found;
 
 	tmp = get_sym_from_dlopen_handler (entry->dlopen_ref, name);
@@ -488,8 +488,8 @@ cherokee_plugin_loader_get_sym  (cherokee_plugin_loader_t  *loader,
 }
 
 
-ret_t 
-cherokee_plugin_loader_get (cherokee_plugin_loader_t  *loader, 
+ret_t
+cherokee_plugin_loader_get (cherokee_plugin_loader_t  *loader,
 			    const char                *modname,
 			    cherokee_plugin_info_t   **info)
 {
@@ -507,7 +507,7 @@ cherokee_plugin_loader_get (cherokee_plugin_loader_t  *loader,
 }
 
 
-ret_t 
+ret_t
 cherokee_plugin_loader_set_directory  (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir)
 {
 	cherokee_buffer_clean (&loader->module_dir);
@@ -517,7 +517,7 @@ cherokee_plugin_loader_set_directory  (cherokee_plugin_loader_t *loader, cheroke
 }
 
 
-ret_t 
+ret_t
 cherokee_plugin_loader_set_deps_dir (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir)
 {
 	cherokee_buffer_clean (&loader->deps_dir);
@@ -553,6 +553,6 @@ cherokee_plugin_loader_get_mods_info (cherokee_plugin_loader_t *loader,
 	{
 		cherokee_buffer_drop_ending (builtin, 1);
 	}
-			
+
 	return ret_ok;
 }

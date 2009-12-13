@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HEADER_H
 #define CHEROKEE_HEADER_H
@@ -33,7 +33,7 @@
 
 
 typedef struct {
-	off_t info_off;  
+	off_t info_off;
 	off_t info_len;
 } cherokee_header_entry_t;
 
@@ -48,7 +48,7 @@ struct cherokee_header {
 	/* Known headers
 	 */
 	cherokee_header_entry_t header[HEADER_LENGTH];
-	
+
 	/* Unknown headers
 	 */
 	cherokee_header_unknown_entry_t *unknowns;

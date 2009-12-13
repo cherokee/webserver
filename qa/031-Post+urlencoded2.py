@@ -23,7 +23,7 @@ class Test (TestBase):
     def Prepare (self, www):
         self.Mkdir (www, "post3")
         self.WriteFile (www, "post3/test.php", 0444, "<?php echo $_POST; ?>")
-                        
+
     def Precondition (self):
         return os.path.exists (look_for_php())
 

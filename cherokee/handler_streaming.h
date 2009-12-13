@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_STREAMING_H
 #define CHEROKEE_HANDLER_STREAMING_H
@@ -69,7 +69,7 @@ typedef struct {
 /* Library init function
  */
 void PLUGIN_INIT_NAME(streaming) (cherokee_plugin_loader_t *loader);
-				 
+
 ret_t cherokee_handler_streaming_configure  (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 ret_t cherokee_handler_streaming_new        (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_streaming_free       (cherokee_handler_streaming_t *hdl);

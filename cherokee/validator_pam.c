@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "http.h"
@@ -53,13 +53,13 @@ cherokee_validator_pam_configure (cherokee_config_node_t   *conf,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_pam_new (cherokee_validator_pam_t **pam,
 			    cherokee_module_props_t  *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_pam);
 
-	/* Init 
+	/* Init
 	 */
 	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(pam));
 	VALIDATOR(n)->support = http_auth_basic;
@@ -73,7 +73,7 @@ cherokee_validator_pam_new (cherokee_validator_pam_t **pam,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_pam_free (cherokee_validator_pam_t *pam)
 {
 	cherokee_validator_free_base (VALIDATOR(pam));
@@ -89,7 +89,7 @@ cherokee_validator_pam_free (cherokee_validator_pam_t *pam)
  *   A username is asked for by requesting input _with_ echoing
  *
  */
-static int 
+static int
 auth_pam_talker (int                        num_msg,
 		 const struct pam_message **msg,
 		 struct pam_response      **resp,
@@ -99,28 +99,28 @@ auth_pam_talker (int                        num_msg,
 	struct pam_response   *response = NULL;
 	cherokee_connection_t *conn     = CONN(appdata_ptr);
 
-	/* parameter sanity checking 
+	/* parameter sanity checking
 	 */
 	if (!resp || !msg || !conn) {
 		return PAM_CONV_ERR;
 	}
 
-	/* allocate memory to store response 
+	/* allocate memory to store response
 	 */
 	response = malloc (num_msg * sizeof(struct pam_response));
 	if (!response) {
 		return PAM_CONV_ERR;
 	}
 
-	/* copy values 
+	/* copy values
 	 */
 	for (i = 0; i < num_msg; i++) {
-		/* initialize to safe values 
+		/* initialize to safe values
 		 */
 		response[i].resp_retcode = 0;
 		response[i].resp = 0;
 
-		/* select response based on requested output style 
+		/* select response based on requested output style
 		 */
 		switch (msg[i]->msg_style) {
 		case PAM_PROMPT_ECHO_ON:
@@ -136,14 +136,14 @@ auth_pam_talker (int                        num_msg,
 		}
 	}
 
-	/* everything okay, set PAM response values 
+	/* everything okay, set PAM response values
 	 */
 	*resp = response;
 	return PAM_SUCCESS;
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 			      cherokee_connection_t    *conn)
 {
@@ -181,7 +181,7 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 	/* If you can't set the delay to zero, you try to call one of
 	 * the PAM internal functions. It is nasty, but reached this
 	 * point it's the only thing you can do.
-	 * 
+	 *
 	 * Parameters: The second one, 0, are the flags. The third
 	 * means PAM_AUTHENTICATE
 	 */
@@ -201,9 +201,9 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 		goto unauthorized;
 	}
 
-	/* Check that the account is healthy 
+	/* Check that the account is healthy
 	 */
-	ret = pam_acct_mgmt (pamhandle, PAM_DISALLOW_NULL_AUTHTOK); 
+	ret = pam_acct_mgmt (pamhandle, PAM_DISALLOW_NULL_AUTHTOK);
 	if (ret != PAM_SUCCESS) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_PAM_ACCOUNT,
 			   conn->validator->user.buf,
@@ -221,7 +221,7 @@ unauthorized:
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_pam_add_headers (cherokee_validator_pam_t *pam,
 				    cherokee_connection_t    *conn,
 				    cherokee_buffer_t        *buf)

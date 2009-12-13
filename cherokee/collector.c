@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "collector.h"
@@ -83,7 +83,7 @@ base_init (cherokee_collector_base_t *collector,
 	/* Pure virtual methods
 	 */
 	collector->free       = NULL;
-	
+
 	/* Properties
 	 */
 	collector->rx         = 0;

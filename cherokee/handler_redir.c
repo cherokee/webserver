@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_redir.h"
@@ -43,13 +43,13 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
 /* Methods implementation
  */
 static ret_t
-match_and_substitute (cherokee_handler_redir_t *n) 
+match_and_substitute (cherokee_handler_redir_t *n)
 {
 	cherokee_list_t       *i;
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
 	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(n)->tmp_buf1;
-	
+
 	/* Append the query string
 	 */
 	if ((conn->web_directory.len > 1) &&
@@ -62,22 +62,22 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		cherokee_buffer_add_str (&conn->request, "?");
 		cherokee_buffer_add_buffer (&conn->request, &conn->query_string);
 	}
-	
+
 	/* Try to match it
 	 */
 	list_for_each (i, &HDL_REDIR_PROPS(n)->regex_list) {
-		char                   *subject; 
+		char                   *subject;
 		cint_t                  subject_len;
 		cint_t                  ovector[OVECTOR_LEN];
 		cint_t                  rc                    = 0;
 		cherokee_regex_entry_t *list                  = REGEX_ENTRY(i);
 
-		/* The subject usually begins with a slash. Lets imagine a request "/dir/thing". 
-		 * If it matched with a "/dir" directory entry, the subject have to be "/thing", 
+		/* The subject usually begins with a slash. Lets imagine a request "/dir/thing".
+		 * If it matched with a "/dir" directory entry, the subject have to be "/thing",
 		 * so the way to extract it is to remove the directory from the beginning.
 		 *
-		 * There is an special case though. When a connection is using the default 
-		 * directory ("/"), it has to remove one character less. 
+		 * There is an special case though. When a connection is using the default
+		 * directory ("/"), it has to remove one character less.
 		 */
 		if (conn->web_directory.len == 1)
 			subject = conn->request.buf + (conn->web_directory.len - 1);
@@ -91,9 +91,9 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		if ((list->re == NULL) &&
 		    (conn->regex_ovecsize == 0))
 		{
-			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", 
+			TRACE (ENTRIES, "Using conn->ovector, size=%d\n",
 			       conn->regex_ovecsize);
-		} 
+		}
 
 		/* Case 2: Cached conn substitution
 		 */
@@ -101,10 +101,10 @@ match_and_substitute (cherokee_handler_redir_t *n)
 			memcpy (ovector,
 				conn->regex_ovector,
 				OVECTOR_LEN * sizeof(cint_t));
-			
+
 			rc = conn->regex_ovecsize;
 			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", rc);
-		} 
+		}
 
 		/* Case 3: Use the rule-subentry regex
 		 */
@@ -114,7 +114,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 				LOG_ERROR_S (CHEROKEE_ERROR_HANDLER_REGEX_GROUPS);
 			}
 
-			TRACE (ENTRIES, "subject = \"%s\" + len(\"%s\")-1=%d\n", 
+			TRACE (ENTRIES, "subject = \"%s\" + len(\"%s\")-1=%d\n",
 			       conn->request.buf, conn->web_directory.buf, conn->web_directory.len - 1);
 			TRACE (ENTRIES, "pcre_exec: subject=\"%s\" -> %d\n", subject, rc);
 
@@ -128,7 +128,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		if (cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
 		}
-		
+
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add (tmp, subject, subject_len);
 
@@ -163,12 +163,12 @@ match_and_substitute (cherokee_handler_redir_t *n)
 				cherokee_buffer_prepend_str (&conn->request, "/");
 			}
 
-			TRACE (ENTRIES, "Hidden redirect to: request=\"%s\" query_string=\"%s\"\n", 
+			TRACE (ENTRIES, "Hidden redirect to: request=\"%s\" query_string=\"%s\"\n",
 			       conn->request.buf, conn->query_string.buf);
 
 			return ret_eagain;
 		}
-		
+
 		/* External redirect
 		 */
 		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
@@ -200,20 +200,20 @@ out:
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_redir);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base(HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(redir));
-	
+
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_redir_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_redir_free;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_redir_add_headers;
-	
+
 	HANDLER(n)->connection  = cnt;
 	HANDLER(n)->support     = hsupport_nothing;
 
@@ -240,11 +240,11 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 	/* Return the new handler obj
 	 */
 	*hdl = HANDLER(n);
-	return ret_ok;	   
+	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_redir_free (cherokee_handler_redir_t *rehdl)
 {
 	UNUSED(rehdl);
@@ -253,33 +253,33 @@ cherokee_handler_redir_free (cherokee_handler_redir_t *rehdl)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 {
 	int                    request_end;
 	char                  *request_ending;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
-    
+
 	/* Maybe ::new -> match_and_substitute() has already set
 	 * this redirection
 	 */
-	if (! cherokee_buffer_is_empty (&conn->redirect)) {		
+	if (! cherokee_buffer_is_empty (&conn->redirect)) {
 		conn->error_code = http_moved_permanently;
 		return ret_error;
 	}
-	
+
 	/* Check if it has the URL
 	 */
 	if (HDL_REDIR_PROPS(n)->url.len <= 0) {
 		conn->error_code = http_internal_error;
-		return ret_error;		
+		return ret_error;
 	}
 
 	/* Try with URL directive
 	 */
 	request_end = (conn->request.len - conn->web_directory.len);
 	request_ending = conn->request.buf + conn->web_directory.len;
-	
+
 	cherokee_buffer_ensure_size (&conn->redirect, request_end + HDL_REDIR_PROPS(n)->url.len +1);
 	cherokee_buffer_add_buffer (&conn->redirect, &HDL_REDIR_PROPS(n)->url);
 	cherokee_buffer_add (&conn->redirect, request_ending, request_end);
@@ -289,7 +289,7 @@ cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_buffer_t *buffer)
 {
 	UNUSED(rehdl);
@@ -299,7 +299,7 @@ cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_bu
 }
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_handler_redir_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->url);
@@ -309,7 +309,7 @@ props_free (cherokee_handler_redir_props_t *props)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                           ret;
@@ -319,14 +319,14 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n,handler_redir_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(props_free));		
-		
+		cherokee_module_props_init_base (MODULE_PROPS(n),
+						 MODULE_PROPS_FREE(props_free));
+
 		cherokee_buffer_init (&n->url);
 		INIT_LIST_HEAD (&n->regex_list);
-		
+
 		*_props = MODULE_PROPS(n);
-	}	
+	}
 
 	props = PROP_REDIR(*_props);
 
@@ -344,6 +344,6 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 				return ret;
 		}
 	}
-	
+
 	return ret_ok;
 }

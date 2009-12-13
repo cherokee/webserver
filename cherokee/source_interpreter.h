@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_SOURCE_INTERPRETER_H
 #define CHEROKEE_SOURCE_INTERPRETER_H
@@ -76,7 +76,7 @@ ret_t cherokee_source_interpreter_add_env   (cherokee_source_interpreter_t  *src
 ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t  *src,
 					     cherokee_logger_writer_t       *error_writer);
 
-ret_t cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src, 
+ret_t cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 						   cherokee_socket_t             *socket,
 						   cherokee_connection_t         *conn);
 

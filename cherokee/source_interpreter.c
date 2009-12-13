@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "source_interpreter.h"
@@ -46,7 +46,7 @@ static void interpreter_free (void *src);
 #define source_is_unresponsive(src)					\
 	(cherokee_bogonow_now > (src)->spawning_since + (src)->timeout)
 
-ret_t 
+ret_t
 cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 {
 	CHEROKEE_NEW_STRUCT(n, source_interpreter);
@@ -70,7 +70,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 
 	SOURCE(n)->type = source_interpreter;
 	SOURCE(n)->free = (cherokee_func_free_t)interpreter_free;
-	
+
 	CHEROKEE_MUTEX_INIT (&n->launching_mutex, NULL);
 	n->launching = false;
 
@@ -84,11 +84,11 @@ free_custom_env (void *ptr)
 {
 	cuint_t                        i;
 	cherokee_source_interpreter_t *src = ptr;
-	
+
 	for (i=0; src->custom_env[i] != NULL; i++) {
 		free (src->custom_env[i]);
 	}
-	
+
 	free (src->custom_env);
 }
 
@@ -163,15 +163,15 @@ check_interpreter_full (cherokee_buffer_t *fullpath)
 		/* Does the file exist? */
 		re = cherokee_stat (fullpath->buf, &inter);
 		if ((re == 0) &&
-		    (! S_ISDIR(inter.st_mode))) 
+		    (! S_ISDIR(inter.st_mode)))
 		{
 			*p = tmp;
 			return ret_ok;
 		}
-		
+
 		*p = tmp;
 
-		/* Exit if already reached the end */		
+		/* Exit if already reached the end */
 		if (p >= end)
 			break;
 
@@ -239,16 +239,16 @@ check_interpreter (cherokee_source_interpreter_t *src)
 
 	if (src->interpreter.buf[0] == '/') {
 		ret = check_interpreter_full (&src->interpreter);
-		if (ret == ret_ok) 
+		if (ret == ret_ok)
 			return ret_ok;
 
 		return ret_error;
 	}
-	
+
 	return check_interpreter_path (&src->interpreter);
 }
 
-ret_t 
+ret_t
 cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 				       cherokee_config_node_t        *conf,
 				       int                            prio)
@@ -298,26 +298,26 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 		} else if (equal_buf_str (&child->key, "group")) {
 			struct group grp;
 			char         tmp[GRNAM_BUF_LEN];
-		
+
 			ret = cherokee_getgrnam (child->val.buf, &grp, tmp, sizeof(tmp));
 			if (ret != ret_ok) {
 				LOG_CRITICAL (CHEROKEE_ERROR_SRC_INTER_NO_GROUP, conf->val.buf, prio);
 				return ret_error;
-			}		
-			
+			}
+
 			src->change_group = grp.gr_gid;
 
-		} else if (equal_buf_str (&child->key, "env")) {			
+		} else if (equal_buf_str (&child->key, "env")) {
 			cherokee_config_node_foreach (j, child) {
 				cherokee_config_node_t *child2 = CONFIG_NODE(j);
-                                
+
 				ret = cherokee_source_interpreter_add_env (src, child2->key.buf, child2->val.buf);
 				if (ret != ret_ok) return ret;
 			}
 
 		} else if (equal_buf_str (&child->key, "env_inherited")) {
 			/* Handled later on */
-		}	
+		}
 	}
 
 	/* Inherited Environment
@@ -346,7 +346,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 }
 
 
-ret_t 
+ret_t
 cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *env, char *val)
 {
 	char    *entry;
@@ -367,7 +367,7 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 	entry[env_len] = '=';
 	memcpy (entry + env_len + 1, val, val_len);
 	entry[env_len + val_len + 1] = '\0';
-	
+
 	/* Add it into the env array
 	 */
 	if (src->custom_env_len == 0) {
@@ -384,7 +384,7 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 }
 
 #ifdef HAVE_POSIX_SHM
-static ret_t 
+static ret_t
 _spawn_shm (cherokee_source_interpreter_t *src,
 	    cherokee_logger_writer_t      *error_writer)
 {
@@ -394,10 +394,10 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 
 	/* Sanity check
 	 */
-	if (cherokee_buffer_is_empty (&src->interpreter)) 
+	if (cherokee_buffer_is_empty (&src->interpreter))
 		return ret_not_found;
 
-	/* Maybe set a custom enviroment variable set 
+	/* Maybe set a custom enviroment variable set
 	 */
 	envp = (src->custom_env) ? src->custom_env : empty_envp;
 
@@ -407,7 +407,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 		src->change_user  = getuid();
 		src->change_group = getgid();
 	}
-	
+
 	/* Invoke the spawn mechanism
 	 */
 	ret = cherokee_spawner_spawn (&src->interpreter,
@@ -432,7 +432,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 #endif
 
 
-static ret_t 
+static ret_t
 _spawn_local (cherokee_source_interpreter_t *src,
 	      cherokee_logger_writer_t      *error_writer)
 {
@@ -447,7 +447,7 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	 */
 	kill_pid (src);
 
-	/* Maybe set a custom enviroment variable set 
+	/* Maybe set a custom enviroment variable set
 	 */
 	envp = (src->custom_env) ? src->custom_env : empty_envp;
 
@@ -483,11 +483,11 @@ _spawn_local (cherokee_source_interpreter_t *src,
 			{
 				dup2 (error_writer->fd, STDOUT_FILENO);
 				dup2 (error_writer->fd, STDERR_FILENO);
-			} 
+			}
 			else {
 				close (STDOUT_FILENO);
 				close (STDERR_FILENO);
-			}			
+			}
 		}
 
 		argv[2] = (char *)tmp.buf;
@@ -505,13 +505,13 @@ _spawn_local (cherokee_source_interpreter_t *src,
 		exit ((re == 0) ? 0 : 1);
 	case -1:
 		goto error;
-		
+
 	default:
 		src->pid = child;
 
 		sleep (1);
 		break;
-		
+
 	}
 
 	cherokee_buffer_mrproper (&tmp);
@@ -523,7 +523,7 @@ error:
 }
 
 
-ret_t 
+ret_t
 cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 				   cherokee_logger_writer_t      *error_writer)
 {
@@ -574,7 +574,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 
 
 ret_t
-cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src, 
+cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 					     cherokee_socket_t             *socket,
 					     cherokee_connection_t         *conn)
 {
@@ -582,10 +582,10 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	ret_t ret;
 	int   unlocked;
 	int   kill_prev;
-	
+
 	/* Connect
 	 */
- 	ret = cherokee_source_connect (SOURCE(src), socket); 
+ 	ret = cherokee_source_connect (SOURCE(src), socket);
 	switch (ret) {
 	case ret_ok:
 		/* connected */

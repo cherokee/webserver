@@ -13,7 +13,7 @@ class Test (TestBase):
 
         self.expected_error   = 200
         self.expected_content = MAGIC
-        
+
     def Prepare (self, www):
         d = self.Mkdir (www, "php3")
         self.WriteFile (d, "post.php", 0444, '<?php echo $_POST["magic"] ?>')

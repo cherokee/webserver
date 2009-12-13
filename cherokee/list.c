@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "list.h"
@@ -30,10 +30,10 @@
 ret_t
 cherokee_list_get_len (cherokee_list_t *head, size_t *len)
 {
-	cherokee_list_t *i;		
+	cherokee_list_t *i;
 	cuint_t          n = 0;
-	
-	list_for_each (i, head) 
+
+	list_for_each (i, head)
 		n++;
 
 	*len = n;
@@ -41,12 +41,12 @@ cherokee_list_get_len (cherokee_list_t *head, size_t *len)
 }
 
 
-void 
+void
 cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherokee_list_t *b))
 {
 	cherokee_list_t *p, *q, *e, *list, *tail, *oldhead;
 	int insize, nmerges, psize, qsize, i;
-	
+
 	list = head->next;
 	cherokee_list_del(head);
 	insize = 1;
@@ -120,43 +120,43 @@ cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherok
 
 
 
-ret_t 
+ret_t
 cherokee_list_add_content (cherokee_list_t *head, void *item)
 {
 	CHEROKEE_NEW_STRUCT(n,list_item);
-	
+
 	/* Init
 	 */
 	INIT_LIST_HEAD (LIST(n));
 	n->info = item;
-	
+
 	/* Add to list
 	 */
 	cherokee_list_add (LIST(n), head);
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_list_add_tail_content (cherokee_list_t *head, void *item)
 {
 	CHEROKEE_NEW_STRUCT(n,list_item);
-	
+
 	/* Init
 	 */
 	INIT_LIST_HEAD (LIST(n));
 	n->info = item;
-	
+
 	/* Add to list
 	 */
 	cherokee_list_add_tail (LIST(n), head);
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_list_content_free (cherokee_list_t *head, cherokee_list_free_func free_func)
 {
 	cherokee_list_t *i, *tmp;
@@ -164,36 +164,36 @@ cherokee_list_content_free (cherokee_list_t *head, cherokee_list_free_func free_
 	list_for_each_safe (i, tmp, head) {
 		cherokee_list_content_free_item (i, free_func);
 	}
-	
+
 	INIT_LIST_HEAD(head);
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_list_content_free_item (cherokee_list_t *head, cherokee_list_free_func free_func)
 {
 	cherokee_list_del (head);
-	
+
 	if ((free_func != NULL) && (LIST_ITEM(head)->info)) {
 		free_func (LIST_ITEM(head)->info);
 	}
-	
+
 	free (head);
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_list_content_free_item_simple (cherokee_list_t *head)
 {
 	cherokee_list_del (head);
-	
+
 	if (LIST_ITEM(head)->info) {
 		free (LIST_ITEM(head)->info);
 	}
-	
+
 	free (head);
-	return ret_ok;	
+	return ret_ok;
 }

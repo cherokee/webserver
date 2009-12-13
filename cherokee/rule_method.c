@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_method.h"
@@ -34,9 +34,9 @@
 
 PLUGIN_INFO_RULE_EASIEST_INIT(method);
 
-static ret_t 
-configure (cherokee_rule_method_t    *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_method_t    *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t              ret;
@@ -67,7 +67,7 @@ _free (void *p)
 	return ret_ok;
 }
 
-static ret_t 
+static ret_t
 match (cherokee_rule_method_t  *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
@@ -92,7 +92,7 @@ cherokee_rule_method_new (cherokee_rule_method_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(method));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

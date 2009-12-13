@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_fastcgi.h"
@@ -46,10 +46,10 @@ CGI_LIB_INIT (fastcgi, http_get | http_post | http_head);
 
 /* Methods implementation
  */
-static ret_t 
+static ret_t
 props_free (cherokee_handler_fastcgi_props_t *props)
 {
-	if (props->balancer != NULL) 
+	if (props->balancer != NULL)
 		cherokee_balancer_free (props->balancer);
 
 	/* TODO: Free the structure content
@@ -57,7 +57,7 @@ props_free (cherokee_handler_fastcgi_props_t *props)
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
-ret_t 
+ret_t
 cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
@@ -68,9 +68,9 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 	 */
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_fastcgi_props);
-		
-		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n), 
-							   MODULE_PROPS_FREE(props_free));		
+
+		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n),
+							   MODULE_PROPS_FREE(props_free));
 
 		INIT_LIST_HEAD (&n->fastcgi_env_ref);
 
@@ -90,7 +90,7 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "balancer")) {
-			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer);
 			if (ret != ret_ok)
 				return ret;
 
@@ -101,7 +101,7 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 				/* TODO : implement this */
 				subconf2 = subconf2;
 			}
-			
+
 		} else if (equal_buf_str (&subconf->key, "keepalive")) {
 			props->nkeepalive = atoi(subconf->val.buf);
 
@@ -142,14 +142,14 @@ fcgi_build_request_body (FCGI_BeginRequestRecord *request)
 	request->body.reserved[4] = 0;
 }
 
-static void 
-set_env_pair (cherokee_handler_cgi_base_t *cgi_base, 
-	      const char *key, int key_len, 
+static void
+set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
+	      const char *key, int key_len,
 	      const char *val, int val_len)
 {
 	int                         len;
 	FCGI_BeginRequestRecord     request;
-	cherokee_handler_fastcgi_t *hdl = HDL_FASTCGI(cgi_base);	
+	cherokee_handler_fastcgi_t *hdl = HDL_FASTCGI(cgi_base);
 	cherokee_buffer_t          *buf = &hdl->write_buffer;
 
 	len  = key_len + val_len;
@@ -201,12 +201,12 @@ read_from_fastcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	/* Does the connection belong to an old generation?
 	 */
 	if (hdl->generation != manager->generation) {
-		TRACE (ENTRIES, "id=%d, different generation: conn=%d, manager=%d.. EOF\n", 
+		TRACE (ENTRIES, "id=%d, different generation: conn=%d, manager=%d.. EOF\n",
 		       hdl->id, hdl->generation, manager->generation);
 
 		return ret_eof;
 	}
-		
+
 	/* Let the manager to some job
 	 */
 	ret = cherokee_fcgi_manager_step (manager);
@@ -227,7 +227,7 @@ read_from_fastcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn, hdl->manager->socket.socket, 0, true);
 		else
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn, hdl->manager->socket.socket, 0, false);
-			
+
 		return ret_eagain;
 
 	case ret_eof:
@@ -238,7 +238,7 @@ read_from_fastcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	}
 
 	SHOULDNT_HAPPEN;
-	return ret_error;	
+	return ret_error;
 }
 
 
@@ -246,10 +246,10 @@ ret_t
 cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_fastcgi);
-	
+
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(fastcgi), 
+	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(fastcgi),
 					HANDLER_PROPS(props), set_env_pair, read_from_fastcgi);
 
 	/* Virtual methods
@@ -284,11 +284,11 @@ cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	/* Return the object
 	 */
 	*hdl = HANDLER(n);
-	return ret_ok;	   
+	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_fastcgi_free (cherokee_handler_fastcgi_t *hdl)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
@@ -393,7 +393,7 @@ add_extra_fastcgi_env (cherokee_handler_fastcgi_t *hdl, cuint_t *last_header_off
 
 	/* PATH_INFO
 	 */
-	cherokee_buffer_clean (&buffer); 
+	cherokee_buffer_clean (&buffer);
 	cherokee_buffer_add_buffer (&buffer, &conn->local_directory);
 	if (conn->request.len > 0) {
 		cherokee_buffer_add (&buffer, conn->request.buf + 1, conn->request.len - 1);
@@ -431,7 +431,7 @@ fixup_padding (cherokee_buffer_t *buf, cuint_t last_header_offset)
 	rest        = buf->len % 8;
 	pad         = 8 - rest;
 
-	if (rest == 0) 
+	if (rest == 0)
 		return;
 
 	last_header->paddingLength = pad;
@@ -445,7 +445,7 @@ static void
 add_empty_packet (cherokee_handler_fastcgi_t *hdl, cuint_t type)
 {
 	FCGI_BeginRequestRecord  request;
-  
+
 	fcgi_build_header (&request.header, type, hdl->id, 0, 0);
 	cherokee_buffer_add (&hdl->write_buffer, (void *)&request.header, sizeof(FCGI_Header));
 
@@ -464,7 +464,7 @@ build_header (cherokee_handler_fastcgi_t *hdl)
 	cherokee_buffer_ensure_size (&hdl->write_buffer, 512);
 
 	/* FCGI_BEGIN_REQUEST
-	 */	
+	 */
 	fcgi_build_header (&request.header, FCGI_BEGIN_REQUEST, hdl->id, sizeof(request.body), 0);
 	fcgi_build_request_body (&request);
 
@@ -505,7 +505,7 @@ send_post (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buf)
 
 		if (hdl->post_len <= 0)
 			return ret_ok;
-		
+
 		hdl->post_phase = fcgi_post_read;
 
 	case fcgi_post_read:
@@ -528,7 +528,7 @@ send_post (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buf)
 		}
 
 		if (buf->len > sizeof(FCGI_Header)) {
-			fcgi_build_header ((FCGI_Header *)buf->buf, FCGI_STDIN, 
+			fcgi_build_header ((FCGI_Header *)buf->buf, FCGI_STDIN,
 				hdl->id, buf->len - sizeof(FCGI_Header), 0);
 		}
 
@@ -595,18 +595,18 @@ init_respin (cherokee_handler_fastcgi_t *hdl)
 	ret = cherokee_fcgi_manager_ensure_is_connected (hdl->manager, HANDLER_THREAD(hdl));
 	if (unlikely (ret != ret_ok))
 		return ret;
-	
+
 	ret = register_connection (hdl);
 	if (unlikely (ret != ret_ok))
 		return ret;
-	
+
 	HDL_CGI_BASE(hdl)->got_eof = false;
 	hdl->init_phase = fcgi_init_build_header;
-	return ret_eagain;			
+	return ret_eagain;
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 {
 	ret_t                        ret;
@@ -616,14 +616,14 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 	switch (hdl->init_phase) {
 	case fcgi_init_get_manager:
 		TRACE (ENTRIES, "id=? gen=?, Init phase = %s\n", "get_manager");
-		
+
 		/* Choose a server to connect to
 		 */
 		if (hdl->dispatcher == NULL) {
 			ret = get_dispatcher (hdl, &hdl->dispatcher);
 			if (unlikely (ret != ret_ok)) return ret;
 		}
-		
+
 		/* Register this connection with the manager
 		 */
 		ret = register_connection (hdl);
@@ -671,7 +671,7 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 			conn->error_code = http_bad_gateway;
 			return ret;
 		}
-		
+
 		hdl->init_phase = fcgi_init_send_post;
 
 	case fcgi_init_send_post:
@@ -682,14 +682,14 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 			return ret;
 
 		hdl->init_phase = fcgi_init_read;
-		
+
 	case fcgi_init_read:
  		TRACE (ENTRIES, "id=%d gen=%d, Init phase = read\n", hdl->id, hdl->generation);
 
 		ret = read_from_fastcgi (HDL_CGI_BASE(hdl), &HANDLER_CONN(hdl)->buffer);
 		switch (ret) {
 		case ret_eof:
-			if (cgi->got_eof) 
+			if (cgi->got_eof)
 				break;
 
 			return init_respin (hdl);
@@ -701,9 +701,9 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 		case ret_eagain:
 			if (cgi->data.len > 0)
 				break;
-			
+
 			return ret_eagain;
-			
+
 		default:
 			break;
 		}
@@ -713,7 +713,7 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 	case fcgi_init_end:
 		TRACE (ENTRIES, "id=%d gen=%d, Init finished\n", hdl->id, hdl->generation);
 		return ret_ok;
-		
+
 	default:
 		SHOULDNT_HAPPEN;
 	}

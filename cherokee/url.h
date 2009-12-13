@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -37,11 +37,11 @@
 CHEROKEE_BEGIN_DECLS
 
 
-typedef struct {	
+typedef struct {
 	cherokee_buffer_t  host;
 	cuint_t            port;
 	cherokee_buffer_t  request;
-	
+
 	enum {
 		http,
 		https

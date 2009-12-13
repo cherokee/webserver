@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_header.h"
@@ -36,8 +36,8 @@
 PLUGIN_INFO_RULE_EASIEST_INIT(header);
 
 
-static ret_t 
-match (cherokee_rule_header_t  *rule, 
+static ret_t
+match (cherokee_rule_header_t  *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
@@ -55,24 +55,24 @@ match (cherokee_rule_header_t  *rule,
 					 &info, &info_len);
 
 	if ((ret != ret_ok) || (info == NULL)) {
-		TRACE (ENTRIES, "Request '%s'; couldn't find header(%d)\n", 
+		TRACE (ENTRIES, "Request '%s'; couldn't find header(%d)\n",
 		       conn->request.buf, rule->header);
 		return ret_not_found;
 	}
 
 	/* Check whether it matches
 	 */
-	re = pcre_exec (rule->pcre, NULL, 
+	re = pcre_exec (rule->pcre, NULL,
 			info, info_len,
 			0, 0, NULL, 0);
 
 	if (re < 0) {
-		TRACE (ENTRIES, "Request '%s' didn't match header(%d) with '%s'\n", 
+		TRACE (ENTRIES, "Request '%s' didn't match header(%d) with '%s'\n",
 		       conn->request.buf, rule->header, rule->match.buf);
 		return ret_not_found;
 	}
 
-	TRACE (ENTRIES, "Request '%s' matched header(%d) with '%s'\n", 
+	TRACE (ENTRIES, "Request '%s' matched header(%d) with '%s'\n",
 	       conn->request.buf, rule->header, rule->match.buf);
 	return ret_ok;
 }
@@ -105,9 +105,9 @@ header_str_to_type (cherokee_buffer_t        *header,
 }
 
 
-static ret_t 
-configure (cherokee_rule_header_t    *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_header_t    *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
@@ -124,9 +124,9 @@ configure (cherokee_rule_header_t    *rule,
 	}
 
 	ret = header_str_to_type (header, &rule->header);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
-	
+
 	/* Read the match
 	 */
 	ret = cherokee_config_node_copy (conf, "match", &rule->match);
@@ -139,11 +139,11 @@ configure (cherokee_rule_header_t    *rule,
 	/* Compile the regular expression
 	 */
 	ret = cherokee_regex_table_add (regexs, rule->match.buf);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
-	
+
 	ret = cherokee_regex_table_get (regexs, rule->match.buf, &rule->pcre);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	return ret_ok;
@@ -167,7 +167,7 @@ cherokee_rule_header_new (cherokee_rule_header_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(header));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_RENDER_RRD_H
 #define CHEROKEE_HANDLER_RENDER_RRD_H
@@ -33,7 +33,7 @@
 typedef struct {
 	cherokee_module_props_t        base;
 	cherokee_boolean_t             disabled;
-	cherokee_handler_file_props_t *file_props;	
+	cherokee_handler_file_props_t *file_props;
 } cherokee_handler_render_rrd_props_t;
 
 typedef struct {

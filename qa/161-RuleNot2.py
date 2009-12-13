@@ -20,7 +20,7 @@ vserver!1610!rule!20!handler = cgi
 CGI = """#!/bin/sh
 
 echo "Content-Type: text/plain"
-echo 
+echo
 echo "%s"
 """ % (MAGIC)
 

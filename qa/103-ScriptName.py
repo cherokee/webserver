@@ -28,6 +28,6 @@ class Test (TestBase):
                         echo "Content-Type: text/plain"
                         echo
                         echo "SCRIPT_NAME = $SCRIPT_NAME"
-                        """) 
+                        """)
 
         self.conf = CONF % (VIRTUAL_DIR, d)

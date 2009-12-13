@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "logger_custom.h"
@@ -88,13 +88,13 @@ add_ip_local (cherokee_template_t       *template,
 
 	UNUSED (template);
 	UNUSED (token);
-	
+
 	if (! cherokee_buffer_is_empty (&conn->bind->ip)) {
 		cherokee_buffer_add_buffer (output, &conn->bind->ip);
 	} else {
 		cherokee_buffer_add_str (output, "-");
 	}
-	
+
 	return ret_ok;
 }
 
@@ -208,7 +208,7 @@ add_request_first_line (cherokee_template_t       *template,
 
 	UNUSED (template);
 	UNUSED (token);
-	
+
 	end = (conn->header.input_buffer->buf +
 	       conn->header.input_buffer->len);
 
@@ -217,7 +217,7 @@ add_request_first_line (cherokee_template_t       *template,
 
 	while ((*p != CHR_CR) && (*p != CHR_LF) && (p < end))
 		p++;
-	
+
 	cherokee_buffer_add (output,
 			     conn->header.input_buffer->buf,
 			     p - conn->header.input_buffer->buf);
@@ -247,7 +247,7 @@ add_time_secs (cherokee_template_t       *template,
 	UNUSED (template);
 	UNUSED (token);
 	UNUSED (param);
-	
+
 	return cherokee_buffer_add_long10 (output, cherokee_bogonow_now);
 }
 
@@ -275,7 +275,7 @@ add_user_remote (cherokee_template_t       *template,
 	UNUSED (template);
 	UNUSED (token);
 
-	if ((conn->validator) && 
+	if ((conn->validator) &&
 	    (! cherokee_buffer_is_empty (&conn->validator->user)))
 	{
 		cherokee_buffer_add_buffer (output, &conn->validator->user);
@@ -311,7 +311,7 @@ add_request_original (cherokee_template_t       *template,
 
 	UNUSED (template);
 	UNUSED (token);
-	
+
 	if (cherokee_buffer_is_empty (&conn->request_original)) {
 		cherokee_buffer_add_buffer (output, &conn->request);
 	} else  {
@@ -365,7 +365,7 @@ _set_template (cherokee_logger_custom_t *logger,
 	};
 
 	for (p=macros; p->name; p++) {
-		ret = cherokee_template_set_token (template, p->name, 
+		ret = cherokee_template_set_token (template, p->name,
 						   (cherokee_tem_repl_func_t) p->func,
 						   logger, NULL);
 		if (unlikely (ret != ret_ok)) {
@@ -410,8 +410,8 @@ _init_template (cherokee_logger_custom_t *logger,
 }
 
 
-static void 
-bogotime_callback (void *param) 
+static void
+bogotime_callback (void *param)
 {
 	struct tm                *pnow_tm;
 	cherokee_logger_custom_t *logger   = LOG_CUSTOM(param);
@@ -425,7 +425,7 @@ bogotime_callback (void *param)
 	}
 
 	/* Render the string
-	 */	
+	 */
 	cherokee_buffer_clean  (&now);
 	cherokee_buffer_add_va (&now,
 				"%02d/%s/%d:%02d:%02d:%02d %c%02d%02d",
@@ -494,7 +494,7 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_logger_custom_init (cherokee_logger_custom_t *logger)
 {
 	ret_t ret;
@@ -539,7 +539,7 @@ cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;
-	
+
 	/* Get the buffer
 	 */
 	cherokee_logger_writer_get_buf (logger->writer_access, &log);
@@ -554,7 +554,7 @@ cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
 	cherokee_buffer_add_char (log, '\n');
 
 	/* Flush buffer if full
-	 */  
+	 */
 	if (log->len < logger->writer_access->max_bufsize)
 		goto ok;
 
@@ -590,7 +590,7 @@ cherokee_logger_custom_write_string (cherokee_logger_custom_t *logger,
 	}
 
 	/* Flush buffer if full
-	 */  
+	 */
   	if (log->len < logger->writer_access->max_bufsize) {
 		goto ok;
 	}

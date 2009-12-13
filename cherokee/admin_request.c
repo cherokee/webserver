@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "admin_request.h"
@@ -38,17 +38,17 @@ struct cherokee_admin_request {
 ret_t cherokee_admin_request_new  (cherokee_admin_request_t **req)
 {
 	CHEROKEE_NEW_STRUCT (n, admin_request);
-	   
+
 	INIT_LIST_HEAD(&n->list);
 	cherokee_buffer_init (&n->req);
 	n->num = 0;
-	   
+
 	*req = n;
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_admin_request_free (cherokee_admin_request_t *req)
 {
 	cherokee_list_content_free (&req->list, free);
@@ -86,7 +86,7 @@ cherokee_admin_request_serialize (cherokee_admin_request_t *req)
 
 	/* Clean the list
 	 */
-	cherokee_list_content_free (&req->list, free);	   
+	cherokee_list_content_free (&req->list, free);
 	return ret_ok;
 }
 

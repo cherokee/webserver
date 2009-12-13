@@ -16,7 +16,7 @@ CGI = """#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo "X-Sendfile: %s"
-echo 
+echo
 echo "%s"
 """
 
@@ -37,6 +37,6 @@ class Test (TestBase):
     def Prepare (self, www):
         temp = self.WriteTemp (MAGIC)
         cgi  = CGI % (temp, DISCART)
-        
+
         d = self.Mkdir (www, DIR)
         f = self.WriteFile (d, FILE, 0755, cgi)

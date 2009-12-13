@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "trace.h"
@@ -41,14 +41,14 @@ typedef struct {
 
 
 static cherokee_trace_t trace = {
-	CHEROKEE_BUF_INIT, 
+	CHEROKEE_BUF_INIT,
 	false,
 	false,
 	false
 };
 
 
-ret_t 
+ret_t
 cherokee_trace_init (void)
 {
 	const char        *env;
@@ -57,19 +57,19 @@ cherokee_trace_init (void)
 	/* Read the environment variable
 	 */
 	env = getenv (TRACE_ENV);
-	if (env == NULL) 
+	if (env == NULL)
 		return ret_ok;
 
 	/* Set it up
 	 */
 	cherokee_buffer_fake (&tmp, env, strlen(env));
 	cherokee_trace_set_modules (&tmp);
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_trace_set_modules (cherokee_buffer_t *modules)
 {
 	/* Store a copy of the modules
@@ -79,7 +79,7 @@ cherokee_trace_set_modules (cherokee_buffer_t *modules)
 	if (cherokee_buffer_case_cmp_str (modules, "none") != 0) {
 		cherokee_buffer_add_buffer (&trace.modules, modules);
 	}
-	
+
 	/* Check the special properties
 	 */
 	trace.use_syslog   = (strstr (modules->buf, "syslog") != NULL);
@@ -90,7 +90,7 @@ cherokee_trace_set_modules (cherokee_buffer_t *modules)
 }
 
 
-ret_t 
+ret_t
 cherokee_trace_do_trace (const char *entry, const char *file, int line, const char *func, const char *fmt, ...)
 {
 	char               *p;
@@ -139,7 +139,7 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 
 	/* Return if trace entry didn't match with the configured list
 	 */
-	if (! do_log) 
+	if (! do_log)
 		goto out;
 
 	/* Format the message and log it:
@@ -155,7 +155,7 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 		cherokee_buf_add_bogonow (&entries, true);
 		cherokee_buffer_add_str  (&entries, "] ");
 	}
-	
+
 	cherokee_buffer_add_va (&entries, "%18s:%04d (%30s): ", file, line, func);
 
 	va_start (args, fmt);
@@ -180,7 +180,7 @@ out:
 }
 
 
-ret_t 
+ret_t
 cherokee_trace_get_trace (cherokee_buffer_t **buf_ref)
 {
 	if (buf_ref == NULL)

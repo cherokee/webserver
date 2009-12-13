@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -34,9 +34,9 @@
 PLUGIN_INFO_BALANCER_EASIEST_INIT (round_robin);
 
 
-ret_t 
-cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer, 
-					 cherokee_server_t      *srv, 
+ret_t
+cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer,
+					 cherokee_server_t      *srv,
 					 cherokee_config_node_t *conf)
 {
 	ret_t                            ret;
@@ -54,7 +54,7 @@ cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer,
 		LOG_CRITICAL_S (CHEROKEE_ERROR_BALANCER_EMPTY);
 		return ret_error;
 	}
- 
+
 	/* Set the current source pointer
 	 */
 	bal_rr->last_one = balancer->entries.next;
@@ -86,8 +86,8 @@ reactivate_entry (cherokee_balancer_entry_t *entry)
 }
 
 static ret_t
-dispatch (cherokee_balancer_round_robin_t *balancer, 
-	  cherokee_connection_t           *conn, 
+dispatch (cherokee_balancer_round_robin_t *balancer,
+	  cherokee_connection_t           *conn,
 	  cherokee_source_t              **src)
 {
 	cherokee_balancer_entry_t *entry;
@@ -125,7 +125,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 		}
 	} while (true);
 
-	/* Found */ 
+	/* Found */
 	*src = entry->source;
 
 	CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
@@ -134,8 +134,8 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 
 static ret_t
-report_fail (cherokee_balancer_round_robin_t *balancer, 
-	     cherokee_connection_t           *conn, 
+report_fail (cherokee_balancer_round_robin_t *balancer,
+	     cherokee_connection_t           *conn,
 	     cherokee_source_t               *src)
 {
 	ret_t                      ret;
@@ -169,7 +169,7 @@ report_fail (cherokee_balancer_round_robin_t *balancer,
 		cherokee_source_copy_name (entry->source, &tmp);
 		LOG_WARNING (CHEROKEE_ERROR_BALANCER_OFFLINE_SOURCE, tmp.buf);
 		cherokee_buffer_mrproper (&tmp);
-		
+
 		CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
 		return ret_ok;
 	}
@@ -183,12 +183,12 @@ out:
 }
 
 
-ret_t 
+ret_t
 cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 {
 	CHEROKEE_NEW_STRUCT (n, balancer_round_robin);
 
-	/* Init 	
+	/* Init
 	 */
 	cherokee_balancer_init_base (BAL(n), PLUGIN_INFO_PTR(round_robin));
 
@@ -209,7 +209,7 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 }
 
 
-ret_t      
+ret_t
 cherokee_balancer_round_robin_free (cherokee_balancer_round_robin_t *balancer)
 {
 	CHEROKEE_MUTEX_DESTROY (&balancer->mutex);

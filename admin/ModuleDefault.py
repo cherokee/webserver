@@ -11,7 +11,7 @@ class ModuleDefault (Module, FormHelper):
 
     def _op_render (self):
         return ""
-        
+
     def apply_cfg (self, values):
         None
 

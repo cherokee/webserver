@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "module.h"
 
-ret_t 
-cherokee_module_init_base (cherokee_module_t       *module, 
+ret_t
+cherokee_module_init_base (cherokee_module_t       *module,
 			   cherokee_module_props_t *props,
 			   cherokee_plugin_info_t  *info)
 {
@@ -45,7 +45,7 @@ cherokee_module_init_base (cherokee_module_t       *module,
 }
 
 
-ret_t 
+ret_t
 cherokee_module_get_name (cherokee_module_t *module, const char **name)
 {
 	if (module->info == NULL)
@@ -72,10 +72,10 @@ cherokee_module_props_init_base (cherokee_module_props_t *prop, module_func_prop
 }
 
 
-ret_t 
+ret_t
 cherokee_module_props_free (cherokee_module_props_t *prop)
 {
-	if (prop == NULL) 
+	if (prop == NULL)
 		return ret_error;
 
 	if (prop->free == NULL) {
@@ -88,7 +88,7 @@ cherokee_module_props_free (cherokee_module_props_t *prop)
 }
 
 
-ret_t 
+ret_t
 cherokee_module_props_free_base (cherokee_module_props_t *prop)
 {
 	free (prop);

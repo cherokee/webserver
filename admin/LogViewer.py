@@ -27,7 +27,7 @@ LOG_ENTRY_HTML = """
     $("#log_vsrv_%(vserver)s").load("/monitor/content/%(vserver)s");
   }
 
-  window.setInterval (function(){ 
+  window.setInterval (function(){
        log_%(vserver)s_reload();
   }, 1000 );
 
@@ -41,7 +41,7 @@ class LogViewerWidget (threading.Thread):
         # Create the thread
         threading.Thread.__init__ (self)
         self.setDaemon (1)
-        
+
         # File
         self.file     = None
         self.filename = filename
@@ -59,7 +59,7 @@ class LogViewerWidget (threading.Thread):
             self.file = open (self.filename, 'r')
         except IOError:
             return True
-        
+
         # Seek
         try:
             filesize = os.path.getsize (self.filename)
@@ -147,7 +147,7 @@ def init_log_readers (cfg):
     # Launch them
     for reader in widget_objs:
         reader.start()
-    
+
 
 class PageMonitor (PageMenu, FormHelper):
     def __init__ (self, cfg=None):
@@ -174,7 +174,7 @@ class PageMonitor (PageMenu, FormHelper):
             return render
         else:
             self._op_render()
-    
+
     def _op_render (self):
         content = SINGLE_TIME_HTML
 
@@ -188,7 +188,7 @@ class PageMonitor (PageMenu, FormHelper):
                  'log_file':  widget.filename,
                  'vserver':   vsrv})
             content += entry
-            
+
         self.AddMacroContent ('title',   _('Cherokee Web Server Monitor'))
         self.AddMacroContent ('content', content)
         return Page.Render(self)

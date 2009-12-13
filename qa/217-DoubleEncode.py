@@ -20,7 +20,7 @@ echo "Content-Type: text/plain"
 echo "Content-Encoding: gzip"
 echo
 cat %s
-""" 
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -40,11 +40,11 @@ class Test (TestBase):
             return -1
         return 0
 
-    def Prepare (self, www):        
+    def Prepare (self, www):
         d = self.Mkdir (www, DIR)
 
         g = gzip.open('%s/temp.gz'%(d), 'wb')
         g.write(MAGIC)
         g.close()
-        
+
         self.WriteFile (d, "file", 0755, CGI_BASE%("%s/temp.gz"%(d)))

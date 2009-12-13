@@ -49,7 +49,7 @@ class ModuleDbslayer (ModuleHandler):
         txt += '<h2>%s</h2>' % (_('Data base balancing'))
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload_Module (table, _("Balancer"), prefix, 
+        e = self.AddPropOptions_Reload_Module (table, _("Balancer"), prefix,
                                               modules_available(BALANCERS), _(NOTE_BALANCER))
         txt += self.Indent(str(table) + e)
         return txt

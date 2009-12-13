@@ -248,7 +248,7 @@ class PageVServers (PageMenu, FormHelper):
                         }
                       });
 
-                      function openSection(section) 
+                      function openSection(section)
                       {
                           document.cookie = "open_vssec="  + section;
                           if (prevSection != '') {
@@ -309,7 +309,7 @@ class PageVServers (PageMenu, FormHelper):
         txt += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone Virtual Server'))
         txt += '<div class="rulesbutton"><a id="wizardsection_b">%s</a></div>' % (_('Wizards'))
         txt += '</div>'
-        
+
         return txt
 
     def _render_wizards (self):
@@ -320,7 +320,7 @@ class PageVServers (PageMenu, FormHelper):
         table = '<table id="wizSel" class="rulestable"><tr><th>Category</th><th>Wizard</th></tr>'
         table += '<tr><td id="wizG"></td><td id="wizL"></td></table>'
 
-        if txt: 
+        if txt:
             txt = _("<h2>Wizards</h2>") + table + txt
 
         return txt
@@ -356,7 +356,7 @@ class PageVServers (PageMenu, FormHelper):
             return
 
         # Clone it
-        error = self._cfg.clone('vserver!%s'%(prio_source), 
+        error = self._cfg.clone('vserver!%s'%(prio_source),
                                 'vserver!%s'%(prio_target))
         if not error:
             self._cfg['vserver!%s!nick'%(prio_target)] = nick_target

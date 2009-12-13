@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -31,26 +31,26 @@
 #define ENTRIES "config"
 
 
-/* Implements _new() and _free() 
+/* Implements _new() and _free()
  */
 CHEROKEE_ADD_FUNC_NEW  (config_node);
 CHEROKEE_ADD_FUNC_FREE (config_node);
 
 
-ret_t 
+ret_t
 cherokee_config_node_init (cherokee_config_node_t *conf)
 {
 	INIT_LIST_HEAD (&conf->entry);
 	INIT_LIST_HEAD (&conf->child);
-	
+
 	cherokee_buffer_init (&conf->key);
 	cherokee_buffer_init (&conf->val);
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_mrproper (cherokee_config_node_t *conf)
 {
 	cherokee_list_t *i, *j;
@@ -92,14 +92,14 @@ add_new_child (cherokee_config_node_t *entry, cherokee_buffer_t *key)
 	ret = cherokee_config_node_new (&n);
 	if (ret != ret_ok) return NULL;
 
-	cherokee_buffer_add_buffer (&n->key, key);	   
+	cherokee_buffer_add_buffer (&n->key, key);
 
 	cherokee_list_add_tail (LIST(n), &entry->child);
 	return n;
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *val)
 {
 	char                   *sep;
@@ -108,7 +108,7 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 	const char             *begin   = key;
 	cherokee_buffer_t       tmp     = CHEROKEE_BUF_INIT;
 	cherokee_boolean_t      final   = false;
-	
+
 	/* 'include' is a special case
 	 */
 	if (equal_str (key, "include")) {
@@ -155,7 +155,7 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_add_buf (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_buffer_t *val)
 {
 	return cherokee_config_node_add (conf, key->buf, val);
@@ -203,20 +203,20 @@ cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cheroke
 		cherokee_buffer_clean (&tmp);
 
 	} while (! final);
-       
+
 	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_get_buf (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_config_node_t **entry)
 {
 	return cherokee_config_node_get (conf, key->buf, entry);
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_while (cherokee_config_node_t *conf, cherokee_config_node_while_func_t func, void *data)
 {
 	ret_t            ret;
@@ -231,7 +231,7 @@ cherokee_config_node_while (cherokee_config_node_t *conf, cherokee_config_node_w
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_read (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf)
 {
 	ret_t                   ret;
@@ -245,12 +245,12 @@ cherokee_config_node_read (cherokee_config_node_t *conf, const char *key, cherok
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_copy (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *buf)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp = NULL;
-	
+
 	ret = cherokee_config_node_read (conf, key, &tmp);
 	if (ret != ret_ok) return ret;
 
@@ -258,7 +258,7 @@ cherokee_config_node_copy (cherokee_config_node_t *conf, const char *key, cherok
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_read_int (cherokee_config_node_t *conf, const char *key, int *num)
 {
 	ret_t                   ret;
@@ -272,7 +272,7 @@ cherokee_config_node_read_int (cherokee_config_node_t *conf, const char *key, in
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_read_long (cherokee_config_node_t *conf, const char *key, long *num)
 {
 	ret_t                   ret;
@@ -286,7 +286,7 @@ cherokee_config_node_read_long (cherokee_config_node_t *conf, const char *key, l
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_read_bool (cherokee_config_node_t *conf, const char *key, cherokee_boolean_t *val)
 {
 	ret_t ret;
@@ -300,7 +300,7 @@ cherokee_config_node_read_bool (cherokee_config_node_t *conf, const char *key, c
 }
 
 
-ret_t 
+ret_t
 cherokee_config_node_read_path (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf)
 {
 	ret_t                   ret;
@@ -321,10 +321,10 @@ cherokee_config_node_read_path (cherokee_config_node_t *conf, const char *key, c
 }
 
 
-ret_t 
-cherokee_config_node_read_list (cherokee_config_node_t           *conf, 
-				const char                       *key, 
-				cherokee_config_node_list_func_t  func, 
+ret_t
+cherokee_config_node_read_list (cherokee_config_node_t           *conf,
+				const char                       *key,
+				cherokee_config_node_list_func_t  func,
 				void                             *param)
 {
 	ret_t                   ret;
@@ -350,17 +350,17 @@ cherokee_config_node_read_list (cherokee_config_node_t           *conf,
 
 		stop = strchr (ptr, ',');
 		if (stop != NULL) *stop = '\0';
-	
+
 		ret = func (ptr, param);
 		if (ret != ret_ok) return ret;
-		
+
 		if (stop == NULL)
 			break;
-		
+
 		*stop = ',';
 		ptr = stop + 1;
 	}
-	
+
 	return ret_ok;
 }
 

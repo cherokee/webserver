@@ -13,7 +13,7 @@ class TestHandler (SCGIHandler):
     def handle_request (self):
         self.send('Content-Type: text/plain\\r\\n\\r\\n')
         self.send('%s\\n')
-        
+
 SCGIServerFork(TestHandler, port=%d).serve_forever()
 """ % (MAGIC, PORT)
 

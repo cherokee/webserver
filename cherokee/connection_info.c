@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -31,7 +31,7 @@
 #include "handler_file.h"
 
 
-ret_t 
+ret_t
 cherokee_connection_info_new (cherokee_connection_info_t **info)
 {
 	CHEROKEE_NEW_STRUCT(n, connection_info);
@@ -54,7 +54,7 @@ cherokee_connection_info_new (cherokee_connection_info_t **info)
 }
 
 
-ret_t 
+ret_t
 cherokee_connection_info_free (cherokee_connection_info_t *info)
 {
 	cherokee_buffer_mrproper (&info->id);
@@ -73,7 +73,7 @@ cherokee_connection_info_free (cherokee_connection_info_t *info)
 }
 
 
-ret_t 
+ret_t
 cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 				  cherokee_connection_t      *conn)
 {
@@ -91,51 +91,51 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 	switch (conn->phase) {
 	case phase_nothing:
 		phase = phase_nothing;
-		cherokee_buffer_add_str (&info->phase, "Unknown"); 
+		cherokee_buffer_add_str (&info->phase, "Unknown");
 		break;
 	case phase_switching_headers:
 		phase = phase_switching_headers;
-		cherokee_buffer_add_str (&info->phase, "Switching headers"); 
+		cherokee_buffer_add_str (&info->phase, "Switching headers");
 		break;
 	case phase_tls_handshake:
 		phase = phase_tls_handshake;
-		cherokee_buffer_add_str (&info->phase, "TLS Handshake"); 
+		cherokee_buffer_add_str (&info->phase, "TLS Handshake");
 		break;
 	case phase_reading_header:
 		phase = phase_reading_header;
-		cherokee_buffer_add_str (&info->phase, "Reading header"); 
+		cherokee_buffer_add_str (&info->phase, "Reading header");
 		break;
 	case phase_processing_header:
 		phase = phase_processing_header;
-		cherokee_buffer_add_str (&info->phase, "Processing headers"); 
+		cherokee_buffer_add_str (&info->phase, "Processing headers");
 		break;
 	case phase_read_post:
 		phase = phase_read_post;
-		cherokee_buffer_add_str (&info->phase, "Reading Post"); 
+		cherokee_buffer_add_str (&info->phase, "Reading Post");
 		break;
 	case phase_setup_connection:
 		phase = phase_setup_connection;
-		cherokee_buffer_add_str (&info->phase, "Setting up connection"); 
+		cherokee_buffer_add_str (&info->phase, "Setting up connection");
 		break;
 	case phase_init:
 		phase = phase_init;
-		cherokee_buffer_add_str (&info->phase, "Initializing"); 
+		cherokee_buffer_add_str (&info->phase, "Initializing");
 		break;
 	case phase_add_headers:
 		phase = phase_add_headers;
-		cherokee_buffer_add_str (&info->phase, "Adding headers"); 
+		cherokee_buffer_add_str (&info->phase, "Adding headers");
 		break;
 	case phase_send_headers:
 		phase = phase_send_headers;
-		cherokee_buffer_add_str (&info->phase, "Sending headers"); 
+		cherokee_buffer_add_str (&info->phase, "Sending headers");
 		break;
 	case phase_steping:
 		phase = phase_steping;
-		cherokee_buffer_add_str (&info->phase, "Sending body"); 
+		cherokee_buffer_add_str (&info->phase, "Sending body");
 		break;
 	case phase_lingering:
 		phase = phase_lingering;
-		cherokee_buffer_add_str (&info->phase, "Closing"); 
+		cherokee_buffer_add_str (&info->phase, "Closing");
 		break;
 	default:
 		SHOULDNT_HAPPEN;
@@ -157,7 +157,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 
 	} else if (! cherokee_buffer_is_empty (&conn->request)) {
 		cherokee_buffer_add_buffer (&info->request, &conn->request);
-	} 
+	}
 
 	/* Transference
 	 */
@@ -168,7 +168,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 	 */
 	if (conn->handler != NULL) {
 		cherokee_module_get_name (MODULE(conn->handler), &handler_name);
-		
+
 		if (handler_name)
 			cherokee_buffer_add (&info->handler, handler_name, strlen(handler_name));
 	}
@@ -178,22 +178,22 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 	if (handler_name && !strcmp (handler_name, "file")) {
 		char                    *point;
 		double                   percent;
-		cherokee_handler_file_t *file = HDL_FILE(conn->handler);		
+		cherokee_handler_file_t *file = HDL_FILE(conn->handler);
 
 		/* File size
 		 */
 		cherokee_buffer_add_va (&info->total_size, FMT_OFFSET, (CST_OFFSET)file->info->st_size);
-		
-		/* Percent	
+
+		/* Percent
 		 */
 		percent = (CST_OFFSET)conn->tx * (double)100 / (CST_OFFSET)file->info->st_size;
 		cherokee_buffer_add_va (&info->percent, "%f", percent);
-		
+
 		point = strchr (info->percent.buf, '.');
-		if (point != NULL) 
-			cherokee_buffer_drop_ending (&info->percent, (info->percent.buf + info->percent.len) - (point + 2)); 
+		if (point != NULL)
+			cherokee_buffer_drop_ending (&info->percent, (info->percent.buf + info->percent.len) - (point + 2));
 	}
-	
+
 	/* Local icon
 	 */
 	if ((icons != NULL) &&
@@ -206,13 +206,13 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 		cherokee_buffer_add_buffer (&name, &info->request);
 
 		tmp = strchr (name.buf, '?');
-		if (tmp != NULL) 
+		if (tmp != NULL)
 			cherokee_buffer_drop_ending (&name, (name.buf + name.len) - tmp);
 
 		tmp = strrchr (name.buf, '/');
-		if (tmp != NULL) 
+		if (tmp != NULL)
 			cherokee_buffer_move_to_begin (&name, tmp - name.buf);
-		
+
 		ret = cherokee_icons_get_icon (icons, &name, &icon);
 		if (ret == ret_ok)
 			cherokee_buffer_add_buffer (&info->icon, icon);
@@ -224,7 +224,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 }
 
 
-ret_t 
+ret_t
 cherokee_connection_info_list_thread (cherokee_list_t    *list,
 				      void               *_thread,
 				      cherokee_handler_t *self_handler)
@@ -280,7 +280,7 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 }
 
 
-ret_t 
+ret_t
 cherokee_connection_info_list_server (cherokee_list_t    *list,
 				      cherokee_server_t  *server,
 				      cherokee_handler_t *self)

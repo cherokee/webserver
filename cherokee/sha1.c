@@ -70,7 +70,7 @@ typedef unsigned long ULONG;
     A = T32(R32(B,5) + f##n(C,D,E) + T + *WP++ + CONST##n); C = R32(C,30)
 
 
-static void 
+static void
 sha_transform (SHA_INFO *sha_info)
 {
 	int i;
@@ -203,7 +203,7 @@ void sha_init(SHA_INFO *sha_info)
 
 /* update the SHA digest */
 
-void 
+void
 sha_update (SHA_INFO *sha_info, U8 *buffer, int count)
 {
 	int i;
@@ -267,7 +267,7 @@ static void sha_transform_and_copy(unsigned char digest[20], SHA_INFO *sha_info)
 }
 
 /* finish computing the SHA digest */
-void 
+void
 sha_final (SHA_INFO *sha_info, unsigned char digest[20])
 {
 	int count;

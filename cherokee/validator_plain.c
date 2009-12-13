@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "validator_plain.h"
@@ -36,14 +36,14 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (plain, http_auth_basic | http_auth_digest);
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_validator_plain_props_t *props)
 {
 	return cherokee_validator_file_props_free_base (PROP_VFILE(props));
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
 				    cherokee_server_t        *srv,
 				    cherokee_module_props_t **_props)
@@ -67,13 +67,13 @@ cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_plain_new (cherokee_validator_plain_t **plain,
 			      cherokee_module_props_t     *props)
-{	
+{
 	CHEROKEE_NEW_STRUCT(n,validator_plain);
 
-	/* Init 		
+	/* Init
 	 */
 	cherokee_validator_file_init_base (VFILE(n),
 					   PROP_VFILE(props),
@@ -92,14 +92,14 @@ cherokee_validator_plain_new (cherokee_validator_plain_t **plain,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_plain_free (cherokee_validator_plain_t *plain)
 {
 	return cherokee_validator_file_free_base (VFILE(plain));
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 				cherokee_connection_t      *conn)
 {
@@ -113,7 +113,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 	cherokee_buffer_t  bpass = CHEROKEE_BUF_INIT;
 
 	/* Sanity check */
-	if (unlikely ((conn->validator == NULL) || 
+	if (unlikely ((conn->validator == NULL) ||
 	    cherokee_buffer_is_empty(&conn->validator->user))) {
 		return ret_error;
 	}
@@ -142,7 +142,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 	while (p < end) {
 		char *eol;
 		char *colon;
-		
+
 		/* Look for the EOL
 		 */
 		eol = strchr (p, '\n');
@@ -166,7 +166,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 		 */
 		cherokee_buffer_clean (&buser);
 		cherokee_buffer_add (&buser, p, colon - p);
-		
+
 		re = cherokee_buffer_cmp_buf (&buser, &conn->validator->user);
 		if (re != 0)
 			goto next;
@@ -179,7 +179,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 		switch (conn->req_auth_type) {
 		case http_auth_basic:
 			/* Empty password
-			 */			 
+			 */
 			if (cherokee_buffer_is_empty (&bpass) &&
 			    cherokee_buffer_is_empty (&conn->validator->passwd)) {
 				ret = ret_ok;
@@ -189,7 +189,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 			/* Check the passwd
 			 */
 			re = cherokee_buffer_cmp_buf (&bpass, &conn->validator->passwd);
-			if (re != 0) 
+			if (re != 0)
 				ret = ret_deny;
 			goto out;
 
@@ -209,7 +209,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 	next:
 		p = eol + 1;
 
-		/* Reached the end without success 
+		/* Reached the end without success
 		 */
 		if (p >= end) {
 			ret = ret_deny;
@@ -225,7 +225,7 @@ out:
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_plain_add_headers (cherokee_validator_plain_t *plain, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(plain);

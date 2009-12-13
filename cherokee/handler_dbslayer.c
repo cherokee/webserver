@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_dbslayer.h"
@@ -83,7 +83,7 @@ send_query (cherokee_handler_dbslayer_t *hdl)
 	}
 
 	cherokee_buffer_clean (tmp);
-	cherokee_buffer_add   (tmp, 
+	cherokee_buffer_add   (tmp,
 			       conn->request.buf + len,
 			       conn->request.len - len);
 
@@ -166,14 +166,14 @@ cherokee_handler_dbslayer_init (cherokee_handler_dbslayer_t *hdl)
 		if (ret != ret_ok)
 			return ret;
 	}
-	
+
 	/* Connect to the MySQL server
 	 */
 	ret = connect_to_database(hdl);
 	if (unlikely (ret != ret_ok))
 		return ret;
-	
-	/* Send query: 
+
+	/* Send query:
 	 * Do not check whether it failed, ::step() will do
 	 * it and send an error message if needed.
 	 */
@@ -184,7 +184,7 @@ cherokee_handler_dbslayer_init (cherokee_handler_dbslayer_t *hdl)
 
 
 static ret_t
-dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl, 
+dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl,
 		      cherokee_buffer_t           *buffer)
 {
 	switch (HANDLER_DBSLAYER_PROPS(hdl)->lang) {
@@ -207,7 +207,7 @@ dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl,
 
 	return ret_ok;
 }
-	
+
 
 static ret_t
 render_empty_result (cherokee_handler_dbslayer_t *hdl)
@@ -215,7 +215,7 @@ render_empty_result (cherokee_handler_dbslayer_t *hdl)
 	cherokee_dwriter_dict_open (&hdl->writer);
 	add_cstr_int (&hdl->writer, "SUCCESS", true);
 	add_cstr_int (&hdl->writer, "AFFECTED_ROWS", mysql_affected_rows(hdl->conn));
-	add_cstr_int (&hdl->writer, "INSERT_ID", mysql_insert_id (hdl->conn));	
+	add_cstr_int (&hdl->writer, "INSERT_ID", mysql_insert_id (hdl->conn));
 	cherokee_dwriter_dict_close (&hdl->writer);
 
 	return ret_ok;
@@ -230,13 +230,13 @@ render_result (cherokee_handler_dbslayer_t *hdl,
 	MYSQL_ROW    row;
 	MYSQL_FIELD *fields;
 	char        *tmp;
-	
+
 #define	TYPE2S(n)							\
 	case MYSQL_TYPE_ ## n:						\
 		cherokee_dwriter_cstring (&hdl->writer,			\
 					  "MYSQL_TYPE_"#n);		\
 	break
-	
+
 #define	BLOB_TYPE2S(n)							\
 	case MYSQL_TYPE_ ## n:						\
 		if (fields[i].charsetnr == 63)				\
@@ -266,7 +266,7 @@ render_result (cherokee_handler_dbslayer_t *hdl,
 	 * Blobs: http://www.mysql.org/doc/refman/5.1/en/c-api-datatypes.html
 	 */
 	cherokee_dwriter_cstring (&hdl->writer, "TYPES");
-	cherokee_dwriter_list_open (&hdl->writer);	
+	cherokee_dwriter_list_open (&hdl->writer);
 	for(i = 0; i < num_fields; i++) {
 		switch(fields[i].type) {
 			TYPE2S(TINY);
@@ -297,25 +297,25 @@ render_result (cherokee_handler_dbslayer_t *hdl,
 			BLOB_TYPE2S(MEDIUM_BLOB);
 			BLOB_TYPE2S(LONG_BLOB);
 		default:
-			cherokee_dwriter_cstring (&hdl->writer, "MYSQL_TYPE_UNKNOWN"); 
+			cherokee_dwriter_cstring (&hdl->writer, "MYSQL_TYPE_UNKNOWN");
 		}
-	}	
+	}
 	cherokee_dwriter_list_close (&hdl->writer);
-	
+
 	/* Headers
 	 */
 	cherokee_dwriter_cstring (&hdl->writer, "HEADER");
-	cherokee_dwriter_list_open (&hdl->writer);	
+	cherokee_dwriter_list_open (&hdl->writer);
 	for(i = 0; i < num_fields; i++) {
 		tmp = fields[i].name;
-		cherokee_dwriter_string (&hdl->writer, tmp, strlen(tmp)); 
-	}	
-	cherokee_dwriter_list_close (&hdl->writer);	
+		cherokee_dwriter_string (&hdl->writer, tmp, strlen(tmp));
+	}
+	cherokee_dwriter_list_close (&hdl->writer);
 
 	/* Data
 	 */
 	cherokee_dwriter_cstring (&hdl->writer, "ROWS");
-	cherokee_dwriter_list_open (&hdl->writer);	
+	cherokee_dwriter_list_open (&hdl->writer);
 
 	while (true) {
 		row = mysql_fetch_row (result);
@@ -355,8 +355,8 @@ render_result (cherokee_handler_dbslayer_t *hdl,
 			case MYSQL_TYPE_BLOB:
 			case MYSQL_TYPE_TINY_BLOB:
 			case MYSQL_TYPE_MEDIUM_BLOB:
-			case MYSQL_TYPE_LONG_BLOB:				
-				if ((row[i] == NULL) || 
+			case MYSQL_TYPE_LONG_BLOB:
+				if ((row[i] == NULL) ||
 				    (fields[i].charsetnr == 63))
 				{
 					cherokee_dwriter_null (&hdl->writer);
@@ -377,9 +377,9 @@ render_result (cherokee_handler_dbslayer_t *hdl,
 		}
 		cherokee_dwriter_list_close (&hdl->writer);
 	}
-	cherokee_dwriter_list_close (&hdl->writer);	
+	cherokee_dwriter_list_close (&hdl->writer);
 
-       
+
 	cherokee_dwriter_dict_close (&hdl->writer);
 	cherokee_dwriter_dict_close (&hdl->writer);
 
@@ -417,7 +417,7 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 			render_result (hdl, result);
 			mysql_free_result (result);
 		}
-		
+
 		re = mysql_next_result (hdl->conn);
 		if (re > 0) {
 			handle_error (hdl);
@@ -442,12 +442,12 @@ dbslayer_free (cherokee_handler_dbslayer_t *hdl)
 }
 
 ret_t
-cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl, 
+cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 			       void                    *cnt,
 			       cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_dbslayer);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(dbslayer));
@@ -455,12 +455,12 @@ cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_dbslayer_init;
 	MODULE(n)->free         = (module_func_free_t) dbslayer_free;
 	HANDLER(n)->step        = (handler_func_step_t) dbslayer_step;
-	HANDLER(n)->add_headers = (handler_func_add_headers_t) dbslayer_add_headers; 
+	HANDLER(n)->add_headers = (handler_func_add_headers_t) dbslayer_add_headers;
 
 	/* Supported features
 	 */
 	HANDLER(n)->support     = hsupport_nothing;
-	
+
 	/* Properties
 	 */
 	n->src_ref  = NULL;
@@ -480,12 +480,12 @@ cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 }
 
 
-static ret_t 
+static ret_t
 props_free  (cherokee_handler_dbslayer_props_t *props)
 {
 	if (props->balancer)
 		cherokee_balancer_free (props->balancer);
-	
+
 	cherokee_buffer_mrproper (&props->user);
 	cherokee_buffer_mrproper (&props->password);
 	cherokee_buffer_mrproper (&props->db);
@@ -494,21 +494,21 @@ props_free  (cherokee_handler_dbslayer_props_t *props)
 }
 
 
-ret_t 
-cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf, 
+ret_t
+cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 				     cherokee_server_t       *srv,
 				     cherokee_module_props_t **_props)
 {
 	ret_t                              ret;
 	cherokee_list_t                   *i;
 	cherokee_handler_dbslayer_props_t *props;
-	
+
 	/* Instance a new property object
 	 */
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_dbslayer_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+		cherokee_handler_props_init_base (HANDLER_PROPS(n),
 						  MODULE_PROPS_FREE(props_free));
 		n->balancer = NULL;
 		cherokee_buffer_init (&n->user);
@@ -518,7 +518,7 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 		*_props = MODULE_PROPS(n);
 	}
 
-	props = PROP_DBSLAYER(*_props);	
+	props = PROP_DBSLAYER(*_props);
 
 	/* Parse the configuration tree
 	 */
@@ -526,7 +526,7 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "balancer")) {
-			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer);
 			if (ret != ret_ok)
 				return ret;
 
@@ -557,7 +557,7 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 				LOG_CRITICAL (CHEROKEE_ERROR_HANDLER_DBSLAYER_LANG, subconf->val.buf);
 				return ret_error;
 			}
-		} 
+		}
 	}
 
 	/* Final checks

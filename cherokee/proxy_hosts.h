@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_PROXY_HOST_H
 #define CHEROKEE_HANDLER_PROXY_HOST_H
@@ -88,7 +88,7 @@ ret_t cherokee_handler_proxy_poll_new       (cherokee_handler_proxy_poll_t  **po
 					     cuint_t                          reuse_max);
 ret_t cherokee_handler_proxy_poll_free      (cherokee_handler_proxy_poll_t   *poll);
 ret_t cherokee_handler_proxy_poll_get       (cherokee_handler_proxy_poll_t   *poll,
-					     cherokee_handler_proxy_conn_t  **pconn, 
+					     cherokee_handler_proxy_conn_t  **pconn,
 					     cherokee_source_t               *src);
 
 
@@ -104,7 +104,7 @@ ret_t cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *
 
 /* Utils
  */
-ret_t cherokee_proxy_util_init_socket          (cherokee_socket_t *socket, 
+ret_t cherokee_proxy_util_init_socket          (cherokee_socket_t *socket,
 						cherokee_source_t *src);
 
 #endif /* CHEROKEE_HANDLER_PROXY_HOSTS_H */

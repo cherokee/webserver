@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_request.h"
@@ -35,7 +35,7 @@
 PLUGIN_INFO_RULE_EASIEST_INIT(request);
 
 
-static ret_t 
+static ret_t
 match (cherokee_rule_request_t *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
@@ -67,23 +67,23 @@ match (cherokee_rule_request_t *rule,
 
 	/* Evaluate the pcre
 	 */
-	re = pcre_exec (rule->pcre, NULL, 
-			conn->request.buf, 
-			conn->request.len, 
-			0, 0, 
+	re = pcre_exec (rule->pcre, NULL,
+			conn->request.buf,
+			conn->request.len,
+			0, 0,
 			conn->regex_ovector, OVECTOR_LEN);
 
 	if (re < 0) {
-		TRACE (ENTRIES, "Request \"%s\" didn't match with \"%s\"\n", 
+		TRACE (ENTRIES, "Request \"%s\" didn't match with \"%s\"\n",
 		       conn->request.buf, rule->pattern.buf);
 
 		ret = ret_not_found;
 		goto restore;
-	}	
+	}
 
 	conn->regex_ovecsize = re;
 
-	TRACE (ENTRIES, "Request \"%s\" matches with \"%s\", ovecsize=%d\n", 
+	TRACE (ENTRIES, "Request \"%s\" matches with \"%s\", ovecsize=%d\n",
 	       conn->request.buf, rule->pattern.buf, conn->regex_ovecsize);
 
 	ret = ret_ok;
@@ -97,9 +97,9 @@ restore:
 }
 
 
-static ret_t 
-configure (cherokee_rule_request_t   *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_request_t   *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
@@ -117,11 +117,11 @@ configure (cherokee_rule_request_t   *rule,
 	/* Add it to the regular extension table
 	 */
 	ret = cherokee_regex_table_add (regexs, rule->pattern.buf);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
-	
+
 	ret = cherokee_regex_table_get (regexs, rule->pattern.buf, &rule->pcre);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	return ret_ok;
@@ -146,7 +146,7 @@ cherokee_rule_request_new (cherokee_rule_request_t  **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(request));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

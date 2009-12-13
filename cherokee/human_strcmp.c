@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "human_strcmp.h"
@@ -28,7 +28,7 @@
 #include <ctype.h>
 
 
-static int 
+static int
 parsenum (const char *a, const char **a_ret)
 {
 	int result = *a - '0';
@@ -44,7 +44,7 @@ parsenum (const char *a, const char **a_ret)
 
 	/* Return the new pointer
 	 */
-	if (a_ret) 
+	if (a_ret)
 		*a_ret = a - 1;
 
 	/* .. and the number
@@ -53,7 +53,7 @@ parsenum (const char *a, const char **a_ret)
 }
 
 
-int 
+int
 cherokee_human_strcmp (const char *a, const char *b)
 {
 	int a0;
@@ -81,9 +81,9 @@ cherokee_human_strcmp (const char *a, const char *b)
 		else
 			b0 = tolower(*b);
 
-		if (a0 < b0) 
+		if (a0 < b0)
 			return -1;
-		if (a0 > b0) 
+		if (a0 > b0)
 			return 1;
 
 		a++;
@@ -94,5 +94,5 @@ cherokee_human_strcmp (const char *a, const char *b)
 	if (*b) return -1;
 
 	return 0;
-	   
+
 }

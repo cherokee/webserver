@@ -16,7 +16,7 @@ class Test (TestBase):
 
         self.request          = "GET /%s/foo HTTP/1.0\r\n" % (DIR)
         self.expected_error   = 200
-        self.expected_content = ["Content-Type: image/gif", 
+        self.expected_content = ["Content-Type: image/gif",
                                  "GIF89a", "\x4c\x01\x00\x3B"]
         self.conf             = CONF
 

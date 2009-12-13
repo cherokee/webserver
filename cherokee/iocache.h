@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -95,7 +95,7 @@ ret_t cherokee_iocache_autoget         (cherokee_iocache_t        *iocache,
 ret_t cherokee_iocache_autoget_fd      (cherokee_iocache_t        *iocache,
 					cherokee_buffer_t         *file,
 					cherokee_iocache_info_t    info,
-					int                       *fd, 
+					int                       *fd,
 					cherokee_iocache_entry_t **ret_io);
 
 /* Misc */

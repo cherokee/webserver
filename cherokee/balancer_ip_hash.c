@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -38,9 +38,9 @@
 PLUGIN_INFO_BALANCER_EASIEST_INIT (ip_hash);
 
 
-ret_t 
-cherokee_balancer_ip_hash_configure (cherokee_balancer_t    *balancer, 
-				     cherokee_server_t      *srv, 
+ret_t
+cherokee_balancer_ip_hash_configure (cherokee_balancer_t    *balancer,
+				     cherokee_server_t      *srv,
 				     cherokee_config_node_t *conf)
 {
 	ret_t                        ret;
@@ -59,11 +59,11 @@ cherokee_balancer_ip_hash_configure (cherokee_balancer_t    *balancer,
 		LOG_CRITICAL_S (CHEROKEE_ERROR_BALANCER_EMPTY);
 		return ret_error;
 	}
- 
+
 	/* Set the current source pointer
 	 */
 	bal_ip->last_one = balancer->entries.next;
-	
+
 	/* Count active
 	 */
 	list_for_each (i, &BAL(balancer)->entries) {
@@ -103,8 +103,8 @@ reactivate_entry (cherokee_balancer_ip_hash_t *balancer,
 
 
 static ret_t
-report_fail (cherokee_balancer_ip_hash_t *balancer, 
-	     cherokee_connection_t       *conn, 
+report_fail (cherokee_balancer_ip_hash_t *balancer,
+	     cherokee_connection_t       *conn,
 	     cherokee_source_t           *src)
 {
 	ret_t                      ret;
@@ -156,8 +156,8 @@ out:
 
 
 static ret_t
-dispatch (cherokee_balancer_ip_hash_t  *balancer, 
-	  cherokee_connection_t        *conn, 
+dispatch (cherokee_balancer_ip_hash_t  *balancer,
+	  cherokee_connection_t        *conn,
 	  cherokee_source_t           **src)
 {
 	cint_t                     n;
@@ -167,16 +167,16 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	cherokee_balancer_entry_t *entry  = NULL;
 	culong_t                   hash   = 0;
 	cherokee_socket_t         *socket = &conn->socket;
-	
+
 	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
-	
+
 	/* Hash(ip)
 	 */
 #ifdef HAVE_IPV6
 	if (SOCKET_AF(socket) == AF_INET6) {
 		ip     = (char *)&SOCKET_ADDRESS_IPv6(socket);
 		ip_len = 16;
-	} else 
+	} else
 #endif
 	{
 		ip     = (char *)&SOCKET_ADDRESS_IPv4(socket);
@@ -202,7 +202,7 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 
 	n = (hash % balancer->n_active);
 	TRACE(ENTRIES, "Chosen active server number %d\n", n);
-	
+
 	/* Pick the entry
 	 */
 	list_for_each (i, &BAL(balancer)->entries) {
@@ -221,7 +221,7 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 		n--;
 	}
 
-	/* Found */ 
+	/* Found */
 	if (unlikely (entry == NULL))
 		goto error;
 
@@ -236,12 +236,12 @@ error:
 }
 
 
-ret_t 
+ret_t
 cherokee_balancer_ip_hash_new (cherokee_balancer_t **bal)
 {
 	CHEROKEE_NEW_STRUCT (n, balancer_ip_hash);
 
-	/* Init 	
+	/* Init
 	 */
 	cherokee_balancer_init_base (BAL(n), PLUGIN_INFO_PTR(ip_hash));
 
@@ -264,7 +264,7 @@ cherokee_balancer_ip_hash_new (cherokee_balancer_t **bal)
 }
 
 
-ret_t      
+ret_t
 cherokee_balancer_ip_hash_free (cherokee_balancer_ip_hash_t *balancer)
 {
 	CHEROKEE_MUTEX_DESTROY (&balancer->mutex);

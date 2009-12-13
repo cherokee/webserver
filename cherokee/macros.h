@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -65,7 +65,7 @@
 # define not_ok(x)   __builtin_expect(x != ret_ok, 0)
 # define lt_ok(x)    __builtin_expect(x <  ret_ok, 0)
 #else
-# define likely(x)   (x) 
+# define likely(x)   (x)
 # define unlikely(x) (x)
 # define not_ok(x)   (x != ret_ok)
 # define lt_ok(x)    (x <  ret_ok)
@@ -81,8 +81,8 @@
 #if __GNUC_VERSION >= 30000
 # define must_check  __attribute__ ((warn_unused_result))
 # define no_return   __attribute__ ((noreturn))
-#else 
-# define must_check  
+#else
+# define must_check
 # define no_return
 #endif
 
@@ -138,7 +138,7 @@
 #endif
 
 #define CSZLEN(str) (sizeof(str) - 1)
-  
+
 #define LF_LF     "\n\n"        /* EOHs (End Of Headers) */
 #define CRLF_CRLF "\r\n\r\n"    /* EOHs (End Of Headers) */
 #define CRLF      "\r\n"        /* EOH (End Of Header Line) */
@@ -232,7 +232,7 @@
 
 #define CHEROKEE_NEW_TYPE(obj,type) \
 	type * obj = (type *) malloc(sizeof(type)); \
-	return_if_fail (obj != NULL, ret_nomem)	
+	return_if_fail (obj != NULL, ret_nomem)
 
 /* We assume to have a C ANSI free().
  */
@@ -299,7 +299,7 @@
 # else
 #  define PRINT_DEBUG(fmt,...) do { fprintf(stdout, "%s:%d - " fmt,__FILE__,__LINE__,__VA_ARGS__); fflush(stdout); } while (0)
 # endif
-#else 
+#else
 # ifdef __GNUC__
 #  define PRINT_DEBUG(fmt,arg...) do { } while(0)
 # else
@@ -349,7 +349,7 @@
 # define FMT_OFFSET_HEX "%lx"
 # define CST_OFFSET unsigned long
 #else
-# error Unknown size of off_t 
+# error Unknown size of off_t
 #endif
 
 #if (SIZEOF_SIZE_T == SIZEOF_UNSIGNED_INT)
@@ -361,7 +361,7 @@
 # define FMT_SIZE_HEX "%llx"
 # define CST_SIZE unsigned long long
 #else
-# error Unknown size of size_t 
+# error Unknown size of size_t
 #endif
 
 

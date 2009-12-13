@@ -2,7 +2,7 @@ import os, re, sys
 
 # Cherokee Project:
 # Error generation and check
-# 
+#
 # This script loads a error definition file, and generates .h and .c
 # from it. It also checks whether all the errors are actually being
 # used, look for undefined errors, and check that the number of
@@ -12,7 +12,7 @@ import os, re, sys
 SOURCE_DIRS = ['.', '../cget']
 
 #
-# Error reading 
+# Error reading
 #
 class CherokeeError:
     def __init__ (self, **kwargs):
@@ -28,7 +28,7 @@ _errors = []
 
 def e (error_id, title, **kwargs):
     global _errors
-    
+
     # Check dup. errors
     for err in _errors:
         if error_id == err.id:
@@ -58,7 +58,7 @@ def check_source_code (dirs):
             if not fullpath.endswith('.c') or \
                not os.path.isfile(fullpath):
                 continue
-                
+
             # Check the source code
             content = open (fullpath, 'r').read()
             for e in re.findall (r'CHEROKEE_ERROR_([\w_]+)[ ,)]', content):
@@ -133,7 +133,7 @@ def check_parameters (dirs):
                         break
                     for param in internal_params:
                         tmp = tmp.replace(param, '')
-                
+
                 params_num = len (filter (lambda x: len(x), tmp.split(',')))
                 source_errors_params[error] = params_num
 
@@ -175,7 +175,7 @@ HEADER = """/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 /* NOTE: File automatically generated (from  error_list.py). */
 

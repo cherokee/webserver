@@ -24,7 +24,7 @@ class ModuleFullpath (Module, FormHelper):
 
         txt = ""
         pre = '%s!fullpath'%(self._prefix)
-        
+
         table = Table (2)
         first = True
         for k in self._cfg.keys(pre):

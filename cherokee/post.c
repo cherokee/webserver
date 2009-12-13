@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "post.h"
@@ -34,7 +34,7 @@
 #define ENTRIES "post"
 
 
-ret_t 
+ret_t
 cherokee_post_init (cherokee_post_t *post)
 {
 	post->type              = post_undefined;
@@ -48,15 +48,15 @@ cherokee_post_init (cherokee_post_t *post)
 
 	post->chunked_last      = false;
 	post->chunked_processed = 0;
-	
+
 	cherokee_buffer_init (&post->info);
 	cherokee_buffer_init (&post->tmp_file);
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_post_mrproper (cherokee_post_t *post)
 {
 	int re;
@@ -72,16 +72,16 @@ cherokee_post_mrproper (cherokee_post_t *post)
 	post->chunked_last      = false;
 	post->chunked_processed = 0;
 
-	
+
 	if (post->tmp_file_fd != -1) {
 		close (post->tmp_file_fd);
 		post->tmp_file_fd = -1;
 	}
-	
+
 	if (! cherokee_buffer_is_empty (&post->tmp_file)) {
 		re = unlink (post->tmp_file.buf);
 		if (unlikely (re != 0)) {
-			LOG_ERRNO (errno, cherokee_err_error, 
+			LOG_ERRNO (errno, cherokee_err_error,
 				   CHEROKEE_ERROR_POST_REMOVE_TEMP, post->tmp_file.buf);
 		}
 
@@ -95,7 +95,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 }
 
 
-ret_t 
+ret_t
 cherokee_post_set_len (cherokee_post_t *post, off_t len)
 {
 	ret_t ret;
@@ -160,7 +160,7 @@ cherokee_post_got_all (cherokee_post_t *post)
 }
 
 
-ret_t 
+ret_t
 cherokee_post_get_len (cherokee_post_t *post, off_t *len)
 {
 	*len = post->size;
@@ -168,7 +168,7 @@ cherokee_post_get_len (cherokee_post_t *post, off_t *len)
 }
 
 
-ret_t 
+ret_t
 cherokee_post_append (cherokee_post_t *post, const char *str, size_t len, size_t *written)
 {
 	if ((post->size > 0) &&
@@ -188,7 +188,7 @@ cherokee_post_append (cherokee_post_t *post, const char *str, size_t len, size_t
 
 
 static ret_t
-process_chunk (cherokee_post_t *post, 
+process_chunk (cherokee_post_t *post,
 	       off_t            start_at,
 	       off_t           *processed)
 {
@@ -225,10 +225,10 @@ process_chunk (cherokee_post_t *post,
 		/* Read the length */
 		content_size = (off_t) strtoul (begin, &p, 16);
 		p += 2;
-		
+
 		if (unlikely (content_size < 0))
 			return ret_error;
-		
+
 		/* Check if there's enough info */
 		if (content_size == 0)
 			post->chunked_last = true;
@@ -262,7 +262,7 @@ process_chunk (cherokee_post_t *post,
 }
 
 
-ret_t 
+ret_t
 cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 {
 	ret_t   ret;
@@ -284,7 +284,7 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 		if (processed <= 0) {
 			return ret_ok;
 		}
-		
+
 		/* Store the processed info */
 		switch (post->type) {
 		case post_undefined:
@@ -299,12 +299,12 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 		case post_in_tmp_file:
 			if (post->tmp_file_fd == -1)
 				return ret_error;
-			
+
 			written = write (post->tmp_file_fd, post->info.buf, processed);
 			if (unlikely ((written < 0) || (written < processed))) {
 				return ret_error;
 			}
-						 
+
 			cherokee_buffer_move_to_begin (&post->info, (cuint_t)written);
 
 			post->chunked_processed -= written;
@@ -335,7 +335,7 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 		if (unlikely (post->tmp_file_fd == -1))
 			return ret_error;
 
-		written = write (post->tmp_file_fd, post->info.buf, post->info.len); 
+		written = write (post->tmp_file_fd, post->info.buf, post->info.len);
 		if (unlikely ((written < 0) || (written < processed))) {
 			return ret_error;
 		}
@@ -351,7 +351,7 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 }
 
 
-ret_t 
+ret_t
 cherokee_post_walk_reset (cherokee_post_t *post)
 {
 	post->walk_offset = 0;
@@ -364,7 +364,7 @@ cherokee_post_walk_reset (cherokee_post_t *post)
 }
 
 
-ret_t 
+ret_t
 cherokee_post_walk_finished (cherokee_post_t *post)
 {
 	ret_t ret;
@@ -391,7 +391,7 @@ post_read_file_step (cherokee_post_t *post)
 	int r;
 
 	cherokee_buffer_ensure_size (&post->info, DEFAULT_READ_SIZE+1);
-	
+
 	/* Read from the temp file is needed
 	 */
 	if (!cherokee_buffer_is_empty (&post->info))
@@ -405,13 +405,13 @@ post_read_file_step (cherokee_post_t *post)
 		/* Couldn't read */
 		return ret_error;
 	}
-	
+
 	post->info.len    = r;
 	post->info.buf[r] = '\0';
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mode)
 {
 	ret_t   ret;
@@ -437,8 +437,8 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 				return ret_eagain;
 
 			TRACE(ENTRIES, "errno %d: %s\n", err, strerror(err));
-			return  ret_error; 			
-		} 
+			return  ret_error;
+		}
 
 		TRACE(ENTRIES, "wrote %d bytes from memory\n", r);
 
@@ -465,8 +465,8 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 			}
 
 			TRACE(ENTRIES, "errno %d\n", errno);
-			return ret_error;	
-		} 
+			return ret_error;
+		}
 		else if (r == 0)
 			return ret_eagain;
 
@@ -493,7 +493,7 @@ cherokee_post_walk_to_socket (cherokee_post_t *post, cherokee_socket_t *socket)
 
 	switch (post->type) {
 	case post_in_memory:
-		ret = cherokee_socket_write (socket, 
+		ret = cherokee_socket_write (socket,
 					     post->info.buf + post->walk_offset,
 					     post->info.len - post->walk_offset,
 					     &written);
@@ -522,12 +522,12 @@ cherokee_post_walk_to_socket (cherokee_post_t *post, cherokee_socket_t *socket)
 		SHOULDNT_HAPPEN;
 		return ret_error;
 	}
-	
+
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_post_walk_read (cherokee_post_t *post, cherokee_buffer_t *buf, cuint_t len)
 {
 	ssize_t ur;

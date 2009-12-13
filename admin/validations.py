@@ -121,12 +121,12 @@ def is_ipv4 (value):
 
 def is_ipv6 (value):
     from socket import inet_pton, AF_INET6
-    try: 
+    try:
         tmp = inet_pton(AF_INET6, value)
     except:
         raise ValueError, _('Malformed IPv6')
     return value
-    
+
 def is_local_dir_exists (value, cfg, nochroot=False):
     value = is_path (value)
 
@@ -318,4 +318,4 @@ def is_new_host (value, cfg, nochroot):
             raise ValueError, _('Virtual host nick is already being used.')
     return value
 
-            
+

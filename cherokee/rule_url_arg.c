@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "rule_url_arg.h"
@@ -49,12 +49,12 @@ check_argument (cherokee_rule_url_arg_t *rule,
 			0, 0, NULL, 0);
 
 	if (re < 0) {
-		TRACE (ENTRIES, "Parameter value '%s' didn't match with '%s'\n", 
+		TRACE (ENTRIES, "Parameter value '%s' didn't match with '%s'\n",
 		       value->buf, rule->match.buf);
 		return ret_not_found;
 	}
 
-	TRACE (ENTRIES, "Parameter value '%s' matched with '%s'\n", 
+	TRACE (ENTRIES, "Parameter value '%s' matched with '%s'\n",
 	       value->buf, rule->match.buf);
 
 	return ret_ok;
@@ -88,13 +88,13 @@ match_avl_func (cherokee_buffer_t *key, void *val, void *param)
 }
 
 
-static ret_t 
-match (cherokee_rule_url_arg_t  *rule, 
+static ret_t
+match (cherokee_rule_url_arg_t  *rule,
        cherokee_connection_t    *conn,
        cherokee_config_entry_t  *ret_conf)
 {
 	ret_t              ret;
-	cherokee_buffer_t *value; 
+	cherokee_buffer_t *value;
 
 	UNUSED(ret_conf);
 
@@ -119,7 +119,7 @@ match (cherokee_rule_url_arg_t  *rule,
 		}
 
 		return check_argument (rule, value);
-	} 
+	}
 
 	/* Check all arguments
 	 */
@@ -134,9 +134,9 @@ match (cherokee_rule_url_arg_t  *rule,
 }
 
 
-static ret_t 
-configure (cherokee_rule_url_arg_t   *rule, 
-	   cherokee_config_node_t    *conf, 
+static ret_t
+configure (cherokee_rule_url_arg_t   *rule,
+	   cherokee_config_node_t    *conf,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
@@ -158,11 +158,11 @@ configure (cherokee_rule_url_arg_t   *rule,
 	/* Compile the regular expression
 	 */
 	ret = cherokee_regex_table_add (regexs, rule->match.buf);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
-	
+
 	ret = cherokee_regex_table_get (regexs, rule->match.buf, &rule->pcre);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	return ret_ok;
@@ -188,7 +188,7 @@ cherokee_rule_url_arg_new (cherokee_rule_url_arg_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(url_arg));
-	
+
 	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

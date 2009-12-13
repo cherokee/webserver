@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "vrule_target_ip.h"
@@ -34,7 +34,7 @@
 PLUGIN_INFO_VRULE_EASIEST_INIT(target_ip);
 
 
-static ret_t 
+static ret_t
 match (cherokee_vrule_target_ip_t *vrule,
        cherokee_buffer_t          *host,
        cherokee_connection_t      *conn)
@@ -55,10 +55,10 @@ match (cherokee_vrule_target_ip_t *vrule,
 		return ret_error;
 
 	/* Copy the server IP
-	 */	
+	 */
 	sock.client_addr_len = conn->socket.client_addr_len;
 
-	re = getsockname (SOCKET_FD(&conn->socket), 
+	re = getsockname (SOCKET_FD(&conn->socket),
 			  (struct sockaddr *) &(sock.client_addr),
 			  &sock.client_addr_len);
 	if (re != 0) {
@@ -83,9 +83,9 @@ deny:
 	return ret_deny;
 }
 
-static ret_t 
-configure (cherokee_vrule_target_ip_t   *vrule, 
-	   cherokee_config_node_t       *conf, 
+static ret_t
+configure (cherokee_vrule_target_ip_t   *vrule,
+	   cherokee_config_node_t       *conf,
 	   cherokee_virtual_server_t    *vsrv)
 {
 	ret_t                   ret;
@@ -98,8 +98,8 @@ configure (cherokee_vrule_target_ip_t   *vrule,
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_VRULE_NO_PROPERTY, VRULE(vrule)->priority, "to");
 		return ret_error;
-	} 
-	
+	}
+
 	cherokee_config_node_foreach (i, subconf) {
 		cherokee_config_node_t *subconf2 = CONFIG_NODE(i);
 
@@ -117,7 +117,7 @@ static ret_t
 _free (void *p)
 {
 	cherokee_vrule_target_ip_t *vrule = p;
-	
+
 	cherokee_access_mrproper (&vrule->access);
 	return ret_ok;
 }

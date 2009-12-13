@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "init.h"
@@ -43,7 +43,7 @@ cherokee_null_bool_t cherokee_readable_errors;
 
 static cherokee_boolean_t _cherokee_init = false;
 
-ret_t 
+ret_t
 cherokee_init (void)
 {
 	ret_t ret;
@@ -53,7 +53,7 @@ cherokee_init (void)
 
 #ifdef _WIN32
 	init_win32();
-#endif	
+#endif
 
 	/* Init the tracing facility
 	 */

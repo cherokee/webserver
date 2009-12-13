@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "bind.h"
@@ -101,7 +101,7 @@ build_strings (cherokee_bind_t         *listener,
 	 */
 	cherokee_socket_ntop (&listener->socket, server_ip, sizeof(server_ip)-1);
 	cherokee_buffer_add (&listener->server_address, server_ip, strlen(server_ip));
-	
+
 	/* server_port
 	 */
 	cherokee_buffer_add_va (&listener->server_port, "%d", listener->port);
@@ -164,7 +164,7 @@ set_socket_opts (int socket)
 	ret = cherokee_fd_set_closexec (socket);
 	if (ret != ret_ok)
 		return ret;
-		
+
 	/* To re-bind without wait to TIME_WAIT. It prevents 2MSL
 	 * delay on accept.
 	 */
@@ -190,7 +190,7 @@ set_socket_opts (int socket)
 	setsockopt (socket, SOL_SOCKET, TCP_MAXSEG, &on, sizeof(on));
 
 	/* Do no check the returned value */
-#endif	
+#endif
 
 	/* SO_LINGER:
 	 * Don't want to block on calls to close.
@@ -206,16 +206,16 @@ set_socket_opts (int socket)
 	/* TCP_DEFER_ACCEPT:
 	 * Allows a listener to be awakened only when data arrives on the socket.
 	 * Takes an integer value (seconds), this can bound the maximum number of
-	 * attempts TCP will make to complete the connection. This option should 
+	 * attempts TCP will make to complete the connection. This option should
 	 * not be used in code intended to be portable.
 	 *
-	 * Give clients 5s to send first data packet 
+	 * Give clients 5s to send first data packet
 	 */
 #ifdef TCP_DEFER_ACCEPT
 	on = 5;
 	setsockopt (socket, SOL_TCP, TCP_DEFER_ACCEPT, &on, sizeof(on));
 #endif
-	
+
 	/* SO_ACCEPTFILTER:
 	 * FreeBSD accept filter for HTTP:
 	 *
@@ -275,22 +275,22 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 	{
 		ret = ret_not_found;
 	}
-	
+
 	if (ret != ret_ok) {
 		ret = init_socket (listener, AF_INET);
 
 		if (ret != ret_ok) {
-			LOG_CRITICAL (CHEROKEE_ERROR_BIND_COULDNT_BIND_PORT, 
+			LOG_CRITICAL (CHEROKEE_ERROR_BIND_COULDNT_BIND_PORT,
 				      listener->port, getuid(), getgid());
 			return ret_error;
 		}
 	}
 
 	/* Set no-delay mode:
-	 * If no clients are waiting, accept() will return -1 immediately 
+	 * If no clients are waiting, accept() will return -1 immediately
 	 */
 	ret = cherokee_fd_set_nodelay (listener->socket.socket, true);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	/* Listen

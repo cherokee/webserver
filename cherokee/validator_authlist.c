@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "validator_authlist.h"
@@ -73,7 +73,7 @@ entry_free (entry_t *entry)
 }
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_validator_authlist_props_t *props)
 {
 	cherokee_list_t *i, *j;
@@ -97,7 +97,7 @@ add_new_user (cherokee_validator_authlist_props_t *props,
 	ret = entry_new (&entry);
 	if (ret != ret_ok)
 		return ret;
-	
+
 	ret = cherokee_config_node_read (conf, "user", &tmp);
 	if (ret != ret_ok) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_AUTHLIST_USER, conf->val.buf);
@@ -118,7 +118,7 @@ add_new_user (cherokee_validator_authlist_props_t *props,
 	return ret_ok;
 }
 
-ret_t 
+ret_t
 cherokee_validator_authlist_configure (cherokee_config_node_t   *conf,
 				       cherokee_server_t        *srv,
 				       cherokee_module_props_t **_props)
@@ -159,7 +159,7 @@ out:
 }
 
 
-static ret_t 
+static ret_t
 authlist_free (cherokee_validator_authlist_t *authlist)
 {
 	cherokee_validator_free_base (VALIDATOR(authlist));
@@ -167,7 +167,7 @@ authlist_free (cherokee_validator_authlist_t *authlist)
 }
 
 
-static ret_t 
+static ret_t
 authlist_check (cherokee_validator_authlist_t *authlist,
 		cherokee_connection_t         *conn)
 {
@@ -198,14 +198,14 @@ authlist_check (cherokee_validator_authlist_t *authlist,
 
 			/* Check the real password
 			 */
-			re = cherokee_buffer_cmp_buf (&entry->password, 
+			re = cherokee_buffer_cmp_buf (&entry->password,
 						      &conn->validator->passwd);
-			if (re == 0) 
+			if (re == 0)
 				return ret_ok;
 			break;
 
 		case http_auth_digest:
-			ret = cherokee_validator_digest_check (VALIDATOR(authlist), 
+			ret = cherokee_validator_digest_check (VALIDATOR(authlist),
 							       &entry->password, conn);
 			if (ret == ret_ok)
 				return ret;
@@ -220,7 +220,7 @@ authlist_check (cherokee_validator_authlist_t *authlist,
 }
 
 
-static ret_t 
+static ret_t
 authlist_add_headers (cherokee_validator_authlist_t *authlist,
 		      cherokee_connection_t         *conn,
 		      cherokee_buffer_t             *buf)
@@ -233,13 +233,13 @@ authlist_add_headers (cherokee_validator_authlist_t *authlist,
 }
 
 
-ret_t 
+ret_t
 cherokee_validator_authlist_new (cherokee_validator_authlist_t **authlist,
 				 cherokee_module_props_t        *props)
-{	
+{
 	CHEROKEE_NEW_STRUCT(n,validator_authlist);
 
-	/* Init 		
+	/* Init
 	 */
 	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(authlist));
 	VALIDATOR(n)->support = http_auth_basic | http_auth_digest;

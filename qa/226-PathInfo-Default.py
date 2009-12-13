@@ -52,7 +52,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         scgi_file = self.WriteFile (www, "test226.scgi", 0444, SCRIPT)
-        
+
         pyscgi = os.path.join (www, 'pyscgi.py')
         if not os.path.exists (pyscgi):
             self.CopyFile ('pyscgi.py', pyscgi)

@@ -16,7 +16,7 @@ def app (environ, start_response):
     for k in environ:
           resp += '%%s: %%s\\n' %% (k, environ[k])
     return [resp]
- 
+
 WSGIServer(app, bindAddress=("localhost",%d)).run()
 """ % (PORT)
 

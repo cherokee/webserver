@@ -1,4 +1,4 @@
-import validations 
+import validations
 
 from Form import *
 from Table import *

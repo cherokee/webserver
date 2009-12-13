@@ -20,14 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "info.h"
 #include "plugin_loader.h"
 #include "server-protected.h"
 
-void 
+void
 cherokee_info_build_print (cherokee_server_t *srv)
 {
 	cherokee_buffer_t builtin = CHEROKEE_BUF_INIT;

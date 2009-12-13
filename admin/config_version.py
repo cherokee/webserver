@@ -47,7 +47,7 @@ def config_version_cfg_is_up_to_date (cfg):
 
     elif int(ver_config) == int(ver_cherokee):
         return True
-    
+
     else:
         return False
 
@@ -69,7 +69,7 @@ def config_version_update_cfg (cfg):
     if ver_config_i < 99031:
         upgrade_to_0_99_31 (cfg)
 
-    # Update to.. 0.99.xx    
+    # Update to.. 0.99.xx
 
     cfg["config!version"] = ver_release_s
     return True

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "logger_combined.h"
 #include "logger_ncsa.h"
@@ -39,7 +39,7 @@ cherokee_logger_combined_new (cherokee_logger_t         **logger,
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n, logger_combined);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(combined), config);
@@ -70,11 +70,11 @@ cherokee_logger_combined_new (cherokee_logger_t         **logger,
  */
 static cherokee_boolean_t _combined_is_init = false;
 
-void                                                        
-PLUGIN_INIT_NAME(name) (cherokee_plugin_loader_t *loader)   
-{                                                           
+void
+PLUGIN_INIT_NAME(name) (cherokee_plugin_loader_t *loader)
+{
 	if (_combined_is_init) return;
 	_combined_is_init = true;
 
 	cherokee_plugin_loader_load (loader, "ncsa");
-}                                                           
+}

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_HANDLER_SCGI_H
 #define CHEROKEE_HANDLER_SCGI_H
@@ -54,7 +54,7 @@ typedef struct {
 #define PROP_SCGI(x)          ((cherokee_handler_scgi_props_t *)(x))
 #define HANDLER_SCGI_PROPS(x) (PROP_SCGI(MODULE(x)->props))
 
- 
+
 /* Library init function
  */
 void PLUGIN_INIT_NAME(scgi)      (cherokee_plugin_loader_t *loader);

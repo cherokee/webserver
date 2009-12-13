@@ -1,5 +1,5 @@
 import os
-import validations 
+import validations
 
 from Form import *
 from Table import *
@@ -32,7 +32,7 @@ class ModuleDirlist (ModuleHandler):
         'user', 'group',
         'theme', 'icon_dir',
         'notice_files', 'symlinks',
-        'redir_symlinks', 'hidden', 
+        'redir_symlinks', 'hidden',
         'backup'
     ]
 

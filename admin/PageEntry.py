@@ -30,7 +30,7 @@ DATA_VALIDATION = [
     ("vserver!(\d+)!rule!(\d+)!allow_from",      validations.is_ip_or_netmask_list),
     ("vserver!(\d+)!rule!(\d+)!rate",            validations.is_number_gt_0),
     ("vserver!(\d+)!rule!(\d+)!timeout",         validations.is_number_gt_0),
-    ("vserver!(\d+)!rule!(\d+)!expiration!time", validations.is_time) 
+    ("vserver!(\d+)!rule!(\d+)!expiration!time", validations.is_time)
 ]
 
 HELPS = [

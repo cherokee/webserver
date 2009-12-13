@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
@@ -57,12 +57,12 @@ _free (cherokee_fdpoll_poll_t *fdp)
 		return ret_ok;
 
 	free (fdp->pollfds);
-	free (fdp->fdidx);      
+	free (fdp->fdidx);
 
 	/* Caller has to set this pointer to NULL.
 	 */
 	free (fdp);
-        
+
 	return ret_ok;
 }
 
@@ -80,11 +80,11 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 	}
 
 	fdp->pollfds[nfd->npollfds].fd      = fd;
-	fdp->pollfds[nfd->npollfds].revents = 0; 
+	fdp->pollfds[nfd->npollfds].revents = 0;
 
 	switch (rw) {
 	case FDPOLL_MODE_READ:
-		fdp->pollfds[nfd->npollfds].events = POLLIN; 
+		fdp->pollfds[nfd->npollfds].events = POLLIN;
 		break;
 	case FDPOLL_MODE_WRITE:
 		fdp->pollfds[nfd->npollfds].events = POLLOUT;
@@ -142,8 +142,8 @@ _del (cherokee_fdpoll_poll_t *fdp, int fd)
 	 */
 	fdp->fdidx[fd]                      = -1;
 	fdp->pollfds[nfd->npollfds].fd      = -1;
-	fdp->pollfds[nfd->npollfds].events  = 0; 
-	fdp->pollfds[nfd->npollfds].revents = 0; 
+	fdp->pollfds[nfd->npollfds].events  = 0;
+	fdp->pollfds[nfd->npollfds].revents = 0;
 
 	return ret_ok;
 }
@@ -165,7 +165,7 @@ _check (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 			return revents & POLL_READ;
 		case FDPOLL_MODE_WRITE:
 			return revents & POLL_WRITE;
-		default: 
+		default:
 			SHOULDNT_HAPPEN;
 			return -1;
 	}
@@ -229,7 +229,7 @@ fdpoll_poll_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 	nfd->reset     = (fdpoll_func_reset_t) _reset;
 	nfd->set_mode  = (fdpoll_func_set_mode_t) _set_mode;
 	nfd->check     = (fdpoll_func_check_t) _check;
-	nfd->watch     = (fdpoll_func_watch_t) _watch;	
+	nfd->watch     = (fdpoll_func_watch_t) _watch;
 
 	/* Get memory: pollfds structs
 	 */

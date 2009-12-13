@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_ssi.h"
@@ -106,7 +106,7 @@ cherokee_handler_ssi_configure (cherokee_config_node_t   *conf,
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_ssi_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
+		cherokee_module_props_init_base (MODULE_PROPS(n),
 						 MODULE_PROPS_FREE(props_free));
 		n->foo = 1;
 		*_props = MODULE_PROPS(n);
@@ -122,7 +122,7 @@ get_pair (cherokee_buffer_t *key,
 	  cherokee_buffer_t *pair)
 {
 	char *i = key->buf;
-	
+
 	while ((*i != ' ') && *i)
 		i++;
 
@@ -185,7 +185,7 @@ parse (cherokee_handler_ssi_t *hdl,
 	while (true) {
 		begin = q;
 
-		/* Check the end 
+		/* Check the end
 		 */
 		if (q >= in->buf + in->len)
 			break;
@@ -201,7 +201,7 @@ parse (cherokee_handler_ssi_t *hdl,
 		q = strstr (p + 5, "-->");
 		if (q == NULL)
 			return ret_error;
-		
+
 		len = q - p;
 		len -= 5;
 
@@ -241,7 +241,7 @@ parse (cherokee_handler_ssi_t *hdl,
 		switch (op) {
 		case op_size:
 		case op_include:
-		case op_lastmod:			
+		case op_lastmod:
 			/* Read a property key
 			 */
 			cherokee_buffer_move_to_begin (&key, len);
@@ -249,7 +249,7 @@ parse (cherokee_handler_ssi_t *hdl,
 
 			cherokee_buffer_clean (&pair);
 			get_pair (&key, &pair);
-			
+
 			cherokee_buffer_drop_ending (&key, pair.len);
 			cherokee_buffer_trim (&key);
 
@@ -269,7 +269,7 @@ parse (cherokee_handler_ssi_t *hdl,
 			cherokee_buffer_clean (&fpath);
 
 			switch (path) {
-			case path_file:			  
+			case path_file:
 				cherokee_buffer_add_buffer (&fpath, &hdl->dir);
 				cherokee_buffer_add_char   (&fpath, '/');
 				cherokee_buffer_add_buffer (&fpath, &val);
@@ -286,7 +286,7 @@ parse (cherokee_handler_ssi_t *hdl,
 			default:
 				SHOULDNT_HAPPEN;
 			}
-			
+
 			/* Path security check: ensure that the file
 			 * to include is inside the document root.
 			 */
@@ -295,7 +295,7 @@ parse (cherokee_handler_ssi_t *hdl,
 
 				if (fpath.len < HANDLER_VSRV(hdl)->root.len) {
 					ignore = true;
-				
+
 				}  else {
 					re = strncmp (fpath.buf,
 						      HANDLER_VSRV(hdl)->root.buf,
@@ -312,7 +312,7 @@ parse (cherokee_handler_ssi_t *hdl,
 				switch (op) {
 				case op_include:
 					TRACE(ENTRIES, "Including file '%s'\n", fpath.buf);
-					cherokee_buffer_read_file (out, fpath.buf);				
+					cherokee_buffer_read_file (out, fpath.buf);
 					break;
 
 				case op_size:
@@ -323,13 +323,13 @@ parse (cherokee_handler_ssi_t *hdl,
 					}
 					break;
 
-				case op_lastmod:	
+				case op_lastmod:
 					TRACE(ENTRIES, "Including file modification date '%s'\n", fpath.buf);
 					re = cherokee_stat (fpath.buf, &info);
 					if (re >= 0) {
 						char tmp[50];
 
-						strftime (tmp, sizeof(tmp), 
+						strftime (tmp, sizeof(tmp),
 							  "%d-%b-%Y %H:%M",
 							  localtime(&info.st_mtime));
 						cherokee_buffer_add (out, tmp, strlen(tmp));
@@ -363,13 +363,13 @@ init (cherokee_handler_ssi_t *hdl,
 	re = stat (local_path->buf, &hdl->cache_info);
 	if (re < 0) {
 		switch (errno) {
-		case ENOENT: 
+		case ENOENT:
 			conn->error_code = http_not_found;
 			break;
-		case EACCES: 
+		case EACCES:
 			conn->error_code = http_access_denied;
 			break;
-		default:     
+		default:
 			conn->error_code = http_internal_error;
 		}
 		return ret_error;
@@ -417,7 +417,7 @@ cherokee_handler_ssi_init (cherokee_handler_ssi_t *hdl)
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 	ret = init (hdl, &conn->local_directory);
-	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);	
+	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 
 	return ret;
 }
@@ -462,7 +462,7 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 		ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &hdl->mime);
 		if (ret == ret_ok) {
 			cherokee_mime_entry_get_type (hdl->mime, &mime);
-		
+
 			cherokee_buffer_add_str    (buffer, "Content-Type: ");
 			cherokee_buffer_add_buffer (buffer, mime);
 			cherokee_buffer_add_str    (buffer, CRLF);

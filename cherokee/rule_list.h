@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -47,7 +47,7 @@ ret_t cherokee_rule_list_mrproper (cherokee_rule_list_t *list);
 ret_t cherokee_rule_list_add      (cherokee_rule_list_t *list, cherokee_rule_t *rule);
 ret_t cherokee_rule_list_sort     (cherokee_rule_list_t *list);
 
-ret_t cherokee_rule_list_match    (cherokee_rule_list_t    *list, 
+ret_t cherokee_rule_list_match    (cherokee_rule_list_t    *list,
 				   cherokee_connection_t   *conn,
 				   cherokee_config_entry_t *ret_config);
 

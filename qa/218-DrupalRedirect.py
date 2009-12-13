@@ -3,7 +3,7 @@ from base import *
 DOMAIN  = "218_drupal_clean_urls"
 REQUEST = "/users/1/edit"
 
-CONF = """        
+CONF = """
 vserver!2180!nick = %s
 vserver!2180!document_root = %s
 

@@ -2,7 +2,7 @@ from base import *
 
 TEST_FILE = "Cherokee is the fastest one"
 
-CONF = """        
+CONF = """
 vserver!1!rule!1230!match = directory
 vserver!1!rule!1230!match!directory = /implicit_redir1
 vserver!1!rule!1230!handler = dirlist

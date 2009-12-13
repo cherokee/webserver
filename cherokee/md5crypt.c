@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "md5.h"
@@ -85,14 +85,14 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	if (strncmp(sp, magic, magic_len) == 0)
 		sp += magic_len;
 
-	/* It stops at the first '$', max 8 chars 
+	/* It stops at the first '$', max 8 chars
 	 */
 	for (ep = sp; *ep != '$'; ep++) {
 		if (*ep == '\0' || ep >= (sp + 8))
 			return NULL;
 	}
 
-	/* Get the length of the true salt 
+	/* Get the length of the true salt
 	 */
 	sl = ep - sp;
 
@@ -132,7 +132,7 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 			MD5Update(&ctx, (unsigned char *)pw + j, 1);
 	}
 
-	/* Now make the output string 
+	/* Now make the output string
 	 */
 
 	snprintf(passwd, MD5CRYPT_PASSWD_LEN, "%s%s$", magic, salt_copy);
@@ -180,7 +180,7 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	l =                    final[11]                ;
 	strlcat (passwd, to64(to64_buf, l, 2), MD5CRYPT_PASSWD_LEN);
 
-	/* Don't leave anything around in vm they could use. 
+	/* Don't leave anything around in vm they could use.
 	 */
 	memset(final, 0, sizeof(final));
 	memset(salt_copy, 0, sizeof(salt_copy));

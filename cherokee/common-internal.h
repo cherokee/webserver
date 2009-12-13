@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_COMMON_INTERNAL_H
 #define CHEROKEE_COMMON_INTERNAL_H
@@ -126,8 +126,8 @@
 # define CHEROKEE_RWLOCK_UNLOCK(m)     pthread_rwlock_unlock(m)
 # define CHEROKEE_RWLOCK_DESTROY(m)    pthread_rwlock_destroy(m)
 #else
-# define CHEROKEE_MUTEX_T(n)          
-# define CHEROKEE_RWLOCK_T(n)         
+# define CHEROKEE_MUTEX_T(n)
+# define CHEROKEE_RWLOCK_T(n)
 # define CHEROKEE_THREAD_JOIN(t)
 # define CHEROKEE_THREAD_SELF          0
 # define CHEROKEE_THREAD_KILL(t,s)     0
@@ -138,8 +138,8 @@
 
 # define CHEROKEE_MUTEX_LOCK(m)
 # define CHEROKEE_MUTEX_UNLOCK(m)
-# define CHEROKEE_MUTEX_INIT(m,n)  
-# define CHEROKEE_MUTEX_DESTROY(m) 
+# define CHEROKEE_MUTEX_INIT(m,n)
+# define CHEROKEE_MUTEX_DESTROY(m)
 # define CHEROKEE_MUTEX_TRY_LOCK(m)    0
 
 # define CHEROKEE_RWLOCK_INIT(m,n)
@@ -154,8 +154,8 @@
 #ifdef HAVE_SCHED_YIELD
 # define CHEROKEE_THREAD_YIELD         sched_yield()
 #else
-# define CHEROKEE_THREAD_YIELD         
-#endif 
+# define CHEROKEE_THREAD_YIELD
+#endif
 
 
 #ifdef _WIN32
@@ -166,7 +166,7 @@
 
 
 /* IMPORTANT:
- * Cross compilers should define BYTE_ORDER in CFLAGS 
+ * Cross compilers should define BYTE_ORDER in CFLAGS
  */
 #ifndef BYTE_ORDER
 
@@ -178,12 +178,12 @@
 # endif
 # ifndef BIG_ENDIAN
 #  define BIG_ENDIAN     4321    /* MSB first: 68000, ibm, net */
-# endif 
+# endif
 # ifndef PDP_ENDIAN
 #  define PDP_ENDIAN     3412    /* LSB first in word, MSW first in long */
 # endif
 
-/* It assumes autoconf's AC_C_BIGENDIAN has been ran. 
+/* It assumes autoconf's AC_C_BIGENDIAN has been ran.
  * If it hasn't, we assume the order is LITTLE ENDIAN.
  */
 # ifdef WORDS_BIGENDIAN
@@ -194,7 +194,7 @@
 
 #endif
 
-/* String missing prototypes: 
+/* String missing prototypes:
  * Implemented in util.c, can't move prototype there though
  */
 #ifndef HAVE_STRSEP

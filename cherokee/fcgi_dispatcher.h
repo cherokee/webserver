@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_FCGI_DISPATCHER_H
 #define CHEROKEE_FCGI_DISPATCHER_H
@@ -49,7 +49,7 @@ ret_t cherokee_fcgi_dispatcher_free       (cherokee_fcgi_dispatcher_t  *fcgi);
 
 ret_t cherokee_fcgi_dispatcher_dispatch   (cherokee_fcgi_dispatcher_t *fcgi, cherokee_fcgi_manager_t **mgr);
 
-ret_t cherokee_fcgi_dispatcher_queue_conn (cherokee_fcgi_dispatcher_t *fcgi, cherokee_connection_t *conn); 
+ret_t cherokee_fcgi_dispatcher_queue_conn (cherokee_fcgi_dispatcher_t *fcgi, cherokee_connection_t *conn);
 ret_t cherokee_fcgi_dispatcher_end_notif  (cherokee_fcgi_dispatcher_t *fcgi);
 
 #endif /* CHEROKEE_FCGI_DISPATCHER_H */

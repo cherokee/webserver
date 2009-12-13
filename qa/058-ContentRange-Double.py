@@ -23,7 +23,7 @@ class Test (TestBase):
     def CustomTest (self):
         body = self.reply.split ("\r\n\r\n")[1]
         if len(body) != OFFSET2-OFFSET1 + 1:
-            return -1        
+            return -1
 
     def Prepare (self, www):
         self.WriteFile (www, "Range100Both", 0444, MAGIC)

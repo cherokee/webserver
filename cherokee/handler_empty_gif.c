@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_empty_gif.h"
@@ -36,7 +36,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (empty_gif, http_get | http_head);
 #define HARDCODED_GIF							\
 	"GIF89a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00\xff\xff"	\
 	"\xff\x21\xf9\x04\x01\x00\x00\x01\x00\x2c\x00\x00\x00"		\
-	"\x00\x01\x00\x01\x00\x00\x02\x02\x4c\x01\x00\x3B" 
+	"\x00\x01\x00\x01\x00\x00\x02\x02\x4c\x01\x00\x3B"
 
 ret_t
 cherokee_handler_empty_gif_new (cherokee_handler_t     **hdl,
@@ -48,7 +48,7 @@ cherokee_handler_empty_gif_new (cherokee_handler_t     **hdl,
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base(HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(empty_gif));
-	   
+
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_empty_gif_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_empty_gif_free;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_empty_gif_step;
@@ -73,7 +73,7 @@ cherokee_handler_empty_gif_step (cherokee_handler_empty_gif_t *hdl,
 }
 
 ret_t
-cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl, 
+cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl,
 					cherokee_buffer_t            *buffer)
 {
 	if (cherokee_connection_should_include_length (HANDLER_CONN(hdl))) {
@@ -83,7 +83,7 @@ cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl,
 	} else {
 		cherokee_buffer_add_str (buffer, "Content-Type: image/gif"CRLF);
 	}
-	
+
 	return ret_ok;
 }
 
@@ -96,7 +96,7 @@ cherokee_handler_empty_gif_configure (cherokee_config_node_t   *conf,
 	UNUSED(conf);
 	UNUSED(srv);
 	UNUSED(_props);
-	
+
 	return ret_ok;
 }
 

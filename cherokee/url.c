@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "url.h"
@@ -32,7 +32,7 @@
 #endif
 
 
-ret_t 
+ret_t
 cherokee_url_init (cherokee_url_t *url)
 {
 	ret_t ret;
@@ -41,7 +41,7 @@ cherokee_url_init (cherokee_url_t *url)
 	 */
 	ret = cherokee_buffer_init (&url->host);
 	if (unlikely(ret < ret_ok)) return ret;
-	
+
 	ret = cherokee_buffer_init (&url->request);
  	if (unlikely(ret < ret_ok)) return ret;
 
@@ -52,7 +52,7 @@ cherokee_url_init (cherokee_url_t *url)
 }
 
 
-ret_t 
+ret_t
 cherokee_url_mrproper (cherokee_url_t *url)
 {
 	cherokee_buffer_mrproper (&url->host);
@@ -100,10 +100,10 @@ parse_protocol (cherokee_url_t *url, char *string, cuint_t *len)
 }
 
 
-static ret_t 
-cherokee_url_parse_guts (cherokee_url_t    *url, 
+static ret_t
+cherokee_url_parse_guts (cherokee_url_t    *url,
 			 cherokee_buffer_t *url_buf,
-			 cherokee_buffer_t *user_ret, 
+			 cherokee_buffer_t *user_ret,
 			 cherokee_buffer_t *password_ret)
 {
 	ret_t    ret;
@@ -113,12 +113,12 @@ cherokee_url_parse_guts (cherokee_url_t    *url,
 	char    *server;
 	char    *arroba;
 	char    *tmp;
-	
+
 	/* Drop protocol, if exists..
 	 */
 	ret = parse_protocol (url, url_buf->buf, &len);
 	if (unlikely(ret < ret_ok)) return ret_error;
-	
+
 	tmp = url_buf->buf + len;
 
 	/* User (and password)
@@ -147,7 +147,7 @@ cherokee_url_parse_guts (cherokee_url_t    *url,
 	server = tmp;
 	len    = strlen (server);
 	slash  = strpbrk (server, "/\\");
-	
+
 	if (slash == NULL) {
 		cherokee_buffer_add (&url->request, "/", 1);
 		cherokee_buffer_add (&url->host, server, len);
@@ -172,19 +172,19 @@ cherokee_url_parse_guts (cherokee_url_t    *url,
 		ret = cherokee_buffer_drop_ending (&url->host, strlen(port));
 		if (unlikely(ret < ret_ok)) return ret;
 	}
-	
+
 #if 0
 	cherokee_url_print (url);
 #endif
-	   
+
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_url_parse (cherokee_url_t    *url, 
+cherokee_url_parse (cherokee_url_t    *url,
 		    cherokee_buffer_t *string,
-		    cherokee_buffer_t *user_ret, 
+		    cherokee_buffer_t *user_ret,
 		    cherokee_buffer_t *password_ret)
 {
 	if (cherokee_buffer_is_empty (string)) {
@@ -195,7 +195,7 @@ cherokee_url_parse (cherokee_url_t    *url,
 }
 
 
-ret_t 
+ret_t
 cherokee_url_build_string (cherokee_url_t *url, cherokee_buffer_t *buf)
 {
 	cherokee_buffer_add_buffer (buf, &url->host);
@@ -212,7 +212,7 @@ cherokee_url_build_string (cherokee_url_t *url, cherokee_buffer_t *buf)
 }
 
 
-ret_t 
+ret_t
 cherokee_url_print (cherokee_url_t *url)
 {
 	printf ("Host:    %s\n", url->host.buf);

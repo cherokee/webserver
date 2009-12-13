@@ -99,13 +99,13 @@ class WizardManager:
             show = wizard.show()
             img  = "/static/images/wizards/%s" % (wizard.ICON)
 
-            txt += 'cherokeeWizards["%s"]["%s"] = {"title": "%s", "desc": "%s", "img": "%s", ' % (group, name, name, wizard.DESC, img) 
+            txt += 'cherokeeWizards["%s"]["%s"] = {"title": "%s", "desc": "%s", "img": "%s", ' % (group, name, name, wizard.DESC, img)
 
             if not show:
-                txt += '"show": false, "no_show": "%s" }\n' % (wizard.no_show) 
+                txt += '"show": false, "no_show": "%s" }\n' % (wizard.no_show)
             else:
                 url = "%s/wizard/%s" % (url_pre, name)
-                txt += '"show": true, "url": "%s" }\n' % (url) 
+                txt += '"show": true, "url": "%s" }\n' % (url)
 
         return txt
 

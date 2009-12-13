@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -40,7 +40,7 @@
 
 #ifdef HAVE_ARPA_INET_H
 # include <arpa/inet.h>
-#endif 
+#endif
 
 #ifdef HAVE_PWD_H
 # include <pwd.h>
@@ -108,7 +108,7 @@ int     cherokee_isbigendian        (void);
 char   *cherokee_min_str            (char *s1, char *s2);
 char   *cherokee_max_str            (char *s1, char *s2);
 int     cherokee_estimate_va_length (const char *format, va_list ap);
-long    cherokee_eval_formated_time (cherokee_buffer_t *buf);  
+long    cherokee_eval_formated_time (cherokee_buffer_t *buf);
 ret_t   cherokee_fix_dirpath        (cherokee_buffer_t *buf);
 
 ret_t   cherokee_find_header_end    (cherokee_buffer_t  *buf,
@@ -156,10 +156,10 @@ ret_t cherokee_mkdir_p       (cherokee_buffer_t *path, int mode);
 ret_t cherokee_ntop          (int family, struct sockaddr *addr, char *dst, size_t cnt);
 ret_t cherokee_mkdir_p_perm  (cherokee_buffer_t *dir_path, int create_mode, int ensure_perm);
 
-ret_t cherokee_io_stat       (cherokee_iocache_t        *iocache, 
-			      cherokee_buffer_t         *path, 
-			      cherokee_boolean_t         useit, 
-			      struct stat               *info_space, 
+ret_t cherokee_io_stat       (cherokee_iocache_t        *iocache,
+			      cherokee_buffer_t         *path,
+			      cherokee_boolean_t         useit,
+			      struct stat               *info_space,
 			      cherokee_iocache_entry_t **io_entry,
 			      struct stat              **info);
 
@@ -196,7 +196,7 @@ ret_t cherokee_path_arg_eval      (cherokee_buffer_t *path);
 
 /* Path walking
  */
-ret_t cherokee_split_pathinfo     (cherokee_buffer_t  *path, 
+ret_t cherokee_split_pathinfo     (cherokee_buffer_t  *path,
 				   cuint_t             init_pos,
 				   int                 allow_dirs,
 				   char              **pathinfo,
@@ -207,7 +207,7 @@ ret_t cherokee_split_arguments    (cherokee_buffer_t *request,
 				   char             **arguments,
 				   int               *arguments_len);
 
-ret_t cherokee_parse_query_string (cherokee_buffer_t *qstring, 
+ret_t cherokee_parse_query_string (cherokee_buffer_t *qstring,
 				   cherokee_avl_t  *arguments);
 
 char *cherokee_header_get_next_line (char *line);

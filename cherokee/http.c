@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "http.h"
@@ -34,7 +34,7 @@
  		 return ret_ok;
 
 
-ret_t 
+ret_t
 cherokee_http_method_to_string (cherokee_http_method_t method, const char **str, cuint_t *len)
 {
 	switch (method) {
@@ -79,47 +79,47 @@ ret_t
 cherokee_http_string_to_method (cherokee_buffer_t      *string,
 				cherokee_http_method_t *method)
 {
-	if (cherokee_buffer_case_cmp_str (string, "get") == 0) 
+	if (cherokee_buffer_case_cmp_str (string, "get") == 0)
 		*method = http_get;
-	else if (cherokee_buffer_case_cmp_str (string, "post") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "post") == 0)
 		*method = http_post;
-	else if (cherokee_buffer_case_cmp_str (string, "head") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "head") == 0)
 		*method = http_head;
-	else if (cherokee_buffer_case_cmp_str (string, "put") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "put") == 0)
 		*method = http_put;
-	else if (cherokee_buffer_case_cmp_str (string, "options") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "options") == 0)
 		*method = http_options;
-	else if (cherokee_buffer_case_cmp_str (string, "delete") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "delete") == 0)
 		*method = http_delete;
-	else if (cherokee_buffer_case_cmp_str (string, "trace") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "trace") == 0)
 		*method = http_trace;
-	else if (cherokee_buffer_case_cmp_str (string, "connect") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "connect") == 0)
 		*method = http_connect;
-	else if (cherokee_buffer_case_cmp_str (string, "copy") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "copy") == 0)
 		*method = http_copy;
-	else if (cherokee_buffer_case_cmp_str (string, "lock") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "lock") == 0)
 		*method = http_lock;
-	else if (cherokee_buffer_case_cmp_str (string, "mkcol") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "mkcol") == 0)
 		*method = http_mkcol;
-	else if (cherokee_buffer_case_cmp_str (string, "move") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "move") == 0)
 		*method = http_move;
-	else if (cherokee_buffer_case_cmp_str (string, "notify") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "notify") == 0)
 		*method = http_notify;
-	else if (cherokee_buffer_case_cmp_str (string, "poll") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "poll") == 0)
 		*method = http_poll;
-	else if (cherokee_buffer_case_cmp_str (string, "propfind") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "propfind") == 0)
 		*method = http_propfind;
-	else if (cherokee_buffer_case_cmp_str (string, "proppatch") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "proppatch") == 0)
 		*method = http_proppatch;
-	else if (cherokee_buffer_case_cmp_str (string, "search") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "search") == 0)
 		*method = http_search;
-	else if (cherokee_buffer_case_cmp_str (string, "subscribe") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "subscribe") == 0)
 		*method = http_subscribe;
-	else if (cherokee_buffer_case_cmp_str (string, "unlock") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "unlock") == 0)
 		*method = http_unlock;
-	else if (cherokee_buffer_case_cmp_str (string, "unsubscribe") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "unsubscribe") == 0)
 		*method = http_unsubscribe;
-	else if (cherokee_buffer_case_cmp_str (string, "report") == 0) 
+	else if (cherokee_buffer_case_cmp_str (string, "report") == 0)
 		*method = http_report;
 	else {
 		*method = http_unknown;
@@ -130,7 +130,7 @@ cherokee_http_string_to_method (cherokee_buffer_t      *string,
 }
 
 
-ret_t 
+ret_t
 cherokee_http_version_to_string (cherokee_http_version_t version, const char **str, cuint_t *len)
 {
 	switch (version) {
@@ -209,7 +209,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 }
 
 
-ret_t 
+ret_t
 cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 {
 #define entry_code(c)    \

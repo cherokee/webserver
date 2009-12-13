@@ -6,5 +6,5 @@ class Test (TestBase):
         self.name = "Wrong Protocol"
 
         self.expected_error = 505
-        self.request        = "GET / HTTP/1.3\r\n" 
+        self.request        = "GET / HTTP/1.3\r\n"
 

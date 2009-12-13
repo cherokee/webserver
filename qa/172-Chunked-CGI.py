@@ -16,7 +16,7 @@ vserver!1!rule!1720!handler!allow_chunked = 1
 CGI_CODE = """#!/bin/sh
 
 echo "Content-Type: text/plain"
-echo 
+echo
 
 # echo adds a new line at the end, -n from bash
 %s -c "import sys; sys.stdout.write('%s')"
@@ -34,7 +34,7 @@ class Test (TestBase):
                                  # Added another one to close the connection
 
         self.expected_error    = 200
-        self.expected_content  = ["Transfer-Encoding: chunked", 
+        self.expected_content  = ["Transfer-Encoding: chunked",
                                   CHUNKED_BEGIN, MAGIC, CHUNKED_FINISH]
         self.conf              = CONF
 

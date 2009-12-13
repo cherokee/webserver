@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -38,8 +38,8 @@
 	    return ERROR;            \
 	 }
 
-int 
-main (int argc, char *argv[]) 
+int
+main (int argc, char *argv[])
 {
 	ret_t                    ret;
 	cuint_t                  fds_num;
@@ -63,7 +63,7 @@ main (int argc, char *argv[])
 
 	ret = cherokee_fdpoll_best_new (&fdpoll, fds_num, fds_num);
 	if (ret != ret_ok) return ERROR;
-	   
+
 	ret = cherokee_admin_client_new (&client);
 	if (ret != ret_ok) return ERROR;
 
@@ -97,7 +97,7 @@ main (int argc, char *argv[])
 	RUN_CLIENT1 (client, cherokee_admin_client_ask_port_tls, &port);
 	CHECK_ERROR ("port_tls");
 	printf ("Port TLS is %d\n", port);
-	
+
 	RUN_CLIENT1 (client, cherokee_admin_client_ask_rx, &buf);
 	CHECK_ERROR ("rx");
 	printf ("Server RX is %s\n", buf.buf);
@@ -114,12 +114,12 @@ main (int argc, char *argv[])
 		list_for_each (i, &conns) {
 			cherokee_connection_info_t *conn = CONN_INFO(i);
 
-			printf ("Request: '%s', phase: '%s', rx: '%s', tx: '%s', size: '%s'\n", 
-				conn->request.buf, conn->phase.buf, conn->rx.buf, 
+			printf ("Request: '%s', phase: '%s', rx: '%s', tx: '%s', size: '%s'\n",
+				conn->request.buf, conn->phase.buf, conn->rx.buf,
 				conn->tx.buf, conn->total_size.buf);
 		}
 	}
-	
+
 	list_for_each_safe (i, tmp, &conns) {
 		cherokee_connection_info_free (CONN_INFO(i));
 	}

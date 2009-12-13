@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
@@ -73,7 +73,7 @@ static ret_t
 fd_associate( cherokee_fdpoll_port_t *fdp, int fd, void *rw )
 {
 	int rc;
-	
+
 	rc = port_associate (fdp->port,                /* port */
 	                     PORT_SOURCE_FD,           /* source */
 	                     fd,                       /* object */
@@ -85,18 +85,18 @@ fd_associate( cherokee_fdpoll_port_t *fdp, int fd, void *rw )
 			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
 		return ret_error;
 	}
-	
+
 	return ret_ok;
 }
 
 
-static ret_t 
+static ret_t
 _free (cherokee_fdpoll_port_t *fdp)
 {
 	if (fdp == NULL)
 		return ret_ok;
 
-	if ( fdp->port >= 0 ) { 
+	if ( fdp->port >= 0 ) {
 		close (fdp->port);
 	}
 
@@ -109,7 +109,7 @@ _free (cherokee_fdpoll_port_t *fdp)
 	 */
 	free( fdp );
 
-	return ret_ok;	   
+	return ret_ok;
 }
 
 
@@ -120,7 +120,7 @@ _add (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 
 	rc = fd_associate(fdp, fd, (rw == FDPOLL_MODE_WRITE ? WRITE : READ));
 	if ( rc == -1 ) {
-		LOG_ERRNO (errno, cherokee_err_error, 
+		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, fd);
 		return ret_error;
 	}
@@ -169,7 +169,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 
 	/* First call to get the number of file descriptors with activity
 	 */
-	rc = port_getn (fdp->port, fdp->port_events, 0,	
+	rc = port_getn (fdp->port, fdp->port_events, 0,
 			(uint_t *)&fdp->port_readyfds,
 		        &timeout);
 	if ( rc < 0 ) {
@@ -186,7 +186,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 	/* Second call to get the events of the file descriptors with
 	 * activity
 	 */
-	rc = port_getn (fdp->port, fdp->port_events,FDPOLL(fdp)->nfiles, 
+	rc = port_getn (fdp->port, fdp->port_events,FDPOLL(fdp)->nfiles,
 			&fdp->port_readyfds, &timeout);
 	if ( ( (rc < 0) && (errno != ETIME) ) || (fdp->port_readyfds == -1)) {
 		LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_PORTS_GETN);
@@ -198,8 +198,8 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 
 		nfd = fdp->port_events[i].portev_object;
 		fdp->port_activefd[nfd] = fdp->port_events[i].portev_events;
-		rc = fd_associate( fdp, 
-		                   nfd, 
+		rc = fd_associate( fdp,
+		                   nfd,
 		                   fdp->port_events[i].portev_user);
 		if ( rc < 0 ) {
 			LOG_ERRNO (errno, cherokee_err_error,
@@ -276,7 +276,7 @@ fdpoll_port_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 }
 
 
-ret_t 
+ret_t
 fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 {
 	cuint_t            i;
@@ -300,7 +300,7 @@ fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	nfd->reset         = (fdpoll_func_reset_t) _reset;
 	nfd->set_mode      = (fdpoll_func_set_mode_t) _set_mode;
 	nfd->check         = (fdpoll_func_check_t) _check;
-	nfd->watch         = (fdpoll_func_watch_t) _watch;	
+	nfd->watch         = (fdpoll_func_watch_t) _watch;
 
 	/* Allocate data
 	 */

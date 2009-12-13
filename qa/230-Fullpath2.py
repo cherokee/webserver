@@ -31,7 +31,7 @@ class Test (TestBase):
     def Prepare (self, www):
         for pair in [PAIR1, PAIR2]:
             pd,pf = pair
-            
+
             if pd:
                 d = self.Mkdir (www, pd)
             else:
