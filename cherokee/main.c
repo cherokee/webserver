@@ -578,14 +578,14 @@ sem_chmod (int sem, char *worker_uid)
 		return -1;
 	}
 
-	re = semctl (sem, 0, IPC_STAT, &buf);
+	re = semctl (sem, 0, IPC_STAT, buf);
 	if (re != -0) {
 		PRINT_MSG ("(warning) Couldn't IPC_STAT: errno=%d\n", errno);
 		return -1;
 	}
 
 	buf.sem_perm.uid = uid;
-	re = semctl (spawn_shared_sem, 0, IPC_SET, &buf);
+	re = semctl (spawn_shared_sem, 0, IPC_SET, buf);
 	if (re != 0) {
 		PRINT_MSG ("(warning) Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
 		return -1;
