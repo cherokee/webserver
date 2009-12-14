@@ -37,7 +37,8 @@ CONFIG_DIR = """
 """
 
 SRC_PATHS = [
-    "/usr/share/phpmyadmin"          # Debian, Fedora
+    "/usr/share/phpmyadmin",          # Debian, Fedora
+    "/opt/local/www/phpmyadmin"       # MacPorts
 ]
 
 def is_phpmyadmin_dir (path, cfg, nochroot):

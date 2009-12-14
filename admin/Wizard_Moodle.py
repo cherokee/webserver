@@ -44,10 +44,11 @@ CONFIG_VSERVER = """
 """
 
 SRC_PATHS = [
-    "/usr/share/moodle",          # Debian, Fedora
-    "/var/www/*/htdocs/moodle",   # Gentoo
-    "/srv/www/htdocs/moodle",     # SuSE
-    "/usr/local/www/data/moodle*" # BSD
+    "/usr/share/moodle",           # Debian, Fedora
+    "/var/www/*/htdocs/moodle",    # Gentoo
+    "/srv/www/htdocs/moodle",      # SuSE
+    "/usr/local/www/data/moodle*", # BSD
+    "/opt/local/www/moodle"        # MacPorts
 ]
 
 def is_moodle_dir (path, cfg, nochroot):
