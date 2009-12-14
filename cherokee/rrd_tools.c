@@ -60,6 +60,7 @@ cherokee_rrd_connection_init (cherokee_rrd_connection_t *rrd_conn)
 	rrd_conn->read_fd  = -1;
 	rrd_conn->pid      = -1;
 	rrd_conn->exiting  = false;
+	rrd_conn->disabled = false;
 
 	cherokee_buffer_init (&rrd_conn->tmp);
 	cherokee_buffer_init (&rrd_conn->path_rrdtool);
@@ -109,8 +110,8 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 	} else {
 		ret = cherokee_find_exec_in_path ("rrdtool", &rrd_conn->path_rrdtool);
 		if (ret != ret_ok) {
+			rrd_conn->disabled = true;
 			LOG_ERROR (CHEROKEE_ERROR_RRD_NO_BINARY, getenv("PATH"));
-			return ret_error;
 		}
 	}
 
@@ -157,7 +158,9 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
         int    fds_from[2];
 
 	/* Do not spawn if the server it exiting */
-	if (rrd_conn->exiting) {
+	if ((rrd_conn->exiting) ||
+	    (rrd_conn->disabled))
+	{
 		return ret_ok;
 	}
 
@@ -322,6 +325,12 @@ cherokee_rrd_connection_execute (cherokee_rrd_connection_t *rrd_conn,
 	ret_t ret;
 
 	TRACE (ENTRIES, "Sending to RRDtool: %s", buf->buf);
+
+	/* Might be disabled
+	 */
+	if (unlikely (rrd_conn->disabled)) {
+		return ret_ok;
+	}
 
 	/* Spawn rrdtool
 	 */

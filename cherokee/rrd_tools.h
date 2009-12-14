@@ -41,6 +41,7 @@ typedef struct {
 	int                read_fd;
 	pid_t              pid;
 	cherokee_boolean_t exiting;
+	cherokee_boolean_t disabled;
 
 	/* Threading */
 	CHEROKEE_MUTEX_T  (mutex);
