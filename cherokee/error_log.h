@@ -81,8 +81,11 @@ ret_t cherokee_error_errno_log   (int                    errnumber,
 				  int                    line,
 				  int                    error_num, ...);
 
-ret_t cherokee_error_log_set_log_writer  (cherokee_logger_writer_t  *writer);
-ret_t cherokee_error_log_get_log_writer  (cherokee_logger_writer_t **writer);
-ret_t cherokee_error_log_set_echo_stderr (cherokee_boolean_t         do_echo);
+
+ret_t cherokee_error_log_default_set  (cherokee_logger_writer_t *writer);
+ret_t cherokee_error_log_default_get  (cherokee_logger_writer_t **writer);
+ret_t cherokee_error_log_default_free (void);
+
+ret_t cherokee_error_log_set_echo_stderr (cherokee_boolean_t do_echo);
 
 #endif /* CHEROKEE_ERROR_LOG_H */

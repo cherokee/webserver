@@ -36,28 +36,41 @@ static cherokee_boolean_t        echo_to_stderr       = true;
 
 
 ret_t
-cherokee_error_log_set_log_writer (cherokee_logger_writer_t *writer)
+cherokee_error_log_default_set (cherokee_logger_writer_t *writer)
 {
 	default_error_writer = writer;
 	return ret_ok;
 }
 
 ret_t
-cherokee_error_log_set_echo_stderr (cherokee_boolean_t do_echo)
-{
-	echo_to_stderr = do_echo;
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_error_log_get_log_writer (cherokee_logger_writer_t **writer)
+cherokee_error_log_default_get (cherokee_logger_writer_t **writer)
 {
 	if (default_error_writer == NULL) {
 		return ret_not_found;
 	}
 
 	*writer = default_error_writer;
+	return ret_ok;
+}
+
+ret_t
+cherokee_error_log_default_free (void)
+{
+	if (default_error_writer == NULL) {
+		return ret_not_found;
+	}
+
+	cherokee_logger_writer_free (default_error_writer);
+	default_error_writer = NULL;
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_error_log_set_echo_stderr (cherokee_boolean_t do_echo)
+{
+	echo_to_stderr = do_echo;
 	return ret_ok;
 }
 

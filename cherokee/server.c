@@ -640,52 +640,40 @@ initialize_server_threads (cherokee_server_t *srv)
 
 
 static ret_t
-set_default_server_logger (cherokee_server_t *srv)
-{
-	cherokee_logger_writer_t *writer;
-
-	writer = VSERVER(srv->vservers.prev)->error_writer;
-	if (writer == NULL) {
-		return ret_not_found;
-	}
-
-	cherokee_error_log_set_log_writer (writer);
-	return ret_ok;
-}
-
-
-static ret_t
 initialize_loggers (cherokee_server_t *srv)
 {
 	ret_t                     ret;
 	cherokee_list_t          *i;
 	cherokee_logger_t        *logger;
-	cherokee_logger_writer_t *start_up_writer;
+	cherokee_logger_writer_t *writer;
 
 	/* Initialize all the loggers
 	 */
 	list_for_each (i, &srv->vservers) {
 		logger = VSERVER(i)->logger;
-		if (logger == NULL)
+		if (logger == NULL) {
 			continue;
+		}
 
 		ret = cherokee_logger_init (logger);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			return ret;
+		}
 	}
 
 	/* Free the startup log-writer
 	 */
-	ret = cherokee_error_log_get_log_writer (&start_up_writer);
-	if (ret == ret_ok) {
-		cherokee_logger_writer_free (start_up_writer);
-	}
-
+	cherokee_error_log_default_free();
 	cherokee_error_log_set_echo_stderr (false);
 
 	/* Set the (real) default error writer
 	 */
-	set_default_server_logger (srv);
+	writer = VSERVER(srv->vservers.prev)->error_writer;
+	if (writer == NULL) {
+		return ret_ok;
+	}
+
+	cherokee_error_log_default_set (writer);
 	return ret_ok;
 }
 
@@ -971,8 +959,9 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (! cherokee_buffer_is_empty (&srv->chroot)) {
 		/* Open the logs */
 		ret = initialize_loggers (srv);
-		if (unlikely(ret < ret_ok))
+		if (unlikely(ret < ret_ok)) {
 			return ret;
+		}
 
 		loggers_done = true;
 
@@ -1010,8 +999,9 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	if (! loggers_done) {
 		ret = initialize_loggers (srv);
-		if (unlikely(ret < ret_ok))
+		if (unlikely(ret < ret_ok)) {
 			return ret;
+		}
 	}
 
 	/* Collectors
@@ -1550,7 +1540,7 @@ create_startup_log_writer (cherokee_server_t *srv)
 
 	/* The error writer is ready
 	 */
-	cherokee_error_log_set_log_writer (writer);
+	cherokee_error_log_default_set (writer);
 	return ret_ok;
 
 error:
