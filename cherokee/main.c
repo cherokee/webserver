@@ -562,9 +562,12 @@ sem_chmod (int sem, char *worker_uid)
 {
 	int              re;
 	struct semid_ds  buf;
+	union  semun     semopts;
 	struct passwd   *passwd;
 	int              uid     = 0;
 
+	/* Read the UID
+	 */
 	uid = (int)strtol (worker_uid, (char **)NULL, 10);
 	if (uid == 0) {
 		passwd = getpwnam (worker_uid);
@@ -578,14 +581,23 @@ sem_chmod (int sem, char *worker_uid)
 		return -1;
 	}
 
-	re = semctl (sem, 0, IPC_STAT, buf);
+	/* Initialize the memory
+	 */
+	memset (&buf,     0, sizeof(struct semid_ds));
+	memset (&semopts, 0, sizeof(union  semun));
+
+	semopts.buf = &buf;
+
+	/* Set the permissions
+	 */
+	re = semctl (sem, 0, IPC_STAT, semopts);
 	if (re != -0) {
 		PRINT_MSG ("(warning) Couldn't IPC_STAT: errno=%d\n", errno);
 		return -1;
 	}
 
 	buf.sem_perm.uid = uid;
-	re = semctl (spawn_shared_sem, 0, IPC_SET, buf);
+	re = semctl (spawn_shared_sem, 0, IPC_SET, semopts);
 	if (re != 0) {
 		PRINT_MSG ("(warning) Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
 		return -1;
