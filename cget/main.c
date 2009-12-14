@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -42,7 +42,7 @@
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
-#else 
+#else
 # include "getopt/getopt.h"
 #endif
 
@@ -120,9 +120,9 @@ print_tuple_str (const char *title, const char *info)
 	int   whites;
 	char *tmp;
 
-	if (quiet == true) 
+	if (quiet == true)
 		return;
-	
+
 	whites = COLUM_NUM - strlen(title);
 
 	fprintf (stderr, "%s ", title);
@@ -143,8 +143,8 @@ static void
 print_tuple_int (const char *title, int num)
 {
 	char tmp[128];
-	
-	snprintf (tmp, 128, "%d", num);	
+
+	snprintf (tmp, 128, "%d", num);
 	print_tuple_str (title, tmp);
 }
 
@@ -157,7 +157,7 @@ do_download__init (cherokee_downloader_t *downloader, void *param)
 	UNUSED(param);
 
 	url = &downloader->request.url;
-	
+
 	print_tuple_str ("Host",    url->host.buf);
 	print_tuple_str ("Request", url->request.buf);
 	print_tuple_int ("Port",    url->port);
@@ -195,7 +195,7 @@ do_download__has_headers (cherokee_downloader_t *downloader, void *param)
 	 */
 	if (global_fd == UNSET_FD) {
 		char *name;
-		
+
 		name = strrchr (req->buf, '/');
 		if (name == NULL) {
 			name = "index.html";
@@ -257,7 +257,7 @@ do_download__read_body (cherokee_downloader_t *downloader, void *param)
 	}
 
 	cherokee_buffer_mrproper (&tmp);
-	return ret_ok;	
+	return ret_ok;
 }
 
 
@@ -295,7 +295,7 @@ do_download (cherokee_downloader_t *downloader)
 			if ( !reading && (status & downloader_status_post_sent)) {
 				reading = true;
 			}
-			
+
 			if ( (status & downloader_status_headers_received) && !got_headers) {
 				do_download__has_headers (downloader, NULL);
 				got_headers = true;
@@ -309,16 +309,16 @@ do_download (cherokee_downloader_t *downloader)
 				do_download__finish (downloader, NULL);
 			}
 			break;
-			
+
 		case ret_eagain:
 			/* It's going on..
 			 */
 			break;
-			
+
 		case ret_eof_have_data:
 			if ((status & downloader_status_headers_received) && !got_headers) {
 				do_download__has_headers (downloader, NULL);
-				got_headers = true;				
+				got_headers = true;
 			}
 			if (status & downloader_status_data_available) {
 				do_download__read_body (downloader, NULL);
@@ -335,7 +335,7 @@ do_download (cherokee_downloader_t *downloader)
 			/* Finished or critical error
 			 */
 			return ret;
-			
+
 		default:
 			SHOULDNT_HAPPEN;
 			return ret_error;
@@ -393,9 +393,9 @@ main (int argc, char **argv)
 			}
 			break;
 
-		case 0: 
+		case 0:
 			break;
-			
+
 		case 'q':
 			quiet = true;
 			break;
@@ -415,7 +415,7 @@ main (int argc, char **argv)
 	/* The rest..
 	 */
 	param_num = argc - optind;
-	
+
 	if (param_num <= 0) {
 		print_usage();
 		return EXIT_OK;
@@ -428,7 +428,7 @@ main (int argc, char **argv)
 
 	for (val=optind; val<optind+param_num; val++) {
 		cherokee_buffer_t url = CHEROKEE_BUF_INIT;
-		
+
 		/* Build the url buffer
 		 */
 		ret = cherokee_buffer_add_va (&url, "%s", argv[val]);
@@ -475,7 +475,7 @@ main (int argc, char **argv)
 	/* Close the output file
 	 */
 	re = close (output_fd);
-	if (re != 0) 
+	if (re != 0)
 		exit (EXIT_ERROR);
 
 	cherokee_mrproper();

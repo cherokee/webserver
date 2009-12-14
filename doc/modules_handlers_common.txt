@@ -19,7 +19,7 @@ Parameters
 |Parameters       |Type    |Description
 |`allow_pathinfo` |boolean |Makes the handler to stop parsing the
                             pathinfo string. Default: `Disabled`.
-|`allow_dirlist`  |boolean |Enables showing the contents of a 
+|`allow_dirlist`  |boolean |Enables showing the contents of a
                             directory.
 |==================================================================
 

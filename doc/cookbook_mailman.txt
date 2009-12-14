@@ -80,7 +80,7 @@ make sure to have the following checkboxes enabled: `Error handler`,
 +
 [options="header"]
 |=========================
-|Document Root	
+|Document Root
 |/usr/lib/cgi-bin/mailman/
 |=========================
 

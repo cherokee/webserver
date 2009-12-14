@@ -28,7 +28,7 @@ def build_colors():
                 continue
             color = '\033[0;%d;%dm' % (a,b)
             _colors.append(color)
-    
+
 def thread_color (thread):
     global _threads
     global _color_n
@@ -48,7 +48,7 @@ def main():
 
         # Thread
         thread = None
-        if line[0] == '{':        
+        if line[0] == '{':
             end = line.find('}')
             if end > 0:
                 thread = line[1:end]

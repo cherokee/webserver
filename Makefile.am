@@ -48,7 +48,7 @@ CONFS = \
 $(CONFS_PRE:.sample.pre=.sample)
 
 XMLS_PRE = \
-http-cherokee.xml.pre 
+http-cherokee.xml.pre
 
 XMLS = \
 $(XMLS_PRE:.xml.pre=.xml)

@@ -47,6 +47,6 @@ def main():
     # Print result
     pot_files.sort()
     print '\n'.join (pot_files),
-    
+
 if __name__ == "__main__":
     main()

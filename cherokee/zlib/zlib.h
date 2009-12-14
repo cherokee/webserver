@@ -37,7 +37,7 @@
 
 #define ZLIB_VERSION "1.1.3"
 
-/* 
+/*
      The 'zlib' compression library provides in-memory compression and
   decompression functions, including integrity checks of the uncompressed
   data.  This version of the library supports only one compression method
@@ -171,7 +171,7 @@ extern int zlib_deflate_workspacesize (void);
    returned in stream->workspace before calling zlib_deflateInit().
 */
 
-/* 
+/*
 extern int deflateInit (z_streamp strm, int level);
 
      Initializes the internal stream state for compression. The fields
@@ -249,7 +249,7 @@ extern int zlib_deflate (z_streamp strm, int flush);
   more input data, until it returns with Z_STREAM_END or an error. After
   deflate has returned Z_STREAM_END, the only possible operations on the
   stream are deflateReset or deflateEnd.
-  
+
     Z_FINISH can be used immediately after deflateInit if all the compression
   is to be done in a single step. In this case, avail_out must be at least
   0.1% larger than avail_in plus 12 bytes.  If deflate does not return
@@ -293,7 +293,7 @@ extern int zlib_inflate_workspacesize (void);
    returned in stream->workspace before calling zlib_inflateInit().
 */
 
-/* 
+/*
 extern int zlib_inflateInit (z_streamp strm);
 
      Initializes the internal stream state for decompression. The fields
@@ -362,7 +362,7 @@ extern int zlib_inflate (z_streamp strm, int flush);
 
      If a preset dictionary is needed at this point (see inflateSetDictionary
   below), inflate sets strm-adler to the adler32 checksum of the
-  dictionary chosen by the compressor and returns Z_NEED_DICT; otherwise 
+  dictionary chosen by the compressor and returns Z_NEED_DICT; otherwise
   it sets strm->adler to the adler32 checksum of all output produced
   so far (that is, total_out bytes) and returns Z_OK, Z_STREAM_END or
   an error code as described below. At the end of the stream, inflate()
@@ -400,7 +400,7 @@ extern int zlib_inflateEnd (z_streamp strm);
     The following functions are needed only in some special applications.
 */
 
-/*   
+/*
 extern int deflateInit2 (z_streamp strm,
                                      int  level,
                                      int  method,
@@ -443,7 +443,7 @@ extern int deflateInit2 (z_streamp strm,
    method). msg is set to null if there is no error message.  deflateInit2 does
    not perform any compression: this will be done by deflate().
 */
-                            
+
 extern int zlib_deflateSetDictionary (z_streamp strm,
 						     const Byte *dictionary,
 						     uInt  dictLength);
@@ -527,7 +527,7 @@ extern int zlib_deflateParams (z_streamp strm, int level, int strategy);
    if strm->avail_out was zero.
 */
 
-/*   
+/*
 extern int inflateInit2 (z_streamp strm, int  windowBits);
 
      This is another version of inflateInit with an extra parameter. The
@@ -569,7 +569,7 @@ extern int zlib_inflateSetDictionary (z_streamp strm,
 */
 
 extern int zlib_inflateSync (z_streamp strm);
-/* 
+/*
     Skips invalid compressed data until a full flush point (see above the
   description of deflate with Z_FULL_FLUSH) can be found, or until all
   available input is skipped. No output is provided.

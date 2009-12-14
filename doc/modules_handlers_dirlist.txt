@@ -37,7 +37,7 @@ Parameters: Theming
 |`theme`        |string  |Optional. The theme to use when displaying
                           the directory listings.
                           Default: `default`.
-|`icon_dir`     |string  |Optional: Alternative path to a new icon 
+|`icon_dir`     |string  |Optional: Alternative path to a new icon
                           set.
 |`notice_files` |string  |Optional: List of notice files to be
                           inserted.

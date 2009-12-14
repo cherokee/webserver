@@ -45,7 +45,7 @@ def convert (fin, fout):
             prio = 1
         else:
             n += 1
-            prio = n 
+            prio = n
 
         # Rename the virtual server entry
         to = "vserver!%03d" % (prio)
@@ -58,7 +58,7 @@ def convert (fin, fout):
             cin['%s!domain!1'%(to)] = vserver
 
     save_result (str(cin), fout)
-        
+
 
 def main ():
     if len(sys.argv) < 3:
@@ -68,6 +68,6 @@ def main ():
         raise SystemExit
 
     convert (sys.argv[1], sys.argv[2])
-    
+
 if __name__ == "__main__":
     main()

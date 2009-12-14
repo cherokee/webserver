@@ -42,7 +42,7 @@ def render_paths (entry):
         for path in entry.getElementsByTagName('path'):
             action = path.getAttribute('action')
             txt += "\t%s %s\n"%(action, get_text(path.childNodes))
-    return txt        
+    return txt
 
 def do_parse():
     try:
@@ -55,7 +55,7 @@ def do_parse():
 
     log = dom.getElementsByTagName('log')[0]
 
-    for entry in log.getElementsByTagName('logentry'):    
+    for entry in log.getElementsByTagName('logentry'):
         revision = entry.getAttribute('revision')
         date     = entry_get_val (entry, 'date').split('T')[0]
         time     = entry_get_val (entry, 'date').split('T')[1].split('.')[0]
@@ -63,7 +63,7 @@ def do_parse():
         msg      = reformat_msg(entry_get_val (entry, 'msg'))
         author   = DEVELOPERS[dev]
         paths    = render_paths(entry)
-    
+
         print "%s  %s" % (date, author)
         print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
         print

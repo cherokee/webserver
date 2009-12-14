@@ -52,7 +52,7 @@ def convert (fin, fout):
     for v in cin.keys('vserver'):
         for r in cin.keys('vserver!%s!rule'%(v)):
             balancer = cin.get_val ('vserver!%s!rule!%s!handler!balancer'%(v,r))
-            if not balancer: 
+            if not balancer:
                 continue
 
             tipe = cin.get_val('vserver!%s!rule!%s!handler!balancer!type'%(v,r))
@@ -69,7 +69,7 @@ def convert (fin, fout):
                 if tmp:
                     for e in tmp:
                         env[e] = cin.get_val('vserver!%s!rule!%s!handler!balancer!%s!env!%s'%(v,r,h,e))
-                        
+
                 sourcen, is_new = add_source ((tipe, host, inte, env))
                 if is_new:
                     cin['source!%d!type'%(sourcen)] = tipe
@@ -89,7 +89,7 @@ def convert (fin, fout):
     del (cin['server!encoder'])
 
     save_result (str(cin), fout)
-                
+
 
 def main ():
     if len(sys.argv) < 3:
@@ -99,6 +99,6 @@ def main ():
         raise SystemExit
 
     convert (sys.argv[1], sys.argv[2])
-    
+
 if __name__ == "__main__":
     main()

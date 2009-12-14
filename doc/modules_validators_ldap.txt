@@ -14,18 +14,18 @@ Parameters
 |====================================================================
 |Parameter   |Description
 |__server__  |Name of the host providing the LDAP service.
-|__port__    |Optional. Port number of the LDAP service. 
+|__port__    |Optional. Port number of the LDAP service.
               Default: __389__.
-|__binddn__  |Optional. Bind Distinguished Name (`user`). If none 
+|__binddn__  |Optional. Bind Distinguished Name (`user`). If none
               is provided an anonymous bind will be attempted.
 |__bindpw__  |Bind Password (`password`).
 |__basedn__  |Base Distinguished Name.
-|__filter__  |A filter that defines the conditions that must be 
+|__filter__  |A filter that defines the conditions that must be
               fulfilled in order for the search to match a given
               entry.
 |__tls__     |Optional. Enable the use of TLS based integrity.
               Defaults to __0__.
-|__ca_file__ |Optional. It's the CA filename. Must be provided 
+|__ca_file__ |Optional. It's the CA filename. Must be provided
               if TLS is enabled.
 |===================================================================
 

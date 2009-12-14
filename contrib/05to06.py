@@ -66,7 +66,7 @@ class Syntax:
                        'directoryindex':        'directory_index',
                        'scriptalias':           'script_alias'
                        }
-    
+
     def __init__ (self, lex):
         self._lex = lex
 
@@ -82,7 +82,7 @@ class Syntax:
             print '%s!handler = %s' % (prefix, val)
 
             kind, val = self._lex.get_token()
-            if kind != '{': 
+            if kind != '{':
                 self._lex.rewind()
                 return True
 
@@ -93,7 +93,7 @@ class Syntax:
                 # Special cases
                 if kind == '}':
                     break
-                
+
                 elif kind == 'server':
                     kind, val_prop_val = self._lex.get_token()
                     print '%s!handler!balancer = round_robin' % (prefix)
@@ -125,7 +125,7 @@ class Syntax:
                     val_prop_low = val_prop.lower()
                     if val_prop_low == 'justabout':
                         print '%s!handler!just_about = 1' % (prefix)
-                        continue 
+                        continue
 
                     elif val_prop_low == 'env':
                         kind, val_env_name = self._lex.get_token()
@@ -135,7 +135,7 @@ class Syntax:
                         if kind != 'str': raise "Expected a str"
 
                         print '%s!handler!env!%s = %s' % (prefix, val_env_name, val_env_val)
-                        continue 
+                        continue
 
                     elif val_prop_low == 'show' or \
                          val_prop_low == 'rewrite':
@@ -150,7 +150,7 @@ class Syntax:
                                 print '%s!handler!date = %d' % (prefix, 'date' in val_prop)
                                 print '%s!handler!user = %d' % (prefix, 'owner' in val_prop)
                                 continue
-                            
+
                         # redir
                         rewrite = (kind == 'str' and val_prop.lower() == 'rewrite')
                         if not rewrite: self._lex.rewind()
@@ -175,13 +175,13 @@ class Syntax:
 
                         else:
                             raise "Expected a str or '}'"
-                    
+
                 # Default case
                 val_prop_low = val_prop.lower()
                 if val_prop_low in self.similar_entries:
                     val_prop = self.similar_entries[val_prop_low]
                 else:
-                    val_prop = val_prop_low                    
+                    val_prop = val_prop_low
 
                 # Get property value
                 kind, val_prop_val = self._lex.get_token()
@@ -191,7 +191,7 @@ class Syntax:
             kind, val = self._lex.get_token()
             if kind != 'path': raise "Malformed DocumentRoot"
             print '%s!document_root = %s' % (prefix, val)
-            
+
         elif kind == 'auth':
             return self._process_auth (prefix)
 
@@ -203,7 +203,7 @@ class Syntax:
             if not kind in ['str', 'list']: raise "Malformed Allow from"
 
             print '%s!allow_from = %s' % (prefix, val_ip)
-            
+
         else:
             self._lex.rewind()
             return False
@@ -226,7 +226,7 @@ class Syntax:
             if kind == 'user':
                 kind = 'str'
                 val_prop_name = 'user'
-            
+
             if kind == '}':
                 self._lex.rewind()
                 break
@@ -259,7 +259,7 @@ class Syntax:
                     kind, val_val = self._lex.get_token()
                     print "%s!auth!%s = %s" % (prefix, val_prop, val_val)
             else:
-                self._lex.rewind()            
+                self._lex.rewind()
 
         kind, val = self._lex.get_token()
         if kind != '}' : raise "Malformed Auth"
@@ -281,7 +281,7 @@ class Syntax:
     def _process_encoder (self, prefix):
         while True:
             kind, val = self._lex.get_token()
-            if kind not in ['allow', 'deny']: 
+            if kind not in ['allow', 'deny']:
                 raise "Malformed encoder"
 
             kind_val, val_val = self._lex.get_token()
@@ -313,7 +313,7 @@ class Syntax:
 
             kind, val2 = self._lex.get_token()
             if kind != 'path': raise "Malformed Log"
-            
+
             if val2[0] == '/' or val2[1:2] == ':\\':
                 print "%s!%s!type = file" % (prefix, entry)
                 print "%s!%s!filename = %s" % (prefix, entry, val2)
@@ -372,7 +372,7 @@ class Syntax:
                 print "icons!suffix!%s = %s" % (val_file, val_suffixes)
 
         else:
-            self._lex.rewind()            
+            self._lex.rewind()
             return False
 
         return True
@@ -466,7 +466,7 @@ class Syntax:
         elif kind == 'errorhandler':
             kind, handler_val = self._lex.get_token()
             if kind != 'str': raise "Malformed ErrorHandler"
-            
+
             kind, val = self._lex.get_token()
             if kind != '{': raise "Malformed ErrorHandler"
 
@@ -486,14 +486,14 @@ class Syntax:
                     raise "Malformed ErrorHandler"
 
                 print "%s!%s = %s" % (prefix, error_val, url_val)
-            
+
             kind, val = self._lex.get_token()
             if kind != '}': raise "Malformed ErrorHandler"
 
         elif kind == 'log':
             kind, log_val = self._lex.get_token()
             if kind != 'str': raise "Malformed Log"
-            
+
             kind, val = self._lex.get_token()
             if kind != '{':
                 self._lex.rewind()
@@ -507,7 +507,7 @@ class Syntax:
             if kind != '}': raise "Malformed Log"
 
         else:
-            self._lex.rewind()            
+            self._lex.rewind()
             return False
 
         return True
@@ -541,7 +541,7 @@ class Syntax:
         elif kind == 'encoder':
             kind, enc_val = self._lex.get_token()
             if kind != 'str': raise "Malformed encoder"
-            
+
             kind, val = self._lex.get_token()
             if kind != '{': raise "Malformed encoder"
 
@@ -569,7 +569,7 @@ class Syntax:
             kind, val_type = self._lex.get_token()
             if kind != 'policy':
                 raise "Malformed threadnumber"
-            
+
             kind, val_val = self._lex.get_token()
             if kind != 'str': raise "Malformed threadnumber"
 
@@ -590,7 +590,7 @@ class Syntax:
                     raise "Malformed Sendfile"
 
                 val = val.lower()
-                
+
                 if val == 'minsize':
                     kind, val_num = self._lex.get_token()
                     if kind != 'int': raise "Malformed Sendfile"
@@ -602,12 +602,12 @@ class Syntax:
                     if kind != 'int': raise "Malformed Sendfile"
 
                     print "server!sendfile_max = %s" % (val_num)
-                    
+
                 else:
                     raise "Malformed Sendfile"
 
         else:
-            self._lex.rewind()            
+            self._lex.rewind()
             return False
 
         return True
@@ -655,7 +655,7 @@ class Syntax:
         kind, val = self._lex.get_token()
         if kind == None: return False
         self._lex.rewind()
-        
+
         # Global server stuff
         ok = self._process_server_content ()
         if ok: return True
@@ -692,10 +692,10 @@ class Lexer:
     special_strings = ['server_info']
 
     reserved_words = ['{', '}', 'porttls', 'port', 'directoryindex', 'directory', 'extension',
-                      'request', 'handler', 'ipv6', 'timeout', 'keepalive', 'logflushinterval', 
+                      'request', 'handler', 'ipv6', 'timeout', 'keepalive', 'logflushinterval',
                       'maxkeepaliverequests', 'servertokens', 'encoder', 'log', 'server',
                       'allow', 'deny', 'pidfile', 'icons', 'mimefile', 'errorhandler', 'auth',
-                      'include', 'listenqueuesize', 'listen', 'userdir', 'user','group', 'chroot', 
+                      'include', 'listenqueuesize', 'listen', 'userdir', 'user','group', 'chroot',
                       'maxfds', 'maxconnectionreuse', 'panicaction', 'pollmethod', 'documentroot',
                       'threadnumber', 'policy', 'sendfile', 'file', 'suffix', 'parentdirectory',
                       'default', 'sslcertificatefile', 'sslcertificatekeyfile', 'sslcalistfile']
@@ -704,7 +704,7 @@ class Lexer:
         self._txt      = txt
         self._last     = None,None
         self._rewinded = False
-        
+
     def _find_consume (self, s):
         found = (self._txt.lower().find (s.lower()) == 0)
         if not found: return False
@@ -739,7 +739,7 @@ class Lexer:
             while self._txt[0] in " \t":
                 self._txt = self._txt[1:]
         return word
-        
+
     def rewind (self):
         self._rewinded = True
 
@@ -747,7 +747,7 @@ class Lexer:
         if self._rewinded:
             self._rewinded = False
             return self._last
-        
+
         self._last = self._get_token_guts()
         return self._last
 
@@ -817,7 +817,7 @@ class Converter:
         tmp = filter (lambda x: len(x) > 0 and x[0] != '#',
                       map (lambda x: x.strip(),
                            self._in.readlines()))
-        if not len(tmp): return 
+        if not len(tmp): return
 
         incoming = reduce (lambda x,y: x+' '+y, tmp)
         self.lex = Lexer (incoming)
@@ -828,6 +828,6 @@ class Converter:
 def main ():
     c = Converter (sys.stdin, sys.stdout)
     c.convert()
-    
+
 if __name__ == "__main__":
     main()

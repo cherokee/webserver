@@ -168,7 +168,7 @@ method of `django.core.servers.fastcgi` in your script.
 ----
 from django.core.servers.fastcgi import runfastcgi
 
-runfastcgi(method="threaded", daemonize="true", maxrequests=5, 
+runfastcgi(method="threaded", daemonize="true", maxrequests=5,
            protocol="scgi", socket="/tmp/cherokee-django.socket",
            pidfile="/tmp/cherokee-django.pid")
 ----
@@ -177,7 +177,7 @@ runfastcgi(method="threaded", daemonize="true", maxrequests=5,
 ----
 from django.core.servers.fastcgi import runfastcgi
 
-runfastcgi(method="threaded", daemonize="true", maxrequests=5, 
+runfastcgi(method="threaded", daemonize="true", maxrequests=5,
            protocol="scgi", host="127.0.0.1", port=3033)
 ----
 *********************************************************************

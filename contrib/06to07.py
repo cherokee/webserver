@@ -14,7 +14,7 @@ from config import *
 
 def reparent_child (orig, target):
     if not orig:
-        return 
+        return
 
     for p in orig._child:
         if p == 'priority':
@@ -47,7 +47,7 @@ def convert (fin, fout):
                 else:
                     cin['vserver!%s!rule!%s!match!type'     %(vserver, prio)] = 'directory'
                     cin['vserver!%s!rule!%s!match!directory'%(vserver, prio)] = _dir
-                reparent_child (cin['vserver!%s!directory!%s'%(vserver, _dir)], 
+                reparent_child (cin['vserver!%s!directory!%s'%(vserver, _dir)],
                                 cin['vserver!%s!rule!%s'     %(vserver, prio)])
 
         exts = cin['vserver!%s!extensions'%(vserver)]
@@ -56,7 +56,7 @@ def convert (fin, fout):
                 prio = cin.get_val('vserver!%s!extensions!%s!priority'%(vserver, ext))
                 cin['vserver!%s!rule!%s!match!type'      %(vserver, prio)] = 'extensions'
                 cin['vserver!%s!rule!%s!match!extensions'%(vserver, prio)] = ext
-                reparent_child (cin['vserver!%s!extensions!%s'%(vserver, ext)], 
+                reparent_child (cin['vserver!%s!extensions!%s'%(vserver, ext)],
                                 cin['vserver!%s!rule!%s'      %(vserver, prio)])
 
         reqs = cin['vserver!%s!request'%(vserver)]
@@ -65,7 +65,7 @@ def convert (fin, fout):
                 prio = cin.get_val('vserver!%s!request!%s!priority'%(vserver, req))
                 cin['vserver!%s!rule!%s!match!type'   %(vserver, prio)] = 'request'
                 cin['vserver!%s!rule!%s!match!request'%(vserver, prio)] = req
-                reparent_child (cin['vserver!%s!request!%s'%(vserver, req)], 
+                reparent_child (cin['vserver!%s!request!%s'%(vserver, req)],
                                 cin['vserver!%s!rule!%s'   %(vserver, prio)])
 
         del (cin["vserver!%s!directory" %(vserver)])
@@ -77,6 +77,6 @@ def convert (fin, fout):
 
 def main ():
     convert (sys.argv[1], sys.argv[2])
-    
+
 if __name__ == "__main__":
     main()

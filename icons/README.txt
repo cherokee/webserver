@@ -14,15 +14,15 @@ _________________________________________
     purpose, and make any changes you like. All I ask is that you
     include a link back to this page in your credits (although a giant
     link on every page of your website really isn't needed, contact me
-    to discuss specifics). 
+    to discuss specifics).
 
     The icons can also be used under Creative Commons Attribution 3.0
-    License (Hi Debian folks!) with the following requirements: 
+    License (Hi Debian folks!) with the following requirements:
 
     As an author, I would appreciate a reference to my authorship of
     the Silk icon set contents within a readme file or equivalent
     documentation for the software which includes the set or a subset
-    of the icons contained within. 
+    of the icons contained within.
 
     [http://creativecommons.org/licenses/by/2.5/]
     [http://creativecommons.org/licenses/by/3.0/]

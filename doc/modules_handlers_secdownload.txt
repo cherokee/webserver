@@ -14,7 +14,7 @@ Parameters
 |Parameters |Type   |Description
 |`secret`   |String |Required. Share secret between the handler and
                      the script.
-|`timeout`  |number |Optional. How long - in seconds - the URL will 
+|`timeout`  |number |Optional. How long - in seconds - the URL will
                      be valid.
 |==================================================================
 

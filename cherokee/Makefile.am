@@ -50,7 +50,7 @@ pcre/pcre_globals.c \
 pcre/pcre_compile.c \
 pcre/pcre_tables.c \
 pcre/pcre_exec.c \
-pcre/pcre_get.c 
+pcre/pcre_get.c
 
 getopt_src =  \
 getopt/getopt.h  \
@@ -109,7 +109,7 @@ $(common_ldflags) \
 -module \
 -avoid-version \
 -export-dynamic \
-$(module_ldflags_w32) 
+$(module_ldflags_w32)
 
 
 #
@@ -119,7 +119,7 @@ rule_directory = \
 rule_directory.c \
 rule_directory.h
 
-libplugin_directory_la_LDFLAGS = $(module_ldflags)  
+libplugin_directory_la_LDFLAGS = $(module_ldflags)
 libplugin_directory_la_SOURCES = $(rule_directory)
 
 if STATIC_RULE_DIRECTORY
@@ -136,7 +136,7 @@ rule_extensions = \
 rule_extensions.c \
 rule_extensions.h
 
-libplugin_extensions_la_LDFLAGS = $(module_ldflags)  
+libplugin_extensions_la_LDFLAGS = $(module_ldflags)
 libplugin_extensions_la_SOURCES = $(rule_extensions)
 
 if STATIC_RULE_EXTENSIONS
@@ -153,7 +153,7 @@ rule_request = \
 rule_request.c \
 rule_request.h
 
-libplugin_request_la_LDFLAGS = $(module_ldflags)  
+libplugin_request_la_LDFLAGS = $(module_ldflags)
 libplugin_request_la_SOURCES = $(rule_request)
 
 if STATIC_RULE_REQUEST
@@ -170,7 +170,7 @@ rule_header = \
 rule_header.c \
 rule_header.h
 
-libplugin_header_la_LDFLAGS = $(module_ldflags)  
+libplugin_header_la_LDFLAGS = $(module_ldflags)
 libplugin_header_la_SOURCES = $(rule_header)
 
 if STATIC_RULE_HEADER
@@ -187,7 +187,7 @@ rule_exists = \
 rule_exists.c \
 rule_exists.h
 
-libplugin_exists_la_LDFLAGS = $(module_ldflags)  
+libplugin_exists_la_LDFLAGS = $(module_ldflags)
 libplugin_exists_la_SOURCES = $(rule_exists)
 
 if STATIC_RULE_EXISTS
@@ -204,7 +204,7 @@ rule_url_arg = \
 rule_url_arg.c \
 rule_url_arg.h
 
-libplugin_url_arg_la_LDFLAGS = $(module_ldflags)  
+libplugin_url_arg_la_LDFLAGS = $(module_ldflags)
 libplugin_url_arg_la_SOURCES = $(rule_url_arg)
 
 if STATIC_RULE_URL_ARG
@@ -238,7 +238,7 @@ rule_bind = \
 rule_bind.c \
 rule_bind.h
 
-libplugin_bind_la_LDFLAGS = $(module_ldflags)  
+libplugin_bind_la_LDFLAGS = $(module_ldflags)
 libplugin_bind_la_SOURCES = $(rule_bind)
 
 if STATIC_RULE_BIND
@@ -255,7 +255,7 @@ rule_method = \
 rule_method.c \
 rule_method.h
 
-libplugin_method_la_LDFLAGS = $(module_ldflags)  
+libplugin_method_la_LDFLAGS = $(module_ldflags)
 libplugin_method_la_SOURCES = $(rule_method)
 
 if STATIC_RULE_METHOD
@@ -272,7 +272,7 @@ rule_from = \
 rule_from.c \
 rule_from.h
 
-libplugin_from_la_LDFLAGS = $(module_ldflags)  
+libplugin_from_la_LDFLAGS = $(module_ldflags)
 libplugin_from_la_SOURCES = $(rule_from)
 
 if STATIC_RULE_FROM
@@ -290,7 +290,7 @@ rule_geoip = \
 rule_geoip.c \
 rule_geoip.h
 
-libplugin_geoip_la_LDFLAGS = $(module_ldflags)  
+libplugin_geoip_la_LDFLAGS = $(module_ldflags)
 libplugin_geoip_la_SOURCES = $(rule_geoip)
 libplugin_geoip_la_LIBADD  = -lGeoIP
 
@@ -310,7 +310,7 @@ rule_not = \
 rule_not.c \
 rule_not.h
 
-libplugin_not_la_LDFLAGS = $(module_ldflags)  
+libplugin_not_la_LDFLAGS = $(module_ldflags)
 libplugin_not_la_SOURCES = $(rule_not)
 
 if STATIC_RULE_NOT
@@ -327,7 +327,7 @@ rule_and = \
 rule_and.c \
 rule_and.h
 
-libplugin_and_la_LDFLAGS = $(module_ldflags)  
+libplugin_and_la_LDFLAGS = $(module_ldflags)
 libplugin_and_la_SOURCES = $(rule_and)
 
 if STATIC_RULE_AND
@@ -344,7 +344,7 @@ rule_or = \
 rule_or.c \
 rule_or.h
 
-libplugin_or_la_LDFLAGS = $(module_ldflags)  
+libplugin_or_la_LDFLAGS = $(module_ldflags)
 libplugin_or_la_SOURCES = $(rule_or)
 
 if STATIC_RULE_OR
@@ -361,7 +361,7 @@ vrule_wildcard = \
 vrule_wildcard.c \
 vrule_wildcard.h
 
-libplugin_wildcard_la_LDFLAGS = $(module_ldflags)  
+libplugin_wildcard_la_LDFLAGS = $(module_ldflags)
 libplugin_wildcard_la_SOURCES = $(vrule_wildcard)
 
 if STATIC_VRULE_WILDCARD
@@ -434,7 +434,7 @@ gen_evhost = \
 gen_evhost.c \
 gen_evhost.h
 
-libplugin_evhost_la_LDFLAGS = $(module_ldflags)  
+libplugin_evhost_la_LDFLAGS = $(module_ldflags)
 libplugin_evhost_la_SOURCES = $(gen_evhost)
 
 if STATIC_GEN_EVHOST
@@ -450,7 +450,7 @@ endif
 handler_server_info = \
 handler_server_info.c \
 handler_server_info.h \
-logo.inc 
+logo.inc
 
 libplugin_server_info_la_LDFLAGS = $(module_ldflags)
 libplugin_server_info_la_SOURCES = $(handler_server_info)
@@ -470,7 +470,7 @@ handler_file = \
 handler_file.c \
 handler_file.h
 
-libplugin_file_la_LDFLAGS = $(module_ldflags)  
+libplugin_file_la_LDFLAGS = $(module_ldflags)
 libplugin_file_la_SOURCES = $(handler_file)
 
 if STATIC_HANDLER_FILE
@@ -487,7 +487,7 @@ handler_dirlist = \
 handler_dirlist.c \
 handler_dirlist.h
 
-libplugin_dirlist_la_LDFLAGS = $(module_ldflags)  
+libplugin_dirlist_la_LDFLAGS = $(module_ldflags)
 libplugin_dirlist_la_SOURCES = $(handler_dirlist)
 
 if STATIC_HANDLER_DIRLIST
@@ -508,7 +508,7 @@ handler_render_rrd = \
 $(rrd_common) \
 handler_render_rrd.c \
 handler_render_rrd.h \
-logo.inc 
+logo.inc
 
 libplugin_render_rrd_la_LDFLAGS = $(module_ldflags)
 libplugin_render_rrd_la_SOURCES = $(handler_render_rrd)
@@ -533,7 +533,7 @@ $(handlercgi_cgi) \
 handler_cgi.c \
 handler_cgi.h
 
-libplugin_cgi_la_LDFLAGS = $(module_ldflags)  
+libplugin_cgi_la_LDFLAGS = $(module_ldflags)
 libplugin_cgi_la_SOURCES = $(handler_cgi)
 libplugin_cgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
@@ -556,7 +556,7 @@ $(handlerscgi_cgi) \
 handler_scgi.h \
 handler_scgi.c
 
-libplugin_scgi_la_LDFLAGS = $(module_ldflags)  
+libplugin_scgi_la_LDFLAGS = $(module_ldflags)
 libplugin_scgi_la_SOURCES = $(handler_scgi)
 libplugin_scgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
@@ -580,7 +580,7 @@ fastcgi.h \
 handler_fcgi.h \
 handler_fcgi.c
 
-libplugin_fcgi_la_LDFLAGS = $(module_ldflags)  
+libplugin_fcgi_la_LDFLAGS = $(module_ldflags)
 libplugin_fcgi_la_SOURCES = $(handler_fcgi)
 libplugin_fcgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
@@ -603,7 +603,7 @@ $(handleruwsgi_cgi) \
 handler_uwsgi.h \
 handler_uwsgi.c
 
-libplugin_uwsgi_la_LDFLAGS = $(module_ldflags)  
+libplugin_uwsgi_la_LDFLAGS = $(module_ldflags)
 libplugin_uwsgi_la_SOURCES = $(handler_uwsgi)
 libplugin_uwsgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
@@ -629,9 +629,9 @@ fcgi_dispatcher.c \
 fcgi_manager.h \
 fcgi_manager.c \
 handler_fastcgi.c \
-handler_fastcgi.h 
+handler_fastcgi.h
 
-libplugin_fastcgi_la_LDFLAGS = $(module_ldflags)  
+libplugin_fastcgi_la_LDFLAGS = $(module_ldflags)
 libplugin_fastcgi_la_SOURCES = $(handler_fastcgi)
 libplugin_fastcgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
@@ -729,7 +729,7 @@ handler_proxy.h \
 proxy_hosts.h \
 proxy_hosts.c
 
-libplugin_proxy_la_LDFLAGS = $(module_ldflags)  
+libplugin_proxy_la_LDFLAGS = $(module_ldflags)
 libplugin_proxy_la_SOURCES = $(handler_proxy)
 
 if STATIC_HANDLER_PROXY
@@ -748,7 +748,7 @@ handler_ssi = \
 handler_ssi.c \
 handler_ssi.h
 
-libplugin_ssi_la_LDFLAGS = $(module_ldflags)  
+libplugin_ssi_la_LDFLAGS = $(module_ldflags)
 libplugin_ssi_la_SOURCES = $(handler_ssi)
 
 if STATIC_HANDLER_SSI
@@ -765,7 +765,7 @@ handler_secdownload = \
 handler_secdownload.c \
 handler_secdownload.h
 
-libplugin_secdownload_la_LDFLAGS = $(module_ldflags)  
+libplugin_secdownload_la_LDFLAGS = $(module_ldflags)
 libplugin_secdownload_la_SOURCES = $(handler_secdownload)
 
 if STATIC_HANDLER_SECDOWNLOAD
@@ -782,7 +782,7 @@ handler_empty_gif = \
 handler_empty_gif.c \
 handler_empty_gif.h
 
-libplugin_empty_gif_la_LDFLAGS = $(module_ldflags)  
+libplugin_empty_gif_la_LDFLAGS = $(module_ldflags)
 libplugin_empty_gif_la_SOURCES = $(handler_empty_gif)
 
 if STATIC_HANDLER_EMPTY_GIF
@@ -842,9 +842,9 @@ handler_custom_error = \
 handler_custom_error.c \
 handler_custom_error.h
 
-libplugin_custom_error_la_LDFLAGS = $(module_ldflags)  
+libplugin_custom_error_la_LDFLAGS = $(module_ldflags)
 libplugin_custom_error_la_SOURCES = $(handler_custom_error)
-libplugin_custom_error_la_LIBADD  = libcherokee-client.la  
+libplugin_custom_error_la_LIBADD  = libcherokee-client.la
 
 if STATIC_HANDLER_CUSTOM_ERROR
 static_handler_custom_error_src = $(handler_custom_error)
@@ -860,11 +860,11 @@ handler_admin = \
 handler_admin.c \
 handler_admin.h \
 admin_server.h \
-admin_server.c 
+admin_server.c
 
-libplugin_admin_la_LDFLAGS = $(module_ldflags)  
+libplugin_admin_la_LDFLAGS = $(module_ldflags)
 libplugin_admin_la_SOURCES = $(handler_admin)
-libplugin_admin_la_LIBADD  = libcherokee-config.la libcherokee-client.la  
+libplugin_admin_la_LIBADD  = libcherokee-config.la libcherokee-client.la
 
 if STATIC_HANDLER_ADMIN
 static_handler_admin_src = $(handler_admin)
@@ -914,7 +914,7 @@ logger_custom = \
 logger_custom.h \
 logger_custom.c
 
-libplugin_custom_la_LDFLAGS = $(module_ldflags)  
+libplugin_custom_la_LDFLAGS = $(module_ldflags)
 libplugin_custom_la_SOURCES = $(logger_custom)
 
 if STATIC_LOGGER_CUSTOM
@@ -931,7 +931,7 @@ logger_ncsa = \
 logger_ncsa.h \
 logger_ncsa.c
 
-libplugin_ncsa_la_LDFLAGS = $(module_ldflags)  
+libplugin_ncsa_la_LDFLAGS = $(module_ldflags)
 libplugin_ncsa_la_SOURCES = $(logger_ncsa)
 
 if STATIC_LOGGER_NCSA
@@ -970,7 +970,7 @@ validator_pam = \
 validator_pam.c \
 validator_pam.h
 
-libplugin_pam_la_LDFLAGS = $(module_ldflags) 
+libplugin_pam_la_LDFLAGS = $(module_ldflags)
 libplugin_pam_la_SOURCES = $(validator_pam)
 libplugin_pam_la_LIBADD  = -lpam
 
@@ -991,7 +991,7 @@ validator_ldap = \
 validator_ldap.c \
 validator_ldap.h
 
-libplugin_ldap_la_LDFLAGS = $(module_ldflags) 
+libplugin_ldap_la_LDFLAGS = $(module_ldflags)
 libplugin_ldap_la_SOURCES = $(validator_ldap)
 libplugin_ldap_la_LIBADD  = -lldap
 
@@ -1017,7 +1017,7 @@ $(validator_file_file) \
 validator_htpasswd.c \
 validator_htpasswd.h
 
-libplugin_htpasswd_la_LDFLAGS = $(module_ldflags) 
+libplugin_htpasswd_la_LDFLAGS = $(module_ldflags)
 libplugin_htpasswd_la_SOURCES = $(validator_htpasswd)
 libplugin_htpasswd_la_LIBADD  = $(CRYPT_LIBS)
 libplugin_htpasswd_la_CFLAGS  = $(CRYPT_CFLAGS)
@@ -1043,7 +1043,7 @@ $(validator_file_file) \
 validator_plain.c \
 validator_plain.h
 
-libplugin_plain_la_LDFLAGS = $(module_ldflags) 
+libplugin_plain_la_LDFLAGS = $(module_ldflags)
 libplugin_plain_la_SOURCES = $(validator_plain)
 
 if STATIC_VALIDATOR_PLAIN
@@ -1065,7 +1065,7 @@ $(validator_file_file) \
 validator_htdigest.c   \
 validator_htdigest.h
 
-libplugin_htdigest_la_LDFLAGS = $(module_ldflags) 
+libplugin_htdigest_la_LDFLAGS = $(module_ldflags)
 libplugin_htdigest_la_SOURCES = $(validator_htdigest)
 
 if STATIC_VALIDATOR_HTDIGEST
@@ -1082,7 +1082,7 @@ validator_authlist = \
 validator_authlist.c \
 validator_authlist.h
 
-libplugin_authlist_la_LDFLAGS = $(module_ldflags) 
+libplugin_authlist_la_LDFLAGS = $(module_ldflags)
 libplugin_authlist_la_SOURCES = $(validator_authlist)
 
 if STATIC_VALIDATOR_AUTHLIST
@@ -1149,7 +1149,7 @@ balancer_round_robin = \
 balancer_round_robin.c \
 balancer_round_robin.h
 
-libplugin_round_robin_la_LDFLAGS = $(module_ldflags) 
+libplugin_round_robin_la_LDFLAGS = $(module_ldflags)
 libplugin_round_robin_la_SOURCES = $(balancer_round_robin)
 
 if STATIC_BALANCER_ROUND_ROBIN
@@ -1167,7 +1167,7 @@ balancer_ip_hash = \
 balancer_ip_hash.c \
 balancer_ip_hash.h
 
-libplugin_ip_hash_la_LDFLAGS = $(module_ldflags) 
+libplugin_ip_hash_la_LDFLAGS = $(module_ldflags)
 libplugin_ip_hash_la_SOURCES = $(balancer_ip_hash)
 
 if STATIC_BALANCER_IP_HASH
@@ -1262,7 +1262,7 @@ unix4win32.c \
 win32_misc.h \
 win32_misc.c \
 win32_cservice.h \
-win32_cservice.c 
+win32_cservice.c
 endif
 
 if USE_POSIX_SHM
@@ -1387,7 +1387,7 @@ downloader_async.h \
 downloader_async.c
 
 
-if STATIC_HANDLER_FCGI 
+if STATIC_HANDLER_FCGI
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
 endif
@@ -1562,7 +1562,7 @@ collector.c
 
 libcherokee_config_la_SOURCES = \
 admin_client.h \
-admin_client.c 
+admin_client.c
 
 #
 # Header files
@@ -1675,7 +1675,7 @@ $(dynamic_validator_authlist_lib) \
 $(dynamic_validator_mysql_lib) \
 $(dynamic_cryptor_libssl_lib) \
 $(dynamic_balancer_round_robin_lib) \
-$(dynamic_balancer_ip_hash_lib) 
+$(dynamic_balancer_ip_hash_lib)
 
 
 #
@@ -1733,7 +1733,7 @@ win32_cherokeeserv =
 endif
 
 win32_cherokeeserv_SOURCES = win32_cherokeeserv.c
-win32_cherokeeserv_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 
+win32_cherokeeserv_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la
 
 #
 # Test programs
@@ -1741,7 +1741,7 @@ win32_cherokeeserv_LDADD = libcherokee-config.la libcherokee-base.la libcherokee
 noinst_PROGRAMS = $(win32_cherokeeserv)
 
 # test_SOURCES = test.c
-# test_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 
+# test_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la
 
 
 CLEANFILES = \

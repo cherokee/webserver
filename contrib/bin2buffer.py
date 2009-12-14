@@ -25,7 +25,7 @@ for c in cont:
     if (len(lin) > 75):
         s += '"%s"\n' % (lin)
         lin = ""
-        
+
         if (siz > 127):
             print_block (s, siz)
             s   = ""

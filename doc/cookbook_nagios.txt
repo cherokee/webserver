@@ -44,8 +44,8 @@ follow these steps:
 +
 [options="header"]
 |==============================
-|Nick   |Type     |Host         
-|Nagios |External |10.0.0.11:80 
+|Nick   |Type     |Host
+|Nagios |External |10.0.0.11:80
 |==============================
 
 - Then, create the set of rules that match the following list of
@@ -57,7 +57,7 @@ follow these steps:
 
 This, in turn, can be done easily. For compactness sake, we will just
 use one but you could define a separate one if you need more precise
-matching. The mechanism is exactly the same: 
+matching. The mechanism is exactly the same:
 
 - Within the `Behavior` tab of your virtual server, choose "Regular
 Expression" as type of the new rule, and use the expression
@@ -75,7 +75,7 @@ Advanced set up: Cherokee as host
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is and advanced method only namely. In reality, it is exactly as
-simple. 
+simple.
 
 In this case, the relevant information from the configuration
 file is limited to a couple of snippets:

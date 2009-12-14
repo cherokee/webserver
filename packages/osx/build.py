@@ -48,11 +48,11 @@ def _perform():
 
     # Build package and image
     chdir ('%s/usr/local' %(DESTDIR_ROOT))
-    exe ("%s -build -v " % (PKG_MAKER) + 
-         "-p %s/cherokee-%s.pkg " % (TMP, version) + 
-         "-f %s/usr/local " % (DESTDIR_ROOT) + 
-         "-r %s " % (DESTDIR_RESOURCES) + 
-         "-i %s/Info.plist " % (DESTDIR_RESOURCES) + 
+    exe ("%s -build -v " % (PKG_MAKER) +
+         "-p %s/cherokee-%s.pkg " % (TMP, version) +
+         "-f %s/usr/local " % (DESTDIR_ROOT) +
+         "-r %s " % (DESTDIR_RESOURCES) +
+         "-i %s/Info.plist " % (DESTDIR_RESOURCES) +
          "-d %s/Description.plist " % (DESTDIR_RESOURCES))
 
     chdir (TMP)

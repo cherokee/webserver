@@ -15,7 +15,7 @@ def red (s):
 
 def yellow (s):
     return ESC + '1;33m' + s + RESET
-    
+
 def blue (s):
     return ESC + '0;34m' + s + RESET
 

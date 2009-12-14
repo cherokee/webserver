@@ -10,7 +10,7 @@ bin_PROGRAMS = cget
 cget_LDADD = \
 $(PTHREAD_LIBS) \
 ../cherokee/libcherokee-base.la \
-../cherokee/libcherokee-client.la 
+../cherokee/libcherokee-client.la
 
 cget_SOURCES = \
 main.c \

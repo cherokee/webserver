@@ -3,7 +3,7 @@ ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --conf-file=$(top_srcdir)/do
 SUFFIXES = .txt .html
 
 .txt.html:
-	$(ASCIIDOC) -o $@ $(top_srcdir)/doc/$< 
+	$(ASCIIDOC) -o $@ $(top_srcdir)/doc/$<
 
 doc_DATA = \
 index.html \

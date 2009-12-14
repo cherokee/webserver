@@ -17,7 +17,7 @@ The MySQL validator allows you to authenticate a user against a MySQL database.
 |__unix_socket__ |Optional. A Unix socket.
 |__user__        |The MySQL user to authenticate as.
 |__passwd__      |The MySQL user password to use.
-|__database__    |Required. The MySQL database to select upon 
+|__database__    |Required. The MySQL database to select upon
                   connection.
 |__query__       |Required. The query to execute to authenticate
                   the HTTP user.

@@ -4,7 +4,7 @@ Cookbook: Streaming Audio and Video
 -----------------------------------
 
 It's really easy to configure Cherokee so it streams audio and video
-files instead of sending then as a regular file. 
+files instead of sending then as a regular file.
 
 The first thing you have to ensure is that Cherokee has been compiled
 with the required libraries. In this case, the FFMpeg library set is
