@@ -106,7 +106,7 @@ class Wizard_VServer_Sugar (WizardPage):
                              submit = '/vserver/wizard/Sugar',
                              id     = "Sugar_Page1",
                              title  = _("Sugar Wizard"),
-                             group  = _(WIZARD_GROUP_MANAGEMENT))
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         return True
@@ -178,7 +178,7 @@ class Wizard_Rules_Sugar (WizardPage):
                              submit = '/vserver/%s/wizard/Sugar'%(pre.split('!')[1]),
                              id     = "Sugar_Page1",
                              title  = _("Sugar Wizard"),
-                             group  = _(WIZARD_GROUP_MANAGEMENT))
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         # Check for PHP

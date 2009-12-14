@@ -72,7 +72,7 @@ class Wizard_VServer_Moodle (WizardPage):
                              submit = '/vserver/wizard/Moodle',
                              id     = "Moodle_Page1",
                              title  = _("Moodle Wizard"),
-                             group  = _(WIZARD_GROUP_MANAGEMENT))
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         return True
@@ -141,7 +141,7 @@ class Wizard_Rules_Moodle (WizardPage):
                              submit = '/vserver/%s/wizard/Moodle'%(pre.split('!')[1]),
                              id     = "Moodle_Page1",
                              title  = _("Moodle Wizard"),
-                             group  = _(WIZARD_GROUP_MANAGEMENT))
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         # Check for PHP

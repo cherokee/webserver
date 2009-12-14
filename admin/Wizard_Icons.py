@@ -36,6 +36,7 @@ class Wizard_Rules_Icons (Wizard):
         self.name        = _("Add the /icons directory")
         self.have_icons  = False
         self.have_themes = False
+        self.group = _(WIZARD_GROUP_TASKS)
 
     def _check_config (self):
         rules = self._cfg.keys('%s!rule'%(self._pre))

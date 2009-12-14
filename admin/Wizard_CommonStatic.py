@@ -19,7 +19,8 @@ class Wizard_Rules_CommonStatic (Wizard):
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
-        self.name = "Common Static"
+        self.name  = _("Common Static")
+        self.group = _(WIZARD_GROUP_TASKS)
 
     def show (self):
         rules = self._cfg.keys('%s!rule'%(self._pre))

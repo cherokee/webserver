@@ -21,6 +21,7 @@ class Wizard_Rules_Streaming (Wizard):
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
         self.name = "Media Streaming"
+        self.group = _(WIZARD_GROUP_TASKS)
 
     def show (self):
         if not cherokee_has_plugin ('streaming'):

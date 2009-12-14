@@ -69,7 +69,7 @@ class Wizard_VServer_Alfresco (WizardPage):
                              submit = '/vserver/wizard/Alfresco',
                              id     = "Alfresco_Page1",
                              title  = _("Alfresco Wizard"),
-                             group  = _(WIZARD_GROUP_CMS))
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -129,7 +129,7 @@ class Wizard_Rules_Alfresco (WizardPage):
                              submit = '/vserver/%s/wizard/Alfresco'%(pre.split('!')[1]),
                              id     = "Alfresco_Page1",
                              title  = _("Alfresco Wizard"),
-                             group  = _(WIZARD_GROUP_CMS))
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True

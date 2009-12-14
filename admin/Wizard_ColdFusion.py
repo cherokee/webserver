@@ -88,7 +88,7 @@ class Wizard_VServer_ColdFusion (WizardPage):
                              submit = '/vserver/wizard/ColdFusion',
                              id     = "ColdFusion_Page1",
                              title  = _("ColdFusion Wizard"),
-                             group  = _(WIZARD_GROUP_LANGS))
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -146,7 +146,7 @@ class Wizard_Rules_ColdFusion (WizardPage):
                              submit = '/vserver/%s/wizard/ColdFusion'%(pre.split('!')[1]),
                              id     = "Coldfusion_Page1",
                              title  = _("ColdFusion Wizard"),
-                             group  = _(WIZARD_GROUP_LANGS))
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True

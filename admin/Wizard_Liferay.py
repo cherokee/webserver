@@ -66,7 +66,7 @@ class Wizard_VServer_Liferay (WizardPage):
                              submit = '/vserver/wizard/Liferay',
                              id     = "Liferay_Page1",
                              title  = _("Liferay Wizard"),
-                             group  = _(WIZARD_GROUP_CMS))
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -126,7 +126,7 @@ class Wizard_Rules_Liferay (WizardPage):
                              submit = '/vserver/%s/wizard/Liferay'%(pre.split('!')[1]),
                              id     = "Liferay_Page1",
                              title  = _("Liferay Wizard"),
-                             group  = _(WIZARD_GROUP_CMS))
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True

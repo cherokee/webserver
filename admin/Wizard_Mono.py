@@ -81,14 +81,14 @@ class CommonMethods:
 
 class Wizard_VServer_Mono (CommonMethods, WizardPage):
     ICON = "mono.png"
-    DESC = _("New virtual server based on a Mono project.")
+    DESC = _("New virtual server based on a .NET/Mono project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Mono',
                              id     = "Mono_Page1",
-                             title  = _("Mono Wizard"),
-                             group  = _(WIZARD_GROUP_PLATFORM))
+                             title  = _(".NET/Mono Wizard"),
+                             group  = _(WIZARD_GROUP_LANGS))
 
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
@@ -145,14 +145,14 @@ class Wizard_VServer_Mono (CommonMethods, WizardPage):
 
 class Wizard_Rules_Mono (CommonMethods, WizardPage):
     ICON = "mono.png"
-    DESC = _("New directory based on a Mono project.")
+    DESC = _("New directory based on a .NET/Mono project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Mono'%(pre.split('!')[1]),
                              id     = "Mono_Page1",
-                             title  = _("Mono Wizard"),
-                             group  = _(WIZARD_GROUP_PLATFORM))
+                             title  = _(".NET/Mono Wizard"),
+                             group  = _(WIZARD_GROUP_LANGS))
 
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
