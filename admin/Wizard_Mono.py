@@ -49,7 +49,6 @@ CONFIG_RULES = SOURCE + """
 DEFAULT_BINS  = ['fastcgi-mono-server2','fastcgi-mono-server']
 
 DEFAULT_PATHS = ['/usr/bin',
-                 '/opt/php',
                  '/usr/sfw/bin',
                  '/usr/gnu/bin',
                  '/opt/local/bin']
