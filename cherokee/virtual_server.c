@@ -912,3 +912,30 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver,
 
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_virtual_server_get_error_log (cherokee_virtual_server_t  *vserver,
+				       cherokee_logger_writer_t  **writer)
+{
+	/* Virtual server's custom error log
+	 */
+	if ((vserver->error_writer != NULL) &&
+	    (vserver->error_writer->initialized))
+	{
+		*writer = vserver->error_writer;
+		return ret_ok;
+	}
+
+	/* Server's error writer
+	 */
+	if ((VSERVER_SRV(vserver)->error_writer != NULL) &&
+	    (VSERVER_SRV(vserver)->error_writer->initialized))
+	{
+		*writer = vserver->error_writer;
+		return ret_ok;
+	}
+
+	SHOULDNT_HAPPEN;
+	return ret_error;
+}

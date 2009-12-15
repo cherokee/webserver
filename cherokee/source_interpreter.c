@@ -629,6 +629,8 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	}
 
 	if (src->spawning_since == 0) {
+		cherokee_logger_writer_t *error_writer = NULL;
+
 		/* Check re-try limit */
 		if (src->spawning_since_fails >= MAX_SPAWN_FAILS_IN_A_ROW) {
 			TRACE (ENTRIES, "Failed to launch the interpreter %d consecutive times. Giving up now.\n",
@@ -646,7 +648,12 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		}
 
 		/* Spawn */
-		ret = cherokee_source_interpreter_spawn (src, CONN_VSRV(conn)->error_writer);
+		ret = cherokee_virtual_server_get_error_log (CONN_VSRV(conn), &error_writer);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+
+		ret = cherokee_source_interpreter_spawn (src, error_writer);
 		switch (ret) {
 		case ret_ok:
 			src->spawning_since = cherokee_bogonow_now;

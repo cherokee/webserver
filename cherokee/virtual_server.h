@@ -99,4 +99,7 @@ ret_t cherokee_virtual_server_has_tls   (cherokee_virtual_server_t *vserver);
 void  cherokee_virtual_server_add_rx    (cherokee_virtual_server_t *vserver, size_t rx);
 void  cherokee_virtual_server_add_tx    (cherokee_virtual_server_t *vserver, size_t tx);
 
+ret_t cherokee_virtual_server_get_error_log (cherokee_virtual_server_t  *vserver,
+					     cherokee_logger_writer_t  **writer);
+
 #endif /* CHEROKEE_VIRTUAL_SERVER_H */

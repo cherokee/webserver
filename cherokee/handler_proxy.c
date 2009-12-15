@@ -762,8 +762,18 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				}
 
 				if (hdl->src_ref->type == source_interpreter) {
+					cherokee_logger_writer_t *error_writer = NULL;
+
+					/* Spawn a new process
+					 */
+					ret = cherokee_virtual_server_get_error_log (CONN_VSRV(conn),
+										     &error_writer);
+					if (ret != ret_ok) {
+						return ret_error;
+					}
+
 					ret = cherokee_source_interpreter_spawn (SOURCE_INT(hdl->src_ref),
-										 CONN_VSRV(conn)->logger);
+										 error_writer);
 					switch (ret) {
 					case ret_ok:
 						break;

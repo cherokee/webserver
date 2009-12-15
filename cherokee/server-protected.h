@@ -94,14 +94,18 @@ struct cherokee_server {
 	 */
 	cherokee_collector_t      *collector;
 
+	int                        nonces_cleanup_lapse;
+	time_t                     nonces_cleanup_next;
+
+	/* Logging
+	 */
+	cherokee_logger_writer_t  *error_writer;
+
 	cherokee_list_t            logger_writers;
 	cherokee_avl_t             logger_writers_index;
 
 	int                        log_flush_lapse;
 	time_t                     log_flush_next;
-
-	int                        nonces_cleanup_lapse;
-	time_t                     nonces_cleanup_next;
 
 	/* Main socket
 	 */

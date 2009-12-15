@@ -193,7 +193,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	cherokee_avl_init (&n->logger_writers_index);
 	INIT_LIST_HEAD (&n->logger_writers);
 
-	n->log_flush_next        = 0;
+	n->log_flush_next       = 0;
 	n->log_flush_lapse      = LOGGER_FLUSH_LAPSE;
 
 	/* Programmed tasks
@@ -212,6 +212,20 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Information sources: SCGI, FCGI
 	 */
 	cherokee_avl_init (&n->sources);
+
+	/* Init the default error writer
+	 */
+	ret = cherokee_logger_writer_new_stderr (&n->error_writer);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	ret = cherokee_logger_writer_open (n->error_writer);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	cherokee_error_set_default (n->error_writer);
 
 	/* Return the object
 	 */
@@ -642,10 +656,9 @@ initialize_server_threads (cherokee_server_t *srv)
 static ret_t
 initialize_loggers (cherokee_server_t *srv)
 {
-	ret_t                     ret;
-	cherokee_list_t          *i;
-	cherokee_logger_t        *logger;
-	cherokee_logger_writer_t *writer;
+	ret_t              ret;
+	cherokee_list_t   *i;
+	cherokee_logger_t *logger;
 
 	/* Initialize all the loggers
 	 */
@@ -661,19 +674,6 @@ initialize_loggers (cherokee_server_t *srv)
 		}
 	}
 
-	/* Free the startup log-writer
-	 */
-	cherokee_error_log_default_free();
-	cherokee_error_log_set_echo_stderr (false);
-
-	/* Set the (real) default error writer
-	 */
-	writer = VSERVER(srv->vservers.prev)->error_writer;
-	if (writer == NULL) {
-		return ret_ok;
-	}
-
-	cherokee_error_log_default_set (writer);
 	return ret_ok;
 }
 
@@ -1481,87 +1481,10 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 
 
 static ret_t
-create_startup_log_writer (cherokee_server_t *srv)
-{
-	ret_t                     ret;
-	cherokee_list_t          *i;
-	cherokee_config_node_t   *subconf;
-	int                       lower      = -1;
-	cherokee_config_node_t   *lower_conf = NULL;
-	cherokee_logger_writer_t *writer     = NULL;
-
-	/* Find the first virtual server
-	 */
-	ret = cherokee_config_node_get (&srv->config, "vserver", &subconf);
-	if (ret != ret_ok) {
-		return ret_not_found;
-	}
-
-	cherokee_config_node_foreach (i, subconf) {
-		cherokee_config_node_t *vsrv_conf = CONFIG_NODE(i);
-		int                     vsrv_num  = atoi(vsrv_conf->key.buf);
-
-		if ((lower < 0) || (vsrv_num < lower)) {
-			lower     = vsrv_num;
-			lower_conf = vsrv_conf;
-		}
-	}
-
-	if (lower_conf == NULL) {
-		return ret_not_found;
-	}
-
-	/* Instance the writer
-	 */
-	ret = cherokee_config_node_get (lower_conf, "error_writer", &subconf);
-	if (ret != ret_ok) {
-		return ret_not_found;
-	}
-
-	ret = cherokee_logger_writer_new (&writer);
-	if (ret != ret_ok) {
-		goto error;
-	}
-
-	ret = cherokee_logger_writer_configure (writer, subconf);
-	if (ret != ret_ok) {
-		goto error;
-	}
-
-	/* Init it
-	 */
-	ret = cherokee_logger_writer_open (writer);
-	if (ret != ret_ok) {
-		PRINT_ERROR_S ("Could not initialize starting up logger\n");
-		goto error;
-	}
-
-	TRACE (ENTRIES, "Instanced a specific error writer object: %p\n", writer);
-
-	/* The error writer is ready
-	 */
-	cherokee_error_log_default_set (writer);
-	return ret_ok;
-
-error:
-	if (writer) {
-		cherokee_logger_writer_free (writer);
-	}
-
-	TRACE (ENTRIES, "Could not instance a specific error writer object: %p\n", writer);
-	return ret_not_found;
-}
-
-
-static ret_t
 configure_server (cherokee_server_t *srv)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf, *subconf2;
-
-	/* Create an special logger writers
-	 */
-	create_startup_log_writer (srv);
 
 	/* Server
 	 */
