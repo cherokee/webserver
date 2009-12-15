@@ -8,6 +8,7 @@ AVAILABLE_LANGUAGES = [
     ('fr',           N_('French')),
     ('nl',           N_('Dutch')),
     ('sv_SE',        N_('Swedish')),
+    ('po_BR',        N_('Brazilian Portuguese')),
     ('zh_CN',        N_('Chinese Simplified'))
 ]
 
