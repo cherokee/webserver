@@ -2,8 +2,8 @@
 uWSGI wizard.
 
 Last update:
-* Cherokee 0.99.28
-* uWSGI 20090829 Version 0.9.2
+* Cherokee 0.99.36b
+* uWSGI Version 0.9.3
 """
 import validations
 import re
@@ -29,7 +29,7 @@ ERROR_NO_UWSGI_BINARY = N_("The uWSGI server could not be found.")
 SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = uWSGI %(src_num)d
-source!%(src_num)d!host = /tmp/cherokee-source%(src_num)d.sock
+source!%(src_num)d!host = 127.0.0.1:%(src_port)d
 source!%(src_num)d!interpreter = %(uwsgi_binary)s -s 127.0.0.1:%(src_port)d -t 10 -M -p 1 -C %(uwsgi_extra)s
 """
 
