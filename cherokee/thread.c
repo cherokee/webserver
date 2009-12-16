@@ -515,9 +515,14 @@ process_polling_connections (cherokee_thread_t *thd)
 	list_for_each_safe (i, tmp, LIST(&thd->polling_list)) {
 		conn = CONN(i);
 
-		/* Thread logger
+		/* Thread's error logger
 		 */
-		CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, conn->logger_ref);
+		if (CONN_VSRV(conn) &&
+		    CONN_VSRV(conn)->error_writer)
+		{
+			CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
+						  CONN_VSRV(conn)->error_writer);
+		}
 
 		/* Has it been too much without any work?
 		 */
@@ -597,9 +602,14 @@ process_active_connections (cherokee_thread_t *thd)
 		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s'\n",
 		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn));
 
-		/* Thread logger
+		/* Thread's error logger
 		 */
-		CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, conn->logger_ref);
+		if (CONN_VSRV(conn) &&
+		    CONN_VSRV(conn)->error_writer)
+		{
+			CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
+						  CONN_VSRV(conn)->error_writer);
+		}
 
 		/* Has the connection been too much time w/o any work
 		 */
@@ -882,9 +892,14 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			}
 
-			/* Thread logger
+			/* Thread's error logger
 			 */
-			CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, conn->logger_ref);
+			if (CONN_VSRV(conn) &&
+			    CONN_VSRV(conn)->error_writer)
+			{
+				CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
+							  CONN_VSRV(conn)->error_writer);
+			}
 
 			/* Information collection
 			 */

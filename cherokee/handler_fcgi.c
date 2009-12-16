@@ -59,9 +59,8 @@ CGI_LIB_INIT (fcgi, http_all_methods);
 static ret_t
 process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cherokee_buffer_t *outbuf)
 {
-	FCGI_Header           *header;
-	FCGI_EndRequestBody   *ending;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	FCGI_Header         *header;
+	FCGI_EndRequestBody *ending;
 
 	cuint_t  len;
 	char    *data;
@@ -116,10 +115,10 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	case FCGI_STDERR:
 /*		printf ("READ:STDERR (%d): %s", len, data?data:""); */
 
-		if (CONN_VSRV(conn)->logger != NULL) {
-			LOG_ERROR (CHEROKEE_ERROR_HANDLER_FCGI_STDERR, data);
-		}
-		else if (SOURCE_INT(hdl->src_ref)->debug) {
+		LOG_ERROR (CHEROKEE_ERROR_HANDLER_FCGI_STDERR, data);
+
+		/* Debug mode */
+		if (SOURCE_INT(hdl->src_ref)->debug) {
 			PRINT_MSG ("%.*s\n", len, data);
 		}
 

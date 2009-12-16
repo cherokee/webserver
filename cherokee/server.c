@@ -656,13 +656,30 @@ initialize_server_threads (cherokee_server_t *srv)
 static ret_t
 initialize_loggers (cherokee_server_t *srv)
 {
-	ret_t              ret;
-	cherokee_list_t   *i;
-	cherokee_logger_t *logger;
+	ret_t            ret;
+	cherokee_list_t *i;
 
-	/* Initialize all the loggers
+	/* Initialize the error writers
 	 */
 	list_for_each (i, &srv->vservers) {
+		cherokee_logger_writer_t *writer;
+
+		writer = VSERVER(i)->error_writer;
+		if (writer == NULL) {
+			continue;
+		}
+
+		ret = cherokee_logger_writer_open (writer);
+		if (ret != ret_ok) {
+			return ret;
+		}
+	}
+
+	/* Initialize loggers as well
+	 */
+	list_for_each (i, &srv->vservers) {
+		cherokee_logger_t *logger;
+
 		logger = VSERVER(i)->logger;
 		if (logger == NULL) {
 			continue;
