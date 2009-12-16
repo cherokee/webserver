@@ -156,6 +156,9 @@ check_worker_version (const char *this_exec)
 		/* Skip line until it found the version entry
 		 */
 		line = fgets (tmp, sizeof(tmp), f);
+		if (line == NULL)
+			continue;
+
 		line = strstr (line, "Version: ");
 		if (line == NULL)
 			continue;
@@ -325,8 +328,9 @@ pid_file_clean (const char *pid_file)
 	 */
 	len = strlen(pid_file);
 	pid_file_worker = (char *) malloc (len + 8);
-	if (unlikely (pid_file_worker == NULL))
+	if (unlikely (pid_file_worker == NULL)) {
 		return;
+	}
 
 	memcpy (pid_file_worker, pid_file, len);
 	memcpy (pid_file_worker + len, ".worker\0", 8);
@@ -687,7 +691,10 @@ clean_up (void)
 #ifdef HAVE_POSIX_SHM
 	spawn_clean();
 #endif
-	pid_file_clean (pid_file_path);
+
+	if (pid_file_path) {
+		pid_file_clean (pid_file_path);
+	}
 }
 
 static ret_t
