@@ -594,6 +594,18 @@ table tr th {
   font-weight: bold;
 }
 
+.rulesdisabled {
+  color: #000;
+  opacity: 0.2;
+  filter:alpha(opacity=20);
+  -moz-opacity:0.2;
+  -khtml-opacity: 0.2;
+}
+
+tr.rulesdisabled a {
+  color: #000;
+}
+
 .rulesdiv {
   margin: 8px 0 16px 0;
   border-radius: 4px;
@@ -1159,3 +1171,34 @@ table#table_new_file td {
 	color: #ccc;
 }
 
+.ibutton-container {
+	width: 38px;
+	height: 15px;
+}
+
+.ibutton-container .ibutton-handle {
+	width: 10px;
+	height: 15px;
+}
+
+.ibutton-container label {
+	float: none !important;
+}
+
+div.ibutton-label-on, div.ibutton-label-off {
+	font-size: 8px;
+	line-height: 8px;
+	height: 15px;
+}
+
+div.ibutton-label-on {
+	text-align: left;
+}
+
+div.ibutton-label-on span {
+	 padding-left: 3px;
+}
+
+div.ibutton-label-off span {
+	padding-right: 2px;
+}

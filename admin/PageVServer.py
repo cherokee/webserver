@@ -357,9 +357,12 @@ class PageVServer (PageMenu, FormHelper):
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
 
+        ON_IMAGE  = self.InstanceImage('switch_on_m.png', _('Enabled'))
+        OFF_IMAGE = self.InstanceImage('switch_off_m.png', _('Disabled'))
+
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr class="nodrag nodrop"><th>&nbsp;</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' %(
-            _('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Time'), _('Final'))
+        txt += '<tr class="nodrag nodrop"><th>&nbsp;</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' %(
+            _('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Time'), _('Final'), _('Active'))
 
         # Rule list
         for prio in priorities:
@@ -379,12 +382,17 @@ class PageVServer (PageMenu, FormHelper):
 
             if _type != 'default':
                 link      = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)
+                disabled  = self.InstanceCheckbox ('%s!%s!disabled'%(cfg_key, prio), self._cfg.get_val('%s!%s!disabled'%(cfg_key, prio)) == 1, quiet=True, switch=True, noautosubmit=True)
                 final     = self.InstanceCheckbox ('%s!final'%(pre), True, quiet=True)
                 link_del  = self.AddDeleteLink (self.submit_ajax_url, "%s!%s"%(cfg_key, prio))
-                extra     = ''
+                if self._cfg.get_val('%s!%s!disabled'%(cfg_key, prio)) == "1":
+                    extra = ' class="trdisabled"'
+                else:
+                    extra     = ''
                 draggable = ' class="dragHandle"'
             else:
                 link      = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, _('Default'))
+                disabled  = self.HiddenInput ('%s!%s!disabled'%(cfg_key, prio), "0")
                 final     = self.HiddenInput ('%s!final'%(pre), "1")
                 link_del  = ''
                 extra     = ' class="nodrag nodrop"'
@@ -410,72 +418,17 @@ class PageVServer (PageMenu, FormHelper):
                     if int(conf.get_val('encoder!%s'%(k))):
                         encoders = ENABLED_IMAGE
 
-            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td%s>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>\n' % (
-                prio, pre, prio, extra, draggable, link, name_type, handler_name, document_root, auth_name, encoders, expiration, timeout, final, link_del)
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td%s>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center switch">%s</td><td class="center">%s</td></tr>\n' % (
+                prio, pre, prio, extra, draggable, link, name_type, handler_name, document_root, auth_name, encoders, expiration, timeout, final, disabled, link_del)
 
         txt += '</table>\n'
 
         txt += '''
-                      <script type="text/javascript">
-                      prevSection = '';
-                      $(document).ready(function() {
-                        $("#%(name)s tr:even').addClass('alt')");
-
-                        $('#%(name)s').tableDnD({
-                          onDrop: function(table, row) {
-                              var rows = table.tBodies[0].rows;
-                              var post = 'update_prefix=%(prefix)s&';
-                              for (var i=1; i<rows.length; i++) {
-                                var prio = (rows.length - i) * 100;
-                                post += 'update_prio=' + rows[i].id + ',' + prio + '&';
-                              }
-                              jQuery.post ('%(url)s', post,
-                                  function (data, textStatus) {
-                                      window.location = window.location;
-                                  }
-                              );
-                          },
-                          dragHandle: "dragHandle"
-                        });
-
-                        $("#%(name)s tr:not(.nodrag, nodrop)").hover(function() {
-                            $(this.cells[0]).addClass('dragHandleH');
-                        }, function() {
-                            $(this.cells[0]).removeClass('dragHandleH');
-                        });
-
-                      });
-
-                      $(document).ready(function(){
-                        $("table.rulestable tr:odd").addClass("odd");
-                        $("#newsection_b").click(function() { openSection('newsection')});
-                        $("#clonesection_b").click(function() { openSection('clonesection')});
-                        $("#wizardsection_b").click(function() { openSection('wizardsection')});
-                        open_vsec  = get_cookie('open_vsec');
-                        if (open_vsec && document.referrer == window.location) {
-                            openSection(open_vsec);
-                        }
-
-                      });
-
-                      function openSection(section)
-                      {
-                          document.cookie = "open_vsec="  + section;
-                          if (prevSection != '') {
-                              $("#"+prevSection).hide();
-                              $("#"+prevSection+"_b").attr("style", "font-weight: normal;");
-                          }
-                          $("#"+section+"_b").attr("style", "font-weight: bold;");
-                          $("#"+section).show();
-                          prevSection = section;
-                      }
-
-
-                      $(document).mouseup(function(){
-                        $("table.rulestable tr:even").removeClass("odd");
-                        $("table.rulestable tr:odd").addClass("odd");
-                      });
-                      </script>
+               <script type="text/javascript">
+                   $(document).ready(function(){
+                      init_PageVServer ("%(name)s", "%(url)s", "%(prefix)s");
+                   });
+               </script>
                ''' % {'name':   table_name,
                       'url' :   self.submit_ajax_url,
                       'prefix': cfg_key}
@@ -715,6 +668,7 @@ class PageVServer (PageMenu, FormHelper):
         tmp = self._cfg['%s!rule'%(pre)]
         if tmp and tmp.has_child():
             for p in tmp:
+                checkboxes.append('%s!rule!%s!disabled'%(pre,p))
                 checkboxes.append('%s!rule!%s!match!final'%(pre,p))
 
         # Special case for loggers

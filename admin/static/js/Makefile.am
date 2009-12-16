@@ -1,7 +1,7 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
 THIRD_PARTY = \
-jquery-1.2.6.min.js \
+jquery-1.3.2.min.js \
 ui.core.js \
 ui.tabs.js \
 ui.draggable.js \
@@ -12,6 +12,7 @@ jquery.easing.js \
 jquery.dimensions.js \
 jquery.tablednd.js \
 jquery.form-defaults.js \
+jquery.ibutton.js \
 thickbox.js
 
 adminstaticdir = "$(datadir)/cherokee/admin/static/js"

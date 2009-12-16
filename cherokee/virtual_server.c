@@ -387,6 +387,10 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		/* Ignore: Previously handled
 		 */
 
+	} else if (equal_buf_str (&conf->key, "disabled")) {
+		/* Ignore: Previously handled 
+		 */
+
 	} else {
 		LOG_CRITICAL (CHEROKEE_ERROR_VSERVER_RULE_UNKNOWN_KEY,
 			      conf->key.buf, vserver->priority, rule_prio);
@@ -520,6 +524,16 @@ add_rule (cherokee_config_node_t    *config,
 		LOG_CRITICAL (CHEROKEE_ERROR_VSERVER_BAD_PRIORITY,
 			      config->key.buf, vserver->priority);
 		return ret_error;
+	}
+
+	/* Is disabled?
+	 */
+	ret = cherokee_config_node_get (config, "disabled", &subconf);
+	if (ret == ret_ok) {
+		if (atoi(subconf->val.buf)) {
+			TRACE(ENTRIES, "Skipping rule '%s'\n", config->key.buf);
+			return ret_ok;
+		}
 	}
 
 	/* Configure the rule match section
@@ -832,10 +846,14 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
 		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
 
- 	} else if (equal_buf_str (&conf->key, "collector")) {
+	} else if (equal_buf_str (&conf->key, "collector")) {
 		/* Handled later on */
 
- 	} else if (equal_buf_str (&conf->key, "collect_statistics")) {
+	} else if (equal_buf_str (&conf->key, "disabled")) {
+		/* Ignore: Previously handled
+		*/
+
+	} else if (equal_buf_str (&conf->key, "collect_statistics")) {
 		/* DEPRECATED: Ignore */
 	} else {
 		LOG_CRITICAL (CHEROKEE_ERROR_VSERVER_UNKNOWN_KEY,
@@ -877,11 +895,22 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver,
 				   cuint_t                    prio,
 				   cherokee_config_node_t    *config)
 {
-	ret_t ret;
+	ret_t                   ret;
+	cherokee_config_node_t *subconf = NULL;
 
 	/* Set the priority
 	 */
 	vserver->priority = prio;
+
+	/* Is disabled?
+	*/
+	ret = cherokee_config_node_get (config, "disabled", &subconf);
+	if (ret == ret_ok) {
+		if (atoi(subconf->val.buf)) {
+			TRACE(ENTRIES, "Skipping VServer '%s'\n", config->key.buf);
+			return ret_deny;
+		}
+	}
 
 	/* Parse properties
 	 */

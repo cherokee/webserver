@@ -140,8 +140,8 @@ class PageVServers (PageMenu, FormHelper):
         sorted_vservers.sort(sort_vservers, reverse=True)
 
         txt += '<div class="rulesdiv"><table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr class="nodrag nodrop"><th>&nbsp</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
-            (_('Nickname'), _('Root'), _('Domains'), _('Logging'), _('Stats'))
+        txt += '<tr class="nodrag nodrop"><th>&nbsp</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
+            (_('Nickname'), _('Root'), _('Domains'), _('Logging'), _('Stats'), _('Active'))
 
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
@@ -175,12 +175,6 @@ class PageVServers (PageMenu, FormHelper):
                     doms = 1
 
             link = '<a href="/vserver/%s">%s</a>' % (prio, nick)
-            if nick == 'default':
-                extra = ' class="nodrag nodrop"'
-                draggable = ''
-            else:
-                extra = ''
-                draggable = ' class="dragHandle"'
 
             if logger_val:
                 logging = ENABLED_IMAGE
@@ -196,74 +190,30 @@ class PageVServers (PageMenu, FormHelper):
                 collector = OFFLINE_IMAGE
 
             if nick != "default":
+                disabled = self.InstanceCheckbox ('vserver!%s!disabled'%(prio), self._cfg.get_val('vserver!%s!disabled'%(prio)) == 1, quiet=True, switch=True, noautosubmit=True)
                 link_del = self.AddDeleteLink ('/ajax/update', 'vserver!%s'%(prio))
+                if self._cfg.get_val('vserver!%s!disabled'%(prio)) == "1":
+                    extra = ' class="trdisabled"'
+                else:
+                    extra = ''
+                    draggable = ' class="dragHandle"'
             else:
+                disabled  = self.HiddenInput ('vserver!%s!disabled'%(prio), "0")
                 link_del = ''
+                extra = ' class="nodrag nodrop"'
+                draggable = ''
 
-            txt += '<tr prio="%s" id="%s"%s><td%s>&nbsp</td><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>' % (
-                prio, prio, extra, draggable, link, document_root, doms, logging, collector, link_del)
+            txt += '<tr prio="%s" id="%s"%s><td%s>&nbsp</td><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td><td class="center switch">%s</td><td class="center">%s</td></tr>' % (
+                prio, prio, extra, draggable, link, document_root, doms, logging, collector, disabled, link_del)
 
         txt += '</table>'
 
 
         txt += '''
                       <script type="text/javascript">
-                      var prevSection = '';
-
-                      $(document).ready(function() {
-                        $("#%(name)s tr:even').addClass('alt')");
-
-                        $('#%(name)s').tableDnD({
-                          onDrop: function(table, row) {
-                              var rows = table.tBodies[0].rows;
-                              var post = 'update_prio=1&prios=';
-                              for (var i=1; i<rows.length; i++) {
-                                post += rows[i].id + ',';
-                              }
-                              jQuery.post ('%(url)s', post,
-                                  function (data, textStatus) {
-                                      window.location.reload();
-                                  }
-                              );
-                          },
-                          dragHandle: "dragHandle"
+                        $(document).ready(function(){
+                            init_PageVServers ("%(name)s", "%(url)s");
                         });
-
-                        $("#%(name)s tr:not(.nodrag, nodrop)").hover(function() {
-                            $(this.cells[0]).addClass('dragHandleH');
-                        }, function() {
-                            $(this.cells[0]).removeClass('dragHandleH');
-                        });
-
-                      });
-
-                      $(document).ready(function(){
-                        $("table.rulestable tr:odd").addClass("odd");
-                        $("#newsection_b").click(function() { openSection('newsection')});
-                        $("#clonesection_b").click(function() { openSection('clonesection')});
-                        $("#wizardsection_b").click(function() { openSection('wizardsection')});
-                        open_vssec  = get_cookie('open_vssec');
-                        if (open_vssec && document.referrer == window.location) {
-                            openSection(open_vssec);
-                        }
-                      });
-
-                      function openSection(section)
-                      {
-                          document.cookie = "open_vssec="  + section;
-                          if (prevSection != '') {
-                              $("#"+prevSection).hide();
-                              $("#"+prevSection+"_b").attr("style", "font-weight: normal;");
-                          }
-		          $("#"+section+"_b").attr("style", "font-weight: bold;");
-                          $("#"+section).show();
-                          prevSection = section;
-                      }
-
-                      $(document).mouseup(function(){
-                        $("table.rulestable tr:even").removeClass("odd");
-                        $("table.rulestable tr:odd").addClass("odd");
-                      });
                       </script>
                ''' % {'name':   table_name,
                       'url' :   '/vserver/ajax_update'}

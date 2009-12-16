@@ -27,6 +27,10 @@ class Entry:
             str_class += 'optional '
             del kwargs['optional']
 
+        if 'switch' in kwargs and kwargs['switch'] == True:
+            str_class += 'switch '
+            del kwargs['switch']
+
         if str_class:
             self._kwargs['class'] = str_class
 

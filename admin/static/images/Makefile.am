@@ -42,7 +42,8 @@ proud.png \
 feedback.png \
 rulestable-th.png \
 arrow_ns.png \
-arrow_ns_h.png
+arrow_ns_h.png \
+ibutton-slider-default.png
 
 EXTRA_DIST = \
 $(adminstatic_DATA)

@@ -92,6 +92,22 @@ function options_changed (url, obj)
 	);
 }
 
+function switch_changed (url, obj)
+{
+	var value = jQuery(obj).attr("checked");
+
+	if (value == 'on' || value == '1' || value == 'true') {
+		value = '1';
+	} else {
+		value = '0';
+	}
+
+	/* POST the new value and reload */
+	var post = obj.name + "=" + value;
+
+	jQuery.post (url, post);
+}
+
 function save_config()
 {
 	var post = "restart=" + $("#restart").val();
@@ -231,7 +247,6 @@ function unloadMessage()
 }
 
 
-
 /* RULES
  */
 
@@ -277,4 +292,112 @@ function rule_delete (prefix)
 		    window.location = window.location;
 		}
     );
+}
+
+function openSection(cookie_name, section)
+{
+	document.cookie = cookie_name + "=" + section;
+	if (prevSection != '') {
+		$("#"+prevSection).hide();
+		$("#"+prevSection+"_b").attr("style", "font-weight: normal;");
+	}
+
+	$("#"+section+"_b").attr("style", "font-weight: bold;");
+	$("#"+section).show();
+	prevSection = section;
+}
+
+function PageVServer_disable_rule (obj)
+{
+	checked = $(obj).is(":checked");
+	$(obj)
+		.closest('tr')
+		.toggleClass("trdisabled", checked)
+		.children('td:not(.switch)')
+		.toggleClass("rulesdisabled", checked);
+}
+
+/* INITIALIZATION FUNCTIONS
+ */
+
+/* Common initialization code for PageVServer and PageVServers
+ */
+function init_PageVServer_common (table_name, cookie_name)
+{
+	$("table.rulestable tr:odd").addClass("odd");
+	$(document).mouseup(function(){
+		$("table.rulestable tr:even").removeClass("odd");
+		$("table.rulestable tr:odd").addClass("odd");
+	});
+
+	$("#" + table_name + " tr:not(.nodrag, nodrop)").hover(
+		function() {
+			$(this.cells[0]).addClass('dragHandleH');
+		},
+		function() {
+			$(this.cells[0]).removeClass('dragHandleH');
+		}
+	);
+
+	$("#" + table_name + " input:checkbox.switch").iButton("invert").change(function() {
+		switch_changed('/ajax/update', this);
+		PageVServer_disable_rule(this);
+	});
+
+	$("tr.trdisabled td:not(.switch)").addClass("rulesdisabled");
+
+	prevSection = '';
+	$("#newsection_b").click(function() { openSection(cookie_name, 'newsection')});
+	$("#clonesection_b").click(function() { openSection(cookie_name, 'clonesection')});
+	$("#wizardsection_b").click(function() { openSection(cookie_name, 'wizardsection')});
+
+	open_section  = get_cookie(cookie_name);
+	if (open_section && document.referrer == window.location) {
+		openSection(cookie_name, open_section);
+	}
+}
+
+function init_PageVServers (table_name, ajax_url)
+{
+	init_PageVServer_common(table_name, 'open_vssec');
+
+	$('#' + table_name).tableDnD({
+		onDrop: function(table, row) {
+			var rows = table.tBodies[0].rows;
+			var post = 'update_prio=1&prios=';
+			for (var i=1; i<rows.length; i++) {
+				post += rows[i].id + ',';
+			}
+
+			jQuery.post (ajax_url, post,
+				function (data, textStatus) {
+					window.location.reload();
+				}
+			);
+		},
+		dragHandle: "dragHandle"
+	});
+}
+
+function init_PageVServer (table_name, ajax_url, prefix)
+{
+	init_PageVServer_common(table_name, 'open_vsec');
+
+	$('#' + table_name).tableDnD({
+		onDrop: function(table, row) {
+			var rows = table.tBodies[0].rows;
+			var post = 'update_prefix=' + prefix + '&';
+			for (var i=1; i<rows.length; i++) {
+				var prio = (rows.length - i) * 100;
+				post += 'update_prio=' + rows[i].id + ',' + prio + '&';
+			}
+
+			jQuery.post (ajax_url, post,
+				function (data, textStatus) {
+					window.location = window.location;
+				}
+			);
+		},
+		dragHandle: "dragHandle"
+	});
 }

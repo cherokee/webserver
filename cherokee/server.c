@@ -1237,7 +1237,12 @@ add_vserver (cherokee_config_node_t *conf, void *data)
 	/* Configure the new object
 	 */
 	ret = cherokee_virtual_server_configure (vsrv, prio, conf);
-	if (ret != ret_ok) return ret;
+	if (ret == ret_deny) {
+		cherokee_virtual_server_free (vsrv);
+		return ret_ok;
+	} else if (ret != ret_ok) {
+		return ret;
+	}
 
 	/* Add it to the list
 	 */

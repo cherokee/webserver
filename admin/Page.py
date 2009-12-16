@@ -85,6 +85,7 @@ PAGE_MENU_MENU = """
 <script type="text/javascript">
   $(document).ready(function() {
     $('input.optional').DefaultValue('optional', '{{_optional}}');
+    $("input:checkbox.switch").iButton();
     protectChanges();
   });
 </script>
