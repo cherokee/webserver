@@ -98,9 +98,6 @@ class PageInternelError (Page):
         Page.__init__ (self, 'error_internal', None)
         self.trace = trace
 
-    def _op_handler (self, uri, post):
-        return '/'
-
     def _op_render (self):
         template = 'error_internal.template'
 
