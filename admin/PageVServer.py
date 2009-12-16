@@ -729,35 +729,42 @@ class PageVServer (PageMenu, FormHelper):
         # Apply changes
         self.ApplyChanges (checkboxes, post, DATA_VALIDATION)
 
-        # Clean old logger properties
-        self._cleanup_logger_cfg (host)
+        # Clean up: Error Log
+        cfg_key = 'vserver!%s!error_writer'%(host)
+        self._cleanup_writer_cfg (cfg_key)
 
-    def _cleanup_logger_cfg (self, host):
-        cfg_key = "vserver!%s!logger" % (host)
-        logger = self._cfg.get_val (cfg_key)
+        # Clean up: Access Log
+        cfg_key = 'vserver!%s!logger!access'%(host)
+        self._cleanup_writer_cfg (cfg_key)
+
+
+    def _cleanup_writer_cfg (self, pre):
+        logger = self._cfg.get_val('%s!type'%(pre))
         if not logger:
-            del(self._cfg['%s!access'%(cfg_key)])
-            del(self._cfg['%s!error'%(cfg_key)])
-            del(self._cfg['%s!all'%(cfg_key)])
+            del (self._cfg[pre])
             return
 
         to_be_deleted = []
-        to_be_deleted.append('%s!all' % cfg_key)
+        to_be_deleted.append('%s!all' %(pre))
 
-        for entry in self._cfg[cfg_key]:
+        for entry in self._cfg[pre]:
+            if entry == 'type':
+                continue
+
             if logger == "stderr" or \
                logger == "syslog":
-                to_be_deleted.append(cfg_key)
+                to_be_deleted.append(entry)
             elif logger == "file" and \
                  entry != "filename":
-                to_be_deleted.append(cfg_key)
+                to_be_deleted.append(entry)
             elif logger == "exec" and \
                  entry != "command":
-                to_be_deleted.append(cfg_key)
+                to_be_deleted.append(entry)
 
         for entry in to_be_deleted:
-            key = "%s!%s" % (cfg_key, entry)
+            key = "%s!%s" % (pre, entry)
             del(self._cfg[key])
+
 
     def _add_logger_template (self, table, prefix, target):
         cfg_key = '%s!%s_template' % (prefix, target)
