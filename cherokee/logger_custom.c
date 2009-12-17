@@ -109,7 +109,12 @@ add_status (cherokee_template_t       *template,
 	UNUSED (template);
 	UNUSED (token);
 
-	cherokee_buffer_add_ulong10 (output, conn->error_code);
+	if (unlikely (conn->error_internal_code != http_unset)) {
+		cherokee_buffer_add_long10 (output, conn->error_internal_code);
+	} else {
+		cherokee_buffer_add_ulong10 (output, conn->error_code);
+	}
+
 	return ret_ok;
 }
 

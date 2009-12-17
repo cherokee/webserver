@@ -198,7 +198,7 @@ static ret_t
 build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, cherokee_buffer_t *buf)
 {
 	ret_t       ret;
-	char       *username;
+	const char *username;
 	size_t      username_len = 0;
 	const char *method;
 	cuint_t     method_len   = 0;
@@ -259,7 +259,13 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add        (buf, version, version_len);
 	cherokee_buffer_add_str    (buf, "\" ");
-	cherokee_buffer_add_long10 (buf, cnt->error_code);
+
+	if (unlikely (cnt->error_internal_code != http_unset)) {
+		cherokee_buffer_add_long10 (buf, cnt->error_internal_code);
+	} else {
+		cherokee_buffer_add_long10 (buf, cnt->error_code);
+	}
+
 	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add_ullong10 (buf, (cullong_t) (cnt->range_end - cnt->range_start));
 
