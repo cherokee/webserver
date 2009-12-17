@@ -100,7 +100,8 @@ ret_t cherokee_handler_proxy_conn_release      (cherokee_handler_proxy_conn_t  *
 ret_t cherokee_handler_proxy_conn_send         (cherokee_handler_proxy_conn_t  *pconn,
 					        cherokee_buffer_t              *buf);
 ret_t cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *pconn,
-						cherokee_buffer_t              *body);
+						cherokee_buffer_t              *body,
+						cherokee_boolean_t              flexible);
 
 /* Utils
  */

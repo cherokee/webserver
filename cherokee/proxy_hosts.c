@@ -27,6 +27,8 @@
 #include "resolv_cache.h"
 #include "util.h"
 
+#define ENTRIES "proxy"
+
 
 static void
 poll_free (void *p)
@@ -300,9 +302,38 @@ cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t *pconn,
 	return ret_eagain;
 }
 
+static ret_t
+find_header_end_flexible (cherokee_buffer_t  *buf,
+			  char              **end,
+			  cuint_t            *sep_len)
+{
+	char *pos;
+
+	pos = strstr (buf->buf, CRLF_CRLF);
+	if (pos != NULL) {
+		*end     = pos;
+		*sep_len = 4;
+		return ret_ok;
+	}
+
+	pos = strstr (buf->buf, LF_LF);
+	if (pos != NULL) {
+		*end     = pos;
+		*sep_len = 2;
+		return ret_ok;
+	}
+
+	if (buf->len > MAX_HEADER_LEN) {
+		return ret_error;
+	}
+
+	return ret_not_found;
+}
+
 ret_t
 cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
-					  cherokee_buffer_t             *body)
+					  cherokee_buffer_t             *body,
+					  cherokee_boolean_t             flexible)
 {
 	ret_t    ret;
 	char    *end;
@@ -334,7 +365,25 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	case ret_not_found:
 		return ret_eagain;
 	default:
-		return ret_error;
+		/* Did not success
+		 */
+		if (! flexible) {
+			goto error;
+		}
+
+		/* Plan B!
+		 */
+		TRACE (ENTRIES, "Header end not found. Being more flexible about malformed headers\n");
+
+		ret = find_header_end_flexible (&pconn->header_in_raw, &end, &sep_len);
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_not_found:
+			return ret_eagain;
+		default:
+			goto error;
+		}
 	}
 
 	/* Copy the body if there is any
@@ -345,6 +394,13 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	cherokee_buffer_drop_ending (&pconn->header_in_raw, size);
 
 	return ret_ok;
+
+error:
+	LOG_ERROR (CHEROKEE_ERROR_PROXY_HEADER_PARSE,
+		   pconn->header_in_raw.len,
+		   pconn->header_in_raw.buf);
+
+	return ret_error;
 }
 
 

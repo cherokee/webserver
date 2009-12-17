@@ -67,6 +67,7 @@ typedef struct {
 	cherokee_list_t                 out_headers_add;
 	cherokee_list_t                 out_request_regexs;
 	cherokee_boolean_t              out_preserve_server;
+	cherokee_boolean_t              out_flexible_EOH;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {

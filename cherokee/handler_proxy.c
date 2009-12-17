@@ -124,6 +124,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		n->in_allow_keepalive  = true;
 		n->in_preserve_host    = false;
 		n->out_preserve_server = false;
+		n->out_flexible_EOH    = true;
 
 		INIT_LIST_HEAD (&n->in_request_regexs);
 		INIT_LIST_HEAD (&n->in_headers_add);
@@ -163,6 +164,9 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 
 		} else if (equal_buf_str (&subconf->key, "out_preserve_server")) {
 			props->out_preserve_server = !! atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "out_flexible_EOH")) {
+			props->out_flexible_EOH = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "in_header_hide")) {
 			cherokee_config_node_foreach (j, subconf) {
@@ -875,7 +879,8 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	case proxy_init_read_header:
 		/* Read the client header
 		 */
-		ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn, &hdl->tmp);
+		ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn, &hdl->tmp,
+								props->out_flexible_EOH);
 		switch (ret) {
 		case ret_ok:
 			/* Turn Error Handling on. From this point the
