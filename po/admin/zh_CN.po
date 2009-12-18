@@ -2557,7 +2557,7 @@ msgstr ""
 
 #: admin/PageVServer.py:68
 msgid "Time standard to use in the log file entries."
-msgstr ""
+msgstr "日志文件使用的时间标准"
 
 #: admin/PageVServer.py:72
 msgid "Loggers"
