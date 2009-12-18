@@ -404,7 +404,8 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	/* Set the SSL context cache
 	 */
 	rc = SSL_CTX_set_session_id_context (n->context,
-					     vsrv->name.buf, vsrv->name.len);
+					     (unsigned char *) vsrv->name.buf,
+					     (unsigned int) vsrv->name.len);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SESSION_ID,

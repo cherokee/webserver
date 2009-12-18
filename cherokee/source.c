@@ -198,7 +198,7 @@ set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 
 	/* Host name
 	 */
-	ret = cherokee_parse_host (host, &src->host, &src->port);
+	ret = cherokee_parse_host (host, &src->host, (cuint_t *)&src->port);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}

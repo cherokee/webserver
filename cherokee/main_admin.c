@@ -32,6 +32,7 @@
 #include "socket.h"
 #include "spawner.h"
 #include "config_reader.h"
+#include "util.h"
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>

@@ -206,7 +206,7 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_
 		entry->no_log = source->no_log;
 	}
 
-	if (NULLI_IS_NULL(entry->timeout_lapse) && (source->timeout_lapse != NULL))
+	if (NULLI_IS_NULL(entry->timeout_lapse) && (source->timeout_lapse != NULLI_NULL))
 	{
 		entry->timeout_lapse  = source->timeout_lapse;
 		entry->timeout_header = source->timeout_header;

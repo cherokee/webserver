@@ -177,7 +177,7 @@ internal_step (cherokee_admin_client_t *admin)
 	switch (ret) {
 	case ret_eof:
 	case ret_eof_have_data:
-		if (cherokee_buffer_is_empty (&DOWNLOADER(admin->downloader)->body))
+		if (cherokee_buffer_is_empty (&downloader->body))
 			return ret_eof;
 		return ret_ok;
 	case ret_error:

@@ -1863,7 +1863,6 @@ cherokee_parse_host (cherokee_buffer_t  *buf,
 	char *p;
 	char *colon;
 
-
 	colon = strchr (buf->buf, ':');
 	if (colon == NULL) {
 		/* Host

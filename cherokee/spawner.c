@@ -109,8 +109,7 @@ static ret_t
 write_logger (cherokee_buffer_t        *buf,
 	      cherokee_logger_writer_t *error_writer)
 {
-	ret_t ret;
-	int   val;
+	int val;
 
 	/* No writer
 	 */
