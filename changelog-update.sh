@@ -4,7 +4,7 @@
 #
 # Author: Alvaro Lopez Ortega <alvaro@alobbs.com>
 
-TZ=UTC 
+TZ=UTC
 
 # The current ChangeLog file starts at revision number..
 FIRST_REV="3357"
@@ -29,7 +29,7 @@ go_git()
 	  echo " * Last commit in the ChangeLog: $LAST_COMMIT_ID"
    fi
 
-   # New log   
+   # New log
    echo " * Appending commits since: $LAST_COMMIT_ID"
    $GIT log --stat --no-merges --date=short $LAST_COMMIT_ID..HEAD | python $srcdir/gitlog2changelog.py > $srcdir/ChangeLog.new
 
@@ -40,7 +40,7 @@ go_git()
 		 echo " * Merging new entries.."
 		 mv $srcdir/ChangeLog $srcdir/ChangeLog.prev
 		 cat $srcdir/ChangeLog.new $srcdir/ChangeLog.prev > ChangeLog
-	  else 
+	  else
 		 echo " * No previous entries.."
 		 mv $srcdir/ChangeLog.new $srcdir/ChangeLog
 	  fi

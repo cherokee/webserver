@@ -8,6 +8,7 @@
 ##
 
 import re
+import sys
 import time
 
 from sys import stdin
@@ -63,6 +64,11 @@ def do_parse():
         commit = re.findall(r"commit (\w+)", entry)[0]
         author = re.findall(r"Author: +(.+) \<", entry)[0]
         date   = re.findall(r"Date: +(.+)", entry)[0]
+
+        if not "git-svn-id:" in entry:
+            print >> sys.stderr, "Unpushed commit: %s, %s - %s" % (author, date, commit)
+            continue
+
         svn_id = re.findall(r"git-svn-id: svn://cherokee-project.com/cherokee/trunk@(.+) ", entry)[0]
 
         header_end = entry.index('\n\n')
