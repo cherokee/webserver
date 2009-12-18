@@ -43,20 +43,6 @@ cherokee_error_set_default (cherokee_logger_writer_t *writer)
 }
 
 
-ret_t
-cherokee_error_log_default_free (void)
-{
-	if (default_error_writer == NULL) {
-		return ret_not_found;
-	}
-
-	cherokee_logger_writer_free (default_error_writer);
-	default_error_writer = NULL;
-
-	return ret_ok;
-}
-
-
 static void
 skip_args (va_list ap, const char *prev_string)
 {
@@ -86,7 +72,6 @@ skip_args (va_list ap, const char *prev_string)
 static ret_t
 report_error (cherokee_buffer_t *buf)
 {
-	ret_t                     ret;
 	cherokee_logger_writer_t *writer = NULL;
 
 	/* 1st Option, the thread variable
