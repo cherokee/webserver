@@ -1239,7 +1239,7 @@ msgstr "参数"
 #: admin/ModuleUrlArg.py:65
 #, python-format
 msgid "Any arg ~= %s"
-msgstr "任何参数"
+msgstr "任何参数 ~= %s"
 
 #: admin/ModuleUrlArg.py:72
 #, fuzzy
