@@ -102,6 +102,9 @@ class Wizard_VServer_phpBB (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_phpbb!host',    ERROR_NO_HOST)
+        self.Validate_NotEmpty (post, 'tmp!wizard_phpbb!sources', ERROR_NO_SRC)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -172,6 +175,9 @@ class Wizard_Rules_phpBB (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, 'tmp!wizard_phpbb!web_dir', ERROR_NO_WEB)
+        self.Validate_NotEmpty (post, 'tmp!wizard_phpbb!sources', ERROR_NO_SRC)
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

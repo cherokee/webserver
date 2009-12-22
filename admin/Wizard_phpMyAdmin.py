@@ -88,6 +88,9 @@ class Wizard_Rules_phpMyAdmin (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_phpmyadmin!web_dir', ERROR_NO_WEB)
+        self.Validate_NotEmpty (post, 'tmp!wizard_phpmyadmin!sources', ERROR_NO_SRC)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
