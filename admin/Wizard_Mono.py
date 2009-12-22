@@ -115,6 +115,10 @@ class Wizard_VServer_Mono (CommonMethods, WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_mono!new_host',      ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_mono!document_root', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_mono!mono_dir',      ERROR_NOT_EMPTY)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -175,6 +179,9 @@ class Wizard_Rules_Mono (CommonMethods, WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, 'tmp!wizard_mono!new_webdir',  ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_mono!mono_dir',    ERROR_NOT_EMPTY)
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

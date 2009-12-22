@@ -96,6 +96,10 @@ class Wizard_VServer_Liferay (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_liferay!new_src_host', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_liferay!new_src_port', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_liferay!new_host',     ERROR_NOT_EMPTY)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -148,6 +152,10 @@ class Wizard_Rules_Liferay (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, 'tmp!wizard_liferay!new_src_host', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_liferay!new_src_port', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_liferay!new_webdir',   ERROR_NOT_EMPTY)
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

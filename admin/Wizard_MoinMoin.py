@@ -156,6 +156,9 @@ class Wizard_VServer_MoinMoin (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_moinmoin!new_host',      ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_moinmoin!moinmoin_wiki', ERROR_NOT_EMPTY)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -207,6 +210,9 @@ class Wizard_Rules_MoinMoin (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, 'tmp!wizard_moinmoin!web_dir',      ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_moinmoin!moinmoin_wiki', ERROR_NOT_EMPTY)
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

@@ -137,6 +137,9 @@ class Wizard_VServer_Joomla (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_joomla!host',    ERROR_NO_HOST)
+        self.Validate_NotEmpty (post, 'tmp!wizard_joomla!sources', ERROR_NO_SRC)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -209,6 +212,9 @@ class Wizard_Rules_Joomla (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, 'tmp!wizard_joomla!webdir',  ERROR_NO_WEB)
+        self.Validate_NotEmpty (post, 'tmp!wizard_joomla!sources', ERROR_NO_SRC)
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

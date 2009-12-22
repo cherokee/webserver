@@ -98,6 +98,9 @@ class Wizard_VServer_Moodle (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_moodle!host',    ERROR_NO_HOST)
+        self.Validate_NotEmpty (post, 'tmp!wizard_moodle!sources', ERROR_NO_SRC)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -167,6 +170,9 @@ class Wizard_Rules_Moodle (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, 'tmp!wizard_moodle!web_dir', ERROR_NO_WEB)
+        self.Validate_NotEmpty (post, 'tmp!wizard_moodle!sources', ERROR_NO_SRC)
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

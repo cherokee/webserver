@@ -139,6 +139,11 @@ class Wizard_VServer_Mailman (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_mailman!mailman_cgi_dir',  ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_mailman!mailman_data_dir', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_mailman!mailman_arch_dir', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_mailman!new_host',         ERROR_NOT_EMPTY)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
