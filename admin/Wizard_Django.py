@@ -15,6 +15,7 @@ NOTE_NEW_HOST   = N_("Name of the new domain that will be created.")
 
 ERROR_NO_DJANGO = N_("It does not look like a Django based project directory.")
 ERROR_NO_DROOT  = N_("The document root directory does not exist.")
+ERROR_NO_HOST   = N_("A name for the virtual server is required.")
 
 SOURCE = """
 source!%(src_num)d!type = interpreter
@@ -126,6 +127,10 @@ class Wizard_VServer_Django (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, "tmp!wizard_django!new_host",      _(ERROR_NO_HOST))
+        self.Validate_NotEmpty (post, "tmp!wizard_django!document_root", _(ERROR_NO_DROOT))
+        self.Validate_NotEmpty (post, "tmp!wizard_django!django_dir",    _(ERROR_NO_DJANGO))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
