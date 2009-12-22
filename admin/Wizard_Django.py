@@ -12,10 +12,12 @@ N_ = lambda x: x
 
 NOTE_DJANGO_DIR = N_("Local path to the Django based project.")
 NOTE_NEW_HOST   = N_("Name of the new domain that will be created.")
+NOTE_WEBDIR     = N_("Web directory that will give access to the project.")
 
 ERROR_NO_DJANGO = N_("It does not look like a Django based project directory.")
 ERROR_NO_DROOT  = N_("The document root directory does not exist.")
 ERROR_NO_HOST   = N_("A name for the virtual server is required.")
+ERROR_NO_WEBDIR = N_("A web directory is required.")
 
 SOURCE = """
 source!%(src_num)d!type = interpreter
@@ -179,7 +181,7 @@ class Wizard_Rules_Django (WizardPage):
 
         txt += '<h2>%s</h2>' % (_("Web Directory"))
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir', _(NOTE_NEW_HOST), value="/project")
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir', _(NOTE_WEBDIR), value="/project")
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_("Django Project"))
@@ -193,6 +195,9 @@ class Wizard_Rules_Django (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, "tmp!wizard_django!new_webdir",    _(ERROR_NO_WEBDIR))
+        self.Validate_NotEmpty (post, "tmp!wizard_django!django_dir",    _(ERROR_NO_DJANGO))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
