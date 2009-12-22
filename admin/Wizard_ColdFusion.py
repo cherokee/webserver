@@ -117,6 +117,9 @@ class Wizard_VServer_ColdFusion (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_coldfusion!new_host', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_coldfusion!new_source', ERROR_NOT_EMPTY)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -167,6 +170,9 @@ class Wizard_Rules_ColdFusion (WizardPage):
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
+
+        self.Validate_NotEmpty (post, 'tmp!wizard_coldfusion!new_webdir', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_coldfusion!new_source', ERROR_NOT_EMPTY)
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
