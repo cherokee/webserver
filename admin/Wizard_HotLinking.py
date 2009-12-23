@@ -38,9 +38,20 @@ REPLY_REDIR = """
 %(rule_pre)s!handler!rewrite!1!substring = %(redirection)s
 """
 
+REPLY_EMPTY = """
+%(rule_pre)s!handler = empty_gif
+"""
+
+CONFIG_EXCEPTION = """
+%(pre_rule_plus1)s!handler = file
+%(pre_rule_plus1)s!match = fullpath
+%(pre_rule_plus1)s!match!fullpath!1 = %(redirection)s
+"""
+
 TYPES = [
-    ('error', 'Show error'),
-    ('redir', 'Redirect')
+    ('error', N_('Show error')),
+    ('redir', N_('Redirect')),
+    ('empty', N_('1x1 Transparent GIF'))
 ]
 
 class Wizard_Rules_HotLinking (WizardPage):
@@ -88,6 +99,7 @@ class Wizard_Rules_HotLinking (WizardPage):
         # Validate
         if tipe == 'redir':
             self.ValidateChange_SingleKey ('tmp!wizard_hotlink!redirection', post, DATA_VALIDATION)
+            self.Validate_NotEmpty (post, 'tmp!wizard_hotlink!redirection', _(ERROR_EMPTY))
 
         self.Validate_NotEmpty (post, 'tmp!wizard_hotlink!domain', _(ERROR_EMPTY_DOMAIN))
         if self.has_errors():
@@ -102,11 +114,20 @@ class Wizard_Rules_HotLinking (WizardPage):
         domain = domain.replace ('.', "\\.")
 
         # Locals
-        x, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
+        prio, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
 
         # Add the new rules
         if tipe == 'redir' and redirection:
             config = (CONFIG_RULES + REPLY_REDIR) % (locals())
+            for ext in ['jpg','jpeg','gif','png','flv']:
+                if redirection.endswith('.%s' % ext):
+                    tmp = prio + 100
+                    pre_rule_plus1 = '%s!%d' % ('!'.join(rule_pre.split('!')[:-1]), tmp)
+                    config += CONFIG_EXCEPTION % (locals())
+                    break
+
+        elif tipe == 'empty':
+            config = (CONFIG_RULES + REPLY_EMPTY) % (locals())
         else:
             config = (CONFIG_RULES + REPLY_FORBIDDEN) % (locals())
 
