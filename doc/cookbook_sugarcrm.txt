@@ -39,7 +39,7 @@ have it available within every available virtual server, and the
 latter will directly be present under the `Virtual Servers` section of
 the admin.
 
-Once the Wizard list is visible, simply go to the `Management`
+Once the Wizard list is visible, simply go to the `Misc`
 section, click on `Sugar`, provide the basic information and you can
 skip the rest of this section and jump directly to
 link:#installation[Package installation]

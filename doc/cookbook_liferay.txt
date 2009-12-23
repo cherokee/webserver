@@ -74,7 +74,7 @@ Phase two: Cherokee
 
 Now to set up Cherokee. To do this, use the provided `Wizard`. Launch
 Cherokee-Admin on your proxy machine and then you will find this
-assistant under the `CMS` category of the Wizards. Click, answer a few
+assistant under the `Platforms` category of the Wizards. Click, answer a few
 questions and you are done. You can then skip the rest of this
 document.
 

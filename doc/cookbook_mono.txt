@@ -44,7 +44,7 @@ Once you have a FastCGI Mono backend available, we can proceed with
 the recipe.
 
 Since a Mono Wizard is shipped with Cherokee, the configuration is as
-simple as clicking on the Wizard, located under the `Platforms`
+simple as clicking on the Wizard, located under the `Languages`
 category, and filling up a few required fields. Your application
 should be up and running. The rest of this document simply details the
 the recipe that is emulated by the Wizard. If you have any trouble

@@ -36,7 +36,7 @@ there, you'll have to click the `Wizards` button:
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
-Then, select the `Management` category, run the Moodle wizard and you are
+Then, select the `Misc` category, run the Moodle wizard and you are
 good to go.
 
 image::media/images/admin_vservers_wizard_misc.png[Virtual Server Wizards]
