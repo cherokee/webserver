@@ -5,8 +5,8 @@ from Page import *
 # For gettext
 N_ = lambda x: x
 
-NOTE_DUP_LOGS   = N_("Use the same logging configuration as one of the other virtual servers.")
-ERROR_NOT_EMPTY = N_("Cannot be empty.")
+NOTE_DUP_LOGS = N_("Use the same logging configuration as one of the other virtual servers.")
+ERROR_EMPTY   = N_("This field can not be empty.")
 
 WIZARD_GROUP_MISC       = N_('Misc')
 WIZARD_GROUP_CMS        = N_('CMS')

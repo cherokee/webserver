@@ -160,8 +160,8 @@ class Wizard_VServer_Drupal (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
-        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!host',    ERROR_NO_HOST)
-        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!sources', ERROR_NO_SRC)
+        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!host',    _(ERROR_NO_HOST))
+        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!sources', _(ERROR_NO_SRC))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
@@ -240,8 +240,8 @@ class Wizard_Rules_Drupal (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
-        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!web_dir', ERROR_NO_WEB)
-        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!sources', ERROR_NO_SRC)
+        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!web_dir', _(ERROR_NO_WEB))
+        self.Validate_NotEmpty (post, 'tmp!wizard_drupal!sources', _(ERROR_NO_SRC))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

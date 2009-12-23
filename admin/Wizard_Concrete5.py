@@ -141,8 +141,8 @@ class Wizard_VServer_Concrete5 (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
-        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!host',    ERROR_NOT_EMPTY)
-        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!sources', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!host',    _(ERROR_NO_HOST))
+        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!sources', _(ERROR_NO_SRC))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
@@ -218,8 +218,8 @@ class Wizard_Rules_Concrete5 (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
-        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!web_dir', ERROR_NOT_EMPTY)
-        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!sources', ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!web_dir', _(ERROR_NO_WEB))
+        self.Validate_NotEmpty (post, 'tmp!wizard_concrete5!sources', _(ERROR_NO_SRC))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

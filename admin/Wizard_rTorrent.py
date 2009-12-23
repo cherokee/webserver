@@ -53,6 +53,11 @@ class Wizard_Rules_rTorrent (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_rTorrent!connection', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_rTorrent!web_dir', _(ERROR_EMPTY))
+        if self.has_errors():
+            return
+
         self._cfg_clean_values (post)
 
         # Incoming info

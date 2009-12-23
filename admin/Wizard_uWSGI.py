@@ -161,6 +161,9 @@ class Wizard_VServer_uWSGI (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_uwsgi!document_root', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_uwsgi!new_host',      _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_uwsgi!uwsgi_cfg',     _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -238,6 +241,7 @@ class Wizard_Rules_uWSGI (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_uwsgi!uwsgi_cfg',     _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return

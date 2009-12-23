@@ -134,6 +134,9 @@ class Wizard_VServer_Symfony (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_symfony!sources',       _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_symfony!document_root', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_symfony!host',          _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -204,6 +207,9 @@ class Wizard_Rules_Symfony (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_symfony!sources',       _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_symfony!document_root', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_symfony!web_dir',       _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return

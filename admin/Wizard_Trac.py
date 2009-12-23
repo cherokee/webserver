@@ -122,6 +122,9 @@ class Wizard_VServer_Trac (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_trac!trac_data',    _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_trac!trac_project', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_trac!new_host',     _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -129,7 +132,7 @@ class Wizard_VServer_Trac (WizardPage):
         self._cfg_clean_values (post)
 
         # Incoming info
-        new_host    = post.pop('tmp!wizard_trac!new_host')
+        new_host     = post.pop('tmp!wizard_trac!new_host')
         trac_data    = post.pop('tmp!wizard_trac!trac_data')
         trac_project = post.pop('tmp!wizard_trac!trac_project')
 

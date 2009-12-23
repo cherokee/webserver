@@ -220,6 +220,8 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_ror!ror_dir',    _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_ror!new_host',   _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -316,6 +318,8 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_ror!ror_dir',    _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_ror!new_webdir', _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return

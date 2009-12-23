@@ -106,6 +106,8 @@ class Wizard_VServer_Zend (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_zend!host',    _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_zend!sources', _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
@@ -172,6 +174,8 @@ class Wizard_Rules_Zend (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
+        self.Validate_NotEmpty (post, 'tmp!wizard_zend!web_dir', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_zend!sources', _(ERROR_EMPTY))
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return

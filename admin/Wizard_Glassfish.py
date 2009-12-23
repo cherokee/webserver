@@ -96,9 +96,9 @@ class Wizard_VServer_Glassfish (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
-        self.Validate_NotEmpty (post, 'tmp!wizard_galssfish!new_src_host', ERROR_NOT_EMPTY)
-        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_src_port', ERROR_NOT_EMPTY)
-        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_host',     ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_galssfish!new_src_host', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_src_port', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_host',     _(ERROR_EMPTY))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
@@ -153,9 +153,9 @@ class Wizard_Rules_Glassfish (WizardPage):
         # Store tmp, validate and clean up tmp
         self._cfg_store_post (post)
 
-        self.Validate_NotEmpty (post, 'tmp!wizard_galssfish!new_src_host', ERROR_NOT_EMPTY)
-        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_src_port', ERROR_NOT_EMPTY)
-        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_webdir',   ERROR_NOT_EMPTY)
+        self.Validate_NotEmpty (post, 'tmp!wizard_galssfish!new_src_host', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_src_port', _(ERROR_EMPTY))
+        self.Validate_NotEmpty (post, 'tmp!wizard_glassfish!new_webdir',   _(ERROR_EMPTY))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
