@@ -70,6 +70,9 @@ Now you are ready to configure Cherokee.
 You can either do it by hand, or you can use the appropriate wizard
 for a hassle-free configuration.
 
+[[wizard]]
+=== Setting up Cherokee with the wizard
+
 You should really use the recommended method, which is using the
 configuration wizard provided by Cherokee-Admin. Simply go to the
 virtual server list page. Once in there, you'll have to click the
@@ -85,18 +88,22 @@ vast majority of the cases. Most probably it will cover your needs,
 although you are free to modify it as you will. No more configuration
 is needed after this step.
 
+image::media/images/cookbook_ror_wizard.png[Rails Wizard]
+
 It is usually best to proxy one or several of the servers used by
 Rails, be it Thin, Mongrel, Unicorn or whatever it can handle.
 You could also choose the FastCGI alternative if there is a suitable
 spawning method in your system. This approach, however, has been known
-to give inconsistent on several releases of Rails. Test it out and
-choose the method that best suits your need.
+to give inconsistent on several releases of Rails. In particular,
+Rails releases 2.3 or higher are known to give errors when used with
+FastCGI. You will have to test it out and choose the method that best
+suits your need.
+
+=== Setting up Cherokee by hand
 
 If you decide to ignore the configuration wizard you can set up
 everything by hand. Although it is not complicated, this method is not
 recommended.
-
-=== Setting up Cherokee by hand
 
 You only need to know that you can spawn the FastCGI process using a
 script that is already in your deployed project. In this case,

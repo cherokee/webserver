@@ -201,6 +201,7 @@ media/images/cookbook_mono_demo.png \
 media/images/cookbook_mono_handler.png \
 media/images/cookbook_django.png \
 media/images/cookbook_ror.png \
+media/images/cookbook_ror_wizard.png \
 media/images/cookbook_mailman.png \
 media/images/cookbook_glassfish.png \
 media/images/cookbook_drupal.png \
