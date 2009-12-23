@@ -57,10 +57,6 @@ entry point to our application.
 Configure Cheroke using the Wizard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[manual_configuration]]
-Configure Cheroke using the Wizard
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Cherokee is shipped with a configuration `Wizard` that can be used
 both to deploy the application under a dedicated `Virtual Server` and
 under a web folder from one already existent.
@@ -69,7 +65,10 @@ Launch cherokee-admin, and proceed to the
 link:config_virtual_servers.html[Virtual servers] section.
 
 Now you can either enter the chosen one to install under a web folder,
-or directly click on the `Symfony Wizard` to create a customised one.
+or directly click on the `Symfony Wizard` to create a customised
+virtual server. In any case you will find the wizard under the
+`Platforms` category.
+
 
 After that you will be asked for the minimal information required to
 correctly configure your server in a totally transparent way.

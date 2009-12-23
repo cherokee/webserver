@@ -9,6 +9,10 @@ central archive of such examples. Remember there are some more generic
 examples both in the link:config_quickstart.html[quickstart] and in
 the link:modules_handlers_redir.html[redirection] handler sections.
 
+There is also a wizard to automatically assist you with
+redirections. It can be found in the `Wizards` link of the `Virtual
+Servers` tab, under the `Tasks` category.
+
 Redirecting www.example.net to example.net
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

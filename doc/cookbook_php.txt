@@ -9,6 +9,9 @@ you. It will look for the PHP interpreter, it will check whether it
 support FastCGI, and then it'll perform all the necessary operations
 to set it up on Cherokee. It is a piece of cake.
 
+If PHP-fpm binaries are found, those will be prioritized over the
+regular binaries.
+
 It requires a single operation to get PHP configured on a Virtual
 Server: Choose the virtual server your want to configure, and click on
 the `Behavior` tab. Once in there, click on `Wizards`:

@@ -69,6 +69,14 @@ FLUSH PRIVILEGES;
 quit;
 ------------------------------------------------------------------------
 
+[[wizard]]
+Configuring with the Wizard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`Cherokee-Admin` provides a wizard for phpBB that will configure the
+web server appropriately. Just find it under the `Misc` category,
+provide some basic information and you are good to go.
+
 Then point your web browser to `http://example.net` and follow all the
 steps. Basically you will have to provide the database information and
 troubleshoot any possible warning, but the process is fairly straight
@@ -121,7 +129,6 @@ image::media/images/cookbook_phpbb_running.png[phpBB]
 
 URL rewrites
 ~~~~~~~~~~~~
-
 To beautify your URLs you will need to write some redirection rules
 and apply some patches. This feature seems to not be supported in
 phpBB, so you will have to download phpBB's `mod_rewrite` module and

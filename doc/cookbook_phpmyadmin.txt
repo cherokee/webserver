@@ -95,6 +95,16 @@ accessible to your web server, so simply use the Wizard and fill in
 the required information. Alternatively you can either install
 directly under your `document root` or make a symbolic link.
 
+[[wizard]]
+Configuring with the Wizard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There is also a wizard to assist you with your configuration. Once
+phpMyAdmin is installed, simply access one of your virtual servers in
+`Cherokee-Admin`. Then, click on the phpMyAdmin wizard that can be
+found in the `Behavior` tab, by clicking on `Wizards` and under the
+`Database` category.
+
 Considerations
 ~~~~~~~~~~~~~~
 
