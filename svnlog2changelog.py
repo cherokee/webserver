@@ -64,7 +64,7 @@ def do_parse():
         author   = DEVELOPERS[dev]
         paths    = render_paths(entry)
 
-        print "%s  %s" % (date, author)
+        print "%s " % (date), author
         print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
         print
         if msg:
