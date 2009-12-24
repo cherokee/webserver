@@ -22,20 +22,33 @@
 
 from Widget import Widget, RenderResponse
 
-class Container (Widget):
-    def __init__ (self):
-        Widget.__init__ (self)
-        self.child = []
 
-    def __add__ (self, widget):
-        assert isinstance(widget, Widget)
-        self.child.append (widget)
-        return self
+class Combobox (Widget):
+    def __init__ (self, props, options):
+        Widget.__init__ (self)
+
+        self._props   = props
+        self._options = options
 
     def Render (self):
-        render = RenderResponse()
+        selected = self._props.get('selected')
 
-        for c in self.child:
-            render += c.Render()
+        # Render entries
+        content = ''
+        for o in self._options:
+            name, label = o
+            if selected and selected == name:
+                content += '<option value="%s" selected="true">%s</option>' % (name, label)
+            else:
+                content += '<option value="%s">%s</option>' % (name, label)
 
-        return render
+        # Render the conteiner
+        header = ''
+        for p in filter(lambda x: x!='selected', self._props):
+            if self._props[p]:
+                header += ' %s="%s"' %(p, self._props[p])
+            else:
+                header += ' %s' %(p)
+
+        html = '<select%s>%s</select>' %(header, content)
+        return RenderResponse(html)

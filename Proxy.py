@@ -20,44 +20,52 @@
 # 02110-1301, USA.
 #
 
-from Table import Table
-from RawHTML import RawHTML
+from consts import *
 from Widget import Widget, RenderResponse
+from Server import publish
+
+from httplib import HTTPConnection
+
+HTML = """
+<div id="%(id_widget)s"></div>
+"""
+
+JAVASCRIPT = """
+var response = $.ajax({
+   url:    "%(proxy_url)s",
+   type:   "GET",
+   async:  false
+}).responseText;
+
+$('#%(id_widget)s').html(response);
+"""
 
 
-class TextField (Widget):
-    def __init__ (self, props={}):
+class ProxyRequest:
+   def __call__ (self, host, req):
+      conn = HTTPConnection (host)
+      conn.request ("GET", req)
+      r = conn.getresponse()
+      return r.read()
+
+
+class Proxy (Widget):
+    def __init__ (self, host, req, props={}):
         Widget.__init__ (self)
-        self._props = props
+        self._props     = props
+        self._url_local = '/proxy_widget_%d' %(self.uniq_id)
 
         if not 'id' in props:
             self._props['id'] = 'widget%d'%(self.uniq_id)
 
-    def __get_input_props (self):
-        render = ''
-
-        for prop in self._props:
-            render += " %s" %(prop)
-            value = self._props[prop]
-            if value:
-                if type(value) == str:
-                    render += '="%s"' %(value)
-                else:
-                    render += '=' + value
-        return render
-
-    def __get_error_div_props (self):
-        render = ' id="%s"' % (self._props['id'])
-        if self._props.get('name'):
-            render += ' key="%s"' %(self._props.get('name'))
-        return render
+        # Register the proxy path
+        publish (self._url_local, ProxyRequest, host=host, req=req)
 
     def Render (self):
-        # Render the text field
-        html = '<input type="text"%s />' % (self.__get_input_props())
+        props = {'id_widget': self._props['id'],
+                 'proxy_url': self._url_local}
 
-        # Render the error reporting field
-        html += '<div class="error"%s></div>' % (self.__get_error_div_props())
+        html = HTML       %(props)
+        js   = JAVASCRIPT %(props)
 
-        return RenderResponse (html)
-
+        return RenderResponse (html, js)

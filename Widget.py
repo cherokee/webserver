@@ -6,7 +6,7 @@
 # Copyright (C) 2009 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
-# modify it under the terms of version 2 of the GNU General Public 
+# modify it under the terms of version 2 of the GNU General Public
 # License as published by the Free Software Foundation.
 #
 # This program is distributed in the hope that it will be useful,
@@ -22,6 +22,23 @@
 
 widget_uniq_id = 1;
 
+
+class RenderResponse:
+    def __init__ (self, html='', js='', headers=[]):
+        self.html    = html
+        self.js      = js
+        self.headers = headers
+
+    def __add__ (self, other):
+        i = RenderResponse()
+
+        i.html    = self.html    + other.html
+        i.js      = self.js      + other.js
+        i.headers = self.headers + other.headers
+
+        return i
+
+
 class Widget:
     def __init__ (self):
         global widget_uniq_id;
@@ -31,5 +48,3 @@ class Widget:
 
     def Render (self):
         raise NotImplementedError, "Pure Virtual Method"
-
-

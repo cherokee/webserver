@@ -44,6 +44,7 @@ source!1!interpreter = /usr/bin/true
 source!1!host = localhost:8000
 source!1!nick = Tests SCGI backend
 source!1!type = interpreter
+source!1!debug = 1
 icons!default = page_white.png
 icons!directory = folder.png
 icons!file!bomb.png = core

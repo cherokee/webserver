@@ -6,7 +6,7 @@
 # Copyright (C) 2009 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
-# modify it under the terms of version 2 of the GNU General Public 
+# modify it under the terms of version 2 of the GNU General Public
 # License as published by the Free Software Foundation.
 #
 # This program is distributed in the hope that it will be useful,
@@ -25,3 +25,11 @@ HTML_JS_BLOCK = """
 %s
 </script>
 """
+
+JS_ON_READY = """
+$(document).ready(function(){
+  %s
+});
+"""
+
+HTML_JS_ON_READY_BLOCK = HTML_JS_BLOCK %(JS_ON_READY)

@@ -1,69 +1,40 @@
 import CTK
-import time
-import pyscgi
 
-HTML_PAGE = """\
-<html><head>
-<script type="text/javascript" src="/static/js/jquery-1.3.2.js"></script>
-<script type="text/javascript" src="/static/js/Submitter.js"></script>
-</head><body>
-%s
-</body></html>"""
+def error(x):
+    raise Exception("Bad dog!!!!")
 
-HTTP_HEADER = """\
-Status: 200 OK\r\n\
-Content-Type: text/html\r\n\
-\r\n"""
+def ok(x):
+    return x.upper()
 
-def test():
-    entry1 = CTK.TextField({'name': "server!uno", 'class':"required", 'value':"algo"})
-    entry2 = CTK.TextField({'name': "server!dos", 'class':"optional"})
-    entry3 = CTK.TextField({'name': "server!tri", 'class':"required"})
+VALIDATIONS = [
+    ("server!uno", ok),
+    ("server!dos", error),
+    ("server!dos", lambda x: None)
+]
 
-    submit = CTK.Submitter('http://localhost:9091/error')
+URL     = "http://www.cherokee-project.com/dynamic/cherokee-list.html"
+OPTIONS = [('one','uno'), ('two','dos'), ('three', 'tres')]
 
-    submit += entry1
-    submit += entry2
-    submit += entry3
+def apply (post):
+    return {'ret': "ok"}
 
-    return HTML_PAGE %(submit.Render())
+class default:
+    def __init__ (self):
+        self.p = CTK.PropsTableAuto ('/apply')
+        self.p.Add ('Name',    CTK.TextField({'name': "server!uno"}),    'Example 1')
+        self.p.Add ('Surname', CTK.TextField({'name': "server!dos"}),    'Lalala')
+        self.p.Add ('Nick',    CTK.TextField({'name': "server!tri"}),    'Oh uh ah!')
+        self.p.Add ('Active',  CTK.Checkbox ({'name': "server!active"}), 'Nuevo')
+        self.p.Add ('Elige',   CTK.Combobox ({'name': "server!elec", 'selected': "two"}, OPTIONS), 'la lista')
+        self.p.Add ('Carga',   CTK.Proxy("www.cherokee-project.com", '/dynamic/cherokee-list.html'), 'Lista')
 
-def test2():
-    props = CTK.PropsTable()
-    props['Name']    = CTK.TextField({'name': "server!uno", 'class':"required"})
-    props['Surname'] = CTK.TextField({'name': "server!dos", 'class':"required"})
-    props['Nick']    = CTK.TextField({'name': "server!tri", 'class':"optional"})
-
-    submit = CTK.Submitter('http://localhost:9091/error')
-    submit += props
-
-    return HTML_PAGE %(submit.Render())
-
-def test3():
-    props = CTK.PropsTableAuto ('http://localhost:9091/error')
-    props.Add ('Name',    CTK.TextField({'name': "server!uno", 'class':"required"}), 'Example 1')
-    props.Add ('Surname', CTK.TextField({'name': "server!dos", 'class':"required"}), 'Lalala')
-    props.Add ('Nick',    CTK.TextField({'name': "server!tri", 'class':"optional"}), 'Oh uh ah!')
-
-    return HTML_PAGE %(props.Render())
+    def __call__ (self):
+        page = CTK.Page ()
+        page += self.p
+        return page.Render()
 
 
-class Handler (pyscgi.SCGIHandler):
-    def handle_request (self):
-        url = self.env['REQUEST_URI']
+CTK.publish ('', default)
+CTK.publish ('^/apply$', apply, method='POST', validation=VALIDATIONS)
 
-        if url == '/ok':
-            time.sleep(1)
-            content = HTTP_HEADER + "{'ret': 'ok'}"
-        elif url == '/error':
-            time.sleep(1)
-            content = HTTP_HEADER + "{'ret': 'error', 'errors': {'server!dos': 'Bad boy'}}"
-        else:
-            content = HTTP_HEADER + test3()
-        self.send(content)
-
-if __name__ == '__main__':
-    srv = pyscgi.ServerFactory (True, handler_class=Handler, host="127.0.0.1", port=8000)
-
-    while True:
-        srv.handle_request()
+CTK.run (port=8000)

@@ -6,7 +6,7 @@
 # Copyright (C) 2009 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
-# modify it under the terms of version 2 of the GNU General Public 
+# modify it under the terms of version 2 of the GNU General Public
 # License as published by the Free Software Foundation.
 #
 # This program is distributed in the hope that it will be useful,
@@ -30,5 +30,9 @@ from Page import Page
 from Table import Table, TableFixed
 from RawHTML import RawHTML
 from TextField import TextField
+from Checkbox import Checkbox
+from Combobox import Combobox
 from PropsTable import PropsTable, PropsTableAuto
 from Template import Template
+from Server import Server, run, publish
+from Proxy import Proxy

@@ -6,7 +6,7 @@
 # Copyright (C) 2009 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
-# modify it under the terms of version 2 of the GNU General Public 
+# modify it under the terms of version 2 of the GNU General Public
 # License as published by the Free Software Foundation.
 #
 # This program is distributed in the hope that it will be useful,
@@ -20,8 +20,9 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
+from Widget import Widget, RenderResponse
 from Container import Container
+
 
 class TableField (Container):
     def __init__ (self, widget=None):
@@ -33,17 +34,25 @@ class TableField (Container):
             self += widget
 
     def Render (self):
-        render = '<%s' % (self._tag)
-        for prop in self._props:
-            value = self._props[prop]
+        # Build tag props
+        props = ''
+        for p in self._props:
+            value = self._props[p]
             if value:
-                render += ' %s="%s"' %(prop, value)
+                props += ' %s="%s"' %(p, value)
             else:
-                render += ' %s' %(prop)
+                props += ' %s' %(p)
 
-        container = Container.Render(self)
-        render += '>%s</%s>' %(container, self._tag)
-        return render
+        # Render content
+        render = Container.Render(self)
+
+        # Output
+        html  = '<%s%s>' % (self._tag, props)
+        html += render.html
+        html += '</%s>' % (self._tag)
+
+        r = RenderResponse (html, render.js, render.headers)
+        return r
 
     def __setitem__ (self, prop, value):
         assert type(prop)  == str
@@ -68,7 +77,7 @@ class Table (Widget):
         for row in self.rows:
             row.append (None)
         self.last_col += 1
-    
+
     def __grow_if_needed (self, row, col):
         if col < 1:
             raise IndexError, "Column number out of bounds"
@@ -117,23 +126,26 @@ class Table (Widget):
             raise IndexError, "Row number out of bounds"
 
         return self.rows[row-1][col-1]
-            
+
     def Render (self):
         props = self.kwargs.get('props')
         if props:
-            render = '<table %s>' %(props)
+            html = '<table %s>' %(props)
         else:
-            render = '<table>'
+            html = '<table>'
+
+        render = RenderResponse (html)
 
         for row in self.rows:
-            render += '<tr>'
+            html += '<tr>'
             for field in row:
                 if field:
                     assert isinstance(field, TableField)
-                    render += field.Render()
-            render += '</tr>'
+                    r = field.Render()
+                    render += r
+            render.html += '</tr>'
 
-        render += '</table>'
+        render.html += '</table>'
         return render
 
 
@@ -148,7 +160,7 @@ class TableFixed (Table):
 
         if row > self._fixed_rows:
             raise IndexError, "Row number out of bounds"
-            
+
         if col > self._fixed_cols:
             raise IndexError, "Column number out of bounds"
 
