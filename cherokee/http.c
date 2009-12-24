@@ -157,9 +157,12 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_ok:  	                    *str = http_ok_string; break;
 	case http_created:                  *str = http_created_string; break;
 	case http_accepted:                 *str = http_accepted_string; break;
+	case http_non_authoritative_info:   *str = http_non_authoritative_info_string; break;
 	case http_no_content:               *str = http_no_content_string; break;
+	case http_reset_content:            *str = http_reset_content_string; break;
 	case http_partial_content:          *str = http_partial_content_string; break;
 	case http_multi_status:             *str = http_multi_status_string; break;
+	case http_im_used:                  *str = http_im_used_string; break;
 
 	/* 3xx
 	 */
@@ -168,6 +171,8 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_see_other:                *str = http_see_other_string; break;
 	case http_not_modified:             *str = http_not_modified_string; break;
 	case http_temporary_redirect:       *str = http_temporary_redirect_string; break;
+	case http_multiple_choices:         *str = http_multiple_choices_string; break;
+	case http_use_proxy:                *str = http_use_proxy_string; break;
 
 	/* 4xx
 	 */
@@ -185,6 +190,14 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_request_uri_too_long:     *str = http_request_uri_too_long_string; break;
 	case http_range_not_satisfiable:    *str = http_range_not_satisfiable_string; break;
 	case http_upgrade_required:         *str = http_upgrade_required_string; break;
+	case http_payment_required:         *str = http_payment_required_string; break;
+	case http_proxy_auth_required:      *str = http_proxy_auth_required_string; break;
+	case http_conflict:                 *str = http_conflict_string; break;
+	case http_precondition_failed:      *str = http_precondition_failed_string; break;
+	case http_expectation_failed:       *str = http_expectation_failed_string; break;
+	case http_unprocessable_entity:     *str = http_unprocessable_entity_string; break;
+	case http_locked:                   *str = http_locked_string; break;
+	case http_failed_dependency:        *str = http_failed_dependency_string; break;
 
 	/* 5xx
 	 */
@@ -194,11 +207,14 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_service_unavailable:      *str = http_service_unavailable_string; break;
 	case http_gateway_timeout:          *str = http_gateway_timeout_string; break;
 	case http_version_not_supported:    *str = http_version_not_supported_string; break;
+	case http_insufficient_storage:     *str = http_insufficient_storage_string; break;
+	case http_not_extended:             *str = http_not_extended_string; break;
 
 	/* 1xx
 	*/
 	case http_continue:                 *str = http_continue_string; break;
 	case http_switching_protocols:      *str = http_switching_protocols_string; break;
+	case http_processing:               *str = http_processing_string; break;
 
 	default:
 		*str = "500 Unknown error";
@@ -223,9 +239,12 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (ok);
 		entry_code (created);
 		entry_code (accepted);
+		entry_code (non_authoritative_info);
 		entry_code (no_content);
+		entry_code (reset_content);
 		entry_code (partial_content);
 		entry_code (multi_status);
+		entry_code (im_used);
 
 		/* 3xx
 		 */
@@ -234,6 +253,8 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (see_other);
 		entry_code (not_modified);
 		entry_code (temporary_redirect);
+		entry_code (multiple_choices);
+		entry_code (use_proxy);
 
 		/* 4xx
 		 */
@@ -251,6 +272,14 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (unsupported_media_type);
 		entry_code (range_not_satisfiable);
 		entry_code (upgrade_required);
+		entry_code (payment_required);
+		entry_code (proxy_auth_required);
+		entry_code (conflict);
+		entry_code (precondition_failed);
+		entry_code (expectation_failed);
+		entry_code (unprocessable_entity);
+		entry_code (locked);
+		entry_code (failed_dependency);
 
 		/* 5xx
 		 */
@@ -260,11 +289,14 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (service_unavailable);
 		entry_code (gateway_timeout);
 		entry_code (version_not_supported);
+		entry_code (insufficient_storage);
+		entry_code (not_extended);
 
 		/* 1xx
 		 */
 		entry_code (continue);
 		entry_code (switching_protocols);
+		entry_code (processing);
 
 	default:
  		LOG_WARNING (CHEROKEE_ERROR_HTTP_UNKNOWN_CODE, code);

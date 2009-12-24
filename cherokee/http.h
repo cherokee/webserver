@@ -82,69 +82,99 @@ typedef enum {
 	http_upgrade_tls10
 } cherokee_http_upgrade_t;
 
-typedef enum {
+typedef enum {                               /* Protocol   RFC  Section */
 	http_unset                    = 0,
-	http_continue                 = 100,
-	http_switching_protocols      = 101,
-	http_ok                       = 200,
-	http_created                  = 201,
-	http_accepted                 = 202,
-	http_no_content               = 204,
-	http_partial_content          = 206,
-	http_multi_status             = 207,
-	http_moved_permanently        = 301,
-	http_moved_temporarily        = 302,
- 	http_see_other                = 303,
-	http_not_modified             = 304,
-	http_temporary_redirect       = 307,
-	http_bad_request              = 400,
-	http_unauthorized             = 401,
-	http_access_denied            = 403,
-	http_not_found                = 404,
-	http_method_not_allowed       = 405,
-	http_not_acceptable           = 406,
-	http_request_timeout          = 408,
-	http_gone                     = 410,
-	http_length_required          = 411,
- 	http_request_entity_too_large = 413,
-	http_request_uri_too_long     = 414,
-	http_unsupported_media_type   = 415,
-	http_range_not_satisfiable    = 416,
-	http_upgrade_required         = 426,
-	http_internal_error           = 500,
-	http_not_implemented          = 501,
-	http_bad_gateway              = 502,
-	http_service_unavailable      = 503,
-	http_gateway_timeout          = 504,
-	http_version_not_supported    = 505
+	http_continue                 = 100, /* HTTP/1.1  2616  10.1.1  */
+	http_switching_protocols      = 101, /* HTTP/1.1  2616  10.1.2  */
+	http_processing               = 102, /*   WebDAV  2518  10.1    */
+	http_ok                       = 200, /* HTTP/1.1  2616  10.2.1  */
+	http_created                  = 201, /* HTTP/1.1  2616  10.2.2  */
+	http_accepted                 = 202, /* HTTP/1.1  2616  10.2.3  */
+	http_non_authoritative_info   = 203, /* HTTP/1.1  2616  10.2.4  */
+	http_no_content               = 204, /* HTTP/1.1  2616  10.2.5  */
+	http_reset_content            = 205, /* HTTP/1.1  2616  10.2.6  */
+	http_partial_content          = 206, /* HTTP/1.1  2616  10.2.6  */
+	http_multi_status             = 207, /*   WebDAV  2518  10.2    */
+	http_im_used                  = 226, /*    Delta  3229  10.4.1  */
+	http_multiple_choices         = 300, /* HTTP/1.1  2616  10.3.1  */
+	http_moved_permanently        = 301, /* HTTP/1.1  2616  10.3.2  */
+	http_moved_temporarily        = 302, /* HTTP/1.1  2616  10.3.3  */
+ 	http_see_other                = 303, /* HTTP/1.1  2616  10.3.4  */
+	http_not_modified             = 304, /* HTTP/1.1  2616  10.3.5  */
+	http_use_proxy                = 305, /* HTTP/1.1  2616  10.3.6  */
+	http_temporary_redirect       = 307, /* HTTP/1.1  2616  10.3.8  */
+	http_bad_request              = 400, /* HTTP/1.1  2616  10.4.1  */
+	http_unauthorized             = 401, /* HTTP/1.1  2616  10.4.2  */
+	http_payment_required         = 402, /* HTTP/1.1  2616  10.4.3  */
+	http_access_denied            = 403, /* HTTP/1.1  2616  10.4.4  */
+	http_not_found                = 404, /* HTTP/1.1  2616  10.4.5  */
+	http_method_not_allowed       = 405, /* HTTP/1.1  2616  10.4.6  */
+	http_not_acceptable           = 406, /* HTTP/1.1  2616  10.4.7  */
+	http_proxy_auth_required      = 407, /* HTTP/1.1  2616  10.4.8  */
+	http_request_timeout          = 408, /* HTTP/1.1  2616  10.4.9  */
+	http_conflict                 = 409, /* HTTP/1.1  2616  10.4.10 */
+	http_gone                     = 410, /* HTTP/1.1  2616  10.4.11 */
+	http_length_required          = 411, /* HTTP/1.1  2616  10.4.12 */
+	http_precondition_failed      = 412, /* HTTP/1.1  2616  10.4.13 */
+ 	http_request_entity_too_large = 413, /* HTTP/1.1  2616  10.4.14 */
+	http_request_uri_too_long     = 414, /* HTTP/1.1  2616  10.4.15 */
+	http_unsupported_media_type   = 415, /* HTTP/1.1  2616  10.4.16 */
+	http_range_not_satisfiable    = 416, /* HTTP/1.1  2616  10.4.17 */
+	http_expectation_failed       = 417, /* HTTP/1.1  2616  10.4.18 */
+	http_unprocessable_entity     = 422, /*   WebDAV  2518  10.3    */
+	http_locked                   = 423, /*   WebDAV  2518  10.4    */
+	http_failed_dependency        = 424, /*   WebDAV  2518  10.5    */
+	http_upgrade_required         = 426, /* TLS upgr  2817   6      */
+	http_internal_error           = 500, /* HTTP/1.1  2616  10.5.1  */
+	http_not_implemented          = 501, /* HTTP/1.1  2616  10.5.2  */
+	http_bad_gateway              = 502, /* HTTP/1.1  2616  10.5.3  */
+	http_service_unavailable      = 503, /* HTTP/1.1  2616  10.5.4  */
+	http_gateway_timeout          = 504, /* HTTP/1.1  2616  10.5.5  */
+	http_version_not_supported    = 505, /* HTTP/1.1  2616  10.5.6  */
+	http_insufficient_storage     = 507, /* HTTP/1.1  2616  10.6    */
+	http_not_extended             = 510  /* HTTP Ext  2774   7      */
 } cherokee_http_t;
 
 #define http_continue_string                 "100 Continue"
 #define http_switching_protocols_string      "101 Switching Protocols"
+#define http_processing_string               "102 Processing"
 #define http_ok_string                       "200 OK"
 #define http_created_string                  "201 Created"
 #define http_accepted_string                 "202 Accepted"
+#define http_non_authoritative_info_string   "203 Non-Authoritative Information"
 #define http_no_content_string               "204 No Content"
+#define http_reset_content_string            "205 Reset Content"
 #define http_partial_content_string          "206 Partial Content"
 #define http_multi_status_string             "207 Multi-Status"
+#define http_im_used_string                  "226 IM Used"
+#define http_multiple_choices_string         "300 Multiple Choices"
 #define http_moved_permanently_string        "301 Moved Permanently"
 #define http_moved_temporarily_string        "302 Moved Temporarily"
 #define http_see_other_string                "303 See Other"
 #define http_not_modified_string             "304 Not Modified"
+#define http_use_proxy_string                "305 Use Proxy"
 #define http_temporary_redirect_string       "307 Temporary Redirect"
 #define http_bad_request_string              "400 Bad Request"
 #define http_unauthorized_string             "401 Authorization Required"
+#define http_payment_required_string         "402 Payment Required"
 #define http_access_denied_string            "403 Forbidden"
 #define http_not_found_string                "404 Not Found"
 #define http_method_not_allowed_string       "405 Method Not Allowed"
 #define http_not_acceptable_string           "406 Not Acceptable"
+#define http_proxy_auth_required_string      "407 Proxy Authentication Required"
 #define http_request_timeout_string          "408 Request Time-out"
+#define http_conflict_string                 "409 Conflict"
 #define http_gone_string                     "410 Gone"
 #define http_length_required_string          "411 Length Required"
+#define http_precondition_failed_string      "412 Precondition Failed"
 #define http_request_entity_too_large_string "413 Request Entity too large"
 #define http_request_uri_too_long_string     "414 Request-URI too long"
 #define http_unsupported_media_type_string   "415 Unsupported Media Type"
 #define http_range_not_satisfiable_string    "416 Requested range not satisfiable"
+#define http_expectation_failed_string       "417 Expectation Failed"
+#define http_unprocessable_entity_string     "422 Unprocessable Entity"
+#define http_locked_string                   "423 Locked"
+#define http_failed_dependency_string        "424 Failed Dependency"
 #define http_upgrade_required_string         "426 Upgrade Required"
 #define http_internal_error_string           "500 Internal Server Error"
 #define http_not_implemented_string          "501 Not Implemented"
@@ -152,6 +182,8 @@ typedef enum {
 #define http_service_unavailable_string      "503 Service Unavailable"
 #define http_gateway_timeout_string          "504 Gateway Timeout"
 #define http_version_not_supported_string    "505 HTTP Version Not Supported"
+#define http_insufficient_storage_string     "507 Insufficient Storage"
+#define http_not_extended_string             "510 Not Extended"
 
 #define http_type_100_max 102
 #define http_type_200_max 206
