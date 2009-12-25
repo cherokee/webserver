@@ -38,7 +38,11 @@ DEFAULT_PAGE_TEMPLATE = """\
 </html>
 """
 
-DEFAULT_JS = '<script type="text/javascript" src="/static/js/jquery-1.3.2.js"></script>'
+HEADERS = [
+    '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
+    '<script type="text/javascript" src="/static/js/common.js"></script>',
+    '<script type="text/javascript" src="/static/js/jquery-1.3.2.js"></script>'
+]
 
 def uniq (seq):
     noDupes = []
@@ -48,9 +52,7 @@ def uniq (seq):
 class Page (Container):
     def __init__ (self, template=None, headers=[]):
         Container.__init__ (self)
-
-        self._headers = [DEFAULT_JS]
-        self._headers += headers
+        self._headers = HEADERS + headers
 
         if template:
             self._template = Template (filename = template)

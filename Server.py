@@ -231,7 +231,7 @@ class Server:
                 # Handle request
                 self._scgi.handle_request()
         except KeyboardInterrupt:
-            print "\r", _("Server exiting..")
+            print "\r", "Server exiting.."
             self._scgi.server_close()
 
 

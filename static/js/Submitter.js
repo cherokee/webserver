@@ -77,6 +77,10 @@ function Submitter (id, url) {
 		  info[this.name] = this.value;
 	   });
 
+	   /* Remove error messages */
+	   filter = "#submitter"+ self.submitter_id +" div.error";
+	   $(filter).html("");
+
 	   /* Async post */
 	   $.ajax ({
 		  type:     'POST',

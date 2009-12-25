@@ -9,7 +9,7 @@ def write_cherokee_conf (test):
     root = os.path.abspath (os.path.join (here, ".."))
 
     test_path = "python %s" %(os.path.join (here, test))
-    
+
     config = open('cherokee.conf.orig', 'r').read()
     config = config.replace ('vserver!10!document_root = /var/www',
                              'vserver!10!document_root = ' + root)
