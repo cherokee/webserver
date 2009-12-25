@@ -31,15 +31,15 @@ HTML = """
 """
 
 JAVASCRIPT = """
-var response = $.ajax({
-   url:    "%(proxy_url)s",
-   type:   "GET",
-   async:  false
-}).responseText;
-
-$('#%(id_widget)s').html(response);
+$.ajax({
+   url:     "%(proxy_url)s",
+   type:    "GET",
+   async:   %(async_bool)s,
+   success: function(msg){
+      $('#%(id_widget)s').html(msg);
+   }
+});
 """
-
 
 class ProxyRequest:
    def __call__ (self, host, req):
@@ -52,18 +52,19 @@ class ProxyRequest:
 class Proxy (Widget):
     def __init__ (self, host, req, props={}):
         Widget.__init__ (self)
-        self._props     = props
         self._url_local = '/proxy_widget_%d' %(self.uniq_id)
 
-        if not 'id' in props:
-            self._props['id'] = 'widget%d'%(self.uniq_id)
+        self._props     = props
+        self._async     = props.pop('async', True)
+        self._id        = 'widget%d'%(self.uniq_id)
 
         # Register the proxy path
         publish (self._url_local, ProxyRequest, host=host, req=req)
 
     def Render (self):
-        props = {'id_widget': self._props['id'],
-                 'proxy_url': self._url_local}
+        props = {'id_widget':  self._id,
+                 'proxy_url':  self._url_local,
+                 'async_bool': ['false','true'][self._async]}
 
         html = HTML       %(props)
         js   = JAVASCRIPT %(props)

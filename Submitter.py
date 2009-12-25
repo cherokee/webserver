@@ -37,7 +37,7 @@ BLOCK_HTML = """
 BLOCK_JS = """
  %(js)s
 
-  submit_%(id_widget)d = new Submitter('%(id_widget)d', '%(url)s');
+  var submit_%(id_widget)d = new Submitter('%(id_widget)d', '%(url)s');
   submit_%(id_widget)d.setup (submit_%(id_widget)d);
 """
 
