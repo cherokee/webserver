@@ -53,18 +53,24 @@ class Submitter (Container):
     # Public interface
     #
     def Render (self):
+        # Child render
         tmp = RenderResponse()
 
         for widget in self.child:
             tmp += widget.Render()
 
+        # Own render
         props = {'id_widget': self.uniq_id,
                  'url':       self._url,
                  'html':      tmp.html,
                  'js':        tmp.js}
 
-        html = BLOCK_HTML % (props)
-        js   = BLOCK_JS % (props)
+        my = RenderResponse()
 
-        return RenderResponse (html, js, HEADER)
+        my.html    = BLOCK_HTML %(props)
+        my.js      = BLOCK_JS   %(props)
+        my.headers = HEADER + tmp.headers
+
+        my.clean_up_headers()
+        return my
 

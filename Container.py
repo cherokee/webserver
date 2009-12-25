@@ -29,6 +29,7 @@ class Container (Widget):
 
     def __add__ (self, widget):
         assert isinstance(widget, Widget)
+
         self.child.append (widget)
         return self
 

@@ -22,16 +22,29 @@
 
 from Widget import Widget, RenderResponse
 
+HEADERS = [
+    '<script type="text/javascript" src="/static/js/jquery.ibutton.js"></script>',
+    '<link type="text/css" href="/static/css/jquery.ibutton.css" rel="stylesheet" media="all" />'
+]
+
 HTML = """
-<input type="checkbox" name="%(name)s" />
+<input type="checkbox" id="%(id)s" name="%(name)s" value="true" />
 """
 
-class Checkbox (Widget):
+JS = """
+$("#%(id)s").iButton();
+"""
+
+class iPhoneToggle (Widget):
     def __init__ (self, props={}):
         Widget.__init__ (self)
         self._props = props
 
+        if not 'id' in props:
+            self._props['id'] = 'widget%d'%(self.uniq_id)
+
     def Render (self):
-        # Render the text field
-        html = HTML % (self._props)
-        return RenderResponse (html)
+        html = HTML %(self._props)
+        js   = JS   %(self._props)
+
+        return RenderResponse (html, js, HEADERS)

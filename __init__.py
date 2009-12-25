@@ -36,3 +36,4 @@ from PropsTable import PropsTable, PropsTableAuto
 from Template import Template
 from Server import Server, run, publish
 from Proxy import Proxy
+from iPhoneToggle import iPhoneToggle

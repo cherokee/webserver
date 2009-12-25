@@ -51,8 +51,8 @@ class TableField (Container):
         html += render.html
         html += '</%s>' % (self._tag)
 
-        r = RenderResponse (html, render.js, render.headers)
-        return r
+        render.html = html
+        return render
 
     def __setitem__ (self, prop, value):
         assert type(prop)  == str
@@ -130,14 +130,12 @@ class Table (Widget):
     def Render (self):
         props = self.kwargs.get('props')
         if props:
-            html = '<table %s>' %(props)
+            render = RenderResponse('<table %s>' %(props))
         else:
-            html = '<table>'
-
-        render = RenderResponse (html)
+            render = RenderResponse('<table>')
 
         for row in self.rows:
-            html += '<tr>'
+            render.html += '<tr>'
             for field in row:
                 if field:
                     assert isinstance(field, TableField)

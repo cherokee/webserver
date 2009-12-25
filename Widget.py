@@ -29,13 +29,24 @@ class RenderResponse:
         self.js      = js
         self.headers = headers
 
+    def clean_up_headers (self):
+        noDupes = []
+        [noDupes.append(i) for i in self.headers if not noDupes.count(i)]
+        self.headers = noDupes
+
     def __add__ (self, other):
+        assert isinstance(other, RenderResponse)
+
+        # New response obj
         i = RenderResponse()
 
+        # Append the new response
         i.html    = self.html    + other.html
         i.js      = self.js      + other.js
         i.headers = self.headers + other.headers
 
+        # Sort the headers
+        i.clean_up_headers()
         return i
 
 

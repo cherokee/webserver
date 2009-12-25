@@ -26,6 +26,7 @@ class default:
         self.p.Add ('Nick',    CTK.TextField({'name': "server!tri"}),    'Oh uh ah!')
         self.p.Add ('Active',  CTK.Checkbox ({'name': "server!active"}), 'Nuevo')
         self.p.Add ('Elige',   CTK.Combobox ({'name': "server!elec", 'selected': "two"}, OPTIONS), 'la lista')
+        self.p.Add ('iPhone',  CTK.iPhoneToggle({'name': "server!off"}), 'Fancy')
         self.p.Add ('Carga',   CTK.Proxy("www.cherokee-project.com", '/dynamic/cherokee-list.html'), 'Lista')
 
     def __call__ (self):
