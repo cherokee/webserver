@@ -23,88 +23,11 @@
 import re
 import json
 import pyscgi
+import threading
+import Cookie
 
 from Post import Post
-
-
-class HTTP_Response:
-    DESC = {
-        100: 'CONTINUE',
-        101: 'SWITCHING PROTOCOLS',
-        200: 'OK',
-        201: 'CREATED',
-        202: 'ACCEPTED',
-        203: 'NON-AUTHORITATIVE INFORMATION',
-        204: 'NO CONTENT',
-        205: 'RESET CONTENT',
-        206: 'PARTIAL CONTENT',
-        300: 'MULTIPLE CHOICES',
-        301: 'MOVED PERMANENTLY',
-        302: 'FOUND',
-        303: 'SEE OTHER',
-        304: 'NOT MODIFIED',
-        305: 'USE PROXY',
-        306: 'RESERVED',
-        307: 'TEMPORARY REDIRECT',
-        400: 'BAD REQUEST',
-        401: 'UNAUTHORIZED',
-        402: 'PAYMENT REQUIRED',
-        403: 'FORBIDDEN',
-        404: 'NOT FOUND',
-        405: 'METHOD NOT ALLOWED',
-        406: 'NOT ACCEPTABLE',
-        407: 'PROXY AUTHENTICATION REQUIRED',
-        408: 'REQUEST TIMEOUT',
-        409: 'CONFLICT',
-        410: 'GONE',
-        411: 'LENGTH REQUIRED',
-        412: 'PRECONDITION FAILED',
-        413: 'REQUEST ENTITY TOO LARGE',
-        414: 'REQUEST-URI TOO LONG',
-        415: 'UNSUPPORTED MEDIA TYPE',
-        416: 'REQUESTED RANGE NOT SATISFIABLE',
-        417: 'EXPECTATION FAILED',
-        500: 'INTERNAL SERVER ERROR',
-        501: 'NOT IMPLEMENTED',
-        502: 'BAD GATEWAY',
-        503: 'SERVICE UNAVAILABLE',
-        504: 'GATEWAY TIMEOUT',
-        505: 'HTTP VERSION NOT SUPPORTED',
-        }
-
-    def __init__ (self, error=200, headers=[], body=''):
-        self.error   = error
-        self.headers = headers
-        self.body    = body
-
-    def __setitem__ (self, key, value):
-        self.headers.append ("%s: %s"%(key, str(value)))
-
-    def __str__ (self):
-        # Add content length
-        if not "Content-Length:" in ''.join(self.headers).lower():
-            self['Content-Length'] = len(self.body)
-
-        # Build the HTTP response
-        hdr  = "%d %s\r\n" %(self.error, HTTP_Response.DESC[self.error])
-        hdr += "Status: %d\r\n" %(self.error)
-        hdr += "\r\n".join (self.headers) + '\r\n'
-
-        # No body replies: RFC2616 4.3
-        if self.error in (100, 101, 204, 304):
-            return hdr
-
-        return hdr + '\r\n' + self.body
-
-
-class HTTP_Error (HTTP_Response):
-    def __init__ (self, error=500):
-        HTTP_Response.__init__ (self, error)
-
-        self.body  = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\r\n'
-        self.body += "<html><head><title>Error %d: %s</title></head>\n" %(error, HTTP_Response.DESC[error])
-        self.body += '<body><h1>Error %d: %s</h1></body>\n' %(error, HTTP_Response.DESC[error])
-        self.body += "</html>"
+from HTTP import HTTP_Response, HTTP_Error
 
 
 class PostValidator:
@@ -145,6 +68,9 @@ class PostValidator:
 
 class ServerHandler (pyscgi.SCGIHandler):
     def __init__ (self, *args):
+        self.response = HTTP_Response()
+
+        # SCGIHandler.__init__ invokes ::handle()
         pyscgi.SCGIHandler.__init__ (self, *args)
 
     def _process_post (self):
@@ -152,12 +78,23 @@ class ServerHandler (pyscgi.SCGIHandler):
         post = Post (self.post)
         return post
 
+    def _render_page_ret (self, ret):
+        # <int>  - HTTP Error <int>
+        # <dict> - JSON <dict>
+        # <str>  - 200, HTTP <str>
+        # <list> - [
+        None
+
     def _do_handle (self):
         # Read the URL
         url = self.env['REQUEST_URI']
 
         # Get a copy of the server (it did fork!)
         server = get_server()
+
+        # Refer SCGI object by thread
+        my_thread = threading.currentThread()
+        my_thread.scgi_conn = self
 
         for published in server._web_paths:
             if re.match (published._regex, url):
@@ -179,16 +116,21 @@ class ServerHandler (pyscgi.SCGIHandler):
 
                 # Deal with the returned info
                 if type(ret) == str:
-                    return HTTP_Response(200, body=ret)
+                    self.response += ret
+                    return self.response
 
                 elif type(ret) == dict:
                     info = json.dumps(ret)
-                    resp = HTTP_Response(200, body=info)
-                    resp['Content-Type'] = "application/json"
-                    return resp
+                    self.response += info
+                    self.response['Content-Type'] = "application/json"
+                    return self.response
+
+                elif isinstance(ret, HTTP_Response):
+                    return ret
 
                 else:
-                    return HTTP_Response(200, body=ret)
+                    self.response += ret
+                    return self.response
 
         # Not found
         return HTTP_Error (404)
@@ -281,3 +223,17 @@ def publish (regex_url, klass, **kwargs):
     server.add_route (obj)
 
 
+
+class _Cookie:
+    def __setitem__ (self, name, value):
+        my_thread = threading.currentThread()
+        response = my_thread.scgi_conn.response
+        response['Set-Cookie'] = "%s=%s" %(name, value)
+
+    def __getitem__ (self, name):
+        my_thread = threading.currentThread()
+        scgi = my_thread.scgi_conn
+        cookie = Cookie.SimpleCookie(scgi.env.get('HTTP_COOKIE', ''))
+        return cookie[name].value
+
+cookie = _Cookie()

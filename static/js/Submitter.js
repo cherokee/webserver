@@ -102,6 +102,9 @@ function Submitter (id, url) {
 				    $(filter).attr ('value', data['updates'][key]);
 				}
 			 }
+			 if (data['redirect'] != undefined) {
+				window.location.replace (data['redirect']);
+			 }
 		  },
 		  error: function (xhr, ajaxOptions, thrownError) {
 			 self.restore_orig_values (self);

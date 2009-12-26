@@ -34,7 +34,8 @@ from Checkbox import Checkbox
 from Combobox import Combobox
 from PropsTable import PropsTable, PropsTableAuto
 from Template import Template
-from Server import Server, run, publish
+from Server import Server, run, publish, cookie
 from Proxy import Proxy
 from iPhoneToggle import iPhoneToggle
 from Tab import Tab
+from HTTP import HTTP_Redir, HTTP_Error

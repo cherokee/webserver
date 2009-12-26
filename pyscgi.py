@@ -54,7 +54,7 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
 
     def __safe_read (self, lenght):
-        while True: 
+        while True:
             chunk = None
             try:
                 chunk = self.rfile.read(lenght)

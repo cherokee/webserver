@@ -1,9 +1,20 @@
 import CTK
+import random
 
 LOGINS = {
     'root': "god",
     'alo' : "cherokee"
 }
+
+SECRET = ''.join([random.choice(''.join(dir())) for x in range(30)])
+
+
+def welcome():
+    if CTK.cookie['secret'] != SECRET:
+        return CTK.HTTP_Redir('/')
+
+    return "<h1>Welcome Sir!</h1>"
+
 
 def apply (post):
     name  = post.get_val('login!name')
@@ -14,7 +25,8 @@ def apply (post):
     if LOGINS[name] != passw:
         return {'ret': "error", 'errors': {'login!pass': "Wrong password"}}
 
-    return {'ret': "ok"}
+    CTK.cookie['secret'] = SECRET
+    return {'ret': "ok", 'redirect': "/welcome"}
 
 
 class default:
@@ -33,6 +45,7 @@ class default:
         return self.page.Render()
 
 
+CTK.publish ('/welcome', welcome)
 CTK.publish ('/apply', apply, method="POST")
 CTK.publish ('', default)
 
