@@ -6,14 +6,19 @@ LOGINS = {
     'alo' : "cherokee"
 }
 
-SECRET = ''.join([random.choice(''.join(dir())) for x in range(30)])
+SECRET = ''.join ([random.choice("1234567890") for x in range(30)])
 
 
 def welcome():
     if CTK.cookie['secret'] != SECRET:
         return CTK.HTTP_Redir('/')
 
-    return "<h1>Welcome Sir!</h1>"
+    dialog = CTK.Dialog ({'title': "You did it"})
+    dialog += CTK.RawHTML ("<h1>Welcome Sir!</h1>")
+
+    page = CTK.Page()
+    page += dialog
+    return page.Render()
 
 
 def apply (post):
