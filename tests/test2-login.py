@@ -21,9 +21,9 @@ def welcome():
     return page.Render()
 
 
-def apply (post):
-    name  = post.get_val('login!name')
-    passw = post.get_val('login!pass')
+def apply():
+    name  = CTK.post['login!name']
+    passw = CTK.post['login!pass']
 
     if not name in LOGINS:
         return {'ret': "error", 'errors': {'login!name': "Unknown user"}}

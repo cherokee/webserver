@@ -15,7 +15,7 @@ VALIDATIONS = [
 URL     = "http://www.cherokee-project.com/dynamic/cherokee-list.html"
 OPTIONS = [('one','uno'), ('two','dos'), ('three', 'tres')]
 
-def apply (post):
+def apply():
     return {'ret': "ok"}
 
 class default:

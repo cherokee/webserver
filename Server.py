@@ -101,7 +101,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                 # POST
                 if published._method == 'POST':
                     post = self._process_post()
-                    published._kwargs['post'] = post
+                    my_thread.post = post
 
                     # Validate
                     validator = PostValidator (post, published._validation)
@@ -236,4 +236,14 @@ class _Cookie:
         cookie = Cookie.SimpleCookie(scgi.env.get('HTTP_COOKIE', ''))
         return cookie[name].value
 
+class _Post:
+    def get_val (self, name, default=None):
+        my_thread = threading.currentThread()
+        post = my_thread.post
+        return post.get_val(name, default)
+
+    def __getitem__ (self, name):
+        return self.get_val (name, None)
+
 cookie = _Cookie()
+post   = _Post()
