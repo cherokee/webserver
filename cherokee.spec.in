@@ -32,7 +32,7 @@ CFLAGS="$RPM_OPT_FLAGS"                 \
             --mandir=%{_mandir}         \
             --sbindir=%{_sbindir}       \
 		  --with-wwwroot=/home/httpd
-make CFLAGS="-O0 -ggb"
+make CFLAGS="-O0 -ggdb"
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
