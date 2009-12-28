@@ -762,7 +762,7 @@ e('TEMPLATE_NO_TOKEN',
 #
 e('SPAWNER_SHM_INIT',
   title = "Could not initialize SHM '%s': ${errno}",
-  desc  = SYSTEM_ISSUE)
+  desc  = "Check if your shared memory is mounted in /dev/shm")
 
 e('SPAWNER_UNLOCK_SEMAPHORE',
   title = "Could not unlock spawning semaphore %d: ${errno}",
