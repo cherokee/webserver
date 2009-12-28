@@ -189,6 +189,7 @@ class PageVServers (PageMenu, FormHelper):
             else:
                 collector = OFFLINE_IMAGE
 
+            draggable = ''
             if nick != "default":
                 disabled = self.InstanceCheckbox ('vserver!%s!disabled'%(prio), self._cfg.get_val('vserver!%s!disabled'%(prio)) == 1, quiet=True, switch=True, noautosubmit=True)
                 link_del = self.AddDeleteLink ('/ajax/update', 'vserver!%s'%(prio))
@@ -201,7 +202,6 @@ class PageVServers (PageMenu, FormHelper):
                 disabled  = self.HiddenInput ('vserver!%s!disabled'%(prio), "0")
                 link_del = ''
                 extra = ' class="nodrag nodrop"'
-                draggable = ''
 
             txt += '<tr prio="%s" id="%s"%s><td%s>&nbsp</td><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td><td class="center switch">%s</td><td class="center">%s</td></tr>' % (
                 prio, prio, extra, draggable, link, document_root, doms, logging, collector, disabled, link_del)
