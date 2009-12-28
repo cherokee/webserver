@@ -28,14 +28,15 @@ function Submitter (id, url) {
 
     this.setup = function (self) {
 	   /* When input looses focus */
-	   $("#submitter" + this.submitter_id + " input[type='text']").bind ("blur", this, this.input_blur_cb);
-	   $("#submitter" + this.submitter_id + " input[type='text']").bind ("keypress", this, this.input_keypress_cb);
-	   $("#submitter" + this.submitter_id + " input[type='checkbox']").bind ("change", this, this.input_checkbox_cb);
+	   var pre = "#submitter" + this.submitter_id;
+	   $(pre+" :text, "+pre+" :password").bind ("blur",     this, this.input_blur_cb);
+	   $(pre+" :text, "+pre+" :password").bind ("keypress", this, this.input_keypress_cb);
+	   $("#submitter" + this.submitter_id + " :checkbox").bind ("change", this, this.input_checkbox_cb);
 	   $("#submitter" + this.submitter_id + " select").bind ("change", this, this.input_combobox_cb);
 
 	   /* Read the original values */
 	   self.orig_values = {};
-	   $("#submitter" + self.submitter_id).children("input:text").each(function(){
+	   $("#submitter" + self.submitter_id).children(":text").each(function(){
 		  self.orig_values[this.id] = this.value;
 	   });
     }
@@ -50,8 +51,9 @@ function Submitter (id, url) {
 
     this.is_fulfilled = function (self) {
 	   var full = true;
+	   var pre  = "#submitter"+ self.submitter_id;
 
-	   $("#submitter"+ self.submitter_id +" .required[type=text]").each(function() {
+	   $(pre +" .required:text, "+ pre +" .required:password").each(function() {
 		  if (! this.value) {
 			 full = false;
 		  }
@@ -61,19 +63,21 @@ function Submitter (id, url) {
     }
 
     this.submit_form = function (self) {
+	   var pre = "#submitter" + self.submitter_id;
+
 	   /* Block the fields */
-	   $("#submitter"+self.submitter_id +" input").attr("disabled", true);
-	   $("#submitter"+self.submitter_id +" #notice").html("Submitting..");
+	   $(pre +" input").attr("disabled", true);
+	   $(pre +" #notice").html("Submitting..");
 
 	   /* Build the post */
 	   info = {};
-	   $("#submitter"+ self.submitter_id +" input:text").each(function(){
+	   $(pre +" input:text, "+ pre +" input:password").each(function(){
 		  info[this.name] = this.value;
 	   });
-	   $("#submitter"+ self.submitter_id +" input:checkbox").each(function(){
+	   $(pre +" input:checkbox").each(function(){
 		  info[this.name] = this.checked ? "1" : "0";
 	   });
-	   $("#submitter"+ self.submitter_id +" select").each(function(){
+	   $(pre +" select").each(function(){
 		  info[this.name] = this.value;
 	   });
 
@@ -146,6 +150,7 @@ function Submitter (id, url) {
 
     this.input_blur_cb = function (event) {
 	   var self = event.data;
+	   var pre  = "#submitter" + self.submitter_id;
 
 	   /* Only proceed when something */
 	   if (! self.key_pressed) {
@@ -153,10 +158,11 @@ function Submitter (id, url) {
 	   }
 
 	   /* Procced on the last entry */
-	   last_req_text_filter = "#submitter" + self.submitter_id + " .required[type=text]:last";
+	   var last = $(pre +" :text, "+ pre +" :password").filter(".required:last");
 
-	   if (($(last_req_text_filter).attr('id') != undefined) &&
-		  ($(last_req_text_filter).attr('id') != event.currentTarget.id)) {
+	   if ((last.attr('id') != undefined) &&
+		  (last.attr('id') != event.currentTarget.id))
+	   {
 		  return;
 	   }
 

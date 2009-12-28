@@ -29,6 +29,7 @@ class TextField (Widget):
     def __init__ (self, props={}):
         Widget.__init__ (self)
         self._props = props
+        self.type   = "text"
 
         if not 'id' in props:
             self._props['id'] = 'widget%d'%(self.uniq_id)
@@ -54,10 +55,15 @@ class TextField (Widget):
 
     def Render (self):
         # Render the text field
-        html = '<input type="text"%s />' % (self.__get_input_props())
+        html = '<input type="%s"%s />' %(self.type, self.__get_input_props())
 
         # Render the error reporting field
-        html += '<div class="error"%s></div>' % (self.__get_error_div_props())
+        html += '<div class="error"%s></div>' %(self.__get_error_div_props())
 
         return RenderResponse (html)
 
+
+class TextFieldPassword (TextField):
+    def __init__ (self, *a, **kw):
+        TextField.__init__ (self, *a, **kw)
+        self.type = "password"

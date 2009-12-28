@@ -38,7 +38,7 @@ class default:
     def __init__ (self):
         g = CTK.PropsTable()
         g.Add ('User',     CTK.TextField({'name': "login!name", 'class': "required"}), 'Type your user name')
-        g.Add ('Password', CTK.TextField({'name': "login!pass", 'class': "required"}), 'Type your password')
+        g.Add ('Password', CTK.TextFieldPassword({'name': "login!pass", 'class': "required"}), 'Type your password')
 
         form = CTK.Submitter("/apply")
         form += g

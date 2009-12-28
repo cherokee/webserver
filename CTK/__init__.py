@@ -29,7 +29,7 @@ from Page import Page
 # Widgets
 from Table import Table, TableFixed
 from RawHTML import RawHTML
-from TextField import TextField
+from TextField import TextField, TextFieldPassword
 from Checkbox import Checkbox
 from Combobox import Combobox
 from PropsTable import PropsTable, PropsTableAuto
