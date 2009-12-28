@@ -124,6 +124,15 @@ function Submitter (id, url) {
     this.input_keypress_cb = function(event) {
 	   var self = event.data;
 	   self.key_pressed = true;
+
+	   /* Enter -> Focus next input */
+	   if (event.keyCode == 13) {
+		  var n = $("input").index(this);
+		  var next = (n < $("input").length -1) ? n+1 : 0;
+
+		  $("input")[next].blur();
+		  $("input")[next].focus();
+	   }
     }
 
     this.input_checkbox_cb = function (event) {
