@@ -20,6 +20,8 @@
 # 02110-1301, USA.
 #
 
+__author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
+
 from Widget import Widget, RenderResponse
 
 HTML = """

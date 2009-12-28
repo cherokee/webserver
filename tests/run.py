@@ -5,9 +5,11 @@ import sys
 import tempfile
 
 def write_cherokee_conf (test):
+    # Figure out paths
     here = os.path.abspath (os.path.dirname (__file__))
     root = os.path.abspath (os.path.join (here, ".."))
 
+    # Write the custom configuration file
     test_path = "python %s" %(os.path.join (here, test))
 
     config = open('cherokee.conf.orig', 'r').read()
@@ -19,6 +21,9 @@ def write_cherokee_conf (test):
     tempfd, tempname = tempfile.mkstemp()
     os.write(tempfd, config)
     os.close(tempfd)
+
+    # Set environment var PYTHONPATH
+    os.putenv("PYTHONPATH", "%s:%s"%(root, os.getenv("PYTHONPATH", '')))
 
     return tempname
 
