@@ -56,5 +56,11 @@ def check_images():
     return error
 
 if __name__ == "__main__":
+    # Exit if .txt files are not included
+    if not filter (lambda x: x.endswith('.txt'), os.listdir('.')):
+        print "Nothing to check.."
+        raise SystemExit
+
+    # Test
     error = check_images()
     sys.exit(int(error))
