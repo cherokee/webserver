@@ -23,6 +23,7 @@
 from consts import *
 from Container import Container
 from Template import Template
+from PageCleaner import Postprocess
 
 DEFAULT_PAGE_TEMPLATE = """\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -82,4 +83,5 @@ class Page (Container):
         else:
             body = render.html + HTML_JS_ON_READY_BLOCK %(render.js)
 
-        return self._template.Render()
+        txt = self._template.Render()
+        return Postprocess (txt)

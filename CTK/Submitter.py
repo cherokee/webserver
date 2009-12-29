@@ -26,19 +26,26 @@ from RawHTML import RawHTML
 from Container import Container
 from TextField import TextField
 from Widget import RenderResponse
+from PageCleaner import Uniq_Block
 
-BLOCK_HTML = """
+HTML = """
 <div id="submitter%(id_widget)d">
  %(html)s
  <div id="notice"></div>
 </div>
 """
 
-BLOCK_JS = """
+# Initialization
+JS_INIT = """
  %(js)s
 
   var submit_%(id_widget)d = new Submitter('%(id_widget)d', '%(url)s');
   submit_%(id_widget)d.setup (submit_%(id_widget)d);
+"""
+
+# Focus on the first <input> of the page
+JS_FOCUS = """
+$("input:first").focus();
 """
 
 HEADER = [
@@ -67,8 +74,9 @@ class Submitter (Container):
 
         my = RenderResponse()
 
-        my.html    = BLOCK_HTML %(props)
-        my.js      = BLOCK_JS   %(props)
+        my.html    = HTML %(props)
+        my.js      = JS_INIT %(props)
+        my.js     += Uniq_Block (JS_FOCUS %(props))
         my.headers = HEADER + tmp.headers
 
         my.clean_up_headers()
