@@ -951,7 +951,9 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	/* File
 	 */
-	VTMP_SUBSTITUTE_TOKEN ("%file_name%", name);
+	cherokee_buffer_clean (tmp);
+	cherokee_buffer_add_escape_html (tmp, &name_buf);
+	VTMP_SUBSTITUTE_TOKEN ("%file_name%", tmp->buf);
 
 	if ((is_link) && (props->redir_symlinks)) {
 		if (file->realpath.len <= 0) {
