@@ -230,11 +230,18 @@ class _Cookie:
         response = my_thread.scgi_conn.response
         response['Set-Cookie'] = "%s=%s" %(name, value)
 
-    def __getitem__ (self, name):
+    def get_val (self, name, default=None):
         my_thread = threading.currentThread()
         scgi = my_thread.scgi_conn
         cookie = Cookie.SimpleCookie(scgi.env.get('HTTP_COOKIE', ''))
-        return cookie[name].value
+        if name in cookie:
+            return cookie[name].value
+        else:
+            return default
+
+    def __getitem__ (self, name):
+        return self.get_val (name, None)
+
 
 class _Post:
     def get_val (self, name, default=None):
