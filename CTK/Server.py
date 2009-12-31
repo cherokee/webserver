@@ -94,7 +94,8 @@ class ServerHandler (pyscgi.SCGIHandler):
 
         # Refer SCGI object by thread
         my_thread = threading.currentThread()
-        my_thread.scgi_conn = self
+        my_thread.scgi_conn   = self
+        my_thread.request_url = url
 
         for published in server._web_paths:
             if re.match (published._regex, url):
@@ -252,5 +253,15 @@ class _Post:
     def __getitem__ (self, name):
         return self.get_val (name, None)
 
-cookie = _Cookie()
-post   = _Post()
+
+class _Request:
+    def _get_request_url (self):
+        my_thread = threading.currentThread()
+        return my_thread.request_url
+
+    url = property (_get_request_url)
+
+
+cookie  = _Cookie()
+post    = _Post()
+request = _Request()

@@ -121,9 +121,9 @@ class Table (Widget):
         row,col = pos
 
         if col > self.last_col:
-            raise IndexError, "Column number out of bounds"
+            raise IndexError, "Column number out of bounds (get)"
         if row > self.last_row:
-            raise IndexError, "Row number out of bounds"
+            raise IndexError, "Row number out of bounds (get)"
 
         return self.rows[row-1][col-1]
 
@@ -145,6 +145,17 @@ class Table (Widget):
 
         render.html += '</table>'
         return render
+
+    def set_header (self, row=True, column=False, num=1):
+        if row:
+            for field in self.rows[num-1]:
+                field._tag = 'th'
+            return
+
+        if column:
+            for row in self.rows:
+                row[num-1]._tag = 'th'
+            return
 
 
 class TableFixed (Table):
