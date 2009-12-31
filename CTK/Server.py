@@ -253,6 +253,11 @@ class _Post:
     def __getitem__ (self, name):
         return self.get_val (name, None)
 
+    def __iter__ (self):
+        my_thread = threading.currentThread()
+        post = my_thread.post
+        return post.__iter__()
+
 
 class _Request:
     def _get_request_url (self):
