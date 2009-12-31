@@ -39,11 +39,15 @@ $("#%(id)s").dialog();
 """
 
 class Dialog (Container):
-    def __init__ (self, props={}):
+    def __init__ (self, props=None):
         Container.__init__ (self)
 
-        self.title = props.pop('title', '')
-        self.props = props
+        if props:
+            self.props = props
+        else:
+            self.props = {}
+
+        self.title = self.props.pop('title', '')
         self.id    = 'dialog%d'%(self.uniq_id)
 
     def Render (self):

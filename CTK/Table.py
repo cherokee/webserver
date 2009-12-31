@@ -31,7 +31,7 @@ class TableField (Container):
         self._tag   = 'td'
 
         if widget:
-            self += widget
+            Container.__add__ (self, widget)
 
     def Render (self):
         # Build tag props

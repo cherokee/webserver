@@ -50,13 +50,17 @@ class ProxyRequest:
 
 
 class Proxy (Widget):
-    def __init__ (self, host, req, props={}):
+    def __init__ (self, host, req, props=None):
         Widget.__init__ (self)
         self._url_local = '/proxy_widget_%d' %(self.uniq_id)
 
-        self._props     = props
-        self._async     = props.pop('async', True)
-        self._id        = 'widget%d'%(self.uniq_id)
+        if props:
+            self.props = props
+        else:
+            self.props = {}
+
+        self._async = self.props.pop('async', True)
+        self._id    = 'widget%d'%(self.uniq_id)
 
         # Register the proxy path
         publish (self._url_local, ProxyRequest, host=host, req=req)

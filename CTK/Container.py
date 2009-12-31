@@ -37,6 +37,7 @@ class Container (Widget):
         render = RenderResponse()
 
         for c in self.child:
-            render += c.Render()
+            tmp = c.Render()
+            render += tmp
 
         return render

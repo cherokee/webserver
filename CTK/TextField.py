@@ -26,12 +26,16 @@ from Widget import Widget, RenderResponse
 
 
 class TextField (Widget):
-    def __init__ (self, props={}):
+    def __init__ (self, props=None):
         Widget.__init__ (self)
-        self._props = props
-        self.type   = "text"
+        self.type = "text"
 
-        if not 'id' in props:
+        if props:
+            self._props = props
+        else:
+            self._props = {}
+
+        if not 'id' in self._props:
             self._props['id'] = 'widget%d'%(self.uniq_id)
 
     def __get_input_props (self):

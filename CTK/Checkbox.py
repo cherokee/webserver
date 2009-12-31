@@ -29,9 +29,12 @@ HTML = """
 """
 
 class Checkbox (Widget):
-    def __init__ (self, props={}):
+    def __init__ (self, props=None):
         Widget.__init__ (self)
-        self._props = props
+        if props:
+            self._props = props
+        else:
+            self._props = {}
 
     def Render (self):
         # Render the text field

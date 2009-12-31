@@ -61,10 +61,7 @@ class Submitter (Container):
     #
     def Render (self):
         # Child render
-        tmp = RenderResponse()
-
-        for widget in self.child:
-            tmp += widget.Render()
+        tmp = Container.Render(self)
 
         # Own render
         props = {'id_widget': self.uniq_id,
@@ -74,11 +71,10 @@ class Submitter (Container):
 
         my = RenderResponse()
 
-        my.html    = HTML %(props)
+        my.html    = HTML    %(props)
         my.js      = JS_INIT %(props)
         my.js     += Uniq_Block (JS_FOCUS %(props))
         my.headers = HEADER + tmp.headers
 
         my.clean_up_headers()
         return my
-
