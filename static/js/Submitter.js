@@ -71,7 +71,7 @@ function Submitter (id, url) {
 
 	   /* Build the post */
 	   info = {};
-	   $(pre +" input:text, "+ pre +" input:password").each(function(){
+	   $(pre +" input:text, "+ pre +" input:password, "+ pre +" input:hidden").each(function(){
 		  info[this.name] = this.value;
 	   });
 	   $(pre +" input:checkbox").each(function(){
@@ -127,11 +127,12 @@ function Submitter (id, url) {
 
 	   /* Enter -> Focus next input */
 	   if (event.keyCode == 13) {
-		  var n = $("input").index(this);
-		  var next = (n < $("input").length -1) ? n+1 : 0;
+		  var inputs = $("input").not("input:hidden");
+		  var n      = inputs.index(this);
+		  var next   = (n < inputs.length -1) ? n+1 : 0;
 
-		  $("input")[next].blur();
-		  $("input")[next].focus();
+		  inputs[next].blur();
+		  inputs[next].focus();
 	   }
     }
 
