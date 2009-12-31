@@ -40,3 +40,4 @@ from iPhoneToggle import iPhoneToggle
 from Tab import Tab
 from Dialog import Dialog
 from HTTP import HTTP_Redir, HTTP_Error
+from HiddenField import HiddenField

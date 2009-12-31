@@ -258,6 +258,11 @@ class _Post:
         post = my_thread.post
         return post.__iter__()
 
+    def pop (self, *args):
+        my_thread = threading.currentThread()
+        post = my_thread.post
+        return post.pop(*args)
+
 
 class _Request:
     def _get_request_url (self):
