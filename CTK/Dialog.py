@@ -35,8 +35,28 @@ HTML = """
 """
 
 JS = """
-$("#%(id)s").dialog();
+$("#%(id)s").dialog(%(dialog_props)s);
 """
+
+def py2js_dic (d):
+    js_pairs = []
+
+    for key in d:
+        val = d[key]
+        if type(val) == bool:
+            js_pairs.append ('%s: %s' %(key, ('false', 'true')[val]))
+        elif type(val) == int:
+            js_pairs.append ('%s: %d' %(key, val))
+        elif type(val) == str:
+            if '/* code */' in val:
+                js_pairs.append ("%s: %s" %(key, val))
+            else:
+                js_pairs.append ("%s: '%s'" %(key, val))
+        else:
+            assert false, "Unknown data type"
+
+    return "{%s}" % (", ".join(js_pairs))
+
 
 class Dialog (Container):
     def __init__ (self, props=None):
@@ -47,15 +67,32 @@ class Dialog (Container):
         else:
             self.props = {}
 
-        self.title = self.props.pop('title', '')
-        self.id    = 'dialog%d'%(self.uniq_id)
+        self.id      = 'dialog%d'%(self.uniq_id)
+        self.title   = self.props.pop('title', '')
+        self.buttons = []
+
+        # Defaults
+        if not 'modal' in self.props:
+            self.props['modal'] = True
+        if not 'resizable' in self.props:
+            self.props['resizable'] = False
+
+    def AddButton (self, caption, action):
+        self.buttons.append ((caption, action))
 
     def Render (self):
-        render_child = Container.Render (self)
+        # Build buttons
+        if self.buttons:
+            self.props['buttons'] = self._render_buttons_property()
 
-        props = {'id':      self.id,
-                 'title':   self.title,
-                 'content': render_child.html}
+        # Render
+        render_child = Container.Render (self)
+        dialog_props = py2js_dic (self.props)
+
+        props = {'id':           self.id,
+                 'title':        self.title,
+                 'content':      render_child.html,
+                 'dialog_props': dialog_props}
 
         html = HTML %(props)
         js   = JS   %(props)
@@ -66,3 +103,20 @@ class Dialog (Container):
 
         return render
 
+    def _render_buttons_property (self):
+        buttons_js = []
+
+        # Render the button entries
+        for tmp in self.buttons:
+            button_caption, action = tmp
+            tmp = '"%(button_caption)s": function() {'
+            if action == "close":
+                tmp += '$(this).dialog("close");'
+            else:
+                tmp += 'window.location.replace("%(action)s")'
+            tmp += '}'
+            buttons_js.append (tmp%(locals()))
+
+        # Add the property
+        js = '/* code */ { %s }' %(','.join(buttons_js))
+        return js
