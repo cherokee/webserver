@@ -56,7 +56,7 @@ class PostValidator:
                             errors[key] = str(e)
                             break
 
-                        if tmp:
+                        if tmp and tmp != val:
                             self.post[key][n] = tmp
                             updates[key] = tmp
 
@@ -77,13 +77,6 @@ class ServerHandler (pyscgi.SCGIHandler):
         pyscgi.SCGIHandler.handle_post(self)
         post = Post (self.post)
         return post
-
-    def _render_page_ret (self, ret):
-        # <int>  - HTTP Error <int>
-        # <dict> - JSON <dict>
-        # <str>  - 200, HTTP <str>
-        # <list> - [
-        None
 
     def _do_handle (self):
         # Read the URL

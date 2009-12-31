@@ -123,7 +123,6 @@ function Submitter (id, url) {
 
     this.input_keypress_cb = function(event) {
 	   var self = event.data;
-	   self.key_pressed = true;
 
 	   /* Enter -> Focus next input */
 	   if (event.keyCode == 13) {
@@ -133,7 +132,10 @@ function Submitter (id, url) {
 
 		  inputs[next].blur();
 		  inputs[next].focus();
+		  return;
 	   }
+
+	   self.key_pressed = true;
     }
 
     this.input_checkbox_cb = function (event) {
