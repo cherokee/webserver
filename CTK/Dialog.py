@@ -120,3 +120,6 @@ class Dialog (Container):
         # Add the property
         js = '/* code */ { %s }' %(','.join(buttons_js))
         return js
+
+    def get_js_to_show (self):
+        return " $('#%s').dialog('open');" % (self.id)

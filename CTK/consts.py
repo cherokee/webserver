@@ -33,3 +33,6 @@ $(document).ready(function(){
 """
 
 HTML_JS_ON_READY_BLOCK = HTML_JS_BLOCK %(JS_ON_READY)
+
+LINK_JS_ON_CLICK = '<a href="#" OnClick="javascript:%s">%s</a>'
+LINK_HREF        = '<a href="%s">%s</a>'
