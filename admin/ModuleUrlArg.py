@@ -65,7 +65,10 @@ class ModuleUrlArg (Module, FormHelper):
             return _("Any arg ~= %s" %(match))
 
         txt = self._cfg.get_val ('%s!arg'%(self._prefix))
-        txt += " ~= %s" % (match)
+        if not txt:
+            return ''
+        else:
+            txt += " ~= %s" % (match)
         return txt
 
     def get_type_name (self):
