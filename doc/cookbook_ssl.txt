@@ -41,7 +41,11 @@ straightforward actions is order to enable it:
     this port, and to check the TLS toggle button.
 
   . The last step would be to assign SSL certificates to the virtual
-    servers. The configuration is found inside each
+    servers, starting with the default virtual server.
+    Cherokee uses SNI to distinguish between virtual servers, the
+    certificate specified in the default server will be used in the
+    first negotiation. If not present, the startup sequence will
+    fail. The configuration is found inside each
     link:config_virtual_servers.html#security[virtual server]
     configuration, under the Security tab.
 
