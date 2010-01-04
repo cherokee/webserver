@@ -357,7 +357,7 @@ render_result (cherokee_handler_dbslayer_t *hdl,
 			case MYSQL_TYPE_MEDIUM_BLOB:
 			case MYSQL_TYPE_LONG_BLOB:
 				if ((row[i] == NULL) ||
-				    (fields[i].charsetnr == 63))
+				    (fields[i].charsetnr != 63))
 				{
 					cherokee_dwriter_null (&hdl->writer);
 					continue;
