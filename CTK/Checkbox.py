@@ -25,18 +25,27 @@ __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 from Widget import Widget, RenderResponse
 
 HTML = """
-<input type="checkbox" name="%(name)s" />
+<input type="checkbox" name="%(name)s" %(checked)s/>
 """
 
 class Checkbox (Widget):
     def __init__ (self, props=None):
         Widget.__init__ (self)
+
         if props:
             self._props = props
         else:
             self._props = {}
 
+        checked = props.pop('checked')
+        self.checked = bool(int(checked))
+
     def Render (self):
+        if self.checked:
+            self._props['checked'] = 'checked="checked" '
+        else:
+            self._props['checked'] = ""
+
         # Render the text field
         html = HTML % (self._props)
         return RenderResponse (html)
