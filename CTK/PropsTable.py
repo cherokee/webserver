@@ -23,6 +23,8 @@
 from Table import Table
 from RawHTML import RawHTML
 from Submitter import Submitter
+from Container import Container
+from HiddenField import HiddenField
 
 class PropsTable (Table):
     def __init__ (self, **kwargs):
@@ -44,10 +46,23 @@ class PropsTable (Table):
 class PropsTableAuto (PropsTable):
     def __init__ (self, url, **kwargs):
         PropsTable.__init__ (self, **kwargs)
-        self._url = url
+        self._url      = url
+        self.constants = {}
 
     def Add (self, title, widget, comment):
         submit = Submitter (self._url)
-        submit += widget
+
+        if self.constants:
+            box = Container()
+            box += widget
+            for key in self.constants:
+                box += HiddenField ({'name': key, 'value': self.constants[key]})
+
+            submit += box
+        else:
+            submit += widget
 
         return PropsTable.Add (self, title, submit, comment)
+
+    def AddConstant (self, key, val):
+        self.constants[key] = val
