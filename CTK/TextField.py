@@ -45,10 +45,7 @@ class TextField (Widget):
             render += " %s" %(prop)
             value = self._props[prop]
             if value:
-                if type(value) == str:
-                    render += '="%s"' %(value)
-                else:
-                    render += '=' + value
+                render += '="%s"' %(str(value))
         return render
 
     def __get_error_div_props (self):
