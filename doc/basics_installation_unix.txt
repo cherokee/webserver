@@ -9,6 +9,8 @@ mechanism of choice. This will provide you with automatic bootup
 scripts, consistency and dependency checks, and an easy upgrade path
 tailored to your system whenever a new package is available.
 
+Skip through to the link:#APT[APT] section of this document if you are using Debian or Ubuntu.
+
 If you do not find a prepackaged version that suits your needs, you
 can always download and compile your own.
 
@@ -84,3 +86,66 @@ Additionally, you need to create symlinks at the correct rc directory
 of the appropriate runlevel. This can be done in many ways and usually
 each distribution offers its own tools to do so.
 
+
+
+[[APT]]
+APT
+~~~
+This section is intended for those who use Debian and Ubuntu and want
+to use the latest
+If the latest and greatest version of Cherokee is not yet available on
+your APT repositories, you can do several things besides installing
+manually.
+
+For Ubuntu users, simply use the PPA repository. Normally when a new
+Cherokee version is released, the repository will have it almost in
+real time. Simply type:
+
+----
+sudo add-apt-repository ppa:cherokee-webserver
+----
+
+That will add the PPA keys. You just need to sudo apt-get update
+afterwards.
+
+For Debian users, you will have to use packages from 'Unstable' or
+'Testing' if you want to keep up.
+
+Cherokee does not have deep dependencies, so apt-pinning might be
+enough for you.
+
+The APT suite can handle more than one set of packages with
+different priorities. If you want to get the latest Cherokee off
+unstable, you can make your /etc/apt/sources.list be:
+
+------------------------------------------------------------
+ deb http://ftp.debian.org/debian/ lenny main
+ deb-src http://ftp.debian.org/debian/ lenny main
+
+ deb http://ftp.debian.org/debian/ sid main
+ deb-src http://ftp.debian.org/debian/ sid main
+------------------------------------------------------------
+
+And set your preferences to lenny in /etc/apt/preferences:
+
+------------------------------------------------------------
+ Package: *
+ Pin: release a=stable
+ Pin-priority: 900
+
+ Package: *
+ Pin: release a=testing
+ Pin-priority: 200
+------------------------------------------------------------
+
+Just make the pin-priority lower. Then, `aptitude update` to get the
+full lists, and install Cherokee from unstable:
+
+----
+# aptitude -t testing install cherokee
+----
+
+This will probably pull newer versions of libssl-dev, libssl0.9.8 and
+mysql-common to fulfill dependencies. Of course, this _might_ break
+other packages depending on those specific versions, but it is not
+very likely.

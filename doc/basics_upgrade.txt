@@ -3,6 +3,15 @@
 Upgrading Cherokee
 ------------------
 
+If there is a perpackaged version of Cherokee for you platform of
+choice, we stronlgy encourage you to use it. Although upgrading
+Cherokee is not complicated, the prepackaged versions should make your
+upgrades much easier.
+
+Refer to the link:basic_installation_unix.html#APT[APT] section of the
+Unix installation instructions if you are using Debian or Ubuntu for
+some aditional information.
+
 The current mechanism of choice to configure Cherokee did not exist
 prior to release 0.6. A lot has happened since then, and Cherokee has
 been constantly improving in terms of stability, efficiency and
