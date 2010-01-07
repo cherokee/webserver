@@ -105,7 +105,9 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 
 	/* Add big banner
 	 */
-	cherokee_buffer_add_str (buffer, "</title></head>" CRLF "<body>" CRLF "<h1>");
+	cherokee_buffer_add_str (buffer, "</title>" CRLF
+				 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" CRLF
+				 "</head>" CRLF "<body>" CRLF "<h1>");
 	cherokee_http_code_copy (conn->error_code, buffer);
 	cherokee_buffer_add_str (buffer, "</h1>" CRLF);
 
