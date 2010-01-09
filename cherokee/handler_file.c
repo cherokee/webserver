@@ -134,7 +134,7 @@ ret_t
 cherokee_handler_file_free (cherokee_handler_file_t *fhdl)
 {
 	if (fhdl->fd != -1) {
-		close (fhdl->fd);
+		cherokee_fd_close (fhdl->fd);
 		fhdl->fd = -1;
 	}
 

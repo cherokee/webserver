@@ -70,18 +70,18 @@ cherokee_shm_create (cherokee_shm_t *shm, char *name, size_t len)
 
 	re = ftruncate (fd, len);
 	if (re < 0) {
-		close (fd);
+		cherokee_fd_close (fd);
 		return ret_error;
 	}
 
 	shm->mem = mmap (0, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (shm->mem == MAP_FAILED) {
 		shm->mem = NULL;
-		close (fd);
+		cherokee_fd_close (fd);
 		return ret_error;
 	}
 
-	close (fd);
+	cherokee_fd_close (fd);
 
 	shm->len = len;
 	cherokee_buffer_add (&shm->name, name, strlen(name));
@@ -109,12 +109,12 @@ cherokee_shm_map (cherokee_shm_t    *shm,
 
 	shm->mem = mmap (0, info.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (shm->mem == MAP_FAILED) {
-		close (fd);
+		cherokee_fd_close (fd);
 		shm->mem = NULL;
 		return ret_error;
 	}
 
-	close (fd);
+	cherokee_fd_close (fd);
 
 	cherokee_buffer_clean      (&shm->name);
 	cherokee_buffer_add_buffer (&shm->name, name);

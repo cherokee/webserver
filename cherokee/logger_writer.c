@@ -240,13 +240,14 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 	case 0:
 		/* Child
 		 */
-		close (STDIN_FILENO);
+		cherokee_fd_close (STDIN_FILENO);
 		dup2 (to_log_fds[0], STDIN_FILENO);
-		close (to_log_fds[0]);
-		close (to_log_fds[1]);
+		cherokee_fd_close (to_log_fds[0]);
+		cherokee_fd_close (to_log_fds[1]);
 
-		for (fd = 3; fd < 256; fd++)
-			close (fd);
+		for (fd = 3; fd < 256; fd++) {
+			cherokee_fd_close (fd);
+		}
 
 		execl("/bin/sh", "sh", "-c", writer->command.buf, NULL);
 
@@ -257,7 +258,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 		break;
 
 	default:
-		close(to_log_fds[0]);
+		cherokee_fd_close (to_log_fds[0]);
 		writer->fd = to_log_fds[1];
 	}
 #else

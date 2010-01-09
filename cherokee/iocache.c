@@ -394,15 +394,17 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	PUBL(entry)->mmaped_len      = entry->state.st_size;
 	PRIV(entry)->mmap_expiration = cherokee_bogonow_now + iocache->lasting_mmap;
 
-	if ((fd == NULL) && (fd_local != -1))
-		close (fd_local);
+	if ((fd == NULL) && (fd_local != -1)) {
+		cherokee_fd_close (fd_local);
+	}
 
 	BIT_SET (PUBL(entry)->info, iocache_mmap);
 	return ret_ok;
 
 error:
-	if ((fd == NULL) && (fd_local != -1))
-		close (fd_local);
+	if ((fd == NULL) && (fd_local != -1)) {
+		cherokee_fd_close (fd_local);
+	}
 
 	BIT_UNSET (PUBL(entry)->info, iocache_mmap);
 	return ret;

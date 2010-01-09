@@ -74,7 +74,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 
 
 	if (post->tmp_file_fd != -1) {
-		close (post->tmp_file_fd);
+		cherokee_fd_close (post->tmp_file_fd);
 		post->tmp_file_fd = -1;
 	}
 

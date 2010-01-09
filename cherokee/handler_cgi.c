@@ -207,12 +207,12 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 	/* Close the connection with the CGI
 	 */
 	if (cgi->pipeInput > 0) {
-		close (cgi->pipeInput);
+		cherokee_fd_close (cgi->pipeInput);
 		cgi->pipeInput = -1;
 	}
 
 	if (cgi->pipeOutput > 0) {
-		close (cgi->pipeOutput);
+		cherokee_fd_close (cgi->pipeOutput);
 		cgi->pipeOutput = -1;
 	}
 
@@ -403,7 +403,7 @@ send_post (cherokee_handler_cgi_t *cgi)
 	case ret_ok:
 		TRACE (ENTRIES",post", "%s\n", "finished");
 
-		close (cgi->pipeOutput);
+		cherokee_fd_close (cgi->pipeOutput);
 		cgi->pipeOutput = -1;
 		return ret_ok;
 
@@ -524,13 +524,13 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Close useless sides
 	 */
-	close (pipe_cgi[0]);
-	close (pipe_server[1]);
+	cherokee_fd_close (pipe_cgi[0]);
+	cherokee_fd_close (pipe_server[1]);
 
 	/* Change stdin and out
 	 */
 	re  = dup2 (pipe_server[0], STDIN_FILENO);
-	close (pipe_server[0]);
+	cherokee_fd_close (pipe_server[0]);
 
 	if (unlikely (re != 0)) {
 		printf ("Status: 500" CRLF_CRLF);
@@ -539,7 +539,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	}
 
 	re |= dup2 (pipe_cgi[1], STDOUT_FILENO);
-	close (pipe_cgi[1]);
+	cherokee_fd_close (pipe_cgi[1]);
 
 	/* Redirect the stderr
 	 */
@@ -684,11 +684,11 @@ fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi)
 	} else if (pid < 0) {
 		/* Error
 		 */
-		close (pipes.cgi[0]);
-		close (pipes.cgi[1]);
+		cherokee_fd_close (pipes.cgi[0]);
+		cherokee_fd_close (pipes.cgi[1]);
 
-		close (pipes.server[0]);
-		close (pipes.server[1]);
+		cherokee_fd_close (pipes.server[0]);
+		cherokee_fd_close (pipes.server[1]);
 
 		conn->error_code = http_internal_error;
 		return ret_error;
@@ -696,8 +696,8 @@ fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi)
 
 	TRACE (ENTRIES, "pid %d\n", pid);
 
-	close (pipes.server[0]);
-	close (pipes.cgi[1]);
+	cherokee_fd_close (pipes.server[0]);
+	cherokee_fd_close (pipes.cgi[1]);
 
 	cgi->pid        = pid;
 	cgi->pipeInput  = pipes.cgi[0];

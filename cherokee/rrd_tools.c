@@ -195,13 +195,13 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 
 		/* Move stdout to fd_from[1] */
 		dup2 (fds_from[1], STDOUT_FILENO);
-                close (fds_from[1]);
-                close (fds_from[0]);
+                cherokee_fd_close (fds_from[1]);
+                cherokee_fd_close (fds_from[0]);
 
                 /* Move the stdin to fd_to[0] */
                 dup2 (fds_to[0], STDIN_FILENO);
-                close (fds_to[0]);
-                close (fds_to[1]);
+                cherokee_fd_close (fds_to[0]);
+                cherokee_fd_close (fds_to[1]);
 
 		/* Execute it */
 		re = execv(argv[0], argv);
@@ -214,8 +214,8 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
                 break;
 
         default:
-                close (fds_from[1]);
-                close (fds_to[0]);
+                cherokee_fd_close (fds_from[1]);
+                cherokee_fd_close (fds_to[0]);
 
                 rrd_conn->write_fd = fds_to[1];
                 rrd_conn->read_fd  = fds_from[0];
@@ -241,12 +241,12 @@ cherokee_rrd_connection_kill (cherokee_rrd_connection_t *rrd_conn,
 	int status;
 
 	if (rrd_conn->write_fd) {
-		close (rrd_conn->write_fd);
+		cherokee_fd_close (rrd_conn->write_fd);
 		rrd_conn->write_fd = -1;
 	}
 
 	if (rrd_conn->read_fd) {
-		close (rrd_conn->read_fd);
+		cherokee_fd_close (rrd_conn->read_fd);
 		rrd_conn->read_fd = -1;
 	}
 

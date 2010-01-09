@@ -963,13 +963,13 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	if (r < 0) {
 		buf->buf[buf->len] = '\0';
 
-		close(f);
+		cherokee_fd_close(f);
 		return ret_error;
 	}
 
 	/* Close it and exit
 	 */
-	close(f);
+	cherokee_fd_close(f);
 
 	buf->len += r;
 	buf->buf[buf->len] = '\0';
