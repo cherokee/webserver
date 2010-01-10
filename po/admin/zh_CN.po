@@ -231,7 +231,7 @@ msgid ""
 "Whether the handler should read and use the X-Real-IP header and use it in "
 "REMOTE_ADDR."
 msgstr ""
-"是否记录和使用 X-Real-IP  和X-Forwarded-For 请求头  ( 由反向代理服务器发送)."
+"是否读取和使用 X-Real-IP并且在远程主机使用."
 
 #: admin/ModuleCgi.py:16
 #, fuzzy
@@ -239,7 +239,7 @@ msgid ""
 "Accept all the X-Real-IP headers. WARNING: Turn it on only if you are "
 "centain of what you are doing."
 msgstr ""
-"接受X-Real-IP和X-Forwarded-For请求头. 警告：如果你不确信你需要这个功能请不要"
+"接受X-Real-IP请求头. 警告：如果你不确信你需要这个功能请不要"
 "开启"
 
 #: admin/ModuleCgi.py:17
@@ -248,7 +248,7 @@ msgid ""
 "List of IP addresses and subnets that are allowed to send the X-Real-IP "
 "header."
 msgstr ""
-"列表上的IP地址和子网允许发送 X-Real-IP and X-Forwarded-For 请求头通常应用于代"
+"列表上的IP地址和子网允许发送 X-Real-IP 请求头通常应用于代"
 "理服务器."
 
 #: admin/ModuleCgi.py:49
@@ -265,7 +265,7 @@ msgstr "修改 UID（用户ID）"
 
 #: admin/ModuleCgi.py:57 admin/PageVServer.py:272
 msgid "Error handler"
-msgstr "错误处理"
+msgstr "错误处理程序"
 
 #: admin/ModuleCgi.py:58
 msgid "Check file"
@@ -291,7 +291,7 @@ msgstr "不检查来源"
 #: admin/ModuleCgi.py:70 admin/PageVServer.py:613
 #, fuzzy
 msgid "Accept from Hosts"
-msgstr "接受域"
+msgstr "接受访问的主机"
 
 #: admin/ModuleCgi.py:74
 msgid "Custom environment variables"
@@ -894,7 +894,7 @@ msgstr "SQL 查询"
 #: admin/ModuleMysql.py:53 admin/ModuleMysql.py:55
 #, fuzzy
 msgid "Password Hash"
-msgstr "密码"
+msgstr "密码加密"
 
 #: admin/ModuleMysql.py:57
 msgid "MySQL connection"
@@ -1014,7 +1014,7 @@ msgstr "新增正则表达式"
 
 #: admin/ModuleRedir.py:9
 msgid "Defines whether the redirection will be seen by the client."
-msgstr "Defines whether the redirection will be seen by the client."
+msgstr "定义客户端是否可见重定向信息."
 
 #: admin/ModuleRedir.py:10
 msgid ""
@@ -1090,7 +1090,7 @@ msgstr "RRDtool 可执行文件路径.默认情况下,服务器"
 
 #: admin/ModuleRrd.py:24
 msgid "RRD Database directory"
-msgstr ""
+msgstr "RRD 数据库目录"
 
 #: admin/ModuleRrd.py:25
 #, fuzzy
@@ -1573,22 +1573,22 @@ msgstr "PID 进程号"
 #: admin/PageAdvanced.py:139
 #, fuzzy
 msgid "DH parameters: 512 bits"
-msgstr "Diffie-Hellman参数(512 bits)"
+msgstr "Diffie-Hellman参数(512 比特)"
 
 #: admin/PageAdvanced.py:140
 #, fuzzy
 msgid "DH parameters: 1024 bits"
-msgstr "Diffie-Hellman参数(1024 bits)"
+msgstr "Diffie-Hellman参数(1024 比特)"
 
 #: admin/PageAdvanced.py:141
 #, fuzzy
 msgid "DH parameters: 2048 bits"
-msgstr "Diffie-Hellman参数(2048 bits)"
+msgstr "Diffie-Hellman参数(2048 比特)"
 
 #: admin/PageAdvanced.py:142
 #, fuzzy
 msgid "DH parameters: 4096 bits"
-msgstr "Diffie-Hellman参数(4096 bits)"
+msgstr "Diffie-Hellman参数(4096 比特)"
 
 #: admin/PageEntry.py:15
 msgid "Allows to specify an alternative document root path."
@@ -1870,7 +1870,7 @@ msgstr "如果要启用TLS/SSL支持，请在列表中选择相应的选项."
 
 #: admin/PageGeneral.py:38
 msgid "How the usage graphics should be generated."
-msgstr ""
+msgstr "图形统计生成方式"
 
 #: admin/PageGeneral.py:40 admin/PageGeneral.py:51
 msgid "General Configuration"
@@ -1935,7 +1935,7 @@ msgstr "数据压缩"
 
 #: admin/PageGeneral.py:91
 msgid "Graphs Type"
-msgstr ""
+msgstr "图形显示类型"
 
 #: admin/PageGeneral.py:146
 msgid "Listening to ports"
@@ -2117,7 +2117,7 @@ msgstr "不允许删除. 请检查数据源是否使用中."
 #: admin/PageInfoSource.py:327
 #, fuzzy
 msgid "Add new Information Source"
-msgstr "转移数据源"
+msgstr "新增数据源"
 
 #: admin/PageInfoSource.py:330 admin/PageInfoSource.py:349
 #, fuzzy
@@ -2206,7 +2206,7 @@ msgstr "新建"
 
 #: admin/PageNewConfig.py:39
 msgid "Regular"
-msgstr "Regular"
+msgstr "规则"
 
 #: admin/PageNewConfig.py:39
 msgid "Server Development"
@@ -2262,7 +2262,8 @@ msgstr ""
 "\n"
 "如果您想告诉我们一些对Cherokee的建议:\n"
 "比如你喜欢的或者你建议增加的功能, 请不要犹豫，\n"
-"<a href=\"/feedback\">将它写下来告诉我们吧！</a>.\n"
+"<a href=\"/feedback\">将它写下来告诉我们吧！</a>.\n 
+中文翻译建议，请发信至:gefire@qq.com，谢谢各位支持！"
 
 #: admin/PageStatus.py:53
 msgid ""
@@ -2367,23 +2368,23 @@ msgstr "连接"
 
 #: admin/PageStatus.py:178 admin/PageVServer.py:529
 msgid "1 month"
-msgstr ""
+msgstr "1月"
 
 #: admin/PageStatus.py:179 admin/PageVServer.py:530
 msgid "1 week"
-msgstr ""
+msgstr "1周"
 
 #: admin/PageStatus.py:180 admin/PageVServer.py:531
 msgid "1 day"
-msgstr ""
+msgstr "1天"
 
 #: admin/PageStatus.py:181 admin/PageVServer.py:532
 msgid "6 hours"
-msgstr ""
+msgstr "6小时"
 
 #: admin/PageStatus.py:182 admin/PageVServer.py:533
 msgid "1 hour"
-msgstr ""
+msgstr "1小时"
 
 #: admin/PageVServer.py:33
 msgid ""
@@ -2556,7 +2557,7 @@ msgstr "域名匹配规则."
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
-msgstr ""
+msgstr "是否对此虚拟机进行流量及状态统计"
 
 #: admin/PageVServer.py:68
 msgid "Time standard to use in the log file entries."
@@ -2581,12 +2582,12 @@ msgstr "基本配置"
 #: admin/PageVServer.py:253 admin/PageVServer.py:733
 #, fuzzy
 msgid "Clone rule"
-msgstr "克隆虚拟主机"
+msgstr "克隆规则"
 
 #: admin/PageVServer.py:254 admin/PageVServers.py:260
 #, fuzzy
 msgid "Wizards"
-msgstr "通配符"
+msgstr "向导"
 
 #: admin/PageVServer.py:257 admin/Wizard_HotLinking.py:82
 msgid "Behavior"
@@ -2676,7 +2677,7 @@ msgstr "启用"
 
 #: admin/PageVServer.py:365 admin/PageVServers.py:144
 msgid "Active"
-msgstr ""
+msgstr "激活"
 
 #: admin/PageVServer.py:448 admin/PageVServers.py:274
 msgid "<h2>Wizards</h2>"
@@ -2740,7 +2741,7 @@ msgstr "错误处理机制"
 #: admin/PageVServer.py:565
 #, fuzzy
 msgid "Write errors to"
-msgstr "Writers"
+msgstr "错误信息写入"
 
 #: admin/PageVServer.py:569 admin/PageVServer.py:592
 msgid "Filename"
@@ -2752,7 +2753,7 @@ msgstr "命令"
 
 #: admin/PageVServer.py:576
 msgid "Access logging"
-msgstr ""
+msgstr "访问日志"
 
 #: admin/PageVServer.py:583
 msgid "Format"
@@ -2764,7 +2765,7 @@ msgstr "访问"
 
 #: admin/PageVServer.py:608
 msgid "Time standard"
-msgstr ""
+msgstr "时间标准"
 
 #: admin/PageVServer.py:609
 msgid "Accept Forwarded IPs"
@@ -2912,16 +2913,16 @@ msgstr ""
 
 #: admin/Wizard.py:13
 msgid "Tasks"
-msgstr "任务"
+msgstr ""
 
 #: admin/Wizard.py:14
 msgid "Platforms"
-msgstr "平台"
+msgstr ""
 
 #: admin/Wizard.py:15
 #, fuzzy
 msgid "Languages"
-msgstr "语言"
+msgstr ""
 
 #: admin/Wizard.py:16
 msgid "Management"
@@ -4328,6 +4329,16 @@ msgstr "错误的时间"
 #: admin/validations.py:318
 msgid "Virtual host nick is already being used."
 msgstr "虚拟主机名称正在被使用中"
+
+msgid "Execute the interpreter under a different user. Default: Same UID as the server."
+msgstr "使用别的用户执行解释器，默认是和服务器设置相同."
+
+msgid "Execute the interpreter under a different group. Default: Default GID of the new process UID."
+msgstr "使用别的用户组执行解释器，默认是和服务器设置相同."
+
+msgid "Execute as Group"
+msgstr "执行用户组"
+
 
 #~ msgid "Logging Format"
 #~ msgstr "日志格式"
