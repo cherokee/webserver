@@ -218,6 +218,8 @@ cherokee_socket_close (cherokee_socket_t *socket)
 ret_t
 cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 {
+	int re;
+
 	/* If the read side of the socket has been closed but the
 	 * write side is not, then don't bother to call shutdown
 	 * because the socket is going to be closed anyway.
@@ -228,8 +230,15 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 	if (unlikely (socket->socket < 0))
 		return ret_error;
 
-	if (unlikely (shutdown (socket->socket, how) != 0))
+	/* Shutdown the socket
+	 */
+	do {
+		re = shutdown (socket->socket, how);
+	} while ((re == -1) && (errno == EINTR));
+
+	if (unlikely (re != 0)) {
 		return ret_error;
+	}
 
 	return ret_ok;
 }
@@ -331,7 +340,9 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 
 
 ret_t
-cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherokee_sockaddr_t *sa)
+cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
+			   int                 *new_fd,
+			   cherokee_sockaddr_t *sa)
 {
 	int           re;
 	ret_t         ret;
@@ -343,32 +354,12 @@ cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherok
 	 */
 	len = sizeof (cherokee_sockaddr_t);
 
-	new_socket = accept (server_socket->socket, &sa->sa, &len);
+	do {
+		new_socket = accept (server_socket->socket, &sa->sa, &len);
+	} while ((new_socket == -1) && (errno == EINTR));
+
 	if (new_socket < 0) {
-		int err = SOCK_ERRNO();
-		/* Caller has to retry the call on ret_deny.
-		 */
-		switch (err) {
-#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
-		case EWOULDBLOCK:
-#endif
-		case EAGAIN:
-		case EINTR:
-			/* no data or error.
-			 */
-			return ret_eagain;
-#ifdef ECONNABORTED
-		case ECONNABORTED:
-			/* aborted connection, retry immediately
-			 */
-			return ret_deny;
-#endif
-		default:
-			/* error
-			 */
-			return ret_error;
-		}
-		/* NOTREACHED */
+		return ret_error;
 	}
 
 	/* Deal with the FIN_WAIT2 state
@@ -400,6 +391,8 @@ cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherok
 	ret = cherokee_fd_set_nodelay (new_socket, true);
 	if (ret != ret_ok) {
 		LOG_WARNING_S (CHEROKEE_ERROR_SOCKET_RM_NAGLES);
+
+		cherokee_fd_close (new_socket);
 		return ret_error;
 	}
 
@@ -408,6 +401,8 @@ cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherok
 	ret = cherokee_fd_set_nonblocking (new_socket, true);
 	if (ret != ret_ok) {
 		LOG_WARNING (CHEROKEE_ERROR_SOCKET_NON_BLOCKING, new_socket);
+
+		cherokee_fd_close (new_socket);
 		return ret_error;
 	}
 

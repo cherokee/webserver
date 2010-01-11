@@ -221,7 +221,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	}
 
         if (conn->polling_fd != -1) {
-                close (conn->polling_fd);
+                cherokee_fd_close (conn->polling_fd);
                 conn->polling_fd   = -1;
 		conn->polling_mode = FDPOLL_MODE_NONE;
         }
@@ -295,7 +295,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->encoder_new_func = NULL;
 
 	if (conn->polling_fd != -1) {
-		close (conn->polling_fd);
+		cherokee_fd_close (conn->polling_fd);
 		conn->polling_fd = -1;
 	}
 
@@ -968,10 +968,11 @@ cherokee_connection_set_cork (cherokee_connection_t *conn,
 		return ret;
 	}
 
-	if (enable)
+	if (enable) {
 		BIT_SET (conn->options, conn_op_tcp_cork);
-	else
+	} else {
 		BIT_UNSET (conn->options, conn_op_tcp_cork);
+	}
 
 	return ret_ok;
 }
@@ -1176,6 +1177,13 @@ error:
 ret_t
 cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 {
+	/* Turn TCP-cork off
+	 */
+	if (conn->options & conn_op_tcp_cork) {
+		cherokee_socket_flush (&conn->socket);
+		cherokee_connection_set_cork (conn, false);
+	}
+
 	/* At this point, we don't want to follow the TLS protocol
 	 * any longer.
 	 */

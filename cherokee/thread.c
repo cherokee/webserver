@@ -1452,12 +1452,10 @@ accept_new_connection (cherokee_thread_t *thd,
 
 	/* Try to get a new connection
 	 */
-	do {
-		ret = cherokee_socket_accept_fd (&bind->socket, &new_fd, &new_sa);
-	} while (ret == ret_deny);
-
-	if (ret != ret_ok)
+	ret = cherokee_socket_accept_fd (&bind->socket, &new_fd, &new_sa);
+	if (ret != ret_ok) {
 		return ret_deny;
+	}
 
 	/* Information collection
 	 */
