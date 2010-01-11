@@ -93,6 +93,17 @@ easier done than said.
 [[ssl-vhosts]]
 SSL Virtual Hosts
 ~~~~~~~~~~~~~~~~~
+
+A problem arises when virtual hosts and SSL must be used
+simultaneously. This is due to the fact that a web server cannot see
+the hostname header when the SSL request is being processed. The first
+thing that the server has to do is to connect with the other end by
+using SSL/TLS. The user entered host part of the URI must match the
+Common Name (CN) provided by the certificate. Since virtual hosts are
+in use, the CN of the first available certificate may or may not match
+the one specified in the early stages of TLS negotiation.
+
+////
 You might have been told elsewhere that named virtual hosts in SSL
 cannot be supported without SNI (Server Name Indication) because a web
 server cannot see the hostname header when the SSL request is being
@@ -103,7 +114,6 @@ Common Name (CN) provided by the certificate. Since virtual hosts are in
 use, the CN of the first available certificate may or may not match
 the one specified in the early stages of TLS negotiation.
 
-////
 However, nothing is forever.. and that applies to SSL/TLS connections
 as well. Cherokee elegantly respins the SSL layer once it knows the
 virtual server, and the magic occurs: SSL supporting several
@@ -124,8 +134,10 @@ the other side. Currently every modern web browser supports this, and
 Cherokee has TLS SNI support for the OpenSSL backends.
 
 Note that for SNI to work, client support is required. Web browsers
-known to support it are Mozilla Firefox 2.0+, Opera 8.0+, Internet
-Explorer 7 (Vista, not XP) or later and Google Chrome.
+known to support it are Mozilla Firefox 2.0+ and Opera 8.0+ in all its
+variants, Safari 3.2.1+ on OS X and Vista, Internet Explorer 7+
+(Vista, not XP) or later, and Google Chrome (Vista, not XP).
+
 
 [[dbslayer]]
 Database load balancing
