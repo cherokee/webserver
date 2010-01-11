@@ -62,6 +62,7 @@
 
 #define BASIC_CONFIG							\
 	"vserver!1!nick = default\n"					\
+	"vserver!1!error_writer!type = stderr\n"                        \
 	"vserver!1!rule!3!match = directory\n"				\
 	"vserver!1!rule!3!match!directory = /cherokee_themes\n"		\
 	"vserver!1!rule!3!handler = file\n"				\
