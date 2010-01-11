@@ -42,7 +42,7 @@ class Combobox (Widget):
             else:
                 content += '<option value="%s">%s</option>' % (name, label)
 
-        # Render the conteiner
+        # Render the container
         header = ''
         for p in filter(lambda x: x!='selected', self._props):
             if self._props[p]:
