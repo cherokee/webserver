@@ -14,7 +14,7 @@ well with Cherokee.
 
 It is written in Python and can work with Cherokee either using HTTP
 or SCGI protocols. The recipe will address the second scenario because
-it is slighlty more complex. Should you wish to run it via HTTP,
+it is slightly more complex. Should you wish to run it via HTTP,
 Cherokee would only have to relay the requests to Trac acting as an
 link:modules_handlers_proxy.html[HTTP reverse proxy] and no other
 configuration would be needed on that end.
@@ -22,16 +22,20 @@ configuration would be needed on that end.
 Trac
 ~~~~
 The software requirements are Python-2.5, easy_install and
-SQlite-3.3.4 or above.
+SQLite-3.3.4 or above. Flup is also required unless you want to use
+the HTTP-proxy method, and SQLite can be replaced by PostreSQL or
+MySQL if you wish to do so.
 
 On Debian based Linux distributions, just a couple of commands issued
 as `root` would suffice to provide the requirements and install Trac.
 
 .Quick install
 ----
-apt-get install python-genshi python-setuptools python-pysqlite2
+apt-get install python-genshi python-setuptools python-pysqlite2 python-flup
 easy_install Trac
 ----
+
+The package names could slightly vary on different distributions.
 
 The next thing would be defining a project environment:
 
