@@ -1388,10 +1388,12 @@ get_encoding (cherokee_connection_t *conn,
 	      char                  *ptr,
 	      cherokee_avl_t        *encoders_accepted)
 {
-	ret_t ret;
-	char tmp;
-	char *i1, *i2;
-	char *end;
+	ret_t                         ret;
+	char                          tmp;
+	char                         *i1;
+	char                         *i2;
+	char                         *end;
+	cherokee_encoder_avl_entry_t *encoder_info;
 
 	/* ptr = Header at the "Accept-Encoding" position
 	 */
@@ -1407,23 +1409,40 @@ get_encoding (cherokee_connection_t *conn,
 			i1++;
 
 		i2 = strchr (i1, ',');
-		if (!i2)
+		if (!i2) {
 			i2 = strchr (i1, ';');
-		if (!i2)
-			i2 = end;
-
-		tmp = *i2;    /* (2) */
-		*i2 = '\0';
-		ret = cherokee_avl_get_ptr (encoders_accepted, i1,
-					    (void **) &conn->encoder_new_func);
-		*i2 = tmp;    /* (2') */
-
-		if ((ret == ret_ok) &&
-		    (conn->encoder_new_func != NULL))
-		{
-			break;
+			if (!i2) {
+				i2 = end;
+			}
 		}
 
+		/* Get the encoder configuration entry
+		 */
+		tmp = *i2;    /* (2) */
+		*i2 = '\0';
+		ret = cherokee_avl_get_ptr (encoders_accepted, i1, (void **)&encoder_info);
+		*i2 = tmp;    /* (2') */
+
+		if (ret == ret_ok) {
+			if (encoder_info->perms == cherokee_encoder_allow) {
+				/* Use encoder
+				 */
+				conn->encoder_new_func = encoder_info->instance_func;
+				break;
+
+			} else if (encoder_info->perms == cherokee_encoder_forbid) {
+				/* Explicitly forbidden
+				 */
+				conn->encoder_new_func = NULL;
+				break;
+			}
+
+			SHOULDNT_HAPPEN;
+			return ret_error;
+		}
+
+		/* Next iteration
+		 */
 		if (i2 < end) {
 			i1 = i2+1;
 		}

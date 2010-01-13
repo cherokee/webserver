@@ -37,6 +37,13 @@ HELPS = [
     ('config_virtual_servers_rule', N_("Behavior rules"))
 ]
 
+ENCODE_OPTIONS = [
+    ('',       N_('Leave unset')),
+    ('allow',  N_('Allow')),
+    ('forbid', N_('Forbid'))
+]
+
+
 class PageEntry (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'entry', cfg, HELPS)
@@ -112,8 +119,6 @@ class PageEntry (PageMenu, FormHelper):
         # Check boxes
         checks = ["%s!only_secure"%(self._conf_prefix),
                   "%s!no_log"%(self._conf_prefix)]
-        for e,e_name in modules_available(ENCODERS):
-            checks.append ('%s!encoder!%s' % (self._conf_prefix, e))
 
         pre = '%s!match'%(self._conf_prefix)
         rule = Rule (self._cfg, pre, self.submit_url, self.errors, 0)
@@ -274,16 +279,20 @@ class PageEntry (PageMenu, FormHelper):
         pre = "%s!encoder"%(self._conf_prefix)
         encoders = modules_available(ENCODERS)
 
+        # Add help
         for e in encoders:
             self.AddHelp (('modules_encoders_%s'%(e[0]),
                            '%s encoder' % (_(e[1]))))
 
+        # Render
         txt += "<h2>%s</h2>" % (_('Information Encoders'))
         table = TableProps()
         for e,e_name in encoders:
-            note = _("Use the %s encoder whenever the client requests it.")
-            note = note % (_(e_name))
-            self.AddPropCheck (table, _("Allow") + " " + (_(e_name)), "%s!%s"%(pre,e), False, note)
+            note  = _("Use the %s encoder whenever the client requests it.")
+            note  = note % (_(e_name))
+            title = _("%s Support") %(_(e_name))
+            self.AddPropOptions_Ajax (table, title, "%s!%s"%(pre,e), ENCODE_OPTIONS, note)
+
 
         txt += self.Indent(table)
         return txt

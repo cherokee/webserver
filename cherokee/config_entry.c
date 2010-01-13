@@ -119,18 +119,33 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 }
 
 ret_t
-cherokee_config_entry_add_encoder (cherokee_config_entry_t *entry,
+cherokee_config_entry_encoder_add (cherokee_config_entry_t *entry,
 				   cherokee_buffer_t       *name,
 				   cherokee_plugin_info_t  *plugin_info)
 {
+	CHEROKEE_NEW_STRUCT (n, encoder_avl_entry);
+
 	if (entry->encoders == NULL) {
 		cherokee_avl_new (&entry->encoders);
 	}
 
-	cherokee_avl_add (entry->encoders, name, (void*)plugin_info->instance);
-	return ret_ok;
+	n->perms         = cherokee_encoder_allow;
+	n->instance_func = plugin_info->instance;
+
+	return cherokee_avl_add (entry->encoders, name, (void*)n);
 }
 
+ret_t
+cherokee_config_entry_encoder_forbid (cherokee_config_entry_t *entry,
+				      cherokee_buffer_t       *name)
+{
+	CHEROKEE_NEW_STRUCT (n, encoder_avl_entry);
+
+	n->instance_func = NULL;
+	n->perms         = cherokee_encoder_forbid;
+
+	return cherokee_avl_add (entry->encoders, name, (void*)n);
+}
 
 ret_t
 cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,

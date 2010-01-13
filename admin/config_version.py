@@ -4,12 +4,36 @@ import configured
 def upgrade_to_0_99_31 (cfg):
     # verver!_!logger!error is vserver!_!error_writer now.
     # Must be relocated on each virtual server.
+    #
     for v in cfg.keys('vserver'):
         pre = 'vserver!%s' % (v)
         if cfg['vserver!%s!logger!error' %(v)]:
             cfg.clone ('vserver!%s!logger!error' %(v),
                        'vserver!%s!error_writer' %(v))
             del(cfg['vserver!%s!logger!error' %(v)])
+
+# Converts from 0.99.31-39 to 0.99.40
+def upgrade_to_0_99_40 (cfg):
+    # The encoder related configuration changed. What used to be
+    # vserver!10!rule!600!encoder!gzip = 1  is now
+    # vserver!10!rule!600!encoder!gzip = allow
+    #
+    # There are three possible options: "allow", "deny" and empty.
+    # The previous "1" turns "allow", "0" is default so those entries
+    # are removed and the brand new "deny" key is not assigned.
+    #
+    to_del = []
+    for v in cfg.keys('vserver'):
+        for r in cfg.keys('vserver!%s!rule'%(v)):
+            if cfg['vserver!%s!rule!%s!encoder' %(v,r)]:
+                for e in cfg['vserver!%s!rule!%s!encoder' %(v,r)]:
+                    pre = 'vserver!%s!rule!%s!encoder!%s' %(v,r,e)
+                    if cfg.get_val(pre) == "1":
+                        cfg[pre] = "allow"
+                    else:
+                        to_del.append(pre)
+    for pre in to_del:
+        del(cfg[pre])
 
 
 def config_version_get_current():
@@ -69,7 +93,9 @@ def config_version_update_cfg (cfg):
     if ver_config_i < 99031:
         upgrade_to_0_99_31 (cfg)
 
-    # Update to.. 0.99.xx
+    # Update to.. 0.99.40
+    if ver_config_i < 99040:
+        upgrade_to_0_99_40 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True
