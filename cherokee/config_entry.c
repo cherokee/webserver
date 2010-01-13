@@ -111,7 +111,7 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 	}
 
 	if (entry->encoders) {
-		cherokee_avl_free (entry->encoders, NULL);
+		cherokee_avl_free (entry->encoders, free);
 		entry->encoders = NULL;
 	}
 
