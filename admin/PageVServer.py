@@ -354,11 +354,9 @@ class PageVServer (PageMenu, FormHelper):
         table_name = "rules%d" % (self._rule_table)
         self._rule_table += 1
 
-        ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
-        DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
-
-        ON_IMAGE  = self.InstanceImage('switch_on_m.png', _('Enabled'))
-        OFF_IMAGE = self.InstanceImage('switch_off_m.png', _('Disabled'))
+        ENABLED_IMAGE   = self.InstanceImage('tick.png',  _('Yes'))
+        DISABLED_IMAGE  = self.InstanceImage('cross.png', _('No'))
+        FORBIDDEN_IMAGE = self.InstanceImage('forbidden.png', _('Forbidden'))
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
         txt += '<tr class="nodrag nodrop"><th>&nbsp;</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' %(
@@ -415,8 +413,11 @@ class PageVServer (PageMenu, FormHelper):
             encoders = DISABLED_IMAGE
             if 'encoder' in conf.keys():
                 for k in conf['encoder'].keys():
-                    if int(conf.get_val('encoder!%s'%(k))):
+                    val = conf.get_val('encoder!%s'%(k))
+                    if val in ['1', 'allow']:
                         encoders = ENABLED_IMAGE
+                    elif val == 'forbid':
+                        encoders = FORBIDDEN_IMAGE
 
             txt += '<!-- %s --><tr prio="%s" id="%s"%s><td%s>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center switch">%s</td><td class="center">%s</td></tr>\n' % (
                 prio, pre, prio, extra, draggable, link, name_type, handler_name, document_root, auth_name, encoders, expiration, timeout, final, disabled, link_del)
