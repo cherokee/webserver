@@ -69,7 +69,7 @@ def do_parse():
             print >> sys.stderr, "Unpushed commit: %s, %s - %s" % (author, date, commit)
             continue
 
-        svn_id = re.findall(r"git-svn-id: svn://cherokee-project.com/cherokee/trunk@(.+) ", entry)[0]
+        svn_id = re.findall(r"git-svn-id: svn://cherokee-project.com/.+@(.+) ", entry)[0]
 
         header_end = entry.index('\n\n')
         if header_end == -1:
