@@ -35,15 +35,19 @@
 #include "balancer.h"
 
 typedef struct __attribute__((packed)) {
-	unsigned char arg1;
-	unsigned short env_size;
-	unsigned char arg2;
+	uint8_t modifier1;
+	uint16_t env_size;
+	uint8_t modifier2;
 } uwsgi_header ;
 
 
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
 	cherokee_balancer_t         *balancer;
+	uint8_t modifier1;
+	uint8_t modifier2;
+	cherokee_boolean_t pass_wsgi_vars;
+	cherokee_boolean_t pass_request_body;
 } cherokee_handler_uwsgi_props_t;
 
 
