@@ -51,9 +51,13 @@ def uniq (seq):
     return noDupes
 
 class Page (Container):
-    def __init__ (self, template_filename=None, headers=[]):
+    def __init__ (self, template_filename=None, headers=None):
         Container.__init__ (self)
-        self._headers = HEADERS + headers
+
+        if headers:
+            self._headers = HEADERS + headers
+        else:
+            self._headers = HEADERS
 
         if template_filename:
             self._template = Template (filename = template_filename)
