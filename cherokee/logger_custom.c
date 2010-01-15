@@ -341,6 +341,20 @@ add_vserver_name (cherokee_template_t       *template,
 	return ret_ok;
 }
 
+static ret_t
+add_response_size (cherokee_template_t       *template,
+		   cherokee_template_token_t *token,
+		   cherokee_buffer_t         *output,
+		   void                      *param)
+{
+	cherokee_connection_t *conn = CONN(param);
+
+	UNUSED (template);
+	UNUSED (token);
+
+	cherokee_buffer_add_ullong10 (output, conn->tx);
+	return ret_ok;
+}
 
 static ret_t
 _set_template (cherokee_logger_custom_t *logger,
@@ -366,6 +380,7 @@ _set_template (cherokee_logger_custom_t *logger,
 		{"request",            add_request},
 		{"request_original",   add_request_original},
 		{"vserver_name",       add_vserver_name},
+		{"response_size",      add_response_size},
 		{NULL, NULL}
 	};
 
