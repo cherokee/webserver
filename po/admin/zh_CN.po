@@ -2263,7 +2263,7 @@ msgstr ""
 "如果您想告诉我们一些对Cherokee的建议:\n"
 "比如你喜欢的或者你建议增加的功能, 请不要犹豫，\n"
 "<a href=\"/feedback\">将它写下来告诉我们吧！</a>.\n"
-"中文翻译建议，请发信至:gefire@qq.com，谢谢各位支持！"
+"中文翻译建议，请发信至:gefire@qq.com，谢谢各位支持！\n"
 
 #: admin/PageStatus.py:53
 msgid ""
