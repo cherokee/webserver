@@ -7,5 +7,6 @@ DEVELOPERS = {
     'taher'        : "Taher Shihadeh  <taher@unixwars.com>",
     'robertounbit' : "Roberto De Ioris <roberto@unbit.it>",
     'gefire'       : "李炅 <lijiong1986@126.com>",
-    'skinkie'      : "Stefan de Konink <stefan@konink.de>"
+    'skinkie'      : "Stefan de Konink <stefan@konink.de>",
+    'adefacc'      : "A.D.F. <adefacc@tin.it>"
 }
