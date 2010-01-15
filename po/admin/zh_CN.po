@@ -2262,8 +2262,8 @@ msgstr ""
 "\n"
 "如果您想告诉我们一些对Cherokee的建议:\n"
 "比如你喜欢的或者你建议增加的功能, 请不要犹豫，\n"
-"<a href=\"/feedback\">将它写下来告诉我们吧！</a>.\n 
-中文翻译建议，请发信至:gefire@qq.com，谢谢各位支持！"
+"<a href=\"/feedback\">将它写下来告诉我们吧！</a>.\n"
+"中文翻译建议，请发信至:gefire@qq.com，谢谢各位支持！"
 
 #: admin/PageStatus.py:53
 msgid ""
@@ -4329,16 +4329,6 @@ msgstr "错误的时间"
 #: admin/validations.py:318
 msgid "Virtual host nick is already being used."
 msgstr "虚拟主机名称正在被使用中"
-
-msgid "Execute the interpreter under a different user. Default: Same UID as the server."
-msgstr "使用别的用户执行解释器，默认是和服务器设置相同."
-
-msgid "Execute the interpreter under a different group. Default: Default GID of the new process UID."
-msgstr "使用别的用户组执行解释器，默认是和服务器设置相同."
-
-msgid "Execute as Group"
-msgstr "执行用户组"
-
 
 #~ msgid "Logging Format"
 #~ msgstr "日志格式"
