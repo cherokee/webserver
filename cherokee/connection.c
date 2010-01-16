@@ -2569,6 +2569,12 @@ cherokee_connection_print (cherokee_connection_t *conn)
 		print_add (" tcp_cork");
 	if (conn->options & conn_op_document_root)
 		print_add (" document_root");
+	if (conn->options & conn_op_was_polling)
+		print_add (" was_polling");
+	if (conn->options & conn_op_cant_encoder)
+		print_add (" cant_encoder");
+	if (conn->options & conn_op_got_eof)
+		print_add (" got_eof");
 
 	print_add ("\n");
 
