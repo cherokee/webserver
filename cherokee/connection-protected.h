@@ -86,7 +86,6 @@ typedef enum {
 
 
 #define conn_op_nothing        0
-#define conn_op_log_at_end    (1 << 0)
 #define conn_op_root_index    (1 << 1)
 #define conn_op_tcp_cork      (1 << 2)
 #define conn_op_document_root (1 << 3)
@@ -301,8 +300,7 @@ int   cherokee_connection_use_webdir             (cherokee_connection_t *conn);
 
 /* Log
  */
-ret_t cherokee_connection_log_or_delay           (cherokee_connection_t *conn);
-ret_t cherokee_connection_log_delayed            (cherokee_connection_t *conn);
+ret_t cherokee_connection_log                    (cherokee_connection_t *conn);
 ret_t cherokee_connection_update_vhost_traffic   (cherokee_connection_t *conn);
 char *cherokee_connection_print                  (cherokee_connection_t *conn);
 

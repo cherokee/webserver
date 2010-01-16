@@ -94,7 +94,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->auth_type            = http_auth_nothing;
 	n->req_auth_type        = http_auth_nothing;
 	n->upgrade              = http_upgrade_nothing;
-	n->options              = conn_op_log_at_end;
+	n->options              = conn_op_nothing;
 	n->handler              = NULL;
 	n->encoder              = NULL;
 	n->encoder_new_func     = NULL;
@@ -255,7 +255,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->auth_type            = http_auth_nothing;
 	conn->req_auth_type        = http_auth_nothing;
 	conn->upgrade              = http_upgrade_nothing;
-	conn->options              = conn_op_log_at_end;
+	conn->options              = conn_op_nothing;
 	conn->error_code           = http_ok;
 	conn->range_start          = -1;
 	conn->range_end            = -1;
@@ -2395,51 +2395,16 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_log_or_delay (cherokee_connection_t *conn)
-{
-	cherokee_boolean_t at_end;
-
-	/* Check whether it should log at end or not..
-	 */
-	if (conn->handler == NULL)
-		at_end = true;
-	else
-		at_end = ! HANDLER_SUPPORTS (conn->handler, hsupport_length);
-
-	/* Set the option bit mask
-	 */
-	if (at_end)
-		BIT_SET (conn->options, conn_op_log_at_end);
-	else
-		BIT_UNSET (conn->options, conn_op_log_at_end);
-
-	/* Return if there is no logger or has to log_at_end
-	 */
-	if (conn->logger_ref == NULL)
-		return ret_ok;
-	if (conn->options & conn_op_log_at_end)
-		return ret_ok;
-
-	/* Log it
-	 */
-	return cherokee_logger_write_access (conn->logger_ref, conn);
-}
-
-
-ret_t
-cherokee_connection_log_delayed (cherokee_connection_t *conn)
+cherokee_connection_log (cherokee_connection_t *conn)
 {
 	/* Check whether if needs to log now of not
 	 */
-	if (conn->logger_ref == NULL)
+	if (conn->logger_ref == NULL) {
 		return ret_ok;
-	if (! (conn->options & conn_op_log_at_end))
-		return ret_ok;
+	}
 
 	/* Log it
 	 */
-	BIT_UNSET (conn->options, conn_op_log_at_end);
-
 	return cherokee_logger_write_access (conn->logger_ref, conn);
 }
 
@@ -2447,8 +2412,9 @@ cherokee_connection_log_delayed (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_update_vhost_traffic (cherokee_connection_t *conn)
 {
-	if (CONN_VSRV(conn)->collector == NULL)
+	if (CONN_VSRV(conn)->collector == NULL) {
 		return ret_ok;
+	}
 
 	cherokee_collector_vsrv_count (CONN_VSRV(conn)->collector,
 				       conn->rx_partial,
@@ -2597,14 +2563,13 @@ cherokee_connection_print (cherokee_connection_t *conn)
 	/* Options bit fields
 	 */
 	print_add ("\t|     Option bits:");
-	if (conn->options & conn_op_log_at_end)
-		print_add (" log_at_end");
 	if (conn->options & conn_op_root_index)
 		print_add (" root_index");
 	if (conn->options & conn_op_tcp_cork)
 		print_add (" tcp_cork");
 	if (conn->options & conn_op_document_root)
 		print_add (" document_root");
+
 	print_add ("\n");
 
 #undef print_buf

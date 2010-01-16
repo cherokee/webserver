@@ -327,7 +327,7 @@ purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 
 	/* It maybe have a delayed log
 	 */
-	cherokee_connection_log_delayed (conn);
+	cherokee_connection_log (conn);
 
 	/* Close & clean the socket and clean up the connection object
 	 */
@@ -437,7 +437,7 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	/* Log if it was delayed and update vserver traffic counters
 	 */
 	cherokee_connection_update_vhost_traffic (conn);
-	cherokee_connection_log_delayed (conn);
+	cherokee_connection_log (conn);
 
 	/* If it isn't a keep-alive connection, it should try to
 	 * perform a lingering close (there is no need to disable TCP
@@ -1193,13 +1193,8 @@ process_active_connections (cherokee_thread_t *thd)
 				RET_UNKNOWN(ret);
 			}
 
-			/* Maybe log the connection
-			 */
-			cherokee_connection_log_or_delay (conn);
-
 		phase_send_headers_EXIT:
 			conn->phase = phase_steping;
-
 
 		case phase_steping:
 			/* Special case:
