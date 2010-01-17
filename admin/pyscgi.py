@@ -39,9 +39,11 @@ import SocketServer
 import traceback
 import socket
 import errno
+import time
 import sys
+import os
 
-__version__   = '1.10'
+__version__   = '1.11'
 __author__    = 'Alvaro Lopez Ortega'
 __copyright__ = 'Copyright 2009, Alvaro Lopez Ortega'
 __license__   = 'BSD'
@@ -53,32 +55,43 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         self.post   = None
         SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
 
-    def __safe_read (self, lenght):
+    def __safe_read (self, length):
+        info = ''
         while True:
+            if len(info) >= length:
+                return info
+
             chunk = None
             try:
-                chunk = self.rfile.read(lenght)
-                return chunk
-            except socket.error, (err, strerr):
-                if err == errno.EAGAIN or \
-                   err == errno.EWOULDBLOCK or \
-                   err == errno.EINPROGRESS:
-                   if chunk:
-                       return chunk
-                   continue
-            raise
+                to_read = length - len(info)
+                chunk = os.read (self.rfile.fileno(), to_read)
+                if not len(chunk):
+                    return info
+                info += chunk
+            except OSError, e:
+                if e.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
+                    if chunk:
+                        info += chunk
+                        continue
+                    time.sleep(0.01)
+                    continue
 
     def send(self, buf):
         pending = len(buf)
-        offset = 0
-        while pending:
+        offset  = 0
+
+        while True:
+            if not pending:
+                return
+
             try:
-                sent = self.connection.send(buf[offset:])
+                sent = os.write (self.wfile.fileno(), buf[offset:])
                 pending -= sent
-                offset += sent
-            except socket.error, e:
-                if e[0]!=errno.EAGAIN:
-                    raise
+                offset  += sent
+            except OSError, e:
+                if e.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
+                    time.sleep(0.01)
+                    continue
 
     def __read_netstring_size (self):
         size = ""
@@ -114,10 +127,12 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
             self.env[items[i]] = items[i+1]
 
     def handle_post (self):
-        if not self.env.has_key('CONTENT_LENGTH'):
-            return
         if self.post:
             return
+
+        if not self.env.has_key('CONTENT_LENGTH'):
+            return
+
         length = int(self.env['CONTENT_LENGTH'])
         self.post = self.__safe_read(length)
 
