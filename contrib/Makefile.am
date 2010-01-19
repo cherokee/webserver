@@ -15,7 +15,8 @@ bin2buffer.py \
 098to099.py \
 0999to09910.py \
 tracelor.py \
-make-cert.sh
+make-cert.sh \
+make-dh_params.sh
 
 CLEANFILES = \
 cherokee \
@@ -23,7 +24,6 @@ server.pem \
 rand.dat \
 cakey.key \
 cakey.csr \
-cakey.pem \
-make-dh_params.sh
+cakey.pem
 
 all-local: cherokee
