@@ -31,7 +31,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "pathinfo")
-        self.WriteFile (www, "pathinfo/test.php", 0444, '<?php echo "PathInfo is: ".$_SERVER[PATH_INFO]; ?>')
+        self.WriteFile (www, "pathinfo/test.php", 0444, '<?php echo "PathInfo is: ".$_SERVER[\'PATH_INFO\']; ?>')
 
     def Precondition (self):
         return os.path.exists (look_for_php())

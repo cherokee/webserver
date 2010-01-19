@@ -23,9 +23,9 @@ class Test (TestBase):
         self.Mkdir (www, "directoryindex3/inside/foo")
 
         self.WriteFile (self.dr, "super_test_index.php", 0666, """<?php
-                        echo "DocumentRoot ".$_SERVER[DOCUMENT_ROOT]."\n";
-                        echo "ScriptName "  .$_SERVER[SCRIPT_NAME]."\n";
-                        echo "RequestUri "  .$_SERVER[REQUEST_URI]."\n";
+                        echo "DocumentRoot ".$_SERVER['DOCUMENT_ROOT']."\n";
+                        echo "ScriptName "  .$_SERVER['SCRIPT_NAME']."\n";
+                        echo "RequestUri "  .$_SERVER['REQUEST_URI']."\n";
                         ?>""")
 
         # Set the configuration
