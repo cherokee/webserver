@@ -183,6 +183,10 @@ def get_server():
 
     return __global_server
 
+def get_scgi():
+    my_thread = threading.currentThread()
+    return my_thread.scgi_conn
+
 def run (*args, **kwargs):
     srv = get_server()
 
@@ -262,8 +266,11 @@ class _Request:
         my_thread = threading.currentThread()
         return my_thread.request_url
 
-    url = property (_get_request_url)
+    def _get_scgi_conn (self):
+        return get_scgi()
 
+    url  = property (_get_request_url)
+    scgi = property (_get_scgi_conn)
 
 cookie  = _Cookie()
 post    = _Post()
