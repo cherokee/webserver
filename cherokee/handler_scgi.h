@@ -47,7 +47,6 @@ typedef struct {
 	cherokee_buffer_t            header;
 	cherokee_socket_t            socket;
 	cherokee_source_t           *src_ref;
-	off_t                        post_len;
 } cherokee_handler_scgi_t;
 
 #define HDL_SCGI(x)           ((cherokee_handler_scgi_t *)(x))
@@ -61,8 +60,9 @@ void PLUGIN_INIT_NAME(scgi)      (cherokee_plugin_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_handler_scgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl);
-ret_t cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl);
+ret_t cherokee_handler_scgi_new       (cherokee_handler_t     **hdl, void *cnt, cherokee_module_props_t *props);
+ret_t cherokee_handler_scgi_free      (cherokee_handler_scgi_t *hdl);
+ret_t cherokee_handler_scgi_init      (cherokee_handler_scgi_t *hdl);
+ret_t cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl);
 
 #endif /* CHEROKEE_HANDLER_SCGI_H */

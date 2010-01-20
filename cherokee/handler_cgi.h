@@ -75,10 +75,11 @@ void  PLUGIN_INIT_NAME(cgi)            (cherokee_plugin_loader_t *loader);
  */
 ret_t cherokee_handler_cgi_new         (cherokee_handler_t    **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_cgi_free        (cherokee_handler_cgi_t *hdl);
-
 ret_t cherokee_handler_cgi_init        (cherokee_handler_cgi_t *hdl);
-ret_t cherokee_handler_cgi_step        (cherokee_handler_cgi_t *hdl, cherokee_buffer_t *buffer);
+
+ret_t cherokee_handler_cgi_read_post   (cherokee_handler_cgi_t *hdl);
 ret_t cherokee_handler_cgi_add_headers (cherokee_handler_cgi_t *hdl, cherokee_buffer_t *buffer);
+ret_t cherokee_handler_cgi_step        (cherokee_handler_cgi_t *hdl, cherokee_buffer_t *buffer);
 
 
 /* This handler export these extra functions to allow phpcgi

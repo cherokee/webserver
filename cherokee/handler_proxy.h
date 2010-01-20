@@ -97,7 +97,8 @@ ret_t cherokee_handler_proxy_new   (cherokee_handler_t **hdl, cherokee_connectio
  */
 ret_t cherokee_handler_proxy_init        (cherokee_handler_proxy_t *hdl);
 ret_t cherokee_handler_proxy_free        (cherokee_handler_proxy_t *hdl);
-ret_t cherokee_handler_proxy_step        (cherokee_handler_proxy_t *hdl, cherokee_buffer_t *buffer);
+ret_t cherokee_handler_proxy_read_post   (cherokee_handler_proxy_t *hdl);
 ret_t cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl, cherokee_buffer_t *buffer);
+ret_t cherokee_handler_proxy_step        (cherokee_handler_proxy_t *hdl, cherokee_buffer_t *buffer);
 
 #endif /* CHEROKEE_HANDLER_PROXY_H */

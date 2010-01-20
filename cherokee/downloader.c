@@ -76,11 +76,11 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 
 	cherokee_buffer_init (&n->tmp1);
 	cherokee_buffer_init (&n->tmp2);
+	cherokee_buffer_init (&n->post);
 
 	/* Init the properties
 	 */
 	n->phase             = downloader_phase_init;
-	n->post              = NULL;
 
 	/* Lengths
 	 */
@@ -108,8 +108,9 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 
 	cherokee_buffer_mrproper (&downloader->request_header);
 	cherokee_buffer_mrproper (&downloader->reply_header);
-	cherokee_buffer_mrproper (&downloader->body);
 	cherokee_buffer_mrproper (&downloader->proxy);
+	cherokee_buffer_mrproper (&downloader->body);
+	cherokee_buffer_mrproper (&downloader->post);
 
 	cherokee_buffer_mrproper (&downloader->tmp1);
 	cherokee_buffer_mrproper (&downloader->tmp2);
@@ -319,13 +320,17 @@ downloader_send_buffer (cherokee_downloader_t *downloader, cherokee_buffer_t *bu
 
 
 static ret_t
-downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
+downloader_header_read (cherokee_downloader_t *downloader,
+			cherokee_buffer_t     *tmp1,
+			cherokee_buffer_t     *tmp2)
 {
 	ret_t               ret;
 	cuint_t             len;
 	size_t              read_      = 0;
 	cherokee_socket_t  *sock       = &downloader->socket;
 	cherokee_http_t     error_code = http_bad_request;
+
+	UNUSED(tmp2);
 
 	ret = cherokee_socket_bufread (sock, &downloader->reply_header, DEFAULT_RECV_SIZE, &read_);
 	switch (ret) {
@@ -468,10 +473,9 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 
 		/* Maybe add the post info
 		 */
-		if (downloader->post != NULL) {
-			req->method = http_post;
-			cherokee_post_walk_reset (downloader->post);
-			req->post_len = downloader->post->size;
+		if (! cherokee_buffer_is_empty (&downloader->post)) {
+			req->method   = http_post;
+			req->post_len = downloader->post.len;
 		}
 
 		/* Build the request header
@@ -504,10 +508,18 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 	case downloader_phase_send_post:
 		TRACE(ENTRIES, "Phase %s\n", "send_post");
 
-		if (downloader->post != NULL) {
-			ret = cherokee_post_walk_to_socket (downloader->post, &downloader->socket);
-			if (unlikely(ret != ret_ok))
+		if (! cherokee_buffer_is_empty (&downloader->post)) {
+			size_t written = 0;
+
+			ret = cherokee_socket_bufwrite (&downloader->socket, &downloader->post, &written);
+			if (ret != ret_ok) {
 				return ret;
+			}
+
+			cherokee_buffer_move_to_begin (&downloader->post, written);
+			if (! cherokee_buffer_is_empty (&downloader->post)) {
+				return ret_eagain;
+			}
 		}
 
 		BIT_SET (downloader->status, downloader_status_post_sent);
@@ -577,26 +589,11 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 
 
 ret_t
-cherokee_downloader_post_set (cherokee_downloader_t *downloader, cherokee_post_t *post)
-{
-	TRACE(ENTRIES, "post=%p\n", post);
-
-	if (downloader->post != NULL) {
-		LOG_WARNING_S (CHEROKEE_ERROR_DOWNLOADER_OVERWRITE_POST);
-	}
-
-	downloader->post = post;
-	return ret_ok;
-}
-
-
-ret_t
 cherokee_downloader_reuse (cherokee_downloader_t *downloader)
 {
 	TRACE(ENTRIES, "%p\n", downloader);
 
 	downloader->phase = downloader_phase_init;
-	downloader->post  = NULL;
 
 	downloader->info.request_sent = 0;
 	downloader->info.headers_recv = 0;
@@ -606,6 +603,7 @@ cherokee_downloader_reuse (cherokee_downloader_t *downloader)
 	cherokee_buffer_clean (&downloader->request_header);
 	cherokee_buffer_clean (&downloader->reply_header);
 	cherokee_buffer_clean (&downloader->body);
+	cherokee_buffer_clean (&downloader->post);
 
 	cherokee_request_header_clean (&downloader->request);
 	return ret_ok;

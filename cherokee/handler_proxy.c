@@ -449,15 +449,10 @@ build_request (cherokee_handler_proxy_t *hdl,
 	}
 
 	/* Add header "Content-Length:" */
-	if (conn->post.is_set) {
-		off_t post_len;
-
-		ret = cherokee_post_get_len (&conn->post, &post_len);
-		if (ret == ret_ok) {
-			cherokee_buffer_add_str      (buf, "Content-Length: ");
-			cherokee_buffer_add_ullong10 (buf, (cullong_t)post_len);
-			cherokee_buffer_add_str      (buf, CRLF);
-		}
+	if (conn->post.has_info) {
+		cherokee_buffer_add_str      (buf, "Content-Length: ");
+		cherokee_buffer_add_ullong10 (buf, conn->post.len);
+		cherokee_buffer_add_str      (buf, CRLF);
 	}
 
 	/* Headers
@@ -628,39 +623,34 @@ do_connect (cherokee_handler_proxy_t *hdl)
 	return ret_ok;
 }
 
+
 static ret_t
 send_post (cherokee_handler_proxy_t *hdl)
 {
-	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	ret_t                     ret;
+	cherokee_connection_t    *conn     = HANDLER_CONN(hdl);
+	cherokee_socket_status_t  blocking = socket_closed;
 
-	ret = cherokee_post_walk_to_socket (&conn->post, &hdl->pconn->socket);
-
-	TRACE (ENTRIES",post", "Sending POST fd=%d, ret=%d\n",
-	       hdl->pconn->socket.socket, ret);
-
+	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
+					    &hdl->pconn->socket, NULL, &blocking);
 	switch (ret) {
 	case ret_ok:
-		TRACE (ENTRIES",post", "%s\n", "finished");
-		return ret_ok;
-
-	case ret_eof:
-	case ret_error:
-		return ret;
+		break;
 
 	case ret_eagain:
-		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							   conn, hdl->pconn->socket.socket,
-							   FDPOLL_MODE_WRITE, false);
-		if (ret != ret_ok) {
-			return ret_eof;
+		if (blocking == socket_writing) {
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
+							     hdl->pconn->socket.socket,
+							     FDPOLL_MODE_WRITE, false);
 		}
 		return ret_eagain;
 
 	default:
-		RET_UNKNOWN(ret);
-		return ret_error;
+		conn->error_code = http_bad_gateway;
+		return ret;
 	}
+
+	return ret_ok;
 }
 
 
@@ -677,8 +667,9 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	case proxy_init_start:
 		/* Send the Post if needed
 		 */
-		if (! cherokee_post_is_empty (&conn->post)) {
-			cherokee_post_walk_reset (&conn->post);
+		if (conn->post.has_info) {
+			// TODO: Is it necessary?
+			cherokee_post_send_reset (&conn->post);
 		}
 
 		hdl->init_phase = proxy_init_get_conn;
@@ -847,7 +838,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		TRACE(ENTRIES, "Entering phase '%s'\n", "send post");
 
 	case proxy_init_send_post:
-		if (! cherokee_post_is_empty (&conn->post)) {
+		if (conn->post.has_info) {
 			ret = send_post (hdl);
 			switch (ret) {
 			case ret_ok:
@@ -913,7 +904,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				return ret_error;
 			}
 
-			cherokee_post_walk_reset (&conn->post);
+			cherokee_post_send_reset (&conn->post);
 			hdl->respinned = true;
 			goto reconnect;
 		default:
@@ -1432,8 +1423,8 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_proxy_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_proxy_free;
-	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_proxy_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_proxy_add_headers;
+	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_proxy_step;
 
 	HANDLER(n)->support = hsupport_full_headers;
 

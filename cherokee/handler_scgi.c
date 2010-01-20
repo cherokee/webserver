@@ -184,16 +184,16 @@ cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	 */
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_scgi_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_scgi_free;
+	HANDLER(n)->read_post   = (handler_func_read_post_t) cherokee_handler_scgi_read_post;
 
 	/* Virtual methods: implemented by handler_cgi_base
 	 */
-	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_cgi_base_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_cgi_base_add_headers;
+	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_cgi_base_step;
 
 	/* Properties
 	 */
-	n->post_len = 0;
-	n->src_ref  = NULL;
+	n->src_ref = NULL;
 
 	cherokee_buffer_init (&n->header);
 	cherokee_socket_init (&n->socket);
@@ -248,15 +248,16 @@ netstringer (cherokee_buffer_t *buf)
 static ret_t
 build_header (cherokee_handler_scgi_t *hdl)
 {
-	cuint_t len;
-	char    tmp[64];
+	cuint_t                len;
+	char                   tmp[64];
+	cherokee_connection_t *conn     = HANDLER_CONN(hdl);
 
-	len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)hdl->post_len);
+	len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)conn->post.len);
 
 	set_env (HDL_CGI_BASE(hdl), "CONTENT_LENGTH", tmp, len);
 	set_env (HDL_CGI_BASE(hdl), "SCGI", "1", 1);
 
-	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), HANDLER_CONN(hdl));
+	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), conn);
 
 	return netstringer (&hdl->header);
 }
@@ -322,32 +323,6 @@ send_header (cherokee_handler_scgi_t *hdl)
 }
 
 
-static ret_t
-send_post (cherokee_handler_scgi_t *hdl)
-{
-	ret_t                  ret;
-	int                    e_fd = -1;
-	int                    mode =  0;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-
-	ret = cherokee_post_walk_to_fd (&conn->post, hdl->socket.socket, &e_fd, &mode);
-
-	switch (ret) {
-	case ret_ok:
-		break;
-	case ret_eagain:
-		if (e_fd != -1)
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn, e_fd, mode, false);
-		return ret_eagain;
-	default:
-		conn->error_code = http_bad_gateway;
-		return ret;
-	}
-
-	return ret_ok;
-}
-
-
 ret_t
 cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 {
@@ -364,13 +339,6 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		if (unlikely (ret < ret_ok)) {
 			conn->error_code = http_internal_error;
 			return ret_error;
-		}
-
-		/* Prepare Post
-		 */
-		if (! cherokee_post_is_empty (&conn->post)) {
-			cherokee_post_walk_reset (&conn->post);
-			cherokee_post_get_len (&conn->post, &hdl->post_len);
 		}
 
 		/* Build the headers
@@ -410,18 +378,40 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		/* Send the header
 		 */
 		ret = send_header (hdl);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			return ret;
-
-		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_post;
-
-	case hcgi_phase_send_post:
-		/* Send the Post
-		 */
-		if (hdl->post_len > 0) {
-			return send_post (hdl);
 		}
+	}
+
+	TRACE (ENTRIES, "Init: %s\n", "finished");
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
+{
+	ret_t                     ret;
+	cherokee_connection_t    *conn     = HANDLER_CONN(hdl);
+	cherokee_socket_status_t  blocking = socket_closed;
+
+	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
+					    &hdl->socket, NULL, &blocking);
+	switch (ret) {
+	case ret_ok:
 		break;
+
+	case ret_eagain:
+		if (blocking == socket_writing) {
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							     conn, hdl->socket.socket,
+							     FDPOLL_MODE_WRITE, false);
+		}
+		return ret_eagain;
+
+	default:
+		conn->error_code = http_bad_gateway;
+		return ret;
 	}
 
 	return ret_ok;

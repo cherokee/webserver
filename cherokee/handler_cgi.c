@@ -131,17 +131,17 @@ cherokee_handler_cgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_p
 	 */
 	MODULE(n)->init         = (module_func_init_t) cherokee_handler_cgi_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_cgi_free;
+	HANDLER(n)->read_post   = (handler_func_read_post_t) cherokee_handler_cgi_read_post;
 
 	/* Virtual methods: implemented by handler_cgi_base
 	 */
-	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_cgi_base_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_cgi_base_add_headers;
+	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_cgi_base_step;
 
 	/* Init
 	 */
-	n->post_data_sent =  0;
-	n->pipeInput      = -1;
-	n->pipeOutput     = -1;
+	n->pipeInput  = -1;
+	n->pipeOutput = -1;
 
 #ifdef _WIN32
 	n->process   = NULL;
@@ -356,7 +356,6 @@ add_environment (cherokee_handler_cgi_t *cgi,
 		 cherokee_connection_t  *conn)
 {
 	ret_t                        ret;
-	off_t                        post_len;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
 	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(CONN_THREAD(conn));
 
@@ -367,10 +366,8 @@ add_environment (cherokee_handler_cgi_t *cgi,
 	/* CONTENT_LENGTH
 	 */
 	if (http_method_with_input (conn->header.method)) {
-		cherokee_post_get_len (&conn->post, &post_len);
-
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_add_ullong10 (tmp, post_len);
+		cherokee_buffer_add_ullong10 (tmp, conn->post.len);
 		set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);
 	}
 
@@ -384,39 +381,6 @@ add_environment (cherokee_handler_cgi_t *cgi,
 		 cgi_base->executable.len);
 
 	return ret_ok;
-}
-
-
-static ret_t
-send_post (cherokee_handler_cgi_t *cgi)
-{
-	ret_t                  ret;
-	int                    eagain_fd = -1;
-	int                    mode      =  0;
-	cherokee_connection_t *conn      = HANDLER_CONN(cgi);
-
-	ret = cherokee_post_walk_to_fd (&conn->post, cgi->pipeOutput, &eagain_fd, &mode);
-
-	TRACE (ENTRIES",post", "Sending POST fd=%d, ret=%d\n", cgi->pipeOutput, ret);
-
-	switch (ret) {
-	case ret_ok:
-		TRACE (ENTRIES",post", "%s\n", "finished");
-
-		cherokee_fd_close (cgi->pipeOutput);
-		cgi->pipeOutput = -1;
-		return ret_ok;
-
-	case ret_eagain:
-		if (eagain_fd != -1) {
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn, eagain_fd, mode, false);
-		}
-
-		return ret_eagain;
-
-	default:
-		return ret;
-	}
 }
 
 
@@ -434,7 +398,9 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 		 */
 		if (cherokee_buffer_is_empty (&cgi_base->executable)) {
 			ret = cherokee_handler_cgi_base_extract_path (cgi_base, true);
-			if (unlikely (ret < ret_ok)) return ret;
+			if (unlikely (ret < ret_ok)) {
+				return ret;
+			}
 		}
 
 		/* It has to update the timeout of the connection,
@@ -442,35 +408,55 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 		 * isn't fast enough
 		 */
 		conn->timeout = cherokee_bogonow_now + CGI_TIMEOUT;
-
 		cgi_base->init_phase = hcgi_phase_connect;
 
 	case hcgi_phase_connect:
 		/* Launch the CGI
 		 */
 		ret = fork_and_execute_cgi(cgi);
-		if (unlikely (ret != ret_ok)) return ret;
-
-		/* Send the Post if needed
-		 */
-		if (! cherokee_post_is_empty (&conn->post)) {
-			cherokee_post_walk_reset (&conn->post);
+		if (unlikely (ret != ret_ok)) {
+			return ret;
 		}
 
-		cgi_base->init_phase = hcgi_phase_send_headers;
-
-	case hcgi_phase_send_headers:
-		/* There is nothing to do here, so move on!
-		 */
-		cgi_base->init_phase = hcgi_phase_send_post;
-
-	case hcgi_phase_send_post:
-		if (! cherokee_post_is_empty (&conn->post)) {
-			return send_post (cgi);
-		}
+	default:
+		break;
 	}
 
 	TRACE (ENTRIES, "finishing %s\n", "ret_ok");
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
+{
+	ret_t                     ret;
+	cherokee_connection_t    *conn     = HANDLER_CONN(cgi);
+	cherokee_socket_status_t  blocking = socket_closed;
+
+	if (! conn->post.has_info) {
+		return ret_ok;
+	}
+
+	ret = cherokee_post_send_to_fd (&conn->post, &conn->socket,
+					cgi->pipeOutput, NULL, &blocking);
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_eagain:
+		if (blocking == socket_writing) {
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn,
+							     cgi->pipeOutput, 1, false);
+		}
+		return ret_eagain;
+	default:
+		return ret;
+	}
+
+	TRACE (ENTRIES",post", "%s\n", "finished");
+	cherokee_fd_close (cgi->pipeOutput);
+	cgi->pipeOutput = -1;
+
 	return ret_ok;
 }
 
@@ -844,7 +830,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	 */
 	cgi->pipeInput  = _open_osfhandle((LONG)hChildStdoutRd, O_BINARY|_O_RDONLY);
 
-	if (cherokee_post_is_empty (&conn->post)) {
+	if (! conn->post.len <= 0) {
 		CloseHandle (hChildStdinWr);
 	} else {
 		cgi->pipeOutput = _open_osfhandle((LONG)hChildStdinWr,  O_BINARY|_O_WRONLY);

@@ -54,7 +54,7 @@ struct cherokee_downloader {
 	cherokee_buffer_t            reply_header;
 	cherokee_buffer_t            body;
 
-	cherokee_post_t             *post;
+	cherokee_buffer_t            post;
 	cherokee_buffer_t            proxy;
 	cuint_t                      proxy_port;
 

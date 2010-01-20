@@ -59,6 +59,7 @@ typedef enum {
  */
 typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cherokee_module_props_t *properties);
 typedef ret_t (* handler_func_init_t)        (void  *handler);
+typedef ret_t (* handler_func_read_post_t)   (void  *handler);
 typedef ret_t (* handler_func_step_t)        (void  *handler, cherokee_buffer_t *buffer);
 typedef ret_t (* handler_func_add_headers_t) (void  *handler, cherokee_buffer_t *buffer);
 typedef ret_t (* handler_func_configure_t)   (cherokee_config_node_t *, cherokee_server_t *, cherokee_module_props_t **);
@@ -71,8 +72,9 @@ typedef struct {
 
 	/* Pure virtual methods
 	 */
-	handler_func_step_t         step;
+	handler_func_read_post_t    read_post;
 	handler_func_add_headers_t  add_headers;
+	handler_func_step_t         step;
 
 	/* Properties
 	 */

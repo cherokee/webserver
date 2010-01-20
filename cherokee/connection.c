@@ -299,7 +299,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		conn->polling_fd = -1;
 	}
 
-	cherokee_post_mrproper (&conn->post);
+	cherokee_post_clean (&conn->post);
 	cherokee_buffer_mrproper (&conn->encoder_buffer);
 
 	cherokee_buffer_clean (&conn->request);
@@ -712,6 +712,17 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 
 
 ret_t
+cherokee_connection_read_post (cherokee_connection_t *conn)
+{
+	if (conn->handler->read_post == NULL) {
+		return ret_ok;
+	}
+
+	return cherokee_handler_read_post (conn->handler);
+}
+
+
+ret_t
 cherokee_connection_build_header (cherokee_connection_t *conn)
 {
 	ret_t              ret;
@@ -907,12 +918,15 @@ cherokee_connection_tx_add (cherokee_connection_t *conn, ssize_t tx)
 
 
 ret_t
-cherokee_connection_recv (cherokee_connection_t *conn, cherokee_buffer_t *buffer, off_t *len)
+cherokee_connection_recv (cherokee_connection_t *conn,
+			  cherokee_buffer_t     *buffer,
+			  off_t                  to_read,
+			  off_t                 *len)
 {
 	ret_t  ret;
 	size_t cnt_read = 0;
 
-	ret = cherokee_socket_bufread (&conn->socket, buffer, DEFAULT_RECV_SIZE, &cnt_read);
+	ret = cherokee_socket_bufread (&conn->socket, buffer, to_read, &cnt_read);
 	switch (ret) {
 	case ret_ok:
 		cherokee_connection_rx_add (conn, cnt_read);
@@ -1713,98 +1727,6 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 
 
 static ret_t
-send_100continue (cherokee_connection_t *conn)
-{
-	ret_t       ret;
-	const char *reply   = "HTTP/1.1 100 Continue" CRLF CRLF; /* 25 chars */
-	size_t      written = 0;
-
-	ret = cherokee_socket_write (&conn->socket, reply, 25, &written);
-	if ((ret == ret_ok) && (written == 25)) {
-		TRACE(ENTRIES, "Sent a '100 Continue' response.\n");
-		return ret_ok;
-	}
-
-	TRACE(ENTRIES, "Could not send a '100 Continue' response. Error=500.\n");
-	conn->error_code = http_internal_error;
-	return ret_error;
-}
-
-
-static ret_t
-post_init (cherokee_connection_t *conn)
-{
-	ret_t    ret;
-	off_t    post_len;
-	char    *info     = NULL;
-	cuint_t  info_len = 0;
-	CHEROKEE_TEMP(buf, 64);
-
-	/* RFC 2616:
-	 *
-	 * If a message is received with both a Transfer-Encoding
-	 * header field and a Content-Length header field, the latter
-	 * MUST be ignored.
-	 */
-
-	/* Check "Transfer-Encoding"
-	 */
-	ret = cherokee_header_get_known (&conn->header, header_transfer_encoding, &info, &info_len);
-	if (ret == ret_ok) {
-		if (strncasecmp (info, "chunked", MIN(info_len, 7)) == 0) {
-			cherokee_post_set_encoding (&conn->post, post_enc_chunked);
-			return ret_ok;
-		}
-	}
-
-	/* Check "Content-Length"
-	 */
-	ret = cherokee_header_get_known (&conn->header, header_content_length, &info, &info_len);
-	if (unlikely (ret != ret_ok)) {
-		conn->error_code = http_length_required;
-		return ret_error;
-	}
-
-	/* Parse the POST length
-	 */
-	if (unlikely ((info == NULL)  ||
-		      (info_len == 0) ||
-		      (info_len >= buf_size)))
-	{
-		conn->error_code = http_bad_request;
-		return ret_error;
-	}
-
-	memcpy (buf, info, info_len);
-	buf[info_len] = '\0';
-
-	/* Check: Post length >= 0
-	 */
-	post_len = (off_t) atoll(buf);
-	if (unlikely (post_len < 0)) {
-		conn->error_code = http_bad_request;
-		return ret_error;
-	}
-
-	/* Set the length
-	 */
-	cherokee_post_set_len (&conn->post, post_len);
-
-	/* Check "Expect: 100-continue" header
-	 */
-	ret = cherokee_header_get_known (&conn->header, header_expect, &info, &info_len);
-	if (ret == ret_ok) {
-		ret = send_100continue(conn);
-		if (ret != ret_ok) {
-			return ret_error;
-		}
-	}
-
-	return ret_ok;
-}
-
-
-static ret_t
 parse_userdir (cherokee_connection_t *conn)
 {
 	char *begin;
@@ -1863,33 +1785,13 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	if (unlikely (ret < ret_ok))
 		goto error;
 
-	/* Maybe read the POST data
+	/* Init the POST structure if needed
 	 */
-	if (http_method_with_input (conn->header.method)) {
-		uint32_t header_len;
-		uint32_t post_len;
-		size_t   written;
-
-		/* Init the post info
-		 */
-		ret = post_init (conn);
+	if (http_method_with_input (conn->header.method))
+	{
+		ret = cherokee_post_read_header (&conn->post, conn);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
-		}
-
-		/* Split header and post
-		 */
-		ret = cherokee_header_get_length (&conn->header, &header_len);
-		if (unlikely(ret != ret_ok))
-			return ret;
-
-		post_len = conn->incoming_header.len - header_len;
-
-		if (post_len > 0) {
-			cherokee_post_append (&conn->post, conn->incoming_header.buf + header_len,
-					       post_len, &written);
-
-			cherokee_buffer_remove_chunk (&conn->incoming_header, header_len, written);
 		}
 	}
 
@@ -1997,7 +1899,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	/* Check Upload limit
 	 */
 	if ((CONN_VSRV(conn)->post_max_len > 0) &&
-	    (conn->post.size > CONN_VSRV(conn)->post_max_len))
+	    (conn->post.len > CONN_VSRV(conn)->post_max_len))
 	{
 		conn->error_code = http_request_entity_too_large;
 		return ret_error;

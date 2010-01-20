@@ -29,8 +29,9 @@
 
 #include "util.h"
 #include "buffer.h"
-#include "downloader_async.h"
+#include "downloader.h"
 #include "downloader-protected.h"
+#include "downloader_async.h"
 
 #define ENTRIES "admin,client"
 
@@ -38,12 +39,10 @@
 struct cherokee_admin_client {
 	cherokee_downloader_async_t *downloader;
 
+	cherokee_fdpoll_t           *poll_ref;
 	cherokee_buffer_t           *url_ref;
 	cherokee_buffer_t            request;
 	cherokee_buffer_t            reply;
-
-	cherokee_post_t              post;
-	cherokee_fdpoll_t           *poll_ref;
 };
 
 #define strcmp_begin(line,sub)       strncmp(line, sub, strlen(sub))
@@ -60,7 +59,6 @@ cherokee_admin_client_new (cherokee_admin_client_t **admin)
 	n->poll_ref = NULL;
 	n->url_ref  = NULL;
 
-	cherokee_post_init (&n->post);
 	cherokee_downloader_async_new (&n->downloader);
 	cherokee_buffer_init (&n->request);
 	cherokee_buffer_init (&n->reply);
@@ -196,19 +194,15 @@ internal_step (cherokee_admin_client_t *admin)
 static void
 prepare_and_set_post (cherokee_admin_client_t *admin, const char *str, cuint_t str_len)
 {
-	size_t written;
-
 	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
 
 	cherokee_downloader_set_url (downloader, admin->url_ref);
 	cherokee_buffer_add (&admin->request, str, str_len);
 
-	/* Build and set the post object
+	/* Copy the post info
 	 */
-	cherokee_post_init (&admin->post);
-	cherokee_post_set_len (&admin->post, str_len);
-	cherokee_post_append (&admin->post, str, str_len, &written);
-	cherokee_downloader_post_set (downloader, &admin->post);
+	cherokee_buffer_clean (&downloader->post);
+	cherokee_buffer_add (&downloader->post, str, str_len);
 }
 
 #define SET_POST(admin,str) \
@@ -262,7 +256,7 @@ common_processing (cherokee_admin_client_t *admin,
 	/* Initial state: needs to get the Post info
 	 */
 	if ((downloader->phase == downloader_phase_init) &&
-	    (downloader->post == NULL))
+	    (cherokee_buffer_is_empty (&downloader->post)))
 	{
 		conf_request_func (admin, argument);
 		return ret_eagain;

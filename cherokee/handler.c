@@ -40,8 +40,9 @@ cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_handle
 
 	/* Pure virtual methods
 	 */
-	hdl->step          = NULL;
+	hdl->read_post     = NULL;
 	hdl->add_headers   = NULL;
+	hdl->step          = NULL;
 
 	/* Parent reference
 	 */
@@ -90,6 +91,17 @@ cherokee_handler_init (cherokee_handler_t *hdl)
 	}
 
 	return ret_error;
+}
+
+
+ret_t
+cherokee_handler_read_post (cherokee_handler_t *hdl)
+{
+	if (unlikely (hdl->read_post == NULL)) {
+		return ret_error;
+	}
+
+	return hdl->read_post(hdl);
 }
 
 

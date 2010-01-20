@@ -63,8 +63,7 @@ typedef ret_t (* cherokee_handler_cgi_base_read_from_cgi_t) (cherokee_handler_cg
 typedef enum {
 	hcgi_phase_build_headers,
 	hcgi_phase_connect,
-	hcgi_phase_send_headers,
-	hcgi_phase_send_post
+	hcgi_phase_send_headers
 } cherokee_handler_cgi_base_phase_t;
 
 /* Data structure

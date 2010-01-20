@@ -66,7 +66,7 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_admin_add_headers;
 
 	/* Supported features
-	*/
+	 */
 	HANDLER(n)->support     = hsupport_nothing;
 
 	cherokee_buffer_init (&n->reply);
@@ -133,26 +133,26 @@ cherokee_handler_admin_init (cherokee_handler_admin_t *ahdl)
 {
 	ret_t                    ret;
 	char                    *tmp;
-	off_t                   postl;
 	cherokee_buffer_t        post = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t        line = CHEROKEE_BUF_INIT;
 	cherokee_connection_t   *conn = HANDLER_CONN(ahdl);
 
 	/* Check for the post info
 	 */
-	cherokee_post_get_len (&conn->post, &postl);
-	if (postl <= 0 || postl >= (INT_MAX-1)) {
+	if (conn->post.len <= 0) {
 		conn->error_code = http_bad_request;
 		return ret_error;
 	}
 
 	/* Process line per line
 	 */
-	ret = cherokee_post_walk_read (&conn->post, &post, (cuint_t) postl);
-	if (unlikely (ret == ret_error)) {
-		conn->error_code = http_bad_request;
-		return ret_error;
-	}
+	do {
+		ret = cherokee_post_read (&conn->post, &conn->socket, &post);
+		if (unlikely (ret == ret_error)) {
+			conn->error_code = http_bad_request;
+			return ret_error;
+		}
+	} while (! cherokee_post_read_finished (&conn->post));
 
 	for (tmp = post.buf;;) {
 		char *end1 = strchr (tmp, CHR_LF);

@@ -1458,18 +1458,16 @@ $(static_gen_evhost_src) \
 $(static_collector_rrd_src) \
 \
 $(static_handler_file_src) \
-$(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
-$(static_handler_scgi_src) \
+$(static_handler_cgi_src) \
 $(static_handler_fcgi_src) \
+$(static_handler_scgi_src) \
+$(static_handler_proxy_src) \
 $(static_handler_uwsgi_src) \
-$(static_handler_fastcgi_src) \
 $(static_handler_redir_src) \
 $(static_handler_error_redir_src) \
 $(static_handler_error_nn_src) \
-$(static_handler_cgi_src) \
 $(static_handler_common_src) \
-$(static_handler_proxy_src) \
 $(static_handler_ssi_src) \
 $(static_handler_secdownload_src) \
 $(static_handler_empty_gif_src) \
@@ -1478,6 +1476,7 @@ $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
 $(static_handler_render_rrd_src) \
 $(static_handler_dbslayer_src) \
+$(static_handler_admin_src) \
 \
 $(static_logger_ncsa_src) \
 $(static_logger_custom_src) \
@@ -1558,6 +1557,8 @@ spawner.h \
 spawner.c \
 collector.h \
 collector.c
+
+#$(static_handler_fastcgi_src)
 
 
 libcherokee_config_la_SOURCES = \
@@ -1641,17 +1642,15 @@ $(dynamic_vrule_target_ip_lib) \
 $(dynamic_collector_rrd_lib) \
 $(dynamic_gen_evhost_lib) \
 $(dynamic_handler_file_lib) \
-$(dynamic_handler_cgi_lib) \
 $(dynamic_handler_server_info_lib) \
 $(dynamic_handler_render_rrd_lib) \
-$(dynamic_handler_admin_lib) \
 $(dynamic_handler_dirlist_lib) \
-$(dynamic_handler_scgi_lib) \
+$(dynamic_handler_cgi_lib) \
 $(dynamic_handler_fcgi_lib) \
-$(dynamic_handler_uwsgi_lib) \
-$(dynamic_handler_fastcgi_lib) \
-$(dynamic_handler_redir_lib) \
+$(dynamic_handler_scgi_lib) \
 $(dynamic_handler_proxy_lib) \
+$(dynamic_handler_uwsgi_lib) \
+$(dynamic_handler_redir_lib) \
 $(dynamic_handler_ssi_lib) \
 $(dynamic_handler_secdownload_lib) \
 $(dynamic_handler_empty_gif_lib) \
@@ -1661,6 +1660,7 @@ $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_error_nn_lib) \
 $(dynamic_handler_common_lib) \
 $(dynamic_handler_dbslayer_lib) \
+$(dynamic_handler_admin_lib) \
 $(dynamic_encoder_gzip_lib) \
 $(dynamic_encoder_deflate_lib) \
 $(dynamic_logger_ncsa_lib) \
@@ -1676,6 +1676,8 @@ $(dynamic_validator_mysql_lib) \
 $(dynamic_cryptor_libssl_lib) \
 $(dynamic_balancer_round_robin_lib) \
 $(dynamic_balancer_ip_hash_lib)
+
+#$(dynamic_handler_fastcgi_lib)
 
 
 #

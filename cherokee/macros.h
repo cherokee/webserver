@@ -97,7 +97,6 @@
 #define DEFAULT_TRAFFIC_UPDATE        10
 #define CGI_TIMEOUT                   65
 #define MSECONDS_TO_LINGER            2000
-#define POST_SIZE_TO_DISK             32768
 #define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
@@ -107,6 +106,7 @@
 #define SENDFILE_MAX_SIZE             2147483647     /* 2Gb -1*/
 #define NONCE_CLEANUP_LAPSE           60
 #define NONCE_EXPIRATION              60
+#define POST_READ_SIZE                32700
 
 #define FD_NUM_SPARE                  10        /* range:  8 ... 20    */
 #define FD_NUM_MIN_SYSTEM             20        /* range: 16 ... 64    */
@@ -157,16 +157,13 @@
 	(cherokee_buffer_case_cmp_str(b,str) == 0)
 
 #define return_if_fail(expr,ret) \
-	if (!(expr)) {                                                      \
-		fprintf (stderr,                                            \
-       		         "file %s: line %d (%s): assertion `%s' failed\n",  \
-                          __FILE__,                                         \
-                          __LINE__,                                         \
-                          __cherokee_func__,                                \
-                          #expr);                                           \
-	        return (ret);                                               \
-	}
-
+	do {								\
+		if (!(expr)) {						\
+			PRINT_ERROR ("assertion `%s' failed\n", #expr);	\
+			CHEROKEE_PRINT_BACKTRACE;			\
+			return (ret);					\
+		}							\
+	} while(0)
 
 #define SHOULDNT_HAPPEN \
 	do { fprintf (stderr, "file %s:%d (%s): this should not happen\n",  \

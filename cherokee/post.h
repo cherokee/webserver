@@ -25,67 +25,82 @@
 #ifndef CHEROKEE_POST_H
 #define CHEROKEE_POST_H
 
-#include <cherokee/common.h>
-#include <cherokee/buffer.h>
-#include <cherokee/socket.h>
-#include <unistd.h>
+#include "common.h"
+#include "socket.h"
+
+
+typedef enum {
+        post_enc_regular,
+        post_enc_chunked
+} cherokee_post_encoding_t;
+
+typedef enum {
+	cherokee_post_read_header_init,
+	cherokee_post_read_header_100cont
+} cherokee_post_rh_phase_t;
+
+typedef enum {
+	cherokee_post_send_phase_read,
+	cherokee_post_send_phase_write
+} cherokee_post_send_phase_t;
+
+typedef struct {
+	off_t                    len;
+	cherokee_boolean_t       has_info;
+	cherokee_post_encoding_t encoding;
+	cherokee_post_rh_phase_t read_header_phase;
+	cherokee_buffer_t        read_header_100cont;
+	cherokee_buffer_t        header_surplus;
+
+	struct {
+		off_t                      read;
+		cherokee_post_send_phase_t phase;
+		cherokee_buffer_t          buffer;
+	} send;
+
+	struct {
+		cherokee_boolean_t         last;
+		off_t                      processed;
+		cherokee_buffer_t          buffer;
+		cherokee_boolean_t         retransmit;
+	} chunked;
+
+} cherokee_post_t;
+
+#define POST(x) ((cherokee_post_t *)(x))
 
 
 CHEROKEE_BEGIN_DECLS
 
-typedef enum {
-	post_undefined,
-	post_in_memory,
-	post_in_tmp_file
-} cherokee_post_type_t;
-
-typedef enum {
-	post_enc_regular,
-	post_enc_chunked
-} cherokee_post_encoding_t;
-
-typedef struct {
-	cherokee_post_type_t     type;
-	cherokee_post_encoding_t encoding;
-	cherokee_boolean_t       is_set;
-
-	cherokee_boolean_t       chunked_last;
-	off_t                    chunked_processed;
-
-	cherokee_boolean_t       got_last_chunk;
-
-	off_t                    size;
-	off_t                    received;
-	off_t                    walk_offset;
-
-	cherokee_buffer_t        info;
-
-	cherokee_buffer_t        tmp_file;
-	int                      tmp_file_fd;
-} cherokee_post_t;
-
-#define POST(x)      ((cherokee_post_t *)(x))
-#define POST_BUF(x)  (&POST(x)->info)
-
-
 ret_t cherokee_post_init           (cherokee_post_t *post);
+ret_t cherokee_post_clean          (cherokee_post_t *post);
 ret_t cherokee_post_mrproper       (cherokee_post_t *post);
 
-int   cherokee_post_is_empty       (cherokee_post_t *post);
-int   cherokee_post_got_all        (cherokee_post_t *post);
+ret_t cherokee_post_read_header    (cherokee_post_t *post, void *conn);
+ret_t cherokee_post_has_info       (cherokee_post_t *post);
+int   cherokee_post_read_finished  (cherokee_post_t *post);
 
-ret_t cherokee_post_set_len        (cherokee_post_t *post, off_t  len);
-ret_t cherokee_post_get_len        (cherokee_post_t *post, off_t *len);
+/* Read
+ */
+ret_t cherokee_post_read           (cherokee_post_t          *post,
+				    cherokee_socket_t        *sock_in,
+				    cherokee_buffer_t        *buffer);
 
-ret_t cherokee_post_append         (cherokee_post_t *post, const char *str, size_t len, size_t *written);
-ret_t cherokee_post_commit_buf     (cherokee_post_t *post, size_t len);
-ret_t cherokee_post_set_encoding   (cherokee_post_t *post, cherokee_post_encoding_t enc);
+/* Read + Send
+ */
+ret_t cherokee_post_send_reset     (cherokee_post_t          *post);
 
-ret_t cherokee_post_walk_reset     (cherokee_post_t *post);
-ret_t cherokee_post_walk_finished  (cherokee_post_t *post);
-ret_t cherokee_post_walk_read      (cherokee_post_t *post, cherokee_buffer_t *buf, cuint_t len);
-ret_t cherokee_post_walk_to_fd     (cherokee_post_t *post, int fd, int *eagain_fd, int *mode);
-ret_t cherokee_post_walk_to_socket (cherokee_post_t *post, cherokee_socket_t *socket);
+ret_t cherokee_post_send_to_socket (cherokee_post_t          *post,
+				    cherokee_socket_t        *sock_in,
+				    cherokee_socket_t        *sock_out,
+				    cherokee_buffer_t        *buffer,
+				    cherokee_socket_status_t *blocking);
+
+ret_t cherokee_post_send_to_fd     (cherokee_post_t          *post,
+				    cherokee_socket_t        *sock_in,
+				    int                       fd_out,
+				    cherokee_buffer_t        *tmp,
+				    cherokee_socket_status_t *blocking);
 
 CHEROKEE_END_DECLS
 

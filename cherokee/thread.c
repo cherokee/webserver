@@ -257,8 +257,17 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 
 
 static void
-conn_set_mode (cherokee_thread_t *thd, cherokee_connection_t *conn, cherokee_socket_status_t s)
+conn_set_mode (cherokee_thread_t        *thd,
+	       cherokee_connection_t    *conn,
+	       cherokee_socket_status_t  s)
 {
+	if (conn->socket.status == s) {
+		TRACE (ENTRIES, "Connection already in mode = %s\n", (s == socket_reading)? "reading" : "writing");
+		return ret_ok;
+	}
+
+	TRACE (ENTRIES, "Connection mode = %s\n", (s == socket_reading)? "reading" : "writing");
+
 	cherokee_socket_set_status (&conn->socket, s);
 	cherokee_fdpoll_set_mode (thd->fdpoll, SOCKET_FD(&conn->socket), s);
 }
@@ -740,65 +749,6 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 			break;
 
-		case phase_read_post:
-			len = 0;
-			ret = cherokee_connection_recv (conn, POST_BUF(&conn->post), &len);
-
-			switch (ret) {
-			case ret_eagain:
-				continue;
-
-			case ret_ok:
-				if ((conn->post.size > 0) &&
-				    ((conn->post.received + len) > conn->post.size))
-				{
-					size_t remain = 0;
-
-					remain = len - (conn->post.size - conn->post.received);
-					len = conn->post.size - conn->post.received;
-
-					cherokee_buffer_add (&conn->incoming_header,
-							conn->post.info.buf + len,
-							remain);
-
-					cherokee_buffer_drop_ending (POST_BUF(&conn->post),
-							remain);
-				}
-
-				cherokee_post_commit_buf (&conn->post, len);
-				if (cherokee_post_got_all (&conn->post)) {
-					break;
-				}
-				continue;
-
-			case ret_eof:
-				/* Finish..
-				 */
-				if (!cherokee_post_got_all (&conn->post)) {
-					conns_freed++;
-					goto shutdown;
-				}
-
-				cherokee_post_commit_buf (&conn->post, len);
-				break;
-
-			case ret_error:
-				conns_freed++;
-				goto shutdown;
-
-			default:
-				RET_UNKNOWN(ret);
-				conns_freed++;
-				goto shutdown;
-			}
-
-			/* Turn the connection in write mode
-			 */
-			conn_set_mode (thd, conn, socket_writing);
-			conn->phase = phase_setup_connection;
-			break;
-
-
 		case phase_reading_header:
 			/* Maybe the buffer has a request (previous pipelined)
 			 */
@@ -824,7 +774,9 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Read from the client
 			 */
-			ret = cherokee_connection_recv (conn, &conn->incoming_header, &len);
+			ret = cherokee_connection_recv (conn,
+							&conn->incoming_header,
+							DEFAULT_RECV_SIZE, &len);
 			switch (ret) {
 			case ret_ok:
 				break;
@@ -907,15 +859,6 @@ process_active_connections (cherokee_thread_t *thd)
 				cherokee_collector_log_request (THREAD_SRV(thd)->collector);
 			}
 
-			/* If it's a POST we've to read more data
-			 */
-			if (http_method_with_input (conn->header.method)) {
-				if (! cherokee_post_got_all (&conn->post)) {
-					conn_set_mode (thd, conn, socket_reading);
-					conn->phase = phase_read_post;
-					continue;
-				}
-			}
 
 			conn->phase = phase_setup_connection;
 
@@ -1126,9 +1069,43 @@ process_active_connections (cherokee_thread_t *thd)
 				}
 			}
 
+			/* Figure next state
+			 */
+			if (! http_method_with_input (conn->header.method)) {
+				conn->phase = phase_add_headers;
+				goto add_headers;
+			}
+
+			conn->phase = phase_read_post;
+
+		case phase_read_post:
+
+			/* Read/Send the POST info
+			 */
+			ret = cherokee_connection_read_post (conn);
+			switch (ret) {
+			case ret_ok:
+				break;
+			case ret_eagain:
+				conn_set_mode (thd, conn, socket_reading);
+				continue;
+			case ret_eof:
+			case ret_error:
+				conn->error_code = http_internal_error;
+				cherokee_connection_setup_error_handler (conn);
+				continue;
+			default:
+				RET_UNKNOWN(ret);
+			}
+
+			/* Turn the connection in write mode
+			 */
+			conn_set_mode (thd, conn, socket_writing);
 			conn->phase = phase_add_headers;
 
 		case phase_add_headers:
+		add_headers:
+
 			/* Build the header
 			 */
 			ret = cherokee_connection_build_header (conn);
