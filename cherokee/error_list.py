@@ -164,13 +164,6 @@ e('VALIDATOR_METHOD_UNKNOWN',
   desc  = BROKEN_CONFIG)
 
 
-# cherokee/downloader.c
-#
-e('DOWNLOADER_OVERWRITE_POST',
-  title = "Overwriting post info",
-  desc  = CODING_BUG)
-
-
 # cherokee/admin_client.c
 #
 e('ADMIN_CLIENT_INTERNAL',
@@ -742,13 +735,6 @@ e('CONF_READ_PARSE',
   title = "Parsing error",
   desc  = "The server could not parse the configuration. Something must be wrong with formation. At this stage the lexical is checked.",
   debug = "%s")
-
-
-# cherokee/post.c
-#
-e('POST_REMOVE_TEMP',
-  title = "Could not remove temporal file",
-  desc  = "The temporal file '%s' could not be removed.")
 
 
 # cherokee/template.c
