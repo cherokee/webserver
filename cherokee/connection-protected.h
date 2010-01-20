@@ -159,6 +159,7 @@ struct cherokee_connection {
 	cherokee_buffer_t             host;
 	cherokee_buffer_t             effective_directory;
 	cherokee_buffer_t             request_original;
+	cherokee_buffer_t             query_string_original;
 
 	/* Authentication
 	 */

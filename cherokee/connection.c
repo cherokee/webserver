@@ -150,6 +150,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	cherokee_buffer_init (&n->query_string);
 	cherokee_buffer_init (&n->request_original);
+	cherokee_buffer_init (&n->query_string_original);
 
 	cherokee_socket_init (&n->socket);
 	cherokee_header_init (&n->header, header_type_request);
@@ -188,6 +189,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 
 	cherokee_buffer_mrproper (&conn->request);
 	cherokee_buffer_mrproper (&conn->request_original);
+	cherokee_buffer_mrproper (&conn->query_string_original);
 	cherokee_buffer_mrproper (&conn->logger_real_ip);
 
 	cherokee_buffer_mrproper (&conn->pathinfo);
@@ -304,6 +306,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 	cherokee_buffer_clean (&conn->request);
 	cherokee_buffer_clean (&conn->request_original);
+	cherokee_buffer_clean (&conn->query_string_original);
 	cherokee_buffer_clean (&conn->logger_real_ip);
 
 	cherokee_buffer_clean (&conn->pathinfo);
@@ -1586,6 +1589,9 @@ cherokee_connection_set_custom_droot (cherokee_connection_t   *conn,
 	 */
 	if (cherokee_buffer_is_empty (&conn->request_original)) {
 		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		if (! cherokee_buffer_is_empty (&conn->query_string)) {
+			cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
+		}
 	}
 
 	if (conn->web_directory.len > 1) {
@@ -2448,6 +2454,7 @@ cherokee_connection_print (cherokee_connection_t *conn)
 	print_cbuf ("        Pathinfo", pathinfo);
 	print_cbuf ("        User Dir", userdir);
 	print_cbuf ("    Query string", query_string);
+	print_cbuf ("Query str. Orig.", query_string_original);
 	print_cbuf ("            Host", host);
 	print_cbuf ("        Redirect", redirect);
 	print_cint ("    Redirect num", respins);

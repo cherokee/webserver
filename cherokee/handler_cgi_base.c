@@ -418,6 +418,10 @@ cherokee_handler_cgi_base_build_basic_env (
 
 		if (! cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_buffer (tmp, &conn->request_original);
+			if (! cherokee_buffer_is_empty (&conn->query_string_original)) {
+				cherokee_buffer_add_char   (tmp, '?');
+				cherokee_buffer_add_buffer (tmp, &conn->query_string_original);
+			}
 		} else {
 			cherokee_buffer_add_buffer (tmp, &conn->request);
 

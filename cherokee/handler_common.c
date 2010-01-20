@@ -182,6 +182,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		 */
 		if (cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+			cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
 		}
 
 		cherokee_buffer_add (&conn->pathinfo, pathinfo, pathinfo_len);
@@ -265,6 +266,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				cherokee_buffer_clean (&conn->local_directory);
 				if (cherokee_buffer_is_empty (&conn->request_original)) {
 					cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+					cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
 				}
 
 				cherokee_buffer_clean (&conn->request);
@@ -302,6 +304,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 			if (cherokee_buffer_is_empty (&conn->request_original)) {
 				cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+				cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
 			}
 
 			cherokee_buffer_add_buffer (&conn->request, index);

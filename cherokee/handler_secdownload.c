@@ -205,6 +205,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 	 */
 	if (cherokee_buffer_is_empty (&conn->request_original)) {
 		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
 	}
 
 	cherokee_buffer_clean (&conn->request);
