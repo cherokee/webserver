@@ -79,7 +79,6 @@
 #include "fdpoll.h"
 #include "fdpoll-protected.h"
 #include "regex.h"
-#include "fcgi_manager.h"
 #include "connection-protected.h"
 #include "nonce.h"
 #include "config_reader.h"

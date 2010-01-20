@@ -39,7 +39,6 @@
 #include "header.h"
 #include "header-protected.h"
 #include "util.h"
-#include "fcgi_manager.h"
 #include "bogotime.h"
 #include "limiter.h"
 
