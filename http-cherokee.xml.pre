@@ -7,8 +7,8 @@
     Authors:
          Rodrigo Fernandez-Vizarra <rodrigo.fernandez-vizarra@sun.com>
 
-    Copyright (C) 2006-2007 Alvaro Lopez Ortega
-    
+    Copyright (C) 2006-2010 Alvaro Lopez Ortega
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of version 2 of the GNU General Public
     License as published by the Free Software Foundation.
@@ -32,28 +32,28 @@
 	Cherokee is an instance of the network/http service, it
 	is not enabled by default.
     -->
-    <instance name='cherokee' enabled='false'>    
+    <instance name='cherokee' enabled='false'>
 
 
       <!--
 	  Cherokee dependencies
       -->
       <dependency name='loopback'
-		  grouping='require_all' 
+		  grouping='require_all'
 		  restart_on='error'
 		  type='service'>
-	
+
 	<service_fmri value='svc:/network/loopback:default'/>
-	
+
       </dependency>
-      
+
       <dependency name='physical'
 		  grouping='optional_all'
 		  restart_on='error'
 		  type='service'>
 	<service_fmri value='svc:/network/physical:default'/>
       </dependency>
-      
+
 
       <!--
 	  start method
@@ -66,8 +66,8 @@
 	  <method_credential user='root' group='root' />
 	</method_context>
       </exec_method>
-      
-      
+
+
       <!--
 	  stop method
       -->
@@ -79,8 +79,8 @@
 	  <method_credential user='root' group='root' />
 	</method_context>
       </exec_method>
-      
-      
+
+
       <!--
 	  resstart method
       -->
@@ -92,14 +92,14 @@
 	  <method_credential user='root' group='root' />
 	</method_context>
       </exec_method>
-      
+
       <property_group name='startd' type='framework'>
 	<propval name='duration' type='astring' value='contract'/>
 	<propval name='ignore_error' type='astring' value='core,signal' />
-      </property_group>      
+      </property_group>
 
     </instance>
-    
+
     <!--
 	Describe the service
     -->
