@@ -20,7 +20,6 @@ error_redir.deps \
 scgi.deps \
 fcgi.deps \
 uwsgi.deps \
-fastcgi.deps \
 cgi.deps \
 streaming.deps \
 secdownload.deps \
@@ -611,34 +610,6 @@ if STATIC_HANDLER_UWSGI
 static_handler_uwsgi_src = $(handler_uwsgi)
 else
 dynamic_handler_uwsgi_lib = libplugin_uwsgi.la
-endif
-
-
-#
-# Handler fastcgi
-#
-if !STATIC_HANDLER_FASTCGI
-handlerfastcgi_cgi = handler_cgi_base.h handler_cgi_base.c
-endif
-
-handler_fastcgi = \
-$(handlerfastcgi_cgi) \
-fastcgi.h \
-fcgi_dispatcher.h \
-fcgi_dispatcher.c \
-fcgi_manager.h \
-fcgi_manager.c \
-handler_fastcgi.c \
-handler_fastcgi.h
-
-libplugin_fastcgi_la_LDFLAGS = $(module_ldflags)
-libplugin_fastcgi_la_SOURCES = $(handler_fastcgi)
-libplugin_fastcgi_la_LIBADD  = $(dynamic_handler_file_lib)
-
-if STATIC_HANDLER_FASTCGI
-static_handler_fastcgi_src = $(handler_fastcgi)
-else
-dynamic_handler_fastcgi_lib = libplugin_fastcgi.la
 endif
 
 
@@ -1391,10 +1362,6 @@ if STATIC_HANDLER_FCGI
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
 endif
-if STATIC_HANDLER_FASTCGI
-   common_cgi = handler_cgi_base.h \
-	     	 handler_cgi_base.c
-endif
 if STATIC_HANDLER_CGI
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
@@ -1558,8 +1525,6 @@ spawner.c \
 collector.h \
 collector.c
 
-#$(static_handler_fastcgi_src)
-
 
 libcherokee_config_la_SOURCES = \
 admin_client.h \
@@ -1676,8 +1641,6 @@ $(dynamic_validator_mysql_lib) \
 $(dynamic_cryptor_libssl_lib) \
 $(dynamic_balancer_round_robin_lib) \
 $(dynamic_balancer_ip_hash_lib)
-
-#$(dynamic_handler_fastcgi_lib)
 
 
 #

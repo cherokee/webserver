@@ -1427,7 +1427,6 @@ AM_CONDITIONAL(STATIC_HANDLER_DIRLIST,        grep dirlist        $conf_h >/dev/
 AM_CONDITIONAL(STATIC_HANDLER_CGI,            grep cgi            $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_FCGI,           grep fcgi           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_SCGI,           grep scgi           $conf_h >/dev/null)
-AM_CONDITIONAL(STATIC_HANDLER_FASTCGI,        grep fastcgi        $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_UWSGI,          grep uwsgi          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_REDIR,          grep redir          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_ERROR_REDIR,    grep error_redir    $conf_h >/dev/null)
