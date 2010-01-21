@@ -236,8 +236,9 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 ret_t
 cherokee_connection_clean (cherokee_connection_t *conn)
 {
-	uint32_t header_len;
-	size_t   crlf_len;
+	size_t             crlf_len;
+	uint32_t           header_len;
+	cherokee_server_t *srv         = CONN_SRV(conn);
 
 	/* I/O cache entry reference
 	 */
@@ -251,6 +252,12 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	if (conn->options & conn_op_tcp_cork) {
 		cherokee_connection_set_cork (conn, false);
 		BIT_UNSET (conn->options, conn_op_tcp_cork);
+	}
+
+	/* POST track
+	 */
+	if (srv && srv->post_track) {
+		srv->post_track->func_unregister (srv->post_track, &conn->post);
 	}
 
 	conn->phase                = phase_reading_header;
@@ -1780,21 +1787,25 @@ parse_userdir (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_get_request (cherokee_connection_t *conn)
 {
-	ret_t            ret;
-	cherokee_http_t  error_code = http_bad_request;
-	char            *host, *upgrade, *cnt;
-	cuint_t          host_len, upgrade_len, cnt_len;
+	ret_t              ret;
+	char              *host, *upgrade, *cnt;
+	cuint_t            host_len, upgrade_len, cnt_len;
+	cherokee_http_t    error_code = http_bad_request;
+	cherokee_server_t *srv        = CONN_SRV(conn);
 
 	/* Header parsing
 	 */
 	ret = cherokee_header_parse (&conn->header, &conn->incoming_header, &error_code);
-	if (unlikely (ret < ret_ok))
+	if (unlikely (ret < ret_ok)) {
 		goto error;
+	}
 
 	/* Init the POST structure if needed
 	 */
 	if (http_method_with_input (conn->header.method))
 	{
+		/* Read the POST header
+		 */
 		ret = cherokee_post_read_header (&conn->post, conn);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
@@ -2270,14 +2281,16 @@ cherokee_connection_parse_args (cherokee_connection_t *conn)
 	/* Build a new table
 	 */
 	ret = cherokee_avl_new (&conn->arguments);
-	if (unlikely(ret < ret_ok))
+	if (unlikely(ret != ret_ok)) {
 		return ret;
+	}
 
 	/* Parse the header
 	 */
 	ret = cherokee_parse_query_string (&conn->query_string, conn->arguments);
-	if (unlikely(ret < ret_ok))
+	if (unlikely(ret != ret_ok)) {
 		return ret;
+	}
 
 	return ret_ok;
 }

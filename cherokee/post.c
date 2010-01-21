@@ -54,6 +54,7 @@ cherokee_post_init (cherokee_post_t *post)
 	cherokee_buffer_init (&post->chunked.buffer);
 	cherokee_buffer_init (&post->read_header_100cont);
 	cherokee_buffer_init (&post->header_surplus);
+	cherokee_buffer_init (&post->progress_id);
 
 	return ret_ok;
 }
@@ -77,6 +78,7 @@ cherokee_post_clean (cherokee_post_t *post)
 	cherokee_buffer_mrproper (&post->chunked.buffer);
 	cherokee_buffer_mrproper (&post->read_header_100cont);
 	cherokee_buffer_mrproper (&post->header_surplus);
+	cherokee_buffer_mrproper (&post->progress_id);
 
 	return ret_ok;
 }
@@ -88,6 +90,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 	cherokee_buffer_mrproper (&post->chunked.buffer);
 	cherokee_buffer_mrproper (&post->read_header_100cont);
 	cherokee_buffer_mrproper (&post->header_surplus);
+	cherokee_buffer_mrproper (&post->progress_id);
 
 	return ret_ok;
 }

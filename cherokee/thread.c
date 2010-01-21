@@ -262,7 +262,7 @@ conn_set_mode (cherokee_thread_t        *thd,
 {
 	if (conn->socket.status == s) {
 		TRACE (ENTRIES, "Connection already in mode = %s\n", (s == socket_reading)? "reading" : "writing");
-		return ret_ok;
+		return;
 	}
 
 	TRACE (ENTRIES, "Connection mode = %s\n", (s == socket_reading)? "reading" : "writing");
@@ -1073,6 +1073,12 @@ process_active_connections (cherokee_thread_t *thd)
 			if (! http_method_with_input (conn->header.method)) {
 				conn->phase = phase_add_headers;
 				goto add_headers;
+			}
+
+			/* Register with the POST tracker
+			 */
+			if ((srv->post_track) && (conn->post.has_info)) {
+				srv->post_track->func_register (srv->post_track, conn);
 			}
 
 			conn->phase = phase_read_post;

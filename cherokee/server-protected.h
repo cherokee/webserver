@@ -57,6 +57,7 @@
 #include "cryptor.h"
 #include "logger_writer.h"
 #include "collector.h"
+#include "post_track.h"
 
 struct cherokee_server {
 	/* Exit related
@@ -92,8 +93,6 @@ struct cherokee_server {
 
 	/* Programmed tasks
 	 */
-	cherokee_collector_t      *collector;
-
 	int                        nonces_cleanup_lapse;
 	time_t                     nonces_cleanup_next;
 
@@ -107,9 +106,11 @@ struct cherokee_server {
 	int                        log_flush_lapse;
 	time_t                     log_flush_next;
 
-	/* Main socket
+	/* Extensions
 	 */
 	cherokee_cryptor_t        *cryptor;
+	cherokee_post_track_t     *post_track;
+	cherokee_collector_t      *collector;
 
 	/* System related
 	 */

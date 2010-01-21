@@ -51,6 +51,7 @@ typedef struct {
 	cherokee_post_rh_phase_t read_header_phase;
 	cherokee_buffer_t        read_header_100cont;
 	cherokee_buffer_t        header_surplus;
+	cherokee_buffer_t        progress_id;
 
 	struct {
 		off_t                      read;

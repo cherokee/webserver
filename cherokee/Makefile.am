@@ -427,7 +427,7 @@ endif
 
 
 #
-# Gen wildcard
+# Enhanced virtual hosts
 #
 gen_evhost = \
 gen_evhost.c \
@@ -440,6 +440,40 @@ if STATIC_GEN_EVHOST
 static_gen_evhost_src = $(gen_evhost)
 else
 dynamic_gen_evhost_lib = libplugin_evhost.la
+endif
+
+
+#
+# POST tracker
+#
+post_track = \
+post_track.h \
+post_track.c
+
+libplugin_post_track_la_LDFLAGS = $(module_ldflags)
+libplugin_post_track_la_SOURCES = $(post_track)
+
+if STATIC_POST_TRACK
+static_post_track_src = $(post_track)
+else
+dynamic_post_track_lib = libplugin_post_track.la
+endif
+
+
+#
+# POST reporter
+#
+handler_post_report = \
+handler_post_report.h \
+handler_post_report.c
+
+libplugin_port_report_la_LDFLAGS = $(module_ldflags)
+libplugin_port_report_la_SOURCES = $(handler_post_report)
+
+if STATIC_POST_REPORT
+static_handler_post_report_src = $(handler_post_report)
+else
+dynamic_handler_post_report_lib = libplugin_post_report.la
 endif
 
 
@@ -1422,6 +1456,9 @@ $(static_vrule_target_ip_src) \
 \
 $(static_gen_evhost_src) \
 \
+$(static_post_track_src) \
+$(static_handler_post_report_src) \
+\
 $(static_collector_rrd_src) \
 \
 $(static_handler_file_src) \
@@ -1606,6 +1643,8 @@ $(dynamic_vrule_rehost_lib) \
 $(dynamic_vrule_target_ip_lib) \
 $(dynamic_collector_rrd_lib) \
 $(dynamic_gen_evhost_lib) \
+$(dynamic_post_track_lib) \
+$(dynamic_handler_post_report_lib) \
 $(dynamic_handler_file_lib) \
 $(dynamic_handler_server_info_lib) \
 $(dynamic_handler_render_rrd_lib) \

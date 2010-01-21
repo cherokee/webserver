@@ -303,8 +303,9 @@ cherokee_generic_evhost_new (cherokee_generic_evhost_t **evhost)
 	/* Properties
 	 */
 	ret = cherokee_template_init (&n->tpl_document_root);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret_error;
+	}
 
         cherokee_template_set_token (&n->tpl_document_root, "domain",
                                      TEMPLATE_FUNC(add_domain), n, NULL);
