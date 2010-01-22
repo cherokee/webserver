@@ -70,6 +70,7 @@ ModuleBalancer.py \
 ModuleSsi.py \
 ModuleSecdownload.py \
 ModuleEmptyGif.py \
+ModulePostReport.py \
 ModuleProxy.py \
 ModuleDbslayer.py \
 ModuleStreaming.py \

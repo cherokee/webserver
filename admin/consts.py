@@ -22,6 +22,7 @@ HANDLERS = [
     ('scgi',         N_('SCGI')),
     ('uwsgi',        N_('uWSGI')),
     ('proxy',        N_('HTTP reverse proxy')),
+    ('post_report',  N_('Upload reporting')),
     ('streaming',    N_('Audio/Video streaming')),
     ('cgi',          N_('CGI')),
     ('ssi',          N_('Server Side Includes')),
@@ -176,4 +177,11 @@ COLLECTORS = [
 UTC_TIME = [
     ('',         N_('Local time')),
     ('1',        N_('UTC: Coordinated Universal Time'))
+]
+
+DWRITER_LANGS = [
+    ('json',     N_('JSON')),
+    ('python',   N_('Python')),
+    ('php',      N_('PHP')),
+    ('ruby',     N_('Ruby'))
 ]
