@@ -110,3 +110,8 @@ class HTTP_Redir (HTTP_Response):
     def __init__ (self, location, error=307):
         HTTP_Response.__init__ (self, error)
         self['Location'] = location
+
+class HTTP_XSendfile (HTTP_Response):
+    def __init__ (self, location, error=200):
+        HTTP_Response.__init__ (self, error)
+        self['X-Sendfile'] = location
