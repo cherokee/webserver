@@ -110,6 +110,7 @@ class HTTP_Redir (HTTP_Response):
     def __init__ (self, location, error=307):
         HTTP_Response.__init__ (self, error)
         self['Location'] = location
+        self.body += 'Redirecting to <a href="%s">%s</a>.' %(location, location)
 
 class HTTP_XSendfile (HTTP_Response):
     def __init__ (self, location, error=200):

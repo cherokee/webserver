@@ -25,31 +25,54 @@ import cgi
 
 from Server import publish, get_scgi
 from Widget import Widget, RenderResponse
-
+from HTTP import HTTP_Redir
 
 HEADERS = [
-    '<link type="text/css" href="/static/css/uploadify.css" rel="stylesheet" />',
-    '<script type="text/javascript" src="/static/js/swfobject.js"></script>',
-    '<script type="text/javascript" src="/static/js/jquery.uploadify.v2.1.0.min.js"></script>'
+    '<script type="text/javascript" src="/static/js/jquery.uploadProgress.js"></script>'
 ]
 
 HTML = """
-<div id="fileQueue"></div>
-<input type="file" name="uploadify" id="uploadify_%(id)s" />
-<p><a href="javascript:jQuery('#uploadify_%(id)s').uploadifyClearQueue()">Cancel All Uploads</a></p>
+<style type="text/css">
+.bar {
+  width: 300px;
+}
+
+#progress {
+  background: #eee;
+  border: 1px solid #222;
+  margin-top: 20px;
+}
+
+#progressbar {
+  width: 0px;
+  height: 24px;
+  background: #333;
+}
+</style>
+
+<form id="upload" enctype="multipart/form-data" action="%(upload_url)s" method="post">
+   <input name="file" type="file"/>
+   <input type="submit" value="Upload"/>
+</form>
+
+<div id="uploading">
+    <div id="progress" class="bar">
+       <div id="progressbar">&nbsp;</div>
+    </div>
+</div>
+
+<div id="percents"></div>
 """
 
 JS = """
-$("#uploadify_%(id)s").uploadify({
-	'uploader'       : '/static/flash/uploadify.swf',
-	'cancelImg'      : '/static/images/uploadify.cancel.png',
-	'script'         : '%(upload_url)s',
-	'auto'           : true,
-	'multi'          : false
+$('form').uploadProgress({
+	/* scripts locations for safari */
+	jqueryPath:         "/static/js/jquery-1.3.2.js",
+	uploadProgressPath: "/static/js/jquery.uploadProgress.js",
+        progressUrl:        "/progress/",
+	interval:           2000,
+	uploading:          function(upload) {$('#percents').html(upload.percents+'&#37;');}
 });
-
-//	'folder'         : 'uploads',
-//	'queueID'        : 'fileQueue',
 """
 
 class MyFieldStorage(cgi.FieldStorage):
@@ -57,10 +80,14 @@ class MyFieldStorage(cgi.FieldStorage):
         return open (os.path.join('/tmp', self.filename), 'wb')
 
 class UploadRequest:
-   def __call__ (self):
+   def __call__ (self, handler):
        scgi = get_scgi()
+
+       print "Writing the post..",
        form = MyFieldStorage (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
-       return "1"
+       print "ok"
+
+       return handler()
 
 class Uploader (Widget):
     def __init__ (self, props=None):
@@ -73,13 +100,14 @@ class Uploader (Widget):
             self.props = {}
 
         self.id = 'uplodaer%d'%(self.uniq_id)
+        handler = self.props.get('handler')
 
         # Register the uploader path
-        publish (self._url_local, UploadRequest)
+        publish (self._url_local, UploadRequest, handler=handler)
 
     def Render (self):
-        props = {'id':         self.id,
-                 'upload_url': self._url_local}
+        props = {'id':          self.id,
+                 'upload_url':  self._url_local}
 
         html = HTML %(props)
         js   = JS   %(props)
