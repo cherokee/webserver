@@ -259,6 +259,13 @@ e('HANDLER_DIRLIST_BAD_THEME',
   desc  = "Most likely someone has inadvertedly deleted some of the files of your theme. Please try to restore the files or change your theme selection.")
 
 
+# cherokee/handler_post_report.c
+#
+e('HANDLER_POST_REPORT_LANG',
+  title = "Unrecognized language '%s'",
+  desc  = "Cherokee's POST status reporter supports a number of output languages and formats, including: JSON, Python, PHP and Ruby.")
+
+
 # cherokee/handler_dbslayer.c
 #
 e('HANDLER_DBSLAYER_LANG',

@@ -445,7 +445,7 @@ cherokee_dwriter_lang_to_type (cherokee_buffer_t       *buf,
 	}
 
 	if (equal_buf_str (buf, "ruby")) {
-		props->lang = dwriter_ruby;
+		*lang = dwriter_ruby;
 		return ret_ok;
 	}
 

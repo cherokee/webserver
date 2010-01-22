@@ -49,6 +49,7 @@ cherokee_handler_post_report_configure (cherokee_config_node_t   *conf,
 					cherokee_server_t        *srv,
 					cherokee_module_props_t **_props)
 {
+	ret_t                                 ret;
 	cherokee_list_t                      *i;
 	cherokee_handler_post_report_props_t *props;
 
@@ -59,7 +60,7 @@ cherokee_handler_post_report_configure (cherokee_config_node_t   *conf,
 
 		cherokee_module_props_init_base (MODULE_PROPS(n),
 						 MODULE_PROPS_FREE(props_free));
-
+		n->lang = dwriter_json;
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -67,7 +68,12 @@ cherokee_handler_post_report_configure (cherokee_config_node_t   *conf,
 
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-		UNUSED (subconf);
+
+		ret = cherokee_dwriter_lang_to_type (&subconf->val, &props->lang);
+		if (ret != ret_ok) {
+			LOG_CRITICAL (CHEROKEE_ERROR_HANDLER_POST_REPORT_LANG, subconf->val.buf);
+			return ret_error;
+		}
 	}
 
 	return ret_ok;
@@ -107,7 +113,7 @@ cherokee_handler_post_report_new  (cherokee_handler_t      **hdl,
 	}
 
 	n->writer.pretty = true;
-	n->writer.lang   = dwriter_json;
+	n->writer.lang   = PROP_POST_REPORT(props)->lang;
 
 	cherokee_dwriter_set_buffer (&n->writer, &n->buffer);
 
