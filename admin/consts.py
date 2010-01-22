@@ -185,3 +185,8 @@ DWRITER_LANGS = [
     ('php',      N_('PHP')),
     ('ruby',     N_('Ruby'))
 ]
+
+POST_TRACKERS = [
+    ('',           N_('Disabled')),
+    ('post_track', N_('POST tracker'))
+]

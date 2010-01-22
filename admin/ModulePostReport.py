@@ -7,8 +7,8 @@ HELPS = [
     ('modules_handlers_post_report', _("POST Report"))
 ]
 
-NOTE_LANGUAGES = "Target language for which the information will be encoded. (Default: JSON)"
-
+NOTE_LANGUAGES   = "Target language for which the information will be encoded. (Default: JSON)"
+WARNING_NO_TRACK = 'The <a href="/general">Upload tracking mechanism</a> must be enabled for this handler to work.'
 
 class ModulePostReport (ModuleHandler):
     PROPERTIES = []
@@ -18,8 +18,12 @@ class ModulePostReport (ModuleHandler):
         self.show_document_root = False
 
     def _op_render (self):
-        txt  = "<h2>%s</h2>" % (_('Formatting options'))
+        txt = ''
 
+        if not self._cfg.get_val('server!post_track'):
+            txt += self.Dialog (WARNING_NO_TRACK, 'warning')
+
+        txt += "<h2>%s</h2>" % (_('Formatting options'))
         table = TableProps()
         self.AddPropOptions_Reload_Plain (table, _("Target language"),
                                           "%s!lang" % (self._prefix),
@@ -28,6 +32,4 @@ class ModulePostReport (ModuleHandler):
         return txt
 
     def _op_apply_changes (self, uri, post):
-        if not self._cfg.get_val('server!post_track'):
-            self._cfg['server!post_track'] = 'post_track'
-
+        self.ApplyChangesPrefix (self._prefix, [], post)

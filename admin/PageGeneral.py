@@ -26,16 +26,17 @@ DATA_VALIDATION = [
     ("server!chroot",           (validations.is_local_dir_exists, 'cfg')),
 ]
 
-NOTE_ADD_PORT   = N_('Defines a port that the server will listen to')
-NOTE_IPV6       = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
-NOTE_LISTEN     = N_('IP address of the interface to bind. It is usually empty.')
-NOTE_TIMEOUT    = N_('Time interval until the server closes inactive connections.')
-NOTE_TOKENS     = N_('This option allows to choose how the server identifies itself.')
-NOTE_USER       = N_('Changes the effective user. User names and IDs are accepted.')
-NOTE_GROUP      = N_('Changes the effective group. Group names and IDs are accepted.')
-NOTE_CHROOT     = N_('Jail the server inside the directory. Don\'t use it as the only security measure.')
-NOTE_TLS        = N_('Which, if any, should be the TLS/SSL backend.')
-NOTE_COLLECTORS = N_('How the usage graphics should be generated.')
+NOTE_ADD_PORT    = N_('Defines a port that the server will listen to')
+NOTE_IPV6        = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
+NOTE_LISTEN      = N_('IP address of the interface to bind. It is usually empty.')
+NOTE_TIMEOUT     = N_('Time interval until the server closes inactive connections.')
+NOTE_TOKENS      = N_('This option allows to choose how the server identifies itself.')
+NOTE_USER        = N_('Changes the effective user. User names and IDs are accepted.')
+NOTE_GROUP       = N_('Changes the effective group. Group names and IDs are accepted.')
+NOTE_CHROOT      = N_('Jail the server inside the directory. Don\'t use it as the only security measure.')
+NOTE_TLS         = N_('Which, if any, should be the TLS/SSL backend.')
+NOTE_COLLECTORS  = N_('How the usage graphics should be generated.')
+NOTE_POST_TRACKS = N_('How to track uploads/posts so its progress can be reported to the user.')
 
 HELPS = [('config_general',    N_("General Configuration")),
          ('config_quickstart', N_("Configuration Quickstart"))]
@@ -91,6 +92,12 @@ class PageGeneral (PageMenu, FormHelper):
         e = self.AddPropOptions_Reload_Module (table, _('Graphs Type'), 'server!collector',
                                                modules_available(COLLECTORS), _(NOTE_COLLECTORS))
         txt += self.Indent(str(table) + e)
+
+        txt += "<h2>%s</h2>" % (_('Upload tracking'))
+        table = TableProps()
+        self.AddPropOptions_Reload_Plain (table, _('Upload tracking'), 'server!post_track',
+                                          modules_available(POST_TRACKERS), _(NOTE_POST_TRACKS))
+        txt += self.Indent(table)
 
         return txt
 
