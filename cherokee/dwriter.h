@@ -81,6 +81,9 @@ ret_t cherokee_dwriter_dict_close (cherokee_dwriter_t *w);
 ret_t cherokee_dwriter_list_open  (cherokee_dwriter_t *w);
 ret_t cherokee_dwriter_list_close (cherokee_dwriter_t *w);
 
+/* Helpers */
+ret_t cherokee_dwriter_lang_to_type (cherokee_buffer_t *buf, cherokee_dwriter_lang_t *lang);
+
 CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_DATA_WRITER_H */

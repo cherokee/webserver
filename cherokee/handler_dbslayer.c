@@ -544,16 +544,8 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 
 		} else  if (equal_buf_str (&subconf->key, "lang")) {
 
-			if (equal_buf_str (&subconf->val, "json")) {
-				props->lang = dwriter_json;
-			} else if (equal_buf_str (&subconf->val, "python")) {
-				props->lang = dwriter_python;
-			} else if (equal_buf_str (&subconf->val, "php")) {
-				props->lang = dwriter_php;
-			} else if (equal_buf_str (&subconf->val, "ruby")) {
-				props->lang = dwriter_ruby;
-
-			} else {
+			ret = cherokee_dwriter_lang_to_type (&subconf->val, &props->lang);
+			if (ret != ret_ok) {
 				LOG_CRITICAL (CHEROKEE_ERROR_HANDLER_DBSLAYER_LANG, subconf->val.buf);
 				return ret_error;
 			}

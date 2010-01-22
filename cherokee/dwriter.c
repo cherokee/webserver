@@ -423,3 +423,31 @@ cherokee_dwriter_list_close (cherokee_dwriter_t *w)
 	ADD_NEW_LINE;
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_dwriter_lang_to_type (cherokee_buffer_t       *buf,
+			       cherokee_dwriter_lang_t *lang)
+{
+	if (equal_buf_str (buf, "json")) {
+		*lang = dwriter_json;
+		return ret_ok;
+	}
+
+	if (equal_buf_str (buf, "python")) {
+		*lang = dwriter_python;
+		return ret_ok;
+	}
+
+	if (equal_buf_str (buf, "php")) {
+		*lang = dwriter_php;
+		return ret_ok;
+	}
+
+	if (equal_buf_str (buf, "ruby")) {
+		props->lang = dwriter_ruby;
+		return ret_ok;
+	}
+
+	return ret_not_found;
+}
