@@ -468,8 +468,8 @@ handler_post_report = \
 handler_post_report.h \
 handler_post_report.c
 
-libplugin_port_report_la_LDFLAGS = $(module_ldflags)
-libplugin_port_report_la_SOURCES = $(handler_post_report)
+libplugin_post_report_la_LDFLAGS = $(module_ldflags)
+libplugin_post_report_la_SOURCES = $(handler_post_report)
 
 if STATIC_POST_REPORT
 static_handler_post_report_src = $(handler_post_report)
