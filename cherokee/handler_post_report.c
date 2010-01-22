@@ -29,6 +29,8 @@
 #include "plugin_loader.h"
 #include "util.h"
 
+#define ENTRIES "handler,post,track"
+
 
 /* Plug-in initialization
  */
@@ -159,6 +161,8 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 		cherokee_dwriter_cstring (&hdl->writer, "error");
 		cherokee_dwriter_cstring (&hdl->writer, "Tracking is disabled");
 		cherokee_dwriter_dict_close (&hdl->writer);
+
+		TRACE (ENTRIES, "Post report: '%s'\n", "disabled");
 		return ret_ok;
 	}
 
@@ -170,6 +174,8 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 		cherokee_dwriter_cstring (&hdl->writer, "error");
 		cherokee_dwriter_cstring (&hdl->writer, "Could not read the X-Progress-ID parameter");
 		cherokee_dwriter_dict_close (&hdl->writer);
+
+		TRACE (ENTRIES, "Post report: '%s'\n", "No X-Progress-ID");
 		return ret_ok;
 	}
 
@@ -182,6 +188,8 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 		cherokee_dwriter_cstring (&hdl->writer, "error");
 		cherokee_dwriter_cstring (&hdl->writer, state);
 		cherokee_dwriter_dict_close (&hdl->writer);
+
+		TRACE (ENTRIES, "Post report: '%s'\n", "Could not get info");
 		return ret_ok;
 	}
 
@@ -194,6 +202,7 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 	cherokee_dwriter_integer (&hdl->writer, received);
 	cherokee_dwriter_dict_close (&hdl->writer);
 
+	TRACE (ENTRIES, "Post report: %llu of %llu\n", received, size);
 	return ret_ok;
 }
 

@@ -23,7 +23,8 @@ uwsgi.deps \
 cgi.deps \
 streaming.deps \
 secdownload.deps \
-render_rrd.deps
+render_rrd.deps \
+post_report.deps
 
 #
 # External sources
