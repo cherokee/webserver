@@ -160,7 +160,6 @@
 	do {								\
 		if (!(expr)) {						\
 			PRINT_ERROR ("assertion `%s' failed\n", #expr);	\
-			CHEROKEE_PRINT_BACKTRACE;			\
 			return (ret);					\
 		}							\
 	} while(0)
