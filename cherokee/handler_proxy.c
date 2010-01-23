@@ -717,8 +717,8 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		/* Configure if respinned
 		 */
 		if (hdl->respinned) {
-			cherokee_socket_clean (&hdl->pconn->socket);
 			cherokee_socket_close (&hdl->pconn->socket);
+			cherokee_socket_clean (&hdl->pconn->socket);
 		}
 
 		if (! cherokee_socket_configured (&hdl->pconn->socket))
