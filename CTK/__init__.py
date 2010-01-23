@@ -39,6 +39,6 @@ from Proxy import Proxy
 from iPhoneToggle import iPhoneToggle
 from Tab import Tab
 from Dialog import Dialog
-from HTTP import HTTP_Redir, HTTP_Error, HTTP_XSendfile
+from HTTP import HTTP_Response, HTTP_Redir, HTTP_Error, HTTP_XSendfile
 from HiddenField import HiddenField
 from Uploader import Uploader
