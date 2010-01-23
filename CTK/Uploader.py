@@ -71,23 +71,26 @@ $('form').uploadProgress({
 	uploadProgressPath: "/static/js/jquery.uploadProgress.js",
         progressUrl:        "/progress/",
 	interval:           2000,
-	uploading:          function(upload) {$('#percents').html(upload.percents+'&#37;');}
+	uploading:          function(upload) {$('#percents').html(upload.percents+'&#37;');},
+        start:              function(upload) {$('#upload').hide('slow');}
 });
 """
 
 class MyFieldStorage(cgi.FieldStorage):
     def make_file (self, binary=None):
-        return open (os.path.join('/tmp', self.filename), 'wb')
+        target_path = os.path.join (self.target_dir, self.filename)
+        return open (target_path, 'w+b')
 
 class UploadRequest:
-   def __call__ (self, handler):
+   def __call__ (self, handler, target_dir):
        scgi = get_scgi()
 
-       print "Writing the post..",
+       # This obj writes the file right away. Beware: The
+       # functionality is invoked from the constructor!
+       MyFieldStorage.target_dir = target_dir
        form = MyFieldStorage (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
-       print "ok"
 
-       return handler()
+       return handler (form['file'].filename)
 
 class Uploader (Widget):
     def __init__ (self, props=None):
@@ -100,10 +103,12 @@ class Uploader (Widget):
             self.props = {}
 
         self.id = 'uplodaer%d'%(self.uniq_id)
-        handler = self.props.get('handler')
+        handler    = self.props.get('handler')
+        target_dir = self.props.get('target_dir')
 
         # Register the uploader path
-        publish (self._url_local, UploadRequest, handler=handler)
+        publish (self._url_local, UploadRequest,
+                 handler=handler, target_dir=target_dir)
 
     def Render (self):
         props = {'id':          self.id,
