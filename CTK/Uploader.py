@@ -50,29 +50,29 @@ HTML = """
 }
 </style>
 
-<form id="upload" enctype="multipart/form-data" action="%(upload_url)s" method="post">
+ <form id="%(id)s_form" enctype="multipart/form-data" action="%(upload_url)s" method="post">
    <input name="file" type="file"/>
    <input type="submit" value="Upload"/>
-</form>
+ </form>
 
-<div id="uploading">
+ <div id="uploading_%(id)s">
     <div id="progress" class="bar">
        <div id="progressbar">&nbsp;</div>
     </div>
-</div>
-
-<div id="percents"></div>
+ </div>
+ <div id="%(id)s_percents"></div>
 """
 
 JS = """
-$('form').uploadProgress({
+$('#%(id)s_form').uploadProgress({
 	/* scripts locations for safari */
 	jqueryPath:         "/static/js/jquery-1.3.2.js",
 	uploadProgressPath: "/static/js/jquery.uploadProgress.js",
+        progressBar:        "#uploading_%(id)s #progressbar",
         progressUrl:        "/progress/",
 	interval:           2000,
-	uploading:          function(upload) {$('#percents').html(upload.percents+'&#37;');},
-        start:              function(upload) {$('#upload').hide('slow');}
+	uploading:          function(upload) {$('#%(id)s_percents').html(upload.percents+'&#37;');},
+        start:              function(upload) {$('#%(id)s_form').hide('slow');}
 });
 """
 
