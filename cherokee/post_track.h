@@ -33,6 +33,7 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef ret_t (* post_track_new_t)        (void **track);
+typedef ret_t (* post_track_configure_t)  (void *track, cherokee_config_node_t *config);
 typedef ret_t (* post_track_register_t)   (void *track, cherokee_connection_t *);
 typedef ret_t (* post_track_unregister_t) (void *track, cherokee_post_t *);
 
@@ -41,6 +42,7 @@ typedef struct {
 	cherokee_module_t        module;
 
 	/* Methods */
+	post_track_configure_t   func_configure;
 	post_track_register_t    func_register;
 	post_track_unregister_t  func_unregister;
 
@@ -56,7 +58,6 @@ typedef struct {
 #define POST_TRACK(x) ((cherokee_post_track_t *)(x))
 
 ret_t cherokee_generic_post_track_new       (cherokee_post_track_t **track);
-ret_t cherokee_generic_post_track_free      (cherokee_post_track_t  *track);
 ret_t cherokee_generic_post_track_configure (cherokee_post_track_t  *track,
 					     cherokee_config_node_t *config);
 

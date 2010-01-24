@@ -301,7 +301,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	}
 
 	if (srv->post_track) {
-		cherokee_generic_post_track_free (srv->post_track);
+		MODULE(srv->post_track)->free (srv->post_track);
 	}
 
 	if (srv->collector) {
@@ -1494,6 +1494,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "post_track")) {
 		post_track_new_t        instance;
+		post_track_configure_t  configure;
 		cherokee_plugin_info_t *info      = NULL;
 
 		ret = cherokee_plugin_loader_get (&srv->loader, conf->val.buf, &info);
@@ -1505,7 +1506,8 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok)
 			return ret;
 
-		ret = cherokee_generic_post_track_configure (srv->post_track, conf);
+		configure = (post_track_configure_t) info->configure;
+		ret = configure ((void **) srv->post_track, conf);
 		if (ret != ret_ok)
 			return ret;
 

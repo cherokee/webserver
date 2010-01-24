@@ -261,6 +261,17 @@ cherokee_generic_post_track_free (cherokee_post_track_t *track)
 
 
 ret_t
+cherokee_generic_post_track_configure (cherokee_post_track_t  *track,
+				       cherokee_config_node_t *config)
+{
+	UNUSED (config);
+	UNUSED (track);
+
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_generic_post_track_new (cherokee_post_track_t **track)
 {
 	ret_t ret;
@@ -270,9 +281,9 @@ cherokee_generic_post_track_new (cherokee_post_track_t **track)
 	 */
 	cherokee_module_init_base (MODULE(n), NULL, PLUGIN_INFO_PTR(post_track));
 
-	MODULE(n)->free        = (module_func_free_t) _free;
-	n->func_register       = (post_track_register_t) _register;
-	n->func_unregister     = (post_track_register_t) _unregister;
+	MODULE(n)->free    = (module_func_free_t) _free;
+	n->func_register   = (post_track_register_t) _register;
+	n->func_unregister = (post_track_register_t) _unregister;
 
 	/* Properties
 	 */
@@ -286,16 +297,6 @@ cherokee_generic_post_track_new (cherokee_post_track_t **track)
 	}
 
 	*track = n;
-	return ret_ok;
-}
-
-ret_t
-cherokee_generic_post_track_configure (cherokee_post_track_t  *track,
-				       cherokee_config_node_t *config)
-{
-	UNUSED (config);
-	UNUSED (track);
-
 	return ret_ok;
 }
 

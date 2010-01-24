@@ -1787,11 +1787,10 @@ parse_userdir (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_get_request (cherokee_connection_t *conn)
 {
-	ret_t              ret;
-	char              *host, *upgrade, *cnt;
-	cuint_t            host_len, upgrade_len, cnt_len;
-	cherokee_http_t    error_code = http_bad_request;
-	cherokee_server_t *srv        = CONN_SRV(conn);
+	ret_t            ret;
+	char            *host, *upgrade, *cnt;
+	cuint_t          host_len, upgrade_len, cnt_len;
+	cherokee_http_t  error_code = http_bad_request;
 
 	/* Header parsing
 	 */
