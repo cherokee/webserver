@@ -25,13 +25,14 @@ import cgi
 
 from Server import publish, get_scgi
 from Widget import Widget, RenderResponse
-from HTTP import HTTP_Redir
+from PageCleaner import Uniq_Block
+
 
 HEADERS = [
     '<script type="text/javascript" src="/static/js/jquery.uploadProgress.js"></script>'
 ]
 
-HTML = """
+CSS = """
 <style type="text/css">
 .bar {
   width: 300px;
@@ -49,7 +50,9 @@ HTML = """
   background: #333;
 }
 </style>
+"""
 
+HTML = """
  <form id="%(id)s_form" enctype="multipart/form-data" action="%(upload_url)s" method="post">
    <input name="file" type="file"/>
    <input type="submit" value="Upload"/>
@@ -114,8 +117,11 @@ class Uploader (Widget):
         props = {'id':          self.id,
                  'upload_url':  self._url_local}
 
-        html = HTML %(props)
-        js   = JS   %(props)
+        raw_html  = Uniq_Block(CSS)
+        raw_html += HTML
+
+        html = raw_html %(props)
+        js   = JS       %(props)
 
         render = RenderResponse (html, js, HEADERS)
         return render
