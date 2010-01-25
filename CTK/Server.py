@@ -24,6 +24,7 @@ import re
 import json
 import pyscgi
 import threading
+import traceback
 import Cookie
 
 from Post import Post
@@ -130,8 +131,12 @@ class ServerHandler (pyscgi.SCGIHandler):
         return HTTP_Error (404)
 
     def handle_request (self):
-        content = self._do_handle()
-        self.send(str(content))
+        try:
+            content = self._do_handle()
+            self.send(str(content))
+        except:
+            trace = '<pre>%s</pre>'%(traceback.format_exc())
+            self.send(str(HTTP_Error(desc=trace)))
 
 
 class Server:
