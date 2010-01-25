@@ -114,8 +114,8 @@ class Uploader (Widget):
                  handler=handler, target_dir=target_dir)
 
     def Render (self):
-        props = {'id':          self.id,
-                 'upload_url':  self._url_local}
+        props = {'id':         self.id,
+                 'upload_url': self._url_local}
 
         raw_html  = Uniq_Block(CSS)
         raw_html += HTML
