@@ -111,3 +111,4 @@ class SubmitterButton(Widget):
         js   = FORCE_SUBMIT_JS %(locals())
 
         return RenderResponse (html, js)
+

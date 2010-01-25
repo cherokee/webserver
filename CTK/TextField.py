@@ -49,7 +49,7 @@ class TextField (Widget):
         return render
 
     def __get_error_div_props (self):
-        render = ' id="%s"' % (self._props['id'])
+        render = ' id="error_%s"' % (self._props['id'])
         if self._props.get('name'):
             render += ' key="%s"' %(self._props.get('name'))
         return render
