@@ -98,7 +98,7 @@ class Tab (Widget):
 
             num  += 1
 
-        # Rende the whole thing
+        # Render the whole thing
         tmp  = HTML_UL %({'li_tabs': ul_html})
         tmp += tab_html
 
