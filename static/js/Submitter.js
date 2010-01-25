@@ -112,6 +112,7 @@ function Submitter (id, url) {
 		  },
 		  error: function (xhr, ajaxOptions, thrownError) {
 			 self.restore_orig_values (self);
+			 alert ("Error: " + xhr.status +"\n"+ xhr.statusText);
 		  },
 		  complete:  function (XMLHttpRequest, textStatus) {
 			 /* Unlock fields */
