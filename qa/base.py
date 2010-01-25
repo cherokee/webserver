@@ -40,6 +40,7 @@ class TestBase:
         self.expected_error          = None
         self.expected_content        = None
         self.forbidden_content       = None
+        self.disabled                = False
         self._initialize()
 
     def _initialize (self):

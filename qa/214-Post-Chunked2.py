@@ -16,6 +16,11 @@ SCRIPT = """<?php
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
+
+        ### TEMPORAL MEASURE ###
+        self.disabled = True
+        ########################
+
         self.name = "POST Chunked: ~100k"
 
         self.request          = "POST /%s HTTP/1.0\r\n" % (FILE) +\

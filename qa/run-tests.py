@@ -410,7 +410,10 @@ def mainloop_iterator(objs, main_thread=True):
 
         # Iterate
         for obj in objs:
-            go_ahead = obj.Precondition()
+            if obj.disabled:
+                go_ahead = False
+            else:
+                go_ahead = obj.Precondition()
 
             if proxy and not obj.proxy_suitable:
                 go_ahead = False
@@ -428,7 +431,10 @@ def mainloop_iterator(objs, main_thread=True):
 
             if not go_ahead:
                 if not quiet:
-                    print MESSAGE_SKIPPED
+                    if obj.disabled:
+                        print MESSAGE_DISABLED
+                    else:
+                        print MESSAGE_SKIPPED
                     if not obj in skipped:
                         skipped.append(obj)
                 continue
