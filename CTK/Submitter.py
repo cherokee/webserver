@@ -22,6 +22,7 @@
 
 from consts import *
 from Table import Table
+from Widget import Widget
 from RawHTML import RawHTML
 from Container import Container
 from TextField import TextField
@@ -29,7 +30,7 @@ from Widget import RenderResponse
 from PageCleaner import Uniq_Block
 
 HTML = """
-<div id="submitter%(id_widget)d">
+<div id="submitter%(id_widget)d" class="submitter">
  %(html)s
  <div id="notice"></div>
 </div>
@@ -78,3 +79,35 @@ class Submitter (Container):
 
         my.clean_up_headers()
         return my
+
+
+
+FORCE_SUBMIT_JS = """
+$("#%(id)s").click(function() {
+    /* Figure the widget number of the Submitter */
+    var submitter     = $('#%(id)s').parent('.submitter');
+    var submitter_num = submitter.attr('id').replace('submitter','');
+
+    /* Invoke its submit method */
+    submit_obj = eval("submit_" + submitter_num);
+    submit_obj.submit_form (submit_obj);
+});
+"""
+
+class SubmitterButton(Widget):
+    def __init__ (self, caption="Submit"):
+        Widget.__init__ (self)
+
+        self.id      = "button_%d" %(self.uniq_id)
+        self.caption = caption
+
+    # Public interface
+    #
+    def Render (self):
+        id      = self.id
+        caption = self.caption
+
+        html = '<input id="%(id)s" type="button" value="%(caption)s" />' %(locals())
+        js   = FORCE_SUBMIT_JS %(locals())
+
+        return RenderResponse (html, js)

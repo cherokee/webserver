@@ -23,7 +23,7 @@
 # Generic
 from Widget import Widget
 from Container import Container
-from Submitter import Submitter
+from Submitter import Submitter, SubmitterButton
 from Page import Page
 from Config import Config
 
