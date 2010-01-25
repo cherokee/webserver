@@ -36,6 +36,7 @@ vserver!10!rule!200!match = directory
 vserver!10!rule!200!match!directory = /static
 vserver!10!rule!200!match!final = 1
 vserver!10!rule!100!handler = scgi
+vserver!10!rule!100!handler!xsendfile = 1
 vserver!10!rule!100!handler!balancer = round_robin
 vserver!10!rule!100!handler!balancer!source!1 = 1
 vserver!10!rule!100!handler!iocache = 0
