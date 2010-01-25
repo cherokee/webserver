@@ -84,8 +84,7 @@ class HTTP_Response:
             self['Content-Length'] = len(self.body)
 
         # Build the HTTP response
-        hdr  = "%d %s\r\n" %(self.error, HTTP_Response.DESC[self.error])
-        hdr += "Status: %d\r\n" %(self.error)
+        hdr  = "Status: %d\r\n" %(self.error)
         hdr += "\r\n".join (self.headers) + '\r\n'
 
         # No body replies: RFC2616 4.3
