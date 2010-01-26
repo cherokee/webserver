@@ -435,13 +435,19 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 	ret_t                     ret;
 	cherokee_connection_t    *conn     = HANDLER_CONN(cgi);
 	cherokee_socket_status_t  blocking = socket_closed;
+	cherokee_boolean_t        did_IO   = false;
 
 	if (! conn->post.has_info) {
 		return ret_ok;
 	}
 
-	ret = cherokee_post_send_to_fd (&conn->post, conn, &conn->socket,
-					cgi->pipeOutput, NULL, &blocking);
+	ret = cherokee_post_send_to_fd (&conn->post, &conn->socket,
+					cgi->pipeOutput, NULL, &blocking, &did_IO);
+
+	if (did_IO) {
+		cherokee_connection_update_timeout (conn);
+	}
+
 	switch (ret) {
 	case ret_ok:
 		break;

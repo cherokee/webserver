@@ -131,8 +131,9 @@ ret_t cherokee_handler_free_base   (cherokee_handler_t  *hdl);
  */
 ret_t cherokee_handler_init        (cherokee_handler_t  *hdl);
 ret_t cherokee_handler_free        (cherokee_handler_t  *hdl);
-ret_t cherokee_handler_step        (cherokee_handler_t  *hdl, cherokee_buffer_t *buffer);
+ret_t cherokee_handler_read_post   (cherokee_handler_t  *hdl);
 ret_t cherokee_handler_add_headers (cherokee_handler_t  *hdl, cherokee_buffer_t *buffer);
+ret_t cherokee_handler_step        (cherokee_handler_t  *hdl, cherokee_buffer_t *buffer);
 
 /* Handler properties methods
  */

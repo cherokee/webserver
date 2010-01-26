@@ -396,9 +396,19 @@ cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 	ret_t                     ret;
 	cherokee_connection_t    *conn     = HANDLER_CONN(hdl);
 	cherokee_socket_status_t  blocking = socket_closed;
+	cherokee_boolean_t        did_IO   = false;
 
-	ret = cherokee_post_send_to_socket (&conn->post, conn, &conn->socket,
-					    &hdl->socket, NULL, &blocking);
+	/* Client Socket -> Back-end SCGI
+	 */
+	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
+					    &hdl->socket, NULL, &blocking, &did_IO);
+
+	if (did_IO) {
+		cherokee_connection_update_timeout (conn);
+	}
+
+	/* Check return
+	 */
 	switch (ret) {
 	case ret_ok:
 		break;

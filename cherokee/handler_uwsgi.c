@@ -422,6 +422,7 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 	cherokee_connection_t          *conn     = HANDLER_CONN(hdl);
 	cherokee_socket_status_t        blocking = socket_closed;
 	cherokee_handler_uwsgi_props_t *props    = HANDLER_UWSGI_PROPS(hdl);
+	cherokee_boolean_t              did_IO   = false;
 
 	/* Should it send the post?
 	 */
@@ -431,8 +432,13 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 
 	/* Send it
 	 */
-	ret = cherokee_post_send_to_socket (&conn->post, conn, &conn->socket,
-					    &hdl->socket, NULL, &blocking);
+	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
+					    &hdl->socket, NULL, &blocking, &did_IO);
+
+	if (did_IO) {
+		cherokee_connection_update_timeout (conn);
+	}
+
 	switch (ret) {
 	case ret_ok:
 		break;

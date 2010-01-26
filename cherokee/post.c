@@ -532,11 +532,11 @@ do_send_socket (cherokee_socket_t        *sock,
 
 ret_t
 cherokee_post_send_to_socket (cherokee_post_t          *post,
-			      cherokee_connection_t    *conn,
 			      cherokee_socket_t        *sock_in,
 			      cherokee_socket_t        *sock_out,
 			      cherokee_buffer_t        *tmp,
-			      cherokee_socket_status_t *blocking)
+			      cherokee_socket_status_t *blocking,
+			      cherokee_boolean_t       *did_IO)
 {
 	ret_t              ret;
 	cherokee_buffer_t *buffer = tmp ? tmp : &post->send.buffer;
@@ -560,7 +560,7 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 
 		/* Did something, increase timeout
 		 */
-		cherokee_connection_update_timeout (conn);
+		*did_IO = true;
 
 		/* Write it
 		 */
@@ -587,7 +587,7 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 
 			/* Did something, increase timeout
 			 */
-			cherokee_connection_update_timeout (conn);
+			*did_IO = true;
 		}
 
 		if (! cherokee_buffer_is_empty (buffer)) {
@@ -614,11 +614,11 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 
 ret_t
 cherokee_post_send_to_fd (cherokee_post_t          *post,
-			  cherokee_connection_t    *conn,
 			  cherokee_socket_t        *sock_in,
 			  int                       fd_out,
 			  cherokee_buffer_t        *tmp,
-			  cherokee_socket_status_t *blocking)
+			  cherokee_socket_status_t *blocking,
+			  cherokee_boolean_t       *did_IO)
 {
 	ret_t              ret;
 	int                r;
@@ -644,7 +644,7 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 
 		/* Did something, increase timeout
 		 */
-		cherokee_connection_update_timeout (conn);
+		*did_IO = true;
 
 		/* Write it
 		 */
@@ -673,7 +673,7 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 
 			/* Did something, increase timeout
 			 */
-			cherokee_connection_update_timeout (conn);
+			*did_IO = true;
 		}
 
 		/* Next iteration
