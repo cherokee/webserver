@@ -617,6 +617,10 @@ send_post (cherokee_handler_fcgi_t *hdl,
 
 		TRACE (ENTRIES",post", "Post buffer.len %d\n", buf->len);
 
+		/* Did something, increase timeout
+		 */
+		cherokee_connection_update_timeout (conn);
+
 		/* Complete the header
 		 */
 		if (buf->len > sizeof(FCGI_Header)) {
@@ -651,6 +655,12 @@ send_post (cherokee_handler_fcgi_t *hdl,
                         }
 		}
 
+		/* Did something, increase timeout
+		 */
+		cherokee_connection_update_timeout (conn);
+
+		/* Next iteration
+		 */
 		if (! cherokee_buffer_is_empty (buf)) {
 			return ret_eagain;
 		}

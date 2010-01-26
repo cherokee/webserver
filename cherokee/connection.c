@@ -724,6 +724,8 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 ret_t
 cherokee_connection_read_post (cherokee_connection_t *conn)
 {
+	/* Shortcut
+	 */
 	if (conn->handler->read_post == NULL) {
 		return ret_ok;
 	}
@@ -2520,7 +2522,7 @@ cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 	case phase_tls_handshake:     return "TLS handshake";
 	case phase_reading_header:    return "Reading header";
 	case phase_processing_header: return "Processing header";
-	case phase_read_post:         return "Read POST";
+	case phase_reading_post:      return "Reading POST";
 	case phase_setup_connection:  return "Setup connection";
 	case phase_init:              return "Init connection";
 	case phase_add_headers:       return "Add headers";
@@ -2591,4 +2593,22 @@ cherokee_connection_sleep (cherokee_connection_t *conn,
 {
 	conn->limit_blocked_until = cherokee_bogonow_msec + msecs;
 	return ret_ok;
+}
+
+
+void
+cherokee_connection_update_timeout (cherokee_connection_t *conn)
+{
+	if (conn->timeout_lapse == -1) {
+		TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
+		       conn, cherokee_connection_get_phase_str (conn), CONN_SRV(conn)->timeout);
+
+		conn->timeout = cherokee_bogonow_now + CONN_SRV(conn)->timeout;
+		return;
+	}
+
+	TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
+	       conn, cherokee_connection_get_phase_str (conn), conn->timeout_lapse);
+
+	conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
 }

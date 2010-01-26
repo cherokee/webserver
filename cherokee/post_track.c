@@ -131,6 +131,14 @@ _purge_unreg (cherokee_post_track_t *track)
 	list_for_each_safe (i, j, &track->posts_list) {
 		entry = (cherokee_post_track_entry_t *)i;
 
+		/* It still in use
+		 */
+		if (entry->unregistered_at == 0) {
+			continue;
+		}
+
+		/* It has not timed out
+		 */
 		if (cherokee_bogonow_now < entry->unregistered_at + TIMEOUT) {
 			continue;
 		}

@@ -640,17 +640,10 @@ process_active_connections (cherokee_thread_t *thd)
 		/* Update the connection timeout
 		 */
 		if ((conn->phase != phase_reading_header) &&
+		    (conn->phase != phase_reading_post) &&
 		    (conn->phase != phase_lingering))
 		{
-			if (conn->timeout_lapse == -1) {
-				TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
-				       conn, cherokee_connection_get_phase_str (conn), srv->timeout);
-				conn->timeout = cherokee_bogonow_now + srv->timeout;
-			} else {
-				TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
-				       conn, cherokee_connection_get_phase_str (conn), conn->timeout_lapse);
-				conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
-			}
+			cherokee_connection_update_timeout (conn);
 		}
 
 		/* Maybe update traffic counters
@@ -1081,9 +1074,9 @@ process_active_connections (cherokee_thread_t *thd)
 				srv->post_track->func_register (srv->post_track, conn);
 			}
 
-			conn->phase = phase_read_post;
+			conn->phase = phase_reading_post;
 
-		case phase_read_post:
+		case phase_reading_post:
 
 			/* Read/Send the POST info
 			 */

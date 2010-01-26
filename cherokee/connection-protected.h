@@ -76,7 +76,7 @@ typedef enum {
 	phase_processing_header,
 	phase_setup_connection,
 	phase_init,
-	phase_read_post,
+	phase_reading_post,
 	phase_add_headers,
 	phase_send_headers,
 	phase_steping,
@@ -275,6 +275,7 @@ void  cherokee_connection_set_chunked_encoding   (cherokee_connection_t *conn);
 int   cherokee_connection_should_include_length  (cherokee_connection_t *conn);
 ret_t cherokee_connection_instance_encoder       (cherokee_connection_t *conn);
 ret_t cherokee_connection_sleep                  (cherokee_connection_t *conn, cherokee_msec_t msecs);
+void  cherokee_connection_update_timeout         (cherokee_connection_t *conn);
 
 /* Iteration
  */
