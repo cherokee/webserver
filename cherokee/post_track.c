@@ -283,7 +283,7 @@ cherokee_generic_post_track_new (cherokee_post_track_t **track)
 
 	MODULE(n)->free    = (module_func_free_t) _free;
 	n->func_register   = (post_track_register_t) _register;
-	n->func_unregister = (post_track_register_t) _unregister;
+	n->func_unregister = (post_track_unregister_t) _unregister;
 
 	/* Properties
 	 */
