@@ -532,6 +532,7 @@ do_send_socket (cherokee_socket_t        *sock,
 
 ret_t
 cherokee_post_send_to_socket (cherokee_post_t          *post,
+			      cherokee_connection_t    *conn,
 			      cherokee_socket_t        *sock_in,
 			      cherokee_socket_t        *sock_out,
 			      cherokee_buffer_t        *tmp,
@@ -544,6 +545,8 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 	case cherokee_post_send_phase_read:
 		TRACE (ENTRIES, "Post send, phase: %s\n", "read");
 
+		/* Read from the client
+		 */
 		ret = cherokee_post_read (post, sock_in, buffer);
 		switch (ret) {
 		case ret_ok:
@@ -555,6 +558,12 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 			return ret;
 		}
 
+		/* Did something, increase timeout
+		 */
+		cherokee_connection_update_timeout (conn);
+
+		/* Write it
+		 */
 		TRACE (ENTRIES, "Post buffer.len %d\n", buffer->len);
 		post->send.phase = cherokee_post_send_phase_write;
 
@@ -575,6 +584,10 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 				RET_UNKNOWN(ret);
 				return ret_error;
                         }
+
+			/* Did something, increase timeout
+			 */
+			cherokee_connection_update_timeout (conn);
 		}
 
 		if (! cherokee_buffer_is_empty (buffer)) {
@@ -601,6 +614,7 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 
 ret_t
 cherokee_post_send_to_fd (cherokee_post_t          *post,
+			  cherokee_connection_t    *conn,
 			  cherokee_socket_t        *sock_in,
 			  int                       fd_out,
 			  cherokee_buffer_t        *tmp,
@@ -615,6 +629,8 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 	case cherokee_post_send_phase_read:
 		TRACE (ENTRIES, "Post send, phase: %s\n", "read");
 
+		/* Read from the client
+		 */
 		ret = cherokee_post_read (post, sock_in, buffer);
 		switch (ret) {
 		case ret_ok:
@@ -626,6 +642,12 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 			return ret;
 		}
 
+		/* Did something, increase timeout
+		 */
+		cherokee_connection_update_timeout (conn);
+
+		/* Write it
+		 */
 		TRACE (ENTRIES, "Post buffer.len %d\n", buffer->len);
 		post->send.phase = cherokee_post_send_phase_write;
 
@@ -648,8 +670,14 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 			}
 
 			cherokee_buffer_move_to_begin (buffer, r);
+
+			/* Did something, increase timeout
+			 */
+			cherokee_connection_update_timeout (conn);
 		}
 
+		/* Next iteration
+		 */
 		if (! cherokee_buffer_is_empty (buffer)) {
 			return ret_eagain;
 		}

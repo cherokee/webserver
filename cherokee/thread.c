@@ -1085,7 +1085,11 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				break;
 			case ret_eagain:
+				/* Blocking on socket read */
 				conn_set_mode (thd, conn, socket_reading);
+				continue;
+			case ret_deny:
+				/* Blocking on back-end write */
 				continue;
 			case ret_eof:
 			case ret_error:

@@ -631,7 +631,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 	cherokee_connection_t    *conn     = HANDLER_CONN(hdl);
 	cherokee_socket_status_t  blocking = socket_closed;
 
-	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
+	ret = cherokee_post_send_to_socket (&conn->post, conn, &conn->socket,
 					    &hdl->pconn->socket, NULL, &blocking);
 	switch (ret) {
 	case ret_ok:
@@ -642,6 +642,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
 							     hdl->pconn->socket.socket,
 							     FDPOLL_MODE_WRITE, false);
+			return ret_deny;
 		}
 		return ret_eagain;
 

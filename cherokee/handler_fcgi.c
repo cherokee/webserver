@@ -560,7 +560,8 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 
 
 static ret_t
-do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
+do_send (cherokee_handler_fcgi_t *hdl,
+	 cherokee_buffer_t       *buffer)
 {
 	ret_t                  ret;
 	size_t                 written = 0;
@@ -581,10 +582,6 @@ do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 
 	cherokee_buffer_move_to_begin (buffer, written);
 	TRACE (ENTRIES, "sent=%d, remaining=%d\n", written, buffer->len);
-
-	if (! cherokee_buffer_is_empty (buffer)) {
-		return ret_eagain;
-	}
 
 	return ret_ok;
 }
@@ -662,7 +659,11 @@ send_post (cherokee_handler_fcgi_t *hdl,
 		/* Next iteration
 		 */
 		if (! cherokee_buffer_is_empty (buf)) {
-			return ret_eagain;
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							     HANDLER_CONN(hdl),
+							     hdl->socket.socket,
+							     FDPOLL_MODE_WRITE, false);
+			return ret_deny;
 		}
 
 		if (! cherokee_post_read_finished (&conn->post)) {
@@ -731,8 +732,13 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		/* Send the header
 		 */
 		ret = do_send (hdl, &hdl->write_buffer);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			return ret;
+		}
+
+		if (! cherokee_buffer_is_empty (&hdl->write_buffer)) {
+			return ret_eagain;
+		}
 
 		break;
 	}

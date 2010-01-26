@@ -95,7 +95,9 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 
 	switch (ret) {
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), HANDLER_CONN(cgi), cgi->pipeInput, 0, false);
+		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
+						     HANDLER_CONN(cgi), cgi->pipeInput,
+						     FDPOLL_MODE_READ, false);
 		return ret_eagain;
 
 	case ret_ok:
@@ -438,15 +440,17 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 		return ret_ok;
 	}
 
-	ret = cherokee_post_send_to_fd (&conn->post, &conn->socket,
+	ret = cherokee_post_send_to_fd (&conn->post, conn, &conn->socket,
 					cgi->pipeOutput, NULL, &blocking);
 	switch (ret) {
 	case ret_ok:
 		break;
 	case ret_eagain:
 		if (blocking == socket_writing) {
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn,
-							     cgi->pipeOutput, 1, false);
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
+							     conn, cgi->pipeOutput,
+							     FDPOLL_MODE_WRITE, false);
+			return ret_deny;
 		}
 		return ret_eagain;
 	default:
