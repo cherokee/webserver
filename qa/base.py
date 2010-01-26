@@ -375,8 +375,9 @@ class TestBase:
 
 class TestCollection:
     def __init__ (self):
-        self.tests = []
-        self.num   = 0
+        self.tests    = []
+        self.num      = 0
+        self.disabled = False
 
     def Add (self, test):
         self.num += 1
