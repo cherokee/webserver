@@ -102,32 +102,43 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
 
+	/* Warning: If s web server collects data (rrd collector) and
+	 * renders graphs (handler render_rrd) it calls this function
+	 * twice with the same object. Take that in mind.
+	 */
+
 	/* RRDtool binary
 	 */
-	ret = cherokee_config_node_get (config, "rrdtool_path", &subconf);
-	if (ret == ret_ok) {
-		cherokee_buffer_add_buffer (&rrd_conn->path_rrdtool, &subconf->val);
-	} else {
-		ret = cherokee_find_exec_in_path ("rrdtool", &rrd_conn->path_rrdtool);
-		if (ret != ret_ok) {
-			rrd_conn->disabled = true;
-			LOG_ERROR (CHEROKEE_ERROR_RRD_NO_BINARY, getenv("PATH"));
+	if (cherokee_buffer_is_empty (&rrd_conn->path_rrdtool)) {
+		ret = cherokee_config_node_get (config, "rrdtool_path", &subconf);
+		if (ret == ret_ok) {
+			cherokee_buffer_add_buffer (&rrd_conn->path_rrdtool, &subconf->val);
+		} else {
+			ret = cherokee_find_exec_in_path ("rrdtool", &rrd_conn->path_rrdtool);
+			if (ret != ret_ok) {
+				rrd_conn->disabled = true;
+				LOG_ERROR (CHEROKEE_ERROR_RRD_NO_BINARY, getenv("PATH"));
+			}
 		}
 	}
 
 	/* RRDtool databases directory
 	 */
-	ret = cherokee_config_node_get (config, "database_dir", &subconf);
-	if (ret == ret_ok) {
-		cherokee_buffer_add_buffer (&rrd_conn->path_databases, &subconf->val);
-	} else {
-		cherokee_buffer_add_str (&rrd_conn->path_databases, CHEROKEE_RRD_DIR);
+	if (cherokee_buffer_is_empty (&rrd_conn->path_databases)) {
+		ret = cherokee_config_node_get (config, "database_dir", &subconf);
+		if (ret == ret_ok) {
+			cherokee_buffer_add_buffer (&rrd_conn->path_databases, &subconf->val);
+		} else {
+			cherokee_buffer_add_str (&rrd_conn->path_databases, CHEROKEE_RRD_DIR);
+		}
 	}
 
 	/* Build the image cache directory
 	 */
-	cherokee_tmp_dir_copy  (&rrd_conn->path_img_cache);
-	cherokee_buffer_add_va (&rrd_conn->path_img_cache, "/cherokee/rrd-cache");
+	if (cherokee_buffer_is_empty (&rrd_conn->path_img_cache)) {
+		cherokee_tmp_dir_copy  (&rrd_conn->path_img_cache);
+		cherokee_buffer_add_va (&rrd_conn->path_img_cache, "/cherokee/rrd-cache");
+	}
 
 	return ret_ok;
 }
