@@ -248,7 +248,8 @@ run-tests.py \
 240-utf8-dir1.py \
 241-utf8-pathinfo1.py \
 242-utf8-pathinfo2.py \
-243-custom-error-1.py
+243-custom-error-1.py \
+244-Directory-Overwrite.py
 
 test:
 	./run-tests.py
