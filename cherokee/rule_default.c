@@ -39,13 +39,10 @@ match (cherokee_rule_t         *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
+	UNUSED(rule);
 	UNUSED(ret_conf);
 
-	if (rule->config.handler_new_func != NULL) {
-		cherokee_buffer_clean (&conn->web_directory);
-		cherokee_buffer_add_str (&conn->web_directory, "/");
-
-	} else if (cherokee_buffer_is_empty (&conn->web_directory)) {
+	if (cherokee_buffer_is_empty (&conn->web_directory)) {
 		cherokee_buffer_add_str (&conn->web_directory, "/");
 	}
 

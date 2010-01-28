@@ -89,7 +89,9 @@ match (cherokee_rule_directory_t *rule,
 
 	/* Copy the web directory property
 	 */
-	if (RULE(rule)->config.handler_new_func != NULL) {
+	if ((RULE(rule)->config.handler_new_func != NULL) ||
+	    (RULE(rule)->config.document_root != NULL))
+	{
 		cherokee_buffer_clean      (&conn->web_directory);
 		cherokee_buffer_add_buffer (&conn->web_directory, &rule->directory);
 	}
