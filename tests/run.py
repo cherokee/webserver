@@ -17,6 +17,8 @@ def write_cherokee_conf (test):
                              'vserver!10!document_root = ' + root)
     config = config.replace ('source!1!interpreter = /usr/bin/true',
                              'source!1!interpreter = ' + test_path)
+    config = config.replace ('vserver!10!rule!200!document_root = /var/www/static',
+                             'vserver!10!rule!200!document_root = %s/static' %(root))
 
     tempfd, tempname = tempfile.mkstemp()
     os.write(tempfd, config)

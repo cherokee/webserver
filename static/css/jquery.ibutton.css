@@ -37,7 +37,7 @@
   top: 0;
   left: 0;
   width: 0;
-  background: transparent url(/static/images/ibutton-slider-default.png) no-repeat scroll 0 -27px;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 0 -27px;
   z-index: 3;
   padding-left: 3px;
 	/* set default width based on ON/OFF labels */
@@ -48,14 +48,14 @@
   height: 100%;
   width: 100%;
   padding-right: 3px;
-  background: transparent url(/static/images/ibutton-slider-default.png) no-repeat scroll 100% -27px;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 100% -27px;
   z-index: 3;
 }
 
 .ibutton-handle-middle {
   height: 100%;
   width: 100%;
-  background: transparent url(/static/images/ibutton-slider-default.png) no-repeat scroll 50% -27px;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 50% -27px;
   z-index: 3;
 }
 
@@ -74,7 +74,7 @@ div.ibutton-label-on, div.ibutton-label-off {
   top: 0;
   padding-top: 5px;
   overflow: hidden;
-  background: transparent url(/static/images/ibutton-slider-default.png) no-repeat scroll 0 0;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 0 0;
 }
 
 div.ibutton-label-on {
@@ -126,7 +126,7 @@ div.ibutton-label-off span {
 	position: absolute;
 	top: 4px;
 	z-index: 2;
-	background: transparent url(/static/images/ibutton-slider-default.png) no-repeat scroll 0 -4px;
+	background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 0 -4px;
 	width: 3px;
 	height: 20px;
 }

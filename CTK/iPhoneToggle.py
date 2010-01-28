@@ -23,8 +23,8 @@
 from Widget import Widget, RenderResponse
 
 HEADERS = [
-    '<script type="text/javascript" src="/static/js/jquery.ibutton.js"></script>',
-    '<link type="text/css" href="/static/css/jquery.ibutton.css" rel="stylesheet" />'
+    '<script type="text/javascript" src="/CTK/js/jquery.ibutton.js"></script>',
+    '<link type="text/css" href="/CTK/css/jquery.ibutton.css" rel="stylesheet" />'
 ]
 
 HTML = """

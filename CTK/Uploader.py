@@ -29,7 +29,7 @@ from PageCleaner import Uniq_Block
 
 
 HEADERS = [
-    '<script type="text/javascript" src="/static/js/jquery.uploadProgress.js"></script>'
+    '<script type="text/javascript" src="/CTK/js/jquery.uploadProgress.js"></script>'
 ]
 
 CSS = """
@@ -69,8 +69,8 @@ HTML = """
 JS = """
 $('#%(id)s_form').uploadProgress({
 	/* scripts locations for safari */
-	jqueryPath:         "/static/js/jquery-1.3.2.js",
-	uploadProgressPath: "/static/js/jquery.uploadProgress.js",
+	jqueryPath:         "/CTK/js/jquery-1.3.2.js",
+	uploadProgressPath: "/CTK/js/jquery.uploadProgress.js",
         progressBar:        "#uploading_%(id)s #progressbar",
         progressUrl:        "/progress/",
 	interval:           2000,

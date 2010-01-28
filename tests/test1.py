@@ -24,7 +24,7 @@ class default:
         a.Add ('Name',    CTK.TextField({'name': "server!uno"}),    'Example 1')
         a.Add ('Surname', CTK.TextField({'name': "server!dos"}),    'Lalala')
         a.Add ('Nick',    CTK.TextField({'name': "server!tri"}),    'Oh uh ah!')
-        a.Add ('Active',  CTK.Checkbox ({'name': "server!active"}), 'Nuevo')
+        a.Add ('Active',  CTK.Checkbox ({'name': "server!active", 'checked':1}), 'Nuevo')
 
         b = CTK.PropsTableAuto ('/apply')
         b.Add ('Elige',   CTK.Combobox ({'name': "server!elec", 'selected': "two"}, OPTIONS), 'la lista')

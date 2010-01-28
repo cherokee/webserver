@@ -50,7 +50,7 @@ $("input:first").focus();
 """
 
 HEADER = [
-    '<script type="text/javascript" src="/static/js/Submitter.js"></script>'
+    '<script type="text/javascript" src="/CTK/js/Submitter.js"></script>'
 ]
 
 class Submitter (Container):

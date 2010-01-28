@@ -23,8 +23,8 @@
 from Widget import Widget, RenderResponse
 
 HEADERS = [
-    '<link type="text/css" href="/static/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" />',
-    '<script type="text/javascript" src="/static/js/jquery-ui-1.7.2.custom.min.js"></script>'
+    '<link type="text/css" href="/CTK/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" />',
+    '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>'
 ]
 
 HTML = """

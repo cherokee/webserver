@@ -41,8 +41,8 @@ DEFAULT_PAGE_TEMPLATE = """\
 
 HEADERS = [
     '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
-    '<script type="text/javascript" src="/static/js/common.js"></script>',
-    '<script type="text/javascript" src="/static/js/jquery-1.3.2.js"></script>'
+    '<script type="text/javascript" src="/CTK/js/common.js"></script>',
+    '<script type="text/javascript" src="/CTK/js/jquery-1.3.2.js"></script>'
 ]
 
 def uniq (seq):
