@@ -26,6 +26,7 @@ import pyscgi
 import threading
 import traceback
 import Cookie
+import Config
 
 from Post import Post
 from HTTP import HTTP_Response, HTTP_Error
@@ -277,6 +278,8 @@ class _Request:
     url  = property (_get_request_url)
     scgi = property (_get_scgi_conn)
 
+
 cookie  = _Cookie()
 post    = _Post()
 request = _Request()
+cfg     = Config.Config()

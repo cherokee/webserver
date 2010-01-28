@@ -172,13 +172,16 @@ class Config:
 
         # Build ConfigNode tree
         if file:
-            try:
-                f = open (file, "r")
-            except:
-                pass
-            else:
-                self._parse (f.read())
-                f.close()
+            self.load()
+
+    def load (self):
+        try:
+            f = open (self.file, "r")
+        except:
+            pass
+        else:
+            self._parse (f.read())
+            f.close()
 
     def _create_path (self, path):
         node = self.root
