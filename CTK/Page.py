@@ -51,7 +51,7 @@ def uniq (seq):
     return noDupes
 
 class Page (Container):
-    def __init__ (self, template_filename=None, headers=None):
+    def __init__ (self, template=None, headers=None):
         Container.__init__ (self)
 
         if headers:
@@ -59,8 +59,8 @@ class Page (Container):
         else:
             self._headers = HEADERS
 
-        if template_filename:
-            self._template = Template (filename = template_filename)
+        if template:
+            self._template = template
         else:
             self._template = Template (content = DEFAULT_PAGE_TEMPLATE)
 
@@ -78,14 +78,18 @@ class Page (Container):
         self._headers += render.headers
         head = "\n".join (uniq(self._headers))
 
-        # Misc properties
-        body_props = ''
-
         # Build the <body>
         if not render.js:
             body = render.html
         else:
             body = render.html + HTML_JS_ON_READY_BLOCK %(render.js)
+
+        # Set up the template
+        self._template['head'] = head
+        self._template['body'] = body
+
+        if not self._template['body_props']:
+            self._template['body_props'] = ''
 
         txt = self._template.Render()
         return Postprocess (txt)

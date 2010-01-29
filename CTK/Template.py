@@ -34,6 +34,7 @@ class Template (Widget):
         Widget.__init__ (self)
         self.filename = None
         self.content  = None
+        self.vars     = {}
 
         if kwargs.has_key('filename'):
             self.filename = kwargs['filename']
@@ -65,16 +66,25 @@ class Template (Widget):
         else:
             return self.content
 
-    def Render (self):
-        vars = globals()
-        vars.update (inspect.currentframe(1).f_locals)
+    def __setitem__ (self, key, val):
+        self.vars[key] = val
 
+    def __getitem__ (self, key):
+        return self.vars.get(key)
+
+    def Render (self):
         content = self._content_get()
         while True:
             prev = content[:]
-            content = content % (vars)
+            content = content % (self.vars)
 
             if content == prev:
                 break
 
         return content
+
+    def _figure_vars (self):
+        vars = globals()
+        vars.update (inspect.currentframe(1).f_locals)
+        return vars
+
