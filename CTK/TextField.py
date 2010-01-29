@@ -23,7 +23,7 @@
 from Table import Table
 from RawHTML import RawHTML
 from Widget import Widget, RenderResponse
-
+from Server import cfg
 
 class TextField (Widget):
     def __init__ (self, props=None):
@@ -68,3 +68,19 @@ class TextFieldPassword (TextField):
     def __init__ (self, *a, **kw):
         TextField.__init__ (self, *a, **kw)
         self.type = "password"
+
+class TextCfg (TextField):
+    def __init__ (self, key, props=None):
+        if not props:
+            props = {}
+
+        # Read the key value
+        val = cfg.get_val(key)
+        if val:
+            props['value'] = val
+
+        # Other properties
+        props['name'] = key
+
+        # Init parent
+        TextField.__init__ (self, props)

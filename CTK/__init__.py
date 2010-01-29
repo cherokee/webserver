@@ -30,7 +30,7 @@ from Config import Config
 # Widgets
 from Table import Table, TableFixed
 from RawHTML import RawHTML
-from TextField import TextField, TextFieldPassword
+from TextField import TextField, TextFieldPassword, TextCfg
 from Checkbox import Checkbox, CheckCfg
 from Combobox import Combobox, ComboCfg
 from PropsTable import PropsTable, PropsTableAuto

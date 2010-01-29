@@ -71,5 +71,8 @@ class ComboCfg (Combobox):
         if sel:
             props['selected'] = sel
 
+        # Other properties
+        props['name'] = key
+
         # Init parent
         Combobox.__init__ (self, props, options)
