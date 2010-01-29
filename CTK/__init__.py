@@ -31,8 +31,8 @@ from Config import Config
 from Table import Table, TableFixed
 from RawHTML import RawHTML
 from TextField import TextField, TextFieldPassword
-from Checkbox import Checkbox
-from Combobox import Combobox
+from Checkbox import Checkbox, CheckCfg
+from Combobox import Combobox, ComboCfg
 from PropsTable import PropsTable, PropsTableAuto
 from Template import Template
 from Server import Server, run, publish, cookie, post, request, cfg

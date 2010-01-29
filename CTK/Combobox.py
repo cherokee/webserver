@@ -21,6 +21,7 @@
 #
 
 from Widget import Widget, RenderResponse
+from Server import cfg
 
 
 class Combobox (Widget):
@@ -52,3 +53,23 @@ class Combobox (Widget):
 
         html = '<select%s>%s</select>' %(header, content)
         return RenderResponse(html)
+
+class ComboCfg (Combobox):
+    def __init__ (self, key, options, props=None):
+        if not props:
+            props = {}
+
+        # Read the key value
+        val = cfg.get_val(key)
+        sel = None
+
+        # Look for the selected entry
+        for v,k in options:
+            if v == val:
+                sel = val
+
+        if sel:
+            props['selected'] = sel
+
+        # Init parent
+        Combobox.__init__ (self, props, options)

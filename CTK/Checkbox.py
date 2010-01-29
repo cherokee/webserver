@@ -23,6 +23,7 @@
 __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 
 from Widget import Widget, RenderResponse
+from Server import cfg
 
 HTML = """
 <input type="checkbox" name="%(name)s" %(checked)s/>
@@ -49,3 +50,23 @@ class Checkbox (Widget):
         # Render the text field
         html = HTML % (self._props)
         return RenderResponse (html)
+
+class CheckCfg (Checkbox):
+    def __init__ (self, key, default, props=None):
+        if not props:
+            props = {}
+
+        # Read the key value
+        val = cfg.get_val(key)
+        if not val:
+            props['checked'] = "01"[bool(int(default))]
+        elif val.isdigit():
+            props['checked'] = "01"[bool(int(val))]
+        else:
+            assert False, "Could handle value: %s"%(val)
+
+        # Other properties
+        props['name'] = key
+
+        # Init parent
+        Checkbox.__init__ (self, props)

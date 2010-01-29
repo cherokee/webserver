@@ -261,6 +261,11 @@ class _Post:
         post = my_thread.post
         return post.__iter__()
 
+    def __str__ (self):
+        my_thread = threading.currentThread()
+        post = my_thread.post
+        return str(post)
+
     def pop (self, *args):
         my_thread = threading.currentThread()
         post = my_thread.post
