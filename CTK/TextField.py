@@ -25,6 +25,11 @@ from RawHTML import RawHTML
 from Widget import Widget, RenderResponse
 from Server import cfg
 
+HEADER = [
+    '<script type="text/javascript" src="/CTK/js/jquery.form-defaults.js"></script>'
+]
+
+
 class TextField (Widget):
     def __init__ (self, props=None):
         Widget.__init__ (self)
@@ -40,7 +45,6 @@ class TextField (Widget):
 
     def __get_input_props (self):
         render = ''
-
         for prop in self._props:
             render += " %s" %(prop)
             value = self._props[prop]
@@ -61,7 +65,13 @@ class TextField (Widget):
         # Render the error reporting field
         html += '<div class="error"%s></div>' %(self.__get_error_div_props())
 
-        return RenderResponse (html)
+        # Watermark
+        js = ''
+        if self._props.get('optional'):
+            js += "$('#%s').DefaultValue('optional','%s');" %(
+                self._props.get('id'), _("optional"))
+
+        return RenderResponse (html, js, headers=HEADER)
 
 
 class TextFieldPassword (TextField):
@@ -70,7 +80,7 @@ class TextFieldPassword (TextField):
         self.type = "password"
 
 class TextCfg (TextField):
-    def __init__ (self, key, props=None):
+    def __init__ (self, key, optional=False, props=None):
         if not props:
             props = {}
 
@@ -78,6 +88,9 @@ class TextCfg (TextField):
         val = cfg.get_val(key)
         if val:
             props['value'] = val
+
+        if optional:
+            props['optional'] = True
 
         # Other properties
         props['name'] = key
