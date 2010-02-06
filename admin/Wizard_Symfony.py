@@ -2,6 +2,9 @@
 Symfony wizard. Checked with:
 * Cherokee 0.99.25
 * Symfony  1.2.9
+
+* Cherokee 0.99.44
+* Symfony  1.2.10, 1.3.1, 1.4.1
 """
 import validations
 from config import *
@@ -79,18 +82,28 @@ CONFIG_VSERVER = """
 """
 
 SRC_PATHS = [
-    "/usr/share/php/data/symfony1.0",         # Debian, Fedora
+    "/usr/share/php/data/symfony1.4",         # Debian, Fedora
+    "/usr/share/php/data/symfony1.3",
     "/usr/share/php/data/symfony1.2",
+    "/usr/share/php/data/symfony1.0",
     "/usr/share/php/data/symfony",
-    "/usr/local/lib/php/data/symfony"         # Pear installation
+    "/usr/local/lib/php/data/symfony",        # Pear installation
+    "/usr/share/pear/data/symfony",
+    "/usr/share/pear/symfony",
 ]
 
 def is_symfony_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
-    module_inc = os.path.join (path, 'bin/symfony.php')
-    if not os.path.exists (module_inc):
-        raise ValueError, _(ERROR_NO_SRC)
-    return path
+
+    module_inc = os.path.join (path, 'bin/symfony')
+    if os.path.exists (module_inc):
+        return path
+
+    module_inc = os.path.join (path, 'bin/check_configuration.php')
+    if os.path.exists (module_inc):
+        return path
+
+    raise ValueError, _(ERROR_NO_SRC)
 
 DATA_VALIDATION = [
     ("tmp!wizard_symfony!sources", (is_symfony_dir, 'cfg')),
