@@ -85,7 +85,7 @@ class MyFieldStorage(cgi.FieldStorage):
         return open (target_path, 'w+b')
 
 class UploadRequest:
-   def __call__ (self, handler, target_dir):
+   def __call__ (self, handler, target_dir, params):
        scgi = get_scgi()
 
        # This obj writes the file right away. Beware: The
@@ -93,10 +93,10 @@ class UploadRequest:
        MyFieldStorage.target_dir = target_dir
        form = MyFieldStorage (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
 
-       return handler (form['file'].filename, target_dir)
+       return handler (form['file'].filename, target_dir, params)
 
 class Uploader (Widget):
-    def __init__ (self, props=None):
+    def __init__ (self, props=None, params=None):
         Widget.__init__ (self)
         self._url_local = '/uploader_widget_%d' %(self.uniq_id)
 
@@ -111,7 +111,7 @@ class Uploader (Widget):
 
         # Register the uploader path
         publish (self._url_local, UploadRequest,
-                 handler=handler, target_dir=target_dir)
+                 handler=handler, target_dir=target_dir, params=params)
 
     def Render (self):
         props = {'id':         self.id,
