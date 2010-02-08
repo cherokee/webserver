@@ -20,22 +20,59 @@
  * 02110-1301, USA.
  */
 
+/* Reset styles 
+ */
+body,div,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,input,button,textarea,p,blockquote,th,td {margin:0; padding:0;}
+table{ border-collapse: collapse; border-spacing:0; }
+fieldset,img{border:0;}
+th{text-align:left;}
+input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
+input,button,textarea,select{*font-size:100%;}
+strong {font-weight: bold;}
+em {font-style: italic;}
+code {font-family: courier;}
+img {display: block; border: none;}
+ul {list-style: none;}
+
+/* General styles
+ */
+body { background: #fff; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 14px; color: #000; padding: 32px; }
+a { color: #3465a4; }
+a:hover { color: #c00; text-decoration: underline; }
+h1 { color: #c00; font-weight: normal; }
+
+/* JQuery Helpers 
+*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+/* Styles for CTK/Tabs.py 
+ */
+.ui-tabs { zoom: 1; background: transparent url(/CTK/images/tabbg.png) 0 -240px repeat-x; }
+.ui-tabs .ui-tabs-nav { list-style: none; position: relative; }
+.ui-tabs-nav li { float: left; background: transparent url(/CTK/images/tabbg.png) 0 -30px; width: 96px; height: 24px; font-size: 12px; text-align: center; padding-top: 6px; padding-left: 21px; position: relative; }
+.ui-tabs-nav li.ui-tabs-first { background: transparent url(/CTK/images/tabbg.png) 0 0; }
+.ui-tabs-nav li.ui-tabs-last { background: transparent url(/CTK/images/tabbg.png) 0 -60px; width: 138px; padding-left: 0; }
+.ui-tabs-nav li.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -120px; }
+.ui-tabs-nav li.ui-tabs-first.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -90px; }
+.ui-tabs-nav li.ui-tabs-last.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -150px; width: 138px; padding-left: 0; }
+.ui-tabs-nav li.ui-tabs-selected-next { background: transparent url(/CTK/images/tabbg.png) 0 -180px; }
+.ui-tabs-nav li.ui-tabs-selected-next-last { background: transparent url(/CTK/images/tabbg.png) 0 -210px; width: 138px; padding-left: 0;}
+.ui-tabs-nav a { color: #fff; text-decoration: none; display: block; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
 
 /* Styles for CTK/PropsTable.py
  */
-
-.propstable {
-	width: 100%;
-}
-
-.propstable .entry .title {
-	white-space: nowrap;
-	float: left;
-	width: 50%;
-}
-
-.propstable .entry .comment {
-	text-align: left;
-	color: #888;
-	font: small "Courier New", Courier, mono;
-}
+.propstable { width: 100%; }
+.propstable .entry .title { white-space: nowrap; float: left; width: 50%; }
+.propstable .entry .comment { text-align: left;	color: #888; font: small "Courier New", Courier, mono; }
