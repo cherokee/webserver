@@ -20,13 +20,13 @@ def apply():
 
 class default:
     def __init__ (self):
-        a = CTK.PropsTableAuto ('/apply')
+        a = CTK.PropsAuto ('/apply')
         a.Add ('Name',    CTK.TextField({'name': "server!uno"}),    'Example 1')
         a.Add ('Surname', CTK.TextField({'name': "server!dos"}),    'Lalala')
         a.Add ('Nick',    CTK.TextField({'name': "server!tri"}),    'Oh uh ah!')
         a.Add ('Active',  CTK.Checkbox ({'name': "server!active", 'checked':1}), 'Nuevo')
 
-        b = CTK.PropsTableAuto ('/apply')
+        b = CTK.PropsAuto ('/apply')
         b.Add ('Elige',   CTK.Combobox ({'name': "server!elec", 'selected': "two"}, OPTIONS), 'la lista')
         b.Add ('iPhone',  CTK.iPhoneToggle({'name': "server!off"}), 'Fancy')
         b.Add ('Carga',   CTK.Proxy("www.cherokee-project.com", '/dynamic/cherokee-list.html'), 'Lista')
