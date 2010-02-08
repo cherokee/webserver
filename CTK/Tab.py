@@ -23,7 +23,7 @@
 from Widget import Widget, RenderResponse
 
 HEADERS = [
-    '<link type="text/css" href="/CTK/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" />',
+    '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
     '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>'
 ]
 
@@ -44,12 +44,36 @@ HTML_TAB = """
 
 JS_INIT = """
 $("#tab_%(id)s").tabs().bind('tabsselect', function(event, ui) {
+    tabslen = $("#tab_%(id)s").tabs('length');
+
+    nprevtab = parseInt(get_cookie('open_tab')) + 2;
+    if (nprevtab < tabslen) {
+    	$("#tab_%(id)s li:nth-child("+ nprevtab  +")").removeClass("ui-tabs-selected-next");
+    } else {
+    	$("#tab_%(id)s li:nth-child("+ nprevtab  +")").removeClass("ui-tabs-selected-next-last");
+    }
+
+    nnexttab = ui.index + 2;
+    if (nnexttab < tabslen) { 
+        $("#tab_%(id)s li:nth-child("+ nnexttab  +")").addClass("ui-tabs-selected-next");
+    } else {
+        $("#tab_%(id)s li:nth-child("+ nnexttab  +")").addClass("ui-tabs-selected-next-last");
+    }
     document.cookie = "open_tab="  + ui.index;
 });
 
+$("#tab_%(id)s ul li:first").addClass("ui-tabs-first");
+$("#tab_%(id)s ul li:last").addClass("ui-tabs-last");
+
 var open_tab = get_cookie('open_tab');
 if (open_tab) {
-      $("#tab_%(id)s").tabs("select", open_tab);
+    $("#tab_%(id)s").tabs("select", parseInt(open_tab));
+} else {
+    document.cookie = "open_tab=0";
+}
+
+if ($("#tab_%(id)s").tabs('option', 'selected') == 0) { 
+    $("#tab_%(id)s li:nth-child(2)").addClass("ui-tabs-selected-next");
 }
 """
 
