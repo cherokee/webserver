@@ -77,15 +77,18 @@ class Page (Container):
         # Build the <head> text
         self._headers += render.headers
         head = "\n".join (uniq(self._headers))
+        js   = HTML_JS_ON_READY_BLOCK %(render.js)
 
         # Build the <body>
         if not render.js:
             body = render.html
         else:
-            body = render.html + HTML_JS_ON_READY_BLOCK %(render.js)
+            body = render.html + js
 
         # Set up the template
         self._template['head'] = head
+        self._template['html'] = render.html
+        self._template['js']   = js
         self._template['body'] = body
 
         if not self._template['body_props']:
