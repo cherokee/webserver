@@ -400,8 +400,10 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 	char  *slash;
 	int    mask;
 	char   sep;
+	int    colon;
 
-	slash = strpbrk(ip_or_subnet, "/\\");
+	slash = strpbrk (ip_or_subnet, "/\\");
+	colon = (strchr (ip_or_subnet, ':') != NULL);
 
 	/* Add a single IP address
 	 */
@@ -409,11 +411,14 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 		char *i         = ip_or_subnet;
 		int   is_domain = 0;
 
-		while (*i && !is_domain) {
-			if (((*i >= 'a') && (*i <= 'z')) ||
-			    ((*i >= 'A') && (*i <= 'Z')))
-				is_domain = 1;
-			i++;
+		if (! colon) {
+			while (*i && !is_domain) {
+				if (((*i >= 'a') && (*i <= 'z')) ||
+				    ((*i >= 'A') && (*i <= 'Z'))) {
+					is_domain = 1;
+				}
+				i++;
+			}
 		}
 
 		if (is_domain)
@@ -426,7 +431,7 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 	 */
 	mask = atoi(slash+1);
 
-	if ((strchr(ip_or_subnet, ':') != NULL) && (mask == 128)) {
+	if (colon && (mask == 128)) {
 		sep = *slash;
 		*slash = '\0';
 		ret = cherokee_access_add_ip (entry, ip_or_subnet);
