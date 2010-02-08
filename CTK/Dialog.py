@@ -24,7 +24,7 @@ from Container import Container
 from Widget import RenderResponse
 
 HEADERS = [
-    '<link type="text/css" href="/CTK/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" />',
+    '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
     '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>'
 ]
 
