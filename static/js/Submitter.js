@@ -67,7 +67,7 @@ function Submitter (id, url) {
 
 	   /* Block the fields */
 	   $(pre +" input").attr("disabled", true);
-	   $(pre +" #notice").html("Submitting..");
+	   $(pre +" .notice").html("Submitting..");
 
 	   /* Build the post */
 	   info = {};
@@ -116,7 +116,7 @@ function Submitter (id, url) {
 		  },
 		  complete:  function (XMLHttpRequest, textStatus) {
 			 /* Unlock fields */
-			 $("#submitter"+ self.submitter_id +" #notice").html("");
+			 $("#submitter"+ self.submitter_id +" .notice").html("");
 			 $("#submitter"+ self.submitter_id +" input").removeAttr("disabled");
 		  }
 	   });

@@ -32,7 +32,7 @@ from PageCleaner import Uniq_Block
 HTML = """
 <div id="submitter%(id_widget)d" class="submitter">
  %(html)s
- <div id="notice"></div>
+ <div class="notice"></div>
 </div>
 """
 
