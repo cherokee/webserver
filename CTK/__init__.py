@@ -33,7 +33,7 @@ from RawHTML import RawHTML
 from TextField import TextField, TextFieldPassword, TextCfg
 from Checkbox import Checkbox, CheckCfg
 from Combobox import Combobox, ComboCfg
-from PropsTable import PropsTable, PropsTableAuto
+from PropsTable import PropsTable, PropsTableAuto, PropsAuto
 from Template import Template
 from Server import Server, run, publish, cookie, post, request, cfg
 from Proxy import Proxy
