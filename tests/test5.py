@@ -3,9 +3,9 @@ import CTK
 
 UPLOAD_DIR = "/tmp"
 
-def ok (filename):
+def ok (filename, target_dir):
     txt =  "<h1>It worked!</h1>"
-    txt += "<pre>%s</pre>" %(os.popen("ls -l '%s/%s'"%(UPLOAD_DIR, filename)).read())
+    txt += "<pre>%s</pre>" %(os.popen("ls -l " + os.path.join(target_dir, filename)).read())
     return txt
 
 class default:

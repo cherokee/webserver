@@ -93,7 +93,7 @@ class UploadRequest:
        MyFieldStorage.target_dir = target_dir
        form = MyFieldStorage (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
 
-       return handler (form['file'].filename)
+       return handler (form['file'].filename, target_dir)
 
 class Uploader (Widget):
     def __init__ (self, props=None):
