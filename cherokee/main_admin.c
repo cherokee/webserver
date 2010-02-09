@@ -187,7 +187,7 @@ config_server (cherokee_server_t *srv)
 
 	cherokee_buffer_add_va  (&buf, "server!bind!1!port = %d\n", port);
 	cherokee_buffer_add_str (&buf, "server!thread_number = 1\n");
-	cherokee_buffer_add_str (&buf, "server!ipv6 = 0\n");
+	cherokee_buffer_add_str (&buf, "server!ipv6 = 1\n");
 	cherokee_buffer_add_str (&buf, "server!max_connection_reuse = 0\n");
 
 	if (bind_to) {
