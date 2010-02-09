@@ -22,6 +22,7 @@
 
 import os
 import cgi
+import tempfile
 
 from Server import publish, get_scgi
 from Widget import Widget, RenderResponse
@@ -79,24 +80,47 @@ $('#%(id)s_form').uploadProgress({
 });
 """
 
-class MyFieldStorage(cgi.FieldStorage):
+# Field Storage classes
+#
+class FieldStorage_Direct(cgi.FieldStorage):
     def make_file (self, binary=None):
-        target_path = os.path.join (self.target_dir, self.filename)
-        return open (target_path, 'w+b')
+        self.target_path = os.path.join (self.target_dir, self.filename)
+        return open (self.target_path, 'w+b')
 
+class FieldStorage_Temporal(cgi.FieldStorage):
+    def make_file (self, binary=None):
+        return self._file
+
+
+# Internal Proxy
+#
 class UploadRequest:
-   def __call__ (self, handler, target_dir, params):
+   def __call__ (self, handler, target_dir, params, direct):
        scgi = get_scgi()
 
-       # This obj writes the file right away. Beware: The
-       # functionality is invoked from the constructor!
-       MyFieldStorage.target_dir = target_dir
-       form = MyFieldStorage (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
+       # Beware: The functionality is invoked from the constructor!
+       if direct:
+           FieldStorage_Direct.target_dir = target_dir
+           form = FieldStorage_Direct (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
+           return handler (form['file'].filename, target_dir,
+                           form['file'].filename, params)
 
-       return handler (form['file'].filename, target_dir, params)
+       # Upload to a temporal file
+       fd, target_path = tempfile.mkstemp (prefix='CTK_upload_', dir=target_dir)
 
+       FieldStorage_Temporal._file = os.fdopen(fd, 'w+b')
+       FieldStorage_Temporal._path = target_path
+
+       form = FieldStorage_Temporal (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
+
+       return handler (form['file'].filename, target_dir,
+                       FieldStorage_Temporal._path, params)
+
+
+# Uploader CTK widget
+#
 class Uploader (Widget):
-    def __init__ (self, props=None, params=None):
+    def __init__ (self, props=None, params=None, direct=True):
         Widget.__init__ (self)
         self._url_local = '/uploader_widget_%d' %(self.uniq_id)
 
@@ -111,7 +135,7 @@ class Uploader (Widget):
 
         # Register the uploader path
         publish (self._url_local, UploadRequest,
-                 handler=handler, target_dir=target_dir, params=params)
+                 handler=handler, target_dir=target_dir, params=params, direct=direct)
 
     def Render (self):
         props = {'id':         self.id,
