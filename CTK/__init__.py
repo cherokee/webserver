@@ -21,11 +21,12 @@
 #
 
 # Generic
-from Widget import Widget
+from Widget import Widget, RenderResponse
 from Container import Container
 from Submitter import Submitter, SubmitterButton
 from Page import Page
 from Config import Config
+from Plugin import Plugin
 
 # Widgets
 from Table import Table, TableFixed
@@ -43,3 +44,4 @@ from Dialog import Dialog
 from HTTP import HTTP_Response, HTTP_Redir, HTTP_Error, HTTP_XSendfile
 from HiddenField import HiddenField
 from Uploader import Uploader
+from Plugin import PluginSelector

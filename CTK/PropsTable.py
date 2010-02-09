@@ -95,10 +95,10 @@ class PropsAuto (Widget):
     def AddConstant (self, key, val):
         self.constants[key] = val
 
-    def Add (self, title, widget, comment):
+    def Add (self, title, widget, comment, use_submitter=True):
         # No constants, just the widget
         if not self.constants:
-            self.entries.append ((title, widget, comment))
+            self.entries.append ((title, widget, comment, use_submitter))
             return
 
         # Wrap it
@@ -112,10 +112,13 @@ class PropsAuto (Widget):
         render = RenderResponse()
 
         for e in self.entries:
-            title, widget, comment = e
+            title, widget, comment, use_submitter = e
 
-            submit = Submitter (self._url)
-            submit += widget
+            if use_submitter:
+                submit = Submitter (self._url)
+                submit += widget
+            else:
+                submit = widget
 
             widget_r    = submit.Render()
             widget_html = widget_r.html

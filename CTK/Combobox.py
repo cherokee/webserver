@@ -31,6 +31,10 @@ class Combobox (Widget):
         self._props   = props
         self._options = options
 
+        if not 'id' in props:
+            self._props['id'] = 'Combobox_%s' %(self.uniq_id)
+        self.id = self._props['id']
+
     def Render (self):
         selected = self._props.get('selected')
 
