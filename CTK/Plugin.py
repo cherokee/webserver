@@ -26,10 +26,12 @@ import os
 import sys
 import traceback
 
+from consts import *
 from Widget import Widget
 from Container import Container
 from Combobox import ComboCfg
 from Server import cfg, publish, post
+from PageCleaner import Postprocess
 
 SELECTOR_CHANGED_JS = """
 $('#%(id)s').bind ('change', this, function() {
@@ -50,10 +52,11 @@ $('#%(id)s').bind ('change', this, function() {
 
 
 class Plugin (Container):
-    def __init__ (self, **kwargs):
+    def __init__ (self, key, **kwargs):
         Container.__init__ (self, **kwargs)
-        self.id = "Plugin_%s" %(self.uniq_id)
 
+        self.key = key
+        self.id  = "Plugin_%s" %(self.uniq_id)
 
 class PluginInstanceProxy:
     def __call__ (self, key, modules):
@@ -61,15 +64,18 @@ class PluginInstanceProxy:
         new_val = post.get_val (key, None)
         cfg[key] = new_val
 
-        # Intance the content
-        plugin = intance_plugin (new_val)
+        # Instance the content
+        plugin = instance_plugin (new_val, key)
         if not plugin:
             return ''
 
         # Render it
         render = plugin.Render()
-        render.html = '<div id="%s">%s</div>' %(plugin.id, render.html)
-        return render.html + render.js
+
+        output  = '<div id="%s">%s</div>' %(plugin.id, render.html)
+        output += HTML_JS_ON_READY_BLOCK %(render.js)
+
+        return Postprocess(output)
 
 
 class PluginSelector (Container):
@@ -84,7 +90,7 @@ class PluginSelector (Container):
 
         # Widgets
         self.selector_widget = ComboCfg (key, modules)
-        self.plugin          = intance_plugin (name)
+        self.plugin          = instance_plugin (name, key)
 
         # Register hidden URL for the plugin content
         publish (self._url, PluginInstanceProxy, key=key, modules=modules, method='POST')
@@ -135,12 +141,13 @@ def load_module (name):
     return plugin
 
 
-def intance_plugin (name):
+def instance_plugin (name, key):
     # Load the Python module
     module = load_module (name)
     if not module:
         return None
 
-    # Intance an object
+    # Instance an object
     class_name = 'Plugin_%s' %(name)
-    return module.__dict__[class_name]()
+    obj = module.__dict__[class_name](key)
+    return obj

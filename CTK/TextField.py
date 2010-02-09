@@ -59,17 +59,17 @@ class TextField (Widget):
         return render
 
     def Render (self):
+        # Watermark
+        js = ''
+        if self._props.get('optional'):
+            js += "$('#%s').DefaultValue('optional','%s');" %(self._props['id'], _("optional"))
+            self._props['class'] = 'optional'
+
         # Render the text field
         html = '<input type="%s"%s />' %(self.type, self.__get_input_props())
 
         # Render the error reporting field
         html += '<div class="error"%s></div>' %(self.__get_error_div_props())
-
-        # Watermark
-        js = ''
-        if self._props.get('optional'):
-            js += "$('#%s').DefaultValue('optional','%s');" %(
-                self._props.get('id'), _("optional"))
 
         return RenderResponse (html, js, headers=HEADER)
 

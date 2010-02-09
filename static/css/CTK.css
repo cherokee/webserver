@@ -20,7 +20,7 @@
  * 02110-1301, USA.
  */
 
-/* Reset styles 
+/* Reset styles
  */
 body,div,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,input,button,textarea,p,blockquote,th,td {margin:0; padding:0;}
 table{ border-collapse: collapse; border-spacing:0; }
@@ -41,7 +41,7 @@ a { color: #3465a4; }
 a:hover { color: #c00; text-decoration: underline; }
 h1 { color: #c00; font-weight: normal; }
 
-/* JQuery Helpers 
+/* JQuery Helpers
 */
 .ui-helper-hidden { display: none; }
 .ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
@@ -54,7 +54,7 @@ h1 { color: #c00; font-weight: normal; }
 /* end clearfix */
 .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
 
-/* Styles for CTK/Tabs.py 
+/* Styles for CTK/Tabs.py
  */
 .ui-tabs { zoom: 1; background: transparent url(/CTK/images/tabbg.png) 0 -240px repeat-x; }
 .ui-tabs .ui-tabs-nav { list-style: none; position: relative; }
@@ -76,3 +76,7 @@ h1 { color: #c00; font-weight: normal; }
 .propstable { width: 100%; }
 .propstable .entry .title { white-space: nowrap; float: left; width: 50%; }
 .propstable .entry .comment { text-align: left;	color: #888; font: small "Courier New", Courier, mono; }
+
+/* Optional text entries
+ */
+.optional { color: #ccc; }
