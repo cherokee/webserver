@@ -36,7 +36,8 @@ e('SOURCE_NONBLOCK',
 e('RRD_NO_BINARY',
   title = "Could not find the rrdtool binary.",
   desc  = "A custom rrdtool binary has not been defined, and the server could not find one in the $PATH.",
-  debug = "PATH=%s")
+  debug = "PATH=%s",
+  admin = '/general#tabs_general-0')
 
 e('RRD_EXECV',
   title = "execv failed cmd='%s': ${errno}",
@@ -52,7 +53,8 @@ e('RRD_WRITE',
 
 e('RRD_MKDIR_WRITE',
   title = "Cannot create the '%s' directory",
-  desc  = SYSTEM_ISSUE)
+  desc  = SYSTEM_ISSUE,
+  admin = '/general#tabs_general-0')
 
 
 # cherokee/balancer_round_robin.c
