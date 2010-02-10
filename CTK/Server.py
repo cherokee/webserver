@@ -22,9 +22,11 @@
 
 import re
 import json
-import pyscgi
+import types
 import threading
 import traceback
+
+import pyscgi
 import Cookie
 import Config
 
@@ -45,7 +47,8 @@ class PostValidator:
             key_done = False
 
             for regex, func in self.validation_list:
-                if key_done: break
+                if key_done:
+                    break
 
                 if re.match(regex, key):
                     key_done = True
@@ -211,10 +214,10 @@ class Publish_FakeClass:
 
 def publish (regex_url, klass, **kwargs):
     # Instance object
-    if type(klass) == type(lambda: None):
-        obj = Publish_FakeClass (klass)
-    else:
+    if type(klass) == types.ClassType:
         obj = klass()
+    else:
+        obj = Publish_FakeClass (klass)
 
     # Set internal properties
     obj._kwargs     = kwargs

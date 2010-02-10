@@ -58,6 +58,11 @@ class Plugin (Container):
         self.key = key
         self.id  = "Plugin_%s" %(self.uniq_id)
 
+    def apply (self):
+        "Commodity method"
+        return {'ret': 'ok'}
+
+
 class PluginInstanceProxy:
     def __call__ (self, key, modules):
         # Update the configuration
