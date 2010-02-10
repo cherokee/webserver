@@ -145,7 +145,9 @@ def instance_plugin (name, key):
     # Load the Python module
     module = load_module (name)
     if not module:
-        return None
+        # Instance an empty plugin
+        plugin = Plugin(key)
+        return plugin
 
     # Instance an object
     class_name = 'Plugin_%s' %(name)
