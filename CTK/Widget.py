@@ -24,10 +24,11 @@ widget_uniq_id = 1;
 
 
 class RenderResponse:
-    def __init__ (self, html='', js='', headers=[]):
+    def __init__ (self, html='', js='', headers=[], helps=[]):
         self.html    = html
         self.js      = js
-        self.headers = headers
+        self.headers = headers[:]
+        self.helps   = helps[:]
 
     def clean_up_headers (self):
         noDupes = []
@@ -44,6 +45,7 @@ class RenderResponse:
         i.html    = self.html    + other.html
         i.js      = self.js      + other.js
         i.headers = self.headers + other.headers
+        i.helps   = self.helps   + other.helps
 
         # Sort the headers
         i.clean_up_headers()

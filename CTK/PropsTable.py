@@ -128,6 +128,7 @@ class PropsAuto (Widget):
             render.html    += html
             render.js      += widget_r.js
             render.headers += widget_r.headers
+            render.helps   += widget_r.helps
 
         render.html     = HTML_TABLE %(render.html)
         render.headers += HEADERS

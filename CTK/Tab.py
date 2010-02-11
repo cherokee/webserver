@@ -54,7 +54,7 @@ $("#tab_%(id)s").tabs().bind('tabsselect', function(event, ui) {
     }
 
     nnexttab = ui.index + 2;
-    if (nnexttab < tabslen) { 
+    if (nnexttab < tabslen) {
         $("#tab_%(id)s li:nth-child("+ nnexttab  +")").addClass("ui-tabs-selected-next");
     } else {
         $("#tab_%(id)s li:nth-child("+ nnexttab  +")").addClass("ui-tabs-selected-next-last");
@@ -72,7 +72,7 @@ if (open_tab) {
     document.cookie = "open_tab=0";
 }
 
-if ($("#tab_%(id)s").tabs('option', 'selected') == 0) { 
+if ($("#tab_%(id)s").tabs('option', 'selected') == 0) {
     $("#tab_%(id)s li:nth-child(2)").addClass("ui-tabs-selected-next");
 }
 """
@@ -110,6 +110,7 @@ class Tab (Widget):
             # Keep record of dependencies
             render.js      += r.js
             render.headers += r.headers
+            render.helps   += r.helps
 
             props = {'id':     id,
                      'widget': r.html,

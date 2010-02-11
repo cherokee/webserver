@@ -32,8 +32,11 @@ from Container import Container
 from Combobox import ComboCfg
 from Server import cfg, publish, post
 from PageCleaner import Postprocess
+from Help import HelpEntry, HelpGroup
 
 SELECTOR_CHANGED_JS = """
+/* On selector change
+ */
 $('#%(id)s').bind ('change', this, function() {
     info = {'%(key)s': $('#%(id)s')[0].value };
     $.ajax ({url:      '%(url)s',
@@ -47,13 +50,21 @@ $('#%(id)s').bind ('change', this, function() {
 		 alert ("Error: " + xhr.status +"\\n"+ xhr.statusText);
              }
     });
+
+   /* Update the Help menu
+    */
+   Help_update_group ('%(key)s', $('#%(id)s')[0].value);
 });
+
+/* Help: Initial status
+ */
+Help_update_group ('%(key)s', $('#%(id)s')[0].value);
 """
 
 
 class Plugin (Container):
-    def __init__ (self, key, **kwargs):
-        Container.__init__ (self, **kwargs)
+    def __init__ (self, key):
+        Container.__init__ (self)
 
         self.key = key
         self.id  = "Plugin_%s" %(self.uniq_id)
@@ -88,17 +99,33 @@ class PluginSelector (Container):
         Container.__init__ (self)
 
         # Properties
-        self._key  = key
-        self._mods = modules
-        self._url  = '/plugin_content_%d' %(self.uniq_id)
-        name       = cfg.get_val (self._key)
+        self._key   = key
+        self._mods  = modules
+        self._url   = '/plugin_content_%d' %(self.uniq_id)
+        active_name = cfg.get_val (self._key)
 
         # Widgets
         self.selector_widget = ComboCfg (key, modules)
-        self.plugin          = instance_plugin (name, key)
+        self.plugin          = instance_plugin (active_name, key)
 
         # Register hidden URL for the plugin content
         publish (self._url, PluginInstanceProxy, key=key, modules=modules, method='POST')
+
+    def _get_helps (self):
+        global_key  = self._key.replace('!','_')
+        global_help = HelpGroup(global_key)
+
+        for e in self._mods:
+            name, desc = e
+            module = load_module (name)
+            if module:
+                if 'HELPS' in dir(module):
+                    help_grp = HelpGroup (name)
+                    for entry in module.HELPS:
+                        help_grp += HelpEntry (entry[1], entry[0])
+                    global_help += help_grp
+
+        return [global_help]
 
     def Render (self):
         # Load the plugin
@@ -114,6 +141,8 @@ class PluginSelector (Container):
                 'plugin_id': self.plugin.id,
                 'key':       self._key})
 
+        # Helps
+        render.helps = self._get_helps()
         return render
 
 
