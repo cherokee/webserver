@@ -63,7 +63,7 @@ class CheckCfg (Checkbox):
         elif val.isdigit():
             props['checked'] = "01"[bool(int(val))]
         else:
-            assert False, "Could handle value: %s"%(val)
+            assert False, "Could not handle value: %s"%(val)
 
         # Other properties
         props['name'] = key
