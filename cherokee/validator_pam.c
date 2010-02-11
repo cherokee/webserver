@@ -148,7 +148,7 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 			      cherokee_connection_t    *conn)
 {
 	int                  ret;
-	static pam_handle_t *pamhandle = NULL;
+	pam_handle_t        *pamhandle = NULL;
 	struct pam_conv      pamconv   = {&auth_pam_talker, conn};
 
 	extern int _pam_dispatch (pam_handle_t *, int, int);
