@@ -80,3 +80,12 @@ h1 { color: #c00; font-weight: normal; }
 /* Optional text entries
  */
 .optional { color: #ccc; }
+
+
+/* Help menu
+ */
+.help {
+	position: fixed;
+	top: 0;
+	right: 0;
+}

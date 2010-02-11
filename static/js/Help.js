@@ -20,26 +20,6 @@
  * 02110-1301, USA.
  */
 
-/*
-<div class="help">
-   <div class="help_entry"><a href="/help/General Configuration.html">config_general</a></div>
-   <div class="help_entry"><a href="/help/Configuration Quickstart.html">config_quickstart</a></div>
-   <div class="help_group" id="help_group_help_server!collector">
-      <div class="help_group" id="help_group_rrd">
-          <div class="help_entry"><a href="/help/prueba.html">prueeeeeeeba</a></div>
-      </div>
-      <div class="help_group" id="help_group_post_track">
-          <div class="help_entry"><a href="/help/modules_handlers_post_report.html">POST Report</a></div>
-      </div>
-   </div>
-   <div class="help_group" id="help_group_help_server!post_track">
-      <div class="help_group" id="help_group_post_track">
-          <div class="help_entry"><a href="/help/modules_handlers_post_report.html">POST Report</a></div>
-      </div>
-   </div>
-</div>
-*/
-
 function Help_update_group (group_prefix, active_value) {
     prefix = group_prefix.replace('!','_');
 
@@ -47,12 +27,9 @@ function Help_update_group (group_prefix, active_value) {
     selector = '.help #help_group_'+prefix;
     $(selector).children().each(function(){
 	   $(this).hide();
-	   //console.log ('Hides #'+this.id);
     });
 
     /* Show the right group */
     selector = '.help #help_group_'+prefix+' #help_group_'+active_value;
     $(selector).show();
-
-    //console.log ("Show: #"+$(selector).attr('id'));
 }
