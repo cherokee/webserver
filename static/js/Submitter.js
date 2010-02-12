@@ -67,8 +67,8 @@ function Submitter (id, url) {
 
 	   /* Block the fields */
 	   $(pre +" input").attr("disabled", true);
-	   $(pre +" .notice").html("Submitting..");
-
+           // XXX: Probably we need to know if it's input or select... is better to have an ID for the field...
+	   $("#submitter"+ self.submitter_id +" input").after('<img class="notice" id="notice' + self.submitter_id  + '" src="/CTK/images/loading.gif" alt="Submitting..."/>');
 	   /* Build the post */
 	   info = {};
 	   $(pre +" input:text, "+ pre +" input:password, "+ pre +" input:hidden").each(function(){
@@ -116,7 +116,8 @@ function Submitter (id, url) {
 		  },
 		  complete:  function (XMLHttpRequest, textStatus) {
 			 /* Unlock fields */
-			 $("#submitter"+ self.submitter_id +" .notice").html("");
+			 $("#notice"+ self.submitter_id).remove();
+                         // XXX: Probably we need to know if it's input or select...
 			 $("#submitter"+ self.submitter_id +" input").removeAttr("disabled");
 		  }
 	   });

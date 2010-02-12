@@ -89,3 +89,7 @@ h1 { color: #c00; font-weight: normal; }
 	top: 0;
 	right: 0;
 }
+
+/* Loading Message 
+ */
+.notice { display: inline; padding-left: 8px; }
