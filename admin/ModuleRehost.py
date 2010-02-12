@@ -9,7 +9,9 @@ N_ = lambda x: x
 NOTE_REHOST   = N_("Regular Expression against which the hosts be Host name will be compared.")
 WARNING_EMPTY = N_("At least one Regular Expression string must be defined.")
 
-DATA_VALIDATION = []
+DATA_VALIDATION = [
+    ('vserver!.+?!match!regex![^!]+', validations.is_regex)
+]
 
 class ModuleRehost (Module, FormHelper):
     PROPERTIES = ['regex']

@@ -2,6 +2,7 @@ from Form import *
 from Table import *
 from ModuleHandler import *
 from consts import *
+import validations
 
 # For gettext
 N_ = lambda x: x
@@ -9,6 +10,11 @@ N_ = lambda x: x
 NOTE_SHOW         = N_("Defines whether the redirection will be seen by the client.")
 NOTE_REGEX        = N_('Regular expression. Check out the <a target="_blank" href="http://perldoc.perl.org/perlre.html">Reference</a>.')
 NOTE_SUBSTITUTION = N_("Target address. It can use Regular Expression substitution sub-strings.")
+
+DATA_VALIDATION = [
+    ('vserver!.+?!rule!.+?!handler!rewrite|.+?|regex', validations.is_regex),
+    ('rewrite_new_regex', validations.is_regex)
+]
 
 HELPS = [
     ('modules_handlers_redir',              N_("Redirections")),
@@ -67,6 +73,10 @@ class ModuleRedir (ModuleHandler):
             i += 1
 
     def _op_apply_changes (self, uri, post):
+        self.ValidateChange_SingleKey ('rewrite_new_regex', post, DATA_VALIDATION)
+        if self.has_errors():
+            return self._op_render()
+
         regex  = post.pop('rewrite_new_regex')
         substr = post.pop('rewrite_new_substring')
         show   = post.pop('rewrite_new_show')
@@ -80,4 +90,4 @@ class ModuleRedir (ModuleHandler):
             if substr:
                 self._cfg['%s!substring'%(pre)] = substr
 
-        self.ApplyChangesPrefix (self._prefix, [], post)
+        self.ApplyChangesPrefix (self._prefix, [], post, DATA_VALIDATION)

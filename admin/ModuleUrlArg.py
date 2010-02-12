@@ -18,6 +18,9 @@ class ModuleUrlArg (Module, FormHelper):
         FormHelper.__init__ (self, 'url_arg', cfg)
         Module.__init__ (self, 'url_arg', cfg, prefix, submit_url)
 
+        self.validation = [('tmp!new_rule!value', validations.is_regex),
+                           ('%s!match' % self._prefix, validations.is_regex)]
+
     def _op_render (self):
         if self._prefix.startswith('tmp!'):
             return self._render_new_entry()

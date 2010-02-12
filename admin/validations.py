@@ -1,5 +1,6 @@
 import string
 import os.path
+import re
 from util import split_list
 
 def is_number (value):
@@ -263,7 +264,11 @@ def debug_fail (value):
     raise ValueError, _('Forced failure')
 
 def is_regex (value):
-    # Can a regular expression be checked?
+    try:
+        trash = re.compile(value)
+    except:
+        raise ValueError, _('Invalid regular expression')
+
     return value
 
 def is_http_url (value):
