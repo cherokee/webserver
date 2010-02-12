@@ -73,7 +73,11 @@ if (open_tab) {
 }
 
 if ($("#tab_%(id)s").tabs('option', 'selected') == 0) {
-    $("#tab_%(id)s li:nth-child(2)").addClass("ui-tabs-selected-next");
+    if ($("#tab_%(id)s").tabs('length') == 2) {
+        $("#tab_%(id)s li:nth-child(2)").addClass("ui-tabs-selected-next-last");
+    } else {
+        $("#tab_%(id)s li:nth-child(2)").addClass("ui-tabs-selected-next");
+    }
 }
 """
 
