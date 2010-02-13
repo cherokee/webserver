@@ -1255,7 +1255,7 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			retries--;
 			if (cnt_read == tmp1->size && retries > 0)
 				continue;
-			return ret;
+			return ret_eof;
 		default:
 			RET_UNKNOWN(ret);
 			return ret_error;
