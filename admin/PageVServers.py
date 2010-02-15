@@ -255,9 +255,9 @@ class PageVServers (PageMenu, FormHelper):
         txt += self._render_wizards()
         txt += '</div>'
 
-        txt += '<div class="rulesbutton"><a id="newsection_b">%s</a></div>' % (_('Add new Virtual Server'))
-        txt += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone Virtual Server'))
-        txt += '<div class="rulesbutton"><a id="wizardsection_b">%s</a></div>' % (_('Wizards'))
+        txt += '<div class="rulesbutton"><a href="#" id="newsection_b">%s</a></div>' % (_('Add new Virtual Server'))
+        txt += '<div class="rulesbutton"><a href="#" id="clonesection_b">%s</a></div>' % (_('Clone Virtual Server'))
+        txt += '<div class="rulesbutton"><a href="#" id="wizardsection_b">%s</a></div>' % (_('Wizards'))
         txt += '</div>'
 
         return txt

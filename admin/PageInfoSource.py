@@ -324,10 +324,10 @@ class PageInfoSource (PageMenu, FormHelper):
         txt += TABLE_JS + CLONE_JS % clone_params
 
         txt += '<div class="infosource_func_block">'
-        txt += '<div class="rulesbutton"><a id="sourcesection_b" href="%s">%s</a></div>' % (self.submit_url, _('Add new Information Source'))
+        txt += '<div class="rulesbutton"><a href="%s" id="sourcesection_b">%s</a></div>' % (self.submit_url, _('Add new Information Source'))
 
         if keys:
-            txt += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone Information Source'))
+            txt += '<div class="rulesbutton"><a href="#" id="clonesection_b">%s</a></div>' % (_('Clone Information Source'))
         txt += '</div>'
 
         if keys:

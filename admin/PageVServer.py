@@ -249,9 +249,9 @@ class PageVServer (PageMenu, FormHelper):
         tmp += self._render_wizards (host)
         tmp += '</div>'
 
-        tmp += '<div class="rulesbutton"><a id="newsection_b">%s</a></div>' % (_('Add new rule'))
-        tmp += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone rule'))
-        tmp += '<div class="rulesbutton"><a id="wizardsection_b">%s</a></div>' % (_('Wizards'))
+        tmp += '<div class="rulesbutton"><a href="#" id="newsection_b">%s</a></div>' % (_('Add new rule'))
+        tmp += '<div class="rulesbutton"><a href="#" id="clonesection_b">%s</a></div>' % (_('Clone rule'))
+        tmp += '<div class="rulesbutton"><a href="#" id="wizardsection_b">%s</a></div>' % (_('Wizards'))
 
         tmp += '</div>\n'
         tabs += [(_('Behavior'), tmp)]
