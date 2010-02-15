@@ -98,7 +98,6 @@ class ServerHandler (pyscgi.SCGIHandler):
 
         for published in server._web_paths:
             if re.match (published._regex, url):
-                print "--->", url, "~", published._regex
                 # POST
                 if published._method == 'POST':
                     post = self._process_post()
@@ -207,7 +206,11 @@ def get_scgi():
 def run (*args, **kwargs):
     srv = get_server()
 
+    if not 'threading' in kwargs:
+        kwargs['threading'] = True
+
     kwargs['handler_class'] = ServerHandler
+
     srv.init_server (*args, **kwargs)
     srv.serve_forever()
 
