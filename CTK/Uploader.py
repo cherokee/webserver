@@ -73,7 +73,7 @@ $('#%(id)s_form').uploadProgress({
 	jqueryPath:         "/CTK/js/jquery-1.3.2.js",
 	uploadProgressPath: "/CTK/js/jquery.uploadProgress.js",
         progressBar:        "#uploading_%(id)s #progressbar",
-        progressUrl:        "/progress/",
+        progressUrl:        "/upload_report/",
 	interval:           2000,
 	uploading:          function(upload) {$('#%(id)s_percents').html(upload.percents+'&#37;');},
         start:              function(upload) {$('#%(id)s_form').hide('slow');}
@@ -83,13 +83,28 @@ $('#%(id)s_form').uploadProgress({
 # Field Storage classes
 #
 class FieldStorage_Direct(cgi.FieldStorage):
-    def make_file (self, binary=None):
-        self.target_path = os.path.join (self.target_dir, self.filename)
-        return open (self.target_path, 'w+b')
+    def __init__ (self, fp=None, headers=None, outerboundary="",
+                  environ=os.environ, keep_blank_values=0, strict_parsing=0):
+        self.environ = environ
+        cgi.FieldStorage.__init__ (self, fp, headers, outerboundary,
+                                   environ, keep_blank_values, strict_parsing)
 
-class FieldStorage_Temporal(cgi.FieldStorage):
     def make_file (self, binary=None):
-        return self._file
+        target_dir  = self.environ.get('CTK_hack__target_path')
+        target_path = os.path.join (target_dir, self.filename)
+        return open (target_path, 'w+b')
+
+
+class FieldStorage_Temporal (cgi.FieldStorage):
+    def __init__ (self, fp=None, headers=None, outerboundary="",
+                  environ=os.environ, keep_blank_values=0, strict_parsing=0):
+        self.environ = environ
+        cgi.FieldStorage.__init__ (self, fp, headers, outerboundary,
+                                   environ, keep_blank_values, strict_parsing)
+
+    def make_file (self, binary=None):
+        os_fd_str  = self.environ.get('CTK_hack__os_fd')
+        return os.fdopen (int(os_fd_str), 'w+b')
 
 
 # Internal Proxy
@@ -98,23 +113,33 @@ class UploadRequest:
    def __call__ (self, handler, target_dir, params, direct):
        scgi = get_scgi()
 
-       # Beware: The functionality is invoked from the constructor!
+       # *REMEMBER*: Do not print the 'form'. Python's cgi module will
+       # parse the whole file to memory in order to print it, which is
+       # certainly an issue for large file uploads.
+       #
+       # *NOTE*: The functionality is invoked from the constructor!
+       #
+
        if direct:
-           FieldStorage_Direct.target_dir = target_dir
-           form = FieldStorage_Direct (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
+           environ = scgi.env.copy()
+           environ['CTK_hack__target_path'] = target_dir
+
+           # Receive the POST
+           form = FieldStorage_Direct (fp=scgi.rfile, environ=environ, keep_blank_values=1)
+
+           # Callback
            return handler (form['file'].filename, target_dir,
                            form['file'].filename, params)
 
        # Upload to a temporal file
-       fd, target_path = tempfile.mkstemp (prefix='CTK_upload_', dir=target_dir)
+       os_fd, target_path = tempfile.mkstemp (prefix='CTK_upload_', dir=target_dir)
 
-       FieldStorage_Temporal._file = os.fdopen(fd, 'w+b')
-       FieldStorage_Temporal._path = target_path
+       environ = scgi.env.copy()
+       environ['CTK_hack__os_fd'] = str(os_fd)
 
-       form = FieldStorage_Temporal (fp=scgi.rfile, environ=scgi.env, keep_blank_values=1)
+       form = FieldStorage_Temporal (fp=scgi.rfile, environ=environ, keep_blank_values=1)
+       return handler (form['file'].filename, target_dir, target_path, params)
 
-       return handler (form['file'].filename, target_dir,
-                       FieldStorage_Temporal._path, params)
 
 
 # Uploader CTK widget

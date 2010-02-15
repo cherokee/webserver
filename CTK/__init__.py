@@ -27,6 +27,7 @@ from Submitter import Submitter, SubmitterButton
 from Page import Page
 from Config import Config
 from Plugin import Plugin
+import JS
 
 # Widgets
 from Table import Table, TableFixed
@@ -45,3 +46,5 @@ from HTTP import HTTP_Response, HTTP_Redir, HTTP_Error, HTTP_XSendfile
 from HiddenField import HiddenField
 from Uploader import Uploader
 from Plugin import PluginSelector
+from Refreshable import Refreshable
+from Image import Image

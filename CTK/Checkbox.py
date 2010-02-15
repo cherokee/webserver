@@ -26,7 +26,7 @@ from Widget import Widget, RenderResponse
 from Server import cfg
 
 HTML = """
-<input type="checkbox" name="%(name)s" %(checked)s/>
+<input type="checkbox" name="%(name)s" %(checked)s %(disabled)s/>
 """
 
 class Checkbox (Widget):
@@ -39,13 +39,20 @@ class Checkbox (Widget):
             self._props = {}
 
         checked = props.pop('checked')
-        self.checked = bool(int(checked))
+
+        self.checked  = bool(int(checked))
+        self.disabled = props.get('disabled')
 
     def Render (self):
         if self.checked:
             self._props['checked'] = 'checked="checked" '
         else:
-            self._props['checked'] = ""
+            self._props['checked'] = ''
+
+        if self.disabled:
+            self._props['disabled'] = 'disabled'
+        else:
+            self._props['disabled'] = ''
 
         # Render the text field
         html = HTML % (self._props)

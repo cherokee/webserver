@@ -59,5 +59,16 @@ class Widget:
         widget_uniq_id += 1;
         self.uniq_id = widget_uniq_id;
 
+        self.binds = []
+        self.id    = "widget_%d" %(widget_uniq_id)
+
     def Render (self):
-        raise NotImplementedError, "Pure Virtual Method"
+        render = RenderResponse()
+
+        for event, js in self.binds:
+            render.js += "$('#%s').bind('%s', function(){ %s });\n" %(self.id, event, js)
+
+        return render
+
+    def bind (self, event, js):
+        self.binds.append ((event, js))

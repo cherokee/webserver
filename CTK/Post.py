@@ -41,7 +41,7 @@ class Post:
 
         vals = filter(lambda x: len(x)>0, self._vars[key])
         if not len(vals) > 0:
-            return None
+            return self._vars[key][0]
 
         return vals[0]
 
@@ -53,7 +53,7 @@ class Post:
 
     def pop (self, key, not_found=None):
         val = self._smart_chooser(key)
-        if not val:
+        if val == None:
             return not_found
         if key in self._vars:
             del(self[key])

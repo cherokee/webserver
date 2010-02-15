@@ -344,3 +344,12 @@ class Config:
     def has_tree (self):
         return len(self.root._child) > 0
 
+    # Utilities
+    def get_next_entry_prefix (self, pre):
+        entries = [int(x) for x in self.keys(pre)]
+        entries.sort()
+
+        if not entries:
+            return '%s!1'%(pre)
+
+        return '%s!%d'%(pre, entries[-1] + 1)

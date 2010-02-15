@@ -71,6 +71,8 @@ class Plugin (Container):
 
     def apply (self):
         "Commodity method"
+        for key in CTK.post:
+            print "POST", key, "=", CTK.post[key]
         return {'ret': 'ok'}
 
 
@@ -158,10 +160,14 @@ def load_module (name):
     if sys.modules.has_key(name):
         return sys.modules[name]
 
-    # Figure the path to admin's python source
-    stack    = traceback.extract_stack()
-    first_py = stack[0][0]
-    mod_path = os.path.abspath(os.path.join (first_py, '../plugins'))
+    # Figure the path to admin's python source (hacky!)
+    stack = traceback.extract_stack()
+    for stage in stack:
+        if 'CTK/Server.py' in stage[0]:
+            first_py = stage[0]
+            break
+
+    mod_path = os.path.abspath(os.path.join (first_py, '../../../plugins'))
 
     # Load the plug-in
     sys.path.append (mod_path)

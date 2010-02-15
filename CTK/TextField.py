@@ -34,6 +34,7 @@ class TextField (Widget):
     def __init__ (self, props=None):
         Widget.__init__ (self)
         self.type = "text"
+        self.id   = 'widget%d'%(self.uniq_id)
 
         if props:
             self._props = props
@@ -41,7 +42,7 @@ class TextField (Widget):
             self._props = {}
 
         if not 'id' in self._props:
-            self._props['id'] = 'widget%d'%(self.uniq_id)
+            self._props['id'] = self.id
 
     def __get_input_props (self):
         render = ''
@@ -53,7 +54,7 @@ class TextField (Widget):
         return render
 
     def __get_error_div_props (self):
-        render = ' id="error_%s"' % (self._props['id'])
+        render = ' id="error_%s"' % (self.id)
         if self._props.get('name'):
             render += ' key="%s"' %(self._props.get('name'))
         return render
@@ -62,7 +63,7 @@ class TextField (Widget):
         # Watermark
         js = ''
         if self._props.get('optional'):
-            js += "$('#%s').DefaultValue('optional','%s');" %(self._props['id'], _("optional"))
+            js += "$('#%s').DefaultValue('optional','%s');" %(self.id, _("optional"))
             self._props['class'] = 'optional'
 
         # Render the text field
@@ -72,6 +73,11 @@ class TextField (Widget):
         html += '<div class="error"%s></div>' %(self.__get_error_div_props())
 
         return RenderResponse (html, js, headers=HEADER)
+
+    def JS_to_clean (self):
+        return "$('#%s').attr('value', '');" %(self.id)
+    def JS_to_focus (self):
+        return "$('#%s').blur(); $('#%s').focus();" %(self.id, self.id)
 
 
 class TextFieldPassword (TextField):

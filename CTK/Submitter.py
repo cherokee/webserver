@@ -42,6 +42,8 @@ JS_INIT = """
 
   var submit_%(id_widget)d = new Submitter('%(id_widget)d', '%(url)s');
   submit_%(id_widget)d.setup (submit_%(id_widget)d);
+
+ %(js_bind_events)s
 """
 
 # Focus on the first <input> of the page
@@ -56,19 +58,33 @@ HEADER = [
 class Submitter (Container):
     def __init__ (self, submit_url):
         Container.__init__ (self)
-        self._url = submit_url
+        self._url    = submit_url
+        self._events = {}
 
     # Public interface
     #
+    def bind (self, event, js):
+        if not event in self._events:
+            self._events[event] = []
+        self._events[event].append (js)
+
+    def _bind_render_js (self):
+        js = ''
+        for event in self._events:
+            for function in self._events[event]:
+                js += "$('#submitter%s').bind ('%s', function(){ %s });" %(self.uniq_id, event, function)
+        return js
+
     def Render (self):
         # Child render
         tmp = Container.Render(self)
 
         # Own render
-        props = {'id_widget': self.uniq_id,
-                 'url':       self._url,
-                 'html':      tmp.html,
-                 'js':        tmp.js}
+        props = {'id_widget':      self.uniq_id,
+                 'url':            self._url,
+                 'html':           tmp.html,
+                 'js':             tmp.js,
+                 'js_bind_events': self._bind_render_js()}
 
         my = RenderResponse()
 

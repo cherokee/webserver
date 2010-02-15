@@ -65,10 +65,10 @@ class HTTP_Response:
         505: 'HTTP VERSION NOT SUPPORTED',
         }
 
-    def __init__ (self, error=200, headers=[], body=''):
+    def __init__ (self, error=200, headers=None, body=''):
         self.error   = error
-        self.headers = headers
         self.body    = body
+        self.headers = ([],headers)[bool(headers)]
 
     def __add__ (self, text):
         assert type(text) == str

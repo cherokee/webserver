@@ -21,6 +21,7 @@
 #
 
 import re
+import sys
 import json
 import types
 import threading
@@ -97,6 +98,7 @@ class ServerHandler (pyscgi.SCGIHandler):
 
         for published in server._web_paths:
             if re.match (published._regex, url):
+                print "--->", url, "~", published._regex
                 # POST
                 if published._method == 'POST':
                     post = self._process_post()
@@ -139,8 +141,11 @@ class ServerHandler (pyscgi.SCGIHandler):
             content = self._do_handle()
             self.send(str(content))
         except:
-            trace = '<pre>%s</pre>'%(traceback.format_exc())
-            self.send(str(HTTP_Error(desc=trace)))
+            info = traceback.format_exc()
+            print >> sys.stderr, info
+
+            html = '<pre>%s</pre>'%(info)
+            self.send(str(HTTP_Error(desc=html)))
 
 
 class Server:
@@ -148,6 +153,7 @@ class Server:
         self._web_paths = []
         self._scgi      = None
         self._is_init   = False
+        self.lock       = threading.RLock()
 
     def init_server (self, *args, **kwargs):
         # Is it already init?
@@ -164,11 +170,13 @@ class Server:
             ly = len(y._regex)
             return cmp(ly,lx)
 
-        self._web_paths.sort(__cmp)
+        with self.lock:
+            self._web_paths.sort(__cmp)
 
     def add_route (self, route_obj):
-        self._web_paths.append (route_obj)
-        self.sort_routes()
+        with self.lock:
+            self._web_paths.append (route_obj)
+            self.sort_routes()
 
     def serve_forever (self):
         try:

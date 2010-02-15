@@ -109,6 +109,9 @@ function Submitter (id, url) {
 			 if (data['redirect'] != undefined) {
 				window.location.replace (data['redirect']);
 			 }
+
+			 /* Trigger events */
+			 $(pre).trigger('submit_success');
 		  },
 		  error: function (xhr, ajaxOptions, thrownError) {
 			 self.restore_orig_values (self);
