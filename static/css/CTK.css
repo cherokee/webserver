@@ -39,6 +39,8 @@ ul {list-style: none;}
 body { background: #fff; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 14px; color: #000; padding: 32px; }
 a { color: #3465a4; }
 a:hover { color: #c00; text-decoration: underline; }
+a:active { outline: none; }
+a:focus { -moz-outline-style: none; }
 h1 { color: #c00; font-weight: normal; }
 
 /* JQuery Helpers
@@ -93,3 +95,4 @@ h1 { color: #c00; font-weight: normal; }
 /* Loading Message 
  */
 .notice { display: inline; padding-left: 8px; }
+
