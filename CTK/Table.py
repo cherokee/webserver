@@ -61,34 +61,81 @@ class TableField (Container):
         self._props[prop] = value
 
 
-class Table (Widget):
-    def __init__ (self, **kwargs):
+class TableRow (Widget):
+    def __init__ (self, length=1):
         Widget.__init__ (self)
-        self.kwargs   = kwargs
-        self.last_col = 0
-        self.last_row = 0
-        self.rows     = []
+        self.tag     = 'tr'
+        self.props   = {}
+        self.length  = length
+        self.entries = [None] * length
 
-    def __add_row (self):
-        self.rows.append ([None] * self.last_col)
-        self.last_row += 1
+    def __add__ (self, field):
+        assert isinstance(field, TableField) or field == None
+        self.entries.append (field)
+        return self
 
-    def __add_col (self):
-        for row in self.rows:
-            row.append (None)
-        self.last_col += 1
+    def __getitem__ (self, num):
+        if num > self.length:
+            raise IndexError, "Column number out of bounds (get)"
 
-    def __grow_if_needed (self, row, col):
+        return self.entries[num-1]
+
+    def __setitem__ (self, num, field):
+        assert isinstance(field, TableField) or field == None
+        self.grow_to (num)
+        self.entries[num-1] = field
+
+    def grow_to (self, col):
         if col < 1:
             raise IndexError, "Column number out of bounds"
+
+        if col > self.length:
+            self.entries += [None] * (col - self.length)
+            self.length = col
+
+    def Render (self):
+        # Render content
+        render = RenderResponse()
+        for field in self.entries:
+            if field:
+                render += field.Render()
+            else:
+                render.html += "<td></td>"
+
+        # Wrap the table row
+        props = " ".join (['%s="%s"'%(k,self.props[k]) for k in self.props])
+
+        if props:
+            render.html = '<%s %s>%s</%s>' %(self.tag, props, render.html, self.tag)
+        else:
+            render.html = '<%s>%s</%s>' %(self.tag, render.html, self.tag)
+
+        return render
+
+
+class Table (Widget):
+    def __init__ (self, props=None, **kwargs):
+        Widget.__init__ (self)
+        self.kwargs   = kwargs
+        self.last_row = 0
+        self.rows     = []
+        self.props    = [{},props][bool(props)]
+
+    def __add_row (self):
+        row = TableRow()
+        self.rows.append (row)
+        self.last_row += 1
+        return row
+
+    def __grow_if_needed (self, row, col):
         if row < 1:
             raise IndexError, "Row number out of bounds"
 
         while row > self.last_row:
             self.__add_row()
 
-        while col > self.last_col:
-            self.__add_col()
+        for row in self.rows:
+            row.grow_to (col)
 
     def __setitem_single (self, pos, widget):
         assert isinstance(widget, Widget)
@@ -103,7 +150,7 @@ class Table (Widget):
 
         # Set the element
         table_row = self.rows[row-1]
-        table_row[col-1] = field
+        table_row[col] = field
 
     def __setitem_list (self, pos, wid_list):
         row,col = pos
@@ -118,32 +165,40 @@ class Table (Widget):
             return self.__setitem_single (pos, item)
 
     def __getitem__ (self, pos):
+        # Whole row
+        if type(pos) == int:
+            if pos < 0:
+                return self.rows[pos]
+            return self.rows[pos-1]
+
+        # Table cell
         row,col = pos
 
-        if col > self.last_col:
-            raise IndexError, "Column number out of bounds (get)"
         if row > self.last_row:
             raise IndexError, "Row number out of bounds (get)"
 
-        return self.rows[row-1][col-1]
+        return self.rows[row-1][col]
+
+    def __add__ (self, items):
+        assert isinstance(items, list)
+        self.__add_row()
+
+        self[(self.last_row, 1)] = items
+        return self
 
     def Render (self):
-        props = self.kwargs.get('props')
-        if props:
-            render = RenderResponse('<table %s>' %(props))
-        else:
-            render = RenderResponse('<table>')
-
+        # Render content
+        render = RenderResponse()
         for row in self.rows:
-            render.html += '<tr>'
-            for field in row:
-                if field:
-                    assert isinstance(field, TableField)
-                    r = field.Render()
-                    render += r
-            render.html += '</tr>'
+            render += row.Render()
 
-        render.html += '</table>'
+        # Wrap the table
+        props = " ".join (['%s="%s"'%(k,self.props[k]) for k in self.props])
+        if props:
+            render.html = '<table id="%s" %s>%s</table>' %(self.id, props, render.html)
+        else:
+            render.html = '<table id="%s">%s</table>' %(self.id, render.html)
+
         return render
 
     def set_header (self, row=True, column=False, num=1):

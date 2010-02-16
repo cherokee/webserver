@@ -48,3 +48,4 @@ from Uploader import Uploader
 from Plugin import PluginSelector
 from Refreshable import Refreshable
 from Image import Image
+from SortableList import SortableList

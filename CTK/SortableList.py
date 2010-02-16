@@ -1,0 +1,80 @@
+# CTK: Cherokee Toolkit
+#
+# Authors:
+#      Alvaro Lopez Ortega <alvaro@alobbs.com>
+#
+# Copyright (C) 2009 Alvaro Lopez Ortega
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of version 2 of the GNU General Public
+# License as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+
+from Table import Table
+from Server import publish
+
+HEADER = [
+    '<script type="text/javascript" src="/CTK/js/jquery.tablednd_0_5.js"></script>'
+]
+
+JS_INIT = """
+$("#%(id)s").tableDnD({
+   onDrop: function (table, row) {
+       $.ajax ({url:      "%(url)s",
+                async:    true,
+                type:     "POST",
+		dataType: "text",
+                data:     $.tableDnD.serialize_plain()});
+   }
+});
+
+jQuery.tableDnD.serialize_plain = function() {
+     var result = "";
+     var table  = jQuery.tableDnD.currentTable;
+
+     for (var i=0; i<table.rows.length; i++) {
+         if (result.length > 0) {
+              result += ",";
+         }
+         result += table.rows[i].id;
+     }
+     return table.id + "_order=" + result;
+};
+"""
+
+def changed_handler_func (callback, key_id, **kwargs):
+    return callback (key_id, **kwargs)
+
+class SortableList (Table):
+    def __init__ (self, callback, *args, **kwargs):
+        Table.__init__ (self, *args, **kwargs)
+        self.id  = "sortablelist_%d" %(self.uniq_id)
+        self.url = "/sortablelist_%d"%(self.uniq_id)
+
+        # Register the public URL
+        publish (self.url, changed_handler_func, method='POST',
+                 callback=callback, key_id='%s_order'%(self.id), **kwargs)
+
+    def Render (self):
+        render = Table.Render (self)
+
+        render.js      += JS_INIT %({'id': self.id, 'url': self.url})
+        render.headers += HEADER
+        return render
+
+    def set_header (self, row_num):
+        # Set the row properties
+        self[row_num].props['class'] = "nodrag nodrop"
+
+        # Let Table do the rest
+        Table.set_header (self, num=row_num)
