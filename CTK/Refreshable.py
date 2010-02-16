@@ -23,6 +23,8 @@
 from consts import *
 from Widget import Widget
 from Server import publish
+from PageCleaner import _remove_dupped_code
+
 
 HTML = '<div id="%s">%s</div>'
 
@@ -39,7 +41,7 @@ $.ajax({
 
 def render_plain_html (build_func, **kwargs):
     render = build_func (**kwargs)
-    return render.html + HTML_JS_ON_READY_BLOCK %(render.js)
+    return render.html + _remove_dupped_code(HTML_JS_ON_READY_BLOCK %(render.js))
 
 
 class Refreshable (Widget):

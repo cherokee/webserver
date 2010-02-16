@@ -101,7 +101,7 @@ class Submitter (Container):
 FORCE_SUBMIT_JS = """
 $("#%(id)s").click(function() {
     /* Figure the widget number of the Submitter */
-    var submitter     = $('#%(id)s').parent('.submitter');
+    var submitter     = $('#%(id)s').parents('.submitter');
     var submitter_num = submitter.attr('id').replace('submitter','');
 
     /* Invoke its submit method */
