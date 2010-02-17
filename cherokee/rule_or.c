@@ -41,7 +41,7 @@ match (cherokee_rule_t         *rule,
 	/* It only needs one of the sides to match.
 	 */
 	ret = cherokee_rule_match (RULE_OR(rule)->left, conn, ret_conf);
-	if (ret == ret_ok)
+	if (ret != ret_not_found)
 		return ret;
 
 	/* It didn't match, it is time for the right side
