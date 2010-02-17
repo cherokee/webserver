@@ -458,11 +458,12 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 
 	conn->keepalive--;
 
-	/* Flush any buffered data
+	/* There might be data in the kernel buffer. Flush it before
+	 * the connection is reused for the next keep-alive request.
+	 * If not flushed, the data would remain on the buffer until
+	 * the timeout is reached (with a huge performance penalty).
 	 */
-	if (conn->options & conn_op_tcp_cork) {
-		cherokee_socket_flush (&conn->socket);
-	}
+	cherokee_socket_flush (&conn->socket);
 
 	/* Clean the connection
 	 */
