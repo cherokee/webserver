@@ -106,7 +106,7 @@ class PropsAuto (Widget):
         box += widget
         for key in self.constants:
             box += HiddenField ({'name': key, 'value': self.constants[key]})
-        self.entries.append ((title, box, comment))
+        self.entries.append ((title, box, comment, use_submitter))
 
     def Render (self):
         render = RenderResponse()
