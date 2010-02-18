@@ -50,3 +50,5 @@ from Refreshable import Refreshable
 from Image import Image
 from SortableList import SortableList
 from Indenter import Indenter
+from Notice import Notice
+
