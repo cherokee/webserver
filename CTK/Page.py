@@ -42,6 +42,7 @@ DEFAULT_PAGE_TEMPLATE = """\
 
 HEADERS = [
     '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
+    '<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />',
     '<script type="text/javascript" src="/CTK/js/common.js"></script>',
     '<script type="text/javascript" src="/CTK/js/jquery-1.3.2.js"></script>',
     '<script type="text/javascript" src="/CTK/js/Help.js"></script>',
