@@ -20,26 +20,28 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+from Container import Container
 
 NOTICE_TYPES = ['information', 'important-information',
                 'warning', 'error', 'offline', 'online']
 
 HTML = """
 <div class="dialog-%(klass)s" id="%(id)s">
-%(text)s
+%(content)s
 </div>
 """
 
-class Notice (Widget):
-    def __init__ (self, text, klass='information'):
-        assert klass in NOTICE_TYPES
+class Notice (Container):
+    def __init__ (self, klass='information'):
+        Container.__init__ (self)
 
-        Widget.__init__ (self)
-        self.text  = text
+        assert klass in NOTICE_TYPES
         self.klass = klass
 
     def Render (self):
-        render = Widget.Render (self)
-        render.html += HTML %({'text': self.text, 'id': self.id, 'klass': self.klass})
+        render = Container.Render (self)
+
+        render.html = HTML %({'klass':   self.klass,
+                              'id':      self.id,
+                              'content': render.html})
         return render
