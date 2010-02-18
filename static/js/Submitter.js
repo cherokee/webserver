@@ -31,8 +31,8 @@ function Submitter (id, url) {
 	   var pre = "#submitter" + this.submitter_id;
 	   $(pre+" :text, "+pre+" :password").bind ("blur",     this, this.input_blur_cb);
 	   $(pre+" :text, "+pre+" :password").bind ("keypress", this, this.input_keypress_cb);
-	   $("#submitter" + this.submitter_id + " not(.required) :checkbox").bind ("change", this, this.input_checkbox_cb);
-	   $("#submitter" + this.submitter_id + " not(.required) select").bind ("change", this, this.input_combobox_cb);
+	   $("#submitter" + this.submitter_id + " :checkbox").not('.required').bind ("change", this, this.input_checkbox_cb);
+	   $("#submitter" + this.submitter_id + " select").not('.required').bind ("change", this, this.input_combobox_cb);
 
 	   /* Read the original values */
 	   self.orig_values = {};

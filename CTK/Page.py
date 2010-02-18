@@ -91,7 +91,10 @@ class Page (Container):
         render_helps = HelpMenu(all_helps).Render().html
 
         # Javascript
-        js = HTML_JS_ON_READY_BLOCK %(render.js)
+        if render.js:
+            js = HTML_JS_ON_READY_BLOCK %(render.js)
+        else:
+            js = ''
 
         # Build the <body>
         body = render.html + render_helps
