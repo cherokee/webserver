@@ -48,7 +48,7 @@ h2 { color: #666; font-weight: normal; padding: 8px 0; }
 /* Styles for cherokee-admin layout
  */
 html>body #container { min-height: 100%; }
-#container { width: 960px; margin: 0 auto; text-align: left; background: #fff; border-left: 1px solid #203f67; border-right: 1px solid #203f67;}
+#container { width: 960px; margin: 0 auto; text-align: left; background: #fff; border-left: 1px solid #2c579e; border-right: 1px solid #2c579e;}
 #topbar { background: #3465a4 url(/static/images/bg-bar.png) top left repeat-x; }
 
 /* JQuery Helpers
