@@ -36,12 +36,20 @@ ul {list-style: none;}
 
 /* General styles
  */
-body { background: #fff; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 14px; color: #000; padding: 32px; }
+html { height: 100%; } 
+body { background: #def; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 14px; color: #000; text-align: center; height: 100%; }
 a { color: #3465a4; }
 a:hover { color: #c00; text-decoration: underline; }
 a:active { outline: none; }
 a:focus { -moz-outline-style: none; }
-h1 { color: #c00; font-weight: normal; }
+h1 { color: #c00; font-weight: normal; padding: 16px; }
+h2 { color: #666; font-weight: normal; padding: 8px 0; }
+
+/* Styles for cherokee-admin layout
+ */
+html>body #container { min-height: 100%; }
+#container { width: 960px; margin: 0 auto; text-align: left; background: #fff; border-left: 1px solid #203f67; border-right: 1px solid #203f67;}
+#topbar { background: #3465a4 url(/static/images/bg-bar.png) top left repeat-x; }
 
 /* JQuery Helpers
 */
@@ -69,6 +77,7 @@ h1 { color: #c00; font-weight: normal; }
 .ui-tabs-nav li.ui-tabs-selected-next { background: transparent url(/CTK/images/tabbg.png) 0 -180px; }
 .ui-tabs-nav li.ui-tabs-selected-next-last { background: transparent url(/CTK/images/tabbg.png) 0 -210px; width: 138px; padding-left: 0;}
 .ui-tabs-nav a { color: #fff; text-decoration: none; display: block; }
+.ui-tabs-nav li.ui-tabs-selected a { color: #000; font-weight: bold; } 
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; }
 .ui-tabs .ui-tabs-hide { display: none !important; }
@@ -95,4 +104,5 @@ h1 { color: #c00; font-weight: normal; }
 /* Loading Message 
  */
 .notice { display: inline; padding-left: 8px; }
+
 
