@@ -116,10 +116,12 @@ class TableRow (Widget):
 class Table (Widget):
     def __init__ (self, props=None, **kwargs):
         Widget.__init__ (self)
-        self.kwargs   = kwargs
-        self.last_row = 0
-        self.rows     = []
-        self.props    = [{},props][bool(props)]
+        self.kwargs      = kwargs
+        self.last_row    = 0
+        self.rows        = []
+        self.props       = [{},props][bool(props)]
+        self.header_rows = []
+        self.header_cols = []
 
     def __add_row (self):
         row = TableRow()
@@ -187,6 +189,16 @@ class Table (Widget):
         return self
 
     def Render (self):
+        # Set the header rows/cols
+        for num in self.header_rows:
+            for field in self.rows[num-1]:
+                if field:
+                    field._tag = 'th'
+
+        for num in self.header_cols:
+            for row in self.rows:
+                row[num]._tag = 'th'
+
         # Render content
         render = RenderResponse()
         for row in self.rows:
@@ -202,14 +214,12 @@ class Table (Widget):
         return render
 
     def set_header (self, row=True, column=False, num=1):
-        if row:
-            for field in self.rows[num-1]:
-                field._tag = 'th'
+        if column:
+            self.header_cols.append(num)
             return
 
-        if column:
-            for row in self.rows:
-                row[num-1]._tag = 'th'
+        if row:
+            self.header_rows.append(num)
             return
 
 
