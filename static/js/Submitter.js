@@ -29,8 +29,8 @@ function Submitter (id, url) {
     this.setup = function (self) {
 	   /* When input looses focus */
 	   var pre = "#submitter" + this.submitter_id;
-	   $(pre+" :text, "+pre+" :password").bind ("blur",     this, this.input_blur_cb);
-	   $(pre+" :text, "+pre+" :password").bind ("keypress", this, this.input_keypress_cb);
+	   $(pre+" :text, "+pre+" :password").not('.noauto').bind ("blur",     this, this.input_blur_cb);
+	   $(pre+" :text, "+pre+" :password").not('.noauto').bind ("keypress", this, this.input_keypress_cb);
 	   $("#submitter" + this.submitter_id + " :checkbox").not('.required').bind ("change", this, this.input_checkbox_cb);
 	   $("#submitter" + this.submitter_id + " select").not('.required').bind ("change", this, this.input_combobox_cb);
 

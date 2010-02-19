@@ -23,9 +23,12 @@
 from Widget import Widget
 
 class Image (Widget):
-    def __init__ (self, props, **kwargs):
+    def __init__ (self, props=None, **kwargs):
         Widget.__init__ (self, **kwargs)
-        self.props = props
+        if props:
+            self.props = props
+        else:
+            self.props = {}
 
     def Render (self):
         if not 'id' in self.props:

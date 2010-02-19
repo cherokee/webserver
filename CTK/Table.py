@@ -140,7 +140,7 @@ class Table (Widget):
             row.grow_to (col)
 
     def __setitem_single (self, pos, widget):
-        assert isinstance(widget, Widget)
+        assert isinstance(widget, Widget) or widget is None
         assert type(pos) == tuple
 
         # Check table bounds

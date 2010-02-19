@@ -110,7 +110,7 @@ $("#%(id)s").click(function() {
 });
 """
 
-class SubmitterButton(Widget):
+class SubmitterButton (Widget):
     def __init__ (self, caption="Submit"):
         Widget.__init__ (self)
 

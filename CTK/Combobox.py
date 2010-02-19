@@ -28,15 +28,15 @@ class Combobox (Widget):
     def __init__ (self, props, options):
         Widget.__init__ (self)
 
-        self._props   = props
+        self.props    = props
         self._options = options
 
         if not 'id' in props:
-            self._props['id'] = 'Combobox_%s' %(self.uniq_id)
-        self.id = self._props['id']
+            self.props['id'] = 'Combobox_%s' %(self.uniq_id)
+        self.id = self.props['id']
 
     def Render (self):
-        selected = self._props.get('selected')
+        selected = self.props.get('selected')
 
         # Render entries
         content = ''
@@ -49,9 +49,9 @@ class Combobox (Widget):
 
         # Render the container
         header = ''
-        for p in filter(lambda x: x!='selected', self._props):
-            if self._props[p]:
-                header += ' %s="%s"' %(p, self._props[p])
+        for p in filter(lambda x: x!='selected', self.props):
+            if self.props[p]:
+                header += ' %s="%s"' %(p, self.props[p])
             else:
                 header += ' %s' %(p)
 
