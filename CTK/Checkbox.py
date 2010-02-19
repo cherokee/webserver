@@ -26,7 +26,7 @@ from Widget import Widget, RenderResponse
 from Server import cfg
 
 HTML = """
-<input type="checkbox" name="%(name)s" %(checked)s %(disabled)s/>
+<input type="checkbox" %(props)s />
 """
 
 class Checkbox (Widget):
@@ -38,25 +38,28 @@ class Checkbox (Widget):
         else:
             self._props = {}
 
-        checked = props.pop('checked')
-
-        self.checked  = bool(int(checked))
-        self.disabled = props.get('disabled')
-
     def Render (self):
-        if self.checked:
-            self._props['checked'] = 'checked="checked" '
-        else:
-            self._props['checked'] = ''
+        # Deal with a couple of exceptions
+        if self._props.has_key('checked') and int(self._props.pop('checked')):
+            self._props['checked'] = "checked"
 
-        if self.disabled:
-            self._props['disabled'] = 'disabled'
-        else:
-            self._props['disabled'] = ''
+        if self._props.has_key('disabled'):
+            self._props['disabled'] = None
 
-        # Render the text field
-        html = HTML % (self._props)
-        return RenderResponse (html)
+        # Render the properties
+        plist = []
+        for k in self._props:
+            if self._props[k]:
+                plist.append ('%s="%s"'%(k, self._props[k]))
+            else:
+                plist.append (k)
+        props = " ".join (plist)
+
+        # Render the widget
+        render = Widget.Render (self)
+        render.html += HTML % ({'props': props})
+        return render
+
 
 class CheckCfg (Checkbox):
     def __init__ (self, key, default, props=None):
