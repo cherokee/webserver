@@ -353,3 +353,12 @@ class Config:
             return '%s!1'%(pre)
 
         return '%s!%d'%(pre, entries[-1] + 1)
+
+    def get_lowest_entry (self, pre):
+        entries = [int(x) for x in self.keys(pre)]
+        entries.sort()
+
+        if entries:
+            return entries[0]
+
+        return 1
