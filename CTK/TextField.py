@@ -64,7 +64,11 @@ class TextField (Widget):
         js = ''
         if self._props.get('optional'):
             js += "$('#%s').DefaultValue('optional','%s');" %(self.id, _("optional"))
-            self._props['class'] = 'optional'
+
+            if not self._props.get('class'):
+                self._props['class'] = 'optional'
+            else:
+                self._props['class'] += ' optional'
 
         # Render the text field
         html = '<input type="%s"%s />' %(self.type, self.__get_input_props())
@@ -103,3 +107,38 @@ class TextCfg (TextField):
 
         # Init parent
         TextField.__init__ (self, props)
+
+
+JS = """
+$("#%(id)s").bind ("blur", function (event){
+    var value = $("#%(id)s").val();
+    if ("%(value)s" != value) {
+       $.ajax ({type: 'POST', url: '%(url)s', data: '%(key)s='+value, error: function() {
+          event.stopPropagation();
+          $("#%(id)s").val("%(value)s");
+       }});
+    }
+});
+
+$("#%(id)s").bind ("keypress", function(event){
+    if (event.keyCode == 13) {
+        focus_next_input (this);
+    }
+});
+"""
+
+class TextCfgAuto (TextCfg):
+    def __init__ (self, key, url, optional=False, props=None):
+        self.key = key
+        self.url = url
+        TextCfg.__init__ (self, key, optional, props)
+
+    def Render (self):
+        value = cfg.get_val (self.key, '')
+
+        render = TextCfg.Render(self)
+        render.js += JS %({'id':    self.id,
+                           'url':   self.url,
+                           'key':   self.key,
+                           'value': value})
+        return render
