@@ -133,12 +133,7 @@ function Submitter (id, url) {
 
 	   /* Enter -> Focus next input */
 	   if (event.keyCode == 13) {
-		  var inputs = $("input").not("input:hidden");
-		  var n      = inputs.index(this);
-		  var next   = (n < inputs.length -1) ? n+1 : 0;
-
-		  inputs[next].blur();
-		  inputs[next].focus();
+		  focus_next_input (this);
 		  return;
 	   }
 

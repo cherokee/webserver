@@ -36,3 +36,12 @@ function get_cookie (key) {
     return unescape (document.cookie.substring (i, e));
 }
 
+function focus_next_input (input) {
+	var inputs = $("input").not("input:hidden");
+	var n      = inputs.index(input);
+	var next   = (n < inputs.length -1) ? n+1 : 0;
+
+	inputs[next].blur();
+	inputs[next].focus();
+
+}
