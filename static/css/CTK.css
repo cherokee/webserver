@@ -31,13 +31,13 @@ input,button,textarea,select{*font-size:100%;}
 strong {font-weight: bold;}
 em {font-style: italic;}
 code {font-family: courier;}
-img {display: block; border: none;}
+img { border: none;}
 ul {list-style: none;}
 
 /* General styles
  */
 html { height: 100%; }
-body { background: #def; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 14px; color: #000; text-align: center; height: 100%; }
+body { background: #def url(/static/images/bg-bar.png) top left repeat-x; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 14px; color: #000; text-align: center; height: 100%; }
 a { color: #3465a4; }
 a:hover { color: #c00; text-decoration: underline; }
 a:active { outline: none; }
@@ -48,8 +48,21 @@ h2 { color: #666; font-weight: normal; padding: 8px 0; }
 /* Styles for cherokee-admin layout
  */
 html>body #container { min-height: 100%; }
-#container { width: 960px; margin: 0 auto; text-align: left; background: #fff; border-left: 1px solid #2c579e; border-right: 1px solid #2c579e;}
-#topbar { background: #3465a4 url(/static/images/bg-bar.png) top left repeat-x; }
+#container { width: 960px; margin: 0 auto; text-align: left; }
+#topbar { background: #fff url(/static/images/bg-bar.png) top left repeat-x; }
+#main { background: #fff; border: 1px solid #cde; padding: 8px; margin-top: 16px; }
+
+#nav { float: right; padding:0; font-size: 10px; }
+#nav li {float: left; margin: 0;padding: 0;text-align: center; width: 64px; height: 62px; }
+#nav li:hover { background-color: #2b5ea1; }
+#nav li.selected  a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 58px; }
+#nav li a { display: block; height: 20px; text-decoration: none;color: #eef;border: none; padding-top: 42px; text-shadow: #14335d 0px 1px 0px; }
+#nav li a:hover { color: #fff; text-decoration: none;}
+#nav-status { background: transparent url(/static/images/status.png) no-repeat 16px 8px; }
+#nav-general { background: transparent url(/static/images/general.png) no-repeat 16px 8px; }
+#nav-icons { background: transparent url(/static/images/icons.png) no-repeat 16px 8px; }
+#nav-mime { background: transparent url(/static/images/mime.png) no-repeat 16px 8px; }
+#nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat 16px 8px; }
 
 /* JQuery Helpers
 */
