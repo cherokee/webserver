@@ -100,6 +100,7 @@ function Submitter (id, url) {
 				for (var key in data['errors']) {
 				    filter = "#submitter"+ self.submitter_id + " div.error[key='"+ key +"']";
 				    $(filter).html (data['errors'][key]);
+				    had_errors = 1;
 				}
 
 				/* Update the fields */
@@ -113,7 +114,9 @@ function Submitter (id, url) {
 			 }
 
 			 /* Trigger events */
-			 $(pre).trigger('submit_success');
+			 if (data['ret'] == "ok") {
+				$(pre).trigger('submit_success');
+			 }
 		  },
 		  error: function (xhr, ajaxOptions, thrownError) {
 			 self.restore_orig_values (self);

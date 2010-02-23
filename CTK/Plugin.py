@@ -71,19 +71,19 @@ class Plugin (Container):
 
     def apply (self):
         "Commodity method"
-        for key in CTK.post:
-            print "POST", key, "=", CTK.post[key]
+        for key in post:
+            cfg[key] = post[key]
         return {'ret': 'ok'}
 
 
 class PluginInstanceProxy:
-    def __call__ (self, key, modules):
+    def __call__ (self, key, modules, **kwargs):
         # Update the configuration
         new_val = post.get_val (key, None)
         cfg[key] = new_val
 
         # Instance the content
-        plugin = instance_plugin (new_val, key)
+        plugin = instance_plugin (new_val, key, **kwargs)
         if not plugin:
             return ''
 
@@ -97,7 +97,7 @@ class PluginInstanceProxy:
 
 
 class PluginSelector (Container):
-    def __init__ (self, key, modules):
+    def __init__ (self, key, modules, **kwargs):
         Container.__init__ (self)
 
         # Properties
@@ -108,10 +108,10 @@ class PluginSelector (Container):
 
         # Widgets
         self.selector_widget = ComboCfg (key, modules)
-        self.plugin          = instance_plugin (active_name, key)
+        self.plugin          = instance_plugin (active_name, key, **kwargs)
 
         # Register hidden URL for the plugin content
-        publish (self._url, PluginInstanceProxy, key=key, modules=modules, method='POST')
+        publish (self._url, PluginInstanceProxy, key=key, modules=modules, method='POST', **kwargs)
 
     def _get_helps (self):
         global_key  = self._key.replace('!','_')
@@ -181,7 +181,7 @@ def load_module (name):
     return plugin
 
 
-def instance_plugin (name, key):
+def instance_plugin (name, key, **kwargs):
     # Load the Python module
     module = load_module (name)
     if not module:
@@ -191,5 +191,5 @@ def instance_plugin (name, key):
 
     # Instance an object
     class_name = 'Plugin_%s' %(name)
-    obj = module.__dict__[class_name](key)
+    obj = module.__dict__[class_name](key, **kwargs)
     return obj

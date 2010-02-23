@@ -39,3 +39,5 @@ def Ajax (url, data='', type='POST', async=True, dataType='json',
     js += "});"
     return js
 
+def Hide (id):
+    return "$('#%s').hide();"%(id)

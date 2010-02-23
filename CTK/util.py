@@ -3,7 +3,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2009 Alvaro Lopez Ortega
+# Copyright (C) 2009-2010 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -20,27 +20,22 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+#
+# Strings
+#
+def formater (string, props):
+    """ This function does a regular substitution 'str%(dict)' with a
+    little difference. It takes care of the escaped percentage chars,
+    so strings can be replaced an arbitrary number of times."""
 
-class Container (Widget):
-    def __init__ (self):
-        Widget.__init__ (self)
-        self.child = []
+    s2 = ''
+    n  = 0
+    while n < len(string):
+        if n<len(string)-1 and string[n] == string[n+1] == '%':
+            s2 += '%%%%'
+            n  += 2
+        else:
+            s2 += string[n]
+            n  += 1
 
-    def __len__ (self):
-        return len(self.child)
-
-    def __add__ (self, widget):
-        assert isinstance(widget, Widget)
-
-        self.child.append (widget)
-        return self
-
-    def Render (self):
-        render = Widget.Render(self)
-
-        for c in self.child:
-            tmp = c.Render()
-            render += tmp
-
-        return render
+    return s2 %(props)

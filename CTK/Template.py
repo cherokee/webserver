@@ -25,7 +25,7 @@ import stat
 import inspect
 
 from Widget import Widget
-
+from util import formater
 
 class Template (Widget):
     cache = {}
@@ -76,12 +76,13 @@ class Template (Widget):
         content = self._content_get()
         while True:
             prev = content[:]
-            content = content % (self.vars)
+            content = formater (content, self.vars)
 
             if content == prev:
                 break
 
-        return content
+        # Get rid of %%s
+        return content %({})
 
     def _figure_vars (self):
         vars = globals()

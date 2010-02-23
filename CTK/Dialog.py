@@ -20,21 +20,21 @@
 # 02110-1301, USA.
 #
 
+import JS
 from Container import Container
-from Widget import RenderResponse
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
     '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>'
 ]
 
-HTML = """
+DIALOG_HTML = """
 <div id="%(id)s" title="%(title)s">
 %(content)s
 </div>
 """
 
-JS = """
+DIALOG_JS = """
 $("#%(id)s").dialog(%(dialog_props)s);
 """
 
@@ -86,20 +86,20 @@ class Dialog (Container):
             self.props['buttons'] = self._render_buttons_property()
 
         # Render
-        render_child = Container.Render (self)
+        render       = Container.Render (self)
         dialog_props = py2js_dic (self.props)
 
         props = {'id':           self.id,
                  'title':        self.title,
-                 'content':      render_child.html,
+                 'content':      render.html,
                  'dialog_props': dialog_props}
 
-        html = HTML %(props)
-        js   = JS   %(props)
+        html = DIALOG_HTML %(props)
+        js   = DIALOG_JS   %(props)
 
-        render = RenderResponse (html)
-        render.js      = render_child.js + js
-        render.headers = render_child.headers + HEADERS
+        render.html     = html
+        render.js      += js
+        render.headers += HEADERS
 
         return render
 
@@ -121,5 +121,8 @@ class Dialog (Container):
         js = '/* code */ { %s }' %(','.join(buttons_js))
         return js
 
-    def get_js_to_show (self):
+    def JS_to_show (self):
         return " $('#%s').dialog('open');" % (self.id)
+
+    def JS_to_close (self):
+        return " $('#%s').dialog('close');" % (self.id)
