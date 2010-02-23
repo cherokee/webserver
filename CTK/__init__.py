@@ -49,7 +49,7 @@ from HiddenField import HiddenField
 from Uploader import Uploader
 from Plugin import PluginSelector
 from Refreshable import Refreshable
-from Image import Image
+from Image import Image, ImageStock
 from SortableList import SortableList
 from Indenter import Indenter
 from Notice import Notice

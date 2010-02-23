@@ -39,3 +39,10 @@ class Image (Widget):
         render = Widget.Render (self)
         render.html = '<img %s />' %(props)
         return render
+
+class ImageStock (Image):
+    def __init__ (self, name):
+        if name == 'del':
+            Image.__init__ (self, {'src':'/CTK/images/del.png', 'alt':'Delete'})
+        else:
+            assert False, "Unknown stock image"
