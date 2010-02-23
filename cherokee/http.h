@@ -136,14 +136,18 @@ typedef enum {                               /* Protocol   RFC  Section */
 	http_unprocessable_entity     = 422, /*   WebDAV  2518  10.3    */
 	http_locked                   = 423, /*   WebDAV  2518  10.4    */
 	http_failed_dependency        = 424, /*   WebDAV  2518  10.5    */
+	http_unordered_collection     = 425, /*   WebDAV  3648          */
 	http_upgrade_required         = 426, /* TLS upgr  2817   6      */
+	http_retry_with               = 449, /* Microsoft extension     */
 	http_internal_error           = 500, /* HTTP/1.1  2616  10.5.1  */
 	http_not_implemented          = 501, /* HTTP/1.1  2616  10.5.2  */
 	http_bad_gateway              = 502, /* HTTP/1.1  2616  10.5.3  */
 	http_service_unavailable      = 503, /* HTTP/1.1  2616  10.5.4  */
 	http_gateway_timeout          = 504, /* HTTP/1.1  2616  10.5.5  */
 	http_version_not_supported    = 505, /* HTTP/1.1  2616  10.5.6  */
+	http_variant_also_negotiates  = 506, /* HTTP/1.1  2295   8.1    */
 	http_insufficient_storage     = 507, /* HTTP/1.1  2616  10.6    */
+	http_bandwidth_limit_exceeded = 509, /* Apache extension        */
 	http_not_extended             = 510  /* HTTP Ext  2774   7      */
 } cherokee_http_t;
 
@@ -187,14 +191,18 @@ typedef enum {                               /* Protocol   RFC  Section */
 #define http_unprocessable_entity_string     "422 Unprocessable Entity"
 #define http_locked_string                   "423 Locked"
 #define http_failed_dependency_string        "424 Failed Dependency"
+#define http_unordered_collection_string     "425 Unordered Collection"
 #define http_upgrade_required_string         "426 Upgrade Required"
+#define http_retry_with_string               "449 Retry With"
 #define http_internal_error_string           "500 Internal Server Error"
 #define http_not_implemented_string          "501 Not Implemented"
 #define http_bad_gateway_string              "502 Bad gateway"
 #define http_service_unavailable_string      "503 Service Unavailable"
 #define http_gateway_timeout_string          "504 Gateway Timeout"
 #define http_version_not_supported_string    "505 HTTP Version Not Supported"
+#define http_variant_also_negotiates_string  "506 Variant Also Negotiates"
 #define http_insufficient_storage_string     "507 Insufficient Storage"
+#define http_bandwidth_limit_exceeded_string "509 Bandwidth Limit Exceeded"
 #define http_not_extended_string             "510 Not Extended"
 
 #define http_type_100_max 102

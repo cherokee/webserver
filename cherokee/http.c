@@ -234,6 +234,8 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_unprocessable_entity:     *str = http_unprocessable_entity_string; break;
 	case http_locked:                   *str = http_locked_string; break;
 	case http_failed_dependency:        *str = http_failed_dependency_string; break;
+	case http_unordered_collection:     *str = http_unordered_collection_string; break;
+	case http_retry_with:               *str = http_retry_with_string; break;
 
 	/* 5xx
 	 */
@@ -243,7 +245,9 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_service_unavailable:      *str = http_service_unavailable_string; break;
 	case http_gateway_timeout:          *str = http_gateway_timeout_string; break;
 	case http_version_not_supported:    *str = http_version_not_supported_string; break;
+	case http_variant_also_negotiates:  *str = http_variant_also_negotiates_string; break;
 	case http_insufficient_storage:     *str = http_insufficient_storage_string; break;
+	case http_bandwidth_limit_exceeded: *str = http_bandwidth_limit_exceeded_string; break;
 	case http_not_extended:             *str = http_not_extended_string; break;
 
 	/* 1xx
@@ -316,6 +320,8 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (unprocessable_entity);
 		entry_code (locked);
 		entry_code (failed_dependency);
+		entry_code (unordered_collection);
+		entry_code (retry_with);
 
 		/* 5xx
 		 */
@@ -326,7 +332,9 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (gateway_timeout);
 		entry_code (version_not_supported);
 		entry_code (insufficient_storage);
+		entry_code (bandwidth_limit_exceeded);
 		entry_code (not_extended);
+		entry_code (variant_also_negotiates);
 
 		/* 1xx
 		 */
