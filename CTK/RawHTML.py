@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+from Widget import Widget
 
 class RawHTML (Widget):
     def __init__ (self, init=''):
@@ -32,4 +32,6 @@ class RawHTML (Widget):
         self.html += txt
 
     def Render (self):
-        return RenderResponse (self.html)
+        render = Widget.Render(self)
+        render.html += self.html
+        return render

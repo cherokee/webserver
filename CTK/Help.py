@@ -24,7 +24,6 @@ __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 
 from Widget import Widget
 from Container import Container
-from Widget import RenderResponse
 
 
 class HelpEntry (Widget):
@@ -34,7 +33,7 @@ class HelpEntry (Widget):
         self.ref   = ref
 
     def Render (self):
-        render = RenderResponse()
+        render = Widget.Render(self)
         render.html = '<div class="help_entry"><a href="/help/%s.html">%s</a></div>' %(self.ref, self.title)
         return render
 
@@ -60,7 +59,7 @@ class HelpGroup (Widget):
         return self
 
     def Render (self):
-        render = RenderResponse()
+        render = Widget.Render(self)
         for entry in self.entries:
             render += entry.Render()
 
@@ -96,7 +95,7 @@ class HelpMenu (Widget):
 
     def Render (self):
         # Empty response
-        render = RenderResponse()
+        render = Widget.Render(self)
 
         # Render the help entries
         for entry in self.helps:

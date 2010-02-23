@@ -43,6 +43,6 @@ class Image (Widget):
 class ImageStock (Image):
     def __init__ (self, name):
         if name == 'del':
-            Image.__init__ (self, {'src':'/CTK/images/del.png', 'alt':'Delete'})
+            Image.__init__ (self, {'src':'/CTK/images/del.png', 'alt': _('Delete')})
         else:
             assert False, "Unknown stock image"

@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+from Widget import Widget
 from Server import cfg
 
 
@@ -56,7 +56,12 @@ class Combobox (Widget):
                 header += ' %s' %(p)
 
         html = '<select%s>%s</select>' %(header, content)
-        return RenderResponse(html)
+
+        render = Widget.Render (self)
+        render.html += html
+
+        return render
+
 
 class ComboCfg (Combobox):
     def __init__ (self, key, options, props=None):

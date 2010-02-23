@@ -21,7 +21,7 @@
 #
 
 from Table import Table
-from Widget import Widget, RenderResponse
+from Widget import Widget
 from RawHTML import RawHTML
 from Submitter import Submitter
 from Container import Container
@@ -109,7 +109,7 @@ class PropsAuto (Widget):
         self.entries.append ((title, box, comment, use_submitter))
 
     def Render (self):
-        render = RenderResponse()
+        render = Widget.Render(self)
 
         for e in self.entries:
             title, widget, comment, use_submitter = e

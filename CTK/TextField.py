@@ -22,7 +22,7 @@
 
 from Table import Table
 from RawHTML import RawHTML
-from Widget import Widget, RenderResponse
+from Widget import Widget
 from Server import cfg
 
 HEADER = [
@@ -76,7 +76,12 @@ class TextField (Widget):
         # Render the error reporting field
         html += '<div class="error"%s></div>' %(self.__get_error_div_props())
 
-        return RenderResponse (html, js, headers=HEADER)
+        render = Widget.Render (self)
+        render.html    += html
+        render.js      += js
+        render.headers += HEADER
+
+        return render
 
     def JS_to_clean (self):
         return "$('#%s').attr('value', '');" %(self.id)

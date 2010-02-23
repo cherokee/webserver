@@ -26,7 +26,6 @@ from Widget import Widget
 from RawHTML import RawHTML
 from Container import Container
 from TextField import TextField
-from Widget import RenderResponse
 from PageCleaner import Uniq_Block
 
 HTML = """
@@ -77,24 +76,22 @@ class Submitter (Container):
 
     def Render (self):
         # Child render
-        tmp = Container.Render(self)
+        render = Container.Render(self)
 
         # Own render
         props = {'id_widget':      self.uniq_id,
                  'url':            self._url,
-                 'html':           tmp.html,
-                 'js':             tmp.js,
+                 'html':           render.html,
+                 'js':             render.js,
                  'js_bind_events': self._bind_render_js()}
 
-        my = RenderResponse()
+        render.html     = HTML    %(props)
+        render.js       = JS_INIT %(props)
+        render.js      += Uniq_Block (JS_FOCUS %(props))
+        render.headers += HEADER
 
-        my.html    = HTML    %(props)
-        my.js      = JS_INIT %(props)
-        my.js     += Uniq_Block (JS_FOCUS %(props))
-        my.headers = HEADER + tmp.headers
-
-        my.clean_up_headers()
-        return my
+        render.clean_up_headers()
+        return render
 
 
 
@@ -126,5 +123,9 @@ class SubmitterButton (Widget):
         html = '<input id="%(id)s" type="button" value="%(caption)s" />' %(locals())
         js   = FORCE_SUBMIT_JS %(locals())
 
-        return RenderResponse (html, js)
+        render = Widget.Render (self)
+        render.html += html
+        render.js   += js
+
+        return render
 

@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+from Widget import Widget
 from Container import Container
 
 
@@ -95,7 +95,8 @@ class TableRow (Widget):
 
     def Render (self):
         # Render content
-        render = RenderResponse()
+        render = Widget.Render(self)
+
         for field in self.entries:
             if field:
                 render += field.Render()
@@ -200,7 +201,8 @@ class Table (Widget):
                 row[num]._tag = 'th'
 
         # Render content
-        render = RenderResponse()
+        render = Widget.Render (self)
+
         for row in self.rows:
             render += row.Render()
 

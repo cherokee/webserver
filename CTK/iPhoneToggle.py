@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+from Widget import Widget
 
 HEADERS = [
     '<script type="text/javascript" src="/CTK/js/jquery.ibutton.js"></script>',
@@ -48,7 +48,9 @@ class iPhoneToggle (Widget):
             self._props['id'] = 'widget%d'%(self.uniq_id)
 
     def Render (self):
-        html = HTML %(self._props)
-        js   = JS   %(self._props)
+        render = Widget.Render(self)
 
-        return RenderResponse (html, js, HEADERS)
+        render.html += HTML %(self._props)
+        render.js   += JS   %(self._props)
+
+        return render

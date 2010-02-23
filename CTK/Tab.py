@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+from Widget import Widget
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
@@ -101,8 +101,8 @@ class Tab (Widget):
         self._tabs.append ((title, widget))
 
     def Render (self):
+        render = Widget.Render(self)
         id     = self._props['id']
-        render = RenderResponse()
 
         ul_html  = ''
         tab_html = ''

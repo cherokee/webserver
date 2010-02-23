@@ -25,7 +25,7 @@ import cgi
 import tempfile
 
 from Server import publish, get_scgi
-from Widget import Widget, RenderResponse
+from Widget import Widget
 from PageCleaner import Uniq_Block
 
 
@@ -169,8 +169,9 @@ class Uploader (Widget):
         raw_html  = Uniq_Block(CSS)
         raw_html += HTML
 
-        html = raw_html %(props)
-        js   = JS       %(props)
+        render = Widget.Render (self)
+        render.html    += raw_html %(props)
+        render.js      += JS       %(props)
+        render.headers += HEADERS
 
-        render = RenderResponse (html, js, HEADERS)
         return render

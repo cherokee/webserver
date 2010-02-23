@@ -21,7 +21,7 @@
 #
 
 from consts import *
-from Widget import Widget, RenderResponse
+from Widget import Widget
 from Server import publish
 
 from httplib import HTTPConnection
@@ -66,11 +66,13 @@ class Proxy (Widget):
         publish (self._url_local, ProxyRequest, host=host, req=req)
 
     def Render (self):
-        props = {'id_widget':  self._id,
-                 'proxy_url':  self._url_local,
-                 'async_bool': ['false','true'][self._async]}
+       render = Widget.Render(self)
 
-        html = HTML       %(props)
-        js   = JAVASCRIPT %(props)
+       props = {'id_widget':  self._id,
+                'proxy_url':  self._url_local,
+                'async_bool': ['false','true'][self._async]}
 
-        return RenderResponse (html, js)
+       render.html += HTML       %(props)
+       render.js   += JAVASCRIPT %(props)
+
+       return render

@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget, RenderResponse
+from Widget import Widget
 
 
 class HiddenField (Widget):
@@ -51,4 +51,8 @@ class HiddenField (Widget):
     def Render (self):
         # Render the text field
         html = '<input type="hidden"%s />' %(self.__get_input_props())
-        return RenderResponse(html)
+
+        render = Widget.Render(self)
+        render.html += html
+
+        return render

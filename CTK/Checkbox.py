@@ -22,7 +22,7 @@
 
 __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 
-from Widget import Widget, RenderResponse
+from Widget import Widget
 from Server import cfg
 
 HTML = """
