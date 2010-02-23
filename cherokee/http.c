@@ -64,6 +64,18 @@ cherokee_http_method_to_string (cherokee_http_method_t method, const char **str,
 		entry (http_unlock, "UNLOCK");
 		entry (http_unsubscribe, "UNSUBSCRIBE");
 		entry (http_report, "REPORT");
+		entry (http_patch, "PATCH");
+		entry (http_version_control, "VERSION_CONTROL");
+		entry (http_checkout, "CHECKOUT");
+		entry (http_uncheckout, "UNCHECKOUT");
+		entry (http_checkin, "CHECKIN");
+		entry (http_update, "UPDATE");
+		entry (http_label, "LABEL");
+		entry (http_mkworkspace, "MKWORKSPACE");
+		entry (http_mkactivity, "MKACTIVITY");
+		entry (http_baseline_control, "BASELINE_CONTROL");
+		entry (http_merge, "MERGE");
+		entry (http_invalid, "INVALID");
 
 	default:
 		break;
@@ -121,6 +133,30 @@ cherokee_http_string_to_method (cherokee_buffer_t      *string,
 		*method = http_unsubscribe;
 	else if (cherokee_buffer_case_cmp_str (string, "report") == 0)
 		*method = http_report;
+	else if (cherokee_buffer_case_cmp_str (string, "patch") == 0)
+		*method = http_patch;
+	else if (cherokee_buffer_case_cmp_str (string, "version_control") == 0)
+		*method = http_version_control;
+	else if (cherokee_buffer_case_cmp_str (string, "checkout") == 0)
+		*method = http_checkout;
+	else if (cherokee_buffer_case_cmp_str (string, "uncheckout") == 0)
+		*method = http_uncheckout;
+	else if (cherokee_buffer_case_cmp_str (string, "checkin") == 0)
+		*method = http_checkin;
+	else if (cherokee_buffer_case_cmp_str (string, "update") == 0)
+		*method = http_update;
+	else if (cherokee_buffer_case_cmp_str (string, "label") == 0)
+		*method = http_label;
+	else if (cherokee_buffer_case_cmp_str (string, "mkworkspace") == 0)
+		*method = http_mkworkspace;
+	else if (cherokee_buffer_case_cmp_str (string, "mkactivity") == 0)
+		*method = http_mkactivity;
+	else if (cherokee_buffer_case_cmp_str (string, "baseline_control") == 0)
+		*method = http_baseline_control;
+	else if (cherokee_buffer_case_cmp_str (string, "merge") == 0)
+		*method = http_merge;
+	else if (cherokee_buffer_case_cmp_str (string, "invalid") == 0)
+		*method = http_invalid;
 	else {
 		*method = http_unknown;
 		return ret_not_found;
