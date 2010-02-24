@@ -27,28 +27,63 @@ from Submitter import Submitter
 from Container import Container
 from HiddenField import HiddenField
 
-class PropsTable (Table):
+HTML_TABLE = """
+<div class="propstable">%s</div>
+"""
+
+HTML_ENTRY = """
+<div class="entry">
+   <div class="title">%(title)s</div>
+   <div class="widget">%(widget_html)s</div>
+   <div class="comment">%(comment)s</div>
+   <div class="after"></div>
+</div>
+"""
+
+HEADERS = ['<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />']
+
+
+class PropsTable (Widget):
+    """Property Table: Formatting"""
+
     def __init__ (self, **kwargs):
-        Table.__init__ (self, **kwargs)
-        self.current_row = 1
+        Widget.__init__ (self, **kwargs)
+        self.entries = []
 
     def Add (self, title, widget, comment):
-        widget_title   = RawHTML(title)
-        widget_comment = RawHTML(comment)
+        self.entries.append ((title, widget, comment))
 
-        Table.__setitem__ (self, (self.current_row, 1),  [widget_title, widget])
-        Table.__setitem__ (self, (self.current_row+1, 1), widget_comment)
+    def Render (self):
+        render = Widget.Render(self)
 
-        field = Table.__getitem__ (self, (self.current_row+1, 1))
-        field['colspan'] = "2"
+        for e in self.entries:
+            title, widget, comment = e
+            if widget:
+                r = widget.Render()
+            else:
+                r = Container().Render()
 
-        self.current_row += 2
+            props = {'title':       title,
+                     'widget_html': r.html,
+                     'comment':     comment}
+
+            r.html = HTML_ENTRY %(props)
+            render += r
+
+        render.html = HTML_TABLE %(render.html)
+        return render
+
 
 class PropsTableAuto (PropsTable):
+    """Property Table: Adds Submitters and constants"""
+
     def __init__ (self, url, **kwargs):
         PropsTable.__init__ (self, **kwargs)
         self._url      = url
         self.constants = {}
+
+    def AddConstant (self, key, val):
+        self.constants[key] = val
 
     def Add (self, title, widget, comment):
         submit = Submitter (self._url)
@@ -64,25 +99,6 @@ class PropsTableAuto (PropsTable):
             submit += widget
 
         return PropsTable.Add (self, title, submit, comment)
-
-    def AddConstant (self, key, val):
-        self.constants[key] = val
-
-
-HTML_TABLE = """
-<div class="propstable">%s</div>
-"""
-
-HTML_ENTRY = """
-<div class="entry">
-   <div class="title">%(title)s</div>
-   <div class="widget">%(widget_html)s</div>
-   <div class="comment">%(comment)s</div>
-   <div class="after"></div>
-</div>
-"""
-
-HEADERS = ['<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />']
 
 
 class PropsAuto (Widget):
