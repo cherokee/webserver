@@ -23,6 +23,7 @@
 __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 
 from Widget import Widget
+from Container import Container
 from Server import cfg
 
 HTML = """
@@ -60,7 +61,6 @@ class Checkbox (Widget):
         render.html += HTML % ({'props': props})
         return render
 
-
 class CheckCfg (Checkbox):
     def __init__ (self, key, default, props=None):
         if not props:
@@ -80,3 +80,23 @@ class CheckCfg (Checkbox):
 
         # Init parent
         Checkbox.__init__ (self, props)
+
+class CheckboxText (Checkbox):
+    def __init__ (self, props=None, text='Enabled'):
+        Checkbox.__init__ (self, props)
+        self.text = text
+
+    def Render (self):
+        render = Checkbox.Render (self)
+        render.html = '<div id="%s" class="checkbox-text">%s %s</div>' %(self.id, render.html, self.text)
+        return render
+
+class CheckCfgText (CheckCfg):
+    def __init__ (self, key, default, text='Enabled', props=None):
+        CheckCfg.__init__ (self, key, default, props)
+        self.text = text
+
+    def Render (self):
+        render = CheckCfg.Render (self)
+        render.html = '<div id="%s" class="checkbox-text">%s %s</div>' %(self.id, render.html, self.text)
+        return render

@@ -35,7 +35,7 @@ import util
 from Table import Table, TableFixed
 from RawHTML import RawHTML
 from TextField import TextField, TextFieldPassword, TextCfg, TextCfgAuto
-from Checkbox import Checkbox, CheckCfg
+from Checkbox import Checkbox, CheckCfg, CheckboxText, CheckCfgText
 from Combobox import Combobox, ComboCfg
 from PropsTable import PropsTable, PropsTableAuto, PropsAuto
 from Template import Template
