@@ -54,3 +54,4 @@ from SortableList import SortableList
 from Indenter import Indenter
 from Notice import Notice
 from Link import Link, LinkIcon
+from DatePicker import DatePicker
