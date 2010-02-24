@@ -40,7 +40,7 @@ class PropsTable (Table):
         Table.__setitem__ (self, (self.current_row+1, 1), widget_comment)
 
         field = Table.__getitem__ (self, (self.current_row+1, 1))
-        field['cellspan'] = "2"
+        field['colspan'] = "2"
 
         self.current_row += 2
 
