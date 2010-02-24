@@ -124,8 +124,8 @@ class Table (Widget):
         self.header_rows = []
         self.header_cols = []
 
-        if 'id' in props:
-            self.id = props.pop('id')
+        if 'id' in self.props:
+            self.id = self.props.pop('id')
 
     def __add_row (self):
         row = TableRow()
