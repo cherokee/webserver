@@ -46,7 +46,7 @@ class DatePicker (Widget):
 
     def __get_props (self):
         render = ''
-        if nos self.props:
+        if not self.props:
             return render
 
         if 'class' in self.props:
