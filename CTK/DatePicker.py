@@ -28,7 +28,7 @@ HEADERS = [
 ]
 
 HTML = """
-<input type="text" id="%(id)s" class="datepicker">
+<input type="text" id="%(id)s"%(props)s>
 """
 
 JS = """
@@ -41,11 +41,29 @@ class DatePicker (Widget):
 
         if props and 'id' in props:
             self.id = props['id']
+            props.pop('id')
+        self.props = props
+
+    def __get_props (self):
+        render = ''
+        if nos self.props:
+            return render
+
+        if 'class' in self.props:
+            self.props['class'] += ' datepicker'
+        else:
+            self.props['class'] = 'datepicker'
+
+        for key,val in self.props.items():
+            if key and val:
+                render += ' %s="%s"' % (key,str(val))
+        return render
 
     def Render (self):
         render = Widget.Render (self)
 
-        render.html    += HTML %({'id': self.id})
+        render.html    += HTML %({'id': self.id,
+                                  'props': self.__get_props()})
         render.js      += JS   %({'id': self.id})
         render.headers += HEADERS
 
