@@ -23,6 +23,7 @@
 # Generic
 from Widget import Widget, RenderResponse
 from Container import Container
+from Box import Box
 from Submitter import Submitter, SubmitterButton
 from Page import Page
 from Config import Config
