@@ -30,9 +30,12 @@ class Container (Widget):
     def __len__ (self):
         return len(self.child)
 
-    def __add__ (self, widget):
-        assert isinstance(widget, Widget)
+    def __nonzero__ (self):
+        "It is an obj, no matter its child."
+        return True
 
+    def __iadd__ (self, widget):
+        assert isinstance(widget, Widget)
         self.child.append (widget)
         return self
 

@@ -43,12 +43,14 @@ def _remove_dupped_code (txt):
         n1 = txt.find(PAGE_CLEAN_DUP_BEGIN)
         if n1 == -1:
             return txt
+
         n2 = txt.find(PAGE_CLEAN_DUP_END)
+        assert n2 != -1
 
         # Remove tags
         maybe_dupped = txt[n1+len(PAGE_CLEAN_DUP_BEGIN):n2]
         if maybe_dupped in dups:
-            txt = txt[:n1] + txt [n2+len(PAGE_CLEAN_DUP_END):]
+            txt = txt[:n1] + txt[n2+len(PAGE_CLEAN_DUP_END):]
         else:
-            txt = txt[:n1] + maybe_dupped + txt [n2+len(PAGE_CLEAN_DUP_END):]
+            txt = txt[:n1] + maybe_dupped + txt[n2+len(PAGE_CLEAN_DUP_END):]
             dups[maybe_dupped] = True
