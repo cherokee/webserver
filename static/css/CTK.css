@@ -84,6 +84,42 @@ html>body #container { min-height: 100%; }
 /* end clearfix */
 .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
 
+/* Error
+ */
+.error { color: #c00; font-weight: bold; font-size: 90%; }
+
+/* Button
+ */
+a.button {
+    background: transparent url('/CTK/images/bg-button-a.png') no-repeat scroll top right;
+    color: #fff;
+    display: block;
+    float: left;
+    font-size: 12px;
+    height: 24px;
+    margin-right: 6px;
+    padding-right: 18px; 
+    text-decoration: none;
+}
+
+a.button span {
+    background: transparent url('/CTK/images/bg-button-span.png') no-repeat;
+    display: block;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+}
+
+a.button:active {
+    background-position: bottom right;
+    color: #fff;
+    outline: none; 
+}
+
+a.button:active span {
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; 
+}
+
 /* Styles for CTK/Tabs.py
  */
 .ui-tabs { zoom: 1; background: transparent url(/CTK/images/tabbg.png) 0 -240px repeat-x; }
@@ -209,4 +245,10 @@ html>body #container { min-height: 100%; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
 .ui-dialog.ui-corner-all { -moz-border-radius: 8px; -webkit-border-radius: 4px; }
+
+.ui-dialog table { width: 100%; border-bottom: 1px solid #cde; margin-bottom: 8px; }
+.ui-dialog td { padding: 4px; }
+.ui-dialog .button { float: right; }
+
+
 

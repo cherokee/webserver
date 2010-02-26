@@ -120,7 +120,7 @@ class SubmitterButton (Widget):
         id      = self.id
         caption = self.caption
 
-        html = '<input id="%(id)s" type="button" value="%(caption)s" />' %(locals())
+        html = '<a id="%(id)s" href="#" class="button"><span>%(caption)s</span></a>' %(locals())
         js   = FORCE_SUBMIT_JS %(locals())
 
         render = Widget.Render (self)
