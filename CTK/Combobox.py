@@ -42,7 +42,7 @@ class Combobox (Widget):
         content = ''
         for o in self._options:
             name, label = o
-            if selected and selected == name:
+            if selected and str(selected) == str(name):
                 content += '<option value="%s" selected="true">%s</option>' % (name, label)
             else:
                 content += '<option value="%s">%s</option>' % (name, label)
