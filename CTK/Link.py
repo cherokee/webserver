@@ -29,9 +29,12 @@ LINK_ICON_HTML = '<div id="%(id)s"><span class="ui-icon ui-icon-%(icon)s"></span
 
 
 class Link (Container):
-    def __init__ (self, href):
+    def __init__ (self, href, content=None):
         Container.__init__ (self)
         self.href = href[:]
+
+        if content:
+            self += content
 
     def Render (self):
         render = Container.Render (self)

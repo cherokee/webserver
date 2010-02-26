@@ -20,14 +20,27 @@
 # 02110-1301, USA.
 #
 
+from Widget import Widget
 from Container import Container
 
+
 class Box (Container):
-    def __init__ (self, props=None):
+    def __init__ (self, props=None, content=None):
         Container.__init__ (self)
 
+        # Object ID
         if props and 'id' in props:
             self.id = props.pop('id')
+
+        # Initial value
+        if content:
+            if isinstance (content, Widget):
+                self += content
+            elif type(content) in (list, type):
+                for o in content:
+                    self += o
+            else:
+                raise TypeError, 'Unknown type: "%s"' %(type(content))
 
     def Render (self):
         render = Container.Render (self)

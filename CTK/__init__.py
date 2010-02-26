@@ -42,7 +42,7 @@ from PropsTable import PropsTable, PropsTableAuto, PropsAuto
 from Template import Template
 from Server import Server, run, publish, cookie, post, request, cfg
 from Proxy import Proxy
-from iPhoneToggle import iPhoneToggle
+from iPhoneToggle import iPhoneToggle, iPhoneCfg
 from Tab import Tab
 from Dialog import Dialog
 from HTTP import HTTP_Response, HTTP_Redir, HTTP_Error, HTTP_XSendfile

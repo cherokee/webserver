@@ -21,6 +21,8 @@
 #
 
 from Widget import Widget
+from Server import cfg
+from util import *
 
 HEADERS = [
     '<script type="text/javascript" src="/CTK/js/jquery.ibutton.js"></script>',
@@ -28,7 +30,7 @@ HEADERS = [
 ]
 
 HTML = """
-<input type="checkbox" id="%(id)s" name="%(name)s" value="true" />
+<input type="checkbox" id="%(id)s" %(props)s/>
 """
 
 JS = """
@@ -40,17 +42,41 @@ class iPhoneToggle (Widget):
         Widget.__init__ (self)
 
         if props:
-            self._props = props
+            self.props = props
         else:
-            self._props = {}
+            self.props = {}
 
-        if not 'id' in self._props:
-            self._props['id'] = 'widget%d'%(self.uniq_id)
+        if 'id' in self.props:
+            self.id = self.props.pop('id')
 
     def Render (self):
         render = Widget.Render(self)
 
-        render.html += HTML %(self._props)
-        render.js   += JS   %(self._props)
+        props = {'id':    self.id,
+                 'props': props_to_str(self.props)}
+
+        render.html    += HTML %(props)
+        render.js      += JS   %(props)
+        render.headers += HEADERS
 
         return render
+
+class iPhoneCfg (iPhoneToggle):
+    def __init__ (self, key, default, props=None):
+        if not props:
+            props = {}
+
+        # Read the key value
+        val = cfg.get_val(key)
+        if not val:
+            props['checked'] = "01"[bool(int(default))]
+        elif val.isdigit():
+            props['checked'] = "01"[bool(int(val))]
+        else:
+            assert False, "Could not handle value: %s"%(val)
+
+        # Other properties
+        props['name'] = key
+
+        # Init parent
+        iPhoneToggle.__init__ (self, props)

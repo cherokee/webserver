@@ -39,3 +39,19 @@ def formater (string, props):
             n  += 1
 
     return s2 %(props)
+
+#
+# HTML Tag properties
+#
+def props_to_str (props):
+    assert type(props) == dict
+
+    tmp = []
+    for p in props:
+        val = props[p]
+        if val:
+            tmp.append ('%s="%s"'%(p, val))
+        else:
+            tmp.append (p)
+
+    return ' '.join(tmp)
