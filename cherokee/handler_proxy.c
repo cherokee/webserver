@@ -850,6 +850,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			switch (ret) {
 			case ret_ok:
 				break;
+			case ret_deny:
 			case ret_eagain:
 				return ret_eagain;
 			case ret_eof:
