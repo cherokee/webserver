@@ -23,6 +23,7 @@
 from consts import *
 from Table import Table
 from Widget import Widget
+from Button import Button
 from RawHTML import RawHTML
 from Container import Container
 from TextField import TextField
@@ -107,25 +108,11 @@ $("#%(id)s").click(function() {
 });
 """
 
-class SubmitterButton (Widget):
+class SubmitterButton (Button):
     def __init__ (self, caption="Submit"):
-        Widget.__init__ (self)
+        Button.__init__ (self, caption)
 
-        self.id      = "button_%d" %(self.uniq_id)
-        self.caption = caption
-
-    # Public interface
-    #
     def Render (self):
-        id      = self.id
-        caption = self.caption
-
-        html = '<a id="%(id)s" href="#" class="button"><span>%(caption)s</span></a>' %(locals())
-        js   = FORCE_SUBMIT_JS %(locals())
-
-        render = Widget.Render (self)
-        render.html += html
-        render.js   += js
-
+        render = Button.Render(self)
+        render.js += FORCE_SUBMIT_JS %({'id': self.id})
         return render
-
