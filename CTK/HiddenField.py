@@ -56,3 +56,7 @@ class HiddenField (Widget):
         render.html += html
 
         return render
+
+class Hidden (HiddenField):
+    def __init__ (self, name, value):
+        HiddenField.__init__ (self, {'name': name, 'value': value})

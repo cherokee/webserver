@@ -27,7 +27,7 @@ from Box import Box
 from Submitter import Submitter, SubmitterButton
 from Page import Page
 from Config import Config
-from Plugin import Plugin
+from Plugin import Plugin, instance_plugin
 
 import JS
 import util
@@ -46,7 +46,7 @@ from iPhoneToggle import iPhoneToggle, iPhoneCfg
 from Tab import Tab
 from Dialog import Dialog
 from HTTP import HTTP_Response, HTTP_Redir, HTTP_Error, HTTP_XSendfile
-from HiddenField import HiddenField
+from HiddenField import HiddenField, Hidden
 from Uploader import Uploader
 from Plugin import PluginSelector
 from Refreshable import Refreshable
