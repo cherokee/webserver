@@ -25,44 +25,50 @@ __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 from Widget import Widget
 from Container import Container
 from Server import cfg
+from util import *
+
 
 HTML = """
-<input type="checkbox" %(props)s />
+<input type="checkbox" id="%(id)s" %(props)s />
 """
 
 class Checkbox (Widget):
     def __init__ (self, props=None):
-        Widget.__init__ (self)
+        # Sanity check
+        assert type(props) in (type(None), dict)
 
+        Widget.__init__ (self)
         if props:
             self._props = props
         else:
             self._props = {}
 
+        #self._props = ({}, props)[bool(props)]
+
     def Render (self):
         # Deal with a couple of exceptions
-        if self._props.has_key('checked') and int(self._props.pop('checked')):
-            self._props['checked'] = "checked"
+        new_props = self._props.copy()
 
-        if self._props.has_key('disabled'):
-            self._props['disabled'] = None
+        if new_props.has_key('checked') and int(new_props.pop('checked')):
+            new_props['checked'] = "checked"
 
-        # Render the properties
-        plist = []
-        for k in self._props:
-            if self._props[k]:
-                plist.append ('%s="%s"'%(k, self._props[k]))
-            else:
-                plist.append (k)
-        props = " ".join (plist)
+        if new_props.has_key('disabled'):
+            new_props['disabled'] = None
 
         # Render the widget
         render = Widget.Render (self)
-        render.html += HTML % ({'props': props})
+        render.html += HTML % ({'id':    self.id,
+                                'props': props_to_str (new_props)})
         return render
+
 
 class CheckCfg (Checkbox):
     def __init__ (self, key, default, props=None):
+        # Sanity checks
+        assert type(key) == str
+        assert type(default) == bool
+        assert type(props) in (type(None), dict)
+
         if not props:
             props = {}
 
@@ -80,6 +86,7 @@ class CheckCfg (Checkbox):
 
         # Init parent
         Checkbox.__init__ (self, props)
+
 
 class CheckboxText (Checkbox):
     def __init__ (self, props=None, text='Enabled'):

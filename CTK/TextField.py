@@ -94,8 +94,14 @@ class TextFieldPassword (TextField):
         TextField.__init__ (self, *a, **kw)
         self.type = "password"
 
+
 class TextCfg (TextField):
     def __init__ (self, key, optional=False, props=None):
+        # Sanity checks
+        assert type(key) == str
+        assert type(optional) == bool
+        assert type(props) in (type(None), dict)
+
         if not props:
             props = {}
 

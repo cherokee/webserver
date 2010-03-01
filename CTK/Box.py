@@ -22,15 +22,18 @@
 
 from Widget import Widget
 from Container import Container
+from util import *
 
+HTML = '<div id="%(id)s" %(props)s>%(content)s</div>'
 
 class Box (Container):
     def __init__ (self, props=None, content=None):
         Container.__init__ (self)
+        self.props = ({}, props)[bool(props)]
 
         # Object ID
-        if props and 'id' in props:
-            self.id = props.pop('id')
+        if 'id' in self.props:
+            self.id = self.props.pop('id')
 
         # Initial value
         if content:
@@ -44,5 +47,10 @@ class Box (Container):
 
     def Render (self):
         render = Container.Render (self)
-        render.html = '<div id="%s">%s</div>' %(self.id, render.html)
+
+        props = {'id':      self.id,
+                 'props':   props_to_str (self.props),
+                 'content': render.html}
+
+        render.html = HTML %(props)
         return render

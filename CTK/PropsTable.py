@@ -20,19 +20,21 @@
 # 02110-1301, USA.
 #
 
+from Box import Box
 from Table import Table
 from Widget import Widget
 from RawHTML import RawHTML
 from Submitter import Submitter
 from Container import Container
 from HiddenField import HiddenField
+from util import *
 
 HTML_TABLE = """
 <div class="propstable">%s</div>
 """
 
 HTML_ENTRY = """
-<div class="entry">
+<div class="entry" id="%(id)s" %(props)s>
    <div class="title">%(title)s</div>
    <div class="widget">%(widget_html)s</div>
    <div class="comment">%(comment)s</div>
@@ -43,35 +45,52 @@ HTML_ENTRY = """
 HEADERS = ['<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />']
 
 
-class PropsTable (Widget):
+class PropsTableEntry (Widget):
+    """Property Table Entry"""
+
+    def __init__ (self, title, widget, comment, props=None):
+        Widget.__init__ (self)
+
+        self.title   = title
+        self.widget  = widget
+        self.comment = comment
+        self.props   = ({}, props)[bool(props)]
+
+        if 'id' in self.props:
+            self.id = self.props.pop('id')
+
+    def Render (self):
+        # Render child
+        if self.widget:
+            w_rend = self.widget.Render()
+        else:
+            w_rend = Container().Render()
+
+        w_html = w_rend.html
+        w_rend.html = ''
+
+        # Mix both
+        render = Widget.Render (self)
+        render += w_rend
+
+        props = {'id':           self.id,
+                 'props':        props_to_str(self.props),
+                 'title':        self.title,
+                 'widget_html':  w_html,
+                 'comment':      self.comment}
+
+        render.html += HTML_ENTRY %(props)
+        return render
+
+
+class PropsTable (Box):
     """Property Table: Formatting"""
 
     def __init__ (self, **kwargs):
-        Widget.__init__ (self, **kwargs)
-        self.entries = []
+        Box.__init__ (self, {'class': "propstable"})
 
     def Add (self, title, widget, comment):
-        self.entries.append ((title, widget, comment))
-
-    def Render (self):
-        render = Widget.Render(self)
-
-        for e in self.entries:
-            title, widget, comment = e
-            if widget:
-                r = widget.Render()
-            else:
-                r = Container().Render()
-
-            props = {'title':       title,
-                     'widget_html': r.html,
-                     'comment':     comment}
-
-            r.html = HTML_ENTRY %(props)
-            render += r
-
-        render.html = HTML_TABLE %(render.html)
-        return render
+        self += PropsTableEntry (title, widget, comment)
 
 
 class PropsTableAuto (PropsTable):
@@ -129,6 +148,9 @@ class PropsAuto (Widget):
 
         for e in self.entries:
             title, widget, comment, use_submitter = e
+
+            id    = self.id
+            props = ''
 
             if use_submitter:
                 submit = Submitter (self._url)

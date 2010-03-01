@@ -27,6 +27,9 @@ class Container (Widget):
         Widget.__init__ (self)
         self.child = []
 
+    def __getitem__ (self, n):
+        return self.child[n]
+
     def __len__ (self):
         return len(self.child)
 
