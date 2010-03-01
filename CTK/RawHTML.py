@@ -23,9 +23,10 @@
 from Widget import Widget
 
 class RawHTML (Widget):
-    def __init__ (self, init=''):
+    def __init__ (self, html='', js=''):
         Widget.__init__ (self)
-        self.html = init
+        self.html = html
+        self.js   = js
 
     def __add__ (self, txt):
         assert type(txt) == string
@@ -34,4 +35,5 @@ class RawHTML (Widget):
     def Render (self):
         render = Widget.Render(self)
         render.html += self.html
+        render.js   += self.js
         return render
