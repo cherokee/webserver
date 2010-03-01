@@ -22,6 +22,8 @@
 
 import JS
 from Container import Container
+from Proxy import Proxy
+from Server import get_scgi
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
@@ -126,3 +128,11 @@ class Dialog (Container):
 
     def JS_to_close (self):
         return " $('#%s').dialog('close');" % (self.id)
+
+
+class DialogProxy (Dialog):
+    def __init__ (self, url, props=None):
+        Dialog.__init__ (self, props)
+
+        scgi = get_scgi()
+        self += Proxy (scgi.env['HTTP_HOST'], url)

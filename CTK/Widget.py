@@ -20,6 +20,9 @@
 # 02110-1301, USA.
 #
 
+from consts import *
+from PageCleaner import Postprocess
+
 widget_uniq_id = 1;
 
 
@@ -50,6 +53,11 @@ class RenderResponse:
         # Sort the headers
         i.clean_up_headers()
         return i
+
+    def toStr (self):
+        txt  = self.html
+        txt += HTML_JS_ON_READY_BLOCK %(self.js)
+        return Postprocess(txt)
 
 
 class Widget:

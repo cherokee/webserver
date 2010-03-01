@@ -174,6 +174,13 @@ class Server:
 
     def add_route (self, route_obj):
         with self.lock:
+            # Look for a duplicate
+            for r in self._web_paths:
+                if r._regex == route_obj._regex:
+                    self._web_paths.remove (r)
+                    break
+
+            # Insert
             self._web_paths.append (route_obj)
             self.sort_routes()
 
