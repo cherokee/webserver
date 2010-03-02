@@ -24,6 +24,7 @@ import JS
 from Container import Container
 from Proxy import Proxy
 from Server import get_scgi
+from Box import Box
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
@@ -136,3 +137,16 @@ class DialogProxy (Dialog):
 
         scgi = get_scgi()
         self += Proxy (scgi.env['HTTP_HOST'], url)
+
+
+class DialogProxyLazy (Dialog):
+    def __init__ (self, url, props=None):
+        Dialog.__init__ (self, props)
+
+        box = Box()
+        box += ImageStock('loading')
+        self += box
+
+        self.bind ('dialogopen', JS.Ajax(url,
+                                         type    = 'GET',
+                                         success = '$("#%s").html(data);'%(box.id)))

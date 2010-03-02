@@ -26,11 +26,12 @@ def Ajax (url, data='', type='POST', async=True, dataType='json',
           success=None, error=None, complete=None):
 
     async_s = ['false','true'][async]
-    js  = """$.ajax ({type: '%(type)s', url: '%(url)s', async: %(async_s)s,
-                      dataType: '%(dataType)s', data: %(data)s""" %(locals())
+    js = "$.ajax ({type: '%(type)s', url: '%(url)s', async: %(async_s)s" %(locals())
 
+    if data:
+        js += ", data: %(data)s, dataType: '%(dataType)s'" %(locals())
     if success:
-        js += ", success: function() { %(success)s }" %(locals())
+        js += ", success: function(data) { %(success)s }" %(locals())
     if error:
         js += ", error: function() { %(error)s }" %(locals())
     if complete:
