@@ -29,8 +29,8 @@ function Submitter (id, url) {
     this.setup = function (self) {
 	   /* When input looses focus */
 	   var pre = "#submitter" + this.submitter_id;
-	   $(pre+" :text, "+pre+" :password").not('.noauto').bind ("blur",     this, this.input_blur_cb);
-	   $(pre+" :text, "+pre+" :password").not('.noauto').bind ("keypress", this, this.input_keypress_cb);
+	   $(pre+" :text, "+pre+" :password, "+pre+" textarea").not('.noauto').bind ("blur",     this, this.input_blur_cb);
+	   $(pre+" :text, "+pre+" :password, "+pre+" textarea").not('.noauto').bind ("keypress", this, this.input_keypress_cb);
 	   $("#submitter" + this.submitter_id + " :checkbox").not('.required,.noauto').bind ("change", this, this.input_checkbox_cb);
 	   $("#submitter" + this.submitter_id + " select").not('.required,.noauto').bind ("change", this, this.input_combobox_cb);
 
@@ -53,7 +53,7 @@ function Submitter (id, url) {
 	   var full = true;
 	   var pre  = "#submitter"+ self.submitter_id;
 
-	   $(pre +" .required:text, "+ pre +" .required:password").each(function() {
+	   $(pre+" .required:text, "+ pre+" .required:password, "+ pre+" textarea.required").each(function() {
 		  if (! this.value) {
 			 full = false;
 		  }
@@ -69,7 +69,7 @@ function Submitter (id, url) {
 	   $(pre +" input").attr("disabled", true);
 
         // FIXME @ion: Probably we need to know if it's input or select... is better to have an ID for the field...
-	   $("#submitter"+ self.submitter_id +" input").after('<img class="notice" id="notice' + self.submitter_id  + '" src="/CTK/images/loading.gif" alt="Submitting..."/>');
+//	   $("#submitter"+ self.submitter_id +" input").after('<img class="notice" id="notice' + self.submitter_id  + '" src="/CTK/images/loading.gif" alt="Submitting..."/>');
 
 	   /* Build the post */
 	   info = {};
@@ -81,6 +81,9 @@ function Submitter (id, url) {
 	   });
 	   $(pre +" select").each(function(){
 		  info[this.name] = this.value;
+	   });
+	   $(pre +" textarea").each(function(){
+		  info[this.name] = $(this).val();
 	   });
 
 	   /* Remove error messages */
@@ -124,7 +127,7 @@ function Submitter (id, url) {
 		  },
 		  complete:  function (XMLHttpRequest, textStatus) {
 			 /* Unlock fields */
-			 $("#notice"+ self.submitter_id).remove();
+//			 $("#notice"+ self.submitter_id).remove();
                          // XXX: Probably we need to know if it's input or select...
 			 $("#submitter"+ self.submitter_id +" input").removeAttr("disabled");
 		  }

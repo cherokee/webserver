@@ -139,12 +139,28 @@ class ServerHandler (pyscgi.SCGIHandler):
         try:
             content = self._do_handle()
             self.send(str(content))
-        except:
+        except Exception, desc:
+            # Print the backtrace
             info = traceback.format_exc()
             print >> sys.stderr, info
 
+            # Custom error management
+            #page = error.page (info, desc)
+            #response = HTTP_Response (error=500, body=page.Render())
+            #self.send (str(response))
+            if error.page:
+                try:
+                    page = error.page (info, desc)
+                    response = HTTP_Response (error=500, body=page.Render())
+                    self.send (str(response))
+                    return
+                except Exception, e:
+                    print "!!!!!!", e
+                    pass
+
+            # No error handling page
             html = '<pre>%s</pre>'%(info)
-            self.send(str(HTTP_Error(desc=html)))
+            self.send (str(HTTP_Error(desc=html)))
 
 
 class Server:
@@ -305,7 +321,13 @@ class _Request:
     scgi = property (_get_scgi_conn)
 
 
+class _Error:
+    def __init__ (self):
+        self.error_page = None
+
+
 cookie  = _Cookie()
 post    = _Post()
 request = _Request()
+error   = _Error()
 cfg     = Config.Config()

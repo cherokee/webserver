@@ -25,6 +25,7 @@ from Container import Container
 from Template import Template
 from PageCleaner import Postprocess
 from Help import HelpEntry, HelpMenu
+from util import formater
 
 DEFAULT_PAGE_TEMPLATE = """\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -93,7 +94,7 @@ class Page (Container):
 
         # Javascript
         if render.js:
-            js = HTML_JS_ON_READY_BLOCK %(render.js)
+            js = formater (HTML_JS_ON_READY_BLOCK, render.js)
         else:
             js = ''
 

@@ -20,7 +20,6 @@
 # 02110-1301, USA.
 #
 
-from Table import Table
 from RawHTML import RawHTML
 from Widget import Widget
 from Server import cfg

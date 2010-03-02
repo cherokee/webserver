@@ -24,7 +24,9 @@ import JS
 from Container import Container
 from Proxy import Proxy
 from Server import get_scgi
+from Image import ImageStock
 from Box import Box
+
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',

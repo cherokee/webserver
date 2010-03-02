@@ -40,7 +40,7 @@ from Checkbox import Checkbox, CheckCfg, CheckboxText, CheckCfgText
 from Combobox import Combobox, ComboCfg
 from PropsTable import PropsTable, PropsTableAuto, PropsAuto
 from Template import Template
-from Server import Server, run, publish, cookie, post, request, cfg
+from Server import Server, run, publish, cookie, post, request, cfg, error
 from Proxy import Proxy
 from iPhoneToggle import iPhoneToggle, iPhoneCfg
 from Tab import Tab
@@ -57,3 +57,4 @@ from Notice import Notice
 from Link import Link, LinkIcon
 from DatePicker import DatePicker
 from Button import Button
+from TextArea import TextArea
