@@ -32,11 +32,14 @@ HTML = """
 """
 
 class Notice (Container):
-    def __init__ (self, klass='information'):
+    def __init__ (self, klass='information', content=None):
         Container.__init__ (self)
 
         assert klass in NOTICE_TYPES
         self.klass = klass
+
+        if content:
+            self += content
 
     def Render (self):
         render = Container.Render (self)
