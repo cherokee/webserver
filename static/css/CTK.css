@@ -48,8 +48,8 @@ h2 { color: #666; font-weight: normal; padding: 8px 0; font-size: 18px; }
 /* Form Styles
  */
 
-input[type=text] { border: 1px solid #b0bfce; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; }
-input[type=text]:focus { border: 1px solid #259; }
+input[type=text], textarea { border: 1px solid #b0bfce; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; }
+input[type=text]:focus, textarea:focus { border: 1px solid #259; }
 select { border: 1px solid #b0bfce; padding: 3px; outline: none;}
 
 /* Styles for cherokee-admin layout
@@ -90,32 +90,41 @@ html>body #container { min-height: 100%; }
 
 /* Button
  */
-a.button {
+button { border: 0; margin: 0; padding: 0; outline: none; background: #fff; }
+a.button, .button-outter {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    outline: none;
     background: transparent url('/CTK/images/bg-button-a.png') no-repeat scroll top right;
     color: #fff;
     display: block;
     float: left;
-    font-size: 12px;
     height: 24px;
     margin-right: 6px;
     padding-right: 18px; 
     text-decoration: none;
 }
 
-a.button span {
+a.button span, .button-inner {
+    outline: none;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-size: 12px;
     background: transparent url('/CTK/images/bg-button-span.png') no-repeat;
     display: block;
     line-height: 14px;
     padding: 5px 0 5px 18px;
 }
 
-a.button:active {
+a.button:active, button:active .button-outter {
     background-position: bottom right;
     color: #fff;
     outline: none; 
 }
 
-a.button:active span {
+a.button:active span, button:active .button-inner {
     background-position: bottom left;
     padding: 6px 0 4px 18px; 
 }
@@ -234,20 +243,25 @@ a.button:active span {
 /* CTK/Dialog.py
  */
 .ui-dialog { position: relative; padding: 8px; width: 300px; background: transparent url(/CTK/images/bg-dialog.png); }
-.ui-dialog .ui-dialog-titlebar { height: 28px; position: relative;  background: transparent url(/CTK/images/bg-dialog-titlebar.png); border: 1px solid #259; }
+.ui-dialog .ui-dialog-titlebar { height: 28px; position: relative;  background: transparent url(/CTK/images/bg-dialog-titlebar.png); border-bottom: 1px solid #259; }
 .ui-dialog .ui-dialog-title { float: left; margin: 6px 0 0 16px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: #259 0px 1px 0px; }
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: 16px; top: 9px; background: transparent url(/CTK/images/bg-dialog-titlebar-close.gif) no-repeat; text-indent: -99999px; overflow: hidden; width: 10px;}
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
-.ui-dialog .ui-dialog-content { border: 0; padding: 16px; background: #fff; overflow: auto; zoom: 1; border: 1px solid #259; border-top: none;}
-.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; }
-.ui-dialog .ui-dialog-buttonpane button { float: right; margin: .5em .4em .5em 0; cursor: pointer; padding: .2em .6em .3em .6em; line-height: 1.4em; width:auto; overflow:visible; }
+.ui-dialog .ui-dialog-content { border: 0; padding: 16px; background: #fff; overflow: auto; zoom: 1; }
+.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background: #fff; padding: 16px; border-top: 1px solid #cde; }
+.ui-dialog .ui-dialog-buttonpane button { float: right; cursor: pointer; width:auto; overflow:visible; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
 .ui-dialog.ui-corner-all { -moz-border-radius: 8px; -webkit-border-radius: 4px; }
-
 .ui-dialog .button { float: right; }
 .ui-dialog .propstable { width: 100%; border-bottom: 1px solid #cde; padding-bottom: 16px; margin-bottom: 16px; }
 
-
+/* PageException.py
+ */
+.backtrace { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; background: #fafafa; border: 1px solid #ddd; color: #c00; padding: 16px; margin: 16px 0; }
+#body-error h1 { background: #fff url(/CTK/images/dialog-error.png) 8px 12px no-repeat; padding-left: 48px; }
+#body-error #main { padding: 16px; }
+#body-error textarea { width: 912px;  clear: both; margin: 16px 0; }
+#body-error .button { float: right; clear: both; }
 
