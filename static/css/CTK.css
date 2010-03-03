@@ -66,10 +66,15 @@ html>body #container { min-height: 100%; }
 #nav li a { display: block; height: 20px; text-decoration: none;color: #eef;border: none; padding-top: 32px; text-shadow: #14335d 0px 1px 0px; }
 #nav li a:hover { color: #fff; text-decoration: none;}
 #nav-status { background: transparent url(/static/images/status.png) no-repeat center 6px; }
+#body-index #nav-status a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
 #nav-general { background: transparent url(/static/images/general.png) no-repeat center 6px; }
+#body-general #nav-general a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
 #nav-icons { background: transparent url(/static/images/icons.png) no-repeat center 6px; }
+#body-icons #nav-icons a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
 #nav-mime { background: transparent url(/static/images/mime.png) no-repeat center 6px; }
+#body-mime #nav-mime a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
 #nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat center 6px; }
+#body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
 
 /* JQuery Helpers
 */
