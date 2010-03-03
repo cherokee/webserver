@@ -119,11 +119,14 @@ function Submitter (id, url) {
 			 /* Trigger events */
 			 if (data['ret'] == "ok") {
 				$(pre).trigger('submit_success');
+			 } else {
+				$(pre).trigger('submit_fail');
 			 }
 		  },
 		  error: function (xhr, ajaxOptions, thrownError) {
 			 self.restore_orig_values (self);
 			 alert ("Error: " + xhr.status +"\n"+ xhr.statusText);
+			 $(pre).trigger('submit_fail');
 		  },
 		  complete:  function (XMLHttpRequest, textStatus) {
 			 /* Unlock fields */

@@ -21,73 +21,51 @@
 #
 
 from consts import *
-from Table import Table
-from Widget import Widget
 from Button import Button
 from RawHTML import RawHTML
 from Container import Container
 from TextField import TextField
 from PageCleaner import Uniq_Block
 
+HEADER = ['<script type="text/javascript" src="/CTK/js/Submitter.js"></script>']
+
+# Placeholder
 HTML = """
-<div id="submitter%(id_widget)d" class="submitter">
- %(html)s
+<div id="%(id)s" class="submitter">
+ %(content)s
  <div class="notice"></div>
 </div>
 """
 
 # Initialization
 JS_INIT = """
- %(js)s
-
-  var submit_%(id_widget)d = new Submitter('%(id_widget)d', '%(url)s');
-  submit_%(id_widget)d.setup (submit_%(id_widget)d);
-
- %(js_bind_events)s
+  var submit_%(id_uniq)d = new Submitter('%(id_uniq)d', '%(url)s');
+  submit_%(id_uniq)d.setup (submit_%(id_uniq)d);
 """
 
 # Focus on the first <input> of the page
 JS_FOCUS = """
-$("input:first").focus();
+  $("input:first").focus();
 """
-
-HEADER = [
-    '<script type="text/javascript" src="/CTK/js/Submitter.js"></script>'
-]
 
 class Submitter (Container):
     def __init__ (self, submit_url):
         Container.__init__ (self)
         self._url    = submit_url
-        self._events = {}
-
-    # Public interface
-    #
-    def bind (self, event, js):
-        if not event in self._events:
-            self._events[event] = []
-        self._events[event].append (js)
-
-    def _bind_render_js (self):
-        js = ''
-        for event in self._events:
-            for function in self._events[event]:
-                js += "$('#submitter%s').bind ('%s', function(){ %s });" %(self.uniq_id, event, function)
-        return js
+        self.id      = "submitter%d" %(self.uniq_id)
 
     def Render (self):
         # Child render
         render = Container.Render(self)
 
         # Own render
-        props = {'id_widget':      self.uniq_id,
-                 'url':            self._url,
-                 'html':           render.html,
-                 'js':             render.js,
-                 'js_bind_events': self._bind_render_js()}
+        props = {'id':      self.id,
+                 'id_uniq': self.uniq_id,
+                 'url':     self._url,
+                 'content': render.html}
 
         render.html     = HTML    %(props)
-        render.js       = JS_INIT %(props)
+        render.js      += JS_INIT %(props)
         render.js      += Uniq_Block (JS_FOCUS %(props))
         render.headers += HEADER
 
