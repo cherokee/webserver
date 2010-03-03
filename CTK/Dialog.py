@@ -26,6 +26,7 @@ from Proxy import Proxy
 from Server import get_scgi
 from Image import ImageStock
 from Box import Box
+from PageCleaner import Uniq_Block
 
 
 HEADERS = [
@@ -41,6 +42,10 @@ DIALOG_HTML = """
 
 DIALOG_JS = """
 $("#%(id)s").dialog(%(dialog_props)s);
+"""
+
+DIALOG_BUTTON_JS = """
+$('.ui-dialog-buttonpane :button').wrapInner('<span class=\"button-outter\"><span class=\"button-inner\"></span></span>');
 """
 
 def py2js_dic (d):
@@ -99,8 +104,9 @@ class Dialog (Container):
                  'content':      render.html,
                  'dialog_props': dialog_props}
 
-        html = DIALOG_HTML %(props)
-        js   = DIALOG_JS   %(props)
+        html  = DIALOG_HTML %(props)
+        js    = DIALOG_JS   %(props)
+        js   += Uniq_Block (DIALOG_BUTTON_JS)
 
         render.html     = html
         render.js      += js
