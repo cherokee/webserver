@@ -125,7 +125,6 @@ class PageInfoSource (PageMenu, FormHelper):
         if post.get_val('is_submit'):
             if post.get_val('source_clone_trg'):
                 return self._op_clone_source (post)
-
             if post.get_val('tmp!new_source_nick'):
                 return self._apply_new_source (uri, post)
             else:
@@ -135,6 +134,8 @@ class PageInfoSource (PageMenu, FormHelper):
                     post.get_val ('new_env_value')):
                     self._apply_add_new_env_var(post, source)
 
+                if not source:
+                    return "/%s" % (self._id)
                 checkboxes = ['source!%s!%s'%(source,x) for x in self.check_boxes]
                 self.ApplyChanges (checkboxes, post, validation = DATA_VALIDATION)
                 return "/%s/%s" % (self._id, source)
@@ -342,7 +343,7 @@ class PageInfoSource (PageMenu, FormHelper):
                 nick = self._cfg.get_val('source!%s!nick'%(s))
                 clonable.append((s,nick))
 
-            op1 = self.InstanceOptions ("source_clone_src", clonable)
+            op1 = self.InstanceOptions ("source_clone_src", clonable, noautosubmit=True)
             en1 = self.InstanceEntry   ("source_clone_trg", "text", size=40)
             table += (op1[0], en1, SUBMIT_CLONE)
 
