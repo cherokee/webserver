@@ -123,8 +123,10 @@ class Dialog (Container):
             tmp = '"%(button_caption)s": function() {'
             if action == "close":
                 tmp += '$(this).dialog("close");'
-            else:
+            elif action[0] == '/':
                 tmp += 'window.location.replace("%(action)s")'
+            else:
+                tmp += action
             tmp += '}'
             buttons_js.append (tmp%(locals()))
 

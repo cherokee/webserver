@@ -73,6 +73,8 @@ class Submitter (Container):
         render.clean_up_headers()
         return render
 
+    def JS_to_submit (self):
+        return "submit_%d.submit_form (submit_%d);" % (self.uniq_id, self.uniq_id)
 
 
 FORCE_SUBMIT_JS = """
