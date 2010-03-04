@@ -271,7 +271,8 @@ a.button:active span, button:active .button-inner {
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
 .ui-dialog.ui-corner-all { -moz-border-radius: 8px; -webkit-border-radius: 4px; }
 .ui-dialog .button { float: right; }
-.ui-dialog .propstable { width: 100%; border-bottom: 1px solid #cde; padding-bottom: 16px; margin-bottom: 16px; }
+.ui-dialog .button span, .ui-dialog .button-inner { min-width: 4em; }
+.ui-dialog .propstable { width: 100%; }
 
 /* PageException.py
  */
