@@ -48,9 +48,10 @@ h2 { color: #666; font-weight: normal; padding: 8px 0; font-size: 18px; }
 /* Form Styles
  */
 
-input[type=text], textarea { border: 1px solid #b0bfce; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; }
-input[type=text]:focus, textarea:focus { border: 1px solid #259; }
-select { border: 1px solid #b0bfce; padding: 3px; outline: none;}
+input[type=text], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; }
+input[type=text]:focus, textarea:focus { border: 2px solid #2d70cb; margin: 0; }
+select { border: 1px solid #b0bfce; padding: 2px; outline: none;}
+.checkbox-text { padding: 4px; }
 
 /* Styles for cherokee-admin layout
  */
@@ -155,8 +156,9 @@ a.button:active span, button:active .button-inner {
 /* Styles for CTK/PropsTable.py
  */
 .propstable { width: 100%; }
-.propstable .entry .title { white-space: nowrap; float: left; width: 50%; }
-.propstable .entry .comment { text-align: left;	color: #888; font: small "Courier New", Courier, mono; }
+.propstable .entry { padding: 8px 0; }
+.propstable .entry .title { float: left; width: 240px; padding-top: 6px; }
+.propstable .entry .comment { text-align: left; color: #888; font: 90%; }
 
 /* Optional text entries
  */
