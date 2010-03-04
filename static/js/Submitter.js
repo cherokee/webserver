@@ -66,6 +66,7 @@ function Submitter (id, url) {
 	   var pre = "#submitter" + self.submitter_id;
 
 	   /* Block the fields */
+	   $("#activity").show();
 	   $(pre +" input").attr("disabled", true);
 
         // FIXME @ion: Probably we need to know if it's input or select... is better to have an ID for the field...
@@ -130,8 +131,9 @@ function Submitter (id, url) {
 		  },
 		  complete:  function (XMLHttpRequest, textStatus) {
 			 /* Unlock fields */
-//			 $("#notice"+ self.submitter_id).remove();
-                         // XXX: Probably we need to know if it's input or select...
+			 $("#activity").fadeOut('fast');
+
+                // XXX: Probably we need to know if it's input or select...
 			 $("#submitter"+ self.submitter_id +" input").removeAttr("disabled");
 		  }
 	   });

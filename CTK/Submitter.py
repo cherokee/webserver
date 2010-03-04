@@ -46,6 +46,7 @@ JS_INIT = """
 # Focus on the first <input> of the page
 JS_FOCUS = """
   $("input:first").focus();
+  $("#activity").hide();
 """
 
 class Submitter (Container):

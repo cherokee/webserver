@@ -20,6 +20,15 @@
  * 02110-1301, USA.
  */
 
+/* Activity notifier
+ */
+#activity {
+	float: right;
+	position: static;
+	padding-right: 5px;
+	padding-top: 5px;
+}
+
 /* Reset styles
  */
 body,div,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,input,button,textarea,p,blockquote,th,td {margin:0; padding:0;}
@@ -108,7 +117,7 @@ a.button, .button-outter {
     float: left;
     height: 24px;
     margin-right: 6px;
-    padding-right: 18px; 
+    padding-right: 18px;
     text-decoration: none;
 }
 
@@ -127,12 +136,12 @@ a.button span, .button-inner {
 a.button:active, button:active .button-outter {
     background-position: bottom right;
     color: #fff;
-    outline: none; 
+    outline: none;
 }
 
 a.button:active span, button:active .button-inner {
     background-position: bottom left;
-    padding: 6px 0 4px 18px; 
+    padding: 6px 0 4px 18px;
 }
 
 /* Styles for CTK/Tabs.py
