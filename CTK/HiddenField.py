@@ -24,14 +24,10 @@ from Widget import Widget
 
 
 class HiddenField (Widget):
-    def __init__ (self, props=None):
+    def __init__ (self, props={}):
         Widget.__init__ (self)
 
-        if props:
-            self._props = props
-        else:
-            self._props = {}
-
+        self._props = props.copy()
         if not 'id' in self._props:
             self._props['id'] = 'widget%d'%(self.uniq_id)
 

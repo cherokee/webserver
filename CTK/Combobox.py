@@ -28,10 +28,10 @@ class Combobox (Widget):
     def __init__ (self, props, options):
         Widget.__init__ (self)
 
-        self.props    = props
+        self.props    = props.copy()
         self._options = options
 
-        if not 'id' in props:
+        if not 'id' in self.props:
             self.props['id'] = 'Combobox_%s' %(self.uniq_id)
         self.id = self.props['id']
 
@@ -64,9 +64,8 @@ class Combobox (Widget):
 
 
 class ComboCfg (Combobox):
-    def __init__ (self, key, options, props=None):
-        if not props:
-            props = {}
+    def __init__ (self, key, options, _props={}):
+        props = _props.copy()
 
         # Read the key value
         val = cfg.get_val(key)

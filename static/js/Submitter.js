@@ -74,17 +74,17 @@ function Submitter (id, url) {
 
 	   /* Build the post */
 	   info = {};
-	   $(pre +" input:text, "+ pre +" input:password, "+ pre +" input:hidden").each(function(){
-		  info[this.name] = this.value;
+	   $(pre+" input:text, "+ pre+" input:password, "+ pre+" input:hidden").each(function(){
+		  info[$(this).attr('name')] = $(this).val();
 	   });
 	   $(pre +" input:checkbox").each(function(){
-		  info[this.name] = this.checked ? "1" : "0";
+		  info[$(this).attr('name')] = this.checked ? "1" : "0";
 	   });
 	   $(pre +" select").each(function(){
-		  info[this.name] = this.value;
+		  info[$(this).attr('name')] = $(this).val();
 	   });
 	   $(pre +" textarea").each(function(){
-		  info[this.name] = $(this).val();
+		  info[$(this).attr('name')] = $(this).val();
 	   });
 
 	   /* Remove error messages */

@@ -76,14 +76,10 @@ def py2js_dic (d):
 
 
 class Dialog (Container):
-    def __init__ (self, props=None):
+    def __init__ (self, props={}):
         Container.__init__ (self)
 
-        if props:
-            self.props = props
-        else:
-            self.props = {}
-
+        self.props   = props.copy()
         self.id      = 'dialog%d'%(self.uniq_id)
         self.title   = self.props.pop('title', '')
         self.buttons = []
@@ -156,16 +152,16 @@ class Dialog (Container):
 
 
 class DialogProxy (Dialog):
-    def __init__ (self, url, props=None):
-        Dialog.__init__ (self, props)
+    def __init__ (self, url, props={}):
+        Dialog.__init__ (self, props.copy())
 
         scgi = get_scgi()
         self += Proxy (scgi.env['HTTP_HOST'], url)
 
 
 class DialogProxyLazy (Dialog):
-    def __init__ (self, url, props=None):
-        Dialog.__init__ (self, props)
+    def __init__ (self, url, props={}):
+        Dialog.__init__ (self, props.copy())
 
         box = Box()
         box += ImageStock('loading')
@@ -178,6 +174,6 @@ class DialogProxyLazy (Dialog):
 
 class Dialog2Buttons (Dialog):
     def __init__ (self, props, button_name, button_action):
-        Dialog.__init__ (self, props)
+        Dialog.__init__ (self, props.copy())
         self.AddButton (button_name, button_action)
         self.AddButton (_('Close'), "close")

@@ -27,9 +27,9 @@ from util import *
 HTML = '<div id="%(id)s" %(props)s>%(content)s</div>'
 
 class Box (Container):
-    def __init__ (self, props=None, content=None):
+    def __init__ (self, props={}, content=None):
         Container.__init__ (self)
-        self.props = ({}, props)[bool(props)]
+        self.props = props.copy()
 
         # Object ID
         if 'id' in self.props:

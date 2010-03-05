@@ -33,17 +33,12 @@ HTML = """
 """
 
 class Checkbox (Widget):
-    def __init__ (self, props=None):
+    def __init__ (self, props={}):
         # Sanity check
-        assert type(props) in (type(None), dict)
+        assert type(props) == dict
 
         Widget.__init__ (self)
-        if props:
-            self._props = props
-        else:
-            self._props = {}
-
-        #self._props = ({}, props)[bool(props)]
+        self._props = props.copy()
 
     def Render (self):
         # Deal with a couple of exceptions
