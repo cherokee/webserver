@@ -98,8 +98,13 @@ class CheckboxText (Checkbox):
         render.html = '<div id="%s" class="checkbox-text">%s %s</div>' %(self.id, render.html, self.text)
         return render
 
+
 class CheckCfgText (CheckCfg):
     def __init__ (self, key, default, text='Enabled', props=None):
+        assert type(default) == bool
+        assert type(text) == str
+        assert type(props) in (dict, type(None))
+
         CheckCfg.__init__ (self, key, default, props)
         self.text = text
 

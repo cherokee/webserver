@@ -96,9 +96,9 @@ class PluginInstanceProxy:
         return Postprocess(output)
 
 
-class PluginSelector (Container):
+class PluginSelector (Widget):
     def __init__ (self, key, modules, **kwargs):
-        Container.__init__ (self)
+        Widget.__init__ (self)
 
         # Properties
         self._key   = key

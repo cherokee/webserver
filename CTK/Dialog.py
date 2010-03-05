@@ -151,6 +151,9 @@ class Dialog (Container):
     def JS_to_close (self):
         return " $('#%s').dialog('close');" % (self.id)
 
+    def JS_to_trigger (self, event):
+        return " $('#%s .submitter').trigger('%s');" %(self.id, event)
+
 
 class DialogProxy (Dialog):
     def __init__ (self, url, props=None):

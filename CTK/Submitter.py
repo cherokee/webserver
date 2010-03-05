@@ -41,6 +41,10 @@ HTML = """
 JS_INIT = """
   var submit_%(id_uniq)d = new Submitter('%(id_uniq)d', '%(url)s');
   submit_%(id_uniq)d.setup (submit_%(id_uniq)d);
+
+  $("#submitter%(id_uniq)d").bind('submit', function() {
+      submit_%(id_uniq)d.submit_form (submit_%(id_uniq)d);
+  });
 """
 
 # Focus on the first <input> of the page
@@ -52,8 +56,8 @@ JS_FOCUS = """
 class Submitter (Container):
     def __init__ (self, submit_url):
         Container.__init__ (self)
-        self._url    = submit_url
-        self.id      = "submitter%d" %(self.uniq_id)
+        self.url = submit_url
+        self.id  = "submitter%d" %(self.uniq_id)
 
     def Render (self):
         # Child render
@@ -62,7 +66,7 @@ class Submitter (Container):
         # Own render
         props = {'id':      self.id,
                  'id_uniq': self.uniq_id,
-                 'url':     self._url,
+                 'url':     self.url,
                  'content': render.html}
 
         render.html     = HTML    %(props)
@@ -80,7 +84,7 @@ class Submitter (Container):
 FORCE_SUBMIT_JS = """
 $("#%(id)s").click(function() {
     /* Figure the widget number of the Submitter */
-    var submitter     = $('#%(id)s').parents('.submitter');
+    var submitter     = $(this).parents('.submitter');
     var submitter_num = submitter.attr('id').replace('submitter','');
 
     /* Invoke its submit method */

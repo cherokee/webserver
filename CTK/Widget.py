@@ -66,9 +66,8 @@ class Widget:
 
         widget_uniq_id += 1;
         self.uniq_id = widget_uniq_id;
-
-        self.binds = []
-        self.id    = "widget_%d" %(widget_uniq_id)
+        self.id      = "widget_%d" %(widget_uniq_id)
+        self.binds   = []
 
     def Render (self):
         render = RenderResponse()
@@ -78,5 +77,7 @@ class Widget:
 
         return render
 
+    # Javacript events
+    #
     def bind (self, event, js):
         self.binds.append ((event, js))

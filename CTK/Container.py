@@ -34,7 +34,7 @@ class Container (Widget):
         return len(self.child)
 
     def __nonzero__ (self):
-        "It is an obj, no matter its child."
+        # It's an obj, no matter its child.
         return True
 
     def __iadd__ (self, widget):
