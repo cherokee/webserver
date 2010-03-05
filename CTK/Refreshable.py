@@ -41,7 +41,12 @@ $.ajax({
 
 def render_plain_html (build_func, **kwargs):
     render = build_func (**kwargs)
-    return render.html + _remove_dupped_code(HTML_JS_ON_READY_BLOCK %(render.js))
+
+    output = render.html
+    if render.js:
+        output += _remove_dupped_code(HTML_JS_ON_READY_BLOCK %(render.js))
+
+    return output
 
 
 class Refreshable (Widget):
