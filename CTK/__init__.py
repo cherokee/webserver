@@ -44,7 +44,7 @@ from Server import Server, run, publish, cookie, post, request, cfg, error
 from Proxy import Proxy
 from iPhoneToggle import iPhoneToggle, iPhoneCfg
 from Tab import Tab
-from Dialog import Dialog, DialogProxy, DialogProxyLazy
+from Dialog import Dialog, DialogProxy, DialogProxyLazy, Dialog2Buttons
 from HTTP import HTTP_Response, HTTP_Redir, HTTP_Error, HTTP_XSendfile
 from HiddenField import HiddenField, Hidden
 from Uploader import Uploader

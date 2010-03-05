@@ -46,9 +46,12 @@ $("#%(id)s").dialog (%(dialog_props)s);
 
 DIALOG_BUTTON_JS = """
 $("#%(id)s").bind ('dialogopen', function(event, ui){
-   if ($('.ui-dialog-buttonpane :button').html().indexOf("<span") != 0) {
-     $('.ui-dialog-buttonpane :button').wrapInner('<span class=\"button-outter\"><span class=\"button-inner\"></span></span>');
-   }
+   $('.ui-dialog-buttonpane :button').each (function(){
+       var html = $(this).html();
+         if (! html || html.indexOf('<span') != 0) {
+            $(this).wrapInner('<span class=\"button-outter\"><span class=\"button-inner\"></span></span>');
+         }
+   });
 });
 """
 
@@ -86,10 +89,14 @@ class Dialog (Container):
         self.buttons = []
 
         # Defaults
-        if not 'modal' in self.props:
+        if 'modal' not in self.props:
             self.props['modal'] = True
-        if not 'resizable' in self.props:
+        if 'resizable' not in self.props:
             self.props['resizable'] = False
+        if 'autoOpen' not in self.props:
+            self.props['autoOpen'] = False
+        if 'draggable' not in self.props:
+            self.props['draggable'] = False
 
     def AddButton (self, caption, action):
         self.buttons.append ((caption, action))
@@ -164,3 +171,10 @@ class DialogProxyLazy (Dialog):
         self.bind ('dialogopen', JS.Ajax(url,
                                          type    = 'GET',
                                          success = '$("#%s").html(data);'%(box.id)))
+
+
+class Dialog2Buttons (Dialog):
+    def __init__ (self, props, button_name, button_action):
+        Dialog.__init__ (self, props)
+        self.AddButton (button_name, button_action)
+        self.AddButton (_('Close'), "close")
