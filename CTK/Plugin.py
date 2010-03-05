@@ -45,6 +45,7 @@ $('#%(id)s').bind ('change', this, function() {
 	     data:      info,
              success:  function(data) {
                  $('#%(plugin_id)s').html(data);
+		 $('#%(id)s').trigger('changed');
              },
              error: function (xhr, ajaxOptions, thrownError) {
 		 alert ("Error: " + xhr.status +"\\n"+ xhr.statusText);
