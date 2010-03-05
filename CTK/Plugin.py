@@ -80,6 +80,9 @@ class PluginInstanceProxy:
     def __call__ (self, key, modules, **kwargs):
         # Update the configuration
         new_val = post.get_val (key, None)
+        if not new_val:
+            return ''
+
         cfg[key] = new_val
 
         # Instance the content
