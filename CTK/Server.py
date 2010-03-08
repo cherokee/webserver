@@ -56,6 +56,9 @@ class PostValidator:
 
                     for n in range(len(self.post[key])):
                         val = self.post[key][n]
+                        if not val:
+                            continue
+
                         try:
                             tmp = func (val)
                         except Exception, e:
