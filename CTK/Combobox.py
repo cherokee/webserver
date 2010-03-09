@@ -22,7 +22,7 @@
 
 from Widget import Widget
 from Server import cfg
-
+from util import props_to_str
 
 class Combobox (Widget):
     def __init__ (self, props, options):
@@ -38,14 +38,42 @@ class Combobox (Widget):
     def Render (self):
         selected = self.props.get('selected')
 
+        def render_str (o):
+            if len(o) == 2:
+                name, label = o
+                props       = {}
+            elif len(o) == 3:
+                name, label, props = o
+
+            props_str = props_to_str(props)
+            if selected and str(selected) == str(name):
+                return '<option value="%s" selected="true" %s>%s</option>' % (name, props_str, label)
+            else:
+                return '<option value="%s" %s>%s</option>' % (name, props_str, label)
+
+        def render_list (o):
+            if len(o) == 2:
+                name, options = o
+                props       = {}
+            elif len(o) == 3:
+                name, options, props = o
+
+            props_str = props_to_str(props)
+            txt = '<optgroup label="%s" %s>' %(name, props_str)
+            for o in options:
+                txt += render_str (o)
+            txt += '</optgroup>'
+            return txt
+
         # Render entries
         content = ''
         for o in self._options:
-            name, label = o
-            if selected and str(selected) == str(name):
-                content += '<option value="%s" selected="true">%s</option>' % (name, label)
+            if type(o[1]) == str:
+                content += render_str (o)
+            elif type(o[1]) == list:
+                content += render_list (o)
             else:
-                content += '<option value="%s">%s</option>' % (name, label)
+                raise ValueError
 
         # Render the container
         header = ''
