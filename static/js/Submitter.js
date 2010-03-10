@@ -3,7 +3,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2009 Alvaro Lopez Ortega
+ * Copyright (C) 2010 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -20,182 +20,175 @@
  * 02110-1301, USA.
  */
 
-function Submitter (id, url) {
-    this.submitter_id  = id;
-    this.url           = url;
-    this.key_pressed   = false;
-    this.check_changed = false;
+;(function($) {
+    var Submitter = function (element, url) {
+	   var key_pressed = false;
+	   var orig_values = {};
+	   var obj         = this;       //  Object {}
+	   var self        = $(element); // .submitter
 
-    this.setup = function (self) {
-	   /* When input looses focus */
-	   var pre = "#submitter" + this.submitter_id;
-	   $(pre+" :text, "+pre+" :password, "+pre+" textarea").not('.noauto').bind ("blur",     this, this.input_blur_cb);
-	   $(pre+" :text, "+pre+" :password, "+pre+" textarea").not('.noauto').bind ("keypress", this, this.input_keypress_cb);
-	   $("#submitter" + this.submitter_id + " :checkbox").not('.required,.noauto').bind ("change", this, this.input_checkbox_cb);
-	   $("#submitter" + this.submitter_id + " select").not('.required,.noauto').bind ("change", this, this.input_combobox_cb);
+	   // PRIVATE callbacks
+	   //
+	   function input_keypress_cb (event) {
+		  key_pressed = true;
+	   };
 
-	   /* Read the original values */
-	   self.orig_values = {};
-	   $("#submitter" + self.submitter_id).children(":text").each(function(){
-		  self.orig_values[this.id] = this.value;
-	   });
-    }
-
-    this.restore_orig_values = function (self) {
-        for (var key in self.orig_values) {
-		  $("#submitter"+ self.submitter_id +" #"+key).attr (
-			 'value', self.orig_values[key]
-		  );
-        }
-    }
-
-    this.is_fulfilled = function (self) {
-	   var full = true;
-	   var pre  = "#submitter"+ self.submitter_id;
-
-	   $(pre+" .required:text, "+ pre+" .required:password, "+ pre+" textarea.required").each(function() {
-		  if (! this.value) {
-			 full = false;
+	   function input_blur_cb (event) {
+		  /* Only proceed when something */
+		  if (! key_pressed) {
+			 return;
 		  }
-	   });
 
-	   return full;
-    }
+		  /* Procced on the last entry */
+		  var last = self.find(":text,:password,textarea").filter(".required:last");
+		  if ((last.attr('id') != undefined) &&
+			 (last.attr('id') != event.currentTarget.id))
+		  {
+			 return;
+		  }
 
-    this.submit_form = function (self) {
-	   var pre = "#submitter" + self.submitter_id;
+		  /* Check fields fulfillness */
+		  if (! is_fulfilled()) {
+			 return;
+		  }
+		  submit_form();
+	   };
 
-	   /* Block the fields */
-	   $("#activity").show();
-	   $(pre +" input").attr("disabled", true);
+	   function input_checkbox_cb (event) {
+		  //var self = event.data;
 
-        // FIXME @ion: Probably we need to know if it's input or select... is better to have an ID for the field...
-//	   $("#submitter"+ self.submitter_id +" input").after('<img class="notice" id="notice' + self.submitter_id  + '" src="/CTK/images/loading.gif" alt="Submitting..."/>');
+		  if (! is_fulfilled()) {
+			 return;
+		  }
+		  submit_form();
+	   }
 
-	   /* Build the post */
-	   info = {};
-	   $(pre+" input:text, "+ pre+" input:password, "+ pre+" input:hidden").each(function(){
-		  info[$(this).attr('name')] = $(this).val();
-	   });
-	   $(pre +" input:checkbox").each(function(){
-		  info[$(this).attr('name')] = this.checked ? "1" : "0";
-	   });
-	   $(pre +" select").each(function(){
-		  info[$(this).attr('name')] = $(this).val();
-	   });
-	   $(pre +" textarea").each(function(){
-		  info[$(this).attr('name')] = $(this).val();
-	   });
+	   function input_combobox_cb (event) {
+		  if (! is_fulfilled()) {
+			 return;
+		  }
+		  submit_form();
+	   }
 
-	   /* Remove error messages */
-	   filter = "#submitter"+ self.submitter_id +" div.error";
-	   $(filter).html("");
+	   // PRIVATE
+	   //
+	   function is_fulfilled () {
+		  var full = true;
+		  self.find (".required:text, .required:password, textarea.required").each(function() {
+			 if (! this.value) {
+				full = false;
+			 }
+		  });
+		  return full;
+	   }
 
-	   /* Async post */
-	   $.ajax ({
-		  type:     'POST',
-		  url:       self.url,
-		  async:     true,
-		  dataType: 'json',
-		  data:      info,
-		  success:   function (data) {
-			 if (data['ret'] != "ok") {
-				/* Set the error messages */
-				for (var key in data['errors']) {
-				    filter = "#submitter"+ self.submitter_id + " div.error[key='"+ key +"']";
-				    $(filter).html (data['errors'][key]);
-				    had_errors = 1;
+	   function restore_orig_values () {
+		  for (var key in orig_values) {
+			 self.find("#"+key).attr ('value', self.orig_values[key]);
+	       }
+	   }
+
+	   function submit_form() {
+		  /* Block the fields */
+		  $("#activity").show();
+		  self.find("input,select,textarea").attr("disabled", true);
+
+		  /* Build the post */
+		  info = {};
+		  self.find ("input:text, input:password, input:hidden").each(function(){
+			 info[this.name] = this.value;
+		  });
+		  self.find ("input:checkbox").each(function(){
+			 info[this.name] = this.checked ? "1" : "0";
+		  });
+		  self.find ("select").each(function(){
+			 info[this.name] = $(this).val();
+		  });
+		  self.find ("textarea").each(function(){
+			 info[this.name] = $(this).val();
+		  });
+
+		  /* Remove error messages */
+		  self.find('div.error').html('');
+
+		  /* Async POST */
+		  $.ajax ({
+			 type:     'POST',
+			 url:       url,
+			 async:     true,
+			 dataType: 'json',
+			 data:      info,
+			 success:   function (data) {
+				if (data['ret'] != "ok") {
+				    /* Set the error messages */
+				    for (var key in data['errors']) {
+					   self.find ("div.error[key='"+ key +"']").html(data['errors'][key]);
+					   had_errors = 1;
+				    }
+
+				    /* Update the fields */
+				    for (var key in data['updates']) {
+					   self.find ("input[name='"+ key +"']").attr('value', data['updates'][key]);
+				    }
+				}
+				if (data['redirect'] != undefined) {
+				    window.location.replace (data['redirect']);
 				}
 
-				/* Update the fields */
-				for (var key in data['updates']) {
-				    filter = "#submitter"+ self.submitter_id + " input[name='"+ key +"']";
-				    $(filter).attr ('value', data['updates'][key]);
+				/* Trigger events */
+				if (data['ret'] == "ok") {
+				    self.trigger('submit_success');
+				} else {
+				    self.trigger('submit_fail');
 				}
+			 },
+			 error: function (xhr, ajaxOptions, thrownError) {
+				restore_orig_values();
+				// alert ("Error: " + xhr.status +"\n"+ xhr.statusText);
+				self.trigger('submit_fail');
+			 },
+			 complete:  function (XMLHttpRequest, textStatus) {
+				/* Unlock fields */
+				$("#activity").fadeOut('fast');
+				self.find("input,select,textarea").removeAttr("disabled");
 			 }
-			 if (data['redirect'] != undefined) {
-				window.location.replace (data['redirect']);
-			 }
+		  });
+	   }
 
-			 /* Trigger events */
-			 if (data['ret'] == "ok") {
-				$(pre).trigger('submit_success');
-			 } else {
-				$(pre).trigger('submit_fail');
-			 }
-		  },
-		  error: function (xhr, ajaxOptions, thrownError) {
-			 self.restore_orig_values (self);
-			 alert ("Error: " + xhr.status +"\n"+ xhr.statusText);
-			 $(pre).trigger('submit_fail');
-		  },
-		  complete:  function (XMLHttpRequest, textStatus) {
-			 /* Unlock fields */
-			 $("#activity").fadeOut('fast');
+	   // PUBLIC
+	   //
+	   this.submit_form = function() {
+		  submit_form (obj);
+		  return obj;
+	   };
 
-                // XXX: Probably we need to know if it's input or select...
-			 $("#submitter"+ self.submitter_id +" input").removeAttr("disabled");
-		  }
+	   this.init = function (self) {
+		  /* Events */
+		  self.find(":text, :password, textarea").not('.noauto').bind ('keypress', self, input_keypress_cb);
+		  self.find(":text, :password, textarea").not('.noauto').bind ("blur", self, input_blur_cb);
+		  self.find(":checkbox").not('.required,.noauto').bind ("change", self, input_checkbox_cb);
+		  self.find("select").not('.required,.noauto').bind ("change", self, input_combobox_cb);
+
+		  /* Original values */
+		  self.find(":text,textarea").each(function(){
+			 orig_values[this.id] = this.value;
+		  });
+
+		  return obj;
+	   }
+    };
+
+    $.fn.Submitter = function (url) {
+	   var self = this;
+	   return this.each(function() {
+		  if ($(this).data('submitter')) return;
+		  var submitter = new Submitter(this, url);
+		  $(this).data('submitter', submitter);
+		  submitter.init(self);
+		  $$ = submitter;
 	   });
-    }
+    };
 
-    this.input_keypress_cb = function(event) {
-	   var self = event.data;
+})(jQuery);
 
-	   /* Enter -> Focus next input */
-	   if (event.keyCode == 13) {
-		  focus_next_input (this);
-		  return;
-	   }
-
-	   self.key_pressed = true;
-    }
-
-    this.input_checkbox_cb = function (event) {
-	   var self = event.data;
-	   self.check_changed = true;
-
-	   if (! self.is_fulfilled(self)) {
-		  return;
-	   }
-
-	   self.submit_form(self);
-    }
-
-    this.input_combobox_cb = function(event) {
-	   var self = event.data;
-	   self.check_changed = true;
-
-	   if (! self.is_fulfilled(self)) {
-		  return;
-	   }
-
-	   self.submit_form(self);
-    }
-
-    this.input_blur_cb = function (event) {
-	   var self = event.data;
-	   var pre  = "#submitter" + self.submitter_id;
-
-	   /* Only proceed when something */
-	   if (! self.key_pressed) {
-		  return;
-	   }
-
-	   /* Procced on the last entry */
-	   var last = $(pre +" :text, "+ pre +" :password").filter(".required:last");
-
-	   if ((last.attr('id') != undefined) &&
-		  (last.attr('id') != event.currentTarget.id))
-	   {
-		  return;
-	   }
-
-	   /* Check fields fulfillness */
-	   if (! self.is_fulfilled(self)) {
-		  return;
-	   }
-
-	   self.submit_form (self);
-    }
-}
+// REF: http://www.virgentech.com/code/view/id/3

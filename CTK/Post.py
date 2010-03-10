@@ -59,6 +59,9 @@ class Post:
             del(self[key])
         return val
 
+    def keys (self):
+        return self._vars.keys()
+
     # Relay on the internal array methods
     #
     def __getitem__ (self, key):

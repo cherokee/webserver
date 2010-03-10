@@ -39,12 +39,10 @@ HTML = """
 
 # Initialization
 JS_INIT = """
-  var submit_%(id_uniq)d = new Submitter('%(id_uniq)d', '%(url)s');
-  submit_%(id_uniq)d.setup (submit_%(id_uniq)d);
-
-  $("#submitter%(id_uniq)d").bind('submit', function() {
-      submit_%(id_uniq)d.submit_form (submit_%(id_uniq)d);
-  });
+  $("#%(id)s").Submitter ('%(url)s')
+          .bind('submit', function() {
+                $(this).data('submitter').submit_form();
+          });
 """
 
 # Focus on the first <input> of the page
@@ -78,18 +76,15 @@ class Submitter (Container):
         return render
 
     def JS_to_submit (self):
-        return "submit_%d.submit_form (submit_%d);" % (self.uniq_id, self.uniq_id)
+        return "$('#%s').data('submitter').submit_form();" %(self.id)
+        #return "submit_%d.submit_form (submit_%d);" % (self.uniq_id, self.uniq_id)
 
 
 FORCE_SUBMIT_JS = """
 $("#%(id)s").click(function() {
     /* Figure the widget number of the Submitter */
-    var submitter     = $(this).parents('.submitter');
-    var submitter_num = submitter.attr('id').replace('submitter','');
-
-    /* Invoke its submit method */
-    submit_obj = eval("submit_" + submitter_num);
-    submit_obj.submit_form (submit_obj);
+    var submitter = $(this).parents('.submitter');
+    $(submitter).data('submitter').submit_form();
 });
 """
 

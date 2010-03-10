@@ -148,7 +148,8 @@ class Dialog (Container):
         return " $('#%s').dialog('close');" % (self.id)
 
     def JS_to_trigger (self, event):
-        return " $('#%s .submitter').trigger('%s');" %(self.id, event)
+        props = {'id': self.id, 'event': event}
+        return "$('#%(id)s .submitter').trigger('%(event)s');" %(props)
 
 
 class DialogProxy (Dialog):

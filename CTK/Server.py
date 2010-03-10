@@ -311,6 +311,11 @@ class _Post:
         post = my_thread.post
         return post.pop(*args)
 
+    def keys (self, *args):
+        my_thread = threading.currentThread()
+        post = my_thread.post
+        return post.keys(*args)
+
 
 class _Request:
     def _get_request_url (self):
