@@ -671,7 +671,8 @@ process_active_connections (cherokee_thread_t *thd)
 		}
 		else if ((conn->phase != phase_shutdown) &&
 			 (conn->phase != phase_lingering) &&
-			 (conn->phase != phase_reading_header || conn->incoming_header.len <= 0))
+			 (conn->phase != phase_reading_header || conn->incoming_header.len <= 0) &&
+			 (conn->phase != phase_reading_post || conn->post.send.buffer.len <= 0))
 		{
 			re = cherokee_fdpoll_check (thd->fdpoll,
 						    SOCKET_FD(&conn->socket),
@@ -1078,7 +1079,6 @@ process_active_connections (cherokee_thread_t *thd)
 			conn->phase = phase_reading_post;
 
 		case phase_reading_post:
-
 			/* Read/Send the POST info
 			 */
 			ret = cherokee_connection_read_post (conn);

@@ -592,6 +592,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 	   cherokee_buffer_t       *buf)
 {
 	ret_t                  ret;
+	int                    tmp;
 	cherokee_connection_t *conn         = HANDLER_CONN(hdl);
 	static FCGI_Header     empty_header = {0,0,0,0,0,0,0,0};
 
@@ -637,9 +638,22 @@ send_post (cherokee_handler_fcgi_t *hdl,
 		TRACE (ENTRIES",post", "Post write, buf.len=%d (header len %d)\n", buf->len, sizeof(FCGI_Header));
 
 		if (! cherokee_buffer_is_empty (buf)) {
+			tmp = buf->len;
+
 			ret = do_send (hdl, buf);
 			switch (ret) {
                         case ret_ok:
+				/* Did something, increase timeout
+				 */
+				if (buf->len < tmp) {
+					cherokee_connection_update_timeout (conn);
+				}
+
+				/* Block on back-end write
+				 */
+				if (buf->len > 0) {
+					return ret_deny;
+				}
                                 break;
                         case ret_eagain:
                                 return ret_eagain;
@@ -651,10 +665,6 @@ send_post (cherokee_handler_fcgi_t *hdl,
 				return ret_error;
                         }
 		}
-
-		/* Did something, increase timeout
-		 */
-		cherokee_connection_update_timeout (conn);
 
 		/* Next iteration
 		 */

@@ -402,7 +402,6 @@ cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 	 */
 	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
 					    &hdl->socket, NULL, &blocking, &did_IO);
-
 	if (did_IO) {
 		cherokee_connection_update_timeout (conn);
 	}
@@ -418,6 +417,13 @@ cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							     conn, hdl->socket.socket,
 							     FDPOLL_MODE_WRITE, false);
+			return ret_deny;
+		}
+
+		/* ret_eagain - Block on read
+		 * ret_deny   - Block on back-end write
+		 */
+		if (cherokee_post_has_buffered_info (&conn->post, NULL)) {
 			return ret_deny;
 		}
 		return ret_eagain;

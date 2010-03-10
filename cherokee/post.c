@@ -529,6 +529,13 @@ do_send_socket (cherokee_socket_t        *sock,
 	return ret_ok;
 }
 
+int
+cherokee_post_has_buffered_info (cherokee_post_t   *post,
+				 cherokee_buffer_t *tmp)
+{
+	cherokee_buffer_t *buffer = tmp ? tmp : &post->send.buffer;
+	return (! cherokee_buffer_is_empty (buffer));
+}
 
 ret_t
 cherokee_post_send_to_socket (cherokee_post_t          *post,
