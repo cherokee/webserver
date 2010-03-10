@@ -185,7 +185,6 @@
 		  var submitter = new Submitter(this, url);
 		  $(this).data('submitter', submitter);
 		  submitter.init(self);
-		  $$ = submitter;
 	   });
     };
 
