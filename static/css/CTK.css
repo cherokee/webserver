@@ -69,22 +69,23 @@ html>body #container { min-height: 100%; }
 #topbar { background: #fff url(/static/images/bg-bar.png) top left repeat-x; }
 #main { background: #fff; border: 1px solid #cde; padding: 0 8px 8px 8px; margin: 8px 0 16px 0; min-height: 90%; }
 
-#nav { float: right; padding:0; font-size: 10px; }
-#nav li {float: left; margin: 0;padding: 0;text-align: center; width: 64px; height: 46px; }
+#nav { float: right; padding:0; font-size: 11px; }
+#nav li {float: left; margin: 0;padding: 0;text-align: center; width: 64px; height: 50px; }
 #nav li:hover { background-color: #259; }
-#nav li.selected  a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
-#nav li a { display: block; height: 20px; text-decoration: none;color: #eef;border: none; padding-top: 32px; text-shadow: #14335d 0px 1px 0px; }
+#nav li a { display: block; height: 20px; text-decoration: none;color: #eef;border: none; padding-top: 34px; text-shadow: #14335d 0px 1px 0px; }
 #nav li a:hover { color: #fff; text-decoration: none;}
 #nav-status { background: transparent url(/static/images/status.png) no-repeat center 6px; }
-#body-index #nav-status a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
+#body-index #nav-status a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-general { background: transparent url(/static/images/general.png) no-repeat center 6px; }
-#body-general #nav-general a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
+#body-general #nav-general a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-icons { background: transparent url(/static/images/icons.png) no-repeat center 6px; }
-#body-icons #nav-icons a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
+#body-icons #nav-icons a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-mime { background: transparent url(/static/images/mime.png) no-repeat center 6px; }
-#body-mime #nav-mime a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
+#body-mime #nav-mime a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
+#nav-vservers { background: transparent url(/static/images/vservers.png) no-repeat center 6px; }
+#body-vservers #nav-vservers a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat center 6px; }
-#body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 43px; }
+#body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 
 /* JQuery Helpers
 */
