@@ -30,6 +30,12 @@
 	   // PRIVATE callbacks
 	   //
 	   function input_keypress_cb (event) {
+		  /* Enter -> Focus next input */
+	       if (event.keyCode == 13) {
+	           focus_next_input (this);
+	           return;
+	       }
+
 		  key_pressed = true;
 	   };
 
