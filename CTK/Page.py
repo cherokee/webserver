@@ -70,7 +70,7 @@ class Page (Container):
 
         self._helps = []
         for entry in helps:
-            self._helps.append (HelpEntry (entry[0], entry[1]))
+            self._helps.append (HelpEntry (entry[1], entry[0]))
 
     def AddHeaders (self, headers):
         if type(headers) == list:

@@ -99,6 +99,7 @@ class ServerHandler (pyscgi.SCGIHandler):
         my_thread.scgi_conn   = self
         my_thread.request_url = url
 
+        print "server._web_paths", len(server._web_paths)
         for published in server._web_paths:
             if re.match (published._regex, url):
                 # POST
@@ -194,10 +195,12 @@ class Server:
     def add_route (self, route_obj):
         with self.lock:
             # Look for a duplicate
+            to_remove = []
             for r in self._web_paths:
                 if r._regex == route_obj._regex:
-                    self._web_paths.remove (r)
-                    break
+                    to_remove.append (r)
+
+            self._web_paths = filter (lambda x: x not in to_remove, self._web_paths)
 
             # Insert
             self._web_paths.append (route_obj)
@@ -265,7 +268,6 @@ def publish (regex_url, klass, **kwargs):
     # Register
     server = get_server()
     server.add_route (obj)
-
 
 
 class _Cookie:

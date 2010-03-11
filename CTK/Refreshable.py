@@ -50,10 +50,14 @@ def render_plain_html (build_func, **kwargs):
 
 
 class Refreshable (Widget):
-    def __init__ (self):
+    def __init__ (self, _props={}):
+        assert 'id' in _props, "'id' is a required property"
+
         Widget.__init__ (self)
-        self.id  = "refreshable_%s" %(self.uniq_id)
-        self.url = "/refreshable_%s" %(self.uniq_id)
+        props = _props.copy()
+
+        self.id  = props.pop('id')
+        self.url = "/refreshable/%s" %(self.id)
 
     def register (self, build_func=None, **kwargs):
         self.build_func = build_func
