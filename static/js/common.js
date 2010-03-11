@@ -37,10 +37,11 @@ function get_cookie (key) {
 }
 
 function focus_next_input (input) {
-    var inputs = $("input").not("input:hidden");
-    var n      = inputs.index(input);
-    var next   = (n < inputs.length -1) ? n+1 : 0;
+    var inputs  = $("input,textarea").not("input:hidden");
+    var n       = inputs.index(input);
+    var next    = (n < inputs.length -1) ? n+1 : 0;
+    var n_input = $(inputs[next]);
 
-    inputs[next].blur();
-    inputs[next].focus();
+    n_input.blur();
+    n_input.focus();
 }

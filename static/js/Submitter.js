@@ -30,10 +30,9 @@
 	   // PRIVATE callbacks
 	   //
 	   function input_keypress_cb (event) {
-		  /* Enter -> Focus next input */
 	       if (event.keyCode == 13) {
-	           focus_next_input (this);
-	           return;
+			 focus_next_input ($(this));
+			 return;
 	       }
 
 		  key_pressed = true;
@@ -61,8 +60,6 @@
 	   };
 
 	   function input_checkbox_cb (event) {
-		  //var self = event.data;
-
 		  if (! is_fulfilled()) {
 			 return;
 		  }
@@ -83,6 +80,7 @@
 		  self.find (".required:text, .required:password, textarea.required").each(function() {
 			 if (! this.value) {
 				full = false;
+				return false; /* stops iteration */
 			 }
 		  });
 		  return full;
@@ -90,7 +88,7 @@
 
 	   function restore_orig_values () {
 		  for (var key in orig_values) {
-			 self.find("#"+key).attr ('value', self.orig_values[key]);
+			 self.find("#"+key).attr ('value', orig_values[key]);
 	       }
 	   }
 
