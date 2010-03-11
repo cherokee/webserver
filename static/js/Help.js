@@ -33,3 +33,17 @@ function Help_update_group (group_prefix, active_value) {
     selector = '.help #help_group_'+prefix+' #help_group_'+active_value;
     $(selector).show();
 }
+
+var help_a_size = 0;
+function toggleHelp() {
+    if ($("#help-a").width() == 230) {
+        $("#help .help").fadeOut(200, function() { 
+            $("#help-a").animate({ width: help_a_size + 'px' }, 100);
+        });
+    } else {
+        help_a_size = $("#help-a").width();
+        $("#help-a").animate({ width: '230px' }, 100, function() { 
+            $("#help .help").fadeIn(200);
+        });
+    }
+}

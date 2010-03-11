@@ -23,13 +23,16 @@
 /* Activity notifier
  */
 #activity {
-    float: right;
-    position: static;
-    padding: 1px 8px 0 19px;
-    margin-top: 22px;
+    text-align: right;
+    position: absolute;
+    width: 944px;
+    bottom: 20px;
     color: #27c;
     height: 15px; 
+}
+#activity span { 
     background: #fff url(/CTK/images/loader.gif) no-repeat ;
+    padding: 1px 8px 0 19px;
 }
 
 /* Reset styles
@@ -180,11 +183,54 @@ a.button:active span, button:active .button-inner {
 
 /* Help menu
  */
-.help {
-	position: fixed;
-	top: 0;
-	right: 0;
+#help {
+    position: absolute;
+    width: 964px;
+    padding-top: 22px;
 }
+
+a.helpbutton {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    background: transparent url('/CTK/images/bg-help-a.png') no-repeat scroll top right;
+    color: #79b;
+    text-shadow: #fff 0px 1px 0px;
+    display: block;
+    float: right;
+    height: 20px;
+    margin-right: 0;
+    padding-right: 14px;
+    text-decoration: none;
+}
+
+a.helpbutton span {
+    outline: none;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-size: 11px;
+    background: transparent url('/CTK/images/bg-help-span.png') no-repeat;
+    display: block;
+    line-height: 14px;
+    padding: 4px 0 4px 14px;
+}
+
+.help {
+  position: absolute;
+  right: 4px;
+  border: 1px solid #cde;
+  border-top: none;
+  background: #f4f9ff;
+  width: 214px;
+  float: right;
+  margin-top: 20px;
+  display: none;
+  padding: 8px;
+}
+
+
 
 /* Loading Message
  */
