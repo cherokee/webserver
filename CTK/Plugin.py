@@ -24,6 +24,7 @@ __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 
 import os
 import sys
+import string
 import traceback
 
 from consts import *
@@ -102,12 +103,15 @@ class PluginInstanceProxy:
 
 class PluginSelector (Widget):
     def __init__ (self, key, modules, **kwargs):
+        def key_to_url (key):
+            return ''.join ([('_',c)[c in string.letters + string.digits] for c in key])
+
         Widget.__init__ (self)
 
         # Properties
         self._key   = key
         self._mods  = modules
-        self._url   = '/plugin_content_%d' %(self.uniq_id)
+        self._url   = '/plugin_content_%s' %(key_to_url(key))
         active_name = cfg.get_val (self._key)
 
         # Widgets

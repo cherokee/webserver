@@ -99,7 +99,6 @@ class ServerHandler (pyscgi.SCGIHandler):
         my_thread.scgi_conn   = self
         my_thread.request_url = url
 
-        print "server._web_paths", len(server._web_paths)
         for published in server._web_paths:
             if re.match (published._regex, url):
                 # POST
