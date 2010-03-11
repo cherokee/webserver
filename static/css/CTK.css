@@ -23,10 +23,13 @@
 /* Activity notifier
  */
 #activity {
-	float: right;
-	position: static;
-	padding-right: 5px;
-	padding-top: 5px;
+    float: right;
+    position: static;
+    padding: 1px 8px 0 19px;
+    margin-top: 22px;
+    color: #27c;
+    height: 15px; 
+    background: #fff url(/CTK/images/loader.gif) no-repeat ;
 }
 
 /* Reset styles
@@ -47,11 +50,11 @@ ul {list-style: none;}
  */
 html { height: 100%; }
 body { background: #def url(/static/images/bg-bar.png) top left repeat-x; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 12px; color: #000; text-align: center; height: 100%; }
-a { color: #3465a4; }
+a { color: #27c; }
 a:hover { color: #c00; text-decoration: underline; }
 a:active { outline: none; }
 a:focus { -moz-outline-style: none; }
-h1 { color: #c00; font-weight: normal; padding: 16px; font-size: 22px; }
+h1 { color: #c00; font-weight: normal; padding: 16px; font-size: 20px; }
 h2 { color: #666; font-weight: normal; padding: 8px 0; font-size: 18px; }
 
 /* Form Styles
@@ -59,7 +62,7 @@ h2 { color: #666; font-weight: normal; padding: 8px 0; font-size: 18px; }
 
 input[type=text], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; }
 input[type=text]:focus, textarea:focus { border: 2px solid #2d70cb; margin: 0; }
-select { border: 1px solid #b0bfce; padding: 2px; outline: none;}
+select { border: 1px solid #b0bfce; ibackground: #fff; padding: 2px; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px;}
 .checkbox-text { padding: 4px; }
 
 /* Styles for cherokee-admin layout
@@ -67,7 +70,7 @@ select { border: 1px solid #b0bfce; padding: 2px; outline: none;}
 html>body #container { min-height: 100%; }
 #container { width: 960px; margin: 0 auto; text-align: left; height: 100%; }
 #topbar { background: #fff url(/static/images/bg-bar.png) top left repeat-x; }
-#main { background: #fff; border: 1px solid #cde; padding: 0 8px 8px 8px; margin: 8px 0 16px 0; min-height: 90%; }
+#main { background: #fff; border: 1px solid #cde; padding: 0 8px 8px 8px; margin: 0 0 16px 0; min-height: 90%; }
 
 #nav { float: right; padding:0; font-size: 11px; }
 #nav li {float: left; margin: 0;padding: 0;text-align: center; width: 64px; height: 50px; }
@@ -282,3 +285,18 @@ a.button:active span, button:active .button-inner {
 #body-error textarea { width: 912px;  clear: both; margin: 16px 0; }
 #body-error .button { float: right; clear: both; }
 
+
+/* Top dialog
+ */
+#topdialog { 
+    background: #fff6b6;
+    color: #3b3929;
+    height: 32px;
+    border: none;
+    border-left: 1px solid #edd400;
+    border-right: 1px solid #edd400;
+    display: none;
+}
+
+#topdialog .topmsg { float: left; padding: 8px 0 0 16px; font-weight: bold; }
+#topdialog .buttonarea { float: right; padding-top: 4px; }
