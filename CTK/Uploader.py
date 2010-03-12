@@ -21,8 +21,8 @@
 #
 
 import os
-import cgi
 import tempfile
+from cgi import FieldStorage
 
 from Server import publish, get_scgi
 from Widget import Widget
@@ -82,12 +82,12 @@ $('#%(id)s_form').uploadProgress({
 
 # Field Storage classes
 #
-class FieldStorage_Direct(cgi.FieldStorage):
+class FieldStorage_Direct(FieldStorage):
     def __init__ (self, fp=None, headers=None, outerboundary="",
                   environ=os.environ, keep_blank_values=0, strict_parsing=0):
         self.environ = environ
-        cgi.FieldStorage.__init__ (self, fp, headers, outerboundary,
-                                   environ, keep_blank_values, strict_parsing)
+        FieldStorage.__init__ (self, fp, headers, outerboundary,
+                               environ, keep_blank_values, strict_parsing)
 
     def make_file (self, binary=None):
         target_dir  = self.environ.get('CTK_hack__target_path')
@@ -95,12 +95,12 @@ class FieldStorage_Direct(cgi.FieldStorage):
         return open (target_path, 'w+b')
 
 
-class FieldStorage_Temporal (cgi.FieldStorage):
+class FieldStorage_Temporal (FieldStorage):
     def __init__ (self, fp=None, headers=None, outerboundary="",
                   environ=os.environ, keep_blank_values=0, strict_parsing=0):
         self.environ = environ
-        cgi.FieldStorage.__init__ (self, fp, headers, outerboundary,
-                                   environ, keep_blank_values, strict_parsing)
+        FieldStorage.__init__ (self, fp, headers, outerboundary,
+                               environ, keep_blank_values, strict_parsing)
 
     def make_file (self, binary=None):
         os_fd_str  = self.environ.get('CTK_hack__os_fd')

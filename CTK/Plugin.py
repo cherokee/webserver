@@ -3,7 +3,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2009 Alvaro Lopez Ortega
+# Copyright (C) 2009-2010 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -20,10 +20,9 @@
 # 02110-1301, USA.
 #
 
-__author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
-
 import os
 import sys
+import imp
 import string
 import traceback
 
@@ -164,10 +163,6 @@ def load_module (name):
     if not name:
         return
 
-    # Shortcut: Is it already loaded?
-    if sys.modules.has_key(name):
-        return sys.modules[name]
-
     # Figure the path to admin's python source (hacky!)
     stack = traceback.extract_stack()
     for stage in stack:
@@ -176,17 +171,15 @@ def load_module (name):
             break
 
     mod_path = os.path.abspath(os.path.join (first_py, '../../../plugins'))
+    fullpath = os.path.join (mod_path, "%s.py"%(name))
+
+    # Shortcut: it might be loaded
+    if sys.modules.has_key (name):
+        if sys.modules[name].__file__ == fullpath:
+            return sys.modules[name]
 
     # Load the plug-in
-    sys.path.append (mod_path)
-    try:
-        plugin = __import__(name)
-        sys.modules[plugin.__name__] = plugin
-    finally:
-        del sys.path[-1]
-
-    # Got it
-    return plugin
+    return imp.load_source (name, os.path.join (mod_path, "%s.py"%(name)))
 
 
 def instance_plugin (name, key, **kwargs):
