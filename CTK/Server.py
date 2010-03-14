@@ -218,6 +218,10 @@ class Server:
 #
 # Helpers
 #
+def cfg_apply_post():
+    for k in post:
+        cfg[k] = post[k]
+    return {'ret':'ok'}
 
 __global_server = None
 def get_server():
