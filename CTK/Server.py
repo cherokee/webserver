@@ -56,7 +56,7 @@ class PostValidator:
 
                     for n in range(len(self.post[key])):
                         val = self.post[key][n]
-                        if not val:
+                        if not val and 'CHECK_ON_NO_VALUE' not in dir(func):
                             continue
 
                         try:
