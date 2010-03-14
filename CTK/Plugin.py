@@ -95,7 +95,8 @@ class PluginInstanceProxy:
         render = plugin.Render()
 
         output  = '<div id="%s">%s</div>' %(plugin.id, render.html)
-        output += HTML_JS_ON_READY_BLOCK %(render.js)
+        if render.js:
+            output += HTML_JS_ON_READY_BLOCK %(render.js)
 
         return Postprocess(output)
 
