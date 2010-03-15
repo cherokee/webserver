@@ -28,9 +28,9 @@
     width: 944px;
     bottom: 20px;
     color: #27c;
-    height: 15px; 
+    height: 15px;
 }
-#activity span { 
+#activity span {
     background: #fff url(/CTK/images/loader.gif) no-repeat ;
     padding: 1px 8px 0 19px;
 }
@@ -334,7 +334,7 @@ a.helpbutton span {
 
 /* Top dialog
  */
-#topdialog { 
+#topdialog {
     background: #fff6b6;
     color: #3b3929;
     height: 32px;
@@ -346,3 +346,15 @@ a.helpbutton span {
 
 #topdialog .topmsg { float: left; padding: 8px 0 0 16px; font-weight: bold; }
 #topdialog .buttonarea { float: right; padding-top: 4px; }
+
+/* Sortable Table
+ */
+.dragHandle {
+  width: 18px;
+  cursor: move;
+  background: transparent url(/CTK/images/arrow_ns.png) center center no-repeat;
+}
+
+.panel-selected {
+	background-color: #f00;
+}

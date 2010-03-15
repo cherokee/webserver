@@ -55,8 +55,9 @@ class RenderResponse:
         return i
 
     def toStr (self):
-        txt  = self.html
-        txt += HTML_JS_ON_READY_BLOCK %(self.js)
+        txt = self.html
+        if self.js:
+            txt += HTML_JS_ON_READY_BLOCK %(self.js)
         return Postprocess(txt)
 
 

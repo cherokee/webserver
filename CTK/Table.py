@@ -27,8 +27,8 @@ from Container import Container
 class TableField (Container):
     def __init__ (self, widget=None):
         Container.__init__ (self)
-        self._props = {}
-        self._tag   = 'td'
+        self.props = {}
+        self._tag  = 'td'
 
         if widget:
             Container.__iadd__ (self, widget)
@@ -36,8 +36,8 @@ class TableField (Container):
     def Render (self):
         # Build tag props
         props = ''
-        for p in self._props:
-            value = self._props[p]
+        for p in self.props:
+            value = self.props[p]
             if value:
                 props += ' %s="%s"' %(p, value)
             else:
@@ -58,7 +58,7 @@ class TableField (Container):
         assert type(prop)  == str
         assert type(value) == str
 
-        self._props[prop] = value
+        self.props[prop] = value
 
 
 class TableRow (Widget):
