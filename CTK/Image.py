@@ -38,10 +38,19 @@ class Image (Widget):
         return render
 
 class ImageStock (Image):
-    def __init__ (self, name):
+    def __init__ (self, name, _props={}):
+        props = _props.copy()
+
         if name == 'del':
-            Image.__init__ (self, {'src':'/CTK/images/del.png',     'alt': _('Delete')})
+            props['src'] = '/CTK/images/del.png'
+            props['alt'] = _('Delete')
+            Image.__init__ (self, props)
+
         elif name == 'loading':
-            Image.__init__ (self, {'src':'/CTK/images/loading.png', 'alt': _('Loading')})
+            props['src'] = '/CTK/images/loading.png'
+            props['alt'] = _('Loading')
+
+            Image.__init__ (self, props)
+
         else:
             assert False, "Unknown stock image"
