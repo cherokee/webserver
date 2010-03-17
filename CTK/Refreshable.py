@@ -35,6 +35,7 @@ $.ajax({
    async:   true,
    success: function(msg){
       $('#%(id)s').html(msg);
+      %(on_success)s
    }
 });
 """
@@ -71,5 +72,8 @@ class Refreshable (Widget):
         render.html = HTML%(self.id, render.html)
         return render
 
-    def JS_to_refresh (self):
-        return REFRESHABLE_UPDATE_JS %({'url':self.url, 'id':self.id})
+    def JS_to_refresh (self, on_success=''):
+        props = {'id':         self.id,
+                 'url':        self.url,
+                 'on_success': on_success}
+        return REFRESHABLE_UPDATE_JS %(props)

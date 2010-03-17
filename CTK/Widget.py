@@ -82,3 +82,10 @@ class Widget:
     #
     def bind (self, event, js):
         self.binds.append ((event, js))
+
+    def JS_to_trigger (self, event, param=None):
+        if param:
+            return "$('#%s').trigger('%s', %s);" %(self.id, event, param)
+        else:
+            return "$('#%s').trigger('%s');" %(self.id, event)
+
