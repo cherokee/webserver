@@ -85,6 +85,7 @@ class HTTP_Response:
 
         # Build the HTTP response
         hdr  = "Status: %d\r\n" %(self.error)
+        hdr += "X-Powered-By: Cherokee and CTK\r\n"
         hdr += "\r\n".join (self.headers) + '\r\n'
 
         # No body replies: RFC2616 4.3
