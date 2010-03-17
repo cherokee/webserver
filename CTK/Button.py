@@ -21,10 +21,20 @@
 #
 
 from Widget import Widget
+from util import props_to_str
 
 class Button (Widget):
-    def __init__ (self, caption="Submit"):
+    def __init__ (self, caption="Submit", props={}):
         Widget.__init__ (self)
+        self.props = props.copy()
+
+        if 'class' in props:
+            self.props['class'] += " button"
+        else:
+            self.props['class'] = "button"
+
+        if not 'href' in props:
+            self.props['href'] = " #"
 
         self.id      = "button_%d" %(self.uniq_id)
         self.caption = caption
@@ -34,8 +44,9 @@ class Button (Widget):
     def Render (self):
         id      = self.id
         caption = self.caption
+        props   = props_to_str (self.props)
 
-        html = '<a id="%(id)s" href="#" class="button"><span>%(caption)s</span></a>' %(locals())
+        html = '<a id="%(id)s" %(props)s><span>%(caption)s</span></a>' %(locals())
 
         render = Widget.Render (self)
         render.html += html
