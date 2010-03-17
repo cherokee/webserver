@@ -57,7 +57,7 @@ a { color: #27c; }
 a:hover { color: #c00; text-decoration: underline; }
 a:active { outline: none; }
 a:focus { -moz-outline-style: none; }
-h1 { color: #c00; font-weight: normal; padding: 16px; font-size: 20px; }
+h1 { color: #c00; font-weight: normal; padding: 16px 0; font-size: 20px; }
 h2 { color: #666; font-weight: normal; padding: 8px 0; font-size: 18px; }
 
 /* Form Styles
@@ -73,7 +73,7 @@ select { border: 1px solid #b0bfce; ibackground: #fff; padding: 2px; outline: no
 html>body #container { min-height: 100%; }
 #container { width: 960px; margin: 0 auto; text-align: left; height: 100%; }
 #topbar { background: #fff url(/static/images/bg-bar.png) top left repeat-x; }
-#main { background: #fff; border: 1px solid #cde; padding: 0 8px 8px 8px; margin: 0 0 16px 0; min-height: 90%; }
+#main { background: #fff; border: 1px solid #cde; padding: 0 0 8px 0; margin: 0; }
 
 #nav { float: right; padding:0; font-size: 11px; }
 #nav li {float: left; margin: 0;padding: 0;text-align: center; width: 64px; height: 50px; }
@@ -349,6 +349,32 @@ a.helpbutton span {
 
 /* Sortable Table
  */
+.panel {
+  border: 1px solid #cde;
+  border-left: none;
+  background-color: #def;
+  width: 240px;
+  float: left;
+  height: 400px;
+}
+
+#source_panel {
+ background: #fff;
+ height: 320px;
+ margin: 2px;
+ border: 1px solid #cde;
+}
+
+.panel table {
+  background-color: #fff; 
+  border-collapse: collapse;
+}
+
+.panel table tr td {
+  background-color: #fff; 
+  border-bottom: 1px solid #cde;
+}
+
 .dragHandle {
   width: 18px;
   cursor: move;
@@ -356,5 +382,11 @@ a.helpbutton span {
 }
 
 .panel-selected {
-	background-color: #f00;
+  background-color: #27c;
+  color: #fff;
+}
+
+.source_content {
+  width: 600px;
+  float: right;
 }
