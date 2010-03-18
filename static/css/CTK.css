@@ -91,9 +91,11 @@ html>body #container { min-height: 100%; }
 #body-mime #nav-mime a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-vservers { background: transparent url(/static/images/vservers.png) no-repeat center 6px; }
 #body-vservers #nav-vservers a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
+#nav-source { background: transparent url(/static/images/vservers.png) no-repeat center 6px; }
+#body-source #nav-source a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat center 6px; }
 #body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
-#body-source { overflow: hidden; }
+#body-source, #body-vservers { overflow: hidden; }
 
 /* JQuery Helpers
 */
@@ -156,15 +158,15 @@ a.button:active span, button:active .button-inner {
 /* Styles for CTK/Tabs.py
  */
 .ui-tabs { zoom: 1; background: transparent url(/CTK/images/tabbg.png) 0 -240px repeat-x; }
-.ui-tabs .ui-tabs-nav { list-style: none; position: relative; }
-.ui-tabs-nav li { float: left; background: transparent url(/CTK/images/tabbg.png) 0 -30px; width: 96px; height: 24px; font-size: 12px; text-align: center; padding-top: 6px; padding-left: 21px; position: relative; }
+.ui-tabs .ui-tabs-nav { list-style: none; position: relative; clear: both;}
+.ui-tabs-nav li { float: left; background: transparent url(/CTK/images/tabbg.png) 0 -30px; width: 86px; height: 17px; font-size: 11px; text-align: center; padding-top: 6px; padding-left: 21px; position: relative; text-shadow: #fff 0px 1px 0px; }
 .ui-tabs-nav li.ui-tabs-first { background: transparent url(/CTK/images/tabbg.png) 0 0; }
-.ui-tabs-nav li.ui-tabs-last { background: transparent url(/CTK/images/tabbg.png) 0 -60px; width: 138px; padding-left: 0; }
+.ui-tabs-nav li.ui-tabs-last { background: transparent url(/CTK/images/tabbg.png) 0 -60px; width: 126px; padding-left: 0; }
 .ui-tabs-nav li.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -120px; }
 .ui-tabs-nav li.ui-tabs-first.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -90px; }
-.ui-tabs-nav li.ui-tabs-last.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -150px; width: 138px; padding-left: 0; }
+.ui-tabs-nav li.ui-tabs-last.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -150px; width: 128px; padding-left: 0; }
 .ui-tabs-nav li.ui-tabs-selected-next { background: transparent url(/CTK/images/tabbg.png) 0 -180px; }
-.ui-tabs-nav li.ui-tabs-selected-next-last { background: transparent url(/CTK/images/tabbg.png) 0 -210px; width: 138px; padding-left: 0;}
+.ui-tabs-nav li.ui-tabs-selected-next-last { background: transparent url(/CTK/images/tabbg.png) 0 -210px; width: 128px; padding-left: 0;}
 .ui-tabs-nav a { color: #79b; text-decoration: none; display: block; }
 .ui-tabs-nav li.ui-tabs-selected a { color: #000; font-weight: bold; }
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
@@ -190,6 +192,7 @@ a.button:active span, button:active .button-inner {
     position: absolute;
     width: 964px;
     padding-top: 10px;
+    z-index: 9999;
 }
 
 a.helpbutton {
@@ -366,7 +369,7 @@ a.helpbutton span {
   text-shadow: #fff 0px 1px 0px;
 }
 
-#source_panel {
+#vservers_panel, #source_panel {
  background: #fff;
  height: 320px;
  margin: 2px;
@@ -406,24 +409,28 @@ a.helpbutton span {
   color: #fff;
 }
 
-.source_content  {
+.vserver_content, .source_content  {
   width: 719px;
   padding: 0;
   float: right;
-  background-color: #f0f7ff;
+  background-color: #fff;
 }
-.source_content  h2 {
+
+.vserver_content h2, .source_content  h2 {
   padding-left: 16px;
   color: #27c;
-  text-shadow: #fff 0px 1px 0px;
   font-size: 16px;
 }
 
-.source_content .submitter {
+.vserver_content .ui-tabs .ui-tabs-panel, .source_content .submitter {
   padding-left: 16px; 
   background-color: #fff;
   border-top: 1px solid #cde;
   overflow: auto;
+}
+
+.vserver_content .ui-tabs .ui-tabs-panel {
+  border: 0;
 }
 
 /* Information sources */
@@ -431,4 +438,5 @@ a.helpbutton span {
 .type { font-size: 11px; border: 1px solid #cde; background-color: #def; float: right; padding: 1px;}
 .host { clear: both; color: #999; font-size: 11px; white-space: nowrap;  width: 200px;}
 .inter { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
+.droot { clear: both; color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 
