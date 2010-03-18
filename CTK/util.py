@@ -20,6 +20,8 @@
 # 02110-1301, USA.
 #
 
+import re
+
 #
 # Strings
 #
@@ -55,3 +57,29 @@ def props_to_str (props):
             tmp.append (p)
 
     return ' '.join(tmp)
+
+#
+# Copying and Cloning
+#
+def find_copy_name (orig, names):
+    # Clean up name
+    cropped = re.search (r' Copy( \d+|)$', orig) != None
+    if cropped:
+        orig = orig[:orig.rindex(' Copy')]
+
+    # Find higher copy
+    similar = filter (lambda x: x.startswith(orig), names)
+    if '%s Copy'%(orig) in similar:
+        higher = 1
+    else:
+        higher = 0
+
+    for tmp in [re.findall(r' Copy (\d)+', x) for x in similar]:
+        if not tmp: continue
+        higher = max (int(tmp[0]), higher)
+
+    # Copy X
+    if higher == 0:
+        return '%s Copy' %(orig)
+
+    return '%s Copy %d' %(orig, higher+1)
