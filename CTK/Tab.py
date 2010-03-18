@@ -22,7 +22,7 @@
 
 from Widget import Widget
 
-HEADERS = [
+HEADER = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
     '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>'
 ]
@@ -139,6 +139,6 @@ class Tab (Widget):
 
         render.html     = html
         render.js      += JS_INIT %(props)
-        render.headers += HEADERS
+        render.headers += HEADER
 
         return render

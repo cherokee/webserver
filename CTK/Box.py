@@ -22,14 +22,16 @@
 
 from Widget import Widget
 from Container import Container
+from consts import HTML_JS_BLOCK
 from util import *
 
-HTML = '<div id="%(id)s" %(props)s>%(content)s</div>'
+HTML = '<div id="%(id)s" %(props)s>%(content)s%(embedded_js)s</div>'
 
 class Box (Container):
-    def __init__ (self, props={}, content=None):
+    def __init__ (self, props={}, content=None, embed_javascript=False):
         Container.__init__ (self)
         self.props = props.copy()
+        self.embed_javascript = embed_javascript
 
         # Object ID
         if 'id' in self.props:
@@ -48,9 +50,16 @@ class Box (Container):
     def Render (self):
         render = Container.Render (self)
 
-        props = {'id':      self.id,
-                 'props':   props_to_str (self.props),
-                 'content': render.html}
+        if self.embed_javascript and render.js:
+            js = HTML_JS_BLOCK %(render.js)
+            render.js   = ''
+        else:
+            js = ''
+
+        props = {'id':          self.id,
+                 'props':       props_to_str (self.props),
+                 'content':     render.html,
+                 'embedded_js': js}
 
         render.html = HTML %(props)
         return render

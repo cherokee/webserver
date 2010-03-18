@@ -180,7 +180,13 @@ def load_module (name):
             return sys.modules[name]
 
     # Load the plug-in
-    return imp.load_source (name, os.path.join (mod_path, "%s.py"%(name)))
+    fullpath = os.path.join (mod_path, "%s.py"%(name))
+
+    try:
+        return imp.load_source (name, fullpath)
+    except IOError:
+        print "Could not load '%s'." %(fullpath)
+        raise
 
 
 def instance_plugin (name, key, **kwargs):
