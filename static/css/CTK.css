@@ -91,7 +91,7 @@ html>body #container { min-height: 100%; }
 #body-mime #nav-mime a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-vservers { background: transparent url(/static/images/vservers.png) no-repeat center 6px; }
 #body-vservers #nav-vservers a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
-#nav-source { background: transparent url(/static/images/vservers.png) no-repeat center 6px; }
+#nav-source { background: transparent url(/static/images/sources.png) no-repeat center 6px; }
 #body-source #nav-source a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat center 6px; }
 #body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
