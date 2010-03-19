@@ -3,7 +3,7 @@
 Modules: Loggers
 ----------------
 
-Loggers are a type of Cherokee modules unsurpisingly used to log
+Loggers are a type of Cherokee modules unsurprisingly used to log
 events. They can be configured on a per virtual server basis through
 each virtual server's `Logging` section.
 

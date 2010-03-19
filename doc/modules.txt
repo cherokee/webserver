@@ -22,7 +22,7 @@
     - link:modules_validators_plain.html[Plain]: Plain file mechanism.
     - link:modules_validators_htpasswd.html[htpasswd]: htpasswd mechanism.
     - link:modules_validators_htdigest.html[htdigest]: htdigest mechanism.
-    - link:modules_validators_ldap.html[LDAP]: Lightweight Directory Acces Protocol mechanism.
+    - link:modules_validators_ldap.html[LDAP]: Lightweight Directory Access Protocol mechanism.
     - link:modules_validators_mysql.html[MySQL]: Database mechanism.
     - link:modules_validators_pam.html[PAM]: Pluggable Authentication Module mechanism.
     - link:modules_validators_authlist.html[Fixed list]: Fixed authentication list.

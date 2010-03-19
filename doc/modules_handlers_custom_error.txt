@@ -34,6 +34,6 @@ image::media/images/admin_handler_custom_error.png[Handler Custom Error]
 |501  |Not Implemented
 |502  |Bad gateway
 |503  |Service Unavailable
-|504  |Gatewat Timeout
+|504  |Gateway Timeout
 |505  |HTTP Version Not Supported
 |=====================================

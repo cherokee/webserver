@@ -8,7 +8,7 @@ dispatches in-bound network traffic to a set of servers, and presents
 a single interface to the requesters. This is particularly useful to
 load balance a cluster of webservers at a much higher network stack
 level than that allowed by the
-link:modules_hanlders_mirror.html[generic balancer].
+link:modules_handlers_mirror.html[generic balancer].
 
 All connections coming from the Internet addressed to one of the Web
 servers are routed through the proxy, which can either deal with the
@@ -34,7 +34,7 @@ steps.
 image::media/images/proxy_phase1.png[Phase 1]
 
 * Phase 2: Once the server that has received the request sends back the
-  response, the reverse proxy deletes the unnecesary return HTTP
+  response, the reverse proxy deletes the unnecessary return HTTP
   headers and sends the response  back to the requesting client.
 
 image::media/images/proxy_phase2.png[Phase 2]

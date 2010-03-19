@@ -41,7 +41,7 @@ that perform the actual authentication tasks.
 Cherokee's installation procedure already takes care of the creation
 of such file (under /etc or whatever system configuration directory is
 used in your platform of choice). If you consistently fail to use the
-PAM validator, make sure that such configuration deffinitions are set.
+PAM validator, make sure that such configuration definitions are set.
 
 .Sample: /etc/pam.d/cherokee
 ----

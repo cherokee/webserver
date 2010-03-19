@@ -6,7 +6,7 @@ Modules: Encoders
 Encoders are Cherokee modules that can be used as filters. The most
 common usage is to compress information allowing you to save
 bandwidth. You should do that whenever you can since hardware is
-mostly unexpensive while bandwidth is not. Besides, the performance
+mostly inexpensive while bandwidth is not. Besides, the performance
 penalization suffered due to the compression process is trivial, and
 if the content is cached you will only suffer it once.
 

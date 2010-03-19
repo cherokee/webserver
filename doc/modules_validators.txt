@@ -15,7 +15,7 @@ configured virtual server.
 Depending on the complexity of the mechanism you will have to provide
 more or less information.
 
-You will always have to provide a *Relam*, which is a name to
+You will always have to provide a *Realm*, which is a name to
 associate with the authenticated resource.
 You will also have permanently the option to provide a list of *allowed
 users*, regardless of the validator chosen.
@@ -26,7 +26,7 @@ authentication mechanisms:
     * Basic
     * Digest
 
-Some can only handle one of those mechanisms because of techical
+Some can only handle one of those mechanisms because of technical
 limitations. In case the module supports both of them, the interface
 allows to choose whether one or both are to be used.
 

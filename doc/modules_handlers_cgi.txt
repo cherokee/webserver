@@ -97,10 +97,10 @@ This info will be added upon completion of issue 40
   example, "File does not exist: /usr/local/docroot/nonexistent.html".
 
 * SERVER_ADDR: This will typically be `::1` which is a unicast
-  localhost address. This means that the packets sent to this addrress
+  localhost address. This means that the packets sent to this address
   will be looped back on the same virtual interface.
 
-* SERVER_PORT: Port to which the request was performed origianlly.
+* SERVER_PORT: Port to which the request was performed originally.
 
 * REMOTE_PORT: Port to which the request was served.
 //////

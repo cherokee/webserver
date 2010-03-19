@@ -76,6 +76,6 @@ group fails the rest will not be run. You will receive at least one
 error among the results, which is probably all what you need in case
 you were in the middle of a transaction or that sort of situation.
 
-Further information about this hanlder can be found in the
+Further information about this handler can be found in the
 link:cookbook.html[cookbook] section, specifically in the recipe about
 link:cookbook_dbslayer.html[setting up the MySQL balancing].

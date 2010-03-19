@@ -5,7 +5,7 @@ Handler: Server Side Includes
 
 Server Side Includes, also known as SSI, are directives placed in HTML
 pages meant to be evaluated on the web server while the requests are
-being delivered. The intented use is adding some dynamic content to
+being delivered. The intended use is adding some dynamic content to
 existing HTML pages without having to serve the whole content
 dynamically (be it through CGI, SCGI, FastCGI, etc.).
 
@@ -17,7 +17,7 @@ extension.
 
 Although this will be the majority of cases where this can be of
 usefulness, Cherokee is not limited to just one file extension. The
-SSI hanlder applies to whatever is matched by the rule where it has
+SSI handler applies to whatever is matched by the rule where it has
 been configured.
 
 Currently Cherokee supports the following SSI directives:
@@ -57,7 +57,7 @@ directives like the following ones:
 ----
 
 Note that the include element can determine what file to include based
-on the `virtual` or `file` attributes, which have the behavoir
+on the `virtual` or `file` attributes, which have the behavior
 specified above. In any case, despite specifying absolute or relative
 paths containing `..`, the SSI handler will not include any files
 outside the webserver document root.

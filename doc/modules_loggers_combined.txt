@@ -23,15 +23,15 @@ Here is an example:
 ::ffff:127.0.0.1 - - [11/Aug/2008:16:17:58 +0000] "GET /index.html HTTP/1.1" 200 2633 "-" "Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.9.0.1) Gecko/2008072820 Firefox/3.0.1"
 ****
 
-The description of the aditional fields follows.
+The description of the additional fields follows.
 Refer to the link:modules_loggers_ncsa.html[Common Log
 Format] documentation for information about the rest of the fields.
 
 
 *referrer* ("-") ::
-This is the "Referer" HTTP request header. This indicates the URL
+This is the "Referrer" HTTP request header. This indicates the URL
 which linked the user to your site (as reported by the client). In
-this case it is empty because no referer exists (i.e. it is a direct
+this case it is empty because no Referrer exists (i.e. it is a direct
 hit).
 
 
