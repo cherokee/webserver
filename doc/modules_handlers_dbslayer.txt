@@ -20,7 +20,7 @@ with any standard mechanism currently in place.
 the bridge and the database server. Experience a huge performance
 boost independently of your application's design.
 
-. Possibility of applying any of the encoding modules provoded by
+. Possibility of applying any of the encoding modules provided by
 Cherokee: deliver your database results in gzipped format and save
 bandwidth.
 

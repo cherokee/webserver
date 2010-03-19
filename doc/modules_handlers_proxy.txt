@@ -48,7 +48,7 @@ image::media/images/admin_handler_proxy.png[Reverse Proxy]
 
 Then you will have to specify:
 
-* Reuse connections: the maximum number of connetions per server to be
+* Reuse connections: the maximum number of connections per server to be
   kept with Keep-alive. If not specified, the default value of 16 will
   be taken.
 
