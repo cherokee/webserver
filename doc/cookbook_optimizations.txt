@@ -30,12 +30,12 @@ Support
  Polling methods: select poll epoll
 ----
 
-The last section is interesting. If you see that any siginficant
+The last section is interesting. If you see that any significant
 capability supported by your platform is missing, you should really
 build another binary or check if something is wrong with your
 system. Note that not every single capability is present in every
 platform. For instance, `epoll` is a polling method specific to Linux
-platforms, and its abscence from any non-Linux system is perfectly
+platforms, and its absence from any non-Linux system is perfectly
 normal. It is inherently more efficient than the other methods
 available on Linux. For BSD based platforms `kqueue` is also a great
 improvement over the most standard `poll`. This is the standard POSIX
@@ -49,7 +49,7 @@ methods, the existence of sendfile() and the Pthreads support.
 Tweaks
 ~~~~~~
 
-There is no general recomendation that is the best for everybody. In
+There is no general recommendation that is the best for everybody. In
 general Cherokee's default values try to offer a good compromise
 between resources and performance, but for specific cases you will be
 able to tweak somethings that may (or may not) improve the overall
@@ -88,7 +88,7 @@ General::
 +
 * *Keep alive*: This setting dramatically affects the speed at which
   repeated connections are served to the same client. This is
-  especially noticeable when an asyncrhonous application is used. The
+  especially noticeable when an asynchronous application is used. The
   trade off is that, since connections are kept open more time, less
   connections remain available for other clients in any given
   moment. Cherokee does a pretty good job at reclaiming unused open
@@ -104,7 +104,7 @@ Advanced::
   and a lower one will simply increase the amount of unused processor
   power.
 +
-* *File descriptors*: By deffinition, the higher this limit is, the
+* *File descriptors*: By definition, the higher this limit is, the
   less efficient will your system be in relative terms. However, it
   is understood that if you are tweaking this value is because you
   need to, that is, you have a very high load site. In these cases
@@ -113,7 +113,7 @@ Advanced::
   handle. By default Cherokee does not touch this value and it uses
   the one specified by your system.
 +
-* *IO Cache*: This setting allows to enable or diasable server-wide
+* *IO Cache*: This setting allows to enable or disable server-wide
   the content caching. If disabled, the _IO Cache_ settings of the
   static content handlers will also be disabled, no matter what
   behavior is desired in their specific configuration. This global

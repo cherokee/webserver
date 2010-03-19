@@ -25,7 +25,7 @@ typing:
 ----
 
 The official supported packages can be found at
-link:http://www.go-mono.com/mono-downloads/download.html[the downlad
+link:http://www.go-mono.com/mono-downloads/download.html[the download
 site]. If your flavor is not there, for Linux you can either:
 
 * Download the binary installer, which is the
@@ -97,7 +97,7 @@ production is highly recommended.
     standard extensions to the FastCGI Mono Server, defining a rule
     that uses the information source we just mentioned and applies to
     the extensions: `aspx, asmx, ashx, asax, ascx, soap, rem, axd, cs,
-    config, dll`. However, this is not the option recomended by the
+    config, dll`. However, this is not the option recommended by the
     Mono Project since some undesired side effects are obtained, such
     as exposed files and missing features.
 

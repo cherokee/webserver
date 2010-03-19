@@ -69,7 +69,7 @@ on the `Symfony Wizard` to create a customised one.
 In either case you will be asked for the basic information and
 everything will be handled for you. The two main data pieces will be
 the location of the public web folder of your Symfony project (that
-is, the part that you wish to make publicly accesible, not the whole
+is, the part that you wish to make publicly accessible, not the whole
 project), and the path to the installed release of Symfony in your
 system.
 
@@ -85,7 +85,7 @@ image::media/images/cookbook_symfony.png[Symfony Application]
 
 Note that the Wizard configures Cherokee for your project's production
 frontend. Should you wish to access the development environment simply
-adjust the redirection to the appropriate forntend.
+adjust the redirection to the appropriate frontend.
 
 
 [[manual_configuration]]
@@ -130,9 +130,9 @@ your demo project.
   example, our application name is "demo" so this controller will be
   called "demo_dev.php".
 
-. A slight adition must be added to fix an issue with how requests for
+. A slight addition must be added to fix an issue with how requests for
   the root are managed when there is a rule with the `File exists`
-  handler in place. If this is not put in place, you will recieve 403
+  handler in place. If this is not put in place, you will receive 403
   errors. Simply define yet another redirection rule for this regular
   expression:
 +

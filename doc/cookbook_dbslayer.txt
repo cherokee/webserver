@@ -307,7 +307,7 @@ From there on the built-in functions should be extended to support
 Cherokee Bridged MySQL resources as well as the regular MySQL ones.
 
 If you don't care about mixing regular MySQL resources and Bridged
-ones, as will be the case in most ocasions, you could even skip the
+ones, as will be the case in most occasions, you could even skip the
 manual initialization and simply modify the `cherokee_mysql_connect()`
 and `cherokee_mysql_pconnect()` functions to do the task for you on
 invocation.

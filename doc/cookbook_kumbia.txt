@@ -12,7 +12,7 @@ link:http://www.kumbiaphp.com/blog/about/[About] page:
 **********************************************************************
 
 Kumbia is a free web framework written in PHP5. Based on the best web
-developing practices, used in comercial and educational software,
+developing practices, used in commercial and educational software,
 Kumbia encourages speed and efficiency in web application creation and
 maintainment, substituting repetitive coding tasks for power, control
 and pleasure.

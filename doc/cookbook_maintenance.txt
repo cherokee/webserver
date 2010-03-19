@@ -31,7 +31,7 @@ The steps are fairly simple:
 +
 image::media/images/cookbook_maintenance_copy.png[Copycat]
 
-- Dont forget to set up the domains handled by the virtual host.
+- Don't forget to set up the domains handled by the virtual host.
 +
 image::media/images/cookbook_maintenance_domain.png[Domain]
 
@@ -50,14 +50,14 @@ image::media/images/cookbook_maintenance_rule.png[Rule]
 - Make sure the copycat is positioned above the original virtual host,
   effectively having a higher priority for it. By default the new
   virtual hosts are positioned on top of the rest. Just make sure you
-  don't inadvertedly change the relative priorities.
+  don't inadvertently change the relative priorities.
 +
 image::media/images/cookbook_maintenance_result.png[Final result]
 
 - Make a *graceful restart*.
 
 By doing this, the existing connections to the original virtual host
-will be preserverd and will eventually end upon completion. At the
+will be preserved and will eventually end upon completion. At the
 same time, new requests will be delivered to its copycat and will be
 handled according to its specified behavior. If you don't want this
 behavior you can always make a *hard restart*, effectively shutting
@@ -99,7 +99,7 @@ maintenance directory.
 Advanced Example: Staff review
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By now you can switch the server to and from maintenace mode.
+By now you can switch the server to and from maintenance mode.
 The next essential feature needed is to allow specific users to be
 able to access the original site, not the maintenance version, so that
 the can view the changes reflected as soon as they work on something.
@@ -116,7 +116,7 @@ image::media/images/cookbook_maintenance_advanced_domains.png[Domains]
 [NOTE]
 As mentioned in the link:config_virtual_servers.html[Virtual Servers]
 section, you should keep in mind the way the domain lists are
-interpreted. Whenever Cherokee recieves a request for a specific
+interpreted. Whenever Cherokee receives a request for a specific
 domain, it evaluates the `Domain list` of every defined virtual host
 in the order defined by the priorities of such hosts. If no domain
 name matches the request, Cherokee re-evaluates the list of virtual
@@ -131,7 +131,7 @@ Cherokee issue the failure.
 10.0.0.118	intranet_example
 ----
 +
-In this case we are using the IP address asigned to the server in our
+In this case we are using the IP address assigned to the server in our
 intranet, and this will grant access from our computer to the original
 site whether the copycat is present or not.
 +

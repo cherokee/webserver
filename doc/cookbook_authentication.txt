@@ -132,7 +132,7 @@ suits the shown query.
 
 
 Assuming you have a MySQL user with privileges granted to create
-databases, a MySQL session simliar to this one would suffice:
+databases, a MySQL session similar to this one would suffice:
 
 ----
 $ mysql -u cherokee -D cherokee -p
@@ -165,7 +165,7 @@ Another usage example
 ~~~~~~~~~~~~~~~~~~~~~
 
 As you can see, getting the hang of how authentication works is pretty
-easy. Let's ilustrate another easy example. How to serve PHP files,
+easy. Let's illustrate another easy example. How to serve PHP files,
 both from a protected location and an unprotected one?
 
 Let's assume our locations are targets are:
@@ -192,7 +192,7 @@ And this would be more than enough. The files from the secure location
 would match the first rule and the authentication would be
 required. In case it was successful, not being a final rule, the
 request would proceed to the second rule. Once there, the regular
-processing of PHP files would take palce. This one is a _FINAL_ rule,
+processing of PHP files would take place. This one is a _FINAL_ rule,
 so the rule evaluation would stop.
 
 In case the PHP files were not being requested from the secured

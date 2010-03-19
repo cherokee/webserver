@@ -94,7 +94,7 @@ called `manage.py`.
 
 Django can be run on a TCP port or on a Unix socket. In our example we
 will be launching it as threaded server on a TCP port with SCGI
-protocol. This is acomplished with the following command, which is
+protocol. This is accomplished with the following command, which is
 what we will have to set up in `cherokee-admin`.
 
 ----

@@ -115,7 +115,7 @@ image::media/images/cookbook_sugarcrm_install0.png[Installation]
 You'll need to Accept the license agreement before you can go on, and
 once you've done this the installer will run the compatibility checks.
 
-Select `Typicall` installation, choose the MySQL database, fill in
+Select `Typical` installation, choose the MySQL database, fill in
 the required data and if everything went smoothly, the installer
 should create the database and go through with the whole process.
 

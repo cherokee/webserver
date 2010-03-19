@@ -19,7 +19,7 @@ Redirecting www.example.net to example.net
 Sometimes a site will have several domains or subdomains pointing to
 the same official name. For whatever reasons (site statistics, for
 instance), having many subdomains redirected to a unique subdomain
-might be desireable. This can be accomplished farily easily. The
+might be desirable. This can be accomplished fairly easily. The
 general recipe consists in defining a virtual host with the sole
 purpose of redirecting petitions to the official subdomain. In our
 example, this could manage __*.example.net__ and the __.com__ and
@@ -34,7 +34,7 @@ The official name would then be managed by another virtual host
 image::media/images/cookbook_redir_behavior.png[Unique rule]
 
 This in turn would define an _external redirection_ with a _Regular
-Expression_ like __^/(.*)$__ and the apropriate _Substitution_:
+Expression_ like __^/(.*)$__ and the appropriate _Substitution_:
 http://example.net/$1
 
 image::media/images/cookbook_redir_handler.png[Handler configuration]

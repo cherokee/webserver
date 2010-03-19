@@ -258,7 +258,7 @@ if [ $? != 0 ]; then
 fi
 ----
 
-You can see that, in essence, it issues the folowing command:
+You can see that, in essence, it issues the following command:
 ----
 $ openssl req -new -x509 -nodes -out server.crt -keyout server.key
 ----

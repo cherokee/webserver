@@ -9,11 +9,11 @@ one or many Rails servers. This is done by using an extremely
 efficient web server to manage the web part and leaving as many free
 resources as possible to Rails.
 
-[[framewrok]]
+[[framework]]
 === Preparing the framework
 
 Of course you will need a working Rails installation for this to
-succed. You can set this up easily. If you have Ruby and Ruby Gems
+succeed. You can set this up easily. If you have Ruby and Ruby Gems
 installed, you can directly install the 'Rails' gem like this:
 
 ----
@@ -132,7 +132,7 @@ Under `FastCGI specific` make sure to add the hosts providing the
 service. Do this by adding one or more
 link:config_info_sources.html[Information Sources].
 
-Note that, in the definition of the informaction source, you will have
+Note that, in the definition of the information source, you will have
 to manually launch the `spawner` if you use a `Remote host` as
 `Information source` instead of a `Local interpreter`.
 

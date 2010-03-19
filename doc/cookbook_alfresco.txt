@@ -24,7 +24,7 @@ you must know that it uses JDK 1.5+, MySQL and Tomcat as application
 server.
 
 We will be installing the package and then setting up Cherokee as a
-reverse proxy to access this Enterprse Content Managment solution.
+reverse proxy to access this Enterprise Content Management solution.
 
 [[alfresco]]
 Phase one: Alfresco
@@ -47,7 +47,7 @@ The process is fairly straight forward.
 image::media/images/cookbook_alfresco_install.png[Install process]
 
 When you are asked for an OpenOffice location, you can select the
-Alfresco directory if you don'w want to use it for Office document
+Alfresco directory if you don't want to use it for Office document
 conversions. If you can't seem to find a path that lets the installer
 proceed, it could be that the installer is trying to look for the file
 `soffice.exe`. There is information about this problem in their
@@ -117,7 +117,7 @@ assistant under the `Platforms` category of the Wizards. Click, answer a few
 questions and you are done. You can then skip the rest of this
 document.
 
-Should you have any problem with the assitant, you can perform the
+Should you have any problem with the assistant, you can perform the
 same tasks manually. Simply set up Cherokee as reverse proxy. You can
 either create a new virtual server with a matching rule (be it
 `default` or anything else) if you are sharing the proxy machine, or
@@ -133,7 +133,7 @@ matches the desired path on your web server hierarchy -`/share` for
 instance- in your virtual server of choice, and define the `HTTP
 reverse proxy` handler from within the `Handler` tab.
 
-Remeber to configure an URL rewriting rule in the handler's
+Remember to configure an URL rewriting rule in the handler's
 configuration. Alfresco's application server doesn't provide content
 directly in the document root, so we'll have to add the required
 subnode.
