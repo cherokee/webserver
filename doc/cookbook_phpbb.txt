@@ -32,7 +32,7 @@ In this example, we will be installing everything under
 cherokee-admin for our server, which will be hosting contents for the
 domain `example.net`. You can modify this going to `Virtual servers`
 -> `default` -> `Basics` -> `Document Root`. You can delete all the
-unnecesary rules of your default out-of-the-box configuration.
+unnecessary rules of your default out-of-the-box configuration.
 
 image::media/images/cookbook_phpbb_rules.png[phpBB basic rules]
 
@@ -133,7 +133,7 @@ To beautify your URLs you will need to write some redirection rules
 and apply some patches. This feature seems to not be supported in
 phpBB, so you will have to download phpBB's `mod_rewrite` module and
 apply the patch. There are several alternative patches available from
-diferent sources. Since you will need to modify by hand some code,
+different sources. Since you will need to modify by hand some code,
 your best alternative is probably sticking to some pre-modded version.
 
 One such version is link:http://www.phpbb-seo.com/[phpBB SEO]. Make

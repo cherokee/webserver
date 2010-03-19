@@ -72,7 +72,7 @@ start over.
 
 If you are going to attempt to make an installation as is, with no
 reconfiguration of Cherokee whatsoever, you can skip right to the
-secction link:cookbook_wordpress.html#setting_up_wordpress[Setting up
+section link:cookbook_wordpress.html#setting_up_wordpress[Setting up
 Wordpress].
 
 
@@ -124,7 +124,7 @@ way the links are to be rewritten.
 image::media/images/cookbook_wp4.png[WP admin]
 
 Remember to set up the plugins that are of interest for you, such as
-the sitemaps generator, in a fashion compatible with what you
+the sitemap generator, in a fashion compatible with what you
 configured in Cherokee.
 
 And voilà! You have a Wordpress installation working flawlessly with

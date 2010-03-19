@@ -150,7 +150,7 @@ under a directory in an existing virtual server, but we will take the
 first approach for clarity and simplicity. And we will make the
 modifications in our `default` virtual server. This will only affect
 the URLs we'll be accessing to log in to Joomla. First download and
-uncompressed the distributed Joomla release into `/var/www/joomla`, and
+uncompress the distributed Joomla release into `/var/www/joomla`, and
 set that path as the `Document Root` in your virtual host's `Basics`
 tab.
 

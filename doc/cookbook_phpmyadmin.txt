@@ -67,7 +67,7 @@ Since Cherokee doesn't appear in the list of web servers provided by
 the package installation script, select any of them to proceed with
 phpMyAdmin's configuration.
 
-The commands above asume you are running Cherokee as `root` and that
+The commands above assume you are running Cherokee as `root` and that
 your web server's `document root` is `/var/www`.
 
 If you were to run it as `www-data`, simply change the script's

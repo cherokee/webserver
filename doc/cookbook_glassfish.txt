@@ -143,7 +143,7 @@ the `Behaviour` tab of any given virtual server.
 
 The wizard will simply ask for the host to be proxied and will set it
 up for you to see. Should you need to add more machines to your
-cluster, you can add extra informtion sources to your Cherokee
+cluster, you can add extra information sources to your Cherokee
 configuration and let it deal with all the load balancing.
 
 No extra steps are necessary. You can skip directly to the
