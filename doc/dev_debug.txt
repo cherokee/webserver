@@ -105,7 +105,7 @@ interesting for your trace. Besides, there are a few special cases:
   - time: Prints the time at the beginning of the line
   - thread: Prints the thread ID
 
-* You can also access the functionality of CHEROKE_TRACE through
+* You can also access the functionality of CHEROKEE_TRACE through
   `cherokee-tweak`. Refer to the apropriate section of the
   documentation to learn more about this:
   link:bundle_cherokee-tweak.html[cherokee-tweak].

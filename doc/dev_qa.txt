@@ -3,7 +3,7 @@
 Development: Quality Assurance
 -------------------------------
 
-Cherokee has an automated battery of scripts intentded to prevent
+Cherokee has an automated battery of scripts intended to prevent
 regressions.
 
 You should run all the QA tests before whenever you implement changes

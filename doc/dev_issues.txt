@@ -11,9 +11,9 @@ mainstream usage.
 
 As these features get properly integrated into the Cherokee
 infrastructure, the notes regarding the subject should be moved to
-their specific section of the docmentation.
+their specific section of the documentation.
 
-For now, this document mantains a list of currently open issues. It
+For now, this document maintains a list of currently open issues. It
 mostly is useful to list things of the Cherokee Project that are known
 to be half-baked, and as such are only of interest for developers.
 

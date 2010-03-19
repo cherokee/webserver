@@ -56,7 +56,7 @@ is run as root or whether to use keep-alive connections.
 [options="header"]
 |====================================================================
 |**Key**                       |**Type** |**Description**
-|server!bind!#!port            |Number   |Listen to a TCP port. '#' is a secuential number since many ports can be listened at once.
+|server!bind!#!port            |Number   |Listen to a TCP port. '#' is a sequential number since many ports can be listened at once.
 |server!bind!#!tls             |Bool    |on\|off: whether the listened port '#' is for HTTPS.
 |server!max_fds                |Number   |Max open file descriptors
 |server!listen_queue           |Number   |Length of the listen queue
@@ -123,7 +123,7 @@ Virtual servers are stored in a numbered list. The starting number
 does not really matter. What matters is that the list will be
 interpreted in an orderly fashion to prioritize some virtual servers
 over others, which can be of use depending on the way these are
-defined. The only precuation to take is making sure there are no
+defined. The only precaution to take is making sure there are no
 repeated priorities, since the behavior in these cases in undefined.
 
 
@@ -163,7 +163,7 @@ specifies which is the rule type and its properties.
 
 The general syntax is::
 +
-`vserver ! order ! rule ! prioriry ! match`
+`vserver ! order ! rule ! priority ! match`
 
 The rule types plug-ins shipped within a standard Cherokee release
 include:
@@ -205,11 +205,11 @@ Eg: requests beginning with 'a' and PHP extension:
 It tries to match a regular expression against a certain header
 entry.
 +
-Eg: check whether the Referer header matches a specific host:
+Eg: check whether the Referrer header matches a specific host:
 +
 ----
       vserver!1!rule!50!match!type = header
-      vserver!1!rule!50!match!header = Referer
+      vserver!1!rule!50!match!header = Referrer
       vserver!1!rule!50!match!match = .+\.example\.com
 ----
 
@@ -262,7 +262,7 @@ kinds of entry:
 |===================================================================
 
 The ``auth`` entry deserves a little more attention,
-actually. Accepted validarot modules are `htdigest, htpasswd, ldap,
+actually. Accepted validator modules are `htdigest, htpasswd, ldap,
 mysql, pam, plain`. It restricts the access to some of the objects
 accessed by the web server based on a number of properties that are
 defined at its child properties:
