@@ -18,7 +18,7 @@ There are two possible settings as *information sources*:
 . *Remote*: Cherokee will simply dispatch the request to the specified
   host. As many hosts as needed can be added, and Cherokee will simply
   apply the balancing strategy to which the information source is
-  asinged among them. If for any reason the requests made to these
+  assigned among them. If for any reason the requests made to these
   hosts could not be performed, the processes would simply fail.
 
 . *Local*: As before, many hosts can be specified (despite the name,
@@ -36,8 +36,8 @@ There are two possible settings as *information sources*:
   will give up. The default value is 3 seconds.
 
 Note that because of Cherokee's flexibility and modularity, sometimes
-and deppending of the situation one or the other setting might not
-make much sense. In such ocasions `cherokee-admin` will simply hide
+and depending of the situation one or the other setting might not
+make much sense. In such occasions `cherokee-admin` will simply hide
 whatever options do not apply.
 
 image::media/images/admin_info_sources.png[Information Sources]
@@ -52,7 +52,7 @@ For instance, if your PHP rule was balancing among two information
 sources, by deleting one of the sources in this section you would also
 be deleting it in the corresponding rule entry. Now the PHP rule would
 balance only with one information source. This is perfectly safe. The
-problem arises whenever you want to compeltely exhaust the list of
+problem arises whenever you want to completely exhaust the list of
 sources being balanced. Since every balancer (a generic balancer or a
 FastCGI balancer, for example) needs at least one information source,
 the rule would be broken and Cherokee would fail to start. This is
@@ -66,7 +66,7 @@ alternative information sources or by completely eliminating the rule.
 Unix Sockets
 ~~~~~~~~~~~~
 
-Note that information sources can be adressed by host:port or directly
+Note that information sources can be addressed by host:port or directly
 through Unix sockets. You only have to specify a full path to the
 socket instead of the `host:port`.
 

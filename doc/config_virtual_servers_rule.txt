@@ -58,7 +58,7 @@ on the values you have configured. The available options are:
 [[security]]
 Security
 ~~~~~~~~
-This section will give acces to access restriction settings and
+This section will give access to access restriction settings and
 authentication settings.
 
 [[restrictions]]
@@ -67,12 +67,12 @@ Access Restrictions
 * Only https::
   This configuration entry determines that the directory will be
   served by the secure server (*https*) only.
-  If you access directory /admin -or any sub-directory- throught a
+  If you access directory /admin -or any sub-directory- through a
   non-secure connection Cherokee will report a *426 Upgrade Required
   error*.
 
 * Allow From::
-  This parameter lets you set up wich IP or IP ranges will be allowed
+  This parameter lets you set up which IP or IP ranges will be allowed
   to access the directory contents . The remote client IP will be
   checked with all the provided list and only if the IP matches with
   some of the rules the access will be allowed.
@@ -119,7 +119,7 @@ Authentication
 
 This parameter allows to configure user/password protected entries. A
 validator has to be used in each Auth entry in order to specify the
-validaton mechanism. The following `validators` are available:
+validation mechanism. The following `validators` are available:
 
 - link:modules_validators_plain.html[plain] - **Plain text file**
 +
@@ -156,6 +156,6 @@ authentication mechanisms:
     * Digest
 
 Some link:modules_validators.html[validators] can only handle one of
-those mechanisms because of techical  limitations. In case the module supports
+those mechanisms because of technical  limitations. In case the module supports
 both of them, the interface allows to choose whether one or both are
 to be used.

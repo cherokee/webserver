@@ -33,7 +33,7 @@ configuration.
 Most of the wizards are documented on their corresponding recipes in
 the link:cookbook.html[Cookbook].
 
-The wizards are loosly organized on several categories: CMS,
+The wizards are loosely organized on several categories: CMS,
 platforms, tasks, misc, etc. Take a look at them. You might find
 something interesting in the place least expected.
 
@@ -75,7 +75,7 @@ Available Wizards
 
 * link:cookbook_php.html[PHP]: PHP configuration.
 
-* Redirect: assits in configurin redirections.
+* Redirect: assits in configuring redirections.
 
 * link:cookbook_ror.html[RoR]: Ruby on Rails configuration.
 

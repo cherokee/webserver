@@ -7,7 +7,7 @@
     - link:config_virtual_servers_rule.html[Rule Options]: Specifying the matching rules.
     - link:config_virtual_servers_evhost.html[Advanced Virtual Hosting]: Multi-domain settings.
   . link:config_info_sources.html[Information Sources]: Defining information sources.
-  . link:config_icons.html[Icons]: Icon managment.
+  . link:config_icons.html[Icons]: Icon management.
   . link:config_mime_types.html[Mime Types]: Setting up the MIME types.
   . link:config_advanced.html[Advanced]: Advanced tweaking. Not for the faint of heart.
   . link:config_wizards.html[Wizards]: Configuration assistants for many known scenarios.

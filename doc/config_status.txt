@@ -11,7 +11,7 @@ link:other_graphs.html[usage graphs] will be displayed.
 image::media/images/admin_index.png[Status]
 
 This section also enables you to change Cherokee-Admin's current user
-language, and enables you te send feedback directly to Cherokee
+language, and enables you to send feedback directly to Cherokee
 developers, as well as enlisting in our
 link:http://www.cherokee-project.com/cherokee-domain-list.html[Proud
 Cherokee Users] ranking.

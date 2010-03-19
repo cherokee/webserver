@@ -25,9 +25,9 @@ Connections
 * Max keepalive reqs:
   This limits the number of HTTP requests that can be served by each
   keepalive connection. Keepalive connections improve performance, but
-  surpasing certain amount of requests per each connection is an
+  surpassing certain amount of requests per each connection is an
   indicator that something out of the ordinary is happening. This
-  prevents the appearence of any problems related to these situations.
+  prevents the appearance of any problems related to these situations.
 
 * Chunked encoding:
   Enabled by default to try to keep enabled Keep-Alive.
@@ -75,7 +75,7 @@ Resources
   possible, allowing it to improve performance by not having to
   reinitialize structures in memory that can serve perfectly well for
   more than one time. It defaults to 20. Though this mechanism is an obvious
-  improvent, reducing this limit is useful for cases when a sudden
+  improvement, reducing this limit is useful for cases when a sudden
   burst of connections happens. In those cases it doesn't make much
   sense to keep reusing many more connections than those of an average
   load for any other moment.
