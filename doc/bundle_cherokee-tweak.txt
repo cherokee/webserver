@@ -57,7 +57,7 @@ This is the full information provided by the manpage.
                found.  This target must be  defined  previously  in  cherokee-
                admin, enabling a "Remote Administration" type handler (Virtual
                Servers->Behaviour->Add new  rule,  and  then  Handler->"Remote
-               Administration").  The  definition of a security mechanisim is
+               Administration").  The  definition of a security mechanism is
                highly encouraged.
 
        -l, --log=PATH;;
@@ -80,7 +80,7 @@ image::media/images/admin_handler_admin.png[Setting up an admin interface]
 
 Please note that while you are at it, the definition of a security
 (through the 'Security' tab) is highly encouraged. Although you have
-the choice to, you should never use 'None' as security mechanisim
+the choice to, you should never use 'None' as security mechanism
 since this would leave your system exposed to third parties using
 `cherokee-tweak`.
 
@@ -93,7 +93,7 @@ Every module traceable with CHEROKEE_TRACE can also be traced this
 way. Refer to the link:dev_debug.html["Debugging"] section of the
 documentation for more information on this matter.
 
-Keep in mind one important thing: when the `-t` option is specificed,
+Keep in mind one important thing: when the `-t` option is specified,
 `cherokee-tweak` activates the tracing functionality within the
 `cherokee` instance. It does not provide tracing of its own. This
 means the debugging information will appear in the machine that is

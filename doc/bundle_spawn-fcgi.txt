@@ -9,7 +9,7 @@ supported in Cherokee, though in PHP's case you do not need any
 knowledge of spawn-fcgi since it is configured by default.
 
 It supports many parameters, but there is not much to be added to the
-information about arguments supplied by the programm.
+information about arguments supplied by the program.
 
 This is the full information provided by the manpage.
 **********************************************************************
