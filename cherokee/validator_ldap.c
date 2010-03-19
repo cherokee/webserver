@@ -32,7 +32,7 @@
 #include "util.h"
 
 
-#define ENTRIES "validador,ldap"
+#define ENTRIES "validator,ldap"
 #define LDAP_DEFAULT_PORT 389
 
 #ifndef LDAP_OPT_SUCCESS
