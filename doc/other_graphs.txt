@@ -19,7 +19,7 @@ of each virtual server.
 link:config_status.html[Status section]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Three types of grpahs are available. You can switch between them at
+Three types of graphs are available. You can switch between them at
 any time.
 
 [[traffic]]
@@ -52,7 +52,7 @@ This graph will show the maximum, minimum and average number of
 connections that are timed out per second. These timeouts can happen
 for several reasons. If Keep-alive is enabled, a client will be able
 to keep the connection lingering to improve performance. If this
-happenned indefinitely, sooner or later the server would be unable to
+happened indefinitely, sooner or later the server would be unable to
 serve new requests. These connections must naturally expire according
 to a configurable value to leave space for new users. Connections can
 also timeout if a backend ceases to respond, which is something you
@@ -73,7 +73,7 @@ link:config_virtual_servers.html#logging[Virtual server's logging tab]
 Just like the Server-traffic graph, it displays the amount of bytes
 per second moving back and forth, in this case limited to a specific
 virtual server. The `global` representation would show the total
-amount of data transmited by the whole server, which corresponds to
+amount of data transmitted by the whole server, which corresponds to
 the sum of every virtual server's outbound traffic.
 
 image::media/images/other_graphs_logging.png[Virtual server logging]

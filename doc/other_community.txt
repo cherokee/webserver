@@ -6,7 +6,7 @@ Mailing Lists
 The documentation for the latest stable release is always available at
 the link:http://www.cherokee-project.com/doc[Cherokee Project] site.
 
-If you cannot find what you are looking for in there, you can allways
+If you cannot find what you are looking for in there, you can always
 go to the official mailing lists. Post your questions there. Usually
 the people hanging around will be happy to help.
 Keep in mind that, as a sign of politeness towards the rest of the

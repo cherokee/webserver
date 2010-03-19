@@ -4,7 +4,7 @@ Other: Frequently Asked Questions
 ---------------------------------
 
 Here is a list of the most frequently asked questions. Please refer to
-the appropiate section of the documentation for more details.
+the appropriate section of the documentation for more details.
 
 [[faq01]]
 === How to compile it
@@ -166,7 +166,7 @@ If you don't have SVN access, simply mail your contributions to
 link:mailto:feedback@cherokee-project.com[feedback@cherokee-project.com].
 
 [[faq14]]
-=== Can encoders be set for specfic file types?
+=== Can encoders be set for specific file types?
 
 Yes. Since content encoding is set on a per-rule basis, simply add a
 rule at the beginning of the virtual server that matches the specific
