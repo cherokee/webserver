@@ -9,7 +9,7 @@ Cookbook: Setting up Moodle
 ---------------------------
 
 Running link:http://moodle.org/[Moodle] on Cherokee is easy to
-do. Since Moodle has relatively high requirementes (1GB RAM is
+do. Since Moodle has relatively high requirements (1GB RAM is
 recommended), it is actually a very good idea to run a high
 performance web server and see how things simply start flying.
 
@@ -20,11 +20,11 @@ requirements] at Moodle's site. Don't worry about this point. The
 installer will detail exactly what are the missing modules, soy you
 can install whatever you need during that part of the process.
 
-Cherokee can be configured in a breeze thanks to the provided Moodel
+Cherokee can be configured in a breeze thanks to the provided Moodle
 Wizard.
 
 [[wizard_configuration]]
-Configure Cheroke using the Wizard
+Configure Cherokee using the Wizard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [[cherokee_vserver]]

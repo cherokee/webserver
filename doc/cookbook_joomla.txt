@@ -24,12 +24,12 @@ documentation from the time when the wizards weren't available. Every
 step described there is taken care of by the wizard.
 
 [[wizard_configuration]]
-Configure Cheroke using the Wizard
+Configure Cherokee using the Wizard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Two common scenarios are contemplated: installation on a dedicated
 virtual server (http://joomla.example.net/, for instance) or under a
-subdirectory on an existing virtual servar (as could be
+subdirectory on an existing virtual server (as could be
 http://example.net/joomla/).
 
 [[cherokee_vserver]]
@@ -145,12 +145,12 @@ would already be able to have your site up and running.
 
 However, we can add several refinements. In this recipe we will be
 dedicating a virtual server entirely to Joomla, so either create a new
-one or adjust `default` accodringly. Of course, you can also set it up
+one or adjust `default` accordingly. Of course, you can also set it up
 under a directory in an existing virtual server, but we will take the
 first approach for clarity and simplicity. And we will make the
 modifications in our `default` virtual server. This will only affect
 the URLs we'll be accessing to log in to Joomla. First download and
-uncompress the distributed Joomla release into `/var/www/joomla`, and
+uncompressed the distributed Joomla release into `/var/www/joomla`, and
 set that path as the `Document Root` in your virtual host's `Basics`
 tab.
 

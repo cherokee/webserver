@@ -58,7 +58,7 @@ rules.
 
 
 [[wizard_configuration]]
-Configure Cheroke using the Wizard
+Configure Cherokee using the Wizard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Launch cherokee-admin, and proceed to the
@@ -89,7 +89,7 @@ adjust the redirection to the appropriate forntend.
 
 
 [[manual_configuration]]
-Configure Cheroke manually
+Configure Cherokee manually
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In case you are wondering, these are manual steps you would have to

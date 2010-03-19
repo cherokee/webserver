@@ -54,7 +54,7 @@ entry point to our application.
 *********************************************************************
 
 [[wizard_configuration]]
-Configure Cheroke using the Wizard
+Configure Cherokee using the Wizard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Cherokee is shipped with a configuration `Wizard` that can be used
