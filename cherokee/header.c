@@ -619,10 +619,6 @@ sanitize_buffer (cherokee_buffer_t *buf)
 		{
 			j       += 2;
 			removed += 2;
-
-		} else if (unlikely ((unsigned char)buf->buf[i] == 0x9B)) {
-			j       += 1;
-			removed += 1;
 		}
 
 		if (removed) {
