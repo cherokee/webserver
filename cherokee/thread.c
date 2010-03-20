@@ -335,6 +335,7 @@ purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 
 	/* It maybe have a delayed log
 	 */
+	cherokee_connection_update_vhost_traffic (conn);
 	cherokee_connection_log (conn);
 
 	/* Close & clean the socket and clean up the connection object
@@ -442,14 +443,10 @@ close_active_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 static void
 maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
-	/* Log if it was delayed and update vserver traffic counters
-	 */
-	cherokee_connection_update_vhost_traffic (conn);
-	cherokee_connection_log (conn);
-
-	/* If it isn't a keep-alive connection, it should try to
-	 * perform a lingering close (there is no need to disable TCP
-	 * cork before shutdown or before a close).
+	/* CONNECTION CLOSE: If it isn't a keep-alive connection, it
+	 * should try to perform a lingering close (there is no need
+	 * to disable TCP cork before shutdown or before a close).
+	 * Logging is performed after the lingering close.
 	 */
 	if (conn->keepalive <= 0) {
 		conn->phase = phase_shutdown;
@@ -457,6 +454,11 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	}
 
 	conn->keepalive--;
+
+	/* Log
+	 */
+	cherokee_connection_update_vhost_traffic (conn);
+	cherokee_connection_log (conn);
 
 	/* There might be data in the kernel buffer. Flush it before
 	 * the connection is reused for the next keep-alive request.
