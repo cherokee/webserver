@@ -205,11 +205,11 @@ Eg: requests beginning with 'a' and PHP extension:
 It tries to match a regular expression against a certain header
 entry.
 +
-Eg: check whether the Referrer header matches a specific host:
+Eg: check whether the Referer header matches a specific host:
 +
 ----
       vserver!1!rule!50!match!type = header
-      vserver!1!rule!50!match!header = Referrer
+      vserver!1!rule!50!match!header = Referer
       vserver!1!rule!50!match!match = .+\.example\.com
 ----
 

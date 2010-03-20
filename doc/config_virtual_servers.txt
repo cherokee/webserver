@@ -221,7 +221,7 @@ rule types:
       response to the contents of HTTP headers. A regular expression
       is needed to match against. This kind of rule can be used to
       provide alternative contents to a specific type of users. For
-      example, it can check if the HTTP referrer header refferences
+      example, it can check if the HTTP referer header refferences
       specific domains to allow or deny the delivery of the requested
       information.
 

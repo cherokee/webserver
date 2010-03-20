@@ -14,7 +14,7 @@ link:modules_loggers_ncsa.html[Common Log Format], with two extra
 fields.
 
 ----
-host rfc931 username date:time request statuscode bytes referrer user_agent
+host rfc931 username date:time request statuscode bytes referer user_agent
 ----
 
 Here is an example:
@@ -28,10 +28,10 @@ Refer to the link:modules_loggers_ncsa.html[Common Log
 Format] documentation for information about the rest of the fields.
 
 
-*referrer* ("-") ::
-This is the "Referrer" HTTP request header. This indicates the URL
+*referer* ("-") ::
+This is the "Referer" HTTP request header. This indicates the URL
 which linked the user to your site (as reported by the client). In
-this case it is empty because no Referrer exists (i.e. it is a direct
+this case it is empty because no Referer exists (i.e. it is a direct
 hit).
 
 
