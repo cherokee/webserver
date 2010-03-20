@@ -402,6 +402,7 @@ a.helpbutton span {
 
 .row_content {
   padding: 4px;
+  cursor: pointer;
 }
 
 tr.panel-selected td.dragHandle {
