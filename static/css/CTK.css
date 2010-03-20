@@ -159,7 +159,7 @@ a.button:active span, button:active .button-inner {
  */
 .ui-tabs { zoom: 1; background: transparent url(/CTK/images/tabbg.png) 0 -240px repeat-x; }
 .ui-tabs .ui-tabs-nav { list-style: none; position: relative; clear: both;}
-.ui-tabs-nav li { float: left; background: transparent url(/CTK/images/tabbg.png) 0 -30px; width: 86px; height: 17px; font-size: 11px; text-align: center; padding-top: 6px; padding-left: 21px; position: relative; text-shadow: #fff 0px 1px 0px; }
+.ui-tabs-nav li { float: left; background: transparent url(/CTK/images/tabbg.png) 0 -30px; width: 86px; height: 17px; font-size: 11px; text-align: center; padding-top: 6px; padding-left: 21px; position: relative; text-shadow: #fff 0px 1px 0px; white-space: nowrap; }
 .ui-tabs-nav li.ui-tabs-first { background: transparent url(/CTK/images/tabbg.png) 0 0; }
 .ui-tabs-nav li.ui-tabs-last { background: transparent url(/CTK/images/tabbg.png) 0 -60px; width: 126px; padding-left: 0; }
 .ui-tabs-nav li.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -120px; }
@@ -437,10 +437,11 @@ tr.panel-selected td div.row_content {
   border: 0;
 }
 
-/* Information sources */
+/* Information sources and VServers*/
 .nick  { font-weight: bold; float: left; }
-.type { font-size: 11px; border: 1px solid #cde; background-color: #def; float: right; padding: 1px;}
+.type { font-size: 11px; border: 1px solid #cde; background-color: #def; float: right; padding: 2px;}
 .host { clear: both; color: #999; font-size: 11px; white-space: nowrap;  width: 200px;}
 .inter { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 .droot { clear: both; color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
+.panel-selected .droot, .panel-selected .host, .panel-selected .inter { color: #cde; }
 
