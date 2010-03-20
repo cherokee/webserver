@@ -404,7 +404,11 @@ a.helpbutton span {
   padding: 4px;
 }
 
-.panel-selected {
+tr.panel-selected td.dragHandle {
+  background: #27c url(/CTK/images/arrow_ns.png) center center no-repeat;
+}
+
+tr.panel-selected td div.row_content {
   background-color: #27c;
   color: #fff;
 }
