@@ -249,7 +249,8 @@ run-tests.py \
 241-utf8-pathinfo1.py \
 242-utf8-pathinfo2.py \
 243-custom-error-1.py \
-244-Directory-Overwrite.py
+244-Directory-Overwrite.py \
+245-0x9b.py
 
 test:
 	./run-tests.py
