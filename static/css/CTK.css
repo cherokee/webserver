@@ -355,8 +355,7 @@ a.helpbutton span {
 /* Sortable Table
  */
 .panel {
-  border: 1px solid #cde;
-  border-left: none;
+  border-right: 1px solid #cde;
   background-color: #f0f7ff;
   width: 240px;
   float: left;
