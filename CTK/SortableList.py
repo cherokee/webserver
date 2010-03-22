@@ -35,7 +35,7 @@ $("#%(id)s").tableDnD({
                 type:     "POST",
 		dataType: "text",
                 data:     $.tableDnD.serialize_plain()});
-   }, 
+   },
    dragHandle: "dragHandle"
 });
 

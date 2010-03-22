@@ -234,13 +234,24 @@ class Config:
         return error
 
     def set_sub_node (self, path, config_node):
-        assert (isinstance(config_node, ConfigNode))
+        assert isinstance(config_node, ConfigNode), type(config_node)
 
+        # Top level entry
+        if not '!' in path:
+            self.root[path] = config_node
+            return
+
+        # Deep entries
         parent, parent_path, child_name = self._get_parent_node (path)
-        if parent:
-            if not parent._child.has_key(child_name):
-                parent._create_path(child_name)
-            parent._child[child_name] = config_node
+        if not parent:
+            # Target parent does not exist
+            self._create_path (parent_path)
+            parent, parent_path, child_name = self._get_parent_node (path)
+
+        if not parent._child.has_key(child_name):
+            parent._create_path(child_name)
+
+        parent._child[child_name] = config_node
 
     def __setitem__ (self, path, val):
         if not isinstance (val, ConfigNode):
@@ -267,9 +278,13 @@ class Config:
         return self.root.get_vals (paths, default)
 
     def __delitem__ (self, path):
-        parent, parent_path, child_name = self._get_parent_node (path)
-        if parent and parent._child.has_key(child_name):
-            del (parent._child[child_name])
+        if '!' in path:
+            parent, parent_path, child_name = self._get_parent_node (path)
+            if parent and parent._child.has_key(child_name):
+                del (parent._child[child_name])
+        else:
+            if path in self.root.keys():
+                del (self.root[path])
 
     def keys (self, path):
         tmp = self[path]

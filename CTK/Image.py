@@ -47,7 +47,7 @@ class ImageStock (Image):
             Image.__init__ (self, props)
 
         elif name == 'loading':
-            props['src'] = '/CTK/images/loading.png'
+            props['src'] = '/CTK/images/loader.gif'
             props['alt'] = _('Loading')
             Image.__init__ (self, props)
 
