@@ -100,10 +100,10 @@ class HTTP_Error (HTTP_Response):
         HTTP_Response.__init__ (self, error)
         self.body  = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\r\n'
         self.body += "<html><head><title>Error %d: %s</title></head>\n" %(error, HTTP_Response.DESC[error])
-        self.body += '<body><h1>Error %d: %s</h1></body>\n' %(error, HTTP_Response.DESC[error])
+        self.body += '<body><h1>Error %d: %s</h1>\n' %(error, HTTP_Response.DESC[error])
         if desc:
             self.body += "<p>%s</p>"%(desc)
-        self.body += "</html>"
+        self.body += "</body></html>"
 
 
 class HTTP_Redir (HTTP_Response):

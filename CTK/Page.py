@@ -27,7 +27,7 @@ from PageCleaner import Postprocess
 from Help import HelpEntry, HelpMenu
 from util import formater
 
-DEFAULT_PAGE_TEMPLATE = """\
+PAGE_TEMPLATE_DEFAULT = """\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -38,6 +38,13 @@ DEFAULT_PAGE_TEMPLATE = """\
  <body%(body_props)s>
 %(body)s
  </body>
+</html>
+"""
+
+PAGE_TEMPLATE_MINI = """\
+<html>
+ <head>%(head)s</head>
+ <body>%(body)s</body>
 </html>
 """
 
@@ -66,7 +73,7 @@ class Page (Container):
         if template:
             self._template = template
         else:
-            self._template = Template (content = DEFAULT_PAGE_TEMPLATE)
+            self._template = Template (content = PAGE_TEMPLATE_DEFAULT)
 
         self._helps = []
         for entry in helps:
@@ -114,4 +121,26 @@ class Page (Container):
             self._template['body_props'] = ''
 
         txt = self._template.Render()
+        return Postprocess (txt)
+
+class PageEmpty (Container):
+    def __init__ (self, headers=[], **kwargs):
+        Container.__init__ (self, **kwargs)
+
+        self.headers  = headers[:]
+        self.template = Template (content = PAGE_TEMPLATE_MINI)
+
+    def Render(self):
+        # Get the content render
+        render = Container.Render(self)
+
+        # Build the <head> text
+        self.headers += render.headers
+        head = "\n".join (uniq(self.headers))
+
+        self.template['head']  = head
+        self.template['body']  = render.html
+
+        # Render
+        txt = self.template.Render()
         return Postprocess (txt)

@@ -25,7 +25,7 @@ from Widget import Widget, RenderResponse
 from Container import Container
 from Box import Box
 from Submitter import Submitter, SubmitterButton
-from Page import Page
+from Page import Page, PageEmpty
 from Config import Config
 from Plugin import Plugin, instance_plugin
 
