@@ -83,3 +83,71 @@ there manually:
 
 image::media/images/admin_handler_fastcgi2.png[Fastcgi]
 
+
+[[multi-site]]
+Multi-site support
+~~~~~~~~~~~~~~~~~~
+
+An even more advanced scenario would be one that required custom PHP
+settings for each virtual host.
+
+In such a scenario several information sources are required. Some
+settings can be set simply by providing ENV variables to customize the
+FastCGI behavior. Others can only be specified in the `php.ini`
+configuration file, which is read by `php-cgi` on start-up.
+
+The location of this file is platform dependent, so you will need to
+reffer to PHP's documentation. It is the file located in
+'/etc/php5/cgi/php.ini' on Debian/Ubuntu systems,
+'/opt/local/etc/php5/php.ini' on MacPorts, etc.
+
+You will have to customize and specify different `php.ini` files for
+each information source. A nifty trick to do this and provide custom
+environment variables is by wrapping the required parameters in a
+simple script such as this one:
+
+------
+
+#!/bin/sh
+
+export PHP_FCGI_MAX_REQUESTS=250
+export PHP_FCGI_CHILDREN=4
+
+exec /usr/local/bin/php-cgi $@
+
+# EOF
+
+------
+
+It just calls the real `php-cgi` with the ENV variables to customize the
+FastCGI behavior, passing the parameters along. The same wrapper can
+be used for every information source, providing a different `-c
+path/php.ini` for each one of them.
+
+Bare in mind that every information source will need its own port to
+run.
+
+Asuming that two customized information sources were required, simply
+specifying different interpreters for each one of them would suffice.
+
+
+
+[cols="10%,90%",options="header"]
+|====================================================================
+|VHost        | Interpreter
+| 1 | `/usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost1.ini -b 127.0.0.1:2998`
+
+| 2 | `/usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost2.ini -b 127.0.0.1:2990`
+|====================================================================
+
+
+This, in turn, would produce configuration entries similar to the
+following ones:
+
+------
+source!1!nick = php-vhost1
+source!1!interpreter = /usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost1.ini -b 127.0.0.1:2998
+...
+source!2!nick = php-vhost2
+source!2!interpreter = /usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost2.ini -b 127.0.0.1:2999
+------
