@@ -97,7 +97,7 @@ FastCGI behavior. Others can only be specified in the `php.ini`
 configuration file, which is read by `php-cgi` on start-up.
 
 The location of this file is platform dependent, so you will need to
-reffer to PHP's documentation. It is the file located in
+refer to PHP's documentation. It is the file located in
 '/etc/php5/cgi/php.ini' on Debian/Ubuntu systems,
 '/opt/local/etc/php5/php.ini' on MacPorts, etc.
 
@@ -127,7 +127,7 @@ path/php.ini` for each one of them.
 Bare in mind that every information source will need its own port to
 run.
 
-Asuming that two customized information sources were required, simply
+Assuming that two customized information sources were required, simply
 specifying different interpreters for each one of them would suffice.
 
 
