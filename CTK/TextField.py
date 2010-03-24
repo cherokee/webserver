@@ -95,13 +95,13 @@ class TextFieldPassword (TextField):
 
 
 class TextCfg (TextField):
-    def __init__ (self, key, optional=False, _props={}):
+    def __init__ (self, key, optional=False, props={}):
         # Sanity checks
         assert type(key) == str
         assert type(optional) == bool
-        assert type(_props) in (type(None), dict)
+        assert type(props) in (type(None), dict)
 
-        props = _props.copy()
+        props = props.copy()
 
         # Read the key value
         val = cfg.get_val(key)
