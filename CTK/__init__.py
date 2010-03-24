@@ -58,3 +58,6 @@ from Link import Link, LinkIcon
 from DatePicker import DatePicker
 from Button import Button
 from TextArea import TextArea
+
+# Comodity
+from cgi import escape as escape_html

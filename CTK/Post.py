@@ -51,6 +51,12 @@ class Post:
             return not_found
         return tmp
 
+    def get_all (self, key, not_found=[]):
+        if not key in self._vars:
+            return not_found.copy()
+
+        return filter(lambda x: len(x)>0, self._vars[key])
+
     def pop (self, key, not_found=None):
         val = self._smart_chooser(key)
         if val == None:
