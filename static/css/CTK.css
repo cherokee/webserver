@@ -52,7 +52,7 @@ ul {list-style: none;}
 /* General styles
  */
 html { height: 100%; }
-body { background: #def url(/static/images/bg-body.png) top center repeat-y; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 12px; color: #000; text-align: center; }
+body { background: #def url(/CTK/images/bg-body.png) top center repeat-y; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 12px; color: #000; text-align: center; }
 a { color: #27c; }
 a:hover { color: #c00; text-decoration: underline; }
 a:active { outline: none; }
@@ -381,13 +381,13 @@ a.helpbutton span {
 }
 
 .panel table {
-  background-color: #fff; 
+  background-color: #fff;
   border-collapse: collapse;
   width: 100%;
 }
 
 .panel table tr td {
-  background-color: #fff; 
+  background-color: #fff;
   border-bottom: 1px solid #cde;
 }
 
@@ -430,7 +430,7 @@ tr.panel-selected td div.row_content {
 }
 
 .vserver_content .ui-tabs .ui-tabs-panel, .source_content .submitter, .rules_content .ui-tabs .ui-tabs-panel{
-  padding-left: 16px; 
+  padding-left: 16px;
   background-color: #fff;
   border: 0;
   overflow: auto;

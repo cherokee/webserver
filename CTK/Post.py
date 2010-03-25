@@ -53,7 +53,7 @@ class Post:
 
     def get_all (self, key, not_found=[]):
         if not key in self._vars:
-            return not_found.copy()
+            return not_found[:]
 
         return filter(lambda x: len(x)>0, self._vars[key])
 
