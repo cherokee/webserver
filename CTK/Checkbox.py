@@ -47,7 +47,7 @@ class Checkbox (Widget):
         if new_props.has_key('checked') and int(new_props.pop('checked')):
             new_props['checked'] = "checked"
 
-        if new_props.has_key('disabled'):
+        if new_props.has_key('disabled') and int(new_props.pop('disabled')):
             new_props['disabled'] = None
 
         # Render the widget
