@@ -205,6 +205,15 @@ class Server:
             self._web_paths.append (route_obj)
             self.sort_routes()
 
+    def remove_route (self, path):
+        with self.lock:
+            to_remove = []
+            for r in self._web_paths:
+                if r._regex == path:
+                    to_remove.append (r)
+
+            self._web_paths = filter (lambda x: x not in to_remove, self._web_paths)
+
     def serve_forever (self):
         try:
             while True:
@@ -235,7 +244,7 @@ def get_scgi():
     my_thread = threading.currentThread()
     return my_thread.scgi_conn
 
-def run (*args, **kwargs):
+def init (*args, **kwargs):
     srv = get_server()
 
     if not 'threading' in kwargs:
@@ -244,7 +253,16 @@ def run (*args, **kwargs):
     kwargs['handler_class'] = ServerHandler
 
     srv.init_server (*args, **kwargs)
+
+def run (*args, **kwargs):
+    init (*args, **kwargs)
+
+    srv = get_server()
     srv.serve_forever()
+
+def step ():
+    srv = get_server()
+    srv._scgi.handle_request()
 
 
 class Publish_FakeClass:
@@ -271,6 +289,11 @@ def publish (regex_url, klass, **kwargs):
     # Register
     server = get_server()
     server.add_route (obj)
+
+def unpublish (regex_url):
+    # Unregister
+    server = get_server()
+    server.remove_route (regex_url)
 
 
 class _Cookie:
