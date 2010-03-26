@@ -68,6 +68,15 @@ class HelpGroup (Widget):
         txt = ', '.join([e.__repr__() for e in self.entries])
         return "<CTK.Help.HelpGroup: id=%d, %s>"%(id(self), txt)
 
+    def toJSON (self):
+        all = []
+        for entry in self.entries:
+            if isinstance(entry, HelpEntry):
+                all.append ((entry.title, entry.ref))
+            else:
+                all += entry.toJSON()
+        return all
+
 
 class HelpMenu (Widget):
     def __init__ (self, helps=None):

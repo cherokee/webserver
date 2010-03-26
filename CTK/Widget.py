@@ -60,6 +60,19 @@ class RenderResponse:
             txt += HTML_JS_ON_READY_BLOCK %(self.js)
         return Postprocess(txt)
 
+    def toJSON (self):
+        tmp = filter (lambda x: x, [x.toJSON() for x in self.helps])
+        if tmp:
+            help = reduce (lambda x,y: x+y, tmp)
+        else:
+            help = []
+
+        import json
+        return json.dumps({'html':    self.html,
+                           'js':      Postprocess(self.js),
+                           'headers': self.headers,
+                           'helps':   help})
+
 
 class Widget:
     def __init__ (self):

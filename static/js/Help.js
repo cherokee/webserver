@@ -37,13 +37,24 @@ function Help_update_group (group_prefix, active_value) {
 var help_a_size = 0;
 function toggleHelp() {
     if ($("#help-a").width() == 230) {
-        $("#help .help").fadeOut(200, function() { 
+        $("#help .help").fadeOut(200, function() {
             $("#help-a").animate({ width: help_a_size + 'px' }, 100);
         });
     } else {
         help_a_size = $("#help-a").width();
-        $("#help-a").animate({ width: '230px' }, 100, function() { 
+        $("#help-a").animate({ width: '230px' }, 100, function() {
             $("#help .help").fadeIn(200);
         });
+    }
+}
+
+function Help_add_entries (helps) {
+    var help = $('.help:first');
+
+    for (var tmp in helps) {
+	   var name = helps[tmp][0];
+	   var file = helps[tmp][1];
+
+	   help.append ('<div class="help_entry"><a href="/help/'+file+'.html">'+name+'</a></div>');
     }
 }
