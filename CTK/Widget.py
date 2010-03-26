@@ -63,7 +63,10 @@ class RenderResponse:
     def toJSON (self):
         tmp = filter (lambda x: x, [x.toJSON() for x in self.helps])
         if tmp:
-            help = reduce (lambda x,y: x+y, tmp)
+            help = []
+            for e in reduce(lambda x,y: x+y, tmp):
+                if not e[0] in [x[0] for x in help]:
+                    help.append(e)
         else:
             help = []
 
