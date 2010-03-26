@@ -119,17 +119,41 @@ class TextCfg (TextField):
 
 
 JS = """
-$("#%(id)s").bind ("blur", function (event){
-    var value = $("#%(id)s").val();
-    if ("%(value)s" != value) {
-       $.ajax ({type: 'POST', url: '%(url)s', data: '%(key)s='+value, error: function() {
-          event.stopPropagation();
-          $("#%(id)s").val("%(value)s");
-       }});
-    }
-});
+$("#%(id)s")
 
-$("#%(id)s").bind ("keypress", function(event){
+.bind ("blur", function (event){
+    var self  = $(this);
+    var value = self.val();
+
+    if (value != self.data('last_value')) {
+       $("#activity").show();
+
+       $.ajax ({type: 'POST', url: '%(url)s', data: '%(key)s='+value,
+	 success: function (data) {
+            self.data('last_value', value);
+
+            var name = self.attr('name');
+	    for (var key in data['updates']) {
+               if (key == name) {
+                  self.val (data['updates'][kay]);
+                  break;
+               }
+            }
+         },
+         error: function() {
+            event.stopPropagation();
+            self.val (self.data('last_value'));
+         },
+         complete: function (XMLHttpRequest, textStatus) {
+	    $("#activity").fadeOut('fast');
+         }
+       });
+    }
+})
+
+.data ('last_value', "%(value)s")
+
+.bind ("keypress", function(event){
     if (event.keyCode == 13) {
         focus_next_input (this);
     }
