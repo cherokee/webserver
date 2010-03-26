@@ -46,6 +46,16 @@ class ImageStock (Image):
             props['alt'] = _('Delete')
             Image.__init__ (self, props)
 
+        elif name == 'on':
+            props['src'] = '/CTK/images/on.png'
+            props['alt'] = _('Active')
+            Image.__init__ (self, props)
+
+        elif name == 'off':
+            props['src'] = '/CTK/images/off.png'
+            props['alt'] = _('Inactive')
+            Image.__init__ (self, props)
+
         elif name == 'loading':
             props['src'] = '/CTK/images/loader.gif'
             props['alt'] = _('Loading')
