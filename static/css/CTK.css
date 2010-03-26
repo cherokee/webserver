@@ -327,7 +327,7 @@ a.helpbutton span {
 .ui-dialog .ui-dialog-buttonpane button { float: right; cursor: pointer; width:auto; overflow:visible; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
-.ui-dialog.ui-corner-all { -moz-border-radius: 8px; -webkit-border-radius: 4px; }
+.ui-dialog.ui-corner-all { -moz-border-radius: 8px; -webkit-border-radius: 8px; }
 .ui-dialog .button { float: right; }
 .ui-dialog .propstable { width: 100%; }
 
@@ -380,15 +380,27 @@ a.helpbutton span {
  overflow-x: hidden;
 }
 
+
 .panel table {
-  background-color: #fff;
+  position : absolute;
+  background-color: #fff; 
   border-collapse: collapse;
-  width: 100%;
+  width: 234px;
+  overflow-x: hidden;
 }
 
 .panel table tr td {
-  background-color: #fff;
+  background-color: #fff; 
   border-bottom: 1px solid #cde;
+  max-width: 180px;
+}
+.panel td .sel-actions {
+ position : absolute;
+ margin-left: 163px;
+ width: 32px;
+ height: 14px;
+ background: transparent url(/CTK/images/bg-sel-actions.png) no-repeat;
+ padding: 1px 0 1px 16px; 
 }
 
 .panel-buttons {
@@ -411,9 +423,19 @@ tr.panel-selected td.dragHandle {
   background: #27c url(/CTK/images/arrow_ns.png) center center no-repeat;
 }
 
+tr.panel-selected, tr.panel-selected td.nodragHandle {
+  width: 18px;
+  background-color: #27c;
+  color: #fff;
+}
+
 tr.panel-selected td div.row_content {
   background-color: #27c;
   color: #fff;
+}
+
+tr.panel-selected td div.row_content .sel-actions {
+ background: transparent url(/CTK/images/bg-sel-actions-sel.png) no-repeat;
 }
 
 .vserver_content, .source_content, .rules_content  {
@@ -430,7 +452,7 @@ tr.panel-selected td div.row_content {
 }
 
 .vserver_content .ui-tabs .ui-tabs-panel, .source_content .submitter, .rules_content .ui-tabs .ui-tabs-panel{
-  padding-left: 16px;
+  padding-left: 16px; 
   background-color: #fff;
   border: 0;
   overflow: auto;
@@ -443,9 +465,9 @@ tr.panel-selected td div.row_content {
 }
 
 /* Information sources and VServers*/
-.nick  { font-weight: bold; float: left; }
-.name  { font-weight: bold; }
-.type { font-size: 11px; border: 1px solid #cde; background-color: #def; float: right; padding: 2px;}
+.nick  { font-weight: bold; float: left; white-space: nowrap; }
+.name  { font-weight: bold; white-space: nowrap; }
+.type { font-size: 11px; border: 1px solid #cde; background-color: #def; float: right; padding: 2px; white-space: nowrap; }
 .host { clear: both; color: #999; font-size: 11px; white-space: nowrap;  width: 200px;}
 .inter { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 .droot { clear: both; color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
