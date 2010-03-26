@@ -51,5 +51,10 @@ class ImageStock (Image):
             props['alt'] = _('Loading')
             Image.__init__ (self, props)
 
+        elif name == 'on':
+            props['src'] = '/CTK/images/on.png'
+            props['alt'] = _('On')
+            Image.__init__ (self, props)
+
         else:
-            assert False, "Unknown stock image"
+            assert False, "Unknown stock image: %s" %(name)
