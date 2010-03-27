@@ -115,6 +115,10 @@ html>body #container { min-height: 100%; }
  */
 .error { color: #c00; font-weight: bold; font-size: 90%; }
 
+/* Del
+ */ 
+.del { cursor: pointer; }
+
 /* Button
  */
 button { border: 0; margin: 0; padding: 0; outline: none; background: #fff; }
