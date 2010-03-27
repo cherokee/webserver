@@ -58,12 +58,12 @@ a:hover { color: #c00; text-decoration: underline; }
 a:active { outline: none; }
 a:focus { -moz-outline-style: none; }
 h1 { color: #c00; font-weight: normal; padding: 16px 0 16px 16px; font-size: 20px; z-index: 9000; }
-h2 { color: #666; font-weight: normal; padding: 8px 0; font-size: 18px; z-index: 9000;}
+h2 { color: #259; font-weight: normal; padding: 8px 0; font-size: 18px; z-index: 9000; border-bottom: 1px solid #def; }
 
 /* Form Styles
  */
 
-input[type=text], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; }
+input[type=text], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
 input[type=text]:focus, textarea:focus { border: 2px solid #2d70cb; margin: 0; }
 select { border: 1px solid #b0bfce; ibackground: #fff; padding: 2px; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px;}
 .checkbox-text { padding: 4px; }
@@ -180,7 +180,7 @@ a.button:active span, button:active .button-inner {
 .propstable .entry { padding: 8px 0; }
 .propstable .entry .title { float: left; width: 240px; padding-top: 6px; font-weight: bold; }
 .propstable .entry .notice { display: none; }
-.propstable .entry .comment { text-align: left; color: #999; font: 11px; padding: 4px 0; }
+.propstable .entry .comment { text-align: left; color: #999; font-size: 11px; padding: 4px 0; }
 
 /* Optional text entries
  */
@@ -236,6 +236,10 @@ a.helpbutton span {
   display: none;
   padding: 8px;
   z-index: 9999;
+}
+
+.help_entry {
+  margin: 6px 0;
 }
 
 
@@ -369,6 +373,7 @@ a.helpbutton span {
   color: #27c;
   text-shadow: #fff 0px 1px 0px;
   z-index: 9000;
+  border: none;
 }
 
 #vservers_panel, #rules_panel, #source_panel {
@@ -446,9 +451,14 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 
 .vserver_content h2, .source_content  h2, .rules_content h2 {
+  border: none;
   padding-left: 16px;
   color: #27c;
   font-size: 16px;
+}
+
+.ui-tabs-panel h2 {
+  border-bottom: 1px solid #cde;
 }
 
 .vserver_content .ui-tabs .ui-tabs-panel, .source_content .submitter, .rules_content .ui-tabs .ui-tabs-panel{
