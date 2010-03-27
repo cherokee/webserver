@@ -324,7 +324,7 @@ a.helpbutton span {
 
 /* CTK/Dialog.py
  */
-.ui-dialog { position: relative; padding: 8px; width: 300px; background: transparent url(/CTK/images/bg-dialog.png); }
+.ui-dialog { position: relative; padding: 8px; width: 300px; background: transparent url(/CTK/images/bg-dialog.png); text-align: left;  }
 .ui-dialog .ui-dialog-titlebar { height: 28px; position: relative;  background: transparent url(/CTK/images/bg-dialog-titlebar.png); border-bottom: 1px solid #259; }
 .ui-dialog .ui-dialog-title { float: left; margin: 6px 0 0 16px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: #259 0px 1px 0px; }
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: 16px; top: 9px; background: transparent url(/CTK/images/bg-dialog-titlebar-close.gif) no-repeat; text-indent: -99999px; overflow: hidden; width: 10px;}
@@ -338,6 +338,7 @@ a.helpbutton span {
 .ui-dialog.ui-corner-all { -moz-border-radius: 8px; -webkit-border-radius: 8px; }
 .ui-dialog .button { float: right; }
 .ui-dialog .propstable { width: 100%; }
+.ui-dialog p { margin: 0.5em 0 1em 0; }
 
 /* PageException.py
  */
@@ -479,11 +480,11 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 
 /* Information sources and VServers*/
-.nick  { font-weight: bold; float: left; white-space: nowrap; }
+.nick  { font-weight: bold; white-space: nowrap; }
 .name  { font-weight: bold; white-space: nowrap; }
-.type { font-size: 11px; border: 1px solid #cde; background-color: #def; float: right; padding: 2px; white-space: nowrap; }
+.type { font-weight: bold; font-size: 11px; float: left; }
 .host { clear: both; color: #999; font-size: 11px; white-space: nowrap;  width: 200px;}
-.inter { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
+.inter { color: #999; font-size: 11px; white-space: nowrap; width: 200px; float: left; }
 .droot { clear: both; color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 .panel .comment { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 .panel-selected .droot, .panel-selected .host, .panel-selected .inter, .panel-selected .comment { color: #cde; }
