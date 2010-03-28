@@ -1,7 +1,7 @@
 # German translations for cherokee package.
 # Copyright (C) 2009 ORGANIZATION
 # Automatically generated, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: pygettext.py 1.5\n"
 
 #: admin/CherokeeManagement.py:106
 msgid "Could not access file descriptors: "
@@ -31,7 +31,7 @@ msgstr "Akiviert"
 
 #: admin/Form.py:30
 msgid "Submit"
-msgstr ""
+msgstr "Senden"
 
 #: admin/Form.py:206
 msgid "Delete"
@@ -105,20 +105,18 @@ msgid "Allow to select how the connections will be dispatched."
 msgstr ""
 
 #: admin/ModuleBalancer.py:11
-msgid ""
-"There are no Information Sources configured. Please proceed to configure an "
-"<a href=\"/source\">Information Source</a>."
+msgid "There are no Information Sources configured. Please proceed to configure an <a href=\"/source\">Information Source</a>."
 msgstr ""
 
 #: admin/ModuleBalancer.py:12
-msgid ""
-"A load balancer must be configured to use at least one information source."
+msgid "A load balancer must be configured to use at least one information source."
 msgstr ""
 
 #: admin/ModuleBalancer.py:55 admin/Page.py:171 admin/PageInfoSource.py:93
 #: admin/PageInfoSource.py:153
+#, fuzzy
 msgid "Information Sources"
-msgstr ""
+msgstr "Informationsquellen"
 
 #: admin/ModuleBalancer.py:57 admin/PageInfoSource.py:248
 #: admin/PageInfoSource.py:276 admin/PageInfoSource.py:303
@@ -232,21 +230,15 @@ msgid "Allow the use of the non-standard X-Sendfile header."
 msgstr ""
 
 #: admin/ModuleCgi.py:15
-msgid ""
-"Whether the handler should read and use the X-Real-IP header and use it in "
-"REMOTE_ADDR."
+msgid "Whether the handler should read and use the X-Real-IP header and use it in REMOTE_ADDR."
 msgstr ""
 
 #: admin/ModuleCgi.py:16
-msgid ""
-"Accept all the X-Real-IP headers. WARNING: Turn it on only if you are "
-"centain of what you are doing."
+msgid "Accept all the X-Real-IP headers. WARNING: Turn it on only if you are centain of what you are doing."
 msgstr ""
 
 #: admin/ModuleCgi.py:17
-msgid ""
-"List of IP addresses and subnets that are allowed to send the X-Real-IP "
-"header."
+msgid "List of IP addresses and subnets that are allowed to send the X-Real-IP header."
 msgstr ""
 
 #: admin/ModuleCgi.py:49
@@ -398,8 +390,7 @@ msgid "Balancer"
 msgstr ""
 
 #: admin/ModuleDirectory.py:9
-msgid ""
-"Public Web Directory to which content the configuration will be applied."
+msgid "Public Web Directory to which content the configuration will be applied."
 msgstr ""
 
 #: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
@@ -532,15 +523,11 @@ msgid "Add error codes"
 msgstr "Füge Fehler-Code hinzu"
 
 #: admin/ModuleEvhost.py:9
-msgid ""
-"Check the dynamically generated Document Root, and use the general Document "
-"Root if it doesn't exist."
+msgid "Check the dynamically generated Document Root, and use the general Document Root if it doesn't exist."
 msgstr ""
 
 #: admin/ModuleEvhost.py:10
-msgid ""
-"The Document Root directory will be built dynamically. The following "
-"variables are accepted:<br/>"
+msgid "The Document Root directory will be built dynamically. The following variables are accepted:<br/>"
 msgstr ""
 
 #: admin/ModuleEvhost.py:30
@@ -556,9 +543,7 @@ msgid "Comma separated list of files. Rule applies if one exists."
 msgstr ""
 
 #: admin/ModuleExists.py:10
-msgid ""
-"Uses cache during file detection. Disable if directory contents change "
-"frequently. Enable otherwise."
+msgid "Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise."
 msgstr ""
 
 #: admin/ModuleExists.py:11
@@ -616,9 +601,7 @@ msgid "File Exists"
 msgstr "Datei existiert"
 
 #: admin/ModuleExtensions.py:9
-msgid ""
-"Comma-separated list of File Extension to which the configuration will be "
-"applied."
+msgid "Comma-separated list of File Extension to which the configuration will be applied."
 msgstr ""
 
 #: admin/ModuleExtensions.py:22 admin/ModuleExtensions.py:24
@@ -663,9 +646,7 @@ msgid "Add new entry"
 msgstr "Neue Regel hinzufügen"
 
 #: admin/ModuleFullpath.py:9
-msgid ""
-"Full path request to which content the configuration will be applied. (Eg: /"
-"favicon.ico)"
+msgid "Full path request to which content the configuration will be applied. (Eg: /favicon.ico)"
 msgstr ""
 
 #: admin/ModuleFullpath.py:22 admin/ModuleFullpath.py:52 admin/consts.py:136
@@ -863,9 +844,7 @@ msgid "SQL command to execute. ${user} is replaced with the user name."
 msgstr ""
 
 #: admin/ModuleMysql.py:14
-msgid ""
-"Choose an encryption type for the password. Only suitable for the \"Basic\" "
-"authentication mechanism."
+msgid "Choose an encryption type for the password. Only suitable for the \"Basic\" authentication mechanism."
 msgstr ""
 
 #: admin/ModuleMysql.py:46
@@ -915,24 +894,20 @@ msgid "POST Report"
 msgstr "Bericht"
 
 #: admin/ModulePostReport.py:26
-#, fuzzy
 msgid "Formatting options"
 msgstr "Protokollierung"
 
 #: admin/ModulePostReport.py:28
 #, fuzzy
 msgid "Target language"
-msgstr "Available languages"
+msgstr "Zielsprache"
 
 #: admin/ModuleProxy.py:13
-msgid ""
-"Maximum number of connection per server that the proxy can try to keep "
-"opened."
+msgid "Maximum number of connection per server that the proxy can try to keep opened."
 msgstr ""
 
 #: admin/ModuleProxy.py:14
-msgid ""
-"Allow the server to use Keep-alive connections with the back-end servers."
+msgid "Allow the server to use Keep-alive connections with the back-end servers."
 msgstr ""
 
 #: admin/ModuleProxy.py:15
@@ -940,8 +915,7 @@ msgid "Preserve the original \"Host:\" header sent by the client. (Default No)"
 msgstr ""
 
 #: admin/ModuleProxy.py:16
-msgid ""
-"Preserve the \"Server:\" header sent by the back-end server. (Default No)"
+msgid "Preserve the \"Server:\" header sent by the back-end server. (Default No)"
 msgstr ""
 
 #: admin/ModuleProxy.py:19
@@ -1018,9 +992,7 @@ msgid "Defines whether the redirection will be seen by the client."
 msgstr ""
 
 #: admin/ModuleRedir.py:11
-msgid ""
-"Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc."
-"perl.org/perlre.html\">Reference</a>."
+msgid "Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc.perl.org/perlre.html\">Reference</a>."
 msgstr ""
 
 #: admin/ModuleRedir.py:12
@@ -1049,8 +1021,7 @@ msgid "Add new rule"
 msgstr "Neue Regel hinzufügen"
 
 #: admin/ModuleRehost.py:9
-msgid ""
-"Regular Expression against which the hosts be Host name will be compared."
+msgid "Regular Expression against which the hosts be Host name will be compared."
 msgstr ""
 
 #: admin/ModuleRehost.py:10
@@ -1081,8 +1052,7 @@ msgid "Directory where the RRDtool databases should be written."
 msgstr ""
 
 #: admin/ModuleRrd.py:8
-msgid ""
-"Path to the rrdtool binary. By default the server will look in the PATH."
+msgid "Path to the rrdtool binary. By default the server will look in the PATH."
 msgstr ""
 
 #: admin/ModuleRrd.py:24
@@ -1166,8 +1136,7 @@ msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
 msgstr ""
 
 #: admin/ModuleStreaming.py:14
-msgid ""
-"Number of seconds to stream before setting the bandwidth limit. Default: 5."
+msgid "Number of seconds to stream before setting the bandwidth limit. Default: 5."
 msgstr ""
 
 #: admin/ModuleStreaming.py:22 admin/ModuleStreaming.py:45
@@ -1187,9 +1156,7 @@ msgid "Initial Boost"
 msgstr ""
 
 #: admin/ModuleTargetIp.py:9
-msgid ""
-"IP or Subnet of the NIC that accepted the request. Example: ::1, or "
-"10.0.0.0/8"
+msgid "IP or Subnet of the NIC that accepted the request. Example: ::1, or 10.0.0.0/8"
 msgstr ""
 
 #: admin/ModuleTargetIp.py:10
@@ -1242,9 +1209,7 @@ msgid "UWSGI specific"
 msgstr ""
 
 #: admin/ModuleWildcard.py:9
-msgid ""
-"Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example."
-"com"
+msgid "Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com"
 msgstr ""
 
 #: admin/ModuleWildcard.py:10
@@ -1329,23 +1294,15 @@ msgstr "Nicht Neustarten"
 
 #: admin/Page.py:187
 msgid "Commit to disk and apply changes to the running server"
-msgstr ""
-"Änderungen auf der Festplatte speichern und im laufenden Server die "
-"Änderungen übernehmen"
+msgstr "Änderungen auf der Festplatte speichern und im laufenden Server die Änderungen übernehmen"
 
 #: admin/Page.py:190
 msgid "Commit all the changes permanently"
 msgstr "Speichere alle Änderungen permanent"
 
 #: admin/PageAdvanced.py:37
-msgid ""
-"<p><b>WARNING</b>: This section contains advanced configuration parameters. "
-"Changing things is not recommended unless you really know what you are doing."
-"</p>"
-msgstr ""
-"<p><b>Achtung</b>: Dieser Bereich enthält erweiterte "
-"Konfigurationsparameter. Parameter zu verändern ist nicht Empfehlenswert, "
-"außer sie wissen genau was sie tun.</p>"
+msgid "<p><b>WARNING</b>: This section contains advanced configuration parameters. Changing things is not recommended unless you really know what you are doing.</p>"
+msgstr "<p><b>Achtung</b>: Dieser Bereich enthält erweiterte Konfigurationsparameter. Parameter zu verändern ist nicht Empfehlenswert, außer sie wissen genau was sie tun.</p>"
 
 #: admin/PageAdvanced.py:39
 msgid "Defines which thread policy the OS should apply to the server."
@@ -1356,9 +1313,7 @@ msgid "If empty, Cherokee will calculate a default number."
 msgstr "Wenn das Feld leer ist, wird Cherokee eine Standardnummer berechnen"
 
 #: admin/PageAdvanced.py:41
-msgid ""
-"It defines how many file descriptors the server should handle. Default is "
-"the number showed by ulimit -n"
+msgid "It defines how many file descriptors the server should handle. Default is the number showed by ulimit -n"
 msgstr ""
 
 #: admin/PageAdvanced.py:42
@@ -1367,20 +1322,15 @@ msgstr ""
 
 #: admin/PageAdvanced.py:43
 msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
-msgstr ""
-"Minimale Größe einer Datei um sendfile() zu benutzen. Standard: 32768 Bytes."
+msgstr "Minimale Größe einer Datei um sendfile() zu benutzen. Standard: 32768 Bytes."
 
 #: admin/PageAdvanced.py:44
 msgid "Maximum size of a file to use sendfile(). Default: 2 GB."
 msgstr "Maximale Größe einer Datei um sendfile() zu benutzen. Standard: 2 GB."
 
 #: admin/PageAdvanced.py:45
-msgid ""
-"Name a program that will be called if, by some reason, the server fails. "
-"Default: <em>cherokee-panic</em>."
-msgstr ""
-"Ein Programm, welches aufgerufen wird, wenn der Server aus irgendeinem Grund "
-"abstürzt. Standard: <em>cherokee-panic</em>."
+msgid "Name a program that will be called if, by some reason, the server fails. Default: <em>cherokee-panic</em>."
+msgstr "Ein Programm, welches aufgerufen wird, wenn der Server aus irgendeinem Grund abstürzt. Standard: <em>cherokee-panic</em>."
 
 #: admin/PageAdvanced.py:46
 msgid "Path of the PID file. If empty, the file will not be created."
@@ -1391,15 +1341,11 @@ msgid "Max. length of the incoming connection queue."
 msgstr ""
 
 #: admin/PageAdvanced.py:48
-msgid ""
-"Set the number of how many internal connections can be held for reuse by "
-"each thread. Default 20."
+msgid "Set the number of how many internal connections can be held for reuse by each thread. Default 20."
 msgstr ""
 
 #: admin/PageAdvanced.py:49
-msgid ""
-"Sets the number of seconds between log consolidations (flushes). Default: 10 "
-"seconds."
+msgid "Sets the number of seconds between log consolidations (flushes). Default: 10 seconds."
 msgstr ""
 
 #: admin/PageAdvanced.py:50
@@ -1407,20 +1353,15 @@ msgid "Time lapse (in seconds) between Nonce cache clean ups."
 msgstr ""
 
 #: admin/PageAdvanced.py:51
-msgid ""
-"Enables the server-wide keep-alive support. It increases the performance. It "
-"is usually set on."
+msgid "Enables the server-wide keep-alive support. It increases the performance. It is usually set on."
 msgstr ""
 
 #: admin/PageAdvanced.py:52
-msgid ""
-"Maximum number of HTTP requests that can be served by each keepalive "
-"connection."
+msgid "Maximum number of HTTP requests that can be served by each keepalive connection."
 msgstr ""
 
 #: admin/PageAdvanced.py:53
-msgid ""
-"Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
+msgid "Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
 msgstr ""
 
 #: admin/PageAdvanced.py:54
@@ -1440,9 +1381,7 @@ msgid "Files over this size will not be cached."
 msgstr "Dateien die größer sind werden nicht gepuffert."
 
 #: admin/PageAdvanced.py:58
-msgid ""
-"How long (in seconds) the file information should last cached without "
-"refreshing it."
+msgid "How long (in seconds) the file information should last cached without refreshing it."
 msgstr ""
 
 #: admin/PageAdvanced.py:59
@@ -1606,8 +1545,7 @@ msgid "Points how long the files should be cached"
 msgstr ""
 
 #: admin/PageEntry.py:22
-msgid ""
-"Set an outbound traffic limit. It must be specified in Bytes per second."
+msgid "Set an outbound traffic limit. It must be specified in Bytes per second."
 msgstr ""
 
 #: admin/PageEntry.py:23
@@ -1617,8 +1555,7 @@ msgstr ""
 #: admin/PageEntry.py:24
 msgid ""
 "How long from the object can be cached.<br />\n"
-"The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for "
-"minutes, hours, days, and weeks. Eg: 2d.\n"
+"The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d.\n"
 msgstr ""
 
 #: admin/PageEntry.py:37
@@ -1827,11 +1764,8 @@ msgid "Defines a port that the server will listen to"
 msgstr "Definiert einen Port, auf welchem der Server horcht"
 
 #: admin/PageGeneral.py:30
-msgid ""
-"Set to enable the IPv6 support. The OS must support IPv6 for this to work."
-msgstr ""
-"Unterstützung für IPv6 aktivieren. Das Betriebssystem muss IPv6 "
-"unterstützen, damit es funktioniert."
+msgid "Set to enable the IPv6 support. The OS must support IPv6 for this to work."
+msgstr "Unterstützung für IPv6 aktivieren. Das Betriebssystem muss IPv6 unterstützen, damit es funktioniert."
 
 #: admin/PageGeneral.py:31
 msgid "IP address of the interface to bind. It is usually empty."
@@ -1843,29 +1777,19 @@ msgstr "Zeitintervall nach dem der Server inaktive Verbindungen schließt."
 
 #: admin/PageGeneral.py:33
 msgid "This option allows to choose how the server identifies itself."
-msgstr ""
-"Diese Einstellung erlaubt ihnen zu wählen, wie sich der Server selbt "
-"identifiziert"
+msgstr "Diese Einstellung erlaubt ihnen zu wählen, wie sich der Server selbt identifiziert"
 
 #: admin/PageGeneral.py:34
 msgid "Changes the effective user. User names and IDs are accepted."
-msgstr ""
-"Ändert den Benutzer unter dem der Server ausgeführt wird. Benutzername und "
-"Benutzer-ID sind erlaubt"
+msgstr "Ändert den Benutzer unter dem der Server ausgeführt wird. Benutzername und Benutzer-ID sind erlaubt"
 
 #: admin/PageGeneral.py:35
 msgid "Changes the effective group. Group names and IDs are accepted."
-msgstr ""
-"Ändert die Gruppe unter welcher der Server ausgeführt wird. Gruppenname oder "
-"Gruppen-ID sind erlaubt."
+msgstr "Ändert die Gruppe unter welcher der Server ausgeführt wird. Gruppenname oder Gruppen-ID sind erlaubt."
 
 #: admin/PageGeneral.py:36
-msgid ""
-"Jail the server inside the directory. Don't use it as the only security "
-"measure."
-msgstr ""
-"Sperre den Server in einem Ordner ein. Benutze dies nicht als einzige "
-"Sicherheitsmaßnahme."
+msgid "Jail the server inside the directory. Don't use it as the only security measure."
+msgstr "Sperre den Server in einem Ordner ein. Benutze dies nicht als einzige Sicherheitsmaßnahme."
 
 #: admin/PageGeneral.py:37
 msgid "Which, if any, should be the TLS/SSL backend."
@@ -2019,14 +1943,11 @@ msgid "Special Icons"
 msgstr "Besondere Icons"
 
 #: admin/PageInfoSource.py:12
-msgid ""
-"The source can be either a local interpreter or a remote host acting as an "
-"information source."
+msgid "The source can be either a local interpreter or a remote host acting as an information source."
 msgstr ""
 
 #: admin/PageInfoSource.py:13
-msgid ""
-"Source nick. It will be referenced by this name in the rest of the server."
+msgid "Source nick. It will be referenced by this name in the rest of the server."
 msgstr ""
 
 #: admin/PageInfoSource.py:14
@@ -2034,9 +1955,7 @@ msgid "It allows to choose whether it runs the local host or a remote server."
 msgstr ""
 
 #: admin/PageInfoSource.py:15
-msgid ""
-"Where the information source can be accessed. The host:port pair, or the "
-"Unix socket path."
+msgid "Where the information source can be accessed. The host:port pair, or the Unix socket path."
 msgstr ""
 
 #: admin/PageInfoSource.py:16
@@ -2044,33 +1963,23 @@ msgid "Command to spawn a new source in case it were not accessible."
 msgstr ""
 
 #: admin/PageInfoSource.py:17
-msgid ""
-"How long should the server wait when spawning an interpreter before giving "
-"up (in seconds). Default: 3."
+msgid "How long should the server wait when spawning an interpreter before giving up (in seconds). Default: 3."
 msgstr ""
 
 #: admin/PageInfoSource.py:18
-msgid ""
-"Sources currently in use. Note that the last source of any rule cannot be "
-"deleted until the rule has been manually edited."
+msgid "Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited."
 msgstr ""
 
 #: admin/PageInfoSource.py:19
-msgid ""
-"Execute the interpreter under a different user. Default: Same UID as the "
-"server."
+msgid "Execute the interpreter under a different user. Default: Same UID as the server."
 msgstr ""
 
 #: admin/PageInfoSource.py:20
-msgid ""
-"Execute the interpreter under a different group. Default: Default GID of the "
-"new process UID."
+msgid "Execute the interpreter under a different group. Default: Default GID of the new process UID."
 msgstr ""
 
 #: admin/PageInfoSource.py:21
-msgid ""
-"Whether the new child process should inherit the environment variables from "
-"the server process. Default: yes."
+msgid "Whether the new child process should inherit the environment variables from the server process. Default: yes."
 msgstr ""
 
 #: admin/PageInfoSource.py:200
@@ -2203,9 +2112,7 @@ msgid "Max Age"
 msgstr ""
 
 #: admin/PageNewConfig.py:14
-msgid ""
-"<b>The configuration is not found</b>.<br />You can create a new "
-"configuration file and proceed to customize the web server."
+msgid "<b>The configuration is not found</b>.<br />You can create a new configuration file and proceed to customize the web server."
 msgstr ""
 
 #: admin/PageNewConfig.py:22
@@ -2248,9 +2155,7 @@ msgstr "Erzeuge eine neue Konfigurationsdatei"
 msgid ""
 "\n"
 "<h3>Beta testing</h3>\n"
-"<p>Individuals like yourself who download and test the latest developer "
-"snapshots of Cherokee Web Server help us to create the highest quality "
-"product.</p>\n"
+"<p>Individuals like yourself who download and test the latest developer snapshots of Cherokee Web Server help us to create the highest quality product.</p>\n"
 "<p>For that, we thank you.</p>\n"
 msgstr ""
 
@@ -2270,14 +2175,11 @@ msgstr ""
 msgid ""
 "\n"
 "We would love to know that you are using Cherokee. Submit your domain\n"
-"name and  it will be <a href=\"http://www.cherokee-project.com/cherokee-"
-"domain-list.html\">\n"
+"name and  it will be <a href=\"http://www.cherokee-project.com/cherokee-domain-list.html\">\n"
 "listed on the Cherokee Project web site</a>.\n"
 msgstr ""
 "\n"
-"Es würde uns freuen zu wissen, dass sie Cherokee benutzen. Geben sie ihren "
-"Domainnamen bekannt und er wird  <a href=\"http://www.cherokee-project.com/"
-"cherokee-domain-list.html\">\n"
+"Es würde uns freuen zu wissen, dass sie Cherokee benutzen. Geben sie ihren Domainnamen bekannt und er wird  <a href=\"http://www.cherokee-project.com/cherokee-domain-list.html\">\n"
 "auf der Cherokee Project-Seite aufgelistet werden</a>.\n"
 
 #: admin/PageStatus.py:69
@@ -2286,8 +2188,7 @@ msgstr "Willkommen bei Cherokee-Admin"
 
 #: admin/PageStatus.py:70
 msgid "This interface will assist in configuring the Cherokee Web Server."
-msgstr ""
-"Diese Oberfläche wird ihnen helfen den Cherokee Web Server zu konfigurieren"
+msgstr "Diese Oberfläche wird ihnen helfen den Cherokee Web Server zu konfigurieren"
 
 #: admin/PageStatus.py:80
 msgid "Server status"
@@ -2387,9 +2288,7 @@ msgid "1 hour"
 msgstr ""
 
 #: admin/PageVServer.py:33
-msgid ""
-"<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
-"reorder.</p>"
+msgid "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>"
 msgstr ""
 
 #: admin/PageVServer.py:35
@@ -2403,9 +2302,7 @@ msgid "Nickname for the virtual server."
 msgstr "Name des virtuellen Servers"
 
 #: admin/PageVServer.py:40
-msgid ""
-"This directive points to the PEM-encoded Certificate file for the server "
-"(Full path to the file)"
+msgid "This directive points to the PEM-encoded Certificate file for the server (Full path to the file)"
 msgstr ""
 
 #: admin/PageVServer.py:41
@@ -2413,16 +2310,11 @@ msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr ""
 
 #: admin/PageVServer.py:42
-msgid ""
-"File containing the trusted CA certificates, utilized for checking the "
-"client certificates (Full path to the file)"
+msgid "File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)"
 msgstr ""
 
 #: admin/PageVServer.py:43
-msgid ""
-"Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
-"www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
-"ciphers supported by the OpenSSL version used)."
+msgid "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all ciphers supported by the OpenSSL version used)."
 msgstr ""
 
 #: admin/PageVServer.py:44
@@ -2430,9 +2322,7 @@ msgid "Skip, Accept or Require client certificates."
 msgstr ""
 
 #: admin/PageVServer.py:45
-msgid ""
-"Limit up to which depth certificates in a chain are used during the "
-"verification procedure (Default: 1)"
+msgid "Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)"
 msgstr ""
 
 #: admin/PageVServer.py:46
@@ -2440,9 +2330,7 @@ msgid "Allows the selection of how to generate the error responses."
 msgstr ""
 
 #: admin/PageVServer.py:47
-msgid ""
-"Directory inside the user home directory to use as root web directory. "
-"Disabled if empty."
+msgid "Directory inside the user home directory to use as root web directory. Disabled if empty."
 msgstr ""
 
 #: admin/PageVServer.py:48
@@ -2451,17 +2339,14 @@ msgstr ""
 
 #: admin/PageVServer.py:49
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
-msgstr ""
-"Fügt einen neuen Domainnamen hinzu. Platzhalter sind erlaubt im Domainnamen."
+msgstr "Fügt einen neuen Domainnamen hinzu. Platzhalter sind erlaubt im Domainnamen."
 
 #: admin/PageVServer.py:50
 msgid "Virtual Server root directory."
 msgstr "Hauptverzeichnis des virtuellen Servers"
 
 #: admin/PageVServer.py:51
-msgid ""
-"List of name files that will be used as directory index. Eg: <em>index.html,"
-"index.php</em>."
+msgid "List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>."
 msgstr ""
 
 #: admin/PageVServer.py:52
@@ -2501,35 +2386,23 @@ msgid "Path to the executable that will be invoked on each log entry."
 msgstr ""
 
 #: admin/PageVServer.py:61
-msgid ""
-"Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
-"headers (send by reverse proxies)."
+msgid "Whether the logger should read and use the X-Real-IP and X-Forwarded-For headers (send by reverse proxies)."
 msgstr ""
 
 #: admin/PageVServer.py:62
-msgid ""
-"Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
-"only if you are centain of what you are doing."
+msgid "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on only if you are centain of what you are doing."
 msgstr ""
 
 #: admin/PageVServer.py:63
-msgid ""
-"List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
-"Forwarded-For headers."
+msgid "List of IP addresses and subnets that are allowed to send X-Real-IP and X-Forwarded-For headers."
 msgstr ""
 
 #: admin/PageVServer.py:64
-msgid ""
-"How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
+msgid "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr ""
 
 #: admin/PageVServer.py:65
-msgid ""
-"The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
-"${protocol}, ${transport}, ${port_server}, ${query_string}, "
-"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-"${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
-"${response_size}"
+msgid "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}, ${response_size}"
 msgstr ""
 
 #: admin/PageVServer.py:66
@@ -2537,9 +2410,7 @@ msgid "Allows the selection of domain matching method."
 msgstr ""
 
 #: admin/PageVServer.py:67
-msgid ""
-"Whether or not it should collected statistics about the traffic of this "
-"virtual server."
+msgid "Whether or not it should collected statistics about the traffic of this virtual server."
 msgstr ""
 
 #: admin/PageVServer.py:68
@@ -2784,10 +2655,8 @@ msgid ""
 "more domains.</p>\n"
 msgstr ""
 "\n"
-"<p>'Virtuelle Server' ist ein Abstraktionsmechanismus und erlaubt eine "
-"spezifische Anzahl\n"
-"von Parametern und Regeln festzulegen, welche in einer oder mehreren "
-"Domains\n"
+"<p>'Virtuelle Server' ist ein Abstraktionsmechanismus und erlaubt eine spezifische Anzahl\n"
+"von Parametern und Regeln festzulegen, welche in einer oder mehreren Domains\n"
 "übernommen werden.</p>\n"
 
 #: admin/PageVServers.py:54
@@ -2997,9 +2866,7 @@ msgid "Alfresco Project"
 msgstr ""
 
 #: admin/Wizard_ColdFusion.py:20
-msgid ""
-"The pair IP:port of the server running ColdFusion. You can add more later to "
-"have the load balanced."
+msgid "The pair IP:port of the server running ColdFusion. You can add more later to have the load balanced."
 msgstr ""
 
 #: admin/Wizard_ColdFusion.py:21
@@ -3043,14 +2910,11 @@ msgid "Couldn't add a new rule."
 msgstr "Neue Regel hinzufügen"
 
 #: admin/Wizard_Concrete5.py:16
-msgid ""
-"Path to the directory where the Concrete5 source code is located. (Example: /"
-"usr/share/concrete5)"
+msgid "Path to the directory where the Concrete5 source code is located. (Example: /usr/share/concrete5)"
 msgstr ""
 
 #: admin/Wizard_Concrete5.py:17
-msgid ""
-"Web directory where you want Concrete5 to be accessible. (Example: /cms)"
+msgid "Web directory where you want Concrete5 to be accessible. (Example: /cms)"
 msgstr ""
 
 #: admin/Wizard_Concrete5.py:18 admin/Wizard_Drupal.py:14
@@ -3173,9 +3037,7 @@ msgid "New directory based on a Django project."
 msgstr ""
 
 #: admin/Wizard_Drupal.py:12
-msgid ""
-"Path to the directory where the Drupal source code is located. (Example: /"
-"usr/share/drupal)"
+msgid "Path to the directory where the Drupal source code is located. (Example: /usr/share/drupal)"
 msgstr ""
 
 #: admin/Wizard_Drupal.py:13
@@ -3199,9 +3061,7 @@ msgid "Configures Drupal inside a public web directory."
 msgstr ""
 
 #: admin/Wizard_Glassfish.py:19
-msgid ""
-"Hostname or IP of the server running Glassfish. You can add more later to "
-"have the load balanced."
+msgid "Hostname or IP of the server running Glassfish. You can add more later to have the load balanced."
 msgstr ""
 
 #: admin/Wizard_Glassfish.py:20
@@ -3282,9 +3142,7 @@ msgid "Reply type"
 msgstr "Antwort"
 
 #: admin/Wizard_Icons.py:32
-msgid ""
-"Add the /icons and /cherokee_themes directories so Cherokee can use icons "
-"when listing directories."
+msgid "Add the /icons and /cherokee_themes directories so Cherokee can use icons when listing directories."
 msgstr ""
 
 #: admin/Wizard_Icons.py:36
@@ -3297,9 +3155,7 @@ msgid "The /icons and /cherokee_themes directories are already configured."
 msgstr ""
 
 #: admin/Wizard_Joomla.py:17
-msgid ""
-"Path to the directory where the Joomla source code is located. (Example: /"
-"usr/share/joomla)"
+msgid "Path to the directory where the Joomla source code is located. (Example: /usr/share/joomla)"
 msgstr ""
 
 #: admin/Wizard_Joomla.py:18
@@ -3467,14 +3323,11 @@ msgid "New directory based on a .NET/Mono project."
 msgstr ""
 
 #: admin/Wizard_Moodle.py:17
-msgid ""
-"Path to the directory where the Moodle source code is located. (Example: /"
-"usr/share/moodle)"
+msgid "Path to the directory where the Moodle source code is located. (Example: /usr/share/moodle)"
 msgstr ""
 
 #: admin/Wizard_Moodle.py:18
-msgid ""
-"Web directory where you want Moodle to be accessible. (Example: /course)"
+msgid "Web directory where you want Moodle to be accessible. (Example: /course)"
 msgstr ""
 
 #: admin/Wizard_Moodle.py:20
@@ -3490,9 +3343,7 @@ msgid "Moodle Wizard"
 msgstr ""
 
 #: admin/Wizard_PHP.py:41
-msgid ""
-"Configures PHP in the current Virtual Server. It will add a new .php "
-"extension if not present."
+msgid "Configures PHP in the current Virtual Server. It will add a new .php extension if not present."
 msgstr ""
 
 #: admin/Wizard_PHP.py:45
@@ -3517,9 +3368,7 @@ msgid "Couldn't determine correct interpreter settings"
 msgstr ""
 
 #: admin/Wizard_Redirect.py:11
-msgid ""
-"This domain name will be used as nickname for the new virtual server. More "
-"domains names can be added to the virtual server later on."
+msgid "This domain name will be used as nickname for the new virtual server. More domains names can be added to the virtual server later on."
 msgstr ""
 
 #: admin/Wizard_Redirect.py:12
@@ -3550,8 +3399,7 @@ msgid "Local path to the Ruby on Rails based project."
 msgstr ""
 
 #: admin/Wizard_RoR.py:16
-msgid ""
-"Directory of the web directory where the Ruby on Rails project will live in."
+msgid "Directory of the web directory where the Ruby on Rails project will live in."
 msgstr ""
 
 #: admin/Wizard_RoR.py:17
@@ -3559,28 +3407,19 @@ msgid "Value of the RAILS_ENV variable."
 msgstr ""
 
 #: admin/Wizard_RoR.py:18
-msgid ""
-"It is recommended to proxy the best available option, but FastCGI can also "
-"be used."
+msgid "It is recommended to proxy the best available option, but FastCGI can also be used."
 msgstr ""
 
 #: admin/Wizard_RoR.py:20
-msgid ""
-"<p>Even though the directory looks like a Ruby on Rails project, the public/"
-"dispatch.fcgi file wasn't found.</p>"
+msgid "<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>"
 msgstr ""
 
 #: admin/Wizard_RoR.py:21
-msgid ""
-"<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
-"might want to rename it.</p>"
+msgid "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>"
 msgstr ""
 
 #: admin/Wizard_RoR.py:22
-msgid ""
-"<p>If you are using Rails >= 2.3.0, you will have to execute the following "
-"command from the project directory in order to add the missing file:</"
-"p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
+msgid "<p>If you are using Rails >= 2.3.0, you will have to execute the following command from the project directory in order to add the missing file:</p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
 msgstr ""
 
 #: admin/Wizard_RoR.py:23
@@ -3628,14 +3467,11 @@ msgid "Media streaming is already configured."
 msgstr ""
 
 #: admin/Wizard_Sugar.py:17
-msgid ""
-"Path to the directory where the Sugar CRM source code is located. (Example: /"
-"usr/share/sugar)"
+msgid "Path to the directory where the Sugar CRM source code is located. (Example: /usr/share/sugar)"
 msgstr ""
 
 #: admin/Wizard_Sugar.py:18
-msgid ""
-"Web directory where you want Sugar CRM to be accessible. (Example: /crm)"
+msgid "Web directory where you want Sugar CRM to be accessible. (Example: /crm)"
 msgstr ""
 
 #: admin/Wizard_Sugar.py:20
@@ -3655,15 +3491,11 @@ msgid "Configures Sugar CRM inside a public web directory."
 msgstr ""
 
 #: admin/Wizard_Symfony.py:20
-msgid ""
-"Path to the directory where Symfony is installed. (Example: /usr/share/php/"
-"data/symfony)"
+msgid "Path to the directory where Symfony is installed. (Example: /usr/share/php/data/symfony)"
 msgstr ""
 
 #: admin/Wizard_Symfony.py:21
-msgid ""
-"Path to the web folder of the Symfony project. (Example: /home/user/"
-"sf_project/web)"
+msgid "Path to the web folder of the Symfony project. (Example: /home/user/sf_project/web)"
 msgstr ""
 
 #: admin/Wizard_Symfony.py:22
@@ -3730,14 +3562,11 @@ msgid "Trac Directory"
 msgstr "Ordner"
 
 #: admin/Wizard_WordPress.py:12
-msgid ""
-"Path to the directory where the Wordpress source code is located. (Example: /"
-"usr/share/wordpress)"
+msgid "Path to the directory where the Wordpress source code is located. (Example: /usr/share/wordpress)"
 msgstr ""
 
 #: admin/Wizard_WordPress.py:13
-msgid ""
-"Web directory where you want Wordpress to be accessible. (Example: /blog)"
+msgid "Web directory where you want Wordpress to be accessible. (Example: /blog)"
 msgstr ""
 
 #: admin/Wizard_WordPress.py:15
@@ -3761,9 +3590,7 @@ msgid "Wordpress Wizard: Location"
 msgstr ""
 
 #: admin/Wizard_Zend.py:17
-msgid ""
-"Path to the directory where the Zend source code is located. (Example: /usr/"
-"share/zend)"
+msgid "Path to the directory where the Zend source code is located. (Example: /usr/share/zend)"
 msgstr ""
 
 #: admin/Wizard_Zend.py:18
@@ -3784,9 +3611,7 @@ msgid "Configures Zend inside a public web directory."
 msgstr ""
 
 #: admin/Wizard_phpBB.py:17
-msgid ""
-"Path to the directory where the phpBB source code is located. (Example: /usr/"
-"share/phpbb)"
+msgid "Path to the directory where the phpBB source code is located. (Example: /usr/share/phpbb)"
 msgstr ""
 
 #: admin/Wizard_phpBB.py:18
@@ -3806,15 +3631,11 @@ msgid "phpBB Wizard"
 msgstr ""
 
 #: admin/Wizard_phpMyAdmin.py:17
-msgid ""
-"Path to the directory where the phpMyAdmin source code is located. "
-"(Example: /usr/share/phpmyadmin)"
+msgid "Path to the directory where the phpMyAdmin source code is located. (Example: /usr/share/phpmyadmin)"
 msgstr ""
 
 #: admin/Wizard_phpMyAdmin.py:18
-msgid ""
-"Web directory where you want phpMyAdmin to be accessible. (Example: /"
-"phpmyadmin)"
+msgid "Web directory where you want phpMyAdmin to be accessible. (Example: /phpmyadmin)"
 msgstr ""
 
 #: admin/Wizard_phpMyAdmin.py:19
@@ -3830,15 +3651,11 @@ msgid "phpMyAdmin Wizard"
 msgstr ""
 
 #: admin/Wizard_rTorrent.py:10
-msgid ""
-"Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket "
-"path."
+msgid "Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket path."
 msgstr ""
 
 #: admin/Wizard_rTorrent.py:11
-msgid ""
-"Web directory where you want rTorrent XMLRPC to be accessible. (Example: /"
-"RPC2)"
+msgid "Web directory where you want rTorrent XMLRPC to be accessible. (Example: /RPC2)"
 msgstr ""
 
 #: admin/Wizard_rTorrent.py:36
@@ -3851,9 +3668,7 @@ msgid "Already configured:"
 msgstr ""
 
 #: admin/Wizard_uWSGI.py:19
-msgid ""
-"Path to the uWSGI configuration file (XML or Python-only). Its mountpoint "
-"will be used."
+msgid "Path to the uWSGI configuration file (XML or Python-only). Its mountpoint will be used."
 msgstr ""
 
 #: admin/Wizard_uWSGI.py:20
@@ -4323,7 +4138,6 @@ msgstr ""
 msgid "Virtual host nick is already being used."
 msgstr ""
 
-#, fuzzy
 #~ msgid "Enabled"
 #~ msgstr "Akiviert"
 
@@ -4333,11 +4147,9 @@ msgstr ""
 #~ msgid "Options"
 #~ msgstr "Optionen"
 
-#, fuzzy
 #~ msgid "Accepted Connections"
 #~ msgstr "Erlaube Domains"
 
-#, fuzzy
 #~ msgid "Rendering interval (<i>secs</i>)"
 #~ msgstr "Timeout (<i>in Sekunden</i>)"
 
@@ -4353,7 +4165,6 @@ msgstr ""
 #~ msgid "W3C"
 #~ msgstr "W3C"
 
-#, fuzzy
 #~ msgid "yes"
 #~ msgstr "Ja"
 
