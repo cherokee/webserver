@@ -51,10 +51,16 @@ function toggleHelp() {
 function Help_add_entries (helps) {
     var help = $('.help:first');
 
+    /* Remove previously merged entries
+     */
+    $('.help_entry.merged').remove();
+
+    /* Add new entries
+     */
     for (var tmp in helps) {
 	   var name = helps[tmp][0];
 	   var file = helps[tmp][1];
 
-	   help.append ('<div class="help_entry"><a href="/help/'+file+'.html">'+name+'</a></div>');
+	   help.append ('<div class="help_entry merged"><a href="/help/'+file+'.html">'+name+'</a></div>');
     }
 }
