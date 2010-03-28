@@ -1028,7 +1028,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			char *c = begin + 11;
 			while (*c == ' ') c++;
 
-			if (strncasecmp (c, "Keep-Alive", 7) == 0) {
+			if (strncasecmp (c, "Keep-Alive", 10) == 0) {
 				hdl->pconn->keepalive_in = true;
 			} else {
 				hdl->pconn->keepalive_in = false;
