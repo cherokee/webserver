@@ -128,14 +128,17 @@ $("#%(id)s")
     if (value != self.data('last_value')) {
        $("#activity").show();
 
-       $.ajax ({type: 'POST', url: '%(url)s', data: '%(key)s='+value,
+       $.ajax ({type:     'POST',
+                dataType: 'json',
+                url:      '%(url)s',
+                data:     '%(key)s='+value,
 	 success: function (data) {
             self.data('last_value', value);
 
             var name = self.attr('name');
 	    for (var key in data['updates']) {
                if (key == name) {
-                  self.val (data['updates'][kay]);
+                  self.val (data['updates'][key]);
                   break;
                }
             }
