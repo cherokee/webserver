@@ -31,7 +31,7 @@
 	   //
 	   function input_keypress_cb (event) {
 	       if (event.keyCode == 13) {
-			 focus_next_input ($(this));
+			 submit_form();
 			 return;
 	       }
 
