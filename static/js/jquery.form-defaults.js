@@ -1,3 +1,6 @@
+/* CTK'fied version
+ */
+
 jQuery.fn.DefaultValue = function(klass, text){
 	return this.each(function(){
 		//Make sure we're dealing with text-based form fields
@@ -29,17 +32,6 @@ jQuery.fn.DefaultValue = function(klass, text){
 				$(this).addClass(klass);
 				$(this).val(text);
 			}
-		});
-
-		//Capture parent form submission
-		//Remove field values that are still default
-		$(this).parents("form").each(function() {
-			//Bind parent form submit
-			$(this).submit(function() {
-				if($(fld_current).val() == text) {
-					$(fld_current).val('');
-				}
-			});
 		});
     });
 };

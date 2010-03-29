@@ -77,7 +77,7 @@
 	   //
 	   function is_fulfilled () {
 		  var full = true;
-		  self.find (".required:text, .required:password, textarea.required").each(function() {
+		  self.find (".required:text, .required:password, textarea.required").not('.optional').each(function() {
 			 if (! this.value) {
 				full = false;
 				return false; /* stops iteration */
@@ -92,14 +92,23 @@
 	       }
 	   }
 
-	   function submit_form() {
-		  /* Block the fields */
+	   function submit_in() {
 		  $("#activity").show();
 		  self.find("input,select,textarea").attr("disabled", true);
+	   }
+
+	   function submit_out() {
+		  $("#activity").fadeOut('fast');
+		  self.find("input,select,textarea").removeAttr("disabled");
+	   }
+
+	   function submit_form() {
+		  /* Block the fields */
+		  submit_in();
 
 		  /* Build the post */
 		  info = {};
-		  self.find ("input:text, input:password, input:hidden").each(function(){
+		  self.find ("input:text, input:password, input:hidden").not('.optional').each(function(){
 			 info[this.name] = this.value;
 		  });
 		  self.find ("input:checkbox").each(function(){
@@ -111,6 +120,11 @@
 		  self.find ("textarea").each(function(){
 			 info[this.name] = $(this).val();
 		  });
+
+		  if (info.__count__ == 0) {
+			 submit_out();
+			 return;
+		  }
 
 		  /* Remove error messages */
 		  self.find('div.error').html('');
@@ -153,8 +167,7 @@
 			 },
 			 complete:  function (XMLHttpRequest, textStatus) {
 				/* Unlock fields */
-				$("#activity").fadeOut('fast');
-				self.find("input,select,textarea").removeAttr("disabled");
+				submit_out();
 			 }
 		  });
 	   }
