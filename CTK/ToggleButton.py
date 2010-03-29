@@ -25,17 +25,17 @@ from util import props_to_str
 from Image import ImageStock
 
 HTML = """
-<div id="container_%(id)s" %(props)s>
+<div id="%(id)s" %(props)s>
   %(on_html)s
   %(off_html)s
-  <input name="%(id)s" type="hidden" value="%(value)s" />
+  <input id="hidden_%(id)s" name="%(id)s" type="hidden" value="%(value)s" />
 </div>
 """
 
 JS = """
 /* On click
  */
-$('#container_%(id)s').click (function() {
+$('#%(id)s').click (function() {
    var self   = $(this);
    var hidden = self.find ('input:hidden');
    var val    = hidden.val();
@@ -49,16 +49,20 @@ $('#container_%(id)s').click (function() {
        self.find('#%(off_id)s').show();
        self.find('#%(on_id)s').hide();
    }
+
+   self.trigger({'type': "changed", 'value': val});
+   return false;
 });
 
 /* Init
  */
+var self = $('#%(id)s');
 if ("%(value)s" == "1") {
-   $('#%(on_id)s').show();
-   $('#%(off_id)s').hide();
+   self.find('#%(on_id)s').show();
+   self.find('#%(off_id)s').hide();
 } else {
-   $('#%(off_id)s').show();
-   $('#%(on_id)s').hide();
+   self.find('#%(off_id)s').show();
+   self.find('#%(on_id)s').hide();
 }
 """
 
@@ -72,9 +76,9 @@ class ToggleButtonImages (Widget):
         self.widget_off = off
 
         if 'class' in props:
-            self.props['class'] += " button"
+            self.props['class'] += " togglebutton"
         else:
-            self.props['class'] = "button"
+            self.props['class'] = "togglebutton"
 
         self.id = props.pop('id', "togglebutton_%d"%(self.uniq_id))
 
@@ -106,7 +110,7 @@ class ToggleButtonImages (Widget):
 
         return render
 
-
 class ToggleButtonOnOff (ToggleButtonImages):
     def __init__ (self, active=True, props={}):
         ToggleButtonImages.__init__ (self, ImageStock('on'), ImageStock('off'), active, props.copy())
+

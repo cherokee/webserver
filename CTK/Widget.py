@@ -90,7 +90,7 @@ class Widget:
         render = RenderResponse()
 
         for event, js in self.binds:
-            render.js += "$('#%s').bind('%s', function(){ %s });\n" %(self.id, event, js)
+            render.js += "$('#%s').bind('%s', function(event){ %s });\n" %(self.id, event, js)
 
         return render
 
