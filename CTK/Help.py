@@ -32,7 +32,7 @@ class HelpEntry (Widget):
 
     def Render (self):
         render = Widget.Render(self)
-        render.html = '<div class="help_entry"><a href="/help/%s.html">%s</a></div>' %(self.ref, self.title)
+        render.html = '<div class="help_entry"><a href="/help/%s.html" target="cherokee_help">%s</a></div>' %(self.ref, self.title)
         return render
 
     def __repr__ (self):

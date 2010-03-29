@@ -61,6 +61,6 @@ function Help_add_entries (helps) {
 	   var name = helps[tmp][0];
 	   var file = helps[tmp][1];
 
-	   help.append ('<div class="help_entry merged"><a href="/help/'+file+'.html">'+name+'</a></div>');
+	   help.append ('<div class="help_entry merged"><a href="/help/'+file+'.html" target="cherokee_help">'+name+'</a></div>');
     }
 }
