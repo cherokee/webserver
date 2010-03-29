@@ -61,8 +61,10 @@ class TextField (Widget):
     def Render (self):
         # Watermark
         js = ''
+
         if self._props.get('optional'):
-            js += "$('#%s').DefaultValue('optional','%s');" %(self.id, _("optional"))
+            optional_string = self._props.get('optional_string', _("optional"))
+            js += "$('#%s').DefaultValue('optional','%s');" %(self.id, optional_string)
 
             if not self._props.get('class'):
                 self._props['class'] = 'optional'
