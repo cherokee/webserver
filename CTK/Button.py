@@ -36,7 +36,7 @@ class Button (Widget):
         if not 'href' in props:
             self.props['href'] = " #"
 
-        self.id      = "button_%d" %(self.uniq_id)
+        self.id      = props.pop('id', "button_%d"%(self.uniq_id))
         self.caption = caption
 
     # Public interface
