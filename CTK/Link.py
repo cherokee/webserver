@@ -24,7 +24,7 @@ from Widget import Widget
 from Container import Container
 from util import formater
 
-LINK_HTML      = '<a href="%(href)s">%(content)s</a>'
+LINK_HTML      = '<a href="%(href)s" id="%(id)s">%(content)s</a>'
 LINK_ICON_HTML = '<div id="%(id)s"><span class="ui-icon ui-icon-%(icon)s"></span>%(link)s</div>'
 
 
@@ -39,7 +39,8 @@ class Link (Container):
     def Render (self):
         render = Container.Render (self)
 
-        props = {'href':    self.href,
+        props = {'id':      self.id,
+                 'href':    self.href,
                  'content': render.html}
 
         render.html = formater (LINK_HTML, props)

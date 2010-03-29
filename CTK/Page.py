@@ -64,6 +64,7 @@ def uniq (seq):
 class Page (Container):
     def __init__ (self, template=None, headers=None, helps=[], **kwargs):
         Container.__init__ (self, **kwargs)
+        self.js_header_end = True
 
         if headers:
             self._headers = HEADERS + headers
@@ -91,7 +92,11 @@ class Page (Container):
 
         # Build the <head> text
         self._headers += render.headers
-        head = "\n".join (uniq(self._headers))
+
+        if self.js_header_end:
+            head = "\n".join (filter (lambda l: not '<script' in l, uniq(self._headers)))
+        else:
+            head = "\n".join (uniq(self._headers))
 
         # Helps
         all_helps  = self._helps
@@ -100,10 +105,13 @@ class Page (Container):
         render_helps = HelpMenu(all_helps).Render().html
 
         # Javascript
+        js = ''
+
+        if self.js_header_end:
+            js += "\n".join (filter (lambda l: '<script' in l, uniq(self._headers)))
+
         if render.js:
-            js = formater (HTML_JS_ON_READY_BLOCK, render.js)
-        else:
-            js = ''
+            js += formater (HTML_JS_ON_READY_BLOCK, render.js)
 
         # Build the <body>
         body = render.html + render_helps
