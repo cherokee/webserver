@@ -20,6 +20,8 @@
 # 02110-1301, USA.
 #
 
+import re
+
 from consts import *
 from Container import Container
 from Template import Template
@@ -57,8 +59,27 @@ HEADERS = [
 ]
 
 def uniq (seq):
-    noDupes = []
-    [noDupes.append(i) for i in seq if not noDupes.count(i)]
+    aggregated = ''
+    noDupes    = []
+
+    for line in seq:
+        if line.startswith('<script'):
+            file = re.findall (r'(src=".+?")', line)[0]
+            if not file in aggregated:
+                noDupes.append(line)
+                aggregated += line
+
+        elif line.startswith('<link'):
+            file = re.findall (r'(href=".+?")', line)[0]
+            if not file in aggregated:
+                noDupes.append(line)
+                aggregated += line
+
+        else:
+            if not line in aggregated:
+                noDupes.append(line)
+                aggregated += line
+
     return noDupes
 
 class Page (Container):
