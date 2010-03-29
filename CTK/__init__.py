@@ -58,6 +58,7 @@ from Link import Link, LinkIcon
 from DatePicker import DatePicker
 from Button import Button
 from TextArea import TextArea
+from ToggleButton import ToggleButtonImages, ToggleButtonOnOff
 
 # Comodity
 from cgi import escape as escape_html
