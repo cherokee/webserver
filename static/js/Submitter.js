@@ -154,16 +154,19 @@
 				}
 
 				/* Trigger events */
+				var event_type;
+
 				if (data['ret'] == "ok") {
-				    self.trigger('submit_success');
+				    event_type = 'submit_success';
 				} else {
-				    self.trigger('submit_fail');
+				    event_type = 'submit_fail';
 				}
+				self.trigger({type: event_type, url: url, ret: data['ret']});
 			 },
 			 error: function (xhr, ajaxOptions, thrownError) {
 				restore_orig_values();
 				// alert ("Error: " + xhr.status +"\n"+ xhr.statusText);
-				self.trigger('submit_fail');
+				self.trigger({type: 'submit_fail', url: url, status: xhr.status});
 			 },
 			 complete:  function (XMLHttpRequest, textStatus) {
 				/* Unlock fields */
