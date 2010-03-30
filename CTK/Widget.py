@@ -56,8 +56,12 @@ class RenderResponse:
 
     def toStr (self):
         txt = self.html
+
+        for js_header in filter(lambda x: x.startswith('<script'), self.headers):
+            txt += '%s\n'%(js_header)
         if self.js:
             txt += HTML_JS_ON_READY_BLOCK %(self.js)
+
         return Postprocess(txt)
 
     def toJSON (self):
@@ -99,9 +103,12 @@ class Widget:
     def bind (self, event, js):
         self.binds.append ((event, js))
 
-    def JS_to_trigger (self, event, param=None):
+    def JS_to_trigger (self, event, param=None, selector=None):
+        if not selector:
+            selector = "$('#%s')" %(self.id)
+
         if param:
-            return "$('#%s').trigger('%s', %s);" %(self.id, event, param)
+            return "%s.trigger('%s', %s);" %(selector, event, param)
         else:
-            return "$('#%s').trigger('%s');" %(self.id, event)
+            return "%s.trigger('%s');" %(selector, event)
 
