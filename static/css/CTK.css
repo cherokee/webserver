@@ -116,7 +116,7 @@ html>body #container { min-height: 100%; }
 .error { color: #c00; font-weight: bold; font-size: 90%; }
 
 /* Del
- */ 
+ */
 .del { cursor: pointer; }
 
 /* Button
@@ -349,20 +349,6 @@ a.helpbutton span {
 #body-error .button { float: right; clear: both; }
 
 
-/* Top dialog
- */
-#topdialog {
-    background: #fff6b6;
-    color: #3b3929;
-    height: 32px;
-    border: none;
-    border-bottom: 1px solid #edd400;
-    display: none;
-}
-
-#topdialog .topmsg { float: left; padding: 8px 0 0 16px; font-weight: bold; }
-#topdialog .buttonarea { float: right; padding-top: 4px; }
-
 /* Sortable Table
  */
 .panel {
@@ -393,14 +379,14 @@ a.helpbutton span {
 
 .panel table {
   position : absolute;
-  background-color: #fff; 
+  background-color: #fff;
   border-collapse: collapse;
   width: 234px;
   overflow-x: hidden;
 }
 
 .panel table tr td {
-  background-color: #fff; 
+  background-color: #fff;
   border-bottom: 1px solid #cde;
   max-width: 180px;
 }
@@ -410,7 +396,7 @@ a.helpbutton span {
  width: 32px;
  height: 14px;
  background: transparent url(/CTK/images/bg-sel-actions.png) no-repeat;
- padding: 1px 0 1px 16px; 
+ padding: 1px 0 1px 16px;
 }
 
 .panel-buttons {
@@ -467,7 +453,7 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 
 .vserver_content .ui-tabs .ui-tabs-panel, .source_content .submitter, .rules_content .ui-tabs .ui-tabs-panel{
-  padding-left: 16px; 
+  padding-left: 16px;
   background-color: #fff;
   border: 0;
   overflow: auto;
