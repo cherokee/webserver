@@ -147,9 +147,16 @@ class Dialog (Container):
     def JS_to_close (self):
         return " $('#%s').dialog('close');" % (self.id)
 
-    def JS_to_trigger (self, event):
+    def JS_to_trigger (self, event, _params=[]):
         props = {'id': self.id, 'event': event}
-        return "$('#%(id)s .submitter').trigger('%(event)s');" %(props)
+
+        tmp = ["type: '%s'"%(event)]
+        for p in _params:
+            assert type(p) == tuple and len(p) == 2
+            tmp.append ('%s:%s' %(p[0],p[1]))
+
+        props['details'] = ','.join(tmp)
+        return "$('#%(id)s .submitter').trigger({%(details)s});" %(props)
 
 
 class DialogProxy (Dialog):
