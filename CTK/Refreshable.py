@@ -23,13 +23,18 @@
 from consts import *
 from Widget import Widget
 from Server import publish
+from util import props_to_str
 
-HTML = '<div id="%s">%s</div>'
+HTML = """
+<div id="%(id)s" %(props)s>
+  %(content)s
+</div>
+"""
 
 REFRESHABLE_UPDATE_JS = """
 $.ajax({
-   url:     "%(url)s",
-   type:    "GET",
+   type:    'GET',
+   url:     '%(url)s',
    async:   true,
    success: function(msg){
       $('#%(id)s').html(msg);
@@ -45,13 +50,14 @@ def render_plain_html (build_func, **kwargs):
 
 class Refreshable (Widget):
     def __init__ (self, _props={}):
-        assert 'id' in _props, "'id' is a required property"
-
         Widget.__init__ (self)
-        props = _props.copy()
 
-        self.id  = props.pop('id')
-        self.url = "/refreshable/%s" %(self.id)
+        assert 'id' in _props, "Property 'id' must be provided"
+
+        self.props      = _props.copy()
+        self.id         = self.props.pop('id')
+        self.url        = "/refreshable/%s" %(self.id)
+        self.build_func = None
 
     def register (self, build_func=None, **kwargs):
         self.build_func = build_func
@@ -62,7 +68,12 @@ class Refreshable (Widget):
 
     def Render (self):
         render = self.build_func (**self.params)
-        render.html = HTML%(self.id, render.html)
+
+        props = {'id':      self.id,
+                 'props':   props_to_str(self.props),
+                 'content': render.html}
+
+        render.html = HTML %(props)
         return render
 
     def JS_to_refresh (self, on_success=''):
@@ -70,3 +81,52 @@ class Refreshable (Widget):
                  'url':        self.url,
                  'on_success': on_success}
         return REFRESHABLE_UPDATE_JS %(props)
+
+
+JS_URL_LOAD = """
+var refresh = $('#%(id)s');
+refresh.data('url', "%(url)s");
+
+$.ajax({type: "GET", url: "%(url)s", async: true,
+   success: function(msg){
+      refresh.html(msg);
+   }
+});
+"""
+
+JS_URL_INIT = """
+refresh.bind('refresh_goto', function(event) {
+  var refresh = $('#%(id)s');
+  refresh.data('url', "%(url)s", event.goto);
+
+  $.ajax({type: "GET", url: event.goto, async: true,
+     success: function(msg){
+        refresh.html(msg);
+     }
+  });
+});
+"""
+
+class RefreshableURL (Widget):
+    def __init__ (self, url, _props={}):
+        Widget.__init__ (self)
+
+        self.props = _props.copy()
+        self.url   = url
+
+    def Render (self):
+        props = {'id':      self.id,
+                 'url':     self.url,
+                 'props':   props_to_str(self.props),
+                 'content': ''}
+
+        render = Widget.Render (self)
+        render.html += HTML %(props)
+        render.js   += JS_URL_LOAD %(props)
+        render.js   += JS_URL_INIT %(props)
+        return render
+
+    def JS_to_load (self, url):
+        props = {'id':  self.id,
+                 'url': url}
+        return JS_URL_LOAD %(props)

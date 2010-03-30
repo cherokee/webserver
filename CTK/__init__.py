@@ -49,7 +49,7 @@ from HTTP import HTTP_Response, HTTP_Redir, HTTP_Error, HTTP_XSendfile
 from HiddenField import HiddenField, Hidden
 from Uploader import Uploader
 from Plugin import PluginSelector
-from Refreshable import Refreshable
+from Refreshable import Refreshable, RefreshableURL
 from Image import Image, ImageStock
 from SortableList import SortableList
 from Indenter import Indenter
