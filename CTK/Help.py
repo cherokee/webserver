@@ -31,8 +31,13 @@ class HelpEntry (Widget):
         self.ref   = ref
 
     def Render (self):
+        if '://' in self.ref:
+            url = self.ref
+        else:
+            url = "/help/%s.html" %(self.ref)
+
         render = Widget.Render(self)
-        render.html = '<div class="help_entry"><a href="/help/%s.html" target="cherokee_help">%s</a></div>' %(self.ref, self.title)
+        render.html = '<div class="help_entry"><a href="%s" target="cherokee_help">%s</a></div>' %(url, self.title)
         return render
 
     def __repr__ (self):
