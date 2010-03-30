@@ -79,9 +79,14 @@ class HTTP_Response:
         self.headers.append ("%s: %s"%(key, str(value)))
 
     def __str__ (self):
-        # Add content length
-        if not "Content-Length:" in ''.join(self.headers).lower():
+        all_lower = ''.join(self.headers).lower()
+
+        # Add default headers
+        if not "content-length:" in all_lower:
             self['Content-Length'] = len(self.body)
+
+        if not "content-type:" in all_lower:
+            self['Content-Type'] = 'text/html'
 
         # Build the HTTP response
         hdr  = "Status: %d\r\n" %(self.error)
