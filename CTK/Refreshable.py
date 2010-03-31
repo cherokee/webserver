@@ -111,7 +111,14 @@ class RefreshableURL (Widget):
     def __init__ (self, url, _props={}):
         Widget.__init__ (self)
 
-        self.props = _props.copy()
+        # Properties
+        props = _props.copy()
+        if 'class' in props:
+            props['class'] += ' refreshable-url'
+        else:
+            props['class'] = 'refreshable-url'
+
+        self.props = props
         self.url   = url
 
     def Render (self):
