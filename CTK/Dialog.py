@@ -168,15 +168,21 @@ class DialogProxy (Dialog):
 
 
 class DialogProxyLazy (Dialog):
-    def __init__ (self, url, props={}):
-        Dialog.__init__ (self, props.copy())
+    def __init__ (self, url, _props={}):
+        # Properties
+        props = _props.copy()
+        Dialog.__init__ (self, props)
 
-        box = Box()
-        box += ImageStock('loading')
+        # Widget content
+        img = ImageStock('loading', {'class': 'no-see'})
+
+        box = Box({'class': 'dialog-proxy-lazy-loader'})
+        box += img
         self += box
 
-        self.bind ('dialogopen', JS.Ajax(url,
-                                         type    = 'GET',
+        # Event
+        self.bind ('dialogopen', "$('#%s').show();" %(img.id) + \
+                                 JS.Ajax(url, type = 'GET',
                                          success = '$("#%s").html(data);'%(box.id)))
 
 
