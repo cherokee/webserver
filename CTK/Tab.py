@@ -24,7 +24,8 @@ from Widget import Widget
 
 HEADER = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
-    '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>'
+    '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>',
+    '<script type="text/javascript" src="/CTK/js/jquery.cookie.js"></script>'
 ]
 
 HTML = """
@@ -43,10 +44,17 @@ HTML_TAB = """
 """
 
 JS_INIT = """
+function set_tab_cookie (value) {
+    var path_begin = location.href.indexOf('/', location.href.indexOf('://') + 3);
+    var path       = location.href.substring (path_begin);
+
+    $.cookie ('open_tab', value, {path: path});
+}
+
 $("#tab_%(id)s").tabs().bind('tabsselect', function(event, ui) {
     tabslen = $("#tab_%(id)s").tabs('length');
 
-    nprevtab = parseInt(get_cookie('open_tab')) + 2;
+    nprevtab = parseInt ($.cookie('open_tab')) + 2;
     if (nprevtab < tabslen) {
     	$("#tab_%(id)s li:nth-child("+ nprevtab  +")").removeClass("ui-tabs-selected-next");
     } else {
@@ -59,17 +67,18 @@ $("#tab_%(id)s").tabs().bind('tabsselect', function(event, ui) {
     } else {
         $("#tab_%(id)s li:nth-child("+ nnexttab  +")").addClass("ui-tabs-selected-next-last");
     }
-    document.cookie = "open_tab="  + ui.index;
+
+    set_tab_cookie (ui.index);
 });
 
 $("#tab_%(id)s ul li:first").addClass("ui-tabs-first");
 $("#tab_%(id)s ul li:last").addClass("ui-tabs-last");
 
-var open_tab = get_cookie('open_tab');
+var open_tab = $.cookie('open_tab');
 if (open_tab) {
     $("#tab_%(id)s").tabs("select", parseInt(open_tab));
 } else {
-    document.cookie = "open_tab=0";
+    set_tab_cookie ("0");
 }
 
 if ($("#tab_%(id)s").tabs('option', 'selected') == 0) {
