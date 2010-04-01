@@ -3,7 +3,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2009 Alvaro Lopez Ortega
+# Copyright (C) 2010 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -21,32 +21,16 @@
 #
 
 from Widget import Widget
-
+from util import props_to_str
 
 class HiddenField (Widget):
     def __init__ (self, props={}):
         Widget.__init__ (self)
-
-        self._props = props.copy()
-        if not 'id' in self._props:
-            self._props['id'] = 'widget%d'%(self.uniq_id)
-
-    def __get_input_props (self):
-        render = ''
-
-        for prop in self._props:
-            render += " %s" %(prop)
-            value = self._props[prop]
-            if value:
-                if type(value) == str:
-                    render += '="%s"' %(value)
-                else:
-                    render += '=' + value
-        return render
+        self.props = props.copy()
 
     def Render (self):
         # Render the text field
-        html = '<input type="hidden"%s />' %(self.__get_input_props())
+        html = '<input type="hidden" id="%s"%s />' %(self.id, props_to_str(self.props))
 
         render = Widget.Render(self)
         render.html += html
@@ -54,5 +38,9 @@ class HiddenField (Widget):
         return render
 
 class Hidden (HiddenField):
-    def __init__ (self, name, value):
-        HiddenField.__init__ (self, {'name': name, 'value': value})
+    def __init__ (self, name, value, _props={}):
+        props = _props.copy()
+        props['name']  = name
+        props['value'] = value
+
+        HiddenField.__init__ (self, props)
