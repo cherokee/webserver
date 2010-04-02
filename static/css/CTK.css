@@ -70,7 +70,8 @@ h2 { color: #259; font-weight: normal; padding: 8px 0; font-size: 18px; z-index:
  */
 
 input[type=text], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
-input[type=text]:focus, textarea:focus { border: 2px solid #2d70cb; margin: 0; }
+input[type=text]focus, textarea:focus { border: 2px solid #2d70cb; margin: 0; }
+input[type=text] { width: 240px; }
 select { border: 1px solid #b0bfce; ibackground: #fff; padding: 2px; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px;}
 .checkbox-text { padding: 4px; }
 
