@@ -70,7 +70,7 @@ HTML = """
 JS = """
 $('#%(id)s_form').uploadProgress({
 	/* scripts locations for safari */
-	jqueryPath:         "/CTK/js/jquery-1.3.2.js",
+	jqueryPath:         "/CTK/js/jquery-1.3.2.min.js",
 	uploadProgressPath: "/CTK/js/jquery.uploadProgress.js",
         progressBar:        "#uploading_%(id)s #progressbar",
         progressUrl:        "/upload_report/",
