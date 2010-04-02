@@ -499,9 +499,9 @@ tr.panel-selected td div.row_content .sel-actions {
 
 /* Information sources and VServers*/
 .vserver-inactive { color: #999; }
-.nick  { font-weight: bold; white-space: nowrap; width: 176px; overflow-x: hidden; }
-.hasScroll td .nick { width: 166px; }
-.name  { font-weight: bold; white-space: nowrap; }
+.rule-inactive { color: #999; }
+.nick, .name { font-weight: bold; white-space: nowrap; width: 176px; overflow-x: hidden; }
+.hasScroll td .nick, .hasScroll td .name { width: 166px; }
 .type { font-weight: bold; font-size: 11px; float: left; }
 .host { clear: both; color: #999; font-size: 11px; white-space: nowrap;  width: 200px;}
 .inter { color: #999; font-size: 11px; white-space: nowrap; width: 200px; float: left; }
