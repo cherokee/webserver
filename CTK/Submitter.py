@@ -47,7 +47,11 @@ JS_INIT = """
 
 # Focus on the first <input> of the page
 JS_FOCUS = """
-  $("input:first").focus();
+  if ($("input:first").hasClass('filter')) {
+      $("input:first").next().focus();
+  } else {
+      $("input:first").focus();
+  }
   $("#activity").hide();
 """
 

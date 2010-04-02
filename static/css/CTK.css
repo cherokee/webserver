@@ -366,6 +366,7 @@ a.helpbutton span {
   background-color: #f0f7ff;
   width: 240px;
   float: left;
+  z-index: 9000;
 }
 
 .panel h2 {
@@ -373,14 +374,24 @@ a.helpbutton span {
   font-size: 16px;
   color: #27c;
   text-shadow: #fff 0px 1px 0px;
-  z-index: 9000;
   border: none;
 }
+
+.panel .filterbox {
+  background: transparent url(/CTK/images/bg-filter.png) repeat-x;
+  border: 1px solid #cde;
+  border-bottom: 0;
+  margin: 0 2px;
+  padding: 4px;
+}
+
+.panel .filter { width: 214px; }
+
 
 #vservers_panel, #rules_panel, #source_panel {
  background: #fff;
  height: 320px;
- margin: 2px;
+ margin: 0 2px 2px 2px;
  border: 1px solid #cde;
  overflow: auto;
  overflow-x: hidden;
@@ -388,7 +399,6 @@ a.helpbutton span {
 
 
 .panel table {
-  position : absolute;
   background-color: #fff;
   border-collapse: collapse;
   width: 234px;
@@ -401,12 +411,15 @@ a.helpbutton span {
   max-width: 180px;
 }
 .panel td .sel-actions {
- position : absolute;
- margin-left: 163px;
- width: 32px;
+ float: right;
+ width: 28px;
  height: 14px;
  background: transparent url(/CTK/images/bg-sel-actions.png) no-repeat;
- padding: 1px 0 1px 16px;
+ padding: 0;
+}
+
+.hasScroll td .sel-actions {
+ padding: 0 10px 0 0;
 }
 
 .panel-buttons {
@@ -444,6 +457,9 @@ tr.panel-selected td div.row_content .sel-actions {
  background: transparent url(/CTK/images/bg-sel-actions-sel.png) no-repeat;
 }
 
+.sel-actions .togglebutton { float: left; }
+
+
 .vserver_content, .source_content, .rules_content  {
   width: 716px;
   padding: 0;
@@ -476,7 +492,8 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 
 /* Information sources and VServers*/
-.nick  { font-weight: bold; white-space: nowrap; }
+.nick  { font-weight: bold; white-space: nowrap; width: 176px; overflow-x: hidden; }
+.hasScroll td .nick { width: 166px; }
 .name  { font-weight: bold; white-space: nowrap; }
 .type { font-weight: bold; font-size: 11px; float: left; }
 .host { clear: both; color: #999; font-size: 11px; white-space: nowrap;  width: 200px;}
