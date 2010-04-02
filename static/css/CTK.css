@@ -415,7 +415,7 @@ a.helpbutton span {
  float: right;
  width: 28px;
  height: 14px;
- background: transparent url(/CTK/images/bg-sel-actions.png) no-repeat;
+ background: transparent;
  padding: 0;
 }
 
@@ -437,6 +437,11 @@ a.helpbutton span {
 .row_content {
   padding: 4px;
   cursor: pointer;
+}
+
+tr.tDnD_whileDrag td.dragHandle,
+tr.tDnD_whileDrag td.nodrag {
+  background-color: #def;
 }
 
 tr.panel-selected td.dragHandle {
