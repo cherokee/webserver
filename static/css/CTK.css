@@ -195,7 +195,7 @@ a.button:active span, button:active .button-inner {
 
 /* Optional text entries
  */
-.optional { color: #ccc; }
+.optional-grey { color: #ccc; }
 
 
 /* Help menu
@@ -498,7 +498,7 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 
 /* Information sources and VServers*/
-.vserver-inactive { color: #999; } 
+.vserver-inactive { color: #999; }
 .nick  { font-weight: bold; white-space: nowrap; width: 176px; overflow-x: hidden; }
 .hasScroll td .nick { width: 166px; }
 .name  { font-weight: bold; white-space: nowrap; }

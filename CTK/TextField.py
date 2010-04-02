@@ -63,8 +63,8 @@ class TextField (Widget):
         js = ''
 
         if self._props.get('optional'):
-            optional_string = self._props.get('optional_string', _("optional"))
-            js += "$('#%s').DefaultValue('optional','%s');" %(self.id, optional_string)
+            optional_string = self._props.get('optional_string', _("Optional"))
+            js += "$('#%s').DefaultValue('optional-grey','%s');" %(self.id, optional_string)
 
             if not self._props.get('class'):
                 self._props['class'] = 'optional'

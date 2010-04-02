@@ -171,6 +171,11 @@
 			 complete:  function (XMLHttpRequest, textStatus) {
 				/* Unlock fields */
 				submit_out();
+
+				/* Update Optional fields */
+				self.find('.optional').each(function() {
+				    $(this).trigger('update');
+				});
 			 }
 		  });
 	   }
