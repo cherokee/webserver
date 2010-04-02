@@ -34,6 +34,7 @@ from Server import cfg, publish, post
 from PageCleaner import Postprocess
 from Help import HelpEntry, HelpGroup
 
+
 SELECTOR_CHANGED_JS = """
 /* On selector change
  */
@@ -70,21 +71,18 @@ class Plugin (Container):
         self.key = key
         self.id  = "Plugin_%s" %(self.uniq_id)
 
-    def apply (self):
-        "Commodity method"
-        for key in post:
-            cfg[key] = post[key]
-        return {'ret': 'ok'}
-
 
 class PluginInstanceProxy:
     def __call__ (self, key, modules, **kwargs):
         # Update the configuration
-        new_val = post.get_val (key, None)
-        if not new_val:
+        if not key in post.keys():
             return ''
 
+        new_val = post.get_val (key)
         cfg[key] = new_val
+
+        if not new_val:
+            return ''
 
         # Instance the content
         plugin = instance_plugin (new_val, key, **kwargs)
