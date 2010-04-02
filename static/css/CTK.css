@@ -509,4 +509,27 @@ tr.panel-selected td div.row_content .sel-actions {
 .panel .comment { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 .panel-selected .droot, .panel-selected .host, .panel-selected .inter, .panel-selected .comment { color: #cde; }
 
+/* Rules table */
+#rules-table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #cde;
+}
 
+#rules-table th { 
+  background: #e6f3ff url(/CTK/images/bg-th.png) repeat-x;
+  border: none;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px; 
+}
+
+#rules-table td {
+  padding: 6px 4px; 
+  background: #eff7ff url(/CTK/images/bg-td-even.png) repeat-x; 
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #def;
+} 
+
+#rules-table tr.trodd td {
+  background: #fff;
+}
