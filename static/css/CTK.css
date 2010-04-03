@@ -371,14 +371,17 @@ a.helpbutton span {
 }
 
 .panel h2 {
-  padding-left: 16px;
+  padding-left: 8px;
+  width: 172px;
   font-size: 16px;
   color: #27c;
   text-shadow: #fff 0px 1px 0px;
   border: none;
+  float: left;
 }
 
 .panel .filterbox {
+  clear: both;
   background: transparent url(/CTK/images/bg-filter.png) repeat-x;
   border: 1px solid #cde;
   border-bottom: 0;
@@ -392,7 +395,7 @@ a.helpbutton span {
 #vservers_panel, #rules_panel, #source_panel {
  background: #fff;
  height: 320px;
- margin: 0 2px 2px 2px;
+ margin: 0 2px 8px 2px;
  border: 1px solid #cde;
  overflow: auto;
  overflow-x: hidden;
@@ -425,11 +428,6 @@ a.helpbutton span {
 }
 .hasScroll td .sel-actions {
  padding: 0 10px 0 0;
-}
-
-.panel-buttons {
-  height: 48px;
-  padding: 8px;
 }
 
 .dragHandle {
@@ -469,7 +467,6 @@ tr.panel-selected td div.row_content .sel-actions {
 
 .sel-actions .togglebutton { float: left; }
 
-
 .vserver_content, .source_content, .rules_content  {
   width: 716px;
   padding: 0;
@@ -495,8 +492,6 @@ tr.panel-selected td div.row_content .sel-actions {
   overflow: auto;
 }
 
-
-
 .source_content .submitter {
   border-top: 1px solid #cde;
 }
@@ -515,11 +510,23 @@ tr.panel-selected td div.row_content .sel-actions {
 .panel .comment { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 .panel-selected .droot, .panel-selected .host, .panel-selected .inter, .panel-selected .comment, .panel-selected .type { color: #cde; }
 
+/* Panel buttons */
+.panel-buttons { height: 24px; float: right; }
+.panel-button { width: 24px !important; padding: 0 !important; margin: 6px 2px 2px 2px !important; }
+.panel-button span { background: none !important; text-indent: -99999px !important; width: 0 !important; }
+#vserver-new-button { background: transparent url(/CTK/images/bg-button-new.png) no-repeat; }
+#vserver-clone-button { background: transparent url(/CTK/images/bg-button-clone.png) no-repeat; }
+#rule-new-button { background: transparent url(/CTK/images/bg-button-new.png) no-repeat; }
+#rule-clone-button { background: transparent url(/CTK/images/bg-button-clone.png) no-repeat; }
+#source-new-button { background: transparent url(/CTK/images/bg-button-new.png) no-repeat; }
+#source-clone-button { background: transparent url(/CTK/images/bg-button-clone.png) no-repeat; }
+.panel-button:active { background-position: bottom left !important; }
+
 /* Rules table */
 #rules-table {
-  border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #cde;
+ border-collapse: collapse;
+ width: 100%;
+ border: 1px solid #cde;
 }
 
 #rules-table th { 
