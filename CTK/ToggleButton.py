@@ -112,5 +112,8 @@ class ToggleButtonImages (Widget):
 
 class ToggleButtonOnOff (ToggleButtonImages):
     def __init__ (self, active=True, props={}):
-        ToggleButtonImages.__init__ (self, ImageStock('on'), ImageStock('off'), active, props.copy())
+        ToggleButtonImages.__init__ (self,
+                                     ImageStock('on',  {'title': _("Disable")}),
+                                     ImageStock('off', {'title': _("Enable")}),
+                                     active, props.copy())
 
