@@ -59,7 +59,7 @@ class List (Container):
         if widget:
             if type(widget) == list:
                 for w in widget:
-                    entry += widget
+                    entry += w
             else:
                 entry += widget
 
