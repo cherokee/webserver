@@ -60,6 +60,7 @@ from Button import Button
 from TextArea import TextArea
 from ToggleButton import ToggleButtonImages, ToggleButtonOnOff
 from Druid import Druid, DruidButtonsPanel, DruidButton, DruidButton_Goto, DruidButtonsPanel_Next, DruidButtonsPanel_PrevNext, DruidButtonsPanel_PrevCreate
+from List import List, ListEntry
 
 # Comodity
 from cgi import escape as escape_html
