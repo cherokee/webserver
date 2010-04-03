@@ -38,9 +38,9 @@ class HiddenField (Widget):
         return render
 
 class Hidden (HiddenField):
-    def __init__ (self, name, value, _props={}):
+    def __init__ (self, name, value='', _props={}):
         props = _props.copy()
         props['name']  = name
-        props['value'] = value
+        props['value'] = value[:]
 
         HiddenField.__init__ (self, props)
