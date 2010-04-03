@@ -5,7 +5,7 @@ This module has been written as part of the Cherokee project:
                http://www.cherokee-project.com/
 """
 
-# Copyright (c) 2006-2009, Alvaro Lopez Ortega <alvaro@alobbs.com>
+# Copyright (c) 2006-2010, Alvaro Lopez Ortega <alvaro@alobbs.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -43,9 +43,9 @@ import time
 import sys
 import os
 
-__version__   = '1.11'
+__version__   = '1.12'
 __author__    = 'Alvaro Lopez Ortega'
-__copyright__ = 'Copyright 2009, Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
 __license__   = 'BSD'
 
 
@@ -73,8 +73,9 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
                     if chunk:
                         info += chunk
                         continue
-                    time.sleep(0.01)
+                    time.sleep(0.001)
                     continue
+                raise
 
     def send(self, buf):
         pending = len(buf)
@@ -90,12 +91,13 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
                 offset  += sent
             except OSError, e:
                 if e.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
-                    time.sleep(0.01)
+                    time.sleep(0.001)
                     continue
+                raise
 
     def __read_netstring_size (self):
         size = ""
-        while 1:
+        while True:
             c = self.__safe_read(1)
             if c == ':':
                 break
