@@ -52,18 +52,21 @@ class List (Container):
         self.tag   = tag
         self.props = _props.copy()
 
-    def Add (self, list_entry):
-        assert isinstance (list_entry, ListEntry)
-        Container.__iadd__ (self, list_entry)
+    def Add (self, widget, props={}):
+        assert isinstance(widget, Widget) or widget is None or type(widget) is list
+
+        entry = ListEntry (props.copy())
+        if widget:
+            if type(widget) == list:
+                for w in widget:
+                    entry += widget
+            else:
+                entry += widget
+
+        Container.__iadd__ (self, entry)
 
     def __iadd__ (self, widget):
-        assert isinstance (widget, Widget) or widget is None
-
-        entry = ListEntry()
-        if widget:
-            entry += widget
-
-        self.Add (entry)
+        self.Add (widget)
         return self
 
     def Render (self):
