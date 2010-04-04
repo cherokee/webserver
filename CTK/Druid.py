@@ -25,7 +25,7 @@
 from Box import Box
 from Button import Button
 from Refreshable import RefreshableURL
-
+from Server import request
 
 JS_BUTTON_GOTO = """
 var druid      = $(this).parents('.druid:first');
@@ -42,7 +42,11 @@ if ((! %(do_submit)s) || (submitters.length == 0))
 // Submit
 submitters.bind ('submit_success', function (event) {
    $(this).unbind (event);
-   refresh.trigger({'type':'refresh_goto', 'goto':'%(url)s'});
+   if ('%(url)s'.length > 0) {
+      refresh.trigger({'type':'refresh_goto', 'goto':'%(url)s'});
+   } else {
+      druid.trigger('druid_exiting');
+   }
 });
 
 submitters.bind ('submit_fail', function (event) {
@@ -55,12 +59,6 @@ submitters.trigger ({'type': 'submit'});
 JS_BUTTON_CLOSE = """
 $(this).parents('.ui-dialog:first').dialog().dialog('close');
 return false;
-"""
-
-JS_BUTTON_SUBMIT = """
-$(this)
-.trigger ({type: 'submit'})
-.parents('.ui-dialog:first').dialog().dialog('close');
 """
 
 
@@ -124,9 +122,11 @@ class DruidButton_Submit (DruidButton):
     def __init__ (self, caption, _props={}):
         DruidButton.__init__ (self, caption, _props.copy())
 
-        # Event
-        self.bind ('click', JS_BUTTON_SUBMIT)
+        props = {'url':       '',
+                 'do_submit': 'true'}
 
+        # Event
+        self.bind ('click', JS_BUTTON_GOTO%(props))
 
 #
 # Button Panels
@@ -168,4 +168,42 @@ class DruidButtonsPanel_PrevCreate (DruidButtonsPanel):
         self += DruidButton_Submit (_('Create'))
         self += DruidButton_Goto (_('Prev'), url_prev, False)
 
+
+#
+# Helper
+#
+def druid_url_next (url):
+    parts = url.split('/')
+
+    try:
+        num = int(parts[-1])
+    except ValueError:
+        return '%s/2' %(url)
+
+    return '%s/%d' %('/'.join(parts[:-1]), num+1)
+
+def druid_url_prev (url):
+    parts = url.split('/')
+    num = int(parts[-1])
+
+    if num == 2:
+        return '/'.join(parts[:-1])
+    return '%s/%d' %('/'.join(parts[:-1]), num-1)
+
+
+class DruidButtonsPanel_Next_Auto (DruidButtonsPanel_Next):
+    def __init__ (self, **kwargs):
+        kwargs['url'] = druid_url_next(request.url)
+        DruidButtonsPanel_Next.__init__ (self, **kwargs)
+
+class DruidButtonsPanel_PrevNext_Auto (DruidButtonsPanel_PrevNext):
+    def __init__ (self, **kwargs):
+        kwargs['url_prev'] = druid_url_prev(request.url)
+        kwargs['url_next'] = druid_url_next(request.url)
+        DruidButtonsPanel_PrevNext.__init__ (self, **kwargs)
+
+class DruidButtonsPanel_PrevCreate_Auto (DruidButtonsPanel_PrevCreate):
+    def __init__ (self, **kwargs):
+        kwargs['url_prev'] = druid_url_prev(request.url)
+        DruidButtonsPanel_PrevCreate.__init__ (self, **kwargs)
 
