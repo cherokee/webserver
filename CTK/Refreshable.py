@@ -87,11 +87,13 @@ JS_URL_LOAD = """
 var refresh = $('#%(id)s');
 refresh.data('url', "%(url)s");
 
-$.ajax({type: "GET", url: "%(url)s", async: true,
-   success: function(msg){
-      refresh.html(msg);
-   }
-});
+if ("%(url)s".length > 0) {
+  $.ajax({type: "GET", url: "%(url)s", async: true,
+     success: function(msg){
+        refresh.html(msg);
+     }
+  });
+}
 """
 
 JS_URL_INIT = """
@@ -108,7 +110,7 @@ refresh.bind('refresh_goto', function(event) {
 """
 
 class RefreshableURL (Widget):
-    def __init__ (self, url, _props={}):
+    def __init__ (self, url='', _props={}):
         Widget.__init__ (self)
 
         # Properties
