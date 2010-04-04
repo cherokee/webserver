@@ -125,7 +125,7 @@ class PluginSelector (Widget):
 
         for e in self._mods:
             name, desc = e
-            module = load_module (name)
+            module = load_module (name, 'plugins')
             if module:
                 if 'HELPS' in dir(module):
                     help_grp = HelpGroup (name)
@@ -157,19 +157,23 @@ class PluginSelector (Widget):
 # Helper functions
 #
 
-def load_module (name):
+def load_module (name, dirname):
     # Sanity check
     if not name:
         return
 
     # Figure the path to admin's python source (hacky!)
     stack = traceback.extract_stack()
-    for stage in stack:
-        if 'CTK/Server.py' in stage[0]:
-            first_py = stage[0]
-            break
 
-    mod_path = os.path.abspath(os.path.join (first_py, '../../../plugins'))
+    if 'pyscgi.py' in ' '.join([x[0] for x in stack]):
+        for stage in stack:
+            if 'CTK/pyscgi.py' in stage[0]:
+                base_dir = os.path.join (stage[0], '../../..')
+                break
+    else:
+        base_dir = os.path.dirname (stack[0][0])
+
+    mod_path = os.path.abspath (os.path.join (base_dir, dirname))
     fullpath = os.path.join (mod_path, "%s.py"%(name))
 
     # Shortcut: it might be loaded
@@ -189,7 +193,7 @@ def load_module (name):
 
 def instance_plugin (name, key, **kwargs):
     # Load the Python module
-    module = load_module (name)
+    module = load_module (name, 'plugins')
     if not module:
         # Instance an empty plugin
         plugin = Plugin(key)

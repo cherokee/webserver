@@ -27,7 +27,7 @@ from Box import Box
 from Submitter import Submitter, SubmitterButton
 from Page import Page, PageEmpty
 from Config import Config
-from Plugin import Plugin, instance_plugin
+from Plugin import Plugin, instance_plugin, load_module
 
 import JS
 import util
