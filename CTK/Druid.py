@@ -32,7 +32,6 @@ var druid      = $(this).parents('.druid:first');
 var refresh    = druid.find('.refreshable-url');
 var submitters = refresh.find('.submitter');
 
-
 // No Submit
 if ((! %(do_submit)s) || (submitters.length == 0))
 {
@@ -54,7 +53,6 @@ submitters.trigger ({'type': 'submit'});
 """
 
 JS_BUTTON_CLOSE = """
-console.log("dialog", $(this).parents('.ui-dialog:first'));
 $(this).parents('.ui-dialog:first').dialog().dialog('close');
 return false;
 """
@@ -82,6 +80,11 @@ class Druid (Box):
         assert isinstance (refreshable, RefreshableURL)
         self.refreshable = refreshable
         self += self.refreshable
+
+    def JS_to_goto (self, url):
+        props = {'refresh': self.refreshable.id,
+                 'url':     url}
+        return "$('#%(refresh)s').trigger({'type':'refresh_goto', 'goto': %(url)s});" %(props)
 
 
 #
