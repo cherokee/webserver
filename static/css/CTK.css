@@ -554,3 +554,6 @@ tr.panel-selected td div.row_content .sel-actions {
 #rules-table tr.trodd td {
   background: #fff;
 }
+
+/* Warning advanced */
+#body-advanced .dialog-warning { width: 240px; margin-left: 640px; margin-top: 48px; position: absolute; }
