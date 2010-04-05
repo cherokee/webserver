@@ -20,6 +20,7 @@
 # 02110-1301, USA.
 #
 
+import string
 from Widget import Widget
 
 HEADER = [
@@ -35,60 +36,56 @@ HTML = """
 """
 
 HTML_UL = """<ul class="ui-tabs-nav">%(li_tabs)s</ul>"""
-HTML_LI = """<li><a href="#tabs_%(id)s-%(num)d"><span>%(title)s</span></a></li>"""
+HTML_LI = """<li><a href="#%(tab_ref)s"><span>%(title)s</span></a></li>"""
 
 HTML_TAB = """
-<div id="tabs_%(id)s-%(num)d">
+<div id="%(tab_ref)s">
   %(widget)s
-</div> <!-- tabs_%(id)s-%(num)d -->
+</div> <!-- %(tab_ref)s -->
 """
 
 JS_INIT = """
-function set_tab_cookie (value) {
-    var path_begin = location.href.indexOf('/', location.href.indexOf('://') + 3);
-    var path       = location.href.substring (path_begin);
+$("#tab_%(id)s").each(function() {
+   var this_tab   = $(this);
+   var path_begin = location.href.indexOf('/', location.href.indexOf('://') + 3);
+   var path       = location.href.substring (path_begin);
 
-    $.cookie ('open_tab', value, {path: path});
-}
+   this_tab.find("ul li:first").addClass("ui-tabs-first");
+   this_tab.find("ul li:last").addClass("ui-tabs-last");
 
-$("#tab_%(id)s").tabs().bind('tabsselect', function(event, ui) {
-    tabslen = $("#tab_%(id)s").tabs('length');
+   this_tab.tabs({
+      cookie: { path: path }
 
-    nprevtab = parseInt ($.cookie('open_tab')) + 2;
-    if (nprevtab < tabslen) {
-    	$("#tab_%(id)s li:nth-child("+ nprevtab  +")").removeClass("ui-tabs-selected-next");
-    } else {
-    	$("#tab_%(id)s li:nth-child("+ nprevtab  +")").removeClass("ui-tabs-selected-next-last");
-    }
+   }).bind('tabsselect', function(event, ui) {
+      /* Selection fixes for the tab theme */
 
-    nnexttab = ui.index + 2;
-    if (nnexttab < tabslen) {
-        $("#tab_%(id)s li:nth-child("+ nnexttab  +")").addClass("ui-tabs-selected-next");
-    } else {
-        $("#tab_%(id)s li:nth-child("+ nnexttab  +")").addClass("ui-tabs-selected-next-last");
-    }
+      var tabslen  = this_tab.tabs('length');
+      var nprevtab = parseInt(ui.index) -2;
+      var nnexttab = parseInt(ui.index) +2;
 
-    set_tab_cookie (ui.index);
+      if (nprevtab < tabslen) {
+         $("#tab_%(id)s li:nth-child("+ nprevtab +")").removeClass("ui-tabs-selected-next");
+      } else {
+         $("#tab_%(id)s li:nth-child("+ nprevtab +")").removeClass("ui-tabs-selected-next-last");
+      }
+
+      if (nnexttab < tabslen) {
+         $("#tab_%(id)s li:nth-child("+ nnexttab +")").addClass("ui-tabs-selected-next");
+      } else {
+         $("#tab_%(id)s li:nth-child("+ nnexttab +")").addClass("ui-tabs-selected-next-last");
+      }
+   });
+
+   if (this_tab.tabs('option', 'selected') == 0) {
+      if (this_tab.tabs('length') == 2) {
+         this_tab.find("li:nth-child(2)").addClass("ui-tabs-selected-next-last");
+      } else {
+         this_tab.find("li:nth-child(2)").addClass("ui-tabs-selected-next");
+      }
+   }
 });
-
-$("#tab_%(id)s ul li:first").addClass("ui-tabs-first");
-$("#tab_%(id)s ul li:last").addClass("ui-tabs-last");
-
-var open_tab = $.cookie('open_tab');
-if (open_tab) {
-    $("#tab_%(id)s").tabs("select", parseInt(open_tab));
-} else {
-    set_tab_cookie ("0");
-}
-
-if ($("#tab_%(id)s").tabs('option', 'selected') == 0) {
-    if ($("#tab_%(id)s").tabs('length') == 2) {
-        $("#tab_%(id)s li:nth-child(2)").addClass("ui-tabs-selected-next-last");
-    } else {
-        $("#tab_%(id)s li:nth-child(2)").addClass("ui-tabs-selected-next");
-    }
-}
 """
+
 
 class Tab (Widget):
     def __init__ (self, props=None):
@@ -125,12 +122,20 @@ class Tab (Widget):
             render.headers += r.headers
             render.helps   += r.helps
 
-            props = {'id':     id,
-                     'widget': r.html,
-                     'title':  title,
-                     'num':    num}
+            tab_ref = ''
+            for c in title:
+                if c in string.letters + string.digits:
+                    tab_ref += c
+                else:
+                    tab_ref += '_'
+            tab_ref += '-%d' %(num)
 
             # Render <ul>
+            props = {'id':      id,
+                     'tab_ref': tab_ref,
+                     'widget':  r.html,
+                     'title':   title}
+
             ul_html  += HTML_LI  %(props)
             tab_html += HTML_TAB %(props)
 
