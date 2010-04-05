@@ -22,7 +22,7 @@
 
 from consts import *
 from Widget import Widget
-from Server import publish
+from Server import publish, get_scgi
 
 from httplib import HTTPConnection
 
@@ -58,6 +58,10 @@ class Proxy (Widget):
             self.props = props
         else:
             self.props = {}
+
+        if host == None:
+           scgi = get_scgi()
+           host =scgi.env['HTTP_HOST']
 
         self._async = self.props.pop('async', True)
         self._id    = 'widget%d'%(self.uniq_id)
