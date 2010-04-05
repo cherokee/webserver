@@ -377,3 +377,26 @@ class Config:
             return entries[0]
 
         return 1
+
+    def normalize (self, pre, step=10):
+        keys = self.keys(pre)
+        keys.sort (lambda x,y: cmp(int(x),int(y)))
+
+        del (self['tmp!normalize'])
+
+        n = step
+        for k in keys:
+            self.clone ('%s!%s'%(pre, k), 'tmp!normalize!%s!%s'%(pre,n))
+            n += step
+
+        del (self[pre])
+        self.rename ('tmp!normalize!%s'%(pre), pre)
+
+    def apply_chunk (self, chunk):
+        lines = [l.strip() for l in chunk.split('\n')]
+        lines = filter (lambda x: len(x) and x[0] != '#', lines)
+
+        for line in lines:
+            left, right = line.split (" = ", 2)
+            self[left] = right
+
