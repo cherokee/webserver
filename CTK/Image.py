@@ -44,8 +44,15 @@ class ImageStock (Image):
         props = _props.copy()
 
         if name == 'del':
-            props['src'] = '/CTK/images/del.png'
-            props['alt'] = _('Delete')
+            props['src']   = '/CTK/images/del.png'
+            props['alt']   = _('Delete')
+            props['title'] = _('Delete')
+
+            if 'class' in props:
+                props['class'] += ' del'
+            else:
+                props['class'] = 'del'
+
             Image.__init__ (self, props)
 
         elif name == 'on':
