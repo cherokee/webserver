@@ -99,11 +99,12 @@ jQuery.tableDnD = {
 				onDragClass: "tDnD_whileDrag",
                 onDrop: null,
                 onDragStart: null,
-                scrollAmount: 5,
+                scrollAmount: 8,
 				serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
 				serializeParamName: null, // If you want to specify another parameter name instead of the table ID
-                dragHandle: null // If you give the name of a class here, then only Cells with this class will be draggable
-            }, options || {});
+                dragHandle: null, // If you give the name of a class here, then only Cells with this class will be draggable
+                containerDiv: null
+            }, options || {})
             // Now make the rows draggable
             jQuery.tableDnD.makeDraggable(this);
         });
@@ -229,44 +230,35 @@ jQuery.tableDnD = {
         var y = mousePos.y - jQuery.tableDnD.mouseOffset.y;
         //auto scroll the window
 	    var yOffset = window.pageYOffset;
-	 	if (document.all) {
-	        // Windows version
-	        //yOffset=document.body.scrollTop;
-	        if (typeof document.compatMode != 'undefined' &&
-	             document.compatMode != 'BackCompat') {
-	           yOffset = document.documentElement.scrollTop;
-	        }
-	        else if (typeof document.body != 'undefined') {
-	           yOffset=document.body.scrollTop;
-	        }
+            var container = config.containerDiv;
+            var yOffset = container.scrollTop();
+            var windowHeight = container.innerHeight();
+            var y = mousePos.y - jQuery.tableDnD.mouseOffset.y;
 
-	    }
-		    
-		if (mousePos.y-yOffset < config.scrollAmount) {
-	    	window.scrollBy(0, -config.scrollAmount);
-	    } else {
-            var windowHeight = window.innerHeight ? window.innerHeight
-                    : document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight;
-            if (windowHeight-(mousePos.y-yOffset) < config.scrollAmount) {
-                window.scrollBy(0, config.scrollAmount);
+            var upperBorder = container.position().top;
+            var bottomBorder = container.position().top + container.innerHeight();
+
+            if (mousePos.y > bottomBorder) {
+                container.scrollTop(container.scrollTop() + config.scrollAmount);
             }
-        }
+            if (mousePos.y < upperBorder) {
+		container.scrollTop(container.scrollTop() - config.scrollAmount);
+            }
 
-
-        if (y != jQuery.tableDnD.oldY) {
-            // work out if we're going up or down...
+        if (mousePos.y  != jQuery.tableDnD.oldY) {
             var movingDown = y > jQuery.tableDnD.oldY;
             // update the old value
             jQuery.tableDnD.oldY = y;
             // update the style to show we're dragging
-			if (config.onDragClass) {
-				dragObj.addClass(config.onDragClass);
-			} else {
-	            dragObj.css(config.onDragStyle);
-			}
+                        if (config.onDragClass) {
+                                dragObj.addClass(config.onDragClass);
+                        } else {
+                    dragObj.css(config.onDragStyle);
+                        }
             // If we're over a row then move the dragged row to there so that the user sees the
             // effect dynamically
-            var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
+                        var offsetx = jQuery.tableDnD.mouseOffset.y + container.scrollTop() - 15;
+                        var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y + offsetx);
             if (currentRow) {
                 // TODO worry about what happens when there are multiple TBODIES
                 if (movingDown && jQuery.tableDnD.dragObject != currentRow) {

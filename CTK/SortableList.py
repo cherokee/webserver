@@ -36,7 +36,8 @@ $("#%(id)s").tableDnD({
 		dataType: "text",
                 data:     $.tableDnD.serialize_plain()});
    },
-   dragHandle: "dragHandle"
+   dragHandle: "dragHandle",
+   containerDiv: $("#%(container)s")
 });
 
 jQuery.tableDnD.serialize_plain = function() {
@@ -57,10 +58,11 @@ def changed_handler_func (callback, key_id, **kwargs):
     return callback (key_id, **kwargs)
 
 class SortableList (Table):
-    def __init__ (self, callback, *args, **kwargs):
+    def __init__ (self, callback, container, *args, **kwargs):
         Table.__init__ (self, *args, **kwargs)
         self.id  = "sortablelist_%d" %(self.uniq_id)
         self.url = "/sortablelist_%d"%(self.uniq_id)
+        self.container = container
 
         # Register the public URL
         publish (self.url, changed_handler_func, method='POST',
@@ -69,7 +71,7 @@ class SortableList (Table):
     def Render (self):
         render = Table.Render (self)
 
-        render.js      += JS_INIT %({'id': self.id, 'url': self.url})
+        render.js      += JS_INIT %({'id': self.id, 'url': self.url, 'container': self.container})
         render.headers += HEADER
         return render
 
