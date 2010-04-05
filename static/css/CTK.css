@@ -354,10 +354,14 @@ a.helpbutton span {
 /* PageException.py
  */
 .backtrace { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; background: #fafafa; border: 1px solid #ddd; color: #c00; padding: 16px; margin: 16px 0; }
+.shell { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; background: #fafafa; border: 1px solid #ddd; color: #0b0; padding: 16px; margin: 16px 0 16px 48px; }
 #body-error h1 { background: #fff url(/CTK/images/dialog-error.png) 8px 12px no-repeat; padding-left: 48px; }
-#body-error #main { padding: 16px; }
+#body-error h2 { margin-bottom: 1em; }
+#body-error #main { padding: 16px; width: 926px; }
+#body-error p { padding-left: 48px; line-height: 1.5em; margin-bottom: 1.5em; }
 #body-error textarea { width: 912px;  clear: both; margin: 16px 0; }
 #body-error .button { float: right; clear: both; }
+.cherokee-link { float: right; }
 
 
 /* Sortable Table
