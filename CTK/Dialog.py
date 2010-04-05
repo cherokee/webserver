@@ -41,18 +41,23 @@ DIALOG_HTML = """
 """
 
 DIALOG_JS = """
-$("#%(id)s").dialog (%(dialog_props)s);
-"""
+var dialog_obj = $("#%(id)s");
 
-DIALOG_BUTTON_JS = """
-$("#%(id)s").bind ('dialogopen', function(event, ui){
+/* Initialize */
+dialog_obj.dialog (%(dialog_props)s);
+
+/* Events */
+dialog_obj.bind ('dialogopen', function(event, ui){
    $('.ui-dialog-buttonpane :button').each (function(){
        var html = $(this).html();
-         if (! html || html.indexOf('<span') != 0) {
-            $(this).wrapInner('<span class=\"button-outter\"><span class=\"button-inner\"></span></span>');
-         }
+       if (! html || html.indexOf('<span') != 0) {
+          $(this).wrapInner('<span class=\"button-outter\"><span class=\"button-inner\"></span></span>');
+       }
    });
 });
+
+/* Positioning */
+dialog_obj.dialog ('option', 'position', ['center', 85]);
 """
 
 def py2js_dic (d):
@@ -111,9 +116,8 @@ class Dialog (Container):
                  'content':      render.html,
                  'dialog_props': dialog_props}
 
-        html  = DIALOG_HTML %(props)
-        js    = DIALOG_JS   %(props)
-        js   += Uniq_Block (DIALOG_BUTTON_JS %(props))
+        html = DIALOG_HTML %(props)
+        js   = DIALOG_JS   %(props)
 
         render.html     = html
         render.js      += js
