@@ -71,9 +71,10 @@ class Submitter (Container):
                  'url':     self.url,
                  'content': render.html}
 
-        render.html     = HTML    %(props)
-        render.js      += JS_INIT %(props)
-        render.js      += Uniq_Block (JS_FOCUS %(props))
+        js = JS_INIT %(props) + Uniq_Block (JS_FOCUS %(props))
+
+        render.html     = HTML %(props)
+        render.js       = js + render.js
         render.headers += HEADER
 
         render.clean_up_headers()
