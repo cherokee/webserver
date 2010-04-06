@@ -25,20 +25,22 @@ from Widget import Widget
 
 # WARNING
 # -------
-
 # This class currently depends on a modified version of jQuery-UI. By
 # some reason I cannot still quite comprehend, there is no way to stop
 # jQuery's tab class from removing the active tab cookie when its
-# destroyed is executed.
+# destroy() method is executed.
 #
-# The patch just removes these three lines from the destroy() method:
+# The following patch has been applied to our jquery-ui copy. It just
+# removes three lines from the destroy() method, so the cookie is not
+# wiped out:
 #
 # - if (o.cookie) {
 # -   this._cookie(null, o.cookie);
 # - }
 #
-# We should wrap the method to store and restore the cookie, so we can
-# get rid of this patch.
+# We ought to wrap the method to store the cookie value before the
+# method execution, and to restore it afterwards. In that way we could
+# use a standard version of jQuery-UI.
 
 
 HEADER = [
