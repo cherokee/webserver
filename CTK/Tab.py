@@ -23,6 +23,24 @@
 import string
 from Widget import Widget
 
+# WARNING
+# -------
+
+# This class currently depends on a modified version of jQuery-UI. By
+# some reason I cannot still quite comprehend, there is no way to stop
+# jQuery's tab class from removing the active tab cookie when its
+# destroyed is executed.
+#
+# The patch just removes these three lines from the destroy() method:
+#
+# - if (o.cookie) {
+# -   this._cookie(null, o.cookie);
+# - }
+#
+# We should wrap the method to store and restore the cookie, so we can
+# get rid of this patch.
+
+
 HEADER = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
     '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>',
@@ -54,7 +72,8 @@ $("#tab_%(id)s").each(function() {
    this_tab.find("ul li:last").addClass("ui-tabs-last");
 
    this_tab.tabs({
-      cookie: { path: path }
+      cookie: {path: path,
+               name: 'opentab'}
 
    }).bind('tabsselect', function(event, ui) {
       /* Selection fixes for the tab theme */
