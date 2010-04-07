@@ -89,8 +89,10 @@ html>body #container { min-height: 100%; }
 #nav li:hover { background-color: #259; }
 #nav li a { display: block; height: 20px; text-decoration: none;color: #eef;border: none; padding-top: 34px; text-shadow: #14335d 0px 1px 0px; }
 #nav li a:hover { color: #fff; text-decoration: none;}
+#nav-index { background: transparent url(/static/images/home.png) no-repeat center 6px; }
+#body-index #nav-index a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-status { background: transparent url(/static/images/status.png) no-repeat center 6px; }
-#body-index #nav-status a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
+#body-status #nav-status a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-general { background: transparent url(/static/images/general.png) no-repeat center 6px; }
 #body-general #nav-general a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-icons { background: transparent url(/static/images/icons.png) no-repeat center 6px; }
@@ -144,16 +146,33 @@ a.button, .button-outter {
     text-decoration: none;
 }
 
+a.button.butlight {
+    background: transparent url('/CTK/images/bg-button-a-light.png') no-repeat scroll top right;
+    color: #27c;
+    text-shadow: #fff 0px 1px 0px;
+}
+
 a.button span, .button-inner {
     outline: none;
     padding: 0;
     margin: 0;
     border: 0;
     font-size: 12px;
-    background: transparent url('/CTK/images/bg-button-span.png') no-repeat;
+    background: transparent url('/CTK/images/bg-button-span.png') no-repeat; 
     display: block;
     line-height: 14px;
     padding: 5px 0 5px 18px;
+}
+a.button.butlight span {
+    background: transparent url('/CTK/images/bg-button-span-light.png') no-repeat;
+}
+a.button.butlight.butstart span {
+    background: transparent url('/CTK/images/bg-button-span-start-light.png') no-repeat;
+    padding-left: 38px;
+}
+a.button.butlight.butstop span {
+    background: transparent url('/CTK/images/bg-button-span-stop-light.png') no-repeat;
+    padding-left: 38px; 
 }
 
 a.button:active, button:active .button-outter {
@@ -162,10 +181,18 @@ a.button:active, button:active .button-outter {
     outline: none;
 }
 
+a.button.butlight:active {
+    color: #469;
+}
+
 a.button:active span, button:active .button-inner {
     background-position: bottom left;
-    padding: 6px 0 4px 18px;
 }
+
+a.button.butlight:active span{
+    background-position: bottom left;
+}
+
 
 /* Styles for CTK/Tabs.py
  */
@@ -206,6 +233,8 @@ a.button:active span, button:active .button-inner {
     top: 60px;
     margin-left: 900px;
 }
+
+#body-index #help { display: none; }
 
 a.helpbutton {
     border: 0;
@@ -557,3 +586,52 @@ tr.panel-selected td div.row_content .sel-actions {
 
 /* Warning advanced */
 #body-advanced .dialog-warning { width: 240px; margin-left: 640px; margin-top: 48px; position: absolute; }
+
+/* Index */
+#top-box { padding: 8px 0; border-bottom: 1px solid #def; margin: 8px 16px; height: 28px; }
+#top-box h1 { padding: 0; margin: 0; float: left; width: 480px; }
+.server-status { padding-left: 128px; min-height: 128px; margin-left: 32px; margin-top: 16px; width: 370px; float: left;  }
+#server-running { background: #fff url(/static/images/kid-running.png) no-repeat; }
+#server-stopped { background: #fff url(/static/images/kid-stopped.png) no-repeat; }
+#status-message { font-size: 18px; font-weight: bold; padding: 48px 0 28px 0; }
+#server-info { width: 384px; float: right; margin-right: 16px; }
+#server-info h3 { font-size: 13px; color: #000; font-weight: bold; padding: 4px 0; border-bottom: 1px solid #cde; }
+#launch-button { float: right; }
+#server-info-table { border-collapse: collapse; width: 100%; }
+#server-info-table td, #server-info-table th { border-bottom: 1px solid #cde; padding: 4px; }
+#server-info-table th { font-weight: normal; color: #666; }
+#server-info-table td { text-align: right; }
+
+#language-selector { float: right; margin: 0; padding: 0; }
+#language-list { display: inline; margin: 0; padding: 0;}
+
+#bottom-box { padding: 8px 0; margin: 8px 16px; }
+#bottom-box h2 { font-size: 16px; margin-bottom: 16px; }
+#enterprise-box { width: 256px; float: left; }
+#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top 30px; padding-top:64px; }
+#enterprise-link { text-align: right; margin-top: 16px; color: #def; }
+
+#community-box { width: 648px; float: right; } 
+#community-box h3 { color: #000; font-weight: bold; font-size: 12px; margin-bottom: 8px;}
+#community-box h4 { color: #000; font-weight: bold; font-size: 12px; margin-bottom: 8px;}
+
+#community-left { width: 306px; float: left; }
+#community-right { width: 306px; float: right; padding-left: 16px; }
+
+#proud-users { background: #fff url(/static/images/other/proud.png) no-repeat; padding-left: 52px; }
+#proud-link { text-align: right; margin-top: 8px; color: #def; }
+#proud-link a { margin: 0 4px; }
+#proud-a { cursor: pointer; text-decoration: underline; }
+
+#social-media { border-top: 1px dotted #def; margin-top: 16px; padding-top: 8px; } 
+.social-box { padding-left: 52px; padding-top: 3px; min-height: 22px; margin-bottom: 6px;  }
+#twitter-box { background: #fff url(/static/images/other/twitter.png) no-repeat top 26px; }
+#fb-box { background: #fff url(/static/images/other/facebook.png) no-repeat top 26px; }
+
+#contact-channels { font-size: 11px; }
+.contact-box { padding-left: 28px; padding-top: 3px; margin-bottom: 16px; }
+#contact-irc { background: #fff url(/static/images/other/contact-irc.png) no-repeat; }
+#contact-list { background: #fff url(/static/images/other/contact-list.png) no-repeat; }
+#subscribe-a { cursor: pointer; text-decoration: underline; }
+#contact-bug { background: #fff url(/static/images/other/contact-bug.png) no-repeat; }
+
