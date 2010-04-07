@@ -79,11 +79,10 @@ select { border: 1px solid #b0bfce; ibackground: #fff; padding: 2px; outline: no
  */
 html>body #container { min-height: 100%; }
 #container { width: 960px; margin: 0 auto; text-align: left; height: 100%; }
+#main { background: #fff; padding: 0; margin: 0; width: 958px; margin: 0 auto;}
 #topbar-container { background: #def url(/static/images/bg-bar.png) top left repeat-x; }
 #topbar { height: 52px; background: #fff url(/static/images/bg-bar.png) top left repeat-x; width: 960px; margin: 0 auto; text-align: left; }
 #topbar img { float: left; }
-#main { background: #fff; padding: 0; margin: 0; width: 958px; margin: 0 auto;}
-
 #nav { float: right; padding:0; font-size: 11px; }
 #nav li {float: left; margin: 0;padding: 0;text-align: center; width: 64px; height: 50px; }
 #nav li:hover { background-color: #259; }
@@ -106,6 +105,8 @@ html>body #container { min-height: 100%; }
 #nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat center 6px; }
 #body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #body-source, #body-vservers, #body-rules { overflow: hidden; }
+/** Save **/
+#save-box { background: transparent url(/static/images/nav-sep.png) no-repeat; float: right; height: 38px; padding: 12px 16px 0 16px;  margin-left: 8px; }
 
 /* JQuery Helpers
 */
@@ -152,6 +153,15 @@ a.button.butlight {
     text-shadow: #fff 0px 1px 0px;
 }
 
+a.button.butbig {
+    background: transparent url('/CTK/images/bg-button-a-big.png') no-repeat scroll top right;
+    color: #def;
+    text-transform:uppercase;
+    font-weight: bold;
+    text-shadow: #234b81 0px 1px 0px;
+    height: 27px;
+}
+
 a.button span, .button-inner {
     outline: none;
     padding: 0;
@@ -165,6 +175,12 @@ a.button span, .button-inner {
 }
 a.button.butlight span {
     background: transparent url('/CTK/images/bg-button-span-light.png') no-repeat;
+}
+a.button.butbig span {
+    background: transparent url('/CTK/images/bg-button-span-big.png') no-repeat;
+    font-size: 14px;
+    line-height: 14px;
+    padding: 6px 0 7px 18px;
 }
 a.button.butlight.butstart span {
     background: transparent url('/CTK/images/bg-button-span-start-light.png') no-repeat;
@@ -184,12 +200,28 @@ a.button:active, button:active .button-outter {
 a.button.butlight:active {
     color: #469;
 }
+a.button.butbig:active {
+    color: #cfddef;
+    background-position: -27px right;
+}
 
 a.button:active span, button:active .button-inner {
     background-position: bottom left;
 }
 
 a.button.butlight:active span{
+    background-position: bottom left;
+}
+a.button.butbig:active span{
+    background-position: -27px left;
+}
+
+a.button.butbig.saved {
+    color: #5c81b5;
+    background-position: bottom right;
+}
+a.button.butbig.saved span {
+    text-shadow: none;
     background-position: bottom left;
 }
 
