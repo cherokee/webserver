@@ -488,6 +488,7 @@ a.helpbutton span {
  padding: 0;
 }
 
+
 .panel #source_panel td .sel-actions {
  width: 14px;
 }
@@ -505,6 +506,8 @@ a.helpbutton span {
   padding: 4px;
   cursor: pointer;
 }
+
+.panel #rules_panel .row_content {  height: 32px;  }
 
 tr.tDnD_whileDrag td.dragHandle,
 tr.tDnD_whileDrag td.nodrag {
@@ -616,6 +619,33 @@ tr.panel-selected td div.row_content .sel-actions {
   background: #fff;
 }
 
+/* Final On/Off */
+.panel td .final {
+ font-size: 9px; 
+ float: right;
+ height: 14px;
+ padding: 4px 0;
+ text-transform:uppercase;
+}
+
+.final-on, .final-off { 
+ padding: 1px 3px; 
+ 
+}
+.final-on { 
+ border: 1px solid #b90;
+ color: #b90;
+ background-color: #fff2b3;
+}
+
+.final-off { 
+ border: 1px solid #27c;
+ color: #27c;
+ background-color: #def;
+}
+
+
 /* Warning advanced */
 #body-advanced .dialog-warning { width: 240px; margin-left: 640px; margin-top: 48px; position: absolute; }
+
 
