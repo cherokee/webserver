@@ -104,7 +104,7 @@ html>body #container { min-height: 100%; }
 #body-source #nav-source a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat center 6px; }
 #body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
-#body-source, #body-vservers, #body-rules { overflow: hidden; }
+#body-source, #body-vservers, #body-rules, #body-general { overflow: hidden; }
 /** Save **/
 #save-box { background: transparent url(/static/images/nav-sep.png) no-repeat; float: right; height: 38px; padding: 12px 16px 0 16px;  margin-left: 8px; }
 
@@ -648,4 +648,59 @@ tr.panel-selected td div.row_content .sel-actions {
 /* Warning advanced */
 #body-advanced .dialog-warning { width: 240px; margin-left: 640px; margin-top: 48px; position: absolute; }
 
+/* Page general */
+#Network-1,
+#Ports_to_listen-2,
+#Permissions-3,
+#Icons-4,
+#xMime_types-5 #mimetable
+{ 
+ overflow: auto;
+ overflow-x: hidden;
+}
 
+#Mime_types-5 h2 {
+ border: none;
+}
+
+#Mime_types-5 .button {
+ float: right; 
+}
+
+#mimetable {
+ border-collapse: collapse;
+ border: 1px solid #cde;
+}
+
+#mimetable thead th { width: 480px; }
+#mimetable thead th + th { width: 260px; }
+#mimetable thead th + th + th { width: 140px; }
+#mimetable thead th + th + th + th { width: 32px; }
+
+#mimetable thead tr { position: relative; display: block; }
+
+#mimetable tbody {
+	display: block;
+	height: 480px;
+	overflow: auto;
+	width: 100%;
+}
+
+#mimetable tbody td { width: 480px; }
+#mimetable tbody td input { width: 90%; }
+#mimetable tbody td + td { width: 260px; }
+#mimetable tbody td + td + td { width: 140px; }
+#mimetable tbody td + td + td + td { width: 16px; }
+
+#mimetable th {
+  background: #e6f3ff url(/CTK/images/bg-th.png) repeat-x;
+  border: none;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px;
+}
+
+#mimetable td {
+  padding: 6px 4px;
+  background: #fff;
+  border-bottom: 1px solid #def;
+}
