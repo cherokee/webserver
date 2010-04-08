@@ -206,8 +206,17 @@ class Table (Widget):
         # Render content
         render = Widget.Render (self)
 
-        for row in self.rows:
-            render += row.Render()
+        # XXX: This is an ugly hack to set thead/tbody when only one row is a header
+        if len(self.header_rows) == 1:
+            render.html += '<thead>'
+            render += self.rows[0].Render()
+            render.html += '</thead><tbody>'
+            for row in self.rows[1:]:
+                render += row.Render()
+            render.html += '</tbody>'
+        else: 
+            for row in self.rows:
+                render += row.Render()
 
         # Wrap the table
         props = " ".join (['%s="%s"'%(k,self.props[k]) for k in self.props])
