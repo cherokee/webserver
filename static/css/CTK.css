@@ -652,8 +652,7 @@ tr.panel-selected td div.row_content .sel-actions {
 #Network-1,
 #Ports_to_listen-2,
 #Permissions-3,
-#Icons-4,
-#xMime_types-5 #mimetable
+#Icons-4
 { 
  overflow: auto;
  overflow-x: hidden;
@@ -703,4 +702,10 @@ tr.panel-selected td div.row_content .sel-actions {
   padding: 6px 4px;
   background: #fff;
   border-bottom: 1px solid #def;
+}
+
+/* Page Advanced */
+#body-advanced .ui-tabs-panel {
+ overflow: auto;
+ overflow-x: hidden;
 }
