@@ -507,7 +507,7 @@ a.helpbutton span {
   cursor: pointer;
 }
 
-.panel #rules_panel .row_content {  height: 32px;  }
+.panel #rules_panel .row_content {  height: 38px;  }
 
 tr.tDnD_whileDrag td.dragHandle,
 tr.tDnD_whileDrag td.nodrag {
