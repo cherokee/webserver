@@ -361,7 +361,7 @@ class Config:
     def save (self):
         # Try to make a copy
         try:
-            t = open (self.file+'.backup', 'w')
+            t = open (self.file+'.backup', 'w+')
             s = open (self.file, 'r')
             t.write (s.read())
             t.close()
@@ -372,9 +372,12 @@ class Config:
         # Write the new one
         cfg = self.serialize()
 
-        t = open (self.file, 'w')
+        t = open (self.file, 'w+')
         t.write (cfg)
         t.close()
+
+        # Update the original tree
+        self.root_orig = copy.deepcopy (self.root)
 
     # Checks
     def is_writable (self):
