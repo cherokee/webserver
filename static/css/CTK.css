@@ -104,7 +104,7 @@ html>body #container { min-height: 100%; }
 #body-source #nav-source a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-advanced { background: transparent url(/static/images/advanced.png) no-repeat center 6px; }
 #body-advanced #nav-advanced a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
-#body-source, #body-vservers, #body-rules, #body-general { overflow: hidden; }
+#body-source, #body-vservers, #body-rules, #body-general, #body-status { overflow: hidden; }
 /** Save **/
 #save-box { background: transparent url(/static/images/nav-sep.png) no-repeat; float: right; height: 38px; padding: 12px 16px 0 16px;  margin-left: 8px; }
 
@@ -441,7 +441,7 @@ a.helpbutton span {
 .panel .filter { width: 214px; }
 
 
-#vservers_panel, #rules_panel, #source_panel {
+#status_panel, #vservers_panel, #rules_panel, #source_panel {
  background: #fff;
  height: 320px;
  margin: 0 2px 8px 2px;
@@ -492,6 +492,7 @@ a.helpbutton span {
 }
 
 .panel #rules_panel .row_content {  height: 38px;  }
+.panel #status_panel .row_content {  height: 28px;  }
 
 tr.tDnD_whileDrag td.dragHandle,
 tr.tDnD_whileDrag td.nodrag {
@@ -519,14 +520,14 @@ tr.panel-selected td div.row_content .sel-actions {
 
 .sel-actions .togglebutton { float: left; }
 
-.vserver_content, .source_content, .rules_content  {
+.status_content, .vserver_content, .source_content, .rules_content  {
   width: 716px;
   padding: 0;
   float: right;
   background-color: #fff;
 }
 
-.vserver_content h2, .source_content  h2, .rules_content h2 {
+.status_content h2, .vserver_content h2, .source_content  h2, .rules_content h2 {
   border: none;
   padding-left: 16px;
   color: #27c;
@@ -537,7 +538,10 @@ tr.panel-selected td div.row_content .sel-actions {
   border-bottom: 1px solid #cde;
 }
 
-.vserver_content .ui-tabs .ui-tabs-panel, .source_content .submitter, .rules_content .ui-tabs .ui-tabs-panel{
+.status_content .ui-tabs .ui-tabs-panel, 
+.vserver_content .ui-tabs .ui-tabs-panel, 
+.source_content .submitter, 
+.rules_content .ui-tabs .ui-tabs-panel {
   padding-left: 16px;
   background-color: #fff;
   border: 0;
@@ -556,6 +560,7 @@ tr.panel-selected td div.row_content .sel-actions {
 .vserver-inactive { color: #999; }
 .rule-inactive { color: #999; }
 .nick, .name { font-weight: bold; white-space: nowrap; width: 176px; overflow-x: hidden; }
+#status_panel .nick {  width: 100%; }
 .panel #source_panel td .nick { width: 190px; }
 .hasScroll td .nick, .hasScroll td .name { width: 166px; }
 .panel #source_panel .hasScroll td .nick { width: 180px; }
