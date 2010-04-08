@@ -27,6 +27,7 @@ from Server import get_scgi
 from Image import ImageStock
 from Box import Box
 from PageCleaner import Uniq_Block
+from util import props_to_str
 
 
 HEADERS = [
@@ -35,7 +36,7 @@ HEADERS = [
 ]
 
 DIALOG_HTML = """
-<div id="%(id)s" title="%(title)s">
+<div id="%(id)s" title="%(title)s" %(div_props)s>
 %(content)s
 </div>
 """
@@ -81,30 +82,31 @@ def py2js_dic (d):
 
 
 class Dialog (Container):
-    def __init__ (self, props={}):
+    def __init__ (self, js_props={}, props={}):
         Container.__init__ (self)
 
-        self.props   = props.copy()
-        self.id      = 'dialog%d'%(self.uniq_id)
-        self.title   = self.props.pop('title', '')
-        self.buttons = []
+        self.js_props = js_props.copy()
+        self.props    = props.copy()
+        self.id       = 'dialog%d'%(self.uniq_id)
+        self.title    = self.js_props.pop('title', '')
+        self.buttons  = []
 
         # Defaults
-        if 'modal' not in self.props:
-            self.props['modal'] = True
-        if 'resizable' not in self.props:
-            self.props['resizable'] = False
-        if 'autoOpen' not in self.props:
-            self.props['autoOpen'] = False
-        if 'draggable' not in self.props:
-            self.props['draggable'] = False
+        if 'modal' not in self.js_props:
+            self.js_props['modal'] = True
+        if 'resizable' not in self.js_props:
+            self.js_props['resizable'] = False
+        if 'autoOpen' not in self.js_props:
+            self.js_props['autoOpen'] = False
+        if 'draggable' not in self.js_props:
+            self.js_props['draggable'] = False
 
         # Special cases
-        if not self.props['autoOpen']:
-            if 'class' in self.props:
-                self.props['class'] += ' dialog-hidden'
+        if not self.js_props['autoOpen']:
+            if 'class' in self.js_props:
+                self.js_props['class'] += ' dialog-hidden'
             else:
-                self.props['class'] = 'dialog-hidden'
+                self.js_props['class'] = 'dialog-hidden'
 
             if 'style' in self.props:
                 self.props['style'] += ' display:none;'
@@ -117,16 +119,18 @@ class Dialog (Container):
     def Render (self):
         # Build buttons
         if self.buttons:
-            self.props['buttons'] = self._render_buttons_property()
+            self.js_props['buttons'] = self._render_buttons_property()
 
         # Render
         render       = Container.Render (self)
-        dialog_props = py2js_dic (self.props)
+        dialog_props = py2js_dic (self.js_props)
+        div_props    = props_to_str (self.props)
 
         props = {'id':           self.id,
                  'title':        self.title,
                  'content':      render.html,
-                 'dialog_props': dialog_props}
+                 'dialog_props': dialog_props,
+                 'div_props':    div_props}
 
         html = DIALOG_HTML %(props)
         js   = DIALOG_JS   %(props)
