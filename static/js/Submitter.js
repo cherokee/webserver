@@ -108,7 +108,7 @@
 
 		  /* Build the post */
 		  info = {};
-		  self.find ("input:text, input:password, input:hidden").not('.optional').each(function(){
+		  self.find ("input:text, input:password, input:hidden").each(function(){
 			 info[this.name] = this.value;
 		  });
 		  self.find ("input:checkbox").each(function(){
