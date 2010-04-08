@@ -37,7 +37,7 @@ $.ajax({
    url:     '%(url)s',
    async:   true,
    success: function(msg){
-      $('#%(id)s').html(msg);
+      %(selector)s.html(msg);
       %(on_success)s
    }
 });
@@ -76,8 +76,11 @@ class Refreshable (Widget):
         render.html = HTML %(props)
         return render
 
-    def JS_to_refresh (self, on_success=''):
-        props = {'id':         self.id,
+    def JS_to_refresh (self, on_success='', selector=None):
+        if not selector:
+            selector = "$('#%s')" %(self.id)
+
+        props = {'selector':   selector,
                  'url':        self.url,
                  'on_success': on_success}
         return REFRESHABLE_UPDATE_JS %(props)
