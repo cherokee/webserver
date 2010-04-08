@@ -80,7 +80,7 @@ $("#tab_%(id)s").each(function() {
    }).bind('tabsselect', function(event, ui) {
       /* Selection fixes for the tab theme */
       var tabslen  = this_tab.tabs('length');
-      var nprevtab = parseInt(ui.index);
+      var nprevtab = parseInt(get_cookie('opentab')) + 2;
       var nnexttab = parseInt(ui.index) +2;
 
       if (nprevtab < tabslen) {
