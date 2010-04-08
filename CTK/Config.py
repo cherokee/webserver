@@ -164,24 +164,52 @@ class ConfigNode (object):
     def keys (self):
         return self._child.keys()
 
+    def __contains__ (self, key):
+        return key in self._child.keys()
+
+    def __cmp__ (self, other):
+        if self._val != other._val:
+            return cmp (self._val, other._val)
+
+        for k in self._child:
+            if not k in other:
+                return 1
+            re = cmp(self._child[k], other[k])
+            if re != 0:
+                return re
+
+        for k in other._child:
+            if not k in self:
+                return -1
+            re = cmp(other[k], self._child[k])
+            if re != 0:
+                return re
+
+        return 0
+
 
 class Config:
     def __init__ (self, file=None):
-        self.root = ConfigNode()
-        self.file = file
+        self.root      = ConfigNode()
+        self.root_orig = None
+        self.file      = file
 
         # Build ConfigNode tree
         if file:
             self.load()
 
     def load (self):
+        # Load and Parse
         try:
             f = open (self.file, "r")
         except:
-            pass
+            return
         else:
             self._parse (f.read())
             f.close()
+
+        # Original copy
+        self.root_orig = copy.deepcopy (self.root)
 
     def _create_path (self, path):
         node = self.root
@@ -400,3 +428,5 @@ class Config:
             left, right = line.split (" = ", 2)
             self[left] = right
 
+    def has_changed (self):
+        return not self.root == self.root_orig
