@@ -99,6 +99,18 @@ class Dialog (Container):
         if 'draggable' not in self.props:
             self.props['draggable'] = False
 
+        # Special cases
+        if not self.props['autoOpen']:
+            if 'class' in self.props:
+                self.props['class'] += ' dialog-hidden'
+            else:
+                self.props['class'] = 'dialog-hidden'
+
+            if 'style' in self.props:
+                self.props['style'] += ' display:none;'
+            else:
+                self.props['style'] = 'display:none;'
+
     def AddButton (self, caption, action):
         self.buttons.append ((caption, action))
 
@@ -146,7 +158,7 @@ class Dialog (Container):
         return js
 
     def JS_to_show (self):
-        return " $('#%s').dialog('open');" % (self.id)
+        return "$('#%s').show().dialog('open');" % (self.id)
 
     def JS_to_close (self):
         return " $('#%s').dialog('close');" % (self.id)
