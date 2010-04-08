@@ -146,11 +146,11 @@ class DruidButtonsPanel (Box):
         self.buttons = []
 
 class DruidButtonsPanel_Next (DruidButtonsPanel):
-    def __init__ (self, url, cancel=True, props={}):
+    def __init__ (self, url, cancel=True, do_submit=True, props={}):
         DruidButtonsPanel.__init__ (self, props.copy())
         if cancel:
             self += DruidButton_Close(_('Cancel'))
-        self += DruidButton_Goto (_('Next'), url, False)
+        self += DruidButton_Goto (_('Next'), url, do_submit)
 
 class DruidButtonsPanel_PrevNext (DruidButtonsPanel):
     def __init__ (self, url_prev, url_next, cancel=True, do_submit=True, props={}):
