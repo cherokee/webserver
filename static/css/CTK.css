@@ -580,6 +580,7 @@ tr.panel-selected td div.row_content .sel-actions {
 
 /* Rules table */
 #rules-table {
+ table-layout: fixed;
  border-collapse: collapse;
  width: 100%;
  border: 1px solid #cde;
@@ -591,13 +592,21 @@ tr.panel-selected td div.row_content .sel-actions {
   border-bottom: 2px solid #27c;
   padding: 8px 4px;
 }
+#rules-table th + th { width: 92px; }
+#rules-table th + th + th { width: 38px; text-align: center; overflow: hidden; font-size: 10px; }
 
 #rules-table td {
   padding: 6px 4px;
   background: #eff7ff url(/CTK/images/bg-td-even.png) repeat-x;
   border-top: 1px solid #fff;
   border-bottom: 1px solid #def;
+  border-left: 1px solid #def;
+  text-align: center;
 }
+
+#rules-table td { text-align: left; }
+#rules-table td + td { text-align: left; width: 92px; font-size: 11px; }
+#rules-table td + td + td { width: 38px; text-align: center; overflow: hidden; }
 
 #rules-table tr.trodd td {
   background: #fff;
