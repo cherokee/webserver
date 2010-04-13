@@ -717,3 +717,47 @@ tr.panel-selected td div.row_content .sel-actions {
 #buttons .submitter .button { 
   width: 120px;
 }
+
+/* Dialog with selection panel */
+.ui-dialog .selection-panel { 
+  width: 240px;
+  height: 320px;
+  border: 1px solid #cde;
+  float: left;
+}
+.ui-dialog .selection-panel .row_content .title { 
+  font-weight: bold;
+}
+.ui-dialog .vserver_new_content,
+.ui-dialog .rule_new_content { 
+  width: 432px; 
+  height: 320px;
+  float: right;
+  border: 1px solid #cde;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.ui-dialog .vserver_new_content .submitter,
+.ui-dialog .rule_new_content .submitter,
+.ui-dialog .rule_new_content .propstable { 
+  padding: 8px; 
+}
+
+.wizard-list li { 
+  border-bottom: 1px solid #cde;
+  height: 56px;
+}
+.wizard-list li .logo { 
+  width: 48px;
+  float: left;
+  margin: 2px 8px;
+}
+.wizard-list li .title { 
+  padding-top: 8px;
+  font-weight: bold; 
+  font-size: 14px;
+}
+  
+.wizard-list li .descr { 
+}
