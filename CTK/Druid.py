@@ -168,6 +168,18 @@ class DruidButtonsPanel_PrevCreate (DruidButtonsPanel):
         self += DruidButton_Submit (_('Create'))
         self += DruidButton_Goto (_('Prev'), url_prev, False)
 
+class DruidButtonsPanel_Create (DruidButtonsPanel):
+    def __init__ (self, cancel=True, props={}):
+        DruidButtonsPanel.__init__ (self, props.copy())
+        if cancel:
+            self += DruidButton_Close(_('Cancel'))
+        self += DruidButton_Submit (_('Create'))
+
+class DruidButtonsPanel_Cancel (DruidButtonsPanel):
+    def __init__ (self, props={}):
+        DruidButtonsPanel.__init__ (self, props.copy())
+        self += DruidButton_Close(_('Cancel'))
+
 
 #
 # Helper
@@ -206,4 +218,3 @@ class DruidButtonsPanel_PrevCreate_Auto (DruidButtonsPanel_PrevCreate):
     def __init__ (self, **kwargs):
         kwargs['url_prev'] = druid_url_prev(request.url)
         DruidButtonsPanel_PrevCreate.__init__ (self, **kwargs)
-
