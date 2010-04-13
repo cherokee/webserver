@@ -707,3 +707,13 @@ tr.panel-selected td div.row_content .sel-actions {
  overflow: auto;
  overflow-x: hidden;
 }
+
+/* Save dialog */
+#buttons .submitter  { 
+  width: 148px;
+  margin: 16px 0 0 4px;
+  float: left; 
+}
+#buttons .submitter .button { 
+  width: 120px;
+}
