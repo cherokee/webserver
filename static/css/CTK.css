@@ -387,7 +387,7 @@ a.helpbutton span {
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
 .ui-dialog .ui-dialog-content { border: 0; padding: 16px; background: #fff; overflow: auto; zoom: 1; }
-.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background: #fff url(/CTK/images/bg-dialog-buttonpane.png) center top no-repeat; padding: 16px; }
+.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background: #fff; padding: 16px; border-top: 1px solid #cde; }
 .ui-dialog .ui-dialog-buttonpane button { float: right; cursor: pointer; width:auto; overflow:visible; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
@@ -720,6 +720,7 @@ tr.panel-selected td div.row_content .sel-actions {
 
 /* Dialog with selection panel */
 .ui-dialog .selection-panel { 
+  background: #fff;
   width: 240px;
   height: 320px;
   border: 1px solid #cde;
@@ -730,6 +731,7 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 .ui-dialog .vserver_new_content,
 .ui-dialog .rule_new_content { 
+  background: #fff;
   width: 432px; 
   height: 320px;
   float: right;
@@ -743,6 +745,8 @@ tr.panel-selected td div.row_content .sel-actions {
 .ui-dialog .rule_new_content .propstable { 
   padding: 8px; 
 }
+
+.ui-dialog .vserver_new_content .ui-dialog-buttonpane { border: none; }
 
 .wizard-list li { 
   border-bottom: 1px solid #cde;
@@ -760,4 +764,10 @@ tr.panel-selected td div.row_content .sel-actions {
 }
   
 .wizard-list li .descr { 
+  color: #666;
+}
+
+#dialog-new-vserver,
+#dialog-new-rule {
+ background-color: #f0f7ff;
 }
