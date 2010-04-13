@@ -767,7 +767,11 @@ tr.panel-selected td div.row_content .sel-actions {
   color: #666;
 }
 
+.wizard-descr.wizard-icon { float: left; margin: 8px; }
+.wizard-welcome { padding-left: 64px; }
+
 #dialog-new-vserver,
 #dialog-new-rule {
  background-color: #f0f7ff;
 }
+
