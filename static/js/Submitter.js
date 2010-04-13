@@ -109,7 +109,9 @@
 		  /* Build the post */
 		  info = {};
 		  self.find ("input:text, input:password, input:hidden").each(function(){
-			 info[this.name] = this.value;
+			 if ((!$(this).hasClass('optional')) || (this.value != 'Optional')) {
+				info[this.name] = this.value;
+			 }
 		  });
 		  self.find ("input:checkbox").each(function(){
 			 info[this.name] = this.checked ? "1" : "0";
