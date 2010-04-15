@@ -219,6 +219,7 @@ a.button.butbig:active span{
 a.button.butbig.saved {
     color: #5c81b5;
     background-position: bottom right;
+    cursor: default;
 }
 a.button.butbig.saved span {
     text-shadow: none;

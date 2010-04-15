@@ -171,8 +171,9 @@
 
 				if (modified != undefined) {
 				    $(modified).show();
+				    $(modified).removeClass('saved');
 				} else if (not_modified) {
-				    $(not_modified).hide();
+				    $(not_modified).addClass('saved');
 				}
 			 },
 			 error: function (xhr, ajaxOptions, thrownError) {
