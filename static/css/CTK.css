@@ -31,7 +31,7 @@
     position: absolute;
     margin-left: 840px;
     display: inline;
-    bottom: 64px;
+    bottom: 24px;
     color: #27c;
     height: 15px;
 }
@@ -538,9 +538,9 @@ tr.panel-selected td div.row_content .sel-actions {
   border-bottom: 1px solid #cde;
 }
 
-.status_content .ui-tabs .ui-tabs-panel, 
-.vserver_content .ui-tabs .ui-tabs-panel, 
-.source_content .submitter, 
+.status_content .ui-tabs .ui-tabs-panel,
+.vserver_content .ui-tabs .ui-tabs-panel,
+.source_content .submitter,
 .rules_content .ui-tabs .ui-tabs-panel {
   padding-left: 16px;
   background-color: #fff;
@@ -619,24 +619,24 @@ tr.panel-selected td div.row_content .sel-actions {
 
 /* Final On/Off */
 .panel td .final {
- font-size: 9px; 
+ font-size: 9px;
  float: right;
  height: 14px;
  padding: 4px 0;
  text-transform:uppercase;
 }
 
-.final-on, .final-off { 
- padding: 1px 3px; 
- 
+.final-on, .final-off {
+ padding: 1px 3px;
+
 }
-.final-on { 
+.final-on {
  border: 1px solid #b90;
  color: #b90;
  background-color: #fff2b3;
 }
 
-.final-off { 
+.final-off {
  border: 1px solid #27c;
  color: #27c;
  background-color: #def;
@@ -651,7 +651,7 @@ tr.panel-selected td div.row_content .sel-actions {
 #Ports_to_listen-2,
 #Permissions-3,
 #Icons-4
-{ 
+{
  overflow: auto;
  overflow-x: hidden;
 }
@@ -661,7 +661,7 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 
 #Mime_types-5 .button {
- float: right; 
+ float: right;
 }
 
 #mimetable {
@@ -709,30 +709,30 @@ tr.panel-selected td div.row_content .sel-actions {
 }
 
 /* Save dialog */
-#buttons .submitter  { 
+#buttons .submitter  {
   width: 148px;
   margin: 16px 0 0 4px;
-  float: left; 
+  float: left;
 }
-#buttons .submitter .button { 
+#buttons .submitter .button {
   width: 120px;
 }
 
 /* Dialog with selection panel */
-.ui-dialog .selection-panel { 
+.ui-dialog .selection-panel {
   background: #fff;
   width: 240px;
   height: 320px;
   border: 1px solid #cde;
   float: left;
 }
-.ui-dialog .selection-panel .row_content .title { 
+.ui-dialog .selection-panel .row_content .title {
   font-weight: bold;
 }
 .ui-dialog .vserver_new_content,
-.ui-dialog .rule_new_content { 
+.ui-dialog .rule_new_content {
   background: #fff;
-  width: 432px; 
+  width: 432px;
   height: 320px;
   float: right;
   border: 1px solid #cde;
@@ -742,28 +742,28 @@ tr.panel-selected td div.row_content .sel-actions {
 
 .ui-dialog .vserver_new_content .submitter,
 .ui-dialog .rule_new_content .submitter,
-.ui-dialog .rule_new_content .propstable { 
-  padding: 8px; 
+.ui-dialog .rule_new_content .propstable {
+  padding: 8px;
 }
 
 .ui-dialog .vserver_new_content .ui-dialog-buttonpane { border: none; }
 
-.wizard-list li { 
+.wizard-list li {
   border-bottom: 1px solid #cde;
   height: 56px;
 }
-.wizard-list li .logo { 
+.wizard-list li .logo {
   width: 48px;
   float: left;
   margin: 2px 8px;
 }
-.wizard-list li .title { 
+.wizard-list li .title {
   padding-top: 8px;
-  font-weight: bold; 
+  font-weight: bold;
   font-size: 14px;
 }
-  
-.wizard-list li .descr { 
+
+.wizard-list li .descr {
   color: #666;
 }
 
@@ -783,7 +783,7 @@ tr.panel-selected td div.row_content .sel-actions {
 #icon_files td + td + td { padding: 4px 0; }
 #icon_files input { width: 400px; }
 #icon_files .notice { display: none; }
-#icons_extensions { clear: both; margin-bottom: 64px; } 
+#icons_extensions { clear: both; margin-bottom: 64px; }
 .Extensions-button { width: 480px; }
 .Extensions-button .button { float: right; }
 #icon_extensions td { padding: 2px 8px; }
