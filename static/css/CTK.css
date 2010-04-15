@@ -27,18 +27,19 @@
 }
 
 #activity {
-    text-align: right;
+    z-index: 1;
     position: absolute;
-    width: 944px;
-    bottom: 20px;
+    margin-left: 840px;
+    display: inline;
+    bottom: 64px;
     color: #27c;
     height: 15px;
     display: none;
 }
 #activity span {
-    background: #fff url(/CTK/images/loader.gif) no-repeat ;
+    background: transparent url(/CTK/images/loader.gif) no-repeat ;
     padding: 1px 8px 0 19px;
-    display: none;
+    display: none; 
 }
 
 /* Reset styles

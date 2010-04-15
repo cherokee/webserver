@@ -234,6 +234,8 @@ def cfg_reply_ajax_ok():
     return {'ret':'ok', 'not-modified': '#save-button'}
 
 def cfg_apply_post():
+    import time
+    time.sleep(5)
     for k in post:
         cfg[k] = post[k]
 
