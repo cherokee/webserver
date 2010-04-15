@@ -57,7 +57,7 @@ submitters.trigger ({'type': 'submit'});
 """
 
 JS_BUTTON_CLOSE = """
-$(this).parents('.ui-dialog:first').dialog().dialog('close');
+$(this).parents('.ui-dialog-content:first').dialog('close');
 return false;
 """
 
