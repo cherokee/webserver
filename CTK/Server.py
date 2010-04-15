@@ -227,16 +227,17 @@ class Server:
 #
 # Helpers
 #
+def cfg_reply_ajax_ok():
+    if cfg.has_changed():
+        return {'ret':'ok', 'modified': '#save-button'}
+
+    return {'ret':'ok', 'not-modified': '#save-button'}
+
 def cfg_apply_post():
     for k in post:
         cfg[k] = post[k]
 
-    if cfg.has_changed():
-        return {'ret':'ok', 'modified': '#save-button'}
-    else:
-        return {'ret':'ok', 'not-modified': '#save-button'}
-
-    return {'ret':'ok'}
+    return cfg_reply_ajax_ok()
 
 
 __global_server = None
