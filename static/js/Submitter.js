@@ -164,6 +164,16 @@
 				    event_type = 'submit_fail';
 				}
 				self.trigger({type: event_type, url: url, ret: data['ret']});
+
+				/* Modified: Save button */
+				var modified     = data['modified'];
+				var not_modified = data['not-modified'];
+
+				if (modified != undefined) {
+				    $(modified).show();
+				} else if (not_modified) {
+				    $(not_modified).hide();
+				}
 			 },
 			 error: function (xhr, ajaxOptions, thrownError) {
 				restore_orig_values();

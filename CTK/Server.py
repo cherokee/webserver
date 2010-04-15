@@ -230,7 +230,14 @@ class Server:
 def cfg_apply_post():
     for k in post:
         cfg[k] = post[k]
+
+    if cfg.has_changed():
+        return {'ret':'ok', 'modified': '#save-button'}
+    else:
+        return {'ret':'ok', 'not-modified': '#save-button'}
+
     return {'ret':'ok'}
+
 
 __global_server = None
 def get_server():
