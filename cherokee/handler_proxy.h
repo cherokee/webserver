@@ -50,7 +50,7 @@ typedef enum {
 } cherokee_handler_proxy_init_phase_t;
 
 typedef struct {
-	cherokee_module_props_t         base;
+	cherokee_handler_props_t        base;
 	cherokee_balancer_t            *balancer;
 	cherokee_handler_proxy_hosts_t  hosts;
 	cuint_t                         reuse_max;

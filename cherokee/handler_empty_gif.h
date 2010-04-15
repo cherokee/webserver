@@ -34,7 +34,7 @@
 /* Data types
  */
 typedef struct {
-	cherokee_module_props_t base;
+	cherokee_handler_props_t base;
 } cherokee_handler_empty_gif_props_t;
 
 

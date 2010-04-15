@@ -96,7 +96,7 @@ struct cherokee_handler_cgi_base {
 /* Properties data structure
  */
 typedef struct {
-	cherokee_module_props_t            base;
+	cherokee_handler_props_t           base;
 	cherokee_list_t                    system_env;
 	cuint_t                            change_user;
 	cherokee_buffer_t                  script_alias;

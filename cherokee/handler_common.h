@@ -32,7 +32,7 @@
 
 
 typedef struct {
-	cherokee_module_props_t           base;
+	cherokee_handler_props_t          base;
 	cherokee_boolean_t                allow_pathinfo;
 	cherokee_boolean_t                allow_dirlist;
 	cherokee_handler_file_props_t    *props_file;

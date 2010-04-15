@@ -41,8 +41,8 @@
 /* Data types
  */
 typedef struct {
-	cherokee_module_props_t base;
-	int                     foo;
+	cherokee_handler_props_t base;
+	int                      foo;
 } cherokee_handler_ssi_props_t;
 
 

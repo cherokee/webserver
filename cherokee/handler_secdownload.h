@@ -32,7 +32,7 @@
 /* Data types
  */
 typedef struct {
-	cherokee_module_props_t        base;
+	cherokee_handler_props_t       base;
 	cherokee_handler_file_props_t *props_file;
 	cuint_t                        timeout;
 	cherokee_buffer_t              secret;

@@ -36,7 +36,7 @@
 /* Data types
  */
 typedef struct {
-	cherokee_module_props_t  base;
+	cherokee_handler_props_t base;
 	cherokee_dwriter_lang_t  lang;
 } cherokee_handler_post_report_props_t;
 

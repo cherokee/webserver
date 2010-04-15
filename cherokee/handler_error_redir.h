@@ -37,8 +37,8 @@ typedef struct {
 } cherokee_handler_error_redir_t;
 
 typedef struct {
-	cherokee_module_props_t base;
-	cherokee_list_t         errors;
+	cherokee_handler_props_t base;
+	cherokee_list_t          errors;
 } cherokee_handler_error_redir_props_t;
 
 #define ERREDIR_HANDLER(x)  ((cherokee_handler_error_redir_t *)(x))

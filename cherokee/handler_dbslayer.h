@@ -34,12 +34,12 @@
 #include <mysql.h>
 
 typedef struct {
-	cherokee_module_props_t  base;
-	cherokee_balancer_t     *balancer;
-	cherokee_buffer_t        user;
-	cherokee_buffer_t        password;
-	cherokee_buffer_t        db;
-	cherokee_dwriter_lang_t  lang;
+	cherokee_handler_props_t  base;
+	cherokee_balancer_t      *balancer;
+	cherokee_buffer_t         user;
+	cherokee_buffer_t         password;
+	cherokee_buffer_t         db;
+	cherokee_dwriter_lang_t   lang;
 } cherokee_handler_dbslayer_props_t;
 
 typedef struct {

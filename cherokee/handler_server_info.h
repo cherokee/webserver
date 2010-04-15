@@ -36,7 +36,7 @@
 /* Data types
  */
 typedef struct {
-	cherokee_module_props_t  base;
+	cherokee_handler_props_t base;
 	cherokee_boolean_t       just_about;
 	cherokee_boolean_t       connection_details;
 } cherokee_handler_server_info_props_t;

@@ -30,7 +30,7 @@
 
 
 typedef struct {
-	cherokee_module_props_t           base;
+	cherokee_handler_props_t          base;
 	cherokee_http_t                   error_code;
 } cherokee_handler_custom_error_props_t;
 
