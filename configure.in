@@ -1514,6 +1514,13 @@ admin/static/css/Makefile
 admin/static/images/Makefile
 admin/static/images/flags/Makefile
 admin/static/images/wizards/Makefile
+admin/static/images/other/Makefile
+admin/CTK/Makefile
+admin/CTK/CTK/Makefile
+admin/CTK/static/css/Makefile
+admin/CTK/static/images/Makefile
+admin/CTK/static/js/Makefile
+admin/CTK/static/Makefile
 po/Makefile
 ])
 
