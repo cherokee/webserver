@@ -457,7 +457,7 @@ e('FDPOLL_PORTS_GETN',
 e('FDPOLL_POLL_FULL',
   title = "The FD Poll is full",
   desc  = "The server reached the file descriptor limit. This usaully happens when many simultaneous connections are kept open. Try to increase this limit.",
-  admin = "/advanced#tabs_advanced-1")
+  admin = "/advanced#Resources-2")
 
 e('FDPOLL_POLL_DEL',
   title = "Could not remove fd %d (idx=%d) from the poll",
@@ -553,22 +553,22 @@ e('RULE_BIND_PORT',
 e('SERVER_GROUP_NOT_FOUND',
   title = "Group '%s' not found in the system",
   desc  = "Seem like you've specified a wrong GID. Change the specified one or try to create it using the addgroup/groupadd command.",
-  admin = "/general#tabs_general-2")
+  admin = "/general#Permissions-3")
 
 e('SERVER_USER_NOT_FOUND',
   title = "User '%s' not found in the system",
   desc  = "Looks like you've specified a wrong UID. Either change the specified one or try to create it using the adduser/useradd command.",
-  admin = "/general#tabs_general-2")
+  admin = "/general#Permissions-3")
 
 e('SERVER_THREAD_IGNORE',
   title = "Ignoring thread_policy entry '%s'",
   desc  = "It looks like an error ocurred with the selected OS thread policy and it has been ignored. Once a valid one is selected, the issue will be fixed.",
-  admin = "/advanced#tabs_advanced-1")
+  admin = "/advanced#Resources-2")
 
 e('SERVER_THREAD_POLICY',
   title = "Unknown thread policy '%s'",
   desc  = "The specified OS thread policy is unknown. You should try re-selecting one.",
-  admin = "/advanced#tabs_advanced-1")
+  admin = "/advanced#Resources-2")
 
 e('SERVER_TOKEN',
   title = "Unknown server token '%s'",
@@ -578,27 +578,27 @@ e('SERVER_TOKEN',
 e('SERVER_POLLING_UNRECOGNIZED',
   title = "Polling method '%s' has not been recognized",
   desc  = "An incorrect polling method was specified. Please try to fix that in your advanced settings.",
-  admin = "/advanced#tabs_advanced-0")
+  admin = "/advanced#Connections-1")
 
 e('SERVER_POLLING_UNSUPPORTED',
   title = "Polling method '%s' is not supported by this OS",
   desc  = "The specified polling method does not work on your platform. Please try to choose another one in your advanced settings.",
-  admin = "/advanced#tabs_advanced-0")
+  admin = "/advanced#Connections-1")
 
 e('SERVER_POLLING_UNKNOWN',
   title = "Unknown polling method '%s'",
   desc  = "An incorrect polling method was specified. Please try to fix that in your advanced settings.",
-  admin = "/advanced#tabs_advanced-0")
+  admin = "/advanced#Connections-1")
 
 e('SERVER_NO_BIND',
   title = "Not listening on any port.",
   desc  = "The web server needs to be associated to a TCP port. Please try to specify that in your general settings.",
-  admin = "/general#tabs_general-1")
+  admin = "/general#Ports_to_listen-2")
 
 e('SERVER_IGNORE_TLS',
   title = "Ignoring TLS port %d",
   desc  = "No TLS backend is specified, but the configuration specifies a secure port and it is being ignored. Either enable a TLS backend or disable the TLS checkbox for the specified port.",
-  admin = "/general#tabs_general-0")
+  admin = "/general#Network-1")
 
 e('SERVER_TLS_DEFAULT',
   title = "TLS/SSL support required for 'default' Virtual Server.",
@@ -775,17 +775,17 @@ e('HTTP_UNKNOWN_CODE',
 e('ICONS_NO_DEFAULT',
   title = "A default icon is needed",
   desc  = "Please, specify a default icon. It is the icon that Cherokee will use whenever no other icon is used.",
-  admin = "/icons")
+  admin = "/general#Icons-4")
 
 e('ICONS_ASSIGN_SUFFIX',
   title = "Could not assign suffix '%s' to file '%s'",
   desc  = UNKNOWN_CAUSE,
-  admin = "/icons")
+  admin = "/general#Icons-4")
 
 e('ICONS_DUP_SUFFIX',
   title = "Duped suffix (case insensitive) '%s', pointing to '%s'",
   desc  = UNKNOWN_CAUSE,
-  admin = "/icons")
+  admin = "/general#Icons-4")
 
 
 # cherokee/header.c
@@ -1069,7 +1069,7 @@ e('VSERVER_RULE_MATCH_MISSING',
 
 e('VSERVER_MATCH_MISSING',
   title = "Virtual Server must specify a 'match' property",
-  admin = "/vserver/%d#tabs_vserver-1",
+  admin = "/vserver/%d#Host_Match-2",
   desc  = "Try filling in the fields under the 'Host Match' tab.")
 
 e('VSERVER_UNKNOWN_KEY',
@@ -1079,12 +1079,12 @@ e('VSERVER_UNKNOWN_KEY',
 
 e('VSERVER_NICK_MISSING',
   title = "Virtual Server  without a 'nick' property",
-  admin = "/vserver/%d#tabs_vserver-0",
+  admin = "/vserver/%d#Basics-1",
   desc  = "For some reason, a mandatory property is not present in your configuration. Fill in the 'Virtual Server nickname' field, under the 'Basics' tab.")
 
 e('VSERVER_DROOT_MISSING',
   title = "Virtual Server  without a 'document_root' property",
-  admin = "/vserver/%d#tabs_vserver-0",
+  admin = "/vserver/%d#Basics-1",
   desc  = "You seem to have forgotten to provide a valid Document Root. This is the root path that contains the files and directories that will be made publicly available through the web server. It can be an empty path and even /dev/null, but it is a mandatory property.")
 
 
@@ -1115,12 +1115,12 @@ e('ACCESS_INVALID_MASK',
 e('BIND_PORT_NEEDED',
   title = "A port entry is need",
   desc  = "It seems that the configuration file includes a port listening entry with the wrong format. It should contain one port specification, but it does not in this case.",
-  admin = "/general/#tabs_general-1")
+  admin = "/general#Ports_to_listen-2")
 
 e('BIND_COULDNT_BIND_PORT',
   title = "Could not bind() port=%d (UID=%d, GID=%d)",
   desc  = "Most probably there is another web server listening to the same port. You will have to shut it down before launching Cherokee. It could also be a permissions issue as well. Remember that non-root user cannot listen to ports < 1024.",
-  admin = "/general/#tabs_general-1")
+  admin = "/general#Ports_to_listen-2")
 
 
 # cherokee/handler_rrd.c
@@ -1147,7 +1147,7 @@ e('HANDLER_RENDER_RRD_INVALID_REQ',
 e('COLLECTOR_COMMAND_EXEC',
   title = "Could not execute RRD command: %s",
   desc  = SYSTEM_ISSUE,
-  admin = "/general/#tabs_general-0")
+  admin = "/general#Network-1")
 
 e('COLLECTOR_NEW_THREAD',
   title = "Could not create the RRD working thread: error=%d",

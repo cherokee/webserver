@@ -1207,7 +1207,8 @@ AC_ARG_WITH([geoip],
             want_geoip="yes"
         else
             want_geoip="yes"
-            GEOIP_CONFIG="$withval"
+		  CPPFLAGS="${CPPFLAGS} -I${withval}/include"
+		  LDFLAGS="-L${withval}/lib ${LDFLAGS}"
         fi
         ],
         [want_geoip="yes"]
@@ -1354,6 +1355,7 @@ dnl
 dnl Clean files generated from *.pre
 dnl
 pres="constants.h cherokee.conf.sample performance.conf.sample http-cherokee.xml admin/configured.py contrib/cherokee"
+
 AC_MSG_NOTICE([Deleting .pre files])
 rm -f $pres
 
@@ -1504,6 +1506,8 @@ packages/windows/cherokee.nsi
 www/Makefile
 dbslayer/Makefile
 admin/Makefile
+admin/plugins/Makefile
+admin/wizards/Makefile
 admin/static/Makefile
 admin/static/js/Makefile
 admin/static/css/Makefile

@@ -203,10 +203,11 @@ config_server (cherokee_server_t *srv)
 					 "source!1!type = interpreter\n"
 					 "source!1!timeout = 25\n"
 					 "source!1!host = %s\n"
-					 "source!1!interpreter = %s/server.py %s %s\n"
+					 "source!1!interpreter = %s/server.py %s %s %s\n"
 					 "source!1!env_inherited = 1\n",
 					 DEFAULT_UNIX_SOCKET, document_root,
-					 DEFAULT_UNIX_SOCKET, config_file);
+					 DEFAULT_UNIX_SOCKET, config_file,
+					 (debug) ? "-x" : "");
 
 	} else {
 		cherokee_buffer_add_va  (&buf,
@@ -214,9 +215,11 @@ config_server (cherokee_server_t *srv)
 					 "source!1!type = interpreter\n"
 					 "source!1!timeout = 25\n"
 					 "source!1!host = localhost:%d\n"
-					 "source!1!interpreter = %s/server.py %d %s\n"
+					 "source!1!interpreter = %s/server.py %d %s %s\n"
 					 "source!1!env_inherited = 1\n",
-					 scgi_port, document_root, scgi_port, config_file);
+					 scgi_port, document_root,
+					 scgi_port, config_file,
+					 (debug) ? "-x" : "");
 	}
 
 	if (debug) {
@@ -226,6 +229,7 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str  (&buf,
 				  RULE_PRE "1!match = default\n"
 				  RULE_PRE "1!handler = scgi\n"
+				  RULE_PRE "1!encoder!gzip = 1\n"
 				  RULE_PRE "1!handler!balancer = round_robin\n"
 				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
 
@@ -280,38 +284,63 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_str (&buf, RULE_PRE "5!expiration!time = 30d\n");
 	}
 
+
+	cherokee_buffer_add_va  (&buf,
+				 RULE_PRE "6!match = directory\n"
+				 RULE_PRE "6!match!directory = /CTK\n"
+				 RULE_PRE "6!handler = file\n"
+				 RULE_PRE "6!handler!iocache = 0\n"
+				 RULE_PRE "6!document_root = %s/CTK/static\n", document_root);
+
+	if (! debug) {
+		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration = time\n");
+		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration!time = 30d\n");
+	}
+
+
 	/* Embedded help
 	 */
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "6!match = directory\n"
-				 RULE_PRE "6!match!directory = /help\n"
-				 RULE_PRE "6!handler = file\n");
+				 RULE_PRE "7!match = and\n"
+				 RULE_PRE "7!match!left = directory\n"
+				 RULE_PRE "7!match!left!directory = /help\n"
+				 RULE_PRE "7!match!right = not\n"
+				 RULE_PRE "7!match!right!right = extensions\n"
+				 RULE_PRE "7!match!right!right!extensions = html\n"
+				 RULE_PRE "7!handler = file\n");
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "7!match = fullpath\n"
-				 RULE_PRE "7!match!fullpath!1 = /static/help_404.html\n"
-				 RULE_PRE "7!handler = file\n"
-				 RULE_PRE "7!handler!iocache = 0\n"
-				 RULE_PRE "7!document_root = %s\n", document_root);
+				 RULE_PRE "8!match = fullpath\n"
+				 RULE_PRE "8!match!fullpath!1 = /static/help_404.html\n"
+				 RULE_PRE "8!handler = file\n"
+				 RULE_PRE "8!handler!iocache = 0\n"
+				 RULE_PRE "8!document_root = %s\n", document_root);
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "8!match = and\n"
-				 RULE_PRE "8!match!left = directory\n"
-				 RULE_PRE "8!match!left!directory = /help\n"
-				 RULE_PRE "8!match!right = not\n"
-				 RULE_PRE "8!match!right!right = exists\n"
-				 RULE_PRE "8!match!right!right!iocache = 0\n"
-				 RULE_PRE "8!match!right!right!match_any = 1\n"
-				 RULE_PRE "8!handler = redir\n"
-				 RULE_PRE "8!handler!rewrite!1!show = 1\n"
-				 RULE_PRE "8!handler!rewrite!1!substring = /static/help_404.html\n");
+				 RULE_PRE "9!match = and\n"
+				 RULE_PRE "9!match!left = directory\n"
+				 RULE_PRE "9!match!left!directory = /help\n"
+				 RULE_PRE "9!match!right = not\n"
+				 RULE_PRE "9!match!right!right = exists\n"
+				 RULE_PRE "9!match!right!right!iocache = 0\n"
+				 RULE_PRE "9!match!right!right!match_any = 1\n"
+				 RULE_PRE "9!handler = redir\n"
+				 RULE_PRE "9!handler!rewrite!1!show = 1\n"
+				 RULE_PRE "9!handler!rewrite!1!substring = /static/help_404.html\n");
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "9!match = directory\n"
-				 RULE_PRE "9!match!directory = /help\n"
-				 RULE_PRE "9!match!final = 0\n"
-				 RULE_PRE "9!document_root = %s\n", CHEROKEE_DOCDIR);
+				 RULE_PRE "10!match = directory\n"
+				 RULE_PRE "10!match!directory = /help\n"
+				 RULE_PRE "10!match!final = 0\n"
+				 RULE_PRE "10!document_root = %s\n", CHEROKEE_DOCDIR);
 
+	/* GZip
+	 */
+	cherokee_buffer_add_va  (&buf,
+				 RULE_PRE "15!match = extensions\n"
+				 RULE_PRE "15!match!extensions = css,js,html\n"
+				 RULE_PRE "15!match!final = 0\n"
+				 RULE_PRE "15!encoder!gzip = 1\n");
 
 	/* RRDtool graphs
 	 */
