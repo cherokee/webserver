@@ -1,0 +1,192 @@
+/* Cherokee Admin
+ *
+ * Authors:
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *
+ * Copyright (C) 2001-2010 Alvaro Lopez Ortega
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU General Public
+ * License as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
+
+/* Rules
+ */
+.rule {
+	border: 1px solid #cde;
+	padding: 5px;
+	margin: 5px;
+        -moz-border-radius: 4px; -webkit-border-radius: 4px;
+}
+
+.inactive-rule {
+	opacity: 0.3;
+}
+
+.rulebuttons { height: 52px; }
+
+.rulebuttons .submitter  {
+  width: 64px;
+  height: 48px;
+  margin: 0;
+  float: right;
+}
+
+.rule-label-and { 
+  font-weight: bold; 
+  color: #0b0;
+}
+
+.rule-label-or {
+  font-weight: bold;
+  color: #27c;
+}
+
+.rule-label-not {
+  font-weight: bold;
+  color: #c00;
+}
+
+
+/* Flag list
+ */
+.check-list-flags {
+	width: 400px;
+	height: 300px;
+	overflow-y: scroll;
+	text-align: left;
+}
+
+.check-list-flags-entry img {
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+.check-list-flags-entry input {
+	margin-left: 10px;
+}
+
+/* Icon Chooser
+ */
+img.icon_chooser_entry {
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid #ccc;
+}
+
+img.icon_chooser_used {
+	background-color: #dedede;
+	opacity: 0.3;
+	border: 1px solid #666;
+}
+
+img.icon_chooser_unused:hover {
+	border: 1px solid #666;
+	background-color: #efefef;
+}
+
+img.icon_chooser_selected {
+	border: 1px solid #666;
+	background-color: #81bef7;
+}
+
+/* Top dialog
+ */
+#savebar {
+    background: #fff6b6;
+    color: #3b3929;
+    height: 32px;
+    border: none;
+    border-bottom: 1px solid #edd400;
+    display: none;
+}
+
+#savebar .topmsg { float: left; padding: 8px 0 0 16px; font-weight: bold; }
+#savebar .buttonarea { float: right; padding-top: 4px; }
+
+
+/* PageHelp
+ */
+.help_toc { float: left; width: 220px; }
+.help_content { overflow: scroll; }
+.help_selected { background: #eef3ff; font-weight: bold; }
+
+/* Wizard
+ */
+.wizard-list li {
+  cursor: pointer;
+}
+
+.wizard-list-selected {
+  background: #fff6b6;
+}
+
+
+/* Index
+ */
+#top-box { padding: 8px 0; border-bottom: 1px solid #def; margin: 8px 0 0 0; height: 28px; }
+#top-box h1 { padding: 0; margin: 0 0 0 16px; float: left; width: 480px; }
+#home-container { overflow: auto; overflow-x: hidden; }
+.server-status { padding-left: 128px; min-height: 128px; margin-left: 32px; margin-top: 16px; width: 370px; float: left;  }
+#server-running { background: #fff url(/static/images/kid-running.png) no-repeat; }
+#server-stopped { background: #fff url(/static/images/kid-stopped.png) no-repeat; }
+#status-message { font-size: 18px; font-weight: bold; padding: 48px 0 28px 0; }
+#server-info { width: 384px; float: right; margin-right: 16px; }
+#server-info h3 { font-size: 13px; color: #000; font-weight: bold; padding: 4px 0; border-bottom: 1px solid #cde; }
+#launch-button { float: right; }
+#server-info-table { border-collapse: collapse; width: 100%; }
+#server-info-table td, #server-info-table th { border-bottom: 1px solid #cde; padding: 4px; }
+#server-info-table th { font-weight: normal; color: #666; }
+#server-info-table td { text-align: right; }
+
+#language-selector { float: right; margin: 0; padding: 0; height: 28px; }
+#language-list { display: inline; margin: 0; padding: 0;}
+
+#bottom-box { padding: 8px 0; margin: 8px 16px; }
+#bottom-box h2 { font-size: 16px; margin-bottom: 16px; }
+#enterprise-box { width: 256px; float: right; }
+#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top 30px; padding-top:64px; }
+#enterprise-link { text-align: right; margin-top: 16px; color: #def; }
+
+#community-box { width: 648px; float: left; }
+#community-box h3 { color: #000; font-weight: bold; font-size: 12px; margin-bottom: 8px;}
+#community-box h4 { color: #000; font-weight: bold; font-size: 12px; margin-bottom: 8px;}
+
+#community-left { width: 306px; float: left; }
+#community-right { width: 306px; float: right; padding-left: 16px; }
+
+#proud-users { background: #fff url(/static/images/other/proud.png) no-repeat; padding-left: 52px; }
+#proud-link { text-align: right; margin-top: 8px; color: #def; }
+#proud-link a { margin: 0 4px; }
+#proud-a { cursor: pointer; text-decoration: underline; }
+
+#social-media { border-top: 1px dotted #def; margin-top: 16px; padding-top: 8px; }
+.social-box { padding-left: 52px; padding-top: 3px; min-height: 22px; margin-bottom: 6px;  }
+#twitter-box { background: #fff url(/static/images/other/twitter.png) no-repeat top 26px; }
+#fb-box { background: #fff url(/static/images/other/facebook.png) no-repeat top 26px; }
+
+.contact-box { padding-left: 28px; padding-top: 3px; margin-bottom: 16px; }
+#contact-irc { background: #fff url(/static/images/other/contact-irc.png) no-repeat; }
+#contact-list { background: #fff url(/static/images/other/contact-list.png) no-repeat; }
+#subscribe-a { cursor: pointer; text-decoration: underline; }
+#contact-bug { background: #fff url(/static/images/other/contact-bug.png) no-repeat; }
+
+
+
+/* Page Status
+ */
+#grapharea .submitter { float: right; position: absolute; top: 120px; width: 700px; }
+.graph_type { float: right; }
+.graph_props_bottom {position: absolute; top: 450px;}
+.graph_props_top {position: absolute; top: -35px;}

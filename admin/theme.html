@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+   <title>%(title)s - Cherokee Admin</title>
+%(head)s
+ </head>
+ <body%(body_props)s>
+ <div id="topbar-container">
+ <!-- XXX: @ion: Don't know if this is the place to load the top bar... -->
+   <div id="topbar">
+    <img src="/static/images/cherokee-logo-bar.png" alt="Cherokee"/>
+    <div id="save-box"><a href="#" id="save-button" class="button butbig saved"><span id="save-msg">Save</span></a></div>
+    <ul id="nav">
+    <li id="nav-index"><a href="/">Home</a></li>
+    <li id="nav-status"><a href="/status">Status</a></li>
+    <li id="nav-general"><a href="/general">General</a></li>
+    <li id="nav-vservers"><a href="/vserver">vServers</a></li>
+    <li id="nav-source"><a href="/source">Sources</a></li>
+    <li id="nav-advanced"><a href="/advanced">Advanced</a></li>
+    </ul>
+   </div>
+ </div>
+ <div id="container">
+   <div id="help">
+     <a class="helpbutton" href="#" id="help-a"><span>Help</span></a>
+     %(helps)s
+   </div>
+
+   <div id="main">
+     <div id="activity"><span>Updating...</span></div>
+     %(html)s
+   </div>
+ </div>
+
+ <!-- Place Javascript at the end -->
+ %(js)s
+
+ <script type="text/javascript">
+   $('#help-a').click (function(){ toggleHelp(); });
+
+   $('.del').live('mouseover', function(){
+         $(this).attr('src', '/CTK/images/del-hover.png');
+   }).live('mouseout', function(){
+         $(this).attr('src', '/CTK/images/del.png');
+   });
+ </script>
+ </body>
+</html>
