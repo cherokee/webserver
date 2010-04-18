@@ -87,6 +87,7 @@ adminhelp_DATA = $(template_data)
 
 EXTRA_DIST = \
 $(PY_PRE) \
+$(html_data) \
 $(admin_data) \
 $(admin_scripts) \
 $(template_data)
