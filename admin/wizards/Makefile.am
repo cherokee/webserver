@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-adminwizardsdir = "$(datadir)/cherokee/admin/plugins"
+adminwizardsdir = "$(datadir)/cherokee/admin/wizards"
 adminwizards_DATA = \
 List.py \
 \

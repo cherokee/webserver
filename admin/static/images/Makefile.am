@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = flags wizards
+SUBDIRS = flags wizards other
 
 adminstaticdir = "$(datadir)/cherokee/admin/static/images"
 adminstatic_DATA = \

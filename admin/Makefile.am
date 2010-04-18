@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = plugins wizards
+SUBDIRS = plugins wizards CTK
 
 if INSTALL_ADMIN
 SUBDIRS += static
