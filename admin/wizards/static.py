@@ -35,7 +35,7 @@ from util import *
 from configured import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the Common Static wizard")
-NOTE_WELCOME_P1 = N_("This wizard adds a rule to serve the most common static files as files.")
+NOTE_WELCOME_P1 = N_("This wizard adds a rule to optimally serve the most common static files.")
 NOTE_CREATE_H1  = N_("Current rules have been checked")
 NOTE_CREATE_OK  = N_("The process is very simple. Let the wizard take over and don't worry about a thing.")
 NOTE_CREATE_ERR = N_("Common files have been already configured, so there is nothing to be done.")

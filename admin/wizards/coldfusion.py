@@ -36,7 +36,7 @@ import validations
 from util import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the ColdFusion Wizard")
-NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://www.adobe.com/products/coldfusion/">Adobe® ColdFusion®</a> enable developers to rapidly build, deploy, and maintain robust Internet applications for the enterprise.')
+NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://www.adobe.com/products/coldfusion/">Adobe ColdFusion®</a> enable developers to rapidly build, deploy, and maintain robust Internet applications for the enterprise.')
 NOTE_WELCOME_P2 = N_('It allows developers to condense complex business logic into fewer lines of code.')
 
 NOTE_COMMON_H1  = N_("ColdFusion Details")
