@@ -8,5 +8,6 @@ DEVELOPERS = {
     'robertounbit' : "Roberto De Ioris <roberto@unbit.it>",
     'gefire'       : "李炅 <lijiong1986@126.com>",
     'skinkie'      : "Stefan de Konink <stefan@konink.de>",
-    'adefacc'      : "A.D.F. <adefacc@tin.it>"
+    'adefacc'      : "A.D.F. <adefacc@tin.it>",
+    'cesar'        : "Cesar Fernandez Gago <cesar@pk2.org>"
 }
