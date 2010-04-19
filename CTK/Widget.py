@@ -74,7 +74,10 @@ class RenderResponse:
         else:
             help = []
 
-        import json
+        try:
+            import json
+        except ImportError:
+            import simplejson as json
         return json.dumps({'html':    self.html,
                            'js':      Postprocess(self.js),
                            'headers': self.headers,

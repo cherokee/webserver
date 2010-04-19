@@ -22,10 +22,13 @@
 
 import re
 import sys
-import json
 import types
 import threading
 import traceback
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 import pyscgi
 import Cookie
