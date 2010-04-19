@@ -44,7 +44,7 @@ typedef enum {
 
 typedef enum {
 	http_unknown      = 0LL,
-	http_all_methods  = 0xFFFFFFFLL,
+	http_all_methods  = 0x1FFFFFFFFLL,
 
 	http_get              = 1,
 	http_post             = 1LL << 1,

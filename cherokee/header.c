@@ -320,15 +320,27 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 		detect_method (line, "TRACE", trace)
 		break;
 	case 'C':
+		detect_method (line, "CHECKIN", checkin)
+		else
+		detect_method (line, "CHECKOUT", checkout)
+		else
 		detect_method (line, "CONNECT", connect)
 		else
 		detect_method (line, "COPY", copy)
 		break;
 	case 'L':
+		detect_method (line, "LABEL", label)
+	        break;
 		detect_method (line, "LOCK", lock)
 	        break;
 	case 'M':
+		detect_method (line, "MERGE", merge)
+		else
+		detect_method (line, "MKACTIVITY", mkactivity)
+		else
 		detect_method (line, "MKCOL", mkcol)
+		else
+		detect_method (line, "MKWORKSPACE", mkworkspace)
 		else
 		detect_method (line, "MOVE", move)
 	        break;
@@ -341,6 +353,10 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 		detect_method (line, "SUBSCRIBE", subscribe)
 	        break;
 	case 'U':
+		detect_method (line, "UPDATE", update)
+		else
+		detect_method (line, "UNCHECKOUT", uncheckout)
+		else
 		detect_method (line, "UNLOCK", unlock)
 		else
 		detect_method (line, "UNSUBSCRIBE", unsubscribe)
@@ -348,6 +364,15 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 	case 'R':
 		detect_method (line, "REPORT", report)
 	        break;
+	case 'V':
+		detect_method (line, "VERSION_CONTROL", version_control)
+	        break;
+	case 'B':
+		detect_method (line, "BASELINE_CONTROL", baseline_control)
+		break;
+	case 'I':
+		detect_method (line, "INVALID", invalid)
+		break;
 	}
 
 	return ret_error;
