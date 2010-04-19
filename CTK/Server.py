@@ -384,7 +384,7 @@ class _Request:
 
 class _Error:
     def __init__ (self):
-        self.error_page = None
+        self.page = None
 
 
 cookie  = _Cookie()

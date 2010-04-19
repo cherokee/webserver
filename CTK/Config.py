@@ -203,7 +203,7 @@ class Config:
         try:
             f = open (self.file, "r")
         except:
-            return
+            pass
         else:
             self._parse (f.read())
             f.close()
