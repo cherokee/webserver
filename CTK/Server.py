@@ -188,11 +188,15 @@ class Server:
             ly = len(y._regex)
             return cmp(ly,lx)
 
-        with self.lock:
+        self.lock.acquire()
+        try:
             self._web_paths.sort(__cmp)
+        finally:
+            self.lock.release()
 
     def add_route (self, route_obj):
-        with self.lock:
+        self.lock.acquire()
+        try:
             # Look for a duplicate
             to_remove = []
             for r in self._web_paths:
@@ -204,15 +208,20 @@ class Server:
             # Insert
             self._web_paths.append (route_obj)
             self.sort_routes()
+        finally:
+            self.lock.release()
 
     def remove_route (self, path):
-        with self.lock:
+        self.lock.acquire()
+        try:
             to_remove = []
             for r in self._web_paths:
                 if r._regex == path:
                     to_remove.append (r)
 
             self._web_paths = filter (lambda x: x not in to_remove, self._web_paths)
+        finally:
+            self.lock.release()
 
     def serve_forever (self):
         try:
