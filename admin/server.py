@@ -133,7 +133,8 @@ if __name__ == "__main__":
 
     # Ancient config file
     def are_vsrvs_num():
-        return reduce (lambda x,y: x and y, [x.isdigit() for x in CTK.cfg.keys('vserver')])
+        tmp = [True] + [x.isdigit() for x in CTK.cfg.keys('vserver')]
+        return reduce (lambda x,y: x and y, tmp)
 
     if not are_vsrvs_num():
         import PageError
