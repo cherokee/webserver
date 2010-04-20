@@ -35,6 +35,13 @@ def upgrade_to_0_99_40 (cfg):
     for pre in to_del:
         del(cfg[pre])
 
+# Converts from 0.99.40 to 0.99.45
+def upgrade_to_0_99_45 (cfg):
+    # Remove some broken 'source' entries:
+    # http://bugs.cherokee-project.com/768
+    if 'None' in cfg.keys('source'):
+        del (cfg['source!None'])
+
 
 def config_version_get_current():
     ver = configured.VERSION.split ('b')[0]
@@ -96,6 +103,10 @@ def config_version_update_cfg (cfg):
     # Update to.. 0.99.40
     if ver_config_i < 99040:
         upgrade_to_0_99_40 (cfg)
+
+    # Update to.. 0.99.45
+    if ver_config_i < 99045:
+        upgrade_to_0_99_45 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True
