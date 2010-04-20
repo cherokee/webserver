@@ -89,7 +89,7 @@ class Plugin_url_arg (RulePlugin):
     def GUI_mod (self):
         table = CTK.PropsTable()
         table.Add (_('Match type'),         CTK.ComboCfg('%s!match_any'%(self.key), OPTIONS), '')
-        if not int(CTK.cfg.get_val('%s!match_any'%(self.key))):
+        if not int(CTK.cfg.get_val('%s!match_any'%(self.key), 0)):
             table.Add (_('Argument'),       CTK.TextCfg('%s!arg'%(self.key), False), _(NOTE_ARGUMENT))
         table.Add (_('Regular Expression'), CTK.TextCfg('%s!match'%(self.key), False), _(NOTE_REGEX))
 
