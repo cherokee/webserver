@@ -38,8 +38,12 @@ class Plugin_custom_error (Handler.PluginHandler):
         Handler.PluginHandler.__init__ (self, key, **kwargs)
         Handler.PluginHandler.AddCommon (self)
 
+        error_codes = [('', _('Choose'))] + ERROR_CODES
+        if CTK.cfg.get_val('%s!error'%(key)):
+            error_codes.pop(0)
+
         table = CTK.PropsTable()
-        table.Add (_("HTTP Error"), CTK.ComboCfg('%s!error'%(key), ERROR_CODES), _(NOTE_ERRORS))
+        table.Add (_("HTTP Error"), CTK.ComboCfg('%s!error'%(key), error_codes), _(NOTE_ERRORS))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
