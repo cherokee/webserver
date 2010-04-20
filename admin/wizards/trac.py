@@ -41,8 +41,6 @@ NOTE_WELCOME_P2 = N_('It provides an interface to Subversion (or other version c
 NOTE_LOCAL_H1   = N_("Application Source Code")
 NOTE_HOST_H1    = N_("New Virtual Server Details")
 NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
-NOTE_WEBDIR     = N_("Web directory where you want Trac to be accessible. (Example: /blog)")
-NOTE_WEBDIR_H1  = N_("Public Web Direcoty")
 NOTE_TRAC_PROJECT = N_("Local path to the Trac project.")
 NOTE_TRAC_DATA  = N_("Local path to the Trac installation. (Example: /usr/share/trac)")
 
@@ -102,7 +100,7 @@ class Commit:
         props = {}
         props['pre_vsrv']     = next
         props['new_host']     = CTK.cfg.get_val('%s!new_host'     %(PREFIX))
-        props['trac_data']    = CTK.cfg.get_val('%s!trac_data'    %(PREFIX))
+        props['trac_data']    = CTK.cfg.get_val('%s!trac_data'    %(PREFIX)).rstrip('/')
         props['trac_project'] = CTK.cfg.get_val('%s!trac_project' %(PREFIX))
         props['src_num'], x   = cfg_source_get_next()
         props['src_port']     = cfg_source_find_free_port()
