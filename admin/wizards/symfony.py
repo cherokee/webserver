@@ -108,7 +108,7 @@ CONFIG_VSERVER = """
 %(pre_rule_minus1)s!match!left!right!request = ^/$
 
 %(pre_rule_minus2)s!handler = redir
-%(pre_rule_minus2)s!handler!rewrite!1!regex = /.+
+%(pre_rule_minus2)s!handler!rewrite!1!regex = /.*
 %(pre_rule_minus2)s!handler!rewrite!1!show = 0
 %(pre_rule_minus2)s!handler!rewrite!1!substring = /index.php
 %(pre_rule_minus2)s!match = default
