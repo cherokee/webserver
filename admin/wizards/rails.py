@@ -46,7 +46,7 @@ NOTE_ROR_DIR    = N_("Local path to the Ruby on Rails based project.")
 NOTE_NEW_HOST   = N_("Name of the new domain that will be created.")
 NOTE_NEW_DIR    = N_("Directory of the web directory where the Ruby on Rails project will live in.")
 NOTE_ENV        = N_("Value of the RAILS_ENV variable.")
-NOTE_METHOD     = N_("It is recommended to proxy the best available option, but FastCGI can also be used if fcgi-spawn is available.")
+NOTE_METHOD     = N_("The proxy setting is recommended, but FastCGI can also be used if spawn-fcgi is available.")
 
 ERROR_DISPATCH  = N_("<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>")
 ERROR_EXAMPLE   = N_("<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>")
