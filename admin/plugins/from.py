@@ -27,7 +27,7 @@ from util import *
 
 URL_APPLY = '/plugin/from/apply'
 
-NOTE_FROM = N_("IP or SubNet to check the connection origin against.")
+NOTE_FROM = N_("IP or Subnet to check the connection origin against.")
 
 def apply():
     # POST info

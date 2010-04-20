@@ -30,7 +30,7 @@ URL_APPLY = '/plugin/ldap/apply'
 HELPS     = [('modules_validators_ldap', N_("LDAP"))]
 
 NOTE_SERVER      = N_('LDAP server IP address.')
-NOTE_PORT        = N_('LDAP server port to connect to. Defaults to 389')
+NOTE_PORT        = N_('LDAP server port to connect to. Default: 389')
 NOTE_BIND_DOMAIN = N_('Domain sent during the LDAP authentication operation. Optional.')
 NOTE_BIND_PASSWD = N_('Password to authenticate in the LDAP server.')
 NOTE_BASE_DOMAIN = N_('Base domain for the web server authentications.')

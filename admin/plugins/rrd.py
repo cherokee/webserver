@@ -37,7 +37,7 @@ class Plugin_rrd (CTK.Plugin):
 
         # GUI
         table = CTK.PropsAuto (URL_APPLY)
-        table.Add (_('RRD Database directory'), CTK.TextCfg('%s!database_dir'%(key), True), _(NOTE_DB_DIR))
+        table.Add (_('Round Robin Database directory'), CTK.TextCfg('%s!database_dir'%(key), True), _(NOTE_DB_DIR))
         table.Add (_('Custom rrdtool binary'),  CTK.TextCfg('%s!rrdtool_path'%(key), True), _(NOTE_RRDTOOL))
         self += table
 

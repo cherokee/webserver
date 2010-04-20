@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Cherokee-admin's Moinmoin Wizard
+# Cherokee-admin's MoinMoin Wizard
 #
 # Authors:
 #      Taher Shihadeh <taher@unixwars.com>
@@ -34,11 +34,11 @@ import Wizard
 import validations
 from util import *
 
-NOTE_WELCOME_H1  = N_("Welcome to the Moinmoin Wizard")
+NOTE_WELCOME_H1  = N_("Welcome to the MoinMoin Wizard")
 NOTE_WELCOME_P1  = N_('<a target="_blank" href="http://moinmo.in/">MoinMoin</a>  is an advanced, easy to use and extensible WikiEngine with a large community of users.')
 NOTE_WELCOME_P2  = N_(' Said in a few words, it is about collaboration on easily editable web pages.')
 
-NOTE_COMMON_H1   = N_("Moinmoin Wiki Instance")
+NOTE_COMMON_H1   = N_("MoinMoin Wiki Instance")
 NOTE_COMMON_WIKI = N_("Local path to the MoinMoin Wiki Instance.")
 
 NOTE_HOST        = N_("Host name of the virtual server that is about to be created.")
@@ -224,7 +224,7 @@ class Common:
         guessed_src = path_find_w_default (SRC_PATHS)
 
         table = CTK.PropsTable()
-        table.Add (_('Moinmoin Directory'), CTK.TextCfg ('%s!moinmoin_wiki'%(PREFIX), False, {'value':guessed_src}), _(NOTE_COMMON_WIKI))
+        table.Add (_('MoinMoin Directory'), CTK.TextCfg ('%s!moinmoin_wiki'%(PREFIX), False, {'value':guessed_src}), _(NOTE_COMMON_WIKI))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table

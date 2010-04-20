@@ -33,8 +33,8 @@ HELPS     = [('modules_handlers_proxy', N_("Reverse Proxy"))]
 
 NOTE_REUSE_MAX       = N_("Maximum number of connection per server that the proxy can try to keep opened.")
 NOTE_ALLOW_KEEPALIVE = N_("Allow the server to use Keep-alive connections with the back-end servers.")
-NOTE_PRESERVE_HOST   = N_("Preserve the original \"Host:\" header sent by the client. (Default No)")
-NOTE_PRESERVE_SERVER = N_("Preserve the \"Server:\" header sent by the back-end server. (Default No)")
+NOTE_PRESERVE_HOST   = N_("Preserve the original \"Host:\" header sent by the client. (Default: No)")
+NOTE_PRESERVE_SERVER = N_("Preserve the \"Server:\" header sent by the back-end server. (Default: No)")
 
 
 def commit():
@@ -242,25 +242,25 @@ class Plugin_proxy (Handler.PluginHandler):
         # Request
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Request')))
 
-        self += CTK.RawHTML ('<h3>%s</h3>' %(_('URL Rewriting')))
+        self += CTK.Indenter (CTK.RawHTML ('<h3>%s</h3>' %(_('URL Rewriting'))))
         self += URL_Rewrite (key, 'in_rewrite_request')
 
-        self += CTK.RawHTML ('<h3>%s</h3>' %(_('Header Addition')))
+        self += CTK.Indenter (CTK.RawHTML ('<h3>%s</h3>' %(_('Header Addition'))))
         self += Header_List (key, 'in_header_add')
 
-        self += CTK.RawHTML ('<h3>%s</h3>' %(_('Hide Headers')))
+        self += CTK.Indenter (CTK.RawHTML ('<h3>%s</h3>' %(_('Hide Headers'))))
         self += Header_Hide (key, 'in_header_hide')
 
         # Reply
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Reply')))
 
-        self += CTK.RawHTML ('<h3>%s</h3>' %(_('URL Rewriting')))
+        self += CTK.Indenter (CTK.RawHTML ('<h3>%s</h3>' %(_('URL Rewriting'))))
         self += URL_Rewrite (key, 'out_rewrite_request')
 
-        self += CTK.RawHTML ('<h3>%s</h3>' %(_('Header Addition')))
+        self += CTK.Indenter (CTK.RawHTML ('<h3>%s</h3>' %(_('Header Addition'))))
         self += Header_List (key, 'out_header_add')
 
-        self += CTK.RawHTML ('<h3>%s</h3>' %(_('Hide Headers')))
+        self += CTK.Indenter (CTK.RawHTML ('<h3>%s</h3>' %(_('Hide Headers'))))
         self += Header_Hide (key, 'out_header_hide')
 
         # Balancer
