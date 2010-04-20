@@ -138,3 +138,30 @@ class ConfigIconsMissing (CTK.Page):
 
 def IconsMissing (path):
     return ConfigIconsMissing(path).Render()
+
+
+
+ANCIENT_CONFIG_TITLE = N_('Cherokee-admin has detected a very old configuration file.')
+ANCIENT_CONFIG       = N_('Most probably cherokee-admin is trying to read an old configuation file. Please, remove it so cherokee-admin can create a new one with the right format.')
+
+class AncientConfigError (CTK.Page):
+    def __init__ (self, path, **kwargs):
+        srcdir = os.path.dirname (os.path.realpath (__file__))
+        theme_file = os.path.join (srcdir, 'exception.html')
+
+        # Set up the template
+        template = CTK.Template (filename = theme_file)
+        template['body_props'] = ' id="body-error"'
+        template['title']      = _('Detected an Ancient Configuration File')
+
+        # Parent's constructor
+        CTK.Page.__init__ (self, template, **kwargs)
+
+        # Body
+        self += CTK.RawHTML ('<h1>%s</h1>'%(_('Ancient Configuration File')))
+        self += CTK.RawHTML ('<p><strong>%s</strong>'%(_(ANCIENT_CONFIG_TITLE)))
+        self += CTK.RawHTML ('<p>%s</p>' %(ANCIENT_CONFIG))
+        self += CTK.RawHTML ("<p><pre>rm -f '%s'</pre></p>" %(path))
+
+def AncientConfig (file):
+    return AncientConfigError(file).Render()

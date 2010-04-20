@@ -131,6 +131,19 @@ if __name__ == "__main__":
     # Init
     init (scgi_port, cfg_file)
 
+    # Ancient config file
+    def are_vsrvs_num():
+        return reduce (lambda x,y: x and y, [x.isdigit() for x in CTK.cfg.keys('vserver')])
+
+    if not are_vsrvs_num():
+        import PageError
+        CTK.publish (r'', PageError.AncientConfig, file=cfg_file)
+
+        while not are_vsrvs_num():
+            CTK.step()
+
+        CTK.unpublish (r'')
+
     # Check config file and set up
     if not os.path.exists (cfg_file):
         import PageNewConfig
