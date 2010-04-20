@@ -109,10 +109,6 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 		phase = phase_processing_header;
 		cherokee_buffer_add_str (&info->phase, "Processing headers");
 		break;
-	case phase_reading_post:
-		phase = phase_reading_post;
-		cherokee_buffer_add_str (&info->phase, "Reading POST");
-		break;
 	case phase_setup_connection:
 		phase = phase_setup_connection;
 		cherokee_buffer_add_str (&info->phase, "Setting up connection");
@@ -120,6 +116,10 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 	case phase_init:
 		phase = phase_init;
 		cherokee_buffer_add_str (&info->phase, "Initializing");
+		break;
+	case phase_reading_post:
+		phase = phase_reading_post;
+		cherokee_buffer_add_str (&info->phase, "Reading POST");
 		break;
 	case phase_add_headers:
 		phase = phase_add_headers;
@@ -133,9 +133,13 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 		phase = phase_steping;
 		cherokee_buffer_add_str (&info->phase, "Sending body");
 		break;
+	case phase_shutdown:
+		phase = phase_shutdown;
+		cherokee_buffer_add_str (&info->phase, "Shutting down");
+		break;
 	case phase_lingering:
 		phase = phase_lingering;
-		cherokee_buffer_add_str (&info->phase, "Closing");
+		cherokee_buffer_add_str (&info->phase, "Lingering Close");
 		break;
 	default:
 		SHOULDNT_HAPPEN;
