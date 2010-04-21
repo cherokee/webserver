@@ -24,9 +24,9 @@
 
 #
 # Tested:
-# 2009/10/xx: uWSGI Version 0.9.3 / Cherokee 0.99.36b
-# 2010/04/15: uWSGI Version 0.9.3 / Cherokee 0.99.41
-#
+# 2009/10/xx: uWSGI Version 0.9.3   / Cherokee 0.99.36b
+# 2010/04/15: uWSGI Version 0.9.3   / Cherokee 0.99.41
+# 2010/04/21: uWSGI Version 0.9.4.3 / Cherokee 0.99.45b
 
 import re
 import CTK
@@ -310,14 +310,14 @@ def find_virtualenv (filename):
 
 def find_mountpoint_xml (filename):
     regex = re.compile(RE_MOUNTPOINT_XML, re.DOTALL)
-    fullname = get_full_path (filename)
+    fullname = get_real_path (filename)
     match = regex.search (open(fullname).read())
     if match:
         return match.groups()[0]
 
 def find_mountpoint_wsgi (filename):
     regex = re.compile(RE_MOUNTPOINT_WSGI, re.DOTALL)
-    fullname = get_full_path (filename)
+    fullname = get_real_path (filename)
     match = regex.search (open(fullname).read())
     if match:
         return match.groups()[0]

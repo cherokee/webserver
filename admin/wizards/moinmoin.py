@@ -276,7 +276,7 @@ def find_url_prefix_static (path):
         RE_MATCH = """url_prefix_static = '(.*?)'"""
         filename = os.path.join (path, "config/wikiconfig.py")
         regex = re.compile(RE_MATCH, re.DOTALL)
-        fullname = get_full_path (filename)
+        fullname = get_real_path (filename)
         match = regex.search (open(fullname).read())
         if match:
             return match.groups()[0]

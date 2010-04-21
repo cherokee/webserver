@@ -255,7 +255,7 @@ def lists_differ (a, b):
     return False
 
 
-def get_full_path (name):
+def get_real_path (name):
     """Get real path accounting for chrooted environments"""
     chroot = CTK.cfg.get_val('server!chroot')
     if chroot:

@@ -1,7 +1,7 @@
 import CTK
 import string
 import os.path
-from util import split_list, get_full_path
+from util import split_list, get_real_path
 
 # Conditional Check
 # -----------------
@@ -153,7 +153,7 @@ def is_ipv6 (value):
 
 def is_local_dir_exists (value, nochroot=False):
     value = is_path (value)
-    path  = get_full_path (value)
+    path  = get_real_path (value)
 
     if not os.path.exists(path):
         raise ValueError, _('Path does not exist')
@@ -165,7 +165,7 @@ def is_local_dir_exists (value, nochroot=False):
 
 def is_local_file_exists (value, nochroot=False):
     value = is_path (value)
-    path  = get_full_path (value)
+    path  = get_real_path (value)
 
     if not os.path.exists(path):
         raise ValueError, _('Path does not exist')

@@ -64,7 +64,7 @@ source!%(src_num)d!interpreter = %(mono_bin)s --socket=tcp --address=127.0.0.1 -
 CONFIG_VSERVER = SOURCE + """
 %(vsrv_pre)s!nick = %(new_host)s
 %(vsrv_pre)s!document_root = %(document_root)s
-%(vsrv_pre)s!directory_index = index.aspx,default.aspx
+%(vsrv_pre)s!directory_index = %(index)s
 
 %(vsrv_pre)s!rule!1!match = default
 %(vsrv_pre)s!rule!1!match!final = 1
@@ -100,6 +100,13 @@ class Commit:
         mono_dir      = CTK.cfg.get_val('%s!mono_dir'%(PREFIX))
         webdir        = '/'
         mono_bin      = CTK.cfg.get_val('%s!mono_bin'%(PREFIX))
+
+        # Index
+        listdir = os.listdir (get_real_path (path))
+        files = {'index.aspx': 'index.aspx', 'default.aspx':'default.aspx'}
+        for x in listdir:
+            files[x.lower()] = x
+        index = '%s,%s' % (files['index.aspx'], files['default.aspx'])
 
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
@@ -246,17 +253,13 @@ class Welcome:
 
 def is_mono_dir (path):
     path = validations.is_local_dir_exists (path)
-    index = os.path.join (path, "index.aspx")
-    default = os.path.join (path, "default.aspx")
 
-    try:
-        validations.is_local_file_exists (index)
-    except ValueError:
-        validations.is_local_file_exists (default)
-    except:
-        raise ValueError, _(ERROR_NO_MONO)
+    real_path = get_real_path (path)
+    files = [x.lower() for x in os.listdir(real_path)]
+    if 'index.aspx' in files or 'default.aspx' in files:
+        return path
 
-    return path
+    raise ValueError, _(ERROR_NO_MONO)
 
 VALS = [
     ("%s!mono_dir"     %(PREFIX), is_mono_dir),
