@@ -160,7 +160,7 @@ class VirtualServerNew (CTK.Container):
             panel.Add (cat['name'], url_pre, content, draggable=False)
 
 
-class Render():
+class Render:
     class PanelList (CTK.Container):
         def __init__ (self, refresh, right_box):
             CTK.Container.__init__ (self)
@@ -317,7 +317,7 @@ class Render():
         return page.Render()
 
 
-class RenderParticular():
+class RenderParticular:
     def __call__ (self):
         headers = SelectionPanel.HEADER
         page    = CTK.Page(headers=headers)

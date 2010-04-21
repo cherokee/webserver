@@ -226,7 +226,7 @@ class HandlerWidget (CTK.Container):
         self += modul
 
 
-class Render():
+class Render:
     def __call__ (self):
         # Parse request
         vsrv_num, rule_num = re.findall (URL_BASE, CTK.request.url)[0]

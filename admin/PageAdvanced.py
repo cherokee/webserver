@@ -175,7 +175,7 @@ class TLSWidget (CTK.Container):
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('TLS')))
         self += CTK.Indenter(table)
 
-class Render():
+class Render:
     def __call__ (self):
         tabs = CTK.Tab()
         tabs.Add (_('Connections'),   ConnectionsWidget())

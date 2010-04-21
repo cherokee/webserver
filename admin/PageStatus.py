@@ -79,7 +79,7 @@ class Render_Content (CTK.Container):
         return render.toJSON()
 
 
-class Render():
+class Render:
     class PanelList (CTK.Container):
         def __init__ (self, right_box):
             CTK.Container.__init__ (self)

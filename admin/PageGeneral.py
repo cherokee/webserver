@@ -221,7 +221,7 @@ class PermsWidget (CTK.Container):
         self += CTK.Indenter(table)
 
 
-class Render():
+class Render:
     def __call__ (self):
         ports   = PortsWidget()
         network = NetworkWidget()

@@ -141,7 +141,7 @@ class Form (CTK.Container):
         self += CTK.Indenter (submit)
 
 
-class Render():
+class Render:
     def __call__ (self):
 
         container  = CTK.Container()

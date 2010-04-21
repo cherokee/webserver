@@ -398,7 +398,7 @@ class EnterpriseBox (CTK.Box):
         self += CTK.Box ({'id': 'enterprise-link'}, CTK.RawHTML ('<a target="_blank" href="%s">%s</a>' %(LINK_SUPPORT, _('Purchase Support'))))
 
 
-class Render():
+class Render:
     def __call__ (self):
         Cherokee.pid.refresh()
 

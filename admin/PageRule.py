@@ -145,7 +145,7 @@ class RuleNew (CTK.Container):
             panel.Add (cat['name'], url_pre, content, draggable=False)
 
 
-class Render():
+class Render:
     class PanelList (CTK.Container):
         def __init__ (self, refresh, right_box, vsrv_num):
             CTK.Container.__init__ (self)

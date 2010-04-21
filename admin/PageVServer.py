@@ -484,7 +484,7 @@ class RenderContent (CTK.Container):
         self += tabs
 
 
-class Render():
+class Render:
     def __call__ (self):
         # Parse request
         vsrv_num = re.findall (r'^%s/([\d]+)'%(URL_BASE), CTK.request.url)[0]

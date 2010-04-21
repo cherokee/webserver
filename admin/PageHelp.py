@@ -37,7 +37,7 @@ TOC_TITLE  = N_('Table of Contents')
 BODY_REGEX = r'.*<div class="sectionbody">(.+?)</div>\s*<div id="footer">'
 LINK_REGEX = r'<a href="(.+?)">(.+?)</a>' #link, title
 
-class Parser():
+class Parser:
     """Simple documentation parser"""
     def __init__ (self, filename):
         self.filename = filename
@@ -179,7 +179,7 @@ class Page (CTK.Page):
         CTK.Page.__init__ (self, template, headers)
 
 
-class Render():
+class Render:
     def __call__ (self):
         # Content
         filename = CTK.request.url.split('/')[-1]

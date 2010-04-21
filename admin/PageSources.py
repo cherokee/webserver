@@ -43,7 +43,7 @@ class Panel (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'id': 'sources-panel'})
 
-class Render():
+class Render:
     def __call__ (self):
         title = _('Information Sources')
 

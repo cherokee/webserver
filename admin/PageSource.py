@@ -151,7 +151,7 @@ def _get_protected_sources ():
     return protected_sources
 
 
-class Render_Source():
+class Render_Source:
     class Source_Usage (CTK.Container):
         def __init__ (self, rules):
             CTK.Container.__init__ (self)
@@ -228,7 +228,7 @@ class AddSource (CTK.Container):
         submit += table
         self += submit
 
-class Render_Particular():
+class Render_Particular:
     def __call__ (self):
         headers = SelectionPanel.HEADER
         page    = CTK.Page(headers=headers)
@@ -239,7 +239,7 @@ class Render_Particular():
         page += CTK.RawHTML (js=JS_PARTICULAR %(props))
         return page.Render()
 
-class Render():
+class Render:
     class PanelList (CTK.Container):
         def __init__ (self, refresh, right_box):
             CTK.Container.__init__ (self)
