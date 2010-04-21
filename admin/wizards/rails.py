@@ -398,8 +398,8 @@ class Welcome:
         return cont.Render().toStr()
 
 
-def is_ror_dir (path, nochroot=False):
-    path = validations.is_local_dir_exists (path, nochroot)
+def is_ror_dir (path):
+    path = validations.is_local_dir_exists (path)
     manage = os.path.join (path, "script/server")
     if not os.path.exists (manage):
         manage = os.path.join (path, "script/rails")

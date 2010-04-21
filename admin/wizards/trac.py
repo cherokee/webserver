@@ -180,16 +180,16 @@ class Welcome:
         return cont.Render().toStr()
 
 
-def is_trac_data (path, nochroot=False):
-    path = validations.is_local_dir_exists (path, nochroot)
+def is_trac_data (path):
+    path = validations.is_local_dir_exists (path)
     manage = os.path.join (path, "htdocs")
 
     if not os.path.exists (manage):
         raise ValueError, _(ERROR_NO_DATA)
     return path
 
-def is_trac_project (path, nochroot=False):
-    path = validations.is_local_dir_exists (path, nochroot)
+def is_trac_project (path):
+    path = validations.is_local_dir_exists (path)
     manage = os.path.join (path, "conf/trac.ini")
 
     if not os.path.exists (manage):

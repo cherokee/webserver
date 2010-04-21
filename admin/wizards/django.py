@@ -261,8 +261,8 @@ def django_figure_media_prefix (local_django_dir):
     return prefix
 
 
-def is_django_dir (path, nochroot=False):
-    path = validations.is_local_dir_exists (path, nochroot)
+def is_django_dir (path):
+    path = validations.is_local_dir_exists (path)
     manage = os.path.join (path, "manage.py")
     if not os.path.exists (manage):
         raise ValueError, _("Directory doesn't look like a Django based project.")

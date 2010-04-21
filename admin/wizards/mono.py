@@ -244,8 +244,8 @@ class Welcome:
         return cont.Render().toStr()
 
 
-def is_mono_dir (path, nochroot=False):
-    path = validations.is_local_dir_exists (path, nochroot)
+def is_mono_dir (path):
+    path = validations.is_local_dir_exists (path)
     index = os.path.join (path, "index.aspx")
     default = os.path.join (path, "default.aspx")
     if not os.path.exists (index) and not os.path.exists (default):

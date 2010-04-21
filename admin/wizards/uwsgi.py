@@ -290,8 +290,8 @@ class Welcome:
         return cont.Render().toStr()
 
 
-def is_uwsgi_cfg (filename, nochroot=False):
-    filename = validations.is_local_file_exists (filename, nochroot)
+def is_uwsgi_cfg (filename):
+    filename = validations.is_local_file_exists (filename)
     mountpoint = find_mountpoint_xml(filename)
     if not mountpoint:
         mountpoint = find_mountpoint_wsgi(filename)
