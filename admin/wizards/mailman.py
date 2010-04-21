@@ -214,8 +214,10 @@ def is_mailman_cgi_dir (path):
 
 def is_mailman_arch_dir (path):
     path = validations.is_local_dir_exists (path)
-    file = os.path.join (path, "archives/public")
-    if not os.path.exists (file):
+    module_inc = os.path.join (path, "archives/public")
+    try:
+        validations.is_local_file_exists (module_inc)
+    except:
         raise ValueError, _("It doesn't look like a Mailman archive directory.")
     return path
 

@@ -184,7 +184,9 @@ def is_trac_data (path):
     path = validations.is_local_dir_exists (path)
     manage = os.path.join (path, "htdocs")
 
-    if not os.path.exists (manage):
+    try:
+        validations.is_local_file_exists (manage)
+    except:
         raise ValueError, _(ERROR_NO_DATA)
     return path
 
@@ -192,7 +194,9 @@ def is_trac_project (path):
     path = validations.is_local_dir_exists (path)
     manage = os.path.join (path, "conf/trac.ini")
 
-    if not os.path.exists (manage):
+    try:
+        validations.is_local_file_exists (manage)
+    except:
         raise ValueError, _(ERROR_NO_PROJECT)
     return path
 

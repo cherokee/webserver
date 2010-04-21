@@ -269,15 +269,16 @@ class Welcome:
 def is_symfony_dir (path):
     path = validations.is_local_dir_exists (path)
 
-    module_inc = os.path.join (path, 'bin/symfony')
-    if os.path.exists (module_inc):
-        return path
+    try:
+        module_inc = os.path.join (path, 'bin/symfony')
+        validations.is_local_file_exists (module_inc)
+    except ValueError:
+        module_inc = os.path.join (path, 'bin/check_configuration.php')
+        validations.is_local_file_exists (module_inc)
+    except:
+        raise ValueError, _(ERROR_NO_SRC)
 
-    module_inc = os.path.join (path, 'bin/check_configuration.php')
-    if os.path.exists (module_inc):
-        return path
-
-    raise ValueError, _(ERROR_NO_SRC)
+    return path
 
 VALS = [
     ('%s!sources' %(PREFIX), is_symfony_dir),

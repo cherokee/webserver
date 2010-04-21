@@ -260,7 +260,9 @@ class Welcome:
 def is_sugar_dir (path):
     path = validations.is_local_dir_exists (path)
     module_inc = os.path.join (path, 'include/entryPoint.php')
-    if not os.path.exists (module_inc):
+    try:
+        validations.is_local_file_exists (module_inc)
+    except:
         raise ValueError, _(ERROR_NO_SRC)
     return path
 

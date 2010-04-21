@@ -276,7 +276,8 @@ def find_url_prefix_static (path):
         RE_MATCH = """url_prefix_static = '(.*?)'"""
         filename = os.path.join (path, "config/wikiconfig.py")
         regex = re.compile(RE_MATCH, re.DOTALL)
-        match = regex.search(open(filename).read())
+        fullname = get_full_path (filename)
+        match = regex.search (open(fullname).read())
         if match:
             return match.groups()[0]
         raise ValueError, _(ERROR_NO_MOINMOIN)
@@ -284,8 +285,9 @@ def find_url_prefix_static (path):
 def is_moinmoin_wiki (path):
     path = validations.is_local_dir_exists (path)
     manage = os.path.join (path, "config/wikiconfig.py")
-
-    if not os.path.exists (manage):
+    try:
+        validations.is_local_file_exists (manage)
+    except:
         raise ValueError, _(ERROR_NO_MOINMOIN_WIKI)
     return path
 

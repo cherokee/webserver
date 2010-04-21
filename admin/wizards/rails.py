@@ -400,12 +400,18 @@ class Welcome:
 
 def is_ror_dir (path):
     path = validations.is_local_dir_exists (path)
-    manage = os.path.join (path, "script/server")
-    if not os.path.exists (manage):
+
+    try:
+        manage = os.path.join (path, "script/server")
+        validations.is_local_file_exists (manage)
+    except ValueError:
         manage = os.path.join (path, "script/rails")
-        if not os.path.exists (manage):
-            raise ValueError, _(ERROR_NO_ROR)
+        validations.is_local_file_exists (manage)
+    except:
+        raise ValueError, _(ERROR_NO_ROR)
+
     return path
+
 
 VALS = [
     ("%s!ror_dir" %(PREFIX), is_ror_dir),

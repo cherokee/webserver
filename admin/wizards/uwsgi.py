@@ -306,17 +306,19 @@ def find_virtualenv (filename):
         return None
 
     dirname = os.path.dirname(os.path.normpath(filename))
-    return os.path.normpath(dirname + '/..')
+    return os.path.normpath(dirname + os.path.sep + os.path.pardir)
 
 def find_mountpoint_xml (filename):
     regex = re.compile(RE_MOUNTPOINT_XML, re.DOTALL)
-    match = regex.search(open(filename).read())
+    fullname = get_full_path (filename)
+    match = regex.search (open(fullname).read())
     if match:
         return match.groups()[0]
 
 def find_mountpoint_wsgi (filename):
     regex = re.compile(RE_MOUNTPOINT_WSGI, re.DOTALL)
-    match = regex.search(open(filename).read())
+    fullname = get_full_path (filename)
+    match = regex.search (open(fullname).read())
     if match:
         return match.groups()[0]
 

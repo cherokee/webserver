@@ -253,3 +253,14 @@ def lists_differ (a, b):
     if bool (set(b)-set(a)):
         return True
     return False
+
+
+def get_full_path (name):
+    """Get real path accounting for chrooted environments"""
+    chroot = CTK.cfg.get_val('server!chroot')
+    if chroot:
+        fullname = os.path.normpath (chroot + os.path.sep + name)
+    else:
+        fullname = name
+
+    return fullname

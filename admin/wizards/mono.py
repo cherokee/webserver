@@ -248,8 +248,14 @@ def is_mono_dir (path):
     path = validations.is_local_dir_exists (path)
     index = os.path.join (path, "index.aspx")
     default = os.path.join (path, "default.aspx")
-    if not os.path.exists (index) and not os.path.exists (default):
+
+    try:
+        validations.is_local_file_exists (index)
+    except ValueError:
+        validations.is_local_file_exists (default)
+    except:
         raise ValueError, _(ERROR_NO_MONO)
+
     return path
 
 VALS = [
