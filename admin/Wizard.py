@@ -177,7 +177,7 @@ def CategoryList_Vsrv():
 
 def CategoryList_Rule():
     # Figure the category
-    category = re.findall (URL_CAT_LIST_Rule_R, CTK.request.url)[0]
+    category = re.findall (URL_CAT_LIST_RULE_R, CTK.request.url)[0]
 
     # Instance and Render
     content = CategoryList_Widget (category, TYPE_RULE)
