@@ -57,15 +57,12 @@ typedef struct {
 
 /* Global
  */
-static cherokee_boolean_t inited = false;
-#ifdef HAVE_PTHREAD
-static pthread_rwlock_t   lock   = PTHREAD_RWLOCK_INITIALIZER;
-#endif
+static cherokee_boolean_t  inited = false;
+static CHEROKEE_RWLOCK_T  (lock);
 
 
 /* Multi-threading support
  */
-
 void
 cherokee_bogotime_lock_read (void)
 {
@@ -92,8 +89,12 @@ init_timezone (void)
 ret_t
 cherokee_bogotime_init (void)
 {
-	if (inited)
+	if (inited) {
 		return ret_ok;
+	}
+
+	/* RW-lock mutex */
+	CHEROKEE_RWLOCK_INIT (&lock, NULL);
 
 	/* Properties */
 	cherokee_bogonow_now = 0;
