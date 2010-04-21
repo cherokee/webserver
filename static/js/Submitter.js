@@ -21,11 +21,12 @@
  */
 
 ;(function($) {
-    var Submitter = function (element, url) {
-	   var key_pressed = false;
-	   var orig_values = {};
-	   var obj         = this;       //  Object {}
-	   var self        = $(element); // .submitter
+    var Submitter = function (element, url, optional) {
+	   var optional_str = optional;
+	   var key_pressed  = false;
+	   var orig_values  = {};
+	   var obj          = this;       //  Object {}
+	   var self         = $(element); // .submitter
 
 	   // PRIVATE callbacks
 	   //
@@ -109,7 +110,7 @@
 		  /* Build the post */
 		  info = {};
 		  self.find ("input:text, input:password, input:hidden").each(function(){
-			 if ((!$(this).hasClass('optional')) || (this.value != 'Optional')) {
+			 if ((!$(this).hasClass('optional')) || (this.value != optional_str)) {
 				info[this.name] = this.value;
 			 }
 		  });
@@ -216,11 +217,11 @@
 	   }
     };
 
-    $.fn.Submitter = function (url) {
+    $.fn.Submitter = function (url, optional) {
 	   var self = this;
 	   return this.each(function() {
 		  if ($(this).data('submitter')) return;
-		  var submitter = new Submitter(this, url);
+		  var submitter = new Submitter(this, url, optional);
 		  $(this).data('submitter', submitter);
 		  submitter.init(self);
 	   });

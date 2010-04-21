@@ -39,7 +39,7 @@ HTML = """
 
 # Initialization
 JS_INIT = """
-  $("#%(id)s").Submitter ('%(url)s')
+  $("#%(id)s").Submitter ('%(url)s', '%(optional)s')
           .bind('submit', function() {
                 $(this).data('submitter').submit_form();
           });
@@ -66,10 +66,11 @@ class Submitter (Container):
         render = Container.Render(self)
 
         # Own render
-        props = {'id':      self.id,
-                 'id_uniq': self.uniq_id,
-                 'url':     self.url,
-                 'content': render.html}
+        props = {'id':       self.id,
+                 'id_uniq':  self.uniq_id,
+                 'url':      self.url,
+                 'content':  render.html,
+                 'optional': _('Optional')}
 
         js = JS_INIT %(props) + Uniq_Block (JS_FOCUS %(props))
 
