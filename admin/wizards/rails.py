@@ -402,7 +402,9 @@ def is_ror_dir (path, nochroot=False):
     path = validations.is_local_dir_exists (path, nochroot)
     manage = os.path.join (path, "script/server")
     if not os.path.exists (manage):
-        raise ValueError, _(ERROR_NO_ROR)
+        manage = os.path.join (path, "script/rails")
+        if not os.path.exists (manage):
+            raise ValueError, _(ERROR_NO_ROR)
     return path
 
 VALS = [

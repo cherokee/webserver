@@ -34,18 +34,19 @@ import Wizard
 import validations
 from util import *
 
-NOTE_WELCOME_H1  = N_("Welcome to the MoinMoin Wizard")
-NOTE_WELCOME_P1  = N_('<a target="_blank" href="http://moinmo.in/">MoinMoin</a>  is an advanced, easy to use and extensible WikiEngine with a large community of users.')
-NOTE_WELCOME_P2  = N_(' Said in a few words, it is about collaboration on easily editable web pages.')
+NOTE_WELCOME_H1   = N_("Welcome to the MoinMoin Wizard")
+NOTE_WELCOME_P1   = N_('<a target="_blank" href="http://moinmo.in/">MoinMoin</a>  is an advanced, easy to use and extensible WikiEngine with a large community of users.')
+NOTE_WELCOME_P2   = N_(' Said in a few words, it is about collaboration on easily editable web pages.')
 
-NOTE_COMMON_H1   = N_("MoinMoin Wiki Instance")
-NOTE_COMMON_WIKI = N_("Local path to the MoinMoin Wiki Instance.")
+NOTE_COMMON_H1    = N_("MoinMoin Wiki Instance")
+NOTE_COMMON_WIKI  = N_("Local path to the MoinMoin Wiki Instance.")
+NOTE_COMMON_SPAWN = N_("Complete path to the FastCGI spawner, normally spawn-fcgi.")
 
-NOTE_HOST        = N_("Host name of the virtual server that is about to be created.")
-NOTE_HOST_H1     = N_("New Virtual Server Details")
+NOTE_HOST         = N_("Host name of the virtual server that is about to be created.")
+NOTE_HOST_H1      = N_("New Virtual Server Details")
 
-NOTE_WEBDIR      = N_("Public web directory to access the project.")
-NOTE_WEBDIR_H1   = N_("Public Web Direcoty")
+NOTE_WEBDIR       = N_("Public web directory to access the project.")
+NOTE_WEBDIR_H1    = N_("Public Web Direcoty")
 
 ERROR_NO_MOINMOIN_WIKI = N_("It does not look like a MoinMoin Wiki Instance.")
 ERROR_NO_MOINMOIN = N_("MoinMoin doesn't seem to be correctly installed.")
@@ -57,7 +58,7 @@ URL_APPLY       = r'/wizard/vserver/moinmoin/apply'
 SOURCE = """
 source!%(src_num)d!env_inherited = 1
 source!%(src_num)d!host = 127.0.0.1:%(src_port)d
-source!%(src_num)d!interpreter = spawn-fcgi -n -a 127.0.0.1 -p %(src_port)d -- %(moinmoin_wiki)s/server/moin.fcg
+source!%(src_num)d!interpreter = %(spawn_fcgi)s -n -a 127.0.0.1 -p %(src_port)d -- %(moinmoin_wiki)s/server/moin.fcg
 source!%(src_num)d!nick = MoinMoin %(src_num)d
 source!%(src_num)d!type = interpreter
 """
@@ -119,12 +120,15 @@ SRC_PATHS = [
     "/opt/local/share/moin"
 ]
 
+DEFAULT_BINS    = ['spawn-fcgi']
+
 class Commit:
     def Commit_VServer (self):
         # Incoming info
         new_host = CTK.cfg.get_val('%s!new_host'%(PREFIX))
         moinmoin_wiki   = CTK.cfg.get_val('%s!moinmoin_wiki'%(PREFIX))
         moinmoin_static = find_url_prefix_static (moinmoin_wiki)
+        spawn_fcgi      = CTK.cfg.get_val('%s!spawn_fcgi'%(PREFIX))
 
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
@@ -155,6 +159,7 @@ class Commit:
         web_dir         = CTK.cfg.get_val('%s!web_dir'%(PREFIX))
         moinmoin_wiki   = CTK.cfg.get_val('%s!moinmoin_wiki'%(PREFIX))
         moinmoin_static = find_url_prefix_static (moinmoin_wiki)
+        spawn_fcgi      = CTK.cfg.get_val('%s!spawn_fcgi'%(PREFIX))
 
         # locals
         rule_n, x        = cfg_vsrv_rule_get_next (vsrv_pre)
@@ -222,11 +227,17 @@ class Host:
 class Common:
     def __call__ (self):
         guessed_src = path_find_w_default (SRC_PATHS)
-
-        table = CTK.PropsTable()
-        table.Add (_('MoinMoin Directory'), CTK.TextCfg ('%s!moinmoin_wiki'%(PREFIX), False, {'value':guessed_src}), _(NOTE_COMMON_WIKI))
+        spawn_fcgi  = path_find_binary (DEFAULT_BINS)
 
         submit = CTK.Submitter (URL_APPLY)
+        table  = CTK.PropsTable()
+        table.Add (_('MoinMoin Directory'), CTK.TextCfg ('%s!moinmoin_wiki'%(PREFIX), False, {'value':guessed_src}), _(NOTE_COMMON_WIKI))
+
+        if spawn_fcgi:
+            submit += CTK.Hidden('%s!spawn_fcgi'%(PREFIX), spawn_fcgi)
+        else:
+            table.Add (_('FastCGI spawner binary'), CTK.TextCfg ('%s!spawn_fcgi'%(PREFIX), False), _(NOTE_COMMON_SPAWN))
+
         submit += table
 
         cont = CTK.Container()
