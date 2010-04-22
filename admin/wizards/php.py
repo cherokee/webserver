@@ -25,8 +25,13 @@
 
 import re
 import CTK
+import Wizard
 
 from util import *
+
+NOTE_WELCOME_H1 = N_("Welcome to the PHP Wizard")
+NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://php.net/">PHP</a> is a widely-used general-purpose scripting language that is especially suited for Web development and can be embedded into HTML.')
+NOTE_WELCOME_OK = N_("PHP has been correctly configured.")
 
 PHP_DEFAULT_TIMEOUT        = '30'
 SAFE_PHP_FCGI_MAX_REQUESTS = '490'
@@ -145,8 +150,23 @@ URL_WIZARD_RULE = r'^/wizard/vserver/(\d+)/php$'
 class Wizard_Rule:
     def __call__ (self):
         vserver = re.findall (URL_WIZARD_RULE, CTK.request.url)[0]
-        error = wizard_php_add (vserver)
-        return ''
+        error   = wizard_php_add ('vserver!%s'%(vserver))
+
+        cont = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon ('php', {'class': 'wizard-descr'})
+        box = CTK.Box ({'class': 'wizard-welcome'})
+        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        cont += box
+
+        if error:
+            cont += CTK.Notice('error', CTK.RawHTML (error))
+        else:
+            cont += CTK.Notice('information', CTK.RawHTML (_(NOTE_WELCOME_OK)))
+
+        cont += CTK.DruidButton_Close(_('Close'))
+
+        return cont.Render().toStr()
 
 CTK.publish (URL_WIZARD_RULE, Wizard_Rule)
 
