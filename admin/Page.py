@@ -29,8 +29,9 @@ import CTK
 import Cherokee
 import configured
 
-SAVED_NOTICE  = N_("The Configuration has been Saved")
-SAVED_RESTART = N_("Would you like to apply the changes to the running server now?")
+SAVED_NOTICE     = N_("The Configuration has been Saved")
+SAVED_RESTART    = N_("Would you like to apply the changes to the running server now?")
+SAVED_NO_RUNNING = N_("The configuration file has been saved successfuly.")
 
 URL_SAVE          = r'/save'
 URL_SAVE_GRACEFUL = r'/save/apply/graceful'
@@ -63,27 +64,38 @@ class Save:
         # Save
         CTK.cfg.save()
 
-        # Prompt about the reset
         all = CTK.Box({'id': "buttons"})
-        all += CTK.RawHTML ('<p>%s</p>' %(SAVED_RESTART))
 
-        submit = CTK.Submitter (URL_SAVE_NONE)
-        submit += CTK.Hidden('none')
-        submit += CTK.SubmitterButton (_('Do not restart'))
-        submit.bind ('submit_success', dialog.JS_to_close())
-        all += submit
+        if Cherokee.server.is_alive():
+            # Prompt about the reset
+            all += CTK.RawHTML ('<p>%s</p>' %(SAVED_RESTART))
 
-        submit = CTK.Submitter (URL_SAVE_GRACEFUL)
-        submit += CTK.Hidden('graceful')
-        submit += CTK.SubmitterButton (_('Graceful restart'))
-        submit.bind ('submit_success', dialog.JS_to_close())
-        all += submit
+            submit = CTK.Submitter (URL_SAVE_NONE)
+            submit += CTK.Hidden('none')
+            submit += CTK.SubmitterButton (_('Do not restart'))
+            submit.bind ('submit_success', dialog.JS_to_close())
+            all += submit
 
-        submit = CTK.Submitter (URL_SAVE_HARD)
-        submit += CTK.Hidden('hard')
-        submit += CTK.SubmitterButton (_('Hard restart'))
-        submit.bind ('submit_success', dialog.JS_to_close())
-        all += submit
+            submit = CTK.Submitter (URL_SAVE_GRACEFUL)
+            submit += CTK.Hidden('graceful')
+            submit += CTK.SubmitterButton (_('Graceful restart'))
+            submit.bind ('submit_success', dialog.JS_to_close())
+            all += submit
+
+            submit = CTK.Submitter (URL_SAVE_HARD)
+            submit += CTK.Hidden('hard')
+            submit += CTK.SubmitterButton (_('Hard restart'))
+            submit.bind ('submit_success', dialog.JS_to_close())
+            all += submit
+        else:
+            # Prompt about the reset
+            all += CTK.RawHTML ('<p>%s</p>' %(SAVED_NO_RUNNING))
+
+            submit = CTK.Submitter (URL_SAVE_NONE)
+            submit += CTK.Hidden('none')
+            submit += CTK.SubmitterButton (_('OK'))
+            submit.bind ('submit_success', dialog.JS_to_close())
+            all += submit
 
         render = all.Render()
         return render.toStr()
