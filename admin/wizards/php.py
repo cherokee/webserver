@@ -150,6 +150,8 @@ URL_WIZARD_APPLY_R = r'^/wizard/vserver/(\d+)/php/apply$'
 def Commit():
     vserver = re.findall (URL_WIZARD_APPLY_R, CTK.request.url)[0]
     error   = wizard_php_add ('vserver!%s'%(vserver))
+    if error:
+        return {'ret': 'error', 'errors': {'msg': error}}
     return CTK.cfg_reply_ajax_ok()
 
 class Welcome:
@@ -160,12 +162,16 @@ class Welcome:
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
         cont += Wizard.Icon ('php', {'class': 'wizard-descr'})
 
+        notice = CTK.Notice('error', props={'class': 'no-see'})
+
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += notice
 
         submit = CTK.Submitter (URL_WIZARD_APPLY %(vserver))
         submit += CTK.Hidden ('aint', 'empty')
         submit += box
+        submit.bind ('submit_fail', "$('#%s').show().html(event.ret_data.errors.msg);"%(notice.id))
 
         cont += submit
         cont += CTK.DruidButtonsPanel_Create()
