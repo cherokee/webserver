@@ -164,7 +164,7 @@
 				} else {
 				    event_type = 'submit_fail';
 				}
-				self.trigger({type: event_type, url: url, ret: data['ret']});
+				self.trigger({type: event_type, url: url, ret: data['ret'], ret_data: data});
 
 				/* Modified: Save button */
 				var modified     = data['modified'];

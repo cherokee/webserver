@@ -21,22 +21,28 @@
 #
 
 from Container import Container
+from util import props_to_str
 
 NOTICE_TYPES = ['information', 'important-information',
                 'warning', 'error', 'offline', 'online']
 
 HTML = """
-<div class="dialog-%(klass)s" id="%(id)s">
+<div id="%(id)s" %(props)s>
 %(content)s
 </div>
 """
 
 class Notice (Container):
-    def __init__ (self, klass='information', content=None):
+    def __init__ (self, klass='information', content=None, props={}):
         Container.__init__ (self)
 
         assert klass in NOTICE_TYPES
-        self.klass = klass
+        self.props = props.copy()
+
+        if 'class' in self.props:
+            self.props['class'] = 'dialog-%s %s'%(klass, self.props['class'])
+        else:
+            self.props['class'] = 'dialog-%s' %(klass)
 
         if content:
             self += content
@@ -44,7 +50,7 @@ class Notice (Container):
     def Render (self):
         render = Container.Render (self)
 
-        render.html = HTML %({'klass':   self.klass,
-                              'id':      self.id,
-                              'content': render.html})
+        render.html = HTML %({'id':      self.id,
+                              'content': render.html,
+                              'props':   props_to_str(self.props)})
         return render
