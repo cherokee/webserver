@@ -143,7 +143,6 @@ class Form (CTK.Container):
 
 class Render:
     def __call__ (self):
-
         container  = CTK.Container()
         container += CTK.RawHTML("<h2>%s</h2>" %(_('Create a new configuration file')))
 
