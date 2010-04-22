@@ -1940,7 +1940,7 @@ msgid ""
 "Jail the server inside the directory. Don't use it as the only security "
 "measure."
 msgstr ""
-"Enjaular el servidor en el directorio. No usar ésto únicamente como medida "
+"Enjaular el servidor en el directorio. No usar esto como única medida "
 "de seguridad."
 
 #: admin/PageGeneral.py:37
