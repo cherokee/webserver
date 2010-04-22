@@ -137,7 +137,7 @@ specifying different interpreters for each one of them would suffice.
 |VHost        | Interpreter
 | 1 | `/usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost1.ini -b 127.0.0.1:2998`
 
-| 2 | `/usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost2.ini -b 127.0.0.1:2990`
+| 2 | `/usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost2.ini -b 127.0.0.1:2999`
 |====================================================================
 
 
