@@ -31,7 +31,6 @@ from util import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the PHP Wizard")
 NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://php.net/">PHP</a> is a widely-used general-purpose scripting language that is especially suited for Web development and can be embedded into HTML.')
-NOTE_WELCOME_OK = N_("PHP has been correctly configured.")
 
 PHP_DEFAULT_TIMEOUT        = '30'
 SAFE_PHP_FCGI_MAX_REQUESTS = '490'
@@ -140,35 +139,41 @@ def get_info (key):
             'rule':   rule}   # cfg path
 
 
-
 #
 # Public URLs
 #
 
-URL_WIZARD_RULE = r'^/wizard/vserver/(\d+)/php$'
+URL_WIZARD_RULE_R  = r'^/wizard/vserver/(\d+)/php$'
+URL_WIZARD_APPLY   = '/wizard/vserver/%s/php/apply'
+URL_WIZARD_APPLY_R = r'^/wizard/vserver/(\d+)/php/apply$'
 
-class Wizard_Rule:
+def Commit():
+    vserver = re.findall (URL_WIZARD_APPLY_R, CTK.request.url)[0]
+    error   = wizard_php_add ('vserver!%s'%(vserver))
+    return CTK.cfg_reply_ajax_ok()
+
+class Welcome:
     def __call__ (self):
-        vserver = re.findall (URL_WIZARD_RULE, CTK.request.url)[0]
-        error   = wizard_php_add ('vserver!%s'%(vserver))
+        vserver = re.findall (URL_WIZARD_RULE_R, CTK.request.url)[0]
 
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
         cont += Wizard.Icon ('php', {'class': 'wizard-descr'})
+
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        cont += box
 
-        if error:
-            cont += CTK.Notice('error', CTK.RawHTML (error))
-        else:
-            cont += CTK.Notice('information', CTK.RawHTML (_(NOTE_WELCOME_OK)))
+        submit = CTK.Submitter (URL_WIZARD_APPLY %(vserver))
+        submit += CTK.Hidden ('aint', 'empty')
+        submit += box
 
-        cont += CTK.DruidButton_Close(_('Close'))
+        cont += submit
+        cont += CTK.DruidButtonsPanel_Create()
 
         return cont.Render().toStr()
 
-CTK.publish (URL_WIZARD_RULE, Wizard_Rule)
+CTK.publish (URL_WIZARD_RULE_R,  Welcome)
+CTK.publish (URL_WIZARD_APPLY_R, Commit, method="POST")
 
 
 #
