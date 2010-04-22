@@ -49,9 +49,7 @@ NOTE_NO_SOURCES  = N_('No ports to listen have been defined. By default the serv
 
 
 HELPS = [('config_general',    N_("General Configuration")),
-         ('config_quickstart', N_("Configuration Quickstart")),
-         ('config_mime_types', N_("MIME types")),
-         ('config_icons',      N_('Icons'))]
+         ('config_quickstart', N_("Configuration Quickstart"))]
 
 
 VALIDATIONS = [
