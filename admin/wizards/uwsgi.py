@@ -26,7 +26,7 @@
 # Tested:
 # 2009/10/xx: uWSGI Version 0.9.3   / Cherokee 0.99.36b
 # 2010/04/15: uWSGI Version 0.9.3   / Cherokee 0.99.41
-# 2010/04/21: uWSGI Version 0.9.4.3 / Cherokee 0.99.45b
+# 2010/04/22: uWSGI Version 0.9.4.3 / Cherokee 0.99.45b
 
 import re
 import CTK
@@ -124,10 +124,13 @@ class Commit:
 
         # Choose between XML config+launcher, or Python only config
         if webdir:
-            uwsgi_extra = SOURCE_XML % uwsgi_cfg
+            uwsgi_extra = SOURCE_XML % (uwsgi_cfg)
         else:
-            webdir = find_mountpoint_wsgi(uwsgi_cfg)
-            uwsgi_extra = SOURCE_WSGI % uwsgi_cfg
+            webdir   = find_mountpoint_wsgi(uwsgi_cfg)
+            par_name = os.path.dirname(os.path.normpath (uwsgi_cfg)).split(os.path.sep)[-1]
+            cfg_name = os.path.basename(os.path.normpath(uwsgi_cfg))
+            module   = '%s.%s' %(par_name, os.path.splitext(cfg_name)[0])
+            uwsgi_extra = SOURCE_WSGI % (module)
 
         # Virtualenv support
         uwsgi_virtualenv = find_virtualenv(uwsgi_cfg)
