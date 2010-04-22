@@ -1,167 +1,614 @@
-== Cherokee 0.99 documentation
-
-*********************************
-link:basics.html[Getting started]: Cherokee basics
-*********************************
-
- . link:basics_why_cherokee.html[Why Cherokee?]: Feature overview.
- . link:basics_requirements.html[Requirements]: Hardware and software requirements.
- . link:basics_download.html[Download]: Where and how to download Cherokee.
- . link:basics_installation.html[Installation]: Installation instructions.
-   - link:basics_installation_unix.html[Unix]: Installation on Unix/Linux platforms.
-   - link:basics_installation_windows.html[Windows]: Installation on Windows platform.
-   - link:basics_installation_svn.html[From SVN]: Installation of the development release.
- . link:basics_upgrade.html[Upgrading Cherokee]: Upgrading from a previous release?
- . link:basics_running_cherokee.html[Running Cherokee]: Basic steps to run Cherokee.
-
-*********************************
-link:bundle.html[Cherokee Bundle]: Details about each program bundled with Cherokee
-*********************************
-
- . link:bundle_cherokee.html[cherokee]: Main web server invoker.
- . link:bundle_cherokee-admin.html[cherokee-admin]: The configuration UI.
- . link:bundle_cherokee-config.html[cherokee-config]: Information retriever.
- . link:bundle_cherokee-tweak.html[cherokee-tweak]: Cherokee Swiss army knife
- . link:bundle_cherokee-worker.html[cherokee-worker]: Web server stand alone program.
- . link:bundle_cget.html[cget]: Web retriever.
-
-*********************************
-link:config.html[Configuration]: Set up process explained
-*********************************
-
-  . link:config_quickstart.html[Quickstart]: Overview and walkthrough.
-  . link:config_status.html[Status]: Server status information.
-  . link:config_general.html[General]: General settings.
-  . link:config_virtual_servers.html[Virtual servers]: Server definition.
-    - link:config_virtual_servers_rule.html[Rule Options]: Specifying the matching rules.
-    - link:config_virtual_servers_evhost.html[Advanced Virtual Hosting]: Multi-domain settings.
-  . link:config_info_sources.html[Information Sources]: Defining information sources.
-  . link:config_icons.html[Icons]: Icon managment.
-  . link:config_mime_types.html[Mime Types]: Setting up the MIME types.
-  . link:config_advanced.html[Advanced]: Advanced tweaking. Not for the faint of heart.
-  . link:config_wizards.html[Wizards]: Configuration assistants for many known scenarios.
-
-*********************************
-link:cookbook.html[Cookbook]: Recipes for specific tasks
-*********************************
-
-  . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
-  . link:cookbook_cross_compilation.html[Cross compilation]: How to cross compile Cherokee.
-  . link:cookbook_dbslayer.html[DBSlayer]: How to set up DBSlayer MySQL balancing.
-  . link:cookbook_embedding_cherokee.html[Embedding Cherokee]: Cherokee on embedded devices.
-  . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
-  . link:cookbook_managing_logs.html[Managing logs]: Seamless log rotation.
-  . link:cookbook_optimizations.html[Optimizing Cherokee]: Recommendations and tweaks.
-  . link:cookbook_redirs.html[Redirections]: Common redirection examples.
-  . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
-  . link:cookbook_streaming.html[Streaming]: How to stream Audio and Video with Cherokee.
-  . link:cookbook_php.html[PHP]: How to run PHP apps with Cherokee.
-  . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.
-  . link:cookbook_django.html[Django]: How to run Django apps with Cherokee.
-  . link:cookbook_coldfusion.html[ColdFusion]: How to run ColdFusion apps with Cherokee.
-  . link:cookbook_drupal.html[Drupal]: How to run Drupal on Cherokee.
-  . link:cookbook_wordpress.html[Wordpress]: How to run Wordpress on Cherokee.
-  . link:cookbook_alfresco.html[Alfresco]: How to run Alfresco on Cherokee.
-  . link:cookbook_mono.html[ASP.NET]: How to run ASP.NET apps with Mono and Cherokee.
-  . link:cookbook_glassfish.html[GlassFish]: How to run Java apps with Cherokee.
-  . link:cookbook_joomla.html[Joomla]: How to run Joomla on Cherokee.
-  . link:cookbook_kumbia.html[Kumbia]: How to run Kumbia apps with Cherokee.
-  . link:cookbook_liferay.html[Liferay]: How to run Liferay on Cherokee.
-  . link:cookbook_mailman.html[Mailman]: How to run Mailman on Cherokee.
-  . link:cookbook_moodle.html[Moodle]: How to run Moodle on Cherokee.
-  . link:cookbook_nagios.html[Nagios]: How to run Nagios with Cheroke.
-  . link:cookbook_phpbb.html[phpBB]: How to run phpBB on Cherokee.
-  . link:cookbook_phpmyadmin.html[phpMyAdmin]: How to run phpMyAdmin on Cherokee.
-  . link:cookbook_sugarcrm.html[SugarCRM]: How to run SugarCRM on Cherokee.
-  . link:cookbook_concrete5.html[Concrete5]: How to run Concrete5 on Cherokee.
-  . link:cookbook_symfony.html[Symfony]: How to run Symfony apps with Cherokee.
-  . link:cookbook_trac.html[Trac]: How to run Trac on Cherokee.
-  . link:cookbook_zend.html[Zend]: How to run Zend apps with Cherokee.
-  . link:cookbook_uwsgi.html[uWSGI]: Setting up Cherokee for uWSGI.
-
-*********************************
-link:modules.html[Modules]: Information about the standard modules
-*********************************
-
-  . link:modules_handlers.html[Handlers]: Connection handling modules.
-    - link:modules_handlers_file.html[Static Content]: Send files.
-    - link:modules_handlers_dirlist.html[Only listing]: List directories.
-    - link:modules_handlers_common.html[List & Send]: List directories and send files.
-    - link:modules_handlers_custom_error.html[HTTP error]: Generate custom HTTP errors.
-    - link:modules_handlers_redir.html[Redirection]: URL forwards and rewrites.
-    - link:modules_handlers_cgi.html[CGI]: Common Gateway Interface.
-    - link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
-    - link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
-    - link:modules_handlers_uwsgi.html[uWSGI]: uWSGI protocol.
-    - link:modules_handlers_proxy.html[HTTP reverse proxy]: Surrogate/reverse proxy handler.
-    - link:modules_handlers_ssi.html[Server Side Includes]: SSI Server Support.
-    - link:modules_handlers_streaming.html[Audio/Video Streaming]: Media streamer.
-    - link:modules_handlers_secdownload.html[Hidden Downloads]: Secure, Time expiring downloads.
-    - link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
-    - link:modules_handlers_dbslayer.html[MySQL bridge]: MySQL over HTTP bridge.
-    - link:modules_handlers_admin.html[Remote Administration]: Cherokee administration handler.
-    - link:modules_handlers_empty_gif.html[1x1 Transparent GIF]: Returns a 1x1 pixel transparent GIF.
-  . link:modules_validators.html[Validators]: Authentication mechanisms.
-    - link:modules_validators_plain.html[Plain]: Plain file mechanism.
-    - link:modules_validators_htpasswd.html[htpasswd]: htpasswd mechanism.
-    - link:modules_validators_htdigest.html[htdigest]: htdigest mechanism.
-    - link:modules_validators_ldap.html[LDAP]: Lightweight Directory Acces Protocol mechanism.
-    - link:modules_validators_mysql.html[MySQL]: Database mechanism.
-    - link:modules_validators_pam.html[PAM]: Pluggable Authentication Module mechanism.
-    - link:modules_validators_authlist.html[Fixed list]: Fixed authentication list.
-  . link:modules_encoders.html[Encoders]: Compression and filtering.
-    - link:modules_encoders_gzip.html[gzip]: compress using gzip algorithm.
-    - link:modules_encoders_deflate.html[deflate]: compress using deflate algorithm.
-  . link:modules_loggers.html[Loggers]: Logging mechanisms.
-    - link:modules_loggers_combined.html[Combined]: Combined log format.
-    - link:modules_loggers_custom.html[Custom]: Customizable log format.
-    - link:modules_loggers_ncsa.html[Common (NCSA)]: Common log format.
-  . link:modules_balancers.html[Balancers]: Load balancing strategies.
-    - link:modules_balancers_round_robin.html[Round robin]: Round Robin strategy.
-    - link:modules_balancers_ip_hash.html[IP Hash]: Client IP hash strategy.
-
-*********************************
-link:other.html[Other information]: Miscellaneus
-*********************************
-
-  . link:other_faq.html[FAQ]: List of Frequently Asked Questions.
-  . link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
-  . link:other_graphs.html[Usage graphs]: Information on the several graphs available.
-  . link:other_signals.html[Signals]: Signals supported by Cherokee.
-  . link:other_community.html[Community]: More information sources.
-  . link:other_errors.html[Common errors]: Some typical production  errors and their cause.
-
-*********************************
-link:dev.html[Development info]: Things of interest to developers
-*********************************
-
-  . link:dev_debug.html[Debugging]: Resources available to debug Cherokee.
-  . link:dev_cherokee.conf.html[cherokee.conf]: Internal configuration specs.
-  . link:dev_issues.html[Open issues]: Current development issues (proxy, wizards, extra ruletypes...)
-  . link:dev_qa.html[Quality Assurance]: Some info about QA in Cherokee.
-////
-  . link:dev_api.html[API introduction]
-  . link:dev_examples.html[Examples]: Development examples
-////
-
-////////////////////////////////////////////////////
-
-Suggested recipes:
-------------------
-Cake PHP: 	http://www.cakephp.org/
-Piwik:		http://piwik.org/
-vBSEO:		http://www.vbseo.com/
-Subversion:	http://subversion.tigris.org/
-Tracks:		http://www.rousette.org.uk/projects/
-SquirrelMail: 	http://www.squirrelmail.org/
-Roller:		http://www.rollerweblogger.org/
-DokuWiki:	http://wiki.splitbrain.org/wiki:dokuwiki
-MediaWiki:	http://www.mediawiki.org/wiki/MediaWiki
-Mantis:		http://www.mantisbt.org/
-Opina:		http://trac.ebabel.info/projects/opina
-KnowledgeTree:	http://www.knowledgetree.com/
-Redmine:	http://www.redmine.org/
-JasperServer:	http://jasperforge.org/sf/projects/jasperserver
-eZPublish:	http://ez.no/
-Jaws Project:	http://www.jaws-project.com/
-////////////////////////////////////////////////////
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <meta name="ROBOTS" content="ALL" />
+    <meta http-equiv="imagetoolbar" content="no" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />
+    <meta name="Keywords" content="cherokee web server httpd http" />
+    <meta name="Description" content="Cherokee is a flexible, very fast, lightweight Web server. It is implemented entirely in C, and has no dependencies beyond a standard C library. It is embeddable and extensible with plug-ins. It supports on-the-fly configuration by reading files or strings, TLS/SSL (via GNUTLS or OpenSSL), virtual hosts, authentication, cache friendly features, PHP, custom error management, and much more." />
+    <link href="media/css/cherokee_doc.css" rel="stylesheet" type="text/css" media="all" />
+  </head>
+<body>
+<div class="paragraph"><p>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="Content-type" content="text/html; charset=utf-8" /&gt;
+    &lt;meta http-equiv="Content-Language" content="en-us" /&gt;
+    &lt;meta name="ROBOTS" content="ALL" /&gt;
+    &lt;meta http-equiv="imagetoolbar" content="no" /&gt;
+    &lt;meta name="MSSmartTagsPreventParsing" content="true" /&gt;
+    &lt;meta name="Keywords" content="cherokee web server httpd http" /&gt;
+    &lt;meta name="Description" content="Cherokee is a flexible, very fast, lightweight Web server. It is implemented entirely in C, and has no dependencies beyond a standard C library. It is embeddable and extensible with plug-ins. It supports on-the-fly configuration by reading files or strings, TLS/SSL (via GNUTLS or OpenSSL), virtual hosts, authentication, cache friendly features, PHP, custom error management, and much more." /&gt;
+    &lt;link href="media/css/cherokee_doc.css" rel="stylesheet" type="text/css" media="all" /&gt;
+  &lt;/head&gt;
+&lt;body&gt;
+&lt;h2 id="_cherokee_0_99_documentation"&gt;Cherokee 0.99 documentation&lt;/h2&gt;
+&lt;div class="sectionbody"&gt;
+&lt;div class="sidebarblock"&gt;
+&lt;div class="sidebar-content"&gt;
+&lt;div class="paragraph"&gt;&lt;p&gt;&lt;a href="basics.html"&gt;Getting started&lt;/a&gt;: Cherokee basics&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="olist arabic"&gt;&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_why_cherokee.html"&gt;Why Cherokee?&lt;/a&gt;: Feature overview.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_requirements.html"&gt;Requirements&lt;/a&gt;: Hardware and software requirements.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_download.html"&gt;Download&lt;/a&gt;: Where and how to download Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_installation.html"&gt;Installation&lt;/a&gt;: Installation instructions.
+&lt;/p&gt;
+&lt;div class="ulist"&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_installation_unix.html"&gt;Unix&lt;/a&gt;: Installation on Unix/Linux platforms.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_installation_windows.html"&gt;Windows&lt;/a&gt;: Installation on Windows platform.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_installation_svn.html"&gt;From SVN&lt;/a&gt;: Installation of the development release.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_upgrade.html"&gt;Upgrading Cherokee&lt;/a&gt;: Upgrading from a previous release?
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="basics_running_cherokee.html"&gt;Running Cherokee&lt;/a&gt;: Basic steps to run Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+&lt;div class="sidebarblock"&gt;
+&lt;div class="sidebar-content"&gt;
+&lt;div class="paragraph"&gt;&lt;p&gt;&lt;a href="bundle.html"&gt;Cherokee Bundle&lt;/a&gt;: Details about each program bundled with Cherokee&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="olist arabic"&gt;&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="bundle_cherokee.html"&gt;cherokee&lt;/a&gt;: Main web server invoker.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="bundle_cherokee-admin.html"&gt;cherokee-admin&lt;/a&gt;: The configuration UI.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="bundle_cherokee-config.html"&gt;cherokee-config&lt;/a&gt;: Information retriever.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="bundle_cherokee-tweak.html"&gt;cherokee-tweak&lt;/a&gt;: Cherokee Swiss army knife
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="bundle_cherokee-worker.html"&gt;cherokee-worker&lt;/a&gt;: Web server stand alone program.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="bundle_cget.html"&gt;cget&lt;/a&gt;: Web retriever.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+&lt;div class="sidebarblock"&gt;
+&lt;div class="sidebar-content"&gt;
+&lt;div class="paragraph"&gt;&lt;p&gt;&lt;a href="config.html"&gt;Configuration&lt;/a&gt;: Set up process explained&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="olist arabic"&gt;&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_quickstart.html"&gt;Quickstart&lt;/a&gt;: Overview and walkthrough.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_status.html"&gt;Status&lt;/a&gt;: Server status information.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_general.html"&gt;General&lt;/a&gt;: General settings.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_virtual_servers.html"&gt;Virtual servers&lt;/a&gt;: Server definition.
+&lt;/p&gt;
+&lt;div class="ulist"&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_virtual_servers_rule.html"&gt;Rule Options&lt;/a&gt;: Specifying the matching rules.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_virtual_servers_evhost.html"&gt;Advanced Virtual Hosting&lt;/a&gt;: Multi-domain settings.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_info_sources.html"&gt;Information Sources&lt;/a&gt;: Defining information sources.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_advanced.html"&gt;Advanced&lt;/a&gt;: Advanced tweaking. Not for the faint of heart.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="config_wizards.html"&gt;Wizards&lt;/a&gt;: Configuration assistants for many known scenarios.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+&lt;div class="sidebarblock"&gt;
+&lt;div class="sidebar-content"&gt;
+&lt;div class="paragraph"&gt;&lt;p&gt;&lt;a href="cookbook.html"&gt;Cookbook&lt;/a&gt;: Recipes for specific tasks&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="olist arabic"&gt;&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_authentication.html"&gt;Authentication&lt;/a&gt;: How to set up authenticated resources.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_cross_compilation.html"&gt;Cross compilation&lt;/a&gt;: How to cross compile Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_dbslayer.html"&gt;DBSlayer&lt;/a&gt;: How to set up DBSlayer MySQL balancing.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_embedding_cherokee.html"&gt;Embedding Cherokee&lt;/a&gt;: Cherokee on embedded devices.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_maintenance.html"&gt;Maintenance&lt;/a&gt;: Seamlessly switching to maintenance mode.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_managing_logs.html"&gt;Managing logs&lt;/a&gt;: Seamless log rotation.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_optimizations.html"&gt;Optimizing Cherokee&lt;/a&gt;: Recommendations and tweaks.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_redirs.html"&gt;Redirections&lt;/a&gt;: Common redirection examples.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_ssl.html"&gt;SSL/TLS, certs&lt;/a&gt;: Secure connection tips.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_streaming.html"&gt;Streaming&lt;/a&gt;: How to stream Audio and Video with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_php.html"&gt;PHP&lt;/a&gt;: How to run PHP apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_ror.html"&gt;Ruby on Rails&lt;/a&gt;: How to run Ruby on Rails apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_django.html"&gt;Django&lt;/a&gt;: How to run Django apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_coldfusion.html"&gt;ColdFusion&lt;/a&gt;: How to run ColdFusion apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_drupal.html"&gt;Drupal&lt;/a&gt;: How to run Drupal on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_wordpress.html"&gt;Wordpress&lt;/a&gt;: How to run Wordpress on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_alfresco.html"&gt;Alfresco&lt;/a&gt;: How to run Alfresco on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_mono.html"&gt;ASP.NET&lt;/a&gt;: How to run ASP.NET apps with Mono and Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_glassfish.html"&gt;GlassFish&lt;/a&gt;: How to run Java apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_joomla.html"&gt;Joomla&lt;/a&gt;: How to run Joomla on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_kumbia.html"&gt;Kumbia&lt;/a&gt;: How to run Kumbia apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_liferay.html"&gt;Liferay&lt;/a&gt;: How to run Liferay on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_mailman.html"&gt;Mailman&lt;/a&gt;: How to run Mailman on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_moodle.html"&gt;Moodle&lt;/a&gt;: How to run Moodle on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_nagios.html"&gt;Nagios&lt;/a&gt;: How to run Nagios with Cheroke.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_phpbb.html"&gt;phpBB&lt;/a&gt;: How to run phpBB on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_phpmyadmin.html"&gt;phpMyAdmin&lt;/a&gt;: How to run phpMyAdmin on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_sugarcrm.html"&gt;SugarCRM&lt;/a&gt;: How to run SugarCRM on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_concrete5.html"&gt;Concrete5&lt;/a&gt;: How to run Concrete5 on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_symfony.html"&gt;Symfony&lt;/a&gt;: How to run Symfony apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_trac.html"&gt;Trac&lt;/a&gt;: How to run Trac on Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_zend.html"&gt;Zend&lt;/a&gt;: How to run Zend apps with Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="cookbook_uwsgi.html"&gt;uWSGI&lt;/a&gt;: Setting up Cherokee for uWSGI.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+&lt;div class="sidebarblock"&gt;
+&lt;div class="sidebar-content"&gt;
+&lt;div class="paragraph"&gt;&lt;p&gt;&lt;a href="modules.html"&gt;Modules&lt;/a&gt;: Information about the standard modules&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="olist arabic"&gt;&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers.html"&gt;Handlers&lt;/a&gt;: Connection handling modules.
+&lt;/p&gt;
+&lt;div class="ulist"&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_file.html"&gt;Static Content&lt;/a&gt;: Send files.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_dirlist.html"&gt;Only listing&lt;/a&gt;: List directories.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_common.html"&gt;List &amp; Send&lt;/a&gt;: List directories and send files.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_custom_error.html"&gt;HTTP error&lt;/a&gt;: Generate custom HTTP errors.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_redir.html"&gt;Redirection&lt;/a&gt;: URL forwards and rewrites.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_cgi.html"&gt;CGI&lt;/a&gt;: Common Gateway Interface.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_fcgi.html"&gt;FastCGI&lt;/a&gt;: Fast Common Gateway Interface.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_scgi.html"&gt;SCGI&lt;/a&gt;: Simple Common Gateway Interface.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_uwsgi.html"&gt;uWSGI&lt;/a&gt;: uWSGI protocol.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_proxy.html"&gt;HTTP reverse proxy&lt;/a&gt;: Surrogate/reverse proxy handler.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_ssi.html"&gt;Server Side Includes&lt;/a&gt;: SSI Server Support.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_streaming.html"&gt;Audio/Video Streaming&lt;/a&gt;: Media streamer.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_secdownload.html"&gt;Hidden Downloads&lt;/a&gt;: Secure, Time expiring downloads.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_server_info.html"&gt;Server Info&lt;/a&gt;: Provide info about Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_dbslayer.html"&gt;MySQL bridge&lt;/a&gt;: MySQL over HTTP bridge.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_admin.html"&gt;Remote Administration&lt;/a&gt;: Cherokee administration handler.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_handlers_empty_gif.html"&gt;1x1 Transparent GIF&lt;/a&gt;: Returns a 1x1 pixel transparent GIF.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators.html"&gt;Validators&lt;/a&gt;: Authentication mechanisms.
+&lt;/p&gt;
+&lt;div class="ulist"&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators_plain.html"&gt;Plain&lt;/a&gt;: Plain file mechanism.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators_htpasswd.html"&gt;htpasswd&lt;/a&gt;: htpasswd mechanism.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators_htdigest.html"&gt;htdigest&lt;/a&gt;: htdigest mechanism.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators_ldap.html"&gt;LDAP&lt;/a&gt;: Lightweight Directory Acces Protocol mechanism.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators_mysql.html"&gt;MySQL&lt;/a&gt;: Database mechanism.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators_pam.html"&gt;PAM&lt;/a&gt;: Pluggable Authentication Module mechanism.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_validators_authlist.html"&gt;Fixed list&lt;/a&gt;: Fixed authentication list.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_encoders.html"&gt;Encoders&lt;/a&gt;: Compression and filtering.
+&lt;/p&gt;
+&lt;div class="ulist"&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_encoders_gzip.html"&gt;gzip&lt;/a&gt;: compress using gzip algorithm.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_encoders_deflate.html"&gt;deflate&lt;/a&gt;: compress using deflate algorithm.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_loggers.html"&gt;Loggers&lt;/a&gt;: Logging mechanisms.
+&lt;/p&gt;
+&lt;div class="ulist"&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_loggers_combined.html"&gt;Combined&lt;/a&gt;: Combined log format.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_loggers_custom.html"&gt;Custom&lt;/a&gt;: Customizable log format.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_loggers_ncsa.html"&gt;Common (NCSA)&lt;/a&gt;: Common log format.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_balancers.html"&gt;Balancers&lt;/a&gt;: Load balancing strategies.
+&lt;/p&gt;
+&lt;div class="ulist"&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_balancers_round_robin.html"&gt;Round robin&lt;/a&gt;: Round Robin strategy.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="modules_balancers_ip_hash.html"&gt;IP Hash&lt;/a&gt;: Client IP hash strategy.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+&lt;div class="sidebarblock"&gt;
+&lt;div class="sidebar-content"&gt;
+&lt;div class="paragraph"&gt;&lt;p&gt;&lt;a href="other.html"&gt;Other information&lt;/a&gt;: Miscellaneus&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="olist arabic"&gt;&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="other_faq.html"&gt;FAQ&lt;/a&gt;: List of Frequently Asked Questions.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="other_goodies.html"&gt;Cherokee Goodies&lt;/a&gt;: Interesting Cherokee features.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="other_graphs.html"&gt;Usage graphs&lt;/a&gt;: Information on the several graphs available.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="other_signals.html"&gt;Signals&lt;/a&gt;: Signals supported by Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="other_community.html"&gt;Community&lt;/a&gt;: More information sources.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="other_errors.html"&gt;Common errors&lt;/a&gt;: Some typical production  errors and their cause.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+&lt;div class="sidebarblock"&gt;
+&lt;div class="sidebar-content"&gt;
+&lt;div class="paragraph"&gt;&lt;p&gt;&lt;a href="dev.html"&gt;Development info&lt;/a&gt;: Things of interest to developers&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="olist arabic"&gt;&lt;ol class="arabic"&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="dev_debug.html"&gt;Debugging&lt;/a&gt;: Resources available to debug Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="dev_cherokee.conf.html"&gt;cherokee.conf&lt;/a&gt;: Internal configuration specs.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="dev_issues.html"&gt;Open issues&lt;/a&gt;: Current development issues (proxy, wizards, extra ruletypes&#8230;)
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+&lt;a href="dev_qa.html"&gt;Quality Assurance&lt;/a&gt;: Some info about QA in Cherokee.
+&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="footer"&gt;
+&lt;div id="footer-text"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</p></div>
+<div id="footer">
+<div id="footer-text">
+</div>
+</div>
+</body>
+</html>

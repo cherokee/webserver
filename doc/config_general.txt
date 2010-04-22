@@ -92,3 +92,51 @@ Chroot
 
 Cherokee can be jailed inside a directory. Note that this should not
 be used as the sole security measure.
+
+
+[[icons]]
+Icon management
+~~~~~~~~~~~~~~~
+The icons configuration file associates an icon image with one or more
+file extensions. This information will be used mainly by the
+link:modules_handlers_dirlist.html[dirlist] handler.
+
+
+* **Extensions**
+
+    - This allows to associate icons with extensions.
+
+* **Files**
+
+   - This section lets you specify an icon for certain filenames such
+     as "core" or "README". It accepts wild-card strings (using * and
+     ?)
+
+* **Special icons**
+
+    - **Directory**: In this case, it specifies the icon to be used
+        with Directories.
+
+    - **ParentDirectory**: This entry is used to assign an Icon to the
+        "go to the parent directory" action.
+
+    - **Default**: This is the icon that will be shown if any of the
+        previous ones matched.
+
+image::media/images/admin_general_icons.png[Icons]
+
+
+[[mime]]
+MIME Types
+~~~~~~~~~~
+This section allows to add support for new MIME types or edit the
+existing ones.
+
+* *Mime Type*: this is the proper mime string.
+
+* *Extensions*: the file extensions for this type of contents.
+
+* *Max Age*: defines for how long a file of this type must be cached at
+  the client's side.
+
+image::media/images/admin_general_mime.png[MIME Types]

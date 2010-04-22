@@ -31,8 +31,6 @@ config_general.html \
 config_virtual_servers.html \
 config_virtual_servers_evhost.html \
 config_virtual_servers_rule.html \
-config_icons.html \
-config_mime_types.html \
 config_advanced.html \
 config_info_sources.html \
 config_status.html \
@@ -139,6 +137,8 @@ media/images/admin_general.png \
 media/images/admin_general_networking.png \
 media/images/admin_general_permissions.png \
 media/images/admin_general_ports.png \
+media/images/admin_general_icons.png \
+media/images/admin_general_mime.png \
 media/images/admin_info_sources.png \
 media/images/admin_handler_admin.png \
 media/images/admin_handler_cgi.png \
@@ -152,12 +152,8 @@ media/images/admin_handler_onlylisting_ex.png \
 media/images/admin_handler_onlylisting.png \
 media/images/admin_handler_dbslayer.png \
 media/images/admin_handler_secdownload.png \
-media/images/admin_icons1.png \
-media/images/admin_icons2.png \
-media/images/admin_icons3.png \
 media/images/admin_index.png \
 media/images/admin_launch.png \
-media/images/admin_mime.png \
 media/images/admin_noconfig.png \
 media/images/admin_notrunning.png \
 media/images/admin_rule_regex.png \
@@ -167,8 +163,6 @@ media/images/admin_validators_authlist.png \
 media/images/admin_validators_ldap.png \
 media/images/admin_vservers_wizard.png \
 media/images/admin_vserver_wizard.png \
-media/images/admin_vservers_wizard_misc.png \
-media/images/admin_vserver_wizard_misc.png \
 media/images/admin_vserver_errors.png \
 media/images/admin_vserver_loggers.png \
 media/images/admin_vserver.png \
