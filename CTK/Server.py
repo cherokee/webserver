@@ -48,15 +48,8 @@ class PostValidator:
         updates = {}
 
         for key in self.post:
-            key_done = False
-
             for regex, func in self.validation_list:
-                if key_done:
-                    break
-
                 if re.match(regex, key):
-                    key_done = True
-
                     for n in range(len(self.post[key])):
                         val = self.post[key][n]
                         if not val and 'CHECK_ON_NO_VALUE' not in dir(func):
