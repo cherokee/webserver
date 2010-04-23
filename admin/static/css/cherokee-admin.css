@@ -138,25 +138,25 @@ img.icon_chooser_selected {
 #top-box { padding: 8px 0; border-bottom: 1px solid #def; margin: 8px 0 0 0; height: 28px; }
 #top-box h1 { padding: 0; margin: 0 0 0 16px; float: left; width: 480px; }
 #home-container { overflow: auto; overflow-x: hidden; }
-.server-status { padding-left: 128px; min-height: 128px; margin-left: 32px; margin-top: 16px; width: 370px; float: left;  }
-#server-running { background: #fff url(/static/images/kid-running.png) no-repeat; }
-#server-stopped { background: #fff url(/static/images/kid-stopped.png) no-repeat; }
+#home-main { width: 580px; float: left; } 
+#home-sidebar { width: 320px; padding: 16px; float: right; background: #f0f7ff url(/static/images/sidebar-bg.png) repeat-y;}
+.server-status { padding-left: 128px; min-height: 128px; margin-left: 32px; margin-top: 16px; }
+#server-running { background: transparent url(/static/images/kid-running.png) no-repeat; }
+#server-stopped { background: transparent url(/static/images/kid-stopped.png) no-repeat; }
 #status-message { font-size: 18px; font-weight: bold; padding: 48px 0 28px 0; }
-#server-info { width: 384px; float: right; margin-right: 16px; }
-#server-info h3 { font-size: 13px; color: #000; font-weight: bold; padding: 4px 0; border-bottom: 1px solid #cde; }
+#server-info { margin: 16px; background-color: #f0f7ff; padding: 4px; border: 1px solid #cde; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+#server-info h3 { font-size: 13px; color: #27c; font-weight: bold; padding: 2px 4px; text-shadow: #fff 0px 1px 0px; }
 #launch-button { float: right; }
-#server-info-table { border-collapse: collapse; width: 100%; }
-#server-info-table td, #server-info-table th { border-bottom: 1px solid #cde; padding: 4px; }
+#server-info-table { border-collapse: collapse; width: 100%; border: 1px solid #cde; background-color: #fff; margin-top: 4px; }
+#server-info-table td, #server-info-table th { border-bottom: 1px solid #cde; padding: 6px; }
 #server-info-table th { font-weight: normal; color: #666; }
 #server-info-table td { text-align: right; }
 
 #language-selector { float: right; margin: 0; padding: 0; height: 28px; }
 #language-list { display: inline; margin: 0; padding: 0;}
 
-#bottom-box { padding: 8px 0; margin: 8px 16px; }
-#bottom-box h2 { font-size: 16px; margin-bottom: 16px; }
-#enterprise-box { width: 256px; float: right; }
-#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top 30px; padding-top:64px; }
+#enterprise-box { }
+#enterprise-notice { background: transparent url(/static/images/other/octality-logo.png) no-repeat top 30px; padding-top:64px; }
 #enterprise-link { text-align: right; margin-top: 16px; color: #def; }
 
 #community-box { width: 648px; float: left; }
@@ -166,21 +166,21 @@ img.icon_chooser_selected {
 #community-left { width: 306px; float: left; }
 #community-right { width: 306px; float: right; padding-left: 16px; }
 
-#proud-users { background: #fff url(/static/images/other/proud.png) no-repeat; padding-left: 52px; }
+#proud-users { background: transparent url(/static/images/other/proud.png) no-repeat; padding-left: 52px; }
 #proud-link { text-align: right; margin-top: 8px; color: #def; }
 #proud-link a { margin: 0 4px; }
 #proud-a { cursor: pointer; text-decoration: underline; }
 
 #social-media { border-top: 1px dotted #def; margin-top: 16px; padding-top: 8px; }
 .social-box { padding-left: 52px; padding-top: 3px; min-height: 22px; margin-bottom: 6px;  }
-#twitter-box { background: #fff url(/static/images/other/twitter.png) no-repeat top 26px; }
-#fb-box { background: #fff url(/static/images/other/facebook.png) no-repeat top 26px; }
+#twitter-box { background: transparent url(/static/images/other/twitter.png) no-repeat top 26px; }
+#fb-box { background: transparent url(/static/images/other/facebook.png) no-repeat top 26px; }
 
 .contact-box { padding-left: 28px; padding-top: 3px; margin-bottom: 16px; }
-#contact-irc { background: #fff url(/static/images/other/contact-irc.png) no-repeat; }
-#contact-list { background: #fff url(/static/images/other/contact-list.png) no-repeat; }
+#contact-irc { background: transparent url(/static/images/other/contact-irc.png) no-repeat; }
+#contact-list { background: transparent url(/static/images/other/contact-list.png) no-repeat; }
 #subscribe-a { cursor: pointer; text-decoration: underline; }
-#contact-bug { background: #fff url(/static/images/other/contact-bug.png) no-repeat; }
+#contact-bug { background: transparent url(/static/images/other/contact-bug.png) no-repeat; }
 
 
 

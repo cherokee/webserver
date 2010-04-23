@@ -156,7 +156,7 @@ class Render_Source:
         def __init__ (self, rules):
             CTK.Container.__init__ (self)
 
-            table = CTK.Table()
+            table = CTK.Table({'id': 'source-usage'})
             self += table
             table.set_header(1)
             table += [CTK.RawHTML(x) for x in (_('Virtual Server'), _('Rule'))]
@@ -184,6 +184,8 @@ class Render_Source:
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>Source: %s</h2>'%(nick))
 
+        workarea = CTK.Box ({'id': 'source-workarea'})
+
         table = CTK.PropsTable()
         table.Add (_('Type'),       CTK.ComboCfg ('source!%s!type'%(num), SOURCE_TYPES), _(NOTE_TYPE))
         table.Add (_('Nick'),       CTK.TextCfg ('source!%s!nick'%(num), False), _(NOTE_NICK))
@@ -198,13 +200,15 @@ class Render_Source:
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('source', num)
         submit += table
-        cont += submit
+        workarea += submit
 
         sources = _get_rule_sources ()
         rules   = [key for key,val in sources.items() if str(num) in val]
 
         if rules:
-            cont += self.Source_Usage (rules)
+            workarea += self.Source_Usage (rules)
+ 
+        cont += workarea
 
         render = cont.Render()
         return render.toJSON()

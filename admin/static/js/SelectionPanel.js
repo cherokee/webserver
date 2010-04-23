@@ -201,7 +201,7 @@ function resize_cherokee_panels() {
            $(".selection-panel table").removeClass('hasScroll');
        }
        $('#source_panel').height($(window).height() - 130);
-       $('.source_content .submitter').height($(window).height() - 92);
+       $('#source-workarea').height($(window).height() - 92);
    }
 }
 
