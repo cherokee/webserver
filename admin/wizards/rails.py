@@ -404,11 +404,12 @@ def is_ror_dir (path):
     try:
         manage = os.path.join (path, "script/server")
         validations.is_local_file_exists (manage)
-    except ValueError:
-        manage = os.path.join (path, "script/rails")
-        validations.is_local_file_exists (manage)
     except:
-        raise ValueError, _(ERROR_NO_ROR)
+        try:
+            manage = os.path.join (path, "script/rails")
+            validations.is_local_file_exists (manage)
+        except:
+            raise ValueError, _(ERROR_NO_ROR)
 
     return path
 
