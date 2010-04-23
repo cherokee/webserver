@@ -158,9 +158,9 @@
 	   var self = this;
 	   return this.each(function() {
 		  if ($(this).data('selectionpanel')) return;
-		  var submitter = new SelectionPanel(this, table_id, content_id, cookie, cookie_domain, url_empty);
-		  $(this).data('selectionpanel', submitter);
-		  submitter.init(self);
+		  var panel = new SelectionPanel(this, table_id, content_id, cookie, cookie_domain, url_empty);
+		  $(this).data('selectionpanel', panel);
+		  panel.init(self);
 	   });
     };
 

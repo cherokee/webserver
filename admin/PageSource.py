@@ -248,7 +248,7 @@ class Render:
             entry = lambda klass, key: CTK.Box ({'class': klass}, CTK.RawHTML (CTK.cfg.get_val(key, '')))
 
             # Build the panel list
-            panel = SelectionPanel.SelectionPanel (None, right_box.id, URL_CONTENT, '%s/empty'%(URL_CONTENT), draggable=False, container='source_panel')
+            panel = SelectionPanel.SelectionPanel (None, right_box.id, "/source", '%s/empty'%(URL_CONTENT), draggable=False, container='source_panel')
             self += panel
 
             sources = CTK.cfg.keys('source')
