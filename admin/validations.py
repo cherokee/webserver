@@ -151,9 +151,12 @@ def is_ipv6 (value):
         raise ValueError, _('Malformed IPv6')
     return value
 
+def is_chroot_dir_exists (value):
+    return is_local_dir_exists (value, nochroot=True)
+
 def is_local_dir_exists (value, nochroot=False):
     value = is_path (value)
-    path  = get_real_path (value)
+    path  = get_real_path (value, nochroot)
 
     if not os.path.exists(path):
         raise ValueError, _('Path does not exist')
@@ -165,7 +168,7 @@ def is_local_dir_exists (value, nochroot=False):
 
 def is_local_file_exists (value, nochroot=False):
     value = is_path (value)
-    path  = get_real_path (value)
+    path  = get_real_path (value, nochroot)
 
     if not os.path.exists(path):
         raise ValueError, _('Path does not exist')
