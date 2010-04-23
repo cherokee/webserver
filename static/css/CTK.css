@@ -810,3 +810,36 @@ tr.panel-selected td div.row_content .sel-actions {
 #icon_extensions td + td + td { padding: 4px 0; }
 #icon_extensions input { width: 400px; }
 #icon_extensions .notice { display: none; }
+
+
+
+#error-redirection {
+ table-layout: fixed;
+ border-collapse: collapse;
+ width: 670px;
+ border: 1px solid #cde;
+ margin-bottom: 32px;
+}
+
+#error-redirection th {
+  background: #e6f3ff url(/CTK/images/bg-th.png) repeat-x;
+  border: none;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px;
+}
+#error-redirection td {
+  border-bottom: 1px solid #cde;
+  padding: 4px;
+}
+
+#error-redirection th { width: 100px;  }
+#error-redirection th+th { width: 338px;  }
+#error-redirection th+th+th { width: 200px; }
+#error-redirection th+th+th+th { width: 32px; }
+
+#error-redirection td { width: 100px;  }
+#error-redirection td+td { width: 338px;  }
+#error-redirection td+td+td { width: 200px; }
+#error-redirection td+td+td+td { width: 32px; text-align: center; }
+
+
