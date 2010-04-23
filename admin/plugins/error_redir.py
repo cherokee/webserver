@@ -61,9 +61,9 @@ class Content (CTK.Container):
         entries.sort (lambda x,y: cmp(int(x),int(y)))
 
         if entries:
-            table = CTK.Table()
+            table = CTK.Table({'id': 'error-redirection'})
             table.set_header(1)
-            table += [CTK.RawHTML(x) for x in ('Error', 'Redirection', 'Type')]
+            table += [CTK.RawHTML(x) for x in ('Error', 'Redirection', 'Type', '')]
 
             for i in entries:
                 show  = CTK.ComboCfg ('%s!%s!show'%(key,i), REDIRECTION_TYPE)
