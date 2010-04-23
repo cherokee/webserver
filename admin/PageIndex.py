@@ -409,21 +409,21 @@ class Render:
         self.page += top;
 
         cont = CTK.Box({'id': 'home-container'})
-        mainarea = CTK.Box({'id': 'home-main'})
 
         if 'b' in VERSION:
             notice  = CTK.Notice()
             notice += CTK.RawHTML(_(BETA_TESTER_NOTICE))
-            mainarea += notice
+            cont += notice
 
-        mainarea += ServerStatus()
-        mainarea += ServerInfo()
-        cont += mainarea
+        cont += ServerStatus()
+        cont += ServerInfo()
+        cont += CTK.RawHTML('<div class="ui-helper-clearfix"></div>')
 
-        sidebar = CTK.Box({'id': 'home-sidebar'})
-        sidebar += EnterpriseBox()
-        sidebar += CommunityBox()
-        cont += sidebar
+        bottom = CTK.Box({'id': 'bottom-box'})
+        bottom += EnterpriseBox()
+        bottom += CommunityBox()
+        cont += bottom
+        cont += CTK.RawHTML('<div class="ui-helper-clearfix"></div>')
 
         self.page += cont
         self.page += CTK.RawHTML (js=JS_SCROLL)
