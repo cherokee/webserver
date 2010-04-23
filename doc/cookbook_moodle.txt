@@ -52,10 +52,8 @@ virtual servers.
 
 In this case, the first thing you will have to do is to enter the
 virtual server configuration you'd like to configure Moodle in. Once
-in there, click on the `Wizards` button and choose the one named
-`Moodle`:
-
-image::media/images/admin_vserver_wizard_misc.png[Virtual Server Wizards]
+in there, click on the rule addition button and choose the `Moodle`
+wizard.
 
 As in the previous case, this wizard will ask some very basic
 information, including the public web directory where Moodle will be
