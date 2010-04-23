@@ -540,7 +540,7 @@ tr.panel-selected td div.row_content .sel-actions {
 
 .status_content .ui-tabs .ui-tabs-panel,
 .vserver_content .ui-tabs .ui-tabs-panel,
-.source_content .submitter,
+#source-workarea,
 .rules_content .ui-tabs .ui-tabs-panel {
   padding-left: 16px;
   background-color: #fff;
@@ -548,9 +548,29 @@ tr.panel-selected td div.row_content .sel-actions {
   overflow: auto;
 }
 
-.source_content .submitter {
+#source-workarea {
   border-top: 1px solid #cde;
 }
+
+#source-usage { 
+ table-layout: fixed;
+ border-collapse: collapse;
+ width: 670px;
+ border: 1px solid #cde;
+ margin-bottom: 32px;
+}
+
+#source-usage th {
+  background: #e6f3ff url(/CTK/images/bg-th.png) repeat-x;
+  border: none;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px;
+}
+#source-usage td {
+  border-bottom: 1px solid #cde;
+  padding: 4px;
+}
+
 
 .vserver_new_content {
   float: right;
