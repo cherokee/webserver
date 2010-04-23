@@ -142,9 +142,9 @@ def is_valid_webdir (web_dir):
     return web_dir
 
 VALS = [
+    ('%s!web_dir' %(PREFIX), validations.is_not_empty),
     ('%s!web_dir' %(PREFIX), is_valid_webdir),
 ]
-Wizard.CheckOnNoValue (VALS)
 
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/rtorrent$',   Welcome)

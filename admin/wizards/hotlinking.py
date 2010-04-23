@@ -211,10 +211,9 @@ class Welcome:
 
 
 VALS = [
+    ("%s!redirection", validations.is_not_empty),
     ("%s!redirection", validations.is_path),
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 
 # Rule

@@ -201,13 +201,16 @@ def is_trac_project (path):
     return path
 
 VALS = [
+    ('%s!trac_data'   %(PREFIX), validations.is_not_empty),
+    ('%s!trac_project'%(PREFIX), validations.is_not_empty),
+    ('%s!new_host'    %(PREFIX), validations.is_not_empty),
+    ('%s!new_webdir'  %(PREFIX), validations.is_not_empty),
+
     ("%s!trac_data"   %(PREFIX), is_trac_data),
     ("%s!trac_project"%(PREFIX), is_trac_project),
     ("%s!new_host"    %(PREFIX), validations.is_new_vserver_nick),
     ("%s!new_webdir"  %(PREFIX), validations.is_dir_formatted)
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/trac$',   Welcome)

@@ -231,14 +231,6 @@ def AddUsualStaticFiles (rule_pre):
         n += 1
 
 
-def CheckOnNoValue (vals):
-    """Append special property to validation functions so they can be
-    called on empty values"""
-    assert type(vals) == list
-    for x, func in vals:
-        func.CHECK_ON_NO_VALUE = True
-
-
 #
 # Init (TEMPORARY)
 #

@@ -174,10 +174,12 @@ def is_phpmyadmin_dir (path):
     return path
 
 VALS = [
+    ('%s!sources' %(PREFIX), validations.is_not_empty),
+    ('%s!web_dir' %(PREFIX), validations.is_not_empty),
+
     ('%s!sources' %(PREFIX), is_phpmyadmin_dir),
     ('%s!web_dir' %(PREFIX), validations.is_dir_formatted),
 ]
-Wizard.CheckOnNoValue (VALS)
 
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/phpmyadmin$',   Welcome)

@@ -139,4 +139,3 @@ class Welcome:
 CTK.publish ('^/wizard/vserver/(\d+)/common_static$',   Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/common_static/2', Create)
 CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST")
-

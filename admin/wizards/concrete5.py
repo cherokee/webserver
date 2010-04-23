@@ -277,11 +277,14 @@ def is_concrete5_dir (path):
     return path
 
 VALS = [
+    ("%s!sources" %(PREFIX), validations.is_not_empty),
+    ("%s!host"    %(PREFIX), validations.is_not_empty),
+    ("%s!web_dir" %(PREFIX), validations.is_not_empty),
+
     ('%s!sources' %(PREFIX), is_concrete5_dir),
     ('%s!host'    %(PREFIX), validations.is_new_vserver_nick),
     ('%s!web_dir' %(PREFIX), validations.is_dir_formatted),
 ]
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/concrete5$',   Welcome)

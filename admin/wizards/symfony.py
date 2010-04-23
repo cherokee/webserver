@@ -281,13 +281,16 @@ def is_symfony_dir (path):
     return path
 
 VALS = [
+    ('%s!sources' %(PREFIX), validations.is_not_empty),
+    ('%s!host'    %(PREFIX), validations.is_not_empty),
+    ('%s!web_dir' %(PREFIX), validations.is_not_empty),
+    ('%s!document_root' %(PREFIX), validations.is_not_empty),
+
     ('%s!sources' %(PREFIX), is_symfony_dir),
     ('%s!host'    %(PREFIX), validations.is_new_vserver_nick),
     ('%s!web_dir' %(PREFIX), validations.is_dir_formatted),
     ('%s!document_root' %(PREFIX), validations.is_local_dir_exists),
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/symfony$',   Welcome)

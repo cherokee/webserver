@@ -216,13 +216,15 @@ class Welcome:
         return cont.Render().toStr()
 
 VALS = [
+    ('%s!new_host'     %(PREFIX), validations.is_not_empty),
+    ('%s!bew_webdir'   %(PREFIX), validations.is_not_empty),
+    ('%s!new_src_host' %(PREFIX), validations.is_not_empty),
+    ('%s!new_src_port' %(PREFIX), validations.is_not_empty),
+
     ("%s!new_host"     %(PREFIX), validations.is_new_vserver_nick),
     ("%s!new_webdir"   %(PREFIX), validations.is_dir_formatted),
-    ("%s!new_src_host" %(PREFIX), validations.is_not_empty),
     ("%s!new_src_port" %(PREFIX), validations.is_tcp_port),
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/liferay$',   Welcome)

@@ -261,12 +261,14 @@ def is_wordpress_dir (path):
 
 
 VALS = [
+    ('%s!local_dir'%(PREFIX), validations.is_not_empty),
+    ('%s!host'     %(PREFIX), validations.is_not_empty),
+    ('%s!web_dir'  %(PREFIX), validations.is_not_empty),
+
     ('%s!local_dir'%(PREFIX), is_wordpress_dir),
     ('%s!host'     %(PREFIX), validations.is_new_vserver_nick),
     ('%s!web_dir'  %(PREFIX), validations.is_dir_formatted)
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/wordpress$',   Welcome)

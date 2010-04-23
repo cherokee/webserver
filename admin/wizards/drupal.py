@@ -306,12 +306,14 @@ def is_drupal_dir (path):
 
 
 VALS = [
+    ('%s!local_dir'%(PREFIX), validations.is_not_empty),
+    ('%s!host'     %(PREFIX), validations.is_not_empty),
+    ('%s!web_dir'  %(PREFIX), validations.is_not_empty),
+
     ('%s!local_dir'%(PREFIX), is_drupal_dir),
     ('%s!host'     %(PREFIX), validations.is_new_vserver_nick),
-    ('%s!web_dir'  %(PREFIX), validations.is_dir_formatted)
+    ('%s!web_dir'  %(PREFIX), validations.is_dir_formatted),
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/drupal$',   Welcome)

@@ -414,11 +414,12 @@ def is_ror_dir (path):
 
 
 VALS = [
+    ('%s!ror_dir' %(PREFIX), validations.is_not_empty),
+    ('%s!new_host'%(PREFIX), validations.is_not_empty),
+
     ("%s!ror_dir" %(PREFIX), is_ror_dir),
     ("%s!new_host"%(PREFIX), validations.is_new_vserver_nick)
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/rails$',   Welcome)

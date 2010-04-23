@@ -293,12 +293,14 @@ def is_moinmoin_wiki (path):
 
 
 VALS = [
+    ('%s!new_host'     %(PREFIX), validations.is_not_empty),
+    ('%s!new_webdir'   %(PREFIX), validations.is_not_empty),
+    ('%s!moinmoin_wiki'%(PREFIX), validations.is_not_empty),
+
     ("%s!new_host"     %(PREFIX), validations.is_new_vserver_nick),
     ("%s!new_webdir"   %(PREFIX), validations.is_dir_formatted),
     ("%s!moinmoin_wiki"%(PREFIX), is_moinmoin_wiki),
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/moinmoin$',   Welcome)

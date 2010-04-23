@@ -135,11 +135,11 @@ class Welcome:
 
 
 VALS = [
-    ("%s!host_src"%(PREFIX), validations.is_new_vserver_nick),
-    ("%s!host_trg"%(PREFIX), validations.is_not_empty),
-]
+    ('%s!host_src'%(PREFIX), validations.is_not_empty),
+    ('%s!host_trg'%(PREFIX), validations.is_not_empty),
 
-Wizard.CheckOnNoValue (VALS)
+    ("%s!host_src"%(PREFIX), validations.is_new_vserver_nick),
+]
 
 
 # Rule

@@ -262,13 +262,18 @@ def is_mono_dir (path):
     raise ValueError, _(ERROR_NO_MONO)
 
 VALS = [
+    ('%s!mono_dir'     %(PREFIX), validations.is_not_empty),
+    ('%s!mono_bin'     %(PREFIX), validations.is_not_empty),
+    ('%s!new_host'     %(PREFIX), validations.is_not_empty),
+    ('%s!new_webdir'   %(PREFIX), validations.is_not_empty),
+    ('%s!document_root'%(PREFIX), validations.is_not_empty),
+
     ("%s!mono_dir"     %(PREFIX), is_mono_dir),
     ("%s!mono_bin"     %(PREFIX), validations.is_local_file_exists),
     ("%s!new_host"     %(PREFIX), validations.is_new_vserver_nick),
     ("%s!new_webdir"   %(PREFIX), validations.is_dir_formatted),
     ("%s!document_root"%(PREFIX), validations.is_local_dir_exists),
 ]
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/mono$',   Welcome)

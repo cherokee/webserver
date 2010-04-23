@@ -329,14 +329,18 @@ def find_uwsgi_binary ():
     return path_find_binary (DEFAULT_BINS, extra_dirs = DEFAULT_PATHS)
 
 VALS = [
+    ("%s!uwsgi_binary" %(PREFIX), validations.is_not_empty),
+    ("%s!uwsgi_cfg"    %(PREFIX), validations.is_not_empty),
+    ("%s!new_host"     %(PREFIX), validations.is_not_empty),
+    ("%s!document_root"%(PREFIX), validations.is_not_empty),
+    ("%s!new_webdir"   %(PREFIX), validations.is_not_empty),
+
     ("%s!uwsgi_binary" %(PREFIX), validations.is_local_file_exists),
     ("%s!uwsgi_cfg"    %(PREFIX), is_uwsgi_cfg),
     ("%s!new_host"     %(PREFIX), validations.is_new_vserver_nick),
     ("%s!document_root"%(PREFIX), validations.is_local_dir_exists),
     ("%s!new_webdir"   %(PREFIX), validations.is_dir_formatted),
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/uwsgi$',   Welcome)

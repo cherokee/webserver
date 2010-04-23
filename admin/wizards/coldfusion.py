@@ -238,11 +238,12 @@ def is_coldfusion_host (host):
     return host
 
 VALS = [
+    ("%s!new_host"   %(PREFIX), validations.is_not_empty),
+    ("%s!new_source" %(PREFIX), validations.is_not_empty),
+
     ("%s!new_host"   %(PREFIX), validations.is_new_vserver_nick),
     ("%s!new_source" %(PREFIX), is_coldfusion_host),
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/coldfusion$',   Welcome)

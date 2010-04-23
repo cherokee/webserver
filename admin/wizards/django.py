@@ -273,13 +273,16 @@ def is_django_dir (path):
 
 
 VALS = [
+    ("%s!django_dir"   %(PREFIX), validations.is_not_empty),
+    ("%s!new_host"     %(PREFIX), validations.is_not_empty),
+    ("%s!webdir"       %(PREFIX), validations.is_not_empty),
+    ("%s!document_root"%(PREFIX), validations.is_not_empty),
+
     ('%s!django_dir'   %(PREFIX), is_django_dir),
     ('%s!new_host'     %(PREFIX), validations.is_new_vserver_nick),
     ('%s!webdir'       %(PREFIX), validations.is_dir_formatted),
     ("%s!document_root"%(PREFIX), validations.is_local_dir_exists)
 ]
-
-Wizard.CheckOnNoValue (VALS)
 
 # VServer
 CTK.publish ('^/wizard/vserver/django$',   Welcome)
