@@ -91,6 +91,38 @@ class Plugin_redir (Handler.PluginHandler):
                 submit += table
                 self += CTK.Indenter (submit)
 
+    class AddNew_Button (CTK.Box):
+        class Content (CTK.Container):
+            def __init__ (self, key):
+                CTK.Container.__init__ (self)
+
+                table = CTK.PropsTable()
+                table.Add (_('Show'),               CTK.ComboCfg('tmp!new_show', REDIR_SHOW, {'class': 'noauto'}), _(NOTE_SHOW))
+                table.Add (_('Regular Expression'), CTK.TextCfg('tmp!new_regex', False,      {'class': 'noauto'}), _(NOTE_REGEX))
+                table.Add (_('Substitution'),       CTK.TextCfg('tmp!new_subst', False,      {'class': 'noauto'}), _(NOTE_SUBSTITUTION))
+
+                submit = CTK.Submitter(URL_APPLY)
+                submit += CTK.Hidden ('key', '%s!rewrite'%(key))
+                submit += table
+                self += submit
+
+        def __init__ (self, key):
+            CTK.Box.__init__ (self, {'class': 'mime-button'})
+
+            # Add New
+            dialog = CTK.Dialog ({'title': _('Add New Regular Expression'), 'width': 480})
+            dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
+            dialog.AddButton (_('Cancel'), "close")
+            dialog += self.Content (key)
+
+            button = CTK.Button(_('Add New RegEx…'))
+            button.bind ('click', dialog.JS_to_show())
+            dialog.bind ('submit_success', dialog.JS_to_close())
+            dialog.bind ('submit_success', self.JS_to_trigger('submit_success'));
+
+            self += button
+            self += dialog
+
     def __init__ (self, key, **kwargs):
         kwargs['show_document_root'] = False
         Handler.PluginHandler.__init__ (self, key, **kwargs)
@@ -102,19 +134,9 @@ class Plugin_redir (Handler.PluginHandler):
         self += refresh
 
         # New
-        table = CTK.PropsTable()
-        table.Add (_('Show'),               CTK.ComboCfg('tmp!new_show', REDIR_SHOW, {'class': 'noauto'}), _(NOTE_SHOW))
-        table.Add (_('Regular Expression'), CTK.TextCfg('tmp!new_regex', False,      {'class': 'noauto'}), _(NOTE_REGEX))
-        table.Add (_('Substitution'),       CTK.TextCfg('tmp!new_subst', False,      {'class': 'noauto'}), _(NOTE_SUBSTITUTION))
-
-        submit = CTK.Submitter(URL_APPLY)
-        submit += CTK.Hidden ('key', '%s!rewrite'%(key))
-        submit += table
-        submit += CTK.SubmitterButton(_('Add'))
-        submit.bind ('submit_success', refresh.JS_to_refresh())
-
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Add New Regular Expression')))
-        self += CTK.Indenter (submit)
+        button = self.AddNew_Button (key)
+        button.bind ('submit_success', refresh.JS_to_refresh ())
+        self += CTK.Indenter (button)
 
 
 CTK.publish ('^%s'%(URL_APPLY), commit, method="POST")
