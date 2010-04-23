@@ -81,7 +81,6 @@ $(document).ready(function() {
 """
 
 
-
 def commit():
     # Add a new port
     port = CTK.post.pop('new_port')
