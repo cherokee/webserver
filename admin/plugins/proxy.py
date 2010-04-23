@@ -26,15 +26,20 @@ import CTK
 import Handler
 import Cherokee
 import Balancer
+import validations
 from consts import *
 
 URL_APPLY = '/plugin/proxy/apply'
 HELPS     = [('modules_handlers_proxy', N_("Reverse Proxy"))]
 
-NOTE_REUSE_MAX       = N_("Maximum number of connection per server that the proxy can try to keep opened.")
+NOTE_REUSE_MAX       = N_("Maximum number of connections per server that the proxy can try to keep opened.")
 NOTE_ALLOW_KEEPALIVE = N_("Allow the server to use Keep-alive connections with the back-end servers.")
 NOTE_PRESERVE_HOST   = N_("Preserve the original \"Host:\" header sent by the client. (Default: No)")
 NOTE_PRESERVE_SERVER = N_("Preserve the \"Server:\" header sent by the back-end server. (Default: No)")
+
+VALS = [
+    ('.+?!reuse_max', validations.is_number_gt_0),
+]
 
 
 def commit():
@@ -272,5 +277,4 @@ class Plugin_proxy (Handler.PluginHandler):
         self += CTK.Indenter (table)
         self += modul
 
-
-CTK.publish ('^%s$'%(URL_APPLY), commit, method="POST")
+CTK.publish ('^%s$'%(URL_APPLY), commit, method="POST", validation=VALS)
