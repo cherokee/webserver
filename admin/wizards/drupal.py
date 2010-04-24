@@ -44,21 +44,22 @@ NOTE_HOST_H1    = N_("New Virtual Server Details")
 NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
 NOTE_WEBDIR     = N_("Web directory where you want Drupal to be accessible. (Example: /blog)")
 NOTE_WEBDIR_H1  = N_("Public Web Direcoty")
-
 ERROR_NO_SRC    = N_("Does not look like a Drupal source directory.")
 
 PREFIX    = 'tmp!wizard!drupal'
-
-URL_APPLY      = r'/wizard/vserver/drupal/apply'
+URL_APPLY = r'/wizard/vserver/drupal/apply'
 
 SRC_PATHS = [
-    "/usr/share/drupal7",         # Debian, Fedora
+    "/usr/share/drupal7",          # Debian, Fedora
     "/usr/share/drupal",
     "/usr/share/drupal6",
     "/usr/share/drupal5",
-    "/var/www/*/htdocs/drupal",   # Gentoo
-    "/srv/www/htdocs/drupal",     # SuSE
-    "/usr/local/www/data/drupal*" # BSD
+    "/var/www/*/htdocs/drupal",    # Gentoo
+    "/srv/www/htdocs/drupal",      # SuSE
+    "/usr/local/www/data/drupal*", # BSD
+    "/opt/local/www/data/drupal7", # MacPorts
+    "/opt/local/www/data/drupal6",
+    "/opt/local/www/data/drupal5"
 ]
 
 CONFIG_VSERVER = """
