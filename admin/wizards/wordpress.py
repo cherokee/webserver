@@ -44,12 +44,10 @@ NOTE_HOST_H1    = N_("New Virtual Server Details")
 NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
 NOTE_WEBDIR     = N_("Web directory where you want WordPress to be accessible. (Example: /blog)")
 NOTE_WEBDIR_H1  = N_("Public Web Direcoty")
-
 ERROR_NO_SRC    = N_("Does not look like a WordPress source directory.")
 
 PREFIX    = 'tmp!wizard!wordpress'
-
-URL_APPLY      = r'/wizard/vserver/wordpress/apply'
+URL_APPLY = r'/wizard/vserver/wordpress/apply'
 
 CONFIG_DIR = """
 %(pre_rule_minus1)s!document_root = %(local_dir)s
@@ -64,6 +62,8 @@ CONFIG_DIR = """
 %(pre_rule_minus2)s!match!right = exists
 %(pre_rule_minus2)s!match!right!iocache = 1
 %(pre_rule_minus2)s!match!right!match_any = 1
+%(pre_rule_minus2)s!match!right!match_index_files = 0
+%(pre_rule_minus2)s!match!right!match_only_files = 1
 %(pre_rule_minus2)s!handler = file
 %(pre_rule_minus2)s!handler!iocache = 1
 
@@ -104,10 +104,11 @@ CONFIG_VSERVER = """
 """
 
 SRC_PATHS = [
-    "/usr/share/wordpress",         # Debian, Fedora
-    "/var/www/*/htdocs/wordpress",  # Gentoo
-    "/srv/www/htdocs/wordpress",    # SuSE
-    "/usr/local/www/data/wordpress" # BSD
+    "/usr/share/wordpress",          # Debian, Fedora
+    "/var/www/*/htdocs/wordpress",   # Gentoo
+    "/srv/www/htdocs/wordpress",     # SuSE
+    "/usr/local/www/data/wordpress", # BSD
+    "/opt/local/www/wordpress"       # MacPorts
 ]
 
 
