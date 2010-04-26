@@ -86,9 +86,9 @@ displayed on screen. However, there is a corner case that might make
 your installation fail: if the server is running a broken MTA, this
 could make PHP fail when trying to deliver the email, in turn
 resulting in a failure during the installation, and making Cherokee
-report an `Error 500`. Having a broken MTA on a production server
-is a very unlikely scenario, but should you receive this error double
-check your MTA just in case.
+report an `Error 500`. Having a broken MTA on a production server is a
+very unlikely scenario, but double check your MTA in case you receive
+this error.
 
 [[wordpress]]
 Setting up Wordpress
