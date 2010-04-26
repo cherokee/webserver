@@ -53,12 +53,13 @@ This is the full information provided by the manpage.
                Required option. Command to execute: logrotate, trace or info
 
        -a, --url=URL;;
-               Required  option. URL where the administrative interface can be
-               found.  This target must be  defined  previously  in  cherokee-
-               admin, enabling a "Remote Administration" type handler (Virtual
-               Servers->Behaviour->Add new  rule,  and  then  Handler->"Remote
-               Administration").  The  definition of a security mechanism is
-               highly encouraged.
+               Required option. URL where the administrative interface
+               can be found.  This target must be defined previously
+               in cherokee- admin, enabling a "Remote Administration"
+               type handler (Virtual Servers->Behavior->Rule
+               Management->Add new rule, and then Handler->"Remote
+               Administration").  The definition of a security
+               mechanism is highly encouraged.
 
        -l, --log=PATH;;
                Log file to be rotated (Only to be used when -c is logrotate)
@@ -74,7 +75,7 @@ To use `cherokee-tweak`, an administrative interface must be defined
 within link:bundle_cherokee-admin.html[cherokee-admin]. That is, you
 must define a path managed by the handler `Remote
 Administration`. This can be done through the 'Virtual Servers' option,
-in 'Behaviour' and using the 'Add new rule' option.
+in 'Behavior' and using the 'Add new rule' option.
 
 image::media/images/admin_handler_admin.png[Setting up an admin interface]
 

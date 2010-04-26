@@ -56,12 +56,13 @@ image::media/images/cookbook_maintenance_result.png[Final result]
 
 - Make a *graceful restart*.
 
-By doing this, the existing connections to the original virtual host
-will be preserved and will eventually end upon completion. At the
-same time, new requests will be delivered to its copycat and will be
-handled according to its specified behavior. If you don't want this
-behavior you can always make a *hard restart*, effectively shutting
-down every existing connection.
+This can be done from the SAVE dialog. By doing this, the existing
+connections to the original virtual host will be preserved and will
+eventually end upon completion. At the same time, new requests will be
+delivered to its copycat and will be handled according to its
+specified behavior. If you don't want this behavior you can always
+make a *hard restart*, effectively shutting down every existing
+connection.
 
 By now you are almost done. Now you can make whatever changes were
 needed to the original host without affecting the incoming

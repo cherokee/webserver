@@ -215,4 +215,4 @@ Here is a basic example of the LDAP validator in action. It assumes
 you have a working LDAP service running at your localhost, and it uses
 no TLS of CA files.
 
-image::media/images/admin_validators_ldap.png
+image::media/images/admin_validators_ldap.png[LDAP example]

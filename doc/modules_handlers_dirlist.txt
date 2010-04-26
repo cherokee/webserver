@@ -6,7 +6,7 @@ Handler: Directory Listing
 The **Only Listing** handler builds a list of directories and files
 within the requested directory, but **does not allow you to download
 its contents**. Refer to link:modules_handlers_common.html[List &
-Send] for the opposite behaviour.
+Send] for the opposite behavior.
 
 [[listing]]
 Parameters: Listing

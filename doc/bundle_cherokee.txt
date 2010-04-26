@@ -33,7 +33,7 @@ This is the full information provided by the manpage.
                Perform a sanity check on the configuration  file. The  server will not run.
 
        -d, --detach;;
-               Launches  the server as a background process (default behaviour is to stay attached to the controlling terminal).
+               Launches  the server as a background process (default behavior is to stay attached to the controlling terminal).
 
        -C, --config=PATH;;
                Specifies an alternative path for the configuration file to use instead of the default cherokee.conf

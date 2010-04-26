@@ -23,7 +23,7 @@ one. It is your choice, since the Wizard contemplates both scenarios.
 For the former you'll have to access the Wizard from the list of
 available ones within the `Virtual Servers` tab of Cherokee-Admin. The
 latter is accessed through the same list of Wizards, this time within
-the `Behaviour` tab of any given virtual server.
+the `Behavior` tab of any given virtual server.
 
 The wizard will simply ask for the host to be proxied and will set it
 up for you to see. It will automatically detect if the provided
