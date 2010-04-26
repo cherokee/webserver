@@ -4,6 +4,7 @@ SUBDIRS = flags wizards other
 
 adminstaticdir = "$(datadir)/cherokee/admin/static/images"
 adminstatic_DATA = \
+favicon.ico \
 advanced.png \
 bg-bar.png \
 cherokee-logo-bar.png \
