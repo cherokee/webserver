@@ -842,4 +842,31 @@ tr.panel-selected td div.row_content .sel-actions {
 #error-redirection td+td+td { width: 200px; }
 #error-redirection td+td+td+td { width: 32px; text-align: center; }
 
+#balancer-table {
+ table-layout: fixed;
+ border-collapse: collapse;
+ width: 640px;
+ border: 1px solid #cde;
+ margin-bottom: 32px;
+}
+
+#balancer-table th {
+  background: #e6f3ff url(/CTK/images/bg-th.png) repeat-x;
+  border: none;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px;
+}
+
+#balancer-table td {
+  border-bottom: 1px solid #cde;
+  padding: 4px;
+}
+
+#balancer-table th { width: 300px;  }
+#balancer-table th+th { width: 308px;  }
+#balancer-table th+th+th { width: 32px; }
+
+#balancer-table td { width: 300px;  }
+#balancer-table td+td { width: 308px;  }
+#balancer-table td+td+td { width: 32px; }
 
