@@ -156,7 +156,7 @@ img.icon_chooser_selected {
 #bottom-box { padding: 8px 0; margin: 8px 16px; } 
 #bottom-box h2 { font-size: 16px; margin-bottom: 16px; } 
 #enterprise-box { width: 256px; float: right; } 
-#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top 30px; padding-top:64px; } 
+#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat 30px top; padding-top:64px; } 
 #enterprise-link { text-align: right; margin-top: 16px; color: #def; }
 
 #community-box { width: 648px; float: left; }
@@ -173,8 +173,8 @@ img.icon_chooser_selected {
 
 #social-media { border-top: 1px dotted #def; margin-top: 16px; padding-top: 8px; }
 .social-box { padding-left: 52px; padding-top: 3px; min-height: 22px; margin-bottom: 6px;  }
-#twitter-box { background: transparent url(/static/images/other/twitter.png) no-repeat top 26px; }
-#fb-box { background: transparent url(/static/images/other/facebook.png) no-repeat top 26px; }
+#twitter-box { background: transparent url(/static/images/other/twitter.png) no-repeat 26px top; }
+#fb-box { background: transparent url(/static/images/other/facebook.png) no-repeat 26px top; }
 
 .contact-box { padding-left: 28px; padding-top: 3px; margin-bottom: 16px; }
 #contact-irc { background: transparent url(/static/images/other/contact-irc.png) no-repeat; }
