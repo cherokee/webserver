@@ -26,9 +26,15 @@ import os
 import base64
 import socket
 import random
-import hashlib
 import httplib
 import xmlrpclib
+
+try:
+    # Python >= 2.5
+    from hashlib import md5
+except ImportError:
+    # Python <= 2.4
+    from md5 import md5
 
 from urllib2 import urlparse
 from urllib import splituser, splitpasswd
@@ -87,13 +93,13 @@ class CustomTransport(xmlrpclib.Transport):
                 nonce = self.params['nonce'].strip('"')
                 qop   = self.params['qop'].strip('"')
 
-                a1 = hashlib.md5('%(username)s:%(realm)s:%(password)s' % locals()).hexdigest()
-                a2 = hashlib.md5('POST:%(uri)s' % locals()).hexdigest()
+                a1 = md5('%(username)s:%(realm)s:%(password)s' % locals()).hexdigest()
+                a2 = md5('POST:%(uri)s' % locals()).hexdigest()
 
                 nc = '%08d' % self.nc
                 chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
                 cnonce = ''.join([random.choice(chars) for i in range(16)])
-                response = hashlib.md5('%(a1)s:%(nonce)s:%(nc)s:%(cnonce)s:%(qop)s:%(a2)s' % locals()).hexdigest()
+                response = md5('%(a1)s:%(nonce)s:%(nc)s:%(cnonce)s:%(qop)s:%(a2)s' % locals()).hexdigest()
 
                 params = []
                 params.append('username=%s' % username)

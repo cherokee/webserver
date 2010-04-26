@@ -216,8 +216,7 @@ class Render:
 
                     # Disable
                     is_disabled = bool (int (CTK.cfg.get_val('vserver!%s!rule!%s!disabled'%(vsrv_num,r), "0")))
-
-                    disclass = 'rule-inactive' if is_disabled else ''
+                    disclass = ('','rule-inactive')[is_disabled][:]
 
                     disabled = CTK.ToggleButtonOnOff (not is_disabled)
                     disabled.bind ('changed',
