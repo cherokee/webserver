@@ -1,4 +1,7 @@
 == link:index.html[Index] -> link:basics.html[Getting started]
+////
+Last checked: 2010/04/26 Cherokee 0.99.46b
+////
 
 Upgrading Cherokee
 ------------------

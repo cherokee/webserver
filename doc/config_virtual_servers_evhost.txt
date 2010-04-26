@@ -1,4 +1,7 @@
 == link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
+////
+Last checked: 2010/04/26 Cherokee 0.99.46b
+////
 
 Advanced Virtual Hosting
 ------------------------

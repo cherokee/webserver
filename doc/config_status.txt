@@ -1,4 +1,7 @@
 == link:index.html[Index] -> link:config.html[Configuration]
+////
+Last checked: 2010/04/26 Cherokee 0.99.46b
+////
 
 Status
 ------
