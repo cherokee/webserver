@@ -1,8 +1,7 @@
 == link:index.html[Index] -> link:config.html[Configuration]
-///////////////////////////////////////////////////////////////////
-Last checked:
-* Cherokee 0.99.25
-///////////////////////////////////////////////////////////////////
+////
+Last checked: 2010/04/26 Cherokee 0.99.46b
+////
 
 Configuration Wizards
 ---------------------
@@ -15,7 +14,7 @@ These will help you to set up Cherokee to work with several popular
 applications, frameworks and programming languages, and hopefully your
 task will be performed with just a couple of clicks.
 
-Even if they might not apply exactly to your what you are trying to
+Even if they might not apply exactly to what you are trying to
 accomplish, they can always be used as a template that you can fine
 tune afterwards.
 
@@ -23,19 +22,30 @@ Some of the wizards can only be applied to new virtual servers, others
 can only be used inside pre-existent ones. Most of them, however, are
 good for both scenarios.
 
-Using them is as simple as clicking on the `Wizards` button located
-under the list of `Virtual servers` or `Behavior rules`. The former
-applies to new dedicated virtual servers, and is located on its
-homonymous tab of the main interface. The latter is found on a tab by
-the same name that exists for every virtual server defined on your
-configuration.
+Using them is as simple as clicking on `Add New` button located in the
+upper part of the left panel, on the `vServers` section of the
+admin. It is one of the two buttons available, and is marked with a
+*+* (plus) symbol. This panel can change from `Virtual Server` mode to
+`Behavior` mode, depending on it being applied to all the virtual
+servers or to a specific one. In the former scenario the wizards will
+create a new customized virtual host upon successful execution. The
+latter scenario will have the wizards modify an existing pre-selected
+virtual host.
+
+Changing the way in which the wizards should behave is as simple as
+toggling the panel in and out of `Virtual Servers` or `Behavior` modes. To
+go to `Behavior` mode, select a virtual server and click on the `Rule
+Management` button of the `Behavior` tab. To go to `Virtual Servers`
+mode, simply click on the link for the virtual server that is
+displayed in the upper section of the main content area. If there is
+no such link, the panel is already in `Virtual Server` mode.
 
 Most of the wizards are documented on their corresponding recipes in
 the link:cookbook.html[Cookbook].
 
 The wizards are loosely organized on several categories: CMS,
 platforms, tasks, misc, etc. Take a look at them. You might find
-something interesting in the place least expected.
+something interesting in the least expected place.
 
 These are the wizards currently implemented:
 
@@ -44,7 +54,9 @@ Available Wizards
 
 * link:cookbook_alfresco.html[Alfresco]: open source ECM.
 
-* CommonStatic: adds the usual rules to manage static contents.
+* link:cookbook_coldfusion.html[ColdFusion]: ColdFusion platform.
+
+* link:cookbook_concrete5.html[Concrete5]: Content management system.
 
 * link:cookbook_django.html[Django]: high-level Python Web framework.
 
@@ -66,6 +78,10 @@ Available Wizards
 * link:cookbook_mailman.html[Mailman]: Mailman is free software for
   managing electronic mail discussion and e-newsletter lists.
 
+* link:cookbook_moinmoin.html[MoinMoin]: Python Wiki enginge.
+
+* link:cookbook_mono.html[Mono.NET]: .NET open source framework.
+
 * link:cookbook_moodle.html[Moodle]: Course Management System.
 
 * link:cookbook_phpbb.html[phpBB]: Forum software.
@@ -81,6 +97,8 @@ Available Wizards
 
 * rTorrent: BitTorrent client.
 
+* Static: adds the usual rules to manage static contents.
+
 * link:cookbook_streaming.html[Streaming]: assists in media streaming
   configuration.
 
@@ -90,9 +108,10 @@ Available Wizards
 * link:cookbook_symfony.html[Symfony]: Symfony PHP web development
   framework.
 
-
 * link:cookbook_trac.html[Trac]: open source, web-based project
   management and bug-tracking tool.
+
+* link:cookbook_uwsgi.html[uWSGI]: UWSGI server aimed for professional python webapps deployment and development.
 
 * link:cookbook_wordpress.html[WordPress]: blog publishing application
   and content management system.

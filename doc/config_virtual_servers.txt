@@ -1,4 +1,7 @@
 == link:index.html[Index] -> link:config.html[Configuration]
+////
+Last checked: 2010/04/26 Cherokee 0.99.46b
+////
 
 Virtual Server
 --------------
@@ -78,18 +81,19 @@ inherit the authentication specified for /secret.
 
 *Add New Virtual Server* allows the creation of additional virtual
 hosts, either manually or by using any of the available configuration
-wizards. These are configuration assistants that will allow you to set
-up a new virtual server tailored to some application's specific
-needs. The wizard will ask for some basic values, such as the name of
-the new virtual server or anything that might be needed to make its
-job, like deploying a Django application, installing Wordpress or
-whatever task you might have chosen. The wizards can also be run on a
-per-server basis, in which case instead of creating a new dedicated
-virtual server, the required changes will be added to the existing
-one. To use the wizards in this manner you will have to trigger them
-from the `Behavior` panel instead of the `Virtual Server Panel`. This
-`Behavior` panel is specific to a given virtual host, and can be
-activated using the `Rule Management` button of the `Behavior` tab.
+link:config_wizards.html[wizards]. These are configuration assistants
+that will allow you to set up a new virtual server tailored to some
+application's specific needs. The wizard will ask for some basic
+values, such as the name of the new virtual server or anything that
+might be needed to make its job, like deploying a Django application,
+installing Wordpress or whatever task you might have chosen. The
+wizards can also be run on a per-server basis, in which case instead
+of creating a new dedicated virtual server, the required changes will
+be added to the existing one. To use the wizards in this manner you
+will have to trigger them from the `Behavior` panel instead of the
+`Virtual Server Panel`. This `Behavior` panel is specific to a given
+virtual host, and can be activated using the `Rule Management` button
+of the `Behavior` tab.
 
 *Clone Selected Virtual Server* is simply a matter of selecting a
 target name and a source virtual server currently present. Every
