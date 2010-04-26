@@ -159,7 +159,7 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
 
 
 class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
-    def set_syncronous (self, sync):
+    def set_synchronous (self, sync):
         assert type(sync) == bool
         self.syncronous = sync
 
