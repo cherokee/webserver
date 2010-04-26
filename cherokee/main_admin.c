@@ -52,6 +52,7 @@
 #define ALPHA_NUM            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define PASSWORD_LEN         16
 #define DEFAULT_PORT         9090
+#define TIMEOUT              "25"
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
 #define DEFAULT_UNIX_SOCKET  "/tmp/cherokee-admin-scgi.socket"
@@ -201,7 +202,7 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_va  (&buf,
 					 "source!1!nick = app-logic\n"
 					 "source!1!type = interpreter\n"
-					 "source!1!timeout = 25\n"
+					 "source!1!timeout = " TIMEOUT "\n"
 					 "source!1!host = %s\n"
 					 "source!1!interpreter = %s/server.py %s %s %s\n"
 					 "source!1!env_inherited = 1\n",
@@ -213,7 +214,7 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_va  (&buf,
 					 "source!1!nick = app-logic\n"
 					 "source!1!type = interpreter\n"
-					 "source!1!timeout = 25\n"
+					 "source!1!timeout = " TIMEOUT "\n"
 					 "source!1!host = localhost:%d\n"
 					 "source!1!interpreter = %s/server.py %d %s %s\n"
 					 "source!1!env_inherited = 1\n",
@@ -230,6 +231,7 @@ config_server (cherokee_server_t *srv)
 				  RULE_PRE "1!match = default\n"
 				  RULE_PRE "1!handler = scgi\n"
 				  RULE_PRE "1!encoder!gzip = 1\n"
+				  RULE_PRE "1!timeout = " TIMEOUT "\n"
 				  RULE_PRE "1!handler!balancer = round_robin\n"
 				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
 
