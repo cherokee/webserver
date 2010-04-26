@@ -43,7 +43,8 @@ Widget.py \
 consts.py \
 iPhoneToggle.py \
 pyscgi.py \
-util.py
+util.py \
+json_embedded.py
 
 EXTRA_DIST = \
 $(ctk_DATA)
