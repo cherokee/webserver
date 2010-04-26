@@ -65,13 +65,12 @@ used parameters are these:
 |`--disable-readdir_r`   |Disable readdir_r usage
 |`--disable-ipv6`        |Disable IPv6 support
 |`--disable-pam`         |Disable PAM support
-|`--enable-trace`        |Allows debugging options
 |`--disable-admin`       |Skips cherokee-admin installation
 |`--disable-largefile`   |omit support for large files
 |`--enable-internal-pcre`|Enable internal PCRE
 |`--disable-nls`         |do not use Native Language Support
 |`--enable-beta`         |Enable beta development
-|`--enable-trace`        |Enable trace facility
+|`--enable-trace`        |Enable the tracing mechanism
 |`--enable-backtraces`   |Enable backtraces on error
 |`--disable-epoll`       |Disable epoll() support
 |`--disable-pthread`     |Disable threading support
