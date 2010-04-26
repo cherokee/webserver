@@ -264,8 +264,11 @@ def init (*args, **kwargs):
         kwargs['threading'] = True
 
     kwargs['handler_class'] = ServerHandler
-
     srv.init_server (*args, **kwargs)
+
+def set_synchronous (sync):
+    srv = get_server()
+    srv._scgi.set_synchronous (sync)
 
 def run (*args, **kwargs):
     init (*args, **kwargs)

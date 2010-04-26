@@ -43,7 +43,7 @@ import time
 import sys
 import os
 
-__version__   = '1.12'
+__version__   = '1.13'
 __author__    = 'Alvaro Lopez Ortega'
 __copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
 __license__   = 'BSD'
@@ -158,12 +158,28 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         self.send("handle_request() should be overridden")
 
 
+class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
+    def set_syncronous (self, sync):
+        assert type(sync) == bool
+        self.syncronous = sync
+
+    def process_request (self, request, client_address):
+        if hasattr(self, 'syncronous') and self.syncronous:
+            return self.process_request_thread (request, client_address)
+
+        return SocketServer.ThreadingMixIn.process_request (self, request, client_address)
+
+
+class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer): pass
+class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer): pass
+
+
 # TCP port
 #
-class SCGIServer (SocketServer.ThreadingTCPServer):
+class SCGIServer (ThreadingTCPServer_Custom):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
         self.allow_reuse_address = True
-        SocketServer.ThreadingTCPServer.__init__ (self, (host, port), handler_class)
+        ThreadingTCPServer_Custom.__init__ (self, (host, port), handler_class)
 
 class SCGIServerFork (SocketServer.ForkingTCPServer):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
@@ -172,10 +188,10 @@ class SCGIServerFork (SocketServer.ForkingTCPServer):
 
 # Unix socket
 #
-class SCGIUnixServer (SocketServer.ThreadingUnixStreamServer):
+class SCGIUnixServer (ThreadingUnixStreamServer_Custom):
     def __init__(self, unix_socket, handler_class=SCGIHandler):
         self.allow_reuse_address = True
-        SocketServer.ThreadingUnixStreamServer.__init__ (self, unix_socket, handler_class)
+        ThreadingUnixStreamServer_Custom.__init__ (self, unix_socket, handler_class)
 
 class SCGIUnixServerFork (SocketServer.UnixStreamServer):
     def __init__(self, unix_socket, handler_class=SCGIHandler):
