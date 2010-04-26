@@ -23,8 +23,10 @@
 import re
 import sys
 import types
+import errno
 import threading
 import traceback
+
 try:
     import json
 except ImportError:
@@ -135,10 +137,7 @@ class ServerHandler (pyscgi.SCGIHandler):
         return HTTP_Error (404)
 
     def handle_request (self):
-        try:
-            content = self._do_handle()
-            self.send(str(content))
-        except Exception, desc:
+        def manage_exception():
             # Print the backtrace
             info = traceback.format_exc()
             print >> sys.stderr, info
@@ -160,6 +159,20 @@ class ServerHandler (pyscgi.SCGIHandler):
             # No error handling page
             html = '<pre>%s</pre>'%(info)
             self.send (str(HTTP_Error(desc=html)))
+
+        try:
+            content = self._do_handle()
+            self.send (str(content))
+
+        except OSError, e:
+            if e.errno == errno.EPIPE:
+                # The web server closed the SCGI socket
+                return
+            manage_exception()
+
+        except Exception, desc:
+            manage_exception()
+
 
 
 class Server:
