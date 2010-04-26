@@ -67,6 +67,13 @@ used parameters are these:
 |`--disable-largefile`   |omit support for large files
 |`--enable-internal-pcre`|Enable internal PCRE
 |`--disable-nls`         |do not use Native Language Support
+|`--enable-beta`         |Enable beta development
+|`--enable-trace`        |Enable trace facility
+|`--enable-backtraces`   |Enable backtraces on error
+|`--disable-epoll`       |Disable epoll() support
+|`--disable-pthread`     |Disable threading support
+|`--disable-ipv6`        |Disable IPv6 support
+|`--disable-pam`         |Disable PAM support
 |`--enable-static-module=MODULE`| build listed modules as static. Accepts ALL
 |======================================================================
 

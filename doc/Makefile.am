@@ -27,6 +27,7 @@ bundle_spawn-fcgi.html \
 bundle_cget.html \
 config.html \
 config_quickstart.html \
+config_index.html \
 config_general.html \
 config_virtual_servers.html \
 config_virtual_servers_evhost.html \
@@ -167,7 +168,6 @@ media/images/admin_vserver_errors.png \
 media/images/admin_vserver_loggers.png \
 media/images/admin_vserver.png \
 media/images/admin_vserver_security.png \
-media/images/admin_vserver_vserver.png \
 media/images/admin_vserver_evhost.png \
 media/images/admin_handler_proxy.png \
 media/images/cookbook_django_common.png \

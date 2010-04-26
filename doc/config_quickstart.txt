@@ -5,10 +5,10 @@ Configuration Quickstart
 
 This section briefly describes the whole administration web interface
 provided by link:bundle_cherokee-admin.html[cherokee-admin]. This is
-the only recommended way of configuring Cherokee. If you are looking
-for development information, you should refer to the appropriate
-section, especially the link:dev_cherokee.conf.html[cherokee.conf]
-file specification.
+the recommended way of configuring Cherokee. If you are looking for
+development information relevant to your automation and scripting
+needs, you should refer to the appropriate section, especially the
+link:dev_cherokee.conf.html[cherokee.conf] file specification.
 
 We will first show a quick overview of the available options, followed
 by a simple walkthrough. You can learn more about the options in their
@@ -17,14 +17,21 @@ specific documentation entries.
 [[overview]]
 Overview
 ~~~~~~~~
+* link:config_index.html[Home]:
+  This is the initial screen of cherokee-admin. From here you will be
+  able to launch and stop the webserver, change the language of the
+  configuration-interface, check a quick view of the server status and
+  access relevant support and contact Cherokee-Project links.
+
 * link:config_status.html[Status]:
-  This gives a quick view of the server status.
+  This gives access to usage graphs and statistics regarding each
+  virtual host and the server as a whole.
 
 * link:config_general.html[General]:
   There are a number of entries that specify the most significant
   configuration options such as the port - or ports - that the server
   will listen to, the default timeout, whether to support keep-alive
-  connections and so on.
+  connections, default icon and MIME type definitions and so on.
 
 * link:config_virtual_servers.html[Virtual servers]:
   If you want your web server to work with more than one domain you
@@ -37,13 +44,6 @@ Overview
   Define the resources that will be providing information. For
   instance, PHP.
 
-* link:config_icons.html[Icons]:
-  Associate icon images with one or more file extensions. Used to
-  offer directory listings.
-
-* link:config_mime_types.html[Mime Types]:
-  Manage MIME types.
-
 * link:config_advanced.html[Advanced]:
   This is to configure the most complex parameters of the server and how
   it interacts with the operating system. If you are unsure about any of
@@ -55,13 +55,20 @@ Walkthrough
 ~~~~~~~~~~~
 There is very little set up you must do to have a perfectly functional
 web server out of the box. Cherokee's default configuration can be
-used to serve any typical PHP-driven dynamic website.
+used to serve any typical static website. For dynamic contents you
+should check the wizards, available using the buttons located at the
+top section of the left panel. This panel can either display
+information relevant to every virtual host in your system, or rule
+management information specific to a given virtual host. In the first
+scenario, the wizards will be able to create new virtual servers
+customized for a specific need, while the second case would apply to
+the -preexisting- selected virtual host.
 
-If you have a specific need, you should check out the recipes present in
-the 'Cookbook' section of the documentation. Among other subjects, you
-can find information about
-link:cookbook_optimizations.html[Cherokee optimizations],
-setting up efficient link:cookbook_authentication.html[Authentication]
+If you have a specific need, you should check out the recipes present
+in the link:cookbook.html'Cookbook] section of the
+documentation. Among other subjects, you can find information about
+link:cookbook_optimizations.html[Cherokee optimizations], setting up
+efficient link:cookbook_authentication.html[authentication]
 mechanisms, or configuring several popular application frameworks.
 
 In this tutorial we will be setting up a system with a couple of
@@ -86,7 +93,11 @@ scheduling policy
 ----
 
 Now you can access the administration interface simply by opening your
-web browser and visiting link:http://localhost:9090[http://localhost:9090]
+web browser and visiting
+link:http://localhost:9090[http://localhost:9090].
+link:bundle_cherokee-admin.html[Cherokee-admin] supports several
+command line parameters, so you can change the predefined port in case
+it was already in use in your system.
 
 The User and One-time Password will be required initially. This is to
 prevent other users of the local host from being able to configure the
@@ -110,17 +121,18 @@ image::media/images/admin_notrunning.png[Server not launched]
 
 Of course, once we're done we will have to apply our changes and
 launch the server. The configuration changes must be submitted to the
-server, be it automatically if possible or by using the appropriate form
-submitting buttons. But no change is reflected in the configuration
-file until you `Save` the changes. You can be sure of not damaging
-anything while playing around with `cherokee-admin`. At least not
-until you `Save` the changes. Note that, if the Cherokee server is
-running, the applied modifications will only affect the instance being
-executed if either `Graceful restart` or `Hard restart` are selected.
-No restart simply modifies the configuration file, but doesn't affect
+server, be it automatically if possible or by using the appropriate
+form submitting buttons. But no change is reflected in the
+configuration file until you `Save` the changes. You can be sure of
+not damaging anything while playing around with `cherokee-admin`. At
+least not until you `Save` the changes by using the `SAVE` button on
+the main toolbar. Note that, if the Cherokee server is running, the
+applied modifications will only affect the instance being executed if
+either `Graceful restart` or `Hard restart` are selected.  `No
+restart` simply modifies the configuration file, but doesn't affect
 the currently running instance. A `graceful restart` will preserve the
-old set up for any prior connections, while a `hard restart` will
-kill every connection and instantly apply the changes.
+old set-up for any prior connections, while a `hard restart` will kill
+every connection and instantly apply the changes.
 
 This is what the `General` tab looks like:
 
@@ -138,7 +150,11 @@ Next is the link:config_virtual_servers.html[Virtual Servers] tab:
 image::media/images/admin_vserver.png[Virtual server]
 
 When you start, you will only have one virtual server called
-`default`. You can begin by cloning it as `example`.
+`default`. You can begin by cloning it as `example`. This can be
+achieved with the `Clone Selected Virtual Server` button, which is
+placed in the upper side of the left panel, adjacent to the `Virtual
+Servers` title and the `Add New Virtual Server` button.
+
 While you are at it you should also append the following line to your
 `/etc/hosts` file (in Windows you will find this as
 `%WINDIR%\system32\drivers\etc\hosts`).
@@ -165,9 +181,18 @@ changed that during the build process). Whenever there is no match for
 a virtual server specifically defined in your list, the `default`
 virtual server will be the one responding.
 +
-Right now any file with the 'php' extension will be served after being
-processed by the PHP interpreter (you should have `php-cgi` installed
-in your system for this, though).
+To enable PHP support you will have to select the desired virtual
+server, access the `Behavior` tab, and click on the `Rule Management`
+button. This will replace the `Virtual Servers` panel with a `Rules`
+panel that applies only to the selected virtual server. The `Add`
+button now will give you access to manually adding rules or to the
+list of wizards. You will find PHP under the `Languages`
+category. Simply point and click, and this will make the required
+adjustments. Any file with the 'php' extension will be served after being
+processed by the PHP interpreter. You should have `php-cgi` installed
+in your system for this, though. Don't worry too much about it: the
+wizard will give you instructions and will notify any further
+requirements not yet satisfied by your system.
 +
 Any requested file would be sent. If a directory is requested, a file
 called index.php or index.html will be served if it is present (the
@@ -179,10 +204,24 @@ serving whatever content is requested directly, simply change the
 
 
 *`example`*::
+Make sure to select the correct virtual server in the `Virtual
+Servers` panel displayed in the left side of the interface. If the
+panel was titled `Behavior` instead, make sure it applies to the
+desired virtual server. This can be easily checked, since it is
+displayed as a title in the upper part of the contents area, which is
+everything else on the screen that doesn't belong to the panel. If you
+are inside another virtual server, just click on the host name to
+restore the `Virtual Servers` panel. If you have already selected the
+correct virtual host, access the `Behavior` tab and click on the `Rule
+Management` button to see the `Behavior` panel that will enable you to
+modify the rules of your virtual host.
+
 For now this virtual server is an exact copy of the untouched
 `default` virtual server. Create some new directories
 '/var/www/example' and '/var/www/example/auth', and configure the
-first one as default document root path.
+first one as default document root path. This is easy using the `Add`
+button of the panel, which is marked with a `+ (plus)` symbol at the
+top of the panel.
 +
 Next, setup `example.net` and `example.com` in the `Domain names` tab.
 We'll erase everything in the *Targets* list within the `Behavior`

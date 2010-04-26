@@ -8,51 +8,57 @@ a custom number of parameters and rules that have to be applied to one
 or more domains.
 
 In a Cherokee server there must be at least one virtual server named
-default, and there is no maximum number. It is important to know that
+`default`, and there is no maximum number. It is important to know that
 this server cannot be deleted.
 
 When the server receives a request it will try to match the domain
 name specified in the virtual server that should handle it. In case no
-virtual server matches the request, default will be used.
+virtual server matches the request, `default` will be used.
 
 image::media/images/admin_vserver.png[Virtual server]
 
-Four main options are accessible through this menu:
+This section of the admin is divided in a left panel and main contents
+section on the right.
 
-. Virtual Server List
+The panel displays the list of virtual servers, which can be filtered
+according to the matching criteria specified in the `Virtual Server
+Filtering` box, and has two buttons at the top that correspond, from
+left to right, to `Add New Virtual Server` and `Clone Selected
+Virtual Server`.
 
-. Add new Virtual Server
+Whenever you select a virtual server, the main content area displays
+information relevant to the chosen host.
 
-. Clone Virtual Server
+You should be aware that the order in which the virtual servers are
+listed is not arbitrary. The list is evaluated from top to bottom
+whenever Cherokee receives a request, and the first virtual server
+that matches the given request will be the one used to send a reply.
 
-. Wizards
+You can drag and drop the elements of the list to change the order in
+which the matches are evaluated.
 
-*Cloning a Virtual Server* is simply a matter of selecting a target name
-and a source virtual server currently present. Every setting will be
-duplicated. From then onwards changes applied to any of them, be it
-the original or the copied Virtual Servers, will only apply to the
-implicated one. This is a great way to set up complex domains,
-since you can use the existing ones as templates to be refined with
-further work.
+The `default` virtual server is always at the bottom and cannot be
+dragged. As mentioned above, if a request doesn't match any other
+virtual server, it falls through all the way to the default one to
+ensure no requests are left unattended. The most simple usage
+scenarios usually involve only the default virtual host, and do not
+require additional virtual servers.
 
-*Wizards* are configuration assistants that will allow you to set up a
-new virtual server tailored to some application's specific needs. The
-wizard will ask for some basic values, such as the name of the new
-virtual server or anything that might be needed to make its job, like
-deploying a Django application, installing Wordpress or whatever task
-you might have chosen. The wizards can also be run on a per-server
-basis, in which case instead of creating a new dedicated virtual
-server, the required changes will be added to the existing one.
+The entries on the `Virtual Server` list are composed of two elements:
 
-*Add a new Virtual Server* allows you to do that by entering the
-server name and a valid Document Root directory.
-
+- *Name*
++
+An alias that is used to identify the virtual server and is the value
+used when filtering the virtual servers to be listed. The domain names
+handled by the virtual server should be specified later in the virtual
+server details page.
++
 - *Document Root*
 +
-This directive sets the directory from which Cherokee will serve
-files. The set of rules is checked from the highest to the lowest
-possible priority. Once a rule is matched, the server appends the path
-from the requested URL to the document root to make the path to the
+This is the directory from which Cherokee will serve files. The set of
+rules is checked from the highest to the lowest possible
+priority. Once a rule is matched, the server appends the path from the
+requested URL to the document root to make the path to the
 document. If it is a directory, this information is used. If other
 rules apply to a parent directory, those are applied as well without
 overwriting the original behavior:
@@ -68,17 +74,30 @@ higher priority for /secret/cgi that only specified to use the CGI
 handler. Under these circumstances, if a request was received for
 /secret/cgi/something then the CGI handler would be taken and it would
 inherit the authentication specified for /secret.
-+
-- *Name*
-+
-Name is an alias. The domain names handled by the virtual server
-should be specified later in the virtual server details page.
 
-The *Virtual Server List* is by far the most interesting of these
-three main options. It gives an overview of the existing virtual
-servers, and allows to configure in detail every possible setting.
 
-image::media/images/admin_vserver_vserver.png[Virtual server overview]
+*Add New Virtual Server* allows the creation of additional virtual
+hosts, either manually or by using any of the available configuration
+wizards. These are configuration assistants that will allow you to set
+up a new virtual server tailored to some application's specific
+needs. The wizard will ask for some basic values, such as the name of
+the new virtual server or anything that might be needed to make its
+job, like deploying a Django application, installing Wordpress or
+whatever task you might have chosen. The wizards can also be run on a
+per-server basis, in which case instead of creating a new dedicated
+virtual server, the required changes will be added to the existing
+one. To use the wizards in this manner you will have to trigger them
+from the `Behavior` panel instead of the `Virtual Server Panel`. This
+`Behavior` panel is specific to a given virtual host, and can be
+activated using the `Rule Management` button of the `Behavior` tab.
+
+*Clone Selected Virtual Server* is simply a matter of selecting a
+target name and a source virtual server currently present. Every
+setting will be duplicated. From then onwards changes applied to any
+of them, be it the original or the copied Virtual Servers, will only
+apply to the implicated one. This is a great way to set up complex
+domains, since you can use the existing ones as templates to be
+refined with further work.
 
 A detailed explanation of every tab follows.
 
@@ -133,8 +152,8 @@ domains].
 
 
 [[domain_names]]
-Domain names
-~~~~~~~~~~~~
+Host Match
+~~~~~~~~~~
 
 This section allows to define the list of domains that the virtual
 server implements.
@@ -151,11 +170,11 @@ For instance::
 
 Note that you should probably keep in mind the way this list is
 interpreted in order to avoid future problems. Whenever Cherokee
-recieves a request for a specific domain, it evaluates the `Domain
+receives a request for a specific domain, it evaluates the `Domain
 list` of every defined virtual host in the order defined by the
 priorities of such hosts. When it finds a match, it stops the
 evaluation and starts matching the specific rules from that virtual
-host to send the apropriate response.
+host to send the appropriate response.
 
 If no domain name matches the request, Cherokee re-evaluates the list
 of virtual hosts trying to match the request against the `Nicknames`,
@@ -258,7 +277,7 @@ rule types:
 
   * **Full Path**: Full path request to which content the
       configuration will be applied. This means you can pinpoint a
-      list of files that will be specifcally targetted by this rule
+      list of files that will be specifically targeted by this rule
       type.
 
   * **Connected from**: will let you discriminate connections based on
@@ -269,20 +288,22 @@ rule types:
       arguments.
 
 It is very important to know that these rules are prioritized. The
-higher its priority is, the sooner they are checked. You could
-think of a network routing table, it is quite similar. You can set the
-relative priorities among the rules by simply dragging and dropping
-them in the desired position (if you click on the rule name, you will be
-redirected to the rule's configuration options; if you click anywhere
-else, you will be able to drag and drop it into the desired position).
+higher its priority is, the sooner they are checked. You could think
+of a network routing table, it is quite similar. You can set the
+relative priorities among the rules from within the `Behavior` panel,
+which is accessed through the `Rule Management` button. Simply
+dragging and dropping them in the desired position will do. If you
+click on the rule name, the rule's configuration options will be
+displayed in the main content area. If you click anywhere else, you
+will be able to drag and drop it into the desired position).
 
 image::media/images/admin_behaviour.png[Virtual server]
 
-Each of these behavior rules must specify which is the handler that
-the server should use to reply to the requests that match the rule.
-Handlers are the modules that generate the information with which the
-server responds a client's request. By default Cherokee provides a
-number of them:
+Each of these behavior rules must specify the handler that the server
+should use to reply to the requests that match the rule.  Handlers are
+the modules that generate the information with which the server
+responds a client's request. By default Cherokee provides a number of
+them:
 
 
 **********************************************************************
@@ -386,7 +407,7 @@ lets suppose there is an `Extension` type rule configured to handle
 PHP files. If a request is made for
 `http://example.com/index.php/what/ever`, this rule *WOULD NOT* be
 applied at first because the request doesn't end with the appropriate
-extension: it has some adittional path information. However, if there
+extension: it has some additional path information. However, if there
 is a `Default` rule configured that is managed by the `List and Send`
 handler, things would work. This is because the `Default` rule would
 catch any unmatched requests, and the `List and Send` handler would
@@ -396,6 +417,7 @@ information, and would then evaluate once more the list of rules. This
 time the request would end in `.php` and thus it would match the
 `Extension` rule meant to handle PHP files.
 
+//////////////////////////////////////////////////////////////////////
 [[personal_webs]]
 Personal Webs
 ~~~~~~~~~~~~~
@@ -405,6 +427,7 @@ users' home directory that will be used as document root for personal
 web content. For instance, if `/foo` was specified, a user `bar` could
 publish the content of ~/foo at the relative URL /~bar
 This option is disabled if the 'Directory name' field is empty.
+//////////////////////////////////////////////////////////////////////
 
 
 [[error_handler]]
@@ -465,11 +488,8 @@ Logging using a user-specified format.
 --
 
 Besides, this sections allows you to specify several other options,
-such as the backend used to store errors, or wether or not statistics
-should be collected for each particular virtual server. This feature
-has to be globally enabled within the link:config_general.html[general
-configuration section]. In case statistics are collected,
-link:other_graphs.html[usage graphs] are displayed in this section.
+such as the backend used to store errors.
+
 
 [[security]]
 Security
@@ -484,12 +504,6 @@ certificates.
 Cherokee fully supports the usage of different certificates for each
 virtual server in a given host by it using SNI as defined in
 link:http://www.rfc-archive.org/getrfc.php?rfc=3546[RFC 3546].
-
-////
-or by elegantly respinning the secure handshake. Check the
-link:other_goodies.html#ssl-vhosts[SSL Virtual Hosts] information for
-more details.
-////
 
 image::media/images/admin_vserver_security.png[Certificates]
 

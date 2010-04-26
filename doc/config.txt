@@ -1,6 +1,7 @@
 == link:index.html[Index] -> Configuration
 
   . link:config_quickstart.html[Quickstart]: Overview and walkthrough.
+  . link:config_index.html[Home]: Main section.
   . link:config_status.html[Status]: Server status information.
   . link:config_general.html[General]: General settings.
   . link:config_virtual_servers.html[Virtual servers]: Server definition.

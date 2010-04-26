@@ -56,11 +56,10 @@ problem arises whenever you want to completely exhaust the list of
 sources being balanced. Since every balancer (a generic balancer or a
 FastCGI balancer, for example) needs at least one information source,
 the rule would be broken and Cherokee would fail to start. This is
-prevented by disabling the deletion of the last source of any rule (as
-you can see in the screenshot, where one of the rules' deletion links
-shows a "Forbidden" icon instead of a trash bin.  To eliminate such
-sources you will have to manually fix the rule by either setting up
-alternative information sources or by completely eliminating the rule.
+prevented by disabling the deletion of the last source of any rule. To
+eliminate such sources you will have to manually fix the rule by
+either setting up alternative information sources or by completely
+eliminating the rule.
 
 [[unix_sockets]]
 Unix Sockets

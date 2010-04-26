@@ -22,8 +22,9 @@ There are several ways you can run Cherokee:
   link:bundle_cherokee-worker.html[`cherokee-worker`] to see the
   complete list of optional arguments.
 
-. Cherokee-Admin: The administrative web interface allows you to configure
-  and launch Cherokee. This is probably where you want to start if you
-  have just installed the web server. Launch the
-  link:bundle_cherokee-admin.html[`cherokee-admin`] process and follow the
-  link:config_quickstart.html[Quickstart] section of the documentation.
+. Cherokee-Admin: The administration web interface allows you to
+  configure and launch Cherokee. This is probably where you want to
+  start if you have just installed the web server. Launch the
+  link:bundle_cherokee-admin.html[`cherokee-admin`] process and follow
+  the link:config_quickstart.html[Quickstart] section of the
+  documentation.

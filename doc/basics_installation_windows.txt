@@ -7,8 +7,16 @@ The latest Windows bundled release is available at the
 link:http://www.cherokee-project.com/download/windows[Windows
 download] section of the Cherokee Project website.
 
-WARNING: The Windows build is currently broken. It will be fixed as
-soon as possible. A Windows binary release will be available too.
+WARNING: The Windows native build is currently broken. It will be
+fixed as soon as possible. A Windows binary release will be available
+too. In the meantime, if you need to run Cherokee on a Windows host
+you will have to rely on Cygwin and the likes. Almost all the code
+base of the Cherokee-Project can be used natively under Windows, as it
+was 100% compatible not too long ago. However, since resources and
+man-power are limited, and due to Cherokee's fast evolution, we are
+not yet there. Reacquiring binary compatibility with the Windows
+platform is a medium-to-long term goal.
+
 
 [[quickstart]]
 Quickstart

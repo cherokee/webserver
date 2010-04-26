@@ -70,3 +70,7 @@ the upgrade process is successful, you should use the new configuration
 file as a start point and go through the normal configuration process
 using link:bundle_cherokee-admin.html[cherokee-admin].
 
+Also, as long as you are not using an ancient configuration file,
+every new cherokee-admin release will be able to upgrade the
+configuration automatically from previous versions whenever a format
+change has been required.
