@@ -62,9 +62,9 @@ class PluginBalancer (CTK.Plugin):
             if not balancer_sources:
                 self += CTK.Notice ('warning', CTK.RawHTML (_(NO_SOURCE_WARNING)))
             else:
-                table = CTK.Table()
+                table = CTK.Table({'id': 'balancer-table'})
                 table.set_header(1)
-                table += [CTK.RawHTML(x) for x in (_('Nick'), _('Host'))]
+                table += [CTK.RawHTML(x) for x in (_('Nick'), _('Host'), '')]
                 for sb in balancer_sources:
                     sg   = CTK.cfg.get_val ('%s!source!%s'%(key, sb))
                     nick = CTK.cfg.get_val ('source!%s!nick'%(sg))
