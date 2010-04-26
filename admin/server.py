@@ -66,13 +66,14 @@ def init (scgi_port, cfg_file):
     # Read configuration file
     CTK.cfg.file = cfg_file
     CTK.cfg.load()
+
     # Update config tree if required
     config_version.config_version_update_cfg (CTK.cfg)
 
-    # Init CTK in advance
-    # Params could be passed to CTK.run() later
+    # Init CTK
     if scgi_port.isdigit():
         CTK.init (port=8000)
+
     else:
         # Remove the unix socket if it already exists
         try:
@@ -82,8 +83,15 @@ def init (scgi_port, cfg_file):
                 os.unlink (scgi_port)
         except OSError:
             pass
+
         CTK.init (unix_socket=scgi_port)
 
+    # At this moment, CTK must be forced to work as a syncronous
+    # server. All the initial tests (config file readable, correct
+    # installation, etc) must be performed in the safest possible way,
+    # ensuring that race conditions don't cause trouble. It will be
+    # upgraded to asyncronous mode just before the mainloop is reached
+    CTK.set_synchronous (True)
 
 def debug_set_up():
     def debug_callback (sig, frame):
@@ -193,5 +201,9 @@ if __name__ == "__main__":
     import PageHelp
     import PageStatus
 
-    # Run
+    # Let's get asyncronous..
+    CTK.set_synchronous (False)
+
+    # Run forever
     CTK.run()
+
