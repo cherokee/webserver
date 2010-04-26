@@ -23,6 +23,11 @@
 from consts import *
 from PageCleaner import Postprocess
 
+try:
+    import json
+except ImportError:
+    import json_embedded as json
+
 widget_uniq_id = 1;
 
 
@@ -74,10 +79,6 @@ class RenderResponse:
         else:
             help = []
 
-        try:
-            import json
-        except ImportError:
-            import simplejson as json
         return json.dumps({'html':    self.html,
                            'js':      Postprocess(self.js),
                            'headers': self.headers,
