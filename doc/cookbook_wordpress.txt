@@ -75,6 +75,20 @@ reconfiguration of Cherokee whatsoever, you can skip right to the
 section link:cookbook_wordpress.html#setting_up_wordpress[Setting up
 Wordpress].
 
+WARNING
+^^^^^^^
+Beware of another possible break point. The last step in the
+installation of WordPress involves mailing the details of the new
+account to the provided email. Normally the process will be painless:
+if the system is running an MTA, this report will be sent. If not, it
+will simply skip this step. In both cases the information will also be
+displayed on screen. However, there is a corner case that might make
+your installation fail: if the server is running a broken MTA, this
+could make PHP fail when trying to deliver the email, in turn
+resulting in a failure during the installation, and making Cherokee
+report an `Error 500`. Having a broken MTA on a production server
+is a very unlikely scenario, but should you receive this error double
+check your MTA just in case.
 
 [[wordpress]]
 Setting up Wordpress
