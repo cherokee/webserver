@@ -22,7 +22,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILE_NAME, 666, "Test file")
+        f = self.WriteFile (d, FILE_NAME, 0666, "Test file")
         s = self.SymLink (f, os.path.join(d,LINK_NAME))
 
         self.conf = CONF.replace('<dir>', DIR)
