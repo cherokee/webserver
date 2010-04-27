@@ -9,8 +9,8 @@
 
 import sys
 
-sys.path.append('../admin/')
-from config import *
+sys.path.append('../admin/CTK/CTK')
+from Config import *
 
 def reparent_child (orig, target):
     if not orig:

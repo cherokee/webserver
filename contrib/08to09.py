@@ -9,8 +9,8 @@
 
 import sys
 
-sys.path.append('../admin/')
-from config import *
+sys.path.append('../admin/CTK/CTK')
+from Config import *
 
 def save_result (content, file):
     tmp = content.split('\n')
