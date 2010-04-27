@@ -34,10 +34,14 @@ installation Wizard.
 
 To do this, you'll have to locate the Wizard, available for
 installation under a subdirectory or using a new dedicated virtual
-server. In both cases you'll find a Wizard option: the former one will
-have it available within every available virtual server, and the
-latter will directly be present under the `Virtual Servers` section of
-the admin.
+server. In both cases you'll find a Wizard option: For the former
+you'll have to access the Wizard from the list of available ones
+within the `Virtual Servers` section of Cherokee-Admin, clicking on
+the `Add` button at the top of the panel. The latter is accessed
+through the same list of Wizards, this time using the `Rule
+Management` button within the `Behavior` tab of any given virtual
+server. Once the panel with the rules is listed, follow a similar
+procedure using the `Add` button located at the top.
 
 Once the Wizard list is visible, simply go to the `Misc`
 section, click on `Sugar`, provide the basic information and you can

@@ -65,9 +65,9 @@ Launch cherokee-admin, and proceed to the
 link:config_virtual_servers.html[Virtual servers] section.
 
 Now you can either enter the chosen one to install under a web folder,
-or directly click on the `Symfony Wizard` to create a customised
-virtual server. In any case you will find the wizard under the
-`Platforms` category.
+or directly click on the `Add` button of the `Virtual Servers` panel
+to create a customised virtual server. In any case you will find the
+wizard under the `Platforms` category.
 
 
 After that you will be asked for the minimal information required to

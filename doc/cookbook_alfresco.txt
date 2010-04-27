@@ -113,9 +113,11 @@ Phase two: Cherokee
 
 Now to set up Cherokee. To do this, use the provided `Wizard`. Launch
 Cherokee-Admin on your proxy machine and then you will find this
-assistant under the `Platforms` category of the Wizards. Click, answer a few
-questions and you are done. You can then skip the rest of this
-document.
+assistant under the `Platforms` category of the Wizards. Simply go to
+the virtual server list page and click on the `Add` button at the top
+of the panel to show the list of available wizards. Click on the one
+for Alfresco, answer a few questions and you are done. You can then
+skip the rest of this document.
 
 Should you have any problem with the assistant, you can perform the
 same tasks manually. Simply set up Cherokee as reverse proxy. You can

@@ -29,7 +29,7 @@ Then, you have to set up several rules in Cherokee to rewrite the
 requests. To do that, proceed to the
 link:config_virtual_servers.html[Virtual servers] section. Select the
 virtual server that you will be configuring and go to the `Behavior`
-tab to set up the rules.
+tab and `Rule Management` to set up the rules.
 
 .Steps
 . You will need to keep the rule for the `php` extension.

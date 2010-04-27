@@ -19,5 +19,5 @@ Wiki].
 //////
 TO DO:
 Talk about uCherokee.
-Recolect information about more devices, such as the NSLU2.
+Collect information about more devices, such as the NSLU2.
 //////

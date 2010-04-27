@@ -101,9 +101,11 @@ Configuring with the Wizard
 
 There is also a wizard to assist you with your configuration. Once
 phpMyAdmin is installed, simply access one of your virtual servers in
-`Cherokee-Admin`. Then, click on the phpMyAdmin wizard that can be
-found in the `Behavior` tab, by clicking on `Wizards` and under the
-`Database` category.
+`Cherokee-Admin`. Then, access the `Behavior` tab and trigger the
+`Rule panel` by clicking on the `Rule Management` button. Once in
+there, use the `Add` button at the top of the panel to see the
+available wizards, and choose the phpMyAdmin wizard that can be found
+under the `Web Applications` category.
 
 Considerations
 ~~~~~~~~~~~~~~

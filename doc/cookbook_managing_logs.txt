@@ -35,8 +35,8 @@ cherokee-admin
 ~~~~~~~~~~~~~~
 First, the remote administration handler must be configured, so we
 will have to create a rule for that (`Virtual Servers` -> `default` ->
-`Behavior` -> `Add new rule`). We will use a directory-type
-rule.
+`Behavior` -> `Rule Management` -> `Add New`). We will use a
+directory-type rule.
 
 [options="header"]
 |=======================
@@ -97,3 +97,7 @@ Setting backup mode.. OK
 Log file '/var/log/cherokee.access' moved to '/var/log/cherokee.access.1' successfully
 Restoring production mode.. OK
 -----
+
+That should do it. link:bundle_cherokee-tweak.html[cherokee-tweak] is
+a powerful tool. Take a look at the parameters and you find out if it
+can solve some of your administration problems.

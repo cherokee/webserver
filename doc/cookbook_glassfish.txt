@@ -134,12 +134,16 @@ Configuring Cherokee
 ~~~~~~~~~~~~~~~~~~~~
 
 Cherokee provides a wizard that will assist you on this task. You can
-either dedicate a new virtual server to the task, or use a preexisting
+either dedicate a new virtual server for this, or use a preexisting
 one. It is your choice, since the Wizard contemplates both scenarios.
+
 For the former you'll have to access the Wizard from the list of
-available ones within the `Virtual Servers` tab of Cherokee-Admin. The
-latter is accessed through the same list of Wizards, this time within
-the `Behavior` tab of any given virtual server.
+available ones within the `Virtual Servers` section of Cherokee-Admin,
+clicking on the `Add` button at the top of the panel. The latter is
+accessed through the same list of Wizards, this time using the `Rule
+Management` button within the `Behavior` tab of any given virtual
+server. Once the panel with the rules is listed, follow a similar
+procedure using the `Add` button located at the top.
 
 The wizard will simply ask for the host to be proxied and will set it
 up for you to see. Should you need to add more machines to your

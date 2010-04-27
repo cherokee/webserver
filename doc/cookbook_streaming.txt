@@ -16,11 +16,13 @@ Standard configuration
 
 To configure Cherokee to stream media files is trivial. The only thing
 you will have to do is to choose the virtual server on which you want
-to enable the streaming functionality, and then click on `Wizard`.
+to enable the streaming functionality, and then click on the `Add New`
+button located at the top of the panel.
 
 image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 
-Once in there, the only thing left to do is to click `Misc` and run
-the Streaming wizard. Right after which the virtual server will be
-ready to stream your media files, including MP3, OGG, OGV, MP4, etc.
+Once in there, the only thing left to do is finding the the Streaming
+wizard under the `Tasks` category, and following the
+instructions. Right after which the virtual server will be ready to
+stream your media files, including MP3, OGG, OGV, MP4, etc.
 

@@ -21,7 +21,8 @@ Setting up Wordpress as a new Virtual Server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first step would be to go to the virtual server list page. Once in
-there, you'll have to click the `Wizards` button:
+there, click on the `Add` button at the top of the panel to show the
+list of available wizards.
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
@@ -46,8 +47,9 @@ want to set up Wordpress inside the `/blog` directory of one of our
 virtual servers.
 
 In this case, the first thing you will have to do is to enter the
-virtual server configuration you'd like to configure Wordpress in.
-Once in there, click the `Wizards` button:
+virtual server configuration you'd like to configure WordPress
+in. Visit the `Behavior` tab, use the `Rule Management` button and
+click on the `Add` button at the top of the panel.
 
 image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 

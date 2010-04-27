@@ -19,12 +19,12 @@ section specific to Cherokee: the configuration of the web server.
 
 You should really use the recommended method, which is using the
 configuration wizard provided by Cherokee-Admin. Simply go to the
-virtual server list page. Once in there, you'll have to click the
-`Wizards` button:
+virtual server list page and click on the `Add` button at the top of
+the panel to show the list of available wizards.
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
-Now, you will have to select the `Misc` category, and run the
+Now, you will have to select the `Web Applications` category, and run the
 `Mailman` wizard. You will be asked for some basic parameters about
 the installation. The new virtual server will be created after this
 form is submitted.  The virtual server configuration will cover the

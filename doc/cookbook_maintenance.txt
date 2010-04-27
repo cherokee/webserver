@@ -100,13 +100,15 @@ maintenance directory.
 Advanced Example: Staff review
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By now you can switch the server to and from maintenance mode.
+By now you should be able of switching the server to and from
+maintenance mode.
+
 The next essential feature needed is to allow specific users to be
 able to access the original site, not the maintenance version, so that
-the can view the changes reflected as soon as they work on something.
+they can view the changes reflected while they are working.
 
-The tweaking here has to take place in the original vhost. The steps
-are also fairly simple.
+The tweaking here has to take place in the original virtual
+server. The steps are also fairly simple.
 
 - In this example we will be adding a new
 imaginary domain to the list of domains managed by the virtual

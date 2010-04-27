@@ -21,9 +21,12 @@ Cherokee provides a wizard that will assist you on this task. You can
 either dedicate a new virtual server to the task, or use a preexisting
 one. It is your choice, since the Wizard contemplates both scenarios.
 For the former you'll have to access the Wizard from the list of
-available ones within the `Virtual Servers` tab of Cherokee-Admin. The
-latter is accessed through the same list of Wizards, this time within
-the `Behavior` tab of any given virtual server.
+available ones within the `Virtual Servers` panel. The latter is
+accessed through the same list of Wizards of the `Rule Management`
+panel. This panel is accessed by visiting the `Behavior` tab of the
+selected virtual server, and triggering the `Rule panel` by clicking
+on the `Rule Management` button. In either case, use the `Add` button
+at the top of the panel to see the available wizards.
 
 The wizard will simply ask for the host to be proxied and will set it
 up for you to see. It will automatically detect if the provided

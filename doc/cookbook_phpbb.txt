@@ -74,8 +74,8 @@ Configuring with the Wizard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `Cherokee-Admin` provides a wizard for phpBB that will configure the
-web server appropriately. Just find it under the `Misc` category,
-provide some basic information and you are good to go.
+web server appropriately. Just find it under the `Web Applications`
+category, provide some basic information and you are good to go.
 
 Then point your web browser to `http://example.net` and follow all the
 steps. Basically you will have to provide the database information and

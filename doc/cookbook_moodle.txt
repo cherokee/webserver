@@ -31,8 +31,9 @@ Configure Cherokee using the Wizard
 Setting up Moodle as a new Virtual Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The first step would be to go to the virtual server list page. Once in
-there, you'll have to click the `Wizards` button:
+The first step would be to go to the virtual server list page. Then,
+click on the `Add` button at the top of the panel to show the list of
+available wizards.
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 

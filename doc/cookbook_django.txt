@@ -63,12 +63,14 @@ You can either do it by hand, or you can use the appropriate wizard
 for a hassle-free configuration.
 
 To do so, simply access the `Virtual Servers` section in
-`Cherokee-Admin`, and click on `Wizards` -> `Platforms` -
-`Django`. You can use this wizard both within your `Virtual
-Servers` list (in which case a new virtual server is configured) and
-from the `Behavior` tab inside one of your virtual servers. In this
-last scenario, the Django project will be accessible under the
-specified web directory of the selected virtual server.
+`Cherokee-Admin`, and click on the `Add` button at the top of the
+panel to show the list of available wizards. `Django` is located under
+the `Platforms` category. You can use this wizard both within your
+`Virtual Servers` list (in which case a new virtual server is
+configured), and from the `Rule Management` button on the `Behavior`
+tab inside one of your virtual servers. In this last scenario, the
+Django project will be accessible under the specified web directory of
+the selected virtual server.
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 

@@ -14,7 +14,9 @@ regular binaries.
 
 It requires a single operation to get PHP configured on a Virtual
 Server: Choose the virtual server your want to configure, and click on
-the `Behavior` tab. Once in there, click on `Wizards`:
+the `Behavior` tab and trigger the `Rule panel` by clicking on the
+`Rule Management` button. Once in there, use the `Add` button at the
+top of the panel to see the available wizards:
 
 image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 

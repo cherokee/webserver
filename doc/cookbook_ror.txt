@@ -4,8 +4,8 @@ Cookbook: Setting up Ruby on Rails
 ----------------------------------
 
 Setting up a Rails application to run with Cherokee is not only
-easy. It is also the best possible solution to manage the load among
-one or many Rails servers. This is done by using an extremely
+easy. It is also the best possible solution to manage the load among a
+bunch of servers running Rails. This is done by using an extremely
 efficient web server to manage the web part and leaving as many free
 resources as possible to Rails.
 
@@ -75,8 +75,17 @@ for a hassle-free configuration.
 
 You should really use the recommended method, which is using the
 configuration wizard provided by Cherokee-Admin. Simply go to the
-virtual server list page. Once in there, you'll have to click the
-`Wizards` button:
+virtual server list page and click on the `Add` button at the top of
+the panel to show the list of available wizards. This will allow you
+to set up a new dedicated virtual host for your Rails application.
+Once in there, use the `Add` button at the top of the panel to see the
+available wizards.
+
+If you wanted to configure Rails to run under a web directory of an
+existing virtual server, you would have to launch the wizard from
+within the specific virtual server, visiting the `Behavior` tab and
+trigger the `Rule panel` by clicking on the `Rule Management`
+button.
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
