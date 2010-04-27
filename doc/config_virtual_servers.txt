@@ -301,7 +301,7 @@ click on the rule name, the rule's configuration options will be
 displayed in the main content area. If you click anywhere else, you
 will be able to drag and drop it into the desired position).
 
-image::media/images/admin_behaviour.png[Virtual server]
+image::media/images/admin_behavior.png[Virtual server]
 
 Each of these behavior rules must specify the handler that the server
 should use to reply to the requests that match the rule.  Handlers are
