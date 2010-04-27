@@ -8,9 +8,13 @@
 # Copyright (C) 2001-2010 Alvaro Lopez Ortega
 # This file is distributed under the GPL2 license.
 
+import os
 import sys
 
-from config import *
+# Import CTK
+sys.path.append (os.path.abspath (os.path.realpath(__file__) + '/../CTK/CTK'))
+from Config import *
+
 from configured import *
 from config_version import *
 
