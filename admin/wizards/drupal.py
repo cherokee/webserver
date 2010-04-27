@@ -90,6 +90,8 @@ CONFIG_VSERVER = """
 %(pre_rule_minus1)s!match = exists
 %(pre_rule_minus1)s!match!iocache = 1
 %(pre_rule_minus1)s!match!match_any = 1
+%(pre_rule_minus1)s!match!match_index_files = 0
+%(pre_rule_minus1)s!match!match_only_files = 1
 %(pre_rule_minus1)s!handler = file
 
 %(pre_rule_minus2)s!match = default
@@ -137,6 +139,8 @@ CONFIG_DIR = """
 %(pre_rule_minus1)s!match!right = exists
 %(pre_rule_minus1)s!match!right!iocache = 1
 %(pre_rule_minus1)s!match!right!match_any = 1
+%(pre_rule_minus1)s!match!right!match_index_files = 0
+%(pre_rule_minus1)s!match!right!match_only_files = 1
 %(pre_rule_minus1)s!handler = file
 
 %(pre_rule_minus2)s!match = directory

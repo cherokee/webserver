@@ -50,28 +50,35 @@ PREFIX    = 'tmp!wizard!wordpress'
 URL_APPLY = r'/wizard/vserver/wordpress/apply'
 
 CONFIG_DIR = """
-%(pre_rule_minus1)s!document_root = %(local_dir)s
-%(pre_rule_minus1)s!match = directory
-%(pre_rule_minus1)s!match!directory = %(web_dir)s
-%(pre_rule_minus1)s!match!final = 0
+%(pre_rule_minus1)s!match = fullpath
+%(pre_rule_minus1)s!match!fullpath!1 = %(web_dir)s/wp-admin/
+%(pre_rule_minus1)s!handler = redir
+%(pre_rule_minus1)s!handler!rewrite!1!regex = (.*)/
+%(pre_rule_minus1)s!handler!rewrite!1!show = 0
+%(pre_rule_minus1)s!handler!rewrite!1!substring = $1/index.php
 
-%(pre_rule_minus2)s!match = and
-%(pre_rule_minus2)s!match!final = 1
-%(pre_rule_minus2)s!match!left = directory
-%(pre_rule_minus2)s!match!left!directory = %(web_dir)s
-%(pre_rule_minus2)s!match!right = exists
-%(pre_rule_minus2)s!match!right!iocache = 1
-%(pre_rule_minus2)s!match!right!match_any = 1
-%(pre_rule_minus2)s!match!right!match_index_files = 0
-%(pre_rule_minus2)s!match!right!match_only_files = 1
-%(pre_rule_minus2)s!handler = file
-%(pre_rule_minus2)s!handler!iocache = 1
+%(pre_rule_minus2)s!document_root = %(local_dir)s
+%(pre_rule_minus2)s!match = directory
+%(pre_rule_minus2)s!match!directory = %(web_dir)s
+%(pre_rule_minus2)s!match!final = 0
 
-%(pre_rule_minus3)s!match = request
-%(pre_rule_minus3)s!match!request = %(web_dir)s/(.+)
-%(pre_rule_minus3)s!handler = redir
-%(pre_rule_minus3)s!handler!rewrite!1!show = 0
-%(pre_rule_minus3)s!handler!rewrite!1!substring = %(web_dir)s/index.php?/$1
+%(pre_rule_minus3)s!match = and
+%(pre_rule_minus3)s!match!final = 1
+%(pre_rule_minus3)s!match!left = directory
+%(pre_rule_minus3)s!match!left!directory = %(web_dir)s
+%(pre_rule_minus3)s!match!right = exists
+%(pre_rule_minus3)s!match!right!iocache = 1
+%(pre_rule_minus3)s!match!right!match_any = 1
+%(pre_rule_minus3)s!match!right!match_index_files = 0
+%(pre_rule_minus3)s!match!right!match_only_files = 1
+%(pre_rule_minus3)s!handler = file
+%(pre_rule_minus3)s!handler!iocache = 1
+
+%(pre_rule_minus4)s!match = request
+%(pre_rule_minus4)s!match!request = %(web_dir)s/(.+)
+%(pre_rule_minus4)s!handler = redir
+%(pre_rule_minus4)s!handler!rewrite!1!show = 0
+%(pre_rule_minus4)s!handler!rewrite!1!substring = %(web_dir)s/index.php?/$1
 """
 
 CONFIG_VSERVER = """
