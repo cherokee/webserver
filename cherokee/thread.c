@@ -849,6 +849,17 @@ process_active_connections (cherokee_thread_t *thd)
 							  CONN_VSRV(conn)->error_writer);
 			}
 
+			/* Update timeout of the Keep-alive connections carried over..
+			 * The previous timeout was set to allow them to linger open
+			 * for a while. The new one is set to allow the server to serve
+			 * the new request.
+			 */
+			if ((conn->keepalive > 0) &&
+			    (conn->keepalive < CONN_SRV(conn)->keepalive_max))
+			{
+				cherokee_connection_update_timeout (conn);
+			}
+
 			/* Information collection
 			 */
 			if (THREAD_SRV(thd)->collector != NULL) {
@@ -1487,7 +1498,6 @@ accept_new_connection (cherokee_thread_t *thd,
 	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
 
 	TRACE (ENTRIES, "new conn %p, fd %d\n", new_conn, new_fd);
-
 	return ret_ok;
 
 error:
