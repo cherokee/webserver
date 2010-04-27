@@ -126,8 +126,8 @@ LIST = [
      'title': _('Web Applications'),
      'descr': _('General Purpose Applications'),
      'list':  [
-            {'name':  'mailman',
-             'title': 'GNU MailMan',
+            {'name':  'phpmyadmin',
+             'title': 'phpMyAdmin',
              'descr': 'PHP web application to handle the administration of MySQL.',
              'type':  TYPE_RULE},
             {'name':  'mailman',
