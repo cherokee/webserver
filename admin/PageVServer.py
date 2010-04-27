@@ -339,7 +339,7 @@ class LogginWidgetContent (CTK.Container):
         CTK.Container.__init__ (self)
 
         pre        = "vserver!%s" %(vsrv_num)
-        url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
+        url_apply  = "%s/%s/log" %(URL_APPLY, vsrv_num)
         writers    = [('', N_('Disabled'))] + LOGGER_WRITERS
 
         # Error writer
@@ -412,6 +412,18 @@ class LogginWidgetContent (CTK.Container):
             self += CTK.RawHTML ('<h3>%s</h3>' % (_('Logging Option')))
             self += CTK.Indenter (submit)
 
+def LogginWidgetContent_Apply():
+    # Apply
+    ret = CTK.cfg_apply_post()
+
+    # Check Error Writer stale-entries
+    vsrv_num = re.findall (r'^%s/(\d+)/log'%URL_APPLY,  CTK.request.url)[0]
+    pre      = 'vserver!%s!error_writer' %(vsrv_num)
+
+    if not CTK.cfg.get_val ('%s!type'%(pre)):
+        del (CTK.cfg[pre])
+
+    return ret
 
 
 class LogginWidget (CTK.Container):
@@ -504,5 +516,6 @@ class Render:
 
 CTK.publish (r'^%s/[\d]+$'      %(URL_BASE), Render)
 CTK.publish (r'^%s/[\d]+$'      %(URL_APPLY), CTK.cfg_apply_post, validation=VALIDATIONS, method="POST")
+CTK.publish (r'^%s/[\d]+/log$'  %(URL_APPLY), LogginWidgetContent_Apply, validation=VALIDATIONS, method="POST")
 CTK.publish ('^%s/[\d]+/clone$' %(URL_BASE), commit_clone)
 
