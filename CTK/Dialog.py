@@ -67,14 +67,14 @@ def py2js_dic (d):
     for key in d:
         val = d[key]
         if type(val) == bool:
-            js_pairs.append ('%s: %s' %(key, ('false', 'true')[val]))
+            js_pairs.append ("'%s': %s" %(key, ('false', 'true')[val]))
         elif type(val) == int:
-            js_pairs.append ('%s: %d' %(key, val))
+            js_pairs.append ("'%s': %d" %(key, val))
         elif type(val) == str:
             if '/* code */' in val:
-                js_pairs.append ("%s: %s" %(key, val))
+                js_pairs.append ("'%s': %s" %(key, val))
             else:
-                js_pairs.append ("%s: '%s'" %(key, val))
+                js_pairs.append ("'%s': '%s'" %(key, val))
         else:
             assert false, "Unknown data type"
 
