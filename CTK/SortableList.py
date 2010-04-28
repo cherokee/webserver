@@ -22,6 +22,7 @@
 
 from Table import Table
 from Server import publish
+from PageCleaner import Uniq_Block
 
 HEADER = [
     '<script type="text/javascript" src="/CTK/js/jquery.tablednd_0_5.js"></script>'
@@ -34,12 +35,31 @@ $("#%(id)s").tableDnD({
                 async:    true,
                 type:     "POST",
 		dataType: "text",
-                data:     $.tableDnD.serialize_plain()});
+                data:     $.tableDnD.serialize_plain(),
+	        success:   function (data_raw) {
+                  var data = eval('(' + data_raw + ')');
+
+		  if (data['ret'] == 'ok') {
+                    /* Modified: Save button */
+                    var modified     = data['modified'];
+                    var not_modified = data['not-modified'];
+
+                    if (modified != undefined) {
+                       $(modified).show();
+                       $(modified).removeClass('saved');
+                    } else if (not_modified) {
+                       $(not_modified).addClass('saved');
+                    }
+                  }
+                }
+              });
    },
    dragHandle: "dragHandle",
    containerDiv: $("#%(container)s")
 });
+"""
 
+JS_INIT_FUNC = """
 jQuery.tableDnD.serialize_plain = function() {
      var result = "";
      var table  = jQuery.tableDnD.currentTable;
@@ -71,7 +91,9 @@ class SortableList (Table):
     def Render (self):
         render = Table.Render (self)
 
-        render.js      += JS_INIT %({'id': self.id, 'url': self.url, 'container': self.container})
+        props = {'id': self.id, 'url': self.url, 'container': self.container}
+
+        render.js      += JS_INIT %(props) + Uniq_Block (JS_INIT_FUNC %(props))
         render.headers += HEADER
         return render
 
