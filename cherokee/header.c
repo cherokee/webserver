@@ -282,8 +282,8 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 {
 	char chr = *line;
 
-#define detect_method(l,str,mthd)           		  \
-	if (cmp_str (line, (str" "))) { \
+#define detect_method(l,str,mthd)		\
+	if (cmp_str (line, (str" "))) {		\
 		hdr->method = http_ ## mthd;    \
 		*pointer += sizeof(str);        \
 		return ret_ok;                  \
@@ -330,7 +330,7 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 		break;
 	case 'L':
 		detect_method (line, "LABEL", label)
-	        break;
+		else
 		detect_method (line, "LOCK", lock)
 	        break;
 	case 'M':
