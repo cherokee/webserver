@@ -47,7 +47,10 @@ PHP_NAMES         = ["php5-cgi",
                      "php5",
                      "php",
                      "php4"]
-PYTHON_NAMES      = ["python2.5",
+
+PYTHON_NAMES      = ["python",
+                     "python2.7",
+                     "python2.6",
+                     "python2.5",
                      "python2.4",
-                     "python",
                      "python2.3"]

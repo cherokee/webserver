@@ -331,7 +331,10 @@ class TestBase:
             return ret
 
         def CalculateResponse (self, user, realm, passwd, method, url, nonce, qop, cnonce, nc):
-            from hashlib import md5
+            try:
+                from hashlib import md5
+            except ImportError:
+                from md5 import md5
 
             md5obj = md5()
             md5obj.update("%s:%s:%s" % (user, realm, passwd))

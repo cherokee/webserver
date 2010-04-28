@@ -16,9 +16,14 @@ vserver!1!rule!2030!document_root = %s
 """
 
 def secure_download (url, secret):
-    import time, hashlib
+    import time
+    try:
+        from hashlib import md5
+    except ImportError:
+        from md5 import md5
+
     t = "%08x"%(time.time())
-    return '/'+ hashlib.md5(secret + url + t).hexdigest() +'/'+ t + url
+    return '/'+ md5(secret + url + t).hexdigest() +'/'+ t + url
 
 class Test (TestBase):
     def __init__ (self):
