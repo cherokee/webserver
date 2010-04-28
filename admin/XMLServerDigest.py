@@ -45,7 +45,11 @@ class CustomTransport(xmlrpclib.Transport):
                        HTTPS_PROXY = 'https')
 
     def __init__(self, proxies={}, local=False):
-        xmlrpclib.Transport.__init__(self)
+        # Warning: Check for parent's init. The xmlrpclib.Transport
+        # class does not implement __init__() on Python 2.4
+        if hasattr (xmlrpclib.Transport, '__init__'):
+            xmlrpclib.Transport.__init__(self)
+
         self.proxies = dict(((self.proxy_keys[k],v) for k,v in os.environ.items() if k in self.proxy_keys))
         self.proxies.update(proxies)
 
