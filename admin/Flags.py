@@ -327,7 +327,7 @@ class CheckListFlags (CTK.Box):
         for k in codes:
             box = CTK.Box({'class': 'check-list-flags-entry'})
             box += CTK.CheckCfg ('%s!%s' %(key, k), k in selected, props)
-            box += CTK.Image ({'src': "/static/images/flags/%s.png"%(k)})
+            box += CTK.Image ({'src': "/static/images/flags/%s.png"%(k.lower())})
             box += CTK.RawHTML (ISO_3166[k])
             self += box
 
