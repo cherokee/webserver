@@ -238,7 +238,7 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("only_secure:               %d\n", entry->only_secure);
 	printf ("access:                    %p\n", entry->access);
 	printf ("handler_new:               %p\n", entry->handler_new_func);
-	printf ("http_methods:              0x%x\n", entry->handler_methods);
+	printf ("http_methods:              0x%x\n", (cuint_t)entry->handler_methods);
 	printf ("handler_properties:        %p\n", entry->handler_properties);
 	printf ("validator_new:             %p\n", entry->validator_new_func);
 	printf ("validator_properties:      %p\n", entry->validator_properties);
