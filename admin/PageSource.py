@@ -115,40 +115,58 @@ def commit():
     return CTK.cfg_apply_post()
 
 
-def _get_used_sources ():
-    """List of every rule using any info source"""
-    used_sources = {}
-    target ='!balancer!source!'
-    for entry in CTK.cfg.serialize().split():
-        if target in entry:
-            source = CTK.cfg.get_val(entry)
-            if not used_sources.has_key(source):
-                used_sources[source] = []
-            used_sources[source].append(entry)
-    return used_sources
+def _all_sources_per_rule ():
+    """Return list of {rule: [sources used by rule]}"""
+    result = []
+    vservers = CTK.cfg.keys('vserver')
+
+    for vsrv in vservers:
+        rules = CTK.cfg.keys('vserver!%s!rule'%(vsrv))
+        for rule_num in rules:
+            rule    = 'vserver!%s!rule!%s'%(vsrv,rule_num)
+            sources = _sources_per_rule (rule)
+            if sources:
+                result.append({rule: sources})
+    return result
 
 
-def _get_rule_sources ():
-    # List of sources used by each rule
-    rule_sources = {}
-    used_sources = _get_used_sources()
-    for src in used_sources:
-        for r in used_sources[src]:
-            rule = r.split('!handler!balancer!')[0]
-            if not rule_sources.has_key(rule):
-                rule_sources[rule] = []
-            rule_sources[rule].append(src)
-    return rule_sources
+def _sources_per_rule (rule):
+    """Return list of sources used by a given rule"""
+    sources  = []
+    pre      = '%s!handler!balancer!source'%(rule)
+    src_keys = CTK.cfg.keys(pre)
+
+    for src_key in src_keys:
+        sources.append (CTK.cfg.get_val('%s!%s'%(pre,src_key)))
+    return list(set(sources))
 
 
-def _get_protected_sources ():
-    # List of sources to protect against deletion"""
-    rule_sources = _get_rule_sources()
-    protected_sources = []
-    for s in rule_sources:
-        if len(rule_sources[s])==1:
-            protected_sources.append(rule_sources[s][0])
-    return protected_sources
+def _rules_per_source (source):
+    """Return list of complete rules using a given source number"""
+    rules = []
+    source_usage = _all_sources_per_rule ()
+
+    for rule_dict in source_usage:
+        rule_pre, sources = rule_dict.items()[0]
+        if source in sources:
+            pre = '%s!handler!balancer!source'%(rule_pre)
+            balanced = CTK.cfg.keys(pre)
+            for src in balanced:
+                rule = '%s!%s'%(pre,src)
+                if CTK.cfg.get_val(rule) == source:
+                    rules.append(rule)
+    return list(set(rules))
+
+
+def _protected_sources ():
+    """Return list of sources that must be protected"""
+    protect = []
+    rules   = _all_sources_per_rule()
+    for rule in rules:
+        sources = rule.values()[0]
+        if len(sources) == 1:
+            protect += sources[0]
+    return protect
 
 
 class Render_Source:
@@ -202,12 +220,12 @@ class Render_Source:
         submit += table
         workarea += submit
 
-        sources = _get_rule_sources ()
-        rules   = [key for key,val in sources.items() if str(num) in val]
+        sources = _all_sources_per_rule ()
+        rules   = [dic.keys()[0] for dic in sources if str(num) in dic.values()[0]]
 
         if rules:
             workarea += self.Source_Usage (rules)
- 
+
         cont += workarea
 
         render = cont.Render()
@@ -258,8 +276,7 @@ class Render:
             sources = CTK.cfg.keys('source')
             sources.sort (lambda x,y: cmp (int(x), int(y)))
 
-            self.protected_sources = _get_protected_sources ()
-            self.rule_sources      = _get_rule_sources ()
+            self.protected_sources = _protected_sources ()
 
             for k in sources:
                 tipe = CTK.cfg.get_val('source!%s!type'%(k))
@@ -285,16 +302,14 @@ class Render:
 
         def _get_dialog (self, k, refresh):
             if k in self.protected_sources:
-                rules = []
-                for rule, sources in self.rule_sources.items():
-                    if str(k) in sources:
-                        rules.append(rule)
+                rules = _rules_per_source (k)
 
                 links = []
                 for rule in rules:
-                    r = Rule.Rule('%s!match' %(rule))
+                    rule_pre = rule.split('!handler')[0]
+                    r = Rule.Rule('%s!match' %(rule_pre))
                     rule_name = r.GetName()
-                    rule_link = rule.replace('!','/')
+                    rule_link = rule_pre.replace('!','/')
                     links.append(CTK.consts.LINK_HREF%(rule_link, rule_name))
 
                 dialog  = CTK.Dialog ({'title': _('Deletion is forbidden'), 'width': 480})
@@ -303,9 +318,14 @@ class Render:
                 dialog.AddButton (_('Close'), "close")
 
             else:
+                actions = {'source!%s'%(k):''}
+                rule_entries_to_delete = _rules_per_source(k)
+                for r in rule_entries_to_delete:
+                    actions[r] = ''
+
                 dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
                 dialog.AddButton (_('Remove'), CTK.JS.Ajax (URL_APPLY, async=False,
-                                                            data    = {'source!%s'%(k):''},
+                                                            data    = actions,
                                                             success = dialog.JS_to_close() + \
                                                                       refresh.JS_to_refresh()))
                 dialog.AddButton (_('Cancel'), "close")
