@@ -175,7 +175,7 @@ class EncodingWidget (CTK.Container):
         table = CTK.PropsTable()
         for e,e_name in encoders:
             note  = _("Use the %s encoder whenever the client requests it.") %(_(e_name))
-            table.Add ('%s %s'% (_(e_name), _("Support")), CTK.ComboCfg('%s!%s'%(pre,e), ENCODE_OPTIONS), note)
+            table.Add ('%s %s'% (_(e_name), _("support")), CTK.ComboCfg('%s!%s'%(pre,e), ENCODE_OPTIONS), note)
 
         submit = CTK.Submitter (apply)
         submit += table
