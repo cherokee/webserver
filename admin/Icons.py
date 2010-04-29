@@ -135,7 +135,7 @@ class ExtensionsTable (CTK.Container):
             self += CTK.Indenter (table)
 
         # Add New
-        button = AdditionDialogButton ('new_exts', 'Extensions', submit_label=_('Add New Extension'))
+        button = AdditionDialogButton ('new_exts', _('Extensions'), submit_label=_('Add New Extension'))
         button.bind ('submit_success', refreshable.JS_to_refresh())
         self += button
 
@@ -168,7 +168,7 @@ class FilesTable (CTK.Container):
             self += CTK.Indenter (table)
 
         # Add New
-        button = AdditionDialogButton ('new_file', 'File', submit_label=_('Add New File'))
+        button = AdditionDialogButton ('new_file', _('File'), submit_label=_('Add New File'))
         button.bind ('submit_success', refreshable.JS_to_refresh())
         self += button
 
@@ -342,7 +342,7 @@ class AdditionDialogButton (CTK.Box):
         button_label = kwargs.get('button_label', '%s…'%(submit_label))
 
         # Dialog
-        dialog = CTK.Dialog ({'title': _('Add new %s'%(name)), 'width': 375})
+        dialog = CTK.Dialog ({'title': '%s %s'%(_('Add new'), name), 'width': 375})
         dialog.AddButton (submit_label, dialog.JS_to_trigger('submit'))
         dialog.AddButton (_('Cancel'), "close")
         dialog += AddIcon(key, **kwargs)

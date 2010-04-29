@@ -147,7 +147,7 @@ class Rule (CTK.Box):
         vsrv_num = self.key.split('!')[1]
 
         if not CTK.cfg.get_val(self.key):
-            rules = [('', _('Select..'))] + RULES
+            rules = [('', _('Select…'))] + RULES
         else:
             rules = RULES[:]
 

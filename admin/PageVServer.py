@@ -409,7 +409,7 @@ class LogginWidgetContent (CTK.Container):
             submit.bind ('submit_success', refreshable.JS_to_refresh())
             submit += table
 
-            self += CTK.RawHTML ('<h3>%s</h3>' % (_('Logging Option')))
+            self += CTK.RawHTML ('<h3>%s</h3>' % (_('Logging Options')))
             self += CTK.Indenter (submit)
 
 def LogginWidgetContent_Apply():

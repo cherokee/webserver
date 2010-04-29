@@ -190,7 +190,7 @@ class Render_Source:
     def __call__ (self):
         # /source/empty
         if CTK.request.url.endswith('/empty'):
-            notice = CTK.Notice ('information', CTK.RawHTML (NOTE_NO_ENTRIES))
+            notice = CTK.Notice ('information', CTK.RawHTML (_(NOTE_NO_ENTRIES)))
             return notice.Render().toJSON()
 
         # /source/content/\d+
@@ -313,8 +313,8 @@ class Render:
                     links.append(CTK.consts.LINK_HREF%(rule_link, rule_name))
 
                 dialog  = CTK.Dialog ({'title': _('Deletion is forbidden'), 'width': 480})
-                dialog += CTK.RawHTML (NOTE_FORBID_1)
-                dialog += CTK.RawHTML (_('<p>%s: %s</p>')%(NOTE_FORBID_2, ', '.join(links)))
+                dialog += CTK.RawHTML (_(NOTE_FORBID_1))
+                dialog += CTK.RawHTML ('<p>%s: %s</p>'%(_(NOTE_FORBID_2), ', '.join(links)))
                 dialog.AddButton (_('Close'), "close")
 
             else:
@@ -329,7 +329,7 @@ class Render:
                                                             success = dialog.JS_to_close() + \
                                                                       refresh.JS_to_refresh()))
                 dialog.AddButton (_('Cancel'), "close")
-                dialog += CTK.RawHTML (NOTE_DELETE_DIALOG)
+                dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG))
 
             return dialog
 

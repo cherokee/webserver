@@ -109,7 +109,7 @@ def NewManual():
     vsrv_num = re.findall (URL_NEW_MANUAL_R, CTK.request.url)[0]
 
     # Add New Rule: Content
-    rules = [('',_('Choose..'))] + RULES
+    rules = [('',_('Choose…'))] + RULES
 
     table = CTK.PropsTable()
     modul = CTK.PluginSelector ('tmp', rules, vsrv_num=vsrv_num)

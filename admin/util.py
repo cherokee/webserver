@@ -32,7 +32,7 @@ import CTK
 # Strings
 #
 def bool_to_active (b):
-    return (_('Deactived'), _('Active'))[bool(b)]
+    return (_('Inactive'), _('Active'))[bool(b)]
 
 def bool_to_onoff (b):
     return (_('Off'), _('On'))[bool(b)]

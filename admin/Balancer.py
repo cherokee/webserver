@@ -114,7 +114,7 @@ class PluginBalancer (CTK.Plugin):
         if not general_left:
             self += CTK.Indenter (CTK.Notice('information', CTK.RawHTML (_(NOTE_ALL_SOURCES)%("/source"))))
         else:
-            options = [('', _('Choose..'))]
+            options = [('', _('Choose…'))]
             for s in general_left:
                 nick = CTK.cfg.get_val('source!%s!nick'%(s))
                 options.append((s,nick))
