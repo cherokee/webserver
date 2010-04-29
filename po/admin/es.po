@@ -5,21 +5,23 @@
 # Authors:
 #  Antonio Pérez Jiménez <aperez@skarcha.com>
 #  Alvaro Lopez Ortega <alvaro@alobbs.com>
+#  Taher Shihadeh <taher@unixwars.com>
 #
+# Taher Shihadeh <taher@shihadeh.net>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: cherokee '0.99.10'\n"
+"Project-Id-Version: cherokee '0.99.49'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-04-23 19:39+0200\n"
-"PO-Revision-Date: 2009-08-31 02:16+0200\n"
-"Last-Translator: Antonio Pérez Jiménez <aperez@skarcha.com>\n"
-"Language-Team: Spanish <>\n"
+"POT-Creation-Date: 2010-04-29 17:49+0200\n"
+"PO-Revision-Date: 2010-04-29 17:50+0200\n"
+"Last-Translator: Taher Shihadeh <taher@unixwars.com>\n"
+"Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 1.0\n"
 
 #: admin/Auth.py:34
 msgid "Allowed HTTP Authentication methods."
@@ -51,14 +53,16 @@ msgstr "Detalles de autenticación"
 
 #: admin/Balancer.py:32
 msgid "Specifies the policy used to dispatch the connections."
-msgstr ""
+msgstr "Especifica la política usada para atender las conexiones."
 
 #: admin/Balancer.py:33
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "It is already balancing among all the configured <a href=\"%s\">Information "
 "Sources</a>."
-msgstr "Ya se está balanceando entre todos los definidos"
+msgstr ""
+"Ya se está balanceando entre todos los <a href=\"%s\">orígenes de datos</a> "
+"definidos."
 
 #: admin/Balancer.py:34
 msgid ""
@@ -75,7 +79,7 @@ msgstr ""
 "Un balanceador de carga debe ser configurado para usar al menos un origen de "
 "datos."
 
-#: admin/Balancer.py:67 admin/PageSource.py:189 admin/PageSource.py:224
+#: admin/Balancer.py:67 admin/PageSource.py:209 admin/PageSource.py:246
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "Nombre"
@@ -84,8 +88,8 @@ msgstr "Nombre"
 msgid "Host"
 msgstr "Servidor"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:347
-#: admin/PageSource.py:367 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:371
+#: admin/PageSource.py:391 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "Orígenes de datos"
 
@@ -94,8 +98,8 @@ msgid "Assign Information Sources"
 msgstr "Asignar orígenes de datos"
 
 #: admin/Balancer.py:117 admin/PageRule.py:112
-msgid "Choose.."
-msgstr "Elija.."
+msgid "Choose…"
+msgstr "Elegir…"
 
 #: admin/Balancer.py:123
 msgid "Application Server"
@@ -128,16 +132,14 @@ msgid "Allow the use of the non-standard X-Sendfile header."
 msgstr "Permitir el uso de la cabecera no-estándar X-Sendfile."
 
 #: admin/CgiBase.py:38
-#, fuzzy
 msgid ""
 "Whether the handler should read and use the X-Real-IP header and use it in "
 "REMOTE_ADDR."
 msgstr ""
-"Si el sistema de logs debería leer y usar la cabecera X-Real-IP (enviada por "
-"los proxies inversos)."
+"Si el sistema de logs debería leer y usar la cabecera X-Real-IP y usarla en "
+"REMOTE_ADDR."
 
 #: admin/CgiBase.py:39
-#, fuzzy
 msgid ""
 "Accept all the X-Real-IP headers. WARNING: Turn it on only if you are "
 "centain of what you are doing."
@@ -146,25 +148,22 @@ msgstr ""
 "realmente lo que está haciendo."
 
 #: admin/CgiBase.py:40
-#, fuzzy
 msgid ""
 "List of IP addresses and subnets that are allowed to send the X-Real-IP "
 "header."
 msgstr ""
 "Lista de direcciones IP y subredes a las que se les permite enviar cabeceras "
-"X-Real-IP (normalmente sus servidores proxy)."
+"X-Real-IP."
 
 #: admin/CgiBase.py:68
-#, fuzzy
 msgid "Read X-Real-IP"
 msgstr "Aceptar X-Real-IP"
 
 #: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
 #: admin/PageVServer.py:119
-#, fuzzy
 msgid "Enabled"
-msgstr " Activado"
+msgstr "Activo"
 
 #: admin/CgiBase.py:70 admin/PageVServer.py:403
 msgid "Don't check origin"
@@ -191,9 +190,8 @@ msgid "Change UID"
 msgstr "Cambiar UID"
 
 #: admin/CgiBase.py:121
-#, fuzzy
 msgid "Change"
-msgstr "Cambiar UID"
+msgstr "Cambiar"
 
 #: admin/CgiBase.py:123
 msgid "Error handler"
@@ -212,80 +210,68 @@ msgid "Allow X-Sendfile"
 msgstr "Permitir X-Sendfile"
 
 #: admin/CgiBase.py:131
-#, fuzzy
 msgid "Common CGI Options"
 msgstr "Opciones comunes de los CGI"
 
 #: admin/CgiBase.py:138
-#, fuzzy
 msgid "Fixed Authentication List"
-msgstr "Lista de autenticación fija"
+msgstr "Lista de autenticación"
 
 #: admin/CgiBase.py:145
-#, fuzzy
 msgid "Custom Environment Variables"
 msgstr "Variables de entorno personalizadas"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:259 admin/PageSource.py:320
+#: admin/PageGeneral.py:189 admin/PageRule.py:258 admin/PageSource.py:344
 #: admin/PageVServers.py:235
 msgid "Add"
 msgstr "Añadir"
 
 #: admin/CgiBase.py:162
-#, fuzzy
 msgid "Add New Custom Environment Variable"
 msgstr "Añadir nueva variable de entorno personalizada"
 
 #: admin/Cherokee.py:142
 msgid "Could not access file descriptors: "
-msgstr "No puedo acceder a los descriptores de fichero:"
+msgstr "No se pudo acceder a los descriptores de fichero: "
 
 #: admin/Flags.py:308 admin/Flags.py:326
 msgid "Countries"
 msgstr "Países"
 
 #: admin/Flags.py:308 admin/Flags.py:334
-#, fuzzy
 msgid "Extras"
-msgstr "Externa"
+msgstr "Extras"
 
 #: admin/Graph.py:39
 msgid "Server Traffic"
 msgstr "Tráfico del servidor"
 
 #: admin/Graph.py:40
-#, fuzzy
 msgid "Connections / Requests"
-msgstr "Tiempo de espera de las conexiones"
+msgstr "Conexiones / Peticiones"
 
 #: admin/Graph.py:41
-#, fuzzy
 msgid "Connection Timeouts"
 msgstr "Tiempo de espera de las conexiones"
 
 #: admin/Graph.py:43
-#, fuzzy
 msgid "1 Hour"
 msgstr "1 Hora"
 
 #: admin/Graph.py:44
-#, fuzzy
 msgid "6 Hours"
 msgstr "6 Horas"
 
 #: admin/Graph.py:45
-#, fuzzy
 msgid "1 Day"
 msgstr "1 Día"
 
 #: admin/Graph.py:46
-#, fuzzy
 msgid "1 Week"
 msgstr "1 Semana"
 
 #: admin/Graph.py:47
-#, fuzzy
 msgid "1 Month"
 msgstr "1 Mes"
 
@@ -295,17 +281,18 @@ msgid ""
 "You need to enable the <a href=\"%s\">Information Collector</a> setting in "
 "order to render usage graphics."
 msgstr ""
+"Se debe habilitar el <a href=\"%s\">colector de actividad</a> para poder "
+"generar gráficas de uso."
 
 #: admin/Graph.py:51
-#, fuzzy
 msgid ""
 "Whether or not it should collect statistics about the traffic of this "
 "virtual server."
 msgstr ""
 "Si debería recolectar estadísticas sobre el tráfico de este servidor virtual."
 
-#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:166
-#: admin/PageStatus.py:70 admin/PageVServer.py:494 admin/PageVServers.py:193
+#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
+#: admin/PageStatus.py:70 admin/PageVServer.py:506 admin/PageVServers.py:193
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -314,7 +301,6 @@ msgid "Collect Statistics"
 msgstr "Estadísticas de Tráfico"
 
 #: admin/Handler.py:31
-#, fuzzy
 msgid "Allows to specify an alternative Document Root path."
 msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 
@@ -322,20 +308,18 @@ msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 msgid "Document Root"
 msgstr "Raíz de documentos"
 
-#: admin/Icons.py:118 admin/Icons.py:312 admin/Mime.py:86 admin/Mime.py:120
-#: admin/consts.py:181
+#: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
+#: admin/Mime.py:120 admin/consts.py:181
 msgid "Extensions"
 msgstr "Extensiones"
 
 #: admin/Icons.py:134
-#, fuzzy
 msgid "Extension List"
 msgstr "Lista de extensiones"
 
 #: admin/Icons.py:138
-#, fuzzy
 msgid "Add New Extension"
-msgstr "Añadir una extensión"
+msgstr "Añadir nueva extensión"
 
 #: admin/Icons.py:152
 msgid "Files"
@@ -343,12 +327,15 @@ msgstr "Ficheros"
 
 #: admin/Icons.py:167
 msgid "File Matches"
-msgstr ""
+msgstr "Concordancia de ficheros"
+
+#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:98
+msgid "File"
+msgstr "Fichero"
 
 #: admin/Icons.py:171
-#, fuzzy
 msgid "Add New File"
-msgstr "Añadir nueva regla"
+msgstr "Añadir nuevo archivo"
 
 #: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:37
 #: admin/consts.py:121
@@ -364,30 +351,24 @@ msgid "Go to Parent"
 msgstr "Ir al padre"
 
 #: admin/Icons.py:191
-#, fuzzy
 msgid "Modify"
-msgstr "Modificado"
+msgstr "Modificar"
 
 #: admin/Icons.py:198 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
 msgid "Special Files"
 msgstr "Ficheros especiales"
 
-#: admin/Icons.py:311 admin/consts.py:98
-msgid "File"
-msgstr "Fichero"
-
 #: admin/Icons.py:345
-#, fuzzy, python-format
-msgid "Add new %s"
+msgid "Add new"
 msgstr "Añadir nuevo"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:260
-#: admin/PageRule.py:286 admin/PageSource.py:307 admin/PageSource.py:321
-#: admin/PageSource.py:335 admin/PageVServers.py:201 admin/PageVServers.py:236
+#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:259
+#: admin/PageRule.py:285 admin/PageSource.py:331 admin/PageSource.py:345
+#: admin/PageSource.py:359 admin/PageVServers.py:201 admin/PageVServers.py:236
 #: admin/PageVServers.py:262
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: admin/Mime.py:37
 msgid "New MIME type to be added."
@@ -413,38 +394,32 @@ msgid "Max Age"
 msgstr "Max Age"
 
 #: admin/Mime.py:99
-#, fuzzy
 msgid "Add New MIME-Type"
 msgstr "Añadir nuevo MIME"
 
 #: admin/Mime.py:104
-#, fuzzy
 msgid "Add New…"
 msgstr "Añadir nuevo"
 
 #: admin/Mime.py:120
-#, fuzzy
 msgid "MIME type"
 msgstr "Tipos MIME"
 
 #: admin/Mime.py:120
-#, fuzzy
 msgid "MaxAge (<em>secs</em>)"
-msgstr "MaxAge<br/>(<i>segs</i>)"
+msgstr "MaxAge (<em>segs</em>)"
 
 #: admin/Page.py:32
-#, fuzzy
 msgid "The Configuration has been Saved"
-msgstr "Configuración guardada."
+msgstr "La configuración ha sido guardada"
 
 #: admin/Page.py:33
-#, fuzzy
 msgid "Would you like to apply the changes to the running server now?"
 msgstr "Guardar en disco y aplicar los cambios al servidor actual"
 
 #: admin/Page.py:34
 msgid "The configuration file has been saved successfuly."
-msgstr ""
+msgstr "El archivo de configuración se ha guardado satisfactoriamente."
 
 #: admin/Page.py:75
 msgid "Do not restart"
@@ -460,10 +435,9 @@ msgstr "Reinicio forzado"
 
 #: admin/Page.py:96
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: admin/PageAdvanced.py:61
-#, fuzzy
 msgid ""
 "<p><b>WARNING</b>: This section contains advanced\n"
 "configuration parameters. Changing things is not recommended unless\n"
@@ -522,7 +496,6 @@ msgid "Max. length of the incoming connection queue."
 msgstr "Máxima longitud de la cola de conexiones entrantes."
 
 #: admin/PageAdvanced.py:74
-#, fuzzy
 msgid ""
 "Set the number of how many internal connections can be held for reuse by "
 "each thread. Default: 20."
@@ -578,7 +551,6 @@ msgid "Files over this size will not be cached."
 msgstr "Máximo tamaño de fichero que será cacheado."
 
 #: admin/PageAdvanced.py:84
-#, fuzzy
 msgid ""
 "How long (in seconds) the file information should last cached without "
 "refreshing it."
@@ -587,9 +559,10 @@ msgstr ""
 "refrescarla."
 
 #: admin/PageAdvanced.py:85
-#, fuzzy
 msgid "How long (in seconds) the file content should last cached."
-msgstr "Cuánto tiempo debe mantenerse cacheado el contenido de un fichero."
+msgstr ""
+"Cuánto tiempo (en segundos) debe mantenerse cacheado el contenido de un "
+"fichero."
 
 #: admin/PageAdvanced.py:86
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 512 bits."
@@ -616,7 +589,6 @@ msgid "Keep Alive"
 msgstr "Keep Alive"
 
 #: admin/PageAdvanced.py:113 admin/PageAdvanced.py:115
-#, fuzzy
 msgid "Allowed"
 msgstr "Permitir"
 
@@ -670,7 +642,7 @@ msgstr "Tiempo volcado log"
 
 #: admin/PageAdvanced.py:134
 msgid "Nonces clean up time"
-msgstr ""
+msgstr "Tiempo de limpieza de Nonces"
 
 #: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
 msgid "Resources"
@@ -735,14 +707,13 @@ msgid "TLS"
 msgstr "TLS"
 
 #: admin/PageAdvanced.py:191
-#, fuzzy
 msgid "Advanced Configuration"
 msgstr "Configuración avanzada"
 
 #: admin/PageEntry.py:40
-#, fuzzy
 msgid "Apply a custom timeout to the connections matching this rule."
-msgstr "No escribir estas peticiones en el histórico."
+msgstr ""
+"Aplicar un timeout propio a las conexiones que concuerden con esta regla."
 
 #: admin/PageEntry.py:41
 msgid "How the connection will be handled."
@@ -790,10 +761,9 @@ msgstr "Reglas de funcionamiento"
 
 #: admin/PageEntry.py:62
 msgid "GZip encoder"
-msgstr ""
+msgstr "Codificador GZip"
 
 #: admin/PageEntry.py:63
-#, fuzzy
 msgid "Deflate encoder"
 msgstr "Deflate"
 
@@ -802,13 +772,12 @@ msgid "Authentication"
 msgstr "Autenticación"
 
 #: admin/PageEntry.py:65
-#, fuzzy
 msgid "Authentication modules"
 msgstr "Lista de autenticación"
 
 #: admin/PageEntry.py:69
 msgid "Leave unset"
-msgstr ""
+msgstr "Dejar sin especificar"
 
 #: admin/PageEntry.py:70 admin/PageVServer.py:305
 msgid "Allow"
@@ -816,7 +785,7 @@ msgstr "Permitir"
 
 #: admin/PageEntry.py:71
 msgid "Forbid"
-msgstr ""
+msgstr "Prohibir"
 
 #: admin/PageEntry.py:89
 msgid "Limit traffic to"
@@ -830,9 +799,9 @@ msgstr "Gestión de tráfico"
 msgid "Skip Logging"
 msgstr "No guardar log"
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:483
+#: admin/PageEntry.py:108 admin/PageVServer.py:495
 msgid "Logging"
-msgstr ""
+msgstr "Registro"
 
 #: admin/PageEntry.py:113
 msgid "Only https"
@@ -876,9 +845,8 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr "Usar el codificador %s si el cliente lo solicita."
 
 #: admin/PageEntry.py:178
-#, fuzzy, python-format
-msgid "%s Support"
-msgstr "Soporte"
+msgid "support"
+msgstr " "
 
 #: admin/PageEntry.py:183
 msgid "Information Encoders"
@@ -893,7 +861,7 @@ msgstr "Aplicar regla"
 msgid "Handler"
 msgstr "Gestor"
 
-#: admin/PageEntry.py:247 admin/PageSource.py:162
+#: admin/PageEntry.py:247 admin/PageSource.py:180
 msgid "Rule"
 msgstr "Regla"
 
@@ -902,11 +870,10 @@ msgid "Encoding"
 msgstr "Codificación"
 
 #: admin/PageEntry.py:250
-#, fuzzy
 msgid "Time"
-msgstr "Tiempo de Espera"
+msgstr "Tiempo"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:484
+#: admin/PageEntry.py:251 admin/PageVServer.py:496
 msgid "Security"
 msgstr "Seguridad"
 
@@ -916,55 +883,55 @@ msgid ""
 "The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
 "problem can he solved in there."
 msgstr ""
+"El servidor sugiere consultar <a href=\"%s\">esta página</a>. Probablemente "
+"se pueda solucionar el problema desde ahí."
 
 #: admin/PageError.py:61 admin/PageError.py:65 admin/PageError.py:83
-#, fuzzy
 msgid "Server Launch Error"
-msgstr "Info. del servidor"
+msgstr "Error lanzando el servidor"
 
 #: admin/PageError.py:84
 msgid "Something unexpected just happened."
-msgstr ""
+msgstr "Ha ocurrido algo inesperado."
 
 #: admin/PageError.py:89
-#, fuzzy, python-format
+#, python-format
 msgid "The configuration file <code>%s</code> cannot be modified."
-msgstr "El fichero de configuración no se puede modificar"
+msgstr "El fichero de configuración <code>%s</code> no se puede modificar."
 
 #: admin/PageError.py:90
 msgid ""
 "You have to change its permissions in order to allow cherokee-admin to work "
 "with it. You can try to fix it by changing the file permissions:"
 msgstr ""
+"Es preciso modificar los permisos para permitir sule su uso a cherokee-"
+"admin. Se puede tratar de arreglarlo cambiando los permisos del archivo:"
 
 #: admin/PageError.py:91
 msgid "or by launching cherokee-admin as root."
-msgstr ""
+msgstr "o lanzando cherokee-admin como root."
 
 #: admin/PageError.py:101 admin/PageError.py:107
-#, fuzzy
 msgid "Configuration file is not writable"
-msgstr "El fichero de configuración no se puede modificar"
+msgstr "El fichero de configuración no es editable"
 
 #: admin/PageError.py:118
 #, python-format
 msgid "Could not find the icons directory: <code>%s</code>"
-msgstr ""
+msgstr "No se pudo encontrar el directorio de iconos: <code>%s</code>"
 
 #: admin/PageError.py:119
 msgid ""
 "You may need to reinstall the Web Server in order to sort out this issue."
-msgstr ""
+msgstr "Es preciso reinstalar el servidor web para arreglar este problema."
 
 #: admin/PageError.py:129 admin/PageError.py:135
-#, fuzzy
 msgid "Icons Directory is Missing"
 msgstr "Falta el directorio de iconos"
 
 #: admin/PageError.py:144
-#, fuzzy
 msgid "Cherokee-admin has detected a very old configuration file."
-msgstr "Crear un nuevo fichero de configuración"
+msgstr "Cherokee-admin ha detectado un archivo de configuración muy antiguo."
 
 #: admin/PageError.py:145
 msgid ""
@@ -972,20 +939,21 @@ msgid ""
 "Please, remove it so cherokee-admin can create a new one with the right "
 "format."
 msgstr ""
+"Seguramente cherokee-admin está intentado leer un archivo de configuración "
+"antiguo. Por favor, elimínelo para que cherokee-admin pueda crear uno nuevo "
+"con el formato adecuado."
 
 #: admin/PageError.py:155
-#, fuzzy
 msgid "Detected an Ancient Configuration File"
-msgstr "Crear un nuevo fichero de configuración"
+msgstr "Detectado archivo de configuración obsoleto"
 
 #: admin/PageError.py:161
-#, fuzzy
 msgid "Ancient Configuration File"
-msgstr "Nuevo fichero de configuración"
+msgstr "Archivo de configuración obsoleto"
 
 #: admin/PageException.py:38
 msgid "We apologize for any inconveniences that this may have caused."
-msgstr ""
+msgstr "Lamentamos los inconvenientes que esto haya podido ocasionar."
 
 #: admin/PageException.py:39
 msgid ""
@@ -993,12 +961,17 @@ msgid ""
 "<strong>will</strong> be attached upon submission. What were you doing when "
 "the issue showed up?"
 msgstr ""
+"Por favor, envíe sus comentarios a los desarrolladores. Su fichero de "
+"configuración <strong>será adjuntado</strong> al realizar el envío. ¿Qué "
+"estaba haciendo cuando se presentó el problema?"
 
 #: admin/PageException.py:40
 msgid ""
 "Thank you for reporting the problem. The Cherokee Web Server developers will "
 "try to fix it up as soon as possible."
 msgstr ""
+"Gracias por comunicar el problema. Los desarrolladores de Cherokee tratarán "
+"de arreglarlo tan pronto como sea posible."
 
 #: admin/PageException.py:41
 #, python-format
@@ -1007,34 +980,34 @@ msgid ""
 "</p><p>Please, do not hesitate to <a target=\"_blank\" href=\"%s\">report "
 "the issue</a> on our bug tracking system if the problem persists.</p>"
 msgstr ""
+"<p>Por algún motivo no ha sido posible reportar el problema al Proyecto "
+"Cherokee.</p> <p>Si el problema persiste, no dude en <a target=\"_blank\" "
+"href=\"%s\">reportarlo</a> en nuestro gestor de incidencias.</p>"
 
 #: admin/PageException.py:80
-#, fuzzy
 msgid "Internal Error"
-msgstr "Interna"
+msgstr "Error Interno"
 
 #: admin/PageException.py:87
-#, fuzzy
 msgid "Thank you!"
-msgstr "Comentarios: Muchas gracias"
+msgstr "Muchas gracias"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:299
-#, fuzzy
+#: admin/PageSource.py:318
 msgid "Close"
-msgstr "Clonar"
+msgstr "Cerrar"
 
 #: admin/PageException.py:91
 msgid "Could not report the issue"
-msgstr ""
+msgstr "No se pudo reportar el problema"
 
 #: admin/PageException.py:99
 msgid "Unexpected Exception"
-msgstr ""
+msgstr "Excepción inesperada"
 
 #: admin/PageException.py:112
 msgid "Report developers"
-msgstr ""
+msgstr "Informar a los desarrolladores"
 
 #: admin/PageGeneral.py:38
 msgid "Defines a port that the server will listen to"
@@ -1066,6 +1039,7 @@ msgstr "Cómo se deben generar las gráficas de uso del servidor."
 #: admin/PageGeneral.py:44
 msgid "How to track uploads/posts so its progress can be reported to the user."
 msgstr ""
+"Cómo monitorizar los upload/post para informar al usuario de su progreso."
 
 #: admin/PageGeneral.py:45
 msgid "Changes the effective user. User names and IDs are accepted."
@@ -1088,6 +1062,8 @@ msgid ""
 "No ports to listen have been defined. By default the server will listen to "
 "TCP port 80 on all the network interfaces."
 msgstr ""
+"No se han definido puertos de escucha. Por defecto el servidor escucha en el "
+"puerto 80 TCP de todas las interfaces de red."
 
 #: admin/PageGeneral.py:51
 msgid "General Configuration"
@@ -1099,7 +1075,7 @@ msgstr "Configuración rápida."
 
 #: admin/PageGeneral.py:101
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: admin/PageGeneral.py:102
 msgid "SSL/TLS back-end"
@@ -1118,7 +1094,6 @@ msgid "Server Tokens"
 msgstr "Identificación del servidor"
 
 #: admin/PageGeneral.py:113
-#, fuzzy
 msgid "Network Behavior"
 msgstr "Comportamiento de red"
 
@@ -1132,7 +1107,7 @@ msgstr "Colector de actividad"
 
 #: admin/PageGeneral.py:125 admin/PageGeneral.py:126
 msgid "Upload Tracking"
-msgstr ""
+msgstr "Seguimiento de Upload"
 
 #: admin/PageGeneral.py:145 admin/PageGeneral.py:183
 msgid "Port"
@@ -1143,26 +1118,22 @@ msgid "Bind to"
 msgstr "Escuchar en"
 
 #: admin/PageGeneral.py:158
-#, fuzzy
 msgid "TLS/SSL port"
-msgstr "Sin TLS/SSL"
+msgstr "Puerto TLS/SSL"
 
 #: admin/PageGeneral.py:160
 msgid "TLS/SSL support disabled"
-msgstr ""
+msgstr "Soporte TLS/SSL inactivo"
 
 #: admin/PageGeneral.py:188
-#, fuzzy
 msgid "New port"
-msgstr "Informe"
+msgstr "Nuevo puerto"
 
 #: admin/PageGeneral.py:197
-#, fuzzy
 msgid "Add new port…"
 msgstr "Añadir nuevo puerto"
 
 #: admin/PageGeneral.py:203
-#, fuzzy
 msgid "Listening to Ports"
 msgstr "Escuchando en los puertos"
 
@@ -1180,7 +1151,7 @@ msgstr "Grupo"
 
 #: admin/PageGeneral.py:217
 msgid "Chroot"
-msgstr ""
+msgstr "Chroot"
 
 #: admin/PageGeneral.py:228 admin/PageVServer.py:308
 msgid "Network"
@@ -1191,18 +1162,16 @@ msgid "Ports to listen"
 msgstr "Puertos"
 
 #: admin/PageGeneral.py:230
-#, fuzzy
 msgid "Permissions"
-msgstr "Permisos del servidor"
+msgstr "Permisos"
 
 #: admin/PageGeneral.py:231
 msgid "Icons"
 msgstr "Iconos"
 
 #: admin/PageGeneral.py:232
-#, fuzzy
 msgid "Mime types"
-msgstr "Tipo MIME"
+msgstr "Tipos MIME"
 
 #: admin/PageGeneral.py:234 admin/PageStatus.py:101
 msgid "General"
@@ -1214,30 +1183,27 @@ msgstr "Ajustes generales"
 
 #: admin/PageHelp.py:35
 msgid "Table of Contents"
-msgstr ""
+msgstr "Índice de contenidos"
 
 #: admin/PageHelp.py:172
-#, fuzzy
 msgid "Documentation"
-msgstr "Raíz de documentos"
+msgstr "Documentación"
 
 #: admin/PageIndex.py:62
 msgid "You will be sent an email requesting confirmation"
-msgstr ""
+msgstr "Recibirá un correo solicitando confirmación"
 
 #: admin/PageIndex.py:63
 msgid "Optionally provide your name"
-msgstr ""
+msgstr "Opcionalmente proporcione su nombre"
 
 #: admin/PageIndex.py:66
-#, fuzzy
 msgid "Server is Running."
-msgstr "Servidor ejecutándose."
+msgstr "Servidor en ejecución."
 
 #: admin/PageIndex.py:67
-#, fuzzy
 msgid "Server is not Running."
-msgstr "El servidor no está ejecutándose."
+msgstr "El servidor no está en ejecución."
 
 #: admin/PageIndex.py:68
 #, python-format
@@ -1246,18 +1212,23 @@ msgid ""
 "\">Octality</a>. They provide top notch Consulting, Custom Engineering, and "
 "Enterprise Support Services."
 msgstr ""
+"<a target=\"_blank\" href=\"%s\">Octality</a> proporciona el soporte "
+"comercial de Cherokee. Su abanico de servicios incluye consultoría, "
+"ingeniería a medida y servicios de soporte empresarial."
 
 #: admin/PageIndex.py:69
 msgid ""
 "The Community Mailing List is the place to go for help on Cherokee. <a id="
 "\"subscribe-a\">Subscribe now!</a>"
 msgstr ""
+"La lista de distribución de la Cherokee es el lugar idóneo para buscar "
+"ayuda.  <a id=\"subscribe-a\">¡Suscríbase ya!</a>"
 
 #: admin/PageIndex.py:70
 #, python-format
 msgid ""
 "Join us at the <a target=\"_blank\" href=\"%s\">#cherokee</a> IRC Channel."
-msgstr ""
+msgstr "Unirse al canal <a target=\"_blank\" href=\"%s\">#cherokee</a> en IRC."
 
 #: admin/PageIndex.py:71
 #, python-format
@@ -1266,29 +1237,30 @@ msgid ""
 "our <a target=\"_blank\" href=\"%s\">bug tracker</a> to help us improve "
 "Cherokee."
 msgstr ""
+"¡Juntos podemos mejorar Cherokee! Es importante comunicar errores y "
+"solicitar mejoras mediante nuestro <a target=\"_blank\" href=\"%s\">gestor "
+"de incidencias</a>."
 
 #: admin/PageIndex.py:72
 msgid "Find out what's going on with Cherokee on your favorite Social Media!"
-msgstr ""
+msgstr "¡Descubra novedades de Cherokee en las redes sociales!"
 
 #: admin/PageIndex.py:73
 #, python-format
 msgid "Follow <a target=\"_blank\" href=\"%s\">Cherokee on Twitter</a>."
-msgstr ""
+msgstr " Seguir a <a target=\"_blank\" href=\"%s\">Cherokee en Twitter</a>."
 
 #: admin/PageIndex.py:74
 #, python-format
 msgid "Join <a target=\"_blank\" href=\"%s\">Cherokee on Facebook</a>."
-msgstr ""
+msgstr "Unirse a <a target=\"_blank\" href=\"%s\">Cherokee en Facebook</a>."
 
 #: admin/PageIndex.py:76
-#, fuzzy
 msgid ""
 "<h3>Beta testing</h3> <p>Individuals like yourself who download and\n"
 "test the latest developer snapshots of Cherokee Web Server help us to\n"
 "create the highest quality product. For that, we thank you.</p>\n"
 msgstr ""
-"\n"
 "<h3>Pruebas de Betas</h3>\n"
 "<p>Usuarios como usted, que descargan y prueban las últimas versiones de "
 "desarrollo del servidor web Cherokee, nos ayudan a crear el producto de más "
@@ -1296,12 +1268,10 @@ msgstr ""
 "<p>Por ello, muchas gracias.</p>\n"
 
 #: admin/PageIndex.py:82
-#, fuzzy
 msgid ""
 "We would love to know that you are using Cherokee. Submit your domain\n"
 "name and it will be listed on the Cherokee Project web site.\n"
 msgstr ""
-"\n"
 "Nos encantaría saber que está usando Cherokee. Envíe su nombre\n"
 "de dominio y aparecerá en la <a href=\"http://www.cherokee-project.com/"
 "cherokee-domain-list.html\">\n"
@@ -1309,28 +1279,30 @@ msgstr ""
 
 #: admin/PageIndex.py:88
 msgid "The information has been successfully sent. Thank you!"
-msgstr ""
+msgstr "La información ha sido enviada satisfactoriamente. ¡Gracias!"
 
 #: admin/PageIndex.py:89
 msgid ""
 "Unfortunatelly something went wrong, and the information could not be "
 "submitted:"
 msgstr ""
+"Desgraciadamente se ha producido un error y no ha sido posible enviar la "
+"información:"
 
 #: admin/PageIndex.py:90
 msgid ""
 "Please, try again. Do not hesitate to report the problem if it persists."
 msgstr ""
+"Por favor, inténtelo de nuevo. No dude en comunicarnos el problema si éste "
+"persiste."
 
 #: admin/PageIndex.py:143
-#, fuzzy
 msgid "Stop Server"
-msgstr "Servidor"
+msgstr "Parar el servidor"
 
 #: admin/PageIndex.py:147
-#, fuzzy
 msgid "Start Server"
-msgstr "Servidor Virtual"
+msgstr "Lanzar el servidor"
 
 #: admin/PageIndex.py:157
 msgid "Information"
@@ -1338,7 +1310,7 @@ msgstr "Información"
 
 #: admin/PageIndex.py:162
 msgid "PID"
-msgstr ""
+msgstr "PID"
 
 #: admin/PageIndex.py:162
 msgid "Not running"
@@ -1349,16 +1321,14 @@ msgid "Version"
 msgstr "Versión"
 
 #: admin/PageIndex.py:164
-#, fuzzy
 msgid "Default WWW"
-msgstr "Por defecto"
+msgstr "WWW por defecto"
 
 #: admin/PageIndex.py:165
 msgid "Prefix"
 msgstr "Prefijo"
 
 #: admin/PageIndex.py:166
-#, fuzzy
 msgid "Config File"
 msgstr "Fichero de configuración"
 
@@ -1389,77 +1359,72 @@ msgid "Proud Cherokee Users"
 msgstr "Usuarios orgullosos de Cherokee"
 
 #: admin/PageIndex.py:258
-#, fuzzy
 msgid "View list"
-msgstr "Lista fija"
+msgstr "Ver lista"
 
 #: admin/PageIndex.py:258
-#, fuzzy
 msgid "Send your domains"
-msgstr "Dominios aceptados"
+msgstr "Enviar dominios"
 
 #: admin/PageIndex.py:274
 msgid "Latest Release"
-msgstr ""
+msgstr "Última versión"
 
 #: admin/PageIndex.py:278
 msgid "Latest version could not be determined at the moment."
-msgstr ""
+msgstr "Por el momento no ha sido posible determinar la última versión."
 
 #: admin/PageIndex.py:280
 msgid "Cherokee is up to date."
-msgstr ""
+msgstr "Cherokee está actualizado."
 
 #: admin/PageIndex.py:283
 msgid "You are running Cherokee"
-msgstr ""
+msgstr "Está ejecutando Cherokee"
 
 #: admin/PageIndex.py:285
 msgid "Latest release is "
-msgstr ""
+msgstr "La ultima versión es "
 
 #: admin/PageIndex.py:323
 msgid "Your email address"
-msgstr ""
+msgstr "Su dirección de correo"
 
 #: admin/PageIndex.py:324
-#, fuzzy
 msgid "Your name"
-msgstr "Nombres de servidor"
+msgstr "Su nombre"
 
 #: admin/PageIndex.py:336
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: admin/PageIndex.py:341
 msgid "Mailing List"
-msgstr ""
+msgstr "Lista de distribución"
 
 #: admin/PageIndex.py:346
 msgid "Mailing list subscription"
-msgstr ""
+msgstr "Suscripción a la lista de distribución"
 
 #: admin/PageIndex.py:347
 msgid "Subscribe"
-msgstr ""
+msgstr "Suscribirse"
 
 #: admin/PageIndex.py:355
 msgid "Bug Tracker"
-msgstr ""
+msgstr "Gestor  de incidencias"
 
 #: admin/PageIndex.py:380
-#, fuzzy
 msgid "Community"
-msgstr "País"
+msgstr "Comunidad"
 
 #: admin/PageIndex.py:396
 msgid "Commercial Support"
-msgstr ""
+msgstr "Soporte comercial"
 
 #: admin/PageIndex.py:398
-#, fuzzy
 msgid "Purchase Support"
-msgstr "Soporte"
+msgstr "Contrate soporte"
 
 #: admin/PageIndex.py:405 admin/PageIndex.py:407
 msgid "Welcome to Cherokee Admin"
@@ -1467,7 +1432,7 @@ msgstr "Bienvenido a Cherokee-Admin"
 
 #: admin/PageNewConfig.py:38
 msgid "Index"
-msgstr ""
+msgstr "Índice"
 
 #: admin/PageNewConfig.py:140
 msgid "Create"
@@ -1515,10 +1480,12 @@ msgid ""
 "<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure "
 "you want to proceed?</p>"
 msgstr ""
+"<p>Se va a eliminar la regla de comportamiento <b>%s</b>.</p><p>¿Proceder?</"
+"p>"
 
 #: admin/PageRule.py:53
 msgid "You are about to clone a Behavior Rule. Would you like to proceed?"
-msgstr ""
+msgstr "Se va a clonar una regla de comportamiento. ¿Proceder?"
 
 #: admin/PageRule.py:116 admin/Rule.py:156
 msgid "Rule Type"
@@ -1526,79 +1493,71 @@ msgstr "Tipo de regla"
 
 #: admin/PageRule.py:136 admin/PageVServers.py:133 admin/PageVServers.py:151
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #: admin/PageRule.py:137 admin/PageVServers.py:152
-#, fuzzy
 msgid "Manual configuration"
-msgstr "Icono de configuración"
+msgstr "Configuración manual"
 
 #: admin/PageRule.py:143 admin/PageVServers.py:158
-#, fuzzy
 msgid "title"
-msgstr "Fichero"
+msgstr "título"
 
 #: admin/PageRule.py:144 admin/PageVServers.py:159
 msgid "descr"
 msgstr ""
 
-#: admin/PageRule.py:206 admin/PageSource.py:302 admin/PageVServers.py:196
+#: admin/PageRule.py:206 admin/PageSource.py:326 admin/PageVServers.py:196
 msgid "Do you really want to remove it?"
-msgstr ""
+msgstr "¿De verdad se quiere eliminar?"
 
-#: admin/PageRule.py:207 admin/PageSource.py:303 admin/PageVServers.py:197
+#: admin/PageRule.py:207 admin/PageSource.py:327 admin/PageVServers.py:197
 msgid "Remove"
 msgstr "Eliminar"
 
-#: admin/PageRule.py:232 admin/PageVServer.py:118
+#: admin/PageRule.py:231 admin/PageVServer.py:118
 msgid "Final"
 msgstr "Final"
 
-#: admin/PageRule.py:233
-#, fuzzy
+#: admin/PageRule.py:232
 msgid "Non Final"
-msgstr "Final"
+msgstr "No final"
 
-#: admin/PageRule.py:257 admin/PageRule.py:270
-#, fuzzy
+#: admin/PageRule.py:256 admin/PageRule.py:269
 msgid "Add Behavior Rule"
-msgstr "Reglas de funcionamiento"
+msgstr "Añadir regla de funcionamiento"
 
-#: admin/PageRule.py:264
-#, fuzzy
+#: admin/PageRule.py:263
 msgid "Configuration Assistant"
-msgstr "Configuración rápida."
+msgstr "Asistente de configuración"
 
-#: admin/PageRule.py:270 admin/PageSource.py:324 admin/PageVServers.py:246
+#: admin/PageRule.py:269 admin/PageSource.py:348 admin/PageVServers.py:246
 msgid "New…"
-msgstr ""
+msgstr "Nuevo..."
 
-#: admin/PageRule.py:284
-#, fuzzy
+#: admin/PageRule.py:283
 msgid "Clone Behavior Rule"
-msgstr "Reglas de funcionamiento"
+msgstr "Clonar regla"
 
-#: admin/PageRule.py:285 admin/PageSource.py:334 admin/PageVServers.py:261
+#: admin/PageRule.py:284 admin/PageSource.py:358 admin/PageVServers.py:261
 msgid "Clone"
 msgstr "Clonar"
 
-#: admin/PageRule.py:289 admin/PageSource.py:338 admin/PageVServers.py:265
-#, fuzzy
+#: admin/PageRule.py:288 admin/PageSource.py:362 admin/PageVServers.py:265
 msgid "Clone…"
 msgstr "Clonar"
 
-#: admin/PageRule.py:289
+#: admin/PageRule.py:288
 msgid "Clone Selected Behavior Rule"
-msgstr ""
+msgstr "Clonar la regla seleccionada"
 
-#: admin/PageRule.py:297 admin/PageVServer.py:481
+#: admin/PageRule.py:296 admin/PageVServer.py:493
 msgid "Behavior"
 msgstr "Comportamiento"
 
-#: admin/PageRule.py:316
-#, fuzzy
+#: admin/PageRule.py:315
 msgid "Rule Filtering"
-msgstr "Lista de Reglas"
+msgstr "Filtrado de reglas"
 
 #: admin/PageSource.py:44
 msgid ""
@@ -1678,84 +1637,75 @@ msgstr ""
 msgid ""
 "You are about to delete an Information Source. Are you sure you want to "
 "proceed?"
-msgstr ""
+msgstr "Se va a eliminar un origen de datos. ¿Proceder?"
 
 #: admin/PageSource.py:55
-#, fuzzy
 msgid "The Information Source list is currently empty."
-msgstr "Ajustes de orígenes de datos"
+msgstr "La lista de orígenes de datos está vacía."
 
 #: admin/PageSource.py:56
 msgid ""
 "This is the last Information Source in use by a rule. Deleting it would "
 "break the configuration."
 msgstr ""
+"Este es el único origen de datos de una regla. Su eliminación rompería la "
+"configuración."
 
 #: admin/PageSource.py:57
 msgid "First edit the offending rule(s)"
-msgstr ""
+msgstr "Edite primero las reglas afectadas"
 
-#: admin/PageSource.py:162 admin/PageVServer.py:486
+#: admin/PageSource.py:180 admin/PageVServer.py:498
 msgid "Virtual Server"
 msgstr "Servidor Virtual"
 
-#: admin/PageSource.py:188
+#: admin/PageSource.py:208
 msgid "Type"
 msgstr "Tipo"
 
-#: admin/PageSource.py:190 admin/PageSource.py:225
+#: admin/PageSource.py:210 admin/PageSource.py:247
 msgid "Connection"
 msgstr "Conexión"
 
-#: admin/PageSource.py:192
+#: admin/PageSource.py:212
 msgid "Interpreter"
 msgstr "Intérprete"
 
-#: admin/PageSource.py:193
+#: admin/PageSource.py:213
 msgid "Spawning timeout"
 msgstr "Tiempo de espera de lanzamiento"
 
-#: admin/PageSource.py:194
+#: admin/PageSource.py:214
 msgid "Execute as User"
 msgstr "Ejecutar como el usuario"
 
-#: admin/PageSource.py:195
+#: admin/PageSource.py:215
 msgid "Execute as Group"
 msgstr "Ejecutar como el grupo"
 
-#: admin/PageSource.py:196
+#: admin/PageSource.py:216
 msgid "Inherit Environment"
 msgstr "Heredar entorno"
 
-#: admin/PageSource.py:296
-#, fuzzy
+#: admin/PageSource.py:315
 msgid "Deletion is forbidden"
-msgstr "No se puede borrar. Compruebe si se está usando."
+msgstr "No se puede borrar"
 
-#: admin/PageSource.py:298
-#, python-format
-msgid "<p>%s: %s</p>"
-msgstr ""
-
-#: admin/PageSource.py:319 admin/PageSource.py:324
-#, fuzzy
+#: admin/PageSource.py:343 admin/PageSource.py:348
 msgid "Add New Information Source"
-msgstr "Asignar orígenes de datos"
+msgstr "Añadir nuevo orígen de datos"
 
-#: admin/PageSource.py:333
-#, fuzzy
+#: admin/PageSource.py:357
 msgid "Clone Information Source"
-msgstr "Orígenes de datos"
+msgstr "Clonar orígen de datos"
 
-#: admin/PageSource.py:338
-#, fuzzy
+#: admin/PageSource.py:362
 msgid "Clone Selected Information Source"
-msgstr "Orígenes de datos"
+msgstr "Clonar el orígen de datos seleccionado"
 
-#: admin/PageSource.py:358
-#, fuzzy
+#: admin/PageSource.py:382
 msgid "Sources Filtering"
-msgstr "Directorio de las fuentes"
+msgstr "Filtrado de orígenes de datos"
 
 #: admin/PageSources.py:35 admin/PageVServer.py:102 admin/PageVServers.py:48
 #: admin/PageVServers.py:274
@@ -1763,14 +1713,12 @@ msgid "Virtual Servers"
 msgstr "Servidores virtuales"
 
 #: admin/PageStatus.py:66
-#, fuzzy
 msgid "Server Wide Monitoring"
-msgstr "Servidor saliendo.."
+msgstr "Monitorización global"
 
 #: admin/PageStatus.py:71
-#, fuzzy
 msgid "Virtual Server Monitoring"
-msgstr "Configuración de servidores virtuales"
+msgstr "Monitoriación de servidor virtual"
 
 #: admin/PageStatus.py:102
 #, fuzzy
@@ -1778,9 +1726,8 @@ msgid "System wide status"
 msgstr "Estado del servidor"
 
 #: admin/PageStatus.py:119 admin/PageVServers.py:289
-#, fuzzy
 msgid "Virtual Server Filtering"
-msgstr "Servidor Virtual"
+msgstr "Filtrado de servidores virtuales"
 
 #: admin/PageVServer.py:40
 msgid "Nickname for the virtual server."
@@ -1934,7 +1881,6 @@ msgstr ""
 "(Predeterminado: desactivado)"
 
 #: admin/PageVServer.py:66
-#, fuzzy
 msgid ""
 "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
 "${protocol}, ${transport}, ${port_server}, ${query_string}, "
@@ -1945,7 +1891,8 @@ msgstr ""
 "Se aceptan las siguentes variables: <br/>${ip_remote}, ${ip_local}, "
 "${protocol}, ${transport}, ${port_server}, ${query_string}, "
 "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-"${user_remote}, ${request}, ${request_original}, ${vserver_name}"
+"${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
+"${response_size}"
 
 #: admin/PageVServer.py:67
 msgid "Allows the selection of domain matching method."
@@ -1960,40 +1907,36 @@ msgstr ""
 
 #: admin/PageVServer.py:69
 msgid "Time standard to use in the log file entries."
-msgstr ""
+msgstr "Estándar de tiempo a utilizar en las entradas del archivo de registro."
 
 #: admin/PageVServer.py:71
-#, fuzzy
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr ""
-"\n"
-"<p>El servidor virtual 'default' acepta todos los nombres de dominio.</p>\n"
+"<p>El servidor virtual 'default' acepta todos los nombres de dominio.</p>"
 
 #: admin/PageVServer.py:103
 msgid "Loggers"
-msgstr ""
+msgstr "Registradores"
 
 #: admin/PageVServer.py:104
 msgid "SSL cookbook"
 msgstr "Receta sobre SSL"
 
 #: admin/PageVServer.py:108
-#, fuzzy
 msgid "Rule Match"
-msgstr "Ruta completa"
+msgstr "Concordancia de la regla"
 
 #: admin/PageVServer.py:108
 msgid "Match"
-msgstr ""
+msgstr "Concordancia"
 
 #: admin/PageVServer.py:109
-#, fuzzy
 msgid "Assigned Handler"
-msgstr "Gestor"
+msgstr "Manejador"
 
 #: admin/PageVServer.py:110
 msgid "Auth"
-msgstr ""
+msgstr "Aut"
 
 #: admin/PageVServer.py:111
 #, fuzzy
@@ -2006,28 +1949,25 @@ msgstr "Raíz"
 
 #: admin/PageVServer.py:112
 msgid "Only HTTPS"
-msgstr ""
+msgstr "Sólo HTTPS"
 
 #: admin/PageVServer.py:112
-#, fuzzy
 msgid "Secure"
-msgstr "Secreto"
+msgstr "Seguro"
 
 #: admin/PageVServer.py:113
-#, fuzzy
 msgid "Encoders"
-msgstr "Codificación"
+msgstr "Codificadores"
 
 #: admin/PageVServer.py:113
 msgid "Enc"
-msgstr ""
+msgstr "Cod"
 
 #: admin/PageVServer.py:114
 msgid "Exp"
 msgstr "Cad"
 
 #: admin/PageVServer.py:115
-#, fuzzy
 msgid "Connection Timeout"
 msgstr "Tiempo de espera de las conexiones"
 
@@ -2037,23 +1977,20 @@ msgid "Shaping"
 msgstr "Gestión de tráfico"
 
 #: admin/PageVServer.py:117
-#, fuzzy
 msgid "Logging Enabled"
-msgstr " Activado"
+msgstr "Registro activado"
 
 #: admin/PageVServer.py:117
 msgid "Log"
-msgstr ""
+msgstr "Reg"
 
 #: admin/PageVServer.py:118
-#, fuzzy
 msgid "Rule is Final"
-msgstr "Lista de Reglas"
+msgstr "La regla es Final"
 
 #: admin/PageVServer.py:119
-#, fuzzy
 msgid "Rule is Active"
-msgstr "Lista de Reglas"
+msgstr "La regla está activa"
 
 #: admin/PageVServer.py:144
 #, fuzzy
@@ -2071,43 +2008,39 @@ msgstr "Reglas de funcionamiento"
 
 #: admin/PageVServer.py:203
 msgid "Rule Management"
-msgstr ""
+msgstr "Manejo de reglas"
 
 #: admin/PageVServer.py:228
-#, fuzzy
 msgid "Only accept Secure Connections"
-msgstr "Conexiones aceptadas"
+msgstr "Aceptar conexiones seguras únicamente"
 
 #: admin/PageVServer.py:233
-#, fuzzy
 msgid "Encoding enabled"
-msgstr "Codificación"
+msgstr "Codificación activa"
 
 #: admin/PageVServer.py:239
 msgid "no"
 msgstr "no"
 
 #: admin/PageVServer.py:250
-#, fuzzy
 msgid " seconds"
-msgstr "Iconos"
+msgstr " segundos"
 
 #: admin/PageVServer.py:255
 msgid " bytes per second"
-msgstr ""
+msgstr "bytes por segundo"
 
 #: admin/PageVServer.py:260
 msgid "Logging enabled for this rule"
-msgstr ""
+msgstr "Logging habilitada para esta regla"
 
 #: admin/PageVServer.py:265
 msgid "Prevents further rule evaluation"
-msgstr ""
+msgstr "Impide seguir evaluando reglas"
 
 #: admin/PageVServer.py:270
-#, fuzzy
 msgid "Rule is active"
-msgstr "Lista de Reglas"
+msgstr "La regla está activa"
 
 #: admin/PageVServer.py:290
 msgid "Virtual Server nickname"
@@ -2139,16 +2072,15 @@ msgstr "Hospedaje Virtual Avanzado"
 
 #: admin/PageVServer.py:332
 msgid "Error Handling hook"
-msgstr ""
+msgstr "Manejo de errores"
 
 #: admin/PageVServer.py:343 admin/consts.py:224 admin/consts.py:241
 msgid "Disabled"
 msgstr "Desactivado"
 
 #: admin/PageVServer.py:347
-#, fuzzy
 msgid "Write errors to"
-msgstr "Escritores"
+msgstr "Escribir errores en"
 
 #: admin/PageVServer.py:351 admin/PageVServer.py:383
 msgid "Filename"
@@ -2159,31 +2091,28 @@ msgid "Command"
 msgstr "Comando"
 
 #: admin/PageVServer.py:359
-#, fuzzy
 msgid "Error Logging"
-msgstr "No guardar log"
+msgstr "Registro de errores"
 
 #: admin/PageVServer.py:370
 msgid "Format"
 msgstr "Formato"
 
 #: admin/PageVServer.py:377
-#, fuzzy
 msgid "Write accesses to"
-msgstr "Escritores"
+msgstr "Escribir accesos en"
 
 #: admin/PageVServer.py:391
 msgid "Template: "
 msgstr "Plantilla:"
 
 #: admin/PageVServer.py:393
-#, fuzzy
 msgid "Access Logging"
-msgstr "No guardar log"
+msgstr "Registro de accesos"
 
 #: admin/PageVServer.py:399
 msgid "Time standard"
-msgstr ""
+msgstr "Estándar de tiempo"
 
 #: admin/PageVServer.py:400
 msgid "Accept Forwarded IPs"
@@ -2194,59 +2123,56 @@ msgid "Accept"
 msgstr "Aceptar"
 
 #: admin/PageVServer.py:403
-#, fuzzy
 msgid "Do not check"
-msgstr "No comprobar origen"
+msgstr "No comprobar"
 
 #: admin/PageVServer.py:412
-#, fuzzy
-msgid "Logging Option"
-msgstr "Formato del histórico"
+msgid "Logging Options"
+msgstr "Opciones del histórico"
 
-#: admin/PageVServer.py:436
+#: admin/PageVServer.py:448
 msgid "Certificate"
 msgstr "Certificado"
 
-#: admin/PageVServer.py:437
+#: admin/PageVServer.py:449
 msgid "Certificate key"
 msgstr "Clave del Certificado"
 
-#: admin/PageVServer.py:442
+#: admin/PageVServer.py:454
 #, fuzzy
 msgid "Required SSL/TLS Values"
 msgstr "Valores SSL/TLS obligatorios"
 
-#: admin/PageVServer.py:447
+#: admin/PageVServer.py:459
 msgid "Ciphers"
 msgstr "Codificadores"
 
-#: admin/PageVServer.py:448
+#: admin/PageVServer.py:460
 msgid "Client Certs. Request"
 msgstr "Solicitud de Certif. de Clientes"
 
-#: admin/PageVServer.py:451
+#: admin/PageVServer.py:463
 msgid "CA List"
 msgstr "Lista de CA"
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:466
 msgid "Verify Depth"
 msgstr "Profundidad de verificación"
 
-#: admin/PageVServer.py:460
+#: admin/PageVServer.py:472
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Opciones avanzadas"
 
-#: admin/PageVServer.py:479
+#: admin/PageVServer.py:491
 msgid "Basics"
 msgstr "Básica"
 
-#: admin/PageVServer.py:480
-#, fuzzy
+#: admin/PageVServer.py:492
 msgid "Host Match"
-msgstr "Fichero más parecido"
+msgstr "Concordancia de Host"
 
-#: admin/PageVServer.py:482
+#: admin/PageVServer.py:494
 msgid "Error Handler"
 msgstr "Errores"
 
@@ -2256,20 +2182,21 @@ msgid ""
 "<p>You are about to delete the <b>%s</b> Virtual Server.</p><p>Are you sure "
 "you want to proceed?</p>"
 msgstr ""
+"<p>Se va a eliminar el servidor virtual <b>%s</b>.</p><p>¿Proceder?</p>"
 
 #: admin/PageVServers.py:51
 msgid "You are about to clone a Virtual Server. Would you like to proceed?"
-msgstr ""
+msgstr "Se va a clonar un servidor virtual. ¿Proceder?"
 
 #: admin/PageVServers.py:52
 msgid ""
 "Name of the Virtual Server you are about to create. A domain name is alright."
 msgstr ""
+"Nombre del servidor virtual que se va a crear. Un nombre de dominio sirve."
 
 #: admin/PageVServers.py:53
-#, fuzzy
 msgid "Document Root directory of the new Virtual Server."
-msgstr "Nombre para el servidor virtual."
+msgstr "Raíz de documentos del nuevo servidor virtual."
 
 #: admin/PageVServers.py:233 admin/PageVServers.py:246
 #, fuzzy
@@ -2277,18 +2204,16 @@ msgid "Add New Virtual Server"
 msgstr "Añadir nuevo servidor virtual"
 
 #: admin/PageVServers.py:240
-#, fuzzy
 msgid "Virtual Server Configuration Assistant"
-msgstr "Configuración de servidores virtuales"
+msgstr "Asistente de configuración de servidores virtuales"
 
 #: admin/PageVServers.py:260
 msgid "Clone Virtual Server"
 msgstr "Clonar servidor virtual"
 
 #: admin/PageVServers.py:265
-#, fuzzy
 msgid "Clone Selected Virtual Server"
-msgstr "Clonar servidor virtual"
+msgstr "Clonar servidor virtual seleccionado"
 
 #: admin/Rule.py:30
 msgid "The default match ought not to be changed."
@@ -2308,12 +2233,12 @@ msgid "Not"
 msgstr "No"
 
 #: admin/Rule.py:150
-msgid "Select.."
-msgstr ""
+msgid "Select…"
+msgstr "Seleccionar…"
 
 #: admin/Wizard.py:195
 msgid "Use the same logging configuration as one of the other virtual servers."
-msgstr ""
+msgstr "Utilizar el mismo ajuste de registro que otro servidor virtual."
 
 #: admin/consts.py:26
 msgid "English"
@@ -2329,7 +2254,7 @@ msgstr "Alemán"
 
 #: admin/consts.py:29
 msgid "French"
-msgstr ""
+msgstr "Francés"
 
 #: admin/consts.py:30
 msgid "Dutch"
@@ -2341,7 +2266,7 @@ msgstr "Sueco"
 
 #: admin/consts.py:32
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Portugués de Brasil"
 
 #: admin/consts.py:33
 msgid "Chinese Simplified"
@@ -2403,9 +2328,8 @@ msgid "HTTP Reverse Proxy"
 msgstr "Proxy inverso HTTP"
 
 #: admin/consts.py:55
-#, fuzzy
 msgid "Upload Reporting"
-msgstr "Reescritura de URL"
+msgstr "Reporte de Upload"
 
 #: admin/consts.py:56
 msgid "Audio/Video Streaming"
@@ -2417,7 +2341,7 @@ msgstr "CGI"
 
 #: admin/consts.py:58
 msgid "Server Side Includes"
-msgstr ""
+msgstr "SSI"
 
 #: admin/consts.py:59
 msgid "Hidden Downloads"
@@ -2585,9 +2509,8 @@ msgid "HTTP Method"
 msgstr "Método HTTP"
 
 #: admin/consts.py:186
-#, fuzzy
 msgid "Incoming IP/Port"
-msgstr "Puerto de entrada"
+msgstr "IP/Puerto de entrada"
 
 #: admin/consts.py:187
 msgid "Full Path"
@@ -2599,7 +2522,7 @@ msgstr "Conectado desde"
 
 #: admin/consts.py:189
 msgid "URL Argument"
-msgstr ""
+msgstr "Argumento URL"
 
 #: admin/consts.py:190
 msgid "GeoIP"
@@ -2667,34 +2590,32 @@ msgid "RRDtool graphs"
 msgstr "Gráficas RRDTool"
 
 #: admin/consts.py:229
-#, fuzzy
 msgid "Local time"
-msgstr "Nuevo nombre de host"
+msgstr "Hora local"
 
 #: admin/consts.py:230
 msgid "UTC: Coordinated Universal Time"
-msgstr ""
+msgstr "UTC: Tiempo Universal Coordinado"
 
 #: admin/consts.py:234
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: admin/consts.py:235
-#, fuzzy
 msgid "Python"
-msgstr "Ruta"
+msgstr "Python"
 
 #: admin/consts.py:236
 msgid "PHP"
-msgstr ""
+msgstr "PHP"
 
 #: admin/consts.py:237
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 #: admin/consts.py:242
 msgid "POST tracker"
-msgstr ""
+msgstr "Seguimiento POST"
 
 #: admin/server.py:62
 #, python-format
@@ -2706,22 +2627,21 @@ msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)s"
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)s"
 
-#: admin/server.py:124
+#: admin/server.py:132
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Parámetros incorrectos: PORT CONFIG_FILE"
 
 #: admin/util.py:35
-#, fuzzy
-msgid "Deactived"
-msgstr "Deflate"
+msgid "Inactive"
+msgstr "Inactivo"
 
 #: admin/util.py:35
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 #: admin/util.py:38
 msgid "On"
-msgstr ""
+msgstr "On"
 
 #: admin/util.py:41
 msgid "No"
@@ -2748,13 +2668,12 @@ msgid "Port must be a number"
 msgstr "El puerto debe ser un número"
 
 #: admin/validations.py:44
-#, fuzzy
 msgid "Out of range (1 to 65535)"
 msgstr "Fuera de rango (1 a 65535)"
 
 #: admin/validations.py:52
 msgid "Port already in use"
-msgstr ""
+msgstr "El puerto ya está en uso"
 
 #: admin/validations.py:65
 msgid "Malformed path"
@@ -2833,16 +2752,26 @@ msgid "Malformed time"
 msgstr "Tiempo malformado"
 
 #: admin/validations.py:337
-#, fuzzy
 msgid "Virtual Server nick name is already being used."
-msgstr "El nombre del virtual server ya está siendo usado."
+msgstr "El nombre del servidor virtual ya está siendo usado."
 
 #: admin/validations.py:344 admin/validations.py:354 admin/validations.py:371
 msgid "Already in use"
-msgstr ""
+msgstr "Ya en uso"
+
+#, fuzzy
+#~ msgid "%s Support"
+#~ msgstr "Soporte"
+
+#, fuzzy
+#~ msgid "Add new %s"
+#~ msgstr "Añadir nuevo"
+
+#~ msgid "Choose.."
+#~ msgstr "Elija.."
 
 #~ msgid "ERROR: Couldn't execute '%s -i'"
-#~ msgstr "ERROR: No puedo ejecutar '%s -i'"
+#~ msgstr "ERROR: No se pudo ejecutar '%s -i'"
 
 #~ msgid "Submit"
 #~ msgstr "Enviar"
@@ -3622,9 +3551,6 @@ msgstr ""
 #~ msgid "Details:"
 #~ msgstr "Detalles:"
 
-#~ msgid "Add a new"
-#~ msgstr "Añadir nuevo"
-
 #~ msgid "Source usage"
 #~ msgstr "Uso del origen de datos"
 
@@ -4032,7 +3958,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Could not find the fastcgi Mono server binary"
-#~ msgstr "No puedo lanzar el servidor"
+#~ msgstr "No se pudo lanzar el servidor"
 
 #, fuzzy
 #~ msgid "New virtual server based on a .NET/Mono project."
@@ -4340,7 +4266,7 @@ msgstr ""
 #~ msgstr "ERROR: No pudo procesar '%s'"
 
 #~ msgid "Could not copy configuration to "
-#~ msgstr "No puedo copiar la configuración a"
+#~ msgstr "No se pudo copiar la configuración a"
 
 #~ msgid "Static content"
 #~ msgstr "Contenido estático"

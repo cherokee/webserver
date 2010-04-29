@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-04-23 19:39+0200\n"
+"POT-Creation-Date: 2010-04-29 17:49+0200\n"
 "PO-Revision-Date: 2009-05-12 15:10+0100\n"
 "Last-Translator: Andreas Sinz <andreas.sinz@aon.at>\n"
 "Language-Team: none\n"
@@ -67,7 +67,7 @@ msgid ""
 "A load balancer must be configured to use at least one information source."
 msgstr ""
 
-#: admin/Balancer.py:67 admin/PageSource.py:189 admin/PageSource.py:224
+#: admin/Balancer.py:67 admin/PageSource.py:209 admin/PageSource.py:246
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "Nick"
@@ -76,8 +76,8 @@ msgstr "Nick"
 msgid "Host"
 msgstr "Host"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:347
-#: admin/PageSource.py:367 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:371
+#: admin/PageSource.py:391 admin/PageSources.py:48
 #, fuzzy
 msgid "Information Sources"
 msgstr "Informationsquellen"
@@ -87,8 +87,9 @@ msgid "Assign Information Sources"
 msgstr ""
 
 #: admin/Balancer.py:117 admin/PageRule.py:112
-msgid "Choose.."
-msgstr "Wähle.."
+#, fuzzy
+msgid "Choose…"
+msgstr "Wählen"
 
 #: admin/Balancer.py:123
 msgid "Application Server"
@@ -206,7 +207,7 @@ msgid "Custom Environment Variables"
 msgstr "Umgebungsvariablen"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:259 admin/PageSource.py:320
+#: admin/PageGeneral.py:189 admin/PageRule.py:258 admin/PageSource.py:344
 #: admin/PageVServers.py:235
 msgid "Add"
 msgstr "Hinzufügen"
@@ -276,8 +277,8 @@ msgid ""
 "virtual server."
 msgstr ""
 
-#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:166
-#: admin/PageStatus.py:70 admin/PageVServer.py:494 admin/PageVServers.py:193
+#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
+#: admin/PageStatus.py:70 admin/PageVServer.py:506 admin/PageVServers.py:193
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -293,8 +294,8 @@ msgstr ""
 msgid "Document Root"
 msgstr "Hauptordner"
 
-#: admin/Icons.py:118 admin/Icons.py:312 admin/Mime.py:86 admin/Mime.py:120
-#: admin/consts.py:181
+#: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
+#: admin/Mime.py:120 admin/consts.py:181
 msgid "Extensions"
 msgstr ""
 
@@ -314,6 +315,10 @@ msgstr "Dateien"
 #: admin/Icons.py:167
 msgid "File Matches"
 msgstr ""
+
+#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:98
+msgid "File"
+msgstr "Datei"
 
 #: admin/Icons.py:171
 #, fuzzy
@@ -342,19 +347,15 @@ msgstr "Verändert am"
 msgid "Special Files"
 msgstr "Besondere Dateien"
 
-#: admin/Icons.py:311 admin/consts.py:98
-msgid "File"
-msgstr "Datei"
-
 #: admin/Icons.py:345
-#, fuzzy, python-format
-msgid "Add new %s"
+#, fuzzy
+msgid "Add new"
 msgstr "Neue Regel hinzufügen"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:260
-#: admin/PageRule.py:286 admin/PageSource.py:307 admin/PageSource.py:321
-#: admin/PageSource.py:335 admin/PageVServers.py:201 admin/PageVServers.py:236
+#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:259
+#: admin/PageRule.py:285 admin/PageSource.py:331 admin/PageSource.py:345
+#: admin/PageSource.py:359 admin/PageVServers.py:201 admin/PageVServers.py:236
 #: admin/PageVServers.py:262
 #, fuzzy
 msgid "Cancel"
@@ -776,7 +777,7 @@ msgstr ""
 msgid "Skip Logging"
 msgstr ""
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:483
+#: admin/PageEntry.py:108 admin/PageVServer.py:495
 msgid "Logging"
 msgstr "Protokollierung"
 
@@ -823,8 +824,8 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr ""
 
 #: admin/PageEntry.py:178
-#, fuzzy, python-format
-msgid "%s Support"
+#, fuzzy
+msgid "support"
 msgstr "Unterstützung"
 
 #: admin/PageEntry.py:183
@@ -840,7 +841,7 @@ msgstr ""
 msgid "Handler"
 msgstr ""
 
-#: admin/PageEntry.py:247 admin/PageSource.py:162
+#: admin/PageEntry.py:247 admin/PageSource.py:180
 msgid "Rule"
 msgstr "Regel"
 
@@ -853,7 +854,7 @@ msgstr ""
 msgid "Time"
 msgstr "Design"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:484
+#: admin/PageEntry.py:251 admin/PageVServer.py:496
 msgid "Security"
 msgstr "Sicherheit"
 
@@ -965,7 +966,7 @@ msgid "Thank you!"
 msgstr "Feedback: Danke"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:299
+#: admin/PageSource.py:318
 #, fuzzy
 msgid "Close"
 msgstr "Klonen"
@@ -1487,60 +1488,60 @@ msgstr "Datei"
 msgid "descr"
 msgstr ""
 
-#: admin/PageRule.py:206 admin/PageSource.py:302 admin/PageVServers.py:196
+#: admin/PageRule.py:206 admin/PageSource.py:326 admin/PageVServers.py:196
 msgid "Do you really want to remove it?"
 msgstr ""
 
-#: admin/PageRule.py:207 admin/PageSource.py:303 admin/PageVServers.py:197
+#: admin/PageRule.py:207 admin/PageSource.py:327 admin/PageVServers.py:197
 msgid "Remove"
 msgstr "Löschen"
 
-#: admin/PageRule.py:232 admin/PageVServer.py:118
+#: admin/PageRule.py:231 admin/PageVServer.py:118
 msgid "Final"
 msgstr ""
 
-#: admin/PageRule.py:233
+#: admin/PageRule.py:232
 #, fuzzy
 msgid "Non Final"
 msgstr "Icon Datei"
 
-#: admin/PageRule.py:257 admin/PageRule.py:270
+#: admin/PageRule.py:256 admin/PageRule.py:269
 #, fuzzy
 msgid "Add Behavior Rule"
 msgstr "Verhalten"
 
-#: admin/PageRule.py:264
+#: admin/PageRule.py:263
 #, fuzzy
 msgid "Configuration Assistant"
 msgstr "Schnelle Konfiguration"
 
-#: admin/PageRule.py:270 admin/PageSource.py:324 admin/PageVServers.py:246
+#: admin/PageRule.py:269 admin/PageSource.py:348 admin/PageVServers.py:246
 msgid "New…"
 msgstr ""
 
-#: admin/PageRule.py:284
+#: admin/PageRule.py:283
 #, fuzzy
 msgid "Clone Behavior Rule"
 msgstr "Klone virtuellen Server"
 
-#: admin/PageRule.py:285 admin/PageSource.py:334 admin/PageVServers.py:261
+#: admin/PageRule.py:284 admin/PageSource.py:358 admin/PageVServers.py:261
 msgid "Clone"
 msgstr "Klonen"
 
-#: admin/PageRule.py:289 admin/PageSource.py:338 admin/PageVServers.py:265
+#: admin/PageRule.py:288 admin/PageSource.py:362 admin/PageVServers.py:265
 #, fuzzy
 msgid "Clone…"
 msgstr "Klonen"
 
-#: admin/PageRule.py:289
+#: admin/PageRule.py:288
 msgid "Clone Selected Behavior Rule"
 msgstr ""
 
-#: admin/PageRule.py:297 admin/PageVServer.py:481
+#: admin/PageRule.py:296 admin/PageVServer.py:493
 msgid "Behavior"
 msgstr "Verhalten"
 
-#: admin/PageRule.py:316
+#: admin/PageRule.py:315
 #, fuzzy
 msgid "Rule Filtering"
 msgstr "Liste der Regeln"
@@ -1620,63 +1621,58 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr ""
 
-#: admin/PageSource.py:162 admin/PageVServer.py:486
+#: admin/PageSource.py:180 admin/PageVServer.py:498
 msgid "Virtual Server"
 msgstr "Virtueller Server"
 
-#: admin/PageSource.py:188
+#: admin/PageSource.py:208
 msgid "Type"
 msgstr "Typ"
 
-#: admin/PageSource.py:190 admin/PageSource.py:225
+#: admin/PageSource.py:210 admin/PageSource.py:247
 msgid "Connection"
 msgstr "Verbindung"
 
-#: admin/PageSource.py:192
+#: admin/PageSource.py:212
 msgid "Interpreter"
 msgstr ""
 
-#: admin/PageSource.py:193
+#: admin/PageSource.py:213
 msgid "Spawning timeout"
 msgstr ""
 
-#: admin/PageSource.py:194
+#: admin/PageSource.py:214
 msgid "Execute as User"
 msgstr "Ausführen als Benutzer"
 
-#: admin/PageSource.py:195
+#: admin/PageSource.py:215
 msgid "Execute as Group"
 msgstr "Ausführen als Gruppe"
 
-#: admin/PageSource.py:196
+#: admin/PageSource.py:216
 msgid "Inherit Environment"
 msgstr ""
 
-#: admin/PageSource.py:296
+#: admin/PageSource.py:315
 msgid "Deletion is forbidden"
 msgstr ""
 
-#: admin/PageSource.py:298
-#, python-format
-msgid "<p>%s: %s</p>"
-msgstr ""
-
-#: admin/PageSource.py:319 admin/PageSource.py:324
+#: admin/PageSource.py:343 admin/PageSource.py:348
 #, fuzzy
 msgid "Add New Information Source"
 msgstr "Zeige Informationen"
 
-#: admin/PageSource.py:333
+#: admin/PageSource.py:357
 #, fuzzy
 msgid "Clone Information Source"
 msgstr "Zeige Informationen"
 
-#: admin/PageSource.py:338
+#: admin/PageSource.py:362
 #, fuzzy
 msgid "Clone Selected Information Source"
 msgstr "Zeige Informationen"
 
-#: admin/PageSource.py:358
+#: admin/PageSource.py:382
 #, fuzzy
 msgid "Sources Filtering"
 msgstr "Ordner"
@@ -2087,52 +2083,52 @@ msgstr "Nicht Neustarten"
 
 #: admin/PageVServer.py:412
 #, fuzzy
-msgid "Logging Option"
+msgid "Logging Options"
 msgstr "Protokollierung"
 
-#: admin/PageVServer.py:436
+#: admin/PageVServer.py:448
 msgid "Certificate"
 msgstr ""
 
-#: admin/PageVServer.py:437
+#: admin/PageVServer.py:449
 msgid "Certificate key"
 msgstr ""
 
-#: admin/PageVServer.py:442
+#: admin/PageVServer.py:454
 msgid "Required SSL/TLS Values"
 msgstr ""
 
-#: admin/PageVServer.py:447
+#: admin/PageVServer.py:459
 msgid "Ciphers"
 msgstr ""
 
-#: admin/PageVServer.py:448
+#: admin/PageVServer.py:460
 msgid "Client Certs. Request"
 msgstr ""
 
-#: admin/PageVServer.py:451
+#: admin/PageVServer.py:463
 msgid "CA List"
 msgstr ""
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:466
 msgid "Verify Depth"
 msgstr ""
 
-#: admin/PageVServer.py:460
+#: admin/PageVServer.py:472
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Erweiterte Optionen"
 
-#: admin/PageVServer.py:479
+#: admin/PageVServer.py:491
 msgid "Basics"
 msgstr ""
 
-#: admin/PageVServer.py:480
+#: admin/PageVServer.py:492
 #, fuzzy
 msgid "Host Match"
 msgstr "Hostnamen"
 
-#: admin/PageVServer.py:482
+#: admin/PageVServer.py:494
 msgid "Error Handler"
 msgstr ""
 
@@ -2193,7 +2189,7 @@ msgid "Not"
 msgstr "Nicht"
 
 #: admin/Rule.py:150
-msgid "Select.."
+msgid "Select…"
 msgstr ""
 
 #: admin/Wizard.py:195
@@ -2595,12 +2591,12 @@ msgstr "Server %s läuft.. PID=%d Port=%d"
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "Server %s läuft.. PID=%d Port=%d"
 
-#: admin/server.py:124
+#: admin/server.py:132
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr ""
 
 #: admin/util.py:35
-msgid "Deactived"
+msgid "Inactive"
 msgstr ""
 
 #: admin/util.py:35
@@ -2729,6 +2725,13 @@ msgstr "Virtueller-Server Name"
 #: admin/validations.py:344 admin/validations.py:354 admin/validations.py:371
 msgid "Already in use"
 msgstr ""
+
+#, fuzzy
+#~ msgid "%s Support"
+#~ msgstr "Unterstützung"
+
+#~ msgid "Choose.."
+#~ msgstr "Wähle.."
 
 #~ msgid "ERROR: Couldn't execute '%s -i'"
 #~ msgstr "FEHLER: Konnte '%s -i' nicht ausführen"

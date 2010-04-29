@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-04-23 19:39+0200\n"
+"POT-Creation-Date: 2010-04-29 17:49+0200\n"
 "PO-Revision-Date: 2010-02-26 02:40+0100\n"
 "Last-Translator: Stefan de Konink <stefan@konink.de>\n"
 "Language-Team: none\n"
@@ -71,7 +71,7 @@ msgstr ""
 "Een verdeler moet worden geconfigureerd om minimaal een informatie bron te "
 "gebruiken."
 
-#: admin/Balancer.py:67 admin/PageSource.py:189 admin/PageSource.py:224
+#: admin/Balancer.py:67 admin/PageSource.py:209 admin/PageSource.py:246
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "Naam"
@@ -80,8 +80,8 @@ msgstr "Naam"
 msgid "Host"
 msgstr "Systeem"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:347
-#: admin/PageSource.py:367 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:371
+#: admin/PageSource.py:391 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "Informatie Bronnen"
 
@@ -90,8 +90,9 @@ msgid "Assign Information Sources"
 msgstr "Koppel Informatie Bron"
 
 #: admin/Balancer.py:117 admin/PageRule.py:112
-msgid "Choose.."
-msgstr "Kies.."
+#, fuzzy
+msgid "Choose…"
+msgstr "Kies"
 
 #: admin/Balancer.py:123
 msgid "Application Server"
@@ -216,7 +217,7 @@ msgid "Custom Environment Variables"
 msgstr "Eigen omgevings variabelen"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:259 admin/PageSource.py:320
+#: admin/PageGeneral.py:189 admin/PageRule.py:258 admin/PageSource.py:344
 #: admin/PageVServers.py:235
 msgid "Add"
 msgstr "Voeg toe"
@@ -291,8 +292,8 @@ msgid ""
 "virtual server."
 msgstr "Worden verkeers statistieken voor deze server wel of niet verzameld."
 
-#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:166
-#: admin/PageStatus.py:70 admin/PageVServer.py:494 admin/PageVServers.py:193
+#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
+#: admin/PageStatus.py:70 admin/PageVServer.py:506 admin/PageVServers.py:193
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -309,8 +310,8 @@ msgstr "Staat toe om een alternatieve hoofdmap op te geven."
 msgid "Document Root"
 msgstr "Hoofdmap"
 
-#: admin/Icons.py:118 admin/Icons.py:312 admin/Mime.py:86 admin/Mime.py:120
-#: admin/consts.py:181
+#: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
+#: admin/Mime.py:120 admin/consts.py:181
 msgid "Extensions"
 msgstr "Extenties"
 
@@ -331,6 +332,10 @@ msgstr "Bestanden"
 #: admin/Icons.py:167
 msgid "File Matches"
 msgstr "Bestand komt overeen"
+
+#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:98
+msgid "File"
+msgstr "Bestand"
 
 #: admin/Icons.py:171
 #, fuzzy
@@ -359,19 +364,15 @@ msgstr "Veranderd"
 msgid "Special Files"
 msgstr "Speciale Bestanden"
 
-#: admin/Icons.py:311 admin/consts.py:98
-msgid "File"
-msgstr "Bestand"
-
 #: admin/Icons.py:345
-#, fuzzy, python-format
-msgid "Add new %s"
-msgstr "Voeg toe"
+#, fuzzy
+msgid "Add new"
+msgstr "Voeg een nieuwe toe"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:260
-#: admin/PageRule.py:286 admin/PageSource.py:307 admin/PageSource.py:321
-#: admin/PageSource.py:335 admin/PageVServers.py:201 admin/PageVServers.py:236
+#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:259
+#: admin/PageRule.py:285 admin/PageSource.py:331 admin/PageSource.py:345
+#: admin/PageSource.py:359 admin/PageVServers.py:201 admin/PageVServers.py:236
 #: admin/PageVServers.py:262
 #, fuzzy
 msgid "Cancel"
@@ -826,7 +827,7 @@ msgstr "Verkeer Limiteren"
 msgid "Skip Logging"
 msgstr "Sla logging over"
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:483
+#: admin/PageEntry.py:108 admin/PageVServer.py:495
 msgid "Logging"
 msgstr "Logging"
 
@@ -872,8 +873,8 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr "Gebruik de %s encoder wanneer de gebruiker er om vraagt."
 
 #: admin/PageEntry.py:178
-#, fuzzy, python-format
-msgid "%s Support"
+#, fuzzy
+msgid "support"
 msgstr "Ondersteuning"
 
 #: admin/PageEntry.py:183
@@ -889,7 +890,7 @@ msgstr "Kies Regel"
 msgid "Handler"
 msgstr "Uitvoerder"
 
-#: admin/PageEntry.py:247 admin/PageSource.py:162
+#: admin/PageEntry.py:247 admin/PageSource.py:180
 msgid "Rule"
 msgstr "Regel"
 
@@ -901,7 +902,7 @@ msgstr "Encodering"
 msgid "Time"
 msgstr "Tijd"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:484
+#: admin/PageEntry.py:251 admin/PageVServer.py:496
 msgid "Security"
 msgstr "Beveiliging"
 
@@ -1014,7 +1015,7 @@ msgid "Thank you!"
 msgstr "Reactie: Bedankt"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:299
+#: admin/PageSource.py:318
 #, fuzzy
 msgid "Close"
 msgstr "Kloon"
@@ -1538,60 +1539,60 @@ msgstr "Bestand"
 msgid "descr"
 msgstr ""
 
-#: admin/PageRule.py:206 admin/PageSource.py:302 admin/PageVServers.py:196
+#: admin/PageRule.py:206 admin/PageSource.py:326 admin/PageVServers.py:196
 msgid "Do you really want to remove it?"
 msgstr ""
 
-#: admin/PageRule.py:207 admin/PageSource.py:303 admin/PageVServers.py:197
+#: admin/PageRule.py:207 admin/PageSource.py:327 admin/PageVServers.py:197
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: admin/PageRule.py:232 admin/PageVServer.py:118
+#: admin/PageRule.py:231 admin/PageVServer.py:118
 msgid "Final"
 msgstr "Definieve"
 
-#: admin/PageRule.py:233
+#: admin/PageRule.py:232
 #, fuzzy
 msgid "Non Final"
 msgstr "Definieve"
 
-#: admin/PageRule.py:257 admin/PageRule.py:270
+#: admin/PageRule.py:256 admin/PageRule.py:269
 #, fuzzy
 msgid "Add Behavior Rule"
 msgstr "Gedrag regels"
 
-#: admin/PageRule.py:264
+#: admin/PageRule.py:263
 #, fuzzy
 msgid "Configuration Assistant"
 msgstr "Configuratie Snelstart"
 
-#: admin/PageRule.py:270 admin/PageSource.py:324 admin/PageVServers.py:246
+#: admin/PageRule.py:269 admin/PageSource.py:348 admin/PageVServers.py:246
 msgid "New…"
 msgstr ""
 
-#: admin/PageRule.py:284
+#: admin/PageRule.py:283
 #, fuzzy
 msgid "Clone Behavior Rule"
 msgstr "Gedrag regels"
 
-#: admin/PageRule.py:285 admin/PageSource.py:334 admin/PageVServers.py:261
+#: admin/PageRule.py:284 admin/PageSource.py:358 admin/PageVServers.py:261
 msgid "Clone"
 msgstr "Kloon"
 
-#: admin/PageRule.py:289 admin/PageSource.py:338 admin/PageVServers.py:265
+#: admin/PageRule.py:288 admin/PageSource.py:362 admin/PageVServers.py:265
 #, fuzzy
 msgid "Clone…"
 msgstr "Kloon"
 
-#: admin/PageRule.py:289
+#: admin/PageRule.py:288
 msgid "Clone Selected Behavior Rule"
 msgstr ""
 
-#: admin/PageRule.py:297 admin/PageVServer.py:481
+#: admin/PageRule.py:296 admin/PageVServer.py:493
 msgid "Behavior"
 msgstr "Gedrag"
 
-#: admin/PageRule.py:316
+#: admin/PageRule.py:315
 #, fuzzy
 msgid "Rule Filtering"
 msgstr "Regel lijst"
@@ -1688,63 +1689,58 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr ""
 
-#: admin/PageSource.py:162 admin/PageVServer.py:486
+#: admin/PageSource.py:180 admin/PageVServer.py:498
 msgid "Virtual Server"
 msgstr "Virtuele Server"
 
-#: admin/PageSource.py:188
+#: admin/PageSource.py:208
 msgid "Type"
 msgstr "Type"
 
-#: admin/PageSource.py:190 admin/PageSource.py:225
+#: admin/PageSource.py:210 admin/PageSource.py:247
 msgid "Connection"
 msgstr "Verbinding"
 
-#: admin/PageSource.py:192
+#: admin/PageSource.py:212
 msgid "Interpreter"
 msgstr "Interpereter"
 
-#: admin/PageSource.py:193
+#: admin/PageSource.py:213
 msgid "Spawning timeout"
 msgstr "Herstart uitvaltijd"
 
-#: admin/PageSource.py:194
+#: admin/PageSource.py:214
 msgid "Execute as User"
 msgstr "Voeruit als Eigenaar"
 
-#: admin/PageSource.py:195
+#: admin/PageSource.py:215
 msgid "Execute as Group"
 msgstr "Voeruit als Groep"
 
-#: admin/PageSource.py:196
+#: admin/PageSource.py:216
 msgid "Inherit Environment"
 msgstr "Overgenomen Omgeving"
 
-#: admin/PageSource.py:296
+#: admin/PageSource.py:315
 #, fuzzy
 msgid "Deletion is forbidden"
 msgstr "Verwijdering voorkomen. Controleer bron gebruik."
 
-#: admin/PageSource.py:298
-#, python-format
-msgid "<p>%s: %s</p>"
-msgstr ""
-
-#: admin/PageSource.py:319 admin/PageSource.py:324
+#: admin/PageSource.py:343 admin/PageSource.py:348
 #, fuzzy
 msgid "Add New Information Source"
 msgstr "Maak nieuwe Informatie Bron"
 
-#: admin/PageSource.py:333
+#: admin/PageSource.py:357
 msgid "Clone Information Source"
 msgstr "Kloon Informatie Bronnen"
 
-#: admin/PageSource.py:338
+#: admin/PageSource.py:362
 #, fuzzy
 msgid "Clone Selected Information Source"
 msgstr "Kloon Informatie Bronnen"
 
-#: admin/PageSource.py:358
+#: admin/PageSource.py:382
 #, fuzzy
 msgid "Sources Filtering"
 msgstr "Bron Map"
@@ -2192,53 +2188,54 @@ msgid "Do not check"
 msgstr "Controleer bron niet"
 
 #: admin/PageVServer.py:412
-msgid "Logging Option"
+#, fuzzy
+msgid "Logging Options"
 msgstr "Log opties"
 
-#: admin/PageVServer.py:436
+#: admin/PageVServer.py:448
 msgid "Certificate"
 msgstr "Certificaat"
 
-#: admin/PageVServer.py:437
+#: admin/PageVServer.py:449
 msgid "Certificate key"
 msgstr "Certificaat sleutel"
 
-#: admin/PageVServer.py:442
+#: admin/PageVServer.py:454
 #, fuzzy
 msgid "Required SSL/TLS Values"
 msgstr "Verplichte SSL/TLS waarden"
 
-#: admin/PageVServer.py:447
+#: admin/PageVServer.py:459
 msgid "Ciphers"
 msgstr "Versleutelingen"
 
-#: admin/PageVServer.py:448
+#: admin/PageVServer.py:460
 msgid "Client Certs. Request"
 msgstr "Gebruiker Certificaat Aanvragen"
 
-#: admin/PageVServer.py:451
+#: admin/PageVServer.py:463
 msgid "CA List"
 msgstr "CA lijst"
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:466
 msgid "Verify Depth"
 msgstr "Verifieer Diepte"
 
-#: admin/PageVServer.py:460
+#: admin/PageVServer.py:472
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Uitgebreide opties"
 
-#: admin/PageVServer.py:479
+#: admin/PageVServer.py:491
 msgid "Basics"
 msgstr "Basis"
 
-#: admin/PageVServer.py:480
+#: admin/PageVServer.py:492
 #, fuzzy
 msgid "Host Match"
 msgstr "Dichtsbijzijnde overeenkomst"
 
-#: admin/PageVServer.py:482
+#: admin/PageVServer.py:494
 msgid "Error Handler"
 msgstr "Fout afhandelaar"
 
@@ -2299,7 +2296,7 @@ msgid "Not"
 msgstr "Niet"
 
 #: admin/Rule.py:150
-msgid "Select.."
+msgid "Select…"
 msgstr ""
 
 #: admin/Wizard.py:195
@@ -2696,13 +2693,13 @@ msgstr "Server %(version)s draait... PID=%(pid)d Poort=%(scgi_port)s"
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "Server %(version)s draait... PID=%(pid)d Poort=%(scgi_port)s"
 
-#: admin/server.py:124
+#: admin/server.py:132
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Foutieve parameters: PORT CONFIG_FILE"
 
 #: admin/util.py:35
 #, fuzzy
-msgid "Deactived"
+msgid "Inactive"
 msgstr "Geactiveerd"
 
 #: admin/util.py:35
@@ -2831,6 +2828,21 @@ msgstr "Virtuele computer bijnaam is al in gebruik."
 #, fuzzy
 msgid "Already in use"
 msgstr "Reeds geconfigureerd:"
+
+#, fuzzy
+#~ msgid "%s Support"
+#~ msgstr "Ondersteuning"
+
+#, fuzzy
+#~ msgid "Add new %s"
+#~ msgstr "Voeg toe"
+
+#, fuzzy
+#~ msgid "Deactived"
+#~ msgstr "Geactiveerd"
+
+#~ msgid "Choose.."
+#~ msgstr "Kies.."
 
 #~ msgid "ERROR: Couldn't execute '%s -i'"
 #~ msgstr "FOUT: Kan '%s -i' niet uitvoeren"
@@ -3619,9 +3631,6 @@ msgstr "Reeds geconfigureerd:"
 
 #~ msgid "Details:"
 #~ msgstr "Defails:"
-
-#~ msgid "Add a new"
-#~ msgstr "Voeg een nieuwe toe"
 
 #~ msgid "Source usage"
 #~ msgstr "Bron gebruik"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.38' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-04-23 19:39+0200\n"
+"POT-Creation-Date: 2010-04-29 17:49+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -62,7 +62,7 @@ msgid ""
 "A load balancer must be configured to use at least one information source."
 msgstr "负载均衡器要求必须配置至少一个数据源."
 
-#: admin/Balancer.py:67 admin/PageSource.py:189 admin/PageSource.py:224
+#: admin/Balancer.py:67 admin/PageSource.py:209 admin/PageSource.py:246
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "名称"
@@ -71,8 +71,8 @@ msgstr "名称"
 msgid "Host"
 msgstr "主机"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:347
-#: admin/PageSource.py:367 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:371
+#: admin/PageSource.py:391 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "数据源"
 
@@ -81,8 +81,9 @@ msgid "Assign Information Sources"
 msgstr "转移数据源"
 
 #: admin/Balancer.py:117 admin/PageRule.py:112
-msgid "Choose.."
-msgstr "选择.."
+#, fuzzy
+msgid "Choose…"
+msgstr "选择"
 
 #: admin/Balancer.py:123
 msgid "Application Server"
@@ -206,7 +207,7 @@ msgid "Custom Environment Variables"
 msgstr "自定义环境变量"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:259 admin/PageSource.py:320
+#: admin/PageGeneral.py:189 admin/PageRule.py:258 admin/PageSource.py:344
 #: admin/PageVServers.py:235
 msgid "Add"
 msgstr "增加"
@@ -283,8 +284,8 @@ msgid ""
 "virtual server."
 msgstr "是否对此虚拟机进行流量及状态统计"
 
-#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:166
-#: admin/PageStatus.py:70 admin/PageVServer.py:494 admin/PageVServers.py:193
+#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
+#: admin/PageStatus.py:70 admin/PageVServer.py:506 admin/PageVServers.py:193
 msgid "Unknown"
 msgstr "未知"
 
@@ -302,8 +303,8 @@ msgstr "允许指定的替代文件根路径."
 msgid "Document Root"
 msgstr "根目录"
 
-#: admin/Icons.py:118 admin/Icons.py:312 admin/Mime.py:86 admin/Mime.py:120
-#: admin/consts.py:181
+#: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
+#: admin/Mime.py:120 admin/consts.py:181
 msgid "Extensions"
 msgstr "扩展"
 
@@ -324,6 +325,10 @@ msgstr "文件"
 #: admin/Icons.py:167
 msgid "File Matches"
 msgstr "文件匹配"
+
+#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:98
+msgid "File"
+msgstr "文件"
 
 #: admin/Icons.py:171
 #, fuzzy
@@ -352,19 +357,15 @@ msgstr "上次修改时间"
 msgid "Special Files"
 msgstr "特殊文件"
 
-#: admin/Icons.py:311 admin/consts.py:98
-msgid "File"
-msgstr "文件"
-
 #: admin/Icons.py:345
-#, fuzzy, python-format
-msgid "Add new %s"
+#, fuzzy
+msgid "Add new"
 msgstr "新增"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:260
-#: admin/PageRule.py:286 admin/PageSource.py:307 admin/PageSource.py:321
-#: admin/PageSource.py:335 admin/PageVServers.py:201 admin/PageVServers.py:236
+#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:259
+#: admin/PageRule.py:285 admin/PageSource.py:331 admin/PageSource.py:345
+#: admin/PageSource.py:359 admin/PageVServers.py:201 admin/PageVServers.py:236
 #: admin/PageVServers.py:262
 #, fuzzy
 msgid "Cancel"
@@ -800,7 +801,7 @@ msgstr "流量限制"
 msgid "Skip Logging"
 msgstr "不启用日志"
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:483
+#: admin/PageEntry.py:108 admin/PageVServer.py:495
 msgid "Logging"
 msgstr "启用日志"
 
@@ -847,8 +848,8 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr "每当客户端请求时使用 %s 压缩."
 
 #: admin/PageEntry.py:178
-#, fuzzy, python-format
-msgid "%s Support"
+#, fuzzy
+msgid "support"
 msgstr "支持"
 
 #: admin/PageEntry.py:183
@@ -864,7 +865,7 @@ msgstr "匹配规则"
 msgid "Handler"
 msgstr "处理"
 
-#: admin/PageEntry.py:247 admin/PageSource.py:162
+#: admin/PageEntry.py:247 admin/PageSource.py:180
 msgid "Rule"
 msgstr "规则"
 
@@ -877,7 +878,7 @@ msgstr "压缩"
 msgid "Time"
 msgstr "超时"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:484
+#: admin/PageEntry.py:251 admin/PageVServer.py:496
 msgid "Security"
 msgstr "安全"
 
@@ -990,7 +991,7 @@ msgid "Thank you!"
 msgstr "反馈信息: 谢谢"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:299
+#: admin/PageSource.py:318
 #, fuzzy
 msgid "Close"
 msgstr "克隆"
@@ -1511,60 +1512,60 @@ msgstr "文件"
 msgid "descr"
 msgstr ""
 
-#: admin/PageRule.py:206 admin/PageSource.py:302 admin/PageVServers.py:196
+#: admin/PageRule.py:206 admin/PageSource.py:326 admin/PageVServers.py:196
 msgid "Do you really want to remove it?"
 msgstr ""
 
-#: admin/PageRule.py:207 admin/PageSource.py:303 admin/PageVServers.py:197
+#: admin/PageRule.py:207 admin/PageSource.py:327 admin/PageVServers.py:197
 msgid "Remove"
 msgstr "删除"
 
-#: admin/PageRule.py:232 admin/PageVServer.py:118
+#: admin/PageRule.py:231 admin/PageVServer.py:118
 msgid "Final"
 msgstr "启用"
 
-#: admin/PageRule.py:233
+#: admin/PageRule.py:232
 #, fuzzy
 msgid "Non Final"
 msgstr "启用"
 
-#: admin/PageRule.py:257 admin/PageRule.py:270
+#: admin/PageRule.py:256 admin/PageRule.py:269
 #, fuzzy
 msgid "Add Behavior Rule"
 msgstr "行为规则"
 
-#: admin/PageRule.py:264
+#: admin/PageRule.py:263
 #, fuzzy
 msgid "Configuration Assistant"
 msgstr "快速配置"
 
-#: admin/PageRule.py:270 admin/PageSource.py:324 admin/PageVServers.py:246
+#: admin/PageRule.py:269 admin/PageSource.py:348 admin/PageVServers.py:246
 msgid "New…"
 msgstr ""
 
-#: admin/PageRule.py:284
+#: admin/PageRule.py:283
 #, fuzzy
 msgid "Clone Behavior Rule"
 msgstr "行为规则"
 
-#: admin/PageRule.py:285 admin/PageSource.py:334 admin/PageVServers.py:261
+#: admin/PageRule.py:284 admin/PageSource.py:358 admin/PageVServers.py:261
 msgid "Clone"
 msgstr "克隆"
 
-#: admin/PageRule.py:289 admin/PageSource.py:338 admin/PageVServers.py:265
+#: admin/PageRule.py:288 admin/PageSource.py:362 admin/PageVServers.py:265
 #, fuzzy
 msgid "Clone…"
 msgstr "克隆"
 
-#: admin/PageRule.py:289
+#: admin/PageRule.py:288
 msgid "Clone Selected Behavior Rule"
 msgstr ""
 
-#: admin/PageRule.py:297 admin/PageVServer.py:481
+#: admin/PageRule.py:296 admin/PageVServer.py:493
 msgid "Behavior"
 msgstr "扩展设置"
 
-#: admin/PageRule.py:316
+#: admin/PageRule.py:315
 #, fuzzy
 msgid "Rule Filtering"
 msgstr "规则列表"
@@ -1647,65 +1648,60 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr ""
 
-#: admin/PageSource.py:162 admin/PageVServer.py:486
+#: admin/PageSource.py:180 admin/PageVServer.py:498
 msgid "Virtual Server"
 msgstr "虚拟主机"
 
-#: admin/PageSource.py:188
+#: admin/PageSource.py:208
 msgid "Type"
 msgstr "类型"
 
-#: admin/PageSource.py:190 admin/PageSource.py:225
+#: admin/PageSource.py:210 admin/PageSource.py:247
 msgid "Connection"
 msgstr "连接"
 
-#: admin/PageSource.py:192
+#: admin/PageSource.py:212
 msgid "Interpreter"
 msgstr "解释器"
 
-#: admin/PageSource.py:193
+#: admin/PageSource.py:213
 msgid "Spawning timeout"
 msgstr "超时"
 
-#: admin/PageSource.py:194
+#: admin/PageSource.py:214
 msgid "Execute as User"
 msgstr "执行用户"
 
-#: admin/PageSource.py:195
+#: admin/PageSource.py:215
 #, fuzzy
 msgid "Execute as Group"
 msgstr "执行用户组"
 
-#: admin/PageSource.py:196
+#: admin/PageSource.py:216
 msgid "Inherit Environment"
 msgstr ""
 
-#: admin/PageSource.py:296
+#: admin/PageSource.py:315
 #, fuzzy
 msgid "Deletion is forbidden"
 msgstr "不允许删除. 请检查数据源是否使用中."
 
-#: admin/PageSource.py:298
-#, python-format
-msgid "<p>%s: %s</p>"
-msgstr ""
-
-#: admin/PageSource.py:319 admin/PageSource.py:324
+#: admin/PageSource.py:343 admin/PageSource.py:348
 #, fuzzy
 msgid "Add New Information Source"
 msgstr "新增数据源"
 
-#: admin/PageSource.py:333
+#: admin/PageSource.py:357
 #, fuzzy
 msgid "Clone Information Source"
 msgstr "数据源"
 
-#: admin/PageSource.py:338
+#: admin/PageSource.py:362
 #, fuzzy
 msgid "Clone Selected Information Source"
 msgstr "数据源"
 
-#: admin/PageSource.py:358
+#: admin/PageSource.py:382
 #, fuzzy
 msgid "Sources Filtering"
 msgstr "网页目录"
@@ -2141,53 +2137,53 @@ msgstr "不检查来源"
 
 #: admin/PageVServer.py:412
 #, fuzzy
-msgid "Logging Option"
+msgid "Logging Options"
 msgstr "启用日志"
 
-#: admin/PageVServer.py:436
+#: admin/PageVServer.py:448
 msgid "Certificate"
 msgstr "证书"
 
-#: admin/PageVServer.py:437
+#: admin/PageVServer.py:449
 msgid "Certificate key"
 msgstr "加密证书"
 
-#: admin/PageVServer.py:442
+#: admin/PageVServer.py:454
 #, fuzzy
 msgid "Required SSL/TLS Values"
 msgstr "必要的 SSL/TLS 值"
 
-#: admin/PageVServer.py:447
+#: admin/PageVServer.py:459
 msgid "Ciphers"
 msgstr "密码"
 
-#: admin/PageVServer.py:448
+#: admin/PageVServer.py:460
 msgid "Client Certs. Request"
 msgstr "客户端证书. 请求"
 
-#: admin/PageVServer.py:451
+#: admin/PageVServer.py:463
 msgid "CA List"
 msgstr "CA 列表"
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:466
 msgid "Verify Depth"
 msgstr "验证"
 
-#: admin/PageVServer.py:460
+#: admin/PageVServer.py:472
 #, fuzzy
 msgid "Advanced Options"
 msgstr "高级选项"
 
-#: admin/PageVServer.py:479
+#: admin/PageVServer.py:491
 msgid "Basics"
 msgstr "基本配置"
 
-#: admin/PageVServer.py:480
+#: admin/PageVServer.py:492
 #, fuzzy
 msgid "Host Match"
 msgstr "最接近"
 
-#: admin/PageVServer.py:482
+#: admin/PageVServer.py:494
 msgid "Error Handler"
 msgstr "错误处理"
 
@@ -2248,7 +2244,7 @@ msgid "Not"
 msgstr "非"
 
 #: admin/Rule.py:150
-msgid "Select.."
+msgid "Select…"
 msgstr ""
 
 #: admin/Wizard.py:195
@@ -2652,13 +2648,13 @@ msgstr "服务器%s运行中.. 进程号=%d 端口=%d"
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "服务器%s运行中.. 进程号=%d 端口=%d"
 
-#: admin/server.py:124
+#: admin/server.py:132
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "不正确的参数: PORT CONFIG_FILE"
 
 #: admin/util.py:35
 #, fuzzy
-msgid "Deactived"
+msgid "Inactive"
 msgstr "激活"
 
 #: admin/util.py:35
@@ -2787,6 +2783,21 @@ msgstr "虚拟主机名称正在被使用中"
 #: admin/validations.py:344 admin/validations.py:354 admin/validations.py:371
 msgid "Already in use"
 msgstr ""
+
+#, fuzzy
+#~ msgid "%s Support"
+#~ msgstr "支持"
+
+#, fuzzy
+#~ msgid "Add new %s"
+#~ msgstr "新增"
+
+#, fuzzy
+#~ msgid "Deactived"
+#~ msgstr "激活"
+
+#~ msgid "Choose.."
+#~ msgstr "选择.."
 
 #~ msgid "ERROR: Couldn't execute '%s -i'"
 #~ msgstr "错误: 执行 '%s -i' 失败"
@@ -3555,9 +3566,6 @@ msgstr ""
 
 #~ msgid "Details:"
 #~ msgstr "详细:"
-
-#~ msgid "Add a new"
-#~ msgstr "新增"
 
 #~ msgid "Source usage"
 #~ msgstr "数据源使用"
