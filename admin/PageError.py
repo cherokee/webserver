@@ -54,15 +54,15 @@ class PageErrorLaunch (CTK.Page):
                 break
 
         # Build the page content
+        template['title'] = _('Server Launch Error')
+
         if self._error:
-            template['title'] = '%s' %(self._error['title'])
             self._build_error_py()
         else:
-            template['title'] = _('Server Launch Error')
             self._build_error_raw()
 
     def _build_error_py (self):
-        self += CTK.RawHTML ('<h1>%s</h1>' %(_('Server Launch Error')))
+        self += CTK.RawHTML ('<h1>%s</h1>' %(self._error['title']))
         self += CTK.Box ({'class': 'description'}, CTK.RawHTML(self._error.get('description','')))
 
         admin_url = self._error.get('admin_url')

@@ -380,7 +380,7 @@ e('LOGGER_WRITER_UNKNOWN',
 
 e('LOGGER_WRITER_READ',
   title = "Logger writer (%s): Could not read the filename.",
-  desc  = BROKEN_CONFIG)
+  desc  = "A property of the log writer is missing. Odds are you selected to write the output of the log into a file but you did not define it.")
 
 e('LOGGER_WRITER_APPEND',
   title = "Could not open '%s' for appending",
