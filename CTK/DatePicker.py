@@ -28,7 +28,7 @@ HEADERS = [
 ]
 
 HTML = """
-<input type="text" id="%(id)s"%(props)s>
+<input type="text" id="%(id)s"%(props)s />
 """
 
 JS = """

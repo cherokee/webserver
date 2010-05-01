@@ -30,7 +30,7 @@ class HiddenField (Widget):
 
     def Render (self):
         # Render the text field
-        html = '<input type="hidden" id="%s"%s />' %(self.id, props_to_str(self.props))
+        html = '<input type="hidden" id="%s" %s/>' %(self.id, props_to_str(self.props))
 
         render = Widget.Render(self)
         render.html += html
