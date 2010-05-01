@@ -71,19 +71,19 @@ class Save:
             all += CTK.RawHTML ('<p>%s</p>' %(SAVED_RESTART))
 
             submit = CTK.Submitter (URL_SAVE_NONE)
-            submit += CTK.Hidden('none')
+            submit += CTK.Hidden('none', 'foo')
             submit += CTK.SubmitterButton (_('Do not restart'))
             submit.bind ('submit_success', dialog.JS_to_close())
             all += submit
 
             submit = CTK.Submitter (URL_SAVE_GRACEFUL)
-            submit += CTK.Hidden('graceful')
+            submit += CTK.Hidden('graceful', 'foo')
             submit += CTK.SubmitterButton (_('Graceful restart'))
             submit.bind ('submit_success', dialog.JS_to_close())
             all += submit
 
             submit = CTK.Submitter (URL_SAVE_HARD)
-            submit += CTK.Hidden('hard')
+            submit += CTK.Hidden('hard', 'foo')
             submit += CTK.SubmitterButton (_('Hard restart'))
             submit.bind ('submit_success', dialog.JS_to_close())
             all += submit
@@ -92,7 +92,7 @@ class Save:
             all += CTK.RawHTML ('<p>%s</p>' %(SAVED_NO_RUNNING))
 
             submit = CTK.Submitter (URL_SAVE_NONE)
-            submit += CTK.Hidden('none')
+            submit += CTK.Hidden('none', 'foo')
             submit += CTK.SubmitterButton (_('OK'))
             submit.bind ('submit_success', dialog.JS_to_close())
             all += submit
