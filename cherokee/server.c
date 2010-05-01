@@ -414,7 +414,11 @@ print_banner (cherokee_server_t *srv)
 
 		b += 1;
 		if (! cherokee_buffer_is_empty(&bind->ip)) {
-			cherokee_buffer_add_buffer (&n, &bind->ip);
+			if (strchr (bind->ip.buf, ':')) {
+				cherokee_buffer_add_va (&n, "[%s]", bind->ip.buf);
+			} else {
+				cherokee_buffer_add_buffer (&n, &bind->ip);
+			}
 		} else {
 			cherokee_buffer_add_str (&n, "ALL");
 		}
