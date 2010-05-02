@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-04-29 17:49+0200\n"
+"POT-Creation-Date: 2010-05-02 23:02+0200\n"
 "PO-Revision-Date: 2009-05-12 15:10+0100\n"
 "Last-Translator: Andreas Sinz <andreas.sinz@aon.at>\n"
 "Language-Team: none\n"
@@ -143,15 +143,15 @@ msgstr ""
 
 #: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
-#: admin/PageVServer.py:119
+#: admin/PageVServer.py:120
 msgid "Enabled"
 msgstr "Akiviert"
 
-#: admin/CgiBase.py:70 admin/PageVServer.py:403
+#: admin/CgiBase.py:70 admin/PageVServer.py:408
 msgid "Don't check origin"
 msgstr ""
 
-#: admin/CgiBase.py:72 admin/PageVServer.py:406
+#: admin/CgiBase.py:72 admin/PageVServer.py:411
 #, fuzzy
 msgid "Accept from Hosts"
 msgstr "Erlaube Domains"
@@ -278,7 +278,7 @@ msgid ""
 msgstr ""
 
 #: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
-#: admin/PageStatus.py:70 admin/PageVServer.py:506 admin/PageVServers.py:193
+#: admin/PageStatus.py:70 admin/PageVServer.py:511 admin/PageVServers.py:193
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "Allows to specify an alternative Document Root path."
 msgstr ""
 
-#: admin/Handler.py:43 admin/PageVServer.py:297 admin/PageVServers.py:127
+#: admin/Handler.py:43 admin/PageVServer.py:298 admin/PageVServers.py:127
 msgid "Document Root"
 msgstr "Hauptordner"
 
@@ -744,7 +744,7 @@ msgstr ""
 msgid "Deflate encoder"
 msgstr ""
 
-#: admin/PageEntry.py:64 admin/PageEntry.py:127 admin/PageVServer.py:110
+#: admin/PageEntry.py:64 admin/PageEntry.py:127 admin/PageVServer.py:111
 msgid "Authentication"
 msgstr "Authentifizierung"
 
@@ -757,7 +757,7 @@ msgstr "Authentifizierung"
 msgid "Leave unset"
 msgstr ""
 
-#: admin/PageEntry.py:70 admin/PageVServer.py:305
+#: admin/PageEntry.py:70 admin/PageVServer.py:306
 msgid "Allow"
 msgstr "Erlauben"
 
@@ -769,7 +769,7 @@ msgstr ""
 msgid "Limit traffic to"
 msgstr "Begrenze den Datenverkehr auf"
 
-#: admin/PageEntry.py:93 admin/PageEntry.py:252 admin/PageVServer.py:116
+#: admin/PageEntry.py:93 admin/PageEntry.py:252 admin/PageVServer.py:117
 msgid "Traffic Shaping"
 msgstr ""
 
@@ -777,7 +777,7 @@ msgstr ""
 msgid "Skip Logging"
 msgstr ""
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:495
+#: admin/PageEntry.py:108 admin/PageVServer.py:500
 msgid "Logging"
 msgstr "Protokollierung"
 
@@ -797,7 +797,7 @@ msgstr "Zugriffsbeschränkungen"
 msgid "Validation Mechanism"
 msgstr ""
 
-#: admin/PageEntry.py:138 admin/PageVServer.py:114
+#: admin/PageEntry.py:138 admin/PageVServer.py:115
 msgid "Expiration"
 msgstr ""
 
@@ -805,7 +805,7 @@ msgstr ""
 msgid "Time to expire"
 msgstr ""
 
-#: admin/PageEntry.py:154 admin/PageVServer.py:115
+#: admin/PageEntry.py:154 admin/PageVServer.py:116
 msgid "Timeout"
 msgstr ""
 
@@ -837,7 +837,7 @@ msgid "Matching Rule"
 msgstr ""
 
 #: admin/PageEntry.py:222 admin/PageEntry.py:224 admin/PageEntry.py:248
-#: admin/PageVServer.py:109
+#: admin/PageVServer.py:110
 msgid "Handler"
 msgstr ""
 
@@ -854,7 +854,7 @@ msgstr ""
 msgid "Time"
 msgstr "Design"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:496
+#: admin/PageEntry.py:251 admin/PageVServer.py:501
 msgid "Security"
 msgstr "Sicherheit"
 
@@ -865,7 +865,7 @@ msgid ""
 "problem can he solved in there."
 msgstr ""
 
-#: admin/PageError.py:61 admin/PageError.py:65 admin/PageError.py:83
+#: admin/PageError.py:57 admin/PageError.py:83
 #, fuzzy
 msgid "Server Launch Error"
 msgstr "Server Info"
@@ -916,7 +916,7 @@ msgstr "Erzeuge eine neue Konfigurationsdatei"
 
 #: admin/PageError.py:145
 msgid ""
-"Most probably cherokee-admin is trying to read an old configuation file. "
+"Most probably cherokee-admin is trying to read an old configuration file. "
 "Please, remove it so cherokee-admin can create a new one with the right "
 "format."
 msgstr ""
@@ -1135,7 +1135,7 @@ msgstr "Gruppe"
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:228 admin/PageVServer.py:308
+#: admin/PageGeneral.py:228 admin/PageVServer.py:309
 msgid "Network"
 msgstr "Netzwerk"
 
@@ -1496,7 +1496,7 @@ msgstr ""
 msgid "Remove"
 msgstr "Löschen"
 
-#: admin/PageRule.py:231 admin/PageVServer.py:118
+#: admin/PageRule.py:231 admin/PageVServer.py:119
 msgid "Final"
 msgstr ""
 
@@ -1537,7 +1537,7 @@ msgstr "Klonen"
 msgid "Clone Selected Behavior Rule"
 msgstr ""
 
-#: admin/PageRule.py:296 admin/PageVServer.py:493
+#: admin/PageRule.py:296 admin/PageVServer.py:498
 msgid "Behavior"
 msgstr "Verhalten"
 
@@ -1621,7 +1621,7 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr ""
 
-#: admin/PageSource.py:180 admin/PageVServer.py:498
+#: admin/PageSource.py:180 admin/PageVServer.py:503
 msgid "Virtual Server"
 msgstr "Virtueller Server"
 
@@ -1677,7 +1677,7 @@ msgstr "Zeige Informationen"
 msgid "Sources Filtering"
 msgstr "Ordner"
 
-#: admin/PageSources.py:35 admin/PageVServer.py:102 admin/PageVServers.py:48
+#: admin/PageSources.py:35 admin/PageVServer.py:103 admin/PageVServers.py:48
 #: admin/PageVServers.py:274
 msgid "Virtual Servers"
 msgstr "Virtuelle Server"
@@ -1702,132 +1702,132 @@ msgstr "Server Status"
 msgid "Virtual Server Filtering"
 msgstr "Virtueller Server"
 
-#: admin/PageVServer.py:40
+#: admin/PageVServer.py:41
 msgid "Nickname for the virtual server."
 msgstr "Name des virtuellen Servers"
 
-#: admin/PageVServer.py:41
+#: admin/PageVServer.py:42
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
 msgstr ""
 
-#: admin/PageVServer.py:42
+#: admin/PageVServer.py:43
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr ""
 
-#: admin/PageVServer.py:43
+#: admin/PageVServer.py:44
 msgid ""
 "File containing the trusted CA certificates, utilized for checking the "
 "client certificates (Full path to the file)"
 msgstr ""
 
-#: admin/PageVServer.py:44
+#: admin/PageVServer.py:45
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
 "ciphers supported by the OpenSSL version used)."
 msgstr ""
 
-#: admin/PageVServer.py:45
+#: admin/PageVServer.py:46
 msgid "Skip, Accept or Require client certificates."
 msgstr ""
 
-#: admin/PageVServer.py:46
+#: admin/PageVServer.py:47
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
 msgstr ""
 
-#: admin/PageVServer.py:47
+#: admin/PageVServer.py:48
 msgid "Allows the selection of how to generate the error responses."
 msgstr ""
 
-#: admin/PageVServer.py:48
+#: admin/PageVServer.py:49
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
 msgstr ""
 
-#: admin/PageVServer.py:49
+#: admin/PageVServer.py:50
 msgid "The personal web support is currently turned on."
 msgstr ""
 
-#: admin/PageVServer.py:50
+#: admin/PageVServer.py:51
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
 msgstr ""
 "Fügt einen neuen Domainnamen hinzu. Platzhalter sind erlaubt im Domainnamen."
 
-#: admin/PageVServer.py:51
+#: admin/PageVServer.py:52
 msgid "Virtual Server root directory."
 msgstr "Hauptverzeichnis des virtuellen Servers"
 
-#: admin/PageVServer.py:52
+#: admin/PageVServer.py:53
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
 msgstr ""
 
-#: admin/PageVServer.py:53
+#: admin/PageVServer.py:54
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 msgstr ""
 
-#: admin/PageVServer.py:54
+#: admin/PageVServer.py:55
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 msgstr ""
 
-#: admin/PageVServer.py:55
+#: admin/PageVServer.py:56
 msgid "The Logging is currently enabled."
 msgstr "Die Protokollierung ist zur Zeit aktiviert."
 
-#: admin/PageVServer.py:56
+#: admin/PageVServer.py:57
 msgid "Logging format. Apache compatible is highly recommended here."
 msgstr "Protokollierungsformat. Apache kompatibilität ist sehr empfohlen hier."
 
-#: admin/PageVServer.py:57
+#: admin/PageVServer.py:58
 msgid "Back-end used to store the log accesses."
 msgstr ""
 
-#: admin/PageVServer.py:58
+#: admin/PageVServer.py:59
 msgid "Back-end used to store the log errors."
 msgstr ""
 
-#: admin/PageVServer.py:59
+#: admin/PageVServer.py:60
 msgid "Back-end used to store the log accesses and errors."
 msgstr ""
 
-#: admin/PageVServer.py:60
+#: admin/PageVServer.py:61
 msgid "Full path to the file where the information will be saved."
 msgstr ""
 
-#: admin/PageVServer.py:61
+#: admin/PageVServer.py:62
 msgid "Path to the executable that will be invoked on each log entry."
 msgstr ""
 
-#: admin/PageVServer.py:62
+#: admin/PageVServer.py:63
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
 "headers (send by reverse proxies)."
 msgstr ""
 
-#: admin/PageVServer.py:63
+#: admin/PageVServer.py:64
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
 msgstr ""
 
-#: admin/PageVServer.py:64
+#: admin/PageVServer.py:65
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
 "Forwarded-For headers."
 msgstr ""
 
-#: admin/PageVServer.py:65
+#: admin/PageVServer.py:66
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr ""
 
-#: admin/PageVServer.py:66
+#: admin/PageVServer.py:67
 msgid ""
 "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
 "${protocol}, ${transport}, ${port_server}, ${query_string}, "
@@ -1836,299 +1836,299 @@ msgid ""
 "${response_size}"
 msgstr ""
 
-#: admin/PageVServer.py:67
+#: admin/PageVServer.py:68
 msgid "Allows the selection of domain matching method."
 msgstr ""
 
-#: admin/PageVServer.py:68
+#: admin/PageVServer.py:69
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
 msgstr ""
 
-#: admin/PageVServer.py:69
+#: admin/PageVServer.py:70
 msgid "Time standard to use in the log file entries."
 msgstr ""
 
-#: admin/PageVServer.py:71
+#: admin/PageVServer.py:72
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr ""
 
-#: admin/PageVServer.py:103
+#: admin/PageVServer.py:104
 msgid "Loggers"
 msgstr ""
 
-#: admin/PageVServer.py:104
+#: admin/PageVServer.py:105
 msgid "SSL cookbook"
 msgstr ""
 
-#: admin/PageVServer.py:108
+#: admin/PageVServer.py:109
 #, fuzzy
 msgid "Rule Match"
 msgstr "Pfad"
 
-#: admin/PageVServer.py:108
+#: admin/PageVServer.py:109
 msgid "Match"
 msgstr ""
 
-#: admin/PageVServer.py:109
+#: admin/PageVServer.py:110
 msgid "Assigned Handler"
 msgstr ""
 
-#: admin/PageVServer.py:110
+#: admin/PageVServer.py:111
 msgid "Auth"
 msgstr ""
 
-#: admin/PageVServer.py:111
+#: admin/PageVServer.py:112
 #, fuzzy
 msgid "Custom Document Root"
 msgstr "Hauptordner"
 
-#: admin/PageVServer.py:111
+#: admin/PageVServer.py:112
 msgid "Root"
 msgstr "Hauptverzeichnis"
 
-#: admin/PageVServer.py:112
+#: admin/PageVServer.py:113
 msgid "Only HTTPS"
 msgstr ""
 
-#: admin/PageVServer.py:112
+#: admin/PageVServer.py:113
 #, fuzzy
 msgid "Secure"
 msgstr "Sicherheit"
 
-#: admin/PageVServer.py:113
+#: admin/PageVServer.py:114
 msgid "Encoders"
 msgstr ""
 
-#: admin/PageVServer.py:113
+#: admin/PageVServer.py:114
 msgid "Enc"
 msgstr ""
 
-#: admin/PageVServer.py:114
+#: admin/PageVServer.py:115
 msgid "Exp"
 msgstr ""
 
-#: admin/PageVServer.py:115
+#: admin/PageVServer.py:116
 #, fuzzy
 msgid "Connection Timeout"
 msgstr "Verbindungen"
 
-#: admin/PageVServer.py:116
+#: admin/PageVServer.py:117
 #, fuzzy
 msgid "Shaping"
 msgstr "Change"
 
-#: admin/PageVServer.py:117
+#: admin/PageVServer.py:118
 #, fuzzy
 msgid "Logging Enabled"
 msgstr "Akiviert"
 
-#: admin/PageVServer.py:117
+#: admin/PageVServer.py:118
 #, fuzzy
 msgid "Log"
 msgstr "Protokollierung"
 
-#: admin/PageVServer.py:118
+#: admin/PageVServer.py:119
 #, fuzzy
 msgid "Rule is Final"
 msgstr "Liste der Regeln"
 
-#: admin/PageVServer.py:119
+#: admin/PageVServer.py:120
 #, fuzzy
 msgid "Rule is Active"
 msgstr "Liste der Regeln"
 
-#: admin/PageVServer.py:144
+#: admin/PageVServer.py:145
 #, fuzzy
 msgid "Host Names"
 msgstr "Hostnamen"
 
-#: admin/PageVServer.py:154 admin/PageVServer.py:314 admin/PageVServer.py:330
+#: admin/PageVServer.py:155 admin/PageVServer.py:315 admin/PageVServer.py:331
 msgid "Method"
 msgstr ""
 
-#: admin/PageVServer.py:199
+#: admin/PageVServer.py:200
 #, fuzzy
 msgid "Behavior Rules"
 msgstr "Verhalten"
 
-#: admin/PageVServer.py:203
+#: admin/PageVServer.py:204
 msgid "Rule Management"
 msgstr ""
 
-#: admin/PageVServer.py:228
+#: admin/PageVServer.py:229
 #, fuzzy
 msgid "Only accept Secure Connections"
 msgstr "Erlaube Domains"
 
-#: admin/PageVServer.py:233
+#: admin/PageVServer.py:234
 #, fuzzy
 msgid "Encoding enabled"
 msgstr "Akiviert"
 
-#: admin/PageVServer.py:239
+#: admin/PageVServer.py:240
 msgid "no"
 msgstr ""
 
-#: admin/PageVServer.py:250
+#: admin/PageVServer.py:251
 #, fuzzy
 msgid " seconds"
 msgstr "Icons"
 
-#: admin/PageVServer.py:255
+#: admin/PageVServer.py:256
 msgid " bytes per second"
 msgstr ""
 
-#: admin/PageVServer.py:260
+#: admin/PageVServer.py:261
 msgid "Logging enabled for this rule"
 msgstr ""
 
-#: admin/PageVServer.py:265
+#: admin/PageVServer.py:266
 msgid "Prevents further rule evaluation"
 msgstr ""
 
-#: admin/PageVServer.py:270
+#: admin/PageVServer.py:271
 #, fuzzy
 msgid "Rule is active"
 msgstr "Liste der Regeln"
 
-#: admin/PageVServer.py:290
+#: admin/PageVServer.py:291
 msgid "Virtual Server nickname"
 msgstr "Virtueller-Server Name"
 
-#: admin/PageVServer.py:292
+#: admin/PageVServer.py:293
 msgid "Server ID"
 msgstr "Server ID"
 
-#: admin/PageVServer.py:298
+#: admin/PageVServer.py:299
 msgid "Directory Indexes"
 msgstr ""
 
-#: admin/PageVServer.py:300
+#: admin/PageVServer.py:301
 msgid "Paths"
 msgstr "Pfade"
 
-#: admin/PageVServer.py:305
+#: admin/PageVServer.py:306
 msgid "Keep-alive"
 msgstr ""
 
-#: admin/PageVServer.py:306
+#: admin/PageVServer.py:307
 msgid "Max Upload Size"
 msgstr "Maximale Upload Größe"
 
-#: admin/PageVServer.py:316
+#: admin/PageVServer.py:317
 msgid "Advanced Virtual Hosting"
 msgstr "Erweitertes virtuelles Hosting"
 
-#: admin/PageVServer.py:332
+#: admin/PageVServer.py:333
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:343 admin/consts.py:224 admin/consts.py:241
+#: admin/PageVServer.py:344 admin/consts.py:224 admin/consts.py:241
 #, fuzzy
 msgid "Disabled"
 msgstr "Deaktivieren"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:348
 msgid "Write errors to"
 msgstr ""
 
-#: admin/PageVServer.py:351 admin/PageVServer.py:383
+#: admin/PageVServer.py:352 admin/PageVServer.py:388
 msgid "Filename"
 msgstr "Dateiname"
 
-#: admin/PageVServer.py:353 admin/PageVServer.py:386
+#: admin/PageVServer.py:354 admin/PageVServer.py:391
 msgid "Command"
 msgstr ""
 
-#: admin/PageVServer.py:359
+#: admin/PageVServer.py:360
 #, fuzzy
 msgid "Error Logging"
 msgstr "Protokollierung"
 
-#: admin/PageVServer.py:370
+#: admin/PageVServer.py:371
 msgid "Format"
 msgstr "Format"
 
-#: admin/PageVServer.py:377
+#: admin/PageVServer.py:378
 msgid "Write accesses to"
 msgstr ""
 
-#: admin/PageVServer.py:391
+#: admin/PageVServer.py:396
 msgid "Template: "
 msgstr ""
 
-#: admin/PageVServer.py:393
+#: admin/PageVServer.py:398
 #, fuzzy
 msgid "Access Logging"
 msgstr "Protokollierung"
 
-#: admin/PageVServer.py:399
+#: admin/PageVServer.py:404
 msgid "Time standard"
 msgstr ""
 
-#: admin/PageVServer.py:400
+#: admin/PageVServer.py:405
 msgid "Accept Forwarded IPs"
 msgstr ""
 
-#: admin/PageVServer.py:400 admin/consts.py:219
+#: admin/PageVServer.py:405 admin/consts.py:219
 msgid "Accept"
 msgstr "Annehmen"
 
-#: admin/PageVServer.py:403
+#: admin/PageVServer.py:408
 #, fuzzy
 msgid "Do not check"
 msgstr "Nicht Neustarten"
 
-#: admin/PageVServer.py:412
+#: admin/PageVServer.py:417
 #, fuzzy
 msgid "Logging Options"
 msgstr "Protokollierung"
 
-#: admin/PageVServer.py:448
+#: admin/PageVServer.py:453
 msgid "Certificate"
 msgstr ""
 
-#: admin/PageVServer.py:449
+#: admin/PageVServer.py:454
 msgid "Certificate key"
 msgstr ""
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:459
 msgid "Required SSL/TLS Values"
 msgstr ""
 
-#: admin/PageVServer.py:459
+#: admin/PageVServer.py:464
 msgid "Ciphers"
 msgstr ""
 
-#: admin/PageVServer.py:460
+#: admin/PageVServer.py:465
 msgid "Client Certs. Request"
 msgstr ""
 
-#: admin/PageVServer.py:463
+#: admin/PageVServer.py:468
 msgid "CA List"
 msgstr ""
 
-#: admin/PageVServer.py:466
+#: admin/PageVServer.py:471
 msgid "Verify Depth"
 msgstr ""
 
-#: admin/PageVServer.py:472
+#: admin/PageVServer.py:477
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Erweiterte Optionen"
 
-#: admin/PageVServer.py:491
+#: admin/PageVServer.py:496
 msgid "Basics"
 msgstr ""
 
-#: admin/PageVServer.py:492
+#: admin/PageVServer.py:497
 #, fuzzy
 msgid "Host Match"
 msgstr "Hostnamen"
 
-#: admin/PageVServer.py:494
+#: admin/PageVServer.py:499
 msgid "Error Handler"
 msgstr ""
 

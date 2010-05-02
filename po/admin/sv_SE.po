@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee-admin 0.99.16\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-04-29 17:49+0200\n"
+"POT-Creation-Date: 2010-05-02 23:02+0200\n"
 "PO-Revision-Date: 2009-06-02 12:23+0100\n"
 "Last-Translator: Andreas Andersson <andreas@cyberdelic.org>\n"
 "Language-Team: Swedish <LL@li.org>\n"
@@ -153,16 +153,16 @@ msgstr ""
 
 #: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
-#: admin/PageVServer.py:119
+#: admin/PageVServer.py:120
 #, fuzzy
 msgid "Enabled"
 msgstr "Aktiverad"
 
-#: admin/CgiBase.py:70 admin/PageVServer.py:403
+#: admin/CgiBase.py:70 admin/PageVServer.py:408
 msgid "Don't check origin"
 msgstr "Kolla inte ursprung"
 
-#: admin/CgiBase.py:72 admin/PageVServer.py:406
+#: admin/CgiBase.py:72 admin/PageVServer.py:411
 msgid "Accept from Hosts"
 msgstr "Acceptera från värd(ar)"
 
@@ -291,7 +291,7 @@ msgid ""
 msgstr ""
 
 #: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
-#: admin/PageStatus.py:70 admin/PageVServer.py:506 admin/PageVServers.py:193
+#: admin/PageStatus.py:70 admin/PageVServer.py:511 admin/PageVServers.py:193
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -305,7 +305,7 @@ msgstr "Trafikstatistik"
 msgid "Allows to specify an alternative Document Root path."
 msgstr "Tillåter att ange en alternativ dokumentroot."
 
-#: admin/Handler.py:43 admin/PageVServer.py:297 admin/PageVServers.py:127
+#: admin/Handler.py:43 admin/PageVServer.py:298 admin/PageVServers.py:127
 msgid "Document Root"
 msgstr "Dokumentrot"
 
@@ -788,7 +788,7 @@ msgstr ""
 msgid "Deflate encoder"
 msgstr "Deflate"
 
-#: admin/PageEntry.py:64 admin/PageEntry.py:127 admin/PageVServer.py:110
+#: admin/PageEntry.py:64 admin/PageEntry.py:127 admin/PageVServer.py:111
 msgid "Authentication"
 msgstr "Autentisering"
 
@@ -801,7 +801,7 @@ msgstr "Autentiseringslista"
 msgid "Leave unset"
 msgstr ""
 
-#: admin/PageEntry.py:70 admin/PageVServer.py:305
+#: admin/PageEntry.py:70 admin/PageVServer.py:306
 msgid "Allow"
 msgstr "Tillåt"
 
@@ -813,7 +813,7 @@ msgstr ""
 msgid "Limit traffic to"
 msgstr "Begränsa trafik till"
 
-#: admin/PageEntry.py:93 admin/PageEntry.py:252 admin/PageVServer.py:116
+#: admin/PageEntry.py:93 admin/PageEntry.py:252 admin/PageVServer.py:117
 msgid "Traffic Shaping"
 msgstr "Trafikmodellering"
 
@@ -821,7 +821,7 @@ msgstr "Trafikmodellering"
 msgid "Skip Logging"
 msgstr "Hoppa över loggning"
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:495
+#: admin/PageEntry.py:108 admin/PageVServer.py:500
 msgid "Logging"
 msgstr "Loggning"
 
@@ -841,7 +841,7 @@ msgstr "Åtkomstrestriktioner"
 msgid "Validation Mechanism"
 msgstr "Mekanism för validering"
 
-#: admin/PageEntry.py:138 admin/PageVServer.py:114
+#: admin/PageEntry.py:138 admin/PageVServer.py:115
 msgid "Expiration"
 msgstr "Förfallande"
 
@@ -849,7 +849,7 @@ msgstr "Förfallande"
 msgid "Time to expire"
 msgstr "Tid att förfalla"
 
-#: admin/PageEntry.py:154 admin/PageVServer.py:115
+#: admin/PageEntry.py:154 admin/PageVServer.py:116
 msgid "Timeout"
 msgstr "Timeout"
 
@@ -881,7 +881,7 @@ msgid "Matching Rule"
 msgstr "Matchande regel"
 
 #: admin/PageEntry.py:222 admin/PageEntry.py:224 admin/PageEntry.py:248
-#: admin/PageVServer.py:109
+#: admin/PageVServer.py:110
 msgid "Handler"
 msgstr "Hanterare"
 
@@ -898,7 +898,7 @@ msgstr "Kodning"
 msgid "Time"
 msgstr "Timeout"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:496
+#: admin/PageEntry.py:251 admin/PageVServer.py:501
 msgid "Security"
 msgstr "Säkerhet"
 
@@ -909,7 +909,7 @@ msgid ""
 "problem can he solved in there."
 msgstr ""
 
-#: admin/PageError.py:61 admin/PageError.py:65 admin/PageError.py:83
+#: admin/PageError.py:57 admin/PageError.py:83
 #, fuzzy
 msgid "Server Launch Error"
 msgstr "Serverinfo"
@@ -960,7 +960,7 @@ msgstr "Skapa en ny konfigurations-fil"
 
 #: admin/PageError.py:145
 msgid ""
-"Most probably cherokee-admin is trying to read an old configuation file. "
+"Most probably cherokee-admin is trying to read an old configuration file. "
 "Please, remove it so cherokee-admin can create a new one with the right "
 "format."
 msgstr ""
@@ -1176,7 +1176,7 @@ msgstr "Grupp"
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:228 admin/PageVServer.py:308
+#: admin/PageGeneral.py:228 admin/PageVServer.py:309
 msgid "Network"
 msgstr "Nätverk"
 
@@ -1546,7 +1546,7 @@ msgstr ""
 msgid "Remove"
 msgstr "Ta bort"
 
-#: admin/PageRule.py:231 admin/PageVServer.py:118
+#: admin/PageRule.py:231 admin/PageVServer.py:119
 msgid "Final"
 msgstr ""
 
@@ -1587,7 +1587,7 @@ msgstr "Klona"
 msgid "Clone Selected Behavior Rule"
 msgstr ""
 
-#: admin/PageRule.py:296 admin/PageVServer.py:493
+#: admin/PageRule.py:296 admin/PageVServer.py:498
 msgid "Behavior"
 msgstr "Betéende"
 
@@ -1683,7 +1683,7 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr ""
 
-#: admin/PageSource.py:180 admin/PageVServer.py:498
+#: admin/PageSource.py:180 admin/PageVServer.py:503
 msgid "Virtual Server"
 msgstr "Virtuell server"
 
@@ -1740,7 +1740,7 @@ msgstr "Informationskällor"
 msgid "Sources Filtering"
 msgstr "Webkatalog"
 
-#: admin/PageSources.py:35 admin/PageVServer.py:102 admin/PageVServers.py:48
+#: admin/PageSources.py:35 admin/PageVServer.py:103 admin/PageVServers.py:48
 #: admin/PageVServers.py:274
 msgid "Virtual Servers"
 msgstr "Virtuella servrar"
@@ -1765,11 +1765,11 @@ msgstr "Serverstatus"
 msgid "Virtual Server Filtering"
 msgstr "Virtuell server"
 
-#: admin/PageVServer.py:40
+#: admin/PageVServer.py:41
 msgid "Nickname for the virtual server."
 msgstr "Namn för den virtuella servern."
 
-#: admin/PageVServer.py:41
+#: admin/PageVServer.py:42
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
@@ -1777,11 +1777,11 @@ msgstr ""
 "Detta direktiv pekar till den PEM-kodade certifikatfilen för servern (Hela "
 "sökvägen till filen)."
 
-#: admin/PageVServer.py:42
+#: admin/PageVServer.py:43
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr "PEM-kodad privat nyckelfil för servern (Hela sökvägen till filen)"
 
-#: admin/PageVServer.py:43
+#: admin/PageVServer.py:44
 #, fuzzy
 msgid ""
 "File containing the trusted CA certificates, utilized for checking the "
@@ -1790,7 +1790,7 @@ msgstr ""
 "Valbart: Fil som innehåller det betrodda  CA-certifikatet.  Används för att "
 "kolla klientcertifikat. (Hela sökvägen till filen)"
 
-#: admin/PageVServer.py:44
+#: admin/PageVServer.py:45
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
@@ -1800,12 +1800,12 @@ msgstr ""
 "www.openssl.org/docs/apps/ciphers.html\">Referens</a>.. ( Förvalt värde: "
 "alla chiffer som stöds  av  OpenSSL används)."
 
-#: admin/PageVServer.py:45
+#: admin/PageVServer.py:46
 #, fuzzy
 msgid "Skip, Accept or Require client certificates."
 msgstr "Valbart: Använd inte, acceptera eller kräv klientcertifikat."
 
-#: admin/PageVServer.py:46
+#: admin/PageVServer.py:47
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
@@ -1813,11 +1813,11 @@ msgstr ""
 "Begränsa till vilket djup certifikatet i en kedja används under "
 "verifikations-proceduren ( Förvalt värde: 1)"
 
-#: admin/PageVServer.py:47
+#: admin/PageVServer.py:48
 msgid "Allows the selection of how to generate the error responses."
 msgstr "Låter dig att välja hur felmeddelanden ska återges."
 
-#: admin/PageVServer.py:48
+#: admin/PageVServer.py:49
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
@@ -1825,20 +1825,20 @@ msgstr ""
 "Katalog att använda som rotkatalog inuti användarens hemkatalog. Används ej "
 "om fältet är tomt."
 
-#: admin/PageVServer.py:49
+#: admin/PageVServer.py:50
 msgid "The personal web support is currently turned on."
 msgstr "Funktionen för personliga hemsidor är förnärvarande på."
 
-#: admin/PageVServer.py:50
+#: admin/PageVServer.py:51
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
 msgstr ""
 "Lägger till ett nytt domännamn. Joker-tecken är tillåtna i domännamnet."
 
-#: admin/PageVServer.py:51
+#: admin/PageVServer.py:52
 msgid "Virtual Server root directory."
 msgstr "Rot-katalog för den virtuella servern."
 
-#: admin/PageVServer.py:52
+#: admin/PageVServer.py:53
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
@@ -1846,47 +1846,47 @@ msgstr ""
 "Lista av filer som används som katalog-index. Eg: <em>index.html,index.php</"
 "em>."
 
-#: admin/PageVServer.py:53
+#: admin/PageVServer.py:54
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 msgstr ""
 "Den maximala storleken i bytes för POST-uppladdningar. ( Förvalt värde: "
 "obegränsad)"
 
-#: admin/PageVServer.py:54
+#: admin/PageVServer.py:55
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 msgstr ""
 "Huruvida den här virtuella servern tillåts att använda Keep-alive ( Förvalt "
 "värde: Ja)"
 
-#: admin/PageVServer.py:55
+#: admin/PageVServer.py:56
 msgid "The Logging is currently enabled."
 msgstr "Loggning är för närvarande aktiverat."
 
-#: admin/PageVServer.py:56
+#: admin/PageVServer.py:57
 msgid "Logging format. Apache compatible is highly recommended here."
 msgstr "Format för loggning. Apache-kompatibla loggar rekommenderas här."
 
-#: admin/PageVServer.py:57
+#: admin/PageVServer.py:58
 msgid "Back-end used to store the log accesses."
 msgstr "Back-end att använda för att logga åtkomster."
 
-#: admin/PageVServer.py:58
+#: admin/PageVServer.py:59
 msgid "Back-end used to store the log errors."
 msgstr "Back-end att använda för att logga fel."
 
-#: admin/PageVServer.py:59
+#: admin/PageVServer.py:60
 msgid "Back-end used to store the log accesses and errors."
 msgstr "Back-end att använda för att logga åtkomster och fel."
 
-#: admin/PageVServer.py:60
+#: admin/PageVServer.py:61
 msgid "Full path to the file where the information will be saved."
 msgstr "Hela sökvägen till filen där informationen sparas."
 
-#: admin/PageVServer.py:61
+#: admin/PageVServer.py:62
 msgid "Path to the executable that will be invoked on each log entry."
 msgstr "Sökväg till binären som körs vid varje loggningstillfälle."
 
-#: admin/PageVServer.py:62
+#: admin/PageVServer.py:63
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
 "headers (send by reverse proxies)."
@@ -1894,7 +1894,7 @@ msgstr ""
 "Huruvida loggaren ska läsa och använda X-Real-IP och X-Forwarded-For-headers "
 "(skickas av omvända proxies)"
 
-#: admin/PageVServer.py:63
+#: admin/PageVServer.py:64
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
@@ -1902,7 +1902,7 @@ msgstr ""
 "Acceptera alla X-Real-IP och X-Forwarded-For-headers. VARNING: Aktivera bara "
 "om du vet vad du gör.."
 
-#: admin/PageVServer.py:64
+#: admin/PageVServer.py:65
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
 "Forwarded-For headers."
@@ -1910,12 +1910,12 @@ msgstr ""
 "Lista av IP-adresser och subnets som tillåts att skicka X-Real-IP och X-"
 "Forwarded-For-headers."
 
-#: admin/PageVServer.py:65
+#: admin/PageVServer.py:66
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr "Hur  \"Avancerad Virtual Hosting\" ska skötas. (Default: off)"
 
-#: admin/PageVServer.py:66
+#: admin/PageVServer.py:67
 #, fuzzy
 msgid ""
 "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
@@ -1929,21 +1929,21 @@ msgstr ""
 "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
 "${user_remote}, ${request}, ${request_original}, ${vserver_name}"
 
-#: admin/PageVServer.py:67
+#: admin/PageVServer.py:68
 msgid "Allows the selection of domain matching method."
 msgstr "Möjliggör valet av metod för matching av domäner."
 
-#: admin/PageVServer.py:68
+#: admin/PageVServer.py:69
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
 msgstr ""
 
-#: admin/PageVServer.py:69
+#: admin/PageVServer.py:70
 msgid "Time standard to use in the log file entries."
 msgstr ""
 
-#: admin/PageVServer.py:71
+#: admin/PageVServer.py:72
 #, fuzzy
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr ""
@@ -1951,284 +1951,284 @@ msgstr ""
 "<p>Den virtuella servern som konfigureras vid installation matchar alla  "
 "domännamn.</p>\n"
 
-#: admin/PageVServer.py:103
+#: admin/PageVServer.py:104
 msgid "Loggers"
 msgstr "Loggare"
 
-#: admin/PageVServer.py:104
+#: admin/PageVServer.py:105
 msgid "SSL cookbook"
 msgstr "SSL-kokbok"
 
-#: admin/PageVServer.py:108
+#: admin/PageVServer.py:109
 #, fuzzy
 msgid "Rule Match"
 msgstr "Filmatchningar"
 
-#: admin/PageVServer.py:108
+#: admin/PageVServer.py:109
 msgid "Match"
 msgstr "Matcha"
 
-#: admin/PageVServer.py:109
+#: admin/PageVServer.py:110
 #, fuzzy
 msgid "Assigned Handler"
 msgstr "Hanterare"
 
-#: admin/PageVServer.py:110
+#: admin/PageVServer.py:111
 msgid "Auth"
 msgstr ""
 
-#: admin/PageVServer.py:111
+#: admin/PageVServer.py:112
 #, fuzzy
 msgid "Custom Document Root"
 msgstr "Dokumentrot"
 
-#: admin/PageVServer.py:111
+#: admin/PageVServer.py:112
 msgid "Root"
 msgstr "Rot"
 
-#: admin/PageVServer.py:112
+#: admin/PageVServer.py:113
 msgid "Only HTTPS"
 msgstr ""
 
-#: admin/PageVServer.py:112
+#: admin/PageVServer.py:113
 #, fuzzy
 msgid "Secure"
 msgstr "Hemlighet"
 
-#: admin/PageVServer.py:113
+#: admin/PageVServer.py:114
 #, fuzzy
 msgid "Encoders"
 msgstr "Kodning"
 
-#: admin/PageVServer.py:113
+#: admin/PageVServer.py:114
 msgid "Enc"
 msgstr ""
 
-#: admin/PageVServer.py:114
+#: admin/PageVServer.py:115
 msgid "Exp"
 msgstr ""
 
-#: admin/PageVServer.py:115
+#: admin/PageVServer.py:116
 #, fuzzy
 msgid "Connection Timeout"
 msgstr "Anslutningar"
 
-#: admin/PageVServer.py:116
+#: admin/PageVServer.py:117
 #, fuzzy
 msgid "Shaping"
 msgstr "Trafikmodellering"
 
-#: admin/PageVServer.py:117
+#: admin/PageVServer.py:118
 #, fuzzy
 msgid "Logging Enabled"
 msgstr "Aktiverad"
 
-#: admin/PageVServer.py:117
+#: admin/PageVServer.py:118
 #, fuzzy
 msgid "Log"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:118
+#: admin/PageVServer.py:119
 #, fuzzy
 msgid "Rule is Final"
 msgstr "Regellista"
 
-#: admin/PageVServer.py:119
+#: admin/PageVServer.py:120
 #, fuzzy
 msgid "Rule is Active"
 msgstr "Regellista"
 
-#: admin/PageVServer.py:144
+#: admin/PageVServer.py:145
 #, fuzzy
 msgid "Host Names"
 msgstr "Värdnamn"
 
-#: admin/PageVServer.py:154 admin/PageVServer.py:314 admin/PageVServer.py:330
+#: admin/PageVServer.py:155 admin/PageVServer.py:315 admin/PageVServer.py:331
 msgid "Method"
 msgstr "Metod"
 
-#: admin/PageVServer.py:199
+#: admin/PageVServer.py:200
 #, fuzzy
 msgid "Behavior Rules"
 msgstr "Betéende-regler"
 
-#: admin/PageVServer.py:203
+#: admin/PageVServer.py:204
 msgid "Rule Management"
 msgstr ""
 
-#: admin/PageVServer.py:228
+#: admin/PageVServer.py:229
 #, fuzzy
 msgid "Only accept Secure Connections"
 msgstr "Godkända domäner"
 
-#: admin/PageVServer.py:233
+#: admin/PageVServer.py:234
 #, fuzzy
 msgid "Encoding enabled"
 msgstr "Kodning"
 
-#: admin/PageVServer.py:239
+#: admin/PageVServer.py:240
 msgid "no"
 msgstr ""
 
-#: admin/PageVServer.py:250
+#: admin/PageVServer.py:251
 #, fuzzy
 msgid " seconds"
 msgstr "Ikoner"
 
-#: admin/PageVServer.py:255
+#: admin/PageVServer.py:256
 msgid " bytes per second"
 msgstr ""
 
-#: admin/PageVServer.py:260
+#: admin/PageVServer.py:261
 msgid "Logging enabled for this rule"
 msgstr ""
 
-#: admin/PageVServer.py:265
+#: admin/PageVServer.py:266
 msgid "Prevents further rule evaluation"
 msgstr ""
 
-#: admin/PageVServer.py:270
+#: admin/PageVServer.py:271
 #, fuzzy
 msgid "Rule is active"
 msgstr "Regellista"
 
-#: admin/PageVServer.py:290
+#: admin/PageVServer.py:291
 msgid "Virtual Server nickname"
 msgstr "Smeknamn för virtuell server"
 
-#: admin/PageVServer.py:292
+#: admin/PageVServer.py:293
 msgid "Server ID"
 msgstr "Server-id"
 
-#: admin/PageVServer.py:298
+#: admin/PageVServer.py:299
 msgid "Directory Indexes"
 msgstr "Katalogindex"
 
-#: admin/PageVServer.py:300
+#: admin/PageVServer.py:301
 msgid "Paths"
 msgstr "Sökvägar"
 
-#: admin/PageVServer.py:305
+#: admin/PageVServer.py:306
 msgid "Keep-alive"
 msgstr "Keep-alive"
 
-#: admin/PageVServer.py:306
+#: admin/PageVServer.py:307
 msgid "Max Upload Size"
 msgstr "Max Uppladdnings-storlek"
 
-#: admin/PageVServer.py:316
+#: admin/PageVServer.py:317
 msgid "Advanced Virtual Hosting"
 msgstr "Avancerad Virtual Hosting"
 
-#: admin/PageVServer.py:332
+#: admin/PageVServer.py:333
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:343 admin/consts.py:224 admin/consts.py:241
+#: admin/PageVServer.py:344 admin/consts.py:224 admin/consts.py:241
 #, fuzzy
 msgid "Disabled"
 msgstr "Deaktivera"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:348
 msgid "Write errors to"
 msgstr ""
 
-#: admin/PageVServer.py:351 admin/PageVServer.py:383
+#: admin/PageVServer.py:352 admin/PageVServer.py:388
 msgid "Filename"
 msgstr "Filnamn"
 
-#: admin/PageVServer.py:353 admin/PageVServer.py:386
+#: admin/PageVServer.py:354 admin/PageVServer.py:391
 msgid "Command"
 msgstr "Kommando"
 
-#: admin/PageVServer.py:359
+#: admin/PageVServer.py:360
 #, fuzzy
 msgid "Error Logging"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:370
+#: admin/PageVServer.py:371
 msgid "Format"
 msgstr "Format"
 
-#: admin/PageVServer.py:377
+#: admin/PageVServer.py:378
 msgid "Write accesses to"
 msgstr ""
 
-#: admin/PageVServer.py:391
+#: admin/PageVServer.py:396
 msgid "Template: "
 msgstr "Mall:"
 
-#: admin/PageVServer.py:393
+#: admin/PageVServer.py:398
 #, fuzzy
 msgid "Access Logging"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:399
+#: admin/PageVServer.py:404
 msgid "Time standard"
 msgstr ""
 
-#: admin/PageVServer.py:400
+#: admin/PageVServer.py:405
 msgid "Accept Forwarded IPs"
 msgstr "Acceptera vidarebefodrade IPnummer."
 
-#: admin/PageVServer.py:400 admin/consts.py:219
+#: admin/PageVServer.py:405 admin/consts.py:219
 msgid "Accept"
 msgstr "Acceptera"
 
-#: admin/PageVServer.py:403
+#: admin/PageVServer.py:408
 #, fuzzy
 msgid "Do not check"
 msgstr "Kolla inte ursprung"
 
-#: admin/PageVServer.py:412
+#: admin/PageVServer.py:417
 #, fuzzy
 msgid "Logging Options"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:448
+#: admin/PageVServer.py:453
 msgid "Certificate"
 msgstr "Certifikat"
 
-#: admin/PageVServer.py:449
+#: admin/PageVServer.py:454
 msgid "Certificate key"
 msgstr "Certifikatnyckel"
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:459
 #, fuzzy
 msgid "Required SSL/TLS Values"
 msgstr "Obligatoriska SSL/TLS-värden"
 
-#: admin/PageVServer.py:459
+#: admin/PageVServer.py:464
 msgid "Ciphers"
 msgstr "Chiffer"
 
-#: admin/PageVServer.py:460
+#: admin/PageVServer.py:465
 msgid "Client Certs. Request"
 msgstr ""
 
-#: admin/PageVServer.py:463
+#: admin/PageVServer.py:468
 msgid "CA List"
 msgstr "CA-lista"
 
-#: admin/PageVServer.py:466
+#: admin/PageVServer.py:471
 msgid "Verify Depth"
 msgstr "Verifiera djup"
 
-#: admin/PageVServer.py:472
+#: admin/PageVServer.py:477
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Avancerade val"
 
-#: admin/PageVServer.py:491
+#: admin/PageVServer.py:496
 msgid "Basics"
 msgstr "Allmänt"
 
-#: admin/PageVServer.py:492
+#: admin/PageVServer.py:497
 #, fuzzy
 msgid "Host Match"
 msgstr "Närmast träff"
 
-#: admin/PageVServer.py:494
+#: admin/PageVServer.py:499
 msgid "Error Handler"
 msgstr "Felhanterare"
 
