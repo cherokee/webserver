@@ -142,7 +142,7 @@ def IconsMissing (path):
 
 
 ANCIENT_CONFIG_TITLE = N_('Cherokee-admin has detected a very old configuration file.')
-ANCIENT_CONFIG       = N_('Most probably cherokee-admin is trying to read an old configuation file. Please, remove it so cherokee-admin can create a new one with the right format.')
+ANCIENT_CONFIG       = N_('Most probably cherokee-admin is trying to read an old configuration file. Please, remove it so cherokee-admin can create a new one with the right format.')
 
 class AncientConfigError (CTK.Page):
     def __init__ (self, path, **kwargs):
