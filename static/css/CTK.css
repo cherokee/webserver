@@ -408,6 +408,10 @@ a.helpbutton span {
 #body-error .button { float: right; clear: both; }
 .cherokee-link { float: right; }
 
+#body-error .description { padding-left: 48px; margin-bottom: 16px; }
+#body-error .admin-url { padding-left: 48px; margin-bottom: 16px; }
+#body-error .time { float: right; color: #666; margin-bottom: 16px;  }
+
 
 /* Sortable Table
  */
