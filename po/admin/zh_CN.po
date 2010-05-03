@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.38' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-02 23:02+0200\n"
+"POT-Creation-Date: 2010-05-03 13:34+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -67,7 +67,8 @@ msgstr "负载均衡器要求必须配置至少一个数据源."
 msgid "Nick"
 msgstr "名称"
 
-#: admin/Balancer.py:67
+#: admin/Balancer.py:67 admin/plugins/mysql.py:72
+#: admin/wizards/coldfusion.py:194
 msgid "Host"
 msgstr "主机"
 
@@ -141,7 +142,11 @@ msgstr "允许 X-Real-IP"
 
 #: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
-#: admin/PageVServer.py:120
+#: admin/PageVServer.py:120 admin/plugins/dirlist.py:56
+#: admin/plugins/exists.py:105 admin/plugins/exists.py:111
+#: admin/plugins/exists.py:112 admin/plugins/exists.py:113
+#: admin/plugins/file.py:40 admin/plugins/ldap.py:53
+#: admin/plugins/streaming.py:43
 #, fuzzy
 msgid "Enabled"
 msgstr " 允许"
@@ -159,7 +164,7 @@ msgstr "接受访问的主机"
 msgid "Name"
 msgstr "姓名"
 
-#: admin/CgiBase.py:90 admin/CgiBase.py:154
+#: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/plugins/proxy.py:170
 msgid "Value"
 msgstr "值"
 
@@ -196,7 +201,7 @@ msgstr "允许 X-Sendfile"
 msgid "Common CGI Options"
 msgstr "一般 CGI 设置"
 
-#: admin/CgiBase.py:138
+#: admin/CgiBase.py:138 admin/plugins/authlist.py:87
 #, fuzzy
 msgid "Fixed Authentication List"
 msgstr "修复认证列表"
@@ -207,8 +212,12 @@ msgid "Custom Environment Variables"
 msgstr "自定义环境变量"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:258 admin/PageSource.py:344
-#: admin/PageVServers.py:235
+#: admin/PageGeneral.py:189 admin/PageRule.py:259 admin/PageSource.py:344
+#: admin/PageVServers.py:236 admin/plugins/authlist.py:93
+#: admin/plugins/error_redir.py:94 admin/plugins/proxy.py:117
+#: admin/plugins/proxy.py:166 admin/plugins/proxy.py:213
+#: admin/plugins/redir.py:114 admin/plugins/rehost.py:71
+#: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
 msgid "Add"
 msgstr "增加"
 
@@ -285,7 +294,7 @@ msgid ""
 msgstr "是否对此虚拟机进行流量及状态统计"
 
 #: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
-#: admin/PageStatus.py:70 admin/PageVServer.py:511 admin/PageVServers.py:193
+#: admin/PageStatus.py:70 admin/PageVServer.py:511 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "未知"
 
@@ -300,11 +309,13 @@ msgid "Allows to specify an alternative Document Root path."
 msgstr "允许指定的替代文件根路径."
 
 #: admin/Handler.py:43 admin/PageVServer.py:298 admin/PageVServers.py:127
+#: admin/wizards/django.py:190 admin/wizards/mono.py:199
+#: admin/wizards/uwsgi.py:242
 msgid "Document Root"
 msgstr "根目录"
 
 #: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
-#: admin/Mime.py:120 admin/consts.py:181
+#: admin/Mime.py:120 admin/consts.py:181 admin/plugins/extensions.py:57
 msgid "Extensions"
 msgstr "扩展"
 
@@ -318,7 +329,7 @@ msgstr "扩展列表"
 msgid "Add New Extension"
 msgstr "增加新的扩展"
 
-#: admin/Icons.py:152
+#: admin/Icons.py:152 admin/plugins/exists.py:74 admin/plugins/exists.py:110
 msgid "Files"
 msgstr "文件"
 
@@ -341,6 +352,7 @@ msgid "Default"
 msgstr "默认"
 
 #: admin/Icons.py:183 admin/Icons.py:314 admin/consts.py:180
+#: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "目录"
 
@@ -363,10 +375,10 @@ msgid "Add new"
 msgstr "新增"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:211 admin/PageRule.py:259
-#: admin/PageRule.py:285 admin/PageSource.py:331 admin/PageSource.py:345
-#: admin/PageSource.py:359 admin/PageVServers.py:201 admin/PageVServers.py:236
-#: admin/PageVServers.py:262
+#: admin/PageIndex.py:348 admin/PageRule.py:212 admin/PageRule.py:260
+#: admin/PageRule.py:286 admin/PageSource.py:331 admin/PageSource.py:345
+#: admin/PageSource.py:359 admin/PageVServers.py:202 admin/PageVServers.py:237
+#: admin/PageVServers.py:263 admin/plugins/redir.py:115
 #, fuzzy
 msgid "Cancel"
 msgstr "修改"
@@ -396,7 +408,9 @@ msgstr "缓存最大时间"
 msgid "Add New MIME-Type"
 msgstr "新增 MIME"
 
-#: admin/Mime.py:104
+#: admin/Mime.py:104 admin/plugins/error_redir.py:101
+#: admin/plugins/rehost.py:80 admin/plugins/target_ip.py:88
+#: admin/plugins/wildcard.py:79
 #, fuzzy
 msgid "Add New…"
 msgstr "新增"
@@ -626,7 +640,7 @@ msgstr "文件描述符"
 msgid "Listening queue length"
 msgstr "访问队列长度"
 
-#: admin/PageAdvanced.py:132
+#: admin/PageAdvanced.py:132 admin/plugins/proxy.py:236
 msgid "Reuse connections"
 msgstr "连接重用"
 
@@ -700,7 +714,7 @@ msgid "DH parameters: 4096 bits"
 msgstr "Diffie-Hellman参数(4096 比特)"
 
 #: admin/PageAdvanced.py:175 admin/PageAdvanced.py:185
-#: admin/PageGeneral.py:145
+#: admin/PageGeneral.py:145 admin/plugins/bind.py:92
 msgid "TLS"
 msgstr "TLS支持"
 
@@ -779,7 +793,9 @@ msgstr "认证列表"
 msgid "Leave unset"
 msgstr ""
 
-#: admin/PageEntry.py:70 admin/PageVServer.py:306
+#: admin/PageEntry.py:70 admin/PageVServer.py:306 admin/plugins/common.py:42
+#: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
+#: admin/plugins/proxy.py:237
 #, fuzzy
 msgid "Allow"
 msgstr "允许 "
@@ -830,6 +846,7 @@ msgid "Time to expire"
 msgstr "过期时间"
 
 #: admin/PageEntry.py:154 admin/PageVServer.py:116
+#: admin/plugins/secdownload.py:44
 msgid "Timeout"
 msgstr "超时"
 
@@ -1104,11 +1121,13 @@ msgstr "数据压缩"
 msgid "Upload Tracking"
 msgstr ""
 
-#: admin/PageGeneral.py:145 admin/PageGeneral.py:183
+#: admin/PageGeneral.py:145 admin/PageGeneral.py:183 admin/plugins/bind.py:92
+#: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
+#: admin/plugins/mysql.py:73
 msgid "Port"
 msgstr "端口"
 
-#: admin/PageGeneral.py:145
+#: admin/PageGeneral.py:145 admin/plugins/bind.py:92
 msgid "Bind to"
 msgstr "绑定到IP"
 
@@ -1140,7 +1159,8 @@ msgstr "服务器端口设置"
 msgid "Execution Permissions"
 msgstr "执行权限"
 
-#: admin/PageGeneral.py:215
+#: admin/PageGeneral.py:215 admin/plugins/authlist.py:63
+#: admin/plugins/authlist.py:97
 msgid "User"
 msgstr "用户"
 
@@ -1340,11 +1360,12 @@ msgstr "没有找到哦！~"
 msgid "Modified"
 msgstr "上次修改时间"
 
-#: admin/PageIndex.py:202
+#: admin/PageIndex.py:202 admin/plugins/bind.py:69 admin/plugins/bind.py:121
+#: admin/plugins/custom_error.py:41 admin/plugins/method.py:31
 msgid "Choose"
 msgstr "选择"
 
-#: admin/PageIndex.py:209
+#: admin/PageIndex.py:209 admin/plugins/dbslayer.py:49
 msgid "Language"
 msgstr "语言"
 
@@ -1455,7 +1476,7 @@ msgstr "规则"
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "设置: Apache logs, MIME types, icons, 等"
 
-#: admin/PageNewConfig.py:155 admin/consts.py:48
+#: admin/PageNewConfig.py:155 admin/consts.py:48 admin/plugins/file.py:29
 msgid "Static Content"
 msgstr "静态内容"
 
@@ -1503,69 +1524,60 @@ msgstr ""
 msgid "Manual configuration"
 msgstr "Icon 设置"
 
-#: admin/PageRule.py:143 admin/PageVServers.py:158
-#, fuzzy
-msgid "title"
-msgstr "文件"
-
-#: admin/PageRule.py:144 admin/PageVServers.py:159
-msgid "descr"
-msgstr ""
-
-#: admin/PageRule.py:206 admin/PageSource.py:326 admin/PageVServers.py:196
+#: admin/PageRule.py:207 admin/PageSource.py:326 admin/PageVServers.py:197
 msgid "Do you really want to remove it?"
 msgstr ""
 
-#: admin/PageRule.py:207 admin/PageSource.py:327 admin/PageVServers.py:197
+#: admin/PageRule.py:208 admin/PageSource.py:327 admin/PageVServers.py:198
 msgid "Remove"
 msgstr "删除"
 
-#: admin/PageRule.py:231 admin/PageVServer.py:119
+#: admin/PageRule.py:232 admin/PageVServer.py:119
 msgid "Final"
 msgstr "启用"
 
-#: admin/PageRule.py:232
+#: admin/PageRule.py:233
 #, fuzzy
 msgid "Non Final"
 msgstr "启用"
 
-#: admin/PageRule.py:256 admin/PageRule.py:269
+#: admin/PageRule.py:257 admin/PageRule.py:270
 #, fuzzy
 msgid "Add Behavior Rule"
 msgstr "行为规则"
 
-#: admin/PageRule.py:263
+#: admin/PageRule.py:264
 #, fuzzy
 msgid "Configuration Assistant"
 msgstr "快速配置"
 
-#: admin/PageRule.py:269 admin/PageSource.py:348 admin/PageVServers.py:246
+#: admin/PageRule.py:270 admin/PageSource.py:348 admin/PageVServers.py:247
 msgid "New…"
 msgstr ""
 
-#: admin/PageRule.py:283
+#: admin/PageRule.py:284
 #, fuzzy
 msgid "Clone Behavior Rule"
 msgstr "行为规则"
 
-#: admin/PageRule.py:284 admin/PageSource.py:358 admin/PageVServers.py:261
+#: admin/PageRule.py:285 admin/PageSource.py:358 admin/PageVServers.py:262
 msgid "Clone"
 msgstr "克隆"
 
-#: admin/PageRule.py:288 admin/PageSource.py:362 admin/PageVServers.py:265
+#: admin/PageRule.py:289 admin/PageSource.py:362 admin/PageVServers.py:266
 #, fuzzy
 msgid "Clone…"
 msgstr "克隆"
 
-#: admin/PageRule.py:288
+#: admin/PageRule.py:289
 msgid "Clone Selected Behavior Rule"
 msgstr ""
 
-#: admin/PageRule.py:296 admin/PageVServer.py:498
+#: admin/PageRule.py:297 admin/PageVServer.py:498
 msgid "Behavior"
 msgstr "扩展设置"
 
-#: admin/PageRule.py:315
+#: admin/PageRule.py:316
 #, fuzzy
 msgid "Rule Filtering"
 msgstr "规则列表"
@@ -1652,11 +1664,13 @@ msgstr ""
 msgid "Virtual Server"
 msgstr "虚拟主机"
 
-#: admin/PageSource.py:208
+#: admin/PageSource.py:208 admin/plugins/error_redir.py:87
+#: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:143
 msgid "Type"
 msgstr "类型"
 
 #: admin/PageSource.py:210 admin/PageSource.py:247
+#: admin/wizards/rtorrent.py:100
 msgid "Connection"
 msgstr "连接"
 
@@ -1707,7 +1721,7 @@ msgid "Sources Filtering"
 msgstr "网页目录"
 
 #: admin/PageSources.py:35 admin/PageVServer.py:103 admin/PageVServers.py:48
-#: admin/PageVServers.py:274
+#: admin/PageVServers.py:275
 msgid "Virtual Servers"
 msgstr "虚拟主机设置"
 
@@ -1726,7 +1740,7 @@ msgstr "虚拟主机配置"
 msgid "System wide status"
 msgstr "服务器状态"
 
-#: admin/PageStatus.py:119 admin/PageVServers.py:289
+#: admin/PageStatus.py:119 admin/PageVServers.py:290
 #, fuzzy
 msgid "Virtual Server Filtering"
 msgstr "虚拟主机"
@@ -1996,6 +2010,7 @@ msgid "Host Names"
 msgstr "主机名称"
 
 #: admin/PageVServer.py:155 admin/PageVServer.py:315 admin/PageVServer.py:331
+#: admin/plugins/method.py:94 admin/plugins/method.py:104
 msgid "Method"
 msgstr "方式"
 
@@ -2057,7 +2072,7 @@ msgstr "服务器 ID"
 msgid "Directory Indexes"
 msgstr "目录首页设置"
 
-#: admin/PageVServer.py:301
+#: admin/PageVServer.py:301 admin/plugins/fullpath.py:115
 msgid "Paths"
 msgstr "路径"
 
@@ -2069,7 +2084,7 @@ msgstr "保持活动连接"
 msgid "Max Upload Size"
 msgstr "允许上传大小"
 
-#: admin/PageVServer.py:317
+#: admin/PageVServer.py:317 admin/plugins/evhost.py:33
 msgid "Advanced Virtual Hosting"
 msgstr "高级虚拟主机"
 
@@ -2208,21 +2223,21 @@ msgstr ""
 msgid "Document Root directory of the new Virtual Server."
 msgstr "虚拟主机名称."
 
-#: admin/PageVServers.py:233 admin/PageVServers.py:246
+#: admin/PageVServers.py:234 admin/PageVServers.py:247
 #, fuzzy
 msgid "Add New Virtual Server"
 msgstr "新建一个虚拟主机"
 
-#: admin/PageVServers.py:240
+#: admin/PageVServers.py:241
 #, fuzzy
 msgid "Virtual Server Configuration Assistant"
 msgstr "虚拟主机配置"
 
-#: admin/PageVServers.py:260
+#: admin/PageVServers.py:261
 msgid "Clone Virtual Server"
 msgstr "克隆虚拟主机"
 
-#: admin/PageVServers.py:265
+#: admin/PageVServers.py:266
 #, fuzzy
 msgid "Clone Selected Virtual Server"
 msgstr "克隆虚拟主机"
@@ -2310,7 +2325,7 @@ msgstr "完整服务器信息"
 msgid "None"
 msgstr "没有"
 
-#: admin/consts.py:47
+#: admin/consts.py:47 admin/plugins/common.py:30
 msgid "List & Send"
 msgstr "列出 & 发送"
 
@@ -2319,7 +2334,8 @@ msgstr "列出 & 发送"
 msgid "Only Listing"
 msgstr "仅进行目录列表"
 
-#: admin/consts.py:50
+#: admin/consts.py:50 admin/plugins/error_redir.py:86
+#: admin/wizards/hotlinking.py:145 admin/wizards/hotlinking.py:164
 msgid "Redirection"
 msgstr "重定向"
 
@@ -2331,7 +2347,7 @@ msgstr "FastCGI"
 msgid "SCGI"
 msgstr "SCGI"
 
-#: admin/consts.py:53
+#: admin/consts.py:53 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
 #, fuzzy
 msgid "uWSGI"
 msgstr "SCGI"
@@ -2346,7 +2362,8 @@ msgstr "HTTP反向代理"
 msgid "Upload Reporting"
 msgstr "URL 重写"
 
-#: admin/consts.py:56
+#: admin/consts.py:56 admin/plugins/streaming.py:31
+#: admin/plugins/streaming.py:63
 msgid "Audio/Video Streaming"
 msgstr "视频/音频流媒体"
 
@@ -2354,7 +2371,7 @@ msgstr "视频/音频流媒体"
 msgid "CGI"
 msgstr "CGI"
 
-#: admin/consts.py:58
+#: admin/consts.py:58 admin/plugins/ssi.py:28
 msgid "Server Side Includes"
 msgstr "服务器端包含"
 
@@ -2371,15 +2388,15 @@ msgstr "服务器信息"
 msgid "MySQL Bridge"
 msgstr "MySQL 桥接"
 
-#: admin/consts.py:62
+#: admin/consts.py:62 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
 msgstr "HTTP错误"
 
-#: admin/consts.py:63
+#: admin/consts.py:63 admin/plugins/admin.py:29
 msgid "Remote Administration"
 msgstr "远程管理"
 
-#: admin/consts.py:64
+#: admin/consts.py:64 admin/wizards/hotlinking.py:84
 msgid "1x1 Transparent GIF"
 msgstr "1x1 透明 GIF"
 
@@ -2419,7 +2436,7 @@ msgstr "MySQL 服务器"
 msgid "PAM"
 msgstr "PAM"
 
-#: admin/consts.py:81
+#: admin/consts.py:81 admin/plugins/authlist.py:30
 msgid "Fixed list"
 msgstr "修复列表"
 
@@ -2499,19 +2516,23 @@ msgstr "动态"
 msgid "Automatic"
 msgstr "自动"
 
-#: admin/consts.py:138
+#: admin/consts.py:138 admin/plugins/error_redir.py:32
 msgid "External"
 msgstr "外部"
 
-#: admin/consts.py:139
+#: admin/consts.py:139 admin/plugins/error_redir.py:31
 msgid "Internal"
 msgstr "内部"
 
-#: admin/consts.py:182
+#: admin/consts.py:182 admin/plugins/header.py:72 admin/plugins/proxy.py:91
+#: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
+#: admin/plugins/redir.py:101 admin/plugins/request.py:31
+#: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
 msgid "Regular Expression"
 msgstr "正则表达式"
 
-#: admin/consts.py:183
+#: admin/consts.py:183 admin/plugins/header.py:71 admin/plugins/header.py:86
+#: admin/plugins/proxy.py:190
 msgid "Header"
 msgstr "请求头"
 
@@ -2523,17 +2544,18 @@ msgstr "文件存在"
 msgid "HTTP Method"
 msgstr "HTTP 方法"
 
-#: admin/consts.py:186
+#: admin/consts.py:186 admin/plugins/bind.py:76 admin/plugins/bind.py:129
 #, fuzzy
 msgid "Incoming IP/Port"
 msgstr "接收端口"
 
-#: admin/consts.py:187
+#: admin/consts.py:187 admin/plugins/fullpath.py:66
+#: admin/plugins/fullpath.py:98
 #, fuzzy
 msgid "Full Path"
 msgstr "配置文件路径"
 
-#: admin/consts.py:188
+#: admin/consts.py:188 admin/plugins/from.py:70
 #, fuzzy
 msgid "Connected from"
 msgstr "连接"
@@ -2555,7 +2577,7 @@ msgstr "名称"
 msgid "Wildcards"
 msgstr "通配符"
 
-#: admin/consts.py:196
+#: admin/consts.py:196 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
 msgid "Regular Expressions"
 msgstr "正则表达式"
 
@@ -2626,7 +2648,7 @@ msgstr ""
 msgid "Python"
 msgstr "配置文件路径"
 
-#: admin/consts.py:236
+#: admin/consts.py:236 admin/wizards/List.py:115
 msgid "PHP"
 msgstr ""
 
@@ -2637,6 +2659,979 @@ msgstr ""
 #: admin/consts.py:242
 msgid "POST tracker"
 msgstr ""
+
+#: admin/plugins/authlist.py:32
+msgid "At least one user/password pair should be configured."
+msgstr ""
+
+#: admin/plugins/authlist.py:60
+#, fuzzy
+msgid "Authentication list"
+msgstr "认证"
+
+#: admin/plugins/authlist.py:63 admin/plugins/authlist.py:97
+msgid "Password"
+msgstr "密码"
+
+#: admin/plugins/authlist.py:105
+#, fuzzy
+msgid "Add New Pair"
+msgstr "增加一对"
+
+#: admin/plugins/bind.py:64
+msgid "IP (Port):"
+msgstr "IP地址(端口)"
+
+#: admin/plugins/bind.py:65
+#, fuzzy
+msgid "Port:"
+msgstr "端口"
+
+#: admin/plugins/bind.py:98 admin/util.py:41
+msgid "No"
+msgstr "否"
+
+#: admin/plugins/bind.py:98 admin/util.py:41
+msgid "Yes"
+msgstr "是"
+
+#: admin/plugins/bind.py:109
+msgid "Selected Ports"
+msgstr "已经选择的端口"
+
+#: admin/plugins/bind.py:131
+#, fuzzy
+msgid "Assign new IP/Port"
+msgstr "增加新的IP地址/端口"
+
+#: admin/plugins/bind.py:156
+#, fuzzy
+msgid "Ports"
+msgstr "端口"
+
+#: admin/plugins/common.py:32
+msgid "Allow extra tailing paths"
+msgstr "允许额外附加路径"
+
+#: admin/plugins/common.py:33
+msgid "Allow to list directory contents"
+msgstr "允许列出文件夹内容"
+
+#: admin/plugins/common.py:42
+msgid "Allow PathInfo"
+msgstr "允许显示路径信息"
+
+#: admin/plugins/common.py:43
+msgid "Allow Directory Listing"
+msgstr "允许目录列表"
+
+#: admin/plugins/common.py:48
+msgid "Parsing"
+msgstr "解析"
+
+#: admin/plugins/custom_error.py:30
+msgid "HTTP Error that you be used to reply the request."
+msgstr "HTTP错误，您要对请求作出答复."
+
+#: admin/plugins/custom_error.py:32
+msgid "HTTP Custom Error"
+msgstr "自定义的HTTP错误"
+
+#: admin/plugins/custom_error.py:51
+#, fuzzy
+msgid "Custom Error"
+msgstr "自定义的HTTP错误"
+
+#: admin/plugins/dbslayer.py:32
+msgid "MySQL balancing"
+msgstr "MySQL 负载均衡"
+
+#: admin/plugins/dbslayer.py:33
+msgid "DB balancig recipe"
+msgstr "数据库负载均衡处理方法"
+
+#: admin/plugins/dbslayer.py:35
+msgid "Language from which the information will be consumed."
+msgstr "设置信息使用的语言."
+
+#: admin/plugins/dbslayer.py:36
+msgid "User to access the database."
+msgstr "访问数据库的用户."
+
+#: admin/plugins/dbslayer.py:37
+msgid "Password for the user accessing the database."
+msgstr "访问数据库的用户密码."
+
+#: admin/plugins/dbslayer.py:38
+#, fuzzy
+msgid "Database to connect to."
+msgstr "服务器端口."
+
+#: admin/plugins/dbslayer.py:50 admin/plugins/mysql.py:75
+msgid "DB User"
+msgstr "数据库用户"
+
+#: admin/plugins/dbslayer.py:51
+msgid "DB Password"
+msgstr "数据库用户密码"
+
+#: admin/plugins/dbslayer.py:52
+msgid "Data Base"
+msgstr "数据库名称"
+
+#: admin/plugins/dbslayer.py:57
+msgid "Serialization"
+msgstr "连载"
+
+#: admin/plugins/dbslayer.py:63 admin/plugins/fcgi.py:47
+#: admin/plugins/proxy.py:274 admin/plugins/scgi.py:47
+#: admin/plugins/uwsgi.py:47
+msgid "Balancer"
+msgstr "均衡器"
+
+#: admin/plugins/dbslayer.py:65
+#, fuzzy
+msgid "Data Base Balancing"
+msgstr "数据库负载均衡"
+
+#: admin/plugins/directory.py:27
+msgid ""
+"Public Web Directory to which content the configuration will be applied."
+msgstr "公共网页目录的内容将应用于配置."
+
+#: admin/plugins/directory.py:31 admin/wizards/alfresco.py:156
+#: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
+#: admin/wizards/django.py:173 admin/wizards/drupal.py:234
+#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:202
+#: admin/wizards/liferay.py:153 admin/wizards/moinmoin.py:198
+#: admin/wizards/mono.py:182 admin/wizards/phpbb.py:161
+#: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:43
+#: admin/wizards/rails.py:297 admin/wizards/rtorrent.py:99
+#: admin/wizards/sugar.py:191 admin/wizards/symfony.py:201
+#: admin/wizards/uwsgi.py:224 admin/wizards/wordpress.py:193
+#: admin/wizards/zend.py:176
+msgid "Web Directory"
+msgstr "网页目录"
+
+#: admin/plugins/dirlist.py:34
+msgid "Choose the listing theme."
+msgstr "选个一个列出的主题."
+
+#: admin/plugins/dirlist.py:35
+msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
+msgstr "网站目录下的图标文件位于. 默认: <i>/icons</i>."
+
+#: admin/plugins/dirlist.py:36
+msgid "List of notice files to be inserted."
+msgstr "列出要插入的通知文件."
+
+#: admin/plugins/dirlist.py:37
+msgid "List of files that should not be listed."
+msgstr "列出不允许被列出的文件."
+
+#: admin/plugins/dirlist.py:39
+#, fuzzy
+msgid "Only listing"
+msgstr "仅进行目录列表"
+
+#: admin/plugins/dirlist.py:49
+msgid "Show Size"
+msgstr "显示大小"
+
+#: admin/plugins/dirlist.py:49 admin/plugins/dirlist.py:50
+#: admin/plugins/dirlist.py:51 admin/plugins/dirlist.py:52
+#: admin/plugins/dirlist.py:53 admin/plugins/dirlist.py:54
+#: admin/plugins/redir.py:100
+msgid "Show"
+msgstr "显示"
+
+#: admin/plugins/dirlist.py:50
+msgid "Show Date"
+msgstr "显示日期"
+
+#: admin/plugins/dirlist.py:51
+msgid "Show User"
+msgstr "显示用户"
+
+#: admin/plugins/dirlist.py:52
+msgid "Show Group"
+msgstr "显示用户组"
+
+#: admin/plugins/dirlist.py:53
+#, fuzzy
+msgid "Show Backup files"
+msgstr "隐藏文件"
+
+#: admin/plugins/dirlist.py:54
+#, fuzzy
+msgid "Show Hidden files"
+msgstr "隐藏文件"
+
+#: admin/plugins/dirlist.py:55
+msgid "Allow symbolic links"
+msgstr "允许符号链接"
+
+#: admin/plugins/dirlist.py:56
+#, fuzzy
+msgid "Redirect symbolic links"
+msgstr "允许符号链接"
+
+#: admin/plugins/dirlist.py:60
+msgid "Listing"
+msgstr "列出"
+
+#: admin/plugins/dirlist.py:65
+msgid "Theme"
+msgstr "主题"
+
+#: admin/plugins/dirlist.py:66
+msgid "Icons dir"
+msgstr "图标文件目录"
+
+#: admin/plugins/dirlist.py:67
+msgid "Notice files"
+msgstr "通知文件"
+
+#: admin/plugins/dirlist.py:68
+msgid "Hidden files"
+msgstr "隐藏文件"
+
+#: admin/plugins/dirlist.py:72
+msgid "Theming"
+msgstr "主题"
+
+#: admin/plugins/empty_gif.py:29
+msgid "1x1 Empty GIF"
+msgstr "1x1 空白GIF文件"
+
+#: admin/plugins/error_redir.py:35
+#, fuzzy
+msgid "HTTP Error to match."
+msgstr "HTTP错误"
+
+#: admin/plugins/error_redir.py:36
+msgid "Target to access whenever the HTTP Error occurs."
+msgstr ""
+
+#: admin/plugins/error_redir.py:37
+#, fuzzy
+msgid "Whether the redirection should be Internal or External."
+msgstr "定义客户端是否可见重定向信息."
+
+#: admin/plugins/error_redir.py:85
+msgid "Error"
+msgstr "错误"
+
+#: admin/plugins/error_redir.py:89
+#, fuzzy
+msgid "Add New Custom Error"
+msgstr "自定义的HTTP错误"
+
+#: admin/plugins/evhost.py:29
+msgid ""
+"Check the dynamically generated Document Root, and use the general Document "
+"Root if it doesn't exist."
+msgstr "检查动态生成的文档根目录, 如果不存在则使用默认 文件根目录."
+
+#: admin/plugins/evhost.py:30
+msgid ""
+"The Document Root directory will be built dynamically. The following "
+"variables are accepted:<br/>"
+msgstr "根目录将是动态生成的. 以下变量将被接受 :<br/>"
+
+#: admin/plugins/evhost.py:41
+msgid "Dynamic Document Root"
+msgstr "动态根目录"
+
+#: admin/plugins/evhost.py:42
+msgid "Check Document Root"
+msgstr "检查根目录"
+
+#: admin/plugins/exists.py:31
+msgid "Comma separated list of files. Rule applies if one exists."
+msgstr "逗号分隔的文件列表.已存在的规则将被应用."
+
+#: admin/plugins/exists.py:32
+msgid ""
+"Uses cache during file detection. Disable if directory contents change "
+"frequently. Enable otherwise."
+msgstr "启用文件高速缓存检测机制. 如果目录内容经常改变请禁用. 选择其他机制."
+
+#: admin/plugins/exists.py:33
+msgid "Match the request if any file exists."
+msgstr "检查符合要求的文件是否存在."
+
+#: admin/plugins/exists.py:34
+msgid "Only match regular files. If unset directories will be matched as well."
+msgstr "只匹配常规文件,如果没有设置目录,则将匹配所有目录"
+
+#: admin/plugins/exists.py:35
+msgid "If a directory is request, check the index files inside it."
+msgstr "如果请求一个目录,将检查目录里面的index文件"
+
+#: admin/plugins/exists.py:37
+msgid "Match a specific list of files"
+msgstr "匹配文件清单"
+
+#: admin/plugins/exists.py:38 admin/plugins/exists.py:71
+#: admin/plugins/exists.py:109
+msgid "Match any file"
+msgstr "匹配任何文件"
+
+#: admin/plugins/exists.py:76 admin/plugins/exists.py:111
+#: admin/plugins/file.py:40
+msgid "Use I/O cache"
+msgstr "使用 I/O 缓存"
+
+#: admin/plugins/exists.py:77 admin/plugins/exists.py:112
+#, fuzzy
+msgid "Only match files"
+msgstr "匹配任何文件"
+
+#: admin/plugins/exists.py:78 admin/plugins/exists.py:113
+msgid "If dir, check index files"
+msgstr ""
+
+#: admin/plugins/exists.py:132
+#, fuzzy
+msgid "File exists"
+msgstr "文件存在"
+
+#: admin/plugins/exists.py:136
+#, fuzzy, python-format
+msgid "File %s exists"
+msgstr "文件存在"
+
+#: admin/plugins/exists.py:138
+msgid "File exists (never matched)"
+msgstr ""
+
+#: admin/plugins/exists.py:140
+#, fuzzy, python-format
+msgid "File %(most)s or %(last)s exists"
+msgstr "文件存在"
+
+#: admin/plugins/extensions.py:30
+#, fuzzy
+msgid ""
+"Comma-separated list of File Extension to which the configuration will be "
+"applied."
+msgstr "应用文件扩展名列表的配置内容."
+
+#: admin/plugins/fcgi.py:49
+#, fuzzy
+msgid "FastCGI Specific"
+msgstr "FastCGI 详细设置"
+
+#: admin/plugins/file.py:31
+msgid "Enables an internal I/O cache that improves performance."
+msgstr "使内部的I/O缓存提高性能."
+
+#: admin/plugins/file.py:45
+msgid "File Sending"
+msgstr "文件传送"
+
+#: admin/plugins/from.py:30
+#, fuzzy
+msgid "IP or Subnet to check the connection origin against."
+msgstr "检查来源IP地址或子网"
+
+#: admin/plugins/from.py:95
+#, fuzzy
+msgid "IPs and Subnets"
+msgstr "IP地址或子网"
+
+#: admin/plugins/from.py:102
+#, fuzzy
+msgid "New IP or Subnet"
+msgstr "IP地址或子网"
+
+#: admin/plugins/from.py:106
+#, fuzzy
+msgid "Add another entry"
+msgstr "增加一对"
+
+#: admin/plugins/from.py:116
+#, fuzzy
+msgid "From"
+msgstr "格式"
+
+#: admin/plugins/fullpath.py:30
+#, fuzzy
+msgid ""
+"Full path request to which content the configuration will be applied. (Eg: /"
+"favicon.ico)"
+msgstr "公共网页目录的内容将应用于配置."
+
+#: admin/plugins/fullpath.py:91
+#, fuzzy
+msgid "Full Web Paths"
+msgstr "配置文件路径"
+
+#: admin/plugins/fullpath.py:102
+#, fuzzy
+msgid "Add another path"
+msgstr "增加一对"
+
+#: admin/plugins/fullpath.py:113 admin/plugins/fullpath.py:120
+#, fuzzy
+msgid "Path"
+msgstr "路径"
+
+#: admin/plugins/geoip.py:32
+msgid "Add the initial country. It's possible to add more later on."
+msgstr "增加初始国家，可以增加更多."
+
+#: admin/plugins/geoip.py:33
+msgid "Pick an additional country to add to the country list."
+msgstr "增加一个国家到国家名单."
+
+#: admin/plugins/geoip.py:34
+#, python-format
+msgid ""
+"List of countries from the client IPs. It must use the\n"
+"<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation."
+msgstr ""
+"国家IP地址名单. 必须使用\n"
+"<a target=\"_blank\" href=\"%s\">ISO 3166</a> 国家符号."
+
+#: admin/plugins/geoip.py:78
+msgid "Select all"
+msgstr ""
+
+#: admin/plugins/geoip.py:79
+#, fuzzy
+msgid "Select none"
+msgstr "已经选择的端口"
+
+#: admin/plugins/header.py:30
+msgid "Header against which the regular expression will be evaluated."
+msgstr "符合正则表达式的将被优先应用."
+
+#: admin/plugins/header.py:31
+msgid "Regular expression."
+msgstr "正则表达式."
+
+#: admin/plugins/htdigest.py:32
+msgid "Full path to the Htdigest formated password file."
+msgstr "Htdigest格式密码文件的完整路径."
+
+#: admin/plugins/htdigest.py:41 admin/plugins/htpasswd.py:40
+#: admin/plugins/plain.py:40
+msgid "Password File"
+msgstr "密码文件"
+
+#: admin/plugins/htdigest.py:46
+#, fuzzy
+msgid "Htdigest Password File"
+msgstr "密码文件"
+
+#: admin/plugins/htpasswd.py:32
+msgid "Full path to the Htpasswd formated password file."
+msgstr "Htpasswd格式密码文件的完整路径."
+
+#: admin/plugins/htpasswd.py:45
+#, fuzzy
+msgid "Htpasswd Password File"
+msgstr "密码文件"
+
+#: admin/plugins/ldap.py:30
+msgid "LDAP"
+msgstr "LDAP"
+
+#: admin/plugins/ldap.py:32
+msgid "LDAP server IP address."
+msgstr "LDAP 服务器地址."
+
+#: admin/plugins/ldap.py:33
+#, fuzzy
+msgid "LDAP server port to connect to. Default: 389"
+msgstr "LDAP 服务器连接端口. 默认值:389"
+
+#: admin/plugins/ldap.py:34
+msgid "Domain sent during the LDAP authentication operation. Optional."
+msgstr "域间发送LDAP认证模式. 选择."
+
+#: admin/plugins/ldap.py:35
+msgid "Password to authenticate in the LDAP server."
+msgstr "LDAP服务器的验证密码."
+
+#: admin/plugins/ldap.py:36
+msgid "Base domain for the web server authentications."
+msgstr "相应的域的Web服务器身份验证."
+
+#: admin/plugins/ldap.py:37
+msgid "Object filter. It can be empty."
+msgstr "对象的过滤器。可以为空."
+
+#: admin/plugins/ldap.py:38
+msgid "Enable to use secure connections between the web and LDAP servers."
+msgstr "启用使用安全链接WEB服务器和LDAP服务器."
+
+#: admin/plugins/ldap.py:39
+msgid "CA File for the TLS connections."
+msgstr "TLS 链接使用的CA 文件."
+
+#: admin/plugins/ldap.py:47
+#, fuzzy
+msgid "Server"
+msgstr "服务器 ID"
+
+#: admin/plugins/ldap.py:49
+msgid "Bind Domain"
+msgstr "绑定域名"
+
+#: admin/plugins/ldap.py:50
+msgid "Bind Password"
+msgstr "绑定密码"
+
+#: admin/plugins/ldap.py:51
+msgid "Base Domain"
+msgstr "相应的域名"
+
+#: admin/plugins/ldap.py:52
+msgid "Filter"
+msgstr "过滤器"
+
+#: admin/plugins/ldap.py:53
+msgid "Use TLS"
+msgstr "使用 TLS"
+
+#: admin/plugins/ldap.py:54
+msgid "CA File"
+msgstr "CA 文件"
+
+#: admin/plugins/ldap.py:59
+#, fuzzy
+msgid "LDAP Connection"
+msgstr "LDAP 链接"
+
+#: admin/plugins/method.py:66
+msgid "The HTTP method that should match this rule."
+msgstr "HTTP 方法将被此规则验证."
+
+#: admin/plugins/mysql.py:32
+msgid "MySQL server IP address."
+msgstr "MySQL 服务器IP地址."
+
+#: admin/plugins/mysql.py:33
+msgid "Server port to connect to."
+msgstr "服务器端口."
+
+#: admin/plugins/mysql.py:34
+msgid "Full path of Unix socket to communicate with the data base."
+msgstr "数据库UNIX套接字连接完整路径."
+
+#: admin/plugins/mysql.py:35
+msgid "User name for connecting to the database."
+msgstr "数据库用户名."
+
+#: admin/plugins/mysql.py:36
+msgid "Password for connecting to the database."
+msgstr "数据库用户密码."
+
+#: admin/plugins/mysql.py:37
+msgid "Database name containing the user/password pair list."
+msgstr "数据库名称及相应用户/密码名单."
+
+#: admin/plugins/mysql.py:38
+msgid "SQL command to execute. ${user} is replaced with the user name."
+msgstr "SQL命令执行. ${user} 将替代此用户."
+
+#: admin/plugins/mysql.py:39
+#, fuzzy
+msgid ""
+"Choose an encryption type for the password. Only suitable for the \"Basic\" "
+"authentication mechanism."
+msgstr "使用MD5密码加密. 只适合\"Basic\" 认证 机制."
+
+#: admin/plugins/mysql.py:74
+msgid "Unix Socket"
+msgstr "Unix 套接字"
+
+#: admin/plugins/mysql.py:76
+#, fuzzy
+msgid "BD Password"
+msgstr "数据库用户密码"
+
+#: admin/plugins/mysql.py:77
+msgid "Database"
+msgstr "数据库"
+
+#: admin/plugins/mysql.py:78
+msgid "SQL Query"
+msgstr "SQL 查询"
+
+#: admin/plugins/mysql.py:79
+#, fuzzy
+msgid "Password Hash"
+msgstr "密码加密"
+
+#: admin/plugins/mysql.py:84
+#, fuzzy
+msgid "MySQL Connection"
+msgstr "MySQL 连接"
+
+#: admin/plugins/plain.py:30
+msgid "Plain text"
+msgstr "纯文字"
+
+#: admin/plugins/plain.py:32
+msgid "Full path to the plain text password file."
+msgstr "纯文字密码文件的完整路径."
+
+#: admin/plugins/plain.py:45
+#, fuzzy
+msgid "Plain Password File"
+msgstr "纯文字密码文件"
+
+#: admin/plugins/post_report.py:30 admin/plugins/post_track.py:25
+#, fuzzy
+msgid "POST Report"
+msgstr "报告"
+
+#: admin/plugins/post_report.py:47
+#, fuzzy
+msgid "Target language"
+msgstr "可用的语言"
+
+#: admin/plugins/proxy.py:33
+msgid "Reverse Proxy"
+msgstr "反向代理"
+
+#: admin/plugins/proxy.py:35
+#, fuzzy
+msgid ""
+"Maximum number of connections per server that the proxy can try to keep "
+"opened."
+msgstr "服务器保持开放的最大代理请求数量 "
+
+#: admin/plugins/proxy.py:36
+msgid ""
+"Allow the server to use Keep-alive connections with the back-end servers."
+msgstr "允许服务器使用活动连接到后台程序."
+
+#: admin/plugins/proxy.py:37
+#, fuzzy
+msgid ""
+"Preserve the original \"Host:\" header sent by the client. (Default: No)"
+msgstr "保留原始\"Host:\" 客户端请求. (Default No)"
+
+#: admin/plugins/proxy.py:38
+#, fuzzy
+msgid ""
+"Preserve the \"Server:\" header sent by the back-end server. (Default: No)"
+msgstr "保留原始\"Host:\" 客户端请求. (Default No)"
+
+#: admin/plugins/proxy.py:91 admin/plugins/proxy.py:121
+#: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
+#: admin/plugins/redir.py:102
+msgid "Substitution"
+msgstr "替换"
+
+#: admin/plugins/proxy.py:121
+msgid "Add RegEx"
+msgstr "新增正则表达式"
+
+#: admin/plugins/proxy.py:170
+#, fuzzy
+msgid "Add Header Entry"
+msgstr "增加一对"
+
+#: admin/plugins/proxy.py:217
+msgid "Hide Header"
+msgstr "隐藏请求头"
+
+#: admin/plugins/proxy.py:237
+msgid "Allow Keepalive"
+msgstr "允许活动连接"
+
+#: admin/plugins/proxy.py:238
+#, fuzzy
+msgid "Preserve Host Header"
+msgstr "维护主机头"
+
+#: admin/plugins/proxy.py:238 admin/plugins/proxy.py:239
+#, fuzzy
+msgid "Preserve"
+msgstr "LDAP 服务器"
+
+#: admin/plugins/proxy.py:239
+#, fuzzy
+msgid "Preserve Server Header"
+msgstr "维护主机头"
+
+#: admin/plugins/proxy.py:244
+msgid "Reverse Proxy Settings"
+msgstr "反向代理设置"
+
+#: admin/plugins/proxy.py:248
+msgid "Request"
+msgstr "请求"
+
+#: admin/plugins/proxy.py:250 admin/plugins/proxy.py:262
+#, fuzzy
+msgid "URL Rewriting"
+msgstr "URL 重写"
+
+#: admin/plugins/proxy.py:253 admin/plugins/proxy.py:265
+msgid "Header Addition"
+msgstr "头部附加文件"
+
+#: admin/plugins/proxy.py:256 admin/plugins/proxy.py:268
+msgid "Hide Headers"
+msgstr "隐藏请求头"
+
+#: admin/plugins/proxy.py:260
+#, fuzzy
+msgid "Reply"
+msgstr "回复"
+
+#: admin/plugins/proxy.py:276
+msgid "Back-end Servers"
+msgstr "服务器后台程序"
+
+#: admin/plugins/redir.py:31
+msgid "Defines whether the redirection will be seen by the client."
+msgstr "定义客户端是否可见重定向信息."
+
+#: admin/plugins/redir.py:32
+msgid ""
+"Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc."
+"perl.org/perlre.html\">Reference</a>."
+msgstr ""
+"正则表达式. 请访问 <a target=\"_blank\" href=\"http://perldoc.perl.org/"
+"perlre.html\">perl参考</a>."
+
+#: admin/plugins/redir.py:33
+msgid "Target address. It can use Regular Expression substitution sub-strings."
+msgstr "目标地址。可以使用正则表达式替换子字符串."
+
+#: admin/plugins/redir.py:34
+#, fuzzy
+msgid "At least one Regular Expression should be defined."
+msgstr "至少需要定一个正则表达式规则."
+
+#: admin/plugins/redir.py:36
+msgid "Redirections"
+msgstr "重定向"
+
+#: admin/plugins/redir.py:68
+#, fuzzy
+msgid "Rule list"
+msgstr "规则列表"
+
+#: admin/plugins/redir.py:113
+#, fuzzy
+msgid "Add New Regular Expression"
+msgstr "新的正则表达式"
+
+#: admin/plugins/redir.py:118
+#, fuzzy
+msgid "Add New RegEx…"
+msgstr "新增"
+
+#: admin/plugins/rehost.py:29
+msgid ""
+"Regular Expression against which the hosts be Host name will be compared."
+msgstr "正则表达式将对主机和主机名之间进行比较."
+
+#: admin/plugins/rehost.py:30
+msgid "At least one Regular Expression string must be defined."
+msgstr "至少需要定一个正则表达式规则."
+
+#: admin/plugins/rehost.py:68 admin/plugins/rehost.py:92
+msgid "New Regular Expression"
+msgstr "新的正则表达式"
+
+#: admin/plugins/rehost.py:71
+#, fuzzy
+msgid "Add New Entry"
+msgstr "增加一对"
+
+#: admin/plugins/request.py:27
+msgid "Regular expression against which the request will be executed."
+msgstr "正在表达式将决定哪些请求将被执行."
+
+#: admin/plugins/rrd.py:30
+msgid "Directory where the RRDtool databases should be written."
+msgstr "RRDtool数据库目录必须可写"
+
+#: admin/plugins/rrd.py:31
+msgid ""
+"Path to the rrdtool binary. By default the server will look in the PATH."
+msgstr "RRDtool 可执行文件路径.默认情况下,服务器"
+
+#: admin/plugins/rrd.py:40
+#, fuzzy
+msgid "Round Robin Database directory"
+msgstr "RRD 数据库目录"
+
+#: admin/plugins/rrd.py:41
+#, fuzzy
+msgid "Custom rrdtool binary"
+msgstr "自定义重定向"
+
+#: admin/plugins/scgi.py:49
+#, fuzzy
+msgid "SCGI Specific"
+msgstr "SCGI 详细"
+
+#: admin/plugins/secdownload.py:31
+msgid "Hidden Download"
+msgstr "隐藏下载"
+
+#: admin/plugins/secdownload.py:33
+msgid "Shared secret between the server and the script."
+msgstr "服务器和脚本引擎见共享安全模式."
+
+#: admin/plugins/secdownload.py:34
+msgid "How long the download will last accessible - in seconds. Default: 60."
+msgstr "下载开放时间 - 单位：秒. 默认值: 60."
+
+#: admin/plugins/secdownload.py:43
+#, fuzzy
+msgid "Secret"
+msgstr "保密"
+
+#: admin/plugins/secdownload.py:50
+#, fuzzy
+msgid "Covering Parameters"
+msgstr "覆盖参数"
+
+#: admin/plugins/server_info.py:29 admin/plugins/server_info.py:32
+msgid "Server Information"
+msgstr "服务器信息"
+
+#: admin/plugins/server_info.py:33
+msgid "Only version information"
+msgstr "服务器版本号"
+
+#: admin/plugins/server_info.py:34
+msgid "Server Information + Connections"
+msgstr "服务器信息和连接数"
+
+#: admin/plugins/server_info.py:37
+msgid "Which information should be shown."
+msgstr "要显示的信息."
+
+#: admin/plugins/server_info.py:47
+msgid "Show Information"
+msgstr "显示服务器信息"
+
+#: admin/plugins/server_info.py:52
+#, fuzzy
+msgid "Privacy Settings"
+msgstr "隐私设置"
+
+#: admin/plugins/streaming.py:33
+msgid "Figure the bit rate of the media file, and limit the bandwidth to it."
+msgstr "数字比特率的媒体文件，并限制它的带宽."
+
+#: admin/plugins/streaming.py:34
+msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
+msgstr "动态增加带宽限制因子. 默认值: 0.1"
+
+#: admin/plugins/streaming.py:35
+msgid ""
+"Number of seconds to stream before setting the bandwidth limit. Default: 5."
+msgstr "不限制带宽值钱的时间（秒），默认值: 5."
+
+#: admin/plugins/streaming.py:46
+msgid "Auto Rate"
+msgstr "自动"
+
+#: admin/plugins/streaming.py:47
+msgid "Speedup Factor"
+msgstr "加速"
+
+#: admin/plugins/streaming.py:48
+msgid "Initial Boost"
+msgstr "开始升高"
+
+#: admin/plugins/target_ip.py:31
+msgid ""
+"IP or Subnet of the NIC that accepted the request. Example: ::1, or "
+"10.0.0.0/8"
+msgstr "绑定接受请求的网卡的IP地址或子网,例如: ::1 或 10.0.0.0/8"
+
+#: admin/plugins/target_ip.py:32
+#, fuzzy
+msgid "At least one IP or Subnet entry must be defined."
+msgstr "至少有一个通配符字符串必须定义."
+
+#: admin/plugins/target_ip.py:61
+msgid "IP or Subnet"
+msgstr "IP地址或子网"
+
+#: admin/plugins/target_ip.py:76
+msgid "New IP/Subnet"
+msgstr "新的IP地址或子网"
+
+#: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
+#, fuzzy
+msgid "Add new entry"
+msgstr "增加一对"
+
+#: admin/plugins/target_ip.py:100
+#, fuzzy
+msgid "Accepted Server IP Addresses and Subnets"
+msgstr "应用服务器IP地址和子网"
+
+#: admin/plugins/url_arg.py:30
+msgid "Argument name"
+msgstr "参数名称"
+
+#: admin/plugins/url_arg.py:31
+#, fuzzy
+msgid "Regular Expression for the match"
+msgstr "正则表达式"
+
+#: admin/plugins/url_arg.py:33
+msgid "Match a specific argument"
+msgstr "匹配一个具体参数"
+
+#: admin/plugins/url_arg.py:34
+#, fuzzy
+msgid "Match any argument"
+msgstr "匹配任何文件"
+
+#: admin/plugins/url_arg.py:73 admin/plugins/url_arg.py:91
+#, fuzzy
+msgid "Match type"
+msgstr "匹配任何文件"
+
+#: admin/plugins/url_arg.py:74 admin/plugins/url_arg.py:93
+msgid "Argument"
+msgstr "参数"
+
+#: admin/plugins/uwsgi.py:49
+#, fuzzy
+msgid "UWSGI Specific"
+msgstr "SCGI 详细"
+
+#: admin/plugins/wildcard.py:29
+msgid ""
+"Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example."
+"com"
+msgstr "设置域名. 允许匹配字符 (* and ?) . 例: *.example.com"
+
+#: admin/plugins/wildcard.py:30
+msgid "At least one wildcard string must be defined."
+msgstr "至少有一个通配符字符串必须定义."
+
+#: admin/plugins/wildcard.py:52
+msgid "Domain pattern"
+msgstr "域名模式"
+
+#: admin/plugins/wildcard.py:67
+msgid "New host name"
+msgstr "新主机别名"
+
+#: admin/plugins/wildcard.py:91
+#, fuzzy
+msgid "Accepted Domains"
+msgstr "相应的域名"
 
 #: admin/server.py:62
 #, fuzzy, python-format
@@ -2664,14 +3659,6 @@ msgstr "激活"
 #: admin/util.py:38
 msgid "On"
 msgstr ""
-
-#: admin/util.py:41
-msgid "No"
-msgstr "否"
-
-#: admin/util.py:41
-msgid "Yes"
-msgstr "是"
 
 #: admin/validations.py:19
 msgid "Malformed number"
@@ -2784,6 +3771,1481 @@ msgstr "虚拟主机名称正在被使用中"
 msgid "Already in use"
 msgstr ""
 
+#: admin/wizards/List.py:30
+msgid "CMS"
+msgstr ""
+
+#: admin/wizards/List.py:31
+msgid "Content Management Systems"
+msgstr ""
+
+#: admin/wizards/List.py:34
+#, fuzzy
+msgid "Drupal"
+msgstr "通配符"
+
+#: admin/wizards/List.py:35
+msgid ""
+"CMS for everything from personal weblogs to large community-driven websites."
+msgstr ""
+
+#: admin/wizards/List.py:38
+msgid "WordPress"
+msgstr ""
+
+#: admin/wizards/List.py:39
+msgid ""
+"State-of-the-art publishing platform with a focus on aesthetics, web "
+"standards, and usability."
+msgstr ""
+
+#: admin/wizards/List.py:42
+#, fuzzy
+msgid "Joomla"
+msgstr "通配符"
+
+#: admin/wizards/List.py:43
+msgid "Build Web sites and powerful online applications"
+msgstr ""
+
+#: admin/wizards/List.py:46
+#, fuzzy
+msgid "MoinMoin Wiki"
+msgstr "通配符"
+
+#: admin/wizards/List.py:47
+msgid ""
+"Advanced, easy to use and extensible WikiEngine with a large community of "
+"users."
+msgstr ""
+
+#: admin/wizards/List.py:50
+msgid "Trac Bug Tracker System"
+msgstr ""
+
+#: admin/wizards/List.py:51
+msgid ""
+"Enhanced wiki and issue tracking system for software development projects."
+msgstr ""
+
+#: admin/wizards/List.py:54
+#, fuzzy
+msgid "Concrete 5"
+msgstr "新建"
+
+#: admin/wizards/List.py:55
+msgid "The CMS made for Marketing, but built for Geeks."
+msgstr ""
+
+#: admin/wizards/List.py:61
+#, fuzzy
+msgid "Application Servers"
+msgstr "应用程序服务器"
+
+#: admin/wizards/List.py:62
+#, fuzzy
+msgid "General Purpose Application Servers"
+msgstr "应用程序服务器"
+
+#: admin/wizards/List.py:65
+#, fuzzy
+msgid "Alfresco"
+msgstr "重定向"
+
+#: admin/wizards/List.py:66 admin/wizards/List.py:70
+msgid "Enterprise web platform for building business solutions."
+msgstr ""
+
+#: admin/wizards/List.py:69
+#, fuzzy
+msgid "Liferay"
+msgstr "通配符"
+
+#: admin/wizards/List.py:73
+msgid "Glassfish"
+msgstr ""
+
+#: admin/wizards/List.py:74
+msgid ""
+"The first compatible implementation of the Java EE 6 platform specification."
+msgstr ""
+
+#: admin/wizards/List.py:77
+#, fuzzy
+msgid "Adobe ColdFusion"
+msgstr "重定向"
+
+#: admin/wizards/List.py:78
+msgid "Rapidly build Internet applications for the enterprise."
+msgstr ""
+
+#: admin/wizards/List.py:84
+msgid "Platforms"
+msgstr ""
+
+#: admin/wizards/List.py:85
+#, fuzzy
+msgid "Web Development Platforms"
+msgstr "服务器开发"
+
+#: admin/wizards/List.py:88
+#, fuzzy
+msgid "Django"
+msgstr "通配符"
+
+#: admin/wizards/List.py:89
+msgid "The Web framework for perfectionists (with deadlines)."
+msgstr ""
+
+#: admin/wizards/List.py:92
+msgid "Ruby on Rails"
+msgstr ""
+
+#: admin/wizards/List.py:93
+msgid "Open-source web framework optimized for sustainable productivity."
+msgstr ""
+
+#: admin/wizards/List.py:96
+msgid "Zend"
+msgstr ""
+
+#: admin/wizards/List.py:97
+msgid "Simple, straightforward, open-source software framework for PHP 5."
+msgstr ""
+
+#: admin/wizards/List.py:100
+msgid "Symfony"
+msgstr ""
+
+#: admin/wizards/List.py:101
+msgid "Full-stack framework, a library of cohesive classes written in PHP."
+msgstr ""
+
+#: admin/wizards/List.py:105
+msgid "Fast, self-healing, developer-friendly WSGI server."
+msgstr ""
+
+#: admin/wizards/List.py:111
+#, fuzzy
+msgid "Languages"
+msgstr "语言"
+
+#: admin/wizards/List.py:112
+msgid "Development Languages and Platforms"
+msgstr ""
+
+#: admin/wizards/List.py:116
+msgid "Widely-used general-purpose scripting language."
+msgstr ""
+
+#: admin/wizards/List.py:119
+msgid ".NET with Mono"
+msgstr ""
+
+#: admin/wizards/List.py:120
+msgid "Cross-platform, open-source .NET development framework."
+msgstr ""
+
+#: admin/wizards/List.py:126
+#, fuzzy
+msgid "Web Applications"
+msgstr "应用程序服务器"
+
+#: admin/wizards/List.py:127
+#, fuzzy
+msgid "General Purpose Applications"
+msgstr "一般配置"
+
+#: admin/wizards/List.py:130
+msgid "phpMyAdmin"
+msgstr ""
+
+#: admin/wizards/List.py:131
+msgid "PHP web application to handle the administration of MySQL."
+msgstr ""
+
+#: admin/wizards/List.py:134
+msgid "GNU MailMan"
+msgstr ""
+
+#: admin/wizards/List.py:135
+msgid ""
+"Free software for managing electronic mail discussion and e-newsletter lists."
+msgstr ""
+
+#: admin/wizards/List.py:138
+#, fuzzy
+msgid "Moodle"
+msgstr "通配符"
+
+#: admin/wizards/List.py:139
+msgid "Course Management System / Virtual Learning Environment."
+msgstr ""
+
+#: admin/wizards/List.py:142
+msgid "phpBB Forum"
+msgstr ""
+
+#: admin/wizards/List.py:143
+msgid "The most widely used Open Source forum solution."
+msgstr ""
+
+#: admin/wizards/List.py:146
+msgid "Sugar CRM"
+msgstr ""
+
+#: admin/wizards/List.py:147
+msgid "Enable organizations to efficiently organize customer relationships."
+msgstr ""
+
+#: admin/wizards/List.py:150
+#, fuzzy
+msgid "rTorrent"
+msgstr "重定向"
+
+#: admin/wizards/List.py:151
+msgid ""
+"BitTorrent client written in C++, based on the libTorrent libraries for Unix."
+msgstr ""
+
+#: admin/wizards/List.py:157
+msgid "Tasks"
+msgstr ""
+
+#: admin/wizards/List.py:158
+msgid "Common Maintenance Tasks"
+msgstr ""
+
+#: admin/wizards/List.py:161
+#, fuzzy
+msgid "Virtual Server Redirection"
+msgstr "虚拟主机根目录."
+
+#: admin/wizards/List.py:162
+msgid ""
+"Create a new virtual server redirecting every request to another domain host."
+msgstr ""
+
+#: admin/wizards/List.py:165
+msgid "Anti Hot-Linking"
+msgstr ""
+
+#: admin/wizards/List.py:166
+msgid "Stop other domains from hot-linking your media files."
+msgstr ""
+
+#: admin/wizards/List.py:169
+#, fuzzy
+msgid "Directory-listing Icons"
+msgstr "允许目录列表"
+
+#: admin/wizards/List.py:170
+msgid ""
+"Add the /icons and /cherokee_themes directories used for directory listing."
+msgstr ""
+
+#: admin/wizards/List.py:173
+msgid "Static-file support"
+msgstr ""
+
+#: admin/wizards/List.py:174
+msgid "Add a rule to optimally serve the most common static files."
+msgstr ""
+
+#: admin/wizards/List.py:177
+#, fuzzy
+msgid "Media file streaming"
+msgstr "音频/视频流"
+
+#: admin/wizards/List.py:178
+msgid ""
+"Add a rule to stream media files through an intelligent streaming handler."
+msgstr ""
+
+#: admin/wizards/alfresco.py:37
+#, fuzzy
+msgid "Welcome to the Alfresco Wizard"
+msgstr "重定向"
+
+#: admin/wizards/alfresco.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://www.alfresco.com/\">Alfresco Portal</a> "
+"is an enterprise web platform for building business solutions that deliver "
+"immediate results and long-term value."
+msgstr ""
+
+#: admin/wizards/alfresco.py:39 admin/wizards/liferay.py:39
+msgid ""
+"Get the benefits of packaged applications and an enterprise application "
+"framework in a single solution."
+msgstr ""
+
+#: admin/wizards/alfresco.py:41
+msgid "Alfresco Project"
+msgstr "Alfresco项目"
+
+#: admin/wizards/alfresco.py:42
+#, fuzzy
+msgid ""
+"Hostname or IP of the server running Alfresco. You can add more later to "
+"have the load balanced."
+msgstr "服务器主机名或IP地址"
+
+#: admin/wizards/alfresco.py:43 admin/wizards/glassfish.py:43
+#: admin/wizards/liferay.py:43
+#, fuzzy
+msgid "Port running the service in said host. (Example: 8080)"
+msgstr "运行服务的主机端口"
+
+#: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
+#: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
+#: admin/wizards/drupal.py:44 admin/wizards/glassfish.py:45
+#: admin/wizards/joomla.py:47 admin/wizards/liferay.py:45
+#: admin/wizards/mailman.py:46 admin/wizards/moinmoin.py:45
+#: admin/wizards/mono.py:46 admin/wizards/phpbb.py:47
+#: admin/wizards/phpmyadmin.py:48 admin/wizards/sugar.py:47
+#: admin/wizards/symfony.py:51 admin/wizards/trac.py:43
+#: admin/wizards/uwsgi.py:47 admin/wizards/wordpress.py:44
+#: admin/wizards/zend.py:47
+#, fuzzy
+msgid "Host name of the virtual server that is about to be created."
+msgstr "虚拟主机名称."
+
+#: admin/wizards/alfresco.py:46 admin/wizards/coldfusion.py:45
+#: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
+#: admin/wizards/drupal.py:43 admin/wizards/glassfish.py:46
+#: admin/wizards/joomla.py:46 admin/wizards/liferay.py:46
+#: admin/wizards/mailman.py:45 admin/wizards/moinmoin.py:46
+#: admin/wizards/mono.py:45 admin/wizards/phpbb.py:46
+#: admin/wizards/phpmyadmin.py:47 admin/wizards/sugar.py:46
+#: admin/wizards/symfony.py:50 admin/wizards/trac.py:42
+#: admin/wizards/uwsgi.py:46 admin/wizards/wordpress.py:43
+#: admin/wizards/zend.py:46
+#, fuzzy
+msgid "New Virtual Server Details"
+msgstr "虚拟主机"
+
+#: admin/wizards/alfresco.py:48 admin/wizards/coldfusion.py:48
+#: admin/wizards/glassfish.py:48 admin/wizards/liferay.py:48
+#: admin/wizards/moinmoin.py:48 admin/wizards/uwsgi.py:50
+#, fuzzy
+msgid "Public web directory to access the project."
+msgstr "新目录基于Alfresco项目"
+
+#: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
+#: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
+#: admin/wizards/drupal.py:46 admin/wizards/glassfish.py:49
+#: admin/wizards/joomla.py:50 admin/wizards/liferay.py:49
+#: admin/wizards/moinmoin.py:49 admin/wizards/mono.py:50
+#: admin/wizards/phpbb.py:50 admin/wizards/phpmyadmin.py:51
+#: admin/wizards/sugar.py:50 admin/wizards/symfony.py:54
+#: admin/wizards/uwsgi.py:51 admin/wizards/wordpress.py:46
+#: admin/wizards/zend.py:50
+#, fuzzy
+msgid "Public Web Direcoty"
+msgstr "网页目录"
+
+#: admin/wizards/alfresco.py:172 admin/wizards/coldfusion.py:178
+#: admin/wizards/concrete5.py:220 admin/wizards/django.py:189
+#: admin/wizards/drupal.py:251 admin/wizards/glassfish.py:170
+#: admin/wizards/joomla.py:219 admin/wizards/liferay.py:169
+#: admin/wizards/mailman.py:145 admin/wizards/moinmoin.py:214
+#: admin/wizards/mono.py:198 admin/wizards/phpbb.py:178
+#: admin/wizards/rails.py:313 admin/wizards/sugar.py:208
+#: admin/wizards/symfony.py:218 admin/wizards/trac.py:131
+#: admin/wizards/uwsgi.py:241 admin/wizards/wordpress.py:209
+#: admin/wizards/zend.py:193
+#, fuzzy
+msgid "New Host Name"
+msgstr "新主机别名"
+
+#: admin/wizards/alfresco.py:188 admin/wizards/glassfish.py:186
+#: admin/wizards/liferay.py:185
+#, fuzzy
+msgid "Source host"
+msgstr "数据源使用"
+
+#: admin/wizards/alfresco.py:189 admin/wizards/glassfish.py:187
+#: admin/wizards/liferay.py:186
+#, fuzzy
+msgid "Source port"
+msgstr "支持"
+
+#: admin/wizards/coldfusion.py:38
+#, fuzzy
+msgid "Welcome to the ColdFusion Wizard"
+msgstr "重定向"
+
+#: admin/wizards/coldfusion.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://www.adobe.com/products/coldfusion/"
+"\">Adobe ColdFusion®</a> enable developers to rapidly build, deploy, and "
+"maintain robust Internet applications for the enterprise."
+msgstr ""
+
+#: admin/wizards/coldfusion.py:40
+msgid ""
+"It allows developers to condense complex business logic into fewer lines of "
+"code."
+msgstr ""
+
+#: admin/wizards/coldfusion.py:42
+#, fuzzy
+msgid "ColdFusion Details"
+msgstr "重定向"
+
+#: admin/wizards/coldfusion.py:43
+msgid ""
+"The pair IP:port of the server running ColdFusion. You can add more later to "
+"have the load balanced."
+msgstr ""
+
+#: admin/wizards/coldfusion.py:51
+#, fuzzy
+msgid "ColdFusion is not running on the specified host."
+msgstr "运行服务的主机端口"
+
+#: admin/wizards/concrete5.py:38
+#, fuzzy
+msgid "Welcome to the Concrete5 Wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/concrete5.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://www.concrete5.org/\">Concrete5</a> is a "
+"content management system that is free and open source."
+msgstr ""
+
+#: admin/wizards/concrete5.py:40
+msgid "It is the CMS made for Marketing, but built for Geeks."
+msgstr ""
+
+#: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
+#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:42
+#: admin/wizards/phpbb.py:42 admin/wizards/phpmyadmin.py:43
+#: admin/wizards/rtorrent.py:36 admin/wizards/sugar.py:42
+#: admin/wizards/symfony.py:45 admin/wizards/trac.py:41
+#: admin/wizards/wordpress.py:41 admin/wizards/zend.py:42
+#, fuzzy
+msgid "Application Source Code"
+msgstr "应用程序服务器"
+
+#: admin/wizards/concrete5.py:43
+msgid ""
+"Local directory where the Concrete5 source code is located. Example: /usr/"
+"share/concrete5."
+msgstr ""
+
+#: admin/wizards/concrete5.py:44
+msgid "Does not look like a Concrete5 source directory."
+msgstr ""
+
+#: admin/wizards/concrete5.py:49
+msgid ""
+"Web directory where you want Concrete5 to be accessible. (Example: /"
+"concrete5)"
+msgstr ""
+
+#: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
+#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:220
+#: admin/wizards/mailman.py:146 admin/wizards/mono.py:200
+#: admin/wizards/phpbb.py:179 admin/wizards/rails.py:314
+#: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
+#: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
+#: admin/wizards/wordpress.py:210 admin/wizards/zend.py:194
+#, fuzzy
+msgid "Use Same Logs as"
+msgstr "和虚拟主机使用同一个日志文件"
+
+#: admin/wizards/concrete5.py:239 admin/wizards/phpbb.py:197
+#: admin/wizards/phpmyadmin.py:134 admin/wizards/zend.py:210
+#, fuzzy
+msgid "Source Directory"
+msgstr "网页目录"
+
+#: admin/wizards/django.py:38
+#, fuzzy
+msgid "Welcome to the Django wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/django.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://djangoproject.com/\">Django</a> is a high-"
+"level Python Web framework that encourages rapid development and clean, "
+"pragmatic design."
+msgstr ""
+
+#: admin/wizards/django.py:40
+msgid ""
+"It is the Web framework for perfectionists (with deadlines). Django makes it "
+"easier to build better Web apps more quickly and with less code."
+msgstr ""
+
+#: admin/wizards/django.py:42
+msgid ""
+"Local directory where the Django source code is located. Example: /usr/share/"
+"django."
+msgstr ""
+
+#: admin/wizards/django.py:45
+msgid "Web directory where you want Django to be accessible. (Example: /blog)"
+msgstr ""
+
+#: admin/wizards/django.py:47 admin/wizards/uwsgi.py:48
+#, fuzzy
+msgid "Path to use as document root for the new virtual server."
+msgstr "虚拟主机名称."
+
+#: admin/wizards/django.py:48
+msgid "Does not look like a Django source directory."
+msgstr ""
+
+#: admin/wizards/django.py:49 admin/wizards/rails.py:55
+#: admin/wizards/uwsgi.py:54
+#, fuzzy
+msgid "The document root directory does not exist."
+msgstr "虚拟主机名称."
+
+#: admin/wizards/django.py:209
+#, fuzzy
+msgid "Django Local Directory"
+msgstr "网页目录"
+
+#: admin/wizards/django.py:271
+msgid "Directory doesn't look like a Django based project."
+msgstr ""
+
+#: admin/wizards/drupal.py:38
+#, fuzzy
+msgid "Welcome to the Drupal wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/drupal.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://drupal.org/\">Drupal</a> is a free "
+"software package that allows an individual or a community of users to easily "
+"publish, manage and organize a wide variety of content on a website."
+msgstr ""
+
+#: admin/wizards/drupal.py:40
+msgid ""
+"Tens of thousands of people and organizations are using Drupal to power "
+"scores of different web sites."
+msgstr ""
+
+#: admin/wizards/drupal.py:42
+msgid ""
+"Local directory where the Drupal source code is located. Example: /usr/share/"
+"drupal."
+msgstr ""
+
+#: admin/wizards/drupal.py:45
+msgid "Web directory where you want Drupal to be accessible. (Example: /blog)"
+msgstr ""
+
+#: admin/wizards/drupal.py:47
+#, fuzzy
+msgid "Does not look like a Drupal source directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/drupal.py:270
+#, fuzzy
+msgid "Drupal Local Directory"
+msgstr "网页目录"
+
+#: admin/wizards/glassfish.py:37
+msgid "Welcome to the GlassFish Wizard"
+msgstr ""
+
+#: admin/wizards/glassfish.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://glassfish.org/\">GlassFish</a> is the "
+"first compatible implementation of the Java EE 6 platform specification."
+msgstr ""
+
+#: admin/wizards/glassfish.py:39
+msgid ""
+"This lightweight, flexible, and open-source application server enables "
+"organizations to not only leverage the new capabilities introduced within "
+"the Java EE 6 specification, but also to add to their existing capabilities "
+"through a faster and more streamlined development and deployment cycle."
+msgstr ""
+
+#: admin/wizards/glassfish.py:41
+#, fuzzy
+msgid "GlassFish Project"
+msgstr "Alfresco项目"
+
+#: admin/wizards/glassfish.py:42
+msgid ""
+"Hostname or IP of the server running GlassFish. You can add more later to "
+"have the load balanced."
+msgstr ""
+
+#: admin/wizards/hotlinking.py:38
+msgid "Welcome to the Hotlinking Wizard"
+msgstr ""
+
+#: admin/wizards/hotlinking.py:39
+msgid "This wizard stops other domains from hot-linking your media files."
+msgstr ""
+
+#: admin/wizards/hotlinking.py:40
+#, fuzzy
+msgid "Anti-HotLinking Information"
+msgstr "显示服务器信息"
+
+#: admin/wizards/hotlinking.py:41
+msgid "Domain allowed to access the files. Eg: example.com"
+msgstr ""
+
+#: admin/wizards/hotlinking.py:42
+msgid "Path to the public resource to use. Eg: /images/forbidden.jpg"
+msgstr ""
+
+#: admin/wizards/hotlinking.py:43
+msgid "How to handle hot-linking requests."
+msgstr ""
+
+#: admin/wizards/hotlinking.py:44
+msgid "Recollection completed"
+msgstr ""
+
+#: admin/wizards/hotlinking.py:45
+msgid ""
+"The required Information has been collected. Proceed to create the necessary "
+"rules to prevent hot-linking from happening."
+msgstr ""
+
+#: admin/wizards/hotlinking.py:82
+#, fuzzy
+msgid "Show error"
+msgstr "显示用户"
+
+#: admin/wizards/hotlinking.py:83
+#, fuzzy
+msgid "Redirect"
+msgstr "重定向"
+
+#: admin/wizards/hotlinking.py:142
+#, fuzzy
+msgid "Domain"
+msgstr "绑定域名数量"
+
+#: admin/wizards/hotlinking.py:179
+#, fuzzy
+msgid "Domain Name"
+msgstr "域名模式"
+
+#: admin/wizards/hotlinking.py:180
+#, fuzzy
+msgid "Reply type"
+msgstr "回复"
+
+#: admin/wizards/icons.py:37
+#, fuzzy
+msgid "Welcome to the Icons Wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/icons.py:38
+msgid ""
+"This wizard adds the /icons and /cherokee_themes directories so Cherokee can "
+"use icons when listing directories."
+msgstr ""
+
+#: admin/wizards/icons.py:39
+msgid ""
+"The /icons and /cherokee_themes directories are already configured. There is "
+"nothing left to do."
+msgstr ""
+
+#: admin/wizards/joomla.py:38
+#, fuzzy
+msgid "Welcome to the Joomla wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/joomla.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://www.joomla.org/\">Joomla</a> is an award-"
+"winning content management system (CMS), which enables you to build Web "
+"sites and powerful online applications."
+msgstr ""
+
+#: admin/wizards/joomla.py:40
+msgid ""
+"Best of all, Joomla is an open source solution that is freely available to "
+"everyone."
+msgstr ""
+
+#: admin/wizards/joomla.py:43
+msgid ""
+"Local directory where the Joomla source code is located. Example: /usr/share/"
+"joomla."
+msgstr ""
+
+#: admin/wizards/joomla.py:44
+msgid "Does not look like a Joomla source directory."
+msgstr ""
+
+#: admin/wizards/joomla.py:49
+msgid ""
+"Web directory where you want Joomla to be accessible. (Example: /joomla)"
+msgstr ""
+
+#: admin/wizards/joomla.py:238
+#, fuzzy
+msgid "Joomla Local Directory"
+msgstr "网页目录"
+
+#: admin/wizards/liferay.py:37
+#, fuzzy
+msgid "Welcome to the Liferay Wizard"
+msgstr "通配符"
+
+#: admin/wizards/liferay.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://www.liferay.com/\">Liferay Portal</a> is "
+"an enterprise web platform for building business solutions that deliver "
+"immediate results and long-term value."
+msgstr ""
+
+#: admin/wizards/liferay.py:41
+#, fuzzy
+msgid "Liferay Project"
+msgstr "Alfresco项目"
+
+#: admin/wizards/liferay.py:42
+msgid ""
+"Hostname or IP of the server running Liferay. You can add more later to have "
+"the load balanced."
+msgstr ""
+
+#: admin/wizards/mailman.py:36
+msgid "Welcome to the Mailman Wizard"
+msgstr ""
+
+#: admin/wizards/mailman.py:37
+msgid ""
+"<a target=\"_blank\" href=\"http://www.gnu.org/software/mailman/\">Mailman</"
+"a> is free software for managing electronic mail discussion and e-newsletter "
+"lists."
+msgstr ""
+
+#: admin/wizards/mailman.py:38
+msgid ""
+"Mailman supports built-in archiving, automatic bounce processing, content "
+"filtering, digest delivery, spam filters, and more."
+msgstr ""
+
+#: admin/wizards/mailman.py:40
+#, fuzzy
+msgid "Mailman Details"
+msgstr "路径不是目录"
+
+#: admin/wizards/mailman.py:41
+#, fuzzy
+msgid "Local path to the Mailman CGI directory."
+msgstr "路径不是目录"
+
+#: admin/wizards/mailman.py:42
+#, fuzzy
+msgid "Local path to the Mailman data directory."
+msgstr "路径不是目录"
+
+#: admin/wizards/mailman.py:43
+msgid "Local path to the Mailman mail archive directory."
+msgstr ""
+
+#: admin/wizards/mailman.py:166
+#, fuzzy
+msgid "Mailman CGI directory"
+msgstr "路径不是目录"
+
+#: admin/wizards/mailman.py:167
+#, fuzzy
+msgid "Mailman Data directory"
+msgstr "路径不是目录"
+
+#: admin/wizards/mailman.py:168
+#, fuzzy
+msgid "Mail Archive directory"
+msgstr "虚拟主机根目录."
+
+#: admin/wizards/mailman.py:205
+#, fuzzy
+msgid "It doesn't look like a Mailman data directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/mailman.py:212
+#, fuzzy
+msgid "It doesn't look like a Mailman CGI directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/mailman.py:221
+#, fuzzy
+msgid "It doesn't look like a Mailman archive directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/moinmoin.py:37
+#, fuzzy
+msgid "Welcome to the MoinMoin Wizard"
+msgstr "通配符"
+
+#: admin/wizards/moinmoin.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://moinmo.in/\">MoinMoin</a>  is an "
+"advanced, easy to use and extensible WikiEngine with a large community of "
+"users."
+msgstr ""
+
+#: admin/wizards/moinmoin.py:39
+msgid ""
+"Said in a few words, it is about collaboration on easily editable web pages."
+msgstr ""
+
+#: admin/wizards/moinmoin.py:41
+#, fuzzy
+msgid "MoinMoin Wiki Instance"
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/moinmoin.py:42
+#, fuzzy
+msgid "Local path to the MoinMoin Wiki Instance."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/moinmoin.py:43
+msgid "Complete path to the FastCGI spawner, normally spawn-fcgi."
+msgstr ""
+
+#: admin/wizards/moinmoin.py:51
+#, fuzzy
+msgid "It does not look like a MoinMoin Wiki Instance."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/moinmoin.py:52
+msgid "MoinMoin doesn't seem to be correctly installed."
+msgstr ""
+
+#: admin/wizards/moinmoin.py:234
+#, fuzzy
+msgid "MoinMoin Directory"
+msgstr "路径不是目录"
+
+#: admin/wizards/moinmoin.py:239
+#, fuzzy
+msgid "FastCGI spawner binary"
+msgstr "FastCGI 详细设置"
+
+#: admin/wizards/mono.py:37
+#, fuzzy
+msgid "Welcome to the mono Wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/mono.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://www.mono-project.com/\">Mono</a> is a "
+"cross-platform, open-source .NET development framework."
+msgstr ""
+
+#: admin/wizards/mono.py:39
+msgid ""
+"It is an open implementation of C# and the CLR that is binary compatible "
+"with Microsoft.NET."
+msgstr ""
+
+#: admin/wizards/mono.py:41
+#, fuzzy
+msgid "Mono Project"
+msgstr "Alfresco项目"
+
+#: admin/wizards/mono.py:42
+msgid "Local path to the Mono based project."
+msgstr ""
+
+#: admin/wizards/mono.py:43
+#, fuzzy
+msgid "Local path to the FastCGI Mono server binary."
+msgstr "不能启动服务器"
+
+#: admin/wizards/mono.py:47
+msgid "Document root (for non Mono related files)."
+msgstr ""
+
+#: admin/wizards/mono.py:49
+#, fuzzy
+msgid "Web directory under which the Mono application will be published."
+msgstr "公共网页目录的内容将应用于配置."
+
+#: admin/wizards/mono.py:52
+#, fuzzy
+msgid "Directory doesn't look like a Mono based project."
+msgstr "新目录基于Alfresco项目"
+
+#: admin/wizards/mono.py:219 admin/wizards/rails.py:365
+#: admin/wizards/trac.py:151
+#, fuzzy
+msgid "Project Directory"
+msgstr "网页目录"
+
+#: admin/wizards/mono.py:221
+msgid "Mono Server Binary"
+msgstr ""
+
+#: admin/wizards/php.py:32
+#, fuzzy
+msgid "Welcome to the PHP Wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/php.py:33
+msgid ""
+"<a target=\"_blank\" href=\"http://php.net/\">PHP</a> is a widely-used "
+"general-purpose scripting language that is especially suited for Web "
+"development and can be embedded into HTML."
+msgstr ""
+
+#: admin/wizards/php.py:70
+#, fuzzy
+msgid "Invalid Virtual Server reference."
+msgstr "虚拟主机名称"
+
+#: admin/wizards/php.py:82
+msgid "Could not find a suitable PHP interpreter."
+msgstr ""
+
+#: admin/wizards/php.py:91
+msgid "Could not determine PHP-fpm settings."
+msgstr ""
+
+#: admin/wizards/php.py:95
+msgid "Could not determine correct interpreter settings."
+msgstr ""
+
+#: admin/wizards/phpbb.py:38
+#, fuzzy
+msgid "Welcome to the phpBB Wizard"
+msgstr "通配符"
+
+#: admin/wizards/phpbb.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://www.phpbb.com/\">phpBB</a> has become the "
+"most widely used Open Source forum solution."
+msgstr ""
+
+#: admin/wizards/phpbb.py:40
+msgid ""
+"With a large and highly customisable set of key features coupled with a "
+"standards compliant interface, phpBB will grow with, and complement your "
+"website. With millions of installations worldwide, it is no wonder phpBB™ is "
+"one of the most popular ways to create and support a community."
+msgstr ""
+
+#: admin/wizards/phpbb.py:43
+msgid ""
+"Local directory where the phpBB source code is located. Example: /usr/share/"
+"phpbb."
+msgstr ""
+
+#: admin/wizards/phpbb.py:44
+#, fuzzy
+msgid "Does not look like a phpBB source directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/phpbb.py:49
+msgid "Web directory where you want phpBB to be accessible. (Example: /phpbb)"
+msgstr ""
+
+#: admin/wizards/phpmyadmin.py:39
+#, fuzzy
+msgid "Welcome to the phpMyAdmin Wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/phpmyadmin.py:40
+msgid ""
+"<a target=\"_blank\" href=\"http://www.phpmyadmin.net/\">phpMyAdmin</a> is a "
+"free software tool written in PHP intended to handle the administration of "
+"MySQL over the World Wide Web."
+msgstr ""
+
+#: admin/wizards/phpmyadmin.py:41
+msgid ""
+"phpMyAdmin supports a wide range of operations with MySQL. The most "
+"frequently used operations are supported by the user interface (managing "
+"databases, tables, fields, relations, indexes, users, permissions, etc), "
+"while you still have the ability to directly execute any SQL statement."
+msgstr ""
+
+#: admin/wizards/phpmyadmin.py:44
+msgid ""
+"Local directory where the phpMyAdmin source code is located. Example: /usr/"
+"share/phpmyadmin."
+msgstr ""
+
+#: admin/wizards/phpmyadmin.py:45
+msgid "Does not look like a phpMyAdmin source directory."
+msgstr ""
+
+#: admin/wizards/phpmyadmin.py:50
+msgid ""
+"Web directory where you want phpMyAdmin to be accessible. (Example: /"
+"phpmyadmin)"
+msgstr ""
+
+#: admin/wizards/rails.py:37
+msgid "Welcome to the Ruby on Rails wizard"
+msgstr ""
+
+#: admin/wizards/rails.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://rubyonrails.org/\">Ruby on Rails</a> is "
+"an open-source web framework optimized for programmer happines and "
+"sustainable productivity."
+msgstr ""
+
+#: admin/wizards/rails.py:39
+msgid ""
+"It lets yow write beautiful code by favoring convention over configuration."
+msgstr ""
+
+#: admin/wizards/rails.py:41
+msgid "Ruby on Rails Project"
+msgstr ""
+
+#: admin/wizards/rails.py:42
+#, fuzzy
+msgid "New Virtual Server"
+msgstr "虚拟主机"
+
+#: admin/wizards/rails.py:45
+msgid "Local path to the Ruby on Rails based project."
+msgstr ""
+
+#: admin/wizards/rails.py:46
+#, fuzzy
+msgid "Name of the new domain that will be created."
+msgstr "PID文件的路径. 为空则不建立PID文件"
+
+#: admin/wizards/rails.py:47
+msgid ""
+"Directory of the web directory where the Ruby on Rails project will live in."
+msgstr ""
+
+#: admin/wizards/rails.py:48
+msgid "Value of the RAILS_ENV variable."
+msgstr ""
+
+#: admin/wizards/rails.py:49
+msgid ""
+"The proxy setting is recommended, but FastCGI can also be used if spawn-fcgi "
+"is available."
+msgstr ""
+
+#: admin/wizards/rails.py:51
+msgid ""
+"<p>Even though the directory looks like a Ruby on Rails project, the public/"
+"dispatch.fcgi file wasn't found.</p>"
+msgstr ""
+
+#: admin/wizards/rails.py:52
+msgid ""
+"<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
+"might want to rename it.</p>"
+msgstr ""
+
+#: admin/wizards/rails.py:53
+msgid ""
+"<p>If you are using Rails >= 2.3.0, you will have to execute the following "
+"command from the project directory in order to add the missing file:</"
+"p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
+msgstr ""
+
+#: admin/wizards/rails.py:54
+#, fuzzy
+msgid "It does not look like a Ruby on Rails based project directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/rails.py:366
+msgid "RAILS_ENV environment"
+msgstr ""
+
+#: admin/wizards/rails.py:369
+msgid "Deployment method"
+msgstr ""
+
+#: admin/wizards/redirect.py:39
+#, fuzzy
+msgid "Welcome to the Redirection Wizard"
+msgstr "重定向"
+
+#: admin/wizards/redirect.py:40
+msgid ""
+"This Wizard creates a new virtual server redirecting every request to "
+"another domain host."
+msgstr ""
+
+#: admin/wizards/redirect.py:42
+#, fuzzy
+msgid "Redirection details"
+msgstr "重定向"
+
+#: admin/wizards/redirect.py:43
+msgid ""
+"This domain name will be used as nickname for the new virtual server. More "
+"domain names can be added to the virtual server later on."
+msgstr ""
+
+#: admin/wizards/redirect.py:44
+#, fuzzy
+msgid "Domain name to which requests will be redirected."
+msgstr "正在表达式将决定哪些请求将被执行."
+
+#: admin/wizards/redirect.py:111
+#, fuzzy
+msgid "Origin Domain"
+msgstr "绑定域名"
+
+#: admin/wizards/redirect.py:112
+#, fuzzy
+msgid "Target Domain"
+msgstr "相应的域名"
+
+#: admin/wizards/rtorrent.py:33
+#, fuzzy
+msgid "Welcome to the rTorrent Wizard"
+msgstr "重定向"
+
+#: admin/wizards/rtorrent.py:34
+msgid ""
+"<a target=\"_blank\" href=\"http://libtorrent.rakshasa.no/\">rTorrent</a> is "
+"a text-based ncurses BitTorrent client written in C++, based on the "
+"libTorrent libraries for Unix (not to be confused with libtorrent by Arvid "
+"Norberg), whose author's goal is “a focus on high performance and good code”"
+msgstr ""
+
+#: admin/wizards/rtorrent.py:37
+#, fuzzy
+msgid ""
+"Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket "
+"path."
+msgstr "如果信息源可以访问. 主机:端口, 或者 UNIX套接字连接路径."
+
+#: admin/wizards/rtorrent.py:38
+msgid ""
+"Web directory where you want rTorrent XMLRPC to be accessible. (Example: /"
+"RPC2)"
+msgstr ""
+
+#: admin/wizards/rtorrent.py:140
+#, python-format
+msgid "Already configured: %s"
+msgstr ""
+
+#: admin/wizards/static.py:37
+msgid "Welcome to the Common Static wizard"
+msgstr ""
+
+#: admin/wizards/static.py:38
+msgid ""
+"This wizard adds a rule to optimally serve the most common static files."
+msgstr ""
+
+#: admin/wizards/static.py:39
+msgid "Current rules have been checked"
+msgstr ""
+
+#: admin/wizards/static.py:40
+msgid ""
+"The process is very simple. Let the wizard take over and don't worry about a "
+"thing."
+msgstr ""
+
+#: admin/wizards/static.py:41
+msgid ""
+"Common files have been already configured, so there is nothing to be done."
+msgstr ""
+
+#: admin/wizards/streaming.py:39
+#, fuzzy
+msgid "Welcome to the Streaming Wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/streaming.py:40
+msgid "This Wizard Adds a rule to stream media files."
+msgstr ""
+
+#: admin/wizards/streaming.py:115
+msgid "The media streaming plug-in is not installed."
+msgstr ""
+
+#: admin/wizards/streaming.py:123
+#, fuzzy
+msgid "Media streaming is already configured."
+msgstr "虚拟主机名称正在被使用中"
+
+#: admin/wizards/sugar.py:38
+msgid "Welcome to the Sugar CRM Wizard"
+msgstr ""
+
+#: admin/wizards/sugar.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://www.sugarcrm.com/\">Sugar</a> enables "
+"organizations to efficiently organize, populate, and maintain information on "
+"all aspects of their customer relationships."
+msgstr ""
+
+#: admin/wizards/sugar.py:40
+msgid ""
+"It provides integrated management of corporate information on customer "
+"accounts and contacts, sales leads and opportunities, plus activities such "
+"as calls, meetings, and assigned tasks."
+msgstr ""
+
+#: admin/wizards/sugar.py:43
+msgid ""
+"Local directory where the Sugar CRM source code is located. Example: /usr/"
+"share/sugar."
+msgstr ""
+
+#: admin/wizards/sugar.py:44
+msgid "Does not look like a Sugar CRM source directory."
+msgstr ""
+
+#: admin/wizards/sugar.py:49
+msgid ""
+"Web directory where you want Sugar CRM to be accessible. (Example: /sugar)"
+msgstr ""
+
+#: admin/wizards/sugar.py:227
+#, fuzzy
+msgid "Sugar Local Directory"
+msgstr "网页目录"
+
+#: admin/wizards/symfony.py:41
+msgid "Welcome to the Symfony Wizard"
+msgstr ""
+
+#: admin/wizards/symfony.py:42
+msgid ""
+"<a target=\"_blank\" href=\"http://www.symfony-project.org/\">Symfony</a>  "
+"is a full-stack framework, a library of cohesive classes written in PHP."
+msgstr ""
+
+#: admin/wizards/symfony.py:43
+msgid ""
+"It provides an architecture, components and tools for developers to build "
+"complex web applications faster."
+msgstr ""
+
+#: admin/wizards/symfony.py:46
+msgid ""
+"Local directory where the Symfony source code is located. Example: /usr/"
+"share/php/data/symfony."
+msgstr ""
+
+#: admin/wizards/symfony.py:47
+msgid ""
+"Path to the web folder of the Symfony project. (Example: /home/user/"
+"sf_project/web)"
+msgstr ""
+
+#: admin/wizards/symfony.py:48
+#, fuzzy
+msgid "Does not look like a Symfony source directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/symfony.py:53
+msgid ""
+"Web directory where you want Symfony to be accessible. (Example: /symfony)"
+msgstr ""
+
+#: admin/wizards/symfony.py:237
+#, fuzzy
+msgid "Project Source"
+msgstr "网页目录"
+
+#: admin/wizards/symfony.py:238
+msgid "Symfony Package"
+msgstr ""
+
+#: admin/wizards/trac.py:38
+#, fuzzy
+msgid "Welcome to the Trac wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/trac.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://trac.edgewall.org/\">Trac</a> is an "
+"enhanced wiki and issue tracking system for software development projects. "
+"Trac uses a minimalistic approach to web-based software project management."
+msgstr ""
+
+#: admin/wizards/trac.py:40
+msgid ""
+"It provides an interface to Subversion (or other version control systems), "
+"an integrated Wiki and convenient reporting facilities."
+msgstr ""
+
+#: admin/wizards/trac.py:44
+msgid "Local path to the Trac project."
+msgstr ""
+
+#: admin/wizards/trac.py:45
+msgid "Local path to the Trac installation. (Example: /usr/share/trac)"
+msgstr ""
+
+#: admin/wizards/trac.py:47
+#, fuzzy
+msgid "It does not look like a Trac based project directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/trac.py:48
+#, fuzzy
+msgid "It does not look like a Trac installation."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/trac.py:150
+#, fuzzy
+msgid "Trac Local Directory"
+msgstr "网页目录"
+
+#: admin/wizards/uwsgi.py:37
+msgid "Welcome to the uWsgi Wizard"
+msgstr ""
+
+#: admin/wizards/uwsgi.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://projects.unbit.it/uwsgi/\">uWSGI</a> is a "
+"fast (pure C), self-healing, developer-friendly WSGI server, aimed for "
+"professional python webapps deployment and development."
+msgstr ""
+
+#: admin/wizards/uwsgi.py:39
+msgid ""
+"Over time it has evolved in a complete stack for networked/clustered python "
+"applications, implementing message/object passing and process management. It "
+"uses the uwsgi (all lowercase) protocol for all the networking/interprocess "
+"communications."
+msgstr ""
+
+#: admin/wizards/uwsgi.py:42
+msgid ""
+"Path to the uWSGI configuration file (XML or Python-only). Its mountpoint "
+"will be used."
+msgstr ""
+
+#: admin/wizards/uwsgi.py:43
+msgid "Location of the uWSGI binary"
+msgstr ""
+
+#: admin/wizards/uwsgi.py:44
+#, fuzzy
+msgid "It does not look like a uWSGI configuration file."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/uwsgi.py:52
+msgid ""
+"The default value is extracted from the configuration file. Change it at "
+"your own risk."
+msgstr ""
+
+#: admin/wizards/uwsgi.py:53
+#, fuzzy
+msgid "Does not look like a Uwsgi source directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/uwsgi.py:262
+#, fuzzy
+msgid "uWSGI binary"
+msgstr "通配符"
+
+#: admin/wizards/uwsgi.py:263
+#, fuzzy
+msgid "Configuration File"
+msgstr "服务器配置文件"
+
+#: admin/wizards/wordpress.py:38
+#, fuzzy
+msgid "Welcome to the WordPress wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/wordpress.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://wordpress.org/\">WordPress</a> is a state-"
+"of-the-art publishing platform with a focus on aesthetics, web standards, "
+"and usability. WordPress is both free and priceless at the same time."
+msgstr ""
+
+#: admin/wizards/wordpress.py:40
+msgid ""
+"More simply, WordPress is what you use when you want to work with your "
+"blogging software, not fight it."
+msgstr ""
+
+#: admin/wizards/wordpress.py:42
+msgid ""
+"Local directory where the WordPress source code is located. Example: /usr/"
+"share/wordpress."
+msgstr ""
+
+#: admin/wizards/wordpress.py:45
+msgid ""
+"Web directory where you want WordPress to be accessible. (Example: /blog)"
+msgstr ""
+
+#: admin/wizards/wordpress.py:47
+msgid "Does not look like a WordPress source directory."
+msgstr ""
+
+#: admin/wizards/wordpress.py:228
+#, fuzzy
+msgid "WordPress Local Directory"
+msgstr "网页目录"
+
+#: admin/wizards/zend.py:38
+#, fuzzy
+msgid "Welcome to the Zend Wizard"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/wizards/zend.py:39
+msgid ""
+"<a target=\"_blank\" href=\"http://www.zend.com/\">Zend</a> Framework is a "
+"simple, straightforward, open-source software framework for PHP 5 designed "
+"to eliminate the tedious details of coding and let you focus on the big "
+"picture."
+msgstr ""
+
+#: admin/wizards/zend.py:40
+msgid ""
+"One of its strengths is the highly modular Model-View-Controller (MVC) "
+"design, making your code more reusable and easier to maintain."
+msgstr ""
+
+#: admin/wizards/zend.py:43
+msgid ""
+"Local directory where the Zend source code is located. Example: /usr/share/"
+"php/data/zend."
+msgstr ""
+
+#: admin/wizards/zend.py:44
+#, fuzzy
+msgid "Does not look like a Zend source directory."
+msgstr "新建一个新的配置文件"
+
+#: admin/wizards/zend.py:49
+msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
+msgstr ""
+
+#, fuzzy
+#~ msgid "or"
+#~ msgstr "端口"
+
+#, fuzzy
+#~ msgid "exists"
+#~ msgstr "文件存在"
+
+#, fuzzy
+#~ msgid "title"
+#~ msgstr "文件"
+
 #, fuzzy
 #~ msgid "%s Support"
 #~ msgstr "支持"
@@ -2811,292 +5273,32 @@ msgstr ""
 #~ msgid "Realm can not be empty"
 #~ msgstr "界限不能为空"
 
-#~ msgid "Password"
-#~ msgstr "密码"
-
-#~ msgid "Add new pair"
-#~ msgstr "增加一对"
-
 #~ msgid "Allow to select how the connections will be dispatched."
 #~ msgstr "允许你选择连接如何进行."
 
 #~ msgid "information sources"
 #~ msgstr "数据源"
 
-#~ msgid "IP (Port):"
-#~ msgstr "IP地址(端口)"
-
-#, fuzzy
-#~ msgid "Port:"
-#~ msgstr "端口"
-
-#~ msgid "Selected Ports"
-#~ msgstr "已经选择的端口"
-
-#, fuzzy
-#~ msgid "Assign new IP/Port"
-#~ msgstr "增加新的IP地址/端口"
-
 #~ msgid "ERROR, a 'value' entry is needed!"
 #~ msgstr "遇到错误, 您必须输入一个参数!"
-
-#~ msgid "Allow extra tailing paths"
-#~ msgstr "允许额外附加路径"
-
-#~ msgid "Allow to list directory contents"
-#~ msgstr "允许列出文件夹内容"
-
-#~ msgid "Allow PathInfo"
-#~ msgstr "允许显示路径信息"
-
-#~ msgid "Allow Directory Listing"
-#~ msgstr "允许目录列表"
-
-#~ msgid "Parsing"
-#~ msgstr "解析"
-
-#~ msgid "HTTP Error that you be used to reply the request."
-#~ msgstr "HTTP错误，您要对请求作出答复."
-
-#~ msgid "HTTP Custom Error"
-#~ msgstr "自定义的HTTP错误"
-
-#~ msgid "Language from which the information will be consumed."
-#~ msgstr "设置信息使用的语言."
-
-#~ msgid "User to access the database."
-#~ msgstr "访问数据库的用户."
-
-#~ msgid "Password for the user accessing the database."
-#~ msgstr "访问数据库的用户密码."
-
-#, fuzzy
-#~ msgid "Database to connect to."
-#~ msgstr "服务器端口."
-
-#~ msgid "MySQL balancing"
-#~ msgstr "MySQL 负载均衡"
-
-#~ msgid "DB balancig recipe"
-#~ msgstr "数据库负载均衡处理方法"
-
-#~ msgid "Serialization"
-#~ msgstr "连载"
-
-#~ msgid "DB User"
-#~ msgstr "数据库用户"
-
-#~ msgid "DB Password"
-#~ msgstr "数据库用户密码"
-
-#~ msgid "Data Base"
-#~ msgstr "数据库名称"
-
-#~ msgid "Data base balancing"
-#~ msgstr "数据库负载均衡"
-
-#~ msgid "Balancer"
-#~ msgstr "均衡器"
-
-#~ msgid ""
-#~ "Public Web Directory to which content the configuration will be applied."
-#~ msgstr "公共网页目录的内容将应用于配置."
-
-#~ msgid "Web Directory"
-#~ msgstr "网页目录"
-
-#~ msgid "Choose the listing theme."
-#~ msgstr "选个一个列出的主题."
-
-#~ msgid ""
-#~ "Web directory where the icon files are located. Default: <i>/icons</i>."
-#~ msgstr "网站目录下的图标文件位于. 默认: <i>/icons</i>."
-
-#~ msgid "List of notice files to be inserted."
-#~ msgstr "列出要插入的通知文件."
-
-#~ msgid "List of files that should not be listed."
-#~ msgstr "列出不允许被列出的文件."
-
-#~ msgid "Listing"
-#~ msgstr "列出"
-
-#~ msgid "Show Size"
-#~ msgstr "显示大小"
-
-#~ msgid "Show Date"
-#~ msgstr "显示日期"
-
-#~ msgid "Show User"
-#~ msgstr "显示用户"
-
-#~ msgid "Show Group"
-#~ msgstr "显示用户组"
-
-#, fuzzy
-#~ msgid "Show Hidden files"
-#~ msgstr "隐藏文件"
-
-#~ msgid "Allow symbolic links"
-#~ msgstr "允许符号链接"
-
-#, fuzzy
-#~ msgid "Redirect symbolic links"
-#~ msgstr "允许符号链接"
-
-#~ msgid "Theming"
-#~ msgstr "主题"
-
-#~ msgid "Theme"
-#~ msgstr "主题"
-
-#~ msgid "Icons dir"
-#~ msgstr "图标文件目录"
-
-#~ msgid "Notice files"
-#~ msgstr "通知文件"
-
-#~ msgid "Hidden files"
-#~ msgstr "隐藏文件"
-
-#~ msgid "1x1 Empty GIF"
-#~ msgstr "1x1 空白GIF文件"
 
 #~ msgid "Configured error codes"
 #~ msgstr "配置错误代码"
 
-#~ msgid "Error"
-#~ msgstr "错误"
-
 #~ msgid "Add error codes"
 #~ msgstr "增加错误代码"
-
-#~ msgid ""
-#~ "Check the dynamically generated Document Root, and use the general "
-#~ "Document Root if it doesn't exist."
-#~ msgstr "检查动态生成的文档根目录, 如果不存在则使用默认 文件根目录."
-
-#~ msgid ""
-#~ "The Document Root directory will be built dynamically. The following "
-#~ "variables are accepted:<br/>"
-#~ msgstr "根目录将是动态生成的. 以下变量将被接受 :<br/>"
-
-#~ msgid "Dynamic Document Root"
-#~ msgstr "动态根目录"
-
-#~ msgid "Check Document Root"
-#~ msgstr "检查根目录"
-
-#~ msgid "Comma separated list of files. Rule applies if one exists."
-#~ msgstr "逗号分隔的文件列表.已存在的规则将被应用."
-
-#~ msgid ""
-#~ "Uses cache during file detection. Disable if directory contents change "
-#~ "frequently. Enable otherwise."
-#~ msgstr "启用文件高速缓存检测机制. 如果目录内容经常改变请禁用. 选择其他机制."
-
-#~ msgid "Match the request if any file exists."
-#~ msgstr "检查符合要求的文件是否存在."
-
-#~ msgid ""
-#~ "Only match regular files. If unset directories will be matched as well."
-#~ msgstr "只匹配常规文件,如果没有设置目录,则将匹配所有目录"
-
-#~ msgid "If a directory is request, check the index files inside it."
-#~ msgstr "如果请求一个目录,将检查目录里面的index文件"
-
-#~ msgid "Match a specific list of files"
-#~ msgstr "匹配文件清单"
-
-#~ msgid "Match any file"
-#~ msgstr "匹配任何文件"
-
-#, fuzzy
-#~ msgid "Match type"
-#~ msgstr "匹配任何文件"
-
-#~ msgid "Use I/O cache"
-#~ msgstr "使用 I/O 缓存"
-
-#, fuzzy
-#~ msgid "Only match files"
-#~ msgstr "匹配任何文件"
 
 #~ msgid "Any file"
 #~ msgstr "任何文件"
 
-#, fuzzy
-#~ msgid ""
-#~ "Comma-separated list of File Extension to which the configuration will be "
-#~ "applied."
-#~ msgstr "应用文件扩展名列表的配置内容."
-
-#~ msgid "FastCGI specific"
-#~ msgstr "FastCGI 详细设置"
-
-#~ msgid "Enables an internal I/O cache that improves performance."
-#~ msgstr "使内部的I/O缓存提高性能."
-
-#~ msgid "File Sending"
-#~ msgstr "文件传送"
-
-#~ msgid "IP or SubNet to check the connection origin against."
-#~ msgstr "检查来源IP地址或子网"
-
 #~ msgid "IP or SubNet"
 #~ msgstr "IP地址或子网"
-
-#, fuzzy
-#~ msgid "Add new entry"
-#~ msgstr "增加一对"
-
-#, fuzzy
-#~ msgid ""
-#~ "Full path request to which content the configuration will be applied. "
-#~ "(Eg: /favicon.ico)"
-#~ msgstr "公共网页目录的内容将应用于配置."
-
-#, fuzzy
-#~ msgid "Full Web Paths"
-#~ msgstr "配置文件路径"
-
-#, fuzzy
-#~ msgid "Add another path"
-#~ msgstr "增加一对"
-
-#~ msgid "Add the initial country. It's possible to add more later on."
-#~ msgstr "增加初始国家，可以增加更多."
-
-#~ msgid "Pick an additional country to add to the country list."
-#~ msgstr "增加一个国家到国家名单."
-
-#~ msgid ""
-#~ "List of countries from the client IPs. It must use the\n"
-#~ "<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation."
-#~ msgstr ""
-#~ "国家IP地址名单. 必须使用\n"
-#~ "<a target=\"_blank\" href=\"%s\">ISO 3166</a> 国家符号."
 
 #~ msgid "Add Country"
 #~ msgstr "新增国家"
 
-#~ msgid "Header against which the regular expression will be evaluated."
-#~ msgstr "符合正则表达式的将被优先应用."
-
-#~ msgid "Regular expression."
-#~ msgstr "正则表达式."
-
-#~ msgid "Full path to the Htdigest formated password file."
-#~ msgstr "Htdigest格式密码文件的完整路径."
-
-#~ msgid "Password File"
-#~ msgstr "密码文件"
-
 #~ msgid "Password file can not be empty"
 #~ msgstr "密码文件不能为空"
-
-#~ msgid "Full path to the Htpasswd formated password file."
-#~ msgstr "Htpasswd格式密码文件的完整路径."
 
 #~ msgid ""
 #~ "The <i>IP Hash</i> balancer distributes connections between upstreams\n"
@@ -3105,224 +5307,21 @@ msgstr ""
 #~ "<i>IP Hash</i> 负载均衡的上传数据流 \n"
 #~ "基于IP地址的客户端."
 
-#~ msgid "LDAP server IP address."
-#~ msgstr "LDAP 服务器地址."
-
-#~ msgid "LDAP server port to connect to. Defaults to 389"
-#~ msgstr "LDAP 服务器连接端口. 默认值:389"
-
-#~ msgid "Domain sent during the LDAP authentication operation. Optional."
-#~ msgstr "域间发送LDAP认证模式. 选择."
-
-#~ msgid "Password to authenticate in the LDAP server."
-#~ msgstr "LDAP服务器的验证密码."
-
-#~ msgid "Base domain for the web server authentications."
-#~ msgstr "相应的域的Web服务器身份验证."
-
-#~ msgid "Object filter. It can be empty."
-#~ msgstr "对象的过滤器。可以为空."
-
-#~ msgid "Enable to use secure connections between the web and LDAP servers."
-#~ msgstr "启用使用安全链接WEB服务器和LDAP服务器."
-
-#~ msgid "CA File for the TLS connections."
-#~ msgstr "TLS 链接使用的CA 文件."
-
-#~ msgid "LDAP"
-#~ msgstr "LDAP"
-
-#~ msgid "Bind Domain"
-#~ msgstr "绑定域名"
-
-#~ msgid "Bind Password"
-#~ msgstr "绑定密码"
-
-#~ msgid "Base Domain"
-#~ msgstr "相应的域名"
-
-#~ msgid "Filter"
-#~ msgstr "过滤器"
-
-#~ msgid "Use TLS"
-#~ msgstr "使用 TLS"
-
-#~ msgid "CA File"
-#~ msgstr "CA 文件"
-
-#~ msgid "LDAP connection"
-#~ msgstr "LDAP 链接"
-
-#~ msgid "The HTTP method that should match this rule."
-#~ msgstr "HTTP 方法将被此规则验证."
-
-#~ msgid "MySQL server IP address."
-#~ msgstr "MySQL 服务器IP地址."
-
-#~ msgid "Server port to connect to."
-#~ msgstr "服务器端口."
-
-#~ msgid "Full path of Unix socket to communicate with the data base."
-#~ msgstr "数据库UNIX套接字连接完整路径."
-
-#~ msgid "User name for connecting to the database."
-#~ msgstr "数据库用户名."
-
-#~ msgid "Password for connecting to the database."
-#~ msgstr "数据库用户密码."
-
-#~ msgid "Database name containing the user/password pair list."
-#~ msgstr "数据库名称及相应用户/密码名单."
-
-#~ msgid "SQL command to execute. ${user} is replaced with the user name."
-#~ msgstr "SQL命令执行. ${user} 将替代此用户."
-
-#, fuzzy
-#~ msgid ""
-#~ "Choose an encryption type for the password. Only suitable for the \"Basic"
-#~ "\" authentication mechanism."
-#~ msgstr "使用MD5密码加密. 只适合\"Basic\" 认证 机制."
-
-#~ msgid "Unix Socket"
-#~ msgstr "Unix 套接字"
-
-#~ msgid "Database"
-#~ msgstr "数据库"
-
-#~ msgid "SQL Query"
-#~ msgstr "SQL 查询"
-
-#, fuzzy
-#~ msgid "Password Hash"
-#~ msgstr "密码加密"
-
-#~ msgid "MySQL connection"
-#~ msgstr "MySQL 连接"
-
 #~ msgid "SQL query"
 #~ msgstr "SQL 查询"
 
 #~ msgid " can not be empty"
 #~ msgstr " 不能为空"
 
-#~ msgid "Full path to the plain text password file."
-#~ msgstr "纯文字密码文件的完整路径."
-
-#~ msgid "Plain text"
-#~ msgstr "纯文字"
-
-#~ msgid "Plain password file"
-#~ msgstr "纯文字密码文件"
-
-#, fuzzy
-#~ msgid "POST Report"
-#~ msgstr "报告"
-
 #, fuzzy
 #~ msgid "Formatting options"
 #~ msgstr "负载平衡选项"
 
-#, fuzzy
-#~ msgid "Target language"
-#~ msgstr "可用的语言"
-
-#~ msgid ""
-#~ "Maximum number of connection per server that the proxy can try to keep "
-#~ "opened."
-#~ msgstr "服务器保持开放的最大代理请求数量 "
-
-#~ msgid ""
-#~ "Allow the server to use Keep-alive connections with the back-end servers."
-#~ msgstr "允许服务器使用活动连接到后台程序."
-
-#~ msgid ""
-#~ "Preserve the original \"Host:\" header sent by the client. (Default No)"
-#~ msgstr "保留原始\"Host:\" 客户端请求. (Default No)"
-
-#, fuzzy
-#~ msgid ""
-#~ "Preserve the \"Server:\" header sent by the back-end server. (Default No)"
-#~ msgstr "保留原始\"Host:\" 客户端请求. (Default No)"
-
-#~ msgid "Reverse Proxy"
-#~ msgstr "反向代理"
-
-#~ msgid "Reverse Proxy Settings"
-#~ msgstr "反向代理设置"
-
-#~ msgid "Request"
-#~ msgstr "请求"
-
-#, fuzzy
-#~ msgid "Reply"
-#~ msgstr "回复"
-
-#~ msgid "Back-end Servers"
-#~ msgstr "服务器后台程序"
-
-#~ msgid "Allow Keepalive"
-#~ msgstr "允许活动连接"
-
-#~ msgid "Preserve Host header"
-#~ msgstr "维护主机头"
-
-#, fuzzy
-#~ msgid "Preserve Server header"
-#~ msgstr "维护主机头"
-
-#~ msgid "Header Addition"
-#~ msgstr "头部附加文件"
-
 #~ msgid "Add New Header"
 #~ msgstr "添加新的请求头"
 
-#~ msgid "Hide Headers"
-#~ msgstr "隐藏请求头"
-
-#~ msgid "Hide Header"
-#~ msgstr "隐藏请求头"
-
 #~ msgid "Header addition"
 #~ msgstr "附加请求头"
-
-#~ msgid "Substitution"
-#~ msgstr "替换"
-
-#~ msgid "Add RegEx"
-#~ msgstr "新增正则表达式"
-
-#~ msgid "Defines whether the redirection will be seen by the client."
-#~ msgstr "定义客户端是否可见重定向信息."
-
-#~ msgid ""
-#~ "Regular expression. Check out the <a target=\"_blank\" href=\"http://"
-#~ "perldoc.perl.org/perlre.html\">Reference</a>."
-#~ msgstr ""
-#~ "正则表达式. 请访问 <a target=\"_blank\" href=\"http://perldoc.perl.org/"
-#~ "perlre.html\">perl参考</a>."
-
-#~ msgid ""
-#~ "Target address. It can use Regular Expression substitution sub-strings."
-#~ msgstr "目标地址。可以使用正则表达式替换子字符串."
-
-#~ msgid "Redirections"
-#~ msgstr "重定向"
-
-#~ msgid "Show"
-#~ msgstr "显示"
-
-#~ msgid ""
-#~ "Regular Expression against which the hosts be Host name will be compared."
-#~ msgstr "正则表达式将对主机和主机名之间进行比较."
-
-#~ msgid "At least one Regular Expression string must be defined."
-#~ msgstr "至少需要定一个正则表达式规则."
-
-#~ msgid "New Regular Expression"
-#~ msgstr "新的正则表达式"
-
-#~ msgid "Regular expression against which the request will be executed."
-#~ msgstr "正在表达式将决定哪些请求将被执行."
 
 #~ msgid ""
 #~ "The <i>Round Robin</i> balancer can either access remote servers or\n"
@@ -3331,115 +5330,11 @@ msgstr ""
 #~ "<i>轮询模式</i> 的负载均衡可以轮流连接和使用远程或本地应用程序服务器\n"
 #~ "."
 
-#~ msgid "Directory where the RRDtool databases should be written."
-#~ msgstr "RRDtool数据库目录必须可写"
-
-#~ msgid ""
-#~ "Path to the rrdtool binary. By default the server will look in the PATH."
-#~ msgstr "RRDtool 可执行文件路径.默认情况下,服务器"
-
-#~ msgid "RRD Database directory"
-#~ msgstr "RRD 数据库目录"
-
-#, fuzzy
-#~ msgid "Custom rrdtool binary"
-#~ msgstr "自定义重定向"
-
-#~ msgid "SCGI specific"
-#~ msgstr "SCGI 详细"
-
-#~ msgid "Hidden Download"
-#~ msgstr "隐藏下载"
-
-#~ msgid "Shared secret between the server and the script."
-#~ msgstr "服务器和脚本引擎见共享安全模式."
-
-#~ msgid ""
-#~ "How long the download will last accessible - in seconds. Default: 60."
-#~ msgstr "下载开放时间 - 单位：秒. 默认值: 60."
-
-#~ msgid "Covering parameters"
-#~ msgstr "覆盖参数"
-
 #~ msgid "A shared-secret must be defined"
 #~ msgstr "必须设置一个共享安全模式"
 
 #~ msgid "It can't be empty"
 #~ msgstr "不能为空"
-
-#~ msgid "Which information should be shown."
-#~ msgstr "要显示的信息."
-
-#~ msgid "Server Information"
-#~ msgstr "服务器信息"
-
-#~ msgid "Only version information"
-#~ msgstr "服务器版本号"
-
-#~ msgid "Server Information + Connections"
-#~ msgstr "服务器信息和连接数"
-
-#~ msgid "Privacy settings"
-#~ msgstr "隐私设置"
-
-#~ msgid "Show Information"
-#~ msgstr "显示服务器信息"
-
-#~ msgid ""
-#~ "Figure the bit rate of the media file, and limit the bandwidth to it."
-#~ msgstr "数字比特率的媒体文件，并限制它的带宽."
-
-#~ msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
-#~ msgstr "动态增加带宽限制因子. 默认值: 0.1"
-
-#~ msgid ""
-#~ "Number of seconds to stream before setting the bandwidth limit. Default: "
-#~ "5."
-#~ msgstr "不限制带宽值钱的时间（秒），默认值: 5."
-
-#~ msgid "Auto Rate"
-#~ msgstr "自动"
-
-#~ msgid "Speedup Factor"
-#~ msgstr "加速"
-
-#~ msgid "Initial Boost"
-#~ msgstr "开始升高"
-
-#~ msgid ""
-#~ "IP or Subnet of the NIC that accepted the request. Example: ::1, or "
-#~ "10.0.0.0/8"
-#~ msgstr "绑定接受请求的网卡的IP地址或子网,例如: ::1 或 10.0.0.0/8"
-
-#, fuzzy
-#~ msgid "At least one IP or Subnet entry must be defined."
-#~ msgstr "至少有一个通配符字符串必须定义."
-
-#~ msgid "Accepted Server IP addresses and subnets"
-#~ msgstr "应用服务器IP地址和子网"
-
-#~ msgid "IP or Subnet"
-#~ msgstr "IP地址或子网"
-
-#~ msgid "New IP/Subnet"
-#~ msgstr "新的IP地址或子网"
-
-#~ msgid "Argument name"
-#~ msgstr "参数名称"
-
-#, fuzzy
-#~ msgid "Regular Expression for the match"
-#~ msgstr "正则表达式"
-
-#~ msgid "Match a specific argument"
-#~ msgstr "匹配一个具体参数"
-
-#, fuzzy
-#~ msgid "Match any argument"
-#~ msgstr "匹配任何文件"
-
-#~ msgid "Argument"
-#~ msgstr "参数"
 
 #~ msgid "Any arg ~= %s"
 #~ msgstr "任何参数 ~= %s"
@@ -3447,24 +5342,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "URL arg"
 #~ msgstr "URL 重写"
-
-#, fuzzy
-#~ msgid "UWSGI specific"
-#~ msgstr "SCGI 详细"
-
-#~ msgid ""
-#~ "Accepted host name. Wildcard characters (* and ?) are allowed. Eg: "
-#~ "*example.com"
-#~ msgstr "设置域名. 允许匹配字符 (* and ?) . 例: *.example.com"
-
-#~ msgid "At least one wildcard string must be defined."
-#~ msgstr "至少有一个通配符字符串必须定义."
-
-#~ msgid "Domain pattern"
-#~ msgstr "域名模式"
-
-#~ msgid "New host name"
-#~ msgstr "新主机别名"
 
 #~ msgid "Version:"
 #~ msgstr "服务器版本:"
@@ -3665,9 +5542,6 @@ msgstr ""
 #~ "<p>'虚拟主机是一种抽象网站服务机制，它允许你自定义一个或多个域的参数以及规"
 #~ "则。.</p>\n"
 
-#~ msgid "Domains"
-#~ msgstr "绑定域名数量"
-
 #, fuzzy
 #~ msgid "Stats"
 #~ msgstr "状态"
@@ -3705,146 +5579,30 @@ msgstr ""
 #~ msgid "Unknown wizard"
 #~ msgstr "未知向导"
 
-#~ msgid "Same logs as vserver"
-#~ msgstr "和虚拟主机使用同一个日志文件"
-
-#, fuzzy
-#~ msgid "Name of the new domain that will be created."
-#~ msgstr "PID文件的路径. 为空则不建立PID文件"
-
-#~ msgid "Hostname or IP of the server running Alfresco."
-#~ msgstr "服务器主机名或IP地址"
-
-#~ msgid "Port running the service in said host."
-#~ msgstr "运行服务的主机端口"
-
 #~ msgid "New virtual server based on a Alfresco project."
 #~ msgstr "新虚拟主机基于Alfresco项目"
-
-#, fuzzy
-#~ msgid "Alfresco Wizard"
-#~ msgstr "重定向"
-
-#, fuzzy
-#~ msgid "New Virtual Server"
-#~ msgstr "虚拟主机"
-
-#, fuzzy
-#~ msgid "New Host Name"
-#~ msgstr "新主机别名"
 
 #~ msgid "Alfresco project"
 #~ msgstr "Alfresco 项目"
 
-#, fuzzy
-#~ msgid "Source host"
-#~ msgstr "数据源使用"
-
-#, fuzzy
-#~ msgid "Source port"
-#~ msgstr "支持"
-
 #~ msgid "New directory based on a Alfresco project."
 #~ msgstr "新目录基于Alfresco项目"
-
-#~ msgid "Alfresco Project"
-#~ msgstr "Alfresco项目"
-
-#, fuzzy
-#~ msgid "ColdFusion Wizard"
-#~ msgstr "重定向"
 
 #, fuzzy
 #~ msgid "Couldn't add a new rule."
 #~ msgstr "添加新的规则"
 
 #, fuzzy
-#~ msgid "Web directory that will give access to the project."
-#~ msgstr "新目录基于Alfresco项目"
-
-#, fuzzy
-#~ msgid "A name for the virtual server is required."
-#~ msgstr "虚拟主机名称."
-
-#, fuzzy
-#~ msgid "Django Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
-#~ msgid "Project Directory"
-#~ msgstr "网页目录"
-
-#, fuzzy
-#~ msgid "Drupal Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
-#~ msgid "Show error"
-#~ msgstr "显示用户"
-
-#, fuzzy
-#~ msgid "Redirect"
-#~ msgstr "重定向"
-
-#, fuzzy
 #~ msgid "Local Host Name"
 #~ msgstr "新主机别名"
-
-#, fuzzy
-#~ msgid "Domain Name"
-#~ msgstr "域名模式"
-
-#, fuzzy
-#~ msgid "Reply type"
-#~ msgstr "回复"
 
 #, fuzzy
 #~ msgid "Add the /icons directory"
 #~ msgstr "路径不是目录"
 
 #, fuzzy
-#~ msgid "Joomla Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
-#~ msgid "Liferay Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
-#~ msgid "Mailman CGI directory"
-#~ msgstr "路径不是目录"
-
-#, fuzzy
-#~ msgid "Mailman Data directory"
-#~ msgstr "路径不是目录"
-
-#, fuzzy
-#~ msgid "Mail Archive directory"
-#~ msgstr "虚拟主机根目录."
-
-#, fuzzy
 #~ msgid "Web folder under which MoinMoin Wiki will be accessible."
 #~ msgstr "公共网页目录的内容将应用于配置."
-
-#, fuzzy
-#~ msgid "It does not look like a MoinMoin Wiki Instance."
-#~ msgstr "新建一个新的配置文件"
-
-#, fuzzy
-#~ msgid "Moinmoin Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
-#~ msgid "Moinmoin Directory"
-#~ msgstr "路径不是目录"
-
-#, fuzzy
-#~ msgid "Web directory under which the Mono application will be published."
-#~ msgstr "公共网页目录的内容将应用于配置."
-
-#, fuzzy
-#~ msgid "Could not find the fastcgi Mono server binary"
-#~ msgstr "不能启动服务器"
 
 #, fuzzy
 #~ msgid "New virtual server based on a .NET/Mono project."
@@ -3855,77 +5613,19 @@ msgstr ""
 #~ msgstr "通配符"
 
 #, fuzzy
-#~ msgid "New directory based on a .NET/Mono project."
-#~ msgstr "新目录基于Alfresco项目"
-
-#, fuzzy
-#~ msgid "Moodle Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
 #~ msgid "Add PHP support"
 #~ msgstr "增加一个端口"
-
-#, fuzzy
-#~ msgid "Domain name to which requests will be redirected."
-#~ msgstr "正在表达式将决定哪些请求将被执行."
-
-#, fuzzy
-#~ msgid "Redirection Wizard"
-#~ msgstr "重定向"
-
-#, fuzzy
-#~ msgid "Origin Domain"
-#~ msgstr "绑定域名"
-
-#, fuzzy
-#~ msgid "Target Domain"
-#~ msgstr "相应的域名"
-
-#, fuzzy
-#~ msgid "Media streaming is already configured."
-#~ msgstr "虚拟主机名称正在被使用中"
 
 #, fuzzy
 #~ msgid "Sugar Wizard"
 #~ msgstr "通配符"
 
 #, fuzzy
-#~ msgid "Project Source"
-#~ msgstr "网页目录"
-
-#, fuzzy
 #~ msgid "Trac Wizard"
 #~ msgstr "通配符"
 
 #, fuzzy
-#~ msgid "Trac Directory"
-#~ msgstr "网页目录"
-
-#, fuzzy
 #~ msgid "Zend Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
-#~ msgid "phpBB Wizard"
-#~ msgstr "通配符"
-
-#, fuzzy
-#~ msgid ""
-#~ "Where rTorrent XMLRPC is available. The host:port pair, or the Unix "
-#~ "socket path."
-#~ msgstr "如果信息源可以访问. 主机:端口, 或者 UNIX套接字连接路径."
-
-#, fuzzy
-#~ msgid "rTorrent Wizard"
-#~ msgstr "重定向"
-
-#, fuzzy
-#~ msgid "It does not look like a uWSGI configuration file."
-#~ msgstr "新建一个新的配置文件"
-
-#, fuzzy
-#~ msgid "uWSGI Wizard"
 #~ msgstr "通配符"
 
 #~ msgid "ERROR: Couldn't unpack '%s'"
@@ -3936,9 +5636,6 @@ msgstr ""
 
 #~ msgid "Static content"
 #~ msgstr "静态内容"
-
-#~ msgid "Audio/Video streaming"
-#~ msgstr "音频/视频流"
 
 #~ msgid "HTTP error"
 #~ msgstr "HTTP错误"
@@ -3977,9 +5674,6 @@ msgstr ""
 
 #~ msgid "Generic balancer"
 #~ msgstr "通用均衡器"
-
-#~ msgid "Configuration file"
-#~ msgstr "服务器配置文件"
 
 #~ msgid ""
 #~ "Specifies if Traffic Statistics should be collected for the virtual "
