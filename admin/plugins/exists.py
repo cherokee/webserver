@@ -137,4 +137,4 @@ class Plugin_exists (RulePlugin):
         elif len(files) == 0:
             return _("File exists (never matched)")
 
-        return _("File %s or %s exists") %(', '.join (files[:-1]), files[-1])
+        return _('File %(most)s or %(last)s exists' % ({most:', '.join (files[:-1]), last:files[-1]}))
