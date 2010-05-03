@@ -27,15 +27,11 @@ import errno
 import threading
 import traceback
 
-try:
-    import json
-except ImportError:
-    import json_embedded as json
-
 import pyscgi
 import Cookie
 import Config
 
+from util import json_dump
 from Post import Post
 from HTTP import HTTP_Response, HTTP_Error
 
@@ -108,7 +104,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                     validator = PostValidator (post, published._validation)
                     errors = validator.Validate()
                     if errors:
-                        resp = HTTP_Response(200, body=json.dumps(errors))
+                        resp = HTTP_Response(200, body=json_dump(errors))
                         resp['Content-Type'] = "application/json"
                         return resp
 
@@ -121,7 +117,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                     return self.response
 
                 elif type(ret) == dict:
-                    info = json.dumps(ret)
+                    info = json_dump(ret)
                     self.response += info
                     self.response['Content-Type'] = "application/json"
                     return self.response

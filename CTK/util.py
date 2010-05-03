@@ -22,6 +22,11 @@
 
 import re
 
+try:
+    import json
+except ImportError:
+    import json_embedded as json
+
 #
 # Strings
 #
@@ -83,3 +88,14 @@ def find_copy_name (orig, names):
         return '%s Copy' %(orig)
 
     return '%s Copy %d' %(orig, higher+1)
+
+#
+# JSon
+#
+def json_dump (obj):
+    # Python 2.6, and json_embeded
+    if hasattr (json, 'dumps'):
+        return json.dumps (obj)
+
+    # Python 2.5
+    return json.write(obj)

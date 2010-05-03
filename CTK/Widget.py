@@ -21,12 +21,9 @@
 #
 
 from consts import *
+from util import json_dump
 from PageCleaner import Postprocess
 
-try:
-    import json
-except ImportError:
-    import json_embedded as json
 
 widget_uniq_id = 1;
 
@@ -79,10 +76,10 @@ class RenderResponse:
         else:
             help = []
 
-        return json.dumps({'html':    self.html,
-                           'js':      Postprocess(self.js),
-                           'headers': self.headers,
-                           'helps':   help})
+        return json_dump({'html':    self.html,
+                          'js':      Postprocess(self.js),
+                          'headers': self.headers,
+                          'helps':   help})
 
 
 class Widget:
