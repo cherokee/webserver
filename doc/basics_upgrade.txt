@@ -11,7 +11,7 @@ choice, we strongly encourage you to use it. Although upgrading
 Cherokee is not complicated, the prepackaged versions should make your
 upgrades much easier.
 
-Refer to the link:basic_installation_unix.html#APT[APT] section of the
+Refer to the link:basics_installation_unix.html#APT[APT] section of the
 Unix installation instructions if you are using Debian or Ubuntu for
 some additional information.
 
