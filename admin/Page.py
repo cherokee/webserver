@@ -92,6 +92,7 @@ class Save:
             all += CTK.RawHTML ('<p>%s</p>' %(SAVED_NO_RUNNING))
 
             submit = CTK.Submitter (URL_SAVE_NONE)
+            submit.id = 'saved-no-running'
             submit += CTK.Hidden('none', 'foo')
             submit += CTK.SubmitterButton (_('OK'))
             submit.bind ('submit_success', dialog.JS_to_close())
