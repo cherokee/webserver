@@ -742,6 +742,8 @@ tr.panel-selected td div.row_content .sel-actions {
   width: 120px;
 }
 
+#buttons #saved-no-running { width: 300px; }
+
 /* Dialog with selection panel */
 .ui-dialog .selection-panel {
   background: #fff;
