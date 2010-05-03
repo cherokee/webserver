@@ -150,6 +150,10 @@
 			 filter_entries ($(this).val());
 		  });
 
+		  if (! filter_input.hasClass('optional_msg')) {
+			 filter_entries (filter_input.val());
+		  }
+
 		  return obj;
 	   }
     };
