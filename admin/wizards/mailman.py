@@ -35,7 +35,7 @@ from util import *
 
 NOTE_WELCOME_H1   = N_("Welcome to the Mailman Wizard")
 NOTE_WELCOME_P1   = N_('<a target="_blank" href="http://www.gnu.org/software/mailman/">Mailman</a> is free software for managing electronic mail discussion and e-newsletter lists.')
-NOTE_WELCOME_P2   = N_('Mailman supports built-in archiving, automatic bounce processing, content filtering, digest delivery, spam filters, and more. See the features page for details.')
+NOTE_WELCOME_P2   = N_('Mailman supports built-in archiving, automatic bounce processing, content filtering, digest delivery, spam filters, and more.')
 
 NOTE_LOCAL_H1     = N_('Mailman Details')
 NOTE_LOCAL_CGI_DIR  = N_("Local path to the Mailman CGI directory.")

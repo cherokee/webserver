@@ -36,7 +36,7 @@ from util import *
 
 NOTE_WELCOME_H1   = N_("Welcome to the MoinMoin Wizard")
 NOTE_WELCOME_P1   = N_('<a target="_blank" href="http://moinmo.in/">MoinMoin</a>  is an advanced, easy to use and extensible WikiEngine with a large community of users.')
-NOTE_WELCOME_P2   = N_(' Said in a few words, it is about collaboration on easily editable web pages.')
+NOTE_WELCOME_P2   = N_('Said in a few words, it is about collaboration on easily editable web pages.')
 
 NOTE_COMMON_H1    = N_("MoinMoin Wiki Instance")
 NOTE_COMMON_WIKI  = N_("Local path to the MoinMoin Wiki Instance.")
