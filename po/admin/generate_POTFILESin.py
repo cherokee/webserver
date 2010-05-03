@@ -8,11 +8,12 @@
 # Copyright (C) 2010 Alvaro Lopez Ortega
 # This file is distributed under the GPL2 license.
 
-# Configuration
-DIRS = [('admin', ['.+\.py$'])]
-
-
 import os, re
+
+# Configuration
+DIRS = [('admin', ['.+\.py$']),
+        (os.path.join('admin','wizards'), ['.+\.py$']),
+        (os.path.join('admin','plugins'), ['.+\.py$']),]
 
 def main():
     # Figure a few paths
