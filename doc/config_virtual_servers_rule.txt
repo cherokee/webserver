@@ -162,3 +162,16 @@ Some link:modules_validators.html[validators] can only handle one of
 those mechanisms because of technical  limitations. In case the module supports
 both of them, the interface allows to choose whether one or both are
 to be used.
+
+
+[[Traffic Shaping]]
+Traffic Shaping
+~~~~~~~~~~~~~~~
+
+In order to limit the amount of traffic used for a specific rule you can set
+up a traffic shaper. By default no traffic shaping will occur, all possible
+network resources are used to facilitate the clients.
+
+This parameter will not act globally, but per outgoing connection. Hence,
+20 clients limited to 1kB/s will give 20kB/s as total outbound traffic.
+To limit the amount of traffic a value in Bytes per second should be entered.
