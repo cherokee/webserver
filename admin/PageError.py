@@ -35,7 +35,7 @@ class PageErrorLaunch (CTK.Page):
 
         # Set up the template
         template = CTK.Template (filename = theme_file)
-        template['body_props'] = ' id="body-error-launch"'
+        template['body_props'] = ' id="body-error"'
 
         # Parent's constructor
         CTK.Page.__init__ (self, template, **kwargs)
