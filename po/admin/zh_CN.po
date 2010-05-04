@@ -42,7 +42,7 @@ msgstr "认证模式详细信息"
 
 #: admin/Balancer.py:32
 msgid "Specifies the policy used to dispatch the connections."
-msgstr ""
+msgstr "设定连接的调度策略"
 
 #: admin/Balancer.py:33
 #, fuzzy, python-format
@@ -284,7 +284,7 @@ msgstr "1月"
 msgid ""
 "You need to enable the <a href=\"%s\">Information Collector</a> setting in "
 "order to render usage graphics."
-msgstr ""
+msgstr "你需要允许<a href=\"%s\">信息收集器</a>使用图形模式"
 
 #: admin/Graph.py:51
 #, fuzzy
@@ -773,12 +773,12 @@ msgstr "行为规则"
 
 #: admin/PageEntry.py:62
 msgid "GZip encoder"
-msgstr ""
+msgstr "GZip 压缩"
 
 #: admin/PageEntry.py:63
 #, fuzzy
 msgid "Deflate encoder"
-msgstr "Deflate"
+msgstr "Deflate 压缩"
 
 #: admin/PageEntry.py:64 admin/PageEntry.py:127 admin/PageVServer.py:111
 msgid "Authentication"
@@ -791,7 +791,7 @@ msgstr "认证列表"
 
 #: admin/PageEntry.py:69
 msgid "Leave unset"
-msgstr ""
+msgstr "不更改"
 
 #: admin/PageEntry.py:70 admin/PageVServer.py:306 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
@@ -802,7 +802,7 @@ msgstr "允许 "
 
 #: admin/PageEntry.py:71
 msgid "Forbid"
-msgstr ""
+msgstr "禁止"
 
 #: admin/PageEntry.py:89
 msgid "Limit traffic to"
@@ -904,7 +904,7 @@ msgstr "安全"
 msgid ""
 "The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
 "problem can he solved in there."
-msgstr ""
+msgstr "服务器建议您检查<a href=\"%s\">此页面</a>，您很有可能在此找到解决问题的办法"
 
 #: admin/PageError.py:57 admin/PageError.py:83
 #, fuzzy
@@ -913,7 +913,7 @@ msgstr "服务器信息"
 
 #: admin/PageError.py:84
 msgid "Something unexpected just happened."
-msgstr ""
+msgstr "一些意外的问题发生了"
 
 #: admin/PageError.py:89
 #, fuzzy, python-format
@@ -924,11 +924,11 @@ msgstr "配置文件不允许修改"
 msgid ""
 "You have to change its permissions in order to allow cherokee-admin to work "
 "with it. You can try to fix it by changing the file permissions:"
-msgstr ""
+msgstr "你需要改变cherokee-admin的权限来使其和他工作。你可以改变其权限设置"
 
 #: admin/PageError.py:91
 msgid "or by launching cherokee-admin as root."
-msgstr ""
+msgstr "或者使用root用户来运行cherokee-admin"
 
 #: admin/PageError.py:101 admin/PageError.py:107
 #, fuzzy
@@ -938,12 +938,12 @@ msgstr "配置文件不允许修改"
 #: admin/PageError.py:118
 #, python-format
 msgid "Could not find the icons directory: <code>%s</code>"
-msgstr ""
+msgstr "无法找到图标目录：<code>%s</code>"
 
 #: admin/PageError.py:119
 msgid ""
 "You may need to reinstall the Web Server in order to sort out this issue."
-msgstr ""
+msgstr "你可能需要重新安装服务器来解决这个问题。"
 
 #: admin/PageError.py:129 admin/PageError.py:135
 #, fuzzy
@@ -960,7 +960,7 @@ msgid ""
 "Most probably cherokee-admin is trying to read an old configuration file. "
 "Please, remove it so cherokee-admin can create a new one with the right "
 "format."
-msgstr ""
+msgstr "cherokee-admin可能尝试读取旧的配置文件，请删除旧的配置文件，服务器将新建一个新的正确配置文件。"
 
 #: admin/PageError.py:155
 #, fuzzy
@@ -974,20 +974,20 @@ msgstr "新配置文件"
 
 #: admin/PageException.py:38
 msgid "We apologize for any inconveniences that this may have caused."
-msgstr ""
+msgstr "我们为给您造成的问题感到抱歉。"
 
 #: admin/PageException.py:39
 msgid ""
 "Please, send your comments to the server developers. Your configuration file "
 "<strong>will</strong> be attached upon submission. What were you doing when "
 "the issue showed up?"
-msgstr ""
+msgstr "当您发现这个问题的时候，请讲您的意见或者建议发送到服务器开发者手中，您的配置文件将被一同已提交。"
 
 #: admin/PageException.py:40
 msgid ""
 "Thank you for reporting the problem. The Cherokee Web Server developers will "
 "try to fix it up as soon as possible."
-msgstr ""
+msgstr "谢谢您报告这个问题。服务器开发者将尽快的解决这个问题。"
 
 #: admin/PageException.py:41
 #, python-format
@@ -1085,7 +1085,7 @@ msgstr "快速配置"
 
 #: admin/PageGeneral.py:101
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: admin/PageGeneral.py:102
 msgid "SSL/TLS back-end"
@@ -1134,11 +1134,11 @@ msgstr "绑定到IP"
 #: admin/PageGeneral.py:158
 #, fuzzy
 msgid "TLS/SSL port"
-msgstr "无 TLS/SSL"
+msgstr "TLS/SSL 端口"
 
 #: admin/PageGeneral.py:160
 msgid "TLS/SSL support disabled"
-msgstr ""
+msgstr "TLS/SSL 被禁止"
 
 #: admin/PageGeneral.py:188
 #, fuzzy
@@ -1170,7 +1170,7 @@ msgstr "用户组"
 
 #: admin/PageGeneral.py:217
 msgid "Chroot"
-msgstr "Chroot"
+msgstr "监禁模式运行"
 
 #: admin/PageGeneral.py:228 admin/PageVServer.py:309
 msgid "Network"
@@ -1204,7 +1204,7 @@ msgstr "一般设置"
 
 #: admin/PageHelp.py:35
 msgid "Table of Contents"
-msgstr ""
+msgstr "连接表"
 
 #: admin/PageHelp.py:172
 #, fuzzy
@@ -1213,11 +1213,11 @@ msgstr "根目录"
 
 #: admin/PageIndex.py:62
 msgid "You will be sent an email requesting confirmation"
-msgstr ""
+msgstr "您将收到一封电子邮件，要求确认"
 
 #: admin/PageIndex.py:63
 msgid "Optionally provide your name"
-msgstr ""
+msgstr "选择提供您的姓名"
 
 #: admin/PageIndex.py:66
 #, fuzzy
@@ -1289,10 +1289,7 @@ msgid ""
 "We would love to know that you are using Cherokee. Submit your domain\n"
 "name and it will be listed on the Cherokee Project web site.\n"
 msgstr ""
-"\n"
-"欢迎您使用Cherokee服务器. 向Cherokee提交您的使用Cherokee服务器的域名,您的域"
-"名\n"
-"<a href=\"http://www.cherokee-project.com/cherokee-domain-list.html\">\n"
+"欢迎您使用Cherokee服务器. 向Cherokee提交您的使用Cherokee服务器的域名,您的域名\n"
 "将会在Cherokee项目网站上列出</a>.\n"
 
 #: admin/PageIndex.py:88
