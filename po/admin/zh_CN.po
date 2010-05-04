@@ -1420,7 +1420,7 @@ msgstr ""
 
 #: admin/PageIndex.py:341
 msgid "Mailing List"
-msgstr ""
+msgstr "邮件列表"
 
 #: admin/PageIndex.py:346
 msgid "Mailing list subscription"
@@ -1432,7 +1432,7 @@ msgstr ""
 
 #: admin/PageIndex.py:355
 msgid "Bug Tracker"
-msgstr ""
+msgstr "Bug 提交"
 
 #: admin/PageIndex.py:380
 #, fuzzy
@@ -1441,7 +1441,7 @@ msgstr "国家"
 
 #: admin/PageIndex.py:396
 msgid "Commercial Support"
-msgstr ""
+msgstr "商业支持"
 
 #: admin/PageIndex.py:398
 #, fuzzy
@@ -1454,7 +1454,7 @@ msgstr "欢迎进入Cherokee后台管理中心"
 
 #: admin/PageNewConfig.py:38
 msgid "Index"
-msgstr ""
+msgstr "首页"
 
 #: admin/PageNewConfig.py:140
 msgid "Create"
@@ -1502,11 +1502,11 @@ msgstr "配置文件没有找到"
 msgid ""
 "<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure "
 "you want to proceed?</p>"
-msgstr ""
+msgstr "<p>您将要删除<b>%s</b> 规则。</p><p>您想继续吗？</p>"
 
 #: admin/PageRule.py:53
 msgid "You are about to clone a Behavior Rule. Would you like to proceed?"
-msgstr ""
+msgstr "您将要克隆一个规则。您想继续吗？"
 
 #: admin/PageRule.py:116 admin/Rule.py:156
 msgid "Rule Type"
@@ -1514,7 +1514,7 @@ msgstr "规则类型"
 
 #: admin/PageRule.py:136 admin/PageVServers.py:133 admin/PageVServers.py:151
 msgid "Manual"
-msgstr ""
+msgstr "手册"
 
 #: admin/PageRule.py:137 admin/PageVServers.py:152
 #, fuzzy
@@ -1523,7 +1523,7 @@ msgstr "Icon 设置"
 
 #: admin/PageRule.py:207 admin/PageSource.py:326 admin/PageVServers.py:197
 msgid "Do you really want to remove it?"
-msgstr ""
+msgstr "你真的想删除它吗？"
 
 #: admin/PageRule.py:208 admin/PageSource.py:327 admin/PageVServers.py:198
 msgid "Remove"
@@ -1550,12 +1550,12 @@ msgstr "快速配置"
 
 #: admin/PageRule.py:270 admin/PageSource.py:348 admin/PageVServers.py:247
 msgid "New…"
-msgstr ""
+msgstr "新的..."
 
 #: admin/PageRule.py:284
 #, fuzzy
 msgid "Clone Behavior Rule"
-msgstr "行为规则"
+msgstr "克隆扩展规则"
 
 #: admin/PageRule.py:285 admin/PageSource.py:358 admin/PageVServers.py:262
 msgid "Clone"
@@ -1861,8 +1861,7 @@ msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
 msgstr ""
-"接受X-Real-IP和X-Forwarded-For请求头. 警告：如果你不确信你需要这个功能请不要"
-"开启"
+"接受X-Real-IP和X-Forwarded-For请求头. 警告：如果你不确信你需要这个功能请不要开启。"
 
 #: admin/PageVServer.py:65
 #, fuzzy
@@ -1934,7 +1933,7 @@ msgstr "匹配"
 #: admin/PageVServer.py:110
 #, fuzzy
 msgid "Assigned Handler"
-msgstr "处理"
+msgstr "分配处理程序"
 
 #: admin/PageVServer.py:111
 msgid "Auth"
@@ -1951,7 +1950,7 @@ msgstr "网站根目录"
 
 #: admin/PageVServer.py:113
 msgid "Only HTTPS"
-msgstr ""
+msgstr "仅开启HTTPS"
 
 #: admin/PageVServer.py:113
 #, fuzzy
@@ -2042,11 +2041,11 @@ msgstr "图标设置"
 
 #: admin/PageVServer.py:256
 msgid " bytes per second"
-msgstr ""
+msgstr "字节每秒"
 
 #: admin/PageVServer.py:261
 msgid "Logging enabled for this rule"
-msgstr ""
+msgstr "对此规则启用日志"
 
 #: admin/PageVServer.py:266
 msgid "Prevents further rule evaluation"
@@ -2204,16 +2203,16 @@ msgstr "错误处理"
 msgid ""
 "<p>You are about to delete the <b>%s</b> Virtual Server.</p><p>Are you sure "
 "you want to proceed?</p>"
-msgstr ""
+msgstr "您将删除<b>%s</b>虚拟主机，是否确认继续"
 
 #: admin/PageVServers.py:51
 msgid "You are about to clone a Virtual Server. Would you like to proceed?"
-msgstr ""
+msgstr "您将删除克隆一个虚拟主机，是否确认继续"
 
 #: admin/PageVServers.py:52
 msgid ""
 "Name of the Virtual Server you are about to create. A domain name is alright."
-msgstr ""
+msgstr "您将新建的虚拟主机名称，最好是一个域名。"
 
 #: admin/PageVServers.py:53
 #, fuzzy
@@ -2278,7 +2277,7 @@ msgstr "德语"
 
 #: admin/consts.py:29
 msgid "French"
-msgstr ""
+msgstr "法语"
 
 #: admin/consts.py:30
 #, fuzzy
@@ -2291,11 +2290,11 @@ msgstr "瑞典文"
 
 #: admin/consts.py:32
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "巴西葡萄牙语"
 
 #: admin/consts.py:33
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "简体中文"
 
 #: admin/consts.py:38
 msgid "Product only"
@@ -2347,7 +2346,7 @@ msgstr "SCGI"
 #: admin/consts.py:53 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
 #, fuzzy
 msgid "uWSGI"
-msgstr "SCGI"
+msgstr "uWSGI"
 
 #: admin/consts.py:54
 #, fuzzy
@@ -2559,7 +2558,7 @@ msgstr "连接"
 
 #: admin/consts.py:189
 msgid "URL Argument"
-msgstr ""
+msgstr "URL参数"
 
 #: admin/consts.py:190
 msgid "GeoIP"
@@ -2581,7 +2580,7 @@ msgstr "正则表达式"
 #: admin/consts.py:197
 #, fuzzy
 msgid "Server IP"
-msgstr "服务器 ID"
+msgstr "服务器 IP"
 
 #: admin/consts.py:201
 msgid "Not set"
@@ -2625,7 +2624,7 @@ msgstr "需要"
 
 #: admin/consts.py:225
 msgid "RRDtool graphs"
-msgstr ""
+msgstr "RRDtool 图形"
 
 #: admin/consts.py:229
 #, fuzzy
@@ -2634,7 +2633,7 @@ msgstr "新主机别名"
 
 #: admin/consts.py:230
 msgid "UTC: Coordinated Universal Time"
-msgstr ""
+msgstr "UTC:世界协调时间"
 
 #: admin/consts.py:234
 msgid "JSON"
@@ -2659,7 +2658,7 @@ msgstr ""
 
 #: admin/plugins/authlist.py:32
 msgid "At least one user/password pair should be configured."
-msgstr ""
+msgstr "至少需要设置一个用户/密码"
 
 #: admin/plugins/authlist.py:60
 #, fuzzy
@@ -3001,7 +3000,7 @@ msgstr "文件存在"
 
 #: admin/plugins/exists.py:138
 msgid "File exists (never matched)"
-msgstr ""
+msgstr "文件存在（没有匹配）"
 
 #: admin/plugins/exists.py:140
 #, fuzzy, python-format
@@ -3094,7 +3093,7 @@ msgstr ""
 
 #: admin/plugins/geoip.py:78
 msgid "Select all"
-msgstr ""
+msgstr "选择所有"
 
 #: admin/plugins/geoip.py:79
 #, fuzzy
@@ -3134,16 +3133,16 @@ msgstr "密码文件"
 
 #: admin/plugins/ldap.py:30
 msgid "LDAP"
-msgstr "LDAP"
+msgstr "LDAP目录服务"
 
 #: admin/plugins/ldap.py:32
 msgid "LDAP server IP address."
-msgstr "LDAP 服务器地址."
+msgstr "LDAP目录服务器地址."
 
 #: admin/plugins/ldap.py:33
 #, fuzzy
 msgid "LDAP server port to connect to. Default: 389"
-msgstr "LDAP 服务器连接端口. 默认值:389"
+msgstr "LDAP目录服务器连接端口. 默认值:389"
 
 #: admin/plugins/ldap.py:34
 msgid "Domain sent during the LDAP authentication operation. Optional."
@@ -5186,11 +5185,11 @@ msgstr ""
 #: admin/wizards/wordpress.py:45
 msgid ""
 "Web directory where you want WordPress to be accessible. (Example: /blog)"
-msgstr ""
+msgstr "您的WordPress所在目录.例如:/blog"
 
 #: admin/wizards/wordpress.py:47
 msgid "Does not look like a WordPress source directory."
-msgstr ""
+msgstr "这个看起来并不像一个WordPress的源目录。"
 
 #: admin/wizards/wordpress.py:228
 #, fuzzy
@@ -5208,19 +5207,19 @@ msgid ""
 "simple, straightforward, open-source software framework for PHP 5 designed "
 "to eliminate the tedious details of coding and let you focus on the big "
 "picture."
-msgstr ""
+msgstr "<a target=\"_blank\" href=\"http://www.zend.com/\">Zend Framework</a>是一个简单，直接，开放源码的PHP 5软件框架，旨在消除编码的繁琐细节，让您专注于大局。"
 
 #: admin/wizards/zend.py:40
 msgid ""
 "One of its strengths is the highly modular Model-View-Controller (MVC) "
 "design, making your code more reusable and easier to maintain."
-msgstr ""
+msgstr "它的优势之一是高度模块化的模型视图控制器（MVC）设计，使您的代码更易于维护和重用。”"
 
 #: admin/wizards/zend.py:43
 msgid ""
 "Local directory where the Zend source code is located. Example: /usr/share/"
 "php/data/zend."
-msgstr ""
+msgstr "本地目录下的Zend源代码的位置.例如：/usr/share/php/data/zend."
 
 #: admin/wizards/zend.py:44
 #, fuzzy
@@ -5229,7 +5228,7 @@ msgstr "新建一个新的配置文件"
 
 #: admin/wizards/zend.py:49
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
-msgstr ""
+msgstr "你想要使用zend访问的目录。例如：/zend"
 
 #, fuzzy
 #~ msgid "or"
