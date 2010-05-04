@@ -56,9 +56,12 @@ URL_APPLY       = r'/wizard/vserver/joomla/apply'
 CONFIG_DIR = """
 %(pre_rule_plus3)s!handler = custom_error
 %(pre_rule_plus3)s!handler!error = 403
-%(pre_rule_plus3)s!match = request
-%(pre_rule_plus3)s!match!final = 1
-%(pre_rule_plus3)s!match!request = %(ban_regex)s
+%(pre_rule_plus3)s!match = and
+%(pre_rule_plus3)s!match!left = request
+%(pre_rule_plus3)s!match!left!final = 1
+%(pre_rule_plus3)s!match!left!request = %(ban_regex)s
+%(pre_rule_plus3)s!match!right = directory
+%(pre_rule_plus3)s!match!right!directory = %(web_dir)s
 
 %(pre_rule_plus2)s!match = request
 %(pre_rule_plus2)s!match!request = ^%(web_dir)s/$
