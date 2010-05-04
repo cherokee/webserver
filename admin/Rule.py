@@ -199,7 +199,8 @@ class Rule (CTK.Box):
         # Expression rule contained a subsctring like '%[', it would
         # make the Python string replacement mechanism fail.
         #
-        return name.replace ('%', '&#37;')
+        tmp = CTK.escape_html (name)
+        return tmp.replace ('%', '&#37;')
 
 
 CTK.publish (r"^%s$"%(URL_APPLY_LOGIC), RuleButtons_apply, method="POST")

@@ -165,6 +165,7 @@ class Render:
             for r in rules:
                 rule = Rule ('vserver!%s!rule!%s!match'%(vsrv_num, r))
                 rule_name = rule.GetName()
+                rule_name_esc = CTK.escape_html (rule_name)
 
                 # Comment
                 comment = []
@@ -199,7 +200,7 @@ class Render:
                 row_id = '%s_%s' %(r, vsrv_num)
 
                 if r == rules[-1]:
-                    content = [CTK.Box ({'class': 'name'}, CTK.RawHTML(rule_name)),
+                    content = [CTK.Box ({'class': 'name'}, CTK.RawHTML (rule_name_esc)),
                                CTK.Box ({'class': 'comment'}, CTK.RawHTML (', '.join(comment)))]
                     panel.Add (row_id, '/vserver/%s/rule/content/%s'%(vsrv_num, r), content, draggable=False)
                 else:
@@ -210,7 +211,7 @@ class Render:
                                                                 success = dialog.JS_to_close() + \
                                                                     refresh.JS_to_refresh()))
                     dialog.AddButton (_('Cancel'), "close")
-                    dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(rule_name))
+                    dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(rule_name_esc))
                     self += dialog
                     remove = CTK.ImageStock('del')
                     remove.bind ('click', dialog.JS_to_show() + "return false;")
@@ -240,7 +241,7 @@ class Render:
                     group = CTK.Box ({'class': 'sel-actions'}, [disabled, remove])
 
                     content = [group]
-                    content += [CTK.Box ({'class': 'name'},    CTK.RawHTML (rule_name)),
+                    content += [CTK.Box ({'class': 'name'},    CTK.RawHTML (rule_name_esc)),
                                 CTK.Box ({'class': 'final'},   final),
                                 CTK.Box ({'class': 'comment'}, CTK.RawHTML (', '.join(comment)))]
 

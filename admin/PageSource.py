@@ -213,7 +213,7 @@ class Render_Source:
         nick = CTK.cfg.get_val('source!%s!nick'%(num))
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>Source: %s</h2>'%(nick))
+        cont += CTK.RawHTML ('<h2>Source: %s</h2>'%(CTK.escape_html (nick)))
 
         workarea = CTK.Box ({'id': 'source-workarea'})
 
@@ -280,7 +280,7 @@ class Render:
             CTK.Container.__init__ (self)
 
             # Helper
-            entry = lambda klass, key: CTK.Box ({'class': klass}, CTK.RawHTML (CTK.cfg.get_val(key, '')))
+            entry = lambda klass, key: CTK.Box ({'class': klass}, CTK.RawHTML (CTK.escape_html (CTK.cfg.get_val(key, ''))))
 
             # Build the panel list
             panel = SelectionPanel.SelectionPanel (None, right_box.id, "/source", '%s/empty'%(URL_CONTENT), draggable=False, container='source_panel')

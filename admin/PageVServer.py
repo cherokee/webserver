@@ -282,7 +282,6 @@ class BasicsWidget (CTK.Container):
 
         pre        = "vserver!%s" %(vsrv_num)
         url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
-        vsrv_nick  = CTK.cfg.get_val("%s!nick"%(pre), '')
         is_default = CTK.cfg.get_lowest_entry("vserver") == int(vsrv_num)
 
         # Server ID
@@ -500,7 +499,7 @@ class RenderContent (CTK.Container):
         tabs.Add (_('Logging'),       LogginWidget (vsrv_num))
         tabs.Add (_('Security'),      SecurityWidget (vsrv_num))
 
-        self += CTK.RawHTML ('<h2>%s: %s</h2>' %(_('Virtual Server'), vsrv_nam))
+        self += CTK.RawHTML ('<h2>%s: %s</h2>' %(_('Virtual Server'), CTK.escape_html (vsrv_nam)))
         self += tabs
 
 

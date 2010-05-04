@@ -174,7 +174,7 @@ class Render:
                 CTK.cfg['vserver!1!rule!1!handler'] = 'common'
 
             # Helper
-            entry = lambda klass, key: CTK.Box ({'class': klass}, CTK.RawHTML (CTK.cfg.get_val(key, '')))
+            entry = lambda klass, key: CTK.Box ({'class': klass}, CTK.RawHTML (CTK.escape_html (CTK.cfg.get_val(key, ''))))
 
             # Build the panel list
             panel = SelectionPanel.SelectionPanel (reorder, right_box.id, URL_BASE, '', container='vservers_panel')
@@ -191,7 +191,8 @@ class Render:
                                entry('droot', 'vserver!%s!document_root'%(k))]
                     panel.Add (k, '/vserver/content/%s'%(k), content, draggable=False)
                 else:
-                    nick = CTK.cfg.get_val ('vserver!%s!nick'%(k), _('Unknown'))
+                    nick     = CTK.cfg.get_val ('vserver!%s!nick'%(k), _('Unknown'))
+                    nick_esc = CTK.escape_html (nick)
 
                     # Remove
                     dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
@@ -200,7 +201,7 @@ class Render:
                                                                 success = dialog.JS_to_close() + \
                                                                     refresh.JS_to_refresh()))
                     dialog.AddButton (_('Cancel'), "close")
-                    dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(nick))
+                    dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(nick_esc))
                     self += dialog
                     remove = CTK.ImageStock('del')
                     remove.bind ('click', dialog.JS_to_show() + "return false;")
