@@ -345,22 +345,24 @@ def is_safe_mime_type (mime):
     return mime
 
 
-def is_safe_information_source (value):
-    host = is_information_source (value)
-    keys = CTK.cfg.keys ('source')
-    hosts  = [CTK.cfg.get_val('source!%s!host' % key) for key in keys]
+def is_safe_information_source_host (value, exclude = None):
+    host  = is_information_source (value)
+    keys  = ['source!%s!host'%(key) for key in CTK.cfg.keys ('source')]
+    hosts = [CTK.cfg.get_val(key) for key in keys if key != exclude]
 
     if host in hosts:
         raise ValueError, _('Already in use')
     return host
 
 
-def is_new_information_source_nick (value):
-    value = is_not_empty(value)
-    for s in CTK.cfg.keys('source'):
-        if value == CTK.cfg.get_val('source!%s!nick'%(s)):
-            raise ValueError, _('Information Source  nick name is already being used.')
-    return value
+def is_safe_information_source_nick (value, exclude = None):
+    nick  = is_not_empty(value)
+    keys  = ['source!%s!nick'%(key) for key in CTK.cfg.keys ('source')]
+    nicks = [CTK.cfg.get_val(key) for key in keys if key != exclude]
+
+    if nick in nicks:
+        raise ValueError, _('Already in use')
+    return nick
 
 
 def is_safe_cfgval (key, cfg_str, new, safe):

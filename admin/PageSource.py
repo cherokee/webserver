@@ -57,10 +57,9 @@ NOTE_FORBID_1      = N_('This is the last Information Source in use by a rule. D
 NOTE_FORBID_2      = N_('First edit the offending rule(s)')
 
 VALIDATIONS = [
-    ('source!.+?!host',        validations.is_information_source),
     ('source!.+?!timeout',     validations.is_positive_int),
-    ('tmp!new_host',           validations.is_safe_information_source),
-    ('tmp!new_nick',           validations.is_new_information_source_nick),
+    ('tmp!new_host',           validations.is_safe_information_source_host),
+    ('tmp!new_nick',           validations.is_safe_information_source_nick),
     ("source_clone_trg",       validations.is_safe_id),
 ]
 
@@ -85,7 +84,6 @@ JS_PARTICULAR = """
   $.cookie ('%(cookie_name)s', source, { path: '/source' });
   window.location.replace ('%(url_base)s');
 """
-
 
 def commit_clone():
     num = re.findall(r'^%s/([\d]+)/clone$'%(URL_CONTENT), CTK.request.url)[0]
@@ -113,6 +111,20 @@ def commit():
         return CTK.cfg_reply_ajax_ok()
 
     # Modification
+    errors = {}
+    for key in CTK.post.keys():
+        try:
+            value = CTK.post.get_val (key)
+            if key.endswith('!nick'):
+                validations.is_safe_information_source_nick (value, key)
+            elif key.endswith('!host'):
+                validations.is_safe_information_source_host (value, key)
+        except ValueError, e:
+            errors[key] = str(e)
+
+    if errors:
+        return { "ret": "error", "errors": errors }
+
     return CTK.cfg_apply_post()
 
 

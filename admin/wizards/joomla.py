@@ -26,6 +26,7 @@
 # Tested:
 # 2009/10/xx: Joomla 1.5.14 / Cherokee 0.99.25
 # 2010/04/16: Joomla 1.5.15 / Cherokee 0.99.41
+# 2010/05/04: Joomla 1.5.15 / Cherokee 0.99.49b
 #
 
 import os
