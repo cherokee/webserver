@@ -60,6 +60,7 @@ VALIDATIONS = [
     ('source!.+?!host',        validations.is_information_source),
     ('source!.+?!timeout',     validations.is_positive_int),
     ('tmp!new_host',           validations.is_safe_information_source),
+    ('tmp!new_nick',           validations.is_new_information_source_nick),
     ("source_clone_trg",       validations.is_safe_id),
 ]
 

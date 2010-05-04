@@ -355,6 +355,14 @@ def is_safe_information_source (value):
     return host
 
 
+def is_new_information_source_nick (value):
+    value = is_not_empty(value)
+    for s in CTK.cfg.keys('source'):
+        if value == CTK.cfg.get_val('source!%s!nick'%(s)):
+            raise ValueError, _('Information Source  nick name is already being used.')
+    return value
+
+
 def is_safe_cfgval (key, cfg_str, new, safe):
     new  = list(set(split_list (new))) # remove list duplicates
     keys = CTK.cfg.keys (key)
