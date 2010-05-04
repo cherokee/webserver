@@ -243,13 +243,12 @@ _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 	if ((rw == FDPOLL_MODE_WRITE) &&
 	    (fdp->fdinterest[fd] == FDPOLL_MODE_READ))
 	{
-		return _add_change (fdp, fd, FDPOLL_MODE_READ, EV_DELETE);
-	}
+		_add_change (fdp, fd, FDPOLL_MODE_READ, EV_DELETE);
 
-	if ((rw == FDPOLL_MODE_READ) &&
-	    (fdp->fdinterest[fd] == FDPOLL_MODE_WRITE))
+	} else if ((rw == FDPOLL_MODE_READ) &&
+		   (fdp->fdinterest[fd] == FDPOLL_MODE_WRITE))
 	{
-		return _add_change (fdp, fd, FDPOLL_MODE_WRITE, EV_DELETE);
+		_add_change (fdp, fd, FDPOLL_MODE_WRITE, EV_DELETE);
 	}
 
 	return _add_change (fdp, fd, rw, EV_ADD);
