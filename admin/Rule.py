@@ -191,7 +191,15 @@ class Rule (CTK.Box):
 
         # Regular rules
         plugin = CTK.instance_plugin (value, self.key)
-        return plugin.GetName()
+        name = plugin.GetName()
+
+        # There are no further replacements within this string. Let's
+        # replace the '%' by its HTML equivalent so it does not cause
+        # trouble later on. For instance, if the title of a Regular
+        # Expression rule contained a subsctring like '%[', it would
+        # make the Python string replacement mechanism fail.
+        #
+        return name.replace ('%', '&#37;')
 
 
 CTK.publish (r"^%s$"%(URL_APPLY_LOGIC), RuleButtons_apply, method="POST")
