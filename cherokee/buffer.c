@@ -1164,10 +1164,11 @@ escape_with_table (cherokee_buffer_t *buffer,
 		   cherokee_buffer_t *src,
 		   uint32_t          *is_char_escaped)
 {
-	cuint_t      i;
-	char        *s, *t;
-	cuint_t      n_escape    = 0;
-	static char  hex_chars[] = "0123456789abcdef";
+	cuint_t        i;
+	unsigned char *s;
+	unsigned char *t;
+	cuint_t        n_escape    = 0;
+	static char    hex_chars[] = "0123456789abcdef";
 
 	if (unlikely (src->buf == NULL)) {
 		return ret_error;
