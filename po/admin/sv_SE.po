@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee-admin 0.99.16\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-03 13:34+0200\n"
+"POT-Creation-Date: 2010-05-05 13:31+0200\n"
 "PO-Revision-Date: 2009-06-02 12:23+0100\n"
 "Last-Translator: Andreas Andersson <andreas@cyberdelic.org>\n"
 "Language-Team: Swedish <LL@li.org>\n"
@@ -69,7 +69,7 @@ msgid ""
 msgstr ""
 "En lastbalanserare måste konfigureras att använda minst en informationskälla."
 
-#: admin/Balancer.py:67 admin/PageSource.py:209 admin/PageSource.py:246
+#: admin/Balancer.py:67 admin/PageSource.py:222 admin/PageSource.py:259
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "Smeknamn"
@@ -79,8 +79,8 @@ msgstr "Smeknamn"
 msgid "Host"
 msgstr "Värd"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:371
-#: admin/PageSource.py:391 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:384
+#: admin/PageSource.py:404 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "Informationskällor"
 
@@ -88,9 +88,10 @@ msgstr "Informationskällor"
 msgid "Assign Information Sources"
 msgstr "Tilldela informationskällor"
 
-#: admin/Balancer.py:117 admin/PageRule.py:112
-#, fuzzy
-msgid "Choose…"
+#: admin/Balancer.py:117 admin/PageIndex.py:202 admin/PageRule.py:112
+#: admin/plugins/bind.py:69 admin/plugins/bind.py:121
+#: admin/plugins/custom_error.py:41 admin/plugins/method.py:31
+msgid "Choose"
 msgstr "Välj"
 
 #: admin/Balancer.py:123
@@ -163,11 +164,11 @@ msgstr ""
 msgid "Enabled"
 msgstr "Aktiverad"
 
-#: admin/CgiBase.py:70 admin/PageVServer.py:408
+#: admin/CgiBase.py:70 admin/PageVServer.py:407
 msgid "Don't check origin"
 msgstr "Kolla inte ursprung"
 
-#: admin/CgiBase.py:72 admin/PageVServer.py:411
+#: admin/CgiBase.py:72 admin/PageVServer.py:410
 msgid "Accept from Hosts"
 msgstr "Acceptera från värd(ar)"
 
@@ -224,8 +225,8 @@ msgid "Custom Environment Variables"
 msgstr "Egna miljövariabler"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:259 admin/PageSource.py:344
-#: admin/PageVServers.py:236 admin/plugins/authlist.py:93
+#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:357
+#: admin/PageVServers.py:237 admin/plugins/authlist.py:93
 #: admin/plugins/error_redir.py:94 admin/plugins/proxy.py:117
 #: admin/plugins/proxy.py:166 admin/plugins/proxy.py:213
 #: admin/plugins/redir.py:114 admin/plugins/rehost.py:71
@@ -299,8 +300,8 @@ msgid ""
 "virtual server."
 msgstr ""
 
-#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
-#: admin/PageStatus.py:70 admin/PageVServer.py:511 admin/PageVServers.py:194
+#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:197
+#: admin/PageStatus.py:70 admin/PageVServer.py:510 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -314,14 +315,14 @@ msgstr "Trafikstatistik"
 msgid "Allows to specify an alternative Document Root path."
 msgstr "Tillåter att ange en alternativ dokumentroot."
 
-#: admin/Handler.py:43 admin/PageVServer.py:298 admin/PageVServers.py:127
+#: admin/Handler.py:43 admin/PageVServer.py:297 admin/PageVServers.py:127
 #: admin/wizards/django.py:190 admin/wizards/mono.py:199
 #: admin/wizards/uwsgi.py:242
 msgid "Document Root"
 msgstr "Dokumentrot"
 
 #: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
-#: admin/Mime.py:120 admin/consts.py:181 admin/plugins/extensions.py:57
+#: admin/Mime.py:120 admin/consts.py:182 admin/plugins/extensions.py:57
 msgid "Extensions"
 msgstr "Filändelser"
 
@@ -343,7 +344,7 @@ msgstr "Filer"
 msgid "File Matches"
 msgstr "Filmatchningar"
 
-#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:98
+#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:99
 msgid "File"
 msgstr "Fil"
 
@@ -352,12 +353,12 @@ msgstr "Fil"
 msgid "Add New File"
 msgstr "Lägg till ny regel"
 
-#: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:37
-#: admin/consts.py:121
+#: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:38
+#: admin/consts.py:122
 msgid "Default"
 msgstr "Förvald"
 
-#: admin/Icons.py:183 admin/Icons.py:314 admin/consts.py:180
+#: admin/Icons.py:183 admin/Icons.py:314 admin/consts.py:181
 #: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "Katalog"
@@ -381,10 +382,10 @@ msgid "Add new"
 msgstr "Lägg till ny"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:212 admin/PageRule.py:260
-#: admin/PageRule.py:286 admin/PageSource.py:331 admin/PageSource.py:345
-#: admin/PageSource.py:359 admin/PageVServers.py:202 admin/PageVServers.py:237
-#: admin/PageVServers.py:263 admin/plugins/redir.py:115
+#: admin/PageIndex.py:348 admin/PageRule.py:213 admin/PageRule.py:261
+#: admin/PageRule.py:287 admin/PageSource.py:344 admin/PageSource.py:358
+#: admin/PageSource.py:372 admin/PageVServers.py:203 admin/PageVServers.py:238
+#: admin/PageVServers.py:264 admin/plugins/redir.py:115
 msgid "Cancel"
 msgstr ""
 
@@ -418,7 +419,7 @@ msgstr "Lägg till ny MIME"
 #: admin/plugins/rehost.py:80 admin/plugins/target_ip.py:88
 #: admin/plugins/wildcard.py:79
 #, fuzzy
-msgid "Add New…"
+msgid "Add New"
 msgstr "Lägg till ny"
 
 #: admin/Mime.py:120
@@ -457,7 +458,7 @@ msgstr "Snäll omstart"
 msgid "Hard restart"
 msgstr "Hård omstart"
 
-#: admin/Page.py:96
+#: admin/Page.py:97
 msgid "OK"
 msgstr ""
 
@@ -815,7 +816,7 @@ msgstr "Autentiseringslista"
 msgid "Leave unset"
 msgstr ""
 
-#: admin/PageEntry.py:70 admin/PageVServer.py:306 admin/plugins/common.py:42
+#: admin/PageEntry.py:70 admin/PageVServer.py:305 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
 #: admin/plugins/proxy.py:237
 msgid "Allow"
@@ -829,7 +830,7 @@ msgstr ""
 msgid "Limit traffic to"
 msgstr "Begränsa trafik till"
 
-#: admin/PageEntry.py:93 admin/PageEntry.py:252 admin/PageVServer.py:117
+#: admin/PageEntry.py:93 admin/PageEntry.py:253 admin/PageVServer.py:117
 msgid "Traffic Shaping"
 msgstr "Trafikmodellering"
 
@@ -837,7 +838,7 @@ msgstr "Trafikmodellering"
 msgid "Skip Logging"
 msgstr "Hoppa över loggning"
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:500
+#: admin/PageEntry.py:108 admin/PageVServer.py:499
 msgid "Logging"
 msgstr "Loggning"
 
@@ -897,25 +898,25 @@ msgstr "Informationskodare"
 msgid "Matching Rule"
 msgstr "Matchande regel"
 
-#: admin/PageEntry.py:222 admin/PageEntry.py:224 admin/PageEntry.py:248
+#: admin/PageEntry.py:223 admin/PageEntry.py:225 admin/PageEntry.py:249
 #: admin/PageVServer.py:110
 msgid "Handler"
 msgstr "Hanterare"
 
-#: admin/PageEntry.py:247 admin/PageSource.py:180
+#: admin/PageEntry.py:248 admin/PageSource.py:193
 msgid "Rule"
 msgstr "Regel"
 
-#: admin/PageEntry.py:249
+#: admin/PageEntry.py:250
 msgid "Encoding"
 msgstr "Kodning"
 
-#: admin/PageEntry.py:250
+#: admin/PageEntry.py:251
 #, fuzzy
 msgid "Time"
 msgstr "Timeout"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:501
+#: admin/PageEntry.py:252 admin/PageVServer.py:500
 msgid "Security"
 msgstr "Säkerhet"
 
@@ -1028,7 +1029,7 @@ msgid "Thank you!"
 msgstr "Feedback: Tack!"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:318
+#: admin/PageSource.py:331
 #, fuzzy
 msgid "Close"
 msgstr "Klona"
@@ -1171,7 +1172,7 @@ msgstr "Rapportera"
 
 #: admin/PageGeneral.py:197
 #, fuzzy
-msgid "Add new port…"
+msgid "Add new port"
 msgstr "Lägg till ny port"
 
 #: admin/PageGeneral.py:203
@@ -1196,7 +1197,7 @@ msgstr "Grupp"
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:228 admin/PageVServer.py:309
+#: admin/PageGeneral.py:228 admin/PageVServer.py:308
 msgid "Network"
 msgstr "Nätverk"
 
@@ -1386,11 +1387,6 @@ msgstr "Hittades inte"
 msgid "Modified"
 msgstr "Modifierad"
 
-#: admin/PageIndex.py:202 admin/plugins/bind.py:69 admin/plugins/bind.py:121
-#: admin/plugins/custom_error.py:41 admin/plugins/method.py:31
-msgid "Choose"
-msgstr "Välj"
-
 #: admin/PageIndex.py:209 admin/plugins/dbslayer.py:49
 msgid "Language"
 msgstr "Språk"
@@ -1502,7 +1498,7 @@ msgstr "Reguljär"
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "Vanlig konfiguration: Apache-loggar, MIME-typer, ikoner osv."
 
-#: admin/PageNewConfig.py:155 admin/consts.py:48 admin/plugins/file.py:29
+#: admin/PageNewConfig.py:155 admin/consts.py:49 admin/plugins/file.py:29
 msgid "Static Content"
 msgstr "Statiskt innehåll"
 
@@ -1550,60 +1546,57 @@ msgstr ""
 msgid "Manual configuration"
 msgstr "Ikonkonfiguration"
 
-#: admin/PageRule.py:207 admin/PageSource.py:326 admin/PageVServers.py:197
+#: admin/PageRule.py:208 admin/PageSource.py:339 admin/PageVServers.py:198
 msgid "Do you really want to remove it?"
 msgstr ""
 
-#: admin/PageRule.py:208 admin/PageSource.py:327 admin/PageVServers.py:198
+#: admin/PageRule.py:209 admin/PageSource.py:340 admin/PageVServers.py:199
 msgid "Remove"
 msgstr "Ta bort"
 
-#: admin/PageRule.py:232 admin/PageVServer.py:119
+#: admin/PageRule.py:233 admin/PageVServer.py:119
 msgid "Final"
 msgstr ""
 
-#: admin/PageRule.py:233
+#: admin/PageRule.py:234
 #, fuzzy
 msgid "Non Final"
 msgstr "Ikonfil"
 
-#: admin/PageRule.py:257 admin/PageRule.py:270
+#: admin/PageRule.py:258 admin/PageRule.py:271
 #, fuzzy
 msgid "Add Behavior Rule"
 msgstr "Betéende-regler"
 
-#: admin/PageRule.py:264
+#: admin/PageRule.py:265
 #, fuzzy
 msgid "Configuration Assistant"
 msgstr "Konfigurationssnabbstart"
 
-#: admin/PageRule.py:270 admin/PageSource.py:348 admin/PageVServers.py:247
-msgid "New…"
-msgstr ""
+#: admin/PageRule.py:271 admin/PageSource.py:361 admin/PageVServers.py:248
+#, fuzzy
+msgid "New"
+msgstr "Nätverk"
 
-#: admin/PageRule.py:284
+#: admin/PageRule.py:285
 #, fuzzy
 msgid "Clone Behavior Rule"
 msgstr "Betéende-regler"
 
-#: admin/PageRule.py:285 admin/PageSource.py:358 admin/PageVServers.py:262
+#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:371
+#: admin/PageSource.py:375 admin/PageVServers.py:263 admin/PageVServers.py:267
 msgid "Clone"
 msgstr "Klona"
 
-#: admin/PageRule.py:289 admin/PageSource.py:362 admin/PageVServers.py:266
-#, fuzzy
-msgid "Clone…"
-msgstr "Klona"
-
-#: admin/PageRule.py:289
+#: admin/PageRule.py:290
 msgid "Clone Selected Behavior Rule"
 msgstr ""
 
-#: admin/PageRule.py:297 admin/PageVServer.py:498
+#: admin/PageRule.py:298 admin/PageVServer.py:497
 msgid "Behavior"
 msgstr "Betéende"
 
-#: admin/PageRule.py:316
+#: admin/PageRule.py:317
 #, fuzzy
 msgid "Rule Filtering"
 msgstr "Regellista"
@@ -1695,67 +1688,67 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr ""
 
-#: admin/PageSource.py:180 admin/PageVServer.py:503
+#: admin/PageSource.py:193 admin/PageVServer.py:502
 msgid "Virtual Server"
 msgstr "Virtuell server"
 
-#: admin/PageSource.py:208 admin/plugins/error_redir.py:87
+#: admin/PageSource.py:221 admin/plugins/error_redir.py:87
 #: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:143
 msgid "Type"
 msgstr "Typ"
 
-#: admin/PageSource.py:210 admin/PageSource.py:247
+#: admin/PageSource.py:223 admin/PageSource.py:260
 #: admin/wizards/rtorrent.py:100
 msgid "Connection"
 msgstr "Anslutning"
 
-#: admin/PageSource.py:212
+#: admin/PageSource.py:225
 msgid "Interpreter"
 msgstr "Tolk"
 
-#: admin/PageSource.py:213
+#: admin/PageSource.py:226
 msgid "Spawning timeout"
 msgstr "Tidsgräns för nya processer"
 
-#: admin/PageSource.py:214
+#: admin/PageSource.py:227
 msgid "Execute as User"
 msgstr "Kör som användare"
 
-#: admin/PageSource.py:215
+#: admin/PageSource.py:228
 msgid "Execute as Group"
 msgstr "Kör som grupp"
 
-#: admin/PageSource.py:216
+#: admin/PageSource.py:229
 msgid "Inherit Environment"
 msgstr ""
 
-#: admin/PageSource.py:315
+#: admin/PageSource.py:328
 #, fuzzy
 msgid "Deletion is forbidden"
 msgstr "Borttagning omöjlig. Kolla användandet av källan."
 
-#: admin/PageSource.py:343 admin/PageSource.py:348
+#: admin/PageSource.py:356 admin/PageSource.py:361
 #, fuzzy
 msgid "Add New Information Source"
 msgstr "Tilldela informationskällor"
 
-#: admin/PageSource.py:357
+#: admin/PageSource.py:370
 #, fuzzy
 msgid "Clone Information Source"
 msgstr "Informationskällor"
 
-#: admin/PageSource.py:362
+#: admin/PageSource.py:375
 #, fuzzy
 msgid "Clone Selected Information Source"
 msgstr "Informationskällor"
 
-#: admin/PageSource.py:382
+#: admin/PageSource.py:395
 #, fuzzy
 msgid "Sources Filtering"
 msgstr "Webkatalog"
 
 #: admin/PageSources.py:35 admin/PageVServer.py:103 admin/PageVServers.py:48
-#: admin/PageVServers.py:275
+#: admin/PageVServers.py:276
 msgid "Virtual Servers"
 msgstr "Virtuella servrar"
 
@@ -1774,7 +1767,7 @@ msgstr "Konfiguration för virtuella servrar."
 msgid "System wide status"
 msgstr "Serverstatus"
 
-#: admin/PageStatus.py:119 admin/PageVServers.py:290
+#: admin/PageStatus.py:119 admin/PageVServers.py:291
 #, fuzzy
 msgid "Virtual Server Filtering"
 msgstr "Virtuell server"
@@ -2057,7 +2050,7 @@ msgstr "Regellista"
 msgid "Host Names"
 msgstr "Värdnamn"
 
-#: admin/PageVServer.py:155 admin/PageVServer.py:315 admin/PageVServer.py:331
+#: admin/PageVServer.py:155 admin/PageVServer.py:314 admin/PageVServer.py:330
 #: admin/plugins/method.py:94 admin/plugins/method.py:104
 msgid "Method"
 msgstr "Metod"
@@ -2107,143 +2100,143 @@ msgstr ""
 msgid "Rule is active"
 msgstr "Regellista"
 
-#: admin/PageVServer.py:291
+#: admin/PageVServer.py:290
 msgid "Virtual Server nickname"
 msgstr "Smeknamn för virtuell server"
 
-#: admin/PageVServer.py:293
+#: admin/PageVServer.py:292
 msgid "Server ID"
 msgstr "Server-id"
 
-#: admin/PageVServer.py:299
+#: admin/PageVServer.py:298
 msgid "Directory Indexes"
 msgstr "Katalogindex"
 
-#: admin/PageVServer.py:301 admin/plugins/fullpath.py:115
+#: admin/PageVServer.py:300 admin/plugins/fullpath.py:115
 msgid "Paths"
 msgstr "Sökvägar"
 
-#: admin/PageVServer.py:306
+#: admin/PageVServer.py:305
 msgid "Keep-alive"
 msgstr "Keep-alive"
 
-#: admin/PageVServer.py:307
+#: admin/PageVServer.py:306
 msgid "Max Upload Size"
 msgstr "Max Uppladdnings-storlek"
 
-#: admin/PageVServer.py:317 admin/plugins/evhost.py:33
+#: admin/PageVServer.py:316 admin/plugins/evhost.py:33
 msgid "Advanced Virtual Hosting"
 msgstr "Avancerad Virtual Hosting"
 
-#: admin/PageVServer.py:333
+#: admin/PageVServer.py:332
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:344 admin/consts.py:224 admin/consts.py:241
+#: admin/PageVServer.py:343 admin/consts.py:225 admin/consts.py:242
 #, fuzzy
 msgid "Disabled"
 msgstr "Deaktivera"
 
-#: admin/PageVServer.py:348
+#: admin/PageVServer.py:347
 msgid "Write errors to"
 msgstr ""
 
-#: admin/PageVServer.py:352 admin/PageVServer.py:388
+#: admin/PageVServer.py:351 admin/PageVServer.py:387
 msgid "Filename"
 msgstr "Filnamn"
 
-#: admin/PageVServer.py:354 admin/PageVServer.py:391
+#: admin/PageVServer.py:353 admin/PageVServer.py:390
 msgid "Command"
 msgstr "Kommando"
 
-#: admin/PageVServer.py:360
+#: admin/PageVServer.py:359
 #, fuzzy
 msgid "Error Logging"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:371
+#: admin/PageVServer.py:370
 msgid "Format"
 msgstr "Format"
 
-#: admin/PageVServer.py:378
+#: admin/PageVServer.py:377
 msgid "Write accesses to"
 msgstr ""
 
-#: admin/PageVServer.py:396
+#: admin/PageVServer.py:395
 msgid "Template: "
 msgstr "Mall:"
 
-#: admin/PageVServer.py:398
+#: admin/PageVServer.py:397
 #, fuzzy
 msgid "Access Logging"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:404
+#: admin/PageVServer.py:403
 msgid "Time standard"
 msgstr ""
 
-#: admin/PageVServer.py:405
+#: admin/PageVServer.py:404
 msgid "Accept Forwarded IPs"
 msgstr "Acceptera vidarebefodrade IPnummer."
 
-#: admin/PageVServer.py:405 admin/consts.py:219
+#: admin/PageVServer.py:404 admin/consts.py:220
 msgid "Accept"
 msgstr "Acceptera"
 
-#: admin/PageVServer.py:408
+#: admin/PageVServer.py:407
 #, fuzzy
 msgid "Do not check"
 msgstr "Kolla inte ursprung"
 
-#: admin/PageVServer.py:417
+#: admin/PageVServer.py:416
 #, fuzzy
 msgid "Logging Options"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:453
+#: admin/PageVServer.py:452
 msgid "Certificate"
 msgstr "Certifikat"
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:453
 msgid "Certificate key"
 msgstr "Certifikatnyckel"
 
-#: admin/PageVServer.py:459
+#: admin/PageVServer.py:458
 #, fuzzy
 msgid "Required SSL/TLS Values"
 msgstr "Obligatoriska SSL/TLS-värden"
 
-#: admin/PageVServer.py:464
+#: admin/PageVServer.py:463
 msgid "Ciphers"
 msgstr "Chiffer"
 
-#: admin/PageVServer.py:465
+#: admin/PageVServer.py:464
 msgid "Client Certs. Request"
 msgstr ""
 
-#: admin/PageVServer.py:468
+#: admin/PageVServer.py:467
 msgid "CA List"
 msgstr "CA-lista"
 
-#: admin/PageVServer.py:471
+#: admin/PageVServer.py:470
 msgid "Verify Depth"
 msgstr "Verifiera djup"
 
-#: admin/PageVServer.py:477
+#: admin/PageVServer.py:476
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Avancerade val"
 
-#: admin/PageVServer.py:496
+#: admin/PageVServer.py:495
 msgid "Basics"
 msgstr "Allmänt"
 
-#: admin/PageVServer.py:497
+#: admin/PageVServer.py:496
 #, fuzzy
 msgid "Host Match"
 msgstr "Närmast träff"
 
-#: admin/PageVServer.py:499
+#: admin/PageVServer.py:498
 msgid "Error Handler"
 msgstr "Felhanterare"
 
@@ -2268,21 +2261,21 @@ msgstr ""
 msgid "Document Root directory of the new Virtual Server."
 msgstr "Namn för den virtuella servern."
 
-#: admin/PageVServers.py:234 admin/PageVServers.py:247
+#: admin/PageVServers.py:235 admin/PageVServers.py:248
 #, fuzzy
 msgid "Add New Virtual Server"
 msgstr "Lägg till ny virtuell server"
 
-#: admin/PageVServers.py:241
+#: admin/PageVServers.py:242
 #, fuzzy
 msgid "Virtual Server Configuration Assistant"
 msgstr "Konfiguration för virtuella servrar."
 
-#: admin/PageVServers.py:261
+#: admin/PageVServers.py:262
 msgid "Clone Virtual Server"
 msgstr "Klona virtuell server"
 
-#: admin/PageVServers.py:266
+#: admin/PageVServers.py:267
 #, fuzzy
 msgid "Clone Selected Virtual Server"
 msgstr "Klona virtuell server"
@@ -2304,8 +2297,9 @@ msgid "Not"
 msgstr ""
 
 #: admin/Rule.py:150
-msgid "Select…"
-msgstr ""
+#, fuzzy
+msgid "Select"
+msgstr "Valda portar"
 
 #: admin/Wizard.py:195
 msgid "Use the same logging configuration as one of the other virtual servers."
@@ -2333,373 +2327,378 @@ msgstr "Dutch"
 
 #: admin/consts.py:31
 #, fuzzy
+msgid "Polish"
+msgstr "English"
+
+#: admin/consts.py:32
+#, fuzzy
 msgid "Swedish"
 msgstr "Svenska"
 
-#: admin/consts.py:32
+#: admin/consts.py:33
 msgid "Brazilian Portuguese"
 msgstr ""
 
-#: admin/consts.py:33
+#: admin/consts.py:34
 msgid "Chinese Simplified"
 msgstr ""
 
-#: admin/consts.py:38
+#: admin/consts.py:39
 msgid "Product only"
 msgstr "Enbart namn"
 
-#: admin/consts.py:39
+#: admin/consts.py:40
 msgid "Product + Minor version"
 msgstr "Namn + Huvudversion"
 
-#: admin/consts.py:40
+#: admin/consts.py:41
 msgid "Product + Minimal version"
 msgstr "Namn + bi-version"
 
-#: admin/consts.py:41
+#: admin/consts.py:42
 msgid "Product + Platform"
 msgstr "Namn + Plattform"
 
-#: admin/consts.py:42
+#: admin/consts.py:43
 msgid "Full Server string"
 msgstr "Hela servernamnet."
 
-#: admin/consts.py:46 admin/consts.py:74 admin/consts.py:91
-#: admin/consts.py:105
+#: admin/consts.py:47 admin/consts.py:75 admin/consts.py:92
+#: admin/consts.py:106
 msgid "None"
 msgstr "Ingen"
 
-#: admin/consts.py:47 admin/plugins/common.py:30
+#: admin/consts.py:48 admin/plugins/common.py:30
 msgid "List & Send"
 msgstr "List & Send"
 
-#: admin/consts.py:49
+#: admin/consts.py:50
 msgid "Only Listing"
 msgstr ""
 
-#: admin/consts.py:50 admin/plugins/error_redir.py:86
+#: admin/consts.py:51 admin/plugins/error_redir.py:86
 #: admin/wizards/hotlinking.py:145 admin/wizards/hotlinking.py:164
 msgid "Redirection"
 msgstr "Omdirigering"
 
-#: admin/consts.py:51
+#: admin/consts.py:52
 msgid "FastCGI"
 msgstr "FastCGI"
 
-#: admin/consts.py:52
+#: admin/consts.py:53
 msgid "SCGI"
 msgstr "SCGI"
 
-#: admin/consts.py:53 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
+#: admin/consts.py:54 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
 #, fuzzy
 msgid "uWSGI"
 msgstr "SCGI"
 
-#: admin/consts.py:54
+#: admin/consts.py:55
 #, fuzzy
 msgid "HTTP Reverse Proxy"
 msgstr "HTTP omvänd proxy"
 
-#: admin/consts.py:55
+#: admin/consts.py:56
 #, fuzzy
 msgid "Upload Reporting"
 msgstr "URL-omskrivning"
 
-#: admin/consts.py:56 admin/plugins/streaming.py:31
+#: admin/consts.py:57 admin/plugins/streaming.py:31
 #: admin/plugins/streaming.py:63
 msgid "Audio/Video Streaming"
 msgstr "Ljud-/Video-strömning"
 
-#: admin/consts.py:57
+#: admin/consts.py:58
 msgid "CGI"
 msgstr "CGI"
 
-#: admin/consts.py:58 admin/plugins/ssi.py:28
+#: admin/consts.py:59 admin/plugins/ssi.py:28
 msgid "Server Side Includes"
 msgstr "Server Side Includes"
 
-#: admin/consts.py:59
+#: admin/consts.py:60
 msgid "Hidden Downloads"
 msgstr "Gömda nedladdningar"
 
-#: admin/consts.py:60
+#: admin/consts.py:61
 msgid "Server Info"
 msgstr "Serverinfo"
 
-#: admin/consts.py:61
+#: admin/consts.py:62
 #, fuzzy
 msgid "MySQL Bridge"
 msgstr "MySQL-brygga"
 
-#: admin/consts.py:62 admin/plugins/custom_error.py:46
+#: admin/consts.py:63 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
 msgstr "HTTP-felmeddelande"
 
-#: admin/consts.py:63 admin/plugins/admin.py:29
+#: admin/consts.py:64 admin/plugins/admin.py:29
 msgid "Remote Administration"
 msgstr "Fjärradministration"
 
-#: admin/consts.py:64 admin/wizards/hotlinking.py:84
+#: admin/consts.py:65 admin/wizards/hotlinking.py:84
 msgid "1x1 Transparent GIF"
 msgstr "1x1 transparent GIF"
 
-#: admin/consts.py:68
+#: admin/consts.py:69
 msgid "Default errors"
 msgstr "Vanliga fel"
 
-#: admin/consts.py:69
+#: admin/consts.py:70
 msgid "Custom redirections"
 msgstr "Egna omdirigeringar"
 
-#: admin/consts.py:70
+#: admin/consts.py:71
 msgid "Closest match"
 msgstr "Närmast träff"
 
-#: admin/consts.py:75
+#: admin/consts.py:76
 msgid "Plain text file"
 msgstr "Vanlig textfil"
 
-#: admin/consts.py:76
+#: admin/consts.py:77
 msgid "Htpasswd file"
 msgstr "Htpasswd-fil"
 
-#: admin/consts.py:77
+#: admin/consts.py:78
 msgid "Htdigest file"
 msgstr "Htdigest-fil"
 
-#: admin/consts.py:78
+#: admin/consts.py:79
 msgid "LDAP server"
 msgstr "LDAP-server"
 
-#: admin/consts.py:79
+#: admin/consts.py:80
 msgid "MySQL server"
 msgstr "MySQL-server"
 
-#: admin/consts.py:80
+#: admin/consts.py:81
 msgid "PAM"
 msgstr "PAM"
 
-#: admin/consts.py:81 admin/plugins/authlist.py:30
+#: admin/consts.py:82 admin/plugins/authlist.py:30
 msgid "Fixed list"
 msgstr "Fast lista"
 
-#: admin/consts.py:85
+#: admin/consts.py:86
 msgid "Basic"
 msgstr "Basic"
 
-#: admin/consts.py:86
+#: admin/consts.py:87
 msgid "Digest"
 msgstr "Digest"
 
-#: admin/consts.py:87
+#: admin/consts.py:88
 msgid "Basic or Digest"
 msgstr "Basic eller Digest"
 
-#: admin/consts.py:92
+#: admin/consts.py:93
 msgid "Apache compatible"
 msgstr "Apache-kompatibel"
 
-#: admin/consts.py:93
+#: admin/consts.py:94
 msgid "NCSA"
 msgstr "NCSA"
 
-#: admin/consts.py:94
+#: admin/consts.py:95
 #, fuzzy
 msgid "Custom"
 msgstr "Anpassad"
 
-#: admin/consts.py:99
+#: admin/consts.py:100
 msgid "System logger"
 msgstr "Systemloggare"
 
-#: admin/consts.py:100
+#: admin/consts.py:101
 msgid "Standard Error"
 msgstr "Standardfel"
 
-#: admin/consts.py:101
+#: admin/consts.py:102
 msgid "Execute program"
 msgstr "Kör program"
 
-#: admin/consts.py:106
+#: admin/consts.py:107
 msgid "Round Robin"
 msgstr "Round-robin"
 
-#: admin/consts.py:107
+#: admin/consts.py:108
 msgid "IP Hash"
 msgstr "IP Hash"
 
-#: admin/consts.py:111
+#: admin/consts.py:112
 msgid "Local interpreter"
 msgstr "Lokal tolk"
 
-#: admin/consts.py:112
+#: admin/consts.py:113
 msgid "Remote host"
 msgstr "Fjärrvärd"
 
-#: admin/consts.py:116
+#: admin/consts.py:117
 msgid "GZip"
 msgstr "GZIP"
 
-#: admin/consts.py:117
+#: admin/consts.py:118
 msgid "Deflate"
 msgstr "Deflate"
 
-#: admin/consts.py:122
+#: admin/consts.py:123
 msgid "FIFO"
 msgstr "FIFO"
 
-#: admin/consts.py:123
+#: admin/consts.py:124
 msgid "Round-robin"
 msgstr "Round-robin"
 
-#: admin/consts.py:124
+#: admin/consts.py:125
 msgid "Dynamic"
 msgstr "Dynamisk"
 
-#: admin/consts.py:128
+#: admin/consts.py:129
 msgid "Automatic"
 msgstr "Automatisk"
 
-#: admin/consts.py:138 admin/plugins/error_redir.py:32
+#: admin/consts.py:139 admin/plugins/error_redir.py:32
 msgid "External"
 msgstr "Extern"
 
-#: admin/consts.py:139 admin/plugins/error_redir.py:31
+#: admin/consts.py:140 admin/plugins/error_redir.py:31
 msgid "Internal"
 msgstr "Intern"
 
-#: admin/consts.py:182 admin/plugins/header.py:72 admin/plugins/proxy.py:91
+#: admin/consts.py:183 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:101 admin/plugins/request.py:31
 #: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
 msgid "Regular Expression"
 msgstr "Reguljärt uttryck"
 
-#: admin/consts.py:183 admin/plugins/header.py:71 admin/plugins/header.py:86
+#: admin/consts.py:184 admin/plugins/header.py:71 admin/plugins/header.py:86
 #: admin/plugins/proxy.py:190
 msgid "Header"
 msgstr "Header"
 
-#: admin/consts.py:184
+#: admin/consts.py:185
 msgid "File Exists"
 msgstr "Fil finns"
 
-#: admin/consts.py:185
+#: admin/consts.py:186
 msgid "HTTP Method"
 msgstr "HTTP-metod"
 
-#: admin/consts.py:186 admin/plugins/bind.py:76 admin/plugins/bind.py:129
+#: admin/consts.py:187 admin/plugins/bind.py:76 admin/plugins/bind.py:129
 #, fuzzy
 msgid "Incoming IP/Port"
 msgstr "Inkommande port"
 
-#: admin/consts.py:187 admin/plugins/fullpath.py:66
+#: admin/consts.py:188 admin/plugins/fullpath.py:66
 #: admin/plugins/fullpath.py:98
 msgid "Full Path"
 msgstr "Hela sökvägen"
 
-#: admin/consts.py:188 admin/plugins/from.py:70
+#: admin/consts.py:189 admin/plugins/from.py:70
 #, fuzzy
 msgid "Connected from"
 msgstr "Anslutning"
 
-#: admin/consts.py:189
+#: admin/consts.py:190
 msgid "URL Argument"
 msgstr ""
 
-#: admin/consts.py:190
+#: admin/consts.py:191
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: admin/consts.py:194
+#: admin/consts.py:195
 #, fuzzy
 msgid "Match Nickname"
 msgstr "Smeknamn"
 
-#: admin/consts.py:195
+#: admin/consts.py:196
 msgid "Wildcards"
 msgstr "Joker-tecken"
 
-#: admin/consts.py:196 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
+#: admin/consts.py:197 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
 msgid "Regular Expressions"
 msgstr "Reguljära uttryck"
 
-#: admin/consts.py:197
+#: admin/consts.py:198
 #, fuzzy
 msgid "Server IP"
 msgstr "Server-id"
 
-#: admin/consts.py:201
+#: admin/consts.py:202
 msgid "Not set"
 msgstr "Inte satt"
 
-#: admin/consts.py:202
+#: admin/consts.py:203
 msgid "Already expired on 1970"
 msgstr "Förföll redan 1970"
 
-#: admin/consts.py:203
+#: admin/consts.py:204
 msgid "Do not expire until 2038"
 msgstr "Förfaller inte förens år 2038"
 
-#: admin/consts.py:204
+#: admin/consts.py:205
 msgid "Custom value"
 msgstr "Eget värde"
 
-#: admin/consts.py:208
+#: admin/consts.py:209
 msgid "No TLS/SSL"
 msgstr "Ingen TLS/SSL"
 
-#: admin/consts.py:209
+#: admin/consts.py:210
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:213 admin/util.py:38
+#: admin/consts.py:214 admin/util.py:38
 msgid "Off"
 msgstr "Av"
 
-#: admin/consts.py:214
+#: admin/consts.py:215
 msgid "Enhanced Virtual Hosting"
 msgstr "Förbättrad Virtual Hosting"
 
-#: admin/consts.py:218
+#: admin/consts.py:219
 msgid "Skip"
 msgstr "Hoppa över"
 
-#: admin/consts.py:220
+#: admin/consts.py:221
 msgid "Require"
 msgstr "Kräv"
 
-#: admin/consts.py:225
+#: admin/consts.py:226
 msgid "RRDtool graphs"
 msgstr ""
 
-#: admin/consts.py:229
+#: admin/consts.py:230
 #, fuzzy
 msgid "Local time"
 msgstr "Nytt värdnamn"
 
-#: admin/consts.py:230
+#: admin/consts.py:231
 msgid "UTC: Coordinated Universal Time"
 msgstr ""
 
-#: admin/consts.py:234
+#: admin/consts.py:235
 msgid "JSON"
 msgstr ""
 
-#: admin/consts.py:235
+#: admin/consts.py:236
 #, fuzzy
 msgid "Python"
 msgstr "Sökväg"
 
-#: admin/consts.py:236 admin/wizards/List.py:115
+#: admin/consts.py:237 admin/wizards/List.py:115
 msgid "PHP"
 msgstr ""
 
-#: admin/consts.py:237
+#: admin/consts.py:238
 msgid "Ruby"
 msgstr ""
 
-#: admin/consts.py:242
+#: admin/consts.py:243
 msgid "POST tracker"
 msgstr ""
 
@@ -2815,7 +2814,7 @@ msgstr "Serverport att ansluta till."
 msgid "DB User"
 msgstr "DB-användare"
 
-#: admin/plugins/dbslayer.py:51
+#: admin/plugins/dbslayer.py:51 admin/plugins/mysql.py:76
 msgid "DB Password"
 msgstr "DB-lösenord"
 
@@ -2846,7 +2845,7 @@ msgstr "Publik webkatalog som konfigurationen ska appliceras på."
 #: admin/plugins/directory.py:31 admin/wizards/alfresco.py:156
 #: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
 #: admin/wizards/django.py:173 admin/wizards/drupal.py:234
-#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:202
+#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:206
 #: admin/wizards/liferay.py:153 admin/wizards/moinmoin.py:198
 #: admin/wizards/mono.py:182 admin/wizards/phpbb.py:161
 #: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:43
@@ -3302,11 +3301,6 @@ msgstr ""
 msgid "Unix Socket"
 msgstr "Unix-socket"
 
-#: admin/plugins/mysql.py:76
-#, fuzzy
-msgid "BD Password"
-msgstr "DB-lösenord"
-
 #: admin/plugins/mysql.py:77
 msgid "Database"
 msgstr "Databas"
@@ -3485,7 +3479,7 @@ msgstr "Nytt reguljärt uttryck"
 
 #: admin/plugins/redir.py:118
 #, fuzzy
-msgid "Add New RegEx…"
+msgid "Add New RegEx"
 msgstr "Lägg till ny"
 
 #: admin/plugins/rehost.py:29
@@ -3828,7 +3822,8 @@ msgstr "Felformaterad tid"
 msgid "Virtual Server nick name is already being used."
 msgstr "Namnet för den virtuella värden används redan."
 
-#: admin/validations.py:344 admin/validations.py:354 admin/validations.py:371
+#: admin/validations.py:344 admin/validations.py:354 admin/validations.py:364
+#: admin/validations.py:381
 msgid "Already in use"
 msgstr ""
 
@@ -4160,7 +4155,7 @@ msgstr ""
 #: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
 #: admin/wizards/drupal.py:44 admin/wizards/glassfish.py:45
-#: admin/wizards/joomla.py:47 admin/wizards/liferay.py:45
+#: admin/wizards/joomla.py:48 admin/wizards/liferay.py:45
 #: admin/wizards/mailman.py:46 admin/wizards/moinmoin.py:45
 #: admin/wizards/mono.py:46 admin/wizards/phpbb.py:47
 #: admin/wizards/phpmyadmin.py:48 admin/wizards/sugar.py:47
@@ -4174,7 +4169,7 @@ msgstr "Namn för den virtuella servern."
 #: admin/wizards/alfresco.py:46 admin/wizards/coldfusion.py:45
 #: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
 #: admin/wizards/drupal.py:43 admin/wizards/glassfish.py:46
-#: admin/wizards/joomla.py:46 admin/wizards/liferay.py:46
+#: admin/wizards/joomla.py:47 admin/wizards/liferay.py:46
 #: admin/wizards/mailman.py:45 admin/wizards/moinmoin.py:46
 #: admin/wizards/mono.py:45 admin/wizards/phpbb.py:46
 #: admin/wizards/phpmyadmin.py:47 admin/wizards/sugar.py:46
@@ -4194,20 +4189,20 @@ msgstr ""
 #: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
 #: admin/wizards/drupal.py:46 admin/wizards/glassfish.py:49
-#: admin/wizards/joomla.py:50 admin/wizards/liferay.py:49
+#: admin/wizards/joomla.py:51 admin/wizards/liferay.py:49
 #: admin/wizards/moinmoin.py:49 admin/wizards/mono.py:50
 #: admin/wizards/phpbb.py:50 admin/wizards/phpmyadmin.py:51
 #: admin/wizards/sugar.py:50 admin/wizards/symfony.py:54
 #: admin/wizards/uwsgi.py:51 admin/wizards/wordpress.py:46
 #: admin/wizards/zend.py:50
 #, fuzzy
-msgid "Public Web Direcoty"
+msgid "Public Web Directory"
 msgstr "Webkatalog"
 
 #: admin/wizards/alfresco.py:172 admin/wizards/coldfusion.py:178
 #: admin/wizards/concrete5.py:220 admin/wizards/django.py:189
 #: admin/wizards/drupal.py:251 admin/wizards/glassfish.py:170
-#: admin/wizards/joomla.py:219 admin/wizards/liferay.py:169
+#: admin/wizards/joomla.py:223 admin/wizards/liferay.py:169
 #: admin/wizards/mailman.py:145 admin/wizards/moinmoin.py:214
 #: admin/wizards/mono.py:198 admin/wizards/phpbb.py:178
 #: admin/wizards/rails.py:313 admin/wizards/sugar.py:208
@@ -4279,7 +4274,7 @@ msgid "It is the CMS made for Marketing, but built for Geeks."
 msgstr ""
 
 #: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
-#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:42
+#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:43
 #: admin/wizards/phpbb.py:42 admin/wizards/phpmyadmin.py:43
 #: admin/wizards/rtorrent.py:36 admin/wizards/sugar.py:42
 #: admin/wizards/symfony.py:45 admin/wizards/trac.py:41
@@ -4305,7 +4300,7 @@ msgid ""
 msgstr ""
 
 #: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
-#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:220
+#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:224
 #: admin/wizards/mailman.py:146 admin/wizards/mono.py:200
 #: admin/wizards/phpbb.py:179 admin/wizards/rails.py:314
 #: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
@@ -4515,40 +4510,40 @@ msgid ""
 "nothing left to do."
 msgstr ""
 
-#: admin/wizards/joomla.py:38
+#: admin/wizards/joomla.py:39
 #, fuzzy
 msgid "Welcome to the Joomla wizard"
 msgstr "Välkommen till Cherokee Admin"
 
-#: admin/wizards/joomla.py:39
+#: admin/wizards/joomla.py:40
 msgid ""
 "<a target=\"_blank\" href=\"http://www.joomla.org/\">Joomla</a> is an award-"
 "winning content management system (CMS), which enables you to build Web "
 "sites and powerful online applications."
 msgstr ""
 
-#: admin/wizards/joomla.py:40
+#: admin/wizards/joomla.py:41
 msgid ""
 "Best of all, Joomla is an open source solution that is freely available to "
 "everyone."
 msgstr ""
 
-#: admin/wizards/joomla.py:43
+#: admin/wizards/joomla.py:44
 msgid ""
 "Local directory where the Joomla source code is located. Example: /usr/share/"
 "joomla."
 msgstr ""
 
-#: admin/wizards/joomla.py:44
+#: admin/wizards/joomla.py:45
 msgid "Does not look like a Joomla source directory."
 msgstr ""
 
-#: admin/wizards/joomla.py:49
+#: admin/wizards/joomla.py:50
 msgid ""
 "Web directory where you want Joomla to be accessible. (Example: /joomla)"
 msgstr ""
 
-#: admin/wizards/joomla.py:238
+#: admin/wizards/joomla.py:242
 #, fuzzy
 msgid "Joomla Local Directory"
 msgstr "Webkatalog"
@@ -4859,7 +4854,7 @@ msgstr ""
 
 #: admin/wizards/rails.py:39
 msgid ""
-"It lets yow write beautiful code by favoring convention over configuration."
+"It lets you write beautiful code by favoring convention over configuration."
 msgstr ""
 
 #: admin/wizards/rails.py:41
@@ -5291,6 +5286,22 @@ msgstr "Skapa en ny konfigurations-fil"
 #: admin/wizards/zend.py:49
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Choose…"
+#~ msgstr "Välj"
+
+#, fuzzy
+#~ msgid "Add New…"
+#~ msgstr "Lägg till ny"
+
+#, fuzzy
+#~ msgid "Clone…"
+#~ msgstr "Klona"
+
+#, fuzzy
+#~ msgid "BD Password"
+#~ msgstr "DB-lösenord"
 
 #, fuzzy
 #~ msgid "or"

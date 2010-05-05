@@ -7,15 +7,14 @@
 #  Alvaro Lopez Ortega <alvaro@alobbs.com>
 #  Taher Shihadeh <taher@unixwars.com>
 #
-# Taher Shihadeh <taher@shihadeh.net>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.49'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-03 13:34+0200\n"
-"PO-Revision-Date: 2010-05-03 17:17+0200\n"
-"Last-Translator: Taher Shihadeh <taher@shihadeh.net>\n"
-"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2010-05-05 13:31+0200\n"
+"PO-Revision-Date: 2010-05-05 13:32+0200\n"
+"Last-Translator: Taher Shihadeh <taher@unixwars.com>\n"
+"Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -79,7 +78,7 @@ msgstr ""
 "Un balanceador de carga debe ser configurado para usar al menos un origen de "
 "datos."
 
-#: admin/Balancer.py:67 admin/PageSource.py:209 admin/PageSource.py:246
+#: admin/Balancer.py:67 admin/PageSource.py:222 admin/PageSource.py:259
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "Nombre"
@@ -89,8 +88,8 @@ msgstr "Nombre"
 msgid "Host"
 msgstr "Servidor"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:371
-#: admin/PageSource.py:391 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:384
+#: admin/PageSource.py:404 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "Orígenes de datos"
 
@@ -98,9 +97,11 @@ msgstr "Orígenes de datos"
 msgid "Assign Information Sources"
 msgstr "Asignar orígenes de datos"
 
-#: admin/Balancer.py:117 admin/PageRule.py:112
-msgid "Choose…"
-msgstr "Elegir…"
+#: admin/Balancer.py:117 admin/PageIndex.py:202 admin/PageRule.py:112
+#: admin/plugins/bind.py:69 admin/plugins/bind.py:121
+#: admin/plugins/custom_error.py:41 admin/plugins/method.py:31
+msgid "Choose"
+msgstr "Elegir"
 
 #: admin/Balancer.py:123
 msgid "Application Server"
@@ -170,11 +171,11 @@ msgstr "Aceptar X-Real-IP"
 msgid "Enabled"
 msgstr "Activo"
 
-#: admin/CgiBase.py:70 admin/PageVServer.py:408
+#: admin/CgiBase.py:70 admin/PageVServer.py:407
 msgid "Don't check origin"
 msgstr "No comprobar origen"
 
-#: admin/CgiBase.py:72 admin/PageVServer.py:411
+#: admin/CgiBase.py:72 admin/PageVServer.py:410
 msgid "Accept from Hosts"
 msgstr "Acceptar de Hosts"
 
@@ -227,8 +228,8 @@ msgid "Custom Environment Variables"
 msgstr "Variables de entorno personalizadas"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:259 admin/PageSource.py:344
-#: admin/PageVServers.py:236 admin/plugins/authlist.py:93
+#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:357
+#: admin/PageVServers.py:237 admin/plugins/authlist.py:93
 #: admin/plugins/error_redir.py:94 admin/plugins/proxy.py:117
 #: admin/plugins/proxy.py:166 admin/plugins/proxy.py:213
 #: admin/plugins/redir.py:114 admin/plugins/rehost.py:71
@@ -300,8 +301,8 @@ msgid ""
 msgstr ""
 "Si debería recolectar estadísticas sobre el tráfico de este servidor virtual."
 
-#: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
-#: admin/PageStatus.py:70 admin/PageVServer.py:511 admin/PageVServers.py:194
+#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:197
+#: admin/PageStatus.py:70 admin/PageVServer.py:510 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -313,14 +314,14 @@ msgstr "Estadísticas de Tráfico"
 msgid "Allows to specify an alternative Document Root path."
 msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 
-#: admin/Handler.py:43 admin/PageVServer.py:298 admin/PageVServers.py:127
+#: admin/Handler.py:43 admin/PageVServer.py:297 admin/PageVServers.py:127
 #: admin/wizards/django.py:190 admin/wizards/mono.py:199
 #: admin/wizards/uwsgi.py:242
 msgid "Document Root"
 msgstr "Raíz de documentos"
 
 #: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
-#: admin/Mime.py:120 admin/consts.py:181 admin/plugins/extensions.py:57
+#: admin/Mime.py:120 admin/consts.py:182 admin/plugins/extensions.py:57
 msgid "Extensions"
 msgstr "Extensiones"
 
@@ -340,7 +341,7 @@ msgstr "Ficheros"
 msgid "File Matches"
 msgstr "Concordancia de ficheros"
 
-#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:98
+#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:99
 msgid "File"
 msgstr "Fichero"
 
@@ -348,12 +349,12 @@ msgstr "Fichero"
 msgid "Add New File"
 msgstr "Añadir nuevo archivo"
 
-#: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:37
-#: admin/consts.py:121
+#: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:38
+#: admin/consts.py:122
 msgid "Default"
 msgstr "Por defecto"
 
-#: admin/Icons.py:183 admin/Icons.py:314 admin/consts.py:180
+#: admin/Icons.py:183 admin/Icons.py:314 admin/consts.py:181
 #: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "Directorio"
@@ -375,10 +376,10 @@ msgid "Add new"
 msgstr "Añadir nuevo"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:212 admin/PageRule.py:260
-#: admin/PageRule.py:286 admin/PageSource.py:331 admin/PageSource.py:345
-#: admin/PageSource.py:359 admin/PageVServers.py:202 admin/PageVServers.py:237
-#: admin/PageVServers.py:263 admin/plugins/redir.py:115
+#: admin/PageIndex.py:348 admin/PageRule.py:213 admin/PageRule.py:261
+#: admin/PageRule.py:287 admin/PageSource.py:344 admin/PageSource.py:358
+#: admin/PageSource.py:372 admin/PageVServers.py:203 admin/PageVServers.py:238
+#: admin/PageVServers.py:264 admin/plugins/redir.py:115
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -412,7 +413,7 @@ msgstr "Añadir nuevo MIME"
 #: admin/Mime.py:104 admin/plugins/error_redir.py:101
 #: admin/plugins/rehost.py:80 admin/plugins/target_ip.py:88
 #: admin/plugins/wildcard.py:79
-msgid "Add New…"
+msgid "Add New"
 msgstr "Añadir nuevo"
 
 #: admin/Mime.py:120
@@ -447,7 +448,7 @@ msgstr "Reinicio suave"
 msgid "Hard restart"
 msgstr "Reinicio forzado"
 
-#: admin/Page.py:96
+#: admin/Page.py:97
 msgid "OK"
 msgstr "OK"
 
@@ -793,7 +794,7 @@ msgstr "Lista de autenticación"
 msgid "Leave unset"
 msgstr "Dejar sin especificar"
 
-#: admin/PageEntry.py:70 admin/PageVServer.py:306 admin/plugins/common.py:42
+#: admin/PageEntry.py:70 admin/PageVServer.py:305 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
 #: admin/plugins/proxy.py:237
 msgid "Allow"
@@ -807,7 +808,7 @@ msgstr "Prohibir"
 msgid "Limit traffic to"
 msgstr "Limitar tráfico a"
 
-#: admin/PageEntry.py:93 admin/PageEntry.py:252 admin/PageVServer.py:117
+#: admin/PageEntry.py:93 admin/PageEntry.py:253 admin/PageVServer.py:117
 msgid "Traffic Shaping"
 msgstr "Gestión de tráfico"
 
@@ -815,7 +816,7 @@ msgstr "Gestión de tráfico"
 msgid "Skip Logging"
 msgstr "No guardar log"
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:500
+#: admin/PageEntry.py:108 admin/PageVServer.py:499
 msgid "Logging"
 msgstr "Registro"
 
@@ -873,24 +874,24 @@ msgstr "Codificador de información"
 msgid "Matching Rule"
 msgstr "Aplicar regla"
 
-#: admin/PageEntry.py:222 admin/PageEntry.py:224 admin/PageEntry.py:248
+#: admin/PageEntry.py:223 admin/PageEntry.py:225 admin/PageEntry.py:249
 #: admin/PageVServer.py:110
 msgid "Handler"
 msgstr "Gestor"
 
-#: admin/PageEntry.py:247 admin/PageSource.py:180
+#: admin/PageEntry.py:248 admin/PageSource.py:193
 msgid "Rule"
 msgstr "Regla"
 
-#: admin/PageEntry.py:249
+#: admin/PageEntry.py:250
 msgid "Encoding"
 msgstr "Codificación"
 
-#: admin/PageEntry.py:250
+#: admin/PageEntry.py:251
 msgid "Time"
 msgstr "Tiempo"
 
-#: admin/PageEntry.py:251 admin/PageVServer.py:501
+#: admin/PageEntry.py:252 admin/PageVServer.py:500
 msgid "Security"
 msgstr "Seguridad"
 
@@ -1010,7 +1011,7 @@ msgid "Thank you!"
 msgstr "Muchas gracias"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:318
+#: admin/PageSource.py:331
 msgid "Close"
 msgstr "Cerrar"
 
@@ -1149,7 +1150,7 @@ msgid "New port"
 msgstr "Nuevo puerto"
 
 #: admin/PageGeneral.py:197
-msgid "Add new port…"
+msgid "Add new port"
 msgstr "Añadir nuevo puerto"
 
 #: admin/PageGeneral.py:203
@@ -1173,7 +1174,7 @@ msgstr "Grupo"
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:228 admin/PageVServer.py:309
+#: admin/PageGeneral.py:228 admin/PageVServer.py:308
 msgid "Network"
 msgstr "Red"
 
@@ -1360,11 +1361,6 @@ msgstr "No encontrado"
 msgid "Modified"
 msgstr "Modificado"
 
-#: admin/PageIndex.py:202 admin/plugins/bind.py:69 admin/plugins/bind.py:121
-#: admin/plugins/custom_error.py:41 admin/plugins/method.py:31
-msgid "Choose"
-msgstr "Elija"
-
 #: admin/PageIndex.py:209 admin/plugins/dbslayer.py:49
 msgid "Language"
 msgstr "Lenguaje"
@@ -1469,7 +1465,7 @@ msgstr "Normal"
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "Configuración normal: Logs tipo Apache, tipos MIME, iconos, etc."
 
-#: admin/PageNewConfig.py:155 admin/consts.py:48 admin/plugins/file.py:29
+#: admin/PageNewConfig.py:155 admin/consts.py:49 admin/plugins/file.py:29
 msgid "Static Content"
 msgstr "Contenido estático"
 
@@ -1518,55 +1514,52 @@ msgstr "Manual"
 msgid "Manual configuration"
 msgstr "Configuración manual"
 
-#: admin/PageRule.py:207 admin/PageSource.py:326 admin/PageVServers.py:197
+#: admin/PageRule.py:208 admin/PageSource.py:339 admin/PageVServers.py:198
 msgid "Do you really want to remove it?"
 msgstr "¿De verdad se quiere eliminar?"
 
-#: admin/PageRule.py:208 admin/PageSource.py:327 admin/PageVServers.py:198
+#: admin/PageRule.py:209 admin/PageSource.py:340 admin/PageVServers.py:199
 msgid "Remove"
 msgstr "\t\tEliminar"
 
-#: admin/PageRule.py:232 admin/PageVServer.py:119
+#: admin/PageRule.py:233 admin/PageVServer.py:119
 msgid "Final"
 msgstr "Final"
 
-#: admin/PageRule.py:233
+#: admin/PageRule.py:234
 msgid "Non Final"
 msgstr "No final"
 
-#: admin/PageRule.py:257 admin/PageRule.py:270
+#: admin/PageRule.py:258 admin/PageRule.py:271
 msgid "Add Behavior Rule"
 msgstr "Añadir regla de funcionamiento"
 
-#: admin/PageRule.py:264
+#: admin/PageRule.py:265
 msgid "Configuration Assistant"
 msgstr "Asistente de configuración"
 
-#: admin/PageRule.py:270 admin/PageSource.py:348 admin/PageVServers.py:247
-msgid "New…"
-msgstr "Nuevo..."
+#: admin/PageRule.py:271 admin/PageSource.py:361 admin/PageVServers.py:248
+msgid "New"
+msgstr "Nuevo"
 
-#: admin/PageRule.py:284
+#: admin/PageRule.py:285
 msgid "Clone Behavior Rule"
 msgstr "Clonar regla"
 
-#: admin/PageRule.py:285 admin/PageSource.py:358 admin/PageVServers.py:262
+#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:371
+#: admin/PageSource.py:375 admin/PageVServers.py:263 admin/PageVServers.py:267
 msgid "Clone"
 msgstr "Clonar"
 
-#: admin/PageRule.py:289 admin/PageSource.py:362 admin/PageVServers.py:266
-msgid "Clone…"
-msgstr "Clonar"
-
-#: admin/PageRule.py:289
+#: admin/PageRule.py:290
 msgid "Clone Selected Behavior Rule"
 msgstr "Clonar la regla seleccionada"
 
-#: admin/PageRule.py:297 admin/PageVServer.py:498
+#: admin/PageRule.py:298 admin/PageVServer.py:497
 msgid "Behavior"
 msgstr "Comportamiento"
 
-#: admin/PageRule.py:316
+#: admin/PageRule.py:317
 msgid "Rule Filtering"
 msgstr "Filtrado de reglas"
 
@@ -1666,62 +1659,62 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr "Edite primero las reglas afectadas"
 
-#: admin/PageSource.py:180 admin/PageVServer.py:503
+#: admin/PageSource.py:193 admin/PageVServer.py:502
 msgid "Virtual Server"
 msgstr "Servidor Virtual"
 
-#: admin/PageSource.py:208 admin/plugins/error_redir.py:87
+#: admin/PageSource.py:221 admin/plugins/error_redir.py:87
 #: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:143
 msgid "Type"
 msgstr "Tipo"
 
-#: admin/PageSource.py:210 admin/PageSource.py:247
+#: admin/PageSource.py:223 admin/PageSource.py:260
 #: admin/wizards/rtorrent.py:100
 msgid "Connection"
 msgstr "Conexión"
 
-#: admin/PageSource.py:212
+#: admin/PageSource.py:225
 msgid "Interpreter"
 msgstr "Intérprete"
 
-#: admin/PageSource.py:213
+#: admin/PageSource.py:226
 msgid "Spawning timeout"
 msgstr "Tiempo de espera de lanzamiento"
 
-#: admin/PageSource.py:214
+#: admin/PageSource.py:227
 msgid "Execute as User"
 msgstr "Ejecutar como el usuario"
 
-#: admin/PageSource.py:215
+#: admin/PageSource.py:228
 msgid "Execute as Group"
 msgstr "Ejecutar como el grupo"
 
-#: admin/PageSource.py:216
+#: admin/PageSource.py:229
 msgid "Inherit Environment"
 msgstr "Heredar entorno"
 
-#: admin/PageSource.py:315
+#: admin/PageSource.py:328
 msgid "Deletion is forbidden"
 msgstr "No se puede borrar"
 
-#: admin/PageSource.py:343 admin/PageSource.py:348
+#: admin/PageSource.py:356 admin/PageSource.py:361
 msgid "Add New Information Source"
 msgstr "Añadir nuevo orígen de datos"
 
-#: admin/PageSource.py:357
+#: admin/PageSource.py:370
 msgid "Clone Information Source"
 msgstr "Clonar orígen de datos"
 
-#: admin/PageSource.py:362
+#: admin/PageSource.py:375
 msgid "Clone Selected Information Source"
 msgstr "Clonar el orígen de datos seleccionado"
 
-#: admin/PageSource.py:382
+#: admin/PageSource.py:395
 msgid "Sources Filtering"
 msgstr "Filtrado de orígenes de datos"
 
 #: admin/PageSources.py:35 admin/PageVServer.py:103 admin/PageVServers.py:48
-#: admin/PageVServers.py:275
+#: admin/PageVServers.py:276
 msgid "Virtual Servers"
 msgstr "Servidores virtuales"
 
@@ -1737,7 +1730,7 @@ msgstr "Monitoriación de servidor virtual"
 msgid "System wide status"
 msgstr "Estado del servidor"
 
-#: admin/PageStatus.py:119 admin/PageVServers.py:290
+#: admin/PageStatus.py:119 admin/PageVServers.py:291
 msgid "Virtual Server Filtering"
 msgstr "Filtrado de servidores virtuales"
 
@@ -2006,7 +1999,7 @@ msgstr "La regla está activa"
 msgid "Host Names"
 msgstr "Nombres de servidor"
 
-#: admin/PageVServer.py:155 admin/PageVServer.py:315 admin/PageVServer.py:331
+#: admin/PageVServer.py:155 admin/PageVServer.py:314 admin/PageVServer.py:330
 #: admin/plugins/method.py:94 admin/plugins/method.py:104
 msgid "Method"
 msgstr "Método"
@@ -2051,135 +2044,135 @@ msgstr "Impide seguir evaluando reglas"
 msgid "Rule is active"
 msgstr "La regla está activa"
 
-#: admin/PageVServer.py:291
+#: admin/PageVServer.py:290
 msgid "Virtual Server nickname"
 msgstr "Nombre del servidor virtual"
 
-#: admin/PageVServer.py:293
+#: admin/PageVServer.py:292
 msgid "Server ID"
 msgstr "ID del servidor"
 
-#: admin/PageVServer.py:299
+#: admin/PageVServer.py:298
 msgid "Directory Indexes"
 msgstr "Índices de directorio"
 
-#: admin/PageVServer.py:301 admin/plugins/fullpath.py:115
+#: admin/PageVServer.py:300 admin/plugins/fullpath.py:115
 msgid "Paths"
 msgstr "Rutas"
 
-#: admin/PageVServer.py:306
+#: admin/PageVServer.py:305
 msgid "Keep-alive"
 msgstr "keep-alive"
 
-#: admin/PageVServer.py:307
+#: admin/PageVServer.py:306
 msgid "Max Upload Size"
 msgstr "Tam. Máx. Subida"
 
-#: admin/PageVServer.py:317 admin/plugins/evhost.py:33
+#: admin/PageVServer.py:316 admin/plugins/evhost.py:33
 msgid "Advanced Virtual Hosting"
 msgstr "Hospedaje Virtual Avanzado"
 
-#: admin/PageVServer.py:333
+#: admin/PageVServer.py:332
 msgid "Error Handling hook"
 msgstr "Manejo de errores"
 
-#: admin/PageVServer.py:344 admin/consts.py:224 admin/consts.py:241
+#: admin/PageVServer.py:343 admin/consts.py:225 admin/consts.py:242
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: admin/PageVServer.py:348
+#: admin/PageVServer.py:347
 msgid "Write errors to"
 msgstr "Escribir errores en"
 
-#: admin/PageVServer.py:352 admin/PageVServer.py:388
+#: admin/PageVServer.py:351 admin/PageVServer.py:387
 msgid "Filename"
 msgstr "Nombre del fichero"
 
-#: admin/PageVServer.py:354 admin/PageVServer.py:391
+#: admin/PageVServer.py:353 admin/PageVServer.py:390
 msgid "Command"
 msgstr "Comando"
 
-#: admin/PageVServer.py:360
+#: admin/PageVServer.py:359
 msgid "Error Logging"
 msgstr "Registro de errores"
 
-#: admin/PageVServer.py:371
+#: admin/PageVServer.py:370
 msgid "Format"
 msgstr "Formato"
 
-#: admin/PageVServer.py:378
+#: admin/PageVServer.py:377
 msgid "Write accesses to"
 msgstr "Escribir accesos en"
 
-#: admin/PageVServer.py:396
+#: admin/PageVServer.py:395
 msgid "Template: "
 msgstr "Plantilla:"
 
-#: admin/PageVServer.py:398
+#: admin/PageVServer.py:397
 msgid "Access Logging"
 msgstr "Registro de accesos"
 
-#: admin/PageVServer.py:404
+#: admin/PageVServer.py:403
 msgid "Time standard"
 msgstr "Estándar de tiempo"
 
-#: admin/PageVServer.py:405
+#: admin/PageVServer.py:404
 msgid "Accept Forwarded IPs"
 msgstr "Acceptar IPs redireccionadas"
 
-#: admin/PageVServer.py:405 admin/consts.py:219
+#: admin/PageVServer.py:404 admin/consts.py:220
 msgid "Accept"
 msgstr "Aceptar"
 
-#: admin/PageVServer.py:408
+#: admin/PageVServer.py:407
 msgid "Do not check"
 msgstr "No comprobar"
 
-#: admin/PageVServer.py:417
+#: admin/PageVServer.py:416
 msgid "Logging Options"
 msgstr "Opciones del histórico"
 
-#: admin/PageVServer.py:453
+#: admin/PageVServer.py:452
 msgid "Certificate"
 msgstr "Certificado"
 
-#: admin/PageVServer.py:454
+#: admin/PageVServer.py:453
 msgid "Certificate key"
 msgstr "Clave del Certificado"
 
-#: admin/PageVServer.py:459
+#: admin/PageVServer.py:458
 msgid "Required SSL/TLS Values"
 msgstr "Valores SSL/TLS obligatorios"
 
-#: admin/PageVServer.py:464
+#: admin/PageVServer.py:463
 msgid "Ciphers"
 msgstr "Codificadores"
 
-#: admin/PageVServer.py:465
+#: admin/PageVServer.py:464
 msgid "Client Certs. Request"
 msgstr "Solicitud de Certif. de Clientes"
 
-#: admin/PageVServer.py:468
+#: admin/PageVServer.py:467
 msgid "CA List"
 msgstr "Lista de CA"
 
-#: admin/PageVServer.py:471
+#: admin/PageVServer.py:470
 msgid "Verify Depth"
 msgstr "Profundidad de verificación"
 
-#: admin/PageVServer.py:477
+#: admin/PageVServer.py:476
 msgid "Advanced Options"
 msgstr "Opciones avanzadas"
 
-#: admin/PageVServer.py:496
+#: admin/PageVServer.py:495
 msgid "Basics"
 msgstr "Básica"
 
-#: admin/PageVServer.py:497
+#: admin/PageVServer.py:496
 msgid "Host Match"
 msgstr "Concordancia de Host"
 
-#: admin/PageVServer.py:499
+#: admin/PageVServer.py:498
 msgid "Error Handler"
 msgstr "Errores"
 
@@ -2205,19 +2198,19 @@ msgstr ""
 msgid "Document Root directory of the new Virtual Server."
 msgstr "Raíz de documentos del nuevo servidor virtual."
 
-#: admin/PageVServers.py:234 admin/PageVServers.py:247
+#: admin/PageVServers.py:235 admin/PageVServers.py:248
 msgid "Add New Virtual Server"
 msgstr "Añadir nuevo servidor virtual"
 
-#: admin/PageVServers.py:241
+#: admin/PageVServers.py:242
 msgid "Virtual Server Configuration Assistant"
 msgstr "Asistente de configuración de servidores virtuales"
 
-#: admin/PageVServers.py:261
+#: admin/PageVServers.py:262
 msgid "Clone Virtual Server"
 msgstr "Clonar servidor virtual"
 
-#: admin/PageVServers.py:266
+#: admin/PageVServers.py:267
 msgid "Clone Selected Virtual Server"
 msgstr "Clonar servidor virtual seleccionado"
 
@@ -2239,8 +2232,8 @@ msgid "Not"
 msgstr "No"
 
 #: admin/Rule.py:150
-msgid "Select…"
-msgstr "Seleccionar…"
+msgid "Select"
+msgstr "Seleccionar"
 
 #: admin/Wizard.py:195
 msgid "Use the same logging configuration as one of the other virtual servers."
@@ -2267,362 +2260,366 @@ msgid "Dutch"
 msgstr "Holandés"
 
 #: admin/consts.py:31
+msgid "Polish"
+msgstr "Polaco"
+
+#: admin/consts.py:32
 msgid "Swedish"
 msgstr "Sueco"
 
-#: admin/consts.py:32
+#: admin/consts.py:33
 msgid "Brazilian Portuguese"
 msgstr "Portugués de Brasil"
 
-#: admin/consts.py:33
+#: admin/consts.py:34
 msgid "Chinese Simplified"
 msgstr "Chino Simplificado"
 
-#: admin/consts.py:38
+#: admin/consts.py:39
 msgid "Product only"
 msgstr "Sólo el producto"
 
-#: admin/consts.py:39
+#: admin/consts.py:40
 msgid "Product + Minor version"
 msgstr "Producto + Versión menor"
 
-#: admin/consts.py:40
+#: admin/consts.py:41
 msgid "Product + Minimal version"
 msgstr "Producto + Versión mínima"
 
-#: admin/consts.py:41
+#: admin/consts.py:42
 msgid "Product + Platform"
 msgstr "Producto + Plataforma"
 
-#: admin/consts.py:42
+#: admin/consts.py:43
 msgid "Full Server string"
 msgstr "Cadena completa del servidor"
 
-#: admin/consts.py:46 admin/consts.py:74 admin/consts.py:91
-#: admin/consts.py:105
+#: admin/consts.py:47 admin/consts.py:75 admin/consts.py:92
+#: admin/consts.py:106
 msgid "None"
 msgstr "Ninguno"
 
-#: admin/consts.py:47 admin/plugins/common.py:30
+#: admin/consts.py:48 admin/plugins/common.py:30
 msgid "List & Send"
 msgstr "Listar y Enviar"
 
-#: admin/consts.py:49
+#: admin/consts.py:50
 msgid "Only Listing"
 msgstr "Sólo mostrar"
 
-#: admin/consts.py:50 admin/plugins/error_redir.py:86
+#: admin/consts.py:51 admin/plugins/error_redir.py:86
 #: admin/wizards/hotlinking.py:145 admin/wizards/hotlinking.py:164
 msgid "Redirection"
 msgstr "Redirección"
 
-#: admin/consts.py:51
+#: admin/consts.py:52
 msgid "FastCGI"
 msgstr "FastCGI"
 
-#: admin/consts.py:52
+#: admin/consts.py:53
 msgid "SCGI"
 msgstr "SCGI"
 
-#: admin/consts.py:53 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
+#: admin/consts.py:54 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
 msgid "uWSGI"
 msgstr "uWSGI"
 
-#: admin/consts.py:54
+#: admin/consts.py:55
 msgid "HTTP Reverse Proxy"
 msgstr "Proxy inverso HTTP"
 
-#: admin/consts.py:55
+#: admin/consts.py:56
 msgid "Upload Reporting"
 msgstr "Reporte de Upload"
 
-#: admin/consts.py:56 admin/plugins/streaming.py:31
+#: admin/consts.py:57 admin/plugins/streaming.py:31
 #: admin/plugins/streaming.py:63
 msgid "Audio/Video Streaming"
 msgstr "Transmisión de Audio/Video"
 
-#: admin/consts.py:57
+#: admin/consts.py:58
 msgid "CGI"
 msgstr "CGI"
 
-#: admin/consts.py:58 admin/plugins/ssi.py:28
+#: admin/consts.py:59 admin/plugins/ssi.py:28
 msgid "Server Side Includes"
 msgstr "SSI"
 
-#: admin/consts.py:59
+#: admin/consts.py:60
 msgid "Hidden Downloads"
 msgstr "Descargas ocultas"
 
-#: admin/consts.py:60
+#: admin/consts.py:61
 msgid "Server Info"
 msgstr "Info. del servidor"
 
-#: admin/consts.py:61
+#: admin/consts.py:62
 msgid "MySQL Bridge"
 msgstr "Puente MySQL"
 
-#: admin/consts.py:62 admin/plugins/custom_error.py:46
+#: admin/consts.py:63 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
 msgstr "Error HTTP"
 
-#: admin/consts.py:63 admin/plugins/admin.py:29
+#: admin/consts.py:64 admin/plugins/admin.py:29
 msgid "Remote Administration"
 msgstr "Administración Remota"
 
-#: admin/consts.py:64 admin/wizards/hotlinking.py:84
+#: admin/consts.py:65 admin/wizards/hotlinking.py:84
 msgid "1x1 Transparent GIF"
 msgstr "GIF Transparente 1x1"
 
-#: admin/consts.py:68
+#: admin/consts.py:69
 msgid "Default errors"
 msgstr "Errores por defecto"
 
-#: admin/consts.py:69
+#: admin/consts.py:70
 msgid "Custom redirections"
 msgstr "Redirecciones personalizadas"
 
-#: admin/consts.py:70
+#: admin/consts.py:71
 msgid "Closest match"
 msgstr "Fichero más parecido"
 
-#: admin/consts.py:75
+#: admin/consts.py:76
 msgid "Plain text file"
 msgstr "Fichero de texto plano"
 
-#: admin/consts.py:76
+#: admin/consts.py:77
 msgid "Htpasswd file"
 msgstr "Fichero Htpasswd"
 
-#: admin/consts.py:77
+#: admin/consts.py:78
 msgid "Htdigest file"
 msgstr "Fichero Htdigest"
 
-#: admin/consts.py:78
+#: admin/consts.py:79
 msgid "LDAP server"
 msgstr "Servidor LDAP"
 
-#: admin/consts.py:79
+#: admin/consts.py:80
 msgid "MySQL server"
 msgstr "Servidor MySQL"
 
-#: admin/consts.py:80
+#: admin/consts.py:81
 msgid "PAM"
 msgstr "PAM"
 
-#: admin/consts.py:81 admin/plugins/authlist.py:30
+#: admin/consts.py:82 admin/plugins/authlist.py:30
 msgid "Fixed list"
 msgstr "Lista fija"
 
-#: admin/consts.py:85
+#: admin/consts.py:86
 msgid "Basic"
 msgstr "Básico"
 
-#: admin/consts.py:86
+#: admin/consts.py:87
 msgid "Digest"
 msgstr "Digest"
 
-#: admin/consts.py:87
+#: admin/consts.py:88
 msgid "Basic or Digest"
 msgstr "Basic o Digest"
 
-#: admin/consts.py:92
+#: admin/consts.py:93
 msgid "Apache compatible"
 msgstr "Compatible con Apache"
 
-#: admin/consts.py:93
+#: admin/consts.py:94
 msgid "NCSA"
 msgstr "NCSA"
 
-#: admin/consts.py:94
+#: admin/consts.py:95
 msgid "Custom"
 msgstr "Personalizado"
 
-#: admin/consts.py:99
+#: admin/consts.py:100
 msgid "System logger"
 msgstr "Log del sistema"
 
-#: admin/consts.py:100
+#: admin/consts.py:101
 msgid "Standard Error"
 msgstr "Error estándar"
 
-#: admin/consts.py:101
+#: admin/consts.py:102
 msgid "Execute program"
 msgstr "Ejecutar programa"
 
-#: admin/consts.py:106
+#: admin/consts.py:107
 msgid "Round Robin"
 msgstr "Round Robin"
 
-#: admin/consts.py:107
+#: admin/consts.py:108
 msgid "IP Hash"
 msgstr "IP Hash"
 
-#: admin/consts.py:111
+#: admin/consts.py:112
 msgid "Local interpreter"
 msgstr "Intérprete local"
 
-#: admin/consts.py:112
+#: admin/consts.py:113
 msgid "Remote host"
 msgstr "Servidor remoto"
 
-#: admin/consts.py:116
+#: admin/consts.py:117
 msgid "GZip"
 msgstr "GZip"
 
-#: admin/consts.py:117
+#: admin/consts.py:118
 msgid "Deflate"
 msgstr "Deflate"
 
-#: admin/consts.py:122
+#: admin/consts.py:123
 msgid "FIFO"
 msgstr "FIFO"
 
-#: admin/consts.py:123
+#: admin/consts.py:124
 msgid "Round-robin"
 msgstr "Round-robin"
 
-#: admin/consts.py:124
+#: admin/consts.py:125
 msgid "Dynamic"
 msgstr "Dinámico"
 
-#: admin/consts.py:128
+#: admin/consts.py:129
 msgid "Automatic"
 msgstr "Automático"
 
-#: admin/consts.py:138 admin/plugins/error_redir.py:32
+#: admin/consts.py:139 admin/plugins/error_redir.py:32
 msgid "External"
 msgstr "Externa"
 
-#: admin/consts.py:139 admin/plugins/error_redir.py:31
+#: admin/consts.py:140 admin/plugins/error_redir.py:31
 msgid "Internal"
 msgstr "Interna"
 
-#: admin/consts.py:182 admin/plugins/header.py:72 admin/plugins/proxy.py:91
+#: admin/consts.py:183 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:101 admin/plugins/request.py:31
 #: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
 msgid "Regular Expression"
 msgstr "Expresión regular"
 
-#: admin/consts.py:183 admin/plugins/header.py:71 admin/plugins/header.py:86
+#: admin/consts.py:184 admin/plugins/header.py:71 admin/plugins/header.py:86
 #: admin/plugins/proxy.py:190
 msgid "Header"
 msgstr "Cabecera"
 
-#: admin/consts.py:184
+#: admin/consts.py:185
 msgid "File Exists"
 msgstr "Existe fichero"
 
-#: admin/consts.py:185
+#: admin/consts.py:186
 msgid "HTTP Method"
 msgstr "Método HTTP"
 
-#: admin/consts.py:186 admin/plugins/bind.py:76 admin/plugins/bind.py:129
+#: admin/consts.py:187 admin/plugins/bind.py:76 admin/plugins/bind.py:129
 msgid "Incoming IP/Port"
 msgstr "IP/Puerto de entrada"
 
-#: admin/consts.py:187 admin/plugins/fullpath.py:66
+#: admin/consts.py:188 admin/plugins/fullpath.py:66
 #: admin/plugins/fullpath.py:98
 msgid "Full Path"
 msgstr "Ruta completa"
 
-#: admin/consts.py:188 admin/plugins/from.py:70
+#: admin/consts.py:189 admin/plugins/from.py:70
 msgid "Connected from"
 msgstr "Conectado desde"
 
-#: admin/consts.py:189
+#: admin/consts.py:190
 msgid "URL Argument"
 msgstr "Argumento URL"
 
-#: admin/consts.py:190
+#: admin/consts.py:191
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: admin/consts.py:194
+#: admin/consts.py:195
 msgid "Match Nickname"
 msgstr "Nombre"
 
-#: admin/consts.py:195
+#: admin/consts.py:196
 msgid "Wildcards"
 msgstr "Comodines"
 
-#: admin/consts.py:196 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
+#: admin/consts.py:197 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
 msgid "Regular Expressions"
 msgstr "Expresiones Regulares"
 
-#: admin/consts.py:197
+#: admin/consts.py:198
 msgid "Server IP"
 msgstr "IP del Servidor"
 
-#: admin/consts.py:201
+#: admin/consts.py:202
 msgid "Not set"
 msgstr "Sin configurar"
 
-#: admin/consts.py:202
+#: admin/consts.py:203
 msgid "Already expired on 1970"
 msgstr "Caducado en 1970"
 
-#: admin/consts.py:203
+#: admin/consts.py:204
 msgid "Do not expire until 2038"
 msgstr "No cadua hasta 2038"
 
-#: admin/consts.py:204
+#: admin/consts.py:205
 msgid "Custom value"
 msgstr "Valor personalizado"
 
-#: admin/consts.py:208
+#: admin/consts.py:209
 msgid "No TLS/SSL"
 msgstr "Sin TLS/SSL"
 
-#: admin/consts.py:209
+#: admin/consts.py:210
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:213 admin/util.py:38
+#: admin/consts.py:214 admin/util.py:38
 msgid "Off"
 msgstr "Desactivado"
 
-#: admin/consts.py:214
+#: admin/consts.py:215
 msgid "Enhanced Virtual Hosting"
 msgstr "Hospedaje Virtual Mejorado"
 
-#: admin/consts.py:218
+#: admin/consts.py:219
 msgid "Skip"
 msgstr "Saltar"
 
-#: admin/consts.py:220
+#: admin/consts.py:221
 msgid "Require"
 msgstr "Requerir"
 
-#: admin/consts.py:225
+#: admin/consts.py:226
 msgid "RRDtool graphs"
 msgstr "Gráficas RRDTool"
 
-#: admin/consts.py:229
+#: admin/consts.py:230
 msgid "Local time"
 msgstr "Hora local"
 
-#: admin/consts.py:230
+#: admin/consts.py:231
 msgid "UTC: Coordinated Universal Time"
 msgstr "UTC: Tiempo Universal Coordinado"
 
-#: admin/consts.py:234
+#: admin/consts.py:235
 msgid "JSON"
 msgstr "JSON"
 
-#: admin/consts.py:235
+#: admin/consts.py:236
 msgid "Python"
 msgstr "Python"
 
-#: admin/consts.py:236 admin/wizards/List.py:115
+#: admin/consts.py:237 admin/wizards/List.py:115
 msgid "PHP"
 msgstr "PHP"
 
-#: admin/consts.py:237
+#: admin/consts.py:238
 msgid "Ruby"
 msgstr "Ruby"
 
-#: admin/consts.py:242
+#: admin/consts.py:243
 msgid "POST tracker"
 msgstr "Seguimiento POST"
 
@@ -2631,16 +2628,14 @@ msgid "At least one user/password pair should be configured."
 msgstr "Se debe configurar al menos un par usuario/contraseña."
 
 #: admin/plugins/authlist.py:60
-#, fuzzy
 msgid "Authentication list"
-msgstr "Autenticación"
+msgstr "Lista de autenticación"
 
 #: admin/plugins/authlist.py:63 admin/plugins/authlist.py:97
 msgid "Password"
 msgstr "Contraseña"
 
 #: admin/plugins/authlist.py:105
-#, fuzzy
 msgid "Add New Pair"
 msgstr "Añadir nuevo par"
 
@@ -2701,7 +2696,6 @@ msgid "HTTP Custom Error"
 msgstr "Error HTTP personalizado"
 
 #: admin/plugins/custom_error.py:51
-#, fuzzy
 msgid "Custom Error"
 msgstr "Error HTTP personalizado"
 
@@ -2733,7 +2727,7 @@ msgstr "Base de datos"
 msgid "DB User"
 msgstr "Usuario de la BBDD"
 
-#: admin/plugins/dbslayer.py:51
+#: admin/plugins/dbslayer.py:51 admin/plugins/mysql.py:76
 msgid "DB Password"
 msgstr "Contraseña de la BBDD"
 
@@ -2752,9 +2746,8 @@ msgid "Balancer"
 msgstr "Balanceador"
 
 #: admin/plugins/dbslayer.py:65
-#, fuzzy
 msgid "Data Base Balancing"
-msgstr "Balanceo de Base de datos"
+msgstr "Balanceo de bases de datos"
 
 #: admin/plugins/directory.py:27
 msgid ""
@@ -2765,7 +2758,7 @@ msgstr ""
 #: admin/plugins/directory.py:31 admin/wizards/alfresco.py:156
 #: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
 #: admin/wizards/django.py:173 admin/wizards/drupal.py:234
-#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:202
+#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:206
 #: admin/wizards/liferay.py:153 admin/wizards/moinmoin.py:198
 #: admin/wizards/mono.py:182 admin/wizards/phpbb.py:161
 #: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:43
@@ -2794,7 +2787,6 @@ msgid "List of files that should not be listed."
 msgstr "Lista de ficheros que no deben mostrarse."
 
 #: admin/plugins/dirlist.py:39
-#, fuzzy
 msgid "Only listing"
 msgstr "Sólo mostrar"
 
@@ -2866,7 +2858,6 @@ msgid "1x1 Empty GIF"
 msgstr "GIF transparente 1x1"
 
 #: admin/plugins/error_redir.py:35
-#, fuzzy
 msgid "HTTP Error to match."
 msgstr "Error HTTP"
 
@@ -2875,7 +2866,6 @@ msgid "Target to access whenever the HTTP Error occurs."
 msgstr "Destino a acceder cuando se produzca el error HTTP."
 
 #: admin/plugins/error_redir.py:37
-#, fuzzy
 msgid "Whether the redirection should be Internal or External."
 msgstr "Define si la redirección será vista por el cliente."
 
@@ -2884,7 +2874,6 @@ msgid "Error"
 msgstr "Error"
 
 #: admin/plugins/error_redir.py:89
-#, fuzzy
 msgid "Add New Custom Error"
 msgstr "Error HTTP personalizado"
 
@@ -2964,7 +2953,6 @@ msgid "If dir, check index files"
 msgstr "Si es un directorio, comprobar fichero de índice"
 
 #: admin/plugins/exists.py:132
-#, fuzzy
 msgid "File exists"
 msgstr "Existe fichero"
 
@@ -2990,7 +2978,6 @@ msgstr ""
 "Lista de extensiones de fichero a la que se le aplicará la configuración."
 
 #: admin/plugins/fcgi.py:49
-#, fuzzy
 msgid "FastCGI Specific"
 msgstr "Específico de FastCGI"
 
@@ -3003,7 +2990,6 @@ msgid "File Sending"
 msgstr "Envío de fichero"
 
 #: admin/plugins/from.py:30
-#, fuzzy
 msgid "IP or Subnet to check the connection origin against."
 msgstr "IP o subred con la que comprobar origen de la conexión."
 
@@ -3106,7 +3092,6 @@ msgid "LDAP server IP address."
 msgstr "Dirección IP del servidor LDAP."
 
 #: admin/plugins/ldap.py:33
-#, fuzzy
 msgid "LDAP server port to connect to. Default: 389"
 msgstr "Puerto del servidor LDAP. Por defecto: 389"
 
@@ -3163,7 +3148,6 @@ msgid "CA File"
 msgstr "Fichero de CA"
 
 #: admin/plugins/ldap.py:59
-#, fuzzy
 msgid "LDAP Connection"
 msgstr "Conexión LDAP"
 
@@ -3212,11 +3196,6 @@ msgstr ""
 msgid "Unix Socket"
 msgstr "Socket Unix"
 
-#: admin/plugins/mysql.py:76
-#, fuzzy
-msgid "BD Password"
-msgstr "Contraseña de la BBDD"
-
 #: admin/plugins/mysql.py:77
 msgid "Database"
 msgstr "Base de datos"
@@ -3230,7 +3209,6 @@ msgid "Password Hash"
 msgstr "Hash de la Contraseña"
 
 #: admin/plugins/mysql.py:84
-#, fuzzy
 msgid "MySQL Connection"
 msgstr "Conexión MySQL"
 
@@ -3243,12 +3221,10 @@ msgid "Full path to the plain text password file."
 msgstr "Ruta completa al fichero de contraseñas de texto plano."
 
 #: admin/plugins/plain.py:45
-#, fuzzy
 msgid "Plain Password File"
 msgstr "Fichero de contraseñas"
 
 #: admin/plugins/post_report.py:30 admin/plugins/post_track.py:25
-#, fuzzy
 msgid "POST Report"
 msgstr "Informe"
 
@@ -3261,7 +3237,6 @@ msgid "Reverse Proxy"
 msgstr "Proxy inverso"
 
 #: admin/plugins/proxy.py:35
-#, fuzzy
 msgid ""
 "Maximum number of connections per server that the proxy can try to keep "
 "opened."
@@ -3276,7 +3251,6 @@ msgstr ""
 "Permitir al servidor usar conexiones Keep-alive con los servidores back-end."
 
 #: admin/plugins/proxy.py:37
-#, fuzzy
 msgid ""
 "Preserve the original \"Host:\" header sent by the client. (Default: No)"
 msgstr ""
@@ -3284,7 +3258,6 @@ msgstr ""
 "(Predeterminado: No)"
 
 #: admin/plugins/proxy.py:38
-#, fuzzy
 msgid ""
 "Preserve the \"Server:\" header sent by the back-end server. (Default: No)"
 msgstr ""
@@ -3302,7 +3275,6 @@ msgid "Add RegEx"
 msgstr "Añadir Exp.Reg."
 
 #: admin/plugins/proxy.py:170
-#, fuzzy
 msgid "Add Header Entry"
 msgstr "Añadir nueva entrada"
 
@@ -3315,7 +3287,6 @@ msgid "Allow Keepalive"
 msgstr "Permitir Keepalive"
 
 #: admin/plugins/proxy.py:238
-#, fuzzy
 msgid "Preserve Host Header"
 msgstr "Mantener la cabecera \"Host\""
 
@@ -3374,7 +3345,6 @@ msgstr ""
 "regulares."
 
 #: admin/plugins/redir.py:34
-#, fuzzy
 msgid "At least one Regular Expression should be defined."
 msgstr "Debe definirse al menos una cadena de expresión regular."
 
@@ -3387,12 +3357,12 @@ msgid "Rule list"
 msgstr "Lista de reglas"
 
 #: admin/plugins/redir.py:113
-#, fuzzy
 msgid "Add New Regular Expression"
 msgstr "Nueva expresión regular"
 
 #: admin/plugins/redir.py:118
-msgid "Add New RegEx…"
+#, fuzzy
+msgid "Add New RegEx"
 msgstr "Añadir nueva RegEx"
 
 #: admin/plugins/rehost.py:29
@@ -3409,7 +3379,6 @@ msgid "New Regular Expression"
 msgstr "Nueva expresión regular"
 
 #: admin/plugins/rehost.py:71
-#, fuzzy
 msgid "Add New Entry"
 msgstr "Añadir nueva entrada"
 
@@ -3428,7 +3397,6 @@ msgstr ""
 "Ruta al binario rrdtool. Por defecto el servidor lo buscará en el PATH."
 
 #: admin/plugins/rrd.py:40
-#, fuzzy
 msgid "Round Robin Database directory"
 msgstr "Directorio de las bases de datos RRD"
 
@@ -3437,7 +3405,6 @@ msgid "Custom rrdtool binary"
 msgstr "Binario personalizado de rrdtool"
 
 #: admin/plugins/scgi.py:49
-#, fuzzy
 msgid "SCGI Specific"
 msgstr "Específico de SCGI"
 
@@ -3456,9 +3423,8 @@ msgstr ""
 "60."
 
 #: admin/plugins/secdownload.py:43
-#, fuzzy
 msgid "Secret"
-msgstr "Seguro"
+msgstr "Secreto"
 
 #: admin/plugins/secdownload.py:50
 msgid "Covering Parameters"
@@ -3485,7 +3451,6 @@ msgid "Show Information"
 msgstr "Mostrar información"
 
 #: admin/plugins/server_info.py:52
-#, fuzzy
 msgid "Privacy Settings"
 msgstr "Ajustes de privacidad"
 
@@ -3553,12 +3518,10 @@ msgid "Argument name"
 msgstr "Nombre de argumento"
 
 #: admin/plugins/url_arg.py:31
-#, fuzzy
 msgid "Regular Expression for the match"
 msgstr "Expresión regular"
 
 #: admin/plugins/url_arg.py:33
-#, fuzzy
 msgid "Match a specific argument"
 msgstr "Comprobar una lista específica de peticiones"
 
@@ -3732,7 +3695,8 @@ msgstr "Tiempo malformado"
 msgid "Virtual Server nick name is already being used."
 msgstr "El nombre del servidor virtual ya está siendo usado."
 
-#: admin/validations.py:344 admin/validations.py:354 admin/validations.py:371
+#: admin/validations.py:344 admin/validations.py:354 admin/validations.py:364
+#: admin/validations.py:381
 msgid "Already in use"
 msgstr "Ya en uso"
 
@@ -3754,7 +3718,6 @@ msgid ""
 msgstr "CMS para todo: desde webs personales hasta sitios web comunitarios"
 
 #: admin/wizards/List.py:38
-#, fuzzy
 msgid "WordPress"
 msgstr "WordPress"
 
@@ -3948,7 +3911,6 @@ msgid "Course Management System / Virtual Learning Environment."
 msgstr "Sistema de gestión de cursos / Entorno de aprendizaje virtual."
 
 #: admin/wizards/List.py:142
-#, fuzzy
 msgid "phpBB Forum"
 msgstr "Foro phpBB"
 
@@ -4025,7 +3987,6 @@ msgstr ""
 "Añadir regla para servir los ficheros estáticos más comunes de manera óptima."
 
 #: admin/wizards/List.py:177
-#, fuzzy
 msgid "Media file streaming"
 msgstr "Flujo de Audio/Video"
 
@@ -4078,7 +4039,7 @@ msgstr "Puerto en el que corre el servicio en dicho host. (Ejemplo: 8080)"
 #: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
 #: admin/wizards/drupal.py:44 admin/wizards/glassfish.py:45
-#: admin/wizards/joomla.py:47 admin/wizards/liferay.py:45
+#: admin/wizards/joomla.py:48 admin/wizards/liferay.py:45
 #: admin/wizards/mailman.py:46 admin/wizards/moinmoin.py:45
 #: admin/wizards/mono.py:46 admin/wizards/phpbb.py:47
 #: admin/wizards/phpmyadmin.py:48 admin/wizards/sugar.py:47
@@ -4091,7 +4052,7 @@ msgstr "Nombre del servidor virtual que será creado."
 #: admin/wizards/alfresco.py:46 admin/wizards/coldfusion.py:45
 #: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
 #: admin/wizards/drupal.py:43 admin/wizards/glassfish.py:46
-#: admin/wizards/joomla.py:46 admin/wizards/liferay.py:46
+#: admin/wizards/joomla.py:47 admin/wizards/liferay.py:46
 #: admin/wizards/mailman.py:45 admin/wizards/moinmoin.py:46
 #: admin/wizards/mono.py:45 admin/wizards/phpbb.py:46
 #: admin/wizards/phpmyadmin.py:47 admin/wizards/sugar.py:46
@@ -4110,20 +4071,19 @@ msgstr "Directorio web para acceder al proyecto."
 #: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
 #: admin/wizards/drupal.py:46 admin/wizards/glassfish.py:49
-#: admin/wizards/joomla.py:50 admin/wizards/liferay.py:49
+#: admin/wizards/joomla.py:51 admin/wizards/liferay.py:49
 #: admin/wizards/moinmoin.py:49 admin/wizards/mono.py:50
 #: admin/wizards/phpbb.py:50 admin/wizards/phpmyadmin.py:51
 #: admin/wizards/sugar.py:50 admin/wizards/symfony.py:54
 #: admin/wizards/uwsgi.py:51 admin/wizards/wordpress.py:46
 #: admin/wizards/zend.py:50
-#, fuzzy
-msgid "Public Web Direcoty"
+msgid "Public Web Directory"
 msgstr "Directorio web"
 
 #: admin/wizards/alfresco.py:172 admin/wizards/coldfusion.py:178
 #: admin/wizards/concrete5.py:220 admin/wizards/django.py:189
 #: admin/wizards/drupal.py:251 admin/wizards/glassfish.py:170
-#: admin/wizards/joomla.py:219 admin/wizards/liferay.py:169
+#: admin/wizards/joomla.py:223 admin/wizards/liferay.py:169
 #: admin/wizards/mailman.py:145 admin/wizards/moinmoin.py:214
 #: admin/wizards/mono.py:198 admin/wizards/phpbb.py:178
 #: admin/wizards/rails.py:313 admin/wizards/sugar.py:208
@@ -4198,7 +4158,7 @@ msgid "It is the CMS made for Marketing, but built for Geeks."
 msgstr "Es el CMS hecho para marketing pero construido para geeks."
 
 #: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
-#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:42
+#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:43
 #: admin/wizards/phpbb.py:42 admin/wizards/phpmyadmin.py:43
 #: admin/wizards/rtorrent.py:36 admin/wizards/sugar.py:42
 #: admin/wizards/symfony.py:45 admin/wizards/trac.py:41
@@ -4225,19 +4185,17 @@ msgid ""
 msgstr "Directorio web donde Concrete5 será publicado (Ejemplo: /concrete5)"
 
 #: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
-#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:220
+#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:224
 #: admin/wizards/mailman.py:146 admin/wizards/mono.py:200
 #: admin/wizards/phpbb.py:179 admin/wizards/rails.py:314
 #: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
 #: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
 #: admin/wizards/wordpress.py:210 admin/wizards/zend.py:194
-#, fuzzy
 msgid "Use Same Logs as"
-msgstr "Los mismos logs que el vserver"
+msgstr "Los mismos logs que"
 
 #: admin/wizards/concrete5.py:239 admin/wizards/phpbb.py:197
 #: admin/wizards/phpmyadmin.py:134 admin/wizards/zend.py:210
-#, fuzzy
 msgid "Source Directory"
 msgstr "Directorio de las fuentes"
 
@@ -4275,7 +4233,6 @@ msgid "Web directory where you want Django to be accessible. (Example: /blog)"
 msgstr "Directorio web por el cual Django será accedido. (Ejemplo: /blog)"
 
 #: admin/wizards/django.py:47 admin/wizards/uwsgi.py:48
-#, fuzzy
 msgid "Path to use as document root for the new virtual server."
 msgstr "Raíz de documentos del nuevo servidor virtual."
 
@@ -4319,7 +4276,6 @@ msgstr ""
 "sus sitios web."
 
 #: admin/wizards/drupal.py:42
-#, fuzzy
 msgid ""
 "Local directory where the Drupal source code is located. Example: /usr/share/"
 "drupal."
@@ -4334,7 +4290,6 @@ msgid "Does not look like a Drupal source directory."
 msgstr "No parece ser un directorio con las fuentes de Drupal."
 
 #: admin/wizards/drupal.py:270
-#, fuzzy
 msgid "Drupal Local Directory"
 msgstr "Directorio de las fuentes"
 
@@ -4393,7 +4348,6 @@ msgid "Domain allowed to access the files. Eg: example.com"
 msgstr "Dominio al que se le permite acceder a los ficheros. Ej: example.com"
 
 #: admin/wizards/hotlinking.py:42
-#, fuzzy
 msgid "Path to the public resource to use. Eg: /images/forbidden.jpg"
 msgstr ""
 "Ruta al recurso público que se debe utilizar. Ej: /images/forbidden.jpg"
@@ -4419,7 +4373,6 @@ msgid "Show error"
 msgstr "Mostrar error"
 
 #: admin/wizards/hotlinking.py:83
-#, fuzzy
 msgid "Redirect"
 msgstr "Redirección"
 
@@ -4455,11 +4408,11 @@ msgstr ""
 "Los directorios /icons y /cherokee_themes ya han sido configurados. No queda "
 "nada por hacer. "
 
-#: admin/wizards/joomla.py:38
+#: admin/wizards/joomla.py:39
 msgid "Welcome to the Joomla wizard"
 msgstr "Bienvenido al asistente de Joomla"
 
-#: admin/wizards/joomla.py:39
+#: admin/wizards/joomla.py:40
 msgid ""
 "<a target=\"_blank\" href=\"http://www.joomla.org/\">Joomla</a> is an award-"
 "winning content management system (CMS), which enables you to build Web "
@@ -4469,7 +4422,7 @@ msgstr ""
 "galardonado sistema gestor de contenidos (CMS) que permite construir sitios "
 "web y potentes aplicaciones online."
 
-#: admin/wizards/joomla.py:40
+#: admin/wizards/joomla.py:41
 msgid ""
 "Best of all, Joomla is an open source solution that is freely available to "
 "everyone."
@@ -4477,23 +4430,22 @@ msgstr ""
 "Lo mejor de todo es que Joomla es una solución open source disponible "
 "libremente para todos."
 
-#: admin/wizards/joomla.py:43
+#: admin/wizards/joomla.py:44
 msgid ""
 "Local directory where the Joomla source code is located. Example: /usr/share/"
 "joomla."
 msgstr "Ruta local a las fuentes de Joomla. (Ejemplo: /usr/share/joomla)"
 
-#: admin/wizards/joomla.py:44
+#: admin/wizards/joomla.py:45
 msgid "Does not look like a Joomla source directory."
 msgstr "No parece ser un directorio con las fuentes de Joomla."
 
-#: admin/wizards/joomla.py:49
+#: admin/wizards/joomla.py:50
 msgid ""
 "Web directory where you want Joomla to be accessible. (Example: /joomla)"
 msgstr "Directorio web por el cual Joomla será accedido. (Ejemplo: /joomla)"
 
-#: admin/wizards/joomla.py:238
-#, fuzzy
+#: admin/wizards/joomla.py:242
 msgid "Joomla Local Directory"
 msgstr "Directorio de las fuentes"
 
@@ -4537,7 +4489,6 @@ msgstr ""
 "a> es software libre para manejar listas de correo y boletines electrónicos."
 
 #: admin/wizards/mailman.py:38
-#, fuzzy
 msgid ""
 "Mailman supports built-in archiving, automatic bounce processing, content "
 "filtering, digest delivery, spam filters, and more."
@@ -4813,7 +4764,7 @@ msgstr ""
 
 #: admin/wizards/rails.py:39
 msgid ""
-"It lets yow write beautiful code by favoring convention over configuration."
+"It lets you write beautiful code by favoring convention over configuration."
 msgstr ""
 "Permite escribir código bonito al favorecer convención sobre configuración."
 
@@ -4905,7 +4856,6 @@ msgid "Redirection details"
 msgstr "Detalles de la redirección"
 
 #: admin/wizards/redirect.py:43
-#, fuzzy
 msgid ""
 "This domain name will be used as nickname for the new virtual server. More "
 "domain names can be added to the virtual server later on."
@@ -5046,7 +4996,6 @@ msgid ""
 msgstr "Directorio web por el cual Sugar CRM será accedido. (Ejemplo: /sugar)"
 
 #: admin/wizards/sugar.py:227
-#, fuzzy
 msgid "Sugar Local Directory"
 msgstr "Directorio de las fuentes"
 
@@ -5205,7 +5154,6 @@ msgid "uWSGI binary"
 msgstr "Binario uWSGI"
 
 #: admin/wizards/uwsgi.py:263
-#, fuzzy
 msgid "Configuration File"
 msgstr "Fichero de configuración"
 
@@ -5241,7 +5189,6 @@ msgstr ""
 "wordpress)"
 
 #: admin/wizards/wordpress.py:45
-#, fuzzy
 msgid ""
 "Web directory where you want WordPress to be accessible. (Example: /blog)"
 msgstr "Directorio web donde Wordpress será publicado (Ejemplo: /blog)"
@@ -5293,22 +5240,30 @@ msgstr "No parece ser un directorio de fuentes de Zend."
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
 msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
-#, fuzzy
+#~ msgid "Choose…"
+#~ msgstr "Elegir…"
+
+#~ msgid "Add New…"
+#~ msgstr "Añadir nuevo"
+
+#~ msgid "Clone…"
+#~ msgstr "Clonar"
+
+#~ msgid "BD Password"
+#~ msgstr "Contraseña de la BBDD"
+
 #~ msgid "or"
 #~ msgstr "Puerto"
 
-#, fuzzy
 #~ msgid "exists"
 #~ msgstr "Existe fichero"
 
 #~ msgid "title"
 #~ msgstr "título"
 
-#, fuzzy
 #~ msgid "%s Support"
 #~ msgstr "Soporte"
 
-#, fuzzy
 #~ msgid "Add new %s"
 #~ msgstr "Añadir nuevo"
 
@@ -5368,7 +5323,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid " can not be empty"
 #~ msgstr "No puede estar vacío"
 
-#, fuzzy
 #~ msgid "Formatting options"
 #~ msgstr "Cargar opciones de balanceo"
 
@@ -5391,7 +5345,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "It can't be empty"
 #~ msgstr "No puede estar vacío"
 
-#, fuzzy
 #~ msgid "URL arg"
 #~ msgstr "Reescritura de URL"
 
@@ -5419,7 +5372,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Commit all the changes permanently"
 #~ msgstr "Guardar todos los cambios permanentemente"
 
-#, fuzzy
 #~ msgid "Connections timeout"
 #~ msgstr "Tiempo de espera de las conexiones"
 
@@ -5483,7 +5435,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Known sources"
 #~ msgstr "Orígenes de datos conocidos"
 
-#, fuzzy
 #~ msgid "Source"
 #~ msgstr "Uso del origen de datos"
 
@@ -5539,7 +5490,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ "<p>Las reglas se evalúan de <b>arriba a abajo</b>. Arrastre y suéltelas "
 #~ "para reordenarlas.</p> "
 
-#, fuzzy
 #~ msgid "Clone rule"
 #~ msgstr "Clonar servidor virtual"
 
@@ -5576,7 +5526,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Filename must be set"
 #~ msgstr "Debe poner un nombre de fichero"
 
-#, fuzzy
 #~ msgid "Choose a rule.."
 #~ msgstr "Elija.."
 
@@ -5595,7 +5544,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Stats"
 #~ msgstr "Stats"
 
-#, fuzzy
 #~ msgid "Offline"
 #~ msgstr "Desactivado"
 
@@ -5623,23 +5571,18 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "This field can not be empty."
 #~ msgstr "Este campo no puede estar vacio"
 
-#, fuzzy
 #~ msgid "Unknown wizard"
 #~ msgstr "Desconocido"
 
-#, fuzzy
 #~ msgid "New virtual server based on a Alfresco project."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "New directory based on a Alfresco project."
 #~ msgstr "El directorio no parece un proyecto basado en Django."
 
-#, fuzzy
 #~ msgid "New virtual server to proxy a ColdFusion host."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "Couldn't add a new rule."
 #~ msgstr "Añadir nueva regla"
 
@@ -5652,78 +5595,61 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Local path to the Django based project."
 #~ msgstr "Ruta local al proyecto basado en Django."
 
-#, fuzzy
 #~ msgid "Web directory that will give access to the project."
 #~ msgstr "Se debe proporcionar un directorio web."
 
 #~ msgid "It does not look like a Django based project directory."
 #~ msgstr "No parece ser el directorio de un proyecto basado en Django."
 
-#, fuzzy
 #~ msgid "A name for the virtual server is required."
 #~ msgstr "Nombre para el servidor virtual."
 
-#, fuzzy
 #~ msgid "A web directory is required."
 #~ msgstr "Se debe proporcionar un directorio web."
 
-#, fuzzy
 #~ msgid "New directory based on a Django project."
 #~ msgstr "El directorio no parece un proyecto basado en Django."
 
-#, fuzzy
 #~ msgid "New virtual server to proxy Glassfish projects."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "New directory to proxy Glassfish projects."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
 #~ msgid "Hot Linking Prevention Wizard"
 #~ msgstr "Prevención de Hot-Linking"
 
-#, fuzzy
 #~ msgid "Local Host Name"
 #~ msgstr "Nuevo nombre de host"
 
-#, fuzzy
 #~ msgid "Add the /icons directory"
 #~ msgstr "La ruta no es un directorio"
 
-#, fuzzy
 #~ msgid "New virtual server based on a Liferay project."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "New directory based on a Liferay project."
 #~ msgstr "El directorio no parece un proyecto basado en Django."
 
-#, fuzzy
 #~ msgid "New virtual server based on a Mailman mailing list manager."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "Web folder under which MoinMoin Wiki will be accessible."
 #~ msgstr ""
 #~ "Directorio web público a cuyo contenido se le aplicará la configuración."
 
-#, fuzzy
 #~ msgid "New virtual server based on a Moinmoin Wiki Instance."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "New virtual server based on a .NET/Mono project."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid ".NET/Mono Wizard"
 #~ msgstr "Asistente para Django"
 
-#, fuzzy
 #~ msgid "New directory based on a .NET/Mono project."
 #~ msgstr "El directorio no parece un proyecto basado en Django."
 
-#, fuzzy
 #~ msgid ""
 #~ "Path to the directory where the Moodle source code is located. (Example: /"
 #~ "usr/share/moodle)"
@@ -5731,53 +5657,42 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ "Directorio local a las fuentes de Wordpress (Por ejemplo: /usr/share/"
 #~ "wordpress)"
 
-#, fuzzy
 #~ msgid ""
 #~ "Web directory where you want Moodle to be accessible. (Example: /course)"
 #~ msgstr "Directorio web donde Wordpress será publicado (Ejemplo: /blog)"
 
-#, fuzzy
 #~ msgid "Add PHP support"
 #~ msgstr "Añadir nuevo puerto"
 
-#, fuzzy
 #~ msgid "New virtual server based on a Ruby on Rails project."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "New directory based on a Ruby of Rails project."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "Sugar Wizard"
 #~ msgstr "Asistente para Drupal"
 
-#, fuzzy
 #~ msgid ""
 #~ "Path to the directory where Symfony is installed. (Example: /usr/share/"
 #~ "php/data/symfony)"
 #~ msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
 
-#, fuzzy
 #~ msgid "New virtual server based on a Trac project."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "Trac Wizard"
 #~ msgstr "Asistente para Drupal"
 
 #~ msgid "Wordpress Wizard: Location"
 #~ msgstr "Asistente para Wordpress"
 
-#, fuzzy
 #~ msgid "Zend Wizard"
 #~ msgstr "Asistentes"
 
-#, fuzzy
 #~ msgid "New virtual server for an uWSGI project."
 #~ msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#, fuzzy
 #~ msgid "New directory for an uWSGI project."
 #~ msgstr "El directorio no parece un proyecto basado en Django."
 
@@ -5799,7 +5714,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid " Hard restart performed."
 #~ msgstr " Realizado el reinicio forzado."
 
-#, fuzzy
 #~ msgid "Invalid regular expression"
 #~ msgstr "Expresión regular."
 
@@ -5846,7 +5760,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "W3C"
 #~ msgstr "W3C"
 
-#, fuzzy
 #~ msgid "yes"
 #~ msgstr "Sí"
 
