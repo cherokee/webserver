@@ -197,8 +197,10 @@ class Render_Source:
                 vsrv_name = CTK.cfg.get_val ("vserver!%s!nick" %(vsrv_num), _("Unknown"))
                 r = Rule.Rule('%s!match' %(rule))
                 rule_name = r.GetName()
-                table += [CTK.RawHTML(x) for x in (vsrv_name, rule_name)]
-
+                vsrv_link = '/vserver/%s'%(vsrv_num)
+                rule_link = rule.replace('!','/')
+                table += [CTK.Link (vsrv_link, CTK.RawHTML(vsrv_name)),
+                          CTK.Link (rule_link, CTK.RawHTML(rule_name))]
 
     def __call__ (self):
         # /source/empty
