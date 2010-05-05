@@ -47,7 +47,7 @@ NOTE_HOST       = N_("Host name of the virtual server that is about to be create
 NOTE_DROOT      = N_("Document root (for non Mono related files).")
 
 NOTE_WEBDIR     = N_("Web directory under which the Mono application will be published.")
-NOTE_WEBDIR_H1  = N_("Public Web Direcoty")
+NOTE_WEBDIR_H1  = N_("Public Web Directory")
 
 ERROR_NO_MONO   = N_("Directory doesn't look like a Mono based project.")
 

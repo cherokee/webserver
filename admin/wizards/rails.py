@@ -36,7 +36,7 @@ from util import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the Ruby on Rails wizard")
 NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://rubyonrails.org/">Ruby on Rails</a> is an open-source web framework optimized for programmer happines and sustainable productivity.')
-NOTE_WELCOME_P2 = N_('It lets yow write beautiful code by favoring convention over configuration.')
+NOTE_WELCOME_P2 = N_('It lets you write beautiful code by favoring convention over configuration.')
 
 NOTE_LOCAL_H1   = N_("Ruby on Rails Project")
 NOTE_HOST_H1    = N_("New Virtual Server")

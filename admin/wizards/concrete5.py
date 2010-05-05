@@ -47,7 +47,7 @@ NOTE_HOST_H1    = N_("New Virtual Server Details")
 NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
 
 NOTE_WEBDIR     = N_("Web directory where you want Concrete5 to be accessible. (Example: /concrete5)")
-NOTE_WEBDIR_H1  = N_("Public Web Direcoty")
+NOTE_WEBDIR_H1  = N_("Public Web Directory")
 
 PREFIX          = 'tmp!wizard!concrete5'
 URL_APPLY       = r'/wizard/vserver/concrete5/apply'

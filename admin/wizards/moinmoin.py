@@ -46,7 +46,7 @@ NOTE_HOST         = N_("Host name of the virtual server that is about to be crea
 NOTE_HOST_H1      = N_("New Virtual Server Details")
 
 NOTE_WEBDIR       = N_("Public web directory to access the project.")
-NOTE_WEBDIR_H1    = N_("Public Web Direcoty")
+NOTE_WEBDIR_H1    = N_("Public Web Directory")
 
 ERROR_NO_MOINMOIN_WIKI = N_("It does not look like a MoinMoin Wiki Instance.")
 ERROR_NO_MOINMOIN = N_("MoinMoin doesn't seem to be correctly installed.")

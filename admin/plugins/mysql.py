@@ -73,7 +73,7 @@ class Plugin_mysql (Auth.PluginAuth):
         table.Add (_('Port'),          CTK.TextCfg("%s!port"%(self.key), True),        _(NOTE_PORT))
         table.Add (_('Unix Socket'),   CTK.TextCfg("%s!unix_socket"%(self.key), True), _(NOTE_UNIX))
         table.Add (_('DB User'),       CTK.TextCfg("%s!user"%(self.key), False),       _(NOTE_USER))
-        table.Add (_('BD Password'),   CTK.TextCfg("%s!passwd"%(self.key), True),      _(NOTE_PASSWD))
+        table.Add (_('DB Password'),   CTK.TextCfg("%s!passwd"%(self.key), True),      _(NOTE_PASSWD))
         table.Add (_('Database'),      CTK.TextCfg("%s!database"%(self.key), False),   _(NOTE_DB))
         table.Add (_('SQL Query'),     CTK.TextCfg("%s!query"%(self.key), False),      _(NOTE_SQL))
         table.Add (_('Password Hash'), CTK.ComboCfg("%s!hash"%(self.key), HASHES, {'id': 'mysql_hash'}), _(NOTE_HASH))

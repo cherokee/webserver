@@ -43,7 +43,7 @@ NOTE_LOCAL_DIR  = N_("Local directory where the WordPress source code is located
 NOTE_HOST_H1    = N_("New Virtual Server Details")
 NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
 NOTE_WEBDIR     = N_("Web directory where you want WordPress to be accessible. (Example: /blog)")
-NOTE_WEBDIR_H1  = N_("Public Web Direcoty")
+NOTE_WEBDIR_H1  = N_("Public Web Directory")
 ERROR_NO_SRC    = N_("Does not look like a WordPress source directory.")
 
 PREFIX    = 'tmp!wizard!wordpress'

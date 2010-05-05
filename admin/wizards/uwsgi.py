@@ -48,7 +48,7 @@ NOTE_HOST       = N_("Host name of the virtual server that is about to be create
 NOTE_DROOT      = N_("Path to use as document root for the new virtual server.")
 
 NOTE_WEBDIR     = N_("Public web directory to access the project.")
-NOTE_WEBDIR_H1  = N_("Public Web Direcoty")
+NOTE_WEBDIR_H1  = N_("Public Web Directory")
 NOTE_WEBDIR_P1  = N_("The default value is extracted from the configuration file. Change it at your own risk.")
 ERROR_NO_SRC    = N_("Does not look like a Uwsgi source directory.")
 ERROR_NO_DROOT  = N_("The document root directory does not exist.")
