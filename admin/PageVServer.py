@@ -391,7 +391,7 @@ class LogginWidgetContent (CTK.Container):
 
             if format == 'custom':
                 submit = CTK.Submitter(url_apply)
-                submit += CTK.TextCfg('%s!access!access_template'%(pre))
+                submit += CTK.TextCfg('%s!access_template'%(pre))
                 table.Add (_('Template: '), submit, _(NOTE_LOGGER_TEMPLATE))
 
         self += CTK.RawHTML ('<h2>%s</h2>' % (_('Access Logging')))
