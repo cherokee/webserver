@@ -137,7 +137,7 @@ def Stop():
 class ServerStatus (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'class': 'server-status', 'id': ['server-stopped', 'server-running'][Cherokee.server.is_alive()]})
-        self += CTK.Box ({'id': 'status-message'}, CTK.RawHTML([STOPPED_NOTICE, RUNNING_NOTICE][Cherokee.server.is_alive()]))
+        self += CTK.Box ({'id': 'status-message'}, CTK.RawHTML([_(STOPPED_NOTICE), _(RUNNING_NOTICE)][Cherokee.server.is_alive()]))
 
         if Cherokee.server.is_alive():
             button = CTK.Button(_('Stop Server'), {'id': 'launch-button', 'class': 'butlight butstop'})
@@ -225,7 +225,7 @@ def ProudUsers_Apply():
 
     # Send the list
     try:
-        xmlrpc = XMLServerDigest.XmlRpcServer (OWS_PROUD)
+        xmlrpc = XMLServerDigest.XmlRpcServer (_(OWS_PROUD))
         xmlrpc.add_domains_to_review(domains)
 
     except xmlrpclib.ProtocolError, err:
@@ -233,14 +233,14 @@ def ProudUsers_Apply():
         details += "Error message: %s\n" % err.errmsg
         details += "Headers: %s\n"       % err.headers
 
-        return '<p>%s</p>'            %(PROUS_DIALOG_ERROR1)      + \
-               '<p><pre>%s</pre></p>' %(CTK.escape_html(details)) + \
-               '<p>%s</p>'            %(PROUS_DIALOG_ERROR2)
+        return '<p>%s</p>'            %(_(PROUS_DIALOG_ERROR1))    + \
+               '<p><pre>%s</pre></p>' %(CTK.escape_html(details))  + \
+               '<p>%s</p>'            %(_(PROUS_DIALOG_ERROR2))
 
     except Exception, e:
-        return '<p>%s</p>'              %(PROUS_DIALOG_ERROR1)     + \
+        return '<p>%s</p>'              %(_(PROUS_DIALOG_ERROR1))  + \
                '<p><pre>%s\n</pre></p>' %(CTK.escape_html(str(e))) + \
-               '<p>%s</p>'              %(PROUS_DIALOG_ERROR2)
+               '<p>%s</p>'              %(_(PROUS_DIALOG_ERROR2))
 
     return "<p>%s</p>" %(_(PROUD_DIALOG_OK))
 
@@ -254,8 +254,8 @@ class ProudUsers (CTK.Box):
         dialog.AddButton (_('Close'), "close")
 
         self += CTK.RawHTML('<h3>%s</h3>' %(_('Proud Cherokee Users')))
-        self += CTK.Box ({'id': 'proud-notice'}, CTK.RawHTML (PROUD_USERS_NOTICE))
-        self += CTK.Box ({'id': 'proud-link'}, CTK.RawHTML ('<a target="_blank" href="%s">%s</a> | <a id="proud-a">%s</a>' %(PROUD_USERS_WEB, _('View list'), _('Send your domains'))))
+        self += CTK.Box ({'id': 'proud-notice'}, CTK.RawHTML (_(PROUD_USERS_NOTICE)))
+        self += CTK.Box ({'id': 'proud-link'}, CTK.RawHTML ('<a target="_blank" href="%s">%s</a> | <a id="proud-a">%s</a>' %(_(PROUD_USERS_WEB), _('View list'), _('Send your domains'))))
         self += CTK.RawHTML (js=JS_PROUD %(dialog.JS_to_show()))
         self += dialog
 
@@ -394,7 +394,7 @@ class EnterpriseBox (CTK.Box):
         CTK.Box.__init__ (self, {'id': 'enterprise-box'})
 
         self += CTK.RawHTML('<h2>%s</h2>' % _('Commercial Support'))
-        self += CTK.Box ({'id': 'enterprise-notice'}, CTK.RawHTML (SUPPORT_NOTICE))
+        self += CTK.Box ({'id': 'enterprise-notice'}, CTK.RawHTML (_(SUPPORT_NOTICE)))
         self += CTK.Box ({'id': 'enterprise-link'}, CTK.RawHTML ('<a target="_blank" href="%s">%s</a>' %(LINK_SUPPORT, _('Purchase Support'))))
 
 
