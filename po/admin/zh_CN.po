@@ -1,6 +1,10 @@
+# EChinese Simplified translations for cherokee package.
+# Copyright (C) 2010 ORGANIZATION
+# Automatically generated, 2010.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: cherokee '0.99.38' admin UI for zh_CN \n"
+"Project-Id-Version: cherokee '0.99.49' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
 "POT-Creation-Date: 2010-05-03 13:34+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
@@ -14,58 +18,62 @@ msgstr ""
 
 #: admin/Auth.py:34
 msgid "Allowed HTTP Authentication methods."
-msgstr "允许HTTP访问控制模式."
+msgstr "允许HTTP认证方式。"
 
 #: admin/Auth.py:35
 msgid "Name associated with the protected resource."
-msgstr "名称相关保护资源."
+msgstr "受保护资源名称"
 
 #: admin/Auth.py:36
 msgid "User filter. List of allowed users."
-msgstr "用户访问控制. 列出允许访问的用户."
+msgstr "用户过滤。允许访问的用户列表。"
 
 #: admin/Auth.py:53
 msgid "Methods"
-msgstr "方式"
+msgstr "Methods"
 
 #: admin/Auth.py:54
 msgid "Realm"
-msgstr "界限"
+msgstr "Realm"
 
 #: admin/Auth.py:55
 msgid "Users"
-msgstr "用户"
+msgstr "Users"
 
 #: admin/Auth.py:60
 msgid "Authentication Details"
-msgstr "认证模式详细信息"
+msgstr "认证详情"
 
 #: admin/Balancer.py:32
 msgid "Specifies the policy used to dispatch the connections."
-msgstr "设定连接的调度策略"
+msgstr "指定连接的调度政策。"
 
 #: admin/Balancer.py:33
 #, fuzzy, python-format
 msgid ""
 "It is already balancing among all the configured <a href=\"%s\">Information "
 "Sources</a>."
-msgstr "这是已经配置好的均衡器 "
+msgstr "这个已经使用均衡到所有已经配置的<a href=\"%s\">数据"
+"源</a>."
 
 #: admin/Balancer.py:34
 msgid ""
 "There are no Information Sources configured. Please proceed to configure an "
 "<a href=\"/source\">Information Source</a>."
-msgstr "没有已配置信息源. 请配置一个 <a href=\"/source\">数据源</a>."
+msgstr ""
+"没有设置好的数据源。请继续设置一个"
+"<a href=\"/source\">数据源</a>."
 
 #: admin/Balancer.py:35
 msgid ""
 "A load balancer must be configured to use at least one information source."
-msgstr "负载均衡器要求必须配置至少一个数据源."
+msgstr ""
+"A load balancer must be configured to use at least one information source."
 
 #: admin/Balancer.py:67 admin/PageSource.py:209 admin/PageSource.py:246
 #: admin/PageVServers.py:126
 msgid "Nick"
-msgstr "名称"
+msgstr "昵称"
 
 #: admin/Balancer.py:67 admin/plugins/mysql.py:72
 #: admin/wizards/coldfusion.py:194
@@ -79,7 +87,7 @@ msgstr "数据源"
 
 #: admin/Balancer.py:112
 msgid "Assign Information Sources"
-msgstr "转移数据源"
+msgstr "设置数据源"
 
 #: admin/Balancer.py:117 admin/PageRule.py:112
 #, fuzzy
@@ -92,53 +100,59 @@ msgstr "应用程序服务器"
 
 #: admin/CgiBase.py:32
 msgid "Path to an executable that will be run with the CGI as parameter."
-msgstr "可执行CGI路径."
+msgstr "CGI可执行文件路径。"
 
 #: admin/CgiBase.py:33
 msgid "Execute the CGI under its file owner user ID."
-msgstr "执行CGI的用户"
+msgstr "使用CGI文件的用户权限执行CGI。"
 
 #: admin/CgiBase.py:34
 msgid "Send errors exactly as they are generated."
-msgstr "发送产生的错误."
+msgstr "精确发送产生的错误。"
 
 #: admin/CgiBase.py:35
 msgid "Check whether the file is in place."
-msgstr "检查文件是否存在."
+msgstr "检查文件是否存在。"
 
 #: admin/CgiBase.py:36
 msgid "Forward all the client headers to the CGI encoded as HTTP_*. headers."
-msgstr "转发所有HTTP_*的客户端请求头到CGI编码 ."
+msgstr "转发所有客户端的headers信息以http_*方式发送到CGI"
 
 #: admin/CgiBase.py:37
 msgid "Allow the use of the non-standard X-Sendfile header."
-msgstr "允许使用非标准的X-Sendfile请求头."
+msgstr "允许使用非标准的X - Sendfile头。"
 
 #: admin/CgiBase.py:38
 #, fuzzy
 msgid ""
 "Whether the handler should read and use the X-Real-IP header and use it in "
 "REMOTE_ADDR."
-msgstr "是否读取和使用 X-Real-IP并且在远程主机使用."
+msgstr ""
+"处理程序是否读取和使用X-Real-IP header并设置为"
+"客户端地址。"
 
 #: admin/CgiBase.py:39
 #, fuzzy
 msgid ""
 "Accept all the X-Real-IP headers. WARNING: Turn it on only if you are "
 "centain of what you are doing."
-msgstr "接受X-Real-IP请求头. 警告：如果你不确信你需要这个功能请不要开启"
+msgstr ""
+"接受所有 X-Real-IP headers. 警告: 除非您知道您在做什么，否则 "
+"请不要开启这个选项。"
 
 #: admin/CgiBase.py:40
 #, fuzzy
 msgid ""
 "List of IP addresses and subnets that are allowed to send the X-Real-IP "
 "header."
-msgstr "列表上的IP地址和子网允许发送 X-Real-IP 请求头通常应用于代理服务器."
+msgstr ""
+"允许发送 X-Real-IP header 的IP和子网"
+"."
 
 #: admin/CgiBase.py:68
 #, fuzzy
 msgid "Read X-Real-IP"
-msgstr "允许 X-Real-IP"
+msgstr "读取 X-Real-IP"
 
 #: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
@@ -158,11 +172,11 @@ msgstr "不检查来源"
 #: admin/CgiBase.py:72 admin/PageVServer.py:411
 #, fuzzy
 msgid "Accept from Hosts"
-msgstr "接受访问的主机"
+msgstr "允许访问的主机"
 
 #: admin/CgiBase.py:90 admin/CgiBase.py:154
 msgid "Name"
-msgstr "姓名"
+msgstr "名称"
 
 #: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/plugins/proxy.py:170
 msgid "Value"
@@ -174,11 +188,11 @@ msgstr "脚本别名"
 
 #: admin/CgiBase.py:121
 msgid "Change UID"
-msgstr "修改 UID（用户ID）"
+msgstr "更改 UID"
 
 #: admin/CgiBase.py:121
 msgid "Change"
-msgstr "修改"
+msgstr "更改"
 
 #: admin/CgiBase.py:123
 msgid "Error handler"
@@ -186,11 +200,11 @@ msgstr "错误处理程序"
 
 #: admin/CgiBase.py:124
 msgid "Check file"
-msgstr "检查文件"
+msgstr "C检查文件"
 
 #: admin/CgiBase.py:125
 msgid "Pass Request Headers"
-msgstr "允许请求头通过"
+msgstr "忽略请求Headers"
 
 #: admin/CgiBase.py:126
 msgid "Allow X-Sendfile"
@@ -199,12 +213,12 @@ msgstr "允许 X-Sendfile"
 #: admin/CgiBase.py:131
 #, fuzzy
 msgid "Common CGI Options"
-msgstr "一般 CGI 设置"
+msgstr "公共CGI选项"
 
 #: admin/CgiBase.py:138 admin/plugins/authlist.py:87
 #, fuzzy
 msgid "Fixed Authentication List"
-msgstr "修复认证列表"
+msgstr "确定认证名单"
 
 #: admin/CgiBase.py:145
 #, fuzzy
@@ -224,11 +238,11 @@ msgstr "增加"
 #: admin/CgiBase.py:162
 #, fuzzy
 msgid "Add New Custom Environment Variable"
-msgstr "添加新的自定义环境变量"
+msgstr "增加自定义环境变量"
 
 #: admin/Cherokee.py:142
 msgid "Could not access file descriptors: "
-msgstr "不能访问配置文件: "
+msgstr "无法访问文件描述符: "
 
 #: admin/Flags.py:308 admin/Flags.py:326
 msgid "Countries"
@@ -237,61 +251,57 @@ msgstr "国家"
 #: admin/Flags.py:308 admin/Flags.py:334
 #, fuzzy
 msgid "Extras"
-msgstr "外部"
+msgstr "附加功能"
 
 #: admin/Graph.py:39
 #, fuzzy
 msgid "Server Traffic"
-msgstr "服务器信息"
+msgstr "服务器流量"
 
 #: admin/Graph.py:40
 #, fuzzy
 msgid "Connections / Requests"
-msgstr "连接"
+msgstr "连接/请求"
 
 #: admin/Graph.py:41
 #, fuzzy
 msgid "Connection Timeouts"
-msgstr "连接"
+msgstr "连接超时"
 
 #: admin/Graph.py:43
-#, fuzzy
 msgid "1 Hour"
-msgstr "1小时"
+msgstr "1 小时"
 
 #: admin/Graph.py:44
-#, fuzzy
 msgid "6 Hours"
-msgstr "6小时"
+msgstr "6 小时"
 
 #: admin/Graph.py:45
-#, fuzzy
 msgid "1 Day"
-msgstr "1天"
+msgstr "1 天"
 
 #: admin/Graph.py:46
-#, fuzzy
 msgid "1 Week"
-msgstr "1周"
+msgstr "1 周"
 
 #: admin/Graph.py:47
-#, fuzzy
 msgid "1 Month"
-msgstr "1月"
+msgstr "1 月"
 
 #: admin/Graph.py:50
 #, python-format
 msgid ""
 "You need to enable the <a href=\"%s\">Information Collector</a> setting in "
 "order to render usage graphics."
-msgstr "你需要允许<a href=\"%s\">信息收集器</a>使用图形模式"
+msgstr "您需要启动图形化的<a href=\"%s\">信息采集器</a>"
+"。"
 
 #: admin/Graph.py:51
-#, fuzzy
 msgid ""
 "Whether or not it should collect statistics about the traffic of this "
 "virtual server."
-msgstr "是否对此虚拟机进行流量及状态统计"
+msgstr "是否在此虚拟主机上启用流量统计"
+"。"
 
 #: admin/Graph.py:117 admin/PageEntry.py:233 admin/PageSource.py:184
 #: admin/PageStatus.py:70 admin/PageVServer.py:511 admin/PageVServers.py:194
@@ -301,18 +311,18 @@ msgstr "未知"
 #: admin/Graph.py:124
 #, fuzzy
 msgid "Collect Statistics"
-msgstr "流量统计"
+msgstr "流量信息统计"
 
 #: admin/Handler.py:31
 #, fuzzy
 msgid "Allows to specify an alternative Document Root path."
-msgstr "允许指定的替代文件根路径."
+msgstr "允许指定替代网站根目录。"
 
 #: admin/Handler.py:43 admin/PageVServer.py:298 admin/PageVServers.py:127
 #: admin/wizards/django.py:190 admin/wizards/mono.py:199
 #: admin/wizards/uwsgi.py:242
 msgid "Document Root"
-msgstr "根目录"
+msgstr "网站目录"
 
 #: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
 #: admin/Mime.py:120 admin/consts.py:181 admin/plugins/extensions.py:57
@@ -327,7 +337,7 @@ msgstr "扩展列表"
 #: admin/Icons.py:138
 #, fuzzy
 msgid "Add New Extension"
-msgstr "增加新的扩展"
+msgstr "增加新扩展"
 
 #: admin/Icons.py:152 admin/plugins/exists.py:74 admin/plugins/exists.py:110
 msgid "Files"
@@ -344,7 +354,7 @@ msgstr "文件"
 #: admin/Icons.py:171
 #, fuzzy
 msgid "Add New File"
-msgstr "添加新的规则"
+msgstr "增加新规则"
 
 #: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:37
 #: admin/consts.py:121
@@ -363,7 +373,7 @@ msgstr "转到上一级"
 #: admin/Icons.py:191
 #, fuzzy
 msgid "Modify"
-msgstr "上次修改时间"
+msgstr "修改"
 
 #: admin/Icons.py:198 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
 msgid "Special Files"
@@ -372,7 +382,7 @@ msgstr "特殊文件"
 #: admin/Icons.py:345
 #, fuzzy
 msgid "Add new"
-msgstr "新增"
+msgstr "增加"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
 #: admin/PageIndex.py:348 admin/PageRule.py:212 admin/PageRule.py:260
@@ -381,19 +391,19 @@ msgstr "新增"
 #: admin/PageVServers.py:263 admin/plugins/redir.py:115
 #, fuzzy
 msgid "Cancel"
-msgstr "修改"
+msgstr "取消"
 
 #: admin/Mime.py:37
 msgid "New MIME type to be added."
-msgstr "新增 MIME 类型."
+msgstr "增加MIME类型."
 
 #: admin/Mime.py:38
 msgid "Comma separated list of file extensions associated with the MIME type."
-msgstr "逗号分隔的MIME类型列表."
+msgstr "逗号分隔的列表与MIME类型的文件扩展名。"
 
 #: admin/Mime.py:39
 msgid "Maximum time that this sort of content can be cached (in seconds)."
-msgstr "内容缓存的最大时间 (单位:秒)."
+msgstr "内容缓存最大时间（秒）."
 
 #: admin/Mime.py:85
 msgid "Mime Type"
@@ -401,19 +411,19 @@ msgstr "Mime 类型"
 
 #: admin/Mime.py:87
 msgid "Max Age"
-msgstr "缓存最大时间"
+msgstr "最大缓存时间"
 
 #: admin/Mime.py:99
 #, fuzzy
 msgid "Add New MIME-Type"
-msgstr "新增 MIME"
+msgstr "新增MIME类型"
 
 #: admin/Mime.py:104 admin/plugins/error_redir.py:101
 #: admin/plugins/rehost.py:80 admin/plugins/target_ip.py:88
 #: admin/plugins/wildcard.py:79
 #, fuzzy
 msgid "Add New…"
-msgstr "新增"
+msgstr "增加"
 
 #: admin/Mime.py:120
 #, fuzzy
@@ -423,7 +433,7 @@ msgstr "MIME 类型"
 #: admin/Mime.py:120
 #, fuzzy
 msgid "MaxAge (<em>secs</em>)"
-msgstr "缓存最大时间<br/>(<i>秒</i>)"
+msgstr "最大缓存时间（秒）"
 
 #: admin/Page.py:32
 #, fuzzy
@@ -433,27 +443,27 @@ msgstr "配置已保存."
 #: admin/Page.py:33
 #, fuzzy
 msgid "Would you like to apply the changes to the running server now?"
-msgstr "保存配置文件，并将所做修改应用于服务器"
+msgstr "您是否将更改应用到正在运行的服务器，并将更改保存到磁盘？"
 
 #: admin/Page.py:34
 msgid "The configuration file has been saved successfuly."
-msgstr ""
+msgstr "配置文件保存成功。"
 
 #: admin/Page.py:75
 msgid "Do not restart"
-msgstr "不重启"
+msgstr "不要重启"
 
 #: admin/Page.py:81
 msgid "Graceful restart"
-msgstr "常规重启"
+msgstr "重载"
 
 #: admin/Page.py:87
 msgid "Hard restart"
-msgstr "强制重启"
+msgstr "重启"
 
 #: admin/Page.py:96
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: admin/PageAdvanced.py:61
 #, fuzzy
@@ -462,86 +472,100 @@ msgid ""
 "configuration parameters. Changing things is not recommended unless\n"
 "you really know what you are doing.</p>"
 msgstr ""
-"<p><b>注意</b>: 本页面有服务器高级设置参数. 除非你知道自己在做什么，否则请不"
-"要修改任何参数.</p>"
+"<p><b>警告</b>: 这里包含一些高级设置. "
+"除非您知道自己在做什么，否则请不要随意更改这些选项."
+"</p>"
 
 #: admin/PageAdvanced.py:65
 msgid "Defines which thread policy the OS should apply to the server."
-msgstr "定义服务器线程使用的规则."
+msgstr "定义服务器线程运作方式."
 
 #: admin/PageAdvanced.py:66
 msgid "If empty, Cherokee will calculate a default number."
-msgstr "如果为空，Cherokee将使用默认值."
+msgstr "如果为空，Cherokee将使用默认设置。"
 
 #: admin/PageAdvanced.py:67
 msgid ""
 "It defines how many file descriptors the server should handle. Default is "
 "the number showed by ulimit -n"
-msgstr "它定义多少文件描述符被服务器处理. 默认值是 ulimit -n所显示的数量"
+msgstr ""
+"定义服务器同时打开的文件描述符。 默认是 "
+"ulimit -n 所显示的数值"
 
 #: admin/PageAdvanced.py:68
 msgid "Allows to choose the internal file descriptor polling method."
-msgstr "允许选择内部文件描述符 polling 方法."
+msgstr "允许选择内部文件描述polling方法。"
 
 #: admin/PageAdvanced.py:69
 msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
-msgstr "使用sendfile()发送文件的最小值. 默认是: 32768 Bytes."
+msgstr "sendfile()发送的最小文件大小。默认: 32768 Bytes。"
 
 #: admin/PageAdvanced.py:70
 msgid "Maximum size of a file to use sendfile(). Default: 2 GB."
-msgstr "使用sendfile()发送文件的最大值. 默认是: 2 GB."
+msgstr "sendfile()发送的最大文件大小。 默认: 2 GB。"
 
 #: admin/PageAdvanced.py:71
 msgid ""
 "Name a program that will be called if, by some reason, the server fails. "
 "Default: <em>cherokee-panic</em>."
-msgstr "如果服务器启动失败，将执行的程序默认: <em>cherokee-panic</em>."
+msgstr ""
+"服务器故障处理程序名称。 "
+"默认: <em>cherokee-panic</em>."
 
 #: admin/PageAdvanced.py:72
 msgid "Path of the PID file. If empty, the file will not be created."
-msgstr "PID文件的路径. 为空则不建立PID文件"
+msgstr "PID 文件路径。为空则不创建PID文件。"
 
 #: admin/PageAdvanced.py:73
 msgid "Max. length of the incoming connection queue."
-msgstr "最大访问请求队列长度"
+msgstr "最大入站连接队列长度。"
 
 #: admin/PageAdvanced.py:74
 #, fuzzy
 msgid ""
 "Set the number of how many internal connections can be held for reuse by "
 "each thread. Default: 20."
-msgstr "设置可以被线程重用的内部连接数量 默认 20."
+msgstr ""
+"设置每个线程处理的连接数 "
+"。 默认值 20."
 
 #: admin/PageAdvanced.py:75
 msgid ""
 "Sets the number of seconds between log consolidations (flushes). Default: 10 "
 "seconds."
-msgstr "设置日志合并（刷新时间）. Default: 10 秒."
+msgstr ""
+"设置日志合并的时间。 默认: 10 "
+"秒。"
 
 #: admin/PageAdvanced.py:76
 msgid "Time lapse (in seconds) between Nonce cache clean ups."
-msgstr "缓存清理间隔时间(单位：秒)."
+msgstr "Nonce缓存清理时间."
 
 #: admin/PageAdvanced.py:77
 msgid ""
 "Enables the server-wide keep-alive support. It increases the performance. It "
 "is usually set on."
-msgstr "允许服务器使用活动连接，将提高服务器性能 ， 通常都是启用的."
+msgstr ""
+"启用keep-alive支持。 一般"
+"这个项目都是启用的。"
 
 #: admin/PageAdvanced.py:78
 msgid ""
 "Maximum number of HTTP requests that can be served by each keepalive "
 "connection."
-msgstr "每个活动连接的最大HTTP请求数量."
+msgstr ""
+"keepalive最大连接数"
+"。"
 
 #: admin/PageAdvanced.py:79
 msgid ""
 "Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
-msgstr "允许服务器在活动连接时使用分块编码."
+msgstr ""
+"允许服务器在Keep-Alive上使用分块编码。"
 
 #: admin/PageAdvanced.py:80
 msgid "Activate or deactivate the I/O cache globally."
-msgstr "全局设置是否启用I/O缓存."
+msgstr "激活或停用全局I/O缓存."
 
 #: admin/PageAdvanced.py:81
 msgid "Number of pages that the cache should handle."
@@ -549,18 +573,20 @@ msgstr "缓存处理页面数量."
 
 #: admin/PageAdvanced.py:82
 msgid "Files under this size will not be cached."
-msgstr "文件小于此大小则不会被缓存."
+msgstr "文件小于此大小则不被缓存."
 
 #: admin/PageAdvanced.py:83
 msgid "Files over this size will not be cached."
-msgstr "文件大于此大小则不会被缓存."
+msgstr "文件大于此大小则不被缓存."
 
 #: admin/PageAdvanced.py:84
 #, fuzzy
 msgid ""
 "How long (in seconds) the file information should last cached without "
 "refreshing it."
-msgstr "文件信息最大缓存时间."
+msgstr ""
+"多长时间刷新缓存"
+"。"
 
 #: admin/PageAdvanced.py:85
 #, fuzzy
@@ -568,32 +594,28 @@ msgid "How long (in seconds) the file content should last cached."
 msgstr "文件最大缓存时间."
 
 #: admin/PageAdvanced.py:86
-#, fuzzy
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 512 bits."
-msgstr "PEM文件DH路径参数 (512 bits)"
+msgstr "Diffie Hellman (DH) PEM文件路径: 512 bits."
 
 #: admin/PageAdvanced.py:87
-#, fuzzy
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits."
-msgstr "PEM文件DH路径参数(1024 bits)"
+msgstr "Diffie Hellman (DH) PEM文件路径: 1024 bits"
 
 #: admin/PageAdvanced.py:88
-#, fuzzy
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits."
-msgstr "PEM文件DH路径参数(2048 bits)"
+msgstr "Diffie Hellman (DH) PEM文件路径: 2048 bits."
 
 #: admin/PageAdvanced.py:89
-#, fuzzy
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
-msgstr "PEM文件DH路径参数(4096 bits)"
+msgstr "Diffie Hellman (DH) PEM文件路径: 4096 bits. "
 
 #: admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
 msgid "Advanced"
-msgstr "高级设置"
+msgstr "高级"
 
 #: admin/PageAdvanced.py:113
 msgid "Keep Alive"
-msgstr "保持活动连接"
+msgstr "Keep Alive"
 
 #: admin/PageAdvanced.py:113 admin/PageAdvanced.py:115
 #, fuzzy
@@ -602,11 +624,11 @@ msgstr "允许 "
 
 #: admin/PageAdvanced.py:114
 msgid "Max keepalive reqs"
-msgstr "活动连接最大数量"
+msgstr "keepalive最大请求数"
 
 #: admin/PageAdvanced.py:115
 msgid "Chunked Encoding"
-msgstr "分块编码"
+msgstr "块编码"
 
 #: admin/PageAdvanced.py:116
 msgid "Polling Method"
@@ -614,11 +636,11 @@ msgstr "Polling 方式"
 
 #: admin/PageAdvanced.py:117
 msgid "Sendfile min size"
-msgstr "最小文件发送大小"
+msgstr "Sendfile最小大小"
 
 #: admin/PageAdvanced.py:118
 msgid "Sendfile max size"
-msgstr "最大发送文件大小"
+msgstr "Sendfile 最大大小"
 
 #: admin/PageAdvanced.py:120 admin/PageAdvanced.py:181
 msgid "Connections"
@@ -630,27 +652,27 @@ msgstr "线程数量"
 
 #: admin/PageAdvanced.py:129
 msgid "Thread Policy"
-msgstr "线程策略"
+msgstr "线程工作方式"
 
 #: admin/PageAdvanced.py:130
 msgid "File descriptors"
-msgstr "文件描述符"
+msgstr "文件描述法"
 
 #: admin/PageAdvanced.py:131
 msgid "Listening queue length"
-msgstr "访问队列长度"
+msgstr "监听队列长度"
 
 #: admin/PageAdvanced.py:132 admin/plugins/proxy.py:236
 msgid "Reuse connections"
-msgstr "连接重用"
+msgstr "重用连接"
 
 #: admin/PageAdvanced.py:133
 msgid "Log flush time"
-msgstr "线程日志刷新时间"
+msgstr "日志刷新时间"
 
 #: admin/PageAdvanced.py:134
 msgid "Nonces clean up time"
-msgstr "清理时间"
+msgstr "Nonces清理时间"
 
 #: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
 msgid "Resources"
@@ -663,7 +685,7 @@ msgstr "状态"
 
 #: admin/PageAdvanced.py:145
 msgid "Max pages"
-msgstr "最大页数"
+msgstr "最大页面数量"
 
 #: admin/PageAdvanced.py:146
 msgid "File Min Size"
@@ -675,11 +697,11 @@ msgstr "文件最大大小"
 
 #: admin/PageAdvanced.py:148
 msgid "Lasting: stat"
-msgstr "持续时间: stat方式"
+msgstr "持续：统计"
 
 #: admin/PageAdvanced.py:149
 msgid "Lasting: mmap"
-msgstr "持续时间: mmap方式"
+msgstr "持续: mmap"
 
 #: admin/PageAdvanced.py:151 admin/PageAdvanced.py:183
 msgid "I/O cache"
@@ -687,75 +709,71 @@ msgstr "I/O 缓存"
 
 #: admin/PageAdvanced.py:159
 msgid "Panic action"
-msgstr "Panic action"
+msgstr "Panic 动作"
 
 #: admin/PageAdvanced.py:160
 msgid "PID file"
-msgstr "PID 进程号"
+msgstr "PID 文件"
 
 #: admin/PageAdvanced.py:170
-#, fuzzy
 msgid "DH parameters: 512 bits"
-msgstr "Diffie-Hellman参数(512 比特)"
+msgstr "DH参数: 512 bits"
 
 #: admin/PageAdvanced.py:171
-#, fuzzy
 msgid "DH parameters: 1024 bits"
-msgstr "Diffie-Hellman参数(1024 比特)"
+msgstr "DH参数: 1024 bits"
 
 #: admin/PageAdvanced.py:172
-#, fuzzy
 msgid "DH parameters: 2048 bits"
-msgstr "Diffie-Hellman参数(2048 比特)"
+msgstr "DH参数: 2048 bits"
 
 #: admin/PageAdvanced.py:173
-#, fuzzy
 msgid "DH parameters: 4096 bits"
-msgstr "Diffie-Hellman参数(4096 比特)"
+msgstr "DH参数: 4096 bits"
 
 #: admin/PageAdvanced.py:175 admin/PageAdvanced.py:185
 #: admin/PageGeneral.py:145 admin/plugins/bind.py:92
 msgid "TLS"
-msgstr "TLS支持"
+msgstr "TLS"
 
 #: admin/PageAdvanced.py:191
 #, fuzzy
 msgid "Advanced Configuration"
-msgstr "高级配置"
+msgstr "高级设置"
 
 #: admin/PageEntry.py:40
-#, fuzzy
 msgid "Apply a custom timeout to the connections matching this rule."
-msgstr "没有登录请求匹配这条规则."
+msgstr "对匹配这条规则的连接应用自定义超时"
 
 #: admin/PageEntry.py:41
 msgid "How the connection will be handled."
-msgstr "连接将被怎么处理."
+msgstr "最大处理多少连接."
 
 #: admin/PageEntry.py:42
 msgid "Enable to allow access to the resource only by https."
-msgstr "启用只有通过HTTPS才允许访问资源."
+msgstr "只允许通过https访问这个资源."
 
 #: admin/PageEntry.py:43
 msgid "List of IPs and subnets allowed to access the resource."
-msgstr "列表中的IP和子网允许访问该资源."
+msgstr "允许访问此资源的IP和子网列表."
 
 #: admin/PageEntry.py:44
 msgid "Which, if any, will be the authentication method."
-msgstr "其中，如果有的话，将使用此验证方法."
+msgstr "定义认证方式."
 
 #: admin/PageEntry.py:45
 msgid "Points how long the files should be cached"
-msgstr "多久文件应当缓存"
+msgstr "多长文件可以缓存"
 
 #: admin/PageEntry.py:46
 msgid ""
 "Set an outbound traffic limit. It must be specified in Bytes per second."
-msgstr "启用了流量限制.必须指定每秒字节数(Bytes/s)"
+msgstr ""
+"设置流出流量限制.单位: 字节/秒"
 
 #: admin/PageEntry.py:47
 msgid "Do not log requests matching this rule."
-msgstr "没有登录请求匹配这条规则."
+msgstr "不记录匹配此规则的请求。"
 
 #: admin/PageEntry.py:48
 msgid ""
@@ -763,9 +781,9 @@ msgid ""
 "The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for "
 "minutes, hours, days, and weeks. Eg: 2d.\n"
 msgstr ""
-"对象缓存时间.<br />\n"
-"单位 <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> 分别对应 分,时,天, 周. 例: "
-"2d.\n"
+"内容可以被缓存多长时间.<br />\n"
+"<b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> 对应 "
+"分, 小时, 天, and 周. 例如: 2d.\n"
 
 #: admin/PageEntry.py:61
 msgid "Behavior rules"
@@ -787,11 +805,11 @@ msgstr "认证"
 #: admin/PageEntry.py:65
 #, fuzzy
 msgid "Authentication modules"
-msgstr "认证列表"
+msgstr "认证方式列表"
 
 #: admin/PageEntry.py:69
 msgid "Leave unset"
-msgstr "不更改"
+msgstr "不设置"
 
 #: admin/PageEntry.py:70 admin/PageVServer.py:306 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
@@ -806,24 +824,24 @@ msgstr "禁止"
 
 #: admin/PageEntry.py:89
 msgid "Limit traffic to"
-msgstr "限制流量到"
+msgstr "限制流量"
 
 #: admin/PageEntry.py:93 admin/PageEntry.py:252 admin/PageVServer.py:117
 msgid "Traffic Shaping"
-msgstr "流量限制"
+msgstr "流量调整"
 
 #: admin/PageEntry.py:104
 #, fuzzy
 msgid "Skip Logging"
-msgstr "不启用日志"
+msgstr "不记录"
 
 #: admin/PageEntry.py:108 admin/PageVServer.py:500
 msgid "Logging"
-msgstr "启用日志"
+msgstr "记录"
 
 #: admin/PageEntry.py:113
 msgid "Only https"
-msgstr "只允许 https"
+msgstr "仅 https"
 
 #: admin/PageEntry.py:114
 msgid "Allow From"
@@ -853,16 +871,16 @@ msgstr "超时"
 #: admin/PageEntry.py:158
 #, fuzzy
 msgid "Connections Timeout"
-msgstr "连接"
+msgstr "连接超时"
 
 #: admin/PageEntry.py:165
 msgid "Content Expiration"
-msgstr "内容过期"
+msgstr "内容超时"
 
 #: admin/PageEntry.py:177
 #, python-format
 msgid "Use the %s encoder whenever the client requests it."
-msgstr "每当客户端请求时使用 %s 压缩."
+msgstr "对客户端请求使用 %s 压缩 。"
 
 #: admin/PageEntry.py:178
 #, fuzzy
@@ -880,7 +898,7 @@ msgstr "匹配规则"
 #: admin/PageEntry.py:222 admin/PageEntry.py:224 admin/PageEntry.py:248
 #: admin/PageVServer.py:110
 msgid "Handler"
-msgstr "处理"
+msgstr "处理程序"
 
 #: admin/PageEntry.py:247 admin/PageSource.py:180
 msgid "Rule"
@@ -893,7 +911,7 @@ msgstr "压缩"
 #: admin/PageEntry.py:250
 #, fuzzy
 msgid "Time"
-msgstr "超时"
+msgstr "时间"
 
 #: admin/PageEntry.py:251 admin/PageVServer.py:501
 msgid "Security"
@@ -904,90 +922,102 @@ msgstr "安全"
 msgid ""
 "The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
 "problem can he solved in there."
-msgstr "服务器建议您检查<a href=\"%s\">此页面</a>，您很有可能在此找到解决问题的办法"
+msgstr "建议您检查<a href=\"%s\">此页面</a>，"
+"您可能会发现解决问题的方式"
 
 #: admin/PageError.py:57 admin/PageError.py:83
 #, fuzzy
 msgid "Server Launch Error"
-msgstr "服务器信息"
+msgstr "启动服务器失败"
 
 #: admin/PageError.py:84
 msgid "Something unexpected just happened."
-msgstr "一些意外的问题发生了"
+msgstr "发生未知事件"
 
 #: admin/PageError.py:89
 #, fuzzy, python-format
 msgid "The configuration file <code>%s</code> cannot be modified."
-msgstr "配置文件不允许修改"
+msgstr "配置文件<code>%s</code>不允许修改。"
 
 #: admin/PageError.py:90
 msgid ""
 "You have to change its permissions in order to allow cherokee-admin to work "
 "with it. You can try to fix it by changing the file permissions:"
-msgstr "你需要改变cherokee-admin的权限来使其和他工作。你可以改变其权限设置"
+msgstr ""
+"您必须更改 cherokee-admin权限以使其可以运行"
+"您可以尝试更改文件的权限:"
 
 #: admin/PageError.py:91
 msgid "or by launching cherokee-admin as root."
-msgstr "或者使用root用户来运行cherokee-admin"
+msgstr "或者使用root启动cherokee-admin。"
 
 #: admin/PageError.py:101 admin/PageError.py:107
 #, fuzzy
 msgid "Configuration file is not writable"
-msgstr "配置文件不允许修改"
+msgstr "配置文件不允许被修改。"
 
 #: admin/PageError.py:118
 #, python-format
 msgid "Could not find the icons directory: <code>%s</code>"
-msgstr "无法找到图标目录：<code>%s</code>"
+msgstr "没有找到图标目录：<code>%s</code>"
 
 #: admin/PageError.py:119
 msgid ""
 "You may need to reinstall the Web Server in order to sort out this issue."
-msgstr "你可能需要重新安装服务器来解决这个问题。"
+msgstr ""
+"您可能需要重新安装web服务器."
 
 #: admin/PageError.py:129 admin/PageError.py:135
 #, fuzzy
 msgid "Icons Directory is Missing"
-msgstr "图标文件目录不存在"
+msgstr "图标目录没有找到"
 
 #: admin/PageError.py:144
 #, fuzzy
 msgid "Cherokee-admin has detected a very old configuration file."
-msgstr "新建一个新的配置文件"
+msgstr "Cherokee-admin发现一个非常旧的配置文件"
 
 #: admin/PageError.py:145
 msgid ""
 "Most probably cherokee-admin is trying to read an old configuration file. "
 "Please, remove it so cherokee-admin can create a new one with the right "
 "format."
-msgstr "cherokee-admin可能尝试读取旧的配置文件，请删除旧的配置文件，服务器将新建一个新的正确配置文件。"
+msgstr ""
+"cherokee-admin 将尝试读取旧的配置文件. "
+"请删除旧的配置文件，cherokee-admin将创建一个新的正确的配置文件"
+"."
 
 #: admin/PageError.py:155
 #, fuzzy
 msgid "Detected an Ancient Configuration File"
-msgstr "新建一个新的配置文件"
+msgstr "检测到旧配置文件"
 
 #: admin/PageError.py:161
 #, fuzzy
 msgid "Ancient Configuration File"
-msgstr "新配置文件"
+msgstr "旧配置文件"
 
 #: admin/PageException.py:38
 msgid "We apologize for any inconveniences that this may have caused."
-msgstr "我们为给您造成的问题感到抱歉。"
+msgstr "我们为因此对您造成的不便表示歉意。"
 
 #: admin/PageException.py:39
 msgid ""
 "Please, send your comments to the server developers. Your configuration file "
 "<strong>will</strong> be attached upon submission. What were you doing when "
 "the issue showed up?"
-msgstr "当您发现这个问题的时候，请讲您的意见或者建议发送到服务器开发者手中，您的配置文件将被一同已提交。"
+msgstr ""
+"当您发现这个问题，请将您的评价发送给服务器开发者， 您的配置文件 "
+"<strong>将</strong> 被一同发送"
+"。"
 
 #: admin/PageException.py:40
 msgid ""
 "Thank you for reporting the problem. The Cherokee Web Server developers will "
 "try to fix it up as soon as possible."
-msgstr "谢谢您报告这个问题。服务器开发者将尽快的解决这个问题。"
+msgstr ""
+"谢谢您报告此问题，Cherokee服务器开发者将尽快的解决和修复这个 "
+"问题."
 
 #: admin/PageException.py:41
 #, python-format
@@ -996,92 +1026,99 @@ msgid ""
 "</p><p>Please, do not hesitate to <a target=\"_blank\" href=\"%s\">report "
 "the issue</a> on our bug tracking system if the problem persists.</p>"
 msgstr ""
+"<p>由于一些原因，错误报告没有提交到Cherokee项目组."
+"</p><p>请积极提交<a target=\"_blank\" href=\"%s\">错误报告 "
+"</a> 到我们的BUG报告系统.</p>"
 
 #: admin/PageException.py:80
 #, fuzzy
 msgid "Internal Error"
-msgstr "内部"
+msgstr "内部错误"
 
 #: admin/PageException.py:87
 #, fuzzy
 msgid "Thank you!"
-msgstr "反馈信息: 谢谢"
+msgstr "谢谢您！"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
 #: admin/PageSource.py:318
 #, fuzzy
 msgid "Close"
-msgstr "克隆"
+msgstr "关闭"
 
 #: admin/PageException.py:91
 msgid "Could not report the issue"
-msgstr ""
+msgstr "无法报告这个问题"
 
 #: admin/PageException.py:99
 msgid "Unexpected Exception"
-msgstr ""
+msgstr "异常"
 
 #: admin/PageException.py:112
 msgid "Report developers"
-msgstr ""
+msgstr "报告开发人员"
 
 #: admin/PageGeneral.py:38
 msgid "Defines a port that the server will listen to"
-msgstr "设置一个服务器监听端口"
+msgstr "定义服务器监听端口"
 
 #: admin/PageGeneral.py:39
 msgid ""
 "Set to enable the IPv6 support. The OS must support IPv6 for this to work."
-msgstr "如果要启用IPV6支持，请确认你的系统支持IPV6."
+msgstr ""
+"启用IPV6支持，前提您的服务器必须支持IPV6."
 
 #: admin/PageGeneral.py:40
 msgid "This option allows to choose how the server identifies itself."
-msgstr "这个选项允许修改服务器识别信息的级别."
+msgstr "此选项允许选择服务器如何确定自己."
 
 #: admin/PageGeneral.py:41
 msgid "Time interval until the server closes inactive connections."
-msgstr "服务器关闭无效链接的时间."
+msgstr "服务器关闭不活动连接时间."
 
 #: admin/PageGeneral.py:42
 msgid "Which, if any, should be the TLS/SSL backend."
-msgstr "如果要启用TLS/SSL支持，请在列表中选择相应的选项."
+msgstr "TLS/SSL处理程序。"
 
 #: admin/PageGeneral.py:43
 msgid "How the usage graphics should be generated."
-msgstr "图形统计生成方式"
+msgstr "如何生成负载图形"
 
 #: admin/PageGeneral.py:44
 msgid "How to track uploads/posts so its progress can be reported to the user."
-msgstr ""
+msgstr "如何跟踪上传/提交状态给用户。"
 
 #: admin/PageGeneral.py:45
 msgid "Changes the effective user. User names and IDs are accepted."
-msgstr "修改服务器启动用户为有效的系统用户，请填写用户名或者用户ID."
+msgstr "变更用户，可以使用用户名或者ID."
 
 #: admin/PageGeneral.py:46
 msgid "Changes the effective group. Group names and IDs are accepted."
-msgstr "修改服务器启动用户组为有效的系统用户组. 请填写用户组名或者用户组ID."
+msgstr "变更用户组，可以使用用户组名或者ID."
 
 #: admin/PageGeneral.py:47
 msgid ""
 "Jail the server inside the directory. Don't use it as the only security "
 "measure."
 msgstr ""
-"监禁服务器运行目录，注意：请不要把这种方式作为你服务器唯一的安全措施。 "
+"监禁服务器运行于此目录。请不要把这个作为服务器安全得唯一"
+"措施。"
 
 #: admin/PageGeneral.py:48
 msgid ""
 "No ports to listen have been defined. By default the server will listen to "
 "TCP port 80 on all the network interfaces."
 msgstr ""
+"没有设置监听端口，服务器默认将监听所有网络接口上的 "
+"80端口."
 
 #: admin/PageGeneral.py:51
 msgid "General Configuration"
-msgstr "一般配置"
+msgstr "常规配置"
 
 #: admin/PageGeneral.py:52
 msgid "Configuration Quickstart"
-msgstr "快速配置"
+msgstr "配置快速入门"
 
 #: admin/PageGeneral.py:101
 msgid "IPv6"
@@ -1089,7 +1126,7 @@ msgstr "IPv6"
 
 #: admin/PageGeneral.py:102
 msgid "SSL/TLS back-end"
-msgstr "SSL/TLS 支持"
+msgstr "SSL/TLS back-end"
 
 #: admin/PageGeneral.py:105
 msgid "Support"
@@ -1097,11 +1134,11 @@ msgstr "支持"
 
 #: admin/PageGeneral.py:109
 msgid "Timeout (<i>secs</i>)"
-msgstr "超时 (<i>秒</i>)"
+msgstr "超时 (<i>s秒</i>)"
 
 #: admin/PageGeneral.py:110
 msgid "Server Tokens"
-msgstr "服务器识别信息级别"
+msgstr "服务器令牌"
 
 #: admin/PageGeneral.py:113
 #, fuzzy
@@ -1110,16 +1147,16 @@ msgstr "网络行为"
 
 #: admin/PageGeneral.py:118
 msgid "Graphs Type"
-msgstr "图形显示类型"
+msgstr "图像类型"
 
 #: admin/PageGeneral.py:119
 #, fuzzy
 msgid "Information Collector"
-msgstr "数据压缩"
+msgstr "信息收集"
 
 #: admin/PageGeneral.py:125 admin/PageGeneral.py:126
 msgid "Upload Tracking"
-msgstr ""
+msgstr "上传追踪"
 
 #: admin/PageGeneral.py:145 admin/PageGeneral.py:183 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
@@ -1129,31 +1166,31 @@ msgstr "端口"
 
 #: admin/PageGeneral.py:145 admin/plugins/bind.py:92
 msgid "Bind to"
-msgstr "绑定到IP"
+msgstr "监听"
 
 #: admin/PageGeneral.py:158
 #, fuzzy
 msgid "TLS/SSL port"
-msgstr "TLS/SSL 端口"
+msgstr "TLS/SSL端口"
 
 #: admin/PageGeneral.py:160
 msgid "TLS/SSL support disabled"
-msgstr "TLS/SSL 被禁止"
+msgstr "TLS/SSL 支持被禁用"
 
 #: admin/PageGeneral.py:188
 #, fuzzy
 msgid "New port"
-msgstr "报告"
+msgstr "新端口"
 
 #: admin/PageGeneral.py:197
 #, fuzzy
 msgid "Add new port…"
-msgstr "增加一个端口"
+msgstr "增加新端口"
 
 #: admin/PageGeneral.py:203
 #, fuzzy
 msgid "Listening to Ports"
-msgstr "服务器端口设置"
+msgstr "监听端口"
 
 #: admin/PageGeneral.py:214
 msgid "Execution Permissions"
@@ -1170,7 +1207,7 @@ msgstr "用户组"
 
 #: admin/PageGeneral.py:217
 msgid "Chroot"
-msgstr "监禁模式运行"
+msgstr "监禁服务器"
 
 #: admin/PageGeneral.py:228 admin/PageVServer.py:309
 msgid "Network"
@@ -1183,11 +1220,11 @@ msgstr "监听端口"
 #: admin/PageGeneral.py:230
 #, fuzzy
 msgid "Permissions"
-msgstr "服务器权限"
+msgstr "权限"
 
 #: admin/PageGeneral.py:231
 msgid "Icons"
-msgstr "图标设置"
+msgstr "图标"
 
 #: admin/PageGeneral.py:232
 #, fuzzy
@@ -1196,11 +1233,11 @@ msgstr "Mime 类型"
 
 #: admin/PageGeneral.py:234 admin/PageStatus.py:101
 msgid "General"
-msgstr "一般设置"
+msgstr "常规"
 
 #: admin/PageGeneral.py:235
 msgid "General Settings"
-msgstr "一般设置"
+msgstr "常规设置"
 
 #: admin/PageHelp.py:35
 msgid "Table of Contents"
@@ -1209,11 +1246,11 @@ msgstr "连接表"
 #: admin/PageHelp.py:172
 #, fuzzy
 msgid "Documentation"
-msgstr "根目录"
+msgstr "网页目录"
 
 #: admin/PageIndex.py:62
 msgid "You will be sent an email requesting confirmation"
-msgstr "您将收到一封电子邮件，要求确认"
+msgstr "您将发送一封电子邮件确认"
 
 #: admin/PageIndex.py:63
 msgid "Optionally provide your name"
@@ -1222,12 +1259,12 @@ msgstr "选择提供您的姓名"
 #: admin/PageIndex.py:66
 #, fuzzy
 msgid "Server is Running."
-msgstr "服务器正在运行中."
+msgstr "服务器运行中."
 
 #: admin/PageIndex.py:67
 #, fuzzy
 msgid "Server is not Running."
-msgstr "服务器没有运行."
+msgstr "服务器没有启动."
 
 #: admin/PageIndex.py:68
 #, python-format
@@ -1236,18 +1273,24 @@ msgid ""
 "\">Octality</a>. They provide top notch Consulting, Custom Engineering, and "
 "Enterprise Support Services."
 msgstr ""
+"Cherokee商业支持由<a target=\"_blank\" href=\"%s"
+"\">Octality</a>提供. 他们提供一流的咨询，定制和"
+"企业支持服务."
 
 #: admin/PageIndex.py:69
 msgid ""
 "The Community Mailing List is the place to go for help on Cherokee. <a id="
 "\"subscribe-a\">Subscribe now!</a>"
 msgstr ""
+"社区邮件列表将更好的帮助您使用Cherokee. <a id="
+"\"subscribe-a\">S现在订阅!</a>"
 
 #: admin/PageIndex.py:70
 #, python-format
 msgid ""
 "Join us at the <a target=\"_blank\" href=\"%s\">#cherokee</a> IRC Channel."
 msgstr ""
+"进入我们的<a target=\"_blank\" href=\"%s\">#cherokee</a> IRC频道."
 
 #: admin/PageIndex.py:71
 #, python-format
@@ -1256,10 +1299,13 @@ msgid ""
 "our <a target=\"_blank\" href=\"%s\">bug tracker</a> to help us improve "
 "Cherokee."
 msgstr ""
+"您的反馈是非常重要的，将BUG报告和建议提交到"
+"our <a target=\"_blank\" href=\"%s\">bug tracker</a> 将帮助我们更好的发展"
+"Cherokee."
 
 #: admin/PageIndex.py:72
 msgid "Find out what's going on with Cherokee on your favorite Social Media!"
-msgstr ""
+msgstr "在流行的社会媒体中关注Cherokee"
 
 #: admin/PageIndex.py:73
 #, python-format
@@ -1278,57 +1324,58 @@ msgid ""
 "test the latest developer snapshots of Cherokee Web Server help us to\n"
 "create the highest quality product. For that, we thank you.</p>\n"
 msgstr ""
-"\n"
-"<h3>Beta 测试</h3>\n"
-"<p>个人下载并测试最新开发 Web服务器帮助我们创造最高质量服务.</p>\n"
-"<p>为此，我们感谢你。</p>\n"
+"像您这样下载和测试Cherokee服务器将帮助我们创造和开发高质量的产品，"
+"我们非常感谢您"
+"。"
 
 #: admin/PageIndex.py:82
-#, fuzzy
 msgid ""
 "We would love to know that you are using Cherokee. Submit your domain\n"
 "name and it will be listed on the Cherokee Project web site.\n"
 msgstr ""
-"欢迎您使用Cherokee服务器. 向Cherokee提交您的使用Cherokee服务器的域名,您的域名\n"
-"将会在Cherokee项目网站上列出</a>.\n"
+"我们非常想知道您在使用Cherokee. 在Cherokee项目网站上\n"
+"提交您的域名。\n"
 
 #: admin/PageIndex.py:88
 msgid "The information has been successfully sent. Thank you!"
-msgstr ""
+msgstr "信息发送成功，谢谢您！"
 
 #: admin/PageIndex.py:89
 msgid ""
 "Unfortunatelly something went wrong, and the information could not be "
 "submitted:"
 msgstr ""
+"遇到错误，信息不能提交"
+":"
 
 #: admin/PageIndex.py:90
 msgid ""
 "Please, try again. Do not hesitate to report the problem if it persists."
 msgstr ""
+"如果这个错误再次发生，请务必提交这个信息."
 
 #: admin/PageIndex.py:143
 #, fuzzy
 msgid "Stop Server"
-msgstr "服务器"
+msgstr "停止服务器"
 
 #: admin/PageIndex.py:147
 #, fuzzy
 msgid "Start Server"
-msgstr "虚拟主机"
+msgstr "启动服务器"
 
 #: admin/PageIndex.py:157
 #, fuzzy
 msgid "Information"
-msgstr "服务器相关信息"
+msgstr "服务器信息"
 
 #: admin/PageIndex.py:162
 msgid "PID"
-msgstr ""
+msgstr "PID文件"
 
 #: admin/PageIndex.py:162
 msgid "Not running"
-msgstr "服务器没有运行"
+msgstr "没有运行"
 
 #: admin/PageIndex.py:163
 msgid "Version"
@@ -1337,25 +1384,25 @@ msgstr "服务器版本"
 #: admin/PageIndex.py:164
 #, fuzzy
 msgid "Default WWW"
-msgstr "默认"
+msgstr "默认网站目录"
 
 #: admin/PageIndex.py:165
 msgid "Prefix"
-msgstr "服务器安装目录"
+msgstr "安装目录"
 
 #: admin/PageIndex.py:166
 #, fuzzy
 msgid "Config File"
-msgstr "服务器配置文件"
+msgstr "配置文件"
 
 #: admin/PageIndex.py:166
 #, fuzzy
 msgid "Not found"
-msgstr "没有找到哦！~"
+msgstr "未找到"
 
 #: admin/PageIndex.py:167
 msgid "Modified"
-msgstr "上次修改时间"
+msgstr "修改"
 
 #: admin/PageIndex.py:202 admin/plugins/bind.py:69 admin/plugins/bind.py:121
 #: admin/plugins/custom_error.py:41 admin/plugins/method.py:31
@@ -1367,56 +1414,55 @@ msgid "Language"
 msgstr "语言"
 
 #: admin/PageIndex.py:253
-#, fuzzy
 msgid "Proud Cherokee User List Submission"
-msgstr "致服务器所有者"
+msgstr "自豪的Cherokee用户名单提交"
 
 #: admin/PageIndex.py:256
 msgid "Proud Cherokee Users"
-msgstr "致服务器所有者"
+msgstr "自豪的Cherokee用户"
 
 #: admin/PageIndex.py:258
 #, fuzzy
 msgid "View list"
-msgstr "修复列表"
+msgstr "视图"
 
 #: admin/PageIndex.py:258
 #, fuzzy
 msgid "Send your domains"
-msgstr "被使用的域名"
+msgstr "提交您的域名"
 
 #: admin/PageIndex.py:274
 msgid "Latest Release"
-msgstr ""
+msgstr "最新版本"
 
 #: admin/PageIndex.py:278
 msgid "Latest version could not be determined at the moment."
-msgstr ""
+msgstr "未找到最新版本"
 
 #: admin/PageIndex.py:280
 msgid "Cherokee is up to date."
-msgstr ""
+msgstr "Cherokee是最新的。"
 
 #: admin/PageIndex.py:283
 msgid "You are running Cherokee"
-msgstr ""
+msgstr "您在运行Cherokee"
 
 #: admin/PageIndex.py:285
 msgid "Latest release is "
-msgstr ""
+msgstr "最新版本是"
 
 #: admin/PageIndex.py:323
 msgid "Your email address"
-msgstr ""
+msgstr "您的电子邮件地址"
 
 #: admin/PageIndex.py:324
 #, fuzzy
 msgid "Your name"
-msgstr "主机名称"
+msgstr "您的姓名"
 
 #: admin/PageIndex.py:336
 msgid "IRC"
-msgstr ""
+msgstr "IRC频道"
 
 #: admin/PageIndex.py:341
 msgid "Mailing List"
@@ -1424,20 +1470,20 @@ msgstr "邮件列表"
 
 #: admin/PageIndex.py:346
 msgid "Mailing list subscription"
-msgstr ""
+msgstr "邮件列表订阅"
 
 #: admin/PageIndex.py:347
 msgid "Subscribe"
-msgstr ""
+msgstr "订阅"
 
 #: admin/PageIndex.py:355
 msgid "Bug Tracker"
-msgstr "Bug 提交"
+msgstr "Bug跟踪"
 
 #: admin/PageIndex.py:380
 #, fuzzy
 msgid "Community"
-msgstr "国家"
+msgstr "社区"
 
 #: admin/PageIndex.py:396
 msgid "Commercial Support"
@@ -1446,11 +1492,11 @@ msgstr "商业支持"
 #: admin/PageIndex.py:398
 #, fuzzy
 msgid "Purchase Support"
-msgstr "支持"
+msgstr "购买支持"
 
 #: admin/PageIndex.py:405 admin/PageIndex.py:407
 msgid "Welcome to Cherokee Admin"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "欢迎进入Cherokee管理中心"
 
 #: admin/PageNewConfig.py:38
 msgid "Index"
@@ -1458,20 +1504,20 @@ msgstr "首页"
 
 #: admin/PageNewConfig.py:140
 msgid "Create"
-msgstr "新建"
+msgstr "创建"
 
 #: admin/PageNewConfig.py:147
 msgid "Create a new configuration file"
-msgstr "新建一个新的配置文件"
+msgstr "新建配置文件"
 
 #: admin/PageNewConfig.py:150
 msgid "Regular"
-msgstr "规则"
+msgstr "固定"
 
 #: admin/PageNewConfig.py:151
 #, fuzzy
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
-msgstr "设置: Apache logs, MIME types, icons, 等"
+msgstr "固定配置文件: Apache logs, MIME types, icons, etc."
 
 #: admin/PageNewConfig.py:155 admin/consts.py:48 admin/plugins/file.py:29
 msgid "Static Content"
@@ -1487,7 +1533,7 @@ msgstr "服务器开发"
 
 #: admin/PageNewConfig.py:161
 msgid "No standard port, No log files, No PID file, etc."
-msgstr "没有标准的端口，没有日志文件，没有任何的PID文件等"
+msgstr "没有标准的端口，没有日志文件，没有PID文件等。"
 
 #: admin/PageNewConfig.py:164
 msgid "New Configuration File"
@@ -1502,11 +1548,13 @@ msgstr "配置文件没有找到"
 msgid ""
 "<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure "
 "you want to proceed?</p>"
-msgstr "<p>您将要删除<b>%s</b> 规则。</p><p>您想继续吗？</p>"
+msgstr ""
+"<p>您要删除 <b>%s</b> b规则.</p><p>您确认 "
+"继续吗?</p>"
 
 #: admin/PageRule.py:53
 msgid "You are about to clone a Behavior Rule. Would you like to proceed?"
-msgstr "您将要克隆一个规则。您想继续吗？"
+msgstr "您要克隆一个规则，您确认继续吗？"
 
 #: admin/PageRule.py:116 admin/Rule.py:156
 msgid "Rule Type"
@@ -1514,16 +1562,16 @@ msgstr "规则类型"
 
 #: admin/PageRule.py:136 admin/PageVServers.py:133 admin/PageVServers.py:151
 msgid "Manual"
-msgstr "手册"
+msgstr "手动"
 
 #: admin/PageRule.py:137 admin/PageVServers.py:152
 #, fuzzy
 msgid "Manual configuration"
-msgstr "Icon 设置"
+msgstr "手动配置"
 
 #: admin/PageRule.py:207 admin/PageSource.py:326 admin/PageVServers.py:197
 msgid "Do you really want to remove it?"
-msgstr "你真的想删除它吗？"
+msgstr "您真的想要删除它吗？"
 
 #: admin/PageRule.py:208 admin/PageSource.py:327 admin/PageVServers.py:198
 msgid "Remove"
@@ -1531,40 +1579,40 @@ msgstr "删除"
 
 #: admin/PageRule.py:232 admin/PageVServer.py:119
 msgid "Final"
-msgstr "启用"
+msgstr "完成"
 
 #: admin/PageRule.py:233
 #, fuzzy
 msgid "Non Final"
-msgstr "启用"
+msgstr "未完成"
 
 #: admin/PageRule.py:257 admin/PageRule.py:270
 #, fuzzy
 msgid "Add Behavior Rule"
-msgstr "行为规则"
+msgstr "增加规则"
 
 #: admin/PageRule.py:264
 #, fuzzy
 msgid "Configuration Assistant"
-msgstr "快速配置"
+msgstr "Configuration Quickstart"
 
 #: admin/PageRule.py:270 admin/PageSource.py:348 admin/PageVServers.py:247
 msgid "New…"
-msgstr "新的..."
+msgstr ""
 
 #: admin/PageRule.py:284
 #, fuzzy
 msgid "Clone Behavior Rule"
-msgstr "克隆扩展规则"
+msgstr "Behavior rules"
 
 #: admin/PageRule.py:285 admin/PageSource.py:358 admin/PageVServers.py:262
 msgid "Clone"
-msgstr "克隆"
+msgstr "Clone"
 
 #: admin/PageRule.py:289 admin/PageSource.py:362 admin/PageVServers.py:266
 #, fuzzy
 msgid "Clone…"
-msgstr "克隆"
+msgstr "Clone"
 
 #: admin/PageRule.py:289
 msgid "Clone Selected Behavior Rule"
@@ -1572,63 +1620,76 @@ msgstr ""
 
 #: admin/PageRule.py:297 admin/PageVServer.py:498
 msgid "Behavior"
-msgstr "扩展设置"
+msgstr "Behavior"
 
 #: admin/PageRule.py:316
 #, fuzzy
 msgid "Rule Filtering"
-msgstr "规则列表"
+msgstr "Rule list"
 
 #: admin/PageSource.py:44
 msgid ""
 "The source can be either a local interpreter or a remote host acting as an "
 "information source."
-msgstr "可以是本地翻译或远程主机代理作为一个数据源."
+msgstr ""
+"The source can be either a local interpreter or a remote host acting as an "
+"information source."
 
 #: admin/PageSource.py:45
 msgid ""
 "Source nick. It will be referenced by this name in the rest of the server."
-msgstr "源名称，这个名字将被主机引用"
+msgstr ""
+"Source nick. It will be referenced by this name in the rest of the server."
 
 #: admin/PageSource.py:46
 msgid "It allows to choose whether it runs the local host or a remote server."
-msgstr "可以选择运行在本地主机或远程服务器."
+msgstr "It allows to choose whether it runs the local host or a remote server."
 
 #: admin/PageSource.py:47
 msgid ""
 "Where the information source can be accessed. The host:port pair, or the "
 "Unix socket path."
-msgstr "如果信息源可以访问. 主机:端口, 或者 UNIX套接字连接路径."
+msgstr ""
+"Where the information source can be accessed. The host:port pair, or the "
+"Unix socket path."
 
 #: admin/PageSource.py:48
 msgid "Command to spawn a new source in case it were not accessible."
-msgstr "命令生成新数据源情况下，无法访问."
+msgstr "Command to spawn a new source in case it were not accessible."
 
 #: admin/PageSource.py:49
 msgid ""
 "How long should the server wait when spawning an interpreter before giving "
 "up (in seconds). Default: 3."
-msgstr "服务器解释引擎等待时间 (单位:秒). 默认: 3."
+msgstr ""
+"How long should the server wait when spawning an interpreter before giving "
+"up (in seconds). Default: 3."
 
 #: admin/PageSource.py:50
 msgid ""
 "Sources currently in use. Note that the last source of any rule cannot be "
 "deleted until the rule has been manually edited."
-msgstr "数据源正在使用中，任何规则都不能被删除直到规则被手动修改 ."
+msgstr ""
+"Sources currently in use. Note that the last source of any rule cannot be "
+"deleted until the rule has been manually edited."
 
 #: admin/PageSource.py:51
 #, fuzzy
 msgid ""
 "Execute the interpreter under a different user. Default: Same UID as the "
 "server."
-msgstr "设置不同的执行用户. 默认: 与主机执行用户 UID 相同  ."
+msgstr ""
+"Execute the interpreter under a different user. The server needs enough "
+"privileges to switch the user (usually root)."
 
 #: admin/PageSource.py:52
 #, fuzzy
 msgid ""
 "Execute the interpreter under a different group. Default: Default GID of the "
 "new process UID."
-msgstr "设置不同的执行用户. 默认: 与主机执行用户 UID 相同  ."
+msgstr ""
+"Execute the interpreter under a different user. The server needs enough "
+"privileges to switch the user (usually root)."
 
 #: admin/PageSource.py:53
 msgid ""
@@ -1645,7 +1706,7 @@ msgstr ""
 #: admin/PageSource.py:55
 #, fuzzy
 msgid "The Information Source list is currently empty."
-msgstr "数据源设置"
+msgstr "Information Sources Settings"
 
 #: admin/PageSource.py:56
 msgid ""
@@ -1659,34 +1720,34 @@ msgstr ""
 
 #: admin/PageSource.py:180 admin/PageVServer.py:503
 msgid "Virtual Server"
-msgstr "虚拟主机"
+msgstr "Virtual Server"
 
 #: admin/PageSource.py:208 admin/plugins/error_redir.py:87
 #: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:143
 msgid "Type"
-msgstr "类型"
+msgstr "Type"
 
 #: admin/PageSource.py:210 admin/PageSource.py:247
 #: admin/wizards/rtorrent.py:100
 msgid "Connection"
-msgstr "连接"
+msgstr "Connection"
 
 #: admin/PageSource.py:212
 msgid "Interpreter"
-msgstr "解释器"
+msgstr "Interpreter"
 
 #: admin/PageSource.py:213
 msgid "Spawning timeout"
-msgstr "超时"
+msgstr "Spawning timeout"
 
 #: admin/PageSource.py:214
 msgid "Execute as User"
-msgstr "执行用户"
+msgstr "Execute as User"
 
 #: admin/PageSource.py:215
 #, fuzzy
 msgid "Execute as Group"
-msgstr "执行用户组"
+msgstr "Execute as User"
 
 #: admin/PageSource.py:216
 msgid "Inherit Environment"
@@ -1695,73 +1756,77 @@ msgstr ""
 #: admin/PageSource.py:315
 #, fuzzy
 msgid "Deletion is forbidden"
-msgstr "不允许删除. 请检查数据源是否使用中."
+msgstr "Deletion forbidden. Check source usage."
 
 #: admin/PageSource.py:343 admin/PageSource.py:348
 #, fuzzy
 msgid "Add New Information Source"
-msgstr "新增数据源"
+msgstr "Assign Information Sources"
 
 #: admin/PageSource.py:357
 #, fuzzy
 msgid "Clone Information Source"
-msgstr "数据源"
+msgstr "Information Sources"
 
 #: admin/PageSource.py:362
 #, fuzzy
 msgid "Clone Selected Information Source"
-msgstr "数据源"
+msgstr "Information Sources"
 
 #: admin/PageSource.py:382
 #, fuzzy
 msgid "Sources Filtering"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/PageSources.py:35 admin/PageVServer.py:103 admin/PageVServers.py:48
 #: admin/PageVServers.py:275
 msgid "Virtual Servers"
-msgstr "虚拟主机设置"
+msgstr "Virtual Servers"
 
 #: admin/PageStatus.py:66
 #, fuzzy
 msgid "Server Wide Monitoring"
-msgstr "服务器退出.."
+msgstr "Server exiting.."
 
 #: admin/PageStatus.py:71
 #, fuzzy
 msgid "Virtual Server Monitoring"
-msgstr "虚拟主机配置"
+msgstr "Virtual Servers configuration"
 
 #: admin/PageStatus.py:102
 #, fuzzy
 msgid "System wide status"
-msgstr "服务器状态"
+msgstr "Server status"
 
 #: admin/PageStatus.py:119 admin/PageVServers.py:290
 #, fuzzy
 msgid "Virtual Server Filtering"
-msgstr "虚拟主机"
+msgstr "Virtual Server"
 
 #: admin/PageVServer.py:41
 msgid "Nickname for the virtual server."
-msgstr "虚拟主机名称."
+msgstr "Nickname for the virtual server."
 
 #: admin/PageVServer.py:42
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
-msgstr "设置服务器的PEM编码的证书文件(完整路径)"
+msgstr ""
+"This directive points to the PEM-encoded Certificate file for the server "
+"(Full path to the file)"
 
 #: admin/PageVServer.py:43
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
-msgstr "设置服务器PEM-编码加密文件  (完整路径)"
+msgstr "PEM-encoded Private Key file for the server (Full path to the file)"
 
 #: admin/PageVServer.py:44
 #, fuzzy
 msgid ""
 "File containing the trusted CA certificates, utilized for checking the "
 "client certificates (Full path to the file)"
-msgstr "选择：用于检查客户端的信任CA客户端证书  (完整路径)"
+msgstr ""
+"Optional: File containing the trusted CA certificates, utilized for checking "
+"the client certificates (Full path to the file)"
 
 #: admin/PageVServer.py:45
 msgid ""
@@ -1769,83 +1834,91 @@ msgid ""
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
 "ciphers supported by the OpenSSL version used)."
 msgstr ""
-"TLS的/ SSL是允许使用密码的. <a target=\"_blank\" href=\"http://www.openssl."
-"org/docs/apps/ciphers.html\">参考</a>. (默认: 所有 OPENSSL将启动密码支持)."
+"Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
+"www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
+"ciphers supported by the OpenSSL version used)."
 
 #: admin/PageVServer.py:46
 #, fuzzy
 msgid "Skip, Accept or Require client certificates."
-msgstr "选择：跳过，接受或者要求客户端证书。"
+msgstr "Optional: Skip, Accept or Require client certificates."
 
 #: admin/PageVServer.py:47
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
-msgstr "限制证书链在检查程序中的使用范围 (默认值: 1)"
+msgstr ""
+"Limit up to which depth certificates in a chain are used during the "
+"verification procedure (Default: 1)"
 
 #: admin/PageVServer.py:48
 msgid "Allows the selection of how to generate the error responses."
-msgstr "允许选择如何产生错误的反应."
+msgstr "Allows the selection of how to generate the error responses."
 
 #: admin/PageVServer.py:49
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
-msgstr "目录内的用户主目录用作根Web目录. 为空则禁止此功能."
+msgstr ""
+"Directory inside the user home directory to use as root web directory. "
+"Disabled if empty."
 
 #: admin/PageVServer.py:50
 msgid "The personal web support is currently turned on."
-msgstr "个人网页支持目前正在打开."
+msgstr "The personal web support is currently turned on."
 
 #: admin/PageVServer.py:51
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
-msgstr "增加了一个新域名。允许在域名中使用通配符."
+msgstr "Adds a new domain name. Wildcards are allowed in the domain name."
 
 #: admin/PageVServer.py:52
 msgid "Virtual Server root directory."
-msgstr "虚拟主机根目录."
+msgstr "Virtual Server root directory."
 
 #: admin/PageVServer.py:53
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
-msgstr "默认首页设置. 例如: <em>index.html,index.php</em>."
+msgstr ""
+"List of name files that will be used as directory index. Eg: <em>index.html,"
+"index.php</em>."
 
 #: admin/PageVServer.py:54
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
-msgstr "设置服务器允许上传大小, 单位：bytes (默认:无限制)"
+msgstr "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 
 #: admin/PageVServer.py:55
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
-msgstr "虚拟主机是否允许使用活动连接(默认: 是)"
+msgstr ""
+"Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 
 #: admin/PageVServer.py:56
 msgid "The Logging is currently enabled."
-msgstr "日志记录正在启用."
+msgstr "The Logging is currently enabled."
 
 #: admin/PageVServer.py:57
 msgid "Logging format. Apache compatible is highly recommended here."
-msgstr "日志格式强烈建议使用 Apache 兼容格式."
+msgstr "Logging format. Apache compatible is highly recommended here."
 
 #: admin/PageVServer.py:58
 msgid "Back-end used to store the log accesses."
-msgstr "存放访问日志后台程序."
+msgstr "Back-end used to store the log accesses."
 
 #: admin/PageVServer.py:59
 msgid "Back-end used to store the log errors."
-msgstr "存放错误日志后台程序."
+msgstr "Back-end used to store the log errors."
 
 #: admin/PageVServer.py:60
 msgid "Back-end used to store the log accesses and errors."
-msgstr "存放错误和访问日志的后台程序."
+msgstr "Back-end used to store the log accesses and errors."
 
 #: admin/PageVServer.py:61
 msgid "Full path to the file where the information will be saved."
-msgstr "文件的完整路径信息会被保存."
+msgstr "Full path to the file where the information will be saved."
 
 #: admin/PageVServer.py:62
 msgid "Path to the executable that will be invoked on each log entry."
-msgstr "可执行路径将援引每个日志条目."
+msgstr "Path to the executable that will be invoked on each log entry."
 
 #: admin/PageVServer.py:63
 #, fuzzy
@@ -1853,7 +1926,8 @@ msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
 "headers (send by reverse proxies)."
 msgstr ""
-"是否记录和使用 X-Real-IP  和X-Forwarded-For 请求头  ( 由反向代理服务器发送)."
+"Whether the logger should read and use the X-Real-IP header (send by reverse "
+"proxy front-ends)."
 
 #: admin/PageVServer.py:64
 #, fuzzy
@@ -1861,7 +1935,8 @@ msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
 msgstr ""
-"接受X-Real-IP和X-Forwarded-For请求头. 警告：如果你不确信你需要这个功能请不要开启。"
+"Accept all the X-Real-IP headers. It's dangerous: turn it on only if you are "
+"centain of what you are doing."
 
 #: admin/PageVServer.py:65
 #, fuzzy
@@ -1869,13 +1944,14 @@ msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
 "Forwarded-For headers."
 msgstr ""
-"列表上的IP地址和子网允许发送 X-Real-IP and X-Forwarded-For 请求头通常应用于代"
-"理服务器."
+"List of IP addresses and subnets that are allowed to send X-Real-IP headers "
+"(usually your proxy servers)."
 
 #: admin/PageVServer.py:66
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
-msgstr "设置是否允许高级虚拟主机支持. (默认：关闭)"
+msgstr ""
+"How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 
 #: admin/PageVServer.py:67
 #, fuzzy
@@ -1886,36 +1962,36 @@ msgid ""
 "${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
 "${response_size}"
 msgstr ""
-"可使用以下变量: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, "
-"${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, "
-"${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, "
-"${request_original}, ${vserver_name}"
+"The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
+"${protocol}, ${transport}, ${port_server}, ${query_string}, "
+"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
+"${user_remote}, ${request}, ${request_original}, ${vserver_name}"
 
 #: admin/PageVServer.py:68
 #, fuzzy
 msgid "Allows the selection of domain matching method."
-msgstr "域名匹配规则."
+msgstr "Allows the selection of how to generate the error responses."
 
 #: admin/PageVServer.py:69
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
-msgstr "是否对此虚拟机进行流量及状态统计"
+msgstr ""
 
 #: admin/PageVServer.py:70
 msgid "Time standard to use in the log file entries."
-msgstr "日志文件使用的时间标准"
+msgstr ""
 
 #: admin/PageVServer.py:72
 #, fuzzy
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr ""
 "\n"
-"<p>这个默认虚拟主机将匹配所有未设定的域名</p>\n"
+"<p>The 'default' virtual server matches all the domain names.</p>\n"
 
 #: admin/PageVServer.py:104
 msgid "Loggers"
-msgstr "日志"
+msgstr "Loggers"
 
 #: admin/PageVServer.py:105
 msgid "SSL cookbook"
@@ -1924,128 +2000,127 @@ msgstr "SSL cookbook"
 #: admin/PageVServer.py:109
 #, fuzzy
 msgid "Rule Match"
-msgstr "文件匹配"
+msgstr "File Matches"
 
 #: admin/PageVServer.py:109
 msgid "Match"
-msgstr "匹配"
+msgstr "Match"
 
 #: admin/PageVServer.py:110
 #, fuzzy
 msgid "Assigned Handler"
-msgstr "分配处理程序"
+msgstr "Handler"
 
 #: admin/PageVServer.py:111
 msgid "Auth"
-msgstr "认证"
+msgstr "Auth"
 
 #: admin/PageVServer.py:112
 #, fuzzy
 msgid "Custom Document Root"
-msgstr "根目录"
+msgstr "Document Root"
 
 #: admin/PageVServer.py:112
 msgid "Root"
-msgstr "网站根目录"
+msgstr "Root"
 
 #: admin/PageVServer.py:113
 msgid "Only HTTPS"
-msgstr "仅开启HTTPS"
+msgstr ""
 
 #: admin/PageVServer.py:113
 #, fuzzy
 msgid "Secure"
-msgstr "保密"
+msgstr "Secret"
 
 #: admin/PageVServer.py:114
 #, fuzzy
 msgid "Encoders"
-msgstr "压缩"
+msgstr "Encoding"
 
 #: admin/PageVServer.py:114
 msgid "Enc"
-msgstr "压缩"
+msgstr "Enc"
 
 #: admin/PageVServer.py:115
 msgid "Exp"
-msgstr "到期"
+msgstr "Exp"
 
 #: admin/PageVServer.py:116
 #, fuzzy
 msgid "Connection Timeout"
-msgstr "连接"
+msgstr "Connections"
 
 #: admin/PageVServer.py:117
 #, fuzzy
 msgid "Shaping"
-msgstr "流量限制"
+msgstr "Traffic Shaping"
 
 #: admin/PageVServer.py:118
 #, fuzzy
 msgid "Logging Enabled"
-msgstr " 允许"
+msgstr " Enabled"
 
 #: admin/PageVServer.py:118
 #, fuzzy
 msgid "Log"
-msgstr "启用日志"
+msgstr "Logging"
 
 #: admin/PageVServer.py:119
 #, fuzzy
 msgid "Rule is Final"
-msgstr "规则列表"
+msgstr "Rule list"
 
 #: admin/PageVServer.py:120
 #, fuzzy
 msgid "Rule is Active"
-msgstr "规则列表"
+msgstr "Rule list"
 
 #: admin/PageVServer.py:145
 #, fuzzy
 msgid "Host Names"
-msgstr "主机名称"
+msgstr "Host names"
 
 #: admin/PageVServer.py:155 admin/PageVServer.py:315 admin/PageVServer.py:331
 #: admin/plugins/method.py:94 admin/plugins/method.py:104
 msgid "Method"
-msgstr "方式"
+msgstr "Method"
 
 #: admin/PageVServer.py:200
 #, fuzzy
 msgid "Behavior Rules"
-msgstr "行为规则"
+msgstr "Behavior rules"
 
 #: admin/PageVServer.py:204
-#, fuzzy
 msgid "Rule Management"
-msgstr "管理"
+msgstr ""
 
 #: admin/PageVServer.py:229
 #, fuzzy
 msgid "Only accept Secure Connections"
-msgstr "被使用的域名"
+msgstr "Accepted domains"
 
 #: admin/PageVServer.py:234
 #, fuzzy
 msgid "Encoding enabled"
-msgstr "压缩"
+msgstr "Encoding"
 
 #: admin/PageVServer.py:240
 msgid "no"
-msgstr "否"
+msgstr ""
 
 #: admin/PageVServer.py:251
 #, fuzzy
 msgid " seconds"
-msgstr "图标设置"
+msgstr "Icons"
 
 #: admin/PageVServer.py:256
 msgid " bytes per second"
-msgstr "字节每秒"
+msgstr ""
 
 #: admin/PageVServer.py:261
 msgid "Logging enabled for this rule"
-msgstr "对此规则启用日志"
+msgstr ""
 
 #: admin/PageVServer.py:266
 msgid "Prevents further rule evaluation"
@@ -2054,205 +2129,205 @@ msgstr ""
 #: admin/PageVServer.py:271
 #, fuzzy
 msgid "Rule is active"
-msgstr "规则列表"
+msgstr "Rule list"
 
 #: admin/PageVServer.py:291
 msgid "Virtual Server nickname"
-msgstr "虚拟主机名称"
+msgstr "Virtual Server nickname"
 
 #: admin/PageVServer.py:293
 msgid "Server ID"
-msgstr "服务器 ID"
+msgstr "Server ID"
 
 #: admin/PageVServer.py:299
 msgid "Directory Indexes"
-msgstr "目录首页设置"
+msgstr "Directory Indexes"
 
 #: admin/PageVServer.py:301 admin/plugins/fullpath.py:115
 msgid "Paths"
-msgstr "路径"
+msgstr "Paths"
 
 #: admin/PageVServer.py:306
 msgid "Keep-alive"
-msgstr "保持活动连接"
+msgstr "Keep-alive"
 
 #: admin/PageVServer.py:307
 msgid "Max Upload Size"
-msgstr "允许上传大小"
+msgstr "Max Upload Size"
 
 #: admin/PageVServer.py:317 admin/plugins/evhost.py:33
 msgid "Advanced Virtual Hosting"
-msgstr "高级虚拟主机"
+msgstr "Advanced Virtual Hosting"
 
 #: admin/PageVServer.py:333
 msgid "Error Handling hook"
-msgstr "错误处理机制"
+msgstr "Error Handling hook"
 
 #: admin/PageVServer.py:344 admin/consts.py:224 admin/consts.py:241
 #, fuzzy
 msgid "Disabled"
-msgstr "禁止"
+msgstr "Disable"
 
 #: admin/PageVServer.py:348
 #, fuzzy
 msgid "Write errors to"
-msgstr "错误信息写入"
+msgstr "Writers"
 
 #: admin/PageVServer.py:352 admin/PageVServer.py:388
 msgid "Filename"
-msgstr "文件名"
+msgstr "Filename"
 
 #: admin/PageVServer.py:354 admin/PageVServer.py:391
 msgid "Command"
-msgstr "命令"
+msgstr "Command"
 
 #: admin/PageVServer.py:360
 #, fuzzy
 msgid "Error Logging"
-msgstr "错误处理机制"
+msgstr "Error Handling hook"
 
 #: admin/PageVServer.py:371
 msgid "Format"
-msgstr "格式"
+msgstr "Format"
 
 #: admin/PageVServer.py:378
 #, fuzzy
 msgid "Write accesses to"
-msgstr "错误信息写入"
+msgstr "Writers"
 
 #: admin/PageVServer.py:396
 msgid "Template: "
-msgstr "日志格式: "
+msgstr "Template: "
 
 #: admin/PageVServer.py:398
 #, fuzzy
 msgid "Access Logging"
-msgstr "访问日志"
+msgstr "Logging"
 
 #: admin/PageVServer.py:404
 msgid "Time standard"
-msgstr "时间标准"
+msgstr ""
 
 #: admin/PageVServer.py:405
 msgid "Accept Forwarded IPs"
-msgstr "接受转发IPs"
+msgstr ""
 
 #: admin/PageVServer.py:405 admin/consts.py:219
 msgid "Accept"
-msgstr "接受"
+msgstr "Accept"
 
 #: admin/PageVServer.py:408
 #, fuzzy
 msgid "Do not check"
-msgstr "不检查来源"
+msgstr "Do not restart"
 
 #: admin/PageVServer.py:417
 #, fuzzy
 msgid "Logging Options"
-msgstr "启用日志"
+msgstr "Logging"
 
 #: admin/PageVServer.py:453
 msgid "Certificate"
-msgstr "证书"
+msgstr "Certificate"
 
 #: admin/PageVServer.py:454
 msgid "Certificate key"
-msgstr "加密证书"
+msgstr "Certificate key"
 
 #: admin/PageVServer.py:459
 #, fuzzy
 msgid "Required SSL/TLS Values"
-msgstr "必要的 SSL/TLS 值"
+msgstr "Required SSL/TLS values"
 
 #: admin/PageVServer.py:464
 msgid "Ciphers"
-msgstr "密码"
+msgstr "Ciphers"
 
 #: admin/PageVServer.py:465
 msgid "Client Certs. Request"
-msgstr "客户端证书. 请求"
+msgstr "Client Certs. Request"
 
 #: admin/PageVServer.py:468
 msgid "CA List"
-msgstr "CA 列表"
+msgstr "CA List"
 
 #: admin/PageVServer.py:471
 msgid "Verify Depth"
-msgstr "验证"
+msgstr "Verify Depth"
 
 #: admin/PageVServer.py:477
 #, fuzzy
 msgid "Advanced Options"
-msgstr "高级选项"
+msgstr "Advanced options"
 
 #: admin/PageVServer.py:496
 msgid "Basics"
-msgstr "基本配置"
+msgstr "Basics"
 
 #: admin/PageVServer.py:497
 #, fuzzy
 msgid "Host Match"
-msgstr "最接近"
+msgstr "Closest match"
 
 #: admin/PageVServer.py:499
 msgid "Error Handler"
-msgstr "错误处理"
+msgstr "Error Handler"
 
 #: admin/PageVServers.py:50
 #, python-format
 msgid ""
 "<p>You are about to delete the <b>%s</b> Virtual Server.</p><p>Are you sure "
 "you want to proceed?</p>"
-msgstr "您将删除<b>%s</b>虚拟主机，是否确认继续"
+msgstr ""
 
 #: admin/PageVServers.py:51
 msgid "You are about to clone a Virtual Server. Would you like to proceed?"
-msgstr "您将删除克隆一个虚拟主机，是否确认继续"
+msgstr ""
 
 #: admin/PageVServers.py:52
 msgid ""
 "Name of the Virtual Server you are about to create. A domain name is alright."
-msgstr "您将新建的虚拟主机名称，最好是一个域名。"
+msgstr ""
 
 #: admin/PageVServers.py:53
 #, fuzzy
 msgid "Document Root directory of the new Virtual Server."
-msgstr "虚拟主机名称."
+msgstr "Nickname for the virtual server."
 
 #: admin/PageVServers.py:234 admin/PageVServers.py:247
 #, fuzzy
 msgid "Add New Virtual Server"
-msgstr "新建一个虚拟主机"
+msgstr "Add new Virtual Server"
 
 #: admin/PageVServers.py:241
 #, fuzzy
 msgid "Virtual Server Configuration Assistant"
-msgstr "虚拟主机配置"
+msgstr "Virtual Servers configuration"
 
 #: admin/PageVServers.py:261
 msgid "Clone Virtual Server"
-msgstr "克隆虚拟主机"
+msgstr "Clone Virtual Server"
 
 #: admin/PageVServers.py:266
 #, fuzzy
 msgid "Clone Selected Virtual Server"
-msgstr "克隆虚拟主机"
+msgstr "Clone Virtual Server"
 
 #: admin/Rule.py:30
 msgid "The default match ought not to be changed."
-msgstr "默认规则不能修改."
+msgstr "The default match ought not to be changed."
 
 #: admin/Rule.py:126
 msgid "And"
-msgstr "和"
+msgstr "And"
 
 #: admin/Rule.py:134
 msgid "Or"
-msgstr "或"
+msgstr "Or"
 
 #: admin/Rule.py:141
 msgid "Not"
-msgstr "非"
+msgstr "Not"
 
 #: admin/Rule.py:150
 msgid "Select…"
@@ -2260,80 +2335,80 @@ msgstr ""
 
 #: admin/Wizard.py:195
 msgid "Use the same logging configuration as one of the other virtual servers."
-msgstr "其他虚拟主机的日志使用相同配置"
+msgstr ""
 
 #: admin/consts.py:26
 msgid "English"
-msgstr "英语"
+msgstr "English"
 
 #: admin/consts.py:27
 msgid "Spanish"
-msgstr "西班牙语"
+msgstr "Spanish"
 
 #: admin/consts.py:28
 #, fuzzy
 msgid "German"
-msgstr "德语"
+msgstr "General"
 
 #: admin/consts.py:29
 msgid "French"
-msgstr "法语"
+msgstr ""
 
 #: admin/consts.py:30
 #, fuzzy
 msgid "Dutch"
-msgstr "认证"
+msgstr "Auth"
 
 #: admin/consts.py:31
 msgid "Swedish"
-msgstr "瑞典文"
+msgstr ""
 
 #: admin/consts.py:32
 msgid "Brazilian Portuguese"
-msgstr "巴西葡萄牙语"
+msgstr ""
 
 #: admin/consts.py:33
 msgid "Chinese Simplified"
-msgstr "简体中文"
+msgstr ""
 
 #: admin/consts.py:38
 msgid "Product only"
-msgstr "只列出服务器软件介绍"
+msgstr "Product only"
 
 #: admin/consts.py:39
 msgid "Product + Minor version"
-msgstr "服务器软件介绍 + 次要版本"
+msgstr "Product + Minor version"
 
 #: admin/consts.py:40
 msgid "Product + Minimal version"
-msgstr "服务器软件介绍 + 最小版本号"
+msgstr "Product + Minimal version"
 
 #: admin/consts.py:41
 msgid "Product + Platform"
-msgstr "服务器软件介绍 + 系统平台"
+msgstr "Product + Platform"
 
 #: admin/consts.py:42
 msgid "Full Server string"
-msgstr "完整服务器信息"
+msgstr "Full Server string"
 
 #: admin/consts.py:46 admin/consts.py:74 admin/consts.py:91
 #: admin/consts.py:105
 msgid "None"
-msgstr "没有"
+msgstr "None"
 
 #: admin/consts.py:47 admin/plugins/common.py:30
 msgid "List & Send"
-msgstr "列出 & 发送"
+msgstr "List & Send"
 
 #: admin/consts.py:49
 #, fuzzy
 msgid "Only Listing"
-msgstr "仅进行目录列表"
+msgstr "Only listing"
 
 #: admin/consts.py:50 admin/plugins/error_redir.py:86
 #: admin/wizards/hotlinking.py:145 admin/wizards/hotlinking.py:164
 msgid "Redirection"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/consts.py:51
 msgid "FastCGI"
@@ -2346,22 +2421,22 @@ msgstr "SCGI"
 #: admin/consts.py:53 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
 #, fuzzy
 msgid "uWSGI"
-msgstr "uWSGI"
+msgstr "SCGI"
 
 #: admin/consts.py:54
 #, fuzzy
 msgid "HTTP Reverse Proxy"
-msgstr "HTTP反向代理"
+msgstr "HTTP reverse proxy"
 
 #: admin/consts.py:55
 #, fuzzy
 msgid "Upload Reporting"
-msgstr "URL 重写"
+msgstr "URL Rewriting"
 
 #: admin/consts.py:56 admin/plugins/streaming.py:31
 #: admin/plugins/streaming.py:63
 msgid "Audio/Video Streaming"
-msgstr "视频/音频流媒体"
+msgstr "Audio/Video Streaming"
 
 #: admin/consts.py:57
 msgid "CGI"
@@ -2369,64 +2444,64 @@ msgstr "CGI"
 
 #: admin/consts.py:58 admin/plugins/ssi.py:28
 msgid "Server Side Includes"
-msgstr "服务器端包含"
+msgstr "Server Side Includes"
 
 #: admin/consts.py:59
 msgid "Hidden Downloads"
-msgstr "隐藏下载"
+msgstr "Hidden Downloads"
 
 #: admin/consts.py:60
 msgid "Server Info"
-msgstr "服务器信息"
+msgstr "Server Info"
 
 #: admin/consts.py:61
 #, fuzzy
 msgid "MySQL Bridge"
-msgstr "MySQL 桥接"
+msgstr "MySQL bridge"
 
 #: admin/consts.py:62 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
-msgstr "HTTP错误"
+msgstr "HTTP Error"
 
 #: admin/consts.py:63 admin/plugins/admin.py:29
 msgid "Remote Administration"
-msgstr "远程管理"
+msgstr "Remote Administration"
 
 #: admin/consts.py:64 admin/wizards/hotlinking.py:84
 msgid "1x1 Transparent GIF"
-msgstr "1x1 透明 GIF"
+msgstr "1x1 Transparent GIF"
 
 #: admin/consts.py:68
 msgid "Default errors"
-msgstr "预设错误"
+msgstr "Default errors"
 
 #: admin/consts.py:69
 msgid "Custom redirections"
-msgstr "自定义重定向"
+msgstr "Custom redirections"
 
 #: admin/consts.py:70
 msgid "Closest match"
-msgstr "最接近"
+msgstr "Closest match"
 
 #: admin/consts.py:75
 msgid "Plain text file"
-msgstr "纯文本文件"
+msgstr "Plain text file"
 
 #: admin/consts.py:76
 msgid "Htpasswd file"
-msgstr "Htpasswd文件"
+msgstr "Htpasswd file"
 
 #: admin/consts.py:77
 msgid "Htdigest file"
-msgstr "Htdigest 文件"
+msgstr "Htdigest file"
 
 #: admin/consts.py:78
 msgid "LDAP server"
-msgstr "LDAP 服务器"
+msgstr "LDAP server"
 
 #: admin/consts.py:79
 msgid "MySQL server"
-msgstr "MySQL 服务器"
+msgstr "MySQL server"
 
 #: admin/consts.py:80
 msgid "PAM"
@@ -2434,7 +2509,7 @@ msgstr "PAM"
 
 #: admin/consts.py:81 admin/plugins/authlist.py:30
 msgid "Fixed list"
-msgstr "修复列表"
+msgstr "Fixed list"
 
 #: admin/consts.py:85
 msgid "Basic"
@@ -2450,43 +2525,43 @@ msgstr "Basic or Digest"
 
 #: admin/consts.py:92
 msgid "Apache compatible"
-msgstr "Apache 兼容模式"
+msgstr "Apache compatible"
 
 #: admin/consts.py:93
 msgid "NCSA"
-msgstr "NCSA格式"
+msgstr "NCSA"
 
 #: admin/consts.py:94
 msgid "Custom"
-msgstr "自定义"
+msgstr "Custom"
 
 #: admin/consts.py:99
 msgid "System logger"
-msgstr "系统记录"
+msgstr "System logger"
 
 #: admin/consts.py:100
 msgid "Standard Error"
-msgstr "标准错误"
+msgstr "Standard Error"
 
 #: admin/consts.py:101
 msgid "Execute program"
-msgstr "执行程序"
+msgstr "Execute program"
 
 #: admin/consts.py:106
 msgid "Round Robin"
-msgstr "轮询"
+msgstr "Round Robin"
 
 #: admin/consts.py:107
 msgid "IP Hash"
-msgstr "IP 散列"
+msgstr "IP Hash"
 
 #: admin/consts.py:111
 msgid "Local interpreter"
-msgstr "本地引擎"
+msgstr "Local interpreter"
 
 #: admin/consts.py:112
 msgid "Remote host"
-msgstr "远程主机"
+msgstr "Remote host"
 
 #: admin/consts.py:116
 msgid "GZip"
@@ -2502,63 +2577,63 @@ msgstr "FIFO"
 
 #: admin/consts.py:123
 msgid "Round-robin"
-msgstr "轮询"
+msgstr "Round-robin"
 
 #: admin/consts.py:124
 msgid "Dynamic"
-msgstr "动态"
+msgstr "Dynamic"
 
 #: admin/consts.py:128
 msgid "Automatic"
-msgstr "自动"
+msgstr "Automatic"
 
 #: admin/consts.py:138 admin/plugins/error_redir.py:32
 msgid "External"
-msgstr "外部"
+msgstr "External"
 
 #: admin/consts.py:139 admin/plugins/error_redir.py:31
 msgid "Internal"
-msgstr "内部"
+msgstr "Internal"
 
 #: admin/consts.py:182 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:101 admin/plugins/request.py:31
 #: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
 msgid "Regular Expression"
-msgstr "正则表达式"
+msgstr "Regular Expression"
 
 #: admin/consts.py:183 admin/plugins/header.py:71 admin/plugins/header.py:86
 #: admin/plugins/proxy.py:190
 msgid "Header"
-msgstr "请求头"
+msgstr "Header"
 
 #: admin/consts.py:184
 msgid "File Exists"
-msgstr "文件存在"
+msgstr "File Exists"
 
 #: admin/consts.py:185
 msgid "HTTP Method"
-msgstr "HTTP 方法"
+msgstr "HTTP Method"
 
 #: admin/consts.py:186 admin/plugins/bind.py:76 admin/plugins/bind.py:129
 #, fuzzy
 msgid "Incoming IP/Port"
-msgstr "接收端口"
+msgstr "Incoming Port"
 
 #: admin/consts.py:187 admin/plugins/fullpath.py:66
 #: admin/plugins/fullpath.py:98
 #, fuzzy
 msgid "Full Path"
-msgstr "配置文件路径"
+msgstr "Path"
 
 #: admin/consts.py:188 admin/plugins/from.py:70
 #, fuzzy
 msgid "Connected from"
-msgstr "连接"
+msgstr "Connection"
 
 #: admin/consts.py:189
 msgid "URL Argument"
-msgstr "URL参数"
+msgstr ""
 
 #: admin/consts.py:190
 msgid "GeoIP"
@@ -2567,40 +2642,40 @@ msgstr "GeoIP"
 #: admin/consts.py:194
 #, fuzzy
 msgid "Match Nickname"
-msgstr "名称"
+msgstr "Nickname"
 
 #: admin/consts.py:195
 msgid "Wildcards"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/consts.py:196 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
 msgid "Regular Expressions"
-msgstr "正则表达式"
+msgstr "Regular Expressions"
 
 #: admin/consts.py:197
 #, fuzzy
 msgid "Server IP"
-msgstr "服务器 IP"
+msgstr "Server ID"
 
 #: admin/consts.py:201
 msgid "Not set"
-msgstr "未设置"
+msgstr "Not set"
 
 #: admin/consts.py:202
 msgid "Already expired on 1970"
-msgstr "1970已经过期"
+msgstr "Already expired on 1970"
 
 #: admin/consts.py:203
 msgid "Do not expire until 2038"
-msgstr "到2038都不会过期"
+msgstr "Do not expire until 2038"
 
 #: admin/consts.py:204
 msgid "Custom value"
-msgstr "自定义值"
+msgstr "Custom value"
 
 #: admin/consts.py:208
 msgid "No TLS/SSL"
-msgstr "无 TLS/SSL"
+msgstr "No TLS/SSL"
 
 #: admin/consts.py:209
 msgid "OpenSSL / libssl"
@@ -2608,32 +2683,32 @@ msgstr "OpenSSL / libssl"
 
 #: admin/consts.py:213 admin/util.py:38
 msgid "Off"
-msgstr "关闭"
+msgstr "Off"
 
 #: admin/consts.py:214
 msgid "Enhanced Virtual Hosting"
-msgstr "高级虚拟主机"
+msgstr "Enhanced Virtual Hosting"
 
 #: admin/consts.py:218
 msgid "Skip"
-msgstr "跳过"
+msgstr "Skip"
 
 #: admin/consts.py:220
 msgid "Require"
-msgstr "需要"
+msgstr "Require"
 
 #: admin/consts.py:225
 msgid "RRDtool graphs"
-msgstr "RRDtool 图形"
+msgstr ""
 
 #: admin/consts.py:229
 #, fuzzy
 msgid "Local time"
-msgstr "新主机别名"
+msgstr "New host name"
 
 #: admin/consts.py:230
 msgid "UTC: Coordinated Universal Time"
-msgstr "UTC:世界协调时间"
+msgstr ""
 
 #: admin/consts.py:234
 msgid "JSON"
@@ -2642,7 +2717,7 @@ msgstr ""
 #: admin/consts.py:235
 #, fuzzy
 msgid "Python"
-msgstr "配置文件路径"
+msgstr "Path"
 
 #: admin/consts.py:236 admin/wizards/List.py:115
 msgid "PHP"
@@ -2658,142 +2733,144 @@ msgstr ""
 
 #: admin/plugins/authlist.py:32
 msgid "At least one user/password pair should be configured."
-msgstr "至少需要设置一个用户/密码"
+msgstr ""
 
 #: admin/plugins/authlist.py:60
 #, fuzzy
 msgid "Authentication list"
-msgstr "认证"
+msgstr "Authentication"
 
 #: admin/plugins/authlist.py:63 admin/plugins/authlist.py:97
 msgid "Password"
-msgstr "密码"
+msgstr "Password"
 
 #: admin/plugins/authlist.py:105
 #, fuzzy
 msgid "Add New Pair"
-msgstr "增加一对"
+msgstr "Add new pair"
 
 #: admin/plugins/bind.py:64
+#, fuzzy
 msgid "IP (Port):"
-msgstr "IP地址(端口)"
+msgstr "Port"
 
 #: admin/plugins/bind.py:65
 #, fuzzy
 msgid "Port:"
-msgstr "端口"
+msgstr "Port"
 
 #: admin/plugins/bind.py:98 admin/util.py:41
 msgid "No"
-msgstr "否"
+msgstr "No"
 
 #: admin/plugins/bind.py:98 admin/util.py:41
 msgid "Yes"
-msgstr "是"
+msgstr "Yes"
 
 #: admin/plugins/bind.py:109
 msgid "Selected Ports"
-msgstr "已经选择的端口"
+msgstr "Selected Ports"
 
 #: admin/plugins/bind.py:131
 #, fuzzy
 msgid "Assign new IP/Port"
-msgstr "增加新的IP地址/端口"
+msgstr "Assign new port"
 
 #: admin/plugins/bind.py:156
 #, fuzzy
 msgid "Ports"
-msgstr "端口"
+msgstr "Port"
 
 #: admin/plugins/common.py:32
 msgid "Allow extra tailing paths"
-msgstr "允许额外附加路径"
+msgstr "Allow extra tailing paths"
 
 #: admin/plugins/common.py:33
 msgid "Allow to list directory contents"
-msgstr "允许列出文件夹内容"
+msgstr "Allow to list directory contents"
 
 #: admin/plugins/common.py:42
 msgid "Allow PathInfo"
-msgstr "允许显示路径信息"
+msgstr "Allow PathInfo"
 
 #: admin/plugins/common.py:43
 msgid "Allow Directory Listing"
-msgstr "允许目录列表"
+msgstr "Allow Directory Listing"
 
 #: admin/plugins/common.py:48
 msgid "Parsing"
-msgstr "解析"
+msgstr "Parsing"
 
 #: admin/plugins/custom_error.py:30
 msgid "HTTP Error that you be used to reply the request."
-msgstr "HTTP错误，您要对请求作出答复."
+msgstr "HTTP Error that you be used to reply the request."
 
 #: admin/plugins/custom_error.py:32
 msgid "HTTP Custom Error"
-msgstr "自定义的HTTP错误"
+msgstr "HTTP Custom Error"
 
 #: admin/plugins/custom_error.py:51
 #, fuzzy
 msgid "Custom Error"
-msgstr "自定义的HTTP错误"
+msgstr "HTTP Custom Error"
 
 #: admin/plugins/dbslayer.py:32
 msgid "MySQL balancing"
-msgstr "MySQL 负载均衡"
+msgstr "MySQL balancing"
 
 #: admin/plugins/dbslayer.py:33
 msgid "DB balancig recipe"
-msgstr "数据库负载均衡处理方法"
+msgstr "DB balancig recipe"
 
 #: admin/plugins/dbslayer.py:35
 msgid "Language from which the information will be consumed."
-msgstr "设置信息使用的语言."
+msgstr "Language from which the information will be consumed."
 
 #: admin/plugins/dbslayer.py:36
 msgid "User to access the database."
-msgstr "访问数据库的用户."
+msgstr "User to access the database."
 
 #: admin/plugins/dbslayer.py:37
 msgid "Password for the user accessing the database."
-msgstr "访问数据库的用户密码."
+msgstr "Password for the user accessing the database."
 
 #: admin/plugins/dbslayer.py:38
 #, fuzzy
 msgid "Database to connect to."
-msgstr "服务器端口."
+msgstr "Server port to connect to."
 
 #: admin/plugins/dbslayer.py:50 admin/plugins/mysql.py:75
 msgid "DB User"
-msgstr "数据库用户"
+msgstr "DB User"
 
 #: admin/plugins/dbslayer.py:51
 msgid "DB Password"
-msgstr "数据库用户密码"
+msgstr "DB Password"
 
 #: admin/plugins/dbslayer.py:52
 msgid "Data Base"
-msgstr "数据库名称"
+msgstr "Data Base"
 
 #: admin/plugins/dbslayer.py:57
 msgid "Serialization"
-msgstr "连载"
+msgstr "Serialization"
 
 #: admin/plugins/dbslayer.py:63 admin/plugins/fcgi.py:47
 #: admin/plugins/proxy.py:274 admin/plugins/scgi.py:47
 #: admin/plugins/uwsgi.py:47
 msgid "Balancer"
-msgstr "均衡器"
+msgstr "Balancer"
 
 #: admin/plugins/dbslayer.py:65
 #, fuzzy
 msgid "Data Base Balancing"
-msgstr "数据库负载均衡"
+msgstr "Data base balancing"
 
 #: admin/plugins/directory.py:27
 msgid ""
 "Public Web Directory to which content the configuration will be applied."
-msgstr "公共网页目录的内容将应用于配置."
+msgstr ""
+"Public Web Directory to which content the configuration will be applied."
 
 #: admin/plugins/directory.py:31 admin/wizards/alfresco.py:156
 #: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
@@ -2807,103 +2884,104 @@ msgstr "公共网页目录的内容将应用于配置."
 #: admin/wizards/uwsgi.py:224 admin/wizards/wordpress.py:193
 #: admin/wizards/zend.py:176
 msgid "Web Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/plugins/dirlist.py:34
 msgid "Choose the listing theme."
-msgstr "选个一个列出的主题."
+msgstr "Choose the listing theme."
 
 #: admin/plugins/dirlist.py:35
 msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
-msgstr "网站目录下的图标文件位于. 默认: <i>/icons</i>."
+msgstr ""
+"Web directory where the icon files are located. Default: <i>/icons</i>."
 
 #: admin/plugins/dirlist.py:36
 msgid "List of notice files to be inserted."
-msgstr "列出要插入的通知文件."
+msgstr "List of notice files to be inserted."
 
 #: admin/plugins/dirlist.py:37
 msgid "List of files that should not be listed."
-msgstr "列出不允许被列出的文件."
+msgstr "List of files that should not be listed."
 
 #: admin/plugins/dirlist.py:39
 #, fuzzy
 msgid "Only listing"
-msgstr "仅进行目录列表"
+msgstr "Only listing"
 
 #: admin/plugins/dirlist.py:49
 msgid "Show Size"
-msgstr "显示大小"
+msgstr "Show Size"
 
 #: admin/plugins/dirlist.py:49 admin/plugins/dirlist.py:50
 #: admin/plugins/dirlist.py:51 admin/plugins/dirlist.py:52
 #: admin/plugins/dirlist.py:53 admin/plugins/dirlist.py:54
 #: admin/plugins/redir.py:100
 msgid "Show"
-msgstr "显示"
+msgstr "Show"
 
 #: admin/plugins/dirlist.py:50
 msgid "Show Date"
-msgstr "显示日期"
+msgstr "Show Date"
 
 #: admin/plugins/dirlist.py:51
 msgid "Show User"
-msgstr "显示用户"
+msgstr "Show User"
 
 #: admin/plugins/dirlist.py:52
 msgid "Show Group"
-msgstr "显示用户组"
+msgstr "Show Group"
 
 #: admin/plugins/dirlist.py:53
 #, fuzzy
 msgid "Show Backup files"
-msgstr "隐藏文件"
+msgstr "Hidden files"
 
 #: admin/plugins/dirlist.py:54
 #, fuzzy
 msgid "Show Hidden files"
-msgstr "隐藏文件"
+msgstr "Hidden files"
 
 #: admin/plugins/dirlist.py:55
 msgid "Allow symbolic links"
-msgstr "允许符号链接"
+msgstr "Allow symbolic links"
 
 #: admin/plugins/dirlist.py:56
 #, fuzzy
 msgid "Redirect symbolic links"
-msgstr "允许符号链接"
+msgstr "Allow symbolic links"
 
 #: admin/plugins/dirlist.py:60
 msgid "Listing"
-msgstr "列出"
+msgstr "Listing"
 
 #: admin/plugins/dirlist.py:65
 msgid "Theme"
-msgstr "主题"
+msgstr "Theme"
 
 #: admin/plugins/dirlist.py:66
 msgid "Icons dir"
-msgstr "图标文件目录"
+msgstr "Icons dir"
 
 #: admin/plugins/dirlist.py:67
 msgid "Notice files"
-msgstr "通知文件"
+msgstr "Notice files"
 
 #: admin/plugins/dirlist.py:68
 msgid "Hidden files"
-msgstr "隐藏文件"
+msgstr "Hidden files"
 
 #: admin/plugins/dirlist.py:72
 msgid "Theming"
-msgstr "主题"
+msgstr "Theming"
 
 #: admin/plugins/empty_gif.py:29
 msgid "1x1 Empty GIF"
-msgstr "1x1 空白GIF文件"
+msgstr "1x1 Empty GIF"
 
 #: admin/plugins/error_redir.py:35
 #, fuzzy
 msgid "HTTP Error to match."
-msgstr "HTTP错误"
+msgstr "HTTP Error"
 
 #: admin/plugins/error_redir.py:36
 msgid "Target to access whenever the HTTP Error occurs."
@@ -2912,77 +2990,83 @@ msgstr ""
 #: admin/plugins/error_redir.py:37
 #, fuzzy
 msgid "Whether the redirection should be Internal or External."
-msgstr "定义客户端是否可见重定向信息."
+msgstr "Defines whether the redirection will be seen by the client."
 
 #: admin/plugins/error_redir.py:85
 msgid "Error"
-msgstr "错误"
+msgstr "Error"
 
 #: admin/plugins/error_redir.py:89
 #, fuzzy
 msgid "Add New Custom Error"
-msgstr "自定义的HTTP错误"
+msgstr "HTTP Custom Error"
 
 #: admin/plugins/evhost.py:29
 msgid ""
 "Check the dynamically generated Document Root, and use the general Document "
 "Root if it doesn't exist."
-msgstr "检查动态生成的文档根目录, 如果不存在则使用默认 文件根目录."
+msgstr ""
+"Check the dynamically generated Document Root, and use the general Document "
+"Root if it doesn't exist."
 
 #: admin/plugins/evhost.py:30
 msgid ""
 "The Document Root directory will be built dynamically. The following "
 "variables are accepted:<br/>"
-msgstr "根目录将是动态生成的. 以下变量将被接受 :<br/>"
+msgstr ""
+"The Document Root directory will be built dynamically. The following "
+"variables are accepted:<br/>"
 
 #: admin/plugins/evhost.py:41
 msgid "Dynamic Document Root"
-msgstr "动态根目录"
+msgstr "Dynamic Document Root"
 
 #: admin/plugins/evhost.py:42
 msgid "Check Document Root"
-msgstr "检查根目录"
+msgstr "Check Document Root"
 
 #: admin/plugins/exists.py:31
 msgid "Comma separated list of files. Rule applies if one exists."
-msgstr "逗号分隔的文件列表.已存在的规则将被应用."
+msgstr "Comma separated list of files. Rule applies if one exists."
 
 #: admin/plugins/exists.py:32
 msgid ""
 "Uses cache during file detection. Disable if directory contents change "
 "frequently. Enable otherwise."
-msgstr "启用文件高速缓存检测机制. 如果目录内容经常改变请禁用. 选择其他机制."
+msgstr ""
+"Uses cache during file detection. Disable if directory contents change "
+"frequently. Enable otherwise."
 
 #: admin/plugins/exists.py:33
 msgid "Match the request if any file exists."
-msgstr "检查符合要求的文件是否存在."
+msgstr "Match the request if any file exists."
 
 #: admin/plugins/exists.py:34
 msgid "Only match regular files. If unset directories will be matched as well."
-msgstr "只匹配常规文件,如果没有设置目录,则将匹配所有目录"
+msgstr ""
 
 #: admin/plugins/exists.py:35
 msgid "If a directory is request, check the index files inside it."
-msgstr "如果请求一个目录,将检查目录里面的index文件"
+msgstr ""
 
 #: admin/plugins/exists.py:37
 msgid "Match a specific list of files"
-msgstr "匹配文件清单"
+msgstr ""
 
 #: admin/plugins/exists.py:38 admin/plugins/exists.py:71
 #: admin/plugins/exists.py:109
 msgid "Match any file"
-msgstr "匹配任何文件"
+msgstr "Match any file"
 
 #: admin/plugins/exists.py:76 admin/plugins/exists.py:111
 #: admin/plugins/file.py:40
 msgid "Use I/O cache"
-msgstr "使用 I/O 缓存"
+msgstr "Use I/O cache"
 
 #: admin/plugins/exists.py:77 admin/plugins/exists.py:112
 #, fuzzy
 msgid "Only match files"
-msgstr "匹配任何文件"
+msgstr "Match any file"
 
 #: admin/plugins/exists.py:78 admin/plugins/exists.py:113
 msgid "If dir, check index files"
@@ -2991,96 +3075,95 @@ msgstr ""
 #: admin/plugins/exists.py:132
 #, fuzzy
 msgid "File exists"
-msgstr "文件存在"
+msgstr "File Exists"
 
 #: admin/plugins/exists.py:136
 #, fuzzy, python-format
 msgid "File %s exists"
-msgstr "文件存在"
+msgstr "File Exists"
 
 #: admin/plugins/exists.py:138
 msgid "File exists (never matched)"
-msgstr "文件存在（没有匹配）"
+msgstr ""
 
 #: admin/plugins/exists.py:140
 #, fuzzy, python-format
 msgid "File %(most)s or %(last)s exists"
-msgstr "文件存在"
+msgstr "File Exists"
 
 #: admin/plugins/extensions.py:30
 #, fuzzy
 msgid ""
 "Comma-separated list of File Extension to which the configuration will be "
 "applied."
-msgstr "应用文件扩展名列表的配置内容."
+msgstr ""
+"File extension list to which content the configuration will be applied."
 
 #: admin/plugins/fcgi.py:49
 #, fuzzy
 msgid "FastCGI Specific"
-msgstr "FastCGI 详细设置"
+msgstr "FastCGI specific"
 
 #: admin/plugins/file.py:31
 msgid "Enables an internal I/O cache that improves performance."
-msgstr "使内部的I/O缓存提高性能."
+msgstr "Enables an internal I/O cache that improves performance."
 
 #: admin/plugins/file.py:45
 msgid "File Sending"
-msgstr "文件传送"
+msgstr "File Sending"
 
 #: admin/plugins/from.py:30
-#, fuzzy
 msgid "IP or Subnet to check the connection origin against."
-msgstr "检查来源IP地址或子网"
+msgstr ""
 
 #: admin/plugins/from.py:95
-#, fuzzy
 msgid "IPs and Subnets"
-msgstr "IP地址或子网"
+msgstr ""
 
 #: admin/plugins/from.py:102
-#, fuzzy
 msgid "New IP or Subnet"
-msgstr "IP地址或子网"
+msgstr ""
 
 #: admin/plugins/from.py:106
 #, fuzzy
 msgid "Add another entry"
-msgstr "增加一对"
+msgstr "Add new pair"
 
 #: admin/plugins/from.py:116
 #, fuzzy
 msgid "From"
-msgstr "格式"
+msgstr "Format"
 
 #: admin/plugins/fullpath.py:30
 #, fuzzy
 msgid ""
 "Full path request to which content the configuration will be applied. (Eg: /"
 "favicon.ico)"
-msgstr "公共网页目录的内容将应用于配置."
+msgstr ""
+"Public Web Directory to which content the configuration will be applied."
 
 #: admin/plugins/fullpath.py:91
 #, fuzzy
 msgid "Full Web Paths"
-msgstr "配置文件路径"
+msgstr "Path"
 
 #: admin/plugins/fullpath.py:102
 #, fuzzy
 msgid "Add another path"
-msgstr "增加一对"
+msgstr "Add new pair"
 
 #: admin/plugins/fullpath.py:113 admin/plugins/fullpath.py:120
 #, fuzzy
 msgid "Path"
-msgstr "路径"
+msgstr "Paths"
 
 #: admin/plugins/geoip.py:32
 msgid "Add the initial country. It's possible to add more later on."
-msgstr "增加初始国家，可以增加更多."
+msgstr "Add the initial country. It's possible to add more later on."
 
 #: admin/plugins/geoip.py:33
 msgid "Pick an additional country to add to the country list."
-msgstr "增加一个国家到国家名单."
+msgstr "Pick an additional country to add to the country list."
 
 #: admin/plugins/geoip.py:34
 #, python-format
@@ -3088,569 +3171,578 @@ msgid ""
 "List of countries from the client IPs. It must use the\n"
 "<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation."
 msgstr ""
-"国家IP地址名单. 必须使用\n"
-"<a target=\"_blank\" href=\"%s\">ISO 3166</a> 国家符号."
+"List of countries from the client IPs. It must use the\n"
+"<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation."
 
 #: admin/plugins/geoip.py:78
 msgid "Select all"
-msgstr "选择所有"
+msgstr ""
 
 #: admin/plugins/geoip.py:79
 #, fuzzy
 msgid "Select none"
-msgstr "已经选择的端口"
+msgstr "Selected Ports"
 
 #: admin/plugins/header.py:30
 msgid "Header against which the regular expression will be evaluated."
-msgstr "符合正则表达式的将被优先应用."
+msgstr "Header against which the regular expression will be evaluated."
 
 #: admin/plugins/header.py:31
 msgid "Regular expression."
-msgstr "正则表达式."
+msgstr "Regular expression."
 
 #: admin/plugins/htdigest.py:32
 msgid "Full path to the Htdigest formated password file."
-msgstr "Htdigest格式密码文件的完整路径."
+msgstr "Full path to the Htdigest formated password file."
 
 #: admin/plugins/htdigest.py:41 admin/plugins/htpasswd.py:40
 #: admin/plugins/plain.py:40
 msgid "Password File"
-msgstr "密码文件"
+msgstr "Password File"
 
 #: admin/plugins/htdigest.py:46
 #, fuzzy
 msgid "Htdigest Password File"
-msgstr "密码文件"
+msgstr "Password File"
 
 #: admin/plugins/htpasswd.py:32
 msgid "Full path to the Htpasswd formated password file."
-msgstr "Htpasswd格式密码文件的完整路径."
+msgstr "Full path to the Htpasswd formated password file."
 
 #: admin/plugins/htpasswd.py:45
 #, fuzzy
 msgid "Htpasswd Password File"
-msgstr "密码文件"
+msgstr "Password File"
 
 #: admin/plugins/ldap.py:30
 msgid "LDAP"
-msgstr "LDAP目录服务"
+msgstr "LDAP"
 
 #: admin/plugins/ldap.py:32
 msgid "LDAP server IP address."
-msgstr "LDAP目录服务器地址."
+msgstr "LDAP server IP address."
 
 #: admin/plugins/ldap.py:33
 #, fuzzy
 msgid "LDAP server port to connect to. Default: 389"
-msgstr "LDAP目录服务器连接端口. 默认值:389"
+msgstr "LDAP server port to connect to. Defaults to 389"
 
 #: admin/plugins/ldap.py:34
 msgid "Domain sent during the LDAP authentication operation. Optional."
-msgstr "域间发送LDAP认证模式. 选择."
+msgstr "Domain sent during the LDAP authentication operation. Optional."
 
 #: admin/plugins/ldap.py:35
 msgid "Password to authenticate in the LDAP server."
-msgstr "LDAP服务器的验证密码."
+msgstr "Password to authenticate in the LDAP server."
 
 #: admin/plugins/ldap.py:36
 msgid "Base domain for the web server authentications."
-msgstr "相应的域的Web服务器身份验证."
+msgstr "Base domain for the web server authentications."
 
 #: admin/plugins/ldap.py:37
 msgid "Object filter. It can be empty."
-msgstr "对象的过滤器。可以为空."
+msgstr "Object filter. It can be empty."
 
 #: admin/plugins/ldap.py:38
 msgid "Enable to use secure connections between the web and LDAP servers."
-msgstr "启用使用安全链接WEB服务器和LDAP服务器."
+msgstr "Enable to use secure connections between the web and LDAP servers."
 
 #: admin/plugins/ldap.py:39
 msgid "CA File for the TLS connections."
-msgstr "TLS 链接使用的CA 文件."
+msgstr "CA File for the TLS connections."
 
 #: admin/plugins/ldap.py:47
 #, fuzzy
 msgid "Server"
-msgstr "服务器 ID"
+msgstr "Server ID"
 
 #: admin/plugins/ldap.py:49
 msgid "Bind Domain"
-msgstr "绑定域名"
+msgstr "Bind Domain"
 
 #: admin/plugins/ldap.py:50
 msgid "Bind Password"
-msgstr "绑定密码"
+msgstr "Bind Password"
 
 #: admin/plugins/ldap.py:51
 msgid "Base Domain"
-msgstr "相应的域名"
+msgstr "Base Domain"
 
 #: admin/plugins/ldap.py:52
 msgid "Filter"
-msgstr "过滤器"
+msgstr "Filter"
 
 #: admin/plugins/ldap.py:53
 msgid "Use TLS"
-msgstr "使用 TLS"
+msgstr "Use TLS"
 
 #: admin/plugins/ldap.py:54
 msgid "CA File"
-msgstr "CA 文件"
+msgstr "CA File"
 
 #: admin/plugins/ldap.py:59
 #, fuzzy
 msgid "LDAP Connection"
-msgstr "LDAP 链接"
+msgstr "LDAP connection"
 
 #: admin/plugins/method.py:66
 msgid "The HTTP method that should match this rule."
-msgstr "HTTP 方法将被此规则验证."
+msgstr "The HTTP method that should match this rule."
 
 #: admin/plugins/mysql.py:32
 msgid "MySQL server IP address."
-msgstr "MySQL 服务器IP地址."
+msgstr "MySQL server IP address."
 
 #: admin/plugins/mysql.py:33
 msgid "Server port to connect to."
-msgstr "服务器端口."
+msgstr "Server port to connect to."
 
 #: admin/plugins/mysql.py:34
 msgid "Full path of Unix socket to communicate with the data base."
-msgstr "数据库UNIX套接字连接完整路径."
+msgstr "Full path of Unix socket to communicate with the data base."
 
 #: admin/plugins/mysql.py:35
 msgid "User name for connecting to the database."
-msgstr "数据库用户名."
+msgstr "User name for connecting to the database."
 
 #: admin/plugins/mysql.py:36
 msgid "Password for connecting to the database."
-msgstr "数据库用户密码."
+msgstr "Password for connecting to the database."
 
 #: admin/plugins/mysql.py:37
 msgid "Database name containing the user/password pair list."
-msgstr "数据库名称及相应用户/密码名单."
+msgstr "Database name containing the user/password pair list."
 
 #: admin/plugins/mysql.py:38
 msgid "SQL command to execute. ${user} is replaced with the user name."
-msgstr "SQL命令执行. ${user} 将替代此用户."
+msgstr "SQL command to execute. ${user} is replaced with the user name."
 
 #: admin/plugins/mysql.py:39
-#, fuzzy
 msgid ""
 "Choose an encryption type for the password. Only suitable for the \"Basic\" "
 "authentication mechanism."
-msgstr "使用MD5密码加密. 只适合\"Basic\" 认证 机制."
+msgstr ""
 
 #: admin/plugins/mysql.py:74
 msgid "Unix Socket"
-msgstr "Unix 套接字"
+msgstr "Unix Socket"
 
 #: admin/plugins/mysql.py:76
 #, fuzzy
 msgid "BD Password"
-msgstr "数据库用户密码"
+msgstr "DB Password"
 
 #: admin/plugins/mysql.py:77
 msgid "Database"
-msgstr "数据库"
+msgstr "Database"
 
 #: admin/plugins/mysql.py:78
 msgid "SQL Query"
-msgstr "SQL 查询"
+msgstr "SQL Query"
 
 #: admin/plugins/mysql.py:79
 #, fuzzy
 msgid "Password Hash"
-msgstr "密码加密"
+msgstr "Password"
 
 #: admin/plugins/mysql.py:84
 #, fuzzy
 msgid "MySQL Connection"
-msgstr "MySQL 连接"
+msgstr "MySQL connection"
 
 #: admin/plugins/plain.py:30
 msgid "Plain text"
-msgstr "纯文字"
+msgstr "Plain text"
 
 #: admin/plugins/plain.py:32
 msgid "Full path to the plain text password file."
-msgstr "纯文字密码文件的完整路径."
+msgstr "Full path to the plain text password file."
 
 #: admin/plugins/plain.py:45
 #, fuzzy
 msgid "Plain Password File"
-msgstr "纯文字密码文件"
+msgstr "Plain password file"
 
 #: admin/plugins/post_report.py:30 admin/plugins/post_track.py:25
 #, fuzzy
 msgid "POST Report"
-msgstr "报告"
+msgstr "Report"
 
 #: admin/plugins/post_report.py:47
 #, fuzzy
 msgid "Target language"
-msgstr "可用的语言"
+msgstr "Available languages"
 
 #: admin/plugins/proxy.py:33
 msgid "Reverse Proxy"
-msgstr "反向代理"
+msgstr "Reverse Proxy"
 
 #: admin/plugins/proxy.py:35
 #, fuzzy
 msgid ""
 "Maximum number of connections per server that the proxy can try to keep "
 "opened."
-msgstr "服务器保持开放的最大代理请求数量 "
+msgstr ""
+"Maximum number of connection per server that the proxy can try to keep "
+"opened."
 
 #: admin/plugins/proxy.py:36
 msgid ""
 "Allow the server to use Keep-alive connections with the back-end servers."
-msgstr "允许服务器使用活动连接到后台程序."
+msgstr ""
+"Allow the server to use Keep-alive connections with the back-end servers."
 
 #: admin/plugins/proxy.py:37
 #, fuzzy
 msgid ""
 "Preserve the original \"Host:\" header sent by the client. (Default: No)"
-msgstr "保留原始\"Host:\" 客户端请求. (Default No)"
+msgstr ""
+"Preserve the original \"Host:\" header sent by the client. (Default No)"
 
 #: admin/plugins/proxy.py:38
 #, fuzzy
 msgid ""
 "Preserve the \"Server:\" header sent by the back-end server. (Default: No)"
-msgstr "保留原始\"Host:\" 客户端请求. (Default No)"
+msgstr ""
+"Preserve the original \"Host:\" header sent by the client. (Default No)"
 
 #: admin/plugins/proxy.py:91 admin/plugins/proxy.py:121
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:102
 msgid "Substitution"
-msgstr "替换"
+msgstr "Substitution"
 
 #: admin/plugins/proxy.py:121
 msgid "Add RegEx"
-msgstr "新增正则表达式"
+msgstr "Add RegEx"
 
 #: admin/plugins/proxy.py:170
 #, fuzzy
 msgid "Add Header Entry"
-msgstr "增加一对"
+msgstr "Add new pair"
 
 #: admin/plugins/proxy.py:217
 msgid "Hide Header"
-msgstr "隐藏请求头"
+msgstr "Hide Header"
 
 #: admin/plugins/proxy.py:237
 msgid "Allow Keepalive"
-msgstr "允许活动连接"
+msgstr "Allow Keepalive"
 
 #: admin/plugins/proxy.py:238
 #, fuzzy
 msgid "Preserve Host Header"
-msgstr "维护主机头"
+msgstr "Preserve Host header"
 
 #: admin/plugins/proxy.py:238 admin/plugins/proxy.py:239
 #, fuzzy
 msgid "Preserve"
-msgstr "LDAP 服务器"
+msgstr "LDAP server"
 
 #: admin/plugins/proxy.py:239
 #, fuzzy
 msgid "Preserve Server Header"
-msgstr "维护主机头"
+msgstr "Preserve Host header"
 
 #: admin/plugins/proxy.py:244
 msgid "Reverse Proxy Settings"
-msgstr "反向代理设置"
+msgstr "Reverse Proxy Settings"
 
 #: admin/plugins/proxy.py:248
 msgid "Request"
-msgstr "请求"
+msgstr "Request"
 
 #: admin/plugins/proxy.py:250 admin/plugins/proxy.py:262
 #, fuzzy
 msgid "URL Rewriting"
-msgstr "URL 重写"
+msgstr "URL Rewriting"
 
 #: admin/plugins/proxy.py:253 admin/plugins/proxy.py:265
 msgid "Header Addition"
-msgstr "头部附加文件"
+msgstr "Header Addition"
 
 #: admin/plugins/proxy.py:256 admin/plugins/proxy.py:268
 msgid "Hide Headers"
-msgstr "隐藏请求头"
+msgstr "Hide Headers"
 
 #: admin/plugins/proxy.py:260
 #, fuzzy
 msgid "Reply"
-msgstr "回复"
+msgstr "Realm"
 
 #: admin/plugins/proxy.py:276
 msgid "Back-end Servers"
-msgstr "服务器后台程序"
+msgstr "Back-end Servers"
 
 #: admin/plugins/redir.py:31
 msgid "Defines whether the redirection will be seen by the client."
-msgstr "定义客户端是否可见重定向信息."
+msgstr "Defines whether the redirection will be seen by the client."
 
 #: admin/plugins/redir.py:32
 msgid ""
 "Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc."
 "perl.org/perlre.html\">Reference</a>."
 msgstr ""
-"正则表达式. 请访问 <a target=\"_blank\" href=\"http://perldoc.perl.org/"
-"perlre.html\">perl参考</a>."
+"Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc."
+"perl.org/perlre.html\">Reference</a>."
 
 #: admin/plugins/redir.py:33
 msgid "Target address. It can use Regular Expression substitution sub-strings."
-msgstr "目标地址。可以使用正则表达式替换子字符串."
+msgstr ""
+"Target address. It can use Regular Expression substitution sub-strings."
 
 #: admin/plugins/redir.py:34
 #, fuzzy
 msgid "At least one Regular Expression should be defined."
-msgstr "至少需要定一个正则表达式规则."
+msgstr "At least one Regular Expression string must be defined."
 
 #: admin/plugins/redir.py:36
 msgid "Redirections"
-msgstr "重定向"
+msgstr "Redirections"
 
 #: admin/plugins/redir.py:68
 #, fuzzy
 msgid "Rule list"
-msgstr "规则列表"
+msgstr "Rule list"
 
 #: admin/plugins/redir.py:113
 #, fuzzy
 msgid "Add New Regular Expression"
-msgstr "新的正则表达式"
+msgstr "New Regular Expression"
 
 #: admin/plugins/redir.py:118
 #, fuzzy
 msgid "Add New RegEx…"
-msgstr "新增"
+msgstr "Add new"
 
 #: admin/plugins/rehost.py:29
 msgid ""
 "Regular Expression against which the hosts be Host name will be compared."
-msgstr "正则表达式将对主机和主机名之间进行比较."
+msgstr ""
+"Regular Expression against which the hosts be Host name will be compared."
 
 #: admin/plugins/rehost.py:30
 msgid "At least one Regular Expression string must be defined."
-msgstr "至少需要定一个正则表达式规则."
+msgstr "At least one Regular Expression string must be defined."
 
 #: admin/plugins/rehost.py:68 admin/plugins/rehost.py:92
 msgid "New Regular Expression"
-msgstr "新的正则表达式"
+msgstr "New Regular Expression"
 
 #: admin/plugins/rehost.py:71
 #, fuzzy
 msgid "Add New Entry"
-msgstr "增加一对"
+msgstr "Add new pair"
 
 #: admin/plugins/request.py:27
 msgid "Regular expression against which the request will be executed."
-msgstr "正在表达式将决定哪些请求将被执行."
+msgstr "Regular expression against which the request will be executed."
 
 #: admin/plugins/rrd.py:30
 msgid "Directory where the RRDtool databases should be written."
-msgstr "RRDtool数据库目录必须可写"
+msgstr ""
 
 #: admin/plugins/rrd.py:31
 msgid ""
 "Path to the rrdtool binary. By default the server will look in the PATH."
-msgstr "RRDtool 可执行文件路径.默认情况下,服务器"
+msgstr ""
 
 #: admin/plugins/rrd.py:40
 #, fuzzy
 msgid "Round Robin Database directory"
-msgstr "RRD 数据库目录"
+msgstr "Path is not a directory"
 
 #: admin/plugins/rrd.py:41
 #, fuzzy
 msgid "Custom rrdtool binary"
-msgstr "自定义重定向"
+msgstr "Custom redirections"
 
 #: admin/plugins/scgi.py:49
 #, fuzzy
 msgid "SCGI Specific"
-msgstr "SCGI 详细"
+msgstr "SCGI specific"
 
 #: admin/plugins/secdownload.py:31
 msgid "Hidden Download"
-msgstr "隐藏下载"
+msgstr "Hidden Download"
 
 #: admin/plugins/secdownload.py:33
 msgid "Shared secret between the server and the script."
-msgstr "服务器和脚本引擎见共享安全模式."
+msgstr "Shared secret between the server and the script."
 
 #: admin/plugins/secdownload.py:34
 msgid "How long the download will last accessible - in seconds. Default: 60."
-msgstr "下载开放时间 - 单位：秒. 默认值: 60."
+msgstr "How long the download will last accessible - in seconds. Default: 60."
 
 #: admin/plugins/secdownload.py:43
 #, fuzzy
 msgid "Secret"
-msgstr "保密"
+msgstr "Secret"
 
 #: admin/plugins/secdownload.py:50
 #, fuzzy
 msgid "Covering Parameters"
-msgstr "覆盖参数"
+msgstr "Covering parameters"
 
 #: admin/plugins/server_info.py:29 admin/plugins/server_info.py:32
 msgid "Server Information"
-msgstr "服务器信息"
+msgstr "Server Information"
 
 #: admin/plugins/server_info.py:33
 msgid "Only version information"
-msgstr "服务器版本号"
+msgstr "Only version information"
 
 #: admin/plugins/server_info.py:34
 msgid "Server Information + Connections"
-msgstr "服务器信息和连接数"
+msgstr "Server Information + Connections"
 
 #: admin/plugins/server_info.py:37
 msgid "Which information should be shown."
-msgstr "要显示的信息."
+msgstr "Which information should be shown."
 
 #: admin/plugins/server_info.py:47
 msgid "Show Information"
-msgstr "显示服务器信息"
+msgstr "Show Information"
 
 #: admin/plugins/server_info.py:52
 #, fuzzy
 msgid "Privacy Settings"
-msgstr "隐私设置"
+msgstr "Privacy settings"
 
 #: admin/plugins/streaming.py:33
 msgid "Figure the bit rate of the media file, and limit the bandwidth to it."
-msgstr "数字比特率的媒体文件，并限制它的带宽."
+msgstr "Figure the bit rate of the media file, and limit the bandwidth to it."
 
 #: admin/plugins/streaming.py:34
 msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
-msgstr "动态增加带宽限制因子. 默认值: 0.1"
+msgstr "Factor by which the bandwidth limit will be increased. Default: 0.1"
 
 #: admin/plugins/streaming.py:35
 msgid ""
 "Number of seconds to stream before setting the bandwidth limit. Default: 5."
-msgstr "不限制带宽值钱的时间（秒），默认值: 5."
+msgstr ""
+"Number of seconds to stream before setting the bandwidth limit. Default: 5."
 
 #: admin/plugins/streaming.py:46
 msgid "Auto Rate"
-msgstr "自动"
+msgstr "Auto Rate"
 
 #: admin/plugins/streaming.py:47
 msgid "Speedup Factor"
-msgstr "加速"
+msgstr "Speedup Factor"
 
 #: admin/plugins/streaming.py:48
 msgid "Initial Boost"
-msgstr "开始升高"
+msgstr "Initial Boost"
 
 #: admin/plugins/target_ip.py:31
 msgid ""
 "IP or Subnet of the NIC that accepted the request. Example: ::1, or "
 "10.0.0.0/8"
-msgstr "绑定接受请求的网卡的IP地址或子网,例如: ::1 或 10.0.0.0/8"
+msgstr ""
 
 #: admin/plugins/target_ip.py:32
 #, fuzzy
 msgid "At least one IP or Subnet entry must be defined."
-msgstr "至少有一个通配符字符串必须定义."
+msgstr "At least one wildcard string must be defined."
 
 #: admin/plugins/target_ip.py:61
 msgid "IP or Subnet"
-msgstr "IP地址或子网"
+msgstr ""
 
 #: admin/plugins/target_ip.py:76
 msgid "New IP/Subnet"
-msgstr "新的IP地址或子网"
+msgstr ""
 
 #: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
 #, fuzzy
 msgid "Add new entry"
-msgstr "增加一对"
+msgstr "Add new pair"
 
 #: admin/plugins/target_ip.py:100
-#, fuzzy
 msgid "Accepted Server IP Addresses and Subnets"
-msgstr "应用服务器IP地址和子网"
+msgstr ""
 
 #: admin/plugins/url_arg.py:30
 msgid "Argument name"
-msgstr "参数名称"
+msgstr ""
 
 #: admin/plugins/url_arg.py:31
 #, fuzzy
 msgid "Regular Expression for the match"
-msgstr "正则表达式"
+msgstr "Regular Expression"
 
 #: admin/plugins/url_arg.py:33
+#, fuzzy
 msgid "Match a specific argument"
-msgstr "匹配一个具体参数"
+msgstr "Match any file"
 
 #: admin/plugins/url_arg.py:34
 #, fuzzy
 msgid "Match any argument"
-msgstr "匹配任何文件"
+msgstr "Match any file"
 
 #: admin/plugins/url_arg.py:73 admin/plugins/url_arg.py:91
 #, fuzzy
 msgid "Match type"
-msgstr "匹配任何文件"
+msgstr "Match any file"
 
 #: admin/plugins/url_arg.py:74 admin/plugins/url_arg.py:93
 msgid "Argument"
-msgstr "参数"
+msgstr ""
 
 #: admin/plugins/uwsgi.py:49
 #, fuzzy
 msgid "UWSGI Specific"
-msgstr "SCGI 详细"
+msgstr "SCGI specific"
 
 #: admin/plugins/wildcard.py:29
 msgid ""
 "Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example."
 "com"
-msgstr "设置域名. 允许匹配字符 (* and ?) . 例: *.example.com"
+msgstr ""
+"Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example."
+"com"
 
 #: admin/plugins/wildcard.py:30
 msgid "At least one wildcard string must be defined."
-msgstr "至少有一个通配符字符串必须定义."
+msgstr "At least one wildcard string must be defined."
 
 #: admin/plugins/wildcard.py:52
 msgid "Domain pattern"
-msgstr "域名模式"
+msgstr "Domain pattern"
 
 #: admin/plugins/wildcard.py:67
 msgid "New host name"
-msgstr "新主机别名"
+msgstr "New host name"
 
 #: admin/plugins/wildcard.py:91
 #, fuzzy
 msgid "Accepted Domains"
-msgstr "相应的域名"
+msgstr "Base Domain"
 
 #: admin/server.py:62
 #, fuzzy, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
-msgstr "服务器%s运行中.. 进程号=%d 端口=%d"
+msgstr "Server %s running.. PID=%d Port=%d"
 
 #: admin/server.py:64
 #, fuzzy, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
-msgstr "服务器%s运行中.. 进程号=%d 端口=%d"
+msgstr "Server %s running.. PID=%d Port=%d"
 
 #: admin/server.py:132
 msgid "Incorrect parameters: PORT CONFIG_FILE"
-msgstr "不正确的参数: PORT CONFIG_FILE"
+msgstr "Incorrect parameters: PORT CONFIG_FILE"
 
 #: admin/util.py:35
 #, fuzzy
 msgid "Inactive"
-msgstr "激活"
+msgstr "Deflate"
 
 #: admin/util.py:35
 msgid "Active"
-msgstr "激活"
+msgstr ""
 
 #: admin/util.py:38
 msgid "On"
@@ -3658,24 +3750,24 @@ msgstr ""
 
 #: admin/validations.py:19
 msgid "Malformed number"
-msgstr "不正确数字"
+msgstr "Malformed number"
 
 #: admin/validations.py:25
 msgid "Malformed float number"
-msgstr "不正确浮点数"
+msgstr "Malformed float number"
 
 #: admin/validations.py:30
 msgid "Must be greater than zero"
-msgstr "必须大于零"
+msgstr "Must be greater than zero"
 
 #: admin/validations.py:42
 msgid "Port must be a number"
-msgstr "端口号必须为"
+msgstr "Port must be a number"
 
 #: admin/validations.py:44
 #, fuzzy
 msgid "Out of range (1 to 65535)"
-msgstr "超出范围 (1-65535)"
+msgstr "Out of the range (1 to 65535)"
 
 #: admin/validations.py:52
 msgid "Port already in use"
@@ -3683,85 +3775,85 @@ msgstr ""
 
 #: admin/validations.py:65
 msgid "Malformed path"
-msgstr "不正确的路径"
+msgstr "Malformed path"
 
 #: admin/validations.py:96
 #, fuzzy
 msgid "It is not executable"
-msgstr "路径不是一个普通文件"
+msgstr "Path is not a regular file"
 
 #: admin/validations.py:102 admin/validations.py:177
 msgid "Path is not a regular file"
-msgstr "路径不是一个普通文件"
+msgstr "Path is not a regular file"
 
 #: admin/validations.py:120
 msgid "It cannot be negative"
-msgstr "不能为负值"
+msgstr "It cannot be negative"
 
 #: admin/validations.py:136
 msgid "Malformed IPv4"
-msgstr "不正确的IPv4地址"
+msgstr "Malformed IPv4"
 
 #: admin/validations.py:141
 msgid "Malformed IPv4 entry"
-msgstr "输入的IPv4地址不正确"
+msgstr "Malformed IPv4 entry"
 
 #: admin/validations.py:143
 msgid "IPv4 entry out of range"
-msgstr "IPv4地址超出范围"
+msgstr "IPv4 entry out of range"
 
 #: admin/validations.py:151
 msgid "Malformed IPv6"
-msgstr "错误的IPv6地址"
+msgstr "Malformed IPv6"
 
 #: admin/validations.py:162 admin/validations.py:174
 msgid "Path does not exist"
-msgstr "路径不存在"
+msgstr "Path does not exist"
 
 #: admin/validations.py:165
 msgid "Path is not a directory"
-msgstr "路径不是目录"
+msgstr "Path is not a directory"
 
 #: admin/validations.py:193
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
-msgstr "无效字符. 允许: letters, digits, _, - and ."
+msgstr "Invalid char. Accepts: letters, digits, _, - and ."
 
 #: admin/validations.py:216
 msgid "Neither a number or an IPv4"
-msgstr "不是数字或IPV4地址"
+msgstr "Neither a number or an IPv4"
 
 #: admin/validations.py:227
 msgid "Invalid mask"
-msgstr "无效掩码"
+msgstr "Invalid mask"
 
 #: admin/validations.py:251
 msgid "Malformed entry (netmask)"
-msgstr "无效输入(子网掩码)"
+msgstr "Malformed entry (netmask)"
 
 #: admin/validations.py:276
 msgid "Cannot be empty"
-msgstr "不能为空"
+msgstr "Cannot be empty"
 
 #: admin/validations.py:281
 msgid "Forced failure"
-msgstr "运行失败"
+msgstr "Forced failure"
 
 #: admin/validations.py:289
 msgid "http:// missing"
-msgstr "http:// 未输入"
+msgstr "http:// missing"
 
 #: admin/validations.py:326
 msgid "Time value contain invalid values"
-msgstr "时间值包含无效值"
+msgstr "Time value contain invalid values"
 
 #: admin/validations.py:329
 msgid "Malformed time"
-msgstr "错误的时间"
+msgstr "Malformed time"
 
 #: admin/validations.py:337
 #, fuzzy
 msgid "Virtual Server nick name is already being used."
-msgstr "虚拟主机名称正在被使用中"
+msgstr "Virtual Server nickname"
 
 #: admin/validations.py:344 admin/validations.py:354 admin/validations.py:371
 msgid "Already in use"
@@ -3778,7 +3870,7 @@ msgstr ""
 #: admin/wizards/List.py:34
 #, fuzzy
 msgid "Drupal"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/List.py:35
 msgid ""
@@ -3798,7 +3890,7 @@ msgstr ""
 #: admin/wizards/List.py:42
 #, fuzzy
 msgid "Joomla"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/List.py:43
 msgid "Build Web sites and powerful online applications"
@@ -3807,7 +3899,7 @@ msgstr ""
 #: admin/wizards/List.py:46
 #, fuzzy
 msgid "MoinMoin Wiki"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/List.py:47
 msgid ""
@@ -3827,7 +3919,7 @@ msgstr ""
 #: admin/wizards/List.py:54
 #, fuzzy
 msgid "Concrete 5"
-msgstr "新建"
+msgstr "Create"
 
 #: admin/wizards/List.py:55
 msgid "The CMS made for Marketing, but built for Geeks."
@@ -3836,17 +3928,17 @@ msgstr ""
 #: admin/wizards/List.py:61
 #, fuzzy
 msgid "Application Servers"
-msgstr "应用程序服务器"
+msgstr "Application Server"
 
 #: admin/wizards/List.py:62
 #, fuzzy
 msgid "General Purpose Application Servers"
-msgstr "应用程序服务器"
+msgstr "Application Server"
 
 #: admin/wizards/List.py:65
 #, fuzzy
 msgid "Alfresco"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/List.py:66 admin/wizards/List.py:70
 msgid "Enterprise web platform for building business solutions."
@@ -3855,7 +3947,7 @@ msgstr ""
 #: admin/wizards/List.py:69
 #, fuzzy
 msgid "Liferay"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/List.py:73
 msgid "Glassfish"
@@ -3869,7 +3961,7 @@ msgstr ""
 #: admin/wizards/List.py:77
 #, fuzzy
 msgid "Adobe ColdFusion"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/List.py:78
 msgid "Rapidly build Internet applications for the enterprise."
@@ -3882,12 +3974,12 @@ msgstr ""
 #: admin/wizards/List.py:85
 #, fuzzy
 msgid "Web Development Platforms"
-msgstr "服务器开发"
+msgstr "Server Development"
 
 #: admin/wizards/List.py:88
 #, fuzzy
 msgid "Django"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/List.py:89
 msgid "The Web framework for perfectionists (with deadlines)."
@@ -3924,7 +4016,7 @@ msgstr ""
 #: admin/wizards/List.py:111
 #, fuzzy
 msgid "Languages"
-msgstr "语言"
+msgstr "Language"
 
 #: admin/wizards/List.py:112
 msgid "Development Languages and Platforms"
@@ -3945,12 +4037,12 @@ msgstr ""
 #: admin/wizards/List.py:126
 #, fuzzy
 msgid "Web Applications"
-msgstr "应用程序服务器"
+msgstr "Application Server"
 
 #: admin/wizards/List.py:127
 #, fuzzy
 msgid "General Purpose Applications"
-msgstr "一般配置"
+msgstr "General Configuration"
 
 #: admin/wizards/List.py:130
 msgid "phpMyAdmin"
@@ -3972,7 +4064,7 @@ msgstr ""
 #: admin/wizards/List.py:138
 #, fuzzy
 msgid "Moodle"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/List.py:139
 msgid "Course Management System / Virtual Learning Environment."
@@ -3997,7 +4089,7 @@ msgstr ""
 #: admin/wizards/List.py:150
 #, fuzzy
 msgid "rTorrent"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/List.py:151
 msgid ""
@@ -4015,7 +4107,7 @@ msgstr ""
 #: admin/wizards/List.py:161
 #, fuzzy
 msgid "Virtual Server Redirection"
-msgstr "虚拟主机根目录."
+msgstr "Virtual Server root directory."
 
 #: admin/wizards/List.py:162
 msgid ""
@@ -4033,7 +4125,7 @@ msgstr ""
 #: admin/wizards/List.py:169
 #, fuzzy
 msgid "Directory-listing Icons"
-msgstr "允许目录列表"
+msgstr "Allow Directory Listing"
 
 #: admin/wizards/List.py:170
 msgid ""
@@ -4051,7 +4143,7 @@ msgstr ""
 #: admin/wizards/List.py:177
 #, fuzzy
 msgid "Media file streaming"
-msgstr "音频/视频流"
+msgstr "Audio/Video streaming"
 
 #: admin/wizards/List.py:178
 msgid ""
@@ -4061,7 +4153,7 @@ msgstr ""
 #: admin/wizards/alfresco.py:37
 #, fuzzy
 msgid "Welcome to the Alfresco Wizard"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/alfresco.py:38
 msgid ""
@@ -4077,21 +4169,20 @@ msgid ""
 msgstr ""
 
 #: admin/wizards/alfresco.py:41
+#, fuzzy
 msgid "Alfresco Project"
-msgstr "Alfresco项目"
+msgstr "Redirection"
 
 #: admin/wizards/alfresco.py:42
-#, fuzzy
 msgid ""
 "Hostname or IP of the server running Alfresco. You can add more later to "
 "have the load balanced."
-msgstr "服务器主机名或IP地址"
+msgstr ""
 
 #: admin/wizards/alfresco.py:43 admin/wizards/glassfish.py:43
 #: admin/wizards/liferay.py:43
-#, fuzzy
 msgid "Port running the service in said host. (Example: 8080)"
-msgstr "运行服务的主机端口"
+msgstr ""
 
 #: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
@@ -4105,7 +4196,7 @@ msgstr "运行服务的主机端口"
 #: admin/wizards/zend.py:47
 #, fuzzy
 msgid "Host name of the virtual server that is about to be created."
-msgstr "虚拟主机名称."
+msgstr "Nickname for the virtual server."
 
 #: admin/wizards/alfresco.py:46 admin/wizards/coldfusion.py:45
 #: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
@@ -4119,14 +4210,13 @@ msgstr "虚拟主机名称."
 #: admin/wizards/zend.py:46
 #, fuzzy
 msgid "New Virtual Server Details"
-msgstr "虚拟主机"
+msgstr "Virtual Server"
 
 #: admin/wizards/alfresco.py:48 admin/wizards/coldfusion.py:48
 #: admin/wizards/glassfish.py:48 admin/wizards/liferay.py:48
 #: admin/wizards/moinmoin.py:48 admin/wizards/uwsgi.py:50
-#, fuzzy
 msgid "Public web directory to access the project."
-msgstr "新目录基于Alfresco项目"
+msgstr ""
 
 #: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
@@ -4139,7 +4229,7 @@ msgstr "新目录基于Alfresco项目"
 #: admin/wizards/zend.py:50
 #, fuzzy
 msgid "Public Web Direcoty"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/alfresco.py:172 admin/wizards/coldfusion.py:178
 #: admin/wizards/concrete5.py:220 admin/wizards/django.py:189
@@ -4153,24 +4243,24 @@ msgstr "网页目录"
 #: admin/wizards/zend.py:193
 #, fuzzy
 msgid "New Host Name"
-msgstr "新主机别名"
+msgstr "New host name"
 
 #: admin/wizards/alfresco.py:188 admin/wizards/glassfish.py:186
 #: admin/wizards/liferay.py:185
 #, fuzzy
 msgid "Source host"
-msgstr "数据源使用"
+msgstr "Source usage"
 
 #: admin/wizards/alfresco.py:189 admin/wizards/glassfish.py:187
 #: admin/wizards/liferay.py:186
 #, fuzzy
 msgid "Source port"
-msgstr "支持"
+msgstr "Support"
 
 #: admin/wizards/coldfusion.py:38
 #, fuzzy
 msgid "Welcome to the ColdFusion Wizard"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/coldfusion.py:39
 msgid ""
@@ -4188,7 +4278,7 @@ msgstr ""
 #: admin/wizards/coldfusion.py:42
 #, fuzzy
 msgid "ColdFusion Details"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/coldfusion.py:43
 msgid ""
@@ -4197,14 +4287,13 @@ msgid ""
 msgstr ""
 
 #: admin/wizards/coldfusion.py:51
-#, fuzzy
 msgid "ColdFusion is not running on the specified host."
-msgstr "运行服务的主机端口"
+msgstr ""
 
 #: admin/wizards/concrete5.py:38
 #, fuzzy
 msgid "Welcome to the Concrete5 Wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/concrete5.py:39
 msgid ""
@@ -4224,7 +4313,7 @@ msgstr ""
 #: admin/wizards/wordpress.py:41 admin/wizards/zend.py:42
 #, fuzzy
 msgid "Application Source Code"
-msgstr "应用程序服务器"
+msgstr "Application Server"
 
 #: admin/wizards/concrete5.py:43
 msgid ""
@@ -4249,20 +4338,19 @@ msgstr ""
 #: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
 #: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
 #: admin/wizards/wordpress.py:210 admin/wizards/zend.py:194
-#, fuzzy
 msgid "Use Same Logs as"
-msgstr "和虚拟主机使用同一个日志文件"
+msgstr ""
 
 #: admin/wizards/concrete5.py:239 admin/wizards/phpbb.py:197
 #: admin/wizards/phpmyadmin.py:134 admin/wizards/zend.py:210
 #, fuzzy
 msgid "Source Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/django.py:38
 #, fuzzy
 msgid "Welcome to the Django wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/django.py:39
 msgid ""
@@ -4290,7 +4378,7 @@ msgstr ""
 #: admin/wizards/django.py:47 admin/wizards/uwsgi.py:48
 #, fuzzy
 msgid "Path to use as document root for the new virtual server."
-msgstr "虚拟主机名称."
+msgstr "Nickname for the virtual server."
 
 #: admin/wizards/django.py:48
 msgid "Does not look like a Django source directory."
@@ -4300,12 +4388,12 @@ msgstr ""
 #: admin/wizards/uwsgi.py:54
 #, fuzzy
 msgid "The document root directory does not exist."
-msgstr "虚拟主机名称."
+msgstr "Nickname for the virtual server."
 
 #: admin/wizards/django.py:209
 #, fuzzy
 msgid "Django Local Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/django.py:271
 msgid "Directory doesn't look like a Django based project."
@@ -4314,7 +4402,7 @@ msgstr ""
 #: admin/wizards/drupal.py:38
 #, fuzzy
 msgid "Welcome to the Drupal wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/drupal.py:39
 msgid ""
@@ -4342,12 +4430,12 @@ msgstr ""
 #: admin/wizards/drupal.py:47
 #, fuzzy
 msgid "Does not look like a Drupal source directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/drupal.py:270
 #, fuzzy
 msgid "Drupal Local Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/glassfish.py:37
 msgid "Welcome to the GlassFish Wizard"
@@ -4368,9 +4456,8 @@ msgid ""
 msgstr ""
 
 #: admin/wizards/glassfish.py:41
-#, fuzzy
 msgid "GlassFish Project"
-msgstr "Alfresco项目"
+msgstr ""
 
 #: admin/wizards/glassfish.py:42
 msgid ""
@@ -4389,7 +4476,7 @@ msgstr ""
 #: admin/wizards/hotlinking.py:40
 #, fuzzy
 msgid "Anti-HotLinking Information"
-msgstr "显示服务器信息"
+msgstr "Show Information"
 
 #: admin/wizards/hotlinking.py:41
 msgid "Domain allowed to access the files. Eg: example.com"
@@ -4416,32 +4503,32 @@ msgstr ""
 #: admin/wizards/hotlinking.py:82
 #, fuzzy
 msgid "Show error"
-msgstr "显示用户"
+msgstr "Show User"
 
 #: admin/wizards/hotlinking.py:83
 #, fuzzy
 msgid "Redirect"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/hotlinking.py:142
 #, fuzzy
 msgid "Domain"
-msgstr "绑定域名数量"
+msgstr "Domains"
 
 #: admin/wizards/hotlinking.py:179
 #, fuzzy
 msgid "Domain Name"
-msgstr "域名模式"
+msgstr "Domain pattern"
 
 #: admin/wizards/hotlinking.py:180
 #, fuzzy
 msgid "Reply type"
-msgstr "回复"
+msgstr "Realm"
 
 #: admin/wizards/icons.py:37
 #, fuzzy
 msgid "Welcome to the Icons Wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/icons.py:38
 msgid ""
@@ -4458,7 +4545,7 @@ msgstr ""
 #: admin/wizards/joomla.py:38
 #, fuzzy
 msgid "Welcome to the Joomla wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/joomla.py:39
 msgid ""
@@ -4491,12 +4578,12 @@ msgstr ""
 #: admin/wizards/joomla.py:238
 #, fuzzy
 msgid "Joomla Local Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/liferay.py:37
 #, fuzzy
 msgid "Welcome to the Liferay Wizard"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/liferay.py:38
 msgid ""
@@ -4508,7 +4595,7 @@ msgstr ""
 #: admin/wizards/liferay.py:41
 #, fuzzy
 msgid "Liferay Project"
-msgstr "Alfresco项目"
+msgstr "Wildcards"
 
 #: admin/wizards/liferay.py:42
 msgid ""
@@ -4536,17 +4623,17 @@ msgstr ""
 #: admin/wizards/mailman.py:40
 #, fuzzy
 msgid "Mailman Details"
-msgstr "路径不是目录"
+msgstr "Path is not a directory"
 
 #: admin/wizards/mailman.py:41
 #, fuzzy
 msgid "Local path to the Mailman CGI directory."
-msgstr "路径不是目录"
+msgstr "Path is not a directory"
 
 #: admin/wizards/mailman.py:42
 #, fuzzy
 msgid "Local path to the Mailman data directory."
-msgstr "路径不是目录"
+msgstr "Path is not a directory"
 
 #: admin/wizards/mailman.py:43
 msgid "Local path to the Mailman mail archive directory."
@@ -4555,37 +4642,37 @@ msgstr ""
 #: admin/wizards/mailman.py:166
 #, fuzzy
 msgid "Mailman CGI directory"
-msgstr "路径不是目录"
+msgstr "Path is not a directory"
 
 #: admin/wizards/mailman.py:167
 #, fuzzy
 msgid "Mailman Data directory"
-msgstr "路径不是目录"
+msgstr "Path is not a directory"
 
 #: admin/wizards/mailman.py:168
 #, fuzzy
 msgid "Mail Archive directory"
-msgstr "虚拟主机根目录."
+msgstr "Virtual Server root directory."
 
 #: admin/wizards/mailman.py:205
 #, fuzzy
 msgid "It doesn't look like a Mailman data directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/mailman.py:212
 #, fuzzy
 msgid "It doesn't look like a Mailman CGI directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/mailman.py:221
 #, fuzzy
 msgid "It doesn't look like a Mailman archive directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/moinmoin.py:37
 #, fuzzy
 msgid "Welcome to the MoinMoin Wizard"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/moinmoin.py:38
 msgid ""
@@ -4602,12 +4689,12 @@ msgstr ""
 #: admin/wizards/moinmoin.py:41
 #, fuzzy
 msgid "MoinMoin Wiki Instance"
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/moinmoin.py:42
 #, fuzzy
 msgid "Local path to the MoinMoin Wiki Instance."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/moinmoin.py:43
 msgid "Complete path to the FastCGI spawner, normally spawn-fcgi."
@@ -4616,7 +4703,7 @@ msgstr ""
 #: admin/wizards/moinmoin.py:51
 #, fuzzy
 msgid "It does not look like a MoinMoin Wiki Instance."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/moinmoin.py:52
 msgid "MoinMoin doesn't seem to be correctly installed."
@@ -4625,17 +4712,17 @@ msgstr ""
 #: admin/wizards/moinmoin.py:234
 #, fuzzy
 msgid "MoinMoin Directory"
-msgstr "路径不是目录"
+msgstr "Path is not a directory"
 
 #: admin/wizards/moinmoin.py:239
 #, fuzzy
 msgid "FastCGI spawner binary"
-msgstr "FastCGI 详细设置"
+msgstr "FastCGI specific"
 
 #: admin/wizards/mono.py:37
 #, fuzzy
 msgid "Welcome to the mono Wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/mono.py:38
 msgid ""
@@ -4652,7 +4739,7 @@ msgstr ""
 #: admin/wizards/mono.py:41
 #, fuzzy
 msgid "Mono Project"
-msgstr "Alfresco项目"
+msgstr "Path is not a directory"
 
 #: admin/wizards/mono.py:42
 msgid "Local path to the Mono based project."
@@ -4661,7 +4748,7 @@ msgstr ""
 #: admin/wizards/mono.py:43
 #, fuzzy
 msgid "Local path to the FastCGI Mono server binary."
-msgstr "不能启动服务器"
+msgstr "Could not launch the server"
 
 #: admin/wizards/mono.py:47
 msgid "Document root (for non Mono related files)."
@@ -4670,18 +4757,19 @@ msgstr ""
 #: admin/wizards/mono.py:49
 #, fuzzy
 msgid "Web directory under which the Mono application will be published."
-msgstr "公共网页目录的内容将应用于配置."
+msgstr ""
+"Public Web Directory to which content the configuration will be applied."
 
 #: admin/wizards/mono.py:52
 #, fuzzy
 msgid "Directory doesn't look like a Mono based project."
-msgstr "新目录基于Alfresco项目"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/mono.py:219 admin/wizards/rails.py:365
 #: admin/wizards/trac.py:151
 #, fuzzy
 msgid "Project Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/mono.py:221
 msgid "Mono Server Binary"
@@ -4690,7 +4778,7 @@ msgstr ""
 #: admin/wizards/php.py:32
 #, fuzzy
 msgid "Welcome to the PHP Wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/php.py:33
 msgid ""
@@ -4702,7 +4790,7 @@ msgstr ""
 #: admin/wizards/php.py:70
 #, fuzzy
 msgid "Invalid Virtual Server reference."
-msgstr "虚拟主机名称"
+msgstr "Virtual Server nickname"
 
 #: admin/wizards/php.py:82
 msgid "Could not find a suitable PHP interpreter."
@@ -4719,7 +4807,7 @@ msgstr ""
 #: admin/wizards/phpbb.py:38
 #, fuzzy
 msgid "Welcome to the phpBB Wizard"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/phpbb.py:39
 msgid ""
@@ -4744,7 +4832,7 @@ msgstr ""
 #: admin/wizards/phpbb.py:44
 #, fuzzy
 msgid "Does not look like a phpBB source directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/phpbb.py:49
 msgid "Web directory where you want phpBB to be accessible. (Example: /phpbb)"
@@ -4753,7 +4841,7 @@ msgstr ""
 #: admin/wizards/phpmyadmin.py:39
 #, fuzzy
 msgid "Welcome to the phpMyAdmin Wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/phpmyadmin.py:40
 msgid ""
@@ -4809,7 +4897,7 @@ msgstr ""
 #: admin/wizards/rails.py:42
 #, fuzzy
 msgid "New Virtual Server"
-msgstr "虚拟主机"
+msgstr "Virtual Server"
 
 #: admin/wizards/rails.py:45
 msgid "Local path to the Ruby on Rails based project."
@@ -4818,7 +4906,7 @@ msgstr ""
 #: admin/wizards/rails.py:46
 #, fuzzy
 msgid "Name of the new domain that will be created."
-msgstr "PID文件的路径. 为空则不建立PID文件"
+msgstr "Path of the PID file. If empty, the file will not be created."
 
 #: admin/wizards/rails.py:47
 msgid ""
@@ -4857,7 +4945,7 @@ msgstr ""
 #: admin/wizards/rails.py:54
 #, fuzzy
 msgid "It does not look like a Ruby on Rails based project directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/rails.py:366
 msgid "RAILS_ENV environment"
@@ -4870,7 +4958,7 @@ msgstr ""
 #: admin/wizards/redirect.py:39
 #, fuzzy
 msgid "Welcome to the Redirection Wizard"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/redirect.py:40
 msgid ""
@@ -4881,7 +4969,7 @@ msgstr ""
 #: admin/wizards/redirect.py:42
 #, fuzzy
 msgid "Redirection details"
-msgstr "重定向"
+msgstr "Redirections"
 
 #: admin/wizards/redirect.py:43
 msgid ""
@@ -4892,22 +4980,22 @@ msgstr ""
 #: admin/wizards/redirect.py:44
 #, fuzzy
 msgid "Domain name to which requests will be redirected."
-msgstr "正在表达式将决定哪些请求将被执行."
+msgstr "Regular expression against which the request will be executed."
 
 #: admin/wizards/redirect.py:111
 #, fuzzy
 msgid "Origin Domain"
-msgstr "绑定域名"
+msgstr "Bind Domain"
 
 #: admin/wizards/redirect.py:112
 #, fuzzy
 msgid "Target Domain"
-msgstr "相应的域名"
+msgstr "Base Domain"
 
 #: admin/wizards/rtorrent.py:33
 #, fuzzy
 msgid "Welcome to the rTorrent Wizard"
-msgstr "重定向"
+msgstr "Redirection"
 
 #: admin/wizards/rtorrent.py:34
 msgid ""
@@ -4922,7 +5010,9 @@ msgstr ""
 msgid ""
 "Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket "
 "path."
-msgstr "如果信息源可以访问. 主机:端口, 或者 UNIX套接字连接路径."
+msgstr ""
+"Where the information source can be accessed. The host:port pair, or the "
+"Unix socket path."
 
 #: admin/wizards/rtorrent.py:38
 msgid ""
@@ -4962,7 +5052,7 @@ msgstr ""
 #: admin/wizards/streaming.py:39
 #, fuzzy
 msgid "Welcome to the Streaming Wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/streaming.py:40
 msgid "This Wizard Adds a rule to stream media files."
@@ -4973,9 +5063,8 @@ msgid "The media streaming plug-in is not installed."
 msgstr ""
 
 #: admin/wizards/streaming.py:123
-#, fuzzy
 msgid "Media streaming is already configured."
-msgstr "虚拟主机名称正在被使用中"
+msgstr ""
 
 #: admin/wizards/sugar.py:38
 msgid "Welcome to the Sugar CRM Wizard"
@@ -5013,7 +5102,7 @@ msgstr ""
 #: admin/wizards/sugar.py:227
 #, fuzzy
 msgid "Sugar Local Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/symfony.py:41
 msgid "Welcome to the Symfony Wizard"
@@ -5046,7 +5135,7 @@ msgstr ""
 #: admin/wizards/symfony.py:48
 #, fuzzy
 msgid "Does not look like a Symfony source directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/symfony.py:53
 msgid ""
@@ -5056,7 +5145,7 @@ msgstr ""
 #: admin/wizards/symfony.py:237
 #, fuzzy
 msgid "Project Source"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/symfony.py:238
 msgid "Symfony Package"
@@ -5065,7 +5154,7 @@ msgstr ""
 #: admin/wizards/trac.py:38
 #, fuzzy
 msgid "Welcome to the Trac wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/trac.py:39
 msgid ""
@@ -5091,17 +5180,17 @@ msgstr ""
 #: admin/wizards/trac.py:47
 #, fuzzy
 msgid "It does not look like a Trac based project directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/trac.py:48
 #, fuzzy
 msgid "It does not look like a Trac installation."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/trac.py:150
 #, fuzzy
 msgid "Trac Local Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/uwsgi.py:37
 msgid "Welcome to the uWsgi Wizard"
@@ -5135,7 +5224,7 @@ msgstr ""
 #: admin/wizards/uwsgi.py:44
 #, fuzzy
 msgid "It does not look like a uWSGI configuration file."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/uwsgi.py:52
 msgid ""
@@ -5146,22 +5235,22 @@ msgstr ""
 #: admin/wizards/uwsgi.py:53
 #, fuzzy
 msgid "Does not look like a Uwsgi source directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/uwsgi.py:262
 #, fuzzy
 msgid "uWSGI binary"
-msgstr "通配符"
+msgstr "Wildcards"
 
 #: admin/wizards/uwsgi.py:263
 #, fuzzy
 msgid "Configuration File"
-msgstr "服务器配置文件"
+msgstr "Configuration file"
 
 #: admin/wizards/wordpress.py:38
 #, fuzzy
 msgid "Welcome to the WordPress wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/wordpress.py:39
 msgid ""
@@ -5185,21 +5274,21 @@ msgstr ""
 #: admin/wizards/wordpress.py:45
 msgid ""
 "Web directory where you want WordPress to be accessible. (Example: /blog)"
-msgstr "您的WordPress所在目录.例如:/blog"
+msgstr ""
 
 #: admin/wizards/wordpress.py:47
 msgid "Does not look like a WordPress source directory."
-msgstr "这个看起来并不像一个WordPress的源目录。"
+msgstr ""
 
 #: admin/wizards/wordpress.py:228
 #, fuzzy
 msgid "WordPress Local Directory"
-msgstr "网页目录"
+msgstr "Web Directory"
 
 #: admin/wizards/zend.py:38
 #, fuzzy
 msgid "Welcome to the Zend Wizard"
-msgstr "欢迎进入Cherokee后台管理中心"
+msgstr "Welcome to Cherokee Admin"
 
 #: admin/wizards/zend.py:39
 msgid ""
@@ -5207,325 +5296,302 @@ msgid ""
 "simple, straightforward, open-source software framework for PHP 5 designed "
 "to eliminate the tedious details of coding and let you focus on the big "
 "picture."
-msgstr "<a target=\"_blank\" href=\"http://www.zend.com/\">Zend Framework</a>是一个简单，直接，开放源码的PHP 5软件框架，旨在消除编码的繁琐细节，让您专注于大局。"
+msgstr ""
 
 #: admin/wizards/zend.py:40
 msgid ""
 "One of its strengths is the highly modular Model-View-Controller (MVC) "
 "design, making your code more reusable and easier to maintain."
-msgstr "它的优势之一是高度模块化的模型视图控制器（MVC）设计，使您的代码更易于维护和重用。”"
+msgstr ""
 
 #: admin/wizards/zend.py:43
 msgid ""
 "Local directory where the Zend source code is located. Example: /usr/share/"
 "php/data/zend."
-msgstr "本地目录下的Zend源代码的位置.例如：/usr/share/php/data/zend."
+msgstr ""
 
 #: admin/wizards/zend.py:44
 #, fuzzy
 msgid "Does not look like a Zend source directory."
-msgstr "新建一个新的配置文件"
+msgstr "Create a new configuration file"
 
 #: admin/wizards/zend.py:49
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
-msgstr "你想要使用zend访问的目录。例如：/zend"
+msgstr ""
 
 #, fuzzy
 #~ msgid "or"
-#~ msgstr "端口"
+#~ msgstr "Port"
 
 #, fuzzy
 #~ msgid "exists"
-#~ msgstr "文件存在"
+#~ msgstr "File Exists"
 
 #, fuzzy
 #~ msgid "title"
-#~ msgstr "文件"
+#~ msgstr "File"
 
 #, fuzzy
 #~ msgid "%s Support"
-#~ msgstr "支持"
+#~ msgstr "Support"
 
 #, fuzzy
 #~ msgid "Add new %s"
-#~ msgstr "新增"
-
-#, fuzzy
-#~ msgid "Deactived"
-#~ msgstr "激活"
+#~ msgstr "Add new"
 
 #~ msgid "Choose.."
-#~ msgstr "选择.."
+#~ msgstr "Choose.."
 
 #~ msgid "ERROR: Couldn't execute '%s -i'"
-#~ msgstr "错误: 执行 '%s -i' 失败"
+#~ msgstr "ERROR: Couldn't execute '%s -i'"
 
 #~ msgid "Submit"
-#~ msgstr "提交"
+#~ msgstr "Submit"
 
 #~ msgid "Delete"
-#~ msgstr "删除"
+#~ msgstr "Delete"
 
 #~ msgid "Realm can not be empty"
-#~ msgstr "界限不能为空"
+#~ msgstr "Realm can not be empty"
 
 #~ msgid "Allow to select how the connections will be dispatched."
-#~ msgstr "允许你选择连接如何进行."
+#~ msgstr "Allow to select how the connections will be dispatched."
 
 #~ msgid "information sources"
-#~ msgstr "数据源"
+#~ msgstr "information sources"
 
 #~ msgid "ERROR, a 'value' entry is needed!"
-#~ msgstr "遇到错误, 您必须输入一个参数!"
+#~ msgstr "ERROR, a 'value' entry is needed!"
 
 #~ msgid "Configured error codes"
-#~ msgstr "配置错误代码"
+#~ msgstr "Configured error codes"
 
 #~ msgid "Add error codes"
-#~ msgstr "增加错误代码"
+#~ msgstr "Add error codes"
 
 #~ msgid "Any file"
-#~ msgstr "任何文件"
-
-#~ msgid "IP or SubNet"
-#~ msgstr "IP地址或子网"
+#~ msgstr "Any file"
 
 #~ msgid "Add Country"
-#~ msgstr "新增国家"
+#~ msgstr "Add Country"
 
 #~ msgid "Password file can not be empty"
-#~ msgstr "密码文件不能为空"
+#~ msgstr "Password file can not be empty"
 
 #~ msgid ""
 #~ "The <i>IP Hash</i> balancer distributes connections between upstreams\n"
 #~ "based on the IP-address of the client."
 #~ msgstr ""
-#~ "<i>IP Hash</i> 负载均衡的上传数据流 \n"
-#~ "基于IP地址的客户端."
+#~ "The <i>IP Hash</i> balancer distributes connections between upstreams\n"
+#~ "based on the IP-address of the client."
 
 #~ msgid "SQL query"
-#~ msgstr "SQL 查询"
+#~ msgstr "SQL query"
 
 #~ msgid " can not be empty"
-#~ msgstr " 不能为空"
+#~ msgstr " can not be empty"
 
 #, fuzzy
 #~ msgid "Formatting options"
-#~ msgstr "负载平衡选项"
+#~ msgstr "Load balancing options"
 
 #~ msgid "Add New Header"
-#~ msgstr "添加新的请求头"
+#~ msgstr "Add New Header"
 
 #~ msgid "Header addition"
-#~ msgstr "附加请求头"
+#~ msgstr "Header addition"
 
 #~ msgid ""
 #~ "The <i>Round Robin</i> balancer can either access remote servers or\n"
 #~ "launch local application servers and connect to them."
 #~ msgstr ""
-#~ "<i>轮询模式</i> 的负载均衡可以轮流连接和使用远程或本地应用程序服务器\n"
-#~ "."
+#~ "The <i>Round Robin</i> balancer can either access remote servers or\n"
+#~ "launch local application servers and connect to them."
 
 #~ msgid "A shared-secret must be defined"
-#~ msgstr "必须设置一个共享安全模式"
+#~ msgstr "A shared-secret must be defined"
 
 #~ msgid "It can't be empty"
-#~ msgstr "不能为空"
-
-#~ msgid "Any arg ~= %s"
-#~ msgstr "任何参数 ~= %s"
+#~ msgstr "It can't be empty"
 
 #, fuzzy
 #~ msgid "URL arg"
-#~ msgstr "URL 重写"
+#~ msgstr "URL Rewriting"
 
 #~ msgid "Version:"
-#~ msgstr "服务器版本:"
+#~ msgstr "Version:"
 
 #~ msgid "Help"
-#~ msgstr "帮助"
+#~ msgstr "Help"
 
 #~ msgid "Mime Types"
-#~ msgstr "Mime 文件类型设置"
+#~ msgstr "Mime Types"
 
 #~ msgid "Save Changes"
-#~ msgstr "保存修改"
+#~ msgstr "Save Changes"
 
 #~ msgid "Save"
-#~ msgstr "保存"
+#~ msgstr "Save"
 
 #, fuzzy
 #~ msgid "Apply"
-#~ msgstr "回复"
+#~ msgstr "Realm"
 
 #, fuzzy
 #~ msgid "Optional"
-#~ msgstr "选项"
+#~ msgstr "Options"
 
 #~ msgid "Commit all the changes permanently"
-#~ msgstr "永久应用所有修改"
+#~ msgstr "Commit all the changes permanently"
 
 #, fuzzy
 #~ msgid "Connections timeout"
-#~ msgstr "连接"
+#~ msgstr "Connections"
 
 #~ msgid ""
 #~ "A working connection to the Internet is required for this form to work."
-#~ msgstr "您需要有一个工作的互联网连接才能完成本次反馈."
+#~ msgstr ""
+#~ "A working connection to the Internet is required for this form to work."
 
 #~ msgid "Feedback"
-#~ msgstr "向我们反馈信息"
+#~ msgstr "Feedback"
 
 #~ msgid "EMail"
-#~ msgstr "EMail地址"
+#~ msgstr "EMail"
 
 #~ msgid "Include configuration"
-#~ msgstr "附上服务器配置文件"
+#~ msgstr "Include configuration"
 
 #~ msgid "Message:"
-#~ msgstr "要反馈的内容:"
+#~ msgstr "Message:"
 
 #~ msgid "Error reading response from the server"
-#~ msgstr "服务器响应错误"
+#~ msgstr "Error reading response from the server"
 
 #~ msgid "Not included"
-#~ msgstr "未包含"
+#~ msgstr "Not included"
 
 #~ msgid "Report sent"
-#~ msgstr "提交报告"
+#~ msgstr "Report sent"
 
 #~ msgid "Thank you a million for your feedback. We do appreciate your help."
-#~ msgstr "谢谢您的宝贵意见，我们改写您的帮助！"
+#~ msgstr "Thank you a million for your feedback. We do appreciate your help."
 
 #~ msgid "IP address of the interface to bind. It is usually empty."
-#~ msgstr "绑定IP地址，通常可以不填写."
+#~ msgstr "IP address of the interface to bind. It is usually empty."
 
 #~ msgid "Unknown method"
-#~ msgstr "未知方式"
+#~ msgstr "Unknown method"
 
 #~ msgid "Icons configuration"
-#~ msgstr "图标设置"
+#~ msgstr "Icons configuration"
 
 #~ msgid "Icon File"
-#~ msgstr "图标文件"
+#~ msgstr "Icon File"
 
 #~ msgid "Icon"
-#~ msgstr "图标"
+#~ msgstr "Icon"
 
 #~ msgid "Add new file match"
-#~ msgstr "增加新的文件匹配"
+#~ msgstr "Add new file match"
 
 #~ msgid "Special Icons"
-#~ msgstr "特殊图标"
+#~ msgstr "Special Icons"
 
 #~ msgid "Environment variables"
-#~ msgstr "环境变量"
+#~ msgstr "Environment variables"
 
 #~ msgid "Add new Environment variable"
-#~ msgstr "新增环境变量"
+#~ msgstr "Add new Environment variable"
 
 #~ msgid "Variable"
-#~ msgstr "变量"
+#~ msgstr "Variable"
 
 #~ msgid "Known sources"
-#~ msgstr "已有数据源"
+#~ msgstr "Known sources"
 
 #, fuzzy
 #~ msgid "Source"
-#~ msgstr "数据源使用"
+#~ msgstr "Source usage"
 
 #~ msgid "Clone as.."
-#~ msgstr "克隆成.."
+#~ msgstr "Clone as.."
 
 #~ msgid "Details:"
-#~ msgstr "详细:"
+#~ msgstr "Details:"
 
 #~ msgid "Source usage"
-#~ msgstr "数据源使用"
+#~ msgstr "Source usage"
 
 #~ msgid "Virtual server"
-#~ msgstr "虚拟主机"
+#~ msgstr "Virtual server"
 
 #~ msgid "Mime types configuration"
-#~ msgstr "Mime 文件类型设置"
+#~ msgstr "Mime types configuration"
 
 #~ msgid ""
 #~ "<b>The configuration is not found</b>.<br />You can create a new "
 #~ "configuration file and proceed to customize the web server."
-#~ msgstr "<b>配置文件没找到</b>.<br />你可以新建 一个配置文件并设置WEB服务器."
-
-#~ msgid ""
-#~ "\n"
-#~ "If you wanted to let us know something about Cherokee: what you\n"
-#~ "like the most or what you would improve, please do not hesitate to\n"
-#~ "<a href=\"/feedback\">drop us a line</a>.\n"
 #~ msgstr ""
-#~ "\n"
-#~ "如果您想告诉我们一些对Cherokee的建议:\n"
-#~ "比如你喜欢的或者你建议增加的功能, 请不要犹豫，\n"
-#~ "<a href=\"/feedback\">将它写下来告诉我们吧！</a>.\n"
-#~ "中文翻译建议，请发信至:gefire@qq.com，谢谢各位支持！\n"
-
-#~ msgid "This interface will assist in configuring the Cherokee Web Server."
-#~ msgstr "这个后台管理界面将帮您有效配置您的Cherokee网站服务器"
+#~ "<b>The configuration is not found</b>.<br />You can create a new "
+#~ "configuration file and proceed to customize the web server."
 
 #~ msgid "Stop"
-#~ msgstr "停止"
+#~ msgstr "Stop"
 
 #~ msgid "Launch"
-#~ msgstr "启动服务器"
+#~ msgstr "Launch"
 
 #, fuzzy
 #~ msgid "Language:"
-#~ msgstr "语言选择"
+#~ msgstr "Language"
 
 #~ msgid ""
 #~ "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
 #~ "reorder.</p>"
-#~ msgstr "<p>规则的应用时 <b>从上到下的</b>.你可以拖动它们进行排序</p>"
+#~ msgstr ""
+#~ "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
+#~ "reorder.</p>"
 
 #, fuzzy
 #~ msgid "Clone rule"
-#~ msgstr "克隆规则"
+#~ msgstr "Clone Virtual Server"
 
 #, fuzzy
 #~ msgid "Wizards"
-#~ msgstr "向导"
+#~ msgstr "Wildcards"
 
 #~ msgid "Personal Webs"
-#~ msgstr "个人主页"
+#~ msgstr "Personal Webs"
 
 #~ msgid "Target"
-#~ msgstr "目标"
-
-#~ msgid "<h2>Wizards</h2>"
-#~ msgstr "新建向导"
+#~ msgstr "Target"
 
 #~ msgid "/~user directories"
-#~ msgstr "/~user 目录"
+#~ msgstr "/~user directories"
 
 #~ msgid "Disable"
-#~ msgstr "禁止"
+#~ msgstr "Disable"
 
 #~ msgid "Directory name"
-#~ msgstr "目录名"
+#~ msgstr "Directory name"
 
 #, fuzzy
 #~ msgid "Statistics"
-#~ msgstr "流量统计"
+#~ msgstr "Traffic Statistics"
 
 #~ msgid "Accesses"
-#~ msgstr "访问"
+#~ msgstr "Accesses"
 
 #~ msgid "Matching method"
-#~ msgstr "匹配方法"
+#~ msgstr "Matching method"
 
 #~ msgid "Filename must be set"
-#~ msgstr "必须设置文件名"
+#~ msgstr "Filename must be set"
 
 #, fuzzy
 #~ msgid "Choose a rule.."
-#~ msgstr "选择.."
+#~ msgstr "Choose.."
 
 #~ msgid ""
 #~ "\n"
@@ -5535,181 +5601,169 @@ msgstr "你想要使用zend访问的目录。例如：/zend"
 #~ "more domains.</p>\n"
 #~ msgstr ""
 #~ "\n"
-#~ "<p>'虚拟主机是一种抽象网站服务机制，它允许你自定义一个或多个域的参数以及规"
-#~ "则。.</p>\n"
+#~ "<p>'Virtual Server' is an abstraction mechanism that allows to define\n"
+#~ "a custom number of parameters and rules that have to be applied to one "
+#~ "or\n"
+#~ "more domains.</p>\n"
 
 #, fuzzy
 #~ msgid "Stats"
-#~ msgstr "状态"
+#~ msgstr "Status"
 
 #, fuzzy
 #~ msgid "Offline"
-#~ msgstr "关闭"
+#~ msgstr "Off"
 
 #~ msgid "AND"
-#~ msgstr "和"
+#~ msgstr "AND"
 
 #~ msgid "OR"
-#~ msgstr "或"
+#~ msgstr "OR"
 
 #~ msgid "Undefined.."
-#~ msgstr "未定义.."
+#~ msgstr "Undefined.."
 
 #~ msgid "Complex"
-#~ msgstr "复杂"
+#~ msgstr "Complex"
 
 #~ msgid "NOT"
-#~ msgstr "非"
+#~ msgstr "NOT"
 
 #~ msgid "ERROR: Unknown uri"
-#~ msgstr "错误: 位置网站"
+#~ msgstr "ERROR: Unknown uri"
 
 #~ msgid "Del"
-#~ msgstr "删除"
+#~ msgstr "Del"
 
 #, fuzzy
 #~ msgid "This field can not be empty."
-#~ msgstr "界限不能为空"
+#~ msgstr "Realm can not be empty"
 
 #, fuzzy
 #~ msgid "Unknown wizard"
-#~ msgstr "未知向导"
-
-#~ msgid "New virtual server based on a Alfresco project."
-#~ msgstr "新虚拟主机基于Alfresco项目"
-
-#~ msgid "Alfresco project"
-#~ msgstr "Alfresco 项目"
-
-#~ msgid "New directory based on a Alfresco project."
-#~ msgstr "新目录基于Alfresco项目"
+#~ msgstr "Unknown"
 
 #, fuzzy
 #~ msgid "Couldn't add a new rule."
-#~ msgstr "添加新的规则"
+#~ msgstr "Add new rule"
 
 #, fuzzy
 #~ msgid "Local Host Name"
-#~ msgstr "新主机别名"
+#~ msgstr "New host name"
 
 #, fuzzy
 #~ msgid "Add the /icons directory"
-#~ msgstr "路径不是目录"
+#~ msgstr "Path is not a directory"
 
 #, fuzzy
 #~ msgid "Web folder under which MoinMoin Wiki will be accessible."
-#~ msgstr "公共网页目录的内容将应用于配置."
-
-#, fuzzy
-#~ msgid "New virtual server based on a .NET/Mono project."
-#~ msgstr "新虚拟主机基于Alfresco项目"
+#~ msgstr ""
+#~ "Public Web Directory to which content the configuration will be applied."
 
 #, fuzzy
 #~ msgid ".NET/Mono Wizard"
-#~ msgstr "通配符"
+#~ msgstr "Wildcards"
 
 #, fuzzy
 #~ msgid "Add PHP support"
-#~ msgstr "增加一个端口"
+#~ msgstr "Add new port"
 
 #, fuzzy
 #~ msgid "Sugar Wizard"
-#~ msgstr "通配符"
+#~ msgstr "Wildcards"
 
 #, fuzzy
 #~ msgid "Trac Wizard"
-#~ msgstr "通配符"
+#~ msgstr "Wildcards"
 
 #, fuzzy
 #~ msgid "Zend Wizard"
-#~ msgstr "通配符"
+#~ msgstr "Wildcards"
 
 #~ msgid "ERROR: Couldn't unpack '%s'"
-#~ msgstr "错误:无法解压缩 '%s'"
+#~ msgstr "ERROR: Couldn't unpack '%s'"
 
 #~ msgid "Could not copy configuration to "
-#~ msgstr "不能复制配置配置文件 "
+#~ msgstr "Could not copy configuration to "
 
 #~ msgid "Static content"
-#~ msgstr "静态内容"
+#~ msgstr "Static content"
 
 #~ msgid "HTTP error"
-#~ msgstr "HTTP错误"
+#~ msgstr "HTTP error"
 
 #~ msgid " Graceful restart performed."
-#~ msgstr " 平稳重启完成."
+#~ msgstr " Graceful restart performed."
 
 #~ msgid " Hard restart performed."
-#~ msgstr " 硬重启完成."
+#~ msgstr " Hard restart performed."
 
 #, fuzzy
 #~ msgid "Invalid regular expression"
-#~ msgstr "正则表达式."
+#~ msgstr "Regular expression."
 
 #~ msgid "Logging Format"
-#~ msgstr "日志格式"
+#~ msgstr "Logging Format"
 
 #~ msgid "Errors"
-#~ msgstr "错误"
+#~ msgstr "Errors"
 
 #~ msgid "Options"
-#~ msgstr "选项"
+#~ msgstr "Options"
 
 #, fuzzy
 #~ msgid "Rendering interval (<i>secs</i>)"
-#~ msgstr "超时 (<i>秒</i>)"
+#~ msgstr "Timeout (<i>secs</i>)"
 
 #~ msgid "WWW Root"
-#~ msgstr "网站根目录"
+#~ msgstr "WWW Root"
 
 #~ msgid "Optionally specifies a database to connect to."
-#~ msgstr "指定数据库连接."
+#~ msgstr "Optionally specifies a database to connect to."
 
 #~ msgid "TCP balancer"
-#~ msgstr "TCP 负载均衡"
+#~ msgstr "TCP balancer"
 
 #~ msgid "Generic balancer"
-#~ msgstr "通用均衡器"
+#~ msgstr "Generic balancer"
 
 #~ msgid ""
 #~ "Specifies if Traffic Statistics should be collected for the virtual "
 #~ "server (Default: yes)"
-#~ msgstr "设置是否允许使用流量统计(默认: 是)"
+#~ msgstr ""
+#~ "Specifies if Traffic Statistics should be collected for the virtual "
+#~ "server (Default: yes)"
 
 #~ msgid "Use MD5 Passwords"
-#~ msgstr "使用 MD5 加密"
+#~ msgstr "Use MD5 Passwords"
 
 #~ msgid "Accesses and Errors"
-#~ msgstr "访问及错误"
+#~ msgstr "Accesses and Errors"
 
 #~ msgid "W3C"
-#~ msgstr "W3C格式"
-
-#, fuzzy
-#~ msgid "Chinese"
-#~ msgstr "简体中文"
-
-#~ msgid "<i>No</i>"
-#~ msgstr "<i>否</i>"
-
-#~ msgid "<i>Yes</i>"
-#~ msgstr "<i>是</i>"
+#~ msgstr "W3C"
 
 #, fuzzy
 #~ msgid "yes"
-#~ msgstr "是"
+#~ msgstr "Yes"
+
+#~ msgid "<i>No</i>"
+#~ msgstr "<i>No</i>"
+
+#~ msgid "<i>Yes</i>"
+#~ msgstr "<i>Yes</i>"
 
 #~ msgid "Accept all X-Real-IPs"
-#~ msgstr "允许所有有  X-Real-IPs"
+#~ msgstr "Accept all X-Real-IPs"
 
 #~ msgid "X-Real-IP Hosts"
-#~ msgstr "X-Real-IP 主机"
+#~ msgstr "X-Real-IP Hosts"
 
 #~ msgid "Active to use MD5 passwords."
-#~ msgstr "使用 MD5 加密密码."
+#~ msgstr "Active to use MD5 passwords."
 
 #~ msgid "Beta testing"
-#~ msgstr "Beta测试"
+#~ msgstr "Beta testing"
 
 #~ msgid "For that, we thank you."
-#~ msgstr "为此，我们感谢你."
+#~ msgstr "For that, we thank you."
