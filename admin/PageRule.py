@@ -193,7 +193,7 @@ class Render:
                 if CTK.cfg.get_val ('vserver!%s!rule!%s!rate' %(vsrv_num, r)):
                     comment.append ('traffic')
 
-                if CTK.cfg.get_val ('vserver!%s!rule!%s!no_log' %(vsrv_num, r)):
+                if int (CTK.cfg.get_val ('vserver!%s!rule!%s!no_log'%(vsrv_num, r), "0")) > 0:
                     comment.append ('no log')
 
                 # List entry
