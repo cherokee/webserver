@@ -23,7 +23,7 @@
 ;(function($) {
     var SelectionPanel = function (element, table_id, content_id, cookie_name, cookie_domain, url_empty) {
 	   var obj  = this;       //  Object {}
-	   var self = $(element); // .submitter
+	   var self = $(element); // .SelectionPanel
 
 	   function deselect_row (row) {
             $('#'+row.attr('pid')).removeClass('panel-selected');
@@ -31,6 +31,7 @@
 
 	   function select_row (row) {
 		  var url      = '';
+		  var pid      = '';
 		  var activity = $("#activity");
 		  var content  = $('#'+content_id);
 
@@ -39,14 +40,15 @@
 			 url = url_empty;
 
 		  } else {
+			 pid = row.attr('pid');
 			 url = row.attr('url');
 
-			 $('#'+row.attr('pid')).each (function() {
+			 $('#'+pid).each (function() {
 				// Highlight
 				$(this).addClass('panel-selected');
 
 				// Cookie
-				$.cookie (cookie_name, $(this).attr('id'), {path: cookie_domain});
+				$.cookie (cookie_name, pid, {path: cookie_domain});
 			 });
 		  }
 
@@ -77,11 +79,11 @@
 	   }
 
 	   function auto_select_row (row) {
-		  var row_id     = row.attr('id');
+		  var row_id     = row.attr('pid');
 		  var did_select = false;
 
 		  self.find('.row_content').each (function() {
-			 if ($(this).attr('id') == row_id) {
+			 if ($(this).attr('pid') == row_id) {
 				select_row ($(this));
 				did_select = true;
 			 } else {
@@ -110,8 +112,7 @@
 	   }
 
 	   this.set_selected_cookie = function (pid) {
-		  var row = self.find ('.row_content[pid='+ pid +']');
-		  $.cookie (cookie_name, row.attr('id'), {path: cookie_domain});
+		  $.cookie (cookie_name, pid, {path: cookie_domain});
 	   }
 
 	   this.select_last = function() {
