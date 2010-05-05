@@ -47,7 +47,7 @@ GRAPH_INTERVALS = [('1h', N_('1 Hour')),
                    ('1m', N_('1 Month'))]
 
 URL_RRD          = '/general#Network-1'
-RRD_NOTICE       = N_('You need to enable the <a href="%s">Information Collector</a> setting in order to render usage graphics.'%URL_RRD)
+RRD_NOTICE       = N_('You need to enable the <a href="%s">Information Collector</a> setting in order to render usage graphics.')
 NOTE_COLLECTOR   = N_('Whether or not it should collect statistics about the traffic of this virtual server.')
 
 UPDATE_JS = """
@@ -88,7 +88,7 @@ class Graph (CTK.Box):
     def build_graph (self):
         if CTK.cfg.get_val('server!collector') != 'rrd':
             notice  = CTK.Notice()
-            notice += CTK.RawHTML(_(RRD_NOTICE))
+            notice += CTK.RawHTML(_(RRD_NOTICE)%(URL_RRD))
             self   += CTK.Indenter(notice)
             return False
 

@@ -358,7 +358,7 @@ class Render:
             dialog.AddButton (_('Cancel'), "close")
             dialog += AddSource()
 
-            button = CTK.Button(_('New…'), {'id': 'source-new-button', 'class': 'panel-button', 'title': _('Add New Information Source')})
+            button = CTK.Button(_('New'), {'id': 'source-new-button', 'class': 'panel-button', 'title': _('Add New Information Source')})
             button.bind ('click', dialog.JS_to_show())
             dialog.bind ('submit_success', dialog.JS_to_close())
             dialog.bind ('submit_success', self.JS_to_trigger('submit_success'));
@@ -372,7 +372,7 @@ class Render:
             dialog.AddButton (_('Cancel'), "close")
             dialog += CloneSource()
 
-            button = CTK.Button(_('Clone…'), {'id': 'source-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Information Source')})
+            button = CTK.Button(_('Clone'), {'id': 'source-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Information Source')})
             button.bind ('click', dialog.JS_to_show())
 
             self += dialog

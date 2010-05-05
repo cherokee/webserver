@@ -109,7 +109,7 @@ def NewManual():
     vsrv_num = re.findall (URL_NEW_MANUAL_R, CTK.request.url)[0]
 
     # Add New Rule: Content
-    rules = [('',_('Choose…'))] + RULES
+    rules = [('',_('Choose'))] + RULES
 
     table = CTK.PropsTable()
     modul = CTK.PluginSelector ('tmp', rules, vsrv_num=vsrv_num)
@@ -268,7 +268,7 @@ class Render:
                         wizard.JS_to_close() +
                         self.JS_to_trigger('submit_success'))
 
-            button = CTK.Button(_('New…'), {'id': 'rule-new-button', 'class': 'panel-button', 'title': _('Add Behavior Rule')})
+            button = CTK.Button(_('New'), {'id': 'rule-new-button', 'class': 'panel-button', 'title': _('Add Behavior Rule')})
             button.bind ('click', dialog.JS_to_show())
             dialog.bind ('submit_success', dialog.JS_to_close())
             dialog.bind ('submit_success', self.JS_to_trigger('submit_success'));
@@ -287,7 +287,7 @@ class Render:
             dialog.AddButton (_('Cancel'), "close")
             dialog += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_CLONE_DIALOG)))
 
-            button = CTK.Button(_('Clone…'), {'id': 'rule-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Behavior Rule')})
+            button = CTK.Button(_('Clone'), {'id': 'rule-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Behavior Rule')})
             button.bind ('click', dialog.JS_to_show())
 
             self += dialog

@@ -245,7 +245,7 @@ class Render:
                         wizard.JS_to_close() +
                         self.JS_to_trigger('submit_success'))
 
-            button = CTK.Button(_('New…'), {'id': 'vserver-new-button', 'class': 'panel-button', 'title': _('Add New Virtual Server')})
+            button = CTK.Button(_('New'), {'id': 'vserver-new-button', 'class': 'panel-button', 'title': _('Add New Virtual Server')})
             button.bind ('click', dialog.JS_to_show())
             dialog.bind ('submit_success', dialog.JS_to_close())
             dialog.bind ('submit_success', self.JS_to_trigger('submit_success'))
@@ -264,7 +264,7 @@ class Render:
             dialog.AddButton (_('Cancel'), "close")
             dialog += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_CLONE_DIALOG)))
 
-            button = CTK.Button(_('Clone…'), {'id': 'vserver-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Virtual Server')})
+            button = CTK.Button(_('Clone'), {'id': 'vserver-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Virtual Server')})
             button.bind ('click', dialog.JS_to_show())
 
             self += dialog

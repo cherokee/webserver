@@ -339,7 +339,7 @@ class AdditionDialogButton (CTK.Box):
     def __init__ (self, key, name, **kwargs):
         CTK.Box.__init__ (self, {'class': '%s-button' %(name)})
         submit_label = kwargs.get('submit_label', _('Add'))
-        button_label = kwargs.get('button_label', '%s…'%(submit_label))
+        button_label = kwargs.get('button_label', submit_label)
 
         # Dialog
         dialog = CTK.Dialog ({'title': '%s %s'%(_('Add new'), name), 'width': 375})

@@ -65,13 +65,13 @@ NOTE_NAME       = N_("Optionally provide your name")
 # Notices
 RUNNING_NOTICE      = N_('Server is Running.')
 STOPPED_NOTICE      = N_('Server is not Running.')
-SUPPORT_NOTICE      = N_('Commercial support for Cherokee is provided by <a target="_blank" href="%s">Octality</a>. They provide top notch Consulting, Custom Engineering, and Enterprise Support Services.' %(LINK_OCTALITY))
+SUPPORT_NOTICE      = N_('Commercial support for Cherokee is provided by <a target="_blank" href="%s">Octality</a>. They provide top notch Consulting, Custom Engineering, and Enterprise Support Services.')
 LIST_NOTICE         = N_('The Community Mailing List is the place to go for help on Cherokee. <a id="subscribe-a">Subscribe now!</a>')
-IRC_NOTICE          = N_('Join us at the <a target="_blank" href="%s">#cherokee</a> IRC Channel.'%(LINK_IRC))
-BUG_TRACKER_NOTICE  = N_('Your feedback is important! Log Bug Reports and Requests for Enhancements in our <a target="_blank" href="%s">bug tracker</a> to help us improve Cherokee.' %(LINK_BUGTRACKER))
+IRC_NOTICE          = N_('Join us at the <a target="_blank" href="%s">#cherokee</a> IRC Channel.')
+BUG_TRACKER_NOTICE  = N_('Your feedback is important! Log Bug Reports and Requests for Enhancements in our <a target="_blank" href="%s">bug tracker</a> to help us improve Cherokee.' )
 SOCIAL_MEDIA_NOTICE = N_("Find out what's going on with Cherokee on your favorite Social Media!")
-TWITTER_NOTICE      = N_('Follow <a target="_blank" href="%s">Cherokee on Twitter</a>.' %(LINK_TWITTER))
-FACEBOOK_NOTICE     = N_('Join <a target="_blank" href="%s">Cherokee on Facebook</a>.' %(LINK_FACEBOOK))
+TWITTER_NOTICE      = N_('Follow <a target="_blank" href="%s">Cherokee on Twitter</a>.')
+FACEBOOK_NOTICE     = N_('Join <a target="_blank" href="%s">Cherokee on Facebook</a>.')
 
 BETA_TESTER_NOTICE = N_("""\
 <h3>Beta testing</h3> <p>Individuals like yourself who download and
@@ -334,7 +334,7 @@ class ContactChannels (CTK.Box):
 
         box = CTK.Box({'id': 'contact-irc', 'class': 'contact-box'})
         box += CTK.RawHTML('<h4>%s</h4>' % _('IRC'))
-        box += CTK.RawHTML(_(IRC_NOTICE))
+        box += CTK.RawHTML(_(IRC_NOTICE)%(LINK_IRC))
         self += box
 
         box = CTK.Box({'id': 'contact-list', 'class': 'contact-box'})
@@ -353,7 +353,7 @@ class ContactChannels (CTK.Box):
 
         box = CTK.Box({'id': 'contact-bug', 'class': 'contact-box'})
         box += CTK.RawHTML('<h4>%s</h4>' % _('Bug Tracker'))
-        box += CTK.RawHTML(_(BUG_TRACKER_NOTICE))
+        box += CTK.RawHTML(_(BUG_TRACKER_NOTICE)%(LINK_BUGTRACKER))
         self += box
 
         self += dialog
@@ -364,11 +364,11 @@ class SocialMedia (CTK.Box):
         CTK.Box.__init__ (self, {'id': 'social-media'})
 
         twitter = CTK.Box ({'id': 'twitter-box', 'class': 'social-box'})
-        twitter += CTK.RawHTML(_(TWITTER_NOTICE))
+        twitter += CTK.RawHTML(_(TWITTER_NOTICE)%(LINK_TWITTER))
         self += twitter
 
         fb = CTK.Box ({'id': 'fb-box', 'class': 'social-box'})
-        fb += CTK.RawHTML(_(FACEBOOK_NOTICE))
+        fb += CTK.RawHTML(_(FACEBOOK_NOTICE)%(LINK_FACEBOOK))
         self += fb
 
 
@@ -394,7 +394,7 @@ class EnterpriseBox (CTK.Box):
         CTK.Box.__init__ (self, {'id': 'enterprise-box'})
 
         self += CTK.RawHTML('<h2>%s</h2>' % _('Commercial Support'))
-        self += CTK.Box ({'id': 'enterprise-notice'}, CTK.RawHTML (_(SUPPORT_NOTICE)))
+        self += CTK.Box ({'id': 'enterprise-notice'}, CTK.RawHTML (_(SUPPORT_NOTICE)%(LINK_OCTALITY)))
         self += CTK.Box ({'id': 'enterprise-link'}, CTK.RawHTML ('<a target="_blank" href="%s">%s</a>' %(LINK_SUPPORT, _('Purchase Support'))))
 
 

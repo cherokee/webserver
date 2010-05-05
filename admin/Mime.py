@@ -101,7 +101,7 @@ class AddNew_Button (CTK.Box):
         dialog.AddButton (_('Cancel'), "close")
         dialog += AddMime()
 
-        button = CTK.Button(_('Add New…'))
+        button = CTK.Button(_('Add New'))
         button.bind ('click', dialog.JS_to_show())
         dialog.bind ('submit_success', dialog.JS_to_close())
         dialog.bind ('submit_success', self.JS_to_trigger('submit_success'));

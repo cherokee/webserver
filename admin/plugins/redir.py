@@ -115,7 +115,7 @@ class Plugin_redir (Handler.PluginHandler):
             dialog.AddButton (_('Cancel'), "close")
             dialog += self.Content (key)
 
-            button = CTK.Button(_('Add New RegEx…'))
+            button = CTK.Button(_('Add New RegEx'))
             button.bind ('click', dialog.JS_to_show())
             dialog.bind ('submit_success', dialog.JS_to_close())
             dialog.bind ('submit_success', self.JS_to_trigger('submit_success'));
