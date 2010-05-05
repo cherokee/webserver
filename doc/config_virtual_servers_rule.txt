@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
 ////
-Last checked: 2010/04/26 Cherokee 0.99.46b
+Last checked: 2010/05/05 Cherokee 0.99.50b
 ////
 
 Virtual Server: Rules
@@ -10,24 +10,42 @@ Besides the connection handler set for the rule, there are other
 parameters that can be set in order to customize the rule behavior.
 This menu offers the following tabs:
 
- . Rule: this is the *rule type*, as explained in the
-   link:config_virtual_servers.html[Virtual servers] section.
+ . link:#rule[Rule]: this is the *rule type*.
 
- . Handler: It allows to fine tune the behavior of any of the
-   available handlers. Since so many options are available, refer to
-   the complete list of link:modules_handlers.html[handlers] shipped
-   with Cherokee.
+ . link:#handler[Handler]: Specifies which handler should manage the
+   requests that match the rule.
 
- . Encoding: to manage the compression of the contents to be sent.
+ . link:#encoding[Encoding]: to manage the compression of the contents to be sent.
 
- . Expiration: to manage the configuration of *HTTP Cache headers*
+ . link:#time[Time]: to manage the configuration of *HTTP Cache headers*
    used to identify cacheable content.
 
- . Security: in this section one can configure *Access Restrictions*
+ . link:#security[Security]: in this section one can configure *Access Restrictions*
    and *Authentication*.
 
- . Traffic Shaping: Sets an outbound traffic limit for this rule,
+ . link:#traffic[Traffic Shaping]: Sets an outbound traffic limit for this rule,
    specified in bytes per second.
+
+
+[[rule]]
+Rule
+~~~~
+There are many rule types, as explained in the
+link:config_virtual_servers.html[Virtual servers] section.
+Complex rules can be defined by combining several basic types with the
+boolean operators AND, OR and NOT. For instance, we could define a
+rule that would apply to certain directories only if the request was
+made from a specific country. It would be as simple as defining a
+'directory type' rule AND a 'GeoIP type' rule.
+
+
+[[handler]]
+Handler
+~~~~~~~
+This allows to fine tune the behavior of any of the available
+handlers. Since so many options are available, refer to the complete
+list of link:modules_handlers.html[handlers] shipped with Cherokee.
+
 
 [[encoding]]
 Encoding
@@ -46,9 +64,12 @@ idea. You are encouraged to use this. Hardware is cheap. Bandwidth is
 not.
 
 
-[[expiration]]
-Expiration
+[[time]]
+Time
 ~~~~~~~~~~
+This tab specifies the connection timeout and content expiration
+settings.
+
 HTTP/1.1 defines caching methods in HTTP. Cherokee-Admin can
 automatically adjust the `Cache-Control` and `Expire` headers depending
 on the values you have configured. The available options are:
@@ -58,11 +79,21 @@ on the values you have configured. The available options are:
  . 2038: Maximum date value representable in POSIX time.
  . Custom Value: set a value by hand.
 
+
 [[security]]
 Security
 ~~~~~~~~
 This section will give access to access restriction settings and
 authentication settings.
+
+[[Logging]]
+Logging
+^^^^^^^
+Here we can specify whether or not the requests that match this rule
+should be logged. This can be useful in order to tidy up our log
+files, since some rule matches might not provide any relevant logging
+information
+
 
 [[restrictions]]
 Access Restrictions
