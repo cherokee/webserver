@@ -118,7 +118,7 @@ class PluginHandlerCGI (Handler.PluginHandler):
         if self.show_script_alias:
             table.Add (_("Script Alias"), CTK.TextCfg('%s!script_alias'%(self.key), True),        _(NOTE_SCRIPT_ALIAS))
         if self.show_change_uid:
-            table.Add (_("Change UID"),   CTK.CheckCfgText('%s!change_user', False, _('Change')), _(NOTE_CHANGE_USER))
+            table.Add (_("Change UID"),   CTK.CheckCfgText('%s!change_user'%(self.key), False, _('Change')), _(NOTE_CHANGE_USER))
 
         table.Add (_('Error handler'),        CTK.CheckCfgText('%s!error_handler'%(self.key),    True,  _('Enabled')), _(NOTE_ERROR_HANDLER))
         table.Add (_('Check file'),           CTK.CheckCfgText('%s!check_file'%(self.key),       True,  _('Enabled')), _(NOTE_CHECK_FILE))
