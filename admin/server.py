@@ -41,7 +41,7 @@ from configured import *
 
 def init (scgi_port, cfg_file):
     # Translation support
-    gettext.install('cherokee')
+    gettext.install('cherokee', LOCALEDIR)
 
     import __builtin__
     __builtin__.__dict__['N_'] = lambda x: x
