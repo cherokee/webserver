@@ -12,11 +12,11 @@ to set it up on Cherokee. It is a piece of cake.
 If PHP-fpm binaries are found, those will be prioritized over the
 regular binaries.
 
-It requires a single operation to get PHP configured on a Virtual
-Server: Choose the virtual server your want to configure, and click on
-the `Behavior` tab and trigger the `Rule panel` by clicking on the
-`Rule Management` button. Once in there, use the `Add` button at the
-top of the panel to see the available wizards:
+It requires a single operation to get PHP configured on a pre-existing
+Virtual Server: Choose the virtual server your want to configure, and
+click on the `Behavior` tab and trigger the `Rule panel` by clicking
+on the `Rule Management` button. Once in there, use the `Add` button
+at the top of the panel to see the available wizards:
 
 image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 

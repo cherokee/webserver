@@ -1,0 +1,88 @@
+== link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
+////
+Last checked: 2010/05/06 Cherokee 0.99.50b
+////
+
+Rule Types
+----------
+
+There are many types of rules available on Cherokee, and each one
+allows you to define specific ways of matching HTTP requests. Further
+more, the behavior can be combined by defining complex rules that
+apply boolean operations to the basic rule types, so the possibilities
+are endless. Some times a specific behavior can be achieved following
+completely different paths: for instance, you can match the requests
+for a specific file type either by using the `Extensions` rule type or
+the `Regular Expressions` type. Be advised that some rule types are
+inherently more efficient than others, so you should stick to the
+simplest and fastest approach.
+
+This is the list of available rule types:
+
+  * **Directory**: The entry Directory encloses a group of directives which will
+    apply only to the named directory and sub-directories of that directory.
+
+  * **Extensions**: The entry Extensions doesn't care about directories, it will
+    just look for the extension of the object requested.
+
+  * **Regular Expressions**: The Request entry provides a powerful way to apply
+    custom options to requests. It is a complement for the Directory and Extension
+    entries. Basically, there are two differences between them:
+
+    - It uses regular expressions to define the requests in which the configuration
+      will be applied.
+
+    - These entries are able to use the connection parameters (both pathinfo
+      and query string). In this way it is possible to set rules based on
+      parameter values.
+
+  * **Header**: This type of rule is used to modify the behavior in
+      response to the contents of HTTP headers. A regular expression
+      is needed to match against. This kind of rule can be used to
+      provide alternative contents to a specific type of users. For
+      example, it can check if the HTTP referer header refferences
+      specific domains to allow or deny the delivery of the requested
+      information.
+
+  * **File Exists**: This type of rule will only be applied if a
+      certain file (or a file among a list of provided file names) is
+      present. An I/O cache specific setting for the rule can be
+      configured in the `Rule` tab. If enabled, it will speed up the
+      file detection during the rule evaluation. This improves
+      performance but is not recommended when the directory contents
+      change dynamically. This type of rule can also be used to match
+      any file. For example, it can be configured to serve static
+      files and fall through to another rule if the HTTP request is
+      for a resource of dynamic nature.
+
+  * **HTTP method**: These rules are applied whenever the selected HTTP
+      method is used. You can configure these to respond to a request
+      of type GET, POST, HEAD, PUT, OPTIONS, DELETE, TRACE, CONNECT,
+      COPY, LOCK, MKCOL, MOVE, NOTIFY, POLL, PROPFIND, PROPPATCH,
+      SEARCH, SUBSCRIBE, UNLOCK or UNSUBSCRIBE.
+
+  * **GeoIP**: If GeoIP support is present, this type of rules can be
+      added. The GeoIP library has to be present at build time for
+      this to happen. If enabled, specific behavior can be offered
+      depending on the country of origin of the requests to the web
+      server. Note that the country is determined by matching the IPs
+      to the actual list of countries handled by the library, so the
+      usage of proxies on the user side will render this resolution
+      mechanism inaccurate. An initial country must be added to the
+      rule, and more selections can be added in further steps.
+
+  * **Incoming IP/Port**: If the server is running on several ports,
+      this rule type will let you specify to which port's pettitions
+      will it apply.
+
+  * **Full Path**: Full path request to which content the
+      configuration will be applied. This means you can pinpoint a
+      list of files that will be specifically targeted by this rule
+      type.
+
+  * **Connected from**: will let you discriminate connections based on
+      the IP or SubNet from which these are originated.
+
+  * **URL Argument**: will allow you to match a Regular Expressions to
+      the URL arguments, be it a specific one or any of the possible
+      arguments.

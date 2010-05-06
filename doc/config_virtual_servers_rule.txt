@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
 ////
-Last checked: 2010/05/05 Cherokee 0.99.50b
+Last checked: 2010/05/06 Cherokee 0.99.50b
 ////
 
 Virtual Server: Rules
@@ -30,13 +30,24 @@ This menu offers the following tabs:
 [[rule]]
 Rule
 ~~~~
-There are many rule types, as explained in the
-link:config_virtual_servers.html[Virtual servers] section.
-Complex rules can be defined by combining several basic types with the
-boolean operators AND, OR and NOT. For instance, we could define a
-rule that would apply to certain directories only if the request was
-made from a specific country. It would be as simple as defining a
-'directory type' rule AND a 'GeoIP type' rule.
+
+Several rule types are available to fit the needs of specific
+tasks. Sometimes you will want to restrict the content delivery based
+on a user's country of origin, sometimes you might want a behavior to
+be applied to a web directory, or you might be interested in modeling
+how the web server behaves if a request matches an existing file (or
+not).
+
+There is a complete list of the types in the
+link:config_virtual_servers_rule_types.html[Rule Types] section.
+
+The behavior can be specified further by combining several basic
+rule-types into a complex rule. Complex rules can be defined by
+combining several basic types with the boolean operators AND, OR and
+NOT. For instance, we could define a rule that would apply to certain
+directories only if the request was made from a specific country. It
+would be as simple as defining a 'directory type' rule AND a 'GeoIP
+type' rule.
 
 
 [[handler]]
@@ -45,6 +56,89 @@ Handler
 This allows to fine tune the behavior of any of the available
 handlers. Since so many options are available, refer to the complete
 list of link:modules_handlers.html[handlers] shipped with Cherokee.
+
+Handlers are the modules that generate the information with which the
+server responds to a client's request. By default Cherokee provides a
+number of them:
+
+
+**********************************************************************
+- link:modules_handlers_common.html[common] - **List & Send**
++
+Combines both `Static Content` and `Only listing` handlers
+functionality to behave similarly to common web servers, it will
+display directory listings when a directory is requested and serve the
+requested files.
+
+- link:modules_handlers_file.html[Static Content] - **Static Content**
++
+This is the file handler and it serves files straight from the
+file system.
+
+- link:modules_handlers_dirlist.html[dirlist] - **Only listing**:
++
+Displays a directory content list when a directory is requested,
+but it does not allow to download any content.
+
+- link:modules_handlers_redir.html[redir] - **Redirection**
++
+Perform simple and/or complex redirections using regexes.
+
+- link:modules_handlers_cgi.html[cgi] - **CGI Execution**
++
+Executes CGI programs.
+
+- link:modules_handlers_fcgi.html[fcgi] - **FastCGI Server Support**
++
+Communicates with FastCGI servers.
+
+- link:modules_handlers_scgi.html[scgi] - **SCGI Server Support**
++
+Communicates with SCGI servers.
+
+- link:modules_handlers_uwsgi.html[uwsgi] - **uWSGI Server Support**
++
+Communicates with the uWSGI server.
+
+- link:modules_handlers_proxy.html[proxy] - **HTTP Reverse Proxy**
++
+Advanced proxy services.
+
+- link:modules_handlers_streaming.html[streaming] - **Audio/Video streaming**
++
+Media streaming directly within Cherokee.
+
+- link:modules_handlers_ssi.html[ssi] - **Server Side Includes**
++
+Enables Server Side Includes.
+
+- link:modules_handlers_secdownload.html[secdownload] - **Hidden Downloads**
++
+Creates one-time, secure, time-expiring downloads.
+
+- link:modules_handlers_dbslayer.html[dbslayer] - **MySQL Bridge**
++
+MySQL load-balancing database abstraction layer.
+
+- link:modules_handlers_custom_error.html[custom_error] - **HTTP Error**
++
+Generates customizable HTTP errors.
+
+- link:modules_handlers_empty_gif.html[empty_gif] - **1x1 Transparent GIF**
++
+Returns a 1 pixel transparent image.
+
+- link:modules_handlers_server_info.html[Server Info] - **Server
+  Info**
++
+Provide some configurable information about the server.
+
+- link:modules_handlers_admin.html[Remote Administration] - **Remote
+  Administration**
++
+Implements an administration interface to work with
+link:bundle_cherokee-tweak.html[cherokee-tweak].
+**********************************************************************
 
 
 [[encoding]]

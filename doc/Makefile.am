@@ -32,6 +32,7 @@ config_general.html \
 config_virtual_servers.html \
 config_virtual_servers_evhost.html \
 config_virtual_servers_rule.html \
+config_virtual_servers_rule_types.html \
 config_advanced.html \
 config_info_sources.html \
 config_status.html \

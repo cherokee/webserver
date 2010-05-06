@@ -192,202 +192,69 @@ Behavior
 ~~~~~~~~
 
 This sections allows to define a set of rules to define how the server
-should handle the different requests. A summary of the existing rules is
-presented, containing several fields of information:
+should handle the different requests. A summary of the existing rules
+is presented, containing several fields of information:
 
-  . *Target*: web target of the rule, be it a path, a file type, etc.
-
-  . *Type*: Rule type. These will be explained in the following
-    paragraphs.
+  . *Match*: what the rule matches, which shows information about the
+    web target of the rule (be it a path, a file type, etc.) plus the
+    rule type. You can check the complete list of rule types in the
+    link:config_virtual_servers_rule_types.html[Rule Types] section.
 
   . *Handler*: The handler that manages the requests that match this
     rule. Read on for further details.
 
+  . *Authentication*: Indicates if authentication is used for this
+    rule. This can be set up through the
+    link:config_virtual_servers_rule.html[Rule Entry] menu.
+
   . *Root*: Indicates if the rule defines an alternative document root
     path.
 
-  . *Auth*: Indicates if authentication is used for this rule. This
-    can be set up through the link:config_virtual_servers_rule.html[Rule
-    Entry] menu.
+  . *Secure*: Which indicates that the rule only applies for HTTPS
+    connections.
 
-  . *Enc*: Indicates if any encoding is applied to the rule.
+  . *Encoders*: Indicates if any encoding is applied to the rule.
 
-  . *Exp*: Indicates if expiration headers are configured for the rule.
+  . *Expiration*: Indicates if expiration headers are configured for the rule.
+
+  . *Timeout*: Indicates if there is a defined connection timeout for
+    the rule.
+
+  . *Shaping*: Whether traffic shaping is enabled.
+
+  . *Logging*: Whether the rule matches are logged or not.
 
   . *Final*: If this flag is present it means that no other rules will
     be applied after this one, even if the request also matches other
     rules with lower priority.
 
+  . *Enabled*: If the rule is currently enabled or not, which might
+    completely alter the behavior of the virtual server.
+
 These rules can be defined based on the directory that the request
 targets, the extension of the file that it is requesting, or a regular
-expression that may match the request. This is the list of available
-rule types:
-
-  * **Directory**: The entry Directory encloses a group of directives which will
-    apply only to the named directory and sub-directories of that directory.
-
-  * **Extensions**: The entry Extensions doesn't care about directories, it will
-    just look for the extension of the object requested.
-
-  * **Regular Expressions**: The Request entry provides a powerful way to apply
-    custom options to requests. It is a complement for the Directory and Extension
-    entries. Basically, there are two differences between them:
-
-    - It uses regular expressions to define the requests in which the configuration
-      will be applied.
-
-    - These entries are able to use the connection parameters (both pathinfo
-      and query string). In this way it is possible to set rules based on
-      parameter values.
-
-  * **Header**: This type of rule is used to modify the behavior in
-      response to the contents of HTTP headers. A regular expression
-      is needed to match against. This kind of rule can be used to
-      provide alternative contents to a specific type of users. For
-      example, it can check if the HTTP referer header refferences
-      specific domains to allow or deny the delivery of the requested
-      information.
-
-  * **File Exists**: This type of rule will only be applied if a
-      certain file (or a file among a list of provided file names) is
-      present. An I/O cache specific setting for the rule can be
-      configured in the `Rule` tab. If enabled, it will speed up the
-      file detection during the rule evaluation. This improves
-      performance but is not recommended when the directory contents
-      change dynamically. This type of rule can also be used to match
-      any file. For example, it can be configured to serve static
-      files and fall through to another rule if the HTTP request is
-      for a resource of dynamic nature.
-
-  * **HTTP method**: These rules are applied whenever the selected HTTP
-      method is used. You can configure these to respond to a request
-      of type GET, POST, HEAD, PUT, OPTIONS, DELETE, TRACE, CONNECT,
-      COPY, LOCK, MKCOL, MOVE, NOTIFY, POLL, PROPFIND, PROPPATCH,
-      SEARCH, SUBSCRIBE, UNLOCK or UNSUBSCRIBE.
-
-  * **GeoIP**: If GeoIP support is present, this type of rules can be
-      added. The GeoIP library has to be present at build time for
-      this to happen. If enabled, specific behavior can be offered
-      depending on the country of origin of the requests to the web
-      server. Note that the country is determined by matching the IPs
-      to the actual list of countries handled by the library, so the
-      usage of proxies on the user side will render this resolution
-      mechanism inaccurate. An initial country must be added to the
-      rule, and more selections can be added in further steps.
-
-  * **Incoming IP/Port**: If the server is running on several ports,
-      this rule type will let you specify to which port's pettitions
-      will it apply.
-
-  * **Full Path**: Full path request to which content the
-      configuration will be applied. This means you can pinpoint a
-      list of files that will be specifically targeted by this rule
-      type.
-
-  * **Connected from**: will let you discriminate connections based on
-      the IP or SubNet from which these are originated.
-
-  * **URL Argument**: will allow you to match a Regular Expressions to
-      the URL arguments, be it a specific one or any of the possible
-      arguments.
+expression that may match the request among other options.
 
 It is very important to know that these rules are prioritized. The
 higher its priority is, the sooner they are checked. You could think
 of a network routing table, it is quite similar. You can set the
 relative priorities among the rules from within the `Behavior` panel,
-which is accessed through the `Rule Management` button. Simply
-dragging and dropping them in the desired position will do. If you
-click on the rule name, the rule's configuration options will be
-displayed in the main content area. If you click anywhere else, you
-will be able to drag and drop it into the desired position).
+which is accessed through the `Rule Management` button. This button
+will switch the left panel from `Virtual Server` mode to `Rule mode`,
+and the list of virtual servers on the left panel will be replaced by
+a panel with the list of rules.
+
+In `Rule mode` you wiil be able to define a set of rules to define how
+the server should handle the different requests, and simply dragging
+and dropping the rules in the desired position will do. If you click
+on the rule name, the rule's configuration options will be displayed
+in the main content area. If you click anywhere else, you will be able
+to drag and drop it into the desired position).
 
 image::media/images/admin_behavior.png[Virtual server]
 
 Each of these behavior rules must specify the handler that the server
-should use to reply to the requests that match the rule.  Handlers are
-the modules that generate the information with which the server
-responds a client's request. By default Cherokee provides a number of
-them:
-
-
-**********************************************************************
-- link:modules_handlers_common.html[common] - **List & Send**
-+
-Combines both `Static Content` and `Only listing` handlers
-functionality to behave similarly to common web servers, it will
-display directory listings when a directory is requested and serve the
-requested files.
-
-- link:modules_handlers_file.html[Static Content] - **Static Content**
-+
-This is the file handler and it serves files straight from the
-file system.
-
-- link:modules_handlers_dirlist.html[dirlist] - **Only listing**:
-+
-Displays a directory content list when a directory is requested,
-but it does not allow to download any content.
-
-- link:modules_handlers_redir.html[redir] - **Redirection**
-+
-Perform simple and/or complex redirections using regexes.
-
-- link:modules_handlers_cgi.html[cgi] - **CGI Execution**
-+
-Executes CGI programs.
-
-- link:modules_handlers_fcgi.html[fcgi] - **FastCGI Server Support**
-+
-Communicates with FastCGI servers.
-
-- link:modules_handlers_scgi.html[scgi] - **SCGI Server Support**
-+
-Communicates with SCGI servers.
-
-- link:modules_handlers_uwsgi.html[uwsgi] - **uWSGI Server Support**
-+
-Communicates with the uWSGI server.
-
-- link:modules_handlers_proxy.html[proxy] - **HTTP Reverse Proxy**
-+
-Advanced proxy services.
-
-- link:modules_handlers_streaming.html[streaming] - **Audio/Video streaming**
-+
-Media streaming directly within Cherokee.
-
-- link:modules_handlers_ssi.html[ssi] - **Server Side Includes**
-+
-Enables Server Side Includes.
-
-- link:modules_handlers_secdownload.html[secdownload] - **Hidden Downloads**
-+
-Creates one-time, secure, time-expiring downloads.
-
-- link:modules_handlers_dbslayer.html[dbslayer] - **MySQL Bridge**
-+
-MySQL load-balancing database abstraction layer.
-
-- link:modules_handlers_custom_error.html[custom_error] - **HTTP Error**
-+
-Generates customizable HTTP errors.
-
-- link:modules_handlers_empty_gif.html[empty_gif] - **1x1 Transparent GIF**
-+
-Returns a 1 pixel transparent image.
-
-- link:modules_handlers_server_info.html[Server Info] - **Server
-  Info**
-+
-Provide some configurable information about the server.
-
-- link:modules_handlers_admin.html[Remote Administration] - **Remote
-  Administration**
-+
-Implements an administration interface to work with
-link:bundle_cherokee-tweak.html[cherokee-tweak].
-**********************************************************************
-
+should use to reply to the requests that match the rule.
 
 The selection of any one of the rule targets will offer new
 configuration options through the
