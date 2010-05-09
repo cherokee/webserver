@@ -58,9 +58,9 @@ class Plugin_authlist (Auth.PluginAuth):
 
             if keys:
                 self += CTK.RawHTML ("<h3>%s</h3>" % (_('Authentication list')))
-                table = CTK.Table()
+                table = CTK.Table({'id': 'authlist-table'})
                 table.set_header (1)
-                table += [CTK.RawHTML(x) for x in (_('User'), _('Password'))]
+                table += [CTK.RawHTML(x) for x in (_('User'), _('Password'),'')]
                 for c in keys:
                     pre    = '%s!list!%s'%(key, c)
                     user   = CTK.RawHTML (CTK.cfg.get_val('%s!user'     %(pre)))
