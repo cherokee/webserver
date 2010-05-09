@@ -81,7 +81,6 @@
 	   function auto_select_row (row) {
 		  var row_id     = row.attr('pid');
 		  var did_select = false;
-
 		  self.find('.row_content').each (function() {
 			 if ($(this).attr('pid') == row_id) {
 				select_row ($(this));
@@ -132,7 +131,7 @@
 			 select_row (first_row);
 
 		  } else {
-			 var did_select = auto_select_row ($('#'+cookie_selected));
+			 var did_select = auto_select_row ($("div[pid='" + cookie_selected + "']"));
 
 			 if (! did_select) {
 				var first_row = self.find('.row_content:first');
