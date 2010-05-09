@@ -47,7 +47,8 @@ static ret_t
 connect_to_database (cherokee_handler_dbslayer_t *hdl)
 {
 	MYSQL                             *conn;
-	cherokee_handler_dbslayer_props_t *props = HANDLER_DBSLAYER_PROPS(hdl);
+	cherokee_handler_dbslayer_props_t *props      = HANDLER_DBSLAYER_PROPS(hdl);
+	cherokee_connection_t             *connection = HANDLER_CONN(hdl);
 
 	conn = mysql_real_connect (hdl->conn,
 				   hdl->src_ref->host.buf,
@@ -58,6 +59,9 @@ connect_to_database (cherokee_handler_dbslayer_t *hdl)
 				   hdl->src_ref->unix_socket.buf,
 				   CLIENT_MULTI_STATEMENTS | CLIENT_MULTI_RESULTS);
 	if (conn == NULL) {
+		cherokee_balancer_report_fail (props->balancer, connection, hdl->src_ref);
+
+		connection->error_code = http_bad_gateway;
 		return ret_error;
 	}
 
