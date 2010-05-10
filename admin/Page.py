@@ -110,7 +110,16 @@ class Base (CTK.Page):
 
         # Set up the template
         template = CTK.Template (filename = theme_file)
-        template['title'] = title
+        template['title']    = title
+        template['save']     = _('Save')
+        template['home']     = _('Home')
+        template['status']   = _('Status')
+        template['general']  = _('General')
+        template['vservers'] = _('vServers')
+        template['sources']  = _('Sources')
+        template['advanced'] = _('Advanced')
+        template['help']     = _('Help')
+        template['updating'] = _('Updating...')
 
         # <body> property
         if body_id:

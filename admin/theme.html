@@ -11,25 +11,25 @@
  <!-- XXX: @ion: Don't know if this is the place to load the top bar... -->
    <div id="topbar">
     <img src="/static/images/cherokee-logo-bar.png" alt="Cherokee"/>
-    <div id="save-box"><a href="#" id="save-button" class="button butbig saved"><span id="save-msg">Save</span></a></div>
+    <div id="save-box"><a href="#" id="save-button" class="button butbig saved"><span id="save-msg">%(save)s</span></a></div>
     <ul id="nav">
-    <li id="nav-index"><a href="/">Home</a></li>
-    <li id="nav-status"><a href="/status">Status</a></li>
-    <li id="nav-general"><a href="/general">General</a></li>
-    <li id="nav-vservers"><a href="/vserver">vServers</a></li>
-    <li id="nav-source"><a href="/source">Sources</a></li>
-    <li id="nav-advanced"><a href="/advanced">Advanced</a></li>
+    <li id="nav-index"><a href="/">%(home)s</a></li>
+    <li id="nav-status"><a href="/status">%(status)s</a></li>
+    <li id="nav-general"><a href="/general">%(general)s</a></li>
+    <li id="nav-vservers"><a href="/vserver">%(vservers)s</a></li>
+    <li id="nav-source"><a href="/source">%(sources)s</a></li>
+    <li id="nav-advanced"><a href="/advanced">%(advanced)s</a></li>
     </ul>
    </div>
  </div>
  <div id="container">
    <div id="help">
-     <a class="helpbutton" href="#" id="help-a"><span>Help</span></a>
+     <a class="helpbutton" href="#" id="help-a"><span>%(help)s</span></a>
      %(helps)s
    </div>
 
    <div id="main">
-     <div id="activity"><span>Updating...</span></div>
+     <div id="activity"><span>%(updating)s</span></div>
      %(html)s
    </div>
  </div>
