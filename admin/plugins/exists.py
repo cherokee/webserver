@@ -32,7 +32,7 @@ NOTE_EXISTS      = N_("Comma separated list of files. Rule applies if one exists
 NOTE_IOCACHE     = N_("Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise.")
 NOTE_ANY         = N_("Match the request if any file exists.")
 NOTE_ONLY_FILES  = N_("Only match regular files. If unset directories will be matched as well.")
-NOTE_INDEX_FILES = N_("If a directory is request, check the index files inside it.")
+NOTE_INDEX_FILES = N_("If a directory is requested, check the index files inside it.")
 
 OPTIONS = [('0', _('Match a specific list of files')),
            ('1', _('Match any file'))]
