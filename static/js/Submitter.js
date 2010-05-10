@@ -20,7 +20,11 @@
  * 02110-1301, USA.
  */
 
-;(function($) {
+// Workaround to prevent double inclussion
+if ((typeof submitter_loaded) == 'undefined') {
+    submitter_loaded = true;
+
+ ;(function($) {
     var Submitter = function (element, url, optional) {
 	   var optional_str = optional;
 	   var key_pressed  = false;
@@ -227,6 +231,8 @@
 	   });
     };
 
-})(jQuery);
+  })(jQuery);
+
+} // Double inclusion
 
 // REF: http://www.virgentech.com/code/view/id/3
