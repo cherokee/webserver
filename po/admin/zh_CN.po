@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.49' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-05 21:16+0800\n"
+"POT-Creation-Date: 2010-05-10 16:11+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -66,18 +66,18 @@ msgid ""
 "A load balancer must be configured to use at least one information source."
 msgstr ""
 
-#: admin/Balancer.py:67 admin/PageSource.py:222 admin/PageSource.py:259
+#: admin/Balancer.py:67 admin/PageSource.py:298 admin/PageSource.py:337
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "昵称"
 
-#: admin/Balancer.py:67 admin/plugins/mysql.py:72
+#: admin/Balancer.py:67 admin/plugins/mysql.py:73
 #: admin/wizards/coldfusion.py:194
 msgid "Host"
 msgstr "主机"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:384
-#: admin/PageSource.py:404 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:69 admin/PageSource.py:462
+#: admin/PageSource.py:482 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "数据源"
 
@@ -165,7 +165,8 @@ msgstr "允许访问的主机"
 msgid "Name"
 msgstr "名称"
 
-#: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/plugins/proxy.py:170
+#: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/PageSource.py:203
+#: admin/PageSource.py:232 admin/plugins/proxy.py:170
 msgid "Value"
 msgstr "值"
 
@@ -210,12 +211,13 @@ msgid "Custom Environment Variables"
 msgstr "自定义环境变量"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:357
-#: admin/PageVServers.py:237 admin/plugins/authlist.py:93
-#: admin/plugins/error_redir.py:94 admin/plugins/proxy.py:117
-#: admin/plugins/proxy.py:166 admin/plugins/proxy.py:213
-#: admin/plugins/redir.py:114 admin/plugins/rehost.py:71
-#: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
+#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:239
+#: admin/PageSource.py:435 admin/PageVServers.py:237
+#: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
+#: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
+#: admin/plugins/proxy.py:213 admin/plugins/redir.py:114
+#: admin/plugins/rehost.py:71 admin/plugins/target_ip.py:79
+#: admin/plugins/wildcard.py:70
 msgid "Add"
 msgstr "增加"
 
@@ -272,9 +274,7 @@ msgstr "1 月"
 msgid ""
 "You need to enable the <a href=\"%s\">Information Collector</a> setting in "
 "order to render usage graphics."
-msgstr ""
-"您需要启动图形化的<a href=\"%s\">信息采集器</a>."
-""
+msgstr "您需要启动图形化的<a href=\"%s\">信息采集器</a>."
 
 #: admin/Graph.py:51
 msgid ""
@@ -282,7 +282,7 @@ msgid ""
 "virtual server."
 msgstr "是否在此虚拟主机上启用流量统计."
 
-#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:197
+#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:270
 #: admin/PageStatus.py:70 admin/PageVServer.py:510 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "未知"
@@ -358,9 +358,10 @@ msgstr "新增"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
 #: admin/PageIndex.py:348 admin/PageRule.py:213 admin/PageRule.py:261
-#: admin/PageRule.py:287 admin/PageSource.py:344 admin/PageSource.py:358
-#: admin/PageSource.py:372 admin/PageVServers.py:203 admin/PageVServers.py:238
-#: admin/PageVServers.py:264 admin/plugins/redir.py:115
+#: admin/PageRule.py:287 admin/PageSource.py:240 admin/PageSource.py:422
+#: admin/PageSource.py:436 admin/PageSource.py:450 admin/PageVServers.py:203
+#: admin/PageVServers.py:238 admin/PageVServers.py:264
+#: admin/plugins/redir.py:115
 msgid "Cancel"
 msgstr "取消"
 
@@ -429,6 +430,46 @@ msgstr "重启"
 #: admin/Page.py:97
 msgid "OK"
 msgstr "确定"
+
+#: admin/Page.py:114
+#, fuzzy
+msgid "Save"
+msgstr "服务器"
+
+#: admin/Page.py:115
+msgid "Home"
+msgstr ""
+
+#: admin/Page.py:116 admin/PageAdvanced.py:144 admin/PageIndex.py:97
+#: admin/PageStatus.py:40 admin/PageStatus.py:112
+msgid "Status"
+msgstr "状态"
+
+#: admin/Page.py:117 admin/PageGeneral.py:234 admin/PageStatus.py:101
+msgid "General"
+msgstr "常规"
+
+#: admin/Page.py:118
+#, fuzzy
+msgid "vServers"
+msgstr "服务器"
+
+#: admin/Page.py:119
+#, fuzzy
+msgid "Sources"
+msgstr "资源"
+
+#: admin/Page.py:120 admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
+msgid "Advanced"
+msgstr "高级"
+
+#: admin/Page.py:121
+msgid "Help"
+msgstr ""
+
+#: admin/Page.py:122
+msgid "Updating..."
+msgstr ""
 
 #: admin/PageAdvanced.py:61
 msgid ""
@@ -554,10 +595,6 @@ msgstr "Diffie Hellman (DH) PEM文件路径: 2048 bits."
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
 msgstr "Diffie Hellman (DH) PEM文件路径: 4096 bits."
 
-#: admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
-msgid "Advanced"
-msgstr "高级"
-
 #: admin/PageAdvanced.py:113
 msgid "Keep Alive"
 msgstr ""
@@ -621,11 +658,6 @@ msgstr "Nonces清理时间"
 #: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
 msgid "Resources"
 msgstr "资源"
-
-#: admin/PageAdvanced.py:144 admin/PageIndex.py:97 admin/PageStatus.py:40
-#: admin/PageStatus.py:112
-msgid "Status"
-msgstr "状态"
 
 #: admin/PageAdvanced.py:145
 msgid "Max pages"
@@ -836,7 +868,7 @@ msgstr "匹配规则"
 msgid "Handler"
 msgstr "处理程序"
 
-#: admin/PageEntry.py:248 admin/PageSource.py:193
+#: admin/PageEntry.py:248 admin/PageSource.py:266
 msgid "Rule"
 msgstr "规则"
 
@@ -857,9 +889,7 @@ msgstr "安全"
 msgid ""
 "The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
 "problem can he solved in there."
-msgstr ""
-"建议您检查<a href=\"%s\">此页面</a>，您可能会发现解决问题的方式"
-""
+msgstr "建议您检查<a href=\"%s\">此页面</a>，您可能会发现解决问题的方式"
 
 #: admin/PageError.py:57 admin/PageError.py:83
 msgid "Server Launch Error"
@@ -878,9 +908,7 @@ msgstr "配置文件<code>%s</code>不允许修改."
 msgid ""
 "You have to change its permissions in order to allow cherokee-admin to work "
 "with it. You can try to fix it by changing the file permissions:"
-msgstr ""
-"您必须更改 cherokee-admin权限以使其可以运行您可以尝试更改文件的权限:"
-""
+msgstr "您必须更改 cherokee-admin权限以使其可以运行您可以尝试更改文件的权限:"
 
 #: admin/PageError.py:91
 msgid "or by launching cherokee-admin as root."
@@ -898,8 +926,7 @@ msgstr "没有找到图标目录：<code>%s</code>"
 #: admin/PageError.py:119
 msgid ""
 "You may need to reinstall the Web Server in order to sort out this issue."
-msgstr ""
-"您可能需要重新安装web服务器."
+msgstr "您可能需要重新安装web服务器."
 
 #: admin/PageError.py:129 admin/PageError.py:135
 msgid "Icons Directory is Missing"
@@ -938,15 +965,12 @@ msgid ""
 msgstr ""
 "当您发现这个问题，请将您的评价发送给服务器开发者， 您的配置文件 <strong>将</"
 "strong> 被一同发送."
-""
 
 #: admin/PageException.py:40
 msgid ""
 "Thank you for reporting the problem. The Cherokee Web Server developers will "
 "try to fix it up as soon as possible."
-msgstr ""
-"谢谢您报告此问题，Cherokee服务器开发者将尽快的解决和修复这个 问题."
-""
+msgstr "谢谢您报告此问题，Cherokee服务器开发者将尽快的解决和修复这个 问题."
 
 #: admin/PageException.py:41
 #, python-format
@@ -957,7 +981,6 @@ msgid ""
 msgstr ""
 "<p>由于一些原因，错误报告没有提交到Cherokee项目组.</p><p>请积极提交<a target="
 "\"_blank\" href=\"%s\">错误报告 </a> 到我们的BUG报告系统.</p>"
-""
 
 #: admin/PageException.py:80
 msgid "Internal Error"
@@ -968,7 +991,7 @@ msgid "Thank you!"
 msgstr "谢谢您！"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:331
+#: admin/PageSource.py:409
 msgid "Close"
 msgstr "关闭"
 
@@ -981,8 +1004,9 @@ msgid "Unexpected Exception"
 msgstr "异常"
 
 #: admin/PageException.py:112
-msgid "Report developers"
-msgstr "报告开发人员"
+#, fuzzy
+msgid "Report this"
+msgstr "远程主机"
 
 #: admin/PageGeneral.py:38
 msgid "Defines a port that the server will listen to"
@@ -991,8 +1015,7 @@ msgstr "定义服务器监听端口"
 #: admin/PageGeneral.py:39
 msgid ""
 "Set to enable the IPv6 support. The OS must support IPv6 for this to work."
-msgstr ""
-"启用IPV6支持，前提您的服务器必须支持IPV6."
+msgstr "启用IPV6支持，前提您的服务器必须支持IPV6."
 
 #: admin/PageGeneral.py:40
 msgid "This option allows to choose how the server identifies itself."
@@ -1026,17 +1049,13 @@ msgstr "变更用户组，可以使用用户组名或者ID."
 msgid ""
 "Jail the server inside the directory. Don't use it as the only security "
 "measure."
-msgstr ""
-"监禁服务器运行于此目录。请不要把这个作为服务器安全得唯一措施。"
-""
+msgstr "监禁服务器运行于此目录。请不要把这个作为服务器安全得唯一措施。"
 
 #: admin/PageGeneral.py:48
 msgid ""
 "No ports to listen have been defined. By default the server will listen to "
 "TCP port 80 on all the network interfaces."
-msgstr ""
-"没有设置监听端口，服务器默认将监听所有网络接口上的 80端口."
-""
+msgstr "没有设置监听端口，服务器默认将监听所有网络接口上的 80端口."
 
 #: admin/PageGeneral.py:51
 msgid "General Configuration"
@@ -1084,7 +1103,7 @@ msgstr "上传追踪"
 
 #: admin/PageGeneral.py:145 admin/PageGeneral.py:183 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
-#: admin/plugins/mysql.py:73
+#: admin/plugins/mysql.py:74
 msgid "Port"
 msgstr "端口"
 
@@ -1149,10 +1168,6 @@ msgstr "图标"
 msgid "Mime types"
 msgstr "Mime 类型"
 
-#: admin/PageGeneral.py:234 admin/PageStatus.py:101
-msgid "General"
-msgstr "常规"
-
 #: admin/PageGeneral.py:235
 msgid "General Settings"
 msgstr "常规配置"
@@ -1190,7 +1205,6 @@ msgid ""
 msgstr ""
 "Cherokee商业支持由<a target=\"_blank\" href=\"%s\">Octality</a>提供. 他们提供"
 "一流的咨询，定制和企业支持服务."
-""
 
 #: admin/PageIndex.py:69
 msgid ""
@@ -1198,14 +1212,12 @@ msgid ""
 "\"subscribe-a\">Subscribe now!</a>"
 msgstr ""
 "社区邮件列表将更好的帮助您使用Cherokee. <a id=\"subscribe-a\">现在订阅!</a>"
-""
 
 #: admin/PageIndex.py:70
 #, python-format
 msgid ""
 "Join us at the <a target=\"_blank\" href=\"%s\">#cherokee</a> IRC Channel."
-msgstr ""
-"进入我们的<a target=\"_blank\" href=\"%s\">#cherokee</a> IRC频道."
+msgstr "进入我们的<a target=\"_blank\" href=\"%s\">#cherokee</a> IRC频道."
 
 #: admin/PageIndex.py:71
 #, python-format
@@ -1216,7 +1228,6 @@ msgid ""
 msgstr ""
 "您的反馈是非常重要的，将BUG报告和建议提交到our <a target=\"_blank\" href=\"%s"
 "\">bug tracker</a> 将帮助我们更好的发展Cherokee."
-""
 
 #: admin/PageIndex.py:72
 msgid "Find out what's going on with Cherokee on your favorite Social Media!"
@@ -1238,7 +1249,8 @@ msgid ""
 "test the latest developer snapshots of Cherokee Web Server help us to\n"
 "create the highest quality product. For that, we thank you.</p>\n"
 msgstr ""
-"像您这样下载和测试Cherokee服务器将帮助我们创造和开发高质量的产品，我们非常感\n"
+"像您这样下载和测试Cherokee服务器将帮助我们创造和开发高质量的产品，我们非常"
+"感\n"
 "谢您。\n"
 "\n"
 
@@ -1258,15 +1270,12 @@ msgstr "信息发送成功，谢谢您！"
 msgid ""
 "Unfortunatelly something went wrong, and the information could not be "
 "submitted:"
-msgstr ""
-"遇到错误，信息不能提交:"
-""
+msgstr "遇到错误，信息不能提交:"
 
 #: admin/PageIndex.py:90
 msgid ""
 "Please, try again. Do not hesitate to report the problem if it persists."
-msgstr ""
-"如果这个错误再次发生，请务必提交这个信息."
+msgstr "如果这个错误再次发生，请务必提交这个信息."
 
 #: admin/PageIndex.py:143
 msgid "Stop Server"
@@ -1445,9 +1454,7 @@ msgstr ""
 msgid ""
 "<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure "
 "you want to proceed?</p>"
-msgstr ""
-"<p>您要删除 <b>%s</b> b规则.</p><p>您确认 继续吗?</p>"
-""
+msgstr "<p>您要删除 <b>%s</b> b规则.</p><p>您确认 继续吗?</p>"
 
 #: admin/PageRule.py:53
 msgid "You are about to clone a Behavior Rule. Would you like to proceed?"
@@ -1465,11 +1472,11 @@ msgstr "手动"
 msgid "Manual configuration"
 msgstr "手动配置"
 
-#: admin/PageRule.py:208 admin/PageSource.py:339 admin/PageVServers.py:198
+#: admin/PageRule.py:208 admin/PageSource.py:417 admin/PageVServers.py:198
 msgid "Do you really want to remove it?"
 msgstr "您真的想要删除它吗？"
 
-#: admin/PageRule.py:209 admin/PageSource.py:340 admin/PageVServers.py:199
+#: admin/PageRule.py:209 admin/PageSource.py:418 admin/PageVServers.py:199
 msgid "Remove"
 msgstr "删除"
 
@@ -1489,7 +1496,7 @@ msgstr "增加规则"
 msgid "Configuration Assistant"
 msgstr "配置助手"
 
-#: admin/PageRule.py:271 admin/PageSource.py:361 admin/PageVServers.py:248
+#: admin/PageRule.py:271 admin/PageSource.py:439 admin/PageVServers.py:248
 msgid "New"
 msgstr "新的"
 
@@ -1497,8 +1504,8 @@ msgstr "新的"
 msgid "Clone Behavior Rule"
 msgstr "克隆规则"
 
-#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:371
-#: admin/PageSource.py:375 admin/PageVServers.py:263 admin/PageVServers.py:267
+#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:449
+#: admin/PageSource.py:453 admin/PageVServers.py:263 admin/PageVServers.py:267
 msgid "Clone"
 msgstr "克隆"
 
@@ -1518,16 +1525,12 @@ msgstr "过滤规则"
 msgid ""
 "The source can be either a local interpreter or a remote host acting as an "
 "information source."
-msgstr ""
-"数据源可以来自本地或者远程的信息处理器."
-""
+msgstr "数据源可以来自本地或者远程的信息处理器."
 
 #: admin/PageSource.py:45
 msgid ""
 "Source nick. It will be referenced by this name in the rest of the server."
-msgstr ""
-"数据源昵称,这个可以在服务器其他地方被引用."
-
+msgstr "数据源昵称,这个可以在服务器其他地方被引用."
 
 #: admin/PageSource.py:46
 msgid "It allows to choose whether it runs the local host or a remote server."
@@ -1537,9 +1540,7 @@ msgstr "它允许选择是否运行在本地主机或远程服务器."
 msgid ""
 "Where the information source can be accessed. The host:port pair, or the "
 "Unix socket path."
-msgstr ""
-"如果数据源可以访问.请设定主机:端口,或Unix套接字的路径."
-""
+msgstr "如果数据源可以访问.请设定主机:端口,或Unix套接字的路径."
 
 #: admin/PageSource.py:48
 msgid "Command to spawn a new source in case it were not accessible."
@@ -1549,9 +1550,7 @@ msgstr "如果不可访问则需要生成一个新的数据源."
 msgid ""
 "How long should the server wait when spawning an interpreter before giving "
 "up (in seconds). Default: 3."
-msgstr ""
-"等待服务程序响应的时间(秒),默认:3秒"
-""
+msgstr "等待服务程序响应的时间(秒),默认:3秒"
 
 #: admin/PageSource.py:50
 msgid ""
@@ -1559,39 +1558,30 @@ msgid ""
 "deleted until the rule has been manually edited."
 msgstr ""
 "数据源被使用中,注意:任何被其他规则引用的数据源都不能被删除,知道规则被编辑."
-""
 
 #: admin/PageSource.py:51
 msgid ""
 "Execute the interpreter under a different user. Default: Same UID as the "
 "server."
-msgstr ""
-"使用不同的用户执行解释程序,默认:与服务器用户相同"
-""
+msgstr "使用不同的用户执行解释程序,默认:与服务器用户相同"
 
 #: admin/PageSource.py:52
 msgid ""
 "Execute the interpreter under a different group. Default: Default GID of the "
 "new process UID."
-msgstr ""
-"使用不同的用户组执行解释程序,默认:与进程的用户组ID相同."
-""
+msgstr "使用不同的用户组执行解释程序,默认:与进程的用户组ID相同."
 
 #: admin/PageSource.py:53
 msgid ""
 "Whether the new child process should inherit the environment variables from "
 "the server process. Default: yes."
-msgstr ""
-"子进程继承服务器的环境设置,默认:是"
-""
+msgstr "子进程继承服务器的环境设置,默认:是"
 
 #: admin/PageSource.py:54
 msgid ""
 "You are about to delete an Information Source. Are you sure you want to "
 "proceed?"
-msgstr ""
-"您要删除一个数据源,请确认是否继续?"
-""
+msgstr "您要删除一个数据源,请确认是否继续?"
 
 #: admin/PageSource.py:55
 msgid "The Information Source list is currently empty."
@@ -1601,64 +1591,97 @@ msgstr "没有设置任何数据源信息."
 msgid ""
 "This is the last Information Source in use by a rule. Deleting it would "
 "break the configuration."
-msgstr ""
-"此数据源被至少一个规则所使用,删除将破坏服务器相关配置"
+msgstr "此数据源被至少一个规则所使用,删除将破坏服务器相关配置"
 
 #: admin/PageSource.py:57
 msgid "First edit the offending rule(s)"
 msgstr "编辑错误规则"
 
-#: admin/PageSource.py:193 admin/PageVServer.py:502
+#: admin/PageSource.py:58
+#, fuzzy
+msgid "Name of the variable"
+msgstr "虚拟主机昵称"
+
+#: admin/PageSource.py:59
+msgid "Value of the variable"
+msgstr ""
+
+#: admin/PageSource.py:60
+#, fuzzy
+msgid "The selected Information Source is about to be cloned."
+msgstr "克隆选定数据源"
+
+#: admin/PageSource.py:203 admin/PageSource.py:231
+#, fuzzy
+msgid "Variable"
+msgstr "禁止"
+
+#: admin/PageSource.py:205
+#, fuzzy
+msgid "Environment Variables"
+msgstr "自定义环境变量"
+
+#: admin/PageSource.py:238
+#, fuzzy
+msgid "Add new Environment variable"
+msgstr "增加自定义环境变量"
+
+#: admin/PageSource.py:247
+#, fuzzy
+msgid "Add new variable"
+msgstr "增加新文件"
+
+#: admin/PageSource.py:266 admin/PageVServer.py:502
 msgid "Virtual Server"
 msgstr "虚拟主机"
 
-#: admin/PageSource.py:221 admin/plugins/error_redir.py:87
-#: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:143
+#: admin/PageSource.py:297 admin/plugins/error_redir.py:87
+#: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:144
 msgid "Type"
 msgstr "类型"
 
-#: admin/PageSource.py:223 admin/PageSource.py:260
+#: admin/PageSource.py:299 admin/PageSource.py:338
 #: admin/wizards/rtorrent.py:100
 msgid "Connection"
 msgstr "连接"
 
-#: admin/PageSource.py:225
+#: admin/PageSource.py:301
 msgid "Interpreter"
 msgstr "解释器"
 
-#: admin/PageSource.py:226
+#: admin/PageSource.py:302
 msgid "Spawning timeout"
 msgstr "派生超时"
 
-#: admin/PageSource.py:227
+#: admin/PageSource.py:303
 msgid "Execute as User"
 msgstr "执行用户"
 
-#: admin/PageSource.py:228
+#: admin/PageSource.py:304
 msgid "Execute as Group"
 msgstr "执行用户组"
 
-#: admin/PageSource.py:229
+#: admin/PageSource.py:305
 msgid "Inherit Environment"
 msgstr "继承环境"
 
-#: admin/PageSource.py:328
+#: admin/PageSource.py:406
 msgid "Deletion is forbidden"
 msgstr "禁止删除"
 
-#: admin/PageSource.py:356 admin/PageSource.py:361
+#: admin/PageSource.py:434 admin/PageSource.py:439
 msgid "Add New Information Source"
 msgstr "添加数据源"
 
-#: admin/PageSource.py:370
+#: admin/PageSource.py:448
 msgid "Clone Information Source"
 msgstr "克隆数据源"
 
-#: admin/PageSource.py:375
+#: admin/PageSource.py:453
 msgid "Clone Selected Information Source"
 msgstr "克隆选定数据源"
 
-#: admin/PageSource.py:395
+#: admin/PageSource.py:473
 msgid "Sources Filtering"
 msgstr "数据源过滤"
 
@@ -1691,9 +1714,7 @@ msgstr "虚拟主机昵称"
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
-msgstr ""
-"PEM-encoded 认证文件路径(完整路径)"
-""
+msgstr "PEM-encoded 认证文件路径(完整路径)"
 
 #: admin/PageVServer.py:43
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
@@ -1730,9 +1751,7 @@ msgstr "选择允许如何生成错误响应。"
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
-msgstr ""
-"使用用户主目录作为网站根目录"
-"为空则禁止此功能。"
+msgstr "使用用户主目录作为网站根目录为空则禁止此功能。"
 
 #: admin/PageVServer.py:50
 msgid "The personal web support is currently turned on."
@@ -1750,9 +1769,7 @@ msgstr "虚拟主机的根目录"
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
-msgstr ""
-"默认首页设置.例如:<em>index.html,index.php</em>."
-""
+msgstr "默认首页设置.例如:<em>index.html,index.php</em>."
 
 #: admin/PageVServer.py:54
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
@@ -1794,31 +1811,26 @@ msgstr "处理日志的程序路径"
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
 "headers (send by reverse proxies)."
-msgstr ""
-"日志处理程序是否读取和使用X-Real-IP和X-Forwarded-For头"
-""
+msgstr "日志处理程序是否读取和使用X-Real-IP和X-Forwarded-For头"
 
 #: admin/PageVServer.py:64
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
 msgstr ""
-"接收所有X-Real-IP和X-Forwarded-For头,警告:除非您知道您在做什么,否则请不要启用."
-""
+"接收所有X-Real-IP和X-Forwarded-For头,警告:除非您知道您在做什么,否则请不要启"
+"用."
 
 #: admin/PageVServer.py:65
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
 "Forwarded-For headers."
-msgstr ""
-"允许发送X-Real-IP和X-Forwarded-For头的IP地址和子网."
-""
+msgstr "允许发送X-Real-IP和X-Forwarded-For头的IP地址和子网."
 
 #: admin/PageVServer.py:66
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
-msgstr ""
-"是否支持高级虚拟主机特性(默认关闭)"
+msgstr "是否支持高级虚拟主机特性(默认关闭)"
 
 #: admin/PageVServer.py:67
 msgid ""
@@ -1828,11 +1840,10 @@ msgid ""
 "${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
 "${response_size}"
 msgstr ""
-"允许使用以下变量: <br/>${ip_remote}, ${ip_local}, "
-"${protocol}, ${transport}, ${port_server}, ${query_string}, "
-"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-"${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
-"${response_size}"
+"允许使用以下变量: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, "
+"${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, "
+"${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, "
+"${request_original}, ${vserver_name}, ${response_size}"
 
 #: admin/PageVServer.py:68
 msgid "Allows the selection of domain matching method."
@@ -1842,9 +1853,7 @@ msgstr "选择域名匹配方式。"
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
-msgstr ""
-"是否对此虚拟主机开启统计."
-""
+msgstr "是否对此虚拟主机开启统计."
 
 #: admin/PageVServer.py:70
 msgid "Time standard to use in the log file entries."
@@ -2116,9 +2125,7 @@ msgstr "错误处理程序"
 msgid ""
 "<p>You are about to delete the <b>%s</b> Virtual Server.</p><p>Are you sure "
 "you want to proceed?</p>"
-msgstr ""
-"您要删除<b>%s</b>虚拟主机,是否确定继续?"
-""
+msgstr "您要删除<b>%s</b>虚拟主机,是否确定继续?"
 
 #: admin/PageVServers.py:51
 msgid "You are about to clone a Virtual Server. Would you like to proceed?"
@@ -2127,8 +2134,7 @@ msgstr "您要克隆一个虚拟主机,是否继续?"
 #: admin/PageVServers.py:52
 msgid ""
 "Name of the Virtual Server you are about to create. A domain name is alright."
-msgstr ""
-"您要新建的虚拟主机名称,建议使用相关域名."
+msgstr "您要新建的虚拟主机名称,建议使用相关域名."
 
 #: admin/PageVServers.py:53
 msgid "Document Root directory of the new Virtual Server."
@@ -2173,6 +2179,11 @@ msgstr "选择"
 #: admin/Wizard.py:195
 msgid "Use the same logging configuration as one of the other virtual servers."
 msgstr "将日志配置应用到其他虚拟主机"
+
+#: admin/Wizard.py:199
+#, fuzzy
+msgid "Do not configure"
+msgstr "不检查"
 
 #: admin/consts.py:26
 msgid "English"
@@ -2231,7 +2242,7 @@ msgid "Full Server string"
 msgstr "完整服务器信息"
 
 #: admin/consts.py:47 admin/consts.py:75 admin/consts.py:92
-#: admin/consts.py:106
+#: admin/consts.py:106 admin/plugins/mysql.py:43
 msgid "None"
 msgstr "无"
 
@@ -2244,11 +2255,11 @@ msgid "Only Listing"
 msgstr "仅列表"
 
 #: admin/consts.py:51 admin/plugins/error_redir.py:86
-#: admin/wizards/hotlinking.py:145 admin/wizards/hotlinking.py:164
+#: admin/wizards/hotlinking.py:146 admin/wizards/hotlinking.py:165
 msgid "Redirection"
 msgstr "转发"
 
-#: admin/consts.py:52
+#: admin/consts.py:52 admin/wizards/rails.py:73
 msgid "FastCGI"
 msgstr "快速CGI"
 
@@ -2301,7 +2312,7 @@ msgstr "HTTP错误"
 msgid "Remote Administration"
 msgstr "远程管理"
 
-#: admin/consts.py:65 admin/wizards/hotlinking.py:84
+#: admin/consts.py:65 admin/wizards/hotlinking.py:85
 msgid "1x1 Transparent GIF"
 msgstr "1*1像素透明的GIF图像"
 
@@ -2432,7 +2443,7 @@ msgstr "内部"
 #: admin/consts.py:183 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:101 admin/plugins/request.py:31
-#: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
+#: admin/plugins/url_arg.py:76 admin/plugins/url_arg.py:95
 msgid "Regular Expression"
 msgstr "正则表达式"
 
@@ -2658,11 +2669,11 @@ msgstr "访问数据库的密码."
 msgid "Database to connect to."
 msgstr "连接到数据库."
 
-#: admin/plugins/dbslayer.py:50 admin/plugins/mysql.py:75
+#: admin/plugins/dbslayer.py:50 admin/plugins/mysql.py:76
 msgid "DB User"
 msgstr "数据库用户名"
 
-#: admin/plugins/dbslayer.py:51 admin/plugins/mysql.py:76
+#: admin/plugins/dbslayer.py:51 admin/plugins/mysql.py:77
 msgid "DB Password"
 msgstr "数据库用户密码"
 
@@ -2687,8 +2698,7 @@ msgstr "数据库负载均衡"
 #: admin/plugins/directory.py:27
 msgid ""
 "Public Web Directory to which content the configuration will be applied."
-msgstr ""
-"配置公共网页目录"
+msgstr "配置公共网页目录"
 
 #: admin/plugins/directory.py:31 admin/wizards/alfresco.py:156
 #: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
@@ -2696,8 +2706,8 @@ msgstr ""
 #: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:206
 #: admin/wizards/liferay.py:153 admin/wizards/moinmoin.py:198
 #: admin/wizards/mono.py:182 admin/wizards/phpbb.py:161
-#: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:43
-#: admin/wizards/rails.py:297 admin/wizards/rtorrent.py:99
+#: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:44
+#: admin/wizards/rails.py:298 admin/wizards/rtorrent.py:99
 #: admin/wizards/sugar.py:191 admin/wizards/symfony.py:201
 #: admin/wizards/uwsgi.py:224 admin/wizards/wordpress.py:193
 #: admin/wizards/zend.py:176
@@ -2815,17 +2825,13 @@ msgstr "添加自定义错误"
 msgid ""
 "Check the dynamically generated Document Root, and use the general Document "
 "Root if it doesn't exist."
-msgstr ""
-"检查动态生成的文档根目录,如果它不存在则使用一般跟目录."
-""
+msgstr "检查动态生成的文档根目录,如果它不存在则使用一般跟目录."
 
 #: admin/plugins/evhost.py:30
 msgid ""
 "The Document Root directory will be built dynamically. The following "
 "variables are accepted:<br/>"
-msgstr ""
-"网站根目录将动态生成，可以使用一下参数:<br/>"
-""
+msgstr "网站根目录将动态生成，可以使用一下参数:<br/>"
 
 #: admin/plugins/evhost.py:41
 msgid "Dynamic Document Root"
@@ -2843,9 +2849,7 @@ msgstr "如果列表中的文件存在规则将被应用。"
 msgid ""
 "Uses cache during file detection. Disable if directory contents change "
 "frequently. Enable otherwise."
-msgstr ""
-"缓存文件监测信息,如果目录内容经常变化,则建议禁用此功能."
-""
+msgstr "缓存文件监测信息,如果目录内容经常变化,则建议禁用此功能."
 
 #: admin/plugins/exists.py:33
 msgid "Match the request if any file exists."
@@ -2856,7 +2860,8 @@ msgid "Only match regular files. If unset directories will be matched as well."
 msgstr "只匹配普通文件,如果未设置目录将使用此规则."
 
 #: admin/plugins/exists.py:35
-msgid "If a directory is request, check the index files inside it."
+#, fuzzy
+msgid "If a directory is requested, check the index files inside it."
 msgstr "如果请求是目录则检查目录内的首页文件."
 
 #: admin/plugins/exists.py:37
@@ -2903,9 +2908,7 @@ msgstr "文件%(most)s 或 %(last)s存在"
 msgid ""
 "Comma-separated list of File Extension to which the configuration will be "
 "applied."
-msgstr ""
-"列表中的文件如果存在则此配置将被应用."
-""
+msgstr "列表中的文件如果存在则此配置将被应用."
 
 #: admin/plugins/fcgi.py:49
 msgid "FastCGI Specific"
@@ -2943,9 +2946,7 @@ msgstr "来自"
 msgid ""
 "Full path request to which content the configuration will be applied. (Eg: /"
 "favicon.ico)"
-msgstr ""
-"请求内容的完整路径.例如:/favicon.ico"
-""
+msgstr "请求内容的完整路径.例如:/favicon.ico"
 
 #: admin/plugins/fullpath.py:91
 msgid "Full Web Paths"
@@ -3085,57 +3086,65 @@ msgstr "LDAP连接"
 msgid "The HTTP method that should match this rule."
 msgstr ""
 
-#: admin/plugins/mysql.py:32
+#: admin/plugins/mysql.py:33
 msgid "MySQL server IP address."
 msgstr "MySQ服务器IP地址"
 
-#: admin/plugins/mysql.py:33
+#: admin/plugins/mysql.py:34
 msgid "Server port to connect to."
 msgstr "端口"
 
-#: admin/plugins/mysql.py:34
+#: admin/plugins/mysql.py:35
 msgid "Full path of Unix socket to communicate with the data base."
 msgstr "数据库Unix套接字路径"
 
-#: admin/plugins/mysql.py:35
+#: admin/plugins/mysql.py:36
 msgid "User name for connecting to the database."
 msgstr "数据库用户名"
 
-#: admin/plugins/mysql.py:36
+#: admin/plugins/mysql.py:37
 msgid "Password for connecting to the database."
 msgstr "数据库用户密码"
 
-#: admin/plugins/mysql.py:37
+#: admin/plugins/mysql.py:38
 msgid "Database name containing the user/password pair list."
 msgstr "数据库包含用户名称/密码对清单。"
 
-#: admin/plugins/mysql.py:38
+#: admin/plugins/mysql.py:39
 msgid "SQL command to execute. ${user} is replaced with the user name."
 msgstr "执行SQL命令.用${user}替代用户名"
 
-#: admin/plugins/mysql.py:39
+#: admin/plugins/mysql.py:40
 msgid ""
 "Choose an encryption type for the password. Only suitable for the \"Basic\" "
 "authentication mechanism."
 msgstr ""
 
-#: admin/plugins/mysql.py:74
+#: admin/plugins/mysql.py:44
+msgid "MD5"
+msgstr ""
+
+#: admin/plugins/mysql.py:45
+msgid "SHA1"
+msgstr ""
+
+#: admin/plugins/mysql.py:75
 msgid "Unix Socket"
 msgstr "Unix 套接字"
 
-#: admin/plugins/mysql.py:77
+#: admin/plugins/mysql.py:78
 msgid "Database"
 msgstr "数据库"
 
-#: admin/plugins/mysql.py:78
+#: admin/plugins/mysql.py:79
 msgid "SQL Query"
 msgstr "SQL 查询"
 
-#: admin/plugins/mysql.py:79
+#: admin/plugins/mysql.py:80
 msgid "Password Hash"
 msgstr "加密"
 
-#: admin/plugins/mysql.py:84
+#: admin/plugins/mysql.py:85
 msgid "MySQL Connection"
 msgstr "MySQL连接"
 
@@ -3167,27 +3176,22 @@ msgstr "反向代理"
 msgid ""
 "Maximum number of connections per server that the proxy can try to keep "
 "opened."
-msgstr ""
-"代理服务器最大连接数"
-"."
+msgstr "代理服务器最大连接数."
 
 #: admin/plugins/proxy.py:36
 msgid ""
 "Allow the server to use Keep-alive connections with the back-end servers."
-msgstr ""
-"服务器与后端服务器保持活动连接数量."
+msgstr "服务器与后端服务器保持活动连接数量."
 
 #: admin/plugins/proxy.py:37
 msgid ""
 "Preserve the original \"Host:\" header sent by the client. (Default: No)"
-msgstr ""
-"保留原来客户端发生的的\"Host:\" 头. (默认: 否)"
+msgstr "保留原来客户端发生的的\"Host:\" 头. (默认: 否)"
 
 #: admin/plugins/proxy.py:38
 msgid ""
 "Preserve the \"Server:\" header sent by the back-end server. (Default: No)"
-msgstr ""
-"保留原来客户端发生的的\"Server:\" 头. (默认: 否)"
+msgstr "保留原来客户端发生的的\"Server:\" 头. (默认: 否)"
 
 #: admin/plugins/proxy.py:91 admin/plugins/proxy.py:121
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
@@ -3347,27 +3351,27 @@ msgstr ""
 msgid "Covering Parameters"
 msgstr ""
 
-#: admin/plugins/server_info.py:29 admin/plugins/server_info.py:32
+#: admin/plugins/server_info.py:30 admin/plugins/server_info.py:33
 msgid "Server Information"
 msgstr ""
 
-#: admin/plugins/server_info.py:33
+#: admin/plugins/server_info.py:34
 msgid "Only version information"
 msgstr ""
 
-#: admin/plugins/server_info.py:34
+#: admin/plugins/server_info.py:35
 msgid "Server Information + Connections"
 msgstr ""
 
-#: admin/plugins/server_info.py:37
+#: admin/plugins/server_info.py:38
 msgid "Which information should be shown."
 msgstr ""
 
-#: admin/plugins/server_info.py:47
+#: admin/plugins/server_info.py:48
 msgid "Show Information"
 msgstr ""
 
-#: admin/plugins/server_info.py:52
+#: admin/plugins/server_info.py:53
 msgid "Privacy Settings"
 msgstr ""
 
@@ -3422,27 +3426,27 @@ msgstr ""
 msgid "Accepted Server IP Addresses and Subnets"
 msgstr ""
 
-#: admin/plugins/url_arg.py:30
+#: admin/plugins/url_arg.py:31
 msgid "Argument name"
 msgstr ""
 
-#: admin/plugins/url_arg.py:31
+#: admin/plugins/url_arg.py:32
 msgid "Regular Expression for the match"
 msgstr ""
 
-#: admin/plugins/url_arg.py:33
+#: admin/plugins/url_arg.py:34
 msgid "Match a specific argument"
 msgstr ""
 
-#: admin/plugins/url_arg.py:34
+#: admin/plugins/url_arg.py:35
 msgid "Match any argument"
 msgstr ""
 
-#: admin/plugins/url_arg.py:73 admin/plugins/url_arg.py:91
+#: admin/plugins/url_arg.py:74 admin/plugins/url_arg.py:92
 msgid "Match type"
 msgstr ""
 
-#: admin/plugins/url_arg.py:74 admin/plugins/url_arg.py:93
+#: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
 msgid "Argument"
 msgstr ""
 
@@ -3961,7 +3965,7 @@ msgstr ""
 #: admin/wizards/joomla.py:223 admin/wizards/liferay.py:169
 #: admin/wizards/mailman.py:145 admin/wizards/moinmoin.py:214
 #: admin/wizards/mono.py:198 admin/wizards/phpbb.py:178
-#: admin/wizards/rails.py:313 admin/wizards/sugar.py:208
+#: admin/wizards/rails.py:314 admin/wizards/sugar.py:208
 #: admin/wizards/symfony.py:218 admin/wizards/trac.py:131
 #: admin/wizards/uwsgi.py:241 admin/wizards/wordpress.py:209
 #: admin/wizards/zend.py:193
@@ -4051,7 +4055,7 @@ msgstr ""
 #: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
 #: admin/wizards/drupal.py:252 admin/wizards/joomla.py:224
 #: admin/wizards/mailman.py:146 admin/wizards/mono.py:200
-#: admin/wizards/phpbb.py:179 admin/wizards/rails.py:314
+#: admin/wizards/phpbb.py:179 admin/wizards/rails.py:315
 #: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
 #: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
 #: admin/wizards/wordpress.py:210 admin/wizards/zend.py:194
@@ -4098,7 +4102,7 @@ msgstr ""
 msgid "Does not look like a Django source directory."
 msgstr ""
 
-#: admin/wizards/django.py:49 admin/wizards/rails.py:55
+#: admin/wizards/django.py:49 admin/wizards/rails.py:56
 #: admin/wizards/uwsgi.py:54
 msgid "The document root directory does not exist."
 msgstr ""
@@ -4174,57 +4178,57 @@ msgid ""
 "have the load balanced."
 msgstr ""
 
-#: admin/wizards/hotlinking.py:38
+#: admin/wizards/hotlinking.py:39
 msgid "Welcome to the Hotlinking Wizard"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:39
+#: admin/wizards/hotlinking.py:40
 msgid "This wizard stops other domains from hot-linking your media files."
 msgstr ""
 
-#: admin/wizards/hotlinking.py:40
+#: admin/wizards/hotlinking.py:41
 msgid "Anti-HotLinking Information"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:41
+#: admin/wizards/hotlinking.py:42
 msgid "Domain allowed to access the files. Eg: example.com"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:42
+#: admin/wizards/hotlinking.py:43
 msgid "Path to the public resource to use. Eg: /images/forbidden.jpg"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:43
+#: admin/wizards/hotlinking.py:44
 msgid "How to handle hot-linking requests."
 msgstr ""
 
-#: admin/wizards/hotlinking.py:44
+#: admin/wizards/hotlinking.py:45
 msgid "Recollection completed"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:45
+#: admin/wizards/hotlinking.py:46
 msgid ""
 "The required Information has been collected. Proceed to create the necessary "
 "rules to prevent hot-linking from happening."
 msgstr ""
 
-#: admin/wizards/hotlinking.py:82
+#: admin/wizards/hotlinking.py:83
 msgid "Show error"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:83
+#: admin/wizards/hotlinking.py:84
 msgid "Redirect"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:142
+#: admin/wizards/hotlinking.py:143
 msgid "Domain"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:179
+#: admin/wizards/hotlinking.py:181
 msgid "Domain Name"
 msgstr ""
 
-#: admin/wizards/hotlinking.py:180
+#: admin/wizards/hotlinking.py:182
 msgid "Reply type"
 msgstr ""
 
@@ -4442,7 +4446,7 @@ msgstr ""
 msgid "Directory doesn't look like a Mono based project."
 msgstr ""
 
-#: admin/wizards/mono.py:219 admin/wizards/rails.py:365
+#: admin/wizards/mono.py:219 admin/wizards/rails.py:366
 #: admin/wizards/trac.py:151
 msgid "Project Directory"
 msgstr ""
@@ -4545,81 +4549,105 @@ msgid ""
 "phpmyadmin)"
 msgstr ""
 
-#: admin/wizards/rails.py:37
+#: admin/wizards/rails.py:38
 msgid "Welcome to the Ruby on Rails wizard"
 msgstr ""
 
-#: admin/wizards/rails.py:38
+#: admin/wizards/rails.py:39
 msgid ""
 "<a target=\"_blank\" href=\"http://rubyonrails.org/\">Ruby on Rails</a> is "
 "an open-source web framework optimized for programmer happines and "
 "sustainable productivity."
 msgstr ""
 
-#: admin/wizards/rails.py:39
+#: admin/wizards/rails.py:40
 msgid ""
 "It lets you write beautiful code by favoring convention over configuration."
 msgstr ""
 
-#: admin/wizards/rails.py:41
+#: admin/wizards/rails.py:42
 msgid "Ruby on Rails Project"
 msgstr ""
 
-#: admin/wizards/rails.py:42
+#: admin/wizards/rails.py:43
 msgid "New Virtual Server"
 msgstr ""
 
-#: admin/wizards/rails.py:45
+#: admin/wizards/rails.py:46
 msgid "Local path to the Ruby on Rails based project."
 msgstr ""
 
-#: admin/wizards/rails.py:46
+#: admin/wizards/rails.py:47
 msgid "Name of the new domain that will be created."
 msgstr ""
 
-#: admin/wizards/rails.py:47
+#: admin/wizards/rails.py:48
 msgid ""
 "Directory of the web directory where the Ruby on Rails project will live in."
 msgstr ""
 
-#: admin/wizards/rails.py:48
+#: admin/wizards/rails.py:49
 msgid "Value of the RAILS_ENV variable."
 msgstr ""
 
-#: admin/wizards/rails.py:49
+#: admin/wizards/rails.py:50
 msgid ""
 "The proxy setting is recommended, but FastCGI can also be used if spawn-fcgi "
 "is available."
 msgstr ""
 
-#: admin/wizards/rails.py:51
+#: admin/wizards/rails.py:52
 msgid ""
 "<p>Even though the directory looks like a Ruby on Rails project, the public/"
 "dispatch.fcgi file wasn't found.</p>"
 msgstr ""
 
-#: admin/wizards/rails.py:52
+#: admin/wizards/rails.py:53
 msgid ""
 "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
 "might want to rename it.</p>"
 msgstr ""
 
-#: admin/wizards/rails.py:53
+#: admin/wizards/rails.py:54
 msgid ""
 "<p>If you are using Rails >= 2.3.0, you will have to execute the following "
 "command from the project directory in order to add the missing file:</"
 "p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
 msgstr ""
 
-#: admin/wizards/rails.py:54
+#: admin/wizards/rails.py:55
 msgid "It does not look like a Ruby on Rails based project directory."
 msgstr ""
 
-#: admin/wizards/rails.py:366
+#: admin/wizards/rails.py:65
+#, fuzzy
+msgid "Production"
+msgstr "仅软件名称"
+
+#: admin/wizards/rails.py:66
+#, fuzzy
+msgid "Test"
+msgstr "Digest"
+
+#: admin/wizards/rails.py:67
+#, fuzzy
+msgid "Development"
+msgstr "服务器开发"
+
+#: admin/wizards/rails.py:68
+msgid "Empty"
+msgstr ""
+
+#: admin/wizards/rails.py:72
+#, fuzzy
+msgid "HTTP proxy"
+msgstr "HTTP错误"
+
+#: admin/wizards/rails.py:367
 msgid "RAILS_ENV environment"
 msgstr ""
 
-#: admin/wizards/rails.py:369
+#: admin/wizards/rails.py:370
 msgid "Deployment method"
 msgstr ""
 
@@ -4961,3 +4989,6 @@ msgstr ""
 #: admin/wizards/zend.py:49
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
 msgstr ""
+
+#~ msgid "Report developers"
+#~ msgstr "报告开发人员"

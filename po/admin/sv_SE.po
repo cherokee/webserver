@@ -1,13 +1,10 @@
-# Copyright (C) YEAR Alvaro Lopez Ortega
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee-admin 0.99.16\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-05 13:31+0200\n"
-"PO-Revision-Date: 2009-06-02 12:23+0100\n"
+"POT-Creation-Date: 2010-05-10 16:11+0200\n"
+"PO-Revision-Date: 2010-05-10 16:28+0100\n"
 "Last-Translator: Andreas Andersson <andreas@cyberdelic.org>\n"
 "Language-Team: Swedish <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -46,14 +43,16 @@ msgstr "Autentiseringsdetaljer"
 
 #: admin/Balancer.py:32
 msgid "Specifies the policy used to dispatch the connections."
-msgstr ""
+msgstr "Specifierar policy att använda för att förmedla anslutningarna"
 
 #: admin/Balancer.py:33
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "It is already balancing among all the configured <a href=\"%s\">Information "
 "Sources</a>."
-msgstr "Den balanserar redan mellan alla konfigurerade"
+msgstr ""
+"Den balanserar redan mellan alla konfigurerade <a href=\"%s"
+"\">Informationskällor</a>."
 
 #: admin/Balancer.py:34
 msgid ""
@@ -69,18 +68,18 @@ msgid ""
 msgstr ""
 "En lastbalanserare måste konfigureras att använda minst en informationskälla."
 
-#: admin/Balancer.py:67 admin/PageSource.py:222 admin/PageSource.py:259
+#: admin/Balancer.py:67 admin/PageSource.py:298 admin/PageSource.py:337
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "Smeknamn"
 
-#: admin/Balancer.py:67 admin/plugins/mysql.py:72
+#: admin/Balancer.py:67 admin/plugins/mysql.py:73
 #: admin/wizards/coldfusion.py:194
 msgid "Host"
 msgstr "Värd"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:384
-#: admin/PageSource.py:404 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:69 admin/PageSource.py:462
+#: admin/PageSource.py:482 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "Informationskällor"
 
@@ -151,7 +150,7 @@ msgstr ""
 
 #: admin/CgiBase.py:68
 msgid "Read X-Real-IP"
-msgstr ""
+msgstr "Läs X-Real-IP"
 
 #: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
@@ -176,7 +175,8 @@ msgstr "Acceptera från värd(ar)"
 msgid "Name"
 msgstr "Namn"
 
-#: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/plugins/proxy.py:170
+#: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/PageSource.py:203
+#: admin/PageSource.py:232 admin/plugins/proxy.py:170
 msgid "Value"
 msgstr "Värde"
 
@@ -189,9 +189,8 @@ msgid "Change UID"
 msgstr "Byt UID"
 
 #: admin/CgiBase.py:121
-#, fuzzy
 msgid "Change"
-msgstr "Byt UID"
+msgstr "Byt"
 
 #: admin/CgiBase.py:123
 msgid "Error handler"
@@ -220,17 +219,17 @@ msgid "Fixed Authentication List"
 msgstr "Fast autentiseringslista"
 
 #: admin/CgiBase.py:145
-#, fuzzy
 msgid "Custom Environment Variables"
 msgstr "Egna miljövariabler"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:357
-#: admin/PageVServers.py:237 admin/plugins/authlist.py:93
-#: admin/plugins/error_redir.py:94 admin/plugins/proxy.py:117
-#: admin/plugins/proxy.py:166 admin/plugins/proxy.py:213
-#: admin/plugins/redir.py:114 admin/plugins/rehost.py:71
-#: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
+#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:239
+#: admin/PageSource.py:435 admin/PageVServers.py:237
+#: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
+#: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
+#: admin/plugins/proxy.py:213 admin/plugins/redir.py:114
+#: admin/plugins/rehost.py:71 admin/plugins/target_ip.py:79
+#: admin/plugins/wildcard.py:70
 msgid "Add"
 msgstr "Lägg till"
 
@@ -248,14 +247,12 @@ msgid "Countries"
 msgstr "Länder"
 
 #: admin/Flags.py:308 admin/Flags.py:334
-#, fuzzy
 msgid "Extras"
-msgstr "Extern"
+msgstr "Extra"
 
 #: admin/Graph.py:39
-#, fuzzy
 msgid "Server Traffic"
-msgstr "Serverinfo"
+msgstr "Servertrafik"
 
 #: admin/Graph.py:40
 #, fuzzy
@@ -263,29 +260,28 @@ msgid "Connections / Requests"
 msgstr "Anslutningar"
 
 #: admin/Graph.py:41
-#, fuzzy
 msgid "Connection Timeouts"
-msgstr "Anslutningar"
+msgstr "Timeout på anslutningar"
 
 #: admin/Graph.py:43
 msgid "1 Hour"
-msgstr ""
+msgstr "1 timma"
 
 #: admin/Graph.py:44
 msgid "6 Hours"
-msgstr ""
+msgstr "6 timmar"
 
 #: admin/Graph.py:45
 msgid "1 Day"
-msgstr ""
+msgstr "1 dag"
 
 #: admin/Graph.py:46
 msgid "1 Week"
-msgstr ""
+msgstr "1 vecka"
 
 #: admin/Graph.py:47
 msgid "1 Month"
-msgstr ""
+msgstr "1 månad"
 
 #: admin/Graph.py:50
 #, python-format
@@ -293,22 +289,25 @@ msgid ""
 "You need to enable the <a href=\"%s\">Information Collector</a> setting in "
 "order to render usage graphics."
 msgstr ""
+"Du måste aktivera <a href=\"%s\">informationsinsamlar</a>-regeln för att "
+"rendera användningsgrafer."
 
 #: admin/Graph.py:51
 msgid ""
 "Whether or not it should collect statistics about the traffic of this "
 "virtual server."
 msgstr ""
+"Huruvida den skall samla in statistik om trafik till den här virtuella "
+"servern."
 
-#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:197
+#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:270
 #: admin/PageStatus.py:70 admin/PageVServer.py:510 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "Okänd"
 
 #: admin/Graph.py:124
-#, fuzzy
 msgid "Collect Statistics"
-msgstr "Trafikstatistik"
+msgstr "Samla in statistik"
 
 #: admin/Handler.py:31
 #, fuzzy
@@ -332,7 +331,6 @@ msgid "Extension List"
 msgstr "Filtypslista"
 
 #: admin/Icons.py:138
-#, fuzzy
 msgid "Add New Extension"
 msgstr "Lägg till ny filtyp"
 
@@ -349,9 +347,8 @@ msgid "File"
 msgstr "Fil"
 
 #: admin/Icons.py:171
-#, fuzzy
 msgid "Add New File"
-msgstr "Lägg till ny regel"
+msgstr "Lägg till ny fil"
 
 #: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:38
 #: admin/consts.py:122
@@ -368,26 +365,25 @@ msgid "Go to Parent"
 msgstr "Gå till förälder"
 
 #: admin/Icons.py:191
-#, fuzzy
 msgid "Modify"
-msgstr "Modifierad"
+msgstr "Modifiera"
 
 #: admin/Icons.py:198 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
 msgid "Special Files"
 msgstr "Speciella filer"
 
 #: admin/Icons.py:345
-#, fuzzy
 msgid "Add new"
 msgstr "Lägg till ny"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
 #: admin/PageIndex.py:348 admin/PageRule.py:213 admin/PageRule.py:261
-#: admin/PageRule.py:287 admin/PageSource.py:344 admin/PageSource.py:358
-#: admin/PageSource.py:372 admin/PageVServers.py:203 admin/PageVServers.py:238
-#: admin/PageVServers.py:264 admin/plugins/redir.py:115
+#: admin/PageRule.py:287 admin/PageSource.py:240 admin/PageSource.py:422
+#: admin/PageSource.py:436 admin/PageSource.py:450 admin/PageVServers.py:203
+#: admin/PageVServers.py:238 admin/PageVServers.py:264
+#: admin/plugins/redir.py:115
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: admin/Mime.py:37
 msgid "New MIME type to be added."
@@ -411,9 +407,8 @@ msgid "Max Age"
 msgstr "Max ålder"
 
 #: admin/Mime.py:99
-#, fuzzy
 msgid "Add New MIME-Type"
-msgstr "Lägg till ny MIME"
+msgstr "Lägg till ny MIME-typ"
 
 #: admin/Mime.py:104 admin/plugins/error_redir.py:101
 #: admin/plugins/rehost.py:80 admin/plugins/target_ip.py:88
@@ -438,13 +433,12 @@ msgid "The Configuration has been Saved"
 msgstr "Konfiguration sparad."
 
 #: admin/Page.py:33
-#, fuzzy
 msgid "Would you like to apply the changes to the running server now?"
-msgstr "Skriv ändringar till disk och starta om den körande servern."
+msgstr "Vill du aktivera ändringarna till den körande servern?"
 
 #: admin/Page.py:34
 msgid "The configuration file has been saved successfuly."
-msgstr ""
+msgstr "Konfigurationsfilen har sparats"
 
 #: admin/Page.py:75
 msgid "Do not restart"
@@ -460,6 +454,45 @@ msgstr "Hård omstart"
 
 #: admin/Page.py:97
 msgid "OK"
+msgstr "Ok"
+
+#: admin/Page.py:114
+msgid "Save"
+msgstr "Spara"
+
+#: admin/Page.py:115
+msgid "Home"
+msgstr ""
+
+#: admin/Page.py:116 admin/PageAdvanced.py:144 admin/PageIndex.py:97
+#: admin/PageStatus.py:40 admin/PageStatus.py:112
+msgid "Status"
+msgstr "Status"
+
+#: admin/Page.py:117 admin/PageGeneral.py:234 admin/PageStatus.py:101
+msgid "General"
+msgstr "Allmänt"
+
+#: admin/Page.py:118
+#, fuzzy
+msgid "vServers"
+msgstr "Server-id"
+
+#: admin/Page.py:119
+#, fuzzy
+msgid "Sources"
+msgstr "Användandet av källa"
+
+#: admin/Page.py:120 admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
+msgid "Advanced"
+msgstr "Avancerat"
+
+#: admin/Page.py:121
+msgid "Help"
+msgstr "Hjälp"
+
+#: admin/Page.py:122
+msgid "Updating..."
 msgstr ""
 
 #: admin/PageAdvanced.py:61
@@ -609,18 +642,13 @@ msgstr "Sökväg till den PEM-kodade DH-parameter-filen (2048 bitar)."
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
 msgstr "Sökväg till den PEM-kodade DH-parameter-filen (4096 bitar)."
 
-#: admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
-msgid "Advanced"
-msgstr "Avancerat"
-
 #: admin/PageAdvanced.py:113
 msgid "Keep Alive"
 msgstr "Keep Alive"
 
 #: admin/PageAdvanced.py:113 admin/PageAdvanced.py:115
-#, fuzzy
 msgid "Allowed"
-msgstr "Tillåt"
+msgstr "Tillåten"
 
 #: admin/PageAdvanced.py:114
 msgid "Max keepalive reqs"
@@ -677,11 +705,6 @@ msgstr ""
 #: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
 msgid "Resources"
 msgstr "Resurser"
-
-#: admin/PageAdvanced.py:144 admin/PageIndex.py:97 admin/PageStatus.py:40
-#: admin/PageStatus.py:112
-msgid "Status"
-msgstr "Status"
 
 #: admin/PageAdvanced.py:145
 msgid "Max pages"
@@ -741,14 +764,14 @@ msgid "TLS"
 msgstr "TLS"
 
 #: admin/PageAdvanced.py:191
-#, fuzzy
 msgid "Advanced Configuration"
 msgstr "Avancerad konfiguration."
 
 #: admin/PageEntry.py:40
-#, fuzzy
 msgid "Apply a custom timeout to the connections matching this rule."
-msgstr "Logga inte requests som matchar denna regel."
+msgstr ""
+"Ange ett eget värde gällande timeout för anslutningar som matchar denna "
+"regel."
 
 #: admin/PageEntry.py:41
 msgid "How the connection will be handled."
@@ -808,13 +831,12 @@ msgid "Authentication"
 msgstr "Autentisering"
 
 #: admin/PageEntry.py:65
-#, fuzzy
 msgid "Authentication modules"
-msgstr "Autentiseringslista"
+msgstr "Autentiseringsmoduler"
 
 #: admin/PageEntry.py:69
 msgid "Leave unset"
-msgstr ""
+msgstr "Lämna oinställt"
 
 #: admin/PageEntry.py:70 admin/PageVServer.py:305 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
@@ -824,7 +846,7 @@ msgstr "Tillåt"
 
 #: admin/PageEntry.py:71
 msgid "Forbid"
-msgstr ""
+msgstr "Förbjud"
 
 #: admin/PageEntry.py:89
 msgid "Limit traffic to"
@@ -872,9 +894,8 @@ msgid "Timeout"
 msgstr "Timeout"
 
 #: admin/PageEntry.py:158
-#, fuzzy
 msgid "Connections Timeout"
-msgstr "Anslutningar"
+msgstr "Timeout för anslutningar"
 
 #: admin/PageEntry.py:165
 msgid "Content Expiration"
@@ -886,9 +907,8 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr "Använd %s som kodning när klienten begär det."
 
 #: admin/PageEntry.py:178
-#, fuzzy
 msgid "support"
-msgstr "Support"
+msgstr "support"
 
 #: admin/PageEntry.py:183
 msgid "Information Encoders"
@@ -903,7 +923,7 @@ msgstr "Matchande regel"
 msgid "Handler"
 msgstr "Hanterare"
 
-#: admin/PageEntry.py:248 admin/PageSource.py:193
+#: admin/PageEntry.py:248 admin/PageSource.py:266
 msgid "Rule"
 msgstr "Regel"
 
@@ -912,9 +932,8 @@ msgid "Encoding"
 msgstr "Kodning"
 
 #: admin/PageEntry.py:251
-#, fuzzy
 msgid "Time"
-msgstr "Timeout"
+msgstr "Tid"
 
 #: admin/PageEntry.py:252 admin/PageVServer.py:500
 msgid "Security"
@@ -926,55 +945,56 @@ msgid ""
 "The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
 "problem can he solved in there."
 msgstr ""
+"Servern föreslår att kolla <a href=\"%s\">denna sida</a>. Med största "
+"sannolikhet kan problemet lösas där."
 
 #: admin/PageError.py:57 admin/PageError.py:83
-#, fuzzy
 msgid "Server Launch Error"
-msgstr "Serverinfo"
+msgstr ""
 
 #: admin/PageError.py:84
 msgid "Something unexpected just happened."
-msgstr ""
+msgstr "Något oförväntat hände just."
 
 #: admin/PageError.py:89
-#, fuzzy, python-format
+#, python-format
 msgid "The configuration file <code>%s</code> cannot be modified."
-msgstr "Konfigurationsfilen kan inte ändras"
+msgstr "Konfigurationsfilen <code>%s</code> kan inte ändras"
 
 #: admin/PageError.py:90
 msgid ""
 "You have to change its permissions in order to allow cherokee-admin to work "
 "with it. You can try to fix it by changing the file permissions:"
 msgstr ""
+"Du måste ändra dess behörigheter för att cherokee-admin ska fungera med det. "
+"Du kan prova att åtgärda det genoma att ändra filbehörigheterna."
 
 #: admin/PageError.py:91
 msgid "or by launching cherokee-admin as root."
-msgstr ""
+msgstr "eller genom att starta cherokee-admin som root-användaren."
 
 #: admin/PageError.py:101 admin/PageError.py:107
-#, fuzzy
 msgid "Configuration file is not writable"
-msgstr "Konfigurationsfilen kan inte ändras"
+msgstr "Kan inte skriva till konfigurationsfilen"
 
 #: admin/PageError.py:118
 #, python-format
 msgid "Could not find the icons directory: <code>%s</code>"
-msgstr ""
+msgstr "Kunde inte hitta ikon-katalogen: <code>%s</code>"
 
 #: admin/PageError.py:119
 msgid ""
 "You may need to reinstall the Web Server in order to sort out this issue."
 msgstr ""
+"Du kan behöva installera om webservern för att reda ut det här problemet."
 
 #: admin/PageError.py:129 admin/PageError.py:135
-#, fuzzy
 msgid "Icons Directory is Missing"
-msgstr "Ikonatalogen fattas"
+msgstr "Ikonkatalogen fattas"
 
 #: admin/PageError.py:144
-#, fuzzy
 msgid "Cherokee-admin has detected a very old configuration file."
-msgstr "Skapa en ny konfigurations-fil"
+msgstr "Cherokee-admin har upptäckt en vädligt gammal konfigurationsfil."
 
 #: admin/PageError.py:145
 msgid ""
@@ -982,20 +1002,21 @@ msgid ""
 "Please, remove it so cherokee-admin can create a new one with the right "
 "format."
 msgstr ""
+"Med största sannolikhet försöker cherokee-admin att läsa en gammal "
+"konfigurationsfil. Var god och ta bort den så att cherokee-admin kan skapa "
+"en ny med rätt format."
 
 #: admin/PageError.py:155
-#, fuzzy
 msgid "Detected an Ancient Configuration File"
-msgstr "Skapa en ny konfigurations-fil"
+msgstr "Upptäckte en uråldrig konfigurationsfil"
 
 #: admin/PageError.py:161
-#, fuzzy
 msgid "Ancient Configuration File"
-msgstr "Ny konfigurationsfil"
+msgstr "Uråldrig konfigurationsfil"
 
 #: admin/PageException.py:38
 msgid "We apologize for any inconveniences that this may have caused."
-msgstr ""
+msgstr "Vi ursäktar alla problem som kan ha uppståt i och med detta."
 
 #: admin/PageException.py:39
 msgid ""
@@ -1003,12 +1024,17 @@ msgid ""
 "<strong>will</strong> be attached upon submission. What were you doing when "
 "the issue showed up?"
 msgstr ""
+"Var god att skicka in kommentarer till utvecklarna av servern. Din "
+"konfigurationsfil <strong>kommer</strong> att skickas med när du skickar. "
+"Vad gjorde du när problemet dök upp?"
 
 #: admin/PageException.py:40
 msgid ""
 "Thank you for reporting the problem. The Cherokee Web Server developers will "
 "try to fix it up as soon as possible."
 msgstr ""
+"Tack för att du rapporterar detta problem. Utvecklarna av Cherokee Web "
+"Server kommer att försöka fixa detta så fort som möjligt."
 
 #: admin/PageException.py:41
 #, python-format
@@ -1017,34 +1043,34 @@ msgid ""
 "</p><p>Please, do not hesitate to <a target=\"_blank\" href=\"%s\">report "
 "the issue</a> on our bug tracking system if the problem persists.</p>"
 msgstr ""
+"<p>Av någon anledning kunde inte problemet rapporteras till Cherokee-"
+"projektet..</p><p>Tveka inte att <a target=\"_blank\" href=\"%s\">rapportera "
+"problemet</a> till vårt bugguppföljningssystem om problemet kvarstår.</p>"
 
 #: admin/PageException.py:80
-#, fuzzy
 msgid "Internal Error"
-msgstr "Intern"
+msgstr "Internt fel"
 
 #: admin/PageException.py:87
-#, fuzzy
 msgid "Thank you!"
-msgstr "Feedback: Tack!"
+msgstr "Tack!"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:331
-#, fuzzy
+#: admin/PageSource.py:409
 msgid "Close"
-msgstr "Klona"
+msgstr "Stäng"
 
 #: admin/PageException.py:91
 msgid "Could not report the issue"
-msgstr ""
+msgstr "Kunde inte rapportera problemet"
 
 #: admin/PageException.py:99
 msgid "Unexpected Exception"
 msgstr ""
 
 #: admin/PageException.py:112
-msgid "Report developers"
-msgstr ""
+msgid "Report this"
+msgstr "Rapportera dett"
 
 #: admin/PageGeneral.py:38
 msgid "Defines a port that the server will listen to"
@@ -1071,11 +1097,13 @@ msgstr "Vilket bibliotek ska användas som back-end för TLS/SSL."
 
 #: admin/PageGeneral.py:43
 msgid "How the usage graphics should be generated."
-msgstr ""
+msgstr "Hur användargraferna ska genereras."
 
 #: admin/PageGeneral.py:44
 msgid "How to track uploads/posts so its progress can be reported to the user."
 msgstr ""
+"Hur uppladdningar/posts ska följas så att dess status kan rapporteras till "
+"användaren."
 
 #: admin/PageGeneral.py:45
 msgid "Changes the effective user. User names and IDs are accepted."
@@ -1099,6 +1127,8 @@ msgid ""
 "No ports to listen have been defined. By default the server will listen to "
 "TCP port 80 on all the network interfaces."
 msgstr ""
+"Inga portar att lyssna på har definerats. Utan modifierade inställningar "
+"kommer servern att lyssna på port 80 på alla nätverksgränssnitt."
 
 #: admin/PageGeneral.py:51
 msgid "General Configuration"
@@ -1129,18 +1159,16 @@ msgid "Server Tokens"
 msgstr "Serveridentifiering"
 
 #: admin/PageGeneral.py:113
-#, fuzzy
 msgid "Network Behavior"
 msgstr "Nätverksbetéende"
 
 #: admin/PageGeneral.py:118
 msgid "Graphs Type"
-msgstr ""
+msgstr "Graftyp"
 
 #: admin/PageGeneral.py:119
-#, fuzzy
 msgid "Information Collector"
-msgstr "Informationskodare"
+msgstr "Informationsinsamlare"
 
 #: admin/PageGeneral.py:125 admin/PageGeneral.py:126
 msgid "Upload Tracking"
@@ -1148,7 +1176,7 @@ msgstr ""
 
 #: admin/PageGeneral.py:145 admin/PageGeneral.py:183 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
-#: admin/plugins/mysql.py:73
+#: admin/plugins/mysql.py:74
 msgid "Port"
 msgstr "Port"
 
@@ -1163,12 +1191,11 @@ msgstr "Ingen TLS/SSL"
 
 #: admin/PageGeneral.py:160
 msgid "TLS/SSL support disabled"
-msgstr ""
+msgstr "TLS/SSL-stöd saknas"
 
 #: admin/PageGeneral.py:188
-#, fuzzy
 msgid "New port"
-msgstr "Rapportera"
+msgstr "Ny port"
 
 #: admin/PageGeneral.py:197
 #, fuzzy
@@ -1206,9 +1233,8 @@ msgid "Ports to listen"
 msgstr "Portar att lyssna med"
 
 #: admin/PageGeneral.py:230
-#, fuzzy
 msgid "Permissions"
-msgstr "Server-rättigheter"
+msgstr "Rättigheter"
 
 #: admin/PageGeneral.py:231
 msgid "Icons"
@@ -1219,10 +1245,6 @@ msgstr "Ikoner"
 msgid "Mime types"
 msgstr "MIME-typ"
 
-#: admin/PageGeneral.py:234 admin/PageStatus.py:101
-msgid "General"
-msgstr "Allmänt"
-
 #: admin/PageGeneral.py:235
 msgid "General Settings"
 msgstr "Allmänna inställningar"
@@ -1232,25 +1254,23 @@ msgid "Table of Contents"
 msgstr ""
 
 #: admin/PageHelp.py:172
-#, fuzzy
 msgid "Documentation"
-msgstr "Dokumentrot"
+msgstr "Dokumentation"
 
 #: admin/PageIndex.py:62
 msgid "You will be sent an email requesting confirmation"
 msgstr ""
+"Du kommer att få ett email skickat till dig med en begäran om bekräftelse."
 
 #: admin/PageIndex.py:63
 msgid "Optionally provide your name"
 msgstr ""
 
 #: admin/PageIndex.py:66
-#, fuzzy
 msgid "Server is Running."
 msgstr "Servern körs"
 
 #: admin/PageIndex.py:67
-#, fuzzy
 msgid "Server is not Running."
 msgstr "Servern körs inte."
 
@@ -1261,18 +1281,23 @@ msgid ""
 "\">Octality</a>. They provide top notch Consulting, Custom Engineering, and "
 "Enterprise Support Services."
 msgstr ""
+"Kommersiell support för Cherokee finns att tillgå från <a target=\"_blank\" "
+"href=\"%s\">Octality</a>. De tillhandahåller konsultation av högsta klass, "
+"skräddarsydd utveckling. Samt support-tjänster för de lite större företagen."
 
 #: admin/PageIndex.py:69
 msgid ""
 "The Community Mailing List is the place to go for help on Cherokee. <a id="
 "\"subscribe-a\">Subscribe now!</a>"
-msgstr ""
+msgstr "Ma"
 
 #: admin/PageIndex.py:70
 #, python-format
 msgid ""
 "Join us at the <a target=\"_blank\" href=\"%s\">#cherokee</a> IRC Channel."
 msgstr ""
+"Anslut till oss andra i <a target=\"_blank\" href=\"%s\">#cherokee</a>s IRC-"
+"kanal."
 
 #: admin/PageIndex.py:71
 #, python-format
@@ -1281,6 +1306,9 @@ msgid ""
 "our <a target=\"_blank\" href=\"%s\">bug tracker</a> to help us improve "
 "Cherokee."
 msgstr ""
+"Din feedback är viktig! Lägg in bugrapporter och förslag på förbättringar i "
+"vårat <a target=\"_blank\" href=\"%s\">problemhanteringssystem</a> för att "
+"hjälpa oss att förbättra Cherokee."
 
 #: admin/PageIndex.py:72
 msgid "Find out what's going on with Cherokee on your favorite Social Media!"
@@ -1289,25 +1317,22 @@ msgstr ""
 #: admin/PageIndex.py:73
 #, python-format
 msgid "Follow <a target=\"_blank\" href=\"%s\">Cherokee on Twitter</a>."
-msgstr ""
+msgstr "Följ <a target=\"_blank\" href=\"%s\">Cherokee på Twitter</a>."
 
 #: admin/PageIndex.py:74
 #, python-format
 msgid "Join <a target=\"_blank\" href=\"%s\">Cherokee on Facebook</a>."
-msgstr ""
+msgstr "Anslut till <a target=\"_blank\" href=\"%s\">Cherokee på Facebook</a>."
 
 #: admin/PageIndex.py:76
-#, fuzzy
 msgid ""
 "<h3>Beta testing</h3> <p>Individuals like yourself who download and\n"
 "test the latest developer snapshots of Cherokee Web Server help us to\n"
 "create the highest quality product. For that, we thank you.</p>\n"
 msgstr ""
-"\n"
 "<h3>Beta-testande</h3>\n"
-"<p>Privatpersoner som du själv som laddade ner och testade  den senaste "
-"revisionen i repositorier hjälper oss att skapa en produkt med högsta "
-"kvalitet.</p>\n"
+"<p>personer som du själv som laddade ner och testar  den senaste revisionen "
+"i repositoriet hjälper oss att skapa en produkt med högsta kvalitet.</p>\n"
 "<p>För det tackar vi dig.</p>\n"
 
 #: admin/PageIndex.py:82
@@ -1325,28 +1350,28 @@ msgstr ""
 
 #: admin/PageIndex.py:88
 msgid "The information has been successfully sent. Thank you!"
-msgstr ""
+msgstr "Information har utan problem skickats. Tack!"
 
 #: admin/PageIndex.py:89
 msgid ""
 "Unfortunatelly something went wrong, and the information could not be "
 "submitted:"
-msgstr ""
+msgstr "Tyvärr uppstod ett problem, och informationen kunde inte skickas."
 
 #: admin/PageIndex.py:90
 msgid ""
 "Please, try again. Do not hesitate to report the problem if it persists."
 msgstr ""
+"Var god och försök igen. Tveka inte till att rapportera problem om det "
+"kvarstår."
 
 #: admin/PageIndex.py:143
-#, fuzzy
 msgid "Stop Server"
-msgstr "Server"
+msgstr "Stoppa server"
 
 #: admin/PageIndex.py:147
-#, fuzzy
 msgid "Start Server"
-msgstr "Virtuell server"
+msgstr "Starta server"
 
 #: admin/PageIndex.py:157
 msgid "Information"
@@ -1354,7 +1379,7 @@ msgstr "Information"
 
 #: admin/PageIndex.py:162
 msgid "PID"
-msgstr ""
+msgstr "PID"
 
 #: admin/PageIndex.py:162
 msgid "Not running"
@@ -1374,12 +1399,10 @@ msgid "Prefix"
 msgstr "Prefix"
 
 #: admin/PageIndex.py:166
-#, fuzzy
 msgid "Config File"
 msgstr "Konfigurationsfil"
 
 #: admin/PageIndex.py:166
-#, fuzzy
 msgid "Not found"
 msgstr "Hittades inte"
 
@@ -1401,77 +1424,72 @@ msgid "Proud Cherokee Users"
 msgstr "Stolta Cherokee-användare"
 
 #: admin/PageIndex.py:258
-#, fuzzy
 msgid "View list"
-msgstr "Fast lista"
+msgstr "Se lista"
 
 #: admin/PageIndex.py:258
-#, fuzzy
 msgid "Send your domains"
-msgstr "Godkända domäner"
+msgstr "Skicka in dina domäner"
 
 #: admin/PageIndex.py:274
 msgid "Latest Release"
-msgstr ""
+msgstr "Senaste release"
 
 #: admin/PageIndex.py:278
 msgid "Latest version could not be determined at the moment."
-msgstr ""
+msgstr "Senaste versionen kan inte hittas för tillfället."
 
 #: admin/PageIndex.py:280
 msgid "Cherokee is up to date."
-msgstr ""
+msgstr "Cherokee kör senaste versionen."
 
 #: admin/PageIndex.py:283
 msgid "You are running Cherokee"
-msgstr ""
+msgstr "Du använder Cherookee."
 
 #: admin/PageIndex.py:285
 msgid "Latest release is "
-msgstr ""
+msgstr "Senaste versionen är"
 
 #: admin/PageIndex.py:323
 msgid "Your email address"
-msgstr ""
+msgstr "Din email-adress."
 
 #: admin/PageIndex.py:324
-#, fuzzy
 msgid "Your name"
-msgstr "Värdnamn"
+msgstr "Ditt namn"
 
 #: admin/PageIndex.py:336
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: admin/PageIndex.py:341
 msgid "Mailing List"
-msgstr ""
+msgstr "Epostlista"
 
 #: admin/PageIndex.py:346
 msgid "Mailing list subscription"
-msgstr ""
+msgstr "Prenumeration av epostlista"
 
 #: admin/PageIndex.py:347
 msgid "Subscribe"
-msgstr ""
+msgstr "Prenumerera"
 
 #: admin/PageIndex.py:355
 msgid "Bug Tracker"
-msgstr ""
+msgstr "Bug Tracker"
 
 #: admin/PageIndex.py:380
-#, fuzzy
 msgid "Community"
-msgstr "Land"
+msgstr "Sällskap"
 
 #: admin/PageIndex.py:396
 msgid "Commercial Support"
-msgstr ""
+msgstr "Kommersiell support"
 
 #: admin/PageIndex.py:398
-#, fuzzy
 msgid "Purchase Support"
-msgstr "Support"
+msgstr "Köp Support"
 
 #: admin/PageIndex.py:405 admin/PageIndex.py:407
 msgid "Welcome to Cherokee Admin"
@@ -1479,7 +1497,7 @@ msgstr "Välkommen till Cherokee Admin"
 
 #: admin/PageNewConfig.py:38
 msgid "Index"
-msgstr ""
+msgstr "Index"
 
 #: admin/PageNewConfig.py:140
 msgid "Create"
@@ -1528,10 +1546,12 @@ msgid ""
 "<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure "
 "you want to proceed?</p>"
 msgstr ""
+"<p>Du är på väg att ta bort <b>%s</b> betéenderegeln.</p><p>Är du säker på "
+"att du vill fortsätta?</p>"
 
 #: admin/PageRule.py:53
 msgid "You are about to clone a Behavior Rule. Would you like to proceed?"
-msgstr ""
+msgstr "Du är påväg att klona en betéenderegel. Vill du fortsätta?"
 
 #: admin/PageRule.py:116 admin/Rule.py:156
 msgid "Rule Type"
@@ -1539,67 +1559,61 @@ msgstr "Regeltyp"
 
 #: admin/PageRule.py:136 admin/PageVServers.py:133 admin/PageVServers.py:151
 msgid "Manual"
-msgstr ""
+msgstr "Manuell"
 
 #: admin/PageRule.py:137 admin/PageVServers.py:152
-#, fuzzy
 msgid "Manual configuration"
-msgstr "Ikonkonfiguration"
+msgstr "Manuell konfiguration"
 
-#: admin/PageRule.py:208 admin/PageSource.py:339 admin/PageVServers.py:198
+#: admin/PageRule.py:208 admin/PageSource.py:417 admin/PageVServers.py:198
 msgid "Do you really want to remove it?"
-msgstr ""
+msgstr "Vill du verkligen ta bort den?"
 
-#: admin/PageRule.py:209 admin/PageSource.py:340 admin/PageVServers.py:199
+#: admin/PageRule.py:209 admin/PageSource.py:418 admin/PageVServers.py:199
 msgid "Remove"
 msgstr "Ta bort"
 
 #: admin/PageRule.py:233 admin/PageVServer.py:119
 msgid "Final"
-msgstr ""
+msgstr "Slutgiltig"
 
 #: admin/PageRule.py:234
-#, fuzzy
 msgid "Non Final"
-msgstr "Ikonfil"
+msgstr "Inte slutgiltig"
 
 #: admin/PageRule.py:258 admin/PageRule.py:271
-#, fuzzy
 msgid "Add Behavior Rule"
-msgstr "Betéende-regler"
+msgstr "Lägg till Betéende-regel"
 
 #: admin/PageRule.py:265
-#, fuzzy
 msgid "Configuration Assistant"
-msgstr "Konfigurationssnabbstart"
+msgstr "Konfigurationshjälp"
 
-#: admin/PageRule.py:271 admin/PageSource.py:361 admin/PageVServers.py:248
+#: admin/PageRule.py:271 admin/PageSource.py:439 admin/PageVServers.py:248
 #, fuzzy
 msgid "New"
-msgstr "Nätverk"
+msgstr "Ny..."
 
 #: admin/PageRule.py:285
-#, fuzzy
 msgid "Clone Behavior Rule"
-msgstr "Betéende-regler"
+msgstr "Klona betéende-regler"
 
-#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:371
-#: admin/PageSource.py:375 admin/PageVServers.py:263 admin/PageVServers.py:267
+#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:449
+#: admin/PageSource.py:453 admin/PageVServers.py:263 admin/PageVServers.py:267
 msgid "Clone"
 msgstr "Klona"
 
 #: admin/PageRule.py:290
 msgid "Clone Selected Behavior Rule"
-msgstr ""
+msgstr "Klona vald betéenderegel"
 
 #: admin/PageRule.py:298 admin/PageVServer.py:497
 msgid "Behavior"
 msgstr "Betéende"
 
 #: admin/PageRule.py:317
-#, fuzzy
 msgid "Rule Filtering"
-msgstr "Regellista"
+msgstr "Regelfiltrering"
 
 #: admin/PageSource.py:44
 msgid ""
@@ -1666,86 +1680,119 @@ msgid ""
 "Whether the new child process should inherit the environment variables from "
 "the server process. Default: yes."
 msgstr ""
+"Huruvida den nya barnprocessen ska ärva miljövariablerna från "
+"serverprocessen. Förvalt: ja."
 
 #: admin/PageSource.py:54
 msgid ""
 "You are about to delete an Information Source. Are you sure you want to "
 "proceed?"
 msgstr ""
+"Du är på väg att ta bort en informationskälla. Är du säker på att du vill "
+"fortsätta?"
 
 #: admin/PageSource.py:55
-#, fuzzy
 msgid "The Information Source list is currently empty."
-msgstr "Inställningar för informationskällor"
+msgstr "Informationskällan är förnärvarande tom"
 
 #: admin/PageSource.py:56
 msgid ""
 "This is the last Information Source in use by a rule. Deleting it would "
 "break the configuration."
 msgstr ""
+"Det här den sista informationskällan som används av en regel. Att ta bort "
+"den kommer att "
 
 #: admin/PageSource.py:57
 msgid "First edit the offending rule(s)"
-msgstr ""
+msgstr "Editera den krånglande regeln/reglerna."
 
-#: admin/PageSource.py:193 admin/PageVServer.py:502
+#: admin/PageSource.py:58
+#, fuzzy
+msgid "Name of the variable"
+msgstr "Värdet för RAILS_ENV-variabeln."
+
+#: admin/PageSource.py:59
+#, fuzzy
+msgid "Value of the variable"
+msgstr "Värdet för RAILS_ENV-variabeln."
+
+#: admin/PageSource.py:60
+#, fuzzy
+msgid "The selected Information Source is about to be cloned."
+msgstr "Klona vald informationskälla"
+
+#: admin/PageSource.py:203 admin/PageSource.py:231
+msgid "Variable"
+msgstr "Variabel"
+
+#: admin/PageSource.py:205
+#, fuzzy
+msgid "Environment Variables"
+msgstr "Miljövariabler"
+
+#: admin/PageSource.py:238
+msgid "Add new Environment variable"
+msgstr "Lägg till ny miljövariabel"
+
+#: admin/PageSource.py:247
+#, fuzzy
+msgid "Add new variable"
+msgstr "Lägg till ny miljövariabel"
+
+#: admin/PageSource.py:266 admin/PageVServer.py:502
 msgid "Virtual Server"
 msgstr "Virtuell server"
 
-#: admin/PageSource.py:221 admin/plugins/error_redir.py:87
-#: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:143
+#: admin/PageSource.py:297 admin/plugins/error_redir.py:87
+#: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:144
 msgid "Type"
 msgstr "Typ"
 
-#: admin/PageSource.py:223 admin/PageSource.py:260
+#: admin/PageSource.py:299 admin/PageSource.py:338
 #: admin/wizards/rtorrent.py:100
 msgid "Connection"
 msgstr "Anslutning"
 
-#: admin/PageSource.py:225
+#: admin/PageSource.py:301
 msgid "Interpreter"
 msgstr "Tolk"
 
-#: admin/PageSource.py:226
+#: admin/PageSource.py:302
 msgid "Spawning timeout"
 msgstr "Tidsgräns för nya processer"
 
-#: admin/PageSource.py:227
+#: admin/PageSource.py:303
 msgid "Execute as User"
 msgstr "Kör som användare"
 
-#: admin/PageSource.py:228
+#: admin/PageSource.py:304
 msgid "Execute as Group"
 msgstr "Kör som grupp"
 
-#: admin/PageSource.py:229
+#: admin/PageSource.py:305
 msgid "Inherit Environment"
-msgstr ""
+msgstr "Ärv miljö"
 
-#: admin/PageSource.py:328
-#, fuzzy
+#: admin/PageSource.py:406
 msgid "Deletion is forbidden"
-msgstr "Borttagning omöjlig. Kolla användandet av källan."
+msgstr "Borttagning är förbjuden"
 
-#: admin/PageSource.py:356 admin/PageSource.py:361
-#, fuzzy
+#: admin/PageSource.py:434 admin/PageSource.py:439
 msgid "Add New Information Source"
-msgstr "Tilldela informationskällor"
+msgstr "Lägg till ny informationskälla"
 
-#: admin/PageSource.py:370
-#, fuzzy
+#: admin/PageSource.py:448
 msgid "Clone Information Source"
-msgstr "Informationskällor"
+msgstr "Klona informationskälla"
 
-#: admin/PageSource.py:375
-#, fuzzy
+#: admin/PageSource.py:453
 msgid "Clone Selected Information Source"
-msgstr "Informationskällor"
+msgstr "Klona vald informationskälla"
 
-#: admin/PageSource.py:395
-#, fuzzy
+#: admin/PageSource.py:473
 msgid "Sources Filtering"
-msgstr "Webkatalog"
+msgstr "Källfiltrering"
 
 #: admin/PageSources.py:35 admin/PageVServer.py:103 admin/PageVServers.py:48
 #: admin/PageVServers.py:276
@@ -1753,24 +1800,20 @@ msgid "Virtual Servers"
 msgstr "Virtuella servrar"
 
 #: admin/PageStatus.py:66
-#, fuzzy
 msgid "Server Wide Monitoring"
-msgstr "Server stängs ner.."
+msgstr "Global övervakning"
 
 #: admin/PageStatus.py:71
-#, fuzzy
 msgid "Virtual Server Monitoring"
-msgstr "Konfiguration för virtuella servrar."
+msgstr "Övervakning för virtuella servrar"
 
 #: admin/PageStatus.py:102
-#, fuzzy
 msgid "System wide status"
-msgstr "Serverstatus"
+msgstr "Global status"
 
 #: admin/PageStatus.py:119 admin/PageVServers.py:291
-#, fuzzy
 msgid "Virtual Server Filtering"
-msgstr "Virtuell server"
+msgstr "Virtuell server-filtrering"
 
 #: admin/PageVServer.py:41
 msgid "Nickname for the virtual server."
@@ -1944,11 +1987,11 @@ msgstr "Möjliggör valet av metod för matching av domäner."
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
-msgstr ""
+msgstr "Huruvida den ska samla in trafikstatistik för denna servern."
 
 #: admin/PageVServer.py:70
 msgid "Time standard to use in the log file entries."
-msgstr ""
+msgstr "Tidsstandard att använda i lognoteringarna."
 
 #: admin/PageVServer.py:72
 #, fuzzy
@@ -1995,7 +2038,7 @@ msgstr "Rot"
 
 #: admin/PageVServer.py:113
 msgid "Only HTTPS"
-msgstr ""
+msgstr "Endast HTTPS"
 
 #: admin/PageVServer.py:113
 #, fuzzy
@@ -2062,7 +2105,7 @@ msgstr "Betéende-regler"
 
 #: admin/PageVServer.py:204
 msgid "Rule Management"
-msgstr ""
+msgstr "Regelhantering"
 
 #: admin/PageVServer.py:229
 #, fuzzy
@@ -2076,7 +2119,7 @@ msgstr "Kodning"
 
 #: admin/PageVServer.py:240
 msgid "no"
-msgstr ""
+msgstr "nej"
 
 #: admin/PageVServer.py:251
 #, fuzzy
@@ -2085,15 +2128,15 @@ msgstr "Ikoner"
 
 #: admin/PageVServer.py:256
 msgid " bytes per second"
-msgstr ""
+msgstr "Bytes per sekund"
 
 #: admin/PageVServer.py:261
 msgid "Logging enabled for this rule"
-msgstr ""
+msgstr "Loggning möjliggjord för denna regel."
 
 #: admin/PageVServer.py:266
 msgid "Prevents further rule evaluation"
-msgstr ""
+msgstr "Förhindrar vidare utvärdering av regler."
 
 #: admin/PageVServer.py:271
 #, fuzzy
@@ -2139,7 +2182,7 @@ msgstr "Deaktivera"
 
 #: admin/PageVServer.py:347
 msgid "Write errors to"
-msgstr ""
+msgstr "Skriv fel till"
 
 #: admin/PageVServer.py:351 admin/PageVServer.py:387
 msgid "Filename"
@@ -2160,7 +2203,7 @@ msgstr "Format"
 
 #: admin/PageVServer.py:377
 msgid "Write accesses to"
-msgstr ""
+msgstr "Skriv åtkomster till"
 
 #: admin/PageVServer.py:395
 msgid "Template: "
@@ -2173,7 +2216,7 @@ msgstr "Loggning"
 
 #: admin/PageVServer.py:403
 msgid "Time standard"
-msgstr ""
+msgstr "Tidsstandard"
 
 #: admin/PageVServer.py:404
 msgid "Accept Forwarded IPs"
@@ -2246,15 +2289,19 @@ msgid ""
 "<p>You are about to delete the <b>%s</b> Virtual Server.</p><p>Are you sure "
 "you want to proceed?</p>"
 msgstr ""
+"<p>Du är på väg att ta bort <b>%s</b> Virtual Server.</p><p>Är du säker på "
+"att du vill fortsätta?</p>"
 
 #: admin/PageVServers.py:51
 msgid "You are about to clone a Virtual Server. Would you like to proceed?"
-msgstr ""
+msgstr "Du är på väg att klona en virtuell server. Vill du fortsätta?"
 
 #: admin/PageVServers.py:52
 msgid ""
 "Name of the Virtual Server you are about to create. A domain name is alright."
 msgstr ""
+"Namnet på den virtuella servern du vill skapa. Ett domännamn är okej att "
+"använda."
 
 #: admin/PageVServers.py:53
 #, fuzzy
@@ -2286,24 +2333,30 @@ msgstr "Den grundinställda matchningen bör inte ändras."
 
 #: admin/Rule.py:126
 msgid "And"
-msgstr ""
+msgstr "Och"
 
 #: admin/Rule.py:134
 msgid "Or"
-msgstr ""
+msgstr "Eller"
 
 #: admin/Rule.py:141
 msgid "Not"
-msgstr ""
+msgstr "Inte"
 
 #: admin/Rule.py:150
 #, fuzzy
 msgid "Select"
-msgstr "Valda portar"
+msgstr "Välj..."
 
 #: admin/Wizard.py:195
 msgid "Use the same logging configuration as one of the other virtual servers."
 msgstr ""
+"Använd samma loggningskonfiguration som en utav de andra virtuella servrarna."
+
+#: admin/Wizard.py:199
+#, fuzzy
+msgid "Do not configure"
+msgstr "Kolla inte ursprung"
 
 #: admin/consts.py:26
 msgid "English"
@@ -2319,7 +2372,7 @@ msgstr "German"
 
 #: admin/consts.py:29
 msgid "French"
-msgstr ""
+msgstr "Franska"
 
 #: admin/consts.py:30
 msgid "Dutch"
@@ -2337,11 +2390,11 @@ msgstr "Svenska"
 
 #: admin/consts.py:33
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brazilianskportugisiska"
 
 #: admin/consts.py:34
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Förenklad kinesiska"
 
 #: admin/consts.py:39
 msgid "Product only"
@@ -2364,7 +2417,7 @@ msgid "Full Server string"
 msgstr "Hela servernamnet."
 
 #: admin/consts.py:47 admin/consts.py:75 admin/consts.py:92
-#: admin/consts.py:106
+#: admin/consts.py:106 admin/plugins/mysql.py:43
 msgid "None"
 msgstr "Ingen"
 
@@ -2377,11 +2430,11 @@ msgid "Only Listing"
 msgstr ""
 
 #: admin/consts.py:51 admin/plugins/error_redir.py:86
-#: admin/wizards/hotlinking.py:145 admin/wizards/hotlinking.py:164
+#: admin/wizards/hotlinking.py:146 admin/wizards/hotlinking.py:165
 msgid "Redirection"
 msgstr "Omdirigering"
 
-#: admin/consts.py:52
+#: admin/consts.py:52 admin/wizards/rails.py:73
 msgid "FastCGI"
 msgstr "FastCGI"
 
@@ -2438,7 +2491,7 @@ msgstr "HTTP-felmeddelande"
 msgid "Remote Administration"
 msgstr "Fjärradministration"
 
-#: admin/consts.py:65 admin/wizards/hotlinking.py:84
+#: admin/consts.py:65 admin/wizards/hotlinking.py:85
 msgid "1x1 Transparent GIF"
 msgstr "1x1 transparent GIF"
 
@@ -2570,7 +2623,7 @@ msgstr "Intern"
 #: admin/consts.py:183 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:101 admin/plugins/request.py:31
-#: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
+#: admin/plugins/url_arg.py:76 admin/plugins/url_arg.py:95
 msgid "Regular Expression"
 msgstr "Reguljärt uttryck"
 
@@ -2670,7 +2723,7 @@ msgstr "Kräv"
 
 #: admin/consts.py:226
 msgid "RRDtool graphs"
-msgstr ""
+msgstr "RRDtool-grafer"
 
 #: admin/consts.py:230
 #, fuzzy
@@ -2683,7 +2736,7 @@ msgstr ""
 
 #: admin/consts.py:235
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: admin/consts.py:236
 #, fuzzy
@@ -2692,11 +2745,11 @@ msgstr "Sökväg"
 
 #: admin/consts.py:237 admin/wizards/List.py:115
 msgid "PHP"
-msgstr ""
+msgstr "PHP"
 
 #: admin/consts.py:238
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 #: admin/consts.py:243
 msgid "POST tracker"
@@ -2704,7 +2757,7 @@ msgstr ""
 
 #: admin/plugins/authlist.py:32
 msgid "At least one user/password pair should be configured."
-msgstr ""
+msgstr "Åtminstone ett användarnamn/lösenord bör konfigureras."
 
 #: admin/plugins/authlist.py:60
 #, fuzzy
@@ -2810,11 +2863,11 @@ msgstr "Lösenord till databasen."
 msgid "Database to connect to."
 msgstr "Serverport att ansluta till."
 
-#: admin/plugins/dbslayer.py:50 admin/plugins/mysql.py:75
+#: admin/plugins/dbslayer.py:50 admin/plugins/mysql.py:76
 msgid "DB User"
 msgstr "DB-användare"
 
-#: admin/plugins/dbslayer.py:51 admin/plugins/mysql.py:76
+#: admin/plugins/dbslayer.py:51 admin/plugins/mysql.py:77
 msgid "DB Password"
 msgstr "DB-lösenord"
 
@@ -2824,7 +2877,7 @@ msgstr "Databas"
 
 #: admin/plugins/dbslayer.py:57
 msgid "Serialization"
-msgstr ""
+msgstr "Serialisera"
 
 #: admin/plugins/dbslayer.py:63 admin/plugins/fcgi.py:47
 #: admin/plugins/proxy.py:274 admin/plugins/scgi.py:47
@@ -2848,8 +2901,8 @@ msgstr "Publik webkatalog som konfigurationen ska appliceras på."
 #: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:206
 #: admin/wizards/liferay.py:153 admin/wizards/moinmoin.py:198
 #: admin/wizards/mono.py:182 admin/wizards/phpbb.py:161
-#: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:43
-#: admin/wizards/rails.py:297 admin/wizards/rtorrent.py:99
+#: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:44
+#: admin/wizards/rails.py:298 admin/wizards/rtorrent.py:99
 #: admin/wizards/sugar.py:191 admin/wizards/symfony.py:201
 #: admin/wizards/uwsgi.py:224 admin/wizards/wordpress.py:193
 #: admin/wizards/zend.py:176
@@ -2953,7 +3006,7 @@ msgstr "HTTP-felmeddelande"
 
 #: admin/plugins/error_redir.py:36
 msgid "Target to access whenever the HTTP Error occurs."
-msgstr ""
+msgstr "Mål att använda när ett http-fel inträffar."
 
 #: admin/plugins/error_redir.py:37
 #, fuzzy
@@ -3011,15 +3064,15 @@ msgstr "Matcha anropet om någon fil existerar."
 
 #: admin/plugins/exists.py:34
 msgid "Only match regular files. If unset directories will be matched as well."
-msgstr ""
+msgstr "Matcha endast vanliga filer. Matchar kataloger om regeln inte väljs."
 
 #: admin/plugins/exists.py:35
-msgid "If a directory is request, check the index files inside it."
-msgstr ""
+msgid "If a directory is requested, check the index files inside it."
+msgstr "Om en katalog är begärd, kolla indexfilerna inuti den."
 
 #: admin/plugins/exists.py:37
 msgid "Match a specific list of files"
-msgstr ""
+msgstr "Matcha en specifik lista av filer."
 
 #: admin/plugins/exists.py:38 admin/plugins/exists.py:71
 #: admin/plugins/exists.py:109
@@ -3038,7 +3091,7 @@ msgstr "Matcha vilken fil som helst."
 
 #: admin/plugins/exists.py:78 admin/plugins/exists.py:113
 msgid "If dir, check index files"
-msgstr ""
+msgstr "Om katalog, kolla index-filer."
 
 #: admin/plugins/exists.py:132
 #, fuzzy
@@ -3052,7 +3105,7 @@ msgstr "Fil finns"
 
 #: admin/plugins/exists.py:138
 msgid "File exists (never matched)"
-msgstr ""
+msgstr "Fil finns (matchas aldrig)"
 
 #: admin/plugins/exists.py:140
 #, fuzzy, python-format
@@ -3081,15 +3134,15 @@ msgstr ""
 
 #: admin/plugins/from.py:30
 msgid "IP or Subnet to check the connection origin against."
-msgstr ""
+msgstr "IP eller subnet att jämföra anslutningsursprunget mot."
 
 #: admin/plugins/from.py:95
 msgid "IPs and Subnets"
-msgstr ""
+msgstr "IPs och subnet"
 
 #: admin/plugins/from.py:102
 msgid "New IP or Subnet"
-msgstr ""
+msgstr "Nytt IP eller subnet"
 
 #: admin/plugins/from.py:106
 #, fuzzy
@@ -3143,7 +3196,7 @@ msgstr ""
 
 #: admin/plugins/geoip.py:78
 msgid "Select all"
-msgstr ""
+msgstr "Välj alla"
 
 #: admin/plugins/geoip.py:79
 #, fuzzy
@@ -3260,35 +3313,35 @@ msgstr "LDAP-anslutning"
 msgid "The HTTP method that should match this rule."
 msgstr "HTTP-metoden som ska matcha denna regel."
 
-#: admin/plugins/mysql.py:32
+#: admin/plugins/mysql.py:33
 msgid "MySQL server IP address."
 msgstr "MySQL-serverns IP-adress."
 
-#: admin/plugins/mysql.py:33
+#: admin/plugins/mysql.py:34
 msgid "Server port to connect to."
 msgstr "Serverport att ansluta till."
 
-#: admin/plugins/mysql.py:34
+#: admin/plugins/mysql.py:35
 msgid "Full path of Unix socket to communicate with the data base."
 msgstr "Full sökväg till socketen för att kommunicera med databasen."
 
-#: admin/plugins/mysql.py:35
+#: admin/plugins/mysql.py:36
 msgid "User name for connecting to the database."
 msgstr "Användarnamn för att ansluta till databasen."
 
-#: admin/plugins/mysql.py:36
+#: admin/plugins/mysql.py:37
 msgid "Password for connecting to the database."
 msgstr "Lösenord för att ansluta till databasen."
 
-#: admin/plugins/mysql.py:37
+#: admin/plugins/mysql.py:38
 msgid "Database name containing the user/password pair list."
 msgstr "Databasnamn innehållandes tabeller med användarnamn och lösenord."
 
-#: admin/plugins/mysql.py:38
+#: admin/plugins/mysql.py:39
 msgid "SQL command to execute. ${user} is replaced with the user name."
 msgstr "SQL-fråga att köra. ${user} byts ut till användarnamnet."
 
-#: admin/plugins/mysql.py:39
+#: admin/plugins/mysql.py:40
 #, fuzzy
 msgid ""
 "Choose an encryption type for the password. Only suitable for the \"Basic\" "
@@ -3297,24 +3350,32 @@ msgstr ""
 "Aktivera för att använda MD5-lösenord. Bör endast användas för \"Basic\"-"
 "autentiserings-mekanismen."
 
-#: admin/plugins/mysql.py:74
+#: admin/plugins/mysql.py:44
+msgid "MD5"
+msgstr ""
+
+#: admin/plugins/mysql.py:45
+msgid "SHA1"
+msgstr ""
+
+#: admin/plugins/mysql.py:75
 msgid "Unix Socket"
 msgstr "Unix-socket"
 
-#: admin/plugins/mysql.py:77
+#: admin/plugins/mysql.py:78
 msgid "Database"
 msgstr "Databas"
 
-#: admin/plugins/mysql.py:78
+#: admin/plugins/mysql.py:79
 msgid "SQL Query"
 msgstr "SQL-fråga"
 
-#: admin/plugins/mysql.py:79
+#: admin/plugins/mysql.py:80
 #, fuzzy
 msgid "Password Hash"
 msgstr "Lösenord"
 
-#: admin/plugins/mysql.py:84
+#: admin/plugins/mysql.py:85
 #, fuzzy
 msgid "MySQL Connection"
 msgstr "MySQL-anslutning"
@@ -3506,12 +3567,14 @@ msgstr "Reguljärt uttryck som anropet körs mot."
 
 #: admin/plugins/rrd.py:30
 msgid "Directory where the RRDtool databases should be written."
-msgstr ""
+msgstr "Katalog där RRDtool-databaserna bör skrivas till."
 
 #: admin/plugins/rrd.py:31
 msgid ""
 "Path to the rrdtool binary. By default the server will look in the PATH."
 msgstr ""
+"Sökväg till rrdtool-binären. Servern kommer att kolla i PATH om inget annat "
+"anges."
 
 #: admin/plugins/rrd.py:40
 #, fuzzy
@@ -3551,27 +3614,27 @@ msgstr "Hemlighet"
 msgid "Covering Parameters"
 msgstr "Timeout"
 
-#: admin/plugins/server_info.py:29 admin/plugins/server_info.py:32
+#: admin/plugins/server_info.py:30 admin/plugins/server_info.py:33
 msgid "Server Information"
 msgstr "Serverinformation"
 
-#: admin/plugins/server_info.py:33
+#: admin/plugins/server_info.py:34
 msgid "Only version information"
 msgstr "Bara versionsinformation"
 
-#: admin/plugins/server_info.py:34
+#: admin/plugins/server_info.py:35
 msgid "Server Information + Connections"
 msgstr "Serverinformation + anslutningar"
 
-#: admin/plugins/server_info.py:37
+#: admin/plugins/server_info.py:38
 msgid "Which information should be shown."
 msgstr "Vilken information som ska visas."
 
-#: admin/plugins/server_info.py:47
+#: admin/plugins/server_info.py:48
 msgid "Show Information"
 msgstr "Visa information"
 
-#: admin/plugins/server_info.py:52
+#: admin/plugins/server_info.py:53
 #, fuzzy
 msgid "Privacy Settings"
 msgstr "Sekretessinställningar"
@@ -3609,6 +3672,8 @@ msgid ""
 "IP or Subnet of the NIC that accepted the request. Example: ::1, or "
 "10.0.0.0/8"
 msgstr ""
+"IP eller subnet på nätverkskortet som tog emot begäran. Exempelvis: ::1, "
+"eller 10.0.0.0/8"
 
 #: admin/plugins/target_ip.py:32
 #, fuzzy
@@ -3617,11 +3682,11 @@ msgstr "Åtminstone en sträng med joker-tecken måste anges."
 
 #: admin/plugins/target_ip.py:61
 msgid "IP or Subnet"
-msgstr ""
+msgstr "IP eller subnet"
 
 #: admin/plugins/target_ip.py:76
 msgid "New IP/Subnet"
-msgstr ""
+msgstr "Nytt IP/subnet"
 
 #: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
 #, fuzzy
@@ -3630,33 +3695,33 @@ msgstr "Lägg till nytt par"
 
 #: admin/plugins/target_ip.py:100
 msgid "Accepted Server IP Addresses and Subnets"
-msgstr ""
+msgstr "Accepterade IP-adresser eller subnets för servern."
 
-#: admin/plugins/url_arg.py:30
+#: admin/plugins/url_arg.py:31
 msgid "Argument name"
 msgstr ""
 
-#: admin/plugins/url_arg.py:31
+#: admin/plugins/url_arg.py:32
 #, fuzzy
 msgid "Regular Expression for the match"
 msgstr "Reguljärt uttryck"
 
-#: admin/plugins/url_arg.py:33
+#: admin/plugins/url_arg.py:34
 #, fuzzy
 msgid "Match a specific argument"
 msgstr "Matcha vilken fil som helst."
 
-#: admin/plugins/url_arg.py:34
+#: admin/plugins/url_arg.py:35
 #, fuzzy
 msgid "Match any argument"
 msgstr "Matcha vilken fil som helst."
 
-#: admin/plugins/url_arg.py:73 admin/plugins/url_arg.py:91
+#: admin/plugins/url_arg.py:74 admin/plugins/url_arg.py:92
 #, fuzzy
 msgid "Match type"
 msgstr "Matcha vilken fil som helst."
 
-#: admin/plugins/url_arg.py:74 admin/plugins/url_arg.py:93
+#: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
 msgid "Argument"
 msgstr ""
 
@@ -3709,11 +3774,11 @@ msgstr "Deflate"
 
 #: admin/util.py:35
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: admin/util.py:38
 msgid "On"
-msgstr ""
+msgstr "På"
 
 #: admin/validations.py:19
 msgid "Malformed number"
@@ -3738,7 +3803,7 @@ msgstr "Utanför omfång (1 till 65535)"
 
 #: admin/validations.py:52
 msgid "Port already in use"
-msgstr ""
+msgstr "Porten används redan"
 
 #: admin/validations.py:65
 msgid "Malformed path"
@@ -3825,15 +3890,15 @@ msgstr "Namnet för den virtuella värden används redan."
 #: admin/validations.py:344 admin/validations.py:354 admin/validations.py:364
 #: admin/validations.py:381
 msgid "Already in use"
-msgstr ""
+msgstr "Används redan"
 
 #: admin/wizards/List.py:30
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 #: admin/wizards/List.py:31
 msgid "Content Management Systems"
-msgstr ""
+msgstr "Innehållshanteringssystem"
 
 #: admin/wizards/List.py:34
 #, fuzzy
@@ -3844,16 +3909,19 @@ msgstr "Guider"
 msgid ""
 "CMS for everything from personal weblogs to large community-driven websites."
 msgstr ""
+"CMS för allt från personliga bloggar till stora gemensamt drivna webbsidor."
 
 #: admin/wizards/List.py:38
 msgid "WordPress"
-msgstr ""
+msgstr "WordPress"
 
 #: admin/wizards/List.py:39
 msgid ""
 "State-of-the-art publishing platform with a focus on aesthetics, web "
 "standards, and usability."
 msgstr ""
+"En publiceringsplattform i högsta klass med fokus på estetik, webstandarder "
+"och användbarhet."
 
 #: admin/wizards/List.py:42
 #, fuzzy
@@ -3862,7 +3930,7 @@ msgstr "Guider"
 
 #: admin/wizards/List.py:43
 msgid "Build Web sites and powerful online applications"
-msgstr ""
+msgstr "Bygg webbsidor och kraftfulla online-applikationer"
 
 #: admin/wizards/List.py:46
 #, fuzzy
@@ -3874,6 +3942,8 @@ msgid ""
 "Advanced, easy to use and extensible WikiEngine with a large community of "
 "users."
 msgstr ""
+"Advancerad, enkel att använda och utbyggbar Wiki-motor med en stor "
+"användarskara."
 
 #: admin/wizards/List.py:50
 msgid "Trac Bug Tracker System"
@@ -3883,6 +3953,8 @@ msgstr ""
 msgid ""
 "Enhanced wiki and issue tracking system for software development projects."
 msgstr ""
+"Förbättrat wiki- och problemhanteringssystem för utvecklingsprojekt av "
+"mjukvaror."
 
 #: admin/wizards/List.py:54
 #, fuzzy
@@ -3891,7 +3963,7 @@ msgstr "Skapa"
 
 #: admin/wizards/List.py:55
 msgid "The CMS made for Marketing, but built for Geeks."
-msgstr ""
+msgstr "CMSt gjord för marknadsföring, men byggd av nördar."
 
 #: admin/wizards/List.py:61
 #, fuzzy
@@ -3919,12 +3991,14 @@ msgstr "Guider"
 
 #: admin/wizards/List.py:73
 msgid "Glassfish"
-msgstr ""
+msgstr "Glassfish"
 
 #: admin/wizards/List.py:74
 msgid ""
 "The first compatible implementation of the Java EE 6 platform specification."
 msgstr ""
+"Den första kompatibla implementationen av specifikationen av Java EE 6-"
+"plattformen."
 
 #: admin/wizards/List.py:77
 #, fuzzy
@@ -3937,7 +4011,7 @@ msgstr ""
 
 #: admin/wizards/List.py:84
 msgid "Platforms"
-msgstr ""
+msgstr "Plattformar"
 
 #: admin/wizards/List.py:85
 #, fuzzy
@@ -3951,35 +4025,36 @@ msgstr "Guider"
 
 #: admin/wizards/List.py:89
 msgid "The Web framework for perfectionists (with deadlines)."
-msgstr ""
+msgstr "Webramverket för perfektionister (med deadlines)."
 
 #: admin/wizards/List.py:92
 msgid "Ruby on Rails"
-msgstr ""
+msgstr "Ruby on Rails"
 
 #: admin/wizards/List.py:93
 msgid "Open-source web framework optimized for sustainable productivity."
-msgstr ""
+msgstr "Öppet källkodsprojekt optimerad för hållbar produktivitet."
 
 #: admin/wizards/List.py:96
 msgid "Zend"
-msgstr ""
+msgstr "Zend"
 
 #: admin/wizards/List.py:97
 msgid "Simple, straightforward, open-source software framework for PHP 5."
-msgstr ""
+msgstr "Enkel, rättframt ramverk av öppen källkod skriven för PHP 5."
 
 #: admin/wizards/List.py:100
 msgid "Symfony"
-msgstr ""
+msgstr "Symfony"
 
 #: admin/wizards/List.py:101
 msgid "Full-stack framework, a library of cohesive classes written in PHP."
 msgstr ""
+"Fullstacks-ramverk, ett bibliotek av sammanhängande klasser skrivna i PHP."
 
 #: admin/wizards/List.py:105
 msgid "Fast, self-healing, developer-friendly WSGI server."
-msgstr ""
+msgstr "Snabb, självläkande och utvecklarvänlig WSGI-server."
 
 #: admin/wizards/List.py:111
 #, fuzzy
@@ -3988,15 +4063,15 @@ msgstr "Språk"
 
 #: admin/wizards/List.py:112
 msgid "Development Languages and Platforms"
-msgstr ""
+msgstr "Utvecklingsspråk och plattformar"
 
 #: admin/wizards/List.py:116
 msgid "Widely-used general-purpose scripting language."
-msgstr ""
+msgstr "Vida använt general-purpose script-språk."
 
 #: admin/wizards/List.py:119
 msgid ".NET with Mono"
-msgstr ""
+msgstr ".NET med Mono"
 
 #: admin/wizards/List.py:120
 msgid "Cross-platform, open-source .NET development framework."
@@ -4014,20 +4089,23 @@ msgstr "Allmän konfiguration"
 
 #: admin/wizards/List.py:130
 msgid "phpMyAdmin"
-msgstr ""
+msgstr "phpMyAdmin"
 
 #: admin/wizards/List.py:131
 msgid "PHP web application to handle the administration of MySQL."
 msgstr ""
+"Web-applikation skriven i PHP för att hantera administrationen av MySQL."
 
 #: admin/wizards/List.py:134
 msgid "GNU MailMan"
-msgstr ""
+msgstr "GNU MailMan"
 
 #: admin/wizards/List.py:135
 msgid ""
 "Free software for managing electronic mail discussion and e-newsletter lists."
 msgstr ""
+"Gratis mjukvara för att hantera listor för elektroniska nyhetsbrev och "
+"konversationer per mail."
 
 #: admin/wizards/List.py:138
 #, fuzzy
@@ -4036,23 +4114,24 @@ msgstr "Guider"
 
 #: admin/wizards/List.py:139
 msgid "Course Management System / Virtual Learning Environment."
-msgstr ""
+msgstr "Kurshanteringssystem / Virtuell inlärningsmiljö."
 
 #: admin/wizards/List.py:142
 msgid "phpBB Forum"
-msgstr ""
+msgstr "phpBB Forum"
 
 #: admin/wizards/List.py:143
 msgid "The most widely used Open Source forum solution."
-msgstr ""
+msgstr "Den mest använda forum-lösningen när det gäller Open Source."
 
 #: admin/wizards/List.py:146
 msgid "Sugar CRM"
-msgstr ""
+msgstr "Sugar CRM"
 
 #: admin/wizards/List.py:147
 msgid "Enable organizations to efficiently organize customer relationships."
 msgstr ""
+"Tillåter organisationer att effektivt organisera relationer med kunder."
 
 #: admin/wizards/List.py:150
 #, fuzzy
@@ -4063,14 +4142,15 @@ msgstr "Omdirigering"
 msgid ""
 "BitTorrent client written in C++, based on the libTorrent libraries for Unix."
 msgstr ""
+"BitTorrent-klient skriven i C++, baserat på libTorrent-biblioteken för Unix."
 
 #: admin/wizards/List.py:157
 msgid "Tasks"
-msgstr ""
+msgstr "Uppgifter"
 
 #: admin/wizards/List.py:158
 msgid "Common Maintenance Tasks"
-msgstr ""
+msgstr "Vanliga underhållsaktiviteter"
 
 #: admin/wizards/List.py:161
 #, fuzzy
@@ -4081,14 +4161,16 @@ msgstr "Rot-katalog för den virtuella servern."
 msgid ""
 "Create a new virtual server redirecting every request to another domain host."
 msgstr ""
+"Skapa en ny virtuell server som skickar vidare alla anslutningar till en "
+"annan domänvärd."
 
 #: admin/wizards/List.py:165
 msgid "Anti Hot-Linking"
-msgstr ""
+msgstr "Anti-hot-linking"
 
 #: admin/wizards/List.py:166
 msgid "Stop other domains from hot-linking your media files."
-msgstr ""
+msgstr "Stoppa andra domäner från att använda dina media-filer."
 
 #: admin/wizards/List.py:169
 #, fuzzy
@@ -4099,14 +4181,18 @@ msgstr "Tillåt kataloglistning"
 msgid ""
 "Add the /icons and /cherokee_themes directories used for directory listing."
 msgstr ""
+"Lägg till /icons och /cherokee_themes-kataloger som skall användas för visa "
+"innehållet i kataloger."
 
 #: admin/wizards/List.py:173
 msgid "Static-file support"
-msgstr ""
+msgstr "Stöd för statiska filer."
 
 #: admin/wizards/List.py:174
 msgid "Add a rule to optimally serve the most common static files."
 msgstr ""
+"Lägg till en regel för att optimalt tillhandahålla de vanligasta statiska "
+"filerna."
 
 #: admin/wizards/List.py:177
 #, fuzzy
@@ -4117,6 +4203,7 @@ msgstr "Ljud- och video-strömmar"
 msgid ""
 "Add a rule to stream media files through an intelligent streaming handler."
 msgstr ""
+"Lägg till en regel för att strömma mediafiler genom en smart strömhanterare."
 
 #: admin/wizards/alfresco.py:37
 #, fuzzy
@@ -4135,6 +4222,8 @@ msgid ""
 "Get the benefits of packaged applications and an enterprise application "
 "framework in a single solution."
 msgstr ""
+"Få fördelarna med paketerade applikationer och ett enterprise-applikations-"
+"ramverk i en enda lösning."
 
 #: admin/wizards/alfresco.py:41
 #, fuzzy
@@ -4146,11 +4235,14 @@ msgid ""
 "Hostname or IP of the server running Alfresco. You can add more later to "
 "have the load balanced."
 msgstr ""
+"Värdnamn eller IP till servern som kör Alfresco. Du kan lägga till fler "
+"senare för att lastbalansera."
 
 #: admin/wizards/alfresco.py:43 admin/wizards/glassfish.py:43
 #: admin/wizards/liferay.py:43
 msgid "Port running the service in said host. (Example: 8080)"
 msgstr ""
+"Porten som används för tjänsten i den nämnda värden. (Exempelvis: 8080)"
 
 #: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
@@ -4184,7 +4276,7 @@ msgstr "Virtuell server"
 #: admin/wizards/glassfish.py:48 admin/wizards/liferay.py:48
 #: admin/wizards/moinmoin.py:48 admin/wizards/uwsgi.py:50
 msgid "Public web directory to access the project."
-msgstr ""
+msgstr "Publik webkatalog att använda för att komma åt projektet"
 
 #: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
@@ -4205,7 +4297,7 @@ msgstr "Webkatalog"
 #: admin/wizards/joomla.py:223 admin/wizards/liferay.py:169
 #: admin/wizards/mailman.py:145 admin/wizards/moinmoin.py:214
 #: admin/wizards/mono.py:198 admin/wizards/phpbb.py:178
-#: admin/wizards/rails.py:313 admin/wizards/sugar.py:208
+#: admin/wizards/rails.py:314 admin/wizards/sugar.py:208
 #: admin/wizards/symfony.py:218 admin/wizards/trac.py:131
 #: admin/wizards/uwsgi.py:241 admin/wizards/wordpress.py:209
 #: admin/wizards/zend.py:193
@@ -4242,6 +4334,7 @@ msgid ""
 "It allows developers to condense complex business logic into fewer lines of "
 "code."
 msgstr ""
+"Den tillåter utvecklare att korta ner affärs-logik till färre rader kod."
 
 #: admin/wizards/coldfusion.py:42
 #, fuzzy
@@ -4253,10 +4346,12 @@ msgid ""
 "The pair IP:port of the server running ColdFusion. You can add more later to "
 "have the load balanced."
 msgstr ""
+"IP och port till servern som kör ColdFusion. Du kan lägga till fler servrar "
+"vid ett senare tillfälle för att lastbalansera."
 
 #: admin/wizards/coldfusion.py:51
 msgid "ColdFusion is not running on the specified host."
-msgstr ""
+msgstr "ColdFusion körs inte på den specifierade värden."
 
 #: admin/wizards/concrete5.py:38
 #, fuzzy
@@ -4268,10 +4363,12 @@ msgid ""
 "<a target=\"_blank\" href=\"http://www.concrete5.org/\">Concrete5</a> is a "
 "content management system that is free and open source."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.concrete5.org/\">Concrete5</a> är ett "
+"innehållshanteringssystem som är gratis och öppen källkod."
 
 #: admin/wizards/concrete5.py:40
 msgid "It is the CMS made for Marketing, but built for Geeks."
-msgstr ""
+msgstr "CMSn byggd för marknadsföring, men byggd av nördar."
 
 #: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
 #: admin/wizards/drupal.py:41 admin/wizards/joomla.py:43
@@ -4288,26 +4385,29 @@ msgid ""
 "Local directory where the Concrete5 source code is located. Example: /usr/"
 "share/concrete5."
 msgstr ""
+"Lokal katalog där källkoden till Concrete5 finns. Exempelvis: /usr/share/"
+"concrete5"
 
 #: admin/wizards/concrete5.py:44
 msgid "Does not look like a Concrete5 source directory."
-msgstr ""
+msgstr "Ser inte ut som en katalog som innehåller källkod till Concrete5."
 
 #: admin/wizards/concrete5.py:49
 msgid ""
 "Web directory where you want Concrete5 to be accessible. (Example: /"
 "concrete5)"
 msgstr ""
+"Web-katalog där du vill att Concrete5 ska kunna nås. (Exempelvis: /concrete5)"
 
 #: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
 #: admin/wizards/drupal.py:252 admin/wizards/joomla.py:224
 #: admin/wizards/mailman.py:146 admin/wizards/mono.py:200
-#: admin/wizards/phpbb.py:179 admin/wizards/rails.py:314
+#: admin/wizards/phpbb.py:179 admin/wizards/rails.py:315
 #: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
 #: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
 #: admin/wizards/wordpress.py:210 admin/wizards/zend.py:194
 msgid "Use Same Logs as"
-msgstr ""
+msgstr "Använd samma loggar som"
 
 #: admin/wizards/concrete5.py:239 admin/wizards/phpbb.py:197
 #: admin/wizards/phpmyadmin.py:134 admin/wizards/zend.py:210
@@ -4326,22 +4426,27 @@ msgid ""
 "level Python Web framework that encourages rapid development and clean, "
 "pragmatic design."
 msgstr ""
+"<a target=\"_blank\" href=\"http://djangoproject.com/\">Django</a> är ett "
+"högnivå-ramverk som främjar snabb utveckling och snabb, pragmatisk design."
 
 #: admin/wizards/django.py:40
 msgid ""
 "It is the Web framework for perfectionists (with deadlines). Django makes it "
 "easier to build better Web apps more quickly and with less code."
 msgstr ""
+"Det är web-ramverket för perfektionister (med deadlines). Django gör det "
+"lättare att mindre kod skriva bättre web-applikationer."
 
 #: admin/wizards/django.py:42
 msgid ""
 "Local directory where the Django source code is located. Example: /usr/share/"
 "django."
 msgstr ""
+"Lokal katalog där källkoden till Django finns. Exempelvis: /usr/share/django"
 
 #: admin/wizards/django.py:45
 msgid "Web directory where you want Django to be accessible. (Example: /blog)"
-msgstr ""
+msgstr "Web-katalog där du vill att Django ska kunna nås. (Exempelvis: /blog)"
 
 #: admin/wizards/django.py:47 admin/wizards/uwsgi.py:48
 #, fuzzy
@@ -4350,9 +4455,9 @@ msgstr "Namn för den virtuella servern."
 
 #: admin/wizards/django.py:48
 msgid "Does not look like a Django source directory."
-msgstr ""
+msgstr "Ser inte ut som en katalog som innehåller källkod till Django."
 
-#: admin/wizards/django.py:49 admin/wizards/rails.py:55
+#: admin/wizards/django.py:49 admin/wizards/rails.py:56
 #: admin/wizards/uwsgi.py:54
 #, fuzzy
 msgid "The document root directory does not exist."
@@ -4365,7 +4470,7 @@ msgstr "Webkatalog"
 
 #: admin/wizards/django.py:271
 msgid "Directory doesn't look like a Django based project."
-msgstr ""
+msgstr "Katalogen ser inte ut som ett Django-baserat projekt."
 
 #: admin/wizards/drupal.py:38
 #, fuzzy
@@ -4390,10 +4495,11 @@ msgid ""
 "Local directory where the Drupal source code is located. Example: /usr/share/"
 "drupal."
 msgstr ""
+"Lokal katalog där källkoden till Drupal finns. Exempelvis: /usr/share/drupal."
 
 #: admin/wizards/drupal.py:45
 msgid "Web directory where you want Drupal to be accessible. (Example: /blog)"
-msgstr ""
+msgstr "Web-katalog där du vill att Drupal ska kunna nås. (Exempelvis: /blog)"
 
 #: admin/wizards/drupal.py:47
 #, fuzzy
@@ -4407,13 +4513,16 @@ msgstr "Webkatalog"
 
 #: admin/wizards/glassfish.py:37
 msgid "Welcome to the GlassFish Wizard"
-msgstr ""
+msgstr "Välkommen till GlassFish-guiden"
 
 #: admin/wizards/glassfish.py:38
 msgid ""
 "<a target=\"_blank\" href=\"http://glassfish.org/\">GlassFish</a> is the "
 "first compatible implementation of the Java EE 6 platform specification."
 msgstr ""
+"<a target=\"_blank\" href=\"http://glassfish.org/\">GlassFish</a> är den "
+"första kompatibla implementationen av specifikationen av Java EE 6-"
+"plattformen."
 
 #: admin/wizards/glassfish.py:39
 msgid ""
@@ -4425,70 +4534,77 @@ msgstr ""
 
 #: admin/wizards/glassfish.py:41
 msgid "GlassFish Project"
-msgstr ""
+msgstr "GlassFish-projektet"
 
 #: admin/wizards/glassfish.py:42
 msgid ""
 "Hostname or IP of the server running GlassFish. You can add more later to "
 "have the load balanced."
 msgstr ""
-
-#: admin/wizards/hotlinking.py:38
-msgid "Welcome to the Hotlinking Wizard"
-msgstr ""
+"Värdnamn eller IP till servern som kör GlassFish. Du kan lägga till fler vid "
+"ett senare tillfälle för lastbalansering."
 
 #: admin/wizards/hotlinking.py:39
-msgid "This wizard stops other domains from hot-linking your media files."
-msgstr ""
+msgid "Welcome to the Hotlinking Wizard"
+msgstr "Välkommen till Hotlinking-guiden."
 
 #: admin/wizards/hotlinking.py:40
+msgid "This wizard stops other domains from hot-linking your media files."
+msgstr ""
+"Den här guiden stoppar andra domäner från att \"hot-linka\" dina media-filer."
+
+#: admin/wizards/hotlinking.py:41
 #, fuzzy
 msgid "Anti-HotLinking Information"
 msgstr "Visa information"
 
-#: admin/wizards/hotlinking.py:41
-msgid "Domain allowed to access the files. Eg: example.com"
-msgstr ""
-
 #: admin/wizards/hotlinking.py:42
-msgid "Path to the public resource to use. Eg: /images/forbidden.jpg"
-msgstr ""
+msgid "Domain allowed to access the files. Eg: example.com"
+msgstr "Domän som tillåts at nå filerna. Exempelvis: exempel.com"
 
 #: admin/wizards/hotlinking.py:43
-msgid "How to handle hot-linking requests."
+msgid "Path to the public resource to use. Eg: /images/forbidden.jpg"
 msgstr ""
+"Sökväg att använda till den publika resursen. Exempelvis: /images/forbidden."
+"jpg"
 
 #: admin/wizards/hotlinking.py:44
-msgid "Recollection completed"
-msgstr ""
+msgid "How to handle hot-linking requests."
+msgstr "Hur hot-linking-begäran ska handhavas."
 
 #: admin/wizards/hotlinking.py:45
+msgid "Recollection completed"
+msgstr "Återinsamling färdig"
+
+#: admin/wizards/hotlinking.py:46
 msgid ""
 "The required Information has been collected. Proceed to create the necessary "
 "rules to prevent hot-linking from happening."
 msgstr ""
+"Den nödvändiga informationen har samlats in. Fortsätt med att skapa de "
+"nödvändiga reglerna för att förhindra hot-linking från att hända."
 
-#: admin/wizards/hotlinking.py:82
+#: admin/wizards/hotlinking.py:83
 #, fuzzy
 msgid "Show error"
 msgstr "Visa användare"
 
-#: admin/wizards/hotlinking.py:83
+#: admin/wizards/hotlinking.py:84
 #, fuzzy
 msgid "Redirect"
 msgstr "Omdirigering"
 
-#: admin/wizards/hotlinking.py:142
+#: admin/wizards/hotlinking.py:143
 #, fuzzy
 msgid "Domain"
 msgstr "Domäner"
 
-#: admin/wizards/hotlinking.py:179
+#: admin/wizards/hotlinking.py:181
 #, fuzzy
 msgid "Domain Name"
 msgstr "Domän-mönster"
 
-#: admin/wizards/hotlinking.py:180
+#: admin/wizards/hotlinking.py:182
 #, fuzzy
 msgid "Reply type"
 msgstr "Svar"
@@ -4503,12 +4619,16 @@ msgid ""
 "This wizard adds the /icons and /cherokee_themes directories so Cherokee can "
 "use icons when listing directories."
 msgstr ""
+"Denna guiden lägger till /icons och /cherokee_theme så att Cherokee kan "
+"använda ikoner medans den visar innehållet kataloger."
 
 #: admin/wizards/icons.py:39
 msgid ""
 "The /icons and /cherokee_themes directories are already configured. There is "
 "nothing left to do."
 msgstr ""
+"/icons och /cherokee_themes-katalogerna är redan konfigurerade. Det finns "
+"inget kvar att göra."
 
 #: admin/wizards/joomla.py:39
 #, fuzzy
@@ -4527,21 +4647,24 @@ msgid ""
 "Best of all, Joomla is an open source solution that is freely available to "
 "everyone."
 msgstr ""
+"Bäst av allt med Joomla är att det är lösning byggd med öppen källkod som är "
+"fritt att använda för alla."
 
 #: admin/wizards/joomla.py:44
 msgid ""
 "Local directory where the Joomla source code is located. Example: /usr/share/"
 "joomla."
 msgstr ""
+"Lokal katalog där källkoden till Joomla finns. Exempelvis: /usr/share/joomla."
 
 #: admin/wizards/joomla.py:45
 msgid "Does not look like a Joomla source directory."
-msgstr ""
+msgstr "Ser inte ut som en katalog för Joomlas källkod."
 
 #: admin/wizards/joomla.py:50
 msgid ""
 "Web directory where you want Joomla to be accessible. (Example: /joomla)"
-msgstr ""
+msgstr "Web-katalog där du vill att Joomla ska kunna nås. (Exempelvis /joomla)"
 
 #: admin/wizards/joomla.py:242
 #, fuzzy
@@ -4570,10 +4693,12 @@ msgid ""
 "Hostname or IP of the server running Liferay. You can add more later to have "
 "the load balanced."
 msgstr ""
+"Värdnamn eller IP till servern som kör Liferay. Du kan lägga till fler vid "
+"ett senare tillfälle för att lastbalansera."
 
 #: admin/wizards/mailman.py:36
 msgid "Welcome to the Mailman Wizard"
-msgstr ""
+msgstr "Välkommen till Mailman-guiden."
 
 #: admin/wizards/mailman.py:37
 msgid ""
@@ -4581,12 +4706,17 @@ msgid ""
 "a> is free software for managing electronic mail discussion and e-newsletter "
 "lists."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.gnu.org/software/mailman/\">Mailman</"
+"a> är gratis mjukvara för att hantera elektroniska diskussioner och "
+"nyhetsbrevs-listor."
 
 #: admin/wizards/mailman.py:38
 msgid ""
 "Mailman supports built-in archiving, automatic bounce processing, content "
 "filtering, digest delivery, spam filters, and more."
 msgstr ""
+"Mailmain har stöd för inbyggd arkivering, automatisk bounce-behandling, "
+"innehållsfiltrering, digest-leverans, spamfilter och mer."
 
 #: admin/wizards/mailman.py:40
 #, fuzzy
@@ -4605,7 +4735,7 @@ msgstr "Sökvägen är inte en katalog"
 
 #: admin/wizards/mailman.py:43
 msgid "Local path to the Mailman mail archive directory."
-msgstr ""
+msgstr "Lokal sökväg till arkivkatalogen för Mailman."
 
 #: admin/wizards/mailman.py:166
 #, fuzzy
@@ -4648,11 +4778,13 @@ msgid ""
 "advanced, easy to use and extensible WikiEngine with a large community of "
 "users."
 msgstr ""
+"<a target=\"_blank\" href=\"http://moinmo.in/\">MoinMoin</a>  är en "
+"avancerad, men enkel att använda WikiMotor med en stor skara användare."
 
 #: admin/wizards/moinmoin.py:39
 msgid ""
 "Said in a few words, it is about collaboration on easily editable web pages."
-msgstr ""
+msgstr "Kort sagt handlar det om at sammarbeta på enkelt editerbara webbsidor."
 
 #: admin/wizards/moinmoin.py:41
 #, fuzzy
@@ -4675,7 +4807,7 @@ msgstr "Skapa en ny konfigurations-fil"
 
 #: admin/wizards/moinmoin.py:52
 msgid "MoinMoin doesn't seem to be correctly installed."
-msgstr ""
+msgstr "MoinMoin verkar inte vara korrekt installerat."
 
 #: admin/wizards/moinmoin.py:234
 #, fuzzy
@@ -4703,6 +4835,8 @@ msgid ""
 "It is an open implementation of C# and the CLR that is binary compatible "
 "with Microsoft.NET."
 msgstr ""
+"Det är en öppen implementation av C# och CLR som är binärt kompatibel med "
+"Microsoft.NET."
 
 #: admin/wizards/mono.py:41
 #, fuzzy
@@ -4711,7 +4845,7 @@ msgstr "Sökvägen är inte en katalog"
 
 #: admin/wizards/mono.py:42
 msgid "Local path to the Mono based project."
-msgstr ""
+msgstr "Lokal sökväg till deta Mono-baserade projektet."
 
 #: admin/wizards/mono.py:43
 #, fuzzy
@@ -4720,7 +4854,7 @@ msgstr "Kunde inte starta servern"
 
 #: admin/wizards/mono.py:47
 msgid "Document root (for non Mono related files)."
-msgstr ""
+msgstr "Dokument-rot (för filer som inte är relaterade till Mono)."
 
 #: admin/wizards/mono.py:49
 #, fuzzy
@@ -4732,7 +4866,7 @@ msgstr "Publik webkatalog som konfigurationen ska appliceras på."
 msgid "Directory doesn't look like a Mono based project."
 msgstr "Skapa en ny konfigurations-fil"
 
-#: admin/wizards/mono.py:219 admin/wizards/rails.py:365
+#: admin/wizards/mono.py:219 admin/wizards/rails.py:366
 #: admin/wizards/trac.py:151
 #, fuzzy
 msgid "Project Directory"
@@ -4740,7 +4874,7 @@ msgstr "Webkatalog"
 
 #: admin/wizards/mono.py:221
 msgid "Mono Server Binary"
-msgstr ""
+msgstr "Serverbinären för Mono"
 
 #: admin/wizards/php.py:32
 #, fuzzy
@@ -4753,6 +4887,9 @@ msgid ""
 "general-purpose scripting language that is especially suited for Web "
 "development and can be embedded into HTML."
 msgstr ""
+"<a target=\"_blank\" href=\"http://php.net/\">PHP</a> är ett vida använt "
+"general-purpose skriptspråk som är speciellt lämpad för webutveckling och "
+"kan bakas in i HTML."
 
 #: admin/wizards/php.py:70
 #, fuzzy
@@ -4761,15 +4898,15 @@ msgstr "Smeknamn för virtuell server"
 
 #: admin/wizards/php.py:82
 msgid "Could not find a suitable PHP interpreter."
-msgstr ""
+msgstr "Kunde inte hitta en lämplig PHP-tolk"
 
 #: admin/wizards/php.py:91
 msgid "Could not determine PHP-fpm settings."
-msgstr ""
+msgstr "Kunde inte fastställa inställningar för PHP-fpm."
 
 #: admin/wizards/php.py:95
 msgid "Could not determine correct interpreter settings."
-msgstr ""
+msgstr "Kunde inte fastställa korrekta inställningar för tolken."
 
 #: admin/wizards/phpbb.py:38
 #, fuzzy
@@ -4781,6 +4918,8 @@ msgid ""
 "<a target=\"_blank\" href=\"http://www.phpbb.com/\">phpBB</a> has become the "
 "most widely used Open Source forum solution."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.phpbb.com/\">phpBB</a> har blivit den "
+"mest använda forum-lösningen byggd med öppen källkod."
 
 #: admin/wizards/phpbb.py:40
 msgid ""
@@ -4795,6 +4934,7 @@ msgid ""
 "Local directory where the phpBB source code is located. Example: /usr/share/"
 "phpbb."
 msgstr ""
+"Lokal katalog fär källkoden till phpBB finns. Exempelvis: /usr/share/phpbb."
 
 #: admin/wizards/phpbb.py:44
 #, fuzzy
@@ -4803,7 +4943,7 @@ msgstr "Skapa en ny konfigurations-fil"
 
 #: admin/wizards/phpbb.py:49
 msgid "Web directory where you want phpBB to be accessible. (Example: /phpbb)"
-msgstr ""
+msgstr "Web-katalog där du vill att phpBB ska kunna nås. (Exempelvis: /phpbb)"
 
 #: admin/wizards/phpmyadmin.py:39
 #, fuzzy
@@ -4830,95 +4970,127 @@ msgid ""
 "Local directory where the phpMyAdmin source code is located. Example: /usr/"
 "share/phpmyadmin."
 msgstr ""
+"Lokal katalog där källkoden till phpMyAdmin finns. Exempelvis: /usr/share/"
+"phpmyadmin."
 
 #: admin/wizards/phpmyadmin.py:45
 msgid "Does not look like a phpMyAdmin source directory."
-msgstr ""
+msgstr "Ser inte ut som en katalog med källkod till phpMyAdmin."
 
 #: admin/wizards/phpmyadmin.py:50
 msgid ""
 "Web directory where you want phpMyAdmin to be accessible. (Example: /"
 "phpmyadmin)"
 msgstr ""
-
-#: admin/wizards/rails.py:37
-msgid "Welcome to the Ruby on Rails wizard"
-msgstr ""
+"Web-katalog där du vill att phpMyAdmin ska kunna nås. (Exempelvis: /"
+"phpmyadmin)"
 
 #: admin/wizards/rails.py:38
+msgid "Welcome to the Ruby on Rails wizard"
+msgstr "Välkommen till Ruby On Rails-guiden."
+
+#: admin/wizards/rails.py:39
 msgid ""
 "<a target=\"_blank\" href=\"http://rubyonrails.org/\">Ruby on Rails</a> is "
 "an open-source web framework optimized for programmer happines and "
 "sustainable productivity."
 msgstr ""
 
-#: admin/wizards/rails.py:39
+#: admin/wizards/rails.py:40
 msgid ""
 "It lets you write beautiful code by favoring convention over configuration."
 msgstr ""
-
-#: admin/wizards/rails.py:41
-msgid "Ruby on Rails Project"
-msgstr ""
+"Tillåter dig att skriva vacker kod genom att favorisera konvention över "
+"konfiguration."
 
 #: admin/wizards/rails.py:42
+msgid "Ruby on Rails Project"
+msgstr "Ruby on Rails-projekt"
+
+#: admin/wizards/rails.py:43
 #, fuzzy
 msgid "New Virtual Server"
 msgstr "Virtuell server"
 
-#: admin/wizards/rails.py:45
-msgid "Local path to the Ruby on Rails based project."
-msgstr ""
-
 #: admin/wizards/rails.py:46
+msgid "Local path to the Ruby on Rails based project."
+msgstr "Lokal sökväg till det Ruby On Rails-baserade projektet."
+
+#: admin/wizards/rails.py:47
 #, fuzzy
 msgid "Name of the new domain that will be created."
 msgstr "Sökväg till PID-filen. Är fältet tomt skapas filen inte."
 
-#: admin/wizards/rails.py:47
+#: admin/wizards/rails.py:48
 msgid ""
 "Directory of the web directory where the Ruby on Rails project will live in."
 msgstr ""
 
-#: admin/wizards/rails.py:48
-msgid "Value of the RAILS_ENV variable."
-msgstr ""
-
 #: admin/wizards/rails.py:49
+msgid "Value of the RAILS_ENV variable."
+msgstr "Värdet för RAILS_ENV-variabeln."
+
+#: admin/wizards/rails.py:50
 msgid ""
 "The proxy setting is recommended, but FastCGI can also be used if spawn-fcgi "
 "is available."
 msgstr ""
+"Proxy-inställningen rekommenderas, men FASTCGI kan också användas om spawn-"
+"fcgi finns tillgänglig."
 
-#: admin/wizards/rails.py:51
+#: admin/wizards/rails.py:52
 msgid ""
 "<p>Even though the directory looks like a Ruby on Rails project, the public/"
 "dispatch.fcgi file wasn't found.</p>"
 msgstr ""
 
-#: admin/wizards/rails.py:52
+#: admin/wizards/rails.py:53
 msgid ""
 "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
 "might want to rename it.</p>"
 msgstr ""
 
-#: admin/wizards/rails.py:53
+#: admin/wizards/rails.py:54
 msgid ""
 "<p>If you are using Rails >= 2.3.0, you will have to execute the following "
 "command from the project directory in order to add the missing file:</"
 "p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
 msgstr ""
 
-#: admin/wizards/rails.py:54
+#: admin/wizards/rails.py:55
 #, fuzzy
 msgid "It does not look like a Ruby on Rails based project directory."
 msgstr "Skapa en ny konfigurations-fil"
 
-#: admin/wizards/rails.py:366
-msgid "RAILS_ENV environment"
+#: admin/wizards/rails.py:65
+#, fuzzy
+msgid "Production"
+msgstr "Enbart namn"
+
+#: admin/wizards/rails.py:66
+#, fuzzy
+msgid "Test"
+msgstr "Digest"
+
+#: admin/wizards/rails.py:67
+#, fuzzy
+msgid "Development"
+msgstr "Serverutveckling"
+
+#: admin/wizards/rails.py:68
+msgid "Empty"
 msgstr ""
 
-#: admin/wizards/rails.py:369
+#: admin/wizards/rails.py:72
+#, fuzzy
+msgid "HTTP proxy"
+msgstr "HTTP-felmeddelande"
+
+#: admin/wizards/rails.py:367
+msgid "RAILS_ENV environment"
+msgstr "RAILS_ENV-miljö"
+
+#: admin/wizards/rails.py:370
 msgid "Deployment method"
 msgstr ""
 
@@ -4932,6 +5104,8 @@ msgid ""
 "This Wizard creates a new virtual server redirecting every request to "
 "another domain host."
 msgstr ""
+"Den här guiden skapar en virtuell server som skickare vidare alla begäran "
+"till en annan domänvärd."
 
 #: admin/wizards/redirect.py:42
 #, fuzzy
@@ -4943,6 +5117,9 @@ msgid ""
 "This domain name will be used as nickname for the new virtual server. More "
 "domain names can be added to the virtual server later on."
 msgstr ""
+"Det här domännamnet kommer att användas som smeknamn för den virtuella "
+"servern. Fler domännamn kan läggas till för den virtuella servern vid ett "
+"senare tillfälle."
 
 #: admin/wizards/redirect.py:44
 #, fuzzy
@@ -4971,6 +5148,11 @@ msgid ""
 "libTorrent libraries for Unix (not to be confused with libtorrent by Arvid "
 "Norberg), whose author's goal is “a focus on high performance and good code”"
 msgstr ""
+"<a target=\"_blank\" href=\"http://libtorrent.rakshasa.no/\">rTorrent</a> är "
+"en textbaserad BitTorrent-klient med ncurses-gränssnit skriven i C++. Den "
+"baseras på libTorrent-biblioteken för Unix (ej att förväxlas med libtorrent "
+"av Arvid NorBerg), vars upphovsmans mål är \"ett fokus på hög prestanda och "
+"bra kod\""
 
 #: admin/wizards/rtorrent.py:37
 #, fuzzy
@@ -4986,11 +5168,13 @@ msgid ""
 "Web directory where you want rTorrent XMLRPC to be accessible. (Example: /"
 "RPC2)"
 msgstr ""
+"Web-katalog där du vill att rTorrents XMLRPC ska kunna nås. (Exempelvis: /"
+"RPC2)"
 
 #: admin/wizards/rtorrent.py:140
 #, python-format
 msgid "Already configured: %s"
-msgstr ""
+msgstr "Redan konfigurerat: %s"
 
 #: admin/wizards/static.py:37
 msgid "Welcome to the Common Static wizard"
@@ -5003,18 +5187,19 @@ msgstr ""
 
 #: admin/wizards/static.py:39
 msgid "Current rules have been checked"
-msgstr ""
+msgstr "Nuvarande regler har kontrollerats"
 
 #: admin/wizards/static.py:40
 msgid ""
 "The process is very simple. Let the wizard take over and don't worry about a "
 "thing."
 msgstr ""
+"Processen är väldigt enkel. Låt guiden ta över och oroa dig inte för något."
 
 #: admin/wizards/static.py:41
 msgid ""
 "Common files have been already configured, so there is nothing to be done."
-msgstr ""
+msgstr "Gemensamma filer har redan konfigurerats. Inget behövs göras."
 
 #: admin/wizards/streaming.py:39
 #, fuzzy
@@ -5023,11 +5208,11 @@ msgstr "Välkommen till Cherokee Admin"
 
 #: admin/wizards/streaming.py:40
 msgid "This Wizard Adds a rule to stream media files."
-msgstr ""
+msgstr "Den här guiden lägger till en regel för att strömma media-filer."
 
 #: admin/wizards/streaming.py:115
 msgid "The media streaming plug-in is not installed."
-msgstr ""
+msgstr "Pluginen för strömmande media är inte installerad."
 
 #: admin/wizards/streaming.py:123
 #, fuzzy
@@ -5036,7 +5221,7 @@ msgstr "Namnet för den virtuella värden används redan."
 
 #: admin/wizards/sugar.py:38
 msgid "Welcome to the Sugar CRM Wizard"
-msgstr ""
+msgstr "Välkommen till Sugar CRM-guiden"
 
 #: admin/wizards/sugar.py:39
 msgid ""
@@ -5057,15 +5242,18 @@ msgid ""
 "Local directory where the Sugar CRM source code is located. Example: /usr/"
 "share/sugar."
 msgstr ""
+"Lokal katalog där källkode till Sugar CRM finns. Exempelvis: /usr/share/"
+"sugar."
 
 #: admin/wizards/sugar.py:44
 msgid "Does not look like a Sugar CRM source directory."
-msgstr ""
+msgstr "Ser inte ut som en katalog där källkode för Sugar CRM finns."
 
 #: admin/wizards/sugar.py:49
 msgid ""
 "Web directory where you want Sugar CRM to be accessible. (Example: /sugar)"
 msgstr ""
+"Web-katalog där du vill att Sugar CRM ska kunna nås. (Exempelvis: /sugar)"
 
 #: admin/wizards/sugar.py:227
 #, fuzzy
@@ -5074,7 +5262,7 @@ msgstr "Webkatalog"
 
 #: admin/wizards/symfony.py:41
 msgid "Welcome to the Symfony Wizard"
-msgstr ""
+msgstr "Välkommen till Symfony-guiden"
 
 #: admin/wizards/symfony.py:42
 msgid ""
@@ -5087,18 +5275,24 @@ msgid ""
 "It provides an architecture, components and tools for developers to build "
 "complex web applications faster."
 msgstr ""
+"Den tillhandahåller en arkitektur, komponenter och verktyg för att "
+"utvecklare ska kunna bygga komplexa web-applikationer snabbare."
 
 #: admin/wizards/symfony.py:46
 msgid ""
 "Local directory where the Symfony source code is located. Example: /usr/"
 "share/php/data/symfony."
 msgstr ""
+"Lokal katalog där källkoden till Symfony finns. Exempelvis: /usr/share/php/"
+"data/symfony."
 
 #: admin/wizards/symfony.py:47
 msgid ""
 "Path to the web folder of the Symfony project. (Example: /home/user/"
 "sf_project/web)"
 msgstr ""
+"Sökväg till webbdelen av Symfony-projektet. (Exempelvis: /home/användare/"
+"sf_project/web)"
 
 #: admin/wizards/symfony.py:48
 #, fuzzy
@@ -5108,7 +5302,7 @@ msgstr "Skapa en ny konfigurations-fil"
 #: admin/wizards/symfony.py:53
 msgid ""
 "Web directory where you want Symfony to be accessible. (Example: /symfony)"
-msgstr ""
+msgstr "Web-katalog där vill att Symfony ska kunna nås. (Exempelvis: /symfony)"
 
 #: admin/wizards/symfony.py:237
 #, fuzzy
@@ -5117,7 +5311,7 @@ msgstr "Webkatalog"
 
 #: admin/wizards/symfony.py:238
 msgid "Symfony Package"
-msgstr ""
+msgstr "Symfony-paket"
 
 #: admin/wizards/trac.py:38
 #, fuzzy
@@ -5136,14 +5330,17 @@ msgid ""
 "It provides an interface to Subversion (or other version control systems), "
 "an integrated Wiki and convenient reporting facilities."
 msgstr ""
+"Den tillhandahåller ett gränssnitt till Subversion (eller andra system för "
+"versionshantering), en integrerad wiki och behändiga "
+"rapporteringsinrättningar."
 
 #: admin/wizards/trac.py:44
 msgid "Local path to the Trac project."
-msgstr ""
+msgstr "Lokal sökväg till Trac-projektet."
 
 #: admin/wizards/trac.py:45
 msgid "Local path to the Trac installation. (Example: /usr/share/trac)"
-msgstr ""
+msgstr "Lokal sökväg till Trac-installationen. (Exempelvis: /usr/share/trac)"
 
 #: admin/wizards/trac.py:47
 #, fuzzy
@@ -5162,7 +5359,7 @@ msgstr "Webkatalog"
 
 #: admin/wizards/uwsgi.py:37
 msgid "Welcome to the uWsgi Wizard"
-msgstr ""
+msgstr "Välkommen till uWsgi-guiden"
 
 #: admin/wizards/uwsgi.py:38
 msgid ""
@@ -5187,7 +5384,7 @@ msgstr ""
 
 #: admin/wizards/uwsgi.py:43
 msgid "Location of the uWSGI binary"
-msgstr ""
+msgstr "Sökväg till uWSGI-binären."
 
 #: admin/wizards/uwsgi.py:44
 #, fuzzy
@@ -5199,6 +5396,8 @@ msgid ""
 "The default value is extracted from the configuration file. Change it at "
 "your own risk."
 msgstr ""
+"Det förinställda värdet extraheras från konfigurationsfilen. Använd det på "
+"egen risk."
 
 #: admin/wizards/uwsgi.py:53
 #, fuzzy
@@ -5238,15 +5437,17 @@ msgid ""
 "Local directory where the WordPress source code is located. Example: /usr/"
 "share/wordpress."
 msgstr ""
+"Lokal katalog där källkoden till Wordpress finns. Exempelvis: /usr/share/"
+"wordpress."
 
 #: admin/wizards/wordpress.py:45
 msgid ""
 "Web directory where you want WordPress to be accessible. (Example: /blog)"
-msgstr ""
+msgstr "Web-katalog där du vi att WordPress ska kunna nås. (Exempelvis: /blog)"
 
 #: admin/wizards/wordpress.py:47
 msgid "Does not look like a WordPress source directory."
-msgstr ""
+msgstr "Ser inte ut som en katalog med källkod till WordPress."
 
 #: admin/wizards/wordpress.py:228
 #, fuzzy
@@ -5277,6 +5478,8 @@ msgid ""
 "Local directory where the Zend source code is located. Example: /usr/share/"
 "php/data/zend."
 msgstr ""
+"Lokal katalog där källkoden till Zend finns. Exempelvis: /usr/share/php/data/"
+"zend."
 
 #: admin/wizards/zend.py:44
 #, fuzzy
@@ -5285,15 +5488,13 @@ msgstr "Skapa en ny konfigurations-fil"
 
 #: admin/wizards/zend.py:49
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
-msgstr ""
+msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 
-#, fuzzy
 #~ msgid "Choose…"
-#~ msgstr "Välj"
+#~ msgstr "Välj..."
 
-#, fuzzy
 #~ msgid "Add New…"
-#~ msgstr "Lägg till ny"
+#~ msgstr "Lägg till ny..."
 
 #, fuzzy
 #~ msgid "Clone…"
@@ -5405,17 +5606,11 @@ msgstr ""
 #~ msgid "Version:"
 #~ msgstr "Version"
 
-#~ msgid "Help"
-#~ msgstr "Hjälp"
-
 #~ msgid "Mime Types"
 #~ msgstr "Mime-typer"
 
 #~ msgid "Save Changes"
 #~ msgstr "Spara ändringar"
-
-#~ msgid "Save"
-#~ msgstr "Spara"
 
 #~ msgid "Apply"
 #~ msgstr "Tillämpa"
@@ -5480,21 +5675,8 @@ msgstr ""
 #~ msgid "Special Icons"
 #~ msgstr "Speciella ikoner"
 
-#~ msgid "Environment variables"
-#~ msgstr "Miljövariabler"
-
-#~ msgid "Add new Environment variable"
-#~ msgstr "Lägg till ny miljövariabel"
-
-#~ msgid "Variable"
-#~ msgstr "Variabel"
-
 #~ msgid "Known sources"
 #~ msgstr "Kända källor"
-
-#, fuzzy
-#~ msgid "Source"
-#~ msgstr "Användandet av källa"
 
 #~ msgid "Clone as.."
 #~ msgstr "Klona som.."
