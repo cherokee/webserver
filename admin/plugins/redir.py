@@ -74,7 +74,7 @@ class Plugin_redir (Handler.PluginHandler):
                 table += [CTK.RawHTML(x) for x in (_('Type'), _('Regular Expression'), _('Substitution'))]
 
                 for k in keys:
-                    show  = CTK.ComboCfg('%s!%s!show' %(key, k), REDIR_SHOW)
+                    show  = CTK.ComboCfg('%s!%s!show' %(key, k), trans(REDIR_SHOW))
                     regex = CTK.TextCfg('%s!%s!regex' %(key, k))
                     subst = CTK.TextCfg('%s!%s!substring' %(key, k))
 
@@ -97,7 +97,7 @@ class Plugin_redir (Handler.PluginHandler):
                 CTK.Container.__init__ (self)
 
                 table = CTK.PropsTable()
-                table.Add (_('Show'),               CTK.ComboCfg('tmp!new_show', REDIR_SHOW, {'class': 'noauto'}), _(NOTE_SHOW))
+                table.Add (_('Show'),               CTK.ComboCfg('tmp!new_show', trans(REDIR_SHOW), {'class': 'noauto'}), _(NOTE_SHOW))
                 table.Add (_('Regular Expression'), CTK.TextCfg('tmp!new_regex', False,      {'class': 'noauto'}), _(NOTE_REGEX))
                 table.Add (_('Substitution'),       CTK.TextCfg('tmp!new_subst', False,      {'class': 'noauto'}), _(NOTE_SUBSTITUTION))
 

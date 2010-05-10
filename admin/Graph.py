@@ -158,7 +158,7 @@ class GraphServer_Instancer (CTK.Container):
             rrd = self.build_graph ()
             if rrd:
                 props   = {'class': 'graph_type', 'name': 'graph_type', 'selected': self.graph['type']}
-                combo   = CTK.Combobox (props, GRAPH_TYPES)
+                combo   = CTK.Combobox (props, trans (GRAPH_TYPES))
                 submit  = CTK.Submitter (URL_APPLY)
                 submit += combo
                 submit.bind('submit_success', self.refresh.JS_to_refresh())

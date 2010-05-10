@@ -293,7 +293,7 @@ class Render_Source:
         workarea = CTK.Box ({'id': 'source-workarea'})
 
         table = CTK.PropsTable()
-        table.Add (_('Type'),       CTK.ComboCfg ('source!%s!type'%(num), SOURCE_TYPES), _(NOTE_TYPE))
+        table.Add (_('Type'),       CTK.ComboCfg ('source!%s!type'%(num), trans(SOURCE_TYPES)), _(NOTE_TYPE))
         table.Add (_('Nick'),       CTK.TextCfg ('source!%s!nick'%(num), False), _(NOTE_NICK))
         table.Add (_('Connection'), CTK.TextCfg ('source!%s!host'%(num), False), _(NOTE_HOST))
         if tipe == 'interpreter':

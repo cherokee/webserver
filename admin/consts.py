@@ -242,3 +242,7 @@ POST_TRACKERS = [
     ('',           N_('Disabled')),
     ('post_track', N_('POST tracker'))
 ]
+
+def trans (options):
+    """Translate the options with gettext"""
+    return [(x[0], _(x[1])) for x in options]

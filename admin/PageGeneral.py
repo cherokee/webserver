@@ -99,7 +99,7 @@ class NetworkWidget (CTK.Box):
 
         table = CTK.PropsTable()
         table.Add (_('IPv6'),             CTK.CheckCfgText('server!ipv6', True), _(NOTE_IPV6))
-        table.Add (_('SSL/TLS back-end'), CTK.ComboCfg('server!tls', Cherokee.support.filter_available(CRYPTORS)), _(NOTE_TLS))
+        table.Add (_('SSL/TLS back-end'), CTK.ComboCfg('server!tls', trans (Cherokee.support.filter_available(CRYPTORS))), _(NOTE_TLS))
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter(table)
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('Support')))
@@ -107,21 +107,21 @@ class NetworkWidget (CTK.Box):
 
         table = CTK.PropsTable()
         table.Add (_('Timeout (<i>secs</i>)'), CTK.TextCfg('server!timeout'), _(NOTE_TIMEOUT))
-        table.Add (_('Server Tokens'),         CTK.ComboCfg('server!server_tokens', PRODUCT_TOKENS), _(NOTE_TOKENS))
+        table.Add (_('Server Tokens'),         CTK.ComboCfg('server!server_tokens', trans (PRODUCT_TOKENS)), _(NOTE_TOKENS))
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter(table)
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('Network Behavior')))
         self += submit
 
         table = CTK.PropsTable()
-        modul = CTK.PluginSelector('server!collector', Cherokee.support.filter_available(COLLECTORS))
+        modul = CTK.PluginSelector('server!collector', trans (Cherokee.support.filter_available(COLLECTORS)))
         table.Add (_('Graphs Type'), modul.selector_widget, _(NOTE_COLLECTORS))
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('Information Collector')))
         self += CTK.Indenter(table)
         self += CTK.Indenter(modul)
 
         table = CTK.PropsTable()
-        modul = CTK.PluginSelector('server!post_track', Cherokee.support.filter_available(POST_TRACKERS))
+        modul = CTK.PluginSelector('server!post_track', trans (Cherokee.support.filter_available(POST_TRACKERS)))
         table.Add (_('Upload Tracking'), modul.selector_widget, _(NOTE_POST_TRACKS))
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('Upload Tracking')))
         self += CTK.Indenter(table)

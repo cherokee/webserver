@@ -50,7 +50,7 @@ class PluginAuth (CTK.Plugin):
             methods = filter (lambda x: x[0] in supported_methods, VALIDATOR_METHODS)
 
         table = CTK.PropsTable()
-        table.Add (_("Methods"), CTK.ComboCfg("%s!methods"%(self.key), methods, {'id': 'auth_method'}), _(NOTE_METHODS))
+        table.Add (_("Methods"), CTK.ComboCfg("%s!methods"%(self.key), trans(methods), {'id': 'auth_method'}), _(NOTE_METHODS))
         table.Add (_("Realm"),   CTK.TextCfg("%s!realm" %(self.key), False), _(NOTE_REALM))
         table.Add (_("Users"),   CTK.TextCfg("%s!users" %(self.key), True),  _(NOTE_USERS))
 

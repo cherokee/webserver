@@ -33,6 +33,7 @@ import CTK
 import Wizard
 import validations
 from util import *
+from consts import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the Ruby on Rails wizard")
 NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://rubyonrails.org/">Ruby on Rails</a> is an open-source web framework optimized for programmer happines and sustainable productivity.')
@@ -61,15 +62,15 @@ ROR_CHILD_PROCS = 3
 DEFAULT_BINS    = ['spawn-fcgi']
 
 RAILS_ENV = [
-    ('production',  'Production'),
-    ('test',        'Test'),
-    ('development', 'Development'),
-    ('',            'Empty')
+    ('production',  N_('Production')),
+    ('test',        N_('Test')),
+    ('development', N_('Development')),
+    ('',            N_('Empty'))
 ]
 
 RAILS_METHOD = [
-    ('proxy',  'HTTP proxy'),
-    ('fcgi',   'FastCGI')
+    ('proxy',  N_('HTTP proxy')),
+    ('fcgi',   N_('FastCGI'))
 ]
 
 SOURCE = """
@@ -363,10 +364,10 @@ class LocalSource:
         submit += table
 
         table.Add (_('Project Directory'), CTK.TextCfg ('%s!ror_dir'%(PREFIX), False), NOTE_ROR_DIR)
-        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), RAILS_ENV, {'class': 'noauto'}), NOTE_ENV)
+        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), trans (RAILS_ENV), {'class': 'noauto'}), NOTE_ENV)
 
         if len(RAILS_METHOD) > 1:
-            table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), RAILS_METHOD, {'class': 'noauto'}), NOTE_METHOD)
+            table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans (RAILS_METHOD), {'class': 'noauto'}), NOTE_METHOD)
         else:
             submit += CTK.Hidden('%s!ror_env'%(PREFIX), RAILS_METHOD[0][0])
 

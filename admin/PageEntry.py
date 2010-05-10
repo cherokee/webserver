@@ -135,7 +135,7 @@ class TimeWidget (CTK.Container):
             CTK.Container.__init__ (self)
 
             table = CTK.PropsTable()
-            table.Add (_('Expiration'), CTK.ComboCfg ('%s!expiration'%(pre), EXPIRATION_TYPE), _(NOTE_EXPIRATION))
+            table.Add (_('Expiration'), CTK.ComboCfg ('%s!expiration'%(pre), trans (EXPIRATION_TYPE)), _(NOTE_EXPIRATION))
 
             if CTK.cfg.get_val ('%s!expiration'%(pre)) == 'time':
                 table.Add (_('Time to expire'), CTK.TextCfg ('%s!expiration!time'%(pre), False), _(NOTE_EXPIRATION_TIME))
@@ -175,7 +175,7 @@ class EncodingWidget (CTK.Container):
         table = CTK.PropsTable()
         for e,e_name in encoders:
             note  = _("Use the %s encoder whenever the client requests it.") %(_(e_name))
-            table.Add ('%s %s'% (_(e_name), _("support")), CTK.ComboCfg('%s!%s'%(pre,e), ENCODE_OPTIONS), note)
+            table.Add ('%s %s'% (_(e_name), _("support")), CTK.ComboCfg('%s!%s'%(pre,e), trans (ENCODE_OPTIONS)), note)
 
         submit = CTK.Submitter (apply)
         submit += table

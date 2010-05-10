@@ -196,7 +196,7 @@ class CloneLogsCfg (CTK.ComboCfg):
 
     def __init__ (self, cfg):
         # Build the options list
-        options = [('', 'Do not configure')]
+        options = [('', _('Do not configure'))]
 
         for v in CTK.cfg.keys('vserver'):
             pre  = 'vserver!%s!logger' %(v)

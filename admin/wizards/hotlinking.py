@@ -34,6 +34,7 @@ import validations
 import Cherokee
 from util import *
 from configured import *
+from consts import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the Hotlinking Wizard")
 NOTE_WELCOME_P1 = N_("This wizard stops other domains from hot-linking your media files.")
@@ -172,7 +173,8 @@ class RuleData:
 
         refresh = CTK.Refreshable ({'id':'hotlinking_wizard_refresh'})
         refresh.register (lambda: self.Refresh().Render())
-        combo_widget = CTK.ComboCfg ('%s!type'%(PREFIX), TYPES)
+
+        combo_widget = CTK.ComboCfg ('%s!type'%(PREFIX), trans (TYPES))
         combo_widget.bind('change', refresh.JS_to_refresh())
 
         table = CTK.PropsTable()

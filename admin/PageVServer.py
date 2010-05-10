@@ -344,7 +344,7 @@ class LogginWidgetContent (CTK.Container):
 
         # Error writer
         table = CTK.PropsTable()
-        table.Add (_('Write errors to'), CTK.ComboCfg('%s!error_writer!type'%(pre), writers), _(NOTE_ERRORS))
+        table.Add (_('Write errors to'), CTK.ComboCfg('%s!error_writer!type'%(pre), trans(writers)), _(NOTE_ERRORS))
 
         writer = CTK.cfg.get_val ('%s!error_writer!type'%(pre))
         if writer == 'file':
@@ -364,7 +364,7 @@ class LogginWidgetContent (CTK.Container):
 
         submit = CTK.Submitter(url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())
-        submit += CTK.ComboCfg(pre, Cherokee.support.filter_available(LOGGERS))
+        submit += CTK.ComboCfg(pre, trans (Cherokee.support.filter_available(LOGGERS)))
 
         table = CTK.PropsTable()
         table.Add (_('Format'), submit, _(NOTE_LOGGERS))
@@ -373,7 +373,7 @@ class LogginWidgetContent (CTK.Container):
         if format:
             submit = CTK.Submitter(url_apply)
             submit.bind ('submit_success', refreshable.JS_to_refresh())
-            submit += CTK.ComboCfg('%s!access!type'%(pre), LOGGER_WRITERS)
+            submit += CTK.ComboCfg('%s!access!type'%(pre), trans (LOGGER_WRITERS))
             table.Add (_('Write accesses to'), submit, _(NOTE_ACCESSES))
 
             submit = CTK.Submitter(url_apply)
@@ -400,7 +400,7 @@ class LogginWidgetContent (CTK.Container):
         # Properties
         if CTK.cfg.get_val (pre):
             table = CTK.PropsTable()
-            table.Add (_('Time standard'), CTK.ComboCfg ('%s!utc_time'%(pre), UTC_TIME), _(NOTE_UTC_TIME))
+            table.Add (_('Time standard'), CTK.ComboCfg ('%s!utc_time'%(pre), trans(UTC_TIME)), _(NOTE_UTC_TIME))
             table.Add (_('Accept Forwarded IPs'), CTK.CheckCfgText ('%s!x_real_ip_enabled'%(pre), False, _('Accept')), _(NOTE_X_REAL_IP))
 
             if int (CTK.cfg.get_val('%s!x_real_ip_enabled'%(pre), "0")):
@@ -461,7 +461,7 @@ class SecutiryWidgetContent (CTK.Container):
         # Advanced options
         table = CTK.PropsTable()
         table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
-        table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), CLIENT_CERTS), _(NOTE_CLIENT_CERTS))
+        table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
 
         if CTK.cfg.get_val('%s!ssl_client_certs' %(pre)):
             table.Add (_('CA List'), CTK.TextCfg ('%s!ssl_ca_list_file' %(pre), False), _(NOTE_CA_LIST))

@@ -24,14 +24,15 @@ import CTK
 
 from Rule import RulePlugin
 from util import *
+from consts import *
 
 URL_APPLY = '/plugin/url_arg/apply'
 
 NOTE_ARGUMENT = N_("Argument name")
 NOTE_REGEX    = N_("Regular Expression for the match")
 
-OPTIONS = [('0', _('Match a specific argument')),
-           ('1', _('Match any argument'))]
+OPTIONS = [('0', N_('Match a specific argument')),
+           ('1', N_('Match any argument'))]
 
 def apply():
     # POST info
@@ -68,7 +69,7 @@ class Plugin_url_arg (RulePlugin):
         return self.GUI_mod()
 
     def GUI_new (self):
-        any   = CTK.ComboCfg('%s!match_any'%(self.key), OPTIONS, {'class': 'noauto'})
+        any   = CTK.ComboCfg('%s!match_any'%(self.key), trans (OPTIONS), {'class': 'noauto'})
         table = CTK.PropsTable()
         table.Add (_('Match type'), any, '')
         table.Add (_('Argument'),           CTK.TextCfg('%s!arg'%(self.key), False, {'class': 'noauto'}), _(NOTE_ARGUMENT))
@@ -88,7 +89,7 @@ class Plugin_url_arg (RulePlugin):
 
     def GUI_mod (self):
         table = CTK.PropsTable()
-        table.Add (_('Match type'),         CTK.ComboCfg('%s!match_any'%(self.key), OPTIONS), '')
+        table.Add (_('Match type'),  CTK.ComboCfg('%s!match_any'%(self.key), trans (OPTIONS)), '')
         if not int(CTK.cfg.get_val('%s!match_any'%(self.key), 0)):
             table.Add (_('Argument'),       CTK.TextCfg('%s!arg'%(self.key), False), _(NOTE_ARGUMENT))
         table.Add (_('Regular Expression'), CTK.TextCfg('%s!match'%(self.key), False), _(NOTE_REGEX))

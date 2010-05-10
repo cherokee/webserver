@@ -109,7 +109,7 @@ class Page (CTK.Page):
 
         submit += CTK.TextArea ({'name': 'comments', 'rows':10, 'cols': 80, 'class': 'noauto'})
         submit += CTK.Hidden ('traceback', bt)
-        submit += CTK.SubmitterButton (_("Report developers"))
+        submit += CTK.SubmitterButton (_("Report this"))
 
 
 CTK.publish (URL_APPLY, submit, method="POST")
