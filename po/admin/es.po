@@ -7,14 +7,15 @@
 #  Alvaro Lopez Ortega <alvaro@alobbs.com>
 #  Taher Shihadeh <taher@unixwars.com>
 #
+# Taher Shihadeh <taher@shihadeh.net>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.49'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-05 13:31+0200\n"
-"PO-Revision-Date: 2010-05-05 13:32+0200\n"
-"Last-Translator: Taher Shihadeh <taher@unixwars.com>\n"
-"Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2010-05-10 12:59+0200\n"
+"PO-Revision-Date: 2010-05-10 13:09+0200\n"
+"Last-Translator: Taher Shihadeh <taher@shihadeh.net>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -78,7 +79,7 @@ msgstr ""
 "Un balanceador de carga debe ser configurado para usar al menos un origen de "
 "datos."
 
-#: admin/Balancer.py:67 admin/PageSource.py:222 admin/PageSource.py:259
+#: admin/Balancer.py:67 admin/PageSource.py:297 admin/PageSource.py:336
 #: admin/PageVServers.py:126
 msgid "Nick"
 msgstr "Nombre"
@@ -88,8 +89,8 @@ msgstr "Nombre"
 msgid "Host"
 msgstr "Servidor"
 
-#: admin/Balancer.py:108 admin/PageSource.py:66 admin/PageSource.py:384
-#: admin/PageSource.py:404 admin/PageSources.py:48
+#: admin/Balancer.py:108 admin/PageSource.py:68 admin/PageSource.py:461
+#: admin/PageSource.py:481 admin/PageSources.py:48
 msgid "Information Sources"
 msgstr "Orígenes de datos"
 
@@ -183,7 +184,8 @@ msgstr "Acceptar de Hosts"
 msgid "Name"
 msgstr "Nombre"
 
-#: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/plugins/proxy.py:170
+#: admin/CgiBase.py:90 admin/CgiBase.py:154 admin/PageSource.py:202
+#: admin/PageSource.py:231 admin/plugins/proxy.py:170
 msgid "Value"
 msgstr "Valor"
 
@@ -228,12 +230,13 @@ msgid "Custom Environment Variables"
 msgstr "Variables de entorno personalizadas"
 
 #: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:357
-#: admin/PageVServers.py:237 admin/plugins/authlist.py:93
-#: admin/plugins/error_redir.py:94 admin/plugins/proxy.py:117
-#: admin/plugins/proxy.py:166 admin/plugins/proxy.py:213
-#: admin/plugins/redir.py:114 admin/plugins/rehost.py:71
-#: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
+#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:238
+#: admin/PageSource.py:434 admin/PageVServers.py:237
+#: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
+#: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
+#: admin/plugins/proxy.py:213 admin/plugins/redir.py:114
+#: admin/plugins/rehost.py:71 admin/plugins/target_ip.py:79
+#: admin/plugins/wildcard.py:70
 msgid "Add"
 msgstr "Añadir"
 
@@ -301,7 +304,7 @@ msgid ""
 msgstr ""
 "Si debería recolectar estadísticas sobre el tráfico de este servidor virtual."
 
-#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:197
+#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:269
 #: admin/PageStatus.py:70 admin/PageVServer.py:510 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "Desconocido"
@@ -377,9 +380,10 @@ msgstr "Añadir nuevo"
 
 #: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
 #: admin/PageIndex.py:348 admin/PageRule.py:213 admin/PageRule.py:261
-#: admin/PageRule.py:287 admin/PageSource.py:344 admin/PageSource.py:358
-#: admin/PageSource.py:372 admin/PageVServers.py:203 admin/PageVServers.py:238
-#: admin/PageVServers.py:264 admin/plugins/redir.py:115
+#: admin/PageRule.py:287 admin/PageSource.py:239 admin/PageSource.py:421
+#: admin/PageSource.py:435 admin/PageSource.py:449 admin/PageVServers.py:203
+#: admin/PageVServers.py:238 admin/PageVServers.py:264
+#: admin/plugins/redir.py:115
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -451,6 +455,43 @@ msgstr "Reinicio forzado"
 #: admin/Page.py:97
 msgid "OK"
 msgstr "OK"
+
+#: admin/Page.py:114
+msgid "Save"
+msgstr "Guardar"
+
+#: admin/Page.py:115
+msgid "Home"
+msgstr "Inicio"
+
+#: admin/Page.py:116 admin/PageAdvanced.py:144 admin/PageIndex.py:97
+#: admin/PageStatus.py:40 admin/PageStatus.py:112
+msgid "Status"
+msgstr "Estado"
+
+#: admin/Page.py:117 admin/PageGeneral.py:234 admin/PageStatus.py:101
+msgid "General"
+msgstr "General"
+
+#: admin/Page.py:118
+msgid "vServers"
+msgstr "vServers"
+
+#: admin/Page.py:119
+msgid "Sources"
+msgstr "Orígenes"
+
+#: admin/Page.py:120 admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: admin/Page.py:121
+msgid "Help"
+msgstr "Ayuda"
+
+#: admin/Page.py:122
+msgid "Updating..."
+msgstr "Actualizando..."
 
 #: admin/PageAdvanced.py:61
 msgid ""
@@ -595,10 +636,6 @@ msgstr "Ruta al fichero de parámetros PEM Diffie Hellman (DH): 2048 bits"
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
 msgstr "Ruta al fichero de parámetros PEM Diffie Hellman (DH): 4096 bits"
 
-#: admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
-msgid "Advanced"
-msgstr "Avanzado"
-
 #: admin/PageAdvanced.py:113
 msgid "Keep Alive"
 msgstr "Keep Alive"
@@ -662,11 +699,6 @@ msgstr "Tiempo de limpieza de Nonces"
 #: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
 msgid "Resources"
 msgstr "Recursos"
-
-#: admin/PageAdvanced.py:144 admin/PageIndex.py:97 admin/PageStatus.py:40
-#: admin/PageStatus.py:112
-msgid "Status"
-msgstr "Estado"
 
 #: admin/PageAdvanced.py:145
 msgid "Max pages"
@@ -879,7 +911,7 @@ msgstr "Aplicar regla"
 msgid "Handler"
 msgstr "Gestor"
 
-#: admin/PageEntry.py:248 admin/PageSource.py:193
+#: admin/PageEntry.py:248 admin/PageSource.py:265
 msgid "Rule"
 msgstr "Regla"
 
@@ -1011,7 +1043,7 @@ msgid "Thank you!"
 msgstr "Muchas gracias"
 
 #: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:331
+#: admin/PageSource.py:408
 msgid "Close"
 msgstr "Cerrar"
 
@@ -1024,8 +1056,8 @@ msgid "Unexpected Exception"
 msgstr "Excepción inesperada"
 
 #: admin/PageException.py:112
-msgid "Report developers"
-msgstr "Informar a los desarrolladores"
+msgid "Report this"
+msgstr "Informar de esto"
 
 #: admin/PageGeneral.py:38
 msgid "Defines a port that the server will listen to"
@@ -1193,10 +1225,6 @@ msgstr "Iconos"
 #: admin/PageGeneral.py:232
 msgid "Mime types"
 msgstr "Tipos MIME"
-
-#: admin/PageGeneral.py:234 admin/PageStatus.py:101
-msgid "General"
-msgstr "General"
 
 #: admin/PageGeneral.py:235
 msgid "General Settings"
@@ -1514,11 +1542,11 @@ msgstr "Manual"
 msgid "Manual configuration"
 msgstr "Configuración manual"
 
-#: admin/PageRule.py:208 admin/PageSource.py:339 admin/PageVServers.py:198
+#: admin/PageRule.py:208 admin/PageSource.py:416 admin/PageVServers.py:198
 msgid "Do you really want to remove it?"
 msgstr "¿De verdad se quiere eliminar?"
 
-#: admin/PageRule.py:209 admin/PageSource.py:340 admin/PageVServers.py:199
+#: admin/PageRule.py:209 admin/PageSource.py:417 admin/PageVServers.py:199
 msgid "Remove"
 msgstr "\t\tEliminar"
 
@@ -1538,7 +1566,7 @@ msgstr "Añadir regla de funcionamiento"
 msgid "Configuration Assistant"
 msgstr "Asistente de configuración"
 
-#: admin/PageRule.py:271 admin/PageSource.py:361 admin/PageVServers.py:248
+#: admin/PageRule.py:271 admin/PageSource.py:438 admin/PageVServers.py:248
 msgid "New"
 msgstr "Nuevo"
 
@@ -1546,8 +1574,8 @@ msgstr "Nuevo"
 msgid "Clone Behavior Rule"
 msgstr "Clonar regla"
 
-#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:371
-#: admin/PageSource.py:375 admin/PageVServers.py:263 admin/PageVServers.py:267
+#: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:448
+#: admin/PageSource.py:452 admin/PageVServers.py:263 admin/PageVServers.py:267
 msgid "Clone"
 msgstr "Clonar"
 
@@ -1659,57 +1687,81 @@ msgstr ""
 msgid "First edit the offending rule(s)"
 msgstr "Edite primero las reglas afectadas"
 
-#: admin/PageSource.py:193 admin/PageVServer.py:502
+#: admin/PageSource.py:58
+msgid "Name of the variable"
+msgstr "Nombre de la variable"
+
+#: admin/PageSource.py:59
+msgid "Value of the variable"
+msgstr "Valor de la variable"
+
+#: admin/PageSource.py:202 admin/PageSource.py:230
+msgid "Variable"
+msgstr "Variable"
+
+#: admin/PageSource.py:204
+msgid "Environment Variables"
+msgstr "Variables de entorno"
+
+#: admin/PageSource.py:237
+msgid "Add new Environment variable"
+msgstr "Añadir nueva variable de entorno"
+
+#: admin/PageSource.py:246
+msgid "Add new variable"
+msgstr "Añadir nueva variable de entorno"
+
+#: admin/PageSource.py:265 admin/PageVServer.py:502
 msgid "Virtual Server"
 msgstr "Servidor Virtual"
 
-#: admin/PageSource.py:221 admin/plugins/error_redir.py:87
+#: admin/PageSource.py:296 admin/plugins/error_redir.py:87
 #: admin/plugins/redir.py:74 admin/wizards/hotlinking.py:143
 msgid "Type"
 msgstr "Tipo"
 
-#: admin/PageSource.py:223 admin/PageSource.py:260
+#: admin/PageSource.py:298 admin/PageSource.py:337
 #: admin/wizards/rtorrent.py:100
 msgid "Connection"
 msgstr "Conexión"
 
-#: admin/PageSource.py:225
+#: admin/PageSource.py:300
 msgid "Interpreter"
 msgstr "Intérprete"
 
-#: admin/PageSource.py:226
+#: admin/PageSource.py:301
 msgid "Spawning timeout"
 msgstr "Tiempo de espera de lanzamiento"
 
-#: admin/PageSource.py:227
+#: admin/PageSource.py:302
 msgid "Execute as User"
 msgstr "Ejecutar como el usuario"
 
-#: admin/PageSource.py:228
+#: admin/PageSource.py:303
 msgid "Execute as Group"
 msgstr "Ejecutar como el grupo"
 
-#: admin/PageSource.py:229
+#: admin/PageSource.py:304
 msgid "Inherit Environment"
 msgstr "Heredar entorno"
 
-#: admin/PageSource.py:328
+#: admin/PageSource.py:405
 msgid "Deletion is forbidden"
 msgstr "No se puede borrar"
 
-#: admin/PageSource.py:356 admin/PageSource.py:361
+#: admin/PageSource.py:433 admin/PageSource.py:438
 msgid "Add New Information Source"
 msgstr "Añadir nuevo orígen de datos"
 
-#: admin/PageSource.py:370
+#: admin/PageSource.py:447
 msgid "Clone Information Source"
 msgstr "Clonar orígen de datos"
 
-#: admin/PageSource.py:375
+#: admin/PageSource.py:452
 msgid "Clone Selected Information Source"
 msgstr "Clonar el orígen de datos seleccionado"
 
-#: admin/PageSource.py:395
+#: admin/PageSource.py:472
 msgid "Sources Filtering"
 msgstr "Filtrado de orígenes de datos"
 
@@ -2925,7 +2977,7 @@ msgstr ""
 "coincidirán también."
 
 #: admin/plugins/exists.py:35
-msgid "If a directory is request, check the index files inside it."
+msgid "If a directory is requested, check the index files inside it."
 msgstr ""
 "Si se trata de la petición de un directorio, comprobar el fichero de índice "
 "en su interior."
@@ -3361,7 +3413,6 @@ msgid "Add New Regular Expression"
 msgstr "Nueva expresión regular"
 
 #: admin/plugins/redir.py:118
-#, fuzzy
 msgid "Add New RegEx"
 msgstr "Añadir nueva RegEx"
 
@@ -5240,6 +5291,9 @@ msgstr "No parece ser un directorio de fuentes de Zend."
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
 msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
+#~ msgid "Report developers"
+#~ msgstr "Informar a los desarrolladores"
+
 #~ msgid "Choose…"
 #~ msgstr "Elegir…"
 
@@ -5351,17 +5405,11 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Version:"
 #~ msgstr "Versión:"
 
-#~ msgid "Help"
-#~ msgstr "Ayuda"
-
 #~ msgid "Mime Types"
 #~ msgstr "Tipos MIME"
 
 #~ msgid "Save Changes"
 #~ msgstr "Guardar cambios"
-
-#~ msgid "Save"
-#~ msgstr "Guardar"
 
 #~ msgid "Apply"
 #~ msgstr "Aplicar"
@@ -5399,9 +5447,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Not included"
 #~ msgstr "No incluida"
 
-#~ msgid "Report sent"
-#~ msgstr "Informe enviado"
-
 #~ msgid "Thank you a million for your feedback. We do appreciate your help."
 #~ msgstr "Muchísimas gracias por tus comentarios. Agradecemos tu ayuda."
 
@@ -5423,20 +5468,8 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "Special Icons"
 #~ msgstr "Iconos especiales"
 
-#~ msgid "Environment variables"
-#~ msgstr "Variables de entorno"
-
-#~ msgid "Add new Environment variable"
-#~ msgstr "Añadir nueva variable de entorno"
-
-#~ msgid "Variable"
-#~ msgstr "Variable"
-
 #~ msgid "Known sources"
 #~ msgstr "Orígenes de datos conocidos"
-
-#~ msgid "Source"
-#~ msgstr "Uso del origen de datos"
 
 #~ msgid "Clone as.."
 #~ msgstr "Clonar como.."
