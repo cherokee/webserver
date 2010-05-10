@@ -57,6 +57,7 @@ NOTE_FORBID_1      = N_('This is the last Information Source in use by a rule. D
 NOTE_FORBID_2      = N_('First edit the offending rule(s)')
 NOTE_ADD_VARIABLE  = N_('Name of the variable')
 NOTE_ADD_VALUE     = N_('Value of the variable')
+NOTE_CLONE_DIALOG  = N_('The selected Information Source is about to be cloned.')
 
 VALIDATIONS = [
     ('source!.+?!timeout',     validations.is_positive_int),
@@ -325,7 +326,7 @@ class Render_Source:
 class CloneSource (CTK.Container):
     def __init__ (self):
         CTK.Container.__init__ (self)
-        self += CTK.RawHTML ('Information Source Cloning dialog.')
+        self += CTK.RawHTML (_(NOTE_CLONE_DIALOG))
 
 
 class AddSource (CTK.Container):
