@@ -98,6 +98,7 @@ thread_routine (void *data)
 	}
 
 	thread->ended = true;
+	pthread_detach (thread->thread);
 	pthread_exit (NULL);
 }
 #endif
