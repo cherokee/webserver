@@ -114,7 +114,7 @@ LIST = [
             {'name':  'php',
              'title': N_('PHP'),
              'descr': N_('Widely-used general-purpose scripting language.'),
-             'type':  TYPE_RULE},
+             'type':  TYPE_VSERVER | TYPE_RULE},
             {'name':  'mono',
              'title': N_('.NET with Mono'),
              'descr': N_('Cross-platform, open-source .NET development framework.'),

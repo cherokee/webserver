@@ -26,11 +26,18 @@
 import re
 import CTK
 import Wizard
+import validations
 
 from util import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the PHP Wizard")
 NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://php.net/">PHP</a> is a widely-used general-purpose scripting language that is especially suited for Web development and can be embedded into HTML.')
+
+NOTE_LOCAL_H1   = N_("Document Root")
+NOTE_LOCAL_DIR  = N_("Local directory that will contain the web documents. Example: /var/www.")
+
+NOTE_HOST_H1    = N_("New Virtual Server Details")
+NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
 
 PHP_DEFAULT_TIMEOUT        = '30'
 SAFE_PHP_FCGI_MAX_REQUESTS = '490'
@@ -60,6 +67,8 @@ STD_ETC_PATHS = ['/etc/php*/cgi/php.ini',
                  '/opt/php*/etc/php.ini',
                  '/opt/local/etc/php*/php.ini',
                  '/etc/php*/*/php.ini']
+
+CFG_PREFIX    = 'tmp!wizard!php'
 
 #
 # Public
@@ -146,15 +155,104 @@ def get_info (key):
 URL_WIZARD_RULE_R  = r'^/wizard/vserver/(\d+)/php$'
 URL_WIZARD_APPLY   = '/wizard/vserver/%s/php/apply'
 URL_WIZARD_APPLY_R = r'^/wizard/vserver/(\d+)/php/apply$'
+URL_APPLY          = '/wizard/vserver/php/apply'
 
-def Commit():
-    vserver = re.findall (URL_WIZARD_APPLY_R, CTK.request.url)[0]
-    error   = wizard_php_add ('vserver!%s'%(vserver))
-    if error:
-        return {'ret': 'error', 'errors': {'msg': error}}
-    return CTK.cfg_reply_ajax_ok()
+class Commit:
+    def Commit_VServer (self):
+        # Create the new Virtual Server
+        next = CTK.cfg.get_next_entry_prefix('vserver')
+        CTK.cfg['%s!nick'%(next)] = CTK.cfg.get_val('%s!host'%(CFG_PREFIX))
+        CTK.cfg['%s!document_root'%(next)] = CTK.cfg.get_val('%s!droot'%(CFG_PREFIX))
+        CTK.cfg['%s!directory_index'%(next)] = 'index.php,index.html'
+        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(CFG_PREFIX), next)
 
-class Welcome:
+        # PHP
+        error   = wizard_php_add (next)
+        if error:
+            del CTK.cfg['vserver!%s'%(next)]
+            return {'ret': 'error', 'errors': {'msg': error}}
+
+        # Clean up
+        CTK.cfg.normalize ('%s!rule'%(next))
+        CTK.cfg.normalize ('vserver')
+
+        del (CTK.cfg[CFG_PREFIX])
+        return CTK.cfg_reply_ajax_ok()
+
+
+    def Commit_Rule (self):
+        vserver = CTK.cfg.get_val ('%s!vsrv_num'%(CFG_PREFIX))
+        error   = wizard_php_add ('vserver!%s'%(vserver))
+        if error:
+            return {'ret': 'error', 'errors': {'msg': error}}
+        return CTK.cfg_reply_ajax_ok()
+
+
+    def __call__ (self):
+        if CTK.post.pop('final'):
+            # Apply POST
+            CTK.cfg_apply_post()
+
+            # VServer or Rule?
+            if CTK.cfg.get_val ('%s!vsrv_num'%(CFG_PREFIX)):
+                return self.Commit_Rule()
+            return self.Commit_VServer()
+
+        return CTK.cfg_apply_post()
+
+
+class Host:
+    def __call__ (self):
+        table = CTK.PropsTable()
+        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!host'%(CFG_PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(CFG_PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
+
+        notice = CTK.Notice('error', props={'class': 'no-see'})
+
+        submit = CTK.Submitter (URL_APPLY)
+        submit += CTK.Hidden('final', '1')
+        submit += table
+        submit.bind ('submit_fail', "$('#%s').show().html(event.ret_data.errors.msg);"%(notice.id))
+
+        cont = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont += submit
+        cont += notice
+        cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
+        return cont.Render().toStr()
+
+
+class DocumentRoot:
+    def __call__ (self):
+        table = CTK.PropsTable()
+        table.Add (_('Document Root'), CTK.TextCfg ('%s!droot'%(CFG_PREFIX), False, {'value': '/var/www'}), _(NOTE_LOCAL_DIR))
+
+        submit = CTK.Submitter (URL_APPLY)
+        submit += table
+
+        cont = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
+        cont += submit
+        cont += CTK.DruidButtonsPanel_PrevNext_Auto()
+        return cont.Render().toStr()
+
+
+class WelcomeVserver:
+    def __call__ (self):
+        cont = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon ('php', {'class': 'wizard-descr'})
+
+        box = CTK.Box ({'class': 'wizard-welcome'})
+        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += Wizard.CookBookBox ('cookbook_php')
+        cont += box
+        cont += CTK.DruidButtonsPanel_Next_Auto()
+
+        return cont.Render().toStr()
+
+
+class WelcomeRule:
     def __call__ (self):
         vserver = re.findall (URL_WIZARD_RULE_R, CTK.request.url)[0]
 
@@ -166,10 +264,15 @@ class Welcome:
 
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += Wizard.CookBookBox ('cookbook_php')
         box += notice
 
         submit = CTK.Submitter (URL_WIZARD_APPLY %(vserver))
-        submit += CTK.Hidden ('aint', 'empty')
+        submit += CTK.Hidden ('final', '1')
+
+        vsrv_num = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
+        submit += CTK.Hidden('%s!vsrv_num'%(CFG_PREFIX), vsrv_num)
+
         submit += box
         submit.bind ('submit_fail', "$('#%s').show().html(event.ret_data.errors.msg);"%(notice.id))
 
@@ -178,8 +281,24 @@ class Welcome:
 
         return cont.Render().toStr()
 
-CTK.publish (URL_WIZARD_RULE_R,  Welcome)
+VALS = [
+    ('%s!host'    %(CFG_PREFIX), validations.is_not_empty),
+    ('%s!host'    %(CFG_PREFIX), validations.is_new_vserver_nick),
+
+    ('%s!droot'   %(CFG_PREFIX), validations.is_not_empty),
+    ('%s!droot'   %(CFG_PREFIX), validations.is_local_dir_exists),
+]
+
+# Rule
+CTK.publish (URL_WIZARD_RULE_R,  WelcomeRule)
 CTK.publish (URL_WIZARD_APPLY_R, Commit, method="POST")
+
+# VServer
+CTK.publish ('^/wizard/vserver/php$',   WelcomeVserver)
+CTK.publish ('^/wizard/vserver/php/2$', DocumentRoot)
+CTK.publish ('^/wizard/vserver/php/3$', Host)
+CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+
 
 
 #
