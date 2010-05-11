@@ -129,6 +129,7 @@ class Welcome:
         cont += Wizard.Icon ('redirect', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += Wizard.CookBookBox ('cookbook_redirs')
         cont += box
         cont += CTK.DruidButtonsPanel_Next_Auto()
         return cont.Render().toStr()

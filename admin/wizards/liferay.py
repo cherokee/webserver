@@ -203,6 +203,7 @@ class Welcome:
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
+        box += Wizard.CookBookBox ('cookbook_liferay')
         cont += box
 
         # Send the VServer num if it is a Rule

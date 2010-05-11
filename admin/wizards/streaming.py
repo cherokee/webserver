@@ -85,6 +85,7 @@ class Welcome:
         cont += Wizard.Icon ('streaming', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += Wizard.CookBookBox ('cookbook_streaming')
 
         # Send the VServer num
         vsrv_num = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
