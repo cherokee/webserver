@@ -9,5 +9,6 @@ DEVELOPERS = {
     'gefire'       : "李炅 <lijiong1986@126.com>",
     'skinkie'      : "Stefan de Konink <stefan@konink.de>",
     'adefacc'      : "A.D.F. <adefacc@tin.it>",
-    'cesar'        : "Cesar Fernandez Gago <cesar@pk2.org>"
+    'cesar'        : "Cesar Fernandez Gago <cesar@pk2.org>",
+    'sberlotto'    : "Sérgio H. Berlotto Jr <sergio.berlotto@gmail.com>",
 }
