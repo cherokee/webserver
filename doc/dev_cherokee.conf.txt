@@ -90,10 +90,10 @@ is run as root or whether to use keep-alive connections.
 |=====================================
 |Value   |Description
 |Product |Cherokee
-|Minor   |Cherokee/0.99
-|Minimal |Cherokee/0.99.3
-|OS      |Cherokee/0.99.3 (UNIX)
-|Full    |Cherokee/0.99.3 b2955 (UNIX)
+|Minor   |Cherokee/1.0
+|Minimal |Cherokee/1.0.0
+|OS      |Cherokee/1.0.0 (UNIX)
+|Full    |Cherokee/1.0.00 b5077 (UNIX)
 |=====================================
 
 ``server!thread_policy`` parameters

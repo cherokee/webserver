@@ -3,7 +3,7 @@
 Why Cherokee?
 -------------
 
-Welcome to the Cherokee 0.99 documentation. Cherokee is a
+Welcome to the Cherokee 1.0 documentation. Cherokee is a
 high-performance web server. It is very fast, flexible and easy to
 configure. In fact, it is the fastest web server there is. Check out
 the link:http://www.cherokee-project.com/benchmarks.html[benchmarks]

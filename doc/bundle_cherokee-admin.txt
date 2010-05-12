@@ -31,7 +31,7 @@ Login:
   User:              admin
   One-time Password: F4c7cyogxhTGbp1r
 
-Cherokee Web Server 0.99.3b2955 (Mar 10 2009): Listening on port ALL:80, TLS
+Cherokee Web Server 1.0.0b5077 (May 12 2010): Listening on port ALL:80, TLS
 disabled, IPv6 enabled, using epoll, 1024 fds system limit, max. 505
 connections, caching I/O, 10 threads, 50 connections per thread, standard
 scheduling policy

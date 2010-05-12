@@ -63,7 +63,7 @@ CHEROKEE_TRACE variable, with the desired options:
 ****
 cherokee# CHEROKEE_TRACE="common" cherokee
 
-Cherokee Web Server 0.99.3b2955 (Mar 10 2009): Listening on port ALL:80, TLS
+Cherokee Web Server 1.0.0b5077 (May 12 2010): Listening on port ALL:80, TLS
 
 disabled, IPv6 enabled, using epoll, 1024 fds system limit, max. 505
 
