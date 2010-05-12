@@ -129,7 +129,7 @@ def wizard_php_add (key):
         CTK.cfg['%s!timeout' %(next)]                   = timeout
 
     # Index files
-    indexes = CTK.cfg.get_val ('%s!directory_index' %(key), '').split(',')
+    indexes = filter (None, CTK.cfg.get_val ('%s!directory_index' %(key), '').split(','))
     if not 'index.php' in indexes:
         indexes.append ('index.php')
         CTK.cfg['%s!directory_index' %(key)] = ','.join(indexes)
