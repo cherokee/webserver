@@ -381,7 +381,7 @@ class LogginWidgetContent (CTK.Container):
             if not writer:
                 CTK.cfg['%s!access!type'%(pre)] = 'file'
 
-            if writer == 'file':
+            if writer == 'file' or not writer:
                 # Set a default value
                 if not CTK.cfg.get_val ('%s!access!filename'%(pre)):
                     CTK.cfg['%s!access!filename'%(pre)] = os.path.join (CHEROKEE_VAR_LOG, 'cherokee.log')
