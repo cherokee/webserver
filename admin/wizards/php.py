@@ -54,7 +54,8 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/usr/gnu/bin',
                  '/usr/local/bin',
                  '/opt/local/bin',
-                 '/usr/pkg/libexec/cgi-bin']
+                 '/usr/pkg/libexec/cgi-bin',
+                 '/usr/sbin']
 
 FPM_ETC_PATHS = ['/etc/php*/fpm/php*fpm.conf',
                  '/usr/local/etc/php*fpm.conf',
@@ -407,4 +408,4 @@ def __test_php_fcgi (path):
     output = f.read()
     try: f.close()
     except: pass
-    return '(cgi-fcgi)' in output
+    return 'fcgi' in output
