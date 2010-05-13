@@ -54,6 +54,7 @@ class Plugin_from (RulePlugin):
         RulePlugin.__init__ (self, key)
         self.vsrv_num = kwargs.pop('vsrv_num', '')
 
+        # Validation, and Public URLs
         VAL = [('^%s!from$'%(key),   validations.is_ip_or_netmask),
                ('^%s!from!.+'%(key), validations.is_ip_or_netmask)]
 

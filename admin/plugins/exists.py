@@ -21,6 +21,7 @@
 #
 
 import CTK
+import validations
 
 from Rule import RulePlugin
 from util import *
@@ -99,7 +100,10 @@ class Plugin_exists (RulePlugin):
             self += refresh
 
         # Validation, and Public URLs
-        CTK.publish (URL_APPLY, apply, method="POST")
+        VALS = [("tmp!exists",      validations.is_list),
+                ("%s!exists"%(key), validations.is_list)]
+
+        CTK.publish (URL_APPLY, apply, validation=VALS, method="POST")
 
     def _GUI_new (self, key, vsrv_num):
         any = CTK.CheckCfgText('%s!match_any'%(key), False, _('Enabled'), {'class': 'noauto'})

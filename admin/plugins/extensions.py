@@ -21,6 +21,7 @@
 #
 
 import CTK
+import validations
 
 from Rule import RulePlugin
 from util import *
@@ -39,6 +40,7 @@ def apply():
     if new_ext:
         next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
 
+        # Apply
         CTK.cfg['%s!match'%(next_pre)]            = 'extensions'
         CTK.cfg['%s!match!extensions'%(next_pre)] = new_ext
 
@@ -63,7 +65,10 @@ class Plugin_extensions (RulePlugin):
         self += submit
 
         # Validation, and Public URLs
-        CTK.publish (URL_APPLY, apply, method="POST")
+        VALS = [("tmp!extensions",       validations.is_extension_list),
+                ("%s!extensions"%(key),  validations.is_extension_list)]
+
+        CTK.publish (URL_APPLY, apply, validation=VALS, method="POST")
 
     def GetName (self):
         tmp = CTK.cfg.get_val ('%s!extensions' %(self.key), '')
