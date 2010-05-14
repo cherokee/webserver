@@ -72,6 +72,7 @@ cookbook_streaming.html \
 cookbook_uwsgi.html \
 cookbook_coldfusion.html \
 cookbook_concrete5.html \
+cookbook_https_accelerator.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_ip_hash.html \
@@ -250,6 +251,8 @@ media/images/cookbook_managing_logs_rules.png \
 media/images/cookbook_managing_logs_handler.png \
 media/images/cookbook_zend1.png \
 media/images/cookbook_joomla.png \
+media/images/cookbook_https_accelerator_handler.png \
+media/images/cookbook_https_accelerator_sources.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/tracelor.png \

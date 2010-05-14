@@ -153,3 +153,25 @@ source!1!interpreter = /usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost1.i
 source!2!nick = php-vhost2
 source!2!interpreter = /usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost2.ini -b 127.0.0.1:2999
 ------
+
+
+[[upload_limits]]
+PHP upload limits
+~~~~~~~~~~~~~~~~~
+
+Every now and then this issue pops up: an HTTP error 400 appears
+repeatedly when uploading files to a PHP back-end.
+
+PHP has several limits in-place which can be configured through its
+`php.ini` configuration file.
+
+Two entries are related to this issue. Tweak them according to your
+necessities. In this example, we are rising the limit to 200MB.
+
+----
+; Maximum size of POST data that PHP will accept.
+post_max_size = 200M
+
+; Maximum allowed size for uploaded files.
+upload_max_filesize = 200M
+----

@@ -190,3 +190,10 @@ documentation.
 === I'm using *BSD and can't compile Cherokee. What's wrong?
 
 Make sure you are building it with `gmake`.
+
+[[faq18]]
+=== Why do I keep getting HTTP Error 400 while uploading files to a PHP back-end?
+
+PHP is configured by default to limit the size of uploaded
+files. Check the link:cookbook_php.html#upload_limits[PHP upload
+limits] note to tweak the appropriate settings.

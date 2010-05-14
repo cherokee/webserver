@@ -1,10 +1,10 @@
 == link:index.html[Index] -> link:other.html[Other information]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee   0.99.25
+* Cherokee   1.0.0
 
-This document will be obsoleted as soon as the new error reporting
-system is put in place.
+This document is mostly obsoleted by the built-in reporting system.
+It is kept here in case it is still not enough.
 ///////////////////////////////////////////////////////////////////
 
 Most common production server errors with Cherokee
@@ -27,6 +27,13 @@ Most common production server errors with Cherokee
   source. If a 503 stays present, you can safely assume Cherokee is
   unable to start an interpreter or connect to the remote host that
   has the information source defined.
+
+- *Page 400*
+
+  If you are repeatedly receiving a 400 error while uploading files to
+  a PHP backend, it could very well be related to PHP being the one
+  restricting uploads bigger than a certain size. Check the [PHP
+  recipe] for more details on how to fix this.
 
 - *CLI*: Can't bind() socket (port=80, UID=1000, GID=1000)
 

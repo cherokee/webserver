@@ -1,0 +1,54 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up an HTTPS accelerator
+-----------------------------------------
+
+It is no secret that HTTPS traffic has an important performance impact
+when compared to HTTP. This penalty is influenced by a number of
+reasons: handshaking overhead, latency due to the increased number of
+round trips, and increased CPU usage on the server.
+
+This impact loss can be mitigated to a certain extent through several
+methods. You can use a dedicated hardware SSL layer. Or you can also
+ensure that the web server is using HTTP Keep-Alive, which allows the
+client to reuse SSL sessions, and avoids the need for another
+handshake. Cherokee will allow this, but you can also set it up to act
+as an HTTPS accelerator, which is pretty interesting by itself.
+
+If you are using several servers this can be easily done. The theory
+is very simple:
+
+. Set up a main HTTP Reverse proxy. This one should allow the clients
+to maintain HTTP Keep-Alive sessions, and will return data through a
+secured HTTPS channel. It can also use dedicated SSL hardware to speed
+up the encryption. This proxy will balance the load among a number of
+back-ends.
+
+. Set up your HTTP back-ends, which will be in your local network and
+thus can transfer data through the regular HTTP protocol.
+
+It seems easy enough. The performance gain is very significant since
+all the back-ends do not have to suffer the constant hammering involved
+with HTTPS overhead, and their contents can be efficiently cached.
+
+[[details]]
+The process in detail
+~~~~~~~~~~~~~~~~~~~~~
+
+Lets assume your back-end servers are running on your local network on
+10.0.0.101:8080, 10.0.0.102:8080, and so on.
+
+The front-end server would have to balance the load among them.  For
+that, you will first have to add as many
+link:config_info_sources.html[Information Sources] as back-ends.
+
+image::media/images/cookbook_https_accelerator_sources.png[Back-ends]
+
+Then you will have to configure the HTTP Reverse proxy. Visit your
+front-end's virtual server through the
+link:config_virtual_servers.html[vServers] section, select the
+`Behavior` tab, and click on `Rule Management`. You will be able to
+choose the link:modules_handlers_proxy.html[HTTP Reverse Proxy]
+handler, and set it to balance the load among all your back-ends.
+
+image::media/images/cookbook_https_accelerator_handler.png[Back-ends]

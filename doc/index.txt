@@ -54,6 +54,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_optimizations.html[Optimizing Cherokee]: Recommendations and tweaks.
   . link:cookbook_redirs.html[Redirections]: Common redirection examples.
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
+  . link:cookbook_https_accelerator.html[HTTPS accelerator]: How to set up Cherokee as HTTPS accelerator.
   . link:cookbook_streaming.html[Streaming]: How to stream Audio and Video with Cherokee.
   . link:cookbook_php.html[PHP]: How to run PHP apps with Cherokee.
   . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.

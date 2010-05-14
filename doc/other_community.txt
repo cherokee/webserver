@@ -1,5 +1,21 @@
 == link:index.html[Index] -> link:other.html[Other information]
 
+The link:http://www.cherokee-project.com/[Cherokee Project] has a
+strong and active
+link:http://www.cherokee-project.com/community.html[Community]. We are
+on social media, mailing lists, blogs, planets, IRC channels,
+celebrate periodic summits, and so on, so it is really simple to
+discuss about the project and look for help.
+
+Social Media
+~~~~~~~~~~~~
+
+Follow link:http://twitter.com/webserver[Cherokee on Twitter].
+
+Join link:http://www.facebook.com/cherokee.project[Cherokee on
+Facebook]
+
+
 Mailing Lists
 ~~~~~~~~~~~~~
 
@@ -19,6 +35,33 @@ These are the lists currently in existence:
 - link:http://lists.octality.com/listinfo/cherokee[General list]
 - link:http://lists.octality.com/listinfo/cherokee-dev[Development list]
 - link:http://lists.octality.com/listinfo/cherokee-commits[SVN Reports]
+
+
+#cherokee IRC channel
+~~~~~~~~~~~~~~~~~~~~~
+
+Join us at the link:irc://irc.freenode.net/cherokee[#cherokee IRC
+channel]. Many of our members and core-deveolpers are always hanging
+around, so after the mailing lists it is the second best place to look
+for answers and help.
+
+
+The Cherokee Planet
+~~~~~~~~~~~~~~~~~~~
+
+Planets are a powerful tool to know what the developers of a project
+are up to. link:http://planet.cherokee-project.com/[Planet Cherokee]
+will let you follow what our deveolpers and contributors are doing
+with their time. It might not always be related to the Cherokee
+Project, but it is guaranteed to be interesting stuff.
+
+
+The Cherokee Blog
+~~~~~~~~~~~~~~~~~
+
+The project has its own
+link:http://blog.cherokee-project.com/[blog]. It is a great place to
+look for information about out latest developments.
 
 
 Bug Tracker
@@ -60,5 +103,4 @@ More resources:
 [[munin]]
 * link:http://www.mobygeek.net/blog/2008/12/07/munin-cherokee-plugin/[Munin
   Plugin] for plotting the web server.
-
 
