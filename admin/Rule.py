@@ -147,9 +147,9 @@ class Rule (CTK.Box):
         vsrv_num = self.key.split('!')[1]
 
         if not CTK.cfg.get_val(self.key):
-            rules = [('', _('Select'))] + RULES
+            rules = [('', _('Select'))] + trans (RULES)
         else:
-            rules = RULES[:]
+            rules = trans (RULES[:])
 
         table = CTK.PropsTable()
         modul = CTK.PluginSelector (self.key, rules, vsrv_num=vsrv_num)

@@ -45,9 +45,9 @@ class PluginAuth (CTK.Plugin):
         assert type(supported_methods) is tuple
 
         if len(supported_methods) > 1:
-            methods = VALIDATOR_METHODS
+            methods = trans (VALIDATOR_METHODS)
         else:
-            methods = filter (lambda x: x[0] in supported_methods, VALIDATOR_METHODS)
+            methods = trans (filter (lambda x: x[0] in supported_methods, VALIDATOR_METHODS))
 
         table = CTK.PropsTable()
         table.Add (_("Methods"), CTK.ComboCfg("%s!methods"%(self.key), trans(methods), {'id': 'auth_method'}), _(NOTE_METHODS))

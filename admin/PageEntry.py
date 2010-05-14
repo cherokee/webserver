@@ -119,7 +119,7 @@ class SecurityWidget (CTK.Container):
         self += CTK.Indenter (submit)
 
         # Authentication
-        modul = CTK.PluginSelector('%s!auth'%(pre), Cherokee.support.filter_available (VALIDATORS))
+        modul = CTK.PluginSelector('%s!auth'%(pre), trans (Cherokee.support.filter_available (VALIDATORS)))
 
         table = CTK.PropsTable()
         table.Add (_('Validation Mechanism'), modul.selector_widget, _(NOTE_VALIDATOR))
@@ -170,7 +170,7 @@ class EncodingWidget (CTK.Container):
     def __init__ (self, vsrv, rule, apply):
         CTK.Container.__init__ (self)
         pre = 'vserver!%s!rule!%s!encoder' %(vsrv, rule)
-        encoders = Cherokee.support.filter_available (ENCODERS)
+        encoders = trans (Cherokee.support.filter_available (ENCODERS))
 
         table = CTK.PropsTable()
         for e,e_name in encoders:
@@ -217,7 +217,7 @@ class HandlerWidget (CTK.Container):
         CTK.Container.__init__ (self)
         pre = 'vserver!%s!rule!%s!handler' %(vsrv, rule)
 
-        modul = CTK.PluginSelector(pre, Cherokee.support.filter_available (HANDLERS))
+        modul = CTK.PluginSelector(pre, trans (Cherokee.support.filter_available (HANDLERS)))
 
         table = CTK.PropsTable()
         table.Add (_('Handler'), modul.selector_widget, _(NOTE_HANDLER))

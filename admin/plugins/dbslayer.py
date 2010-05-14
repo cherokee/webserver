@@ -46,7 +46,7 @@ class Plugin_dbslayer (Handler.PluginHandler):
 
         # DB-Slayer
         table = CTK.PropsTable()
-        table.Add (_('Language'),    CTK.ComboCfg('%s!lang'%(key), DWRITER_LANGS), _(NOTE_LANG))
+        table.Add (_('Language'),    CTK.ComboCfg('%s!lang'%(key),    trans (DWRITER_LANGS)), _(NOTE_LANG))
         table.Add (_('DB User'),     CTK.TextCfg('%s!user'%(key),     False), _(NOTE_USER))
         table.Add (_('DB Password'), CTK.TextCfg('%s!password'%(key), False), _(NOTE_PASSWORD))
         table.Add (_('Data Base'),   CTK.TextCfg('%s!db'%(key),       True),  _(NOTE_DB))
@@ -58,7 +58,7 @@ class Plugin_dbslayer (Handler.PluginHandler):
         self += CTK.Indenter (submit)
 
         # Load Balancing
-        modul = CTK.PluginSelector('%s!balancer'%(key), Cherokee.support.filter_available (BALANCERS))
+        modul = CTK.PluginSelector('%s!balancer'%(key), trans (Cherokee.support.filter_available (BALANCERS)))
         table = CTK.PropsTable()
         table.Add (_("Balancer"), modul.selector_widget, _(Balancer.NOTE_BALANCER))
 

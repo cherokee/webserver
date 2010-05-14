@@ -199,12 +199,12 @@ def Lang_Apply():
 class LanguageSelector (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'id': 'language-selector'})
-        languages = [('', _('Choose'))] + AVAILABLE_LANGUAGES
+        languages = [('', _('Choose'))] + trans (AVAILABLE_LANGUAGES)
 
         submit = CTK.Submitter('/lang/apply')
         submit.id = 'language-list'
         # TODO: Maybe it's better to show selected lang and ommit 'Language' label.
-        submit += CTK.Combobox ({'name': 'lang'}, trans (languages))
+        submit += CTK.Combobox ({'name': 'lang'}, languages)
 
         self += CTK.RawHTML('%s: ' %(_('Language')))
         self += submit

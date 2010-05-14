@@ -109,7 +109,7 @@ def NewManual():
     vsrv_num = re.findall (URL_NEW_MANUAL_R, CTK.request.url)[0]
 
     # Add New Rule: Content
-    rules = [('',_('Choose'))] + RULES
+    rules = [('',_('Choose'))] + trans (RULES)
 
     table = CTK.PropsTable()
     modul = CTK.PluginSelector ('tmp', rules, vsrv_num=vsrv_num)
@@ -173,12 +173,12 @@ class Render:
                 handler = CTK.cfg.get_val ('vserver!%s!rule!%s!handler' %(vsrv_num, r))
                 if handler:
                     desc = filter (lambda x: x[0] == handler, HANDLERS)[0][1]
-                    comment.append (desc)
+                    comment.append (_(desc))
 
                 auth = CTK.cfg.get_val ('vserver!%s!rule!%s!auth' %(vsrv_num, r))
                 if auth:
                     desc = filter (lambda x: x[0] == auth, VALIDATORS)[0][1]
-                    comment.append (desc)
+                    comment.append (_(desc))
 
                 for e in CTK.cfg.keys ('vserver!%s!rule!%s!encoder'%(vsrv_num, r)):
                     val = CTK.cfg.get_val ('vserver!%s!rule!%s!encoder!%s'%(vsrv_num, r, e))

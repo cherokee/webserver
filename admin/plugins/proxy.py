@@ -269,7 +269,7 @@ class Plugin_proxy (Handler.PluginHandler):
         self += Header_Hide (key, 'out_header_hide')
 
         # Balancer
-        modul = CTK.PluginSelector('%s!balancer'%(key), Cherokee.support.filter_available (BALANCERS))
+        modul = CTK.PluginSelector('%s!balancer'%(key), trans (Cherokee.support.filter_available (BALANCERS)))
         table = CTK.PropsTable()
         table.Add (_("Balancer"), modul.selector_widget, _(Balancer.NOTE_BALANCER))
 
