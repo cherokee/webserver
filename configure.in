@@ -1487,6 +1487,7 @@ cget/Makefile
 cherokee-config
 cherokee.pc
 cherokee.spec
+org.cherokee.webserver.plist
 cherokee/Makefile
 contrib/Makefile
 icons/Makefile

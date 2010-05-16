@@ -7,17 +7,17 @@
     <key>CFBundleGetInfoString</key>
     <string>Cherokee Web Server @VERSION@</string>
 
-    <!-- Provides information for the Finder to display about the package. -->    
+    <!-- Provides information for the Finder to display about the package. -->
     <key>CFBundleName</key>
     <string>cherokee</string>
 
-    <!-- Provides information for the Finder to display about the package. -->    
+    <!-- Provides information for the Finder to display about the package. -->
     <key>CFBundleShortVersionString</key>
     <string>@VERSION@</string>
 
     <!-- A unique identifier string for the bundle. It should be in the form of a Java-style package name. -->
     <key>CFBundleIdentifier</key>
-    <string>org.cherokeeproject.cherokee</string>
+    <string>org.cherokee.webserver</string>
 
     <!-- Should Installer require authorization (and prompt the user to authenticate)? -->
     <key>IFPkgFlagAuthorizationAction</key>

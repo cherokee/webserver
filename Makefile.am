@@ -70,23 +70,25 @@ debian_testing.sh   \
 debian_testing_chroot.sh
 
 
-EXTRA_DIST =          \
-http-cherokee.xml     \
-cherokee.spec         \
-cherokee.spec.in      \
-SUNWcherokee.spec     \
-pam.d_cherokee        \
-cherokee.pc.in        \
-developers.py         \
-svnlog2changelog.py   \
-gitlog2changelog.py   \
-changelog-update.sh   \
-$(m4data_DATA)        \
-$(XMLS_PRE)           \
-$(CONFS_PRE)          \
-$(CONSTANTS_PRE)      \
-$(man_MANS)           \
-$(WINDOWS_PORT_FILES) \
+EXTRA_DIST =                    \
+http-cherokee.xml               \
+cherokee.spec                   \
+cherokee.spec.in                \
+org.cherokee.webserver.plist    \
+org.cherokee.webserver.plist.in \
+SUNWcherokee.spec               \
+pam.d_cherokee                  \
+cherokee.pc.in                  \
+developers.py                   \
+svnlog2changelog.py             \
+gitlog2changelog.py             \
+changelog-update.sh             \
+$(m4data_DATA)                  \
+$(XMLS_PRE)                     \
+$(CONFS_PRE)                    \
+$(CONSTANTS_PRE)                \
+$(man_MANS)                     \
+$(WINDOWS_PORT_FILES)           \
 $(COMPILATION_TESTS)
 
 all-local: $(CONSTANTS) $(CONFS) $(XMLS) add_user_group
