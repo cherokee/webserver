@@ -46,7 +46,7 @@ class Plugin_common (Handler.PluginHandler):
         submit += table
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Parsing')))
-        self += CTK.Indenter (table)
+        self += CTK.Indenter (submit)
         self += instance_plugin('file',    key, show_document_root=False)
         self += instance_plugin('dirlist', key, show_document_root=False)
 
