@@ -302,7 +302,7 @@ class WebDirectory:
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(NOTE_WEBDIR_H1))
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -319,7 +319,7 @@ class Host:
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(NOTE_HOST_H1))
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
         cont += Dispatcher ()
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
@@ -363,16 +363,16 @@ class LocalSource:
         table   = CTK.PropsTable()
         submit += table
 
-        table.Add (_('Project Directory'), CTK.TextCfg ('%s!ror_dir'%(PREFIX), False), NOTE_ROR_DIR)
-        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), trans (RAILS_ENV), {'class': 'noauto'}), NOTE_ENV)
+        table.Add (_('Project Directory'), CTK.TextCfg ('%s!ror_dir'%(PREFIX), False), _(NOTE_ROR_DIR))
+        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), trans (RAILS_ENV), {'class': 'noauto'}), _(NOTE_ENV))
 
         if len(RAILS_METHOD) > 1:
-            table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans (RAILS_METHOD), {'class': 'noauto'}), NOTE_METHOD)
+            table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans (RAILS_METHOD), {'class': 'noauto'}), _(NOTE_METHOD))
         else:
             submit += CTK.Hidden('%s!ror_env'%(PREFIX), RAILS_METHOD[0][0])
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(NOTE_LOCAL_H1))
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
@@ -381,11 +381,11 @@ class LocalSource:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(NOTE_WELCOME_H1))
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
         cont += Wizard.Icon ('rails', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(NOTE_WELCOME_P1))
-        box += CTK.RawHTML ('<p>%s</p>' %(NOTE_WELCOME_P2))
+        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
         box += Wizard.CookBookBox ('cookbook_ror')
         cont += box
 
