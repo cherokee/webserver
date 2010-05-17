@@ -36,6 +36,7 @@ URL_BASE  = '/general'
 URL_APPLY = '/general/apply'
 
 NOTE_ADD_PORT    = N_('Defines a port that the server will listen to')
+NOTE_ADD_IF      = N_('Optionally defines an interface to listen to')
 NOTE_IPV6        = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
 NOTE_TOKENS      = N_('This option allows to choose how the server identifies itself.')
 NOTE_TIMEOUT     = N_('Time interval until the server closes inactive connections.')
@@ -59,7 +60,8 @@ VALIDATIONS = [
     ("server!bind!.*!interface", validations.is_ip),
     ("server!bind!.*!tls",       validations.is_boolean),
     ("server!chroot",            validations.is_chroot_dir_exists),
-    ("new_port",                 validations.is_new_tcp_port)
+    ("new_port",                 validations.is_tcp_port),
+    ("new_if",                   validations.is_ip)
 ]
 
 JS_SCROLL = """
@@ -81,13 +83,37 @@ $(document).ready(function() {
 """
 
 
+def is_new_bind (port, ip=None):
+    if ip:
+        ip   = validations.is_ip (ip)
+        port = validations.is_tcp_port (port)
+    else:
+        port = validations.is_new_tcp_port (port)
+
+    binds = [(CTK.cfg.get_val('server!bind!%s!port'%(x)),
+              CTK.cfg.get_val('server!bind!%s!interface'%(x)))
+             for x in CTK.cfg.keys ('server!bind')]
+
+    if (port, ip) in binds:
+        raise ValueError, _("Port/Interface combination already in use.")
+
+
 def commit():
     # Add a new port
     port = CTK.post.pop('new_port')
+    interface = CTK.post.pop('new_if')
     if port:
+        try:
+            is_new_bind (port, interface)
+        except ValueError, e:
+            return { "ret": "error", "errors": { 'new_port': str(e),
+                                                 'new_if':   str(e) }}
+
         # Look for the next entry
         pre = CTK.cfg.get_next_entry_prefix ('server!bind')
         CTK.cfg['%s!port'%(pre)] = port
+        if interface:
+            CTK.cfg['%s!interface'%(pre)] = interface
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -181,6 +207,7 @@ class PortsWidget (CTK.Container):
         # Add new - dialog
         table = CTK.PropsTable()
         table.Add (_('Port'), CTK.TextCfg ('new_port', False, {'class':'noauto'}), _(NOTE_ADD_PORT))
+        table.Add (_('Interface'), CTK.TextCfg ('new_if', True, {'class':'noauto'}), _(NOTE_ADD_IF))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
