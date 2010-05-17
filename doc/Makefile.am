@@ -13,6 +13,7 @@ basics_requirements.html \
 basics_download.html \
 basics_installation.html \
 basics_installation_unix.html \
+basics_installation_osx.html \
 basics_installation_windows.html \
 basics_installation_svn.html \
 basics_upgrade.html \

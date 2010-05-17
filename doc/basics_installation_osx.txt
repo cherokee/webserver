@@ -1,0 +1,70 @@
+== link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
+////
+Last checked: 2010/05/26 Cherokee 1.0.1b
+////
+
+Installation on OSX
+-------------------
+
+Installation on OSX is pretty much the same as in any other Unix
+platform. If you do not find a prepackaged version that suits your
+needs, you can always download and compile your own.
+
+[[quickstart]]
+Quickstart
+~~~~~~~~~~
+
+. link:basics_download.html[Download] a fresh copy of Cherokee
+. Configure the package for your system:
++
+---------------------------------------------------------
+./configure --prefix=/usr/local                         \
+            --with-wwwroot=/Library/WebServer/Documents \
+            --with-wwwuser=www                          \
+            --with-wwwgroup=www
+---------------------------------------------------------
+
+
+. Compile the package:
++
+-----------------------------------------
+make -j4
+-----------------------------------------
+
+. Install the programs and any data files:
++
+-----------------------------------------
+sudo packages/osx/build.py
+-----------------------------------------
+
+. Start link:bundle_cherokee-admin.html[cherokee-admin]
++
+Alternatively, you can follow the link:#autostart[Autostart]
+instructions to load the web server at boot time.
+
+[[advanced]]
+Advanced parameters
+~~~~~~~~~~~~~~~~~~~
+
+If you want to learn more about 'configure' you can run `./configure
+--help`. The list of parameter is extensive, so you might want to take
+a look at it, particularly if you are a developer. Some of the most
+used parameters are listed on the
+link_basics_installation_unix.html[Unix instructions].
+
+
+[[autostart]]
+Autostart
+~~~~~~~~~
+
+If you need the cherokee webserver to start at boot time, you will
+have to use the provided Launchd init script. It will be built with
+the rest of Cherokee at the root of your build directory. Simply copy
+it to the apropriate location and make `launchd` aware of it with the
+following commands.
+
+-----------------------------------------
+sudo cp org.cherokee.webserver.plist /System/Library/LaunchDaemons/
+sudo launchctl load -w /System/Library/LaunchDaemons/org.cherokee.webserver.plist
+-----------------------------------------
+

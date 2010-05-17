@@ -7,6 +7,7 @@ There is information available about compilation and installation for
 several platforms.
 
 * link:basics_installation_unix.html[Unix installation]
+* link:basics_installation_osx.html[OSX installation]
 * link:basics_installation_windows.html[Windows installation]
 * link:basics_installation_svn.html[Installation From SVN]
 
