@@ -78,6 +78,8 @@ Available Wizards
 * link:cookbook_mailman.html[Mailman]: Mailman is free software for
   managing electronic mail discussion and e-newsletter lists.
 
+* MediaWiki: Free wiki engine written in PHP for use in Wikipedia.
+
 * link:cookbook_moinmoin.html[MoinMoin]: Python Wiki enginge.
 
 * link:cookbook_mono.html[Mono.NET]: .NET open source framework.
