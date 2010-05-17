@@ -146,7 +146,7 @@ class HostMatchWidget (CTK.Container):
 
         if is_default:
             notice  = CTK.Notice()
-            notice += CTK.RawHTML(DEFAULT_HOST_NOTE)
+            notice += CTK.RawHTML(_(DEFAULT_HOST_NOTE))
             self += notice
             return
 

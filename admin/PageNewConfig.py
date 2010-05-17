@@ -37,7 +37,7 @@ URL_APPLY = '/create_config/apply'
 
 HELPS = [('index', N_("Index"))]
 
-WARNING_NOT_FOUND = "<b>The configuration is not found</b>.<br />You can create a new configuration file and proceed to customize the web server."
+WARNING_NOT_FOUND = N_("<b>The configuration is not found</b>.<br />You can create a new configuration file and proceed to customize the web server.")
 
 DEFAULT_PID_LOCATIONS = [
     '/var/run/cherokee.pid',

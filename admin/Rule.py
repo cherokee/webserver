@@ -116,7 +116,7 @@ class Rule (CTK.Box):
         # Default Rule
         value = CTK.cfg.get_val (self.key)
         if value == 'default':
-            self += CTK.Notice ('important-information', CTK.RawHTML (DEFAULT_RULE_WARNING))
+            self += CTK.Notice ('important-information', CTK.RawHTML (_(DEFAULT_RULE_WARNING)))
             return CTK.Box.Render (self)
 
         # Special rule types

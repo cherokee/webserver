@@ -85,11 +85,11 @@ class Page (CTK.Page):
 
         # Thank you: submitted
         dialog_ok = CTK.Dialog ({'title': _("Thank you!"), 'autoOpen': False, 'draggable': False, 'width': 480})
-        dialog_ok += CTK.RawHTML ('<p>%s</p>' %(NOTE_EXCEPT_THANKS))
+        dialog_ok += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_EXCEPT_THANKS)))
         dialog_ok.AddButton (_('Close'), "close")
 
         dialog_fail = CTK.Dialog ({'title': _("Could not report the issue"), 'autoOpen': False, 'draggable': False, 'width': 480})
-        dialog_fail += CTK.Notice ('error', CTK.RawHTML (NOTE_EXCEPT_FAIL))
+        dialog_fail += CTK.Notice ('error', CTK.RawHTML (_(NOTE_EXCEPT_FAIL)))
         dialog_fail.AddButton (_('Close'), "close")
 
         self += dialog_ok
