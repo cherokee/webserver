@@ -9,12 +9,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: cherokee '0.99.49'\n"
+"Project-Id-Version: cherokee '1.0.0'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-10 16:11+0200\n"
-"PO-Revision-Date: 2010-05-10 16:37+0200\n"
-"Last-Translator: Alvaro \"Andor\" Gonzalez <andor@pierdelacabeza.com>\n"
-"Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2010-05-17 16:12+0200\n"
+"PO-Revision-Date: 2010-05-17 16:30+0200\n"
+"Last-Translator: Taher Shihadeh <taher@unixwars.com>\n"
+"Language-Team: <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -164,18 +164,18 @@ msgstr "Aceptar X-Real-IP"
 #: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
 #: admin/PageVServer.py:120 admin/plugins/dirlist.py:56
-#: admin/plugins/exists.py:105 admin/plugins/exists.py:111
-#: admin/plugins/exists.py:112 admin/plugins/exists.py:113
+#: admin/plugins/exists.py:109 admin/plugins/exists.py:115
+#: admin/plugins/exists.py:116 admin/plugins/exists.py:117
 #: admin/plugins/file.py:40 admin/plugins/ldap.py:53
 #: admin/plugins/streaming.py:43
 msgid "Enabled"
 msgstr "Activo"
 
-#: admin/CgiBase.py:70 admin/PageVServer.py:407
+#: admin/CgiBase.py:70 admin/PageVServer.py:410
 msgid "Don't check origin"
 msgstr "No comprobar origen"
 
-#: admin/CgiBase.py:72 admin/PageVServer.py:410
+#: admin/CgiBase.py:72 admin/PageVServer.py:413
 msgid "Accept from Hosts"
 msgstr "Aceptar de Hosts"
 
@@ -303,8 +303,8 @@ msgid ""
 msgstr ""
 "Si debería recolectar estadísticas sobre el tráfico de este servidor virtual."
 
-#: admin/Graph.py:117 admin/PageEntry.py:234 admin/PageSource.py:270
-#: admin/PageStatus.py:70 admin/PageVServer.py:510 admin/PageVServers.py:194
+#: admin/Graph.py:117 admin/PageEntry.py:240 admin/PageSource.py:270
+#: admin/PageStatus.py:70 admin/PageVServer.py:513 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -316,14 +316,15 @@ msgstr "Estadísticas de Tráfico"
 msgid "Allows to specify an alternative Document Root path."
 msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 
-#: admin/Handler.py:43 admin/PageVServer.py:297 admin/PageVServers.py:127
-#: admin/wizards/django.py:190 admin/wizards/mono.py:199
+#: admin/Handler.py:43 admin/PageEntry.py:229 admin/PageVServer.py:297
+#: admin/PageVServers.py:127 admin/wizards/django.py:190
+#: admin/wizards/mono.py:199 admin/wizards/php.py:36 admin/wizards/php.py:229
 #: admin/wizards/uwsgi.py:242
 msgid "Document Root"
 msgstr "Raíz de documentos"
 
-#: admin/Icons.py:118 admin/Icons.py:138 admin/Icons.py:312 admin/Mime.py:86
-#: admin/Mime.py:120 admin/consts.py:182 admin/plugins/extensions.py:57
+#: admin/Icons.py:118 admin/Icons.py:312 admin/Mime.py:86 admin/Mime.py:120
+#: admin/consts.py:182 admin/plugins/extensions.py:59
 msgid "Extensions"
 msgstr "Extensiones"
 
@@ -335,17 +336,13 @@ msgstr "Lista de extensiones"
 msgid "Add New Extension"
 msgstr "Añadir nueva extensión"
 
-#: admin/Icons.py:152 admin/plugins/exists.py:74 admin/plugins/exists.py:110
+#: admin/Icons.py:152 admin/plugins/exists.py:75 admin/plugins/exists.py:114
 msgid "Files"
 msgstr "Ficheros"
 
 #: admin/Icons.py:167
 msgid "File Matches"
 msgstr "Concordancia de ficheros"
-
-#: admin/Icons.py:171 admin/Icons.py:311 admin/consts.py:99
-msgid "File"
-msgstr "Fichero"
 
 #: admin/Icons.py:171
 msgid "Add New File"
@@ -372,6 +369,10 @@ msgstr "Modificar"
 #: admin/Icons.py:198 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
 msgid "Special Files"
 msgstr "Ficheros especiales"
+
+#: admin/Icons.py:311 admin/consts.py:99
+msgid "File"
+msgstr "Fichero"
 
 #: admin/Icons.py:345
 msgid "Add new"
@@ -757,42 +758,42 @@ msgstr "TLS"
 msgid "Advanced Configuration"
 msgstr "Configuración avanzada"
 
-#: admin/PageEntry.py:40
+#: admin/PageEntry.py:41
 msgid "Apply a custom timeout to the connections matching this rule."
 msgstr ""
 "Aplicar un timeout propio a las conexiones que concuerden con esta regla."
 
-#: admin/PageEntry.py:41
+#: admin/PageEntry.py:42
 msgid "How the connection will be handled."
 msgstr "Cómo se gestionará la conexión."
 
-#: admin/PageEntry.py:42
+#: admin/PageEntry.py:43
 msgid "Enable to allow access to the resource only by https."
 msgstr "Activa el acceso al recurso sólo por https."
 
-#: admin/PageEntry.py:43
+#: admin/PageEntry.py:44
 msgid "List of IPs and subnets allowed to access the resource."
 msgstr "Lista de IPs y subredes a las que se le permiten acceso al recurso."
 
-#: admin/PageEntry.py:44
+#: admin/PageEntry.py:45
 msgid "Which, if any, will be the authentication method."
 msgstr "Si lo hay, cuál será el método de autenficación."
 
-#: admin/PageEntry.py:45
+#: admin/PageEntry.py:46
 msgid "Points how long the files should be cached"
 msgstr "Cuánto tiempo debe el fichero permanecer en el caché."
 
-#: admin/PageEntry.py:46
+#: admin/PageEntry.py:47
 msgid ""
 "Set an outbound traffic limit. It must be specified in Bytes per second."
 msgstr ""
 "Fija un límite de tráfico saliente. Debe especificarse en bytes por segundo."
 
-#: admin/PageEntry.py:47
+#: admin/PageEntry.py:48
 msgid "Do not log requests matching this rule."
 msgstr "No escribir estas peticiones en el histórico."
 
-#: admin/PageEntry.py:48
+#: admin/PageEntry.py:49
 msgid ""
 "How long from the object can be cached.<br />\n"
 "The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for "
@@ -802,128 +803,128 @@ msgstr ""
 "Los sufijos <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> está permitidos para "
 "minutos, horas, días y semanas. Ej.: 2d.\n"
 
-#: admin/PageEntry.py:61
+#: admin/PageEntry.py:62
 msgid "Behavior rules"
 msgstr "Reglas de funcionamiento"
 
-#: admin/PageEntry.py:62
+#: admin/PageEntry.py:63
 msgid "GZip encoder"
 msgstr "Codificador GZip"
 
-#: admin/PageEntry.py:63
+#: admin/PageEntry.py:64
 msgid "Deflate encoder"
 msgstr "Deflate"
 
-#: admin/PageEntry.py:64 admin/PageEntry.py:127 admin/PageVServer.py:111
+#: admin/PageEntry.py:65 admin/PageEntry.py:128 admin/PageVServer.py:111
 msgid "Authentication"
 msgstr "Autenticación"
 
-#: admin/PageEntry.py:65
+#: admin/PageEntry.py:66
 msgid "Authentication modules"
 msgstr "Lista de autenticación"
 
-#: admin/PageEntry.py:69
+#: admin/PageEntry.py:70
 msgid "Leave unset"
 msgstr "Dejar sin especificar"
 
-#: admin/PageEntry.py:70 admin/PageVServer.py:305 admin/plugins/common.py:42
+#: admin/PageEntry.py:71 admin/PageVServer.py:305 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
 #: admin/plugins/proxy.py:237
 msgid "Allow"
 msgstr "Permitir"
 
-#: admin/PageEntry.py:71
+#: admin/PageEntry.py:72
 msgid "Forbid"
 msgstr "Prohibir"
 
-#: admin/PageEntry.py:89
+#: admin/PageEntry.py:90
 msgid "Limit traffic to"
 msgstr "Limitar tráfico a"
 
-#: admin/PageEntry.py:93 admin/PageEntry.py:253 admin/PageVServer.py:117
+#: admin/PageEntry.py:94 admin/PageEntry.py:259 admin/PageVServer.py:117
 msgid "Traffic Shaping"
 msgstr "Gestión de tráfico"
 
-#: admin/PageEntry.py:104
+#: admin/PageEntry.py:105
 msgid "Skip Logging"
 msgstr "No guardar registro"
 
-#: admin/PageEntry.py:108 admin/PageVServer.py:499
+#: admin/PageEntry.py:109 admin/PageVServer.py:502
 msgid "Logging"
 msgstr "Registro"
 
-#: admin/PageEntry.py:113
+#: admin/PageEntry.py:114
 msgid "Only https"
 msgstr "Sólo https"
 
-#: admin/PageEntry.py:114
+#: admin/PageEntry.py:115
 msgid "Allow From"
 msgstr "Permitir desde"
 
-#: admin/PageEntry.py:118
+#: admin/PageEntry.py:119
 msgid "Access Restrictions"
 msgstr "Restricciones de acceso"
 
-#: admin/PageEntry.py:125
+#: admin/PageEntry.py:126
 msgid "Validation Mechanism"
 msgstr "Mecanismo de validación"
 
-#: admin/PageEntry.py:138 admin/PageVServer.py:115
+#: admin/PageEntry.py:139 admin/PageVServer.py:115
 msgid "Expiration"
 msgstr "Caducidad"
 
-#: admin/PageEntry.py:141
+#: admin/PageEntry.py:142
 msgid "Time to expire"
 msgstr "Tiempo de caducidad"
 
-#: admin/PageEntry.py:154 admin/PageVServer.py:116
+#: admin/PageEntry.py:155 admin/PageVServer.py:116
 #: admin/plugins/secdownload.py:44
 msgid "Timeout"
 msgstr "Tiempo de Espera"
 
-#: admin/PageEntry.py:158
+#: admin/PageEntry.py:159
 msgid "Connections Timeout"
 msgstr "Tiempo de espera de las conexiones"
 
-#: admin/PageEntry.py:165
+#: admin/PageEntry.py:166
 msgid "Content Expiration"
 msgstr "Caducidad del contenido"
 
-#: admin/PageEntry.py:177
+#: admin/PageEntry.py:178
 #, python-format
 msgid "Use the %s encoder whenever the client requests it."
 msgstr "Usar el codificador %s si el cliente lo solicita."
 
-#: admin/PageEntry.py:178
+#: admin/PageEntry.py:179
 msgid "support"
 msgstr " "
 
-#: admin/PageEntry.py:183
+#: admin/PageEntry.py:184
 msgid "Information Encoders"
 msgstr "Codificador de información"
 
-#: admin/PageEntry.py:197
+#: admin/PageEntry.py:198
 msgid "Matching Rule"
 msgstr "Aplicar regla"
 
-#: admin/PageEntry.py:223 admin/PageEntry.py:225 admin/PageEntry.py:249
+#: admin/PageEntry.py:224 admin/PageEntry.py:231 admin/PageEntry.py:255
 #: admin/PageVServer.py:110
 msgid "Handler"
 msgstr "Gestor"
 
-#: admin/PageEntry.py:248 admin/PageSource.py:266
+#: admin/PageEntry.py:254 admin/PageSource.py:266
 msgid "Rule"
 msgstr "Regla"
 
-#: admin/PageEntry.py:250
+#: admin/PageEntry.py:256
 msgid "Encoding"
 msgstr "Codificación"
 
-#: admin/PageEntry.py:251
+#: admin/PageEntry.py:257
 msgid "Time"
 msgstr "Tiempo"
 
-#: admin/PageEntry.py:252 admin/PageVServer.py:500
+#: admin/PageEntry.py:258 admin/PageVServer.py:503
 msgid "Security"
 msgstr "Seguridad"
 
@@ -1477,6 +1478,14 @@ msgstr "Bienvenido a Cherokee-Admin"
 msgid "Index"
 msgstr "Índice"
 
+#: admin/PageNewConfig.py:40
+msgid ""
+"<b>The configuration is not found</b>.<br />You can create a new "
+"configuration file and proceed to customize the web server."
+msgstr ""
+"<b>La configuración no se encuentra</b>.<br />Puede crear un nuevo fichero "
+"de configuración y empezar a personalizar el servidor web."
+
 #: admin/PageNewConfig.py:140
 msgid "Create"
 msgstr "Crear"
@@ -1583,7 +1592,7 @@ msgstr "Clonar"
 msgid "Clone Selected Behavior Rule"
 msgstr "Clonar la regla seleccionada"
 
-#: admin/PageRule.py:298 admin/PageVServer.py:497
+#: admin/PageRule.py:298 admin/PageVServer.py:500
 msgid "Behavior"
 msgstr "Comportamiento"
 
@@ -1696,9 +1705,8 @@ msgid "Value of the variable"
 msgstr "Valor del la variable"
 
 #: admin/PageSource.py:60
-#, fuzzy
 msgid "The selected Information Source is about to be cloned."
-msgstr "Clonar el orígen de datos seleccionado"
+msgstr "Se va a clonar el orígen de datos seleccionado"
 
 #: admin/PageSource.py:203 admin/PageSource.py:231
 msgid "Variable"
@@ -1716,7 +1724,7 @@ msgstr "Añadir nueva variable de entorno"
 msgid "Add new variable"
 msgstr "Añadir nueva variable"
 
-#: admin/PageSource.py:266 admin/PageVServer.py:502
+#: admin/PageSource.py:266 admin/PageVServer.py:505
 msgid "Virtual Server"
 msgstr "Servidor Virtual"
 
@@ -2141,11 +2149,11 @@ msgstr "Desactivado"
 msgid "Write errors to"
 msgstr "Escribir errores en"
 
-#: admin/PageVServer.py:351 admin/PageVServer.py:387
+#: admin/PageVServer.py:351 admin/PageVServer.py:390
 msgid "Filename"
 msgstr "Nombre del fichero"
 
-#: admin/PageVServer.py:353 admin/PageVServer.py:390
+#: admin/PageVServer.py:353 admin/PageVServer.py:393
 msgid "Command"
 msgstr "Comando"
 
@@ -2161,75 +2169,75 @@ msgstr "Formato"
 msgid "Write accesses to"
 msgstr "Escribir accesos en"
 
-#: admin/PageVServer.py:395
+#: admin/PageVServer.py:398
 msgid "Template: "
 msgstr "Plantilla:"
 
-#: admin/PageVServer.py:397
+#: admin/PageVServer.py:400
 msgid "Access Logging"
 msgstr "Registro de accesos"
 
-#: admin/PageVServer.py:403
+#: admin/PageVServer.py:406
 msgid "Time standard"
 msgstr "Estándar de tiempo"
 
-#: admin/PageVServer.py:404
+#: admin/PageVServer.py:407
 msgid "Accept Forwarded IPs"
 msgstr "Acceptar IPs redireccionadas"
 
-#: admin/PageVServer.py:404 admin/consts.py:220
+#: admin/PageVServer.py:407 admin/consts.py:220
 msgid "Accept"
 msgstr "Aceptar"
 
-#: admin/PageVServer.py:407
+#: admin/PageVServer.py:410
 msgid "Do not check"
 msgstr "No comprobar"
 
-#: admin/PageVServer.py:416
+#: admin/PageVServer.py:419
 msgid "Logging Options"
 msgstr "Opciones del histórico"
 
-#: admin/PageVServer.py:452
+#: admin/PageVServer.py:455
 msgid "Certificate"
 msgstr "Certificado"
 
-#: admin/PageVServer.py:453
+#: admin/PageVServer.py:456
 msgid "Certificate key"
 msgstr "Clave del Certificado"
 
-#: admin/PageVServer.py:458
+#: admin/PageVServer.py:461
 msgid "Required SSL/TLS Values"
 msgstr "Valores SSL/TLS obligatorios"
 
-#: admin/PageVServer.py:463
+#: admin/PageVServer.py:466
 msgid "Ciphers"
 msgstr "Codificadores"
 
-#: admin/PageVServer.py:464
+#: admin/PageVServer.py:467
 msgid "Client Certs. Request"
 msgstr "Solicitud de Certif. de Clientes"
 
-#: admin/PageVServer.py:467
+#: admin/PageVServer.py:470
 msgid "CA List"
 msgstr "Lista de CA"
 
-#: admin/PageVServer.py:470
+#: admin/PageVServer.py:473
 msgid "Verify Depth"
 msgstr "Profundidad de verificación"
 
-#: admin/PageVServer.py:476
+#: admin/PageVServer.py:479
 msgid "Advanced Options"
 msgstr "Opciones avanzadas"
 
-#: admin/PageVServer.py:495
+#: admin/PageVServer.py:498
 msgid "Basics"
 msgstr "Básica"
 
-#: admin/PageVServer.py:496
+#: admin/PageVServer.py:499
 msgid "Host Match"
 msgstr "Concordancia de Host"
 
-#: admin/PageVServer.py:498
+#: admin/PageVServer.py:501
 msgid "Error Handler"
 msgstr "Errores"
 
@@ -2292,14 +2300,17 @@ msgstr "No"
 msgid "Select"
 msgstr "Seleccionar"
 
-#: admin/Wizard.py:195
+#: admin/Wizard.py:41
+msgid "Check the cookbook for more details."
+msgstr "Compruebe el recetario para obtener más detalles."
+
+#: admin/Wizard.py:196
 msgid "Use the same logging configuration as one of the other virtual servers."
 msgstr "Utilizar el mismo ajuste de registro que otro servidor virtual."
 
-#: admin/Wizard.py:199
-#, fuzzy
+#: admin/Wizard.py:200
 msgid "Do not configure"
-msgstr "No comprobar"
+msgstr "No configurar"
 
 #: admin/consts.py:26
 msgid "English"
@@ -2383,7 +2394,7 @@ msgstr "FastCGI"
 msgid "SCGI"
 msgstr "SCGI"
 
-#: admin/consts.py:54 admin/wizards/List.py:104 admin/wizards/uwsgi.py:41
+#: admin/consts.py:54 admin/wizards/List.py:108 admin/wizards/uwsgi.py:41
 msgid "uWSGI"
 msgstr "uWSGI"
 
@@ -2585,7 +2596,7 @@ msgstr "IP/Puerto de entrada"
 msgid "Full Path"
 msgstr "Ruta completa"
 
-#: admin/consts.py:189 admin/plugins/from.py:70
+#: admin/consts.py:189 admin/plugins/from.py:71
 msgid "Connected from"
 msgstr "Conectado desde"
 
@@ -2673,7 +2684,7 @@ msgstr "JSON"
 msgid "Python"
 msgstr "Python"
 
-#: admin/consts.py:237 admin/wizards/List.py:115
+#: admin/consts.py:237 admin/wizards/List.py:119
 msgid "PHP"
 msgstr "PHP"
 
@@ -2821,13 +2832,13 @@ msgstr ""
 #: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
 #: admin/wizards/django.py:173 admin/wizards/drupal.py:234
 #: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:206
-#: admin/wizards/liferay.py:153 admin/wizards/moinmoin.py:198
-#: admin/wizards/mono.py:182 admin/wizards/phpbb.py:161
-#: admin/wizards/phpmyadmin.py:115 admin/wizards/rails.py:44
-#: admin/wizards/rails.py:298 admin/wizards/rtorrent.py:99
-#: admin/wizards/sugar.py:191 admin/wizards/symfony.py:201
-#: admin/wizards/uwsgi.py:224 admin/wizards/wordpress.py:193
-#: admin/wizards/zend.py:176
+#: admin/wizards/liferay.py:153 admin/wizards/mediawiki.py:206
+#: admin/wizards/moinmoin.py:198 admin/wizards/mono.py:182
+#: admin/wizards/phpbb.py:161 admin/wizards/phpmyadmin.py:115
+#: admin/wizards/rails.py:44 admin/wizards/rails.py:298
+#: admin/wizards/rtorrent.py:99 admin/wizards/sugar.py:191
+#: admin/wizards/symfony.py:201 admin/wizards/uwsgi.py:224
+#: admin/wizards/wordpress.py:193 admin/wizards/zend.py:176
 msgid "Web Directory"
 msgstr "Directorio web"
 
@@ -2963,12 +2974,12 @@ msgstr "Raíz de documentos dinámico"
 msgid "Check Document Root"
 msgstr "Comprobar raíz de documentos"
 
-#: admin/plugins/exists.py:31
+#: admin/plugins/exists.py:32
 msgid "Comma separated list of files. Rule applies if one exists."
 msgstr ""
 "Lista de ficheros separador por comas. La regla se aplica si uno existe."
 
-#: admin/plugins/exists.py:32
+#: admin/plugins/exists.py:33
 msgid ""
 "Uses cache during file detection. Disable if directory contents change "
 "frequently. Enable otherwise."
@@ -2976,63 +2987,63 @@ msgstr ""
 "Usa caché durante la detección de ficheros. Desactivar si el contenido del "
 "directorio cambia a menudo. Activar en caso contrario."
 
-#: admin/plugins/exists.py:33
+#: admin/plugins/exists.py:34
 msgid "Match the request if any file exists."
 msgstr "Coincide con la solicitud si algún fichero existe."
 
-#: admin/plugins/exists.py:34
+#: admin/plugins/exists.py:35
 msgid "Only match regular files. If unset directories will be matched as well."
 msgstr ""
 "Sólo coincide con ficheros normales. Si se desactiva, los directorios "
 "coincidirán también."
 
-#: admin/plugins/exists.py:35
+#: admin/plugins/exists.py:36
 msgid "If a directory is requested, check the index files inside it."
 msgstr ""
 "Si se trata de la petición de un directorio, comprobar el fichero de índice "
 "en su interior."
 
-#: admin/plugins/exists.py:37
+#: admin/plugins/exists.py:38
 msgid "Match a specific list of files"
 msgstr "Comprobar una lista específica de peticiones"
 
-#: admin/plugins/exists.py:38 admin/plugins/exists.py:71
-#: admin/plugins/exists.py:109
+#: admin/plugins/exists.py:39 admin/plugins/exists.py:72
+#: admin/plugins/exists.py:113
 msgid "Match any file"
 msgstr "Coincide cualquier fichero"
 
-#: admin/plugins/exists.py:76 admin/plugins/exists.py:111
+#: admin/plugins/exists.py:77 admin/plugins/exists.py:115
 #: admin/plugins/file.py:40
 msgid "Use I/O cache"
 msgstr "Usar caché E/S"
 
-#: admin/plugins/exists.py:77 admin/plugins/exists.py:112
+#: admin/plugins/exists.py:78 admin/plugins/exists.py:116
 msgid "Only match files"
 msgstr "Sólo comprobar ficheros"
 
-#: admin/plugins/exists.py:78 admin/plugins/exists.py:113
+#: admin/plugins/exists.py:79 admin/plugins/exists.py:117
 msgid "If dir, check index files"
 msgstr "Si es un directorio, comprobar fichero de índice"
 
-#: admin/plugins/exists.py:132
+#: admin/plugins/exists.py:136
 msgid "File exists"
 msgstr "Existe fichero"
 
-#: admin/plugins/exists.py:136
+#: admin/plugins/exists.py:140
 #, python-format
 msgid "File %s exists"
 msgstr "Fichero %s existe"
 
-#: admin/plugins/exists.py:138
+#: admin/plugins/exists.py:142
 msgid "File exists (never matched)"
 msgstr "Fichero existe (sin concordancia)"
 
-#: admin/plugins/exists.py:140
+#: admin/plugins/exists.py:144
 #, python-format
 msgid "File %(most)s or %(last)s exists"
 msgstr "Fichero %(most)s o %(last)s existe"
 
-#: admin/plugins/extensions.py:30
+#: admin/plugins/extensions.py:31
 msgid ""
 "Comma-separated list of File Extension to which the configuration will be "
 "applied."
@@ -3055,19 +3066,19 @@ msgstr "Envío de fichero"
 msgid "IP or Subnet to check the connection origin against."
 msgstr "IP o subred con la que comprobar origen de la conexión."
 
-#: admin/plugins/from.py:95
+#: admin/plugins/from.py:96
 msgid "IPs and Subnets"
 msgstr "IPs o subredes"
 
-#: admin/plugins/from.py:102
+#: admin/plugins/from.py:103
 msgid "New IP or Subnet"
 msgstr "Nueva IP o subred"
 
-#: admin/plugins/from.py:106
+#: admin/plugins/from.py:107
 msgid "Add another entry"
 msgstr "Añadir otra entrada"
 
-#: admin/plugins/from.py:116
+#: admin/plugins/from.py:117
 msgid "From"
 msgstr "De"
 
@@ -3297,6 +3308,19 @@ msgstr "Fichero de contraseñas"
 #: admin/plugins/post_report.py:30 admin/plugins/post_track.py:25
 msgid "POST Report"
 msgstr "Informe"
+
+#: admin/plugins/post_report.py:32
+msgid ""
+"Target language for which the information will be encoded. (Default: JSON)"
+msgstr "Lenguaje destino al que exportar la información. (Por defecto: JSON)"
+
+#: admin/plugins/post_report.py:33
+msgid ""
+"The <a href=\"/general\">Upload tracking mechanism</a> must be enabled for "
+"this handler to work."
+msgstr ""
+"El mecanismo de <a href=\"/general\">Segumiento de Upload</a> debe estar "
+"hanilitado para que este manejador funcione."
 
 #: admin/plugins/post_report.py:47
 msgid "Target language"
@@ -3807,10 +3831,20 @@ msgid "Build Web sites and powerful online applications"
 msgstr "Construya sitios web y potentes aplicaciones online."
 
 #: admin/wizards/List.py:46
+msgid "MediaWiki Wiki"
+msgstr "Wiki MediaWiki"
+
+#: admin/wizards/List.py:47
+msgid ""
+"Free software wiki package written in PHP, originally for use on Wikipedia."
+msgstr ""
+"Paquete libre de wiki escrito en PHP, orignialmente para su uso en Wikipedia."
+
+#: admin/wizards/List.py:50
 msgid "MoinMoin Wiki"
 msgstr "Wiki MoinMoin"
 
-#: admin/wizards/List.py:47
+#: admin/wizards/List.py:51
 msgid ""
 "Advanced, easy to use and extensible WikiEngine with a large community of "
 "users."
@@ -3818,248 +3852,248 @@ msgstr ""
 "Wiki avanzada, extensible y de fácil manejo que cuenta con una extensa "
 "comunidad de usuarios."
 
-#: admin/wizards/List.py:50
+#: admin/wizards/List.py:54
 msgid "Trac Bug Tracker System"
 msgstr "Gestor  de incidencias Trac"
 
-#: admin/wizards/List.py:51
+#: admin/wizards/List.py:55
 msgid ""
 "Enhanced wiki and issue tracking system for software development projects."
 msgstr ""
 "Wiki mejorada y sistema de gestión de incidencias para proyectos de "
 "desarrollo de software."
 
-#: admin/wizards/List.py:54
+#: admin/wizards/List.py:58
 msgid "Concrete 5"
 msgstr "Concrete 5"
 
-#: admin/wizards/List.py:55
+#: admin/wizards/List.py:59
 msgid "The CMS made for Marketing, but built for Geeks."
 msgstr "El CMS hecho para marketing pero construido para geeks."
 
-#: admin/wizards/List.py:61
+#: admin/wizards/List.py:65
 msgid "Application Servers"
 msgstr "Servidores de aplicación"
 
-#: admin/wizards/List.py:62
+#: admin/wizards/List.py:66
 msgid "General Purpose Application Servers"
 msgstr "Servidores de aplicación de propósito general"
 
-#: admin/wizards/List.py:65
+#: admin/wizards/List.py:69
 msgid "Alfresco"
 msgstr "Alfresco"
 
-#: admin/wizards/List.py:66 admin/wizards/List.py:70
+#: admin/wizards/List.py:70 admin/wizards/List.py:74
 msgid "Enterprise web platform for building business solutions."
 msgstr ""
 "Plataforma web empresarial para la construcción de soluciones de negocio."
 
-#: admin/wizards/List.py:69
+#: admin/wizards/List.py:73
 msgid "Liferay"
 msgstr "Liferay"
 
-#: admin/wizards/List.py:73
+#: admin/wizards/List.py:77
 msgid "Glassfish"
 msgstr "Glassfish"
 
-#: admin/wizards/List.py:74
+#: admin/wizards/List.py:78
 msgid ""
 "The first compatible implementation of the Java EE 6 platform specification."
 msgstr ""
 "La primera implementación compatible con la especificación de la plataforma "
 "Java EE 6."
 
-#: admin/wizards/List.py:77
+#: admin/wizards/List.py:81
 msgid "Adobe ColdFusion"
 msgstr "Adobe ColdFusion"
 
-#: admin/wizards/List.py:78
+#: admin/wizards/List.py:82
 msgid "Rapidly build Internet applications for the enterprise."
 msgstr "Construya aplicaciones de internet empresariales rápidamente."
 
-#: admin/wizards/List.py:84
+#: admin/wizards/List.py:88
 msgid "Platforms"
 msgstr "Plataformas"
 
-#: admin/wizards/List.py:85
+#: admin/wizards/List.py:89
 msgid "Web Development Platforms"
 msgstr "Plataformas de desarrollo web"
 
-#: admin/wizards/List.py:88
+#: admin/wizards/List.py:92
 msgid "Django"
 msgstr "Django"
 
-#: admin/wizards/List.py:89
+#: admin/wizards/List.py:93
 msgid "The Web framework for perfectionists (with deadlines)."
 msgstr "El framework web para perfeccionistas (con plazos de entrega)."
 
-#: admin/wizards/List.py:92
+#: admin/wizards/List.py:96
 msgid "Ruby on Rails"
 msgstr "Ruby on Rails"
 
-#: admin/wizards/List.py:93
+#: admin/wizards/List.py:97
 msgid "Open-source web framework optimized for sustainable productivity."
 msgstr ""
 "Framework Open-Source de desarrollo web optimizado para la productividad "
 "sostenible."
 
-#: admin/wizards/List.py:96
+#: admin/wizards/List.py:100
 msgid "Zend"
 msgstr "Zend"
 
-#: admin/wizards/List.py:97
+#: admin/wizards/List.py:101
 msgid "Simple, straightforward, open-source software framework for PHP 5."
 msgstr "Sencillo y directo framework open-source para PHP5."
 
-#: admin/wizards/List.py:100
+#: admin/wizards/List.py:104
 msgid "Symfony"
 msgstr "Symfony"
 
-#: admin/wizards/List.py:101
+#: admin/wizards/List.py:105
 msgid "Full-stack framework, a library of cohesive classes written in PHP."
 msgstr "Framework completo y librería de clases escritos en PHP."
 
-#: admin/wizards/List.py:105
+#: admin/wizards/List.py:109
 msgid "Fast, self-healing, developer-friendly WSGI server."
 msgstr ""
 "Servidor WSGI veloz, autoregenerativo y amigable hacia el desarrollador."
 
-#: admin/wizards/List.py:111
+#: admin/wizards/List.py:115
 msgid "Languages"
 msgstr "Lenguajes"
 
-#: admin/wizards/List.py:112
+#: admin/wizards/List.py:116
 msgid "Development Languages and Platforms"
 msgstr "Plataformas y lenguajes de desarrollo"
 
-#: admin/wizards/List.py:116
+#: admin/wizards/List.py:120
 msgid "Widely-used general-purpose scripting language."
 msgstr "Lenguaje de propósito general ampliamente utilizado."
 
-#: admin/wizards/List.py:119
+#: admin/wizards/List.py:123
 msgid ".NET with Mono"
 msgstr ".NET con Mono"
 
-#: admin/wizards/List.py:120
+#: admin/wizards/List.py:124
 msgid "Cross-platform, open-source .NET development framework."
 msgstr "Framework de desarrollo .NET multiplataforma y open source."
 
-#: admin/wizards/List.py:126
+#: admin/wizards/List.py:130
 msgid "Web Applications"
 msgstr "Aplicaciones Web"
 
-#: admin/wizards/List.py:127
+#: admin/wizards/List.py:131
 msgid "General Purpose Applications"
 msgstr "Aplicaciones de propósito general"
 
-#: admin/wizards/List.py:130
+#: admin/wizards/List.py:134
 msgid "phpMyAdmin"
 msgstr "phpMyAdmin"
 
-#: admin/wizards/List.py:131
+#: admin/wizards/List.py:135
 msgid "PHP web application to handle the administration of MySQL."
 msgstr "Aplicación web PHP para administrar MySQL."
 
-#: admin/wizards/List.py:134
+#: admin/wizards/List.py:138
 msgid "GNU MailMan"
 msgstr "GNU MailMan"
 
-#: admin/wizards/List.py:135
+#: admin/wizards/List.py:139
 msgid ""
 "Free software for managing electronic mail discussion and e-newsletter lists."
 msgstr ""
 "Software libre para el manejo de listas de distribución y boletines "
 "electrónicos."
 
-#: admin/wizards/List.py:138
+#: admin/wizards/List.py:142
 msgid "Moodle"
 msgstr "Moodle"
 
-#: admin/wizards/List.py:139
+#: admin/wizards/List.py:143
 msgid "Course Management System / Virtual Learning Environment."
 msgstr "Sistema de gestión de cursos / Entorno de aprendizaje virtual."
 
-#: admin/wizards/List.py:142
+#: admin/wizards/List.py:146
 msgid "phpBB Forum"
 msgstr "Foro phpBB"
 
-#: admin/wizards/List.py:143
+#: admin/wizards/List.py:147
 msgid "The most widely used Open Source forum solution."
 msgstr "La solución más utilizada de foro Open Source."
 
-#: admin/wizards/List.py:146
+#: admin/wizards/List.py:150
 msgid "Sugar CRM"
 msgstr "Sugar CRM"
 
-#: admin/wizards/List.py:147
+#: admin/wizards/List.py:151
 msgid "Enable organizations to efficiently organize customer relationships."
 msgstr ""
 "Permite a las organizaciones llevar a cabo una eficiente admnistración de la "
 "relación con los clientes."
 
-#: admin/wizards/List.py:150
+#: admin/wizards/List.py:154
 msgid "rTorrent"
 msgstr "rTorrent"
 
-#: admin/wizards/List.py:151
+#: admin/wizards/List.py:155
 msgid ""
 "BitTorrent client written in C++, based on the libTorrent libraries for Unix."
 msgstr ""
 "Cliente BitTorrent escrito en C++ y basado en las librerías libTorrent para "
 "Unix."
 
-#: admin/wizards/List.py:157
+#: admin/wizards/List.py:161
 msgid "Tasks"
 msgstr "Tareas"
 
-#: admin/wizards/List.py:158
+#: admin/wizards/List.py:162
 msgid "Common Maintenance Tasks"
 msgstr "Tareas comunes de mantenimiento"
 
-#: admin/wizards/List.py:161
+#: admin/wizards/List.py:165
 msgid "Virtual Server Redirection"
 msgstr "Redirección del servidor virtual"
 
-#: admin/wizards/List.py:162
+#: admin/wizards/List.py:166
 msgid ""
 "Create a new virtual server redirecting every request to another domain host."
 msgstr ""
 "Crear un nuevo servidor virtual para redirigir las peticiones hacia otro "
 "dominio."
 
-#: admin/wizards/List.py:165
+#: admin/wizards/List.py:169
 msgid "Anti Hot-Linking"
 msgstr "Anti Hot-Linking"
 
-#: admin/wizards/List.py:166
+#: admin/wizards/List.py:170
 msgid "Stop other domains from hot-linking your media files."
 msgstr "Impedir que otros dominios utilicen nuestros ficheros de medios."
 
-#: admin/wizards/List.py:169
+#: admin/wizards/List.py:173
 msgid "Directory-listing Icons"
 msgstr "Iconos para listado de directorios."
 
-#: admin/wizards/List.py:170
+#: admin/wizards/List.py:174
 msgid ""
 "Add the /icons and /cherokee_themes directories used for directory listing."
 msgstr ""
 "Añadir los directorios /icons y /cherokee_themes utilizados para listar "
 "directorios."
 
-#: admin/wizards/List.py:173
+#: admin/wizards/List.py:177
 msgid "Static-file support"
 msgstr "Soporte de ficheros estáticos."
 
-#: admin/wizards/List.py:174
+#: admin/wizards/List.py:178
 msgid "Add a rule to optimally serve the most common static files."
 msgstr ""
 "Añadir regla para servir los ficheros estáticos más comunes de manera óptima."
 
-#: admin/wizards/List.py:177
+#: admin/wizards/List.py:181
 msgid "Media file streaming"
 msgstr "Flujo de Audio/Video"
 
-#: admin/wizards/List.py:178
+#: admin/wizards/List.py:182
 msgid ""
 "Add a rule to stream media files through an intelligent streaming handler."
 msgstr ""
@@ -4109,8 +4143,9 @@ msgstr "Puerto en el que corre el servicio en dicho host. (Ejemplo: 8080)"
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
 #: admin/wizards/drupal.py:44 admin/wizards/glassfish.py:45
 #: admin/wizards/joomla.py:48 admin/wizards/liferay.py:45
-#: admin/wizards/mailman.py:46 admin/wizards/moinmoin.py:45
-#: admin/wizards/mono.py:46 admin/wizards/phpbb.py:47
+#: admin/wizards/mailman.py:46 admin/wizards/mediawiki.py:43
+#: admin/wizards/moinmoin.py:45 admin/wizards/mono.py:46
+#: admin/wizards/php.py:40 admin/wizards/phpbb.py:47
 #: admin/wizards/phpmyadmin.py:48 admin/wizards/sugar.py:47
 #: admin/wizards/symfony.py:51 admin/wizards/trac.py:43
 #: admin/wizards/uwsgi.py:47 admin/wizards/wordpress.py:44
@@ -4122,8 +4157,9 @@ msgstr "Nombre del servidor virtual que será creado."
 #: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
 #: admin/wizards/drupal.py:43 admin/wizards/glassfish.py:46
 #: admin/wizards/joomla.py:47 admin/wizards/liferay.py:46
-#: admin/wizards/mailman.py:45 admin/wizards/moinmoin.py:46
-#: admin/wizards/mono.py:45 admin/wizards/phpbb.py:46
+#: admin/wizards/mailman.py:45 admin/wizards/mediawiki.py:42
+#: admin/wizards/moinmoin.py:46 admin/wizards/mono.py:45
+#: admin/wizards/php.py:39 admin/wizards/phpbb.py:46
 #: admin/wizards/phpmyadmin.py:47 admin/wizards/sugar.py:46
 #: admin/wizards/symfony.py:50 admin/wizards/trac.py:42
 #: admin/wizards/uwsgi.py:46 admin/wizards/wordpress.py:43
@@ -4141,11 +4177,11 @@ msgstr "Directorio web para acceder al proyecto."
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
 #: admin/wizards/drupal.py:46 admin/wizards/glassfish.py:49
 #: admin/wizards/joomla.py:51 admin/wizards/liferay.py:49
-#: admin/wizards/moinmoin.py:49 admin/wizards/mono.py:50
-#: admin/wizards/phpbb.py:50 admin/wizards/phpmyadmin.py:51
-#: admin/wizards/sugar.py:50 admin/wizards/symfony.py:54
-#: admin/wizards/uwsgi.py:51 admin/wizards/wordpress.py:46
-#: admin/wizards/zend.py:50
+#: admin/wizards/mediawiki.py:45 admin/wizards/moinmoin.py:49
+#: admin/wizards/mono.py:50 admin/wizards/phpbb.py:50
+#: admin/wizards/phpmyadmin.py:51 admin/wizards/sugar.py:50
+#: admin/wizards/symfony.py:54 admin/wizards/uwsgi.py:51
+#: admin/wizards/wordpress.py:46 admin/wizards/zend.py:50
 msgid "Public Web Directory"
 msgstr "Directorio web"
 
@@ -4153,8 +4189,9 @@ msgstr "Directorio web"
 #: admin/wizards/concrete5.py:220 admin/wizards/django.py:189
 #: admin/wizards/drupal.py:251 admin/wizards/glassfish.py:170
 #: admin/wizards/joomla.py:223 admin/wizards/liferay.py:169
-#: admin/wizards/mailman.py:145 admin/wizards/moinmoin.py:214
-#: admin/wizards/mono.py:198 admin/wizards/phpbb.py:178
+#: admin/wizards/mailman.py:145 admin/wizards/mediawiki.py:222
+#: admin/wizards/moinmoin.py:214 admin/wizards/mono.py:198
+#: admin/wizards/php.py:208 admin/wizards/phpbb.py:178
 #: admin/wizards/rails.py:314 admin/wizards/sugar.py:208
 #: admin/wizards/symfony.py:218 admin/wizards/trac.py:131
 #: admin/wizards/uwsgi.py:241 admin/wizards/wordpress.py:209
@@ -4228,10 +4265,11 @@ msgstr "Es el CMS hecho para marketing pero construido para geeks."
 
 #: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
 #: admin/wizards/drupal.py:41 admin/wizards/joomla.py:43
-#: admin/wizards/phpbb.py:42 admin/wizards/phpmyadmin.py:43
-#: admin/wizards/rtorrent.py:36 admin/wizards/sugar.py:42
-#: admin/wizards/symfony.py:45 admin/wizards/trac.py:41
-#: admin/wizards/wordpress.py:41 admin/wizards/zend.py:42
+#: admin/wizards/mediawiki.py:40 admin/wizards/phpbb.py:42
+#: admin/wizards/phpmyadmin.py:43 admin/wizards/rtorrent.py:36
+#: admin/wizards/sugar.py:42 admin/wizards/symfony.py:45
+#: admin/wizards/trac.py:41 admin/wizards/wordpress.py:41
+#: admin/wizards/zend.py:42
 msgid "Application Source Code"
 msgstr "Código fuente de la aplicación"
 
@@ -4255,7 +4293,8 @@ msgstr "Directorio web donde Concrete5 será publicado (Ejemplo: /concrete5)"
 
 #: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
 #: admin/wizards/drupal.py:252 admin/wizards/joomla.py:224
-#: admin/wizards/mailman.py:146 admin/wizards/mono.py:200
+#: admin/wizards/mailman.py:146 admin/wizards/mediawiki.py:223
+#: admin/wizards/mono.py:200 admin/wizards/php.py:209
 #: admin/wizards/phpbb.py:179 admin/wizards/rails.py:315
 #: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
 #: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
@@ -4318,7 +4357,7 @@ msgstr "El Document Root no existe."
 msgid "Django Local Directory"
 msgstr "Directorio local de Django"
 
-#: admin/wizards/django.py:271
+#: admin/wizards/django.py:272
 msgid "Directory doesn't look like a Django based project."
 msgstr "El directorio no parece un proyecto basado en Django."
 
@@ -4593,17 +4632,85 @@ msgstr "Directorio de Datos de Mailman"
 msgid "Mail Archive directory"
 msgstr "Directorio del almacen de correo"
 
-#: admin/wizards/mailman.py:205
+#: admin/wizards/mailman.py:206
 msgid "It doesn't look like a Mailman data directory."
 msgstr "No parece ser un directorio de datos de Mailman."
 
-#: admin/wizards/mailman.py:212
+#: admin/wizards/mailman.py:213
 msgid "It doesn't look like a Mailman CGI directory."
 msgstr "No parece ser un directorio de CGIs de Mailman."
 
-#: admin/wizards/mailman.py:221
+#: admin/wizards/mailman.py:222
 msgid "It doesn't look like a Mailman archive directory."
 msgstr "No parece ser un directorio de 'archive' de Mailman."
+
+#: admin/wizards/mediawiki.py:37
+msgid "Welcome to the Mediawiki wizard"
+msgstr "Bienvenido al asistente de MediaWiki"
+
+#: admin/wizards/mediawiki.py:38
+msgid ""
+"<a target=\"_blank\" href=\"http://mediawiki.org/\">MediaWiki</a> is a free "
+"software wiki  package written in PHP, originally for use on Wikipedia."
+msgstr ""
+"<a target=\"_blank\" href=\"http://www.phpmyadmin.net/\">MediaWiki</a> es "
+"una wiki libre escrita en PHP. Originalmente se escribió para su uso en "
+"Wikipedia."
+
+#: admin/wizards/mediawiki.py:39
+msgid ""
+"It is now used by several other projects of the non-profit Wikimedia "
+"Foundation and by many other wikis."
+msgstr ""
+"Actualmente se utiliza en varios proyectos de la Fundación Wikimedia y en "
+"otras muchas wikis."
+
+#: admin/wizards/mediawiki.py:41
+msgid ""
+"Local directory where the MediaWiki source code is located. Example: /usr/"
+"share/mediawiki."
+msgstr "Ruta local a las fuentes de MediaWiki. (Ejemplo: /usr/share/mediawiki)"
+
+#: admin/wizards/mediawiki.py:44
+msgid ""
+"Web directory where you want MediaWiki to be accessible. (Example: /wiki)"
+msgstr "Directorio web por el cual MediaWiki será accedido. (Ejemplo: /wiki)"
+
+#: admin/wizards/mediawiki.py:46
+msgid "Does not look like a MediaWiki source directory."
+msgstr "No parece ser un directorio de fuentes de MediaWiki."
+
+#: admin/wizards/mediawiki.py:48
+msgid "Internal web directory used by MediaWiki. It usually is /w."
+msgstr "Directorio web interno utilizado por MediaWiki. Normalmente es /w."
+
+#: admin/wizards/mediawiki.py:50
+msgid "Changes to LocalSettings.php"
+msgstr "Cambios de LocalSettings.php"
+
+#: admin/wizards/mediawiki.py:51
+msgid ""
+"Once you complete the installation of MediaWiki, LocalSettings.php will be "
+"created."
+msgstr ""
+"Tras completar la instalación de MediaWiki, el archivo LocalSettings.php "
+"será creado."
+
+#: admin/wizards/mediawiki.py:52
+msgid ""
+"For this wizard to be effective you will have to add the following changes "
+"to that file."
+msgstr ""
+"Para que este asistente sea de utilidad será necesario aplicar los siguiente "
+"cambios a ese archivo."
+
+#: admin/wizards/mediawiki.py:207
+msgid "Internal Web Directory"
+msgstr "Directorio web interno"
+
+#: admin/wizards/mediawiki.py:240
+msgid "MediaWiki Local Directory"
+msgstr "Directorio local de MediaWiki"
 
 #: admin/wizards/moinmoin.py:37
 msgid "Welcome to the MoinMoin Wizard"
@@ -4705,11 +4812,11 @@ msgstr "Directorio del proyecto"
 msgid "Mono Server Binary"
 msgstr "Binario del servidor Mono"
 
-#: admin/wizards/php.py:32
+#: admin/wizards/php.py:33
 msgid "Welcome to the PHP Wizard"
 msgstr "Bienvenido al asistente de PHP"
 
-#: admin/wizards/php.py:33
+#: admin/wizards/php.py:34
 msgid ""
 "<a target=\"_blank\" href=\"http://php.net/\">PHP</a> is a widely-used "
 "general-purpose scripting language that is especially suited for Web "
@@ -4719,19 +4826,23 @@ msgstr ""
 "propósito general ampliamente utilizado. Es especialmente apto para el "
 "desarrollo web y puede ser empotrado en HTML."
 
-#: admin/wizards/php.py:70
+#: admin/wizards/php.py:37
+msgid "Local directory that will contain the web documents. Example: /var/www."
+msgstr "Directorio local que contendrá los documentos web. Ejemplo: /var/www"
+
+#: admin/wizards/php.py:80
 msgid "Invalid Virtual Server reference."
 msgstr "Referencia de servidor virtual inválida."
 
-#: admin/wizards/php.py:82
+#: admin/wizards/php.py:92
 msgid "Could not find a suitable PHP interpreter."
 msgstr "No se pudo encontrar un intérprete PHP adecuado."
 
-#: admin/wizards/php.py:91
+#: admin/wizards/php.py:101
 msgid "Could not determine PHP-fpm settings."
 msgstr "No se pudo determinar la configuración de PHP-fpm."
 
-#: admin/wizards/php.py:95
+#: admin/wizards/php.py:105
 msgid "Could not determine correct interpreter settings."
 msgstr "No se pudo determinar la configuración del intérprete."
 
@@ -4901,28 +5012,24 @@ msgid "It does not look like a Ruby on Rails based project directory."
 msgstr "El directorio no parece contener un proyecto basado en Ruby on Rails."
 
 #: admin/wizards/rails.py:65
-#, fuzzy
 msgid "Production"
-msgstr "Sólo el producto"
+msgstr "Producción"
 
 #: admin/wizards/rails.py:66
-#, fuzzy
 msgid "Test"
-msgstr "Digest"
+msgstr "Prueba"
 
 #: admin/wizards/rails.py:67
-#, fuzzy
 msgid "Development"
-msgstr "Servidor de desarrollo"
+msgstr "Desarrollo"
 
 #: admin/wizards/rails.py:68
 msgid "Empty"
 msgstr "Vacío"
 
 #: admin/wizards/rails.py:72
-#, fuzzy
 msgid "HTTP proxy"
-msgstr "Error HTTP"
+msgstr "Proxy HTTP"
 
 #: admin/wizards/rails.py:367
 msgid "RAILS_ENV environment"
@@ -5041,11 +5148,11 @@ msgstr "Bienvenido al asistente de streaming"
 msgid "This Wizard Adds a rule to stream media files."
 msgstr "Este asistente añade una regla para streaming multimedia."
 
-#: admin/wizards/streaming.py:115
+#: admin/wizards/streaming.py:116
 msgid "The media streaming plug-in is not installed."
 msgstr "El plug-in de streaming no está instalado."
 
-#: admin/wizards/streaming.py:123
+#: admin/wizards/streaming.py:124
 msgid "Media streaming is already configured."
 msgstr "El flujo de audio/video ya está configurado."
 
@@ -5527,13 +5634,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
 #~ msgid "Mime types configuration"
 #~ msgstr "Configuración de los tipos MIME"
-
-#~ msgid ""
-#~ "<b>The configuration is not found</b>.<br />You can create a new "
-#~ "configuration file and proceed to customize the web server."
-#~ msgstr ""
-#~ "<b>La configuración no se encuentra</b>.<br />Puede crear un nuevo "
-#~ "fichero de configuración y empezar a personalizar el servidor web."
 
 #~ msgid ""
 #~ "\n"
