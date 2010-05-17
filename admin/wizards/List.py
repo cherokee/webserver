@@ -42,6 +42,10 @@ LIST = [
              'title': N_('Joomla'),
              'descr': N_('Build Web sites and powerful online applications'),
              'type':  TYPE_VSERVER | TYPE_RULE},
+            {'name':  'mediawiki',
+             'title': N_('MediaWiki Wiki'),
+             'descr': N_('Free software wiki package written in PHP, originally for use on Wikipedia.'),
+             'type':  TYPE_VSERVER | TYPE_RULE},
             {'name':  'moinmoin',
              'title': N_('MoinMoin Wiki'),
              'descr': N_('Advanced, easy to use and extensible WikiEngine with a large community of users.'),
@@ -53,7 +57,7 @@ LIST = [
             {'name':  'concrete5',
              'title': N_('Concrete 5'),
              'descr': N_('The CMS made for Marketing, but built for Geeks.'),
-             'type':  TYPE_VSERVER | TYPE_RULE}
+             'type':  TYPE_VSERVER | TYPE_RULE},
             ]
      },
 

@@ -16,6 +16,7 @@ icons.png \
 joomla.png \
 liferay.png \
 mailman.png \
+mediawiki.png \
 moinmoin.png \
 mono.png \
 moodle.png \

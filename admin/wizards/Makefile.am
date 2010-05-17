@@ -15,6 +15,7 @@ icons.py \
 joomla.py \
 liferay.py \
 mailman.py \
+mediawiki.py \
 moinmoin.py \
 mono.py \
 phpbb.py \
