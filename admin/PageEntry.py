@@ -26,6 +26,7 @@ import CTK
 import Page
 import Cherokee
 import validations
+import Handler
 
 import re
 
@@ -221,6 +222,11 @@ class HandlerWidget (CTK.Container):
 
         table = CTK.PropsTable()
         table.Add (_('Handler'), modul.selector_widget, _(NOTE_HANDLER))
+
+        # Exceptionally, a custom document root option must be
+        # available when the handler is not yet set
+        if CTK.cfg.get_val (pre) == None:
+            table.Add (_('Document Root'), CTK.TextCfg('vserver!%s!rule!%s!document_root'%(vsrv, rule), True), _(Handler.NOTE_DOCUMENT_ROOT))
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Handler')))
         self += CTK.Indenter (table)
