@@ -29,8 +29,8 @@ from consts import *
 URL_APPLY = '/plugin/post_report/apply'
 HELPS     = [('modules_handlers_post_report', _("POST Report"))]
 
-NOTE_LANGUAGES   = "Target language for which the information will be encoded. (Default: JSON)"
-WARNING_NO_TRACK = 'The <a href="/general">Upload tracking mechanism</a> must be enabled for this handler to work.'
+NOTE_LANGUAGES   = N_("Target language for which the information will be encoded. (Default: JSON)")
+WARNING_NO_TRACK = N_('The <a href="/general">Upload tracking mechanism</a> must be enabled for this handler to work.')
 
 class Plugin_post_report (Handler.PluginHandler):
     def __init__ (self, key, **kwargs):
@@ -40,7 +40,7 @@ class Plugin_post_report (Handler.PluginHandler):
 
         # Ensure POST track is enabled
         if not CTK.cfg.get_val('server!post_track'):
-            self += CTK.Notice ('warning', CTK.RawHTML (WARNING_NO_TRACK))
+            self += CTK.Notice ('warning', CTK.RawHTML (_(WARNING_NO_TRACK)))
 
         # Properties
         table = CTK.PropsTable()

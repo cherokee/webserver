@@ -63,7 +63,7 @@ METHODS = [
     ('merge',            'MERGE')
 ]
 
-NOTE_METHOD  = _("The HTTP method that should match this rule.")
+NOTE_METHOD  = N_("The HTTP method that should match this rule.")
 
 def apply():
     # POST info

@@ -46,7 +46,7 @@ class AddressesTable (CTK.Container):
         # Warning message
         if not entries:
             notice = CTK.Notice('warning')
-            notice += CTK.RawHTML (WARNING_EMPTY)
+            notice += CTK.RawHTML (_(WARNING_EMPTY))
             self += notice
 
         # List
