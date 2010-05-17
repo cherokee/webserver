@@ -234,10 +234,15 @@ def AddUsualStaticFiles (rule_pre):
 
 class CookBookBox (CTK.Box):
     """References the local documentation"""
-    def __init__ (self, help_file, text = DEFAULT_RECIPE_TEXT):
+    def __init__ (self, help, text = DEFAULT_RECIPE_TEXT):
         CTK.Box.__init__(self, {'class': 'wizard-cookbook'})
 
-        self += CTK.Link ('/help/%s.html'%(help_file), CTK.RawHTML(_(text)))
+        if help.startswith('http://'):
+            link = help
+        else:
+            link = '/help/%s.html'%(help_file)
+
+        self += CTK.Link (link, CTK.RawHTML(_(text)))
 
 
 #

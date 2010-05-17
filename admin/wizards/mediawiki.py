@@ -257,7 +257,8 @@ class Welcome:
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
-        #box += Wizard.CookBookBox ('cookbook_mediawiki')
+        box += Wizard.CookBookBox ('http://www.mediawiki.org/wiki/Manual:Short_URL/wiki/Page_title_--_Cherokee_rewrite--root_access',
+                                   _('This wizard is based on the Cherokee wiki-article at MediaWiki.org.'))
         cont += box
 
         # Send the VServer num if it's a Rule
