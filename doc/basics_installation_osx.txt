@@ -34,24 +34,13 @@ make -j4
 . Install the programs and any data files:
 +
 -----------------------------------------
-sudo packages/osx/build.py
+sudo make install
 -----------------------------------------
 
 . Start link:bundle_cherokee-admin.html[cherokee-admin]
 +
 Alternatively, you can follow the link:#autostart[Autostart]
 instructions to load the web server at boot time.
-
-[[advanced]]
-Advanced parameters
-~~~~~~~~~~~~~~~~~~~
-
-If you want to learn more about 'configure' you can run `./configure
---help`. The list of parameter is extensive, so you might want to take
-a look at it, particularly if you are a developer. Some of the most
-used parameters are listed on the
-link_basics_installation_unix.html[Unix instructions].
-
 
 [[autostart]]
 Autostart
@@ -68,3 +57,23 @@ sudo cp org.cherokee.webserver.plist /System/Library/LaunchDaemons/
 sudo launchctl load -w /System/Library/LaunchDaemons/org.cherokee.webserver.plist
 -----------------------------------------
 
+[[advanced]]
+Advanced parameters
+~~~~~~~~~~~~~~~~~~~
+
+If you want to learn more about 'configure' you can run `./configure
+--help`. The list of parameter is extensive, so you might want to take
+a look at it, particularly if you are a developer. Some of the most
+used parameters are listed on the
+link_basics_installation_unix.html[Unix instructions].
+
+[[dmg]]
+Building a DMG
+~~~~~~~~~~~~~~
+
+If you want to create a DMG package you can use the provided build
+script. It is available under the `packages/osx` directory.
+
+-----------------------------------------
+packages/osx/build.py
+-----------------------------------------
