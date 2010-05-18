@@ -153,8 +153,8 @@ class CategoryList_Widget (CTK.Box):
         if tmp:
             for w in tmp[0]['list']:
                 wlist.Add ([CTK.Box({'class': 'logo'},  Icon(w['name'])),
-                            CTK.Box({'class': 'title'}, CTK.RawHTML(w['title'])),
-                            CTK.Box({'class': 'descr'}, CTK.RawHTML(w['descr']))],
+                            CTK.Box({'class': 'title'}, CTK.RawHTML(_(w['title']))),
+                            CTK.Box({'class': 'descr'}, CTK.RawHTML(_(w['descr'])))],
                            {'wizard': w['name']})
 
         hidden = CTK.Hidden ('wizard')

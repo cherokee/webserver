@@ -340,7 +340,7 @@ class LogginWidgetContent (CTK.Container):
 
         pre        = "vserver!%s" %(vsrv_num)
         url_apply  = "%s/%s/log" %(URL_APPLY, vsrv_num)
-        writers    = [('', N_('Disabled'))] + trans (LOGGER_WRITERS)
+        writers    = [('', _('Disabled'))] + trans (LOGGER_WRITERS)
 
         # Error writer
         table = CTK.PropsTable()
