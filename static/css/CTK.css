@@ -558,7 +558,7 @@ tr.panel-selected td div.row_content .sel-actions {
   border-top: 1px solid #cde;
 }
 
-#source-usage { 
+#source-usage {
  table-layout: fixed;
  border-collapse: collapse;
  width: 670px;
@@ -703,10 +703,10 @@ tr.panel-selected td div.row_content .sel-actions {
 #mimetable thead tr { position: relative; display: block; }
 
 #mimetable tbody {
-	display: block;
-	height: 480px;
-	overflow: auto;
-	width: 100%;
+  display: block;
+  height: 480px;
+  overflow: auto;
+  width: 100%;
 }
 
 #mimetable tbody td { width: 480px; }
