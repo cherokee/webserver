@@ -305,6 +305,7 @@ class Render:
         # Content
         left  = CTK.Box({'class': 'panel'})
         left += CTK.RawHTML('<h2>%s</h2>'%(title))
+
         # Virtual Server List
         refresh = CTK.Refreshable ({'id': 'rules_panel'})
         refresh.register (lambda: self.PanelList(refresh, right, vsrv_num).Render())
@@ -315,14 +316,15 @@ class Render:
         left += buttons
 
         left += CTK.Box({'class': 'filterbox'}, CTK.TextField({'class':'filter', 'optional_string': _('Rule Filtering'), 'optional': True}))
-
         right = CTK.Box({'class': 'rules_content'})
-
         left += refresh
 
         # Refresh the list whenever the content change
         right.bind ('changed',        refresh.JS_to_refresh());
         right.bind ('submit_success', refresh.JS_to_refresh());
+
+        # Refresh the list when it's been reordered
+        left.bind ('reordered', refresh.JS_to_refresh())
 
         # Build the page
         headers = Tab_HEADER + Submit_HEADER + TextField_HEADER + SortableList_HEADER

@@ -275,25 +275,28 @@ class Render:
     def __call__ (self):
         title = _('Virtual Servers')
 
-        # Content
+        # Virtual Server List
         left  = CTK.Box({'class': 'panel'})
         left += CTK.RawHTML('<h2>%s</h2>'%(title))
 
-        # Virtual Server List
-        refresh = CTK.Refreshable ({'id': 'vservers_panel'})
-        refresh.register (lambda: self.PanelList(refresh, right).Render())
+        # Content
+        refresh_r = CTK.Refreshable ({'id': 'vservers_panel'})
+        refresh_r.register (lambda: self.PanelList(refresh_r, right).Render())
 
         # Refresh on 'New' or 'Clone'
         buttons = self.PanelButtons()
-        buttons.bind ('submit_success', refresh.JS_to_refresh (on_success=JS_ACTIVATE_FIRST))
+        buttons.bind ('submit_success', refresh_r.JS_to_refresh (on_success=JS_ACTIVATE_FIRST))
         left += buttons
 
         left += CTK.Box({'class': 'filterbox'}, CTK.TextField({'class':'filter', 'optional_string': _('Virtual Server Filtering'), 'optional': True}))
         right = CTK.Box({'class': 'vserver_content'})
-        left += refresh
+        left += refresh_r
 
         # Refresh the list whenever the content change
-        right.bind ('submit_success', refresh.JS_to_refresh());
+        right.bind ('submit_success', refresh_r.JS_to_refresh());
+
+        # Refresh the list when it's been reordered
+        left.bind ('reordered', refresh_r.JS_to_refresh())
 
         # Figure out content panel headers. This step is very tricky.
         # We have no idea what HTML headers the content HTML will

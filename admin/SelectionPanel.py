@@ -73,7 +73,6 @@ class SelectionPanel (CTK.Box):
             self.table[-1][1].props['class'] = 'nodragHandle'
             self.table[-1].props['class'] = 'nodrag nodrop'
 
-
     def Render (self):
         render = CTK.Box.Render (self)
 
