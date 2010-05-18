@@ -1,8 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee 0.99.25
-* Joomla   1.5.14
+* Cherokee 1.0.1b
+* Joomla   1.5.16 stable
+* Joomla   1.6.0  beta1
 ///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Joomla
@@ -130,10 +131,13 @@ Cherokee-Admin Joomla Wizard.
 Configuring Cherokee manually
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The wizard handles both series of Joomla, 1.5.x and 1.6.x. This manual
+process was documented for 1.5.x and does not work for 1.6.x.
+
 You will need PHP support correctly configured in Cherokee, and PHP
-with the MySQL module installed. For this you will need to have
-php-cgi installed and to run the PHP wizard, so in case it is not
-configured yet you an follow the appropriate recipe about
+with the MySQL module installed. For this you will require php-cgi
+installed on your system, and to run the PHP wizard, so in case it is
+not configured yet you an follow the appropriate recipe about
 link:cookbook_php.html[setting up PHP]. You will also need an FTP
 server if the Joomla files are owned by a user other than the one
 running the web server.
@@ -146,12 +150,6 @@ dedicating a virtual server entirely to Joomla, so either create a new
 one or adjust `default` accordingly. Of course, you can also set it up
 under a directory in an existing virtual server, but we will take the
 first approach for clarity and simplicity.
-
-If you follow this recipe you will end up with the same configuration
-as the one provided by the wizard when you install a new virtual
-server with it. The approach taken by the wizard when installing under
-a web directory is different, so you will either have to use the
-wizard or take into account the changes in web paths.
 
 For our purposes, we will make the modifications in our `default`
 virtual server. This will only affect the URLs we'll be accessing to

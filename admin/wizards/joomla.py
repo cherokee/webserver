@@ -27,6 +27,8 @@
 # 2009/10/xx: Joomla 1.5.14 / Cherokee 0.99.25
 # 2010/04/16: Joomla 1.5.15 / Cherokee 0.99.41
 # 2010/05/04: Joomla 1.5.15 / Cherokee 0.99.49b
+# 2010/05/18: Joomla 1.5.16 / Cherokee 1.0.1b
+# 2010/05/18: Joomla 1.6.0b1/ Cherokee 1.0.1b
 #
 
 import os
@@ -54,14 +56,21 @@ PREFIX          = 'tmp!wizard!joomla'
 URL_APPLY       = r'/wizard/vserver/joomla/apply'
 
 CONFIG_DIR = """
-%(pre_rule_plus3)s!handler = custom_error
-%(pre_rule_plus3)s!handler!error = 403
-%(pre_rule_plus3)s!match = and
-%(pre_rule_plus3)s!match!left = request
-%(pre_rule_plus3)s!match!left!final = 1
-%(pre_rule_plus3)s!match!left!request = %(ban_regex)s
-%(pre_rule_plus3)s!match!right = directory
-%(pre_rule_plus3)s!match!right!directory = %(web_dir)s
+%(pre_rule_plus4)s!handler = custom_error
+%(pre_rule_plus4)s!handler!error = 403
+%(pre_rule_plus4)s!match = and
+%(pre_rule_plus4)s!match!left = request
+%(pre_rule_plus4)s!match!left!final = 1
+%(pre_rule_plus4)s!match!left!request = %(ban_regex)s
+%(pre_rule_plus4)s!match!right = directory
+%(pre_rule_plus4)s!match!right!directory = %(web_dir)s
+
+%(pre_rule_plus3)s!handler = redir
+%(pre_rule_plus3)s!handler!rewrite!1!show = 0
+%(pre_rule_plus3)s!handler!rewrite!1!substring = %(web_dir)s/administrator/index.php
+%(pre_rule_plus3)s!match = fullpath
+%(pre_rule_plus3)s!match!fullpath!1 = %(web_dir)s/administrator
+%(pre_rule_plus3)s!match!fullpath!2 = %(web_dir)s/administrator/
 
 %(pre_rule_plus2)s!match = request
 %(pre_rule_plus2)s!match!request = ^%(web_dir)s/$
@@ -98,26 +107,47 @@ CONFIG_VSERVER = """
 %(pre_vsrv)s!nick = %(host)s
 %(pre_vsrv)s!document_root = %(local_src_dir)s
 %(pre_vsrv)s!directory_index = index.php,index.html
-%(pre_vsrv)s!error_handler = error_redir
-%(pre_vsrv)s!error_handler!403!show = 0
-%(pre_vsrv)s!error_handler!403!url = /index.php
-%(pre_vsrv)s!error_handler!404!show = 0
-%(pre_vsrv)s!error_handler!404!url = /index.php
 
-%(pre_rule_plus1)s!handler = custom_error
-%(pre_rule_plus1)s!handler!error = 403
+%(pre_rule_plus4)s!handler = custom_error
+%(pre_rule_plus4)s!handler!error = 403
+%(pre_rule_plus4)s!match = request
+%(pre_rule_plus4)s!match!final = 1
+%(pre_rule_plus4)s!match!request = %(ban_regex)s
+
+%(pre_rule_plus3)s!handler = redir
+%(pre_rule_plus3)s!handler!rewrite!1!show = 0
+%(pre_rule_plus3)s!handler!rewrite!1!substring = /index.php
+%(pre_rule_plus3)s!match = fullpath
+%(pre_rule_plus3)s!match!fullpath!1 = /
+
+%(pre_rule_plus2)s!handler = redir
+%(pre_rule_plus2)s!handler!rewrite!1!show = 0
+%(pre_rule_plus2)s!handler!rewrite!1!substring = /administrator/index.php
+%(pre_rule_plus2)s!match = fullpath
+%(pre_rule_plus2)s!match!fullpath!1 = /administrator
+%(pre_rule_plus2)s!match!fullpath!2 = /administrator/
+
+%(pre_rule_plus1)s!handler = redir
+%(pre_rule_plus1)s!handler!rewrite!1!show = 1
+%(pre_rule_plus1)s!handler!rewrite!1!substring = /$1
 %(pre_rule_plus1)s!match = request
-%(pre_rule_plus1)s!match!final = 1
-%(pre_rule_plus1)s!match!request = %(ban_regex)s
+%(pre_rule_plus1)s!match!request = /index.php/(.+)
 
 # IMPORTANT: The PHP rule comes here
 
-%(pre_rule_minus1)s!handler = common
-%(pre_rule_minus1)s!handler!iocache = 0
-%(pre_rule_minus1)s!match = default
-%(pre_rule_minus1)s!match!final = 1
-"""
+%(pre_rule_minus1)s!!handler = file
+%(pre_rule_minus1)s!handler!iocache = 1
+%(pre_rule_minus1)s!match = exists
+%(pre_rule_minus1)s!match!iocache = 1
+%(pre_rule_minus1)s!match!match_any = 1
+%(pre_rule_minus1)s!match!match_only_files = 1
 
+%(pre_rule_minus2)s!handler = redir
+%(pre_rule_minus2)s!handler!rewrite!2!regex = /(.+)
+%(pre_rule_minus2)s!handler!rewrite!2!show = 0
+%(pre_rule_minus2)s!handler!rewrite!2!substring = /index.php?/$1
+%(pre_rule_minus2)s!match = default
+"""
 
 BAN_REGEX = 'mosConfig_[a-zA-Z_]{1,21}(=|\=)|base64_encode.*\(.*\)|(\<|<).*script.*(\>|>)|GLOBALS(=|\[|\%[0-9A-Z]{0,2})|_REQUEST(=|\[|\%[0-9A-Z]{0,2})'
 
