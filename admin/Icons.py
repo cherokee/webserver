@@ -357,9 +357,10 @@ class AdditionDialogButton (CTK.Box):
         self += dialog
 
 
-class Icons_Widget (CTK.Container):
+class Icons_Widget (CTK.Box):
     def __init__ (self, **kwargs):
-        CTK.Container.__init__ (self, **kwargs)
+        CTK.Box.__init__ (self, {'class':'icons'}, **kwargs)
+
         self += SpecialWidget_Instancer()
         self += FilesWidget_Instancer()
         self += ExtensionsWidget_Instancer()

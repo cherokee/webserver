@@ -121,7 +121,7 @@ def commit():
 
 class NetworkWidget (CTK.Box):
     def __init__ (self):
-        CTK.Box.__init__ (self)
+        CTK.Box.__init__ (self, {'class':'network'})
 
         table = CTK.PropsTable()
         table.Add (_('IPv6'),             CTK.CheckCfgText('server!ipv6', True, _('Enabled')), _(NOTE_IPV6))
@@ -158,7 +158,7 @@ class PortsTable (CTK.Submitter):
     def __init__ (self, refreshable, **kwargs):
         CTK.Submitter.__init__ (self, URL_APPLY)
 
-        table   = CTK.Table()
+        table   = CTK.Table({'class':'ports'})
         binds   = CTK.cfg.keys('server!bind')
         has_tls = CTK.cfg.get_val('server!tls') != None
 
@@ -233,9 +233,9 @@ class PortsWidget (CTK.Container):
         self += dialog
 
 
-class PermsWidget (CTK.Container):
+class PermsWidget (CTK.Box):
     def __init__ (self):
-        CTK.Container.__init__ (self)
+        CTK.Box.__init__ (self, {'class':'permissions'})
 
         table = CTK.PropsAuto (URL_APPLY)
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('Execution Permissions')))
@@ -256,7 +256,7 @@ class Render:
         tabs.Add (_('Ports to listen'), ports)
         tabs.Add (_('Permissions'),     PermsWidget())
         tabs.Add (_('Icons'),           Icons.Icons_Widget())
-        tabs.Add (_('Mime types'),       Mime.MIME_Widget())
+        tabs.Add (_('Mime types'),      Mime.MIME_Widget())
 
         page = Page.Base (_("General"), body_id='general', helps=HELPS)
         page += CTK.RawHTML("<h1>%s</h1>" %(_('General Settings')))
