@@ -7,14 +7,15 @@
 #  Alvaro Lopez Ortega <alvaro@alobbs.com>
 #  Taher Shihadeh <taher@unixwars.com>
 #
+# Taher Shihadeh <taher@unixwars.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '1.0.0'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-17 16:12+0200\n"
-"PO-Revision-Date: 2010-05-17 16:30+0200\n"
+"POT-Creation-Date: 2010-05-18 16:18+0200\n"
+"PO-Revision-Date: 2010-05-18 16:20+0200\n"
 "Last-Translator: Taher Shihadeh <taher@unixwars.com>\n"
-"Language-Team: <>\n"
+"Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -107,6 +108,86 @@ msgstr "Elegir"
 msgid "Application Server"
 msgstr "Servidor de aplicación"
 
+#: admin/CTK/CTK/Config.py:237
+#, python-format
+msgid "ERROR: Couldn't unpack '%s'"
+msgstr "ERROR: No pudo procesar '%s'"
+
+#: admin/CTK/CTK/Config.py:370
+msgid "Could not copy configuration to "
+msgstr "No se pudo copiar la configuración a"
+
+#: admin/CTK/CTK/Dialog.py:213 admin/PageException.py:89
+#: admin/PageException.py:93 admin/PageIndex.py:254 admin/PageSource.py:409
+msgid "Close"
+msgstr "Cerrar"
+
+#: admin/CTK/CTK/Druid.py:152 admin/CTK/CTK/Druid.py:159
+#: admin/CTK/CTK/Druid.py:167 admin/CTK/CTK/Druid.py:175
+#: admin/CTK/CTK/Druid.py:181 admin/Icons.py:348 admin/Mime.py:101
+#: admin/PageGeneral.py:217 admin/PageIndex.py:348 admin/PageRule.py:213
+#: admin/PageRule.py:261 admin/PageRule.py:287 admin/PageSource.py:240
+#: admin/PageSource.py:422 admin/PageSource.py:436 admin/PageSource.py:450
+#: admin/PageVServers.py:203 admin/PageVServers.py:238
+#: admin/PageVServers.py:264 admin/plugins/redir.py:115
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: admin/CTK/CTK/Druid.py:153 admin/CTK/CTK/Druid.py:160
+msgid "Next"
+msgstr "Siguiente"
+
+#: admin/CTK/CTK/Druid.py:161 admin/CTK/CTK/Druid.py:169
+msgid "Prev"
+msgstr "Anterior"
+
+#: admin/CTK/CTK/Druid.py:168 admin/CTK/CTK/Druid.py:176
+#: admin/PageNewConfig.py:140
+msgid "Create"
+msgstr "Crear"
+
+#: admin/CTK/CTK/Image.py:48 admin/CTK/CTK/Image.py:49
+msgid "Delete"
+msgstr "Borrar"
+
+#: admin/CTK/CTK/Image.py:60 admin/util.py:35
+msgid "Active"
+msgstr "Activo"
+
+#: admin/CTK/CTK/Image.py:65 admin/util.py:35
+msgid "Inactive"
+msgstr "Inactivo"
+
+#: admin/CTK/CTK/Image.py:70
+msgid "Loading"
+msgstr "Cargando"
+
+#: admin/CTK/CTK/Image.py:75 admin/CgiBase.py:68 admin/CgiBase.py:70
+#: admin/CgiBase.py:123 admin/CgiBase.py:124 admin/CgiBase.py:125
+#: admin/CgiBase.py:126 admin/Graph.py:124 admin/PageAdvanced.py:144
+#: admin/PageEntry.py:105 admin/PageEntry.py:114 admin/PageGeneral.py:127
+#: admin/PageSource.py:305 admin/PageVServer.py:120
+#: admin/plugins/dirlist.py:56 admin/plugins/exists.py:72
+#: admin/plugins/exists.py:77 admin/plugins/exists.py:78
+#: admin/plugins/exists.py:79 admin/plugins/exists.py:109
+#: admin/plugins/exists.py:115 admin/plugins/exists.py:116
+#: admin/plugins/exists.py:117 admin/plugins/file.py:40
+#: admin/plugins/ldap.py:53 admin/plugins/streaming.py:43
+msgid "Enabled"
+msgstr "Activo"
+
+#: admin/CTK/CTK/Submitter.py:73 admin/CTK/CTK/TextField.py:66
+msgid "Optional"
+msgstr "Opcional"
+
+#: admin/CTK/CTK/ToggleButton.py:116
+msgid "Disable"
+msgstr "Desactivar"
+
+#: admin/CTK/CTK/ToggleButton.py:117
+msgid "Enable"
+msgstr "Activar"
+
 #: admin/CgiBase.py:32
 msgid "Path to an executable that will be run with the CGI as parameter."
 msgstr "Ruta a un ejecutable que se ejecutará con el CGI como parámetro."
@@ -160,16 +241,6 @@ msgstr ""
 #: admin/CgiBase.py:68
 msgid "Read X-Real-IP"
 msgstr "Aceptar X-Real-IP"
-
-#: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
-#: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
-#: admin/PageVServer.py:120 admin/plugins/dirlist.py:56
-#: admin/plugins/exists.py:109 admin/plugins/exists.py:115
-#: admin/plugins/exists.py:116 admin/plugins/exists.py:117
-#: admin/plugins/file.py:40 admin/plugins/ldap.py:53
-#: admin/plugins/streaming.py:43
-msgid "Enabled"
-msgstr "Activo"
 
 #: admin/CgiBase.py:70 admin/PageVServer.py:410
 msgid "Don't check origin"
@@ -228,8 +299,8 @@ msgstr "Lista de autenticación"
 msgid "Custom Environment Variables"
 msgstr "Variables de entorno personalizadas"
 
-#: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:239
+#: admin/CgiBase.py:150 admin/Icons.py:342 admin/Mime.py:100
+#: admin/PageGeneral.py:216 admin/PageRule.py:260 admin/PageSource.py:239
 #: admin/PageSource.py:435 admin/PageVServers.py:237
 #: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
 #: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
@@ -323,7 +394,7 @@ msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 msgid "Document Root"
 msgstr "Raíz de documentos"
 
-#: admin/Icons.py:118 admin/Icons.py:312 admin/Mime.py:86 admin/Mime.py:120
+#: admin/Icons.py:118 admin/Icons.py:313 admin/Mime.py:86 admin/Mime.py:120
 #: admin/consts.py:182 admin/plugins/extensions.py:59
 msgid "Extensions"
 msgstr "Extensiones"
@@ -348,17 +419,17 @@ msgstr "Concordancia de ficheros"
 msgid "Add New File"
 msgstr "Añadir nuevo archivo"
 
-#: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:38
+#: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:38
 #: admin/consts.py:122
 msgid "Default"
 msgstr "Por defecto"
 
-#: admin/Icons.py:183 admin/Icons.py:314 admin/consts.py:181
+#: admin/Icons.py:183 admin/Icons.py:315 admin/consts.py:181
 #: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "Directorio"
 
-#: admin/Icons.py:184 admin/Icons.py:315
+#: admin/Icons.py:184 admin/Icons.py:316
 msgid "Go to Parent"
 msgstr "Ir al padre"
 
@@ -366,26 +437,13 @@ msgstr "Ir al padre"
 msgid "Modify"
 msgstr "Modificar"
 
-#: admin/Icons.py:198 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
+#: admin/Icons.py:199 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
 msgid "Special Files"
 msgstr "Ficheros especiales"
 
-#: admin/Icons.py:311 admin/consts.py:99
+#: admin/Icons.py:312 admin/consts.py:99
 msgid "File"
 msgstr "Fichero"
-
-#: admin/Icons.py:345
-msgid "Add new"
-msgstr "Añadir nuevo"
-
-#: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:213 admin/PageRule.py:261
-#: admin/PageRule.py:287 admin/PageSource.py:240 admin/PageSource.py:422
-#: admin/PageSource.py:436 admin/PageSource.py:450 admin/PageVServers.py:203
-#: admin/PageVServers.py:238 admin/PageVServers.py:264
-#: admin/plugins/redir.py:115
-msgid "Cancel"
-msgstr "Cancelar"
 
 #: admin/Mime.py:37
 msgid "New MIME type to be added."
@@ -428,6 +486,10 @@ msgstr "Tipos MIME"
 msgid "MaxAge (<em>secs</em>)"
 msgstr "MaxAge (<em>segs</em>)"
 
+#: admin/Mime.py:141 admin/PageGeneral.py:259
+msgid "Mime types"
+msgstr "Tipos MIME"
+
 #: admin/Page.py:32
 msgid "The Configuration has been Saved"
 msgstr "La configuración ha sido guardada"
@@ -469,7 +531,7 @@ msgstr "Inicio"
 msgid "Status"
 msgstr "Estado"
 
-#: admin/Page.py:117 admin/PageGeneral.py:234 admin/PageStatus.py:101
+#: admin/Page.py:117 admin/PageGeneral.py:261 admin/PageStatus.py:101
 msgid "General"
 msgstr "General"
 
@@ -750,7 +812,7 @@ msgid "DH parameters: 4096 bits"
 msgstr "Parámetros DH: 4096 bits"
 
 #: admin/PageAdvanced.py:175 admin/PageAdvanced.py:185
-#: admin/PageGeneral.py:145 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
 msgid "TLS"
 msgstr "TLS"
 
@@ -1043,11 +1105,6 @@ msgstr "Error Interno"
 msgid "Thank you!"
 msgstr "Muchas gracias"
 
-#: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:409
-msgid "Close"
-msgstr "Cerrar"
-
 #: admin/PageException.py:91
 msgid "Could not report the issue"
 msgstr "No se pudo reportar el problema"
@@ -1065,42 +1122,46 @@ msgid "Defines a port that the server will listen to"
 msgstr "Define un puerto en el que escuchar el servidor"
 
 #: admin/PageGeneral.py:39
+msgid "Optionally defines an interface to listen to"
+msgstr "Define opcionalmente qué interfaz escuchar"
+
+#: admin/PageGeneral.py:40
 msgid ""
 "Set to enable the IPv6 support. The OS must support IPv6 for this to work."
 msgstr ""
 "Activa el soporte de IPv6. El S.O. debe soportar IPv6 para que funcione."
 
-#: admin/PageGeneral.py:40
+#: admin/PageGeneral.py:41
 msgid "This option allows to choose how the server identifies itself."
 msgstr "Esta opción permite seleccionar cómo se identificará el servidor."
 
-#: admin/PageGeneral.py:41
+#: admin/PageGeneral.py:42
 msgid "Time interval until the server closes inactive connections."
 msgstr ""
 "Intervalo de tiempo hasta que el servidor cierre las conexiones inactivas."
 
-#: admin/PageGeneral.py:42
+#: admin/PageGeneral.py:43
 msgid "Which, if any, should be the TLS/SSL backend."
 msgstr "Si lo hay, cuál debe ser el motor de TLS/SSL."
 
-#: admin/PageGeneral.py:43
+#: admin/PageGeneral.py:44
 msgid "How the usage graphics should be generated."
 msgstr "Cómo se deben generar las gráficas de uso del servidor."
 
-#: admin/PageGeneral.py:44
+#: admin/PageGeneral.py:45
 msgid "How to track uploads/posts so its progress can be reported to the user."
 msgstr ""
 "Cómo monitorizar los upload/post para informar al usuario de su progreso."
 
-#: admin/PageGeneral.py:45
+#: admin/PageGeneral.py:46
 msgid "Changes the effective user. User names and IDs are accepted."
 msgstr "Cambiar el usuario. Se aceptan nombres e IDs de usuario."
 
-#: admin/PageGeneral.py:46
+#: admin/PageGeneral.py:47
 msgid "Changes the effective group. Group names and IDs are accepted."
 msgstr "Cambiar el grupo. Se aceptan nombres e IDs de grupos."
 
-#: admin/PageGeneral.py:47
+#: admin/PageGeneral.py:48
 msgid ""
 "Jail the server inside the directory. Don't use it as the only security "
 "measure."
@@ -1108,7 +1169,7 @@ msgstr ""
 "Enjaular el servidor en el directorio. No usar esto como única medida de "
 "seguridad."
 
-#: admin/PageGeneral.py:48
+#: admin/PageGeneral.py:49
 msgid ""
 "No ports to listen have been defined. By default the server will listen to "
 "TCP port 80 on all the network interfaces."
@@ -1116,118 +1177,122 @@ msgstr ""
 "No se han definido puertos de escucha. Por defecto el servidor escucha en el "
 "puerto 80 TCP de todas las interfaces de red."
 
-#: admin/PageGeneral.py:51
+#: admin/PageGeneral.py:52
 msgid "General Configuration"
 msgstr "Configuración general"
 
-#: admin/PageGeneral.py:52
+#: admin/PageGeneral.py:53
 msgid "Configuration Quickstart"
 msgstr "Configuración rápida."
 
-#: admin/PageGeneral.py:101
+#: admin/PageGeneral.py:98
+msgid "Port/Interface combination already in use."
+msgstr "La combinación puerto/interfaz ya está en uso"
+
+#: admin/PageGeneral.py:127
 msgid "IPv6"
 msgstr "IPv6"
 
-#: admin/PageGeneral.py:102
+#: admin/PageGeneral.py:128
 msgid "SSL/TLS back-end"
 msgstr "Motor SSL/TLS"
 
-#: admin/PageGeneral.py:105
+#: admin/PageGeneral.py:131
 msgid "Support"
 msgstr "Soporte"
 
-#: admin/PageGeneral.py:109
+#: admin/PageGeneral.py:135
 msgid "Timeout (<i>secs</i>)"
 msgstr "Tiempo de espera (<i>segs.</i>)"
 
-#: admin/PageGeneral.py:110
+#: admin/PageGeneral.py:136
 msgid "Server Tokens"
 msgstr "Identificación del servidor"
 
-#: admin/PageGeneral.py:113
+#: admin/PageGeneral.py:139
 msgid "Network Behavior"
 msgstr "Comportamiento de red"
 
-#: admin/PageGeneral.py:118
+#: admin/PageGeneral.py:144
 msgid "Graphs Type"
 msgstr "Tipo de gráfica"
 
-#: admin/PageGeneral.py:119
+#: admin/PageGeneral.py:145
 msgid "Information Collector"
 msgstr "Colector de actividad"
 
-#: admin/PageGeneral.py:125 admin/PageGeneral.py:126
+#: admin/PageGeneral.py:151 admin/PageGeneral.py:152
 msgid "Upload Tracking"
 msgstr "Seguimiento de Upload"
 
-#: admin/PageGeneral.py:145 admin/PageGeneral.py:183 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:171 admin/PageGeneral.py:209 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
 #: admin/plugins/mysql.py:74
 msgid "Port"
 msgstr "Puerto"
 
-#: admin/PageGeneral.py:145 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
 msgid "Bind to"
 msgstr "Escuchar en"
 
-#: admin/PageGeneral.py:158
+#: admin/PageGeneral.py:184
 msgid "TLS/SSL port"
 msgstr "Puerto TLS/SSL"
 
-#: admin/PageGeneral.py:160
+#: admin/PageGeneral.py:186
 msgid "TLS/SSL support disabled"
 msgstr "Soporte TLS/SSL inactivo"
 
-#: admin/PageGeneral.py:188
+#: admin/PageGeneral.py:210
+msgid "Interface"
+msgstr "Interfaz"
+
+#: admin/PageGeneral.py:215
 msgid "New port"
 msgstr "Nuevo puerto"
 
-#: admin/PageGeneral.py:197
+#: admin/PageGeneral.py:224
 msgid "Add new port"
 msgstr "Añadir nuevo puerto"
 
-#: admin/PageGeneral.py:203
+#: admin/PageGeneral.py:230
 msgid "Listening to Ports"
 msgstr "Escuchando en los puertos"
 
-#: admin/PageGeneral.py:214
+#: admin/PageGeneral.py:241
 msgid "Execution Permissions"
 msgstr "Permisos de ejecución"
 
-#: admin/PageGeneral.py:215 admin/plugins/authlist.py:63
+#: admin/PageGeneral.py:242 admin/plugins/authlist.py:63
 #: admin/plugins/authlist.py:97
 msgid "User"
 msgstr "Usuario"
 
-#: admin/PageGeneral.py:216
+#: admin/PageGeneral.py:243
 msgid "Group"
 msgstr "Grupo"
 
-#: admin/PageGeneral.py:217
+#: admin/PageGeneral.py:244
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:228 admin/PageVServer.py:308
+#: admin/PageGeneral.py:255 admin/PageVServer.py:308
 msgid "Network"
 msgstr "Red"
 
-#: admin/PageGeneral.py:229
+#: admin/PageGeneral.py:256
 msgid "Ports to listen"
 msgstr "Puertos"
 
-#: admin/PageGeneral.py:230
+#: admin/PageGeneral.py:257
 msgid "Permissions"
 msgstr "Permisos"
 
-#: admin/PageGeneral.py:231
+#: admin/PageGeneral.py:258
 msgid "Icons"
 msgstr "Iconos"
 
-#: admin/PageGeneral.py:232
-msgid "Mime types"
-msgstr "Tipos MIME"
-
-#: admin/PageGeneral.py:235
+#: admin/PageGeneral.py:262
 msgid "General Settings"
 msgstr "Ajustes generales"
 
@@ -1485,10 +1550,6 @@ msgid ""
 msgstr ""
 "<b>La configuración no se encuentra</b>.<br />Puede crear un nuevo fichero "
 "de configuración y empezar a personalizar el servidor web."
-
-#: admin/PageNewConfig.py:140
-msgid "Create"
-msgstr "Crear"
 
 #: admin/PageNewConfig.py:147
 msgid "Create a new configuration file"
@@ -2304,11 +2365,11 @@ msgstr "Seleccionar"
 msgid "Check the cookbook for more details."
 msgstr "Compruebe el recetario para obtener más detalles."
 
-#: admin/Wizard.py:196
+#: admin/Wizard.py:197
 msgid "Use the same logging configuration as one of the other virtual servers."
 msgstr "Utilizar el mismo ajuste de registro que otro servidor virtual."
 
-#: admin/Wizard.py:200
+#: admin/Wizard.py:201
 msgid "Do not configure"
 msgstr "No configurar"
 
@@ -2831,7 +2892,7 @@ msgstr ""
 #: admin/plugins/directory.py:31 admin/wizards/alfresco.py:156
 #: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
 #: admin/wizards/django.py:173 admin/wizards/drupal.py:234
-#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:206
+#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:236
 #: admin/wizards/liferay.py:153 admin/wizards/mediawiki.py:206
 #: admin/wizards/moinmoin.py:198 admin/wizards/mono.py:182
 #: admin/wizards/phpbb.py:161 admin/wizards/phpmyadmin.py:115
@@ -3672,14 +3733,6 @@ msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)s"
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Parámetros incorrectos: PORT CONFIG_FILE"
 
-#: admin/util.py:35
-msgid "Inactive"
-msgstr "Inactivo"
-
-#: admin/util.py:35
-msgid "Active"
-msgstr "Activo"
-
 #: admin/util.py:38
 msgid "On"
 msgstr "On"
@@ -4142,7 +4195,7 @@ msgstr "Puerto en el que corre el servicio en dicho host. (Ejemplo: 8080)"
 #: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
 #: admin/wizards/drupal.py:44 admin/wizards/glassfish.py:45
-#: admin/wizards/joomla.py:48 admin/wizards/liferay.py:45
+#: admin/wizards/joomla.py:50 admin/wizards/liferay.py:45
 #: admin/wizards/mailman.py:46 admin/wizards/mediawiki.py:43
 #: admin/wizards/moinmoin.py:45 admin/wizards/mono.py:46
 #: admin/wizards/php.py:40 admin/wizards/phpbb.py:47
@@ -4156,7 +4209,7 @@ msgstr "Nombre del servidor virtual que será creado."
 #: admin/wizards/alfresco.py:46 admin/wizards/coldfusion.py:45
 #: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
 #: admin/wizards/drupal.py:43 admin/wizards/glassfish.py:46
-#: admin/wizards/joomla.py:47 admin/wizards/liferay.py:46
+#: admin/wizards/joomla.py:49 admin/wizards/liferay.py:46
 #: admin/wizards/mailman.py:45 admin/wizards/mediawiki.py:42
 #: admin/wizards/moinmoin.py:46 admin/wizards/mono.py:45
 #: admin/wizards/php.py:39 admin/wizards/phpbb.py:46
@@ -4176,7 +4229,7 @@ msgstr "Directorio web para acceder al proyecto."
 #: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
 #: admin/wizards/drupal.py:46 admin/wizards/glassfish.py:49
-#: admin/wizards/joomla.py:51 admin/wizards/liferay.py:49
+#: admin/wizards/joomla.py:53 admin/wizards/liferay.py:49
 #: admin/wizards/mediawiki.py:45 admin/wizards/moinmoin.py:49
 #: admin/wizards/mono.py:50 admin/wizards/phpbb.py:50
 #: admin/wizards/phpmyadmin.py:51 admin/wizards/sugar.py:50
@@ -4188,7 +4241,7 @@ msgstr "Directorio web"
 #: admin/wizards/alfresco.py:172 admin/wizards/coldfusion.py:178
 #: admin/wizards/concrete5.py:220 admin/wizards/django.py:189
 #: admin/wizards/drupal.py:251 admin/wizards/glassfish.py:170
-#: admin/wizards/joomla.py:223 admin/wizards/liferay.py:169
+#: admin/wizards/joomla.py:253 admin/wizards/liferay.py:169
 #: admin/wizards/mailman.py:145 admin/wizards/mediawiki.py:222
 #: admin/wizards/moinmoin.py:214 admin/wizards/mono.py:198
 #: admin/wizards/php.py:208 admin/wizards/phpbb.py:178
@@ -4264,7 +4317,7 @@ msgid "It is the CMS made for Marketing, but built for Geeks."
 msgstr "Es el CMS hecho para marketing pero construido para geeks."
 
 #: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
-#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:43
+#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:45
 #: admin/wizards/mediawiki.py:40 admin/wizards/phpbb.py:42
 #: admin/wizards/phpmyadmin.py:43 admin/wizards/rtorrent.py:36
 #: admin/wizards/sugar.py:42 admin/wizards/symfony.py:45
@@ -4292,7 +4345,7 @@ msgid ""
 msgstr "Directorio web donde Concrete5 será publicado (Ejemplo: /concrete5)"
 
 #: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
-#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:224
+#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:254
 #: admin/wizards/mailman.py:146 admin/wizards/mediawiki.py:223
 #: admin/wizards/mono.py:200 admin/wizards/php.py:209
 #: admin/wizards/phpbb.py:179 admin/wizards/rails.py:315
@@ -4516,11 +4569,11 @@ msgstr ""
 "Los directorios /icons y /cherokee_themes ya han sido configurados. No queda "
 "nada por hacer. "
 
-#: admin/wizards/joomla.py:39
+#: admin/wizards/joomla.py:41
 msgid "Welcome to the Joomla wizard"
 msgstr "Bienvenido al asistente de Joomla"
 
-#: admin/wizards/joomla.py:40
+#: admin/wizards/joomla.py:42
 msgid ""
 "<a target=\"_blank\" href=\"http://www.joomla.org/\">Joomla</a> is an award-"
 "winning content management system (CMS), which enables you to build Web "
@@ -4530,7 +4583,7 @@ msgstr ""
 "galardonado sistema gestor de contenidos (CMS) que permite construir sitios "
 "web y potentes aplicaciones online."
 
-#: admin/wizards/joomla.py:41
+#: admin/wizards/joomla.py:43
 msgid ""
 "Best of all, Joomla is an open source solution that is freely available to "
 "everyone."
@@ -4538,22 +4591,22 @@ msgstr ""
 "Lo mejor de todo es que Joomla es una solución open source disponible "
 "libremente para todos."
 
-#: admin/wizards/joomla.py:44
+#: admin/wizards/joomla.py:46
 msgid ""
 "Local directory where the Joomla source code is located. Example: /usr/share/"
 "joomla."
 msgstr "Ruta local a las fuentes de Joomla. (Ejemplo: /usr/share/joomla)"
 
-#: admin/wizards/joomla.py:45
+#: admin/wizards/joomla.py:47
 msgid "Does not look like a Joomla source directory."
 msgstr "No parece ser un directorio con las fuentes de Joomla."
 
-#: admin/wizards/joomla.py:50
+#: admin/wizards/joomla.py:52
 msgid ""
 "Web directory where you want Joomla to be accessible. (Example: /joomla)"
 msgstr "Directorio web por el cual Joomla será accedido. (Ejemplo: /joomla)"
 
-#: admin/wizards/joomla.py:242
+#: admin/wizards/joomla.py:272
 msgid "Joomla Local Directory"
 msgstr "Directorio de las fuentes"
 
@@ -4711,6 +4764,11 @@ msgstr "Directorio web interno"
 #: admin/wizards/mediawiki.py:240
 msgid "MediaWiki Local Directory"
 msgstr "Directorio local de MediaWiki"
+
+#: admin/wizards/mediawiki.py:261
+msgid "This wizard is based on the Cherokee wiki-article at MediaWiki.org."
+msgstr ""
+"Este asistente está basado en el artículo de MediaWiki.org sobre Cherokee."
 
 #: admin/wizards/moinmoin.py:37
 msgid "Welcome to the MoinMoin Wizard"
@@ -5440,6 +5498,12 @@ msgstr "No parece ser un directorio de fuentes de Zend."
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
 msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
+#~ msgid "title"
+#~ msgstr "título"
+
+#~ msgid "Add new"
+#~ msgstr "Añadir nuevo"
+
 #~ msgid "Report developers"
 #~ msgstr "Informar a los desarrolladores"
 
@@ -5458,12 +5522,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "or"
 #~ msgstr "Puerto"
 
-#~ msgid "exists"
-#~ msgstr "Existe fichero"
-
-#~ msgid "title"
-#~ msgstr "título"
-
 #~ msgid "%s Support"
 #~ msgstr "Soporte"
 
@@ -5478,9 +5536,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
 #~ msgid "Submit"
 #~ msgstr "Enviar"
-
-#~ msgid "Delete"
-#~ msgstr "Borrar"
 
 #~ msgid "Realm can not be empty"
 #~ msgstr "Realm no puede estar vacío"
@@ -5562,9 +5617,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
 #~ msgid "Apply"
 #~ msgstr "Aplicar"
-
-#~ msgid "Optional"
-#~ msgstr "Opcional"
 
 #~ msgid "Commit all the changes permanently"
 #~ msgstr "Guardar todos los cambios permanentemente"
@@ -5682,9 +5734,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
 #~ msgid "/~user directories"
 #~ msgstr "Directorios de /~usuario"
-
-#~ msgid "Disable"
-#~ msgstr "Desactivar"
 
 #~ msgid "Directory name"
 #~ msgstr "Nombre del directorio"
@@ -5871,12 +5920,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 #~ msgid "New directory for an uWSGI project."
 #~ msgstr "El directorio no parece un proyecto basado en Django."
 
-#~ msgid "ERROR: Couldn't unpack '%s'"
-#~ msgstr "ERROR: No pudo procesar '%s'"
-
-#~ msgid "Could not copy configuration to "
-#~ msgstr "No se pudo copiar la configuración a"
-
 #~ msgid "Static content"
 #~ msgstr "Contenido estático"
 
@@ -5909,9 +5952,6 @@ msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
 
 #~ msgid "WWW Root"
 #~ msgstr "Raíz WWW"
-
-#~ msgid "Optionally specifies a database to connect to."
-#~ msgstr "Base de datos (opcional)"
 
 #~ msgid "TCP balancer"
 #~ msgstr "Balanceador TCP"
