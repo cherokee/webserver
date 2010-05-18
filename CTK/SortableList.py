@@ -51,6 +51,9 @@ $("#%(id)s").tableDnD({
                        $(not_modified).addClass('saved');
                     }
                   }
+
+                  /* Signal */
+                  $("#%(id)s").trigger ('reordered');
                 }
               });
    },
@@ -64,6 +67,7 @@ jQuery.tableDnD.serialize_plain = function() {
      var result = "";
      var table  = jQuery.tableDnD.currentTable;
 
+     /* Serialize */
      for (var i=0; i<table.rows.length; i++) {
          if (result.length > 0) {
               result += ",";
