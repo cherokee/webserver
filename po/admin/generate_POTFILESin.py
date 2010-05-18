@@ -13,7 +13,8 @@ import os, re
 # Configuration
 DIRS = [('admin', ['.+\.py$']),
         (os.path.join('admin','wizards'), ['.+\.py$']),
-        (os.path.join('admin','plugins'), ['.+\.py$']),]
+        (os.path.join('admin','plugins'), ['.+\.py$']),
+        (os.path.join('admin','CTK','CTK'), ['.+\.py$']),]
 
 def main():
     # Figure a few paths
