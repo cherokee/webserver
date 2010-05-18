@@ -135,7 +135,7 @@ class ExtensionsTable (CTK.Container):
             self += CTK.Indenter (table)
 
         # Add New
-        button = AdditionDialogButton ('new_exts', 'Extensions', submit_label=_('Add New Extension'))
+        button = AdditionDialogButton ('new_exts', _('Add New Extension'), klass='extensions')
         button.bind ('submit_success', refreshable.JS_to_refresh())
         self += button
 
@@ -168,7 +168,7 @@ class FilesTable (CTK.Container):
             self += CTK.Indenter (table)
 
         # Add New
-        button = AdditionDialogButton ('new_file', 'File', submit_label=_('Add New File'))
+        button = AdditionDialogButton ('new_file', _('Add New File'), klass='file')
         button.bind ('submit_success', refreshable.JS_to_refresh())
         self += button
 
@@ -188,7 +188,8 @@ class SpecialTable (CTK.Container):
                      'title': desc,
                      'src'  : '/icons_local/%s'%(icon)}
             image = CTK.Image (props)
-            button = AdditionDialogButton (k, k, selected = icon, submit_label = _('Modify'))
+            modify = _('Modify')
+            button = AdditionDialogButton (k, "%(modify)s '%(desc)s'"%(locals()), selected = icon, submit_label = modify)
             button.bind ('submit_success', refreshable.JS_to_refresh())
             table += [image, CTK.RawHTML(desc), button]
 
@@ -336,13 +337,13 @@ class AddIcon (CTK.Container):
 
 
 class AdditionDialogButton (CTK.Box):
-    def __init__ (self, key, name, **kwargs):
-        CTK.Box.__init__ (self, {'class': '%s-button' %(name)})
+    def __init__ (self, key, title, **kwargs):
+        CTK.Box.__init__ (self, {'class': '%s-button' %(kwargs.get('klass', 'icon'))})
         submit_label = kwargs.get('submit_label', _('Add'))
         button_label = kwargs.get('button_label', submit_label)
 
         # Dialog
-        dialog = CTK.Dialog ({'title': '%s %s'%(_('Add new'), _(name)), 'width': 375})
+        dialog = CTK.Dialog ({'title': title, 'width': 375})
         dialog.AddButton (submit_label, dialog.JS_to_trigger('submit'))
         dialog.AddButton (_('Cancel'), "close")
         dialog += AddIcon(key, **kwargs)
