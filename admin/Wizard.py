@@ -240,7 +240,7 @@ class CookBookBox (CTK.Box):
         if help.startswith('http://'):
             link = help
         else:
-            link = '/help/%s.html'%(help_file)
+            link = '/help/%s.html'%(help)
 
         self += CTK.Link (link, CTK.RawHTML(_(text)))
 
