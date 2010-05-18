@@ -302,7 +302,7 @@ class Render_Source:
             table.Add (_('Spawning timeout'),    CTK.TextCfg ('source!%s!timeout'%(num),       True),  _(NOTE_TIMEOUT))
             table.Add (_('Execute as User'),     CTK.TextCfg ('source!%s!user'%(num),          True),  _(NOTE_USER))
             table.Add (_('Execute as Group'),    CTK.TextCfg ('source!%s!group'%(num),         True),  _(NOTE_GROUP))
-            table.Add (_('Inherit Environment'), CTK.CheckCfgText ('source!%s!env_inherited'%(num), True), _(NOTE_ENV_INHERIT))
+            table.Add (_('Inherit Environment'), CTK.CheckCfgText ('source!%s!env_inherited'%(num), True, _('Enabled')), _(NOTE_ENV_INHERIT))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table

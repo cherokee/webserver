@@ -102,7 +102,7 @@ class SecurityWidget (CTK.Container):
 
         # Logging
         table = CTK.PropsTable()
-        table.Add (_('Skip Logging'), CTK.CheckCfgText ('%s!no_log'%(pre), False), _(NOTE_NO_LOG))
+        table.Add (_('Skip Logging'), CTK.CheckCfgText ('%s!no_log'%(pre), False, _('Enabled')), _(NOTE_NO_LOG))
         submit = CTK.Submitter (apply)
         submit += table
 
@@ -111,7 +111,7 @@ class SecurityWidget (CTK.Container):
 
         # Access Restrictions
         table = CTK.PropsTable()
-        table.Add (_('Only https'), CTK.CheckCfgText ('%s!only_secure'%(pre), False), _(NOTE_HTTPS_ONLY))
+        table.Add (_('Only https'), CTK.CheckCfgText ('%s!only_secure'%(pre), False, _('Enabled')), _(NOTE_HTTPS_ONLY))
         table.Add (_('Allow From'), CTK.TextCfg ('%s!allow_from'%(pre), True), _(NOTE_ALLOW_FROM))
         submit = CTK.Submitter (apply)
         submit += table

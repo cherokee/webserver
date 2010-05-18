@@ -69,14 +69,14 @@ class Modify (CTK.Submitter):
 
         # Main table
         table = CTK.PropsTable()
-        table.Add (_('Match any file'), CTK.CheckCfgText('%s!match_any'%(key), False), _(NOTE_ANY))
+        table.Add (_('Match any file'), CTK.CheckCfgText('%s!match_any'%(key), False, _('Enabled')), _(NOTE_ANY))
 
         if not int (CTK.cfg.get_val('%s!match_any'%(key), '0')):
             table.Add (_('Files'),                 CTK.TextCfg ('%s!exists'%(key),           False), _(NOTE_EXISTS))
 
-        table.Add (_('Use I/O cache'),             CTK.CheckCfgText('%s!iocache'%(key),           True), _(NOTE_IOCACHE))
-        table.Add (_('Only match files'),          CTK.CheckCfgText('%s!match_only_files'%(key),  True), _(NOTE_ONLY_FILES))
-        table.Add (_('If dir, check index files'), CTK.CheckCfgText('%s!match_index_files'%(key), True), _(NOTE_INDEX_FILES))
+        table.Add (_('Use I/O cache'),             CTK.CheckCfgText('%s!iocache'%(key),           True, _('Enabled')), _(NOTE_IOCACHE))
+        table.Add (_('Only match files'),          CTK.CheckCfgText('%s!match_only_files'%(key),  True, _('Enabled')), _(NOTE_ONLY_FILES))
+        table.Add (_('If dir, check index files'), CTK.CheckCfgText('%s!match_index_files'%(key), True, _('Enabled')), _(NOTE_INDEX_FILES))
 
         # Submit
         self += table

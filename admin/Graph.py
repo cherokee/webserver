@@ -121,7 +121,7 @@ class GraphVServer_Instancer (CTK.Container):
 
         def build (self):
             table = CTK.PropsTable()
-            table.Add (_('Collect Statistics'),  CTK.CheckCfgText('vserver!%s!collector!enabled'%(self.graph['num']), self.collector), _(NOTE_COLLECTOR))
+            table.Add (_('Collect Statistics'),  CTK.CheckCfgText('vserver!%s!collector!enabled'%(self.graph['num']), self.collector, _('Enabled')), _(NOTE_COLLECTOR))
 
             submit  = CTK.Submitter (URL_APPLY)
             submit += table

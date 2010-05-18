@@ -124,7 +124,7 @@ class NetworkWidget (CTK.Box):
         CTK.Box.__init__ (self)
 
         table = CTK.PropsTable()
-        table.Add (_('IPv6'),             CTK.CheckCfgText('server!ipv6', True), _(NOTE_IPV6))
+        table.Add (_('IPv6'),             CTK.CheckCfgText('server!ipv6', True, _('Enabled')), _(NOTE_IPV6))
         table.Add (_('SSL/TLS back-end'), CTK.ComboCfg('server!tls', trans (Cherokee.support.filter_available(CRYPTORS))), _(NOTE_TLS))
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter(table)

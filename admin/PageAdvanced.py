@@ -141,7 +141,7 @@ class IOCacheWidget (CTK.Container):
         CTK.Container.__init__ (self)
 
         table = CTK.PropsAuto(URL_APPLY)
-        table.Add (_('Status'),        CTK.CheckCfgText('server!iocache', True), _(NOTE_IO_ENABLED))
+        table.Add (_('Status'),        CTK.CheckCfgText('server!iocache', True, _('Enabled')), _(NOTE_IO_ENABLED))
         table.Add (_('Max pages'),     CTK.TextCfg('server!iocache!max_size',      True), _(NOTE_IO_SIZE))
         table.Add (_('File Min Size'), CTK.TextCfg('server!iocache!min_file_size', True), _(NOTE_IO_MIN_SIZE))
         table.Add (_('File Max Size'), CTK.TextCfg('server!iocache!max_file_size', True), _(NOTE_IO_MAX_SIZE))

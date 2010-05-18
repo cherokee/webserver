@@ -138,7 +138,7 @@ class MIME_Table (CTK.Container):
         button = AddNew_Button()
         button.bind ('submit_success', refreshable.JS_to_refresh ())
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %('MIME Types'))
+        self += CTK.RawHTML ('<h2>%s</h2>' %_('Mime types'))
         self += submit
         self += button
 
