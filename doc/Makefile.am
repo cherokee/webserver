@@ -256,6 +256,7 @@ media/images/cookbook_https_accelerator_handler.png \
 media/images/cookbook_https_accelerator_sources.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
+media/images/screencast.png \
 media/images/tracelor.png \
 media/images/other_graphs_timeouts.png \
 media/images/other_graphs_conns.png \

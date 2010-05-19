@@ -9,6 +9,16 @@ bunch of servers running Rails. This is done by using an extremely
 efficient web server to manage the web part and leaving as many free
 resources as possible to Rails.
 
+There is a
+link:http://www.cherokee-project.com/screencasts.html#rails[screencast]
+available at the
+link:http://www.cherokee-project.com/[Cherokee-Project website] to
+demonstrate how easy it is to use the Rails wizard.
+
+image:media/images/screencast.png["Rails wizard",
+link="http://www.cherokee-project.com/screencasts.html#rails"]
+
+
 [[framework]]
 === Preparing the framework
 

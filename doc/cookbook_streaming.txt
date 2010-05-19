@@ -14,6 +14,15 @@ required. Cherokee uses it to extract information of the media files.
 Standard configuration
 ~~~~~~~~~~~~~~~~~~~~~~
 
+There is a
+link:http://www.cherokee-project.com/screencasts.html#streaming[screencast]
+available at the
+link:http://www.cherokee-project.com/[Cherokee-Project website] to
+demonstrate how easy it is to use the Streaming wizard.
+
+image:media/images/screencast.png["Streaming wizard",
+link="http://www.cherokee-project.com/screencasts.html#streaming"]
+
 To configure Cherokee to stream media files is trivial. The only thing
 you will have to do is to choose the virtual server on which you want
 to enable the streaming functionality, and then click on the `Add New`

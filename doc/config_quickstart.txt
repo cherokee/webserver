@@ -17,6 +17,14 @@ We will first show a quick overview of the available options, followed
 by a simple walkthrough. You can learn more about the options in their
 specific documentation entries.
 
+You can also take a quick look at the
+link:http://www.cherokee-project.com/screencasts.html#intro[introductory
+screencast].
+
+image:media/images/screencast.png["introductory screencast",
+link="http://www.cherokee-project.com/screencasts.html#intro"]
+
+
 [[overview]]
 Overview
 ~~~~~~~~

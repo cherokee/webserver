@@ -27,6 +27,16 @@ and wizard for that, so check it out. We can assure you it will be
 worth your time. The instructions on how to set up the Framework are
 the same, but the method in which Cherokee is configured varies.
 
+There is a
+link:http://www.cherokee-project.com/screencasts.html#django_flup[screencast]
+available at the
+link:http://www.cherokee-project.com/[Cherokee-Project website] to
+demonstrate how easy it is to use the Django wizard.
+
+image:media/images/screencast.png["Django wizard",
+link="http://www.cherokee-project.com/screencasts.html#django_flup"]
+
+
 === Preparing the framework
 
 On Debian based systems this will be enough:

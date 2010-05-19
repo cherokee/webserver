@@ -12,6 +12,15 @@ to set it up on Cherokee. It is a piece of cake.
 If PHP-fpm binaries are found, those will be prioritized over the
 regular binaries.
 
+There is also a
+link:http://www.cherokee-project.com/screencasts.html#php[screencast]
+available at the
+link:http://www.cherokee-project.com/[Cherokee-Project website] to
+demonstrate how easy it is to use the PHP wizard.
+
+image:media/images/screencast.png["PHP Wizard",
+link="http://www.cherokee-project.com/screencasts.html#php"]
+
 It requires a single operation to get PHP configured on a pre-existing
 Virtual Server: Choose the virtual server your want to configure, and
 click on the `Behavior` tab and trigger the `Rule panel` by clicking

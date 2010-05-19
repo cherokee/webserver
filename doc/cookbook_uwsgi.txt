@@ -17,6 +17,15 @@ aimed for professional python webapps deployment and development.
 Cherokee offers native support for it. The configuration is quite
 easy, and uses the link:modules_handlers_uwsgi.html[uWSGI] handler.
 
+There is a
+link:http://www.cherokee-project.com/screencasts.html#django_uwsgi[screencast]
+available at the
+link:http://www.cherokee-project.com/[Cherokee-Project website] to
+demonstrate how easy it is to use the uWSGI wizard.
+
+image:media/images/screencast.png["uWSGI wizard",
+link="http://www.cherokee-project.com/screencasts.html#django_uwsgi"]
+
 To run Cherokee with uWSGI three simple steps will suffice:
 
 . You will need to complete a regular

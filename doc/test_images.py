@@ -15,8 +15,8 @@ def get_img_refs():
     img_refs = {}
 
     for file in filter(lambda x: x.endswith('.txt'), os.listdir('.')):
-        for img_line in filter (lambda x: 'image::' in x, open (file, 'r').readlines()):
-            filename = img_line.strip()[7:]
+        for img_line in filter (lambda x: 'image:' in x, open (file, 'r').readlines()):
+            filename = img_line.replace('::',':').strip()[6:]
             fin = filename.rfind('[')
             if fin > 0:
                 filename = filename[:fin]

@@ -1,23 +1,32 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee 0.99.25
-* Wordpress 2.8.4
+* Cherokee 1.0.1
+* WordPress 2.8.4
 ///////////////////////////////////////////////////////////////////
 
-Cookbook: Setting up Wordpress
+Cookbook: Setting up WordPress
 ------------------------------
 
-Setting up link:http://wordpress.org/[Wordpress] with Cherokee is
-really easy. This recipe describes the Wordpress 2.6.x installation,
+Setting up link:http://wordpress.org/[WordPress] with Cherokee is
+really easy. This recipe describes the WordPress 2.8.x installation,
 which is the latest release at the time of writing.
 
-There are two ways of installing Wordpress: it can either be installed
+There is a
+link:http://www.cherokee-project.com/screencasts.html#wordpress[screencast]
+available at the
+link:http://www.cherokee-project.com/[Cherokee-Project website] to
+demonstrate how easy it is to use the WordPress wizard.
+
+image:media/images/screencast.png["WordPress wizard",
+link="http://www.cherokee-project.com/screencasts.html#wordpress"]
+
+There are two ways of installing WordPress: it can either be installed
 as a new virtual server or be installed inside a directory of some of
 the virtual servers that already exist.
 
 [[cherokee_vserver]]
-Setting up Wordpress as a new Virtual Server
+Setting up WordPress as a new Virtual Server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first step would be to go to the virtual server list page. Once in
@@ -26,11 +35,11 @@ list of available wizards.
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
-Now, you will have to select the `CMS` category, and run the Wordpress
-wizard.  At this stage the Wordpress wizard will ask you for some
+Now, you will have to select the `CMS` category, and run the WordPress
+wizard.  At this stage the WordPress wizard will ask you for some
 basic parameters about the installation. It will try to auto-fill as
 many entries of the form as possible.  For instance, if it finds
-Wordpress installed in a standard location it will use that path as
+WordPress installed in a standard location it will use that path as
 the default directory.
 
 The new virtual server will be created after this form is submitted.
@@ -39,11 +48,11 @@ cases. Most probably it will cover your needs, although you are free
 to modify it as you will.
 
 [[cherokee_dir]]
-Setting up Wordpress inside a Directory
+Setting up WordPress inside a Directory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wordpress can also be configured inside a directory. Let's suppose we
-want to set up Wordpress inside the `/blog` directory of one of our
+WordPress can also be configured inside a directory. Let's suppose we
+want to set up WordPress inside the `/blog` directory of one of our
 virtual servers.
 
 In this case, the first thing you will have to do is to enter the
@@ -54,19 +63,19 @@ click on the `Add` button at the top of the panel.
 image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 
 As in the previous case, this wizard will ask some very basic
-information, including the public web directory where Wordpress will
-be set up and the local Wordpress source directory.
+information, including the public web directory where WordPress will
+be set up and the local WordPress source directory.
 
 
 WARNING
 ^^^^^^^
-Beware of the long time it gets Wordpress to get through the
+Beware of the long time it gets WordPress to get through the
 installation. It has been known to exceed the timeout that Cherokee
 uses as default, and while this will still sometimes allow for a
 complete installation, it will most probably cause a failure while
 delivering the last page of the process. Since this is the page that
 provides the random password needed to access the admin page of
-Wordpress, you installation will be useless.
+WordPress, you installation will be useless.
 
 If you encounter this problem, please increase your server's `timeout`
 value, under the `Basic Behavior` paragraph of the `General` tab, and
@@ -75,7 +84,7 @@ start over.
 If you are going to attempt to make an installation as is, with no
 reconfiguration of Cherokee whatsoever, you can skip right to the
 section link:cookbook_wordpress.html#setting_up_wordpress[Setting up
-Wordpress].
+WordPress].
 
 WARNING
 ^^^^^^^
@@ -93,10 +102,10 @@ very unlikely scenario, but double check your MTA in case you receive
 this error.
 
 [[wordpress]]
-Setting up Wordpress
+Setting up WordPress
 ~~~~~~~~~~~~~~~~~~~~
 
-First download and uncompress the distributed Wordpress release into
+First download and uncompress the distributed WordPress release into
 `/var/www/wordpress`, and create a database suitable for the installation.
 
 Log in to MySQL:
@@ -105,7 +114,7 @@ Log in to MySQL:
 mysql -u root -p
 ----------------
 
-And create the database for Wordpress. We will be using the name
+And create the database for WordPress. We will be using the name
 'wp', the user 'wpuser' and the password 'wppassword', but
 you should set up your own.
 
@@ -143,7 +152,7 @@ Remember to set up the plugins that are of interest for you, such as
 the sitemap generator, in a fashion compatible with what you
 configured in Cherokee.
 
-And voilà! You have a Wordpress installation working flawlessly with
+And voilà! You have a WordPress installation working flawlessly with
 Cherokee.
 
 image::media/images/cookbook_wp5.png[WP in action]
