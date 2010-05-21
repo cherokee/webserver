@@ -42,7 +42,7 @@ NOTE_WELCOME_P1 = N_("This Wizard Adds a rule to stream media files.")
 PREFIX    = 'tmp!wizard!streaming'
 APPLY     = r'/wizard/vserver/streaming/apply'
 
-EXTENSIONS = 'mp3,ogv,flv,mov,ogg,mp4'
+EXTENSIONS = 'mp3,ogv,flv,mov,ogg,mp4,webm'
 
 CONFIG = """
 %(rule_pre)s!match = extensions
