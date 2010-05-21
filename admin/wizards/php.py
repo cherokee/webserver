@@ -162,13 +162,15 @@ class Commit:
     def Commit_VServer (self):
         # Create the new Virtual Server
         next = CTK.cfg.get_next_entry_prefix('vserver')
-        CTK.cfg['%s!nick'%(next)] = CTK.cfg.get_val('%s!host'%(CFG_PREFIX))
-        CTK.cfg['%s!document_root'%(next)] = CTK.cfg.get_val('%s!droot'%(CFG_PREFIX))
+
+        CTK.cfg['%s!nick'%(next)]            = CTK.cfg.get_val('%s!host'%(CFG_PREFIX))
+        CTK.cfg['%s!document_root'%(next)]   = CTK.cfg.get_val('%s!droot'%(CFG_PREFIX))
         CTK.cfg['%s!directory_index'%(next)] = 'index.php,index.html'
+
         Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(CFG_PREFIX), next)
 
         # PHP
-        error   = wizard_php_add (next)
+        error = wizard_php_add (next)
         if error:
             del CTK.cfg['vserver!%s'%(next)]
             return {'ret': 'error', 'errors': {'msg': error}}
@@ -183,9 +185,11 @@ class Commit:
 
     def Commit_Rule (self):
         vserver = CTK.cfg.get_val ('%s!vsrv_num'%(CFG_PREFIX))
-        error   = wizard_php_add ('vserver!%s'%(vserver))
+
+        error = wizard_php_add ('vserver!%s'%(vserver))
         if error:
             return {'ret': 'error', 'errors': {'msg': error}}
+
         return CTK.cfg_reply_ajax_ok()
 
 
@@ -283,11 +287,10 @@ class WelcomeRule:
         return cont.Render().toStr()
 
 VALS = [
-    ('%s!host'    %(CFG_PREFIX), validations.is_not_empty),
-    ('%s!host'    %(CFG_PREFIX), validations.is_new_vserver_nick),
-
-    ('%s!droot'   %(CFG_PREFIX), validations.is_not_empty),
-    ('%s!droot'   %(CFG_PREFIX), validations.is_local_dir_exists),
+    ('%s!host'  %(CFG_PREFIX), validations.is_not_empty),
+    ('%s!host'  %(CFG_PREFIX), validations.is_new_vserver_nick),
+    ('%s!droot' %(CFG_PREFIX), validations.is_not_empty),
+    ('%s!droot' %(CFG_PREFIX), validations.is_local_dir_exists),
 ]
 
 # Rule
@@ -382,12 +385,15 @@ def __source_add_std (php_path):
         return None
 
     next = CTK.cfg.get_next_entry_prefix('source')
+
     CTK.cfg['%s!nick' %(next)]        = 'PHP Interpreter'
     CTK.cfg['%s!type' %(next)]        = 'interpreter'
-    CTK.cfg['%s!interpreter' %(next)] = '%s -b %s:%d' % (php_path, tcp_addr, TCP_PORT)
-    CTK.cfg['%s!host' %(next)]        = '%s:%d' % (tcp_addr, TCP_PORT)
+    CTK.cfg['%s!interpreter' %(next)] = '%s -b %s:%d' %(php_path, tcp_addr, TCP_PORT)
+    CTK.cfg['%s!host' %(next)]        = '%s:%d' %(tcp_addr, TCP_PORT)
+
     CTK.cfg['%s!env!PHP_FCGI_MAX_REQUESTS' %(next)] = SAFE_PHP_FCGI_MAX_REQUESTS
     CTK.cfg['%s!env!PHP_FCGI_CHILDREN' %(next)]     = '5'
+
     return next
 
 def __source_add_fpm (php_path):
@@ -399,7 +405,7 @@ def __source_add_fpm (php_path):
     next = CTK.cfg.get_next_entry_prefix('source')
     CTK.cfg['%s!nick' %(next)]        = 'PHP Interpreter'
     CTK.cfg['%s!type' %(next)]        = 'interpreter'
-    CTK.cfg['%s!interpreter' %(next)] = '%s --fpm-config %s' % (php_path, settings['fpm_conf'])
+    CTK.cfg['%s!interpreter' %(next)] = '%s --fpm-config %s' %(php_path, settings['fpm_conf'])
     CTK.cfg['%s!host' %(next)]        = host
     return next
 
