@@ -201,7 +201,12 @@ class BehaviorWidget (CTK.Container):
         self += CTK.RawHTML (js=JS_TR_ODD+JS_TR_INACTIVE)
         self += CTK.Indenter (table)
 
-        button = CTK.Button(_('Rule Management'), {'id':'rule-management', 'href': '/vserver/%s/rule/%s'%(vsrv_num, rules[0])})
+        if rules:
+            first_rule = rules[0]
+        else:
+            first_rule = '0'
+
+        button = CTK.Button(_('Rule Management'), {'id':'rule-management', 'href': '/vserver/%s/rule/%s'%(vsrv_num, first_rule)})
         self += CTK.Indenter (button)
 
 
