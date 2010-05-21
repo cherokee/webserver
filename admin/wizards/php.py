@@ -166,6 +166,8 @@ class Commit:
         CTK.cfg['%s!nick'%(next)]            = CTK.cfg.get_val('%s!host'%(CFG_PREFIX))
         CTK.cfg['%s!document_root'%(next)]   = CTK.cfg.get_val('%s!droot'%(CFG_PREFIX))
         CTK.cfg['%s!directory_index'%(next)] = 'index.php,index.html'
+        CTK.cfg['%s!rule!1!match'%(next)]    = 'default'
+        CTK.cfg['%s!rule!1!handler'%(next)]  = 'common'
 
         Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(CFG_PREFIX), next)
 
