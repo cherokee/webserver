@@ -47,7 +47,7 @@ VALIDATIONS = [
     ("server!thread_number",          validations.is_positive_int),
     ("server!nonces_cleanup_lapse",   validations.is_positive_int),
     ("server!iocache$",               validations.is_boolean),
-    ("server!iocache!max_size",       validations.is_positive_int),
+    ("server!iocache!max_size",       validations.is_positive_int_4_multiple),
     ("server!iocache!min_file_size",  validations.is_positive_int),
     ("server!iocache!max_file_size",  validations.is_positive_int),
     ("server!iocache!lasting_stat",   validations.is_positive_int),
