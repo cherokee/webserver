@@ -54,7 +54,12 @@ class Refreshable (Widget):
 
         assert 'id' in _props, "Property 'id' must be provided"
 
-        self.props      = _props.copy()
+        self.props = _props.copy()
+        if 'class' in self.props:
+            self.props['class'] += ' refreshable'
+        else:
+            self.props['class'] = 'refreshable'
+
         self.id         = self.props.pop('id')
         self.url        = "/refreshable/%s" %(self.id)
         self.build_func = None

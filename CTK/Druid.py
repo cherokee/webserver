@@ -26,6 +26,7 @@ from Box import Box
 from Button import Button
 from Refreshable import RefreshableURL
 from Server import request
+from RawHTML import RawHTML
 
 JS_BUTTON_GOTO = """
 var druid      = $(this).parents('.druid:first');
@@ -218,3 +219,15 @@ class DruidButtonsPanel_PrevCreate_Auto (DruidButtonsPanel_PrevCreate):
     def __init__ (self, **kwargs):
         kwargs['url_prev'] = druid_url_prev(request.url)
         DruidButtonsPanel_PrevCreate.__init__ (self, **kwargs)
+
+class DruidContent_TriggerNext (Box):
+    def __init__ (self):
+        Box.__init__ (self)
+
+        url = druid_url_next (request.url)
+        js = """$("#%s").parents('.refreshable-url').eq(0).trigger({
+                       'type': 'refresh_goto',
+                       'goto': '%s'
+               });""" %(self.id, url)
+
+        self += RawHTML (js=js)
