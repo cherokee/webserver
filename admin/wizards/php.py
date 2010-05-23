@@ -39,6 +39,10 @@ NOTE_LOCAL_DIR  = N_("Local directory that will contain the web documents. Examp
 NOTE_HOST_H1    = N_("New Virtual Server Details")
 NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
 
+NOTE_NOT_FOUND_H1 = N_("PHP Interpreter Not Found")
+NOTE_NOT_FOUND    = N_("A valid PHP interpreter could not be found in your system.")
+NOTE_NOT_FOUND2   = N_("Please, check out the Cherokee's PHP Documentation to learn how to set it up.")
+
 PHP_DEFAULT_TIMEOUT        = '30'
 SAFE_PHP_FCGI_MAX_REQUESTS = '490'
 
@@ -71,9 +75,27 @@ STD_ETC_PATHS = ['/etc/php*/cgi/php.ini',
 
 CFG_PREFIX    = 'tmp!wizard!php'
 
+
 #
 # Public
 #
+def check_php_interpreter():
+    # PHP Source
+    source = __find_source()
+    if source:
+        return True
+
+    # PHP binary
+    php_path = path_find_binary (DEFAULT_BINS,
+                                 extra_dirs  = DEFAULT_PATHS,
+                                 custom_test = __test_php_fcgi)
+    if php_path:
+        return True
+
+    # No PHP
+    return False
+
+
 def wizard_php_add (key):
     # Sanity check
     if not CTK.cfg[key]:
@@ -305,6 +327,23 @@ CTK.publish ('^/wizard/vserver/php/2$', DocumentRoot)
 CTK.publish ('^/wizard/vserver/php/3$', Host)
 CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
 
+
+#
+# External Stages
+#
+
+def External_FindPHP():
+    # Add PHP if needed
+    have_php = check_php_interpreter()
+    if not have_php:
+        cont = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_NOT_FOUND_H1)))
+        cont += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_NOT_FOUND)))
+        cont += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_NOT_FOUND2)))
+        cont += CTK.DruidButtonsPanel_Cancel()
+        return cont.Render().toStr()
+
+    return CTK.DruidContent_TriggerNext().Render().toStr()
 
 
 #
