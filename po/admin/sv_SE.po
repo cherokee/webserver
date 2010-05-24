@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee-admin 0.99.16\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-17 16:12+0200\n"
+"POT-Creation-Date: 2010-05-24 16:37+0200\n"
 "PO-Revision-Date: 2010-05-10 16:28+0100\n"
 "Last-Translator: Andreas Andersson <andreas@cyberdelic.org>\n"
 "Language-Team: Swedish <LL@li.org>\n"
@@ -97,6 +97,93 @@ msgstr "Välj"
 msgid "Application Server"
 msgstr "Applikations-server"
 
+#: admin/CTK/CTK/Config.py:237
+#, python-format
+msgid "ERROR: Couldn't unpack '%s'"
+msgstr "FEL: Kunde inte packa upp '%s'"
+
+#: admin/CTK/CTK/Config.py:370
+msgid "Could not copy configuration to "
+msgstr "Kunde inte kopiera konfiguration till"
+
+#: admin/CTK/CTK/Dialog.py:213 admin/PageException.py:89
+#: admin/PageException.py:93 admin/PageIndex.py:254 admin/PageSource.py:409
+msgid "Close"
+msgstr "Stäng"
+
+#: admin/CTK/CTK/Druid.py:153 admin/CTK/CTK/Druid.py:160
+#: admin/CTK/CTK/Druid.py:168 admin/CTK/CTK/Druid.py:176
+#: admin/CTK/CTK/Druid.py:182 admin/Icons.py:348 admin/Mime.py:101
+#: admin/PageGeneral.py:217 admin/PageIndex.py:348 admin/PageRule.py:213
+#: admin/PageRule.py:261 admin/PageRule.py:287 admin/PageSource.py:240
+#: admin/PageSource.py:422 admin/PageSource.py:436 admin/PageSource.py:450
+#: admin/PageVServers.py:203 admin/PageVServers.py:238
+#: admin/PageVServers.py:264 admin/plugins/redir.py:115
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: admin/CTK/CTK/Druid.py:154 admin/CTK/CTK/Druid.py:161
+#, fuzzy
+msgid "Next"
+msgstr "Fil finns"
+
+#: admin/CTK/CTK/Druid.py:162 admin/CTK/CTK/Druid.py:170
+#, fuzzy
+msgid "Prev"
+msgstr "LDAP-server"
+
+#: admin/CTK/CTK/Druid.py:169 admin/CTK/CTK/Druid.py:177
+#: admin/PageNewConfig.py:140
+msgid "Create"
+msgstr "Skapa"
+
+#: admin/CTK/CTK/Image.py:48 admin/CTK/CTK/Image.py:49
+msgid "Delete"
+msgstr "Ta bort"
+
+#: admin/CTK/CTK/Image.py:60 admin/util.py:35
+msgid "Active"
+msgstr "Aktiv"
+
+#: admin/CTK/CTK/Image.py:65 admin/util.py:35
+#, fuzzy
+msgid "Inactive"
+msgstr "Deflate"
+
+#: admin/CTK/CTK/Image.py:70
+#, fuzzy
+msgid "Loading"
+msgstr "Loggning"
+
+#: admin/CTK/CTK/Image.py:75 admin/CgiBase.py:68 admin/CgiBase.py:70
+#: admin/CgiBase.py:123 admin/CgiBase.py:124 admin/CgiBase.py:125
+#: admin/CgiBase.py:126 admin/Graph.py:124 admin/PageAdvanced.py:144
+#: admin/PageEntry.py:105 admin/PageEntry.py:114 admin/PageGeneral.py:127
+#: admin/PageSource.py:305 admin/PageVServer.py:120
+#: admin/plugins/dirlist.py:56 admin/plugins/exists.py:72
+#: admin/plugins/exists.py:77 admin/plugins/exists.py:78
+#: admin/plugins/exists.py:79 admin/plugins/exists.py:109
+#: admin/plugins/exists.py:115 admin/plugins/exists.py:116
+#: admin/plugins/exists.py:117 admin/plugins/file.py:40
+#: admin/plugins/ldap.py:53 admin/plugins/streaming.py:43
+#, fuzzy
+msgid "Enabled"
+msgstr "Aktiverad"
+
+#: admin/CTK/CTK/Submitter.py:73 admin/CTK/CTK/TextField.py:66
+#, fuzzy
+msgid "Optional"
+msgstr "Ytterligare inställningar"
+
+#: admin/CTK/CTK/ToggleButton.py:116
+msgid "Disable"
+msgstr "Deaktivera"
+
+#: admin/CTK/CTK/ToggleButton.py:117
+#, fuzzy
+msgid "Enable"
+msgstr "Aktiverad"
+
 #: admin/CgiBase.py:32
 msgid "Path to an executable that will be run with the CGI as parameter."
 msgstr "Sökväg till en binär som kör med CGI som en parameter."
@@ -152,22 +239,11 @@ msgstr ""
 msgid "Read X-Real-IP"
 msgstr "Läs X-Real-IP"
 
-#: admin/CgiBase.py:68 admin/CgiBase.py:70 admin/CgiBase.py:123
-#: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
-#: admin/PageVServer.py:120 admin/plugins/dirlist.py:56
-#: admin/plugins/exists.py:109 admin/plugins/exists.py:115
-#: admin/plugins/exists.py:116 admin/plugins/exists.py:117
-#: admin/plugins/file.py:40 admin/plugins/ldap.py:53
-#: admin/plugins/streaming.py:43
-#, fuzzy
-msgid "Enabled"
-msgstr "Aktiverad"
-
-#: admin/CgiBase.py:70 admin/PageVServer.py:410
+#: admin/CgiBase.py:70 admin/PageVServer.py:415
 msgid "Don't check origin"
 msgstr "Kolla inte ursprung"
 
-#: admin/CgiBase.py:72 admin/PageVServer.py:413
+#: admin/CgiBase.py:72 admin/PageVServer.py:418
 msgid "Accept from Hosts"
 msgstr "Acceptera från värd(ar)"
 
@@ -222,8 +298,8 @@ msgstr "Fast autentiseringslista"
 msgid "Custom Environment Variables"
 msgstr "Egna miljövariabler"
 
-#: admin/CgiBase.py:150 admin/Icons.py:341 admin/Mime.py:100
-#: admin/PageGeneral.py:189 admin/PageRule.py:260 admin/PageSource.py:239
+#: admin/CgiBase.py:150 admin/Icons.py:342 admin/Mime.py:100
+#: admin/PageGeneral.py:216 admin/PageRule.py:260 admin/PageSource.py:239
 #: admin/PageSource.py:435 admin/PageVServers.py:237
 #: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
 #: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
@@ -301,7 +377,7 @@ msgstr ""
 "servern."
 
 #: admin/Graph.py:117 admin/PageEntry.py:240 admin/PageSource.py:270
-#: admin/PageStatus.py:70 admin/PageVServer.py:513 admin/PageVServers.py:194
+#: admin/PageStatus.py:70 admin/PageVServer.py:518 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -314,14 +390,14 @@ msgstr "Samla in statistik"
 msgid "Allows to specify an alternative Document Root path."
 msgstr "Tillåter att ange en alternativ dokumentroot."
 
-#: admin/Handler.py:43 admin/PageEntry.py:229 admin/PageVServer.py:297
+#: admin/Handler.py:43 admin/PageEntry.py:229 admin/PageVServer.py:302
 #: admin/PageVServers.py:127 admin/wizards/django.py:190
-#: admin/wizards/mono.py:199 admin/wizards/php.py:36 admin/wizards/php.py:229
+#: admin/wizards/mono.py:199 admin/wizards/php.py:36 admin/wizards/php.py:257
 #: admin/wizards/uwsgi.py:242
 msgid "Document Root"
 msgstr "Dokumentrot"
 
-#: admin/Icons.py:118 admin/Icons.py:312 admin/Mime.py:86 admin/Mime.py:120
+#: admin/Icons.py:118 admin/Icons.py:313 admin/Mime.py:86 admin/Mime.py:120
 #: admin/consts.py:182 admin/plugins/extensions.py:59
 msgid "Extensions"
 msgstr "Filändelser"
@@ -347,17 +423,17 @@ msgstr "Filmatchningar"
 msgid "Add New File"
 msgstr "Lägg till ny fil"
 
-#: admin/Icons.py:182 admin/Icons.py:313 admin/Rule.py:171 admin/consts.py:38
+#: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:38
 #: admin/consts.py:122
 msgid "Default"
 msgstr "Förvald"
 
-#: admin/Icons.py:183 admin/Icons.py:314 admin/consts.py:181
+#: admin/Icons.py:183 admin/Icons.py:315 admin/consts.py:181
 #: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "Katalog"
 
-#: admin/Icons.py:184 admin/Icons.py:315
+#: admin/Icons.py:184 admin/Icons.py:316
 msgid "Go to Parent"
 msgstr "Gå till förälder"
 
@@ -365,26 +441,13 @@ msgstr "Gå till förälder"
 msgid "Modify"
 msgstr "Modifiera"
 
-#: admin/Icons.py:198 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
+#: admin/Icons.py:199 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
 msgid "Special Files"
 msgstr "Speciella filer"
 
-#: admin/Icons.py:311 admin/consts.py:99
+#: admin/Icons.py:312 admin/consts.py:99
 msgid "File"
 msgstr "Fil"
-
-#: admin/Icons.py:345
-msgid "Add new"
-msgstr "Lägg till ny"
-
-#: admin/Icons.py:347 admin/Mime.py:101 admin/PageGeneral.py:190
-#: admin/PageIndex.py:348 admin/PageRule.py:213 admin/PageRule.py:261
-#: admin/PageRule.py:287 admin/PageSource.py:240 admin/PageSource.py:422
-#: admin/PageSource.py:436 admin/PageSource.py:450 admin/PageVServers.py:203
-#: admin/PageVServers.py:238 admin/PageVServers.py:264
-#: admin/plugins/redir.py:115
-msgid "Cancel"
-msgstr "Avbryt"
 
 #: admin/Mime.py:37
 msgid "New MIME type to be added."
@@ -428,6 +491,11 @@ msgstr "MIME-typer"
 msgid "MaxAge (<em>secs</em>)"
 msgstr "MaxAge<br/>(<i>sekunder</i>)"
 
+#: admin/Mime.py:141 admin/PageGeneral.py:259
+#, fuzzy
+msgid "Mime types"
+msgstr "MIME-typ"
+
 #: admin/Page.py:32
 #, fuzzy
 msgid "The Configuration has been Saved"
@@ -470,7 +538,7 @@ msgstr ""
 msgid "Status"
 msgstr "Status"
 
-#: admin/Page.py:117 admin/PageGeneral.py:234 admin/PageStatus.py:101
+#: admin/Page.py:117 admin/PageGeneral.py:261 admin/PageStatus.py:101
 msgid "General"
 msgstr "Allmänt"
 
@@ -760,7 +828,7 @@ msgid "DH parameters: 4096 bits"
 msgstr "Diffie Hellman-parametrar (4096 bitar)"
 
 #: admin/PageAdvanced.py:175 admin/PageAdvanced.py:185
-#: admin/PageGeneral.py:145 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
 msgid "TLS"
 msgstr "TLS"
 
@@ -839,7 +907,7 @@ msgstr "Autentiseringsmoduler"
 msgid "Leave unset"
 msgstr "Lämna oinställt"
 
-#: admin/PageEntry.py:71 admin/PageVServer.py:305 admin/plugins/common.py:42
+#: admin/PageEntry.py:71 admin/PageVServer.py:310 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
 #: admin/plugins/proxy.py:237
 msgid "Allow"
@@ -861,7 +929,7 @@ msgstr "Trafikmodellering"
 msgid "Skip Logging"
 msgstr "Hoppa över loggning"
 
-#: admin/PageEntry.py:109 admin/PageVServer.py:502
+#: admin/PageEntry.py:109 admin/PageVServer.py:507
 msgid "Logging"
 msgstr "Loggning"
 
@@ -936,7 +1004,7 @@ msgstr "Kodning"
 msgid "Time"
 msgstr "Tid"
 
-#: admin/PageEntry.py:258 admin/PageVServer.py:503
+#: admin/PageEntry.py:258 admin/PageVServer.py:508
 msgid "Security"
 msgstr "Säkerhet"
 
@@ -1056,11 +1124,6 @@ msgstr "Internt fel"
 msgid "Thank you!"
 msgstr "Tack!"
 
-#: admin/PageException.py:89 admin/PageException.py:93 admin/PageIndex.py:254
-#: admin/PageSource.py:409
-msgid "Close"
-msgstr "Stäng"
-
 #: admin/PageException.py:91
 msgid "Could not report the issue"
 msgstr "Kunde inte rapportera problemet"
@@ -1078,52 +1141,57 @@ msgid "Defines a port that the server will listen to"
 msgstr "Anger vilken port servern ska lyssna på."
 
 #: admin/PageGeneral.py:39
+#, fuzzy
+msgid "Optionally defines an interface to listen to"
+msgstr "Välj vid behov en databas att ansluta till."
+
+#: admin/PageGeneral.py:40
 msgid ""
 "Set to enable the IPv6 support. The OS must support IPv6 for this to work."
 msgstr ""
 "Tillåt användandet av IPv6. Operativsystemet måste ha stöd för IPv6 för att "
 "detta ska fungera."
 
-#: admin/PageGeneral.py:40
+#: admin/PageGeneral.py:41
 msgid "This option allows to choose how the server identifies itself."
 msgstr "Denna inställning anger av hur server identifierar sig."
 
-#: admin/PageGeneral.py:41
+#: admin/PageGeneral.py:42
 msgid "Time interval until the server closes inactive connections."
 msgstr "Tidsinterval tills servern stänger inaktiva anslutningar."
 
-#: admin/PageGeneral.py:42
+#: admin/PageGeneral.py:43
 msgid "Which, if any, should be the TLS/SSL backend."
 msgstr "Vilket bibliotek ska användas som back-end för TLS/SSL."
 
-#: admin/PageGeneral.py:43
+#: admin/PageGeneral.py:44
 msgid "How the usage graphics should be generated."
 msgstr "Hur användargraferna ska genereras."
 
-#: admin/PageGeneral.py:44
+#: admin/PageGeneral.py:45
 msgid "How to track uploads/posts so its progress can be reported to the user."
 msgstr ""
 "Hur uppladdningar/posts ska följas så att dess status kan rapporteras till "
 "användaren."
 
-#: admin/PageGeneral.py:45
+#: admin/PageGeneral.py:46
 msgid "Changes the effective user. User names and IDs are accepted."
 msgstr ""
 "Ändrar den användaren som Cherokee körs som. Användarnamn och -id är "
 "tillåtna."
 
-#: admin/PageGeneral.py:46
+#: admin/PageGeneral.py:47
 msgid "Changes the effective group. Group names and IDs are accepted."
 msgstr "Ändrar den gruppen körs som. Användarnamn och -id är tillåtna."
 
-#: admin/PageGeneral.py:47
+#: admin/PageGeneral.py:48
 msgid ""
 "Jail the server inside the directory. Don't use it as the only security "
 "measure."
 msgstr ""
 "Lås in servern i katalogen. Använd inte detta som enda säkerhetsåtgärden."
 
-#: admin/PageGeneral.py:48
+#: admin/PageGeneral.py:49
 msgid ""
 "No ports to listen have been defined. By default the server will listen to "
 "TCP port 80 on all the network interfaces."
@@ -1131,122 +1199,127 @@ msgstr ""
 "Inga portar att lyssna på har definerats. Utan modifierade inställningar "
 "kommer servern att lyssna på port 80 på alla nätverksgränssnitt."
 
-#: admin/PageGeneral.py:51
+#: admin/PageGeneral.py:52
 msgid "General Configuration"
 msgstr "Allmän konfiguration"
 
-#: admin/PageGeneral.py:52
+#: admin/PageGeneral.py:53
 msgid "Configuration Quickstart"
 msgstr "Konfigurationssnabbstart"
 
-#: admin/PageGeneral.py:101
+#: admin/PageGeneral.py:98
+#, fuzzy
+msgid "Port/Interface combination already in use."
+msgstr "Porten används redan"
+
+#: admin/PageGeneral.py:127
 msgid "IPv6"
 msgstr ""
 
-#: admin/PageGeneral.py:102
+#: admin/PageGeneral.py:128
 msgid "SSL/TLS back-end"
 msgstr "Back-end för SSL/TLS"
 
-#: admin/PageGeneral.py:105
+#: admin/PageGeneral.py:131
 msgid "Support"
 msgstr "Support"
 
-#: admin/PageGeneral.py:109
+#: admin/PageGeneral.py:135
 msgid "Timeout (<i>secs</i>)"
 msgstr "Timeout  (<i>sekunder</i>)"
 
-#: admin/PageGeneral.py:110
+#: admin/PageGeneral.py:136
 msgid "Server Tokens"
 msgstr "Serveridentifiering"
 
-#: admin/PageGeneral.py:113
+#: admin/PageGeneral.py:139
 msgid "Network Behavior"
 msgstr "Nätverksbetéende"
 
-#: admin/PageGeneral.py:118
+#: admin/PageGeneral.py:144
 msgid "Graphs Type"
 msgstr "Graftyp"
 
-#: admin/PageGeneral.py:119
+#: admin/PageGeneral.py:145
 msgid "Information Collector"
 msgstr "Informationsinsamlare"
 
-#: admin/PageGeneral.py:125 admin/PageGeneral.py:126
+#: admin/PageGeneral.py:151 admin/PageGeneral.py:152
 msgid "Upload Tracking"
 msgstr ""
 
-#: admin/PageGeneral.py:145 admin/PageGeneral.py:183 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:171 admin/PageGeneral.py:209 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
 #: admin/plugins/mysql.py:74
 msgid "Port"
 msgstr "Port"
 
-#: admin/PageGeneral.py:145 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
 msgid "Bind to"
 msgstr "Använd ip:"
 
-#: admin/PageGeneral.py:158
+#: admin/PageGeneral.py:184
 #, fuzzy
 msgid "TLS/SSL port"
 msgstr "Ingen TLS/SSL"
 
-#: admin/PageGeneral.py:160
+#: admin/PageGeneral.py:186
 msgid "TLS/SSL support disabled"
 msgstr "TLS/SSL-stöd saknas"
 
-#: admin/PageGeneral.py:188
+#: admin/PageGeneral.py:210
+#, fuzzy
+msgid "Interface"
+msgstr "Intern"
+
+#: admin/PageGeneral.py:215
 msgid "New port"
 msgstr "Ny port"
 
-#: admin/PageGeneral.py:197
+#: admin/PageGeneral.py:224
 #, fuzzy
 msgid "Add new port"
 msgstr "Lägg till ny port"
 
-#: admin/PageGeneral.py:203
+#: admin/PageGeneral.py:230
 #, fuzzy
 msgid "Listening to Ports"
 msgstr "Lyssnar på portarna: "
 
-#: admin/PageGeneral.py:214
+#: admin/PageGeneral.py:241
 msgid "Execution Permissions"
 msgstr "Exekverings-rättigheter"
 
-#: admin/PageGeneral.py:215 admin/plugins/authlist.py:63
+#: admin/PageGeneral.py:242 admin/plugins/authlist.py:63
 #: admin/plugins/authlist.py:97
 msgid "User"
 msgstr "Användare"
 
-#: admin/PageGeneral.py:216
+#: admin/PageGeneral.py:243
 msgid "Group"
 msgstr "Grupp"
 
-#: admin/PageGeneral.py:217
+#: admin/PageGeneral.py:244
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:228 admin/PageVServer.py:308
+#: admin/PageGeneral.py:255 admin/PageVServer.py:313
 msgid "Network"
 msgstr "Nätverk"
 
-#: admin/PageGeneral.py:229
+#: admin/PageGeneral.py:256
 msgid "Ports to listen"
 msgstr "Portar att lyssna med"
 
-#: admin/PageGeneral.py:230
+#: admin/PageGeneral.py:257
 msgid "Permissions"
 msgstr "Rättigheter"
 
-#: admin/PageGeneral.py:231
+#: admin/PageGeneral.py:258
 msgid "Icons"
 msgstr "Ikoner"
 
-#: admin/PageGeneral.py:232
-#, fuzzy
-msgid "Mime types"
-msgstr "MIME-typ"
-
-#: admin/PageGeneral.py:235
+#: admin/PageGeneral.py:262
 msgid "General Settings"
 msgstr "Allmänna inställningar"
 
@@ -1508,10 +1581,6 @@ msgstr ""
 "<b>Konfigurationen hittades inte</b>.<br />Du kan skapa en nya "
 "konfigurations-fil och fortsätta med att finjustera webservern."
 
-#: admin/PageNewConfig.py:140
-msgid "Create"
-msgstr "Skapa"
-
 #: admin/PageNewConfig.py:147
 msgid "Create a new configuration file"
 msgstr "Skapa en ny konfigurations-fil"
@@ -1616,11 +1685,11 @@ msgstr "Klona"
 msgid "Clone Selected Behavior Rule"
 msgstr "Klona vald betéenderegel"
 
-#: admin/PageRule.py:298 admin/PageVServer.py:500
+#: admin/PageRule.py:298 admin/PageVServer.py:505
 msgid "Behavior"
 msgstr "Betéende"
 
-#: admin/PageRule.py:317
+#: admin/PageRule.py:318
 msgid "Rule Filtering"
 msgstr "Regelfiltrering"
 
@@ -1749,7 +1818,7 @@ msgstr "Lägg till ny miljövariabel"
 msgid "Add new variable"
 msgstr "Lägg till ny miljövariabel"
 
-#: admin/PageSource.py:266 admin/PageVServer.py:505
+#: admin/PageSource.py:266 admin/PageVServer.py:510
 msgid "Virtual Server"
 msgstr "Virtuell server"
 
@@ -2102,7 +2171,7 @@ msgstr "Regellista"
 msgid "Host Names"
 msgstr "Värdnamn"
 
-#: admin/PageVServer.py:155 admin/PageVServer.py:314 admin/PageVServer.py:330
+#: admin/PageVServer.py:155 admin/PageVServer.py:319 admin/PageVServer.py:335
 #: admin/plugins/method.py:94 admin/plugins/method.py:104
 msgid "Method"
 msgstr "Metod"
@@ -2112,183 +2181,183 @@ msgstr "Metod"
 msgid "Behavior Rules"
 msgstr "Betéende-regler"
 
-#: admin/PageVServer.py:204
+#: admin/PageVServer.py:209
 msgid "Rule Management"
 msgstr "Regelhantering"
 
-#: admin/PageVServer.py:229
+#: admin/PageVServer.py:234
 #, fuzzy
 msgid "Only accept Secure Connections"
 msgstr "Godkända domäner"
 
-#: admin/PageVServer.py:234
+#: admin/PageVServer.py:239
 #, fuzzy
 msgid "Encoding enabled"
 msgstr "Kodning"
 
-#: admin/PageVServer.py:240
+#: admin/PageVServer.py:245
 msgid "no"
 msgstr "nej"
 
-#: admin/PageVServer.py:251
+#: admin/PageVServer.py:256
 #, fuzzy
 msgid " seconds"
 msgstr "Ikoner"
 
-#: admin/PageVServer.py:256
+#: admin/PageVServer.py:261
 msgid " bytes per second"
 msgstr "Bytes per sekund"
 
-#: admin/PageVServer.py:261
+#: admin/PageVServer.py:266
 msgid "Logging enabled for this rule"
 msgstr "Loggning möjliggjord för denna regel."
 
-#: admin/PageVServer.py:266
+#: admin/PageVServer.py:271
 msgid "Prevents further rule evaluation"
 msgstr "Förhindrar vidare utvärdering av regler."
 
-#: admin/PageVServer.py:271
+#: admin/PageVServer.py:276
 #, fuzzy
 msgid "Rule is active"
 msgstr "Regellista"
 
-#: admin/PageVServer.py:290
+#: admin/PageVServer.py:295
 msgid "Virtual Server nickname"
 msgstr "Smeknamn för virtuell server"
 
-#: admin/PageVServer.py:292
+#: admin/PageVServer.py:297
 msgid "Server ID"
 msgstr "Server-id"
 
-#: admin/PageVServer.py:298
+#: admin/PageVServer.py:303
 msgid "Directory Indexes"
 msgstr "Katalogindex"
 
-#: admin/PageVServer.py:300 admin/plugins/fullpath.py:115
+#: admin/PageVServer.py:305 admin/plugins/fullpath.py:115
 msgid "Paths"
 msgstr "Sökvägar"
 
-#: admin/PageVServer.py:305
+#: admin/PageVServer.py:310
 msgid "Keep-alive"
 msgstr "Keep-alive"
 
-#: admin/PageVServer.py:306
+#: admin/PageVServer.py:311
 msgid "Max Upload Size"
 msgstr "Max Uppladdnings-storlek"
 
-#: admin/PageVServer.py:316 admin/plugins/evhost.py:33
+#: admin/PageVServer.py:321 admin/plugins/evhost.py:33
 msgid "Advanced Virtual Hosting"
 msgstr "Avancerad Virtual Hosting"
 
-#: admin/PageVServer.py:332
+#: admin/PageVServer.py:337
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:343 admin/consts.py:225 admin/consts.py:242
+#: admin/PageVServer.py:348 admin/consts.py:225 admin/consts.py:242
 #, fuzzy
 msgid "Disabled"
 msgstr "Deaktivera"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:352
 msgid "Write errors to"
 msgstr "Skriv fel till"
 
-#: admin/PageVServer.py:351 admin/PageVServer.py:390
+#: admin/PageVServer.py:356 admin/PageVServer.py:395
 msgid "Filename"
 msgstr "Filnamn"
 
-#: admin/PageVServer.py:353 admin/PageVServer.py:393
+#: admin/PageVServer.py:358 admin/PageVServer.py:398
 msgid "Command"
 msgstr "Kommando"
 
-#: admin/PageVServer.py:359
+#: admin/PageVServer.py:364
 #, fuzzy
 msgid "Error Logging"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:370
+#: admin/PageVServer.py:375
 msgid "Format"
 msgstr "Format"
 
-#: admin/PageVServer.py:377
+#: admin/PageVServer.py:382
 msgid "Write accesses to"
 msgstr "Skriv åtkomster till"
 
-#: admin/PageVServer.py:398
+#: admin/PageVServer.py:403
 msgid "Template: "
 msgstr "Mall:"
 
-#: admin/PageVServer.py:400
+#: admin/PageVServer.py:405
 #, fuzzy
 msgid "Access Logging"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:406
+#: admin/PageVServer.py:411
 msgid "Time standard"
 msgstr "Tidsstandard"
 
-#: admin/PageVServer.py:407
+#: admin/PageVServer.py:412
 msgid "Accept Forwarded IPs"
 msgstr "Acceptera vidarebefodrade IPnummer."
 
-#: admin/PageVServer.py:407 admin/consts.py:220
+#: admin/PageVServer.py:412 admin/consts.py:220
 msgid "Accept"
 msgstr "Acceptera"
 
-#: admin/PageVServer.py:410
+#: admin/PageVServer.py:415
 #, fuzzy
 msgid "Do not check"
 msgstr "Kolla inte ursprung"
 
-#: admin/PageVServer.py:419
+#: admin/PageVServer.py:424
 #, fuzzy
 msgid "Logging Options"
 msgstr "Loggning"
 
-#: admin/PageVServer.py:455
+#: admin/PageVServer.py:460
 msgid "Certificate"
 msgstr "Certifikat"
 
-#: admin/PageVServer.py:456
+#: admin/PageVServer.py:461
 msgid "Certificate key"
 msgstr "Certifikatnyckel"
 
-#: admin/PageVServer.py:461
+#: admin/PageVServer.py:466
 #, fuzzy
 msgid "Required SSL/TLS Values"
 msgstr "Obligatoriska SSL/TLS-värden"
 
-#: admin/PageVServer.py:466
+#: admin/PageVServer.py:471
 msgid "Ciphers"
 msgstr "Chiffer"
 
-#: admin/PageVServer.py:467
+#: admin/PageVServer.py:472
 msgid "Client Certs. Request"
 msgstr ""
 
-#: admin/PageVServer.py:470
+#: admin/PageVServer.py:475
 msgid "CA List"
 msgstr "CA-lista"
 
-#: admin/PageVServer.py:473
+#: admin/PageVServer.py:478
 msgid "Verify Depth"
 msgstr "Verifiera djup"
 
-#: admin/PageVServer.py:479
+#: admin/PageVServer.py:484
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Avancerade val"
 
-#: admin/PageVServer.py:498
+#: admin/PageVServer.py:503
 msgid "Basics"
 msgstr "Allmänt"
 
-#: admin/PageVServer.py:499
+#: admin/PageVServer.py:504
 #, fuzzy
 msgid "Host Match"
 msgstr "Närmast träff"
 
-#: admin/PageVServer.py:501
+#: admin/PageVServer.py:506
 msgid "Error Handler"
 msgstr "Felhanterare"
 
@@ -2361,12 +2430,12 @@ msgstr "Välj..."
 msgid "Check the cookbook for more details."
 msgstr ""
 
-#: admin/Wizard.py:196
+#: admin/Wizard.py:197
 msgid "Use the same logging configuration as one of the other virtual servers."
 msgstr ""
 "Använd samma loggningskonfiguration som en utav de andra virtuella servrarna."
 
-#: admin/Wizard.py:200
+#: admin/Wizard.py:201
 #, fuzzy
 msgid "Do not configure"
 msgstr "Kolla inte ursprung"
@@ -2909,16 +2978,16 @@ msgid ""
 msgstr "Publik webkatalog som konfigurationen ska appliceras på."
 
 #: admin/plugins/directory.py:31 admin/wizards/alfresco.py:156
-#: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:203
-#: admin/wizards/django.py:173 admin/wizards/drupal.py:234
-#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:206
-#: admin/wizards/liferay.py:153 admin/wizards/mediawiki.py:206
+#: admin/wizards/coldfusion.py:162 admin/wizards/concrete5.py:211
+#: admin/wizards/django.py:173 admin/wizards/drupal.py:242
+#: admin/wizards/glassfish.py:154 admin/wizards/joomla.py:244
+#: admin/wizards/liferay.py:153 admin/wizards/mediawiki.py:214
 #: admin/wizards/moinmoin.py:198 admin/wizards/mono.py:182
-#: admin/wizards/phpbb.py:161 admin/wizards/phpmyadmin.py:115
+#: admin/wizards/phpbb.py:169 admin/wizards/phpmyadmin.py:119
 #: admin/wizards/rails.py:44 admin/wizards/rails.py:298
-#: admin/wizards/rtorrent.py:99 admin/wizards/sugar.py:191
-#: admin/wizards/symfony.py:201 admin/wizards/uwsgi.py:224
-#: admin/wizards/wordpress.py:193 admin/wizards/zend.py:176
+#: admin/wizards/rtorrent.py:99 admin/wizards/sugar.py:199
+#: admin/wizards/symfony.py:209 admin/wizards/uwsgi.py:224
+#: admin/wizards/wordpress.py:201 admin/wizards/zend.py:184
 msgid "Web Directory"
 msgstr "Webkatalog"
 
@@ -3792,15 +3861,6 @@ msgstr "Server %(version)s körs.. PID=%(pid)d Port=%(scgi_port)d"
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Felaktiga parametrar: PORT CONFIG_FILE"
 
-#: admin/util.py:35
-#, fuzzy
-msgid "Inactive"
-msgstr "Deflate"
-
-#: admin/util.py:35
-msgid "Active"
-msgstr "Aktiv"
-
 #: admin/util.py:38
 msgid "On"
 msgstr "På"
@@ -4281,7 +4341,7 @@ msgstr ""
 #: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
 #: admin/wizards/drupal.py:44 admin/wizards/glassfish.py:45
-#: admin/wizards/joomla.py:48 admin/wizards/liferay.py:45
+#: admin/wizards/joomla.py:50 admin/wizards/liferay.py:45
 #: admin/wizards/mailman.py:46 admin/wizards/mediawiki.py:43
 #: admin/wizards/moinmoin.py:45 admin/wizards/mono.py:46
 #: admin/wizards/php.py:40 admin/wizards/phpbb.py:47
@@ -4296,7 +4356,7 @@ msgstr "Namn för den virtuella servern."
 #: admin/wizards/alfresco.py:46 admin/wizards/coldfusion.py:45
 #: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
 #: admin/wizards/drupal.py:43 admin/wizards/glassfish.py:46
-#: admin/wizards/joomla.py:47 admin/wizards/liferay.py:46
+#: admin/wizards/joomla.py:49 admin/wizards/liferay.py:46
 #: admin/wizards/mailman.py:45 admin/wizards/mediawiki.py:42
 #: admin/wizards/moinmoin.py:46 admin/wizards/mono.py:45
 #: admin/wizards/php.py:39 admin/wizards/phpbb.py:46
@@ -4317,7 +4377,7 @@ msgstr "Publik webkatalog att använda för att komma åt projektet"
 #: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
 #: admin/wizards/drupal.py:46 admin/wizards/glassfish.py:49
-#: admin/wizards/joomla.py:51 admin/wizards/liferay.py:49
+#: admin/wizards/joomla.py:53 admin/wizards/liferay.py:49
 #: admin/wizards/mediawiki.py:45 admin/wizards/moinmoin.py:49
 #: admin/wizards/mono.py:50 admin/wizards/phpbb.py:50
 #: admin/wizards/phpmyadmin.py:51 admin/wizards/sugar.py:50
@@ -4328,16 +4388,16 @@ msgid "Public Web Directory"
 msgstr "Webkatalog"
 
 #: admin/wizards/alfresco.py:172 admin/wizards/coldfusion.py:178
-#: admin/wizards/concrete5.py:220 admin/wizards/django.py:189
-#: admin/wizards/drupal.py:251 admin/wizards/glassfish.py:170
-#: admin/wizards/joomla.py:223 admin/wizards/liferay.py:169
-#: admin/wizards/mailman.py:145 admin/wizards/mediawiki.py:222
+#: admin/wizards/concrete5.py:228 admin/wizards/django.py:189
+#: admin/wizards/drupal.py:259 admin/wizards/glassfish.py:170
+#: admin/wizards/joomla.py:261 admin/wizards/liferay.py:169
+#: admin/wizards/mailman.py:145 admin/wizards/mediawiki.py:230
 #: admin/wizards/moinmoin.py:214 admin/wizards/mono.py:198
-#: admin/wizards/php.py:208 admin/wizards/phpbb.py:178
-#: admin/wizards/rails.py:314 admin/wizards/sugar.py:208
-#: admin/wizards/symfony.py:218 admin/wizards/trac.py:131
-#: admin/wizards/uwsgi.py:241 admin/wizards/wordpress.py:209
-#: admin/wizards/zend.py:193
+#: admin/wizards/php.py:236 admin/wizards/phpbb.py:186
+#: admin/wizards/rails.py:314 admin/wizards/sugar.py:216
+#: admin/wizards/symfony.py:226 admin/wizards/trac.py:131
+#: admin/wizards/uwsgi.py:241 admin/wizards/wordpress.py:217
+#: admin/wizards/zend.py:201
 #, fuzzy
 msgid "New Host Name"
 msgstr "Nytt värdnamn"
@@ -4408,7 +4468,7 @@ msgid "It is the CMS made for Marketing, but built for Geeks."
 msgstr "CMSn byggd för marknadsföring, men byggd av nördar."
 
 #: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
-#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:43
+#: admin/wizards/drupal.py:41 admin/wizards/joomla.py:45
 #: admin/wizards/mediawiki.py:40 admin/wizards/phpbb.py:42
 #: admin/wizards/phpmyadmin.py:43 admin/wizards/rtorrent.py:36
 #: admin/wizards/sugar.py:42 admin/wizards/symfony.py:45
@@ -4437,19 +4497,19 @@ msgid ""
 msgstr ""
 "Web-katalog där du vill att Concrete5 ska kunna nås. (Exempelvis: /concrete5)"
 
-#: admin/wizards/concrete5.py:221 admin/wizards/django.py:191
-#: admin/wizards/drupal.py:252 admin/wizards/joomla.py:224
-#: admin/wizards/mailman.py:146 admin/wizards/mediawiki.py:223
-#: admin/wizards/mono.py:200 admin/wizards/php.py:209
-#: admin/wizards/phpbb.py:179 admin/wizards/rails.py:315
-#: admin/wizards/sugar.py:209 admin/wizards/symfony.py:219
+#: admin/wizards/concrete5.py:229 admin/wizards/django.py:191
+#: admin/wizards/drupal.py:260 admin/wizards/joomla.py:262
+#: admin/wizards/mailman.py:146 admin/wizards/mediawiki.py:231
+#: admin/wizards/mono.py:200 admin/wizards/php.py:237
+#: admin/wizards/phpbb.py:187 admin/wizards/rails.py:315
+#: admin/wizards/sugar.py:217 admin/wizards/symfony.py:227
 #: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
-#: admin/wizards/wordpress.py:210 admin/wizards/zend.py:194
+#: admin/wizards/wordpress.py:218 admin/wizards/zend.py:202
 msgid "Use Same Logs as"
 msgstr "Använd samma loggar som"
 
-#: admin/wizards/concrete5.py:239 admin/wizards/phpbb.py:197
-#: admin/wizards/phpmyadmin.py:134 admin/wizards/zend.py:210
+#: admin/wizards/concrete5.py:247 admin/wizards/phpbb.py:205
+#: admin/wizards/phpmyadmin.py:138 admin/wizards/zend.py:218
 #, fuzzy
 msgid "Source Directory"
 msgstr "Webkatalog"
@@ -4545,7 +4605,7 @@ msgstr "Web-katalog där du vill att Drupal ska kunna nås. (Exempelvis: /blog)"
 msgid "Does not look like a Drupal source directory."
 msgstr "Skapa en ny konfigurations-fil"
 
-#: admin/wizards/drupal.py:270
+#: admin/wizards/drupal.py:278
 #, fuzzy
 msgid "Drupal Local Directory"
 msgstr "Webkatalog"
@@ -4669,19 +4729,19 @@ msgstr ""
 "/icons och /cherokee_themes-katalogerna är redan konfigurerade. Det finns "
 "inget kvar att göra."
 
-#: admin/wizards/joomla.py:39
+#: admin/wizards/joomla.py:41
 #, fuzzy
 msgid "Welcome to the Joomla wizard"
 msgstr "Välkommen till Cherokee Admin"
 
-#: admin/wizards/joomla.py:40
+#: admin/wizards/joomla.py:42
 msgid ""
 "<a target=\"_blank\" href=\"http://www.joomla.org/\">Joomla</a> is an award-"
 "winning content management system (CMS), which enables you to build Web "
 "sites and powerful online applications."
 msgstr ""
 
-#: admin/wizards/joomla.py:41
+#: admin/wizards/joomla.py:43
 msgid ""
 "Best of all, Joomla is an open source solution that is freely available to "
 "everyone."
@@ -4689,23 +4749,23 @@ msgstr ""
 "Bäst av allt med Joomla är att det är lösning byggd med öppen källkod som är "
 "fritt att använda för alla."
 
-#: admin/wizards/joomla.py:44
+#: admin/wizards/joomla.py:46
 msgid ""
 "Local directory where the Joomla source code is located. Example: /usr/share/"
 "joomla."
 msgstr ""
 "Lokal katalog där källkoden till Joomla finns. Exempelvis: /usr/share/joomla."
 
-#: admin/wizards/joomla.py:45
+#: admin/wizards/joomla.py:47
 msgid "Does not look like a Joomla source directory."
 msgstr "Ser inte ut som en katalog för Joomlas källkod."
 
-#: admin/wizards/joomla.py:50
+#: admin/wizards/joomla.py:52
 msgid ""
 "Web directory where you want Joomla to be accessible. (Example: /joomla)"
 msgstr "Web-katalog där du vill att Joomla ska kunna nås. (Exempelvis /joomla)"
 
-#: admin/wizards/joomla.py:242
+#: admin/wizards/joomla.py:280
 #, fuzzy
 msgid "Joomla Local Directory"
 msgstr "Webkatalog"
@@ -4862,15 +4922,19 @@ msgid ""
 "to that file."
 msgstr ""
 
-#: admin/wizards/mediawiki.py:207
+#: admin/wizards/mediawiki.py:215
 #, fuzzy
 msgid "Internal Web Directory"
 msgstr "Webkatalog"
 
-#: admin/wizards/mediawiki.py:240
+#: admin/wizards/mediawiki.py:248
 #, fuzzy
 msgid "MediaWiki Local Directory"
 msgstr "Webkatalog"
+
+#: admin/wizards/mediawiki.py:275
+msgid "This wizard is based on the Cherokee wiki-article at MediaWiki.org."
+msgstr ""
 
 #: admin/wizards/moinmoin.py:37
 #, fuzzy
@@ -5000,20 +5064,34 @@ msgstr ""
 msgid "Local directory that will contain the web documents. Example: /var/www."
 msgstr ""
 
-#: admin/wizards/php.py:80
+#: admin/wizards/php.py:42
+#, fuzzy
+msgid "PHP Interpreter Not Found"
+msgstr "Tolk"
+
+#: admin/wizards/php.py:43
+msgid "A valid PHP interpreter could not be found in your system."
+msgstr ""
+
+#: admin/wizards/php.py:44
+msgid ""
+"Please, check out Cherokee's PHP Documentation to learn how to set it up."
+msgstr ""
+
+#: admin/wizards/php.py:102
 #, fuzzy
 msgid "Invalid Virtual Server reference."
 msgstr "Smeknamn för virtuell server"
 
-#: admin/wizards/php.py:92
+#: admin/wizards/php.py:114
 msgid "Could not find a suitable PHP interpreter."
 msgstr "Kunde inte hitta en lämplig PHP-tolk"
 
-#: admin/wizards/php.py:101
+#: admin/wizards/php.py:123
 msgid "Could not determine PHP-fpm settings."
 msgstr "Kunde inte fastställa inställningar för PHP-fpm."
 
-#: admin/wizards/php.py:105
+#: admin/wizards/php.py:127
 msgid "Could not determine correct interpreter settings."
 msgstr "Kunde inte fastställa korrekta inställningar för tolken."
 
@@ -5364,7 +5442,7 @@ msgid ""
 msgstr ""
 "Web-katalog där du vill att Sugar CRM ska kunna nås. (Exempelvis: /sugar)"
 
-#: admin/wizards/sugar.py:227
+#: admin/wizards/sugar.py:235
 #, fuzzy
 msgid "Sugar Local Directory"
 msgstr "Webkatalog"
@@ -5413,12 +5491,12 @@ msgid ""
 "Web directory where you want Symfony to be accessible. (Example: /symfony)"
 msgstr "Web-katalog där vill att Symfony ska kunna nås. (Exempelvis: /symfony)"
 
-#: admin/wizards/symfony.py:237
+#: admin/wizards/symfony.py:245
 #, fuzzy
 msgid "Project Source"
 msgstr "Webkatalog"
 
-#: admin/wizards/symfony.py:238
+#: admin/wizards/symfony.py:246
 msgid "Symfony Package"
 msgstr "Symfony-paket"
 
@@ -5558,7 +5636,7 @@ msgstr "Web-katalog där du vi att WordPress ska kunna nås. (Exempelvis: /blog)
 msgid "Does not look like a WordPress source directory."
 msgstr "Ser inte ut som en katalog med källkod till WordPress."
 
-#: admin/wizards/wordpress.py:228
+#: admin/wizards/wordpress.py:236
 #, fuzzy
 msgid "WordPress Local Directory"
 msgstr "Webkatalog"
@@ -5599,6 +5677,9 @@ msgstr "Skapa en ny konfigurations-fil"
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
 msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 
+#~ msgid "Add new"
+#~ msgstr "Lägg till ny"
+
 #~ msgid "Choose…"
 #~ msgstr "Välj..."
 
@@ -5616,10 +5697,6 @@ msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 #, fuzzy
 #~ msgid "or"
 #~ msgstr "Port"
-
-#, fuzzy
-#~ msgid "exists"
-#~ msgstr "Fil finns"
 
 #, fuzzy
 #~ msgid "title"
@@ -5641,9 +5718,6 @@ msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 
 #~ msgid "Submit"
 #~ msgstr "Skicka"
-
-#~ msgid "Delete"
-#~ msgstr "Ta bort"
 
 #~ msgid "Realm can not be empty"
 #~ msgstr "Realm kan inte vara tom"
@@ -5723,10 +5797,6 @@ msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 
 #~ msgid "Apply"
 #~ msgstr "Tillämpa"
-
-#, fuzzy
-#~ msgid "Optional"
-#~ msgstr "Ytterligare inställningar"
 
 #~ msgid "Commit all the changes permanently"
 #~ msgstr "Skriv alla ändringar permanent."
@@ -5852,9 +5922,6 @@ msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 #~ msgid "/~user directories"
 #~ msgstr "/~användar-kataloger"
 
-#~ msgid "Disable"
-#~ msgstr "Deaktivera"
-
 #~ msgid "Directory name"
 #~ msgstr "Katalognamn"
 
@@ -5948,12 +6015,6 @@ msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 #~ msgid "Zend Wizard"
 #~ msgstr "Guider"
 
-#~ msgid "ERROR: Couldn't unpack '%s'"
-#~ msgstr "FEL: Kunde inte packa upp '%s'"
-
-#~ msgid "Could not copy configuration to "
-#~ msgstr "Kunde inte kopiera konfiguration till"
-
 #~ msgid "Static content"
 #~ msgstr "Statiskt innehåll"
 
@@ -5985,9 +6046,6 @@ msgstr "Web-katalog där du vill att Zend ska kunna nås. (Exempelvis: /zend)"
 
 #~ msgid "WWW Root"
 #~ msgstr "WWW-rot"
-
-#~ msgid "Optionally specifies a database to connect to."
-#~ msgstr "Välj vid behov en databas att ansluta till."
 
 #~ msgid "TCP balancer"
 #~ msgstr "TCP-balanserare"
