@@ -3,7 +3,7 @@
 # rTorrent Wizard
 #
 # Authors:
-#      Taher Shihadeh <taher@unixwars.com>
+#      Taher Shihadeh <taher@octality.com>
 #      Antonio Perez  <aperez@skarcha.com>
 #
 # Copyright (C) 2010 Alvaro Lopez Ortega

@@ -3,7 +3,7 @@
 # Cherokee-admin's Mailman Wizard
 #
 # Authors:
-#      Taher Shihadeh <taher@unixwars.com>
+#      Taher Shihadeh <taher@octality.com>
 #
 # Copyright (C) 2010 Alvaro Lopez Ortega
 #

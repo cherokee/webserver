@@ -3,7 +3,7 @@
 # Cherokee-admin
 #
 # Authors:
-#      Taher Shihadeh <taher@unixwars.com>
+#      Taher Shihadeh <taher@octality.com>
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
 # Copyright (C) 2010 Alvaro Lopez Ortega

@@ -4,7 +4,7 @@
 #
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
-#      Taher Shihadeh <taher@unixwars.com>
+#      Taher Shihadeh <taher@octality.com>
 #
 # Copyright (C) 2001-2010 Alvaro Lopez Ortega
 #

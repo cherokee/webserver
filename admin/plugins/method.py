@@ -1,7 +1,7 @@
 # Cheroke Admin: HTTP Method rule plug-in
 #
 # Authors:
-#      Taher Shihadeh <taher@unixwars.com>
+#      Taher Shihadeh <taher@octality.com>
 #
 # Copyright (C) 2009-2010 Alvaro Lopez Ortega
 #
