@@ -92,7 +92,11 @@ class Commit:
 
         # PHP
         php = CTK.load_module ('php', 'wizards')
+
         error = php.wizard_php_add (next)
+        if error:
+            return {'ret': 'error', 'errors': {'msg': error}}
+
         php_info = php.get_info (next)
 
         # Moodle
@@ -120,7 +124,11 @@ class Commit:
 
         # PHP
         php = CTK.load_module ('php', 'wizards')
+
         error = php.wizard_php_add (next)
+        if error:
+            return {'ret': 'error', 'errors': {'msg': error}}
+
         php_info = php.get_info (next)
 
         # Moodle
@@ -202,6 +210,12 @@ class LocalSource:
         return cont.Render().toStr()
 
 
+class PHP:
+    def __call__ (self):
+        php = CTK.load_module ('php', 'wizards')
+        return php.External_FindPHP()
+
+
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
@@ -245,13 +259,15 @@ VALS = [
 
 # VServer
 CTK.publish ('^/wizard/vserver/moodle$',   Welcome)
-CTK.publish ('^/wizard/vserver/moodle/2$', LocalSource)
-CTK.publish ('^/wizard/vserver/moodle/3$', Host)
+CTK.publish ('^/wizard/vserver/moodle/2$', PHP)
+CTK.publish ('^/wizard/vserver/moodle/3$', LocalSource)
+CTK.publish ('^/wizard/vserver/moodle/4$', Host)
 
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/moodle$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/moodle/2$', LocalSource)
-CTK.publish ('^/wizard/vserver/(\d+)/moodle/3$', WebDirectory)
+CTK.publish ('^/wizard/vserver/(\d+)/moodle/2$', PHP)
+CTK.publish ('^/wizard/vserver/(\d+)/moodle/3$', LocalSource)
+CTK.publish ('^/wizard/vserver/(\d+)/moodle/4$', WebDirectory)
 
 # Common
 CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
