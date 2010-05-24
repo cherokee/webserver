@@ -41,7 +41,7 @@ NOTE_HOST       = N_("Host name of the virtual server that is about to be create
 
 NOTE_NOT_FOUND_H1 = N_("PHP Interpreter Not Found")
 NOTE_NOT_FOUND    = N_("A valid PHP interpreter could not be found in your system.")
-NOTE_NOT_FOUND2   = N_("Please, check out the Cherokee's PHP Documentation to learn how to set it up.")
+NOTE_NOT_FOUND2   = N_("Please, check out Cherokee's PHP Documentation to learn how to set it up.")
 
 PHP_DEFAULT_TIMEOUT        = '30'
 SAFE_PHP_FCGI_MAX_REQUESTS = '490'
