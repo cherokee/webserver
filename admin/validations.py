@@ -58,9 +58,9 @@ def is_extension (value):
 
 def is_web_path (value):
     is_not_empty(value)
-    if not value[0] == '/':
-        value = '/%s'%(value)
-    return value
+    if value[0] == '/':
+        return value
+    raise ValueError, _('Malformed path')
 
 def is_path (value):
     is_not_empty(value)
