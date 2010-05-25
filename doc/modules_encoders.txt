@@ -7,8 +7,7 @@ Encoders are Cherokee modules that can be used as filters. The most
 common usage is to compress information allowing you to save
 bandwidth. You should do that whenever you can since hardware is
 mostly inexpensive while bandwidth is not. Besides, the performance
-penalization suffered due to the compression process is trivial, and
-if the content is cached you will only suffer it once.
+penalization suffered due to the compression process is trivial.
 
 Of course it doesn't make sense to apply a processor intensive filter
 to content that can't take advantage of it (i.e., it doesn't make
@@ -19,5 +18,15 @@ The encoders must be enabled or disabled in a per rule basis.
 
 This is the list of currently provided encoders:
 
-* link:modules_encoders_gzip.html[gzip]
-* link:modules_encoders_deflate.html[deflate]
+. link:modules_encoders_gzip.html[gzip]
+. link:modules_encoders_deflate.html[deflate]
+
+It is interesting to highlight that Cherokee also supports negative
+encoding rules. This translates into rules that forbid an encoder to
+be used. To prevent encoding files that are already compressed, a
+pretty simple rule such as the following one could be included to
+avoid the problem.
+
+* Match: Extensions (jpg,zip,gz,rar,7z)
+* Final: No
+* Encoder: Gzip: Forbid
