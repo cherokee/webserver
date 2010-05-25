@@ -171,9 +171,9 @@ struct cherokee_connection {
 
 	/* Traffic
 	 */
-	size_t                        rx;                  /* Bytes received */
+	off_t                         rx;                  /* Bytes received */
 	size_t                        rx_partial;          /* RX partial counter */
-	size_t                        tx;                  /* Bytes sent */
+	off_t                         tx;                  /* Bytes sent */
 	size_t                        tx_partial;          /* TX partial counter */
 	time_t                        traffic_next;        /* Time to update traffic */
 

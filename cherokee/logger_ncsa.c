@@ -270,8 +270,8 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 		cherokee_buffer_add_long10 (buf, cnt->error_code);
 	}
 
-	cherokee_buffer_add_char   (buf, ' ');
-	cherokee_buffer_add_ullong10 (buf, (cullong_t) (cnt->range_end - cnt->range_start));
+	cherokee_buffer_add_char (buf, ' ');
+	cherokee_buffer_add_ullong10 (buf, cnt->tx);
 
 	/* Look for the "combined" information
 	 */

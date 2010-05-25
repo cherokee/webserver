@@ -903,8 +903,10 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 void
 cherokee_connection_rx_add (cherokee_connection_t *conn, ssize_t rx)
 {
-	conn->rx += rx;
-	conn->rx_partial += rx;
+	if (likely (rx > 0)) {
+		conn->rx += rx;
+		conn->rx_partial += rx;
+	}
 }
 
 
@@ -2430,7 +2432,7 @@ cherokee_connection_print (cherokee_connection_t *conn)
 	/* Shortcut: Don't render if not tracing
 	 */
 	if (! cherokee_trace_is_tracing()) {
-		return "";
+		return (char *)"";
 	}
 
 	/* Render
