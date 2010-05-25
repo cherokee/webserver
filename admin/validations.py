@@ -56,6 +56,12 @@ def is_extension (value):
     is_not_empty(value)
     return value
 
+def is_web_path (value):
+    is_not_empty(value)
+    if not value[0] == '/':
+        value = '/%s'%(value)
+    return value
+
 def is_path (value):
     is_not_empty(value)
     if value[0] == '/':

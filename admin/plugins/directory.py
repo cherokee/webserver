@@ -28,4 +28,4 @@ NOTE_DIRECTORY = N_("Public Web Directory to which content the configuration wil
 
 class Plugin_directory (RuleSimple.PluginSimple):
     def __init__ (self, key, **kwargs):
-        RuleSimple.PluginSimple.__init__ (self, key, _('Web Directory'), "directory", _(NOTE_DIRECTORY), _('Directory'), validations.is_path, **kwargs)
+        RuleSimple.PluginSimple.__init__ (self, key, _('Web Directory'), "directory", _(NOTE_DIRECTORY), _('Directory'), validations.is_web_path, **kwargs)
