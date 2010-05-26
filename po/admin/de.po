@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-24 16:37+0200\n"
+"POT-Creation-Date: 2010-05-25 18:02+0200\n"
 "PO-Revision-Date: 2009-05-12 15:10+0100\n"
 "Last-Translator: Andreas Sinz <andreas.sinz@aon.at>\n"
 "Language-Team: none\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: admin/Auth.py:34
 #, fuzzy
 msgid "Allowed HTTP Authentication methods."
-msgstr "Erlaube HTTP Authentifizierungsmethoden"
+msgstr "Erlaubte HTTP Authentifizierungsmethoden"
 
 #: admin/Auth.py:35
 msgid "Name associated with the protected resource."
@@ -27,15 +27,15 @@ msgstr ""
 
 #: admin/Auth.py:36
 msgid "User filter. List of allowed users."
-msgstr ""
+msgstr "Benutzerfilter. Liste der zugelassenen Benutzer"
 
 #: admin/Auth.py:53
 msgid "Methods"
-msgstr ""
+msgstr "Methoden"
 
 #: admin/Auth.py:54
 msgid "Realm"
-msgstr ""
+msgstr "Bereich"
 
 #: admin/Auth.py:55
 msgid "Users"
@@ -85,7 +85,7 @@ msgstr "Informationsquellen"
 
 #: admin/Balancer.py:112
 msgid "Assign Information Sources"
-msgstr ""
+msgstr "Informationsquellen zuordnen"
 
 #: admin/Balancer.py:117 admin/PageIndex.py:202 admin/PageRule.py:112
 #: admin/plugins/bind.py:69 admin/plugins/bind.py:121
@@ -95,7 +95,7 @@ msgstr "W√§hlen"
 
 #: admin/Balancer.py:123
 msgid "Application Server"
-msgstr ""
+msgstr "Anwendungsserver"
 
 #: admin/CTK/CTK/Config.py:237
 #, python-format
@@ -104,13 +104,13 @@ msgstr "FEHLER: Konnte '%s' nicht entpacken"
 
 #: admin/CTK/CTK/Config.py:370
 msgid "Could not copy configuration to "
-msgstr "Konnte die Konfiguration nicht kopieren nach"
+msgstr "Konnte die Konfiguration nicht kopieren nach "
 
 #: admin/CTK/CTK/Dialog.py:213 admin/PageException.py:89
 #: admin/PageException.py:93 admin/PageIndex.py:254 admin/PageSource.py:409
 #, fuzzy
 msgid "Close"
-msgstr "Klonen"
+msgstr "Schlieﬂen"
 
 #: admin/CTK/CTK/Druid.py:153 admin/CTK/CTK/Druid.py:160
 #: admin/CTK/CTK/Druid.py:168 admin/CTK/CTK/Druid.py:176
@@ -122,11 +122,11 @@ msgstr "Klonen"
 #: admin/PageVServers.py:264 admin/plugins/redir.py:115
 #, fuzzy
 msgid "Cancel"
-msgstr "Change"
+msgstr "Abbrechen"
 
 #: admin/CTK/CTK/Druid.py:154 admin/CTK/CTK/Druid.py:161
 msgid "Next"
-msgstr ""
+msgstr "Weiter"
 
 #: admin/CTK/CTK/Druid.py:162 admin/CTK/CTK/Druid.py:170
 #, fuzzy
@@ -136,7 +136,7 @@ msgstr "LDAP server"
 #: admin/CTK/CTK/Druid.py:169 admin/CTK/CTK/Druid.py:177
 #: admin/PageNewConfig.py:140
 msgid "Create"
-msgstr ""
+msgstr "Anlegen"
 
 #: admin/CTK/CTK/Image.py:48 admin/CTK/CTK/Image.py:49
 msgid "Delete"
@@ -144,16 +144,16 @@ msgstr "L√∂schen"
 
 #: admin/CTK/CTK/Image.py:60 admin/util.py:35
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: admin/CTK/CTK/Image.py:65 admin/util.py:35
 msgid "Inactive"
-msgstr ""
+msgstr "Inaktiv"
 
 #: admin/CTK/CTK/Image.py:70
 #, fuzzy
 msgid "Loading"
-msgstr "Protokollierung"
+msgstr "L‰dt"
 
 #: admin/CTK/CTK/Image.py:75 admin/CgiBase.py:68 admin/CgiBase.py:70
 #: admin/CgiBase.py:123 admin/CgiBase.py:124 admin/CgiBase.py:125
@@ -167,12 +167,12 @@ msgstr "Protokollierung"
 #: admin/plugins/exists.py:117 admin/plugins/file.py:40
 #: admin/plugins/ldap.py:53 admin/plugins/streaming.py:43
 msgid "Enabled"
-msgstr "Akiviert"
+msgstr "Aktiviert"
 
 #: admin/CTK/CTK/Submitter.py:73 admin/CTK/CTK/TextField.py:66
 #, fuzzy
 msgid "Optional"
-msgstr "Optionen"
+msgstr "Optional"
 
 #: admin/CTK/CTK/ToggleButton.py:116
 msgid "Disable"
@@ -181,7 +181,7 @@ msgstr "Deaktivieren"
 #: admin/CTK/CTK/ToggleButton.py:117
 #, fuzzy
 msgid "Enable"
-msgstr "Akiviert"
+msgstr "Aktivieren"
 
 #: admin/CgiBase.py:32
 msgid "Path to an executable that will be run with the CGI as parameter."
@@ -231,12 +231,12 @@ msgstr ""
 
 #: admin/CgiBase.py:70 admin/PageVServer.py:415
 msgid "Don't check origin"
-msgstr ""
+msgstr "Ursprung nicht pr¸fen"
 
 #: admin/CgiBase.py:72 admin/PageVServer.py:418
 #, fuzzy
 msgid "Accept from Hosts"
-msgstr "Erlaube Domains"
+msgstr "Von Hosts erlauben"
 
 #: admin/CgiBase.py:90 admin/CgiBase.py:154
 msgid "Name"
@@ -249,23 +249,23 @@ msgstr "Wert"
 
 #: admin/CgiBase.py:119
 msgid "Script Alias"
-msgstr ""
+msgstr "Script Alias"
 
 #: admin/CgiBase.py:121
 msgid "Change UID"
-msgstr "√Ñndere die UID"
+msgstr "UID ‰ndern"
 
 #: admin/CgiBase.py:121
 msgid "Change"
-msgstr "Change"
+msgstr "ƒndern"
 
 #: admin/CgiBase.py:123
 msgid "Error handler"
-msgstr ""
+msgstr "Fehlerhandhabung"
 
 #: admin/CgiBase.py:124
 msgid "Check file"
-msgstr ""
+msgstr "Datei pr¸fen"
 
 #: admin/CgiBase.py:125
 msgid "Pass Request Headers"
@@ -273,7 +273,7 @@ msgstr ""
 
 #: admin/CgiBase.py:126
 msgid "Allow X-Sendfile"
-msgstr ""
+msgstr "Erlaube X-Sendfile"
 
 #: admin/CgiBase.py:131
 msgid "Common CGI Options"
@@ -287,7 +287,7 @@ msgstr "Authentifizierungsdetails"
 #: admin/CgiBase.py:145
 #, fuzzy
 msgid "Custom Environment Variables"
-msgstr "Umgebungsvariablen"
+msgstr "Benutzerdefinierte Umgebungsvariablen"
 
 #: admin/CgiBase.py:150 admin/Icons.py:342 admin/Mime.py:100
 #: admin/PageGeneral.py:216 admin/PageRule.py:260 admin/PageSource.py:239
@@ -298,12 +298,12 @@ msgstr "Umgebungsvariablen"
 #: admin/plugins/rehost.py:71 admin/plugins/target_ip.py:79
 #: admin/plugins/wildcard.py:70
 msgid "Add"
-msgstr "Hinzuf√ºgen"
+msgstr "Hinzuf¸gen"
 
 #: admin/CgiBase.py:162
 #, fuzzy
 msgid "Add New Custom Environment Variable"
-msgstr "Neue Umgebungsvariable hinzuf√ºgen"
+msgstr "Neue Umgebungsvariable hinzuf¸gen"
 
 #: admin/Cherokee.py:142
 msgid "Could not access file descriptors: "
@@ -311,46 +311,46 @@ msgstr ""
 
 #: admin/Flags.py:308 admin/Flags.py:326
 msgid "Countries"
-msgstr "L√§nder"
+msgstr "L‰nder"
 
 #: admin/Flags.py:308 admin/Flags.py:334
 msgid "Extras"
-msgstr ""
+msgstr "Extras"
 
 #: admin/Graph.py:39
 #, fuzzy
 msgid "Server Traffic"
-msgstr "Server Info"
+msgstr "Server Datenverkehr"
 
 #: admin/Graph.py:40
 #, fuzzy
 msgid "Connections / Requests"
-msgstr "Verbindungen"
+msgstr "Verbindungen / Anfragen"
 
 #: admin/Graph.py:41
 #, fuzzy
 msgid "Connection Timeouts"
-msgstr "Verbindungen"
+msgstr "Verbindungenstimeout"
 
 #: admin/Graph.py:43
 msgid "1 Hour"
-msgstr ""
+msgstr "1 Stunde"
 
 #: admin/Graph.py:44
 msgid "6 Hours"
-msgstr ""
+msgstr "6 Stunden"
 
 #: admin/Graph.py:45
 msgid "1 Day"
-msgstr ""
+msgstr "1 Tag"
 
 #: admin/Graph.py:46
 msgid "1 Week"
-msgstr ""
+msgstr "1 Woche"
 
 #: admin/Graph.py:47
 msgid "1 Month"
-msgstr ""
+msgstr "1 Monat"
 
 #: admin/Graph.py:50
 #, python-format
@@ -372,7 +372,7 @@ msgstr "Unbekannt"
 
 #: admin/Graph.py:124
 msgid "Collect Statistics"
-msgstr ""
+msgstr "Statistiken erfassen"
 
 #: admin/Handler.py:31
 msgid "Allows to specify an alternative Document Root path."
@@ -388,16 +388,16 @@ msgstr "Hauptordner"
 #: admin/Icons.py:118 admin/Icons.py:313 admin/Mime.py:86 admin/Mime.py:120
 #: admin/consts.py:182 admin/plugins/extensions.py:59
 msgid "Extensions"
-msgstr ""
+msgstr "Erweiterungen"
 
 #: admin/Icons.py:134
 msgid "Extension List"
-msgstr ""
+msgstr "Erweiterungsliste"
 
 #: admin/Icons.py:138
 #, fuzzy
 msgid "Add New Extension"
-msgstr "Neue Regel hinzuf√ºgen"
+msgstr "Neue Erweiterung hinzuf¸gen"
 
 #: admin/Icons.py:152 admin/plugins/exists.py:75 admin/plugins/exists.py:114
 msgid "Files"
@@ -405,12 +405,12 @@ msgstr "Dateien"
 
 #: admin/Icons.py:167
 msgid "File Matches"
-msgstr ""
+msgstr "Datei¸bereinstimmung"
 
 #: admin/Icons.py:171
 #, fuzzy
 msgid "Add New File"
-msgstr "Neue Regel hinzuf√ºgen"
+msgstr "Neue Datei hinzuf¸gen"
 
 #: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:38
 #: admin/consts.py:122
@@ -424,12 +424,12 @@ msgstr "Ordner"
 
 #: admin/Icons.py:184 admin/Icons.py:316
 msgid "Go to Parent"
-msgstr "Gehe zum √ºbergeordneten Ordner"
+msgstr "Gehe zum ¸bergeordneten Ordner"
 
 #: admin/Icons.py:191
 #, fuzzy
 msgid "Modify"
-msgstr "Ver√§ndert am"
+msgstr "Ge‰ndert am"
 
 #: admin/Icons.py:199 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
 msgid "Special Files"
@@ -468,7 +468,7 @@ msgstr ""
 #: admin/plugins/wildcard.py:79
 #, fuzzy
 msgid "Add New"
-msgstr "Neue Regel hinzuf√ºgen"
+msgstr "Neu"
 
 #: admin/Mime.py:120
 #, fuzzy
@@ -494,12 +494,12 @@ msgstr "Konfiguration gespeichert"
 #, fuzzy
 msgid "Would you like to apply the changes to the running server now?"
 msgstr ""
-"√Ñnderungen auf der Festplatte speichern und im laufenden Server die "
-"√Ñnderungen √ºbernehmen"
+"ƒnderungenen speichern und im laufenden Server die "
+"ƒnderungenen ¸bernehmen"
 
 #: admin/Page.py:34
 msgid "The configuration file has been saved successfuly."
-msgstr ""
+msgstr "Die Konfigurationsdatei wurde erfolgreich gespeichert"
 
 #: admin/Page.py:75
 msgid "Do not restart"
@@ -537,12 +537,12 @@ msgstr "Allgemein"
 #: admin/Page.py:118
 #, fuzzy
 msgid "vServers"
-msgstr "Server ID"
+msgstr "vServer"
 
 #: admin/Page.py:119
 #, fuzzy
 msgid "Sources"
-msgstr "Unterst√ºtzung"
+msgstr "Quellen"
 
 #: admin/Page.py:120 admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
 msgid "Advanced"
@@ -554,7 +554,7 @@ msgstr "Hilfe"
 
 #: admin/Page.py:122
 msgid "Updating..."
-msgstr ""
+msgstr "‹bertragung..."
 
 #: admin/PageAdvanced.py:61
 #, fuzzy
@@ -645,7 +645,7 @@ msgstr ""
 
 #: admin/PageAdvanced.py:80
 msgid "Activate or deactivate the I/O cache globally."
-msgstr "Aktiviere oder deaktivieren den I/O Puffer global."
+msgstr "Aktivieren oder deaktivieren des I/O Puffers global."
 
 #: admin/PageAdvanced.py:81
 msgid "Number of pages that the cache should handle."
@@ -657,7 +657,7 @@ msgstr "Dateien die kleiner sind werden nicht gepuffert."
 
 #: admin/PageAdvanced.py:83
 msgid "Files over this size will not be cached."
-msgstr "Dateien die gr√∂√üer sind werden nicht gepuffert."
+msgstr "Dateien die grˆﬂer sind werden nicht gepuffert."
 
 #: admin/PageAdvanced.py:84
 msgid ""
@@ -692,7 +692,7 @@ msgstr ""
 #: admin/PageAdvanced.py:113 admin/PageAdvanced.py:115
 #, fuzzy
 msgid "Allowed"
-msgstr "Erlauben"
+msgstr "Erlaubt"
 
 #: admin/PageAdvanced.py:114
 msgid "Max keepalive reqs"
@@ -748,7 +748,7 @@ msgstr ""
 
 #: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
 msgid "Resources"
-msgstr ""
+msgstr "Ressourcen"
 
 #: admin/PageAdvanced.py:145
 msgid "Max pages"
@@ -756,11 +756,11 @@ msgstr "Maximale Anzahl der Seiten"
 
 #: admin/PageAdvanced.py:146
 msgid "File Min Size"
-msgstr "Mindestgr√∂√üe der Datei"
+msgstr "Mindestgrˆﬂe der Datei"
 
 #: admin/PageAdvanced.py:147
 msgid "File Max Size"
-msgstr "H√∂chstgr√∂√üe einer Datei"
+msgstr "Hˆchstgrˆﬂe einer Datei"
 
 #: admin/PageAdvanced.py:148
 msgid "Lasting: stat"
@@ -867,11 +867,11 @@ msgstr "Authentifizierung"
 #: admin/PageEntry.py:66
 #, fuzzy
 msgid "Authentication modules"
-msgstr "Authentifizierung"
+msgstr "Authentifizierungsmodule"
 
 #: admin/PageEntry.py:70
 msgid "Leave unset"
-msgstr ""
+msgstr "unver‰ndert lassen"
 
 #: admin/PageEntry.py:71 admin/PageVServer.py:310 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
@@ -881,7 +881,7 @@ msgstr "Erlauben"
 
 #: admin/PageEntry.py:72
 msgid "Forbid"
-msgstr ""
+msgstr "Verbieten"
 
 #: admin/PageEntry.py:90
 msgid "Limit traffic to"
@@ -909,7 +909,7 @@ msgstr "Erlaube von"
 
 #: admin/PageEntry.py:119
 msgid "Access Restrictions"
-msgstr "Zugriffsbeschr√§nkungen"
+msgstr "Zugriffsbeschr‰nkungen"
 
 #: admin/PageEntry.py:126
 msgid "Validation Mechanism"
@@ -917,7 +917,7 @@ msgstr ""
 
 #: admin/PageEntry.py:139 admin/PageVServer.py:115
 msgid "Expiration"
-msgstr ""
+msgstr "Ablaufdatum"
 
 #: admin/PageEntry.py:142
 msgid "Time to expire"
@@ -931,7 +931,7 @@ msgstr ""
 #: admin/PageEntry.py:159
 #, fuzzy
 msgid "Connections Timeout"
-msgstr "Verbindungen"
+msgstr "Verbindungenstimeout"
 
 #: admin/PageEntry.py:166
 msgid "Content Expiration"
@@ -971,7 +971,7 @@ msgstr ""
 #: admin/PageEntry.py:257
 #, fuzzy
 msgid "Time"
-msgstr "Design"
+msgstr "Zeit"
 
 #: admin/PageEntry.py:258 admin/PageVServer.py:508
 msgid "Security"
@@ -987,7 +987,7 @@ msgstr ""
 #: admin/PageError.py:57 admin/PageError.py:83
 #, fuzzy
 msgid "Server Launch Error"
-msgstr "Server Info"
+msgstr "Fehler beim Serverstart"
 
 #: admin/PageError.py:84
 msgid "Something unexpected just happened."
@@ -996,7 +996,7 @@ msgstr ""
 #: admin/PageError.py:89
 #, fuzzy, python-format
 msgid "The configuration file <code>%s</code> cannot be modified."
-msgstr "Konfigurationsdatei konnte nicht ver√§ndert werden"
+msgstr "Konfigurationsdatei konnte nicht ver‰ndert werden"
 
 #: admin/PageError.py:90
 msgid ""
@@ -1006,12 +1006,12 @@ msgstr ""
 
 #: admin/PageError.py:91
 msgid "or by launching cherokee-admin as root."
-msgstr ""
+msgstr "oder durch Aufruf von cherokee-admin als root"
 
 #: admin/PageError.py:101 admin/PageError.py:107
 #, fuzzy
 msgid "Configuration file is not writable"
-msgstr "Konfigurationsdatei konnte nicht ver√§ndert werden"
+msgstr "Konfigurationsdatei konnte nicht ver‰ndert werden"
 
 #: admin/PageError.py:118
 #, python-format
@@ -1048,7 +1048,7 @@ msgstr "Erzeuge eine neue Konfigurationsdatei"
 #: admin/PageError.py:161
 #, fuzzy
 msgid "Ancient Configuration File"
-msgstr "Neue Konfigurationsdatei"
+msgstr "Alte Konfigurationsdatei"
 
 #: admin/PageException.py:38
 msgid "We apologize for any inconveniences that this may have caused."
@@ -1077,16 +1077,16 @@ msgstr ""
 
 #: admin/PageException.py:80
 msgid "Internal Error"
-msgstr ""
+msgstr "interner Fehler"
 
 #: admin/PageException.py:87
 #, fuzzy
 msgid "Thank you!"
-msgstr "Feedback: Danke"
+msgstr "Vielen Dank!"
 
 #: admin/PageException.py:91
 msgid "Could not report the issue"
-msgstr ""
+msgstr "Problem konnte nicht berichtet werden"
 
 #: admin/PageException.py:99
 msgid "Unexpected Exception"
@@ -1095,7 +1095,7 @@ msgstr ""
 #: admin/PageException.py:112
 #, fuzzy
 msgid "Report this"
-msgstr "Bericht gesendet"
+msgstr "Berichten"
 
 #: admin/PageGeneral.py:38
 msgid "Defines a port that the server will listen to"
@@ -1110,12 +1110,12 @@ msgid ""
 "Set to enable the IPv6 support. The OS must support IPv6 for this to work."
 msgstr ""
 "Unterst√ºtzung f√ºr IPv6 aktivieren. Das Betriebssystem muss IPv6 "
-"unterst√ºtzen, damit es funktioniert."
+"unterst√ºtzen, damit dies funktioniert."
 
 #: admin/PageGeneral.py:41
 msgid "This option allows to choose how the server identifies itself."
 msgstr ""
-"Diese Einstellung erlaubt ihnen zu w√§hlen, wie sich der Server selbt "
+"Diese Einstellung erlaubt Ihnen zu w√§hlen, wie sich der Server selbt "
 "identifiziert"
 
 #: admin/PageGeneral.py:42
@@ -1151,7 +1151,7 @@ msgid ""
 "Jail the server inside the directory. Don't use it as the only security "
 "measure."
 msgstr ""
-"Sperre den Server in einem Ordner ein. Benutze dies nicht als einzige "
+"Sperrt den Server in einem Ordner ein. Nutzen Sie dies nicht als einzige "
 "Sicherheitsma√ünahme."
 
 #: admin/PageGeneral.py:49
@@ -1208,7 +1208,7 @@ msgstr "Informationen"
 
 #: admin/PageGeneral.py:151 admin/PageGeneral.py:152
 msgid "Upload Tracking"
-msgstr ""
+msgstr "Upload Protokollierung"
 
 #: admin/PageGeneral.py:171 admin/PageGeneral.py:209 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
@@ -1223,11 +1223,11 @@ msgstr ""
 #: admin/PageGeneral.py:184
 #, fuzzy
 msgid "TLS/SSL port"
-msgstr "Kein TLS/SSL"
+msgstr "TLS/SSL Port"
 
 #: admin/PageGeneral.py:186
 msgid "TLS/SSL support disabled"
-msgstr ""
+msgstr "TLS/SSL Unterst¸tzung deaktiviert"
 
 #: admin/PageGeneral.py:210
 msgid "Interface"
@@ -1236,7 +1236,7 @@ msgstr ""
 #: admin/PageGeneral.py:215
 #, fuzzy
 msgid "New port"
-msgstr "Bericht"
+msgstr "Neuer Port"
 
 #: admin/PageGeneral.py:224
 #, fuzzy
@@ -1287,12 +1287,12 @@ msgstr "Standardeinstellungen"
 
 #: admin/PageHelp.py:35
 msgid "Table of Contents"
-msgstr ""
+msgstr "Inhalts¸bersicht"
 
 #: admin/PageHelp.py:172
 #, fuzzy
 msgid "Documentation"
-msgstr "Hauptordner"
+msgstr "Dokumentation"
 
 #: admin/PageIndex.py:62
 msgid "You will be sent an email requesting confirmation"
@@ -1391,12 +1391,12 @@ msgstr ""
 #: admin/PageIndex.py:143
 #, fuzzy
 msgid "Stop Server"
-msgstr "Server"
+msgstr "Server stoppen"
 
 #: admin/PageIndex.py:147
 #, fuzzy
 msgid "Start Server"
-msgstr "Virtueller Server"
+msgstr "Server starten"
 
 #: admin/PageIndex.py:157
 msgid "Information"
@@ -1417,11 +1417,11 @@ msgstr "Version"
 #: admin/PageIndex.py:164
 #, fuzzy
 msgid "Default WWW"
-msgstr "Standard"
+msgstr "Standard WWW"
 
 #: admin/PageIndex.py:165
 msgid "Prefix"
-msgstr ""
+msgstr "Pr‰fix"
 
 #: admin/PageIndex.py:166
 #, fuzzy
@@ -1435,7 +1435,7 @@ msgstr "Nicht gefunden"
 
 #: admin/PageIndex.py:167
 msgid "Modified"
-msgstr "Ver√§ndert am"
+msgstr "Ge‰ndert am"
 
 #: admin/PageIndex.py:209 admin/plugins/dbslayer.py:49
 msgid "Language"
@@ -1462,7 +1462,7 @@ msgstr "Erlaube Domains"
 
 #: admin/PageIndex.py:274
 msgid "Latest Release"
-msgstr ""
+msgstr "Letzte Verˆffentlichung"
 
 #: admin/PageIndex.py:278
 msgid "Latest version could not be determined at the moment."
@@ -1470,28 +1470,28 @@ msgstr ""
 
 #: admin/PageIndex.py:280
 msgid "Cherokee is up to date."
-msgstr ""
+msgstr "Cherokee ist auf dem neusten Stand"
 
 #: admin/PageIndex.py:283
 msgid "You are running Cherokee"
-msgstr ""
+msgstr "Sie betreiben Cherokee"
 
 #: admin/PageIndex.py:285
 msgid "Latest release is "
-msgstr ""
+msgstr "Die letzte Verˆffentlichung ist "
 
 #: admin/PageIndex.py:323
 msgid "Your email address"
-msgstr ""
+msgstr "Ihre E-Mail-Adresse"
 
 #: admin/PageIndex.py:324
 #, fuzzy
 msgid "Your name"
-msgstr "Hostnamen"
+msgstr "Ihr name"
 
 #: admin/PageIndex.py:336
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: admin/PageIndex.py:341
 msgid "Mailing List"
@@ -1503,7 +1503,7 @@ msgstr ""
 
 #: admin/PageIndex.py:347
 msgid "Subscribe"
-msgstr ""
+msgstr "Abonnieren"
 
 #: admin/PageIndex.py:355
 msgid "Bug Tracker"
@@ -1512,16 +1512,16 @@ msgstr ""
 #: admin/PageIndex.py:380
 #, fuzzy
 msgid "Community"
-msgstr "Land"
+msgstr ""
 
 #: admin/PageIndex.py:396
 msgid "Commercial Support"
-msgstr ""
+msgstr "Kommerzielle Unterst¸tzung"
 
 #: admin/PageIndex.py:398
 #, fuzzy
 msgid "Purchase Support"
-msgstr "Unterst√ºtzung"
+msgstr "Unterst√ºtzung erwerben"
 
 #: admin/PageIndex.py:405 admin/PageIndex.py:407
 msgid "Welcome to Cherokee Admin"
@@ -1551,7 +1551,7 @@ msgstr ""
 
 #: admin/PageNewConfig.py:155 admin/consts.py:49 admin/plugins/file.py:29
 msgid "Static Content"
-msgstr ""
+msgstr "Statischer Inhalt"
 
 #: admin/PageNewConfig.py:156
 msgid "Optimized to send static content."
@@ -1617,12 +1617,12 @@ msgstr "Icon Datei"
 #: admin/PageRule.py:258 admin/PageRule.py:271
 #, fuzzy
 msgid "Add Behavior Rule"
-msgstr "Verhalten"
+msgstr "Verhaltensrole hinzuf¸gen"
 
 #: admin/PageRule.py:265
 #, fuzzy
 msgid "Configuration Assistant"
-msgstr "Schnelle Konfiguration"
+msgstr "Konfigurationsassistent"
 
 #: admin/PageRule.py:271 admin/PageSource.py:439 admin/PageVServers.py:248
 #, fuzzy
@@ -1632,12 +1632,12 @@ msgstr "Netzwerk"
 #: admin/PageRule.py:285
 #, fuzzy
 msgid "Clone Behavior Rule"
-msgstr "Klone virtuellen Server"
+msgstr "Dupliziere virtuellen Server"
 
 #: admin/PageRule.py:286 admin/PageRule.py:290 admin/PageSource.py:449
 #: admin/PageSource.py:453 admin/PageVServers.py:263 admin/PageVServers.py:267
 msgid "Clone"
-msgstr "Klonen"
+msgstr "Duplizieren"
 
 #: admin/PageRule.py:290
 msgid "Clone Selected Behavior Rule"
@@ -1923,7 +1923,7 @@ msgstr "Die Protokollierung ist zur Zeit aktiviert."
 
 #: admin/PageVServer.py:57
 msgid "Logging format. Apache compatible is highly recommended here."
-msgstr "Protokollierungsformat. Apache kompatibilit√§t ist sehr empfohlen hier."
+msgstr "Protokollierungsformat. Apache Kompatibilit√§t ist hier sehr empfohlen."
 
 #: admin/PageVServer.py:58
 msgid "Back-end used to store the log accesses."
@@ -2023,7 +2023,7 @@ msgstr ""
 #: admin/PageVServer.py:112
 #, fuzzy
 msgid "Custom Document Root"
-msgstr "Hauptordner"
+msgstr "Benuterdefiniertes Hauptverzeichnis"
 
 #: admin/PageVServer.py:112
 msgid "Root"
@@ -2031,12 +2031,12 @@ msgstr "Hauptverzeichnis"
 
 #: admin/PageVServer.py:113
 msgid "Only HTTPS"
-msgstr ""
+msgstr "Nur HTTPS"
 
 #: admin/PageVServer.py:113
 #, fuzzy
 msgid "Secure"
-msgstr "Sicherheit"
+msgstr "Sicher"
 
 #: admin/PageVServer.py:114
 msgid "Encoders"
@@ -2053,7 +2053,7 @@ msgstr ""
 #: admin/PageVServer.py:116
 #, fuzzy
 msgid "Connection Timeout"
-msgstr "Verbindungen"
+msgstr "Verbindungstimeout"
 
 #: admin/PageVServer.py:117
 #, fuzzy
@@ -2063,22 +2063,22 @@ msgstr "Change"
 #: admin/PageVServer.py:118
 #, fuzzy
 msgid "Logging Enabled"
-msgstr "Akiviert"
+msgstr "Protokollierung aktiviert"
 
 #: admin/PageVServer.py:118
 #, fuzzy
 msgid "Log"
-msgstr "Protokollierung"
+msgstr "Protokoll"
 
 #: admin/PageVServer.py:119
 #, fuzzy
 msgid "Rule is Final"
-msgstr "Liste der Regeln"
+msgstr "Regel ist final"
 
 #: admin/PageVServer.py:120
 #, fuzzy
 msgid "Rule is Active"
-msgstr "Liste der Regeln"
+msgstr "Regel aktiv"
 
 #: admin/PageVServer.py:145
 #, fuzzy
@@ -2088,43 +2088,43 @@ msgstr "Hostnamen"
 #: admin/PageVServer.py:155 admin/PageVServer.py:319 admin/PageVServer.py:335
 #: admin/plugins/method.py:94 admin/plugins/method.py:104
 msgid "Method"
-msgstr ""
+msgstr "Methode"
 
 #: admin/PageVServer.py:200
 #, fuzzy
 msgid "Behavior Rules"
-msgstr "Verhalten"
+msgstr "Verhaltensregeln"
 
 #: admin/PageVServer.py:209
 msgid "Rule Management"
-msgstr ""
+msgstr "Verhaltensmanagement"
 
 #: admin/PageVServer.py:234
 #, fuzzy
 msgid "Only accept Secure Connections"
-msgstr "Erlaube Domains"
+msgstr "Erlaube nur sichere Verbindungen"
 
 #: admin/PageVServer.py:239
 #, fuzzy
 msgid "Encoding enabled"
-msgstr "Akiviert"
+msgstr "Verschl¸sselung aktiviert"
 
 #: admin/PageVServer.py:245
 msgid "no"
-msgstr ""
+msgstr "nein"
 
 #: admin/PageVServer.py:256
 #, fuzzy
 msgid " seconds"
-msgstr "Icons"
+msgstr " Sekunden"
 
 #: admin/PageVServer.py:261
 msgid " bytes per second"
-msgstr ""
+msgstr " bytes pro Sekunde"
 
 #: admin/PageVServer.py:266
 msgid "Logging enabled for this rule"
-msgstr ""
+msgstr "Protokollierung f¸r diese Regel aktiviert"
 
 #: admin/PageVServer.py:271
 msgid "Prevents further rule evaluation"
@@ -2133,7 +2133,7 @@ msgstr ""
 #: admin/PageVServer.py:276
 #, fuzzy
 msgid "Rule is active"
-msgstr "Liste der Regeln"
+msgstr "Regel aktiv"
 
 #: admin/PageVServer.py:295
 msgid "Virtual Server nickname"
@@ -2170,7 +2170,7 @@ msgstr ""
 #: admin/PageVServer.py:348 admin/consts.py:225 admin/consts.py:242
 #, fuzzy
 msgid "Disabled"
-msgstr "Deaktivieren"
+msgstr "Deaktiviert"
 
 #: admin/PageVServer.py:352
 msgid "Write errors to"
@@ -2182,12 +2182,12 @@ msgstr "Dateiname"
 
 #: admin/PageVServer.py:358 admin/PageVServer.py:398
 msgid "Command"
-msgstr ""
+msgstr "Befehl"
 
 #: admin/PageVServer.py:364
 #, fuzzy
 msgid "Error Logging"
-msgstr "Protokollierung"
+msgstr "Fehlerprotokollierung"
 
 #: admin/PageVServer.py:375
 msgid "Format"
@@ -2204,11 +2204,11 @@ msgstr ""
 #: admin/PageVServer.py:405
 #, fuzzy
 msgid "Access Logging"
-msgstr "Protokollierung"
+msgstr "Zugriffsprotokollierung"
 
 #: admin/PageVServer.py:411
 msgid "Time standard"
-msgstr ""
+msgstr "Zeitstandard"
 
 #: admin/PageVServer.py:412
 msgid "Accept Forwarded IPs"
@@ -2221,24 +2221,24 @@ msgstr "Annehmen"
 #: admin/PageVServer.py:415
 #, fuzzy
 msgid "Do not check"
-msgstr "Nicht Neustarten"
+msgstr "Nicht pr¸fen"
 
 #: admin/PageVServer.py:424
 #, fuzzy
 msgid "Logging Options"
-msgstr "Protokollierung"
+msgstr "Protokollierungsoptionen"
 
 #: admin/PageVServer.py:460
 msgid "Certificate"
-msgstr ""
+msgstr "Zertifikat"
 
 #: admin/PageVServer.py:461
 msgid "Certificate key"
-msgstr ""
+msgstr "Zertifikatsschl¸ssel"
 
 #: admin/PageVServer.py:466
 msgid "Required SSL/TLS Values"
-msgstr ""
+msgstr "Erfordere SSL/TLS Werte"
 
 #: admin/PageVServer.py:471
 msgid "Ciphers"
@@ -2272,7 +2272,7 @@ msgstr "Hostnamen"
 
 #: admin/PageVServer.py:506
 msgid "Error Handler"
-msgstr ""
+msgstr "Fehlerhandhabung"
 
 #: admin/PageVServers.py:50
 #, python-format
@@ -2307,12 +2307,12 @@ msgstr "Konfiguration der virtuellen Server"
 
 #: admin/PageVServers.py:262
 msgid "Clone Virtual Server"
-msgstr "Klone virtuellen Server"
+msgstr "Dupliziere virtuellen Server"
 
 #: admin/PageVServers.py:267
 #, fuzzy
 msgid "Clone Selected Virtual Server"
-msgstr "Klone virtuellen Server"
+msgstr "Dupliziere virtuellen Server"
 
 #: admin/Rule.py:30
 msgid "The default match ought not to be changed."
@@ -2337,7 +2337,7 @@ msgstr "Ausgew√§hlte Ports"
 
 #: admin/Wizard.py:41
 msgid "Check the cookbook for more details."
-msgstr ""
+msgstr "Konsolidieren Sie das Cookbook f¸r weitere Details"
 
 #: admin/Wizard.py:197
 msgid "Use the same logging configuration as one of the other virtual servers."
@@ -2346,7 +2346,7 @@ msgstr ""
 #: admin/Wizard.py:201
 #, fuzzy
 msgid "Do not configure"
-msgstr "Nicht Neustarten"
+msgstr "Nicht konfigurieren"
 
 #: admin/consts.py:26
 msgid "English"
@@ -2359,11 +2359,11 @@ msgstr "Spanisch"
 #: admin/consts.py:28
 #, fuzzy
 msgid "German"
-msgstr "Allgemein"
+msgstr "Deutsch"
 
 #: admin/consts.py:29
 msgid "French"
-msgstr ""
+msgstr "Franzˆsisch"
 
 #: admin/consts.py:30
 msgid "Dutch"
@@ -2372,11 +2372,11 @@ msgstr ""
 #: admin/consts.py:31
 #, fuzzy
 msgid "Polish"
-msgstr "Englisch"
+msgstr "Polnisch"
 
 #: admin/consts.py:32
 msgid "Swedish"
-msgstr ""
+msgstr "Schwedisch"
 
 #: admin/consts.py:33
 msgid "Brazilian Portuguese"
@@ -2435,16 +2435,16 @@ msgstr "SCGI"
 #: admin/consts.py:54 admin/wizards/List.py:108 admin/wizards/uwsgi.py:41
 #, fuzzy
 msgid "uWSGI"
-msgstr "SCGI"
+msgstr "uWSGI"
 
 #: admin/consts.py:55
 #, fuzzy
 msgid "HTTP Reverse Proxy"
-msgstr "HTTP Fehler"
+msgstr "HTTP Reverse Proxy"
 
 #: admin/consts.py:56
 msgid "Upload Reporting"
-msgstr ""
+msgstr "Upload Berichterstattung"
 
 #: admin/consts.py:57 admin/plugins/streaming.py:31
 #: admin/plugins/streaming.py:63
@@ -2470,7 +2470,7 @@ msgstr "Server Info"
 #: admin/consts.py:62
 #, fuzzy
 msgid "MySQL Bridge"
-msgstr "MySQL server"
+msgstr "MySQL Bridge"
 
 #: admin/consts.py:63 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
@@ -2483,15 +2483,15 @@ msgstr "Entfernte Administration"
 
 #: admin/consts.py:65 admin/wizards/hotlinking.py:85
 msgid "1x1 Transparent GIF"
-msgstr ""
+msgstr "1x1 transparentes GIF"
 
 #: admin/consts.py:69
 msgid "Default errors"
-msgstr ""
+msgstr "Standardfehler"
 
 #: admin/consts.py:70
 msgid "Custom redirections"
-msgstr ""
+msgstr "Benutzerdefinierte Weiterleitungen"
 
 #: admin/consts.py:71
 msgid "Closest match"
@@ -2507,7 +2507,7 @@ msgstr "Htpasswd Datei"
 
 #: admin/consts.py:78
 msgid "Htdigest file"
-msgstr ""
+msgstr "Htdigest Datei"
 
 #: admin/consts.py:79
 msgid "LDAP server"
@@ -2523,7 +2523,7 @@ msgstr ""
 
 #: admin/consts.py:82 admin/plugins/authlist.py:30
 msgid "Fixed list"
-msgstr ""
+msgstr "Fixierte Liste"
 
 #: admin/consts.py:86
 msgid "Basic"
@@ -2539,7 +2539,7 @@ msgstr ""
 
 #: admin/consts.py:93
 msgid "Apache compatible"
-msgstr ""
+msgstr "Apache kompatibel"
 
 #: admin/consts.py:94
 msgid "NCSA"
@@ -2555,7 +2555,7 @@ msgstr ""
 
 #: admin/consts.py:101
 msgid "Standard Error"
-msgstr ""
+msgstr "Standardfehler"
 
 #: admin/consts.py:102
 msgid "Execute program"
@@ -2603,11 +2603,11 @@ msgstr "Automatisch"
 
 #: admin/consts.py:139 admin/plugins/error_redir.py:32
 msgid "External"
-msgstr ""
+msgstr "Extern"
 
 #: admin/consts.py:140 admin/plugins/error_redir.py:31
 msgid "Internal"
-msgstr ""
+msgstr "Intern"
 
 #: admin/consts.py:183 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
@@ -2627,7 +2627,7 @@ msgstr "Datei existiert"
 
 #: admin/consts.py:186
 msgid "HTTP Method"
-msgstr ""
+msgstr "HTTP Methode"
 
 #: admin/consts.py:187 admin/plugins/bind.py:76 admin/plugins/bind.py:129
 #, fuzzy
@@ -2638,12 +2638,12 @@ msgstr "Eingehender Port"
 #: admin/plugins/fullpath.py:98
 #, fuzzy
 msgid "Full Path"
-msgstr "Pfad"
+msgstr "Vollst‰ndiger Pfad"
 
 #: admin/consts.py:189 admin/plugins/from.py:71
 #, fuzzy
 msgid "Connected from"
-msgstr "Verbindung"
+msgstr "Verbindung von"
 
 #: admin/consts.py:190
 msgid "URL Argument"
@@ -2669,7 +2669,7 @@ msgstr ""
 #: admin/consts.py:198
 #, fuzzy
 msgid "Server IP"
-msgstr "Server ID"
+msgstr "Server IP"
 
 #: admin/consts.py:202
 msgid "Not set"
@@ -2685,7 +2685,7 @@ msgstr ""
 
 #: admin/consts.py:205
 msgid "Custom value"
-msgstr ""
+msgstr "Benutzerdefinierter Wert"
 
 #: admin/consts.py:209
 msgid "No TLS/SSL"
@@ -2718,7 +2718,7 @@ msgstr ""
 #: admin/consts.py:230
 #, fuzzy
 msgid "Local time"
-msgstr "Neuer Hostname"
+msgstr "lokale Zeit"
 
 #: admin/consts.py:231
 msgid "UTC: Coordinated Universal Time"
@@ -2731,7 +2731,7 @@ msgstr ""
 #: admin/consts.py:236
 #, fuzzy
 msgid "Python"
-msgstr "Pfad"
+msgstr "Python"
 
 #: admin/consts.py:237 admin/wizards/List.py:119
 msgid "PHP"
@@ -2752,7 +2752,7 @@ msgstr ""
 #: admin/plugins/authlist.py:60
 #, fuzzy
 msgid "Authentication list"
-msgstr "Authentifizierung"
+msgstr "Authentifizierungliste"
 
 #: admin/plugins/authlist.py:63 admin/plugins/authlist.py:97
 msgid "Password"
@@ -2766,7 +2766,7 @@ msgstr "Neuer Header hinzuf√ºgen"
 #: admin/plugins/bind.py:64
 #, fuzzy
 msgid "IP (Port):"
-msgstr "Port"
+msgstr "IP (Port)"
 
 #: admin/plugins/bind.py:65
 #, fuzzy
@@ -2793,7 +2793,7 @@ msgstr "Einen neuen Port zuweisen"
 #: admin/plugins/bind.py:156
 #, fuzzy
 msgid "Ports"
-msgstr "Port"
+msgstr "Ports"
 
 #: admin/plugins/common.py:32
 msgid "Allow extra tailing paths"
@@ -2833,7 +2833,7 @@ msgstr ""
 #: admin/plugins/dbslayer.py:32
 #, fuzzy
 msgid "MySQL balancing"
-msgstr "MySQL Verbindung"
+msgstr "MySQL Ausgleich"
 
 #: admin/plugins/dbslayer.py:33
 msgid "DB balancig recipe"
@@ -2849,7 +2849,7 @@ msgstr "User mit welchem auf die Datenbank zugegriffen wird"
 
 #: admin/plugins/dbslayer.py:37
 msgid "Password for the user accessing the database."
-msgstr "·πîasswort mit welchem auf die Datenbank zugeriffen wird"
+msgstr "Passwort mit welchem auf die Datenbank zugeriffen wird"
 
 #: admin/plugins/dbslayer.py:38
 #, fuzzy
@@ -2859,12 +2859,12 @@ msgstr "Server-Port zu welchem verbunden wird"
 #: admin/plugins/dbslayer.py:50 admin/plugins/mysql.py:76
 #, fuzzy
 msgid "DB User"
-msgstr "Benutzer"
+msgstr "DB Benutzer"
 
 #: admin/plugins/dbslayer.py:51 admin/plugins/mysql.py:77
 #, fuzzy
 msgid "DB Password"
-msgstr "Passwort"
+msgstr "DB Passwort"
 
 #: admin/plugins/dbslayer.py:52
 #, fuzzy
@@ -2873,7 +2873,7 @@ msgstr "Datenbank"
 
 #: admin/plugins/dbslayer.py:57
 msgid "Serialization"
-msgstr ""
+msgstr "Serialisierung"
 
 #: admin/plugins/dbslayer.py:63 admin/plugins/fcgi.py:47
 #: admin/plugins/proxy.py:274 admin/plugins/scgi.py:47
@@ -2883,7 +2883,7 @@ msgstr ""
 
 #: admin/plugins/dbslayer.py:65
 msgid "Data Base Balancing"
-msgstr ""
+msgstr "Datenbank Ausgleichung"
 
 #: admin/plugins/directory.py:27
 msgid ""
@@ -2903,7 +2903,7 @@ msgstr ""
 #: admin/wizards/wordpress.py:201 admin/wizards/zend.py:184
 #, fuzzy
 msgid "Web Directory"
-msgstr "Ordner"
+msgstr "Web Ordner"
 
 #: admin/plugins/dirlist.py:34
 msgid "Choose the listing theme."
@@ -2923,7 +2923,7 @@ msgstr ""
 
 #: admin/plugins/dirlist.py:39
 msgid "Only listing"
-msgstr ""
+msgstr "Nur anzeigen"
 
 #: admin/plugins/dirlist.py:49
 msgid "Show Size"
@@ -2951,12 +2951,12 @@ msgstr "Zeige die Gruppe an"
 #: admin/plugins/dirlist.py:53
 #, fuzzy
 msgid "Show Backup files"
-msgstr "Versteckte Dateien"
+msgstr "Sicherungsdateien anzeigen"
 
 #: admin/plugins/dirlist.py:54
 #, fuzzy
 msgid "Show Hidden files"
-msgstr "Versteckte Dateien"
+msgstr "versteckte Dateien anzeigen"
 
 #: admin/plugins/dirlist.py:55
 msgid "Allow symbolic links"
@@ -2978,7 +2978,7 @@ msgstr "Design"
 #: admin/plugins/dirlist.py:66
 #, fuzzy
 msgid "Icons dir"
-msgstr "Icons"
+msgstr "Iconsverzeichnis"
 
 #: admin/plugins/dirlist.py:67
 #, fuzzy
@@ -2996,7 +2996,7 @@ msgstr "Design"
 
 #: admin/plugins/empty_gif.py:29
 msgid "1x1 Empty GIF"
-msgstr ""
+msgstr "1x1 leeres GIF"
 
 #: admin/plugins/error_redir.py:35
 #, fuzzy
@@ -3076,7 +3076,7 @@ msgstr "MIME Typen"
 #: admin/plugins/file.py:40
 #, fuzzy
 msgid "Use I/O cache"
-msgstr "I/O Puffer"
+msgstr "I/O Puffer nutzen"
 
 #: admin/plugins/exists.py:78 admin/plugins/exists.py:116
 msgid "Only match files"
@@ -3094,7 +3094,7 @@ msgstr "Datei existiert"
 #: admin/plugins/exists.py:140
 #, fuzzy, python-format
 msgid "File %s exists"
-msgstr "Datei existiert"
+msgstr "Datei %s existiert"
 
 #: admin/plugins/exists.py:142
 msgid "File exists (never matched)"
@@ -3114,7 +3114,7 @@ msgstr ""
 #: admin/plugins/fcgi.py:49
 #, fuzzy
 msgid "FastCGI Specific"
-msgstr "FastCGI"
+msgstr "FastCGI spezifisch"
 
 #: admin/plugins/file.py:31
 msgid "Enables an internal I/O cache that improves performance."
@@ -3130,7 +3130,7 @@ msgstr ""
 
 #: admin/plugins/from.py:96
 msgid "IPs and Subnets"
-msgstr ""
+msgstr "IP und Subnetz"
 
 #: admin/plugins/from.py:103
 msgid "New IP or Subnet"
@@ -3155,7 +3155,7 @@ msgstr ""
 #: admin/plugins/fullpath.py:91
 #, fuzzy
 msgid "Full Web Paths"
-msgstr "Pfad"
+msgstr "Vollst‰ndiger Pfad"
 
 #: admin/plugins/fullpath.py:102
 #, fuzzy
@@ -3165,7 +3165,7 @@ msgstr "Neuen Port hinzuf√ºgen"
 #: admin/plugins/fullpath.py:113 admin/plugins/fullpath.py:120
 #, fuzzy
 msgid "Path"
-msgstr "Pfade"
+msgstr "Pfad"
 
 #: admin/plugins/geoip.py:32
 msgid "Add the initial country. It's possible to add more later on."
@@ -3184,12 +3184,12 @@ msgstr ""
 
 #: admin/plugins/geoip.py:78
 msgid "Select all"
-msgstr ""
+msgstr "alle ausw‰hlen"
 
 #: admin/plugins/geoip.py:79
 #, fuzzy
 msgid "Select none"
-msgstr "Ausgew√§hlte Ports"
+msgstr "keine ausw‰hlen"
 
 #: admin/plugins/header.py:30
 msgid "Header against which the regular expression will be evaluated."
@@ -3211,7 +3211,7 @@ msgstr "Passwort Datei"
 #: admin/plugins/htdigest.py:46
 #, fuzzy
 msgid "Htdigest Password File"
-msgstr "Passwort Datei"
+msgstr "Htdigest Passwort Datei"
 
 #: admin/plugins/htpasswd.py:32
 msgid "Full path to the Htpasswd formated password file."
@@ -3290,7 +3290,7 @@ msgstr "Benutze TLS"
 #: admin/plugins/ldap.py:54
 #, fuzzy
 msgid "CA File"
-msgstr "Datei"
+msgstr "CA Datei"
 
 #: admin/plugins/ldap.py:59
 #, fuzzy
@@ -3304,7 +3304,7 @@ msgstr ""
 #: admin/plugins/mysql.py:33
 #, fuzzy
 msgid "MySQL server IP address."
-msgstr "LDAP Server IP Adresse"
+msgstr "MySQL Server IP Adresse"
 
 #: admin/plugins/mysql.py:34
 msgid "Server port to connect to."
@@ -3322,7 +3322,7 @@ msgstr "User mit welchem auf die Datenbank zugegriffen wird"
 #: admin/plugins/mysql.py:37
 #, fuzzy
 msgid "Password for connecting to the database."
-msgstr "·πîasswort mit welchem auf die Datenbank zugeriffen wird"
+msgstr "Passwort mit welchem auf die Datenbank zugeriffen wird"
 
 #: admin/plugins/mysql.py:38
 msgid "Database name containing the user/password pair list."
@@ -3356,7 +3356,7 @@ msgstr "Datenbank"
 
 #: admin/plugins/mysql.py:79
 msgid "SQL Query"
-msgstr ""
+msgstr "SQL Abfrage"
 
 #: admin/plugins/mysql.py:80
 #, fuzzy
@@ -3370,7 +3370,7 @@ msgstr "MySQL Verbindung"
 
 #: admin/plugins/plain.py:30
 msgid "Plain text"
-msgstr ""
+msgstr "Klartext"
 
 #: admin/plugins/plain.py:32
 msgid "Full path to the plain text password file."
@@ -3486,7 +3486,7 @@ msgstr ""
 #: admin/plugins/proxy.py:256 admin/plugins/proxy.py:268
 #, fuzzy
 msgid "Hide Headers"
-msgstr "Neuer Header hinzuf√ºgen"
+msgstr "Header verstecken"
 
 #: admin/plugins/proxy.py:260
 msgid "Reply"
@@ -3517,7 +3517,7 @@ msgstr ""
 #: admin/plugins/redir.py:36
 #, fuzzy
 msgid "Redirections"
-msgstr "Weiterleitung"
+msgstr "Weiterleitungen"
 
 #: admin/plugins/redir.py:68
 #, fuzzy
@@ -3550,7 +3550,7 @@ msgstr ""
 #: admin/plugins/rehost.py:71
 #, fuzzy
 msgid "Add New Entry"
-msgstr "Neue Regel hinzuf√ºgen"
+msgstr "Neuen Eintrag hinzuf√ºgen"
 
 #: admin/plugins/request.py:27
 msgid "Regular expression against which the request will be executed."
@@ -3729,7 +3729,7 @@ msgstr "Neuer Hostname"
 #: admin/plugins/wildcard.py:91
 #, fuzzy
 msgid "Accepted Domains"
-msgstr "Hauptdomain"
+msgstr "Erlaubte Domains"
 
 #: admin/server.py:62
 #, fuzzy, python-format
@@ -3747,7 +3747,7 @@ msgstr ""
 
 #: admin/util.py:38
 msgid "On"
-msgstr ""
+msgstr "An"
 
 #: admin/validations.py:19
 msgid "Malformed number"
@@ -3772,94 +3772,94 @@ msgstr "Au√üerhalb der Grenzen (1 bis 65535)"
 
 #: admin/validations.py:52
 msgid "Port already in use"
-msgstr ""
+msgstr "Port wird bereits genutzt"
 
-#: admin/validations.py:65
+#: admin/validations.py:63 admin/validations.py:71
 msgid "Malformed path"
 msgstr ""
 
-#: admin/validations.py:96
+#: admin/validations.py:102
 #, fuzzy
 msgid "It is not executable"
-msgstr "Pfad ist keine normale Datei"
+msgstr "Nicht ausf¸hrbar"
 
-#: admin/validations.py:102 admin/validations.py:177
+#: admin/validations.py:108 admin/validations.py:183
 msgid "Path is not a regular file"
 msgstr "Pfad ist keine normale Datei"
 
-#: admin/validations.py:120
+#: admin/validations.py:126
 msgid "It cannot be negative"
 msgstr "Es kann nicht negativ sein"
 
-#: admin/validations.py:136
+#: admin/validations.py:142
 msgid "Malformed IPv4"
 msgstr ""
 
-#: admin/validations.py:141
+#: admin/validations.py:147
 msgid "Malformed IPv4 entry"
 msgstr ""
 
-#: admin/validations.py:143
+#: admin/validations.py:149
 msgid "IPv4 entry out of range"
 msgstr "IPv4 Eintrag ist au√üerhalb der Grenzen"
 
-#: admin/validations.py:151
+#: admin/validations.py:157
 msgid "Malformed IPv6"
 msgstr ""
 
-#: admin/validations.py:162 admin/validations.py:174
+#: admin/validations.py:168 admin/validations.py:180
 msgid "Path does not exist"
 msgstr "Pfad existiert nicht"
 
-#: admin/validations.py:165
+#: admin/validations.py:171
 msgid "Path is not a directory"
 msgstr "Pfad ist kein Ordner"
 
-#: admin/validations.py:193
+#: admin/validations.py:199
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
 msgstr ""
 
-#: admin/validations.py:216
+#: admin/validations.py:222
 msgid "Neither a number or an IPv4"
 msgstr ""
 
-#: admin/validations.py:227
+#: admin/validations.py:233
 msgid "Invalid mask"
 msgstr ""
 
-#: admin/validations.py:251
+#: admin/validations.py:257
 msgid "Malformed entry (netmask)"
 msgstr ""
 
-#: admin/validations.py:276
+#: admin/validations.py:282
 msgid "Cannot be empty"
 msgstr "Kann nicht leer sein"
 
-#: admin/validations.py:281
+#: admin/validations.py:287
 msgid "Forced failure"
 msgstr ""
 
-#: admin/validations.py:289
+#: admin/validations.py:295
 msgid "http:// missing"
 msgstr "http:// fehlt"
 
-#: admin/validations.py:326
+#: admin/validations.py:332
 msgid "Time value contain invalid values"
 msgstr ""
 
-#: admin/validations.py:329
+#: admin/validations.py:335
 msgid "Malformed time"
 msgstr ""
 
-#: admin/validations.py:337
+#: admin/validations.py:343
 #, fuzzy
 msgid "Virtual Server nick name is already being used."
-msgstr "Virtueller-Server Name"
+msgstr "Virtueller-Server Name wird bereits genutzt"
 
-#: admin/validations.py:344 admin/validations.py:354 admin/validations.py:364
-#: admin/validations.py:381
+#: admin/validations.py:350 admin/validations.py:360 admin/validations.py:370
+#: admin/validations.py:387
 msgid "Already in use"
-msgstr ""
+msgstr "bereits in Nutzung"
 
 #: admin/wizards/List.py:30
 msgid "CMS"
@@ -3908,7 +3908,7 @@ msgstr ""
 #: admin/wizards/List.py:50
 #, fuzzy
 msgid "MoinMoin Wiki"
-msgstr "Unbekannt"
+msgstr ""
 
 #: admin/wizards/List.py:51
 msgid ""
@@ -3936,7 +3936,7 @@ msgstr ""
 #: admin/wizards/List.py:65
 #, fuzzy
 msgid "Application Servers"
-msgstr "Server"
+msgstr "Anwendungsserver"
 
 #: admin/wizards/List.py:66
 msgid "General Purpose Application Servers"
@@ -3945,7 +3945,7 @@ msgstr ""
 #: admin/wizards/List.py:69
 #, fuzzy
 msgid "Alfresco"
-msgstr "Weiterleitung"
+msgstr ""
 
 #: admin/wizards/List.py:70 admin/wizards/List.py:74
 msgid "Enterprise web platform for building business solutions."
@@ -3975,12 +3975,12 @@ msgstr ""
 
 #: admin/wizards/List.py:88
 msgid "Platforms"
-msgstr ""
+msgstr "Plattformen"
 
 #: admin/wizards/List.py:89
 #, fuzzy
 msgid "Web Development Platforms"
-msgstr "Server Entwicklung"
+msgstr "Web Entwicklung"
 
 #: admin/wizards/List.py:92
 msgid "Django"
@@ -4021,7 +4021,7 @@ msgstr ""
 #: admin/wizards/List.py:115
 #, fuzzy
 msgid "Languages"
-msgstr "Sprache"
+msgstr "Sprachen"
 
 #: admin/wizards/List.py:116
 msgid "Development Languages and Platforms"
@@ -4092,7 +4092,7 @@ msgstr ""
 #: admin/wizards/List.py:154
 #, fuzzy
 msgid "rTorrent"
-msgstr "Weiterleitung"
+msgstr ""
 
 #: admin/wizards/List.py:155
 msgid ""
@@ -4101,7 +4101,7 @@ msgstr ""
 
 #: admin/wizards/List.py:161
 msgid "Tasks"
-msgstr ""
+msgstr "Aufgaben"
 
 #: admin/wizards/List.py:162
 msgid "Common Maintenance Tasks"
@@ -4173,7 +4173,7 @@ msgstr ""
 #: admin/wizards/alfresco.py:41
 #, fuzzy
 msgid "Alfresco Project"
-msgstr "Weiterleitung"
+msgstr ""
 
 #: admin/wizards/alfresco.py:42
 msgid ""
@@ -4265,7 +4265,7 @@ msgstr "Unterst√ºtzung"
 #: admin/wizards/coldfusion.py:38
 #, fuzzy
 msgid "Welcome to the ColdFusion Wizard"
-msgstr "Weiterleitung"
+msgstr ""
 
 #: admin/wizards/coldfusion.py:39
 msgid ""
@@ -4283,7 +4283,7 @@ msgstr ""
 #: admin/wizards/coldfusion.py:42
 #, fuzzy
 msgid "ColdFusion Details"
-msgstr "Weiterleitung"
+msgstr ""
 
 #: admin/wizards/coldfusion.py:43
 msgid ""
@@ -5109,7 +5109,7 @@ msgid ""
 "<a target=\"_blank\" href=\"http://libtorrent.rakshasa.no/\">rTorrent</a> is "
 "a text-based ncurses BitTorrent client written in C++, based on the "
 "libTorrent libraries for Unix (not to be confused with libtorrent by Arvid "
-"Norberg), whose author's goal is ‚Äúa focus on high performance and good code‚Äù"
+"Norberg), whose author's goal is ‚Äúa focus on high performance and good code‚Ä?"
 msgstr ""
 
 #: admin/wizards/rtorrent.py:37
@@ -5432,7 +5432,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Clone‚Ä¶"
-#~ msgstr "Klonen"
+#~ msgstr "Duplizieren"
 
 #, fuzzy
 #~ msgid "BD Password"
@@ -5448,7 +5448,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "%s Support"
-#~ msgstr "Unterst√ºtzung"
+#~ msgstr "%s Unterst√ºtzung"
 
 #~ msgid "Choose.."
 #~ msgstr "W√§hle.."
@@ -5466,13 +5466,13 @@ msgstr ""
 #~ msgstr "F√ºge Fehler-Code hinzu"
 
 #~ msgid "Add Country"
-#~ msgstr "Ein Land hinzuf√ºgen"
+#~ msgstr "Land hinzuf√ºgen"
 
 #~ msgid "Password file can not be empty"
 #~ msgstr "Passwortdatei kann nicht leer sein"
 
 #~ msgid " can not be empty"
-#~ msgstr "kann nicht leer sein"
+#~ msgstr " kann nicht leer sein"
 
 #~ msgid "Formatting options"
 #~ msgstr "Protokollierung"
@@ -5534,7 +5534,7 @@ msgstr ""
 
 #~ msgid "This interface will assist in configuring the Cherokee Web Server."
 #~ msgstr ""
-#~ "Diese Oberfl√§che wird ihnen helfen den Cherokee Web Server zu "
+#~ "Diese Oberfl√§che wird Ihnen helfen den Cherokee Web Server zu "
 #~ "konfigurieren"
 
 #~ msgid "Stop"
@@ -5554,7 +5554,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Statistics"
-#~ msgstr "Status"
+#~ msgstr "Statistiken"
 
 #~ msgid "Filename must be set"
 #~ msgstr "Dateiname muss gesetzt sein"
