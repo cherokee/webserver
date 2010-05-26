@@ -66,11 +66,8 @@ VALIDATIONS = [
 
 JS_SCROLL = """
 function resize_cherokee_containers() {
-   $('#Network-1').height($(window).height() - 154);
-   $('#Ports_to_listen-2').height($(window).height() - 154);
-   $('#Permissions-3').height($(window).height() - 154);
-   $('#Icons-4').height($(window).height() - 154);
    $('#mimetable tbody').height($(window).height() - 270);
+   $('#body-general .ui-tabs-panel').height($(window).height() - 154);
 }
 
 $(document).ready(function() {
