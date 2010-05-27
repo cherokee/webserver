@@ -186,7 +186,7 @@ def is_trac_data (path):
     manage = os.path.join (path, "htdocs")
 
     try:
-        validations.is_local_file_exists (manage)
+        validations.is_local_dir_exists (manage)
     except:
         raise ValueError, _(ERROR_NO_DATA)
     return path
