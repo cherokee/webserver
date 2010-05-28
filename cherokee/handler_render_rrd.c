@@ -253,14 +253,14 @@ render_vsrv_traffic (cherokee_handler_render_rrd_t     *hdl,
 
 	cherokee_buffer_add_str    (tmp, "graph ");
 	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_img_cache);
-	cherokee_buffer_add_va     (tmp, "/vserver_traffic_%s_%s.png ", vserver_name->buf, interval->interval);
+	cherokee_buffer_add_va     (tmp, "'/vserver_traffic_%s_%s.png' ", vserver_name->buf, interval->interval);
 	cherokee_buffer_add_va     (tmp, "--imgformat PNG --width 580 --height 340 --start -%s ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--title \"Traffic, %s: %s\" ", vserver_name->buf, interval->interval);
 	cherokee_buffer_add_str    (tmp, "--vertical-label \"bytes/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
-	cherokee_buffer_add_va     (tmp, "DEF:rx=%s/vserver_%s.rrd:RX:AVERAGE ", rrd_connection->path_databases.buf, vserver_name->buf);
-	cherokee_buffer_add_va     (tmp, "DEF:rx_max=%s/vserver_%s.rrd:RX:MAX ", rrd_connection->path_databases.buf, vserver_name->buf);
-	cherokee_buffer_add_va     (tmp, "DEF:tx=%s/vserver_%s.rrd:TX:AVERAGE ", rrd_connection->path_databases.buf, vserver_name->buf);
-	cherokee_buffer_add_va     (tmp, "DEF:tx_max=%s/vserver_%s.rrd:TX:MAX ", rrd_connection->path_databases.buf, vserver_name->buf);
+	cherokee_buffer_add_va     (tmp, "'DEF:rx=%s/vserver_%s.rrd:RX:AVERAGE' ", rrd_connection->path_databases.buf, vserver_name->buf);
+	cherokee_buffer_add_va     (tmp, "'DEF:rx_max=%s/vserver_%s.rrd:RX:MAX' ", rrd_connection->path_databases.buf, vserver_name->buf);
+	cherokee_buffer_add_va     (tmp, "'DEF:tx=%s/vserver_%s.rrd:TX:AVERAGE' ", rrd_connection->path_databases.buf, vserver_name->buf);
+	cherokee_buffer_add_va     (tmp, "'DEF:tx_max=%s/vserver_%s.rrd:TX:MAX' ", rrd_connection->path_databases.buf, vserver_name->buf);
 	cherokee_buffer_add_str    (tmp, "VDEF:tx_total=tx,TOTAL ");
 	cherokee_buffer_add_str    (tmp, "VDEF:rx_total=rx,TOTAL ");
 	cherokee_buffer_add_str    (tmp, "CDEF:rx_r=rx,-1,* ");
