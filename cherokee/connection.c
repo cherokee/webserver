@@ -1890,32 +1890,6 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		if (ret != ret_ok) return ret;
 	}
 
-	/* RFC 2817: Client Requested Upgrade to HTTP over TLS
-	 *
-	 * When the client sends an HTTP/1.1 request with an Upgrade header
-	 * field containing the token "TLS/1.0", it is requesting the server
-	 * to complete the current HTTP/1.1 request after switching to TLS/1.0
-	 */
-	if (CONN_SRV(conn)->tls_enabled) {
-		ret = cherokee_header_get_known (&conn->header, header_upgrade, &upgrade, &upgrade_len);
-		if (ret == ret_ok) {
-
-			/* Note that HTTP/1.1 [1] specifies "the upgrade keyword MUST be
-			 * supplied within a Connection header field (section 14.10)
-			 * whenever Upgrade is present in an HTTP/1.1 message".
-			 */
-			ret = cherokee_header_get_known (&conn->header, header_connection, &cnt, &cnt_len);
-			if (ret == ret_ok) {
-				if (equal_str (cnt, "Upgrade")) {
-					if (equal_str (upgrade, "TLS")) {
-						conn->phase = phase_switching_headers;
-						return ret_eagain;
-					}
-				}
-			}
-		}
-	}
-
 	/* Check Upload limit
 	 */
 	if ((CONN_VSRV(conn)->post_max_len > 0) &&
@@ -1931,39 +1905,6 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 error:
 	conn->error_code = error_code;
 	return ret_error;
-}
-
-
-ret_t
-cherokee_connection_send_switching (cherokee_connection_t *conn)
-{
-	ret_t ret;
-
-	/* Maybe build the response string
-	 */
-	if (cherokee_buffer_is_empty (&conn->buffer)) {
-		conn->error_code = http_switching_protocols;
-		build_response_header (conn, &conn->buffer);
-	}
-
-	/* Send the response
-	 */
-	ret = cherokee_connection_send_header (conn);
-	switch (ret) {
-	case ret_ok:
-		break;
-
-	case ret_eof:
-	case ret_error:
-	case ret_eagain:
-		return ret;
-
-	default:
-		RET_UNKNOWN(ret);
-		return ret;
-	}
-
-	return ret_ok;
 }
 
 
@@ -2520,7 +2461,6 @@ cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 {
 	switch (conn->phase) {
 	case phase_nothing:           return "Nothing";
-	case phase_switching_headers: return "Switch headers";
 	case phase_tls_handshake:     return "TLS handshake";
 	case phase_reading_header:    return "Reading header";
 	case phase_processing_header: return "Processing header";

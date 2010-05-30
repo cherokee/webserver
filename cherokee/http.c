@@ -253,7 +253,6 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	/* 1xx
 	*/
 	case http_continue:                 *str = http_continue_string; break;
-	case http_switching_protocols:      *str = http_switching_protocols_string; break;
 	case http_processing:               *str = http_processing_string; break;
 
 	default:
@@ -339,7 +338,6 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		/* 1xx
 		 */
 		entry_code (continue);
-		entry_code (switching_protocols);
 		entry_code (processing);
 
 	default:

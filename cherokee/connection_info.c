@@ -93,10 +93,6 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 		phase = phase_nothing;
 		cherokee_buffer_add_str (&info->phase, "Unknown");
 		break;
-	case phase_switching_headers:
-		phase = phase_switching_headers;
-		cherokee_buffer_add_str (&info->phase, "Switching headers");
-		break;
 	case phase_tls_handshake:
 		phase = phase_tls_handshake;
 		cherokee_buffer_add_str (&info->phase, "TLS Handshake");

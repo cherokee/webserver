@@ -70,7 +70,6 @@
 
 typedef enum {
 	phase_nothing,
-	phase_switching_headers,
 	phase_tls_handshake,
 	phase_reading_header,
 	phase_processing_header,
@@ -257,7 +256,6 @@ ret_t cherokee_connection_linger_read            (cherokee_connection_t *conn);
 ret_t cherokee_connection_send                   (cherokee_connection_t *conn);
 ret_t cherokee_connection_send_header            (cherokee_connection_t *conn);
 ret_t cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn);
-ret_t cherokee_connection_send_switching         (cherokee_connection_t *conn);
 ret_t cherokee_connection_recv                   (cherokee_connection_t *conn, cherokee_buffer_t *buffer, off_t to_read, off_t *len);
 
 /* Internal

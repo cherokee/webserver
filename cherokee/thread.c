@@ -697,26 +697,6 @@ process_active_connections (cherokee_thread_t *thd)
 		/* Phases
 		 */
 		switch (conn->phase) {
-		case phase_switching_headers:
-			ret = cherokee_connection_send_switching (conn);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_eagain:
-				continue;
-
-			case ret_eof:
-			case ret_error:
-				conns_freed++;
-				goto shutdown;
-
-			default:
-				RET_UNKNOWN(ret);
-				conns_freed++;
-				goto shutdown;
-			}
-			conn->phase = phase_tls_handshake;;
-
 		case phase_tls_handshake:
 			ret = cherokee_socket_init_tls (&conn->socket, CONN_VSRV(conn));
 			switch (ret) {
@@ -724,14 +704,6 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 
 			case ret_ok:
-				/* RFC2817
-				 * Had it upgraded the protocol?
-				 */
-				if (conn->error_code == http_switching_protocols) {
-					conn->phase = phase_setup_connection;
-					conn->error_code = http_ok;
-					continue;
-				}
 				conn->phase = phase_reading_header;
 				break;
 
