@@ -553,6 +553,8 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 
 	len = SSL_write (cryp->session, buf, buf_len);
 	if (likely (len > 0) ) {
+		TRACE (ENTRIES",write", "write len=%d, written=%d\n", buf_len, len);
+
 		/* Return info
 		 */
 		*pcnt_written = len;
@@ -565,6 +567,8 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 		if (re == SSL_ERROR_ZERO_RETURN)
 			socket->status = socket_closed;
 		 */
+
+		TRACE (ENTRIES",write", "write len=%d, EOF\n", buf_len);
 		return ret_eof;
 	}
 
@@ -575,31 +579,38 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 	switch (re) {
 	case SSL_ERROR_WANT_READ:
 	case SSL_ERROR_WANT_WRITE:
+		TRACE (ENTRIES",write", "write len=%d, EAGAIN\n", buf_len);
 		return ret_eagain;
 
 	case SSL_ERROR_SYSCALL:
 		switch (error) {
 		case EAGAIN:
+			TRACE (ENTRIES",write", "write len=%d, EAGAIN\n", buf_len);
 			return ret_eagain;
 #ifdef ENOTCONN
 		case ENOTCONN:
 #endif
 		case EPIPE:
 		case ECONNRESET:
+			TRACE (ENTRIES",write", "write len=%d, EOF\n", buf_len);
 			return ret_eof;
 		default:
 			LOG_ERRNO_S (error, cherokee_err_error,
 				     CHEROKEE_ERROR_SSL_SW_DEFAULT);
 		}
+
+		TRACE (ENTRIES",write", "write len=%d, ERROR: %s\n", buf_len, ERR_error_string(re, NULL));
 		return ret_error;
 
 	case SSL_ERROR_SSL:
+		TRACE (ENTRIES",write", "write len=%d, ERROR: %s\n", buf_len, ERR_error_string(re, NULL));
 		return ret_error;
 	}
 
 	LOG_ERROR (CHEROKEE_ERROR_SSL_SW_ERROR,
 		   SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
 
+	TRACE (ENTRIES",write", "write len=%d, ERROR: %s\n", buf_len, ERR_error_string(re, NULL));
 	return ret_error;
 }
 
