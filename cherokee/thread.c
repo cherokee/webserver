@@ -1272,6 +1272,16 @@ process_active_connections (cherokee_thread_t *thd)
 
 		case phase_shutdown:
 		shutdown:
+			/* TLS: Do not use lingering close
+			 */
+			if (conn->socket.is_tls == TLS) {
+				conns_freed++;
+				close_active_connection (thd, conn);
+				continue;
+			}
+
+			/* HTTP: Shutdown socket
+			 */
 			ret = cherokee_connection_shutdown_wr (conn);
 			switch (ret) {
 			case ret_ok:
