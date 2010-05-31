@@ -134,7 +134,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->group_orig       = getgid();
 	n->group            = n->group_orig;
 
-	n->fdlimit_custom    = FD_NUM_CUSTOM_LIMIT;
+	n->fdlimit_custom    = MAX (FD_NUM_CUSTOM_LIMIT, cherokee_fdlimit);
 	n->fdlimit_available = -1;
 
 	n->conns_max        =  0;
@@ -1323,9 +1323,11 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	ret_t              ret;
 	char              *key = conf->key.buf;
 	cherokee_server_t *srv = SRV(data);
+	long               num;
 
 	if (equal_buf_str (&conf->key, "fdlimit")) {
-		srv->fdlimit_custom = atoi (conf->val.buf);
+		num = strtol (conf->val.buf, NULL, 10);
+		srv->fdlimit_custom = MAX(num, cherokee_fdlimit);
 
 	} else if (equal_buf_str (&conf->key, "listen_queue")) {
 		srv->listen_queue = atoi (conf->val.buf);
