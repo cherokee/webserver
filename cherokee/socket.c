@@ -146,7 +146,7 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
 
 	if (socket->cryptor != NULL) {
-		cherokee_cryptor_socket_clean (socket->cryptor);
+		cherokee_cryptor_socket_free (socket->cryptor);
 		socket->cryptor = NULL;
 	}
 

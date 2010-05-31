@@ -61,6 +61,28 @@ static DH *dh_param_4096 = NULL;
 static ret_t
 _free (cherokee_cryptor_libssl_t *cryp)
 {
+	/* DH Parameters
+	 */
+	if (dh_param_512  != NULL) {
+		DH_free (dh_param_512);
+		dh_param_512 = NULL;
+	}
+
+	if (dh_param_1024 != NULL) {
+		DH_free (dh_param_1024);
+		dh_param_1024 = NULL;
+	}
+
+	if (dh_param_2048 != NULL) {
+		DH_free (dh_param_2048);
+		dh_param_2048 = NULL;
+	}
+
+	if (dh_param_4096 != NULL) {
+		DH_free (dh_param_4096);
+		dh_param_4096 = NULL;
+	}
+
 	/* Free loaded error strings
 	 */
 	ERR_free_strings();
@@ -250,17 +272,28 @@ tmp_dh_cb (SSL *ssl, int export, int keylen)
 
 	switch (keylen) {
 	case 512:
-		if (dh_param_512) return dh_param_512;
-		return get_dh512();
+		if (dh_param_512 == NULL) {
+			dh_param_512 = get_dh512();
+		}
+		return dh_param_512;
+
 	case 1024:
-		if (dh_param_1024) return dh_param_1024;
-		return get_dh1024();
+		if (dh_param_1024 == NULL) {
+			dh_param_1024 = get_dh1024();
+		}
+		return dh_param_1024;
+
 	case 2048:
-		if (dh_param_2048) return dh_param_2048;
-		return get_dh2048();
+		if (dh_param_2048 == NULL) {
+			dh_param_2048 = get_dh2048();
+		}
+		return dh_param_2048;
+
 	case 4096:
-		if (dh_param_4096) return dh_param_4096;
-		return get_dh4096();
+		if (dh_param_4096 == NULL) {
+			dh_param_4096 = get_dh4096();
+		}
+		return dh_param_4096;
 	}
 	return NULL;
 }
@@ -270,11 +303,13 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	      cherokee_virtual_server_t   *vsrv,
 	      cherokee_cryptor_vserver_t **cryp_vsrv)
 {
-	ret_t       ret;
-	int         rc;
-	int         verify_mode = SSL_VERIFY_NONE;
-	const char *error;
+	ret_t              ret;
+	int                rc;
+	const char        *error;
+	int                verify_mode = SSL_VERIFY_NONE;
+	cherokee_buffer_t  session_id  = CHEROKEE_BUF_INIT;
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
+
 
 	UNUSED(cryp);
 
@@ -401,18 +436,29 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	SSL_CTX_set_verify (n->context, verify_mode, NULL);
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
+	SSL_CTX_set_mode (n->context, SSL_MODE_ENABLE_PARTIAL_WRITE);
+
 	/* Set the SSL context cache
 	 */
+	cherokee_buffer_add_ulong10  (&session_id, getpid());
+	cherokee_buffer_add_char     (&session_id, '-');
+	cherokee_buffer_add_buffer   (&session_id, &vsrv->name);
+	cherokee_buffer_add_char     (&session_id, '-');
+	cherokee_buffer_add_ullong10 (&session_id, random());
+
+	TRACE(ENTRIES, "VServer '%s' session: %s\n", vsrv->name.buf, session_id.buf);
+
 	rc = SSL_CTX_set_session_id_context (n->context,
-					     (unsigned char *) vsrv->name.buf,
-					     (unsigned int) vsrv->name.len);
+					     (unsigned char *) session_id.buf,
+					     (unsigned int)    session_id.len);
+
+	cherokee_buffer_mrproper (&session_id);
+
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SESSION_ID,
 			   vsrv->name.buf, error);
 	}
-
-	SSL_CTX_set_mode (n->context, SSL_MODE_ENABLE_PARTIAL_WRITE);
 
 #ifndef OPENSSL_NO_TLSEXT
 	/* Enable SNI
@@ -537,7 +583,10 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 static ret_t
 _socket_close (cherokee_cryptor_socket_libssl_t *cryp)
 {
-	SSL_shutdown (cryp->session);
+	if (cryp->session != NULL) {
+		SSL_shutdown (cryp->session);
+	}
+
 	return ret_ok;
 }
 
@@ -889,6 +938,30 @@ cherokee_cryptor_libssl_new (cherokee_cryptor_libssl_t **cryp)
 
 
 
+/* Private low-level functions for OpenSSL
+ */
+static pthread_mutex_t *locks;
+static size_t           locks_num;
+
+static unsigned long
+__get_thread_id (void)
+{
+	return (unsigned long) pthread_self();
+}
+
+
+static void
+__lock_thread (int mode, int n, const char *file, int line)
+{
+	UNUSED (file);
+	UNUSED (line);
+
+	if (mode & CRYPTO_LOCK) {
+		CHEROKEE_MUTEX_LOCK (&locks[n]);
+	} else {
+		CHEROKEE_MUTEX_UNLOCK (&locks[n]);
+	}
+}
 
 
 /* Plug-in initialization
@@ -904,12 +977,35 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 #endif
 	UNUSED(loader);
 
-	/* Do not initialize the library twice */
+	/* Do not initialize the library twice
+	 */
 	PLUGIN_INIT_ONCE_CHECK (libssl);
 
+	/* Init OpenSSL
+	 */
+	CRYPTO_malloc_init();
 	SSL_load_error_strings();
 	SSL_library_init();
 	OpenSSL_add_all_algorithms();
+
+	/* Init concurrency related stuff
+	 */
+	if ((CRYPTO_get_id_callback()      == NULL) &&
+	    (CRYPTO_get_locking_callback() == NULL))
+	{
+		cuint_t n;
+
+		CRYPTO_set_id_callback (__get_thread_id);
+		CRYPTO_set_locking_callback (__lock_thread);
+
+		locks_num = CRYPTO_num_locks();
+		locks     = malloc (locks_num * sizeof(*locks));
+
+		for (n = 0; n < locks_num; n++) {
+			CHEROKEE_MUTEX_INIT (&locks[n], NULL);
+		}
+	}
+
 
 # if HAVE_OPENSSL_ENGINE_H
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
