@@ -135,7 +135,7 @@ CONFIG_VSERVER = """
 
 # IMPORTANT: The PHP rule comes here
 
-%(pre_rule_minus1)s!!handler = file
+%(pre_rule_minus1)s!handler = file
 %(pre_rule_minus1)s!handler!iocache = 1
 %(pre_rule_minus1)s!match = exists
 %(pre_rule_minus1)s!match!iocache = 1
