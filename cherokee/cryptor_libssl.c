@@ -583,8 +583,18 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 static ret_t
 _socket_close (cherokee_cryptor_socket_libssl_t *cryp)
 {
+	int re;
+
 	if (cryp->session != NULL) {
-		SSL_shutdown (cryp->session);
+		re = SSL_shutdown (cryp->session);
+		if (re == 0) {
+			/* Call it again to finish the shutdown */
+			re = SSL_shutdown (cryp->session);
+		}
+
+		if (re < 0) {
+			return ret_error;
+		}
 	}
 
 	return ret_ok;
@@ -730,6 +740,11 @@ _socket_clean (cherokee_cryptor_socket_libssl_t *cryp_socket)
 	if (cryp_socket->session != NULL) {
 		SSL_free (cryp_socket->session);
 		cryp_socket->session = NULL;
+	}
+
+	if (cryp_socket->ssl_ctx != NULL) {
+		SSL_CTX_free (cryp_socket->ssl_ctx);
+		cryp_socket->ssl_ctx = NULL;
 	}
 
 	return ret_ok;
