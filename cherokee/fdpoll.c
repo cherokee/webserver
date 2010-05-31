@@ -35,8 +35,8 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 {
 	/* Initialize values.
 	 */
+	*fd_limit     = 0;
 	*sys_fd_limit = 0;
-	*fd_limit = 0;
 
 	/* Call the proper method to get system and per fdpoll set limits.
 	 */
@@ -50,14 +50,14 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 
 	case cherokee_poll_kqueue:
 #if HAVE_KQUEUE
-		return fdpoll_kqueue_get_fdlimits(sys_fd_limit, fd_limit);
+		return fdpoll_kqueue_get_fdlimits (sys_fd_limit, fd_limit);
 #else
 		return ret_no_sys;
 #endif
 
 	case cherokee_poll_port:
 #ifdef HAVE_PORT
-		return fdpoll_port_get_fdlimits(sys_fd_limit, fd_limit);
+		return fdpoll_port_get_fdlimits (sys_fd_limit, fd_limit);
 #else
 		return ret_no_sys;
 #endif

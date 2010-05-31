@@ -190,7 +190,7 @@ cherokee_sys_fdlimit_get (cuint_t *limit)
         struct rlimit rlp;
 
         rlp.rlim_cur = rlp.rlim_max = RLIM_INFINITY;
-        if (getrlimit(RLIMIT_NOFILE, &rlp))
+        if (getrlimit (RLIMIT_NOFILE, &rlp))
             return ret_error;
 
         *limit = rlp.rlim_cur;

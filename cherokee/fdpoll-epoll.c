@@ -256,7 +256,7 @@ ret_t
 fdpoll_epoll_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 {
 	*system_fd_limit = 0;
-	*fd_limit = 0;
+	*fd_limit        = 0;
 
 	return ret_ok;
 }
