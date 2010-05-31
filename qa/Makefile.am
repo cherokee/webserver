@@ -250,7 +250,8 @@ run-tests.py \
 242-utf8-pathinfo2.py \
 243-custom-error-1.py \
 244-Directory-Overwrite.py \
-245-0x9b.py
+245-0x9b.py \
+246-Dup-CacheControl.py
 
 test:
 	./run-tests.py

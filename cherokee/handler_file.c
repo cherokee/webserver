@@ -655,25 +655,12 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);
 		if (ret == ret_ok) {
-			/* Cache-Control, note that we add it in any case
-			 * because it can be useful for clients and / or transparent
-			 * proxies (working with HTTP/1.1 connections) too.
+			/* Set the expiration if there wasn't a
+			 * previous val. connection.c will render it.
 			 */
-			cherokee_buffer_add_str    (buffer, "Cache-Control: max-age=");
-			cherokee_buffer_add_ulong10(buffer, (culong_t) maxage);
-			cherokee_buffer_add_str    (buffer, CRLF);
-
-			if (conn->header.version < http_version_11) {
-				time_t exp_time = cherokee_bogonow_now + (time_t)maxage;
-
-				/* Expire-Time for HTTP/1.0 connections.
-				 */
-				cherokee_gmtime (&exp_time, &modified_tm);
-				szlen = cherokee_dtm_gmttm2str(bufstr,
-						DTM_SIZE_GMTTM_STR, &modified_tm);
-				cherokee_buffer_add_str(buffer, "Expires: ");
-				cherokee_buffer_add    (buffer, bufstr, szlen);
-				cherokee_buffer_add_str(buffer, CRLF);
+			if (conn->expiration == cherokee_expiration_none) {
+				conn->expiration      = cherokee_expiration_time;
+				conn->expiration_time = cherokee_bogonow_now + maxage;
 			}
 		}
 	}
