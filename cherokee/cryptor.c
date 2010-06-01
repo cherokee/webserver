@@ -25,6 +25,8 @@
 #include "common-internal.h"
 #include "cryptor.h"
 
+#define TIMEOUT_DEFAULT 15
+
 
 ret_t
 cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
@@ -32,6 +34,8 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 {
 	ret_t ret;
 
+	/* Module and Methods
+	 */
 	ret = cherokee_module_init_base (MODULE(cryp), NULL, info);
 	if (ret != ret_ok)
 		return ret;
@@ -39,6 +43,10 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 	cryp->vserver_new = NULL;
 	cryp->socket_new  = NULL;
 	cryp->configure   = NULL;
+
+	/* Properties
+	 */
+	cryp->timeout_handshake = TIMEOUT_DEFAULT;
 
 	return ret_ok;
 }
@@ -69,8 +77,15 @@ cherokee_cryptor_configure (cherokee_cryptor_t     *cryp,
 {
 	ret_t ret;
 
-	if (cryp->configure == NULL)
+	/* Read it own configuration parameters
+	 */
+	cherokee_config_node_read_int (conf, "timeout_handshake", &cryp->timeout_handshake);
+
+	/* Call the its virtual method
+	 */
+	if (cryp->configure == NULL) {
 		return ret_error;
+	}
 
 	ret = cryp->configure (cryp, conf, srv);
 	if (ret != ret_ok)

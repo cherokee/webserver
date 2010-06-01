@@ -52,6 +52,7 @@ VALIDATIONS = [
     ("server!iocache!max_file_size",  validations.is_positive_int),
     ("server!iocache!lasting_stat",   validations.is_positive_int),
     ("server!iocache!lasting_mmap",   validations.is_positive_int),
+    ("server!tls!timeout_handshake",  validations.is_positive_int),
     ("server!tls!dh_param512",        validations.is_local_file_exists),
     ("server!tls!dh_param1024",       validations.is_local_file_exists),
     ("server!tls!dh_param2048",       validations.is_local_file_exists),
@@ -87,6 +88,7 @@ NOTE_DH512        = N_('Path to a Diffie Hellman (DH) parameters PEM file: 512 b
 NOTE_DH1024       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits.')
 NOTE_DH2048       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits.')
 NOTE_DH4096       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits.')
+NOTE_TLS_TIMEOUT  = N_('Timeout for the TLS/SSL handshake. Default: 15 seconds.')
 
 HELPS = [('config_advanced', N_('Advanced'))]
 
@@ -167,6 +169,7 @@ class TLSWidget (CTK.Container):
         CTK.Container.__init__ (self)
 
         table = CTK.PropsAuto(URL_APPLY)
+        table.Add (_('Handshake Timeout'),        CTK.TextCfg('server!tls!timeout_handshake', True), _(NOTE_TLS_TIMEOUT))
         table.Add (_('DH parameters: 512 bits'),  CTK.TextCfg('server!tls!dh_param512',  True), _(NOTE_DH512))
         table.Add (_('DH parameters: 1024 bits'), CTK.TextCfg('server!tls!dh_param1024', True), _(NOTE_DH1024))
         table.Add (_('DH parameters: 2048 bits'), CTK.TextCfg('server!tls!dh_param2048', True), _(NOTE_DH2048))

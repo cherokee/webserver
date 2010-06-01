@@ -63,6 +63,7 @@ typedef ret_t (* cryptor_client_func_init_t)    (void  *cryp, void *host, void *
  */
 typedef struct {
 	cherokee_module_t          module;
+	cint_t                     timeout_handshake;
 
 	/* Methods */
 	cryptor_func_configure_t   configure;

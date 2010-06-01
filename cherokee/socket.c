@@ -136,19 +136,24 @@ cherokee_socket_mrproper (cherokee_socket_t *socket)
 ret_t
 cherokee_socket_clean (cherokee_socket_t *socket)
 {
+	/* TLS
+	 */
+	if (socket->cryptor != NULL) {
+		cherokee_cryptor_socket_free (socket->cryptor);
+		socket->cryptor = NULL;
+	}
+
+	socket->is_tls = non_TLS;
+
+	/* Properties
+	 */
 	socket->socket = -1;
 	socket->status = socket_closed;
-	socket->is_tls = non_TLS;
 
 	/* Client address
 	 */
 	socket->client_addr_len = -1;
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
-
-	if (socket->cryptor != NULL) {
-		cherokee_cryptor_socket_free (socket->cryptor);
-		socket->cryptor = NULL;
-	}
 
 	return ret_ok;
 }
@@ -192,6 +197,7 @@ cherokee_socket_close (cherokee_socket_t *socket)
 	 */
 	if (socket->cryptor != NULL) {
 		cherokee_cryptor_socket_close (socket->cryptor);
+		cherokee_socket_flush (socket);
 	}
 
 	/* Close the socket
