@@ -68,7 +68,7 @@ class Save:
 
         if Cherokee.server.is_alive():
             # Prompt about the reset
-            all += CTK.RawHTML ('<p>%s</p>' %(SAVED_RESTART))
+            all += CTK.RawHTML ('<p>%s</p>' %(_(SAVED_RESTART)))
 
             submit = CTK.Submitter (URL_SAVE_NONE)
             submit += CTK.Hidden('none', 'foo')
@@ -89,7 +89,7 @@ class Save:
             all += submit
         else:
             # Prompt about the reset
-            all += CTK.RawHTML ('<p>%s</p>' %(SAVED_NO_RUNNING))
+            all += CTK.RawHTML ('<p>%s</p>' %(_(SAVED_NO_RUNNING)))
 
             submit = CTK.Submitter (URL_SAVE_NONE)
             submit.id = 'saved-no-running'
