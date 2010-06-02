@@ -635,7 +635,7 @@ tr.panel-selected td div.row_content .sel-actions {
   text-align: center;
 }
 
-#rules-table td { text-align: left; }
+#rules-table td { text-align: left; overflow: hidden; white-space: pre; }
 #rules-table td + td { text-align: left; width: 92px; font-size: 11px; }
 #rules-table td + td + td { width: 38px; text-align: center; overflow: hidden; }
 
