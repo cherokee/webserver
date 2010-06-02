@@ -213,7 +213,7 @@ class BehaviorWidget (CTK.Container):
     def _get_row (self, vsrv_num, r):
         rule = Rule ('vserver!%s!rule!%s!match'%(vsrv_num, r))
         rule_name = rule.GetName()
-        link = RuleLink (vsrv_num, r, CTK.RawHTML (rule_name))
+        link = RuleLink (vsrv_num, r, CTK.RawHTML ('<span title="%s">%s</span>' %(rule_name, rule_name)))
 
         handler, auth, root, secure, enc, exp, timeout, shaping, log, final, active = [None for x in range(11)]
 
