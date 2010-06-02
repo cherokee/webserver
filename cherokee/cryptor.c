@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "cryptor.h"
+#include "socket.h"
 
 #define TIMEOUT_DEFAULT 15
 
@@ -200,12 +201,13 @@ cherokee_cryptor_socket_clean (cherokee_cryptor_socket_t *cryp)
 ret_t
 cherokee_cryptor_socket_init_tls (cherokee_cryptor_socket_t *cryp,
 				  void                      *sock,
-				  void                      *vsrv)
+				  void                      *vsrv,
+				  void                      *blocking)
 {
 	if (unlikely (cryp->init_tls == NULL))
 		return ret_error;
 
-	return cryp->init_tls (cryp, sock, vsrv);
+	return cryp->init_tls (cryp, sock, vsrv, blocking);
 }
 
 ret_t
@@ -257,8 +259,10 @@ cherokee_cryptor_client_init (cherokee_cryptor_client_t *cryp,
 			      cherokee_buffer_t         *host,
 			      void                      *socket)
 {
+	cherokee_socket_status_t foo = socket_closed;
+
 	if (unlikely (CRYPTOR_SOCKET(cryp)->init_tls == NULL))
 		return ret_error;
 
-	return CRYPTOR_SOCKET(cryp)->init_tls (cryp, host, socket);
+	return CRYPTOR_SOCKET(cryp)->init_tls (cryp, host, socket, &foo);
 }

@@ -598,13 +598,14 @@ process_polling_connections (cherokee_thread_t *thd)
 static ret_t
 process_active_connections (cherokee_thread_t *thd)
 {
-	int                    re;
-	ret_t                  ret;
-	off_t                  len;
-	cherokee_list_t       *i, *tmp;
-	cuint_t                conns_freed = 0;
-	cherokee_connection_t *conn        = NULL;
-	cherokee_server_t     *srv         = SRV(thd->server);
+	int                       re;
+	ret_t                     ret;
+	off_t                     len;
+	cherokee_list_t          *i, *tmp;
+	cuint_t                   conns_freed = 0;
+	cherokee_connection_t    *conn        = NULL;
+	cherokee_server_t        *srv         = SRV(thd->server);
+	cherokee_socket_status_t  blocking;
 
 	/* Process active connections
 	 */
@@ -687,8 +688,9 @@ process_active_connections (cherokee_thread_t *thd)
 				close_active_connection (thd, conn);
 				continue;
 			case 0:
-				if (! cherokee_socket_pending_read (&conn->socket))
+				if (! cherokee_socket_pending_read (&conn->socket)) {
 					continue;
+				}
 			}
 		}
 
@@ -699,14 +701,33 @@ process_active_connections (cherokee_thread_t *thd)
 		 */
 		switch (conn->phase) {
 		case phase_tls_handshake:
-			ret = cherokee_socket_init_tls (&conn->socket, CONN_VSRV(conn));
+			blocking = socket_closed;
+
+			ret = cherokee_socket_init_tls (&conn->socket, CONN_VSRV(conn), &blocking);
 			switch (ret) {
 			case ret_eagain:
+				switch (blocking) {
+				case socket_reading:
+					conn_set_mode (thd, conn, socket_reading);
+					break;
+
+				case socket_writing:
+					conn_set_mode (thd, conn, socket_writing);
+					break;
+
+				default:
+					break;
+				}
+
 				continue;
 
 			case ret_ok:
-				conn->phase = phase_reading_header;
+				TRACE(ENTRIES, "Handshake %s\n", "finished");
+
+				conn_set_mode (thd, conn, socket_reading);
 				cherokee_connection_update_timeout (conn);
+
+				conn->phase = phase_reading_header;
 				break;
 
 			case ret_error:
@@ -718,6 +739,7 @@ process_active_connections (cherokee_thread_t *thd)
 				conns_freed++;
 				goto shutdown;
 			}
+
 			break;
 
 		case phase_reading_header:

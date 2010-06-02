@@ -537,7 +537,8 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 static ret_t
 _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 		  cherokee_socket_t                *sock,
-		  cherokee_virtual_server_t        *vsrv)
+		  cherokee_virtual_server_t        *vsrv,
+		  cherokee_socket_status_t         *blocking)
 {
 	int   re;
 	ret_t ret;
@@ -559,15 +560,27 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	if (re <= 0) {
 		int         err;
 		const char *error;
+		int         err_sys = errno;
 
 		err = SSL_get_error (cryp->session, re);
 		switch (err) {
 		case SSL_ERROR_WANT_READ:
+			*blocking = socket_reading;
+			return ret_eagain;
+
 		case SSL_ERROR_WANT_WRITE:
 		case SSL_ERROR_WANT_CONNECT:
+		case SSL_ERROR_WANT_ACCEPT:
+			*blocking = socket_writing;
 			return ret_eagain;
-		case SSL_ERROR_SSL:
+
 		case SSL_ERROR_SYSCALL:
+			if (err_sys == EAGAIN) {
+				return ret_eagain;
+			}
+			return ret_error;
+
+		case SSL_ERROR_SSL:
 		case SSL_ERROR_ZERO_RETURN:
 			return ret_error;
 		default:

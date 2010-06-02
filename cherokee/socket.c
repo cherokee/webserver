@@ -161,7 +161,8 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 
 ret_t
 cherokee_socket_init_tls (cherokee_socket_t         *socket,
-			  cherokee_virtual_server_t *vserver)
+			  cherokee_virtual_server_t *vserver,
+			  cherokee_socket_status_t  *blocking)
 {
 	ret_t              ret;
 	cherokee_server_t *srv = VSERVER_SRV(vserver);
@@ -172,7 +173,7 @@ cherokee_socket_init_tls (cherokee_socket_t         *socket,
 			return ret;
 	}
 
-	ret = cherokee_cryptor_socket_init_tls (socket->cryptor, socket, vserver);
+	ret = cherokee_cryptor_socket_init_tls (socket->cryptor, socket, vserver, blocking);
 	if (ret != ret_ok) {
 		return ret;
 	}
