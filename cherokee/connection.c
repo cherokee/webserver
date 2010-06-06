@@ -689,8 +689,12 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 
 	/* Authentication
 	 */
-	if ((conn->realm_ref != NULL) && (conn->error_code == http_unauthorized)) {
-		build_response_header_authentication (conn, buffer);
+	if (conn->realm_ref != NULL) {
+		if ((conn->error_code          == http_unauthorized) ||
+		    (conn->error_internal_code == http_unauthorized))
+		{
+			build_response_header_authentication (conn, buffer);
+		}
 	}
 
 	/* Expiration
@@ -1792,8 +1796,8 @@ ret_t
 cherokee_connection_get_request (cherokee_connection_t *conn)
 {
 	ret_t            ret;
-	char            *host, *upgrade, *cnt;
-	cuint_t          host_len, upgrade_len, cnt_len;
+	char            *host;
+	cuint_t          host_len;
 	cherokee_http_t  error_code = http_bad_request;
 
 	/* Header parsing
