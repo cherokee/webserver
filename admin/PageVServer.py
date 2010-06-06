@@ -261,7 +261,7 @@ class BehaviorWidget (CTK.Container):
             tmp += _(' bytes per second')
             shaping = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
 
-        tmp = not bool (CTK.cfg.get_val ('vserver!%s!rule!%s!no_log' %(vsrv_num, r)))
+        tmp = not bool (int (CTK.cfg.get_val ('vserver!%s!rule!%s!no_log' %(vsrv_num, r), "0")))
         if tmp:
             tmp = _('Logging enabled for this rule')
             log = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
