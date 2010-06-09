@@ -640,10 +640,24 @@ static ret_t
 _socket_close (cherokee_cryptor_socket_libssl_t *cryp)
 {
 	int re;
+	int fd;
 
 	if (cryp->session != NULL) {
+		/* Send a 'close_notify' SSL message
+		 */
 		re = SSL_shutdown (cryp->session);
 		if (re == 0) {
+			/* Send a TCP FIN segment to trigger the
+			 * client's 'close_notify' - leaving the
+			 * connection open for reading.
+			 */
+			fd = SSL_get_fd (cryp->session);
+			if (fd >= 0) {
+				do {
+					re = shutdown (fd, SHUT_WR);
+				} while ((re == -1) && (errno == EINTR));
+			}
+
 			/* Call it again to finish the shutdown */
 			re = SSL_shutdown (cryp->session);
 		}
