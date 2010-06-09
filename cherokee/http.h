@@ -206,10 +206,10 @@ typedef enum {                               /* Protocol   RFC  Section */
 #define http_not_extended_string             "510 Not Extended"
 
 #define http_type_100_max 102
-#define http_type_200_max 206
-#define http_type_300_max 304
-#define http_type_400_max 426
-#define http_type_500_max 505
+#define http_type_200_max 207
+#define http_type_300_max 307
+#define http_type_400_max 449
+#define http_type_500_max 510
 
 #define http_type_100(c)  ((c >= 100) && (c <= http_type_100_max))
 #define http_type_200(c)  ((c >= 200) && (c <= http_type_200_max))
