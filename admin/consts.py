@@ -31,7 +31,8 @@ AVAILABLE_LANGUAGES = [
     ('pl',           N_('Polish')),
     ('sv_SE',        N_('Swedish')),
     ('po_BR',        N_('Brazilian Portuguese')),
-    ('zh_CN',        N_('Chinese Simplified'))
+    ('zh_CN',        N_('Chinese Simplified')),
+    ('ca',           N_('Catalan'))
 ]
 
 PRODUCT_TOKENS = [
