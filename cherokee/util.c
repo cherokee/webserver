@@ -826,7 +826,8 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
          * which results in poor utilization of the network.
 	 */
 #ifdef _WIN32
-	re = ioctlsocket (fd, FIONBIO, (u_long) &enable);
+	flags = enable;
+	re = ioctlsocket (fd, FIONBIO, (u_long) &flags);
 #else
  	flags = fcntl (fd, F_GETFL, 0);
 	if (unlikely (flags == -1)) {

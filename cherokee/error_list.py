@@ -1197,6 +1197,10 @@ e('ERRORLOG_PARAM',
 
 # cherokee/cryptor_libssl.c
 #
+e('SSL_NO_ENTROPY',
+  title = "Not enough entropy in the pool",
+  desc  = SYSTEM_ISSUE)
+
 e('SSL_SOCKET',
   title = "Could not get the socket struct: %p",
   desc  = SYSTEM_ISSUE)

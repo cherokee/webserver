@@ -58,6 +58,15 @@ static DH *dh_param_4096 = NULL;
 #include "cryptor_libssl_dh_2048.c"
 #include "cryptor_libssl_dh_4096.c"
 
+#define CLEAR_LIBSSL_ERRORS						\
+	do {								\
+		while (ERR_peek_error()) {				\
+			TRACE(ENTRIES, "Ignoring libssl error%s","\n"); \
+		}							\
+		ERR_clear_error();					\
+	} while(0)
+
+
 static ret_t
 _free (cherokee_cryptor_libssl_t *cryp)
 {
@@ -298,6 +307,7 @@ tmp_dh_cb (SSL *ssl, int export, int keylen)
 	return NULL;
 }
 
+
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
 	      cherokee_virtual_server_t   *vsrv,
@@ -436,6 +446,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	SSL_CTX_set_verify (n->context, verify_mode, NULL);
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
+	SSL_CTX_set_read_ahead (n->context, 1);
 	SSL_CTX_set_mode (n->context, SSL_MODE_ENABLE_PARTIAL_WRITE);
 
 	/* Set the SSL context cache
@@ -459,6 +470,9 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SESSION_ID,
 			   vsrv->name.buf, error);
 	}
+
+	SSL_CTX_set_session_cache_mode (n->context, SSL_SESS_CACHE_SERVER);
+
 
 #ifndef OPENSSL_NO_TLSEXT
 	/* Enable SNI
@@ -516,6 +530,10 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 		return ret_error;
 	}
 
+	/* Sets ssl to work in server mode
+	 */
+	SSL_set_accept_state (cryp->session);
+
 	/* Set the socket file descriptor
 	 */
 	re = SSL_set_fd (cryp->session, socket->socket);
@@ -556,7 +574,9 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 
 	/* TLS Handshake
 	 */
-	re = SSL_accept (cryp->session);
+	CLEAR_LIBSSL_ERRORS;
+
+	re = SSL_do_handshake (cryp->session);
 	if (re <= 0) {
 		int         err;
 		const char *error;
@@ -588,6 +608,29 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 			LOG_ERROR (CHEROKEE_ERROR_SSL_INIT, error);
 			return ret_error;
 		}
+	}
+
+	/* Report the connection details
+	 */
+#ifdef TRACE_ENABLED
+	{
+		CHEROKEE_TEMP (buf,256);
+		SSL_CIPHER *cipher = SSL_get_current_cipher (cryp->session);
+
+		if (cipher) {
+			SSL_CIPHER_description (cipher, &buf[0], buf_size-1);
+
+			TRACE (ENTRIES, "SSL: %s, %sREUSED, Ciphers: %s",
+			       SSL_get_version(cryp->session),
+			       SSL_session_reused(cryp->session)? "" : "Not ", &buf[0]);
+		}
+	}
+#endif
+
+	/* Disable Ciphers renegotiation (CVE-2009-3555)
+	 */
+	if (cryp->session->s3) {
+		cryp->session->s3->flags |= SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS;
 	}
 
 	return ret_ok;
@@ -622,6 +665,8 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 	int     re;
 	ssize_t len;
 	int     error;
+
+	CLEAR_LIBSSL_ERRORS;
 
 	len = SSL_write (cryp->session, buf, buf_len);
 	if (likely (len > 0) ) {
@@ -696,6 +741,8 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 	int     re;
 	int     error;
 	ssize_t len;
+
+	CLEAR_LIBSSL_ERRORS;
 
 	len = SSL_read (cryp->session, buf, buf_size);
 	if (likely (len > 0)) {
@@ -1015,6 +1062,12 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 	SSL_load_error_strings();
 	SSL_library_init();
 	OpenSSL_add_all_algorithms();
+
+	/* Ensure PRNG has been seeded with enough data
+	 */
+	if (RAND_status() == 0) {
+		LOG_WARNING_S (CHEROKEE_ERROR_SSL_NO_ENTROPY);
+	}
 
 	/* Init concurrency related stuff
 	 */

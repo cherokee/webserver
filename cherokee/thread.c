@@ -607,13 +607,26 @@ process_active_connections (cherokee_thread_t *thd)
 	cherokee_server_t        *srv         = SRV(thd->server);
 	cherokee_socket_status_t  blocking;
 
+#ifdef TRACE_ENABLED
+	TRACE (ENTRIES, "Active connections:%s", "\n");
+
+	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
+		conn = CONN(i);
+
+		TRACE (ENTRIES, "   \\- thread (%p) processing conn (%p), phase %d '%s', socket=%d,%s\n",
+		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn),
+		       conn->socket.socket, (conn->socket.status == socket_reading)? "read" : (conn->socket.status == socket_writing)? "writing" : "closed");
+	}
+#endif
+
 	/* Process active connections
 	 */
 	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
 		conn = CONN(i);
 
-		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s'\n",
-		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn));
+		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s', socket=%d,%s\n",
+		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn),
+		       conn->socket.socket, (conn->socket.status == socket_reading)? "read" : (conn->socket.status == socket_writing)? "writing" : "closed");
 
 		/* Thread's error logger
 		 */
@@ -739,7 +752,6 @@ process_active_connections (cherokee_thread_t *thd)
 				conns_freed++;
 				goto shutdown;
 			}
-
 			break;
 
 		case phase_reading_header:
