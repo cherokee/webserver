@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee 0.99.33\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-24 16:37+0200\n"
+"POT-Creation-Date: 2010-06-10 11:52+0200\n"
 "PO-Revision-Date: 2009-12-13 19:40+0100\n"
 "Last-Translator: Vincent Knecht <vknecht@users.sourceforge.net>\n"
 "Language-Team: none\n"
@@ -119,7 +119,7 @@ msgstr "Choisir"
 #: admin/CTK/CTK/Druid.py:153 admin/CTK/CTK/Druid.py:160
 #: admin/CTK/CTK/Druid.py:168 admin/CTK/CTK/Druid.py:176
 #: admin/CTK/CTK/Druid.py:182 admin/Icons.py:348 admin/Mime.py:101
-#: admin/PageGeneral.py:217 admin/PageIndex.py:348 admin/PageRule.py:213
+#: admin/PageGeneral.py:214 admin/PageIndex.py:348 admin/PageRule.py:213
 #: admin/PageRule.py:261 admin/PageRule.py:287 admin/PageSource.py:240
 #: admin/PageSource.py:422 admin/PageSource.py:436 admin/PageSource.py:450
 #: admin/PageVServers.py:203 admin/PageVServers.py:238
@@ -160,8 +160,8 @@ msgstr "Journalisation"
 
 #: admin/CTK/CTK/Image.py:75 admin/CgiBase.py:68 admin/CgiBase.py:70
 #: admin/CgiBase.py:123 admin/CgiBase.py:124 admin/CgiBase.py:125
-#: admin/CgiBase.py:126 admin/Graph.py:124 admin/PageAdvanced.py:144
-#: admin/PageEntry.py:105 admin/PageEntry.py:114 admin/PageGeneral.py:127
+#: admin/CgiBase.py:126 admin/Graph.py:124 admin/PageAdvanced.py:146
+#: admin/PageEntry.py:105 admin/PageEntry.py:114 admin/PageGeneral.py:124
 #: admin/PageSource.py:305 admin/PageVServer.py:120
 #: admin/plugins/dirlist.py:56 admin/plugins/exists.py:72
 #: admin/plugins/exists.py:77 admin/plugins/exists.py:78
@@ -302,7 +302,7 @@ msgid "Custom Environment Variables"
 msgstr "Variables d'environnement"
 
 #: admin/CgiBase.py:150 admin/Icons.py:342 admin/Mime.py:100
-#: admin/PageGeneral.py:216 admin/PageRule.py:260 admin/PageSource.py:239
+#: admin/PageGeneral.py:213 admin/PageRule.py:260 admin/PageSource.py:239
 #: admin/PageSource.py:435 admin/PageVServers.py:237
 #: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
 #: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
@@ -402,7 +402,7 @@ msgid "Document Root"
 msgstr "Racine des Documents"
 
 #: admin/Icons.py:118 admin/Icons.py:313 admin/Mime.py:86 admin/Mime.py:120
-#: admin/consts.py:182 admin/plugins/extensions.py:59
+#: admin/consts.py:183 admin/plugins/extensions.py:59
 msgid "Extensions"
 msgstr "Extensions"
 
@@ -429,12 +429,12 @@ msgstr ""
 msgid "Add New File"
 msgstr "Ajouter nouvelle règle"
 
-#: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:38
-#: admin/consts.py:122
+#: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:39
+#: admin/consts.py:123
 msgid "Default"
 msgstr "Par défaut"
 
-#: admin/Icons.py:183 admin/Icons.py:315 admin/consts.py:181
+#: admin/Icons.py:183 admin/Icons.py:315 admin/consts.py:182
 #: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "Répertoire"
@@ -448,11 +448,11 @@ msgstr ""
 msgid "Modify"
 msgstr "Modifié"
 
-#: admin/Icons.py:199 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
+#: admin/Icons.py:199 admin/PageAdvanced.py:164 admin/PageAdvanced.py:187
 msgid "Special Files"
 msgstr "Fichiers Spéciaux"
 
-#: admin/Icons.py:312 admin/consts.py:99
+#: admin/Icons.py:312 admin/consts.py:100
 msgid "File"
 msgstr "Fichier"
 
@@ -497,7 +497,7 @@ msgstr "Types MIME"
 msgid "MaxAge (<em>secs</em>)"
 msgstr ""
 
-#: admin/Mime.py:141 admin/PageGeneral.py:259
+#: admin/Mime.py:141 admin/PageGeneral.py:256
 #, fuzzy
 msgid "Mime types"
 msgstr "Type Mime"
@@ -539,12 +539,12 @@ msgstr "Sauvegarder"
 msgid "Home"
 msgstr ""
 
-#: admin/Page.py:116 admin/PageAdvanced.py:144 admin/PageIndex.py:97
+#: admin/Page.py:116 admin/PageAdvanced.py:146 admin/PageIndex.py:97
 #: admin/PageStatus.py:40 admin/PageStatus.py:112
 msgid "Status"
 msgstr "Etat"
 
-#: admin/Page.py:117 admin/PageGeneral.py:261 admin/PageStatus.py:101
+#: admin/Page.py:117 admin/PageGeneral.py:258 admin/PageStatus.py:101
 msgid "General"
 msgstr "Général"
 
@@ -558,7 +558,7 @@ msgstr "ID Serveur"
 msgid "Sources"
 msgstr "Source"
 
-#: admin/Page.py:120 admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
+#: admin/Page.py:120 admin/PageAdvanced.py:93 admin/PageAdvanced.py:193
 msgid "Advanced"
 msgstr "Avancé"
 
@@ -570,103 +570,103 @@ msgstr "Aide"
 msgid "Updating..."
 msgstr ""
 
-#: admin/PageAdvanced.py:61
+#: admin/PageAdvanced.py:62
 msgid ""
 "<p><b>WARNING</b>: This section contains advanced\n"
 "configuration parameters. Changing things is not recommended unless\n"
 "you really know what you are doing.</p>"
 msgstr ""
 
-#: admin/PageAdvanced.py:65
+#: admin/PageAdvanced.py:66
 msgid "Defines which thread policy the OS should apply to the server."
 msgstr ""
 
-#: admin/PageAdvanced.py:66
+#: admin/PageAdvanced.py:67
 msgid "If empty, Cherokee will calculate a default number."
 msgstr ""
 
-#: admin/PageAdvanced.py:67
+#: admin/PageAdvanced.py:68
 msgid ""
 "It defines how many file descriptors the server should handle. Default is "
 "the number showed by ulimit -n"
 msgstr ""
 
-#: admin/PageAdvanced.py:68
+#: admin/PageAdvanced.py:69
 msgid "Allows to choose the internal file descriptor polling method."
 msgstr ""
 
-#: admin/PageAdvanced.py:69
+#: admin/PageAdvanced.py:70
 msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
 msgstr ""
 
-#: admin/PageAdvanced.py:70
+#: admin/PageAdvanced.py:71
 msgid "Maximum size of a file to use sendfile(). Default: 2 GB."
 msgstr ""
 
-#: admin/PageAdvanced.py:71
+#: admin/PageAdvanced.py:72
 msgid ""
 "Name a program that will be called if, by some reason, the server fails. "
 "Default: <em>cherokee-panic</em>."
 msgstr ""
 
-#: admin/PageAdvanced.py:72
+#: admin/PageAdvanced.py:73
 msgid "Path of the PID file. If empty, the file will not be created."
 msgstr ""
 
-#: admin/PageAdvanced.py:73
+#: admin/PageAdvanced.py:74
 msgid "Max. length of the incoming connection queue."
 msgstr ""
 
-#: admin/PageAdvanced.py:74
+#: admin/PageAdvanced.py:75
 msgid ""
 "Set the number of how many internal connections can be held for reuse by "
 "each thread. Default: 20."
 msgstr ""
 
-#: admin/PageAdvanced.py:75
+#: admin/PageAdvanced.py:76
 msgid ""
 "Sets the number of seconds between log consolidations (flushes). Default: 10 "
 "seconds."
 msgstr ""
 
-#: admin/PageAdvanced.py:76
+#: admin/PageAdvanced.py:77
 msgid "Time lapse (in seconds) between Nonce cache clean ups."
 msgstr ""
 
-#: admin/PageAdvanced.py:77
+#: admin/PageAdvanced.py:78
 msgid ""
 "Enables the server-wide keep-alive support. It increases the performance. It "
 "is usually set on."
 msgstr ""
 
-#: admin/PageAdvanced.py:78
+#: admin/PageAdvanced.py:79
 msgid ""
 "Maximum number of HTTP requests that can be served by each keepalive "
 "connection."
 msgstr ""
 
-#: admin/PageAdvanced.py:79
+#: admin/PageAdvanced.py:80
 msgid ""
 "Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
 msgstr ""
 
-#: admin/PageAdvanced.py:80
+#: admin/PageAdvanced.py:81
 msgid "Activate or deactivate the I/O cache globally."
 msgstr "Activer ou désactiver globalement le cache I/O."
 
-#: admin/PageAdvanced.py:81
+#: admin/PageAdvanced.py:82
 msgid "Number of pages that the cache should handle."
 msgstr ""
 
-#: admin/PageAdvanced.py:82
+#: admin/PageAdvanced.py:83
 msgid "Files under this size will not be cached."
 msgstr "Les fichiers inférieurs à cette taille ne seront pas mis en cache."
 
-#: admin/PageAdvanced.py:83
+#: admin/PageAdvanced.py:84
 msgid "Files over this size will not be cached."
 msgstr "Les fichiers supérieurs à cette taille ne seront pas mis en cache."
 
-#: admin/PageAdvanced.py:84
+#: admin/PageAdvanced.py:85
 #, fuzzy
 msgid ""
 "How long (in seconds) the file information should last cached without "
@@ -675,146 +675,154 @@ msgstr ""
 "Combien de temps l'information sur le fichier devra rester en cache sans "
 "être rafraîchie."
 
-#: admin/PageAdvanced.py:85
+#: admin/PageAdvanced.py:86
 #, fuzzy
 msgid "How long (in seconds) the file content should last cached."
 msgstr "Combien de temps le contenu du fichier devra rester en cache."
 
-#: admin/PageAdvanced.py:86
+#: admin/PageAdvanced.py:87
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 512 bits."
 msgstr ""
 
-#: admin/PageAdvanced.py:87
+#: admin/PageAdvanced.py:88
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits."
 msgstr ""
 
-#: admin/PageAdvanced.py:88
+#: admin/PageAdvanced.py:89
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits."
 msgstr ""
 
-#: admin/PageAdvanced.py:89
+#: admin/PageAdvanced.py:90
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
 msgstr ""
 
-#: admin/PageAdvanced.py:113
+#: admin/PageAdvanced.py:91
+msgid "Timeout for the TLS/SSL handshake. Default: 15 seconds."
+msgstr ""
+
+#: admin/PageAdvanced.py:115
 msgid "Keep Alive"
 msgstr ""
 
-#: admin/PageAdvanced.py:113 admin/PageAdvanced.py:115
+#: admin/PageAdvanced.py:115 admin/PageAdvanced.py:117
 #, fuzzy
 msgid "Allowed"
 msgstr "Autoriser"
 
-#: admin/PageAdvanced.py:114
+#: admin/PageAdvanced.py:116
 msgid "Max keepalive reqs"
 msgstr ""
 
-#: admin/PageAdvanced.py:115
+#: admin/PageAdvanced.py:117
 msgid "Chunked Encoding"
 msgstr ""
 
-#: admin/PageAdvanced.py:116
+#: admin/PageAdvanced.py:118
 msgid "Polling Method"
 msgstr ""
 
-#: admin/PageAdvanced.py:117
+#: admin/PageAdvanced.py:119
 msgid "Sendfile min size"
 msgstr ""
 
-#: admin/PageAdvanced.py:118
+#: admin/PageAdvanced.py:120
 msgid "Sendfile max size"
 msgstr ""
 
-#: admin/PageAdvanced.py:120 admin/PageAdvanced.py:181
+#: admin/PageAdvanced.py:122 admin/PageAdvanced.py:184
 msgid "Connections"
 msgstr "Connections"
 
-#: admin/PageAdvanced.py:128
+#: admin/PageAdvanced.py:130
 msgid "Thread Number"
 msgstr ""
 
-#: admin/PageAdvanced.py:129
+#: admin/PageAdvanced.py:131
 msgid "Thread Policy"
 msgstr ""
 
-#: admin/PageAdvanced.py:130
+#: admin/PageAdvanced.py:132
 msgid "File descriptors"
 msgstr "Descripteurs de fichiers"
 
-#: admin/PageAdvanced.py:131
+#: admin/PageAdvanced.py:133
 msgid "Listening queue length"
 msgstr ""
 
-#: admin/PageAdvanced.py:132 admin/plugins/proxy.py:236
+#: admin/PageAdvanced.py:134 admin/plugins/proxy.py:236
 msgid "Reuse connections"
 msgstr "Réutiliser les connections"
 
-#: admin/PageAdvanced.py:133
+#: admin/PageAdvanced.py:135
 msgid "Log flush time"
 msgstr ""
 
-#: admin/PageAdvanced.py:134
+#: admin/PageAdvanced.py:136
 msgid "Nonces clean up time"
 msgstr ""
 
-#: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
+#: admin/PageAdvanced.py:138 admin/PageAdvanced.py:185
 msgid "Resources"
 msgstr "Ressources"
 
-#: admin/PageAdvanced.py:145
+#: admin/PageAdvanced.py:147
 msgid "Max pages"
 msgstr ""
 
-#: admin/PageAdvanced.py:146
+#: admin/PageAdvanced.py:148
 msgid "File Min Size"
 msgstr ""
 
-#: admin/PageAdvanced.py:147
+#: admin/PageAdvanced.py:149
 msgid "File Max Size"
 msgstr ""
 
-#: admin/PageAdvanced.py:148
+#: admin/PageAdvanced.py:150
 msgid "Lasting: stat"
 msgstr ""
 
-#: admin/PageAdvanced.py:149
+#: admin/PageAdvanced.py:151
 msgid "Lasting: mmap"
 msgstr ""
 
-#: admin/PageAdvanced.py:151 admin/PageAdvanced.py:183
+#: admin/PageAdvanced.py:153 admin/PageAdvanced.py:186
 msgid "I/O cache"
 msgstr "Cache I/O"
 
-#: admin/PageAdvanced.py:159
+#: admin/PageAdvanced.py:161
 msgid "Panic action"
 msgstr ""
 
-#: admin/PageAdvanced.py:160
+#: admin/PageAdvanced.py:162
 msgid "PID file"
 msgstr "Fichier PID"
 
-#: admin/PageAdvanced.py:170
-msgid "DH parameters: 512 bits"
-msgstr ""
-
-#: admin/PageAdvanced.py:171
-msgid "DH parameters: 1024 bits"
-msgstr ""
-
 #: admin/PageAdvanced.py:172
-msgid "DH parameters: 2048 bits"
+msgid "Handshake Timeout"
 msgstr ""
 
 #: admin/PageAdvanced.py:173
+msgid "DH parameters: 512 bits"
+msgstr ""
+
+#: admin/PageAdvanced.py:174
+msgid "DH parameters: 1024 bits"
+msgstr ""
+
+#: admin/PageAdvanced.py:175
+msgid "DH parameters: 2048 bits"
+msgstr ""
+
+#: admin/PageAdvanced.py:176
 msgid "DH parameters: 4096 bits"
 msgstr ""
 
-#: admin/PageAdvanced.py:175 admin/PageAdvanced.py:185
-#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
+#: admin/PageAdvanced.py:178 admin/PageAdvanced.py:188
+#: admin/PageGeneral.py:168 admin/plugins/bind.py:92
 msgid "TLS"
 msgstr "TLS"
 
-#: admin/PageAdvanced.py:191
+#: admin/PageAdvanced.py:194
 #, fuzzy
 msgid "Advanced Configuration"
 msgstr "Configuration avancée"
@@ -1176,120 +1184,120 @@ msgstr "Configuration Générale"
 msgid "Configuration Quickstart"
 msgstr ""
 
-#: admin/PageGeneral.py:98
+#: admin/PageGeneral.py:95
 msgid "Port/Interface combination already in use."
 msgstr ""
 
-#: admin/PageGeneral.py:127
+#: admin/PageGeneral.py:124
 msgid "IPv6"
 msgstr ""
 
-#: admin/PageGeneral.py:128
+#: admin/PageGeneral.py:125
 msgid "SSL/TLS back-end"
 msgstr ""
 
-#: admin/PageGeneral.py:131
+#: admin/PageGeneral.py:128
 msgid "Support"
 msgstr "Fonctionnalités"
 
-#: admin/PageGeneral.py:135
+#: admin/PageGeneral.py:132
 msgid "Timeout (<i>secs</i>)"
 msgstr ""
 
-#: admin/PageGeneral.py:136
+#: admin/PageGeneral.py:133
 msgid "Server Tokens"
 msgstr ""
 
-#: admin/PageGeneral.py:139
+#: admin/PageGeneral.py:136
 #, fuzzy
 msgid "Network Behavior"
 msgstr "Comportement réseau"
 
-#: admin/PageGeneral.py:144
+#: admin/PageGeneral.py:141
 msgid "Graphs Type"
 msgstr "Type de Graphes"
 
-#: admin/PageGeneral.py:145
+#: admin/PageGeneral.py:142
 msgid "Information Collector"
 msgstr "Collecteur d'Informations"
 
-#: admin/PageGeneral.py:151 admin/PageGeneral.py:152
+#: admin/PageGeneral.py:148 admin/PageGeneral.py:149
 msgid "Upload Tracking"
 msgstr ""
 
-#: admin/PageGeneral.py:171 admin/PageGeneral.py:209 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:168 admin/PageGeneral.py:206 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
 #: admin/plugins/mysql.py:74
 msgid "Port"
 msgstr "Port"
 
-#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:168 admin/plugins/bind.py:92
 msgid "Bind to"
 msgstr "Lier à"
 
-#: admin/PageGeneral.py:184
+#: admin/PageGeneral.py:181
 msgid "TLS/SSL port"
 msgstr ""
 
-#: admin/PageGeneral.py:186
+#: admin/PageGeneral.py:183
 msgid "TLS/SSL support disabled"
 msgstr ""
 
-#: admin/PageGeneral.py:210
+#: admin/PageGeneral.py:207
 #, fuzzy
 msgid "Interface"
 msgstr "Interne"
 
-#: admin/PageGeneral.py:215
+#: admin/PageGeneral.py:212
 #, fuzzy
 msgid "New port"
 msgstr "Ajouter nouveau port"
 
-#: admin/PageGeneral.py:224
+#: admin/PageGeneral.py:221
 #, fuzzy
 msgid "Add new port"
 msgstr "Ajouter nouveau port"
 
-#: admin/PageGeneral.py:230
+#: admin/PageGeneral.py:227
 #, fuzzy
 msgid "Listening to Ports"
 msgstr "Ecoute sur les ports"
 
-#: admin/PageGeneral.py:241
+#: admin/PageGeneral.py:238
 msgid "Execution Permissions"
 msgstr "Permissions d'Execution"
 
-#: admin/PageGeneral.py:242 admin/plugins/authlist.py:63
+#: admin/PageGeneral.py:239 admin/plugins/authlist.py:63
 #: admin/plugins/authlist.py:97
 msgid "User"
 msgstr "Utilisateur"
 
-#: admin/PageGeneral.py:243
+#: admin/PageGeneral.py:240
 msgid "Group"
 msgstr "Groupe"
 
-#: admin/PageGeneral.py:244
+#: admin/PageGeneral.py:241
 msgid "Chroot"
 msgstr ""
 
-#: admin/PageGeneral.py:255 admin/PageVServer.py:313
+#: admin/PageGeneral.py:252 admin/PageVServer.py:313
 msgid "Network"
 msgstr "Réseau"
 
-#: admin/PageGeneral.py:256
+#: admin/PageGeneral.py:253
 msgid "Ports to listen"
 msgstr "Ports à écouter"
 
-#: admin/PageGeneral.py:257
+#: admin/PageGeneral.py:254
 #, fuzzy
 msgid "Permissions"
 msgstr "Permissions du Serveur"
 
-#: admin/PageGeneral.py:258
+#: admin/PageGeneral.py:255
 msgid "Icons"
 msgstr "Icônes"
 
-#: admin/PageGeneral.py:262
+#: admin/PageGeneral.py:259
 msgid "General Settings"
 msgstr "Règlages Généraux"
 
@@ -1548,7 +1556,7 @@ msgstr ""
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr ""
 
-#: admin/PageNewConfig.py:155 admin/consts.py:49 admin/plugins/file.py:29
+#: admin/PageNewConfig.py:155 admin/consts.py:50 admin/plugins/file.py:29
 msgid "Static Content"
 msgstr "Contenu Statique"
 
@@ -2176,7 +2184,7 @@ msgstr "Hébergement Virtuel Avancé"
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:348 admin/consts.py:225 admin/consts.py:242
+#: admin/PageVServer.py:348 admin/consts.py:226 admin/consts.py:243
 msgid "Disabled"
 msgstr "Désactivé"
 
@@ -2222,7 +2230,7 @@ msgstr ""
 msgid "Accept Forwarded IPs"
 msgstr ""
 
-#: admin/PageVServer.py:412 admin/consts.py:220
+#: admin/PageVServer.py:412 admin/consts.py:221
 msgid "Accept"
 msgstr "Accepter"
 
@@ -2392,354 +2400,358 @@ msgstr ""
 msgid "Chinese Simplified"
 msgstr "Chinois Simplifié"
 
-#: admin/consts.py:39
+#: admin/consts.py:35
+msgid "Catalan"
+msgstr ""
+
+#: admin/consts.py:40
 msgid "Product only"
 msgstr "Produit seulement"
 
-#: admin/consts.py:40
+#: admin/consts.py:41
 msgid "Product + Minor version"
 msgstr "Produit + Version mineure"
 
-#: admin/consts.py:41
+#: admin/consts.py:42
 msgid "Product + Minimal version"
 msgstr "Produit + Version minimale"
 
-#: admin/consts.py:42
+#: admin/consts.py:43
 msgid "Product + Platform"
 msgstr "Produit + Plate-forme"
 
-#: admin/consts.py:43
+#: admin/consts.py:44
 msgid "Full Server string"
 msgstr "Chaine serveur complête"
 
-#: admin/consts.py:47 admin/consts.py:75 admin/consts.py:92
-#: admin/consts.py:106 admin/plugins/mysql.py:43
+#: admin/consts.py:48 admin/consts.py:76 admin/consts.py:93
+#: admin/consts.py:107 admin/plugins/mysql.py:43
 msgid "None"
 msgstr "Aucun"
 
-#: admin/consts.py:48 admin/plugins/common.py:30
+#: admin/consts.py:49 admin/plugins/common.py:30
 msgid "List & Send"
 msgstr "Lire & Envoyer"
 
-#: admin/consts.py:50
+#: admin/consts.py:51
 msgid "Only Listing"
 msgstr ""
 
-#: admin/consts.py:51 admin/plugins/error_redir.py:86
+#: admin/consts.py:52 admin/plugins/error_redir.py:86
 #: admin/wizards/hotlinking.py:146 admin/wizards/hotlinking.py:165
 msgid "Redirection"
 msgstr "Redirection"
 
-#: admin/consts.py:52 admin/wizards/rails.py:73
+#: admin/consts.py:53 admin/wizards/rails.py:73
 msgid "FastCGI"
 msgstr "FastCGI"
 
-#: admin/consts.py:53
+#: admin/consts.py:54
 msgid "SCGI"
 msgstr ""
 
-#: admin/consts.py:54 admin/wizards/List.py:108 admin/wizards/uwsgi.py:41
+#: admin/consts.py:55 admin/wizards/List.py:108 admin/wizards/uwsgi.py:41
 msgid "uWSGI"
 msgstr ""
 
-#: admin/consts.py:55
+#: admin/consts.py:56
 msgid "HTTP Reverse Proxy"
 msgstr ""
 
-#: admin/consts.py:56
+#: admin/consts.py:57
 #, fuzzy
 msgid "Upload Reporting"
 msgstr "Réecriture d'URL"
 
-#: admin/consts.py:57 admin/plugins/streaming.py:31
+#: admin/consts.py:58 admin/plugins/streaming.py:31
 #: admin/plugins/streaming.py:63
 msgid "Audio/Video Streaming"
 msgstr "Streaming Audio/Vidéo"
 
-#: admin/consts.py:58
+#: admin/consts.py:59
 msgid "CGI"
 msgstr ""
 
-#: admin/consts.py:59 admin/plugins/ssi.py:28
+#: admin/consts.py:60 admin/plugins/ssi.py:28
 msgid "Server Side Includes"
 msgstr ""
 
-#: admin/consts.py:60
+#: admin/consts.py:61
 msgid "Hidden Downloads"
 msgstr ""
 
-#: admin/consts.py:61
+#: admin/consts.py:62
 msgid "Server Info"
 msgstr "Info Serveur"
 
-#: admin/consts.py:62
+#: admin/consts.py:63
 #, fuzzy
 msgid "MySQL Bridge"
 msgstr "Serveur MySQL"
 
-#: admin/consts.py:63 admin/plugins/custom_error.py:46
+#: admin/consts.py:64 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
 msgstr ""
 
-#: admin/consts.py:64 admin/plugins/admin.py:29
+#: admin/consts.py:65 admin/plugins/admin.py:29
 msgid "Remote Administration"
 msgstr "Administration distante"
 
-#: admin/consts.py:65 admin/wizards/hotlinking.py:85
+#: admin/consts.py:66 admin/wizards/hotlinking.py:85
 msgid "1x1 Transparent GIF"
 msgstr ""
 
-#: admin/consts.py:69
+#: admin/consts.py:70
 msgid "Default errors"
 msgstr ""
 
-#: admin/consts.py:70
+#: admin/consts.py:71
 msgid "Custom redirections"
 msgstr ""
 
-#: admin/consts.py:71
+#: admin/consts.py:72
 msgid "Closest match"
 msgstr ""
 
-#: admin/consts.py:76
+#: admin/consts.py:77
 msgid "Plain text file"
 msgstr ""
 
-#: admin/consts.py:77
+#: admin/consts.py:78
 msgid "Htpasswd file"
 msgstr ""
 
-#: admin/consts.py:78
+#: admin/consts.py:79
 msgid "Htdigest file"
 msgstr ""
 
-#: admin/consts.py:79
+#: admin/consts.py:80
 msgid "LDAP server"
 msgstr "Serveur LDAP"
 
-#: admin/consts.py:80
+#: admin/consts.py:81
 msgid "MySQL server"
 msgstr "Serveur MySQL"
 
-#: admin/consts.py:81
+#: admin/consts.py:82
 msgid "PAM"
 msgstr "PAM"
 
-#: admin/consts.py:82 admin/plugins/authlist.py:30
+#: admin/consts.py:83 admin/plugins/authlist.py:30
 msgid "Fixed list"
 msgstr "Liste fixe"
 
-#: admin/consts.py:86
+#: admin/consts.py:87
 msgid "Basic"
 msgstr ""
 
-#: admin/consts.py:87
+#: admin/consts.py:88
 msgid "Digest"
 msgstr ""
 
-#: admin/consts.py:88
+#: admin/consts.py:89
 msgid "Basic or Digest"
 msgstr ""
 
-#: admin/consts.py:93
+#: admin/consts.py:94
 msgid "Apache compatible"
 msgstr "Compatible Apache"
 
-#: admin/consts.py:94
+#: admin/consts.py:95
 msgid "NCSA"
 msgstr ""
 
-#: admin/consts.py:95
+#: admin/consts.py:96
 msgid "Custom"
 msgstr ""
 
-#: admin/consts.py:100
+#: admin/consts.py:101
 msgid "System logger"
 msgstr ""
 
-#: admin/consts.py:101
+#: admin/consts.py:102
 msgid "Standard Error"
 msgstr ""
 
-#: admin/consts.py:102
+#: admin/consts.py:103
 msgid "Execute program"
 msgstr ""
 
-#: admin/consts.py:107
+#: admin/consts.py:108
 msgid "Round Robin"
 msgstr ""
 
-#: admin/consts.py:108
+#: admin/consts.py:109
 msgid "IP Hash"
 msgstr ""
 
-#: admin/consts.py:112
+#: admin/consts.py:113
 msgid "Local interpreter"
 msgstr ""
 
-#: admin/consts.py:113
+#: admin/consts.py:114
 msgid "Remote host"
 msgstr "Hôte distant"
 
-#: admin/consts.py:117
+#: admin/consts.py:118
 msgid "GZip"
 msgstr ""
 
-#: admin/consts.py:118
+#: admin/consts.py:119
 msgid "Deflate"
 msgstr ""
 
-#: admin/consts.py:123
+#: admin/consts.py:124
 msgid "FIFO"
 msgstr ""
 
-#: admin/consts.py:124
+#: admin/consts.py:125
 msgid "Round-robin"
 msgstr ""
 
-#: admin/consts.py:125
+#: admin/consts.py:126
 msgid "Dynamic"
 msgstr "Dynamique"
 
-#: admin/consts.py:129
+#: admin/consts.py:130
 msgid "Automatic"
 msgstr "Automatique"
 
-#: admin/consts.py:139 admin/plugins/error_redir.py:32
+#: admin/consts.py:140 admin/plugins/error_redir.py:32
 msgid "External"
 msgstr "Externe"
 
-#: admin/consts.py:140 admin/plugins/error_redir.py:31
+#: admin/consts.py:141 admin/plugins/error_redir.py:31
 msgid "Internal"
 msgstr "Interne"
 
-#: admin/consts.py:183 admin/plugins/header.py:72 admin/plugins/proxy.py:91
+#: admin/consts.py:184 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:101 admin/plugins/request.py:31
 #: admin/plugins/url_arg.py:76 admin/plugins/url_arg.py:95
 msgid "Regular Expression"
 msgstr "Expression Régulière"
 
-#: admin/consts.py:184 admin/plugins/header.py:71 admin/plugins/header.py:86
+#: admin/consts.py:185 admin/plugins/header.py:71 admin/plugins/header.py:86
 #: admin/plugins/proxy.py:190
 msgid "Header"
 msgstr "En-tête"
 
-#: admin/consts.py:185
+#: admin/consts.py:186
 msgid "File Exists"
 msgstr "Le fichier existe"
 
-#: admin/consts.py:186
+#: admin/consts.py:187
 msgid "HTTP Method"
 msgstr "Méthode HTTP"
 
-#: admin/consts.py:187 admin/plugins/bind.py:76 admin/plugins/bind.py:129
+#: admin/consts.py:188 admin/plugins/bind.py:76 admin/plugins/bind.py:129
 msgid "Incoming IP/Port"
 msgstr "IP/Port Entrant"
 
-#: admin/consts.py:188 admin/plugins/fullpath.py:66
+#: admin/consts.py:189 admin/plugins/fullpath.py:66
 #: admin/plugins/fullpath.py:98
 msgid "Full Path"
 msgstr "Chemin complet"
 
-#: admin/consts.py:189 admin/plugins/from.py:71
+#: admin/consts.py:190 admin/plugins/from.py:71
 msgid "Connected from"
 msgstr "Connecté depuis"
 
-#: admin/consts.py:190
+#: admin/consts.py:191
 msgid "URL Argument"
 msgstr ""
 
-#: admin/consts.py:191
+#: admin/consts.py:192
 msgid "GeoIP"
 msgstr ""
 
-#: admin/consts.py:195
+#: admin/consts.py:196
 #, fuzzy
 msgid "Match Nickname"
 msgstr "Surnom"
 
-#: admin/consts.py:196
+#: admin/consts.py:197
 msgid "Wildcards"
 msgstr ""
 
-#: admin/consts.py:197 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
+#: admin/consts.py:198 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
 msgid "Regular Expressions"
 msgstr "Expression Régulières"
 
-#: admin/consts.py:198
+#: admin/consts.py:199
 msgid "Server IP"
 msgstr "IP Serveur"
 
-#: admin/consts.py:202
+#: admin/consts.py:203
 msgid "Not set"
 msgstr ""
 
-#: admin/consts.py:203
+#: admin/consts.py:204
 msgid "Already expired on 1970"
 msgstr ""
 
-#: admin/consts.py:204
+#: admin/consts.py:205
 msgid "Do not expire until 2038"
 msgstr ""
 
-#: admin/consts.py:205
+#: admin/consts.py:206
 msgid "Custom value"
 msgstr ""
 
-#: admin/consts.py:209
+#: admin/consts.py:210
 msgid "No TLS/SSL"
 msgstr ""
 
-#: admin/consts.py:210
+#: admin/consts.py:211
 msgid "OpenSSL / libssl"
 msgstr ""
 
-#: admin/consts.py:214 admin/util.py:38
+#: admin/consts.py:215 admin/util.py:38
 msgid "Off"
 msgstr ""
 
-#: admin/consts.py:215
+#: admin/consts.py:216
 msgid "Enhanced Virtual Hosting"
 msgstr "Hébergement Virtuel Amélioré"
 
-#: admin/consts.py:219
+#: admin/consts.py:220
 msgid "Skip"
 msgstr "Passer"
 
-#: admin/consts.py:221
+#: admin/consts.py:222
 msgid "Require"
 msgstr ""
 
-#: admin/consts.py:226
+#: admin/consts.py:227
 msgid "RRDtool graphs"
 msgstr "Graphes RRDtool"
 
-#: admin/consts.py:230
+#: admin/consts.py:231
 msgid "Local time"
 msgstr "Heure locale"
 
-#: admin/consts.py:231
+#: admin/consts.py:232
 msgid "UTC: Coordinated Universal Time"
 msgstr ""
 
-#: admin/consts.py:235
+#: admin/consts.py:236
 msgid "JSON"
 msgstr ""
 
-#: admin/consts.py:236
+#: admin/consts.py:237
 msgid "Python"
 msgstr ""
 
-#: admin/consts.py:237 admin/wizards/List.py:119
+#: admin/consts.py:238 admin/wizards/List.py:119
 msgid "PHP"
 msgstr ""
 
-#: admin/consts.py:238
+#: admin/consts.py:239
 msgid "Ruby"
 msgstr ""
 
-#: admin/consts.py:243
+#: admin/consts.py:244
 msgid "POST tracker"
 msgstr ""
 
@@ -3769,89 +3781,89 @@ msgstr "Hors de la plage (1 à 65535)"
 msgid "Port already in use"
 msgstr ""
 
-#: admin/validations.py:65
+#: admin/validations.py:63 admin/validations.py:71
 msgid "Malformed path"
 msgstr "Chemin mal formé"
 
-#: admin/validations.py:96
+#: admin/validations.py:102
 msgid "It is not executable"
 msgstr "Il n'est pas éxécutable"
 
-#: admin/validations.py:102 admin/validations.py:177
+#: admin/validations.py:108 admin/validations.py:183
 msgid "Path is not a regular file"
 msgstr "Le chemin n'est pas un fichier régulier"
 
-#: admin/validations.py:120
+#: admin/validations.py:126
 msgid "It cannot be negative"
 msgstr "Il ne doit pas être négatif"
 
-#: admin/validations.py:136
+#: admin/validations.py:142
 msgid "Malformed IPv4"
 msgstr "IPv4 mal formée"
 
-#: admin/validations.py:141
+#: admin/validations.py:147
 msgid "Malformed IPv4 entry"
 msgstr "Entrée IPv4 mal formée"
 
-#: admin/validations.py:143
+#: admin/validations.py:149
 msgid "IPv4 entry out of range"
 msgstr "Entrée IPv4 hors plage"
 
-#: admin/validations.py:151
+#: admin/validations.py:157
 msgid "Malformed IPv6"
 msgstr "IPv6 mal formée"
 
-#: admin/validations.py:162 admin/validations.py:174
+#: admin/validations.py:168 admin/validations.py:180
 msgid "Path does not exist"
 msgstr "Le chemin n'existe pas"
 
-#: admin/validations.py:165
+#: admin/validations.py:171
 msgid "Path is not a directory"
 msgstr "Le chemin n'est pas un répertoire"
 
-#: admin/validations.py:193
+#: admin/validations.py:199
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
 msgstr "Caractère invalide. Acceptés: lettres, digits, _, - et ."
 
-#: admin/validations.py:216
+#: admin/validations.py:222
 msgid "Neither a number or an IPv4"
 msgstr "N'est pas un nombre ni une IPv4"
 
-#: admin/validations.py:227
+#: admin/validations.py:233
 msgid "Invalid mask"
 msgstr "Masque invalide"
 
-#: admin/validations.py:251
+#: admin/validations.py:257
 msgid "Malformed entry (netmask)"
 msgstr "Entrée malformée (netmask)"
 
-#: admin/validations.py:276
+#: admin/validations.py:282
 msgid "Cannot be empty"
 msgstr "Ne peut pas être vide"
 
-#: admin/validations.py:281
+#: admin/validations.py:287
 msgid "Forced failure"
 msgstr ""
 
-#: admin/validations.py:289
+#: admin/validations.py:295
 msgid "http:// missing"
 msgstr "http:// manquant"
 
-#: admin/validations.py:326
+#: admin/validations.py:332
 msgid "Time value contain invalid values"
 msgstr "La valeur de temps contient des valeurs invalides"
 
-#: admin/validations.py:329
+#: admin/validations.py:335
 msgid "Malformed time"
 msgstr "Heure mal formée"
 
-#: admin/validations.py:337
+#: admin/validations.py:343
 #, fuzzy
 msgid "Virtual Server nick name is already being used."
 msgstr "Ce surnom d'hôte virtuel est déjà utilisé."
 
-#: admin/validations.py:344 admin/validations.py:354 admin/validations.py:364
-#: admin/validations.py:381
+#: admin/validations.py:350 admin/validations.py:360 admin/validations.py:370
+#: admin/validations.py:387
 #, fuzzy
 msgid "Already in use"
 msgstr "Déjà configuré:"

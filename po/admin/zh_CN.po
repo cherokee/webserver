@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.49' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-05-24 16:37+0200\n"
+"POT-Creation-Date: 2010-06-10 11:52+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -113,7 +113,7 @@ msgstr "关闭"
 #: admin/CTK/CTK/Druid.py:153 admin/CTK/CTK/Druid.py:160
 #: admin/CTK/CTK/Druid.py:168 admin/CTK/CTK/Druid.py:176
 #: admin/CTK/CTK/Druid.py:182 admin/Icons.py:348 admin/Mime.py:101
-#: admin/PageGeneral.py:217 admin/PageIndex.py:348 admin/PageRule.py:213
+#: admin/PageGeneral.py:214 admin/PageIndex.py:348 admin/PageRule.py:213
 #: admin/PageRule.py:261 admin/PageRule.py:287 admin/PageSource.py:240
 #: admin/PageSource.py:422 admin/PageSource.py:436 admin/PageSource.py:450
 #: admin/PageVServers.py:203 admin/PageVServers.py:238
@@ -155,8 +155,8 @@ msgstr "记录"
 
 #: admin/CTK/CTK/Image.py:75 admin/CgiBase.py:68 admin/CgiBase.py:70
 #: admin/CgiBase.py:123 admin/CgiBase.py:124 admin/CgiBase.py:125
-#: admin/CgiBase.py:126 admin/Graph.py:124 admin/PageAdvanced.py:144
-#: admin/PageEntry.py:105 admin/PageEntry.py:114 admin/PageGeneral.py:127
+#: admin/CgiBase.py:126 admin/Graph.py:124 admin/PageAdvanced.py:146
+#: admin/PageEntry.py:105 admin/PageEntry.py:114 admin/PageGeneral.py:124
 #: admin/PageSource.py:305 admin/PageVServer.py:120
 #: admin/plugins/dirlist.py:56 admin/plugins/exists.py:72
 #: admin/plugins/exists.py:77 admin/plugins/exists.py:78
@@ -288,7 +288,7 @@ msgid "Custom Environment Variables"
 msgstr "自定义环境变量"
 
 #: admin/CgiBase.py:150 admin/Icons.py:342 admin/Mime.py:100
-#: admin/PageGeneral.py:216 admin/PageRule.py:260 admin/PageSource.py:239
+#: admin/PageGeneral.py:213 admin/PageRule.py:260 admin/PageSource.py:239
 #: admin/PageSource.py:435 admin/PageVServers.py:237
 #: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
 #: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
@@ -380,7 +380,7 @@ msgid "Document Root"
 msgstr "网站目录"
 
 #: admin/Icons.py:118 admin/Icons.py:313 admin/Mime.py:86 admin/Mime.py:120
-#: admin/consts.py:182 admin/plugins/extensions.py:59
+#: admin/consts.py:183 admin/plugins/extensions.py:59
 msgid "Extensions"
 msgstr "扩展"
 
@@ -404,12 +404,12 @@ msgstr "文件匹配"
 msgid "Add New File"
 msgstr "增加新文件"
 
-#: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:38
-#: admin/consts.py:122
+#: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:39
+#: admin/consts.py:123
 msgid "Default"
 msgstr "默认"
 
-#: admin/Icons.py:183 admin/Icons.py:315 admin/consts.py:181
+#: admin/Icons.py:183 admin/Icons.py:315 admin/consts.py:182
 #: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "目录"
@@ -422,11 +422,11 @@ msgstr "转到上一级"
 msgid "Modify"
 msgstr "修改"
 
-#: admin/Icons.py:199 admin/PageAdvanced.py:162 admin/PageAdvanced.py:184
+#: admin/Icons.py:199 admin/PageAdvanced.py:164 admin/PageAdvanced.py:187
 msgid "Special Files"
 msgstr "特殊文件"
 
-#: admin/Icons.py:312 admin/consts.py:99
+#: admin/Icons.py:312 admin/consts.py:100
 msgid "File"
 msgstr "文件"
 
@@ -468,7 +468,7 @@ msgstr "MIME 类型"
 msgid "MaxAge (<em>secs</em>)"
 msgstr "最大缓存时间（秒）"
 
-#: admin/Mime.py:141 admin/PageGeneral.py:259
+#: admin/Mime.py:141 admin/PageGeneral.py:256
 msgid "Mime types"
 msgstr "Mime 类型"
 
@@ -509,12 +509,12 @@ msgstr "服务器"
 msgid "Home"
 msgstr ""
 
-#: admin/Page.py:116 admin/PageAdvanced.py:144 admin/PageIndex.py:97
+#: admin/Page.py:116 admin/PageAdvanced.py:146 admin/PageIndex.py:97
 #: admin/PageStatus.py:40 admin/PageStatus.py:112
 msgid "Status"
 msgstr "状态"
 
-#: admin/Page.py:117 admin/PageGeneral.py:261 admin/PageStatus.py:101
+#: admin/Page.py:117 admin/PageGeneral.py:258 admin/PageStatus.py:101
 msgid "General"
 msgstr "常规"
 
@@ -528,7 +528,7 @@ msgstr "服务器"
 msgid "Sources"
 msgstr "资源"
 
-#: admin/Page.py:120 admin/PageAdvanced.py:91 admin/PageAdvanced.py:190
+#: admin/Page.py:120 admin/PageAdvanced.py:93 admin/PageAdvanced.py:193
 msgid "Advanced"
 msgstr "高级"
 
@@ -540,7 +540,7 @@ msgstr ""
 msgid "Updating..."
 msgstr ""
 
-#: admin/PageAdvanced.py:61
+#: admin/PageAdvanced.py:62
 msgid ""
 "<p><b>WARNING</b>: This section contains advanced\n"
 "configuration parameters. Changing things is not recommended unless\n"
@@ -549,239 +549,247 @@ msgstr ""
 "<p><b>警告</b>: 这里包含一些高级设置. 除非您知道自己在做什么，否则请不要随意"
 "更改这些选项.</p>"
 
-#: admin/PageAdvanced.py:65
+#: admin/PageAdvanced.py:66
 msgid "Defines which thread policy the OS should apply to the server."
 msgstr "定义服务器线程运作方式."
 
-#: admin/PageAdvanced.py:66
+#: admin/PageAdvanced.py:67
 msgid "If empty, Cherokee will calculate a default number."
 msgstr "如果为空，Cherokee将使用默认设置."
 
-#: admin/PageAdvanced.py:67
+#: admin/PageAdvanced.py:68
 msgid ""
 "It defines how many file descriptors the server should handle. Default is "
 "the number showed by ulimit -n"
 msgstr "定义服务器同时打开的文件描述符. 默认是 ulimit -n 所显示的数值"
 
-#: admin/PageAdvanced.py:68
+#: admin/PageAdvanced.py:69
 msgid "Allows to choose the internal file descriptor polling method."
 msgstr "允许选择内部文件描述polling方法."
 
-#: admin/PageAdvanced.py:69
+#: admin/PageAdvanced.py:70
 msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
 msgstr "sendfile()发送的最小文件大小.默认: 32768 Bytes."
 
-#: admin/PageAdvanced.py:70
+#: admin/PageAdvanced.py:71
 msgid "Maximum size of a file to use sendfile(). Default: 2 GB."
 msgstr "sendfile()发送的最大文件大小. 默认: 2 GB."
 
-#: admin/PageAdvanced.py:71
+#: admin/PageAdvanced.py:72
 msgid ""
 "Name a program that will be called if, by some reason, the server fails. "
 "Default: <em>cherokee-panic</em>."
 msgstr "服务器故障处理程序名称. 默认: <em>cherokee-panic</em>."
 
-#: admin/PageAdvanced.py:72
+#: admin/PageAdvanced.py:73
 msgid "Path of the PID file. If empty, the file will not be created."
 msgstr "PID 文件路径.为空则不创建PID文件."
 
-#: admin/PageAdvanced.py:73
+#: admin/PageAdvanced.py:74
 msgid "Max. length of the incoming connection queue."
 msgstr "最大入站连接队列长度."
 
-#: admin/PageAdvanced.py:74
+#: admin/PageAdvanced.py:75
 msgid ""
 "Set the number of how many internal connections can be held for reuse by "
 "each thread. Default: 20."
 msgstr "设置每个线程处理的连接数.默认值 20."
 
-#: admin/PageAdvanced.py:75
+#: admin/PageAdvanced.py:76
 msgid ""
 "Sets the number of seconds between log consolidations (flushes). Default: 10 "
 "seconds."
 msgstr "设置日志合并的时间. 默认: 10 秒."
 
-#: admin/PageAdvanced.py:76
+#: admin/PageAdvanced.py:77
 msgid "Time lapse (in seconds) between Nonce cache clean ups."
 msgstr "Nonce缓存清理时间."
 
-#: admin/PageAdvanced.py:77
+#: admin/PageAdvanced.py:78
 msgid ""
 "Enables the server-wide keep-alive support. It increases the performance. It "
 "is usually set on."
 msgstr "启用keep-alive支持. 一般这个项目都是启用的."
 
-#: admin/PageAdvanced.py:78
+#: admin/PageAdvanced.py:79
 msgid ""
 "Maximum number of HTTP requests that can be served by each keepalive "
 "connection."
 msgstr "keepalive最大连接数."
 
-#: admin/PageAdvanced.py:79
+#: admin/PageAdvanced.py:80
 msgid ""
 "Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
 msgstr "允许服务器在Keep-Alive上使用分块编码."
 
-#: admin/PageAdvanced.py:80
+#: admin/PageAdvanced.py:81
 msgid "Activate or deactivate the I/O cache globally."
 msgstr "激活或停用全局I/O缓存."
 
-#: admin/PageAdvanced.py:81
+#: admin/PageAdvanced.py:82
 msgid "Number of pages that the cache should handle."
 msgstr "缓存处理页面数量."
 
-#: admin/PageAdvanced.py:82
+#: admin/PageAdvanced.py:83
 msgid "Files under this size will not be cached."
 msgstr "文件小于此大小则不被缓存."
 
-#: admin/PageAdvanced.py:83
+#: admin/PageAdvanced.py:84
 msgid "Files over this size will not be cached."
 msgstr "文件大于此大小则不被缓存."
 
-#: admin/PageAdvanced.py:84
+#: admin/PageAdvanced.py:85
 msgid ""
 "How long (in seconds) the file information should last cached without "
 "refreshing it."
 msgstr "多长时间刷新缓存."
 
-#: admin/PageAdvanced.py:85
+#: admin/PageAdvanced.py:86
 msgid "How long (in seconds) the file content should last cached."
 msgstr "文件最大缓存时间."
 
-#: admin/PageAdvanced.py:86
+#: admin/PageAdvanced.py:87
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 512 bits."
 msgstr "Diffie Hellman (DH) PEM文件路径: 512 bits."
 
-#: admin/PageAdvanced.py:87
+#: admin/PageAdvanced.py:88
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits."
 msgstr "Diffie Hellman (DH) PEM文件路径: 1024 bits"
 
-#: admin/PageAdvanced.py:88
+#: admin/PageAdvanced.py:89
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits."
 msgstr "Diffie Hellman (DH) PEM文件路径: 2048 bits."
 
-#: admin/PageAdvanced.py:89
+#: admin/PageAdvanced.py:90
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
 msgstr "Diffie Hellman (DH) PEM文件路径: 4096 bits."
 
-#: admin/PageAdvanced.py:113
+#: admin/PageAdvanced.py:91
+msgid "Timeout for the TLS/SSL handshake. Default: 15 seconds."
+msgstr ""
+
+#: admin/PageAdvanced.py:115
 msgid "Keep Alive"
 msgstr ""
 
-#: admin/PageAdvanced.py:113 admin/PageAdvanced.py:115
+#: admin/PageAdvanced.py:115 admin/PageAdvanced.py:117
 msgid "Allowed"
 msgstr "允许"
 
-#: admin/PageAdvanced.py:114
+#: admin/PageAdvanced.py:116
 msgid "Max keepalive reqs"
 msgstr "keepalive最大请求数"
 
-#: admin/PageAdvanced.py:115
+#: admin/PageAdvanced.py:117
 msgid "Chunked Encoding"
 msgstr "块编码"
 
-#: admin/PageAdvanced.py:116
+#: admin/PageAdvanced.py:118
 msgid "Polling Method"
 msgstr "Polling 方式"
 
-#: admin/PageAdvanced.py:117
+#: admin/PageAdvanced.py:119
 msgid "Sendfile min size"
 msgstr "Sendfile最小大小"
 
-#: admin/PageAdvanced.py:118
+#: admin/PageAdvanced.py:120
 msgid "Sendfile max size"
 msgstr "Sendfile 最大大小"
 
-#: admin/PageAdvanced.py:120 admin/PageAdvanced.py:181
+#: admin/PageAdvanced.py:122 admin/PageAdvanced.py:184
 msgid "Connections"
 msgstr "连接"
 
-#: admin/PageAdvanced.py:128
+#: admin/PageAdvanced.py:130
 msgid "Thread Number"
 msgstr "线程数量"
 
-#: admin/PageAdvanced.py:129
+#: admin/PageAdvanced.py:131
 msgid "Thread Policy"
 msgstr "线程工作方式"
 
-#: admin/PageAdvanced.py:130
+#: admin/PageAdvanced.py:132
 msgid "File descriptors"
 msgstr "文件描述符"
 
-#: admin/PageAdvanced.py:131
+#: admin/PageAdvanced.py:133
 msgid "Listening queue length"
 msgstr "监听队列长度"
 
-#: admin/PageAdvanced.py:132 admin/plugins/proxy.py:236
+#: admin/PageAdvanced.py:134 admin/plugins/proxy.py:236
 msgid "Reuse connections"
 msgstr "重用连接"
 
-#: admin/PageAdvanced.py:133
+#: admin/PageAdvanced.py:135
 msgid "Log flush time"
 msgstr "日志刷新时间"
 
-#: admin/PageAdvanced.py:134
+#: admin/PageAdvanced.py:136
 msgid "Nonces clean up time"
 msgstr "Nonces清理时间"
 
-#: admin/PageAdvanced.py:136 admin/PageAdvanced.py:182
+#: admin/PageAdvanced.py:138 admin/PageAdvanced.py:185
 msgid "Resources"
 msgstr "资源"
 
-#: admin/PageAdvanced.py:145
+#: admin/PageAdvanced.py:147
 msgid "Max pages"
 msgstr "最大页面数量"
 
-#: admin/PageAdvanced.py:146
+#: admin/PageAdvanced.py:148
 msgid "File Min Size"
 msgstr "文件最小大小"
 
-#: admin/PageAdvanced.py:147
+#: admin/PageAdvanced.py:149
 msgid "File Max Size"
 msgstr "文件最大大小"
 
-#: admin/PageAdvanced.py:148
+#: admin/PageAdvanced.py:150
 msgid "Lasting: stat"
 msgstr "持续：stat"
 
-#: admin/PageAdvanced.py:149
+#: admin/PageAdvanced.py:151
 msgid "Lasting: mmap"
 msgstr "持续: mmap"
 
-#: admin/PageAdvanced.py:151 admin/PageAdvanced.py:183
+#: admin/PageAdvanced.py:153 admin/PageAdvanced.py:186
 msgid "I/O cache"
 msgstr "I/O 缓存"
 
-#: admin/PageAdvanced.py:159
+#: admin/PageAdvanced.py:161
 msgid "Panic action"
 msgstr "Panic 动作"
 
-#: admin/PageAdvanced.py:160
+#: admin/PageAdvanced.py:162
 msgid "PID file"
 msgstr "PID 文件"
 
-#: admin/PageAdvanced.py:170
+#: admin/PageAdvanced.py:172
+msgid "Handshake Timeout"
+msgstr ""
+
+#: admin/PageAdvanced.py:173
 msgid "DH parameters: 512 bits"
 msgstr "DH参数: 512 bits"
 
-#: admin/PageAdvanced.py:171
+#: admin/PageAdvanced.py:174
 msgid "DH parameters: 1024 bits"
 msgstr "DH参数: 1024 bits"
 
-#: admin/PageAdvanced.py:172
+#: admin/PageAdvanced.py:175
 msgid "DH parameters: 2048 bits"
 msgstr "DH参数: 2048 bits"
 
-#: admin/PageAdvanced.py:173
+#: admin/PageAdvanced.py:176
 msgid "DH parameters: 4096 bits"
 msgstr "DH参数: 4096 bits"
 
-#: admin/PageAdvanced.py:175 admin/PageAdvanced.py:185
-#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
+#: admin/PageAdvanced.py:178 admin/PageAdvanced.py:188
+#: admin/PageGeneral.py:168 admin/plugins/bind.py:92
 msgid "TLS"
 msgstr "TLS"
 
-#: admin/PageAdvanced.py:191
+#: admin/PageAdvanced.py:194
 msgid "Advanced Configuration"
 msgstr "高级设置"
 
@@ -1133,115 +1141,115 @@ msgstr "常规配置"
 msgid "Configuration Quickstart"
 msgstr "配置快速入门"
 
-#: admin/PageGeneral.py:98
+#: admin/PageGeneral.py:95
 msgid "Port/Interface combination already in use."
 msgstr ""
 
-#: admin/PageGeneral.py:127
+#: admin/PageGeneral.py:124
 msgid "IPv6"
 msgstr "IPv6"
 
-#: admin/PageGeneral.py:128
+#: admin/PageGeneral.py:125
 msgid "SSL/TLS back-end"
 msgstr "SSL/TLS back-end"
 
-#: admin/PageGeneral.py:131
+#: admin/PageGeneral.py:128
 msgid "Support"
 msgstr "支持"
 
-#: admin/PageGeneral.py:135
+#: admin/PageGeneral.py:132
 msgid "Timeout (<i>secs</i>)"
 msgstr "超时 (<i>s秒</i>)"
 
-#: admin/PageGeneral.py:136
+#: admin/PageGeneral.py:133
 msgid "Server Tokens"
 msgstr "服务器信息显示"
 
-#: admin/PageGeneral.py:139
+#: admin/PageGeneral.py:136
 msgid "Network Behavior"
 msgstr "网络行为"
 
-#: admin/PageGeneral.py:144
+#: admin/PageGeneral.py:141
 msgid "Graphs Type"
 msgstr "图像类型"
 
-#: admin/PageGeneral.py:145
+#: admin/PageGeneral.py:142
 msgid "Information Collector"
 msgstr "信息收集"
 
-#: admin/PageGeneral.py:151 admin/PageGeneral.py:152
+#: admin/PageGeneral.py:148 admin/PageGeneral.py:149
 msgid "Upload Tracking"
 msgstr "上传追踪"
 
-#: admin/PageGeneral.py:171 admin/PageGeneral.py:209 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:168 admin/PageGeneral.py:206 admin/plugins/bind.py:92
 #: admin/plugins/bind.py:154 admin/plugins/ldap.py:48
 #: admin/plugins/mysql.py:74
 msgid "Port"
 msgstr "端口"
 
-#: admin/PageGeneral.py:171 admin/plugins/bind.py:92
+#: admin/PageGeneral.py:168 admin/plugins/bind.py:92
 msgid "Bind to"
 msgstr "监听"
 
-#: admin/PageGeneral.py:184
+#: admin/PageGeneral.py:181
 msgid "TLS/SSL port"
 msgstr "TLS/SSL端口"
 
-#: admin/PageGeneral.py:186
+#: admin/PageGeneral.py:183
 msgid "TLS/SSL support disabled"
 msgstr "TLS/SSL 支持被禁用"
 
-#: admin/PageGeneral.py:210
+#: admin/PageGeneral.py:207
 #, fuzzy
 msgid "Interface"
 msgstr "内部"
 
-#: admin/PageGeneral.py:215
+#: admin/PageGeneral.py:212
 msgid "New port"
 msgstr "新端口"
 
-#: admin/PageGeneral.py:224
+#: admin/PageGeneral.py:221
 msgid "Add new port"
 msgstr "增加新端口"
 
-#: admin/PageGeneral.py:230
+#: admin/PageGeneral.py:227
 msgid "Listening to Ports"
 msgstr "监听端口"
 
-#: admin/PageGeneral.py:241
+#: admin/PageGeneral.py:238
 msgid "Execution Permissions"
 msgstr "执行权限"
 
-#: admin/PageGeneral.py:242 admin/plugins/authlist.py:63
+#: admin/PageGeneral.py:239 admin/plugins/authlist.py:63
 #: admin/plugins/authlist.py:97
 msgid "User"
 msgstr "用户"
 
-#: admin/PageGeneral.py:243
+#: admin/PageGeneral.py:240
 msgid "Group"
 msgstr "用户组"
 
-#: admin/PageGeneral.py:244
+#: admin/PageGeneral.py:241
 msgid "Chroot"
 msgstr "监禁服务器"
 
-#: admin/PageGeneral.py:255 admin/PageVServer.py:313
+#: admin/PageGeneral.py:252 admin/PageVServer.py:313
 msgid "Network"
 msgstr "网络"
 
-#: admin/PageGeneral.py:256
+#: admin/PageGeneral.py:253
 msgid "Ports to listen"
 msgstr "监听端口"
 
-#: admin/PageGeneral.py:257
+#: admin/PageGeneral.py:254
 msgid "Permissions"
 msgstr "权限"
 
-#: admin/PageGeneral.py:258
+#: admin/PageGeneral.py:255
 msgid "Icons"
 msgstr "图标"
 
-#: admin/PageGeneral.py:262
+#: admin/PageGeneral.py:259
 msgid "General Settings"
 msgstr "常规配置"
 
@@ -1500,7 +1508,7 @@ msgstr "固定"
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "固定配置文件: Apache logs, MIME types, icons, 等."
 
-#: admin/PageNewConfig.py:155 admin/consts.py:49 admin/plugins/file.py:29
+#: admin/PageNewConfig.py:155 admin/consts.py:50 admin/plugins/file.py:29
 msgid "Static Content"
 msgstr "静态内容"
 
@@ -2095,7 +2103,7 @@ msgstr "高级虚拟主机"
 msgid "Error Handling hook"
 msgstr "错误处理程序"
 
-#: admin/PageVServer.py:348 admin/consts.py:225 admin/consts.py:242
+#: admin/PageVServer.py:348 admin/consts.py:226 admin/consts.py:243
 msgid "Disabled"
 msgstr "禁止"
 
@@ -2139,7 +2147,7 @@ msgstr "时间标准"
 msgid "Accept Forwarded IPs"
 msgstr "允许转发的IP地址"
 
-#: admin/PageVServer.py:412 admin/consts.py:220
+#: admin/PageVServer.py:412 admin/consts.py:221
 msgid "Accept"
 msgstr "接受"
 
@@ -2300,351 +2308,355 @@ msgstr "巴西葡萄牙语"
 msgid "Chinese Simplified"
 msgstr "简体中文"
 
-#: admin/consts.py:39
+#: admin/consts.py:35
+msgid "Catalan"
+msgstr ""
+
+#: admin/consts.py:40
 msgid "Product only"
 msgstr "仅软件名称"
 
-#: admin/consts.py:40
+#: admin/consts.py:41
 msgid "Product + Minor version"
 msgstr "软件名称+次要版本号"
 
-#: admin/consts.py:41
+#: admin/consts.py:42
 msgid "Product + Minimal version"
 msgstr "软件名称+版本号"
 
-#: admin/consts.py:42
+#: admin/consts.py:43
 msgid "Product + Platform"
 msgstr "软件名称+平台"
 
-#: admin/consts.py:43
+#: admin/consts.py:44
 msgid "Full Server string"
 msgstr "完整服务器信息"
 
-#: admin/consts.py:47 admin/consts.py:75 admin/consts.py:92
-#: admin/consts.py:106 admin/plugins/mysql.py:43
+#: admin/consts.py:48 admin/consts.py:76 admin/consts.py:93
+#: admin/consts.py:107 admin/plugins/mysql.py:43
 msgid "None"
 msgstr "无"
 
-#: admin/consts.py:48 admin/plugins/common.py:30
+#: admin/consts.py:49 admin/plugins/common.py:30
 msgid "List & Send"
 msgstr "列表和发现"
 
-#: admin/consts.py:50
+#: admin/consts.py:51
 msgid "Only Listing"
 msgstr "仅列表"
 
-#: admin/consts.py:51 admin/plugins/error_redir.py:86
+#: admin/consts.py:52 admin/plugins/error_redir.py:86
 #: admin/wizards/hotlinking.py:146 admin/wizards/hotlinking.py:165
 msgid "Redirection"
 msgstr "转发"
 
-#: admin/consts.py:52 admin/wizards/rails.py:73
+#: admin/consts.py:53 admin/wizards/rails.py:73
 msgid "FastCGI"
 msgstr "快速CGI"
 
-#: admin/consts.py:53
+#: admin/consts.py:54
 msgid "SCGI"
 msgstr "SCGI"
 
-#: admin/consts.py:54 admin/wizards/List.py:108 admin/wizards/uwsgi.py:41
+#: admin/consts.py:55 admin/wizards/List.py:108 admin/wizards/uwsgi.py:41
 msgid "uWSGI"
 msgstr "uWSGI"
 
-#: admin/consts.py:55
+#: admin/consts.py:56
 msgid "HTTP Reverse Proxy"
 msgstr "HTTP反向代理"
 
-#: admin/consts.py:56
+#: admin/consts.py:57
 msgid "Upload Reporting"
 msgstr "上传报告"
 
-#: admin/consts.py:57 admin/plugins/streaming.py:31
+#: admin/consts.py:58 admin/plugins/streaming.py:31
 #: admin/plugins/streaming.py:63
 msgid "Audio/Video Streaming"
 msgstr "音视频流"
 
-#: admin/consts.py:58
+#: admin/consts.py:59
 msgid "CGI"
 msgstr "CGI"
 
-#: admin/consts.py:59 admin/plugins/ssi.py:28
+#: admin/consts.py:60 admin/plugins/ssi.py:28
 msgid "Server Side Includes"
 msgstr "服务器端包含"
 
-#: admin/consts.py:60
+#: admin/consts.py:61
 msgid "Hidden Downloads"
 msgstr "隐藏下载"
 
-#: admin/consts.py:61
+#: admin/consts.py:62
 msgid "Server Info"
 msgstr "服务器信息"
 
-#: admin/consts.py:62
+#: admin/consts.py:63
 msgid "MySQL Bridge"
 msgstr "MySQL桥接"
 
-#: admin/consts.py:63 admin/plugins/custom_error.py:46
+#: admin/consts.py:64 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
 msgstr "HTTP错误"
 
-#: admin/consts.py:64 admin/plugins/admin.py:29
+#: admin/consts.py:65 admin/plugins/admin.py:29
 msgid "Remote Administration"
 msgstr "远程管理"
 
-#: admin/consts.py:65 admin/wizards/hotlinking.py:85
+#: admin/consts.py:66 admin/wizards/hotlinking.py:85
 msgid "1x1 Transparent GIF"
 msgstr "1*1像素透明的GIF图像"
 
-#: admin/consts.py:69
+#: admin/consts.py:70
 msgid "Default errors"
 msgstr "默认错误信息"
 
-#: admin/consts.py:70
+#: admin/consts.py:71
 msgid "Custom redirections"
 msgstr "自定义重定向"
 
-#: admin/consts.py:71
+#: admin/consts.py:72
 msgid "Closest match"
 msgstr "最佳匹配"
 
-#: admin/consts.py:76
+#: admin/consts.py:77
 msgid "Plain text file"
 msgstr "纯文本文件"
 
-#: admin/consts.py:77
+#: admin/consts.py:78
 msgid "Htpasswd file"
 msgstr "Htpasswd文件"
 
-#: admin/consts.py:78
+#: admin/consts.py:79
 msgid "Htdigest file"
 msgstr "Htdigest文件"
 
-#: admin/consts.py:79
+#: admin/consts.py:80
 msgid "LDAP server"
 msgstr "LDA服务器"
 
-#: admin/consts.py:80
+#: admin/consts.py:81
 msgid "MySQL server"
 msgstr "MySQL服务器"
 
-#: admin/consts.py:81
+#: admin/consts.py:82
 msgid "PAM"
 msgstr "PAM"
 
-#: admin/consts.py:82 admin/plugins/authlist.py:30
+#: admin/consts.py:83 admin/plugins/authlist.py:30
 msgid "Fixed list"
 msgstr "固定名单"
 
-#: admin/consts.py:86
+#: admin/consts.py:87
 msgid "Basic"
 msgstr "Basic"
 
-#: admin/consts.py:87
+#: admin/consts.py:88
 msgid "Digest"
 msgstr "Digest"
 
-#: admin/consts.py:88
+#: admin/consts.py:89
 msgid "Basic or Digest"
 msgstr "Basic or Digest"
 
-#: admin/consts.py:93
+#: admin/consts.py:94
 msgid "Apache compatible"
 msgstr "Apache compatible"
 
-#: admin/consts.py:94
+#: admin/consts.py:95
 msgid "NCSA"
 msgstr "NCSA"
 
-#: admin/consts.py:95
+#: admin/consts.py:96
 msgid "Custom"
 msgstr "自定义"
 
-#: admin/consts.py:100
+#: admin/consts.py:101
 msgid "System logger"
 msgstr "系统日志"
 
-#: admin/consts.py:101
+#: admin/consts.py:102
 msgid "Standard Error"
 msgstr "标准错误"
 
-#: admin/consts.py:102
+#: admin/consts.py:103
 msgid "Execute program"
 msgstr "可执行程序"
 
-#: admin/consts.py:107
+#: admin/consts.py:108
 msgid "Round Robin"
 msgstr "Round Robin"
 
-#: admin/consts.py:108
+#: admin/consts.py:109
 msgid "IP Hash"
 msgstr "IP Hash"
 
-#: admin/consts.py:112
+#: admin/consts.py:113
 msgid "Local interpreter"
 msgstr "本地解释器"
 
-#: admin/consts.py:113
+#: admin/consts.py:114
 msgid "Remote host"
 msgstr "远程主机"
 
-#: admin/consts.py:117
+#: admin/consts.py:118
 msgid "GZip"
 msgstr "GZip"
 
-#: admin/consts.py:118
+#: admin/consts.py:119
 msgid "Deflate"
 msgstr "Deflate"
 
-#: admin/consts.py:123
+#: admin/consts.py:124
 msgid "FIFO"
 msgstr "FIFO"
 
-#: admin/consts.py:124
+#: admin/consts.py:125
 msgid "Round-robin"
 msgstr "Round-robin"
 
-#: admin/consts.py:125
+#: admin/consts.py:126
 msgid "Dynamic"
 msgstr "动态"
 
-#: admin/consts.py:129
+#: admin/consts.py:130
 msgid "Automatic"
 msgstr "自动"
 
-#: admin/consts.py:139 admin/plugins/error_redir.py:32
+#: admin/consts.py:140 admin/plugins/error_redir.py:32
 msgid "External"
 msgstr "外部"
 
-#: admin/consts.py:140 admin/plugins/error_redir.py:31
+#: admin/consts.py:141 admin/plugins/error_redir.py:31
 msgid "Internal"
 msgstr "内部"
 
-#: admin/consts.py:183 admin/plugins/header.py:72 admin/plugins/proxy.py:91
+#: admin/consts.py:184 admin/plugins/header.py:72 admin/plugins/proxy.py:91
 #: admin/plugins/proxy.py:141 admin/plugins/redir.py:74
 #: admin/plugins/redir.py:101 admin/plugins/request.py:31
 #: admin/plugins/url_arg.py:76 admin/plugins/url_arg.py:95
 msgid "Regular Expression"
 msgstr "正则表达式"
 
-#: admin/consts.py:184 admin/plugins/header.py:71 admin/plugins/header.py:86
+#: admin/consts.py:185 admin/plugins/header.py:71 admin/plugins/header.py:86
 #: admin/plugins/proxy.py:190
 msgid "Header"
 msgstr "头"
 
-#: admin/consts.py:185
+#: admin/consts.py:186
 msgid "File Exists"
 msgstr "文件已存在"
 
-#: admin/consts.py:186
+#: admin/consts.py:187
 msgid "HTTP Method"
 msgstr "HTTP方式"
 
-#: admin/consts.py:187 admin/plugins/bind.py:76 admin/plugins/bind.py:129
+#: admin/consts.py:188 admin/plugins/bind.py:76 admin/plugins/bind.py:129
 msgid "Incoming IP/Port"
 msgstr "入站 IP/端口"
 
-#: admin/consts.py:188 admin/plugins/fullpath.py:66
+#: admin/consts.py:189 admin/plugins/fullpath.py:66
 #: admin/plugins/fullpath.py:98
 msgid "Full Path"
 msgstr "完整路径"
 
-#: admin/consts.py:189 admin/plugins/from.py:71
+#: admin/consts.py:190 admin/plugins/from.py:71
 msgid "Connected from"
 msgstr "连接来自"
 
-#: admin/consts.py:190
+#: admin/consts.py:191
 msgid "URL Argument"
 msgstr "URL参数"
 
-#: admin/consts.py:191
+#: admin/consts.py:192
 msgid "GeoIP"
 msgstr ""
 
-#: admin/consts.py:195
+#: admin/consts.py:196
 msgid "Match Nickname"
 msgstr "匹配昵称"
 
-#: admin/consts.py:196
+#: admin/consts.py:197
 msgid "Wildcards"
 msgstr "通配符"
 
-#: admin/consts.py:197 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
+#: admin/consts.py:198 admin/plugins/redir.py:37 admin/plugins/rehost.py:53
 msgid "Regular Expressions"
 msgstr "正则表达式"
 
-#: admin/consts.py:198
+#: admin/consts.py:199
 msgid "Server IP"
 msgstr "服务器IP"
 
-#: admin/consts.py:202
+#: admin/consts.py:203
 msgid "Not set"
 msgstr "未设置"
 
-#: admin/consts.py:203
+#: admin/consts.py:204
 msgid "Already expired on 1970"
 msgstr "不缓存"
 
-#: admin/consts.py:204
+#: admin/consts.py:205
 msgid "Do not expire until 2038"
 msgstr "永久缓存"
 
-#: admin/consts.py:205
+#: admin/consts.py:206
 msgid "Custom value"
 msgstr "自定义值"
 
-#: admin/consts.py:209
+#: admin/consts.py:210
 msgid "No TLS/SSL"
 msgstr "无TLS/SSL"
 
-#: admin/consts.py:210
+#: admin/consts.py:211
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:214 admin/util.py:38
+#: admin/consts.py:215 admin/util.py:38
 msgid "Off"
 msgstr "关闭"
 
-#: admin/consts.py:215
+#: admin/consts.py:216
 msgid "Enhanced Virtual Hosting"
 msgstr "增强性虚拟主机"
 
-#: admin/consts.py:219
+#: admin/consts.py:220
 msgid "Skip"
 msgstr "跳过"
 
-#: admin/consts.py:221
+#: admin/consts.py:222
 msgid "Require"
 msgstr "包含"
 
-#: admin/consts.py:226
+#: admin/consts.py:227
 msgid "RRDtool graphs"
 msgstr "RRDtool绘图"
 
-#: admin/consts.py:230
+#: admin/consts.py:231
 msgid "Local time"
 msgstr "本地时间"
 
-#: admin/consts.py:231
+#: admin/consts.py:232
 msgid "UTC: Coordinated Universal Time"
 msgstr "UTC:协调世界时"
 
-#: admin/consts.py:235
+#: admin/consts.py:236
 msgid "JSON"
 msgstr ""
 
-#: admin/consts.py:236
+#: admin/consts.py:237
 msgid "Python"
 msgstr ""
 
-#: admin/consts.py:237 admin/wizards/List.py:119
+#: admin/consts.py:238 admin/wizards/List.py:119
 msgid "PHP"
 msgstr ""
 
-#: admin/consts.py:238
+#: admin/consts.py:239
 msgid "Ruby"
 msgstr ""
 
-#: admin/consts.py:243
+#: admin/consts.py:244
 msgid "POST tracker"
 msgstr ""
 
@@ -3609,88 +3621,88 @@ msgstr ""
 msgid "Port already in use"
 msgstr ""
 
-#: admin/validations.py:65
+#: admin/validations.py:63 admin/validations.py:71
 msgid "Malformed path"
 msgstr ""
 
-#: admin/validations.py:96
+#: admin/validations.py:102
 msgid "It is not executable"
 msgstr ""
 
-#: admin/validations.py:102 admin/validations.py:177
+#: admin/validations.py:108 admin/validations.py:183
 msgid "Path is not a regular file"
 msgstr ""
 
-#: admin/validations.py:120
+#: admin/validations.py:126
 msgid "It cannot be negative"
 msgstr ""
 
-#: admin/validations.py:136
+#: admin/validations.py:142
 msgid "Malformed IPv4"
 msgstr ""
 
-#: admin/validations.py:141
+#: admin/validations.py:147
 msgid "Malformed IPv4 entry"
 msgstr ""
 
-#: admin/validations.py:143
+#: admin/validations.py:149
 msgid "IPv4 entry out of range"
 msgstr ""
 
-#: admin/validations.py:151
+#: admin/validations.py:157
 msgid "Malformed IPv6"
 msgstr ""
 
-#: admin/validations.py:162 admin/validations.py:174
+#: admin/validations.py:168 admin/validations.py:180
 msgid "Path does not exist"
 msgstr ""
 
-#: admin/validations.py:165
+#: admin/validations.py:171
 msgid "Path is not a directory"
 msgstr ""
 
-#: admin/validations.py:193
+#: admin/validations.py:199
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
 msgstr ""
 
-#: admin/validations.py:216
+#: admin/validations.py:222
 msgid "Neither a number or an IPv4"
 msgstr ""
 
-#: admin/validations.py:227
+#: admin/validations.py:233
 msgid "Invalid mask"
 msgstr ""
 
-#: admin/validations.py:251
+#: admin/validations.py:257
 msgid "Malformed entry (netmask)"
 msgstr ""
 
-#: admin/validations.py:276
+#: admin/validations.py:282
 msgid "Cannot be empty"
 msgstr ""
 
-#: admin/validations.py:281
+#: admin/validations.py:287
 msgid "Forced failure"
 msgstr ""
 
-#: admin/validations.py:289
+#: admin/validations.py:295
 msgid "http:// missing"
 msgstr ""
 
-#: admin/validations.py:326
+#: admin/validations.py:332
 msgid "Time value contain invalid values"
 msgstr ""
 
-#: admin/validations.py:329
+#: admin/validations.py:335
 msgid "Malformed time"
 msgstr ""
 
-#: admin/validations.py:337
+#: admin/validations.py:343
 msgid "Virtual Server nick name is already being used."
 msgstr ""
 
-#: admin/validations.py:344 admin/validations.py:354 admin/validations.py:364
-#: admin/validations.py:381
+#: admin/validations.py:350 admin/validations.py:360 admin/validations.py:370
+#: admin/validations.py:387
 msgid "Already in use"
 msgstr ""
 
