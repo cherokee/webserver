@@ -313,11 +313,11 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	      cherokee_virtual_server_t   *vsrv,
 	      cherokee_cryptor_vserver_t **cryp_vsrv)
 {
-	ret_t              ret;
-	int                rc;
-	const char        *error;
-	int                verify_mode = SSL_VERIFY_NONE;
-	cherokee_buffer_t  session_id  = CHEROKEE_BUF_INIT;
+	ret_t       ret;
+	int         rc;
+	const char *error;
+	int         verify_mode = SSL_VERIFY_NONE;
+
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
 
 
@@ -451,24 +451,12 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	/* Set the SSL context cache
 	 */
-	cherokee_buffer_add_ulong10  (&session_id, getpid());
-	cherokee_buffer_add_char     (&session_id, '-');
-	cherokee_buffer_add_buffer   (&session_id, &vsrv->name);
-	cherokee_buffer_add_char     (&session_id, '-');
-	cherokee_buffer_add_ullong10 (&session_id, random());
-
-	TRACE(ENTRIES, "VServer '%s' session: %s\n", vsrv->name.buf, session_id.buf);
-
 	rc = SSL_CTX_set_session_id_context (n->context,
-					     (unsigned char *) session_id.buf,
-					     (unsigned int)    session_id.len);
-
-	cherokee_buffer_mrproper (&session_id);
-
+					     (unsigned char *) vsrv->name.buf,
+					     (unsigned int)    vsrv->name.len);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		LOG_ERROR (CHEROKEE_ERROR_SSL_SESSION_ID,
-			   vsrv->name.buf, error);
+		LOG_ERROR (CHEROKEE_ERROR_SSL_SESSION_ID, vsrv->name.buf, error);
 	}
 
 	SSL_CTX_set_session_cache_mode (n->context, SSL_SESS_CACHE_SERVER);
