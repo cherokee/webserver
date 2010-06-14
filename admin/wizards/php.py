@@ -59,7 +59,11 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/usr/local/bin',
                  '/opt/local/bin',
                  '/usr/pkg/libexec/cgi-bin',
-                 '/usr/sbin']
+                 # FPM
+                 '/usr/sbin',
+                 '/usr/local/sbin',
+                 '/opt/local/sbin',
+                 '/usr/gnu/sbin']
 
 FPM_ETC_PATHS = ['/etc/php*/fpm/php*fpm.conf',
                  '/usr/local/etc/php*fpm.conf',
