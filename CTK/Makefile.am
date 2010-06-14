@@ -44,7 +44,9 @@ consts.py \
 iPhoneToggle.py \
 pyscgi.py \
 util.py \
-json_embedded.py
+json_embedded.py \
+ProgressBar.py \
+Downloader.py
 
 EXTRA_DIST = \
 $(ctk_DATA)
