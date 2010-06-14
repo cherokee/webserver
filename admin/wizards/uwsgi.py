@@ -4,6 +4,7 @@
 #
 # Authors:
 #      Taher Shihadeh <taher@octality.com>
+#      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
 # Copyright (C) 2010 Alvaro Lopez Ortega
 #
@@ -32,6 +33,7 @@ import re
 import CTK
 import Wizard
 import validations
+
 from util import *
 
 NOTE_WELCOME_H1   = N_("Welcome to the uWsgi Wizard")
@@ -43,19 +45,18 @@ NOTE_UWSGI_CONFIG = N_("Path to the uWSGI configuration file (XML or Python-only
 NOTE_UWSGI_BINARY = N_("Location of the uWSGI binary")
 ERROR_NO_CONFIG   = N_("It does not look like a uWSGI configuration file.")
 
-NOTE_HOST_H1    = N_("New Virtual Server Details")
-NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
-NOTE_DROOT      = N_("Path to use as document root for the new virtual server.")
+NOTE_HOST_H1      = N_("New Virtual Server Details")
+NOTE_HOST         = N_("Host name of the virtual server that is about to be created.")
+NOTE_DROOT        = N_("Path to use as document root for the new virtual server.")
 
-NOTE_WEBDIR     = N_("Public web directory to access the project.")
-NOTE_WEBDIR_H1  = N_("Public Web Directory")
-NOTE_WEBDIR_P1  = N_("The default value is extracted from the configuration file. Change it at your own risk.")
-ERROR_NO_SRC    = N_("Does not look like a Uwsgi source directory.")
-ERROR_NO_DROOT  = N_("The document root directory does not exist.")
+NOTE_WEBDIR       = N_("Public web directory to access the project.")
+NOTE_WEBDIR_H1    = N_("Public Web Directory")
+NOTE_WEBDIR_P1    = N_("The default value is extracted from the configuration file. Change it at your own risk.")
+ERROR_NO_SRC      = N_("Does not look like a Uwsgi source directory.")
+ERROR_NO_DROOT    = N_("The document root directory does not exist.")
 
 PREFIX    = 'tmp!wizard!uwsgi'
-
-URL_APPLY      = r'/wizard/vserver/uwsgi/apply'
+URL_APPLY = r'/wizard/vserver/uwsgi/apply'
 
 SOURCE = """
 source!%(src_num)d!type = interpreter
@@ -64,9 +65,9 @@ source!%(src_num)d!host = 127.0.0.1:%(src_port)d
 source!%(src_num)d!interpreter = %(uwsgi_binary)s -s 127.0.0.1:%(src_port)d -t 10 -M -p 1 -C %(uwsgi_extra)s
 """
 
-SOURCE_XML   = """ -x %s"""
-SOURCE_WSGI  = """ -w %s"""
-SOURCE_VE    = """ -H %s"""
+SOURCE_XML  = """ -x %s"""
+SOURCE_WSGI = """ -w %s"""
+SOURCE_VE   = """ -H %s"""
 
 CONFIG_VSERVER = SOURCE + """
 %(vsrv_pre)s!nick = %(new_host)s
@@ -99,14 +100,15 @@ CONFIG_DIR = SOURCE + """
 %(rule_pre)s!handler!balancer!source!1 = %(src_num)d
 """
 
-DEFAULT_BINS   = ['uwsgi','uwsgi26','uwsgi25']
+DEFAULT_BINS  = ['uwsgi','uwsgi26','uwsgi25']
 
-DEFAULT_PATHS  = ['/usr/bin',
-                  '/usr/gnu/bin',
-                  '/opt/local/bin']
+DEFAULT_PATHS = ['/usr/bin',
+                 '/usr/local/bin',
+                 '/usr/gnu/bin',
+                 '/opt/local/bin']
 
-RE_MOUNTPOINT_XML = """<uwsgi>.*?<app mountpoint=["|'](.*?)["|']>.*</uwsgi>"""
-RE_MOUNTPOINT_WSGI  = """applications.*=.*{.*'(.*?)':"""
+RE_MOUNTPOINT_XML  = """<uwsgi>.*?<app mountpoint=["|'](.*?)["|']>.*</uwsgi>"""
+RE_MOUNTPOINT_WSGI = """applications.*=.*{.*'(.*?)':"""
 
 
 class Commit:
@@ -124,33 +126,33 @@ class Commit:
 
         # Choose between XML config+launcher, or Python only config
         if webdir:
-            uwsgi_extra = SOURCE_XML % (uwsgi_cfg)
+            uwsgi_extra = SOURCE_XML %(uwsgi_cfg)
         else:
-            webdir   = find_mountpoint_wsgi(uwsgi_cfg)
-            par_name = os.path.dirname(os.path.normpath (uwsgi_cfg)).split(os.path.sep)[-1]
-            cfg_name = os.path.basename(os.path.normpath(uwsgi_cfg))
-            module   = '%s.%s' %(par_name, os.path.splitext(cfg_name)[0])
-            uwsgi_extra = SOURCE_WSGI % (module)
+            webdir      = find_mountpoint_wsgi(uwsgi_cfg)
+            par_name    = os.path.dirname (os.path.normpath (uwsgi_cfg)).split(os.path.sep)[-1]
+            cfg_name    = os.path.basename (os.path.normpath (uwsgi_cfg))
+            module      = '%s.%s' %(par_name, os.path.splitext (cfg_name)[0])
+            uwsgi_extra = SOURCE_WSGI %(module)
 
         # Virtualenv support
         uwsgi_virtualenv = find_virtualenv(uwsgi_cfg)
         if uwsgi_virtualenv:
-            uwsgi_extra += SOURCE_VE % uwsgi_virtualenv
+            uwsgi_extra += SOURCE_VE %(uwsgi_virtualenv)
 
-        uwsgi_binary  = find_uwsgi_binary()
+        uwsgi_binary = find_uwsgi_binary()
         if not uwsgi_binary:
-            uwsgi_binary = CTK.cfg.get_val('%s!uwsgi_binary'%(PREFIX))
+            uwsgi_binary = CTK.cfg.get_val('%s!uwsgi_binary' %(PREFIX))
 
         # Locals
-        src_num, pre  = cfg_source_get_next ()
-        src_port      = cfg_source_find_free_port ()
+        src_num, pre = cfg_source_get_next ()
+        src_port     = cfg_source_find_free_port ()
 
         # Add the new rules
         config = CONFIG_VSERVER %(locals())
         CTK.cfg.apply_chunk (config)
 
         # Usual Static Files
-        Wizard.AddUsualStaticFiles ("%s!rule!500" % (vsrv_pre))
+        Wizard.AddUsualStaticFiles ("%s!rule!500" %(vsrv_pre))
 
         # Clean up
         CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
@@ -159,35 +161,34 @@ class Commit:
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
-
     def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
+        vsrv_num = CTK.cfg.get_val('%s!vsrv_num' %(PREFIX))
         vsrv_pre = 'vserver!%s' %(vsrv_num)
 
         # Incoming info
-        uwsgi_cfg     = CTK.cfg.get_val('%s!uwsgi_cfg'%(PREFIX))
-        webdir        = find_mountpoint_xml(uwsgi_cfg)
+        uwsgi_cfg = CTK.cfg.get_val('%s!uwsgi_cfg' %(PREFIX))
+        webdir    = find_mountpoint_xml(uwsgi_cfg)
 
         # Choose between XML config+launcher, or Python only config
         if webdir:
-            uwsgi_extra = SOURCE_XML % uwsgi_cfg
+            uwsgi_extra = SOURCE_XML %(uwsgi_cfg)
         else:
-            webdir = find_mountpoint_wsgi(uwsgi_cfg)
-            uwsgi_extra = SOURCE_WSGI % uwsgi_cfg
+            webdir      = find_mountpoint_wsgi (uwsgi_cfg)
+            uwsgi_extra = SOURCE_WSGI %(uwsgi_cfg)
 
         # Virtualenv support
-        uwsgi_virtualenv = find_virtualenv(uwsgi_cfg)
+        uwsgi_virtualenv = find_virtualenv (uwsgi_cfg)
         if uwsgi_virtualenv:
-            uwsgi_extra += SOURCE_VE % uwsgi_virtualenv
+            uwsgi_extra += SOURCE_VE %(uwsgi_virtualenv)
 
-        uwsgi_binary  = find_uwsgi_binary
+        uwsgi_binary = find_uwsgi_binary()
         if not uwsgi_binary:
-            uwsgi_binary = CTK.cfg.get_val('%s!uwsgi_binary'%(PREFIX))
+            uwsgi_binary = CTK.cfg.get_val('%s!uwsgi_binary' %(PREFIX))
 
         # Locals
-        rule_pre = CTK.cfg.get_next_entry_prefix('%s!rule'%(vsrv_pre))
+        rule_pre = CTK.cfg.get_next_entry_prefix ('%s!rule' %(vsrv_pre))
         src_port = cfg_source_find_free_port ()
-        src_num, src_pre  = cfg_source_get_next ()
+        src_num, src_pre = cfg_source_get_next ()
 
         # Add the new rules
         config = CONFIG_DIR %(locals())
@@ -199,14 +200,13 @@ class Commit:
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
-
     def __call__ (self):
         if CTK.post.pop('final'):
             # Apply POST
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX)):
+            if CTK.cfg.get_val ('%s!vsrv_num' %(PREFIX)):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -215,10 +215,11 @@ class Commit:
 
 class WebDirectory:
     def __call__ (self):
-        uwsgi_cfg  = CTK.cfg.get_val('%s!uwsgi_cfg'%(PREFIX))
-        webdir     = find_mountpoint_xml(uwsgi_cfg)
+        uwsgi_cfg = CTK.cfg.get_val('%s!uwsgi_cfg' %(PREFIX))
+        webdir    = find_mountpoint_xml (uwsgi_cfg)
+
         if not webdir:
-            webdir = find_mountpoint_wsgi(uwsgi_cfg)
+            webdir = find_mountpoint_wsgi (uwsgi_cfg)
 
         table = CTK.PropsTable()
         table.Add (_('Web Directory'), CTK.TextCfg ('%s!webdir'%(PREFIX), False, {'value': webdir, 'class': 'noauto'}), _(NOTE_WEBDIR))
@@ -238,7 +239,7 @@ class WebDirectory:
 class Host:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX),      False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
         table.Add (_('Document Root'),    CTK.TextCfg ('%s!document_root'%(PREFIX), False, {'value': os_get_document_root(), 'class': 'noauto'}), _(NOTE_DROOT))
         table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
 
@@ -255,7 +256,7 @@ class Host:
 
 class LocalSource:
     def __call__ (self):
-        uwsgi_binary = find_uwsgi_binary ()
+        uwsgi_binary = find_uwsgi_binary()
 
         table = CTK.PropsTable()
         if not uwsgi_binary:
@@ -274,19 +275,20 @@ class LocalSource:
 
 class Welcome:
     def __call__ (self):
-        cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
-        cont += Wizard.Icon ('uwsgi', {'class': 'wizard-descr'})
-        box = CTK.Box ({'class': 'wizard-welcome'})
+        box  = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
         box += Wizard.CookBookBox ('cookbook_uwsgi')
+
+        cont  = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon ('uwsgi', {'class': 'wizard-descr'})
         cont += box
 
         # Send the VServer num if it is a Rule
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
-            submit = CTK.Submitter (URL_APPLY)
+            submit  = CTK.Submitter (URL_APPLY)
             submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
             cont += submit
 
@@ -294,8 +296,12 @@ class Welcome:
         return cont.Render().toStr()
 
 
+#
+# Utility functions
+#
+
 def is_uwsgi_cfg (filename):
-    filename = validations.is_local_file_exists (filename)
+    filename   = validations.is_local_file_exists (filename)
     mountpoint = find_mountpoint_xml(filename)
     if not mountpoint:
         mountpoint = find_mountpoint_wsgi(filename)
@@ -313,21 +319,28 @@ def find_virtualenv (filename):
     return os.path.normpath(dirname + os.path.sep + os.path.pardir)
 
 def find_mountpoint_xml (filename):
-    regex = re.compile(RE_MOUNTPOINT_XML, re.DOTALL)
+    regex    = re.compile(RE_MOUNTPOINT_XML, re.DOTALL)
     fullname = get_real_path (filename)
+
     match = regex.search (open(fullname).read())
     if match:
         return match.groups()[0]
 
 def find_mountpoint_wsgi (filename):
-    regex = re.compile(RE_MOUNTPOINT_WSGI, re.DOTALL)
+    regex    = re.compile(RE_MOUNTPOINT_WSGI, re.DOTALL)
     fullname = get_real_path (filename)
+
     match = regex.search (open(fullname).read())
     if match:
         return match.groups()[0]
 
-def find_uwsgi_binary ():
+def find_uwsgi_binary():
     return path_find_binary (DEFAULT_BINS, extra_dirs = DEFAULT_PATHS)
+
+
+#
+# Data Validation
+#
 
 VALS = [
     ("%s!uwsgi_binary" %(PREFIX), validations.is_not_empty),
