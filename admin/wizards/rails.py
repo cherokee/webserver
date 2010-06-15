@@ -77,6 +77,7 @@ SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = RoR %(new_host)s, instance %(src_instance)d
 source!%(src_num)d!host = 127.0.0.1:%(src_port)d
+source!%(src_num)d!env_inherited = 0
 """
 
 SOURCE_FCGI = """
@@ -227,10 +228,10 @@ class Commit:
     def Commit_Rule (self):
         # Incoming info
         ror_dir    = CTK.cfg.get_val('%s!ror_dir'%(PREFIX))
-        webdir     = CTK.cfg.get_val('%s!ror_new_webdir'%(PREFIX))
+        webdir     = CTK.cfg.get_val('%s!new_webdir'%(PREFIX))
         ror_env    = CTK.cfg.get_val('%s!ror_env'%(PREFIX))
         ror_method = CTK.cfg.get_val('%s!ror_method'%(PREFIX))
-        vsrv_num   = CTK.cfg.get_val ("%s!vsrv_num"%(PREFIX))
+        vsrv_num   = CTK.cfg.get_val('%s!vsrv_num'%(PREFIX))
 
         # Locals
         vsrv_pre           = 'vserver!%s'%(vsrv_num)
