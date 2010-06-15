@@ -26,6 +26,7 @@
 #
 # Tested:
 # 2010/04/13: Cherokee 0.99.41
+# 2010/06/15: Cherokee 1.0.3b
 #
 
 import re
@@ -40,28 +41,13 @@ NOTE_CREATE_H1  = N_("Current rules have been checked")
 NOTE_CREATE_OK  = N_("The process is very simple. Let the wizard take over and don't worry about a thing.")
 NOTE_CREATE_ERR = N_("Common files have been already configured, so there is nothing to be done.")
 
-PREFIX    = 'tmp!wizard!common_static'
-URL_APPLY = r'/wizard/vserver/common_static/apply'
-
-CONFIG = """
-%(rule_pre)s!match = fullpath
-%(rule_pre)s!handler = file
-%(rule_pre)s!handler!iocache = 1
-%(rule_pre)s!encoder!gzip = 0
-%(rule_pre)s!encoder!deflate = 0
-%(rule_pre)s!expiration = time
-%(rule_pre)s!expiration!time = 1h
-"""
+PREFIX    = 'tmp!wizard!static'
+URL_APPLY = r'/wizard/vserver/static/apply'
 
 class Commit:
     def Commit_Rule (self):
         vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
         vsrv_pre = 'vserver!%s' %(vsrv_num)
-        x, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
-
-        config = CONFIG %(locals())
-        CTK.cfg.apply_chunk (config)
-
         x, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
         Wizard.AddUsualStaticFiles (rule_pre)
 
@@ -121,7 +107,7 @@ class Welcome:
     def __call__ (self):
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
-        cont += Wizard.Icon ('common_static', {'class': 'wizard-descr'})
+        cont += Wizard.Icon ('static', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
         cont += box
@@ -136,6 +122,6 @@ class Welcome:
 
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/common_static$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/common_static/2', Create)
+CTK.publish ('^/wizard/vserver/(\d+)/static$',  Welcome)
+CTK.publish ('^/wizard/vserver/(\d+)/static/2', Create)
 CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST")
