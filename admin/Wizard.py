@@ -224,8 +224,13 @@ def CloneLogsCfg_Apply (key_tmp, vserver):
 
 
 def AddUsualStaticFiles (rule_pre):
-    CTK.cfg['%s!match'%(rule_pre)]   = 'fullpath'
-    CTK.cfg['%s!handler'%(rule_pre)] = 'file'
+    CTK.cfg['%s!match'%(rule_pre)]           = 'fullpath'
+    CTK.cfg['%s!handler'%(rule_pre)]         = 'file'
+    CTK.cfg['%s!handler!iocache'%(rule_pre)] = '1'
+    CTK.cfg['%s!encoder!gzip'%(rule_pre)]    = '0'
+    CTK.cfg['%s!encoder!deflate'%(rule_pre)] = '0'
+    CTK.cfg['%s!expiration'%(rule_pre)]      = 'time'
+    CTK.cfg['%s!expiration!time'%(rule_pre)] = '1h'
 
     n = 1
     for file in USUAL_STATIC_FILES:
