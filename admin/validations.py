@@ -104,7 +104,7 @@ def is_exec_path (value):
 
 def is_exec_file (value):
     value = is_exec_path (value)
-    if not os.path.isfile(path):
+    if not os.path.isfile(value):
         raise ValueError, _('Path is not a regular file')
     return value
 
