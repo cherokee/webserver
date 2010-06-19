@@ -663,7 +663,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 			 */
 			if (conn->expiration == cherokee_expiration_none) {
 				conn->expiration      = cherokee_expiration_time;
-				conn->expiration_time = cherokee_bogonow_now + maxage;
+				conn->expiration_time = maxage;
 			}
 		}
 	}
