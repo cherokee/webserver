@@ -239,12 +239,17 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 		return ret_error;
 	}
 
-	if (unlikely (strcasestr (conn->validator->user.buf, " or ") != NULL))
+	if (unlikely ((strcasestr (conn->validator->user.buf, " or ") != NULL) ||
+		      (strcasestr (conn->validator->user.buf, " or/") != NULL) ||
+		      (strcasestr (conn->validator->user.buf, "/or ") != NULL)))
+	{
 		return ret_error;
+	}
 
 	re = cherokee_buffer_cnt_cspn (&conn->validator->user, 0, "'\";");
-	if (unlikely (re != (int) conn->validator->user.len))
+	if (unlikely (re != (int) conn->validator->user.len)) {
 		return ret_error;
+	}
 
 	/* Build query
 	 */
@@ -269,6 +274,7 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 		TRACE (ENTRIES, "User %s was not found\n", conn->validator->user.buf);
 		ret = ret_not_found;
 		goto error;
+
 	} else if  (re > 1) {
 		TRACE (ENTRIES, "The user %s is not unique in the DB\n", conn->validator->user.buf);
 		ret = ret_deny;
