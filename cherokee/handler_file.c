@@ -268,7 +268,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 			conn->error_code = http_ok;
 
 			conn->range_start = -1;
-			conn->range_end = -1;
+			conn->range_end   = -1;
 		}
 	}
 
@@ -504,9 +504,12 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 	if (unlikely ((conn->range_start >= fhdl->info->st_size) ||
 		      (conn->range_end   >= fhdl->info->st_size)))
 	{
-		conn->error_code   = http_range_not_satisfiable;
-		conn->range_start  = 0;
-		conn->range_end    = 0;
+		/* Sets the range limits, so the error handler can
+		 * report the error properly.
+		 */
+		conn->range_start = 0;
+		conn->range_end   = fhdl->info->st_size;
+		conn->error_code  = http_range_not_satisfiable;
 
 		ret = ret_error;
 		goto out;

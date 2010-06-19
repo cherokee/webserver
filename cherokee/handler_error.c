@@ -266,7 +266,7 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 			* "Content-Range: bytes *" "/" FMT_OFFSET CRLF
 			*/
 			cherokee_buffer_add_str     (buffer, "Content-Range: bytes */");
-			cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_end + 1);
+			cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_end);
 			cherokee_buffer_add_str     (buffer, CRLF);
 		}
 
