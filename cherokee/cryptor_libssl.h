@@ -51,6 +51,7 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <openssl/rand.h>
+#include <openssl/conf.h>
 
 #if HAVE_OPENSSL_ENGINE_H
 # include <openssl/engine.h>

@@ -60,10 +60,11 @@ static DH *dh_param_4096 = NULL;
 
 #define CLEAR_LIBSSL_ERRORS						\
 	do {								\
-		while (ERR_peek_error()) {				\
-			TRACE(ENTRIES, "Ignoring libssl error%s","\n"); \
+		unsigned long openssl_error;				\
+		while ((openssl_error = ERR_get_error())) {		\
+			TRACE(ENTRIES, "Ignoring libssl error: %s\n",	\
+			      ERR_error_string(openssl_error, NULL));	\
 		}							\
-		ERR_clear_error();					\
 	} while(0)
 
 
@@ -320,7 +321,6 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
 
-
 	UNUSED(cryp);
 
 	/* Init
@@ -367,11 +367,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		}
 	}
 
-#if (OPENSSL_VERSION_NUMBER < 0x0090808fL)
-	/* OpenSSL < 0.9.8h
-	 */
-	ERR_clear_error();
-#endif
+	CLEAR_LIBSSL_ERRORS;
 
 	/* Certificate
 	 */
@@ -434,7 +430,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 				return ret_error;
 			}
 
-			ERR_clear_error();
+			CLEAR_LIBSSL_ERRORS;
 
 			SSL_CTX_set_client_CA_list (n->context, X509_clients);
 			TRACE (ENTRIES, "Setting client CA list: %s on '%s'\n", vsrv->certs_ca.buf, vsrv->name.buf);
@@ -447,7 +443,6 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
 	SSL_CTX_set_read_ahead (n->context, 1);
-	SSL_CTX_set_mode (n->context, SSL_MODE_ENABLE_PARTIAL_WRITE);
 
 	/* Set the SSL context cache
 	 */
@@ -890,7 +885,6 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	 */
 
 	SSL_CTX_set_verify (cryp->ssl_ctx, SSL_VERIFY_NONE, NULL);
-	SSL_CTX_set_mode (cryp->ssl_ctx, SSL_MODE_ENABLE_PARTIAL_WRITE);
 
 	/* New session
 	 */
@@ -1060,9 +1054,9 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 
 	/* Init OpenSSL
 	 */
-	CRYPTO_malloc_init();
-	SSL_load_error_strings();
+	OPENSSL_config (NULL);
 	SSL_library_init();
+	SSL_load_error_strings();
 	OpenSSL_add_all_algorithms();
 
 	/* Ensure PRNG has been seeded with enough data
@@ -1093,6 +1087,7 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 # if HAVE_OPENSSL_ENGINE_H
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
         ENGINE_load_builtin_engines();
+	OpenSSL_add_all_algorithms();
 #  endif
         e = ENGINE_by_id("pkcs11");
         while (e != NULL) {
