@@ -560,7 +560,14 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	CLEAR_LIBSSL_ERRORS;
 
 	re = SSL_do_handshake (cryp->session);
-	if (re <= 0) {
+	if (re == 0) {
+		/* The TLS/SSL handshake was not successful but was
+		 * shut down controlled and by the specifications of
+		 * the TLS/SSL protocol.
+		 */
+		return ret_eof;
+
+	} else if (re <= 0) {
 		int         err;
 		const char *error;
 		int         err_sys = errno;

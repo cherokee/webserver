@@ -743,6 +743,7 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->phase = phase_reading_header;
 				break;
 
+			case ret_eof:
 			case ret_error:
 				conns_freed++;
 				goto shutdown;
