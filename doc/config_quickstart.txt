@@ -97,10 +97,9 @@ Login:
   User:              admin
   One-time Password: yp7F1pMhtmD58DbB
 
-Cherokee Web Server 1.0.0b5077 (May 12 2010): Listening on port ALL:80, TLS
-disabled, IPv6 enabled, using epoll, 1024 fds system limit, max. 505
-connections, caching I/O, 10 threads, 50 connections per thread, standard
-scheduling policy
+Cherokee Web Server 1.0.2 (Jun 19 2010): Listening on port 127.0.0.1:9090,
+TLS disabled, IPv6 enabled, using epoll, 4096 fds system limit, max. 2041
+connections, caching I/O, single thread
 ----
 
 Now you can access the administration interface simply by opening your
