@@ -415,8 +415,17 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 	/* Ensure directories are accessible
 	 */
 	ret = cherokee_mkdir_p_perm (&rrd_conn->path_databases, 0775, W_OK);
-	if (ret != ret_ok) {
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_error:
 		LOG_CRITICAL (CHEROKEE_ERROR_RRD_MKDIR_WRITE, rrd_conn->path_databases.buf);
+		return ret_error;
+	case ret_deny:
+		LOG_CRITICAL (CHEROKEE_ERROR_RRD_DIR_PERMS, rrd_conn->path_databases.buf);
+		return ret_error;
+	default:
+		RET_UNKNOWN(ret);
 		return ret_error;
 	}
 
@@ -490,8 +499,17 @@ cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t *rrd_conn,
 	/* Ensure directories are accessible
 	 */
 	ret = cherokee_mkdir_p_perm (&rrd_conn->path_databases, 0775, W_OK);
-	if (ret != ret_ok) {
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_error:
 		LOG_CRITICAL (CHEROKEE_ERROR_RRD_MKDIR_WRITE, rrd_conn->path_databases.buf);
+		return ret_error;
+	case ret_deny:
+		LOG_CRITICAL (CHEROKEE_ERROR_RRD_DIR_PERMS, rrd_conn->path_databases.buf);
+		return ret_error;
+	default:
+		RET_UNKNOWN(ret);
 		return ret_error;
 	}
 

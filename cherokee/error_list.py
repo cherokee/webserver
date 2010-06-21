@@ -51,6 +51,11 @@ e('RRD_WRITE',
   title = "Cannot write in %s: ${errno}",
   desc  = SYSTEM_ISSUE)
 
+e('RRD_DIR_PERMS',
+  title = "Insufficient permissions to work with the RRD directory: %s",
+  desc  = SYSTEM_ISSUE,
+  admin = '/general#tabs_general-0')
+
 e('RRD_MKDIR_WRITE',
   title = "Cannot create the '%s' directory",
   desc  = SYSTEM_ISSUE,

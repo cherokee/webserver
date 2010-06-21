@@ -448,11 +448,12 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		}
 
 		cherokee_buffer_add (&vserver_buf, vserver_name, vserver_len);
+		cherokee_buffer_replace_string (&vserver_buf, " ", 1, "_", 1);
 
 		/* Is it fresh enough?
 		 */
-		cherokee_buffer_add_str (&tmp, "vserver_traffic_");
-		cherokee_buffer_add     (&tmp, vserver_name, vserver_len);
+		cherokee_buffer_add_str    (&tmp, "vserver_traffic_");
+		cherokee_buffer_add_buffer (&tmp, &vserver_buf);
 
 		fresh = check_image_freshness (&tmp, interval);
 		cherokee_buffer_mrproper (&tmp);
@@ -497,6 +498,16 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		return ret_ok;
 	}
 
+	/* Rewrite the request
+	 */
+	if (cherokee_buffer_is_empty (&conn->request_original)) {
+		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+	}
+
+	cherokee_buffer_replace_string (&conn->request, " ", 1, "_", 1);
+
+	/* Handler file init
+	 */
 	return cherokee_handler_file_init (hdl->file_hdl);
 }
 
