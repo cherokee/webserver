@@ -45,6 +45,10 @@ LINK_OCTALITY   = 'http://www.octality.com/'
 LINK_SUPPORT    = '%sengineering.html' % LINK_OCTALITY
 PROUD_USERS_WEB = "http://www.cherokee-project.com/cherokee-domain-list.html"
 OWS_PROUD       = 'http://www.octality.com/api/proud/open/'
+OWS_VERSION     = 'http://www.octality.com/api/version/'
+
+# "Latest release"
+LATEST_URL      = '/index/release'
 
 # Links
 LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
@@ -88,10 +92,6 @@ name and it will be listed on the Cherokee Project web site.
 PROUD_DIALOG_OK     = N_("The information has been successfully sent. Thank you!")
 PROUS_DIALOG_ERROR1 = N_("Unfortunatelly something went wrong, and the information could not be submitted:")
 PROUS_DIALOG_ERROR2 = N_("Please, try again. Do not hesitate to report the problem if it persists.")
-
-# "Latest release" regex
-LATEST_REGEX = r'LATEST_is_(.+?)<'
-LATEST_URL   = '/index/release'
 
 # Help entries
 HELPS = [('config_status', N_("Status"))]
@@ -225,7 +225,7 @@ def ProudUsers_Apply():
 
     # Send the list
     try:
-        xmlrpc = XMLServerDigest.XmlRpcServer (_(OWS_PROUD))
+        xmlrpc = XMLServerDigest.XmlRpcServer (OWS_PROUD)
         xmlrpc.add_domains_to_review(domains)
 
     except xmlrpclib.ProtocolError, err:
@@ -293,10 +293,10 @@ class LatestReleaseBox (CTK.Box):
     def _find_latest_cherokee_release (self):
         """Find out latest Cherokee release"""
         try:
-            txt    = urllib.urlopen(LINK_DOWNLOAD).read()
-            latest = re.findall (LATEST_REGEX, txt, re.DOTALL)[0]
-            return { 'version': latest }
-        except (IOError, IndexError):
+            xmlrpc = XMLServerDigest.XmlRpcServer (OWS_VERSION)
+            data   = xmlrpc.get_latest()
+            return data['default']
+        except:
             pass
 
 
