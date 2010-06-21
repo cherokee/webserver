@@ -443,6 +443,8 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
 	SSL_CTX_set_read_ahead (n->context, 1);
+	SSL_CTX_set_mode (n->context,
+			  SSL_CTX_get_mode(n->context) | SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER);
 
 	/* Set the SSL context cache
 	 */
