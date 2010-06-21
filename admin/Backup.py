@@ -123,8 +123,6 @@ class Restore_Config (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'class': 'backup-restore'})
 
-        Login.login_user='taher'
-        Login.login_password='12314'
         try:
             xmlrpc  = XMLServerDigest.XmlRpcServer (OWS_BACKUP, Login.login_user, Login.login_password)
             configs = xmlrpc.list_extended ()
