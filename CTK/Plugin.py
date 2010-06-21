@@ -47,6 +47,11 @@ $('#%(id)s').bind ('change', this, function() {
              success:  function(data) {
                  $('#%(plugin_id)s').html(data);
 		 $('#%(id)s').trigger('changed');
+
+                 /* Activate the Save button */
+                 var save_button = $('#save-button');
+                 save_button.show();
+                 save_button.removeClass('saved');
              },
              error: function (xhr, ajaxOptions, thrownError) {
 		 alert ("Error: " + xhr.status +"\\n"+ xhr.statusText);
