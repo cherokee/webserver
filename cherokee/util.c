@@ -1467,9 +1467,21 @@ cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
         char        *p;
 	struct stat  foo;
 
-	if (cherokee_buffer_is_empty (path))
+	/* There is no directory
+	 */
+	if (cherokee_buffer_is_empty (path)) {
 		return ret_ok;
+	}
 
+	/* Check whether the directory exists
+	 */
+	re = stat (path->buf, &foo);
+	if (re == 0) {
+		return ret_ok;
+	}
+
+	/* Create the directory tree
+	 */
 	p = path->buf;
 	while (true) {
 		p = strchr (p+1, '/');
@@ -1509,6 +1521,7 @@ cherokee_mkdir_p_perm (cherokee_buffer_t *dir_path,
 		       int                ensure_perm)
 {
 	int         re;
+	ret_t       ret;
 	struct stat foo;
 
 	/* Does it exist?
@@ -1517,14 +1530,17 @@ cherokee_mkdir_p_perm (cherokee_buffer_t *dir_path,
 	if (re != 0) {
 		/* Create the directory
 		 */
-		cherokee_mkdir_p (dir_path, create_mode);
+		ret = cherokee_mkdir_p (dir_path, create_mode);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
 	}
 
 	/* Check permissions
 	 */
 	re = access (dir_path->buf, ensure_perm);
 	if (re != 0) {
-		return ret_error;
+		return ret_deny;
 	}
 
 	return ret_ok;
