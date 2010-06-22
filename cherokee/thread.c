@@ -608,9 +608,11 @@ process_active_connections (cherokee_thread_t *thd)
 	cherokee_socket_status_t  blocking;
 
 #ifdef TRACE_ENABLED
-	TRACE (ENTRIES, "Active connections:%s", "\n");
+	if (! cherokee_list_empty (&thd->active_list)) {
+		TRACE (ENTRIES, "Active connections:%s", "\n");
+	}
 
-	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
+	list_for_each_safe (i, tmp, &thd->active_list) {
 		conn = CONN(i);
 
 		TRACE (ENTRIES, "   \\- thread (%p) processing conn (%p), phase %d '%s', socket=%d,%s\n",
