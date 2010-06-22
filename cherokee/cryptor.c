@@ -162,7 +162,7 @@ cherokee_cryptor_socket_init_base (cherokee_cryptor_socket_t *cryp)
 	cryp->free        = NULL;
 	cryp->clean       = NULL;
 	cryp->init_tls    = NULL;
-	cryp->close       = NULL;
+	cryp->shutdown    = NULL;
 	cryp->read        = NULL;
 	cryp->write       = NULL;
 	cryp->pending     = NULL;
@@ -211,12 +211,12 @@ cherokee_cryptor_socket_init_tls (cherokee_cryptor_socket_t *cryp,
 }
 
 ret_t
-cherokee_cryptor_socket_close (cherokee_cryptor_socket_t *cryp)
+cherokee_cryptor_socket_shutdown (cherokee_cryptor_socket_t *cryp)
 {
-	if (unlikely (cryp->close == NULL))
+	if (unlikely (cryp->shutdown == NULL))
 		return ret_error;
 
-	return cryp->close (cryp);
+	return cryp->shutdown (cryp);
 }
 
 ret_t

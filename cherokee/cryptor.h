@@ -51,7 +51,7 @@ typedef ret_t (* cryptor_vsrv_func_free_t)      (void  *cryp);
 typedef ret_t (* cryptor_socket_func_free_t)    (void *cryp);
 typedef ret_t (* cryptor_socket_func_clean_t)   (void *cryp);
 typedef ret_t (* cryptor_socket_func_init_tls_t)(void *cryp, void *sock, void *vsrv, void *blocking);
-typedef ret_t (* cryptor_socket_func_close_t)   (void *cryp);
+typedef ret_t (* cryptor_socket_func_shutdown_t)(void *cryp);
 typedef ret_t (* cryptor_socket_func_read_t)    (void *cryp, char *buf, int len, size_t *re_len);
 typedef ret_t (* cryptor_socket_func_write_t)   (void *cryp, char *buf, int len, size_t *re_len);
 typedef int   (* cryptor_socket_func_pending_t) (void *cryp);
@@ -85,7 +85,7 @@ typedef struct {
 	cryptor_socket_func_free_t     free;
 	cryptor_socket_func_clean_t    clean;
 	cryptor_socket_func_init_tls_t init_tls;
-	cryptor_socket_func_close_t    close;
+	cryptor_socket_func_shutdown_t shutdown;
 	cryptor_socket_func_read_t     read;
 	cryptor_socket_func_write_t    write;
 	cryptor_socket_func_pending_t  pending;
@@ -154,7 +154,7 @@ ret_t cherokee_cryptor_socket_clean_base  (cherokee_cryptor_socket_t *cryp);
 
 ret_t cherokee_cryptor_socket_free        (cherokee_cryptor_socket_t *cryp);
 ret_t cherokee_cryptor_socket_clean       (cherokee_cryptor_socket_t *cryp);
-ret_t cherokee_cryptor_socket_close       (cherokee_cryptor_socket_t *cryp);
+ret_t cherokee_cryptor_socket_shutdown    (cherokee_cryptor_socket_t *cryp);
 ret_t cherokee_cryptor_socket_init_tls    (cherokee_cryptor_socket_t *cryp,
 					   void                      *sock,
 					   void                      *vsrv,

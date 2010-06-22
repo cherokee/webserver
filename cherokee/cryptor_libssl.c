@@ -629,37 +629,58 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 }
 
 static ret_t
-_socket_close (cherokee_cryptor_socket_libssl_t *cryp)
+_socket_shutdown (cherokee_cryptor_socket_libssl_t *cryp)
 {
 	int re;
 	int fd;
+	int ssl_error;
 
-	if (cryp->session != NULL) {
-		/* Send a 'close_notify' SSL message
-		 */
-		re = SSL_shutdown (cryp->session);
-		if (re == 0) {
-			/* Send a TCP FIN segment to trigger the
-			 * client's 'close_notify' - leaving the
-			 * connection open for reading.
-			 */
-			fd = SSL_get_fd (cryp->session);
-			if (fd >= 0) {
-				do {
-					re = shutdown (fd, SHUT_WR);
-				} while ((re == -1) && (errno == EINTR));
+	if (unlikely (cryp->session == NULL)) {
+		return ret_ok;
+	}
+
+	/* Send a 'close_notify' SSL message
+	 */
+	re = SSL_shutdown (cryp->session);
+	if (re == 1) {
+		/* The shutdown was successfully completed. */
+		return ret_ok;
+
+	} else if (re == 0) {
+		/* Not finished yet */
+		return ret_eagain;
+
+	} else if (re < 0) {
+		ssl_error = SSL_get_error (cryp->session, re);
+		switch (ssl_error) {
+		case SSL_ERROR_ZERO_RETURN:
+			return ret_ok;
+
+		case SSL_ERROR_WANT_READ:
+		case SSL_ERROR_WANT_WRITE:
+			return ret_eagain;
+
+		case SSL_ERROR_SYSCALL:
+			CLEAR_LIBSSL_ERRORS;
+
+			switch (errno) {
+			case 0:
+				return ret_ok;
+			case EINTR:
+			case EAGAIN:
+				return ret_eagain;
+			default:
+				return ret_error;
 			}
+			break;
 
-			/* Call it again to finish the shutdown */
-			re = SSL_shutdown (cryp->session);
-		}
-
-		if (re < 0) {
+		default:
 			return ret_error;
 		}
 	}
 
-	return ret_ok;
+	SHOULDNT_HAPPEN;
+	return ret_error;
 }
 
 static ret_t
@@ -846,7 +867,7 @@ _socket_new (cherokee_cryptor_libssl_t         *cryp,
 	CRYPTOR_SOCKET(n)->free     = (cryptor_socket_func_free_t) _socket_free;
 	CRYPTOR_SOCKET(n)->clean    = (cryptor_socket_func_clean_t) _socket_clean;
 	CRYPTOR_SOCKET(n)->init_tls = (cryptor_socket_func_init_tls_t) _socket_init_tls;
-	CRYPTOR_SOCKET(n)->close    = (cryptor_socket_func_close_t) _socket_close;
+	CRYPTOR_SOCKET(n)->shutdown = (cryptor_socket_func_shutdown_t) _socket_shutdown;
 	CRYPTOR_SOCKET(n)->read     = (cryptor_socket_func_read_t) _socket_read;
 	CRYPTOR_SOCKET(n)->write    = (cryptor_socket_func_write_t) _socket_write;
 	CRYPTOR_SOCKET(n)->pending  = (cryptor_socket_func_pending_t) _socket_pending;
@@ -973,7 +994,7 @@ _client_new (cherokee_cryptor_t         *cryp,
 	n->ssl_ctx = NULL;
 
 	/* Socket */
-	CRYPTOR_SOCKET(n)->close    = (cryptor_socket_func_close_t) _socket_close;
+	CRYPTOR_SOCKET(n)->shutdown = (cryptor_socket_func_shutdown_t) _socket_shutdown;
 	CRYPTOR_SOCKET(n)->read     = (cryptor_socket_func_read_t) _socket_read;
 	CRYPTOR_SOCKET(n)->write    = (cryptor_socket_func_write_t) _socket_write;
 	CRYPTOR_SOCKET(n)->pending  = (cryptor_socket_func_pending_t) _socket_pending;

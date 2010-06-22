@@ -194,13 +194,6 @@ cherokee_socket_close (cherokee_socket_t *socket)
 		return ret_error;
 	}
 
-	/* SSL/TLS shutdown
-	 */
-	if (socket->cryptor != NULL) {
-		cherokee_cryptor_socket_close (socket->cryptor);
-		cherokee_socket_flush (socket);
-	}
-
 	/* Close the socket
 	 */
 #ifdef _WIN32

@@ -660,6 +660,7 @@ process_active_connections (cherokee_thread_t *thd)
 		if ((conn->phase != phase_tls_handshake) &&
 		    (conn->phase != phase_reading_header) &&
 		    (conn->phase != phase_reading_post) &&
+		    (conn->phase != phase_shutdown) &&
 		    (conn->phase != phase_lingering))
 		{
 			cherokee_connection_update_timeout (conn);
@@ -1281,15 +1282,33 @@ process_active_connections (cherokee_thread_t *thd)
 
 		case phase_shutdown:
 		shutdown:
-			/* TLS: Do not use lingering close
+			/* Perform a proper SSL/TLS shutdown
 			 */
 			if (conn->socket.is_tls == TLS) {
-				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				ret = conn->socket.cryptor->shutdown (conn->socket.cryptor);
+				switch (ret) {
+				case ret_ok:
+					break;
+
+				case ret_eagain:
+					conn_set_mode (thd, conn, socket_reading);
+					return ret_eagain;
+
+				case ret_eof:
+				case ret_error:
+					conns_freed++;
+					close_active_connection (thd, conn);
+					continue;
+
+				default:
+					RET_UNKNOWN (ret);
+					conns_freed++;
+					close_active_connection (thd, conn);
+					continue;
+				}
 			}
 
-			/* HTTP: Shutdown socket
+			/* Shutdown socket for writing
 			 */
 			ret = cherokee_connection_shutdown_wr (conn);
 			switch (ret) {
@@ -1308,6 +1327,7 @@ process_active_connections (cherokee_thread_t *thd)
 				close_active_connection (thd, conn);
 				continue;
 			}
+
 			/* fall down */
 
 		case phase_lingering:
