@@ -64,6 +64,7 @@ from List import List, ListEntry
 from ProgressBar import ProgressBar
 from Downloader import Downloader
 from Radio import Radio
+from XMLRPCProxy import XMLRPCProxy
 
 # Comodity
 from cgi import escape as escape_html

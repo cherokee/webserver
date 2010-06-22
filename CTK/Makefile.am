@@ -47,7 +47,8 @@ util.py \
 json_embedded.py \
 ProgressBar.py \
 Downloader.py \
-Radio.py
+Radio.py \
+XMLRPCProxy.py
 
 EXTRA_DIST = \
 $(ctk_DATA)
