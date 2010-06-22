@@ -113,12 +113,12 @@ if ((typeof submitter_loaded) == 'undefined') {
 
 		  /* Build the post */
 		  info = {};
-		  self.find ("input:text, input:password, input:hidden").each(function(){
+		  self.find ("input:text, input:password, input:hidden, input:radio:checked").each(function(){
 			 if ((!$(this).hasClass('optional')) || (this.value != optional_str)) {
 				info[this.name] = this.value;
 			 }
 		  });
-		  self.find ("input:checkbox, input:radio").each(function(){
+		  self.find ("input:checkbox").each(function(){
 			 info[this.name] = this.checked ? "1" : "0";
 		  });
 		  self.find ("select").each(function(){
