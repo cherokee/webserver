@@ -46,7 +46,8 @@ pyscgi.py \
 util.py \
 json_embedded.py \
 ProgressBar.py \
-Downloader.py
+Downloader.py \
+Radio.py
 
 EXTRA_DIST = \
 $(ctk_DATA)
