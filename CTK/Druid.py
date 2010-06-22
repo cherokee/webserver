@@ -220,14 +220,17 @@ class DruidButtonsPanel_PrevCreate_Auto (DruidButtonsPanel_PrevCreate):
         kwargs['url_prev'] = druid_url_prev(request.url)
         DruidButtonsPanel_PrevCreate.__init__ (self, **kwargs)
 
+
+def DruidContent__JS_to_goto (internal_id, url):
+    return """$("#%s").parents('.refreshable-url').eq(0).trigger({
+                       'type': 'refresh_goto',
+                       'goto': '%s'
+               });""" %(internal_id, url)
+
+
 class DruidContent_TriggerNext (Box):
     def __init__ (self):
         Box.__init__ (self)
 
         url = druid_url_next (request.url)
-        js = """$("#%s").parents('.refreshable-url').eq(0).trigger({
-                       'type': 'refresh_goto',
-                       'goto': '%s'
-               });""" %(self.id, url)
-
-        self += RawHTML (js=js)
+        self += RawHTML (js = DruidContent__JS_to_goto (self.id, url))
