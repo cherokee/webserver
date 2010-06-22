@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-06-10 11:52+0200\n"
+"POT-Creation-Date: 2010-06-22 16:53+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -398,8 +398,8 @@ msgstr "Allows to specify an alternative document root path."
 
 #: admin/Handler.py:43 admin/PageEntry.py:229 admin/PageVServer.py:302
 #: admin/PageVServers.py:127 admin/wizards/django.py:190
-#: admin/wizards/mono.py:199 admin/wizards/php.py:36 admin/wizards/php.py:257
-#: admin/wizards/uwsgi.py:242
+#: admin/wizards/mono.py:199 admin/wizards/php.py:36 admin/wizards/php.py:261
+#: admin/wizards/uwsgi.py:243
 msgid "Document Root"
 msgstr "Document Root"
 
@@ -1338,25 +1338,25 @@ msgstr ""
 msgid "Documentation"
 msgstr "Document Root"
 
-#: admin/PageIndex.py:62
+#: admin/PageIndex.py:66
 msgid "You will be sent an email requesting confirmation"
 msgstr ""
 
-#: admin/PageIndex.py:63
+#: admin/PageIndex.py:67
 msgid "Optionally provide your name"
 msgstr ""
 
-#: admin/PageIndex.py:66
+#: admin/PageIndex.py:70
 #, fuzzy
 msgid "Server is Running."
 msgstr "Server is running."
 
-#: admin/PageIndex.py:67
+#: admin/PageIndex.py:71
 #, fuzzy
 msgid "Server is not Running."
 msgstr "Server is not running."
 
-#: admin/PageIndex.py:68
+#: admin/PageIndex.py:72
 #, python-format
 msgid ""
 "Commercial support for Cherokee is provided by <a target=\"_blank\" href=\"%s"
@@ -1364,19 +1364,19 @@ msgid ""
 "Enterprise Support Services."
 msgstr ""
 
-#: admin/PageIndex.py:69
+#: admin/PageIndex.py:73
 msgid ""
 "The Community Mailing List is the place to go for help on Cherokee. <a id="
 "\"subscribe-a\">Subscribe now!</a>"
 msgstr ""
 
-#: admin/PageIndex.py:70
+#: admin/PageIndex.py:74
 #, python-format
 msgid ""
 "Join us at the <a target=\"_blank\" href=\"%s\">#cherokee</a> IRC Channel."
 msgstr ""
 
-#: admin/PageIndex.py:71
+#: admin/PageIndex.py:75
 #, python-format
 msgid ""
 "Your feedback is important! Log Bug Reports and Requests for Enhancements in "
@@ -1384,21 +1384,21 @@ msgid ""
 "Cherokee."
 msgstr ""
 
-#: admin/PageIndex.py:72
+#: admin/PageIndex.py:76
 msgid "Find out what's going on with Cherokee on your favorite Social Media!"
 msgstr ""
 
-#: admin/PageIndex.py:73
+#: admin/PageIndex.py:77
 #, python-format
 msgid "Follow <a target=\"_blank\" href=\"%s\">Cherokee on Twitter</a>."
 msgstr ""
 
-#: admin/PageIndex.py:74
+#: admin/PageIndex.py:78
 #, python-format
 msgid "Join <a target=\"_blank\" href=\"%s\">Cherokee on Facebook</a>."
 msgstr ""
 
-#: admin/PageIndex.py:76
+#: admin/PageIndex.py:80
 #, fuzzy
 msgid ""
 "<h3>Beta testing</h3> <p>Individuals like yourself who download and\n"
@@ -1409,23 +1409,23 @@ msgstr ""
 "snapshots of Cherokee Web Server help us to create the highest quality "
 "product."
 
-#: admin/PageIndex.py:82
+#: admin/PageIndex.py:86
 msgid ""
 "We would love to know that you are using Cherokee. Submit your domain\n"
 "name and it will be listed on the Cherokee Project web site.\n"
 msgstr ""
 
-#: admin/PageIndex.py:88
+#: admin/PageIndex.py:92
 msgid "The information has been successfully sent. Thank you!"
 msgstr ""
 
-#: admin/PageIndex.py:89
+#: admin/PageIndex.py:93
 msgid ""
 "Unfortunatelly something went wrong, and the information could not be "
 "submitted:"
 msgstr ""
 
-#: admin/PageIndex.py:90
+#: admin/PageIndex.py:94
 msgid ""
 "Please, try again. Do not hesitate to report the problem if it persists."
 msgstr ""
@@ -2539,7 +2539,7 @@ msgstr "FastCGI"
 msgid "SCGI"
 msgstr "SCGI"
 
-#: admin/consts.py:55 admin/wizards/List.py:108 admin/wizards/uwsgi.py:41
+#: admin/consts.py:55 admin/wizards/List.py:108 admin/wizards/uwsgi.py:43
 #, fuzzy
 msgid "uWSGI"
 msgstr "SCGI"
@@ -3000,9 +3000,9 @@ msgstr ""
 #: admin/wizards/liferay.py:153 admin/wizards/mediawiki.py:214
 #: admin/wizards/moinmoin.py:198 admin/wizards/mono.py:182
 #: admin/wizards/phpbb.py:169 admin/wizards/phpmyadmin.py:119
-#: admin/wizards/rails.py:44 admin/wizards/rails.py:298
+#: admin/wizards/rails.py:44 admin/wizards/rails.py:299
 #: admin/wizards/rtorrent.py:99 admin/wizards/sugar.py:199
-#: admin/wizards/symfony.py:209 admin/wizards/uwsgi.py:224
+#: admin/wizards/symfony.py:209 admin/wizards/uwsgi.py:225
 #: admin/wizards/wordpress.py:201 admin/wizards/zend.py:184
 msgid "Web Directory"
 msgstr "Web Directory"
@@ -4330,7 +4330,7 @@ msgstr ""
 #: admin/wizards/php.py:40 admin/wizards/phpbb.py:47
 #: admin/wizards/phpmyadmin.py:48 admin/wizards/sugar.py:47
 #: admin/wizards/symfony.py:51 admin/wizards/trac.py:43
-#: admin/wizards/uwsgi.py:47 admin/wizards/wordpress.py:44
+#: admin/wizards/uwsgi.py:49 admin/wizards/wordpress.py:44
 #: admin/wizards/zend.py:47
 #, fuzzy
 msgid "Host name of the virtual server that is about to be created."
@@ -4345,7 +4345,7 @@ msgstr "Nickname for the virtual server."
 #: admin/wizards/php.py:39 admin/wizards/phpbb.py:46
 #: admin/wizards/phpmyadmin.py:47 admin/wizards/sugar.py:46
 #: admin/wizards/symfony.py:50 admin/wizards/trac.py:42
-#: admin/wizards/uwsgi.py:46 admin/wizards/wordpress.py:43
+#: admin/wizards/uwsgi.py:48 admin/wizards/wordpress.py:43
 #: admin/wizards/zend.py:46
 #, fuzzy
 msgid "New Virtual Server Details"
@@ -4353,7 +4353,7 @@ msgstr "Virtual Server"
 
 #: admin/wizards/alfresco.py:48 admin/wizards/coldfusion.py:48
 #: admin/wizards/glassfish.py:48 admin/wizards/liferay.py:48
-#: admin/wizards/moinmoin.py:48 admin/wizards/uwsgi.py:50
+#: admin/wizards/moinmoin.py:48 admin/wizards/uwsgi.py:52
 msgid "Public web directory to access the project."
 msgstr ""
 
@@ -4364,7 +4364,7 @@ msgstr ""
 #: admin/wizards/mediawiki.py:45 admin/wizards/moinmoin.py:49
 #: admin/wizards/mono.py:50 admin/wizards/phpbb.py:50
 #: admin/wizards/phpmyadmin.py:51 admin/wizards/sugar.py:50
-#: admin/wizards/symfony.py:54 admin/wizards/uwsgi.py:51
+#: admin/wizards/symfony.py:54 admin/wizards/uwsgi.py:53
 #: admin/wizards/wordpress.py:46 admin/wizards/zend.py:50
 #, fuzzy
 msgid "Public Web Directory"
@@ -4376,10 +4376,10 @@ msgstr "Web Directory"
 #: admin/wizards/joomla.py:261 admin/wizards/liferay.py:169
 #: admin/wizards/mailman.py:145 admin/wizards/mediawiki.py:230
 #: admin/wizards/moinmoin.py:214 admin/wizards/mono.py:198
-#: admin/wizards/php.py:236 admin/wizards/phpbb.py:186
-#: admin/wizards/rails.py:314 admin/wizards/sugar.py:216
+#: admin/wizards/php.py:240 admin/wizards/phpbb.py:186
+#: admin/wizards/rails.py:315 admin/wizards/sugar.py:216
 #: admin/wizards/symfony.py:226 admin/wizards/trac.py:131
-#: admin/wizards/uwsgi.py:241 admin/wizards/wordpress.py:217
+#: admin/wizards/uwsgi.py:242 admin/wizards/wordpress.py:217
 #: admin/wizards/zend.py:201
 #, fuzzy
 msgid "New Host Name"
@@ -4475,10 +4475,10 @@ msgstr ""
 #: admin/wizards/concrete5.py:229 admin/wizards/django.py:191
 #: admin/wizards/drupal.py:260 admin/wizards/joomla.py:262
 #: admin/wizards/mailman.py:146 admin/wizards/mediawiki.py:231
-#: admin/wizards/mono.py:200 admin/wizards/php.py:237
-#: admin/wizards/phpbb.py:187 admin/wizards/rails.py:315
+#: admin/wizards/mono.py:200 admin/wizards/php.py:241
+#: admin/wizards/phpbb.py:187 admin/wizards/rails.py:316
 #: admin/wizards/sugar.py:217 admin/wizards/symfony.py:227
-#: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:243
+#: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:244
 #: admin/wizards/wordpress.py:218 admin/wizards/zend.py:202
 msgid "Use Same Logs as"
 msgstr ""
@@ -4517,7 +4517,7 @@ msgstr ""
 msgid "Web directory where you want Django to be accessible. (Example: /blog)"
 msgstr ""
 
-#: admin/wizards/django.py:47 admin/wizards/uwsgi.py:48
+#: admin/wizards/django.py:47 admin/wizards/uwsgi.py:50
 #, fuzzy
 msgid "Path to use as document root for the new virtual server."
 msgstr "Nickname for the virtual server."
@@ -4527,7 +4527,7 @@ msgid "Does not look like a Django source directory."
 msgstr ""
 
 #: admin/wizards/django.py:49 admin/wizards/rails.py:56
-#: admin/wizards/uwsgi.py:54
+#: admin/wizards/uwsgi.py:56
 #, fuzzy
 msgid "The document root directory does not exist."
 msgstr "Nickname for the virtual server."
@@ -4974,7 +4974,7 @@ msgstr ""
 msgid "Directory doesn't look like a Mono based project."
 msgstr "Create a new configuration file"
 
-#: admin/wizards/mono.py:219 admin/wizards/rails.py:366
+#: admin/wizards/mono.py:219 admin/wizards/rails.py:367
 #: admin/wizards/trac.py:151
 #, fuzzy
 msgid "Project Directory"
@@ -5014,20 +5014,20 @@ msgid ""
 "Please, check out Cherokee's PHP Documentation to learn how to set it up."
 msgstr ""
 
-#: admin/wizards/php.py:102
+#: admin/wizards/php.py:106
 #, fuzzy
 msgid "Invalid Virtual Server reference."
 msgstr "Virtual Server nickname"
 
-#: admin/wizards/php.py:114
+#: admin/wizards/php.py:118
 msgid "Could not find a suitable PHP interpreter."
 msgstr ""
 
-#: admin/wizards/php.py:123
+#: admin/wizards/php.py:127
 msgid "Could not determine PHP-fpm settings."
 msgstr ""
 
-#: admin/wizards/php.py:127
+#: admin/wizards/php.py:131
 msgid "Could not determine correct interpreter settings."
 msgstr ""
 
@@ -5198,11 +5198,11 @@ msgstr ""
 msgid "HTTP proxy"
 msgstr "HTTP Error"
 
-#: admin/wizards/rails.py:367
+#: admin/wizards/rails.py:368
 msgid "RAILS_ENV environment"
 msgstr ""
 
-#: admin/wizards/rails.py:370
+#: admin/wizards/rails.py:371
 msgid "Deployment method"
 msgstr ""
 
@@ -5276,26 +5276,26 @@ msgstr ""
 msgid "Already configured: %s"
 msgstr ""
 
-#: admin/wizards/static.py:37
+#: admin/wizards/static.py:38
 msgid "Welcome to the Common Static wizard"
 msgstr ""
 
-#: admin/wizards/static.py:38
+#: admin/wizards/static.py:39
 msgid ""
 "This wizard adds a rule to optimally serve the most common static files."
 msgstr ""
 
-#: admin/wizards/static.py:39
+#: admin/wizards/static.py:40
 msgid "Current rules have been checked"
 msgstr ""
 
-#: admin/wizards/static.py:40
+#: admin/wizards/static.py:41
 msgid ""
 "The process is very simple. Let the wizard take over and don't worry about a "
 "thing."
 msgstr ""
 
-#: admin/wizards/static.py:41
+#: admin/wizards/static.py:42
 msgid ""
 "Common files have been already configured, so there is nothing to be done."
 msgstr ""
@@ -5443,18 +5443,18 @@ msgstr "Create a new configuration file"
 msgid "Trac Local Directory"
 msgstr "Web Directory"
 
-#: admin/wizards/uwsgi.py:37
+#: admin/wizards/uwsgi.py:39
 msgid "Welcome to the uWsgi Wizard"
 msgstr ""
 
-#: admin/wizards/uwsgi.py:38
+#: admin/wizards/uwsgi.py:40
 msgid ""
 "<a target=\"_blank\" href=\"http://projects.unbit.it/uwsgi/\">uWSGI</a> is a "
 "fast (pure C), self-healing, developer-friendly WSGI server, aimed for "
 "professional python webapps deployment and development."
 msgstr ""
 
-#: admin/wizards/uwsgi.py:39
+#: admin/wizards/uwsgi.py:41
 msgid ""
 "Over time it has evolved in a complete stack for networked/clustered python "
 "applications, implementing message/object passing and process management. It "
@@ -5462,38 +5462,38 @@ msgid ""
 "communications."
 msgstr ""
 
-#: admin/wizards/uwsgi.py:42
+#: admin/wizards/uwsgi.py:44
 msgid ""
 "Path to the uWSGI configuration file (XML or Python-only). Its mountpoint "
 "will be used."
 msgstr ""
 
-#: admin/wizards/uwsgi.py:43
+#: admin/wizards/uwsgi.py:45
 msgid "Location of the uWSGI binary"
 msgstr ""
 
-#: admin/wizards/uwsgi.py:44
+#: admin/wizards/uwsgi.py:46
 #, fuzzy
 msgid "It does not look like a uWSGI configuration file."
 msgstr "Create a new configuration file"
 
-#: admin/wizards/uwsgi.py:52
+#: admin/wizards/uwsgi.py:54
 msgid ""
 "The default value is extracted from the configuration file. Change it at "
 "your own risk."
 msgstr ""
 
-#: admin/wizards/uwsgi.py:53
+#: admin/wizards/uwsgi.py:55
 #, fuzzy
 msgid "Does not look like a Uwsgi source directory."
 msgstr "Create a new configuration file"
 
-#: admin/wizards/uwsgi.py:262
+#: admin/wizards/uwsgi.py:263
 #, fuzzy
 msgid "uWSGI binary"
 msgstr "Wildcards"
 
-#: admin/wizards/uwsgi.py:263
+#: admin/wizards/uwsgi.py:264
 #, fuzzy
 msgid "Configuration File"
 msgstr "Configuration file"
