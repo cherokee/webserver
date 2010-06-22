@@ -63,6 +63,7 @@ from Druid import Druid, DruidButtonsPanel, DruidButton, DruidButton_Goto, Druid
 from List import List, ListEntry
 from ProgressBar import ProgressBar
 from Downloader import Downloader
+from Radio import Radio
 
 # Comodity
 from cgi import escape as escape_html
