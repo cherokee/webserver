@@ -118,7 +118,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 				info[this.name] = this.value;
 			 }
 		  });
-		  self.find ("input:checkbox").each(function(){
+		  self.find ("input:checkbox, input:radio").each(function(){
 			 info[this.name] = this.checked ? "1" : "0";
 		  });
 		  self.find ("select").each(function(){
@@ -209,7 +209,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 		  /* Events */
 		  self.find(":text, :password, textarea").not('.noauto').bind ('keypress', self, input_keypress_cb);
 		  self.find(":text, :password, textarea").not('.noauto').bind ("blur", self, input_blur_cb);
-		  self.find(":checkbox").not('.required,.noauto').bind ("change", self, input_checkbox_cb);
+		  self.find(":checkbox, :radio").not('.required,.noauto').bind ("change", self, input_checkbox_cb);
 		  self.find("select").not('.required,.noauto').bind ("change", self, input_combobox_cb);
 
 		  /* Original values */
