@@ -59,7 +59,6 @@ class TextField (Widget):
             if value:
                 val = to_utf8(value)
                 render += '="%s"' %(val)
-                # render += '="%s"' %(str(value))
         return render
 
     def __get_error_div_props (self):
