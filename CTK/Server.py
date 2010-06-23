@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # CTK: Cherokee Toolkit
 #
 # Authors:
@@ -34,6 +36,8 @@ import Config
 from util import json_dump
 from Post import Post
 from HTTP import HTTP_Response, HTTP_Error
+
+from cgi import escape as escape_html
 
 
 class PostValidator:
@@ -139,9 +143,6 @@ class ServerHandler (pyscgi.SCGIHandler):
             print >> sys.stderr, info
 
             # Custom error management
-            #page = error.page (info, desc)
-            #response = HTTP_Response (error=500, body=page.Render())
-            #self.send (str(response))
             if error.page:
                 try:
                     page = error.page (info, desc)
@@ -153,7 +154,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                     pass
 
             # No error handling page
-            html = '<pre>%s</pre>'%(info)
+            html = '<pre>%s</pre>' %(escape_html(info))
             self.send (str(HTTP_Error(desc=html)))
 
         try:
