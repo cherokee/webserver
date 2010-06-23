@@ -26,12 +26,12 @@ import CTK
 import XMLServerDigest
 
 LOGIN_APPLY      = '/login/apply/'
-OWS_REGISTER_URL = 'http://www.octality.com/signup'
+OWS_REGISTER_URL = 'http://mall.octality.com/signup'
 OWS_LOGIN        = 'https://www.octality.com/api/login/'
 
 NOTE_EMAIL       = N_('Your email address is used as user account')
 NOTE_PASSWORD    = N_('Password of your account')
-NOTE_REGISTER    = N_('Not registered yet? <a target = "_blank" href="%s">Join today</a>')
+NOTE_REGISTER    = N_('Not registered yet? <a target = "_blank" href="%s">Join today</a>.')
 
 login_user       = None
 login_password   = None
@@ -87,7 +87,6 @@ class Login_Button (CTK.Box):
     def __init__ (self, label=_('Login')):
         CTK.Box.__init__ (self, {'class': 'login-button'})
 
-        # Add New
         dialog = CTK.Dialog ({'title': _('Octality Account Login'), 'width': 500})
         dialog.AddButton (_('Sign in'), dialog.JS_to_trigger('submit'))
         dialog.AddButton (_('Close'), "close")
