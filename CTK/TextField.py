@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # CTK: Cherokee Toolkit
 #
 # Authors:
@@ -28,6 +30,12 @@ HEADER = [
     '<script type="text/javascript" src="/CTK/js/jquery.form-defaults.js"></script>'
 ]
 
+def to_utf8 (something):
+    if type(something) == unicode:
+        return something.encode('utf-8')
+    elif type(something) == str:
+        return unicode(something).encode('utf-8')
+    return str(something)
 
 class TextField (Widget):
     def __init__ (self, props=None):
@@ -49,13 +57,16 @@ class TextField (Widget):
             render += " %s" %(prop)
             value = self._props[prop]
             if value:
-                render += '="%s"' %(str(value))
+                val = to_utf8(value)
+                render += '="%s"' %(val)
+                # render += '="%s"' %(str(value))
         return render
 
     def __get_error_div_props (self):
-        render = ' id="error_%s"' % (self.id)
-        if self._props.get('name'):
-            render += ' key="%s"' %(self._props.get('name'))
+        render = 'id="error_%s"' % (self.id)
+        name = to_utf8 (self._props.get('name'))
+        if name:
+            render += ' key="%s"' %(name)
         return render
 
     def Render (self):
@@ -75,7 +86,7 @@ class TextField (Widget):
         html = '<input type="%s"%s />' %(self.type, self.__get_input_props())
 
         # Render the error reporting field
-        html += '<div class="error"%s></div>' %(self.__get_error_div_props())
+        html += '<div class="error" %s></div>' %(self.__get_error_div_props())
 
         render = Widget.Render (self)
         render.html    += html
