@@ -617,8 +617,8 @@ cherokee_socket_write (cherokee_socket_t *socket,
 			return ret_ok;
 		}
 		if (len == 0) {
-			/* Very strange, socket is ready but nothing has been written,
-			 * retry later.
+			/* Very strange, socket is ready but nothing
+			 * has been written, retry later.
 			 */
 			return ret_eagain;
 		}
@@ -957,22 +957,19 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 
 		cnt = 0;
 		ret = cherokee_socket_write (socket, vector[i].iov_base, vector[i].iov_len, &cnt);
-		*pcnt_written += cnt;
+		if (ret != ret_ok) {
+			return ret;
+		}
 
-		if ((ret == ret_ok) &&
-		    (cnt == vector[i].iov_len))
+		*pcnt_written += cnt;
+		if (cnt == vector[i].iov_len)
 			continue;
 
-		/* else != ret_ok || cnt != vector[i].iov_len
-		 */
-		if (*pcnt_written != 0)
-			return ret_ok;
-
-		/* Nothing has been written, return error code.
-		 */
-		return ret;
+		/* Unfinished */
+		return ret_ok;
 	}
 
+	/* Did send everything */
 	return ret_ok;
 }
 

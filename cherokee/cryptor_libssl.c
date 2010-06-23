@@ -632,7 +632,6 @@ static ret_t
 _socket_shutdown (cherokee_cryptor_socket_libssl_t *cryp)
 {
 	int re;
-	int fd;
 	int ssl_error;
 
 	if (unlikely (cryp->session == NULL)) {
@@ -641,14 +640,50 @@ _socket_shutdown (cherokee_cryptor_socket_libssl_t *cryp)
 
 	/* Send a 'close_notify' SSL message
 	 */
+	errno = 0;
+	CLEAR_LIBSSL_ERRORS;
+
 	re = SSL_shutdown (cryp->session);
 	if (re == 1) {
 		/* The shutdown was successfully completed. */
 		return ret_ok;
 
 	} else if (re == 0) {
-		/* Not finished yet */
-		return ret_eagain;
+		/* Shutdown in progress */
+		int ssl_err = SSL_get_error(cryp->session, re);
+
+		/* According to OpenSSL bug #611, something bad might
+		 * have happened during the call to SSL_shutdown()..
+		 */
+		switch (ssl_err) {
+		case SSL_ERROR_ZERO_RETURN:
+			return ret_ok;
+		case SSL_ERROR_SYSCALL: {
+			unsigned long e = ERR_get_error();
+
+			if (e == 0) {
+				/* EOF occurred in violation of protocol */
+				return ret_eof;
+
+			} else if (e == -1) {
+				/* Underlying BIO reported an I/O error */
+				switch (errno) {
+				case EINTR:
+				case EAGAIN:
+					return ret_eagain;
+				case EIO:
+				case EPIPE:
+				case ECONNRESET:
+					return ret_eof;
+				default:
+					return ret_error;
+				}
+			}
+			return ret_error;
+		}
+		default:
+			return ret_error;
+		}
 
 	} else if (re < 0) {
 		ssl_error = SSL_get_error (cryp->session, re);
@@ -657,6 +692,7 @@ _socket_shutdown (cherokee_cryptor_socket_libssl_t *cryp)
 			return ret_ok;
 
 		case SSL_ERROR_WANT_READ:
+			return ret_eagain;
 		case SSL_ERROR_WANT_WRITE:
 			return ret_eagain;
 
@@ -693,26 +729,44 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 	ssize_t len;
 	int     error;
 
+	/* 'Truco del almendruco': This is a method to bypass the
+	 * limitations of the libssl sockets regard to SSL_write.
+	 */
+
+	/* Stage 1: Keep track of the buffer
+	 */
+	if (cryp->writing.buf != buf) {
+		TRACE (ENTRIES, "SSL-Write. Sets new buffer: %p (len %d)\n", buf, buf_len);
+
+		cryp->writing.buf     = buf;
+		cryp->writing.buf_len = buf_len;
+		cryp->writing.written = 0;
+	}
+
+	/* Proceed to write
+	 */
 	CLEAR_LIBSSL_ERRORS;
 
 	len = SSL_write (cryp->session, buf, buf_len);
 	if (likely (len > 0) ) {
-		TRACE (ENTRIES",write", "write len=%d, written=%d\n", buf_len, len);
 
-		/* Return info
+		/* Stage 2: Lie, if required
 		 */
-		*pcnt_written = len;
-		return ret_ok;
+		cryp->writing.written += len;
+
+		if (cryp->writing.written >= buf_len) {
+			TRACE (ENTRIES, "SSL-Write. Buffer sent: %p (total len %d)\n", buf, buf_len);
+			*pcnt_written = buf_len;
+			return ret_ok;
+		}
+
+		TRACE (ENTRIES",lie", "SSL-Write lies, (package %d, written %d, total %d): eagain\n", len, cryp->writing.written, buf_len);
+		CHEROKEE_PRINT_BACKTRACE;
+		return ret_eagain;
 	}
 
 	if (len == 0) {
-		/* maybe socket was closed by client, no write was performed
-		int re = SSL_get_error (socket->session, len);
-		if (re == SSL_ERROR_ZERO_RETURN)
-			socket->status = socket_closed;
-		 */
-
-		TRACE (ENTRIES",write", "write len=%d, EOF\n", buf_len);
+		TRACE (ENTRIES",write", "write got %s\n", "EOF");
 		return ret_eof;
 	}
 
@@ -862,6 +916,10 @@ _socket_new (cherokee_cryptor_libssl_t         *cryp,
 	/* Socket properties */
 	n->session = NULL;
 	n->ssl_ctx = NULL;
+
+	n->writing.buf     = NULL;
+	n->writing.buf_len = -1;
+	n->writing.written = -1;
 
 	/* Virtual methods */
 	CRYPTOR_SOCKET(n)->free     = (cryptor_socket_func_free_t) _socket_free;

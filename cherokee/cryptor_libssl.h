@@ -79,6 +79,11 @@ typedef struct {
 	cherokee_cryptor_socket_t  base;
 	SSL                       *session;
 	SSL_CTX                   *ssl_ctx;
+	struct {
+		char              *buf;
+		off_t              buf_len;
+		off_t              written;
+	} writing;
 } cherokee_cryptor_socket_libssl_t;
 
 typedef struct {

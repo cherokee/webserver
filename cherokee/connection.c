@@ -1082,20 +1082,21 @@ cherokee_connection_send (cherokee_connection_t *conn)
 					  conn->chunked_sent);
 
 		ret = cherokee_socket_writev (&conn->socket, conn->chunks, conn->chunksn, &sent);
-		if (unlikely (ret != ret_ok)) {
-			switch (ret) {
-			case ret_eof:
-			case ret_eagain:
-				return ret;
+		switch (ret) {
+		case ret_ok:
+			break;
 
-			case ret_error:
-				conn->keepalive = 0;
-				return ret_error;
+		case ret_eof:
+		case ret_eagain:
+			return ret;
 
-			default:
-				RET_UNKNOWN(ret);
-				return ret_error;
-			}
+		case ret_error:
+			conn->keepalive = 0;
+			return ret_error;
+
+		default:
+			RET_UNKNOWN(ret);
+			return ret_error;
 		}
 
 		conn->chunked_sent += sent;

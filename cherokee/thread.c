@@ -1218,7 +1218,9 @@ process_active_connections (cherokee_thread_t *thd)
 					continue;
 
 				case ret_error:
-					goto shutdown;
+					conns_freed++;
+					close_active_connection (thd, conn);
+					continue;
 
 				default:
 					maybe_purge_closed_connection (thd, conn);
@@ -1246,7 +1248,8 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_error:
 				default:
 					conns_freed++;
-					goto shutdown;
+					close_active_connection (thd, conn);
+					continue;
 				}
 				break;
 
@@ -1262,7 +1265,8 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_error:
 				default:
 					conns_freed++;
-					goto shutdown;
+					close_active_connection (thd, conn);
+					continue;
 				}
 				break;
 
@@ -1274,7 +1278,9 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 
 			case ret_error:
-				goto shutdown;
+				conns_freed++;
+				close_active_connection (thd, conn);
+				continue;
 
 			default:
 				RET_UNKNOWN(ret);
@@ -1282,8 +1288,11 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 			break;
 
-		case phase_shutdown:
 		shutdown:
+			conn->phase = phase_shutdown;
+			conn->timeout = cherokee_bogonow_now + 3;
+
+		case phase_shutdown:
 			/* Perform a proper SSL/TLS shutdown
 			 */
 			if (conn->socket.is_tls == TLS) {
