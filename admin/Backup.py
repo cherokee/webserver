@@ -44,16 +44,16 @@ URL_RESTORE_SUCCESS = '%s/restore/success' %(URL_BASE)
 URL_RESTORE_APPLY   = '%s/restore/apply'   %(URL_BASE)
 
 NOTE_SAVE_H2      = N_('Remote Configuration Back Up')
-NOTE_SAVE_P1      = N_('Your current configuration is about to be backed up. By submitting the form it will be stored at a remote location and will be made available to you for future use.')
-NOTE_SAVE_NOTES   = N_('You can store some annotations along the configuration that is about to be saved.')
+NOTE_SAVE_P1      = N_('Your current configuration is about to be backed up.')
+NOTE_SAVE_P2      = N_('By submitting the form it will be stored at a remote location and will be made available to you for future use.')
 NOTE_SAVE_FAIL_H2 = N_('Could not Upload the Configuration File')
 NOTE_SAVE_FAIL_P1 = N_('An error occurred while upload your configuration file. Please try again later.')
-NOTE_SAVE_OK_H2   = N_('Ok H2')       # fixme
-NOTE_SAVE_OK_P1   = N_('bla bla bla') # fixme
+NOTE_SAVE_OK_H2   = N_('Configuration File Successfully uploaded')
+NOTE_SAVE_OK_P1   = N_('Your configuration file has been saved. From now on the back-up will be available for restoration.')
 
 NOTE_RESTORE_H2   = N_('Remote Configuration Restoration')
-NOTE_RESTORE_P1   = N_('Select a configuration state to restore. Submitting the form will download and restore a previous configuration. You might want to save the current one before you proceed.')
-NOTE_RESTORE_ASK  = N_('You are about to replace your current configuration')
+NOTE_RESTORE_P1   = N_('Select a configuration state to restore. Submitting the form will download and restore a previous configuration.')
+NOTE_RESTORE_P2   = N_('You might want to save the current one before you proceed.')
 NOTE_RESTORE_NO   = N_('No configurations could be retireved. It seems you have not uploaded any configuration yet.')
 
 NOTE_RESTORE_ERROR_H2 = N_('Could not retrieve the configuration file list')
@@ -152,7 +152,8 @@ class Backup_Save_Note:
 
         # Layout
         content = CTK.Container()
-        content += CTK.RawHTML (_(NOTE_SAVE_P1))
+        content += CTK.RawHTML ('<p>%s</p>'%(_(NOTE_SAVE_P1)))
+        content += CTK.RawHTML ('<p>%s</p>'%(_(NOTE_SAVE_P2)))
         content += CTK.RawHTML ("<h3>%s</h3>" %(_("Notes")))
         content += submit
         content += panel
@@ -166,8 +167,8 @@ class Backup_Save_Fail:
 
         # Layout
         content = CTK.Container()
-        content += CTK.RawHTML('<h2>%s</h2>' %(NOTE_SAVE_FAIL_H2))
-        content += CTK.RawHTML('<p>%s</p>'   %(NOTE_SAVE_FAIL_P1))
+        content += CTK.RawHTML('<h2>%s</h2>' %(_(NOTE_SAVE_FAIL_H2)))
+        content += CTK.RawHTML('<p>%s</p>'   %(_(NOTE_SAVE_FAIL_P1)))
         content += CTK.RawHTML('<p><pre>%s</pre></p>' %(CTK.escape_html (CTK.cfg.get_val('tmp!backup!save!error',''))))
         content += panel
         return content.Render().toStr()
@@ -179,13 +180,10 @@ class Backup_Save_Success:
 
         # Layout
         content = CTK.Container()
-        content += CTK.RawHTML('<h2>%s</h2>' %(NOTE_SAVE_OK_H2))
-        content += CTK.RawHTML('<p>%s</p>'   %(NOTE_SAVE_OK_P1))
+        content += CTK.RawHTML('<h2>%s</h2>' %(_(NOTE_SAVE_OK_H2)))
+        content += CTK.RawHTML('<p>%s</p>'   %(_(NOTE_SAVE_OK_P1)))
         content += panel
         return content.Render().toStr()
-
-Login.login_user     = 'taher2'
-Login.login_password = '31415'
 
 
 #
@@ -224,8 +222,8 @@ class Backup_Restore_Note:
 
         error = CTK.cfg.get_val('tmp!backup!retrieve!error', '')
         if error:
-            content += CTK.RawHTML('<h2>%s</h2>' %(NOTE_RESTORE_ERROR_H2))
-            content += CTK.RawHTML('<p>%s</p>'   %(NOTE_RESTORE_ERROR_P1))
+            content += CTK.RawHTML('<h2>%s</h2>' %(_(NOTE_RESTORE_ERROR_H2)))
+            content += CTK.RawHTML('<p>%s</p>'   %(_(NOTE_RESTORE_ERROR_P1)))
             content += CTK.RawHTML('<p><pre>%s</pre></p>' %(CTK.escape_html(error)))
             content += panel
             panel += CTK.DruidButton_Close  (_('Close'))
@@ -244,7 +242,8 @@ class Backup_Restore_Note:
             form.bind ('submit_fail',    CTK.DruidContent__JS_to_goto (form.id, URL_RESTORE_FAIL))
 
             # Content
-            content += CTK.RawHTML (_(NOTE_RESTORE_P1))
+            content += CTK.RawHTML ('<p>%s</p>'%(_(NOTE_RESTORE_P1)))
+            content += CTK.RawHTML ('<p>%s</p>'%(_(NOTE_RESTORE_P2)))
             content += form
             content += panel
 
@@ -260,8 +259,8 @@ class Backup_Restore_Fail:
         panel += CTK.DruidButton_Close  (_('Close'))
 
         content = CTK.Container()
-        content += CTK.RawHTML('<h2>%s</h2>' %(NOTE_RESTORE_FAIL_H2))
-        content += CTK.RawHTML('<p>%s</p>'   %(NOTE_RESTORE_FAIL_P1))
+        content += CTK.RawHTML('<h2>%s</h2>' %(_(NOTE_RESTORE_FAIL_H2)))
+        content += CTK.RawHTML('<p>%s</p>'   %(_(NOTE_RESTORE_FAIL_P1)))
         content += CTK.RawHTML('<p><pre>%s</pre></p>' %(CTK.escape_html (CTK.cfg.get_val('tmp!backup!restore!error',''))))
         content += panel
         return content.Render().toStr()
@@ -272,8 +271,8 @@ class Backup_Restore_Success:
         panel += CTK.DruidButton_Close  (_('Close'))
 
         content = CTK.Container()
-        content += CTK.RawHTML('<h2>%s</h2>' %(NOTE_RESTORE_OK_H2))
-        content += CTK.RawHTML('<p>%s</p>'   %(NOTE_RESTORE_OK_P1))
+        content += CTK.RawHTML('<h2>%s</h2>' %(_(NOTE_RESTORE_OK_H2)))
+        content += CTK.RawHTML('<p>%s</p>'   %(_(NOTE_RESTORE_OK_P1)))
         content += panel
         return content.Render().toStr()
 
@@ -285,7 +284,6 @@ class Restore_Config_Button (CTK.Box):
         druid  = CTK.Druid (CTK.RefreshableURL())
         dialog = CTK.Dialog ({'title': _(NOTE_RESTORE_H2), 'width': 500})
         dialog += druid
-        druid.bind ('druid_exiting', dialog.JS_to_close())
 
         # Trigger button
         button = CTK.Button(_('Restore...'))
