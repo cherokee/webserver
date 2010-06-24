@@ -875,7 +875,7 @@ copy_buffer_escape (cherokee_buffer_t *src,
 	if (utf8_len != src->len) {
 		cherokee_buffer_add_buffer (trg, src);
 	} else {
-		cherokee_buffer_escape_uri (trg, src);
+		cherokee_buffer_escape_uri_delims (trg, src);
 	}
 
 	return ret_ok;

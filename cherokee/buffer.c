@@ -1214,11 +1214,30 @@ escape_with_table (cherokee_buffer_t *buffer,
 ret_t
 cherokee_buffer_escape_uri (cherokee_buffer_t *buffer, cherokee_buffer_t *src)
 {
-	/* Each *bit* position of the array represents
+	/* RFC 3986:
+	 * Each *bit* position of the array represents
 	 * whether or not the character is escaped.
 	 */
 	static uint32_t escape_uri[] = {
 		0xffffffff, 0x80000029, 0x00000000, 0x80000000,
+		0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	};
+
+	return escape_with_table (buffer, src, escape_uri);
+}
+
+ret_t
+cherokee_buffer_escape_uri_delims (cherokee_buffer_t *buffer, cherokee_buffer_t *src)
+{
+	/* It's basically cherokee_buffer_escape_uri() for paths
+	 * inside a URI. It escapes the same characters as its
+	 * sibling, plus a number of delimiters. Please check RFC 3986
+	 * (Uniform Resource Identifier) for further information:
+	 *
+	 *  ":", "?", "#", "[", "]", "@"
+	 */
+	static uint32_t escape_uri[] = {
+		0xffffffff, 0x84000029, 0x28000001, 0x80000000,
 		0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	};
 
