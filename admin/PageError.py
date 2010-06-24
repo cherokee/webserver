@@ -26,7 +26,7 @@ import os
 import CTK
 from urllib import quote
 
-ERROR_LAUNCH_URL_ADMIN = N_('The server suggests to check <a href="%s">this page</a>. Most probably the problem can he solved in there.')
+ERROR_LAUNCH_URL_ADMIN = N_('The server suggests to check <a href="%s">this page</a>. Most probably the problem can be solved in there.')
 
 class PageErrorLaunch (CTK.Page):
     def __init__ (self, error_str, **kwargs):
