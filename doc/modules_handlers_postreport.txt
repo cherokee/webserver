@@ -1,0 +1,25 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
+
+Handler: Upload Reporting
+-------------------------
+
+The 'Upload Progress' plug-in provides feedback to the web browser
+about the status of an ongoing POST request.
+
+To make it more convenient, it is implemented so that you don't have
+to change a single line of code in your applications. It is compatible
+with Lighttpd's mod_uploadprogress, Nginx's
+NginxHttpUploadProgressModule, and Apache's equivalent, so chances are
+you'll be able to do a seamless migration.
+
+To make use of the plugin you'll need some code on the client
+side. Many Javascript snippets and Flash modules are available for
+free. The
+link:http://github.com/drogus/jquery-upload-progress[jQuery-upload-progress]
+module has given fairly good results in the past, but there are many
+other options available.
+
+
+////
+Example required: Add code snippet.
+////

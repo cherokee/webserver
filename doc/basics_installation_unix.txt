@@ -100,11 +100,11 @@ each distribution offers its own tools to do so.
 [[APT]]
 APT
 ~~~
+
 This section is intended for those who use Debian and Ubuntu and want
-to use the latest
-If the latest and greatest version of Cherokee is not yet available on
-your APT repositories, you can do several things besides installing
-manually.
+to use the latest -and greatest- version of Cherokee when it is not
+yet available on the APT repositories. You can do several things
+besides installing manually.
 
 For Ubuntu users, simply use the PPA repository. Normally when a new
 Cherokee version is released, the repository will have it almost in
@@ -158,3 +158,54 @@ This will probably pull newer versions of libssl-dev, libssl0.9.8 and
 mysql-common to fulfill dependencies. Of course, this _might_ break
 other packages depending on those specific versions, but it is not
 very likely.
+
+
+[[debian_from_source]]
+Debian package from source
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PPA and Unstable repositories keep up to date with the latest Cherokee
+releases. Usually the time lapse between releasing a new version and
+having the repositories updated is really short.
+
+However, in the event that they arent, some options remain if you want
+to enjoy the latest Cherokee enhancements. Besides building directly
+from our SVN repository, you can build from source for
+Debian/Ubuntu. You will be able to build it cleanly in a `.deb`
+package with dependencies, and push the new release as fast as
+possible to production.
+
+The process is very straight forward. As with any Debian package, it
+should be enough just to download the source package, get its
+build-dependencies, and build.
+
+----
+$ apt-get source cherokee
+(...)
+$ sudo apt-get build-dep cherokee
+(...)
+$ cd cherokee-*     # depending on your version
+$ debuild
+----
+
+Of course, if you want to contribute to Debian/Ubuntu packaging, it is
+a _bit_ more involved.
+
+You should instead clone the Git repository at
+link:git://git.debian.org/collab-maint/cherokee.git[git://git.debian.org/collab-maint/cherokee.git]
+
+After that, the process for building is very similar. You only need to
+get Cherokee's official sources, which can be done running the
+following command within the Cherokee tree:
+
+----
+$ uscan --force
+----
+
+And build using git-buildpackage:
+
+----
+$ git-buildpackage
+----
+
+That's it.

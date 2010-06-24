@@ -12,6 +12,7 @@
     - link:modules_handlers_uwsgi.html[uWSGI]: uWSGI protocol.
     - link:modules_handlers_proxy.html[HTTP reverse proxy]: Surrogate/reverse proxy handler.
     - link:modules_handlers_ssi.html[Server Side Includes]: SSI Server Support.
+    - link:modules_handlers_postreport.html[Upload Reporting]: Show an upload progress bar.
     - link:modules_handlers_streaming.html[Audio/Video Streaming]: Media streamer.
     - link:modules_handlers_secdownload.html[Hidden Downloads]: Secure, Time expiring downloads.
     - link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
