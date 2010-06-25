@@ -110,9 +110,15 @@ class ExtensionsTable (CTK.Container):
     def __init__ (self, refreshable, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
 
+        self += CTK.RawHTML ("<h2>%s</h2>" %_('Extension List'))
+
         # List
         icons = CTK.cfg.keys('icons!suffix')
-        if icons:
+
+        if not icons:
+            button_class = 'no_extensions'
+        else:
+            button_class = 'extensions'
             table = CTK.Table()
             table.id = "icon_extensions"
             table += [None, CTK.RawHTML(_('Extensions'))]
@@ -131,11 +137,10 @@ class ExtensionsTable (CTK.Container):
                 delete.bind('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
                                                   complete = refreshable.JS_to_refresh()))
 
-            self += CTK.RawHTML ("<h2>%s</h2>" %_('Extension List'))
             self += CTK.Indenter (table)
 
         # Add New
-        button = AdditionDialogButton ('new_exts', _('Add New Extension'), klass='extensions')
+        button = AdditionDialogButton ('new_exts', _('Add New Extension'), klass = button_class)
         button.bind ('submit_success', refreshable.JS_to_refresh())
         self += button
 
@@ -144,9 +149,15 @@ class FilesTable (CTK.Container):
     def __init__ (self, refreshable, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
 
+        self += CTK.RawHTML ("<h2>%s</h2>" %_('File Matches'))
+
         # List
         icons = CTK.cfg.keys('icons!file')
-        if icons:
+
+        if not icons:
+            button_class = 'no_file'
+        else:
+            button_class = 'file'
             table = CTK.Table()
             table.id = "icon_files"
             table += [None, CTK.RawHTML(_('Files'))]
@@ -164,11 +175,10 @@ class FilesTable (CTK.Container):
                 delete.bind('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
                                                   complete = refreshable.JS_to_refresh()))
 
-            self += CTK.RawHTML ("<h2>%s</h2>" %_('File Matches'))
             self += CTK.Indenter (table)
 
         # Add New
-        button = AdditionDialogButton ('new_file', _('Add New File'), klass='file')
+        button = AdditionDialogButton ('new_file', _('Add New File'), klass = button_class)
         button.bind ('submit_success', refreshable.JS_to_refresh())
         self += button
 
