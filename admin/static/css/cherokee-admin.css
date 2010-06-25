@@ -190,3 +190,23 @@ img.icon_chooser_selected {
 .graph_type { float: right; }
 .graph_props_bottom {position: absolute; top: 450px;}
 .graph_props_top {position: absolute; top: -35px;}
+
+
+/* Page General
+ */
+#icons_special table td { padding: 4px 8px; }
+#icons_files { clear: both; margin-bottom: 64px; }
+.file-button { width: 480px; }
+.file-button .button { float: right; }
+#icon_files td { padding: 2px 8px; }
+#icon_files td + td + td { padding: 4px 0; }
+#icon_files input { width: 400px; }
+#icon_files .notice { display: none; }
+#icons_extensions { clear: both; margin-bottom: 64px; }
+.extensions-button { width: 480px; }
+.extensions-button .button { float: right; }
+#icon_extensions td { padding: 2px 8px; }
+#icon_extensions td + td + td { padding: 4px 0; }
+#icon_extensions input { width: 400px; }
+#icon_extensions .notice { display: none; }
+.no_file-button, .no_extensions-button { padding: 10px 4px; width:400px; }
