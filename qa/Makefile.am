@@ -252,7 +252,8 @@ run-tests.py \
 244-Directory-Overwrite.py \
 245-0x9b.py \
 246-Dup-CacheControl.py \
-247-UTF8-QueryString.py
+247-UTF8-QueryString.py \
+248-Colon-UTF8.py
 
 test:
 	./run-tests.py
