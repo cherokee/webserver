@@ -1096,6 +1096,79 @@ cherokee_buffer_print_debug (cherokee_buffer_t *buf, int len)
 }
 
 
+static const char *
+utf8_get_next_char (const char *string)
+{
+	/* 2 bytes character: 110vvvvv 10vvvvvv
+	 */
+	if (((unsigned char)(string[0]) & 0xE0) == 0xC0) {
+		if (!string[1]) {
+			return string + 1;
+		}
+		return string + 2;
+	}
+
+	/* 3 bytes character: 1110vvvv 10vvvvvv 10vvvvvv */
+	if (((unsigned char)(string[0]) & 0xF0) == 0xE0) {
+		if (!string[1]) {
+			return string + 1;
+		}
+		if (!string[2]) {
+			return string + 2;
+		}
+		return string + 3;
+	}
+
+	/* 4 bytes characters: 11110vvv 10vvvvvv 10vvvvvv 10vvvvvv */
+	if (((unsigned char)(string[0]) & 0xF8) == 0xF0) {
+		if (!string[1]) {
+			return string + 1;
+		}
+		if (!string[2]) {
+			return string + 2;
+		}
+		if (!string[3]) {
+			return string + 3;
+		}
+		return string + 4;
+	}
+
+	/* Single byte character: 0vvvvvvv */
+	return string + 1;
+}
+
+
+ret_t
+cherokee_buffer_get_utf8_len (cherokee_buffer_t *buf, cuint_t *len)
+{
+	cuint_t     n;
+	const char *p;
+	const char *end;
+
+	/* Empty buffer
+	 */
+	if ((buf->buf == NULL) || (buf->len == 0)) {
+		*len = 0;
+		return ret_ok;
+	}
+
+	/* Count characters
+	 */
+	p   = buf->buf;
+	end = buf->buf + buf->len;
+
+	n = 0;
+	do{
+		p = utf8_get_next_char (p);
+		n++;
+	} while (p < end);
+
+	*len = n;
+	return ret_ok;
+}
+
+
+
 /*
  * Unescape a string that may have escaped characters %xx
  * where xx is the hexadecimal number equal to the character ascii value.
@@ -1164,9 +1237,9 @@ escape_with_table (cherokee_buffer_t *buffer,
 		   cherokee_buffer_t *src,
 		   uint32_t          *is_char_escaped)
 {
-	cuint_t        i;
-	unsigned char *s;
 	unsigned char *t;
+	unsigned char *s,*s_next;
+	unsigned char *end;
 	cuint_t        n_escape    = 0;
 	static char    hex_chars[] = "0123456789abcdef";
 
@@ -1174,13 +1247,26 @@ escape_with_table (cherokee_buffer_t *buffer,
 		return ret_error;
 	}
 
+	end = src->buf + src->len;
+
 	/* Count how many characters it'll have to escape
 	 */
-	for (i=0, s=src->buf; i<src->len; i++, s++) {
-		if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) {
-			n_escape++;
+	s = src->buf;
+	do {
+		s_next = utf8_get_next_char (s);
+
+		/* It's single-byte character */
+		if ((s_next - s) == 1) {
+
+			/* Check whether it has to be escaped */
+			if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) {
+				n_escape++;
+			}
 		}
-	}
+
+		/* Prepare for next iteration */
+		s = s_next;
+	} while (s < end);
 
 	/* Get the memory
 	 */
@@ -1191,16 +1277,42 @@ escape_with_table (cherokee_buffer_t *buffer,
 	s = src->buf;
 	t = buffer->buf + buffer->len;
 
-	for (i=0; i<src->len; i++) {
-		if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) {
-			*t++ = '%';
-			*t++ = hex_chars[*s >> 4];
-			*t++ = hex_chars[*s & 0xf];
-			s++;
+	do {
+		s_next = utf8_get_next_char (s);
+
+		/* Multi-byte character */
+		if ((s_next - s) > 1) {
+			while (s < s_next) {
+				*t++ = *s++;
+			}
+
+		/* Single-byte character */
 		} else {
-			*t++ = *s++;
+			if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) {
+				*t++ = '%';
+				*t++ = hex_chars[*s >> 4];
+				*t++ = hex_chars[*s & 0xf];
+				s++;
+			} else {
+				*t++ = *s++;
+			}
 		}
-	}
+
+		s = s_next;
+	} while (s < end);
+
+
+
+/* 	for (i=0; i<src->len; i++) { */
+/* 		if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) { */
+/* 			*t++ = '%'; */
+/* 			*t++ = hex_chars[*s >> 4]; */
+/* 			*t++ = hex_chars[*s & 0xf]; */
+/* 			s++; */
+/* 		} else { */
+/* 			*t++ = *s++; */
+/* 		} */
+/* 	} */
 
 	/* ..and the final touch
 	 */
@@ -2019,77 +2131,5 @@ cherokee_buffer_to_lowcase (cherokee_buffer_t *buf)
 		}
 	}
 
-	return ret_ok;
-}
-
-
-static const char *
-utf8_get_next_char (const char *string)
-{
-	/* 2 bytes character: 110vvvvv 10vvvvvv
-	 */
-	if (((unsigned char)(string[0]) & 0xE0) == 0xC0) {
-		if (!string[1]) {
-			return string + 1;
-		}
-		return string + 2;
-	}
-
-	/* 3 bytes character: 1110vvvv 10vvvvvv 10vvvvvv */
-	if (((unsigned char)(string[0]) & 0xF0) == 0xE0) {
-		if (!string[1]) {
-			return string + 1;
-		}
-		if (!string[2]) {
-			return string + 2;
-		}
-		return string + 3;
-	}
-
-	/* 4 bytes characters: 11110vvv 10vvvvvv 10vvvvvv 10vvvvvv */
-	if (((unsigned char)(string[0]) & 0xF8) == 0xF0) {
-		if (!string[1]) {
-			return string + 1;
-		}
-		if (!string[2]) {
-			return string + 2;
-		}
-		if (!string[3]) {
-			return string + 3;
-		}
-		return string + 4;
-	}
-
-	/* Single byte character: 0vvvvvvv */
-	return string + 1;
-}
-
-
-ret_t
-cherokee_buffer_get_utf8_len (cherokee_buffer_t *buf, cuint_t *len)
-{
-	cuint_t     n;
-	const char *p;
-	const char *end;
-
-	/* Empty buffer
-	 */
-	if ((buf->buf == NULL) || (buf->len == 0)) {
-		*len = 0;
-		return ret_ok;
-	}
-
-	/* Count characters
-	 */
-	p   = buf->buf;
-	end = buf->buf + buf->len;
-
-	n = 0;
-	do{
-		p = utf8_get_next_char (p);
-		n++;
-	} while (p < end);
-
-	*len = n;
 	return ret_ok;
 }

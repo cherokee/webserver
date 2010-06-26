@@ -861,28 +861,6 @@ substitute_vbuf_token (cherokee_buffer_t **vbuf,
 
 
 static ret_t
-copy_buffer_escape (cherokee_buffer_t *src,
-		    cherokee_buffer_t *trg)
-{
-	ret_t   ret;
-	cuint_t utf8_len;
-
-	ret = cherokee_buffer_get_utf8_len (src, &utf8_len);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
-	if (utf8_len != src->len) {
-		cherokee_buffer_add_buffer (trg, src);
-	} else {
-		cherokee_buffer_escape_uri_delims (trg, src);
-	}
-
-	return ret_ok;
-}
-
-
-static ret_t
 render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
 {
 	ret_t                             ret;
@@ -961,17 +939,17 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		}
 
 		cherokee_buffer_clean (tmp);
-		copy_buffer_escape (&file->realpath, tmp);
+		cherokee_buffer_escape_uri_delims (tmp, &file->realpath);
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else if (! is_dir) {
 		cherokee_buffer_clean (tmp);
-		copy_buffer_escape (&name_buf, tmp);
+		cherokee_buffer_escape_uri_delims (tmp, &name_buf);
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else {
 		cherokee_buffer_clean (tmp);
-		copy_buffer_escape (&name_buf, tmp);
+		cherokee_buffer_escape_uri_delims (tmp, &name_buf);
 		cherokee_buffer_add_str (tmp, "/");
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 	}
