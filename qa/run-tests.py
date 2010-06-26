@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Cherokee QA Tests
 #
@@ -28,6 +29,11 @@ try:
 except ImportError:
     # Use default settings
     from conf import *
+
+# Deals with UTF-8
+if sys.getdefaultencoding() != 'utf-8':
+    reload (sys)
+    sys.setdefaultencoding('utf-8')
 
 # Configuration parameters
 num       = 1

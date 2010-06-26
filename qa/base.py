@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Cherokee QA Tests
 #
 # Authors:
@@ -28,6 +30,7 @@ def importfile(path):
     file.close()
 
     return module
+
 
 class TestBase:
     def __init__ (self, file):
@@ -160,7 +163,7 @@ class TestBase:
             return -1
 
         if self.expected_content != None:
-            if type(self.expected_content) == types.StringType:
+            if type(self.expected_content) in (types.StringType, types.UnicodeType):
                 r = self._check_result_expected_item (self.expected_content)
                 if r == -1:
                     return -1
@@ -172,8 +175,9 @@ class TestBase:
             else:
                 raise Exception("Syntax error")
 
+
         if self.forbidden_content != None:
-            if type(self.forbidden_content) == types.StringType:
+            if type(self.forbidden_content) in (types.StringType, types.UnicodeType):
                 r = self._check_result_forbidden_item (self.forbidden_content)
                 if r == -1:
                     return -1

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os, sys, time, random, fcntl, socket, math
 
 from conf import *
