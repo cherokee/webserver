@@ -410,13 +410,21 @@ def __figure_fpm_settings():
     if tmp:
         listen_address = tmp[0]
     else:
-        listen_address = None
+        tmp = re.findall (r'listen = (.*)', content)
+        if tmp:
+            listen_address = tmp[0]
+        else:
+            listen_address = None
 
     tmp = re.findall (r'<value name="request_terminate_timeout">(\d*)s*</value>', content)
     if tmp:
         timeout = tmp[0]
     else:
-        timeout = PHP_DEFAULT_TIMEOUT
+        tmp = re.findall (r'request_terminate_timeout[ ]*=[ ]*(\d*)s*', content)
+        if tmp:
+            timeout = tmp[0]
+        else:
+            timeout = PHP_DEFAULT_TIMEOUT
 
     # Done
     return {'fpm_conf':              fpm_conf,
