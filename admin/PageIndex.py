@@ -376,28 +376,9 @@ class SocialMedia (CTK.Box):
 class CommunityBox (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'id': 'community-box'})
-        
-        
 
-        """
-        from xmlrpclib import ServerProxy
-        OWS_RPC = 'http://www.octality.com/rpc/'
-
-        client = ServerProxy (OWS_RPC)
-        print client.ping('ping')
-        print client.get_tweets()
-        """
-
-        from RemoteContent import Remote_Tweets
-        self += Remote_Tweets ()
-        #self += Remote_Content (Proxied_Remote_Content)
-        #import Login, Backup
-        #self += Login.Login_Button()
-        #self += Backup.Restore_Config_Button()
-        #self += Backup.Save_Config_Button()
-        
-        
         self += CTK.RawHTML('<h2>%s</h2>' % _('Community'))
+
         left = CTK.Box ({'id': 'community-left'})
         left += ProudUsers()
         left += SocialMedia()
