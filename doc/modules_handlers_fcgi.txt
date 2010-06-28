@@ -29,7 +29,11 @@ To set up the general gateway options, read about the common
 parameters shared with the link:modules_handlers_cgi.html[Common CGI
 options] handler. All of them apply with the exception of `Check
 file`, which will only be present if the manager is handling an
-extension.
+extension. Be sure to understand what that parameter does. It is
+link:modules_handlers_cgi.html#check_file_warning[explained in detail]
+among the rest of CGI options, and depending of how you are using
+FastCGI it can make all the difference between succeeding and failing
+to run your application.
 
 To set up the FastCGI specifics, read the
 link:modules_balancers.html[Balancers] section for general information

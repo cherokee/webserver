@@ -34,6 +34,7 @@ also supports `X-Accel-Redirect` headers transparently. This is to
 allow the migration of applications supporting it whithout having to
 make major code rewrites.
 
+[[check_file_warning]]
 Warning:
 ~~~~~~~~
 
@@ -42,6 +43,18 @@ disable this when you have an application that is running the whole
 virtual server tree, as it is a common source of problems. You can
 look at a practical example about PATH_INFO in the
 link:modules_handlers_common.html[List & Send] handler documentation.
+
+`Check file` must be disabled for cases such as Rails, Django, etc,
+where everything that arrives to Cherokee must be re-sent to the
+framework as request.
+
+Enabling `Check file` is the way to go if you are using any kind of
+file-based system, such as PHP.
+
+If you are reporting *404 Not found* response after you handler has
+been configured, try to deselect the `Check file` option and see how
+it goes.
+
 
 [[examples]]
 Examples
