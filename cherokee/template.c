@@ -32,6 +32,10 @@ typedef struct {
 	cherokee_list_t            listed;
 	cuint_t                    pos;
 	cherokee_template_token_t *token;
+	struct {
+		ssize_t            begin;
+		ssize_t            end;
+ 	} slice;
 } cherokee_template_replacement_t;
 
 #define TEMPLATE_REPL(x) ((cherokee_template_replacement_t *)(x))
@@ -41,8 +45,10 @@ replacement_new (cherokee_template_replacement_t **repl)
 {
 	CHEROKEE_NEW_STRUCT (n, template_replacement);
 
-	n->pos   = 0;
-	n->token = NULL;
+	n->pos         = 0;
+	n->token       = NULL;
+	n->slice.begin = -1;
+	n->slice.end   = -1;
 	INIT_LIST_HEAD (&n->listed);
 
 	*repl = n;
@@ -164,11 +170,16 @@ cherokee_template_parse (cherokee_template_t *tem,
 {
 	char              *token1;
 	char              *token2;
+	char              *slice1;
+	char              *slice2;
+	char              *s;
 	cherokee_list_t   *i;
-	ret_t              ret   = ret_ok;
-	char              *p     = incoming->buf;
-	char              *end   = incoming->buf + incoming->len;
-	cherokee_buffer_t  token = CHEROKEE_BUF_INIT;
+	ssize_t            slice_begin;
+	ssize_t            slice_end;
+	ret_t              ret          = ret_ok;
+	char              *p            = incoming->buf;
+	char              *end          = incoming->buf + incoming->len;
+	cherokee_buffer_t  token        = CHEROKEE_BUF_INIT;
 
 	while (p < end) {
 		cherokee_template_replacement_t *repl;
@@ -189,6 +200,41 @@ cherokee_template_parse (cherokee_template_t *tem,
 			goto out;
 		}
 
+		/* Text slices support
+		 */
+		slice_begin = CHEROKEE_BUF_SLIDE_NONE;
+		slice_end   = CHEROKEE_BUF_SLIDE_NONE;
+
+		if ((token2 < end) && (token2[1] == '[')) {
+			s = slice1 = token2+2;
+
+			/* First number */
+			if ((s < end) && (*s == '-')) s++;
+			while ((s < end) && ((*s >= '0') && (*s <= '9'))) s++;
+
+			/* Check of colon */
+			if (*s != ':') {
+				slice1 = NULL;
+			} else {
+				*s = '\0';
+				slice_begin = strtol (slice1, NULL, 10);
+				*s = ':';
+				slice1 = slice2 = ++s;
+
+				/* Look for the end */
+				if ((s < end) && (*s == '-')) s++;
+				while ((s < end) && ((*s >= '0') && (*s <= '9'))) s++;
+
+				if (*s != ']') {
+					slice_begin = CHEROKEE_BUF_SLIDE_NONE;
+				} else {
+					*s = '\0';
+					slice_end = strtol (slice1, NULL, 10);
+					*s = ']';
+				}
+			}
+		}
+
 		/* Copy the text before the token
 		 */
 		cherokee_buffer_add (&tem->text, p, token1 - p);
@@ -196,16 +242,21 @@ cherokee_template_parse (cherokee_template_t *tem,
 		cherokee_buffer_clean (&token);
 		cherokee_buffer_add   (&token, token1+2, (token2-token1)-2);
 
-		/* Log the token and skip it
+		/* Create the replacement object
 		 */
 		ret = replacement_new (&repl);
 		if (ret != ret_ok) {
 			goto out;
 		}
 
-		repl->pos = tem->text.len;
+		repl->pos         = tem->text.len;
+		repl->slice.begin = slice_begin;
+		repl->slice.end   = slice_end;
+
 		cherokee_list_add_tail (&repl->listed, &tem->replacements);
 
+		/* Assign the token object
+		 */
 		list_for_each (i, &tem->tokens) {
 			cherokee_template_token_t *token_i = TEMPLATE_TOKEN(i);
 
@@ -221,9 +272,14 @@ cherokee_template_parse (cherokee_template_t *tem,
 			goto out;
 		}
 
-		/* Get ready for the next one
+		/* Get ready for the next iteration
 		 */
-		p = token2+1;
+		if (s != NULL) {
+			p = s + 1;
+			s = NULL;
+		} else  {
+			p = token2+1;
+		}
 	}
 
 out:
@@ -277,11 +333,35 @@ cherokee_template_render (cherokee_template_t *tem,
 					     repl->pos - pos);
 		}
 
-		/* Add the token
+		/* Add the token (slide)
 		 */
-		ret = repl->token->func (tem, repl->token, output, param);
-		if (unlikely (ret != ret_ok))
-			return ret;
+		if ((repl->slice.begin != CHEROKEE_BUF_SLIDE_NONE) ||
+		    (repl->slice.end   != CHEROKEE_BUF_SLIDE_NONE))
+		{
+			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+			ret = repl->token->func (tem, repl->token, &tmp, param);
+			if (unlikely (ret != ret_ok)) {
+				cherokee_buffer_mrproper (&tmp);
+				return ret;
+			}
+
+			ret = cherokee_buffer_add_buffer_slice (output, &tmp, repl->slice.begin, repl->slice.end);
+			if (unlikely (ret != ret_ok)) {
+				cherokee_buffer_mrproper (&tmp);
+				return ret;
+			}
+
+			cherokee_buffer_mrproper (&tmp);
+
+		/* Add the token (regular)
+		 */
+		} else {
+			ret = repl->token->func (tem, repl->token, output, param);
+			if (unlikely (ret != ret_ok)) {
+				return ret;
+			}
+		}
 
 		pos = repl->pos;
 	}

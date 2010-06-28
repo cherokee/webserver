@@ -209,6 +209,81 @@ cherokee_buffer_add_buffer (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 
 
 ret_t
+cherokee_buffer_add_buffer_slice (cherokee_buffer_t *buf,
+				  cherokee_buffer_t *buf2,
+				  ssize_t            begin,
+				  ssize_t            end)
+{
+	ssize_t pos_end;
+	ssize_t pos_begin;
+
+	/* Ensure there's something to copy
+	 */
+	if (unlikely (cherokee_buffer_is_empty (buf2)))
+		return ret_ok;
+
+	/* Check the end
+	 */
+	if (end == CHEROKEE_BUF_SLIDE_NONE) {
+		/* [__:] */
+		pos_end = buf2->len;
+	} else {
+		if (end > 0) {
+			/* [__:x] */
+			pos_end = end;
+		} else {
+			if ((-end) > buf2->len) {
+				/* [__:-x] */
+				pos_end = buf2->len - (-end);
+			} else {
+				/* [__:-xxxxx] */
+				return ret_ok;
+			}
+		}
+	}
+
+	/* Check the beginning
+	 */
+	if (begin == CHEROKEE_BUF_SLIDE_NONE) {
+		/* [:__] */
+		pos_begin = 0;
+	} else {
+		if (begin >= 0) {
+			if (begin > buf2->len) {
+				/* [xxxx:__]  */
+				pos_begin = buf2->len;
+			} else {
+				/* [x:__] */
+				pos_begin = begin;
+			}
+		} else {
+			if ((-begin) < buf2->len) {
+				/* [-x:__] */
+				pos_begin = buf2->len - begin;
+			} else {
+				/* [-xxxx:__] */
+				pos_begin = 0;
+			}
+		}
+	}
+
+	/* Sanity check
+	 */
+	if (unlikely ((pos_begin < 0)       ||
+		      (pos_end < 0)         ||
+		      (pos_end > buf2->len) ||
+		      (pos_end < pos_begin)))
+	{
+		return ret_ok;
+	}
+
+	/* Copy the substring
+	 */
+	return cherokee_buffer_add (buf, buf2->buf + pos_begin, pos_end - pos_begin);
+}
+
+
+ret_t
 cherokee_buffer_add_fsize (cherokee_buffer_t *buf, CST_OFFSET size)
 {
 	ret_t       ret;
