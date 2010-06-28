@@ -20,6 +20,7 @@
 # 02110-1301, USA.
 #
 
+import types
 from consts import *
 from Widget import Widget
 from Server import publish, get_scgi
@@ -40,19 +41,29 @@ $.ajax({
 """
 
 class ProxyRequest:
-    def __call__ (self, xmlrpc_func, format_func):
+    def __call__ (self, xmlrpc_func, format_func, debug):
         try:
             return format_func (xmlrpc_func())
         except:
+            if debug:
+                import traceback
+                traceback.print_exc()
             return ''
 
 class XMLRPCProxy (Widget):
-    def __init__ (self, xmlrpc_func, format_func, props=None):
+    def __init__ (self, xmlrpc_func, format_func, debug=False, props=None):
         Widget.__init__ (self)
         self._url_local = '/proxy_widget_%d' %(self.uniq_id)
 
+        # Sanity checks
+        assert type(xmlrpc_func) in (types.FunctionType, types.MethodType)
+        assert type(format_func) in (types.FunctionType, types.MethodType)
+
         # Register the proxy path
-        publish (self._url_local, ProxyRequest, xmlrpc_func=xmlrpc_func, format_func=format_func)
+        publish (self._url_local, ProxyRequest,
+                 xmlrpc_func = xmlrpc_func,
+                 format_func = format_func,
+                 debug       = debug)
 
     def Render (self):
        render = Widget.Render(self)
