@@ -26,3 +26,59 @@ request to the `alo.users.example.com` domain for the examples:
 |`${subdomain1}`    |users                 |First sub-domain
 |`${subdomain2}`    |alo                   |Second sub-domain
 |===================================================================
+
+
+[[slicing]]
+Slicing
+~~~~~~~
+The template subsystem is sophisticated enough to provide slicing
+support, with a grammar that is heavily inspired in the Python syntax.
+It supports positive and negative indexes, and the omission of one of
+the index numbers.
+
+This basically allows to define partial replacements for any of the
+supported variables, meaning that a portion of the replacement string
+can be used instead of the whole string.
+
+If you are not familiar with the Python syntax, these are the rules:
+
+. For any given `string`, a slice is denoted as `string[x:y]`
+
+. Indices start at 0, and [x:y] denotes a range comprehending from
+index x (included) to index y (excluded).
+
+. If negative indices are used, the count starts backwards from the
+last element, meaning -1 will be the last, -2 will be the previous one
+and so on.
+
+It is pretty straight forward. Here are some examples:
+
+[options="header"]
+|===================================================================
+|Variable         |Explanation
+|`${domain}[:1]`  |From the beginning of the string until the character
+                   at index `1` (not included)
+|`${domain}[1:2]` |From index `1` (included), to index `2` (not included)
+|`${domain}[:-1]` |From the beginning of the string until the last
+                   character (not included). Since `0` is the first
+                   character, counting backwards one element would be
+                   the last element of the string.
+|===================================================================
+
+
+As a practical usage example, we will suppose a scenario where
+thousands of virtual servers are distributed within a two-level
+directory tree in order to speed things up. Something like:
+
+-------
+  /var/www/e/x/example.com
+  /var/www/c/h/cherokee-project.com
+  /var/www/1/2/12345.com
+-------
+
+The "Advanced Virtual Hosting" supports this type of set-up by using
+slices on the ${domain} macro.
+
+-------
+  /var/www/${domain}[:1]/${domain}[1:2]/${domain}
+-------

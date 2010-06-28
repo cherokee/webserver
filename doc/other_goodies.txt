@@ -239,3 +239,23 @@ Cherokee-Admin uses RRDtool to collect and display statistical
 data. If this feature is enabled, you will access a wide variety of
 information. Check the link:other_graphs.html[usage graphs] section
 for more details.
+
+[[templating]]
+Template subsystem
+~~~~~~~~~~~~~~~~~~~
+
+There is an advanced template subsystem used for both the
+link:config_virtual_servers_evhost.html[Advanced Virtual Hosting]
+module and the link:modules_loggers_custom.html[Custom logger].
+
+These modules can perform macro substitution to provide fine-grained
+control over their capabilities. The template subsystem provides
+slicing support in pretty much the same way the Python syntax does, so
+it can basically allow to use portion of the replacement strings
+instead of the whole thing.
+
+You can read more about the specifics of the syntax and practical
+examples on the config_virtual_servers_evhost.html#slicing[Slicing]
+section of the link:config_virtual_servers_evhost.html[Advanced
+Virtual Hosting] documentation.
+

@@ -31,6 +31,12 @@ evaluated right before writing each log entry:
 |`${vserver_name}`       |default                    |Virtual Server nick name
 |===================================================================================
 
+The templating subsystem provides slicing support in pretty much the
+same way that the Python strings do, allowing to use specific portions
+of any of these substitution macros. You can read more about this on
+the link:other_goodies.html#templating[Template Subsystem] section of
+the documentation.
+
 [[examples]]
 Example
 ~~~~~~~
