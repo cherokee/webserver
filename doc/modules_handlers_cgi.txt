@@ -21,7 +21,7 @@ This module accepts three parameters:
                                 user ID.
 |Error handler        |Boolean |Use CGI output as error message.
 |Check file           |Boolean |Check file existence to build
-                                PATH_INFO.
+                                PATH_INFO and SCRIPT_NAME.
 |Pass request         |Boolean |Pass request headers.
 |Allow X-Sendfile     |Boolean |Use the non-standard X-Sendfile
                                 header.
@@ -38,10 +38,10 @@ make major code rewrites.
 Warning:
 ~~~~~~~~
 
-The `Check file` flag affects how PATH_INFO is generated. You should
-disable this when you have an application that is running the whole
-virtual server tree, as it is a common source of problems. You can
-look at a practical example about PATH_INFO in the
+The `Check file` flag affects how PATH_INFO and SCRIPT_NAME are
+generated. You should disable this when you have an application that
+is running the whole virtual server tree, as it is a common source of
+problems. You can look at a practical example about PATH_INFO in the
 link:modules_handlers_common.html[List & Send] handler documentation.
 
 `Check file` must be disabled for cases such as Rails, Django, etc,
@@ -51,9 +51,8 @@ framework as request.
 Enabling `Check file` is the way to go if you are using any kind of
 file-based system, such as PHP.
 
-If you are reporting *404 Not found* response after you handler has
-been configured, try to deselect the `Check file` option and see how
-it goes.
+If you are unsure of the way this is being taken into account, try
+both settings and see how your application behaves.
 
 
 [[examples]]
