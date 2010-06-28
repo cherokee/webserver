@@ -7,7 +7,7 @@ Configuration Quickstart
 ------------------------
 
 This section briefly describes the whole administration web interface
-provided by link:bundle_cherokee-admin.html[cherokee-admin]. This is
+provided by link:other_bundle_cherokee-admin.html[cherokee-admin]. This is
 the recommended way of configuring Cherokee. If you are looking for
 development information relevant to your automation and scripting
 needs, you should refer to the appropriate section, especially the
@@ -87,7 +87,7 @@ virtual servers, PHP support, some redirection rules and a simple
 authentication mechanism.
 
 To follow this walkthrough you need to be running
-link:bundle_cherokee-admin.html[cherokee-admin]. This is an
+link:other_bundle_cherokee-admin.html[cherokee-admin]. This is an
 administration tool, so you will need system administrator rights.
 
 ----
@@ -105,7 +105,7 @@ connections, caching I/O, single thread
 Now you can access the administration interface simply by opening your
 web browser and visiting
 link:http://localhost:9090[http://localhost:9090].
-link:bundle_cherokee-admin.html[Cherokee-admin] supports several
+link:other_bundle_cherokee-admin.html[Cherokee-admin] supports several
 command line parameters, so you can change the predefined port in case
 it was already in use in your system.
 

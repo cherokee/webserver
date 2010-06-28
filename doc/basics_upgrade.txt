@@ -67,11 +67,11 @@ Every effort is made to bulletproof the upgrade scripts. If any of
 them does not work for you, please send a bug report.
 However, Cherokee is a very active project and has been steadily
 advancing and incorporating technical improvements. You should really be
-using link:bundle_cherokee-admin.html[cherokee-admin] to configure your
+using link:other_bundle_cherokee-admin.html[cherokee-admin] to configure your
 system if you want to take full advantage of the new features. Even if
 the upgrade process is successful, you should use the new configuration
 file as a start point and go through the normal configuration process
-using link:bundle_cherokee-admin.html[cherokee-admin].
+using link:other_bundle_cherokee-admin.html[cherokee-admin].
 
 Also, as long as you are not using an ancient configuration file,
 every new cherokee-admin release will be able to upgrade the

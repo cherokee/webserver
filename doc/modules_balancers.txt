@@ -10,7 +10,7 @@ be made clear.
 Balancer modules only implement the balancing strategy. To actually
 use one of these strategies you will need to select a
 link:modules_handlers.html[handler] that makes use of balancers in the
-link:bundle_cherokee-admin.html[cherokee-admin] interface.
+link:other_bundle_cherokee-admin.html[cherokee-admin] interface.
 
 These handlers can be chosen within the
 `Handler` tab of the link:config_virtual_servers_rule.html[Rule

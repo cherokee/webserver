@@ -1,7 +1,10 @@
-== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+== link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
+///////////////////////////////////////////////////////////////////
+Last checked: Cherokee 1.0.5b
+///////////////////////////////////////////////////////////////////
 
-cherokee-admin
---------------
+Man pages: cherokee-admin
+-------------------------
 
 This is the administration interface that allows for hassle-free,
 simple and easy configuration of the Cherokee web server. It is the

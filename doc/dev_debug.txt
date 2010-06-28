@@ -108,7 +108,7 @@ interesting for your trace. Besides, there are a few special cases:
 * You can also access the functionality of CHEROKEE_TRACE through
   `cherokee-tweak`. Refer to the apropriate section of the
   documentation to learn more about this:
-  link:bundle_cherokee-tweak.html[cherokee-tweak].
+  link:other_bundle_cherokee-tweak.html[cherokee-tweak].
 
 
 * Lastly a utility is provided, `contrib/tracelor.py`, to provide

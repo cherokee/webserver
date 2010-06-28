@@ -1,7 +1,10 @@
-== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+== link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
+///////////////////////////////////////////////////////////////////
+Last checked: Cherokee 1.0.5b
+///////////////////////////////////////////////////////////////////
 
-Cherokee Bundle: cherokee-tweak
--------------------------------
+Man pages: cherokee-tweak
+-------------------------
 
 This command-line tool is also not as well known as it would. Again
 this is not by lack of merits, which in fact are considerable. Its
@@ -72,7 +75,7 @@ This is the full information provided by the manpage.
 **********************************************************************
 
 To use `cherokee-tweak`, an administrative interface must be defined
-within link:bundle_cherokee-admin.html[cherokee-admin]. That is, you
+within link:other_bundle_cherokee-admin.html[cherokee-admin]. That is, you
 must define a path managed by the handler `Remote
 Administration`. This can be done through the 'Virtual Servers' option,
 in 'Behavior' and using the 'Add new rule' option.

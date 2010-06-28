@@ -1,7 +1,10 @@
-== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+== link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
+///////////////////////////////////////////////////////////////////
+Last checked: Cherokee 1.0.5b
+///////////////////////////////////////////////////////////////////
 
-Cherokee Bundle: cget
----------------------
+Man pages: cget
+---------------
 
 This is an accessory tool developed for testing purposes of the
 capabilities of Cherokee in the early releases. Over the time new

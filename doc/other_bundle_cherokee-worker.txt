@@ -1,13 +1,14 @@
-== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+== link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
+///////////////////////////////////////////////////////////////////
+Last checked: Cherokee 1.0.5b
+///////////////////////////////////////////////////////////////////
 
-Cherokee Bundle: cherokee-worker
---------------------------------
+Man pages: cherokee-worker
+--------------------------
+This executable is meant to be invoked only by the main
+link:other_bundle_cherokee.html[cherokee] instance. Executing it directly is
+a discouraged practice.
 
-This is the main Cherokee program. It can be launched in several ways
-as shown in the section link:basics_running_cherokee.html[Running
-Cherokee]. Unless specified otherwise, `cherokee-worker` will try to
-run with the configuration present in your default
-link:dev_cherokee.conf.html[cherokee.conf] file.
 
 This is the full information provided by the manpage:
 **********************************************************************
@@ -30,8 +31,12 @@ This is the full information provided by the manpage:
 
 **********************************************************************
 
-The accepted parameters are those of the
-link:bundle_cherokee.html[cherokee] binary.
+It can be launched in several ways as shown in the section
+link:basics_running_cherokee.html[Running Cherokee]. Unless specified
+otherwise, `cherokee-worker` will try to run with the configuration
+present in your default link:dev_cherokee.conf.html[cherokee.conf]
+file. The accepted parameters are those of the
+link:other_bundle_cherokee.html[cherokee] binary.
 
 To illustrate the usefulness of such options take the following
 example:

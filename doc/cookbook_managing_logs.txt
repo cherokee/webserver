@@ -9,7 +9,7 @@ applies to the process of log rotation. No need to interrupt any
 active connections just to do this.
 
 This operation involves using
-link:bundle_cherokee-tweak.html[cherokee-tweak] and the
+link:other_bundle_cherokee-tweak.html[cherokee-tweak] and the
 link:modules_handlers_admin.html[remote administration] handler.
 
 Logging is an operation performed on a per-virtual-server basis, so
@@ -98,6 +98,6 @@ Log file '/var/log/cherokee.access' moved to '/var/log/cherokee.access.1' succes
 Restoring production mode.. OK
 -----
 
-That should do it. link:bundle_cherokee-tweak.html[cherokee-tweak] is
+That should do it. link:other_bundle_cherokee-tweak.html[cherokee-tweak] is
 a powerful tool. Take a look at the parameters and you find out if it
 can solve some of your administration problems.

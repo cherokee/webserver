@@ -16,17 +16,6 @@ link:basics.html[Getting started]: Cherokee basics
  . link:basics_running_cherokee.html[Running Cherokee]: Basic steps to run Cherokee.
 
 *********************************
-link:bundle.html[Cherokee Bundle]: Details about each program bundled with Cherokee
-*********************************
-
- . link:bundle_cherokee.html[cherokee]: Main web server invoker.
- . link:bundle_cherokee-admin.html[cherokee-admin]: The configuration UI.
- . link:bundle_cherokee-config.html[cherokee-config]: Information retriever.
- . link:bundle_cherokee-tweak.html[cherokee-tweak]: Cherokee Swiss army knife
- . link:bundle_cherokee-worker.html[cherokee-worker]: Web server stand alone program.
- . link:bundle_cget.html[cget]: Web retriever.
-
-*********************************
 link:config.html[Configuration]: Set up process explained
 *********************************
 
@@ -133,6 +122,13 @@ link:other.html[Other information]: Miscellaneus
   . link:other_signals.html[Signals]: Signals supported by Cherokee.
   . link:other_community.html[Community]: More information sources.
   . link:other_errors.html[Common errors]: Some typical production  errors and their cause.
+  . link:other_bundle.html[Man pages]: Details about each program bundled with Cherokee
+    - link:other_bundle_cherokee.html[cherokee]: Main web server invoker.
+    - link:other_bundle_cherokee-admin.html[cherokee-admin]: The configuration UI.
+    - link:other_bundle_cherokee-config.html[cherokee-config]: Information retriever.
+    - link:other_bundle_cherokee-tweak.html[cherokee-tweak]: Cherokee Swiss army knife
+    - link:other_bundle_cherokee-worker.html[cherokee-worker]: Web server stand alone program.
+    - link:other_bundle_cget.html[cget]: Web retriever.
 
 *********************************
 link:dev.html[Development info]: Things of interest to developers

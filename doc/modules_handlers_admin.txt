@@ -6,7 +6,7 @@ Handler: Remote Administration
 This handler is used to create rules that can provide information
 about the running server useful for System Administration.
 When any such rule is matched, a
-link:bundle_cherokee-tweak.html[cherokee-tweak] instance will have
+link:other_bundle_cherokee-tweak.html[cherokee-tweak] instance will have
 full access to this data stream.
 
 Note that providing real-real time information about the status of a
@@ -23,6 +23,6 @@ selectable system traces such as the ones provided by CHEROKEE_TRACE.
 
 Check the link:dev_debug.html[Debugging] section for more details on
 this, and the section about
-link:bundle_cherokee-tweak.html[cherokee-tweak] for specific usage
+link:other_bundle_cherokee-tweak.html[cherokee-tweak] for specific usage
 information.
 

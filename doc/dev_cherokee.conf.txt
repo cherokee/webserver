@@ -20,7 +20,7 @@ installation parameters.
 
 If you are completely sure about what you are doing, you can modify it
 by hand. We recommend you not to do so, since everything can be
-handled from link:bundle_cherokee-admin.html[cherokee-admin] and a lot
+handled from link:other_bundle_cherokee-admin.html[cherokee-admin] and a lot
 of security measures and consistency checks are made to ensure you end
 up with a well formed `cherokee.conf` file.
 

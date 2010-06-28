@@ -137,7 +137,7 @@ Provide some configurable information about the server.
   Administration**
 +
 Implements an administration interface to work with
-link:bundle_cherokee-tweak.html[cherokee-tweak].
+link:other_bundle_cherokee-tweak.html[cherokee-tweak].
 **********************************************************************
 
 
@@ -290,7 +290,7 @@ both of them, the interface allows to choose whether one or both are
 to be used.
 
 
-[[Traffic Shaping]]
+[[traffic]]
 Traffic Shaping
 ~~~~~~~~~~~~~~~
 

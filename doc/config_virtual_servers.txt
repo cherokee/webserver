@@ -58,13 +58,27 @@ server details page.
 +
 - *Document Root*
 +
-This is the directory from which Cherokee will serve files. The set of
-rules is checked from the highest to the lowest possible
-priority. Once a rule is matched, the server appends the path from the
-requested URL to the document root to make the path to the
-document. If it is a directory, this information is used. If other
-rules apply to a parent directory, those are applied as well without
-overwriting the original behavior:
+
+This is the directory from which Cherokee will serve files. For
+example, if the Document Root is `/var/www`, then a client's request
+for `http://www.example.com/index.html` refers to
+`/var/www/index.html` on the server.
++
+In the simplest case, the server might return the contents of the file
+to the client. But Cherokee provides a richer mechanism of behaviors,
+based on the the URL. Behaviors are described
+link:#behavior[below]. For now, just know that the combination of a
+URL and the Document Root specifies the match (for instance, a file on
+the server), but does not specify how that file will be served. Note
+that not all rules will necessarily match files to be sent to the
+client, so the Document Root is not always used.
++
+This is controlled by behavior rules. The set of rules is checked from
+the highest to the lowest possible priority. Once a rule is matched,
+the server appends the path from the requested URL to the document
+root to make the path to the document. If it is a directory, this
+information is used. If other rules apply to a parent directory, those
+are applied as well without overwriting the original behavior:
 +
 ----
 	http://www.example.com/index.html refers to /var/www/index.html
@@ -93,7 +107,13 @@ be added to the existing one. To use the wizards in this manner you
 will have to trigger them from the `Behavior` panel instead of the
 `Virtual Server Panel`. This `Behavior` panel is specific to a given
 virtual host, and can be activated using the `Rule Management` button
-of the `Behavior` tab.
+of the `Behavior` tab. You can read more about automatic configuration
+on the link:config_wizards.html[wizards] section. Regardless of them
+being used from the `Virtual Server` panel or the `Behavior` panel,
+one or more rules will be created to suit a particular scenario. The
+main difference will lay on the wizard creating a new virtual server
+or just customizing an existing one, depending on the instantiation
+context.
 
 *Clone Selected Virtual Server* is simply a matter of selecting a
 target name and a source virtual server currently present. Every

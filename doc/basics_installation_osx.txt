@@ -37,7 +37,7 @@ make -j4
 sudo make install
 -----------------------------------------
 
-. Start link:bundle_cherokee-admin.html[cherokee-admin]
+. Start link:other_bundle_cherokee-admin.html[cherokee-admin]
 +
 Alternatively, you can follow the link:#autostart[Autostart]
 instructions to load the web server at boot time.

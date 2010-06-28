@@ -3,13 +3,13 @@
 Other: Signals
 --------------
 
-link:bundle_cherokee-admin.html[Cherokee-Admin] is all you need to
+link:other_bundle_cherokee-admin.html[Cherokee-Admin] is all you need to
 interact with Cherokee. However, should you want to tap directly into
 the underlying communication mechanism you would need to send the
-supported signals to the  link:bundle_cherokee.html[cherokee] process.
+supported signals to the  link:other_bundle_cherokee.html[cherokee] process.
 
 If needed it will relay the appropriate signals to any
-link:bundle_cherokee-worker.html[cherokee-worker] instances.
+link:other_bundle_cherokee-worker.html[cherokee-worker] instances.
 
 The following signals are supported by Cherokee:
 

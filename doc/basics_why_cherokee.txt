@@ -17,7 +17,7 @@ and upgrades, Reverse HTTP Proxy, and much more.
 It is highly efficient, extremely lightweight and provides rock solid
 stability. Among its many features there is one that deserves special
 credit: a user friendly interface called
-link:bundle_cherokee-admin.html[cherokee-admin] that is provided for a
+link:other_bundle_cherokee-admin.html[cherokee-admin] that is provided for a
 no-hassle configuration of every single feature of the server. This
 administration interface allows you to configure the web server
 without having to worry about editing a text file written with a

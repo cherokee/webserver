@@ -28,7 +28,7 @@ also be used to trace Cherokee's state on the fly, even remotely and
 on production servers.
 
 This tool has its own documentation under the
-link:bundle_cherokee-tweak.html[cherokee-tweak] section.
+link:other_bundle_cherokee-tweak.html[cherokee-tweak] section.
 
 [[x-sendifle]]
 X-Sendfile
