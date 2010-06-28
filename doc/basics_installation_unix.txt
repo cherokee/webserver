@@ -73,9 +73,6 @@ used parameters are these:
 |`--enable-trace`        |Enable the tracing mechanism
 |`--enable-backtraces`   |Enable backtraces on error
 |`--disable-epoll`       |Disable epoll() support
-|`--disable-pthread`     |Disable threading support
-|`--disable-ipv6`        |Disable IPv6 support
-|`--disable-pam`         |Disable PAM support
 |`--enable-static-module=MODULE`| build listed modules as static. Accepts ALL
 |======================================================================
 
