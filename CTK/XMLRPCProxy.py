@@ -56,8 +56,8 @@ class XMLRPCProxy (Widget):
         self._url_local = '/proxy_widget_%d' %(self.uniq_id)
 
         # Sanity checks
-        assert type(xmlrpc_func) in (types.FunctionType, types.MethodType)
-        assert type(format_func) in (types.FunctionType, types.MethodType)
+        assert type(xmlrpc_func) in (types.FunctionType, types.MethodType, types.InstanceType)
+        assert type(format_func) in (types.FunctionType, types.MethodType, types.InstanceType)
 
         # Register the proxy path
         publish (self._url_local, ProxyRequest,
