@@ -21,6 +21,7 @@
 #
 
 import re
+import types
 
 try:
     import json
@@ -105,6 +106,17 @@ def json_dump (obj):
 # Unicode, UTF-8
 #
 def to_utf8(s):
-    if type(s) == type(u''):
+    if type(s) == types.StringType:
+        return s
+    elif type(s) == types.UnicodeType:
         return s.encode('utf-8')
-    return s
+    elif type(s) == types.ListType:
+        return [to_utf8(x) for x in s]
+    elif type(s) == types.TupleType:
+        return tuple([to_utf8(x) for x in s])
+    elif type(s) == types.DictType:
+        for k in s.keys():
+            s[k] = to_utf8(s[k])
+        return s
+
+    return str(s)
