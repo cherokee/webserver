@@ -21,12 +21,13 @@
 #
 
 from Widget import Widget
+from util import to_utf8
 
 class RawHTML (Widget):
     def __init__ (self, html='', js=''):
         Widget.__init__ (self)
-        self.html = html
-        self.js   = js
+        self.html = to_utf8(html)
+        self.js   = to_utf8(js)
 
     def __add__ (self, txt):
         assert type(txt) == string

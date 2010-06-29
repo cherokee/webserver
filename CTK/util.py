@@ -99,3 +99,12 @@ def json_dump (obj):
 
     # Python 2.5
     return json.write(obj)
+
+
+#
+# Unicode, UTF-8
+#
+def to_utf8(s):
+    if type(s) == type(u''):
+        return s.encode('utf-8')
+    return s
