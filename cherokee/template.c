@@ -202,6 +202,7 @@ cherokee_template_parse (cherokee_template_t *tem,
 
 		/* Text slices support
 		 */
+		s           = NULL;
 		slice_begin = CHEROKEE_BUF_SLIDE_NONE;
 		slice_end   = CHEROKEE_BUF_SLIDE_NONE;
 
