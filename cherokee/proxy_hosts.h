@@ -65,6 +65,11 @@ typedef struct {
 
 	/* Out */
 	size_t                         sent_out;
+	struct {
+		cherokee_buffer_t      buf_temp;
+		cherokee_boolean_t     do_buf_sent;
+		off_t                  sent;
+	} post;
 } cherokee_handler_proxy_conn_t;
 
 #define PROXY_HOSTS(h) ((cherokee_handler_proxy_hosts_t *)(h))

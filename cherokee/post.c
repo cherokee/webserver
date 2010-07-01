@@ -705,13 +705,3 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 
 	return ret_error;
 }
-
-
-ret_t
-cherokee_post_send_reset (cherokee_post_t *post)
-{
-	post->send.read  = 0;
-	post->send.phase = cherokee_post_send_phase_read;
-
-	return ret_ok;
-}

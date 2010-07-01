@@ -92,8 +92,6 @@ ret_t cherokee_post_read           (cherokee_post_t          *post,
 
 /* Read + Send
  */
-ret_t cherokee_post_send_reset     (cherokee_post_t          *post);
-
 ret_t cherokee_post_send_to_socket (cherokee_post_t          *post,
 				    cherokee_socket_t        *sock_in,
 				    cherokee_socket_t        *sock_out,

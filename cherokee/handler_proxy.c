@@ -623,41 +623,154 @@ do_connect (cherokee_handler_proxy_t *hdl)
 	return ret_ok;
 }
 
+static ret_t
+send_post_reset (cherokee_handler_proxy_t *hdl)
+{
+	if (! hdl->pconn->post.do_buf_sent) {
+		/* The post information is not buffered. Thus, there
+		 * is no way to resend it to the back-end server.
+		 */
+		TRACE (ENTRIES, "POST could not be recovered: %s\n", "fail");
+		return ret_not_found;
+	}
+
+	/* The post has been buffered. It can be resend.
+	 */
+	TRACE (ENTRIES, "Recovering POST from buffer: %s\n", "ok");
+
+	hdl->pconn->post.sent = 0;
+	return ret_ok;
+}
 
 static ret_t
 send_post (cherokee_handler_proxy_t *hdl)
 {
-	ret_t                     ret;
-	cherokee_connection_t    *conn     = HANDLER_CONN(hdl);
-	cherokee_socket_status_t  blocking = socket_closed;
-	cherokee_boolean_t        did_IO   = false;
+	ret_t                  ret;
+	size_t                 written  = 0;
+	cherokee_connection_t *conn     = HANDLER_CONN(hdl);
+	cherokee_buffer_t     *buffer   = &hdl->pconn->post.buf_temp;
 
-	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
-					    &hdl->pconn->socket, NULL, &blocking, &did_IO);
+	/* Sent buffered information
+	 */
+	if (! cherokee_buffer_is_empty (buffer)) {
 
-	if (did_IO) {
-		cherokee_connection_update_timeout (conn);
+		/* Buffer sent post
+		 */
+		if ((hdl->pconn->post.do_buf_sent) &&
+		    (hdl->pconn->post.sent < buffer->len))
+		{
+			ret = cherokee_socket_write (&conn->socket,
+						     buffer->buf + hdl->pconn->post.sent,
+						     buffer->len - hdl->pconn->post.sent,
+						     &written);
+			switch (ret) {
+			case ret_ok:
+				break;
+			case ret_eagain:
+				if (written > 0) {
+					break;
+				}
+
+				TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
+				ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
+									   hdl->pconn->socket.socket,
+									   FDPOLL_MODE_WRITE, false);
+				if (ret != ret_ok) {
+					hdl->pconn->keepalive_in = false;
+					conn->error_code = http_bad_gateway;
+					return ret_error;
+				}
+				return ret_eagain;
+			default:
+				return ret_error;
+			}
+
+			/* Keep track */
+			hdl->pconn->post.sent += written;
+
+			/* Check rollback buffer */
+			if (hdl->pconn->post.sent < buffer->len) {
+				return ret_eagain;
+
+			} else {
+				if (hdl->pconn->post.sent >= DEFAULT_READ_SIZE * 3) {
+					TRACE (ENTRIES, "Promoting POST to non-buffered after %d bytes\n", hdl->pconn->post.sent);
+
+					hdl->pconn->post.do_buf_sent = false;
+					cherokee_buffer_clean (buffer);
+					return ret_eagain;
+				}
+
+				/* fall down: read */
+			}
+		}
+
+		/* Straight deliver
+		 */
+		else {
+			ret = cherokee_socket_bufwrite (&hdl->pconn->socket, buffer, &written);
+			switch (ret) {
+			case ret_ok:
+				break;
+			case ret_eagain:
+				if (written > 0) {
+					break;
+				}
+
+				TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
+				ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
+									   hdl->pconn->socket.socket,
+									   FDPOLL_MODE_WRITE, false);
+				if (ret != ret_ok) {
+					hdl->pconn->keepalive_in = false;
+					conn->error_code = http_bad_gateway;
+					return ret_error;
+				}
+				return ret_eagain;
+			default:
+				return ret_error;
+			}
+
+			cherokee_buffer_move_to_begin (buffer, written);
+			TRACE (ENTRIES, "sent=%d, remaining=%d\n", written, buffer->len);
+
+			if (! cherokee_buffer_is_empty (buffer)) {
+				return ret_eagain;
+			}
+
+			/* fall down: read*/
+		}
 	}
 
+	/* Read from the client
+	 */
+	if (cherokee_post_read_finished (&conn->post)) {
+		return ret_ok;
+	}
+
+	ret = cherokee_post_read (&conn->post, &conn->socket, buffer);
 	switch (ret) {
 	case ret_ok:
+		TRACE (ENTRIES, "Post read from client: ret=%d len=%d\n", ret, buffer->len);
+		cherokee_connection_update_timeout (conn);
 		break;
-
 	case ret_eagain:
-		if (blocking == socket_writing) {
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
-							     hdl->pconn->socket.socket,
-							     FDPOLL_MODE_WRITE, false);
-			return ret_deny;
+		TRACE (ENTRIES, "Post read: EAGAIN, buffer has %d bytes\n", buffer->len);
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							   HANDLER_CONN(hdl),
+							   hdl->pconn->socket.socket,
+							   FDPOLL_MODE_READ, false);
+		if (ret != ret_ok) {
+			hdl->pconn->keepalive_in = false;
+			conn->error_code = http_bad_gateway;
+			return ret_error;
 		}
 		return ret_eagain;
-
 	default:
-		conn->error_code = http_bad_gateway;
 		return ret;
 	}
 
-	return ret_ok;
+	return ret_eagain;
 }
 
 
@@ -676,7 +789,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		 */
 		if (conn->post.has_info) {
 			// TODO: Is it necessary?
-			cherokee_post_send_reset (&conn->post);
+			send_post_reset (hdl);
 		}
 
 		hdl->init_phase = proxy_init_get_conn;
@@ -912,7 +1025,14 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				return ret_error;
 			}
 
-			cherokee_post_send_reset (&conn->post);
+			ret = send_post_reset (hdl);
+			if (ret != ret_ok) {
+				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
+				return ret_error;
+			}
+
 			hdl->respinned = true;
 			goto reconnect;
 		default:

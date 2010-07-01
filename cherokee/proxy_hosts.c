@@ -218,6 +218,10 @@ poll_release (cherokee_handler_proxy_poll_t *poll,
 	pconn->sent_out     = 0;
 	pconn->enc          = pconn_enc_none;
 
+	pconn->post.do_buf_sent = true;
+	pconn->post.sent        = 0;
+
+	cherokee_buffer_clean (&pconn->post.buf_temp);
 	cherokee_buffer_clean (&pconn->header_in_raw);
 
 	/* Store it to be reused
@@ -241,6 +245,10 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 	 */
 	cherokee_socket_init (&n->socket);
 
+	n->post.sent        = 0;
+	n->post.do_buf_sent = true;
+	cherokee_buffer_init (&n->post.buf_temp);
+
 	cherokee_buffer_init (&n->header_in_raw);
 	cherokee_buffer_ensure_size (&n->header_in_raw, 512);
 
@@ -261,6 +269,7 @@ cherokee_handler_proxy_conn_free (cherokee_handler_proxy_conn_t *pconn)
 	cherokee_socket_close    (&pconn->socket);
 	cherokee_socket_mrproper (&pconn->socket);
 
+	cherokee_buffer_mrproper (&pconn->post.buf_temp);
 	cherokee_buffer_mrproper (&pconn->header_in_raw);
 
 	return ret_ok;
