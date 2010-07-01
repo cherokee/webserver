@@ -688,26 +688,10 @@ send_post (cherokee_handler_proxy_t *hdl)
 				return ret_error;
 			}
 
-			/* Keep track */
 			hdl->pconn->post.sent += written;
 			TRACE (ENTRIES, "Wrote POST: %d bytes, total sent %d\n", written, hdl->pconn->post.sent);
 
-			/* Check rollback buffer */
-			if (hdl->pconn->post.sent < buffer->len) {
-				TRACE (ENTRIES, "Still have POST to send: %d bytes\n", buffer->len - hdl->pconn->post.sent);
-				return ret_eagain;
-
-			} else {
-				if (hdl->pconn->post.sent >= DEFAULT_READ_SIZE * 3) {
-					TRACE (ENTRIES, "Promoting POST to non-buffered after %d bytes\n", hdl->pconn->post.sent);
-
-					hdl->pconn->post.do_buf_sent = false;
-					cherokee_buffer_clean (buffer);
-					return ret_eagain;
-				}
-
-				/* fall down: read */
-			}
+			/* fall down: read*/
 		}
 
 		/* Straight deliver
@@ -739,24 +723,41 @@ send_post (cherokee_handler_proxy_t *hdl)
 			cherokee_buffer_move_to_begin (buffer, written);
 			TRACE (ENTRIES, "sent=%d, remaining=%d\n", written, buffer->len);
 
-			if (! cherokee_buffer_is_empty (buffer)) {
-				return ret_eagain;
-			}
-
 			/* fall down: read*/
 		}
 	}
 
-	/* Read from the client
+	/* Has it finished?
 	 */
 	if (cherokee_post_read_finished (&conn->post)) {
-		return ret_ok;
+		TRACE(ENTRIES, "POST has been read completely: %s\n", "ok");
+
+		if (hdl->pconn->post.do_buf_sent) {
+			if (hdl->pconn->post.sent >= buffer->len)
+				return ret_ok;
+		} else {
+			if (cherokee_buffer_is_empty (buffer))
+				return ret_ok;
+		}
+		return ret_eagain;
 	}
 
+	/* Still have data to be sent
+	 */
+	if (hdl->pconn->post.do_buf_sent) {
+		if (hdl->pconn->post.sent < buffer->len)
+			return ret_eagain;
+	} else {
+		if (! cherokee_buffer_is_empty (buffer))
+			return ret_eagain;
+	}
+
+	/* Read from the client
+	 */
 	ret = cherokee_post_read (&conn->post, &conn->socket, buffer);
 	switch (ret) {
 	case ret_ok:
-		TRACE (ENTRIES, "Post read from client: ret=%d len=%d\n", ret, buffer->len);
+		TRACE (ENTRIES, "Post has %d bytes - after the addition\n", buffer->len);
 		cherokee_connection_update_timeout (conn);
 		break;
 	case ret_eagain:
@@ -773,6 +774,17 @@ send_post (cherokee_handler_proxy_t *hdl)
 		return ret_eagain;
 	default:
 		return ret;
+	}
+
+	/* Buffered -> Non-buffered promotion
+	 */
+	if ((hdl->pconn->post.do_buf_sent) &&
+	    (buffer->len >= DEFAULT_READ_SIZE * 3))
+	{
+		cherokee_buffer_move_to_begin (buffer, hdl->pconn->post.do_buf_sent);
+		TRACE (ENTRIES, "Promoted POST to non-buffered mode. Length afterwards: %d\n", buffer->len);
+
+		hdl->pconn->post.do_buf_sent = false;
 	}
 
 	return ret_eagain;
