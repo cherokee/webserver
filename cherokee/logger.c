@@ -160,7 +160,7 @@ parse_x_real_ip (cherokee_logger_t *logger, cherokee_connection_t *conn)
 		}
 
 		p = val;
-		while (*p) {
+		while (*p && (p - val < len)) {
 			if ((*p == ' ') || (*p == ',')) {
 				len = p - val;
 				break;
