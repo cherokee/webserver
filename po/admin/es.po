@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '1.0.0'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-06-22 16:53+0200\n"
-"PO-Revision-Date: 2010-05-24 16:40+0200\n"
+"POT-Creation-Date: 2010-07-01 19:58+0200\n"
+"PO-Revision-Date: 2010-07-01 21:37+0200\n"
 "Last-Translator: Taher Shihadeh <taher@unixwars.com>\n"
 "Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
@@ -124,7 +124,7 @@ msgstr "Cerrar"
 
 #: admin/CTK/CTK/Druid.py:153 admin/CTK/CTK/Druid.py:160
 #: admin/CTK/CTK/Druid.py:168 admin/CTK/CTK/Druid.py:176
-#: admin/CTK/CTK/Druid.py:182 admin/Icons.py:348 admin/Mime.py:101
+#: admin/CTK/CTK/Druid.py:182 admin/Icons.py:358 admin/Mime.py:101
 #: admin/PageGeneral.py:214 admin/PageIndex.py:348 admin/PageRule.py:213
 #: admin/PageRule.py:261 admin/PageRule.py:287 admin/PageSource.py:240
 #: admin/PageSource.py:422 admin/PageSource.py:436 admin/PageSource.py:450
@@ -176,7 +176,7 @@ msgstr "Cargando"
 msgid "Enabled"
 msgstr "Activo"
 
-#: admin/CTK/CTK/Submitter.py:73 admin/CTK/CTK/TextField.py:66
+#: admin/CTK/CTK/Submitter.py:73 admin/CTK/CTK/TextField.py:76
 msgid "Optional"
 msgstr "Opcional"
 
@@ -299,14 +299,13 @@ msgstr "Lista de autenticación"
 msgid "Custom Environment Variables"
 msgstr "Variables de entorno personalizadas"
 
-#: admin/CgiBase.py:150 admin/Icons.py:342 admin/Mime.py:100
-#: admin/PageGeneral.py:213 admin/PageRule.py:260 admin/PageSource.py:239
-#: admin/PageSource.py:435 admin/PageVServers.py:237
-#: admin/plugins/authlist.py:93 admin/plugins/error_redir.py:94
-#: admin/plugins/proxy.py:117 admin/plugins/proxy.py:166
-#: admin/plugins/proxy.py:213 admin/plugins/redir.py:114
-#: admin/plugins/rehost.py:71 admin/plugins/target_ip.py:79
-#: admin/plugins/wildcard.py:70
+#: admin/CgiBase.py:150 admin/Mime.py:100 admin/PageGeneral.py:213
+#: admin/PageRule.py:260 admin/PageSource.py:239 admin/PageSource.py:435
+#: admin/PageVServers.py:237 admin/plugins/authlist.py:93
+#: admin/plugins/error_redir.py:94 admin/plugins/proxy.py:117
+#: admin/plugins/proxy.py:166 admin/plugins/proxy.py:213
+#: admin/plugins/redir.py:114 admin/plugins/rehost.py:71
+#: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
 msgid "Add"
 msgstr "Añadir"
 
@@ -394,56 +393,60 @@ msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 msgid "Document Root"
 msgstr "Raíz de documentos"
 
-#: admin/Icons.py:118 admin/Icons.py:313 admin/Mime.py:86 admin/Mime.py:120
+#: admin/Icons.py:113
+msgid "Extension List"
+msgstr "Lista de extensiones"
+
+#: admin/Icons.py:124 admin/Icons.py:323 admin/Mime.py:86 admin/Mime.py:120
 #: admin/consts.py:183 admin/plugins/extensions.py:59
 msgid "Extensions"
 msgstr "Extensiones"
 
-#: admin/Icons.py:134
-msgid "Extension List"
-msgstr "Lista de extensiones"
-
-#: admin/Icons.py:138
+#: admin/Icons.py:143
 msgid "Add New Extension"
 msgstr "Añadir nueva extensión"
 
-#: admin/Icons.py:152 admin/plugins/exists.py:75 admin/plugins/exists.py:114
-msgid "Files"
-msgstr "Ficheros"
-
-#: admin/Icons.py:167
+#: admin/Icons.py:152
 msgid "File Matches"
 msgstr "Concordancia de ficheros"
 
-#: admin/Icons.py:171
+#: admin/Icons.py:163 admin/plugins/exists.py:75 admin/plugins/exists.py:114
+msgid "Files"
+msgstr "Ficheros"
+
+#: admin/Icons.py:181
 msgid "Add New File"
 msgstr "Añadir nuevo archivo"
 
-#: admin/Icons.py:182 admin/Icons.py:314 admin/Rule.py:171 admin/consts.py:39
+#: admin/Icons.py:192 admin/Icons.py:324 admin/Rule.py:171 admin/consts.py:39
 #: admin/consts.py:123
 msgid "Default"
 msgstr "Por defecto"
 
-#: admin/Icons.py:183 admin/Icons.py:315 admin/consts.py:182
+#: admin/Icons.py:193 admin/Icons.py:325 admin/consts.py:182
 #: admin/plugins/directory.py:31
 msgid "Directory"
 msgstr "Directorio"
 
-#: admin/Icons.py:184 admin/Icons.py:316
+#: admin/Icons.py:194 admin/Icons.py:326
 msgid "Go to Parent"
 msgstr "Ir al padre"
 
-#: admin/Icons.py:191
-msgid "Modify"
-msgstr "Modificar"
+#: admin/Icons.py:201
+msgid "Modify…"
+msgstr "Modificar…"
 
-#: admin/Icons.py:199 admin/PageAdvanced.py:164 admin/PageAdvanced.py:187
+#: admin/Icons.py:209 admin/PageAdvanced.py:164 admin/PageAdvanced.py:187
 msgid "Special Files"
 msgstr "Ficheros especiales"
 
-#: admin/Icons.py:312 admin/consts.py:100
+#: admin/Icons.py:322 admin/consts.py:100
 msgid "File"
 msgstr "Fichero"
+
+#: admin/Icons.py:352
+msgid "Add…"
+msgstr "Añadir…"
 
 #: admin/Mime.py:37
 msgid "New MIME type to be added."
@@ -472,11 +475,9 @@ msgstr "Max Age"
 msgid "Add New MIME-Type"
 msgstr "Añadir nuevo MIME"
 
-#: admin/Mime.py:104 admin/plugins/error_redir.py:101
-#: admin/plugins/rehost.py:80 admin/plugins/target_ip.py:88
-#: admin/plugins/wildcard.py:79
-msgid "Add New"
-msgstr "Añadir nuevo"
+#: admin/Mime.py:104
+msgid "Add New…"
+msgstr "Añadir nuevo…"
 
 #: admin/Mime.py:120
 msgid "MIME type"
@@ -702,6 +703,7 @@ msgstr "Ruta al fichero de parámetros PEM Diffie Hellman (DH): 4096 bits"
 #: admin/PageAdvanced.py:91
 msgid "Timeout for the TLS/SSL handshake. Default: 15 seconds."
 msgstr ""
+"Tiempo de espera para la negociación TLS/SSL. Por defecto: 15 segundos."
 
 #: admin/PageAdvanced.py:115
 msgid "Keep Alive"
@@ -801,7 +803,7 @@ msgstr "Fichero PID"
 
 #: admin/PageAdvanced.py:172
 msgid "Handshake Timeout"
-msgstr ""
+msgstr "Tiempo de espera de la negociación"
 
 #: admin/PageAdvanced.py:173
 msgid "DH parameters: 512 bits"
@@ -999,10 +1001,10 @@ msgid "Security"
 msgstr "Seguridad"
 
 #: admin/PageError.py:29
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
-"problem can he solved in there."
+"problem can be solved in there."
 msgstr ""
 "El servidor sugiere consultar <a href=\"%s\">esta página</a>. Probablemente "
 "se pueda solucionar el problema desde ahí."
@@ -2143,8 +2145,8 @@ msgid "Behavior Rules"
 msgstr "Reglas de funcionamiento"
 
 #: admin/PageVServer.py:209
-msgid "Rule Management"
-msgstr "Manejo de reglas"
+msgid "Rule Management…"
+msgstr "Manejo de reglas…"
 
 #: admin/PageVServer.py:234
 msgid "Only accept Secure Connections"
@@ -2419,7 +2421,7 @@ msgstr "Chino Simplificado"
 
 #: admin/consts.py:35
 msgid "Catalan"
-msgstr ""
+msgstr "Catalán "
 
 #: admin/consts.py:40
 msgid "Product only"
@@ -3022,6 +3024,11 @@ msgstr "Error"
 #: admin/plugins/error_redir.py:89
 msgid "Add New Custom Error"
 msgstr "Añadir nuevo error personalizado"
+
+#: admin/plugins/error_redir.py:101 admin/plugins/rehost.py:80
+#: admin/plugins/target_ip.py:88 admin/plugins/wildcard.py:79
+msgid "Add New"
+msgstr "Añadir nuevo"
 
 #: admin/plugins/evhost.py:29
 msgid ""
@@ -5525,3 +5532,4 @@ msgstr "No parece ser un directorio de fuentes de Zend."
 #: admin/wizards/zend.py:49
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
 msgstr "Directorio web por el cual Zend será accedido. (Ejemplo: /zend)"
+
