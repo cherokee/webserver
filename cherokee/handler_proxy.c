@@ -626,6 +626,9 @@ do_connect (cherokee_handler_proxy_t *hdl)
 static ret_t
 send_post_reset (cherokee_handler_proxy_t *hdl)
 {
+	if (hdl->pconn == NULL)
+		return ret_ok;
+
 	if (! hdl->pconn->post.do_buf_sent) {
 		/* The post information is not buffered. Thus, there
 		 * is no way to resend it to the back-end server.
@@ -659,7 +662,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 		if ((hdl->pconn->post.do_buf_sent) &&
 		    (hdl->pconn->post.sent < buffer->len))
 		{
-			ret = cherokee_socket_write (&conn->socket,
+			ret = cherokee_socket_write (&hdl->pconn->socket,
 						     buffer->buf + hdl->pconn->post.sent,
 						     buffer->len - hdl->pconn->post.sent,
 						     &written);
@@ -687,9 +690,11 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 			/* Keep track */
 			hdl->pconn->post.sent += written;
+			TRACE (ENTRIES, "Wrote POST: %d bytes, total sent %d\n", written, hdl->pconn->post.sent);
 
 			/* Check rollback buffer */
 			if (hdl->pconn->post.sent < buffer->len) {
+				TRACE (ENTRIES, "Still have POST to send: %d bytes\n", buffer->len - hdl->pconn->post.sent);
 				return ret_eagain;
 
 			} else {
