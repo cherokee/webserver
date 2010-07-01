@@ -653,78 +653,75 @@ send_post (cherokee_handler_proxy_t *hdl)
 	cherokee_connection_t *conn     = HANDLER_CONN(hdl);
 	cherokee_buffer_t     *buffer   = &hdl->pconn->post.buf_temp;
 
-	/* Sent buffered information
+	/* Send: buffered
 	 */
-	if (! cherokee_buffer_is_empty (buffer)) {
-
-		/* Buffer sent post
-		 */
-		if ((hdl->pconn->post.do_buf_sent) &&
-		    (hdl->pconn->post.sent < buffer->len))
-		{
-			ret = cherokee_socket_write (&hdl->pconn->socket,
-						     buffer->buf + hdl->pconn->post.sent,
-						     buffer->len - hdl->pconn->post.sent,
-						     &written);
-			switch (ret) {
-			case ret_ok:
+	if ((hdl->pconn->post.do_buf_sent) &&
+	    (hdl->pconn->post.sent < buffer->len))
+	{
+		ret = cherokee_socket_write (&hdl->pconn->socket,
+					     buffer->buf + hdl->pconn->post.sent,
+					     buffer->len - hdl->pconn->post.sent,
+					     &written);
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_eagain:
+			if (written > 0) {
 				break;
-			case ret_eagain:
-				if (written > 0) {
-					break;
-				}
-
-				TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
-				ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
-									   hdl->pconn->socket.socket,
-									   FDPOLL_MODE_WRITE, false);
-				if (ret != ret_ok) {
-					hdl->pconn->keepalive_in = false;
-					conn->error_code = http_bad_gateway;
-					return ret_error;
-				}
-				return ret_eagain;
-			default:
-				return ret_error;
 			}
 
-			hdl->pconn->post.sent += written;
-			TRACE (ENTRIES, "Wrote POST: %d bytes, total sent %d\n", written, hdl->pconn->post.sent);
-
-			/* fall down: read*/
-		}
-
-		/* Straight deliver
-		 */
-		else {
-			ret = cherokee_socket_bufwrite (&hdl->pconn->socket, buffer, &written);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_eagain:
-				if (written > 0) {
-					break;
-				}
-
-				TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
-				ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
-									   hdl->pconn->socket.socket,
-									   FDPOLL_MODE_WRITE, false);
-				if (ret != ret_ok) {
-					hdl->pconn->keepalive_in = false;
-					conn->error_code = http_bad_gateway;
-					return ret_error;
-				}
-				return ret_eagain;
-			default:
+			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
+			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
+								   hdl->pconn->socket.socket,
+								   FDPOLL_MODE_WRITE, false);
+			if (ret != ret_ok) {
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
 				return ret_error;
 			}
-
-			cherokee_buffer_move_to_begin (buffer, written);
-			TRACE (ENTRIES, "sent=%d, remaining=%d\n", written, buffer->len);
-
-			/* fall down: read*/
+			return ret_eagain;
+		default:
+			return ret_error;
 		}
+
+		hdl->pconn->post.sent += written;
+		TRACE (ENTRIES, "Wrote POST: %d bytes, total sent %d\n", written, hdl->pconn->post.sent);
+
+		/* fall down: read*/
+	}
+
+	/* Send: Straight
+	 */
+	else if ((! hdl->pconn->post.do_buf_sent) &&
+		 (! cherokee_buffer_is_empty (buffer)))
+	{
+		ret = cherokee_socket_bufwrite (&hdl->pconn->socket, buffer, &written);
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_eagain:
+			if (written > 0) {
+				break;
+			}
+
+			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
+			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
+								   hdl->pconn->socket.socket,
+								   FDPOLL_MODE_WRITE, false);
+			if (ret != ret_ok) {
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
+				return ret_error;
+			}
+			return ret_eagain;
+		default:
+			return ret_error;
+		}
+
+		cherokee_buffer_move_to_begin (buffer, written);
+		TRACE (ENTRIES, "sent=%d, remaining=%d\n", written, buffer->len);
+
+		/* fall down: read*/
 	}
 
 	/* Has it finished?
@@ -764,7 +761,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 		TRACE (ENTRIES, "Post read: EAGAIN, buffer has %d bytes\n", buffer->len);
 		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							   HANDLER_CONN(hdl),
-							   hdl->pconn->socket.socket,
+							   conn->socket.socket,
 							   FDPOLL_MODE_READ, false);
 		if (ret != ret_ok) {
 			hdl->pconn->keepalive_in = false;
@@ -781,10 +778,9 @@ send_post (cherokee_handler_proxy_t *hdl)
 	if ((hdl->pconn->post.do_buf_sent) &&
 	    (buffer->len >= DEFAULT_READ_SIZE * 3))
 	{
+		hdl->pconn->post.do_buf_sent = false;
 		cherokee_buffer_move_to_begin (buffer, hdl->pconn->post.do_buf_sent);
 		TRACE (ENTRIES, "Promoted POST to non-buffered mode. Length afterwards: %d\n", buffer->len);
-
-		hdl->pconn->post.do_buf_sent = false;
 	}
 
 	return ret_eagain;
