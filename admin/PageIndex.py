@@ -42,13 +42,10 @@ from configured import *
 
 # URLs
 LINK_OCTALITY   = 'http://www.octality.com/'
-LINK_SUPPORT    = '%sengineering.html' % LINK_OCTALITY
+LINK_SUPPORT    = '%sengineering.html' %(LINK_OCTALITY)
 PROUD_USERS_WEB = "http://www.cherokee-project.com/cherokee-domain-list.html"
 OWS_PROUD       = 'http://www.octality.com/api/proud/open/'
-OWS_VERSION     = 'http://www.octality.com/api/version/'
-
-# "Latest release"
-LATEST_URL      = '/index/release'
+OWS_VERSION     = 'http://www.octality.com/api/cherokee-info/open/'
 
 # Links
 LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
@@ -59,12 +56,12 @@ LINK_LIST       = 'http://lists.octality.com/listinfo/cherokee'
 LINK_IRC        = 'irc://irc.freenode.net/cherokee'
 
 # Subscription
-SUBSCRIBE_URL   = 'http://lists.octality.com/subscribe/cherokee-dev'
-SUBSCRIBE_CHECK = 'Your subscription request has been received'
-SUBSCRIBE_APPLY = '/index/subscribe/apply'
+SUBSCRIBE_URL       = 'http://lists.octality.com/subscribe/cherokee-dev'
+SUBSCRIBE_CHECK     = 'Your subscription request has been received'
+SUBSCRIBE_APPLY     = '/index/subscribe/apply'
 
-NOTE_EMAIL      = N_("You will be sent an email requesting confirmation")
-NOTE_NAME       = N_("Optionally provide your name")
+NOTE_EMAIL          = N_("You will be sent an email requesting confirmation")
+NOTE_NAME           = N_("Optionally provide your name")
 
 # Notices
 RUNNING_NOTICE      = N_('Server is Running.')
@@ -77,13 +74,13 @@ SOCIAL_MEDIA_NOTICE = N_("Find out what's going on with Cherokee on your favorit
 TWITTER_NOTICE      = N_('Follow <a target="_blank" href="%s">Cherokee on Twitter</a>.')
 FACEBOOK_NOTICE     = N_('Join <a target="_blank" href="%s">Cherokee on Facebook</a>.')
 
-BETA_TESTER_NOTICE = N_("""\
+BETA_TESTER_NOTICE  = N_("""\
 <h3>Beta testing</h3> <p>Individuals like yourself who download and
 test the latest developer snapshots of Cherokee Web Server help us to
 create the highest quality product. For that, we thank you.</p>
 """)
 
-PROUD_USERS_NOTICE = N_("""\
+PROUD_USERS_NOTICE  = N_("""\
 We would love to know that you are using Cherokee. Submit your domain
 name and it will be listed on the Cherokee Project web site.
 """)
@@ -260,44 +257,30 @@ class ProudUsers (CTK.Box):
         self += dialog
 
 
-class LatestRelease (CTK.Container):
+class LatestReleaseBox (CTK.XMLRPCProxy):
     def __init__ (self):
-        CTK.Container.__init__ (self)
+        CTK.XMLRPCProxy.__init__ (self, 'cherokee-latest-release',
+                                  XMLServerDigest.XmlRpcServer(OWS_VERSION).get_latest,
+                                  self.format, debug=True)
 
-        self += CTK.Proxy (None, LATEST_URL)
+    def format (self, response):
+        response = CTK.util.to_utf8(response)
+        latest   = response['default']
 
-
-class LatestReleaseBox (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'latest-release'})
-
-        self += CTK.RawHTML('<h3>%s</h3>' % _('Latest Release'))
-        latest = self._find_latest_cherokee_release()
+        content = CTK.Box()
+        content += CTK.RawHTML('<h3>%s</h3>' % _('Latest Release'))
 
         if not latest:
-            self += CTK.RawHTML(_('Latest version could not be determined at the moment.'))
-        elif VERSION.startswith(latest['version']):
-            self += CTK.RawHTML(_('Cherokee is up to date.'))
+            content += CTK.RawHTML(_('Latest version could not be determined at the moment.'))
+        elif VERSION.startswith (latest['version']):
+            content += CTK.RawHTML(_('Cherokee is up to date.'))
         else:
-            txt = '%s v%s. %s v%s.' % (
-                _('You are running Cherokee'),
-                VERSION,
-                _('Latest release is '),
-                latest['version'])
-            self += CTK.RawHTML(txt)
+            txt = '%s v%s. %s v%s.' % (_('You are running Cherokee'),
+                                       VERSION, _('Latest release is '),
+                                       latest['version'])
+            content += CTK.RawHTML(txt)
 
-    def __call__ (self):
-        render = self.Render()
-        return render.toStr()
-
-    def _find_latest_cherokee_release (self):
-        """Find out latest Cherokee release"""
-        try:
-            xmlrpc = XMLServerDigest.XmlRpcServer (OWS_VERSION)
-            data   = xmlrpc.get_latest()
-            return data['default']
-        except:
-            pass
+        return content.Render().toStr()
 
 
 def Subscribe_Apply ():
@@ -437,4 +420,3 @@ CTK.publish (r'^/stop$',        Stop)
 CTK.publish (r'^/lang/apply$',  Lang_Apply, method="POST")
 CTK.publish (r'^/proud/apply$', ProudUsers_Apply, method="POST")
 CTK.publish (r'^%s$'%(SUBSCRIBE_APPLY), Subscribe_Apply, method="POST")
-CTK.publish (r'^%s$'%(LATEST_URL),      LatestReleaseBox, method="POST")
