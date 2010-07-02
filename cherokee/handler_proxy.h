@@ -71,14 +71,15 @@ typedef struct {
 } cherokee_handler_proxy_props_t;
 
 typedef struct {
-	cherokee_handler_t                   handler;
-	cherokee_buffer_t                    buffer;
-	cherokee_buffer_t                    request;
-	cherokee_source_t                   *src_ref;
-	cherokee_handler_proxy_conn_t       *pconn;
-	cherokee_buffer_t                    tmp;
-	cherokee_boolean_t                   respinned;
-	cherokee_boolean_t                   got_all;
+	cherokee_handler_t              handler;
+	cherokee_buffer_t               buffer;
+	cherokee_buffer_t               request;
+	cherokee_source_t               *src_ref;
+	cherokee_handler_proxy_conn_t   *pconn;
+	cherokee_buffer_t               tmp;
+	cherokee_boolean_t              respinned;
+	cherokee_boolean_t              got_all;
+	cherokee_boolean_t              resending_post;
 
 	cherokee_handler_proxy_init_phase_t  init_phase;
 } cherokee_handler_proxy_t;

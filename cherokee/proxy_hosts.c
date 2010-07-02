@@ -353,14 +353,18 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	 */
 	ret = cherokee_socket_bufread (&pconn->socket,
 				       &pconn->header_in_raw,
-				       512, &size);
+				       DEFAULT_RECV_SIZE, &size);
 	switch (ret) {
 	case ret_ok:
 		break;
 	case ret_eof:
 	case ret_error:
-	case ret_eagain:
 		return ret;
+	case ret_eagain:
+		if (cherokee_buffer_is_empty (&pconn->header_in_raw)) {
+			return ret_eagain;
+		}
+		break;
 	default:
 		RET_UNKNOWN(ret);
 	}
@@ -423,6 +427,9 @@ cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
 {
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv;
+
+	TRACE (ENTRIES, "Initializing proxy socket: %s\n",
+	       cherokee_string_is_ipv6 (&src->host) ? "IPv6": "IPv4");
 
 	/* Family */
 	if (cherokee_string_is_ipv6 (&src->host)) {

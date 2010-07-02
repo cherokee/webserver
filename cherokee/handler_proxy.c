@@ -626,8 +626,17 @@ do_connect (cherokee_handler_proxy_t *hdl)
 static ret_t
 send_post_reset (cherokee_handler_proxy_t *hdl)
 {
-	if (hdl->pconn == NULL)
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+
+	if (hdl->pconn == NULL) {
+		TRACE (ENTRIES, "Post reset: %s\n", "no pconn");
 		return ret_ok;
+	}
+
+	if (conn->post.send.read == 0) {
+		TRACE (ENTRIES, "Did not read POST. No need to %s\n", "reset");
+		return ret_ok;
+	}
 
 	if (! hdl->pconn->post.do_buf_sent) {
 		/* The post information is not buffered. Thus, there
@@ -642,6 +651,8 @@ send_post_reset (cherokee_handler_proxy_t *hdl)
 	TRACE (ENTRIES, "Recovering POST from buffer: %s\n", "ok");
 
 	hdl->pconn->post.sent = 0;
+	conn->post.send.read  = 0;
+
 	return ret_ok;
 }
 
@@ -655,9 +666,52 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 	/* Send: buffered
 	 */
-	if ((hdl->pconn->post.do_buf_sent) &&
-	    (hdl->pconn->post.sent < buffer->len))
+	if (hdl->resending_post) {
+		TRACE (ENTRIES, "Sending post, type Resending. To be sent %d\n", buffer->len);
+
+		ret = cherokee_socket_bufwrite (&hdl->pconn->socket, buffer, &written);
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_eagain:
+			if (written > 0) {
+				break;
+			}
+
+			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
+			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
+								   hdl->pconn->socket.socket,
+								   FDPOLL_MODE_WRITE, false);
+			if (ret != ret_ok) {
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
+				return ret_error;
+			}
+			return ret_eagain;
+		default:
+			return ret_error;
+		}
+
+		conn->post.send.read += written;
+
+		cherokee_buffer_move_to_begin (buffer, written);
+		TRACE (ENTRIES, "sent=%d, remaining=%d\n", written, buffer->len);
+
+		if (! cherokee_buffer_is_empty (buffer)) {
+			return ret_eagain;
+		}
+
+		hdl->resending_post          = false;
+		hdl->pconn->post.do_buf_sent = false;
+		TRACE (ENTRIES, "Promoted POST to non-buffered mode, after %s\n", "re-send");
+	}
+
+	else if ((hdl->pconn->post.do_buf_sent) &&
+		 (hdl->pconn->post.sent < buffer->len))
 	{
+		TRACE (ENTRIES, "Sending post, type Buffered (has %d, to be sent %d)\n",
+		       buffer->len, buffer->len - hdl->pconn->post.sent);
+
 		ret = cherokee_socket_write (&hdl->pconn->socket,
 					     buffer->buf + hdl->pconn->post.sent,
 					     buffer->len - hdl->pconn->post.sent,
@@ -695,6 +749,8 @@ send_post (cherokee_handler_proxy_t *hdl)
 	else if ((! hdl->pconn->post.do_buf_sent) &&
 		 (! cherokee_buffer_is_empty (buffer)))
 	{
+		TRACE (ENTRIES, "Sending post, type Straight. Buffer has %d\n", buffer->len);
+
 		ret = cherokee_socket_bufwrite (&hdl->pconn->socket, buffer, &written);
 		switch (ret) {
 		case ret_ok:
@@ -730,11 +786,15 @@ send_post (cherokee_handler_proxy_t *hdl)
 		TRACE(ENTRIES, "POST has been read completely: %s\n", "ok");
 
 		if (hdl->pconn->post.do_buf_sent) {
-			if (hdl->pconn->post.sent >= buffer->len)
+			if (hdl->pconn->post.sent >= buffer->len) {
+				hdl->got_all = true;
 				return ret_ok;
+			}
 		} else {
-			if (cherokee_buffer_is_empty (buffer))
+			if (cherokee_buffer_is_empty (buffer)) {
+				hdl->got_all = true;
 				return ret_ok;
+			}
 		}
 		return ret_eagain;
 	}
@@ -802,7 +862,6 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		 */
 		if (conn->post.has_info) {
 			// TODO: Is it necessary?
-			send_post_reset (hdl);
 		}
 
 		hdl->init_phase = proxy_init_get_conn;
@@ -850,8 +909,24 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		/* Configure if respinned
 		 */
 		if (hdl->respinned) {
+			TRACE(ENTRIES, "Re-init %s connection\n", "respinned");
+
 			cherokee_socket_close (&hdl->pconn->socket);
 			cherokee_socket_clean (&hdl->pconn->socket);
+
+			if  (conn->post.has_info) {
+				ret = send_post_reset (hdl);
+				if (ret != ret_ok) {
+					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+					hdl->pconn->keepalive_in = false;
+					conn->error_code = http_bad_gateway;
+					return ret_error;
+				}
+
+				if (! cherokee_buffer_is_empty (&hdl->pconn->post.buf_temp)) {
+					hdl->resending_post = true;
+				}
+			}
 		}
 
 		if (! cherokee_socket_configured (&hdl->pconn->socket))
@@ -972,6 +1047,21 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 
 	case proxy_init_send_post:
 		if (conn->post.has_info) {
+			/* Preventive read: The back-end server might send
+			 * a reply before the POST is actually sent.
+			 */
+			ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn, &hdl->tmp,
+									props->out_flexible_EOH);
+			if (ret == ret_ok) {
+				TRACE (ENTRIES, "Found a header while sending the %s\n", "post");
+				HANDLER(hdl)->support |= hsupport_error;
+				hdl->pconn->keepalive_in = false;
+				return ret_ok;
+
+			}
+
+			/* Send POST information
+			 */
 			ret = send_post (hdl);
 			switch (ret) {
 			case ret_ok:
@@ -981,15 +1071,18 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				return ret_eagain;
 			case ret_eof:
 			case ret_error:
-				if (hdl->respinned) {
+				/* Retry
+				 */
+				if (! hdl->respinned) {
+					hdl->respinned = true;
+					goto reconnect;
+				} else {
 					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 					conn->error_code = http_bad_gateway;
 					hdl->pconn->keepalive_in = false;
 					return ret_error;
 				}
 
-				hdl->respinned = true;
-				goto reconnect;
 			default:
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -1032,14 +1125,6 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			/* The socket isn't really connected
 			 */
 			if (hdl->respinned) {
-				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
-				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
-				return ret_error;
-			}
-
-			ret = send_post_reset (hdl);
-			if (ret != ret_ok) {
 				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -1571,11 +1656,12 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 
 	/* Init
 	 */
-	n->pconn      = NULL;
-	n->src_ref    = NULL;
-	n->init_phase = proxy_init_start;
-	n->respinned  = false;
-	n->got_all    = false;
+	n->pconn          = NULL;
+	n->src_ref        = NULL;
+	n->init_phase     = proxy_init_start;
+	n->respinned      = false;
+	n->got_all        = false;
+	n->resending_post = false;
 
 	cherokee_buffer_init (&n->tmp);
 	cherokee_buffer_init (&n->request);
