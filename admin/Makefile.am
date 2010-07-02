@@ -69,8 +69,7 @@ consts.py \
 server.py \
 upgrade_config.py \
 util.py \
-validations.py \
-XMLServerDigest.py
+validations.py
 
 html_data = \
 exception.html \
