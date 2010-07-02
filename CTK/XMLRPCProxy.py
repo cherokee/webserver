@@ -51,9 +51,11 @@ class ProxyRequest:
             return ''
 
 class XMLRPCProxy (Widget):
-    def __init__ (self, xmlrpc_func, format_func, debug=False, props=None):
+    def __init__ (self, name, xmlrpc_func, format_func, debug=False, props=None):
+        assert type(name) == str
+
         Widget.__init__ (self)
-        self._url_local = '/proxy_widget_%d' %(self.uniq_id)
+        self._url_local = '/proxy_widget_%s' %(name)
 
         # Sanity checks
         assert type(xmlrpc_func) in (types.FunctionType, types.MethodType, types.InstanceType)
