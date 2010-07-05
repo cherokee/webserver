@@ -68,7 +68,7 @@ class HTTP_Response:
     def __init__ (self, error=200, headers=None, body=''):
         self.error   = error
         self.body    = body
-        self.headers = ([],headers)[bool(headers)]
+        self.headers = ([],headers)[bool(headers)][:]
 
     def __add__ (self, text):
         assert type(text) == str
