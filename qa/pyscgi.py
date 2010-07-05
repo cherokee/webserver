@@ -5,7 +5,7 @@ This module has been written as part of the Cherokee project:
                http://www.cherokee-project.com/
 """
 
-# Copyright (c) 2006-2009, Alvaro Lopez Ortega <alvaro@alobbs.com>
+# Copyright (c) 2006-2010, Alvaro Lopez Ortega <alvaro@alobbs.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -39,11 +39,13 @@ import SocketServer
 import traceback
 import socket
 import errno
+import time
 import sys
+import os
 
-__version__   = '1.10'
+__version__   = '1.14'
 __author__    = 'Alvaro Lopez Ortega'
-__copyright__ = 'Copyright 2009, Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
 __license__   = 'BSD'
 
 
@@ -53,36 +55,49 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         self.post   = None
         SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
 
-    def __safe_read (self, lenght):
+    def __safe_read (self, length):
+        info = ''
         while True:
+            if len(info) >= length:
+                return info
+
             chunk = None
             try:
-                chunk = self.rfile.read(lenght)
-                return chunk
-            except socket.error, (err, strerr):
-                if err == errno.EAGAIN or \
-                   err == errno.EWOULDBLOCK or \
-                   err == errno.EINPROGRESS:
-                   if chunk:
-                       return chunk
-                   continue
-            raise
+                to_read = length - len(info)
+                chunk = os.read (self.rfile.fileno(), to_read)
+                if not len(chunk):
+                    return info
+                info += chunk
+            except OSError, e:
+                if e.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
+                    if chunk:
+                        info += chunk
+                        continue
+                    time.sleep(0.001)
+                    continue
+                raise
 
     def send(self, buf):
         pending = len(buf)
-        offset = 0
-        while pending:
+        offset  = 0
+
+        while True:
+            if not pending:
+                return
+
             try:
-                sent = self.connection.send(buf[offset:])
+                sent = os.write (self.wfile.fileno(), buf[offset:])
                 pending -= sent
-                offset += sent
-            except socket.error, e:
-                if e[0]!=errno.EAGAIN:
-                    raise
+                offset  += sent
+            except OSError, e:
+                if e.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
+                    time.sleep(0.001)
+                    continue
+                raise
 
     def __read_netstring_size (self):
         size = ""
-        while 1:
+        while True:
             c = self.__safe_read(1)
             if c == ':':
                 break
@@ -114,10 +129,12 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
             self.env[items[i]] = items[i+1]
 
     def handle_post (self):
-        if not self.env.has_key('CONTENT_LENGTH'):
-            return
         if self.post:
             return
+
+        if not self.env.has_key('CONTENT_LENGTH'):
+            return
+
         length = int(self.env['CONTENT_LENGTH'])
         self.post = self.__safe_read(length)
 
@@ -130,10 +147,18 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
             if sys.exc_type != SystemExit:
                 traceback.print_exc()  # Print the error
 
-        try:
-            self.finish()          # Closes wfile and rfile
-            self.request.close()   # ..
+        try: # Closes wfile and rfile
+            self.finish()
         except: pass
+
+        try: # Send a FIN signal
+            self.request.shutdown (socket.SHUT_WR)
+        except: pass
+
+        try: # Either: close or reset
+            self.request.close()
+        except: pass
+
 
     def handle_request (self):
         self.send('Status: 200 OK\r\n')
@@ -141,12 +166,28 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         self.send("handle_request() should be overridden")
 
 
+class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
+    def set_synchronous (self, sync):
+        assert type(sync) == bool
+        self.syncronous = sync
+
+    def process_request (self, request, client_address):
+        if hasattr(self, 'syncronous') and self.syncronous:
+            return self.process_request_thread (request, client_address)
+
+        return SocketServer.ThreadingMixIn.process_request (self, request, client_address)
+
+
+class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer): pass
+class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer): pass
+
+
 # TCP port
 #
-class SCGIServer (SocketServer.ThreadingTCPServer):
+class SCGIServer (ThreadingTCPServer_Custom):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
         self.allow_reuse_address = True
-        SocketServer.ThreadingTCPServer.__init__ (self, (host, port), handler_class)
+        ThreadingTCPServer_Custom.__init__ (self, (host, port), handler_class)
 
 class SCGIServerFork (SocketServer.ForkingTCPServer):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
@@ -155,10 +196,10 @@ class SCGIServerFork (SocketServer.ForkingTCPServer):
 
 # Unix socket
 #
-class SCGIUnixServer (SocketServer.ThreadingUnixStreamServer):
+class SCGIUnixServer (ThreadingUnixStreamServer_Custom):
     def __init__(self, unix_socket, handler_class=SCGIHandler):
         self.allow_reuse_address = True
-        SocketServer.ThreadingUnixStreamServer.__init__ (self, unix_socket, handler_class)
+        ThreadingUnixStreamServer_Custom.__init__ (self, unix_socket, handler_class)
 
 class SCGIUnixServerFork (SocketServer.UnixStreamServer):
     def __init__(self, unix_socket, handler_class=SCGIHandler):
