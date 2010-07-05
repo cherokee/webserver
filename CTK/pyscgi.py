@@ -43,7 +43,7 @@ import time
 import sys
 import os
 
-__version__   = '1.13'
+__version__   = '1.14'
 __author__    = 'Alvaro Lopez Ortega'
 __copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
 __license__   = 'BSD'
@@ -147,10 +147,18 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
             if sys.exc_type != SystemExit:
                 traceback.print_exc()  # Print the error
 
-        try:
-            self.finish()          # Closes wfile and rfile
-            self.request.close()   # ..
+        try: # Closes wfile and rfile
+            self.finish()
         except: pass
+
+        try: # Send a FIN signal
+            self.request.shutdown (socket.SHUT_WR)
+        except: pass
+
+        try: # Either: close or reset
+            self.request.close()
+        except: pass
+
 
     def handle_request (self):
         self.send('Status: 200 OK\r\n')
