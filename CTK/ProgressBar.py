@@ -22,6 +22,7 @@
 
 import os
 from Widget import Widget
+from util import props_to_str
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
@@ -29,7 +30,7 @@ HEADERS = [
 ]
 
 HTML = """
-<div id="%(id)s"></div>
+<div id="%(id)s" %(props)s></div>
 """
 
 PERCENT_INIT_JS = """
@@ -39,12 +40,19 @@ $('#%(id)s').progressbar({ value: 0 });
 class ProgressBar (Widget):
     def __init__ (self, props={}):
         Widget.__init__ (self)
-        self.id  = "progressbar_%d" %(self.uniq_id)
+        self.id = "progressbar_%d" %(self.uniq_id)
+
+        self.props = props.copy()
+        if 'class' in props:
+            self.props['class'] += ' progressbar'
+        else:
+            self.props['class'] = 'progressbar'
 
     def Render (self):
         render = Widget.Render (self)
 
-        props = {'id': self.id}
+        props = {'id':    self.id,
+                 'props': props_to_str (self.props)}
 
         render.html    += HTML %(props)
         render.js      += PERCENT_INIT_JS %(props)
