@@ -4,7 +4,7 @@ from distutils.core import setup
 from distutils.extension import Extension
 
 setup (name         = "cherokee_pyscgi",
-       version      = "1.11",
+       version      = "1.14",
        description  = "Portable SCGI implementation",
        author       = "Alvaro Lopez Ortega",
        author_email = "alvaro@alobbs.com",
