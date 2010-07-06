@@ -184,7 +184,7 @@ check_worker_version (const char *this_exec)
 		PRINT_MSG_S ("\n");
 		PRINT_MSG_S ("This issue is usually caused by a secondary Cherokee installation in your $PATH.\n");
 		PRINT_MSG_S ("The following command might help to find where the installations were performed:\n\n");
-		PRINT_MSG_S ("find `echo $PATH | sed 's/:/ /g'` -name 'cherokee*' -exec dirname \"{}\" \; | uniq\n");
+		PRINT_MSG_S ("find `echo $PATH | sed 's/:/ /g'` -name 'cherokee*' -exec dirname \"{}\" \\; | uniq\n");
 		PRINT_MSG_S ("\n");
 
 		goto error;
