@@ -30,7 +30,7 @@ URL_APPLY = '/plugin/extensions/apply'
 
 NOTE_EXTENSIONS = N_("Comma-separated list of File Extension to which the configuration will be applied.")
 
-def apply():
+def commit():
     # POST info
     key      = CTK.post.pop ('key', None)
     vsrv_num = CTK.post.pop ('vsrv_num', None)
@@ -68,7 +68,7 @@ class Plugin_extensions (RulePlugin):
         VALS = [("tmp!extensions",       validations.is_extension_list),
                 ("%s!extensions"%(key),  validations.is_extension_list)]
 
-        CTK.publish (URL_APPLY, apply, validation=VALS, method="POST")
+        CTK.publish (URL_APPLY, commit, validation=VALS, method="POST")
 
     def GetName (self):
         tmp = CTK.cfg.get_val ('%s!extensions' %(self.key), '')

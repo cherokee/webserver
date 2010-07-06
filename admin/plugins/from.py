@@ -29,7 +29,7 @@ URL_APPLY = '/plugin/from/apply'
 
 NOTE_FROM = N_("IP or Subnet to check the connection origin against.")
 
-def apply():
+def commit():
     # POST info
     key      = CTK.post.pop ('key', None)
     vsrv_num = CTK.post.pop ('vsrv_num', None)
@@ -58,7 +58,7 @@ class Plugin_from (RulePlugin):
         VAL = [('^%s!from$'%(key),   validations.is_ip_or_netmask),
                ('^%s!from!.+'%(key), validations.is_ip_or_netmask)]
 
-        CTK.publish (URL_APPLY, apply, validation=VAL, method="POST")
+        CTK.publish (URL_APPLY, commit, validation=VAL, method="POST")
 
         if key.startswith('tmp'):
             return self.GUI_new()

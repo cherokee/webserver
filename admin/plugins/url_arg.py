@@ -34,7 +34,7 @@ NOTE_REGEX    = N_("Regular Expression for the match")
 OPTIONS = [('0', N_('Match a specific argument')),
            ('1', N_('Match any argument'))]
 
-def apply():
+def commit():
     # POST info
     key       = CTK.post.pop ('key', None)
     vsrv_num  = CTK.post.pop ('vsrv_num', None)
@@ -111,4 +111,4 @@ class Plugin_url_arg (RulePlugin):
 
 
 # Validation, and Public URLs
-CTK.publish (URL_APPLY, apply, method="POST")
+CTK.publish (URL_APPLY, commit, method="POST")

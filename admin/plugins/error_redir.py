@@ -36,7 +36,7 @@ NOTE_ERROR = N_('HTTP Error to match.')
 NOTE_REDIR = N_('Target to access whenever the HTTP Error occurs.')
 NOTE_TYPE  = N_('Whether the redirection should be Internal or External.')
 
-def apply():
+def commit():
     # New entry
     key       = CTK.post.pop('key')
     new_error = CTK.post.pop('new_error')
@@ -115,4 +115,4 @@ class Plugin_error_redir (CTK.Plugin):
         self += CTK.Indenter (refresh)
 
         # Validation, and Public URLs
-        CTK.publish ('^%s/[\d]+$'%(URL_APPLY), apply, method="POST")
+        CTK.publish ('^%s/[\d]+$'%(URL_APPLY), commit, method="POST")

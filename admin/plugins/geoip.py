@@ -34,7 +34,7 @@ NOTE_ADD_COUNTRY = N_("Pick an additional country to add to the country list.")
 NOTE_COUNTRIES   = N_("""List of countries from the client IPs. It must use the
 <a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation.""") % (ISO3166_URL)
 
-def apply():
+def commit():
     # POST info
     key       = CTK.post.pop ('key', None)
     vsrv_num  = CTK.post.pop ('vsrv_num', None)
@@ -94,4 +94,4 @@ class Plugin_geoip (RulePlugin):
         return "From countries %s" %(match)
 
 # Validation, and Public URLs
-CTK.publish (URL_APPLY, apply, method="POST")
+CTK.publish (URL_APPLY, commit, method="POST")

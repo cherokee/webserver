@@ -41,7 +41,7 @@ HEADERS = [
 ]
 
 
-def apply():
+def commit():
     # POST info
     key       = CTK.post.pop ('key', None)
     vsrv_num  = CTK.post.pop ('vsrv_num', None)
@@ -78,7 +78,7 @@ class Plugin_header (RulePlugin):
         self += submit
 
         # Validation, and Public URLs
-        CTK.publish (URL_APPLY, apply, method="POST")
+        CTK.publish (URL_APPLY, commit, method="POST")
 
     def GetName (self):
         header = CTK.cfg.get_val ('%s!header' %(self.key), '')

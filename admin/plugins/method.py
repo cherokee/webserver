@@ -65,7 +65,7 @@ METHODS = [
 
 NOTE_METHOD  = N_("The HTTP method that should match this rule.")
 
-def apply():
+def commit():
     # POST info
     key        = CTK.post.pop ('key', None)
     vsrv_num   = CTK.post.pop ('vsrv_num', None)
@@ -104,4 +104,4 @@ class Plugin_method (RulePlugin):
         return "%s %s" % (_('Method'), method)
 
 
-CTK.publish (URL_APPLY, apply, method="POST")
+CTK.publish (URL_APPLY, commit, method="POST")

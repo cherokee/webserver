@@ -38,7 +38,7 @@ NOTE_INDEX_FILES = N_("If a directory is requested, check the index files inside
 OPTIONS = [('0', _('Match a specific list of files')),
            ('1', _('Match any file'))]
 
-def apply():
+def commit():
     # POST info
     key         = CTK.post.pop ('key', None)
     vsrv_num    = CTK.post.pop ('vsrv_num', None)
@@ -103,7 +103,7 @@ class Plugin_exists (RulePlugin):
         VALS = [("tmp!exists",      validations.is_list),
                 ("%s!exists"%(key), validations.is_list)]
 
-        CTK.publish (URL_APPLY, apply, validation=VALS, method="POST")
+        CTK.publish (URL_APPLY, commit, validation=VALS, method="POST")
 
     def _GUI_new (self, key, vsrv_num):
         any = CTK.CheckCfgText('%s!match_any'%(key), False, _('Enabled'), {'class': 'noauto'})

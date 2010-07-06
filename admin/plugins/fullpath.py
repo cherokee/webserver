@@ -30,7 +30,7 @@ URL_APPLY = '/plugin/fullpath/apply'
 NOTE_FULLPATH = N_("Full path request to which content the configuration will be applied. (Eg: /favicon.ico)")
 
 
-def apply():
+def commit():
     # POST info
     key      = CTK.post.pop ('key', None)
     vsrv_num = CTK.post.pop ('vsrv_num', None)
@@ -119,4 +119,4 @@ class Plugin_fullpath (RulePlugin):
         else:
             return _("Path")
 
-CTK.publish (URL_APPLY, apply, method="POST")
+CTK.publish (URL_APPLY, commit, method="POST")
