@@ -102,6 +102,8 @@ ret_t cherokee_buffer_remove_chunk       (cherokee_buffer_t  *buf, cuint_t from,
 ret_t cherokee_buffer_replace_string     (cherokee_buffer_t  *buf, const char *subs, int subs_len, const char *repl, int repl_len);
 ret_t cherokee_buffer_substitute_string  (cherokee_buffer_t  *bufsrc, cherokee_buffer_t *bufdst, char *subs, int subs_len, char *repl, int repl_len);
 ret_t cherokee_buffer_trim               (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_insert             (cherokee_buffer_t  *buf, char *txt, size_t txt_len, size_t pos);
+ret_t cherokee_buffer_insert_buffer      (cherokee_buffer_t  *buf, cherokee_buffer_t *src, size_t pos);
 
 ret_t cherokee_buffer_get_utf8_len       (cherokee_buffer_t  *buf, cuint_t *len);
 ret_t cherokee_buffer_ensure_addlen      (cherokee_buffer_t  *buf, size_t alen);

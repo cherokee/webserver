@@ -2208,3 +2208,35 @@ cherokee_buffer_to_lowcase (cherokee_buffer_t *buf)
 
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_buffer_insert (cherokee_buffer_t *buf,
+			char              *txt,
+			size_t             txt_len,
+			size_t             pos)
+{
+	cherokee_buffer_ensure_size (buf, buf->len + txt_len);
+
+	/* Make room */
+	memmove (buf->buf + pos + txt_len,
+		 buf->buf + pos,
+		 buf->len - pos);
+
+	/* Insert the string */
+	memcpy (buf->buf + pos, txt, txt_len);
+
+	buf->len += txt_len;
+	buf->buf[buf->len] = '\0';
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_buffer_insert_buffer (cherokee_buffer_t *buf,
+			       cherokee_buffer_t *src,
+			       size_t             pos)
+{
+	return cherokee_buffer_insert (buf, src->buf, src->len, pos);
+}
