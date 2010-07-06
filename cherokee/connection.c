@@ -587,8 +587,9 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 }
 
 
-static void
-build_response_header_expiration (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
+void
+cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
+					   cherokee_buffer_t     *buffer)
 {
 	time_t    exp_time;
 	struct tm exp_tm;
@@ -700,7 +701,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Expiration
 	 */
 	if (conn->expiration != cherokee_expiration_none) {
-		build_response_header_expiration (conn, buffer);
+		cherokee_connection_add_expiration_header (conn, buffer);
 	}
 
 	/* Redirected connections

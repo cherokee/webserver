@@ -274,6 +274,7 @@ int   cherokee_connection_should_include_length  (cherokee_connection_t *conn);
 ret_t cherokee_connection_instance_encoder       (cherokee_connection_t *conn);
 ret_t cherokee_connection_sleep                  (cherokee_connection_t *conn, cherokee_msec_t msecs);
 void  cherokee_connection_update_timeout         (cherokee_connection_t *conn);
+void  cherokee_connection_add_expiration_header  (cherokee_connection_t *conn, cherokee_buffer_t *buffer);
 
 /* Iteration
  */

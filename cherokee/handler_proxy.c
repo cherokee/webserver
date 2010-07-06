@@ -1166,6 +1166,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	cherokee_http_version_t         version;
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
+	cherokee_boolean_t              has_expires  = false;
 
 	p = buf_in->buf;
 	header_end = buf_in->buf + buf_in->len;
@@ -1297,6 +1298,17 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 		} else if (strncasecmp (begin, "Content-Encoding:", 17) == 0) {
 			BIT_SET (conn->options, conn_op_cant_encoder);
 
+		} else if ((conn->expiration != cherokee_expiration_none) &&
+			   (strncasecmp (begin, "Expires:", 8) == 0)) {
+			has_expires = true;
+			goto next;
+
+		} else if ((conn->expiration != cherokee_expiration_none) &&
+			   (strncasecmp (begin, "Cache-Control:", 14) == 0) &&
+			   (strncasecmp (begin, "max-age=", 8) == 0)) {
+			has_expires = true;
+			goto next;
+
 		} else {
 			colon = strchr (begin, ':');
 			if (unlikely (colon == NULL)) {
@@ -1325,6 +1337,13 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	/* Additional headers */
 	list_for_each (i, &props->out_headers_add) {
 		add_header (buf_out, &HEADER_ADD(i)->key, &HEADER_ADD(i)->val);
+	}
+
+	/* Overwrite the 'Expires:' header is there was a custom
+	 * expiration value defined in the rule.
+	 */
+	if (has_expires) {
+		cherokee_connection_add_expiration_header (conn, buf_out);
 	}
 
 	/* Deal with Content-Encoding: If the response is no encoded,
