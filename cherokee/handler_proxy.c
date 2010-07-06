@@ -1166,7 +1166,6 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	cherokee_http_version_t         version;
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
-	cherokee_boolean_t              has_expires  = false;
 
 	p = buf_in->buf;
 	header_end = buf_in->buf + buf_in->len;
@@ -1300,13 +1299,11 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 		} else if ((conn->expiration != cherokee_expiration_none) &&
 			   (strncasecmp (begin, "Expires:", 8) == 0)) {
-			has_expires = true;
 			goto next;
 
 		} else if ((conn->expiration != cherokee_expiration_none) &&
 			   (strncasecmp (begin, "Cache-Control:", 14) == 0) &&
 			   (strncasecmp (begin, "max-age=", 8) == 0)) {
-			has_expires = true;
 			goto next;
 
 		} else {
@@ -1342,7 +1339,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	/* Overwrite the 'Expires:' header is there was a custom
 	 * expiration value defined in the rule.
 	 */
-	if (has_expires) {
+	if (conn->expiration != cherokee_expiration_none) {
 		cherokee_connection_add_expiration_header (conn, buf_out);
 	}
 
