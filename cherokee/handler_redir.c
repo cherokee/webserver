@@ -65,8 +65,25 @@ substitute (cherokee_handler_redir_t *hdl,
 	 */
 	token = strnstr (target->buf, "${host}", target->len);
 	if (token != NULL) {
-		cherokee_buffer_insert_buffer (target, &conn->host, (token - target->buf));
-		cherokee_buffer_remove_chunk (target, (token + conn->host.len) - target->buf, 7);
+		if (! cherokee_buffer_is_empty (&conn->host)) {
+			cherokee_buffer_insert_buffer (target, &conn->host, (token - target->buf));
+			cherokee_buffer_remove_chunk (target, (token + conn->host.len) - target->buf, 7);
+
+		} else if (! cherokee_buffer_is_empty (&conn->bind->ip)) {
+			cherokee_buffer_insert_buffer (target, &conn->bind->ip, (token - target->buf));
+			cherokee_buffer_remove_chunk (target, (token + conn->bind->ip.len) - target->buf, 7);
+
+		} else {
+			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+			ret = cherokee_copy_local_address (&conn->socket, &tmp);
+			if (ret == ret_ok) {
+				cherokee_buffer_insert_buffer (target, &tmp, (token - target->buf));
+				cherokee_buffer_remove_chunk (target, (token + tmp.len) - target->buf, 7);
+			}
+
+			cherokee_buffer_mrproper (&tmp);
+		}
 	}
 
 	return ret_ok;
