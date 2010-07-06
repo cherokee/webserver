@@ -43,12 +43,43 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
 /* Methods implementation
  */
 static ret_t
-match_and_substitute (cherokee_handler_redir_t *n)
+substitute (cherokee_handler_redir_t *hdl,
+	    cherokee_buffer_t        *regex,
+	    cherokee_buffer_t        *source,
+	    cherokee_buffer_t        *target,
+	    cint_t                   *ovector,
+	    cint_t                    ovector_size)
+{
+	ret_t                  ret;
+	char                  *token;
+	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+
+	/* Replace regex matches
+	 */
+	ret = cherokee_regex_substitute (regex, source, target, ovector, ovector_size);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	/* Replace variables
+	 */
+	token = strnstr (target->buf, "${host}", target->len);
+	if (token != NULL) {
+		cherokee_buffer_insert_buffer (target, &conn->host, (token - target->buf));
+		cherokee_buffer_remove_chunk (target, (token + conn->host.len) - target->buf, 7);
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
+match_and_substitute (cherokee_handler_redir_t *hdl)
 {
 	cherokee_list_t       *i;
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(n);
-	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(n)->tmp_buf1;
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(hdl)->tmp_buf1;
 
 	/* Append the query string
 	 */
@@ -65,7 +96,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 
 	/* Try to match it
 	 */
-	list_for_each (i, &HDL_REDIR_PROPS(n)->regex_list) {
+	list_for_each (i, &HDL_REDIR_PROPS(hdl)->regex_list) {
 		char                   *subject;
 		cint_t                  subject_len;
 		cint_t                  ovector[OVECTOR_LEN];
@@ -144,10 +175,11 @@ match_and_substitute (cherokee_handler_redir_t *n)
 			cherokee_buffer_clean (&conn->local_directory);
 
 			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
-			cherokee_regex_substitute (&list->subs,    /* regex str */
-						   tmp,            /* source    */
-						   &conn->request, /* target    */
-						   ovector, rc);
+			substitute (hdl,
+				    &list->subs,    /* regex str */
+				    tmp,            /* source    */
+				    &conn->request, /* target    */
+				    ovector, rc);   /* ovector   */
 
 
 			/* Arguments */
@@ -172,10 +204,12 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		/* External redirect
 		 */
 		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
-		cherokee_regex_substitute (&list->subs,     /* regex str */
-					   tmp,             /* source    */
-					   &conn->redirect, /* target    */
-					   ovector, rc);
+
+		substitute (hdl,
+			    &list->subs,     /* regex str */
+			    tmp,             /* source    */
+			    &conn->redirect, /* target    */
+			    ovector, rc);    /* ovector   */
 
 		TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
 
