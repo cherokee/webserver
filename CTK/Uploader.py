@@ -76,7 +76,8 @@ $('#%(id)s_form').uploadProgress({
         progressUrl:        "/upload_report/",
 	interval:           2000,
 	uploading:          function(upload) {$('#%(id)s_percents').html(upload.percents+'&#37;');},
-        start:              function(upload) {$('#%(id)s_form').hide('slow');}
+        start:              function(upload) {$('#%(id)s_form').hide('slow');},
+        complete:           function(upload) {$('%(id)s_form').trigger ({'type':'upload_finished'});}
 });
 """
 
