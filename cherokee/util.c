@@ -832,7 +832,7 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 #else
  	flags = fcntl (fd, F_GETFL, 0);
 	if (unlikely (flags == -1)) {
-		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_F_GETFL, fd);
+		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_GETFL, fd);
 		return ret_error;
 	}
 
@@ -844,7 +844,7 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 	re = fcntl (fd, F_SETFL, flags);
 #endif
 	if (unlikely (re < 0)) {
-		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_F_SETFL, fd, flags, "O_NDELAY");
+		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_SETFL, fd, flags, "O_NDELAY");
 		return ret_error;
 	}
 
@@ -862,7 +862,7 @@ cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable)
 #else
 	flags = fcntl (fd, F_GETFL, 0);
 	if (flags < 0) {
-		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_F_GETFL, fd);
+		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_GETFL, fd);
 		return ret_error;
 	}
 
@@ -874,7 +874,7 @@ cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable)
 	re = fcntl (fd, F_SETFL, flags);
 #endif
 	if (re < 0) {
-		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_F_SETFL, fd, flags, "O_NONBLOCK");
+		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_SETFL, fd, flags, "O_NONBLOCK");
 		return ret_error;
 	}
 
@@ -891,7 +891,7 @@ cherokee_fd_set_closexec (int fd)
 #ifndef _WIN32
 	flags = fcntl (fd, F_GETFD, 0);
 	if (flags < 0) {
-		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_F_GETFD, fd);
+		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_GETFD, fd);
 		return ret_error;
 	}
 
@@ -899,7 +899,7 @@ cherokee_fd_set_closexec (int fd)
 
 	re = fcntl (fd, F_SETFD, flags);
 	if (re < 0) {
-		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_F_SETFD, fd, flags, "FD_CLOEXEC");
+		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_SETFD, fd, flags, "FD_CLOEXEC");
 		return ret_error;
 	}
 #endif
