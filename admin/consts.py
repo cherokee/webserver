@@ -186,6 +186,7 @@ RULES = [
     ('exists',     N_('File Exists')),
     ('method',     N_('HTTP Method')),
     ('bind',       N_('Incoming IP/Port')),
+    ('tls',        N_('SSL / TLS')),
     ('fullpath',   N_('Full Path')),
     ('from',       N_('Connected from')),
     ('url_arg',    N_('URL Argument')),

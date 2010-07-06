@@ -5,6 +5,7 @@ adminplugins_DATA = \
 admin.py \
 authlist.py \
 bind.py \
+tls.py \
 cgi.py \
 common.py \
 custom_error.py \

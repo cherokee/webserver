@@ -249,6 +249,23 @@ endif
 
 
 #
+# Rule TLS
+#
+rule_tls = \
+rule_tls.c \
+rule_tls.h
+
+libplugin_tls_la_LDFLAGS = $(module_ldflags)
+libplugin_tls_la_SOURCES = $(rule_tls)
+
+if STATIC_RULE_TLS
+static_rule_tls_src = $(rule_tls)
+else
+dynamic_rule_tls_lib = libplugin_tls.la
+endif
+
+
+#
 # Rule method
 #
 rule_method = \
@@ -1444,6 +1461,7 @@ $(static_rule_exists_src) \
 $(static_rule_url_arg_src) \
 $(static_rule_fullpath_src) \
 $(static_rule_bind_src) \
+$(static_rule_tls_src) \
 $(static_rule_method_src) \
 $(static_rule_from_src) \
 $(static_rule_geoip_src) \
@@ -1633,6 +1651,7 @@ $(dynamic_rule_exists_lib) \
 $(dynamic_rule_url_arg_lib) \
 $(dynamic_rule_fullpath_lib) \
 $(dynamic_rule_bind_lib) \
+$(dynamic_rule_tls_lib) \
 $(dynamic_rule_method_lib) \
 $(dynamic_rule_from_lib) \
 $(dynamic_rule_geoip_lib) \
