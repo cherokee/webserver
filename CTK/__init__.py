@@ -65,6 +65,7 @@ from ProgressBar import ProgressBar
 from Downloader import Downloader
 from Radio import Radio
 from XMLRPCProxy import XMLRPCProxy
+from AjaxUpload import AjaxUpload
 
 # Comodity
 from cgi import escape as escape_html
