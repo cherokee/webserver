@@ -11,7 +11,23 @@ UPLOAD_DIR = "/tmp"
 
 JS = """
 $('#%s').bind ('upload_finished', function (event) {
-    $('#image').html ('<img src="/get/'+ event.filename + '" />');
+    var tries = 2;
+    var url   = "/get/"+ event.filename;
+
+    function try_to_set_image() {
+       $.ajax ({type: 'HEAD', url: url,
+          success: function (data) {
+            $('#image').html ('<img src="' + url + '" />');
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            if (tries-- > 0) {
+               window.setTimeout (try_to_set_image, 2000);
+            }
+          }
+       });
+    }
+
+    try_to_set_image();
 });
 """
 
