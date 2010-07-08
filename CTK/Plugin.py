@@ -30,7 +30,7 @@ from consts import *
 from Widget import Widget
 from Container import Container
 from Combobox import ComboCfg
-from Server import cfg, publish, post
+from Server import cfg, publish, post, get_server
 from PageCleaner import Postprocess
 from Help import HelpEntry, HelpGroup
 
@@ -167,19 +167,15 @@ def load_module (name, dirname):
     if not name:
         return
 
-    # Figure the path to admin's python source (hacky!)
-    stack = traceback.extract_stack()
+    # Check the different plug-in dirs
+    srv = get_server()
 
-    if 'pyscgi.py' in ' '.join([x[0] for x in stack]):
-        for stage in stack:
-            if 'CTK/pyscgi.py' in stage[0]:
-                base_dir = os.path.join (stage[0], '../../..')
-                break
-    else:
-        base_dir = os.path.dirname (stack[0][0])
+    for path in srv.plugin_paths:
+        mod_path = os.path.abspath (os.path.join (path, dirname))
+        fullpath = os.path.join (mod_path, "%s.py"%(name))
 
-    mod_path = os.path.abspath (os.path.join (base_dir, dirname))
-    fullpath = os.path.join (mod_path, "%s.py"%(name))
+        if os.access (fullpath, os.R_OK):
+            break
 
     # Shortcut: it might be loaded
     if sys.modules.has_key (name):
@@ -208,3 +204,19 @@ def instance_plugin (name, key, **kwargs):
     class_name = 'Plugin_%s' %(name)
     obj = module.__dict__[class_name](key, **kwargs)
     return obj
+
+
+def figure_plugin_paths():
+    paths = []
+
+    # Figure the path to admin's python source (hacky!)
+    stack = traceback.extract_stack()
+
+    if 'pyscgi.py' in ' '.join([x[0] for x in stack]):
+        for stage in stack:
+            if 'CTK/pyscgi.py' in stage[0]:
+                paths.append (os.path.join (stage[0], '../../..'))
+                break
+
+    paths.append (os.path.dirname (stack[0][0]))
+    return paths

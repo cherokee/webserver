@@ -175,9 +175,10 @@ class ServerHandler (pyscgi.SCGIHandler):
 class Server:
     def __init__ (self):
         self._web_paths = []
-        self._scgi      = None
-        self._is_init   = False
-        self.lock       = threading.RLock()
+        self._scgi        = None
+        self._is_init     = False
+        self.lock         = threading.RLock()
+        self.plugin_paths = []
 
     def init_server (self, *args, **kwargs):
         # Is it already init?
@@ -187,6 +188,10 @@ class Server:
 
         # Instance SCGI server
         self._scgi = pyscgi.ServerFactory (*args, **kwargs)
+
+        # Figure plug-in paths
+        from Plugin import figure_plugin_paths
+        self.plugin_paths = figure_plugin_paths()
 
     def sort_routes (self):
         def __cmp(x,y):
@@ -285,6 +290,10 @@ def init (*args, **kwargs):
 def set_synchronous (sync):
     srv = get_server()
     srv._scgi.set_synchronous (sync)
+
+def add_plugin_dir (path):
+    srv = get_server()
+    srv.plugin_paths.insert (0, path)
 
 def run (*args, **kwargs):
     init (*args, **kwargs)
