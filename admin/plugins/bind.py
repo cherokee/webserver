@@ -150,6 +150,9 @@ class Plugin_bind (RulePlugin):
             return txt
 
         tmp.sort (lambda x,y: cmp(int(x[0]),int(y[0])))
+
+        if len(tmp) == 0:
+            return _("Port")
         if len(tmp) == 1:
             return "%s %s" %(_("Port"), render_entry(tmp[0]))
 
