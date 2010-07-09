@@ -21,7 +21,9 @@
 #
 
 import re
+import sys
 import types
+import traceback
 
 try:
     import json
@@ -120,3 +122,10 @@ def to_utf8(s):
         return s
 
     return str(s)
+
+#
+# Debug
+#
+def print_exception (output = sys.stderr):
+    print >> output, traceback.format_exc()
+
