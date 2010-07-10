@@ -22,16 +22,17 @@
 
 from Widget import Widget
 from Container import Container
-from util import formater
+from util import formater, props_to_str
 
-LINK_HTML      = '<a href="%(href)s" id="%(id)s">%(content)s</a>'
+LINK_HTML      = '<a href="%(href)s" id="%(id)s" %(props)s>%(content)s</a>'
 LINK_ICON_HTML = '<div id="%(id)s"><span class="ui-icon ui-icon-%(icon)s"></span>%(link)s</div>'
 
 
 class Link (Container):
-    def __init__ (self, href, content=None):
+    def __init__ (self, href, content=None, props={}):
         Container.__init__ (self)
-        self.href = href[:]
+        self.href  = href[:]
+        self.props = props.copy()
 
         if content:
             self += content
@@ -41,10 +42,17 @@ class Link (Container):
 
         props = {'id':      self.id,
                  'href':    self.href,
+                 'props':   props_to_str(self.props),
                  'content': render.html}
 
         render.html = formater (LINK_HTML, props)
         return render
+
+
+class LinkWindow (Link):
+    def __init__ (self, href, content=None):
+        props = {'target': '_blank'}
+        Link.__init__ (self, href, content, props)
 
 
 class LinkIcon (Link):

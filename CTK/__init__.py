@@ -54,7 +54,7 @@ from Image import Image, ImageStock
 from SortableList import SortableList
 from Indenter import Indenter
 from Notice import Notice
-from Link import Link, LinkIcon
+from Link import Link, LinkWindow, LinkIcon
 from DatePicker import DatePicker
 from Button import Button
 from TextArea import TextArea
