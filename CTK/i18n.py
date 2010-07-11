@@ -25,6 +25,9 @@
 import sys
 import __builtin__
 
+# Global
+active_lang = ''
+
 #
 # Init
 #
@@ -45,7 +48,16 @@ def install (*args, **kwargs):
         return
     return gettext.install (*args, **kwargs)
 
-def translation (*args, **kwargs):
+def translation (propg, localedir, languages, *args, **kwargs):
     if not 'gettext' in sys.modules:
         return
-    return gettext.translation(*args, **kwargs)
+
+    # Call gettext
+    re = gettext.translation (propg, localedir, languages, *args, **kwargs)
+
+    # It worked, store the global
+    if languages:
+        global active_lang
+        active_lang = languages[0]
+
+    return re
