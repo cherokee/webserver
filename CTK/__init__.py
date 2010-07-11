@@ -20,6 +20,10 @@
 # 02110-1301, USA.
 #
 
+import JS
+import i18n
+import util
+
 # Generic
 from Widget import Widget, RenderResponse
 from Container import Container
@@ -28,9 +32,6 @@ from Submitter import Submitter, SubmitterButton
 from Page import Page, PageEmpty
 from Config import Config
 from Plugin import Plugin, instance_plugin, load_module
-
-import JS
-import util
 
 # Widgets
 from Table import Table, TableFixed

@@ -49,7 +49,8 @@ ProgressBar.py \
 Downloader.py \
 Radio.py \
 XMLRPCProxy.py \
-AjaxUpload.py
+AjaxUpload.py \
+i18n.py
 
 EXTRA_DIST = \
 $(ctk_DATA)
