@@ -46,7 +46,8 @@
 #define DEBUG_BUFFER(b)  fprintf(stderr, "%s:%d len=%d crc=%d\n", __FILE__, __LINE__, b->len, cherokee_buffer_crc32(b))
 #define ENTRIES "core,thread"
 
-static ret_t reactive_conn_from_polling  (cherokee_thread_t *thd, cherokee_connection_t *conn);
+static ret_t reactive_conn_from_polling (cherokee_thread_t *thd, cherokee_connection_t *conn);
+static ret_t move_connection_to_polling (cherokee_thread_t *thd, cherokee_connection_t *conn);
 
 
 static void
@@ -557,7 +558,12 @@ process_polling_connections (cherokee_thread_t *thd)
 						      THREAD_TMP_BUF1(thd));
 			}
 
-			purge_closed_polling_connection (thd, conn);
+			/* Timed-out: Reactive the connection. The
+			 * main loop will take care of closing it.
+			 */
+			reactive_conn_from_polling (thd, conn);
+			BIT_UNSET (conn->options, conn_op_was_polling);
+
 			continue;
 		}
 
@@ -646,15 +652,24 @@ process_active_connections (cherokee_thread_t *thd)
 			       "thread (%p) processing active conn (%p, %s): Time out\n",
 			       thd, conn, cherokee_connection_get_phase_str (conn));
 
+			/* Perform a lingering close. If it times out by a 2nd time,
+			 * close the connection roughly (a conn RST will take place)
+			 */
+			if ((conn->phase == phase_shutdown) ||
+			    (conn->phase == phase_lingering))
+			{
+				conns_freed++;
+				close_active_connection (thd, conn);
+				continue;
+			}
+
 			/* Information collection
 			 */
 			if (THREAD_SRV(thd)->collector != NULL) {
 				cherokee_collector_log_timeout (THREAD_SRV(thd)->collector);
 			}
 
-			conns_freed++;
-			close_active_connection (thd, conn);
-			continue;
+			goto shutdown;
 		}
 
 		/* Update the connection timeout
@@ -691,7 +706,6 @@ process_active_connections (cherokee_thread_t *thd)
 			BIT_UNSET (conn->options, conn_op_was_polling);
 		}
 		else if ((conn->phase != phase_shutdown) &&
-			 (conn->phase != phase_lingering) &&
 			 (conn->phase != phase_reading_header || conn->incoming_header.len <= 0) &&
 			 (conn->phase != phase_reading_post || conn->post.send.buffer.len <= 0))
 		{
@@ -1289,7 +1303,7 @@ process_active_connections (cherokee_thread_t *thd)
 			break;
 
 		shutdown:
-			conn->phase = phase_shutdown;
+			conn->phase   = phase_shutdown;
 			conn->timeout = cherokee_bogonow_now + 3;
 
 		case phase_shutdown:
@@ -1325,11 +1339,12 @@ process_active_connections (cherokee_thread_t *thd)
 			switch (ret) {
 			case ret_ok:
 			case ret_eagain:
-				/* Ok, really lingering
+				/* Wait for the socket to be readable:
+				 * FIN + ACK will have arrived by then
 				 */
-				conn->phase = phase_lingering;
 				conn_set_mode (thd, conn, socket_reading);
-				break;
+				conn->phase = phase_lingering;
+				continue;
 			default:
 				/* Error, no linger and no last read,
 				 * just close the connection.
