@@ -1223,11 +1223,6 @@ cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 	 */
 	conn->socket.is_tls = non_TLS;
 
-	/* Set the timeout for future linger read(s) leaving the
-	 * non-blocking mode.
-         */
-	conn->timeout = cherokee_bogonow_now + (MSECONDS_TO_LINGER / 1000) + 1;
-
 	/* Shut down the socket for write, which will send a FIN to
 	 * the peer. If shutdown fails then the socket is unusable.
          */

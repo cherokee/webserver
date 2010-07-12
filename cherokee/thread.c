@@ -1304,7 +1304,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 		shutdown:
 			conn->phase   = phase_shutdown;
-			conn->timeout = cherokee_bogonow_now + 3;
+			conn->timeout = cherokee_bogonow_now + SECONDS_TO_LINGER;
 
 		case phase_shutdown:
 			/* Perform a proper SSL/TLS shutdown
@@ -1338,7 +1338,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_shutdown_wr (conn);
 			switch (ret) {
 			case ret_ok:
-			case ret_eagain:
 				/* Wait for the socket to be readable:
 				 * FIN + ACK will have arrived by then
 				 */
