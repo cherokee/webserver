@@ -328,13 +328,6 @@ connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn
 static void
 purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
-	/* Try last read, if previous read/write returned eof, then no
-	 * problem, otherwise it may avoid a nasty connection reset.
-	 */
-	if (conn->phase == phase_lingering) {
-		cherokee_connection_linger_read (conn);
-	}
-
 	/* It maybe have a delayed log
 	 */
 	cherokee_connection_update_vhost_traffic (conn);
@@ -1305,6 +1298,7 @@ process_active_connections (cherokee_thread_t *thd)
 		shutdown:
 			conn->phase   = phase_shutdown;
 			conn->timeout = cherokee_bogonow_now + SECONDS_TO_LINGER;
+			TRACE (ENTRIES, "Shutting down connection. Timeout now + %d\n", SECONDS_TO_LINGER);
 
 		case phase_shutdown:
 			/* Perform a proper SSL/TLS shutdown

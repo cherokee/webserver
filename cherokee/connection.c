@@ -1211,6 +1211,8 @@ error:
 ret_t
 cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 {
+	ret_t ret;
+
 	/* Turn TCP-cork off
 	 */
 	if (conn->options & conn_op_tcp_cork) {
@@ -1226,7 +1228,14 @@ cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 	/* Shut down the socket for write, which will send a FIN to
 	 * the peer. If shutdown fails then the socket is unusable.
          */
-	return cherokee_socket_shutdown (&conn->socket, SHUT_WR);
+	ret = cherokee_socket_shutdown (&conn->socket, SHUT_WR);
+	if (unlikely (ret != ret_ok)) {
+		TRACE (ENTRIES, "Could not shutdown (%d, SHUT_WR)\n", conn->socket.socket);
+		return ret_error;
+	}
+
+	TRACE (ENTRIES, "Shutdown (%d, SHUT_WR): successful\n", conn->socket.socket);
+	return ret_ok;
 }
 
 
@@ -1245,16 +1254,16 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size, &cnt_read);
 		switch (ret) {
 		case ret_eof:
-			TRACE(ENTRIES, "%s\n", "eof");
-			return ret;
+			TRACE(ENTRIES, "%s\n", "EOF");
+			return ret_eof;
 		case ret_error:
 			TRACE(ENTRIES, "%s\n", "error");
-			return ret;
+			return ret_error;
 		case ret_eagain:
 			TRACE(ENTRIES, "read %u, eagain\n", cnt_read);
-			return ret;
+			return ret_eagain;
 		case ret_ok:
-			TRACE(ENTRIES, "read %u, ok\n", cnt_read);
+			TRACE(ENTRIES, "tossed away %u bytes\n", cnt_read);
 			retries--;
 			if (cnt_read == tmp1->size && retries > 0)
 				continue;
