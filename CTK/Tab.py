@@ -81,7 +81,8 @@ $("#tab_%(id)s").each(function() {
       /* Selection fixes for the tab theme */
       var tabslen  = this_tab.tabs('length');
       var nprevtab = parseInt(get_cookie('opentab')) + 2;
-      var nnexttab = parseInt(ui.index) +2;
+      var nnexttab = parseInt(ui.index) + 2;
+      if (isNaN(nprevtab)) { nprevtab = 2; }
 
       if (nprevtab < tabslen) {
          this_tab.find("li:nth-child("+ nprevtab +")").removeClass("ui-tabs-selected-next");
@@ -99,12 +100,15 @@ $("#tab_%(id)s").each(function() {
    if (this_tab.tabs('option', 'selected') == 0) {
       if (this_tab.tabs('length') == 2) {
          this_tab.find("li:nth-child(2)").addClass("ui-tabs-selected-next-last");
+         this_tab.find("li:nth-child(2)").addClass("ui-tabs-last");
       } else {
          this_tab.find("li:nth-child(2)").addClass("ui-tabs-selected-next");
       }
    }
 
    var ninitab = parseInt(get_cookie('opentab')) + 2;
+   if (isNaN(ninitab)) { ninitab = 2; }
+
    if (ninitab < this_tab.tabs('length')) {
          this_tab.find("li:nth-child("+ ninitab +")").addClass("ui-tabs-selected-next");
    } else {
