@@ -34,6 +34,9 @@ class Link (Container):
         self.href  = href[:]
         self.props = props.copy()
 
+        if 'id' in self.props:
+            self.id = self.props.pop('id')
+
         if content:
             self += content
 
@@ -44,14 +47,17 @@ class Link (Container):
                  'href':    self.href,
                  'props':   props_to_str(self.props),
                  'content': render.html}
+        print props
 
         render.html = formater (LINK_HTML, props)
         return render
 
 
 class LinkWindow (Link):
-    def __init__ (self, href, content=None):
-        props = {'target': '_blank'}
+    def __init__ (self, href, content=None, props={}):
+        self.props = props.copy()
+        props['target'] = '_blank'
+
         Link.__init__ (self, href, content, props)
 
 
