@@ -1296,9 +1296,7 @@ process_active_connections (cherokee_thread_t *thd)
 			break;
 
 		shutdown:
-			conn->phase   = phase_shutdown;
-			conn->timeout = cherokee_bogonow_now + SECONDS_TO_LINGER;
-			TRACE (ENTRIES, "Shutting down connection. Timeout now + %d\n", SECONDS_TO_LINGER);
+			conn->phase = phase_shutdown;
 
 		case phase_shutdown:
 			/* Perform a proper SSL/TLS shutdown
@@ -1332,11 +1330,19 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_shutdown_wr (conn);
 			switch (ret) {
 			case ret_ok:
+				/* Extend the timeout
+				 */
+				conn->timeout = cherokee_bogonow_now + SECONDS_TO_LINGER;
+				TRACE (ENTRIES, "Lingering-close timeout = now + %d secs\n", SECONDS_TO_LINGER);
+
 				/* Wait for the socket to be readable:
 				 * FIN + ACK will have arrived by then
 				 */
 				conn_set_mode (thd, conn, socket_reading);
 				conn->phase = phase_lingering;
+
+				/* Go to polling..
+				 */
 				continue;
 			default:
 				/* Error, no linger and no last read,

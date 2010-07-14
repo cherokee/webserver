@@ -220,15 +220,9 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 {
 	int re;
 
-	/* If the read side of the socket has been closed but the
-	 * write side is not, then don't bother to call shutdown
-	 * because the socket is going to be closed anyway.
-	 */
-	if (unlikely (socket->status == socket_closed))
-		return ret_eof;
-
-	if (unlikely (socket->socket < 0))
+	if (unlikely (socket->socket < 0)) {
 		return ret_error;
+	}
 
 	/* Shutdown the socket
 	 */
@@ -237,6 +231,7 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 	} while ((re == -1) && (errno == EINTR));
 
 	if (unlikely (re != 0)) {
+		TRACE (ENTRIES, "shutdown(%d, %d) = %s\n", socket->socket, how, strerror(errno));
 		return ret_error;
 	}
 
