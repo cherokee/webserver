@@ -422,8 +422,6 @@ generate_file_entry (cherokee_handler_dirlist_t  *dhdl,
 			cherokee_stat (path->buf, &n->rstat);
 
 			if (HDL_DIRLIST_PROP(dhdl)->redir_symlinks) {
-				char *res;
-
 				/* The local directory realpath is build lazily
 				 */
 				if (cherokee_buffer_is_empty (local_realpath))
@@ -458,8 +456,7 @@ generate_file_entry (cherokee_handler_dirlist_t  *dhdl,
 					return ret_error;
 				}
 
-				cherokee_buffer_move_to_begin (&n->realpath,
-							       path->len - n->name_len);
+				cherokee_buffer_move_to_begin (&n->realpath, local_realpath->len +1);
 			}
 		}
 
@@ -697,7 +694,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 
 	/* Build the local directory path
 	 */
-	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);        /* 1 */
+	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);     /* 1 */
 
 	dir = opendir (conn->local_directory.buf);
 	if (dir == NULL) {
