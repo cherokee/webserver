@@ -87,9 +87,12 @@ class Dialog (Container):
 
         self.js_props = js_props.copy()
         self.props    = props.copy()
-        self.id       = 'dialog%d'%(self.uniq_id)
         self.title    = self.js_props.pop('title', '')
         self.buttons  = []
+        if 'id' in self.props:
+            self.id = self.props.pop('id')
+        else:
+            self.id = 'dialog%d'%(self.uniq_id)
 
         # Defaults
         if 'modal' not in self.js_props:
