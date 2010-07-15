@@ -6,6 +6,18 @@ from util import *
 # This QA test checks:
 # http://bugs.cherokee-project.com/504
 
+# NOTE: On PHP error management
+#
+# PHP could complain while executing this script because there isn't a
+# 'var' variable. Depending of the interpreter and configuration this
+# could be a problem. Please ensure that the 'log_errors' entry of
+# your php.ini configuration file is set to 'Off'. Otherwise, it may
+# print trash to stdout and mess up the FastCGI data stream. Remember:
+#
+#   log_errors = Off
+#
+
+
 POST_LENGTH = 1024 * 10
 POST_EXTRA  = "\r\n\r\n"
 FILENAME    = "post_4extra.php"
