@@ -367,7 +367,7 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 	}
 
 	linger.l_onoff  = 1;
-	linger.l_linger = 0;
+	linger.l_linger = SECONDS_TO_LINGER;
 
 	re = setsockopt (new_socket, SOL_SOCKET, SO_LINGER, &linger, sizeof(linger));
 	if (re == -1) {
@@ -781,7 +781,7 @@ cherokee_socket_flush (cherokee_socket_t *socket)
 	int re;
 	int op = 1;
 
-	TRACE (ENTRIES, "flushing fd=%d\n", socket->socket);
+	TRACE (ENTRIES",flush", "flushing fd=%d\n", socket->socket);
 
 	do {
 		re = setsockopt (SOCKET_FD(socket), IPPROTO_TCP, TCP_NODELAY,
