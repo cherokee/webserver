@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
+#include "init.h"
 
 
 /* Returns max. fd limits (system and fdpoll set).
@@ -92,11 +93,28 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 
 
 ret_t
-cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_fd_limit, int fd_limit)
+cherokee_fdpoll_new (cherokee_fdpoll_t    **fdp,
+		     cherokee_poll_type_t   type,
+		     int                    sys_fd_limit,
+		     int                    fd_limit)
 {
+	/* Set default values if needed
+	 */
+	if (sys_fd_limit == -1) {
+		sys_fd_limit = cherokee_fdlimit;
+	}
+
+	if (fd_limit == -1) {
+		fd_limit = sys_fd_limit;
+	}
+
+	/* Sanity check
+	 */
 	if ((sys_fd_limit < fd_limit) ||
 	    (sys_fd_limit < FD_NUM_MIN_AVAILABLE))
+	{
 		return ret_error;
+	}
 
 	switch (type) {
 	case cherokee_poll_epoll:
