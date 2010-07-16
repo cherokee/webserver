@@ -830,6 +830,10 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 	flags = enable;
 	re = ioctlsocket (fd, FIONBIO, (u_long) &flags);
 #else
+# ifdef TCP_NODELAY
+	flags = enable;
+	re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, (char *) &flags, sizeof (int));
+# else
  	flags = fcntl (fd, F_GETFL, 0);
 	if (unlikely (flags == -1)) {
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_GETFL, fd);
@@ -842,6 +846,7 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 		BIT_UNSET (flags, O_NDELAY);
 
 	re = fcntl (fd, F_SETFL, flags);
+# endif
 #endif
 	if (unlikely (re < 0)) {
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_SETFL, fd, flags, "O_NDELAY");
