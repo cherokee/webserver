@@ -379,7 +379,7 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 		return ret_error;
 	}
 
-#ifdef 0 /* DISABLED */
+#if 0 /* DISABLED */
 
 	/* Deal with the FIN_WAIT2 state
 	 */
