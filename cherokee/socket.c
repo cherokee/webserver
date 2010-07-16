@@ -240,6 +240,30 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 
 
 ret_t
+cherokee_socket_reset (cherokee_socket_t *socket)
+{
+	int           re;
+	struct linger linger;
+
+	if (unlikely (socket->socket < 0)) {
+		return ret_error;
+	}
+
+	linger.l_onoff  = 1;
+	linger.l_linger = 0;
+
+	re = setsockopt (socket->socket, SOL_SOCKET, SO_LINGER, &linger, sizeof(linger));
+	if (re == -1) {
+		LOG_ERRNO (errno, cherokee_err_warning,
+			   CHEROKEE_ERROR_SOCKET_SET_LINGER, socket->socket);
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_socket_ntop (cherokee_socket_t *socket, char *dst, size_t cnt)
 {
 	if (unlikely (SOCKET_FD(socket) < 0)) {
@@ -339,11 +363,9 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 			   int                 *new_fd,
 			   cherokee_sockaddr_t *sa)
 {
-	int           re;
-	ret_t         ret;
-	socklen_t     len;
-	int           new_socket;
-	struct linger linger;
+	ret_t     ret;
+	socklen_t len;
+	int       new_socket;
 
 	/* Get the new connection
 	 */
@@ -356,6 +378,8 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 	if (new_socket < 0) {
 		return ret_error;
 	}
+
+#ifdef 0 /* DISABLED */
 
 	/* Deal with the FIN_WAIT2 state
 	 */
@@ -374,10 +398,21 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 		LOG_ERRNO (errno, cherokee_err_warning,
 			   CHEROKEE_ERROR_SOCKET_SET_LINGER, new_socket);
 	}
+#endif
 
 	/* Close-on-exec: Child processes won't inherit this fd
 	 */
 	cherokee_fd_set_closexec (new_socket);
+
+	/* Enables nonblocking I/O.
+	 */
+	ret = cherokee_fd_set_nonblocking (new_socket, true);
+	if (ret != ret_ok) {
+		LOG_WARNING (CHEROKEE_ERROR_SOCKET_NON_BLOCKING, new_socket);
+
+		cherokee_fd_close (new_socket);
+		return ret_error;
+	}
 
 	/* Disable Nagle's algorithm for this connection
 	 * so that there is no delay involved when sending data
@@ -386,16 +421,6 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 	ret = cherokee_fd_set_nodelay (new_socket, true);
 	if (ret != ret_ok) {
 		LOG_WARNING_S (CHEROKEE_ERROR_SOCKET_RM_NAGLES);
-
-		cherokee_fd_close (new_socket);
-		return ret_error;
-	}
-
-	/* Enables nonblocking I/O.
-	 */
-	ret = cherokee_fd_set_nonblocking (new_socket, true);
-	if (ret != ret_ok) {
-		LOG_WARNING (CHEROKEE_ERROR_SOCKET_NON_BLOCKING, new_socket);
 
 		cherokee_fd_close (new_socket);
 		return ret_error;
