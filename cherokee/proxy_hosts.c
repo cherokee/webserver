@@ -127,12 +127,21 @@ cherokee_handler_proxy_poll_new (cherokee_handler_proxy_poll_t **poll,
 ret_t
 cherokee_handler_proxy_poll_free (cherokee_handler_proxy_poll_t *poll)
 {
-	cherokee_list_t *i, *j;
+	cherokee_list_t               *i, *j;
+	cherokee_handler_proxy_conn_t *poll_conn;
 
 	list_for_each_safe (i, j, &poll->active) {
+		poll_conn = PROXY_CONN(i);
+		cherokee_list_del (&poll_conn->listed);
+		cherokee_handler_proxy_conn_free (poll_conn);
 	}
 
 	list_for_each_safe (i, j, &poll->reuse) {
+		poll_conn = PROXY_CONN(i);
+
+		poll->reuse_len -= 1;
+		cherokee_list_del (&poll_conn->listed);
+		cherokee_handler_proxy_conn_free (poll_conn);
 	}
 
 	CHEROKEE_MUTEX_DESTROY (&poll->mutex);
