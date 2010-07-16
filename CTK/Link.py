@@ -47,7 +47,6 @@ class Link (Container):
                  'href':    self.href,
                  'props':   props_to_str(self.props),
                  'content': render.html}
-        print props
 
         render.html = formater (LINK_HTML, props)
         return render
