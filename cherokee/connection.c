@@ -1265,7 +1265,7 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			TRACE(ENTRIES, "read %u, eagain\n", cnt_read);
 			return ret_eagain;
 		case ret_ok:
-			TRACE(ENTRIES, "tossed away %u bytes\n", cnt_read);
+			TRACE(ENTRIES, "%u bytes tossed away\n", cnt_read);
 			retries--;
 			if (cnt_read == tmp1->size && retries > 0)
 				continue;
