@@ -625,7 +625,7 @@ process_active_connections (cherokee_thread_t *thd)
 	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
 		conn = CONN(i);
 
-		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s', socket=%d,%s\n",
+		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s', socket=%d, %s\n",
 		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn),
 		       conn->socket.socket, (conn->socket.status == socket_reading)? "read" : (conn->socket.status == socket_writing)? "writing" : "closed");
 
@@ -651,8 +651,9 @@ process_active_connections (cherokee_thread_t *thd)
 			if ((conn->phase == phase_shutdown) ||
 			    (conn->phase == phase_lingering))
 			{
-				conns_freed++;
+				cherokee_socket_reset (&conn->socket);
 				close_active_connection (thd, conn);
+				conns_freed++;
 				continue;
 			}
 
