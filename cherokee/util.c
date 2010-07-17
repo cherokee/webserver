@@ -819,21 +819,29 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 	int re;
 	int flags;
 
-	/* TCP_NODELAY: Disable the Nagle algorithm. This means that
-         * segments are always sent as soon as possible, even if there
-         * is only a small amount of data.  When not set, data is
-         * buffered until there is a sufficient amount to send out,
-         * thereby avoiding the frequent sending of small packets,
-         * which results in poor utilization of the network.
+	/* Disable the Nagle algorithm. This means that segments are
+         * always sent as soon as possible, even if there is only a
+         * small amount of data. When not set, data is buffered until
+         * there is a sufficient amount to send out, thereby avoiding
+         * the frequent sending of small packets, which results in
+         * poor utilization of the network.
 	 */
+
 #ifdef _WIN32
 	flags = enable;
 	re = ioctlsocket (fd, FIONBIO, (u_long) &flags);
+
+#elif defined(FIONBIO)
+	/* Even though the right thing to do would be to use POSIX's
+	 * O_NONBLOCK, we are using FIONBIO here. It requires a single
+	 * syscall, while using O_NONBLOCK would require us to call
+	 * fcntl(F_GETFL) and fcntl(F_SETFL, O_NONBLOCK)
+	 */
+	re = ioctl (fd, FIONBIO, &enable);
+
 #else
-# ifdef TCP_NODELAY
-	flags = enable;
-	re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, (char *) &flags, sizeof (int));
-# else
+	/* Use POSIX's O_NONBLOCK
+	 */
  	flags = fcntl (fd, F_GETFL, 0);
 	if (unlikely (flags == -1)) {
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_GETFL, fd);
@@ -846,8 +854,8 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 		BIT_UNSET (flags, O_NDELAY);
 
 	re = fcntl (fd, F_SETFL, flags);
-# endif
 #endif
+
 	if (unlikely (re < 0)) {
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_SETFL, fd, flags, "O_NDELAY");
 		return ret_error;
