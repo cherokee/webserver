@@ -46,7 +46,7 @@ class Button (Widget):
         caption = self.caption
         props   = props_to_str (self.props)
 
-        html = '<a id="%(id)s" %(props)s><span>%(caption)s</span></a>' %(locals())
+        html = '<button id="%(id)s" %(props)s>%(caption)s</button>' %(locals())
 
         render = Widget.Render (self)
         render.html += html
