@@ -47,16 +47,6 @@ var dialog_obj = $("#%(id)s");
 /* Initialize */
 dialog_obj.dialog (%(dialog_props)s);
 
-/* Events */
-dialog_obj.bind ('dialogopen', function(event, ui){
-   $('.ui-dialog-buttonpane :button').each (function(){
-       var html = $(this).html();
-       if (! html || html.indexOf('<span') != 0) {
-          $(this).wrapInner('<span class=\"button-outter\"><span class=\"button-inner\"></span></span>');
-       }
-   });
-});
-
 /* Positioning */
 dialog_obj.dialog ('option', 'position', ['center', 85]);
 """
