@@ -530,18 +530,6 @@ tr.panel-selected td div.row_content .sel-actions {
 .panel .comment { color: #999; font-size: 11px; white-space: nowrap; width: 200px; }
 .panel-selected .droot, .panel-selected .host, .panel-selected .inter, .panel-selected .comment, .panel-selected .type { color: #cde; }
 
-/* Panel buttons */
-.panel-buttons { height: 24px; float: right; }
-.panel-button { width: 24px !important; padding: 0 !important; margin: 6px 2px 2px 2px !important; }
-.panel-button span { background: none !important; text-indent: -99999px !important; width: 0 !important; }
-#vserver-new-button { background: transparent url(/CTK/images/bg-button-new.png) no-repeat; }
-#vserver-clone-button { background: transparent url(/CTK/images/bg-button-clone.png) no-repeat; }
-#rule-new-button { background: transparent url(/CTK/images/bg-button-new.png) no-repeat; }
-#rule-clone-button { background: transparent url(/CTK/images/bg-button-clone.png) no-repeat; }
-#source-new-button { background: transparent url(/CTK/images/bg-button-new.png) no-repeat; }
-#source-clone-button { background: transparent url(/CTK/images/bg-button-clone.png) no-repeat; }
-.panel-button:active { background-position: bottom left !important; }
-
 /* Rules table */
 #rules-table {
  table-layout: fixed;
