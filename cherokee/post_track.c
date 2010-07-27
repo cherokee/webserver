@@ -297,6 +297,7 @@ cherokee_generic_post_track_new (cherokee_post_track_t **track)
 	 */
 	n->last_purge = cherokee_bogonow_now;
 
+	CHEROKEE_MUTEX_INIT (&n->lock, CHEROKEE_MUTEX_FAST);
 	INIT_LIST_HEAD (&n->posts_list);
 
 	ret = cherokee_avl_init (&n->posts_lookup);
