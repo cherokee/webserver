@@ -4,16 +4,6 @@ imagesdir = "$(datadir)/cherokee/admin/CTK/static/images"
 images_DATA = \
 arrow_ns.png \
 bg-body.png \
-bg-button-a-big.png \
-bg-button-a-light.png \
-bg-button-a.png \
-bg-button-clone.png \
-bg-button-new.png \
-bg-button-span-big.png \
-bg-button-span-light.png \
-bg-button-span-start-light.png \
-bg-button-span-stop-light.png \
-bg-button-span.png \
 bg-dialog-buttonpane.png \
 bg-dialog-titlebar-close.gif \
 bg-dialog-titlebar.png \
@@ -40,6 +30,8 @@ on.png \
 online.png \
 tabbg.png \
 tick.png \
+ui-bg_gloss-wave_35_f6a828_500x100.png \
+ui-bg_highlight-soft_100_eeeeee_1x100.png \
 ui-icons_222222_256x240.png \
 ui-icons_2e83ff_256x240.png \
 ui-icons_454545_256x240.png \
