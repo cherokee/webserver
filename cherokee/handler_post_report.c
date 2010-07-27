@@ -192,7 +192,7 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 	if (ret != ret_ok) {
 		cherokee_dwriter_dict_open (&hdl->writer);
 		cherokee_dwriter_cstring (&hdl->writer, "error");
-		cherokee_dwriter_cstring (&hdl->writer, state);
+		cherokee_dwriter_string (&hdl->writer, state, strlen(state));
 		cherokee_dwriter_dict_close (&hdl->writer);
 
 		TRACE (ENTRIES, "Post report: '%s'\n", "Could not get info");
