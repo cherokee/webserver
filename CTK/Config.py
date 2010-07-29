@@ -328,7 +328,7 @@ class Config:
     # Serialization
     def serialize (self):
         def sorter(x,y):
-            order = ['config', 'server', 'vserver', 'source', 'icons', 'mime']
+            order = ['config', 'server', 'vserver', 'source', 'icons', 'mime', 'admin']
             a = x.split('!')
             b = y.split('!')
             try:
