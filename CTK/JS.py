@@ -57,3 +57,6 @@ def Ajax (url, data='', type='POST', async=True, dataType='json',
 
 def Hide (id):
     return "$('#%s').hide();"%(id)
+
+def GotoURL (url):
+    return "window.location = '%s';" %(url)
