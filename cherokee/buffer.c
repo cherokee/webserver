@@ -1434,11 +1434,12 @@ cherokee_buffer_escape_uri_delims (cherokee_buffer_t *buffer, cherokee_buffer_t 
 ret_t
 cherokee_buffer_escape_arg (cherokee_buffer_t *buffer, cherokee_buffer_t *src)
 {
-	/* Each *bit* position of the array represents
-	 * whether or not the character is escaped.
+	/* Escapes:
+	 *
+	 * %00..%1F, ";", " ", "#", "%", "&", "+", "?", %7F..%FF
 	 */
 	static uint32_t escape_arg[] = {
-		0xffffffff, 0x80000829, 0x00000000, 0x80000000,
+		0xffffffff, 0x88000869, 0x00000000, 0x80000000,
 		0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	};
 
