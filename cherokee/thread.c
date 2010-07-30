@@ -523,6 +523,7 @@ static ret_t
 process_polling_connections (cherokee_thread_t *thd)
 {
 	int                    re;
+	ret_t                  ret;
 	cherokee_list_t       *tmp, *i;
 	cherokee_connection_t *conn;
 
@@ -562,16 +563,24 @@ process_polling_connections (cherokee_thread_t *thd)
 			/* Timed-out: Reactive the connection. The
 			 * main loop will take care of closing it.
 			 */
-			reactive_conn_from_polling (thd, conn);
-			BIT_UNSET (conn->options, conn_op_was_polling);
+			ret = reactive_conn_from_polling (thd, conn);
+			if (unlikely (ret != ret_ok)) {
+				purge_closed_polling_connection (thd, conn);
+				continue;
+			}
 
+			BIT_UNSET (conn->options, conn_op_was_polling);
 			continue;
 		}
 
 		/* Is there information to be sent?
 		 */
 		if (conn->buffer.len > 0) {
-			reactive_conn_from_polling (thd, conn);
+			ret = reactive_conn_from_polling (thd, conn);
+			if (unlikely (ret != ret_ok)) {
+				purge_closed_polling_connection (thd, conn);
+				continue;
+			}
 			continue;
 		}
 
@@ -595,7 +604,11 @@ process_polling_connections (cherokee_thread_t *thd)
 
 		/* Move from the 'polling' to the 'active' list:
 		 */
-		reactive_conn_from_polling (thd, conn);
+		ret = reactive_conn_from_polling (thd, conn);
+		if (unlikely (ret != ret_ok)) {
+			purge_closed_polling_connection (thd, conn);
+			continue;
+		}
 	}
 
 	return ret_ok;
