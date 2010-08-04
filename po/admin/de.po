@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-07-17 11:30+0200\n"
+"POT-Creation-Date: 2010-08-04 12:55+0200\n"
 "PO-Revision-Date: 2010-07-15 16:11+0100\n"
 "Last-Translator: Andreas Sinz <andreas.sinz@aon.at>\n"
 "Language-Team: none\n"
@@ -162,7 +162,7 @@ msgstr ""
 
 #: admin/Backup.py:166 admin/Backup.py:179 admin/Backup.py:229
 #: admin/Backup.py:237 admin/Backup.py:259 admin/Backup.py:271
-#: admin/CTK/CTK/Dialog.py:216 admin/Login.py:92 admin/PageException.py:89
+#: admin/CTK/CTK/Dialog.py:206 admin/Login.py:92 admin/PageException.py:89
 #: admin/PageException.py:93 admin/PageIndex.py:251 admin/PageSource.py:409
 msgid "Close"
 msgstr "Schließen"
