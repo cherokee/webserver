@@ -839,7 +839,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 	    (buffer->len >= DEFAULT_READ_SIZE * 3))
 	{
 		hdl->pconn->post.do_buf_sent = false;
-		cherokee_buffer_move_to_begin (buffer, hdl->pconn->post.do_buf_sent);
+		cherokee_buffer_move_to_begin (buffer, hdl->pconn->post.sent);
 		TRACE (ENTRIES, "Promoted POST to non-buffered mode. Length afterwards: %d\n", buffer->len);
 	}
 
