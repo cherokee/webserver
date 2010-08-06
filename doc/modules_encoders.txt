@@ -14,19 +14,49 @@ to content that can't take advantage of it (i.e., it doesn't make
 sense to try to compress an already compressed file because there is
 nothing to gain).
 
-The encoders must be enabled or disabled in a per rule basis.
+The encoders must be enabled or disabled in a per rule basis. The
+acceptable settings for an encoder are 'Leave unset', 'Allow' and
+'Forbid'.
 
 This is the list of currently provided encoders:
 
 . link:modules_encoders_gzip.html[gzip]
 . link:modules_encoders_deflate.html[deflate]
 
-It is interesting to highlight that Cherokee also supports negative
-encoding rules. This translates into rules that forbid an encoder to
-be used. To prevent encoding files that are already compressed, a
-pretty simple rule such as the following one could be included to
-avoid the problem.
+As you might have guessed from the list of acceptable settings, it is
+interesting to highlight that Cherokee supports negative encoding
+rules. This translates into rules that forbid an encoder to be
+used. To prevent encoding files that are already compressed, a pretty
+simple rule such as the following one could be included to avoid the
+problem.
 
-* Match: Extensions (jpg,zip,gz,rar,7z)
-* Final: No
-* Encoder: Gzip: Forbid
+[options="header"]
+|===================================================================
+|Match                          | Final/Non-Final | Encoder setting
+|Extensions (jpg,zip,gz,rar,7z) | Non-Final       | Gzip forbidden
+|====================================================================
+
+For a more complex example, imagine the following scenario:
+
+[options="header"]
+|===================================================================
+|Match   | Final/Non-Final | Encoder setting
+| *.php  | Non-Final       | Gzip forbidden
+|a*      | Non-Final       | Gzip leave unset
+|Default | Final           | Gzip allowed
+|====================================================================
+
+The rule list is evaluated from top to bottom. The 'Leave unset'
+option of the encoders means that, whenever a rule is applied, it will
+not change the status of the encoding setting.
+
+Under these conditions, the following requests would be evaluated as shown:
+
+- /foo.php - wouldn't use Gzip
+- /aaa.txt - would use Gzip (a* wouldn't set it, but since it's non-final the default rule would)
+- /zzz.txt - would use it (set by the default rule)
+- /abc.php - it matches the first rule, so Gzip is forbidden, and
+  since it is no-final the evaluation continues. It also matches the
+  second rule, but since Gzip support got already forbidden nothing is
+  changed. When it hits the last rule, the same thing happens: Gzip is
+  already forbidden, so the value is not overwritten.
