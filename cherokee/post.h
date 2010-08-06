@@ -80,8 +80,7 @@ ret_t cherokee_post_mrproper       (cherokee_post_t *post);
 ret_t cherokee_post_read_header       (cherokee_post_t   *post, void *conn);
 ret_t cherokee_post_has_info          (cherokee_post_t   *post);
 int   cherokee_post_read_finished     (cherokee_post_t   *post);
-int   cherokee_post_has_buffered_info (cherokee_post_t   *post,
-				       cherokee_buffer_t *tmp);
+int   cherokee_post_has_buffered_info (cherokee_post_t   *post);
 
 
 /* Read

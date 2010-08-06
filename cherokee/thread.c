@@ -717,11 +717,13 @@ process_active_connections (cherokee_thread_t *thd)
 		if (conn->options & conn_op_was_polling) {
 			BIT_UNSET (conn->options, conn_op_was_polling);
 		}
-		else if ((conn->phase != phase_shutdown) &&
-
-			 (conn->phase != phase_reading_header || conn->incoming_header.len <= 0) &&
-			 (conn->phase != phase_reading_post || conn->post.send.buffer.len <= 0))
-		{
+		else if (conn->phase == phase_shutdown) {
+			; /* No FD check*/
+		}
+		else if ((conn->phase == phase_reading_header) && (conn->incoming_header.len > 0)) {
+			; /* No need, there's info already */
+		}
+		else {
 			re = cherokee_fdpoll_check (thd->fdpoll,
 						    SOCKET_FD(&conn->socket),
 						    conn->socket.status);
@@ -1131,7 +1133,9 @@ process_active_connections (cherokee_thread_t *thd)
 				conn_set_mode (thd, conn, socket_reading);
 				continue;
 			case ret_deny:
-				/* Blocking on back-end write */
+				/* Blocking on back-end write.
+				 * Skip next fd check */
+				BIT_SET (conn->options, conn_op_was_polling);
 				continue;
 			case ret_eof:
 			case ret_error:

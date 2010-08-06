@@ -462,7 +462,7 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 		/* ret_eagain - Block on read
 		 * ret_deny   - Block on back-end write
 		 */
-		if (cherokee_post_has_buffered_info (&conn->post, NULL)) {
+		if (cherokee_post_has_buffered_info (&conn->post)) {
 			return ret_deny;
 		}
 		return ret_eagain;
