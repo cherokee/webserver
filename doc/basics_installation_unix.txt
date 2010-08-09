@@ -104,8 +104,8 @@ yet available on the APT repositories. You can do several things
 besides installing manually.
 
 For Ubuntu users, simply use the PPA repository. Normally when a new
-Cherokee version is released, the repository will have it almost in
-real time. Simply type:
+Cherokee version is released, the repositories will be swiftly
+updated. Simply type:
 
 ----
 sudo add-apt-repository ppa:cherokee-webserver
@@ -113,6 +113,32 @@ sudo add-apt-repository ppa:cherokee-webserver
 
 That will add the PPA keys. You just need to sudo apt-get update
 afterwards.
+
+Please note that there are two Launchpad Cherokee repositories: the
+link:https://edge.launchpad.net/~cherokee-webserver/+archive/ppa/+packages[current]
+(stable) repository and the new repository called
+link:https://edge.launchpad.net/~cherokee-webserver/+archive/i-tse[i-tse]
+('new' in Cherokee language).
+
+Everytime a new cherokee version is released it goes straight to the
+the i-tse repository. If no critical bugs are found or no new version
+is released within 8 days, this version is then moved moved to the
+current PPA. It is also pushed to Debian Unstable.
+
+Doing this ensures that production servers using the current version
+get a tested version every time they upgrade.
+
+If you want to use the i-tse ( NEW ) version just add the new repository:
+
+.Ubuntu Lucid
+----
+sudo add-apt-repository ppa:cherokee-webserver/i-tse
+----
+
+.Karmic, Jaunty, Hardy: add this to your sources.list
+----
+deb http://ppa.launchpad.net/cherokee-webserver/i-tse/ubuntu YOURVERSION main
+----
 
 For Debian users, you will have to use packages from 'Unstable' or
 'Testing' if you want to keep up.
