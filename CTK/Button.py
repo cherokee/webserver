@@ -33,9 +33,6 @@ class Button (Widget):
         else:
             self.props['class'] = "button"
 
-        if not 'href' in props:
-            self.props['href'] = " #"
-
         self.id      = props.pop('id', "button_%d"%(self.uniq_id))
         self.caption = caption
 
