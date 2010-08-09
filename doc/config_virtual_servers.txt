@@ -182,14 +182,30 @@ Host Match
 This section allows to define the list of domains that the virtual
 server implements.
 
-It can accept either FQDN (Fully Qualified Domain Names) or wild
-card entries.
+It can accept either FQDN (Fully Qualified Domain Names), wild card
+entries, regular expressions or IPs.
 
 For instance::
 +
 ----
           example.com
         *.example.org
+----
+
+Hint: Although it is rare, there are some web-broswsers out there that
+do not seem to convert the FQDN to lowercase before sending the
+requests. This mainly happens with built-in browsers or very-early
+implementations. Even in those cases it is possible to have
+case-insensitive host matching by using regular-expression
+matching. For example, if you're domain name was `Example.com` and
+were dealing with one such browser, you would have to prepend *(?i)*
+to your regular expression. That in turn would perform a
+case-insensitive evaluation, effectively solving the problem.
+
+The followgin Case-insensitive RegEx matches both example.com and Example.com::
++
+----
+	(?i)example.com
 ----
 
 Note that you should probably keep in mind the way this list is
