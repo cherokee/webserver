@@ -206,7 +206,8 @@ class BehaviorWidget (CTK.Container):
         else:
             first_rule = '0'
 
-        button = CTK.Button(_('Rule Management'), {'id':'rule-management', 'href': '/vserver/%s/rule/%s'%(vsrv_num, first_rule)})
+        button = CTK.Button(_('Rule Management'), {'id':'rule-management'})
+        button.bind('click', CTK.JS.GotoURL('/vserver/%s/rule/%s'%(vsrv_num, first_rule)))
         self += CTK.Indenter (button)
 
 
