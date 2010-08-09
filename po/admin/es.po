@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '1.0.0'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-08-04 12:55+0200\n"
+"POT-Creation-Date: 2010-08-09 12:37+0200\n"
 "PO-Revision-Date: 2010-07-01 21:37+0200\n"
 "Last-Translator: Taher Shihadeh <taher@unixwars.com>\n"
 "Language-Team: Spanish <>\n"
@@ -370,11 +370,11 @@ msgstr ""
 msgid "Read X-Real-IP"
 msgstr "Aceptar X-Real-IP"
 
-#: admin/CgiBase.py:70 admin/PageVServer.py:415
+#: admin/CgiBase.py:70 admin/PageVServer.py:416
 msgid "Don't check origin"
 msgstr "No comprobar origen"
 
-#: admin/CgiBase.py:72 admin/PageVServer.py:418
+#: admin/CgiBase.py:72 admin/PageVServer.py:419
 msgid "Accept from Hosts"
 msgstr "Aceptar de Hosts"
 
@@ -503,7 +503,7 @@ msgstr ""
 "Si debería recolectar estadísticas sobre el tráfico de este servidor virtual."
 
 #: admin/Graph.py:117 admin/PageEntry.py:240 admin/PageSource.py:270
-#: admin/PageStatus.py:70 admin/PageVServer.py:518 admin/PageVServers.py:194
+#: admin/PageStatus.py:70 admin/PageVServer.py:519 admin/PageVServers.py:194
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -515,9 +515,9 @@ msgstr "Estadísticas de Tráfico"
 msgid "Allows to specify an alternative Document Root path."
 msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 
-#: admin/Handler.py:43 admin/PageEntry.py:229 admin/PageVServer.py:302
+#: admin/Handler.py:43 admin/PageEntry.py:229 admin/PageVServer.py:303
 #: admin/PageVServers.py:127 admin/wizards/django.py:190
-#: admin/wizards/mono.py:199 admin/wizards/php.py:36 admin/wizards/php.py:261
+#: admin/wizards/mono.py:199 admin/wizards/php.py:36 admin/wizards/php.py:262
 #: admin/wizards/uwsgi.py:243
 msgid "Document Root"
 msgstr "Raíz de documentos"
@@ -527,7 +527,7 @@ msgid "Extension List"
 msgstr "Lista de extensiones"
 
 #: admin/Icons.py:124 admin/Icons.py:323 admin/Mime.py:86 admin/Mime.py:120
-#: admin/consts.py:183 admin/plugins/extensions.py:59
+#: admin/consts.py:183 admin/plugins/extensions.py:61
 msgid "Extensions"
 msgstr "Extensiones"
 
@@ -1062,7 +1062,7 @@ msgstr "Lista de autenticación"
 msgid "Leave unset"
 msgstr "Dejar sin especificar"
 
-#: admin/PageEntry.py:71 admin/PageVServer.py:310 admin/plugins/common.py:42
+#: admin/PageEntry.py:71 admin/PageVServer.py:311 admin/plugins/common.py:42
 #: admin/plugins/common.py:43 admin/plugins/dirlist.py:55
 #: admin/plugins/proxy.py:237
 msgid "Allow"
@@ -1084,7 +1084,7 @@ msgstr "Gestión de tráfico"
 msgid "Skip Logging"
 msgstr "No guardar registro"
 
-#: admin/PageEntry.py:109 admin/PageVServer.py:507
+#: admin/PageEntry.py:109 admin/PageVServer.py:508
 msgid "Logging"
 msgstr "Registro"
 
@@ -1159,7 +1159,7 @@ msgstr "Codificación"
 msgid "Time"
 msgstr "Tiempo"
 
-#: admin/PageEntry.py:258 admin/PageVServer.py:508
+#: admin/PageEntry.py:258 admin/PageVServer.py:509
 msgid "Security"
 msgstr "Seguridad"
 
@@ -1449,7 +1449,7 @@ msgstr "Grupo"
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:252 admin/PageVServer.py:313
+#: admin/PageGeneral.py:252 admin/PageVServer.py:314
 msgid "Network"
 msgstr "Red"
 
@@ -1826,7 +1826,7 @@ msgstr "Clonar"
 msgid "Clone Selected Behavior Rule"
 msgstr "Clonar la regla seleccionada"
 
-#: admin/PageRule.py:298 admin/PageVServer.py:505
+#: admin/PageRule.py:298 admin/PageVServer.py:506
 msgid "Behavior"
 msgstr "Comportamiento"
 
@@ -1958,7 +1958,7 @@ msgstr "Añadir nueva variable de entorno"
 msgid "Add new variable"
 msgstr "Añadir nueva variable"
 
-#: admin/PageSource.py:266 admin/PageVServer.py:510
+#: admin/PageSource.py:266 admin/PageVServer.py:511
 msgid "Virtual Server"
 msgstr "Servidor Virtual"
 
@@ -2298,7 +2298,7 @@ msgstr "La regla está activa"
 msgid "Host Names"
 msgstr "Nombres de servidor"
 
-#: admin/PageVServer.py:155 admin/PageVServer.py:319 admin/PageVServer.py:335
+#: admin/PageVServer.py:155 admin/PageVServer.py:320 admin/PageVServer.py:336
 #: admin/plugins/method.py:94 admin/plugins/method.py:104
 msgid "Method"
 msgstr "Método"
@@ -2312,167 +2312,167 @@ msgstr "Reglas de funcionamiento"
 msgid "Rule Management"
 msgstr "Manejo de reglas…"
 
-#: admin/PageVServer.py:234
+#: admin/PageVServer.py:235
 msgid "Only accept Secure Connections"
 msgstr "Aceptar conexiones seguras únicamente"
 
-#: admin/PageVServer.py:239
+#: admin/PageVServer.py:240
 msgid "Encoding enabled"
 msgstr "Codificación activa"
 
-#: admin/PageVServer.py:245
+#: admin/PageVServer.py:246
 msgid "no"
 msgstr "no"
 
-#: admin/PageVServer.py:256
+#: admin/PageVServer.py:257
 msgid " seconds"
 msgstr " segundos"
 
-#: admin/PageVServer.py:261
+#: admin/PageVServer.py:262
 msgid " bytes per second"
 msgstr " bytes por segundo"
 
-#: admin/PageVServer.py:266
+#: admin/PageVServer.py:267
 msgid "Logging enabled for this rule"
 msgstr "Registros habilitados para esta regla"
 
-#: admin/PageVServer.py:271
+#: admin/PageVServer.py:272
 msgid "Prevents further rule evaluation"
 msgstr "Impide seguir evaluando reglas"
 
-#: admin/PageVServer.py:276
+#: admin/PageVServer.py:277
 msgid "Rule is active"
 msgstr "La regla está activa"
 
-#: admin/PageVServer.py:295
+#: admin/PageVServer.py:296
 msgid "Virtual Server nickname"
 msgstr "Nombre del servidor virtual"
 
-#: admin/PageVServer.py:297
+#: admin/PageVServer.py:298
 msgid "Server ID"
 msgstr "ID del servidor"
 
-#: admin/PageVServer.py:303
+#: admin/PageVServer.py:304
 msgid "Directory Indexes"
 msgstr "Índices de directorio"
 
-#: admin/PageVServer.py:305 admin/plugins/fullpath.py:115
+#: admin/PageVServer.py:306 admin/plugins/fullpath.py:115
 msgid "Paths"
 msgstr "Rutas"
 
-#: admin/PageVServer.py:310
+#: admin/PageVServer.py:311
 msgid "Keep-alive"
 msgstr "keep-alive"
 
-#: admin/PageVServer.py:311
+#: admin/PageVServer.py:312
 msgid "Max Upload Size"
 msgstr "Tam. Máx. Subida"
 
-#: admin/PageVServer.py:321 admin/plugins/evhost.py:33
+#: admin/PageVServer.py:322 admin/plugins/evhost.py:33
 msgid "Advanced Virtual Hosting"
 msgstr "Hospedaje Virtual Avanzado"
 
-#: admin/PageVServer.py:337
+#: admin/PageVServer.py:338
 msgid "Error Handling hook"
 msgstr "Manejo de errores"
 
-#: admin/PageVServer.py:348 admin/consts.py:227 admin/consts.py:244
+#: admin/PageVServer.py:349 admin/consts.py:227 admin/consts.py:244
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: admin/PageVServer.py:352
+#: admin/PageVServer.py:353
 msgid "Write errors to"
 msgstr "Escribir errores en"
 
-#: admin/PageVServer.py:356 admin/PageVServer.py:395
+#: admin/PageVServer.py:357 admin/PageVServer.py:396
 msgid "Filename"
 msgstr "Nombre del fichero"
 
-#: admin/PageVServer.py:358 admin/PageVServer.py:398
+#: admin/PageVServer.py:359 admin/PageVServer.py:399
 msgid "Command"
 msgstr "Comando"
 
-#: admin/PageVServer.py:364
+#: admin/PageVServer.py:365
 msgid "Error Logging"
 msgstr "Registro de errores"
 
-#: admin/PageVServer.py:375
+#: admin/PageVServer.py:376
 msgid "Format"
 msgstr "Formato"
 
-#: admin/PageVServer.py:382
+#: admin/PageVServer.py:383
 msgid "Write accesses to"
 msgstr "Escribir accesos en"
 
-#: admin/PageVServer.py:403
+#: admin/PageVServer.py:404
 msgid "Template: "
 msgstr "Plantilla:"
 
-#: admin/PageVServer.py:405
+#: admin/PageVServer.py:406
 msgid "Access Logging"
 msgstr "Registro de accesos"
 
-#: admin/PageVServer.py:411
+#: admin/PageVServer.py:412
 msgid "Time standard"
 msgstr "Estándar de tiempo"
 
-#: admin/PageVServer.py:412
+#: admin/PageVServer.py:413
 msgid "Accept Forwarded IPs"
 msgstr "Acceptar IPs redireccionadas"
 
-#: admin/PageVServer.py:412 admin/consts.py:222
+#: admin/PageVServer.py:413 admin/consts.py:222
 msgid "Accept"
 msgstr "Aceptar"
 
-#: admin/PageVServer.py:415
+#: admin/PageVServer.py:416
 msgid "Do not check"
 msgstr "No comprobar"
 
-#: admin/PageVServer.py:424
+#: admin/PageVServer.py:425
 msgid "Logging Options"
 msgstr "Opciones del histórico"
 
-#: admin/PageVServer.py:460
+#: admin/PageVServer.py:461
 msgid "Certificate"
 msgstr "Certificado"
 
-#: admin/PageVServer.py:461
+#: admin/PageVServer.py:462
 msgid "Certificate key"
 msgstr "Clave del Certificado"
 
-#: admin/PageVServer.py:466
+#: admin/PageVServer.py:467
 msgid "Required SSL/TLS Values"
 msgstr "Valores SSL/TLS obligatorios"
 
-#: admin/PageVServer.py:471
+#: admin/PageVServer.py:472
 msgid "Ciphers"
 msgstr "Codificadores"
 
-#: admin/PageVServer.py:472
+#: admin/PageVServer.py:473
 msgid "Client Certs. Request"
 msgstr "Solicitud de Certif. de Clientes"
 
-#: admin/PageVServer.py:475
+#: admin/PageVServer.py:476
 msgid "CA List"
 msgstr "Lista de CA"
 
-#: admin/PageVServer.py:478
+#: admin/PageVServer.py:479
 msgid "Verify Depth"
 msgstr "Profundidad de verificación"
 
-#: admin/PageVServer.py:484
+#: admin/PageVServer.py:485
 msgid "Advanced Options"
 msgstr "Opciones avanzadas"
 
-#: admin/PageVServer.py:503
+#: admin/PageVServer.py:504
 msgid "Basics"
 msgstr "Básica"
 
-#: admin/PageVServer.py:504
+#: admin/PageVServer.py:505
 msgid "Host Match"
 msgstr "Concordancia de Host"
 
-#: admin/PageVServer.py:506
+#: admin/PageVServer.py:507
 msgid "Error Handler"
 msgstr "Errores"
 
@@ -3288,6 +3288,20 @@ msgid ""
 "applied."
 msgstr ""
 "Lista de extensiones de fichero a la que se le aplicará la configuración."
+
+#: admin/plugins/extensions.py:32
+msgid "Ensure that the matched extension if part of a local file name."
+msgstr ""
+
+#: admin/plugins/extensions.py:62
+#, fuzzy
+msgid "Check local file"
+msgstr "Comprobar fichero"
+
+#: admin/plugins/extensions.py:62
+#, fuzzy
+msgid "Check"
+msgstr "Comprobar fichero"
 
 #: admin/plugins/fcgi.py:49
 msgid "FastCGI Specific"
@@ -4426,7 +4440,7 @@ msgstr "Directorio web"
 #: admin/wizards/joomla.py:261 admin/wizards/liferay.py:169
 #: admin/wizards/mailman.py:145 admin/wizards/mediawiki.py:230
 #: admin/wizards/moinmoin.py:214 admin/wizards/mono.py:198
-#: admin/wizards/php.py:240 admin/wizards/phpbb.py:186
+#: admin/wizards/php.py:241 admin/wizards/phpbb.py:186
 #: admin/wizards/rails.py:315 admin/wizards/sugar.py:216
 #: admin/wizards/symfony.py:226 admin/wizards/trac.py:131
 #: admin/wizards/uwsgi.py:242 admin/wizards/wordpress.py:217
@@ -4529,7 +4543,7 @@ msgstr "Directorio web donde Concrete5 será publicado (Ejemplo: /concrete5)"
 #: admin/wizards/concrete5.py:229 admin/wizards/django.py:191
 #: admin/wizards/drupal.py:260 admin/wizards/joomla.py:262
 #: admin/wizards/mailman.py:146 admin/wizards/mediawiki.py:231
-#: admin/wizards/mono.py:200 admin/wizards/php.py:241
+#: admin/wizards/mono.py:200 admin/wizards/php.py:242
 #: admin/wizards/phpbb.py:187 admin/wizards/rails.py:316
 #: admin/wizards/sugar.py:217 admin/wizards/symfony.py:227
 #: admin/wizards/trac.py:132 admin/wizards/uwsgi.py:244
