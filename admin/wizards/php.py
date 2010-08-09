@@ -147,6 +147,7 @@ def wizard_php_add (key):
 
         CTK.cfg['%s!match' %(next)]                     = 'extensions'
         CTK.cfg['%s!match!extensions' %(next)]          = 'php'
+        CTK.cfg['%s!match!check_local_file' %(next)]    = '1'
         CTK.cfg['%s!match!final' %(next)]               = '0'
         CTK.cfg['%s!handler' %(next)]                   = 'fcgi'
         CTK.cfg['%s!handler!balancer' %(next)]          = 'round_robin'
