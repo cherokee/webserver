@@ -37,8 +37,11 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	cherokee_rule_t   rule;
-	cherokee_avl_t    extensions;
+	cherokee_rule_t    rule;
+	cherokee_avl_t     extensions;
+
+	cherokee_boolean_t check_local_file;
+	cherokee_boolean_t use_iocache;
 } cherokee_rule_extensions_t;
 
 #define RULE_EXTENSIONS(x) ((cherokee_rule_extensions_t *)(x))

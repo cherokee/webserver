@@ -26,6 +26,8 @@
 #include "rule_extensions.h"
 #include "plugin_loader.h"
 #include "connection-protected.h"
+#include "server-protected.h"
+#include "thread.h"
 #include "util.h"
 
 #define ENTRIES "rule,extensions"
@@ -71,6 +73,9 @@ configure (cherokee_rule_extensions_t *rule,
 		return ret_error;
 	}
 
+	cherokee_config_node_read_bool (conf, "check_local_file", &rule->check_local_file);
+	cherokee_config_node_read_bool (conf, "iocache",          &rule->use_iocache);
+
 	return parse_value (tmp, &rule->extensions);
 }
 
@@ -80,6 +85,61 @@ _free (void *p)
 	cherokee_rule_extensions_t *rule = RULE_EXTENSIONS(p);
 
 	cherokee_avl_mrproper (&rule->extensions, NULL);
+	return ret_ok;
+}
+
+static ret_t
+local_file_exists (cherokee_rule_extensions_t *rule,
+		   cherokee_connection_t      *conn,
+		   cherokee_config_entry_t    *ret_conf)
+{
+	ret_t                     ret;
+	struct stat              *info;
+	struct stat               nocache_info;
+	cherokee_boolean_t        is_file;
+	cherokee_iocache_entry_t *io_entry      = NULL;
+	cherokee_server_t        *srv           = CONN_SRV(conn);
+	cherokee_buffer_t        *tmp           = THREAD_TMP_BUF1(CONN_THREAD(conn));
+
+	UNUSED(rule);
+
+	/* Build the full path
+	 */
+	cherokee_buffer_clean (tmp);
+
+	if (ret_conf->document_root != NULL) {
+		/* A previous non-final rule set a custom document root */
+		cherokee_buffer_add_buffer (tmp, ret_conf->document_root);
+	} else {
+		cherokee_buffer_add_buffer (tmp, &conn->local_directory);
+	}
+
+	cherokee_buffer_add_str    (tmp, "/");
+	cherokee_buffer_add_buffer (tmp, &conn->request);
+
+	/* Check the local file
+	 */
+	ret = cherokee_io_stat (srv->iocache, tmp, rule->use_iocache,
+				&nocache_info, &io_entry, &info);
+
+	is_file = S_ISREG(info->st_mode);
+
+	if (io_entry) {
+		cherokee_iocache_entry_unref (&io_entry);
+	}
+
+	/* Report and return
+	 */
+	if (ret != ret_ok) {
+		TRACE(ENTRIES, "Rule extensions: almost matched '%s', but file does not exist\n", tmp->buf);
+		return ret_not_found;
+	}
+
+	if (! is_file) {
+		TRACE(ENTRIES, "Rule extensions: almost matched '%s', but it is not a file\n", tmp->buf);
+		return ret_not_found;
+	}
+
 	return ret_ok;
 }
 
@@ -140,6 +200,13 @@ match (cherokee_rule_extensions_t *rule,
 		ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
 		switch (ret) {
 		case ret_ok:
+			if (rule->check_local_file) {
+				ret = local_file_exists (rule, conn, ret_conf);
+				if (ret != ret_ok) {
+					break;
+				}
+			}
+
 			TRACE(ENTRIES, "Match extension: '%s'\n", dot+1);
  			if (slash != NULL) {
 				*slash = '/';
@@ -185,6 +252,9 @@ cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule)
 
 	/* Properties
 	 */
+	n->check_local_file = false;
+	n->use_iocache      = true;
+
 	cherokee_avl_init (&n->extensions);
 
 	*rule = n;
