@@ -42,6 +42,16 @@ def upgrade_to_0_99_45 (cfg):
     if 'None' in cfg.keys('source'):
         del (cfg['source!None'])
 
+# Converts from 0.99.45 to 1.0.7
+def upgrade_to_1_0_7 (cfg):
+    # Adds 'check_local_file' to Extension php
+    # http://bugs.cherokee-project.com/951
+    for v in cfg.keys('vserver'):
+        for r in cfg.keys('vserver!%s!rule'%(v)):
+            if cfg.get_val('vserver!%s!rule!%s!match'%(v,r)) == 'extensions' and \
+               cfg.get_val('vserver!%s!rule!%s!match!extensions'%(v,r)) == 'php':
+                cfg['vserver!%s!rule!%s!match!check_local_file'%(v,r)] = '1'
+
 
 def config_version_get_current():
     ver = configured.VERSION.split ('b')[0]
@@ -107,6 +117,10 @@ def config_version_update_cfg (cfg):
     # Update to.. 0.99.45
     if ver_config_i < 99045:
         upgrade_to_0_99_45 (cfg)
+
+    # Update to.. 1.0.7
+    if ver_config_i < 1000007:
+        upgrade_to_1_0_7 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True
