@@ -1312,16 +1312,13 @@ process_active_connections (cherokee_thread_t *thd)
 				ret = conn->socket.cryptor->shutdown (conn->socket.cryptor);
 				switch (ret) {
 				case ret_ok:
+				case ret_eof:
+				case ret_error:
 					break;
 
 				case ret_eagain:
 					conn_set_mode (thd, conn, socket_reading);
 					return ret_eagain;
-
-				case ret_eof:
-				case ret_error:
-					close_active_connection (thd, conn, false);
-					continue;
 
 				default:
 					RET_UNKNOWN (ret);
