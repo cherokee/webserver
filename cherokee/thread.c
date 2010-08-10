@@ -1535,6 +1535,21 @@ get_new_connection (cherokee_thread_t *thd, cherokee_connection_t **conn)
 
 
 static ret_t
+thread_add_connection (cherokee_thread_t *thd, cherokee_connection_t  *conn)
+{
+	ret_t ret;
+
+	ret = cherokee_fdpoll_add (thd->fdpoll, SOCKET_FD(&conn->socket), FDPOLL_MODE_READ);
+	if (unlikely (ret < ret_ok)) return ret;
+
+	conn_set_mode (thd, conn, socket_reading);
+	add_connection (thd, conn);
+
+	return ret_ok;
+}
+
+
+static ret_t
 accept_new_connection (cherokee_thread_t *thd,
 		       cherokee_bind_t   *bind)
 {
@@ -1610,7 +1625,7 @@ accept_new_connection (cherokee_thread_t *thd,
 
 	/* Lets add the new connection
 	 */
-	ret = cherokee_thread_add_connection (thd, new_conn);
+	ret = thread_add_connection (thd, new_conn);
 	if (unlikely (ret < ret_ok))
 		goto error;
 
@@ -1953,21 +1968,6 @@ out:
 }
 
 #endif /* HAVE_PTHREAD */
-
-
-ret_t
-cherokee_thread_add_connection (cherokee_thread_t *thd, cherokee_connection_t  *conn)
-{
-	ret_t ret;
-
-	ret = cherokee_fdpoll_add (thd->fdpoll, SOCKET_FD(&conn->socket), FDPOLL_MODE_READ);
-	if (unlikely (ret < ret_ok)) return ret;
-
-	conn_set_mode (thd, conn, socket_reading);
-	add_connection (thd, conn);
-
-	return ret_ok;
-}
 
 
 int

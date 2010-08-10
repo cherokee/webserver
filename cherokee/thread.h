@@ -120,10 +120,6 @@ ret_t cherokee_thread_free                       (cherokee_thread_t  *thd);
 ret_t cherokee_thread_unlock                     (cherokee_thread_t *thd);
 ret_t cherokee_thread_wait_end                   (cherokee_thread_t *thd);
 
-ret_t cherokee_thread_add_connection             (cherokee_thread_t *thd, cherokee_connection_t  *conn);
-ret_t cherokee_thread_get_new_connection         (cherokee_thread_t *thd, cherokee_connection_t **conn);
-ret_t cherokee_thread_set_reusable_connection    (cherokee_thread_t *thd, cherokee_connection_t  *conn);
-
 ret_t cherokee_thread_deactive_to_polling        (cherokee_thread_t *thd, cherokee_connection_t *conn, int fd, int rw, char multi);
 int   cherokee_thread_connection_num             (cherokee_thread_t *thd);
 
