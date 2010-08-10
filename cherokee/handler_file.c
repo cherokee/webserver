@@ -501,8 +501,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 
 	/* Range 1: Check the range and file size
 	 */
-	if (unlikely ((conn->range_start >= fhdl->info->st_size) ||
-		      (conn->range_end   >= fhdl->info->st_size)))
+	if (unlikely (conn->range_start >= fhdl->info->st_size))
 	{
 		/* Sets the range limits, so the error handler can
 		 * report the error properly.
@@ -513,6 +512,16 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 
 		ret = ret_error;
 		goto out;
+
+	}
+
+	if (unlikely ((conn->range_end >= fhdl->info->st_size)))
+	{
+		/* Send the full file. Set the end to -1 so it is
+		 * updated later on.
+		 */
+		conn->range_start = 0;
+		conn->range_end   = -1;
 	}
 
 	/* Set the error code
