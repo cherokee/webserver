@@ -24,7 +24,11 @@
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
+#include "bogotime.h"
 #include "init.h"
+#include "util.h"
+
+#define ENTRIES "fdpoll"
 
 
 /* Returns max. fd limits (system and fdpoll set).
@@ -338,6 +342,24 @@ cherokee_fdpoll_check (cherokee_fdpoll_t *fdp, int fd, int rw)
 int
 cherokee_fdpoll_watch (cherokee_fdpoll_t *fdp, int timeout_msecs)
 {
+#ifdef TRACE_ENABLED
+	int             re;
+	cherokee_msec_t start;
+
+	if (cherokee_trace_is_tracing()) {
+		cherokee_bogotime_update();
+		start = cherokee_bogonow_msec;
+
+		re = fdp->watch (fdp, timeout_msecs);
+
+		cherokee_bogotime_update();
+		TRACE(ENTRIES, "Watch (took %d msecs ~ limit %d msecs)\n",
+		      cherokee_bogonow_msec - start, timeout_msecs);
+
+		return re;
+	}
+#endif
+
 	return fdp->watch (fdp, timeout_msecs);
 }
 
