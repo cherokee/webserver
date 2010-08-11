@@ -4,6 +4,7 @@
 #
 # Authors:
 #      Taher Shihadeh <taher@octality.com>
+#      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
 # Copyright (C) 2010 Alvaro Lopez Ortega
 #
@@ -42,11 +43,11 @@ NOTE_RULE_H1    = N_("Anti-HotLinking Information")
 NOTE_DOMAIN     = N_("Domain allowed to access the files. Eg: example.com")
 NOTE_REDIR      = N_("Path to the public resource to use. Eg: /images/forbidden.jpg")
 NOTE_TYPE       = N_("How to handle hot-linking requests.")
-NOTE_CONFIRM_H1 = N_("Recollection completed")
-NOTE_CONFIRM_P1 = N_("The required Information has been collected. Proceed to create the necessary rules to prevent hot-linking from happening.")
 
-PREFIX    = 'tmp!wizard!hotlinking'
-URL_APPLY = r'/wizard/vserver/hotlinking/apply'
+PREFIX = 'tmp!wizard!hotlinking'
+
+URL_APPLY         = r'/wizard/vserver/hotlinking/apply'
+URL_APPLY_REFRESH = r'/wizard/vserver/hotlinking/apply/refresh'
 
 CONFIG_RULES = """
 %(rule_pre)s!match = and
@@ -90,6 +91,7 @@ TYPES = [
     ('empty', N_('1x1 Transparent GIF'))
 ]
 
+
 class Commit:
     def Commit_Rule (self):
         vsrv_num    = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
@@ -132,32 +134,6 @@ class Commit:
 
         return CTK.cfg_apply_post()
 
-class Confirm:
-    def __call__ (self):
-        redir  = CTK.cfg.get_val ('%s!redirection'%(PREFIX))
-        domain = CTK.cfg.get_val ('%s!domain'%(PREFIX))
-        tipe   = CTK.cfg.get_val ('%s!type'%(PREFIX))
-        for entry in TYPES:
-            desc = entry[1]
-            if entry[0] == tipe: break
-
-        submit = CTK.Submitter (URL_APPLY)
-        submit += CTK.Hidden('final', '1')
-
-        table = CTK.Table({'id':'wizard-hotlinking'})
-        table += [CTK.RawHTML(x) for x in ['<b>%s</b> '%(_('Domain')), domain]]
-        table += [CTK.RawHTML(x) for x in ['<b>%s</b> '%(_('Type')),  _(desc)]]
-        if tipe == 'redir' and redir:
-            table += [CTK.RawHTML(x) for x in ['<b>%s</b> '%(_('Redirection')),  redir]]
-
-        cont  = CTK.Container()
-        cont  += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_CONFIRM_H1)))
-        cont  += CTK.RawHTML (_(NOTE_CONFIRM_P1))
-        cont  += submit
-        cont  += table
-        cont  += CTK.DruidButtonsPanel_PrevCreate_Auto()
-        return cont.Render().toStr()
-
 
 class RuleData:
     class Refresh (CTK.Container):
@@ -168,7 +144,11 @@ class RuleData:
             if tipe == 'redir':
                 table = CTK.PropsTable()
                 table.Add (_('Redirection'), CTK.TextCfg('%s!redirection'%(PREFIX), False, {}), _(NOTE_REDIR))
-                self += table
+
+                submit = CTK.Submitter (URL_APPLY_REFRESH)
+                submit += table
+
+                self += submit
 
     def __call__ (self):
         vsrv_num = CTK.cfg.get_val("%s!vsrv_num"%(PREFIX))
@@ -187,13 +167,14 @@ class RuleData:
         table.Add (_('Reply type'), combo_widget, _(NOTE_TYPE))
 
         submit = CTK.Submitter (URL_APPLY)
+        submit += CTK.Hidden('final', '1')
         submit += table
-        submit += refresh
 
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_RULE_H1)))
         cont += submit
-        cont += CTK.DruidButtonsPanel_PrevNext_Auto()
+        cont += refresh
+        cont  += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
 
 
@@ -226,5 +207,5 @@ VALS = [
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/hotlinking$',   Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/hotlinking/2$', RuleData)
-CTK.publish ('^/wizard/vserver/(\d+)/hotlinking/3$', Confirm)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s$'%(URL_APPLY),         Commit,             method="POST", validation=VALS)
+CTK.publish (r'^%s$'%(URL_APPLY_REFRESH), CTK.cfg_apply_post, method="POST", validation=VALS)
