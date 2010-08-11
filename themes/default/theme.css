@@ -1,25 +1,24 @@
 /* theme.css
  */
-body 
+body
 {
   color: #000;
   margin: 0;
   padding: 0;
   font-family: "Lucida Grande", Myriad, "Andale Sans", "Luxi Sans", "Bitstream Vera Sans", Tahoma, "Toga Sans", Helvetica, Arial, sans-serif;
   font-size: 1em;
-  background: #fff url(/icons/default-bg.png) center center repeat-y;  
 }
 
 a
-{ 
+{
   text-decoration: none;
   font-size: small;
-  font-weight: bold; 
+  font-weight: bold;
   color: #cc0000;
 }
 
 table
-{ 
+{
   font-size: small;
   height: 100%;
   margin: 0 auto;
@@ -28,28 +27,28 @@ table
 }
 
 thead td
-{ 
+{
   border-bottom: 1px solid #3465a4;
   padding: 0px;
   border-spacing: 0px;
 }
 
 tbody td
-{ 
+{
   border-spacing: 1px;
   padding-top: 3px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.logo 
+.logo
 {
   display: block;
   border: 0px;
   margin: 0 auto;
 }
 
-.icon 
+.icon
 {
   display: block;
   border: 0px;
