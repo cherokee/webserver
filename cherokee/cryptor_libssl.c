@@ -390,8 +390,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	rc = SSL_CTX_use_PrivateKey_file (n->context, vsrv->server_key.buf, SSL_FILETYPE_PEM);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		LOG_ERROR(CHEROKEE_ERROR_SSL_KEY,
-			  vsrv->server_key.buf, error);
+		LOG_ERROR(CHEROKEE_ERROR_SSL_KEY, vsrv->server_key.buf, error);
 		return ret_error;
 	}
 
@@ -761,7 +760,6 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 		}
 
 		TRACE (ENTRIES",lie", "SSL-Write lies, (package %d, written %d, total %d): eagain\n", len, cryp->writing.written, buf_len);
-		CHEROKEE_PRINT_BACKTRACE;
 		return ret_eagain;
 	}
 
