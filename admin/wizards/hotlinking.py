@@ -52,10 +52,15 @@ CONFIG_RULES = """
 %(rule_pre)s!match = and
 %(rule_pre)s!match!left = extensions
 %(rule_pre)s!match!left!extensions = jpg,jpeg,gif,png,flv
-%(rule_pre)s!match!right = not
-%(rule_pre)s!match!right!right = header
-%(rule_pre)s!match!right!right!header = Referer
-%(rule_pre)s!match!right!right!match = ^($|https?://(.*?\.)?%(domain)s)
+%(rule_pre)s!match!right = and
+%(rule_pre)s!match!right!left = header
+%(rule_pre)s!match!right!left!header = Referer
+%(rule_pre)s!match!right!left!type = provided
+%(rule_pre)s!match!right!right = not
+%(rule_pre)s!match!right!right!right = header
+%(rule_pre)s!match!right!right!right!header = Referer
+%(rule_pre)s!match!right!right!right!match = ^https?://(.*?\.)?%(domain)s
+%(rule_pre)s!match!right!right!right!type = regex
 """
 
 REPLY_FORBIDDEN = """
