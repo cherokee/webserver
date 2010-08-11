@@ -231,8 +231,13 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 	} while ((re == -1) && (errno == EINTR));
 
 	if (unlikely (re != 0)) {
-		TRACE (ENTRIES, "shutdown(%d, %d) = %s\n", socket->socket, how, strerror(errno));
-		return ret_error;
+		switch (errno) {
+		case ENOTCONN:
+			break;
+		default:
+			TRACE (ENTRIES, "shutdown(%d, %d) = %s\n", socket->socket, how, strerror(errno));
+			return ret_error;
+		}
 	}
 
 	return ret_ok;
