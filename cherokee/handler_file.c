@@ -487,8 +487,9 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 	 */
 	if (! use_io) {
 		ret = open_local_directory (fhdl, local_file);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			goto out;
+		}
 	}
 
 	/* Is it a directory?
@@ -512,16 +513,14 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 
 		ret = ret_error;
 		goto out;
-
 	}
 
 	if (unlikely ((conn->range_end >= fhdl->info->st_size)))
 	{
-		/* Send the full file. Set the end to -1 so it is
-		 * updated later on.
+		/* Range-end out of bounds. Set it to -1 so it is
+		 * updated with the file size later on.
 		 */
-		conn->range_start = 0;
-		conn->range_end   = -1;
+		conn->range_end = -1;
 	}
 
 	/* Set the error code
