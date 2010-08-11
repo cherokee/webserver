@@ -535,9 +535,13 @@ e('RULE_METHOD_UNKNOWN',
 
 # cherokee/rule_header.c
 #
-e('RULE_HEADER_UNKNOWN',
+e('RULE_HEADER_UNKNOWN_HEADER',
   title = "Unknown header '%s'",
   desc  = "The rule found an entry with an unsupported header. Probably the configuration file has been tampered with.")
+
+e('RULE_HEADER_UNKNOWN_TYPE',
+  title = "Unknown type '%s'",
+  desc  = "The rule found an entry with an unsupported type. Probably the configuration file has been tampered with.")
 
 
 # cherokee/rule_from.c

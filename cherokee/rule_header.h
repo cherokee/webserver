@@ -37,11 +37,17 @@
 
 CHEROKEE_BEGIN_DECLS
 
+typedef enum {
+	rule_header_type_regex,
+	rule_header_type_provided
+} cherokee_rule_header_type_t;
+
 typedef struct {
-	cherokee_rule_t           rule;
-	cherokee_common_header_t  header;
-	cherokee_buffer_t         match;
-	void                     *pcre;
+	cherokee_rule_t             rule;
+	cherokee_rule_header_type_t type;
+	cherokee_common_header_t    header;
+	cherokee_buffer_t           match;
+	void                       *pcre;
 } cherokee_rule_header_t;
 
 #define RULE_HEADER(x) ((cherokee_rule_header_t *)(x))

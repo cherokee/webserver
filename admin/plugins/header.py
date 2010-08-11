@@ -29,6 +29,7 @@ URL_APPLY = '/plugin/header/apply'
 
 NOTE_HEADER = N_("Header against which the regular expression will be evaluated.")
 NOTE_MATCH  = N_("Regular expression.")
+NOTE_TYPES  = N_("It defines how this match has to be evaluated.")
 
 HEADERS = [
     ('Accept-Encoding', 'Accept-Encoding'),
@@ -40,6 +41,10 @@ HEADERS = [
     ('Host',            'Host')
 ]
 
+TYPES = [
+    ('regex',    _('Matches a Regular Expression')),
+    ('provided', _('Is Provided'))
+]
 
 def commit():
     # POST info
@@ -47,14 +52,16 @@ def commit():
     vsrv_num  = CTK.post.pop ('vsrv_num', None)
     new_hdr   = CTK.post.pop ('tmp!header', None)
     new_match = CTK.post.pop ('tmp!match', None)
+    new_type  = CTK.post.pop ('tmp!type', None)
 
     # New entry
-    if new_hdr and new_match:
+    if new_hdr:
         next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
 
         CTK.cfg['%s!match'%(next_pre)]        = 'header'
         CTK.cfg['%s!match!header'%(next_pre)] = new_hdr
         CTK.cfg['%s!match!match'%(next_pre)]  = new_match
+        CTK.cfg['%s!match!type'%(next_pre)]   = new_type
 
         return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
 
@@ -65,11 +72,26 @@ def commit():
 class Plugin_header (RulePlugin):
     def __init__ (self, key, **kwargs):
         RulePlugin.__init__ (self, key)
-        props = ({},{'class': 'noauto'})[key.startswith('tmp')]
+        is_new = key.startswith('tmp')
+        props  = ({},{'class': 'noauto'})[is_new]
+
+        type_widget = CTK.ComboCfg ('%s!type'%(key), TYPES, props)
+        type_val    = CTK.cfg.get_val ('%s!type'%(key), 'regex')
 
         table = CTK.PropsTable()
-        table.Add (_('Header'),             CTK.ComboCfg('%s!header'%(key), HEADERS, props), _(NOTE_HEADER))
-        table.Add (_('Regular Expression'), CTK.TextCfg('%s!match'%(key), False, props), _(NOTE_MATCH))
+        table.Add (_('Header'), CTK.ComboCfg('%s!header'%(key), HEADERS, props), _(NOTE_HEADER))
+        table.Add (_('Type'),   type_widget, _(NOTE_TYPES))
+
+        if is_new or type_val == 'regex':
+            table.Add (_('Regular Expression'), CTK.TextCfg('%s!match'%(key), False, props), _(NOTE_MATCH))
+
+        if is_new:
+            type_widget.bind ('change',
+                  """if ($('#%(type_widget)s').val() == 'regex') {
+                           $('#%(regex)s').show();
+                     } else {
+                           $('#%(regex)s').hide();
+                  }""" %({'type_widget': type_widget.id, 'regex': table[2].id}))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', key)
@@ -83,4 +105,9 @@ class Plugin_header (RulePlugin):
     def GetName (self):
         header = CTK.cfg.get_val ('%s!header' %(self.key), '')
         match  = CTK.cfg.get_val ('%s!match' %(self.key), '')
-        return "%s %s ~ %s" % (_('Header'),header, match)
+        type_  = CTK.cfg.get_val ('%s!type' %(self.key), '')
+
+        if type_ == 'provided':
+            return _("Header %s is provided") %(header)
+        else:
+            return "%s %s ~ %s" % (_('Header'), header, match)

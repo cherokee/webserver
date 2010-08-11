@@ -37,9 +37,9 @@ PLUGIN_INFO_RULE_EASIEST_INIT(header);
 
 
 static ret_t
-match (cherokee_rule_header_t  *rule,
-       cherokee_connection_t   *conn,
-       cherokee_config_entry_t *ret_conf)
+match_regex (cherokee_rule_header_t  *rule,
+	     cherokee_connection_t   *conn,
+	     cherokee_config_entry_t *ret_conf)
 {
 	int      re;
 	ret_t    ret;
@@ -77,6 +77,42 @@ match (cherokee_rule_header_t  *rule,
 	return ret_ok;
 }
 
+static ret_t
+match_provided (cherokee_rule_header_t  *rule,
+		cherokee_connection_t   *conn,
+		cherokee_config_entry_t *ret_conf)
+{
+	ret_t ret;
+
+	UNUSED(ret_conf);
+
+	/* Find the header
+	 */
+	ret = cherokee_header_has_known (&conn->header, rule->header);
+	if (ret != ret_ok) {
+		return ret_not_found;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
+match (cherokee_rule_header_t  *rule,
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
+{
+	switch (rule->type) {
+	case rule_header_type_regex:
+		return match_regex (rule, conn, ret_conf);
+	case rule_header_type_provided:
+		return match_provided (rule, conn, ret_conf);
+	}
+
+	SHOULDNT_HAPPEN;
+	return ret_error;
+}
+
 
 static ret_t
 header_str_to_type (cherokee_buffer_t        *header,
@@ -97,7 +133,23 @@ header_str_to_type (cherokee_buffer_t        *header,
 	} else if (equal_buf_str (header, "Host")) {
 		*common_header = header_host;
 	} else {
-		LOG_CRITICAL (CHEROKEE_ERROR_RULE_HEADER_UNKNOWN, header->buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_HEADER_UNKNOWN_HEADER, header->buf);
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+static ret_t
+type_str_to_type (cherokee_buffer_t           *type_str,
+		  cherokee_rule_header_type_t *type)
+{
+	if (equal_buf_str (type_str, "regex")) {
+		*type = rule_header_type_regex;
+	} else if (equal_buf_str (type_str, "provided")) {
+		*type = rule_header_type_provided;
+	} else {
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_HEADER_UNKNOWN_TYPE, type_str->buf);
 		return ret_error;
 	}
 
@@ -111,6 +163,7 @@ configure (cherokee_rule_header_t    *rule,
 	   cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
+	cherokee_buffer_t      *type     = NULL;
 	cherokee_buffer_t      *header   = NULL;
 	cherokee_regex_table_t *regexs   = VSERVER_SRV(vsrv)->regexs;
 
@@ -124,8 +177,9 @@ configure (cherokee_rule_header_t    *rule,
 	}
 
 	ret = header_str_to_type (header, &rule->header);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret;
+	}
 
 	/* Read the match
 	 */
@@ -134,6 +188,16 @@ configure (cherokee_rule_header_t    *rule,
 		LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
 			   RULE(rule)->priority, "match");
 		return ret_error;
+	}
+
+	/* Type
+	 */
+	ret = cherokee_config_node_read (conf, "type", &type);
+	if (ret == ret_ok) {
+		ret = type_str_to_type (type, &rule->type);
+		if (ret != ret_ok) {
+			return ret;
+		}
 	}
 
 	/* Compile the regular expression
@@ -177,6 +241,8 @@ cherokee_rule_header_new (cherokee_rule_header_t **rule)
 	/* Properties
 	 */
 	n->pcre = NULL;
+	n->type = rule_header_type_regex;
+
 	cherokee_buffer_init (&n->match);
 
 	*rule = n;
