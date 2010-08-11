@@ -181,15 +181,6 @@ configure (cherokee_rule_header_t    *rule,
 		return ret;
 	}
 
-	/* Read the match
-	 */
-	ret = cherokee_config_node_copy (conf, "match", &rule->match);
-	if (ret != ret_ok) {
-		LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-			   RULE(rule)->priority, "match");
-		return ret_error;
-	}
-
 	/* Type
 	 */
 	ret = cherokee_config_node_read (conf, "type", &type);
@@ -200,15 +191,28 @@ configure (cherokee_rule_header_t    *rule,
 		}
 	}
 
+	/* Read the match
+	 */
+	ret = cherokee_config_node_copy (conf, "match", &rule->match);
+	if (ret != ret_ok) {
+		if (equal_buf_str (type, "regex")) {
+			LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
+				   RULE(rule)->priority, "match");
+			return ret_error;
+		}
+	}
+
 	/* Compile the regular expression
 	 */
-	ret = cherokee_regex_table_add (regexs, rule->match.buf);
-	if (ret != ret_ok)
-		return ret;
+	if (! cherokee_buffer_is_empty (&rule->match)) {
+		ret = cherokee_regex_table_add (regexs, rule->match.buf);
+		if (ret != ret_ok)
+			return ret;
 
-	ret = cherokee_regex_table_get (regexs, rule->match.buf, &rule->pcre);
-	if (ret != ret_ok)
-		return ret;
+		ret = cherokee_regex_table_get (regexs, rule->match.buf, &rule->pcre);
+		if (ret != ret_ok)
+			return ret;
+	}
 
 	return ret_ok;
 }
