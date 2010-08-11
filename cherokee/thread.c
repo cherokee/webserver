@@ -768,6 +768,16 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				TRACE(ENTRIES, "Handshake %s\n", "finished");
 
+				/* The client might have sent the request on the same
+				 * package as the last piece of the handshake. Thus,
+				 * the server shouldn't stop on fdpoll->watch(), the
+				 * connection is marked as ready as well.
+				 */
+				BIT_SET (conn->options, conn_op_was_polling);
+				thd->pending_read_num++;
+
+				/* Set mode and update timeout
+				 */
 				conn_set_mode (thd, conn, socket_reading);
 				cherokee_connection_update_timeout (conn);
 
