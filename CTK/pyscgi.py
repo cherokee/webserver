@@ -43,7 +43,7 @@ import time
 import sys
 import os
 
-__version__   = '1.14'
+__version__   = '1.15'
 __author__    = 'Alvaro Lopez Ortega'
 __copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
 __license__   = 'BSD'
@@ -155,7 +155,13 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
             self.request.shutdown (socket.SHUT_WR)
         except: pass
 
-        try: # Either: close or reset
+        try: # Wait for the client's ACK+FIN
+            while True:
+                if not self.request.recv(1):
+                    break;
+        except: pass
+
+        try: # Send either ACK, or RST
             self.request.close()
         except: pass
 
