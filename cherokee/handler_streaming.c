@@ -107,14 +107,11 @@ cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 		cherokee_handler_file_free (hdl->handler_file);
 	}
 
-#ifdef USE_FFMPEG
 	if (hdl->avformat != NULL) {
 		av_close_input_file (hdl->avformat);
 	}
-#endif
 
 	cherokee_buffer_mrproper (&hdl->local_file);
-
 	return ret_ok;
 }
 
@@ -152,9 +149,7 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 	 */
 	cherokee_buffer_init (&n->local_file);
 
-#ifdef USE_FFMPEG
 	n->avformat      = NULL;
-#endif
 	n->start         = -1;
 	n->start_flv     = false;
 	n->start_time    = -1;
@@ -224,8 +219,6 @@ error:
 	return ret_error;
 }
 
-
-#ifdef USE_FFMPEG
 
 static ret_t
 seek_mp3 (cherokee_handler_streaming_t *hdl)
@@ -399,28 +392,6 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 
 	return ret;
 }
-#else
-static ret_t
-seek_mp3 (cherokee_handler_streaming_t *hdl)
-{
-	TRACE(ENTRIES, "%s: No FFMpeg support\n", "Seek MP3");
-	return ret_error;
-}
-
-static ret_t
-open_media_file (cherokee_handler_streaming_t *hdl)
-{
-	TRACE(ENTRIES, "%s: No FFMpeg support\n", "Open Media");
-	return ret_error;
-}
-
-static ret_t
-set_auto_rate (cherokee_handler_streaming_t *hdl)
-{
-	TRACE(ENTRIES, "%s: No FFMpeg support\n", "Auto Rate");
-	return ret_error;
-}
-#endif
 
 
 ret_t
@@ -579,7 +550,5 @@ PLUGIN_INIT_NAME(streaming) (cherokee_plugin_loader_t *loader)
 
 	/* Initialize FFMpeg
 	 */
-#ifdef USE_FFMPEG
 	av_register_all();
-#endif
 }

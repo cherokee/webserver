@@ -827,12 +827,14 @@ libplugin_streaming_la_SOURCES = $(handler_streaming)
 libplugin_streaming_la_LIBADD  = $(FFMPEG_LIBS)
 libplugin_streaming_la_CFLAGS  = $(FFMPEG_CFLAGS)
 
+if HAVE_FFMPEG
 if STATIC_HANDLER_STREAMING
 static_handler_streaming_src   = $(handler_streaming)
 static_handler_streaming_lib   = $(FFMPEG_LIBS)
 static_handler_streaming_flags = $(FFMPEG_CFLAGS)
 else
 dynamic_handler_streaming_lib = libplugin_streaming.la
+endif
 endif
 
 
