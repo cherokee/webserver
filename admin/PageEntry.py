@@ -50,6 +50,12 @@ NOTE_EXPIRATION_TIME = N_("""How long from the object can be cached.<br />
 The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d.
 """)
 
+NOTE_CACHING_OPTIONS          = N_("How an intermediate cache should treat the content.")
+NOTE_CACHING_NO_STORE         = N_("Prevents the retention of sensitive information. Caches must not store this content.")
+NOTE_CACHING_NO_TRANSFORM     = N_("Forbid intermediate caches from transforming the content.")
+NOTE_CACHING_MUST_REVALIDATE  = N_("The client must contact the server to revalidate the object.")
+NOTE_CACHING_PROXY_REVALIDATE = N_("Proxy servers must contact the server to revalidate the object.")
+
 VALIDATIONS = [
     ("vserver![\d]+!rule![\d]+!document_root",   validations.is_dev_null_or_local_dir_exists),
     ("vserver![\d]+!rule![\d]+!allow_from",      validations.is_ip_or_netmask_list),
@@ -135,11 +141,21 @@ class TimeWidget (CTK.Container):
         def __init__ (self, pre, apply, refresh):
             CTK.Container.__init__ (self)
 
+            # Expiration
             table = CTK.PropsTable()
             table.Add (_('Expiration'), CTK.ComboCfg ('%s!expiration'%(pre), trans (EXPIRATION_TYPE)), _(NOTE_EXPIRATION))
 
             if CTK.cfg.get_val ('%s!expiration'%(pre)) == 'time':
                 table.Add (_('Time to expire'), CTK.TextCfg ('%s!expiration!time'%(pre), False), _(NOTE_EXPIRATION_TIME))
+
+            # Caching options
+            if CTK.cfg.get_val ('%s!expiration'%(pre)):
+                table.Add (_('Management by caches'), CTK.ComboCfg('%s!expiration!caching'%(pre), trans(CACHING_OPTIONS)), _(NOTE_CACHING_OPTIONS))
+                if CTK.cfg.get_val ('%s!expiration!caching'%(pre)):
+                    table.Add (_('No Store'),           CTK.CheckCfgText('%s!expiration!caching!no-store'%(pre),         False, _("Do not store in caches")),                     _(NOTE_CACHING_NO_STORE))
+                    table.Add (_('No Transform'),       CTK.CheckCfgText('%s!expiration!caching!no-transform'%(pre),     False, _("Do not allow caches to transform content")),   _(NOTE_CACHING_NO_TRANSFORM))
+                    table.Add (_('Must Revalidate'),    CTK.CheckCfgText('%s!expiration!caching!must-revalidate'%(pre),  False, _("Client must always revalidate the content")),  _(NOTE_CACHING_MUST_REVALIDATE))
+                    table.Add (_('Proxies Revalidate'), CTK.CheckCfgText('%s!expiration!caching!proxy-revalidate'%(pre), False, _("Proxies must always revalidate the content")), _(NOTE_CACHING_PROXY_REVALIDATE))
 
             submit = CTK.Submitter (apply)
             submit.bind ('submit_success', refresh.JS_to_refresh())

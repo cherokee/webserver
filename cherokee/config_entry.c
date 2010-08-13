@@ -65,6 +65,7 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 
 	entry->expiration           = cherokee_expiration_none;
 	entry->expiration_time      = 0;
+	entry->expiration_prop      = cherokee_expiration_prop_none;
 
 	entry->encoders             = NULL;
 	entry->limit_bps            = 0;
@@ -209,6 +210,7 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_
 	{
 		entry->expiration      = source->expiration;
 		entry->expiration_time = source->expiration_time;
+		entry->expiration_prop = source->expiration_prop;
 	}
 
 	if (! entry->encoders)

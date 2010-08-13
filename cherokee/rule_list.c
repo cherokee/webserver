@@ -72,8 +72,9 @@ update_connection (cherokee_connection_t   *conn,
 	if ((conn->expiration       == cherokee_expiration_none) &&
 	    (ret_config->expiration != cherokee_expiration_none))
 	{
-		conn->expiration = ret_config->expiration;
+		conn->expiration      = ret_config->expiration;
 		conn->expiration_time = ret_config->expiration_time;
+		conn->expiration_prop = ret_config->expiration_prop;
 	}
 }
 

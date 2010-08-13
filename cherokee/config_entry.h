@@ -50,6 +50,24 @@ typedef enum {
 } cherokee_expiration_t;
 
 typedef enum {
+	cherokee_expiration_prop_none              = 0,
+
+	/* cacheable */
+	cherokee_expiration_prop_public            = 1,
+	cherokee_expiration_prop_private           = 1 << 1,
+	cherokee_expiration_prop_no_cache          = 1 << 2,
+
+	/* stored */
+	cherokee_expiration_prop_no_store          = 1 << 3,
+	cherokee_expiration_prop_no_transform      = 1 << 4,
+
+	/* other props */
+	cherokee_expiration_prop_must_revalidate   = 1 << 5,
+	cherokee_expiration_prop_proxy_revalidate  = 1 << 6,
+} cherokee_expiration_props_t;
+
+
+typedef enum {
 	cherokee_encoder_unset,
 	cherokee_encoder_allow,
 	cherokee_encoder_forbid
@@ -88,6 +106,7 @@ typedef struct {
 	 */
 	cherokee_expiration_t       expiration;
 	time_t                      expiration_time;
+	cherokee_expiration_props_t expiration_prop;
 
 	/* Encoding
 	 */

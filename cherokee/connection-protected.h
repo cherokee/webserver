@@ -208,6 +208,7 @@ struct cherokee_connection {
 	 */
 	cherokee_expiration_t         expiration;
 	time_t                        expiration_time;
+	cherokee_expiration_props_t   expiration_prop;
 
 	/* Chunked encoding
 	 */

@@ -123,6 +123,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->polling_mode         = FDPOLL_MODE_NONE;
 	n->expiration           = cherokee_expiration_none;
 	n->expiration_time      = 0;
+	n->expiration_prop      = cherokee_expiration_prop_none;
 	n->respins              = 0;
 	n->limit_rate           = false;
 	n->limit_bps            = 0;
@@ -281,6 +282,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->polling_mode         = FDPOLL_MODE_NONE;
 	conn->expiration           = cherokee_expiration_none;
 	conn->expiration_time      = 0;
+	conn->expiration_prop      = cherokee_expiration_prop_none;
 	conn->chunked_encoding     = false;
 	conn->chunked_sent         = 0;
 	conn->chunked_last_package = false;
@@ -593,17 +595,23 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 {
 	time_t    exp_time;
 	struct tm exp_tm;
-	size_t    szlen = 0;
 	char      bufstr[DTM_SIZE_GMTTM_STR + 2];
+	size_t    szlen               = 0;
+	cherokee_boolean_t first_prop = true;
 
+	/* Expires, and Cache-Control: max-age
+	 */
 	switch (conn->expiration) {
 	case cherokee_expiration_epoch:
 		cherokee_buffer_add_str (buffer, "Expires: Tue, 01 Jan 1970 00:00:01 GMT" CRLF);
-		cherokee_buffer_add_str (buffer, "Cache-Control: no-cache" CRLF);
+		if (conn->expiration_prop != cherokee_expiration_prop_none) {
+			cherokee_buffer_add_str (buffer, "Cache-Control: ");
+		}
 		break;
 	case cherokee_expiration_max:
 		cherokee_buffer_add_str (buffer, "Expires: Thu, 31 Dec 2037 23:55:55 GMT" CRLF);
-		cherokee_buffer_add_str (buffer, "Cache-Control: max-age=315360000" CRLF);
+		cherokee_buffer_add_str (buffer, "Cache-Control: max-age=315360000");
+		first_prop = false;
 		break;
 	case cherokee_expiration_time:
 		exp_time = (cherokee_bogonow_now + conn->expiration_time);
@@ -616,11 +624,62 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 
 		cherokee_buffer_add_str (buffer, "Cache-Control: max-age=");
 		cherokee_buffer_add_long10 (buffer, conn->expiration_time);
-		cherokee_buffer_add_str (buffer, CRLF);
+		first_prop = false;
 		break;
 	default:
 		SHOULDNT_HAPPEN;
 	}
+
+	/* No properties shortcut
+	 */
+	if (conn->expiration_prop == cherokee_expiration_prop_none) {
+		if (! first_prop)
+			cherokee_buffer_add_str (buffer, CRLF);
+		return;
+	}
+
+	/* Caching related properties
+	 */
+#define handle_comma						\
+	do {							\
+		if (first_prop) {				\
+			first_prop = false;			\
+		} else {					\
+			cherokee_buffer_add_str (buffer, ", "); \
+		}						\
+	} while (false)
+
+	if (conn->expiration_prop & cherokee_expiration_prop_public) {
+		handle_comma;
+		cherokee_buffer_add_str (buffer, "public");
+	} else if (conn->expiration_prop & cherokee_expiration_prop_private) {
+		handle_comma;
+		cherokee_buffer_add_str (buffer, "private");
+	} else if (conn->expiration_prop & cherokee_expiration_prop_no_cache) {
+		handle_comma;
+		cherokee_buffer_add_str (buffer, "no-cache");
+	}
+
+	if (conn->expiration_prop & cherokee_expiration_prop_no_store) {
+		handle_comma;
+		cherokee_buffer_add_str (buffer, "no-store");
+	}
+	if (conn->expiration_prop & cherokee_expiration_prop_no_transform) {
+		handle_comma;
+		cherokee_buffer_add_str (buffer, "no-transform");
+	}
+	if (conn->expiration_prop & cherokee_expiration_prop_must_revalidate) {
+		handle_comma;
+		cherokee_buffer_add_str (buffer, "must-revalidate");
+	}
+	if (conn->expiration_prop & cherokee_expiration_prop_proxy_revalidate) {
+		handle_comma;
+		cherokee_buffer_add_str (buffer, "proxy-revalidate");
+	}
+
+#undef handle_comma
+
+	cherokee_buffer_add_str (buffer, CRLF);
 }
 
 

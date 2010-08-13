@@ -241,7 +241,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
 	cherokee_buffer_t         *tmp;
-	cherokee_list_t           *i;
+	cherokee_list_t           *i, *j;
+	cherokee_config_node_t    *subconf   = NULL;
+	cherokee_config_node_t    *subconf2  = NULL;
 	cherokee_plugin_info_t    *info      = NULL;
 	cherokee_virtual_server_t *vserver   = ((void **)data)[0];
 	cherokee_config_entry_t   *entry     = ((void **)data)[1];
@@ -362,6 +364,8 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		entry->only_secure = !! atoi(conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "expiration")) {
+		/* Expiration
+		 */
 		if (equal_buf_str (&conf->val, "none")) {
 			entry->expiration = cherokee_expiration_none;
 
@@ -381,6 +385,44 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			}
 
 			entry->expiration_time = cherokee_eval_formated_time (tmp);
+		}
+
+		/* Caching policies
+		 */
+		cherokee_config_node_foreach (i, conf) {
+			subconf = CONFIG_NODE(i);
+
+			if (equal_buf_str (&subconf->key, "caching")) {
+				if (equal_buf_str (&subconf->val, "public")) {
+					BIT_SET (entry->expiration_prop, cherokee_expiration_prop_public);
+				} else if (equal_buf_str (&subconf->val, "private")) {
+					BIT_SET (entry->expiration_prop, cherokee_expiration_prop_private);
+				} else if (equal_buf_str (&subconf->val, "no-cache")) {
+					BIT_SET (entry->expiration_prop, cherokee_expiration_prop_no_cache);
+				}
+
+				cherokee_config_node_foreach (j, subconf) {
+					subconf2 = CONFIG_NODE(j);
+
+					if (equal_buf_str (&subconf2->key, "no-store")) {
+						if (atoi (subconf2->val.buf)) {
+							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_no_store);
+						}
+					} else if (equal_buf_str (&subconf2->key, "no-transform")) {
+						if (atoi (subconf2->val.buf)) {
+							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_no_transform);
+						}
+					} else if (equal_buf_str (&subconf2->key, "must-revalidate")) {
+						if (atoi (subconf2->val.buf)) {
+							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_must_revalidate);
+						}
+					} else if (equal_buf_str (&subconf2->key, "proxy-revalidate")) {
+						if (atoi (subconf2->val.buf)) {
+							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_proxy_revalidate);
+						}
+					}
+				}
+			}
 		}
 
 	} else if (equal_buf_str (&conf->key, "rate")) {

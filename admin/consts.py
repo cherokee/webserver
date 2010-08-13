@@ -245,6 +245,13 @@ POST_TRACKERS = [
     ('post_track', N_('POST tracker'))
 ]
 
+CACHING_OPTIONS = [
+    ('',         N_('Not set')),
+    ('public',   N_('Public')),
+    ('private',  N_('Private')),
+    ('no-cache', N_('No Cache'))
+]
+
 def trans (options):
     """Translate the options with gettext"""
     return [(x[0], _(x[1])) for x in options]
