@@ -6,14 +6,6 @@ cherokee: cherokee.pre
 EXTRA_DIST = \
 cherokee.pre \
 bin2buffer.py \
-05to06.py \
-06to07.py \
-07to08.py \
-08to09.py \
-09to010.py \
-011to098.py \
-098to099.py \
-0999to09910.py \
 tracelor.py \
 make-cert.sh \
 make-dh_params.sh
