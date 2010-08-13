@@ -32,6 +32,18 @@ HTML = """
 <input type="checkbox" id="%(id)s" %(props)s />
 """
 
+CLICK_CHANGE_JS = """
+   $('#%s').each (function() {
+      var checkbox_text = $(this);
+
+      checkbox_text.find('.description').bind ('click', function() {
+          var checkbox = checkbox_text.find('input:checkbox');
+          checkbox.attr("checked", !checkbox.attr("checked"));
+          checkbox.trigger ({type: "change"});
+      });
+   });
+"""
+
 class Checkbox (Widget):
     def __init__ (self, props={}):
         # Sanity check
@@ -90,7 +102,8 @@ class CheckboxText (Checkbox):
 
     def Render (self):
         render = Checkbox.Render (self)
-        render.html = '<div id="%s" class="checkbox-text">%s %s</div>' %(self.id, render.html, self.text)
+        render.html  = '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' %(self.id, render.html, self.text)
+        render.js   += CLICK_CHANGE_JS %(self.id)
         return render
 
 
@@ -105,5 +118,6 @@ class CheckCfgText (CheckCfg):
 
     def Render (self):
         render = CheckCfg.Render (self)
-        render.html = '<div id="%s" class="checkbox-text">%s %s</div>' %(self.id, render.html, self.text)
+        render.html =  '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' %(self.id, render.html, self.text)
+        render.js   += CLICK_CHANGE_JS %(self.id)
         return render
