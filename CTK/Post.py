@@ -83,7 +83,9 @@ class Post:
         return len(self._vars)
 
     def __iter__ (self):
-        return iter(self._vars)
+        keys = self._vars.keys()
+        keys.sort (lambda x,y: cmp(len(y), len(x)))
+        return iter(keys)
 
     def __str__ (self):
         return str(self._vars)
