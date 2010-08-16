@@ -226,30 +226,9 @@ cherokee_dwriter_number (cherokee_dwriter_t *w, const char *s, int len)
 	return ret_ok;
 }
 
-ret_t
-cherokee_dwriter_string (cherokee_dwriter_t *w, const char *s, int len)
+static void
+add_null (cherokee_dwriter_t *w)
 {
-	ENSURE_VALID_STATE;
-	ADD_SEP; ADD_WHITE;
-
-	cherokee_buffer_add_str (OUT, "\"");
-
-	escape_string (w->tmp, s, len);
-	cherokee_buffer_add (OUT, w->tmp->buf, w->tmp->len);
-
-	cherokee_buffer_add_str (OUT, "\"");
-
-	ADD_END; ADD_NEW_LINE;
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_dwriter_null (cherokee_dwriter_t *w)
-{
-	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
-	ADD_SEP; ADD_WHITE;
-
 	switch (w->lang) {
 	case dwriter_json:
 		cherokee_buffer_add_str (OUT, "null");
@@ -266,11 +245,42 @@ cherokee_dwriter_null (cherokee_dwriter_t *w)
 	default:
 		SHOULDNT_HAPPEN;
 	}
+}
+
+ret_t
+cherokee_dwriter_null (cherokee_dwriter_t *w)
+{
+	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
+	ADD_SEP; ADD_WHITE;
+
+	add_null (w);
 
 	ADD_END; ADD_NEW_LINE;
 	return ret_ok;
 }
 
+ret_t
+cherokee_dwriter_string (cherokee_dwriter_t *w, const char *s, int len)
+{
+	ENSURE_VALID_STATE;
+	ADD_SEP; ADD_WHITE;
+
+	if (unlikely (s == NULL)) {
+		add_null (w);
+		goto out;
+	}
+
+	cherokee_buffer_add_str (OUT, "\"");
+
+	escape_string (w->tmp, s, len);
+	cherokee_buffer_add (OUT, w->tmp->buf, w->tmp->len);
+
+	cherokee_buffer_add_str (OUT, "\"");
+
+out:
+	ADD_END; ADD_NEW_LINE;
+	return ret_ok;
+}
 
 ret_t
 cherokee_dwriter_bool (cherokee_dwriter_t *w, cherokee_boolean_t b)
