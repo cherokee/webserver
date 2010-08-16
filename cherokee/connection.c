@@ -2526,7 +2526,6 @@ cherokee_connection_print (cherokee_connection_t *conn)
 }
 #endif
 
-#ifdef TRACE_ENABLED
 const char *
 cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 {
@@ -2536,11 +2535,11 @@ cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 	case phase_reading_header:    return "Reading header";
 	case phase_processing_header: return "Processing header";
 	case phase_reading_post:      return "Reading POST";
-	case phase_setup_connection:  return "Setup connection";
+	case phase_setup_connection:  return "Setting up connection";
 	case phase_init:              return "Init connection";
 	case phase_add_headers:       return "Add headers";
 	case phase_send_headers:      return "Send headers";
-	case phase_steping:           return "Step";
+	case phase_stepping:          return "Stepping";
 	case phase_shutdown:          return "Shutdown connection";
 	case phase_lingering:         return "Lingering close";
 	default:
@@ -2548,7 +2547,6 @@ cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 	}
 	return NULL;
 }
-#endif
 
 
 ret_t

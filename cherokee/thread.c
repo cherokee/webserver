@@ -1228,9 +1228,9 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 
 		phase_send_headers_EXIT:
-			conn->phase = phase_steping;
+			conn->phase = phase_stepping;
 
-		case phase_steping:
+		case phase_stepping:
 			/* Special case:
 			 * If the content is mmap()ed, it has to send the header +
 			 * the file content and stop processing the connection.
