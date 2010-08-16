@@ -73,14 +73,14 @@ cherokee_connection_info_free (cherokee_connection_info_t *info)
 }
 
 
-ret_t
-cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
-				  cherokee_connection_t      *conn)
+static ret_t
+info_fill_up (cherokee_connection_info_t *info,
+	      cherokee_connection_t      *conn)
 {
-	ret_t                        ret;
-	const char                  *handler_name = NULL;
- 	cherokee_icons_t            *icons        = CONN_SRV(conn)->icons;
-	cherokee_connection_phase_t  phase;
+	ret_t             ret;
+	const char       *phase        = NULL;
+	const char       *handler_name = NULL;
+ 	cherokee_icons_t *icons        = CONN_SRV(conn)->icons;
 
 	/* ID
 	 */
@@ -88,58 +88,8 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
 
 	/* Phase
 	 */
-	switch (conn->phase) {
-	case phase_nothing:
-		phase = phase_nothing;
-		cherokee_buffer_add_str (&info->phase, "Unknown");
-		break;
-	case phase_tls_handshake:
-		phase = phase_tls_handshake;
-		cherokee_buffer_add_str (&info->phase, "TLS Handshake");
-		break;
-	case phase_reading_header:
-		phase = phase_reading_header;
-		cherokee_buffer_add_str (&info->phase, "Reading header");
-		break;
-	case phase_processing_header:
-		phase = phase_processing_header;
-		cherokee_buffer_add_str (&info->phase, "Processing headers");
-		break;
-	case phase_setup_connection:
-		phase = phase_setup_connection;
-		cherokee_buffer_add_str (&info->phase, "Setting up connection");
-		break;
-	case phase_init:
-		phase = phase_init;
-		cherokee_buffer_add_str (&info->phase, "Initializing");
-		break;
-	case phase_reading_post:
-		phase = phase_reading_post;
-		cherokee_buffer_add_str (&info->phase, "Reading POST");
-		break;
-	case phase_add_headers:
-		phase = phase_add_headers;
-		cherokee_buffer_add_str (&info->phase, "Adding headers");
-		break;
-	case phase_send_headers:
-		phase = phase_send_headers;
-		cherokee_buffer_add_str (&info->phase, "Sending headers");
-		break;
-	case phase_steping:
-		phase = phase_steping;
-		cherokee_buffer_add_str (&info->phase, "Sending body");
-		break;
-	case phase_shutdown:
-		phase = phase_shutdown;
-		cherokee_buffer_add_str (&info->phase, "Shutting down");
-		break;
-	case phase_lingering:
-		phase = phase_lingering;
-		cherokee_buffer_add_str (&info->phase, "Lingering Close");
-		break;
-	default:
-		SHOULDNT_HAPPEN;
-	}
+	phase = cherokee_connection_get_phase_str (conn);
+	cherokee_buffer_add (&info->phase, phase, strlen(phase));
 
 	/* From
 	 */
@@ -256,14 +206,14 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 	list_for_each (i, &thread->active_list) {
 		CHEROKEE_NEW(n,connection_info);
 
-		cherokee_connection_info_fill_up (n, CONN(i));
+		info_fill_up (n, CONN(i));
 		cherokee_list_add (LIST(n), list);
 	}
 
 	list_for_each (i, &thread->polling_list) {
 		CHEROKEE_NEW(n,connection_info);
 
-		cherokee_connection_info_fill_up (n, CONN(i));
+		info_fill_up (n, CONN(i));
 		cherokee_list_add (LIST(n), list);
 	}
 
