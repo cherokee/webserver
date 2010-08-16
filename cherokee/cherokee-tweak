@@ -37,20 +37,26 @@ APP_COPY_NOTICE =                                                               
     "This is free software; see the source for copying conditions.  There is NO\n" \
     "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
-USAGE =                                                                 \
-    "Usage: cherokee-tweak -c command -a url [options]\n\n"             \
-    "  -h,  --help                   Print this help\n"                 \
-    "  -V,  --version                Print version and exit\n\n"        \
-    " Required:\n"                                                      \
-    "  -c,  --command=STRING         Command: logrotate, trace, info\n" \
-    "  -a,  --url=URL                URL to the admin interface\n\n"    \
-    " Security:\n"                                                      \
-    "  -u,  --user=STRING            User name\n"                       \
-    "  -p,  --password=STRING        Password\n\n"                      \
-    " Logrotate:\n"                                                     \
-    "  -l,  --log=PATH               Log file to be rotated\n\n"        \
-    " Trace:\n"                                                         \
-    "  -t,  --trace=STRING           Modules to be traced\n\n"          \
+
+USAGE =                                                                     \
+    "Usage:\n"                                                              \
+    "  cherokee-tweak [options] URL info \n"                                \
+    "  cherokee-tweak [options] URL sources \n"                             \
+    "  cherokee-tweak [options] URL kill-source ID \n"                      \
+    "  cherokee-tweak [options] URL logrotate   PATH \n"                    \
+    "  cherokee-tweak [options] URL trace       TRACE \n\n"                 \
+    " Commands:\n"                                                          \
+    "  info                          Prints info about the server status\n" \
+    "  trace                         Manipulates the tracing mechanism\n"   \
+    "  logrotate                     Rotates a local log file\n"            \
+    "  sources                       Prints a list of the info. sources\n"  \
+    "  kill-source                   Kill a remote information source\n\n"  \
+    " Parameters:\n"                                                        \
+    "  -h,  --help                   Print this help\n"                     \
+    "  -V,  --version                Print version and exit\n\n"            \
+    " Options:\n"                                                           \
+    "  -u,  --user=STRING            User name\n"                           \
+    "  -p,  --password=STRING        Password\n\n"                          \
     "Report bugs to http://bugs.cherokee-project.com\n"
 
 
@@ -60,13 +66,13 @@ user     = None
 password = None
 log      = None
 trace    = None
-
+ksource  = None
 
 
 def parse_args():
     global command, url
     global user, password
-    global log, trace
+    global log, trace, ksource
 
     if '-h' in sys.argv or '--help' in sys.argv:
         print USAGE
@@ -77,34 +83,62 @@ def parse_args():
         print APP_COPY_NOTICE
         raise SystemExit
 
-    for arg in sys.argv[1:]:
-        if '--command=' in arg:
-            command = arg[10:]
-        elif '-c' in arg:
-            command = arg[2:]
-        elif '--url=' in arg:
-            url = arg[6:]
-        elif '-a' in arg:
-            url = arg[2:]
-        elif '--user=' in arg:
+    # Check length
+    if len(sys.argv) < 3:
+        print USAGE
+        raise SystemExit
+
+    # Parse parameters
+    argn = 1
+    while argn < len(sys.argv):
+        arg = sys.argv[argn]
+
+        if arg.startswith('--user='):
             user = arg[7:]
-        elif '-u' in arg:
-            user = arg[2:]
-        elif '--password=' in arg:
+            argn += 1
+            continue
+        elif arg == '-u':
+            user = sys.argv[argn+1]
+            argn += 2
+            continue
+
+        elif arg.startswith('--password='):
             password = arg[11:]
-        elif '-p' in arg:
-            password = arg[2:]
-        elif '--log=' in arg:
-            log = arg[6:]
-        elif '-l' in arg:
-            log = arg[2:]
-        elif '--trace=' in arg:
-            trace = arg[8:]
-        elif '-t' in arg:
-            trace = arg[2:]
+            argn += 1
+            continue
+        elif arg == '-p':
+            password = sys.argv[argn+1]
+            argn += 2
+            continue
+
         else:
-            print USAGE
-            raise SystemExit
+            if arg.startswith('-'):
+                print USAGE
+                raise SystemExit
+            break
+
+    # Mandatory parameter
+    url     = sys.argv[argn]
+    command = sys.argv[argn + 1]
+    argn += 2
+
+    # Check command
+    if command == 'info':
+        None
+    elif command == 'trace':
+        trace = sys.argv[argn]
+        argn += 1
+    elif command == 'logrotate':
+        log = sys.argv[argn]
+        argn += 1
+    elif command == 'sources':
+        None
+    elif command == 'kill-source':
+        ksource = sys.argv[argn]
+        argn += 1
+    else:
+        print USAGE
+        raise SystemExit
 
 
 def configure_http_auth():
@@ -121,6 +155,42 @@ def request (commands):
     post_info = "%s\n" %('\n'.join(commands))
     conn = urllib2.urlopen (url + '/py', post_info)
     return conn.read()
+
+#
+# Sources
+#
+
+def print_sources():
+    # Query
+    responses_str = request (['get server.sources'])
+    responses = eval(responses_str)
+    sources = responses[0]
+
+    # Print
+    for source in sources:
+        type_ = source.get('type')
+        print "\tID:            %s" %(source.get('id'))
+        print "\tType:          %s" %(type_)
+        print "\tBind:          %s" %(source.get('bind') or '')
+        if type_ == 'interpreter':
+            print "\tPID:           %d" %(source.get('PID') or '')
+            print "\tTimeout:       %d" %(source.get('timeout') or '')
+            print "\tDebug:         %s" %(('No','Yes')[int(source.get('debug'))])
+            print "\tInterpreter:   %s" %(source.get('interpreter') or '')
+
+        if sources.index(source) < len(sources)-1:
+            print "\t---------------------"
+    print
+
+def kill_source():
+    # Query
+    responses_str = request (['kill server.source %s'%(ksource)])
+    responses = eval(responses_str)
+
+    # Report
+    print "Source %s: %s" %(ksource, responses[0]['source'])
+    print
+
 
 #
 # Info
@@ -238,22 +308,30 @@ def do_logrotate():
     assert not backup[0]['backup_mode'], "Couldn't unset backup mode"
 
 
+
 def main():
     parse_args()
     configure_http_auth()
 
-    if command == 'logrotate':
-        if log:
-            do_logrotate()
+    if command == 'info':
+        print_info()
+    elif command == 'sources':
+        print_sources()
+    elif command == 'kill-source':
+        if ksource:
+            kill_source()
         else:
-            print "ERROR: --log is required"
+            print "ERROR: Missing source ID parameter"
     elif command == 'trace':
         if trace:
             set_trace()
         else:
             print_trace()
-    elif command == 'info':
-        print_info()
+    elif command == 'logrotate':
+        if log:
+            do_logrotate()
+        else:
+            print "ERROR: Missing LOG parameter"
     else:
         print "ERROR: Command not found: %s\n" %(command)
         print USAGE
