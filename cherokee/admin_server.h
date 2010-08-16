@@ -26,23 +26,20 @@
 #define CHEROKEE_ADMIN_SERVER_H
 
 #include "handler_admin.h"
+#include "dwriter.h"
 
-ret_t cherokee_admin_server_reply_get_port (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-ret_t cherokee_admin_server_reply_set_port (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
+ret_t cherokee_admin_server_reply_get_ports       (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
+ret_t cherokee_admin_server_reply_get_traffic     (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
+ret_t cherokee_admin_server_reply_get_thread_num  (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
+ret_t cherokee_admin_server_reply_set_backup_mode (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter, cherokee_buffer_t *question);
 
-ret_t cherokee_admin_server_reply_get_port_tls (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-ret_t cherokee_admin_server_reply_set_port_tls (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
+ret_t cherokee_admin_server_reply_get_trace       (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
+ret_t cherokee_admin_server_reply_set_trace       (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter, cherokee_buffer_t *question);
 
-ret_t cherokee_admin_server_reply_get_tx (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-ret_t cherokee_admin_server_reply_get_rx (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
+ret_t cherokee_admin_server_reply_get_sources     (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
+ret_t cherokee_admin_server_reply_kill_source     (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter, cherokee_buffer_t *question);
 
-ret_t cherokee_admin_server_reply_get_connections (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-ret_t cherokee_admin_server_reply_del_connection  (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-
-ret_t cherokee_admin_server_reply_get_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-ret_t cherokee_admin_server_reply_set_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-
-ret_t cherokee_admin_server_reply_get_thread_num  (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
-ret_t cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
+ret_t cherokee_admin_server_reply_get_conns       (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
+ret_t cherokee_admin_server_reply_close_conn      (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter, cherokee_buffer_t *question);
 
 #endif /* CHEROKEE_ADMIN_SERVER_H */

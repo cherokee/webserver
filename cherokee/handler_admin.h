@@ -27,7 +27,7 @@
 
 #include "handler.h"
 #include "plugin_loader.h"
-
+#include "dwriter.h"
 
 typedef enum {
 	state_valid,
@@ -35,8 +35,9 @@ typedef enum {
 } cherokee_handler_admin_state_t;
 
 typedef struct {
-	cherokee_handler_t             handler;
-	cherokee_buffer_t              reply;
+	cherokee_handler_t handler;
+	cherokee_buffer_t  reply;
+	cherokee_dwriter_t dwriter;
 } cherokee_handler_admin_t;
 
 #define PROP_ADMIN(x)      ((cherokee_handler_admin_props_t *)(x))
@@ -51,11 +52,11 @@ ret_t cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_
 
 /* virtual methods implementation
  */
-ret_t cherokee_handler_admin_init        (cherokee_handler_admin_t *ahdl);
-ret_t cherokee_handler_admin_free        (cherokee_handler_admin_t *ahdl);
-void  cherokee_handler_admin_get_name    (cherokee_handler_admin_t *ahdl, const char **name);
-ret_t cherokee_handler_admin_step        (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *buffer);
-ret_t cherokee_handler_admin_add_headers (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *buffer);
+ret_t cherokee_handler_admin_init        (cherokee_handler_admin_t *hdl);
+ret_t cherokee_handler_admin_free        (cherokee_handler_admin_t *hdl);
+ret_t cherokee_handler_admin_read_post   (cherokee_handler_admin_t *hdl);
+ret_t cherokee_handler_admin_step        (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer);
+ret_t cherokee_handler_admin_add_headers (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer);
 
 
 #endif /* CHEROKEE_ADMIN_HANDLER_H */

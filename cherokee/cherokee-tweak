@@ -1,0 +1,264 @@
+#!/usr/bin/env python
+
+# -*- coding: utf-8; mode: python -*-
+#
+# Cherokee-admin
+#
+# Authors:
+#      Alvaro Lopez Ortega <alvaro@alobbs.com>
+#
+# Copyright (C) 2001-2010 Alvaro Lopez Ortega
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of version 2 of the GNU General Public
+# License as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+
+import os
+import re
+import sys
+import urllib2
+
+APP_NAME = "Cherokee Tweak"
+
+APP_COPY_NOTICE =                                                                  \
+    "Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"                       \
+    "Copyright (C) 2001-2010 Alvaro Lopez Ortega.\n"                               \
+    "This is free software; see the source for copying conditions.  There is NO\n" \
+    "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+
+USAGE =                                                                 \
+    "Usage: cherokee-tweak -c command -a url [options]\n\n"             \
+    "  -h,  --help                   Print this help\n"                 \
+    "  -V,  --version                Print version and exit\n\n"        \
+    " Required:\n"                                                      \
+    "  -c,  --command=STRING         Command: logrotate, trace, info\n" \
+    "  -a,  --url=URL                URL to the admin interface\n\n"    \
+    " Security:\n"                                                      \
+    "  -u,  --user=STRING            User name\n"                       \
+    "  -p,  --password=STRING        Password\n\n"                      \
+    " Logrotate:\n"                                                     \
+    "  -l,  --log=PATH               Log file to be rotated\n\n"        \
+    " Trace:\n"                                                         \
+    "  -t,  --trace=STRING           Modules to be traced\n\n"          \
+    "Report bugs to http://bugs.cherokee-project.com\n"
+
+
+command  = None
+url      = None
+user     = None
+password = None
+log      = None
+trace    = None
+
+
+
+def parse_args():
+    global command, url
+    global user, password
+    global log, trace
+
+    if '-h' in sys.argv or '--help' in sys.argv:
+        print USAGE
+        raise SystemExit
+
+    if '-v' in sys.argv or '--version' in sys.argv:
+        print APP_NAME
+        print APP_COPY_NOTICE
+        raise SystemExit
+
+    for arg in sys.argv[1:]:
+        if '--command=' in arg:
+            command = arg[10:]
+        elif '-c' in arg:
+            command = arg[2:]
+        elif '--url=' in arg:
+            url = arg[6:]
+        elif '-a' in arg:
+            url = arg[2:]
+        elif '--user=' in arg:
+            user = arg[7:]
+        elif '-u' in arg:
+            user = arg[2:]
+        elif '--password=' in arg:
+            password = arg[11:]
+        elif '-p' in arg:
+            password = arg[2:]
+        elif '--log=' in arg:
+            log = arg[6:]
+        elif '-l' in arg:
+            log = arg[2:]
+        elif '--trace=' in arg:
+            trace = arg[8:]
+        elif '-t' in arg:
+            trace = arg[2:]
+        else:
+            print USAGE
+            raise SystemExit
+
+
+def configure_http_auth():
+    if not user or not password:
+        return
+
+    passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+    passman.add_password (None, url, user, password)
+    authhandler = urllib2.HTTPBasicAuthHandler (passman)
+    opener = urllib2.build_opener (authhandler)
+    urllib2.install_opener (opener)
+
+def request (commands):
+    post_info = "%s\n" %('\n'.join(commands))
+    conn = urllib2.urlopen (url + '/py', post_info)
+    return conn.read()
+
+#
+# Info
+#
+
+def print_info():
+    # Query
+    info_str = request (['get server.ports',
+                         'get server.traffic',
+                         'get server.thread_num',
+                         'get server.connections'])
+    info = eval(info_str)
+    ports   = info[0]
+    traffic = info[1]
+    threads = info[2]
+    conns   = info[3]
+
+    # General
+    print "General:"
+    print "\tThread number: %d" %(threads.get('thread_num'))
+    print
+
+    # Traffic
+    if traffic.get('tx') != -1 and traffic.get('rx') != -1:
+        print "Traffic:"
+        print "\tTX:            %d" %(traffic.get('tx'))
+        print "\tTX formatted:  %s" %(traffic.get('tx_formatted') or '')
+        print "\tRX:            %d" %(traffic.get('rx'))
+        print "\tRX formatted:  %s" %(traffic.get('rx_formatted') or '')
+        print
+
+    # Incoming Ports
+    print "Ports:"
+    for port in ports:
+        print "\tID:            %d" %(port.get('id'))
+        print "\tPort:          %d" %(port.get('port'))
+        print "\tTLS:           %s" %(('No','Yes')[int(port.get('tls'))])
+        print "\tBind:          %s" %(port.get('bind') or '')
+        if ports.index(port) < len(ports)-1:
+            print "\t---------------------"
+    print
+
+    # Connection details
+    print "Connections:"
+    for conn in conns:
+        print "\tRequest:       %s" %(conn.get('request',''))
+        print "\tHandler:       %s" %(conn.get('handler'))
+        print "\tPhase:         %s" %(conn.get('phase'))
+        print "\tIncoming IP:   %s" %(conn.get('ip'))
+        print "\tRX:            %s" %(conn.get('rx'))
+        print "\tTX:            %s" %(conn.get('tx'))
+        if conns.index(conn) < len(conns)-1:
+            print "\t---------------------"
+    print
+
+
+#
+# Trace
+#
+
+def print_trace():
+    trace_str = request (['get server.trace'])
+    traces = eval(trace_str)
+    print "Trace: %s" %(traces[0].get('trace') or 'Disabled')
+    print
+
+def set_trace():
+    trace_str = request (['set server.trace %s'%(trace)])
+    traces = eval(trace_str)
+    print "Trace set: %s" %(('Failed', 'Succeed')[int(traces[0].get('set'))])
+    print
+
+
+#
+# Log Rotation
+#
+
+def do_logrotate():
+    # Look for the new log name
+    dirname     = os.path.dirname (log) or '.'
+    basename    = os.path.basename (log)
+    num         = 0
+    new_logname = None
+
+    similar = filter (lambda x: x.startswith(basename), os.listdir(dirname))
+    for filename in similar:
+        tmp = re.findall ('%s\.(\d)+'%(basename), filename)
+        if tmp:
+            num = max (int(tmp[0]), num)
+
+    dot = basename.rfind('.')
+    if dot != -1:
+        if basename[dot:].isdigit():
+            new_logname = '%s.%d' %(basename[dot:], num+1)
+
+    if not new_logname:
+        new_logname = '%s.%d' %(basename, num+1)
+
+    new_logpath = os.path.join (dirname, new_logname)
+
+    # Enable Backup-mode
+    print "Enabling Back-up mode.."
+    backup_str = request (['set server.backup_mode on'])
+    backup = eval(backup_str)
+    assert backup[0]['backup_mode'], "Couldn't set backup mode"
+
+    # Rotate the log
+    print "Moving %s to %s" %(log, new_logpath)
+    os.rename (log, new_logpath)
+
+    # Enable Backup-mode
+    print "Disabling Back-up mode.."
+    backup_str = request (['set server.backup_mode off'])
+    backup = eval(backup_str)
+    assert not backup[0]['backup_mode'], "Couldn't unset backup mode"
+
+
+def main():
+    parse_args()
+    configure_http_auth()
+
+    if command == 'logrotate':
+        if log:
+            do_logrotate()
+        else:
+            print "ERROR: --log is required"
+    elif command == 'trace':
+        if trace:
+            set_trace()
+        else:
+            print_trace()
+    elif command == 'info':
+        print_info()
+    else:
+        print "ERROR: Command not found: %s\n" %(command)
+        print USAGE
+        raise SystemExit
+
+
+if __name__ == "__main__":
+    main()

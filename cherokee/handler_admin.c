@@ -31,7 +31,7 @@
 #include "admin_server.h"
 #include "util.h"
 
-#define ERR_STR(x)
+#define ENTRIES "handler,admin"
 
 /* Plug-in initialization
  */
@@ -62,14 +62,20 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 
 	MODULE(n)->init         = (module_func_init_t) cherokee_handler_admin_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_admin_free;
-	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_admin_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_admin_add_headers;
+	HANDLER(n)->read_post   = (handler_func_read_post_t) cherokee_handler_admin_read_post;
+	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_admin_step;
 
 	/* Supported features
 	 */
 	HANDLER(n)->support     = hsupport_nothing;
 
 	cherokee_buffer_init (&n->reply);
+
+	/* Configure the data writer object
+	 */
+	cherokee_dwriter_init       (&n->dwriter, THREAD_TMP_BUF1(CONN_THREAD(cnt)));
+	cherokee_dwriter_set_buffer (&n->dwriter, &n->reply);
 
 	/* Return the object
 	 */
@@ -79,80 +85,107 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 
 
 ret_t
-cherokee_handler_admin_free (cherokee_handler_admin_t *ahdl)
+cherokee_handler_admin_free (cherokee_handler_admin_t *hdl)
 {
-	cherokee_buffer_mrproper (&ahdl->reply);
+	cherokee_buffer_mrproper (&hdl->reply);
+	cherokee_dwriter_mrproper (&hdl->dwriter);
+
 	return ret_ok;
 }
 
 
 static ret_t
-process_request_line (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *line)
+process_request_line (cherokee_handler_admin_t *hdl, cherokee_buffer_t *line)
 {
-#define COMP(str,sub) strncmp(str, sub, sizeof(sub)-1)
+#define COMP(str,sub) (strncmp(str, sub, sizeof(sub)-1) == 0)
 
-	if (!COMP (line->buf, "get server.port_tls"))
-		return cherokee_admin_server_reply_get_port_tls (ahdl, line, &ahdl->reply);
-	else if (!COMP (line->buf, "set server.port_tls"))
-		return cherokee_admin_server_reply_set_port_tls (ahdl, line, &ahdl->reply);
+	if (COMP (line->buf, "get server.ports")) {
+		return cherokee_admin_server_reply_get_ports (HANDLER(hdl), &hdl->dwriter);
+	} else if (COMP (line->buf, "get server.traffic")) {
+		return cherokee_admin_server_reply_get_traffic (HANDLER(hdl), &hdl->dwriter);
+	} else if (COMP (line->buf, "get server.thread_num")) {
+		return cherokee_admin_server_reply_get_thread_num (HANDLER(hdl), &hdl->dwriter);
 
-	else if (!COMP (line->buf, "get server.port"))
-		return cherokee_admin_server_reply_get_port (ahdl, line, &ahdl->reply);
-	else if (!COMP (line->buf, "set server.port"))
-		return cherokee_admin_server_reply_set_port (ahdl, line, &ahdl->reply);
+	} else if (COMP (line->buf, "get server.trace")) {
+		return cherokee_admin_server_reply_get_trace (HANDLER(hdl), &hdl->dwriter);
+	} else if (COMP (line->buf, "set server.trace")) {
+		return cherokee_admin_server_reply_set_trace (HANDLER(hdl), &hdl->dwriter, line);
 
-	else if (!COMP (line->buf, "get server.rx"))
-		return cherokee_admin_server_reply_get_rx (ahdl, line, &ahdl->reply);
-	else if (!COMP (line->buf, "get server.tx"))
-		return cherokee_admin_server_reply_get_tx (ahdl, line, &ahdl->reply);
+	} else if (COMP (line->buf, "get server.sources")) {
+		return cherokee_admin_server_reply_get_sources (HANDLER(hdl), &hdl->dwriter);
+	} else if (COMP (line->buf, "kill server.source")) {
+		return cherokee_admin_server_reply_kill_source (HANDLER(hdl), &hdl->dwriter, line);
 
-	else if (!COMP (line->buf, "get server.connections"))
-		return cherokee_admin_server_reply_get_connections (ahdl, line, &ahdl->reply);
+	} else if (COMP (line->buf, "set server.backup_mode")) {
+		return cherokee_admin_server_reply_set_backup_mode (HANDLER(hdl), &hdl->dwriter, line);
 
-	else if (!COMP (line->buf, "del server.connection"))
-		return cherokee_admin_server_reply_del_connection (ahdl, line, &ahdl->reply);
+	} else if (COMP (line->buf, "get server.connections")) {
+		return cherokee_admin_server_reply_get_conns (HANDLER(hdl), &hdl->dwriter);
+	} else if (COMP (line->buf, "close server.connection")) {
+		return cherokee_admin_server_reply_close_conn (HANDLER(hdl), &hdl->dwriter, line);
 
-	else if (!COMP (line->buf, "get server.thread_num"))
-		return cherokee_admin_server_reply_get_thread_num (ahdl, line, &ahdl->reply);
-
-	else if (!COMP (line->buf, "set server.backup_mode"))
-		return cherokee_admin_server_reply_set_backup_mode (ahdl, line, &ahdl->reply);
-
-	else if (!COMP (line->buf, "set server.trace"))
-		return cherokee_admin_server_reply_set_trace (ahdl, line, &ahdl->reply);
-	else if (!COMP (line->buf, "get server.trace"))
-		return cherokee_admin_server_reply_get_trace (ahdl, line, &ahdl->reply);
+	}
 
 	SHOULDNT_HAPPEN;
 	return ret_error;
 }
 
+ret_t
+cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
+{
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+
+#define finishes_by(s) ((conn->request.len > sizeof(s)-1) && \
+			(!strncmp (conn->request.buf + conn->request.len - (sizeof(s)-1), s, sizeof(s)-1)))
+
+	if (finishes_by ("/py")) {
+		hdl->dwriter.lang = dwriter_python;
+	} else if (finishes_by ("/js")) {
+		hdl->dwriter.lang = dwriter_json;
+	} else if (finishes_by ("/php")) {
+		hdl->dwriter.lang = dwriter_php;
+	} else if (finishes_by ("/ruby")) {
+		hdl->dwriter.lang = dwriter_ruby;
+	}
+
+#undef finishes_by
+	return ret_ok;
+}
 
 ret_t
-cherokee_handler_admin_init (cherokee_handler_admin_t *ahdl)
+cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 {
+	int                      re;
 	ret_t                    ret;
 	char                    *tmp;
 	cherokee_buffer_t        post = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t        line = CHEROKEE_BUF_INIT;
-	cherokee_connection_t   *conn = HANDLER_CONN(ahdl);
+	cherokee_connection_t   *conn = HANDLER_CONN(hdl);
 
 	/* Check for the post info
 	 */
-	if (conn->post.len <= 0) {
+	if (! conn->post.has_info) {
 		conn->error_code = http_bad_request;
 		return ret_error;
 	}
 
 	/* Process line per line
 	 */
-	do {
-		ret = cherokee_post_read (&conn->post, &conn->socket, &post);
-		if (unlikely (ret == ret_error)) {
-			conn->error_code = http_bad_request;
-			return ret_error;
-		}
-	} while (! cherokee_post_read_finished (&conn->post));
+	ret = cherokee_post_read (&conn->post, &conn->socket, &post);
+	switch (ret) {
+	case ret_ok:
+	case ret_eagain:
+		break;
+	default:
+		conn->error_code = http_bad_request;
+		return ret_error;
+	}
+
+	/* Parse
+	 */
+	TRACE (ENTRIES, "Post contains: '%s'\n", post.buf);
+
+	cherokee_dwriter_list_open (&hdl->dwriter);
 
 	for (tmp = post.buf;;) {
 		char *end1 = strchr (tmp, CHR_LF);
@@ -170,11 +203,11 @@ cherokee_handler_admin_init (cherokee_handler_admin_t *ahdl)
 
 		/* Process current line
 		 */
-		ret = process_request_line (ahdl, &line);
+		ret = process_request_line (hdl, &line);
 		if (ret == ret_error) {
 			conn->error_code = http_bad_request;
 			ret = ret_error;
-			goto go_out;
+			goto exit2;
 		}
 
 		/* Clean up for the next iteration
@@ -182,7 +215,14 @@ cherokee_handler_admin_init (cherokee_handler_admin_t *ahdl)
 		cherokee_buffer_clean (&line);
 	}
 
-go_out:
+	cherokee_dwriter_list_close (&hdl->dwriter);
+
+	/* There might be more POST to read
+	 */
+	re = cherokee_post_read_finished (&conn->post);
+	ret = re ? ret_ok : ret_eagain;
+
+exit2:
 	cherokee_buffer_mrproper (&post);
 	cherokee_buffer_mrproper (&line);
 	return ret;
@@ -190,21 +230,21 @@ go_out:
 
 
 ret_t
-cherokee_handler_admin_step (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *buffer)
+cherokee_handler_admin_step (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_add_buffer (buffer, &ahdl->reply);
+	cherokee_buffer_add_buffer (buffer, &hdl->reply);
 	return ret_eof_have_data;
 }
 
 
 ret_t
-cherokee_handler_admin_add_headers (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *buffer)
+cherokee_handler_admin_add_headers (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(ahdl);
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
 	if (cherokee_connection_should_include_length(conn)) {
-		HANDLER(ahdl)->support = hsupport_length;
-		cherokee_buffer_add_va (buffer, "Content-Length: %lu" CRLF, ahdl->reply.len);
+		HANDLER(hdl)->support = hsupport_length;
+		cherokee_buffer_add_va (buffer, "Content-Length: %lu" CRLF, hdl->reply.len);
 	}
 
 	return ret_ok;
