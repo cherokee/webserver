@@ -1391,7 +1391,7 @@ if test "$have_openssl" != "yes"; then
 	modules=`echo $modules | sed s/libssl//`
 fi
 if test "x$have_ffmpeg" != "xyes"; then
-	modules=`echo $modules | sed s/ffmpeg//`
+	modules=`echo $modules | sed s/streaming//`
 fi
 
 add_calls=""
