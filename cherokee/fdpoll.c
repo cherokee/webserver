@@ -179,10 +179,10 @@ cherokee_fdpoll_best_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_epoll, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
 
-	ret = cherokee_fdpoll_new (fdp, cherokee_poll_poll, sys_limit, limit);
+	ret = cherokee_fdpoll_new (fdp, cherokee_poll_kqueue, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
 
-	ret = cherokee_fdpoll_new (fdp, cherokee_poll_kqueue, sys_limit, limit);
+	ret = cherokee_fdpoll_new (fdp, cherokee_poll_poll, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
 
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_port, sys_limit, limit);
