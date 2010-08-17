@@ -33,7 +33,7 @@
 
 
 #define ENTRIES "validator"
-
+#define REALM_DEFAULT "Protected"
 
 ret_t
 cherokee_validator_init_base (cherokee_validator_t             *validator,
@@ -452,8 +452,16 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 			ret = cherokee_config_node_read_list (subconf, NULL, add_user, entry->users);
 			if (ret != ret_ok)
 				return ret;
-
 		}
+	}
+
+	/* Sanity checks
+	 */
+	if ((entry->auth_realm == NULL) ||
+	    (cherokee_buffer_is_empty (entry->auth_realm)))
+	{
+		cherokee_buffer_add_str (entry->auth_realm, REALM_DEFAULT);
+		TRACE (ENTRIES, "No Realm was provided. Setting default realm: %s\n", REALM_DEFAULT);
 	}
 
 	return ret_ok;
