@@ -24,7 +24,7 @@ If you happen to be running an old version of Cherokee and would like
 to keep your current configuration settings, you can upgrade your
 cherokee.conf file.
 
-Cherokee now supports configuration versioning, so
+Cherokee currently supports configuration versioning, so
 from now on, whenever a change is made to the configuration file
 format, Cherokee-Admin will be able to automatically convert yours to
 the new release. You simply have to load Cherokee-Admin and it will be
@@ -40,38 +40,16 @@ In case you need to do this manually, the usage is as follows:
   /usr/share/cherokee/admin/upgrade_config.py /etc/cherokee/cherokee.conf
 ----
 
-If Cherokee-Admin can not make the conversion automatically (because
-it is older than the configuration versioning feature), you still have
-options.
-
-You can attempt to upgrade you configuration file by manually running
-the Python scripts provided under `contrib`.
-
-The usage is quite simple, and works the same way for all the
-scripts:
-
-----
-    cp /etc/cherokee/cherokee.conf /etc/cherokee/cherokee.conf-0.99.9
-    contrib/0999to09910.py /etc/cherokee/cherokee.conf-0.99.9 /etc/cherokee/cherokee.conf
-----
-
-If you need to upgrade from a really old release, simply apply the
-whole chain of conversions.
-
-Note that some of the available prepackaged versions of Cherokee
-are set to offer the possibility of automatically running these scripts
-to upgrade the configuration if files from a prior release are detected
-in the system.
-
-Every effort is made to bulletproof the upgrade scripts. If any of
-them does not work for you, please send a bug report.
-However, Cherokee is a very active project and has been steadily
-advancing and incorporating technical improvements. You should really be
-using link:other_bundle_cherokee-admin.html[cherokee-admin] to configure your
-system if you want to take full advantage of the new features. Even if
-the upgrade process is successful, you should use the new configuration
-file as a start point and go through the normal configuration process
-using link:other_bundle_cherokee-admin.html[cherokee-admin].
+Every effort is made to bulletproof the upgrade script. If an upgrade
+does not work for you, please send a bug report.  However, Cherokee is
+a very active project and has been steadily advancing and
+incorporating technical improvements. You should really be using
+link:other_bundle_cherokee-admin.html[cherokee-admin] to configure
+your system if you want to take full advantage of the new
+features. Even if the upgrade process is successful, you should use
+the new configuration file as a start point and go through the normal
+configuration process using
+link:other_bundle_cherokee-admin.html[cherokee-admin].
 
 Also, as long as you are not using an ancient configuration file,
 every new cherokee-admin release will be able to upgrade the
