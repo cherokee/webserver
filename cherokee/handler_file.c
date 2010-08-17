@@ -766,8 +766,9 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 			goto exit_sendfile;
 		}
 
-		if (ret < ret_ok)
+		if (ret != ret_ok) {
 			return ret;
+		}
 
 		/* This connection is not using the cherokee_connection_send() method,
 		 * so we have to update the connection traffic counter here.
