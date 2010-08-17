@@ -171,21 +171,6 @@ e('VALIDATOR_METHOD_UNKNOWN',
   desc  = BROKEN_CONFIG)
 
 
-# cherokee/admin_client.c
-#
-e('ADMIN_CLIENT_INTERNAL',
-  title = "Internal error",
-  desc  = CODING_BUG)
-
-e('ADMIN_CLIENT_BAD_RESPONSE',
-  title = "Uknown response len(%d): '%s'",
-  desc  = CODING_BUG)
-
-e('ADMIN_CLIENT_LITERAL',
-  title = "Could not find len(%d):'%s' in len(%d):'%s'",
-  desc  = CODING_BUG)
-
-
 # cherokee/handler_*.c
 #
 e('HANDLER_REGEX_GROUPS',
