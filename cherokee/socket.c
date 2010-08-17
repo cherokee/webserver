@@ -1162,7 +1162,9 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 		}
 
 	} else if (_sent == 0) {
-		/* It isn't an error, but it wrote nothing */
+		/* It wrote nothing. Most likely the file was
+		 * truncated and the fd offset is off-limits.
+		 */
 		return ret_error;
 	}
 
