@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
 ////
-Last checked: 2010/05/06 Cherokee 0.99.50b
+Last checked: 2010/08/17 Cherokee 1.0.9b
 ////
 
 Virtual Server: Rules
@@ -173,6 +173,21 @@ on the values you have configured. The available options are:
  . 1970: Corresponds to the Unix Epoch.
  . 2038: Maximum date value representable in POSIX time.
  . Custom Value: set a value by hand.
+
+Additionaly, if a content expiration option is set, it is possible to
+specify the way in which an intermediate cache should treat the
+content, for situations such as when the content is requested to
+Cherokee through an HTTP proxy. This is done through the `Management
+by caches` setting, that can be specified to any of the following
+values: `Not set`, `Private`, `Public`, `No Cache`.
+
+If the setting is enabled, four additional parameters can be
+individually turned on and off to fine tune the behavior:
+
+ . No Store: Prevents the retention of sensitive information. Caches must not store this content.
+ . No Transform: Forbid intermediate caches from transforming the content.
+ . Must Revalidate: The client must contact the server to revalidate the object.
+ . Proxies Revalidate: Proxy servers must contact the server to revalidate the object.
 
 
 [[security]]

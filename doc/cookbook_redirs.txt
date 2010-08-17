@@ -1,4 +1,7 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+////
+Last checked: 2010/08/17 Cherokee 1.0.9b
+////
 
 Cookbook: Redirections
 ----------------------
@@ -42,3 +45,21 @@ image::media/images/cookbook_redir_handler.png[Handler configuration]
 Keep in mind the redirection has to be external in order for Cherokee
 to rewrite the the URL. If it wasn't, the redirection would be applied
 but no change would be displayed to the users while browsing the site.
+
+
+Redirecting to HTTPS
+~~~~~~~~~~~~~~~~~~~~
+
+Now lets imagine a scenario where the name of the virtual server
+matched is of importance for the substitution.  For instance, supose
+you want all the traffic to the `/secure_dir` directory of a regular
+HTTP channel to be redirected to an HTTPS channel through a server
+whose name depends on that of the matching host.
+
+In this case you need to resort to the macros supported by the
+handler. First you'll have to create a `Directory` type rule managed
+by the `Redirection` handler.  And second, define an _external
+redirection_ with a _Regular Expression_ like __^/(.*)$__ and the
+appropriate _Substitution_: https://${host}/secure_dir/$1
+
+image::media/images/cookbook_redir_https.png[HTTPS redirections]

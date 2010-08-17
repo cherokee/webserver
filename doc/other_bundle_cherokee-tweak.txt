@@ -1,12 +1,12 @@
 == link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
-///////////////////////////////////////////////////////////////////
-Last checked: Cherokee 1.0.5b
-///////////////////////////////////////////////////////////////////
+////
+Last checked: 2010/08/17 Cherokee 1.0.9b
+////
 
 Man pages: cherokee-tweak
 -------------------------
 
-This command-line tool is also not as well known as it would. Again
+This command-line tool is also not as well known as it should. Again
 this is not by lack of merits, which in fact are considerable. Its
 intended audience are also system administrators and developers.
 
@@ -23,55 +23,73 @@ These actions are:
 
   * Provide information: `info`.
 
+  * Report the list of Information Sources of a running server and
+    their individual statuses.
+
+  * Kill remotely any information source.
 
 This is the full information provided by the manpage.
 **********************************************************************
 *NAME*::
-       cherokee-tweak  - Command-line interface to the Cherokee administrative
-       interface
+       cherokee-tweak  - Command-line interface to the administration interface of Cherokee
 
 *SYNOPSIS*::
-       cherokee-tweak -c command -a url [options]
+       cherokee-tweak [options] URL info
+       cherokee-tweak [options] URL sources
+       cherokee-tweak [options] URL kill-source ID
+       cherokee-tweak [options] URL logrotate   PATH
+       cherokee-tweak [options] URL trace       TRACE
 
 *DESCRIPTION*::
-       cherokee-tweak connects to running cherokee instance, either  local  or
+       cherokee-tweak connects to a running cherokee instance, either  local  or
        remote, and requests it to perform one of several actions.
+
+*COMMANDS*::
+       info;;
+               Prints info about the server status
+
+       sources;;
+               Prints a list of the information sources
+
+       kill-source;;
+               Kill a remote information source, specified by its reported ID
+
+       logrotate;;
+               Rotates a local (*and only local*) log file specified by PATH.
+
+       trace;;
+               Manipulates the tracing mechanism. TRACE should be the
+               string that specifies the modules to be traced, and
+               Cherokee must have been compiled with the
+               --enable-trace option for this to work. Everything
+               traceable with CHEROKEE_TRACE can also be traced this
+               way.
+
+*PARAMETERS*::
+       URL;;
+               Required before any command. This is the URL where the
+               administrative interface can be found.  This target
+               must be defined previously in cherokee-admin, enabling
+               a "Remote Administration" type handler (Virtual
+               Servers->Behavior->Rule Management->Add new rule, and
+               then Handler->"Remote Administration").  The definition
+               of a security mechanism is highly encouraged.
+
+       -h,  --help;;
+               Shows brief usage information
+
+       -V,  --version;;
+               Print version and exit
 
 *OPTIONS*::
        cherokee-tweak accepts the following options:
 
-       -h, --help;;
-               Shows brief usage information
-
-       -V, --version;;
-               Prints version and exits
-
-       -u, --user= STRING;;
+       -u,  --user=STRING;;
                Specifies the user name with which to identify to the server
 
-       -p, --password=STRING;;
+       -p,  --password=STRING;;
                Specifies the password with which to identify to the server
 
-       -c, --command=STRING;;
-               Required option. Command to execute: logrotate, trace or info
-
-       -a, --url=URL;;
-               Required option. URL where the administrative interface
-               can be found.  This target must be defined previously
-               in cherokee- admin, enabling a "Remote Administration"
-               type handler (Virtual Servers->Behavior->Rule
-               Management->Add new rule, and then Handler->"Remote
-               Administration").  The definition of a security
-               mechanism is highly encouraged.
-
-       -l, --log=PATH;;
-               Log file to be rotated (Only to be used when -c is logrotate)
-
-       -t, --trace=STRING;;
-               Modules to be traced (Only to be used when -c is trace). Chero‐
-               kee must have been compiled with the --enable-trace for this to
-               work. Everything traceable  with  CHEROKEE_TRACE  can  also  be
-               traced this way.
 **********************************************************************
 
 To use `cherokee-tweak`, an administrative interface must be defined
@@ -97,9 +115,9 @@ Every module traceable with CHEROKEE_TRACE can also be traced this
 way. Refer to the link:dev_debug.html["Debugging"] section of the
 documentation for more information on this matter.
 
-Keep in mind one important thing: when the `-t` option is specified,
-`cherokee-tweak` activates the tracing functionality within the
-`cherokee` instance. It does not provide tracing of its own. This
+Keep in mind one important thing: when the `trace` command is
+specified, `cherokee-tweak` activates the tracing functionality within
+the `cherokee` instance. It does not provide tracing of its own. This
 means the debugging information will appear in the machine that is
 actually running the `cherokee` instance. This may or may not be the
 same that is running the `cherokee-tweak` process.

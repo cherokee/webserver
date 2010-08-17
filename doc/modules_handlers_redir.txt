@@ -1,4 +1,7 @@
 == link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
+////
+Last checked: 2010/08/17 Cherokee 1.0.9b
+////
 
 Handler: Redirection
 --------------------
@@ -48,7 +51,17 @@ the substitution.
    the intended target of such petition. Getting into details of
    regular expressions is out of the scope of this document. Besides,
    there are many link:http://perldoc.perl.org/perlre.html[Perl
-   regular expressions] references.
+   regular expressions] references. Macros can be used for these
+   substitutions, which is specially handy for some cases that cannot
+   be covered any other way, such as uniformly managing virtual
+   servers with multiple matches. Take a look at the examples at the
+   end of this section for further clarification.
++
+[options="header"]
+|=========================================================================
+|Variable           |Example          |Description
+|`${host}`          |example.com      |Host of the matching virtual server
+|=========================================================================
 
 
 [[vhosts]]
@@ -94,10 +107,11 @@ This example will perform internal redirections:
 
 [cols="30%,70%",options="header"]
 |=======================================================================================
-|Regular Expression |Substitution
-|__/(\d+)$__        |http://example.com/inst/photogallery/viewphoto?photoid=$1
-|__/(\d+)/cmts__    |http://example.com/viewcomments?photoid=$1
-|__/(\d+)/delete__  |http://example.com/inst/photogallery/admin?photoid=$1&method=delete
+|Regular Expression    |Substitution
+|__/(\d+)$__           |http://example.com/inst/photogallery/viewphoto?photoid=$1
+|__/(\d+)/cmts__       |http://example.com/viewcomments?photoid=$1
+|__/(\d+)/delete__     |http://example.com/inst/photogallery/admin?photoid=$1&method=delete
+|__/https_redir/(\d+)__|https://${host}/secure?photoid=$1
 |=======================================================================================
 
 Which would translate into the following redirections for the listed
@@ -109,4 +123,5 @@ matching requests:
 |__/photo/123__        |http://example.com/inst/photogallery/viewphoto?photoid=123
 |__/photo/213/cmts__   |http://example.com/viewcomments?photoid=213
 |__/photo/501/delete__ |http://example.com/inst/photogallery/admin?photoid=501&method=delete
+|__/https_redir/555__  |https://example.com/secure?photoid=555
 |===========================================================================================

@@ -191,6 +191,7 @@ media/images/cookbook_maintenance_advanced_domains.png \
 media/images/cookbook_redir_behavior.png \
 media/images/cookbook_redir_domains.png \
 media/images/cookbook_redir_handler.png \
+media/images/cookbook_redir_https.png \
 media/images/cookbook_dbslayer1.png \
 media/images/cookbook_dbslayer2.png \
 media/images/cookbook_dbslayer3.png \

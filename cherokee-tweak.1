@@ -1,52 +1,73 @@
 .TH cherokee-tweak 1
 .SH NAME
-cherokee-tweak - Command-line interface to the Cherokee administrative interface
+cherokee-tweak - Command-line interface to the administration interface of Cherokee
 .SH SYNOPSIS
 .B cherokee-tweak
-\-c command \-a url [options]
+[options] URL info
+.PP
+.B cherokee-tweak
+[options] URL sources
+.PP
+.B cherokee-tweak
+[options] URL kill-source ID
+.PP
+.B cherokee-tweak
+[options] URL logrotate   PATH
+.PP
+.B cherokee-tweak
+[options] URL trace       TRACE
 .SH DESCRIPTION
-\fIcherokee-tweak\fP connects to running cherokee instance, either local or remote,
+\fIcherokee-tweak\fP connects to a running cherokee instance, either local or remote,
 and requests it to perform one of several actions.
-.SH OPTIONS
-\fIcherokee-tweak\fP accepts the following options:
+.SH COMMANDS
+.TP 8
+.B info
+Prints info about the server status
+.TP 8
+.B sources
+Prints a list of the information sources
+.TP 8
+.B kill-source
+Kill a remote information source, specified by its reported ID
+.TP 8
+.B logrotate
+Rotates a local (*and only local*) log file specified by PATH.
+.TP 8
+.B trace
+Manipulates the tracing mechanism. TRACE should be the
+string that specifies the modules to be traced, and
+Cherokee must have been compiled with the
+\--enable-trace option for this to work. Everything
+traceable with CHEROKEE_TRACE can also be traced this
+way.
+.SH PARAMETERS
+.TP 8
+.B URL
+Required before any command. This is the URL where the administration
+interface can be found.  This target must be defined previously in
+\fcherokee-admin\f, enabling a "Remote Administration" type handler
+(Virtual Servers->Behaviour->Add new rule, and then Handler->"Remote
+Administration"). The deffinition of a security mechanism is highly
+encouraged.
 .TP 8
 .B  \-h, --help
 Shows brief usage information
 .TP 8
 .B  \-V, --version
 Prints version and exits
+.SH OPTIONS
 .TP 8
-.B  \-u, --user= STRING
+\fIcherokee-tweak\fP accepts the following options:
+.TP 8
+.B \-u, --user=STRING
 Specifies the user name with which to identify to the server
 .TP 8
-.B  \-p, --password= STRING
+.B \-p, --password=STRING
 Specifies the password with which to identify to the server
-.TP 8
-.B  \-c, --command=STRING
-Required option. Command to execute: logrotate, trace or info
-.TP 8
-.B  \-a, --url=URL
-Required option. URL where the administration interface can be found.
-This target must be defined previously in cherokee-admin, enabling
-a "Remote Administration" type handler (Virtual Servers->Behaviour->Add new rule,
-and then Handler->"Remote Administration"). The deffinition of a security mechanism
-is highly encouraged.
-.TP 8
-.B  \-l, --log=PATH
-Log file to be rotated (Only to be used when -c is logrotate)
-.TP 8
-.B  \-t, --trace=STRING
-Modules to be traced (Only to be used when -c is trace). Cherokee must have
-been compiled with the --enable-trace for this to work. Everything traceable
-with CHEROKEE_TRACE can also be traced this way.
 .SH SEE ALSO
 \&\fIcherokee-admin\fR\|(8)
 .PP
 This program is a part of the Cherokee web server, \&\fIcherokee\fR\|(1)
 .SH AUTHOR
-This manual page was written by Gunnar Wolf <gwolf@debian.org>, for
-the Debian GNU/linux system (but may be used by others). Maintained by Taher
-Shihadeh <taher@unixwars.com>.
 .PP
-Cherokee itself was written by Álvaro López Ortega
-<alvaro@alobbs.com>.
+Cherokee was written by Alvaro Lopez Ortega<alvaro@alobbs.com>. This manual page was written by Taher Shihadeh <taher@unixwars.com>.

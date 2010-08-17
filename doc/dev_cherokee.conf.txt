@@ -1,4 +1,8 @@
 == link:index.html[Index] -> link:dev.html[Development info]
+////
+Outdated. Most changes since January 2009 are trivial, and not much
+content has been added since.
+////
 
 Development: cherokee.conf
 --------------------------
