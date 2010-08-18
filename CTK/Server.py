@@ -273,10 +273,9 @@ def get_scgi():
     return my_thread.scgi_conn
 
 def init (*args, **kwargs):
-    # Deals with UTF-8
-    if sys.getdefaultencoding() != 'utf-8':
-        reload (sys)
-        sys.setdefaultencoding('utf-8')
+    # Init CTK
+    import Init
+    Init.Init()
 
     # Server
     srv = get_server()
