@@ -37,9 +37,8 @@ FOOTER_OPTIONS = 3
 
 
 class Paginator_Footer (Box):
-    def __init__ (self, results_num, page_num, items_per_page, refreshable):
+    def __init__ (self, results_num, page_num, items_per_page, total_pages, refreshable):
         Box.__init__ (self, {'class': 'paginator-footer'})
-        total_pages = results_num/items_per_page
 
         # Get the base URL
         url = refreshable.url
@@ -101,10 +100,17 @@ class Paginator_Refresh (Widget):
     def Render (self):
         render = Widget.Render (self)
 
-        total_pags = int(len(self.items)/self.items_per_page) or 1
+        # Total pages
+        tmp = len(self.items)/float(self.items_per_page)
+        if int(tmp) < tmp:
+            total_pags = int(tmp) + 1
+        else:
+            total_pags = int(tmp) or 1
+
         title = RawHTML ("Page %d of %d" %(self.page_num+1, total_pags))
         render += title.Render()
 
+        # Content
         range_start = self.items_per_page * self.page_num
         range_end   = self.items_per_page * (self.page_num + 1)
 
@@ -112,7 +118,7 @@ class Paginator_Refresh (Widget):
             render += item.Render()
 
         # Add footer
-        footer = Paginator_Footer (len(self.items), self.page_num, self.items_per_page, self.refreshable)
+        footer = Paginator_Footer (len(self.items), self.page_num, self.items_per_page, total_pags, self.refreshable)
         render += footer.Render()
 
         return render
