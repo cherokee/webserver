@@ -81,14 +81,15 @@ class Refreshable (Widget):
         render.html = HTML %(props)
         return render
 
-    def JS_to_refresh (self, on_success='', selector=None):
+    def JS_to_refresh (self, on_success='', selector=None, url=None):
         if not selector:
             selector = "$('#%s')" %(self.id)
 
         props = {'selector':   selector,
-                 'url':        self.url,
+                 'url':        url or self.url,
                  'on_success': on_success}
         return REFRESHABLE_UPDATE_JS %(props)
+
 
 
 JS_URL_LOAD = """

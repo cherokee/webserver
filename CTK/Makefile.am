@@ -51,7 +51,8 @@ Radio.py \
 XMLRPCProxy.py \
 AjaxUpload.py \
 i18n.py \
-Init.py
+Init.py \
+Paginator.py
 
 EXTRA_DIST = \
 $(ctk_DATA)

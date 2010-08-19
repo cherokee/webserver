@@ -67,6 +67,7 @@ from Downloader import Downloader
 from Radio import Radio
 from XMLRPCProxy import XMLRPCProxy
 from AjaxUpload import AjaxUpload
+from Paginator import Paginator
 
 # Comodity
 from cgi import escape as escape_html
