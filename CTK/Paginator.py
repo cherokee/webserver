@@ -49,9 +49,9 @@ class Paginator_Footer (Box):
         # Reckon the range
         extra = 0
         if page_num + FOOTER_OPTIONS > total_pages:
-            extra += total_pages - (page_num + FOOTER_OPTIONS)
+            extra += abs (total_pages - (page_num + FOOTER_OPTIONS))
         if page_num - FOOTER_OPTIONS < 0:
-            extra += - (page_num - (FOOTER_OPTIONS + 1))
+            extra += abs (page_num - (FOOTER_OPTIONS + 1))
 
         chunk_raw = range(page_num - (FOOTER_OPTIONS + extra), page_num + FOOTER_OPTIONS + extra + 1)
         chunk     = filter (lambda x: x >= 0 and x < total_pages, chunk_raw)
@@ -78,7 +78,7 @@ class Paginator_Footer (Box):
 
         self += indexes
 
-        if page_num != total_pages-1:
+        if page_num < total_pages-1:
             url = '%s/%d' %(refreshable.url, page_num+1)
             link = Link ('#', RawHTML (_("Next")), {'class': 'paginator-footer-prev'})
             link.bind ('click', refreshable.JS_to_refresh(url=url))
@@ -101,7 +101,8 @@ class Paginator_Refresh (Widget):
     def Render (self):
         render = Widget.Render (self)
 
-        title = RawHTML ("Page %d of %d" %(self.page_num+1, len(self.items)/self.items_per_page))
+        total_pags = int(len(self.items)/self.items_per_page) or 1
+        title = RawHTML ("Page %d of %d" %(self.page_num+1, total_pags))
         render += title.Render()
 
         range_start = self.items_per_page * self.page_num
