@@ -48,6 +48,7 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 	/* Properties
 	 */
 	cryp->timeout_handshake = TIMEOUT_DEFAULT;
+	cryp->allow_SSLv2       = false;
 
 	return ret_ok;
 }
@@ -80,7 +81,10 @@ cherokee_cryptor_configure (cherokee_cryptor_t     *cryp,
 
 	/* Read it own configuration parameters
 	 */
-	cherokee_config_node_read_int (conf, "timeout_handshake", &cryp->timeout_handshake);
+	cherokee_config_node_read_int  (conf, "timeout_handshake", &cryp->timeout_handshake);
+	cherokee_config_node_read_bool (conf, "protocol!SSLv2",    &cryp->allow_SSLv2);
+
+	printf ("cryp->allow_SSLv2 %d\n", cryp->allow_SSLv2);
 
 	/* Call the its virtual method
 	 */

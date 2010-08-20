@@ -317,6 +317,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	ret_t       ret;
 	int         rc;
 	const char *error;
+	long        options;
 	int         verify_mode = SSL_VERIFY_NONE;
 
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
@@ -343,17 +344,20 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	 */
 	SSL_CTX_set_tmp_dh_callback (n->context, tmp_dh_cb);
 
-	/* Work around all known bugs
+	/* Set the SSL context options:
 	 */
-	SSL_CTX_set_options (n->context, SSL_OP_ALL);
-
-	/* Set other OpenSSL context options
-	 */
-	SSL_CTX_set_options (n->context, SSL_OP_SINGLE_DH_USE);
+	options  = SSL_OP_ALL;
+	options |= SSL_OP_SINGLE_DH_USE;
 
 #ifdef SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS
-	SSL_CTX_set_options (n->context, SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS);
+	options |= SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS;
 #endif
+
+	if (! cryp->allow_SSLv2) {
+		options |= SSL_OP_NO_SSLv2;
+	}
+
+	SSL_CTX_set_options (n->context, options);
 
 	/* Set cipher list that vserver will accept.
 	 */

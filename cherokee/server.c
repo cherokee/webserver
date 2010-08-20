@@ -1472,18 +1472,20 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		cryptor_func_new_t      instance;
 		cherokee_plugin_info_t *info      = NULL;
 
-		ret = cherokee_plugin_loader_get (&srv->loader, conf->val.buf, &info);
-		if ((ret != ret_ok) || (info == NULL))
-			return ret;
+		if (! cherokee_buffer_is_empty (&conf->val)) {
+			ret = cherokee_plugin_loader_get (&srv->loader, conf->val.buf, &info);
+			if ((ret != ret_ok) || (info == NULL))
+				return ret;
 
-		instance = (cryptor_func_new_t) info->instance;
-		ret = instance ((void **) &srv->cryptor);
-		if (ret != ret_ok)
-			return ret;
+			instance = (cryptor_func_new_t) info->instance;
+			ret = instance ((void **) &srv->cryptor);
+			if (ret != ret_ok)
+				return ret;
 
-		ret = cherokee_cryptor_configure (srv->cryptor, conf, srv);
-		if (ret != ret_ok)
-			return ret;
+			ret = cherokee_cryptor_configure (srv->cryptor, conf, srv);
+			if (ret != ret_ok)
+				return ret;
+		}
 
 	} else if (equal_buf_str (&conf->key, "collector")) {
 		collector_func_new_t    instance;
