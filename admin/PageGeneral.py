@@ -29,7 +29,7 @@ import Icons
 import Mime
 import validations
 
-from utils import *
+from util import *
 from consts import *
 from configured import *
 
@@ -123,7 +123,9 @@ class NetworkWidget (CTK.Box):
 
         table = CTK.PropsTable()
         table.Add (_('IPv6'),             CTK.CheckCfgText('server!ipv6', True, _('Enabled')), _(NOTE_IPV6))
-        table.Add (_('SSL/TLS back-end'), CTK.ComboCfg('server!tls', trans_options(Cherokee.support.filter_available(CRYPTORS))), _(NOTE_TLS))
+#       table.Add (_('SSL/TLS back-end'), CTK.ComboCfg('server!tls', trans_options(Cherokee.support.filter_available(CRYPTORS))), _(NOTE_TLS))
+        modul = CTK.PluginSelector('server!tls', trans_options(Cherokee.support.filter_available(CRYPTORS)))
+        table.Add (_('SSL/TLS back-end'), modul.selector_widget, _(NOTE_TLS))
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter(table)
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('Support')))

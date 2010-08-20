@@ -26,7 +26,7 @@ import CTK
 import Cherokee
 import validations
 
-from utils import *
+from util import *
 from consts import *
 from configured import *
 
