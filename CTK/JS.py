@@ -60,3 +60,6 @@ def Hide (id):
 
 def GotoURL (url):
     return "window.location = '%s';" %(url)
+
+def ReloadURL():
+    return "window.location = window.location;"
