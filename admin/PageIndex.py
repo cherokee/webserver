@@ -37,6 +37,7 @@ import urllib
 import urllib2
 import re
 
+from util import *
 from consts import *
 from configured import *
 
@@ -196,7 +197,7 @@ def Lang_Apply():
 class LanguageSelector (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'id': 'language-selector'})
-        languages = [('', _('Choose'))] + trans (AVAILABLE_LANGUAGES)
+        languages = [('', _('Choose'))] + trans_options(AVAILABLE_LANGUAGES)
 
         submit = CTK.Submitter('/lang/apply')
         submit.id = 'language-list'

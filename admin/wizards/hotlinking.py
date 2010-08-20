@@ -33,6 +33,7 @@ import CTK
 import Wizard
 import validations
 import Cherokee
+
 from util import *
 from configured import *
 from consts import *
@@ -159,7 +160,7 @@ class RuleData:
         refresh = CTK.Refreshable ({'id':'hotlinking_wizard_refresh'})
         refresh.register (lambda: self.Refresh().Render())
 
-        combo_widget = CTK.ComboCfg ('%s!type'%(PREFIX), trans (TYPES))
+        combo_widget = CTK.ComboCfg ('%s!type'%(PREFIX), trans_options(TYPES))
         combo_widget.bind('change', refresh.JS_to_refresh())
 
         table = CTK.PropsTable()

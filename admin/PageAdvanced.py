@@ -27,6 +27,7 @@ import Page
 import Cherokee
 import validations
 
+from util import *
 from consts import *
 from configured import *
 
@@ -115,7 +116,7 @@ class ConnectionsWidget (CTK.Container):
         table.Add (_('Keep Alive'),         CTK.CheckCfgText('server!keepalive', True, _("Allowed")), _(NOTE_KEEPALIVE))
         table.Add (_('Max keepalive reqs'), CTK.TextCfg('server!keepalive_max_requests'), _(NOTE_KEEPALIVE_RS))
         table.Add (_('Chunked Encoding'),   CTK.CheckCfgText('server!chunked_encoding', True, _("Allowed")), _(NOTE_CHUNKED))
-        table.Add (_('Polling Method'),     CTK.ComboCfg('server!poll_method', trans (Cherokee.support.filter_polling_methods(POLL_METHODS))), _(NOTE_POLLING))
+        table.Add (_('Polling Method'),     CTK.ComboCfg('server!poll_method', trans_options(Cherokee.support.filter_polling_methods(POLL_METHODS))), _(NOTE_POLLING))
         table.Add (_('Sendfile min size'),  CTK.TextCfg('server!sendfile_min', True), _(NOTE_SENDFILE_MIN))
         table.Add (_('Sendfile max size'),  CTK.TextCfg('server!sendfile_max', True), _(NOTE_SENDFILE_MAX))
 
@@ -128,7 +129,7 @@ class ResourcesWidget (CTK.Container):
 
         table = CTK.PropsAuto(URL_APPLY)
         table.Add (_('Thread Number'),          CTK.TextCfg('server!thread_number', True), _(NOTE_THREAD_NUM))
-        table.Add (_('Thread Policy'),          CTK.ComboCfg('server!thread_policy', trans (THREAD_POLICY)), _(NOTE_THREAD))
+        table.Add (_('Thread Policy'),          CTK.ComboCfg('server!thread_policy', trans_options(THREAD_POLICY)), _(NOTE_THREAD))
         table.Add (_('File descriptors'),       CTK.TextCfg('server!fdlimit',              True), _(NOTE_FD_NUM))
         table.Add (_('Listening queue length'), CTK.TextCfg('server!listen_queue',         True), _(NOTE_LISTEN_Q))
         table.Add (_('Reuse connections'),      CTK.TextCfg('server!max_connection_reuse', True), _(NOTE_REUSE_CONNS))

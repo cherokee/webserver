@@ -26,6 +26,7 @@ import CTK
 import Cherokee
 import validations
 
+from utils import *
 from consts import *
 from configured import *
 
@@ -45,12 +46,12 @@ class PluginAuth (CTK.Plugin):
         assert type(supported_methods) is tuple
 
         if len(supported_methods) > 1:
-            methods = trans (VALIDATOR_METHODS)
+            methods = trans_options (VALIDATOR_METHODS)
         else:
-            methods = trans (filter (lambda x: x[0] in supported_methods, VALIDATOR_METHODS))
+            methods = trans_options (filter (lambda x: x[0] in supported_methods, VALIDATOR_METHODS))
 
         table = CTK.PropsTable()
-        table.Add (_("Methods"), CTK.ComboCfg("%s!methods"%(self.key), trans(methods), {'id': 'auth_method'}), _(NOTE_METHODS))
+        table.Add (_("Methods"), CTK.ComboCfg("%s!methods"%(self.key), trans_options(methods), {'id': 'auth_method'}), _(NOTE_METHODS))
         table.Add (_("Realm"),   CTK.TextCfg("%s!realm" %(self.key), False), _(NOTE_REALM))
         table.Add (_("Users"),   CTK.TextCfg("%s!users" %(self.key), True),  _(NOTE_USERS))
 

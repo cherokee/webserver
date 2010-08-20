@@ -32,6 +32,7 @@ import re
 import CTK
 import Wizard
 import validations
+
 from util import *
 from consts import *
 
@@ -365,10 +366,10 @@ class LocalSource:
         submit += table
 
         table.Add (_('Project Directory'), CTK.TextCfg ('%s!ror_dir'%(PREFIX), False), _(NOTE_ROR_DIR))
-        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), trans (RAILS_ENV), {'class': 'noauto'}), _(NOTE_ENV))
+        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), trans_options(RAILS_ENV), {'class': 'noauto'}), _(NOTE_ENV))
 
         if len(RAILS_METHOD) > 1:
-            table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans (RAILS_METHOD), {'class': 'noauto'}), _(NOTE_METHOD))
+            table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans_options(RAILS_METHOD), {'class': 'noauto'}), _(NOTE_METHOD))
         else:
             submit += CTK.Hidden('%s!ror_env'%(PREFIX), RAILS_METHOD[0][0])
 

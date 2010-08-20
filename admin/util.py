@@ -40,6 +40,10 @@ def bool_to_onoff (b):
 def bool_to_yesno (b):
     return (_('No'), _('Yes'))[bool(b)]
 
+def trans_options (options):
+    """Translate the options with gettext"""
+    return [(x[0], _(x[1])) for x in options]
+
 
 #
 # Virtual Server

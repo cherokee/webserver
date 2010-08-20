@@ -25,6 +25,8 @@
 import CTK
 import Auth
 import validations
+
+from util import *
 from consts import *
 
 URL_APPLY = '/plugin/mysql/apply'
@@ -77,7 +79,7 @@ class Plugin_mysql (Auth.PluginAuth):
         table.Add (_('DB Password'),   CTK.TextCfg("%s!passwd"%(self.key), True),      _(NOTE_PASSWD))
         table.Add (_('Database'),      CTK.TextCfg("%s!database"%(self.key), False),   _(NOTE_DB))
         table.Add (_('SQL Query'),     CTK.TextCfg("%s!query"%(self.key), False),      _(NOTE_SQL))
-        table.Add (_('Password Hash'), CTK.ComboCfg("%s!hash"%(self.key), trans (HASHES), {'id': 'mysql_hash'}), _(NOTE_HASH))
+        table.Add (_('Password Hash'), CTK.ComboCfg("%s!hash"%(self.key), trans_options(HASHES), {'id': 'mysql_hash'}), _(NOTE_HASH))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table

@@ -24,6 +24,8 @@
 
 import CTK
 import Handler
+
+from util import *
 from consts import *
 
 URL_APPLY = '/plugin/server_info/apply'
@@ -45,7 +47,7 @@ class Plugin_server_info (Handler.PluginHandler):
         Handler.PluginHandler.AddCommon (self)
 
         table = CTK.PropsTable()
-        table.Add (_("Show Information"), CTK.ComboCfg('%s!type'%(key), trans (OPTIONS)), _(NOTE_INFORMATION))
+        table.Add (_("Show Information"), CTK.ComboCfg('%s!type'%(key), trans_options(OPTIONS)), _(NOTE_INFORMATION))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table

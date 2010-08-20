@@ -23,6 +23,8 @@
 #
 
 import CTK
+
+from util import *
 from consts import *
 
 URL_APPLY = '/plugin/error_redir/apply'
@@ -66,7 +68,7 @@ class Content (CTK.Container):
             table += [CTK.RawHTML(x) for x in ('Error', 'Redirection', 'Type', '')]
 
             for i in entries:
-                show  = CTK.ComboCfg ('%s!%s!show'%(key,i), trans (REDIRECTION_TYPE))
+                show  = CTK.ComboCfg ('%s!%s!show'%(key,i), trans_options(REDIRECTION_TYPE))
                 redir = CTK.RawHTML (CTK.cfg.get_val('%s!%s!url'%(key,i)))
                 rm    = CTK.ImageStock('del')
                 table += [CTK.RawHTML(i), redir, show, rm]
@@ -84,7 +86,7 @@ class Content (CTK.Container):
         table = CTK.PropsTable()
         table.Add (_('Error'),       CTK.ComboCfg('new_error', redir_codes, {'class':'noauto'}), _(NOTE_ERROR))
         table.Add (_('Redirection'), CTK.TextCfg ('new_redir', False, {'class':'noauto'}), _(NOTE_REDIR))
-        table.Add (_('Type'),        CTK.ComboCfg('new_type', trans (REDIRECTION_TYPE), {'class':'noauto'}), _(NOTE_TYPE))
+        table.Add (_('Type'),        CTK.ComboCfg('new_type', trans_options(REDIRECTION_TYPE), {'class':'noauto'}), _(NOTE_TYPE))
 
         dialog = CTK.Dialog({'title': _('Add New Custom Error'), 'width': 540})
 

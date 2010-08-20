@@ -27,6 +27,8 @@ import Cherokee
 import validations
 import CgiBase
 import Balancer
+
+from util import *
 from consts import *
 
 HELPS = CgiBase.HELPS + [('modules_handlers_fcgi', "FastCGI")]
@@ -42,7 +44,7 @@ class Plugin_fcgi (CgiBase.PluginHandlerCGI):
         CgiBase.PluginHandlerCGI.AddCommon (self)
 
         # Balancer
-        modul = CTK.PluginSelector('%s!balancer'%(key), trans (Cherokee.support.filter_available (BALANCERS)))
+        modul = CTK.PluginSelector('%s!balancer'%(key), trans_options(Cherokee.support.filter_available (BALANCERS)))
         table = CTK.PropsTable()
         table.Add (_("Balancer"), modul.selector_widget, _(Balancer.NOTE_BALANCER))
 

@@ -30,9 +30,11 @@ import validations
 import os
 import re
 
+from util import *
 from consts import *
-from Rule import Rule
 from configured import *
+
+from Rule import Rule
 from CTK.util import find_copy_name
 
 URL_BASE  = '/vserver/content'
@@ -151,7 +153,7 @@ class HostMatchWidget (CTK.Container):
             return
 
         table = CTK.PropsAuto (url_apply)
-        modul = CTK.PluginSelector ('%s!match'%(pre), trans (Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+        modul = CTK.PluginSelector ('%s!match'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
         table.Add (_('Method'), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
         self += CTK.Indenter (table)
         self += modul
@@ -316,7 +318,7 @@ class BasicsWidget (CTK.Container):
 
         # Advanced Virtual Hosting
         table = CTK.PropsAuto (url_apply)
-        modul = CTK.PluginSelector('%s!evhost'%(pre), trans (Cherokee.support.filter_available(EVHOSTS)))
+        modul = CTK.PluginSelector('%s!evhost'%(pre), trans_options(Cherokee.support.filter_available(EVHOSTS)))
         table.Add (_('Method'), modul.selector_widget, _(NOTE_EVHOST), False)
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Advanced Virtual Hosting')))
@@ -332,7 +334,7 @@ class ErrorHandlerWidget (CTK.Container):
         url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
 
         table = CTK.PropsAuto (url_apply)
-        modul = CTK.PluginSelector ('%s!error_handler'%(pre), trans (Cherokee.support.filter_available(ERROR_HANDLERS)), vsrv_num=vsrv_num)
+        modul = CTK.PluginSelector ('%s!error_handler'%(pre), trans_options(Cherokee.support.filter_available(ERROR_HANDLERS)), vsrv_num=vsrv_num)
         table.Add (_('Method'), modul.selector_widget, _(NOTE_ERROR_HANDLER), False)
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Error Handling hook')))
@@ -346,7 +348,7 @@ class LogginWidgetContent (CTK.Container):
 
         pre        = "vserver!%s" %(vsrv_num)
         url_apply  = "%s/%s/log" %(URL_APPLY, vsrv_num)
-        writers    = [('', _('Disabled'))] + trans (LOGGER_WRITERS)
+        writers    = [('', _('Disabled'))] + trans_options(LOGGER_WRITERS)
 
         # Error writer
         table = CTK.PropsTable()
@@ -370,7 +372,7 @@ class LogginWidgetContent (CTK.Container):
 
         submit = CTK.Submitter(url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())
-        submit += CTK.ComboCfg(pre, trans (Cherokee.support.filter_available(LOGGERS)))
+        submit += CTK.ComboCfg(pre, trans_options(Cherokee.support.filter_available(LOGGERS)))
 
         table = CTK.PropsTable()
         table.Add (_('Format'), submit, _(NOTE_LOGGERS))
@@ -379,7 +381,7 @@ class LogginWidgetContent (CTK.Container):
         if format:
             submit = CTK.Submitter(url_apply)
             submit.bind ('submit_success', refreshable.JS_to_refresh())
-            submit += CTK.ComboCfg('%s!access!type'%(pre), trans (LOGGER_WRITERS))
+            submit += CTK.ComboCfg('%s!access!type'%(pre), trans_options(LOGGER_WRITERS))
             table.Add (_('Write accesses to'), submit, _(NOTE_ACCESSES))
 
             submit = CTK.Submitter(url_apply)
@@ -409,7 +411,7 @@ class LogginWidgetContent (CTK.Container):
         # Properties
         if CTK.cfg.get_val (pre):
             table = CTK.PropsTable()
-            table.Add (_('Time standard'), CTK.ComboCfg ('%s!utc_time'%(pre), trans (UTC_TIME)), _(NOTE_UTC_TIME))
+            table.Add (_('Time standard'), CTK.ComboCfg ('%s!utc_time'%(pre), trans_options(UTC_TIME)), _(NOTE_UTC_TIME))
             table.Add (_('Accept Forwarded IPs'), CTK.CheckCfgText ('%s!x_real_ip_enabled'%(pre), False, _('Accept')), _(NOTE_X_REAL_IP))
 
             if int (CTK.cfg.get_val('%s!x_real_ip_enabled'%(pre), "0")):
@@ -470,7 +472,7 @@ class SecutiryWidgetContent (CTK.Container):
         # Advanced options
         table = CTK.PropsTable()
         table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
-        table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans (CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
+        table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
 
         if CTK.cfg.get_val('%s!ssl_client_certs' %(pre)):
             table.Add (_('CA List'), CTK.TextCfg ('%s!ssl_ca_list_file' %(pre), False), _(NOTE_CA_LIST))

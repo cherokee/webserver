@@ -22,9 +22,9 @@
 
 import CTK
 
-from Rule import RulePlugin
 from util import *
 from consts import *
+from Rule import RulePlugin
 
 URL_APPLY = '/plugin/url_arg/apply'
 
@@ -69,7 +69,7 @@ class Plugin_url_arg (RulePlugin):
         return self.GUI_mod()
 
     def GUI_new (self):
-        any   = CTK.ComboCfg('%s!match_any'%(self.key), trans (OPTIONS), {'class': 'noauto'})
+        any   = CTK.ComboCfg('%s!match_any'%(self.key), trans_options(OPTIONS), {'class': 'noauto'})
         table = CTK.PropsTable()
         table.Add (_('Match type'), any, '')
         table.Add (_('Argument'),           CTK.TextCfg('%s!arg'%(self.key), False, {'class': 'noauto'}), _(NOTE_ARGUMENT))
@@ -89,7 +89,7 @@ class Plugin_url_arg (RulePlugin):
 
     def GUI_mod (self):
         table = CTK.PropsTable()
-        table.Add (_('Match type'),  CTK.ComboCfg('%s!match_any'%(self.key), trans (OPTIONS)), '')
+        table.Add (_('Match type'),  CTK.ComboCfg('%s!match_any'%(self.key), trans_options(OPTIONS)), '')
         if not int(CTK.cfg.get_val('%s!match_any'%(self.key), 0)):
             table.Add (_('Argument'),       CTK.TextCfg('%s!arg'%(self.key), False), _(NOTE_ARGUMENT))
         table.Add (_('Regular Expression'), CTK.TextCfg('%s!match'%(self.key), False), _(NOTE_REGEX))

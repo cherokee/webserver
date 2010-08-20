@@ -31,7 +31,9 @@ import SelectionPanel
 import validations
 import Rule
 
+from util import *
 from consts import *
+
 from CTK.util import find_copy_name
 from CTK.Submitter import HEADER as Submit_HEADER
 from CTK.TextField import HEADER as TextField_HEADER
@@ -294,7 +296,7 @@ class Render_Source:
         workarea = CTK.Box ({'id': 'source-workarea'})
 
         table = CTK.PropsTable()
-        table.Add (_('Type'),       CTK.ComboCfg ('source!%s!type'%(num), trans(SOURCE_TYPES)), _(NOTE_TYPE))
+        table.Add (_('Type'),       CTK.ComboCfg ('source!%s!type'%(num), trans_options(SOURCE_TYPES)), _(NOTE_TYPE))
         table.Add (_('Nick'),       CTK.TextCfg ('source!%s!nick'%(num), False), _(NOTE_NICK))
         table.Add (_('Connection'), CTK.TextCfg ('source!%s!host'%(num), False), _(NOTE_HOST))
         if tipe == 'interpreter':

@@ -24,6 +24,8 @@
 
 import CTK
 import Handler
+
+from util import *
 from consts import *
 
 URL_APPLY = '/plugin/post_report/apply'
@@ -44,7 +46,7 @@ class Plugin_post_report (Handler.PluginHandler):
 
         # Properties
         table = CTK.PropsTable()
-        table.Add (_('Target language'), CTK.ComboCfg('%s!lang'%(key), trans (DWRITER_LANGS)), _(NOTE_LANGUAGES))
+        table.Add (_('Target language'), CTK.ComboCfg('%s!lang'%(key), trans_options(DWRITER_LANGS)), _(NOTE_LANGUAGES))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter (table)

@@ -25,7 +25,10 @@
 import re
 import copy
 import CTK
+
+from util import *
 from consts import *
+
 
 DEFAULT_RULE_WARNING = N_('The default match ought not to be changed.')
 
@@ -147,9 +150,9 @@ class Rule (CTK.Box):
         vsrv_num = self.key.split('!')[1]
 
         if not CTK.cfg.get_val(self.key):
-            rules = [('', _('Select'))] + trans (RULES)
+            rules = [('', _('Select'))] + trans_options(RULES)
         else:
-            rules = trans (RULES[:])
+            rules = trans_options(RULES[:])
 
         table = CTK.PropsTable()
         modul = CTK.PluginSelector (self.key, rules, vsrv_num=vsrv_num)
