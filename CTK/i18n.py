@@ -31,13 +31,16 @@ active_lang = ''
 #
 # Init
 #
-try:
-    import gettext
-except ImportError:
+if not __builtin__.__dict__.has_key('_'):
     __builtin__.__dict__['_'] = lambda x: x
 
 if not __builtin__.__dict__.has_key('N_'):
     __builtin__.__dict__['N_'] = lambda x: x
+
+try:
+    import gettext
+except ImportError:
+    pass
 
 
 #
