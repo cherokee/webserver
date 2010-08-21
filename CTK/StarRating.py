@@ -39,13 +39,20 @@ RATING_OPTIONS = [
 ]
 
 JS_INIT = """
-$("#%(id)s").StarRating (%(selected)s);
+$("#%(id)s").StarRating ({
+   'selected': %(selected)s,
+   'can_set':  %(can_set)s
+});
 """
 
 class StarRating (Box):
     def __init__ (self, props={}):
         Box.__init__ (self, {'class': 'star-rating'})
+
+        assert type(props) == dict
         self.selected = props.get('selected')
+        self.can_set  = props.pop('can_set', False)
+
         combo = Combobox (props.copy(), RATING_OPTIONS)
         self += combo
 
@@ -54,5 +61,6 @@ class StarRating (Box):
 
         render.headers += HEADERS
         render.js      += JS_INIT %({'id':       self.id,
-                                     'selected': self.selected or "-1"})
+                                     'selected': self.selected or "-1",
+                                     'can_set':  ('false','true')[self.can_set]})
         return render

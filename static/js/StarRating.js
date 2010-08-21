@@ -55,10 +55,11 @@
 
 	   // PUBLIC
 	   //
-	   this.init = function (self, selected) {
+	   this.init = function (self, options) {
 		  obj.$select = self.find('select');  // <select>
 		  obj.$parent = obj.$select.parent(); // <div>
-		  obj.score   = selected;
+		  obj.score   = options.selected;
+		  obj.can_set = options.can_set;
 
 		  /* Hide the <select> */
 		  obj.$select.hide();
@@ -74,32 +75,34 @@
 		  fill_to (obj.score, true);
 
 		  /* Events */
-		  obj.$parent.find ('.ui-stars-star')
-		  .bind('mouseover', function() {
-			 var idx = get_star_number (this);
-			 fill_to (idx, true);
-		  })
-		  .bind('mouseout', function() {
-			 fill_to (obj.score, true);
-		  })
-		  .bind('click', function() {
-			 var idx = get_star_number (this);
-			 obj.score = parseInt(idx);
-			 fill_to (idx, true);
-			 obj.$select.val(idx);
-			 obj.$select.trigger ({type: 'change', value: idx})
-		  });
+		  if (obj.can_set) {
+			 obj.$parent.find ('.ui-stars-star')
+			 .bind('mouseover', function() {
+				var idx = get_star_number (this);
+				fill_to (idx, true);
+			 })
+			 .bind('mouseout', function() {
+				fill_to (obj.score, true);
+			 })
+			 .bind('click', function() {
+				var idx = get_star_number (this);
+				obj.score = parseInt(idx);
+				fill_to (idx, true);
+				obj.$select.val(idx);
+				obj.$select.trigger ({type: 'change', value: idx})
+			 });
+		  }
 	   };
     };
 
-    $.fn.StarRating = function (selected) {
+    $.fn.StarRating = function (options) {
 	   var self = this;
 	   return this.each (function() {
 		  if ($(this).data('starts')) return;
 
 		  var stars = new StarRating (this);
 		  $(this).data('stars', stars);
-		  stars.init (self, selected);
+		  stars.init (self, options);
 	   });
 
     };
