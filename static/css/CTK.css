@@ -820,3 +820,10 @@ tr.panel-selected td div.row_content .sel-actions {
 
 .ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; }
 .ui-corner-left { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; }
+
+.ui-stars-star {float:left; display:block; overflow:hidden; text-indent:-999em; cursor:pointer; }
+.ui-stars-star a {width:16px; height:15px; display:block; background:url(/CTK/images/jquery.ui.stars.gif) no-repeat 0 0;}
+.ui-stars-star a {background-position:0 -32px;}
+.ui-stars-star-on a {background-position:0 -48px;}
+.ui-stars-star-hover a {background-position:0 -64px;}
+.ui-stars-star-disabled,.ui-stars-star-disabled a {cursor:default!important;}
