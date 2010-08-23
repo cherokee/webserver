@@ -395,12 +395,15 @@ class _Request:
         my_thread = threading.currentThread()
         return my_thread.request_url
 
+    def _get_request_headers (self):
+        return get_scgi().env
+
     def _get_scgi_conn (self):
         return get_scgi()
 
-    url  = property (_get_request_url)
-    scgi = property (_get_scgi_conn)
-
+    scgi    = property (_get_scgi_conn)
+    url     = property (_get_request_url)
+    headers = property (_get_request_headers)
 
 class _Error:
     def __init__ (self):
