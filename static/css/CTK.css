@@ -90,6 +90,8 @@ html>body #container { min-height: 100%; }
 #nav li a:hover { color: #fff; text-decoration: none;}
 #nav-index { background: transparent url(/static/images/home.png) no-repeat center 6px; }
 #body-index #nav-index a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
+#nav-market { background: transparent url(/static/images/market.png) no-repeat center 6px; }
+#body-market #nav-market a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-status { background: transparent url(/static/images/status.png) no-repeat center 6px; }
 #body-status #nav-status a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-general { background: transparent url(/static/images/general.png) no-repeat center 6px; }
