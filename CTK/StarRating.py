@@ -53,6 +53,11 @@ class StarRating (Box):
         self.selected = props.get('selected')
         self.can_set  = props.pop('can_set', False)
 
+        if 'style' in props:
+            props['style'] += ' display:none;'
+        else:
+            props['style'] = 'display:none;'
+
         combo = Combobox (props.copy(), RATING_OPTIONS)
         self += combo
 
