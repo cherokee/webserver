@@ -197,3 +197,20 @@ Make sure you are building it with `gmake`.
 PHP is configured by default to limit the size of uploaded
 files. Check the link:cookbook_php.html#upload_limits[PHP upload
 limits] note to tweak the appropriate settings.
+
+[[faq19]]
+=== Why are my nicknames not matched, while *.example.com does work?
+
+The Cherokee Virtual Server nickname is not the first thing that is
+evaluated. In fact the all Host Matches are first evaluated from top to
+bottom, then the nicknames from top to bottom, and on last resort: Default.
+
+For example; a virtual server with the nickname test.example.com, and a second
+virtual server with a hostmatch *.example.com. In this example *.example.com
+will be matched first.
+
+[[faq20]]
+=== SSLv2 is ancient, OpenSSL 1.0.0+ doesn't like it, how can I disable it?
+
+Within cherokee-admin, in the Advanced Menu, you can find the option to
+disable SSLv2 all together.
