@@ -37,6 +37,9 @@ class ListEntry (Container):
     def Render (self):
         render = Container.Render (self)
 
+        if 'id' in self.props:
+            self.id = self.props['id']
+
         props = {'id':      self.id,
                  'tag':     self.tag,
                  'props':   props_to_str(self.props),
