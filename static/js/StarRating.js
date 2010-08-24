@@ -32,10 +32,11 @@
 	   }
 
 	   function fill_to (idx, hover) {
-		  if (idx == -1) {
+		  if (idx <= -1) {
 			 for (var i=1; i<=5; i++) {
 				var $star = obj.$parent.find('.star'+i);
-				$star.addClass('ui-stars-star-disabled').removeClass('ui-stars-star-hover').removeClass('ui-stars-star-on');
+				$star.removeClass('ui-stars-star-hover')
+				     .removeClass('ui-stars-star-on');
 			 }
 			 return;
 		  }
@@ -67,7 +68,11 @@
 		  /* Add the stars */
 		  var stars_html = '';
 		  for (var i=1; i<=5; i++) {
-			 stars_html += '<div class="star'+i +' ui-stars-star"><a>'+ i +'</a></div>';
+			 if (obj.can_set) {
+				stars_html += '<div class="star'+i +' ui-stars-star"><a>'+ i +'</a></div>';
+			 } else {
+				stars_html += '<div class="star'+i +' ui-stars-star ui-stars-star-disabled"><a>'+ i +'</a></div>';
+			 }
             }
 		  obj.$parent.append (stars_html);
 
@@ -98,7 +103,7 @@
     $.fn.StarRating = function (options) {
 	   var self = this;
 	   return this.each (function() {
-		  if ($(this).data('starts')) return;
+		  if ($(this).data('stars')) return;
 
 		  var stars = new StarRating (this);
 		  $(this).data('stars', stars);
