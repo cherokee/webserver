@@ -72,3 +72,4 @@ from StarRating import StarRating
 
 # Comodity
 from cgi import escape as escape_html
+from urllib import unquote as unescape_html
