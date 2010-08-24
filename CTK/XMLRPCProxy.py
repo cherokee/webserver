@@ -75,5 +75,8 @@ class XMLRPCProxy (Widget):
 
        render.html += HTML       %(props)
        render.js   += JAVASCRIPT %(props)
-
        return render
+
+    def JS_to_refresh (self):
+        return JAVASCRIPT %({'id_widget': self.id,
+                             'proxy_url': self._url_local})
