@@ -432,4 +432,12 @@ class Config:
             self[left] = right
 
     def has_changed (self):
-        return not self.root == self.root_orig
+        root = copy.deepcopy (self.root)
+        orig = copy.deepcopy (self.root_orig)
+
+        if 'tmp' in root:
+            del (root['tmp'])
+        if 'tmp' in orig:
+            del (orig['tmp'])
+
+        return not root == orig
