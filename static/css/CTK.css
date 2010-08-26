@@ -825,7 +825,8 @@ tr.panel-selected td div.row_content .sel-actions {
 
 .ui-stars-star {float:left; display:block; overflow:hidden; text-indent:-999em; cursor:pointer; }
 .ui-stars-star a {width:16px; height:15px; display:block; background:url(/CTK/images/jquery.ui.stars.gif) no-repeat 0 0;}
-.ui-stars-star a {background-position:0 -32px;}
-.ui-stars-star-on a {background-position:0 -48px;}
-.ui-stars-star-hover a {background-position:0 -64px;}
+.ui-stars-star a {background-position:0 -48px;}
+.ui-stars-star-on a {background-position:0 -32px;}
+.ui-stars-star-hover a:hover {background-position:0 -64px; }
 .ui-stars-star-disabled,.ui-stars-star-disabled a {cursor:default!important;}
+.ui-stars-star-disabled.ui-stars-star-hover a:hover { background-position:0 -48px; }
