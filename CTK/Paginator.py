@@ -111,7 +111,7 @@ class Paginator_Refresh (Widget):
 
 
         if total_pags > 1 or self.show_footer_1pag:
-            title = RawHTML ("Page %d of %d" %(self.page_num+1, total_pags))
+            title = Box ({'class': 'paginator-counter'}, RawHTML ("Page %d of %d" %(self.page_num+1, total_pags)))
             render += title.Render()
 
         # Content
