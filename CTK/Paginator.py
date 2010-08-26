@@ -80,7 +80,7 @@ class Paginator_Footer (Box):
 
         if page_num < total_pages-1:
             url = '%s/%d' %(refreshable.url, page_num+1)
-            link = Link ('#', RawHTML (_("Next")), {'class': 'paginator-footer-prev'})
+            link = Link ('#', RawHTML (_("Next")), {'class': 'paginator-footer-next'})
             link.bind ('click', refreshable.JS_to_refresh(url=url))
             self += link
 
