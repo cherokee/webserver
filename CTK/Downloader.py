@@ -119,6 +119,7 @@ class DownloadEntry (Thread):
                 if not chunk:
                     # Download finished
                     self.status = 'finished'
+                    self.target_temp.close()
                     break
                 self.target_temp.write (chunk)
             except Exception, e:
@@ -156,18 +157,20 @@ class DownloadReport:
            d.start()
            return 'ok'
 
+
 class Downloader (Box):
-    def __init__ (self, url, props={}):
+    def __init__ (self, name, url, props={}):
         Box.__init__ (self)
-        self.url = url
-        self.id  = "downloader_%d" %(self.uniq_id)
+        self.url  = url
+        self.name = name
+        self.id   = "downloader_%s" %(name)
 
         # Other GUI components
         self.progressbar = ProgressBar()
         self += self.progressbar
 
         # Register the uploader path
-        self._url_local = "/downloader_%d_report" %(self.uniq_id)
+        self._url_local = "/downloader_%s_report" %(name)
         publish (self._url_local, DownloadReport, url=url)
 
         download = DownloadEntry_Factory (self.url)

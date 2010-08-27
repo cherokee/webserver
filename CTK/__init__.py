@@ -63,7 +63,7 @@ from ToggleButton import ToggleButtonImages, ToggleButtonOnOff
 from Druid import Druid, DruidButtonsPanel, DruidButton, DruidButton_Goto, DruidButton_Close, DruidButton_Submit, DruidButtonsPanel_Next, DruidButtonsPanel_PrevNext, DruidButtonsPanel_PrevCreate, DruidButtonsPanel_Create, DruidButtonsPanel_Cancel, DruidButtonsPanel_Next_Auto, DruidButtonsPanel_PrevNext_Auto, DruidButtonsPanel_PrevCreate_Auto, DruidContent_TriggerNext, DruidContent__JS_to_goto
 from List import List, ListEntry
 from ProgressBar import ProgressBar
-from Downloader import Downloader
+from Downloader import Downloader, DownloadEntry_Factory
 from Radio import Radio
 from XMLRPCProxy import XMLRPCProxy
 from AjaxUpload import AjaxUpload
