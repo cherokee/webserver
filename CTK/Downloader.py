@@ -119,6 +119,7 @@ class DownloadEntry (Thread):
                 if not chunk:
                     # Download finished
                     self.status = 'finished'
+                    self.target_temp.flush()
                     self.target_temp.close()
                     break
                 self.target_temp.write (chunk)
