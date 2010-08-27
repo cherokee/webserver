@@ -161,6 +161,16 @@ class PluginSelector (Widget):
 
 # Helper functions
 #
+def load_module_pyc (fullpath_pyc, namespace, use_cache=True):
+    # Cache
+    if use_cache:
+        if sys.modules.has_key (namespace):
+            if sys.modules[namespace].__file__ == fullpath_pyc:
+                return sys.modules[namespace]
+
+    # Load
+    return imp.load_compiled (namespace, fullpath_pyc)
+
 
 def load_module (name, dirname):
     # Sanity check
