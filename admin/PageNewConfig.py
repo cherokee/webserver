@@ -62,8 +62,11 @@ class ConfigCreator:
             return self._create_config ("performance.conf.sample")
 
         elif profile  == 'development':
-            if self._create_config ("cherokee.conf.sample"):
-                self._tweak_config_for_dev()
+            re = self._create_config ("cherokee.conf.sample")
+            if not re:
+                return False
+
+            self._tweak_config_for_dev()
             return True
 
 
@@ -73,10 +76,11 @@ class ConfigCreator:
             return True
 
         dirname = os.path.dirname(file)
-        if not os.path.exists (dirname):
+        if dirname and not os.path.exists (dirname):
             try:
                 os.mkdir (dirname)
             except:
+                print "ERROR: Could not create directory '%s'" %(dirname)
                 return False
 
         content = "config!version = %s\n" %(config_version_get_current())
@@ -92,6 +96,7 @@ class ConfigCreator:
             f.write (content)
             f.close()
         except:
+            print "ERROR: Could not open '%s' for writing" %(file)
             return False
 
         CTK.cfg.load()
