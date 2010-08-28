@@ -69,6 +69,7 @@ from XMLRPCProxy import XMLRPCProxy
 from AjaxUpload import AjaxUpload
 from Paginator import Paginator
 from StarRating import StarRating
+from Carousel import Carousel
 
 # Comodity
 from cgi import escape as escape_html

@@ -830,3 +830,5 @@ tr.panel-selected td div.row_content .sel-actions {
 .ui-stars-star-hover a:hover {background-position:0 -64px; }
 .ui-stars-star-disabled,.ui-stars-star-disabled a {cursor:default!important;}
 .ui-stars-star-disabled.ui-stars-star-hover a:hover { background-position:0 -48px; }
+
+.carousel .selected { background: #f00; }
