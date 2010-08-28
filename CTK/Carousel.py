@@ -47,10 +47,12 @@ class Carousel (Box):
         self.images = List ({'class': 'overview'})
         self.pager  = List ({'class': 'pager'})
 
-        Box.__iadd__ (self, Link (None, RawHTML("%s"%(_('left'))), {'class': "buttons prev"}))
         Box.__iadd__ (self, self.images)
-        Box.__iadd__ (self, Link (None, RawHTML("%s"%(_('right'))), {'class': "buttons next"}))
-        Box.__iadd__ (self, self.pager)
+        controls = Box({'class':'controls'})
+        controls += Link (None, RawHTML("%s"%(_('left'))), {'class': "buttons prev"})
+        controls += self.pager
+        controls += Link (None, RawHTML("%s"%(_('right'))), {'class': "buttons next"})
+        Box.__iadd__ (self, controls)
 
     def __iadd__ (self, widget):
         link = Link (None, RawHTML ("%s" %(len(self.images.child) +1)))
