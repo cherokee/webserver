@@ -30,7 +30,7 @@
 	   function set_item (num) {
 		  for (var n=0; n<obj.child_num; n++) {
 			 if (n == num) {
-				obj.$child.eq(n).show();
+				obj.$child.eq(n).fadeIn(500);
 				obj.$pager_child.eq(n).addClass('selected');
 			 } else {
 				obj.$child.eq(n).hide();
