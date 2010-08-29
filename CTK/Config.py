@@ -435,6 +435,11 @@ class Config:
         root = copy.deepcopy (self.root)
         orig = copy.deepcopy (self.root_orig)
 
+        if not root and orig:
+            return True
+        if not orig and root:
+            return True
+
         if 'tmp' in root:
             del (root['tmp'])
         if 'tmp' in orig:
