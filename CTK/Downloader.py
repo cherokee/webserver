@@ -155,7 +155,8 @@ class DownloadReport:
        elif request.url.endswith('/start'):
            # Current Downloads
            d = downloads[url]
-           d.start()
+           if d.status == 'init':
+               d.start()
            return 'ok'
 
 
