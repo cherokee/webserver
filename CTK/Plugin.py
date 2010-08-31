@@ -161,15 +161,28 @@ class PluginSelector (Widget):
 
 # Helper functions
 #
-def load_module_pyc (fullpath_pyc, namespace, use_cache=True):
-    # Cache
-    if use_cache:
-        if sys.modules.has_key (namespace):
-            if sys.modules[namespace].__file__ == fullpath_pyc:
-                return sys.modules[namespace]
+def load_module_pyc (fullpath_pyc, namespace, use_cache=True, load_src=True):
+    files = [fullpath_pyc]
 
-    # Load
-    return imp.load_compiled (namespace, fullpath_pyc)
+    # Load source if present
+    if load_src and \
+       (fullpath_pyc.endswith('.pyc') or \
+        fullpath_pyc.endswith('.pyo')):
+        files.insert (0, fullpath_pyc[:-1])
+
+    # Load the first available
+    for fullpath in files:
+        # Cache
+        if use_cache:
+            if sys.modules.has_key (namespace):
+                if sys.modules[namespace].__file__ == fullpath:
+                    return sys.modules[namespace]
+
+        # Load
+        if os.path.exists (fullpath):
+            if fullpath.endswith ('.py'):
+                return imp.load_source (namespace, fullpath)
+            return imp.load_compiled (namespace, fullpath)
 
 
 def load_module (name, dirname):
