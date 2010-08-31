@@ -62,7 +62,7 @@ def GotoURL (url):
     return "window.location = '%s';" %(url)
 
 def ReloadURL():
-    return "window.location = window.location;"
+    return "window.location.reload();"
 
 def OpenWindow (url):
     return "window.open ('%s');" %(url)
