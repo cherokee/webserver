@@ -192,9 +192,22 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 
 	re = strncasecmp (md5.buf, &conn->request.buf[1], 32);
 	if (re != 0) {
-		TRACE(ENTRIES, "MD5 (%s) didn't match\n", md5.buf);
-		cherokee_buffer_mrproper(&md5);
+#ifdef TRACE_ENABLED
+		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
+		cherokee_buffer_add_str    (&tmp, "secret='");
+		cherokee_buffer_add_buffer (&tmp, &PROP_SECDOWN(props)->secret);
+		cherokee_buffer_add_str    (&tmp, "', path='");
+		cherokee_buffer_add        (&tmp, p, path_len);
+		cherokee_buffer_add_str    (&tmp, "', time='");
+		cherokee_buffer_add        (&tmp, time_s, 8);
+		cherokee_buffer_add_str    (&tmp, "'");
+
+		TRACE(ENTRIES, "MD5 (%s) didn't match (%s)\n", md5.buf, tmp.buf);
+		cherokee_buffer_mrproper(&tmp);
+#endif
+
+		cherokee_buffer_mrproper(&md5);
 		conn->error_code = http_access_denied;
 		return ret_error;
 	}
