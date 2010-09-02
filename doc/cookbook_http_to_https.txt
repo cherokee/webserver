@@ -1,0 +1,31 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Redirecting all traffic from HTTP to HTTPS
+----------------------------------------------------
+
+Some times you will have a production website that has to be used via
+HTTPS.  However, many users are not aware that they need to type
+'https:' and not 'http:' into their browser. The request will simply
+timeout if only port 443 is used, or the users will get '426 Upgrade
+Required' if port 80 is also turned on on your Cherokee configuration.
+
+No need to worry. link:modules_handlers_redir.html[Rewrite rules] can
+easily handle this situation.
+
+To achive your goal you will simply have to set up a redirection
+making use of the `${host}` macro, such as the following one.
+
+[options="header"]
+|========================================
+|Regular Expression |Substitution
+|`/(.*)$`           |`https://${host}/$1`
+|========================================
+
+Of course, this macro uses the standard template subsystem , which
+provides link:config_virtual_servers_evhost.html#slicing[slicing
+support]. This means you could specify a substitution such as
+`https://${host}[:-4].com/$1` that would redirect any matching request
+to an HTTPS version of that request for the `.com` TLD. As an example,
+provided all the domains matched your virtual server, you could send
+traffic from http://example.com, http://example.net, and
+http://example.org to https://example.com

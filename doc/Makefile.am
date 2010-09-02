@@ -66,6 +66,7 @@ cookbook_uwsgi.html \
 cookbook_coldfusion.html \
 cookbook_concrete5.html \
 cookbook_https_accelerator.html \
+cookbook_http_to_https.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_ip_hash.html \
