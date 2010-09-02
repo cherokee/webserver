@@ -154,6 +154,15 @@ if __name__ == "__main__":
         CTK.unpublish (r'')
 
     # Check config file and set up
+    if os.path.exists (cfg_file) and os.path.isdir (cfg_file):
+        import PageError
+        CTK.publish (r'', PageError.NotWritable, file=cfg_file)
+
+        while os.path.isdir (cfg_file):
+            CTK.step()
+
+        CTK.unpublish (r'')
+
     if not os.path.exists (cfg_file):
         import PageNewConfig
         CTK.publish (r'', PageNewConfig.Render)
