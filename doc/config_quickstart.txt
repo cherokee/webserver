@@ -225,7 +225,7 @@ restore the `Virtual Servers` panel. If you have already selected the
 correct virtual host, access the `Behavior` tab and click on the `Rule
 Management` button to see the `Behavior` panel that will enable you to
 modify the rules of your virtual host.
-
++
 For now this virtual server is an exact copy of the untouched
 `default` virtual server. Create some new directories
 '/var/www/example' and '/var/www/example/auth', and configure the
