@@ -46,21 +46,50 @@ ones handling the requests in the end.
 
 image::media/images/admin_handler_proxy.png[Reverse Proxy]
 
-Then you will have to specify:
+Then you will have to specify the Reverse Proxy Settings by adjusting
+the following settings.
 
+[[handler]]
+Handler
+~~~~~~
 * Reuse connections: the maximum number of connections per server to be
   kept with Keep-alive. If not specified, the default value of 16 will
   be taken.
 
-* Header additions: to add specific HTTP headers.
+* Allow Keepalive: Allow the server to use Keep-alive connections with
+  the back-end servers, which is a good idea.
+
+* Preserve Host Header: Preserve the original "Host:" header sent by
+  the client. It defaults to no, but it is of use in scenarios where
+  you need to uniquely identify a proxied machine. In these cases, IP
+  and port might not be enough, particularly if you are proxying a
+  server on a different port of that which it uses by default. For
+  example, when proxying a Java Server on the same machine through
+  port 80, resorting to the host header will most likely make things
+  work as expected.
+
+* Preserve Server Header: Preserve the "Server:" header sent by the
+  back-end server. As before, it default to no, but the mechanism is
+  completely analogous.
+
+[[request_reply]]
+Request / Reply
+~~~~~~~~~~~~~~~
+These setting apply respectively to the HTTP request or response.
 
 * URL rewriting rules, which are specified using regular expressions
   to modify URLs before relaying the requests.
 
+* Header additions: to add specific HTTP headers.
+
 * Hidden returned headers: to eliminate specific HTTP headers.
 
-* Balancer: the type of load balancing strategy to be used.
+[[backend]]
+Back-end Servers
+~~~~~~~~~~~~~~~~
+* Balancer: the type of load balancing strategy to be used to dispatch connections.
 
 * Information sources: where you will assign the previously defined
   sources, which are all the servers from our set to be used in the
   cluster of web servers.
+
