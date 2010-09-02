@@ -62,7 +62,12 @@ the substitution.
 |Variable           |Example          |Description
 |`${host}`          |example.com      |Host of the matching virtual server
 |=========================================================================
++
 
+This macro uses the standard template subsystem , which provides
+link:config_virtual_servers_evhost.html#slicing[slicing support]. You
+should read more about this powerful feature if you are not already
+familiar with it.
 
 [[vhosts]]
 Virtual hosts and redirections
@@ -125,3 +130,5 @@ matching requests:
 |__/photo/501/delete__ |http://example.com/inst/photogallery/admin?photoid=501&method=delete
 |__/https_redir/555__  |https://example.com/secure?photoid=555
 |===========================================================================================
+
+You might also want to check out the cookbook entry titled link:cookbook_http_to_https.html[HTTP to HTTPS] on how to redirect all traffic from HTTP to HTTPS.

@@ -27,5 +27,5 @@ support]. This means you could specify a substitution such as
 `https://${host}[:-4].com/$1` that would redirect any matching request
 to an HTTPS version of that request for the `.com` TLD. As an example,
 provided all the domains matched your virtual server, you could send
-traffic from http://example.com, http://example.net, and
-http://example.org to https://example.com
+traffic from `http://example.com`, `http://example.net`, and
+`http://example.org` to `https://example.com`
