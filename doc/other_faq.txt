@@ -202,12 +202,25 @@ limits] note to tweak the appropriate settings.
 === Why are my nicknames not matched, while *.example.com does work?
 
 The Cherokee Virtual Server nickname is not the first thing that is
-evaluated. In fact the all Host Matches are first evaluated from top to
-bottom, then the nicknames from top to bottom, and on last resort: Default.
+evaluated. In fact all the Host Matches are first evaluated from top
+to bottom, then the nicknames from top to bottom, and on last resort:
+Default.
 
-For example; a virtual server with the nickname test.example.com, and a second
-virtual server with a hostmatch *.example.com. In this example *.example.com
-will be matched first.
+For example: a virtual server (`A`) with the nickname test.example.com, and
+a second virtual server (`B`) with a hostmatch .*\.example.com. In this
+example, the virtual server `B` will be matched first.
+
+If you are specifically looking for the virtual server `A` to be
+matched first, you will have rely on it being matched by `Host Match`
+instead of by nickname.
+
+.Solution
+* Virtual Server A RegEx: ^test.example.com$
+* Virtual Server B RegEx: .*\.example.com$
+
+Carefully read the way in which
+link:config_virtual_servers.html#domain_names[host matches] are
+performed if you still need further clarification.
 
 [[faq20]]
 === SSLv2 is ancient, OpenSSL 1.0.0+ doesn't like it, how can I disable it?

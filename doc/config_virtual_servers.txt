@@ -221,7 +221,16 @@ of virtual hosts trying to match the request against the `Nicknames`,
 also using the priorities defined by the virtual host order.
 
 Only after failing both with the domain names and the nicknames will
-Cherokee issue the failure.
+Cherokee issue the failure, in which case the default virtual server
+is used to handle the request.
+
+IMPORTANT: It is easy to overlook the way in which virtual servers are
+evaluated, which leads to the common problem of not knowing exactly
+why some virtual servers work and some don't. The list of Frequently
+Asked Questions includes link:other_faq.html#faq19["Why are my
+nicknames not matched, while *.example.com does work?"]. A careful
+reinterpretation of what has just been explained in this section
+should clarify any doubts.
 
 [[behavior]]
 Behavior
