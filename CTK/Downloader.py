@@ -24,7 +24,7 @@ import os
 import time
 import urllib2
 import tempfile
-from threading import Thread
+import threading
 
 import JS
 from Box import Box
@@ -79,9 +79,9 @@ $.ajax ({type: 'GET', url: "%(url)s/start", async: false,
 downloads = {}
 
 
-class DownloadEntry (Thread):
+class DownloadEntry (threading.Thread):
     def __init__ (self, url):
-        Thread.__init__ (self)
+        threading.Thread.__init__ (self)
 
         self.url        = url
         self.size       = 0
@@ -132,8 +132,6 @@ class DownloadEntry (Thread):
             # Stats
             self.downloaded += len(chunk)
             self.percent = int(self.downloaded * 100 / self.size)
-            print "Downloading thread", "%d%%" %(self.percent)
-
 
 
 def DownloadEntry_Factory (url, *args, **kwargs):
@@ -146,17 +144,27 @@ def DownloadEntry_Factory (url, *args, **kwargs):
 
 
 class DownloadReport:
-   def __call__ (self, url):
+    lock = threading.RLock()
+
+    def __call__ (self, url):
        if request.url.endswith('/info'):
            d = downloads[url]
            return '{"status": "%s", "percent": %d, "size": %d, "downloaded": %d}' %(
                d.status, d.percent, d.size, d.downloaded)
 
        elif request.url.endswith('/start'):
+           self.lock.acquire()
+
            # Current Downloads
            d = downloads[url]
            if d.status == 'init':
-               d.start()
+               try:
+                   d.start()
+               except:
+                   self.lock.release()
+                   raise
+
+           self.lock.release()
            return 'ok'
 
 
