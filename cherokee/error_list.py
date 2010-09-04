@@ -632,7 +632,7 @@ e('SERVER_THREAD_POLL',
   desc  = "It seems that an internal server thread assumed a file descriptor limit of %d. However, its FD poll has a lower limit of %d descriptors. The limit has been reduced to the poll limit.")
 
 e('SERVER_NEW_THREAD',
-  title = "Could not create a cherokee_thread_t",
+  title = "Could not create an internal server thread",
   desc  = "This is a extremely unusual error. For some reason the server could not create a thread while launching the server.",
   debug = "ret = %d")
 
@@ -895,7 +895,12 @@ e('THREAD_GET_CONN_OBJ',
 
 e('THREAD_SET_SOCKADDR',
   title = "Could not set sockaddr",
-  desc  = CODING_BUG);
+  desc  = CODING_BUG)
+
+e('THREAD_CREATE',
+  title = "Could not create a system thread: '${errno}'",
+  desc  = "This is a extremely unusual error. For some reason your system could not create a thread while launching the server. You might have hit some system restriction.",
+  debug = "pthread_create() error = %d")
 
 
 # cherokee/connection.c

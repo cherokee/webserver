@@ -219,6 +219,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	 */
 	if (type == thread_async) {
 #ifdef HAVE_PTHREAD
+		int            re;
 		pthread_attr_t attr;
 
 		/* Init the thread attributes
@@ -241,7 +242,10 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 
 		/* Finally, create the system thread
 		 */
-		if (pthread_create (&n->thread, &attr, thread_routine, n) != 0) {
+		re = pthread_create (&n->thread, &attr, thread_routine, n);
+		if (unlikely (re != 0)) {
+			LOG_ERRNO (re, cherokee_err_error, CHEROKEE_ERROR_THREAD_CREATE, re);
+
 			cherokee_thread_free (n);
 			return ret_error;
 		}
