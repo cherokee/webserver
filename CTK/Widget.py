@@ -132,3 +132,12 @@ class Widget:
         else:
             return "%s.trigger('%s');" %(selector, event)
 
+    def JS_to_show (self, how='', selector=None):
+        if not selector:
+            selector = "$('#%s')" %(self.id)
+        return '%s.show(%s);' %(selector, how)
+
+    def JS_to_hide (self, how='', selector=None):
+        if not selector:
+            selector = "$('#%s')" %(self.id)
+        return '%s.hide(%s);' %(selector, how)
