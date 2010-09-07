@@ -223,7 +223,7 @@ def CloneLogsCfg_Apply (key_tmp, vserver):
     CTK.cfg.clone ('%s!error_writer'%(logging_as), '%s!error_writer'%(vserver))
 
 
-def AddUsualStaticFiles (rule_pre):
+def AddUsualStaticFiles (rule_pre, files = USUAL_STATIC_FILES):
     CTK.cfg['%s!match'%(rule_pre)]           = 'fullpath'
     CTK.cfg['%s!handler'%(rule_pre)]         = 'file'
     CTK.cfg['%s!handler!iocache'%(rule_pre)] = '1'
@@ -233,7 +233,7 @@ def AddUsualStaticFiles (rule_pre):
     CTK.cfg['%s!expiration!time'%(rule_pre)] = '1h'
 
     n = 1
-    for file in USUAL_STATIC_FILES:
+    for file in files:
         CTK.cfg['%s!match!fullpath!%d'%(rule_pre,n)] = file
         n += 1
 

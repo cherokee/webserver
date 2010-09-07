@@ -145,7 +145,7 @@ class Commit:
 
         config = CONFIG_VSERVER %(props)
         CTK.cfg.apply_chunk (config)
-        Wizard.AddUsualStaticFiles(props['pre_rule_minus1'])
+        Wizard.AddUsualStaticFiles(props['pre_rule_minus1'], ['/favicon.ico','/crossdomain.xml'])
 
         # Clean up
         CTK.cfg.normalize ('%s!rule'%(next))
