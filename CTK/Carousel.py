@@ -28,7 +28,7 @@ from Link import Link
 from RawHTML import RawHTML
 
 HEADERS = [
-    '<script type="text/javascript" src="/CTK/js/carousel.js"></script>'
+    '<script type="text/javascript" src="/CTK/js/Carousel.js"></script>'
 ]
 
 JS_INIT = """
