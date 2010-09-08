@@ -43,7 +43,10 @@ PAYMENT_CHECK_TIMEOUT  = 5 * 1000 # 5 secs
 
 NOTE_ALREADY_INSTALLED = N_('The application is already in your library, so there is no need the buy it again. Please, proceed to the installation.')
 NOTE_ALREADY_TO_BUY_1  = N_('The application is available at the Octality Market. Please, check "Check Out" to proceed to the payment secction.')
-NOTE_ALREADY_TO_BUY_2  = N_('The application will be download and installed afterwards. It will also remain in your library for any future installation.')
+NOTE_ALREADY_TO_BUY_2  = N_('The application will be downloaded and installed afterwards. It will also remain in your library for any future installation.')
+
+THANKS_P1 = N_("The application has been deployed and Cherokee has been configured to fully support it. Remember to backup your configuration if you are going to manually perform further customization. You can always restore it or reinstall the application if anything does not work as expected.")
+THANKS_P2 = N_("Thank you for buying at Octality's Market. We hope to see you back soon!")
 
 URL_INSTALL_WELCOME        = "%s/install/welcome"        %(URL_MAIN)
 URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
@@ -314,7 +317,8 @@ class Install_Done (Install_Stage):
         # Thank user for the install
         box = CTK.Box()
         box += CTK.RawHTML ('<h2>%s %s</h2>' %(app_name, _("has been installed successfully")))
-        box += CTK.RawHTML ("<h1>%s</h1>"    %(_("Thanks for buying at Octality's Market!")))
+        box += CTK.RawHTML ("<p>%s</p>"    %(_(THANKS_P1)))
+        box += CTK.RawHTML ("<p>%s</p>"    %(_(THANKS_P2)))
 
         buttons = CTK.DruidButtonsPanel()
         buttons += CTK.DruidButton_Close(_('Close'))
