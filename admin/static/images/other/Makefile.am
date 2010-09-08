@@ -5,6 +5,7 @@ other_DATA = \
 contact-bug.png \
 contact-list.png \
 facebook.png \
+linkedin.png \
 irc.png \
 left.png \
 octality-logo.png \

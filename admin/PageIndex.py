@@ -62,8 +62,9 @@ LINK_DOWNLOAD   = 'http://www.cherokee-project.com/download/'
 LINK_LISTS      = 'http://lists.octality.com/'
 LINK_LIST       = 'http://lists.octality.com/listinfo/cherokee'
 LINK_IRC        = 'irc://irc.freenode.net/cherokee'
-LINK_HELP       = '/help/basics.html';
+LINK_HELP       = '/help/basics.html'
 LINK_CHEROKEE   = 'http://www.cherokee-project.com/'
+LINK_LINKEDIN   = 'http://www.linkedin.com/groups?gid=1819726'
 
 # Subscription
 SUBSCRIBE_URL       = 'http://lists.octality.com/subscribe/cherokee-dev'
@@ -417,6 +418,7 @@ class CommunityBar (CTK.Box):
         slist += CTK.LinkWindow (LINK_CHEROKEE, CTK.Image({'src': '/static/images/other/web.png',      'title': _('Visit the Cherokee Project Website')}))
         slist += CTK.LinkWindow (LINK_TWITTER,  CTK.Image({'src': '/static/images/other/twitter.png',  'title': _('Follow us on Twitter')}))
         slist += CTK.LinkWindow (LINK_FACEBOOK, CTK.Image({'src': '/static/images/other/facebook.png', 'title': _('Join us on Facebook')}))
+        slist += CTK.LinkWindow (LINK_LINKEDIN, CTK.Image({'src': '/static/images/other/linkedin.png', 'title': _('Become a member of Cherokee group on LinkedIn')}))
         slist += CTK.LinkWindow (LINK_IRC,      CTK.Image({'src': '/static/images/other/irc.png',      'title': _('Chat with us at irc.freenode.net')}))
 
 class Render:
