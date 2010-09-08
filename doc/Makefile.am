@@ -205,22 +205,11 @@ media/images/cookbook_ror_wizard.png \
 media/images/cookbook_mailman.png \
 media/images/cookbook_glassfish.png \
 media/images/cookbook_drupal.png \
-media/images/cookbook_drupal_dir_rules_1.png \
-media/images/cookbook_drupal_dir_rules_2.png \
-media/images/cookbook_drupal_dir_rules_3.png \
-media/images/cookbook_drupal_dir_rules_4.png \
-media/images/cookbook_drupal_dir_rules_6.png \
-media/images/cookbook_drupal_dir_rules_7.png \
-media/images/cookbook_drupal_dir_rules.png \
-media/images/cookbook_drupal_vserver_rules.png
 media/images/cookbook_wp1.png \
 media/images/cookbook_wp2.png \
 media/images/cookbook_wp3.png \
 media/images/cookbook_wp4.png \
 media/images/cookbook_wp5.png \
-media/images/cookbook_wp_example1.png \
-media/images/cookbook_wp_example2.png \
-media/images/cookbook_wp_example3.png \
 media/images/cookbook_nagios1.png \
 media/images/cookbook_nagios2.png \
 media/images/cookbook_nagios3.png \
