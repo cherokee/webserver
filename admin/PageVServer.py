@@ -209,7 +209,7 @@ class BehaviorWidget (CTK.Container):
             first_rule = '0'
 
         button = CTK.Button(_('Rule Management'), {'id':'rule-management'})
-        button.bind('click', CTK.JS.GotoURL('/vserver/%s/rule/%s'%(vsrv_num, first_rule)))
+        button.bind ('click', "window.location = '/vserver/%s/rule/%s'"%(vsrv_num, first_rule))
         self += CTK.Indenter (button)
 
 
@@ -302,7 +302,9 @@ class BasicsWidget (CTK.Container):
 
         # Paths
         table = CTK.PropsAuto (url_apply)
-        table.Add (_('Document Root'),     CTK.TextCfg('%s!document_root'%(pre)),   _(NOTE_DOCUMENT_ROOT))
+        if not CTK.cfg.get_val ('%s!document_root'%(pre),'').startswith(CHEROKEE_OWS_ROOT):
+            table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre)),   _(NOTE_DOCUMENT_ROOT))
+
         table.Add (_('Directory Indexes'), CTK.TextCfg('%s!directory_index'%(pre)), _(NOTE_DIRECTORY_INDEX))
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Paths')))

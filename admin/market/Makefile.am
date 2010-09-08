@@ -1,0 +1,22 @@
+## Cherokee: Makefile.am  -*- makefile -*-
+
+code = \
+__init__.py \
+Install.py \
+Install_Log.py \
+Menu.py \
+Package.py \
+PageApp.py \
+PageCategory.py \
+PageIndex.py \
+PageSearch.py \
+Review.py \
+Util.py \
+ows_consts.py
+
+marketpydir = "$(datadir)/cherokee/admin/market"
+marketpy_DATA = $(code)
+
+EXTRA_DIST = \
+$(code)
+

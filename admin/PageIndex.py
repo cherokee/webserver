@@ -26,10 +26,12 @@
 import CTK
 import Page
 import Cherokee
-import gettext
 import xmlrpclib
 import XMLServerDigest
 import PageError
+import SystemStats
+import SystemStatsWidgets
+import About
 
 import os
 import time
@@ -37,24 +39,31 @@ import urllib
 import urllib2
 import re
 
+import OWS_Login
+import OWS_Backup
+import OWS_Market_Info
+import OWS_Cherokee_Info
+
 from util import *
 from consts import *
 from configured import *
 
 # URLs
 LINK_OCTALITY   = 'http://www.octality.com/'
-LINK_SUPPORT    = '%sengineering.html' %(LINK_OCTALITY)
+LINK_SUPPORT    = 'http://www.octality.com/engineering.html'
+OWS_PROUD       = 'http://www.octality.com/api/v%s/open/proud/' %(OWS_API_VERSION)
 PROUD_USERS_WEB = "http://www.cherokee-project.com/cherokee-domain-list.html"
-OWS_PROUD       = 'http://www.octality.com/api/proud/open/'
-OWS_VERSION     = 'http://www.octality.com/api/cherokee-info/open/'
 
 # Links
 LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
 LINK_TWITTER    = 'http://twitter.com/webserver'
 LINK_FACEBOOK   = 'http://www.facebook.com/cherokee.project'
 LINK_DOWNLOAD   = 'http://www.cherokee-project.com/download/'
+LINK_LISTS      = 'http://lists.octality.com/'
 LINK_LIST       = 'http://lists.octality.com/listinfo/cherokee'
 LINK_IRC        = 'irc://irc.freenode.net/cherokee'
+LINK_HELP       = '/help/basics.html';
+LINK_CHEROKEE   = 'http://www.cherokee-project.com/'
 
 # Subscription
 SUBSCRIBE_URL       = 'http://lists.octality.com/subscribe/cherokee-dev'
@@ -64,22 +73,15 @@ SUBSCRIBE_APPLY     = '/index/subscribe/apply'
 NOTE_EMAIL          = N_("You will be sent an email requesting confirmation")
 NOTE_NAME           = N_("Optionally provide your name")
 
-# Notices
-RUNNING_NOTICE      = N_('Server is Running.')
-STOPPED_NOTICE      = N_('Server is not Running.')
-SUPPORT_NOTICE      = N_('Commercial support for Cherokee is provided by <a target="_blank" href="%s">Octality</a>. They provide top notch Consulting, Custom Engineering, and Enterprise Support Services.')
-LIST_NOTICE         = N_('The Community Mailing List is the place to go for help on Cherokee. <a id="subscribe-a">Subscribe now!</a>')
-IRC_NOTICE          = N_('Join us at the <a target="_blank" href="%s">#cherokee</a> IRC Channel.')
-BUG_TRACKER_NOTICE  = N_('Your feedback is important! Log Bug Reports and Requests for Enhancements in our <a target="_blank" href="%s">bug tracker</a> to help us improve Cherokee.' )
-SOCIAL_MEDIA_NOTICE = N_("Find out what's going on with Cherokee on your favorite Social Media!")
-TWITTER_NOTICE      = N_('Follow <a target="_blank" href="%s">Cherokee on Twitter</a>.')
-FACEBOOK_NOTICE     = N_('Join <a target="_blank" href="%s">Cherokee on Facebook</a>.')
+MAILING_LIST_INFO   = N_("""\
+There is a number of Community <a href="%s" target="_blank">Mailing Lists</a>
+available for you to subscribe. You can subscribe the General Discussion
+mailing list from this interface. There is where most of the discussions
+take place.""")%(LINK_LISTS)
 
-BETA_TESTER_NOTICE  = N_("""\
-<h3>Beta testing</h3> <p>Individuals like yourself who download and
-test the latest developer snapshots of Cherokee Web Server help us to
-create the highest quality product. For that, we thank you.</p>
-""")
+# Server is..
+RUNNING_NOTICE      = N_('Server is Running')
+STOPPED_NOTICE      = N_('Server is not Running')
 
 PROUD_USERS_NOTICE  = N_("""\
 We would love to know that you are using Cherokee. Submit your domain
@@ -90,6 +92,11 @@ name and it will be listed on the Cherokee Project web site.
 PROUD_DIALOG_OK     = N_("The information has been successfully sent. Thank you!")
 PROUS_DIALOG_ERROR1 = N_("Unfortunatelly something went wrong, and the information could not be submitted:")
 PROUS_DIALOG_ERROR2 = N_("Please, try again. Do not hesitate to report the problem if it persists.")
+
+#
+REMOTE_SERVS_APPLY  = '/remote-servs/apply'
+REMOTE_SERVS_ENABLE = N_('Enable Remote Services')
+
 
 # Help entries
 HELPS = [('config_status', N_("Status"))]
@@ -125,73 +132,144 @@ def Launch():
 
     return CTK.HTTP_Redir('/')
 
-
 def Stop():
     Cherokee.pid.refresh()
     Cherokee.server.stop()
     return CTK.HTTP_Redir('/')
 
 
-class ServerStatus (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'class': 'server-status', 'id': ['server-stopped', 'server-running'][Cherokee.server.is_alive()]})
-        self += CTK.Box ({'id': 'status-message'}, CTK.RawHTML([_(STOPPED_NOTICE), _(RUNNING_NOTICE)][Cherokee.server.is_alive()]))
-
-        if Cherokee.server.is_alive():
-            button = CTK.Button(_('Stop Server'), {'id': 'launch-button', 'class': 'butlight butstop'})
-            button.bind ('click', "window.location = '/stop';")
-
-        else:
-            button = CTK.Button(_('Start Server'), {'id': 'launch-button', 'class': 'butlight butstart'})
-            button.bind ('click', "window.location = '/launch';")
-
-        self+= button
-
-
-
 class ServerInfo (CTK.Box):
     def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'server-info'})
-        self += CTK.RawHTML("<h3>%s</h3>"%(_("Information")))
-        table = CTK.Table()
+        CTK.Box.__init__ (self, {'id': 'server-section', 'class': 'infosection'})
+
+        infotable = CTK.Table({'class': 'info-table'})
+        infotable.set_header (column=True, num=1)
+
+        is_alive = Cherokee.server.is_alive()
         entry = lambda title, string: [CTK.RawHTML (title), CTK.RawHTML(str(string))]
-        table.id = "server-info-table"
+
+        if is_alive:
+            button = CTK.Button(_('Stop Server'), {'id': 'launch-button', 'class': 'button-stop'})
+            button.bind ('click', CTK.JS.GotoURL('/stop'))
+            infotable += [CTK.RawHTML(_(RUNNING_NOTICE)), button]
+        else:
+            button = CTK.Button(_('Start Server'), {'id': 'launch-button', 'class': 'button-start'})
+            button.bind ('click', CTK.JS.GotoURL('/launch'))
+            infotable += [CTK.RawHTML(_(STOPPED_NOTICE)), button]
+
+        sys_stats = SystemStats.get_system_stats()
+        infotable += entry(_('Hostname'), sys_stats.hostname)
+        if CTK.cfg.file:
+            cfg_file = '<span title="%s: %s">%s</span>' % (_('Modified'), self._get_cfg_ctime(), CTK.cfg.file)
+        else:
+            cfg_file = _('Not found')
+        infotable += entry(_("Config File"), cfg_file)
+
+        box = CTK.Box()
+        box += infotable
+
+        table = CTK.Table()
         table.set_header (column=True, num=1)
-        table += entry(_('PID'),          Cherokee.pid.pid or _("Not running"))
-        table += entry(_('Version'),      VERSION)
-        table += entry(_("Default WWW"),  self._get_droot())
-        table += entry(_("Prefix"),       PREFIX)
-        table += entry(_("Config File"),  CTK.cfg.file or _("Not found"))
-        table += entry(_("Modified"),     self._get_cfg_ctime())
+        table += [CTK.RawHTML (_('Server Information')), box]
         self += table
-
-    def _get_droot (self):
-        tmp = [int(x) for x in CTK.cfg.keys('vserver')]
-        tmp.sort()
-
-        if not tmp:
-            return WWWROOT
-
-        return CTK.cfg.get_val ('vserver!%d!document_root'%(tmp[0]), WWWROOT)
 
     def _get_cfg_ctime (self):
         info = os.stat(CTK.cfg.file)
         return time.ctime(info.st_ctime)
 
 
-def Lang_Apply():
-    # Sanity check
-    langs = CTK.post.get_val('lang')
-    if not langs:
-        return {'ret': 'error', 'errors': {'lang': 'Cannot be empty'}}
+def RemoteServices_Apply():
+    enabled = CTK.post.get_val('admin!ows!enabled')
+    CTK.cfg['admin!ows!enabled'] = enabled
+    return CTK.cfg_reply_ajax_ok()
 
-    # Install the new language
+
+class RemoteServices (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'id': 'remote-services-section', 'class': 'infosection'})
+
+        submit = CTK.Submitter (REMOTE_SERVS_APPLY)
+        submit += CTK.CheckCfgText ("admin!ows!enabled", True, _(REMOTE_SERVS_ENABLE))
+        submit.bind ('submit_success', CTK.JS.GotoURL('/'))
+
+        infotable = CTK.Table({'class': 'info-table'})
+        infotable.set_header (column=True, num=1)
+
+        if int (CTK.cfg.get_val("admin!ows!enabled", OWS_ENABLE)):
+            if OWS_Login.is_logged():
+                infotable += [submit, OWS_Login.LoggedAs_Text()]
+            else:
+                dialog = OWS_Login.LoginDialog()
+                dialog.bind ('submit_success', CTK.JS.GotoURL('/'))
+
+                link = CTK.Link ("#", CTK.RawHTML('<span>%s</span>' %(_('Sign in'))))
+                link.bind ('click', dialog.JS_to_show())
+
+                cont = CTK.Container()
+                cont += dialog
+                cont += link
+
+                infotable += [submit, cont]
+        else:
+            infotable += [submit]
+
+        table = CTK.Table()
+        table.set_header (column=True, num=1)
+        table += [CTK.RawHTML (_('Remote Services')), infotable]
+        self += table
+
+class BackupService (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'id': 'remote-backup-section', 'class': 'infosection'})
+
+        cont = CTK.Container()
+        cont += OWS_Backup.Restore_Config_Button()
+        cont += OWS_Backup.Save_Config_Button()
+
+        table = CTK.Table()
+        table.set_header (column=True, num=1)
+        table += [CTK.RawHTML (_('Backup Service')), cont]
+        self += table
+
+
+class CPUInfo (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'id': 'cpu-section', 'class': 'infosection'})
+        table = CTK.Table()
+        table.set_header (column=True, num=1)
+        table += [CTK.RawHTML (_('Processors')), SystemStatsWidgets.CPU_Info()]
+        table += [CTK.RawHTML (''), SystemStatsWidgets.CPU_Meter()]
+        self += table
+
+class MemoryInfo (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'id': 'ram-section', 'class': 'infosection'})
+
+        cont = CTK.Container()
+        cont += SystemStatsWidgets.Memory_Info()
+        cont += SystemStatsWidgets.Memory_Meter()
+
+        table = CTK.Table()
+        table.set_header (column=True, num=1)
+        table += [CTK.RawHTML (_('Memory')), cont]
+        self += table
+
+
+def language_set (langs):
     languages = [l for s in langs.split(',') for l in s.split(';') if not '=' in l]
     try:
-        gettext.translation('cherokee', LOCALEDIR, languages).install()
+        CTK.i18n.translation('cherokee', LOCALEDIR, languages).install()
     except:
-        pass
+        CTK.util.print_exception()
+        return True
 
+def Lang_Apply():
+    # Sanity check
+    lang = CTK.post.get_val('lang')
+    if not lang:
+        return {'ret': 'error', 'errors': {'lang': 'Cannot be empty'}}
+
+    language_set (lang)
     return {'ret': 'ok', 'redirect': '/'}
 
 class LanguageSelector (CTK.Box):
@@ -245,43 +323,17 @@ def ProudUsers_Apply():
 
 class ProudUsers (CTK.Box):
     def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'proud-users'})
+        CTK.Box.__init__ (self, {'id': 'proud-users', 'class': 'sidebar-box'})
 
         # Dialog
         dialog = CTK.DialogProxyLazy ('/proud/apply', {'title': _('Proud Cherokee User List Submission'), 'width': 500})
         dialog.AddButton (_('Close'), "close")
 
-        self += CTK.RawHTML('<h3>%s</h3>' %(_('Proud Cherokee Users')))
+        self += CTK.RawHTML('<h2>%s</h2>' %(_('Proud Cherokee Users')))
         self += CTK.Box ({'id': 'proud-notice'}, CTK.RawHTML (_(PROUD_USERS_NOTICE)))
-        self += CTK.Box ({'id': 'proud-link'}, CTK.RawHTML ('<a target="_blank" href="%s">%s</a> | <a id="proud-a">%s</a>' %(_(PROUD_USERS_WEB), _('View list'), _('Send your domains'))))
+        self += CTK.Box ({'id': 'proud-link'},   CTK.RawHTML ('<a target="_blank" href="%s">%s</a> | <a id="proud-a">%s</a>' %(_(PROUD_USERS_WEB), _('View list…'), _('Send your domains'))))
         self += CTK.RawHTML (js=JS_PROUD %(dialog.JS_to_show()))
         self += dialog
-
-
-class LatestReleaseBox (CTK.XMLRPCProxy):
-    def __init__ (self):
-        CTK.XMLRPCProxy.__init__ (self, 'cherokee-latest-release',
-                                  XMLServerDigest.XmlRpcServer(OWS_VERSION).get_latest,
-                                  self.format, debug=True)
-
-    def format (self, response):
-        response = CTK.util.to_utf8(response)
-        latest   = response['default']
-
-        content = CTK.Box()
-        content += CTK.RawHTML('<h3>%s</h3>' % _('Latest Release'))
-
-        if not latest:
-            content += CTK.RawHTML(_('Latest version could not be determined at the moment.'))
-        elif VERSION.startswith (latest['version']):
-            content += CTK.RawHTML(_('Cherokee is up to date.'))
-        else:
-            txt = '%s v%s. %s v%s.' % (_('You are running Cherokee'),
-                                       VERSION, _('Latest release is '),
-                                       latest['version'])
-            content += CTK.RawHTML(txt)
-
-        return content.Render().toStr()
 
 
 def Subscribe_Apply ():
@@ -299,120 +351,120 @@ def Subscribe_Apply ():
     return {'ret':'error'}
 
 
-class MailingListSubscription (CTK.Container):
+class MailingListDialog (CTK.Dialog):
     def __init__ (self):
-        CTK.Container.__init__ (self)
+        CTK.Dialog.__init__ (self, {'title': _('Mailing List Subscription'), 'width': 560})
+        self.AddButton (_('Subscribe'), self.JS_to_trigger('submit'))
+        self.AddButton (_('Cancel'), "close")
 
         table = CTK.PropsTable()
         table.Add (_('Your email address'), CTK.TextField({'name': 'email', 'class': 'noauto'}), _(NOTE_EMAIL))
         table.Add (_('Your name'),          CTK.TextField({'name': 'fullname', 'class': 'noauto', 'optional':True}), _(NOTE_NAME))
 
-        submit = CTK.Submitter(SUBSCRIBE_APPLY)
+        submit = CTK.Submitter (SUBSCRIBE_APPLY)
+        submit.bind ('submit_success', self.JS_to_close())
         submit += table
+
+        self += CTK.RawHTML ("<p>%s</p>" %(_(MAILING_LIST_INFO)))
         self += submit
 
 
-class ContactChannels (CTK.Box):
+class SupportBox (CTK.Box):
     def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'contact-channels'})
+        CTK.Box.__init__ (self, {'id': 'support-box', 'class': 'sidebar-box'})
 
-        box = CTK.Box({'id': 'contact-irc', 'class': 'contact-box'})
-        box += CTK.RawHTML('<h4>%s</h4>' % _('IRC'))
-        box += CTK.RawHTML(_(IRC_NOTICE)%(LINK_IRC))
-        self += box
+        qlist = CTK.List ()
+        self += CTK.RawHTML('<h2>%s</h2>' % _('Support'))
+        self += qlist
 
-        box = CTK.Box({'id': 'contact-list', 'class': 'contact-box'})
-        box += CTK.RawHTML('<h4>%s</h4>' % _('Mailing List'))
-        box += CTK.RawHTML(_(LIST_NOTICE))
-        self += box
+        # Help
+        link = CTK.LinkWindow (LINK_HELP, CTK.RawHTML (_('Getting started')))
+        qlist += link
 
-        # Subscribe Dialog
-        dialog = CTK.Dialog ({'title': _('Mailing list subscription'), 'width': 560})
-        dialog.AddButton (_('Subscribe'), dialog.JS_to_trigger('submit'))
-        dialog.AddButton (_('Cancel'), "close")
-        dialog += MailingListSubscription()
-        dialog.bind ('submit_success', dialog.JS_to_close())
+        # Mailing List
+        link = CTK.Link ('#', CTK.RawHTML (_('Subscribe to mailing lists')))
+        dialog = MailingListDialog()
 
-        self += CTK.RawHTML (js=JS_SUBSCRIBE %(dialog.JS_to_show()))
+        link.bind ('click', dialog.JS_to_show())
+        self += dialog
+        qlist += link
 
-        box = CTK.Box({'id': 'contact-bug', 'class': 'contact-box'})
-        box += CTK.RawHTML('<h4>%s</h4>' % _('Bug Tracker'))
-        box += CTK.RawHTML(_(BUG_TRACKER_NOTICE)%(LINK_BUGTRACKER))
-        self += box
+        # Bug report
+        link = CTK.LinkWindow (LINK_BUGTRACKER, CTK.RawHTML (_('Report a bug')))
+        qlist += link
 
+        # Commercial Support
+        link = CTK.LinkWindow (LINK_SUPPORT, CTK.RawHTML (_('Purchase commercial support')))
+        qlist += link
+
+        # About..
+        dialog = CTK.DialogProxyLazy (About.URL_ABOUT_CONTENT, {'title': _("About Cherokee"), 'width': 600})
+        dialog.AddButton (_('Close'), 'close')
         self += dialog
 
+        link = CTK.Link ('#', CTK.RawHTML (_('About Cherokee')))
+        link.bind ('click', dialog.JS_to_show())
+        qlist += link
 
-class SocialMedia (CTK.Box):
+class CommunityBar (CTK.Box):
     def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'social-media'})
+        CTK.Box.__init__ (self, {'id': 'community-bar'})
 
-        twitter = CTK.Box ({'id': 'twitter-box', 'class': 'social-box'})
-        twitter += CTK.RawHTML(_(TWITTER_NOTICE)%(LINK_TWITTER))
-        self += twitter
+        slist = CTK.List ()
+        self += CTK.RawHTML('<h3>%s</h3>' % _('Join the Cherokee Community:'))
+        self += slist
 
-        fb = CTK.Box ({'id': 'fb-box', 'class': 'social-box'})
-        fb += CTK.RawHTML(_(FACEBOOK_NOTICE)%(LINK_FACEBOOK))
-        self += fb
-
-
-
-class CommunityBox (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'community-box'})
-
-        self += CTK.RawHTML('<h2>%s</h2>' % _('Community'))
-
-        left = CTK.Box ({'id': 'community-left'})
-        left += ProudUsers()
-        left += SocialMedia()
-        #self += LatestRelease()
-        self += left
-        right = CTK.Box ({'id': 'community-right'})
-        right += ContactChannels()
-        self += right
-
-
-class EnterpriseBox (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'enterprise-box'})
-
-        self += CTK.RawHTML('<h2>%s</h2>' % _('Commercial Support'))
-        self += CTK.Box ({'id': 'enterprise-notice'}, CTK.RawHTML (_(SUPPORT_NOTICE)%(LINK_OCTALITY)))
-        self += CTK.Box ({'id': 'enterprise-link'}, CTK.RawHTML ('<a target="_blank" href="%s">%s</a>' %(LINK_SUPPORT, _('Purchase Support'))))
-
+        slist += CTK.LinkWindow (LINK_CHEROKEE, CTK.Image({'src': '/static/images/other/web.png',      'title': _('Visit the Cherokee Project Website')}))
+        slist += CTK.LinkWindow (LINK_TWITTER,  CTK.Image({'src': '/static/images/other/twitter.png',  'title': _('Follow us on Twitter')}))
+        slist += CTK.LinkWindow (LINK_FACEBOOK, CTK.Image({'src': '/static/images/other/facebook.png', 'title': _('Join us on Facebook')}))
+        slist += CTK.LinkWindow (LINK_IRC,      CTK.Image({'src': '/static/images/other/irc.png',      'title': _('Chat with us at irc.freenode.net')}))
 
 class Render:
     def __call__ (self):
         Cherokee.pid.refresh()
 
-        self.page = Page.Base(_('Welcome to Cherokee Admin'), body_id='index', helps=HELPS)
+        # Top
         top = CTK.Box({'id': 'top-box'})
         top += CTK.RawHTML ("<h1>%s</h1>"% _('Welcome to Cherokee Admin'))
         top += LanguageSelector()
-        self.page += top;
 
+        # Content: Left
+        mainarea = CTK.Box({'id': 'main-area'})
+        mainarea += OWS_Market_Info.Index_Block1()
+        mainarea += ServerInfo()
+        if int(OWS_ENABLE): # Hide it by the moment
+            mainarea += RemoteServices()
+
+        if OWS_Login.is_logged() and \
+           int (CTK.cfg.get_val("admin!ows!enabled", OWS_ENABLE)):
+            mainarea += BackupService()
+
+        mainarea += CPUInfo()
+        mainarea += MemoryInfo()
+
+        # Content: Right
+        sidebar = CTK.Box({'id': 'sidebar'})
+        sidebar += SupportBox()
+
+        if int (CTK.cfg.get_val("admin!ows!enabled", OWS_ENABLE)):
+            sidebar += OWS_Cherokee_Info.Latest_Release()
+
+        sidebar += ProudUsers()
+        sidebar += OWS_Market_Info.Index_Block2()
+
+        # Content
         cont = CTK.Box({'id': 'home-container'})
+        cont += mainarea
+        cont += sidebar
+        cont += CommunityBar()
 
-        if 'b' in VERSION:
-            notice  = CTK.Notice()
-            notice += CTK.RawHTML(_(BETA_TESTER_NOTICE))
-            cont += notice
+        # Page
+        page = Page.Base(_('Welcome to Cherokee Admin'), body_id='index', helps=HELPS)
+        page += top
+        page += cont
+        page += CTK.RawHTML (js=JS_SCROLL)
 
-        cont += ServerStatus()
-        cont += ServerInfo()
-        cont += CTK.RawHTML('<div class="ui-helper-clearfix"></div>')
-
-        bottom = CTK.Box({'id': 'bottom-box'})
-        bottom += EnterpriseBox()
-        bottom += CommunityBox()
-        cont += bottom
-        cont += CTK.RawHTML('<div class="ui-helper-clearfix"></div>')
-
-        self.page += cont
-        self.page += CTK.RawHTML (js=JS_SCROLL)
-
-        return self.page.Render()
+        return page.Render()
 
 
 CTK.publish (r'^/$',            Render)
@@ -421,3 +473,4 @@ CTK.publish (r'^/stop$',        Stop)
 CTK.publish (r'^/lang/apply$',  Lang_Apply, method="POST")
 CTK.publish (r'^/proud/apply$', ProudUsers_Apply, method="POST")
 CTK.publish (r'^%s$'%(SUBSCRIBE_APPLY), Subscribe_Apply, method="POST")
+CTK.publish (r'^%s$'%(REMOTE_SERVS_APPLY), RemoteServices_Apply, method="POST")

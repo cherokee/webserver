@@ -23,7 +23,7 @@
 ;(function($) {
     var SelectionPanel = function (element, table_id, content_id, cookie_name, cookie_domain, url_empty) {
 	   var obj  = this;       //  Object {}
-	   var self = $(element); // .SelectionPanel
+	   var self = $(element); // .submitter
 
 	   function deselect_row (row) {
             $('#'+row.attr('pid')).removeClass('panel-selected');
@@ -31,7 +31,6 @@
 
 	   function select_row (row) {
 		  var url      = '';
-		  var pid      = '';
 		  var activity = $("#activity");
 		  var content  = $('#'+content_id);
 
@@ -40,15 +39,14 @@
 			 url = url_empty;
 
 		  } else {
-			 pid = row.attr('pid');
 			 url = row.attr('url');
 
-			 $('#'+pid).each (function() {
+			 $('#'+row.attr('pid')).each (function() {
 				// Highlight
 				$(this).addClass('panel-selected');
 
 				// Cookie
-				$.cookie (cookie_name, pid, {path: cookie_domain});
+				$.cookie (cookie_name, $(this).attr('id'), {path: cookie_domain});
 			 });
 		  }
 
@@ -79,10 +77,11 @@
 	   }
 
 	   function auto_select_row (row) {
-		  var row_id     = row.attr('pid');
+		  var row_id     = row.attr('id');
 		  var did_select = false;
+
 		  self.find('.row_content').each (function() {
-			 if ($(this).attr('pid') == row_id) {
+			 if ($(this).attr('id') == row_id) {
 				select_row ($(this));
 				did_select = true;
 			 } else {
@@ -111,7 +110,8 @@
 	   }
 
 	   this.set_selected_cookie = function (pid) {
-		  $.cookie (cookie_name, pid, {path: cookie_domain});
+		  var row = self.find ('.row_content[pid='+ pid +']');
+		  $.cookie (cookie_name, row.attr('id'), {path: cookie_domain});
 	   }
 
 	   this.select_last = function() {
@@ -131,7 +131,7 @@
 			 select_row (first_row);
 
 		  } else {
-			 var did_select = auto_select_row ($("div[pid='" + cookie_selected + "']"));
+			 var did_select = auto_select_row ($('#'+cookie_selected).find('.row_content'));
 
 			 if (! did_select) {
 				var first_row = self.find('.row_content:first');
@@ -150,10 +150,6 @@
 			 filter_entries ($(this).val());
 		  });
 
-		  if (! filter_input.hasClass('optional_msg')) {
-			 filter_entries (filter_input.val());
-		  }
-
 		  return obj;
 	   }
     };
@@ -162,9 +158,9 @@
 	   var self = this;
 	   return this.each(function() {
 		  if ($(this).data('selectionpanel')) return;
-		  var panel = new SelectionPanel(this, table_id, content_id, cookie, cookie_domain, url_empty);
-		  $(this).data('selectionpanel', panel);
-		  panel.init(self);
+		  var submitter = new SelectionPanel(this, table_id, content_id, cookie, cookie_domain, url_empty);
+		  $(this).data('selectionpanel', submitter);
+		  submitter.init(self);
 	   });
     };
 
@@ -205,7 +201,7 @@ function resize_cherokee_panels() {
            $(".selection-panel table").removeClass('hasScroll');
        }
        $('#source_panel').height($(window).height() - 130);
-       $('#source-workarea').height($(window).height() - 92);
+       $('.source_content .submitter').height($(window).height() - 92);
    }
 }
 

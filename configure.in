@@ -1511,6 +1511,7 @@ packages/windows/cherokee.nsi
 www/Makefile
 dbslayer/Makefile
 admin/Makefile
+admin/market/Makefile
 admin/plugins/Makefile
 admin/wizards/Makefile
 admin/static/Makefile

@@ -1,0 +1,170 @@
+# -*- coding: utf-8 -*-
+#
+# Cherokee-admin
+#
+# Authors:
+#      Alvaro Lopez Ortega <alvaro@alobbs.com>
+#
+# Copyright (C) 2001-2010 Alvaro Lopez Ortega
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of version 2 of the GNU General Public
+# License as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+
+import CTK
+import SystemStats
+from CTK.PageCleaner import Uniq_Block
+
+
+JS_COMMON = """
+var system_stats = {};
+
+function update_system_stats() {
+  $.ajax({
+     type:     "GET",
+     url:      "/system/stats",
+     dataType: "json",
+     async:     true,
+     success: function (data){
+        // deep copy
+        system_stats = jQuery.extend (true, {}, data);
+     }
+  });
+  setTimeout (update_system_stats, 2000);
+}
+update_system_stats();
+"""
+
+JS_CPU = """
+function update_meter_cpu() {
+  $('#%(bar_id)s').progressbar ('option', 'value', system_stats['cpu']['usage']);
+  $('#%(details_id)s').html (system_stats['cpu']['usage'] + '&#37;');
+
+  setTimeout (update_meter_cpu, 2000);
+}
+setTimeout (update_meter_cpu, 1000);
+"""
+
+JS_MEMORY = """
+function update_meter_memory() {
+  var Gb_used      = system_stats['mem']['used'] / (1024 * 1024);
+  var Gb_free      = (system_stats['mem']['total'] - system_stats['mem']['used']) / (1024 * 1024);
+  var used_percent = system_stats['mem']['used'] / system_stats['mem']['total'] * 100;
+
+  $('#%(bar_id)s').progressbar ('option', 'value', used_percent);
+  $('#%(details_id)s').html (used_percent.toFixed(1) + '&#37;');
+  $('#%(extra_id)s').html (Gb_used.toFixed(1) + 'GB Used, '+ Gb_free.toFixed(1) + 'GB Free');
+
+  setTimeout (update_meter_memory, 2000);
+}
+setTimeout (update_meter_memory, 1000);
+"""
+
+
+class Meter (CTK.Box):
+    def __init__ (self, name):
+        CTK.Box.__init__ (self)
+        self.progress = CTK.ProgressBar()
+        self.details  = CTK.Box ({'class': 'progress-details'})
+        self.extra    = CTK.Box ({'class': 'progress-extra'})
+
+        self += self.extra
+        self += self.progress
+        self += self.details
+
+    def Render (self, js):
+        render = CTK.Box.Render (self)
+        render.js += Uniq_Block (JS_COMMON)
+
+        props = {'bar_id':     self.progress.id,
+                 'details_id': self.details.id,
+                 'extra_id': self.extra.id }
+
+        render.js += js %(props)
+        return render
+
+
+#
+# CPU
+#
+
+class CPU_Info (CTK.RawHTML):
+    def __init__ (self):
+        stats = SystemStats.get_system_stats()
+
+        parts = []
+        if stats.cpu.speed:
+            parts.append (stats.cpu.speed)
+
+        if stats.cpu.num:
+            parts.append (_("%s Logical Processors") %(stats.cpu.num))
+
+        if stats.cpu.cores:
+            parts.append (_("%s Cores") %(stats.cpu.cores))
+
+        if parts:
+            txt = ', '.join(parts)
+        else:
+            txt = _('Unknown Processor')
+
+        CTK.RawHTML.__init__ (self, txt)
+
+
+class CPU_Meter (Meter):
+    def __init__ (self):
+        Meter.__init__ (self, 'cpu')
+
+    def Render (self):
+        return Meter.Render (self, JS_CPU)
+
+
+#
+# Memory
+#
+
+class Memory_Info (CTK.RawHTML):
+    def __init__ (self):
+        stats = SystemStats.get_system_stats()
+
+        if stats.mem.total:
+            if stats.mem.total < (1024**2):
+                total = "%dMB" %(stats.mem.total / 1024)
+            else:
+                total = "%.1fGB" %(stats.mem.total / (1024.0 ** 2))
+        else:
+            total = _('Unknown RAM')
+
+        CTK.RawHTML.__init__ (self, total)
+
+
+class Memory_Meter (Meter):
+    def __init__ (self):
+        Meter.__init__ (self, 'memory')
+
+    def Render (self):
+        return Meter.Render (self, JS_MEMORY)
+
+
+#
+# /system/stats
+#
+
+def SystemStats_JSON():
+    stats = SystemStats.get_system_stats()
+    return {'mem': {'used':  stats.mem.used,
+                    'total': stats.mem.total},
+            'cpu': {'usage': stats.cpu.usage,
+                    'idle':  stats.cpu.idle}}
+
+CTK.publish (r'^/system/stats$', SystemStats_JSON)

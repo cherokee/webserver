@@ -26,7 +26,20 @@ import os
 import sys
 import glob
 import socket
+import subprocess
+
 import CTK
+
+
+#
+# Deal with os.popen and subprocess issues in Python 2.4
+#
+def run (command):
+    p = subprocess.Popen (command, shell=True, stdout=subprocess.PIPE, close_fds=True)
+    output = p.stdout.read()
+    p.stdout.close()
+    p.poll()
+    return output
 
 #
 # Strings
@@ -157,6 +170,52 @@ def cfg_get_surrounding_repls (macro, value, n_minus=9, n_plus=9):
         replacements['%s_plus%d'%(macro,n+1)] = '%s!%d' %(pre, num+(n+1))
 
     return replacements
+
+#
+# Version strings management
+#
+
+def version_to_int (v):
+    num = 0
+    tmp = v.split('.')
+
+    if len(tmp) >= 3:
+        num += int(tmp[2]) * (10**3)
+    if len(tmp) >= 2:
+        num += int(tmp[1]) * (10**6)
+    if len(tmp) >= 1:
+        num += int(tmp[0]) * (10**9)
+
+    return num
+
+def version_cmp (x, y):
+    xp = x.split('b')
+    yp = y.split('b')
+
+    if len(xp) > 1:
+        x_ver  = version_to_int(xp[0])
+        x_beta = xp[1]
+    else:
+        x_ver  = version_to_int(xp[0])
+        x_beta = None
+
+    if len(yp) > 1:
+        y_ver  = version_to_int(yp[0])
+        y_beta = yp[1]
+    else:
+        y_ver  = version_to_int(yp[0])
+        y_beta = None
+
+    if x_ver == y_ver:
+        if not x_beta and not y_beta: return 0
+        if not y_beta: return -1
+        if not x_beta: return  1
+        return cmp(int(x_beta),int(y_beta))
+
+    elif x_ver > y_ver:
+        return 1
+
+    return -1
 
 #
 # Version strings management

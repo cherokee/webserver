@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = plugins wizards CTK
+SUBDIRS = market plugins wizards CTK
 
 if INSTALL_ADMIN
 SUBDIRS += static
@@ -33,8 +33,8 @@ adminpy_SCRIPTS = $(admin_scripts)
 
 if INSTALL_ADMIN
 admin_data = \
+About.py \
 Auth.py \
-Backup.py \
 Balancer.py \
 CgiBase.py \
 Cherokee.py \
@@ -42,8 +42,11 @@ Flags.py \
 Graph.py \
 Handler.py \
 Icons.py \
-Login.py \
 Mime.py \
+OWS_Backup.py \
+OWS_Cherokee_Info.py \
+OWS_Login.py \
+OWS_Market_Info.py \
 Page.py \
 PageAdvanced.py \
 PageEntry.py \
@@ -62,12 +65,14 @@ PageVServers.py \
 Rule.py \
 RuleSimple.py \
 SelectionPanel.py \
+SystemInfo.py \
+SystemStats.py \
+SystemStatsWidgets.py \
 Wizard.py \
 XMLServerDigest.py \
 config_version.py \
+configured.py \
 consts.py \
-server.py \
-upgrade_config.py \
 util.py \
 validations.py
 

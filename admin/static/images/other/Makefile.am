@@ -3,12 +3,15 @@
 otherdir = "$(datadir)/cherokee/admin/static/images/other"
 other_DATA = \
 contact-bug.png \
-contact-irc.png \
 contact-list.png \
 facebook.png \
+irc.png \
+left.png \
 octality-logo.png \
 proud.png \
-twitter.png
+right.png \
+twitter.png \
+web.png
 
 EXTRA_DIST = \
 $(other_DATA)

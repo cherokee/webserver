@@ -186,9 +186,15 @@ class Render:
             vservers.reverse()
 
             for k in vservers:
+                # Document root widget
+                droot_str = CTK.cfg.get_val ('vserver!%s!document_root'%(k), '')
+                if droot_str.startswith (CHEROKEE_OWS_ROOT):
+                    droot_widget = CTK.Box ({'class': 'droot'}, CTK.RawHTML(_('Market installation')))
+                else:
+                    droot_widget = CTK.Box ({'class': 'droot'}, CTK.RawHTML(CTK.escape_html (droot_str)))
+
                 if k == vservers[-1]:
-                    content = [entry('nick',  'vserver!%s!nick'%(k)),
-                               entry('droot', 'vserver!%s!document_root'%(k))]
+                    content = [entry('nick', 'vserver!%s!nick'%(k)), droot_widget]
                     panel.Add (k, '/vserver/content/%s'%(k), content, draggable=False)
                 else:
                     nick     = CTK.cfg.get_val ('vserver!%s!nick'%(k), _('Unknown'))
@@ -221,8 +227,7 @@ class Render:
                     group = CTK.Box ({'class': 'sel-actions'}, [disabled, remove])
 
                     content = [group]
-                    content += [entry('nick',  'vserver!%s!nick'%(k)),
-                                entry('droot', 'vserver!%s!document_root'%(k))]
+                    content += [entry('nick', 'vserver!%s!nick'%(k)), droot_widget]
 
                     # List entry
                     panel.Add (k, '/vserver/content/%s'%(k), content, True, disclass)
@@ -245,7 +250,7 @@ class Render:
                         wizard.JS_to_close() +
                         self.JS_to_trigger('submit_success'))
 
-            button = CTK.Button(_('New'), {'id': 'vserver-new-button', 'class': 'panel-button', 'title': _('Add New Virtual Server')})
+            button = CTK.Button('<img src="/static/images/panel-new.png" />', {'id': 'vserver-new-button', 'class': 'panel-button', 'title': _('Add New Virtual Server')})
             button.bind ('click', dialog.JS_to_show())
             dialog.bind ('submit_success', dialog.JS_to_close())
             dialog.bind ('submit_success', self.JS_to_trigger('submit_success'))
@@ -264,7 +269,7 @@ class Render:
             dialog.AddButton (_('Cancel'), "close")
             dialog += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_CLONE_DIALOG)))
 
-            button = CTK.Button(_('Clone'), {'id': 'vserver-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Virtual Server')})
+            button = CTK.Button('<img src="/static/images/panel-clone.png" />', {'id': 'vserver-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Virtual Server')})
             button.bind ('click', dialog.JS_to_show())
 
             self += dialog
