@@ -90,7 +90,14 @@ class System_stats__Darwin (Thread, System_stats):
 
         line = self.vm_stat_fd.stdout.readline()
         self._page_size = int (re.findall("page size of (\d+) bytes", line)[0])
-        self.vm_stat_fd.stdout.readline()
+
+        first_line = self.vm_stat_fd.stdout.readline()
+        if 'spec' in first_line:
+            # free active spec inactive wire faults copy 0fill reactive pageins pageout
+            self.vm_stat_type = 11
+        else:
+            # free active inac wire faults copy zerofill reactive pageins pageout
+            self.vm_stat_type = 10
 
         # I/O stat
         self.iostat_fd = subprocess.Popen ("/usr/sbin/iostat -n 0 -w %d" %(self.CHECK_INTERVAL),
@@ -147,8 +154,15 @@ class System_stats__Darwin (Thread, System_stats):
         tmp = filter (lambda x: x, line.split(' '))
         values = [(to_int(x) * self._page_size) / 1024 for x in tmp]
 
-        free, active, spec, inactive, wired, faults, copy, fill, reactive, pageins, pageout = values
-        self.mem.total = free + active + spec + inactive + wired
+        if self.vm_stat_type == 11:
+            # free active spec inactive wire faults copy 0fill reactive pageins pageout
+            free, active, spec, inactive, wired, faults, copy, fill, reactive, pageins, pageout = values
+            self.mem.total = free + active + spec + inactive + wired
+        elif self.vm_stat_type == 10:
+            # free active inac wire faults copy zerofill reactive pageins pageout
+            free, active, inactive, wired, faults, copy, fill, reactive, pageins, pageout = values
+            self.mem.total = free + active + inactive + wired
+
         self.mem.free  = (free + inactive)
         self.mem.used  = self.mem.total - self.mem.free
 
