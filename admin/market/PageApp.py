@@ -112,11 +112,14 @@ class App:
             cont += pags
 
             for review in reviews:
+                d, review_time = review['review_stamp'].value.split('T')
+                review_date = "%s-%s-%s" %(d[0:4], d[4:6], d[6:])
+
                 rev  = CTK.Box ({'class': 'market-app-review'})
                 rev += CTK.Box ({'class': 'market-app-review-score'},    CTK.StarRating({'selected': review['review_score']}))
                 rev += CTK.Box ({'class': 'market-app-review-title'},    CTK.RawHTML(review['review_title']))
                 rev += CTK.Box ({'class': 'market-app-review-name'},     CTK.RawHTML(review['first_name'] + ' ' + review['last_name']))
-                rev += CTK.Box ({'class': 'market-app-review-stamp'},    CTK.RawHTML(_('on %s' %(review['review_stamp']))))
+                rev += CTK.Box ({'class': 'market-app-review-stamp'},    CTK.RawHTML(_('on %s at %s' %(review_date, review_time))))
                 rev += CTK.Box ({'class': 'market-app-review-comment'},  CTK.RawHTML(review['review_comment']))
                 pags += rev
 
