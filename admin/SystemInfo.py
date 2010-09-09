@@ -51,6 +51,7 @@ def get_info():
 def build_info():
     info = {}
 
+    # Uname
     tmp = os.uname()
     info['system']  = tmp[0]
     info['node']    = tmp[1]
@@ -58,11 +59,12 @@ def build_info():
     info['version'] = tmp[3]
     info['machine'] = tmp[4]
 
-    # sys.version examples:
+    # Python version
+    tmp = re.findall('([\w.+]+)\s*\((.+),\s*([\w ]+),\s*([\w :]+)\)\s*\[([^\]]+)\]?', sys.version)[0]
+
     #  2.4.6 (#1, Oct 15 2009, 11:10:21) \n[GCC 4.2.1 (Apple Inc. build 5646)]
     #  2.6.5 (r265:79063, Apr 16 2010, 13:57:41) \n[GCC 4.4.3]
 
-    tmp = re.findall('([\w.+]+)\s*\((.+),\s*([\w ]+),\s*([\w :]+)\)\s*\[([^\]]+)\]?', sys.version)[0]
     info['python_version']    = tmp[0]
     info['python_buildno']    = tmp[1]
     info['python_builddate']  = tmp[2]
@@ -70,11 +72,24 @@ def build_info():
     info['python_compiler']   = tmp[4]
     info['python_executable'] = sys.executable
 
+    # Architecture bits
     size = struct.calcsize('P')
     info['architecture'] = str(size*8) + 'bit'
 
+    # Linux distribution
     if info['system'] == 'Linux':
         _figure_linux_info (info)
+
+    # Users and Groups
+    if os.access ('/etc/group', os.R_OK):
+        group = open('/etc/group', 'r').read()
+        if re.match (r'^root:', group, re.MULTILINE):
+            info['group_root'] = 'root'
+        elif re.match (r'^wheel:', group, re.MULTILINE):
+            info['group_root'] = 'wheel'
+
+    if not info.get ('group_root'):
+        info['group_root'] = '0'
 
     return info
 
