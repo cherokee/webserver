@@ -227,6 +227,8 @@ def DruidContent__JS_to_goto (internal_id, url):
                        'goto': '%s'
                });""" %(internal_id, url)
 
+def DruidContent__JS_to_close (internal_id):
+    return '$("#%s").each(function() { %s });' %(internal_id, JS_BUTTON_CLOSE)
 
 class DruidContent_TriggerNext (Box):
     def __init__ (self):
