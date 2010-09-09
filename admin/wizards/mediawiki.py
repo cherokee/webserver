@@ -184,13 +184,9 @@ class Commit:
 
 class ShowLocalSettings:
     def __call__ (self):
-        print 1
-
         web_dir = CTK.cfg.get_val('%s!web_dir'%(PREFIX))
         aux_dir = CTK.cfg.get_val('%s!aux_dir'%(PREFIX))
         info = LOCAL_SETTINGS % (locals())
-
-        print 2,info
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
@@ -200,8 +196,6 @@ class ShowLocalSettings:
         cont += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_SETTINGS_P1)))
         cont += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_SETTINGS_P2)))
         cont += CTK.Notice (content=CTK.RawHTML('<pre>%s</pre>'%(info)))
-
-        print 3
 
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
