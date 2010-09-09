@@ -186,13 +186,20 @@ class Download (Install_Stage):
         Install_Log.log ("Downloading %s" %(url_download))
 
         downloader = CTK.Downloader ('package', url_download)
+        downloader.bind ('stopped',  CTK.DruidContent__JS_to_close (downloader.id))
         downloader.bind ('finished', CTK.DruidContent__JS_to_goto (downloader.id, URL_INSTALL_SETUP))
         downloader.bind ('error',    CTK.DruidContent__JS_to_goto (downloader.id, URL_INSTALL_DOWNLOAD_ERROR))
+
+        stop = CTK.Button (_('Stop'))
+        stop.bind ('click', downloader.JS_to_stop())
+        buttons = CTK.DruidButtonsPanel()
+        buttons += stop
 
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Downloading"), app_name))
         cont += CTK.RawHTML ('<p>%s</p>' %(_('The application is being downloaded. Hold on tight!')))
         cont += downloader
+        cont += buttons
         cont += CTK.RawHTML (js = downloader.JS_to_start())
         return cont.Render().toStr()
 
