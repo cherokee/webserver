@@ -363,6 +363,9 @@ class Install_Done (Install_Stage):
         # Normalize CTK.cfg
         CTK.cfg.normalize ('vserver')
 
+        # Clean up CTK.cfg
+        del (CTK.cfg['tmp!market!install'])
+
         # Thank user for the install
         box = CTK.Box()
         box += CTK.RawHTML ('<h2>%s %s</h2>' %(app_name, _("has been installed successfully")))
