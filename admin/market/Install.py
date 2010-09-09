@@ -33,6 +33,7 @@ import traceback
 import OWS_Login
 import Install_Log
 import SystemInfo
+import Cherokee
 
 from util import *
 from consts import *
@@ -47,8 +48,9 @@ NOTE_ALREADY_INSTALLED = N_('The application is already in your library, so ther
 NOTE_ALREADY_TO_BUY_1  = N_('The application is available at the Octality Market. Please, check "Check Out" to proceed to the payment secction.')
 NOTE_ALREADY_TO_BUY_2  = N_('The application will be downloaded and installed afterwards. It will also remain in your library for any future installation.')
 
-THANKS_P1 = N_("Cherokee is now ready to run the application. Please, remember to backup your configuration if you are going to perform customizations.")
-THANKS_P2 = N_("Thank you for buying at Cherokee's Market!")
+NOTE_THANKS_P1    = N_("Cherokee is now ready to run the application. Please, remember to backup your configuration if you are going to perform customizations.")
+NOTE_THANKS_P2    = N_("Thank you for buying at Cherokee's Market!")
+NOTE_SAVE_RESTART = N_("Since there were previous changes your configuration has not been applied automatically. Please do it yourself by clicking the SAVE button on the top-right corner.")
 
 URL_INSTALL_WELCOME        = "%s/install/welcome"        %(URL_MAIN)
 URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
@@ -104,6 +106,11 @@ class Welcome (Install_Stage):
         Install_Log.reset()
         Install_Log.log ("Retrieving package information..")
 
+        # Check whether there are CTK.cfg changes to be saved
+        changes = "01"[int(CTK.cfg.has_changed())]
+        CTK.cfg['tmp!market!install!cfg_previous_changes'] = changes
+
+        # Render a welcome message
         box = CTK.Box()
         box += CTK.RawHTML ('<h2>%s</h2>' %(_('Connecting to Octality')))
         box += CTK.RawHTML ('<h1>%s</h1>' %(_('Retrieving package information..')))
@@ -351,14 +358,15 @@ class Setup (Install_Stage):
 
 class Install_Done (Install_Stage):
     def __safe_call__ (self):
-        app_name = CTK.cfg.get_val('tmp!market!install!application_name')
-        root     = CTK.cfg.get_val('tmp!market!install!root')
+        root        = CTK.cfg.get_val('tmp!market!install!root')
+        app_name    = CTK.cfg.get_val('tmp!market!install!application_name')
+        cfg_changes = CTK.cfg.get_val('tmp!market!install!cfg_previous_changes')
 
         # Finished
-        f = open (os.path.join (root, "finished"), 'w+')
+        finished_file = os.path.join (root, "finished")
+        Install_Log.log ("Creating %s" %(finished_file))
+        f = open (finished_file, 'w+')
         f.close()
-
-        Install_Log.log ("Finished")
 
         # Normalize CTK.cfg
         CTK.cfg.normalize ('vserver')
@@ -366,11 +374,25 @@ class Install_Done (Install_Stage):
         # Clean up CTK.cfg
         del (CTK.cfg['tmp!market!install'])
 
+        # Save configuration
+        if not int(cfg_changes):
+            CTK.cfg.save()
+            Install_Log.log ("Configuration saved.")
+
+            Cherokee.server.restart (graceful=True)
+            Install_Log.log ("Server gracefully restarted.")
+
+        Install_Log.log ("Finished")
+
         # Thank user for the install
         box = CTK.Box()
         box += CTK.RawHTML ('<h2>%s %s</h2>' %(app_name, _("has been installed successfully")))
-        box += CTK.RawHTML ("<p>%s</p>"    %(_(THANKS_P1)))
-        box += CTK.RawHTML ("<p>%s</p>"    %(_(THANKS_P2)))
+        box += CTK.RawHTML ("<p>%s</p>" %(_(NOTE_THANKS_P1)))
+
+        if int(cfg_changes):
+            box += CTK.RawHTML ("<p>%s</p>" %(_(NOTE_SAVE_RESTART)))
+
+        box += CTK.RawHTML ("<h1>%s</h1>" %(_(NOTE_THANKS_P2)))
 
         buttons = CTK.DruidButtonsPanel()
         buttons += CTK.DruidButton_Close(_('Close'))
