@@ -57,6 +57,9 @@ function update_progress_%(id)s() {
       (info.status == 'downloading')) {
         window.setTimeout (update_progress_%(id)s, 1000);
 
+  } else if (info.status == 'stopped') {
+        $('#%(progressbar_id)s').trigger ({'type':'stopped'});
+
   } else if (info.status == 'finished') {
         $('#%(progressbar_id)s').trigger ({'type':'finished'});
 
@@ -74,10 +77,13 @@ $.ajax ({type: 'GET', url: "%(url)s/start", async: false,
 });
 """
 
+STOP_DOWNLOAD_JS = """
+$.ajax ({type: 'GET', url: "%(url)s/stop", async: false});
+"""
+
 
 # Current downloads
 downloads = {}
-
 
 class DownloadEntry (threading.Thread):
     def __init__ (self, url):
@@ -88,6 +94,11 @@ class DownloadEntry (threading.Thread):
         self.percent    = 0
         self.downloaded = 0
         self.status     = 'init'
+        self.wanna_exit = False
+
+    def stop (self):
+        self.status     = 'stopped'
+        self.wanna_exit = True
 
     def run (self):
         self.opener  = urllib2.build_opener()
@@ -112,7 +123,7 @@ class DownloadEntry (threading.Thread):
         self.target_path = path
 
         # Read response
-        while True:
+        while not self.wanna_exit:
             # I/O
             try:
                 chunk = self.response.read(1024)
@@ -151,6 +162,11 @@ class DownloadReport:
            d = downloads[url]
            return '{"status": "%s", "percent": %d, "size": %d, "downloaded": %d}' %(
                d.status, d.percent, d.size, d.downloaded)
+
+       elif request.url.endswith('/stop'):
+           d = downloads[url]
+           d.stop()
+           return 'ok'
 
        elif request.url.endswith('/start'):
            self.lock.acquire()
@@ -201,3 +217,8 @@ class Downloader (Box):
 
         return LAUNCH_DOWNLOAD_JS %(props)
 
+    def JS_to_stop (self):
+        props = {'id':  self.id,
+                 'url': self._url_local}
+
+        return STOP_DOWNLOAD_JS %(props)
