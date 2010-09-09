@@ -47,8 +47,8 @@ NOTE_ALREADY_INSTALLED = N_('The application is already in your library, so ther
 NOTE_ALREADY_TO_BUY_1  = N_('The application is available at the Octality Market. Please, check "Check Out" to proceed to the payment secction.')
 NOTE_ALREADY_TO_BUY_2  = N_('The application will be downloaded and installed afterwards. It will also remain in your library for any future installation.')
 
-THANKS_P1 = N_("The application has been deployed and Cherokee has been configured to fully support it. Remember to backup your configuration if you are going to manually perform further customization. You can always restore it or reinstall the application if anything does not work as expected.")
-THANKS_P2 = N_("Thank you for buying at Octality's Market. We hope to see you back soon!")
+THANKS_P1 = N_("Cherokee is now ready to run the application. Please, remember to backup your configuration if you are going to perform customizations.")
+THANKS_P2 = N_("Thank you for buying at Cherokee's Market!")
 
 URL_INSTALL_WELCOME        = "%s/install/welcome"        %(URL_MAIN)
 URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
