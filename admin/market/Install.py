@@ -33,6 +33,7 @@ import OWS_Login
 import Install_Log
 import SystemInfo
 
+from util import *
 from consts import *
 from ows_consts import *
 from configured import *
@@ -259,6 +260,23 @@ class Exception_Handler (CTK.Box):
         self += buttons
 
 
+def replacement_cmd (param_list):
+    server_user  = CTK.cfg.get_val ('server!user',  'root')
+    server_group = CTK.cfg.get_val ('server!group', 'root')
+    app_root     = CTK.cfg.get_val ('tmp!market!install!root')
+    root_group   = SystemInfo.get_info()['group_root']
+
+    new_list = []
+    for param in param_list:
+        param = param.replace('${web_user}',   server_user)
+        param = param.replace('${web_group}',  server_group)
+        param = param.replace('${app_root}',   app_root)
+        param = param.replace('${root_group}', root_group)
+        new_list.append (param)
+
+    return new_list
+
+
 class Setup (Install_Stage):
     def __safe_call__ (self):
         url_download = CTK.cfg.get_val('tmp!market!install!download')
@@ -282,6 +300,7 @@ class Setup (Install_Stage):
             tar.extract (tarinfo, target_path)
 
         # Remove the package
+        Install_Log.log ("Removing %s" %(package_path))
         os.unlink (package_path)
 
         # Import the Installation handler
@@ -293,6 +312,29 @@ class Setup (Install_Stage):
             Install_Log.log ("Passing control to installer.pyo")
             installer_path = os.path.join (target_path, "installer.pyo")
             pkg_installer = imp.load_compiled ('installer', installer_path)
+
+        # Set owner and permissions
+        Install_Log.log ("Setting owner and permissions")
+
+        for chown_entry in pkg_installer.__dict__.get ('CHOWN',[]):
+            chown_entry = replacement_cmd (chown_entry)
+
+            cmd = "chown %s" %(" ".join(chown_entry))
+            Install_Log.log ("  %s" %(cmd))
+
+            ret = run (cmd, stderr=True)
+            if ret['stderr'] != 0:
+                Install_Log.log ('    ' + ret['stderr'])
+
+        for chmod_entry in pkg_installer.__dict__.get ('CHMOD',[]):
+            chmod_entry = replacement_cmd (chmod_entry)
+
+            cmd = "chmod %s" %(" ".join(chmod_entry))
+            Install_Log.log ("  %s" %(cmd))
+
+            ret = run (cmd, stderr=True)
+            if ret['stderr']:
+                Install_Log.log ('    ' + ret['stderr'])
 
         # Delegate to Installer
         box = CTK.Box()
