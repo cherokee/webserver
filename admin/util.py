@@ -34,12 +34,52 @@ import CTK
 #
 # Deal with os.popen and subprocess issues in Python 2.4
 #
-def run (command):
-    p = subprocess.Popen (command, shell=True, stdout=subprocess.PIPE, close_fds=True)
-    output = p.stdout.read()
-    p.stdout.close()
-    p.poll()
-    return output
+def run (command, stdout=True, stderr=False, retcode=False):
+    returns = 0
+
+    args = {'shell': True, 'close_fds': True}
+    if stdout:
+        args['stdout'] = subprocess.PIPE
+        returns += 1
+    if stderr:
+        args['stderr'] = subprocess.PIPE
+        returns += 1
+    if retcode:
+        returns += 1
+
+    p = subprocess.Popen (command, **args)
+
+    if stdout:
+        stdout_output = p.stdout.read()
+    if stderr:
+        stderr_output = p.stderr.read()
+
+    if stdout:
+        p.stdout.close()
+    if stderr:
+        p.stderr.close()
+
+    ret = p.poll()
+
+    if returns > 1:
+        d = {}
+        if stdout:
+            d['stdout'] = stdout_output
+        if stderr:
+            d['stderr'] = stderr_output
+        if retcode:
+            d['retcode'] = ret
+        return d
+
+    if stdout:
+        return stdout_output
+    elif stderr:
+        return stderr_output
+    elif retcode:
+        return ret
+
+    assert False, "Should not happened"
+
 
 #
 # Strings
