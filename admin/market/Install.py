@@ -260,21 +260,20 @@ class Exception_Handler (CTK.Box):
         self += buttons
 
 
-def replacement_cmd (param_list):
+def replacement_cmd (command):
+    # Collect information
     server_user  = CTK.cfg.get_val ('server!user',  'root')
     server_group = CTK.cfg.get_val ('server!group', 'root')
     app_root     = CTK.cfg.get_val ('tmp!market!install!root')
     root_group   = SystemInfo.get_info()['group_root']
 
-    new_list = []
-    for param in param_list:
-        param = param.replace('${web_user}',   server_user)
-        param = param.replace('${web_group}',  server_group)
-        param = param.replace('${app_root}',   app_root)
-        param = param.replace('${root_group}', root_group)
-        new_list.append (param)
+    # Replacements
+    command = command.replace('${web_user}',   server_user)
+    command = command.replace('${web_group}',  server_group)
+    command = command.replace('${app_root}',   app_root)
+    command = command.replace('${root_group}', root_group)
 
-    return new_list
+    return command
 
 
 class Setup (Install_Stage):
@@ -314,27 +313,18 @@ class Setup (Install_Stage):
             pkg_installer = imp.load_compiled ('installer', installer_path)
 
         # Set owner and permissions
-        Install_Log.log ("Setting owner and permissions")
+        Install_Log.log ("Post unpack commands")
 
-        for chown_entry in pkg_installer.__dict__.get ('CHOWN',[]):
-            chown_entry = replacement_cmd (chown_entry)
+        for command_entry in pkg_installer.__dict__.get ('POST_UNPACK_COMMANDS',[]):
+            command = replacement_cmd (command_entry['command'])
+            Install_Log.log ("  %s" %(command))
 
-            cmd = "chown %s" %(" ".join(chown_entry))
-            Install_Log.log ("  %s" %(cmd))
-
-            ret = run (cmd, stderr=True)
+            ret = run (command, stderr=True)
             if ret['stderr'] != 0:
                 Install_Log.log ('    ' + ret['stderr'])
 
-        for chmod_entry in pkg_installer.__dict__.get ('CHMOD',[]):
-            chmod_entry = replacement_cmd (chmod_entry)
-
-            cmd = "chmod %s" %(" ".join(chmod_entry))
-            Install_Log.log ("  %s" %(cmd))
-
-            ret = run (cmd, stderr=True)
-            if ret['stderr']:
-                Install_Log.log ('    ' + ret['stderr'])
+            if command_entry.get ('check_ret', True):
+                None # TODO
 
         # Delegate to Installer
         box = CTK.Box()
