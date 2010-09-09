@@ -48,7 +48,10 @@ def log (txt):
 
     now = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
 
-    entry = '[%s] %s\n' %(now, txt)
+    entry = '[%s] %s' %(now, txt)
+    if not entry.endswith('\n'):
+        entry += '\n'
+
     if not file:
         buf += entry
     else:
