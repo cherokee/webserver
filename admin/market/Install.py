@@ -226,6 +226,7 @@ def Exception_Handler_Apply():
     info = {}
     info['log']      = Install_Log.get_full_log()
     info['user']     = OWS_Login.login_user
+    info['comments'] = CTK.post['comments']
     info['platform'] = SystemInfo.get_info()
     info['tmp!market!install'] = CTK.cfg['tmp!market!install'].serialize()
 
@@ -246,14 +247,18 @@ class Exception_Handler (CTK.Box):
         thanks = CTK.Box ({'style': 'display:none'}, CTK.RawHTML (_('Thank you for your feedback! We do appreciate it.')))
         self += thanks
 
-        report = CTK.SubmitterButton (_("Report Issue"))
+        report   = CTK.SubmitterButton (_("Report Issue"))
+        comments = CTK.Box()
+        comments += CTK.RawHTML ('%s:' %(_("Comments")))
+        comments += CTK.TextArea ({'name': 'comments', 'rows':10, 'cols': 80, 'class': 'noauto'})
 
         submit = CTK.Submitter (URL_INSTALL_EXCEPTION)
+        submit += comments
         submit += report
-        submit += CTK.Hidden ('bar', 'foo')
         self += submit
 
-        submit.bind ('submit_success', thanks.JS_to_show() + report.JS_to_hide())
+        submit.bind ('submit_success',
+                     thanks.JS_to_show() + report.JS_to_hide() + comments.JS_to_hide())
 
         buttons = CTK.DruidButtonsPanel()
         buttons += CTK.DruidButton_Close(_('Close'))
@@ -367,4 +372,4 @@ CTK.publish ('^%s$'%(URL_INSTALL_SETUP_INTRO),    Setup_Intro)
 CTK.publish ('^%s$'%(URL_INSTALL_SETUP),          Setup)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD_ERROR), Download_Error)
 CTK.publish ('^%s$'%(URL_INSTALL_DONE),           Install_Done)
-CTK.publish ('^%s$'%(URL_INSTALL_EXCEPTION),      Exception_Handler_Apply)
+CTK.publish ('^%s$'%(URL_INSTALL_EXCEPTION),      Exception_Handler_Apply, method="POST")
