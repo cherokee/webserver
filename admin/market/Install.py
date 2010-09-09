@@ -26,6 +26,7 @@ import CTK
 
 import os
 import imp
+import stat
 import time
 import tarfile
 import traceback
@@ -302,6 +303,10 @@ class Setup (Install_Stage):
         for tarinfo in tar:
             Install_Log.log ("  %s" %(tarinfo.name))
             tar.extract (tarinfo, target_path)
+
+        # Set default permission
+        Install_Log.log ("Setting default permission 711 for directory %s" %(target_path))
+        os.chmod (target_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH )
 
         # Remove the package
         Install_Log.log ("Removing %s" %(package_path))
