@@ -11,6 +11,7 @@ PageCategory.py \
 PageIndex.py \
 PageSearch.py \
 Review.py \
+Library.py \
 Util.py \
 ows_consts.py
 

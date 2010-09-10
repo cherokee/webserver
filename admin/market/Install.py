@@ -31,6 +31,7 @@ import time
 import tarfile
 import traceback
 import OWS_Login
+import Library
 import Install_Log
 import SystemInfo
 import Cherokee
@@ -177,9 +178,14 @@ class Pay_Check (Install_Stage):
             box += CTK.RawHTML (js="function reload_druid() {%s %s}" %(CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_PAY_CHECK), set_timeout_js))
             box += CTK.RawHTML (js=set_timeout_js)
         else:
-            Install_Log.log ("ACK!")
-            box += CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_DOWNLOAD)
+            Install_Log.log ("Payment ACK!")
+
+            # Invalidate 'My Library' cache
+            MyLibrary.Invalidate_Cache()
+
+            # Move on
             CTK.cfg['tmp!market!install!download'] = install_info['url']
+            box += CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_DOWNLOAD)
 
         return box.Render().toStr()
 
