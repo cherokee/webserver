@@ -69,10 +69,6 @@ class Page_Market (Page.Base):
         from PageCategory import Categories_Widget
         self.sidebar += Categories_Widget()
 
-        if OWS_Login.is_logged():
-            from Library import MyLibrary
-            self.sidebar += MyLibrary()
-
         # Container
         container = CTK.Box({'id': 'market-container'})
         container += self.mainarea

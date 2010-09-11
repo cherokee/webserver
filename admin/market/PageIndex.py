@@ -23,6 +23,7 @@
 #
 
 import CTK
+import Library
 import OWS_Login
 
 from Util import *
@@ -145,6 +146,10 @@ class Main:
         tabs.Add (_('Free'),   TopApps('free'))
         tabs.Add (_('Latest'), TopApps('any'))
         page.mainarea += tabs
+
+        # My Library
+        if OWS_Login.is_logged():
+            page.sidebar += Library.MyLibrary()
 
         # Banners
         #page += OWS_Market_Info.Market_Block1()
