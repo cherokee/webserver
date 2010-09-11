@@ -2,6 +2,7 @@
 
 code = \
 __init__.py \
+Check.py \
 Install.py \
 Install_Log.py \
 Menu.py \

@@ -24,6 +24,7 @@
 
 import CTK
 import time
+import Check
 import OWS_Login
 
 from consts import *
@@ -60,6 +61,8 @@ class MyLibrary (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'class': 'market-my-library'})
         self += CTK.RawHTML ('<h3>%s</h3>' %(_('My Library')))
+
+        self += Check.Unfinished_Installs_None()
 
         if self.cached_str and self.cache_expiration < time.time():
             self += CTK.RawHTML (self.cached_str)
