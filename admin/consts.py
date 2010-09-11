@@ -27,6 +27,7 @@ AVAILABLE_LANGUAGES = [
     ('es',           N_('Spanish')),
     ('de',           N_('German')),
     ('fr',           N_('French')),
+    ('it',           N_('Italian')),
     ('nl',           N_('Dutch')),
     ('pl',           N_('Polish')),
     ('sv_SE',        N_('Swedish')),
