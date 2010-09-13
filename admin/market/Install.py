@@ -198,6 +198,14 @@ class Download (Install_Stage):
 
         Install_Log.log ("Downloading %s" %(url_download))
 
+        # Local storage shortcut
+        pkg_filename = url_download.split('/')[-1]
+        if os.path.exists (os.path.join (CHEROKEE_OWS_DIR, "packages", pkg_filename)):
+            box = CTK.Box()
+            box += CTK.RawHTML (js=CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_SETUP))
+            return box.Render().toStr()
+
+        # Instance a Downloader
         downloader = CTK.Downloader ('package', url_download)
         downloader.bind ('stopped',  CTK.DruidContent__JS_to_close (downloader.id))
         downloader.bind ('finished', CTK.DruidContent__JS_to_goto (downloader.id, URL_INSTALL_SETUP))
@@ -306,8 +314,15 @@ class Setup (Install_Stage):
     def __safe_call__ (self):
         url_download = CTK.cfg.get_val('tmp!market!install!download')
 
-        down_entry = CTK.DownloadEntry_Factory (url_download)
-        package_path = down_entry.target_path
+        # has it been downloaded?
+        pkg_filename = url_download.split('/')[-1]
+
+        local_pkg = os.path.join (CHEROKEE_OWS_DIR, "packages", pkg_filename)
+        if os.path.exists (local_pkg):
+            package_path = local_pkg
+        else:
+            down_entry = CTK.DownloadEntry_Factory (url_download)
+            package_path = down_entry.target_path
 
         # Create the local directory
         target_path = os.path.join (CHEROKEE_OWS_ROOT, str(time.time()))
