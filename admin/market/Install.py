@@ -263,7 +263,7 @@ def Exception_Handler_Apply():
     xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
     install_info = xmlrpc.report_exception (info)
 
-    return {'ret': 'ok'}
+    return CTK.cfg_reply_ajax_ok()
 
 
 class Exception_Handler (CTK.Box):
