@@ -2,6 +2,7 @@
 #
 # Authors:
 #      Taher Shihadeh
+#      Alvaro Lopez Ortega
 #
 # Copyright (C) 2010 Alvaro Lopez Ortega
 #
@@ -20,9 +21,9 @@
 # 02110-1301, USA.
 #
 
-__author__ = 'Taher Shihadeh <taher@octality.com>'
-
 from Widget import Widget
+from Box import Box
+from RawHTML import RawHTML
 from Container import Container
 from Server import cfg
 from util import *
@@ -52,7 +53,19 @@ class Radio (Widget):
 
         # Render the widget
         render = Widget.Render (self)
-        render.html += HTML % ({'id':    self.id,
-                                'props': props_to_str (new_props)})
+        render.html += HTML %({'id':    self.id,
+                               'props': props_to_str (new_props)})
         return render
 
+
+class RadioText (Box):
+    def __init__ (self, txt, props={}):
+        Box.__init__ (self)
+
+        self.radio = Radio (props.copy())
+        self += self.radio
+
+        self.text = Box ({'class': 'radio-text'}, RawHTML(txt))
+        self += self.text
+
+        self.text.bind('click', "$('#%s').attr('checked', true);" %(self.radio.id))
