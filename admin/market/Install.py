@@ -64,6 +64,8 @@ URL_INSTALL_EXCEPTION      = "%s/install/exception"      %(URL_MAIN)
 URL_INSTALL_SETUP_EXTERNAL = "%s/install/setup/package"  %(URL_MAIN)
 URL_INSTALL_DOWNLOAD_ERROR = "%s/install/download_error" %(URL_MAIN)
 URL_INSTALL_DONE           = "%s/install/done"           %(URL_MAIN)
+URL_INSTALL_DONE_CONTENT   = "%s/install/done/content"   %(URL_MAIN)
+URL_INSTALL_DONE_APPLY     = "%s/install/done/apply"     %(URL_MAIN)
 
 
 class InstallDialog (CTK.Dialog):
@@ -387,7 +389,26 @@ class Setup (Install_Stage):
         return box.Render().toStr()
 
 
+def Install_Done_apply():
+    return CTK.cfg_reply_ajax_ok()
+
+
 class Install_Done (Install_Stage):
+    def __safe_call__ (self):
+        box = CTK.Box()
+
+        # Automatic submit -> 'Save' button is updated.
+        submit = CTK.Submitter (URL_INSTALL_DONE_APPLY)
+        submit += CTK.Hidden ('foo', 'bar')
+        submit.bind ('submit_success', CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_DONE_CONTENT))
+
+        box += submit
+        box += CTK.RawHTML (js=submit.JS_to_submit())
+
+        return box.Render().toStr()
+
+
+class Install_Done_Content (Install_Stage):
     def __safe_call__ (self):
         root        = CTK.cfg.get_val('tmp!market!install!root')
         app_name    = CTK.cfg.get_val('tmp!market!install!application_name')
@@ -440,4 +461,6 @@ CTK.publish ('^%s$'%(URL_INSTALL_SETUP_INTRO),    Setup_Intro)
 CTK.publish ('^%s$'%(URL_INSTALL_SETUP),          Setup)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD_ERROR), Download_Error)
 CTK.publish ('^%s$'%(URL_INSTALL_DONE),           Install_Done)
+CTK.publish ('^%s$'%(URL_INSTALL_DONE_CONTENT),   Install_Done_Content)
+CTK.publish ('^%s$'%(URL_INSTALL_DONE_APPLY),     Install_Done_apply,      method="POST")
 CTK.publish ('^%s$'%(URL_INSTALL_EXCEPTION),      Exception_Handler_Apply, method="POST")
