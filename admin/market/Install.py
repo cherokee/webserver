@@ -200,11 +200,12 @@ class Download (Install_Stage):
         app_name     = CTK.cfg.get_val('tmp!market!install!application_name')
         url_download = CTK.cfg.get_val('tmp!market!install!download')
 
-        Install_Log.log ("Downloading %s" %(url_download))
-
         # Local storage shortcut
         pkg_filename = url_download.split('/')[-1]
-        if os.path.exists (os.path.join (CHEROKEE_OWS_DIR, "packages", pkg_filename)):
+        pkg_fullpath = os.path.join (CHEROKEE_OWS_DIR, "packages", pkg_filename)
+        if os.path.exists (pkg_fullpath):
+            Install_Log.log ("Using local repository package: %s" %(pkg_fullpath))
+
             box = CTK.Box()
             box += CTK.RawHTML (js=CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_SETUP))
             return box.Render().toStr()
@@ -219,6 +220,8 @@ class Download (Install_Stage):
         stop.bind ('click', downloader.JS_to_stop())
         buttons = CTK.DruidButtonsPanel()
         buttons += stop
+
+        Install_Log.log ("Downloading %s" %(url_download))
 
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Downloading"), app_name))
@@ -348,8 +351,11 @@ class Setup (Install_Stage):
         os.chmod (target_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH )
 
         # Remove the package
-        Install_Log.log ("Removing %s" %(package_path))
-        os.unlink (package_path)
+        if package_path.startswith (CHEROKEE_OWS_DIR):
+            Install_Log.log ("Skipping removal of: %s" %(package_path))
+        else:
+            Install_Log.log ("Removing %s" %(package_path))
+            os.unlink (package_path)
 
         # Import the Installation handler
         if os.path.exists (os.path.join (target_path, "installer.py")):
