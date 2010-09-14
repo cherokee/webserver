@@ -75,10 +75,6 @@ class App:
             price += buy
             price += login_txt
 
-        shots = CTK.Carousel()
-        for s in info.get('shots', []):
-            shots += CTK.Image ({'src': "%s/%s" %(OWS_STATIC, s)})
-
         app  = CTK.Box ({'class': 'market-app-desc'})
         app += CTK.Box ({'class': 'market-app-desc-icon'},        CTK.Image({'src': OWS_STATIC + info['icon_big']}))
         app += CTK.Box ({'class': 'market-app-desc-price'},       price)
@@ -88,8 +84,14 @@ class App:
         app += CTK.Box ({'class': 'market-app-desc-category'},    CTK.RawHTML("%s: %s" %(_("Category"), info['category_name'])))
         app += CTK.Box ({'class': 'market-app-desc-short-desc'},  CTK.RawHTML(info['summary']))
         app += CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
-        app += shots
         cont += app
+
+        shot_entries = info.get('shots', [])
+        if shot_entries:
+            shots = CTK.Carousel()
+            for s in shot_entries:
+                shots += CTK.Image ({'src': "%s/%s" %(OWS_STATIC, s)})
+            app += shots
 
         app_id = info['application_id']
         App.cache_app[str(app_id)] = info
