@@ -35,6 +35,7 @@ import Check
 import Library
 import Install_Log
 import SystemInfo
+import SaveButton
 import Cherokee
 
 from util import *
@@ -414,6 +415,8 @@ class Install_Done_Content (Install_Stage):
         app_name    = CTK.cfg.get_val('tmp!market!install!application_name')
         cfg_changes = CTK.cfg.get_val('tmp!market!install!cfg_previous_changes')
 
+        box = CTK.Box()
+
         # Finished
         finished_file = os.path.join (root, "finished")
         Install_Log.log ("Creating %s" %(finished_file))
@@ -433,11 +436,11 @@ class Install_Done_Content (Install_Stage):
 
             Cherokee.server.restart (graceful=True)
             Install_Log.log ("Server gracefully restarted.")
+            box += CTK.RawHTML (js=SaveButton.ButtonSave__JS_to_deactive())
 
         Install_Log.log ("Finished")
 
         # Thank user for the install
-        box = CTK.Box()
         box += CTK.RawHTML ('<h2>%s %s</h2>' %(app_name, _("has been installed successfully")))
         box += CTK.RawHTML ("<p>%s</p>" %(_(NOTE_THANKS_P1)))
 
