@@ -64,6 +64,7 @@ PageVServer.py \
 PageVServers.py \
 Rule.py \
 RuleSimple.py \
+SaveButton.py \
 SelectionPanel.py \
 SystemInfo.py \
 SystemStats.py \
