@@ -49,8 +49,10 @@ class MyLibrary (CTK.Box):
         # Render app list
         for app in info:
             link = CTK.Link ("%s/%s"%(URL_APP, app['application_id']), CTK.RawHTML (app['application_name']))
-            cont += CTK.Box ({'class': 'market-mylibrary-icon'}, CTK.Image({'src': OWS_STATIC + app['icon_small']}))
-            cont += CTK.Box ({'class': 'market-mylibrary-name'}, link)
+            itembox = CTK.Box ({'class': 'market-my-library-item'})
+            itembox += CTK.Box ({'class': 'market-my-library-icon'}, CTK.Image({'src': OWS_STATIC + app['icon_small']}))
+            itembox += CTK.Box ({'class': 'market-my-library-name'}, link)
+            cont += itembox
 
         # Cache
         MyLibrary.cached_str       = cont.Render().toStr()

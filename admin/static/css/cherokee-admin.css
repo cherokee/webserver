@@ -671,3 +671,9 @@ img.icon_chooser_selected {
 
 
 #refreshable-search-results { padding-left: 16px; }
+
+.market-my-library { margin-top: 16px; }
+.market-my-library-item { height: 32px; margin-bottom: 8px; }
+.market-my-library-icon { height: 32px; width: 32px; float: left; }
+.market-my-library-icon img { height: 32px; width: 32px; }
+.market-my-library-name { float: left; padding: 8px; }
