@@ -83,9 +83,17 @@ class App:
         app += CTK.Box ({'class': 'market-app-desc-url'},         by)
         app += CTK.Box ({'class': 'market-app-desc-category'},    CTK.RawHTML("%s: %s" %(_("Category"), info['category_name'])))
         app += CTK.Box ({'class': 'market-app-desc-short-desc'},  CTK.RawHTML(info['summary']))
-        app += CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
         cont += app
 
+        # Description
+        title1 = CTK.RawHTML ("☟ Show details")
+        title2 = CTK.RawHTML ("☝ Hide details")
+
+        collapsible = CTK.Collapsible ((title1, title2), True)
+        collapsible += CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
+        app += collapsible
+
+        # Shots
         shot_entries = info.get('shots', [])
         if shot_entries:
             shots = CTK.Carousel()
