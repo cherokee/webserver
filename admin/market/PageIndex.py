@@ -25,6 +25,7 @@
 import CTK
 import Library
 import OWS_Login
+import Maintenance
 
 from Util import *
 from consts import *
@@ -150,6 +151,11 @@ class Main:
         # My Library
         if OWS_Login.is_logged():
             page.sidebar += Library.MyLibrary()
+
+        # Maintanance
+        if Maintenance.does_it_need_maintenance():
+            page.sidebar += CTK.RawHTML ('<h3>%s</h3>' %(_('Maintanance')))
+            page.sidebar += Maintenance.Maintenance_Box()
 
         # Banners
         #page += OWS_Market_Info.Market_Block1()

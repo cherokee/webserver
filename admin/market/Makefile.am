@@ -2,7 +2,6 @@
 
 code = \
 __init__.py \
-Check.py \
 Install.py \
 Install_Log.py \
 Menu.py \
@@ -14,6 +13,7 @@ PageSearch.py \
 Review.py \
 Library.py \
 Util.py \
+Maintenance.py \
 ows_consts.py
 
 marketpydir = "$(datadir)/cherokee/admin/market"

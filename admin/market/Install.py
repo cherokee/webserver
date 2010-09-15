@@ -31,7 +31,7 @@ import time
 import tarfile
 import traceback
 import OWS_Login
-import Check
+import Maintenance
 import Library
 import Install_Log
 import SystemInfo
@@ -102,7 +102,7 @@ class Install_Stage:
             Install_Log.log ("EXCEPTION!\n" + exception_str)
 
             # Reset 'unfinished installations' cache
-            Check.Invalidate_Cache()
+            Maintenance.Invalidate_Cache()
 
             # Present an alternative response
             cont = Exception_Handler (exception_str)
