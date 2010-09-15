@@ -54,7 +54,8 @@ i18n.py \
 Init.py \
 Paginator.py \
 StarRating.py \
-Carousel.py
+Carousel.py \
+Collapsible.py
 
 EXTRA_DIST = \
 $(ctk_DATA)
