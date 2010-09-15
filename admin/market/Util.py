@@ -109,7 +109,7 @@ class PriceTag (CTK.Box):
     def __init__ (self, info):
         CTK.Box.__init__ (self, {'class': 'market-app-price'})
 
-        if int(info['amount']):
+        if float(info['amount']):
             self += CTK.Box ({'class': 'currency'}, CTK.RawHTML (info['currency_symbol']))
             self += CTK.Box ({'class': 'amount'},   CTK.RawHTML (info['amount']))
             self += CTK.Box ({'class': 'currency'}, CTK.RawHTML (info['currency']))
