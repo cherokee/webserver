@@ -27,6 +27,7 @@ import CTK
 import Page
 import OWS_Login
 
+from util import *
 from consts import *
 from ows_consts import *
 from configured import *
@@ -70,7 +71,7 @@ def check_unfinished_installations():
 def Clean_up_Apply():
     for app in check_unfinished_installations():
         fp = os.path.join (CHEROKEE_OWS_ROOT, app)
-        os.removedirs (fp)
+        run ("rm -rf '%s'" %(fp))
 
     return CTK.cfg_reply_ajax_ok()
 
