@@ -73,15 +73,22 @@ setTimeout (update_meter_memory, 1000);
 
 
 class Meter (CTK.Box):
-    def __init__ (self, name):
+    def __init__ (self, name, extra_info_widget=None):
         CTK.Box.__init__ (self)
         self.progress = CTK.ProgressBar()
         self.details  = CTK.Box ({'class': 'progress-details'})
         self.extra    = CTK.Box ({'class': 'progress-extra'})
 
-        self += self.extra
-        self += self.progress
-        self += self.details
+        box  = CTK.Box()
+        if extra_info_widget:
+            box += extra_info_widget
+        box += self.extra
+        self += box
+
+        box  = CTK.Box()
+        box += self.progress
+        box += self.details
+        self += box
 
     def Render (self, js):
         render = CTK.Box.Render (self)
@@ -89,7 +96,7 @@ class Meter (CTK.Box):
 
         props = {'bar_id':     self.progress.id,
                  'details_id': self.details.id,
-                 'extra_id': self.extra.id }
+                 'extra_id':   self.extra.id }
 
         render.js += js %(props)
         return render
@@ -133,8 +140,10 @@ class CPU_Meter (Meter):
 # Memory
 #
 
-class Memory_Info (CTK.RawHTML):
+class Memory_Info (CTK.Box):
     def __init__ (self):
+        CTK.Box.__init__ (self, {'class': 'ram-text'})
+
         stats = SystemStats.get_system_stats()
 
         if stats.mem.total:
@@ -145,12 +154,12 @@ class Memory_Info (CTK.RawHTML):
         else:
             total = _('Unknown RAM')
 
-        CTK.RawHTML.__init__ (self, total)
+        self += CTK.RawHTML (total)
 
 
 class Memory_Meter (Meter):
     def __init__ (self):
-        Meter.__init__ (self, 'memory')
+        Meter.__init__ (self, 'memory', Memory_Info())
 
     def Render (self):
         return Meter.Render (self, JS_MEMORY)

@@ -246,13 +246,11 @@ class MemoryInfo (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'id': 'ram-section', 'class': 'infosection'})
 
-        cont = CTK.Container()
-        cont += SystemStatsWidgets.Memory_Info()
-        cont += SystemStatsWidgets.Memory_Meter()
+        meter = SystemStatsWidgets.Memory_Meter()
 
         table = CTK.Table()
         table.set_header (column=True, num=1)
-        table += [CTK.RawHTML (_('Memory')), cont]
+        table += [CTK.RawHTML (_('Memory')), meter]
         self += table
 
 
