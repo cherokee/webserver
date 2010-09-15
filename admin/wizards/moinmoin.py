@@ -58,7 +58,7 @@ URL_APPLY       = r'/wizard/vserver/moinmoin/apply'
 SOURCE = """
 source!%(src_num)d!env_inherited = 1
 source!%(src_num)d!host = 127.0.0.1:%(src_port)d
-source!%(src_num)d!interpreter = %(spawn_fcgi)s -n -a 127.0.0.1 -p %(src_port)d -- %(moinmoin_wiki)s/server/moin.fcg
+source!%(src_num)d!interpreter = %(spawn_fcgi)s -n -a 127.0.0.1 -p %(src_port)d -- %(moinmoin_wiki)s/server/moin.fcgi
 source!%(src_num)d!nick = MoinMoin %(src_num)d
 source!%(src_num)d!type = interpreter
 """
