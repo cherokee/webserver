@@ -71,7 +71,7 @@ def init (scgi_port, cfg_file):
 
     # Init CTK
     if scgi_port.isdigit():
-        CTK.init (port=8000)
+        CTK.init (port=int(scgi_port))
 
     else:
         # Remove the unix socket if it already exists
