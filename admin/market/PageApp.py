@@ -46,6 +46,8 @@ class App:
         self.menu += "%s %s" %(_('Application'), info['application_name'])
         cont += self.menu
 
+        app_id = info['application_id']
+
         # Install dialog
         install = InstallDialog (info)
         cont += install
@@ -60,7 +62,10 @@ class App:
 
         price = PriceTag(info)
         if OWS_Login.is_logged():
-            buy = CTK.Button (_("Buy"))
+            if Library.is_appID_in_library (app_id):
+                buy = CTK.Button (_("Install"))
+            else:
+                buy = CTK.Button (_("Buy"))
             buy.bind ('click', install.JS_to_show())
             price += buy
         else:
@@ -86,8 +91,8 @@ class App:
         cont += app
 
         # Description
-        title1 = CTK.RawHTML ("☟ Show details")
-        title2 = CTK.RawHTML ("☝ Hide details")
+        title1 = CTK.RawHTML ("☟ Read more…")
+        title2 = CTK.RawHTML ("☝ Read less…")
 
         collapsible = CTK.Collapsible ((title1, title2), True)
         collapsible += CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
@@ -101,7 +106,7 @@ class App:
                 shots += CTK.Image ({'src': "%s/%s" %(OWS_STATIC, s)})
             app += shots
 
-        app_id = info['application_id']
+        # Update the cache
         App.cache_app[str(app_id)] = info
 
         return cont.Render().toStr()

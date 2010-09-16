@@ -33,12 +33,20 @@ from XMLServerDigest import XmlRpcServer
 
 EXPIRATION = 10*60 # 10 min
 
+# Cache
+cached_info      = None
+cache_expiration = None
+
+def Invalidate_Cache():
+    global cached_info
+    global cached_expiration
+
+    cached_info      = None
+    cache_expiration = 0
+
 
 class MyLibrary (CTK.Box):
-    cached_str       = None
-    cache_expiration = None
-
-    def format_func (self, info):
+    def format_func (self, info, from_cache = False):
         cont = CTK.Container()
 
         # Empty library
@@ -54,23 +62,45 @@ class MyLibrary (CTK.Box):
             cont += itembox
 
         # Cache
-        MyLibrary.cached_str       = cont.Render().toStr()
-        MyLibrary.cache_expiration = EXPIRATION
+        if not from_cache:
+            global cached_info
+            global cached_expiration
 
-        return self.cached_str
+            cached_info      = info
+            cache_expiration = time.time() + EXPIRATION
+
+        return cont.Render().toStr()
 
     def __init__ (self):
         CTK.Box.__init__ (self, {'class': 'market-my-library'})
         self += CTK.RawHTML ('<h3>%s</h3>' %(_('My Library')))
 
-        if self.cached_str and self.cache_expiration < time.time():
-            self += CTK.RawHTML (self.cached_str)
+        if cached_info and cache_expiration < time.time():
+            self += CTK.RawHTML (self.format_func (cached_info, from_cache=True))
         else:
             self += CTK.XMLRPCProxy (name = 'cherokee-my-library',
                                      xmlrpc_func = lambda: XmlRpcServer(OWS_APPS_AUTH, OWS_Login.login_user, OWS_Login.login_password).get_user_apps(),
                                      format_func = self.format_func,
                                      debug = OWS_DEBUG)
 
-def Invalidate_Cache():
-    MyLibrary.cached_str       = None
-    MyLibrary.cache_expiration = 0
+def update_cache():
+    global cached_info
+    global cached_expiration
+
+    if not cached_info or cache_expiration < time.time():
+        xmlrpc = XmlRpcServer (OWS_APPS_AUTH, OWS_Login.login_user, OWS_Login.login_password)
+        cached_info = xmlrpc.get_user_apps()
+        cached_expiration = time.time() + EXPIRATION
+
+
+def is_appID_in_library (app_id):
+    update_cache()
+
+    if not cached_info:
+        return False
+
+    for app in cached_info:
+        if int(app['application_id']) == int(app_id):
+            return True
+
+    return False
