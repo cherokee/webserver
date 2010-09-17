@@ -246,6 +246,8 @@ class HandlerWidget (CTK.Container):
             key = 'vserver!%s!rule!%s!document_root'%(vsrv, rule)
             if not CTK.cfg.get_val (key, '').startswith(CHEROKEE_OWS_ROOT):
                 table.Add (_('Document Root'), CTK.TextCfg(key, True), _(Handler.NOTE_DOCUMENT_ROOT))
+            else:
+                table.Add (_('Document Root'), CTK.TextCfg(key, True, {'disabled':True}), _(Handler.NOTE_DOCUMENT_ROOT))
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Handler')))
         self += CTK.Indenter (table)
