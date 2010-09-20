@@ -536,7 +536,7 @@ img.icon_chooser_selected {
 .market-app-desc-icon img { width: 144px; }
 
 .market-app-desc-title {
-  margin-left: 152px;
+  margin-left: 168px;
   font-size: 140%;
   padding-top: 8px;
   color: #259;
@@ -565,15 +565,16 @@ img.icon_chooser_selected {
 .free { color: #0b0; }
 
 .market-app-desc-version, .market-app-desc-url, .market-app-desc-category  {
-  margin-left: 152px;
+  margin-left: 168px;
   color: #666;
   font-size: 90%;
 }
 
 .market-app-desc-short-desc {
-  margin-left: 152px;
+  margin-left: 168px;
   margin-top: 8px;
   width: 512px;
+  min-height: 78px; 
   margin-bottom: 16px;
 }
 
@@ -679,3 +680,7 @@ img.icon_chooser_selected {
 .market-my-library-icon { height: 32px; width: 32px; float: left; }
 .market-my-library-icon img { height: 32px; width: 32px; }
 .market-my-library-name { float: left; padding: 8px; }
+
+.collapsible { margin-bottom: 32px; clear: both; min-height: 16px; }
+.collapsible-title { float: right; color: #27c; }
+.collapsible-title:hover { color: #c00; }
