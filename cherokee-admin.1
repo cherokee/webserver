@@ -1,9 +1,9 @@
-.TH cherokee-admin 8 "July 28, 2008"
+.TH cherokee-admin 8 "September 20, 2010"
 .SH NAME
 cherokee-admin - Runs Cherokee's administrative interface
 .SH SYNOPSIS
 .B cherokee-admin
-[\-d DIR] [\-p PORT] [\-C FILE] [\-b]
+[\-d DIR] [\-p PORT] [\-C FILE] [\-b] [\-x] [\-u] [\-t]
 .SH DESCRIPTION
 \fIcherokee-admin\fP runs the server for the administrative interface
 used to configure Cherokee. The interface itself will be available via
@@ -21,27 +21,34 @@ Show version and exit
 Print the backend errors to the terminal where it is executing. If
 omited, this debug information is lost.
 .TP 8
+.B \-u, --unsecure
+Allows accessing cherokee-admin's interface without requiring the user
+to authenticate. This disables a security measure and is only meant to
+ease the development process. The usage of this parameter is strongly
+discouraged for regular users.
+.TP 8
 .B  \-b, --bind[=IP]
 By default \fIcherokee-admin\fP binds only to 127.0.0.1 (localhost), which
 means you can only connect to it from the same system. With this parameter
 you can specify the network address to listen to. If no IP is provided,
 it will bind to all interfaces.
 .TP 8
-.B  \-C, --target=PATH
-Requests a configuration file different than the default
-/etc/cherokee/cherokee.conf to be used
-.TP 8
 .B  \-d, --appdir=DIR
-Uses a custom admin-interface path
+Uses a custom admin-interface path where the source files of
+\fIcherokee-admin\fP reside.
 .TP 8
 .B \-p, --port=NUM
 Specifies an alternative port. By default, 9090.
 .TP 8
-.B \-u, --unsecure
-Allows accessing cherokee-admin's interface without requiring the user
-to authenticate. This disables a security measure and is only meant to
-ease the development process. The usage of this parameter is strongly
-discouraged for regular users.
+.B \-t,  --internal-unix
+By default, \fIcherokee-admin\fP uses TCP for internal
+communications. This parameter specifies that a Unix domain socket
+should be used instead. The default behavior is the safest one, so
+this parameter should rarely by used.
+.TP 8
+.B  \-C, --target=PATH
+Requests a configuration file different than the default
+/etc/cherokee/cherokee.conf to be used
 .SH SEE ALSO
 This program is a part of the Cherokee web server, \&\fIcherokee\fR\|(1)
 .SH AUTHOR

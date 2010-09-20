@@ -402,7 +402,7 @@ print_help (void)
 		"  -b,  --bind[=IP]              Bind net iface; no arg means all\n"
 		"  -d,  --appdir=DIR             Application directory\n"
 		"  -p,  --port=NUM               TCP port\n"
-		"  -t,  --internal-unix          Use an Unix domain socket internally\n"
+		"  -t,  --internal-unix          Use a Unix domain socket internally\n"
 		"  -C,  --target=PATH            Configuration file to modify\n\n"
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
