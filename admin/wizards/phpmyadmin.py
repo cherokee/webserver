@@ -53,6 +53,25 @@ NOTE_WEBDIR_H1  = N_("Public Web Directory")
 PREFIX          = 'tmp!wizard!phpmyadmin'
 URL_APPLY       = r'/wizard/vserver/phpmyadmin/apply'
 
+CONFIG_VSERVER = """
+%(pre_vsrv)s!nick = %(host)s
+%(pre_vsrv)s!document_root = %(local_src_dir)s
+%(pre_vsrv)s!directory_index = index.php,index.html
+
+%(pre_rule_plus1)s!handler = custom_error
+%(pre_rule_plus1)s!handler!error = 403
+%(pre_rule_plus1)s!match = or
+%(pre_rule_plus1)s!match!left = directory
+%(pre_rule_plus1)s!match!left!directory = /libraries
+%(pre_rule_plus1)s!match!right = directory
+%(pre_rule_plus1)s!match!right!directory = /setup/lib
+
+# IMPORTANT: The PHP rule comes here
+
+%(pre_rule_minus1)s!handler = common
+%(pre_rule_minus1)s!match = default
+"""
+
 CONFIG_DIR = """
 %(pre_rule_plus2)s!handler = custom_error
 %(pre_rule_plus2)s!handler!error = 403
@@ -62,12 +81,13 @@ CONFIG_DIR = """
 %(pre_rule_plus2)s!match!right = directory
 %(pre_rule_plus2)s!match!right!directory = %(web_dir)s/setup/lib
 
-%(pre_rule_plus1)s!match = directory
-%(pre_rule_plus1)s!match!directory = %(web_dir)s
-%(pre_rule_plus1)s!match!final = 0
-%(pre_rule_plus1)s!document_root = %(local_src_dir)s
-
 # IMPORTANT: The PHP rule comes here
+
+%(pre_rule_minus1)s!document_root = %(local_src_dir)s
+%(pre_rule_minus1)s!match = directory
+%(pre_rule_minus1)s!match!directory = %(web_dir)s
+%(pre_rule_minus1)s!handler = common
+%(pre_rule_minus1)s!handler!allow_dirlist = 0
 """
 
 SRC_PATHS = [
@@ -77,6 +97,39 @@ SRC_PATHS = [
 
 
 class Commit:
+    def Commit_VServer (self):
+        # Create the new Virtual Server
+        next = CTK.cfg.get_next_entry_prefix('vserver')
+        CTK.cfg['%s!nick'%(next)] = CTK.cfg.get_val('%s!host'%(PREFIX))
+        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), next)
+
+        # PHP
+        php = CTK.load_module ('php', 'wizards')
+
+        error = php.wizard_php_add (next)
+        if error:
+            return {'ret': 'error', 'errors': {'msg': error}}
+
+        php_info = php.get_info (next)
+
+        # WordPress
+        props = cfg_get_surrounding_repls ('pre_rule', php_info['rule'])
+        props['pre_vsrv']  = next
+        props['host']      = CTK.cfg.get_val('%s!host'      %(PREFIX))
+        props['local_src_dir'] = CTK.cfg.get_val('%s!sources' %(PREFIX))
+
+        config = CONFIG_VSERVER %(props)
+        CTK.cfg.apply_chunk (config)
+        Wizard.AddUsualStaticFiles(props['pre_rule_plus2'])
+
+        # Clean up
+        CTK.cfg.normalize ('%s!rule'%(next))
+        CTK.cfg.normalize ('vserver')
+
+        del (CTK.cfg[PREFIX])
+        return CTK.cfg_reply_ajax_ok()
+
+
     def Commit_Rule (self):
         vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
         next = 'vserver!%s' %(vsrv_num)
@@ -96,6 +149,9 @@ class Commit:
         props['web_dir']       = CTK.cfg.get_val('%s!web_dir'   %(PREFIX))
         props['local_src_dir'] = CTK.cfg.get_val('%s!sources' %(PREFIX))
 
+        # Without this line, the rule is broken for phpMyAdmin
+        CTK.cfg["%s!match!check_local_file" %(php_info['rule'])] = 0
+
         config = CONFIG_DIR %(props)
         CTK.cfg.apply_chunk (config)
 
@@ -108,7 +164,11 @@ class Commit:
     def __call__ (self):
         if CTK.post.pop('final'):
             CTK.cfg_apply_post()
-            return self.Commit_Rule()
+
+            # VServer or Rule?
+            if CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX)):
+                return self.Commit_Rule()
+            return self.Commit_VServer()
 
         return CTK.cfg_apply_post()
 
@@ -125,6 +185,22 @@ class WebDirectory:
 
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
+        cont += submit
+        cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
+        return cont.Render().toStr()
+
+class Host:
+    def __call__ (self):
+        table = CTK.PropsTable()
+        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!host'%(PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
+
+        submit = CTK.Submitter (URL_APPLY)
+        submit += CTK.Hidden('final', '1')
+        submit += table
+
+        cont = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -197,6 +273,12 @@ CTK.publish ('^/wizard/vserver/(\d+)/phpmyadmin$',   Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/phpmyadmin/2$', PHP)
 CTK.publish ('^/wizard/vserver/(\d+)/phpmyadmin/3$', LocalSource)
 CTK.publish ('^/wizard/vserver/(\d+)/phpmyadmin/4$', WebDirectory)
+
+# VServer
+CTK.publish ('^/wizard/vserver/phpmyadmin$',   Welcome)
+CTK.publish ('^/wizard/vserver/phpmyadmin/2$', PHP)
+CTK.publish ('^/wizard/vserver/phpmyadmin/3$', LocalSource)
+CTK.publish ('^/wizard/vserver/phpmyadmin/4$', Host)
 
 # Common
 CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)

@@ -133,7 +133,7 @@ LIST = [
             {'name':  'phpmyadmin',
              'title': N_('phpMyAdmin'),
              'descr': N_('PHP web application to handle the administration of MySQL.'),
-             'type':  TYPE_RULE},
+             'type':  TYPE_VSERVER | TYPE_RULE},
             {'name':  'mailman',
              'title': N_('GNU MailMan'),
              'descr': N_('Free software for managing electronic mail discussion and e-newsletter lists.'),
