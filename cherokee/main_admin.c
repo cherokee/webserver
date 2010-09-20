@@ -65,7 +65,7 @@ static const char *config_file   = DEFAULT_CONFIG_FILE;
 static const char *bind_to       = DEFAULT_BIND;
 static int         debug         = 0;
 static int         unsecure      = 0;
-static int         scgi_port     = 0;
+static int         scgi_port     = 4000;
 
 static ret_t
 find_empty_port (int starting, int *port)
@@ -413,7 +413,7 @@ print_help (void)
 		"  -b,  --bind[=IP]              Bind net iface; no arg means all\n"
 		"  -d,  --appdir=DIR             Application directory\n"
 		"  -p,  --port=NUM               TCP port\n"
-		"  -t,  --internal-tcp           Use TCP for internal communications\n"
+		"  -t,  --internal-unix          Use an Unix domain socket internally\n"
 		"  -C,  --target=PATH            Configuration file to modify\n\n"
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
@@ -460,7 +460,7 @@ process_parameters (int argc, char **argv)
 			unsecure = 1;
 			break;
 		case 't':
-			scgi_port = 4000;
+			scgi_port = 0;
 			break;
 		case 'V':
 			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
