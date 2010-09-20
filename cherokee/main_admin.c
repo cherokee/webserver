@@ -256,49 +256,38 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "3!match = directory\n"
 				 RULE_PRE "3!match!directory = /static\n"
 				 RULE_PRE "3!handler = file\n"
-				 RULE_PRE "3!handler!iocache = 0\n");
-
-	if (! debug) {
-		cherokee_buffer_add_str (&buf, RULE_PRE "3!expiration = time\n");
-		cherokee_buffer_add_str (&buf, RULE_PRE "3!expiration!time = 30d\n");
-	}
+				 RULE_PRE "3!handler!iocache = 0\n"
+				 RULE_PRE "3!expiration = time\n"
+				 RULE_PRE "3!expiration!time = 30d\n");
 
 	cherokee_buffer_add_va  (&buf,
 				 RULE_PRE "4!match = request\n"
 				 RULE_PRE "4!match!request = ^/favicon.ico$\n"
 				 RULE_PRE "4!document_root = %s/static/images\n"
-				 RULE_PRE "4!handler = file\n", document_root);
-
-	if (! debug) {
-		cherokee_buffer_add_str (&buf, RULE_PRE "4!expiration = time\n");
-		cherokee_buffer_add_str (&buf, RULE_PRE "4!expiration!time = 30d\n");
-	}
+				 RULE_PRE "4!handler = file\n"
+				 RULE_PRE "4!expiration = time\n"
+				 RULE_PRE "4!expiration!time = 30d\n",
+				 document_root);
 
 	cherokee_buffer_add_va  (&buf,
 				 RULE_PRE "5!match = directory\n"
 				 RULE_PRE "5!match!directory = /icons_local\n"
 				 RULE_PRE "5!handler = file\n"
 				 RULE_PRE "5!handler!iocache = 0\n"
-				 RULE_PRE "5!document_root = %s\n", CHEROKEE_ICONSDIR);
-
-	if (! debug) {
-		cherokee_buffer_add_str (&buf, RULE_PRE "5!expiration = time\n");
-		cherokee_buffer_add_str (&buf, RULE_PRE "5!expiration!time = 30d\n");
-	}
-
+				 RULE_PRE "5!document_root = %s\n"
+				 RULE_PRE "5!expiration = time\n"
+				 RULE_PRE "5!expiration!time = 30d\n",
+				 CHEROKEE_ICONSDIR);
 
 	cherokee_buffer_add_va  (&buf,
 				 RULE_PRE "6!match = directory\n"
 				 RULE_PRE "6!match!directory = /CTK\n"
 				 RULE_PRE "6!handler = file\n"
 				 RULE_PRE "6!handler!iocache = 0\n"
-				 RULE_PRE "6!document_root = %s/CTK/static\n", document_root);
-
-	if (! debug) {
-		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration = time\n");
-		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration!time = 30d\n");
-	}
-
+				 RULE_PRE "6!document_root = %s/CTK/static\n"
+				 RULE_PRE "6!expiration = time\n"
+				 RULE_PRE "6!expiration!time = 30d\n",
+				 document_root);
 
 	/* Embedded help
 	 */
