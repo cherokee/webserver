@@ -840,11 +840,10 @@ initialize_collectors (cherokee_server_t *srv)
 ret_t
 cherokee_server_initialize (cherokee_server_t *srv)
 {
-	int                 re;
-	ret_t               ret;
-	cherokee_list_t    *i, *tmp;
-	struct passwd      *ent          = NULL;
-	cherokee_boolean_t  loggers_done = false;
+	int              re;
+	ret_t            ret;
+	cherokee_list_t *i, *tmp;
+	struct passwd   *ent      = NULL;
 
 	/* Build the server string
 	 */
@@ -980,17 +979,16 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		cherokee_spawner_init();
 	}
 
+	/* Initialize loggers
+	 */
+	ret = initialize_loggers (srv);
+	if (unlikely(ret < ret_ok)) {
+		return ret;
+	}
+
 	/* Chroot
 	 */
 	if (! cherokee_buffer_is_empty (&srv->chroot)) {
-		/* Open the logs */
-		ret = initialize_loggers (srv);
-		if (unlikely(ret < ret_ok)) {
-			return ret;
-		}
-
-		loggers_done = true;
-
 		/* Jail the process */
 		re = chroot (srv->chroot.buf);
 		srv->chrooted = (re == 0);
@@ -1019,15 +1017,6 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_SERVER_CHDIR, "/");
 		return ret_error;
-	}
-
-	/* Initialize loggers
-	 */
-	if (! loggers_done) {
-		ret = initialize_loggers (srv);
-		if (unlikely(ret < ret_ok)) {
-			return ret;
-		}
 	}
 
 	/* Collectors
