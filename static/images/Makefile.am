@@ -38,7 +38,9 @@ ui-icons_454545_256x240.png \
 ui-icons_888888_256x240.png \
 ui-icons_cd0a0a_256x240.png \
 uploadify.cancel.png \
-jquery.ui.stars.gif
+jquery.ui.stars.gif \
+carousel-left-arrow.png \
+carousel-right-arrow.png
 
 EXTRA_DIST = \
 $(images_DATA)
