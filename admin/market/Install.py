@@ -24,6 +24,7 @@
 
 import CTK
 
+import re
 import os
 import imp
 import stat
@@ -77,7 +78,7 @@ class InstallDialog (CTK.Dialog):
         self.info = info
 
         for key in ('application_id', 'application_name', 'currency_symbol', 'amount', 'currency'):
-            CTK.cfg['tmp!market!install!%s'%(key)] = str(info[key])
+            CTK.cfg['tmp!market!install!app!%s'%(key)] = str(info[key])
 
         self.refresh = CTK.RefreshableURL()
         self.druid = CTK.Druid(self.refresh)
@@ -128,8 +129,8 @@ class Welcome (Install_Stage):
 
 class Initial_Check (Install_Stage):
     def __safe_call__ (self):
-        app_id   = CTK.cfg.get_val('tmp!market!install!application_id')
-        app_name = CTK.cfg.get_val('tmp!market!install!application_name')
+        app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
+        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
         info = {'cherokee': VERSION,
                 'system':   SystemInfo.get_info()}
@@ -169,8 +170,8 @@ class Initial_Check (Install_Stage):
 
 class Pay_Check (Install_Stage):
     def __safe_call__ (self):
-        app_id   = CTK.cfg.get_val('tmp!market!install!application_id')
-        app_name = CTK.cfg.get_val('tmp!market!install!application_name')
+        app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
+        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
         xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
         install_info = xmlrpc.get_install_info (app_id)
@@ -199,14 +200,24 @@ class Pay_Check (Install_Stage):
 
 class Download (Install_Stage):
     def __safe_call__ (self):
-        app_id       = CTK.cfg.get_val('tmp!market!install!application_id')
-        app_name     = CTK.cfg.get_val('tmp!market!install!application_name')
+        app_id       = CTK.cfg.get_val('tmp!market!install!app!application_id')
+        app_name     = CTK.cfg.get_val('tmp!market!install!app!application_name')
         url_download = CTK.cfg.get_val('tmp!market!install!download')
 
         # Local storage shortcut
-        pkg_filename = url_download.split('/')[-1]
-        pkg_fullpath = os.path.join (CHEROKEE_OWS_DIR, "packages", pkg_filename)
-        if os.path.exists (pkg_fullpath):
+        pkg_filename_full = url_download.split('/')[-1]
+        pkg_filename = pkg_filename_full.split('_')[0]
+        pkg_revision = 0
+
+        for f in os.listdir (os.path.join (CHEROKEE_OWS_DIR, "packages")):
+            tmp = re.findall('^%s_(\d+)'%(pkg_filename), f)
+            if tmp:
+                pkg_revision = max (pkg_revision, int(tmp[0]))
+
+        if pkg_revision > 0:
+            pkg_fullpath = os.path.join (CHEROKEE_OWS_DIR, "packages", '%s_%d.pkg' %(pkg_filename, pkg_revision))
+            CTK.cfg['tmp!market!install!local_package'] = pkg_fullpath
+
             Install_Log.log ("Using local repository package: %s" %(pkg_fullpath))
 
             box = CTK.Box()
@@ -237,7 +248,7 @@ class Download (Install_Stage):
 
 class Download_Error (Install_Stage):
     def __safe_call__ (self):
-        app_name = CTK.cfg.get_val('tmp!market!install!application_name')
+        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
         Install_Log.log ("Downloading Error: %s" %(url_download))
 
@@ -249,7 +260,7 @@ class Download_Error (Install_Stage):
 
 class Setup_Intro (Install_Stage):
     def __safe_call__ (self):
-        app_name = CTK.cfg.get_val('tmp!market!install!application_name')
+        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
         Install_Log.log ("Set-up Error")
 
@@ -327,10 +338,8 @@ class Setup (Install_Stage):
         # has it been downloaded?
         pkg_filename = url_download.split('/')[-1]
 
-        local_pkg = os.path.join (CHEROKEE_OWS_DIR, "packages", pkg_filename)
-        if os.path.exists (local_pkg):
-            package_path = local_pkg
-        else:
+        package_path = CTK.cfg.get_val ('tmp!market!install!local_package')
+        if not os.path.exists (package_path):
             down_entry = CTK.DownloadEntry_Factory (url_download)
             package_path = down_entry.target_path
 
@@ -412,7 +421,7 @@ class Install_Done (Install_Stage):
 class Install_Done_Content (Install_Stage):
     def __safe_call__ (self):
         root        = CTK.cfg.get_val('tmp!market!install!root')
-        app_name    = CTK.cfg.get_val('tmp!market!install!application_name')
+        app_name    = CTK.cfg.get_val('tmp!market!install!app!application_name')
         cfg_changes = CTK.cfg.get_val('tmp!market!install!cfg_previous_changes')
 
         box = CTK.Box()
@@ -427,7 +436,9 @@ class Install_Done_Content (Install_Stage):
         CTK.cfg.normalize ('vserver')
 
         # Clean up CTK.cfg
-        del (CTK.cfg['tmp!market!install'])
+        for k in CTK.cfg.keys('tmp!market!install'):
+            if k != 'app':
+                del (CTK.cfg['tmp!market!install!%s'%(k)])
 
         # Save configuration
         if not int(cfg_changes):
