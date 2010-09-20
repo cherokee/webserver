@@ -91,7 +91,7 @@ This is the full information provided by the manpage.
        `cherokee-admin` - Runs Cherokee’s administrative interface
 
 *SYNOPSIS*::
-       `cherokee-admin` [-d DIR] [-p PORT] [-C FILE] [-a]
+       `cherokee-admin` [-d DIR] [-p PORT] [-C FILE] [-b] [-x] [-u] [-t]
 
 *DESCRIPTION*::
        `cherokee-admin` runs the server for the administrative interface used to
@@ -112,6 +112,13 @@ This is the full information provided by the manpage.
                Print the backend errors to the terminal where it is executing.
                If omited, this debug information is lost.
 
+       -u, --unsecure;;
+               Allows accessing cherokee-admin's interface without
+               requiring the user to authenticate. This disables a
+               security measure and is only meant to ease the
+               development process. The usage of this parameter is
+               strongly discouraged for regular users.
+
        -b, --bind[=IP];;
                By  default `cherokee-admin` binds only to 127.0.0.1 (localhost),
                which means you can only connect to it from  the  same  system.
@@ -120,22 +127,24 @@ This is the full information provided by the manpage.
                interfaces.
 
 
-       -C, --target=PATH;;
-               Requests  a  configuration  file  different  than  the  default
-               /etc/cherokee/cherokee.conf to be used
-
        -d, --appdir=DIR;;
-               Uses a custom admin-interface path
+               Uses a custom admin-interface path where the source
+               files of cherokee-admin reside.
 
        -p, --port=NUM;;
                Specifies an alternative port. By default, 9090.
 
-       -u, --unsecure;;
-               Allows accessing cherokee-admin's interface without
-               requiring the user to authenticate. This disables a
-               security measure and is only meant to ease the
-               development process. The usage of this parameter is
-               strongly discouraged for regular users.
+       -t, --internal-unix;;
+               By default, cherokee-admin uses TCP for internal
+               communications. This parameter specifies that a Unix
+               domain socket should be used instead. The default
+               behavior is the safest one, so this parameter should
+               rarely by used.
+
+       -C, --target=PATH;;
+               Requests  a  configuration  file  different  than  the  default
+               /etc/cherokee/cherokee.conf to be used
+
 
 **********************************************************************
 
