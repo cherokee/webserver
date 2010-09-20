@@ -235,9 +235,11 @@ img.icon_chooser_selected {
 #uptime-section { background: transparent url(/static/images/uptime.png) 2px 2px no-repeat; }
 #net-section { background: transparent url(/static/images/network.png) 2px 2px no-repeat; }
 
-.infosection .progressbar { width: 376px; float: left; }
-.infosection .progress-details { width: 64px; float: left; padding-left: 16px; }
-.infosection .progress-extra { clear: both; color: #666; padding-top: 4px; }
+.infosection .progressbar { width: 408px; float: left; }
+.infosection .progress-details { width: 32px; float: left; padding-left: 16px; text-align: right; }
+#ram-section .progressbar, #ram-section .progress-details { margin-top: 8px; }
+.infosection .ram-text { float: left; width: 192px; }
+.infosection .progress-extra { color: #666; float: right; text-align: right; }
 
 
 .ui-dialog .error { margin-bottom: 4px; }
