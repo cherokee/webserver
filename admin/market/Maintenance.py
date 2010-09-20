@@ -63,6 +63,9 @@ def check_unfinished_installations():
     for d in os.listdir (CHEROKEE_OWS_ROOT):
         fd = os.path.join (CHEROKEE_OWS_ROOT, d)
 
+        if not all([c in "0123456789." for c in d]):
+            continue
+
         if not os.path.isdir(fd):
             continue
 
