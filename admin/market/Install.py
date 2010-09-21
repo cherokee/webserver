@@ -56,6 +56,9 @@ NOTE_THANKS_P1    = N_("Cherokee is now ready to run the application. Please, re
 NOTE_THANKS_P2    = N_("Thank you for buying at Cherokee's Market!")
 NOTE_SAVE_RESTART = N_("Since there were previous changes your configuration has not been applied automatically. Please do it yourself by clicking the SAVE button on the top-right corner.")
 
+NOTE_OLD_CHEROKEE_P1 = N_("Your Cherokee version can no longer access many of the features of the Cherokee Market. Please, upgrade Cherokee to an up-to-date version.")
+NOTE_OLD_CHEROKEE_P2 = N_("We apologize for the inconveniences.")
+
 URL_INSTALL_WELCOME        = "%s/install/welcome"        %(URL_MAIN)
 URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
 URL_INSTALL_PAY_CHECK      = "%s/install/pay"            %(URL_MAIN)
@@ -127,19 +130,28 @@ class Welcome (Install_Stage):
         return box.Render().toStr()
 
 
-class Initial_Check (Install_Stage):
+class Init_Check (Install_Stage):
     def __safe_call__ (self):
         app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
         app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
-        info = {'cherokee': VERSION,
-                'system':   SystemInfo.get_info()}
+        info = {'cherokee_version': VERSION,
+                'system':           SystemInfo.get_info()}
 
         cont = CTK.Container()
         xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
         install_info = xmlrpc.get_install_info (app_id, info)
 
-        if install_info['installable']:
+        if install_info.get('required_cherokee_version'):
+            cont += CTK.RawHTML ("<h2>%s</h2>"%(_('Cherokee Upgrade Required')))
+            cont += CTK.RawHTML ("<p>%s</p>"%(_(NOTE_OLD_CHEROKEE_P1)))
+            cont += CTK.RawHTML ("<p>%s</p>"%(_(NOTE_OLD_CHEROKEE_P2)))
+
+            buttons = CTK.DruidButtonsPanel()
+            buttons += CTK.DruidButton_Close(_('Close'))
+            cont += buttons
+
+        elif install_info['installable']:
             Install_Log.log ("Checking: %s, ID: %s = Installable, URL=%s" %(app_name, app_id, install_info['url']))
 
             CTK.cfg['tmp!market!install!download'] = install_info['url']
@@ -150,6 +162,7 @@ class Initial_Check (Install_Stage):
             buttons = CTK.DruidButtonsPanel()
             buttons += CTK.DruidButton_Goto (_('Install'), URL_INSTALL_DOWNLOAD, False)
             cont += buttons
+
         else:
             Install_Log.log ("Checking: %s, ID: %s = Must check out first" %(app_name, app_id))
 
@@ -173,7 +186,8 @@ class Pay_Check (Install_Stage):
         app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
         app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
-        info = {'cherokee': VERSION, 'system': SystemInfo.get_info()}
+        info = {'cherokee_version': VERSION,
+                'system':           SystemInfo.get_info()}
 
         xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
         install_info = xmlrpc.get_install_info (app_id, info)
@@ -181,12 +195,13 @@ class Pay_Check (Install_Stage):
         Install_Log.log ("Waiting for the payment acknowledge..")
 
         box = CTK.Box()
-        if not install_info['installable']:
+        if install_info.get('due_payment'):
             set_timeout_js = "setTimeout (reload_druid, %s);" %(PAYMENT_CHECK_TIMEOUT)
             box += CTK.RawHTML ("<h2>%s %s</h2>"%(_('Checking out'), app_name))
             box += CTK.RawHTML ('<h1>%s</h1>' %(_("Waiting for the payment acknowledge...")))
             box += CTK.RawHTML (js="function reload_druid() {%s %s}" %(CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_PAY_CHECK), set_timeout_js))
             box += CTK.RawHTML (js=set_timeout_js)
+
         else:
             Install_Log.log ("Payment ACK!")
 
@@ -307,7 +322,7 @@ class Exception_Handler (CTK.Box):
         reportbox += CTK.SubmitterButton (_('Report Issue'))
         reportbox += CTK.RawHTML (' %s ' %(_('or')))
         donothing  = CTK.Link('#', CTK.RawHTML(_("Don't send")))
-        #TODO: close 
+        #TODO: close
         reportbox += donothing
 
         comments  = CTK.Box()
@@ -480,7 +495,7 @@ class Install_Done_Content (Install_Stage):
 
 
 CTK.publish ('^%s$'%(URL_INSTALL_WELCOME),        Welcome)
-CTK.publish ('^%s$'%(URL_INSTALL_INIT_CHECK),     Initial_Check)
+CTK.publish ('^%s$'%(URL_INSTALL_INIT_CHECK),     Init_Check)
 CTK.publish ('^%s$'%(URL_INSTALL_PAY_CHECK),      Pay_Check)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD),       Download)
 CTK.publish ('^%s$'%(URL_INSTALL_SETUP_INTRO),    Setup_Intro)
