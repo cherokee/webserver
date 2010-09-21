@@ -121,7 +121,7 @@ class App:
 
         # Render Reviews
         if not reviews:
-            cont += CTK.RawHTML (_("You can be the first one to review the application"))
+            cont += CTK.Box ({'class': 'market-no-reviews'}, CTK.RawHTML(_("You can be the first one to review the application")))
         else:
             pags = CTK.Paginator('market-app-reviews', items_per_page=5)
             cont += pags

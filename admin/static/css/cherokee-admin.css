@@ -647,6 +647,7 @@ img.icon_chooser_selected {
 .paginator-footer-prev { padding-right: 8px; }
 .paginator-footer-next { padding-left: 8px; }
 
+.market-no-reviews { padding: 16px; }
 .market-app-review { border-bottom: 1px dotted #cde; padding: 8px 0; }
 .market-app-review-score { 
   width: 88px;
