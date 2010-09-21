@@ -209,10 +209,12 @@ class Download (Install_Stage):
         pkg_filename = pkg_filename_full.split('_')[0]
         pkg_revision = 0
 
-        for f in os.listdir (os.path.join (CHEROKEE_OWS_DIR, "packages")):
-            tmp = re.findall('^%s_(\d+)'%(pkg_filename), f)
-            if tmp:
-                pkg_revision = max (pkg_revision, int(tmp[0]))
+        pkg_repo_fp  = os.path.join (CHEROKEE_OWS_DIR, "packages")
+        if os.access (pkg_repo_fp, os.X_OK):
+            for f in os.listdir (pkg_repo_fp):
+                tmp = re.findall('^%s_(\d+)'%(pkg_filename), f)
+                if tmp:
+                    pkg_revision = max (pkg_revision, int(tmp[0]))
 
         if pkg_revision > 0:
             pkg_fullpath = os.path.join (CHEROKEE_OWS_DIR, "packages", '%s_%d.pkg' %(pkg_filename, pkg_revision))
