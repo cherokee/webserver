@@ -127,6 +127,12 @@ class Welcome (Install_Stage):
         box += CTK.RawHTML ('<h2>%s</h2>' %(_('Connecting to Octality')))
         box += CTK.RawHTML ('<h1>%s</h1>' %(_('Retrieving package information..')))
         box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_INIT_CHECK))
+
+        # Dialog buttons
+        buttons = CTK.DruidButtonsPanel()
+        buttons += CTK.DruidButton_Close(_('Cancel'))
+        box += buttons
+
         return box.Render().toStr()
 
 
@@ -160,6 +166,7 @@ class Init_Check (Install_Stage):
             cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALREADY_INSTALLED)))
 
             buttons = CTK.DruidButtonsPanel()
+            buttons += CTK.DruidButton_Close(_('Cancel'))
             buttons += CTK.DruidButton_Goto (_('Install'), URL_INSTALL_DOWNLOAD, False)
             cont += buttons
 
@@ -175,6 +182,7 @@ class Init_Check (Install_Stage):
             checkout.bind ('click', CTK.DruidContent__JS_to_goto (checkout.id, URL_INSTALL_PAY_CHECK))
 
             buttons = CTK.DruidButtonsPanel()
+            buttons += CTK.DruidButton_Close(_('Cancel'))
             buttons += checkout
             cont += buttons
 
@@ -201,6 +209,10 @@ class Pay_Check (Install_Stage):
             box += CTK.RawHTML ('<h1>%s</h1>' %(_("Waiting for the payment acknowledge...")))
             box += CTK.RawHTML (js="function reload_druid() {%s %s}" %(CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_PAY_CHECK), set_timeout_js))
             box += CTK.RawHTML (js=set_timeout_js)
+
+            buttons = CTK.DruidButtonsPanel()
+            buttons += CTK.DruidButton_Close(_('Cancel'))
+            box += buttons
 
         else:
             Install_Log.log ("Payment ACK!")
@@ -249,7 +261,7 @@ class Download (Install_Stage):
         downloader.bind ('finished', CTK.DruidContent__JS_to_goto (downloader.id, URL_INSTALL_SETUP))
         downloader.bind ('error',    CTK.DruidContent__JS_to_goto (downloader.id, URL_INSTALL_DOWNLOAD_ERROR))
 
-        stop = CTK.Button (_('Stop'))
+        stop = CTK.Button (_('Cancel'))
         stop.bind ('click', downloader.JS_to_stop())
         buttons = CTK.DruidButtonsPanel()
         buttons += stop
@@ -274,6 +286,11 @@ class Download_Error (Install_Stage):
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Downloading"), app_name))
         cont += CTK.RawHTML ("Say something else here") # TODO
+
+        buttons = CTK.DruidButtonsPanel()
+        buttons += CTK.DruidButton_Close(_('Cancel'))
+        cont += buttons
+
         return cont.Render().toStr()
 
 
