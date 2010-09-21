@@ -242,15 +242,22 @@ class HandlerWidget (CTK.Container):
 
         # Exceptionally, a custom document root option must be
         # available when the handler is not yet set
+        submit = None
         if CTK.cfg.get_val (pre) == None:
             key = 'vserver!%s!rule!%s!document_root'%(vsrv, rule)
+
+            table2 = CTK.PropsTable()
             if not CTK.cfg.get_val (key, '').startswith(CHEROKEE_OWS_ROOT):
-                table.Add (_('Document Root'), CTK.TextCfg(key, True), _(Handler.NOTE_DOCUMENT_ROOT))
+                table2.Add (_('Document Root'), CTK.TextCfg(key, True), _(Handler.NOTE_DOCUMENT_ROOT))
             else:
-                table.Add (_('Document Root'), CTK.TextCfg(key, True, {'disabled':True}), _(Handler.NOTE_DOCUMENT_ROOT))
+                table2.Add (_('Document Root'), CTK.TextCfg(key, True, {'disabled':True}), _(Handler.NOTE_DOCUMENT_ROOT))
+
+            submit = CTK.Submitter (apply)
+            submit += table2
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Handler')))
         self += CTK.Indenter (table)
+        self += CTK.Indenter (submit)
         self += modul
 
 
