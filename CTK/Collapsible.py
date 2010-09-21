@@ -31,7 +31,10 @@ class Collapsible (Box):
         Box.__init__ (self, {'class': 'collapsible'})
 
         self.collapsed = collapsed
-        self.content = Box ({'class': 'collapsible-content'})
+        if collapsed:
+            self.content = Box ({'class': 'collapsible-content', 'style': 'display:none;'})
+        else:
+            self.content = Box ({'class': 'collapsible-content'})
 
         assert len(titles) == 2
         self.title_show = Box ({'class': 'collapsible-title'}, titles[0])
@@ -50,7 +53,7 @@ class Collapsible (Box):
         return self
 
     def __JS_show (self):
-        return self.content.JS_to_show() + self.title_hide.JS_to_show() + self.title_show.JS_to_hide()
+        return self.content.JS_to_show(100) + self.title_hide.JS_to_show() + self.title_show.JS_to_hide()
 
     def __JS_hide (self):
         return self.content.JS_to_hide() + self.title_hide.JS_to_hide() + self.title_show.JS_to_show()
