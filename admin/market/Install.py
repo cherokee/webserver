@@ -173,8 +173,10 @@ class Pay_Check (Install_Stage):
         app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
         app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
+        info = {'cherokee': VERSION, 'system': SystemInfo.get_info()}
+
         xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
-        install_info = xmlrpc.get_install_info (app_id)
+        install_info = xmlrpc.get_install_info (app_id, info)
 
         Install_Log.log ("Waiting for the payment acknowledge..")
 
