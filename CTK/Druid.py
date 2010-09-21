@@ -29,7 +29,7 @@ from Server import request
 from RawHTML import RawHTML
 
 JS_BUTTON_GOTO = """
-var druid      = $(this).parents('.druid:first');
+var druid      = $(this).parents('.ui-dialog:first').find('.druid:first');
 var refresh    = druid.find('.refreshable-url');
 var submitters = refresh.find('.submitter');
 
@@ -58,7 +58,7 @@ submitters.trigger ({'type': 'submit'});
 """
 
 JS_BUTTON_CLOSE = """
-$(this).parents('.ui-dialog-content:first').dialog('close');
+$(this).parents('.ui-dialog:first').find('.ui-dialog-content:first').dialog('close');
 return false;
 """
 
@@ -133,18 +133,46 @@ class DruidButton_Submit (DruidButton):
 # Button Panels
 #
 
+BUTTONS_PANEL_JS = """
+var dialog     = $('#%s').parents('.ui-dialog');
+var panel_orig = dialog.find('.ui-dialog-content .ui-dialog-buttonpane');
+
+dialog.find('.ui-dialog-buttonpane').remove();
+panel_orig.appendTo (dialog);
+"""
+
+# If a CTK.DruidButtonsPanel (ui-dialog-buttonpane) is added within
+# the dialog content, it has to be reparented to the uppper level. A
+# regular dialog has three main sections:
+#
+#   ui-dialog-titlebar
+#   ui-dialog-content
+#   ui-dialog-buttonpane
+#
+# For convenience reasons, a ui-dialog-buttonpane section can be added
+# inside ui-dialog-content, and CTK.DruidButtonsPanel take care of
+# moving it to the right place.
+
 class DruidButtonsPanel (Box):
     def __init__ (self, _props={}):
         # Properties
         props = _props.copy()
         if 'class' in props:
-            props['class'] += ' druid-button-panel'
+            props['class'] += ' ui-dialog-buttonpane'
         else:
-            props['class'] = 'druid-button-panel'
+            props['class'] = 'ui-dialog-buttonpane'
+
+        props['class'] += ' ui-widget-content ui-helper-clearfix'
 
         # Parent's constructor
         Box.__init__ (self, props)
         self.buttons = []
+
+    def Render (self):
+        render = Box.Render(self)
+        render.js = BUTTONS_PANEL_JS%(self.id) + render.js
+        return render
+
 
 class DruidButtonsPanel_Next (DruidButtonsPanel):
     def __init__ (self, url, cancel=True, do_submit=True, props={}):
