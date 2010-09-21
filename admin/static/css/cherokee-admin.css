@@ -684,3 +684,13 @@ img.icon_chooser_selected {
 .collapsible { margin-bottom: 32px; clear: both; min-height: 16px; }
 .collapsible-title { float: right; color: #27c; }
 .collapsible-title:hover { color: #c00; }
+
+.error-h2 { color: #c00; margin-bottom: 8px; }
+.error-title { font-weight: bold; font-size: 120%; }
+.error-message { margin: 8px 0 16px 0; }
+.error-comments { height: 128px; width: 560px; }
+.error-report-box { height: 32px; text-align: right; margin-top: 8px; }
+.error-report-box .button { float: none; }
+.error-report-box .button:active { padding: 6px 8px; }
+.error-thanks { width: 100%; margin-top: 80px; text-align: center; }
+.error-thanks button { margin-top: 80px; }

@@ -290,29 +290,37 @@ def Exception_Handler_Apply():
 class Exception_Handler (CTK.Box):
     def __init__ (self, exception_str):
         CTK.Box.__init__ (self)
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_("Internal Error")))
-        self += CTK.RawHTML ('<h1>%s</h1>' %(_("An internal error occurred while deploying the application")))
-        self += CTK.RawHTML ('<p>%s</p>' %(_("Information on the error has been collected so it can be reported and fixed up. Please help us improve it by sending the error information to the development team.")))
+        self += CTK.RawHTML ('<h2 class="error-h2">%s</h2>' %(_("Internal Error")))
+        self += CTK.RawHTML ('<div class="error-title">%s</div>' %(_("An internal error occurred while deploying the application")))
+        self += CTK.RawHTML ('<div class="error-message">%s</div>' %(_("Information on the error has been collected so it can be reported and fixed up. Please help us improve it by sending the error information to the development team.")))
 
-        thanks = CTK.Box ({'style': 'display:none'}, CTK.RawHTML (_('Thank you for your feedback! We do appreciate it.')))
+        thanks  = CTK.Box ({'class': 'error-thanks', 'style': 'display:none'})
+        thanks += CTK.RawHTML (_('Thank you for your feedback! We do appreciate it.'))
+        thanks += CTK.DruidButton_Close(_('Close'))
         self += thanks
 
-        report   = CTK.SubmitterButton (_("Report Issue"))
-        comments = CTK.Box()
+        reportbox  = CTK.Box({'class': 'error-report-box'})
+        reportbox += CTK.SubmitterButton (_('Report Issue'))
+        reportbox += CTK.RawHTML (' %s ' %(_('or')))
+        donothing  = CTK.Link('#', CTK.RawHTML(_("Don't send")))
+        #TODO: close 
+        reportbox += donothing
+
+        comments  = CTK.Box()
         comments += CTK.RawHTML ('%s:' %(_("Comments")))
-        comments += CTK.TextArea ({'name': 'comments', 'rows':10, 'cols': 80, 'class': 'noauto'})
+        comments += CTK.TextArea ({'name': 'comments', 'class': 'noauto error-comments'})
 
         submit = CTK.Submitter (URL_INSTALL_EXCEPTION)
         submit += comments
-        submit += report
+        submit += reportbox
         self += submit
 
         submit.bind ('submit_success',
-                     thanks.JS_to_show() + report.JS_to_hide() + comments.JS_to_hide())
+                     thanks.JS_to_show() + reportbox.JS_to_hide() + comments.JS_to_hide())
 
-        buttons = CTK.DruidButtonsPanel()
-        buttons += CTK.DruidButton_Close(_('Close'))
-        self += buttons
+        #buttons = CTK.DruidButtonsPanel()
+        #buttons += CTK.DruidButton_Close(_('Close'))
+        #self += buttons
 
 
 def replacement_cmd (command):
