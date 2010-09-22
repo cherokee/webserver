@@ -114,8 +114,15 @@ local_file_exists (cherokee_rule_extensions_t *rule,
 		cherokee_buffer_add_buffer (tmp, &conn->local_directory);
 	}
 
-	cherokee_buffer_add_str    (tmp, "/");
-	cherokee_buffer_add_buffer (tmp, &conn->request);
+	cherokee_buffer_add_str (tmp, "/");
+
+	if (! cherokee_buffer_is_empty (&conn->web_directory)) {
+		cherokee_buffer_add (tmp,
+				     conn->request.buf + conn->web_directory.len,
+				     conn->request.len - conn->web_directory.len);
+	} else {
+		cherokee_buffer_add_buffer (tmp, &conn->request);
+	}
 
 	/* Check the local file
 	 */
