@@ -59,15 +59,12 @@ CGI_LIB_INIT (fcgi, http_all_methods);
 static ret_t
 process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cherokee_buffer_t *outbuf)
 {
-	FCGI_Header         *header;
-	FCGI_EndRequestBody *ending;
-
-	cuint_t  len;
-	char    *data;
-	cint_t   return_val;
-	cuint_t  type;
-	cuint_t  id;
-	cuint_t  padding;
+	FCGI_Header *header;
+	cuint_t      len;
+	char        *data;
+	cuint_t      type;
+	cuint_t      id;
+	cuint_t      padding;
 
 	/* Is there enough information?
 	 */
@@ -130,15 +127,8 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 		break;
 
 	case FCGI_END_REQUEST:
-		ending = (FCGI_EndRequestBody *)data;
-
-		return_val = ((ending->appStatusB0)       |
-			      (ending->appStatusB0 << 8)  |
-			      (ending->appStatusB0 << 16) |
-			      (ending->appStatusB0 << 24));
-
-		HDL_CGI_BASE(hdl)->got_eof = true;
 /*		printf ("READ:END"); */
+		HDL_CGI_BASE(hdl)->got_eof = true;
 		break;
 
 	default:
