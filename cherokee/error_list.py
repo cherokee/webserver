@@ -374,7 +374,7 @@ e('LOGGER_WRITER_READ',
 
 e('LOGGER_WRITER_APPEND',
   title = "Could not open '%s' for appending",
-  desc  = SYSTEM_ISSUE)
+  desc  = "This is probably related to the file permissions. Please make sure that it is writable for the user under which Cherokee is run.")
 
 e('LOGGER_WRITER_ALLOC',
   title = "Allocation logger->max_bufsize %d failed.",
