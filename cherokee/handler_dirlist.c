@@ -50,8 +50,10 @@
 #include "icons.h"
 #include "common.h"
 #include "human_strcmp.h"
+#include "match.h"
 
 #define ICON_WEB_DIR_DEFAULT "/icons"
+#define ENTRIES "handler,dirlist"
 
 
 struct file_entry {
@@ -64,6 +66,13 @@ struct file_entry {
 };
 typedef struct file_entry file_entry_t;
 
+struct file_match {
+	cherokee_list_t    list_node;
+	cherokee_buffer_t  filename;
+	cherokee_boolean_t is_wildcard;
+};
+typedef struct file_match file_match_t;
+
 
 /* Plug-in initialization
  */
@@ -73,9 +82,40 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (dirlist, http_get);
 /* Private type
  */
 static ret_t
+file_match_new (file_match_t **file)
+{
+	file_match_t *n;
+
+	n = (file_match_t *) malloc (sizeof(file_match_t));
+	if (unlikely(n == NULL)) {
+		return ret_nomem;
+	}
+
+	INIT_LIST_HEAD (&n->list_node);
+	cherokee_buffer_init (&n->filename);
+	n->is_wildcard = false;
+
+	*file = n;
+	return ret_ok;
+}
+
+static void
+file_match_free (file_match_t *file)
+{
+	if (file == NULL)
+		return;
+
+	cherokee_buffer_mrproper (&file->filename);
+	free (file);
+}
+
+
+/* Private type
+ */
+static ret_t
 file_entry_new (file_entry_t **file, cuint_t extra_size)
 {
-	file_entry_t  *n;
+	file_entry_t *n;
 
 	n = (file_entry_t *) malloc (sizeof(file_entry_t) + extra_size);
 	if (unlikely(n == NULL)) {
@@ -193,10 +233,8 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 ret_t
 cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 {
-	cherokee_list_content_free (&props->notice_files,
-				    (cherokee_list_free_func) cherokee_buffer_free);
-	cherokee_list_content_free (&props->hidden_files,
-				    (cherokee_list_free_func) cherokee_buffer_free);
+	cherokee_list_content_free (&props->notice_files, (cherokee_list_free_func)file_match_free);
+	cherokee_list_content_free (&props->hidden_files, (cherokee_list_free_func)file_match_free);
 
 	cherokee_buffer_mrproper (&props->header);
 	cherokee_buffer_mrproper (&props->footer);
@@ -205,6 +243,33 @@ cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 	cherokee_buffer_mrproper (&props->icon_web_dir);
 
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
+
+static ret_t
+file_match_add_cb (char *entry, void *data)
+{
+	ret_t            ret;
+	file_match_t    *new_match = NULL;
+	cherokee_list_t *list      = LIST(data);
+
+	ret = file_match_new (&new_match);
+	if (unlikely ((ret != ret_ok) || (new_match == NULL)))
+		return ret_error;
+
+	if ((strchr (entry, '*')) || (strchr (entry, '?')))
+	{
+		new_match->is_wildcard = true;
+	}
+
+	cherokee_buffer_add (&new_match->filename, entry, strlen(entry));
+
+	TRACE(ENTRIES, "Match file entry: '%s' (wildcard: %s)\n",
+	      new_match->filename.buf,
+	      new_match->is_wildcard ? "yes" : "no");
+
+	cherokee_list_add_tail (&new_match->list_node, list);
+	return ret_ok;
 }
 
 
@@ -282,12 +347,12 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 			cherokee_buffer_add_buffer (&props->icon_web_dir, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "notice_files")) {
-			ret = cherokee_config_node_convert_list (subconf, NULL, &props->notice_files);
+			ret = cherokee_config_node_read_list (subconf, NULL, file_match_add_cb, &props->notice_files);
 			if (unlikely (ret != ret_ok))
 				return ret;
 
 		} else if (equal_buf_str (&subconf->key, "hidden_files")) {
-			ret = cherokee_config_node_convert_list (subconf, NULL, &props->hidden_files);
+			ret = cherokee_config_node_read_list (subconf, NULL, file_match_add_cb, &props->hidden_files);
 			if (unlikely (ret != ret_ok))
 				return ret;
 		}
@@ -314,12 +379,21 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 static cherokee_boolean_t
 is_file_in_list (cherokee_list_t *list, char *filename, cuint_t len)
 {
+	ret_t            ret;
 	cherokee_list_t *i;
 
 	list_for_each (i, list) {
-		cherokee_buffer_t *notice = BUF(LIST_ITEM_INFO(i));
+		file_match_t *file_match = ((file_match_t *)i);
 
-		if (cherokee_buffer_cmp (notice, filename, len) == 0) {
+		if (file_match->is_wildcard) {
+			ret = cherokee_wildcard_match (file_match->filename.buf, filename);
+			if (ret == ret_ok) {
+				return true;
+			}
+			continue;
+		}
+
+		if (cherokee_buffer_cmp (&file_match->filename, filename, len) == 0) {
 			return true;
 		}
 	}
