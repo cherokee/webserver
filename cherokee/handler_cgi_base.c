@@ -249,11 +249,11 @@ cherokee_handler_cgi_base_build_basic_env (
 {
 	int                                re;
 	ret_t                              ret;
-	char                              *p;
-	cuint_t                            p_len;
 	cherokee_boolean_t                 remote_addr_set;
-	cherokee_bind_t                   *bind      = CONN_BIND(HANDLER_CONN(cgi));
-	cherokee_handler_cgi_base_props_t *cgi_props = HANDLER_CGI_BASE_PROPS(cgi);
+	char                              *p                = NULL;
+	cuint_t                            p_len            = 0;
+	cherokee_bind_t                   *bind             = CONN_BIND(HANDLER_CONN(cgi));
+	cherokee_handler_cgi_base_props_t *cgi_props        = HANDLER_CGI_BASE_PROPS(cgi);
 
 	char remote_ip[CHE_INET_ADDRSTRLEN+1];
 	CHEROKEE_TEMP(temp, 32);
@@ -281,8 +281,14 @@ cherokee_handler_cgi_base_build_basic_env (
 	if (cgi_props->x_real_ip.enabled)
 	{
 		/* The request has a X-REAL-IP entry */
-		ret = cherokee_header_get_known (&conn->header, header_x_real_ip, &p, &p_len);
-		if (ret == ret_ok)
+		cherokee_header_get_known (&conn->header, header_x_real_ip, &p, &p_len);
+
+		/* The request has a X-Forwared-For entry */
+		if (p == NULL) {
+			cherokee_header_get_known (&conn->header, header_x_forwarded_for, &p, &p_len);
+		}
+
+		if (p != NULL)
 		{
 			/* The remote host is allowed to send it */
 			ret = cherokee_x_real_ip_is_allowed (&cgi_props->x_real_ip, &conn->socket);
@@ -290,12 +296,26 @@ cherokee_handler_cgi_base_build_basic_env (
 				cuint_t     i;
 				const char *port_end = NULL;
 				const char *colon    = NULL;
+				const char *end      = NULL;
 
 				for (i=0; i < p_len; i++) {
+					if ((p[i] == ',') && (end == NULL)) {
+						end = &p[i];
+						while ((end > p) && ((*end == ',')||(*end == ' '))) {
+							end--;
+						}
+						end++;
+						break;
+					}
+
 					if (p[i] == ':') {
 						colon = &p[i];
 						break;
 					}
+				}
+
+				if (end == NULL) {
+					end = p + p_len;
 				}
 
 				if (colon != NULL) {
@@ -305,9 +325,9 @@ cherokee_handler_cgi_base_build_basic_env (
 					}
 
 					set_env (cgi, "REMOTE_ADDR", p, colon - p);
-					set_env (cgi, "REMOTE_PORT", colon+1, (port_end-2) - colon+1);
+					set_env (cgi, "REMOTE_PORT", colon+1, port_end - (colon+1));
 				} else {
-					set_env (cgi, "REMOTE_ADDR", p, p_len);
+					set_env (cgi, "REMOTE_ADDR", p, end - p);
 				}
 
 				remote_addr_set = true;
