@@ -332,15 +332,7 @@ class Exception_Handler (CTK.Box):
 
         thanks  = CTK.Box ({'class': 'error-thanks', 'style': 'display:none'})
         thanks += CTK.RawHTML (_('Thank you for your feedback! We do appreciate it.'))
-        thanks += CTK.DruidButton_Close(_('Close'))
         self += thanks
-
-        reportbox  = CTK.Box({'class': 'error-report-box'})
-        reportbox += CTK.SubmitterButton (_('Report Issue'))
-        reportbox += CTK.RawHTML (' %s ' %(_('or')))
-        donothing  = CTK.Link('#', CTK.RawHTML(_("Don't send")))
-        #TODO: close
-        reportbox += donothing
 
         comments  = CTK.Box()
         comments += CTK.RawHTML ('%s:' %(_("Comments")))
@@ -348,15 +340,22 @@ class Exception_Handler (CTK.Box):
 
         submit = CTK.Submitter (URL_INSTALL_EXCEPTION)
         submit += comments
-        submit += reportbox
         self += submit
 
-        submit.bind ('submit_success',
-                     thanks.JS_to_show() + reportbox.JS_to_hide() + comments.JS_to_hide())
+        report = CTK.Button (_('Report Issue'))
+        cancel = CTK.DruidButton_Close (_('Cancel'))
+        close  = CTK.DruidButton_Close (_('Close'), {'style': 'display:none;'})
 
-        #buttons = CTK.DruidButtonsPanel()
-        #buttons += CTK.DruidButton_Close(_('Close'))
-        #self += buttons
+        report.bind ('click', submit.JS_to_submit())
+        submit.bind ('submit_success',
+                     thanks.JS_to_show() + report.JS_to_hide() +
+                     comments.JS_to_hide() + close.JS_to_show() + cancel.JS_to_hide())
+
+        buttons = CTK.DruidButtonsPanel()
+        buttons += cancel
+        buttons += report
+        buttons += close
+        self += buttons
 
 
 def replacement_cmd (command):
