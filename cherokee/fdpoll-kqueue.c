@@ -165,16 +165,20 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 	/* Get the events of the file descriptors with
 	 * activity
 	 */
-	n_events = kevent(fdp->kqueue,
-			  fdp->changelist,
-			  fdp->nchanges,
-			  fdp->changelist,
-			  FDPOLL(fdp)->nfiles,
-			  &timeout);
+again:
+	n_events = kevent (fdp->kqueue,
+			   fdp->changelist,
+			   fdp->nchanges,
+			   fdp->changelist,
+			   FDPOLL(fdp)->nfiles,
+			   &timeout);
+
 	fdp->nchanges=0;
 	if (unlikely (n_events < 0)) {
-		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_FDPOLL_KQUEUE);
+		if (errno == EINTR)
+			goto again;
+
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_KQUEUE);
 		return 0;
 
 	} else if (n_events > 0) {
