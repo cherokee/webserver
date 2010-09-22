@@ -255,7 +255,8 @@ run-tests.py \
 247-UTF8-QueryString.py \
 248-Colon-UTF8.py \
 249-https-redir.py \
-250-https-redir-2.py
+250-https-redir-2.py \
+251-php-localcheck.py
 
 test:
 	./run-tests.py
