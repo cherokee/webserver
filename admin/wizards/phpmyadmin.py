@@ -149,9 +149,6 @@ class Commit:
         props['web_dir']       = CTK.cfg.get_val('%s!web_dir'   %(PREFIX))
         props['local_src_dir'] = CTK.cfg.get_val('%s!sources' %(PREFIX))
 
-        # Without this line, the rule is broken for phpMyAdmin
-        CTK.cfg["%s!match!check_local_file" %(php_info['rule'])] = 0
-
         config = CONFIG_DIR %(props)
         CTK.cfg.apply_chunk (config)
 
