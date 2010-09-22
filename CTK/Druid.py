@@ -91,7 +91,7 @@ class Druid (Box):
 #
 
 class DruidButton (Button):
-    def __init__ (self, caption, url, _props={}):
+    def __init__ (self, caption, _props={}):
         # Properties
         props = _props.copy()
         if 'class' in props:
@@ -100,11 +100,11 @@ class DruidButton (Button):
             props['class'] = 'druid-button'
 
         # Parent's constructor
-        Button.__init__ (self, caption, props.copy())
+        Button.__init__ (self, caption, props)
 
 class DruidButton_Goto (DruidButton):
     def __init__ (self, caption, url, do_submit, _props={}):
-        DruidButton.__init__ (self, caption, url, _props.copy())
+        DruidButton.__init__ (self, caption, _props.copy())
 
         props = {'url':       url,
                  'do_submit': ('false', 'true')[do_submit]}
