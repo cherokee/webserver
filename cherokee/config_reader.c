@@ -60,7 +60,7 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 	int         re;
 	struct stat info;
 
-	re = stat (path->buf, &info);
+	re = cherokee_stat (path->buf, &info);
 	if (re < 0) {
 		LOG_CRITICAL (CHEROKEE_ERROR_CONF_READ_ACCESS_FILE, path->buf);
 		return ret_error;

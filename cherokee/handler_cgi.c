@@ -598,7 +598,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	if (HANDLER_CGI_PROPS(cgi_base)->change_user) {
 		struct stat info;
 
-		re = stat (script, &info);
+		re = cherokee_stat (script, &info);
 		if (re >= 0) {
 			re = setuid (info.st_uid);
 			if (re != 0) {

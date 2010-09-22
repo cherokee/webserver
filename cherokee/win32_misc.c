@@ -1005,7 +1005,9 @@ cherokee_win32_stat (const char *path, struct stat *buf)
 		e++;
 	}
 
-	re = stat ((const char *)p, buf);
+	do {
+          re = stat ((const char *)p, buf);
+	} while ((re == -1) && (errno == EINTR));
 
 	for (e -= 1; e > 0; e--) {
 		p[len-(e+1)] = '/';

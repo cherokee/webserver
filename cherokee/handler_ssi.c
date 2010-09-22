@@ -360,7 +360,7 @@ init (cherokee_handler_ssi_t *hdl,
 
 	/* Stat the file
 	 */
-	re = stat (local_path->buf, &hdl->cache_info);
+	re = cherokee_stat (local_path->buf, &hdl->cache_info);
 	if (re < 0) {
 		switch (errno) {
 		case ENOENT:

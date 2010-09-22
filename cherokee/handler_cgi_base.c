@@ -813,7 +813,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	if (! cherokee_buffer_is_empty (&props->script_alias)) {
 		TRACE (ENTRIES, "Script alias '%s'\n", props->script_alias.buf);
 
-		if (stat (props->script_alias.buf, &st) == -1) {
+		if (cherokee_stat (props->script_alias.buf, &st) == -1) {
 			conn->error_code = http_not_found;
 			return ret_error;
 		}
@@ -918,7 +918,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	 */
 	ret = ret_ok;
 	if (check_filename) {
-		if (stat (conn->local_directory.buf, &st) == -1) {
+		if (cherokee_stat (conn->local_directory.buf, &st) == -1) {
 			conn->error_code = http_not_found;
 			ret = ret_error;
 			goto bye;

@@ -72,7 +72,7 @@ check_image_freshness (cherokee_buffer_t                 *buf,
 	cherokee_buffer_add         (buf, interval->interval, strlen(interval->interval));
 	cherokee_buffer_add_str     (buf, ".png");
 
-	re = stat (buf->buf, &info);
+	re = cherokee_stat (buf->buf, &info);
 	if (re != 0) {
 		TRACE(ENTRIES, "Image does not exist: '%s'\n", buf->buf);
 		return false;

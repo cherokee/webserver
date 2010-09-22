@@ -479,7 +479,7 @@ cherokee_split_pathinfo (cherokee_buffer_t  *path,
 
 		/* Handle not found case
 		 */
-		if (stat (path->buf, &st) == -1) {
+		if (cherokee_stat (path->buf, &st) == -1) {
 			*cur = '/';
 
 			if ((allow_dirs) && (last_dir != NULL)) {
@@ -1489,7 +1489,7 @@ cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
 
 	/* Check whether the directory exists
 	 */
-	re = stat (path->buf, &foo);
+	re = cherokee_stat (path->buf, &foo);
 	if (re == 0) {
 		return ret_ok;
 	}
@@ -1540,7 +1540,7 @@ cherokee_mkdir_p_perm (cherokee_buffer_t *dir_path,
 
 	/* Does it exist?
 	 */
-	re = stat (dir_path->buf, &foo);
+	re = cherokee_stat (dir_path->buf, &foo);
 	if (re != 0) {
 		/* Create the directory
 		 */
@@ -2039,4 +2039,41 @@ cherokee_copy_local_address (void              *sock,
 	 */
 	cherokee_buffer_add (buf, ip_str, strlen(ip_str));
 	return ret_ok;
+}
+
+
+int
+cherokee_stat (const char *restrict path, struct stat *buf)
+{
+	int re;
+
+	do {
+		re = stat (path, buf);
+	} while ((re == -1) && (errno == EINTR));
+
+	return re;
+}
+
+int
+cherokee_lstat (const char *restrict path, struct stat *buf)
+{
+	int re;
+
+	do {
+		re = lstat (path, buf);
+	} while ((re == -1) && (errno == EINTR));
+
+	return re;
+}
+
+int
+cherokee_fstat (int filedes, struct stat *buf)
+{
+	int re;
+
+	do {
+		re = fstat (filedes, buf);
+	} while ((re == -1) && (errno == EINTR));
+
+	return re;
 }

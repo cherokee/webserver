@@ -102,7 +102,7 @@ cherokee_shm_map (cherokee_shm_t    *shm,
 		return ret_error;
 	}
 
-	re = fstat (fd, &info);
+	re = cherokee_fstat (fd, &info);
 	if (re != 0) {
 		return ret_error;
 	}

@@ -545,7 +545,7 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 
 	/* Remove the socket if it already exists
 	 */
-	re = stat (listen_to->buf, &buf);
+	re = cherokee_stat (listen_to->buf, &buf);
 	if (re == 0) {
 		if (! S_ISSOCK(buf.st_mode)) {
 			LOG_CRITICAL (CHEROKEE_ERROR_SOCKET_NO_SOCKET, listen_to->buf);

@@ -355,7 +355,7 @@ stat_local_directory (cherokee_handler_file_t   *fhdl,
 	/* Without cache
 	 */
 without:
-	re = stat (local_file->buf, &fhdl->cache_info);
+	re = cherokee_stat (local_file->buf, &fhdl->cache_info);
 	TRACE (ENTRIES, "%s, use_iocache=0 ret=%d\n", local_file->buf, re);
 
 	if (re >= 0) {

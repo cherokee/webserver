@@ -1007,7 +1007,7 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 
 	/* Stat() the file
 	 */
-	r = stat (filename, &info);
+	r = cherokee_stat (filename, &info);
 	if (r != 0)
 		return ret_error;
 

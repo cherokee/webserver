@@ -122,7 +122,7 @@ remove_old_socket (const char *path)
 
 	/* It might not exist
 	 */
-	re = stat (path, &info);
+	re = cherokee_stat (path, &info);
 	if (re != 0) {
 		return ret_ok;
 	}

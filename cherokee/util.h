@@ -75,8 +75,6 @@ CHEROKEE_BEGIN_DECLS
 # define cherokee_error            GetLastError()
 # define cherokee_mkdir(path,perm) mkdir(path)
 #else
-# define cherokee_stat(path,buf)   stat(path,buf)
-# define cherokee_lstat(path,buf)  lstat(path,buf)
 # define cherokee_error            errno
 # define cherokee_mkdir(path,perm) mkdir(path,perm)
 #endif
@@ -147,6 +145,9 @@ long      *cherokee_get_timezone_ref (void);
 /* Thread safe functions
  */
 int   cherokee_readdir       (DIR *dirstream, struct dirent *entry, struct dirent **result);
+int   cherokee_stat          (const char *restrict path, struct stat *buf);
+int   cherokee_lstat         (const char *restrict path, struct stat *buf);
+int   cherokee_fstat         (int filedes, struct stat *buf);
 ret_t cherokee_gethostbyname (const char *hostname, void *addr);
 ret_t cherokee_gethostname   (cherokee_buffer_t *buf);
 ret_t cherokee_syslog        (int priority, cherokee_buffer_t *buf);
