@@ -357,7 +357,10 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf,
 				 RULE_PRE "20!match = directory\n"
 				 RULE_PRE "20!match!directory = /graphs\n"
-				 RULE_PRE "20!handler = render_rrd\n");
+				 RULE_PRE "20!handler = render_rrd\n"
+				 RULE_PRE "20!expiration = epoch\n"
+				 RULE_PRE "20!expiration!caching = no-cache\n"
+				 RULE_PRE "20!expiration!caching!no-store = 1\n");
 
 	cherokee_buffer_add_str (&buf, RULE_PRE "20!document_root = ");
 	cherokee_tmp_dir_copy   (&buf);
