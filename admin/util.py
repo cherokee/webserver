@@ -270,12 +270,20 @@ def path_find_binary (executable, extra_dirs=[], custom_test=None):
 
     assert (type(executable) in [str, list])
 
-    dirs = extra_dirs
+    # Extra dirs evaluation
+    dirs = []
+    for d in extra_dirs:
+        if '*' in d or '?' in d:
+            dirs += glob.glob (d)
+        else:
+            dirs.append(d)
 
+    # $PATH
     env_path = os.getenv("PATH")
     if env_path:
         dirs += filter (lambda x: x, env_path.split(":"))
 
+    # Check
     for dir in dirs:
         if type(executable) == str:
             tmp = os.path.join (dir, executable)
