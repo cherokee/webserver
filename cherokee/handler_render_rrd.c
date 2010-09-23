@@ -34,7 +34,7 @@
 
 #define DISABLED_MSG "Graphs generation is disabled because RRDtool was not found." CRLF
 
-PLUGIN_INFO_HANDLER_EASY_INIT (render_rrd, http_get);
+PLUGIN_INFO_HANDLER_EASY_INIT (render_rrd, http_get | http_head);
 
 
 /* Functions
