@@ -36,7 +36,7 @@ from Plugin import Plugin, instance_plugin, load_module, load_module_pyc
 # Widgets
 from Table import Table, TableFixed
 from RawHTML import RawHTML
-from TextField import TextField, TextFieldPassword, TextCfg, TextCfgAuto
+from TextField import TextField, TextFieldPassword, TextCfg, TextCfgPassword, TextCfgAuto
 from Checkbox import Checkbox, CheckCfg, CheckboxText, CheckCfgText
 from Combobox import Combobox, ComboCfg
 from PropsTable import PropsTable, PropsTableAuto, PropsAuto

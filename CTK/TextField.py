@@ -130,6 +130,13 @@ class TextCfg (TextField):
         TextField.__init__ (self, props)
 
 
+class TextCfgPassword (TextCfg):
+    def __init__ (self, *a, **kw):
+        TextCfg.__init__ (self, *a, **kw)
+        self.type = "password"
+
+
+
 JS = """
 $("#%(id)s")
 
