@@ -43,6 +43,12 @@ if ((typeof submitter_loaded) == 'undefined') {
 		  key_pressed = true;
 	   };
 
+	   function input_keypress_noauto_cb (event) {
+	       if (event.keyCode == 13) {
+			 submit_form();
+	       }
+	   };
+
 	   function input_blur_cb (event) {
 		  /* Only proceed when something */
 		  if (! key_pressed) {
@@ -208,6 +214,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 	   this.init = function (self) {
 		  /* Events */
 		  self.find(":text, :password, textarea").not('.noauto').bind ('keypress', self, input_keypress_cb);
+		  self.find(":text, :password, textarea").filter('.noauto').bind ('keypress', self, input_keypress_noauto_cb);
 		  self.find(":text, :password, textarea").not('.noauto').bind ("blur", self, input_blur_cb);
 		  self.find(":checkbox, :radio").not('.required,.noauto').bind ("change", self, input_checkbox_cb);
 		  self.find("select").not('.required,.noauto').bind ("change", self, input_combobox_cb);
