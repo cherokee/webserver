@@ -865,7 +865,8 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {
-		cherokee_buffer_t *filename = BUF(LIST_ITEM_INFO(i));
+		file_match_t      *file_match = ((file_match_t*)(i));
+		cherokee_buffer_t *filename   = &file_match->filename;
 
 		cherokee_buffer_clean (&dhdl->header);
 
