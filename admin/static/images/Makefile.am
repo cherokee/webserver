@@ -7,6 +7,11 @@ adminstatic_DATA = \
 advanced.png \
 backup.png \
 bg-bar.png \
+bg-body.png \
+bg-help-a.png \
+bg-help-span.png \
+bg-th.png \
+bg-td-even.png \
 cherokee-logo-bar.png \
 cpu.png \
 disk.png \
