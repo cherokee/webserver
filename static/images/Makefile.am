@@ -3,18 +3,13 @@
 imagesdir = "$(datadir)/cherokee/admin/CTK/static/images"
 images_DATA = \
 arrow_ns.png \
-bg-body.png \
 bg-dialog-buttonpane.png \
 bg-dialog-titlebar-close.gif \
 bg-dialog-titlebar.png \
 bg-dialog.png \
 bg-filter.png \
-bg-help-a.png \
-bg-help-span.png \
 bg-sel-actions-sel.png \
 bg-sel-actions.png \
-bg-td-even.png \
-bg-th.png \
 del-hover.png \
 del.png \
 dialog-error.png \
