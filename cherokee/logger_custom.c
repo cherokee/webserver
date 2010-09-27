@@ -342,6 +342,40 @@ add_vserver_name (cherokee_template_t       *template,
 }
 
 static ret_t
+add_vserver_name_req (cherokee_template_t       *template,
+		      cherokee_template_token_t *token,
+		      cherokee_buffer_t         *output,
+		      void                      *param)
+{
+	ret_t                  ret;
+	char                  *colon;
+	char                  *header     = NULL;
+	cuint_t                header_len = 0;
+	cherokee_connection_t *conn       = CONN(param);
+
+	UNUSED (template);
+	UNUSED (token);
+
+	/* Log the 'Host:' header
+	 */
+	ret = cherokee_header_get_known (&conn->header, header_host, &header, &header_len);
+	if ((ret == ret_ok) && (header)) {
+		colon = strchr (header, ':');
+		if (colon) {
+			cherokee_buffer_add (output, header, colon - header);
+		} else {
+			cherokee_buffer_add (output, header, header_len);
+		}
+		return ret_ok;
+	}
+
+	/* Plan B: Use the virtual server nick
+	 */
+	cherokee_buffer_add_buffer (output, &CONN_VSRV(conn)->name);
+	return ret_ok;
+}
+
+static ret_t
 add_response_size (cherokee_template_t       *template,
 		   cherokee_template_token_t *token,
 		   cherokee_buffer_t         *output,
@@ -380,6 +414,7 @@ _set_template (cherokee_logger_custom_t *logger,
 		{"request",            add_request},
 		{"request_original",   add_request_original},
 		{"vserver_name",       add_vserver_name},
+		{"vserver_name_req",   add_vserver_name_req},
 		{"response_size",      add_response_size},
 		{NULL, NULL}
 	};
