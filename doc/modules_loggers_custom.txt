@@ -12,7 +12,7 @@ both literal characters and a set of variables. All the literal
 characters will be copied to the log. The following variables will be
 evaluated right before writing each log entry:
 
-[options="header"]
+[cols="10%,40%,50%",options="header"]
 |===================================================================================
 |Variable                |Example                    |Description
 |`${ip_remote}`          |74.125.67.100              |Remote IP-address
@@ -33,7 +33,6 @@ evaluated right before writing each log entry:
 |`${vserver_name}`       |default                    |Virtual Server nick name
 |`${vserver_name_req}`   |example.com                |Requested host (Host: header)
 |===================================================================================
-
 
 The templating subsystem provides slicing support in pretty much the
 same way that the Python strings do, allowing to use specific portions
