@@ -97,7 +97,7 @@ class LocalSource:
     def __call__ (self):
         table = CTK.PropsTable()
         table.Add (_('Web Directory'), CTK.TextCfg ('%s!web_dir'%(PREFIX), False, {'value': '/RPC2', 'class': 'noauto'}), _(NOTE_WEB_DIR))
-        table.Add (_('Connection'), CTK.TextCfg ('%s!connection'%(PREFIX), False, {'value': 'localhost:5000'}), _(NOTE_CONNECTION))
+        table.Add (_('Connection'), CTK.TextCfg ('%s!connection'%(PREFIX), False, {'value': 'localhost:5000', 'class': 'noauto'}), _(NOTE_CONNECTION))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
