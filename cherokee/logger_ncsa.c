@@ -195,16 +195,20 @@ cherokee_logger_ncsa_flush (cherokee_logger_ncsa_t *logger)
 
 
 static ret_t
-build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, cherokee_buffer_t *buf)
+build_log_string (cherokee_logger_ncsa_t *logger,
+		  cherokee_connection_t  *cnt,
+		  cherokee_buffer_t      *buf)
 {
-	ret_t       ret;
-	const char *username;
-	size_t      username_len = 0;
-	const char *method;
-	cuint_t     method_len   = 0;
-	const char *version;
-	cuint_t     version_len  = 0;
-	char        ipaddr[CHE_INET_ADDRSTRLEN];
+	ret_t              ret;
+	const char        *method;
+	const char        *username;
+	const char        *version;
+	cuint_t            method_len                   = 0;
+	size_t             username_len                 = 0;
+	cuint_t            version_len                  = 0;
+	cherokee_buffer_t *referer                      = &logger->referer;
+	cherokee_buffer_t *useragent                    = &logger->useragent;
+	char               ipaddr[CHE_INET_ADDRSTRLEN];
 
 	/* Look for the user
 	 */
@@ -282,31 +286,26 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 
 	/* "combined" information
 	 */
-	{
-		cherokee_buffer_t *referer   = &logger->referer;
-		cherokee_buffer_t *useragent = &logger->useragent;
+	cherokee_buffer_clean (referer);
+	cherokee_buffer_clean (useragent);
 
-		cherokee_buffer_clean (referer);
-		cherokee_buffer_clean (useragent);
+	cherokee_header_copy_known (&cnt->header, header_referer, referer);
+	cherokee_header_copy_known (&cnt->header, header_user_agent, useragent);
+	cherokee_buffer_ensure_addlen (buf, 8 + referer->len + referer->len);
 
-		cherokee_header_copy_known (&cnt->header, header_referer, referer);
-		cherokee_header_copy_known (&cnt->header, header_user_agent, useragent);
-		cherokee_buffer_ensure_addlen (buf, 8 + referer->len + referer->len);
-
-		if (referer->len > 0) {
-			cherokee_buffer_add_str    (buf, " \"");
-			cherokee_buffer_add_buffer (buf, referer);
-			cherokee_buffer_add_str    (buf, "\" \"");
-		} else {
-			cherokee_buffer_add_str (buf, " \"-\" \"");
-		}
-
-		if (useragent->len > 0) {
-			cherokee_buffer_add_buffer (buf, useragent);
-		}
-		cherokee_buffer_add_str (buf, "\"\n");
+	if (referer->len > 0) {
+		cherokee_buffer_add_str    (buf, " \"");
+		cherokee_buffer_add_buffer (buf, referer);
+		cherokee_buffer_add_str    (buf, "\" \"");
+	} else {
+		cherokee_buffer_add_str (buf, " \"-\" \"");
 	}
 
+	if (useragent->len > 0) {
+		cherokee_buffer_add_buffer (buf, useragent);
+	}
+
+	cherokee_buffer_add_str (buf, "\"\n");
 	return ret_ok;
 }
 
