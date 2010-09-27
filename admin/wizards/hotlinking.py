@@ -23,11 +23,6 @@
 # 02110-1301, USA.
 #
 
-#
-# Tested:
-# 2010/04/14: Cherokee 0.99.41
-#
-
 import re
 import CTK
 import Wizard
@@ -45,7 +40,8 @@ NOTE_DOMAIN     = N_("Domain allowed to access the files. Eg: example.com")
 NOTE_REDIR      = N_("Path to the public resource to use. Eg: /images/forbidden.jpg")
 NOTE_TYPE       = N_("How to handle hot-linking requests.")
 
-PREFIX = 'tmp!wizard!hotlinking'
+PREFIX     = 'tmp!wizard!hotlinking'
+EXTENSIONS = ['jpg', 'jpeg', 'gif', 'png', 'flv']
 
 URL_APPLY         = r'/wizard/vserver/hotlinking/apply'
 URL_APPLY_REFRESH = r'/wizard/vserver/hotlinking/apply/refresh'
@@ -53,7 +49,7 @@ URL_APPLY_REFRESH = r'/wizard/vserver/hotlinking/apply/refresh'
 CONFIG_RULES = """
 %(rule_pre)s!match = and
 %(rule_pre)s!match!left = extensions
-%(rule_pre)s!match!left!extensions = jpg,jpeg,gif,png,flv
+%(rule_pre)s!match!left!extensions = %(extensions)s
 %(rule_pre)s!match!right = and
 %(rule_pre)s!match!right!left = header
 %(rule_pre)s!match!right!left!header = Referer
@@ -100,9 +96,17 @@ class Commit:
         redirection = CTK.cfg.get_val ('%s!redirection'%(PREFIX))
         domain      = CTK.cfg.get_val ('%s!domain'%(PREFIX))
         domain      = domain.replace ('.', "\\.")
+        extensions  = ','.join(EXTENSIONS)
 
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
-        prio, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
+        # Overwrite a previous rule or create a new one
+        tmp = re.findall ("vserver!%s!rule!(\d+)!match!left!extensions = %s" %(vsrv_num, extensions), CTK.cfg.serialize())
+        if tmp:
+            vsrv_pre = 'vserver!%s' %(vsrv_num)
+            rule_pre = 'vserver!%s!rule!%s' %(vsrv_num, tmp[0])
+            prio     = int(tmp[0])
+        else:
+            vsrv_pre = 'vserver!%s' %(vsrv_num)
+            prio, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
 
         # Add the new rules
         if tipe == 'redir' and redirection:
