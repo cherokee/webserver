@@ -1342,13 +1342,30 @@ fi
 
 AC_SUBST(PHPCGI)
 
+dnl
+dnl Python
+dnl
+wants_admin="yes"
+have_python="yes"
+
+AC_PATH_PROGS(PYTHON, python python2.7 python2.6 python2.5 python2.4)
+if test -z $PYTHON ; then
+    have_python="no"
+    wants_admin="no"
+    AC_MSG_WARN([
+*** Python must be installed on your system but python interpreter couldn't
+*** be found in path. Please check that python is in path, or install it.
+*** BEWARE: Cherokee-admin support has been disabled.])
+fi
 
 dnl
 dnl Cherokee admin
 dnl
-AC_ARG_ENABLE(admin,
-	   AC_HELP_STRING([--disable-admin],[Disable Cherokee-admin installation]),
-	   wants_admin="$enableval", wants_admin="yes")
+if test "x$wants_admin" = "xyes"; then
+   AC_ARG_ENABLE(admin,
+	      AC_HELP_STRING([--disable-admin],[Disable Cherokee-admin installation]),
+					 wants_admin="$enableval", wants_admin="yes")
+fi
 AM_CONDITIONAL(INSTALL_ADMIN, test "x$wants_admin" != "xno")
 
 dnl
@@ -1564,6 +1581,7 @@ echo "Threading support     $have_pthread"
 echo "OpenSSL support       $have_openssl"
 echo "PCRE library          $have_pcre"
 echo "Compatible PAM        $have_pam"
+echo "Python                $have_python"
 echo "LDAP                  $have_ldap"
 echo "MySQL                 $have_mysql"
 echo "GeoIP                 $have_geoip"
