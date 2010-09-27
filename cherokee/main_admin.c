@@ -466,12 +466,44 @@ process_parameters (int argc, char **argv)
 	}
 }
 
+static ret_t
+check_for_python (void)
+{
+	int         re;
+	pid_t       pid;
+	int         exitcode = -1;
+	char *const args[]   = {"env", "python", "-c", "raise SystemExit", NULL};
+
+	pid = fork();
+	if (pid == -1) {
+		return ret_error;
+
+	} else if (pid == 0) {
+		execv ("/usr/bin/env", args);
+
+	} else {
+		do {
+			re = waitpid (pid, &exitcode, 0);
+		} while (re == -1 && errno == EINTR);
+
+		return (WEXITSTATUS(exitcode) == 0)? ret_ok : ret_error;
+	}
+
+	SHOULDNT_HAPPEN;
+	return ret_error;
+}
 
 int
 main (int argc, char **argv)
 {
 	ret_t              ret;
 	cherokee_server_t *srv;
+
+	ret = check_for_python();
+	if (ret != ret_ok) {
+		PRINT_MSG ("ERROR: Couldn't find python.\n");
+		exit (EXIT_ERROR);
+	}
 
 #ifdef SIGPIPE
         signal (SIGPIPE, SIG_IGN);
