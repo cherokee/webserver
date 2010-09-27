@@ -98,7 +98,6 @@ image::media/images/admin_handler_fastcgi2.png[Fastcgi]
 [[multi-site]]
 Multi-site support
 ~~~~~~~~~~~~~~~~~~
-
 An even more advanced scenario would be one that required custom PHP
 settings for each virtual host.
 
@@ -112,6 +111,9 @@ refer to PHP's documentation. It is the file located in
 '/etc/php5/cgi/php.ini' on Debian/Ubuntu systems,
 '/opt/local/etc/php5/php.ini' on MacPorts, etc.
 
+
+PHP configuration file
+^^^^^^^^^^^^^^^^^^^^^^
 You will have to customize and specify different `php.ini` files for
 each information source. A nifty trick to do this and provide custom
 environment variables is by wrapping the required parameters in a
@@ -142,7 +144,6 @@ Assuming that two customized information sources were required, simply
 specifying different interpreters for each one of them would suffice.
 
 
-
 [cols="10%,90%",options="header"]
 |====================================================================
 |VHost        | Interpreter
@@ -163,6 +164,26 @@ source!2!nick = php-vhost2
 source!2!interpreter = /usr/local/bin/php-cgi -c /usr/local/etc/php/php-vhost2.ini -b 127.0.0.1:2999
 ------
 
+PHP configuration variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The variables specified in `php.ini` can also be overridden setting a
+custom environment variable on a per-virtual-server basis.
+
+Just access the PHP rule of your virtual server, `Extensions php`, and
+select the `Handler` tab to be able to set a custom environment
+variable for the `FastCGI` handler.
+
+You will need to provide the values in the following format:
+
+[cols="50%,50%",options="header"]
+|====================================================================
+|Name             | Value
+| PHP_ADMIN_VALUE | `memory_limit=128M`
+|====================================================================
+
+This will set the memory limit for the virtual server only. Any
+`php.ini` variable can be set using this procedure.
 
 [[upload_limits]]
 PHP upload limits

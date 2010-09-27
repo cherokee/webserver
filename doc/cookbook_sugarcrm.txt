@@ -133,14 +133,16 @@ your system, each one for its own PHP: the CGI version, the CLI,
 etc. Cherokee uses PHP through FastCGI, so edit that one with your
 favorite editor.
 
-.Editing with Emacs
+.Editing the PHP configuration
 ----
-# emacs /etc/php5/cgi/php.ini
+# editor /etc/php5/cgi/php.ini
 ----
 
 .Required adjustments in this case
+
 ****
 memory_limit = 40M
+
 upload_max_filesize = 8M
 ****
 
