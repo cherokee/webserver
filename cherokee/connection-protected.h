@@ -137,6 +137,7 @@ struct cherokee_connection {
 	/* Headers
 	 */
 	cherokee_header_t             header;
+	cherokee_list_t              *header_ops;
 
 	/* Encoders
 	 */

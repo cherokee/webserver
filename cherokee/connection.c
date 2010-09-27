@@ -128,6 +128,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->limit_rate           = false;
 	n->limit_bps            = 0;
 	n->limit_blocked_until  = 0;
+	n->header_ops           = NULL;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -290,6 +291,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->limit_rate           = false;
 	conn->limit_bps            = 0;
 	conn->limit_blocked_until  = 0;
+	conn->header_ops           = NULL;
 
 	memset (conn->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_ovecsize = 0;
@@ -775,6 +777,13 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	 */
 	if (conn->encoder) {
 		cherokee_encoder_add_headers (conn->encoder, buffer);
+	}
+
+
+	/* Headers ops
+	 */
+	if (conn->header_ops) {
+		cherokee_header_op_render (conn->header_ops, buffer);
 	}
 
 	/* Unusual methods

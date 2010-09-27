@@ -35,9 +35,10 @@ from util import *
 from consts import *
 from configured import *
 
-URL_BASE  = r'^/vserver/([\d]+)/rule/content/([\d]+)/?$'
-URL_APPLY = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply$'
-URL_CLONE = r'^/vserver/([\d]+)/rule/content/([\d]+)/clone$'
+URL_BASE            = r'^/vserver/([\d]+)/rule/content/([\d]+)/?$'
+URL_APPLY           = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply$'
+URL_CLONE           = r'^/vserver/([\d]+)/rule/content/([\d]+)/clone$'
+URL_HEADER_OP_APPLY = r'^/vserver/([\d]+)/rule/content/([\d]+)/header_op$'
 
 NOTE_TIMEOUT         = N_('Apply a custom timeout to the connections matching this rule.')
 NOTE_HANDLER         = N_('How the connection will be handled.')
@@ -62,7 +63,9 @@ VALIDATIONS = [
     ("vserver![\d]+!rule![\d]+!allow_from",      validations.is_ip_or_netmask_list),
     ("vserver![\d]+!rule![\d]+!rate",            validations.is_number_gt_0),
     ("vserver![\d]+!rule![\d]+!timeout",         validations.is_number_gt_0),
-    ("vserver![\d]+!rule![\d]+!expiration!time", validations.is_time)
+    ("vserver![\d]+!rule![\d]+!expiration!time", validations.is_time),
+    ("new_header_op_name",                       validations.is_header_name),
+    ("new_header_op_value",                      validations.is_not_empty),
 ]
 
 HELPS = [
@@ -137,6 +140,75 @@ class SecurityWidget (CTK.Container):
         self += modul
 
 
+def HeaderOp_Apply():
+    tmp = re.findall (r'^/vserver/([\d]+)/rule/content/([\d]+)/', CTK.request.url)
+    vsrv  = tmp[0][0]
+    rule  = tmp[0][1]
+
+    name  = CTK.post.pop('new_header_op_name')
+    value = CTK.post.pop('new_header_op_value')
+
+    next_pre = CTK.cfg.get_next_entry_prefix ('vserver!%s!rule!%s!header_op'%(vsrv, rule))
+    CTK.cfg['%s!header'%(next_pre)] = name
+    CTK.cfg['%s!value'%(next_pre)]  = value
+    CTK.cfg['%s!type'%(next_pre)]   = "add"
+
+    return CTK.cfg_reply_ajax_ok()
+
+
+class HeaderOps (CTK.Container):
+    class OpsTable (CTK.Container):
+        def __init__ (self, pre, apply, refresh):
+            CTK.Container.__init__ (self)
+
+            if CTK.cfg.keys('%s!header_op'%(pre)):
+                table = CTK.Table()
+                table.set_header (num=1)
+                table += [CTK.RawHTML(x) for x in (_('Type'), _('Header'))]
+
+                for n in CTK.cfg.keys('%s!header_op'%(pre)):
+                    pre2 = '%s!header_op!%s' %(pre,n)
+                    header = CTK.TextCfg('%s!header'%(pre2))
+                    value  = CTK.TextCfg('%s!value' %(pre2))
+
+                    delete = CTK.ImageStock('del')
+                    delete.bind('click', CTK.JS.Ajax (apply,
+                                                      data     = {pre2: ''},
+                                                      complete = refresh.JS_to_refresh()))
+
+                    table += [header, value, delete]
+
+                self += table
+
+    def __init__ (self, vsrv, rule, apply):
+        CTK.Container.__init__ (self)
+        pre = 'vserver!%s!rule!%s' %(vsrv, rule)
+
+        # Operation Table
+        refresh = CTK.Refreshable({'id': 'header_op'})
+        refresh.register (lambda: HeaderOps.OpsTable(pre, apply, refresh).Render())
+
+        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Header Operations')))
+        self += CTK.Indenter (refresh)
+
+        # New Entries
+        header = CTK.TextField ({'name': 'new_header_op_name',  'class': 'noauto'})
+        value  = CTK.TextField ({'name': 'new_header_op_value', 'class': 'noauto'})
+        button = CTK.SubmitterButton (_('Add'))
+
+        table = CTK.Table()
+        table.set_header (num=1)
+        table += [CTK.RawHTML(x) for x in (_('Header'), _('Value'))]
+        table += [header, value, button]
+
+        submit = CTK.Submitter ('/vserver/%s/rule/content/%s/header_op'%(vsrv, rule))
+        submit.bind ('submit_success', refresh.JS_to_refresh())
+        submit += table
+
+        self += CTK.RawHTML ('<h3>%s</h3>'%(_('Add New Header')))
+        self += CTK.Indenter (submit)
+
+
 class TimeWidget (CTK.Container):
     class Expiration (CTK.Container):
         def __init__ (self, pre, apply, refresh):
@@ -182,6 +254,9 @@ class TimeWidget (CTK.Container):
 
         self += CTK.RawHTML ("<h2>%s</h2>" % (_('Content Expiration')))
         self += CTK.Indenter (refresh)
+
+        # tmp
+        self += HeaderOps (vsrv, rule, apply)
 
 
 class EncodingWidget (CTK.Container):
@@ -297,3 +372,4 @@ class Render:
 CTK.publish (URL_BASE, Render)
 CTK.publish (URL_CLONE, Clone, method="POST")
 CTK.publish (URL_APPLY, CTK.cfg_apply_post, validation=VALIDATIONS, method="POST")
+CTK.publish (URL_HEADER_OP_APPLY, HeaderOp_Apply, validation=VALIDATIONS, method="POST")

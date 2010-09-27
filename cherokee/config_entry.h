@@ -86,6 +86,7 @@ typedef struct {
 	cherokee_boolean_t          only_secure;
 	cherokee_null_bool_t        no_log;
 	void                       *access;
+	cherokee_list_t            *header_ops;
 
 	/* Handler
 	 */

@@ -205,6 +205,9 @@ def is_safe_id_list (value):
         ids.append(is_safe_id (id))
     return ','.join(ids)
 
+def is_header_name (value):
+    return is_safe_id (value)
+
 def int2bin(n, count=24):
     """returns the binary of integer n, using count number of digits"""
     return "".join([str((n >> y) & 1) for y in range(count-1, -1, -1)])

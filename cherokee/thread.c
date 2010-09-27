@@ -1026,6 +1026,10 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->timeout_header = entry.timeout_header;
 			}
 
+			if (entry.header_ops) {
+				conn->header_ops = entry.header_ops;
+			}
+
 			/* Create the handler
 			 */
 			ret = cherokee_connection_create_handler (conn, &entry);
