@@ -20,6 +20,7 @@
 # 02110-1301, USA.
 #
 
+from util import *
 from Widget import Widget
 from Container import Container
 
@@ -27,27 +28,20 @@ from Container import Container
 class TableField (Container):
     def __init__ (self, widget=None):
         Container.__init__ (self)
-        self.props = {}
+        self.props = {'id': self.id}
         self._tag  = 'td'
 
         if widget:
             Container.__iadd__ (self, widget)
 
     def Render (self):
-        # Build tag props
-        props = ''
-        for p in self.props:
-            value = self.props[p]
-            if value:
-                props += ' %s="%s"' %(p, value)
-            else:
-                props += ' %s' %(p)
-
         # Render content
         render = Container.Render(self)
 
         # Output
-        html  = '<%s%s>' % (self._tag, props)
+        props = props_to_str (self.props)
+
+        html  = '<%s %s>' % (self._tag, props)
         html += render.html
         html += '</%s>' % (self._tag)
 
@@ -214,7 +208,7 @@ class Table (Widget):
             for row in self.rows[1:]:
                 render += row.Render()
             render.html += '</tbody>'
-        else: 
+        else:
             for row in self.rows:
                 render += row.Render()
 
