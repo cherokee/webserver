@@ -99,11 +99,32 @@ cherokee_header_op_configure (cherokee_header_op_t   *op,
 }
 
 
+static ret_t
+remove_header (cherokee_buffer_t *buffer,
+	       cherokee_buffer_t *header)
+{
+	char *p, *s;
+
+	p = strcasestr (buffer->buf, header->buf);
+	if (p == NULL)
+		return ret_not_found;
+
+	if (p[header->len] != ':')
+		return ret_not_found;
+
+	s = strchr (p, '\r');
+	if (s == NULL)
+		return ret_eof;
+
+	cherokee_buffer_remove_chunk (buffer, p - buffer->buf, s-p +2);
+	return ret_ok;
+}
+
+
 ret_t
 cherokee_header_op_render (cherokee_list_t   *ops_list,
 			   cherokee_buffer_t *buffer)
 {
-	char                 *p, *s;
 	cherokee_list_t      *i;
 	cherokee_header_op_t *op;
 
@@ -114,17 +135,7 @@ cherokee_header_op_render (cherokee_list_t   *ops_list,
 			/* Check whether there is a previous
 			 * header. If so, get rid of it.
 			 */
-			p = strcasestr (buffer->buf, op->header.buf);
-			if (p != NULL) {
-				if (p[op->header.len] == ':') {
-					s = strchr (p, '\r');
-					if (s != NULL) {
-						cherokee_buffer_remove_chunk (buffer,
-									      p - buffer->buf,
-									      s-p + 2);
-					}
-				}
-			}
+			remove_header (buffer, &op->header);
 
 			/* Add the new entry
 			 */
@@ -134,7 +145,7 @@ cherokee_header_op_render (cherokee_list_t   *ops_list,
 			cherokee_buffer_add_str    (buffer, CRLF);
 
 		} else if (op->op == cherokee_header_op_del) {
-			/* TODO */
+			remove_header (buffer, &op->header);
 		}
 	}
 
