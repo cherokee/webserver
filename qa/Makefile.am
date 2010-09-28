@@ -261,7 +261,8 @@ run-tests.py \
 253-XForwardedFor-2.py \
 254-XForwardedFor-3.py \
 255-header_op-add1.py \
-256-header_op-add2.py
+256-header_op-add2.py \
+257-header_op-add3.py
 
 test:
 	./run-tests.py

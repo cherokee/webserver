@@ -103,6 +103,7 @@ ret_t
 cherokee_header_op_render (cherokee_list_t   *ops_list,
 			   cherokee_buffer_t *buffer)
 {
+	char                 *p, *s;
 	cherokee_list_t      *i;
 	cherokee_header_op_t *op;
 
@@ -110,6 +111,23 @@ cherokee_header_op_render (cherokee_list_t   *ops_list,
 		op = HEADER_OP(i);
 
 		if (op->op == cherokee_header_op_add) {
+			/* Check whether there is a previous
+			 * header. If so, get rid of it.
+			 */
+			p = strcasestr (buffer->buf, op->header.buf);
+			if (p != NULL) {
+				if (p[op->header.len] == ':') {
+					s = strchr (p, '\r');
+					if (s != NULL) {
+						cherokee_buffer_remove_chunk (buffer,
+									      p - buffer->buf,
+									      s-p + 2);
+					}
+				}
+			}
+
+			/* Add the new entry
+			 */
 			cherokee_buffer_add_buffer (buffer, &op->header);
 			cherokee_buffer_add_str    (buffer, ": ");
 			cherokee_buffer_add_buffer (buffer, &op->value);
