@@ -259,7 +259,9 @@ run-tests.py \
 251-php-localcheck.py \
 252-XForwardedFor-1.py \
 253-XForwardedFor-2.py \
-254-XForwardedFor-3.py
+254-XForwardedFor-3.py \
+255-header_op-add1.py \
+256-header_op-add2.py
 
 test:
 	./run-tests.py
