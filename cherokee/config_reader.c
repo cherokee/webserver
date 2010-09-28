@@ -142,6 +142,57 @@ check_config_node_sanity (cherokee_config_node_t *conf)
 }
 
 
+static int
+cmp_num (cherokee_list_t *a, cherokee_list_t *b)
+{
+	int an = strtol(CONFIG_NODE(a)->key.buf, NULL, 10);
+	int bn = strtol(CONFIG_NODE(b)->key.buf, NULL, 10);
+
+	if (an == bn) return 0;
+	if (an < bn)  return bn - an;
+
+	return - (an - bn);
+}
+
+static ret_t
+sort_lists (cherokee_config_node_t *conf)
+{
+	int                 re;
+	ret_t               ret;
+	cherokee_list_t    *i;
+	cherokee_boolean_t  all_num = true;
+
+	/* Are all numbers
+	 */
+	cherokee_config_node_foreach (i, conf) {
+		errno = 0;
+		re    = strtol(CONFIG_NODE(i)->key.buf, NULL, 10);
+
+		if ((re == 0) && (errno = EINVAL)) {
+			all_num = false;
+			break;
+		}
+	}
+
+	/* Reorder entries
+	 */
+	if (all_num) {
+		cherokee_list_sort (&conf->child, cmp_num);
+	}
+
+	/* Iterate through the children
+	 */
+	cherokee_config_node_foreach (i, conf) {
+		ret = sort_lists (CONFIG_NODE(i));
+		if (ret != ret_ok) {
+			return ret;
+		}
+	}
+
+	return ret_ok;
+}
+
+
 ret_t
 cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buffer_t *buf)
 {
@@ -236,6 +287,12 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 
 	cherokee_buffer_mrproper (&key);
 	cherokee_buffer_mrproper (&val);
+
+	/* Sort internal lists
+	 */
+	ret = sort_lists (conf);
+	if (ret != ret_ok)
+		return ret;
 
 	/* Sanity check
 	 */
