@@ -52,7 +52,7 @@ from Uploader import Uploader
 from Plugin import PluginSelector
 from Refreshable import Refreshable, RefreshableURL
 from Image import Image, ImageStock
-from SortableList import SortableList
+from SortableList import SortableList, SortableList__reorder_generic
 from Indenter import Indenter
 from Notice import Notice
 from Link import Link, LinkWindow, LinkIcon

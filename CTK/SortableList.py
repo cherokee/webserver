@@ -21,8 +21,8 @@
 #
 
 from Table import Table
-from Server import publish
 from PageCleaner import Uniq_Block
+from Server import publish, post, cfg, cfg_reply_ajax_ok
 
 HEADER = [
     '<script type="text/javascript" src="/CTK/js/jquery.tablednd_0_5.js"></script>'
@@ -107,3 +107,21 @@ class SortableList (Table):
 
         # Let Table do the rest
         Table.set_header (self, num=row_num)
+
+
+def SortableList__reorder_generic (post_arg_name, pre, step=10):
+    # Process new list
+    order = post.pop (post_arg_name)
+    tmp = order.split(',')
+
+    # Build and alternative tree
+    num = step
+    for v in tmp:
+        cfg.clone ('%s!%s'%(pre, v), 'tmp!reorder!%s!%d'%(pre, num))
+        num += step
+
+    # Set the new list in place
+    del (cfg[pre])
+    cfg.rename ('tmp!reorder!%s'%(pre), pre)
+
+    return cfg_reply_ajax_ok()
