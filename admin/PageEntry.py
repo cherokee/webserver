@@ -63,9 +63,7 @@ VALIDATIONS = [
     ("vserver![\d]+!rule![\d]+!allow_from",      validations.is_ip_or_netmask_list),
     ("vserver![\d]+!rule![\d]+!rate",            validations.is_number_gt_0),
     ("vserver![\d]+!rule![\d]+!timeout",         validations.is_number_gt_0),
-    ("vserver![\d]+!rule![\d]+!expiration!time", validations.is_time),
-    ("new_header_op_name",                       validations.is_header_name),
-    ("new_header_op_value",                      validations.is_not_empty),
+    ("vserver![\d]+!rule![\d]+!expiration!time", validations.is_time)
 ]
 
 HELPS = [
@@ -80,6 +78,11 @@ ENCODE_OPTIONS = [
     ('',       N_('Leave unset')),
     ('allow',  N_('Allow')),
     ('forbid', N_('Forbid'))
+]
+
+HEADER_OP_OPTIONS = [
+    ('add', N_('Add')),
+    ('del', N_('Remove'))
 ]
 
 
@@ -145,38 +148,68 @@ def HeaderOp_Apply():
     vsrv  = tmp[0][0]
     rule  = tmp[0][1]
 
+    tipe  = CTK.post.pop('new_header_op_type')
     name  = CTK.post.pop('new_header_op_name')
     value = CTK.post.pop('new_header_op_value')
 
+    # Validation
+    if not name:
+        return {'ret':'error', 'errors': {'new_header_op_name': _("Can not be empty")}}
+
+    if tipe == 'add' and not value:
+        return {'ret':'error', 'errors': {'new_header_op_value': _("Can not be empty")}}
+
+    #("new_header_op_name",                       validations.is_header_name),
+    #("new_header_op_value",                      validations.is_not_empty),
+
     next_pre = CTK.cfg.get_next_entry_prefix ('vserver!%s!rule!%s!header_op'%(vsrv, rule))
+
+    # Add the configuration entries
+    CTK.cfg['%s!type'%(next_pre)]   = tipe
     CTK.cfg['%s!header'%(next_pre)] = name
-    CTK.cfg['%s!value'%(next_pre)]  = value
-    CTK.cfg['%s!type'%(next_pre)]   = "add"
+
+    if tipe == 'add':
+        CTK.cfg['%s!value'%(next_pre)] = value
 
     return CTK.cfg_reply_ajax_ok()
 
 
 class HeaderOps (CTK.Container):
-    class OpsTable (CTK.Container):
+    class OpsTable (CTK.Box):
         def __init__ (self, pre, apply, refresh):
-            CTK.Container.__init__ (self)
+            CTK.Box.__init__ (self)
+
+            def reorder (arg, pre=pre):
+                return CTK.SortableList__reorder_generic (arg, '%s!header_op'%(pre))
 
             if CTK.cfg.keys('%s!header_op'%(pre)):
-                table = CTK.Table()
-                table.set_header (num=1)
-                table += [CTK.RawHTML(x) for x in (_('Type'), _('Header'))]
+                table = CTK.SortableList (reorder, self.id)
+                table += [CTK.RawHTML(x) for x in ('', '', _('Type'), _('Header'))]
+                table.set_header (1)
 
-                for n in CTK.cfg.keys('%s!header_op'%(pre)):
-                    pre2 = '%s!header_op!%s' %(pre,n)
-                    header = CTK.TextCfg('%s!header'%(pre2))
-                    value  = CTK.TextCfg('%s!value' %(pre2))
+                CTK.cfg.normalize ('%s!header_op'%(pre))
+                keys = CTK.cfg.keys('%s!header_op'%(pre))
+                keys.sort (lambda x,y: cmp(int(x), int(y)))
+
+                for n in keys:
+                    pre2  = '%s!header_op!%s' %(pre,n)
+                    type_ = CTK.cfg.get_val('%s!type'%(pre2))
+
+                    type_name = CTK.RawHTML (_(dict(HEADER_OP_OPTIONS)[type_]))
+                    header    = CTK.TextCfg('%s!header'%(pre2))
+                    value     = CTK.TextCfg('%s!value' %(pre2))
 
                     delete = CTK.ImageStock('del')
-                    delete.bind('click', CTK.JS.Ajax (apply,
-                                                      data     = {pre2: ''},
+                    delete.bind('click', CTK.JS.Ajax (apply, data = {pre2: ''},
                                                       complete = refresh.JS_to_refresh()))
 
-                    table += [header, value, delete]
+                    if type_ == 'add':
+                        table += [None, type_name, header, value, delete]
+                    elif type_ == 'del':
+                        table += [None, type_name, header, None, delete]
+
+                    table[-1].props['id']       = n
+                    table[-1][1].props['class'] = 'dragHandle'
 
                 self += table
 
@@ -192,14 +225,19 @@ class HeaderOps (CTK.Container):
         self += CTK.Indenter (refresh)
 
         # New Entries
+        tipe   = CTK.Combobox  ({'name': 'new_header_op_type',  'class': 'noauto'}, HEADER_OP_OPTIONS)
         header = CTK.TextField ({'name': 'new_header_op_name',  'class': 'noauto'})
         value  = CTK.TextField ({'name': 'new_header_op_value', 'class': 'noauto'})
         button = CTK.SubmitterButton (_('Add'))
 
         table = CTK.Table()
         table.set_header (num=1)
-        table += [CTK.RawHTML(x) for x in (_('Header'), _('Value'))]
-        table += [header, value, button]
+        table += [CTK.RawHTML(x) for x in (_('Action'), _('Header'), _('Value'))]
+        table += [tipe, header, value, button]
+
+        # Manage 3rd column
+        selector = ','.join (['#%s'%(row[3].id) for row in table])
+        tipe.bind('change', "if ($(this).val()=='add'){ $('%s').show(); }else{ $('%s').hide();}" %(selector, selector))
 
         submit = CTK.Submitter ('/vserver/%s/rule/content/%s/header_op'%(vsrv, rule))
         submit.bind ('submit_success', refresh.JS_to_refresh())
