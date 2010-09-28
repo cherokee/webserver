@@ -71,7 +71,7 @@ cherokee_header_op_configure (cherokee_header_op_t   *op,
 
 	if (cherokee_buffer_case_cmp_str (tmp, "add") == 0) {
 		op->op = cherokee_header_op_add;
-	} else if (cherokee_buffer_case_cmp_str (tmp, "add") == 0) {
+	} else if (cherokee_buffer_case_cmp_str (tmp, "del") == 0) {
 		op->op = cherokee_header_op_del;
 	} else {
 		free (op);
@@ -130,7 +130,6 @@ cherokee_header_op_render (cherokee_list_t   *ops_list,
 
 	list_for_each (i, ops_list){
 		op = HEADER_OP(i);
-
 		if (op->op == cherokee_header_op_add) {
 			/* Check whether there is a previous
 			 * header. If so, get rid of it.
