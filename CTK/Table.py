@@ -164,6 +164,9 @@ class Table (Widget):
         else:
             return self.__setitem_single (pos, item)
 
+    def __iter__ (self):
+        return iter(self.rows)
+
     def __getitem__ (self, pos):
         # Whole row
         if type(pos) == int:
