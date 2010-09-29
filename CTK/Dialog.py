@@ -66,7 +66,7 @@ def py2js_dic (d):
             else:
                 js_pairs.append ("'%s': '%s'" %(key, val))
         else:
-            assert false, "Unknown data type"
+            assert False, "Unknown data type"
 
     return "{%s}" % (", ".join(js_pairs))
 
