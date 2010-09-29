@@ -91,8 +91,8 @@ class App:
         cont += app
 
         # Description
-        title1 = CTK.RawHTML ("☟ Read more…")
-        title2 = CTK.RawHTML ("☝ Read less…")
+        title1 = CTK.RawHTML (_("☟ Read more…"))
+        title2 = CTK.RawHTML (_("☝ Read less…"))
 
         collapsible = CTK.Collapsible ((title1, title2), True)
         collapsible += CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
