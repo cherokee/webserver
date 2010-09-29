@@ -112,7 +112,7 @@ class Plugin_redir (Handler.PluginHandler):
             CTK.Box.__init__ (self, {'class': 'mime-button'})
 
             # Add New
-            dialog = CTK.Dialog ({'title': _('Add New Regular Expression'), 'width': 480})
+            dialog = CTK.Dialog ({'title': _('Add New Regular Expression'), 'width': 540})
             dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
             dialog.AddButton (_('Cancel'), "close")
             dialog += self.Content (key)
