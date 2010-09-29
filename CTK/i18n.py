@@ -23,6 +23,7 @@
 #
 
 import sys
+import types
 import __builtin__
 
 # Global
@@ -46,16 +47,33 @@ except ImportError:
 #
 # Functions
 #
+def underscore_wrapper (x):
+    re = __builtin__.__dict__['_orig'] (unicode(x, 'UTF-8'))
+
+    if type(re) == types.UnicodeType:
+        re = re.encode ('UTF-8')
+
+    return re
+
 def install (*args, **kwargs):
     if not 'gettext' in sys.modules:
         return
-    return gettext.install (*args, **kwargs)
+
+    gettext.install (*args, **kwargs)
+
+    #  Wrap the _() function. Since Gettext internal catalog stores
+    # Unicode values, we have to take care of using Unicode strings
+    # rather than UTF-8, and to convert the translated strings back
+    # to UTF-8 to be consumed by CTK. [workaround]
+    #
+    __builtin__.__dict__['_orig'] = __builtin__.__dict__['_']
+    __builtin__.__dict__['_']     = underscore_wrapper
 
 def translation (propg, localedir, languages, *args, **kwargs):
     if not 'gettext' in sys.modules:
         return
 
-    # Call gettext
+    # Call gettext (returns a gettext.GNUTranslations obj)
     re = gettext.translation (propg, localedir, languages, *args, **kwargs)
 
     # It worked, store the global
