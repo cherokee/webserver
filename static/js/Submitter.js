@@ -214,7 +214,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 	   this.init = function (self) {
 		  /* Events */
 		  self.find(":text, :password, textarea").not('.noauto').bind ('keypress', self, input_keypress_cb);
-		  self.find(":text, :password, textarea").filter('.noauto').bind ('keypress', self, input_keypress_noauto_cb);
+		  self.find(":text, :password").filter('.noauto').bind ('keypress', self, input_keypress_noauto_cb);
 		  self.find(":text, :password, textarea").not('.noauto').bind ("blur", self, input_blur_cb);
 		  self.find(":checkbox, :radio").not('.required,.noauto').bind ("change", self, input_checkbox_cb);
 		  self.find("select").not('.required,.noauto').bind ("change", self, input_combobox_cb);
