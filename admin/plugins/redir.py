@@ -60,10 +60,11 @@ def commit():
 
 
 class Plugin_redir (Handler.PluginHandler):
-    class Content (CTK.Container):
+    class Content (CTK.Box):
         def __init__ (self, refresh, key):
-            CTK.Container.__init__ (self)
+            CTK.Box.__init__ (self)
 
+            CTK.cfg.normalize (key)
             keys = CTK.cfg.keys (key)
             keys.sort(lambda x,y: cmp(int(x), int(y)))
 
@@ -71,14 +72,15 @@ class Plugin_redir (Handler.PluginHandler):
             if not keys:
                 self += CTK.Indenter (CTK.Notice ('information', CTK.RawHTML(_(NOTE_EMPTY))))
             else:
-                table = CTK.Table()
+                # table = CTK.Table()
+                table = CTK.SortableList (lambda arg: CTK.SortableList__reorder_generic (arg, key), self.id)
+                table += [CTK.RawHTML(x) for x in ('', _('Type'), _('Regular Expression'), _('Substitution'))]
                 table.set_header(1)
-                table += [CTK.RawHTML(x) for x in (_('Type'), _('Regular Expression'), _('Substitution'))]
 
                 for k in keys:
-                    show  = CTK.ComboCfg('%s!%s!show' %(key, k), trans_options(REDIR_SHOW))
-                    regex = CTK.TextCfg('%s!%s!regex' %(key, k))
-                    subst = CTK.TextCfg('%s!%s!substring' %(key, k))
+                    show  = CTK.ComboCfg('%s!%s!show'     %(key, k), trans_options(REDIR_SHOW))
+                    regex = CTK.TextCfg ('%s!%s!regex'    %(key, k))
+                    subst = CTK.TextCfg ('%s!%s!substring'%(key, k))
 
                     remove = None
                     if len(keys) >= 2:
@@ -86,8 +88,10 @@ class Plugin_redir (Handler.PluginHandler):
                         remove.bind('click', CTK.JS.Ajax (URL_APPLY, data={'%s!%s'%(key, k): ''},
                                                           complete = refresh.JS_to_refresh()))
 
-                    table += [show, regex, subst, remove]
+                    table += [None, show, regex, subst, remove]
 
+                    table[-1].props['id']       = k
+                    table[-1][1].props['class'] = 'dragHandle'
 
                 submit = CTK.Submitter (URL_APPLY)
                 submit += table
