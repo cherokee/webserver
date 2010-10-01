@@ -68,7 +68,7 @@ CONFIG_VSERVER = SOURCE + """
 %(vsrv_pre)s!rule!1!handler!balancer = round_robin
 %(vsrv_pre)s!rule!1!handler!balancer!source!1 = %(src_num)d
 %(vsrv_pre)s!rule!1!handler!in_allow_keepalive = 1
-%(vsrv_pre)s!rule!1!handler!in_preserve_host = 0
+%(vsrv_pre)s!rule!1!handler!in_preserve_host = 1
 """
 
 CONFIG_DIR = SOURCE + """
@@ -79,7 +79,7 @@ CONFIG_DIR = SOURCE + """
 %(rule_pre)s!handler!balancer = round_robin
 %(rule_pre)s!handler!balancer!source!1 = %(src_num)d
 %(rule_pre)s!handler!in_allow_keepalive = 1
-%(rule_pre)s!handler!in_preserve_host = 0
+%(rule_pre)s!handler!in_preserve_host = 1
 """
 
 
