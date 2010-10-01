@@ -176,8 +176,12 @@ def cfg_source_find_empty_port (n_ports=1):
         ports.append (port)
 
     pport = 1025
-    for x in ports:
-        if pport + n_ports < x:
+    while pport+n_ports < 65535:
+        pports = range(pport, pport + n_ports)
+        for x in pports:
+            if x in ports:
+                pport += 1
+                break
             return pport
 
     assert (False)
