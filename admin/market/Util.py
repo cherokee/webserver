@@ -25,6 +25,7 @@
 import CTK
 import Page
 import OWS_Login
+import SystemInfo
 
 from consts import *
 from ows_consts import *
@@ -115,3 +116,42 @@ class PriceTag (CTK.Box):
             self += CTK.Box ({'class': 'currency'}, CTK.RawHTML (info['currency']))
         else:
             self += CTK.Box ({'class': 'free'}, CTK.RawHTML (_('Free')))
+
+
+class InstructionBox (CTK.Box):
+    def __init__ (self, note, instructions):
+        assert type(instructions) == dict
+
+        CTK.Box.__init__ (self)
+
+        self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
+
+        info = self.choose_instructions (instructions)
+        if info:
+            notice  = CTK.Notice ()
+            notice += CTK.RawHTML ('<p>%s:</p>' %(_('These instructions will help you install the required software')))
+            notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
+            self += notice
+
+    def choose_instructions (self, instructions):
+        data   = SystemInfo.get_info()
+        system = data.get('system','').lower()
+        distro = data.get('linux_distro_id','').lower()
+        info   = instructions.get('generic')
+
+        # OS specific
+        if instructions.has_key(system):
+            return instructions[system]
+
+        # Linux distro specific
+        if instructions.has_key(distro):
+            return instructions[distro]
+
+        # Linux distro generic
+        for x in ('red hat', 'redhat', 'fedora', 'centos', 'suse'):
+            if x in distro:
+                return instructions.get('yum', info)
+
+        for x in ('debian', 'ubuntu', 'knoppix', 'mint'):
+            if x in distro:
+                return instructions.get('apt', info)

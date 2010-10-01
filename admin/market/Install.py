@@ -285,7 +285,7 @@ class Download_Error (Install_Stage):
 
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Downloading"), app_name))
-        cont += CTK.RawHTML ("Say something else here") # TODO
+        cont += CTK.RawHTML (_("There was an error downloading the application. Please contact us if the problem persists."))
 
         buttons = CTK.DruidButtonsPanel()
         buttons += CTK.DruidButton_Close(_('Cancel'))
