@@ -185,6 +185,21 @@ You will need to provide the values in the following format:
 This will set the memory limit for the virtual server only. Any
 `php.ini` variable can be set using this procedure.
 
+Also, it is possible to manually specify every `php.ini` as a
+parameter of the interpreter thanks to the `-d` argument of
+PHP. Assuming you had to separate virtual servers, each with its own
+PHP information source, you could customize each of them directly
+editing the information source. This example would specify different
+memory limits for both information sources.
+
+[cols="10%,90%",options="header"]
+|====================================================================
+|VHost        | Interpreter
+| 1 | `/usr/local/bin/php-cgi -d memory_limit=256M -b 127.0.0.1:2998`
+
+| 2 | `/usr/local/bin/php-cgi -d memory_limit=32M -b 127.0.0.1:2999`
+|====================================================================
+
 [[upload_limits]]
 PHP upload limits
 ~~~~~~~~~~~~~~~~~
