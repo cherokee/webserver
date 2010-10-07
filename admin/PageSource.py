@@ -192,7 +192,7 @@ def _protected_sources ():
     for rule in rules:
         sources = rule.values()[0]
         if len(sources) == 1:
-            protect += sources[0]
+            protect.append(sources[0])
     return protect
 
 
