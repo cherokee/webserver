@@ -31,7 +31,7 @@ from configured import *
 LOGIN_APPLY      = '/login/apply'
 SIGNOUT_APPLY    = '/signout/apply'
 
-OWS_WEB_REGISTER = 'http://market.octality.com/signup'
+OWS_WEB_REGISTER = 'http://market.octality.com/?signup'
 OWS_WEB_LOGIN    = 'https://www.octality.com/api/v%s/login' %(OWS_API_VERSION)
 OWS_WEB_USER     = 'http://market.octality.com/user/%s'
 
@@ -100,7 +100,7 @@ def SignOut_Apply():
 
 class LoginDialog (CTK.Dialog):
     def __init__ (self):
-        CTK.Dialog.__init__ (self, {'title': _("Sign in to Octality Market")}, {'id': 'login-dialog'})
+        CTK.Dialog.__init__ (self, {'title': _("Sign in to Cherokee Market")}, {'id': 'login-dialog'})
 
         submit  = CTK.Submitter (LOGIN_APPLY)
         submit += CTK.RawHTML (_('Email address'))
