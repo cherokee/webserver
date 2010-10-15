@@ -31,7 +31,7 @@ from configured import *
 LOGIN_APPLY      = '/login/apply'
 SIGNOUT_APPLY    = '/signout/apply'
 
-OWS_WEB_REGISTER = 'http://market.octality.com/?signup'
+OWS_WEB_REGISTER = 'http://market.octality.com/signup'
 OWS_WEB_LOGIN    = 'https://www.octality.com/api/v%s/login' %(OWS_API_VERSION)
 OWS_WEB_USER     = 'http://market.octality.com/user/%s'
 
