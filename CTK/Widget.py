@@ -29,8 +29,6 @@ from consts import *
 from util import json_dump
 from PageCleaner import Postprocess
 
-widget_uniq_id = 1;
-
 SYNC_JS_LOAD_JS = """
 if (typeof (__loaded_%(name)s) == 'undefined') {
     $.ajax ({url: '%(url)s', type:'get', dataType:'script', async:false, global:false, cache:true, ifModified:true});
@@ -102,12 +100,13 @@ class RenderResponse:
 
 
 class Widget:
-    def __init__ (self):
-        global widget_uniq_id;
+    # Class prop
+    widget_uniq_id = 1
 
-        widget_uniq_id += 1;
-        self.uniq_id = widget_uniq_id;
-        self.id      = "widget_%d" %(widget_uniq_id)
+    def __init__ (self):
+        Widget.widget_uniq_id += 1;
+        self.uniq_id = Widget.widget_uniq_id;
+        self.id      = "widget_%d" %(Widget.widget_uniq_id)
         self.binds   = []
 
     def Render (self):
