@@ -52,7 +52,7 @@ class Box (Container):
 
         if self.embed_javascript and render.js:
             js = HTML_JS_BLOCK %(render.js)
-            render.js   = ''
+            render.js = ''
         else:
             js = ''
 
