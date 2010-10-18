@@ -32,8 +32,14 @@ $.ajax({
    url:     "%(proxy_url)s",
    type:    "GET",
    async:   %(async_bool)s,
-   success: function(msg){
-      $('#%(id_widget)s').html(msg);
+   success: function (msg){
+      var me = $('#%(id_widget)s');
+      me.html (msg);
+      me.trigger ({type: 'load_ok', url: url});
+   },
+   error: function (xhr, ajaxOptions, thrownError) {
+      var me = $('#%(id_widget)s');
+      me.trigger({type: 'load_fail', url: url, status: xhr.status});
    }
 });
 """
@@ -58,7 +64,7 @@ class Proxy (Box):
 
         if host == None:
            scgi = get_scgi()
-           host =scgi.env['HTTP_HOST']
+           host = scgi.env['HTTP_HOST']
 
         self._async = self.props.pop('async', True)
         self.id     = 'proxy%d'%(self.uniq_id)
@@ -75,3 +81,10 @@ class Proxy (Box):
 
        render.js += JAVASCRIPT %(props)
        return render
+
+    def JS_to_reload (self):
+       props = {'id_widget':  self.id,
+                'proxy_url':  self._url_local,
+                'async_bool': ['false','true'][self._async]}
+
+       return JAVASCRIPT %(props)
