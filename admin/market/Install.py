@@ -382,7 +382,7 @@ class Setup (Install_Stage):
         pkg_filename = url_download.split('/')[-1]
 
         package_path = CTK.cfg.get_val ('tmp!market!install!local_package')
-        if not os.path.exists (package_path):
+        if not package_path or not os.path.exists (package_path):
             down_entry = CTK.DownloadEntry_Factory (url_download)
             package_path = down_entry.target_path
 
