@@ -21,14 +21,11 @@
 #
 
 from consts import *
-from Widget import Widget
+from Box import Box
 from Server import publish, get_scgi
 
 from httplib import HTTPConnection
 
-HTML = """
-<div id="%(id_widget)s"></div>
-"""
 
 JAVASCRIPT = """
 $.ajax({
@@ -49,9 +46,9 @@ class ProxyRequest:
       return r.read()
 
 
-class Proxy (Widget):
+class Proxy (Box):
     def __init__ (self, host, req, props=None):
-        Widget.__init__ (self)
+        Box.__init__ (self)
         self._url_local = '/proxy_widget_%d' %(self.uniq_id)
 
         if props:
@@ -64,19 +61,17 @@ class Proxy (Widget):
            host =scgi.env['HTTP_HOST']
 
         self._async = self.props.pop('async', True)
-        self._id    = 'widget%d'%(self.uniq_id)
+        self.id     = 'proxy%d'%(self.uniq_id)
 
         # Register the proxy path
         publish (self._url_local, ProxyRequest, host=host, req=req)
 
     def Render (self):
-       render = Widget.Render(self)
+       render = Box.Render(self)
 
-       props = {'id_widget':  self._id,
+       props = {'id_widget':  self.id,
                 'proxy_url':  self._url_local,
                 'async_bool': ['false','true'][self._async]}
 
-       render.html += HTML       %(props)
-       render.js   += JAVASCRIPT %(props)
-
+       render.js += JAVASCRIPT %(props)
        return render
