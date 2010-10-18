@@ -63,11 +63,11 @@ URL_INSTALL_WELCOME        = "%s/install/welcome"        %(URL_MAIN)
 URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
 URL_INSTALL_PAY_CHECK      = "%s/install/pay"            %(URL_MAIN)
 URL_INSTALL_DOWNLOAD       = "%s/install/download"       %(URL_MAIN)
+URL_INSTALL_DOWNLOAD_ERROR = "%s/install/download_error" %(URL_MAIN)
 URL_INSTALL_SETUP_INTRO    = "%s/install/setup-intro"    %(URL_MAIN)
 URL_INSTALL_SETUP          = "%s/install/setup"          %(URL_MAIN)
 URL_INSTALL_EXCEPTION      = "%s/install/exception"      %(URL_MAIN)
 URL_INSTALL_SETUP_EXTERNAL = "%s/install/setup/package"  %(URL_MAIN)
-URL_INSTALL_DOWNLOAD_ERROR = "%s/install/download_error" %(URL_MAIN)
 URL_INSTALL_DONE           = "%s/install/done"           %(URL_MAIN)
 URL_INSTALL_DONE_CONTENT   = "%s/install/done/content"   %(URL_MAIN)
 URL_INSTALL_DONE_APPLY     = "%s/install/done/apply"     %(URL_MAIN)
@@ -378,6 +378,9 @@ class Setup (Install_Stage):
     def __safe_call__ (self):
         url_download = CTK.cfg.get_val('tmp!market!install!download')
 
+        box = CTK.Box()
+        box += CTK.RawHTML ("<h2>%s</h2>" %(_('Unpacking and setting up')))
+
         # has it been downloaded?
         pkg_filename = url_download.split('/')[-1]
 
@@ -425,7 +428,28 @@ class Setup (Install_Stage):
         # Set owner and permissions
         Install_Log.log ("Post unpack commands")
 
-        for command_entry in pkg_installer.__dict__.get ('POST_UNPACK_COMMANDS',[]):
+        # Execute commands
+        commands = pkg_installer.__dict__.get ('POST_UNPACK_COMMANDS',[])
+        box += CommandProgress (commands, URL_INSTALL_SETUP_EXTERNAL)
+
+        return box.Render().toStr()
+
+
+class CommandProgress (CTK.Box):
+    class Exec (CTK.Container):
+        def __init__ (self, command_progress):
+            CTK.Container.__init__ (self)
+
+            # Has it finished?
+            commands_len = len(command_progress.commands)
+            if command_progress.executed >= commands_len:
+                self += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (command_progress.id,
+                                                                        command_progress.finished_url))
+                return
+
+            # Execute command
+            command_entry = command_progress.commands[command_progress.executed]
+
             command = replacement_cmd (command_entry['command'])
             Install_Log.log ("  %s" %(command))
 
@@ -436,10 +460,23 @@ class Setup (Install_Stage):
             if command_entry.get ('check_ret', True):
                 None # TODO
 
-        # Delegate to Installer
-        box = CTK.Box()
-        box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_SETUP_EXTERNAL))
-        return box.Render().toStr()
+            # Progress Bar
+            command_progress.executed += 1
+            percent = command_progress.executed * 100 / commands_len
+
+            self += CTK.ProgressBar ({'value': percent})
+            self += CTK.RawHTML (js = command_progress.refresh.JS_to_refresh())
+
+    def __init__ (self, commands, finished_url):
+        CTK.Box.__init__ (self)
+
+        self.finished_url = finished_url
+        self.commands     = commands
+        self.executed     = 0
+
+        self.refresh = CTK.Refreshable ({'id': 'market-commands-exec'})
+        self.refresh.register (lambda: CommandProgress.Exec(self).Render())
+        self += self.refresh
 
 
 def Install_Done_apply():
