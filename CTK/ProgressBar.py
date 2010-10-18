@@ -34,13 +34,14 @@ HTML = """
 """
 
 PERCENT_INIT_JS = """
-$('#%(id)s').progressbar({ value: 0 });
+$('#%(id)s').progressbar({ value: %(value)s });
 """
 
 class ProgressBar (Widget):
     def __init__ (self, props={}):
         Widget.__init__ (self)
-        self.id = "progressbar_%d" %(self.uniq_id)
+        self.id    = "progressbar_%d" %(self.uniq_id)
+        self.value = props.pop ('value', 0)
 
         self.props = props.copy()
         if 'class' in props:
@@ -52,6 +53,7 @@ class ProgressBar (Widget):
         render = Widget.Render (self)
 
         props = {'id':    self.id,
+                 'value': self.value,
                  'props': props_to_str (self.props)}
 
         render.html    += HTML %(props)
