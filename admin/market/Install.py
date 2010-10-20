@@ -38,6 +38,7 @@ import Install_Log
 import SystemInfo
 import SaveButton
 import Cherokee
+import popen
 
 from util import *
 from consts import *
@@ -274,6 +275,7 @@ class Download (Install_Stage):
         cont += downloader
         cont += buttons
         cont += CTK.RawHTML (js = downloader.JS_to_start())
+
         return cont.Render().toStr()
 
 
@@ -453,8 +455,8 @@ class CommandProgress (CTK.Box):
             command = replacement_cmd (command_entry['command'])
             Install_Log.log ("  %s" %(command))
 
-            ret = run (command, stderr=True)
-            if ret['stderr'] != 0:
+            ret = popen.popen_sync (command, stderr=True, retcode=True)
+            if ret['stderr']:
                 Install_Log.log ('    ' + ret['stderr'])
 
             if command_entry.get ('check_ret', True):

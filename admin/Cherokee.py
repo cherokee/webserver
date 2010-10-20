@@ -34,6 +34,7 @@ from subprocess import *
 from select import select
 
 # Cheroke-admin
+import popen
 from util import *
 from consts import *
 from configured import *
@@ -83,7 +84,8 @@ class PID:
 
     def _figure_pid (self):
         # Execture ps
-        ps = run ("ps aux")
+        ret = popen.popen_sync ("ps aux")
+        ps  = ret['stdout']
 
         # Try to find the Cherokee process
         for l in ps.split("\n"):
@@ -159,7 +161,8 @@ class Support:
     def __init__ (self):
         # Get server info
         try:
-            self._server_info = run ("%s -i" %(CHEROKEE_WORKER))
+            ret = popen.popen_sync ("%s -i" %(CHEROKEE_WORKER))
+            self._server_info = ret['stdout']
         except:
             self._server_info = ''
 
