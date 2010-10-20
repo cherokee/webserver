@@ -75,6 +75,7 @@ config_version.py \
 configured.py \
 consts.py \
 util.py \
+popen.py \
 validations.py
 
 html_data = \
