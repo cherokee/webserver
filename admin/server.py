@@ -45,9 +45,10 @@ def init (scgi_port, cfg_file):
     # Translation support
     CTK.i18n.install ('cherokee', LOCALEDIR)
 
-    # Try to avoid zombie processes
-    if hasattr(signal, "SIGCHLD"):
-        signal.signal(signal.SIGCHLD, signal.SIG_IGN)
+    # Ensure SIGCHLD is set. It needs to receive the signal in order
+    # to detect when its child processes finish.
+    if signal.getsignal (signal.SIGCHLD) == signal.SIG_IGN:
+        signal.signal (signal.SIGCHLD, signal.SIG_DFL)
 
     # Move to the server directory
     pathname, scriptname = os.path.split(sys.argv[0])
