@@ -58,8 +58,13 @@ class SupportBox (CTK.Box):
             self[(1,1)] = [CTK.RawHTML(x[0]) for x in data]
             self.set_header (row=True, num=1)
 
-            f = lambda x: CTK.ImageStock('tick') if x else CTK.ImageStock('del')
-            self += [f(value) for value in [x[1] for x in data]]
+            def image (value):
+                if value:
+                    return CTK.Image({'src': '/CTK/images/tick.png', 'alt': _('Supported')})
+                else:
+                    return CTK.Image({'src': '/CTK/images/del.png',  'alt': _('Unsupported')})
+
+            self += [image(value) for value in [x[1] for x in data]]
 
 
 class App:
