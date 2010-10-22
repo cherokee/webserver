@@ -4,6 +4,7 @@
 #
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
+#      Taher Shihadeh <taher@unixwars.com>
 #
 # Copyright (C) 2001-2010 Alvaro Lopez Ortega
 #
@@ -35,6 +36,30 @@ from ows_consts import *
 from configured import *
 
 from XMLServerDigest import XmlRpcServer
+
+WEBDIR = N_('Web Directory')
+VHOST  = N_('Virtual Server')
+
+class SupportBox (CTK.Box):
+    def __init__ (self, info):
+        CTK.Box.__init__ (self, {'class': 'market-support-box'})
+
+        target = [(_(WEBDIR), dict(info['target'])['host']), (_(VHOST), dict(info['target'])['dir'])]
+
+        self += self.SupportTable (target,     {'class': 'market-support-target'})
+        self += self.SupportTable (info['os'], {'class': 'market-support-os'})
+        self += self.SupportTable (info['db'], {'class': 'market-support-db'})
+
+
+    class SupportTable (CTK.Table):
+        def __init__ (self, data, props):
+            CTK.Table.__init__(self, props)
+
+            self[(1,1)] = [CTK.RawHTML(x[0]) for x in data]
+            self.set_header (row=True, num=1)
+
+            f = lambda x: CTK.ImageStock('tick') if x else CTK.ImageStock('del')
+            self += [f(value) for value in [x[1] for x in data]]
 
 
 class App:
@@ -88,6 +113,7 @@ class App:
         app += CTK.Box ({'class': 'market-app-desc-url'},         by)
         app += CTK.Box ({'class': 'market-app-desc-category'},    CTK.RawHTML("%s: %s" %(_("Category"), info['category_name'])))
         app += CTK.Box ({'class': 'market-app-desc-short-desc'},  CTK.RawHTML(info['summary']))
+        app += SupportBox (info)
         cont += app
 
         # Description
