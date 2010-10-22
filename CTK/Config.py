@@ -421,7 +421,8 @@ class Config:
             n += step
 
         del (self[pre])
-        self.rename ('tmp!normalize!%s'%(pre), pre)
+        if self['tmp!normalize']:
+            self.rename ('tmp!normalize!%s'%(pre), pre)
 
     def apply_chunk (self, chunk):
         lines = [l.strip() for l in chunk.split('\n')]
