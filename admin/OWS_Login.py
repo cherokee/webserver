@@ -57,7 +57,7 @@ def log_in (user, password):
         if session:
             login_user     = user
             login_password = password
-            loing_session  = session
+            login_session  = session
             CTK.cfg["admin!ows!login!user"]     = user
             CTK.cfg["admin!ows!login!password"] = password
             return True
