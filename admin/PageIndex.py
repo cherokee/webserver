@@ -124,6 +124,12 @@ $(document).ready(function() {
 """
 
 
+def Halt():
+    # This function halts Cherokee-*admin*
+    Cherokee.admin.halt()
+    return {'ret': 'ok'}
+
+
 def Launch():
     if not Cherokee.server.is_alive():
         error = Cherokee.server.launch()
@@ -270,6 +276,7 @@ def Lang_Apply():
 
     language_set (lang)
     return {'ret': 'ok', 'redirect': '/'}
+
 
 class LanguageSelector (CTK.Box):
     def __init__ (self):
@@ -419,6 +426,29 @@ class CommunityBar (CTK.Box):
         slist += CTK.LinkWindow (LINK_LINKEDIN, CTK.Image({'src': '/static/images/other/linkedin.png', 'title': _('Become a member of Cherokee group on LinkedIn')}))
         slist += CTK.LinkWindow (LINK_IRC,      CTK.Image({'src': '/static/images/other/irc.png',      'title': _('Chat with us at irc.freenode.net')}))
 
+class HaltAdmin (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'id': 'halt-admin-box'})
+
+        submit = CTK.Submitter('/halt')
+        submit += CTK.Hidden ('what', 'ever')
+
+        dialog = CTK.Dialog ({'title': _('Shutdown Cherokee-admin'), 'width': 560})
+        dialog.AddButton (_('Cancel'), "close")
+        dialog.AddButton (_('Shut down'), dialog.JS_to_trigger('submit'))
+        dialog += CTK.RawHTML ("<h2>%s</h2>" %(_('You are about to shut down this instance of Cherokee-admin')))
+        dialog += CTK.RawHTML ("<p>%s</p>" %(_('Are you sure do you want to proceed?')))
+        dialog += submit
+        dialog.bind ('submit', dialog.JS_to_close())
+        dialog.bind ('submit', "$('body').html('<h1>%s</h1>');"%(_('Cherokee-admin has been shut down')))
+
+        link = CTK.Link (None, CTK.RawHTML (_('Shut down Cherokee-Admin')))
+        link.bind ('click', dialog.JS_to_show())
+
+        self += link
+        self += dialog
+
+
 class Render:
     def __call__ (self):
         Cherokee.pid.refresh()
@@ -451,6 +481,7 @@ class Render:
 
         sidebar += ProudUsers()
         sidebar += OWS_Market_Info.Index_Block2()
+        sidebar += HaltAdmin()
 
         # Content
         cont = CTK.Box({'id': 'home-container'})
@@ -470,6 +501,7 @@ class Render:
 CTK.publish (r'^/$',            Render)
 CTK.publish (r'^/launch$',      Launch)
 CTK.publish (r'^/stop$',        Stop)
+CTK.publish (r'^/halt$',        Halt)
 CTK.publish (r'^/lang/apply$',  Lang_Apply, method="POST")
 CTK.publish (r'^/proud/apply$', ProudUsers_Apply, method="POST")
 CTK.publish (r'^%s$'%(SUBSCRIBE_APPLY), Subscribe_Apply, method="POST")

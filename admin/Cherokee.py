@@ -157,6 +157,13 @@ class Server:
         return None
 
 
+class Admin:
+    def halt (self):
+        parent_pid = os.getppid()
+        os.kill (parent_pid, signal.SIGTERM)
+        raise SystemExit
+
+
 class Support:
     def __init__ (self):
         # Get server info
@@ -218,6 +225,7 @@ class Support:
 pid     = PID()
 server  = Server()
 support = Support()
+admin   = Admin()
 
 
 #
