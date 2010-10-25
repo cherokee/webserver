@@ -155,6 +155,7 @@ uninstall-local: uninstall-local-config
 
 test:
 	$(MAKE) -C doc test
+	$(MAKE) -C admin test
 	$(MAKE) -C qa test
 
 update-po:

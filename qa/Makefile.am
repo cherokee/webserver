@@ -266,4 +266,5 @@ run-tests.py \
 258-header_op-add4.py
 
 test:
+	python -m compileall .
 	./run-tests.py

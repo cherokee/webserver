@@ -104,3 +104,5 @@ $(template_data)
 CLEANFILES = \
 $(generated_DATA)
 
+test:
+	python -m compileall .
