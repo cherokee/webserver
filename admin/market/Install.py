@@ -117,7 +117,7 @@ class Install_Stage:
 class Welcome (Install_Stage):
     def __safe_call__ (self):
         Install_Log.reset()
-        Install_Log.log ("Retrieving package information..")
+        Install_Log.log ("Retrieving package information…")
 
         # Check whether there are CTK.cfg changes to be saved
         changes = "01"[int(CTK.cfg.has_changed())]
@@ -126,7 +126,7 @@ class Welcome (Install_Stage):
         # Render a welcome message
         box = CTK.Box()
         box += CTK.RawHTML ('<h2>%s</h2>' %(_('Connecting to Octality')))
-        box += CTK.RawHTML ('<h1>%s</h1>' %(_('Retrieving package information..')))
+        box += CTK.RawHTML ('<h1>%s</h1>' %(_('Retrieving package information…')))
         box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_INIT_CHECK))
 
         # Dialog buttons
@@ -201,13 +201,13 @@ class Pay_Check (Install_Stage):
         xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
         install_info = xmlrpc.get_install_info (app_id, info)
 
-        Install_Log.log ("Waiting for the payment acknowledge..")
+        Install_Log.log ("Waiting for the payment acknowledge…")
 
         box = CTK.Box()
         if install_info.get('due_payment'):
             set_timeout_js = "setTimeout (reload_druid, %s);" %(PAYMENT_CHECK_TIMEOUT)
             box += CTK.RawHTML ("<h2>%s %s</h2>"%(_('Checking out'), app_name))
-            box += CTK.RawHTML ('<h1>%s</h1>' %(_("Waiting for the payment acknowledge...")))
+            box += CTK.RawHTML ('<h1>%s</h1>' %(_("Waiting for the payment acknowledge…")))
             box += CTK.RawHTML (js="function reload_druid() {%s %s}" %(CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_PAY_CHECK), set_timeout_js))
             box += CTK.RawHTML (js=set_timeout_js)
 
@@ -304,7 +304,7 @@ class Setup_Intro (Install_Stage):
 
         box = CTK.Box()
         box += CKT.RawHTML ("<h2>%s</h2>" %(_("Setting up"), app_name))
-        box += CKT.RawHTML ("<h1>%s</h1>" %(_("The application is being deployed...")))
+        box += CKT.RawHTML ("<h1>%s</h1>" %(_("Unpacking application…")))
         box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_SETUP))
         return box.Render().toStr()
 
@@ -381,7 +381,7 @@ class Setup (Install_Stage):
         url_download = CTK.cfg.get_val('tmp!market!install!download')
 
         box = CTK.Box()
-        box += CTK.RawHTML ("<h2>%s</h2>" %(_('Unpacking and setting up')))
+        box += CTK.RawHTML ("<h2>%s</h2>" %(_('Setting up application…')))
 
         # has it been downloaded?
         pkg_filename = url_download.split('/')[-1]
