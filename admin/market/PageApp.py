@@ -50,7 +50,6 @@ class SupportBox (CTK.Box):
         self += self.SupportTable (info['os'], {'class': 'market-support-os'})
         self += self.SupportTable (info['db'], {'class': 'market-support-db'})
 
-
     class SupportTable (CTK.Table):
         def __init__ (self, data, props):
             CTK.Table.__init__(self, props)
@@ -118,16 +117,9 @@ class App:
         app += CTK.Box ({'class': 'market-app-desc-url'},         by)
         app += CTK.Box ({'class': 'market-app-desc-category'},    CTK.RawHTML("%s: %s" %(_("Category"), info['category_name'])))
         app += CTK.Box ({'class': 'market-app-desc-short-desc'},  CTK.RawHTML(info['summary']))
-        app += SupportBox (info)
         cont += app
 
-        # Description
-        title1 = CTK.RawHTML (_("☟ Read more…"))
-        title2 = CTK.RawHTML (_("☝ Read less…"))
-
-        collapsible = CTK.Collapsible ((title1, title2), True)
-        collapsible += CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
-        app += collapsible
+        ext_description = CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
 
         # Shots
         shot_entries = info.get('shots', [])
@@ -135,7 +127,13 @@ class App:
             shots = CTK.Carousel()
             for s in shot_entries:
                 shots += CTK.Image ({'src': "%s/%s" %(OWS_STATIC, s)})
-            app += shots
+
+        # Tabs
+        tabs = CTK.Tab()
+        tabs.Add (_('Screenshots'), shots)
+        tabs.Add (_('Description'), ext_description)
+        tabs.Add (_('Tech. Specs'), SupportBox(info))
+        app += tabs
 
         # Update the cache
         App.cache_app[str(app_id)] = info
