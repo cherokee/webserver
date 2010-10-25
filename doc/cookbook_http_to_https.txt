@@ -15,6 +15,13 @@ easily handle this situation.
 To achive your goal you will simply have to set up a redirection
 making use of the `${host}` macro, such as the following one.
 
+First, create a new complex rule of type `NOT Is SSL/TLS`, that is,
+make a rule of type `TLS/SSL`, and apply the `NOT` boolean operator to
+it.
+
+Then configure the `Redirection` handler to use the specified macro
+like this:
+
 [options="header"]
 |========================================
 |Regular Expression |Substitution
