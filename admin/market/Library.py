@@ -75,7 +75,7 @@ class MyLibrary (CTK.Box):
         CTK.Box.__init__ (self, {'class': 'market-my-library'})
         self += CTK.RawHTML ('<h3>%s</h3>' %(_('My Library')))
 
-        if cached_info and cache_expiration < time.time():
+        if cached_info and cache_expiration > time.time():
             self += CTK.RawHTML (self.format_func (cached_info, from_cache=True))
         else:
             self += CTK.XMLRPCProxy (name = 'cherokee-my-library',

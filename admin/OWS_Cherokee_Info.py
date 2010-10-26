@@ -24,27 +24,39 @@
 
 
 import CTK
+import time
 
-from configured import *
 from util import version_cmp
 from XMLServerDigest import XmlRpcServer
 from configured import *
 
-OWS_RPC = 'http://www.octality.com/api/v%s/open/cherokee-info/' %(OWS_API_VERSION)
+OWS_RPC    = 'http://www.octality.com/api/v%s/open/cherokee-info/' %(OWS_API_VERSION)
+EXPIRATION = 10*60 # 10 min
 
 BETA_TESTER_NOTICE = N_("Thank you for testing a development snapshot. It helps us to create the highest quality product.")
 
 
-class Latest_Release (CTK.XMLRPCProxy):
+class Latest_Release (CTK.Box):
+    cache_info       = None
+    cache_expiration = 0
+
     def __init__ (self):
-        CTK.XMLRPCProxy.__init__ (self, 'cherokee-latest-release',
-                                  XmlRpcServer(OWS_RPC).get_latest,
-                                  self.format, debug=True)
+        CTK.Box.__init__ (self)
+
+        if Latest_Release.cache_info and \
+           Latest_Release.cache_expiration > time.time():
+            self += CTK.RawHTML (self.cache_info)
+        else:
+            self += CTK.XMLRPCProxy ('cherokee-latest-release',
+                                     xmlrpc_func = XmlRpcServer(OWS_RPC).get_latest,
+                                     format_func = self.format,
+                                     debug       = True)
 
     def format (self, response):
         response = CTK.util.to_utf8(response)
         latest   = response['default']
 
+        # Render
         content  = CTK.Box ({'id': 'latest-release-box', 'class': 'sidebar-box'})
         content += CTK.RawHTML('<h2>%s</h2>' % _('Latest Release'))
 
@@ -62,8 +74,11 @@ class Latest_Release (CTK.XMLRPCProxy):
             else:
                 content += CTK.RawHTML (_(BETA_TESTER_NOTICE))
 
-        return content.Render().toStr()
+        # Update cache
+        Latest_Release.cache_info       = content.Render().toStr()
+        Latest_Release.cache_expiration = time.time() + EXPIRATION
 
+        return Latest_Release.cache_info
 
 
 #

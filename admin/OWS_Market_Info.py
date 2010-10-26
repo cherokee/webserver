@@ -51,11 +51,14 @@ class Index_Block1 (CTK.Container):
             return
 
         # Instance the XML-RPC Proxy object
-        self += CTK.XMLRPCProxy (name = 'cherokee-index-block1',
-                                 xmlrpc_func = lambda: XmlRpcServer(OWS_RPC).get_block_index_1 (CTK.i18n.active_lang, VERSION),
-                                 format_func = self.format_func,
-                                 props = {'class': 'main-banner'},
-                                 debug = DEBUG)
+        if Index_Block1.cached:
+            self += CTK.RawHTML (Index_Block1.cached)
+        else:
+            self += CTK.XMLRPCProxy (name = 'cherokee-index-block1',
+                                     xmlrpc_func = lambda: XmlRpcServer(OWS_RPC).get_block_index_1 (CTK.i18n.active_lang, VERSION),
+                                     format_func = self.format_func,
+                                     props = {'class': 'main-banner'},
+                                     debug = DEBUG)
 
 
 class Index_Block2 (CTK.Container):
