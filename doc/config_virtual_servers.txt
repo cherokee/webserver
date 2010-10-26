@@ -197,7 +197,7 @@ do not seem to convert the FQDN to lowercase before sending the
 requests. This mainly happens with built-in browsers or very-early
 implementations. Even in those cases it is possible to have
 case-insensitive host matching by using regular-expression
-matching. For example, if you're domain name was `Example.com` and
+matching. For example, if your domain name was `Example.com` and
 were dealing with one such browser, you would have to prepend *(?i)*
 to your regular expression. That in turn would perform a
 case-insensitive evaluation, effectively solving the problem.
