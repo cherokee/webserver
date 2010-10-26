@@ -39,6 +39,17 @@ URL_SAVE_GRACEFUL = r'/save/apply/graceful'
 URL_SAVE_HARD     = r'/save/apply/hard'
 URL_SAVE_NONE     = r'/save/apply/none'
 
+HELP_HTML = """
+   <div id="help">
+     <a class="helpbutton" href="#" id="help-a"><span>%(help)s</span></a>
+     %(helps)s
+   </div>
+"""
+
+HELP_JS = """
+   $('#help-a').click (function(){ toggleHelp(); });
+"""
+
 SAVE_BUTTON = """
 $('#save-button').bind ('click', function(){
   /* Do nothing if it hasn't changed */
@@ -111,17 +122,19 @@ class Base (CTK.Page):
 
         # Set up the template
         template = CTK.Template (filename = theme_file)
-        template['title']    = title
-        template['save']     = _('Save')
-        template['home']     = _('Home')
-        template['status']   = _('Status')
-        template['market']   = _('Market')
-        template['general']  = _('General')
-        template['vservers'] = _('vServers')
-        template['sources']  = _('Sources')
-        template['advanced'] = _('Advanced')
-        template['help']     = _('Help')
-        template['updating'] = _('Updating...')
+        template['title']     = title
+        template['save']      = _('Save')
+        template['home']      = _('Home')
+        template['status']    = _('Status')
+        template['market']    = _('Market')
+        template['general']   = _('General')
+        template['vservers']  = _('vServers')
+        template['sources']   = _('Sources')
+        template['advanced']  = _('Advanced')
+        template['help']      = _('Help')
+        template['updating']  = _('Updating...')
+        template['HELP_HTML'] = kwargs.has_key('helps') and HELP_HTML or ''
+        template['HELP_JS']   = kwargs.has_key('helps') and HELP_JS   or ''
 
         # <body> property
         if body_id:

@@ -25,10 +25,7 @@
    </div>
  </div>
  <div id="container">
-   <div id="help">
-     <a class="helpbutton" href="#" id="help-a"><span>%(help)s</span></a>
-     %(helps)s
-   </div>
+   %(HELP_HTML)s
 
    <div id="main">
      <div id="activity"><span>%(updating)s</span></div>
@@ -40,7 +37,7 @@
  %(js)s
 
  <script type="text/javascript">
-   $('#help-a').click (function(){ toggleHelp(); });
+   %(HELP_JS)s
 
    $('.del').live('mouseover', function(){
          $(this).attr('src', '/CTK/images/del-hover.png');
