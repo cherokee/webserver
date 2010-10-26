@@ -64,8 +64,6 @@ class Page_Market (Page.Base):
         top += CTK.RawHTML ("<h1>%s</h1>"% _('Market'))
         top += Search_Widget()
 
-        # Main
-
         # Sidebar
         from PageCategory import Categories_Widget
         self.sidebar += Categories_Widget()
@@ -79,6 +77,28 @@ class Page_Market (Page.Base):
         self += container
         self += CTK.RawHTML (js=JS_SCROLL)
 
+class Page_Market_App (Page.Base):
+    def __init__ (self, title=None):
+        self.mainarea = CTK.Box ({'class': 'market-main-area'})
+        self.sidebar  = CTK.Box({'class': 'market-sidebar'})
+
+        full_title = '%s: %s' %(_("Cherokee Market"), title)
+        Page.Base.__init__ (self, full_title, body_id='market_app', helps=HELPS)
+
+        # Top
+        from PageSearch import Search_Widget
+        top = CTK.Box({'id': 'top-box'})
+        top += CTK.RawHTML ("<h1>%s</h1>"% _('Market'))
+        top += Search_Widget()
+
+        # Container
+        container = CTK.Box({'id': 'market-container'})
+        container += self.mainarea
+        container += self.sidebar
+
+        self += top
+        self += container
+        self += CTK.RawHTML (js=JS_SCROLL)
 
 
 class RenderApp (CTK.Box):

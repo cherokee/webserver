@@ -197,7 +197,7 @@ class App:
         return cont.Render().toStr()
 
     def __call__ (self):
-        page = Page_Market(_('Application'))
+        page = Page_Market_App (_('Application'))
 
         #Parse URL
         tmp = re.findall ('^%s/(.+)$' %(URL_APP), CTK.request.url)
