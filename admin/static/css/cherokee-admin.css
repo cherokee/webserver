@@ -25,7 +25,7 @@
 html { height: 100%; }
 body { background: #def url(/static/images/bg-body.png) top center repeat-y; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 12px; color: #000; text-align: center; }
 a { color: #27c; }
-a:hover { color: #c00; text-decoration: underline; }
+a:hover { color: #c00; text-decoration: underline; cursor: pointer; }
 a:active { outline: none; }
 a:focus { -moz-outline-style: none; }
 h1 { color: #c00; font-weight: normal; padding: 16px 0 16px 16px; font-size: 20px; z-index: 9000; }
@@ -408,6 +408,7 @@ img.icon_chooser_selected {
 #top-box h1 { padding: 0; margin: 0 0 0 16px; float: left; width: 400px; }
 #home-container { overflow: auto; overflow-x: hidden; background: transparent url(/static/images/sidebar-bg.png) right top repeat-y; }
 #main-area { width: 648px; padding: 16px; float: left; }
+#main-banner { height: 150px; background: transparent url(/CTK/images/loader.gif) no-repeat center center; }
 #sidebar { width: 248px; float: left; margin-left: 4px; margin-right: 8px; }
 #sidebar h2 { border: none; font-size: 120%; padding: 0; margin: 0 0 8px 0; text-shadow: #fff 0px 1px 0px;}
 .sidebar-box { margin: 16px 0; padding-bottom: 16px; border-bottom: 1px solid #def; }
@@ -427,12 +428,6 @@ img.icon_chooser_selected {
 #enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top 30px; padding-top:64px; }
 #enterprise-link { text-align: right; margin-top: 16px; color: #def; }
 
-#community-box { width: 648px; float: left; }
-#community-box h3 { color: #000; font-weight: bold; font-size: 12px; margin-bottom: 8px;}
-#community-box h4 { color: #000; font-weight: bold; font-size: 12px; margin-bottom: 8px;}
-
-#community-left { width: 306px; float: left; }
-#community-right { width: 306px; float: right; padding-left: 16px; }
 
 #proud-users { background: transparent url(/static/images/other/proud.png) no-repeat right top; padding-right: 32px; }
 #proud-link { text-align: right; margin-top: 8px; color: #def; }
@@ -540,7 +535,7 @@ img.icon_chooser_selected {
     box-shadow: inset 0 1px 4px #c00;
 }
 
-#community-bar { padding: 32px 16px; margin-bottom: 32px; clear: both; position: }
+#community-bar { padding: 32px 16px; margin-bottom: 32px; width: 500px; }
 #community-bar h3 { color: #79b; float: left; padding-top: 4px; font-size: 14px; height: 16px; font-weight: normal; }
 #community-bar ul { float: left; margin: 2px 0 0 4px; }
 #community-bar ul li { float: left;}
@@ -1156,4 +1151,6 @@ img.icon_chooser_selected {
 #authlist-table td+td+td { width: 32px; }
 
 
-
+#halt-admin-box { text-align: center; padding-top: 64px; }
+#halt-admin-box a { color: #b5c8db; font-size: 90%; }
+#halt-admin-box a:hover { color: #c00; }

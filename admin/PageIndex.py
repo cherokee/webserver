@@ -460,7 +460,7 @@ class Render:
 
         # Content: Left
         mainarea = CTK.Box({'id': 'main-area'})
-        mainarea += OWS_Market_Info.Index_Block1()
+        mainarea += CTK.Box({'id': 'main-banner'}, OWS_Market_Info.Index_Block1())
         mainarea += ServerInfo()
         if int(OWS_ENABLE): # Hide it by the moment
             mainarea += RemoteServices()
@@ -471,6 +471,7 @@ class Render:
 
         mainarea += CPUInfo()
         mainarea += MemoryInfo()
+        mainarea += CommunityBar()
 
         # Content: Right
         sidebar = CTK.Box({'id': 'sidebar'})
@@ -487,7 +488,6 @@ class Render:
         cont = CTK.Box({'id': 'home-container'})
         cont += mainarea
         cont += sidebar
-        cont += CommunityBar()
 
         # Page
         page = Page.Base(_('Welcome to Cherokee Admin'), body_id='index', helps=HELPS)
