@@ -154,12 +154,9 @@ class Main:
 
         # Maintanance
         if Maintenance.does_it_need_maintenance():
-            page.sidebar += CTK.RawHTML ('<h3>%s</h3>' %(_('Maintanance')))
-            page.sidebar += Maintenance.Maintenance_Box()
-
-        # Banners
-        #page += OWS_Market_Info.Market_Block1()
-        #page += OWS_Market_Info.Market_Block2()
+            refresh_maintenance = CTK.Refreshable({'id': 'market_maintenance_box'})
+            refresh_maintenance.register (lambda: Maintenance.Maintenance_Box(refresh_maintenance).Render())
+            page.sidebar += refresh_maintenance
 
         return page.Render()
 

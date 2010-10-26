@@ -119,7 +119,7 @@ def Clean_Orphan_Apply():
 
 
 class Maintenance_Box (CTK.Box):
-    def __init__ (self):
+    def __init__ (self, refresh):
         CTK.Box.__init__ (self)
 
         unfinished = check_unfinished_installations()
@@ -128,13 +128,15 @@ class Maintenance_Box (CTK.Box):
         if not len(unfinished) and not len(orphan):
             return
 
+        self += CTK.RawHTML ('<h3>%s</h3>' %(_('Maintanance')))
+
         if len(unfinished):
             box = CTK.Box()
             box += CTK.RawHTML ('%d %s' %(len(unfinished), _("partial installations: ")))
 
             submit = CTK.Submitter (URL_CLEAN_PARTIAL_APPLY)
             submit += CTK.Hidden ('bar', 'foo')
-            submit.bind ('submit_success', box.JS_to_hide())
+            submit.bind ('submit_success', refresh.JS_to_refresh())
 
             link = CTK.Link (None, CTK.RawHTML(_('Clean up')))
             link.bind ('click', submit.JS_to_submit())
@@ -148,7 +150,7 @@ class Maintenance_Box (CTK.Box):
 
             submit = CTK.Submitter (URL_CLEAN_ORPHAN_APPLY)
             submit += CTK.Hidden ('bar', 'foo')
-            submit.bind ('submit_success', box.JS_to_hide())
+            submit.bind ('submit_success', refresh.JS_to_refresh())
 
             link = CTK.Link (None, CTK.RawHTML(_('Clean up')))
             link.bind ('click', submit.JS_to_submit())
