@@ -149,8 +149,8 @@ class Backup_Save_Note:
 
         # Buttons
         panel = CTK.DruidButtonsPanel()
-        panel += CTK.DruidButton_Submit (_('Back Up'))
         panel += CTK.DruidButton_Close  (_('Cancel'))
+        panel += CTK.DruidButton_Submit (_('Back Up'))
 
         # Layout
         content = CTK.Container()
@@ -250,8 +250,8 @@ class Backup_Restore_Note:
             content += panel
 
             # Buttons
-            panel += CTK.DruidButton_Submit (_('Restore'))
             panel += CTK.DruidButton_Close  (_('Cancel'))
+            panel += CTK.DruidButton_Submit (_('Restore'))
 
         return content.Render().toStr()
 
