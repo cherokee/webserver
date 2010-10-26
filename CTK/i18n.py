@@ -55,12 +55,8 @@ def underscore_wrapper (x):
 
     return re
 
-def install (*args, **kwargs):
-    if not 'gettext' in sys.modules:
-        return
 
-    gettext.install (*args, **kwargs)
-
+def unicode_utf8_workaround():
     #  Wrap the _() function. Since Gettext internal catalog stores
     # Unicode values, we have to take care of using Unicode strings
     # rather than UTF-8, and to convert the translated strings back
@@ -69,16 +65,31 @@ def install (*args, **kwargs):
     __builtin__.__dict__['_orig'] = __builtin__.__dict__['_']
     __builtin__.__dict__['_']     = underscore_wrapper
 
-def translation (propg, localedir, languages, *args, **kwargs):
+
+def install (*args, **kwargs):
+    if not 'gettext' in sys.modules:
+        return
+
+    gettext.install (*args, **kwargs)
+
+    # Autoconversion unicode -> utf8 hack
+    unicode_utf8_workaround()
+
+
+def install_translation (propg, localedir, languages, *args, **kwargs):
     if not 'gettext' in sys.modules:
         return
 
     # Call gettext (returns a gettext.GNUTranslations obj)
     re = gettext.translation (propg, localedir, languages, *args, **kwargs)
 
+    # Install the new gettext object
+    re.install (unicode=True)
+
     # It worked, store the global
     if languages:
         global active_lang
         active_lang = languages[0]
 
-    return re
+    # Autoconversion unicode -> utf8 hack
+    unicode_utf8_workaround()
