@@ -37,6 +37,12 @@ OWS_RPC = 'http://www.octality.com/api/v%s/open/market/info/' %(OWS_API_VERSION)
 # Index
 #
 class Index_Block1 (CTK.Container):
+    cached = None
+
+    def format_func (self, cont):
+        Index_Block1.cached = cont
+        return cont
+
     def __init__ (self):
         CTK.Container.__init__ (self)
 
@@ -53,6 +59,12 @@ class Index_Block1 (CTK.Container):
 
 
 class Index_Block2 (CTK.Container):
+    cached = None
+
+    def format_func (self, cont):
+        Index_Block2.cached = cont
+        return cont
+
     def __init__ (self):
         CTK.Container.__init__ (self)
 
@@ -61,10 +73,13 @@ class Index_Block2 (CTK.Container):
             return
 
         # Instance the XML-RPC Proxy object
-        self += CTK.XMLRPCProxy (name = 'cherokee-index-block2',
-                                 xmlrpc_func = lambda: XmlRpcServer(OWS_RPC).get_block_index_2 (CTK.i18n.active_lang, VERSION),
-                                 format_func = lambda x: x,
-                                 debug = DEBUG)
+        if Index_Block2.cached:
+            self += CTK.RawHTML (Index_Block2.cached)
+        else:
+            self += CTK.XMLRPCProxy (name = 'cherokee-index-block2',
+                                     xmlrpc_func = lambda: XmlRpcServer(OWS_RPC).get_block_index_2 (CTK.i18n.active_lang, VERSION),
+                                     format_func = self.format_func,
+                                     debug = DEBUG)
 
 
 #
