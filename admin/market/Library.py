@@ -39,7 +39,7 @@ cache_expiration = None
 
 def Invalidate_Cache():
     global cached_info
-    global cached_expiration
+    global cache_expiration
 
     cached_info      = None
     cache_expiration = 0
@@ -64,7 +64,7 @@ class MyLibrary (CTK.Box):
         # Cache
         if not from_cache:
             global cached_info
-            global cached_expiration
+            global cache_expiration
 
             cached_info      = info
             cache_expiration = time.time() + EXPIRATION
@@ -85,12 +85,12 @@ class MyLibrary (CTK.Box):
 
 def update_cache():
     global cached_info
-    global cached_expiration
+    global cache_expiration
 
     if not cached_info or cache_expiration < time.time():
         xmlrpc = XmlRpcServer (OWS_APPS_AUTH, OWS_Login.login_user, OWS_Login.login_password)
         cached_info = xmlrpc.get_user_apps()
-        cached_expiration = time.time() + EXPIRATION
+        cache_expiration = time.time() + EXPIRATION
 
 
 def is_appID_in_library (app_id):
