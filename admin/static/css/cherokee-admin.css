@@ -408,7 +408,7 @@ img.icon_chooser_selected {
 #top-box h1 { padding: 0; margin: 0 0 0 16px; float: left; width: 400px; }
 #home-container { overflow: auto; overflow-x: hidden; background: transparent url(/static/images/sidebar-bg.png) right top repeat-y; }
 #main-area { width: 648px; padding: 16px; float: left; }
-#main-banner { height: 150px; background: transparent url(/CTK/images/loader.gif) no-repeat center center; }
+.main-banner { height: 150px; background: transparent url(/CTK/images/loader.gif) no-repeat center center; }
 #sidebar { width: 248px; float: left; margin-left: 4px; margin-right: 8px; }
 #sidebar h2 { border: none; font-size: 120%; padding: 0; margin: 0 0 8px 0; text-shadow: #fff 0px 1px 0px;}
 .sidebar-box { margin: 16px 0; padding-bottom: 16px; border-bottom: 1px solid #def; }
