@@ -48,8 +48,14 @@ except ImportError:
 # Functions
 #
 def underscore_wrapper (x):
-    re = __builtin__.__dict__['_orig'] (unicode(x, 'UTF-8'))
+    # Feed unicode
+    if type(x) != types.UnicodeType:
+        x = unicode(x, 'UTF-8')
 
+    # Translate using the original gettext function
+    re = __builtin__.__dict__['_orig'] (x)
+
+    # Transform the output to UTF-8
     if type(re) == types.UnicodeType:
         re = re.encode ('UTF-8')
 
