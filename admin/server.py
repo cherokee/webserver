@@ -43,7 +43,7 @@ from configured import *
 
 def init (scgi_port, cfg_file):
     # Translation support
-    CTK.i18n.install ('cherokee', LOCALEDIR)
+    CTK.i18n.install ('cherokee', LOCALEDIR, unicode=True)
 
     # Ensure SIGCHLD is set. It needs to receive the signal in order
     # to detect when its child processes finish.

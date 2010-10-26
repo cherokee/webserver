@@ -261,9 +261,9 @@ class MemoryInfo (CTK.Box):
 
 
 def language_set (langs):
-    languages = [l for s in langs.split(',') for l in s.split(';') if not '=' in l]
+    languages = [langs]
     try:
-        CTK.i18n.translation('cherokee', LOCALEDIR, languages).install()
+        CTK.i18n.install_translation('cherokee', LOCALEDIR, languages)
     except:
         CTK.util.print_exception()
         return True
