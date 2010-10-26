@@ -50,7 +50,7 @@ HEADER = [
 ]
 
 HTML = """
-<div id="tab_%(id)s">
+<div id="tab_%(id)s" style="display:none;">
  %(html)s
 </div> <!-- %(id)s -->
 """
@@ -95,7 +95,7 @@ $("#tab_%(id)s").each(function() {
       } else {
          this_tab.find("li:nth-child("+ nnexttab +")").addClass("ui-tabs-selected-next-last");
       }
-   });
+   }).show();
 
    if (this_tab.tabs('option', 'selected') == 0) {
       if (this_tab.tabs('length') == 2) {
