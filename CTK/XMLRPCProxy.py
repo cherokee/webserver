@@ -24,9 +24,10 @@ import types
 from consts import *
 from Widget import Widget
 from Server import publish, get_scgi
+from util   import props_to_str
 
 HTML = """
-<div id="%(id_widget)s"></div>
+<div id="%(id_widget)s" %(extra_props)s></div>
 """
 
 JAVASCRIPT = """
@@ -51,11 +52,12 @@ class ProxyRequest:
             return ''
 
 class XMLRPCProxy (Widget):
-    def __init__ (self, name, xmlrpc_func, format_func, debug=False, props=None):
+    def __init__ (self, name, xmlrpc_func, format_func, debug=False, props={}):
         assert type(name) == str
 
         Widget.__init__ (self)
         self._url_local = '/proxy_widget_%s' %(name)
+        self.props      = props.copy()
 
         # Sanity checks
         assert type(xmlrpc_func) in (types.FunctionType, types.MethodType, types.InstanceType)
@@ -70,8 +72,9 @@ class XMLRPCProxy (Widget):
     def Render (self):
        render = Widget.Render(self)
 
-       props = {'id_widget': self.id,
-                'proxy_url': self._url_local}
+       props = {'id_widget':   self.id,
+                'proxy_url':   self._url_local,
+                'extra_props': props_to_str(self.props)}
 
        render.html += HTML       %(props)
        render.js   += JAVASCRIPT %(props)
