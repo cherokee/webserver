@@ -119,9 +119,9 @@ def popen_sync (command, stdout=True, stderr=True, retcode=True):
             break
 
     # Return information
-    ret = {'stdout':     buf_stdout,
-           'stderr':     buf_stderr,
-           'returncode': returncode}
+    ret = {'stdout':  buf_stdout,
+           'stderr':  buf_stderr,
+           'retcode': returncode}
 
     return ret
 
