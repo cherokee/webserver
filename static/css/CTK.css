@@ -129,6 +129,7 @@ button:hover { cursor: pointer; }
 .ui-tabs-nav li.ui-tabs-selected-next { background: transparent url(/CTK/images/tabbg.png) 0 -180px; }
 .ui-tabs-nav li.ui-tabs-selected-next-last { background: transparent url(/CTK/images/tabbg.png) 0 -210px; width: 128px; padding-left: 0;}
 .ui-tabs-nav a { color: #79b; text-decoration: none; display: block; }
+.ui-tabs-nav a:hover { color: #79b; text-decoration: none; }
 .ui-tabs-nav li.ui-tabs-selected a { color: #000; font-weight: bold; }
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; }
