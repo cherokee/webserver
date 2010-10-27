@@ -69,13 +69,15 @@ FPM_ETC_PATHS = ['/etc/php*/fpm/php*fpm.conf',
                  '/usr/local/etc/php*fpm.conf',
                  '/opt/php*/etc/php*fpm.conf',
                  '/opt/local/etc/php*/php*fpm.conf',
-                 '/etc/php*/*/php*fpm.conf']
+                 '/etc/php*/*/php*fpm.conf',
+                 '/etc/php*/php*fpm.conf']
 
 STD_ETC_PATHS = ['/etc/php*/cgi/php.ini',
                  '/usr/local/etc/php.ini',
                  '/opt/php*/etc/php.ini',
                  '/opt/local/etc/php*/php.ini',
-                 '/etc/php*/*/php.ini']
+                 '/etc/php*/*/php.ini',
+                 '/etc/php*/php.ini']
 
 CFG_PREFIX    = 'tmp!wizard!php'
 
