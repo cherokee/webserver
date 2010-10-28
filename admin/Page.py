@@ -57,7 +57,7 @@ $('#save-button').bind ('click', function(){
      return;
   }
 
-  %s
+  %(show_dialog_js)s
 })"""
 
 
@@ -100,15 +100,15 @@ class Save:
             submit.bind ('submit_success', dialog.JS_to_close())
             all += submit
         else:
-            # Prompt about the reset
+            # Close the dialog
             all += CTK.RawHTML ('<p>%s</p>' %(_(SAVED_NO_RUNNING)))
 
             submit = CTK.Submitter (URL_SAVE_NONE)
-            submit.id = 'saved-no-running'
             submit += CTK.Hidden('none', 'foo')
-            submit += CTK.SubmitterButton (_('OK'))
             submit.bind ('submit_success', dialog.JS_to_close())
+
             all += submit
+            all += CTK.RawHTML (js = submit.JS_to_submit())
 
         render = all.Render()
         return render.toStr()
@@ -163,7 +163,7 @@ class Base (CTK.Page):
         CTK.Page.__init__ (self, template, heads, **kwargs)
 
         # Add the 'Save' dialog
-        js = SAVE_BUTTON %(dialog.JS_to_show())
+        js = SAVE_BUTTON %({'show_dialog_js': dialog.JS_to_show()})
         if CTK.cfg.has_changed():
             js += ".removeClass('saved');"
         else:
