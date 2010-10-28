@@ -32,6 +32,7 @@
 #include "socket.h"
 #include "spawner.h"
 #include "config_reader.h"
+#include "server-protected.h"
 #include "util.h"
 
 #ifdef HAVE_GETOPT_LONG
@@ -59,13 +60,15 @@
 #define DEFAULT_BIND         "127.0.0.1"
 #define RULE_PRE             "vserver!1!rule!"
 
-static int         port          = DEFAULT_PORT;
-static const char *document_root = DEFAULT_DOCUMENTROOT;
-static const char *config_file   = DEFAULT_CONFIG_FILE;
-static const char *bind_to       = DEFAULT_BIND;
-static int         debug         = 0;
-static int         unsecure      = 0;
-static int         scgi_port     = 4000;
+static int                port          = DEFAULT_PORT;
+static const char        *document_root = DEFAULT_DOCUMENTROOT;
+static const char        *config_file   = DEFAULT_CONFIG_FILE;
+static const char        *bind_to       = DEFAULT_BIND;
+static int                debug         = 0;
+static int                unsecure      = 0;
+static int                scgi_port     = 4000;
+static cherokee_server_t *srv           = NULL;
+
 
 static ret_t
 find_empty_port (int starting, int *port)
@@ -492,11 +495,39 @@ check_for_python (void)
 	return ret_error;
 }
 
+static void
+signals_handler (int sig, siginfo_t *si, void *context)
+{
+	ret_t ret;
+	int   retcode;
+
+	UNUSED(context);
+
+	switch (sig) {
+	case SIGCHLD:
+		ret = cherokee_wait_pid (si->si_pid, &retcode);
+		break;
+
+	case SIGINT:
+	case SIGTERM:
+		if (srv->wanna_exit) {
+			break;
+		}
+
+		printf ("Cherokee-admin is exiting..\n");
+		cherokee_server_handle_TERM (srv);
+		break;
+
+	default:
+		PRINT_ERROR ("Unknown signal: %d\n", sig);
+	}
+}
+
 int
 main (int argc, char **argv)
 {
-	ret_t              ret;
-	cherokee_server_t *srv;
+	ret_t            ret;
+	struct sigaction act;
 
 	ret = check_for_python();
 	if (ret != ret_ok) {
@@ -504,13 +535,18 @@ main (int argc, char **argv)
 		exit (EXIT_ERROR);
 	}
 
-#ifdef SIGPIPE
-        signal (SIGPIPE, SIG_IGN);
-#endif
-#ifdef SIGCHLD
-        signal (SIGCHLD, SIG_IGN);
-#endif
+	/* Signal handling */
+	act.sa_handler = SIG_IGN;
+	sigaction (SIGPIPE, &act, NULL);
 
+	memset(&act, 0, sizeof(act));
+	act.sa_sigaction = signals_handler;
+	act.sa_flags     = SA_SIGINFO;
+	sigaction (SIGCHLD, &act, NULL);
+	sigaction (SIGINT,  &act, NULL);
+	sigaction (SIGTERM, &act, NULL);
+
+	/* Initialize the embedded server */
 	cherokee_init();
 	cherokee_spawner_set_active (false);
 	process_parameters (argc, argv);
@@ -527,9 +563,13 @@ main (int argc, char **argv)
 	if (ret != ret_ok)
 		exit (EXIT_ERROR);
 
-	for (;;) {
-		cherokee_server_step (srv);
-	}
+	ret = cherokee_server_unlock_threads (srv);
+	if (ret != ret_ok)
+		exit (EXIT_ERROR);
+
+	do {
+		ret = cherokee_server_step (srv);
+	} while (ret == ret_eagain);
 
 	cherokee_server_stop (srv);
 	cherokee_server_free (srv);
