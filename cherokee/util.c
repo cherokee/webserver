@@ -2077,3 +2077,37 @@ cherokee_fstat (int filedes, struct stat *buf)
 
 	return re;
 }
+
+ret_t
+cherokee_wait_pid (int pid, int *retcode)
+{
+	int re;
+	int exitcode;
+
+	TRACE(ENTRIES",signal", "Handling SIGCHLD, waiting PID %d\n", pid);
+
+	while (true) {
+		re = waitpid (pid, &exitcode, 0);
+		if (re > 0) {
+			if (WIFEXITED(exitcode) && (retcode != NULL)) {
+				*retcode = WEXITSTATUS(exitcode);
+			}
+			return ret_ok;
+		}
+
+		else if (errno == ECHILD) {
+			return ret_not_found;
+		}
+
+		else if (errno == EINTR) {
+			continue;
+
+		} else {
+			PRINT_ERROR ("ERROR: waiting PID %d, error %d\n", pid, errno);
+			return ret_error;
+		}
+	}
+
+	SHOULDNT_HAPPEN;
+	return ret_error;
+}
