@@ -182,7 +182,7 @@ def AncientConfig (file):
 
 
 
-OWS_DIR_P1 = N_("A problem with the installation directories have been found.  The %s directory is missing and it could not be created with Cherokee-Admin.")
+OWS_DIR_P1 = N_("A problem with the installation directories have been found.  The %s directory is missing and it could not be created by Cherokee-Admin.")
 OWS_DIR_P2 = N_("Please, create it and try again:")
 
 OWS_PERM_P1 = N_("A problem with the installation directories have been found.  The %s directory has the wrong permissions. It must be writtable by the UID %d.")
