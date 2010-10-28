@@ -145,7 +145,7 @@ class Main:
         tabs = CTK.Tab()
         tabs.Add (_('Paid'),   TopApps('paid'))
         tabs.Add (_('Free'),   TopApps('free'))
-        tabs.Add (_('Latest'), TopApps('any'))
+        tabs.Add (_('Ranked'), TopApps('any'))
         page.mainarea += tabs
 
         # My Library
