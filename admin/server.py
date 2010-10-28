@@ -226,6 +226,14 @@ if __name__ == "__main__":
               not os.access (CHEROKEE_OWS_ROOT, os.W_OK):
             CTK.step()
 
+            if not os.path.isdir (CHEROKEE_OWS_DIR):
+                try: os.makedirs (CHEROKEE_OWS_DIR, 0755)
+                except OSError: pass
+
+            if not os.path.isdir (CHEROKEE_OWS_ROOT):
+                try: os.makedirs (CHEROKEE_OWS_ROOT, 0755)
+                except OSError: pass
+
         CTK.unpublish (r'')
 
     # Add the OWS plug-in directory

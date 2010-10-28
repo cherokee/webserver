@@ -202,6 +202,8 @@ class OWSDirectoryError (CTK.Page):
         CTK.Page.__init__ (self, template, **kwargs)
 
         # Write the right message
+        errors = False
+
         for d in (CHEROKEE_OWS_DIR, CHEROKEE_OWS_ROOT):
             if not os.path.isdir (d):
                 self += CTK.RawHTML ('<h1>%s</h1>'%(_('Missing Directory')))
@@ -209,7 +211,8 @@ class OWSDirectoryError (CTK.Page):
                 self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_DIR_P2)))
                 self += CTK.RawHTML ("<p><pre>mkdir -p -m 0755 '%s'</pre>" %(d))
                 self += CTK.RawHTML ("<pre>chown -R %d '%s'</pre></p>" %(os.getuid(), d))
-                return
+                errors = True
+                break
 
             if not os.access (d, os.W_OK):
                 self += CTK.RawHTML ('<h1>%s</h1>'%(_('Installation Problem')))
@@ -217,7 +220,15 @@ class OWSDirectoryError (CTK.Page):
                 self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_PERM_P2)))
                 self += CTK.RawHTML ("<pre>chown -R %d '%s'</pre></p>" %(os.getuid(), d))
                 self += CTK.RawHTML ("<pre>chmod -R 0775 '%s'</pre></p>" %(d))
-                return
+                errors = True
+                break
+
+        if errors:
+            button = CTK.Button (_("Try Again"))
+            button.bind ('click', CTK.JS.ReloadURL())
+            self += button
+        else:
+            self += CTK.RawHTML (js = CTK.JS.ReloadURL())
 
 def OWSDirectory():
     return OWSDirectoryError().Render()
