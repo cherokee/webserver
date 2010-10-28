@@ -1803,8 +1803,10 @@ cherokee_server_handle_HUP (cherokee_server_t *srv)
 		 * fd and set it to -1. If a thread added it to its
 		 * fdpoll, it couldn't take the fd out of the poll.
 		 */
-		close (BIND(i)->socket.socket);
+		TRACE (ENTRIES, "Closing listener fd=%d\n", BIND(i)->socket.socket);
+		cherokee_fd_close (BIND(i)->socket.socket);
 	}
+
 
 	return ret_ok;
 }
