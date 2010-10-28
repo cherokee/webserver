@@ -360,8 +360,8 @@ def Subscribe_Apply ():
 class MailingListDialog (CTK.Dialog):
     def __init__ (self):
         CTK.Dialog.__init__ (self, {'title': _('Mailing List Subscription'), 'width': 560})
-        self.AddButton (_('Subscribe'), self.JS_to_trigger('submit'))
         self.AddButton (_('Cancel'), "close")
+        self.AddButton (_('Subscribe'), self.JS_to_trigger('submit'))
 
         table = CTK.PropsTable()
         table.Add (_('Your email address'), CTK.TextField({'name': 'email', 'class': 'noauto'}), _(NOTE_EMAIL))
