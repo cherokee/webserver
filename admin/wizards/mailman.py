@@ -4,6 +4,7 @@
 #
 # Authors:
 #      Taher Shihadeh <taher@octality.com>
+#      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
 # Copyright (C) 2010 Alvaro Lopez Ortega
 #
@@ -33,20 +34,20 @@ import Wizard
 import validations
 from util import *
 
-NOTE_WELCOME_H1   = N_("Welcome to the Mailman Wizard")
-NOTE_WELCOME_P1   = N_('<a target="_blank" href="http://www.gnu.org/software/mailman/">Mailman</a> is free software for managing electronic mail discussion and e-newsletter lists.')
-NOTE_WELCOME_P2   = N_('Mailman supports built-in archiving, automatic bounce processing, content filtering, digest delivery, spam filters, and more.')
+NOTE_WELCOME_H1     = N_("Welcome to the Mailman Wizard")
+NOTE_WELCOME_P1     = N_('<a target="_blank" href="http://www.gnu.org/software/mailman/">Mailman</a> is free software for managing electronic mail discussion and e-newsletter lists.')
+NOTE_WELCOME_P2     = N_('Mailman supports built-in archiving, automatic bounce processing, content filtering, digest delivery, spam filters, and more.')
 
-NOTE_LOCAL_H1     = N_('Mailman Details')
+NOTE_LOCAL_H1       = N_('Mailman Details')
 NOTE_LOCAL_CGI_DIR  = N_("Local path to the Mailman CGI directory.")
 NOTE_LOCAL_DATA_DIR = N_("Local path to the Mailman data directory.")
 NOTE_LOCAL_ARCH_DIR = N_("Local path to the Mailman mail archive directory.")
 
-NOTE_HOST_H1    = N_("New Virtual Server Details")
-NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
+NOTE_HOST_H1        = N_("New Virtual Server Details")
+NOTE_HOST           = N_("Host name of the virtual server that is about to be created.")
 
-PREFIX          = 'tmp!wizard!mailman'
-URL_APPLY       = r'/wizard/vserver/mailman/apply'
+PREFIX    = 'tmp!wizard!mailman'
+URL_APPLY = r'/wizard/vserver/mailman/apply'
 
 CONFIG_VSERVER = """
 %(vsrv_pre)s!nick = %(new_host)s
@@ -94,12 +95,14 @@ SRC_PATHS_CGI = [
 ]
 
 SRC_PATHS_DATA = [
+    "/usr/lib/mailman",
     "/usr/local/mailman",
     "/usr/share/mailman",
     "/opt/mailman*"
 ]
 
 SRC_PATHS_ARCH = [
+    "/var/lib/mailman",
     "/usr/local/mailman",
     "/var/share/mailman",
     "/opt/mailman*"
@@ -203,35 +206,39 @@ def is_mailman_data_dir (path):
     path = validations.is_local_dir_exists (path)
     file = os.path.join (path, "bin/newlist")
     if not os.path.exists (file):
-        raise ValueError, _("It doesn't look like a Mailman data directory.")
+        raise ValueError, _("It does not look like a Mailman data directory.")
     return path
 
 def is_mailman_cgi_dir (path):
     path = validations.is_local_dir_exists (path)
     file = os.path.join (path, "listinfo")
     if not os.path.exists (file):
-        raise ValueError, _("It doesn't look like a Mailman CGI directory.")
+        raise ValueError, _("It does not look like a Mailman CGI directory.")
     return path
 
 def is_mailman_arch_dir (path):
     path = validations.is_local_dir_exists (path)
-    module_inc = os.path.join (path, "archives/public")
+    file = os.path.join (path, "archives/public")
+    print "file", file
     try:
-        validations.is_local_file_exists (module_inc)
+        print "*1"
+        validations.is_local_dir_exists (file)
+        print "*2"
     except:
-        raise ValueError, _("It doesn't look like a Mailman archive directory.")
+        raise ValueError, _("It does not look like a Mailman archive directory.")
+    print "path", path
     return path
 
 
 VALS = [
     ('%s!new_host'        %(PREFIX), validations.is_not_empty),
-    ('%s!mailman_data_dir'%(PREFIX), validations.is_not_empty),
     ('%s!mailman_cgi_dir' %(PREFIX), validations.is_not_empty),
+    ('%s!mailman_data_dir'%(PREFIX), validations.is_not_empty),
     ('%s!mailman_arch_dir'%(PREFIX), validations.is_not_empty),
 
     ("%s!new_host"        %(PREFIX), validations.is_new_vserver_nick),
-    ("%s!mailman_data_dir"%(PREFIX), is_mailman_data_dir),
     ("%s!mailman_cgi_dir" %(PREFIX), is_mailman_cgi_dir),
+    ("%s!mailman_data_dir"%(PREFIX), is_mailman_data_dir),
     ("%s!mailman_arch_dir"%(PREFIX), is_mailman_arch_dir),
 ]
 
