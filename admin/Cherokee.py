@@ -144,7 +144,8 @@ class Server:
 
             nl = stderr.find('\n')
             if nl != -1:
-                for e in ["{'type': ", 'ERROR', '(error) ', '(critical) ']:
+                for e in ["{'type': \"error\"",
+                          "{'type': \"critical\"", 'ERROR', '(error) ', '(critical) ']:
                     if e in stderr:
                         _pid_kill (p.pid)
                         return stderr
