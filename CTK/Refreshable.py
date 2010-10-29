@@ -91,29 +91,28 @@ class Refreshable (Widget):
         return REFRESHABLE_UPDATE_JS %(props)
 
 
-JS_URL_LOAD = """
-%(id)s = $('#%(id)s');
-%(id)s.data('url', "%(url)s");
-
-if ("%(url)s".length > 0) {
-  $.ajax({type: "GET", url: "%(url)s", async: true,
-     success: function(msg){
-        %(id)s.html(msg);
-     }
-  });
-}
-"""
-
 JS_URL_INIT = """
-%(id)s.bind('refresh_goto', function(event) {
+$('#%(id)s').bind('refresh_goto', function(event) {
   $(this).data('url', "%(url)s", event.goto);
 
-  $.ajax({type: "GET", url: event.goto, async: true,
-     success: function(msg){
-        $(this).html(msg);
-     }
-  });
+  $.ajax ({type: "GET", url: event.goto, async: true,
+           success: function (msg){
+              $('#%(id)s').html(msg);
+           }
+         });
 });
+"""
+
+JS_URL_LOAD = """
+$('#%(id)s').data('url', "%(url)s");
+
+if ("%(url)s".length > 0) {
+  $.ajax ({type: "GET", url: "%(url)s", async: true,
+            success: function (msg){
+               $('#%(id)s').html(msg);
+            }
+         });
+}
 """
 
 class RefreshableURL (Widget):
