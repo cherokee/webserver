@@ -66,3 +66,11 @@ def ReloadURL():
 
 def OpenWindow (url):
     return "window.open ('%s');" %(url)
+
+def get_Hashtag():
+    return "window.location.hash"
+
+def set_Hashtag(tag):
+    if tag[0] in ('"', "'"):
+        return "window.location.hash = %s;" %(tag)
+    return "window.location.hash = '%s';" %(tag)
