@@ -42,7 +42,7 @@ def set_non_blocking (fd):
     fcntl.fcntl (fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
 
-def popen_sync (command, stdout=True, stderr=True, retcode=True):
+def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True):
     """This function implements a subset of the functionality provided
     by the subprocess.Popen class. The subprocess module in Python 2.4
     and 2.5 have some problems dealing with processes termination on
@@ -72,7 +72,10 @@ def popen_sync (command, stdout=True, stderr=True, retcode=True):
                 pass
 
         # Pass control to the executable
-        os.execv('/bin/sh', ['sh', '-c', command])
+        if not env:
+            os.execv ('/bin/sh', ['sh', '-c', command])
+        else:
+            os.execve('/bin/sh', ['sh', '-c', command], env)
 
     # Poll on child's process outputs
     buf_stderr = ''
