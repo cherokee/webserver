@@ -81,7 +81,7 @@ class App:
         install = InstallDialog (info)
         cont += install
 
-        # Content
+        # Publisher / Author
         by = CTK.Container()
         by += CTK.RawHTML ('%s '%(_('By')))
         if info.get('author_url') and info.get('author_name'):
@@ -89,33 +89,35 @@ class App:
         else:
             by += CTK.LinkWindow (info['publisher_url'], CTK.RawHTML(info['publisher_name']))
 
-        price = PriceTag(info)
+        # Buy / Install button
         if OWS_Login.is_logged():
             if Library.is_appID_in_library (app_id):
                 buy = CTK.Button (_("Install"))
             else:
-                buy = CTK.Button (_("Buy"))
+                buy = CTK.Button ("%s%s %s" %(info['currency_symbol'], info['amount'], _("Buy")))
             buy.bind ('click', install.JS_to_show())
-            price += buy
         else:
             link = CTK.Link ('#', CTK.RawHTML (_("Sign in")))
             link.bind ('click', self.login_dialog.JS_to_show())
 
-            login_txt = CTK.Container()
+            login_txt = CTK.Box()
             login_txt += link
             login_txt += CTK.RawHTML (" %s" %(_('to buy')))
 
-            buy = CTK.Button (_("Buy"), {"disabled": True})
-            price += buy
-            price += login_txt
+            buy_button = CTK.Button ("%s%s %s" %(info['currency_symbol'], info['amount'], _("Buy")), {"disabled": True})
+
+            buy = CTK.Container()
+            buy += buy_button
+            buy += login_txt
 
         app  = CTK.Box ({'class': 'market-app-desc'})
         app += CTK.Box ({'class': 'market-app-desc-icon'},        CTK.Image({'src': OWS_STATIC + info['icon_big']}))
-        app += CTK.Box ({'class': 'market-app-desc-price'},       price)
+        app += CTK.Box ({'class': 'market-app-desc-buy'},         buy)
         app += CTK.Box ({'class': 'market-app-desc-title'},       CTK.RawHTML(info['application_name']))
         app += CTK.Box ({'class': 'market-app-desc-version'},     CTK.RawHTML("%s: %s" %(_("Version"), info['version_string'])))
         app += CTK.Box ({'class': 'market-app-desc-url'},         by)
         app += CTK.Box ({'class': 'market-app-desc-category'},    CTK.RawHTML("%s: %s" %(_("Category"), info['category_name'])))
+        app += CTK.Box ({'class': 'market-app-desc-support-box'}, SupportBox(info))
         app += CTK.Box ({'class': 'market-app-desc-short-desc'},  CTK.RawHTML(info['summary']))
         cont += app
 
@@ -132,7 +134,6 @@ class App:
         tabs = CTK.Tab()
         tabs.Add (_('Screenshots'), shots)
         tabs.Add (_('Description'), ext_description)
-        tabs.Add (_('Tech. Specs'), SupportBox(info))
         app += tabs
 
         # Update the cache

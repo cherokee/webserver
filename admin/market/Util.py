@@ -135,7 +135,7 @@ class PriceTag (CTK.Box):
             self += CTK.Box ({'class': 'amount'},   CTK.RawHTML (info['amount']))
             self += CTK.Box ({'class': 'currency'}, CTK.RawHTML (info['currency']))
         else:
-            self += CTK.Box ({'class': 'free'}, CTK.RawHTML (_('Free')))
+            self += CTK.Box ({'class': 'free'},     CTK.RawHTML (_('Free')))
 
 
 class InstructionBox (CTK.Box):
