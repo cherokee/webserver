@@ -57,7 +57,7 @@ CONFIG_VSERVER = """
 %(vsrv_pre)s!rule!500!document_root = %(mailman_imgs_dir)s
 %(vsrv_pre)s!rule!500!handler = file
 %(vsrv_pre)s!rule!500!match = directory
-%(vsrv_pre)s!rule!500!match!directory = /images
+%(vsrv_pre)s!rule!500!match!directory = /images/mailman
 
 %(vsrv_pre)s!rule!400!match = directory
 %(vsrv_pre)s!rule!400!match!directory = /pipermail
