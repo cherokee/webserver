@@ -202,5 +202,5 @@ class DialogProxyLazy (Dialog):
 class Dialog2Buttons (Dialog):
     def __init__ (self, props, button_name, button_action):
         Dialog.__init__ (self, props.copy())
-        self.AddButton (button_name, button_action)
         self.AddButton (_('Close'), "close")
+        self.AddButton (button_name, button_action)
