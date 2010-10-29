@@ -68,6 +68,7 @@ static int                debug         = 0;
 static int                unsecure      = 0;
 static int                scgi_port     = 4000;
 static cherokee_server_t *srv           = NULL;
+static cherokee_buffer_t  password      = CHEROKEE_BUF_INIT;
 
 
 static ret_t
@@ -150,25 +151,11 @@ remove_old_socket (const char *path)
 
 
 static ret_t
-config_server (cherokee_server_t *srv)
+print_connection_info (void)
 {
-	ret_t                  ret;
-	cherokee_config_node_t conf;
-	cherokee_buffer_t      buf       = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      password  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      rrd_dir   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      rrd_bin   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      fake;
-
-	/* Print some information
-	 */
 	printf ("\n");
 
-	if (unsecure == 0) {
-		ret = generate_admin_password (&password);
-		if (ret != ret_ok)
-			return ret;
-
+	if (! cherokee_buffer_is_empty (&password)) {
 		printf ("Login:\n"
 			"  User:              admin\n"
 			"  One-time Password: %s\n\n", password.buf);
@@ -177,6 +164,26 @@ config_server (cherokee_server_t *srv)
 	printf ("Web Interface:\n"
 		"  URL:               http://%s:%d/\n\n",
 		(bind_to) ? bind_to : "localhost", port);
+}
+
+
+static ret_t
+config_server (cherokee_server_t *srv)
+{
+	ret_t                  ret;
+	cherokee_config_node_t conf;
+	cherokee_buffer_t      buf       = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      rrd_dir   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      rrd_bin   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      fake;
+
+	/* Generate the password
+	 */
+	if (unsecure == 0) {
+		ret = generate_admin_password (&password);
+		if (ret != ret_ok)
+			return ret;
+	}
 
 	/* Configure the embedded server
 	 */
@@ -388,7 +395,6 @@ config_server (cherokee_server_t *srv)
 
 	cherokee_buffer_mrproper (&rrd_bin);
 	cherokee_buffer_mrproper (&rrd_dir);
-	cherokee_buffer_mrproper (&password);
 	cherokee_buffer_mrproper (&buf);
 
 	return ret_ok;
@@ -562,6 +568,8 @@ main (int argc, char **argv)
 	ret = cherokee_server_initialize (srv);
 	if (ret != ret_ok)
 		exit (EXIT_ERROR);
+
+	print_connection_info();
 
 	ret = cherokee_server_unlock_threads (srv);
 	if (ret != ret_ok)
