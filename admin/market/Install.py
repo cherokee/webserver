@@ -381,7 +381,7 @@ class Setup (Install_Stage):
         url_download = CTK.cfg.get_val('tmp!market!install!download')
 
         box = CTK.Box()
-        box += CTK.RawHTML ("<h2>%s</h2>" %(_('Setting up application…')))
+        box += CTK.RawHTML ("<h2>%s</h2><br/>" %(_('Setting up application…')))
 
         # has it been downloaded?
         pkg_filename = url_download.split('/')[-1]
@@ -441,16 +441,27 @@ class CommandProgress (CTK.Box):
     class Exec (CTK.Container):
         def __init__ (self, command_progress):
             CTK.Container.__init__ (self)
-
-            # Has it finished?
             commands_len = len(command_progress.commands)
+
+            # Special stage: Inicial
+            if command_progress.executed == 0:
+                command_progress.executed += 1
+                command_entry = command_progress.commands[0]
+
+                percent = 100 / (commands_len + 1)
+                self += CTK.ProgressBar ({'value': percent})
+                self += CTK.RawHTML ("<p>%s</p>" %(command_entry['command']))
+                self += CTK.RawHTML (js = command_progress.refresh.JS_to_refresh())
+                return
+
+            # Special stage: Finished
             if command_progress.executed >= commands_len:
                 self += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (command_progress.id,
                                                                         command_progress.finished_url))
                 return
 
             # Execute command
-            command_entry = command_progress.commands[command_progress.executed]
+            command_entry = command_progress.commands[command_progress.executed - 1]
 
             command = replacement_cmd (command_entry['command'])
             Install_Log.log ("  %s" %(command))
@@ -464,9 +475,15 @@ class CommandProgress (CTK.Box):
 
             # Progress Bar
             command_progress.executed += 1
-            percent = command_progress.executed * 100 / commands_len
+            percent = (command_progress.executed + 1) * 100 / (commands_len + 1)
 
+            # Render
             self += CTK.ProgressBar ({'value': percent})
+
+            if command_progress.executed < commands_len:
+                next_command_entry = command_progress.commands[command_progress.executed]
+                self += CTK.RawHTML ("<p>%s</p>" %(next_command_entry['command']))
+
             self += CTK.RawHTML (js = command_progress.refresh.JS_to_refresh())
 
     def __init__ (self, commands, finished_url):
