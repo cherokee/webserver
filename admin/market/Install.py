@@ -466,12 +466,16 @@ class CommandProgress (CTK.Box):
             command = replacement_cmd (command_entry['command'])
             Install_Log.log ("  %s" %(command))
 
-            ret = popen.popen_sync (command, stderr=True, retcode=True)
-            if ret['stderr']:
-                Install_Log.log ('    ' + ret['stderr'])
+            ret_exec = popen.popen_sync (command, stderr=True, retcode=True)
+            if ret_exec['stderr']:
+                Install_Log.log ('    ' + ret_exec['stderr'])
 
             if command_entry.get ('check_ret', True):
-                None # TODO
+                if ret_exec['retcode'] != 0:
+                    percent = (command_progress.executed + 1) * 100 / (commands_len + 1)
+                    self += CTK.ProgressBar ({'value': percent})
+                    self += CTK.RawHTML ("<p>%s: %s</p>" %(_("Could not execute the command"), command))
+                    return
 
             # Progress Bar
             command_progress.executed += 1
