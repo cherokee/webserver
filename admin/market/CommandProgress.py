@@ -71,10 +71,11 @@ class CommandProgress (CTK.Box):
             CTK.Container.__init__ (self)
 
             commands_len = len(command_progress.commands)
-            if command_progress.executed < commands_len:
-                command_entry = command_progress.commands [command_progress.executed]
-            else:
+            if command_progress.error or \
+               command_progress.executed >= commands_len:
                 command_entry = command_progress.commands [command_progress.executed - 1]
+            else:
+                command_entry = command_progress.commands [command_progress.executed]
             command = replacement_cmd (command_entry['command'])
 
             # Error
