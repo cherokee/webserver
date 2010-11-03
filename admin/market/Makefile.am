@@ -3,6 +3,7 @@
 code = \
 __init__.py \
 Install.py \
+InstallUtil.py \
 Install_Log.py \
 Menu.py \
 Package.py \
