@@ -70,6 +70,8 @@ NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remo
 NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
 NOTE_COLLECTOR        = N_('Whether or not it should collected statistics about the traffic of this virtual server.')
 NOTE_UTC_TIME         = N_('Time standard to use in the log file entries.')
+NOTE_INDEX_USAGE      = N_('Either a "File Exists" rule or a "List & Send" handler is required to make use of the Directory Indexes setting.')
+WARNING_INDEX_USAGE   = N_('Directory indexes are currently not being used.')
 
 DEFAULT_HOST_NOTE     = N_("<p>The 'default' virtual server matches all the domain names.</p>")
 
@@ -312,6 +314,12 @@ class BasicsWidget (CTK.Container):
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Paths')))
         self += CTK.Indenter (table)
 
+        cont = CTK.Container()
+        cont += CTK.Notice ('information', CTK.RawHTML(_(NOTE_INDEX_USAGE)))
+        if not self.is_index_used (vsrv_num):
+            cont += CTK.Notice ('warning', CTK.RawHTML(_(WARNING_INDEX_USAGE)))
+        self += CTK.Indenter (cont)
+
         # Network
         table = CTK.PropsAuto (url_apply)
         table.Add (_('Keep-alive'),      CTK.CheckCfgText('%s!keepalive'%(pre), True, _('Allow')), _(NOTE_KEEPALIVE))
@@ -328,6 +336,25 @@ class BasicsWidget (CTK.Container):
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Advanced Virtual Hosting')))
         self += CTK.Indenter (table)
         self += CTK.Indenter (modul)
+
+
+    def is_index_used (self, vsrv_num):
+        key     = 'vserver!%s!rule' %(vsrv_num)
+        matches = ['common', 'exists']
+
+        def recursive_find (key):
+            if CTK.cfg.get_val(key) in matches:
+                return True
+
+            for k in CTK.cfg[key].keys():
+                if recursive_find ('%s!%s' %(key,k)):
+                    return True
+
+            return False
+
+        if recursive_find (key):
+            return True
+        return False
 
 
 class ErrorHandlerWidget (CTK.Container):
