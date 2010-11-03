@@ -259,6 +259,11 @@ class System_stats__Linux (Thread, System_stats):
         lines = fd.readlines()
         fd.close()
 
+        total   = 0
+        used    = 0
+        cached  = 0
+        buffers = 0
+
         for line in lines:
             parts = line.split()
             if parts[0] == 'MemTotal:':
