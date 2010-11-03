@@ -150,4 +150,18 @@ class CommandExec_Thread (threading.Thread):
 
         if command_entry.get ('check_ret', True):
             if ret['retcode'] != 0:
+                self._report_error (command, env, ret)
                 return True
+
+    def _report_error (self, command, env, ret_exec):
+        print "="*40
+        if env:
+            for k in env:
+                print "%s=%s \\"%(k, env[k])
+        print command
+        print "-"*40
+        print ret_exec['stdout']
+        print "-"*40
+        print ret_exec['stderr']
+        print "="*40
+
