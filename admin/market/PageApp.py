@@ -96,6 +96,7 @@ class App:
             else:
                 buy = CTK.Button ("%s%s %s" %(info['currency_symbol'], info['amount'], _("Buy")))
             buy.bind ('click', install.JS_to_show())
+
         else:
             link = CTK.Link ('#', CTK.RawHTML (_("Sign in")))
             link.bind ('click', self.login_dialog.JS_to_show())

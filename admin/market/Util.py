@@ -31,8 +31,6 @@ from consts import *
 from ows_consts import *
 from configured import *
 
-HELPS = []
-
 JS_SCROLL = """
 function resize_cherokee_containers() {
    $('#market-container').height($(window).height() - 106);
