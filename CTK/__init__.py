@@ -70,7 +70,7 @@ from AjaxUpload import AjaxUpload
 from Paginator import Paginator
 from StarRating import StarRating
 from Carousel import Carousel
-from Collapsible import Collapsible
+from Collapsible import Collapsible, CollapsibleEasy
 
 # Comodity
 from cgi import escape as escape_html

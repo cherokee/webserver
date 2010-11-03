@@ -22,9 +22,9 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
 from Box import Box
-
+from Widget import Widget
+from RawHTML import RawHTML
 
 class Collapsible (Box):
     def __init__ (self, (titles), collapsed=True):
@@ -67,3 +67,20 @@ class Collapsible (Box):
             render.js += self.__JS_show()
 
         return render
+
+class CollapsibleEasy (Collapsible):
+    def __init__ (self, (titles), collapsed=True):
+        assert len(titles) == 2
+        assert type(titles[0]) == str
+        assert type(titles[1]) == str
+
+        if collapsed:
+            c0 = "▼ "
+            c1 = "▲ "
+        else:
+            c0 = "▲ "
+            c1 = "▼ "
+
+        show = RawHTML(c0 + titles[0])
+        hide = RawHTML(c1 + titles[1])
+        Collapsible.__init__ (self, (show, hide), collapsed)
