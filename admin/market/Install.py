@@ -39,6 +39,7 @@ import SystemInfo
 import SaveButton
 import Cherokee
 import popen
+import CommandProgress
 
 from util import *
 from consts import *
@@ -360,22 +361,6 @@ class Exception_Handler (CTK.Box):
         self += buttons
 
 
-def replacement_cmd (command):
-    # Collect information
-    server_user  = CTK.cfg.get_val ('server!user',  'root')
-    server_group = CTK.cfg.get_val ('server!group', 'root')
-    app_root     = CTK.cfg.get_val ('tmp!market!install!root')
-    root_group   = SystemInfo.get_info()['group_root']
-
-    # Replacements
-    command = command.replace('${web_user}',   server_user)
-    command = command.replace('${web_group}',  server_group)
-    command = command.replace('${app_root}',   app_root)
-    command = command.replace('${root_group}', root_group)
-
-    return command
-
-
 class Setup (Install_Stage):
     def __safe_call__ (self):
         url_download = CTK.cfg.get_val('tmp!market!install!download')
@@ -432,74 +417,9 @@ class Setup (Install_Stage):
 
         # Execute commands
         commands = pkg_installer.__dict__.get ('POST_UNPACK_COMMANDS',[])
-        box += CommandProgress (commands, URL_INSTALL_SETUP_EXTERNAL)
+        box += CommandProgress.CommandProgress (commands, URL_INSTALL_SETUP_EXTERNAL)
 
         return box.Render().toStr()
-
-
-class CommandProgress (CTK.Box):
-    class Exec (CTK.Container):
-        def __init__ (self, command_progress):
-            CTK.Container.__init__ (self)
-            commands_len = len(command_progress.commands)
-
-            # Special stage: Inicial
-            if command_progress.executed == 0:
-                command_progress.executed += 1
-                command_entry = command_progress.commands[0]
-
-                percent = 100 / (commands_len + 1)
-                self += CTK.ProgressBar ({'value': percent})
-                self += CTK.RawHTML ("<p>%s</p>" %(command_entry['command']))
-                self += CTK.RawHTML (js = command_progress.refresh.JS_to_refresh())
-                return
-
-            # Special stage: Finished
-            if command_progress.executed >= commands_len:
-                self += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (command_progress.id,
-                                                                        command_progress.finished_url))
-                return
-
-            # Execute command
-            command_entry = command_progress.commands[command_progress.executed - 1]
-
-            command = replacement_cmd (command_entry['command'])
-            Install_Log.log ("  %s" %(command))
-
-            ret_exec = popen.popen_sync (command, stderr=True, retcode=True)
-            if ret_exec['stderr']:
-                Install_Log.log ('    ' + ret_exec['stderr'])
-
-            if command_entry.get ('check_ret', True):
-                if ret_exec['retcode'] != 0:
-                    percent = (command_progress.executed + 1) * 100 / (commands_len + 1)
-                    self += CTK.ProgressBar ({'value': percent})
-                    self += CTK.RawHTML ("<p>%s: %s</p>" %(_("Could not execute the command"), command))
-                    return
-
-            # Progress Bar
-            command_progress.executed += 1
-            percent = (command_progress.executed + 1) * 100 / (commands_len + 1)
-
-            # Render
-            self += CTK.ProgressBar ({'value': percent})
-
-            if command_progress.executed < commands_len:
-                next_command_entry = command_progress.commands[command_progress.executed]
-                self += CTK.RawHTML ("<p>%s</p>" %(next_command_entry['command']))
-
-            self += CTK.RawHTML (js = command_progress.refresh.JS_to_refresh())
-
-    def __init__ (self, commands, finished_url):
-        CTK.Box.__init__ (self)
-
-        self.finished_url = finished_url
-        self.commands     = commands
-        self.executed     = 0
-
-        self.refresh = CTK.Refreshable ({'id': 'market-commands-exec'})
-        self.refresh.register (lambda: CommandProgress.Exec(self).Render())
-        self += self.refresh
 
 
 def Install_Done_apply():
