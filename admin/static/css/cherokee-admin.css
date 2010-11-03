@@ -123,7 +123,7 @@ a.helpbutton span {
   margin: 6px 0;
 }
 
-/* Panels 
+/* Panels
  */
 #status_panel, #vservers_panel, #rules_panel, #source_panel {
  background: #fff;
@@ -814,13 +814,17 @@ img.icon_chooser_selected {
   margin-left: 168px;
   margin-top: 8px;
   width: 512px;
-  min-height: 78px; 
+  min-height: 78px;
   margin-bottom: 16px;
 }
 
-
 .market-app-desc-description {
   margin-bottom: 16px;
+}
+
+.market-commands-exec-error-details {
+  height: 168px;
+  overflow: auto;
 }
 
 .carousel {
@@ -832,7 +836,7 @@ img.icon_chooser_selected {
 }
 
 .carousel .controls {
-  float: right; 
+  float: right;
   margin-top: 4px;
   height: 16px;
 }
@@ -840,14 +844,14 @@ img.icon_chooser_selected {
 .carousel .prev { float: left; }
 .carousel .next { float: left; }
 
-.carousel .overview { 
-  background: #fff; 
-  width: 668px; 
-  height: 480px; 
-  overflow: hidden; 
-  border: 1px solid #cde; 
-  display: table-cell; 
-  vertical-align: middle; 
+.carousel .overview {
+  background: #fff;
+  width: 668px;
+  height: 480px;
+  overflow: hidden;
+  border: 1px solid #cde;
+  display: table-cell;
+  vertical-align: middle;
   text-align:center;
 }
 
@@ -860,7 +864,7 @@ img.icon_chooser_selected {
 
 .carousel .pager li {
   float: left;
-  margin-right: 2px;  
+  margin-right: 2px;
   padding: 2px 4px;
   -moz-border-radius: 8px; -webkit-border-radius: 8px;
   color: #fff;
@@ -889,15 +893,15 @@ img.icon_chooser_selected {
 
 .market-no-reviews { padding: 16px; }
 .market-app-review { border-bottom: 1px dotted #cde; padding: 8px 0; }
-.market-app-review-score { 
+.market-app-review-score {
   width: 88px;
   height: 16px;
   float: left;
 }
-.market-app-review-title { 
+.market-app-review-title {
   font-weight: bold;
   padding-top: 3px;
-  height: 16px; 
+  height: 16px;
 }
 .market-app-review-name { float: left; margin-right: 3px; }
 .market-app-review-stamp { color: #666; }
