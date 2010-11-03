@@ -121,11 +121,19 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True):
             returncode = None
             break
 
+    # Clean up
+    os.close (stdin_w)
+    os.close (stderr_r)
+    os.close (stdout_r)
+
+    os.close (stdin_r)
+    os.close (stderr_w)
+    os.close (stdout_w)
+
     # Return information
     ret = {'stdout':  buf_stdout,
            'stderr':  buf_stderr,
            'retcode': returncode}
-
     return ret
 
 if __name__ == "__main__":
