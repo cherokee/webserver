@@ -462,7 +462,7 @@ class Render:
         mainarea = CTK.Box({'id': 'main-area'})
         mainarea += OWS_Market_Info.Index_Block1()
         mainarea += ServerInfo()
-        if int(OWS_ENABLE): # Hide it by the moment
+        if int(OWS_ENABLE):
             mainarea += RemoteServices()
 
         if OWS_Login.is_logged() and \
