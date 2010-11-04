@@ -71,3 +71,19 @@ class Carousel (Box):
 
         return render
 
+
+class CarouselThumbnails (Carousel):
+    def __init__ (self, props_={}):
+        Carousel.__init__ (self, props_.copy())
+
+    def __iadd__ (self, widget):
+        box  = Box ({'class': 'carousel_thumbs'})
+        box += RawHTML ("%s" %(len(self.images.child) +1))
+        box += Box ({'class': 'carousel_thumbs-image'}, widget)
+        link = Link (None, Box ({'class': 'carousel_thumbs-link'}, box))
+
+        self.images += widget
+        self.pager  += link
+        self.pager[-1].props['class'] = 'pagenum'
+
+        return self

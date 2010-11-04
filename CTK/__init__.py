@@ -69,7 +69,7 @@ from XMLRPCProxy import XMLRPCProxy
 from AjaxUpload import AjaxUpload
 from Paginator import Paginator
 from StarRating import StarRating
-from Carousel import Carousel
+from Carousel import Carousel, CarouselThumbnails
 from Collapsible import Collapsible, CollapsibleEasy
 
 # Comodity

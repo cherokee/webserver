@@ -373,3 +373,7 @@ tr.panel-selected td div.row_content .sel-actions {
 /* Collapsible
  */
 .collapsible-title { cursor: pointer; }
+
+/* CTK.CarouselThumbnail
+ */
+.carousel_thumbs img { width: 64px; height: 48px; }
