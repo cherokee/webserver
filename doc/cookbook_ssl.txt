@@ -26,6 +26,35 @@ where any HTTPS compliant browser will look by default. You can change
 that by specifying another port in the URL. For example,
 https://example.com:8080/ would look for an HTTPS server on port 8080.
 
+.Can one host handle HTTPS requests for multiple virtual servers?
+
+Yes, it can. This is a common question because a web server cannot see
+the hostname header when the HTTPS request is being processed. The
+user entered host part of the URI must match the Common Name (CN)
+provided by the certificate. Since virtual hosts are in use, the CN of
+the first available certificate may or may not match the one specified
+in the early stages of TLS negotiation.
+
+Fortunately this can be overcomed by using SNI (Server Name
+Indication), which places the host information in the SSL
+handshake. If the web server is accessed through a web browser that
+supports SNI, things will just work. Every modern web browser does.
+
+For legacy scenarios where using SNI if not possible, there is a
+workaround detailed in the next question.
+
+.Are there workarounds when SNI can't be used?
+
+Using SNI is the clean and standard way to go. For legacy scenarios
+where using SNI is not and option, Cherokee supports a workaround.
+The mechanism requires the web server to listen to several IPs, and to
+assign a specific one for each virtual server. This can be done
+through the `Match` tab of the virtual server configuration, by
+assigning an IP-method to the desired IP. Remember that the list of
+virtual servers is evaluated from top to bottom, so in case you
+specify the same IP for several virtual servers, only the first one
+will actually match.
+
 .How to enable the SSL support?
 
 SSL support is not enabled by default. You will have to perform three

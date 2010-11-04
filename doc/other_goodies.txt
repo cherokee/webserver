@@ -140,6 +140,9 @@ known to support it are Mozilla Firefox 2.0+ and Opera 8.0+ in all its
 variants, Safari 3.2.1+ on OS X and Vista, Internet Explorer 7+
 (Vista, not XP) or later, and Google Chrome (Vista, not XP).
 
+When using SNI is not possible, other workarounds can still be
+used. Check the link:cookbook_ssl.html[SSL recipe] of our
+link:cookbook.html[cookbook] for more details.
 
 [[dbslayer]]
 Database load balancing

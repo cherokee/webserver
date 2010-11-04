@@ -418,7 +418,7 @@ should provide tips and information on how to configure SSL, TLS and
 certificates.
 
 Cherokee fully supports the usage of different certificates for each
-virtual server in a given host by it using SNI as defined in
+virtual server in a given host by using SNI as defined in
 link:http://www.rfc-archive.org/getrfc.php?rfc=3546[RFC 3546].
 
 image::media/images/admin_vserver_security.png[Certificates]
@@ -437,8 +437,12 @@ If you want HTTPS to work, you must remember this:
   with HTTPS and some without. This makes sense, since by enabling the
   feature in any one of them you are opening the HTTPS port in your
   host, and receiving HTTPS requests for a virtual server that does
-  not provide the service would not be handled in a coherente
+  not provide the service would not be handled in a coherent
   manner. None of the alternatives is very elegant in design: falling
   back to HTTP, issuing an error that is likely to restart the HTTPS
   handshake, etc. This behavior, however, might change in the future
   depending on the popularity of any proposed mechanisms.
+
+/////
+The former paragraph will change after fixing issue 1041
+/////
