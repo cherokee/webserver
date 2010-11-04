@@ -124,16 +124,18 @@ class App:
 
         ext_description = CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
 
+        # Tabs
+        tabs = CTK.Tab()
+
         # Shots
         shot_entries = info.get('shots', [])
         if shot_entries:
             shots = CTK.Carousel()
+            tabs.Add (_('Screenshots'), shots)
+
             for s in shot_entries:
                 shots += CTK.Image ({'src': "%s/%s" %(OWS_STATIC, s)})
 
-        # Tabs
-        tabs = CTK.Tab()
-        tabs.Add (_('Screenshots'), shots)
         tabs.Add (_('Description'), ext_description)
         app += tabs
 
