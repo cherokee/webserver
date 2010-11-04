@@ -84,8 +84,6 @@ cherokee_cryptor_configure (cherokee_cryptor_t     *cryp,
 	cherokee_config_node_read_int  (conf, "timeout_handshake", &cryp->timeout_handshake);
 	cherokee_config_node_read_bool (conf, "protocol!SSLv2",    &cryp->allow_SSLv2);
 
-	printf ("cryp->allow_SSLv2 %d\n", cryp->allow_SSLv2);
-
 	/* Call the its virtual method
 	 */
 	if (cryp->configure == NULL) {
