@@ -34,7 +34,9 @@ class RawHTML (Widget):
         # Since the information contained in this widget will most
         # probably go through a few variable replacement processes,
         # the % characters are converted to %% in order to avoid
-        # potential issues during the process.
+        # potential issues during the process. The HTML code might
+        # contain strings such as 'style: 100%;', which aren't meant
+        # to be variable replacement.
         #
         html = html.replace ('%', '%%')
         js   =   js.replace ('%', '%%')
