@@ -372,6 +372,23 @@ endif
 
 
 #
+# VRule or
+#
+vrule_or = \
+vrule_or.c \
+vrule_or.h
+
+libplugin_v_or_la_LDFLAGS = $(module_ldflags)
+libplugin_v_or_la_SOURCES = $(vrule_or)
+
+if STATIC_VRULE_OR
+static_vrule_or_src = $(vrule_or)
+else
+dynamic_vrule_or_lib = libplugin_v_or.la
+endif
+
+
+#
 # VRule wildcard
 #
 vrule_wildcard = \
@@ -1461,6 +1478,7 @@ $(static_rule_not_src) \
 $(static_rule_and_src) \
 $(static_rule_or_src) \
 \
+$(static_vrule_or_src) \
 $(static_vrule_wildcard_src) \
 $(static_vrule_rehost_src) \
 $(static_vrule_target_ip_src) \
@@ -1647,6 +1665,7 @@ $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \
+$(dynamic_vrule_or_lib) \
 $(dynamic_vrule_wildcard_lib) \
 $(dynamic_vrule_rehost_lib) \
 $(dynamic_vrule_target_ip_lib) \

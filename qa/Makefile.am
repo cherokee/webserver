@@ -263,7 +263,9 @@ run-tests.py \
 255-header_op-add1.py \
 256-header_op-add2.py \
 257-header_op-add3.py \
-258-header_op-add4.py
+258-header_op-add4.py \
+259-Vrule-OR-1.py \
+260-Vrule-OR-2.py
 
 test:
 	python -m compileall .

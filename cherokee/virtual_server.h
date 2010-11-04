@@ -93,6 +93,10 @@ ret_t cherokee_virtual_server_new_rule  (cherokee_virtual_server_t  *vserver,
 					 cuint_t                     priority,
 					 cherokee_rule_t           **rule);
 
+ret_t cherokee_virtual_server_new_vrule (cherokee_virtual_server_t  *vserver,
+					 cherokee_config_node_t     *config,
+					 cherokee_vrule_t          **vrule);
+
 ret_t cherokee_virtual_server_init_tls  (cherokee_virtual_server_t *vserver);
 ret_t cherokee_virtual_server_has_tls   (cherokee_virtual_server_t *vserver);
 
