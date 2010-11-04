@@ -130,7 +130,7 @@ class App:
         # Shots
         shot_entries = info.get('shots', [])
         if shot_entries:
-            shots = CTK.Carousel()
+            shots = CTK.CarouselThumbnails()
             tabs.Add (_('Screenshots'), shots)
 
             for s in shot_entries:
