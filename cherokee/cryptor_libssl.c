@@ -197,49 +197,26 @@ _vserver_free (cherokee_cryptor_vserver_libssl_t *cryp_vsrv)
 	return ret_ok;
 }
 
-#ifndef OPENSSL_NO_TLSEXT
-static int
-openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
+ret_t
+cherokee_cryptor_libssl_find_vserver (SSL *ssl,
+				      cherokee_server_t     *srv,
+				      cherokee_buffer_t     *servername,
+				      cherokee_connection_t *conn)
 {
 	ret_t                      ret;
-	const char                *servername;
-	cherokee_socket_t         *socket;
-	cherokee_buffer_t          tmp;
+	cherokee_virtual_server_t *vsrv = NULL;
 	SSL_CTX                   *ctx;
-	cherokee_server_t         *srv       = SRV(arg);
-	cherokee_virtual_server_t *vsrv      = NULL;
 
-	UNUSED(ad);
-
-	/* Get the pointer to the socket
+	/* Try to match the connection to a server
 	 */
-	socket = SSL_get_app_data (ssl);
-	if (unlikely (socket == NULL)) {
-		LOG_ERROR (CHEROKEE_ERROR_SSL_SOCKET, ssl);
-		return SSL_TLSEXT_ERR_ALERT_FATAL;
-	}
 
-	/* Read the SNI server name
-	 */
-	servername = SSL_get_servername (ssl, TLSEXT_NAMETYPE_host_name);
-	if (servername == NULL) {
-		TRACE (ENTRIES, "No SNI: Did not provide a server name%s", "\n");
-		return SSL_TLSEXT_ERR_NOACK;
-	}
-
-	TRACE (ENTRIES, "SNI: Switching to servername='%s'\n", servername);
-
-	/* Try to match the name
-	 */
-	cherokee_buffer_fake (&tmp, servername, strlen(servername));
-
-	ret = cherokee_server_get_vserver (srv, &tmp, NULL, &vsrv);
+	ret = cherokee_server_get_vserver(srv, servername, conn, &vsrv);
 	if ((ret != ret_ok) || (vsrv == NULL)) {
-		LOG_ERROR (CHEROKEE_ERROR_SSL_SRV_MATCH, servername);
-		return SSL_TLSEXT_ERR_NOACK;
+		LOG_ERROR (CHEROKEE_ERROR_SSL_SRV_MATCH, servername->buf);
+		return ret_error;
 	}
 
-	TRACE (ENTRIES, "SNI: Setting new TLS context. Virtual host='%s'\n",
+	TRACE (ENTRIES, "Setting new TLS context. Virtual host='%s'\n",
 	       vsrv->name.buf);
 
 	/* Check whether the Virtual Server supports TLS
@@ -247,15 +224,15 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	if ((vsrv->cryptor == NULL) ||
 	    (CRYPTOR_VSRV_SSL(vsrv->cryptor)->context == NULL))
 	{
-		TRACE (ENTRIES, "Virtual server '%s' does not support SSL\n", servername);
-		return SSL_TLSEXT_ERR_NOACK;
+		TRACE (ENTRIES, "Virtual server '%s' does not support SSL\n", servername->buf);
+		return ret_error;
 	}
 
 	/* Set the new SSL context
 	 */
 	ctx = SSL_set_SSL_CTX (ssl, CRYPTOR_VSRV_SSL(vsrv->cryptor)->context);
 	if (ctx != CRYPTOR_VSRV_SSL(vsrv->cryptor)->context) {
-		LOG_ERROR (CHEROKEE_ERROR_SSL_CHANGE_CTX, servername);
+		LOG_ERROR (CHEROKEE_ERROR_SSL_CHANGE_CTX, servername->buf);
 	}
 
 	/* SSL_set_SSL_CTX() only change certificates. We need to
@@ -270,7 +247,59 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 		               SSL_CTX_get_verify_callback(ssl->ctx));
 	}
 
-	return SSL_TLSEXT_ERR_OK;
+	return ret_ok;
+}
+
+#ifndef OPENSSL_NO_TLSEXT
+static int
+openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
+{
+	ret_t                      ret;
+	int                        re;
+	const char                *servername;
+	cherokee_connection_t     *conn;
+	cherokee_buffer_t          tmp;
+	cherokee_server_t         *srv       = SRV(arg);
+	cherokee_virtual_server_t *vsrv      = NULL;
+
+	UNUSED(ad);
+
+	/* Get the pointer to the socket
+	 */
+	conn = SSL_get_app_data (ssl);
+	if (unlikely (conn == NULL)) {
+		LOG_ERROR (CHEROKEE_ERROR_SSL_SOCKET, ssl);
+		return SSL_TLSEXT_ERR_ALERT_FATAL;
+	}
+
+	cherokee_buffer_init(&tmp);
+	cherokee_buffer_ensure_size(&tmp, 40);
+
+	/* Read the SNI server name
+	 */
+	servername = SSL_get_servername (ssl, TLSEXT_NAMETYPE_host_name);
+	if (servername == NULL) {
+		/* Set the server name to the IP address if we couldn't get the host name via SNI
+		 */
+		cherokee_socket_ntop (&conn->socket, tmp.buf, tmp.size);
+		TRACE (ENTRIES, "No SNI: Did not provide a server name, using IP='%s' as servername.\n", tmp.buf);
+	} else {
+		cherokee_buffer_add (&tmp, servername, strlen(servername));
+		TRACE (ENTRIES, "SNI: Switching to servername='%s'\n", servername);
+	}
+
+	/* Look up and change the vserver
+	 */
+	ret = cherokee_cryptor_libssl_find_vserver(ssl, srv, &tmp, conn);
+	if (ret != ret_ok) {
+		re = SSL_TLSEXT_ERR_NOACK;
+	}
+	else {
+		re = SSL_TLSEXT_ERR_OK;
+	}
+
+	cherokee_buffer_mrproper (&tmp);
+	return re;
 }
 #endif
 
@@ -489,11 +518,16 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 static ret_t
 socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 		   cherokee_socket_t                *socket,
-		   cherokee_virtual_server_t        *vserver)
+		   cherokee_virtual_server_t        *vserver,
+		   cherokee_connection_t            *conn)
 {
 	int                                re;
 	const char                        *error;
 	cherokee_cryptor_vserver_libssl_t *vsrv_crytor = CRYPTOR_VSRV_SSL(vserver->cryptor);
+
+#ifdef OPENSSL_NO_TLSEXT
+	cherokee_buffer_t                  servername = CHEROKEE_BUF_INIT;
+#endif
 
 	/* Set the virtual server object reference
 	 */
@@ -533,7 +567,14 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	}
 
 #ifndef OPENSSL_NO_TLSEXT
-	SSL_set_app_data (cryp->session, socket);
+	SSL_set_app_data (cryp->session, conn);
+#else
+	/* Attempt to determine the vserver without SNI.
+	 */
+	cherokee_buffer_ensure_size(&servername, 40);
+	cherokee_socket_ntop (&conn->socket, servername.buf, servername.size);
+	cherokee_cryptor_libssl_find_vserver (cryp->session, CONN_SRV(conn), &servername, conn);
+	cherokee_buffer_mrproper (&servername);
 #endif
 
 	return ret_ok;
@@ -544,6 +585,7 @@ static ret_t
 _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 		  cherokee_socket_t                *sock,
 		  cherokee_virtual_server_t        *vsrv,
+		  cherokee_connection_t            *conn,
 		  cherokee_socket_status_t         *blocking)
 {
 	int   re;
@@ -552,7 +594,7 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	/* Initialize
 	 */
 	if (CRYPTOR_SOCKET(cryp)->initialized == false) {
-		ret = socket_initialize (cryp, sock, vsrv);
+		ret = socket_initialize (cryp, sock, vsrv, conn);
 		if (ret != ret_ok) {
 			return ret_error;
 		}
@@ -936,7 +978,7 @@ _socket_new (cherokee_cryptor_libssl_t         *cryp,
 	return ret_ok;
 }
 
-static int
+static ret_t
 _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 		  cherokee_buffer_t                *host,
 		  cherokee_socket_t                *socket)

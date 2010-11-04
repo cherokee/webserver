@@ -751,7 +751,7 @@ process_active_connections (cherokee_thread_t *thd)
 		case phase_tls_handshake:
 			blocking = socket_closed;
 
-			ret = cherokee_socket_init_tls (&conn->socket, CONN_VSRV(conn), &blocking);
+			ret = cherokee_socket_init_tls (&conn->socket, CONN_VSRV(conn), conn, &blocking);
 			switch (ret) {
 			case ret_eagain:
 				switch (blocking) {

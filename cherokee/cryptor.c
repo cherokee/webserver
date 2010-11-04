@@ -204,12 +204,13 @@ ret_t
 cherokee_cryptor_socket_init_tls (cherokee_cryptor_socket_t *cryp,
 				  void                      *sock,
 				  void                      *vsrv,
+				  void                      *conn,
 				  void                      *blocking)
 {
 	if (unlikely (cryp->init_tls == NULL))
 		return ret_error;
 
-	return cryp->init_tls (cryp, sock, vsrv, blocking);
+	return cryp->init_tls (cryp, sock, vsrv, conn, blocking);
 }
 
 ret_t
@@ -266,5 +267,5 @@ cherokee_cryptor_client_init (cherokee_cryptor_client_t *cryp,
 	if (unlikely (CRYPTOR_SOCKET(cryp)->init_tls == NULL))
 		return ret_error;
 
-	return CRYPTOR_SOCKET(cryp)->init_tls (cryp, host, socket, &foo);
+	return CRYPTOR_SOCKET(cryp)->init_tls (cryp, host, socket, NULL, &foo);
 }

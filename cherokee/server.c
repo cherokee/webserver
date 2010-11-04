@@ -1956,6 +1956,8 @@ cherokee_server_get_vserver (cherokee_server_t          *srv,
 	cherokee_list_t           *i;
 	cherokee_virtual_server_t *vserver;
 
+	TRACE (ENTRIES, "Trying to match '%s'\n", host->buf);
+
 	/* Evaluate the vrules
 	 */
 	list_for_each (i, &srv->vservers) {
