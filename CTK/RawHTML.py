@@ -23,11 +23,24 @@
 from Widget import Widget
 from util import to_utf8
 
+
 class RawHTML (Widget):
     def __init__ (self, html='', js=''):
         Widget.__init__ (self)
-        self.html = to_utf8(html)
-        self.js   = to_utf8(js)
+
+        html = to_utf8(html)
+        js   = to_utf8(js)
+
+        # Since the information contained in this widget will most
+        # probably go through a few variable replacement processes,
+        # the % characters are converted to %% in order to avoid
+        # potential issues during the process.
+        #
+        html = html.replace ('%', '%%')
+        js   =   js.replace ('%', '%%')
+
+        self.html = html
+        self.js   = js
 
     def __add__ (self, txt):
         assert type(txt) == string
