@@ -126,6 +126,9 @@ class RefreshableURL (Widget):
         else:
             props['class'] = 'refreshable-url'
 
+        if 'id' in props:
+            self.id = self.props.pop('id')
+
         self.props = props
         self.url   = url
 
