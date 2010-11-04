@@ -26,7 +26,7 @@ import os
 import CTK
 import Cherokee
 import configured
-from CTK.util import formater
+from CTK.util import formatter
 
 from urllib import quote, unquote, urlencode
 from httplib import HTTPConnection
@@ -99,7 +99,7 @@ class Page (CTK.Page):
         self += CTK.RawHTML ('<h1>%s</h1>' %(_("Unexpected Exception")))
         self += CTK.RawHTML ('<h2>%s</h2>' %(desc))
         self += CTK.RawHTML (_(NOTE_EXCEPT_SORRY))
-        self += CTK.RawHTML (formater ('<pre class="backtrace">%s</pre>', traceback))
+        self += CTK.RawHTML (formatter ('<pre class="backtrace">%s</pre>', traceback))
         self += CTK.RawHTML (_(NOTE_EXCEPT_COMMENT))
 
         submit = CTK.Submitter (URL_APPLY)
