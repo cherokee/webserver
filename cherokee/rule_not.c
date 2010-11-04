@@ -83,14 +83,15 @@ static ret_t
 _free (void *p)
 {
 	ret_t                ret;
-	cherokee_rule_not_t *rule = RULE_NOT(p);
+	cherokee_boolean_t   error = false;
+	cherokee_rule_not_t *rule  = RULE_NOT(p);
 
 	if (rule->right) {
 		ret = cherokee_rule_free (rule->right);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) error = true;
 	}
 
-	return ret_ok;
+	return (error)? ret_error : ret_ok;
 }
 
 ret_t
