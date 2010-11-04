@@ -22,7 +22,7 @@
 
 from Widget import Widget
 from Container import Container
-from util import formater, props_to_str
+from util import formatter, props_to_str
 
 LINK_HTML      = '<a id="%(id)s" %(href)s %(props)s>%(content)s</a>'
 LINK_ICON_HTML = '<div id="%(id)s"><span class="ui-icon ui-icon-%(icon)s"></span>%(link)s</div>'
@@ -56,7 +56,7 @@ class Link (Container):
                  'props':   props_to_str(self.props),
                  'content': render.html}
 
-        render.html = formater (LINK_HTML, props)
+        render.html = formatter (LINK_HTML, props)
         return render
 
 
@@ -83,6 +83,6 @@ class LinkIcon (Link):
                  'icon': self.icon,
                  'link': render.html}
 
-        render.html = formater (LINK_ICON_HTML, props)
+        render.html = formatter (LINK_ICON_HTML, props)
         return render
 

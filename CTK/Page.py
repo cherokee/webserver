@@ -29,7 +29,7 @@ from Container import Container
 from Template import Template
 from PageCleaner import Postprocess
 from Help import HelpEntry, HelpMenu
-from util import formater
+from util import formatter
 
 PAGE_TEMPLATE_DEFAULT = """\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -134,7 +134,7 @@ class Page (Container):
             js += "\n".join (filter (lambda l: '<script' in l, uniq(self._headers)))
 
         if render.js:
-            js += formater (HTML_JS_ON_READY_BLOCK, render.js)
+            js += formatter (HTML_JS_ON_READY_BLOCK, render.js)
 
         # Build the <body>
         body = render.html + render_helps

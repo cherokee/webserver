@@ -25,7 +25,7 @@ import stat
 import inspect
 
 from Widget import Widget
-from util import formater
+from util import formatter
 
 class Template (Widget):
     cache = {}
@@ -76,7 +76,7 @@ class Template (Widget):
         content = self._content_get()
         while True:
             prev = content[:]
-            content = formater (content, self.vars)
+            content = formatter (content, self.vars)
 
             if content == prev:
                 break

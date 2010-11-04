@@ -33,7 +33,7 @@ except ImportError:
 #
 # Strings
 #
-def formater (string, props):
+def formatter (string, props):
     """ This function does a regular substitution 'str%(dict)' with a
     little difference. It takes care of the escaped percentage chars,
     so strings can be replaced an arbitrary number of times."""
