@@ -772,8 +772,8 @@ img.icon_chooser_selected {
 }
 
 .market-app-desc .ui-tabs-panel {
-  height: 480px; 
-  max-height: 480px; 
+  height: 480px;
+  max-height: 480px;
   overflow: auto;
   border: 1px solid #cde;
   border-top: 0;
@@ -933,7 +933,7 @@ img.icon_chooser_selected {
 
 .arrows .prev, .arrows .next {
   height: 16px;
-  text-indent: -9999px; 
+  text-indent: -9999px;
   color: #fff;
   width: 11px;
   margin-top: 2px;
@@ -970,7 +970,7 @@ img.icon_chooser_selected {
 .market-app-review-comment { margin: 8px 0; }
 
 #button-review { float: right; margin-top: 8px; }
-.title-text { margin-top: 8px; font-weight: bold; `}
+.title-text { margin-top: 8px; font-weight: bold; }
 .review-text { margin-top: 8px; font-weight: bold; }
 .rating-text { font-weight: bold; float: left; margin-top: 16px; padding-right: 4px; }
 .druid-review-title { width: 432px !important;  }
