@@ -1219,3 +1219,7 @@ img.icon_chooser_selected {
 #halt-admin-box { text-align: center; padding-top: 64px; }
 #halt-admin-box a { color: #b5c8db; font-size: 90%; }
 #halt-admin-box a:hover { color: #c00; }
+
+#maintenance-removal-list { table-layout: fixed; width: 100%; }
+#maintenance-removal-list th { background: #e6f3ff url(/static/images/bg-th.png) repeat-x; border: none; }
+

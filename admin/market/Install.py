@@ -160,6 +160,8 @@ class Init_Check (Install_Stage):
             cont += buttons
 
         elif install_info['installable']:
+            # Do not change this log line. It is used by the
+            # Maintenance.py file to figure out the app name
             Install_Log.log ("Checking: %s, ID: %s = Installable, URL=%s" %(app_name, app_id, install_info['url']))
 
             CTK.cfg['tmp!market!install!download'] = install_info['url']
