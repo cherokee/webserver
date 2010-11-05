@@ -118,11 +118,14 @@ class App:
         app += CTK.Box ({'class': 'market-app-desc-version'},     CTK.RawHTML("%s: %s" %(_("Version"), info['version_string'])))
         app += CTK.Box ({'class': 'market-app-desc-url'},         by)
         app += CTK.Box ({'class': 'market-app-desc-category'},    CTK.RawHTML("%s: %s" %(_("Category"), info['category_name'])))
-        app += CTK.Box ({'class': 'market-app-desc-support-box'}, SupportBox(info))
         app += CTK.Box ({'class': 'market-app-desc-short-desc'},  CTK.RawHTML(info['summary']))
         cont += app
 
-        ext_description = CTK.Box ({'class': 'market-app-desc-description'}, CTK.RawHTML(info['description']))
+        ext_description = CTK.Box ({'class': 'market-app-desc-description'})
+        ext_description += CTK.RawHTML(info['description'])
+        desc_panel  = CTK.Box ({'class': 'market-app-desc-desc-panel'})
+        desc_panel += ext_description
+        desc_panel += CTK.Box ({'class': 'market-app-desc-support-box'}, SupportBox(info))
 
         # Tabs
         tabs = CTK.Tab()
@@ -136,7 +139,7 @@ class App:
             for s in shot_entries:
                 shots += CTK.Image ({'src': "%s/%s" %(OWS_STATIC, s)})
 
-        tabs.Add (_('Description'), ext_description)
+        tabs.Add (_('Description'), desc_panel)
         app += tabs
 
         # Update the cache
@@ -191,11 +194,16 @@ class App:
         else:
             sign_box = CTK.Box ({'class': 'market-app-review-signin'})
 
-            signin = CTK.Button(_("Sign in"))
-            signin.bind ('click', self.login_dialog.JS_to_show())
+            link = CTK.Link ('#', CTK.RawHTML (_("sign in")))
+            link.bind ('click', self.login_dialog.JS_to_show())
 
-            sign_box += CTK.RawHTML (_("Please, sign in to review the product."))
-            sign_box += signin
+            login_txt  = CTK.Box()
+            login_txt += CTK.RawHTML ("%s, " %(_('Please')))
+            login_txt += link
+            login_txt += CTK.RawHTML (" %s" %(_('to review the product')))
+
+            sign_box += login_txt
+
             cont += sign_box
 
         return cont.Render().toStr()

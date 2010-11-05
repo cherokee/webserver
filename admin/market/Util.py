@@ -81,7 +81,7 @@ class Page_Market_App (Page.Base):
         self.sidebar  = CTK.Box({'class': 'market-sidebar'})
 
         full_title = '%s: %s' %(_("Cherokee Market"), title)
-        Page.Base.__init__ (self, full_title, body_id='market_app')
+        Page.Base.__init__ (self, full_title, body_id='market-app')
 
         # Top
         from PageSearch import Search_Widget

@@ -25,9 +25,9 @@
 html { height: 100%; }
 body { background: #def url(/static/images/bg-body.png) top center repeat-y; font-family: Helvetica, Arial, Tahoma, sans-serif; font-size: 12px; color: #000; text-align: center; }
 a { color: #27c; }
-a:hover { color: #c00; text-decoration: underline; cursor: pointer; }
+a:hover { color: #c00; text-decoration: underline; cursor: pointer; outline: none; }
 a:active { outline: none; }
-a:focus { -moz-outline-style: none; }
+a:focus { -moz-outline-style: none; outline: none; }
 h1 { color: #c00; font-weight: normal; padding: 16px 0 16px 16px; font-size: 20px; z-index: 9000; }
 h2 { color: #259; font-weight: normal; padding: 8px 0; font-size: 18px; z-index: 9000; border-bottom: 1px solid #def; }
 
@@ -48,6 +48,7 @@ html>body #container { min-height: 100%; }
 #body-index #nav-index a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-market { background: transparent url(/static/images/market.png) no-repeat center 6px; }
 #body-market #nav-market a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
+#body-market-app #nav-market a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-status { background: transparent url(/static/images/status.png) no-repeat center 6px; }
 #body-status #nav-status a { background: transparent url(/static/images/nav-selected.gif) no-repeat center 47px; }
 #nav-general { background: transparent url(/static/images/general.png) no-repeat center 6px; }
@@ -580,6 +581,7 @@ img.icon_chooser_selected {
 /* Market
  */
 #body-market #main { background: transparent url(/static/images/sidebar-market.png) right top repeat-y; }
+#body-market #top-box { background: #fff; }
 #body-market p { margin-bottom: 1em; }
 #body-market #help { display: none; }
 #market-container { overflow: auto; overflow-x: hidden; margin: 0; }
@@ -759,8 +761,23 @@ img.icon_chooser_selected {
   padding-left: 8px;
 }
 
+#body-market-app .market-main-area {
+  width: 928px;
+}
+
+#body-market-app #top-box { background: #fff; }
+
 .market-app-desc {
   padding-left: 16px;
+}
+
+.market-app-desc .ui-tabs-panel {
+  height: 480px; 
+  max-height: 480px; 
+  overflow: auto;
+  border: 1px solid #cde;
+  border-top: 0;
+  margin-bottom: 32px;
 }
 
 #refreshable-market-app-reviews {
@@ -782,17 +799,48 @@ img.icon_chooser_selected {
   color: #259;
 }
 
-.market-app-desc-price {
+.market-app-desc-buy {
+  margin-top: 8px;
+  width: 192px;
+  text-align: center;
   float: right;
-  border: 1px solid #cde;
-  -moz-border-radius: 4px; -webkit-border-radius: 4px;
-  background: #f8fcff;
-  padding: 8px;
-  width: 144px;
+  margin-right: 8px;
+}
+.market-app-desc-buy button {
+  width: 192px;
+  font-size: 18px;
+  margin: 0 0 8px 0;
 }
 
-.market-app-desc-price button {
+.market-app-desc-buy button[disabled=True],
+.market-app-desc-buy button[disabled=True]:active {
+  color: #def;
+  background: #f7fbff;
+  border: 1px solid #def;
+}
+
+.market-app-desc-support-box {
   float: right;
+  width: 256px;
+  margin-top: 16px;
+}
+
+.market-support-box table {
+  border-collapse: collapse;
+  border: 1px solid #def;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.market-support-box table th {
+  text-align: center;
+  background: #def;
+  padding: 4px;
+}
+
+.market-support-box table td {
+  text-align: center;
+  padding: 8px;
 }
 
 .amount, .currency, .free {
@@ -819,7 +867,13 @@ img.icon_chooser_selected {
 }
 
 .market-app-desc-description {
-  margin-bottom: 16px;
+  margin: 16px 0;
+  width: 608px;
+  float: left;
+}
+
+.market-app-desc-description p {
+  margin-bottom: 1em;
 }
 
 .market-commands-exec-error-details {
@@ -829,57 +883,65 @@ img.icon_chooser_selected {
 
 .carousel {
   margin-bottom: 32px;
-  border: 1px solid #cde;
-  -moz-border-radius: 4px; -webkit-border-radius: 4px;
-  background: #f8fcff;
-  padding: 8px 8px 24px 8px;
 }
 
 .carousel .controls {
-  float: right;
-  margin-top: 4px;
-  height: 16px;
 }
 
 .carousel .prev { float: left; }
-.carousel .next { float: left; }
+.carousel .next { float: right; }
 
 .carousel .overview {
   background: #fff;
   width: 668px;
   height: 480px;
   overflow: hidden;
-  border: 1px solid #cde;
   display: table-cell;
   vertical-align: middle;
   text-align:center;
+  float: left;
 }
 
-.carousel .overview {  }
-
+.carousel .arrows {
+  height: 16px;
+  width: 166px;
+  float: right;
+  margin: 0 8px 0 8px;
+}
 .carousel .pager {
+  float: right;
   font-size: 9px;
-  float: left;
+  width: 180px;
+  height: 416px;
 }
 
 .carousel .pager li {
-  float: left;
-  margin-right: 2px;
-  padding: 2px 4px;
-  -moz-border-radius: 8px; -webkit-border-radius: 8px;
+  font-size: 1px;
   color: #fff;
-  background: #cde;
+  float: left;
+  padding: 0 1px 1px 1px;
+  margin-right: 8px;
+  color: #fff;
+  background: #fff;
+  margin: 4px;
 }
 
 .carousel .pager li a { color: #fff; }
 .carousel .pager li a:hover { text-decoration: none; cursor: pointer; color: #fff; }
 
-.carousel .pager li.selected { background: #27c; }
-.carousel .prev, .carousel .next {
-  text-indent: -9999px;
+.carousel .pager li.selected { background: #27c; color: #27c; }
+
+.arrows .prev, .arrows .next {
+  height: 16px;
+  text-indent: -9999px; 
+  color: #fff;
   width: 11px;
   margin-top: 2px;
 }
+
+.xcarousel-thumbs img { width: 72px; height: 54px; border: 1px solid #cde; }
+.carousel-thumbs img { width: 76px; height: 58px; border: 1px solid #cde; }
+.carousel .pager li.selected img { border: 1px solid #27c; }
 
 .carousel .prev:hover, .carousel .next:hover { cursor: pointer; }
 
@@ -914,8 +976,7 @@ img.icon_chooser_selected {
 .druid-review-title { width: 432px !important;  }
 .druid-review-review { width: 432px; height: 128px; }
 .druid .star-rating { margin: 14px 4px; }
-.market-app-review-signin { float: right; margin-top: 8px; }
-.market-app-review-signin button { margin-left: 8px; }
+.market-app-review-signin { float: right; margin-top: 8px; padding: 12px; color: #b5c8db; }
 
 
 #refreshable-search-results { padding-left: 16px; }
