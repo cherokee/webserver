@@ -268,6 +268,7 @@ def language_set (langs):
         CTK.util.print_exception()
         return True
 
+
 def Lang_Apply():
     # Sanity check
     lang = CTK.post.get_val('lang')
@@ -275,6 +276,7 @@ def Lang_Apply():
         return {'ret': 'error', 'errors': {'lang': 'Cannot be empty'}}
 
     language_set (lang)
+    CTK.cfg['admin!lang'] = lang
     return {'ret': 'ok', 'redirect': '/'}
 
 

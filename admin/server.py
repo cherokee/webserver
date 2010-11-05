@@ -262,6 +262,10 @@ if __name__ == "__main__":
     import PageStatus
     import market
 
+    # Init translation
+    if CTK.cfg['admin!lang']:
+        PageIndex.language_set (CTK.cfg.get_val('admin!lang'))
+
     # Let's get asyncronous..
     CTK.set_synchronous (False)
 
