@@ -212,8 +212,7 @@ button:hover { cursor: pointer; }
 
 /* CTK/Dialog.py
  */
-.ui-dialog { position: relative; padding: 8px; width: 300px; background: transparent url(/CTK/images/bg-dialog.png); text-align: left;  }
-.xui-dialog .ui-dialog-titlebar { height: 28px; position: relative;  background: transparent url(/CTK/images/bg-dialog-titlebar.png); border-bottom: 1px solid #259; }
+.ui-dialog { position: relative; padding: 8px; width: 300px; background: transparent url(/CTK/images/bg-dialog.png); text-align: left; }
 .ui-dialog .ui-dialog-titlebar { height: 28px; position: relative;  background: transparent; }
 .ui-dialog .ui-dialog-title { float: left; margin: 2px 0 0 4px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: #00122e 0px 1px 0px; }
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: 4px; top: 4px; background: transparent url(/CTK/images/bg-dialog-titlebar-close.gif) no-repeat; text-indent: -99999px; overflow: hidden; width: 14px;}
