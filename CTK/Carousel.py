@@ -48,10 +48,12 @@ class Carousel (Box):
         self.pager  = List ({'class': 'pager'})
 
         Box.__iadd__ (self, self.images)
+        arrows = Box({'class':'arrows'})
+        arrows += Link (None, RawHTML("%s"%(_('left'))), {'class': "buttons prev"})
+        arrows += Link (None, RawHTML("%s"%(_('right'))), {'class': "buttons next"})
         controls = Box({'class':'controls'})
-        controls += Link (None, RawHTML("%s"%(_('left'))), {'class': "buttons prev"})
+        controls += arrows
         controls += self.pager
-        controls += Link (None, RawHTML("%s"%(_('right'))), {'class': "buttons next"})
         Box.__iadd__ (self, controls)
 
     def __iadd__ (self, widget):
@@ -77,7 +79,7 @@ class CarouselThumbnails (Carousel):
         Carousel.__init__ (self, props_.copy())
 
     def __iadd__ (self, widget):
-        box  = Box ({'class': 'carousel_thumbs'})
+        box  = Box ({'class': 'carousel-thumbs'})
         box += RawHTML ("%s" %(len(self.images.child) +1))
         box += Box ({'class': 'carousel_thumbs-image'}, widget)
         link = Link (None, Box ({'class': 'carousel_thumbs-link'}, box))
