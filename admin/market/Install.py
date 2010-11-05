@@ -118,6 +118,12 @@ class Install_Stage:
 class Welcome (Install_Stage):
     def __safe_call__ (self):
         Install_Log.reset()
+        Install_Log.log (".--------------------------------------------.")
+        Install_Log.log ("| PLESE, DO NOT EDIT OF REMOVE THIS LOG FILE |")
+        Install_Log.log ("|                                            |")
+        Install_Log.log ("| It contains useful information that        |")
+        Install_Log.log ("| cherokee-admin might need in the future.   |")
+        Install_Log.log (".--------------------------------------------.")
         Install_Log.log ("Retrieving package information…")
 
         # Check whether there are CTK.cfg changes to be saved
