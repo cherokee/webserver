@@ -379,7 +379,7 @@ class Setup (Install_Stage):
             package_path = down_entry.target_path
 
         # Create the local directory
-        target_path = os.path.join (CHEROKEE_OWS_ROOT, str(time.time()))
+        target_path = os.path.join (CHEROKEE_OWS_ROOT, str(int(time.time()*100)))
         os.mkdir (target_path, 0700)
         CTK.cfg['tmp!market!install!root'] = target_path
 
