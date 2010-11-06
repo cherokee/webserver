@@ -202,14 +202,25 @@ class MaintenanceDialog (CTK.Dialog):
 
 
 class AppList (CTK.Table):
-    def __init__ (self, apps):
+    def __init__ (self, apps, b_next, b_cancel, b_close):
         CTK.Table.__init__ (self, {'id': 'maintenance-removal-list'})
 
         self += [CTK.RawHTML(x) for x in (_('Remove'), _('Application'), _('Status'), _('Database'), _('Date'))]
         self.set_header()
 
+        js = "if ($('#%s input:checked').size() > 0) {" %(self.id)
+        js +=  b_close.JS_to_hide()
+        js +=  b_cancel.JS_to_show()
+        js +=  b_next.JS_to_show()
+        js += "} else {"
+        js +=  b_close.JS_to_show()
+        js +=  b_cancel.JS_to_hide()
+        js +=  b_next.JS_to_hide()
+        js += "}"
+
         for app in apps:
             check = CTK.Checkbox ({'name': 'remove_%s'%(app), 'class': 'noauto'})
+            check.bind ('change', js)
             self += [check,
                      CTK.RawHTML (apps[app]['name']),
                      CTK.RawHTML (apps[app]['type']),
@@ -251,15 +262,22 @@ class ListApps:
             CTK.cfg ['admin!market!maintenance!remove!%s!name'%(app)] = remove_apps[app]['name']
 
         # Dialog buttons
+        b_next   = CTK.DruidButton_Goto  (_('Next'), URL_MAINTENANCE_DB, True)
+        b_close  = CTK.DruidButton_Close (_('Close'))
+        b_cancel = CTK.DruidButton_Close (_('Cancel'))
+
         buttons  = CTK.DruidButtonsPanel()
-        buttons += CTK.DruidButton_Close (_('Cancel'))
-        buttons += CTK.DruidButton_Goto  (_('Next'), URL_MAINTENANCE_DB, True)
+        buttons += b_close
+        buttons += b_cancel
+        buttons += b_next
 
         # Content
         cont  = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_("Applications requiring maintenance")))
-        cont += AppList (remove_apps)
+        cont += AppList (remove_apps, b_next, b_cancel, b_close)
         cont += buttons
+        cont += CTK.RawHTML (js = b_next.JS_to_hide())
+        cont += CTK.RawHTML (js = b_cancel.JS_to_hide())
 
         submit = CTK.Submitter (URL_MAINTENANCE_LIST_APPLY)
         submit += cont
