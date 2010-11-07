@@ -54,13 +54,23 @@ def commit():
     return CTK.cfg_apply_post()
 
 
+def sorting_func (x,y):
+    if x == y == 'default':
+        return 0
+    if x == 'default':
+        return 1
+    if y == 'default':
+        return -1
+    return cmp(int(x), int(y))
+
+
 class Content (CTK.Container):
     def __init__ (self, refreshable, key, url_apply, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
 
         # List
         entries = CTK.cfg.keys(key)
-        entries.sort (lambda x,y: cmp(int(x),int(y)))
+        entries.sort (sorting_func)
 
         if entries:
             table = CTK.Table({'id': 'error-redirection'})
@@ -81,7 +91,8 @@ class Content (CTK.Container):
             self += submit
 
         # Add new
-        redir_codes = filter (lambda x: not x[0] in entries, ERROR_CODES)
+        redir_codes  = [('default', _('Default Error'))]
+        redir_codes += filter (lambda x: not x[0] in entries, ERROR_CODES)
 
         table = CTK.PropsTable()
         table.Add (_('Error'),       CTK.ComboCfg('new_error', redir_codes, {'class':'noauto'}), _(NOTE_ERROR))
