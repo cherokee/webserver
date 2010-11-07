@@ -23,6 +23,7 @@ request to the `alo.users.example.com` domain for the examples:
 |`${domain}`        |alo.users.example.com |Full domain name
 |`${tld}`           |com                   |Top Level Domain
 |`${domain_no_tld}` |alo.users.example     |Domain without the TLD
+|`${root_domain}`   |example.com           |Root domain
 |`${subdomain1}`    |users                 |First sub-domain
 |`${subdomain2}`    |alo                   |Second sub-domain
 |===================================================================

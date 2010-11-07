@@ -263,6 +263,18 @@ _add_subdomain (cherokee_buffer_t     *output,
 
 
 static ret_t
+add_root_domain (cherokee_template_t       *template,
+                 cherokee_template_token_t *token,
+                 cherokee_buffer_t         *output,
+                 void                      *param)
+{
+	UNUSED(template);
+	UNUSED(token);
+
+	return _add_subdomain (output, CONN(param), 1);
+}
+
+static ret_t
 add_subdomain1 (cherokee_template_t      *template,
 	       cherokee_template_token_t *token,
 	       cherokee_buffer_t         *output,
@@ -313,6 +325,8 @@ cherokee_generic_evhost_new (cherokee_generic_evhost_t **evhost)
                                      TEMPLATE_FUNC(add_tld), n, NULL);
         cherokee_template_set_token (&n->tpl_document_root, "domain_no_tld",
                                      TEMPLATE_FUNC(add_domain_no_tld), n, NULL);
+	cherokee_template_set_token (&n->tpl_document_root, "root_domain",
+                                     TEMPLATE_FUNC(add_root_domain), n, NULL);
         cherokee_template_set_token (&n->tpl_document_root, "subdomain1",
                                      TEMPLATE_FUNC(add_subdomain1), n, NULL);
         cherokee_template_set_token (&n->tpl_document_root, "subdomain2",
