@@ -265,7 +265,8 @@ run-tests.py \
 257-header_op-add3.py \
 258-header_op-add4.py \
 259-Vrule-OR-1.py \
-260-Vrule-OR-2.py
+260-Vrule-OR-2.py \
+261-ErrorRedir-Default1.py
 
 test:
 	python -m compileall .

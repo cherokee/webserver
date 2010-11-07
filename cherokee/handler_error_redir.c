@@ -72,24 +72,35 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		cherokee_module_props_init_base (MODULE_PROPS(n),
 						 MODULE_PROPS_FREE(props_free));
 		INIT_LIST_HEAD (&n->errors);
+		n->error_default = NULL;
+
 		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_ERREDIR(*_props);
 
 	cherokee_config_node_foreach (i, conf) {
-		cuint_t                 error;
 		error_entry_t          *entry;
-		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+		cuint_t                 error      = 0;
+		cherokee_config_node_t *subconf    = CONFIG_NODE(i);
+		cherokee_boolean_t      is_default = false;
+
+		/* Special 'Default' case
+		 */
+		if (equal_buf_str (&subconf->key, "default")) {
+			is_default = true;
 
 		/* Check the error number
 		 */
-		error = atoi (subconf->key.buf);
-		if (!http_type_300 (error) &&
-		    !http_type_400 (error) &&
-		    !http_type_500 (error)) {
-			LOG_ERROR (CHEROKEE_ERROR_HANDLER_ERROR_REDIR_CODE, subconf->key.buf);
-			continue;
+		} else {
+			error = atoi (subconf->key.buf);
+			if (!http_type_300 (error) &&
+			    !http_type_400 (error) &&
+			    !http_type_500 (error))
+			{
+				LOG_ERROR (CHEROKEE_ERROR_HANDLER_ERROR_REDIR_CODE, subconf->key.buf);
+				continue;
+			}
 		}
 
 		/* New object
@@ -98,7 +109,9 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		if (entry == NULL)
 			return ret_nomem;
 
-		entry->error = error;
+		if (error) {
+			entry->error = error;
+		}
 		entry->show  = false;
 
 		INIT_LIST_HEAD (&entry->entry);
@@ -119,7 +132,11 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 
 		/* Add it to the list
 		 */
-		cherokee_list_add (&entry->entry, &props->errors);
+		if (is_default) {
+			props->error_default = entry;
+		} else {
+			cherokee_list_add (&entry->entry, &props->errors);
+		}
 	}
 
 	return ret_ok;
@@ -176,7 +193,10 @@ cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
 				  cherokee_module_props_t *props)
 {
 	cherokee_list_t *i;
+	error_entry_t   *default_error;
 
+	/* Error list
+	 */
 	list_for_each (i, &PROP_ERREDIR(props)->errors) {
 		error_entry_t *entry = (error_entry_t *)i;
 
@@ -188,6 +208,17 @@ cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
 			return do_redir_external (hdl, conn, props, entry);
 		} else {
 			return do_redir_internal (conn, entry);
+		}
+	}
+
+	/* Default error
+	 */
+	default_error = (error_entry_t *) PROP_ERREDIR(props)->error_default;
+	if (default_error) {
+		if (default_error->show) {
+			return do_redir_external (hdl, conn, props, default_error);
+		} else {
+			return do_redir_internal (conn, default_error);
 		}
 	}
 
