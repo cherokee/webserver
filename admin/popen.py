@@ -137,5 +137,5 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True):
     return ret
 
 if __name__ == "__main__":
-    popen ("ls")
-    popen ("lsg")
+    popen_sync ("ls")
+    popen_sync ("lsg")
