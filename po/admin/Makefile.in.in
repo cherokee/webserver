@@ -376,8 +376,20 @@ dist2: stamp-po $(DISTFILES)
 	done
 
 update-po: Makefile
-	$(MAKE) $(DOMAIN).pot-update
-	test -z "$(UPDATEPOFILES)" || $(MAKE) $(UPDATEPOFILES)
+	## ORIGINAL CODE:
+	#  $(MAKE) $(DOMAIN).pot-update
+	#  test -z "$(UPDATEPOFILES)" || $(MAKE) $(UPDATEPOFILES)
+	#
+	## NEW (alo, 2010 Nov 8)
+	# Download cherokee-full.pot
+	wget -O tmp.pot http://www.cherokee-project.com/download/trunk/cherokee.pot && \
+	rm -f cherokee-full.pot && mv tmp.pot cherokee-full.pot
+	# Update po
+	for i in *.po; do \
+	   msgmerge -o "$$i.new" "$$i" cherokee-full.pot && \
+	   cp "$$i.new" "$$i" && \
+	   rm "$$i.new"; \
+     done
 	$(MAKE) update-gmo
 
 # General rule for creating PO files.
