@@ -71,7 +71,7 @@ class HTTP_Response:
         self.headers = ([],headers)[bool(headers)][:]
 
     def __add__ (self, text):
-        assert type(text) == str
+        assert type(text) == str, type(text)
         self.body += text
         return self
 
