@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: cherokee '1.0.8'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
 "POT-Creation-Date: 2010-11-08 12:42+0100\n"
-"PO-Revision-Date: 2010-11-08 13:14+0100\n"
+"PO-Revision-Date: 2010-11-08 17:23+0100\n"
 "Last-Translator: Alvaro Lopez Ortega <alvaro@alobbs.com>\n"
 "Language-Team: Spanish <>\n"
 "Language: es\n"
@@ -6787,20 +6787,20 @@ msgstr "Ajustes generales"
 msgid ""
 "We believe Web infrastructure software should evolve towards efficiency, "
 "scalability, and management simplicity."
-msgstr "Creemos que el software de infraestructuras Web debe evolucionar, ser más eficiente, escalable y fácil de manejar."
+msgstr "En Octality creemos que las infraestructuras Web deben evolucionar, ser más eficientes, escalables y fáciles de manejar."
 
 #: ows/Market_Info/Block.py:13
 msgid ""
 "That is why Octality's products challenge the state of the art. Its "
 "flagship, Cherokee, is the most powerful Web infrastructure software ever "
 "created."
-msgstr "Por eso los productos de Octality innovan constantemente. Su principal product, Cherokee, es el software de infraestructura Web más potente jamás creado."
+msgstr "Por eso nuestros productos siempre son innovadores. Productos como Cherokee, el software de elección sobre el que construir infraestructuras web modernas, potentes y sólidas."
 
 #: ows/Market_Info/Block.py:14
 msgid ""
 "The Cherokee Market represents a wide distribution channel for companies, "
 "and an astonishing new way for users to deploy Web applications."
-msgstr "Cherokee Market representa un gran canal de distribución para compañias, y una increible forma de instalar software para los usuarios."
+msgstr "O como Cherokee Market, un novedoso y amplio canal de distribución para las empresas, y una manera revolucionaria de instalar aplicaciones web para los usuarios."
 
 #: ows/Market_Info/Block.py:15
 msgid "Learn more"
