@@ -185,7 +185,7 @@ def AncientConfig (file):
 OWS_DIR_P1 = N_("A problem with the installation directories has been found.  The %s directory is missing and it could not be created by Cherokee-Admin.")
 OWS_DIR_P2 = N_("Please, create it and try again:")
 
-OWS_PERM_P1 = N_("A problem with the installation directories has been found.  The %s directory has the wrong permissions. It must be writable by the UID %d.")
+OWS_PERM_P1 = N_("A problem with the installation directories has been found.  The %(dir)s directory has the wrong permissions. It must be writable by the UID %(uid)s.")
 OWS_PERM_P2 = N_("Please, fix it and try again:")
 
 class OWSDirectoryError (CTK.Page):
@@ -216,7 +216,7 @@ class OWSDirectoryError (CTK.Page):
 
             if not os.access (d, os.W_OK):
                 self += CTK.RawHTML ('<h1>%s</h1>'%(_('Installation Problem')))
-                self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_PERM_P1)%(d, os.getuid())))
+                self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_PERM_P1)%({'dir':d, 'uid':os.getuid()})))
                 self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_PERM_P2)))
                 self += CTK.RawHTML ("<pre>chown -R %d '%s'</pre></p>" %(os.getuid(), d))
                 self += CTK.RawHTML ("<pre>chmod -R 0775 '%s'</pre></p>" %(d))

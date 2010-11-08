@@ -170,7 +170,7 @@ class App:
                 rev += CTK.Box ({'class': 'market-app-review-score'},    CTK.StarRating({'selected': review['review_score']}))
                 rev += CTK.Box ({'class': 'market-app-review-title'},    CTK.RawHTML(review['review_title']))
                 rev += CTK.Box ({'class': 'market-app-review-name'},     CTK.RawHTML(review['first_name'] + ' ' + review['last_name']))
-                rev += CTK.Box ({'class': 'market-app-review-stamp'},    CTK.RawHTML(_('on %s at %s' %(review_date, review_time))))
+                rev += CTK.Box ({'class': 'market-app-review-stamp'},    CTK.RawHTML(_('on %(date)s at %(time)s' %({'date':review_date, 'time': review_time}))))
                 rev += CTK.Box ({'class': 'market-app-review-comment'},  CTK.RawHTML(review['review_comment']))
                 pags += rev
 
