@@ -33,6 +33,11 @@ DEBUG = True
 OWS_RPC = 'http://www.octality.com/api/v%s/open/market/info/' %(OWS_API_VERSION)
 
 
+def invalidate_caches():
+    Index_Block1.cached = None
+    Index_Block2.cached = None
+
+
 #
 # Index
 #

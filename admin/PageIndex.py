@@ -277,6 +277,8 @@ def Lang_Apply():
 
     language_set (lang)
     CTK.cfg['admin!lang'] = lang
+
+    OWS_Market_Info.invalidate_caches()
     return {'ret': 'ok', 'redirect': '/'}
 
 
