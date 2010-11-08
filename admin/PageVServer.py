@@ -23,6 +23,7 @@
 #
 
 import CTK
+import copy
 import Page
 import Cherokee
 import validations
@@ -144,20 +145,90 @@ class HostMatchWidget (CTK.Container):
         pre        = "vserver!%s" %(vsrv_num)
         url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
         is_default = CTK.cfg.get_lowest_entry("vserver") == int(vsrv_num)
+        is_complex = CTK.cfg.get_val ('%s!match'%(pre)) == 'v_or'
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Host Names')))
+        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Host Match')))
 
+        # Default Virtual Server
         if is_default:
             notice  = CTK.Notice()
             notice += CTK.RawHTML(_(DEFAULT_HOST_NOTE))
             self += notice
             return
 
-        table = CTK.PropsAuto (url_apply)
-        modul = CTK.PluginSelector ('%s!match'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
-        table.Add (_('Method'), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
-        self += CTK.Indenter (table)
-        self += modul
+        # Complex matches
+        if is_complex:
+            table = CTK.PropsAuto (url_apply)
+            modul = CTK.PluginSelector ('%s!match!left'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+            table.Add ('%s 1'%(_('Method')), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
+            self += CTK.Indenter (table)
+            self += modul
+
+            submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
+            submit += CTK.Hidden ('op', 'del_1')
+            remove_1 = CTK.Link (None, CTK.RawHTML(_('Remove criteria')))
+            remove_1.bind ('click', submit.JS_to_submit())
+            self += submit
+            self += remove_1
+
+            table = CTK.PropsAuto (url_apply)
+            modul = CTK.PluginSelector ('%s!match!right'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+            table.Add ('%s 2'%(_('Method')), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
+            self += CTK.Indenter (table)
+            self += modul
+
+            submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
+            submit += CTK.Hidden ('op', 'del_2')
+            remove_2 = CTK.Link (None, CTK.RawHTML(_('Remove criteria')))
+            remove_2.bind ('click', submit.JS_to_submit())
+            self += submit
+            self += remove_2
+
+        # Simple match
+        else:
+            table = CTK.PropsAuto (url_apply)
+            modul = CTK.PluginSelector ('%s!match'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+            table.Add (_('Method'), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
+            self += CTK.Indenter (table)
+            self += modul
+
+            submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
+            submit += CTK.Hidden ('op', 'or')
+
+            link_add = CTK.Link (None, CTK.RawHTML (_('Add an additional matching criteria')))
+            link_add.bind ('click', submit.JS_to_submit())
+
+            self += submit
+            self += link_add
+
+
+def HostMatchWidget_Apply():
+    def move (old, new):
+        val = CTK.cfg.get_val(old)
+        tmp = copy.deepcopy (CTK.cfg[old])
+        del (CTK.cfg[old])
+
+        CTK.cfg[new] = val
+        CTK.cfg.set_sub_node (new, tmp)
+
+    vsrv_num = re.findall (r'^%s/(\d+)/vmatch'%(URL_APPLY), CTK.request.url)[0]
+    pre      = 'vserver!%s!match' %(vsrv_num)
+
+    op = CTK.post.get_val ('op')
+    if op == 'or':
+        move (pre, "%s!left"%(pre))
+        CTK.cfg[pre] = 'v_or'
+        return CTK.cfg_reply_ajax_ok()
+
+    elif op == 'del_1':
+        move ('%s!right'%(pre), pre)
+        return CTK.cfg_reply_ajax_ok()
+
+    elif op == 'del_2':
+        move ('%s!left'%(pre), pre)
+        return CTK.cfg_reply_ajax_ok()
+
+    return {'ret': 'fail'}
 
 
 class RuleLink (CTK.Link):
@@ -462,7 +533,7 @@ def LogginWidgetContent_Apply():
     ret = CTK.cfg_apply_post()
 
     # Check Error Writer stale-entries
-    vsrv_num = re.findall (r'^%s/(\d+)/log'%URL_APPLY,  CTK.request.url)[0]
+    vsrv_num = re.findall (r'^%s/(\d+)/log'%(URL_APPLY), CTK.request.url)[0]
     pre      = 'vserver!%s!error_writer' %(vsrv_num)
 
     if not CTK.cfg.get_val ('%s!type'%(pre)):
@@ -559,8 +630,9 @@ class Render:
         return cont.Render().toJSON()
 
 
-CTK.publish (r'^%s/[\d]+$'      %(URL_BASE), Render)
-CTK.publish (r'^%s/[\d]+$'      %(URL_APPLY), CTK.cfg_apply_post, validation=VALIDATIONS, method="POST")
-CTK.publish (r'^%s/[\d]+/log$'  %(URL_APPLY), LogginWidgetContent_Apply, validation=VALIDATIONS, method="POST")
-CTK.publish ('^%s/[\d]+/clone$' %(URL_BASE), commit_clone)
+CTK.publish (r'^%s/[\d]+$'        %(URL_BASE),  Render)
+CTK.publish (r'^%s/[\d]+$'        %(URL_APPLY), CTK.cfg_apply_post,        validation=VALIDATIONS, method="POST")
+CTK.publish (r'^%s/[\d]+/log$'    %(URL_APPLY), LogginWidgetContent_Apply, validation=VALIDATIONS, method="POST")
+CTK.publish (r'^%s/[\d]+/vmatch$' %(URL_APPLY), HostMatchWidget_Apply, method="POST")
+CTK.publish (r'^%s/[\d]+/clone$'  %(URL_BASE),  commit_clone)
 
