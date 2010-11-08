@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.49' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-11-07 15:00+0100\n"
+"POT-Creation-Date: 2010-11-08 12:42+0100\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: cherokee-trunk/admin/PageVServers.py:48
 #: cherokee-trunk/admin/PageVServers.py:281
 #: cherokee-trunk/admin/PageSources.py:35
-#: cherokee-trunk/admin/PageVServer.py:106
+#: cherokee-trunk/admin/PageVServer.py:107
 msgid "Virtual Servers"
 msgstr "虚拟主机"
 
@@ -57,8 +57,8 @@ msgstr "昵称"
 #: cherokee-trunk/admin/wizards/php.py:36
 #: cherokee-trunk/admin/wizards/php.py:264
 #: cherokee-trunk/admin/PageEntry.py:364 cherokee-trunk/admin/PageEntry.py:366
-#: cherokee-trunk/admin/PageVServer.py:307
-#: cherokee-trunk/admin/PageVServer.py:309 cherokee-trunk/admin/Handler.py:43
+#: cherokee-trunk/admin/PageVServer.py:378
+#: cherokee-trunk/admin/PageVServer.py:380 cherokee-trunk/admin/Handler.py:43
 msgid "Document Root"
 msgstr "网站目录"
 
@@ -83,7 +83,7 @@ msgstr "远程管理"
 #: cherokee-trunk/admin/market/Maintenance.py:287
 #: cherokee-trunk/admin/market/Maintenance.py:296
 #: cherokee-trunk/admin/PageEntry.py:381
-#: cherokee-trunk/admin/PageVServer.py:551
+#: cherokee-trunk/admin/PageVServer.py:622
 #: cherokee-trunk/admin/PageStatus.py:70 cherokee-trunk/admin/Graph.py:118
 msgid "Unknown"
 msgstr "未知"
@@ -169,7 +169,7 @@ msgstr "新建虚拟主机"
 #: cherokee-trunk/admin/plugins/proxy.py:168
 #: cherokee-trunk/admin/plugins/proxy.py:215
 #: cherokee-trunk/admin/plugins/wildcard.py:70
-#: cherokee-trunk/admin/plugins/error_redir.py:96
+#: cherokee-trunk/admin/plugins/error_redir.py:107
 #: cherokee-trunk/admin/plugins/redir.py:120
 #: cherokee-trunk/admin/plugins/rehost.py:71
 #: cherokee-trunk/admin/PageEntry.py:84 cherokee-trunk/admin/PageEntry.py:231
@@ -329,7 +329,7 @@ msgstr "增加新文件"
 
 #: cherokee-trunk/admin/PageSource.py:269
 #: cherokee-trunk/admin/market/PageApp.py:41
-#: cherokee-trunk/admin/PageVServer.py:543 packages/common/target.py:148
+#: cherokee-trunk/admin/PageVServer.py:614 packages/common/target.py:148
 msgid "Virtual Server"
 msgstr "虚拟主机"
 
@@ -339,7 +339,7 @@ msgid "Rule"
 msgstr "规则"
 
 #: cherokee-trunk/admin/PageSource.py:300
-#: cherokee-trunk/admin/plugins/error_redir.py:89
+#: cherokee-trunk/admin/plugins/error_redir.py:100
 #: cherokee-trunk/admin/plugins/header.py:83
 #: cherokee-trunk/admin/plugins/redir.py:77
 #: cherokee-trunk/admin/PageEntry.py:187
@@ -388,7 +388,7 @@ msgstr "继承环境"
 #: cherokee-trunk/admin/plugins/ldap.py:53
 #: cherokee-trunk/admin/PageAdvanced.py:150
 #: cherokee-trunk/admin/PageEntry.py:118 cherokee-trunk/admin/PageEntry.py:127
-#: cherokee-trunk/admin/PageVServer.py:123 cherokee-trunk/admin/Graph.py:125
+#: cherokee-trunk/admin/PageVServer.py:124 cherokee-trunk/admin/Graph.py:125
 #: cherokee-trunk/admin/CgiBase.py:68 cherokee-trunk/admin/CgiBase.py:70
 #: cherokee-trunk/admin/CgiBase.py:123 cherokee-trunk/admin/CgiBase.py:124
 #: cherokee-trunk/admin/CgiBase.py:125 cherokee-trunk/admin/CgiBase.py:126
@@ -781,7 +781,7 @@ msgid "Only Listing"
 msgstr "仅列表"
 
 #: cherokee-trunk/admin/consts.py:54
-#: cherokee-trunk/admin/plugins/error_redir.py:88
+#: cherokee-trunk/admin/plugins/error_redir.py:99
 #: cherokee-trunk/admin/wizards/hotlinking.py:151
 msgid "Redirection"
 msgstr "转发"
@@ -1100,7 +1100,7 @@ msgstr "增强性虚拟主机"
 msgid "Skip"
 msgstr "跳过"
 
-#: cherokee-trunk/admin/consts.py:224 cherokee-trunk/admin/PageVServer.py:445
+#: cherokee-trunk/admin/consts.py:224 cherokee-trunk/admin/PageVServer.py:516
 msgid "Accept"
 msgstr "接受"
 
@@ -1109,7 +1109,7 @@ msgid "Require"
 msgstr "包含"
 
 #: cherokee-trunk/admin/consts.py:229 cherokee-trunk/admin/consts.py:246
-#: cherokee-trunk/admin/PageVServer.py:381
+#: cherokee-trunk/admin/PageVServer.py:452
 msgid "Disabled"
 msgstr "禁止"
 
@@ -1375,7 +1375,7 @@ msgid ""
 msgstr "网站根目录将动态生成，可以使用一下参数:<br/>"
 
 #: cherokee-trunk/admin/plugins/evhost.py:33
-#: cherokee-trunk/admin/PageVServer.py:335
+#: cherokee-trunk/admin/PageVServer.py:406
 msgid "Advanced Virtual Hosting"
 msgstr "高级虚拟主机"
 
@@ -1493,7 +1493,7 @@ msgstr "允许路径信息"
 #: cherokee-trunk/admin/plugins/proxy.py:239
 #: cherokee-trunk/admin/PageAdvanced.py:176
 #: cherokee-trunk/admin/PageEntry.py:79
-#: cherokee-trunk/admin/PageVServer.py:324
+#: cherokee-trunk/admin/PageVServer.py:395
 msgid "Allow"
 msgstr "允许"
 
@@ -1587,11 +1587,9 @@ msgid "Add new entry"
 msgstr ""
 
 #: cherokee-trunk/admin/plugins/target_ip.py:88
-#: cherokee-trunk/admin/plugins/wildcard.py:79
-#: cherokee-trunk/admin/plugins/error_redir.py:103
-#: cherokee-trunk/admin/plugins/rehost.py:80 cherokee-trunk/admin/Mime.py:104
-msgid "Add New"
-msgstr "新增"
+#, fuzzy
+msgid "Add new IP/Subnet…"
+msgstr "新的IP地址和子网"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:100
 msgid "Accepted Server IP Addresses and Subnets"
@@ -1828,6 +1826,10 @@ msgstr ""
 msgid "New host name"
 msgstr ""
 
+#: cherokee-trunk/admin/plugins/wildcard.py:79
+msgid "Add new wildcard…"
+msgstr ""
+
 #: cherokee-trunk/admin/plugins/wildcard.py:91
 msgid "Accepted Domains"
 msgstr ""
@@ -1850,7 +1852,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/plugins/secdownload.py:44
 #: cherokee-trunk/admin/PageEntry.py:282
-#: cherokee-trunk/admin/PageVServer.py:119
+#: cherokee-trunk/admin/PageVServer.py:120
 msgid "Timeout"
 msgstr "超时"
 
@@ -1969,13 +1971,23 @@ msgstr "目标的HTTP访问时出现错误."
 msgid "Whether the redirection should be Internal or External."
 msgstr "内部重定向或外部重定向"
 
-#: cherokee-trunk/admin/plugins/error_redir.py:87
+#: cherokee-trunk/admin/plugins/error_redir.py:94
+#, fuzzy
+msgid "Default Error"
+msgstr "默认错误信息"
+
+#: cherokee-trunk/admin/plugins/error_redir.py:98
 msgid "Error"
 msgstr "错误"
 
-#: cherokee-trunk/admin/plugins/error_redir.py:91
+#: cherokee-trunk/admin/plugins/error_redir.py:102
 msgid "Add New Custom Error"
 msgstr "添加自定义错误"
+
+#: cherokee-trunk/admin/plugins/error_redir.py:114
+#: cherokee-trunk/admin/Mime.py:104
+msgid "Add New"
+msgstr "新增"
 
 #: cherokee-trunk/admin/plugins/url_arg.py:31
 msgid "Argument name"
@@ -2162,7 +2174,7 @@ msgid "Path"
 msgstr "路径"
 
 #: cherokee-trunk/admin/plugins/fullpath.py:115
-#: cherokee-trunk/admin/PageVServer.py:313
+#: cherokee-trunk/admin/PageVServer.py:384
 msgid "Paths"
 msgstr "路径"
 
@@ -2278,9 +2290,11 @@ msgstr ""
 
 #: cherokee-trunk/admin/plugins/method.py:94
 #: cherokee-trunk/admin/plugins/method.py:104
-#: cherokee-trunk/admin/PageVServer.py:158
-#: cherokee-trunk/admin/PageVServer.py:333
-#: cherokee-trunk/admin/PageVServer.py:368
+#: cherokee-trunk/admin/PageVServer.py:163
+#: cherokee-trunk/admin/PageVServer.py:176
+#: cherokee-trunk/admin/PageVServer.py:191
+#: cherokee-trunk/admin/PageVServer.py:404
+#: cherokee-trunk/admin/PageVServer.py:439
 msgid "Method"
 msgstr "方式"
 
@@ -2341,6 +2355,11 @@ msgstr ""
 #: cherokee-trunk/admin/plugins/rehost.py:71
 msgid "Add New Entry"
 msgstr ""
+
+#: cherokee-trunk/admin/plugins/rehost.py:80
+#, fuzzy
+msgid "Add new entry…"
+msgstr "增加其他内容"
 
 #: cherokee-trunk/admin/market/Util.py:53
 #: cherokee-trunk/admin/market/Util.py:55
@@ -2602,7 +2621,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/market/PageApp.py:173
 #, python-format
-msgid "on %s at %s"
+msgid "on %(date)s at %(time)s"
 msgstr ""
 
 #: cherokee-trunk/admin/market/PageApp.py:197
@@ -4771,7 +4790,7 @@ msgid "Deflate encoder"
 msgstr "Deflate 压缩"
 
 #: cherokee-trunk/admin/PageEntry.py:73 cherokee-trunk/admin/PageEntry.py:141
-#: cherokee-trunk/admin/PageVServer.py:114
+#: cherokee-trunk/admin/PageVServer.py:115
 msgid "Authentication"
 msgstr "认证"
 
@@ -4792,7 +4811,7 @@ msgid "Limit traffic to"
 msgstr "限制流量"
 
 #: cherokee-trunk/admin/PageEntry.py:107 cherokee-trunk/admin/PageEntry.py:400
-#: cherokee-trunk/admin/PageVServer.py:120
+#: cherokee-trunk/admin/PageVServer.py:121
 msgid "Traffic Shaping"
 msgstr "流量调整"
 
@@ -4801,7 +4820,7 @@ msgid "Skip Logging"
 msgstr "不记录"
 
 #: cherokee-trunk/admin/PageEntry.py:122
-#: cherokee-trunk/admin/PageVServer.py:540
+#: cherokee-trunk/admin/PageVServer.py:611
 msgid "Logging"
 msgstr "记录"
 
@@ -4843,7 +4862,7 @@ msgid "Add New Header"
 msgstr "新增"
 
 #: cherokee-trunk/admin/PageEntry.py:257
-#: cherokee-trunk/admin/PageVServer.py:118
+#: cherokee-trunk/admin/PageVServer.py:119
 msgid "Expiration"
 msgstr "过期"
 
@@ -4898,7 +4917,7 @@ msgstr "匹配规则"
 
 #: cherokee-trunk/admin/PageEntry.py:354 cherokee-trunk/admin/PageEntry.py:371
 #: cherokee-trunk/admin/PageEntry.py:396
-#: cherokee-trunk/admin/PageVServer.py:113
+#: cherokee-trunk/admin/PageVServer.py:114
 msgid "Handler"
 msgstr "处理程序"
 
@@ -4911,7 +4930,7 @@ msgid "Time"
 msgstr "时间"
 
 #: cherokee-trunk/admin/PageEntry.py:399
-#: cherokee-trunk/admin/PageVServer.py:541
+#: cherokee-trunk/admin/PageVServer.py:612
 msgid "Security"
 msgstr "安全"
 
@@ -5230,114 +5249,114 @@ msgstr ""
 msgid "Could not access file descriptors: "
 msgstr "无法访问文件描述符:"
 
-#: cherokee-trunk/admin/PageVServer.py:43
+#: cherokee-trunk/admin/PageVServer.py:44
 msgid "Nickname for the virtual server."
 msgstr "虚拟主机昵称"
 
-#: cherokee-trunk/admin/PageVServer.py:44
+#: cherokee-trunk/admin/PageVServer.py:45
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
 msgstr "PEM-encoded 认证文件路径(完整路径)"
 
-#: cherokee-trunk/admin/PageVServer.py:45
+#: cherokee-trunk/admin/PageVServer.py:46
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr "服务器PEM-encoded私匙文件完整路径"
 
-#: cherokee-trunk/admin/PageVServer.py:46
+#: cherokee-trunk/admin/PageVServer.py:47
 msgid ""
 "File containing the trusted CA certificates, utilized for checking the "
 "client certificates (Full path to the file)"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:47
+#: cherokee-trunk/admin/PageVServer.py:48
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
 "ciphers supported by the OpenSSL version used)."
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:48
+#: cherokee-trunk/admin/PageVServer.py:49
 msgid "Skip, Accept or Require client certificates."
 msgstr "跳过，接受或要求客户端证书。"
 
-#: cherokee-trunk/admin/PageVServer.py:49
+#: cherokee-trunk/admin/PageVServer.py:50
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:50
+#: cherokee-trunk/admin/PageVServer.py:51
 msgid "Allows the selection of how to generate the error responses."
 msgstr "选择允许如何生成错误响应。"
 
-#: cherokee-trunk/admin/PageVServer.py:51
+#: cherokee-trunk/admin/PageVServer.py:52
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
 msgstr "使用用户主目录作为网站根目录为空则禁止此功能。"
 
-#: cherokee-trunk/admin/PageVServer.py:52
+#: cherokee-trunk/admin/PageVServer.py:53
 msgid "The personal web support is currently turned on."
 msgstr "个人主页服务已启用"
 
-#: cherokee-trunk/admin/PageVServer.py:53
+#: cherokee-trunk/admin/PageVServer.py:54
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
 msgstr "增加一个新域名，允许在域名中使用通配符."
 
-#: cherokee-trunk/admin/PageVServer.py:54
+#: cherokee-trunk/admin/PageVServer.py:55
 msgid "Virtual Server root directory."
 msgstr "虚拟主机的根目录"
 
-#: cherokee-trunk/admin/PageVServer.py:55
+#: cherokee-trunk/admin/PageVServer.py:56
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
 msgstr "默认首页设置.例如:<em>index.html,index.php</em>."
 
-#: cherokee-trunk/admin/PageVServer.py:56
+#: cherokee-trunk/admin/PageVServer.py:57
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 msgstr "最大允许上传大小,单位：字节,默认:不限制"
 
-#: cherokee-trunk/admin/PageVServer.py:57
+#: cherokee-trunk/admin/PageVServer.py:58
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 msgstr "虚拟主机是否使用Keep-alive,默认:是"
 
-#: cherokee-trunk/admin/PageVServer.py:58
+#: cherokee-trunk/admin/PageVServer.py:59
 msgid "The Logging is currently enabled."
 msgstr "日志记录启用"
 
-#: cherokee-trunk/admin/PageVServer.py:59
+#: cherokee-trunk/admin/PageVServer.py:60
 msgid "Logging format. Apache compatible is highly recommended here."
 msgstr "日志记录格式.通常使用Apache compatible"
 
-#: cherokee-trunk/admin/PageVServer.py:60
+#: cherokee-trunk/admin/PageVServer.py:61
 msgid "Back-end used to store the log accesses."
 msgstr "保存访问日志的处理程序"
 
-#: cherokee-trunk/admin/PageVServer.py:61
+#: cherokee-trunk/admin/PageVServer.py:62
 msgid "Back-end used to store the log errors."
 msgstr "保存错误日志的处理程序"
 
-#: cherokee-trunk/admin/PageVServer.py:62
+#: cherokee-trunk/admin/PageVServer.py:63
 msgid "Back-end used to store the log accesses and errors."
 msgstr "保存错误和访问日志的处理程序"
 
-#: cherokee-trunk/admin/PageVServer.py:63
+#: cherokee-trunk/admin/PageVServer.py:64
 msgid "Full path to the file where the information will be saved."
 msgstr "信息文件保存的完整路径"
 
-#: cherokee-trunk/admin/PageVServer.py:64
+#: cherokee-trunk/admin/PageVServer.py:65
 msgid "Path to the executable that will be invoked on each log entry."
 msgstr "处理日志的程序路径"
 
-#: cherokee-trunk/admin/PageVServer.py:65
+#: cherokee-trunk/admin/PageVServer.py:66
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
 "headers (send by reverse proxies)."
 msgstr "日志处理程序是否读取和使用X-Real-IP和X-Forwarded-For头"
 
-#: cherokee-trunk/admin/PageVServer.py:66
+#: cherokee-trunk/admin/PageVServer.py:67
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
@@ -5345,18 +5364,18 @@ msgstr ""
 "接收所有X-Real-IP和X-Forwarded-For头,警告:除非您知道您在做什么,否则请不要启"
 "用."
 
-#: cherokee-trunk/admin/PageVServer.py:67
+#: cherokee-trunk/admin/PageVServer.py:68
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
 "Forwarded-For headers."
 msgstr "允许发送X-Real-IP和X-Forwarded-For头的IP地址和子网."
 
-#: cherokee-trunk/admin/PageVServer.py:68
+#: cherokee-trunk/admin/PageVServer.py:69
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr "是否支持高级虚拟主机特性(默认关闭)"
 
-#: cherokee-trunk/admin/PageVServer.py:69
+#: cherokee-trunk/admin/PageVServer.py:70
 #, fuzzy
 msgid ""
 "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
@@ -5370,292 +5389,299 @@ msgstr ""
 "${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, "
 "${request_original}, ${vserver_name}, ${response_size}"
 
-#: cherokee-trunk/admin/PageVServer.py:70
+#: cherokee-trunk/admin/PageVServer.py:71
 msgid "Allows the selection of domain matching method."
 msgstr "选择域名匹配方式。"
 
-#: cherokee-trunk/admin/PageVServer.py:71
+#: cherokee-trunk/admin/PageVServer.py:72
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
 msgstr "是否对此虚拟主机开启统计."
 
-#: cherokee-trunk/admin/PageVServer.py:72
+#: cherokee-trunk/admin/PageVServer.py:73
 msgid "Time standard to use in the log file entries."
 msgstr "在日志文件使用时间标准"
 
-#: cherokee-trunk/admin/PageVServer.py:73
+#: cherokee-trunk/admin/PageVServer.py:74
 msgid ""
 "Remember that only \"File Exists\" rules and \"List & Send\" handlers use "
 "the Directory Indexes setting."
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:75
+#: cherokee-trunk/admin/PageVServer.py:76
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr "<p>'default'虚拟主机将默认匹配所有域名。</p>"
 
-#: cherokee-trunk/admin/PageVServer.py:107
+#: cherokee-trunk/admin/PageVServer.py:108
 msgid "Loggers"
 msgstr "日志"
 
-#: cherokee-trunk/admin/PageVServer.py:108
+#: cherokee-trunk/admin/PageVServer.py:109
 msgid "SSL cookbook"
 msgstr "SSL cookbook"
 
-#: cherokee-trunk/admin/PageVServer.py:112
+#: cherokee-trunk/admin/PageVServer.py:113
 msgid "Rule Match"
 msgstr "规则匹配"
 
-#: cherokee-trunk/admin/PageVServer.py:112
+#: cherokee-trunk/admin/PageVServer.py:113
 msgid "Match"
 msgstr "匹配"
 
-#: cherokee-trunk/admin/PageVServer.py:113
+#: cherokee-trunk/admin/PageVServer.py:114
 msgid "Assigned Handler"
 msgstr "分配处理程序"
 
-#: cherokee-trunk/admin/PageVServer.py:114
+#: cherokee-trunk/admin/PageVServer.py:115
 msgid "Auth"
 msgstr "认证"
 
-#: cherokee-trunk/admin/PageVServer.py:115
+#: cherokee-trunk/admin/PageVServer.py:116
 msgid "Custom Document Root"
 msgstr "定义网站根目录"
 
-#: cherokee-trunk/admin/PageVServer.py:115
+#: cherokee-trunk/admin/PageVServer.py:116
 msgid "Root"
 msgstr "根目录"
 
-#: cherokee-trunk/admin/PageVServer.py:116
+#: cherokee-trunk/admin/PageVServer.py:117
 msgid "Only HTTPS"
 msgstr "仅HTTPS"
 
-#: cherokee-trunk/admin/PageVServer.py:116
+#: cherokee-trunk/admin/PageVServer.py:117
 msgid "Secure"
 msgstr "安全"
 
-#: cherokee-trunk/admin/PageVServer.py:117
+#: cherokee-trunk/admin/PageVServer.py:118
 msgid "Encoders"
 msgstr "压缩程序"
 
-#: cherokee-trunk/admin/PageVServer.py:117
+#: cherokee-trunk/admin/PageVServer.py:118
 msgid "Enc"
 msgstr "压缩"
 
-#: cherokee-trunk/admin/PageVServer.py:118
+#: cherokee-trunk/admin/PageVServer.py:119
 msgid "Exp"
 msgstr "缓存时间"
 
-#: cherokee-trunk/admin/PageVServer.py:119
+#: cherokee-trunk/admin/PageVServer.py:120
 msgid "Connection Timeout"
 msgstr "连接超时"
 
-#: cherokee-trunk/admin/PageVServer.py:120
+#: cherokee-trunk/admin/PageVServer.py:121
 msgid "Shaping"
 msgstr "流量调整"
 
-#: cherokee-trunk/admin/PageVServer.py:121
+#: cherokee-trunk/admin/PageVServer.py:122
 msgid "Logging Enabled"
 msgstr "日志已启用"
 
-#: cherokee-trunk/admin/PageVServer.py:121
+#: cherokee-trunk/admin/PageVServer.py:122
 msgid "Log"
 msgstr "日志"
 
-#: cherokee-trunk/admin/PageVServer.py:122
+#: cherokee-trunk/admin/PageVServer.py:123
 msgid "Rule is Final"
 msgstr "规则完成"
 
-#: cherokee-trunk/admin/PageVServer.py:122
+#: cherokee-trunk/admin/PageVServer.py:123
 #: cherokee-trunk/admin/PageRule.py:233
 msgid "Final"
 msgstr "完成"
 
-#: cherokee-trunk/admin/PageVServer.py:123
+#: cherokee-trunk/admin/PageVServer.py:124
 msgid "Rule is Active"
 msgstr "规则启用"
 
-#: cherokee-trunk/admin/PageVServer.py:148
-msgid "Host Names"
-msgstr "主机名称"
+#: cherokee-trunk/admin/PageVServer.py:150
+#: cherokee-trunk/admin/PageVServer.py:608
+msgid "Host Match"
+msgstr "主机匹配"
 
-#: cherokee-trunk/admin/PageVServer.py:203
+#: cherokee-trunk/admin/PageVServer.py:169
+#: cherokee-trunk/admin/PageVServer.py:182
+#, fuzzy
+msgid "Remove criteria"
+msgstr "远程主机"
+
+#: cherokee-trunk/admin/PageVServer.py:198
+msgid "Add an additional matching criteria"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:274
 msgid "Behavior Rules"
 msgstr "行为规则"
 
-#: cherokee-trunk/admin/PageVServer.py:212
+#: cherokee-trunk/admin/PageVServer.py:283
 msgid "Rule Management"
 msgstr "规则管理"
 
-#: cherokee-trunk/admin/PageVServer.py:238
+#: cherokee-trunk/admin/PageVServer.py:309
 msgid "Only accept Secure Connections"
 msgstr "仅允许安全连接"
 
-#: cherokee-trunk/admin/PageVServer.py:243
+#: cherokee-trunk/admin/PageVServer.py:314
 msgid "Encoding enabled"
 msgstr "启用压缩"
 
-#: cherokee-trunk/admin/PageVServer.py:249
+#: cherokee-trunk/admin/PageVServer.py:320
 msgid "no"
 msgstr "否"
 
-#: cherokee-trunk/admin/PageVServer.py:260
+#: cherokee-trunk/admin/PageVServer.py:331
 msgid " seconds"
 msgstr "秒"
 
-#: cherokee-trunk/admin/PageVServer.py:265
+#: cherokee-trunk/admin/PageVServer.py:336
 msgid " bytes per second"
 msgstr "比特/秒"
 
-#: cherokee-trunk/admin/PageVServer.py:270
+#: cherokee-trunk/admin/PageVServer.py:341
 msgid "Logging enabled for this rule"
 msgstr "记录此规则相关日志"
 
-#: cherokee-trunk/admin/PageVServer.py:275
+#: cherokee-trunk/admin/PageVServer.py:346
 msgid "Prevents further rule evaluation"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:280
+#: cherokee-trunk/admin/PageVServer.py:351
 msgid "Rule is active"
 msgstr "启用规则"
 
-#: cherokee-trunk/admin/PageVServer.py:299
+#: cherokee-trunk/admin/PageVServer.py:370
 msgid "Virtual Server nickname"
 msgstr "虚拟主机昵称"
 
-#: cherokee-trunk/admin/PageVServer.py:301
+#: cherokee-trunk/admin/PageVServer.py:372
 msgid "Server ID"
 msgstr "服务器ID"
 
-#: cherokee-trunk/admin/PageVServer.py:311
+#: cherokee-trunk/admin/PageVServer.py:382
 msgid "Directory Indexes"
 msgstr "目录列表"
 
-#: cherokee-trunk/admin/PageVServer.py:319
+#: cherokee-trunk/admin/PageVServer.py:390
 msgid "Neither are in use at the moment."
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:324
+#: cherokee-trunk/admin/PageVServer.py:395
 msgid "Keep-alive"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:325
+#: cherokee-trunk/admin/PageVServer.py:396
 msgid "Max Upload Size"
 msgstr "最大上传大小"
 
-#: cherokee-trunk/admin/PageVServer.py:327
+#: cherokee-trunk/admin/PageVServer.py:398
 #: cherokee-trunk/admin/PageGeneral.py:253
 msgid "Network"
 msgstr "网络"
 
-#: cherokee-trunk/admin/PageVServer.py:370
+#: cherokee-trunk/admin/PageVServer.py:441
 msgid "Error Handling hook"
 msgstr "错误处理程序"
 
-#: cherokee-trunk/admin/PageVServer.py:385
+#: cherokee-trunk/admin/PageVServer.py:456
 msgid "Write errors to"
 msgstr "将错误日志写入到"
 
-#: cherokee-trunk/admin/PageVServer.py:389
-#: cherokee-trunk/admin/PageVServer.py:428
+#: cherokee-trunk/admin/PageVServer.py:460
+#: cherokee-trunk/admin/PageVServer.py:499
 msgid "Filename"
 msgstr "文件名"
 
-#: cherokee-trunk/admin/PageVServer.py:391
-#: cherokee-trunk/admin/PageVServer.py:431
+#: cherokee-trunk/admin/PageVServer.py:462
+#: cherokee-trunk/admin/PageVServer.py:502
 msgid "Command"
 msgstr "命令"
 
-#: cherokee-trunk/admin/PageVServer.py:397
+#: cherokee-trunk/admin/PageVServer.py:468
 msgid "Error Logging"
 msgstr "错误日志"
 
-#: cherokee-trunk/admin/PageVServer.py:408
+#: cherokee-trunk/admin/PageVServer.py:479
 msgid "Format"
 msgstr "格式"
 
-#: cherokee-trunk/admin/PageVServer.py:415
+#: cherokee-trunk/admin/PageVServer.py:486
 msgid "Write accesses to"
 msgstr "将访问日志写入"
 
-#: cherokee-trunk/admin/PageVServer.py:436
+#: cherokee-trunk/admin/PageVServer.py:507
 msgid "Template: "
 msgstr "模板"
 
-#: cherokee-trunk/admin/PageVServer.py:438
+#: cherokee-trunk/admin/PageVServer.py:509
 msgid "Access Logging"
 msgstr "访问日志"
 
-#: cherokee-trunk/admin/PageVServer.py:444
+#: cherokee-trunk/admin/PageVServer.py:515
 msgid "Time standard"
 msgstr "时间标准"
 
-#: cherokee-trunk/admin/PageVServer.py:445
+#: cherokee-trunk/admin/PageVServer.py:516
 msgid "Accept Forwarded IPs"
 msgstr "允许转发的IP地址"
 
-#: cherokee-trunk/admin/PageVServer.py:448 cherokee-trunk/admin/CgiBase.py:70
+#: cherokee-trunk/admin/PageVServer.py:519 cherokee-trunk/admin/CgiBase.py:70
 msgid "Don't check origin"
 msgstr "不检查来源"
 
-#: cherokee-trunk/admin/PageVServer.py:448
+#: cherokee-trunk/admin/PageVServer.py:519
 msgid "Do not check"
 msgstr "不检查"
 
-#: cherokee-trunk/admin/PageVServer.py:451 cherokee-trunk/admin/CgiBase.py:72
+#: cherokee-trunk/admin/PageVServer.py:522 cherokee-trunk/admin/CgiBase.py:72
 msgid "Accept from Hosts"
 msgstr "允许访问的主机"
 
-#: cherokee-trunk/admin/PageVServer.py:457
+#: cherokee-trunk/admin/PageVServer.py:528
 msgid "Logging Options"
 msgstr "日志选项"
 
-#: cherokee-trunk/admin/PageVServer.py:493
+#: cherokee-trunk/admin/PageVServer.py:564
 msgid "Certificate"
 msgstr "证书"
 
-#: cherokee-trunk/admin/PageVServer.py:494
+#: cherokee-trunk/admin/PageVServer.py:565
 msgid "Certificate key"
 msgstr "证书密匙"
 
-#: cherokee-trunk/admin/PageVServer.py:499
+#: cherokee-trunk/admin/PageVServer.py:570
 msgid "Required SSL/TLS Values"
 msgstr "包含SSL/TLS值"
 
-#: cherokee-trunk/admin/PageVServer.py:504
+#: cherokee-trunk/admin/PageVServer.py:575
 msgid "Ciphers"
 msgstr "密码"
 
-#: cherokee-trunk/admin/PageVServer.py:505
+#: cherokee-trunk/admin/PageVServer.py:576
 msgid "Client Certs. Request"
 msgstr "客户端证书.请求"
 
-#: cherokee-trunk/admin/PageVServer.py:508
+#: cherokee-trunk/admin/PageVServer.py:579
 msgid "CA List"
 msgstr "证书列表"
 
-#: cherokee-trunk/admin/PageVServer.py:511
+#: cherokee-trunk/admin/PageVServer.py:582
 msgid "Verify Depth"
 msgstr "验证级别"
 
-#: cherokee-trunk/admin/PageVServer.py:517
+#: cherokee-trunk/admin/PageVServer.py:588
 msgid "Advanced Options"
 msgstr "高级选项"
 
-#: cherokee-trunk/admin/PageVServer.py:536
+#: cherokee-trunk/admin/PageVServer.py:607
 msgid "Basics"
 msgstr "基础"
 
-#: cherokee-trunk/admin/PageVServer.py:537
-msgid "Host Match"
-msgstr "主机匹配"
-
-#: cherokee-trunk/admin/PageVServer.py:538
+#: cherokee-trunk/admin/PageVServer.py:609
 #: cherokee-trunk/admin/PageRule.py:298
 msgid "Behavior"
 msgstr "行为"
 
-#: cherokee-trunk/admin/PageVServer.py:539
+#: cherokee-trunk/admin/PageVServer.py:610
 msgid "Error Handler"
 msgstr "错误处理程序"
 
@@ -5811,8 +5837,8 @@ msgstr ""
 #: cherokee-trunk/admin/PageError.py:188
 #, python-format
 msgid ""
-"A problem with the installation directories has been found.  The %s "
-"directory has the wrong permissions. It must be writable by the UID %d."
+"A problem with the installation directories has been found.  The %(dir)s "
+"directory has the wrong permissions. It must be writable by the UID %(uid)s."
 msgstr ""
 
 #: cherokee-trunk/admin/PageError.py:189
@@ -6405,6 +6431,29 @@ msgstr "图标"
 #: cherokee-trunk/admin/PageGeneral.py:260
 msgid "General Settings"
 msgstr "常规配置"
+
+#: ows/Market_Info/Block.py:12
+msgid ""
+"We believe Web infrastructure software should evolve towards efficiency, "
+"scalability, and management simplicity."
+msgstr ""
+
+#: ows/Market_Info/Block.py:13
+msgid ""
+"That is why Octality's products challenge the state of the art. Its "
+"flagship, Cherokee, is the most powerful Web infrastructure software ever "
+"created."
+msgstr ""
+
+#: ows/Market_Info/Block.py:14
+msgid ""
+"The Cherokee Market represents a wide distribution channel for companies, "
+"and an astonishing new way for users to deploy Web applications."
+msgstr ""
+
+#: ows/Market_Info/Block.py:15
+msgid "Learn more"
+msgstr ""
 
 #: packages/magnolia/installer.py:20
 msgid ""
@@ -7044,6 +7093,9 @@ msgid ""
 "Note that launching Nuxeo-DM can take up a couple of  minutes on modern "
 "servers, so please be patient the first time you access it."
 msgstr ""
+
+#~ msgid "Host Names"
+#~ msgstr "主机名称"
 
 #~ msgid "OK"
 #~ msgstr "确定"

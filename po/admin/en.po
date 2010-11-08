@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-11-07 15:00+0100\n"
+"POT-Creation-Date: 2010-11-08 12:42+0100\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: cherokee-trunk/admin/PageVServers.py:48
 #: cherokee-trunk/admin/PageVServers.py:281
 #: cherokee-trunk/admin/PageSources.py:35
-#: cherokee-trunk/admin/PageVServer.py:106
+#: cherokee-trunk/admin/PageVServer.py:107
 msgid "Virtual Servers"
 msgstr "Virtual Servers"
 
@@ -58,8 +58,8 @@ msgstr "Nick"
 #: cherokee-trunk/admin/wizards/php.py:36
 #: cherokee-trunk/admin/wizards/php.py:264
 #: cherokee-trunk/admin/PageEntry.py:364 cherokee-trunk/admin/PageEntry.py:366
-#: cherokee-trunk/admin/PageVServer.py:307
-#: cherokee-trunk/admin/PageVServer.py:309 cherokee-trunk/admin/Handler.py:43
+#: cherokee-trunk/admin/PageVServer.py:378
+#: cherokee-trunk/admin/PageVServer.py:380 cherokee-trunk/admin/Handler.py:43
 msgid "Document Root"
 msgstr "Document Root"
 
@@ -85,7 +85,7 @@ msgstr "Remote Administration"
 #: cherokee-trunk/admin/market/Maintenance.py:287
 #: cherokee-trunk/admin/market/Maintenance.py:296
 #: cherokee-trunk/admin/PageEntry.py:381
-#: cherokee-trunk/admin/PageVServer.py:551
+#: cherokee-trunk/admin/PageVServer.py:622
 #: cherokee-trunk/admin/PageStatus.py:70 cherokee-trunk/admin/Graph.py:118
 msgid "Unknown"
 msgstr "Unknown"
@@ -173,7 +173,7 @@ msgstr "Add new Virtual Server"
 #: cherokee-trunk/admin/plugins/proxy.py:168
 #: cherokee-trunk/admin/plugins/proxy.py:215
 #: cherokee-trunk/admin/plugins/wildcard.py:70
-#: cherokee-trunk/admin/plugins/error_redir.py:96
+#: cherokee-trunk/admin/plugins/error_redir.py:107
 #: cherokee-trunk/admin/plugins/redir.py:120
 #: cherokee-trunk/admin/plugins/rehost.py:71
 #: cherokee-trunk/admin/PageEntry.py:84 cherokee-trunk/admin/PageEntry.py:231
@@ -349,7 +349,7 @@ msgstr "Add new Environment variable"
 
 #: cherokee-trunk/admin/PageSource.py:269
 #: cherokee-trunk/admin/market/PageApp.py:41
-#: cherokee-trunk/admin/PageVServer.py:543 packages/common/target.py:148
+#: cherokee-trunk/admin/PageVServer.py:614 packages/common/target.py:148
 msgid "Virtual Server"
 msgstr "Virtual Server"
 
@@ -359,7 +359,7 @@ msgid "Rule"
 msgstr "Rule"
 
 #: cherokee-trunk/admin/PageSource.py:300
-#: cherokee-trunk/admin/plugins/error_redir.py:89
+#: cherokee-trunk/admin/plugins/error_redir.py:100
 #: cherokee-trunk/admin/plugins/header.py:83
 #: cherokee-trunk/admin/plugins/redir.py:77
 #: cherokee-trunk/admin/PageEntry.py:187
@@ -409,7 +409,7 @@ msgstr ""
 #: cherokee-trunk/admin/plugins/ldap.py:53
 #: cherokee-trunk/admin/PageAdvanced.py:150
 #: cherokee-trunk/admin/PageEntry.py:118 cherokee-trunk/admin/PageEntry.py:127
-#: cherokee-trunk/admin/PageVServer.py:123 cherokee-trunk/admin/Graph.py:125
+#: cherokee-trunk/admin/PageVServer.py:124 cherokee-trunk/admin/Graph.py:125
 #: cherokee-trunk/admin/CgiBase.py:68 cherokee-trunk/admin/CgiBase.py:70
 #: cherokee-trunk/admin/CgiBase.py:123 cherokee-trunk/admin/CgiBase.py:124
 #: cherokee-trunk/admin/CgiBase.py:125 cherokee-trunk/admin/CgiBase.py:126
@@ -814,7 +814,7 @@ msgid "Only Listing"
 msgstr "Only listing"
 
 #: cherokee-trunk/admin/consts.py:54
-#: cherokee-trunk/admin/plugins/error_redir.py:88
+#: cherokee-trunk/admin/plugins/error_redir.py:99
 #: cherokee-trunk/admin/wizards/hotlinking.py:151
 msgid "Redirection"
 msgstr "Redirection"
@@ -1142,7 +1142,7 @@ msgstr "Enhanced Virtual Hosting"
 msgid "Skip"
 msgstr "Skip"
 
-#: cherokee-trunk/admin/consts.py:224 cherokee-trunk/admin/PageVServer.py:445
+#: cherokee-trunk/admin/consts.py:224 cherokee-trunk/admin/PageVServer.py:516
 msgid "Accept"
 msgstr "Accept"
 
@@ -1151,7 +1151,7 @@ msgid "Require"
 msgstr "Require"
 
 #: cherokee-trunk/admin/consts.py:229 cherokee-trunk/admin/consts.py:246
-#: cherokee-trunk/admin/PageVServer.py:381
+#: cherokee-trunk/admin/PageVServer.py:452
 #, fuzzy
 msgid "Disabled"
 msgstr "Disable"
@@ -1427,7 +1427,7 @@ msgstr ""
 "variables are accepted:<br/>"
 
 #: cherokee-trunk/admin/plugins/evhost.py:33
-#: cherokee-trunk/admin/PageVServer.py:335
+#: cherokee-trunk/admin/PageVServer.py:406
 msgid "Advanced Virtual Hosting"
 msgstr "Advanced Virtual Hosting"
 
@@ -1552,7 +1552,7 @@ msgstr "Allow PathInfo"
 #: cherokee-trunk/admin/plugins/proxy.py:239
 #: cherokee-trunk/admin/PageAdvanced.py:176
 #: cherokee-trunk/admin/PageEntry.py:79
-#: cherokee-trunk/admin/PageVServer.py:324
+#: cherokee-trunk/admin/PageVServer.py:395
 #, fuzzy
 msgid "Allow"
 msgstr "Allow "
@@ -1651,12 +1651,9 @@ msgid "Add new entry"
 msgstr "Add new pair"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:88
-#: cherokee-trunk/admin/plugins/wildcard.py:79
-#: cherokee-trunk/admin/plugins/error_redir.py:103
-#: cherokee-trunk/admin/plugins/rehost.py:80 cherokee-trunk/admin/Mime.py:104
 #, fuzzy
-msgid "Add New"
-msgstr "Add a new"
+msgid "Add new IP/Subnet…"
+msgstr "Add new pair"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:100
 msgid "Accepted Server IP Addresses and Subnets"
@@ -1916,6 +1913,10 @@ msgstr "Domain pattern"
 msgid "New host name"
 msgstr "New host name"
 
+#: cherokee-trunk/admin/plugins/wildcard.py:79
+msgid "Add new wildcard…"
+msgstr ""
+
 #: cherokee-trunk/admin/plugins/wildcard.py:91
 #, fuzzy
 msgid "Accepted Domains"
@@ -1940,7 +1941,7 @@ msgstr "Secret"
 
 #: cherokee-trunk/admin/plugins/secdownload.py:44
 #: cherokee-trunk/admin/PageEntry.py:282
-#: cherokee-trunk/admin/PageVServer.py:119
+#: cherokee-trunk/admin/PageVServer.py:120
 msgid "Timeout"
 msgstr "Timeout"
 
@@ -2066,14 +2067,25 @@ msgstr ""
 msgid "Whether the redirection should be Internal or External."
 msgstr "Defines whether the redirection will be seen by the client."
 
-#: cherokee-trunk/admin/plugins/error_redir.py:87
+#: cherokee-trunk/admin/plugins/error_redir.py:94
+#, fuzzy
+msgid "Default Error"
+msgstr "Default errors"
+
+#: cherokee-trunk/admin/plugins/error_redir.py:98
 msgid "Error"
 msgstr "Error"
 
-#: cherokee-trunk/admin/plugins/error_redir.py:91
+#: cherokee-trunk/admin/plugins/error_redir.py:102
 #, fuzzy
 msgid "Add New Custom Error"
 msgstr "HTTP Custom Error"
+
+#: cherokee-trunk/admin/plugins/error_redir.py:114
+#: cherokee-trunk/admin/Mime.py:104
+#, fuzzy
+msgid "Add New"
+msgstr "Add a new"
 
 #: cherokee-trunk/admin/plugins/url_arg.py:31
 msgid "Argument name"
@@ -2278,7 +2290,7 @@ msgid "Path"
 msgstr "Paths"
 
 #: cherokee-trunk/admin/plugins/fullpath.py:115
-#: cherokee-trunk/admin/PageVServer.py:313
+#: cherokee-trunk/admin/PageVServer.py:384
 msgid "Paths"
 msgstr "Paths"
 
@@ -2405,9 +2417,11 @@ msgstr "The HTTP method that should match this rule."
 
 #: cherokee-trunk/admin/plugins/method.py:94
 #: cherokee-trunk/admin/plugins/method.py:104
-#: cherokee-trunk/admin/PageVServer.py:158
-#: cherokee-trunk/admin/PageVServer.py:333
-#: cherokee-trunk/admin/PageVServer.py:368
+#: cherokee-trunk/admin/PageVServer.py:163
+#: cherokee-trunk/admin/PageVServer.py:176
+#: cherokee-trunk/admin/PageVServer.py:191
+#: cherokee-trunk/admin/PageVServer.py:404
+#: cherokee-trunk/admin/PageVServer.py:439
 msgid "Method"
 msgstr "Method"
 
@@ -2473,6 +2487,11 @@ msgstr "New Regular Expression"
 #: cherokee-trunk/admin/plugins/rehost.py:71
 #, fuzzy
 msgid "Add New Entry"
+msgstr "Add new pair"
+
+#: cherokee-trunk/admin/plugins/rehost.py:80
+#, fuzzy
+msgid "Add new entry…"
 msgstr "Add new pair"
 
 #: cherokee-trunk/admin/market/Util.py:53
@@ -2736,7 +2755,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/market/PageApp.py:173
 #, python-format
-msgid "on %s at %s"
+msgid "on %(date)s at %(time)s"
 msgstr ""
 
 #: cherokee-trunk/admin/market/PageApp.py:197
@@ -5039,7 +5058,7 @@ msgid "Deflate encoder"
 msgstr "Deflate"
 
 #: cherokee-trunk/admin/PageEntry.py:73 cherokee-trunk/admin/PageEntry.py:141
-#: cherokee-trunk/admin/PageVServer.py:114
+#: cherokee-trunk/admin/PageVServer.py:115
 msgid "Authentication"
 msgstr "Authentication"
 
@@ -5061,7 +5080,7 @@ msgid "Limit traffic to"
 msgstr "Limit traffic to"
 
 #: cherokee-trunk/admin/PageEntry.py:107 cherokee-trunk/admin/PageEntry.py:400
-#: cherokee-trunk/admin/PageVServer.py:120
+#: cherokee-trunk/admin/PageVServer.py:121
 msgid "Traffic Shaping"
 msgstr "Traffic Shaping"
 
@@ -5071,7 +5090,7 @@ msgid "Skip Logging"
 msgstr "Logging"
 
 #: cherokee-trunk/admin/PageEntry.py:122
-#: cherokee-trunk/admin/PageVServer.py:540
+#: cherokee-trunk/admin/PageVServer.py:611
 msgid "Logging"
 msgstr "Logging"
 
@@ -5114,7 +5133,7 @@ msgid "Add New Header"
 msgstr "Add new pair"
 
 #: cherokee-trunk/admin/PageEntry.py:257
-#: cherokee-trunk/admin/PageVServer.py:118
+#: cherokee-trunk/admin/PageVServer.py:119
 msgid "Expiration"
 msgstr "Expiration"
 
@@ -5171,7 +5190,7 @@ msgstr "Matching Rule"
 
 #: cherokee-trunk/admin/PageEntry.py:354 cherokee-trunk/admin/PageEntry.py:371
 #: cherokee-trunk/admin/PageEntry.py:396
-#: cherokee-trunk/admin/PageVServer.py:113
+#: cherokee-trunk/admin/PageVServer.py:114
 msgid "Handler"
 msgstr "Handler"
 
@@ -5185,7 +5204,7 @@ msgid "Time"
 msgstr "Timeout"
 
 #: cherokee-trunk/admin/PageEntry.py:399
-#: cherokee-trunk/admin/PageVServer.py:541
+#: cherokee-trunk/admin/PageVServer.py:612
 msgid "Security"
 msgstr "Security"
 
@@ -5513,11 +5532,11 @@ msgstr ""
 msgid "Could not access file descriptors: "
 msgstr "Could not access file descriptors: "
 
-#: cherokee-trunk/admin/PageVServer.py:43
+#: cherokee-trunk/admin/PageVServer.py:44
 msgid "Nickname for the virtual server."
 msgstr "Nickname for the virtual server."
 
-#: cherokee-trunk/admin/PageVServer.py:44
+#: cherokee-trunk/admin/PageVServer.py:45
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
@@ -5525,11 +5544,11 @@ msgstr ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
 
-#: cherokee-trunk/admin/PageVServer.py:45
+#: cherokee-trunk/admin/PageVServer.py:46
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr "PEM-encoded Private Key file for the server (Full path to the file)"
 
-#: cherokee-trunk/admin/PageVServer.py:46
+#: cherokee-trunk/admin/PageVServer.py:47
 #, fuzzy
 msgid ""
 "File containing the trusted CA certificates, utilized for checking the "
@@ -5538,7 +5557,7 @@ msgstr ""
 "Optional: File containing the trusted CA certificates, utilized for checking "
 "the client certificates (Full path to the file)"
 
-#: cherokee-trunk/admin/PageVServer.py:47
+#: cherokee-trunk/admin/PageVServer.py:48
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
@@ -5548,12 +5567,12 @@ msgstr ""
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
 "ciphers supported by the OpenSSL version used)."
 
-#: cherokee-trunk/admin/PageVServer.py:48
+#: cherokee-trunk/admin/PageVServer.py:49
 #, fuzzy
 msgid "Skip, Accept or Require client certificates."
 msgstr "Optional: Skip, Accept or Require client certificates."
 
-#: cherokee-trunk/admin/PageVServer.py:49
+#: cherokee-trunk/admin/PageVServer.py:50
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
@@ -5561,11 +5580,11 @@ msgstr ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
 
-#: cherokee-trunk/admin/PageVServer.py:50
+#: cherokee-trunk/admin/PageVServer.py:51
 msgid "Allows the selection of how to generate the error responses."
 msgstr "Allows the selection of how to generate the error responses."
 
-#: cherokee-trunk/admin/PageVServer.py:51
+#: cherokee-trunk/admin/PageVServer.py:52
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
@@ -5573,19 +5592,19 @@ msgstr ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
 
-#: cherokee-trunk/admin/PageVServer.py:52
+#: cherokee-trunk/admin/PageVServer.py:53
 msgid "The personal web support is currently turned on."
 msgstr "The personal web support is currently turned on."
 
-#: cherokee-trunk/admin/PageVServer.py:53
+#: cherokee-trunk/admin/PageVServer.py:54
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
 msgstr "Adds a new domain name. Wildcards are allowed in the domain name."
 
-#: cherokee-trunk/admin/PageVServer.py:54
+#: cherokee-trunk/admin/PageVServer.py:55
 msgid "Virtual Server root directory."
 msgstr "Virtual Server root directory."
 
-#: cherokee-trunk/admin/PageVServer.py:55
+#: cherokee-trunk/admin/PageVServer.py:56
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
@@ -5593,44 +5612,44 @@ msgstr ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
 
-#: cherokee-trunk/admin/PageVServer.py:56
+#: cherokee-trunk/admin/PageVServer.py:57
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 msgstr "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 
-#: cherokee-trunk/admin/PageVServer.py:57
+#: cherokee-trunk/admin/PageVServer.py:58
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 msgstr ""
 "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 
-#: cherokee-trunk/admin/PageVServer.py:58
+#: cherokee-trunk/admin/PageVServer.py:59
 msgid "The Logging is currently enabled."
 msgstr "The Logging is currently enabled."
 
-#: cherokee-trunk/admin/PageVServer.py:59
+#: cherokee-trunk/admin/PageVServer.py:60
 msgid "Logging format. Apache compatible is highly recommended here."
 msgstr "Logging format. Apache compatible is highly recommended here."
 
-#: cherokee-trunk/admin/PageVServer.py:60
+#: cherokee-trunk/admin/PageVServer.py:61
 msgid "Back-end used to store the log accesses."
 msgstr "Back-end used to store the log accesses."
 
-#: cherokee-trunk/admin/PageVServer.py:61
+#: cherokee-trunk/admin/PageVServer.py:62
 msgid "Back-end used to store the log errors."
 msgstr "Back-end used to store the log errors."
 
-#: cherokee-trunk/admin/PageVServer.py:62
+#: cherokee-trunk/admin/PageVServer.py:63
 msgid "Back-end used to store the log accesses and errors."
 msgstr "Back-end used to store the log accesses and errors."
 
-#: cherokee-trunk/admin/PageVServer.py:63
+#: cherokee-trunk/admin/PageVServer.py:64
 msgid "Full path to the file where the information will be saved."
 msgstr "Full path to the file where the information will be saved."
 
-#: cherokee-trunk/admin/PageVServer.py:64
+#: cherokee-trunk/admin/PageVServer.py:65
 msgid "Path to the executable that will be invoked on each log entry."
 msgstr "Path to the executable that will be invoked on each log entry."
 
-#: cherokee-trunk/admin/PageVServer.py:65
+#: cherokee-trunk/admin/PageVServer.py:66
 #, fuzzy
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
@@ -5639,7 +5658,7 @@ msgstr ""
 "Whether the logger should read and use the X-Real-IP header (send by reverse "
 "proxy front-ends)."
 
-#: cherokee-trunk/admin/PageVServer.py:66
+#: cherokee-trunk/admin/PageVServer.py:67
 #, fuzzy
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
@@ -5648,7 +5667,7 @@ msgstr ""
 "Accept all the X-Real-IP headers. It's dangerous: turn it on only if you are "
 "centain of what you are doing."
 
-#: cherokee-trunk/admin/PageVServer.py:67
+#: cherokee-trunk/admin/PageVServer.py:68
 #, fuzzy
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
@@ -5657,13 +5676,13 @@ msgstr ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP headers "
 "(usually your proxy servers)."
 
-#: cherokee-trunk/admin/PageVServer.py:68
+#: cherokee-trunk/admin/PageVServer.py:69
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 
-#: cherokee-trunk/admin/PageVServer.py:69
+#: cherokee-trunk/admin/PageVServer.py:70
 #, fuzzy
 msgid ""
 "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
@@ -5677,323 +5696,329 @@ msgstr ""
 "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
 "${user_remote}, ${request}, ${request_original}, ${vserver_name}"
 
-#: cherokee-trunk/admin/PageVServer.py:70
+#: cherokee-trunk/admin/PageVServer.py:71
 #, fuzzy
 msgid "Allows the selection of domain matching method."
 msgstr "Allows the selection of how to generate the error responses."
 
-#: cherokee-trunk/admin/PageVServer.py:71
+#: cherokee-trunk/admin/PageVServer.py:72
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:72
+#: cherokee-trunk/admin/PageVServer.py:73
 msgid "Time standard to use in the log file entries."
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:73
+#: cherokee-trunk/admin/PageVServer.py:74
 msgid ""
 "Remember that only \"File Exists\" rules and \"List & Send\" handlers use "
 "the Directory Indexes setting."
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:75
+#: cherokee-trunk/admin/PageVServer.py:76
 #, fuzzy
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr ""
 "\n"
 "<p>The 'default' virtual server matches all the domain names.</p>\n"
 
-#: cherokee-trunk/admin/PageVServer.py:107
+#: cherokee-trunk/admin/PageVServer.py:108
 msgid "Loggers"
 msgstr "Loggers"
 
-#: cherokee-trunk/admin/PageVServer.py:108
+#: cherokee-trunk/admin/PageVServer.py:109
 msgid "SSL cookbook"
 msgstr "SSL cookbook"
 
-#: cherokee-trunk/admin/PageVServer.py:112
+#: cherokee-trunk/admin/PageVServer.py:113
 #, fuzzy
 msgid "Rule Match"
 msgstr "File Matches"
 
-#: cherokee-trunk/admin/PageVServer.py:112
+#: cherokee-trunk/admin/PageVServer.py:113
 msgid "Match"
 msgstr "Match"
 
-#: cherokee-trunk/admin/PageVServer.py:113
+#: cherokee-trunk/admin/PageVServer.py:114
 #, fuzzy
 msgid "Assigned Handler"
 msgstr "Handler"
 
-#: cherokee-trunk/admin/PageVServer.py:114
+#: cherokee-trunk/admin/PageVServer.py:115
 msgid "Auth"
 msgstr "Auth"
 
-#: cherokee-trunk/admin/PageVServer.py:115
+#: cherokee-trunk/admin/PageVServer.py:116
 #, fuzzy
 msgid "Custom Document Root"
 msgstr "Document Root"
 
-#: cherokee-trunk/admin/PageVServer.py:115
+#: cherokee-trunk/admin/PageVServer.py:116
 msgid "Root"
 msgstr "Root"
 
-#: cherokee-trunk/admin/PageVServer.py:116
+#: cherokee-trunk/admin/PageVServer.py:117
 msgid "Only HTTPS"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:116
+#: cherokee-trunk/admin/PageVServer.py:117
 #, fuzzy
 msgid "Secure"
 msgstr "Secret"
 
-#: cherokee-trunk/admin/PageVServer.py:117
+#: cherokee-trunk/admin/PageVServer.py:118
 #, fuzzy
 msgid "Encoders"
 msgstr "Encoding"
 
-#: cherokee-trunk/admin/PageVServer.py:117
+#: cherokee-trunk/admin/PageVServer.py:118
 msgid "Enc"
 msgstr "Enc"
 
-#: cherokee-trunk/admin/PageVServer.py:118
+#: cherokee-trunk/admin/PageVServer.py:119
 msgid "Exp"
 msgstr "Exp"
 
-#: cherokee-trunk/admin/PageVServer.py:119
+#: cherokee-trunk/admin/PageVServer.py:120
 #, fuzzy
 msgid "Connection Timeout"
 msgstr "Connections"
 
-#: cherokee-trunk/admin/PageVServer.py:120
+#: cherokee-trunk/admin/PageVServer.py:121
 #, fuzzy
 msgid "Shaping"
 msgstr "Traffic Shaping"
 
-#: cherokee-trunk/admin/PageVServer.py:121
+#: cherokee-trunk/admin/PageVServer.py:122
 #, fuzzy
 msgid "Logging Enabled"
 msgstr " Enabled"
 
-#: cherokee-trunk/admin/PageVServer.py:121
+#: cherokee-trunk/admin/PageVServer.py:122
 #, fuzzy
 msgid "Log"
 msgstr "Logging"
 
-#: cherokee-trunk/admin/PageVServer.py:122
+#: cherokee-trunk/admin/PageVServer.py:123
 #, fuzzy
 msgid "Rule is Final"
 msgstr "Rule list"
 
-#: cherokee-trunk/admin/PageVServer.py:122
+#: cherokee-trunk/admin/PageVServer.py:123
 #: cherokee-trunk/admin/PageRule.py:233
 msgid "Final"
 msgstr "Final"
 
-#: cherokee-trunk/admin/PageVServer.py:123
+#: cherokee-trunk/admin/PageVServer.py:124
 #, fuzzy
 msgid "Rule is Active"
 msgstr "Rule list"
 
-#: cherokee-trunk/admin/PageVServer.py:148
-#, fuzzy
-msgid "Host Names"
-msgstr "Host names"
-
-#: cherokee-trunk/admin/PageVServer.py:203
-#, fuzzy
-msgid "Behavior Rules"
-msgstr "Behavior rules"
-
-#: cherokee-trunk/admin/PageVServer.py:212
-msgid "Rule Management"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:238
-#, fuzzy
-msgid "Only accept Secure Connections"
-msgstr "Accepted domains"
-
-#: cherokee-trunk/admin/PageVServer.py:243
-#, fuzzy
-msgid "Encoding enabled"
-msgstr "Encoding"
-
-#: cherokee-trunk/admin/PageVServer.py:249
-msgid "no"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:260
-#, fuzzy
-msgid " seconds"
-msgstr "Icons"
-
-#: cherokee-trunk/admin/PageVServer.py:265
-msgid " bytes per second"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:270
-msgid "Logging enabled for this rule"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:275
-msgid "Prevents further rule evaluation"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:280
-#, fuzzy
-msgid "Rule is active"
-msgstr "Rule list"
-
-#: cherokee-trunk/admin/PageVServer.py:299
-msgid "Virtual Server nickname"
-msgstr "Virtual Server nickname"
-
-#: cherokee-trunk/admin/PageVServer.py:301
-msgid "Server ID"
-msgstr "Server ID"
-
-#: cherokee-trunk/admin/PageVServer.py:311
-msgid "Directory Indexes"
-msgstr "Directory Indexes"
-
-#: cherokee-trunk/admin/PageVServer.py:319
-msgid "Neither are in use at the moment."
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:324
-msgid "Keep-alive"
-msgstr "Keep-alive"
-
-#: cherokee-trunk/admin/PageVServer.py:325
-msgid "Max Upload Size"
-msgstr "Max Upload Size"
-
-#: cherokee-trunk/admin/PageVServer.py:327
-#: cherokee-trunk/admin/PageGeneral.py:253
-msgid "Network"
-msgstr "Network"
-
-#: cherokee-trunk/admin/PageVServer.py:370
-msgid "Error Handling hook"
-msgstr "Error Handling hook"
-
-#: cherokee-trunk/admin/PageVServer.py:385
-#, fuzzy
-msgid "Write errors to"
-msgstr "Writers"
-
-#: cherokee-trunk/admin/PageVServer.py:389
-#: cherokee-trunk/admin/PageVServer.py:428
-msgid "Filename"
-msgstr "Filename"
-
-#: cherokee-trunk/admin/PageVServer.py:391
-#: cherokee-trunk/admin/PageVServer.py:431
-msgid "Command"
-msgstr "Command"
-
-#: cherokee-trunk/admin/PageVServer.py:397
-#, fuzzy
-msgid "Error Logging"
-msgstr "Error Handling hook"
-
-#: cherokee-trunk/admin/PageVServer.py:408
-msgid "Format"
-msgstr "Format"
-
-#: cherokee-trunk/admin/PageVServer.py:415
-#, fuzzy
-msgid "Write accesses to"
-msgstr "Writers"
-
-#: cherokee-trunk/admin/PageVServer.py:436
-msgid "Template: "
-msgstr "Template: "
-
-#: cherokee-trunk/admin/PageVServer.py:438
-#, fuzzy
-msgid "Access Logging"
-msgstr "Logging"
-
-#: cherokee-trunk/admin/PageVServer.py:444
-msgid "Time standard"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:445
-msgid "Accept Forwarded IPs"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:448 cherokee-trunk/admin/CgiBase.py:70
-msgid "Don't check origin"
-msgstr ""
-
-#: cherokee-trunk/admin/PageVServer.py:448
-#, fuzzy
-msgid "Do not check"
-msgstr "Do not restart"
-
-#: cherokee-trunk/admin/PageVServer.py:451 cherokee-trunk/admin/CgiBase.py:72
-#, fuzzy
-msgid "Accept from Hosts"
-msgstr "Accepted domains"
-
-#: cherokee-trunk/admin/PageVServer.py:457
-#, fuzzy
-msgid "Logging Options"
-msgstr "Logging"
-
-#: cherokee-trunk/admin/PageVServer.py:493
-msgid "Certificate"
-msgstr "Certificate"
-
-#: cherokee-trunk/admin/PageVServer.py:494
-msgid "Certificate key"
-msgstr "Certificate key"
-
-#: cherokee-trunk/admin/PageVServer.py:499
-#, fuzzy
-msgid "Required SSL/TLS Values"
-msgstr "Required SSL/TLS values"
-
-#: cherokee-trunk/admin/PageVServer.py:504
-msgid "Ciphers"
-msgstr "Ciphers"
-
-#: cherokee-trunk/admin/PageVServer.py:505
-msgid "Client Certs. Request"
-msgstr "Client Certs. Request"
-
-#: cherokee-trunk/admin/PageVServer.py:508
-msgid "CA List"
-msgstr "CA List"
-
-#: cherokee-trunk/admin/PageVServer.py:511
-msgid "Verify Depth"
-msgstr "Verify Depth"
-
-#: cherokee-trunk/admin/PageVServer.py:517
-#, fuzzy
-msgid "Advanced Options"
-msgstr "Advanced options"
-
-#: cherokee-trunk/admin/PageVServer.py:536
-msgid "Basics"
-msgstr "Basics"
-
-#: cherokee-trunk/admin/PageVServer.py:537
+#: cherokee-trunk/admin/PageVServer.py:150
+#: cherokee-trunk/admin/PageVServer.py:608
 #, fuzzy
 msgid "Host Match"
 msgstr "Closest match"
 
-#: cherokee-trunk/admin/PageVServer.py:538
+#: cherokee-trunk/admin/PageVServer.py:169
+#: cherokee-trunk/admin/PageVServer.py:182
+#, fuzzy
+msgid "Remove criteria"
+msgstr "Remote host"
+
+#: cherokee-trunk/admin/PageVServer.py:198
+msgid "Add an additional matching criteria"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:274
+#, fuzzy
+msgid "Behavior Rules"
+msgstr "Behavior rules"
+
+#: cherokee-trunk/admin/PageVServer.py:283
+msgid "Rule Management"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:309
+#, fuzzy
+msgid "Only accept Secure Connections"
+msgstr "Accepted domains"
+
+#: cherokee-trunk/admin/PageVServer.py:314
+#, fuzzy
+msgid "Encoding enabled"
+msgstr "Encoding"
+
+#: cherokee-trunk/admin/PageVServer.py:320
+msgid "no"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:331
+#, fuzzy
+msgid " seconds"
+msgstr "Icons"
+
+#: cherokee-trunk/admin/PageVServer.py:336
+msgid " bytes per second"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:341
+msgid "Logging enabled for this rule"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:346
+msgid "Prevents further rule evaluation"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:351
+#, fuzzy
+msgid "Rule is active"
+msgstr "Rule list"
+
+#: cherokee-trunk/admin/PageVServer.py:370
+msgid "Virtual Server nickname"
+msgstr "Virtual Server nickname"
+
+#: cherokee-trunk/admin/PageVServer.py:372
+msgid "Server ID"
+msgstr "Server ID"
+
+#: cherokee-trunk/admin/PageVServer.py:382
+msgid "Directory Indexes"
+msgstr "Directory Indexes"
+
+#: cherokee-trunk/admin/PageVServer.py:390
+msgid "Neither are in use at the moment."
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:395
+msgid "Keep-alive"
+msgstr "Keep-alive"
+
+#: cherokee-trunk/admin/PageVServer.py:396
+msgid "Max Upload Size"
+msgstr "Max Upload Size"
+
+#: cherokee-trunk/admin/PageVServer.py:398
+#: cherokee-trunk/admin/PageGeneral.py:253
+msgid "Network"
+msgstr "Network"
+
+#: cherokee-trunk/admin/PageVServer.py:441
+msgid "Error Handling hook"
+msgstr "Error Handling hook"
+
+#: cherokee-trunk/admin/PageVServer.py:456
+#, fuzzy
+msgid "Write errors to"
+msgstr "Writers"
+
+#: cherokee-trunk/admin/PageVServer.py:460
+#: cherokee-trunk/admin/PageVServer.py:499
+msgid "Filename"
+msgstr "Filename"
+
+#: cherokee-trunk/admin/PageVServer.py:462
+#: cherokee-trunk/admin/PageVServer.py:502
+msgid "Command"
+msgstr "Command"
+
+#: cherokee-trunk/admin/PageVServer.py:468
+#, fuzzy
+msgid "Error Logging"
+msgstr "Error Handling hook"
+
+#: cherokee-trunk/admin/PageVServer.py:479
+msgid "Format"
+msgstr "Format"
+
+#: cherokee-trunk/admin/PageVServer.py:486
+#, fuzzy
+msgid "Write accesses to"
+msgstr "Writers"
+
+#: cherokee-trunk/admin/PageVServer.py:507
+msgid "Template: "
+msgstr "Template: "
+
+#: cherokee-trunk/admin/PageVServer.py:509
+#, fuzzy
+msgid "Access Logging"
+msgstr "Logging"
+
+#: cherokee-trunk/admin/PageVServer.py:515
+msgid "Time standard"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:516
+msgid "Accept Forwarded IPs"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:519 cherokee-trunk/admin/CgiBase.py:70
+msgid "Don't check origin"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:519
+#, fuzzy
+msgid "Do not check"
+msgstr "Do not restart"
+
+#: cherokee-trunk/admin/PageVServer.py:522 cherokee-trunk/admin/CgiBase.py:72
+#, fuzzy
+msgid "Accept from Hosts"
+msgstr "Accepted domains"
+
+#: cherokee-trunk/admin/PageVServer.py:528
+#, fuzzy
+msgid "Logging Options"
+msgstr "Logging"
+
+#: cherokee-trunk/admin/PageVServer.py:564
+msgid "Certificate"
+msgstr "Certificate"
+
+#: cherokee-trunk/admin/PageVServer.py:565
+msgid "Certificate key"
+msgstr "Certificate key"
+
+#: cherokee-trunk/admin/PageVServer.py:570
+#, fuzzy
+msgid "Required SSL/TLS Values"
+msgstr "Required SSL/TLS values"
+
+#: cherokee-trunk/admin/PageVServer.py:575
+msgid "Ciphers"
+msgstr "Ciphers"
+
+#: cherokee-trunk/admin/PageVServer.py:576
+msgid "Client Certs. Request"
+msgstr "Client Certs. Request"
+
+#: cherokee-trunk/admin/PageVServer.py:579
+msgid "CA List"
+msgstr "CA List"
+
+#: cherokee-trunk/admin/PageVServer.py:582
+msgid "Verify Depth"
+msgstr "Verify Depth"
+
+#: cherokee-trunk/admin/PageVServer.py:588
+#, fuzzy
+msgid "Advanced Options"
+msgstr "Advanced options"
+
+#: cherokee-trunk/admin/PageVServer.py:607
+msgid "Basics"
+msgstr "Basics"
+
+#: cherokee-trunk/admin/PageVServer.py:609
 #: cherokee-trunk/admin/PageRule.py:298
 msgid "Behavior"
 msgstr "Behavior"
 
-#: cherokee-trunk/admin/PageVServer.py:539
+#: cherokee-trunk/admin/PageVServer.py:610
 msgid "Error Handler"
 msgstr "Error Handler"
 
@@ -6149,8 +6174,8 @@ msgstr ""
 #: cherokee-trunk/admin/PageError.py:188
 #, python-format
 msgid ""
-"A problem with the installation directories has been found.  The %s "
-"directory has the wrong permissions. It must be writable by the UID %d."
+"A problem with the installation directories has been found.  The %(dir)s "
+"directory has the wrong permissions. It must be writable by the UID %(uid)s."
 msgstr ""
 
 #: cherokee-trunk/admin/PageError.py:189
@@ -6788,6 +6813,29 @@ msgstr "Icons"
 #: cherokee-trunk/admin/PageGeneral.py:260
 msgid "General Settings"
 msgstr "General Settings"
+
+#: ows/Market_Info/Block.py:12
+msgid ""
+"We believe Web infrastructure software should evolve towards efficiency, "
+"scalability, and management simplicity."
+msgstr ""
+
+#: ows/Market_Info/Block.py:13
+msgid ""
+"That is why Octality's products challenge the state of the art. Its "
+"flagship, Cherokee, is the most powerful Web infrastructure software ever "
+"created."
+msgstr ""
+
+#: ows/Market_Info/Block.py:14
+msgid ""
+"The Cherokee Market represents a wide distribution channel for companies, "
+"and an astonishing new way for users to deploy Web applications."
+msgstr ""
+
+#: ows/Market_Info/Block.py:15
+msgid "Learn more"
+msgstr ""
 
 #: packages/magnolia/installer.py:20
 msgid ""
@@ -7428,6 +7476,10 @@ msgid ""
 "Note that launching Nuxeo-DM can take up a couple of  minutes on modern "
 "servers, so please be patient the first time you access it."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Host Names"
+#~ msgstr "Host names"
 
 #, fuzzy
 #~ msgid ""
