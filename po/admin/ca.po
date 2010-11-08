@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee 0.99.31b3906\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-11-08 12:42+0100\n"
+"POT-Creation-Date: 2010-11-08 15:00+0100\n"
 "PO-Revision-Date: 2010-06-15 20:33+0100\n"
 "Last-Translator: Sergi Gomis Gascó <paloky3@gmail.com>\n"
 "Language-Team: \n"
@@ -67,7 +67,7 @@ msgstr "Arrel de documents"
 
 #: cherokee-trunk/admin/PageVServers.py:133
 #: cherokee-trunk/admin/PageVServers.py:151
-#: cherokee-trunk/admin/PageRule.py:136
+#: cherokee-trunk/admin/PageRule.py:136 packages/common/database.py:40
 msgid "Manual"
 msgstr "Manual"
 
@@ -143,8 +143,8 @@ msgstr "Esborrar"
 #: packages/nagios/installer.py:103 packages/nagios/installer.py:117
 #: packages/nagios/installer.py:141 packages/nagios/installer.py:173
 #: packages/redmine/installer.py:107 packages/redmine/installer.py:121
-#: packages/redmine/installer.py:138 packages/redmine/installer.py:158
-#: packages/redmine/installer.py:200 packages/redmine/installer.py:264
+#: packages/redmine/installer.py:137 packages/redmine/installer.py:157
+#: packages/redmine/installer.py:199 packages/redmine/installer.py:260
 #: packages/wsgidav/installer.py:74 packages/wsgidav/installer.py:88
 #: packages/wsgidav/installer.py:110 packages/wsgidav/installer.py:133
 #: packages/zencart/installer.py:83 packages/nuxeo-dam/installer.py:88
@@ -580,7 +580,7 @@ msgstr "Escollir"
 
 #: cherokee-trunk/admin/PageIndex.py:293
 #: cherokee-trunk/admin/plugins/dbslayer.py:51
-#: packages/redmine/installer.py:152
+#: packages/redmine/installer.py:151
 msgid "Language"
 msgstr "Idioma"
 
@@ -979,7 +979,7 @@ msgstr "Round-Robin"
 msgid "Dynamic"
 msgstr "Dinàmic"
 
-#: cherokee-trunk/admin/consts.py:132
+#: cherokee-trunk/admin/consts.py:132 packages/common/database.py:39
 msgid "Automatic"
 msgstr "Automàtic"
 
@@ -1214,8 +1214,8 @@ msgstr " Actiu"
 #: packages/liferay/installer.py:88 packages/liferay/installer.py:153
 #: packages/mediawiki/installer.py:98 packages/wordpress/installer.py:91
 #: packages/nagios/installer.py:118 packages/nagios/installer.py:142
-#: packages/redmine/installer.py:122 packages/redmine/installer.py:139
-#: packages/redmine/installer.py:159 packages/redmine/installer.py:265
+#: packages/redmine/installer.py:122 packages/redmine/installer.py:138
+#: packages/redmine/installer.py:158 packages/redmine/installer.py:261
 #: packages/wsgidav/installer.py:89 packages/wsgidav/installer.py:134
 #: packages/zencart/installer.py:84 packages/nuxeo-dam/installer.py:107
 #: packages/nuxeo-dam/installer.py:175
@@ -1478,9 +1478,9 @@ msgstr "Usuari"
 #: cherokee-trunk/admin/plugins/authlist.py:63
 #: cherokee-trunk/admin/plugins/authlist.py:97
 #: cherokee-trunk/admin/OWS_Login.py:108 packages/magnolia/installer.py:155
-#: packages/liferay/installer.py:147 packages/nagios/installer.py:134
-#: packages/redmine/installer.py:261 packages/nuxeo-dam/installer.py:169
-#: packages/nuxeo-dm/installer.py:169
+#: packages/common/database.py:379 packages/liferay/installer.py:147
+#: packages/nagios/installer.py:134 packages/redmine/installer.py:257
+#: packages/nuxeo-dam/installer.py:169 packages/nuxeo-dm/installer.py:169
 msgid "Password"
 msgstr "Contrasenya"
 
@@ -1984,6 +1984,7 @@ msgstr "Connector Unix"
 
 #: cherokee-trunk/admin/plugins/mysql.py:80
 #: cherokee-trunk/admin/market/Maintenance.py:208
+#: packages/common/database.py:377
 msgid "Database"
 msgstr "Base de Dades"
 
@@ -2519,14 +2520,13 @@ msgid "Market Home"
 msgstr ""
 
 #: cherokee-trunk/admin/market/Maintenance.py:40
-#: packages/common/database.py:18
 msgid ""
 "Specify the name of a privileged DB user. It will be used to automatically "
 "create the required database."
 msgstr ""
 
 #: cherokee-trunk/admin/market/Maintenance.py:41
-#: packages/common/database.py:19
+#: packages/common/database.py:17
 msgid "Specify the password for this user account."
 msgstr ""
 
@@ -2592,12 +2592,10 @@ msgid "Applications requiring maintenance"
 msgstr ""
 
 #: cherokee-trunk/admin/market/Maintenance.py:357
-#: packages/common/database.py:251
 msgid "DB user"
 msgstr ""
 
 #: cherokee-trunk/admin/market/Maintenance.py:358
-#: packages/common/database.py:252
 #, fuzzy
 msgid "DB password"
 msgstr "Contrasenya DB"
@@ -6758,15 +6756,30 @@ msgstr ""
 msgid "Admin User"
 msgstr ""
 
-#: packages/moin/installer.py:148
+#: packages/moin/installer.py:148 packages/common/database.py:359
 #, fuzzy
 msgid "Admin Password"
 msgstr "Contrasenya"
 
-#: packages/common/database.py:17
+#: packages/common/database.py:15
 msgid ""
-"The applications requires a database to work. Please choose the method in "
-"which the database creation should be handled."
+"The applications requires a database to work. Please choose wheter you want "
+"to specify the details manually or if you prefer to have them taken care of "
+"automatically."
+msgstr ""
+
+#: packages/common/database.py:16
+msgid ""
+"Specify the name of a privileged DB user. It will be used to automatically "
+"create the required user and database."
+msgstr ""
+
+#: packages/common/database.py:18
+msgid "Specify the name of an existing database user."
+msgstr ""
+
+#: packages/common/database.py:19
+msgid "Specify the password for the database user account."
 msgstr ""
 
 #: packages/common/database.py:20
@@ -6775,31 +6788,69 @@ msgstr ""
 
 #: packages/common/database.py:21
 msgid ""
+"Specify the existing database that you want to use. The specified user must "
+"have privileges to use it."
+msgstr ""
+
+#: packages/common/database.py:22
+msgid ""
 "Please, provide an administrative user/password pair to connect to your "
 "databse."
 msgstr ""
 
-#: packages/common/database.py:237
+#: packages/common/database.py:23
+msgid "Please, provide details of an existing database and user/password pair."
+msgstr ""
+
+#: packages/common/database.py:151 packages/common/database.py:245
+#, fuzzy
+msgid "Database not present"
+msgstr "La ruta no existeix"
+
+#: packages/common/database.py:213
+#, fuzzy
+msgid "Username does not exist"
+msgstr "La ruta no existeix"
+
+#: packages/common/database.py:243
+msgid "The specified user is not the owner of the database"
+msgstr ""
+
+#: packages/common/database.py:338
 #, fuzzy
 msgid "Database does not exist."
 msgstr "La ruta no existeix"
 
-#: packages/common/database.py:268
-#, fuzzy
-msgid "DB type"
-msgstr "Tipus MIME"
+#: packages/common/database.py:350 packages/common/database.py:369
+msgid "No supported database engines were detected."
+msgstr ""
 
-#: packages/common/database.py:282
+#: packages/common/database.py:358
 #, fuzzy
-msgid "Choose DB configuration method.."
-msgstr "No es pot copiar la configuració a"
+msgid "Admin Username"
+msgstr "Usuari"
 
-#: packages/common/database.py:323
+#: packages/common/database.py:378 packages/redmine/installer.py:256
+#: packages/nuxeo-dam/installer.py:167 packages/nuxeo-dm/installer.py:167
+#, fuzzy
+msgid "Username"
+msgstr "Usuari"
+
+#: packages/common/database.py:402
+msgid "Engine"
+msgstr ""
+
+#: packages/common/database.py:418
+#, fuzzy
+msgid "Configuration method"
+msgstr "Arxiu de configuració"
+
+#: packages/common/database.py:441
 #, fuzzy
 msgid "Unknown method"
 msgstr "Desconegut"
 
-#: packages/common/database.py:333
+#: packages/common/database.py:451
 #, fuzzy
 msgid "Database configuration"
 msgstr "Configuració manual"
@@ -7038,12 +7089,6 @@ msgstr ""
 msgid "Checking for Ruby"
 msgstr ""
 
-#: packages/redmine/installer.py:260 packages/nuxeo-dam/installer.py:167
-#: packages/nuxeo-dm/installer.py:167
-#, fuzzy
-msgid "Username"
-msgstr "Usuari"
-
 #: packages/redmine/tools.py:13
 msgid "Bulgarian"
 msgstr ""
@@ -7258,6 +7303,14 @@ msgid ""
 "Note that launching Nuxeo-DM can take up a couple of  minutes on modern "
 "servers, so please be patient the first time you access it."
 msgstr ""
+
+#, fuzzy
+#~ msgid "DB type"
+#~ msgstr "Tipus MIME"
+
+#, fuzzy
+#~ msgid "Choose DB configuration method.."
+#~ msgstr "No es pot copiar la configuració a"
 
 #~ msgid "Host Names"
 #~ msgstr "Noms de servidor"
