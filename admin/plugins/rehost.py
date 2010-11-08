@@ -77,7 +77,7 @@ class Content (CTK.Container):
         dialog += submit
         self += dialog
 
-        add_new = CTK.Button(_('Add New'))
+        add_new = CTK.Button(_('Add new entry…'))
         add_new.bind ('click', dialog.JS_to_show())
         self += add_new
 
