@@ -39,7 +39,8 @@ OWS_RPC = 'http://www.octality.com/api/v%s/open/market/info/' %(OWS_API_VERSION)
 class Index_Block1 (CTK.Container):
     cached = None
 
-    def format_func (self, cont):
+    def format_func (self, raw_cont):
+        cont = CTK.util.to_utf8 (raw_cont)
         Index_Block1.cached = cont
         return cont
 
@@ -64,7 +65,8 @@ class Index_Block1 (CTK.Container):
 class Index_Block2 (CTK.Container):
     cached = None
 
-    def format_func (self, cont):
+    def format_func (self, raw_cont):
+        cont = CTK.util.to_utf8 (raw_cont)
         Index_Block2.cached = cont
         return cont
 
