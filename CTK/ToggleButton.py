@@ -67,9 +67,13 @@ if ("%(value)s" == "1") {
 """
 
 
-class ToggleButtonImages (Widget):
+class ToggleButton (Widget):
     def __init__ (self, on, off, active=True, props={}):
         Widget.__init__ (self)
+
+        assert isinstance(on,  Widget)
+        assert isinstance(off, Widget)
+
         self.props      = props.copy()
         self.active     = active
         self.widget_on  = on
@@ -91,7 +95,7 @@ class ToggleButtonImages (Widget):
         off_id  = self.widget_off.id
         value   = "01"[int(self.active)]
 
-        # Render embedded images
+        # Render embedded widgets
         render_on  = self.widget_on.Render()
         render_off = self.widget_off.Render()
         on_html  = render_on.html
@@ -110,10 +114,10 @@ class ToggleButtonImages (Widget):
 
         return render
 
-class ToggleButtonOnOff (ToggleButtonImages):
+class ToggleButtonOnOff (ToggleButton):
     def __init__ (self, active=True, props={}):
-        ToggleButtonImages.__init__ (self,
-                                     ImageStock('on',  {'title': _("Disable")}),
-                                     ImageStock('off', {'title': _("Enable")}),
-                                     active, props.copy())
+        ToggleButton.__init__ (self,
+                               ImageStock('on',  {'title': _("Disable")}),
+                               ImageStock('off', {'title': _("Enable")}),
+                               active, props.copy())
 
