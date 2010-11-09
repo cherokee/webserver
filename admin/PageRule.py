@@ -230,9 +230,9 @@ class Render:
                     # Final
                     is_final = bool (int (CTK.cfg.get_val('vserver!%s!rule!%s!match!final'%(vsrv_num,r), "1")))
 
-                    final = CTK.ToggleButtonImages (CTK.Box({'class': 'final-on'},  CTK.RawHTML(_('Final'))),
-                                                    CTK.Box({'class': 'final-off'}, CTK.RawHTML(_('Non Final'))),
-                                                    is_final)
+                    final = CTK.ToggleButton (CTK.Box({'class': 'final-on'},  CTK.RawHTML(_('Final'))),
+                                              CTK.Box({'class': 'final-off'}, CTK.RawHTML(_('Non Final'))),
+                                              is_final)
                     final.bind ('changed',
                                 CTK.JS.Ajax (url_apply, async=True,
                                              data = '{"vserver!%s!rule!%s!match!final": parseInt(event.value)?"0":"1"}'%(vsrv_num,r)))
