@@ -1225,6 +1225,6 @@ img.icon_chooser_selected {
 #halt-admin-box a { color: #b5c8db; font-size: 90%; }
 #halt-admin-box a:hover { color: #c00; }
 
+#maintenance-removal { overflow: auto; overflow-x: hidden; height: 260px; }
 #maintenance-removal-list { table-layout: fixed; width: 100%; }
 #maintenance-removal-list th { background: #e6f3ff url(/static/images/bg-th.png) repeat-x; border: none; }
-

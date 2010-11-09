@@ -205,9 +205,23 @@ class AppList (CTK.Table):
     def __init__ (self, apps, b_next, b_cancel, b_close):
         CTK.Table.__init__ (self, {'id': 'maintenance-removal-list'})
 
-        self += [CTK.RawHTML(x) for x in (_('Remove'), _('Application'), _('Status'), _('Database'), _('Date'))]
+        # Global Selector
+        global_selector = CTK.Checkbox ({'class': 'noauto', 'checked': True})
+        global_selector.bind ('change', """
+            var is_checked = this.checked;
+            $('#%s input:checkbox').each (function() {
+                $(this).attr('checked', is_checked);
+            });
+        """ %(self.id))
+
+        # Add the table title
+        title = [global_selector]
+        title += [CTK.RawHTML(x) for x in (_('Application'), _('Status'), _('Database'), _('Date'))]
+
+        self += title
         self.set_header()
 
+        # Table body
         js = "if ($('#%s input:checked').size() > 0) {" %(self.id)
         js +=  b_close.JS_to_hide()
         js +=  b_cancel.JS_to_show()
@@ -219,7 +233,7 @@ class AppList (CTK.Table):
         js += "}"
 
         for app in apps:
-            check = CTK.Checkbox ({'name': 'remove_%s'%(app), 'class': 'noauto'})
+            check = CTK.Checkbox ({'name': 'remove_%s'%(app), 'class': 'noauto', 'checked': True})
             check.bind ('change', js)
             self += [check,
                      CTK.RawHTML (apps[app]['name']),
@@ -271,10 +285,13 @@ class ListApps:
         buttons += b_cancel
         buttons += b_next
 
+        # App list
+        app_list = AppList (remove_apps, b_next, b_cancel, b_close)
+
         # Content
         cont  = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_("Applications requiring maintenance")))
-        cont += AppList (remove_apps, b_next, b_cancel, b_close)
+        cont += CTK.Box ({'id': 'maintenance-removal'}, app_list)
         cont += buttons
         cont += CTK.RawHTML (js = b_next.JS_to_hide())
         cont += CTK.RawHTML (js = b_cancel.JS_to_hide())
