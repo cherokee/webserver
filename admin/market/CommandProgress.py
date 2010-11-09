@@ -26,7 +26,6 @@ import os
 import CTK
 import popen
 import threading
-#import popen_monitor
 import SystemInfo
 import Install_Log
 import InstallUtil
@@ -97,7 +96,7 @@ class CommandProgress (CTK.Box):
             # Regular
             percent = (command_progress.executed + 1) * 100.0 / (commands_len + 1)
             self += CTK.ProgressBar ({'value': percent})
-            self += CTK.RawHTML ("<p>%s</p>" %(command))
+            self += CTK.Box ({'class': 'market-commands-exec-command'}, CTK.RawHTML ("<p>%s</p>" %(command_entry['command'])))
 
             # Next step
             if command_progress.executed < commands_len:

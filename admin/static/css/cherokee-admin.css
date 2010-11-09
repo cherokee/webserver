@@ -881,6 +881,11 @@ img.icon_chooser_selected {
   overflow: auto;
 }
 
+.market-commands-exec-command {
+  font-size: 9px;
+  color: #333;
+}
+
 .carousel {
   margin-bottom: 32px;
 }
