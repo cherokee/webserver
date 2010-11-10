@@ -216,6 +216,11 @@ def HostMatchWidget_Apply():
 
     op = CTK.post.get_val ('op')
     if op == 'or':
+        # Ensure the first match is set
+        # before adding a second entry.
+        if not CTK.cfg.get_val (pre):
+            return CTK.cfg_reply_ajax_ok()
+
         move (pre, "%s!left"%(pre))
         CTK.cfg[pre] = 'v_or'
         return CTK.cfg_reply_ajax_ok()
