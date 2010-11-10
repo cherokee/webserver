@@ -1138,7 +1138,6 @@ img.icon_chooser_selected {
 #error-redirection {
  table-layout: fixed;
  border-collapse: collapse;
- width: 670px;
  border: 1px solid #cde;
  margin-bottom: 32px;
 }
