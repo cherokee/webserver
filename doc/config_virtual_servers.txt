@@ -367,6 +367,11 @@ errors to a custom path or website.
 
 image::media/images/admin_vserver_errors.png[Virtual server]
 
+In this case, the handled errors will be redirected to the specified
+resource, while non-defined errors will trigger an HTTP 500 error. In
+case this is not the desired behavior, you can set a `Default Error`
+to catch and redirect the non-defined ones.
+
 The 'Closest match' error handler should never fail to deliver
 something. If a requested resource is not available, the closest match
 will be sent. The only exception to this is when nothing at all is at
