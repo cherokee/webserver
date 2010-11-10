@@ -1,6 +1,7 @@
 import CTK
 import string
 import os.path
+import re
 from util import split_list, get_real_path
 
 # Conditional Check
@@ -409,3 +410,11 @@ def is_positive_int_4_multiple (value):
     while num % 4 != 0:
         num += 1
     return str(num)
+
+def is_email (value):
+    is_not_empty(value)
+
+    if re.match (r"^\S+@\S+\.\S+$", value) == None:
+        raise ValueError, _("Please insert a valid email")
+
+    return value
