@@ -226,10 +226,20 @@ def HostMatchWidget_Apply():
         return CTK.cfg_reply_ajax_ok()
 
     elif op == 'del_1':
+        # Is the second rule empty?
+        if not CTK.cfg.get_val ('%s!right'%(pre)):
+            del (CTK.cfg[pre])
+            return CTK.cfg_reply_ajax_ok()
+
         move ('%s!right'%(pre), pre)
         return CTK.cfg_reply_ajax_ok()
 
     elif op == 'del_2':
+        # Is the first rule empty?
+        if not CTK.cfg.get_val ('%s!left'%(pre)):
+            del (CTK.cfg[pre])
+            return CTK.cfg_reply_ajax_ok()
+
         move ('%s!left'%(pre), pre)
         return CTK.cfg_reply_ajax_ok()
 
