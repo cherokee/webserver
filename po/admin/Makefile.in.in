@@ -137,7 +137,7 @@ stamp-po: $(srcdir)/$(DOMAIN).pot
 
 # This target rebuilds $(DOMAIN).pot; it is an expensive operation.
 # Note that $(DOMAIN).pot is not touched if it doesn't need to be changed.
-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
+OLD-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	if LC_ALL=C grep 'GNU @PACKAGE@' $(top_srcdir)/* 2>/dev/null | grep -v 'libtool:' >/dev/null; then \
 	  package_gnu='GNU '; \
 	else \
@@ -180,6 +180,14 @@ $(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	    mv $(DOMAIN).po $(srcdir)/$(DOMAIN).pot; \
 	  fi; \
 	}
+
+$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
+	test ! -f $(DOMAIN).po || { \
+	  wget -O tmp.po http://www.cherokee-project.com/download/trunk/cherokee.pot; \
+	  rm -f $(srcdir)/$(DOMAIN).pot; \
+	  mv tmp.po $(srcdir)/$(DOMAIN).pot; \
+	  rm -f $(DOMAIN).po; \
+     }
 
 # This rule has no dependencies: we don't need to update $(DOMAIN).pot at
 # every "make" invocation, only create it when it is missing.
@@ -376,20 +384,8 @@ dist2: stamp-po $(DISTFILES)
 	done
 
 update-po: Makefile
-	## ORIGINAL CODE:
-	#  $(MAKE) $(DOMAIN).pot-update
-	#  test -z "$(UPDATEPOFILES)" || $(MAKE) $(UPDATEPOFILES)
-	#
-	## NEW (alo, 2010 Nov 8)
-	# Download cherokee-full.pot
-	wget -O tmp.pot http://www.cherokee-project.com/download/trunk/cherokee.pot && \
-	rm -f cherokee-full.pot && mv tmp.pot cherokee-full.pot
-	# Update po
-	for i in *.po; do \
-	   msgmerge -o "$$i.new" "$$i" cherokee-full.pot && \
-	   cp "$$i.new" "$$i" && \
-	   rm "$$i.new"; \
-     done
+	$(MAKE) $(DOMAIN).pot-update
+	test -z "$(UPDATEPOFILES)" || $(MAKE) $(UPDATEPOFILES)
 	$(MAKE) update-gmo
 
 # General rule for creating PO files.
