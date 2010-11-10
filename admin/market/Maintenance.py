@@ -206,7 +206,7 @@ class AppList (CTK.Table):
         CTK.Table.__init__ (self, {'id': 'maintenance-removal-list'})
 
         # Global Selector
-        global_selector = CTK.Checkbox ({'class': 'noauto', 'checked': True})
+        global_selector = CTK.Checkbox ({'class': 'noauto'})
         global_selector.bind ('change', """
             var is_checked = this.checked;
             $('#%s input:checkbox').each (function() {
@@ -233,7 +233,7 @@ class AppList (CTK.Table):
         js += "}"
 
         for app in apps:
-            check = CTK.Checkbox ({'name': 'remove_%s'%(app), 'class': 'noauto', 'checked': True})
+            check = CTK.Checkbox ({'name': 'remove_%s'%(app), 'class': 'noauto'})
             check.bind ('change', js)
             self += [check,
                      CTK.RawHTML (apps[app]['name']),
