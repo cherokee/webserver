@@ -22,6 +22,7 @@
 # 02110-1301, USA.
 #
 
+import os
 import sys
 import types
 import __builtin__
@@ -77,6 +78,14 @@ def install (*args, **kwargs):
         return
 
     gettext.install (*args, **kwargs)
+
+    # Initialize 'active_lang'
+    for envar in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
+        val = os.environ.get(envar)
+        if val:
+            global active_lang
+            active_lang = val
+            break
 
     # Autoconversion unicode -> utf8 hack
     unicode_utf8_workaround()
