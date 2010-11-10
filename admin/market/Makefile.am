@@ -6,7 +6,6 @@ Install.py \
 InstallUtil.py \
 Install_Log.py \
 Menu.py \
-Package.py \
 PageApp.py \
 PageCategory.py \
 PageIndex.py \
