@@ -52,6 +52,7 @@ substitute (cherokee_handler_redir_t *hdl,
 {
 	ret_t                  ret;
 	char                  *token;
+	cint_t                 offset;
 	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
 
 	/* Replace regex matches
@@ -65,21 +66,22 @@ substitute (cherokee_handler_redir_t *hdl,
 	 */
 	token = strnstr (target->buf, "${host}", target->len);
 	if (token != NULL) {
+		offset = token - target->buf;
 		if (! cherokee_buffer_is_empty (&conn->host)) {
-			cherokee_buffer_insert_buffer (target, &conn->host, (token - target->buf));
-			cherokee_buffer_remove_chunk (target, (token + conn->host.len) - target->buf, 7);
+			cherokee_buffer_insert_buffer (target, &conn->host, offset);
+			cherokee_buffer_remove_chunk (target,  offset + conn->host.len, 7);
 
 		} else if (! cherokee_buffer_is_empty (&conn->bind->ip)) {
-			cherokee_buffer_insert_buffer (target, &conn->bind->ip, (token - target->buf));
-			cherokee_buffer_remove_chunk (target, (token + conn->bind->ip.len) - target->buf, 7);
+			cherokee_buffer_insert_buffer (target, &conn->bind->ip, offset);
+			cherokee_buffer_remove_chunk (target, offset + conn->bind->ip.len, 7);
 
 		} else {
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 			ret = cherokee_copy_local_address (&conn->socket, &tmp);
 			if (ret == ret_ok) {
-				cherokee_buffer_insert_buffer (target, &tmp, (token - target->buf));
-				cherokee_buffer_remove_chunk (target, (token + tmp.len) - target->buf, 7);
+				cherokee_buffer_insert_buffer (target, &tmp, offset);
+				cherokee_buffer_remove_chunk (target, offset + tmp.len, 7);
 			}
 
 			cherokee_buffer_mrproper (&tmp);
