@@ -35,13 +35,13 @@ X-Sendfile
 ~~~~~~~~~~
 X-Sendfile is a special, non-standard HTTP header that has been
 supported by Cherokee for a while. At first you might think it is no
-big deal, but think again.It can be enabled in any CGI, FastCGI or
-SCGI backend. Basically its job is to instruct the web server to ignore
-the content of the response and replace it by whatever is specified in
-the header. The main advantage of this is that it will be Cherokee the
-one serving the file, making use of all its optimizations. It is
-useful for processing script-output of e.g. php, perl, ruby or any
-cgi.
+big deal, but think again.It can be enabled in any CGI, FastCGI, SCGI,
+or uWSGI backend. Basically its job is to instruct the web server to
+ignore the content of the response and replace it by whatever is
+specified in the header. The main advantage of this is that it will be
+Cherokee the one serving the file, making use of all its
+optimizations. It is useful for processing script-output of e.g. php,
+perl, ruby or any cgi.
 
 This is particularly useful because it hands the load to Cherokee, all
 the response headers from the backend are forwarded, the whole
@@ -60,6 +60,10 @@ Note that the X-Sendfile feature also supports `X-Accel-Redirect`
 header, a similar feature offered by other web servers.
 This is to allow the migration of applications supporting it without
 having to make major code rewrites.
+
+Of course, this feature can be enabled or disabled in a per-rule
+basis, so you can have several rules and handlers on your virtual
+servers with the feature ON or OFF according to your needs.
 
 [[zero-downtime]]
 Zero Downtime Updates, AKA "Graceful restart"
