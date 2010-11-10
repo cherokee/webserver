@@ -183,7 +183,11 @@ This section allows to define the list of domains that the virtual
 server implements.
 
 It can accept either FQDN (Fully Qualified Domain Names), wild card
-entries, regular expressions or IPs.
+entries, regular expressions, IPs, or a combination of methods that
+will be evaluated as a logical OR. This can be useful for some rare
+cases where you might need to match by IP OR wildcards simultaneously,
+such as the link:cookbook_ssl.html#workaround[HTTPS-without-SNI workaround]
+documented in the link:cookbook.html[cookbook].
 
 For instance::
 +

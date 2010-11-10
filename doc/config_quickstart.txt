@@ -233,10 +233,11 @@ first one as default document root path. This is easy using the `Add`
 button of the panel, which is marked with a `+ (plus)` symbol at the
 top of the panel.
 +
-Next, setup `example.net` and `example.com` in the `Host match` tab.
-We'll erase everything in the *Targets* list within the `Behavior`
-tab, except the `default` rule. With this we'll only be able to serve
-static content.
+Next, setup `example.net` and `example.com` in the `Host match`
+tab. To do so just choose `Wildcards` as method and add both names as
+wildcard strings.  We'll erase everything in the *Targets* list within
+the `Behavior` tab, except the `default` rule. With this we'll only be
+able to serve static content.
 +
 Accessing the URL http://example.org should now show a list of
 available files and directories under '/var/www/example/'.

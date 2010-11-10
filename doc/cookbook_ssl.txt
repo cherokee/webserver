@@ -43,6 +43,7 @@ supports SNI, things will just work. Every modern web browser does.
 For legacy scenarios where using SNI if not possible, there is a
 workaround detailed in the next question.
 
+[[workaround]]
 .Are there workarounds when SNI can't be used?
 
 Using SNI is the clean and standard way to go. For legacy scenarios
@@ -53,7 +54,11 @@ through the `Match` tab of the virtual server configuration, by
 assigning an IP-method to the desired IP. Remember that the list of
 virtual servers is evaluated from top to bottom, so in case you
 specify the same IP for several virtual servers, only the first one
-will actually match.
+will actually match. In case you need more flexibility than that to
+match your domains, you can always add more than one matching criteria
+on that section. An IP/Subnet match plus a simultaneous wildcard match
+is a combination likely to cover every corner-case scenario you are
+presented with.
 
 .How to enable the SSL support?
 

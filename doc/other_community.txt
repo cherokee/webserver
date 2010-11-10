@@ -16,6 +16,7 @@ Join link:http://www.facebook.com/cherokee.project[Cherokee on
 Facebook]
 
 
+[[mailing_lists]]
 Mailing Lists
 ~~~~~~~~~~~~~
 

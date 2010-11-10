@@ -26,7 +26,7 @@ demonstrate how easy it is to use the uWSGI wizard.
 image:media/images/screencast.png["uWSGI wizard",
 link="http://www.cherokee-project.com/screencasts.html#django_uwsgi"]
 
-To run Cherokee with uWSGI three simple steps will suffice:
+To run Cherokee with uWSGI four simple steps will suffice:
 
 . You will need to complete a regular
 link:http://projects.unbit.it/uwsgi/wiki/Install[uWSGI installation]
@@ -37,6 +37,13 @@ link:http://projects.unbit.it/uwsgi/wiki/Install[uWSGI installation]
 
 . Run the uWSGI Wizard provided by Cherokee and let it handle
 everything by itself.
+
+NOTE: uWSGI has evolved quite a lot since both the recipe and the
+uWSGI-wizard were written.  Currently the uWSGI-wizard has been
+reported as not working out of the box, and the task of fixing the
+wizard has been assigned. If you have trouble using the wizard, don't
+hesitate to look for assistance on our
+link:other_community.html#mailing_lists[mailing lists].
 
 The last step, configuring Cherokee, is trivial. The wizard will read
 the specified configuration file and will configure the web server
