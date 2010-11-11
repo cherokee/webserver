@@ -44,7 +44,9 @@ $.ajax({
 class ProxyRequest:
     def __call__ (self, xmlrpc_func, format_func, debug):
         try:
-            return format_func (xmlrpc_func())
+            raw = xmlrpc_func ()
+            fmt = format_func (raw)
+            return fmt
         except:
             if debug:
                 import traceback
