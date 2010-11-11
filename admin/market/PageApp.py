@@ -103,9 +103,13 @@ class App:
 
             login_txt = CTK.Box()
             login_txt += link
-            login_txt += CTK.RawHTML (" %s" %(_('to buy')))
 
-            buy_button = CTK.Button ("%s%s %s" %(info['currency_symbol'], info['amount'], _("Buy")), {"disabled": True})
+            if info['amount']:
+                buy_button = CTK.Button ("%s%s %s" %(info['currency_symbol'], info['amount'], _("Buy")), {"disabled": True})
+                login_txt += CTK.RawHTML (" %s" %(_('to buy')))
+            else:
+                buy_button = CTK.Button ("%s, %s" %(_("Free"), _("Install")), {"disabled": True})
+                login_txt += CTK.RawHTML (" %s" %(_('to install')))
 
             buy = CTK.Container()
             buy += buy_button
