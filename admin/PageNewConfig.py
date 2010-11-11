@@ -133,23 +133,23 @@ class Form (CTK.Container):
     def __init__ (self, key, name, label, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
 
-        table = CTK.Table({'class':key})
+        box = CTK.Box({'class': 'create-box %s' %(key)})
 
-        table.set_header(1)
-        table += [CTK.RawHTML(name)]
-        table += [CTK.RawHTML(label)]
+        box += CTK.RawHTML('<h3>%s</h3>' %(name))
+        box += CTK.RawHTML('<span>%s</span>' %(label))
 
         submit  = CTK.Submitter(URL_APPLY)
-        submit += table
         submit += CTK.Hidden('create', key)
         submit += CTK.SubmitterButton (_('Create'))
-        self += CTK.Indenter (submit)
+        box += submit
+
+        self += box
 
 
 class Render:
     def __call__ (self):
         container  = CTK.Container()
-        container += CTK.RawHTML("<h2>%s</h2>" %(_('Create a new configuration file')))
+        container += CTK.RawHTML("<h2>%s</h2>" %(_('Create a new configuration file:')))
 
         key        = 'regular'
         name       = _('Regular')
@@ -166,7 +166,7 @@ class Render:
         label      = _('No standard port, No log files, No PID file, etc.')
         container += Form (key, name, label)
 
-        page = Page.Base(_('New Configuration File'), body_id='new_config', helps=HELPS)
+        page = Page.Base(_('New Configuration File'), body_id='new-config', helps=HELPS)
         page += CTK.RawHTML("<h1>%s</h1>" %(_('Configuration File Not Found')))
         page += CTK.Notice ('warning', CTK.RawHTML(_(WARNING_NOT_FOUND)))
         page += CTK.Indenter (container)

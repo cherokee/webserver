@@ -1227,3 +1227,38 @@ img.icon_chooser_selected {
 #maintenance-removal { overflow: auto; overflow-x: hidden; height: 260px; }
 #maintenance-removal-list { table-layout: fixed; width: 100%; }
 #maintenance-removal-list th { background: #e6f3ff url(/static/images/bg-th.png) repeat-x; border: none; }
+
+#body-new-config h2 { border: 0; }
+#body-new-config .dialog-warning { margin: 0 16px; }
+#body-new-config .create-box { 
+  text-align: center; 
+  height: 128px;
+  width: 256px; 
+  border: 1px solid #cde;
+  padding: 8px; 
+  margin: 0 8px; 
+  float: left;
+  -moz-border-radius: 4px; -webkit-border-radius: 4px;
+  background-color: #f8fcff;
+}
+
+#body-new-config .create-box:hover { 
+  background-color: #fff;
+}
+
+#body-new-config h3 { 
+  color: #27c;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+#body-new-config span { 
+  display: block;
+  height: 40px;
+  margin-bottom: 8px;
+}
+
+#body-new-config .create-box button { 
+  font-size: 16px;
+  width: 128px;
+}
