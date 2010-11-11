@@ -152,7 +152,7 @@ class Init_Check (Install_Stage):
         info = {'cherokee_version': VERSION,
                 'system':           SystemInfo.get_info()}
 
-        cont = CTK.Container()
+        cont = CTK.Box()
         xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
         install_info = xmlrpc.get_install_info (app_id, info)
 
@@ -171,14 +171,7 @@ class Init_Check (Install_Stage):
             Install_Log.log ("Checking: %s, ID: %s = Installable, URL=%s" %(app_name, app_id, install_info['url']))
 
             CTK.cfg['tmp!market!install!download'] = install_info['url']
-
-            cont += CTK.RawHTML ("<h2>%s</h2>"%(_('Application available')))
-            cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALREADY_INSTALLED)))
-
-            buttons = CTK.DruidButtonsPanel()
-            buttons += CTK.DruidButton_Close(_('Cancel'))
-            buttons += CTK.DruidButton_Goto (_('Install'), URL_INSTALL_DOWNLOAD, False)
-            cont += buttons
+            cont += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (cont.id, URL_INSTALL_DOWNLOAD))
 
         else:
             Install_Log.log ("Checking: %s, ID: %s = Must check out first" %(app_name, app_id))
