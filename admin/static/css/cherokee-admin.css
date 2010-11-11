@@ -857,13 +857,23 @@ img.icon_chooser_selected {
 }
 
 .market-app-desc-description {
-  margin: 16px 0;
-  width: 608px;
+  margin: 16px 0 32px 0;
+  width: 576px;
   float: left;
 }
 
 .market-app-desc-description p {
   margin-bottom: 1em;
+}
+
+.market-app-desc-description ul { 
+  margin-left: 2em;
+}
+
+.market-app-desc-description ul li { 
+  margin-bottom: 4px; 
+  list-style-type:disc; 
+  margin-bottom: 1em; 
 }
 
 .market-commands-exec-error-details {
