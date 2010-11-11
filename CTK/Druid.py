@@ -115,7 +115,13 @@ class DruidButton_Goto (DruidButton):
 
 class DruidButton_Close (DruidButton):
     def __init__ (self, caption, _props={}):
-        DruidButton.__init__ (self, caption, _props.copy())
+        props = _props.copy()
+        if 'class' in props:
+            props['class'] += ' close-button'
+        else:
+            props['class'] = 'close-button'
+
+        DruidButton.__init__ (self, caption, props)
 
         # Event
         self.bind ('click', JS_BUTTON_CLOSE)

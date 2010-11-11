@@ -99,7 +99,7 @@ button {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    background: #2277cc;
+    background: #ddeeff;
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ddeeff));
     background: -moz-linear-gradient(top,  #ffffff,  #ddeeff);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ddeeff');
@@ -115,6 +115,32 @@ button:active {
 }
 
 button:hover { cursor: pointer; }
+
+.druid-button {
+    color: #fff;
+    text-shadow: #14335d 0px 1px 0px;
+    border: 1px solid #17457e;
+    background: #235699;
+    background: -webkit-gradient(linear, left top, left bottom, from(#5e8bc9), to(#235699));
+    background: -moz-linear-gradient(top,  #396aae,  #235699);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#396aae', endColorstr='#235699');
+    -moz-box-shadow: inset 1px 1px 0 #7798c2;
+    -webkit-box-shadow: inset 1px 1px 0 #7798c2;
+    box-shadow: inset 1px 1px 0 #7798c2;
+}
+
+.close-button {
+    color: #27c;
+    text-shadow: #fff 0px 1px 0px;
+    border: 1px solid #cde;
+    background: #2277cc;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ddeeff));
+    background: -moz-linear-gradient(top,  #ffffff,  #ddeeff);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ddeeff');
+    -moz-box-shadow: inset 1px 1px 0 #fff;
+    -webkit-box-shadow: inset 1px 1px 0 #fff;
+    box-shadow: inset 1px 1px 0 #fff;
+}
 
 /* Styles for CTK/Tabs.py
  */
