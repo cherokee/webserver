@@ -123,7 +123,7 @@ class Save_Config_Button (CTK.Box):
 
         # Druid
         druid  = CTK.Druid (CTK.RefreshableURL())
-        dialog = CTK.Dialog ({'title': _(NOTE_SAVE_H2), 'width': 550})
+        dialog = CTK.Dialog ({'title': _(NOTE_SAVE_H2), 'width': 480})
         dialog += druid
         druid.bind ('druid_exiting', dialog.JS_to_close())
 
@@ -143,7 +143,7 @@ class Backup_Save_Note:
     def __call__ (self):
         # Form
         submit = CTK.Submitter (URL_SAVE_APPLY)
-        submit += CTK.TextArea ({'name': 'comment', 'class': 'noauto backup-notes-textarea optional'})
+        submit += CTK.TextArea ({'name': 'comment', 'class': 'noauto backup-notes-textarea optional', 'style': 'width: 436px; height: 48px; margin-top: 8px;' })
         submit.bind ('submit_success', CTK.DruidContent__JS_to_goto (submit.id, URL_SAVE_SUCCESS))
         submit.bind ('submit_fail',    CTK.DruidContent__JS_to_goto (submit.id, URL_SAVE_FAIL))
 
@@ -156,8 +156,10 @@ class Backup_Save_Note:
         content = CTK.Container()
         content += CTK.RawHTML ('<p>%s</p>'%(_(NOTE_SAVE_P1)))
         content += CTK.RawHTML ('<p>%s</p>'%(_(NOTE_SAVE_P2)))
-        content += CTK.RawHTML ("<h3>%s</h3>" %(_("Notes")))
-        content += submit
+        box      = CTK.Box()
+        box     += CTK.RawHTML ("<strong>%s</strong>" %(_("Notes")))
+        box     += submit
+        content += box
         content += panel
 
         return content.Render().toStr()
@@ -284,7 +286,7 @@ class Restore_Config_Button (CTK.Box):
 
         # Druid
         druid  = CTK.Druid (CTK.RefreshableURL())
-        dialog = CTK.Dialog ({'title': _(NOTE_RESTORE_H2), 'width': 500})
+        dialog = CTK.Dialog ({'title': _(NOTE_RESTORE_H2), 'width': 480})
         dialog += druid
 
         # Trigger button

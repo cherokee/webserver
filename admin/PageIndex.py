@@ -336,7 +336,7 @@ class ProudUsers (CTK.Box):
         CTK.Box.__init__ (self, {'id': 'proud-users', 'class': 'sidebar-box'})
 
         # Dialog
-        dialog = CTK.DialogProxyLazy ('/proud/apply', {'title': _('Proud Cherokee User List Submission'), 'width': 500})
+        dialog = CTK.DialogProxyLazy ('/proud/apply', {'title': _('Proud Cherokee User List Submission'), 'width': 480})
         dialog.AddButton (_('Close'), "close")
 
         self += CTK.RawHTML('<h2>%s</h2>' %(_('Proud Cherokee Users')))
