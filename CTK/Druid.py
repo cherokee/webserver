@@ -45,7 +45,7 @@ submitters.bind ('submit_success', function (event) {
    $(this).unbind (event);
    if ('%(url)s'.length > 0) {
       refresh.trigger({'type':'refresh_goto', 'goto':'%(url)s'});
-   } else {
+   } else if (%(do_close)s) {
       druid.trigger('druid_exiting');
    }
 });
@@ -107,7 +107,8 @@ class DruidButton_Goto (DruidButton):
         DruidButton.__init__ (self, caption, _props.copy())
 
         props = {'url':       url,
-                 'do_submit': ('false', 'true')[do_submit]}
+                 'do_close':  'false',
+                 'do_submit': ('false','true')[do_submit]}
 
         # Event
         self.bind ('click', JS_BUTTON_GOTO %(props))
@@ -120,11 +121,12 @@ class DruidButton_Close (DruidButton):
         self.bind ('click', JS_BUTTON_CLOSE)
 
 class DruidButton_Submit (DruidButton):
-    def __init__ (self, caption, _props={}):
+    def __init__ (self, caption, do_close=True, _props={}):
         DruidButton.__init__ (self, caption, _props.copy())
 
         props = {'url':       '',
-                 'do_submit': 'true'}
+                 'do_submit': 'true',
+                 'do_close':  ('false','true')[do_close]}
 
         # Event
         self.bind ('click', JS_BUTTON_GOTO%(props))
