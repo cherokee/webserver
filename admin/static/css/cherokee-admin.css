@@ -434,17 +434,7 @@ img.icon_chooser_selected {
 #proud-link { text-align: right; margin-top: 8px; color: #def; }
 #proud-link a { margin: 0 4px; }
 #proud-a { cursor: pointer; text-decoration: underline; }
-
-#social-media { border-top: 1px dotted #def; margin-top: 16px; padding-top: 8px; }
-.social-box { padding-left: 52px; padding-top: 3px; min-height: 22px; margin-bottom: 6px;  }
-#twitter-box { background: #fff url(/static/images/other/twitter.png) no-repeat top 26px; }
-#fb-box { background: #fff url(/static/images/other/facebook.png) no-repeat top 26px; }
-
-.contact-box { padding-left: 28px; padding-top: 3px; margin-bottom: 16px; }
-#contact-irc { background: #fff url(/static/images/other/contact-irc.png) no-repeat; }
-#contact-list { background: #fff url(/static/images/other/contact-list.png) no-repeat; }
-#subscribe-a { cursor: pointer; text-decoration: underline; }
-#contact-bug { background: #fff url(/static/images/other/contact-bug.png) no-repeat; }
+#latest-release-box { background: transparent url(/static/images/other/latest.png) no-repeat right top; padding-right: 32px; }
 
 .infosection { border-bottom: 1px solid #def; padding-bottom: 8px; padding-left: 30px; margin-bottom: 8px; }
 .infosection table { width: 100%; }
