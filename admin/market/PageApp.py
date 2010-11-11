@@ -75,7 +75,8 @@ class App:
         self.menu += "%s %s" %(_('Application'), info['application_name'])
         cont += self.menu
 
-        app_id = info['application_id']
+        app_id          = info['application_id']
+        currency_symbol = CTK.util.to_utf8 (info['currency_symbol'])
 
         # Install dialog
         install = InstallDialog (info)
@@ -94,7 +95,7 @@ class App:
             if Library.is_appID_in_library (app_id):
                 buy = CTK.Button (_("Install"))
             else:
-                buy = CTK.Button ("%s%s %s" %(info['currency_symbol'], info['amount'], _("Buy")))
+                buy = CTK.Button ("%s%s %s" %(currency_symbol, info['amount'], _("Buy")))
             buy.bind ('click', install.JS_to_show())
 
         else:
@@ -105,7 +106,7 @@ class App:
             login_txt += link
 
             if info['amount']:
-                buy_button = CTK.Button ("%s%s %s" %(info['currency_symbol'], info['amount'], _("Buy")), {"disabled": True})
+                buy_button = CTK.Button ("%s%s %s" %(currency_symbol, info['amount'], _("Buy")), {"disabled": True})
                 login_txt += CTK.RawHTML (" %s" %(_('to buy')))
             else:
                 buy_button = CTK.Button ("%s, %s" %(_("Free"), _("Install")), {"disabled": True})
@@ -259,4 +260,4 @@ class App:
         return page.Render()
 
 
-CTK.publish ('^%s' %(URL_APP),          App)
+CTK.publish ('^%s' %(URL_APP), App)
