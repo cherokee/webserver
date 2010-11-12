@@ -52,9 +52,9 @@ def modify():
 
         # Validations for files and suffixes
         validator = None
-        if k.startswith('icons!suffix') and CTK.post['k']:
+        if k.startswith('icons!suffix') and CTK.post[k]:
             validator = validations.is_safe_icons_suffix
-        elif k.startswith ('icons!file') and CTK.post['k']:
+        elif k.startswith ('icons!file') and CTK.post[k]:
             validator = validations.is_safe_icons_file
 
         if validator:
