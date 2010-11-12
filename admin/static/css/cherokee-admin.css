@@ -163,7 +163,13 @@ a.helpbutton span {
   border-top: 1px solid #cde;
 }
 
-#source-usage {
+#source-workarea .button {
+  float: right;
+  margin: 0 16px 32px 16px;
+}
+
+#source-usage, 
+#env_table {
  table-layout: fixed;
  border-collapse: collapse;
  width: 670px;
@@ -171,23 +177,34 @@ a.helpbutton span {
  margin-bottom: 32px;
 }
 
-#source-usage th {
+#env_table {
+ width: 648px;
+ margin-bottom: 0;
+}
+
+#source-usage th,
+#env_table th {
   background: #e6f3ff url(/static/images/bg-th.png) repeat-x;
   border: none;
   border-bottom: 2px solid #27c;
   padding: 8px 4px;
 }
-#source-usage td {
+#source-usage td,
+#env_table td {
   border-bottom: 1px solid #cde;
   padding: 4px;
 }
+
+#env_table td, #env_table th { width: 304px; }
+#env_table td + td, #env_table th + th  { width: 304px; }
+#env_table td + td + td, #env_table th + th + th { width: 32px; }
 
 
 .vserver_new_content {
   float: right;
 }
 
-* Information sources and VServers*/
+/* Information sources and VServers*/
 .vserver-inactive { color: #999; }
 .rule-inactive { color: #999; }
 .nick, .name { font-weight: bold; white-space: nowrap; width: 176px; overflow-x: hidden; }
