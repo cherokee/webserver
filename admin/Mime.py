@@ -96,7 +96,7 @@ class AddNew_Button (CTK.Box):
         CTK.Box.__init__ (self, {'class': 'mime-button'})
 
         # Add New
-        dialog = CTK.Dialog ({'title': _('Add New MIME-Type'), 'width': 480})
+        dialog = CTK.Dialog ({'title': _('Add New MIME-Type'), 'width': 550})
         dialog.AddButton (_('Cancel'), "close")
         dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
         dialog += AddMime()
