@@ -27,7 +27,7 @@ from Server import get_scgi
 from Image import ImageStock
 from Box import Box
 from PageCleaner import Uniq_Block
-from util import props_to_str
+from util import props_to_str, json_dump
 
 
 HEADERS = [
@@ -46,9 +46,6 @@ var dialog_obj = $("#%(id)s");
 
 /* Initialize */
 dialog_obj.dialog (%(dialog_props)s);
-
-/* Positioning */
-dialog_obj.dialog ('option', 'position', ['center', 85]);
 """
 
 def py2js_dic (d):
@@ -56,10 +53,8 @@ def py2js_dic (d):
 
     for key in d:
         val = d[key]
-        if type(val) == bool:
-            js_pairs.append ("'%s': %s" %(key, ('false', 'true')[val]))
-        elif type(val) == int:
-            js_pairs.append ("'%s': %d" %(key, val))
+        if type(val) in (bool, int, float, list):
+             js_pairs.append ("'%s': %s" %(key, json_dump(val)))
         elif type(val) == str:
             if '/* code */' in val:
                 js_pairs.append ("'%s': %s" %(key, val))
@@ -93,6 +88,8 @@ class Dialog (Container):
             self.js_props['autoOpen'] = False
         if 'draggable' not in self.js_props:
             self.js_props['draggable'] = False
+        if 'position' not in self.js_props:
+            self.js_props['position'] = ['center', 85]
 
         # Special cases
         if not self.js_props['autoOpen']:
