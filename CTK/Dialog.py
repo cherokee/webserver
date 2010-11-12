@@ -46,6 +46,13 @@ var dialog_obj = $("#%(id)s");
 
 /* Initialize */
 dialog_obj.dialog (%(dialog_props)s);
+
+/* Apply the Cancel/Close style */
+var dlg = dialog_obj.parents(".ui-dialog:first");
+var buttons = dlg.find(".ui-dialog-buttonpane button");
+
+buttons.addClass('druid-button');
+buttons.filter(':contains("%(cancel_str)s"), :contains("%(close_str)s")').addClass('close-button');
 """
 
 def py2js_dic (d):
@@ -120,7 +127,9 @@ class Dialog (Container):
                  'title':        self.title,
                  'content':      render.html,
                  'dialog_props': dialog_props,
-                 'div_props':    div_props}
+                 'div_props':    div_props,
+                 'cancel_str':   _("Cancel"),
+                 'close_str':    _("Close")}
 
         html = DIALOG_HTML %(props)
         js   = DIALOG_JS   %(props)
