@@ -40,8 +40,8 @@ NOTE_NEW_MAXAGE     = N_('Maximum time that this sort of content can be cached (
 
 
 VALIDATIONS = [
-    ('new_mime',            validations.is_safe_mime_type),
-    ('new_exts',            validations.is_safe_mime_exts),
+    ('new_mime', validations.is_safe_mime_type),
+    ('new_exts', validations.is_safe_mime_exts),
 ]
 
 def commit():
@@ -97,8 +97,8 @@ class AddNew_Button (CTK.Box):
 
         # Add New
         dialog = CTK.Dialog ({'title': _('Add New MIME-Type'), 'width': 480})
-        dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
         dialog.AddButton (_('Cancel'), "close")
+        dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
         dialog += AddMime()
 
         button = CTK.Button(_('Add New'))

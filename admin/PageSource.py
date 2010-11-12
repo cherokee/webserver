@@ -239,8 +239,8 @@ class EnvironmentWidget (CTK.Container):
         submit += table
 
         dialog = CTK.Dialog({'title': _('Add new Environment variable'), 'autoOpen': False, 'draggable': False, 'width': 350 })
-        dialog.AddButton (_("Add"),    submit.JS_to_submit())
         dialog.AddButton (_("Cancel"), "close")
+        dialog.AddButton (_("Add"),    submit.JS_to_submit())
         dialog += submit
 
         submit.bind ('submit_success', self.refresh.JS_to_refresh())
@@ -418,11 +418,11 @@ class Render:
                     actions[r] = ''
 
                 dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
+                dialog.AddButton (_('Cancel'), "close")
                 dialog.AddButton (_('Remove'), CTK.JS.Ajax (URL_APPLY, async=False,
                                                             data    = actions,
                                                             success = dialog.JS_to_close() + \
                                                                       refresh.JS_to_refresh()))
-                dialog.AddButton (_('Cancel'), "close")
                 dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG))
 
             return dialog
@@ -435,8 +435,8 @@ class Render:
 
             # Add New
             dialog = CTK.Dialog ({'title': _('Add New Information Source'), 'width': 380})
-            dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
             dialog.AddButton (_('Cancel'), "close")
+            dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
             dialog += AddSource()
 
             button = CTK.Button('<img src="/static/images/panel-new.png" />', {'id': 'source-new-button', 'class': 'panel-button', 'title': _('Add New Information Source')})
@@ -449,8 +449,8 @@ class Render:
 
             # Clone
             dialog = CTK.Dialog ({'title': _('Clone Information Source'), 'width': 480})
-            dialog.AddButton (_('Clone'), JS_CLONE + dialog.JS_to_close())
             dialog.AddButton (_('Cancel'), "close")
+            dialog.AddButton (_('Clone'), JS_CLONE + dialog.JS_to_close())
             dialog += CloneSource()
 
             button = CTK.Button('<img src="/static/images/panel-clone.png" />', {'id': 'source-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Information Source')})

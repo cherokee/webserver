@@ -206,11 +206,11 @@ class Render:
                 else:
                     # Remove
                     dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
+                    dialog.AddButton (_('Cancel'), "close")
                     dialog.AddButton (_('Remove'), CTK.JS.Ajax (url_apply, async=False,
                                                                 data    = {'vserver!%s!rule!%s'%(vsrv_num, r):''},
                                                                 success = dialog.JS_to_close() + \
-                                                                    refresh.JS_to_refresh()))
-                    dialog.AddButton (_('Cancel'), "close")
+                                                                          refresh.JS_to_refresh()))
                     dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(rule_name_esc))
                     self += dialog
                     remove = CTK.ImageStock('del')
@@ -257,8 +257,8 @@ class Render:
             # Add New
             dialog = CTK.Dialog ({'title': _('Add Behavior Rule'), 'width': 720})
             dialog.id = 'dialog-new-rule'
-            dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
             dialog.AddButton (_('Cancel'), "close")
+            dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
             dialog += RuleNew (vsrv_num)
 
             druid  = CTK.Druid (CTK.RefreshableURL())
@@ -283,8 +283,8 @@ class Render:
 
             # Clone
             dialog = CTK.Dialog ({'title': _('Clone Behavior Rule'), 'width': 480})
-            dialog.AddButton (_('Clone'), JS_CLONE + dialog.JS_to_close())
             dialog.AddButton (_('Cancel'), "close")
+            dialog.AddButton (_('Clone'), JS_CLONE + dialog.JS_to_close())
             dialog += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_CLONE_DIALOG)))
 
             button = CTK.Button('<img src="/static/images/panel-clone.png" />', {'id': 'rule-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Behavior Rule')})

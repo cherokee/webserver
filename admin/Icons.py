@@ -354,8 +354,8 @@ class AdditionDialogButton (CTK.Box):
 
         # Dialog
         dialog = CTK.Dialog ({'title': title, 'width': 375})
-        dialog.AddButton (submit_label, dialog.JS_to_trigger('submit'))
         dialog.AddButton (_('Cancel'), "close")
+        dialog.AddButton (submit_label, dialog.JS_to_trigger('submit'))
         dialog += AddIcon(key, **kwargs)
 
         # Button
