@@ -45,8 +45,14 @@ VALIDATIONS = [
 def modify():
     updates = {}
     for k in CTK.post:
+        # Presses 'submit' without changing anything
+        if k in ('icons!default', 'icons!directory', 'icons!parent_directory'):
+            if not CTK.post.get_val(k):
+                return {'ret': "error"}
+
+        # Validations for files and suffixes
         validator = None
-        if   k.startswith('icons!suffix') and CTK.post['k']:
+        if k.startswith('icons!suffix') and CTK.post['k']:
             validator = validations.is_safe_icons_suffix
         elif k.startswith ('icons!file') and CTK.post['k']:
             validator = validations.is_safe_icons_file
@@ -58,9 +64,7 @@ def modify():
                 if util.lists_differ (val, new):
                     updates[k] = val
             except ValueError, e:
-                return { "ret": "error", "errors": { k: str(e) }}
-
-        CTK.cfg[k] = CTK.post[k]
+                return {'ret': "error", 'errors': {k: str(e)}}
 
     if updates:
         return {'ret': 'unsatisfactory', 'updates': updates}
@@ -91,7 +95,8 @@ def commit():
     updates = modify()
     if updates:
         return updates
-    return CTK.cfg_reply_ajax_ok()
+
+    return CTK.cfg_apply_post()
 
 
 def prettyfier (filen):
@@ -203,7 +208,7 @@ class SpecialTable (CTK.Container):
             button.bind ('submit_success', refreshable.JS_to_refresh())
             table += [image, CTK.RawHTML(desc), button]
 
-        submit  = CTK.Submitter(URL_APPLY)
+        submit  = CTK.Submitter (URL_APPLY)
         submit += table
 
         self += CTK.RawHTML ("<h2>%s</h2>" %_('Special Files'))
@@ -340,7 +345,7 @@ class AddIcon (CTK.Container):
             prefix = None
 
         table  += row
-        submit  = CTK.Submitter(URL_APPLY)
+        submit  = CTK.Submitter (URL_APPLY)
         submit += table
         submit += IconChooser(hidden_name, prefix, **kwargs)
         self += submit
