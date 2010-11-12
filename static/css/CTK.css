@@ -129,6 +129,12 @@ button:hover { cursor: pointer; }
     box-shadow: inset 1px 1px 0 #7798c2;
 }
 
+.druid-button:active {
+    -moz-box-shadow: inset 0 1px 4px #24589b;
+    -webkit-box-shadow: inset 0 1px 4px #24589b;
+    box-shadow: inset 0 1px 4px #24589b;
+}
+
 .close-button {
     color: #27c;
     text-shadow: #fff 0px 1px 0px;
