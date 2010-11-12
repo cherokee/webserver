@@ -1232,7 +1232,7 @@ img.icon_chooser_selected {
 #body-new-config .dialog-warning { margin: 0 16px; }
 #body-new-config .create-box { 
   text-align: center; 
-  height: 128px;
+  height: 136px;
   width: 256px; 
   border: 1px solid #cde;
   padding: 8px; 
@@ -1249,7 +1249,7 @@ img.icon_chooser_selected {
 #body-new-config h3 { 
   color: #27c;
   font-size: 24px;
-  margin-bottom: 8px;
+  margin: 8px;
 }
 
 #body-new-config span { 
