@@ -113,23 +113,33 @@ class AddNew_Button (CTK.Box):
 class MIME_Table (CTK.Container):
     def __init__ (self, refreshable, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
+        self += CTK.RawHTML ('<h2>%s</h2>' %_('Mime types'))
 
         # List
-        table = CTK.Table ({'id': "mimetable"})
+        table = CTK.Table ({'class': "mimetable"})
         table.set_header(1)
         table += [CTK.RawHTML(x) for x in (_('MIME type'), _('Extensions'), _('MaxAge (<em>secs</em>)'), '')]
 
         mimes = CTK.cfg.keys('mime')
         mimes.sort()
 
+        n = 0
         for mime in mimes:
             pre = "mime!%s"%(mime)
             e1 = CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35})
             e2 = CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6})
             rm = CTK.ImageStock('del')
-            rm.bind('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
-                                          complete = refreshable.JS_to_refresh()))
+            rm.bind ('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
+                                           complete = refreshable.JS_to_refresh()))
             table += [CTK.RawHTML(mime), e1, e2, rm]
+
+            # Include 10 entries per submitter
+            n += 1
+            if n%20 == 0:
+                submit = CTK.Submitter (URL_APPLY)
+                submit += table
+                self += submit
+                table = CTK.Table ({'class': "mimetable"})
 
         submit  = CTK.Submitter (URL_APPLY)
         submit += table
@@ -138,7 +148,6 @@ class MIME_Table (CTK.Container):
         button = AddNew_Button()
         button.bind ('submit_success', refreshable.JS_to_refresh ())
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %_('Mime types'))
         self += submit
         self += button
 

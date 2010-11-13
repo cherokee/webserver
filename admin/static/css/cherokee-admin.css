@@ -168,7 +168,7 @@ a.helpbutton span {
   margin: 0 16px 32px 16px;
 }
 
-#source-usage, 
+#source-usage,
 #env_table {
  table-layout: fixed;
  border-collapse: collapse;
@@ -883,14 +883,14 @@ img.icon_chooser_selected {
   margin-bottom: 1em;
 }
 
-.market-app-desc-description ul { 
+.market-app-desc-description ul {
   margin-left: 2em;
 }
 
-.market-app-desc-description ul li { 
-  margin-bottom: 4px; 
-  list-style-type:disc; 
-  margin-bottom: 1em; 
+.market-app-desc-description ul li {
+  margin-bottom: 4px;
+  list-style-type:disc;
+  margin-bottom: 1em;
 }
 
 .market-commands-exec-error-details {
@@ -1038,39 +1038,38 @@ img.icon_chooser_selected {
  float: right;
 }
 
-#mimetable {
+.mimetable {
  border-collapse: collapse;
  border: 1px solid #cde;
 }
 
-#mimetable thead th { width: 480px; }
-#mimetable thead th + th { width: 260px; }
-#mimetable thead th + th + th { width: 140px; }
-#mimetable thead th + th + th + th { width: 32px; }
+.mimetable thead th { width: 480px; }
+.mimetable thead th + th { width: 260px; }
+.mimetable thead th + th + th { width: 140px; }
+.mimetable thead th + th + th + th { width: 32px; }
 
-#mimetable thead tr { position: relative; display: block; }
+.mimetable thead tr { position: relative; display: block; }
 
-#mimetable tbody {
+.mimetable tbody {
   display: block;
-  height: 480px;
   overflow: auto;
   width: 100%;
 }
 
-#mimetable tbody td { width: 480px; }
-#mimetable tbody td input { width: 90%; }
-#mimetable tbody td + td { width: 260px; }
-#mimetable tbody td + td + td { width: 140px; }
-#mimetable tbody td + td + td + td { width: 16px; }
+.mimetable tbody td { width: 480px; }
+.mimetable tbody td input { width: 90%; }
+.mimetable tbody td + td { width: 260px; }
+.mimetable tbody td + td + td { width: 140px; }
+.mimetable tbody td + td + td + td { width: 16px; }
 
-#mimetable th {
+.mimetable th {
   background: #e6f3ff url(/static/images/bg-th.png) repeat-x;
   border: none;
   border-bottom: 2px solid #27c;
   padding: 8px 4px;
 }
 
-#mimetable td {
+.mimetable td {
   padding: 6px 4px;
   background: #fff;
   border-bottom: 1px solid #def;
@@ -1247,35 +1246,35 @@ img.icon_chooser_selected {
 
 #body-new-config h2 { border: 0; }
 #body-new-config .dialog-warning { margin: 0 16px; }
-#body-new-config .create-box { 
-  text-align: center; 
+#body-new-config .create-box {
+  text-align: center;
   height: 136px;
-  width: 256px; 
+  width: 256px;
   border: 1px solid #cde;
-  padding: 8px; 
-  margin: 0 8px; 
+  padding: 8px;
+  margin: 0 8px;
   float: left;
   -moz-border-radius: 4px; -webkit-border-radius: 4px;
   background-color: #f8fcff;
 }
 
-#body-new-config .create-box:hover { 
+#body-new-config .create-box:hover {
   background-color: #fff;
 }
 
-#body-new-config h3 { 
+#body-new-config h3 {
   color: #27c;
   font-size: 24px;
   margin: 8px;
 }
 
-#body-new-config span { 
+#body-new-config span {
   display: block;
   height: 40px;
   margin-bottom: 8px;
 }
 
-#body-new-config .create-box button { 
+#body-new-config .create-box button {
   font-size: 16px;
   width: 128px;
 }
