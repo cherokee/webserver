@@ -36,8 +36,8 @@ from configured import *
 URL_BASE  = '/general'
 URL_APPLY = '/general/apply'
 
-NOTE_ADD_PORT    = N_('Defines a port that the server will listen to')
-NOTE_ADD_IF      = N_('Optionally defines an interface to listen to')
+NOTE_ADD_PORT    = N_('Defines the TCP port that the server will listen to.')
+NOTE_ADD_IF      = N_('Optionally defines an interface to bind to. For instance: 127.0.0.1')
 NOTE_IPV6        = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
 NOTE_TOKENS      = N_('This option allows to choose how the server identifies itself.')
 NOTE_TIMEOUT     = N_('Time interval until the server closes inactive connections.')
@@ -47,8 +47,8 @@ NOTE_POST_TRACKS = N_('How to track uploads/posts so its progress can be reporte
 NOTE_USER        = N_('Changes the effective user. User names and IDs are accepted.')
 NOTE_GROUP       = N_('Changes the effective group. Group names and IDs are accepted.')
 NOTE_CHROOT      = N_('Jail the server inside the directory. Don\'t use it as the only security measure.')
-NOTE_NO_SOURCES  = N_('No ports to listen have been defined. By default the server will listen to TCP port 80 on all the network interfaces.')
-
+NOTE_NO_BINDS    = N_('No ports to listen have been defined. By default the server will listen to TCP port 80 on all the network interfaces.')
+NOTE_PORTS_INFO  = N_('Remember: The HTTP standard port is 80. The HTTPS port is 443.')
 
 HELPS = [('config_general',    N_("General Configuration")),
          ('config_quickstart', N_("Configuration Quickstart"))]
@@ -162,7 +162,7 @@ class PortsTable (CTK.Submitter):
 
         # Skip if empty
         if not binds:
-            self += CTK.Indenter (CTK.Notice('information', CTK.RawHTML (_(NOTE_NO_SOURCES))))
+            self += CTK.Indenter (CTK.Notice('information', CTK.RawHTML (_(NOTE_NO_BINDS))))
             return
 
         # Header
@@ -210,23 +210,24 @@ class PortsWidget (CTK.Container):
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        dialog = CTK.Dialog({'title': _('New port'), 'autoOpen': False, 'draggable': False, 'width': 480 })
+        dialog = CTK.Dialog({'title': _('Add a new listening port'), 'autoOpen': False, 'draggable': False, 'width': 550 })
         dialog.AddButton (_("Cancel"), "close")
         dialog.AddButton (_("Add"),    submit.JS_to_submit())
         dialog += submit
+        dialog += CTK.Notice (content = CTK.RawHTML('<p>%s</p>'%(_(NOTE_PORTS_INFO))))
 
         submit.bind ('submit_success', self.refresh.JS_to_refresh())
         submit.bind ('submit_success', dialog.JS_to_close())
 
         # Add new
-        button = CTK.SubmitterButton (_('Add new port'))
+        button = CTK.SubmitterButton ("%s…" %(_('Add new port')))
         button.bind ('click', dialog.JS_to_show())
         button_s = CTK.Submitter (URL_APPLY)
         button_s += button
 
         # Integration
         self += CTK.RawHTML ("<h2>%s</h2>" % (_('Listening to Ports')))
-        self += CTK.Indenter(self.refresh)
+        self += CTK.Indenter (self.refresh)
         self += button_s
         self += dialog
 
