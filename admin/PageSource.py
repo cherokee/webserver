@@ -238,7 +238,7 @@ class EnvironmentWidget (CTK.Container):
         submit += CTK.Hidden ('tmp!source_pre','source!%s!env'%(src_num))
         submit += table
 
-        dialog = CTK.Dialog({'title': _('Add new Environment variable'), 'autoOpen': False, 'draggable': False, 'width': 530 })
+        dialog = CTK.Dialog({'title': _('Add new Environment variable'), 'autoOpen': False, 'draggable': False, 'width': 530})
         dialog.AddButton (_("Cancel"), "close")
         dialog.AddButton (_("Add"),    submit.JS_to_submit())
         dialog += submit
@@ -434,7 +434,7 @@ class Render:
             CTK.Box.__init__ (self, {'class': 'panel-buttons'})
 
             # Add New
-            dialog = CTK.Dialog ({'title': _('Add New Information Source'), 'width': 380})
+            dialog = CTK.Dialog ({'title': _('Add New Information Source'), 'width': 530})
             dialog.AddButton (_('Cancel'), "close")
             dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
             dialog += AddSource()
