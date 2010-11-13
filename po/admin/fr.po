@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee 0.99.33\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-11-08 15:00+0100\n"
+"POT-Creation-Date: 2010-11-10 15:00+0100\n"
 "PO-Revision-Date: 2009-12-13 19:40+0100\n"
 "Last-Translator: Vincent Knecht <vknecht@users.sourceforge.net>\n"
 "Language-Team: none\n"
@@ -35,15 +35,18 @@ msgstr ""
 #: cherokee-trunk/admin/PageVServers.py:51
 msgid "You are about to clone a Virtual Server. Would you like to proceed?"
 msgstr ""
+"Vous êtes sur le point de cloner un Serveur Virtuel. Voulez vous continuer ?"
 
 #: cherokee-trunk/admin/PageVServers.py:52
 msgid ""
 "Name of the Virtual Server you are about to create. A domain name is alright."
 msgstr ""
+"Nom du Serveur Virtuel que vous allez créer. Un nom de domaine fera "
+"l'affaire."
 
 #: cherokee-trunk/admin/PageVServers.py:53
 msgid "Document Root directory of the new Virtual Server."
-msgstr ""
+msgstr "Repertoire racine du nouveau Serveur virtuel."
 
 #: cherokee-trunk/admin/PageVServers.py:126
 #: cherokee-trunk/admin/PageSource.py:301
@@ -58,22 +61,21 @@ msgstr "Surnom"
 #: cherokee-trunk/admin/wizards/php.py:36
 #: cherokee-trunk/admin/wizards/php.py:264
 #: cherokee-trunk/admin/PageEntry.py:364 cherokee-trunk/admin/PageEntry.py:366
-#: cherokee-trunk/admin/PageVServer.py:378
-#: cherokee-trunk/admin/PageVServer.py:380 cherokee-trunk/admin/Handler.py:43
+#: cherokee-trunk/admin/PageVServer.py:393
+#: cherokee-trunk/admin/PageVServer.py:395 cherokee-trunk/admin/Handler.py:43
 msgid "Document Root"
 msgstr "Racine des Documents"
 
 #: cherokee-trunk/admin/PageVServers.py:133
 #: cherokee-trunk/admin/PageVServers.py:151
-#: cherokee-trunk/admin/PageRule.py:136 packages/common/database.py:40
+#: cherokee-trunk/admin/PageRule.py:136 packages/common/database.py:39
 msgid "Manual"
-msgstr ""
+msgstr "Manuel"
 
 #: cherokee-trunk/admin/PageVServers.py:152
 #: cherokee-trunk/admin/PageRule.py:137
-#, fuzzy
 msgid "Manual configuration"
-msgstr "Configuration des icônes"
+msgstr "Configuration manuelle"
 
 #: cherokee-trunk/admin/PageVServers.py:192
 #, fuzzy
@@ -82,10 +84,10 @@ msgstr "Administration distante"
 
 #: cherokee-trunk/admin/PageVServers.py:200
 #: cherokee-trunk/admin/PageSource.py:273
-#: cherokee-trunk/admin/market/Maintenance.py:287
-#: cherokee-trunk/admin/market/Maintenance.py:296
+#: cherokee-trunk/admin/market/Maintenance.py:304
+#: cherokee-trunk/admin/market/Maintenance.py:313
 #: cherokee-trunk/admin/PageEntry.py:381
-#: cherokee-trunk/admin/PageVServer.py:622
+#: cherokee-trunk/admin/PageVServer.py:637
 #: cherokee-trunk/admin/PageStatus.py:70 cherokee-trunk/admin/Graph.py:118
 msgid "Unknown"
 msgstr "Inconnu"
@@ -93,14 +95,13 @@ msgstr "Inconnu"
 #: cherokee-trunk/admin/PageVServers.py:204
 #: cherokee-trunk/admin/PageSource.py:420 cherokee-trunk/admin/PageRule.py:208
 msgid "Do you really want to remove it?"
-msgstr ""
+msgstr "Voulez vous vraiment le retirer ?"
 
 #: cherokee-trunk/admin/PageVServers.py:205
-#: cherokee-trunk/admin/PageSource.py:421
-#: cherokee-trunk/admin/market/Maintenance.py:208
-#: cherokee-trunk/admin/PageEntry.py:85 cherokee-trunk/admin/PageRule.py:209
+#: cherokee-trunk/admin/PageSource.py:421 cherokee-trunk/admin/PageEntry.py:85
+#: cherokee-trunk/admin/PageRule.py:209
 msgid "Remove"
-msgstr ""
+msgstr "Retirer"
 
 #: cherokee-trunk/admin/PageVServers.py:209
 #: cherokee-trunk/admin/PageVServers.py:243
@@ -109,7 +110,7 @@ msgstr ""
 #: cherokee-trunk/admin/PageSource.py:425
 #: cherokee-trunk/admin/PageSource.py:439
 #: cherokee-trunk/admin/PageSource.py:453
-#: cherokee-trunk/admin/PageIndex.py:365 cherokee-trunk/admin/PageIndex.py:439
+#: cherokee-trunk/admin/PageIndex.py:367 cherokee-trunk/admin/PageIndex.py:441
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:181
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:188
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:196
@@ -117,7 +118,7 @@ msgstr ""
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:210
 #: cherokee-trunk/admin/plugins/redir.py:121
 #: cherokee-trunk/admin/market/Review.py:87
-#: cherokee-trunk/admin/market/Maintenance.py:267
+#: cherokee-trunk/admin/market/Maintenance.py:281
 #: cherokee-trunk/admin/market/Install.py:141
 #: cherokee-trunk/admin/market/Install.py:179
 #: cherokee-trunk/admin/market/Install.py:195
@@ -159,7 +160,6 @@ msgstr "Annuler"
 
 #: cherokee-trunk/admin/PageVServers.py:240
 #: cherokee-trunk/admin/PageVServers.py:253
-#, fuzzy
 msgid "Add New Virtual Server"
 msgstr "Ajouter un nouveau Serveur Virtuel"
 
@@ -183,9 +183,8 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: cherokee-trunk/admin/PageVServers.py:247
-#, fuzzy
 msgid "Virtual Server Configuration Assistant"
-msgstr "Configuration des Serveurs Virtuels"
+msgstr "Assistant de configuration des Serveurs Virtuels"
 
 #: cherokee-trunk/admin/PageVServers.py:267
 msgid "Clone Virtual Server"
@@ -194,16 +193,14 @@ msgstr "Cloner un Serveur Virtuel"
 #: cherokee-trunk/admin/PageVServers.py:268
 #: cherokee-trunk/admin/PageSource.py:452 cherokee-trunk/admin/PageRule.py:286
 msgid "Clone"
-msgstr ""
+msgstr "Cloner"
 
 #: cherokee-trunk/admin/PageVServers.py:272
-#, fuzzy
 msgid "Clone Selected Virtual Server"
-msgstr "Cloner un Serveur Virtuel"
+msgstr "Cloner le Serveur Virtuel selectionné"
 
 #: cherokee-trunk/admin/PageVServers.py:296
 #: cherokee-trunk/admin/PageStatus.py:119
-#, fuzzy
 msgid "Virtual Server Filtering"
 msgstr "Serveur Virtuel"
 
@@ -339,7 +336,7 @@ msgstr "Ajouter une nouvelle variable d'environnement"
 
 #: cherokee-trunk/admin/PageSource.py:269
 #: cherokee-trunk/admin/market/PageApp.py:41
-#: cherokee-trunk/admin/PageVServer.py:614 packages/common/target.py:148
+#: cherokee-trunk/admin/PageVServer.py:629 packages/common/target.py:148
 msgid "Virtual Server"
 msgstr "Serveur Virtuel"
 
@@ -413,10 +410,10 @@ msgid "Deletion is forbidden"
 msgstr "Suppression refusée. Vérifiez l'usage de la source."
 
 #: cherokee-trunk/admin/PageSource.py:412
-#: cherokee-trunk/admin/PageIndex.py:338 cherokee-trunk/admin/PageIndex.py:410
+#: cherokee-trunk/admin/PageIndex.py:340 cherokee-trunk/admin/PageIndex.py:412
 #: cherokee-trunk/admin/CTK/CTK/Dialog.py:205
 #: cherokee-trunk/admin/market/Review.py:60
-#: cherokee-trunk/admin/market/Maintenance.py:266
+#: cherokee-trunk/admin/market/Maintenance.py:280
 #: cherokee-trunk/admin/market/Install.py:165
 #: cherokee-trunk/admin/market/Install.py:358
 #: cherokee-trunk/admin/market/Install.py:495
@@ -505,7 +502,7 @@ msgid "Enable Remote Services"
 msgstr ""
 
 #: cherokee-trunk/admin/PageIndex.py:103
-#: cherokee-trunk/admin/market/Maintenance.py:208
+#: cherokee-trunk/admin/market/Maintenance.py:219
 #: cherokee-trunk/admin/PageAdvanced.py:150 cherokee-trunk/admin/Page.py:128
 #: cherokee-trunk/admin/PageStatus.py:40
 #: cherokee-trunk/admin/PageStatus.py:112
@@ -570,7 +567,7 @@ msgstr ""
 msgid "Memory"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:286
+#: cherokee-trunk/admin/PageIndex.py:288
 #: cherokee-trunk/admin/plugins/custom_error.py:41
 #: cherokee-trunk/admin/plugins/method.py:31
 #: cherokee-trunk/admin/plugins/bind.py:69
@@ -579,124 +576,124 @@ msgstr ""
 msgid "Choose"
 msgstr "Choisir"
 
-#: cherokee-trunk/admin/PageIndex.py:293
+#: cherokee-trunk/admin/PageIndex.py:295
 #: cherokee-trunk/admin/plugins/dbslayer.py:51
 #: packages/redmine/installer.py:151
 msgid "Language"
 msgstr "Langue"
 
-#: cherokee-trunk/admin/PageIndex.py:337
+#: cherokee-trunk/admin/PageIndex.py:339
 msgid "Proud Cherokee User List Submission"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:340
+#: cherokee-trunk/admin/PageIndex.py:342
 msgid "Proud Cherokee Users"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:342
+#: cherokee-trunk/admin/PageIndex.py:344
 #, fuzzy
 msgid "View list…"
 msgstr "Liste fixe"
 
-#: cherokee-trunk/admin/PageIndex.py:342
+#: cherokee-trunk/admin/PageIndex.py:344
 msgid "Send your domains"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:364
+#: cherokee-trunk/admin/PageIndex.py:366
 msgid "Mailing List Subscription"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:366
+#: cherokee-trunk/admin/PageIndex.py:368
 msgid "Subscribe"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:369
+#: cherokee-trunk/admin/PageIndex.py:371
 msgid "Your email address"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:370
+#: cherokee-trunk/admin/PageIndex.py:372
 #, fuzzy
 msgid "Your name"
 msgstr "Nom d'hôtes"
 
-#: cherokee-trunk/admin/PageIndex.py:385
+#: cherokee-trunk/admin/PageIndex.py:387
 #: cherokee-trunk/admin/PageGeneral.py:129
 msgid "Support"
 msgstr "Fonctionnalités"
 
-#: cherokee-trunk/admin/PageIndex.py:389
+#: cherokee-trunk/admin/PageIndex.py:391
 msgid "Getting started"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:393
+#: cherokee-trunk/admin/PageIndex.py:395
 msgid "Subscribe to mailing lists"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:401
+#: cherokee-trunk/admin/PageIndex.py:403
 #, fuzzy
 msgid "Report a bug"
 msgstr "Rapport envoyé"
 
-#: cherokee-trunk/admin/PageIndex.py:405
+#: cherokee-trunk/admin/PageIndex.py:407
 #, fuzzy
 msgid "Purchase commercial support"
 msgstr "Fonctionnalités"
 
-#: cherokee-trunk/admin/PageIndex.py:409 cherokee-trunk/admin/PageIndex.py:413
+#: cherokee-trunk/admin/PageIndex.py:411 cherokee-trunk/admin/PageIndex.py:415
 msgid "About Cherokee"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:422
+#: cherokee-trunk/admin/PageIndex.py:424
 msgid "Join the Cherokee Community:"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:425
+#: cherokee-trunk/admin/PageIndex.py:427
 msgid "Visit the Cherokee Project Website"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:426
+#: cherokee-trunk/admin/PageIndex.py:428
 msgid "Follow us on Twitter"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:427
+#: cherokee-trunk/admin/PageIndex.py:429
 msgid "Join us on Facebook"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:428
+#: cherokee-trunk/admin/PageIndex.py:430
 msgid "Become a member of Cherokee group on LinkedIn"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:429
+#: cherokee-trunk/admin/PageIndex.py:431
 msgid "Chat with us at irc.freenode.net"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:438
+#: cherokee-trunk/admin/PageIndex.py:440
 #, fuzzy
 msgid "Shutdown Cherokee-admin"
 msgstr "Bienvenue sur Cherokee Admin"
 
-#: cherokee-trunk/admin/PageIndex.py:440
+#: cherokee-trunk/admin/PageIndex.py:442
 msgid "Shut down"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:441
+#: cherokee-trunk/admin/PageIndex.py:443
 msgid "You are about to shut down this instance of Cherokee-admin"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:442
+#: cherokee-trunk/admin/PageIndex.py:444
 msgid "Are you sure do you want to proceed?"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:445
+#: cherokee-trunk/admin/PageIndex.py:447
 msgid "Cherokee-admin has been shut down"
 msgstr ""
 
-#: cherokee-trunk/admin/PageIndex.py:447
+#: cherokee-trunk/admin/PageIndex.py:449
 #, fuzzy
 msgid "Shut down Cherokee-Admin"
 msgstr "Bienvenue sur Cherokee Admin"
 
-#: cherokee-trunk/admin/PageIndex.py:460 cherokee-trunk/admin/PageIndex.py:495
+#: cherokee-trunk/admin/PageIndex.py:462 cherokee-trunk/admin/PageIndex.py:497
 msgid "Welcome to Cherokee Admin"
 msgstr "Bienvenue sur Cherokee Admin"
 
@@ -980,7 +977,7 @@ msgstr ""
 msgid "Dynamic"
 msgstr "Dynamique"
 
-#: cherokee-trunk/admin/consts.py:132 packages/common/database.py:39
+#: cherokee-trunk/admin/consts.py:132 packages/common/database.py:38
 msgid "Automatic"
 msgstr "Automatique"
 
@@ -1117,7 +1114,7 @@ msgstr "Hébergement Virtuel Amélioré"
 msgid "Skip"
 msgstr "Passer"
 
-#: cherokee-trunk/admin/consts.py:224 cherokee-trunk/admin/PageVServer.py:516
+#: cherokee-trunk/admin/consts.py:224 cherokee-trunk/admin/PageVServer.py:531
 msgid "Accept"
 msgstr "Accepter"
 
@@ -1126,7 +1123,7 @@ msgid "Require"
 msgstr ""
 
 #: cherokee-trunk/admin/consts.py:229 cherokee-trunk/admin/consts.py:246
-#: cherokee-trunk/admin/PageVServer.py:452
+#: cherokee-trunk/admin/PageVServer.py:467
 msgid "Disabled"
 msgstr "Désactivé"
 
@@ -1197,12 +1194,12 @@ msgstr "Journalisation"
 msgid "Optional"
 msgstr "Optionel"
 
-#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:116
+#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:120
 #, fuzzy
 msgid "Disable"
 msgstr "Désactivé"
 
-#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:117
+#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:121
 #, fuzzy
 msgid "Enable"
 msgstr " Activé"
@@ -1210,7 +1207,7 @@ msgstr " Activé"
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:182
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:189
 #: cherokee-trunk/admin/CTK/CTK/Paginator.py:83
-#: cherokee-trunk/admin/market/Maintenance.py:265
+#: cherokee-trunk/admin/market/Maintenance.py:279
 #: packages/joomla/installer.py:125 packages/phpmyadmin/installer.py:81
 #: packages/magnolia/installer.py:96 packages/magnolia/installer.py:161
 #: packages/alfresco/installer.py:65 packages/trac/installer.py:123
@@ -1393,7 +1390,7 @@ msgid ""
 msgstr ""
 
 #: cherokee-trunk/admin/plugins/evhost.py:33
-#: cherokee-trunk/admin/PageVServer.py:406
+#: cherokee-trunk/admin/PageVServer.py:421
 msgid "Advanced Virtual Hosting"
 msgstr "Hébergement Virtuel Avancé"
 
@@ -1483,7 +1480,7 @@ msgstr "Utilisateur"
 #: cherokee-trunk/admin/plugins/authlist.py:63
 #: cherokee-trunk/admin/plugins/authlist.py:97
 #: cherokee-trunk/admin/OWS_Login.py:108 packages/magnolia/installer.py:155
-#: packages/common/database.py:379 packages/liferay/installer.py:147
+#: packages/common/database.py:448 packages/liferay/installer.py:147
 #: packages/nagios/installer.py:134 packages/redmine/installer.py:257
 #: packages/nuxeo-dam/installer.py:169 packages/nuxeo-dm/installer.py:169
 msgid "Password"
@@ -1518,7 +1515,7 @@ msgstr "Autoriser PathInfo"
 #: cherokee-trunk/admin/plugins/proxy.py:239
 #: cherokee-trunk/admin/PageAdvanced.py:176
 #: cherokee-trunk/admin/PageEntry.py:79
-#: cherokee-trunk/admin/PageVServer.py:395
+#: cherokee-trunk/admin/PageVServer.py:410
 msgid "Allow"
 msgstr "Autoriser"
 
@@ -1993,8 +1990,8 @@ msgid "Unix Socket"
 msgstr "Socket Unix"
 
 #: cherokee-trunk/admin/plugins/mysql.py:80
-#: cherokee-trunk/admin/market/Maintenance.py:208
-#: packages/common/database.py:377
+#: cherokee-trunk/admin/market/Maintenance.py:219
+#: packages/common/database.py:446
 msgid "Database"
 msgstr "Base de données"
 
@@ -2244,7 +2241,7 @@ msgid "Path"
 msgstr "Chemins"
 
 #: cherokee-trunk/admin/plugins/fullpath.py:115
-#: cherokee-trunk/admin/PageVServer.py:384
+#: cherokee-trunk/admin/PageVServer.py:399
 msgid "Paths"
 msgstr "Chemins"
 
@@ -2374,8 +2371,8 @@ msgstr ""
 #: cherokee-trunk/admin/PageVServer.py:163
 #: cherokee-trunk/admin/PageVServer.py:176
 #: cherokee-trunk/admin/PageVServer.py:191
-#: cherokee-trunk/admin/PageVServer.py:404
-#: cherokee-trunk/admin/PageVServer.py:439
+#: cherokee-trunk/admin/PageVServer.py:419
+#: cherokee-trunk/admin/PageVServer.py:454
 msgid "Method"
 msgstr "Méthode"
 
@@ -2514,17 +2511,17 @@ msgstr ""
 msgid "How do you rate %s?"
 msgstr ""
 
-#: cherokee-trunk/admin/market/CommandProgress.py:34
+#: cherokee-trunk/admin/market/CommandProgress.py:33
 #, fuzzy
 msgid "Show error details"
 msgstr "Ajouter des codes d'erreur"
 
-#: cherokee-trunk/admin/market/CommandProgress.py:35
+#: cherokee-trunk/admin/market/CommandProgress.py:34
 #, fuzzy
 msgid "Hide error details"
 msgstr "Ajouter des codes d'erreur"
 
-#: cherokee-trunk/admin/market/CommandProgress.py:93
+#: cherokee-trunk/admin/market/CommandProgress.py:92
 #, fuzzy
 msgid "Error executing"
 msgstr "Journalisation"
@@ -2568,6 +2565,7 @@ msgid "Database removal"
 msgstr "Base de données"
 
 #: cherokee-trunk/admin/market/Maintenance.py:43
+#: packages/common/database.py:22
 msgid ""
 "Please, provide an administrative user/password pair to connect to your "
 "database."
@@ -2596,37 +2594,37 @@ msgstr "Administration distante"
 msgid "Maintenance"
 msgstr ""
 
-#: cherokee-trunk/admin/market/Maintenance.py:208
+#: cherokee-trunk/admin/market/Maintenance.py:219
 #: cherokee-trunk/admin/market/PageApp.py:75
 #: cherokee-trunk/admin/market/PageApp.py:212
 #, fuzzy
 msgid "Application"
 msgstr "Serveur d'application"
 
-#: cherokee-trunk/admin/market/Maintenance.py:208
+#: cherokee-trunk/admin/market/Maintenance.py:219
 #, fuzzy
 msgid "Date"
 msgstr "Afficher"
 
-#: cherokee-trunk/admin/market/Maintenance.py:240
+#: cherokee-trunk/admin/market/Maintenance.py:254
 #, fuzzy
 msgid "Orphan application"
 msgstr "Serveur d'application"
 
-#: cherokee-trunk/admin/market/Maintenance.py:251
+#: cherokee-trunk/admin/market/Maintenance.py:265
 #, fuzzy
 msgid "Unfinished installation"
 msgstr "Administration distante"
 
-#: cherokee-trunk/admin/market/Maintenance.py:276
+#: cherokee-trunk/admin/market/Maintenance.py:293
 msgid "Applications requiring maintenance"
 msgstr ""
 
-#: cherokee-trunk/admin/market/Maintenance.py:357
+#: cherokee-trunk/admin/market/Maintenance.py:374
 msgid "DB user"
 msgstr ""
 
-#: cherokee-trunk/admin/market/Maintenance.py:358
+#: cherokee-trunk/admin/market/Maintenance.py:375
 #, fuzzy
 msgid "DB password"
 msgstr "Mot de passe"
@@ -3195,7 +3193,7 @@ msgid ""
 "The pair IP:port of the server running ColdFusion. You can add more later to "
 "have the load balanced."
 msgstr ""
-"Nom d'hôte ou IP du serveur éxécutant Glassfish. Vous pouvez en ajouter "
+"Nom d'hôte ou IP du serveur éxécutant ColdFusion. Vous pouvez en ajouter "
 "d'autres plus tard pour répartir la charge."
 
 #: cherokee-trunk/admin/wizards/coldfusion.py:45
@@ -4286,7 +4284,7 @@ msgid ""
 "Hostname or IP of the server running Alfresco. You can add more later to "
 "have the load balanced."
 msgstr ""
-"Nom d'hôte ou IP du serveur éxécutant Glassfish. Vous pouvez en ajouter "
+"Nom d'hôte ou IP du serveur éxécutant Alfresco. Vous pouvez en ajouter "
 "d'autres plus tard pour répartir la charge."
 
 #: cherokee-trunk/admin/wizards/alfresco.py:43
@@ -4564,7 +4562,7 @@ msgid ""
 "Hostname or IP of the server running Liferay. You can add more later to have "
 "the load balanced."
 msgstr ""
-"Nom d'hôte ou IP du serveur éxécutant Glassfish. Vous pouvez en ajouter "
+"Nom d'hôte ou IP du serveur éxécutant Liferay. Vous pouvez en ajouter "
 "d'autres plus tard pour répartir la charge."
 
 #: cherokee-trunk/admin/wizards/uwsgi.py:39
@@ -5003,7 +5001,7 @@ msgid "Skip Logging"
 msgstr ""
 
 #: cherokee-trunk/admin/PageEntry.py:122
-#: cherokee-trunk/admin/PageVServer.py:611
+#: cherokee-trunk/admin/PageVServer.py:626
 msgid "Logging"
 msgstr "Journalisation"
 
@@ -5114,7 +5112,7 @@ msgid "Time"
 msgstr "Temps"
 
 #: cherokee-trunk/admin/PageEntry.py:399
-#: cherokee-trunk/admin/PageVServer.py:612
+#: cherokee-trunk/admin/PageVServer.py:627
 msgid "Security"
 msgstr "Sécurité"
 
@@ -5697,7 +5695,7 @@ msgid "Rule is Active"
 msgstr "Liste de règles"
 
 #: cherokee-trunk/admin/PageVServer.py:150
-#: cherokee-trunk/admin/PageVServer.py:608
+#: cherokee-trunk/admin/PageVServer.py:623
 #, fuzzy
 msgid "Host Match"
 msgstr "Nom d'hôtes"
@@ -5712,188 +5710,188 @@ msgstr "Hôte distant"
 msgid "Add an additional matching criteria"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:274
+#: cherokee-trunk/admin/PageVServer.py:289
 msgid "Behavior Rules"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:283
+#: cherokee-trunk/admin/PageVServer.py:298
 #, fuzzy
 msgid "Rule Management"
 msgstr "Gestion"
 
-#: cherokee-trunk/admin/PageVServer.py:309
+#: cherokee-trunk/admin/PageVServer.py:324
 msgid "Only accept Secure Connections"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:314
+#: cherokee-trunk/admin/PageVServer.py:329
 #, fuzzy
 msgid "Encoding enabled"
 msgstr "Encodage"
 
-#: cherokee-trunk/admin/PageVServer.py:320
+#: cherokee-trunk/admin/PageVServer.py:335
 msgid "no"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:331
+#: cherokee-trunk/admin/PageVServer.py:346
 #, fuzzy
 msgid " seconds"
 msgstr "Icônes"
 
-#: cherokee-trunk/admin/PageVServer.py:336
+#: cherokee-trunk/admin/PageVServer.py:351
 msgid " bytes per second"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:341
+#: cherokee-trunk/admin/PageVServer.py:356
 msgid "Logging enabled for this rule"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:346
+#: cherokee-trunk/admin/PageVServer.py:361
 msgid "Prevents further rule evaluation"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:351
+#: cherokee-trunk/admin/PageVServer.py:366
 #, fuzzy
 msgid "Rule is active"
 msgstr "Liste de règles"
 
-#: cherokee-trunk/admin/PageVServer.py:370
+#: cherokee-trunk/admin/PageVServer.py:385
 msgid "Virtual Server nickname"
 msgstr "Surnom du Serveur Virtuel"
 
-#: cherokee-trunk/admin/PageVServer.py:372
+#: cherokee-trunk/admin/PageVServer.py:387
 msgid "Server ID"
 msgstr "ID Serveur"
 
-#: cherokee-trunk/admin/PageVServer.py:382
+#: cherokee-trunk/admin/PageVServer.py:397
 msgid "Directory Indexes"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:390
+#: cherokee-trunk/admin/PageVServer.py:405
 msgid "Neither are in use at the moment."
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:395
+#: cherokee-trunk/admin/PageVServer.py:410
 msgid "Keep-alive"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:396
+#: cherokee-trunk/admin/PageVServer.py:411
 msgid "Max Upload Size"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:398
+#: cherokee-trunk/admin/PageVServer.py:413
 #: cherokee-trunk/admin/PageGeneral.py:253
 msgid "Network"
 msgstr "Réseau"
 
-#: cherokee-trunk/admin/PageVServer.py:441
+#: cherokee-trunk/admin/PageVServer.py:456
 msgid "Error Handling hook"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:456
+#: cherokee-trunk/admin/PageVServer.py:471
 msgid "Write errors to"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:460
-#: cherokee-trunk/admin/PageVServer.py:499
+#: cherokee-trunk/admin/PageVServer.py:475
+#: cherokee-trunk/admin/PageVServer.py:514
 msgid "Filename"
 msgstr "Nom de fichier"
 
-#: cherokee-trunk/admin/PageVServer.py:462
-#: cherokee-trunk/admin/PageVServer.py:502
+#: cherokee-trunk/admin/PageVServer.py:477
+#: cherokee-trunk/admin/PageVServer.py:517
 msgid "Command"
 msgstr "Commande"
 
-#: cherokee-trunk/admin/PageVServer.py:468
+#: cherokee-trunk/admin/PageVServer.py:483
 #, fuzzy
 msgid "Error Logging"
 msgstr "Journalisation"
 
-#: cherokee-trunk/admin/PageVServer.py:479
+#: cherokee-trunk/admin/PageVServer.py:494
 msgid "Format"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:486
+#: cherokee-trunk/admin/PageVServer.py:501
 msgid "Write accesses to"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:507
+#: cherokee-trunk/admin/PageVServer.py:522
 msgid "Template: "
 msgstr "Modèle:"
 
-#: cherokee-trunk/admin/PageVServer.py:509
+#: cherokee-trunk/admin/PageVServer.py:524
 #, fuzzy
 msgid "Access Logging"
 msgstr "Journalisation"
 
-#: cherokee-trunk/admin/PageVServer.py:515
+#: cherokee-trunk/admin/PageVServer.py:530
 msgid "Time standard"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:516
+#: cherokee-trunk/admin/PageVServer.py:531
 msgid "Accept Forwarded IPs"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:519 cherokee-trunk/admin/CgiBase.py:70
+#: cherokee-trunk/admin/PageVServer.py:534 cherokee-trunk/admin/CgiBase.py:70
 msgid "Don't check origin"
 msgstr "Ne pas vérifier l'origine"
 
-#: cherokee-trunk/admin/PageVServer.py:519
+#: cherokee-trunk/admin/PageVServer.py:534
 #, fuzzy
 msgid "Do not check"
 msgstr "Ne pas vérifier l'origine"
 
-#: cherokee-trunk/admin/PageVServer.py:522 cherokee-trunk/admin/CgiBase.py:72
+#: cherokee-trunk/admin/PageVServer.py:537 cherokee-trunk/admin/CgiBase.py:72
 msgid "Accept from Hosts"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:528
+#: cherokee-trunk/admin/PageVServer.py:543
 #, fuzzy
 msgid "Logging Options"
 msgstr "Options CGI communes"
 
-#: cherokee-trunk/admin/PageVServer.py:564
+#: cherokee-trunk/admin/PageVServer.py:579
 msgid "Certificate"
 msgstr "Certificat"
 
-#: cherokee-trunk/admin/PageVServer.py:565
+#: cherokee-trunk/admin/PageVServer.py:580
 msgid "Certificate key"
 msgstr "Clé du certificat"
 
-#: cherokee-trunk/admin/PageVServer.py:570
+#: cherokee-trunk/admin/PageVServer.py:585
 msgid "Required SSL/TLS Values"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:575
+#: cherokee-trunk/admin/PageVServer.py:590
 msgid "Ciphers"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:576
+#: cherokee-trunk/admin/PageVServer.py:591
 msgid "Client Certs. Request"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:579
+#: cherokee-trunk/admin/PageVServer.py:594
 msgid "CA List"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:582
+#: cherokee-trunk/admin/PageVServer.py:597
 msgid "Verify Depth"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:588
+#: cherokee-trunk/admin/PageVServer.py:603
 #, fuzzy
 msgid "Advanced Options"
 msgstr "Options avancées"
 
-#: cherokee-trunk/admin/PageVServer.py:607
+#: cherokee-trunk/admin/PageVServer.py:622
 msgid "Basics"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:609
+#: cherokee-trunk/admin/PageVServer.py:624
 #: cherokee-trunk/admin/PageRule.py:298
 msgid "Behavior"
 msgstr ""
 
-#: cherokee-trunk/admin/PageVServer.py:610
+#: cherokee-trunk/admin/PageVServer.py:625
 msgid "Error Handler"
 msgstr ""
 
@@ -6853,16 +6851,15 @@ msgstr ""
 msgid "Admin User"
 msgstr ""
 
-#: packages/moin/installer.py:148 packages/common/database.py:359
+#: packages/moin/installer.py:148 packages/common/database.py:383
 #, fuzzy
 msgid "Admin Password"
 msgstr "Mot de passe"
 
 #: packages/common/database.py:15
 msgid ""
-"The applications requires a database to work. Please choose wheter you want "
-"to specify the details manually or if you prefer to have them taken care of "
-"automatically."
+"The applications requires a database to work. Please choose you how to "
+"configure it."
 msgstr ""
 
 #: packages/common/database.py:16
@@ -6889,65 +6886,63 @@ msgid ""
 "have privileges to use it."
 msgstr ""
 
-#: packages/common/database.py:22
-msgid ""
-"Please, provide an administrative user/password pair to connect to your "
-"databse."
-msgstr ""
-
 #: packages/common/database.py:23
 msgid "Please, provide details of an existing database and user/password pair."
 msgstr ""
 
-#: packages/common/database.py:151 packages/common/database.py:245
+#: packages/common/database.py:167 packages/common/database.py:249
 #, fuzzy
 msgid "Database not present"
 msgstr "Le chemin n'existe pas"
 
-#: packages/common/database.py:213
+#: packages/common/database.py:223
 #, fuzzy
 msgid "Username does not exist"
 msgstr "Le chemin n'existe pas"
 
-#: packages/common/database.py:243
+#: packages/common/database.py:247
 msgid "The specified user is not the owner of the database"
 msgstr ""
 
-#: packages/common/database.py:338
-#, fuzzy
-msgid "Database does not exist."
-msgstr "Le chemin n'existe pas"
+#: packages/common/database.py:287
+msgid "Engine"
+msgstr ""
 
-#: packages/common/database.py:350 packages/common/database.py:369
+#: packages/common/database.py:311
+#, fuzzy
+msgid "Configuration method"
+msgstr "Nouveau Fichier de Configuration"
+
+#: packages/common/database.py:368 packages/common/database.py:432
 msgid "No supported database engines were detected."
 msgstr ""
 
-#: packages/common/database.py:358
+#: packages/common/database.py:369 packages/common/database.py:433
+msgid "The available options are"
+msgstr ""
+
+#: packages/common/database.py:382
 #, fuzzy
 msgid "Admin Username"
 msgstr "Utilisateur"
 
-#: packages/common/database.py:378 packages/redmine/installer.py:256
+#: packages/common/database.py:421
+#, fuzzy
+msgid "Database does not exist."
+msgstr "Le chemin n'existe pas"
+
+#: packages/common/database.py:447 packages/redmine/installer.py:256
 #: packages/nuxeo-dam/installer.py:167 packages/nuxeo-dm/installer.py:167
 #, fuzzy
 msgid "Username"
 msgstr "Utilisateur"
 
-#: packages/common/database.py:402
-msgid "Engine"
-msgstr ""
-
-#: packages/common/database.py:418
-#, fuzzy
-msgid "Configuration method"
-msgstr "Nouveau Fichier de Configuration"
-
-#: packages/common/database.py:441
+#: packages/common/database.py:468
 #, fuzzy
 msgid "Unknown method"
 msgstr "Inconnu"
 
-#: packages/common/database.py:451
+#: packages/common/database.py:478
 #, fuzzy
 msgid "Database configuration"
 msgstr "Configuration des icônes"
@@ -6998,73 +6993,73 @@ msgstr "Assistant inconnu"
 msgid "Package Deployment"
 msgstr ""
 
-#: packages/common/ruby.py:27
+#: packages/common/ruby.py:28
 msgid ""
 "The Ruby 1.8 interpreter, RubyGems, or both, could not be found on your "
 "system. Please install Ruby 1.8 and RubyGems to proceed."
 msgstr ""
 
-#: packages/common/java.py:17
+#: packages/common/java.py:18
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Java 6 or "
 "later is required."
 msgstr ""
 
-#: packages/common/java.py:19
+#: packages/common/java.py:20
 msgid "sudo apt-get install sun-java6-jdk"
 msgstr ""
 
-#: packages/common/java.py:20
+#: packages/common/java.py:21
 msgid "yum install java-1.6.0-openjdk"
 msgstr ""
 
-#: packages/common/cc.py:19
+#: packages/common/cc.py:20
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Please make "
 "sure there is a C development environment present."
 msgstr ""
 
-#: packages/common/php.py:49
+#: packages/common/php.py:50
 msgid ""
 "PHP is required for the application to run, but it does not seem to be "
 "available in your system. Please install a FastCGI-enabled PHP interpeter to "
 "proceed."
 msgstr ""
 
-#: packages/common/php.py:50
+#: packages/common/php.py:51
 msgid ""
 "You can check if your interpreter supports FastCGI by looking for the \"fcgi"
 "\" string in the output of the following command: \"php-cgi -v | grep fcgi\""
 msgstr ""
 
-#: packages/common/php.py:64
+#: packages/common/php.py:65
 #, fuzzy
 msgid "Configuring PHP"
 msgstr "Nouveau Fichier de Configuration"
 
-#: packages/common/php.py:73
+#: packages/common/php.py:74
 msgid "Could not find the PHP interpreter"
 msgstr ""
 
-#: packages/common/php.py:78
+#: packages/common/php.py:79
 #, fuzzy
 msgid "Check Again"
 msgstr "Vérifier le fichier"
 
-#: packages/common/php.py:85
+#: packages/common/php.py:86
 msgid "Internal Error while configuring PHP"
 msgstr ""
 
-#: packages/common/php.py:264
+#: packages/common/php.py:265
 msgid "Could not find a suitable local address"
 msgstr ""
 
-#: packages/common/php.py:281
+#: packages/common/php.py:282
 #, fuzzy
 msgid "Could not parse the PHP-fpm settings file"
 msgstr "Échec de la récupération du fichier de configuration choisi"
 
-#: packages/common/php.py:285
+#: packages/common/php.py:286
 msgid "Could not read the \"fpm_listen_address\" property"
 msgstr ""
 
@@ -7107,41 +7102,41 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: packages/nagios/tools.py:18
+#: packages/nagios/tools.py:19
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Please make "
 "sure there is a C development environment and the development libraries for "
 "the <a href='http://www.boutell.com/gd/'>GD Graphics Library</a>"
 msgstr ""
 
-#: packages/nagios/tools.py:20
+#: packages/nagios/tools.py:21
 msgid ""
 "sudo apt-get install build-essential libgd2-xpm-dev || sudo apt-get install "
 "build-essential libgd2-dev"
 msgstr ""
 
-#: packages/nagios/tools.py:21
+#: packages/nagios/tools.py:22
 msgid "yum install gcc glibc glibc-common gd gd-devel"
 msgstr ""
 
-#: packages/nagios/tools.py:40
+#: packages/nagios/tools.py:41
 msgid "Could not create user"
 msgstr ""
 
-#: packages/nagios/tools.py:46
+#: packages/nagios/tools.py:47
 msgid "Could not create group"
 msgstr ""
 
-#: packages/nagios/tools.py:52
+#: packages/nagios/tools.py:53
 msgid "Could not add users to nagcmd group"
 msgstr ""
 
-#: packages/nagios/tools.py:62
+#: packages/nagios/tools.py:63
 #, fuzzy
 msgid "Could not write configuration file"
 msgstr "Ne peut pas récupérer la liste des fichiers de configuration"
 
-#: packages/nagios/tools.py:67
+#: packages/nagios/tools.py:68
 #, fuzzy
 msgid "Could not validate Nagios configuration"
 msgstr "Configuration des icônes"
@@ -7333,17 +7328,17 @@ msgstr "Le chemin n'est pas un répertoire"
 msgid "WebDAV directory"
 msgstr "Répertoire Web"
 
-#: packages/wsgidav/tools.py:49
+#: packages/wsgidav/tools.py:50
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Please make "
 "sure there is a C development environment."
 msgstr ""
 
-#: packages/wsgidav/tools.py:51
+#: packages/wsgidav/tools.py:52
 msgid "sudo apt-get install build-essential"
 msgstr ""
 
-#: packages/wsgidav/tools.py:52
+#: packages/wsgidav/tools.py:53
 msgid "yum install gcc glibc glibc-common"
 msgstr ""
 
@@ -7394,15 +7389,12 @@ msgid ""
 "servers, so please be patient the first time you access it."
 msgstr ""
 
-#, fuzzy
 #~ msgid "DB type"
 #~ msgstr "Types MIME"
 
-#, fuzzy
 #~ msgid "Choose DB configuration method.."
 #~ msgstr "Configuration des icônes"
 
-#, fuzzy
 #~ msgid "Host Names"
 #~ msgstr "Nom d'hôtes"
 
@@ -7415,11 +7407,9 @@ msgstr ""
 #~ msgid "Prefix"
 #~ msgstr "Préfixe"
 
-#, fuzzy
 #~ msgid "New"
 #~ msgstr "Réseau"
 
-#, fuzzy
 #~ msgid "Domain"
 #~ msgstr "Domaines"
 
