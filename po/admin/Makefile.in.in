@@ -182,12 +182,15 @@ OLD-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	}
 
 $(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
-	test ! -f $(DOMAIN).po || { \
-	  wget -O tmp.po http://www.cherokee-project.com/download/trunk/cherokee.pot; \
+	if [ ! -f $(DOMAIN).pot ]; then \
+       wget -O tmp.po http://www.cherokee-project.com/download/trunk/cherokee.pot; \
 	  rm -f $(srcdir)/$(DOMAIN).pot; \
 	  mv tmp.po $(srcdir)/$(DOMAIN).pot; \
+     fi
+	if [ ! -f $(DOMAIN).po ]; then \
 	  rm -f $(DOMAIN).po; \
-     }
+	  cp $(DOMAIN).pot $(DOMAIN).po; \
+	fi
 
 # This rule has no dependencies: we don't need to update $(DOMAIN).pot at
 # every "make" invocation, only create it when it is missing.
