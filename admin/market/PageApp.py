@@ -47,8 +47,16 @@ class SupportBox (CTK.Box):
         target = [(_(WEBDIR), dict(info['target'])['host']), (_(VHOST), dict(info['target'])['dir'])]
 
         self += self.SupportTable (target,     {'class': 'market-support-target'})
-        self += self.SupportTable (info['os'], {'class': 'market-support-os'})
-        self += self.SupportTable (info['db'], {'class': 'market-support-db'})
+
+        # Display these sections only if there is at least a value to show
+        os_values = dict(info['os']).values()
+        if True in os_values:
+            self += self.SupportTable (info['os'], {'class': 'market-support-os'})
+
+        db_values = dict(info['db']).values()
+        if True in db_values:
+            print info.get('db')
+            self += self.SupportTable (info['db'], {'class': 'market-support-db'})
 
     class SupportTable (CTK.Table):
         def __init__ (self, data, props):
