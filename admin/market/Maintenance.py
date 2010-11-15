@@ -178,7 +178,7 @@ class Maintenance_Box (CTK.Box):
                     {'num_unfinished': len(unfinished)}))
         elif len(orphan):
             box += CTK.RawHTML (_("Detected %(num_orphan)d orphan installations: ") %(
-                    {'num_orphan': len(unfinished)}))
+                    {'num_orphan': len(orphan)}))
         box += link
         self += box
 
