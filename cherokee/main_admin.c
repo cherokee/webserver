@@ -35,6 +35,10 @@
 #include "server-protected.h"
 #include "util.h"
 
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
+
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
 #else
