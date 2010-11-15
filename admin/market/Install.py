@@ -133,7 +133,7 @@ class Welcome (Install_Stage):
 
         # Render a welcome message
         box = CTK.Box()
-        box += CTK.RawHTML ('<h2>%s</h2>' %(_('Connecting to Octality')))
+        box += CTK.RawHTML ('<h2>%s</h2>' %(_('Connecting to Cherokee Market')))
         box += CTK.RawHTML ('<h1>%s</h1>' %(_('Retrieving package information…')))
         box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_INIT_CHECK))
 
