@@ -51,8 +51,9 @@ from XMLServerDigest import XmlRpcServer
 PAYMENT_CHECK_TIMEOUT  = 5 * 1000 # 5 secs
 
 NOTE_ALREADY_INSTALLED = N_('The application is already in your library, so there is no need the buy it again. Please, proceed to the installation.')
-NOTE_ALREADY_TO_BUY_1  = N_('The application is available at the Octality Market. Please, check "Check Out" to proceed to the payment secction.')
-NOTE_ALREADY_TO_BUY_2  = N_('The application will be downloaded and installed afterwards. It will also remain in your library for any future installation.')
+
+NOTE_ALL_READY_TO_BUY_1  = N_('You are about to purchase the application. Please proceed with the Check Out to provide the payment details.')
+NOTE_ALL_READY_TO_BUY_2  = N_('The application will be downloaded and installed afterwards, and will remain in your library for future installations.')
 
 NOTE_THANKS_P1    = N_("Cherokee is now ready to run the application. Please, remember to backup your configuration if you are going to perform customizations.")
 NOTE_THANKS_P2    = N_("Thank you for buying at Cherokee's Market!")
@@ -177,8 +178,8 @@ class Init_Check (Install_Stage):
             Install_Log.log ("Checking: %s, ID: %s = Must check out first" %(app_name, app_id))
 
             cont += CTK.RawHTML ("<h2>%s %s</h2>"%(_('Checking out'), app_name))
-            cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALREADY_TO_BUY_1)))
-            cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALREADY_TO_BUY_2)))
+            cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALL_READY_TO_BUY_1)))
+            cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALL_READY_TO_BUY_2)))
 
             checkout = CTK.Button (_("Check Out"))
             checkout.bind ('click', CTK.JS.OpenWindow('%s/order/%s' %(OWS_STATIC, app_id)))
