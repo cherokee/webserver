@@ -55,7 +55,6 @@ class SupportBox (CTK.Box):
 
         db_values = dict(info['db']).values()
         if True in db_values:
-            print info.get('db')
             self += self.SupportTable (info['db'], {'class': 'market-support-db'})
 
     class SupportTable (CTK.Table):
