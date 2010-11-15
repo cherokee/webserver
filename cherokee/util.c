@@ -85,6 +85,10 @@
 # include <sys/utsname.h>
 #endif
 
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
+
 #ifndef HOST_NAME_MAX
 # define HOST_NAME_MAX 255
 #endif
