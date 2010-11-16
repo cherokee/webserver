@@ -25,6 +25,7 @@
 import os
 import CTK
 import popen
+import traceback
 import threading
 import SystemInfo
 import Install_Log
@@ -69,13 +70,23 @@ class CommandProgress (CTK.Box):
         def __init__ (self, command_progress):
             CTK.Container.__init__ (self)
 
+            # Length and current
             commands_len = len(command_progress.commands)
             if command_progress.error or \
                command_progress.executed >= commands_len:
                 command_entry = command_progress.commands [command_progress.executed - 1]
             else:
                 command_entry = command_progress.commands [command_progress.executed]
-            command = replacement_cmd (command_entry['command'])
+
+            # Title
+            if command_entry.has_key('command'):
+                title       = command_entry['command']
+                title_error = replacement_cmd (command_entry['command'])
+            elif command_entry.has_key('function'):
+                title       = command_entry['function'].__name__
+                title_error = command_entry['function'].__name__
+            else:
+                assert False, 'Unknown command entry type'
 
             # Error
             if command_progress.error:
@@ -89,14 +100,14 @@ class CommandProgress (CTK.Box):
                 details += error_content
 
                 self += CTK.ProgressBar ({'value': percent})
-                self += CTK.RawHTML ("<p><b>%s</b>: %s</p>" %(_("Error executing"), command))
+                self += CTK.RawHTML ("<p><b>%s</b>: %s</p>" %(_("Error executing"), title_error))
                 self += details
                 return
 
             # Regular
             percent = (command_progress.executed + 1) * 100.0 / (commands_len + 1)
             self += CTK.ProgressBar ({'value': percent})
-            self += CTK.Box ({'class': 'market-commands-exec-command'}, CTK.RawHTML ("<p>%s</p>" %(command_entry['command'])))
+            self += CTK.Box ({'class': 'market-commands-exec-command'}, CTK.RawHTML ("<p>%s</p>" %(title)))
 
             # Next step
             if command_progress.executed < commands_len:
@@ -130,7 +141,13 @@ class CommandExec_Thread (threading.Thread):
 
     def run (self):
         for command_entry in self.command_progress.commands:
-            error = self._run_command (command_entry)
+            if command_entry.has_key ('command'):
+                error = self._run_command (command_entry)
+            elif command_entry.has_key ('function'):
+                error = self._run_function (command_entry)
+            else:
+                assert False, 'Unknown command type'
+
             self.command_progress.executed += 1
             if error:
                 self.command_progress.error = True
@@ -152,6 +169,26 @@ class CommandExec_Thread (threading.Thread):
                 self._report_error (command, env, ret)
                 return True
 
+    def _run_function (self, command_entry):
+        function = command_entry['function']
+        params   = command_entry.get ('params', {}).copy()
+
+        Install_Log.log ("  Function: %s" %(function.__name__))
+        if params:
+            Install_Log.log ("    (PARAMS) -> %s" %(str(params)))
+
+        try:
+            ret = function (**params)
+        except:
+            ret = {'retcode': 1, 'stderr': ''.join (traceback.format_stack())}
+
+        self.command_progress.last_popen_ret = ret
+
+        if command_entry.get ('check_ret', True):
+            if ret['retcode'] != 0:
+                self._report_error (function.__name__, params, ret)
+                return True
+
     def _report_error (self, command, env, ret_exec):
         print "="*40
         if env:
@@ -159,8 +196,8 @@ class CommandExec_Thread (threading.Thread):
                 print "%s=%s \\"%(k, env[k])
         print command
         print "-"*40
-        print ret_exec['stdout']
+        print ret_exec.get('stdout','')
         print "-"*40
-        print ret_exec['stderr']
+        print ret_exec.get('stderr','')
         print "="*40
 
