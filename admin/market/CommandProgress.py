@@ -180,7 +180,8 @@ class CommandExec_Thread (threading.Thread):
         try:
             ret = function (**params)
         except:
-            ret = {'retcode': 1, 'stderr': ''.join (traceback.format_stack())}
+            ret = {'retcode': 1,
+                   'stderr':  traceback.format_exc()}
 
         self.command_progress.last_popen_ret = ret
 
