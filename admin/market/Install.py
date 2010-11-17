@@ -125,7 +125,7 @@ class Welcome (Install_Stage):
         Install_Log.log ("| It contains useful information that         |")
         Install_Log.log ("| cherokee-admin might need in the future.    |")
         Install_Log.log (".---------------------------------------------.")
-        Install_Log.log ("Retrieving package information…")
+        Install_Log.log ("Retrieving package information...")
 
         # Check whether there are CTK.cfg changes to be saved
         changes = "01"[int(CTK.cfg.has_changed())]
