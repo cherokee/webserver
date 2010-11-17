@@ -155,13 +155,20 @@ class CommandExec_Thread (threading.Thread):
 
     def _run_command (self, command_entry):
         command = replacement_cmd (command_entry['command'])
+        cd      = command_entry.get('cd')
         env     = command_entry.get('env')
+        su      = command_entry.get('su')
+
+        if cd:
+            cd = replacement_cmd (cd)
 
         Install_Log.log ("  %s" %(command))
         if env:
+            Install_Log.log ("    (CD)         -> %s" %(cd))
+            Install_Log.log ("    (SU)         -> %s" %(su))
             Install_Log.log ("    (CUSTOM ENV) -> %s" %(str(env)))
 
-        ret = popen.popen_sync (command, env=env)
+        ret = popen.popen_sync (command, env=env, cd=cd, su=su)
         self.command_progress.last_popen_ret = ret
 
         if command_entry.get ('check_ret', True):
