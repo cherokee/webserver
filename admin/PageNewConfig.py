@@ -109,6 +109,7 @@ class ConfigCreator:
         del(CTK.cfg['vserver!1!logger'])
 
         CTK.cfg['server!bind!1!port']            = "1234"
+        CTK.cfg['server!log_flush_lapse']        = "0"
         CTK.cfg['vserver!1!rule!5!handler!type'] = "normal"
         CTK.cfg['vserver!1!error_writer!type']   = "stderr"
 
