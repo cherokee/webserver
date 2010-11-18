@@ -1984,6 +1984,11 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 
 error:
 	conn->error_code = error_code;
+
+	/* Since the request could not be parsed, the connection is
+	 * about to be closed. Log the error now before it's too late.
+	 */
+	cherokee_logger_write_access (CONN_VSRV(conn)->logger, conn);
 	return ret_error;
 }
 

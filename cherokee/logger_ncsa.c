@@ -223,10 +223,16 @@ build_log_string (cherokee_logger_ncsa_t *logger,
 	/* Get the method and version strings
 	 */
 	ret = cherokee_http_method_to_string (cnt->header.method, &method, &method_len);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely (ret < ret_ok)) {
+		method     = "";
+		method_len = 0;
+	}
 
 	ret = cherokee_http_version_to_string (cnt->header.version, &version, &version_len);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely (ret < ret_ok)) {
+		version     = "";
+		version_len = 0;
+	}
 
 	/* Build the log string
 	 *
