@@ -71,6 +71,7 @@ static const char        *bind_to       = DEFAULT_BIND;
 static int                debug         = 0;
 static int                unsecure      = 0;
 static int                scgi_port     = 4000;
+static int                thread_num    = -1;
 static cherokee_server_t *srv           = NULL;
 static cherokee_buffer_t  password      = CHEROKEE_BUF_INIT;
 
@@ -206,6 +207,10 @@ config_server (cherokee_server_t *srv)
 
 	if (bind_to) {
 		cherokee_buffer_add_va (&buf, "server!bind!1!interface = %s\n", bind_to);
+	}
+
+	if (thread_num != -1) {
+		cherokee_buffer_add_va (&buf, "server!thread_number = %d\n", thread_num);
 	}
 
 	cherokee_buffer_add_str (&buf, "vserver!1!nick = default\n");
@@ -418,6 +423,7 @@ print_help (void)
 		"  -d,  --appdir=DIR             Application directory\n"
 		"  -p,  --port=NUM               TCP port\n"
 		"  -t,  --internal-unix          Use a Unix domain socket internally\n"
+                "  -T,  --threads=NUM            Threads number\n"
 		"  -C,  --target=PATH            Configuration file to modify\n\n"
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
@@ -437,10 +443,11 @@ process_parameters (int argc, char **argv)
 		{"appdir",       required_argument, NULL, 'd'},
 		{"port",         required_argument, NULL, 'p'},
 		{"target",       required_argument, NULL, 'C'},
+		{"threads",      required_argument, NULL, 'T'},
 		{NULL, 0, NULL, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "hVxutb::d:p:C:", long_options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVxutb::d:p:C:T:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'b':
 			if (optarg)
@@ -450,6 +457,9 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'p':
 			port = atoi(optarg);
+			break;
+		case 'T':
+			thread_num = atoi(optarg);
 			break;
 		case 'd':
 			document_root = strdup(optarg);
