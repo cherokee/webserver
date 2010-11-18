@@ -1249,8 +1249,8 @@ img.icon_chooser_selected {
 #body-new-config .dialog-warning { margin: 0 16px; }
 #body-new-config .create-box {
   text-align: center;
-  height: 136px;
-  width: 256px;
+  height: 152px;
+  width: 272px;
   border: 1px solid #cde;
   padding: 8px;
   margin: 0 8px;
@@ -1265,7 +1265,7 @@ img.icon_chooser_selected {
 
 #body-new-config h3 {
   color: #27c;
-  font-size: 24px;
+  font-size: 22px;
   margin: 8px;
 }
 
@@ -1276,6 +1276,8 @@ img.icon_chooser_selected {
 }
 
 #body-new-config .create-box button {
+  position: relative;
+  bottom: 8px;
   font-size: 16px;
   width: 128px;
 }

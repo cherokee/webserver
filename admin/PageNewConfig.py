@@ -142,6 +142,7 @@ class Form (CTK.Container):
         submit += CTK.Hidden('create', key)
         submit += CTK.SubmitterButton (_('Create'))
         box += submit
+        box += CTK.RawHTML('<div class="ui-helper-clearfix"></div>')
 
         self += box
 
@@ -162,7 +163,7 @@ class Render:
         container += Form (key, name, label)
 
         key        = 'development'
-        name       = _('Server Development')
+        name       = _('Server Development Forever')
         label      = _('No standard port, No log files, No PID file, etc.')
         container += Form (key, name, label)
 
