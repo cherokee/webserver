@@ -31,6 +31,7 @@ import time
 import popen
 import string
 import OWS_Login
+import SystemInfo
 
 from util import *
 from consts import *
@@ -246,7 +247,8 @@ class ListApps:
         remove_apps = {}
 
         for app in check_orphan_installations():
-            db = app_database_exists (app)
+            db      = app_database_exists (app)
+            service = self._figure_app_service (app)
 
             remove_apps[app] = {}
             remove_apps[app]['type'] = _('Orphan application')
@@ -254,10 +256,13 @@ class ListApps:
             remove_apps[app]['date'] = self._figure_app_date (app)
             if db:
                 remove_apps[app]['db'] = db
+            if service:
+                remove_apps[app]['service'] = service
 
         for app in check_unfinished_installations():
             if not app in remove_apps:
-                db = app_database_exists (app)
+                db      = app_database_exists (app)
+                service = self._figure_app_service (app)
 
                 remove_apps[app] = {}
                 remove_apps[app]['type'] = _('Unfinished installation')
@@ -265,13 +270,16 @@ class ListApps:
                 remove_apps[app]['date'] = self._figure_app_date (app)
                 if db:
                     remove_apps[app]['db'] = db
+                if service:
+                    remove_apps[app]['service'] = service
 
         # Store in CTK.cfg
         del (CTK.cfg ['admin!market!maintenance!remove'])
         for app in remove_apps:
-            CTK.cfg ['admin!market!maintenance!remove!%s!del' %(app)] = 0
-            CTK.cfg ['admin!market!maintenance!remove!%s!db'  %(app)] = remove_apps[app].get('db')
-            CTK.cfg ['admin!market!maintenance!remove!%s!name'%(app)] = remove_apps[app]['name']
+            CTK.cfg ['admin!market!maintenance!remove!%s!del'    %(app)] = 0
+            CTK.cfg ['admin!market!maintenance!remove!%s!name'   %(app)] = remove_apps[app]['name']
+            CTK.cfg ['admin!market!maintenance!remove!%s!db'     %(app)] = remove_apps[app].get('db')
+            CTK.cfg ['admin!market!maintenance!remove!%s!service'%(app)] = remove_apps[app].get('service')
 
         # Dialog buttons
         b_next   = CTK.DruidButton_Goto  (_('Next'), URL_MAINTENANCE_DB, True)
@@ -320,8 +328,26 @@ class ListApps:
             pass
         return app_name
 
+    def _figure_app_service (self, app):
+        try:
+            fp = os.path.join (CHEROKEE_OWS_ROOT, app, 'install.log')
+            cont = open(fp, 'r').read()
+
+            tmp = re.findall (r'Registered system service\: (.+)\n', cont, re.M)
+            if tmp:
+                return tmp[0]
+
+            tmp = re.findall (r'Registered Launchd service\: (.+)\n', cont, re.M)
+            if tmp:
+                return tmp[0]
+        except:
+            pass
+
 
 def ListApps_Apply():
+    system_info = SystemInfo.get_info()
+    OS = system_info.get('system','').lower()
+
     # Check the apps to remove
     apps_to_remove = []
 
@@ -337,6 +363,17 @@ def ListApps_Apply():
     # Store databases to remove
     for n in range (len(apps_to_remove)):
         CTK.cfg ['admin!market!maintenance!remove!%s!del' %(app)] = '1'
+
+    # Remove services
+    for app in apps_to_remove:
+        service = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!service'%(app))
+        if service:
+            if OS == 'darwin':
+                popen.popen_sync ('launchctl unload %(service)s' %(locals()))
+            elif OS == 'linux':
+                popen.popen_sync ('rm -f /etc/rcS.d/S99%(service)s' %(locals()))
+
+            print "Remove service", service
 
     # Perform the app removal
     for app in apps_to_remove:
