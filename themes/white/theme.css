@@ -1,0 +1,10 @@
+body{background-color:#FFF}
+h1{font:normal 1.6em Verdana, sans-serif;padding:.2em 0 1em}
+a{text-decoration:none}
+a:hover{text-decoration:underline}
+img{vertical-align:middle;border:0}
+hr{border:0;height:0;width:100%;color:#000;background-color:#000}
+table{width:100%;border-top:1px solid #000;border-bottom:1px solid #000;border-collapse:collapse;margin-bottom:20px}
+td{text-align:left;font:normal 1em monospace}
+th{background-color:#eee;text-align:left;padding-top:10px;padding-bottom:10px}
+tr{border-top:1px dotted #ddd;background-color:#FFF;width:100%}

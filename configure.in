@@ -1519,6 +1519,7 @@ doc/Makefile
 themes/Makefile
 themes/default/Makefile
 themes/firefox3/Makefile
+themes/white/Makefile
 themes/plain/Makefile
 packages/Makefile
 packages/osx/Makefile
