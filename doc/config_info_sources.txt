@@ -46,6 +46,20 @@ whatever options do not apply.
 image::media/images/admin_info_sources.png[Information Sources]
 
 [WARNING]
+Do not provide daemonizing options as part of the command to launch a
+given interpreter.
+Cherokee's auto-spawning mechanism is very useful, since it can
+re-launch a local interpreter if for whatever reason the process had
+died unexpectedly. The launched interpreter is automatically
+daemonized, and `stdout` and `stderr` are conveniently handled in
+accordance to any logging setting you might have configured. Beware:
+some applications accept a parameter to daemonize themselves, but
+using such parameter will most likely interfere with Cherokee, so you
+are advised against that. There is no need for such parameters,
+stderr/stdout redirections, background-launching, etc.
+
+
+[TIP]
 The information about source usage allows you to see which information
 sources are currently in use in whatever rule configured along your
 list of virtual servers. This is intended as a tool to let you know
