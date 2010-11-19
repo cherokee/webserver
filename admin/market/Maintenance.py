@@ -164,6 +164,8 @@ class Maintenance_Box (CTK.Box):
             return
 
         dialog = MaintenanceDialog()
+        dialog.bind ('dialogclose', refresh.JS_to_refresh())
+
         self += CTK.RawHTML ('<h3>%s</h3>' %(_('Maintanance')))
         self += dialog
 
