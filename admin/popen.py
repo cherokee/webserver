@@ -148,11 +148,14 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=No
     os.close (stdout_w)
 
     # Return information
-    ret = {'stdout':  buf_stdout,
+    ret = {'command': command,
+           'stdout':  buf_stdout,
            'stderr':  buf_stderr,
            'retcode': returncode}
+
     return ret
 
 if __name__ == "__main__":
-    popen_sync ("ls")
-    popen_sync ("lsg")
+    print popen_sync ("ls")
+    print popen_sync ("lsg")
+    print popen_sync ("""cat <<EOF\nThis\nis\na\ntest\nEOF\n""")
