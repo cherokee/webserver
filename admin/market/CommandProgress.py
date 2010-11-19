@@ -80,11 +80,9 @@ class CommandProgress (CTK.Box):
 
             # Title
             if command_entry.has_key('command'):
-                title       = command_entry['command']
-                title_error = replacement_cmd (command_entry['command'])
+                title = CTK.escape_html (command_entry['command'])
             elif command_entry.has_key('function'):
-                title       = command_entry['function'].__name__
-                title_error = command_entry['function'].__name__
+                title = CTK.escape_html (command_entry['function'].__name__)
             else:
                 assert False, 'Unknown command entry type'
 
@@ -92,6 +90,13 @@ class CommandProgress (CTK.Box):
             if command_progress.error:
                 ret     = command_progress.last_popen_ret
                 percent = command_progress.executed * 100.0 / (commands_len + 1)
+
+                if ret['command']:
+                    title_error = CTK.escape_html (ret['command'])
+                elif command_entry.has_key('function'):
+                    title_error = CTK.escape_html (command_entry['function'].__name__)
+                else:
+                    title_error = _("Unknown Error")
 
                 error_content  = CTK.Box ({'class': 'market-commands-exec-error-details'})
                 error_content += CTK.RawHTML ("<pre>%s</pre>" %(error_to_HTML(ret['stderr'])))
