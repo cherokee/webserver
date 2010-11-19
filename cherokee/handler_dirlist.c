@@ -1028,6 +1028,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	alt = (is_dir) ? "[DIR]" : "[   ]";
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", alt);
+	VTMP_SUBSTITUTE_TOKEN ("%icon_dir%", props->icon_web_dir.buf);
 
 	if (icon) {
 		cherokee_buffer_clean (tmp);
@@ -1163,6 +1164,7 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	}
 
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", "[DIR]");
+	VTMP_SUBSTITUTE_TOKEN ("%icon_dir%", props->icon_web_dir.buf);
 
 	VTMP_SUBSTITUTE_TOKEN ("%file_link%", "../");
 	VTMP_SUBSTITUTE_TOKEN ("%file_name%", "Parent Directory");
@@ -1182,28 +1184,26 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 
 
 static ret_t
-render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, cherokee_buffer_t *buf_pattern)
+render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl,
+			    cherokee_buffer_t          *buffer,
+			    cherokee_buffer_t          *buf_pattern)
 {
-	cherokee_buffer_t *vtmp[2];
-	cherokee_thread_t *thread   = HANDLER_THREAD(dhdl);
-	size_t             idx_tmp  = 0;
-	cherokee_bind_t   *bind     = CONN_BIND(HANDLER_CONN(dhdl));
+	cherokee_buffer_t                *vtmp[2];
+	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
+	size_t                            idx_tmp  = 0;
+	cherokee_bind_t                  *bind     = CONN_BIND(HANDLER_CONN(dhdl));
+	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
 
 	/* Initialize temporary substitution buffers
 	 */
 	VTMP_INIT_SUBST (thread, vtmp, buf_pattern);
 
-	/* Public dir
+	/* Replacements
 	 */
-	VTMP_SUBSTITUTE_TOKEN ("%public_dir%", dhdl->public_dir.buf);
-
-	/* Server software
-	 */
+	VTMP_SUBSTITUTE_TOKEN ("%public_dir%",      dhdl->public_dir.buf);
 	VTMP_SUBSTITUTE_TOKEN ("%server_software%", bind->server_string_w_port.buf);
-
-	/* Notice
-	 */
-	VTMP_SUBSTITUTE_TOKEN ("%notice%", dhdl->header.buf);
+	VTMP_SUBSTITUTE_TOKEN ("%notice%",          dhdl->header.buf);
+	VTMP_SUBSTITUTE_TOKEN ("%icon_dir%",        props->icon_web_dir.buf);
 
 	/* Orders
 	 */
