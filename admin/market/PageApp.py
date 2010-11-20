@@ -40,37 +40,48 @@ from XMLServerDigest import XmlRpcServer
 WEBDIR = N_('Web Directory')
 VHOST  = N_('Virtual Server')
 
+
 class SupportBox (CTK.Box):
+    class Support_Entry (CTK.Box):
+        def __init__ (self, name, supported):
+            CTK.Box.__init__ (self, {'class': 'market-support-entry'})
+            if supported:
+                self += CTK.Image({'src': '/CTK/images/tick.png', 'alt': _('Supported')})
+            else:
+                self += CTK.Image({'src': '/CTK/images/del.png',  'alt': _('Unsupported')})
+
+            self += CTK.RawHTML (name)
+
+    class Support_Block (CTK.Container):
+        def __init__ (self, info, sure_inclusion):
+            CTK.Container.__init__ (self)
+
+            # These entries will always be shown
+            for entry in sure_inclusion:
+                self += SupportBox.Support_Entry (entry, info.get(entry, False))
+
+            # Additional entries
+            rest = filter (lambda x: x not in (sure_inclusion), info.keys())
+            for entry in rest:
+                if info[entry]:
+                    self += SupportBox.Support_Entry (entry, True)
+
     def __init__ (self, info):
         CTK.Box.__init__ (self, {'class': 'market-support-box'})
 
-        target = [(_(WEBDIR), dict(info['target'])['host']), (_(VHOST), dict(info['target'])['dir'])]
+        OSes    = info['os']
+        DBes    = info['db']
+        targets = info['target']
 
-        self += self.SupportTable (target,     {'class': 'market-support-target'})
+        self += CTK.RawHTML ('<h3>%s</h3>' %(_("Deployment methods")))
+        self += SupportBox.Support_Entry (_('Virtual Server'), targets.get('host', False))
+        self += SupportBox.Support_Entry (_('Directory'),      targets.get('dir',  False))
 
-        # Display these sections only if there is at least a value to show
-        os_values = dict(info['os']).values()
-        if True in os_values:
-            self += self.SupportTable (info['os'], {'class': 'market-support-os'})
+        self += CTK.RawHTML ('<h3>%s</h3>' %(_("Operating Systems")))
+        self += SupportBox.Support_Block (OSes, ('Linux', 'MacOS X', 'Solaris', 'FreeBSD'))
 
-        db_values = dict(info['db']).values()
-        if True in db_values:
-            self += self.SupportTable (info['db'], {'class': 'market-support-db'})
-
-    class SupportTable (CTK.Table):
-        def __init__ (self, data, props):
-            CTK.Table.__init__(self, props)
-
-            self[(1,1)] = [CTK.RawHTML(x[0]) for x in data]
-            self.set_header (row=True, num=1)
-
-            def image (value):
-                if value:
-                    return CTK.Image({'src': '/CTK/images/tick.png', 'alt': _('Supported')})
-                else:
-                    return CTK.Image({'src': '/CTK/images/del.png',  'alt': _('Unsupported')})
-
-            self += [image(value) for value in [x[1] for x in data]]
+        self += CTK.RawHTML ('<h3>%s</h3>' %(_("Data Bases")))
+        self += SupportBox.Support_Block (DBes, ('MySQL', 'PostgreSQL', 'SQLite', 'Oracle'))
 
 
 class App:
