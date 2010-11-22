@@ -385,7 +385,7 @@ def __figure_std_settings():
     for conf_file in path_eval_exist (paths):
         # Read
         try:
-            content = open (conf_fine, 'r').read()
+            content = open (conf_file, 'r').read()
         except:
             continue
 
@@ -472,15 +472,16 @@ def __source_add_std (php_path):
 
     # IANA: TCP ports 47809-47999 are unassigned
     TCP_PORT = 47990
-    host     = std_info['host']
+    host     = std_info['listen']
 
     # Add the Source
     next = CTK.cfg.get_next_entry_prefix('source')
 
-    CTK.cfg['%s!nick'        %(next)] = 'PHP Interpreter'
-    CTK.cfg['%s!type'        %(next)] = 'interpreter'
-    CTK.cfg['%s!host'        %(next)] = '%(tcp_addr)s:%(TCP_PORT)d' %(locals())
-    CTK.cfg['%s!interpreter' %(next)] = '%(php_path)s -b %(host)s:%(TCP_PORT)d' %(locals())
+    CTK.cfg['%s!nick'          %(next)] = 'PHP Interpreter'
+    CTK.cfg['%s!type'          %(next)] = 'interpreter'
+    CTK.cfg['%s!host'          %(next)] = '%(host)s:%(TCP_PORT)d' %(locals())
+    CTK.cfg['%s!interpreter'   %(next)] = '%(php_path)s -b %(host)s:%(TCP_PORT)d' %(locals())
+    CTK.cfg['%s!env_inherited' %(next)] = '0'
 
     CTK.cfg['%s!env!PHP_FCGI_MAX_REQUESTS' %(next)] = SAFE_PHP_FCGI_MAX_REQUESTS
     CTK.cfg['%s!env!PHP_FCGI_CHILDREN'     %(next)] = '5'
