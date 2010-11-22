@@ -45,6 +45,7 @@ typedef struct {
 	const char *description;
 	const char *admin_url;
 	const char *debug;
+	int         show_backtrace;
 } cherokee_error_t;
 
 #define CHEROKEE_ERROR(x) ((cherokee_error_t *)(x))

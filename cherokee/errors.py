@@ -23,6 +23,7 @@ class CherokeeError:
         self.url_admin   = kwargs.get('admin', '')
         self.help        = kwargs.get('help', [])
         self.debug       = kwargs.get('debug', '')
+        self.show_bt     = kwargs.get('show_bt', True)
 
 _errors = []
 
@@ -177,7 +178,7 @@ HEADER = """/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8
  * 02110-1301, USA.
  */
 
-/* NOTE: File automatically generated (from  error_list.py). */
+/* NOTE: File automatically generated (by error_list.py). */
 
 """
 
@@ -212,12 +213,14 @@ def generate_C_errors ():
             txt += 'NULL, '
 
         if err.debug:
-            txt += '"%s"' % (err.debug)
+            txt += '"%s", ' % (err.debug)
         else:
-            txt += 'NULL'
+            txt += 'NULL, '
+
+        txt += ('false', 'true')[err.show_bt]
 
         txt += ' },\n'
-    txt += '  {  -1, NULL, NULL, NULL, NULL}\n'
+    txt += '  {  -1, NULL, NULL, NULL, NULL, true }\n'
     txt += '};\n'
     return txt
 

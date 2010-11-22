@@ -209,13 +209,15 @@ render_python_error (cherokee_error_type_t   type,
 	cherokee_buffer_add_str (output, "\", ");
 
 	/* Backtrace */
-	cherokee_buffer_add_str (output, "'backtrace': \"");
+	if (error->show_backtrace) {
+		cherokee_buffer_add_str (output, "'backtrace': \"");
 #ifdef BACKTRACES_ENABLED
-	cherokee_buffer_clean (&tmp);
-	cherokee_buf_add_backtrace (&tmp, 2, "\\n", "");
-	cherokee_buffer_add_escape_html (output, &tmp);
+		cherokee_buffer_clean (&tmp);
+		cherokee_buf_add_backtrace (&tmp, 2, "\\n", "");
+		cherokee_buffer_add_escape_html (output, &tmp);
 #endif
-	cherokee_buffer_add_str (output, "\", ");
+		cherokee_buffer_add_str (output, "\", ");
+	}
 
 	/* Let's finish here.. */
 	if (strcmp (output->buf + output->len - 2, ", ") == 0) {
@@ -268,7 +270,9 @@ render_human_error (cherokee_error_type_t   type,
 
 	/* Backtrace */
 #ifdef BACKTRACES_ENABLED
-	cherokee_buf_add_backtrace (output, 2, "\n", "  ");
+	if (error->show_backtrace) {
+		cherokee_buf_add_backtrace (output, 2, "\n", "  ");
+	}
 #endif
 }
 

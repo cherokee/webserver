@@ -34,10 +34,11 @@ e('SOURCE_NONBLOCK',
 # cherokee/rrd_tools.c
 #
 e('RRD_NO_BINARY',
-  title = "Could not find the rrdtool binary.",
-  desc  = "A custom rrdtool binary has not been defined, and the server could not find one in the $PATH.",
-  debug = "PATH=%s",
-  admin = '/general#tabs_general-0')
+  title   = "Could not find the rrdtool binary.",
+  desc    = "A custom rrdtool binary has not been defined, and the server could not find one in the $PATH.",
+  debug   = "PATH=%s",
+  admin   = '/general#tabs_general-0',
+  show_bt = False)
 
 e('RRD_EXECV',
   title = "execv failed cmd='%s': ${errno}",
@@ -727,8 +728,9 @@ e('SRC_INTER_SPAWN',
 # cherokee/config_reader.c
 #
 e('CONF_READ_ACCESS_FILE',
-  title = "Could not access file",
-  desc  = "The configuration file '%s' could not be accessed. Most probably the server user does not have enough permissions to read it.")
+  title   = "Could not access file",
+  desc    = "The configuration file '%s' could not be accessed. Most probably the server user does not have enough permissions to read it.",
+  show_bt = False)
 
 e('CONF_READ_CHILDREN_SAME_NODE',
   title = "'%s' and '%s' as child of the same node",
