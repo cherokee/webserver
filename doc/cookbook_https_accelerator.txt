@@ -1,7 +1,7 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 
-Cookbook: Setting up an HTTPS accelerator
------------------------------------------
+Cookbook: SSL Offloading with Cherokee
+--------------------------------------
 
 It is no secret that HTTPS traffic has an important performance impact
 when compared to HTTP. This penalty is influenced by a number of
