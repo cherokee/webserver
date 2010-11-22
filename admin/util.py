@@ -315,6 +315,22 @@ def path_find_w_default (path_list, default=''):
                 return p
     return default
 
+def path_eval_exist (path_list):
+    """Evaluate a list of potential paths.
+    Returns the paths that actually exist.
+    """
+    exist = []
+    for path in path_list:
+        if '*' in path or '?' in path:
+            to_check = glob.glob (path)
+        else:
+            to_check = [path]
+        for p in to_check:
+            if os.path.exists (p):
+                exist.append (p)
+    return exist
+
+
 
 #
 # OS
