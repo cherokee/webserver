@@ -126,6 +126,7 @@ typedef struct {
 
 ret_t cherokee_list_add_content              (cherokee_list_t *head, void *item);
 ret_t cherokee_list_add_tail_content         (cherokee_list_t *head, void *item);
+ret_t cherokee_list_invert                   (cherokee_list_t *head);
 
 ret_t cherokee_list_content_free             (cherokee_list_t *head, cherokee_list_free_func free_func);
 ret_t cherokee_list_content_free_item        (cherokee_list_t *head, cherokee_list_free_func free_func);

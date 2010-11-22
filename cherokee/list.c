@@ -119,6 +119,22 @@ cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherok
 }
 
 
+ret_t
+cherokee_list_invert (cherokee_list_t *head)
+{
+	cherokee_list_t *i, *tmp;
+	cherokee_list_t new_list;
+
+	INIT_LIST_HEAD (&new_list);
+
+	list_for_each_safe (i, tmp, head) {
+		cherokee_list_add (i, &new_list);
+	}
+
+	cherokee_list_reparent (&new_list, head);
+	return ret_ok;
+}
+
 
 ret_t
 cherokee_list_add_content (cherokee_list_t *head, void *item)
