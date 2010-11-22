@@ -206,11 +206,19 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 			if (ret != ret_ok)
 				return ret;
 
+			/* Rewrite entries were fed in a decreasing
+			 * order, but they should be evaluated from
+			 * the lower to the highest: Revert them now.
+			 */
+			cherokee_list_invert (&props->in_request_regexs);
+
 		} else if (equal_buf_str (&subconf->key, "out_rewrite_request")) {
 			ret = cherokee_regex_list_configure (&props->out_request_regexs,
 							     subconf, srv->regexs);
 			if (ret != ret_ok)
 				return ret;
+
+			cherokee_list_invert (&props->out_request_regexs);
 		}
 	}
 
