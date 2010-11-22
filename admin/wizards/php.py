@@ -387,20 +387,20 @@ def __figure_std_settings():
             continue
 
         # Timeout
-        if not fpm_info.get('timeout'):
+        if not std_info.get('timeout'):
             tmp = re.findall (r'max_execution_time\s*=\s*(\d*)', content)
             if tmp:
                 std_info['timeout'] = tmp[0]
 
             # Config file
-            if not fpm_info.get('conf_file'):
-                fpm_info['conf_file'] = conf_file
+            if not std_info.get('conf_file'):
+                std_info['conf_file'] = conf_file
 
     # Set last minute defaults
-    if not fpm_info.get('timeout'):
+    if not std_info.get('timeout'):
         std_info['timeout'] = PHP_DEFAULT_TIMEOUT
 
-    if not fpm_info.get('listen'):
+    if not std_info.get('listen'):
         std_info['listen'] = cfg_source_get_localhost_addr()
 
     return std_info
