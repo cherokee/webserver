@@ -65,7 +65,10 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/opt/local/sbin',
                  '/usr/gnu/sbin']
 
-FPM_ETC_PATHS = ['/etc/php*/fpm/php*fpm.conf',
+FPM_ETC_PATHS = ['/etc/php*/fpm/*.conf',
+                 '/etc/php*/fpm/*.d/*',
+                 # Old php-fpm
+                 '/etc/php*/fpm/php*fpm.conf',
                  '/usr/local/etc/php*fpm.conf',
                  '/opt/php*/etc/php*fpm.conf',
                  '/opt/local/etc/php*/php*fpm.conf',
@@ -119,28 +122,27 @@ def wizard_php_add (key):
         if not php_path:
             return _('Could not find a suitable PHP interpreter.')
 
-        # Check PHP type
+        # Add the Source
         php_bin = php_path.split('/')[-1]
         if php_bin not in FPM_BINS:
             ret = __source_add_std (php_path)
         else:
-            settings = __figure_fpm_settings()
-            if not settings:
-                return _('Could not determine PHP-fpm settings.')
             ret = __source_add_fpm (php_path)
 
         if not ret:
-            return _('Could not determine correct interpreter settings.')
+            return '%s: %s' %(_('Could not configure the interpreter'), php_path)
 
         source = __find_source()
 
     # Figure the timeout limit
-    interpreter = CTK.cfg['%s!interpreter' %(source)]
-    if interpreter and 'fpm' in interpreter:
-        settings = __figure_fpm_settings()
-        timeout  = settings['fpm_terminate_timeout']
-    else:
-        timeout = __figure_max_execution_time()
+    interpreter = CTK.cfg.get_val ('%s!interpreter' %(source))
+    timeout     = CTK.cfg.get_val ('%s!timeout'     %(source))
+
+    if not timeout:
+        if 'fpm' in interpreter:
+            timeout = __figure_fpm_settings()['timeout']
+        else:
+            timeout = __figure_std_settings()['timeout']
 
     # Add a new Extension PHP rule
     if not rule:
@@ -367,29 +369,42 @@ def __find_rule (key):
     return cfg_vsrv_rule_find_extension (key, 'php')
 
 
-def __figure_max_execution_time ():
-    # Figure out the php.ini path
+def __figure_std_settings():
+    # Find config file
     paths = []
     for p in STD_ETC_PATHS:
         paths.append (p)
         paths.append ('%s-*' %(p))
 
-    phpini_path = path_find_w_default (paths, None)
-    if not phpini_path:
-        return PHP_DEFAULT_TIMEOUT
+    std_info = {}
 
-    # Read the file
-    try:
-        content = open(phpini_path, 'r').read()
-    except IOError:
-        return PHP_DEFAULT_TIMEOUT
+    # For each configuration file
+    for conf_file in path_eval_exist (paths):
+        # Read
+        try:
+            content = open (conf_fine, 'r').read()
+        except:
+            continue
 
-    # Try to read the max_execution_time
-    tmp = re.findall (r'max_execution_time\s*=\s*(\d*)', content)
-    if not tmp:
-        return PHP_DEFAULT_TIMEOUT
+        # Timeout
+        if not fpm_info.get('timeout'):
+            tmp = re.findall (r'max_execution_time\s*=\s*(\d*)', content)
+            if tmp:
+                std_info['timeout'] = tmp[0]
 
-    return tmp[0]
+            # Config file
+            if not fpm_info.get('conf_file'):
+                fpm_info['conf_file'] = conf_file
+
+    # Set last minute defaults
+    if not fpm_info.get('timeout'):
+        std_info['timeout'] = PHP_DEFAULT_TIMEOUT
+
+    if not fpm_info.get('listen'):
+        std_info['listen'] = cfg_source_get_localhost_addr()
+
+    return std_info
+
 
 def __figure_fpm_settings():
     # Find config file
@@ -398,74 +413,97 @@ def __figure_fpm_settings():
         paths.append (p)
         paths.append ('%s-*' %(p))
 
-    fpm_conf = path_find_w_default (paths, None)
-    if not fpm_conf:
-        return None
+    fpm_info = {}
 
-    # Read
-    try:
-        content = open(fpm_conf, 'r').read()
-    except IOError:
-        return None
+    # For each configuration file
+    for conf_file in path_eval_exist (paths):
+        # Read
+        try:
+            content = open (conf_file, 'r').read()
+        except:
+            continue
 
-    # Extract info
-    tmp = re.findall (r'<value name="listen_address">(.*?)</value>', content)
-    if tmp:
-        listen_address = tmp[0]
-    else:
-        tmp = re.findall (r'listen = (.*)', content)
-        if tmp:
-            listen_address = tmp[0]
-        else:
-            listen_address = None
+        # Listen
+        if not fpm_info.get('listen'):
+            tmp = re.findall (r'<value name="listen_address">(.*?)</value>', content)
+            if tmp:
+                fpm_info['listen'] = tmp[0]
+            else:
+                tmp = re.findall (r'listen = (.*)', content)
+                if tmp:
+                    fpm_info['listen']  = tmp[0]
 
-    tmp = re.findall (r'<value name="request_terminate_timeout">(\d*)s*</value>', content)
-    if tmp:
-        timeout = tmp[0]
-    else:
-        tmp = re.findall (r'request_terminate_timeout[ ]*=[ ]*(\d*)s*', content)
-        if tmp:
-            timeout = tmp[0]
-        else:
-            timeout = PHP_DEFAULT_TIMEOUT
+        # Timeout
+        if not fpm_info.get('timeout'):
+            tmp = re.findall (r'<value name="request_terminate_timeout">(\d*)s*</value>', content)
+            if tmp:
+                fpm_info['timeout'] = tmp[0]
+            else:
+                tmp = re.findall (r'request_terminate_timeout[ ]*=[ ]*(\d*)s*', content)
+                if tmp:
+                    fpm_info['timeout'] = tmp[0]
 
-    # Done
-    return {'fpm_conf':              fpm_conf,
-            'fpm_listen_address':    listen_address,
-            'fpm_terminate_timeout': timeout}
+        # Filename
+        if not fpm_info.get('conf_file'):
+            if '.conf' in conf_file:
+                fpm_info['conf_file'] = conf_file
+
+    # Set last minute defaults
+    if not fpm_info.get('timeout'):
+         fpm_info['timeout'] = PHP_DEFAULT_TIMEOUT
+
+    if not fpm_info.get('listen'):
+         fpm_info['listen'] = "127.0.0.1"
+
+    return fpm_info
+
 
 def __source_add_std (php_path):
+    # Read settings
+    std_info = __figure_std_settings()
+    if not std_info:
+        return _('Could not determine PHP-CGI settings.')
+
+    if not std_info['conf_file']:
+        return _('Could not determine PHP-CGI configuration file.')
+
     # IANA: TCP ports 47809-47999 are unassigned
     TCP_PORT = 47990
+    host     = std_info['host']
 
-    tcp_addr = cfg_source_get_localhost_addr()
-    if not tcp_addr:
-        return None
-
+    # Add the Source
     next = CTK.cfg.get_next_entry_prefix('source')
 
-    CTK.cfg['%s!nick' %(next)]        = 'PHP Interpreter'
-    CTK.cfg['%s!type' %(next)]        = 'interpreter'
-    CTK.cfg['%s!interpreter' %(next)] = '%s -b %s:%d' %(php_path, tcp_addr, TCP_PORT)
-    CTK.cfg['%s!host' %(next)]        = '%s:%d' %(tcp_addr, TCP_PORT)
+    CTK.cfg['%s!nick'        %(next)] = 'PHP Interpreter'
+    CTK.cfg['%s!type'        %(next)] = 'interpreter'
+    CTK.cfg['%s!host'        %(next)] = '%(tcp_addr)s:%(TCP_PORT)d' %(locals())
+    CTK.cfg['%s!interpreter' %(next)] = '%(php_path)s -b %(host)s:%(TCP_PORT)d' %(locals())
 
     CTK.cfg['%s!env!PHP_FCGI_MAX_REQUESTS' %(next)] = SAFE_PHP_FCGI_MAX_REQUESTS
-    CTK.cfg['%s!env!PHP_FCGI_CHILDREN' %(next)]     = '5'
+    CTK.cfg['%s!env!PHP_FCGI_CHILDREN'     %(next)] = '5'
 
     return next
+
 
 def __source_add_fpm (php_path):
-    settings = __figure_fpm_settings()
-    host = settings['fpm_listen_address']
-    if not host:
-        return None
+    # Read settings
+    fpm_info = __figure_fpm_settings()
+    if not fpm_info:
+        return _('Could not determine PHP-fpm settings.')
 
+    host      = fpm_info['listen']
+    conf_file = fpm_info['conf_file']
+
+    # Add Source
     next = CTK.cfg.get_next_entry_prefix('source')
-    CTK.cfg['%s!nick' %(next)]        = 'PHP Interpreter'
-    CTK.cfg['%s!type' %(next)]        = 'interpreter'
-    CTK.cfg['%s!interpreter' %(next)] = '%s --fpm-config %s' %(php_path, settings['fpm_conf'])
-    CTK.cfg['%s!host' %(next)]        = host
+
+    CTK.cfg['%s!nick'        %(next)] = 'PHP Interpreter'
+    CTK.cfg['%s!type'        %(next)] = 'interpreter'
+    CTK.cfg['%s!host'        %(next)] = host
+    CTK.cfg['%s!interpreter' %(next)] = '%(php_path)s --fpm-config %(conf_file)s' %(locals())
+
     return next
+
 
 def __test_php_fcgi (path):
     f = os.popen('%s -v' %(path), 'r')
