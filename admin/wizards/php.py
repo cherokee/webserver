@@ -388,7 +388,7 @@ def __figure_std_settings():
 
         # Timeout
         if not std_info.get('timeout'):
-            tmp = re.findall (r'max_execution_time\s*=\s*(\d*)', content)
+            tmp = re.findall (r'^max_execution_time\s*=\s*(\d*)', content)
             if tmp:
                 std_info['timeout'] = tmp[0]
 
@@ -429,7 +429,7 @@ def __figure_fpm_settings():
             if tmp:
                 fpm_info['listen'] = tmp[0]
             else:
-                tmp = re.findall (r'listen = (.*)', content)
+                tmp = re.findall (r'^listen = (.*)', content)
                 if tmp:
                     fpm_info['listen']  = tmp[0]
 
@@ -439,7 +439,7 @@ def __figure_fpm_settings():
             if tmp:
                 fpm_info['timeout'] = tmp[0]
             else:
-                tmp = re.findall (r'request_terminate_timeout[ ]*=[ ]*(\d*)s*', content)
+                tmp = re.findall (r'^request_terminate_timeout[ ]*=[ ]*(\d*)s*', content)
                 if tmp:
                     fpm_info['timeout'] = tmp[0]
 
