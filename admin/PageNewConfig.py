@@ -164,7 +164,7 @@ class Render:
         container += Form (key, name, label)
 
         key        = 'development'
-        name       = _('Server Development Forever')
+        name       = _('Server Development')
         label      = _('No standard port, No log files, No PID file, etc.')
         container += Form (key, name, label)
 
