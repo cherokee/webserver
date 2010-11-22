@@ -124,22 +124,25 @@ def wizard_php_add (key):
 
         # Add the Source
         php_bin = php_path.split('/')[-1]
-        if php_bin not in FPM_BINS:
-            ret = __source_add_std (php_path)
-        else:
-            ret = __source_add_fpm (php_path)
 
-        if not ret:
-            return '%s: %s' %(_('Could not configure the interpreter'), php_path)
+        try:
+            if php_bin not in FPM_BINS:
+                ret = __source_add_std (php_path)
+            else:
+                ret = __source_add_fpm (php_path)
+        except Exception, e:
+            return str(e)
 
         source = __find_source()
 
     # Figure the timeout limit
-    interpreter = CTK.cfg.get_val ('%s!interpreter' %(source))
-    timeout     = CTK.cfg.get_val ('%s!timeout'     %(source))
+    interpreter = CTK.cfg.get_val ('%s!interpreter'%(source))
+    timeout     = CTK.cfg.get_val ('%s!timeout'    %(source))
 
     if not timeout:
-        if 'fpm' in interpreter:
+        if not interpreter:
+            timeout = PHP_DEFAULT_TIMEOUT
+        elif 'fpm' in interpreter:
             timeout = __figure_fpm_settings()['timeout']
         else:
             timeout = __figure_std_settings()['timeout']
@@ -462,10 +465,10 @@ def __source_add_std (php_path):
     # Read settings
     std_info = __figure_std_settings()
     if not std_info:
-        return _('Could not determine PHP-CGI settings.')
+        raise Exception (_('Could not determine PHP-CGI settings.'))
 
-    if not std_info['conf_file']:
-        return _('Could not determine PHP-CGI configuration file.')
+    if not std_info.has_key('conf_file'):
+        raise Exception (_('Could not determine PHP-CGI configuration file.'))
 
     # IANA: TCP ports 47809-47999 are unassigned
     TCP_PORT = 47990
@@ -489,7 +492,7 @@ def __source_add_fpm (php_path):
     # Read settings
     fpm_info = __figure_fpm_settings()
     if not fpm_info:
-        return _('Could not determine PHP-fpm settings.')
+        raise Exception (_('Could not determine PHP-fpm settings.'))
 
     host      = fpm_info['listen']
     conf_file = fpm_info['conf_file']
