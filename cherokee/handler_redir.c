@@ -395,6 +395,12 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 							     subconf, srv->regexs);
 			if (ret != ret_ok)
 				return ret;
+
+			/* Rewrite entries were fed in a decreasing
+			 * order, but they should be evaluated from
+			 * the lower to the highest: Revert them now.
+			 */
+			cherokee_list_invert (&props->regex_list);
 		}
 	}
 
