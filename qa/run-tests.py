@@ -265,8 +265,11 @@ if log:
 vserver!1!logger = %s
 vserver!1!logger!access!type = file
 vserver!1!logger!access!filename = %s
-vserver!1!logger!error!type = stderr
-""" % (LOGGER_TYPE, LOGGER_ACCESS, LOGGER_ERROR)
+""" % (LOGGER_TYPE, LOGGER_ACCESS)
+
+CONF_BASE += """
+vserver!1!error_writer!type = stderr
+"""
 
 if srv_thds:
     CONF_BASE += """
