@@ -1,19 +1,20 @@
 #!/usr/bin/env python
+# -*- Mode: python; coding: utf-8 -*-
 
 import os
 import sys
 import tempfile
 
-def write_cherokee_conf (app_file):
-    # Figure out paths
-    CTK_root = "%datadir%/cherokee/admin/CTK"
+CTK_ROOT_DEFAULT = "%datadir%/cherokee/admin/CTK"
 
-    # Write the custom configuration file
+def write_cherokee_conf (app_file, CTK_root):
+    # Path to the CTK app
     if app_file.startswith ('/'):
         app_file_path = app_file
     else:
         app_file_path = os.path.join (os.getcwd(), app_file)
 
+    # Write the custom configuration file
     config = CONFIG_BASE[:]
     config = config.replace ('vserver!10!document_root = /var/www',
                              'vserver!10!document_root = %s' %(CTK_root))
@@ -28,24 +29,29 @@ def write_cherokee_conf (app_file):
 
     # Set environment var PYTHONPATH
     os.putenv("PYTHONPATH", "%s:%s"%(CTK_root, os.getenv("PYTHONPATH", '')))
-
     return tempname
-
 
 def main():
     # Usage
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print "USAGE:"
-        print "  %s <file.py>" %(sys.argv[0])
+        print "  %s [-d /path/to/CTK] <file.py>" %(sys.argv[0])
         raise SystemExit
 
+    # Path to CTK
+    if '-d' in sys.argv:
+        CTK_root = sys.argv[sys.argv.index('-d') + 1]
+    else:
+        CTK_root = CTK_ROOT_DEFAULT
+
     # Write config file
-    app_file = sys.argv[1]
-    cherokee_conf = write_cherokee_conf (app_file)
+    app_file = filter (lambda x: x.endswith('.py'), sys.argv)[-1]
+    cherokee_conf = write_cherokee_conf (app_file, CTK_root)
     command = "cherokee -C %s" %(cherokee_conf)
 
     # Run
     print "Running:   %s" % (app_file)
+    print "CTK Path:  %s" % (CTK_root)
     print "Executing: %s" % (command)
     print
 
