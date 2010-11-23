@@ -591,9 +591,10 @@ e('SERVER_NO_BIND',
   admin = "/general#Ports_to_listen-2")
 
 e('SERVER_IGNORE_TLS',
-  title = "Ignoring TLS port %d",
-  desc  = "No TLS backend is specified, but the configuration specifies a secure port and it is being ignored. Either enable a TLS backend or disable the TLS checkbox for the specified port.",
-  admin = "/general#Network-1")
+  title   = "Ignoring TLS port %d",
+  desc    = "No TLS backend is specified, but the configuration specifies a secure port and it is being ignored. Either enable a TLS backend or disable the TLS checkbox for the specified port.",
+  admin   = "/general#Network-1",
+  show_bt = False)
 
 e('SERVER_TLS_DEFAULT',
   title = "TLS/SSL support required for 'default' Virtual Server.",
@@ -752,8 +753,9 @@ e('TEMPLATE_NO_TOKEN',
 # cherokee/spawner.c
 #
 e('SPAWNER_SHM_INIT',
-  title = "Could not initialize SHM '%s': ${errno}",
-  desc  = "Check if your shared memory is mounted in /dev/shm")
+  title   = "Could not initialize SHM '%s': ${errno}",
+  desc    = "Check if your shared memory is mounted in /dev/shm",
+  show_bt = False)
 
 e('SPAWNER_UNLOCK_SEMAPHORE',
   title = "Could not unlock spawning semaphore %d: ${errno}",
