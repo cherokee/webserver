@@ -1241,9 +1241,21 @@ img.icon_chooser_selected {
 #halt-admin-box a { color: #b5c8db; font-size: 90%; }
 #halt-admin-box a:hover { color: #c00; }
 
+#market_maintenance_box {
+ background: #fff2b3 url(/CTK/images/dialog-warning.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #b90;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+}
+#market_maintenance_box h3 {
+ color: #000;
+}
 #maintenance-removal { overflow: auto; overflow-x: hidden; height: 260px; }
-#maintenance-removal-list { table-layout: fixed; width: 100%; }
-#maintenance-removal-list th { background: #e6f3ff url(/static/images/bg-th.png) repeat-x; border: none; }
+#maintenance-removal-list { table-layout: fixed; width: 100%; border-collapse: collapse; border: 1px solid #cde; }{}
+#maintenance-removal-list th { background: #e6f3ff url(/static/images/bg-th.png) repeat-x; border: none; border-bottom: 2px solid #27c; padding: 8px 4px; }
+#maintenance-removal-list td { border-bottom: 1px solid #cde; padding: 4px; }
+
 
 #body-new-config h2 { border: 0; }
 #body-new-config .dialog-warning { margin: 0 16px; }
