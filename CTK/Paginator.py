@@ -36,6 +36,7 @@ from Server import request
 FOOTER_OPTIONS   = 3
 SHOW_FOOTER_1PAG = False
 
+paginator_last_refresh = {}
 
 class Paginator_Footer (Box):
     def __init__ (self, results_num, page_num, items_per_page, total_pages, refreshable):
@@ -93,9 +94,14 @@ class Paginator_Refresh (Widget):
         self.items_per_page   = items_per_page
         self.show_footer_1pag = SHOW_FOOTER_1PAG
 
+        global paginator_last_refresh
+
         tmp = re.findall ('^%s/(\d+)$'%(refreshable.url), request.url)
         if tmp:
             self.page_num = int(tmp[0])
+            paginator_last_refresh [refreshable.id] = self.page_num
+        elif paginator_last_refresh.has_key (refreshable.id):
+            self.page_num = paginator_last_refresh [refreshable.id]
         else:
             self.page_num = page_num
 
