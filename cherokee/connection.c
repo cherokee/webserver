@@ -1988,7 +1988,9 @@ error:
 	/* Since the request could not be parsed, the connection is
 	 * about to be closed. Log the error now before it's too late.
 	 */
-	cherokee_logger_write_access (CONN_VSRV(conn)->logger, conn);
+	if (CONN_VSRV(conn)->logger) {
+		cherokee_logger_write_access (CONN_VSRV(conn)->logger, conn);
+	}
 	return ret_error;
 }
 
