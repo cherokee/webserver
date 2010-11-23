@@ -829,26 +829,26 @@ img.icon_chooser_selected {
 
 .market-app-desc-support-box {
   float: right;
-  width: 256px;
-  margin-top: 16px;
+  width: 160px;
+  margin: 0;
 }
 
-.market-support-box table {
-  border-collapse: collapse;
-  border: 1px solid #def;
-  width: 100%;
-  margin-bottom: 8px;
+.market-support-box h3 {
+  padding: 16px 0 8px 0;
+  color: #000;
 }
 
-.market-support-box table th {
-  text-align: center;
-  background: #def;
-  padding: 4px;
+.market-support-entry {
+  padding: 4px 4px 4px 20px; 
 }
 
-.market-support-box table td {
-  text-align: center;
-  padding: 8px;
+.market-support-entry.supported {
+  background: transparent url('/CTK/images/tick.png') 0 2px no-repeat;
+}
+
+.market-support-entry.unsupported {
+  background: transparent url('/CTK/images/del.png') 1px 3px no-repeat;
+  color: #cde;
 }
 
 .amount, .currency, .free {
@@ -876,7 +876,7 @@ img.icon_chooser_selected {
 
 .market-app-desc-description {
   margin: 16px 0 32px 0;
-  width: 576px;
+  width: 672px;
   float: left;
 }
 

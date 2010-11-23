@@ -46,9 +46,11 @@ class SupportBox (CTK.Box):
         def __init__ (self, name, supported):
             CTK.Box.__init__ (self, {'class': 'market-support-entry'})
             if supported:
-                self += CTK.Image({'src': '/CTK/images/tick.png', 'alt': _('Supported')})
+                self.props['title']  = _('Supported')
+                self.props['class'] += ' supported'
             else:
-                self += CTK.Image({'src': '/CTK/images/del.png',  'alt': _('Unsupported')})
+                self.props['title']  = _('Unsupported')
+                self.props['class'] += ' unsupported'
 
             self += CTK.RawHTML (name)
 
@@ -80,7 +82,7 @@ class SupportBox (CTK.Box):
         self += CTK.RawHTML ('<h3>%s</h3>' %(_("Operating Systems")))
         self += SupportBox.Support_Block (OSes, ('Linux', 'MacOS X', 'Solaris', 'FreeBSD'))
 
-        self += CTK.RawHTML ('<h3>%s</h3>' %(_("Data Bases")))
+        self += CTK.RawHTML ('<h3>%s</h3>' %(_("Databases")))
         self += SupportBox.Support_Block (DBes, ('MySQL', 'PostgreSQL', 'SQLite', 'Oracle'))
 
 
