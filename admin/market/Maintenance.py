@@ -172,7 +172,7 @@ class Maintenance_Box (CTK.Box):
         link = CTK.Link (None, CTK.RawHTML(_('Clean up')))
         link.bind ('click', dialog.JS_to_show())
 
-        box = CTK.Box()
+        box = CTK.Box({'id':'market_maintenance_box'})
         if len(unfinished) and len(orphan):
             box += CTK.RawHTML (_("Detected %(num_orphan)d orphan, and %(num_unfinished)d unfinished installations: ") %(
                     {'num_orphan': len(orphan), 'num_unfinished': len(unfinished)}))

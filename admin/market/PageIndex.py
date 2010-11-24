@@ -154,7 +154,7 @@ class Main:
 
         # Maintanance
         if Maintenance.does_it_need_maintenance():
-            refresh_maintenance = CTK.Refreshable({'id': 'market_maintenance_box'})
+            refresh_maintenance = CTK.Refreshable({'id': 'market_maintenance'})
             refresh_maintenance.register (lambda: Maintenance.Maintenance_Box(refresh_maintenance).Render())
             page.sidebar += refresh_maintenance
 
