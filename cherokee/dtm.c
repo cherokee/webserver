@@ -541,56 +541,60 @@ cvt_tm2time( struct tm *ptm )
 
 
 /*
-** Deformat a date time string from one of the http formats
-** (commonly used) to a time_t time.
-** (str) is assumed to be a zero terminated string.
-** On error, it returns DTM_TIME_EVAL (-1).
+ * Parses a date time string from one of the http formats
+ * (commonly used) to a time_t time.
+ * 'cstr' is assumed to be a zero terminated string.
+ *
+ * Returned values:
+ *   ret_ok    - Parsed okay
+ *   ret_error - Invalid date string
+ *   ret_deny  - Parsed an invalid date
 */
-time_t
-cherokee_dtm_str2time( char* cstr )
+ret_t
+cherokee_dtm_str2time (char* cstr, time_t *time)
 {
-	struct tm tm;
-	char* psz = cstr;
-	size_t idx = 0;
+	struct tm  tm;
+	char      *psz = cstr;
+	size_t     idx = 0;
 
 	/* Zero struct tm.
-	*/
+	 */
 	(void) memset( (char*) &tm, 0, sizeof(struct tm) );
 
 	/* Skip initial blank character(s).
-	*/
+	 */
 	while ( *psz == ' ' || *psz == '\t' )
 		++psz;
 
 	/* Guess category of date time.
-	*/
+	 */
 	if ( isalpha( *psz ) ) {
 		/* wdy[,] ...
-		** wdy = short or long name of the day of week.
-		*/
+		 * wdy = short or long name of the day of week.
+		 */
 
 		/* deformat day (name) of week
-		*/
+		 */
 		for ( idx = 0; isalpha( psz[idx] ); ++idx )
 			;
 		if (! cvt_wday_name2idx( psz, idx, &tm ) )
-			return DTM_TIME_EVAL;
+			return ret_error;
 
 		/* Another guess of the type of date time format.
-		*/
+		 */
 		if ( psz[idx] == ',' ) {
 
 			/* -----------------------------
 			 * wdy, DD mth YYYY HH:MM:SS GMT
 			 * wdy, DD-mth-YY HH:MM:SS GMT
 			 * -----------------------------
-			*/
+			 */
 
 			/* Skip white spaces.
-			*/
+			 */
 			++idx;
 			if ( psz[idx] != ' ')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -598,17 +602,17 @@ cherokee_dtm_str2time( char* cstr )
 			psz += idx;
 
 			/* Deformat day of month.
-			*/
+			 */
 			for ( idx = 0; idx < 2 && isdigit( psz[idx] ); ++idx ) {
 				tm.tm_mday = tm.tm_mday * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				return DTM_TIME_EVAL;
+				return ret_error;
 
 			/* Skip field separator(s).
-			*/
+			 */
 			if ( psz[idx] != ' ' && psz[idx] != '-')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -616,16 +620,16 @@ cherokee_dtm_str2time( char* cstr )
 			psz += idx;
 
 			/* Deformat month.
-			*/
+			 */
 			for ( idx = 0; isalpha( psz[idx] ); ++idx )
 				;
 			if (! cvt_mon_name2idx( psz, idx, &tm ) )
-				return DTM_TIME_EVAL;
+				return ret_error;
 
 			/* Skip field separator(s).
-			*/
+			 */
 			if ( psz[idx] != ' ' && psz[idx] != '-')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -633,17 +637,17 @@ cherokee_dtm_str2time( char* cstr )
 			psz += idx;
 
 			/* Deformat year.
-			*/
+			 */
 			for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
 				tm.tm_year = tm.tm_year * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				return DTM_TIME_EVAL;
+				return ret_error;
 
 			/* Skip field separator(s).
-			*/
+			 */
 			if ( psz[idx] != ' ')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -652,21 +656,21 @@ cherokee_dtm_str2time( char* cstr )
 			idx = 0;
 
 			/* Deformat hours, minutes, seconds.
-			*/
+			 */
 			if (!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
 			    psz[2] != ':' ||
 			    !isdigit( psz[3] ) || !isdigit( psz[4] ) ||
 			    psz[5] != ':' ||
 			    !isdigit( psz[6] ) || !isdigit( psz[7] )
 			   ) {
-				return DTM_TIME_EVAL;
+				return ret_error;
 			}
 			tm.tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
 			tm.tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
 			tm.tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
 
 			/* Skip field separator(s).
-			*/
+			 */
 			idx += 8;
 			while( psz[idx] == ' ')
 				++idx;
@@ -674,11 +678,11 @@ cherokee_dtm_str2time( char* cstr )
 			idx = 0;
 
 			/* Time Zone (always Greenwitch Mean Time)
-			*/
+			 */
 			if ( psz[0] != 'G' ||
 			     psz[1] != 'M' ||
 			     psz[2] != 'T') {
-				return DTM_TIME_EVAL;
+				return ret_error;
 			}
 
 		} else {
@@ -687,10 +691,10 @@ cherokee_dtm_str2time( char* cstr )
 			 * wdy mth DD HH:MM:SS YYYY
 			 * wdy mth DD HH:MM:SS GMT YY
 			 * --------------------------
-			*/
+			 */
 
 			if ( psz[idx] != ' ')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -698,16 +702,16 @@ cherokee_dtm_str2time( char* cstr )
 			psz += idx;
 
 			/* Deformat month.
-			*/
+			 */
 			for ( idx = 0; isalpha( psz[idx] ); ++idx )
 				;
 			if (! cvt_mon_name2idx( psz, idx, &tm ) )
-				return DTM_TIME_EVAL;
+				return ret_error;
 
 			/* Skip field separator(s).
-			*/
+			 */
 			if ( psz[idx] != ' ')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -715,17 +719,17 @@ cherokee_dtm_str2time( char* cstr )
 			psz += idx;
 
 			/* Deformat day of month.
-			*/
+			 */
 			for ( idx = 0; idx < 2 && isdigit( psz[idx] ); ++idx ) {
 				tm.tm_mday = tm.tm_mday * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				return DTM_TIME_EVAL;
+				return ret_error;
 
 			/* Skip field separator(s).
-			*/
+			 */
 			if ( psz[idx] != ' ')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -734,7 +738,7 @@ cherokee_dtm_str2time( char* cstr )
 			idx = 0;
 
 			/* Deformat hours, minutes, seconds.
-			*/
+			 */
 			if (
 				!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
 				psz[2] != ':' ||
@@ -742,17 +746,17 @@ cherokee_dtm_str2time( char* cstr )
 				psz[5] != ':' ||
 				!isdigit( psz[6] ) || !isdigit( psz[7] )
 			   ) {
-				return DTM_TIME_EVAL;
+				return ret_error;
 			}
 			tm.tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
 			tm.tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
 			tm.tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
 
 			/* Skip field separator(s).
-			*/
+			 */
 			idx += 8;
 			if ( psz[idx] != ' ')
-				return DTM_TIME_EVAL;
+				return ret_error;
 			do {
 				++idx;
 			}
@@ -761,12 +765,12 @@ cherokee_dtm_str2time( char* cstr )
 			idx = 0;
 
 			/* Optional Time Zone (always Greenwitch Mean Time)
-			*/
+			 */
 			if ( psz[0] == 'G' ) {
 				if ( psz[1] != 'M' ||
 				     psz[2] != 'T' ||
 				     psz[3] != ' ' )
-					return DTM_TIME_EVAL;
+					return ret_error;
 				idx = 3;
 				do {
 					++idx;
@@ -776,18 +780,18 @@ cherokee_dtm_str2time( char* cstr )
 				idx = 0;
 			}
 			/* else C asctime() format
-			*/
+			 */
 
 			/* Deformat year.
-			*/
+			 */
 			for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
 				tm.tm_year = tm.tm_year * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				return DTM_TIME_EVAL;
+				return ret_error;
 
 			if ( isdigit( psz[idx] ) )
-				return DTM_TIME_EVAL;
+				return ret_error;
 			psz += idx;
 			idx = 0;
 
@@ -799,14 +803,14 @@ cherokee_dtm_str2time( char* cstr )
 		 * HH:MM:SS GMT DD-mth-YY
 		 * DD-mth-YY HH:MM:SS GMT
 		 * --------------------------
-		*/
+		 */
 		if ( !dft_dmyhms2tm( psz, &tm ) )
-			return DTM_TIME_EVAL;
+			return ret_error;
 
 	} else {
 		/* Bad date or unknown date-time format
-		*/
-		return DTM_TIME_EVAL;
+		 */
+		return ret_error;
 	}
 
 	if ( tm.tm_year >  1900 )
@@ -817,7 +821,7 @@ cherokee_dtm_str2time( char* cstr )
 
 	/* Test field values
 	 * NOTE: time has to be in the range 01-Jan-1970 - 31-Dec-2036.
-	*/
+	 */
 	if ( tm.tm_year < 70 || tm.tm_year > 136 ||
 	  /* it's guaranteed that tm_mon is always within this range:
 	   * tm.tm_mon  <  0 || tm.tm_mon  >  11 ||
@@ -826,11 +830,12 @@ cherokee_dtm_str2time( char* cstr )
 	     tm.tm_hour <  0 || tm.tm_hour >  23 ||
 	     tm.tm_min  <  0 || tm.tm_min  >  59 ||
 	     tm.tm_sec  <  0 || tm.tm_sec  >  59 )
-		return DTM_TIME_EVAL;
+		return ret_deny;
 
 	/* OK, convert struct tm to time_t and return result.
-	*/
-	return cvt_tm2time( &tm );
+	 */
+	*time = cvt_tm2time (&tm);
+	return ret_ok;
 }
 
 
