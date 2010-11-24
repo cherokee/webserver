@@ -25,7 +25,7 @@
 from consts import *
 from configured import *
 
-OWS_STATIC       = 'http://market.octality.com'
+OWS_STATIC       = 'http://cherokee-market.com'
 OWS_APPS         = 'http://www.octality.com/api/v%s/open/market/apps/' %(OWS_API_VERSION)
 OWS_APPS_AUTH    = 'http://www.octality.com/api/v%s/market/apps/'      %(OWS_API_VERSION)
 OWS_APPS_INSTALL = 'http://www.octality.com/api/v%s/market/install/'   %(OWS_API_VERSION)

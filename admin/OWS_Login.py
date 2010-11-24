@@ -31,9 +31,9 @@ from configured import *
 LOGIN_APPLY      = '/login/apply'
 SIGNOUT_APPLY    = '/signout/apply'
 
-OWS_WEB_REGISTER = 'http://market.octality.com/signup'
+OWS_WEB_REGISTER = 'http://cherokee-market.com/signup'
 OWS_WEB_LOGIN    = 'https://www.octality.com/api/v%s/login' %(OWS_API_VERSION)
-OWS_WEB_USER     = 'http://market.octality.com/user/%s'
+OWS_WEB_USER     = 'http://cherokee-market.com/user/%s'
 
 NOTE_REGISTER    = N_('<span class="register-link">Not registered yet? <a target = "_blank" href="%s">Join today</a>.</span>')
 
