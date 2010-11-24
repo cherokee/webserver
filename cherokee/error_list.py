@@ -809,9 +809,10 @@ e('HEADER_ADD_HEADER',
 # cherokee/socket.c
 #
 e('SOCKET_NO_IPV6',
-  title = "IPv6 support is disabled. Configuring for IPv4 support only.",
-  desc  = SYSTEM_ISSUE,
-  admin = "/general#Network-4")
+  title   = "IPv6 support is disabled. Configuring for IPv4 support only.",
+  desc    = SYSTEM_ISSUE,
+  admin   = "/general#Network-4",
+  show_bt = False)
 
 e('SOCKET_NEW_SOCKET',
   title = "Could not create socket: ${errno}",
