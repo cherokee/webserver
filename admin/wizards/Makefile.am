@@ -18,6 +18,7 @@ mailman.py \
 mediawiki.py \
 moinmoin.py \
 mono.py \
+moodle.py \
 phpbb.py \
 phpmyadmin.py \
 php.py \
