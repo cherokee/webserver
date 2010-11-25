@@ -9,3 +9,6 @@ CTK-run: CTK-run.pre
 
 EXTRA_DIST = \
 CTK-run.pre
+
+CLEANFILES = \
+CTK-run
