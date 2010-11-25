@@ -75,7 +75,9 @@ FPM_ETC_PATHS = ['/etc/php*/fpm/*.conf',
                  '/etc/php*/*/php*fpm.conf',
                  '/etc/php*/php*fpm.conf']
 
-STD_ETC_PATHS = ['/etc/php*/cgi/php.ini',
+STD_ETC_PATHS = ['/etc/php.ini',
+                 '/etc/php.d/*',
+                 '/etc/php*/cgi/php.ini',
                  '/usr/local/etc/php.ini',
                  '/opt/php*/etc/php.ini',
                  '/opt/local/etc/php*/php.ini',
