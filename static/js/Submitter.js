@@ -36,7 +36,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 	   //
 	   function input_keypress_cb (event) {
 	       if (event.keyCode == 13) {
-			 submit_form();
+			 submit_form (true);
 			 return;
 	       }
 
@@ -45,7 +45,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 
 	   function input_keypress_noauto_cb (event) {
 	       if (event.keyCode == 13) {
-			 submit_form();
+			 submit_form (true);
 	       }
 	   };
 
@@ -67,21 +67,21 @@ if ((typeof submitter_loaded) == 'undefined') {
 		  if (! is_fulfilled()) {
 			 return;
 		  }
-		  submit_form();
+		  submit_form (true);
 	   };
 
 	   function input_checkbox_cb (event) {
 		  if (! is_fulfilled()) {
 			 return;
 		  }
-		  submit_form();
+		  submit_form (true);
 	   }
 
 	   function input_combobox_cb (event) {
 		  if (! is_fulfilled()) {
 			 return;
 		  }
-		  submit_form();
+		  submit_form (true);
 	   }
 
 	   // PRIVATE
@@ -113,7 +113,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 		  self.find("input,select,textarea").removeAttr("disabled");
 	   }
 
-	   function submit_form() {
+	   function submit_form (async) {
 		  /* Block the fields */
 		  submit_in();
 
@@ -144,12 +144,12 @@ if ((typeof submitter_loaded) == 'undefined') {
 
 		  /* Async POST */
 		  $.ajax ({
-			 type:     'POST',
-			 url:       url,
-			 async:     true,
-			 dataType: 'json',
-			 data:      info,
-			 success:   function (data) {
+			 'type':     'POST',
+			 'url':       url,
+			 'async':     async,
+			 'dataType': 'json',
+			 'data':      info,
+			 'success':   function (data) {
 				if (data['ret'] != "ok") {
 				    /* Set the error messages */
 				    for (var key in data['errors']) {
@@ -167,14 +167,14 @@ if ((typeof submitter_loaded) == 'undefined') {
 				}
 
 				/* Trigger events */
-				var event_type;
+				var event = {'url': url, 'ret': data['ret'], 'ret_data': data};
 
 				if (data['ret'] == "ok") {
-				    event_type = 'submit_success';
+				    event['type'] = 'submit_success';
 				} else {
-				    event_type = 'submit_fail';
+				    event['type'] = 'submit_fail';
 				}
-				self.trigger({type: event_type, url: url, ret: data['ret'], ret_data: data});
+				self.trigger (event);
 
 				/* Modified: Save button */
 				var modified     = data['modified'];
@@ -192,7 +192,7 @@ if ((typeof submitter_loaded) == 'undefined') {
 				// alert ("Error: " + xhr.status +"\n"+ xhr.statusText);
 				self.trigger({type: 'submit_fail', url: url, status: xhr.status});
 			 },
-			 complete:  function (XMLHttpRequest, textStatus) {
+			 complete: function (XMLHttpRequest, textStatus) {
 				/* Unlock fields */
 				submit_out();
 
@@ -207,8 +207,11 @@ if ((typeof submitter_loaded) == 'undefined') {
 	   // PUBLIC
 	   //
 	   this.submit_form = function() {
-		  submit_form (obj);
-		  return obj;
+		  submit_form (true);
+	   };
+
+	   this.submit_form_sync = function() {
+		  return submit_form (false);
 	   };
 
 	   this.init = function (self) {
