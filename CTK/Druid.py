@@ -28,6 +28,16 @@ from Refreshable import RefreshableURL
 from Server import request
 from RawHTML import RawHTML
 
+
+# Forces all the submitters inside a Druid. If all the submittion of
+# all of them success, it either updates the Druid to a new stage, or
+# closes it.
+#
+# The global Javascript variable 'CTK_druid_external_submit' is true
+# while the submitters of the Druid are being forced to submit. This
+# flag allows the event handlers of those Submitters to know how the
+# submittion was generated (externally or from within).
+#
 JS_BUTTON_GOTO = """
 var druid            = $(this).parents('.ui-dialog:first').find('.druid:first');
 var refresh          = druid.find('.refreshable-url');
@@ -48,10 +58,15 @@ submitters.bind ('submit_success', function (event) {
 })
 
 // Submits
+CTK_druid_external_submit = true;
+
 submitters.each (function (i, element) {
     $(element).data('submitter').submit_form_sync();
 });
 
+CTK_druid_external_submit = false;
+
+// Check if everything went fine
 if (submit_successes == submitters.length) {
    if ('%(url)s'.length > 0) {
       refresh.trigger({'type':'refresh_goto', 'goto':'%(url)s'});
@@ -269,6 +284,13 @@ def DruidContent__JS_to_goto (internal_id, url):
 
 def DruidContent__JS_to_close (internal_id):
     return '$("#%s").each(function() { %s });' %(internal_id, JS_BUTTON_CLOSE)
+
+def DruidContent__JS_if_external_submit (self, code):
+    return 'if (CTK_druid_external_submit) {%s}' %(code)
+
+def DruidContent__JS_if_internal_submit (self, code):
+    return 'if (! CTK_druid_external_submit) {%s}' %(code)
+
 
 class DruidContent_TriggerNext (Box):
     def __init__ (self):
