@@ -29,9 +29,10 @@ from Server import request
 from RawHTML import RawHTML
 
 JS_BUTTON_GOTO = """
-var druid      = $(this).parents('.ui-dialog:first').find('.druid:first');
-var refresh    = druid.find('.refreshable-url');
-var submitters = refresh.find('.submitter');
+var druid            = $(this).parents('.ui-dialog:first').find('.druid:first');
+var refresh          = druid.find('.refreshable-url');
+var submitters       = refresh.find('.submitter');
+var submit_successes = 0;
 
 // No Submit
 if ((! %(do_submit)s) || (submitters.length == 0))
@@ -40,21 +41,24 @@ if ((! %(do_submit)s) || (submitters.length == 0))
    return;
 }
 
-// Submit
+// Count successes
 submitters.bind ('submit_success', function (event) {
-   $(this).unbind (event);
+    $(this).unbind (event);
+    submit_successes += 1;
+})
+
+// Submits
+submitters.each (function (i, element) {
+    $(element).data('submitter').submit_form_sync();
+});
+
+if (submit_successes == submitters.length) {
    if ('%(url)s'.length > 0) {
       refresh.trigger({'type':'refresh_goto', 'goto':'%(url)s'});
    } else if (%(do_close)s) {
       druid.trigger('druid_exiting');
    }
-});
-
-submitters.bind ('submit_fail', function (event) {
-   $(this).unbind (event);
-});
-
-submitters.trigger ({'type': 'submit'});
+}
 """
 
 JS_BUTTON_CLOSE = """
