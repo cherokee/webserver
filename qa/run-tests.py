@@ -319,14 +319,21 @@ if port is None:
         if valgrind != None:
             valgrind_path = look_for_exec_in_path ("valgrind")
 
+            params = [valgrind_path, "valgrind"]
+            if sys.platform == 'darwin':
+                params += ['--dsymutil=yes']
+
             if valgrind[:3] == 'hel':
-                os.execl (valgrind_path, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
+                params += ["--tool=helgrind"]
             elif valgrind[:3] == 'cac':
-                os.execl (valgrind_path, "valgrind", "--tool=cachegrind", server, "-C", cfg_file)
+                params += ["--tool=cachegrind"]
             elif valgrind[:3] == 'cal':
-                os.execl (valgrind_path, "valgrind", "--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v", server, "-C", cfg_file)
+                params += ["--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v"]
             else:
-                os.execl (valgrind_path, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
+                params += ["--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high"]
+
+            params += [server, "-C", cfg_file]
+            os.execl (*params)
         elif strace:
             if sys.platform.startswith('darwin') or \
                sys.platform.startswith('sunos'):
