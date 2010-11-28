@@ -317,20 +317,24 @@ if port is None:
     pid = os.fork()
     if pid == 0:
         if valgrind != None:
+            valgrind_path = look_for_exec_in_path ("valgrind")
+
             if valgrind[:3] == 'hel':
-                os.execl (VALGRIND_PATH, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
+                os.execl (valgrind_path, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
             elif valgrind[:3] == 'cac':
-                os.execl (VALGRIND_PATH, "valgrind", "--tool=cachegrind", server, "-C", cfg_file)
+                os.execl (valgrind_path, "valgrind", "--tool=cachegrind", server, "-C", cfg_file)
             elif valgrind[:3] == 'cal':
-                os.execl (VALGRIND_PATH, "valgrind", "--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v", server, "-C", cfg_file)
+                os.execl (valgrind_path, "valgrind", "--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v", server, "-C", cfg_file)
             else:
-                os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
+                os.execl (valgrind_path, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
         elif strace:
             if sys.platform.startswith('darwin') or \
                sys.platform.startswith('sunos'):
-                os.execl (DTRUSS_PATH, "dtruss", server, "-C", cfg_file)
+                dtruss_path = look_for_exec_in_path ("dtruss")
+                os.execl (dtruss_path, "dtruss", server, "-C", cfg_file)
             else:
-                os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)
+                strace_path = look_for_exec_in_path ("strace")
+                os.execl (strace_path, "strace", server, "-C", cfg_file)
         else:
             name = server[server.rfind('/') + 1:]
 

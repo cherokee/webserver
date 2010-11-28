@@ -155,6 +155,13 @@ def look_for_python():
     return __python_ref
 
 
+def look_for_exec_in_path (name):
+    for dir in os.getenv("PATH").split(":"):
+        fp = os.path.join (dir, name)
+        if os.path.exists (fp):
+            return fp
+
+
 def print_key (key, val):
     print "%10s: %s" % (key, val)
 

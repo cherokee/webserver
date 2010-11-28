@@ -23,9 +23,6 @@ SSL_CA_FILE       = "/etc/cherokee/ssl/cherokee.pem"
 SERVER_DELAY      = 10
 
 # Third party utilities
-STRACE_PATH       = "/usr/bin/strace"
-DTRUSS_PATH       = "/usr/bin/dtruss"
-VALGRIND_PATH     = "/usr/bin/valgrind"
 PYTHON_PATH       = "auto"
 PHPCGI_PATH       = "auto"
 PHP_FCGI_PORT     = 1980
@@ -41,7 +38,9 @@ PYTHON_DIRS       = ["/usr/bin",
                      "/opt/csw/bin",
                      "/opt/local/bin"]
 
-PHP_NAMES         = ["php5-cgi",
+PHP_NAMES         = ["php-fpm5",
+                     "php-fpm",
+                     "php5-cgi",
                      "php-cgi",
                      "php4-cgi"
                      "php5",
