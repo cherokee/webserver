@@ -493,7 +493,13 @@ generate_file_entry (cherokee_handler_dirlist_t  *dhdl,
 		}
 
 	        if (S_ISLNK(n->stat.st_mode)) {
-			cherokee_stat (path->buf, &n->rstat);
+			/* Info about the (target) linked file
+			 */
+			ret = cherokee_stat (path->buf, &n->rstat);
+			if (ret != ret_ok) {
+				/* Broken link */
+				memcpy (&n->rstat, &n->stat, sizeof(struct stat));
+			}
 
 			if (HDL_DIRLIST_PROP(dhdl)->redir_symlinks) {
 				/* The local directory realpath is build lazily
