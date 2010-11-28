@@ -268,7 +268,8 @@ run-tests.py \
 260-Vrule-OR-2.py \
 261-ErrorRedir-Default1.py \
 262-Redir-order-1.py \
-263-If_Modified_Since-Invalid1.py
+263-If_Modified_Since-Invalid1.py \
+264-Nocache-redirs.py
 
 test:
 	python -m compileall .

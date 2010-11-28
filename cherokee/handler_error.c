@@ -278,8 +278,13 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	/* Usual headers
 	 */
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
-	cherokee_buffer_add_str (buffer, "Cache-Control: no-cache"CRLF);
-	cherokee_buffer_add_str (buffer, "Pragma: no-cache"CRLF);
+
+	if (http_type_400(conn->error_code) ||
+	    http_type_500(conn->error_code))
+	{
+		cherokee_buffer_add_str (buffer, "Cache-Control: no-cache"CRLF);
+		cherokee_buffer_add_str (buffer, "Pragma: no-cache"CRLF);
+	}
 
 	return ret_ok;
 }
