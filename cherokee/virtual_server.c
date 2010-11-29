@@ -327,41 +327,37 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));
 
 	} else if (equal_buf_str (&conf->key, "encoder")) {
-		cherokee_config_node_foreach (i, conf) {
-			cherokee_boolean_t allow = false;
-			cherokee_boolean_t deny  = false;
-
-			/* Skip the entry if it isn't enabled
-			 */
-			deny  = (equal_buf_str (&CONFIG_NODE(i)->val, "deny"));
-			allow = (equal_buf_str (&CONFIG_NODE(i)->val, "1") ||
-				 equal_buf_str (&CONFIG_NODE(i)->val, "allow"));
-
-			if ((!allow) && (!deny))
-				continue;
+		cherokee_config_node_foreach (i, conf)
+		{
+			cherokee_encoder_props_t *encoder_props = NULL;
 
 			tmp = &CONFIG_NODE(i)->key;
 
-			/* Denies to use the encoder
-			 */
-			if (deny) {
-				cherokee_config_entry_encoder_forbid (entry, tmp);
-				TRACE(ENTRIES, "Encoder (forbidden): %s\n", tmp->buf);
+			ret = cherokee_plugin_loader_get (&srv->loader, tmp->buf, &info);
+			if (ret != ret_ok) {
+				return ret;
+			}
 
-			} else if (allow) {
-				ret = cherokee_plugin_loader_get (&srv->loader, tmp->buf, &info);
+			if (info->configure) {
+				encoder_func_configure_t configure = info->configure;
+
+				ret = configure (CONFIG_NODE(i), srv, &encoder_props);
 				if (ret != ret_ok) {
 					return ret;
 				}
 
-				ret = cherokee_avl_get (&srv->encoders, tmp, NULL);
-				if (ret != ret_ok) {
-					cherokee_avl_add (&srv->encoders, tmp, info);
-				}
-
-				cherokee_config_entry_encoder_add (entry, tmp, info);
-				TRACE(ENTRIES, "Encoder (allowed): %s\n", tmp->buf);
+				encoder_props->instance_func = PLUGIN_INFO(info)->instance;
 			}
+
+			ret = cherokee_avl_get (&srv->encoders, tmp, NULL);
+			if (ret != ret_ok) {
+				cherokee_avl_add (&srv->encoders, tmp, info);
+			}
+
+			TRACE(ENTRIES, "Encoder: %s\n", tmp->buf);
+			cherokee_config_entry_set_encoder (entry, tmp,
+							   PLUGIN_INFO(info),
+							   encoder_props);
 		}
 
 	} else if (equal_buf_str (&conf->key, "auth")) {

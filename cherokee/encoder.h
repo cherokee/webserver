@@ -36,14 +36,34 @@
 
 CHEROKEE_BEGIN_DECLS
 
+typedef enum {
+	cherokee_encoder_unset,
+	cherokee_encoder_allow,
+	cherokee_encoder_forbid
+} cherokee_encoder_perms_t;
+
+
 /* Callback function prototipes
  */
-typedef ret_t (* encoder_func_new_t)         (void **encoder);
+typedef ret_t (* encoder_func_new_t)         (void **encoder, void *props);
 typedef ret_t (* encoder_func_free_t)        (void  *encoder);
 typedef ret_t (* encoder_func_add_headers_t) (void  *encoder, cherokee_buffer_t *buf);
 typedef ret_t (* encoder_func_init_t)        (void  *encoder);
 typedef ret_t (* encoder_func_encode_t)      (void  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 typedef ret_t (* encoder_func_flush_t)       (void  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
+typedef ret_t (* encoder_func_configure_t)   (cherokee_config_node_t *, cherokee_server_t *, cherokee_module_props_t **);
+
+
+/* Encoder properties
+ */
+typedef struct {
+	cherokee_module_props_t   base;
+	cherokee_encoder_perms_t  perms;
+	encoder_func_new_t        instance_func;
+} cherokee_encoder_props_t;
+
+#define ENCODER_PROPS(x) ((cherokee_encoder_props_t *)(x))
+
 
 /* Data types
  */
@@ -78,7 +98,7 @@ typedef struct {
                                                                     \
 	PLUGIN_INFO_INIT(name, cherokee_encoder,                    \
 		(void *)cherokee_encoder_ ## name ## _new,          \
-		(void *)NULL)
+		(void *)cherokee_encoder_ ## name ## _configure)
 
 #define PLUGIN_INFO_ENCODER_EASIEST_INIT(name)                      \
 	PLUGIN_EMPTY_INIT_FUNCTION(name)                            \
@@ -87,7 +107,20 @@ typedef struct {
 
 /* Methods
  */
-ret_t cherokee_encoder_init_base   (cherokee_encoder_t *enc, cherokee_plugin_info_t *info);
+ret_t cherokee_encoder_init_base   (cherokee_encoder_t       *enc,
+				    cherokee_plugin_info_t   *info,
+				    cherokee_encoder_props_t *props);
+
+/* Base class methods
+ */
+ret_t cherokee_encoder_configure (cherokee_config_node_t   *config,
+				  cherokee_server_t        *srv,
+				  cherokee_module_props_t **_props);
+
+ret_t cherokee_encoder_props_init_base (cherokee_encoder_props_t *props,
+					module_func_props_free_t  free_func);
+
+ret_t cherokee_encoder_props_free_base (cherokee_encoder_props_t *encoder_props);
 
 /* Encoder virtual methods
  */

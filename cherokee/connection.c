@@ -98,6 +98,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->handler              = NULL;
 	n->encoder              = NULL;
 	n->encoder_new_func     = NULL;
+	n->encoder_props        = NULL;
 	n->logger_ref           = NULL;
 	n->keepalive            = 0;
 	n->range_start          = -1;
@@ -306,6 +307,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		conn->encoder = NULL;
 	}
 	conn->encoder_new_func = NULL;
+	conn->encoder_props    = NULL;
 
 	if (conn->polling_fd != -1) {
 		cherokee_fd_close (conn->polling_fd);
@@ -430,6 +432,7 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	 */
 	if (conn->encoder_new_func) {
 		conn->encoder_new_func = NULL;
+		conn->encoder_props    = NULL;
 	}
 
 	if (conn->encoder != NULL) {
@@ -1256,7 +1259,7 @@ cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 
 	/* Instance and initialize the encoder
 	 */
-	ret = conn->encoder_new_func ((void **)&conn->encoder);
+	ret = conn->encoder_new_func ((void **)&conn->encoder, conn->encoder_props);
 	if (unlikely (ret != ret_ok))
 		goto error;
 
@@ -1496,12 +1499,12 @@ get_encoding (cherokee_connection_t *conn,
 	      char                  *ptr,
 	      cherokee_avl_t        *encoders_accepted)
 {
-	ret_t                         ret;
-	char                          tmp;
-	char                         *i1;
-	char                         *i2;
-	char                         *end;
-	cherokee_encoder_avl_entry_t *encoder_info;
+	ret_t                     ret;
+	char                      tmp;
+	char                     *i1;
+	char                     *i2;
+	char                     *end;
+	cherokee_encoder_props_t *props = NULL;
 
 	/* ptr = Header at the "Accept-Encoding" position
 	 */
@@ -1528,20 +1531,22 @@ get_encoding (cherokee_connection_t *conn,
 		 */
 		tmp = *i2;    /* (2) */
 		*i2 = '\0';
-		ret = cherokee_avl_get_ptr (encoders_accepted, i1, (void **)&encoder_info);
+		ret = cherokee_avl_get_ptr (encoders_accepted, i1, (void **)&props);
 		*i2 = tmp;    /* (2') */
 
 		if (ret == ret_ok) {
-			if (encoder_info->perms == cherokee_encoder_allow) {
+			if (props->perms == cherokee_encoder_allow) {
 				/* Use encoder
 				 */
-				conn->encoder_new_func = encoder_info->instance_func;
+				conn->encoder_new_func = props->instance_func;
+				conn->encoder_props    = props;
 				break;
 
-			} else if (encoder_info->perms == cherokee_encoder_forbid) {
+			} else if (props->perms == cherokee_encoder_forbid) {
 				/* Explicitly forbidden
 				 */
 				conn->encoder_new_func = NULL;
+				conn->encoder_props    = NULL;
 				break;
 			}
 

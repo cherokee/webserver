@@ -30,23 +30,36 @@
 #include "zlib/zlib.h"
 #include "module.h"
 #include "encoder.h"
+#include "plugin_loader.h"
 
 /* Data types
  */
+typedef struct {
+	cherokee_encoder_props_t base;
+	int                      compression_level;
+} cherokee_encoder_deflate_props_t;
+
 typedef struct {
 	cherokee_encoder_t  base;
 	z_stream            stream;
 	void               *workspace;
 } cherokee_encoder_deflate_t;
 
-#define ENC_DEFLATE(x) ((cherokee_encoder_deflate_t *)(x))
 
+#define PROP_DEFLATE(x)     ((cherokee_encoder_deflate_props_t *)(x))
+#define ENC_DEFLATE(x)      ((cherokee_encoder_deflate_t *)(x))
+#define ENC_DEFLATE_PROP(x) (PROP_DEFLATE(MODULE(x)->props))
+
+
+/* Library init function
+ */
+void  PLUGIN_INIT_NAME(deflate)            (cherokee_plugin_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_encoder_deflate_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
+ret_t cherokee_encoder_deflate_new         (cherokee_encoder_deflate_t **encoder,
+					    cherokee_encoder_props_t    *props);
 
-ret_t cherokee_encoder_deflate_new         (cherokee_encoder_deflate_t **encoder);
 ret_t cherokee_encoder_deflate_free        (cherokee_encoder_deflate_t  *encoder);
 
 ret_t cherokee_encoder_deflate_add_headers (cherokee_encoder_deflate_t  *encoder, cherokee_buffer_t *buf);

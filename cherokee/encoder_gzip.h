@@ -30,12 +30,18 @@
 #include "zlib/zlib.h"
 #include "module.h"
 #include "encoder.h"
+#include "plugin_loader.h"
 
 /* Data types
  */
 typedef struct {
-	cherokee_encoder_t  base;
+	cherokee_encoder_props_t base;
+	int                      compression_level;
+} cherokee_encoder_gzip_props_t;
 
+
+typedef struct {
+	cherokee_encoder_t  base;
 	z_stream            stream;
 	void               *workspace;
 	cherokee_boolean_t  add_header;
@@ -43,14 +49,19 @@ typedef struct {
 	uLong               size;
 } cherokee_encoder_gzip_t;
 
-#define ENC_GZIP(x) ((cherokee_encoder_gzip_t *)(x))
 
+#define PROP_GZIP(x)     ((cherokee_encoder_gzip_props_t *)(x))
+#define ENC_GZIP(x)      ((cherokee_encoder_gzip_t *)(x))
+#define ENC_GZIP_PROP(x) (PROP_GZIP(MODULE(x)->props))
+
+
+/* Library init function
+ */
+void  PLUGIN_INIT_NAME(gzip)            (cherokee_plugin_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_encoder_gzip_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
-
-ret_t cherokee_encoder_gzip_new         (cherokee_encoder_gzip_t **encoder);
+ret_t cherokee_encoder_gzip_new         (cherokee_encoder_gzip_t **encoder, cherokee_encoder_props_t *props);
 ret_t cherokee_encoder_gzip_free        (cherokee_encoder_gzip_t  *encoder);
 
 ret_t cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *buf);

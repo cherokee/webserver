@@ -116,7 +116,7 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 	}
 
 	if (entry->encoders) {
-		cherokee_avl_free (entry->encoders, free);
+		cherokee_avl_free (entry->encoders, cherokee_module_props_free);
 		entry->encoders = NULL;
 	}
 
@@ -133,34 +133,31 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 	return ret_ok;
 }
 
-ret_t
-cherokee_config_entry_encoder_add (cherokee_config_entry_t *entry,
-				   cherokee_buffer_t       *name,
-				   cherokee_plugin_info_t  *plugin_info)
-{
-	CHEROKEE_NEW_STRUCT (n, encoder_avl_entry);
 
+ret_t
+cherokee_config_entry_set_encoder (cherokee_config_entry_t  *entry,
+				   cherokee_buffer_t        *encoder_name,
+				   cherokee_plugin_info_t   *plugin_info,
+				   cherokee_encoder_props_t *encoder_props)
+{
+	/* Sanity checks
+	 */
+	return_if_fail (plugin_info != NULL, ret_error);
+
+	if (unlikely (PLUGIN_INFO(plugin_info)->type != cherokee_encoder)) {
+		LOG_ERROR_S (CHEROKEE_ERROR_CONFIG_ENTRY_BAD_TYPE);
+		return ret_error;
+	}
+
+	/* Add the encoder property obj to the tree
+	 */
 	if (entry->encoders == NULL) {
 		cherokee_avl_new (&entry->encoders);
 	}
 
-	n->perms         = cherokee_encoder_allow;
-	n->instance_func = plugin_info->instance;
-
-	return cherokee_avl_add (entry->encoders, name, (void*)n);
+	return cherokee_avl_add (entry->encoders, encoder_name, (void*)encoder_props);
 }
 
-ret_t
-cherokee_config_entry_encoder_forbid (cherokee_config_entry_t *entry,
-				      cherokee_buffer_t       *name)
-{
-	CHEROKEE_NEW_STRUCT (n, encoder_avl_entry);
-
-	n->instance_func = NULL;
-	n->perms         = cherokee_encoder_forbid;
-
-	return cherokee_avl_add (entry->encoders, name, (void*)n);
-}
 
 ret_t
 cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,
@@ -168,7 +165,7 @@ cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,
 {
 	return_if_fail (plugin_info != NULL, ret_error);
 
-	if (PLUGIN_INFO(plugin_info)->type != cherokee_handler) {
+	if (unlikely (PLUGIN_INFO(plugin_info)->type != cherokee_handler)) {
 		LOG_ERROR_S (CHEROKEE_ERROR_CONFIG_ENTRY_BAD_TYPE);
 		return ret_error;
 	}
@@ -181,7 +178,8 @@ cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,
 
 
 ret_t
-cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_entry_t *source)
+cherokee_config_entry_complete (cherokee_config_entry_t *entry,
+				cherokee_config_entry_t *source)
 {
 	/* This method is assigning pointer to the server data. The
 	 * target entry properties must NOT be freed. Take care.

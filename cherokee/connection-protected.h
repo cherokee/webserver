@@ -142,6 +142,7 @@ struct cherokee_connection {
 	/* Encoders
 	 */
 	encoder_func_new_t            encoder_new_func;
+	cherokee_encoder_props_t     *encoder_props;
 	cherokee_encoder_t           *encoder;
 	cherokee_buffer_t             encoder_buffer;
 

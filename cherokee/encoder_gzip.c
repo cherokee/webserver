@@ -67,15 +67,56 @@ static unsigned char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: I
  *
  */
 
+static ret_t
+props_free (cherokee_encoder_gzip_t *props)
+{
+	return cherokee_encoder_props_free_base (ENCODER_PROPS(props));
+}
+
 ret_t
-cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
+cherokee_encoder_gzip_configure (cherokee_config_node_t   *config,
+				 cherokee_server_t        *srv,
+				 cherokee_module_props_t **_props)
+{
+	cherokee_list_t               *i;
+	cherokee_encoder_gzip_props_t *props;
+
+	UNUSED(srv);
+
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, encoder_gzip_props);
+
+		cherokee_encoder_props_init_base (ENCODER_PROPS(n),
+						  MODULE_PROPS_FREE(props_free));
+
+		n->compression_level = Z_DEFAULT_COMPRESSION;
+		*_props = MODULE_PROPS(n);
+	}
+
+	props = PROP_GZIP(*_props);
+
+	cherokee_config_node_foreach (i, config) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		if (equal_buf_str (&subconf->key, "compression_level")) {
+			props->compression_level = atoi (subconf->val.buf);
+		}
+	}
+
+	return cherokee_encoder_configure (config, srv, _props);
+}
+
+
+ret_t
+cherokee_encoder_gzip_new (cherokee_encoder_gzip_t  **encoder,
+			   cherokee_encoder_props_t  *props)
 {
 	cuint_t workspacesize;
 	CHEROKEE_NEW_STRUCT (n, encoder_gzip);
 
 	/* Init
 	 */
-	cherokee_encoder_init_base (ENCODER(n), PLUGIN_INFO_PTR(gzip));
+	cherokee_encoder_init_base (ENCODER(n), PLUGIN_INFO_PTR(gzip), props);
 
 	MODULE(n)->init         = (encoder_func_init_t) cherokee_encoder_gzip_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_encoder_gzip_free;
@@ -164,7 +205,7 @@ cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder)
 	 * windowBits is passed < 0 to suppress zlib header & trailer
 	 */
 	err = zlib_deflateInit2 (z,
-				 Z_DEFAULT_COMPRESSION,
+				 ENC_GZIP_PROP(encoder)->compression_level,
 				 Z_DEFLATED,
 				 -MAX_WBITS,
 				 MAX_MEM_LEVEL,

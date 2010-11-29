@@ -98,7 +98,7 @@ typedef struct {
 	cherokee_http_method_t   valid_methods;
 } cherokee_handler_props_t;
 
-#define HANDLER_PROPS(x)                   ((cherokee_handler_props_t *)(x))
+#define HANDLER_PROPS(x) ((cherokee_handler_props_t *)(x))
 
 
 /* Easy initialization
