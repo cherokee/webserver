@@ -23,6 +23,7 @@
 #
 
 import CTK
+import validations
 
 from util import *
 from consts import *
@@ -32,6 +33,10 @@ URL_APPLY = '/plugin/error_redir/apply'
 REDIRECTION_TYPE = [
     ('0', N_('Internal')),
     ('1', N_('External'))
+]
+
+VALIDATIONS = [
+    ('new_redir', validations.is_path)
 ]
 
 NOTE_ERROR = N_('HTTP Error to match.')
@@ -79,7 +84,7 @@ class Content (CTK.Container):
 
             for i in entries:
                 show  = CTK.ComboCfg ('%s!%s!show'%(key,i), trans_options(REDIRECTION_TYPE))
-                redir = CTK.RawHTML (CTK.cfg.get_val('%s!%s!url'%(key,i)))
+                redir = CTK.TextCfg  ('%s!%s!url'%(key,i), False)
                 rm    = CTK.ImageStock('del')
                 table += [CTK.RawHTML(i), redir, show, rm]
 
@@ -128,4 +133,4 @@ class Plugin_error_redir (CTK.Plugin):
         self += CTK.Indenter (refresh)
 
         # Validation, and Public URLs
-        CTK.publish ('^%s/[\d]+$'%(URL_APPLY), commit, method="POST")
+        CTK.publish ('^%s/[\d]+$'%(URL_APPLY), commit, method="POST", validation=VALIDATIONS)
