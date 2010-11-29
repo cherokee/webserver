@@ -1470,7 +1470,9 @@ cherokee_print_wrapped (cherokee_buffer_t *buffer)
 ret_t
 cherokee_fix_dirpath (cherokee_buffer_t *buf)
 {
-	while (cherokee_buffer_is_ending(buf, '/')) {
+	while ((buf->len > 1) &&
+	       (cherokee_buffer_is_ending (buf, '/')))
+	{
 		cherokee_buffer_drop_ending (buf, 1);
 	}
 
