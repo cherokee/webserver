@@ -236,6 +236,9 @@ typedef enum {                               /* Protocol   RFC  Section */
 				   ((e) != http_no_content)        /* 204 */ && \
 				   ((e) != http_not_modified))     /* 304 */
 
+#define http_port_is_standard(port,is_tls)  (((! is_tls) && (port == 80)) || \
+					     ((  is_tls) && (port == 443)))
+
 ret_t cherokee_http_method_to_string  (cherokee_http_method_t  method,  const char **str, cuint_t *str_len);
 ret_t cherokee_http_string_to_method  (cherokee_buffer_t *string, cherokee_http_method_t *method);
 ret_t cherokee_http_version_to_string (cherokee_http_version_t version, const char **str, cuint_t *str_len);

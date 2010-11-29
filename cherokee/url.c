@@ -200,8 +200,8 @@ cherokee_url_build_string (cherokee_url_t *url, cherokee_buffer_t *buf)
 {
 	cherokee_buffer_add_buffer (buf, &url->host);
 
-	if (((url->protocol == http)  && (url->port != 80)) ||
-	    ((url->protocol == https) && (url->port != 443))) {
+	if (! http_port_is_standard (url->port, (url->protocol == https)))
+	{
 		cherokee_buffer_add_char (buf, ':');
 		cherokee_buffer_add_ulong10 (buf, (culong_t) url->port);
 	}

@@ -2591,7 +2591,8 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->host);
 
-		if (CONN_BIND(conn)->port != 80) {
+		if (! http_port_is_standard (CONN_BIND(conn)->port, conn->socket.is_tls))
+		{
 			cherokee_buffer_add_str (&conn->redirect, ":");
 			cherokee_buffer_add_long10 (&conn->redirect, CONN_BIND(conn)->port);
 		}
