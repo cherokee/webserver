@@ -44,8 +44,8 @@ typedef struct {
 } cherokee_resolv_cache_entry_t;
 
 struct cherokee_resolv_cache {
-	cherokee_avl_t    table;
-	CHEROKEE_RWLOCK_T(lock);
+	cherokee_avl_t     table;
+	CHEROKEE_RWLOCK_T (lock);
 };
 
 static cherokee_resolv_cache_t *__global_resolv = NULL;
@@ -127,6 +127,9 @@ cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 	ret = cherokee_avl_init (&resolv->table);
 	if (unlikely (ret != ret_ok)) return ret;
 
+	ret = cherokee_avl_set_case (&resolv->table, true);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	CHEROKEE_RWLOCK_INIT (&resolv->lock, NULL);
 	return ret_ok;
 }
@@ -145,12 +148,10 @@ cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv)
 ret_t
 cherokee_resolv_cache_get_default (cherokee_resolv_cache_t **resolv)
 {
-	ret_t                    ret;
-	cherokee_resolv_cache_t *n;
+	ret_t ret;
 
 	if (unlikely (__global_resolv == NULL)) {
-		n = (cherokee_resolv_cache_t *) malloc (sizeof(cherokee_resolv_cache_t));
-		if (n == NULL) return ret_nomem;
+		CHEROKEE_NEW_STRUCT (n, resolv_cache);
 
 		ret = cherokee_resolv_cache_init (n);
 		if (ret != ret_ok) return ret;
