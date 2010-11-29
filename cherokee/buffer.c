@@ -2217,7 +2217,7 @@ cherokee_buffer_insert (cherokee_buffer_t *buf,
 			size_t             txt_len,
 			size_t             pos)
 {
-	cherokee_buffer_ensure_size (buf, buf->len + txt_len);
+	cherokee_buffer_ensure_size (buf, buf->len + txt_len + 1);
 
 	/* Make room */
 	memmove (buf->buf + pos + txt_len,
