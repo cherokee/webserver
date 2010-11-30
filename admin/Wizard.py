@@ -37,7 +37,9 @@ URL_CAT_APPLY  = '/wizard/new/apply'
 TYPE_VSERVER = 1
 TYPE_RULE    = 1 << 2
 
-USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt', '/crossdomain.xml']
+USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt', '/crossdomain.xml',
+                      '/sitemap.xml', '/sitemap.xml.gz']
+
 DEFAULT_RECIPE_TEXT= N_('Check the cookbook for more details.')
 
 class Wizard (CTK.Box):
