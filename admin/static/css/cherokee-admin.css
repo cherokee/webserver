@@ -971,8 +971,9 @@ img.icon_chooser_selected {
 .carousel .prev { background: transparent url('/static/images/other/left.png') no-repeat; }
 .carousel .next { background: transparent url('/static/images/other/right.png') no-repeat; }
 
-.paginator-counter { float: right; color: #cde; }
-.paginator-footer { margin-top: 16px; height: 24px; float: left;  }
+.paginator-counter { text-align: right; color: #cde; clear: both; height: 16px; }
+.paginator-footer { margin-top: 16px; padding-top: 16px; height: 24px; text-align: center; clear: both; }
+.paginator-footer a { text-decoration: underline; }
 .paginator-footer-prev { padding-right: 8px; }
 .paginator-footer-next { padding-left: 8px; }
 
@@ -1279,12 +1280,16 @@ img.icon_chooser_selected {
   color: #27c;
   font-size: 22px;
   margin: 8px;
+  height: 50px;
+  display: table-cell;
+  width: 272px;
+  vertical-align: middle;
 }
 
 #body-new-config span {
   display: block;
   height: 40px;
-  margin-bottom: 8px;
+  margin: 8px 0;
 }
 
 #body-new-config .create-box button {
