@@ -156,6 +156,15 @@ def request (commands):
     conn = urllib2.urlopen (url + '/py', post_info)
     return conn.read()
 
+def eval_safe (txt):
+    try:
+        return eval(txt)
+    except:
+        print "Failed to evaluate: ========"
+        print txt
+        print "============================"
+        raise
+
 #
 # Sources
 #
@@ -163,7 +172,7 @@ def request (commands):
 def print_sources():
     # Query
     responses_str = request (['get server.sources'])
-    responses = eval(responses_str)
+    responses = eval_safe(responses_str)
     sources = responses[0]
 
     # Print
@@ -185,7 +194,7 @@ def print_sources():
 def kill_source():
     # Query
     responses_str = request (['kill server.source %s'%(ksource)])
-    responses = eval(responses_str)
+    responses = eval_safe(responses_str)
 
     # Report
     print "Source %s: %s" %(ksource, responses[0]['source'])
@@ -202,7 +211,7 @@ def print_info():
                          'get server.traffic',
                          'get server.thread_num',
                          'get server.connections'])
-    info = eval(info_str)
+    info = eval_safe(info_str)
     ports   = info[0]
     traffic = info[1]
     threads = info[2]
@@ -253,13 +262,13 @@ def print_info():
 
 def print_trace():
     trace_str = request (['get server.trace'])
-    traces = eval(trace_str)
+    traces = eval_safe(trace_str)
     print "Trace: %s" %(traces[0].get('trace') or 'Disabled')
     print
 
 def set_trace():
     trace_str = request (['set server.trace %s'%(trace)])
-    traces = eval(trace_str)
+    traces = eval_safe(trace_str)
     print "Trace set: %s" %(('Failed', 'Succeed')[int(traces[0].get('set'))])
     print
 
@@ -294,7 +303,7 @@ def do_logrotate():
     # Enable Backup-mode
     print "Enabling Back-up mode.."
     backup_str = request (['set server.backup_mode on'])
-    backup = eval(backup_str)
+    backup = eval_safe(backup_str)
     assert backup[0]['backup_mode'], "Couldn't set backup mode"
 
     # Rotate the log
@@ -304,7 +313,7 @@ def do_logrotate():
     # Enable Backup-mode
     print "Disabling Back-up mode.."
     backup_str = request (['set server.backup_mode off'])
-    backup = eval(backup_str)
+    backup = eval_safe(backup_str)
     assert not backup[0]['backup_mode'], "Couldn't unset backup mode"
 
 
