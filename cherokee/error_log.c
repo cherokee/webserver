@@ -118,7 +118,8 @@ render_python_error (cherokee_error_type_t   type,
 		     cherokee_buffer_t      *output,
 		     va_list                 ap)
 {
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	va_list           ap_tmp;
+	cherokee_buffer_t tmp     = CHEROKEE_BUF_INIT;
 
 	/* Dict: open */
 	cherokee_buffer_add_char (output, '{');
@@ -147,8 +148,9 @@ render_python_error (cherokee_error_type_t   type,
 	cherokee_buffer_add_str  (output, "\", ");
 
 	/* Render the title */
+	va_copy (ap_tmp, ap);
 	cherokee_buffer_add_str     (output, "'title': \"");
-	cherokee_buffer_add_va_list (output, error->title, ap);
+	cherokee_buffer_add_va_list (output, error->title, ap_tmp);
 	cherokee_buffer_add_str     (output, "\", ");
 	skip_args (ap, error->title);
 
@@ -164,9 +166,10 @@ render_python_error (cherokee_error_type_t   type,
 
 	/* Description */
 	if (error->description) {
+		va_copy (ap_tmp, ap);
 		cherokee_buffer_add_str     (output, "'description': \"");
 		cherokee_buffer_clean       (&tmp);
-		cherokee_buffer_add_va_list (&tmp, error->description, ap);
+		cherokee_buffer_add_va_list (&tmp, error->description, ap_tmp);
 		cherokee_buffer_add_escape_html (output, &tmp);
 		cherokee_buffer_add_str     (output, "\", ");
 		skip_args (ap, error->description);
@@ -174,8 +177,9 @@ render_python_error (cherokee_error_type_t   type,
 
 	/* Admin URL */
 	if (error->admin_url) {
+		va_copy (ap_tmp, ap);
 		cherokee_buffer_add_str     (output, "'admin_url': \"");
-		cherokee_buffer_add_va_list (output, error->admin_url, ap);
+		cherokee_buffer_add_va_list (output, error->admin_url, ap_tmp);
 		cherokee_buffer_add_str     (output, "\", ");
 
 		/* ARGS: Skip 'admin_url' */
@@ -184,8 +188,9 @@ render_python_error (cherokee_error_type_t   type,
 
 	/* Debug information */
 	if (error->debug) {
+		va_copy (ap_tmp, ap);
 		cherokee_buffer_add_str     (output, "'debug': \"");
-		cherokee_buffer_add_va_list (output, error->debug, ap);
+		cherokee_buffer_add_va_list (output, error->debug, ap_tmp);
 		cherokee_buffer_add_str     (output, "\", ");
 
 		/* ARGS: Skip 'debug' */
