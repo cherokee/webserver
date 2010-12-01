@@ -59,7 +59,8 @@ cherokee_encoder_configure (cherokee_config_node_t   *config,
 
 	/* Skip the entry if it isn't enabled
 	 */
-	deny  = (equal_buf_str (&config->val, "deny"));
+	deny  = (equal_buf_str (&config->val, "0") ||
+		 equal_buf_str (&config->val, "deny"));
 	allow = (equal_buf_str (&config->val, "1") ||
 		 equal_buf_str (&config->val, "allow"));
 
