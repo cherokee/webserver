@@ -106,7 +106,7 @@ LIST = [
              'type':  TYPE_VSERVER | TYPE_RULE},
             {'name':  'uwsgi',
              'title': N_('uWSGI'),
-             'descr': N_('Fast, self-healing, developer-friendly WSGI server.'),
+             'descr': N_('Fast, self-healing, developer-friendly, language-agnostic, application container.'),
              'type':  TYPE_VSERVER | TYPE_RULE}
              ]
     },

@@ -28,20 +28,31 @@
 # 2009/10/xx: uWSGI Version 0.9.3   / Cherokee 0.99.36b
 # 2010/04/15: uWSGI Version 0.9.3   / Cherokee 0.99.41
 # 2010/04/22: uWSGI Version 0.9.4.3 / Cherokee 0.99.45b
+# 2010/12/01: uWSGI Version 0.9.6.5 + 0.9.7-dev / Cherokee SVN: r5847
 
+import os
+import socket
 import re
 import CTK
 import Wizard
 import validations
+from xml.dom import minidom
+import ConfigParser
+
+try:
+    import yaml
+    UWSGI_HAS_YAML=True
+except:
+    UWSGI_HAS_YAML=False
 
 from util import *
 
-NOTE_WELCOME_H1   = N_("Welcome to the uWsgi Wizard")
-NOTE_WELCOME_P1   = N_('<a target="_blank" href="http://projects.unbit.it/uwsgi/">uWSGI</a> is a fast (pure C), self-healing, developer-friendly WSGI server, aimed for professional python webapps deployment and development.')
-NOTE_WELCOME_P2   = N_('Over time it has evolved in a complete stack for networked/clustered python applications, implementing message/object passing and process management. It uses the uwsgi (all lowercase) protocol for all the networking/interprocess communications.')
+NOTE_WELCOME_H1   = N_("Welcome to the uWSGI Wizard")
+NOTE_WELCOME_P1   = N_('<a target="_blank" href="http://projects.unbit.it/uwsgi/">uWSGI</a> is a fast (pure C), self-healing, developer-friendly application container, aimed for professional webapps deployment and development.')
+NOTE_WELCOME_P2   = N_('It includes a complete stack for networked/clustered applications, implementing message/object passing and process management. It uses the uwsgi (all lowercase) protocol for all the networking/interprocess communications.')
 
 NOTE_LOCAL_H1     = N_("uWSGI")
-NOTE_UWSGI_CONFIG = N_("Path to the uWSGI configuration file (XML or Python-only). Its mountpoint will be used.")
+NOTE_UWSGI_CONFIG = N_("Path to the uWSGI configuration file (XML, INI, YAML or .wsgi, .py, .psgi, .pl, .lua, .ws, .ru, .rb). Its mountpoint will be used.")
 NOTE_UWSGI_BINARY = N_("Location of the uWSGI binary")
 ERROR_NO_CONFIG   = N_("It does not look like a uWSGI configuration file.")
 
@@ -52,37 +63,45 @@ NOTE_DROOT        = N_("Path to use as document root for the new virtual server.
 NOTE_WEBDIR       = N_("Public web directory to access the project.")
 NOTE_WEBDIR_H1    = N_("Public Web Directory")
 NOTE_WEBDIR_P1    = N_("The default value is extracted from the configuration file. Change it at your own risk.")
-ERROR_NO_SRC      = N_("Does not look like a Uwsgi source directory.")
-ERROR_NO_DROOT    = N_("The document root directory does not exist.")
 
 PREFIX    = 'tmp!wizard!uwsgi'
 URL_APPLY = r'/wizard/vserver/uwsgi/apply'
 
+UWSGI_CPUS = os.sysconf('SC_NPROCESSORS_ONLN')
+UWSGI_CMDLINE_AUTOMAGIC = "-M -p %d -z %s -L -l %d" % (UWSGI_CPUS*2, CTK.cfg.get_val('server!timeout'), socket.SOMAXCONN)
+UWSGI_DEFAULT_CONFS = ('.xml', '.ini', '.yml',)
+UWSGI_MAGIC_CONFS = ('.wsgi', '.py', '.psgi', '.pl', '.lua', '.ws', '.ru', '.rb',)
+
 SOURCE = """
+source!%(src_num)d!env_inherited = 1
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = uWSGI %(src_num)d
-source!%(src_num)d!host = 127.0.0.1:%(src_port)d
-source!%(src_num)d!interpreter = %(uwsgi_binary)s -s 127.0.0.1:%(src_port)d -t 10 -M -p 1 -C %(uwsgi_extra)s
+source!%(src_num)d!host = %(src_addr)s
+source!%(src_num)d!interpreter = %(uwsgi_binary)s %(uwsgi_extra)s
 """
 
-SOURCE_XML  = """ -x %s"""
-SOURCE_WSGI = """ -w %s"""
-SOURCE_VE   = """ -H %s"""
+SINGLE_DIRECTORY = """
+%(vsrv_pre)s!rule!%(rule_id)d!match = directory
+%(vsrv_pre)s!rule!%(rule_id)d!match!directory = %(webdir)s
+%(vsrv_pre)s!rule!%(rule_id)d!handler = uwsgi
+%(vsrv_pre)s!rule!%(rule_id)d!handler!error_handler = 1
+%(vsrv_pre)s!rule!%(rule_id)d!handler!check_file = 0
+%(vsrv_pre)s!rule!%(rule_id)d!handler!pass_req_headers = 1
+%(vsrv_pre)s!rule!%(rule_id)d!handler!balancer = round_robin
+%(vsrv_pre)s!rule!%(rule_id)d!handler!modifier1 = %(modifier1)d
+%(vsrv_pre)s!rule!%(rule_id)d!handler!modifier2 = 0
+%(vsrv_pre)s!rule!%(rule_id)d!handler!balancer!source!1 = %(src_num)d
+
+"""
+
 
 CONFIG_VSERVER = SOURCE + """
 %(vsrv_pre)s!nick = %(new_host)s
 %(vsrv_pre)s!document_root = %(document_root)s
 
-%(vsrv_pre)s!rule!2!match = directory
-%(vsrv_pre)s!rule!2!match!directory = %(webdir)s
-%(vsrv_pre)s!rule!2!encoder!gzip = 1
-%(vsrv_pre)s!rule!2!handler = uwsgi
-%(vsrv_pre)s!rule!2!handler!error_handler = 1
-%(vsrv_pre)s!rule!2!handler!check_file = 0
-%(vsrv_pre)s!rule!2!handler!pass_req_headers = 1
-%(vsrv_pre)s!rule!2!handler!balancer = round_robin
-%(vsrv_pre)s!rule!2!handler!balancer!source!1 = %(src_num)d
+"""
 
+DEFAULT_DIRECTORY = """
 %(vsrv_pre)s!rule!1!match = default
 %(vsrv_pre)s!rule!1!handler = common
 %(vsrv_pre)s!rule!1!handler!iocache = 0
@@ -91,25 +110,25 @@ CONFIG_VSERVER = SOURCE + """
 CONFIG_DIR = SOURCE + """
 %(rule_pre)s!match = directory
 %(rule_pre)s!match!directory = %(webdir)s
-%(rule_pre)s!encoder!gzip = 1
 %(rule_pre)s!handler = uwsgi
 %(rule_pre)s!handler!error_handler = 1
 %(rule_pre)s!handler!check_file = 0
 %(rule_pre)s!handler!pass_req_headers = 1
 %(rule_pre)s!handler!balancer = round_robin
+%(rule_pre)s!handler!modifier1 = %(modifier1)d
+%(rule_pre)s!handler!modifier2 = 0
 %(rule_pre)s!handler!balancer!source!1 = %(src_num)d
 """
 
 DEFAULT_BINS  = ['uwsgi','uwsgi26','uwsgi25']
 
 DEFAULT_PATHS = ['/usr/bin',
+                 '/usr/sbin',
                  '/usr/local/bin',
+                 '/usr/local/sbin',
                  '/usr/gnu/bin',
+                 '/opt/local/sbin',
                  '/opt/local/bin']
-
-RE_MOUNTPOINT_XML  = """<uwsgi>.*?<app mountpoint=["|'](.*?)["|']>.*</uwsgi>"""
-RE_MOUNTPOINT_WSGI = """applications.*=.*{.*'(.*?)':"""
-
 
 class Commit:
     def Commit_VServer (self):
@@ -117,27 +136,12 @@ class Commit:
         document_root = CTK.cfg.get_val('%s!document_root'%(PREFIX))
         uwsgi_cfg     = CTK.cfg.get_val('%s!uwsgi_cfg'%(PREFIX))
         new_host      = CTK.cfg.get_val('%s!new_host'%(PREFIX))
-        webdir        = find_mountpoint_xml(uwsgi_cfg)
 
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
         CTK.cfg['%s!nick'%(vsrv_pre)] = new_host
         Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
 
-        # Choose between XML config+launcher, or Python only config
-        if webdir:
-            uwsgi_extra = SOURCE_XML %(uwsgi_cfg)
-        else:
-            webdir      = find_mountpoint_wsgi(uwsgi_cfg)
-            par_name    = os.path.dirname (os.path.normpath (uwsgi_cfg)).split(os.path.sep)[-1]
-            cfg_name    = os.path.basename (os.path.normpath (uwsgi_cfg))
-            module      = '%s.%s' %(par_name, os.path.splitext (cfg_name)[0])
-            uwsgi_extra = SOURCE_WSGI %(module)
-
-        # Virtualenv support
-        uwsgi_virtualenv = find_virtualenv(uwsgi_cfg)
-        if uwsgi_virtualenv:
-            uwsgi_extra += SOURCE_VE %(uwsgi_virtualenv)
 
         uwsgi_binary = find_uwsgi_binary()
         if not uwsgi_binary:
@@ -145,14 +149,32 @@ class Commit:
 
         # Locals
         src_num, pre = cfg_source_get_next ()
-        src_port     = cfg_source_find_free_port ()
+
+	uwsgi_extra = uwsgi_get_extra(uwsgi_cfg)
+	modifier1 = uwsgi_get_modifier(uwsgi_cfg)
+	src_addr = uwsgi_get_socket(uwsgi_cfg)
+	if not src_addr:
+            src_addr = "127.0.0.1:%d" % cfg_source_find_free_port ()
+	    uwsgi_extra = "-s %s %s" % (src_addr, uwsgi_extra)
+	else:
+	    if src_addr.startswith(':'):
+		src_addr = "127.0.0.1%s" % src_addr	
+
+        # Build the config
+        cvs = CONFIG_VSERVER
+        webdirs = uwsgi_find_mountpoint(uwsgi_cfg)
+        rule_id = 2
+        for webdir in webdirs:
+            cvs += SINGLE_DIRECTORY %(locals())
+	    rule_id = rule_id + 1
+
+	cvs += DEFAULT_DIRECTORY
+
 
         # Add the new rules
-        config = CONFIG_VSERVER %(locals())
-        CTK.cfg.apply_chunk (config)
+        config = cvs %(locals())
 
-        # Usual Static Files
-        Wizard.AddUsualStaticFiles ("%s!rule!500" %(vsrv_pre))
+        CTK.cfg.apply_chunk (config)
 
         # Clean up
         CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
@@ -167,19 +189,6 @@ class Commit:
 
         # Incoming info
         uwsgi_cfg = CTK.cfg.get_val('%s!uwsgi_cfg' %(PREFIX))
-        webdir    = find_mountpoint_xml(uwsgi_cfg)
-
-        # Choose between XML config+launcher, or Python only config
-        if webdir:
-            uwsgi_extra = SOURCE_XML %(uwsgi_cfg)
-        else:
-            webdir      = find_mountpoint_wsgi (uwsgi_cfg)
-            uwsgi_extra = SOURCE_WSGI %(uwsgi_cfg)
-
-        # Virtualenv support
-        uwsgi_virtualenv = find_virtualenv (uwsgi_cfg)
-        if uwsgi_virtualenv:
-            uwsgi_extra += SOURCE_VE %(uwsgi_virtualenv)
 
         uwsgi_binary = find_uwsgi_binary()
         if not uwsgi_binary:
@@ -187,10 +196,20 @@ class Commit:
 
         # Locals
         rule_pre = CTK.cfg.get_next_entry_prefix ('%s!rule' %(vsrv_pre))
-        src_port = cfg_source_find_free_port ()
         src_num, src_pre = cfg_source_get_next ()
 
+	uwsgi_extra = uwsgi_get_extra(uwsgi_cfg)
+	modifier1 = uwsgi_get_modifier(uwsgi_cfg)
+        src_addr = uwsgi_get_socket(uwsgi_cfg)
+        if not src_addr:
+            src_addr = "127.0.0.1:%d" % cfg_source_find_free_port ()
+            uwsgi_extra = "-s %s %s" % (src_addr, uwsgi_extra)
+        else:
+            if src_addr.startswith(':'):
+                src_addr = "127.0.0.1%s" % src_addr
+
         # Add the new rules
+        webdir = uwsgi_find_mountpoint(uwsgi_cfg)[0]
         config = CONFIG_DIR %(locals())
         CTK.cfg.apply_chunk (config)
 
@@ -216,10 +235,7 @@ class Commit:
 class WebDirectory:
     def __call__ (self):
         uwsgi_cfg = CTK.cfg.get_val('%s!uwsgi_cfg' %(PREFIX))
-        webdir    = find_mountpoint_xml (uwsgi_cfg)
-
-        if not webdir:
-            webdir = find_mountpoint_wsgi (uwsgi_cfg)
+        webdir    = uwsgi_find_mountpoint(uwsgi_cfg)[0]
 
         table = CTK.PropsTable()
         table.Add (_('Web Directory'), CTK.TextCfg ('%s!webdir'%(PREFIX), False, {'value': webdir, 'class': 'noauto'}), _(NOTE_WEBDIR))
@@ -302,37 +318,85 @@ class Welcome:
 
 def is_uwsgi_cfg (filename):
     filename   = validations.is_local_file_exists (filename)
-    mountpoint = find_mountpoint_xml(filename)
-    if not mountpoint:
-        mountpoint = find_mountpoint_wsgi(filename)
-        if not mountpoint:
-            raise ValueError, _(ERROR_NO_CONFIG)
+
+    for k in UWSGI_DEFAULT_CONFS:
+	if filename.endswith(k):
+		return filename
+
+    for k in UWSGI_MAGIC_CONFS:
+	if filename.endswith(k):
+		return filename
     return filename
 
-def find_virtualenv (filename):
-    try:
-        import virtualenv
-    except ImportError:
-        return None
+def uwsgi_get_extra(filename):
+    if filename.endswith('.xml'):
+	return "-x %s" % filename
+    elif filename.endswith('.ini'):
+	return "--ini %s" % filename
+    elif filename.endswith('.yml'):
+	return "--yaml %s" % filename
 
-    dirname = os.path.dirname(os.path.normpath(filename))
-    return os.path.normpath(dirname + os.path.sep + os.path.pardir)
+    return "%s %s" % (UWSGI_CMDLINE_AUTOMAGIC, filename)
+	
 
-def find_mountpoint_xml (filename):
-    regex    = re.compile(RE_MOUNTPOINT_XML, re.DOTALL)
-    fullname = get_real_path (filename)
+def uwsgi_get_modifier(filename):
+    if filename.endswith('.psgi') or filename.endswith('.pl'):
+	return 5
+    if filename.endswith('.lua') or filename.endswith('.ws'):
+	return 6
+    if filename.endswith('.ru') or filename.endswith('.rb'):
+	return 7
+    return 0
 
-    match = regex.search (open(fullname).read())
-    if match:
-        return match.groups()[0]
+def uwsgi_get_socket(filename):
+    s = None
+    if filename.endswith('.xml'):
+	try:
+            udom = minidom.parse(filename)
+            uroot = udom.getElementsByTagName('uwsgi')[0]
+	    s = uroot.getElementsByTagName('socket')[0].childNodes[0].data
+	except:
+	    pass
 
-def find_mountpoint_wsgi (filename):
-    regex    = re.compile(RE_MOUNTPOINT_WSGI, re.DOTALL)
-    fullname = get_real_path (filename)
+    elif filename.endswith('.ini'):
+	try:
+	    c = ConfigParser.ConfigParser()
+	    c.read(filename)
+	    s = c.get('uwsgi', 'socket')
+	except:
+	    pass
 
-    match = regex.search (open(fullname).read())
-    if match:
-        return match.groups()[0]
+    elif filename.endswith('.yml') and UWSGI_HAS_YAML:
+	try:
+	    fd = open(filename, 'r')
+	    y = yaml.load(fd)
+	    s = y['uwsgi']['socket']
+	    fd.close()
+	except:
+	    pass
+    
+    return s
+
+def uwsgi_find_mountpoint(filename):
+    mp = []
+    found_mp = False
+    if filename.endswith('.xml'):
+
+	try:
+            udom = minidom.parse(filename)
+            uroot = udom.getElementsByTagName('uwsgi')[0]
+	    for m in uroot.getElementsByTagName('app'):
+                try:
+                    mp.append(m.attributes['mountpoint'].value)
+                    found_mp = True
+                except:
+                    pass 
+        except:
+            pass
+	    
+    if found_mp:
+        return mp
+    return ['/']
 
 def find_uwsgi_binary():
     return path_find_binary (DEFAULT_BINS, extra_dirs = DEFAULT_PATHS)
