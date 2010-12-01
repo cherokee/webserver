@@ -53,26 +53,31 @@ cherokee_encoder_configure (cherokee_config_node_t   *config,
 {
 	cherokee_boolean_t        allow;
 	cherokee_boolean_t        deny;
+	cherokee_boolean_t        unset;
 	cherokee_encoder_props_t *props = ENCODER_PROPS(*_props);
 
 	UNUSED (srv);
 
 	/* Skip the entry if it isn't enabled
 	 */
-	deny  = (equal_buf_str (&config->val, "0") ||
-		 equal_buf_str (&config->val, "deny"));
+	unset = (equal_buf_str (&config->val, "0"));
+	deny  = (equal_buf_str (&config->val, "deny"));
 	allow = (equal_buf_str (&config->val, "1") ||
 		 equal_buf_str (&config->val, "allow"));
 
 	/* Sanity check
 	 */
-	if ((!allow) && (!deny)) {
+	if ((!allow) && (!deny) && (!unset)) {
+		LOG_ERROR (CHEROKEE_ERROR_ENCODER_NOT_SET_VALUE, config->val.buf);
 		return ret_error;
 	}
 
 	/* Apply permissions
 	 */
-	if (deny) {
+	if (unset) {
+		TRACE (ENTRIES, "Encoder %s: unset\n", config->key.buf);
+
+	} else if (deny) {
 		TRACE (ENTRIES, "Encoder %s: deny\n", config->key.buf);
 		props->perms = cherokee_encoder_forbid;
 

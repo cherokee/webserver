@@ -342,6 +342,11 @@ e('BALANCER_EXHAUSTED',
 
 # cherokee/encoder_*.c
 #
+e('ENCODER_NOT_SET_VALUE',
+  title = "Encoder init error",
+  desc  = "The server did not found a valid initialization value for the encoder",
+  debug = "%s")
+
 e('ENCODER_DEFLATEINIT2',
   title = "deflateInit2(): %s",
   desc  = SYSTEM_ISSUE)
