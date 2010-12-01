@@ -721,6 +721,12 @@ e('SRC_INTER_NO_INTERPRETER',
   desc  = "The server configuration refers to an interpreter that is not installed in this system.",
   admin = "/source/%d")
 
+e('SRC_INTER_ENV_IN_COMMAND',
+  title = "The command to launch the interpreter contains environment variables",
+  desc  = "Please remove the environment variables from the command, and add them as such.",
+  admin = "/source/%d",
+  debug = "Command: %s")
+
 e('SRC_INTER_SPAWN',
   title = "Could not spawn '%s'",
   desc  = SYSTEM_ISSUE)

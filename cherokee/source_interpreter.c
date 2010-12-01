@@ -233,19 +233,35 @@ done:
 }
 
 static ret_t
-check_interpreter (cherokee_source_interpreter_t *src)
+command_has_env_variables (cherokee_buffer_t *command)
+{
+	int                n     = 0;
+	cherokee_boolean_t equal = false;
+
+	while (n < command->len) {
+		if (command->buf[n] == '=') {
+			equal = true;
+		} else if (command->buf[n] == ' ') {
+			return (equal)? ret_error : ret_ok;
+		}
+		n++;
+	}
+
+	return ret_ok;
+}
+
+static ret_t
+check_interpreter (cherokee_source_interpreter_t *src, int prio)
 {
 	ret_t ret;
 
 	if (src->interpreter.buf[0] == '/') {
 		ret = check_interpreter_full (&src->interpreter);
-		if (ret == ret_ok)
-			return ret_ok;
-
-		return ret_error;
+	} else {
+		ret = check_interpreter_path (&src->interpreter);
 	}
 
-	return check_interpreter_path (&src->interpreter);
+	return ret;
 }
 
 ret_t
@@ -336,7 +352,14 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 		return ret_error;
 	}
 
-	ret = check_interpreter (src);
+	ret = command_has_env_variables (&src->interpreter);
+	if (ret != ret_ok) {
+		printf ("->%s<-\n", src->interpreter.buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_SRC_INTER_ENV_IN_COMMAND, prio, src->interpreter.buf);
+		return ret_error;
+	}
+
+	ret = check_interpreter (src, prio);
 	if (ret != ret_ok) {
 		LOG_ERROR (CHEROKEE_ERROR_SRC_INTER_NO_INTERPRETER, src->interpreter.buf, prio);
 		return ret_error;
