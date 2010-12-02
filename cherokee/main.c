@@ -856,7 +856,10 @@ process_launch (const char *path, char *argv[])
 	pid = fork();
 	if (pid == 0) {
 		argv[0] = (char *) path;
-		execvp (path, argv);
+
+		do {
+			execvp (path, argv);
+		} while (errno == EINTR);
 
 		printf ("ERROR: Could not execute %s\n", path);
 		exit (1);
