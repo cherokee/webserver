@@ -31,6 +31,7 @@
 # 2010/12/01: uWSGI Version 0.9.6.5 + 0.9.7-dev / Cherokee SVN: r5847
 
 import os
+import sys
 import socket
 import re
 import CTK
@@ -71,7 +72,8 @@ try:
     UWSGI_CPUS = os.sysconf('SC_NPROCESSORS_ONLN')
 except:
     UWSGI_CPUS = 1
-UWSGI_CMDLINE_AUTOMAGIC = "-M -p %d -z %s -L -l %d" % (UWSGI_CPUS*2, CTK.cfg.get_val('server!timeout'), socket.SOMAXCONN)
+
+UWSGI_CMDLINE_AUTOMAGIC = "-M -p %(CPU_num)d -z %(timeout)s -L -l %(SOMAXCONN)d %(filename)"
 UWSGI_DEFAULT_CONFS = ('.xml', '.ini', '.yml',)
 UWSGI_MAGIC_CONFS = ('.wsgi', '.py', '.psgi', '.pl', '.lua', '.ws', '.ru', '.rb',)
 
@@ -133,6 +135,18 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/opt/local/sbin',
                  '/opt/local/bin']
 
+
+def figure_CPU_num():
+    if 'SC_NPROCESSORS_ONLN'in os.sysconf_names:
+        return os.sysconf('SC_NPROCESSORS_ONLN')
+
+    proc = subprocess.Popen("sysctl -n hw.ncpu", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout_results, stderr_results = proc.communicate()
+    if len(stderr_results) == 0:
+        return int(stdout_results)
+
+    return 1
+
 class Commit:
     def Commit_VServer (self):
         # Incoming info
@@ -161,7 +175,7 @@ class Commit:
 	    uwsgi_extra = "-s %s %s" % (src_addr, uwsgi_extra)
 	else:
 	    if src_addr.startswith(':'):
-		src_addr = "127.0.0.1%s" % src_addr	
+		src_addr = "127.0.0.1%s" % src_addr
 
         # Build the config
         cvs = CONFIG_VSERVER
@@ -339,8 +353,12 @@ def uwsgi_get_extra(filename):
     elif filename.endswith('.yml'):
 	return "--yaml %s" % filename
 
-    return "%s %s" % (UWSGI_CMDLINE_AUTOMAGIC, filename)
-	
+    CPU_num   = figure_CPU_num() * 2
+    timeout   = CTK.cfg.get_val('server!timeout', '15')
+    SOMAXCONN = socket.SOMAXCONN
+
+    return UWSGI_CMDLINE_AUTOMAGIC %(locals())
+
 
 def uwsgi_get_modifier(filename):
     if filename.endswith('.psgi') or filename.endswith('.pl'):
@@ -377,7 +395,7 @@ def uwsgi_get_socket(filename):
 	    fd.close()
 	except:
 	    pass
-    
+
     return s
 
 def uwsgi_find_mountpoint(filename):
@@ -393,10 +411,10 @@ def uwsgi_find_mountpoint(filename):
                     mp.append(m.attributes['mountpoint'].value)
                     found_mp = True
                 except:
-                    pass 
+                    pass
         except:
             pass
-	    
+
     if found_mp:
         return mp
     return ['/']
