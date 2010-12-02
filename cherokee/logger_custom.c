@@ -391,6 +391,74 @@ add_response_size (cherokee_template_t       *template,
 }
 
 static ret_t
+add_http_host  (cherokee_template_t       *template,
+		cherokee_template_token_t *token,
+		cherokee_buffer_t         *output,
+		void                      *param)
+{
+	cherokee_connection_t *conn = CONN(param);
+
+	UNUSED (template);
+	UNUSED (token);
+
+	if (! cherokee_buffer_is_empty (&conn->host)) {
+		cherokee_buffer_add_buffer (output, &conn->host);
+	} else {
+		cherokee_buffer_add_char (output, '-');
+	}
+
+	return ret_ok;
+}
+
+static ret_t
+add_http_referer  (cherokee_template_t       *template,
+		   cherokee_template_token_t *token,
+		   cherokee_buffer_t         *output,
+		   void                      *param)
+{
+	ret_t                  ret;
+	char                  *referer     = NULL;
+	cuint_t                referer_len = 0;
+	cherokee_connection_t *conn        = CONN(param);
+
+	UNUSED (template);
+	UNUSED (token);
+
+	ret = cherokee_header_get_known (&conn->header, header_referer, &referer, &referer_len);
+	if (ret != ret_ok) {
+		cherokee_buffer_add_char (output, '-');
+		return ret_ok;
+	}
+
+	cherokee_buffer_add (output, referer, referer_len);
+	return ret_ok;
+}
+
+static ret_t
+add_http_user_agent  (cherokee_template_t       *template,
+		      cherokee_template_token_t *token,
+		      cherokee_buffer_t         *output,
+		      void                      *param)
+{
+	ret_t                  ret;
+	char                  *user_agent     = NULL;
+	cuint_t                user_agent_len = 0;
+	cherokee_connection_t *conn           = CONN(param);
+
+	UNUSED (template);
+	UNUSED (token);
+
+	ret = cherokee_header_get_known (&conn->header, header_user_agent, &user_agent, &user_agent_len);
+	if (ret != ret_ok) {
+		cherokee_buffer_add_char (output, '-');
+		return ret_ok;
+	}
+
+	cherokee_buffer_add (output, user_agent, user_agent_len);
+	return ret_ok;
+}
+
+static ret_t
 _set_template (cherokee_logger_custom_t *logger,
 	       cherokee_template_t      *template)
 {
@@ -416,6 +484,9 @@ _set_template (cherokee_logger_custom_t *logger,
 		{"vserver_name",       add_vserver_name},
 		{"vserver_name_req",   add_vserver_name_req},
 		{"response_size",      add_response_size},
+		{"http_host",          add_http_host},
+		{"http_referrer",      add_http_referer},
+		{"http_user_agent",    add_http_user_agent},
 		{NULL, NULL}
 	};
 
