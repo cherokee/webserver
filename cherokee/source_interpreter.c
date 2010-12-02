@@ -497,6 +497,10 @@ _spawn_local (cherokee_source_interpreter_t *src,
 			setuid (src->change_user);
 		}
 
+		/* Reset signals
+		 */
+		cherokee_reset_signals();
+
 		/* Redirect/Close stderr and stdout
 		 */
 		if (! src->debug) {

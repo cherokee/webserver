@@ -2117,3 +2117,30 @@ cherokee_wait_pid (int pid, int *retcode)
 	SHOULDNT_HAPPEN;
 	return ret_error;
 }
+
+
+ret_t
+cherokee_reset_signals (void)
+{
+        signal (SIGHUP,  SIG_DFL);
+        signal (SIGINT,  SIG_DFL);
+        signal (SIGPIPE, SIG_DFL);
+        signal (SIGUSR1, SIG_DFL);
+        signal (SIGUSR2, SIG_DFL);
+        signal (SIGSEGV, SIG_DFL);
+        signal (SIGTERM, SIG_DFL);
+        signal (SIGCHLD, SIG_DFL);
+
+#ifdef SIGBUS
+        signal (SIGBUS,  SIG_DFL);
+#endif
+#ifdef SIGTTOU
+        signal (SIGTTOU, SIG_DFL);
+#endif
+#ifdef SIGTTIN
+        signal (SIGTTIN, SIG_DFL);
+#endif
+#ifdef SIGTSTP
+        signal (SIGTSTP, SIG_DFL);
+#endif
+}
