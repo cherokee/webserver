@@ -271,7 +271,8 @@ run-tests.py \
 263-If_Modified_Since-Invalid1.py \
 264-Nocache-redirs.py \
 265-Unset-encoders.py \
-266-Forbid-encoders.py
+266-Forbid-encoders.py \
+267-PortRedirections-1.py
 
 test:
 	python -m compileall .

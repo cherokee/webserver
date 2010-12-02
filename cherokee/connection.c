@@ -145,6 +145,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_buffer_init (&n->pathinfo);
 	cherokee_buffer_init (&n->redirect);
 	cherokee_buffer_init (&n->host);
+	cherokee_buffer_init (&n->host_port);
 	cherokee_buffer_init (&n->self_trace);
 
 	n->error_internal_code = http_unset;
@@ -208,6 +209,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	cherokee_buffer_mrproper (&conn->userdir);
 	cherokee_buffer_mrproper (&conn->redirect);
 	cherokee_buffer_mrproper (&conn->host);
+	cherokee_buffer_mrproper (&conn->host_port);
 	cherokee_buffer_mrproper (&conn->self_trace);
 	cherokee_buffer_mrproper (&conn->chunked_len);
 
@@ -329,6 +331,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_buffer_clean (&conn->userdir);
 	cherokee_buffer_clean (&conn->redirect);
 	cherokee_buffer_clean (&conn->host);
+	cherokee_buffer_clean (&conn->host_port);
 	cherokee_buffer_clean (&conn->query_string);
 	cherokee_buffer_clean (&conn->self_trace);
 	cherokee_buffer_clean (&conn->chunked_len);
@@ -1453,31 +1456,45 @@ get_host (cherokee_connection_t *conn,
 	  char                  *ptr,
 	  int                    size)
 {
-	ret_t    ret;
-	char    *i;
-	char    *end = ptr + size;
-	cuint_t  skip = 0;
+	ret_t  ret;
+	char  *i;
+	char  *colon = NULL;
+	char  *end   = ptr + size;
 
 	/* Sanity check
 	 */
-	if (size <= 0) return ret_error;
+	if (unlikely (size <= 0)) {
+		return ret_error;
+	}
 
-	/* Skip "colon + port"
+	/* Look up for a colon character
 	 */
 	for (i=end-1; i>=ptr; i--) {
 		if (*i == ':') {
-			skip = end - i;
+			colon = i;
 			break;
 		}
 	}
 
-	/* Copy the string
-	 */
-	if (unlikely (size - skip) <= 0)
+	if (unlikely ((colon == ptr) || (end - colon <= 0))) {
 		return ret_error;
+	}
 
-	ret = cherokee_buffer_add (&conn->host, ptr, size - skip);
-	if (unlikely(ret < ret_ok)) return ret;
+	/* Copy the host and port
+	 */
+	if (colon) {
+		ret = cherokee_buffer_add (&conn->host_port, colon+1, end-(colon+1));
+		if (unlikely (ret != ret_ok))
+			return ret;
+
+		ret = cherokee_buffer_add (&conn->host, ptr, colon - ptr);
+		if (unlikely (ret != ret_ok))
+			return ret;
+	} else {
+		ret = cherokee_buffer_add (&conn->host, ptr, size);
+		if (unlikely (ret != ret_ok))
+			return ret;
+	}
 
 	/* Security check: Hostname shouldn't start with a dot
 	 */
@@ -1487,8 +1504,11 @@ get_host (cherokee_connection_t *conn,
 
 	/* RFC-1034: Dot ending host names
 	 */
-	if (cherokee_buffer_end_char (&conn->host) == '.')
+	while ((cherokee_buffer_end_char (&conn->host) == '.') &&
+	       (! cherokee_buffer_is_empty (&conn->host)))
+	{
 		cherokee_buffer_drop_ending (&conn->host, 1);
+	}
 
 	return ret_ok;
 }
@@ -2596,10 +2616,9 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->host);
 
-		if (! http_port_is_standard (CONN_BIND(conn)->port, conn->socket.is_tls))
-		{
-			cherokee_buffer_add_str (&conn->redirect, ":");
-			cherokee_buffer_add_long10 (&conn->redirect, CONN_BIND(conn)->port);
+		if (conn->host_port.len > 0) {
+			cherokee_buffer_add_str    (&conn->redirect, ":");
+			cherokee_buffer_add_buffer (&conn->redirect, &conn->host_port);
 		}
 	}
 
