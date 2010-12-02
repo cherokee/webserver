@@ -491,9 +491,13 @@ do_spawn (void)
 		argv[2] = interpreter;
 
 		if (env_inherit) {
-			execv ("/bin/sh", (char **)argv);
+			do {
+				execv ("/bin/sh", (char **)argv);
+			} while (errno == EINTR);
 		} else {
-			execve ("/bin/sh", (char **)argv, envp);
+			do {
+				execve ("/bin/sh", (char **)argv, envp);
+			} while (errno == EINTR);
 		}
 
 		PRINT_MSG ("(critical) Couldn't spawn: sh -c %s\n", interpreter);

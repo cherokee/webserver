@@ -249,7 +249,9 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 			cherokee_fd_close (fd);
 		}
 
-		execl("/bin/sh", "sh", "-c", writer->command.buf, NULL);
+		do {
+			execl("/bin/sh", "sh", "-c", writer->command.buf, NULL);
+		} while (errno == EINTR);
 
 		SHOULDNT_HAPPEN;
 

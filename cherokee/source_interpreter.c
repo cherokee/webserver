@@ -514,9 +514,13 @@ _spawn_local (cherokee_source_interpreter_t *src,
 
 		argv[2] = (char *)tmp.buf;
 		if (src->env_inherited) {
-			re = execv ("/bin/sh", (char **)argv);
+			do {
+				re = execv ("/bin/sh", (char **)argv);
+			} while (errno == EINTR);
 		} else {
-			re = execve ("/bin/sh", (char **)argv, envp);
+			do {
+				re = execve ("/bin/sh", (char **)argv, envp);
+			} while (errno == EINTR);
 		}
 
 		if (re < 0) {

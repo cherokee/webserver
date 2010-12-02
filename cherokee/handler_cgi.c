@@ -627,7 +627,10 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Lets go.. execute it!
 	 */
-	re = execve (absolute_path, argv, cgi->envp);
+	do {
+		re = execve (absolute_path, argv, cgi->envp);
+	} while ((re == -1) && (errno == EINTR));
+
 	if (re < 0) {
 		int err = errno;
 		char buferr[ERROR_MAX_BUFSIZE];

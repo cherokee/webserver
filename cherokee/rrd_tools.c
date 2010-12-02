@@ -215,7 +215,9 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
                 cherokee_fd_close (fds_to[1]);
 
 		/* Execute it */
-		re = execv(argv[0], argv);
+		do {
+			re = execv(argv[0], argv);
+		} while (errno == EINTR);
 
 		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_RRD_EXECV, argv[0]);
 		exit (EXIT_ERROR);
