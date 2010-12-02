@@ -68,7 +68,7 @@ NOTE_WEBDIR_P1    = N_("The default value is extracted from the configuration fi
 PREFIX    = 'tmp!wizard!uwsgi'
 URL_APPLY = r'/wizard/vserver/uwsgi/apply'
 
-UWSGI_CMDLINE_AUTOMAGIC = "-M -p %(CPU_num)d -z %(timeout)s -L -l %(SOMAXCONN)d %(filename)"
+UWSGI_CMDLINE_AUTOMAGIC = "-M -p %(CPU_num)d -z %(timeout)s -L -l %(SOMAXCONN)d %(filename)s"
 UWSGI_DEFAULT_CONFS = ('.xml', '.ini', '.yml',)
 UWSGI_MAGIC_CONFS = ('.wsgi', '.py', '.psgi', '.pl', '.lua', '.ws', '.ru', '.rb',)
 
