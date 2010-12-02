@@ -67,7 +67,10 @@ NOTE_WEBDIR_P1    = N_("The default value is extracted from the configuration fi
 PREFIX    = 'tmp!wizard!uwsgi'
 URL_APPLY = r'/wizard/vserver/uwsgi/apply'
 
-UWSGI_CPUS = os.sysconf('SC_NPROCESSORS_ONLN')
+try:
+    UWSGI_CPUS = os.sysconf('SC_NPROCESSORS_ONLN')
+except:
+    UWSGI_CPUS = 1
 UWSGI_CMDLINE_AUTOMAGIC = "-M -p %d -z %s -L -l %d" % (UWSGI_CPUS*2, CTK.cfg.get_val('server!timeout'), socket.SOMAXCONN)
 UWSGI_DEFAULT_CONFS = ('.xml', '.ini', '.yml',)
 UWSGI_MAGIC_CONFS = ('.wsgi', '.py', '.psgi', '.pl', '.lua', '.ws', '.ru', '.rb',)
