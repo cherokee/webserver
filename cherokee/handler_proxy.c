@@ -418,6 +418,10 @@ build_request (cherokee_handler_proxy_t *hdl,
 	    (! cherokee_buffer_is_empty (&conn->host)))
 	{
 		cherokee_buffer_add_buffer (buf, &conn->host);
+		if (conn->host_port.len > 0) {
+			cherokee_buffer_add_str    (buf, ":");
+			cherokee_buffer_add_buffer (buf, &conn->host_port);
+		}
 	}
 	else {
 		cherokee_buffer_add_buffer (buf, &hdl->src_ref->host);
