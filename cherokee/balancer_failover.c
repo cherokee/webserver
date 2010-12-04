@@ -63,13 +63,11 @@ cherokee_balancer_failover_configure (cherokee_balancer_t    *balancer,
 
 
 static ret_t
-reactivate_entry (cherokee_balancer_failover_t *balancer,
-		  cherokee_balancer_entry_t    *entry)
+reactivate_entry_guts (cherokee_balancer_failover_t *balancer,
+		       cherokee_balancer_entry_t    *entry)
 {
 	/* balancer->mutex is LOCKED
 	 */
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-
 	UNUSED (balancer);
 
 	/* Disable
@@ -78,6 +76,22 @@ reactivate_entry (cherokee_balancer_failover_t *balancer,
 		return ret_ok;
 
 	entry->disabled = false;
+	return ret_ok;
+}
+
+
+static ret_t
+reactivate_entry (cherokee_balancer_failover_t *balancer,
+		  cherokee_balancer_entry_t    *entry)
+{
+	/* balancer->mutex is LOCKED
+	 */
+	ret_t             ret;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+	/* Reactivate
+	 */
+	ret = reactivate_entry_guts (balancer, entry);
 
 	/* Notify
 	 */
@@ -85,9 +99,8 @@ reactivate_entry (cherokee_balancer_failover_t *balancer,
 	LOG_WARNING (CHEROKEE_ERROR_BALANCER_FAILOVER_REACTIVE, tmp.buf);
 	cherokee_buffer_mrproper (&tmp);
 
-	return ret_ok;
+	return ret;
 }
-
 
 static ret_t
 reactivate_all_entries (cherokee_balancer_failover_t *balancer)
@@ -95,9 +108,10 @@ reactivate_all_entries (cherokee_balancer_failover_t *balancer)
 	cherokee_list_t *i;
 
 	list_for_each (i, &BAL(balancer)->entries) {
-		reactivate_entry (balancer, BAL_ENTRY(i));
+		reactivate_entry_guts (balancer, BAL_ENTRY(i));
 	}
 
+	LOG_WARNING_S (CHEROKEE_ERROR_BALANCER_FAILOVER_ENABLE_ALL);
 	return ret_ok;
 }
 

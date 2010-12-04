@@ -88,6 +88,10 @@ e('BALANCER_FAILOVER_DISABLE',
   title = "Taking source='%s' off-line.",
   desc  = "The server is disabling one of the Information Sources.")
 
+e('BALANCER_FAILOVER_ENABLE_ALL',
+  title = "Taking all sources back on-line.",
+  desc  = "All the Information Sources have been off-lined. The server is re-enabling all of them in order to start over again.")
+
 
 # cherokee/resolv_cache.c
 #
