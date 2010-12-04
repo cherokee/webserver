@@ -63,7 +63,7 @@ e('RRD_MKDIR_WRITE',
   admin = '/general#tabs_general-0')
 
 
-# cherokee/balancer_round_robin.c
+# cherokee/balancer_ip_hash.c
 #
 e('BALANCER_IP_REACTIVE',
   title = "Taking source='%s' back on-line: %d active.",
@@ -76,6 +76,17 @@ e('BALANCER_IP_DISABLE',
 e('BALANCER_IP_EXHAUSTED',
   title = "Sources exhausted: re-enabling one.",
   desc  = "All the information sources are disabled at this moment. Cherokee needs to re-enable at least one.")
+
+
+# cherokee/balancer_failover.c
+#
+e('BALANCER_FAILOVER_REACTIVE',
+  title = "Taking source='%s' back on-line.",
+  desc  = "The server is re-enabling one of the Information Sources.")
+
+e('BALANCER_FAILOVER_DISABLE',
+  title = "Taking source='%s' off-line.",
+  desc  = "The server is disabling one of the Information Sources.")
 
 
 # cherokee/resolv_cache.c

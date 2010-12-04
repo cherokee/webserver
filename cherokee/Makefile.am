@@ -1200,7 +1200,6 @@ dynamic_balancer_round_robin_lib = libplugin_round_robin.la
 endif
 
 
-
 #
 # Balancer IP Hash
 #
@@ -1215,6 +1214,23 @@ if STATIC_BALANCER_IP_HASH
 static_balancer_ip_hash_src = $(balancer_ip_hash)
 else
 dynamic_balancer_ip_hash_lib = libplugin_ip_hash.la
+endif
+
+
+#
+# Balancer Failover
+#
+balancer_failover = \
+balancer_failover.c \
+balancer_failover.h
+
+libplugin_failover_la_LDFLAGS = $(module_ldflags)
+libplugin_failover_la_SOURCES = $(balancer_failover)
+
+if STATIC_BALANCER_FAILOVER
+static_balancer_failover_src = $(balancer_failover)
+else
+dynamic_balancer_failover_lib = libplugin_failover.la
 endif
 
 
@@ -1530,6 +1546,7 @@ $(static_cryptor_libssl_src) \
 \
 $(static_balancer_round_robin_src) \
 $(static_balancer_ip_hash_src) \
+$(static_balancer_failover_src) \
 \
 $(common_cgi) \
 $(common_val_file) \
@@ -1707,7 +1724,8 @@ $(dynamic_validator_authlist_lib) \
 $(dynamic_validator_mysql_lib) \
 $(dynamic_cryptor_libssl_lib) \
 $(dynamic_balancer_round_robin_lib) \
-$(dynamic_balancer_ip_hash_lib)
+$(dynamic_balancer_ip_hash_lib) \
+$(dynamic_balancer_failover_lib)
 
 
 #

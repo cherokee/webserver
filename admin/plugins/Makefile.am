@@ -18,6 +18,7 @@ error_redir.py \
 evhost.py \
 exists.py \
 extensions.py \
+failover.py \
 fcgi.py \
 file.py \
 from.py \
