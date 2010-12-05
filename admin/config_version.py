@@ -52,6 +52,19 @@ def upgrade_to_1_0_7 (cfg):
                cfg.get_val('vserver!%s!rule!%s!match!extensions'%(v,r)) == 'php':
                 cfg['vserver!%s!rule!%s!match!check_local_file'%(v,r)] = '1'
 
+# Converts from 1.0.7 to 1.0.13
+def upgrade_to_1_0_13 (cfg):
+    # Converts !encoder!<x> = '1' to 'allow', and remove '0's
+    for v in cfg.keys('vserver'):
+        for r in cfg.keys('vserver!%s!rule'%(v)):
+            for e in cfg.keys('vserver!%s!rule!%s!encoder'%(v,r)):
+                key = 'vserver!%s!rule!%s!encoder!%s'%(v,r,e)
+                val = cfg.get_val(key)
+                if val == '1':
+                    cfg[key] = 'allow'
+                elif val == '0':
+                    del(cfg[key])
+
 
 def config_version_get_current():
     ver = configured.VERSION.split ('b')[0]
@@ -121,6 +134,10 @@ def config_version_update_cfg (cfg):
     # Update to.. 1.0.7
     if ver_config_i < 1000007:
         upgrade_to_1_0_7 (cfg)
+
+    # Update to.. 1.0.13
+    if ver_config_i < 1000013:
+        upgrade_to_1_0_13 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True
