@@ -193,7 +193,7 @@ cherokee_template_parse (cherokee_template_t *tem,
 			goto out;
 		}
 
-		token2 = strchr (p+2, '}');
+		token2 = strchr (token1, '}');
 		if (token2 == NULL) {
 			cherokee_buffer_add (&tem->text, p, end-p);
 			ret = ret_ok;
