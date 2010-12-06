@@ -58,7 +58,8 @@ match (cherokee_rule_directory_t *rule,
 
 	/* Does not match: same begining, but a longer name
 	 */
-	if ((conn->request.len > rule->directory.len) &&
+	if ((rule->directory.len > 1) &&
+	    (conn->request.len > rule->directory.len) &&
 	    (conn->request.buf[rule->directory.len] != '/'))
 	{
 		TRACE(ENTRIES, "Match directory: rule=%s req=%s: (str) ret_not_found\n",
