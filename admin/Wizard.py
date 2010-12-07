@@ -27,9 +27,9 @@ import os
 import CTK
 import copy
 
-URL_CAT_LIST_VSRV   =  '/wizard/category/vsrv'
+URL_CAT_LIST_VSRV   =   '/wizard/category/vsrv'
 URL_CAT_LIST_VSRV_R = r'^/wizard/category/vsrv/(.*)$'
-URL_CAT_LIST_RULE   =  '/wizard/category/rule'
+URL_CAT_LIST_RULE   =   '/wizard/category/rule'
 URL_CAT_LIST_RULE_R = r'^/wizard/category/rule/(.*)$'
 
 URL_CAT_APPLY  = '/wizard/new/apply'
@@ -74,14 +74,23 @@ def filter_wizard_list (w_list, filter):
     # Remove wizards
     for group in ret_list:
         wizards = group['list']
+
+        to_del = []
         for wizard in wizards:
             if not wizard['type'] & filter:
-                del (wizards[wizards.index(wizard)])
+                to_del.append (wizard)
+
+        for wizard in to_del:
+            del (wizards[wizards.index(wizard)])
 
     # Remove empty groups
+    to_del = []
     for group in ret_list:
         if not group['list']:
-            del (ret_list[ret_list.index(group)])
+            to_del.append (group)
+
+    for group in to_del:
+        del (ret_list[ret_list.index(group)])
 
     return ret_list
 
