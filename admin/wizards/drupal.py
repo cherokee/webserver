@@ -284,18 +284,21 @@ class LocalSource:
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
+
         return cont.Render().toStr()
 
 
 class Welcome:
     def __call__ (self):
-        cont = CTK.Container()
+        cont  = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
         cont += Wizard.Icon ('drupal', {'class': 'wizard-descr'})
-        box = CTK.Box ({'class': 'wizard-welcome'})
+
+        box  = CTK.Box ({'class': 'wizard-welcome'})
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
         box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
         box += Wizard.CookBookBox ('cookbook_drupal')
+
         cont += box
 
         # Send the VServer num if it's a Rule
@@ -318,10 +321,12 @@ class PHP:
 def is_drupal_dir (path):
     path = validations.is_local_dir_exists (path)
     module_inc = os.path.join (path, 'includes/module.inc')
+
     try:
         validations.is_local_file_exists (module_inc)
     except:
         raise ValueError, _(ERROR_NO_SRC)
+
     return path
 
 

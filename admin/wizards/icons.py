@@ -129,8 +129,8 @@ class Welcome:
             tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
             submit = CTK.Submitter (URL_APPLY)
             submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
-            submit += CTK.Hidden('%s!icons'%(PREFIX), ['0','1'][icons])
-            submit += CTK.Hidden('%s!themes'%(PREFIX), ['0','1'][themes])
+            submit += CTK.Hidden('%s!icons'%(PREFIX),  ('0','1')[icons])
+            submit += CTK.Hidden('%s!themes'%(PREFIX), ('0','1')[themes])
             submit += CTK.Hidden('final', '1')
             cont += submit
             cont += CTK.DruidButtonsPanel_Create()
