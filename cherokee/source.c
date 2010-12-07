@@ -178,7 +178,8 @@ cherokee_source_connect_polling (cherokee_source_t     *src,
 static ret_t
 set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 {
-	ret_t ret;
+	ret_t                    ret;
+	cherokee_resolv_cache_t *resolv;
 
 	if (cherokee_buffer_is_empty (host))
 		return ret_error;
@@ -203,6 +204,14 @@ set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 		return ret_error;
 	}
 
+	/* Resolve and cache it
+	 */
+	ret = cherokee_resolv_cache_get_default (&resolv);
+        if (unlikely (ret!=ret_ok)) {
+		return ret_error;
+	}
+
+	cherokee_resolv_cache_get_ipstr (resolv, &src->host, NULL);
 	return ret_ok;
 }
 
