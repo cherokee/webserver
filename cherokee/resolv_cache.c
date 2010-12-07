@@ -37,6 +37,8 @@
 #include "socket.h"
 #include "bogotime.h"
 
+#define ENTRIES "resolve"
+
 
 typedef struct {
 	struct in_addr    addr;
@@ -224,17 +226,24 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
+		TRACE (ENTRIES, "Resolve '%s': missed.", domain->buf);
+
 		/* Bad luck: it wasn't cached
 		 */
 		ret = table_add_new_entry (resolv, domain, &entry);
 		if (ret != ret_ok) {
 			return ret;
 		}
+	} else {
+		TRACE (ENTRIES, "Resolve '%s': hit.", domain->buf);
 	}
 
 	/* Return the ip string
 	 */
-	*ip = entry->ip_str.buf;
+	if (ip != NULL) {
+		*ip = entry->ip_str.buf;
+	}
+
 	return ret_ok;
 }
 
@@ -255,12 +264,16 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
+		TRACE (ENTRIES, "Resolve '%s': missed.", domain->buf);
+
 		/* Bad luck: it wasn't cached
 		 */
 		ret = table_add_new_entry (resolv, domain, &entry);
 		if (ret != ret_ok) {
 			return ret;
 		}
+	} else {
+		TRACE (ENTRIES, "Resolve '%s': hit.", domain->buf);
 	}
 
 	/* Copy the address
