@@ -275,7 +275,8 @@ print_help (void)
 		"  -C,  --config=PATH            Configuration file\n"
 		"  -p,  --port=NUM               TCP port number\n"
 		"  -r,  --documentroot=PATH      Server directory content\n"
-		"  -i,  --print-server-info      Print server technical information\n\n"
+		"  -i,  --print-server-info      Print server technical information\n"
+		"  -v,  --valgrind               Execute the worker process under valgrind\n\n"
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
 

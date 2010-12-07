@@ -68,11 +68,14 @@ union semun {
 #define DEFAULT_PID_FILE  CHEROKEE_VAR_RUN "/cherokee.pid"
 #define DEFAULT_CONFIG    CHEROKEE_CONFDIR "/cherokee.conf"
 
+#define VALGRIND_PREFIX   {"valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", NULL}
+
 pid_t               pid;
 char               *pid_file_path;
 char               *worker_uid;
 cherokee_boolean_t  graceful_restart;
 char               *cherokee_worker;
+cherokee_boolean_t  use_valgrind          = false;
 char               *spawn_shared          = NULL;
 char               *spawn_shared_name     = NULL;
 int                 spawn_shared_sem      = -1;
@@ -208,6 +211,24 @@ figure_config_file (int argc, char **argv)
 	}
 
 	return DEFAULT_CONFIG;
+}
+
+
+static cherokee_boolean_t
+figure_use_valgrind (int argc, char **argv)
+{
+	int i;
+
+	for (i=0; i<argc; i++) {
+		if ((strcmp(argv[i], "-v") == 0) ||
+		    (strcmp(argv[i], "--valgrind") == 0))
+		{
+			argv[i] = "";
+			return true;
+		}
+	}
+
+	return false;
 }
 
 
@@ -849,13 +870,47 @@ may_daemonize (int argc, char *argv[])
 static pid_t
 process_launch (const char *path, char *argv[])
 {
-	pid_t pid;
+	pid_t   pid;
+	char  **new_args = NULL;
+
+	if (use_valgrind) {
+		int         total;
+		int         len_argv;
+		int         len_valg;
+		const char *valgrind_args[] = VALGRIND_PREFIX;
+
+		/* Alloc
+		 */
+		for (len_argv=0; argv[len_argv];          len_argv++);
+		for (len_valg=0; valgrind_args[len_valg]; len_valg++);
+		new_args = malloc ((len_argv + len_valg + 2) * sizeof(char *));
+
+		/* Copy
+		 */
+		total = 0;
+
+		for (len_valg=0; valgrind_args[len_valg]; len_valg++, total++) {
+			new_args[total] = valgrind_args[len_valg];
+		}
+
+		for (len_argv=0; argv[len_argv]; len_argv++, total++) {
+			new_args[total] = argv[len_argv];
+		}
+
+		new_args[total+1] = NULL;
+		argv = new_args;
+	}
 
 	/* Execute the server
 	 */
 	pid = fork();
 	if (pid == 0) {
-		argv[0] = (char *) path;
+		if (use_valgrind) {
+			argv = new_args;
+			path = "valgrind";
+		} else {
+			argv[0] = (char *) path;
+		}
 
 		do {
 			execvp (path, argv);
@@ -863,6 +918,13 @@ process_launch (const char *path, char *argv[])
 
 		printf ("ERROR: Could not execute %s\n", path);
 		exit (1);
+	}
+
+	/* Clean up
+	 */
+	if ((use_valgrind) && (new_args != NULL))
+	{
+		free (new_args);
 	}
 
 	return pid;
@@ -907,6 +969,7 @@ main (int argc, char *argv[])
 	/* Figure out some stuff
 	 */
 	config_file_path = figure_config_file (argc, argv);
+	use_valgrind     = figure_use_valgrind (argc, argv);
 	pid_file_path    = figure_pid_file_path (config_file_path);
 	worker_uid       = figure_worker_uid (config_file_path);
 
