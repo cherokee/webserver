@@ -226,7 +226,7 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
-		TRACE (ENTRIES, "Resolve '%s': missed.", domain->buf);
+		TRACE (ENTRIES, "Resolve '%s': missed.\n", domain->buf);
 
 		/* Bad luck: it wasn't cached
 		 */
@@ -235,7 +235,7 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
 			return ret;
 		}
 	} else {
-		TRACE (ENTRIES, "Resolve '%s': hit.", domain->buf);
+		TRACE (ENTRIES, "Resolve '%s': hit.\n", domain->buf);
 	}
 
 	/* Return the ip string
@@ -264,7 +264,7 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
-		TRACE (ENTRIES, "Resolve '%s': missed.", domain->buf);
+		TRACE (ENTRIES, "Resolve '%s': missed.\n", domain->buf);
 
 		/* Bad luck: it wasn't cached
 		 */
@@ -273,7 +273,7 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 			return ret;
 		}
 	} else {
-		TRACE (ENTRIES, "Resolve '%s': hit.", domain->buf);
+		TRACE (ENTRIES, "Resolve '%s': hit.\n", domain->buf);
 	}
 
 	/* Copy the address
