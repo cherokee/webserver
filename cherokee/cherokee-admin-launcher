@@ -28,6 +28,7 @@ import re
 import os
 import sys
 import time
+import fcntl
 import socket
 import threading
 
@@ -42,6 +43,11 @@ ADMIN_LAUNCH_TIMEOUT = 15
 
 # Paths
 cherokee_admin_path = 'cherokee-admin'
+
+
+def set_non_blocking (fd):
+    fl = fcntl.fcntl (fd, fcntl.F_GETFL)
+    fcntl.fcntl (fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
 
 class Admin_Runner (threading.Thread):
@@ -68,6 +74,9 @@ class Admin_Runner (threading.Thread):
       stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
       stdout,    stderr    = '', ''
 
+      set_non_blocking (stdout_fd)
+      set_non_blocking (stderr_fd)
+
       while True:
          r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
@@ -78,18 +87,20 @@ class Admin_Runner (threading.Thread):
          new_line = False
 
          if stdout_fd in r:
-            c = stdout_f.read(1)
-            if not c: break
-            if c == '\n':
+            data = stdout_f.read(1024)
+            if not data: break
+            if '\n' in data:
                new_line = True
-            stdout += c
+            ## os.write (sys.stdout.fileno(), data)
+            stdout += data
 
          if stderr_fd in r:
-            c = stderr_f.read(1)
-            if not c: break
-            if c == '\n':
+            data = stderr_f.read(1024)
+            if not data: break
+            if '\n' in data:
                new_line = True
-            stderr += c
+            ## os.write (sys.stderr.fileno(), data)
+            stderr += data
 
          # Read the connection info
          finished = bool(self.url)
