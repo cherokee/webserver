@@ -41,7 +41,7 @@ ADMIN_PORT           = 9090
 ADMIN_LAUNCH_TIMEOUT = 15
 
 # Paths
-cherokee_admin_path = os.path.abspath (os.path.realpath (__file__) + '/../cherokee-admin')
+cherokee_admin_path = 'cherokee-admin'
 
 
 class Admin_Runner (threading.Thread):
@@ -143,7 +143,7 @@ def launch_browser (url, user, password):
    # MacOS X
    if bin_in_path ('open'):
       os.system ("open '%(URI)s'" %(locals()))
-   # FreeDesktop
+   # LSB
    elif bin_in_path ('xdg-open'):
       os.system ("xdg-open '%(URI)s'" %(locals()))
    # KDE
@@ -154,12 +154,31 @@ def launch_browser (url, user, password):
       os.system ("gnome-open '%(URI)s'" %(locals()))
 
 
+def find_cherokee_admin():
+   global cherokee_admin_path
+
+   path = os.path.abspath (os.path.realpath (__file__) + '/../cherokee-admin')
+   if os.path.exists (path):
+      cherokee_admin_path = path
+      return
+
+   path = os.path.abspath (os.path.realpath (__file__) + '/../../sbin/cherokee-admin')
+   if os.path.exists (path):
+      cherokee_admin_path = path
+      return
+
+   print "WARNING: Could not find cherokee-admin"
+
+
 def main():
+   # Find cherokee-admin
+   find_cherokee_admin()
+
    # Launch Cherokee-admin
    runner = Admin_Runner()
    runner.start()
 
-   print "Launching cherokee-admin..",
+   print "Launching %(cherokee_admin_path)s.."%(globals()),
    runner.launching_lock.acquire()
    print "OK"
 
