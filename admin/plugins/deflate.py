@@ -27,7 +27,7 @@ import CTK
 URL_APPLY = '/plugin/deflate/apply'
 HELPS     = [('modules_encoders_deflate', _("Deflate encoder"))]
 
-NOTE_LEVEL = "Compression Level from 0 to 9, where 0 is no compression, 1 best speed, and 9 best compression."
+NOTE_LEVEL = N_("Compression Level from 0 to 9, where 0 is no compression, 1 best speed, and 9 best compression.")
 
 class Plugin_deflate (CTK.Plugin):
     def __init__ (self, key, **kwargs):
