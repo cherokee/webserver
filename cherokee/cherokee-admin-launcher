@@ -55,6 +55,9 @@ class Admin_Runner (threading.Thread):
       self.launching_lock = threading.Lock()
       self.launching_lock.acquire()
 
+      self.needs_auth = not ('-u' in sys.argv or
+                             '--unsecure' in sys.argv)
+
    def run (self):
       environ = os.environ.copy()
 
@@ -89,7 +92,11 @@ class Admin_Runner (threading.Thread):
             stderr += c
 
          # Read the connection info
-         if self.user and self.password and self.url:
+         finished = bool(self.url)
+         if self.needs_auth:
+            finished &= bool(self.user) and bool(self.password)
+
+         if finished:
             if self.launching:
                self.launching = False
                self.launching_lock.release()
@@ -137,8 +144,11 @@ def bin_in_path (bin):
 
 
 def launch_browser (url, user, password):
-   host = re.findall (r'http://(.+)/', url)[0]
-   URI = 'http://%(user)s:%(password)s@%(host)s/' %(locals())
+   if user and password:
+      host = re.findall (r'http://(.+)/', url)[0]
+      URI = 'http://%(user)s:%(password)s@%(host)s/' %(locals())
+   else:
+      URI = url
 
    # MacOS X
    if os.access ("/usr/bin/open", os.X_OK):
