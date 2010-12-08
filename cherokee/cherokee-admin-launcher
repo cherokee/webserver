@@ -131,7 +131,7 @@ def try_connect_to_admin():
 def bin_in_path (bin):
    for e in os.getenv('PATH','').split(':'):
       fp = os.path.join (e, bin)
-      if os.path.exists (fp):
+      if os.access (fp, os.X_OK):
          return True
    return False
 
@@ -141,7 +141,7 @@ def launch_browser (url, user, password):
    URI = 'http://%(user)s:%(password)s@%(host)s/' %(locals())
 
    # MacOS X
-   if bin_in_path ('open'):
+   if os.access ("/usr/bin/open", os.X_OK):
       os.system ("open '%(URI)s'" %(locals()))
    # LSB
    elif bin_in_path ('xdg-open'):
