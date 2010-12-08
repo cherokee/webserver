@@ -1,0 +1,200 @@
+#!/usr/bin/env python
+
+# -*- coding: utf-8; mode: python -*-
+#
+# Cherokee-admin
+#
+# Authors:
+#      Alvaro Lopez Ortega <alvaro@alobbs.com>
+#
+# Copyright (C) 2001-2010 Alvaro Lopez Ortega
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of version 2 of the GNU General Public
+# License as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+
+import re
+import os
+import sys
+import time
+import socket
+import threading
+
+from subprocess import *
+from select import select
+
+
+# Constants
+ADMIN_HOST           = "localhost"
+ADMIN_PORT           = 9090
+ADMIN_LAUNCH_TIMEOUT = 15
+
+# Paths
+cherokee_admin_path = os.path.abspath (os.path.realpath (__file__) + '/../cherokee-admin')
+
+
+class Admin_Runner (threading.Thread):
+   def __init__ (self):
+      threading.Thread.__init__ (self)
+      self.url      = ''
+      self.user     = ''
+      self.password = ''
+
+      self.launching      = True
+      self.launching_lock = threading.Lock()
+      self.launching_lock.acquire()
+
+   def run (self):
+      environ = os.environ.copy()
+
+      p = Popen ([cherokee_admin_path] + sys.argv[1:],
+                 stdout=PIPE, stderr=PIPE, env=environ, close_fds=True)
+
+      stdout_f,  stderr_f  = (p.stdout, p.stderr)
+      stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
+      stdout,    stderr    = '', ''
+
+      while True:
+         r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
+
+         if e:
+            return 0
+
+         # Read output
+         new_line = False
+
+         if stdout_fd in r:
+            c = stdout_f.read(1)
+            if not c: break
+            if c == '\n':
+               new_line = True
+            stdout += c
+
+         if stderr_fd in r:
+            c = stderr_f.read(1)
+            if not c: break
+            if c == '\n':
+               new_line = True
+            stderr += c
+
+         # Read the connection info
+         if self.user and self.password and self.url:
+            if self.launching:
+               self.launching = False
+               self.launching_lock.release()
+
+            stdout = stderr = ''
+            continue
+
+         # Parse connection info
+         if new_line:
+            tmp = re.findall (r'\s+URL:\s+(http.+)\n', stdout)
+            if tmp:
+               self.url = tmp[0]
+
+            tmp = re.findall (r'\s+User:\s+(\w+)', stdout)
+            if tmp:
+               self.user = tmp[0]
+
+            tmp = re.findall (r'\s+One-time Password:\s+(\w+)', stdout)
+            if tmp:
+               self.password = tmp[0]
+
+
+def try_connect_to_admin():
+   s = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
+
+   try:
+      s.connect ((ADMIN_HOST, ADMIN_PORT))
+   except socket.error, e:
+      if e[0] == 61: # Connection refused
+         return False
+      raise
+
+   s.send ('GET / HTTP/1.0' + '\r\n\r\n')
+   while True:
+      d = s.recv (1024)
+      if not d:
+         return True
+
+def bin_in_path (bin):
+   for e in os.getenv('PATH','').split(':'):
+      fp = os.path.join (e, bin)
+      if os.path.exists (fp):
+         return True
+   return False
+
+
+def launch_browser (url, user, password):
+   host = re.findall (r'http://(.+)/', url)[0]
+   URI = 'http://%(user)s:%(password)s@%(host)s/' %(locals())
+
+   # MacOS X
+   if bin_in_path ('open'):
+      os.system ("open '%(URI)s'" %(locals()))
+   # FreeDesktop
+   elif bin_in_path ('xdg-open'):
+      os.system ("xdg-open '%(URI)s'" %(locals()))
+   # KDE
+   elif bin_in_path ('kfmclient'):
+      os.system ("kfmclient openURL '%(URI)s'" %(locals()))
+   # Gnome
+   elif bin_in_path ('gnome-open'):
+      os.system ("gnome-open '%(URI)s'" %(locals()))
+
+
+def main():
+   # Launch Cherokee-admin
+   runner = Admin_Runner()
+   runner.start()
+
+   print "Launching cherokee-admin..",
+   runner.launching_lock.acquire()
+   print "OK"
+
+   # Wait for it to be available
+   wait_admin_1 = time.time()
+   wait_timeout = wait_admin_1 + ADMIN_LAUNCH_TIMEOUT
+
+   print "Connecting..",
+   while True:
+      connected = try_connect_to_admin()
+      if connected:
+         print "OK"
+         break
+      if time.time() < wait_timeout:
+         time.sleep(0.3)
+      else:
+         print "Timeout"
+         return
+
+   # Launching browser
+   print "Launching browser..",
+   launch_browser (runner.url, runner.user, runner.password)
+   print "OK"
+
+   # Wait for it to finish
+   runner.join()
+
+
+if __name__ == '__main__':
+   if '--help' in sys.argv:
+      os.system ('%(cherokee_admin_path)s --help' %(globals()))
+      raise SystemExit
+
+   try:
+      main()
+   except KeyboardInterrupt:
+      print
+      print "Exiting.."

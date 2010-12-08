@@ -7,7 +7,10 @@ $(PTHREAD_CFLAGS)
 #
 # Scripts
 #
-bin_SCRIPTS = cherokee-panic cherokee-tweak
+bin_SCRIPTS = \
+cherokee-panic \
+cherokee-tweak \
+cherokee-admin-launcher
 
 #
 # Data
