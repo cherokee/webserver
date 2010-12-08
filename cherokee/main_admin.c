@@ -169,6 +169,8 @@ print_connection_info (void)
 	printf ("Web Interface:\n"
 		"  URL:               http://%s:%d/\n\n",
 		(bind_to) ? bind_to : "localhost", port);
+
+	fflush(stdout);
 }
 
 
