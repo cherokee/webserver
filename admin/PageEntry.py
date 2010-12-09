@@ -315,7 +315,6 @@ class EncodingWidget (CTK.Container):
             submit = CTK.Submitter (apply)
             submit += table
 
-            print key, "CTK.cfg.get_val(key)", CTK.cfg.get_val(key)
             if CTK.cfg.get_val(key) in ['1', 'allow']:
                 module = CTK.instance_plugin (e, key)
 
