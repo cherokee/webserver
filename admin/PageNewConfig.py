@@ -37,6 +37,7 @@ URL_APPLY = '/create_config/apply'
 
 HELPS = [('index', N_("Index"))]
 
+NOTE_LOADING      = N_("Loading new configuration file..")
 WARNING_NOT_FOUND = N_("<b>The configuration is not found</b>.<br />You can create a new configuration file and proceed to customize the web server.")
 
 DEFAULT_PID_LOCATIONS = [
@@ -125,7 +126,7 @@ def apply():
     profile = CTK.post.pop('create')
 
     if creator (profile):
-        return {'ret': 'ok', 'redirect': '/'}
+        return CTK.cfg_reply_ajax_ok()
 
     return {'ret': 'fail'}
 
@@ -142,6 +143,9 @@ class Form (CTK.Container):
         submit  = CTK.Submitter(URL_APPLY)
         submit += CTK.Hidden('create', key)
         submit += CTK.SubmitterButton (_('Create'))
+        submit.bind ('submit_success',
+                     "$('#main').html('<h1>%s</h1>');"%(NOTE_LOADING) + CTK.JS.GotoURL('/'))
+
         box += submit
         box += CTK.RawHTML('<div class="ui-helper-clearfix"></div>')
 
