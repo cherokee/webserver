@@ -75,6 +75,7 @@
 #include "virtual_server.h"
 #include "socket.h"
 #include "header.h"
+#include "header_op.h"
 #include "header-protected.h"
 #include "iocache.h"
 #include "dtm.h"
@@ -1567,6 +1568,10 @@ get_encoding (cherokee_connection_t *conn,
 				 */
 				conn->encoder_new_func = NULL;
 				conn->encoder_props    = NULL;
+				break;
+			} else if (props->perms == cherokee_encoder_unset) {
+				/* Let's it be
+				 */
 				break;
 			}
 
