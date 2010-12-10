@@ -110,13 +110,13 @@ is needed after this step.
 image::media/images/cookbook_ror_wizard.png[Rails Wizard]
 
 It is usually best to proxy one or several of the servers used by
-Rails, be it Thin, Mongrel, Unicorn or whatever it can handle.
-You could also choose the FastCGI alternative if there is a suitable
+Rails, be it Thin, Mongrel, Unicorn or whatever it can handle.  You
+could also choose the FastCGI alternative if there is a suitable
 spawning method in your system. This approach, however, has been known
-to give inconsistent on several releases of Rails. In particular,
-Rails releases 2.3 or higher are known to give errors when used with
-FastCGI. You will have to test it out and choose the method that best
-suits your need.
+to give inconsistent results on several releases of Rails. In
+particular, Rails releases 2.3 or higher are known to give errors when
+used with FastCGI. You will have to test it out and choose the method
+that best suits your need.
 
 === Setting up Cherokee by hand
 
