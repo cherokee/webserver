@@ -709,7 +709,12 @@ build_allow_header (cherokee_buffer_t     *buffer,
 	if (unlikely (conn->handler == NULL))
 		return ret_ok;
 
+	/* Introspect the handler
+	 */
 	supported_methods = PLUGIN_INFO_HANDLER (MODULE (conn->handler)->info)->valid_methods;
+
+	/* Build the response string
+	 */
 	cherokee_buffer_add_str (buffer, "Allow: ");
 
 	for (http_n=0; http_n < cherokee_http_method_LENGTH; http_n++)
@@ -720,17 +725,18 @@ build_allow_header (cherokee_buffer_t     *buffer,
 			method_name     = NULL;
 			method_name_len = 0;
 
+			if (! first) {
+				cherokee_buffer_add_str (buffer, ", ");
+			} else {
+				first = false;
+			}
+
 			ret = cherokee_http_method_to_string (method, &method_name, &method_name_len);
 			if (unlikely ((ret != ret_ok) || (! method_name))) {
 				continue;
 			}
 
 			cherokee_buffer_add (buffer, method_name, method_name_len);
-			if (! first) {
-				cherokee_buffer_add_str (buffer, ", ");
-			} else {
-				first = false;
-			}
 		}
 	}
 
@@ -843,7 +849,9 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Unusual methods
 	 */
 	if (conn->header.method == http_options) {
-		build_allow_header (buffer, conn);
+		if (conn->error_code == http_ok) {
+			build_allow_header (buffer, conn);
+		}
 	}
 }
 
