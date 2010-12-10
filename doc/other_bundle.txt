@@ -4,7 +4,6 @@ Last checked: Cherokee 1.0.5b
 ///////////////////////////////////////////////////////////////////
 
  . link:other_bundle_cherokee.html[cherokee]: Main web server invoker.
- . link:other_bundle_cherokee-admin-launcher.html[cherokee-admin-launcher]: Launcher for the configuration UI.
  . link:other_bundle_cherokee-admin.html[cherokee-admin]: The configuration UI.
  . link:other_bundle_cherokee-config.html[cherokee-config]: Information retriever.
  . link:other_bundle_cherokee-tweak.html[cherokee-tweak]: Cherokee Swiss army knife
