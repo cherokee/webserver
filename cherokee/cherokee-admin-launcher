@@ -136,7 +136,9 @@ def try_connect_to_admin():
    try:
       s.connect ((ADMIN_HOST, ADMIN_PORT))
    except socket.error, e:
-      if e[0] == 61: # Connection refused
+      if e[0] == 61:  # Connection refused (MacOS X)
+         return False
+      if e[0] == 111: # Connection refused (Linux)
          return False
       raise
 
