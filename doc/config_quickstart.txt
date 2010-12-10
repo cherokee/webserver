@@ -88,7 +88,37 @@ authentication mechanism.
 
 To follow this walkthrough you need to be running
 link:other_bundle_cherokee-admin.html[cherokee-admin]. This is an
-administration tool, so you will need system administrator rights.
+administration tool, so you will need system administrator rights. You
+can either launch it manually, letting it generate a one-time-password
+that you will use to securely connect to the user interface, or you
+can follow the recommended way and simply use
+link:other_bundle_cherokee-admin-launcher.html[cherokee-admin-launcher].
+
+
+[[auto-launch]]
+Launching the admin through cherokee-admin-launcher
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Assuming you are using a desktop environment, you can follow the
+launcher approach.
+
+----
+# cherokee-admin-launcher
+Checking TCP port 9090 availability.. OK
+Launching /usr/sbin/cherokee-admin.. OK
+Connecting.. OK
+----
+
+This will automatically open a web browser window pointing at
+http://localhost:9090, so you will be able to begin using
+`cherokee-admin` right away. If there is no web browser registered in
+your system, you will need to leave out the launcher option, and run
+`cherokee-admin` directly. If this is not your case, you can skip the
+details for the manual launch.
+
+[[manual-launch]]
+Manually launching cherokee-admin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ----
 # cherokee-admin
@@ -113,6 +143,10 @@ The User and One-time Password will be required initially. This is to
 prevent other users of the local host from being able to configure the
 server unless they have access to the password. This is also very
 useful to allow temporary access to a remote administrator.
+
+[[cherokee-admin]]
+cherokee-admin
+^^^^^^^^^^^^^^
 
 If your user doesn't have enough privileges you will be notified. Also
 if no configuration file exists you will be prompted to create one

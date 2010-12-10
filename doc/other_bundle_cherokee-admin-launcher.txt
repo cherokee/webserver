@@ -1,0 +1,27 @@
+== link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
+///////////////////////////////////////////////////////////////////
+Last checked: Cherokee 1.0.14b
+///////////////////////////////////////////////////////////////////
+
+Man pages: cherokee-admin-launcher
+----------------------------------
+
+This is a launcher for the administration user interface,
+link:other_bundle_cherokee-admin.html[cherokee-admin]. It will check
+for port availability, launch `cherokee-admin`, and automatically open
+a web browser to access it.  Since it is a wrapper, it accepts exactly
+the same parameters, but provides several extra features that makes
+this the most convenient way of using `cherokee-admin`.
+
+This tools is intended for local use, and is the natural action to
+associate with a launch icon to conviniently deploy `cherokee-admin`
+from within any desktop environment. Since this is the intended use,
+it will automatically provide the one-time login details to the web
+browser, removing the need to copy and paste the user and password. Of
+course this step is not necessary when invoked with the
+`--unsecure` parameter, but this is not recommended except for
+development purposes.
+
+Refer to the link:other_bundle_cherokee-admin.html[cherokee-admin
+documentation ]for more in-depth explanations of all the parameters
+and options.

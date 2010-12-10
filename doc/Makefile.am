@@ -116,6 +116,7 @@ other_graphs.html \
 other_bundle.html \
 other_bundle_cherokee.html \
 other_bundle_cherokee-admin.html \
+other_bundle_cherokee-admin-launcher.html \
 other_bundle_cherokee-config.html \
 other_bundle_cherokee-tweak.html \
 other_bundle_cherokee-worker.html \
