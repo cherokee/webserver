@@ -10,6 +10,9 @@ Remember that the encoding support is based on modules. If the
 configuration file tells the server to load a module, it will get it
 ready to use.  Otherwise there won't be any kind of support in memory.
 
+A *Compression Level* can be optionally set within the range 0 to 9,
+where 0 is no compression, 1 best speed, and 9 is best compression.
+
 For example, let's see how it works when the encoder is configured to
 handle html files.
 

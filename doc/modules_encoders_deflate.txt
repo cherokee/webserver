@@ -8,12 +8,15 @@ link:modules_encoders_gzip.html[gzip] encoder. The `gzip` compression
 is technically superior to `deflate`, thus this one is not set up as a
 default for new virtual servers.
 
+A *Compression Level* can be optionally set within the range 0 to 9,
+where 0 is no compression, 1 best speed, and 9 is best compression.
+
 Just as with `gzip`, the encoding support is based on modules. The
 configuration file must tell the server to load a module or it won't
 be supported.
 
 Also, as with `gzip`, it is possible to specify which files can be
-encoded and which ones cannot.
+encoded and which ones are to be excluded.
 
 The only reason to offer `deflate` encoding is for the rare cases in
 which it is supported by clients that do not support `gzip`. No modern
