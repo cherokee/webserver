@@ -23,6 +23,7 @@
 #
 
 import CTK
+import consts
 
 URL_APPLY = '/plugin/gzip/apply'
 HELPS     = [('modules_encoders_gzip', _("GZip encoder"))]
@@ -34,7 +35,7 @@ class Plugin_gzip (CTK.Plugin):
         CTK.Plugin.__init__ (self, key, **kwargs)
 
         table = CTK.PropsTable()
-        table.Add (_("Compression Level"), CTK.TextCfg('%s!compression_level'%(key), True), _(NOTE_LEVEL))
+        table.Add (_("Compression Level"), CTK.ComboCfg('%s!compression_level'%(key), consts.COMPRESSION_LEVELS), _(NOTE_LEVEL))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table

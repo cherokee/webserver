@@ -254,3 +254,17 @@ CACHING_OPTIONS = [
     ('private',  N_('Private')),
     ('no-cache', N_('No Cache'))
 ]
+
+COMPRESSION_LEVELS = [
+    ('',  N_('Default')),
+    ('0', N_('0 - No compression')),
+    ('1', N_('1')),
+    ('2', N_('2')),
+    ('3', N_('3')),
+    ('4', N_('4')),
+    ('5', N_('5')),
+    ('6', N_('6')),
+    ('7', N_('7')),
+    ('8', N_('8')),
+    ('9', N_('9 - Max compression'))
+]
