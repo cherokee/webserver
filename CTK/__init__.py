@@ -66,7 +66,7 @@ from ProgressBar import ProgressBar
 from Downloader import Downloader, DownloadEntry_Factory
 from Radio import Radio, RadioText
 from XMLRPCProxy import XMLRPCProxy
-from AjaxUpload import AjaxUpload
+from AjaxUpload import AjaxUpload, AjaxUpload_Generic
 from Paginator import Paginator
 from StarRating import StarRating
 from Carousel import Carousel, CarouselThumbnails
