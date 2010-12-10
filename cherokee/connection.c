@@ -692,6 +692,53 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 }
 
 
+static ret_t
+build_allow_header (cherokee_buffer_t     *buffer,
+		    cherokee_connection_t *conn)
+{
+	ret_t                   ret;
+	int                     http_n;
+	const char             *method_name;
+	cuint_t                 method_name_len;
+	cherokee_http_method_t  method;
+	cherokee_http_method_t  supported_methods;
+	cherokee_boolean_t      first              = true;
+
+	/* Sanity check
+	 */
+	if (unlikely (conn->handler == NULL))
+		return ret_ok;
+
+	supported_methods = PLUGIN_INFO_HANDLER (MODULE (conn->handler)->info)->valid_methods;
+	cherokee_buffer_add_str (buffer, "Allow: ");
+
+	for (http_n=0; http_n < cherokee_http_method_LENGTH; http_n++)
+	{
+		method = HTTP_METHOD (1LL << http_n);
+
+		if (supported_methods & method) {
+			method_name     = NULL;
+			method_name_len = 0;
+
+			ret = cherokee_http_method_to_string (method, &method_name, &method_name_len);
+			if (unlikely ((ret != ret_ok) || (! method_name))) {
+				continue;
+			}
+
+			cherokee_buffer_add (buffer, method_name, method_name_len);
+			if (! first) {
+				cherokee_buffer_add_str (buffer, ", ");
+			} else {
+				first = false;
+			}
+		}
+	}
+
+	cherokee_buffer_add_str (buffer, CRLF);
+	return ret_ok;
+}
+
+
 static void
 build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {
@@ -796,7 +843,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Unusual methods
 	 */
 	if (conn->header.method == http_options) {
-		cherokee_buffer_add_str (buffer, "Allow: GET, HEAD, POST, OPTIONS"CRLF);
+		build_allow_header (buffer, conn);
 	}
 }
 
@@ -2147,6 +2194,9 @@ ret_t
 cherokee_connection_check_http_method (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry)
 {
 	if (config_entry->handler_methods & conn->header.method)
+		return ret_ok;
+
+	if (config_entry->handler_methods == http_options)
 		return ret_ok;
 
 	conn->error_code = http_method_not_allowed;

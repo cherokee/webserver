@@ -82,6 +82,10 @@ typedef enum {
 	http_invalid          = 1LL << 32
 } cherokee_http_method_t;
 
+#define cherokee_http_method_LENGTH 33
+#define HTTP_METHOD(x) ((cherokee_http_method_t)(x))
+
+
 typedef enum {
 	http_auth_nothing = 0,
 	http_auth_basic   = 1,
@@ -217,7 +221,8 @@ typedef enum {                               /* Protocol   RFC  Section */
 #define http_type_400(c)  ((c >= 400) && (c <= http_type_400_max))
 #define http_type_500(c)  ((c >= 500) && (c <= http_type_500_max))
 
-#define http_method_with_body(m)  ((m) != http_head)
+#define http_method_with_body(m)  (((m) != http_head) && \
+				   ((m) != http_options))
 
 #define http_method_with_input(m) ((m == http_post)      || \
 				   (m == http_put)       || \
