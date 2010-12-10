@@ -69,6 +69,7 @@ cookbook_https_accelerator.html \
 cookbook_http_to_https.html \
 modules.html \
 modules_balancers.html \
+modules_balancers_failover.html \
 modules_balancers_ip_hash.html \
 modules_balancers_round_robin.html \
 modules_encoders.html \

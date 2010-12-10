@@ -1,0 +1,23 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_balancers.html[Balancers]
+
+Balancer: Failover
+------------------
+
+This balancer type is intended to provided a failover or backup server
+to fulfill requests only during failure of the machine(s) in the
+backend pool.
+
+This balancer is very useful when the tendency is to use single
+backends to accomodate an existing code base using tracking sessions,
+log-ins, etc. In such scenarios, just-in-case balancing might be
+required for situations where the main application server fails.
+
+If multiple entries are defined, the requests will be serverd through
+the first one on the list. When a failure is detected, Cherokee will
+kick requests to the next entry on the list for processing. Upon the
+application server returning, Cherokee will resume sending traffic to
+the original main backend application server for processing.
+
+The only thing needed to configure this balancer is a list of
+link:config_info_sources.html[information sources]. At least one must
+be selected in order for this to work.

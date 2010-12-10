@@ -37,3 +37,4 @@
   . link:modules_balancers.html[Balancers]: Load balancing strategies.
     - link:modules_balancers_round_robin.html[Round robin]: Round Robin strategy.
     - link:modules_balancers_ip_hash.html[IP Hash]: Client IP hash strategy.
+    - link:modules_balancers_failover.html[Failover]: Failover/backup-server strategy.
