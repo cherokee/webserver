@@ -67,6 +67,7 @@ DEFAULT_PATHS = ['/usr/bin',
 
 FPM_ETC_PATHS = ['/etc/php*/fpm/*.conf',
                  '/etc/php*/fpm/*.d/*',
+                 '/etc/php*-fpm.d/*',
                  # Old php-fpm
                  '/etc/php*/fpm/php*fpm.conf',
                  '/usr/local/etc/php*fpm.conf',
