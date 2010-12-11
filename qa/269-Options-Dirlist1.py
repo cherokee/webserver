@@ -8,7 +8,8 @@ class Test (TestBase):
         self.name              = "OPTIONS: Dirlist request"
         self.request           = "OPTIONS /%(DIR)s/ HTTP/1.0\r\n" % (globals())
         self.expected_error    = 200
-        self.expected_content  = ["Allow: ", "GET", "OPTIONS", ", "]
+        self.expected_content  = ["Allow: ", "GET", "OPTIONS", ", ", "Content-Length: 0"]
+        self.forbidden_content = ["Index of"]
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
