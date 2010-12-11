@@ -1126,7 +1126,9 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Figure next state
 			 */
-			if (! http_method_with_input (conn->header.method)) {
+			if (! (http_method_with_input (conn->header.method) ||
+			       http_method_with_optional_input (conn->header.method)))
+			{
 				conn->phase = phase_add_headers;
 				goto add_headers;
 			}

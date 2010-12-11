@@ -221,8 +221,7 @@ typedef enum {                               /* Protocol   RFC  Section */
 #define http_type_400(c)  ((c >= 400) && (c <= http_type_400_max))
 #define http_type_500(c)  ((c >= 500) && (c <= http_type_500_max))
 
-#define http_method_with_body(m)  (((m) != http_head) && \
-				   ((m) != http_options))
+#define http_method_with_body(m)  ((m) != http_head)
 
 #define http_method_with_input(m) ((m == http_post)      || \
 				   (m == http_put)       || \
@@ -230,11 +229,13 @@ typedef enum {                               /* Protocol   RFC  Section */
 				   (m == http_merge)     || \
 				   (m == http_search)    || \
 				   (m == http_report)    || \
-				   (m == http_options)   || \
 				   (m == http_checkout)  || \
 				   (m == http_propfind)  || \
 				   (m == http_proppatch) || \
 				   (m == http_mkactivity))
+
+#define http_method_with_optional_input(m) (m == http_options)
+
 
 /* RFC 2616: Section 4.3 */
 #define http_code_with_body(e)    ((! http_type_100(e))            /* 1xx */ && \

@@ -1956,10 +1956,11 @@ parse_userdir (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_get_request (cherokee_connection_t *conn)
 {
-	ret_t            ret;
-	char            *host;
-	cuint_t          host_len;
-	cherokee_http_t  error_code = http_bad_request;
+	ret_t               ret;
+	char               *host;
+	cuint_t             host_len;
+	cherokee_http_t     error_code = http_bad_request;
+	cherokee_boolean_t  read_post  = false;
 
 	/* Header parsing
 	 */
@@ -1968,12 +1969,22 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		goto error;
 	}
 
-	/* Init the POST structure if needed
+	/* Check is request body is present
 	 */
-	if (http_method_with_input (conn->header.method))
+	if (http_method_with_input (conn->header.method)) {
+		read_post = true;
+	}
+	else if (http_method_with_optional_input (conn->header.method)) {
+		ret = cherokee_header_has_known (&conn->header, header_content_length);
+		if (ret == ret_ok) {
+			read_post = true;
+		}
+	}
+
+	/* Read POST
+	 */
+	if (read_post)
 	{
-		/* Read the POST header
-		 */
 		ret = cherokee_post_read_header (&conn->post, conn);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
