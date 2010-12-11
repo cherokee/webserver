@@ -32,7 +32,10 @@
 
 
 ret_t
-cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_handler_props_t *props, cherokee_plugin_info_handler_t *info)
+cherokee_handler_init_base (cherokee_handler_t             *hdl,
+			    void                           *conn,
+			    cherokee_handler_props_t       *props,
+			    cherokee_plugin_info_handler_t *info)
 {
 	/* Init the base class
 	 */
@@ -106,7 +109,8 @@ cherokee_handler_read_post (cherokee_handler_t *hdl)
 
 
 ret_t
-cherokee_handler_add_headers (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
+cherokee_handler_add_headers (cherokee_handler_t *hdl,
+			      cherokee_buffer_t  *buffer)
 {
 	/* Sanity check
 	 */
@@ -121,7 +125,8 @@ cherokee_handler_add_headers (cherokee_handler_t *hdl, cherokee_buffer_t *buffer
 
 
 ret_t
-cherokee_handler_step (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
+cherokee_handler_step (cherokee_handler_t *hdl,
+		       cherokee_buffer_t  *buffer)
 {
 	/* Sanity check
 	 */
@@ -140,7 +145,8 @@ cherokee_handler_step (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
  */
 
 ret_t
-cherokee_handler_props_init_base (cherokee_handler_props_t *props, module_func_props_free_t free_func)
+cherokee_handler_props_init_base (cherokee_handler_props_t *props,
+				  module_func_props_free_t  free_func)
 {
 	props->valid_methods = http_unknown;
 
@@ -152,4 +158,55 @@ ret_t
 cherokee_handler_props_free_base (cherokee_handler_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
+}
+
+
+/* Utilities
+ */
+ret_t
+cherokee_handler_add_header_options (cherokee_handler_t *hdl,
+				     cherokee_buffer_t  *buffer)
+{
+	ret_t                   ret;
+	int                     http_n;
+	const char             *method_name;
+	cuint_t                 method_name_len;
+	cherokee_http_method_t  method;
+	cherokee_http_method_t  supported_methods;
+	cherokee_boolean_t      first              = true;
+
+	/* Introspect the handler
+	 */
+	supported_methods = PLUGIN_INFO_HANDLER (MODULE (hdl)->info)->valid_methods;
+
+	/* Build the response string
+	 */
+	cherokee_buffer_add_str (buffer, "Allow: ");
+
+	for (http_n=0; http_n < cherokee_http_method_LENGTH; http_n++)
+	{
+		method = HTTP_METHOD (1LL << http_n);
+
+		if (supported_methods & method) {
+			method_name     = NULL;
+			method_name_len = 0;
+
+			if (! first) {
+				cherokee_buffer_add_str (buffer, ", ");
+			} else {
+				first = false;
+			}
+
+			ret = cherokee_http_method_to_string (method, &method_name, &method_name_len);
+			if (unlikely ((ret != ret_ok) || (! method_name))) {
+				continue;
+			}
+
+			cherokee_buffer_add (buffer, method_name, method_name_len);
+		}
+	}
+
+	cherokee_buffer_add_str (buffer, CRLF);
+	return ret_ok;
+
 }

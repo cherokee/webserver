@@ -692,59 +692,6 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 }
 
 
-static ret_t
-build_allow_header (cherokee_buffer_t     *buffer,
-		    cherokee_connection_t *conn)
-{
-	ret_t                   ret;
-	int                     http_n;
-	const char             *method_name;
-	cuint_t                 method_name_len;
-	cherokee_http_method_t  method;
-	cherokee_http_method_t  supported_methods;
-	cherokee_boolean_t      first              = true;
-
-	/* Sanity check
-	 */
-	if (unlikely (conn->handler == NULL))
-		return ret_ok;
-
-	/* Introspect the handler
-	 */
-	supported_methods = PLUGIN_INFO_HANDLER (MODULE (conn->handler)->info)->valid_methods;
-
-	/* Build the response string
-	 */
-	cherokee_buffer_add_str (buffer, "Allow: ");
-
-	for (http_n=0; http_n < cherokee_http_method_LENGTH; http_n++)
-	{
-		method = HTTP_METHOD (1LL << http_n);
-
-		if (supported_methods & method) {
-			method_name     = NULL;
-			method_name_len = 0;
-
-			if (! first) {
-				cherokee_buffer_add_str (buffer, ", ");
-			} else {
-				first = false;
-			}
-
-			ret = cherokee_http_method_to_string (method, &method_name, &method_name_len);
-			if (unlikely ((ret != ret_ok) || (! method_name))) {
-				continue;
-			}
-
-			cherokee_buffer_add (buffer, method_name, method_name_len);
-		}
-	}
-
-	cherokee_buffer_add_str (buffer, CRLF);
-	return ret_ok;
-}
-
-
 static void
 build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {
@@ -844,14 +791,6 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	 */
 	if (conn->header_ops) {
 		cherokee_header_op_render (conn->header_ops, buffer);
-	}
-
-	/* Unusual methods
-	 */
-	if (conn->header.method == http_options) {
-		if (conn->error_code == http_ok) {
-			build_allow_header (buffer, conn);
-		}
 	}
 }
 

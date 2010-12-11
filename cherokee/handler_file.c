@@ -50,7 +50,7 @@
 
 /* Plug-in initialization
  */
-PLUGIN_INFO_HANDLER_EASIEST_INIT (file, http_get | http_head);
+PLUGIN_INFO_HANDLER_EASIEST_INIT (file, http_get | http_head | http_options);
 
 
 /* Methods implementation
@@ -63,7 +63,9 @@ cherokee_handler_file_props_free (cherokee_handler_file_props_t *props)
 
 
 ret_t
-cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
+cherokee_handler_file_configure (cherokee_config_node_t   *conf,
+				 cherokee_server_t        *srv,
+				 cherokee_module_props_t **_props)
 {
 	cherokee_list_t               *i;
 	cherokee_handler_file_props_t *props;
@@ -95,7 +97,9 @@ cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t
 
 
 ret_t
-cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
+cherokee_handler_file_new (cherokee_handler_t     **hdl,
+			   cherokee_connection_t   *cnt,
+			   cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_file);
 
@@ -636,6 +640,12 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	ret_t                  ret;
  	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
 
+	/* OPTIONS request
+	 */
+	if (unlikely (HANDLER_CONN(fhdl)->header.method == http_options)) {
+		return ret_ok;
+	}
+
 	/* Build the local file path
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
@@ -659,6 +669,16 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	off_t                  content_length = 0;
 	cherokee_connection_t *conn           = HANDLER_CONN(fhdl);
 
+	/* OPTIONS request
+	 */
+	if (unlikely (HANDLER_CONN(fhdl)->header.method == http_options)) {
+		cherokee_buffer_add_str (buffer, "Content-Length: 0"CRLF);
+		cherokee_handler_add_header_options (HANDLER(fhdl), buffer);
+		return ret_ok;
+	}
+
+	/* Regular request
+	 */
 	memset (&modified_tm, 0, sizeof(struct tm));
 
 	/* ETag:
@@ -763,6 +783,12 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 	off_t                  total;
 	size_t                 size;
 	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
+
+	/* OPTIONS request
+	 */
+	if (unlikely (HANDLER_CONN(fhdl)->header.method == http_options)) {
+		return ret_eof;
+	}
 
 #ifdef WITH_SENDFILE
 	if (fhdl->using_sendfile) {
