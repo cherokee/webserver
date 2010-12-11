@@ -159,9 +159,6 @@ def HeaderOp_Apply():
     if tipe == 'add' and not value:
         return {'ret':'error', 'errors': {'new_header_op_value': _("Can not be empty")}}
 
-    #("new_header_op_name",                       validations.is_header_name),
-    #("new_header_op_value",                      validations.is_not_empty),
-
     next_pre = CTK.cfg.get_next_entry_prefix ('vserver!%s!rule!%s!header_op'%(vsrv, rule))
 
     # Add the configuration entries

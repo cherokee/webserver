@@ -72,7 +72,6 @@ class Plugin_redir (Handler.PluginHandler):
             if not keys:
                 self += CTK.Indenter (CTK.Notice ('information', CTK.RawHTML(_(NOTE_EMPTY))))
             else:
-                # table = CTK.Table()
                 table = CTK.SortableList (lambda arg: CTK.SortableList__reorder_generic (arg, key), self.id)
                 table += [CTK.RawHTML(x) for x in ('', _('Type'), _('Regular Expression'), _('Substitution'))]
                 table.set_header(1)
