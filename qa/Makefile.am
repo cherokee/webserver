@@ -273,7 +273,8 @@ run-tests.py \
 265-Unset-encoders.py \
 266-Forbid-encoders.py \
 267-PortRedirections-1.py \
-268-Options-PHP1.py
+268-Options-PHP1.py \
+269-Options-Dirlist1.py
 
 test:
 	python -m compileall .
