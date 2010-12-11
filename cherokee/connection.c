@@ -1917,6 +1917,11 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		ret = cherokee_header_has_known (&conn->header, header_content_length);
 		if (ret == ret_ok) {
 			read_post = true;
+		} else {
+			ret = cherokee_header_has_known (&conn->header, header_transfer_encoding);
+			if (ret == ret_ok) {
+				read_post = true;
+			}
 		}
 	}
 
