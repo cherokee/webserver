@@ -52,19 +52,23 @@ class PluginBalancer (CTK.Plugin):
     def __init__ (self, key, **kwargs):
         CTK.Plugin.__init__ (self, key)
 
-    class ContentSources (CTK.Container):
+    class ContentSources (CTK.Box):
         def __init__ (self, refresh, key):
-            CTK.Container.__init__ (self)
+            CTK.Box.__init__ (self)
 
-            general_sources  = CTK.cfg.keys('source')
-            balancer_sources = CTK.cfg.keys('%s!source'%(key))
+            CTK.cfg.normalize ('%s!source'%(key))
+            balancer_sources = CTK.cfg.keys ('%s!source'%(key))
+            balancer_sources.sort(lambda x,y: cmp(int(x), int(y)))
 
             if not balancer_sources:
                 self += CTK.Notice ('warning', CTK.RawHTML (_(NO_SOURCE_WARNING)))
             else:
-                table = CTK.Table({'id': 'balancer-table'})
+                table = CTK.SortableList (lambda arg: CTK.SortableList__reorder_generic (arg, '%s!source'%(key)),
+                                          self.id,
+                                          {'class': 'balancer-sources-sortable'})
+                table += [CTK.RawHTML(x) for x in ('', _('Nick'), _('Host'), '')]
                 table.set_header(1)
-                table += [CTK.RawHTML(x) for x in (_('Nick'), _('Host'), '')]
+
                 for sb in balancer_sources:
                     sg   = CTK.cfg.get_val ('%s!source!%s'%(key, sb))
                     nick = CTK.cfg.get_val ('source!%s!nick'%(sg))
@@ -78,7 +82,10 @@ class PluginBalancer (CTK.Plugin):
                                                           data     = {'%s!source!%s'%(key, sb): ''},
                                                           complete = refresh.JS_to_refresh()))
 
-                    table += [link, CTK.RawHTML(host), remove]
+                    table += [None, link, CTK.RawHTML(host), remove]
+
+                    table[-1].props['id']       = sb
+                    table[-1][1].props['class'] = 'dragHandle'
 
                 submit = CTK.Submitter (URL_APPLY)
                 submit += table

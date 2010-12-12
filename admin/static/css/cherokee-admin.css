@@ -839,7 +839,7 @@ img.icon_chooser_selected {
 }
 
 .market-support-entry {
-  padding: 4px 4px 4px 20px; 
+  padding: 4px 4px 4px 20px;
 }
 
 .market-support-entry.supported {
@@ -1298,3 +1298,5 @@ img.icon_chooser_selected {
   font-size: 16px;
   width: 128px;
 }
+
+.balancer-sources-sortable td, .balancer-sources-sortable th { width: 500px;  height: 24px; }
