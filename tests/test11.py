@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import __builtin__
-__builtin__.__dict__['_']  = lambda x: x
-__builtin__.__dict__['N_'] = lambda x: x
-
 import os
 import CTK
 

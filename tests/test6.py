@@ -1,7 +1,3 @@
-import __builtin__
-__builtin__.__dict__['_']  = lambda x: x
-__builtin__.__dict__['N_'] = lambda x: x
-
 import CTK
 
 name = "whatever"

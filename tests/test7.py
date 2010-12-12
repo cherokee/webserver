@@ -1,7 +1,3 @@
-import __builtin__
-__builtin__.__dict__['_']  = lambda x: x
-__builtin__.__dict__['N_'] = lambda x: x
-
 import CTK
 
 URL = "http://ftp.gnome.org/pub/mozilla.org/addons/14455/tunisia-sat_smilies-2.0-fx.xpi"
