@@ -57,7 +57,7 @@ SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = Trac %(src_num)d
 source!%(src_num)d!host = 127.0.0.1:%(src_port)d
-source!%(src_num)d!interpreter = tracd --single-env --daemonize --protocol=scgi --hostname=%(localhost)s --port=%(src_port)s %(trac_project)s
+source!%(src_num)d!interpreter = tracd --single-env --single-env --protocol=scgi --hostname=%(localhost)s --port=%(src_port)s %(trac_project)s
 """
 
 CONFIG_VSERVER = SOURCE + """
