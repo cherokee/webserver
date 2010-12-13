@@ -29,7 +29,7 @@ import os
 import sys
 import time
 import fcntl
-import socket
+import urllib2
 import threading
 
 from subprocess import *
@@ -48,7 +48,6 @@ cherokee_admin_path = 'cherokee-admin'
 def set_non_blocking (fd):
     fl = fcntl.fcntl (fd, fcntl.F_GETFL)
     fcntl.fcntl (fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
-
 
 class Admin_Runner (threading.Thread):
    def __init__ (self):
@@ -91,7 +90,7 @@ class Admin_Runner (threading.Thread):
             if not data: break
             if '\n' in data:
                new_line = True
-            ## os.write (sys.stdout.fileno(), data)
+            os.write (sys.stdout.fileno(), data)
             stdout += data
 
          if stderr_fd in r:
@@ -99,7 +98,7 @@ class Admin_Runner (threading.Thread):
             if not data: break
             if '\n' in data:
                new_line = True
-            ## os.write (sys.stderr.fileno(), data)
+            os.write (sys.stderr.fileno(), data)
             stderr += data
 
          # Read the connection info
@@ -130,23 +129,22 @@ class Admin_Runner (threading.Thread):
                self.password = tmp[0]
 
 
-def try_connect_to_admin():
-   s = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
+def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
+    URI = "http://%s:%s%s" %(host, port, req)
+    try:
+        resp = urllib2.urlopen (URI)
+    except urllib2.URLError, e:
+        description = str(e)
+        for key in ('61,', '111,', 'connection refused'):
+            if key in description.lower():
+                return False
+        return description
+    except Exception, e:
+        return str(e)
 
-   try:
-      s.connect ((ADMIN_HOST, ADMIN_PORT))
-   except socket.error, e:
-      if e[0] == 61:  # Connection refused (MacOS X)
-         return False
-      if e[0] == 111: # Connection refused (Linux)
-         return False
-      raise
+    content = resp.read()
+    return content
 
-   s.send ('GET / HTTP/1.0' + '\r\n\r\n')
-   while True:
-      d = s.recv (1024)
-      if not d:
-         return True
 
 def bin_in_path (bin):
    for e in os.getenv('PATH','').split(':'):
@@ -203,35 +201,34 @@ def main():
 
    # Ensure port is empty
    print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
-   connected = try_connect_to_admin()
-   if connected:
-      print "Failed: Port already in use."
-      return
-   print "OK"
+   response = http_GET_admin()
+   if not response:
+       print "OK"
+   else:
+       print "\nERROR: The 9090 port is already in use.\n"
+       raise SystemExit
 
    # Launch Cherokee-admin
    runner = Admin_Runner()
    runner.start()
 
-   print "Launching %(cherokee_admin_path)s.."%(globals()),
+   print "Launching %(cherokee_admin_path)s.."%(globals())
    runner.launching_lock.acquire()
-   print "OK"
 
    # Wait for it to be available
-   wait_admin_1 = time.time()
-   wait_timeout = wait_admin_1 + ADMIN_LAUNCH_TIMEOUT
-
    print "Connecting..",
+   wait_timeout = time.time() + ADMIN_LAUNCH_TIMEOUT
+
    while True:
-      connected = try_connect_to_admin()
-      if connected:
-         print "OK"
-         break
-      if time.time() < wait_timeout:
-         time.sleep(0.3)
-      else:
-         print "Timeout"
-         return
+       response = http_GET_admin()
+       if response:
+           print "OK"
+           break
+       if time.time() < wait_timeout:
+           time.sleep(0.3)
+       else:
+           print "Timeout"
+           return
 
    # Launching browser
    print "Launching browser..",
