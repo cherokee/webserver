@@ -55,19 +55,24 @@ class Admin_Runner (threading.Thread):
       self.url      = ''
       self.user     = ''
       self.password = ''
+      self.command  = [cherokee_admin_path] + sys.argv[1:]
 
       self.launching      = True
       self.launching_lock = threading.Lock()
       self.launching_lock.acquire()
 
-      self.needs_auth = not ('-u' in sys.argv or
-                             '--unsecure' in sys.argv)
+      # Detect -u, --unsecure, -<something>u
+      self.needs_auth = not ('--unsecure' in sys.argv)
+
+      for arg in sys.argv:
+          if len(arg) >= 2 and arg[0] == '-' and arg[1] != '-':
+              if 'u' in arg:
+                  self.needs_auth = False
 
    def run (self):
       environ = os.environ.copy()
 
-      p = Popen ([cherokee_admin_path] + sys.argv[1:],
-                 stdout=PIPE, stderr=PIPE, env=environ, close_fds=True)
+      p = Popen (self.command, stdout=PIPE, stderr=PIPE, env=environ, close_fds=True)
 
       stdout_f,  stderr_f  = (p.stdout, p.stderr)
       stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
@@ -212,7 +217,7 @@ def main():
    runner = Admin_Runner()
    runner.start()
 
-   print "Launching %(cherokee_admin_path)s.."%(globals())
+   print "Launching %s.." %(' '.join (runner.command))
    runner.launching_lock.acquire()
 
    # Wait for it to be available
