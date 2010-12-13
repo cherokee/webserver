@@ -41,7 +41,7 @@ from configured import *
 from config_version import *
 
 
-DEFAULT_PATH = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin']
+DEFAULT_PATH = ['/usr/local/sbin', '/usr/local/bin', '/opt/local/sbin', '/opt/local/sbin', '/usr/sbin', '/usr/bin', '/sbin', '/bin']
 LAUNCH_DELAY = 2
 
 
