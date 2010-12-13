@@ -79,9 +79,9 @@ def is_logged():
 
 def Login_Apply():
     # Validation
-    if not['email']:
+    if not CTK.post['email']:
         return {'ret':'error', 'errors': {'email': _("Can not be empty")}}
-    if not['password']:
+    if not CTK.post['password']:
         return {'ret':'error', 'errors': {'password': _("Can not be empty")}}
 
     # Authenticate
