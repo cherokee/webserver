@@ -45,6 +45,7 @@ whatever options do not apply.
 
 image::media/images/admin_info_sources.png[Information Sources]
 
+[[daemonization]]
 [WARNING]
 Do not provide daemonizing options as part of the command to launch a
 given interpreter.

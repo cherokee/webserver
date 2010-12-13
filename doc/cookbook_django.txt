@@ -161,7 +161,7 @@ You can set up as many hosts as desired and Cherokee will balance the
 load among them.
 
 Once everything is done you can check if Django is really
-working. Simply navigate to the path configured by your rule,
+working. Just navigate to the path configured by your rule,
 http://localhost/example for instance, and you should see some notes
 about your recently created project.
 
@@ -170,8 +170,13 @@ image::media/images/cookbook_django.png[Django example]
 *********************************************************************
 Should you wish to deploy your Django application directly instead of
 through `manage.py` this could be easily achieved. Just remember to
-daemonize the script used to launch the interpreter in the relevant
-`information source`.
+add the appropriate command used to launch the interpreter in the
+relevant `information source`, and it will be executed. As noted in
+the warning on the documentation about
+link:config_info_sources.html#daemonization[Information Sources], Cherokee
+is smart enough to daemonize the backend during the spawning process,
+so you must avoid any manual daemonization on your part to prevent the
+processess from interfering.
 
 This is done adding the appropriate parameter to the `runfastcgi`
 method of `django.core.servers.fastcgi` in your script.
@@ -180,7 +185,7 @@ method of `django.core.servers.fastcgi` in your script.
 ----
 from django.core.servers.fastcgi import runfastcgi
 
-runfastcgi(method="threaded", daemonize="true", maxrequests=5,
+runfastcgi(method="threaded", daemonize="false", maxrequests=5,
            protocol="scgi", socket="/tmp/cherokee-django.socket",
            pidfile="/tmp/cherokee-django.pid")
 ----
@@ -189,7 +194,7 @@ runfastcgi(method="threaded", daemonize="true", maxrequests=5,
 ----
 from django.core.servers.fastcgi import runfastcgi
 
-runfastcgi(method="threaded", daemonize="true", maxrequests=5,
+runfastcgi(method="threaded", daemonize="false", maxrequests=5,
            protocol="scgi", host="127.0.0.1", port=3033)
 ----
 *********************************************************************

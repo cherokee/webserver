@@ -72,7 +72,7 @@ You will only need to know that you can spawn Trac as an SCGI process.
 
 .Command to launch Trac
 -------
-/usr/bin/tracd --single-env --daemonize --protocol=scgi /
+/usr/bin/tracd --single-env --protocol=scgi /
 --hostname=localhost --port=4433 /path/to/project
 -------
 
@@ -90,7 +90,7 @@ image::media/images/cookbook_trac_info.png[Information source]
 [cols="20%,80%",options="header"]
 |=========================================================================
 |Host           |Interpreter
-|localhost:4433 |/usr/bin/tracd --single-env --daemonize --protocol=scgi \
+|localhost:4433 |/usr/bin/tracd --single-env --protocol=scgi \
                  --hostname=localhost --port=4433 /path/to/project/
 |=========================================================================
 

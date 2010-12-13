@@ -11,12 +11,13 @@ m4datadir = "$(datadir)/aclocal"
 m4data_DATA = cherokee.m4
 
 # Man pag
-man_MANS =           \
-cherokee.1           \
-cherokee-config.1    \
-cherokee-tweak.1     \
-cherokee-admin.1     \
-cherokee-worker.1
+man_MANS =                \
+cherokee.1                \
+cherokee-config.1         \
+cherokee-tweak.1          \
+cherokee-admin.1          \
+cherokee-worker.1         \
+cherokee-admin-launcher.1
 
 # pkg-config
 pkgconfigdir = $(libdir)/pkgconfig
