@@ -119,7 +119,6 @@ other_bundle_cherokee-admin.html \
 other_bundle_cherokee-config.html \
 other_bundle_cherokee-tweak.html \
 other_bundle_cherokee-worker.html \
-other_bundle_spawn-fcgi.html \
 other_bundle_cget.html \
 dev.html \
 dev_debug.html \
