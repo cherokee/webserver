@@ -50,6 +50,9 @@ This is the full information provided by the manpage.
        -i, --print;;
                Print server technical information.
 
+       -v, --valgrind;;
+               Execute the worker process under Valgrind. Used only for development and troubleshooting purposes.
+
 *SIGNALS*::
        The following signals are supported by Cherokee:
 

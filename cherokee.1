@@ -12,7 +12,7 @@
 .\" along with this program; see the file COPYING.  If not, write to
 .\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH Cherokee 1 "August 04, 2008"
+.TH Cherokee 1 "December 13, 2010"
 .\" Please update the above date whenever this man page is modified.
 .\"
 .\" Some roff macros, for reference:
@@ -62,8 +62,12 @@ Launches a server exposing statically the specified directory. When
 launched with \-r, the configuration file is ignored, and the Cherokee
 instance runs with its default values.
 .TP 8
-.B \-i, --print
+.B \-i, --print-server-info
 Print server technical information.
+.TP 8
+.B \-v, --valgrind
+Execute the worker process under Valgrind. Used only for development
+and troubleshooting purposes.
 .SH SIGNALS
 The following signals are supported by Cherokee:
 .TP 8
@@ -101,3 +105,5 @@ Note that, for most systems, a startup/shutdown script such as
 convenient invocation method.
 .SH AUTHOR
 Alvaro Lopez Ortega <alvaro@alobbs.com>.
+.PP
+This manpage is maintainted by Taher Shihadeh <taher@unixwars.com>.
