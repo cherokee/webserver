@@ -27,6 +27,7 @@ import re
 import CTK
 import Wizard
 import validations
+import popen
 
 from util import *
 
@@ -184,6 +185,44 @@ def get_info (key):
 
     return {'source': source, # cfg path
             'rule':   rule}   # cfg path
+
+
+def figure_modules():
+    """Return list of modules available to PHP"""
+    php_path = path_find_binary (DEFAULT_BINS,
+                                 extra_dirs  = DEFAULT_PATHS,
+                                 custom_test = __test_php_fcgi)
+
+    ret = popen.popen_sync ('%s -m' %(php_path))
+    modules = re.findall('(^[a-zA-Z0-9].*$)', ret['stdout'], re.MULTILINE)
+
+    return modules
+
+
+def figure_php_information():
+    """Parse PHP settings into a dictionary"""
+    php_path = path_find_binary (DEFAULT_BINS,
+                                 extra_dirs  = DEFAULT_PATHS,
+                                 custom_test = __test_php_fcgi)
+
+    ret = popen.popen_sync ('%s -i' %(php_path))
+
+    # Output can either be in HTML format or as a PHP array.
+    if 'Content-type: text/html' in ret['stdout']:
+        regex = """^<tr><td class="e">(.*?)</td><td class="v">(.*?)</td></tr>$"""
+    else:
+        regex = """^(.*?) => (.*?)( => .*)?$"""
+
+    settings = {}
+    tags     = re.compile(r'<.*?>')
+    matches  = re.findall(regex, ret['stdout'], re.MULTILINE)
+
+    for setting in matches:
+        key, val = setting[0].strip(), setting[1].strip()
+        val = tags.sub('', val)
+        settings[key] = val
+
+    return settings
 
 
 #
