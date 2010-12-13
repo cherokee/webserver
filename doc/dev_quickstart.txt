@@ -1,0 +1,54 @@
+== link:index.html[Index] -> link:dev.html[Development info]
+
+Development: Quickstart
+-----------------------
+
+So, you have found things in Cherokee worth improving and feel the
+urge to contribute to the project. But where to start?
+
+The first thing, of course, is setting up a development/testing
+environming for Cherokee.
+
+The relevant documents would be those about
+link:basics_requirements.html[software requirements],
+link:basics_download.html[downloading the SVN repository], and the
+link:basics_installation_unix.html[quickstart installation notes].
+
+In principle, provided you have the required tools in your system, it
+should be as easy as:
+
+----
+    svn co svn://svn.cherokee-project.com/cherokee/trunk ~/cherokee_dev
+    cd ~/cherokee_dev
+    ./autogen.sh --enable-beta --enable-trace
+    make
+----
+
+You should probably read all the link:dev.html[development info]
+section of the documentation, and go through the
+link:http://bugs.cherokee-project.com/[Cherokee Project Bugtracker] to
+make sure you are not wasting your effort working on something already
+solved.
+
+Joining the
+link:http://lists.octality.com/listinfo/cherokee-dev[development list]
+and hanging out at the link:irc://irc.freenode.net/cherokee[#cherokee
+IRC channel] are also good ideas.
+
+Quick Tips
+~~~~~~~~~~
+
+If you are modifiying the core of Cherokee, don't forget to run the
+whole link:dev_qa.html[QA] bench to ensure no regressions are being
+introduced by your changes.
+
+Additionally, if you are modifying cherokee-admin, don't forget to run
+the modified instance instead of the one in the system, which can be
+specified with the -d (--appdir) parameter:
+
+----
+    cherokee-admin -d ~/cherokee_dev/admin
+----
+
+And that's about it. You should be able to get your hands dirty from
+here. Happy hacking!
