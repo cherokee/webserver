@@ -274,7 +274,8 @@ run-tests.py \
 266-Forbid-encoders.py \
 267-PortRedirections-1.py \
 268-Options-PHP1.py \
-269-Options-Dirlist1.py
+269-Options-Dirlist1.py \
+270-Options-asterisk1.py
 
 test:
 	python -m compileall .

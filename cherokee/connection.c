@@ -1945,9 +1945,21 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	if (unlikely (ret < ret_ok))
 		goto error;
 
+
+	/* "OPTIONS *" special case
+	 */
+	if (unlikely ((conn->header.method == http_options) &&
+		      (cherokee_buffer_cmp_str (&conn->request, "*") == 0)))
+	{
+		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+
+		cherokee_buffer_clean   (&conn->request);
+		cherokee_buffer_add_str (&conn->request, "/");
+	}
+
 	/* Look for starting '/' in the request
 	 */
-	if (conn->request.buf[0] != '/') {
+	if (unlikely (conn->request.buf[0] != '/')) {
 		goto error;
 	}
 
