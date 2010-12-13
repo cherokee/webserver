@@ -1471,7 +1471,9 @@ get_host (cherokee_connection_t *conn,
 		}
 	}
 
-	if (unlikely ((colon == ptr) || (end - colon <= 0))) {
+	if (unlikely ((colon != NULL) &&
+		      ((colon == ptr) || (end - colon <= 0))))
+	{
 		return ret_error;
 	}
 
