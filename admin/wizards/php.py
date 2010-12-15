@@ -225,6 +225,21 @@ def figure_php_information():
     return settings
 
 
+def figure_php_user():
+    server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
+    server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
+    php_info     = get_info()
+    interpreter  = CTK.cfg.get_val ('%s!interpreter' %(php_info['source']), '')
+
+    if 'fpm' in interpreter:
+        settings = _figure_fpm_settings()
+    else:
+        settings = {}
+
+    return  {'php_user':  settings.get('user',  server_user),
+             'php_group': settings.get('group', server_group)}
+
+
 #
 # Public URLs
 #
@@ -492,6 +507,25 @@ def __figure_fpm_settings():
         if not fpm_info.get('conf_file'):
             if '.conf' in conf_file:
                 fpm_info['conf_file'] = conf_file
+
+        # User/Group
+        if not fpm_info.get('user'):
+            tmp = re.findall (r'<value name="user">(.*?)</value>', content)
+            if tmp:
+                fpm_info['user'] = tmp[0]
+            else:
+                tmp = re.findall (r'^user = (.*)', content)
+                if tmp:
+                    fpm_info['user'] = tmp[0]
+
+        if not fpm_info.get('group'):
+            tmp = re.findall (r'<value name="group">(.*?)</value>', content)
+            if tmp:
+                fpm_info['group'] = tmp[0]
+            else:
+                tmp = re.findall (r'^group = (.*)', content)
+                if tmp:
+                    fpm_info['group'] = tmp[0]
 
     # Set last minute defaults
     if not fpm_info.get('timeout'):
