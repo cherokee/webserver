@@ -285,11 +285,11 @@ def DruidContent__JS_to_goto (internal_id, url):
 def DruidContent__JS_to_close (internal_id):
     return '$("#%s").each(function() {%s});' %(internal_id, JS_BUTTON_CLOSE)
 
-def DruidContent__JS_if_external_submit (self, code):
+def DruidContent__JS_if_external_submit (code):
     return "if ((typeof (CTK_druid_external_submit) != 'undefined') && " +\
            "    (CTK_druid_external_submit)) {%s}" %(code)
 
-def DruidContent__JS_if_internal_submit (self, code):
+def DruidContent__JS_if_internal_submit (code):
     return "if ((typeof (CTK_druid_external_submit) == 'undefined') || " +\
            "    (! CTK_druid_external_submit)) {%s}" %(code)
 
