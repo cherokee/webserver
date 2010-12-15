@@ -412,8 +412,8 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer,
 		ssize_t nwr = 0;
 		size_t  buflen = writer->buffer.len;
 
-		/* If there is at least 1 page to write
-		 * then round down the length to speed up write(s).
+		/* If there is at least 1 page to write then round
+		 * down the length to speed up write(s).
 		 */
 		if (buflen > LOGGER_BUF_PAGESIZE) {
 			buflen &= ~LOGGER_BUF_PAGESIZE;
@@ -424,9 +424,9 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer,
 		} while (nwr == -1 && errno == EINTR);
 
 		if (nwr <= 0) {
-			/* If an error occured in blocking write,
-			 * then cleanup the log buffer now
-			 * because we don't want to let it grow too much.
+			/* If an error occured in blocking write, then
+			 * cleanup the log buffer now because we don't
+			 * want to let it grow too much.
 			 */
 			cherokee_buffer_clean (&writer->buffer);
 			ret = ret_error;
@@ -442,8 +442,8 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer,
 		break;
 	}
 	case cherokee_logger_writer_syslog:
-		/* Write to syslog the whole log buffer,
-		 * then cleanup it in any case.
+		/* Write to syslog the whole log buffer, then cleanup
+		 * it in any case.
 		 */
 		ret = cherokee_syslog (LOG_INFO, &writer->buffer);
 		cherokee_buffer_clean (&writer->buffer);
