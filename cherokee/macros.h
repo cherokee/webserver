@@ -164,14 +164,20 @@
 		}							\
 	} while(0)
 
-#define SHOULDNT_HAPPEN \
-	do { fprintf (stderr, "file %s:%d (%s): this should not happen\n",  \
-		      __FILE__, __LINE__, __cherokee_func__);               \
+#define SHOULDNT_HAPPEN							\
+	do {								\
+		fprintf (stderr,					\
+			 "file %s:%d (%s): this should not happen\n",	\
+			 __FILE__, __LINE__, __cherokee_func__);	\
+		fflush (stderr);					\
 	} while (0)
 
-#define RET_UNKNOWN(ret) \
-	do { fprintf (stderr, "file %s:%d (%s): ret code unknown ret=%d\n", \
-		      __FILE__, __LINE__, __cherokee_func__, ret);          \
+#define RET_UNKNOWN(ret)						\
+	do {								\
+		fprintf (stderr,					\
+			 "file %s:%d (%s): ret code unknown ret=%d\n",	\
+			 __FILE__, __LINE__, __cherokee_func__, ret);	\
+		fflush (stderr);					\
 	} while (0)
 
 #define UNUSED(x) ((void)(x))
@@ -282,24 +288,24 @@
 /* Printing macros
  */
 #if defined(__GNUC__) || ( defined(__SUNPRO_C) && __SUNPRO_C > 0x590 )
-# define PRINT_MSG(fmt,arg...)    fprintf(stderr, fmt, ##arg)
-# define PRINT_ERROR(fmt,arg...)  fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
+# define PRINT_MSG(fmt,arg...)    do { fprintf(stderr, fmt, ##arg); fflush(stderr); } while(0)
+# define PRINT_ERROR(fmt,arg...)  do { fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg); fflush(stderr); } while(0)
 #else
-# define PRINT_MSG(fmt,...)       fprintf(stderr, fmt, __VA_ARGS__)
-# define PRINT_ERROR(fmt,...)     fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
+# define PRINT_MSG(fmt,...)       do { fprintf(stderr, fmt, __VA_ARGS__); fflush(stderr); } while(0)
+# define PRINT_ERROR(fmt,...)     do { fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__); fflush(stderr); } while(0)
 #endif
 
 #ifdef DEBUG
 # ifdef __GNUC__
 #  define PRINT_DEBUG(fmt,arg...) do { fprintf(stdout, "%s:%d - " fmt,__FILE__,__LINE__,##arg); fflush(stdout); } while (0)
 # else
-#  define PRINT_DEBUG(fmt,...) do { fprintf(stdout, "%s:%d - " fmt,__FILE__,__LINE__,__VA_ARGS__); fflush(stdout); } while (0)
+#  define PRINT_DEBUG(fmt,...)    do { fprintf(stdout, "%s:%d - " fmt,__FILE__,__LINE__,__VA_ARGS__); fflush(stdout); } while (0)
 # endif
 #else
 # ifdef __GNUC__
 #  define PRINT_DEBUG(fmt,arg...) do { } while(0)
 # else
-#  define PRINT_DEBUG(fmt,...) do { } while(0)
+#  define PRINT_DEBUG(fmt,...)    do { } while(0)
 # endif
 #endif
 
