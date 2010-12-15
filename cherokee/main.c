@@ -473,13 +473,20 @@ do_spawn (void)
 			if (fd < 0) {
 				PRINT_ERROR ("(warning) Couldn't open '%s' for writing..\n", log_file);
 			}
+			close (STDOUT_FILENO);
+			close (STDERR_FILENO);
 			dup2 (fd, STDOUT_FILENO);
 			dup2 (fd, STDERR_FILENO);
 		} else if (log_stderr) {
 			/* do nothing */
 		} else {
+			int tmp_fd;
+			tmp_fd = open ("/dev/null", O_WRONLY);
+
 			close (STDOUT_FILENO);
 			close (STDERR_FILENO);
+			dup2 (tmp_fd, STDOUT_FILENO);
+			dup2 (tmp_fd, STDERR_FILENO);
 		}
 
 		/* Change user & group */

@@ -459,6 +459,7 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	      cherokee_logger_writer_t      *error_writer)
 {
 	int                re;
+	int                tmp_fd;
 	char             **envp;
 	const char        *argv[]       = {"sh", "-c", NULL, NULL};
 	int                child        = -1;
@@ -504,6 +505,9 @@ _spawn_local (cherokee_source_interpreter_t *src,
 		/* Redirect/Close stderr and stdout
 		 */
 		if (! src->debug) {
+			cherokee_fd_close (STDOUT_FILENO);
+			cherokee_fd_close (STDERR_FILENO);
+
 			if ((error_writer != NULL) &&
 			    (error_writer->fd != -1))
 			{
@@ -511,8 +515,11 @@ _spawn_local (cherokee_source_interpreter_t *src,
 				dup2 (error_writer->fd, STDERR_FILENO);
 			}
 			else {
-				cherokee_fd_close (STDOUT_FILENO);
-				cherokee_fd_close (STDERR_FILENO);
+				tmp_fd = open ("/dev/null", O_WRONLY);
+				if (tmp_fd != -1) {
+					dup2 (tmp_fd, STDOUT_FILENO);
+					dup2 (tmp_fd, STDERR_FILENO);
+				}
 			}
 		}
 
