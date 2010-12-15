@@ -391,12 +391,14 @@ def ListApps_Apply():
 class DatabaseRemoval:
     def __call__ (self):
         # Check the application
+        db_type  = None
         db_found = False
 
         for app in CTK.cfg.keys ('admin!market!maintenance!remove'):
-            db_type = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!db'%(app))
-            if db_type:
+            tmp = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!db'%(app))
+            if tmp:
                 db_found = True
+                db_type  = tmp
             else:
                 del (CTK.cfg ['admin!market!maintenance!remove!%s'%(app)])
 
