@@ -13,7 +13,8 @@ jquery.form-defaults.js \
 jquery.ibutton.js \
 jquery.tablednd_0_5.js \
 jquery.uploadProgress.js \
-ajaxupload.3.6.js
+ajaxupload.3.6.js \
+Carousel.js
 
 EXTRA_DIST = \
 $(js_DATA)
