@@ -253,7 +253,7 @@ class ListApps:
             service = self._figure_app_service (app)
 
             remove_apps[app] = {}
-            remove_apps[app]['type'] = _('Orphan application')
+            remove_apps[app]['type'] = _('Orphan')
             remove_apps[app]['name'] = self._figure_app_name (app)
             remove_apps[app]['date'] = self._figure_app_date (app)
             if db:
@@ -267,7 +267,7 @@ class ListApps:
                 service = self._figure_app_service (app)
 
                 remove_apps[app] = {}
-                remove_apps[app]['type'] = _('Unfinished installation')
+                remove_apps[app]['type'] = _('Unfinished')
                 remove_apps[app]['name'] = self._figure_app_name (app)
                 remove_apps[app]['date'] = self._figure_app_date (app)
                 if db:
