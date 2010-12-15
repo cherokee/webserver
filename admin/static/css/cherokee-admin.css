@@ -1242,15 +1242,18 @@ img.icon_chooser_selected {
 #halt-admin-box a { color: #b5c8db; font-size: 90%; }
 #halt-admin-box a:hover { color: #c00; }
 
-#market_maintenance_box {
- background: #fff2b3 url(/CTK/images/dialog-warning.png) 4px 4px no-repeat;
- -moz-border-radius: 4px; -webkit-border-radius: 4px;
- border: 1px solid #b90;
- padding: 1em 1em 1em 40px;
- margin: 1em 0;
+#market_maintenance {
+  margin-top: 16px;
 }
-#market_maintenance_box h3 {
- color: #000;
+
+#market_maintenance_box {
+ background: transparent url(/CTK/images/dialog-warning.png) 4px 4px no-repeat;
+ padding: 1em 1em 1em 40px;
+ margin: 0;
+}
+#market_maintenance_box a {
+ float: right;
+ margin-top: 8px;
 }
 #maintenance-removal { overflow: auto; overflow-x: hidden; height: 260px; }
 #maintenance-removal-list { table-layout: fixed; width: 100%; border-collapse: collapse; border: 1px solid #cde; }{}
