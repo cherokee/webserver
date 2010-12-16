@@ -467,16 +467,21 @@ def __figure_std_settings():
 
 
 def __figure_fpm_settings():
+    fpm_info = {}
+
     # Find config file
     paths = []
     for p in FPM_ETC_PATHS:
         paths.append (p)
         paths.append ('%s-*' %(p))
 
-    fpm_info = {}
-
     # For each configuration file
-    for conf_file in path_eval_exist (paths):
+    suitable_confs = path_eval_exist (paths)
+    if not suitable_confs:
+        return {}
+
+    # Read the configuration files
+    for conf_file in suitable_confs:
         # Read
         try:
             content = open (conf_file, 'r').read()
