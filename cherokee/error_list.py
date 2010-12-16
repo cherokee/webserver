@@ -663,8 +663,9 @@ e('SERVER_TLS_INIT',
   desc  = "This is usually caused by an error with a certificate or private key.")
 
 e('SERVER_FD_SET',
-  title = "Unable to raise file descriptor limit to %d",
-  desc  = SYSTEM_ISSUE)
+  title   = "Unable to raise file descriptor limit to %d",
+  desc    = SYSTEM_ISSUE,
+  show_bt = False)
 
 e('SERVER_FD_GET',
   title = "Unable to read the file descriptor limit of the system",
