@@ -494,7 +494,7 @@ def __figure_fpm_settings():
             if tmp:
                 fpm_info['listen'] = tmp[0]
             else:
-                tmp = re.findall (r'^listen = (.*)', content)
+                tmp = re.findall (r'^listen *= *(.+)$', content, re.M)
                 if tmp:
                     fpm_info['listen']  = tmp[0]
 
@@ -504,7 +504,7 @@ def __figure_fpm_settings():
             if tmp:
                 fpm_info['timeout'] = tmp[0]
             else:
-                tmp = re.findall (r'^request_terminate_timeout[ ]*=[ ]*(\d*)s*', content)
+                tmp = re.findall (r'^request_terminate_timeout *= *(\d*)s*', content, re.M)
                 if tmp:
                     fpm_info['timeout'] = tmp[0]
 
@@ -519,7 +519,7 @@ def __figure_fpm_settings():
             if tmp:
                 fpm_info['user'] = tmp[0]
             else:
-                tmp = re.findall (r'^user = (.*)', content)
+                tmp = re.findall (r'^user *= *(.*)$', content, re.M)
                 if tmp:
                     fpm_info['user'] = tmp[0]
 
@@ -528,7 +528,7 @@ def __figure_fpm_settings():
             if tmp:
                 fpm_info['group'] = tmp[0]
             else:
-                tmp = re.findall (r'^group = (.*)', content)
+                tmp = re.findall (r'^group *= *(.*)$', content, re.M)
                 if tmp:
                     fpm_info['group'] = tmp[0]
 
@@ -576,7 +576,7 @@ def __source_add_fpm (php_path):
     if not fpm_info:
         raise Exception (_('Could not determine PHP-fpm settings.'))
 
-    host      = fpm_info['listen']
+    listen    = fpm_info['listen']
     conf_file = fpm_info['conf_file']
 
     # Add Source
@@ -584,7 +584,7 @@ def __source_add_fpm (php_path):
 
     CTK.cfg['%s!nick'        %(next)] = 'PHP Interpreter'
     CTK.cfg['%s!type'        %(next)] = 'interpreter'
-    CTK.cfg['%s!host'        %(next)] = host
+    CTK.cfg['%s!host'        %(next)] = listen
     CTK.cfg['%s!interpreter' %(next)] = '%(php_path)s --fpm-config %(conf_file)s' %(locals())
 
     return next
