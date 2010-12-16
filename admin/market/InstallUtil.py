@@ -76,12 +76,3 @@ def replacement_cmd (command, replacement_dict):
         command = command.replace('${%s}'%(macro), replacement_dict.get(macro, '${%s}'%(macro)))
 
     return command
-
-def replacement_cmds (commands, replacement_dict):
-    assert type(commands) in (list, tuple)
-
-    replaced = []
-    for cmd in commands:
-        replaced.append (replacement_cmd (cmd, replacement_dict))
-
-    return replaced

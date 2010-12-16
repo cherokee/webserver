@@ -24,6 +24,7 @@
 #
 
 import re
+import os
 import CTK
 import Wizard
 import validations
@@ -225,10 +226,10 @@ def figure_php_information():
     return settings
 
 
-def figure_php_user():
+def figure_php_user (pre_vsrv):
     server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
     server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
-    php_info     = get_info()
+    php_info     = get_info (pre_vsrv)
     interpreter  = CTK.cfg.get_val ('%s!interpreter' %(php_info['source']), '')
 
     if 'fpm' in interpreter:
@@ -513,7 +514,7 @@ def __figure_fpm_settings():
             if '.conf' in conf_file:
                 fpm_info['conf_file'] = conf_file
 
-        # User/Group
+        # User
         if not fpm_info.get('user'):
             tmp = re.findall (r'<value name="user">(.*?)</value>', content)
             if tmp:
@@ -523,6 +524,7 @@ def __figure_fpm_settings():
                 if tmp:
                     fpm_info['user'] = tmp[0]
 
+        # Group
         if not fpm_info.get('group'):
             tmp = re.findall (r'<value name="group">(.*?)</value>', content)
             if tmp:
