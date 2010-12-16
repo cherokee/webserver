@@ -43,29 +43,50 @@ def error_to_HTML (error):
     return CTK.escape_html (error)
 
 
-def replacement_cmd (command):
-    # Install user (root, whell, admin, etc)
-    root_user  = InstallUtil.get_installation_UID()
-    root_group = InstallUtil.get_installation_GID()
+class Replacement_Dict:
+    def __init__ (self):
+        self.keys = {}
 
-    # Server user (www-data, server, nobody, etc)
-    server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
-    server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
+    def __setitem__ (self, key, func):
+        self.keys[key] = func
 
-    # Directories
-    app_root = CTK.cfg.get_val ('tmp!market!install!root')
-
-    # Replacements
-    command = command.replace('${web_user}',   server_user)
-    command = command.replace('${web_group}',  server_group)
-    command = command.replace('${root_user}',  root_user)
-    command = command.replace('${root_group}', root_group)
-    command = command.replace('${app_root}',   app_root)
-
-    return command
+    def replace (self, txt):
+        for k in self.keys:
+            macro = '${%s}'%(k)
+            if macro in txt:
+                val = self.keys[k]
+                if hasattr (val, '__call__'):
+                    replacement = val()
+                else:
+                    replacement = val
+                txt = txt.replace (macro, replacement)
+        return txt
 
 
-class CommandProgress (CTK.Box):
+class Replacement_Commons (Replacement_Dict):
+    def __init__ (self):
+        Replacement_Dict.__init__ (self)
+
+        # Install user (root, whell, admin, etc)
+        root_user  = InstallUtil.get_installation_UID()
+        root_group = InstallUtil.get_installation_GID()
+
+        # Server user (www-data, server, nobody, etc)
+        server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
+        server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
+
+        # Directories
+        app_root = CTK.cfg.get_val ('tmp!market!install!root')
+
+        # Replacements
+        self['web_user']   = server_user
+        self['web_group']  = server_group
+        self['root_user']  = root_user
+        self['root_group'] = root_group
+        self['app_root']   = app_root
+
+
+class CommandProgress (CTK.Box, Replacement_Commons):
     class Exec (CTK.Container):
         def __init__ (self, command_progress):
             CTK.Container.__init__ (self)
@@ -124,6 +145,7 @@ class CommandProgress (CTK.Box):
 
     def __init__ (self, commands, finished_url):
         CTK.Box.__init__ (self)
+        Replacement_Commons.__init__ (self)
 
         self.finished_url    = finished_url
         self.commands        = commands
@@ -158,14 +180,17 @@ class CommandExec_Thread (threading.Thread):
                 self.command_progress.error = True
                 break
 
+    def _replace (self, txt):
+        return self.command_progress.replace (txt)
+
     def _run_command (self, command_entry):
-        command = replacement_cmd (command_entry['command'])
+        command = self._replace (command_entry['command'])
         cd      = command_entry.get('cd')
         env     = command_entry.get('env')
         su      = command_entry.get('su')
 
         if cd:
-            cd = replacement_cmd (cd)
+            cd = self._replace (cd)
 
         Install_Log.log ("  %s" %(command))
         if env:
