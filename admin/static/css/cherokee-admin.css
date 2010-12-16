@@ -439,6 +439,7 @@ img.icon_chooser_selected {
 .login-box-form { padding-top: 1px; }
 .login-box-logged-in { padding-top: 6px; }
 #login-dialog .button { margin-top: 14px; }
+#login-dialog input[type="text"], #login-dialog input[type="password"] { width: 256px; }
 
 
 #bottom-box { padding: 8px 0; margin: 8px 16px; }
