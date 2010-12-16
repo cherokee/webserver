@@ -10,6 +10,7 @@ $(PTHREAD_CFLAGS)
 bin_SCRIPTS = \
 cherokee-panic \
 cherokee-tweak \
+cherokee-macos-askpass \
 cherokee-admin-launcher
 
 #

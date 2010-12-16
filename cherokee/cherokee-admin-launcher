@@ -44,10 +44,29 @@ ADMIN_LAUNCH_TIMEOUT = 15
 # Paths
 cherokee_admin_path = 'cherokee-admin'
 
+# Defaults
+PATH_PREFIXES  = ['/usr', '/usr/local', '/opt/local', '/usr/gnu']
+DEFAULT_PATHS  = [os.path.join (x,'sbin') for x in PATH_PREFIXES]
+DEFAULT_PATHS += [os.path.join (x,'bin')  for x in PATH_PREFIXES]
+
 
 def set_non_blocking (fd):
     fl = fcntl.fcntl (fd, fcntl.F_GETFL)
     fcntl.fcntl (fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+
+
+def report_error (description, title="ERROR"):
+    # MacOS X
+    osascript_bin = bin_in_path ("osascript")
+    if osascript_bin:
+        dialog  = "display dialog \\\"%(description)s\\\" with title \\\"%(title)s\\\" buttons \\\"Close\\\" with icon stop" %(locals())
+        command = "osascript -e 'tell application \"Finder\"' -e \"activate\" -e \"%(dialog)s\" -e 'end tell'" %(locals())
+        print "command", command
+        os.system (command)
+
+    # Text mode
+    print '[%(title)s] - %(description)s'%(locals())
+
 
 class Admin_Runner (threading.Thread):
    def __init__ (self):
@@ -56,6 +75,9 @@ class Admin_Runner (threading.Thread):
       self.user     = ''
       self.password = ''
       self.command  = [cherokee_admin_path] + sys.argv[1:]
+
+      if os.getuid() != 0:
+          self.command = [bin_in_path('sudo'), '-A'] + self.command
 
       self.launching      = True
       self.launching_lock = threading.Lock()
@@ -152,11 +174,12 @@ def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
 
 
 def bin_in_path (bin):
-   for e in os.getenv('PATH','').split(':'):
-      fp = os.path.join (e, bin)
-      if os.access (fp, os.X_OK):
-         return True
-   return False
+    paths = os.getenv('PATH').split(':') + DEFAULT_PATHS
+
+    for e in paths:
+        fp = os.path.join (e, bin)
+        if os.access (fp, os.X_OK):
+            return fp
 
 
 def launch_browser (url, user, password):
@@ -181,7 +204,7 @@ def launch_browser (url, user, password):
 
    # Error
    else:
-       print >> sys.stderr, "Did not find a way to open: %(url)s" %(locals())
+       report_error ("Did not find a way to open: %(url)s" %(locals()))
 
 
 def find_cherokee_admin():
@@ -197,12 +220,40 @@ def find_cherokee_admin():
       cherokee_admin_path = path
       return
 
-   print "WARNING: Could not find cherokee-admin"
+   report_error ("Could not find cherokee-admin")
+
+
+def check_uid():
+    # Is it root?
+    uid = os.getuid()
+    if uid == 0:
+        return
+
+    # Set sudo password dialog
+    if not os.getenv ('SUDO_ASKPASS'):
+        gaskpass_bin  = bin_in_path ('gaskpass')
+        osascript_bin = bin_in_path ("osascript")
+        askpass_bin   = bin_in_path ("cherokee-macos-askpass")
+
+        # GNOME: gaskpass
+        if gaskpass_bin:
+            os.environ['SUDO_ASKPASS'] = gaskpass_bin
+
+        # MacOS X: osascript
+        elif osascript_bin and askpass_bin:
+            os.environ['SUDO_ASKPASS'] = askpass_bin
+
+        # Error
+        else:
+            report_error ("Did not find a suitable SUDO_ASKPASS application")
 
 
 def main():
    # Find cherokee-admin
    find_cherokee_admin()
+
+   # Check UID
+   check_uid()
 
    # Ensure port is empty
    print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
@@ -210,7 +261,8 @@ def main():
    if not response:
        print "OK"
    else:
-       print "\nERROR: The 9090 port is already in use.\n"
+       print
+       report_error ("The 9090 port is already in use.")
        raise SystemExit
 
    # Launch Cherokee-admin
