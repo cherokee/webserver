@@ -40,6 +40,7 @@ import SaveButton
 import Cherokee
 import popen
 import CommandProgress
+import InstallUtil
 
 from util import *
 from consts import *
@@ -61,6 +62,10 @@ NOTE_SAVE_RESTART = N_("Since there were previous changes your configuration has
 
 NOTE_OLD_CHEROKEE_P1 = N_("Your Cherokee version can no longer access many of the features of the Cherokee Market. Please, upgrade Cherokee to an up-to-date version.")
 NOTE_OLD_CHEROKEE_P2 = N_("We apologize for the inconveniences.")
+
+NO_ROOT_H1 = N_("Privileges test failed")
+NO_ROOT_P1 = N_("Since the installations may require administrator to execute system administration commands, it is required to run Cherokee-admin under a user with  administrator privileges.")
+NO_ROOT_P2 = N_("Please, run cherokee-admin as root to solve the problem.")
 
 URL_INSTALL_WELCOME        = "%s/install/welcome"        %(URL_MAIN)
 URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
@@ -118,6 +123,20 @@ class Install_Stage:
 
 class Welcome (Install_Stage):
     def __safe_call__ (self):
+        # Ensure the current UID has enough priviledges
+        if not InstallUtil.current_UID_is_admin():
+            box = CTK.Box()
+            box += CTK.RawHTML ('<h2>%s</h2>' %(_(NO_ROOT_H1)))
+            box += CTK.RawHTML ('<p>%s</p>'   %(_(NO_ROOT_P1)))
+            box += CTK.RawHTML ('<p>%s</p>'   %(_(NO_ROOT_P2)))
+
+            buttons = CTK.DruidButtonsPanel()
+            buttons += CTK.DruidButton_Close(_('Cancel'))
+            box += buttons
+
+            return box.Render().toStr()
+
+        # Init the log file
         Install_Log.reset()
         Install_Log.log (".---------------------------------------------.")
         Install_Log.log ("| PLEASE, DO NOT EDIT OR REMOVE THIS LOG FILE |")
