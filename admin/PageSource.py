@@ -67,6 +67,7 @@ VALIDATIONS = [
     ('tmp!new_host',           validations.is_safe_information_source_host),
     ('tmp!new_nick',           validations.is_safe_information_source_nick),
     ("source_clone_trg",       validations.is_safe_id),
+    ("source!.+?!interpreter", validations.is_not_empty),
 ]
 
 HELPS = [('config_info_sources', N_("Information Sources"))]
@@ -264,6 +265,7 @@ class Render_Source:
             CTK.Container.__init__ (self)
 
             table = CTK.Table({'id': 'source-usage'})
+            self += CTK.RawHTML ("<h2>%s</h2>" % (_('Source Usage')))
             self += table
             table.set_header(1)
             table += [CTK.RawHTML(x) for x in (_('Virtual Server'), _('Rule'))]
@@ -292,7 +294,7 @@ class Render_Source:
         nick = CTK.cfg.get_val('source!%s!nick'%(num))
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>Source: %s</h2>'%(CTK.escape_html (nick)))
+        cont += CTK.RawHTML ('<h2>%s: %s</h2>'%(_('Source'), CTK.escape_html (nick)))
 
         workarea = CTK.Box ({'id': 'source-workarea'})
 
@@ -300,6 +302,7 @@ class Render_Source:
         table.Add (_('Type'),       CTK.ComboCfg ('source!%s!type'%(num), trans_options(SOURCE_TYPES)), _(NOTE_TYPE))
         table.Add (_('Nick'),       CTK.TextCfg ('source!%s!nick'%(num), False), _(NOTE_NICK))
         table.Add (_('Connection'), CTK.TextCfg ('source!%s!host'%(num), False), _(NOTE_HOST))
+
         if tipe == 'interpreter':
             table.Add (_('Interpreter'),         CTK.TextCfg ('source!%s!interpreter'%(num),   False), _(NOTE_INTERPRETER))
             table.Add (_('Spawning timeout'),    CTK.TextCfg ('source!%s!timeout'%(num),       True),  _(NOTE_TIMEOUT))
@@ -311,7 +314,8 @@ class Render_Source:
         submit += table
         workarea += submit
 
-        if CTK.cfg.get_val ('source!%s!env_inherited'%(num)) == '0':
+        if CTK.cfg.get_val ('source!%s!type'%(num)) == 'interpreter' and \
+           CTK.cfg.get_val ('source!%s!env_inherited'%(num)) == '0':
             workarea += EnvironmentWidget (num)
 
         sources = _all_sources_per_rule ()
