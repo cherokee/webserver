@@ -173,13 +173,24 @@ def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
     return content
 
 
+_bin_in_path_cache = {}
 def bin_in_path (bin):
+    global _bin_in_path_cache
+
+    # Cache hit
+    if bin in _bin_in_path_cache:
+        return _bin_in_path_cache[bin]
+
+    # Cache miss: check it out
     paths = os.getenv('PATH').split(':') + DEFAULT_PATHS
 
     for e in paths:
         fp = os.path.join (e, bin)
         if os.access (fp, os.X_OK):
+            _bin_in_path_cache[bin] = True
             return fp
+
+    _bin_in_path_cache[bin] = False
 
 
 def launch_browser (url, user, password):
