@@ -154,11 +154,11 @@ def cfg_source_find_interpreter (in_interpreter = None,
             continue
 
         if (in_interpreter and
-            in_interpreter in CTK.cfg.get_val("source!%s!interpreter"%(i))):
+            in_interpreter in CTK.cfg.get_val("source!%s!interpreter"%(i), '')):
             return "source!%s" % (i)
 
         if (in_nick and
-            in_nick in CTK.cfg.get_val("source!%s!nick"%(i))):
+            in_nick in CTK.cfg.get_val("source!%s!nick"%(i), '')):
             return "source!%s" % (i)
 
 def cfg_source_find_empty_port (n_ports=1):
