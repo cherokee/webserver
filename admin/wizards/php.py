@@ -242,7 +242,6 @@ def figure_php_user (pre_vsrv):
         php_user  = CTK.cfg.get_val ('%s!user'  %(php_info['source']), server_user)
         php_group = CTK.cfg.get_val ('%s!group' %(php_info['source']), server_group)
 
-    print 'php', locals()
     return  {'php_user':  php_user,
              'php_group': php_group}
 
