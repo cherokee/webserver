@@ -108,9 +108,10 @@ class Admin_Runner (threading.Thread):
            gaskpass_bin  = bin_in_path ('gaskpass')
            osascript_bin = bin_in_path ("osascript")
            askpass_bin   = bin_in_path ("cherokee-macos-askpass")
+           X_display     = os.getenv ("DISPLAY")
 
            # GNOME: gaskpass
-           if gaskpass_bin:
+           if gaskpass_bin and X_display:
                os.environ['SUDO_ASKPASS'] = gaskpass_bin
 
            # MacOS X: osascript
