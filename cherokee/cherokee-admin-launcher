@@ -71,25 +71,60 @@ def report_error (description, title="ERROR"):
 class Admin_Runner (threading.Thread):
    def __init__ (self):
       threading.Thread.__init__ (self)
-      self.url      = ''
-      self.user     = ''
-      self.password = ''
-      self.command  = [cherokee_admin_path] + sys.argv[1:]
-
-      if os.getuid() != 0:
-          self.command = [bin_in_path('sudo'), '-A'] + self.command
+      self.url        = ''
+      self.user       = ''
+      self.password   = ''
+      self.command    = [cherokee_admin_path] + sys.argv[1:]
+      self.needs_auth = True
 
       self.launching      = True
       self.launching_lock = threading.Lock()
       self.launching_lock.acquire()
 
       # Detect -u, --unsecure, -<something>u
+      self._check_auth()
+
+      # Check priviledges
+      self._check_askpass()
+
+   def _check_auth (self):
+      # Detects --unsecure
       self.needs_auth = not ('--unsecure' in sys.argv)
 
+      # Detects -u and -<something>u
       for arg in sys.argv:
           if len(arg) >= 2 and arg[0] == '-' and arg[1] != '-':
               if 'u' in arg:
                   self.needs_auth = False
+
+   def _check_askpass (self):
+       # If root, there is no need to use sudo
+       uid = os.getuid()
+       if uid == 0:
+           return
+
+       # No root
+       if not os.getenv ('SUDO_ASKPASS'):
+           gaskpass_bin  = bin_in_path ('gaskpass')
+           osascript_bin = bin_in_path ("osascript")
+           askpass_bin   = bin_in_path ("cherokee-macos-askpass")
+
+           # GNOME: gaskpass
+           if gaskpass_bin:
+               os.environ['SUDO_ASKPASS'] = gaskpass_bin
+
+           # MacOS X: osascript
+           elif osascript_bin and askpass_bin:
+               os.environ['SUDO_ASKPASS'] = askpass_bin
+
+           # Error
+           else:
+               report_error ("Did not find a suitable SUDO_ASKPASS application")
+
+       # Add sudo
+       use_askpass = (os.getenv ('SUDO_ASKPASS') != None)
+       if use_askpass:
+           self.command = [bin_in_path('sudo'), '-A'] + self.command
 
    def run (self):
       environ = os.environ.copy()
@@ -234,37 +269,9 @@ def find_cherokee_admin():
    report_error ("Could not find cherokee-admin")
 
 
-def check_uid():
-    # Is it root?
-    uid = os.getuid()
-    if uid == 0:
-        return
-
-    # Set sudo password dialog
-    if not os.getenv ('SUDO_ASKPASS'):
-        gaskpass_bin  = bin_in_path ('gaskpass')
-        osascript_bin = bin_in_path ("osascript")
-        askpass_bin   = bin_in_path ("cherokee-macos-askpass")
-
-        # GNOME: gaskpass
-        if gaskpass_bin:
-            os.environ['SUDO_ASKPASS'] = gaskpass_bin
-
-        # MacOS X: osascript
-        elif osascript_bin and askpass_bin:
-            os.environ['SUDO_ASKPASS'] = askpass_bin
-
-        # Error
-        else:
-            report_error ("Did not find a suitable SUDO_ASKPASS application")
-
-
 def main():
    # Find cherokee-admin
    find_cherokee_admin()
-
-   # Check UID
-   check_uid()
 
    # Ensure port is empty
    print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
