@@ -29,6 +29,7 @@ import CTK
 import Wizard
 import validations
 import popen
+import market
 
 from util import *
 
@@ -593,6 +594,21 @@ def __source_add_fpm (php_path):
     CTK.cfg['%s!type'        %(next)] = 'interpreter'
     CTK.cfg['%s!host'        %(next)] = listen
     CTK.cfg['%s!interpreter' %(next)] = '%(php_path)s --fpm-config %(conf_file)s' %(locals())
+
+    # In case FPM has specific UID/GID and differs from Cherokee's,
+    # the interpreter must by spawned by root.
+    #
+    server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
+    server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
+
+    root_user    = market.InstallUtil.get_installation_UID()
+    root_group   = market.InstallUtil.get_installation_GID()
+    php_user     = fpm_info.get('user',  server_user)
+    php_group    = fpm_info.get('group', server_group)
+
+    if php_user != server_user or php_group != server_group:
+        CTK.cfg['%s!user'  %(next)] = root_user
+        CTK.cfg['%s!group' %(next)] = root_group
 
     return next
 
