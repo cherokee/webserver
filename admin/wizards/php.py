@@ -227,18 +227,24 @@ def figure_php_information():
 
 
 def figure_php_user (pre_vsrv):
+    """Determine PHP user/group accounting for config file, source UID, and server UID"""
+
     server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
     server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
     php_info     = get_info (pre_vsrv)
     interpreter  = CTK.cfg.get_val ('%s!interpreter' %(php_info['source']), '')
 
     if 'fpm' in interpreter:
-        settings = _figure_fpm_settings()
+        fpm_conf  = _figure_fpm_settings()
+        php_user  = fpm_conf.get('user',  server_user)
+        php_group = fpm_conf.get('group', server_group)
     else:
-        settings = {}
+        php_user  = CTK.cfg.get_val ('%s!user'  %(php_info['source']), server_user)
+        php_group = CTK.cfg.get_val ('%s!group' %(php_info['source']), server_group)
 
-    return  {'php_user':  settings.get('user',  server_user),
-             'php_group': settings.get('group', server_group)}
+    print 'php', locals()
+    return  {'php_user':  php_user,
+             'php_group': php_group}
 
 
 #
