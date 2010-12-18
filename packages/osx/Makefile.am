@@ -2,7 +2,8 @@
 
 BINARIES =            \
 License.rtf           \
-background.tiff.gz
+background.tiff.gz    \
+cherokee_icon.icns
 
 PYTHON =              \
 utils.py              \
