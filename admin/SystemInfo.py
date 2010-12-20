@@ -26,6 +26,7 @@ import os
 import re
 import sys
 import struct
+import util
 import subprocess
 
 LINUX_DISTS_ETC = [('gentoo-release',     'gentoo'),
@@ -79,6 +80,8 @@ def build_info():
     # Linux distribution
     if info['system'] == 'Linux':
         _figure_linux_info (info)
+    elif info['system'] == 'Darwin':
+        _figure_macos_info (info)
 
     # Users and Groups
     if os.access ('/etc/group', os.R_OK):
@@ -92,6 +95,7 @@ def build_info():
         info['group_root'] = '0'
 
     return info
+
 
 def _figure_linux_info (info):
     # Check the LSB release file
@@ -108,6 +112,12 @@ def _figure_linux_info (info):
     for dp in LINUX_DISTS_ETC:
         if os.path.exists (os.path.join ('/etc', dp[0])):
             info['linux_distro_id'] = dp[1]
+
+
+def _figure_macos_info (info):
+    port_bin = util.path_find_binary ("port", ['/opt/local/bin'])
+    info['macports']     = bool(port_bin)
+    info['macports_bin'] = port_bin
 
 
 if __name__ == '__main__':
