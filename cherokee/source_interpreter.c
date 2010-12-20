@@ -301,8 +301,17 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 
 			ret = cherokee_getpwnam (child->val.buf, &pwd, tmp, sizeof(tmp));
 			if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
-				LOG_CRITICAL (CHEROKEE_ERROR_SRC_INTER_NO_USER, child->val.buf, prio);
-				return ret_error;
+				long  tmp_uid;
+
+				errno   = 0;
+				tmp_uid = strtol (child->val.buf, NULL, 10);
+				if (errno == 0) {
+					ret = cherokee_getpwuid ((uid_t)tmp_uid, &pwd, tmp, sizeof(tmp));
+					if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
+						LOG_CRITICAL (CHEROKEE_ERROR_SRC_INTER_NO_USER, child->val.buf, prio);
+						return ret_error;
+					}
+				}
 			}
 
 			src->change_user = pwd.pw_uid;
