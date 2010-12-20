@@ -19,6 +19,9 @@
     <key>CFBundleIdentifier</key>
     <string>org.cherokee.webserver</string>
 
+    <key>CFBundleIconFile</key>
+    <string>cherokee_icon</string>
+
     <!-- Should Installer require authorization (and prompt the user to authenticate)? -->
     <key>IFPkgFlagAuthorizationAction</key>
     <string>AdminAuthorization</string>

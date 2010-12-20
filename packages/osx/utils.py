@@ -40,6 +40,8 @@ def exe_output (cmd):
     return p.stdout.read()
 
 def exe (cmd, colorer=lambda x: x, return_fatal=True):
+    print cmd
+
     p = subprocess.Popen (cmd, shell=True, stdout=subprocess.PIPE)
     while True:
         line = p.stdout.readline()

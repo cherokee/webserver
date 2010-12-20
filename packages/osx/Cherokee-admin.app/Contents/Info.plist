@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>CFBundleExecutable</key>
+        <string>run</string>
+        <key>CFBundleName</key>
+        <string>Cherokee Admin</string>
+        <key>CFBundleIconFile</key>
+        <string>cherokee_icon</string>
+        <key>CFBundleIdentifier</key>
+        <string>org.cherokee.webserver-admin</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>NSMainNibFile</key>
+        <string>MainMenu</string>
+        <key>NSPrincipalClass</key>
+        <string>NSApplication</string>
+        <key>CFBundleSignature</key>
+        <string>????</string>
+</dict>
+</plist>
