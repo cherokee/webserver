@@ -1126,6 +1126,67 @@ cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_avl_t *argumen
 }
 
 
+static ret_t
+clone_passwd (struct passwd *source, struct passwd *target, char *buf, size_t buflen)
+{
+	char   *ptr;
+	size_t  pw_name_len   = 0;
+	size_t  pw_passwd_len = 0;
+	size_t  pw_gecos_len  = 0;
+	size_t  pw_dir_len    = 0;
+	size_t  pw_shell_len  = 0;
+
+	if (source->pw_name)   pw_name_len   = strlen(source->pw_name);
+	if (source->pw_passwd) pw_passwd_len = strlen(source->pw_passwd);
+	if (source->pw_gecos)  pw_gecos_len  = strlen(source->pw_gecos);
+	if (source->pw_dir)    pw_dir_len    = strlen(source->pw_dir);
+	if (source->pw_shell)  pw_shell_len  = strlen(source->pw_shell);
+
+	if ((pw_name_len + pw_passwd_len +
+	     pw_gecos_len + pw_dir_len + pw_shell_len + 5) >= buflen) {
+		/* Buffer overflow.
+		 */
+		return ret_error;
+	}
+	memset (buf, 0, buflen);
+	ptr = buf;
+
+	target->pw_uid = source->pw_uid;
+	target->pw_gid = source->pw_gid;
+
+	if (source->pw_dir) {
+		memcpy (ptr, source->pw_dir, pw_dir_len);
+		target->pw_dir = ptr;
+		ptr += pw_dir_len + 1;
+	}
+
+	if (source->pw_passwd) {
+		memcpy (ptr, source->pw_passwd, pw_passwd_len);
+		target->pw_passwd = ptr;
+		ptr += pw_passwd_len + 1;
+	}
+
+	if (source->pw_name) {
+		memcpy (ptr, source->pw_name, pw_name_len);
+		target->pw_name = ptr;
+		ptr += pw_name_len + 1;
+	}
+
+	if (source->pw_gecos) {
+		memcpy (ptr, source->pw_gecos, pw_gecos_len);
+		target->pw_gecos = ptr;
+		ptr += pw_gecos_len + 1;
+	}
+
+	if (source->pw_shell) {
+		memcpy (ptr, source->pw_shell, pw_shell_len);
+		target->pw_shell = ptr;
+		ptr += pw_shell_len + 1;
+	}
+
+	return ret_ok;
+}
+
 
 #if defined(HAVE_PTHREAD) && !defined(HAVE_GETPWNAM_R)
 static pthread_mutex_t __global_getpwnam_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -1135,12 +1196,7 @@ ret_t
 cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buflen)
 {
 #ifndef HAVE_GETPWNAM_R
-	size_t         pw_name_len   = 0;
-	size_t         pw_passwd_len = 0;
-	size_t         pw_gecos_len  = 0;
-	size_t         pw_dir_len    = 0;
-	size_t         pw_shell_len  = 0;
-	char          *ptr;
+	ret_t          ret;
 	struct passwd *tmp;
 
 	CHEROKEE_MUTEX_LOCK (&__global_getpwnam_mutex);
@@ -1150,53 +1206,11 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 		CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
 		return ret_error;
 	}
-	if (tmp->pw_name)   pw_name_len   = strlen(tmp->pw_name);
-	if (tmp->pw_passwd) pw_passwd_len = strlen(tmp->pw_passwd);
-	if (tmp->pw_gecos)  pw_gecos_len  = strlen(tmp->pw_gecos);
-	if (tmp->pw_dir)    pw_dir_len    = strlen(tmp->pw_dir);
-	if (tmp->pw_shell)  pw_shell_len  = strlen(tmp->pw_shell);
 
-	if ((pw_name_len + pw_passwd_len +
-	     pw_gecos_len + pw_dir_len + pw_shell_len + 5) >= buflen) {
-		/* Buffer overflow.
-		 */
+	ret = clone_passwd (tmp, pwbuf, buf, buflen);
+	if (ret != ret_ok) {
 		CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
 		return ret_error;
-	}
-	memset (buf, 0, buflen);
-	ptr = buf;
-
-	pwbuf->pw_uid = tmp->pw_uid;
-	pwbuf->pw_gid = tmp->pw_gid;
-
-	if (tmp->pw_dir) {
-		memcpy (ptr, tmp->pw_dir, pw_dir_len);
-		pwbuf->pw_dir = ptr;
-		ptr += pw_dir_len + 1;
-	}
-
-	if (tmp->pw_passwd) {
-		memcpy (ptr, tmp->pw_passwd, pw_passwd_len);
-		pwbuf->pw_passwd = ptr;
-		ptr += pw_passwd_len + 1;
-	}
-
-	if (tmp->pw_name) {
-		memcpy (ptr, tmp->pw_name, pw_name_len);
-		pwbuf->pw_name = ptr;
-		ptr += pw_name_len + 1;
-	}
-
-	if (tmp->pw_gecos) {
-		memcpy (ptr, tmp->pw_gecos, pw_gecos_len);
-		pwbuf->pw_gecos = ptr;
-		ptr += pw_gecos_len + 1;
-	}
-
-	if (tmp->pw_shell) {
-		memcpy (ptr, tmp->pw_shell, pw_shell_len);
-		pwbuf->pw_shell = ptr;
-		ptr += pw_shell_len + 1;
 	}
 
 	CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
@@ -1241,6 +1255,69 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 	return ret_ok;
 #endif
 
+	return ret_no_sys;
+}
+
+
+#if defined(HAVE_PTHREAD) && !defined(HAVE_GETPWUID_R)
+static pthread_mutex_t __global_getpwuid_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+ret_t
+cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
+{
+#ifdef HAVE_GETPWUID_R_5
+	int            re;
+	struct passwd *result = NULL;
+
+	/* Linux:
+	 *  int getpwuid_r (uid_t uid, struct passwd *pwd, char *buf,    size_t buflen,  struct passwd **result);
+	 * MacOS X:
+	 *  int getpwuid_r (uid_t uid, struct passwd *pwd, char *buffer, size_t bufsize, struct passwd **result);
+	 */
+	re = getpwuid_r (uid, pwbuf, buf, buflen, &result);
+	if ((re != 0) || (result == NULL)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+
+#elif HAVE_GETPWUID_R_4
+	struct passwd *result;
+
+	/* Solaris:
+	 * struct passwd *getpwuid_r (uid_t uid, struct passwd *pwd, char *buffer, int  buflen);
+	 */
+	result = getpwuid_r (uid, pwdbuf, buf, buflen);
+	if (result == NULL) {
+		return ret_error;
+	}
+
+	return ret_ok;
+#else
+	ret_t          ret;
+	struct passwd *tmp;
+
+	/* struct passwd *getpwuid (uid_t uid);
+	 */
+	CHEROKEE_MUTEX_LOCK (&__global_getpwuid_mutex);
+
+	tmp = getpwuid (uid);
+	if (tmp == NULL) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_getpwuid_mutex);
+		return ret_error;
+	}
+
+	ret = clone_passwd (tmp, pwbuf, buf, buflen);
+	if (ret != ret_ok) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_getpwuid_mutex);
+		return ret_error;
+	}
+
+	CHEROKEE_MUTEX_UNLOCK (&__global_getpwuid_mutex);
+	return ret_ok;
+
+#endif
 	return ret_no_sys;
 }
 
@@ -2144,4 +2221,6 @@ cherokee_reset_signals (void)
 #ifdef SIGTSTP
         signal (SIGTSTP, SIG_DFL);
 #endif
+
+	return ret_ok;
 }
