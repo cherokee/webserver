@@ -157,6 +157,10 @@ class InstructionBox (CTK.Box):
         distro = data.get('linux_distro_id','').lower()
         info   = instructions.get('generic')
 
+        # MacPorts
+        if system == 'darwin' and data['macports']:
+            return instructions['macports']
+
         # OS specific
         if instructions.has_key(system):
             return instructions[system]
