@@ -33,15 +33,6 @@ HTML_TABLE = """
 <div class="propstable">%s</div>
 """
 
-HTML_ENTRY = """
-<div class="entry" id="%(id)s" %(props)s>
-   <div class="title">%(title)s</div>
-   <div class="widget">%(widget_html)s</div>
-   <div class="comment">%(comment)s</div>
-   <div class="after"></div>
-</div>
-"""
-
 HEADERS = ['<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />']
 
 
@@ -120,54 +111,19 @@ class PropsTableAuto (PropsTable):
         return PropsTable.Add (self, title, submit, comment)
 
 
-class PropsAuto (Widget):
+class PropsAuto (PropsTable):
     def __init__ (self, url, **kwargs):
-        Widget.__init__ (self, **kwargs)
-        self._url      = url
+        PropsTable.__init__ (self, **kwargs)
+        self.url       = url
         self.constants = {}
-        self.entries   = []
 
-    def AddConstant (self, key, val):
-        self.constants[key] = val
+    def Add (self, title, widget, comment):
+        submit = Submitter (self.url)
+        submit += widget
 
-    def Add (self, title, widget, comment, use_submitter=True):
-        # No constants, just the widget
-        if not self.constants:
-            self.entries.append ((title, widget, comment, use_submitter))
-            return
-
-        # Wrap it
-        box = Container()
-        box += widget
+        # Add constants
         for key in self.constants:
-            box += HiddenField ({'name': key, 'value': self.constants[key]})
-        self.entries.append ((title, box, comment, use_submitter))
+            submit += HiddenField ({'name': key, 'value': self.constants[key]})
 
-    def Render (self):
-        render = Widget.Render(self)
-
-        for e in self.entries:
-            title, widget, comment, use_submitter = e
-
-            id    = self.id
-            props = ''
-
-            if use_submitter:
-                submit = Submitter (self._url)
-                submit += widget
-            else:
-                submit = widget
-
-            widget_r    = submit.Render()
-            widget_html = widget_r.html
-
-            html = HTML_ENTRY %(locals())
-
-            render.html    += html
-            render.js      += widget_r.js
-            render.headers += widget_r.headers
-            render.helps   += widget_r.helps
-
-        render.html     = HTML_TABLE %(render.html)
-        render.headers += HEADERS
-        return render
+        # Append the widget
+        PropsTable.Add (self, title, submit, comment)
