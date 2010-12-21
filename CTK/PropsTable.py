@@ -45,42 +45,42 @@ HTML_ENTRY = """
 HEADERS = ['<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />']
 
 
-class PropsTableEntry (Widget):
+class PropsTableEntry (Box):
     """Property Table Entry"""
 
-    def __init__ (self, title, widget, comment, props=None):
-        Widget.__init__ (self)
-
+    def __init__ (self, title, widget, comment, props_={}):
         self.title   = title
         self.widget  = widget
         self.comment = comment
-        self.props   = ({}, props)[bool(props)]
 
-        if 'id' in self.props:
-            self.id = self.props.pop('id')
+        # Properties
+        props = props_.copy()
 
-    def Render (self):
-        # Render child
-        if self.widget:
-            w_rend = self.widget.Render()
+        if 'id' in props:
+            self.id = props.pop('id')
+
+        if 'class' in props:
+            props['class'] += ' entry'
         else:
-            w_rend = Container().Render()
+            props['class'] = 'entry'
 
-        w_html = w_rend.html
-        w_rend.html = ''
+        # Constructor
+        Box.__init__ (self, props)
 
-        # Mix both
-        render = Widget.Render (self)
-        render += w_rend
+        # Compose
+        self += Box ({'class': 'title'}, RawHTML(self.title))
 
-        props = {'id':           self.id,
-                 'props':        props_to_str(self.props),
-                 'title':        self.title,
-                 'widget_html':  w_html,
-                 'comment':      self.comment}
+        if self.widget:
+            self += Box ({'class': 'widget'}, widget)
+        else:
+            self += Box ({'class': 'widget'}, Container())
 
-        render.html += HTML_ENTRY %(props)
-        return render
+        if isinstance(comment, Widget):
+            self += Box ({'class': 'comment'}, comment)
+        else:
+            self += Box ({'class': 'comment'}, RawHTML(comment))
+
+        self += RawHTML('<div class="after"></div>')
 
 
 class PropsTable (Box):
