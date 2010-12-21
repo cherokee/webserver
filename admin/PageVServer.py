@@ -67,13 +67,38 @@ NOTE_X_REAL_IP        = N_('Whether the logger should read and use the X-Real-IP
 NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on only if you are centain of what you are doing.')
 NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send X-Real-IP and X-Forwarded-For headers.')
 NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechanism. (Default: off)')
-NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}, ${vserver_name_req}, ${response_size}')
+NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: ')
 NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
 NOTE_COLLECTOR        = N_('Whether or not it should collected statistics about the traffic of this virtual server.')
 NOTE_UTC_TIME         = N_('Time standard to use in the log file entries.')
 NOTE_INDEX_USAGE      = N_('Remember that only "File Exists" rules and "List & Send" handlers use the Directory Indexes setting.')
 
 DEFAULT_HOST_NOTE     = N_("<p>The 'default' virtual server matches all the domain names.</p>")
+
+CUSTOM_MACROS_LIST = [
+    ('ip_remote',          N_("TODO: Description")),
+    ('ip_local',           N_("TODO: Description")),
+    ('protocol',           N_("TODO: Description")),
+    ('transport',          N_("TODO: Description")),
+    ('port_server',        N_("TODO: Description")),
+    ('query_string',       N_("TODO: Description")),
+    ('request_first_line', N_("TODO: Description")),
+    ('status',             N_("TODO: Description")),
+    ('now',                N_("TODO: Description")),
+    ('time_secs',          N_("TODO: Description")),
+    ('time_nsecs',         N_("TODO: Description")),
+    ('user_remote',        N_("TODO: Description")),
+    ('request',            N_("TODO: Description")),
+    ('request_original',   N_("TODO: Description")),
+    ('vserver_name',       N_("TODO: Description")),
+    ('vserver_name_req',   N_("TODO: Description")),
+    ('response_size',      N_("TODO: Description")),
+    ('http_host',          N_("TODO: Description")),
+    ('http_referrer',      N_("TODO: Description")),
+    ('http_user_agent',    N_("TODO: Description")),
+    ('http_cookie',        N_("TODO: Description")),
+]
+
 
 JS_TR_ODD = """
 $('#rules-table tr:odd').addClass('trodd');
@@ -517,9 +542,20 @@ class LogginWidgetContent (CTK.Container):
                 table.Add (_('Command'), submit, _(NOTE_WRT_EXEC))
 
             if format == 'custom':
+                table_macros = CTK.Table ({'class': 'custom-logger-macros'})
+                for macro, desc in CUSTOM_MACROS_LIST:
+                    table_macros += [CTK.RawHTML('${%s}'%(macro)), CTK.RawHTML (_(desc))]
+
+                collaps  = CTK.CollapsibleEasy ((_('Show macros'), _('Hide')))
+                collaps += table_macros
+
+                macros = CTK.Container()
+                macros += CTK.RawHTML (_(NOTE_LOGGER_TEMPLATE))
+                macros += collaps
+
                 submit = CTK.Submitter(url_apply)
                 submit += CTK.TextCfg('%s!access_template'%(pre))
-                table.Add (_('Template: '), submit, _(NOTE_LOGGER_TEMPLATE))
+                table.Add (_('Template: '), submit, macros)
 
         self += CTK.RawHTML ('<h2>%s</h2>' % (_('Access Logging')))
         self += CTK.Indenter (table)
