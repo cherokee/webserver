@@ -843,7 +843,9 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	int              re;
 	ret_t            ret;
 	cherokee_list_t *i, *tmp;
-	struct passwd   *ent      = NULL;
+	char             ent_tmp[1024];
+	struct passwd   *ent            = NULL;
+
 
 	/* Build the server string
 	 */
@@ -966,8 +968,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if ((srv->user != srv->user_orig) ||
 	    (srv->group != srv->group_orig))
 	{
-		ent = getpwuid (srv->user);
-		if (ent == NULL) {
+		ret = cherokee_getpwuid (srv->user, ent, ent_tmp, sizeof(ent_tmp));
+		if ((ret != ret_ok) || (ent == NULL)) {
 			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_UID_GET, srv->user);
 			return ret_error;
 		}
