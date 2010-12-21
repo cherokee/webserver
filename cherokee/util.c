@@ -1322,6 +1322,33 @@ cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
 }
 
 
+ret_t
+cherokee_getpwnam_uid (const char *name, struct passwd *pwbuf, char *buf, size_t buflen)
+{
+	ret_t ret;
+	long  tmp_uid;
+
+	ret = cherokee_getpwnam (name, pwbuf, buf, buflen);
+	if ((ret == ret_ok) || (pwbuf->pw_dir != NULL)) {
+		return ret_ok;
+	}
+
+	errno   = 0;
+	tmp_uid = strtol (name, NULL, 10);
+	if (errno != 0) {
+		return ret_error;
+	}
+
+	ret = cherokee_getpwuid ((uid_t)tmp_uid, pwbuf, buf, buflen);
+	if ((ret != ret_ok) || (pwbuf->pw_dir == NULL)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+
 #if defined(HAVE_PTHREAD) && !defined(HAVE_GETGRNAM_R)
 static pthread_mutex_t __global_getgrnam_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
