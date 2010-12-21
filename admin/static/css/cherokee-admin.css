@@ -1304,3 +1304,19 @@ img.icon_chooser_selected {
 }
 
 .balancer-sources-sortable td, .balancer-sources-sortable th { width: 500px;  height: 24px; }
+
+.vserver_content .comment {
+  width: 100%;
+}
+.vserver_content .collapsible {
+  float: right;
+}
+.vserver_content .collapsible-content {
+  float: left;
+  width: 640px;
+  display: block;
+}
+
+.custom-logger-macros {
+}
+.custom-logger-macros td { padding: 4px 8px 4px 2px; }
