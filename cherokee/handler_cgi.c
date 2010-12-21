@@ -533,7 +533,8 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Change stdin and out
 	 */
-	re  = dup2 (pipe_server[0], STDIN_FILENO);
+	cherokee_fd_close (STDIN_FILENO);
+	re = dup2 (pipe_server[0], STDIN_FILENO);
 	cherokee_fd_close (pipe_server[0]);
 
 	if (unlikely (re != 0)) {
@@ -542,6 +543,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 		exit(1);
 	}
 
+	cherokee_fd_close (STDOUT_FILENO);
 	re |= dup2 (pipe_cgi[1], STDOUT_FILENO);
 	cherokee_fd_close (pipe_cgi[1]);
 
@@ -550,6 +552,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	if ((CONN_VSRV(conn)->error_writer != NULL) &&
 	    (CONN_VSRV(conn)->error_writer->fd != -1))
 	{
+		cherokee_fd_close (STDERR_FILENO);
 		dup2 (CONN_VSRV(conn)->error_writer->fd, STDERR_FILENO);
 	}
 
