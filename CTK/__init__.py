@@ -39,7 +39,7 @@ from RawHTML import RawHTML
 from TextField import TextField, TextFieldPassword, TextCfg, TextCfgPassword, TextCfgAuto
 from Checkbox import Checkbox, CheckCfg, CheckboxText, CheckCfgText
 from Combobox import Combobox, ComboCfg
-from PropsTable import PropsTable, PropsTableAuto, PropsAuto
+from PropsTable import PropsTable, PropsAuto
 from Template import Template
 from Server import Server, run, init, set_synchronous, step, publish, unpublish, cookie, post, request, cfg, error, cfg_reply_ajax_ok, cfg_apply_post, add_plugin_dir
 from Proxy import Proxy

@@ -84,33 +84,6 @@ class PropsTable (Box):
         self += PropsTableEntry (title, widget, comment)
 
 
-class PropsTableAuto (PropsTable):
-    """Property Table: Adds Submitters and constants"""
-
-    def __init__ (self, url, **kwargs):
-        PropsTable.__init__ (self, **kwargs)
-        self._url      = url
-        self.constants = {}
-
-    def AddConstant (self, key, val):
-        self.constants[key] = val
-
-    def Add (self, title, widget, comment):
-        submit = Submitter (self._url)
-
-        if self.constants:
-            box = Container()
-            box += widget
-            for key in self.constants:
-                box += HiddenField ({'name': key, 'value': self.constants[key]})
-
-            submit += box
-        else:
-            submit += widget
-
-        return PropsTable.Add (self, title, submit, comment)
-
-
 class PropsAuto (PropsTable):
     def __init__ (self, url, **kwargs):
         PropsTable.__init__ (self, **kwargs)
