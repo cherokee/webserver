@@ -459,6 +459,31 @@ add_http_user_agent  (cherokee_template_t       *template,
 }
 
 static ret_t
+add_http_cookie  (cherokee_template_t       *template,
+		  cherokee_template_token_t *token,
+		  cherokee_buffer_t         *output,
+		  void                      *param)
+{
+	ret_t                  ret;
+	char                  *cookie     = NULL;
+	cuint_t                cookie_len = 0;
+	cherokee_connection_t *conn       = CONN(param);
+
+	UNUSED (template);
+	UNUSED (token);
+
+	ret = cherokee_header_get_known (&conn->header, header_cookie, &cookie, &cookie_len);
+	if (ret != ret_ok) {
+		cherokee_buffer_add_char (output, '-');
+		return ret_ok;
+	}
+
+	cherokee_buffer_add (output, cookie, cookie_len);
+	return ret_ok;
+}
+
+
+static ret_t
 _set_template (cherokee_logger_custom_t *logger,
 	       cherokee_template_t      *template)
 {
@@ -487,6 +512,7 @@ _set_template (cherokee_logger_custom_t *logger,
 		{"http_host",          add_http_host},
 		{"http_referrer",      add_http_referer},
 		{"http_user_agent",    add_http_user_agent},
+		{"http_cookie",        add_http_cookie},
 		{NULL, NULL}
 	};
 
