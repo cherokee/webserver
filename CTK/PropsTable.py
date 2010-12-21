@@ -117,8 +117,12 @@ class PropsAuto (PropsTable):
         self.url       = url
         self.constants = {}
 
-    def Add (self, title, widget, comment):
-        submit = Submitter (self.url)
+    def Add (self, title, widget, comment, use_submitter=True):
+        if use_submitter:
+            submit = Submitter (self.url)
+        else:
+            submit = Container()
+
         submit += widget
 
         # Add constants
