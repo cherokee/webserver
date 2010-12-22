@@ -849,7 +849,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Build the server string
 	 */
-	cherokee_buffer_add_va (&srv->timeout_header, "Keep-Alive: timeout=%d"CRLF, srv->timeout);
+	cherokee_buffer_add_va (&srv->timeout_header, "Keep-Alive: timeout=%d", srv->timeout);
 
 	/* Set the FD number limit
 	 */

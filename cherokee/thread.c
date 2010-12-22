@@ -455,7 +455,7 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	 * to disable TCP cork before shutdown or before a close).
 	 * Logging is performed after the lingering close.
 	 */
-	if (conn->keepalive <= 0) {
+	if (conn->keepalive <= 1) {
 		conn->phase = phase_shutdown;
 		return;
 	}

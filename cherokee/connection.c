@@ -726,9 +726,14 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	if (conn->upgrade != http_upgrade_nothing) {
 		cherokee_buffer_add_str (buffer, "Connection: Upgrade"CRLF);
 
-	} else if (conn->handler && (conn->keepalive > 0)) {
-		cherokee_buffer_add_str (buffer, "Connection: Keep-Alive"CRLF);
-		cherokee_buffer_add_buffer (buffer, conn->timeout_header);
+	} else if (conn->handler && (conn->keepalive > 1)) {
+		if (conn->header.version < http_version_11) {
+			cherokee_buffer_add_str     (buffer, "Connection: Keep-Alive"CRLF);
+			cherokee_buffer_add_buffer  (buffer, conn->timeout_header);
+			cherokee_buffer_add_str     (buffer, ", max=");
+			cherokee_buffer_add_ulong10 (buffer, conn->keepalive);
+			cherokee_buffer_add_str     (buffer, CRLF);
+		}
 	} else {
 		cherokee_buffer_add_str (buffer, "Connection: close"CRLF);
 	}
