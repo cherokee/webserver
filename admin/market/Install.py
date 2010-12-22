@@ -201,8 +201,8 @@ class Init_Check (Install_Stage):
             cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALL_READY_TO_BUY_2)))
 
             checkout = CTK.Button (_("Check Out"))
-            checkout.bind ('click', CTK.JS.OpenWindow('%s/order/%s' %(OWS_STATIC, app_id)))
-            checkout.bind ('click', CTK.DruidContent__JS_to_goto (checkout.id, URL_INSTALL_PAY_CHECK))
+            checkout.bind ('click', CTK.DruidContent__JS_to_goto (cont.id, URL_INSTALL_PAY_CHECK) +
+                                    CTK.JS.OpenWindow('%s/order/%s' %(OWS_STATIC, app_id)))
 
             buttons = CTK.DruidButtonsPanel()
             buttons += CTK.DruidButton_Close(_('Cancel'))
