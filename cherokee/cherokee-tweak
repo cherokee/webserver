@@ -141,19 +141,28 @@ def parse_args():
         raise SystemExit
 
 
-def configure_http_auth():
-    if not user or not password:
-        return
-
-    passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-    passman.add_password (None, url, user, password)
-    authhandler = urllib2.HTTPBasicAuthHandler (passman)
-    opener = urllib2.build_opener (authhandler)
-    urllib2.install_opener (opener)
-
 def request (commands):
+    tmp       = url + '/py'
+    url_py    = tmp[:7] + tmp[7:].replace('//','/')
     post_info = "%s\n" %('\n'.join(commands))
-    conn = urllib2.urlopen (url + '/py', post_info)
+
+    # Authtentication
+    if user or password:
+        passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        passman.add_password (None, url, user, password)
+
+        authhandler = urllib2.HTTPBasicAuthHandler (passman)
+        opener = urllib2.build_opener (authhandler)
+        urllib2.install_opener (opener)
+
+    # Request
+    try:
+        conn = urllib2.urlopen (url_py, post_info)
+    except urllib2.HTTPError, e:
+        if e.code == 401:
+            print >> sys.stderr, "Error in Authentication"
+            raise SystemExit
+        raise
     return conn.read()
 
 def eval_safe (txt):
@@ -320,7 +329,6 @@ def do_logrotate():
 
 def main():
     parse_args()
-    configure_http_auth()
 
     if command == 'info':
         print_info()
