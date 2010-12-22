@@ -34,7 +34,7 @@ run-tests.py \
 026-Host-Broken-Dot.py \
 027-Missing-File.py \
 028-Missing-File+Param.py \
-029-Post+Without-lenght.py \
+029-Post+Without-length.py \
 030-Post+urlencoded.py \
 031-Post+urlencoded2.py \
 032-DirIndex+Redir.py \
