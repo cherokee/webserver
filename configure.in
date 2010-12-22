@@ -1296,44 +1296,48 @@ AC_SUBST(WWW_GROUP)
 dnl
 dnl Look for misc binaries
 dnl
-AC_PATH_PROG(PHPCGI, php-cgi)
-AC_ARG_VAR(PHPCGI, [path to PHP-cgi])
+AC_PATH_PROGS(PHPCGI, [php-fpm php-cgi])
+AC_ARG_VAR(PHPCGI, [path to php-fpm or php-cgi])
 
+dnl If no php, try to find it
+if test "x$PHPCGI" = "x"; then
+   for n in php-cgi php; do
+     for p in /usr/lib/cgi-bin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/local/bin /opt/local/sbin /usr/gnu/bin /usr/gnu/sbin; do
+	  for bin in php-fpm php-cgi; do
+         phpcgi_path="$p/$bin"
+	    AC_MSG_CHECKING([for $phpcgi_path])
+	    if test -x "$phpcgi_path"; then
+	       $phpcgi_path -v | grep 'fcgi' >/dev/null 2>/dev/null
+		  if test $? = 0; then
+		    PHPCGI=$phpcgi_path
+	         AC_MSG_RESULT([yes])
+		  else
+	         AC_MSG_RESULT([not fcgi])
+		  fi
+		  break
+	    else
+	       AC_MSG_RESULT([no])
+	    fi
+       done
+     done
+	if test "x$PHPCGI" != x; then
+	  break;
+	fi
+   done
+fi
+
+dnl Ensures it support FastCGI
 AC_MSG_CHECKING([$PHPCGI supports FastCGI])
 if test "x$PHPCGI" = "x"; then
    AC_MSG_RESULT([no])
 else
-   $PHPCGI -v -d session.save_path=/tmp | grep 'cgi-fcgi' >/dev/null 2>/dev/null
+   $PHPCGI -v -d session.save_path=/tmp | grep 'fcgi' >/dev/null 2>/dev/null
    if test $? != 0; then
       PHPCGI=""
       AC_MSG_RESULT([no])
    else
       AC_MSG_RESULT([yes])
    fi
-fi
-
-if test "x$PHPCGI" = "x"; then
-   for n in php-cgi php; do
-     for p in /usr/lib/cgi-bin /usr/bin /usr/local/bin; do
-       phpcgi_path="$p/php-cgi"
-	  AC_MSG_CHECKING([for $phpcgi_path])
-	  if test -x "$phpcgi_path"; then
-	     $phpcgi_path -v | grep 'cgi-fcgi' >/dev/null 2>/dev/null
-		if test $? = 0; then
-		  PHPCGI=$phpcgi_path
-	       AC_MSG_RESULT([yes])
-		else
-	       AC_MSG_RESULT([not fcgi])
-		fi
-		break
-	  else
-	     AC_MSG_RESULT([no])
-	  fi
-     done
-	if test "x$PHPCGI" != x; then
-	  break;
-	fi
-   done
 fi
 
 if test "x$PHPCGI" = "x"; then
