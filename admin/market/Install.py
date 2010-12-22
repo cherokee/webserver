@@ -241,11 +241,11 @@ class Pay_Check (Install_Stage):
             Install_Log.log ("Payment ACK!")
 
             # Invalidate 'My Library' cache
-            MyLibrary.Invalidate_Cache()
+            Library.Invalidate_Cache()
 
             # Move on
             CTK.cfg['tmp!market!install!download'] = install_info['url']
-            box += CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_DOWNLOAD)
+            box += CTK.RawHTML (js=CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_DOWNLOAD))
 
         return box.Render().toStr()
 
