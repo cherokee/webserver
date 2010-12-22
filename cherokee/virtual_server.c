@@ -273,8 +273,8 @@ static ret_t
 init_entry_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
-	cherokee_buffer_t         *tmp;
 	cherokee_list_t           *i, *j;
+	cherokee_buffer_t         *tmp       = NULL;
 	cherokee_config_node_t    *subconf   = NULL;
 	cherokee_config_node_t    *subconf2  = NULL;
 	cherokee_plugin_info_t    *info      = NULL;
@@ -296,7 +296,10 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		}
 
 	} else if (equal_buf_str (&conf->key, "document_root")) {
-		cherokee_config_node_read_path (conf, NULL, &tmp);
+		ret = cherokee_config_node_read_path (conf, NULL, &tmp);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
 
 		if (entry->document_root == NULL)
 			cherokee_buffer_new (&entry->document_root);

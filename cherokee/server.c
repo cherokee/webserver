@@ -1592,9 +1592,9 @@ configure_server (cherokee_server_t *srv)
 	/* IO-cache
 	 */
 	TRACE (ENTRIES, "Configuring %s\n", "iocache");
-	cherokee_config_node_read_bool (&srv->config, "server!iocache", &srv->iocache_enabled);
+	ret = cherokee_config_node_read_bool (&srv->config, "server!iocache", &srv->iocache_enabled);
 
-	if (srv->iocache_enabled) {
+	if ((ret == ret_ok) && (srv->iocache_enabled)) {
 		ret = cherokee_iocache_new (&srv->iocache);
 		if (ret != ret_ok)
 			return ret;

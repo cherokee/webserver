@@ -139,9 +139,9 @@ configure_rewrite_entry (cherokee_list_t        *list,
 			 cherokee_regex_table_t *regexs)
 {
 	ret_t                   ret;
-	cint_t                  hidden;
 	cherokee_regex_entry_t *n;
 	cherokee_buffer_t      *substring;
+	cint_t                  hidden     = 1;
 	pcre                   *re         = NULL;
 	cherokee_buffer_t      *regex      = NULL;
 

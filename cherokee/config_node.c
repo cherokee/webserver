@@ -267,6 +267,10 @@ cherokee_config_node_read_int (cherokee_config_node_t *conf, const char *key, in
 	ret = cherokee_config_node_get (conf, key, &tmp);
 	if (ret != ret_ok) return ret;
 
+	if (cherokee_buffer_is_empty (&tmp->val)) {
+		return ret_not_found;
+	}
+
 	*num = atoi (tmp->val.buf);
 	return ret_ok;
 }
@@ -280,6 +284,10 @@ cherokee_config_node_read_long (cherokee_config_node_t *conf, const char *key, l
 
 	ret = cherokee_config_node_get (conf, key, &tmp);
 	if (ret != ret_ok) return ret;
+
+	if (cherokee_buffer_is_empty (&tmp->val)) {
+		return ret_not_found;
+	}
 
 	*num = atol (tmp->val.buf);
 	return ret_ok;
@@ -313,6 +321,10 @@ cherokee_config_node_read_path (cherokee_config_node_t *conf, const char *key, c
 		tmp = conf;
 	}
 
+	if (cherokee_buffer_is_empty (&tmp->val)) {
+		return ret_not_found;
+	}
+
 	if (cherokee_buffer_end_char (&tmp->val) != '/')
 		cherokee_buffer_add_str (&tmp->val, "/");
 
@@ -337,6 +349,10 @@ cherokee_config_node_read_list (cherokee_config_node_t           *conf,
 		if (ret != ret_ok) return ret;
 	} else {
 		tmp = conf;
+	}
+
+	if (cherokee_buffer_is_empty (&tmp->val)) {
+		return ret_not_found;
 	}
 
 	ptr = tmp->val.buf;
