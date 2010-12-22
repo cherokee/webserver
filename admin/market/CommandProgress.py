@@ -142,23 +142,25 @@ class CommandProgress (CTK.Box, Replacement_Commons):
             else:
                 self += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (command_progress.id, command_progress.finished_url))
 
+    def Render (self):
+        self.thread.start()
+        return CTK.Box.Render (self)
 
     def __init__ (self, commands, finished_url):
         CTK.Box.__init__ (self)
         Replacement_Commons.__init__ (self)
 
-        self.finished_url    = finished_url
-        self.commands        = commands
-        self.error           = False
-        self.executed        = 0
-        self.last_popen_ret  = None
+        self.finished_url   = finished_url
+        self.commands       = commands
+        self.error          = False
+        self.executed       = 0
+        self.last_popen_ret = None
 
         self.refresh = CTK.Refreshable ({'id': 'market-commands-exec'})
         self.refresh.register (lambda: CommandProgress.Exec(self).Render())
         self += self.refresh
 
         self.thread = CommandExec_Thread (self)
-        self.thread.start()
 
 
 class CommandExec_Thread (threading.Thread):
