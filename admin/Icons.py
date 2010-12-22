@@ -198,7 +198,7 @@ class SpecialTable (CTK.Container):
                         ('directory',        _('Directory')),
                         ('parent_directory', _('Go to Parent'))]:
 
-            icon = CTK.cfg.get_val('icons!%s'%(k))
+            icon = CTK.cfg.get_val('icons!%s'%(k), 'blank.png')
             props = {'alt'  : desc,
                      'title': desc,
                      'src'  : '/icons_local/%s'%(icon)}
