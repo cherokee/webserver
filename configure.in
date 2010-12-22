@@ -1281,8 +1281,30 @@ dnl
 dnl WWW root directory, and user/group
 dnl
 AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),
-		  WWW_ROOT="$withval", WWW_ROOT="$localstatedir/www")
+		  WWW_ROOT="$withval", [
+   case "$host" in
+	*-*-darwin*)
+	   WWW_ROOT="/Library/WebServer/Documents"
+	   ;;
+     *)
+	   WWW_ROOT="$localstatedir/www"
+	   ;;
+   esac
+])
 AC_SUBST(WWW_ROOT)
+
+AC_ARG_WITH(cgiroot, AC_HELP_STRING([--with-cgiroot=DIR], [Set the CGI directory]),
+		  CGI_ROOT="$withval", [
+   case "$host" in
+	*-*-darwin*)
+	   CGI_ROOT="/Library/WebServer/CGI-Executables"
+	   ;;
+   *)
+        CGI_ROOT="$prefix/lib/cgi-bin"
+	   ;;
+   esac
+])
+AC_SUBST(CGI_ROOT)
 
 AC_ARG_WITH(wwwuser, AC_HELP_STRING([--with-wwwuser=USER], [Set default execution user]),
 		  WWW_USER="$withval", WWW_USER="")

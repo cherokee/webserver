@@ -49,7 +49,7 @@ vserver!1!rule!3!handler = file
 
 vserver!1!rule!4!match = directory
 vserver!1!rule!4!match!directory = /cgi-bin
-vserver!1!rule!4!document_root = %prefix%/lib/cgi-bin
+vserver!1!rule!4!document_root = %cgiroot%
 vserver!1!rule!4!handler = cgi
 
 vserver!1!rule!5!match = directory
