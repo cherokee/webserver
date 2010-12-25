@@ -30,7 +30,7 @@ on production servers.
 This tool has its own documentation under the
 link:other_bundle_cherokee-tweak.html[cherokee-tweak] section.
 
-[[x-sendifle]]
+[[x-sendfile]]
 X-Sendfile
 ~~~~~~~~~~
 X-Sendfile is a special, non-standard HTTP header that has been
