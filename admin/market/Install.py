@@ -407,10 +407,13 @@ class Setup (Install_Stage):
         Install_Log.set_file (os.path.join (target_path, "install.log"))
 
         # Uncompress
-        tar = tarfile.open (package_path, 'r:gz')
-        for tarinfo in tar:
-            Install_Log.log ("  %s" %(tarinfo.name))
-            tar.extract (tarinfo, target_path)
+        try:
+            tar = tarfile.open (package_path, 'r:gz')
+            for tarinfo in tar:
+                Install_Log.log ("  %s" %(tarinfo.name))
+                tar.extract (tarinfo, target_path)
+        except CompressionError:
+            popen.popen_sync ("gzip -dc '%(package_path)s' | tar xfv -" %(locals()))
 
         # Set default permission
         Install_Log.log ("Setting default permission 755 for directory %s" %(target_path))
