@@ -48,9 +48,14 @@ match (cherokee_vrule_rehost_t *vrule,
 	list_for_each (i, &vrule->pcre_list) {
 		pcre *regex = LIST_ITEM_INFO(i);
 
-		re = pcre_exec (regex, NULL, host->buf, host->len, 0, 0, NULL, 0);
+		re = pcre_exec (regex, NULL,
+				host->buf,
+				host->len,
+				0, 0,
+				conn->regex_host_ovector, OVECTOR_LEN);
 		if (re >= 0) {
-			TRACE (ENTRIES, "Host \"%s\" matched\n", host->buf);
+			conn->regex_host_ovecsize = re;
+			TRACE (ENTRIES, "Host \"%s\" matched: %d variables\n", host->buf, re);
 			return ret_ok;
 		}
 	}

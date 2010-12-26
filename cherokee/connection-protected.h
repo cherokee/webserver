@@ -204,8 +204,13 @@ struct cherokee_connection {
 	off_t                         mmaped_len;
 	cherokee_iocache_entry_t     *io_entry_ref;
 
+	/* Regular expressions
+	 */
 	int                           regex_ovector[OVECTOR_LEN];
 	int                           regex_ovecsize;
+	int                           regex_host_ovector[OVECTOR_LEN];
+	int                           regex_host_ovecsize;
+
 
 	/* Content Expiration
 	 */

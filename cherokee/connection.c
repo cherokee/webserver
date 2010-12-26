@@ -163,6 +163,8 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	memset (n->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	n->regex_ovecsize = 0;
+	memset (n->regex_host_ovector, 0, OVECTOR_LEN * sizeof(int));
+	n->regex_host_ovecsize = 0;
 
 	n->chunked_encoding     = false;
 	n->chunked_sent         = 0;
@@ -299,6 +301,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 	memset (conn->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_ovecsize = 0;
+	memset (conn->regex_host_ovector, 0, OVECTOR_LEN * sizeof(int));
+	conn->regex_host_ovecsize = 0;
 
 	if (conn->handler != NULL) {
 		cherokee_handler_free (conn->handler);

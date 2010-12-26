@@ -55,9 +55,24 @@ substitute (cherokee_handler_redir_t *hdl,
 	cint_t                 offset;
 	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
 
-	/* Replace regex matches
+	/* Replace regex matches (vserver match)
 	 */
-	ret = cherokee_regex_substitute (regex, source, target, ovector, ovector_size);
+	ret = cherokee_regex_substitute (regex, &conn->host, target,
+					 conn->regex_host_ovector,
+					 conn->regex_host_ovecsize, '^');
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	/* Base regex of the next replacement is output of the
+	 * previous one. Source is the request.
+	 */
+	cherokee_buffer_swap_buffers (regex, target);
+	cherokee_buffer_clean        (target);
+
+	/* Replace regex matches (handler)
+	 */
+	ret = cherokee_regex_substitute (regex, source, target, ovector, ovector_size, '$');
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
