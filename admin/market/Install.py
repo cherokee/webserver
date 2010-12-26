@@ -403,17 +403,21 @@ class Setup (Install_Stage):
         CTK.cfg['tmp!market!install!root'] = target_path
 
         # Create the log file
-        Install_Log.log ("Unpacking %s" %(package_path))
         Install_Log.set_file (os.path.join (target_path, "install.log"))
 
         # Uncompress
         try:
+            Install_Log.log ("Unpacking %s with Python" %(package_path))
             tar = tarfile.open (package_path, 'r:gz')
             for tarinfo in tar:
                 Install_Log.log ("  %s" %(tarinfo.name))
                 tar.extract (tarinfo, target_path)
         except CompressionError:
-            popen.popen_sync ("gzip -dc '%(package_path)s' | tar xfv -" %(locals()))
+            command = "gzip -dc '%s' | tar xfv -" %(package_path)
+            Install_Log.log ("Unpacking %(package_path)s with the GZip binary (cd: %(target_path)s): %(command)s" %(locals()))
+            ret = popen.popen_sync (command, cd=target_path)
+            Install_Log.log (ret['stdout'])
+            Install_Log.log (ret['stderr'])
 
         # Set default permission
         Install_Log.log ("Setting default permission 755 for directory %s" %(target_path))
