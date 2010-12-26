@@ -261,7 +261,7 @@ replace_againt_regex_list (cherokee_buffer_t *in_buf,
 		}
 
 		/* Matched */
-		cherokee_regex_substitute (&regex_entry->subs, in_buf, out_buf, ovector, re);
+		cherokee_regex_substitute (&regex_entry->subs, in_buf, out_buf, ovector, re, '$');
 		return 1;
 	}
 
