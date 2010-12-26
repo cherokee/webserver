@@ -39,15 +39,15 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "SCGI Keepalive"
 
-        self.request           = "GET %s/ HTTP/1.1\r\n" %(DIR)      + \
-                                 "Host: localhost\r\n"              + \
-                                 "Connection: Keep-Alive\r\n\r\n"   + \
-                                 "OPTIONS %s/ HTTP/1.0\r\n" % (DIR) +\
-                                 "Connection: Close\r\n"
+        self.request = "GET %s/ HTTP/1.1\r\n" %(DIR)      + \
+                       "Host: localhost\r\n"              + \
+                       "Connection: Keep-Alive\r\n\r\n"
+        # Second request
+        self.request += self.request
 
         self.expected_error    = 200
-        self.expected_content  = [MAGIC, "Connection: Keep-Alive"]
-        self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']
+        self.expected_content  = [MAGIC]
+        self.forbidden_content = ['close', 'pyscgi', 'SCGIServer', 'write']
 
     def Prepare (self, www):
         scgi_file = self.WriteFile (www, "scgi_keepalive1.scgi", 0444, SCRIPT)
