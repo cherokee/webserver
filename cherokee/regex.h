@@ -75,7 +75,8 @@ ret_t cherokee_regex_substitute (cherokee_buffer_t *regex_str,
 				 cherokee_buffer_t *source,
 				 cherokee_buffer_t *target,
 				 cint_t             ovector[],
-				 cint_t             stringcount);
+				 cint_t             stringcount,
+				 char               dollar_char);
 
 CHEROKEE_END_DECLS
 

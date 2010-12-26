@@ -222,7 +222,8 @@ cherokee_regex_substitute (cherokee_buffer_t *regex_str,
 			   cherokee_buffer_t *source,
 			   cherokee_buffer_t *target,
 			   cint_t             ovector[],
-			   cint_t             stringcount)
+			   cint_t             stringcount,
+			   char               dollar_char)
 {
 	cint_t              re;
 	char               *s;
@@ -232,7 +233,7 @@ cherokee_regex_substitute (cherokee_buffer_t *regex_str,
 
 	for (s = regex_str->buf; *s != '\0'; s++) {
 		if (! dollar) {
-			if (*s == '$')
+			if (*s == dollar_char)
 				dollar = true;
 			else
 				cherokee_buffer_add_char (target, *s);
@@ -243,7 +244,7 @@ cherokee_regex_substitute (cherokee_buffer_t *regex_str,
 
 		/* Add the characters if it wasn't a number */
 		if ((num < 0) || (num > 9)) {
-			cherokee_buffer_add_str  (target, "$");
+			cherokee_buffer_add_char (target, dollar_char);
 			cherokee_buffer_add_char (target, *s);
 
 			dollar = false;
