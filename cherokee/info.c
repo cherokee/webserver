@@ -48,6 +48,7 @@ cherokee_info_build_print (cherokee_server_t *srv)
 	printf (" Icons dir: " CHEROKEE_ICONSDIR "\n");
 	printf (" Themes dir: " CHEROKEE_THEMEDIR "\n");
 	printf (" Plug-in dir: " CHEROKEE_PLUGINDIR "\n");
+	printf (" Temporal dir: " TMPDIR "\n");
 	printf ("\n");
 
 	/* Print plug-ins information
