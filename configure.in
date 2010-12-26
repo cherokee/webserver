@@ -972,6 +972,33 @@ AC_TRY_COMPILE([],
    AC_DEFINE(__func__, __FILE__,
          [Define to appropriate substitue if compiler doesnt have __func__])))
 
+
+dnl
+dnl Temporal directory
+dnl
+AC_ARG_ENABLE(tmpdir, AC_HELP_STRING([--enable-tmpdir=DIR],[default directory for temporary files]))
+
+AC_MSG_CHECKING(directory to use for temporary files)
+if test -n "$enable_tmpdir"; then
+        tmpdir="$enable_tmpdir"
+elif test -n "$TMPDIR"; then
+        tmpdir="$TMPDIR"
+elif test -n "$TMP"; then
+        tmpdir="$TMP"
+elif test -n "$TEMP"; then
+        tmpdir="$TEMP"
+elif test -d "c:/"; then
+        tmpdir="c:/"
+else
+        tmpdir="/tmp"
+fi
+if test -d $tmpdir ; then
+        AC_MSG_RESULT($tmpdir)
+        AC_DEFINE_UNQUOTED(TMPDIR, "$tmpdir", [Temporal directory])
+else
+        AC_MSG_ERROR($tmpdir does not exist)
+fi
+
 dnl
 dnl Check for pcre library
 dnl

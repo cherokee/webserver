@@ -658,9 +658,9 @@ spawn_init (void)
 
 	/* Names
 	 */
-	mem_len = sizeof("/tmp/cherokee-spawner-<PID_number>");
+	mem_len = sizeof(TMPDIR "/cherokee-spawner-<PID_number>");
 	spawn_shared_name = malloc (mem_len);
-	snprintf (spawn_shared_name, mem_len, "/tmp/cherokee-spawner-%d", getpid());
+	snprintf (spawn_shared_name, mem_len, TMPDIR "/cherokee-spawner-%d", getpid());
 
 	/* Create the shared memory
 	 */

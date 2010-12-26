@@ -60,7 +60,7 @@
 #define TIMEOUT              "25"
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
-#define DEFAULT_UNIX_SOCKET  "/tmp/cherokee-admin-scgi.socket"
+#define DEFAULT_UNIX_SOCKET  TMPDIR "/cherokee-admin-scgi.socket"
 #define DEFAULT_BIND         "127.0.0.1"
 #define RULE_PRE             "vserver!1!rule!"
 

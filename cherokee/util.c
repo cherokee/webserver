@@ -1991,9 +1991,10 @@ cherokee_tmp_dir_copy (cherokee_buffer_t *buffer)
 		return ret_ok;
 	}
 
-	/* Since everything has failed, let's go for /tmp
+	/* Since everything has failed, let's go for whatever autoconf
+	 * detected at compilation time.
 	 */
-	cherokee_buffer_add_str (buffer, "/tmp");
+	cherokee_buffer_add_str (buffer, TMPDIR);
 	return ret_ok;
 }
 
