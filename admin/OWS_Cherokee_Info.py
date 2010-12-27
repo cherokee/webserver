@@ -33,7 +33,7 @@ from configured import *
 OWS_RPC    = 'http://www.octality.com/api/v%s/open/cherokee-info/' %(OWS_API_VERSION)
 EXPIRATION = 10*60 # 10 min
 
-BETA_TESTER_NOTICE = N_("Thank you for testing a development snapshot. It helps us to create the highest quality product.")
+BETA_TESTER_NOTICE = N_("Thank you for testing a development snapshot (%(VERSION)s). It helps us to create the highest quality product.")
 
 
 class Latest_Release (CTK.Box):
@@ -66,13 +66,13 @@ class Latest_Release (CTK.Box):
             # Compare the release string
             d = version_cmp (latest['version'], VERSION)
             if d == 0:
-                content += CTK.RawHTML (_('Cherokee is up to date.'))
+                content += CTK.RawHTML (_('Cherokee is up to date') + ': %s'%(VERSION))
             elif d == 1:
                 content += CTK.RawHTML ('%s v%s. %s v%s.' %(_('You are running Cherokee'),
                                                             VERSION, _('Latest release is '),
                                                             latest['version']))
             else:
-                content += CTK.RawHTML (_(BETA_TESTER_NOTICE))
+                content += CTK.RawHTML (_(BETA_TESTER_NOTICE)%(globals()))
 
         # Update cache
         Latest_Release.cache_info       = content.Render().toStr()
