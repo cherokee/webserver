@@ -1355,35 +1355,37 @@ AC_SUBST(WWW_GROUP)
 dnl
 dnl Look for misc binaries
 dnl
-AC_PATH_PROGS(PHPCGI, [php-fpm php-cgi])
-AC_ARG_VAR(PHPCGI, [path to php-fpm or php-cgi])
+AC_ARG_WITH(php, AC_HELP_STRING([--with-php=/path/to/php], [Path to php-fpm or php-cgi]),
+	       PHPCGI="$withval", PHPCGI="")
+
+## AC_ARG_VAR(PHPCGI, [path to php-fpm or php-cgi])
 
 dnl If no php, try to find it
 if test "x$PHPCGI" = "x"; then
-   for n in php-cgi php; do
-     for p in /usr/lib/cgi-bin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/local/bin /opt/local/sbin /usr/gnu/bin /usr/gnu/sbin; do
-	  for bin in php-fpm php-cgi; do
-         phpcgi_path="$p/$bin"
-	    AC_MSG_CHECKING([for $phpcgi_path])
-	    if test -x "$phpcgi_path"; then
-	       $phpcgi_path -v | grep 'fcgi' >/dev/null 2>/dev/null
-		  if test $? = 0; then
-		    PHPCGI=$phpcgi_path
-	         AC_MSG_RESULT([yes])
-		  else
-	         AC_MSG_RESULT([not fcgi])
-		  fi
-		  break
-	    else
-	       AC_MSG_RESULT([no])
-	    fi
-       done
-     done
-	if test "x$PHPCGI" != x; then
-	  break;
-	fi
-   done
+  for bin in php-fpm php-cgi php; do
+    for p in /usr/lib/cgi-bin /usr/sbin /usr/bin /usr/local/sbin /usr/local/bin /opt/local/sbin /opt/local/bin /usr/gnu/sbin /usr/gnu/bin; do
+	 if test -x "$p/$bin"; then
+        PHPCGI="$p/$bin"
+        break
+	 fi
+    done
+    if test "x$PHPCGI" != x; then
+	 break
+    fi
+  done
 fi
+
+dnl Try in the $PATH
+if test "x$PHPCGI" = "x"; then
+   AC_PATH_PROGS(PHPCGI, [php-fpm php-cgi])
+fi
+
+dnl Last, desperate option
+if test "x$PHPCGI" = "x"; then
+   PHPCGI="php-cgi"
+fi
+
+AC_SUBST(PHPCGI)
 
 dnl Ensures it support FastCGI
 AC_MSG_CHECKING([$PHPCGI supports FastCGI])
@@ -1393,17 +1395,11 @@ else
    $PHPCGI -v -d session.save_path=/tmp | grep 'fcgi' >/dev/null 2>/dev/null
    if test $? != 0; then
       PHPCGI=""
-      AC_MSG_RESULT([no])
+      AC_MSG_RESULT([no, use --with-php])
    else
       AC_MSG_RESULT([yes])
    fi
 fi
-
-if test "x$PHPCGI" = "x"; then
-   PHPCGI="php-cgi"
-fi
-
-AC_SUBST(PHPCGI)
 
 dnl
 dnl Python
