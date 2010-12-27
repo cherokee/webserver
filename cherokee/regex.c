@@ -240,10 +240,17 @@ cherokee_regex_substitute (cherokee_buffer_t *regex_str,
 			continue;
 		}
 
-		num = *s - '0';
-
-		/* Add the characters if it wasn't a number */
-		if ((num < 0) || (num > 9)) {
+		/* Convert the $<num>. Limit 99.
+		 */
+		if ((*s >= '0') && (*s <= '9')) {
+			num = *s - '0';
+			if ((s[1] >= '0') && (s[1] <= '9')) {
+				s++;
+				num = (num * 10) + (*s - '0');
+			}
+		} else {
+			/* Add the characters if it wasn't a number
+			 */
 			cherokee_buffer_add_char (target, dollar_char);
 			cherokee_buffer_add_char (target, *s);
 
@@ -251,7 +258,8 @@ cherokee_regex_substitute (cherokee_buffer_t *regex_str,
 			continue;
 		}
 
-		/* Perform the actually substitution */
+		/* Perform the actually substitution
+		 */
 		substring = NULL;
 
 		re = pcre_get_substring (source->buf, ovector, stringcount, num, &substring);
