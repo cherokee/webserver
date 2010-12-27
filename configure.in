@@ -1353,12 +1353,10 @@ AC_SUBST(WWW_GROUP)
 
 
 dnl
-dnl Look for misc binaries
+dnl PHP fcgi
 dnl
 AC_ARG_WITH(php, AC_HELP_STRING([--with-php=/path/to/php], [Path to php-fpm or php-cgi]),
 	       PHPCGI="$withval", PHPCGI="")
-
-## AC_ARG_VAR(PHPCGI, [path to php-fpm or php-cgi])
 
 dnl If no php, try to find it
 if test "x$PHPCGI" = "x"; then
