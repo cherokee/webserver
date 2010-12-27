@@ -79,7 +79,7 @@ def Restart (mode):
 class Save:
     def __call__ (self, dialog):
         # Check
-        errors = SavingCheck.check_config()
+        errors = SavingChecks.check_config()
         if errors:
             ul = CTK.List()
             for error in errors:
@@ -91,9 +91,9 @@ class Save:
 
             all = CTK.Container()
             all += CTK.RawHTML ("<h2>%s</h2>"%(SAVE_CHECK_H1))
-            all += CTK.RawHTML ("<p>%s</p>"%(SAVE_CHECK_P1))
+            all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P1))
             all += CTK.Box({'id': "errors"}, ul)
-            all += CTK.RawHTML ("<p>%s</p>"%(SAVE_CHECK_P2))
+            all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P2))
 
             render = all.Render()
             return render.toStr()
