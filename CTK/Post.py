@@ -26,7 +26,8 @@ from urllib import unquote
 
 class Post:
     def __init__ (self, raw=''):
-        self._vars = {}
+        self._vars    = {}
+        self.raw_post = raw[:]
 
         tmp = parse_qs (raw, keep_blank_values=1)
         for key in tmp:
