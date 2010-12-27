@@ -63,7 +63,8 @@ NOTE_RESTORE_ERROR_P1 = N_('An error occurred while trying to fetch the configur
 NOTE_RESTORE_FAIL_H2  = N_('Could not restore the selected configuration file')
 NOTE_RESTORE_FAIL_P1  = N_('An error occurred while trying to restore a remotely-storaged configuration file.')
 NOTE_RESTORE_OK_H2    = N_('The Configuration File was restored successfuly')
-NOTE_RESTORE_OK_P1    = N_('The configuration has been rolled back to a previous version. Please, click the Save button if you want to commit the changes.')
+NOTE_RESTORE_OK_P1    = N_('The configuration has been rolled back to a previous version.')
+NOTE_RESTORE_OK_P1_2  = N_('Please, click the Save button if you want to commit the changes.')
 
 
 #
@@ -277,6 +278,10 @@ class Backup_Restore_Success:
         content = CTK.Container()
         content += CTK.RawHTML('<h2>%s</h2>' %(_(NOTE_RESTORE_OK_H2)))
         content += CTK.RawHTML('<p>%s</p>'   %(_(NOTE_RESTORE_OK_P1)))
+
+        if CTK.cfg.has_changed():
+            content += CTK.RawHTML('<p>%s</p>' %(_(NOTE_RESTORE_OK_P1_2)))
+
         content += panel
         return content.Render().toStr()
 
