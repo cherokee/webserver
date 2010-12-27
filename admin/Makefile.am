@@ -76,7 +76,8 @@ configured.py \
 consts.py \
 util.py \
 popen.py \
-validations.py
+validations.py \
+SavingChecks.py
 
 html_data = \
 exception.html \

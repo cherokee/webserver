@@ -27,6 +27,7 @@ import copy
 
 import CTK
 import Cherokee
+import SavingChecks
 
 from configured import *
 
@@ -38,6 +39,10 @@ URL_SAVE          = r'/save'
 URL_SAVE_GRACEFUL = r'/save/apply/graceful'
 URL_SAVE_HARD     = r'/save/apply/hard'
 URL_SAVE_NONE     = r'/save/apply/none'
+
+SAVE_CHECK_H1 = N_("Sanity checks")
+SAVE_CHECK_P1 = N_("Glitches were found in the current configuration. Please, fix the following issues:")
+SAVE_CHECK_P2 = N_("Note that the configuration file was not saved.")
 
 HELP_HTML = """
    <div id="help">
@@ -73,6 +78,26 @@ def Restart (mode):
 
 class Save:
     def __call__ (self, dialog):
+        # Check
+        errors = SavingCheck.check_config()
+        if errors:
+            ul = CTK.List()
+            for error in errors:
+                link = CTK.Link (error.url, CTK.RawHTML(_("Solve")))
+                content  = CTK.Box()
+                content += CTK.RawHTML ('%s: '%(error.title))
+                content += link
+                ul += content
+
+            all = CTK.Container()
+            all += CTK.RawHTML ("<h2>%s</h2>"%(SAVE_CHECK_H1))
+            all += CTK.RawHTML ("<p>%s</p>"%(SAVE_CHECK_P1))
+            all += CTK.Box({'id': "errors"}, ul)
+            all += CTK.RawHTML ("<p>%s</p>"%(SAVE_CHECK_P2))
+
+            render = all.Render()
+            return render.toStr()
+
         # Save
         CTK.cfg.save()
 
