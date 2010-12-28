@@ -40,8 +40,8 @@ def check_config():
     #
     # Empty balancers
     #
-    for v in CTK.cfg['vserver']:
-        for r in CTK.cfg['vserver!%s!rule'%(v)]:
+    for v in CTK.cfg['vserver'] or []:
+        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
             handler_name  = CTK.cfg.get_val ('vserver!%s!rule!%s!handler'%(v,r))
             balancer_name = CTK.cfg.get_val ('vserver!%s!rule!%s!handler!balancer'%(v,r))
 
@@ -54,8 +54,8 @@ def check_config():
     #
     # Validators without Realm
     #
-    for v in CTK.cfg['vserver']:
-        for r in CTK.cfg['vserver!%s!rule'%(v)]:
+    for v in CTK.cfg['vserver'] or []:
+        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
             if CTK.cfg.get_val ('vserver!%s!rule!%s!auth'%(v,r)):
                 if not CTK.cfg.get_val ('vserver!%s!rule!%s!auth!realm'%(v,r)):
                     errors.append (Error(_('Authentication rule without Realm'),
