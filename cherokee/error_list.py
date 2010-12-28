@@ -779,9 +779,9 @@ e('TEMPLATE_NO_TOKEN',
 
 # cherokee/spawner.c
 #
-e('SPAWNER_SHM_INIT',
-  title   = "Could not initialize SHM '%s': ${errno}",
-  desc    = "Check if your shared memory is mounted in /dev/shm",
+e('SPAWNER_TMP_INIT',
+  title   = "Could not open temporal file '%s': ${errno}",
+  desc    = "It looks like the cherokee supervisor is not running, or it could not create the required temporal file.",
   show_bt = False)
 
 e('SPAWNER_UNLOCK_SEMAPHORE',

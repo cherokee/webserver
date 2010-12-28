@@ -84,7 +84,7 @@ cherokee_spawner_init (void)
 	return ret_ok;
 
 error:
-	LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SPAWNER_SHM_INIT, name.buf);
+	LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_SPAWNER_TMP_INIT, name.buf);
 	cherokee_buffer_mrproper (&name);
 	return ret_error;
 #else
