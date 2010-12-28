@@ -70,6 +70,7 @@ static const char        *config_file   = DEFAULT_CONFIG_FILE;
 static const char        *bind_to       = DEFAULT_BIND;
 static int                debug         = 0;
 static int                unsecure      = 0;
+static int                iocache       = 1;
 static int                scgi_port     = 4000;
 static int                thread_num    = -1;
 static cherokee_server_t *srv           = NULL;
@@ -155,7 +156,7 @@ remove_old_socket (const char *path)
 }
 
 
-static ret_t
+static void
 print_connection_info (void)
 {
 	printf ("\n");
@@ -206,6 +207,7 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_va  (&buf, "server!bind!1!port = %d\n", port);
 	cherokee_buffer_add_str (&buf, "server!ipv6 = 1\n");
 	cherokee_buffer_add_str (&buf, "server!max_connection_reuse = 0\n");
+	cherokee_buffer_add_va  (&buf, "server!iocache = %d\n", iocache);
 
 	if (bind_to) {
 		cherokee_buffer_add_va (&buf, "server!bind!1!interface = %s\n", bind_to);
@@ -276,7 +278,6 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "3!match = directory\n"
 				 RULE_PRE "3!match!directory = /static\n"
 				 RULE_PRE "3!handler = file\n"
-				 RULE_PRE "3!handler!iocache = 0\n"
 				 RULE_PRE "3!expiration = time\n"
 				 RULE_PRE "3!expiration!time = 30d\n");
 
@@ -293,7 +294,6 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "5!match = directory\n"
 				 RULE_PRE "5!match!directory = /icons_local\n"
 				 RULE_PRE "5!handler = file\n"
-				 RULE_PRE "5!handler!iocache = 0\n"
 				 RULE_PRE "5!document_root = %s\n"
 				 RULE_PRE "5!expiration = time\n"
 				 RULE_PRE "5!expiration!time = 30d\n",
@@ -303,7 +303,6 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "6!match = directory\n"
 				 RULE_PRE "6!match!directory = /CTK\n"
 				 RULE_PRE "6!handler = file\n"
-				 RULE_PRE "6!handler!iocache = 0\n"
 				 RULE_PRE "6!document_root = %s/CTK/static\n"
 				 RULE_PRE "6!expiration = time\n"
 				 RULE_PRE "6!expiration!time = 30d\n",
@@ -324,7 +323,6 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "8!match = fullpath\n"
 				 RULE_PRE "8!match!fullpath!1 = /static/help_404.html\n"
 				 RULE_PRE "8!handler = file\n"
-				 RULE_PRE "8!handler!iocache = 0\n"
 				 RULE_PRE "8!document_root = %s\n", document_root);
 
 	cherokee_buffer_add_va  (&buf,
@@ -333,7 +331,6 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "9!match!left!directory = /help\n"
 				 RULE_PRE "9!match!right = not\n"
 				 RULE_PRE "9!match!right!right = exists\n"
-				 RULE_PRE "9!match!right!right!iocache = 0\n"
 				 RULE_PRE "9!match!right!right!match_any = 1\n"
 				 RULE_PRE "9!handler = redir\n"
 				 RULE_PRE "9!handler!rewrite!1!show = 1\n"
@@ -425,6 +422,7 @@ print_help (void)
 		"  -d,  --appdir=DIR             Application directory\n"
 		"  -p,  --port=NUM               TCP port\n"
 		"  -t,  --internal-unix          Use a Unix domain socket internally\n"
+		"  -i,  --disable-iocache        Disable I/O cache: reduces mem usage\n"
                 "  -T,  --threads=NUM            Threads number\n"
 		"  -C,  --target=PATH            Configuration file to modify\n\n"
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
@@ -436,20 +434,21 @@ process_parameters (int argc, char **argv)
 	int c;
 
 	struct option long_options[] = {
-		{"help",         no_argument,       NULL, 'h'},
-		{"version",      no_argument,       NULL, 'V'},
-		{"debug",        no_argument,       NULL, 'x'},
-		{"unsecure",     no_argument,       NULL, 'u'},
-		{"internal-tcp", no_argument,       NULL, 't'},
-		{"bind",         optional_argument, NULL, 'b'},
-		{"appdir",       required_argument, NULL, 'd'},
-		{"port",         required_argument, NULL, 'p'},
-		{"target",       required_argument, NULL, 'C'},
-		{"threads",      required_argument, NULL, 'T'},
+		{"help",            no_argument,       NULL, 'h'},
+		{"version",         no_argument,       NULL, 'V'},
+		{"debug",           no_argument,       NULL, 'x'},
+		{"unsecure",        no_argument,       NULL, 'u'},
+		{"internal-tcp",    no_argument,       NULL, 't'},
+		{"disable-iocache", no_argument,       NULL, 'i'},
+		{"bind",            optional_argument, NULL, 'b'},
+		{"appdir",          required_argument, NULL, 'd'},
+		{"port",            required_argument, NULL, 'p'},
+		{"target",          required_argument, NULL, 'C'},
+		{"threads",         required_argument, NULL, 'T'},
 		{NULL, 0, NULL, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "hVxutb::d:p:C:T:", long_options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVxutib::d:p:C:T:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'b':
 			if (optarg)
@@ -470,10 +469,14 @@ process_parameters (int argc, char **argv)
 			config_file = strdup(optarg);
 			break;
 		case 'x':
-			debug = 1;
+			debug   = 1;
+			iocache = 0;
 			break;
 		case 'u':
 			unsecure = 1;
+			break;
+		case 'i':
+			iocache = 0;
 			break;
 		case 't':
 			scgi_port = 0;
