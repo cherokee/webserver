@@ -456,10 +456,9 @@ class BasicsWidget (CTK.Container):
             if CTK.cfg.get_val(key) in matches:
                 return True
 
-            for k in CTK.cfg[key].keys():
+            for k in CTK.cfg.keys(key):
                 if recursive_find ('%s!%s' %(key,k)):
                     return True
-
             return False
 
         if recursive_find (key):
