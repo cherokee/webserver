@@ -23,11 +23,13 @@
 #
 
 import os
+import errno
 import base64
 import socket
 import random
 import httplib
 import xmlrpclib
+import configured
 
 try:
     # Python >= 2.5
@@ -53,25 +55,72 @@ class CustomTransport(xmlrpclib.Transport):
         self.proxies = dict(((self.proxy_keys[k],v) for k,v in os.environ.items() if k in self.proxy_keys))
         self.proxies.update(proxies)
 
-        self.local = local
-        self.auth  = ''
-        self.nc    = 0
+        self.local      = local
+        self.auth       = ''
+        self.nc         = 0
+        self.user_agent = "Cherokee-admin %s" %(configured.VERSION)
 
     def make_connection(self, host):
         self.user_pass, self.realhost = splituser(host)
-        proto, proxy, p1,p2,p3,p4 = urlparse.urlparse(self.proxies.get('http', ''))
+        proto, proxy, p1,p2,p3,p4 = urlparse.urlparse (self.proxies.get('http', ''))
         if proxy and not self.local:
             return httplib.HTTP(proxy)
         else:
             return httplib.HTTP(self.realhost)
 
     def send_request(self, connection, handler, request_body):
-        connection.putrequest("POST", handler)
+        connection.putrequest ("POST", handler)
 
-    def request(self, host, handler, request_body, verbose=0):
+    def _request_internal (self, host, handler, request_body, verbose=0):
+        "Re-implementation of xmlrpclib's Transport::request()"
+
+        # own make_conntection()
+        h = self.make_connection (host)
+        if verbose:
+            h.set_debuglevel(1)
+
+        # xmlrpclib's send_request (POST)
+        self.send_request (h, handler, request_body)
+        self.send_host (h, host)
+        self.send_user_agent (h)
+
+        # CUSTOM: xmlrpclib's send_content -- The original version
+        # closes the connection if a EPIPE error is produced without
+        # tryig to read the response (if any). The server might have
+        # replied an error without waiting the POST to be fully sent.
+        #
+        h.putheader ("Content-Type", "text/xml")
+        h.putheader ("Content-Length", str(len(request_body)))
+        h.endheaders()
+
+        try:
+            if request_body:
+                h._conn.sock.sendall (request_body)
+        except socket.error, (code, msg):
+            if code != errno.EPIPE:
+                raise
+
+        # The rest is as in the original Transport::request() method
+        errcode, errmsg, headers = h.getreply()
+        if errcode != 200:
+            raise xmlrpclib.ProtocolError(
+                host + handler,
+                errcode, errmsg,
+                headers
+                )
+
+        self.verbose = verbose
+        try:
+            sock = h._conn.sock
+        except AttributeError:
+            sock = None
+
+        return self._parse_response(h.getfile(), sock)
+
+    def request (self, host, handler, request_body, verbose=0):
         for count in range(3):
             try:
-                return xmlrpclib.Transport.request(self, host, handler, request_body, verbose)
+                return self._request_internal (host, handler, request_body, verbose)
             except xmlrpclib.ProtocolError, ex:
                 if ex.errcode == 401:
                     auth, params = ex.headers['WWW-Authenticate'].split(' ', 1)
