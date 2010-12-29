@@ -389,6 +389,10 @@ class _Post:
         post = my_thread.post
         return post.get_all(*args)
 
+    def get_post (self):
+        my_thread = threading.currentThread()
+        post = my_thread.post
+        return post
 
 class _Request:
     def _get_request_url (self):
