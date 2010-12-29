@@ -412,7 +412,7 @@ class Setup (Install_Stage):
             for tarinfo in tar:
                 Install_Log.log ("  %s" %(tarinfo.name))
                 tar.extract (tarinfo, target_path)
-        except CompressionError:
+        except tarfile.CompressionError:
             command = "gzip -dc '%s' | tar xfv -" %(package_path)
             Install_Log.log ("Unpacking %(package_path)s with the GZip binary (cd: %(target_path)s): %(command)s" %(locals()))
             ret = popen.popen_sync (command, cd=target_path)
