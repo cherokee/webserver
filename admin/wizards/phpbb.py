@@ -53,10 +53,15 @@ PREFIX          = 'tmp!wizard!phpbb'
 URL_APPLY       = r'/wizard/vserver/phpbb/apply'
 
 CONFIG_DIR = """
-%(pre_rule_plus1)s!handler = custom_error
-%(pre_rule_plus1)s!handler!error = 403
-%(pre_rule_plus1)s!match = request
-%(pre_rule_plus1)s!match!request = ^%(web_dir)s/(config.php|common.php|cache/.*|files/.*|images/avatars/upload/.*|store/.*)
+%(pre_rule_plus2)s!handler = custom_error
+%(pre_rule_plus2)s!handler!error = 403
+%(pre_rule_plus2)s!match = request
+%(pre_rule_plus2)s!match!request = ^%(web_dir)s/(config.php|common.php|cache/.*|files/.*|images/avatars/upload/.*|store/.*)
+
+%(pre_rule_plus1)s!document_root = %(local_src_dir)s
+%(pre_rule_plus1)s!match = directory
+%(pre_rule_plus1)s!match!directory = %(web_dir)s
+%(pre_rule_plus1)s!match!final = 0
 
 # IMPORTANT: The PHP rule comes here
 """

@@ -57,12 +57,17 @@ PREFIX          = 'tmp!wizard!symfony'
 URL_APPLY       = r'/wizard/vserver/symfony/apply'
 
 CONFIG_DIR = """
-%(pre_rule_plus1)s!document_root = %(local_src_dir)s/web/sf
-%(pre_rule_plus1)s!encoder!gzip = 1
-%(pre_rule_plus1)s!handler = file
-%(pre_rule_plus1)s!handler!iocache = 1
+%(pre_rule_plus2)s!document_root = %(local_src_dir)s/web/sf
+%(pre_rule_plus2)s!encoder!gzip = 1
+%(pre_rule_plus2)s!handler = file
+%(pre_rule_plus2)s!handler!iocache = 1
+%(pre_rule_plus2)s!match = directory
+%(pre_rule_plus2)s!match!directory = %(web_dir)s/sf
+
+%(pre_rule_plus1)s!document_root = %(document_root)s
 %(pre_rule_plus1)s!match = directory
-%(pre_rule_plus1)s!match!directory = %(web_dir)s/sf
+%(pre_rule_plus1)s!match!directory = %(web_dir)s
+%(pre_rule_plus1)s!match!final = 0
 
 # PHP rule
 

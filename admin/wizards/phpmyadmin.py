@@ -81,6 +81,11 @@ CONFIG_DIR = """
 %(pre_rule_plus2)s!match!right = directory
 %(pre_rule_plus2)s!match!right!directory = %(web_dir)s/setup/lib
 
+%(pre_rule_plus1)s!document_root = %(local_src_dir)s
+%(pre_rule_plus1)s!match = directory
+%(pre_rule_plus1)s!match!directory = %(web_dir)s
+%(pre_rule_plus1)s!match!final = 0
+
 # IMPORTANT: The PHP rule comes here
 
 %(pre_rule_minus1)s!document_root = %(local_src_dir)s

@@ -53,12 +53,12 @@ PREFIX          = 'tmp!wizard!moodle'
 URL_APPLY       = r'/wizard/vserver/moodle/apply'
 
 CONFIG_DIR = """
-# IMPORTANT: The PHP rule comes here
+%(pre_rule_plus1)s!match = directory
+%(pre_rule_plus1)s!match!directory = %(web_dir)s
+%(pre_rule_plus1)s!match!final = 0
+%(pre_rule_plus1)s!document_root = %(local_src_dir)s
 
-%(pre_rule_minus1)s!match = directory
-%(pre_rule_minus1)s!match!directory = %(web_dir)s
-%(pre_rule_minus1)s!match!final = 0
-%(pre_rule_minus1)s!document_root = %(local_src_dir)s
+# IMPORTANT: The PHP rule comes here
 """
 
 CONFIG_VSERVER = """

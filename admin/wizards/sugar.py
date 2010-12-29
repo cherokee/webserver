@@ -53,12 +53,12 @@ PREFIX          = 'tmp!wizard!sugar'
 URL_APPLY       = r'/wizard/vserver/sugar/apply'
 
 CONFIG_DIR = """
-# The PHP rule comes here
+%(pre_rule_plus1)s!document_root = %(local_src_dir)s
+%(pre_rule_plus1)s!match = directory
+%(pre_rule_plus1)s!match!directory = %(web_dir)s
+%(pre_rule_plus1)s!match!final = 0
 
-%(pre_rule_minus1)s!match = directory
-%(pre_rule_minus1)s!match!directory = %(web_dir)s
-%(pre_rule_minus1)s!match!final = 0
-%(pre_rule_minus1)s!document_root = %(local_src_dir)s
+# The PHP rule comes here
 
 %(pre_rule_minus2)s!handler = redir
 %(pre_rule_minus2)s!handler!rewrite!1!show = 1
