@@ -71,6 +71,28 @@ class CustomTransport(xmlrpclib.Transport):
     def send_request(self, connection, handler, request_body):
         connection.putrequest ("POST", handler)
 
+    def _parse_response(self, file, sock):
+        """Method As in Python 2.5. It is included here because
+        the interface changeg, and it was missing in Python 2.7
+        and further."""
+
+        p, u = self.getparser()
+        while 1:
+            if sock:
+                response = sock.recv(1024)
+            else:
+                response = file.read(1024)
+            if not response:
+                break
+            if self.verbose:
+                print "body:", repr(response)
+            p.feed(response)
+
+        file.close()
+        p.close()
+
+        return u.close()
+
     def _request_internal (self, host, handler, request_body, verbose=0):
         "Re-implementation of xmlrpclib's Transport::request()"
 
@@ -97,7 +119,7 @@ class CustomTransport(xmlrpclib.Transport):
             if request_body:
                 h._conn.sock.sendall (request_body)
         except socket.error, (code, msg):
-            if code != errno.EPIPE:
+            if not code in (errno.ECONNRESET, errno.ECONNABORTED, errno.EPIPE):
                 raise
 
         # The rest is as in the original Transport::request() method
@@ -115,7 +137,7 @@ class CustomTransport(xmlrpclib.Transport):
         except AttributeError:
             sock = None
 
-        return self._parse_response(h.getfile(), sock)
+        return self._parse_response (h.getfile(), sock)
 
     def request (self, host, handler, request_body, verbose=0):
         for count in range(3):
