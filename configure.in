@@ -1319,27 +1319,31 @@ dnl WWW root directory, and user/group
 dnl
 AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),
 		  WWW_ROOT="$withval", [
-   case "$host" in
-	*-*-darwin*)
+   dnl MacOS X
+   if test -d "/Library/WebServer/Documents"; then
 	   WWW_ROOT="/Library/WebServer/Documents"
-	   ;;
-     *)
+   dnl Some Linux
+   elif test -d "/srv/www/htdocs"; then
+	   WWW_ROOT="/srv/www/htdocs"
+   dnl Default
+   else
 	   WWW_ROOT="$localstatedir/www"
-	   ;;
-   esac
+   fi
 ])
 AC_SUBST(WWW_ROOT)
 
 AC_ARG_WITH(cgiroot, AC_HELP_STRING([--with-cgiroot=DIR], [Set the CGI directory]),
 		  CGI_ROOT="$withval", [
-   case "$host" in
-	*-*-darwin*)
+   dnl MacOS X
+   if test -d "/Library/WebServer/CGI-Executables"; then
 	   CGI_ROOT="/Library/WebServer/CGI-Executables"
-	   ;;
-   *)
-        CGI_ROOT="$prefix/lib/cgi-bin"
-	   ;;
-   esac
+   dnl Some Linux
+   elif test -d "/srv/www/cgi-bin"; then
+	   CGI_ROOT="/srv/www/cgi-bin"
+   dnl Default
+   else
+	   CGI_ROOT="$prefix/lib/cgi-bin"
+   fi
 ])
 AC_SUBST(CGI_ROOT)
 
