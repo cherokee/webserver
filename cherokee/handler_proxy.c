@@ -1160,6 +1160,55 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	return ret_ok;
 }
 
+static void
+xsendfile_header_clean_up (cherokee_buffer_t *header)
+{
+	char *p;
+	char *begin;
+	char *end;
+	char  chr_end;
+
+	end   = header->buf + header->len;
+	begin = header->buf;
+
+	p = begin;
+	while (begin < end) {
+		end = cherokee_header_get_next_line (begin);
+		if (end == NULL)
+			break;
+		chr_end = *end;
+		*end = '\0';
+
+		if ((strncasecmp (begin, "Expires:", 8) == 0) ||
+		    (strncasecmp (begin, "Set-Cookie:", 11) == 0) ||
+		    (strncasecmp (begin, "Content-Type:", 13) == 0) ||
+		    (strncasecmp (begin, "Accept-Ranges:", 14) == 0) ||
+		    (strncasecmp (begin, "Cache-Control:", 14) == 0) ||
+		    (strncasecmp (begin, "Content-Disposition:", 20) == 0))
+		{
+			goto preserve;
+		}
+
+		/* Remove header entry */
+		*end = chr_end;
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
+
+		cherokee_buffer_remove_chunk (header, begin - header->buf, end-begin);
+		continue;
+
+	preserve:
+		/* Prepare next iteration */
+		*end = chr_end;
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
+
+		begin = end;
+		if (begin < header->buf + header->len)
+			end = begin + 1;
+	}
+}
+
 
 static ret_t
 parse_server_header (cherokee_handler_proxy_t *hdl,
@@ -1173,6 +1222,8 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                           *end;
 	char                           *colon;
 	char                           *header_end;
+	char   *xsendfile   = NULL;
+	cint_t  xsendfile_len;
 	cherokee_list_t                *i;
 	cherokee_http_version_t         version;
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
@@ -1305,6 +1356,26 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 				goto next;
 			}
 
+		} else  if (strncasecmp (begin, "X-Sendfile:", 11) == 0) {
+			char *c = begin + 11;
+			while (*c == ' ') c++;
+
+			if (! xsendfile) {
+				xsendfile = c;
+				xsendfile_len = end - c;
+			}
+			goto next;
+
+		} else  if (strncasecmp (begin, "X-Accel-Redirect:", 17) == 0) {
+			char *c = begin + 17;
+			while (*c == ' ') c++;
+
+			if (! xsendfile) {
+				xsendfile = c;
+				xsendfile_len = end - c;
+			}
+			goto next;
+
 		} else if (strncasecmp (begin, "Content-Encoding:", 17) == 0) {
 			BIT_SET (conn->options, conn_op_cant_encoder);
 
@@ -1340,6 +1411,32 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 		while ((*end == CHR_CR) || (*end == CHR_LF))
 			end++;
 		begin = end;
+	}
+
+	/* X-Sendfile, X-Accel-Redirect
+	 */
+	if ((xsendfile != NULL) &&
+	    (xsendfile_len > 0))
+	{
+		/* Clean buffers */
+
+		cherokee_buffer_clean (&conn->buffer);
+		xsendfile_header_clean_up (&conn->header_buffer);
+
+		/* Store original request */
+		if (cherokee_buffer_is_empty (&conn->request_original)) {
+			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		}
+
+		/* Set new request */
+		cherokee_buffer_clean (&conn->request);
+		cherokee_buffer_add   (&conn->request, xsendfile, xsendfile_len);
+
+		/* Respin connection */
+		cherokee_connection_clean_for_respin (conn);
+		conn->phase = phase_setup_connection;
+
+		return ret_ok_and_sent;
 	}
 
 	/* Additional headers */
@@ -1409,6 +1506,9 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 	case ret_eagain:
 		hdl->init_phase = proxy_init_read_header;
 		conn->phase     = phase_init;
+		return ret_eagain;
+	case ret_ok_and_sent:
+		/* X-Sendfile */
 		return ret_eagain;
 	default:
 		return ret_error;
