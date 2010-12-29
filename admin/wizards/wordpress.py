@@ -50,16 +50,16 @@ PREFIX    = 'tmp!wizard!wordpress'
 URL_APPLY = r'/wizard/vserver/wordpress/apply'
 
 CONFIG_DIR = """
+%(pre_rule_plus1)s!document_root = %(local_dir)s
+%(pre_rule_plus1)s!match = directory
+%(pre_rule_plus1)s!match!directory = %(web_dir)s
+%(pre_rule_plus1)s!match!final = 0
+
 %(pre_rule_minus1)s!match = fullpath
 %(pre_rule_minus1)s!match!fullpath!1 = %(web_dir)s/wp-admin
 %(pre_rule_minus1)s!handler = redir
 %(pre_rule_minus1)s!handler!rewrite!1!show = 0
 %(pre_rule_minus1)s!handler!rewrite!1!substring = %(web_dir)s/index.php
-
-%(pre_rule_minus2)s!document_root = %(local_dir)s
-%(pre_rule_minus2)s!match = directory
-%(pre_rule_minus2)s!match!directory = %(web_dir)s
-%(pre_rule_minus2)s!match!final = 0
 
 %(pre_rule_minus3)s!match = and
 %(pre_rule_minus3)s!match!final = 1
