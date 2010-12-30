@@ -151,10 +151,14 @@ int   cherokee_fstat         (int filedes, struct stat *buf);
 ret_t cherokee_gethostbyname (const char *hostname, void *addr);
 ret_t cherokee_gethostname   (cherokee_buffer_t *buf);
 ret_t cherokee_syslog        (int priority, cherokee_buffer_t *buf);
+
 ret_t cherokee_getpwnam      (const char *name, struct passwd *pwbuf, char *buf, size_t buflen);
 ret_t cherokee_getpwuid      (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen);
 ret_t cherokee_getpwnam_uid  (const char *name, struct passwd *pwbuf, char *buf, size_t buflen);
 ret_t cherokee_getgrnam      (const char *name, struct group *pwbuf, char *buf, size_t buflen);
+ret_t cherokee_getgrgid      (gid_t gid, struct group *pwbuf, char *buf, size_t buflen);
+ret_t cherokee_getgrnam_gid  (const char *name, struct group *pwbuf, char *buf, size_t buflen);
+
 ret_t cherokee_mkstemp       (cherokee_buffer_t *buffer, int *fd);
 ret_t cherokee_mkdir_p       (cherokee_buffer_t *path, int mode);
 ret_t cherokee_ntop          (int family, struct sockaddr *addr, char *dst, size_t cnt);

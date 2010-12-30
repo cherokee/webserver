@@ -1127,7 +1127,7 @@ cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_avl_t *argumen
 
 
 static ret_t
-clone_passwd (struct passwd *source, struct passwd *target, char *buf, size_t buflen)
+clone_struct_passwd (struct passwd *source, struct passwd *target, char *buf, size_t buflen)
 {
 	char   *ptr;
 	size_t  pw_name_len   = 0;
@@ -1188,6 +1188,45 @@ clone_passwd (struct passwd *source, struct passwd *target, char *buf, size_t bu
 }
 
 
+static ret_t
+clone_struct_group (struct group *source, struct group *target, char *buf, size_t buflen)
+{
+	char   *ptr;
+	size_t  gr_name_len   = 0;
+	size_t  gr_passwd_len = 0;
+
+	if (source->gr_name)   gr_name_len   = strlen(source->gr_name);
+	if (source->gr_passwd) gr_passwd_len = strlen(source->gr_passwd);
+
+	if ((gr_name_len + gr_passwd_len) >= buflen) {
+		/* Buffer overflow */
+		return ret_error;
+	}
+
+	memset (buf, 0, buflen);
+	ptr = buf;
+
+	target->gr_gid = source->gr_gid;
+
+	if (source->gr_name) {
+		memcpy (ptr, source->gr_name, gr_name_len);
+		target->gr_name = ptr;
+		ptr += gr_name_len + 1;
+	}
+
+	if (source->gr_passwd) {
+		memcpy (ptr, source->gr_passwd, gr_passwd_len);
+		target->gr_passwd = ptr;
+		ptr += gr_passwd_len + 1;
+	}
+
+	/* TODO: Duplicate '**gr_mem' as well
+	 */
+
+	return ret_ok;
+}
+
+
 #if defined(HAVE_PTHREAD) && !defined(HAVE_GETPWNAM_R)
 static pthread_mutex_t __global_getpwnam_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
@@ -1207,7 +1246,7 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 		return ret_error;
 	}
 
-	ret = clone_passwd (tmp, pwbuf, buf, buflen);
+	ret = clone_struct_passwd (tmp, pwbuf, buf, buflen);
 	if (ret != ret_ok) {
 		CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
 		return ret_error;
@@ -1308,7 +1347,7 @@ cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
 		return ret_error;
 	}
 
-	ret = clone_passwd (tmp, pwbuf, buf, buflen);
+	ret = clone_struct_passwd (tmp, pwbuf, buf, buflen);
 	if (ret != ret_ok) {
 		CHEROKEE_MUTEX_UNLOCK (&__global_getpwuid_mutex);
 		return ret_error;
@@ -1316,8 +1355,8 @@ cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
 
 	CHEROKEE_MUTEX_UNLOCK (&__global_getpwuid_mutex);
 	return ret_ok;
-
 #endif
+
 	return ret_no_sys;
 }
 
@@ -1328,8 +1367,11 @@ cherokee_getpwnam_uid (const char *name, struct passwd *pwbuf, char *buf, size_t
 	ret_t ret;
 	long  tmp_uid;
 
+	memset (buf, 0, buflen);
+	memset (pwbuf, 0, sizeof(struct passwd));
+
 	ret = cherokee_getpwnam (name, pwbuf, buf, buflen);
-	if ((ret == ret_ok) || (pwbuf->pw_dir != NULL)) {
+	if ((ret == ret_ok) && (pwbuf->pw_dir)) {
 		return ret_ok;
 	}
 
@@ -1431,6 +1473,96 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 #endif
 
 	return ret_no_sys;
+}
+
+
+#if defined(HAVE_PTHREAD) && !defined(HAVE_GETGRGID_R)
+static pthread_mutex_t __global_getgrgid_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+ret_t
+cherokee_getgrgid (gid_t gid, struct group *grbuf, char *buf, size_t buflen)
+{
+#ifdef HAVE_GETGRGID_R_5
+	int            re;
+	struct group *result = NULL;
+
+	/* Linux:
+	 *  int getgrgid_r (gid_t gid, struct group *grp, char *buf, size_t buflen, struct group **result);
+	 * MacOS X:
+	 *  int getgrgid_r (gid_t gid, struct group *grp, char *buffer, size_t bufsize, struct group **result);
+	 */
+	re = getgrgid_r (gid, grbuf, buf, buflen, &result);
+	if ((re != 0) || (result == NULL)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+
+#elif HAVE_GETGRGID_R_4
+	struct group *result = NULL;
+
+	/* Solaris:
+	 *  struct group *getgrgid_r (gid_t gid, struct group *grp, char *buffer, int bufsize);
+	 */
+	result = getgrgid_r (gid, grdbuf, buf, buflen);
+	if (result == NULL) {
+		return ret_error;
+	}
+
+	return ret_ok;
+#else
+	ret_t         ret;
+	struct group *tmp;
+
+	CHEROKEE_MUTEX_LOCK (&__global_getgrgid_mutex);
+
+	tmp = getgrgid (gid);
+	if (tmp == NULL) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_getgrgid_mutex);
+		return ret_error;
+	}
+
+	ret = clone_struct_group (tmp, grbuf, buf, buflen);
+	if (ret != ret_ok) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_getgrgid_mutex);
+		return ret_error;
+	}
+
+	CHEROKEE_MUTEX_UNLOCK (&__global_getgrgid_mutex);
+	return ret_ok;
+#endif
+
+	return ret_no_sys;
+}
+
+
+ret_t
+cherokee_getgrnam_gid (const char *name, struct group *grbuf, char *buf, size_t buflen)
+{
+	ret_t ret;
+	long  tmp_gid;
+
+	memset (buf, 0, buflen);
+	memset (grbuf, 0, sizeof(struct group));
+
+	ret = cherokee_getgrnam (name, grbuf, buf, buflen);
+	if ((ret == ret_ok) && (grbuf->gr_name)) {
+		return ret_ok;
+	}
+
+	errno   = 0;
+	tmp_gid = strtol (name, NULL, 10);
+	if (errno != 0) {
+		return ret_error;
+	}
+
+	ret = cherokee_getgrgid ((gid_t)tmp_gid, grbuf, buf, buflen);
+	if ((ret != ret_ok) || (grbuf->gr_name == NULL)) {
+		return ret_error;
+	}
+
+	return ret_ok;
 }
 
 
