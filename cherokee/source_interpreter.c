@@ -315,7 +315,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 			struct group grp;
 			char         tmp[GRNAM_BUF_LEN];
 
-			ret = cherokee_getgrnam (child->val.buf, &grp, tmp, sizeof(tmp));
+			ret = cherokee_getgrnam_gid (child->val.buf, &grp, tmp, sizeof(tmp));
 			if (ret != ret_ok) {
 				LOG_CRITICAL (CHEROKEE_ERROR_SRC_INTER_NO_GROUP, conf->val.buf, prio);
 				return ret_error;
