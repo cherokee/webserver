@@ -54,25 +54,22 @@ substitute (cherokee_handler_redir_t *hdl,
 	char                  *token;
 	cint_t                 offset;
 	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+	cherokee_buffer_t     *tmp    = THREAD_TMP_BUF2(HANDLER_THREAD(hdl));
+
+	cherokee_buffer_clean (tmp);
 
 	/* Replace regex matches (vserver match)
 	 */
-	ret = cherokee_regex_substitute (regex, &conn->host, target,
+	ret = cherokee_regex_substitute (regex, &conn->host, tmp,
 					 conn->regex_host_ovector,
 					 conn->regex_host_ovecsize, '^');
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
-	/* Base regex of the next replacement is output of the
-	 * previous one. Source is the request.
-	 */
-	cherokee_buffer_swap_buffers (regex, target);
-	cherokee_buffer_clean        (target);
-
 	/* Replace regex matches (handler)
 	 */
-	ret = cherokee_regex_substitute (regex, source, target, ovector, ovector_size, '$');
+	ret = cherokee_regex_substitute (tmp, source, target, ovector, ovector_size, '$');
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -113,7 +110,7 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 	cherokee_list_t       *i;
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(hdl)->tmp_buf1;
+	cherokee_buffer_t     *tmp  = THREAD_TMP_BUF1(HANDLER_THREAD(hdl));
 
 	/* Append the query string
 	 */
