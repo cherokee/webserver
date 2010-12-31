@@ -116,9 +116,10 @@ def _figure_linux_info (info):
 
 def _figure_macos_info (info):
     port_bin = util.path_find_binary ("port", ['/opt/local/bin'])
-    info['macports']     = bool(port_bin)
-    info['macports_bin'] = port_bin
-
+    info['macports']      = bool(port_bin)
+    info['macports_bin']  = port_bin
+    if port_bin:
+        info['macports_path'] = '/'.join (port_bin.split('/')[:-1])
 
 if __name__ == '__main__':
     import pprint
