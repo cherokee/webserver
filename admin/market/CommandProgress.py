@@ -143,7 +143,14 @@ class CommandProgress (CTK.Box, Replacement_Commons):
                 self += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (command_progress.id, command_progress.finished_url))
 
     def Render (self):
+        # Add replacement keys to the log
+        for k in self.keys:
+            Install_Log.log ("  ${%s} -> '%s'" %(k, self.keys[k]))
+
+        # Start thread
         self.thread.start()
+
+        # Render
         return CTK.Box.Render (self)
 
     def __init__ (self, commands, finished_url):

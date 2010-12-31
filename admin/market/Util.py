@@ -137,30 +137,39 @@ class PriceTag (CTK.Box):
 
 
 class InstructionBox (CTK.Box):
-    def __init__ (self, note, instructions):
+    def __init__ (self, note, instructions, **kwargs):
         assert type(instructions) in (dict, type(None))
 
         CTK.Box.__init__ (self)
         self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
 
         if instructions:
-            info = self.choose_instructions (instructions)
+            info = self.choose_instructions (instructions, kwargs)
             if info:
                 notice  = CTK.Notice ()
                 notice += CTK.RawHTML ('<p>%s:</p>' %(_('These instructions will help you install the required software')))
                 notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
                 self += notice
 
-    def choose_instructions (self, instructions):
+    def choose_instructions (self, instructions, kwargs):
         data   = SystemInfo.get_info()
         system = data.get('system','').lower()
         distro = data.get('linux_distro_id','').lower()
         info   = instructions.get('generic')
 
+        # Optional parameters
+        bin_path = kwargs.get('bin_path')
+
         # MacPorts
-        if system == 'darwin' and data['macports']:
-            if instructions.has_key('macports'):
-                return instructions['macports']
+        if system == 'darwin' and data.get('macports'):
+            macports_path = data.get('macports_path')
+
+            # Do not suggest macports if the bin is outside its scope:
+            # /usr/local, for instance.
+            if ((not bin_path) or
+                (macports_path and bin_path.startswith (macports_path))):
+                if instructions.has_key('macports'):
+                    return instructions['macports']
 
         # OS specific
         if instructions.has_key(system):
