@@ -120,8 +120,21 @@ def to_utf8(s):
         for k in s.keys():
             s[k] = to_utf8(s[k])
         return s
+    elif type(s) == types.NoneType:
+        return s
 
     return str(s)
+
+def to_utf7(s):
+    if type(s) == types.StringType:
+        return unicode (s, 'utf-8').encode('utf-7')
+    elif type(s) == types.UnicodeType:
+        return s.encode('utf-7')
+    elif type(s) == types.NoneType:
+        return s
+
+    return to_utf7 (str(s))
+
 
 #
 # Debug
