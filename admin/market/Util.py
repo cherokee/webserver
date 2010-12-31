@@ -138,18 +138,18 @@ class PriceTag (CTK.Box):
 
 class InstructionBox (CTK.Box):
     def __init__ (self, note, instructions):
-        assert type(instructions) == dict
+        assert type(instructions) in (dict, type(None))
 
         CTK.Box.__init__ (self)
-
         self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
 
-        info = self.choose_instructions (instructions)
-        if info:
-            notice  = CTK.Notice ()
-            notice += CTK.RawHTML ('<p>%s:</p>' %(_('These instructions will help you install the required software')))
-            notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
-            self += notice
+        if instructions:
+            info = self.choose_instructions (instructions)
+            if info:
+                notice  = CTK.Notice ()
+                notice += CTK.RawHTML ('<p>%s:</p>' %(_('These instructions will help you install the required software')))
+                notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
+                self += notice
 
     def choose_instructions (self, instructions):
         data   = SystemInfo.get_info()
@@ -159,7 +159,8 @@ class InstructionBox (CTK.Box):
 
         # MacPorts
         if system == 'darwin' and data['macports']:
-            return instructions['macports']
+            if instructions.has_key('macports'):
+                return instructions['macports']
 
         # OS specific
         if instructions.has_key(system):
@@ -177,3 +178,6 @@ class InstructionBox (CTK.Box):
         for x in ('debian', 'ubuntu', 'knoppix', 'mint'):
             if x in distro:
                 return instructions.get('apt', info)
+
+        # Default
+        return instructions['default']
