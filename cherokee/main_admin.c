@@ -252,10 +252,13 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str  (&buf,
 				  RULE_PRE "1!match = default\n"
 				  RULE_PRE "1!handler = scgi\n"
-				  RULE_PRE "1!encoder!gzip = 1\n"
 				  RULE_PRE "1!timeout = " TIMEOUT "\n"
 				  RULE_PRE "1!handler!balancer = round_robin\n"
 				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
+
+	if (! debug) {
+		cherokee_buffer_add_str (&buf, RULE_PRE "1!encoder!gzip = 1\n");
+	}
 
 	if ((unsecure == 0) &&
 	    (!cherokee_buffer_is_empty (&password)))
@@ -344,11 +347,13 @@ config_server (cherokee_server_t *srv)
 
 	/* GZip
 	 */
-	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "15!match = extensions\n"
-				 RULE_PRE "15!match!extensions = css,js,html\n"
-				 RULE_PRE "15!match!final = 0\n"
-				 RULE_PRE "15!encoder!gzip = 1\n");
+	if (! debug) {
+		cherokee_buffer_add_va (&buf,
+					RULE_PRE "15!match = extensions\n"
+					RULE_PRE "15!match!extensions = css,js,html\n"
+					RULE_PRE "15!match!final = 0\n"
+					RULE_PRE "15!encoder!gzip = 1\n");
+	}
 
 	/* RRDtool graphs
 	 */
