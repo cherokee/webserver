@@ -133,25 +133,26 @@ def to_utf8 (s, input_encoding='utf-8'):
 
     return s
 
-def to_utf7(s):
-    """Converts all the string entries of an structure to UTF-7. It
+
+def to_unicode (s, input_encoding='utf-8'):
+    """Converts all the string entries of an structure to Unicode. It
     supposes default system encoding to be UTF-8."""
 
-    if type(s) == types.StringType:
-        return unicode (s, 'utf-8').encode('utf-7')
-    elif type(s) == types.UnicodeType:
-        return s.encode('utf-7')
+    if type(s) == types.UnicodeType:
+        return s
+    elif type(s) == types.StringType:
+        return unicode (s, input_encoding)
     elif type(s) == types.ListType:
-        return [to_utf7(x) for x in s]
+        return [to_unicode(x) for x in s]
     elif type(s) == types.TupleType:
-        return tuple([to_utf7(x) for x in s])
+        return tuple([to_unicode(x) for x in s])
     elif type(s) == types.NoneType:
         return s
     elif type(s) == types.DictType:
         for k in s.keys():
             if type(k) in (types.StringType, types.UnicodeType):
-                k = to_utf7(k)
-            s[k] = to_utf7(s[k])
+                k = to_unicode(k)
+            s[k] = to_unicode(s[k])
         return s
 
     return s
