@@ -81,11 +81,9 @@ class Apply:
             del (CTK.cfg['tmp!backup!save'])
 
             try:
-                config_7bit  = CTK.util.to_utf7 (config)
-                comment_7bit = CTK.util.to_utf7 (comment)
-
                 xmlrpc = XMLServerDigest.XmlRpcServer (OWS_BACKUP, OWS_Login.login_user, OWS_Login.login_password)
-                ret    = xmlrpc.upload (config_7bit, comment_7bit)
+                ret    = xmlrpc.upload (CTK.util.to_unicode(config),
+                                        CTK.util.to_unicode(comment))
             except socket.error, (value, message):
                 CTK.cfg['tmp!backup!save!type']  = 'socket'
                 CTK.cfg['tmp!backup!save!error'] = message
