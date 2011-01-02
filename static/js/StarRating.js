@@ -64,6 +64,7 @@
 
 		  /* Hide the <select> */
 		  obj.$select.hide();
+		  obj.$select.val (obj.score);
 
 		  /* Add the stars */
 		  var stars_html = '';

@@ -50,7 +50,7 @@ class StarRating (Box):
         Box.__init__ (self, {'class': 'star-rating'})
 
         assert type(props) == dict
-        self.selected = props.get('selected')
+        self.selected = props.get('selected', '5')
         self.can_set  = props.pop('can_set', False)
 
         if 'style' in props:
@@ -66,6 +66,6 @@ class StarRating (Box):
 
         render.headers += HEADERS
         render.js      += JS_INIT %({'id':       self.id,
-                                     'selected': self.selected or "-1",
+                                     'selected': self.selected,
                                      'can_set':  ('false','true')[self.can_set]})
         return render
