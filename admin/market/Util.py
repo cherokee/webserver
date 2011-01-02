@@ -130,7 +130,7 @@ class PriceTag (CTK.Box):
 
         if float(info['amount']):
             self += CTK.Box ({'class': 'currency'}, CTK.RawHTML (info['currency_symbol']))
-            self += CTK.Box ({'class': 'amount'},   CTK.RawHTML (info['amount']))
+            self += CTK.Box ({'class': 'amount'},   CTK.RawHTML (str(info['amount'])))
             self += CTK.Box ({'class': 'currency'}, CTK.RawHTML (info['currency']))
         else:
             self += CTK.Box ({'class': 'free'},     CTK.RawHTML (_('Free')))

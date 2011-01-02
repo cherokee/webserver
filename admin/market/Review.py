@@ -43,7 +43,9 @@ def Review_Apply():
     # OWS auth
     xmlrpc = XmlRpcServer(OWS_APPS_AUTH, OWS_Login.login_user, OWS_Login.login_password)
     try:
-        ok = xmlrpc.set_review (app_id, rate, title, review)
+        ok = xmlrpc.set_review (app_id, rate,
+                                CTK.util.to_unicode(title),
+                                CTK.util.to_unicode(review))
     except:
         ok = False
 
