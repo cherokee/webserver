@@ -129,7 +129,9 @@ local_file_exists (cherokee_rule_extensions_t *rule,
 	ret = cherokee_io_stat (srv->iocache, tmp, rule->use_iocache,
 				&nocache_info, &io_entry, &info);
 
-	is_file = S_ISREG(info->st_mode);
+	if (ret == ret_ok) {
+		is_file = S_ISREG(info->st_mode);
+	}
 
 	if (io_entry) {
 		cherokee_iocache_entry_unref (&io_entry);
