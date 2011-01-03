@@ -114,7 +114,7 @@ def check_orphan_installations():
     for d in os.listdir (CHEROKEE_OWS_ROOT):
         fd = os.path.join (CHEROKEE_OWS_ROOT, d)
 
-        if not re.match (r'document_root.*'+fd, cfg_txt):
+        if not re.findall (r'document_root.*'+fd, cfg_txt, re.M):
             orphans.append(d)
 
     orphan_installs_cache = orphans
