@@ -72,7 +72,6 @@ URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
 URL_INSTALL_PAY_CHECK      = "%s/install/pay"            %(URL_MAIN)
 URL_INSTALL_DOWNLOAD       = "%s/install/download"       %(URL_MAIN)
 URL_INSTALL_DOWNLOAD_ERROR = "%s/install/download_error" %(URL_MAIN)
-URL_INSTALL_SETUP_INTRO    = "%s/install/setup-intro"    %(URL_MAIN)
 URL_INSTALL_SETUP          = "%s/install/setup"          %(URL_MAIN)
 URL_INSTALL_EXCEPTION      = "%s/install/exception"      %(URL_MAIN)
 URL_INSTALL_SETUP_EXTERNAL = "%s/install/setup/package"  %(URL_MAIN)
@@ -318,19 +317,6 @@ class Download_Error (Install_Stage):
         return cont.Render().toStr()
 
 
-class Setup_Intro (Install_Stage):
-    def __safe_call__ (self):
-        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
-
-        Install_Log.log ("Set-up Error")
-
-        box = CTK.Box()
-        box += CKT.RawHTML ("<h2>%s</h2>" %(_("Setting up"), app_name))
-        box += CKT.RawHTML ("<h1>%s</h1>" %(_("Unpacking application…")))
-        box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_SETUP))
-        return box.Render().toStr()
-
-
 def Exception_Handler_Apply():
     # Collect information
     info = {}
@@ -382,70 +368,79 @@ class Exception_Handler (CTK.Box):
         self += buttons
 
 
+def _Setup_unpack():
+    url_download = CTK.cfg.get_val('tmp!market!install!download')
+
+    # has it been downloaded?
+    pkg_filename = url_download.split('/')[-1]
+
+    package_path = CTK.cfg.get_val ('tmp!market!install!local_package')
+    if not package_path or not os.path.exists (package_path):
+        down_entry = CTK.DownloadEntry_Factory (url_download)
+        package_path = down_entry.target_path
+
+    # Create the local directory
+    target_path = os.path.join (CHEROKEE_OWS_ROOT, str(int(time.time()*100)))
+    os.mkdir (target_path, 0700)
+    CTK.cfg['tmp!market!install!root'] = target_path
+
+    # Create the log file
+    Install_Log.set_file (os.path.join (target_path, "install.log"))
+
+    # Uncompress
+    try:
+        Install_Log.log ("Unpacking %s with Python" %(package_path))
+        tar = tarfile.open (package_path, 'r:gz')
+        for tarinfo in tar:
+            Install_Log.log ("  %s" %(tarinfo.name))
+            tar.extract (tarinfo, target_path)
+        ret = {'retcode': 0}
+    except tarfile.CompressionError:
+        command = "gzip -dc '%s' | tar xfv -" %(package_path)
+        Install_Log.log ("Unpacking %(package_path)s with the GZip binary (cd: %(target_path)s): %(command)s" %(locals()))
+        ret = popen.popen_sync (command, cd=target_path)
+        Install_Log.log (ret['stdout'])
+        Install_Log.log (ret['stderr'])
+
+    # Set default permission
+    Install_Log.log ("Setting default permission 755 for directory %s" %(target_path))
+    os.chmod (target_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH )
+
+    # Remove the package
+    if package_path.startswith (CHEROKEE_OWS_DIR):
+        Install_Log.log ("Skipping removal of: %s" %(package_path))
+    else:
+        Install_Log.log ("Removing %s" %(package_path))
+        os.unlink (package_path)
+
+    # Import the Installation handler
+    if os.path.exists (os.path.join (target_path, "installer.py")):
+        Install_Log.log ("Passing control to installer.py")
+        installer_path = os.path.join (target_path, "installer.py")
+        pkg_installer = imp.load_source ('installer', installer_path)
+    else:
+        Install_Log.log ("Passing control to installer.pyo")
+        installer_path = os.path.join (target_path, "installer.pyo")
+        pkg_installer = imp.load_compiled ('installer', installer_path)
+
+    # Set owner and permissions
+    Install_Log.log ("Post unpack commands")
+    return ret
+
+
 class Setup (Install_Stage):
     def __safe_call__ (self):
-        url_download = CTK.cfg.get_val('tmp!market!install!download')
+        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
+
+        Install_Log.log ("Set-up Error")
 
         box = CTK.Box()
-        box += CTK.RawHTML ("<h2>%s</h2><br/>" %(_('Setting up application…')))
+        box += CTK.RawHTML ("<h2>%s %s</h2>" %(_("Setting up"), app_name))
+        box += CTK.RawHTML ("<p>%s</p>" %(_("Unpacking application…")))
 
-        # has it been downloaded?
-        pkg_filename = url_download.split('/')[-1]
-
-        package_path = CTK.cfg.get_val ('tmp!market!install!local_package')
-        if not package_path or not os.path.exists (package_path):
-            down_entry = CTK.DownloadEntry_Factory (url_download)
-            package_path = down_entry.target_path
-
-        # Create the local directory
-        target_path = os.path.join (CHEROKEE_OWS_ROOT, str(int(time.time()*100)))
-        os.mkdir (target_path, 0700)
-        CTK.cfg['tmp!market!install!root'] = target_path
-
-        # Create the log file
-        Install_Log.set_file (os.path.join (target_path, "install.log"))
-
-        # Uncompress
-        try:
-            Install_Log.log ("Unpacking %s with Python" %(package_path))
-            tar = tarfile.open (package_path, 'r:gz')
-            for tarinfo in tar:
-                Install_Log.log ("  %s" %(tarinfo.name))
-                tar.extract (tarinfo, target_path)
-        except tarfile.CompressionError:
-            command = "gzip -dc '%s' | tar xfv -" %(package_path)
-            Install_Log.log ("Unpacking %(package_path)s with the GZip binary (cd: %(target_path)s): %(command)s" %(locals()))
-            ret = popen.popen_sync (command, cd=target_path)
-            Install_Log.log (ret['stdout'])
-            Install_Log.log (ret['stderr'])
-
-        # Set default permission
-        Install_Log.log ("Setting default permission 755 for directory %s" %(target_path))
-        os.chmod (target_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH )
-
-        # Remove the package
-        if package_path.startswith (CHEROKEE_OWS_DIR):
-            Install_Log.log ("Skipping removal of: %s" %(package_path))
-        else:
-            Install_Log.log ("Removing %s" %(package_path))
-            os.unlink (package_path)
-
-        # Import the Installation handler
-        if os.path.exists (os.path.join (target_path, "installer.py")):
-            Install_Log.log ("Passing control to installer.py")
-            installer_path = os.path.join (target_path, "installer.py")
-            pkg_installer = imp.load_source ('installer', installer_path)
-        else:
-            Install_Log.log ("Passing control to installer.pyo")
-            installer_path = os.path.join (target_path, "installer.pyo")
-            pkg_installer = imp.load_compiled ('installer', installer_path)
-
-        # Set owner and permissions
-        Install_Log.log ("Post unpack commands")
-
-        # Execute commands
-        commands = pkg_installer.__dict__.get ('POST_UNPACK_COMMANDS',[])
-        box += CommandProgress.CommandProgress (commands, URL_INSTALL_SETUP_EXTERNAL)
+        commands = [({'function': _Setup_unpack, 'description': _("The applicaction is being unpackaged…")})]
+        progress = CommandProgress.CommandProgress (commands, URL_INSTALL_SETUP_EXTERNAL)
+        box += progress
 
         return box.Render().toStr()
 
@@ -522,7 +517,6 @@ CTK.publish ('^%s$'%(URL_INSTALL_WELCOME),        Welcome)
 CTK.publish ('^%s$'%(URL_INSTALL_INIT_CHECK),     Init_Check)
 CTK.publish ('^%s$'%(URL_INSTALL_PAY_CHECK),      Pay_Check)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD),       Download)
-CTK.publish ('^%s$'%(URL_INSTALL_SETUP_INTRO),    Setup_Intro)
 CTK.publish ('^%s$'%(URL_INSTALL_SETUP),          Setup)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD_ERROR), Download_Error)
 CTK.publish ('^%s$'%(URL_INSTALL_DONE),           Install_Done)

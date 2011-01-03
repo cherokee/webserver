@@ -103,7 +103,9 @@ class CommandProgress (CTK.Box, Replacement_Commons):
                 command_entry = command_progress.commands [command_progress.executed]
 
             # Title
-            if command_entry.has_key('command'):
+            if command_entry.has_key('description'):
+                title = CTK.escape_html (command_entry['description'])
+            elif command_entry.has_key('command'):
                 title = CTK.escape_html (command_entry['command'])
             elif command_entry.has_key('function'):
                 title = CTK.escape_html (command_entry['function'].__name__)
@@ -117,7 +119,7 @@ class CommandProgress (CTK.Box, Replacement_Commons):
 
                 if ret['command']:
                     title_error = CTK.escape_html (ret['command'])
-                elif command_entry.has_key('function'):
+                elif command_entry.has_key ('function'):
                     title_error = CTK.escape_html (command_entry['function'].__name__)
                 else:
                     title_error = _("Unknown Error")
