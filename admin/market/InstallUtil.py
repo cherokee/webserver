@@ -24,6 +24,7 @@
 
 import os
 import re
+import pwd
 import sys
 import SystemInfo
 
@@ -33,25 +34,35 @@ import SystemInfo
 
 def get_installation_UID():
     whoami = os.getuid()
-    if sys.platform == 'linux2':
-        return (str(whoami), '0')[whoami == 0]
-    elif sys.platform == 'darwin':
-        return (str(whoami), '0')[whoami == 0]
 
-    # Solaris RBAC, TODO
-    return (str(whoami), '0')[whoami == 0]
+    try:
+        info = pwd.getpwuid (whoami)
+        return info.pw_name
+    except:
+        return str(whoami)
+
 
 def get_installation_GID():
-    groups     = os.getgroups()
     root_group = SystemInfo.get_info()['group_root']
 
+    groups = os.getgroups()
+    groups.sort()
+
+    # Systems
     if sys.platform == 'linux2':
-        return (str(groups[0]), root_group)[0 in groups]
+        if os.getuid() == 0:
+            return root_group
+        return str(groups[0])
     elif sys.platform == 'darwin':
-        return (str(groups[0]), root_group)[0 in groups]
+        if os.getuid() == 0:
+            return root_group
+        return str(groups[0])
 
     # Solaris RBAC, TODO
-    return (str(whoami), root_group)[whoami == 0]
+    if os.getuid() == 0:
+        return root_group
+    return str(groups[0])
+
 
 def current_UID_is_admin():
     if sys.platform == 'linux2':

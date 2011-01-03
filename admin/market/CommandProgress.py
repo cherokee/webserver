@@ -72,8 +72,11 @@ class Replacement_Commons (Replacement_Dict):
         root_group = InstallUtil.get_installation_GID()
 
         # Server user (www-data, server, nobody, etc)
+        groups = os.getgroups()
+        groups.sort()
+
         server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
-        server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
+        server_group = CTK.cfg.get_val ('server!group', str(groups[0]))
 
         # Directories
         app_root = CTK.cfg.get_val ('tmp!market!install!root')

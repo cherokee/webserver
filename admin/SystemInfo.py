@@ -86,9 +86,9 @@ def build_info():
     # Users and Groups
     if os.access ('/etc/group', os.R_OK):
         group = open('/etc/group', 'r').read()
-        if re.match (r'^root:', group, re.MULTILINE):
+        if re.findall (r'^root:', group, re.MULTILINE):
             info['group_root'] = 'root'
-        elif re.match (r'^wheel:', group, re.MULTILINE):
+        elif re.findall (r'^wheel:', group, re.MULTILINE):
             info['group_root'] = 'wheel'
 
     if not info.get ('group_root'):
