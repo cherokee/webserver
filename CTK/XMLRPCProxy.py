@@ -21,10 +21,10 @@
 #
 
 import types
+import util
 from consts import *
 from Widget import Widget
 from Server import publish, get_scgi
-from util   import props_to_str
 
 HTML = """
 <div id="%(id_widget)s" %(extra_props)s></div>
@@ -44,13 +44,12 @@ $.ajax({
 class ProxyRequest:
     def __call__ (self, xmlrpc_func, format_func, debug):
         try:
-            raw = xmlrpc_func ()
+            raw = util.to_utf8 (xmlrpc_func ())
             fmt = format_func (raw)
             return fmt
         except:
             if debug:
-                import traceback
-                traceback.print_exc()
+                util.print_exception()
             return ''
 
 class XMLRPCProxy (Widget):
@@ -76,7 +75,7 @@ class XMLRPCProxy (Widget):
 
        props = {'id_widget':   self.id,
                 'proxy_url':   self._url_local,
-                'extra_props': props_to_str(self.props)}
+                'extra_props': util.props_to_str(self.props)}
 
        render.html += HTML       %(props)
        render.js   += JAVASCRIPT %(props)
