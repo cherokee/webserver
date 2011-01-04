@@ -54,6 +54,7 @@ typedef struct {
 	cherokee_balancer_t            *balancer;
 	cherokee_handler_proxy_hosts_t  hosts;
 	cuint_t                         reuse_max;
+	cherokee_boolean_t              vserver_errors;
 
 	/* Request processing */
 	cherokee_avl_t                  in_headers_hide;

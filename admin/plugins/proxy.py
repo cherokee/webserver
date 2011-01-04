@@ -38,6 +38,7 @@ NOTE_REUSE_MAX       = N_("Maximum number of connections per server that the pro
 NOTE_ALLOW_KEEPALIVE = N_("Allow the server to use Keep-alive connections with the back-end servers.")
 NOTE_PRESERVE_HOST   = N_("Preserve the original \"Host:\" header sent by the client. (Default: No)")
 NOTE_PRESERVE_SERVER = N_("Preserve the \"Server:\" header sent by the back-end server. (Default: No)")
+NOTE_ERROR_HANDLER   = N_("Use the VServer error handler, whenever an error response is received from a back-end server. (Default: No)")
 
 VALS = [
     ('.+?!reuse_max', validations.is_number_gt_0),
@@ -235,10 +236,11 @@ class Plugin_proxy (Handler.PluginHandler):
 
         # Properties
         table = CTK.PropsTable()
-        table.Add (_('Reuse connections'),      CTK.TextCfg ('%s!reuse_max'%(key), True), _(NOTE_REUSE_MAX))
-        table.Add (_('Allow Keepalive'),        CTK.CheckCfgText('%s!in_allow_keepalive'%(key),  True,  _('Allow')),    _(NOTE_ALLOW_KEEPALIVE))
-        table.Add (_('Preserve Host Header'),   CTK.CheckCfgText('%s!in_preserve_host'%(key),    False, _('Preserve')), _(NOTE_PRESERVE_HOST))
-        table.Add (_('Preserve Server Header'), CTK.CheckCfgText('%s!out_preserve_server'%(key), False, _('Preserve')), _(NOTE_PRESERVE_SERVER))
+        table.Add (_('Reuse connections'),         CTK.TextCfg ('%s!reuse_max'%(key), True), _(NOTE_REUSE_MAX))
+        table.Add (_('Allow Keepalive'),           CTK.CheckCfgText('%s!in_allow_keepalive'%(key),  True,  _('Allow')),    _(NOTE_ALLOW_KEEPALIVE))
+        table.Add (_('Preserve Host Header'),      CTK.CheckCfgText('%s!in_preserve_host'%(key),    False, _('Preserve')), _(NOTE_PRESERVE_HOST))
+        table.Add (_('Preserve Server Header'),    CTK.CheckCfgText('%s!out_preserve_server'%(key), False, _('Preserve')), _(NOTE_PRESERVE_SERVER))
+        table.Add (_('Use VServer error handler'), CTK.CheckCfgText('%s!vserver_errors'%(key),      False, _('Use it')),   _(NOTE_ERROR_HANDLER))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table

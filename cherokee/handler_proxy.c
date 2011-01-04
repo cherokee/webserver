@@ -125,6 +125,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		n->in_preserve_host    = false;
 		n->out_preserve_server = false;
 		n->out_flexible_EOH    = true;
+		n->vserver_errors      = false;
 
 		INIT_LIST_HEAD (&n->in_request_regexs);
 		INIT_LIST_HEAD (&n->in_headers_add);
@@ -155,6 +156,9 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 				return ret;
 		} else if (equal_buf_str (&subconf->key, "reuse_max")) {
 			props->reuse_max = atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "vserver_errors")) {
+			props->vserver_errors = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "in_allow_keepalive")) {
 			props->in_allow_keepalive = !! atoi (subconf->val.buf);
@@ -1490,8 +1494,9 @@ ret_t
 cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 				    cherokee_buffer_t        *buf)
 {
-	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	ret_t                           ret;
+	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 	if (unlikely (hdl->pconn == NULL)) {
 		return ret_error;
@@ -1521,6 +1526,25 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 
 		TRACE(ENTRIES, "Reply is %d, it has no body. Marking as 'got all'.\n",
 		      HANDLER_CONN(hdl)->error_code);
+	}
+
+	/* Should the Vserver's error handler come into the scene?
+	 */
+	if (props->vserver_errors) {
+		if (http_type_300(conn->error_code) ||
+		    http_type_400(conn->error_code) ||
+		    http_type_500(conn->error_code))
+		{
+			cherokee_buffer_clean (&conn->header_buffer);
+
+			ret = cherokee_connection_setup_error_handler (conn);
+			if (unlikely ((ret != ret_eagain) && (ret != ret_ok))) {
+				return ret_error;
+			}
+
+			/* So a 'continue' is reached in thread.c */
+			return ret_eagain;
+		}
 	}
 
 	TRACE (ENTRIES, "Added reply headers (len=%d)\n", buf->len);
