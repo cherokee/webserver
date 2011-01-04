@@ -84,10 +84,12 @@ class Search:
         page.mainarea += menu
 
         # Perform the search
-        page.mainarea += CTK.XMLRPCProxy (name = 'cherokee-market-search',
-                                 xmlrpc_func = lambda: XmlRpcServer(OWS_APPS).lookup_application (self.text_search, OWS_Login.login_session),
-                                 format_func = self.format_func,
-                                 debug = OWS_DEBUG)
+        page.mainarea += CTK.XMLRPCProxy (
+            name = 'cherokee-market-search',
+            xmlrpc_func = lambda: XmlRpcServer (OWS_APPS).lookup_application (CTK.util.to_unicode (self.text_search), OWS_Login.login_session),
+            format_func = self.format_func,
+            debug = OWS_DEBUG)
+
         return page.Render()
 
 
