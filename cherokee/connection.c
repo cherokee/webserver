@@ -485,6 +485,7 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 			goto clean;
 
 		default:
+			TRACE(ENTRIES, "Could not set the error handler. Relying on %s\n", "the default error handler");
 			break;
 		}
 	}
@@ -505,7 +506,7 @@ out:
 		const char *name = NULL;
 
 		cherokee_module_get_name (MODULE(conn->handler), &name);
-		TRACE(ENTRIES, "New handler %s\n", name);
+		TRACE(ENTRIES, "New handler '%s'\n", name ? name : "unknown");
 	}
 #endif
 
