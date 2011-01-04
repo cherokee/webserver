@@ -73,6 +73,7 @@ URL_INSTALL_PAY_CHECK      = "%s/install/pay"            %(URL_MAIN)
 URL_INSTALL_DOWNLOAD       = "%s/install/download"       %(URL_MAIN)
 URL_INSTALL_DOWNLOAD_ERROR = "%s/install/download_error" %(URL_MAIN)
 URL_INSTALL_SETUP          = "%s/install/setup"          %(URL_MAIN)
+URL_INSTALL_POST_UNPACK    = "%s/install/post_unpack"    %(URL_MAIN)
 URL_INSTALL_EXCEPTION      = "%s/install/exception"      %(URL_MAIN)
 URL_INSTALL_SETUP_EXTERNAL = "%s/install/setup/package"  %(URL_MAIN)
 URL_INSTALL_DONE           = "%s/install/done"           %(URL_MAIN)
@@ -413,35 +414,55 @@ def _Setup_unpack():
         Install_Log.log ("Removing %s" %(package_path))
         os.unlink (package_path)
 
-    # Import the Installation handler
-    if os.path.exists (os.path.join (target_path, "installer.py")):
-        Install_Log.log ("Passing control to installer.py")
-        installer_path = os.path.join (target_path, "installer.py")
-        pkg_installer = imp.load_source ('installer', installer_path)
-    else:
-        Install_Log.log ("Passing control to installer.pyo")
-        installer_path = os.path.join (target_path, "installer.pyo")
-        pkg_installer = imp.load_compiled ('installer', installer_path)
-
-    # Set owner and permissions
-    Install_Log.log ("Post unpack commands")
     return ret
 
 
 class Setup (Install_Stage):
     def __safe_call__ (self):
+        Install_Log.log ("Setup phase")
         app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
-
-        Install_Log.log ("Set-up Error")
 
         box = CTK.Box()
         box += CTK.RawHTML ("<h2>%s %s</h2>" %(_("Setting up"), app_name))
         box += CTK.RawHTML ("<p>%s</p>" %(_("Unpacking application…")))
 
+        # Unpack
         commands = [({'function': _Setup_unpack, 'description': _("The applicaction is being unpackaged…")})]
+        progress = CommandProgress.CommandProgress (commands, URL_INSTALL_POST_UNPACK)
+        box += progress
+        return box.Render().toStr()
+
+
+class Post_unpack (Install_Stage):
+    def __safe_call__ (self):
+        Install_Log.log ("Post unpack commands")
+
+        target_path = CTK.cfg.get_val ('tmp!market!install!root')
+        app_name    = CTK.cfg.get_val ('tmp!market!install!app!application_name')
+
+        # Import the Installation handler
+        if os.path.exists (os.path.join (target_path, "installer.py")):
+            Install_Log.log ("Passing control to installer.py")
+            installer_path = os.path.join (target_path, "installer.py")
+            pkg_installer = imp.load_source ('installer', installer_path)
+        else:
+            Install_Log.log ("Passing control to installer.pyo")
+            installer_path = os.path.join (target_path, "installer.pyo")
+            pkg_installer = imp.load_compiled ('installer', installer_path)
+
+        # GUI
+        box = CTK.Box()
+
+        commands = pkg_installer.__dict__.get ('POST_UNPACK_COMMANDS',[])
+        if not commands:
+            box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_SETUP_EXTERNAL))
+            return box.Render().toStr()
+
+        box += CTK.RawHTML ("<h2>%s %s</h2>" %(_("Setting up"), app_name))
+        box += CTK.RawHTML ("<p>%s</p>" %(_("Post unpacking set up…")))
+
         progress = CommandProgress.CommandProgress (commands, URL_INSTALL_SETUP_EXTERNAL)
         box += progress
-
         return box.Render().toStr()
 
 
@@ -518,6 +539,7 @@ CTK.publish ('^%s$'%(URL_INSTALL_INIT_CHECK),     Init_Check)
 CTK.publish ('^%s$'%(URL_INSTALL_PAY_CHECK),      Pay_Check)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD),       Download)
 CTK.publish ('^%s$'%(URL_INSTALL_SETUP),          Setup)
+CTK.publish ('^%s$'%(URL_INSTALL_POST_UNPACK),    Post_unpack)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD_ERROR), Download_Error)
 CTK.publish ('^%s$'%(URL_INSTALL_DONE),           Install_Done)
 CTK.publish ('^%s$'%(URL_INSTALL_DONE_CONTENT),   Install_Done_Content)
