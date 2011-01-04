@@ -104,12 +104,14 @@ class Content (CTK.Container):
         table.Add (_('Redirection'), CTK.TextCfg ('new_redir', False, {'class':'noauto'}), _(NOTE_REDIR))
         table.Add (_('Type'),        CTK.ComboCfg('new_type', trans_options(REDIRECTION_TYPE), {'class':'noauto'}), _(NOTE_TYPE))
 
-        dialog = CTK.Dialog({'title': _('Add New Custom Error'), 'width': 540})
-
         submit = CTK.Submitter(url_apply)
+
+        dialog = CTK.Dialog({'title': _('Add New Custom Error'), 'width': 540})
+        dialog.AddButton (_("Close"), 'close')
+        dialog.AddButton (_("Add"),   submit.JS_to_submit())
+
         submit += table
         submit += CTK.HiddenField ({'name': 'key', 'value': key})
-        submit += CTK.SubmitterButton(_('Add'))
         submit.bind ('submit_success', refreshable.JS_to_refresh())
         submit.bind ('submit_success', dialog.JS_to_close())
 
