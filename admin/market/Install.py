@@ -427,7 +427,7 @@ class Setup (Install_Stage):
         box += CTK.RawHTML ("<p>%s</p>" %(_("Unpacking application…")))
 
         # Unpack
-        commands = [({'function': _Setup_unpack, 'description': _("The applicaction is being unpackaged…")})]
+        commands = [({'function': _Setup_unpack, 'description': _("The applicaction is being unpacked…")})]
         progress = CommandProgress.CommandProgress (commands, URL_INSTALL_POST_UNPACK)
         box += progress
         return box.Render().toStr()
