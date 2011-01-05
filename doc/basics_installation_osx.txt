@@ -3,10 +3,10 @@
 Last checked: 2010/05/26 Cherokee 1.0.1b
 ////
 
-Installation on OSX
--------------------
+Installation on MacOS X
+-----------------------
 
-Installation on OSX is pretty much the same as in any other Unix
+Installation on MacOS X is pretty much the same as in any other Unix
 platform. If you do not find a prepackaged version that suits your
 needs, you can always download and compile your own.
 
@@ -17,12 +17,11 @@ Quickstart
 . link:basics_download.html[Download] a fresh copy of Cherokee
 . Configure the package for your system:
 +
----------------------------------------------------------
-./configure --prefix=/usr/local                         \
-            --with-wwwroot=/Library/WebServer/Documents \
-            --with-wwwuser=www                          \
+----------------------------------
+./configure --prefix=/usr/local  \
+            --with-wwwuser=www   \
             --with-wwwgroup=www
----------------------------------------------------------
+----------------------------------
 
 
 . Compile the package:
@@ -39,7 +38,7 @@ sudo make install
 
 . Start link:other_bundle_cherokee-admin.html[cherokee-admin]
 +
-Alternatively, you can follow the link:#autostart[Autostart]
+Additionally, you can follow the link:#autostart[Autostart]
 instructions to load the web server at boot time.
 
 [[autostart]]
@@ -66,14 +65,3 @@ If you want to learn more about 'configure' you can run `./configure
 a look at it, particularly if you are a developer. Some of the most
 used parameters are listed on the
 link_basics_installation_unix.html[Unix instructions].
-
-[[dmg]]
-Building a DMG
-~~~~~~~~~~~~~~
-
-If you want to create a DMG package you can use the provided build
-script. It is available under the `packages/osx` directory.
-
------------------------------------------
-packages/osx/build.py
------------------------------------------
