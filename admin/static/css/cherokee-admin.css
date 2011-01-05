@@ -1345,3 +1345,20 @@ img.icon_chooser_selected {
 .custom-logger-macros {
 }
 .custom-logger-macros td { padding: 4px 8px 4px 2px; }
+
+#sanity-msg {
+  text-align: left;
+}
+
+#sanity-msg ul { 
+  margin-bottom: 16px;
+}
+
+#sanity-msg ul li { margin-bottom: 4px; padding-left: 0px; list-style-type:square; list-style-position: inside; }
+
+#sanity-errors { margin-bottom: 16px; }
+
+
+.ui-dialog-content h2 {
+  margin-bottom: 16px;
+}

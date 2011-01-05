@@ -81,6 +81,7 @@ class Save:
         # Check
         errors = SavingChecks.check_config()
         if errors:
+            # FIXME: Needs to change the dialog title to "Configuration was not saved" or something
             ul = CTK.List()
             for error in errors:
                 link = CTK.Link (error.url, CTK.RawHTML(_("Solve")))
@@ -89,10 +90,10 @@ class Save:
                 content += link
                 ul += content
 
-            all = CTK.Container()
+            all = CTK.Box({'id': 'sanity-msg'})
             all += CTK.RawHTML ("<h2>%s</h2>"%(SAVE_CHECK_H1))
             all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P1))
-            all += CTK.Box({'id': "errors"}, ul)
+            all += CTK.Box({'id': "sanity-errors"}, ul)
             all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P2))
 
             render = all.Render()
@@ -172,7 +173,7 @@ class Base (CTK.Page):
             template['market_menu_entry'] = ''
 
         # Save dialog
-        dialog = CTK.DialogProxyLazy (URL_SAVE, {'title': _(SAVED_NOTICE), 'autoOpen': False, 'draggable': False, 'width': 500})
+        dialog = CTK.DialogProxyLazy (URL_SAVE, {'title': _(SAVED_NOTICE), 'autoOpen': False, 'draggable': False, 'width': 480})
         CTK.publish (URL_SAVE, Save, dialog=dialog)
 
         # Default headers
