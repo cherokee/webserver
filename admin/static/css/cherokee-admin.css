@@ -478,6 +478,31 @@ img.icon_chooser_selected {
 
 #remote-backup-section { background: transparent url(/static/images/backup.png) 2px 2px no-repeat; }
 
+.backup-restore-table {
+ width: 100%;
+ border-collapse: collapse;
+ border: 1px solid #cde;
+}
+
+.backup-restore-table th {
+  background: #e6f3ff url(/static/images/bg-th.png) repeat-x;
+  border: none;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px;
+}
+
+.backup-restore-table td {
+  vertical-align: top;
+  padding: 6px 4px;
+  background: #fff;
+  border-bottom: 1px solid #def;
+}
+
+.backup-restore-table td input { padding: 0; margin: 0; border: 1px solid #f90; }
+
+.backup-restore-table td { white-space: normal; }
+.backup-restore-table td + td { white-space: pre; }
+.backup-restore-table td + td + td { white-space: normal; }
 
 #cpu-section { background: transparent url(/static/images/cpu.png) 2px 2px no-repeat; }
 #ram-section { background: transparent url(/static/images/ram.png) 2px 2px no-repeat; }
