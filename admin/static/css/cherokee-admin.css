@@ -1348,6 +1348,7 @@ img.icon_chooser_selected {
 
 #sanity-msg {
   text-align: left;
+  padding-bottom: 16px;
 }
 
 #sanity-msg ul { 
