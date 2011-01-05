@@ -136,20 +136,9 @@ class PriceTag (CTK.Box):
             self += CTK.Box ({'class': 'free'},     CTK.RawHTML (_('Free')))
 
 
-class InstructionBox (CTK.Box):
-    def __init__ (self, note, instructions, **kwargs):
-        assert type(instructions) in (dict, type(None))
-
+class InstructionBoxBase (CTK.Box):
+    def __init__ (self):
         CTK.Box.__init__ (self)
-        self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
-
-        if instructions:
-            info = self.choose_instructions (instructions, kwargs)
-            if info:
-                notice  = CTK.Notice ()
-                notice += CTK.RawHTML ('<p>%s:</p>' %(_('These instructions will help you install the required software')))
-                notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
-                self += notice
 
     def choose_instructions (self, instructions, kwargs):
         data   = SystemInfo.get_info()
@@ -190,3 +179,40 @@ class InstructionBox (CTK.Box):
 
         # Default
         return instructions['default']
+
+
+class InstructionBox (InstructionBoxBase):
+    def __init__ (self, note, instructions, **kwargs):
+        InstructionBoxBase.__init__(self)
+        assert type(instructions) in (dict, type(None))
+
+        self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
+
+        if instructions:
+            info = self.choose_instructions (instructions, kwargs)
+            if info:
+                notice  = CTK.Notice ()
+                notice += CTK.RawHTML ('<p>%s:</p>' %(_('Try the following instructions to install the required software')))
+                notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
+                self += notice
+
+
+class InstructionBoxAlternative (InstructionBoxBase):
+    def __init__ (self, note, instruction_list, **kwargs):
+        InstructionBoxBase.__init__(self)
+
+        assert type(instruction_list) == list
+
+        self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
+
+        if instructions:
+            lst     = CTK.List()
+            for instructions in instruction_list:
+                info = self.choose_instructions (instructions, kwargs)
+                if info:
+                    lst.Add (CTK.RawHTML('<pre>%s</pre>' %(_(info))))
+
+            notice  = CTK.Notice ()
+            notice += CTK.RawHTML ('<p>%s:</p>' %(_('Several alternatives can provide the software requirements for the installation. Try at least one of the following instructions to install your preferred option')))
+            notice += lst
+            self += notice
