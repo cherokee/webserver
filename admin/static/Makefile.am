@@ -2,5 +2,12 @@
 
 SUBDIRS = js css images
 
-EXTRA_DIST = \
+HTMLS = \
 help_404.html
+
+adminstaticdir = "$(datadir)/cherokee/admin/static"
+adminstatic_DATA = \
+$(HTMLS)
+
+EXTRA_DIST = \
+$(HTMLS)
