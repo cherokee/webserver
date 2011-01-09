@@ -29,10 +29,11 @@ import os
 import sys
 import time
 import fcntl
+import signal
 import urllib2
 import threading
+import subprocess
 
-from subprocess import *
 from select import select
 
 
@@ -43,6 +44,8 @@ ADMIN_LAUNCH_TIMEOUT = 15
 
 # Paths
 cherokee_admin_path = 'cherokee-admin'
+runner              = None
+exiting             = False
 
 # Defaults
 PATH_PREFIXES  = ['/usr', '/usr/local', '/opt/local', '/usr/gnu']
@@ -61,21 +64,64 @@ def report_error (description, title="ERROR"):
     if osascript_bin:
         dialog  = "display dialog \\\"%(description)s\\\" with title \\\"%(title)s\\\" buttons \\\"Close\\\" with icon stop" %(locals())
         command = "osascript -e 'tell application \"Finder\"' -e \"activate\" -e \"%(dialog)s\" -e 'end tell'" %(locals())
-        print "command", command
         os.system (command)
 
     # Text mode
     print '[%(title)s] - %(description)s'%(locals())
 
 
+def build_command_as_root (cmd):
+    assert type(cmd) == list
+
+    command = cmd[:]
+    env     = os.environ.copy()
+
+    # If not root
+    uid = os.getuid()
+    if uid != 0:
+        if not os.getenv ('SUDO_ASKPASS'):
+            gaskpass_bin  = bin_in_path ('gaskpass')
+            askpass_bin   = bin_in_path ("cherokee-macos-askpass")
+            osascript_bin = bin_in_path ("osascript")
+            X_display     = os.getenv ("DISPLAY")
+
+            # GNOME: gaskpass
+            if gaskpass_bin and X_display:
+                env['SUDO_ASKPASS'] = gaskpass_bin
+
+            # MacOS X: osascript
+            elif osascript_bin and askpass_bin:
+                env['SUDO_ASKPASS'] = askpass_bin
+
+            # Error
+            else:
+                report_error ("Did not find a suitable SUDO_ASKPASS application")
+
+            # Add sudo
+            use_askpass = (env.get('SUDO_ASKPASS') != None)
+            if use_askpass:
+                command = [bin_in_path('sudo'), '-A'] + command
+
+    return (command, env)
+
+
+def run_as_root (cmd):
+    cmd_env = build_command_as_root (cmd)
+    command, env = cmd_env
+    return subprocess.call (command, env=env, shell=False, close_fds=True)
+
+
 class Admin_Runner (threading.Thread):
    def __init__ (self):
       threading.Thread.__init__ (self)
+      self.daemon = True
+
       self.url        = ''
       self.user       = ''
       self.password   = ''
       self.command    = [cherokee_admin_path] + sys.argv[1:]
       self.needs_auth = True
+      self.popen      = None
 
       self.launching      = True
       self.launching_lock = threading.Lock()
@@ -83,9 +129,6 @@ class Admin_Runner (threading.Thread):
 
       # Detect -u, --unsecure, -<something>u
       self._check_auth()
-
-      # Check priviledges
-      self._check_askpass()
 
    def _check_auth (self):
       # Detects --unsecure
@@ -97,99 +140,74 @@ class Admin_Runner (threading.Thread):
               if 'u' in arg:
                   self.needs_auth = False
 
-   def _check_askpass (self):
-       # If root, there is no need to use sudo
-       uid = os.getuid()
-       if uid == 0:
-           return
-
-       # No root
-       if not os.getenv ('SUDO_ASKPASS'):
-           gaskpass_bin  = bin_in_path ('gaskpass')
-           osascript_bin = bin_in_path ("osascript")
-           askpass_bin   = bin_in_path ("cherokee-macos-askpass")
-           X_display     = os.getenv ("DISPLAY")
-
-           # GNOME: gaskpass
-           if gaskpass_bin and X_display:
-               os.environ['SUDO_ASKPASS'] = gaskpass_bin
-
-           # MacOS X: osascript
-           elif osascript_bin and askpass_bin:
-               os.environ['SUDO_ASKPASS'] = askpass_bin
-
-           # Error
-           else:
-               report_error ("Did not find a suitable SUDO_ASKPASS application")
-
-       # Add sudo
-       use_askpass = (os.getenv ('SUDO_ASKPASS') != None)
-       if use_askpass:
-           self.command = [bin_in_path('sudo'), '-A'] + self.command
-
    def run (self):
-      environ = os.environ.copy()
+       cmd_env = build_command_as_root (self.command)
+       command, environment = cmd_env
 
-      p = Popen (self.command, stdout=PIPE, stderr=PIPE, env=environ, close_fds=True)
+       p = subprocess.Popen (command,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             env=environment, close_fds=True)
+       self.popen = p
 
-      stdout_f,  stderr_f  = (p.stdout, p.stderr)
-      stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
-      stdout,    stderr    = '', ''
+       stdout_f,  stderr_f  = (p.stdout, p.stderr)
+       stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
+       stdout,    stderr    = '', ''
 
-      set_non_blocking (stdout_fd)
-      set_non_blocking (stderr_fd)
+       set_non_blocking (stdout_fd)
+       set_non_blocking (stderr_fd)
 
-      while True:
-         r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
+       while not exiting:
+           r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
-         if e:
-            return 0
+           if e:
+               return 0
 
-         # Read output
-         new_line = False
+           # Read output
+           new_line = False
 
-         if stdout_fd in r:
-            data = stdout_f.read(1024)
-            if not data: break
-            if '\n' in data:
-               new_line = True
-            os.write (sys.stdout.fileno(), data)
-            stdout += data
+           if stdout_fd in r:
+               data = stdout_f.read(1024)
+               if not data: break
+               if '\n' in data:
+                   new_line = True
+               os.write (sys.stdout.fileno(), data)
+               stdout += data
 
-         if stderr_fd in r:
-            data = stderr_f.read(1024)
-            if not data: break
-            if '\n' in data:
-               new_line = True
-            os.write (sys.stderr.fileno(), data)
-            stderr += data
+           if stderr_fd in r:
+               data = stderr_f.read(1024)
+               if not data: break
+               if '\n' in data:
+                   new_line = True
+               os.write (sys.stderr.fileno(), data)
+               stderr += data
 
-         # Read the connection info
-         finished = bool(self.url)
-         if self.needs_auth:
-            finished &= bool(self.user) and bool(self.password)
+           # Read the connection info
+           finished = bool(self.url)
+           if self.needs_auth:
+               finished &= bool(self.user) and bool(self.password)
 
-         if finished:
-            if self.launching:
-               self.launching = False
-               self.launching_lock.release()
+           if finished:
+               if self.launching:
+                   self.launching = False
+                   self.launching_lock.release()
 
-            stdout = stderr = ''
-            continue
+               stdout = stderr = ''
+               continue
 
-         # Parse connection info
-         if new_line:
-            tmp = re.findall (r'\s+URL:\s+(http.+)\n', stdout)
-            if tmp:
-               self.url = tmp[0]
+           # Parse connection info
+           if new_line:
+               tmp = re.findall (r'\s+URL:\s+(http.+)\n', stdout)
+               if tmp:
+                   self.url = tmp[0]
 
-            tmp = re.findall (r'\s+User:\s+(\w+)', stdout)
-            if tmp:
-               self.user = tmp[0]
+               tmp = re.findall (r'\s+User:\s+(\w+)', stdout)
+               if tmp:
+                   self.user = tmp[0]
 
-            tmp = re.findall (r'\s+One-time Password:\s+(\w+)', stdout)
-            if tmp:
-               self.password = tmp[0]
+               tmp = re.findall (r'\s+One-time Password:\s+(\w+)', stdout)
+               if tmp:
+                   self.password = tmp[0]
 
 
 def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
@@ -223,7 +241,7 @@ def bin_in_path (bin):
     for e in paths:
         fp = os.path.join (e, bin)
         if os.access (fp, os.X_OK):
-            _bin_in_path_cache[bin] = True
+            _bin_in_path_cache[bin] = fp
             return fp
 
     _bin_in_path_cache[bin] = False
@@ -270,6 +288,13 @@ def find_cherokee_admin():
    report_error ("Could not find cherokee-admin")
 
 
+def quit_signal (num, stack):
+    global exiting
+    exiting = True
+    print
+    print "Cherokee-admin-launcher exiting.."
+
+
 def main():
    # Find cherokee-admin
    find_cherokee_admin()
@@ -285,6 +310,7 @@ def main():
        raise SystemExit
 
    # Launch Cherokee-admin
+   global runner
    runner = Admin_Runner()
    runner.start()
 
@@ -312,7 +338,14 @@ def main():
    print "OK"
 
    # Wait for it to finish
-   runner.join()
+   while not exiting:
+       time.sleep (.1)
+
+   # Exiting
+   if runner and runner.popen and runner.popen.pid:
+       kill_command = ['/bin/sh', '-c', 'kill %s'%(runner.popen.pid)]
+       run_as_root (kill_command)
+       os.waitpid (runner.popen.pid, 0)
 
 
 if __name__ == '__main__':
@@ -320,10 +353,9 @@ if __name__ == '__main__':
       os.system ('%(cherokee_admin_path)s --help' %(globals()))
       raise SystemExit
 
-   try:
-      main()
-   except KeyboardInterrupt:
-      print
-      print "Exiting.."
-      sys.stdout.flush()
-      raise SystemExit
+   # Set signal handlers
+   signal.signal (signal.SIGINT,  quit_signal)
+   signal.signal (signal.SIGTERM, quit_signal)
+
+   # The real deal
+   main()
