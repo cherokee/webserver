@@ -499,12 +499,14 @@ print_banner (cherokee_server_t *srv)
 
 	/* Trace
 	 */
+#ifdef TRACE_ENABLED
 	ret = cherokee_trace_get_trace (&buf);
 	if ((ret == ret_ok) &&
 	    (! cherokee_buffer_is_empty (buf)))
 	{
 		cherokee_buffer_add_va (&n, ", tracing '%s'", buf->buf);
 	}
+#endif
 
 	/* Print it!
 	 */
