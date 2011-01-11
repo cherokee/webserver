@@ -275,3 +275,6 @@ if __name__ == "__main__":
     # Run forever
     CTK.run()
 
+    # Kill lingering processes
+    parent_pid = os.getppid()
+    os.killpg (parent_pid, signal.SIGTERM)

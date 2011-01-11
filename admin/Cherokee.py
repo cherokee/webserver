@@ -160,9 +160,7 @@ class Server:
 
 class Admin:
     def halt (self):
-        parent_pid = os.getppid()
-        os.kill (parent_pid, signal.SIGTERM)
-        raise SystemExit
+        CTK.stop()
 
 
 class Support:
