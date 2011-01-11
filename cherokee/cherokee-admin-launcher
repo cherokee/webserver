@@ -159,10 +159,11 @@ class Admin_Runner (threading.Thread):
 
        global exiting
        while not exiting:
+           # Poll I/O activity
            r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
            if e:
-               return 0
+               break
 
            # Read output
            new_line = False
@@ -170,30 +171,31 @@ class Admin_Runner (threading.Thread):
            if stdout_fd in r:
                data = stdout_f.read(1024)
                if not data: break
-               if '\n' in data:
-                   new_line = True
                os.write (sys.stdout.fileno(), data)
                stdout += data
+               new_line = '\n' in data
 
            if stderr_fd in r:
                data = stderr_f.read(1024)
                if not data: break
-               if '\n' in data:
-                   new_line = True
                os.write (sys.stderr.fileno(), data)
                stderr += data
+               new_line = '\n' in data
 
-           # Read the connection info
-           finished = bool(self.url)
+           # Launching status
+           if not self.launching:
+               continue
+
+           got_info = bool(self.url)
            if self.needs_auth:
-               finished &= bool(self.user) and bool(self.password)
+               got_info &= bool(self.user) and bool(self.password)
 
-           if finished:
-               if self.launching:
-                   self.launching = False
-                   self.launching_lock.release()
+           if got_info:
+               self.launching = False
+               self.launching_lock.release()
 
-               stdout = stderr = ''
+               stdout = ''
+               stderr = ''
                continue
 
            # Parse connection info
@@ -210,14 +212,7 @@ class Admin_Runner (threading.Thread):
                if tmp:
                    self.password = tmp[0]
 
-
        # Error or process exited
-       try:
-           os.killpg (p.pid, signal.SIGTERM)
-           p.wait()
-       except OSError:
-           pass
-
        exiting = True
 
 

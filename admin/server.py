@@ -276,5 +276,12 @@ if __name__ == "__main__":
     CTK.run()
 
     # Kill lingering processes
-    parent_pid = os.getppid()
-    os.killpg (parent_pid, signal.SIGTERM)
+    try:
+        # Parent
+        cherokee_admin_pid = os.getppid()
+        os.kill (cherokee_admin_pid, signal.SIGTERM)
+
+        # Itself
+        os.killpg (0, signal.SIGTERM)
+    except OSError:
+        pass

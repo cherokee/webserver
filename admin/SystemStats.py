@@ -84,6 +84,7 @@ class System_stats__Darwin (Thread, System_stats):
     def __init__ (self):
         Thread.__init__ (self)
         System_stats.__init__ (self)
+        self.daemon = True
 
         # System Profiler
         self.profiler = subprocess.Popen ("/usr/sbin/system_profiler SPHardwareDataType",
@@ -184,6 +185,7 @@ class System_stats__Linux (Thread, System_stats):
     def __init__ (self):
         Thread.__init__ (self)
         System_stats.__init__ (self)
+        self.daemon = True
 
         self.cpu._user_prev = 0
         self.cpu._sys_prev  = 0
@@ -299,6 +301,7 @@ class System_stats__FreeBSD (Thread, System_stats):
     def __init__ (self):
         Thread.__init__ (self)
         System_stats.__init__ (self)
+        self.daemon = True
 
         self.vmstat_fd = subprocess.Popen ("/usr/bin/vmstat -H -w%d" %(self.CHECK_INTERVAL),
                                             shell=True, stdout = subprocess.PIPE, close_fds=True )
@@ -416,6 +419,7 @@ class System_stats__OpenBSD (Thread, System_stats):
     def __init__ (self):
         Thread.__init__ (self)
         System_stats.__init__ (self)
+        self.daemon = True
 
         self.vmstat_fd = subprocess.Popen ("/usr/bin/vmstat -w%d" %(self.CHECK_INTERVAL),
                                             shell=True, stdout = subprocess.PIPE, close_fds=True )
