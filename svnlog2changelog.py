@@ -50,7 +50,7 @@ def do_parse():
     except xml.parsers.expat.ExpatError, e:
         print ("ERROR: Could update ChangeLog. The XML arser reported: ")
         print ('       "%s2"' %(e))
-        print ()
+        print ('')
         raise SystemExit
 
     log = dom.getElementsByTagName('log')[0]
@@ -66,12 +66,12 @@ def do_parse():
 
         print ("%s " % (date), author)
         print (" "*12 + "SVN: r%s, %s - %s" % (revision, dev, time))
-        print ()
+        print ("")
         if msg:
             print (msg.encode("utf-8")),
 
         if paths:
-            print ()
+            print ("")
             print (paths)
 
 if __name__ == "__main__":

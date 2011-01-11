@@ -77,7 +77,7 @@ def do_parse():
 
         print ("%s  %s" %(date, DEVELOPERS[author]))
         print ("            svn=%s git=%s" %(svn_id, commit))
-        print ()
+        print ("")
         print (format_body(entry[header_end + 2:]))
 
 
