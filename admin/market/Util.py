@@ -205,7 +205,7 @@ class InstructionBoxAlternative (InstructionBoxBase):
 
         self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
 
-        if instructions:
+        if instruction_list:
             lst     = CTK.List()
             for instructions in instruction_list:
                 info = self.choose_instructions (instructions, kwargs)
