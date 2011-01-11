@@ -157,6 +157,7 @@ class Admin_Runner (threading.Thread):
        set_non_blocking (stdout_fd)
        set_non_blocking (stderr_fd)
 
+       global exiting
        while not exiting:
            r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
@@ -208,6 +209,16 @@ class Admin_Runner (threading.Thread):
                tmp = re.findall (r'\s+One-time Password:\s+(\w+)', stdout)
                if tmp:
                    self.password = tmp[0]
+
+
+       # Error or process exited
+       try:
+           os.killpg (p.pid, signal.SIGTERM)
+           p.wait()
+       except OSError:
+           pass
+
+       exiting = True
 
 
 def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
@@ -345,8 +356,10 @@ def main():
    if runner and runner.popen and runner.popen.pid:
        kill_command = ['/bin/sh', '-c', 'kill %s'%(runner.popen.pid)]
        run_as_root (kill_command)
-       os.waitpid (runner.popen.pid, 0)
-
+       try:
+           os.waitpid (runner.popen.pid, 0)
+       except OSError:
+           pass
 
 if __name__ == '__main__':
    if '--help' in sys.argv:
