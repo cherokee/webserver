@@ -881,7 +881,7 @@ cherokee_buffer_remove_dups (cherokee_buffer_t *buffer, char c)
 		a++;
 		*a = a[offset];
 
-	} while ((a < end) && (offset+1 < buffer->len));
+	} while ((a + offset < end) && (offset+1 < buffer->len));
 
 	buffer->len -= offset;
 	buffer->buf[buffer->len] = '\0';
