@@ -228,7 +228,6 @@ cherokee_balancer_instance (cherokee_buffer_t       *name,
 	ret = new_func (balancer);
 	if (ret != ret_ok) return ret;
 
-
 	config_func = (balancer_configure_func_t) info->configure;
 	ret = config_func (*balancer, srv, conf);
 	if (ret != ret_ok) return ret;
