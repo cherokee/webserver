@@ -179,6 +179,7 @@ class Server:
         self._is_init     = False
         self.lock         = threading.RLock()
         self.plugin_paths = []
+        self.exiting      = False
 
     def init_server (self, *args, **kwargs):
         # Is it already init?
@@ -236,12 +237,14 @@ class Server:
 
     def serve_forever (self):
         try:
-            while True:
+            while not self.exiting:
                 # Handle request
                 self._scgi.handle_request()
         except KeyboardInterrupt:
-            print "\r", "CTK Back-end Server exiting.."
-            self._scgi.server_close()
+            self.exiting = True
+
+        print "\r", "CTK Back-end Server exiting.."
+        self._scgi.server_close()
 
 
 #
@@ -299,6 +302,10 @@ def run (*args, **kwargs):
 
     srv = get_server()
     srv.serve_forever()
+
+def stop():
+    srv = get_server()
+    srv.exiting = True
 
 def step ():
     srv = get_server()

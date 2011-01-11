@@ -41,7 +41,7 @@ from Checkbox import Checkbox, CheckCfg, CheckboxText, CheckCfgText
 from Combobox import Combobox, ComboCfg
 from PropsTable import PropsTable, PropsAuto
 from Template import Template
-from Server import Server, run, init, set_synchronous, step, publish, unpublish, cookie, post, request, cfg, error, cfg_reply_ajax_ok, cfg_apply_post, add_plugin_dir
+from Server import Server, run, stop, init, set_synchronous, step, publish, unpublish, cookie, post, request, cfg, error, cfg_reply_ajax_ok, cfg_apply_post, add_plugin_dir
 from Proxy import Proxy
 from iPhoneToggle import iPhoneToggle, iPhoneCfg
 from Tab import Tab
