@@ -48,9 +48,9 @@ def do_parse():
     try:
         dom = xml.dom.minidom.parseString (stdin.read())
     except xml.parsers.expat.ExpatError, e:
-        print "ERROR: Could update ChangeLog. The XML arser reported: "
-        print '       "%s2"' %(e)
-        print
+        print ("ERROR: Could update ChangeLog. The XML arser reported: ")
+        print ('       "%s2"' %(e))
+        print ()
         raise SystemExit
 
     log = dom.getElementsByTagName('log')[0]
@@ -64,15 +64,15 @@ def do_parse():
         author   = DEVELOPERS[dev]
         paths    = render_paths(entry)
 
-        print "%s " % (date), author
-        print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
-        print
+        print ("%s " % (date), author)
+        print (" "*12 + "SVN: r%s, %s - %s" % (revision, dev, time))
+        print ()
         if msg:
-            print msg.encode("utf-8"),
+            print (msg.encode("utf-8")),
 
         if paths:
-            print
-            print paths
+            print ()
+            print (paths)
 
 if __name__ == "__main__":
     do_parse()

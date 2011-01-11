@@ -75,10 +75,10 @@ def do_parse():
         if header_end == -1:
             continue
 
-        print "%s  %s" %(date, DEVELOPERS[author])
-        print "            svn=%s git=%s" %(svn_id, commit)
-        print
-        print format_body(entry[header_end + 2:])
+        print ("%s  %s" %(date, DEVELOPERS[author]))
+        print ("            svn=%s git=%s" %(svn_id, commit))
+        print ()
+        print (format_body(entry[header_end + 2:]))
 
 
 if __name__ == "__main__":

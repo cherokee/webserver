@@ -1409,8 +1409,27 @@ dnl
 wants_admin="yes"
 have_python="yes"
 
-AC_PATH_PROGS(PYTHON, python python2.7 python2.6 python2.5 python2.4)
-if test -z $PYTHON ; then
+AC_ARG_WITH([python], AC_HELP_STRING([--with-python=/path/to/python],[Path to Python interpreter]),
+		  PYTHON="$withval",
+[
+   AC_PATH_PROGS(PYTHON, python python2.7 python2.6 python2.5 python2.4)
+])
+
+if test "x$PYTHON" != "x"; then
+   AC_MSG_CHECKING([Python 2.x interpreter])
+   v=`$PYTHON -c 'import sys; print (sys.version_info[[0]])'`
+   if test "x$v" != "x2"; then
+     have_python="no"
+     wants_admin="no"
+	AC_MSG_RESULT([no])
+	AC_MSG_WARN([
+*** Cherokee-admin requires Python 2.x. Please, use the --with-python
+*** parameter to specify a Python 2.4, 2.5, 2.6 or 2.7 interpreter.
+*** BEWARE: Cherokee-admin support has been disabled.])
+   else
+     AC_MSG_RESULT([yes])
+   fi
+else
     have_python="no"
     wants_admin="no"
     AC_MSG_WARN([
