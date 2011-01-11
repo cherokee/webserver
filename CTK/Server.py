@@ -240,6 +240,8 @@ class Server:
             while not self.exiting:
                 # Handle request
                 self._scgi.handle_request()
+                if self.exiting:
+                    break
         except KeyboardInterrupt:
             self.exiting = True
 
