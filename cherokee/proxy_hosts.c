@@ -281,6 +281,7 @@ cherokee_handler_proxy_conn_free (cherokee_handler_proxy_conn_t *pconn)
 	cherokee_buffer_mrproper (&pconn->post.buf_temp);
 	cherokee_buffer_mrproper (&pconn->header_in_raw);
 
+	free (pconn);
 	return ret_ok;
 }
 
