@@ -89,23 +89,23 @@ cherokee_info_build_print (cherokee_server_t *srv)
 #endif
 
 	printf (" Polling methods: ");
-#ifdef HAVE_PORT
-	printf ("ports ");
-#endif
-#ifdef HAVE_SELECT
-	printf ("select ");
-#endif
-#ifdef HAVE_WIN32_SELECT
-	printf ("win32-select ");
-#endif
-#ifdef HAVE_POLL
-	printf ("poll ");
-#endif
 #ifdef HAVE_EPOLL
 	printf ("epoll ");
 #endif
 #ifdef HAVE_KQUEUE
 	printf ("kqueue");
+#endif
+#ifdef HAVE_POLL
+	printf ("poll ");
+#endif
+#ifdef HAVE_PORT
+	printf ("ports ");
+#endif
+#ifdef HAVE_WIN32_SELECT
+	printf ("win32-select ");
+#endif
+#ifdef HAVE_SELECT
+	printf ("select ");
 #endif
 	printf ("\n\n");
 }
