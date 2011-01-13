@@ -263,15 +263,17 @@ def launch_browser (url, user, password):
    # MacOS X
    if os.access ("/usr/bin/open", os.X_OK):
       os.system ("open '%(URI)s'" %(locals()))
-   # LSB
-   elif bin_in_path ('xdg-open'):
-      os.system ("xdg-open '%(URI)s'" %(locals()))
    # KDE
+   elif bin_in_path ('kde-open'):
+      os.system ("kde-open '%(URI)s'" %(locals()))
    elif bin_in_path ('kfmclient'):
       os.system ("kfmclient openURL '%(URI)s'" %(locals()))
    # Gnome
    elif bin_in_path ('gnome-open'):
       os.system ("gnome-open '%(URI)s'" %(locals()))
+   # LSB
+   elif bin_in_path ('xdg-open'):
+      os.system ("xdg-open '%(URI)s'" %(locals()))
 
    # Error
    else:
