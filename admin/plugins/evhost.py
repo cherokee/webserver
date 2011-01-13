@@ -39,7 +39,7 @@ class Plugin_evhost (CTK.Plugin):
         # GUI
         table = CTK.PropsAuto (URL_APPLY)
         table.Add (_("Dynamic Document Root"), CTK.TextCfg('%s!tpl_document_root'%(key)), _(NOTE_REHOST))
-        table.Add (_("Check Document Root"),   CTK.CheckCfg('%s!check_document_root'%(key), True), _(NOTE_CHECK_DROOT))
+        table.Add (_("Check Document Root"),   CTK.CheckCfgText('%s!check_document_root'%(key), True, _('Check')), _(NOTE_CHECK_DROOT))
         self += table
 
         # URL mapping
