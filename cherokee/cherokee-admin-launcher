@@ -28,13 +28,13 @@ import re
 import os
 import sys
 import time
+import glob
 import fcntl
+import select
 import signal
 import urllib2
 import threading
 import subprocess
-
-from select import select
 
 
 # Constants
@@ -70,6 +70,50 @@ def report_error (description, title="ERROR"):
     print '[%(title)s] - %(description)s'%(locals())
 
 
+def find_sudo_askpass():
+    cwd = os.path.abspath (os.path.realpath (__file__) + '/..')
+
+    # MacOS X: osascript
+    osascript_bin = bin_in_path ("osascript")
+    askpass_bin   = bin_in_path ("cherokee-macos-askpass", [cwd])
+
+    if osascript_bin and askpass_bin:
+        return askpass_bin
+
+    # X-Window
+    X_display = os.getenv ("DISPLAY")
+    if X_display:
+        # GNOME
+        gaskpass_bin = bin_in_path ('gaskpass')
+        if gaskpass_bin:
+            return gaskpass_bin
+
+        extra_paths = ['/usr/lib*/openssh/']
+        gnome_ssh_askpass_bin = bin_in_path ('gnome-ssh-askpass', extra_paths)
+        if gnome_ssh_askpass_bin:
+            return gnome_ssh_askpass_bin
+
+        # KDE
+        ksshaskpass_bin = bin_in_path ('ksshaskpass')
+        if ksshaskpass_bin:
+            return ksshaskpass_bin
+
+        kwalletaskpass_bin = bin_in_path ('kwalletaskpass')
+        if kwalletaskpass_bin:
+            return kwalletaskpass_bin
+
+        # GTK+
+        gtk_led_askpass_bin = bin_in_path ('gtk-led-askpass')
+        if gtk_led_askpass_bin:
+            return gtk_led_askpass_bin
+
+        # X11
+        extra_paths = ['/usr/lib*/ssh/']
+        x11_ssh_askpass_bin = bin_in_path ('x11-ssh-askpass', extra_paths)
+        if x11_ssh_askpass_bin:
+            return x11_ssh_askpass_bin
+
+
 def build_command_as_root (cmd):
     assert type(cmd) == list
 
@@ -80,27 +124,18 @@ def build_command_as_root (cmd):
     uid = os.getuid()
     if uid != 0:
         if not os.getenv ('SUDO_ASKPASS'):
-            gaskpass_bin  = bin_in_path ('gaskpass')
-            askpass_bin   = bin_in_path ("cherokee-macos-askpass")
-            osascript_bin = bin_in_path ("osascript")
-            X_display     = os.getenv ("DISPLAY")
-
-            # GNOME: gaskpass
-            if gaskpass_bin and X_display:
-                env['SUDO_ASKPASS'] = gaskpass_bin
-
-            # MacOS X: osascript
-            elif osascript_bin and askpass_bin:
-                env['SUDO_ASKPASS'] = askpass_bin
-
-            # Error
-            else:
+            askpass = find_sudo_askpass()
+            if not askpass:
                 report_error ("Did not find a suitable SUDO_ASKPASS application")
+            else:
+                env['SUDO_ASKPASS'] = askpass
 
-            # Add sudo
-            use_askpass = (env.get('SUDO_ASKPASS') != None)
-            if use_askpass:
-                command = [bin_in_path('sudo'), '-A'] + command
+        # Add sudo
+        use_askpass = (env.get('SUDO_ASKPASS') != None)
+        if use_askpass:
+            command = [bin_in_path('sudo'), '-A'] + command
+        else:
+            command = [bin_in_path('sudo')] + command
 
     return (command, env)
 
@@ -160,7 +195,7 @@ class Admin_Runner (threading.Thread):
        global exiting
        while not exiting:
            # Poll I/O activity
-           r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
+           r,w,e = select.select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
            if e:
                break
@@ -234,7 +269,7 @@ def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
 
 
 _bin_in_path_cache = {}
-def bin_in_path (bin):
+def bin_in_path (bin, extra_paths=[]):
     global _bin_in_path_cache
 
     # Cache hit
@@ -242,8 +277,14 @@ def bin_in_path (bin):
         return _bin_in_path_cache[bin]
 
     # Cache miss: check it out
-    paths = os.getenv('PATH').split(':') + DEFAULT_PATHS
+    paths_tmp = os.getenv('PATH').split(':') + extra_paths + DEFAULT_PATHS
 
+    # Solve ? and *
+    paths = []
+    for p in paths_tmp:
+        paths += glob.glob(p)
+
+    # Check file
     for e in paths:
         fp = os.path.join (e, bin)
         if os.access (fp, os.X_OK):
@@ -283,17 +324,20 @@ def launch_browser (url, user, password):
 def find_cherokee_admin():
    global cherokee_admin_path
 
+   # Development
    path = os.path.abspath (os.path.realpath (__file__) + '/../cherokee-admin')
    if os.path.exists (path):
       cherokee_admin_path = path
       return
 
+   # Proper installation
    path = os.path.abspath (os.path.realpath (__file__) + '/../../sbin/cherokee-admin')
    if os.path.exists (path):
       cherokee_admin_path = path
       return
 
-   report_error ("Could not find cherokee-admin")
+   # Not found
+   return True
 
 
 def quit_signal (num, stack):
@@ -305,7 +349,10 @@ def quit_signal (num, stack):
 
 def main():
    # Find cherokee-admin
-   find_cherokee_admin()
+   error = find_cherokee_admin()
+   if error:
+       report_error ("Could not find cherokee-admin")
+       return
 
    # Ensure port is empty
    print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
