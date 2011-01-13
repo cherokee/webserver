@@ -750,10 +750,11 @@ process_wait (pid_t pid)
 				break;
 			else
 				continue;
-		else if (errno == ECHILD)
+		else if (errno == ECHILD) {
 			return ret_ok;
-		else
+		} else {
 			return ret_error;
+		}
 	}
 
 	if (WIFEXITED(exitcode)) {
@@ -761,13 +762,14 @@ process_wait (pid_t pid)
 
 		if (re == EXIT_OK_ONCE) {
 			clean_up();
-			exit (EXIT_OK_ONCE);
+			exit (EXIT_OK);
 		}
 
 		/* Child terminated normally */
 		PRINT_MSG ("PID %d: exited re=%d\n", pid, re);
-		if (re != 0)
+		if (re != 0) {
 			return ret_error;
+		}
 	}
 	else if (WIFSIGNALED(exitcode)) {
 		/* Child process terminated by a signal */
