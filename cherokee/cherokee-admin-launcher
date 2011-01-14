@@ -81,9 +81,7 @@ def find_sudo_askpass():
         return askpass_bin
 
     # X-Window
-    X_display = os.getenv ("DISPLAY")
-    if X_display:
-        # GNOME
+    def check_gnome():
         gaskpass_bin = bin_in_path ('gaskpass')
         if gaskpass_bin:
             return gaskpass_bin
@@ -93,7 +91,7 @@ def find_sudo_askpass():
         if gnome_ssh_askpass_bin:
             return gnome_ssh_askpass_bin
 
-        # KDE
+    def check_kde():
         ksshaskpass_bin = bin_in_path ('ksshaskpass')
         if ksshaskpass_bin:
             return ksshaskpass_bin
@@ -101,6 +99,24 @@ def find_sudo_askpass():
         kwalletaskpass_bin = bin_in_path ('kwalletaskpass')
         if kwalletaskpass_bin:
             return kwalletaskpass_bin
+
+    X_display = os.getenv ("DISPLAY")
+    if X_display:
+        ps = os.popen ("ps ax").read().lower()
+        procs_gnome = ps.count("gnome")
+        procs_kde   = ps.count("kde")
+
+        # GNOME and KDE
+        if procs_gnome > procs_kde:
+            bin = check_gnome()
+            if bin: return bin
+            bin = check_kde()
+            if bin: return bin
+        else:
+            bin = check_kde()
+            if bin: return bin
+            bin = check_gnome()
+            if bin: return bin
 
         # GTK+
         gtk_led_askpass_bin = bin_in_path ('gtk-led-askpass')
@@ -147,8 +163,6 @@ def run_as_root (cmd):
 
 
 class Admin_Runner (threading.Thread):
-#  launching_lock = threading.Lock()
-
    def __init__ (self, event_launched):
       threading.Thread.__init__ (self)
       self.daemon = True
