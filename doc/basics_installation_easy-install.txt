@@ -19,10 +19,16 @@ or
 wget -O - http://www.cherokee-project.com/install | python
 ----
 
-The other installation methods listed in the
-link:basics_installation.html[installation section] are also
-recommended, particularly if there is a prepackaged version of
-Cherokee available for your architecture. Those will provide you with
-automatic bootup scripts, consistency and dependency checks, and an
-easy upgrade path tailored to your system whenever a new package is
-available.
+The easy installation script is the express way to make a Cherokee
+installation as seamless and hassle-free as possible.  It will build
+and install everything under `/opt/cherokee`, and by deleting that
+directory you could totally purge Cherokee from your system.
+
+If you require further customization, this script is not for you. The
+other -more elaborate- link:basics_installation.html[installation
+methods] will fulfill your needs. Particularly when there is a
+prepackaged version of Cherokee available for your architecture you
+should follow that route. That will provide you with automatic bootup
+scripts, consistency and dependency checks, and an easy upgrade path
+tailored to your system whenever a new package is available.
+
