@@ -147,20 +147,25 @@ def run_as_root (cmd):
 
 
 class Admin_Runner (threading.Thread):
-   def __init__ (self):
+#  launching_lock = threading.Lock()
+
+   def __init__ (self, event_launched):
       threading.Thread.__init__ (self)
       self.daemon = True
 
       self.url        = ''
       self.user       = ''
       self.password   = ''
-      self.command    = [cherokee_admin_path] + sys.argv[1:]
       self.needs_auth = True
       self.popen      = None
 
-      self.launching      = True
-      self.launching_lock = threading.Lock()
-      self.launching_lock.acquire()
+      self.launching = True
+      self.event_launched = event_launched
+
+      cmd = [cherokee_admin_path] + sys.argv[1:]
+      cmd_env = build_command_as_root (cmd)
+      self.command = cmd_env[0]
+      self.environ = cmd_env[1]
 
       # Detect -u, --unsecure, -<something>u
       self._check_auth()
@@ -176,13 +181,16 @@ class Admin_Runner (threading.Thread):
                   self.needs_auth = False
 
    def run (self):
-       cmd_env = build_command_as_root (self.command)
-       command, environment = cmd_env
+       try:
+           return self._run_guts()
+       except KeyboardInterrupt:
+           pass
 
-       p = subprocess.Popen (command,
+   def _run_guts (self):
+       p = subprocess.Popen (self.command,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
-                             env=environment, close_fds=True)
+                             env=self.environ, close_fds=True)
        self.popen = p
 
        stdout_f,  stderr_f  = (p.stdout, p.stderr)
@@ -198,6 +206,7 @@ class Admin_Runner (threading.Thread):
            r,w,e = select.select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
            if e:
+               print "ERROR: select", e
                break
 
            # Read output
@@ -227,7 +236,7 @@ class Admin_Runner (threading.Thread):
 
            if got_info:
                self.launching = False
-               self.launching_lock.release()
+               self.event_launched.set()
 
                stdout = ''
                stderr = ''
@@ -249,6 +258,9 @@ class Admin_Runner (threading.Thread):
 
        # Error or process exited
        exiting = True
+       self.event_launched.set()
+
+       print "Cheroke admin exiting..."
 
 
 def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
@@ -347,7 +359,7 @@ def quit_signal (num, stack):
     print "Cherokee-admin-launcher exiting.."
 
 
-def main():
+def do_launching():
    # Find cherokee-admin
    error = find_cherokee_admin()
    if error:
@@ -365,18 +377,25 @@ def main():
        raise SystemExit
 
    # Launch Cherokee-admin
+   event_launched = threading.Event()
+
    global runner
-   runner = Admin_Runner()
+   runner  = Admin_Runner (event_launched)
+   command = runner.command[:]
+
    runner.start()
 
-   print "Launching %s.." %(' '.join (runner.command))
-   runner.launching_lock.acquire()
+   print "Launching: %s" %(' '.join (command))
+   event_launched.wait()
 
    # Wait for it to be available
    print "Connecting..",
    wait_timeout = time.time() + ADMIN_LAUNCH_TIMEOUT
 
    while True:
+       if exiting:
+           return
+
        response = http_GET_admin()
        if response:
            print "OK"
@@ -392,10 +411,7 @@ def main():
    launch_browser (runner.url, runner.user, runner.password)
    print "OK"
 
-   # Wait for it to finish
-   while not exiting:
-       time.sleep (.1)
-
+def clean_up():
    # Exiting
    if runner and runner.popen and runner.popen.pid:
        kill_command = ['/bin/sh', '-c', 'kill %s'%(runner.popen.pid)]
@@ -414,5 +430,15 @@ if __name__ == '__main__':
    signal.signal (signal.SIGINT,  quit_signal)
    signal.signal (signal.SIGTERM, quit_signal)
 
-   # The real deal
-   main()
+   # admin and broweser
+   try:
+       do_launching()
+   except KeyboardInterrupt:
+       exiting = True
+
+   # Wait for it to finish
+   while not exiting:
+       time.sleep (.1)
+
+   # Final clean up
+   clean_up()
