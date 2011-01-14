@@ -1,0 +1,28 @@
+== link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
+////
+Last checked: 2011/01/14 Cherokee 1.0.17b
+////
+
+Easy installation
+-----------------
+The easiest way to install Cherokee is by using the script provided
+for easy installations. It compiles and installs the latest version of
+the server with a single command:
+
+----
+curl http://www.cherokee-project.com/install | python
+----
+
+or
+
+----
+wget -O - http://www.cherokee-project.com/install | python
+----
+
+The other installation methods listed in the
+link:basics_installation.html[installation section] are also
+recommended, particularly if there is a prepackaged version of
+Cherokee available for your architecture. Those will provide you with
+automatic bootup scripts, consistency and dependency checks, and an
+easy upgrade path tailored to your system whenever a new package is
+available.

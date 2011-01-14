@@ -4,6 +4,7 @@
  . link:basics_requirements.html[Requirements]: Hardware and software requirements.
  . link:basics_download.html[Download]: Where and how to download Cherokee.
  . link:basics_installation.html[Installation]: Installation instructions.
+   - link:basics_installation_easy-install.html[Easy installation]: One-step installation.
    - link:basics_installation_unix.html[Unix]: Installation on Unix/Linux platforms.
    - link:basics_installation_osx.html[OSX]: Installation on Mac OSX platform.
    - link:basics_installation_windows.html[Windows]: Installation on Windows platform.
