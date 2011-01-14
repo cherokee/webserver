@@ -169,9 +169,13 @@ class InstructionBoxBase (CTK.Box):
             return instructions[distro]
 
         # Linux distro generic
-        for x in ('red hat', 'redhat', 'fedora', 'centos', 'suse'):
+        for x in ('red hat', 'redhat', 'fedora', 'centos'):
             if x in distro:
                 return instructions.get('yum', info)
+
+        for x in ('suse'):
+            if x in distro:
+                return instructions.get('zypper', info)
 
         for x in ('debian', 'ubuntu', 'knoppix', 'mint'):
             if x in distro:
