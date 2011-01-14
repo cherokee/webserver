@@ -173,7 +173,7 @@ class InstructionBoxBase (CTK.Box):
             if x in distro:
                 return instructions.get('yum', info)
 
-        for x in ('suse'):
+        for x in ('suse',):
             if x in distro:
                 return instructions.get('zypper', info)
 
