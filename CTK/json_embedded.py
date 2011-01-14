@@ -1,5 +1,5 @@
 ## Auto-contained SimpleJSON encoder
-## Brewed by: Alvaro Lopez Ortega, 2010
+## Brewed by: Alvaro Lopez Ortega, 2010-2011
 
 # Copyright (c) 2006 Bob Ippolito
 #
