@@ -87,8 +87,12 @@ def commit():
 class Plugin_method (RulePlugin):
     def __init__ (self, key, **kwargs):
         RulePlugin.__init__ (self, key)
-        is_new    = key.startswith('tmp')
-        idx       = [1,0][is_new]
+        is_new = key.startswith('tmp')
+        idx    = (1,0)[is_new]
+
+        # Set the first method is empty
+        if not CTK.cfg.get_val ('%s!method'%(key)):
+            CTK.cfg ['%s!method'%(key)] = METHODS[idx:][0][0]
 
         table = CTK.PropsTable()
         table.Add (_('Method'), CTK.ComboCfg('%s!method'%(key), METHODS[idx:]), _(NOTE_METHOD))
