@@ -193,6 +193,15 @@ def parent_is_dir (value, nochroot=False):
 
     return value
 
+def can_create_file (value, nochroot=False):
+    value = parent_is_dir (value)
+
+    path = get_real_path (value, nochroot)
+    if os.path.isdir(path):
+        raise ValueError, _('Path is a directory')
+
+    return value
+
 def is_safe_id (value):
     for v in value:
         if v not in string.letters + string.digits and \
