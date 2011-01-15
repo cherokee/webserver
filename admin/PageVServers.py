@@ -58,7 +58,7 @@ VALIDATIONS = [
 ]
 
 JS_ACTIVATE_FIRST = """
-$('.selection-panel:first').data('selectionpanel').select_first();
+$('#%s').find('.selection-panel:first').data('selectionpanel').select_first();
 """
 
 JS_CLONE = """
@@ -80,6 +80,7 @@ def Commit():
     # New Virtual Server
     new_nick  = CTK.post.pop('tmp!new_nick')
     new_droot = CTK.post.pop('tmp!new_droot')
+
     if new_nick and new_droot:
         next = CTK.cfg.get_next_entry_prefix ('vserver')
         CTK.cfg['%s!nick'                   %(next)] = new_nick
@@ -251,7 +252,9 @@ class Render:
                         self.JS_to_trigger('submit_success'))
 
             button = CTK.Button('<img src="/static/images/panel-new.png" />', {'id': 'vserver-new-button', 'class': 'panel-button', 'title': _('Add New Virtual Server')})
-            button.bind ('click', dialog.JS_to_show())
+            button.bind ('click',
+                         JS_ACTIVATE_FIRST %(dialog.id) +
+                         dialog.JS_to_show())
             dialog.bind ('submit_success', dialog.JS_to_close())
             dialog.bind ('submit_success', self.JS_to_trigger('submit_success'))
             dialog.bind ('open_wizard',
@@ -290,7 +293,8 @@ class Render:
 
         # Refresh on 'New' or 'Clone'
         buttons = self.PanelButtons()
-        buttons.bind ('submit_success', refresh_r.JS_to_refresh (on_success=JS_ACTIVATE_FIRST))
+        buttons.bind ('submit_success',
+                      refresh_r.JS_to_refresh (on_success=JS_ACTIVATE_FIRST %(refresh_r.id)))
         left += buttons
 
         left += CTK.Box({'class': 'filterbox'}, CTK.TextField({'class':'filter', 'optional_string': _('Virtual Server Filtering'), 'optional': True}))
