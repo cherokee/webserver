@@ -372,6 +372,11 @@ def quit_signal (num, stack):
     print
     print "Cherokee-admin-launcher exiting.."
 
+def browser_signal (num, stack):
+    if (not runner) or exiting:
+        return
+    launch_browser (runner.url, runner.user, runner.password)
+
 
 def do_launching():
    # Find cherokee-admin
@@ -443,6 +448,7 @@ if __name__ == '__main__':
    # Set signal handlers
    signal.signal (signal.SIGINT,  quit_signal)
    signal.signal (signal.SIGTERM, quit_signal)
+   signal.signal (signal.SIGHUP , browser_signal)
 
    # admin and broweser
    try:
