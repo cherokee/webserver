@@ -55,6 +55,9 @@ You cannot proceed unless the *"cgi-fcgi"* string is present.
 [[php_env]]
 PHP process Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To specify Environment Variables at the Information Source level
+be sure to uncheck **Inherit Environment**.  This will display the
+form to enter variables and values.
 
 The **PHP_FCGI_CHILDREN** environment variable is mandatory for PHP
 FastCGI servers.  It defines how much children should serve the
