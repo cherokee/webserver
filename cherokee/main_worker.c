@@ -335,6 +335,12 @@ process_parameters (int argc, char **argv)
 			return ret_eof;
 		}
 	}
+
+	if (optind != argc) {
+		print_help();
+		return ret_eof;
+	}
+
 	return ret_ok;
 }
 

@@ -493,8 +493,13 @@ process_parameters (int argc, char **argv)
 		case '?':
 		default:
 			print_help();
-			exit(0);
+			exit (1);
 		}
+	}
+
+	if (optind != argc) {
+		print_help();
+		exit (1);
 	}
 }
 
