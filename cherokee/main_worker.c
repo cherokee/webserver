@@ -285,8 +285,10 @@ process_parameters (int argc, char **argv)
 {
 	int c;
 
-	/* If any of these parameters change, main_guardian may need
+	/* NOTE 1: If any of these parameters change, main.c may need
 	 * to be updated.
+	 *
+	 * NOTE 2: The -v / --valgrind parameter is handled by main.c.
 	 */
 	struct option long_options[] = {
 		{"help",              no_argument,       NULL, 'h'},
