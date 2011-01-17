@@ -44,11 +44,12 @@ ADMIN_LAUNCH_TIMEOUT = 15
 
 # Paths
 cherokee_admin_path = 'cherokee-admin'
+cherokee_admin_envs = {}
 runner              = None
 exiting             = False
 
 # Defaults
-PATH_PREFIXES  = ['/usr', '/usr/local', '/opt/local', '/usr/gnu']
+PATH_PREFIXES  = ['/usr', '/usr/local', '/opt/local', '/usr/gnu', '/opt/cherokee']
 DEFAULT_PATHS  = [os.path.join (x,'sbin') for x in PATH_PREFIXES]
 DEFAULT_PATHS += [os.path.join (x,'bin')  for x in PATH_PREFIXES]
 
@@ -130,10 +131,10 @@ def find_sudo_askpass():
             return x11_ssh_askpass_bin
 
 
-def build_command_as_root (cmd):
+def build_command_as_root (cmd, internal_envs=[]):
     assert type(cmd) == list
 
-    command = cmd[:]
+    command = internal_envs[:] + cmd[:]
     env     = os.environ.copy()
 
     # If not root
@@ -176,8 +177,12 @@ class Admin_Runner (threading.Thread):
       self.launching = True
       self.event_launched = event_launched
 
+      internal_envs = []
+      for k in cherokee_admin_envs:
+          internal_envs += ["%s=%s"%(k, cherokee_admin_envs[k])]
+
       cmd = [cherokee_admin_path] + sys.argv[1:]
-      cmd_env = build_command_as_root (cmd)
+      cmd_env = build_command_as_root (cmd, internal_envs)
       self.command = cmd_env[0]
       self.environ = cmd_env[1]
 
@@ -365,6 +370,30 @@ def find_cherokee_admin():
    # Not found
    return True
 
+def figure_cherokee_admin_envs():
+   global cherokee_admin_envs
+
+   if sys.platform == 'darwin':
+       ld_env = 'DYLD_LIBRARY_PATH'
+   else:
+       ld_env = 'LD_LIBRARY_PATH'
+   ld_env_val = os.getenv (ld_env) or ''
+
+   # Installation
+   lib_path = os.path.abspath (os.path.realpath (__file__) + '/../../lib')
+   if not glob.glob('%s/libcherokee*' %(lib_path)):
+       # Development
+       lib_path = os.path.abspath (os.path.realpath (__file__) + '/../.libs')
+       if not glob.glob('%s/libcherokee*' %(lib_path)):
+           # No libcherokee found
+           return True
+
+   if not lib_path in ld_env_val:
+       if ld_env_val:
+           cherokee_admin_envs[ld_env] = '%s:%s' %(ld_env_val, lib_path)
+       else:
+           cherokee_admin_envs[ld_env] = lib_path
+
 
 def quit_signal (num, stack):
     global exiting
@@ -383,6 +412,11 @@ def do_launching():
    error = find_cherokee_admin()
    if error:
        report_error ("Could not find cherokee-admin")
+       return
+
+   error = figure_cherokee_admin_envs()
+   if error:
+       report_error ("Could not figure cherokee-admin environment variables")
        return
 
    # Ensure port is empty
