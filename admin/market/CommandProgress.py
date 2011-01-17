@@ -217,7 +217,7 @@ class CommandExec_Thread (threading.Thread):
 
         if command_entry.get ('check_ret', True):
             if ret['retcode'] != 0:
-                self._report_error (command, env, cd, ret)
+                self._report_error (command, env, ret, cd)
                 return True
 
     def _run_function (self, command_entry):
@@ -241,7 +241,7 @@ class CommandExec_Thread (threading.Thread):
                 self._report_error (function.__name__, params, ret)
                 return True
 
-    def _report_error (self, command, env, cd, ret_exec):
+    def _report_error (self, command, env, ret_exec, cd=None):
         print "="*40
         if env:
             for k in env:
