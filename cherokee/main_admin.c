@@ -497,9 +497,13 @@ process_parameters (int argc, char **argv)
 		}
 	}
 
-	if (optind != argc) {
-		print_help();
-		exit (1);
+	/* Check for trailing parameters
+	 */
+	for (c = optind; c < argc; c++) {
+		if ((argv[c] != NULL) && (strlen(argv[c]) > 0)) {
+			print_help();
+			exit (1);
+		}
 	}
 }
 

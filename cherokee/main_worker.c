@@ -338,9 +338,13 @@ process_parameters (int argc, char **argv)
 		}
 	}
 
-	if (optind != argc) {
-		print_help();
-		return ret_eof;
+	/* Check for trailing parameters
+	 */
+	for (c = optind; c < argc; c++) {
+		if ((argv[c] != NULL) && (strlen(argv[c]) > 0)) {
+			print_help();
+			return ret_eof;
+		}
 	}
 
 	return ret_ok;
