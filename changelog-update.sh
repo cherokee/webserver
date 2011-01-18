@@ -92,6 +92,9 @@ go_svn()
 # main
 if [ -d .git ]; then
     go_git
-else
+elif [ -d .svn ]; then
     go_svn
+else
+    echo "The ChangeLog file is not being updated."
+    echo
 fi
