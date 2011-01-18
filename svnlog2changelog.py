@@ -64,8 +64,8 @@ def do_parse():
         author   = DEVELOPERS[dev]
         paths    = render_paths(entry)
 
-        print ("%s " % (date), author)
-        print (" "*12 + "SVN: r%s, %s - %s" % (revision, dev, time))
+        print ("%s  %s" %(str(date), author))
+        print (" "*12 + "svn=%s" %(revision))
         print ("")
         if msg:
             print (msg.encode("utf-8")),
