@@ -63,8 +63,14 @@ def is_web_path (value):
         return value
     raise ValueError, _('Malformed path')
 
+def strip_trailing_slashes (value):
+    while value[-1] == '/':
+        value = value [:-1]
+    return value
+
 def is_path (value):
     is_not_empty(value)
+    value = strip_trailing_slashes (value)
     if value[0] == '/':
         return value
     if value[1:3] == ":\\":
