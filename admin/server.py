@@ -73,8 +73,7 @@ def init (scgi_port, cfg_file):
 
     # Init CTK
     if scgi_port.isdigit():
-        localhost_ip = socket.getaddrinfo('localhost', None)[0][4][0]
-        CTK.init (host=localhost_ip, port=int(scgi_port))
+        CTK.init (host="localhost", port=int(scgi_port))
 
     else:
         # Remove the unix socket if it already exists
