@@ -248,6 +248,8 @@ render_human_error (cherokee_error_type_t   type,
 		    cherokee_buffer_t      *output,
 		    va_list                 ap)
 {
+	va_list ap_tmp;
+
 	UNUSED (error_num);
 
 	/* Time */
@@ -274,15 +276,32 @@ render_human_error (cherokee_error_type_t   type,
 	cherokee_buffer_add_va (output, " %s:%d - ", filename, line);
 
 	/* Error */
-	cherokee_buffer_add_va_list (output, error->title, ap);
-	cherokee_buffer_add_char    (output, '\n');
+	va_copy (ap_tmp, ap);
+	cherokee_buffer_add_va_list (output, error->title, ap_tmp);
+	skip_args (ap, error->title);
 
-	/* Backtrace */
+	/* Description */
+	if (error->description) {
+		va_copy (ap_tmp, ap);
+		cherokee_buffer_add_str     (output, " | ");
+		cherokee_buffer_add_va_list (output, error->description, ap_tmp);
+		cherokee_buffer_add_char    (output, '\n');
+		skip_args (ap, error->title);
+	}
+
+	cherokee_buffer_add_char (output, '\n');
+}
+
+static ret_t
+render_human_backtrace (const cherokee_error_t *error,
+			cherokee_buffer_t      *output)
+{
 #ifdef BACKTRACES_ENABLED
 	if (error->show_backtrace) {
 		cherokee_buf_add_backtrace (output, 2, "\n", "  ");
 	}
 #endif
+	return ret_ok;
 }
 
 
@@ -316,6 +335,8 @@ render (cherokee_error_type_t  type,
 	 */
 	if (readable) {
 		render_human_error (type, filename, line, error_num, error, error_str, ap);
+		cherokee_buffer_split_lines (error_str, TERMINAL_WIDTH, "    ");
+		render_human_backtrace (error, error_str);
 	} else {
 		render_python_error (type, filename, line, error_num, error, error_str, ap);
 	}
