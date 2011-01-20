@@ -115,10 +115,16 @@ class CPU_Info (CTK.RawHTML):
             parts.append (stats.cpu.speed)
 
         if stats.cpu.num:
-            parts.append (_("%s Logical Processors") %(stats.cpu.num))
+            if int(stats.cpu.num) > 1:
+                parts.append (_("%s Logical Processors") %(stats.cpu.num))
+            elif int(stats.cpu.num) == 1:
+                parts.append (_("%s Logical Processor") %(stats.cpu.num))
 
         if stats.cpu.cores:
-            parts.append (_("%s Cores") %(stats.cpu.cores))
+            if int(stats.cpu.cores) > 1:
+                parts.append (_("%s Cores") %(stats.cpu.cores))
+            elif int(stats.cpu.cores) == 1:
+                parts.append (_("%s Core") %(stats.cpu.cores))
 
         if parts:
             txt = ', '.join(parts)
