@@ -1,6 +1,4 @@
-
-AC_DEFUN([AX_LIB_MYSQL],
-[
+AC_DEFUN([AX_LIB_MYSQL],[
     AC_ARG_WITH([mysql],
         AC_HELP_STRING([--with-mysql=@<:@ARG@:>@],
             [use MySQL client library @<:@default=yes@:>@, optionally specify path to mysql_config]
@@ -46,7 +44,7 @@ AC_DEFUN([AX_LIB_MYSQL],
     fi
 
     dnl
-    dnl Detect mysql.h (alo)
+    dnl Detect mysql.h - alo
     dnl
     if test "$want_mysql" = "yes"; then
 	  AC_MSG_CHECKING([for mysql.h (using mysql_config --cflags)])
@@ -57,7 +55,7 @@ AC_DEFUN([AX_LIB_MYSQL],
 	      #include <mysql.h>
 	  ],[
 	      int a = 1;
-	  ],[
+	  ],
 	      have_mysql_h=yes,
 	      have_mysql_h=no
 	  )
@@ -128,3 +126,4 @@ AC_DEFUN([AX_LIB_MYSQL],
     AC_SUBST([MYSQL_CFLAGS])
     AC_SUBST([MYSQL_LDFLAGS])
 ])
+
