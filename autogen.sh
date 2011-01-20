@@ -1,6 +1,11 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
+# Exit on error
+set -e
+set -o pipefail
+
+# Basedir
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
@@ -15,6 +20,7 @@ else
     ACLOCAL_FLAGS="-I m4"
 fi
 
+# Check for the tools
 DIE=0
 
 test -z "$AUTOMAKE" && AUTOMAKE=automake
@@ -28,14 +34,6 @@ else
  test -z "$LIBTOOL" && LIBTOOL=libtool
  test -z "$LIBTOOLIZE" && LIBTOOLIZE=libtoolize
 fi
-
-# Build the Changelog file
-./changelog-update.sh
-
-# Update the POTFILES.in
-echo "Generating a fresh po/admin/POTFILES.in file.."
-po/admin/generate_POTFILESin.py > po/admin/POTFILES.in
-
 
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
     echo
@@ -67,6 +65,14 @@ if test "$DIE" -eq 1; then
     exit 1
 fi
 
+# Build the Changelog file
+./changelog-update.sh
+
+# Update the POTFILES.in
+echo "Generating a fresh po/admin/POTFILES.in file.."
+po/admin/generate_POTFILESin.py > po/admin/POTFILES.in
+
+# No arguments warning
 if test -z "$*"; then
     echo "WARNING: I'm going to run ./configure with no arguments - if you wish "
     echo "to pass any to it, please specify them on the $0 command line."
@@ -80,7 +86,7 @@ esac
 if test -z "$ACLOCAL_FLAGS"; then
 
 	acdir=`$ACLOCAL --print-ac-dir`
-     m4list="etr_socket_nsl.m4 network.m4 sendfile_samba.m4"
+     m4list="etr_socket_nsl.m4 network.m4 sendfile_samba.m4 pwd_grp.m4 mysql.m4"
 
 	for file in $m4list
 	do
@@ -129,5 +135,5 @@ fi
 cd $ORIGDIR
 $srcdir/configure "$@"
 
-echo 
+echo
 echo "Now type 'make' to compile $PROJECT."
