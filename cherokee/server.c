@@ -510,7 +510,7 @@ print_banner (cherokee_server_t *srv)
 
 	/* Print it to stdout
 	 */
-	cherokee_buffer_split_lines (&n, TERMINAL_WIDTH);
+	cherokee_buffer_split_lines (&n, TERMINAL_WIDTH, NULL);
 	fprintf (stdout, "%s\n", n.buf);
 	fflush (stdout);
 
