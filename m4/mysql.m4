@@ -46,9 +46,34 @@ AC_DEFUN([AX_LIB_MYSQL],
     fi
 
     dnl
+    dnl Detect mysql.h (alo)
+    dnl
+    if test "$want_mysql" = "yes"; then
+	  AC_MSG_CHECKING([for mysql.h (using mysql_config --cflags)])
+
+       old_CFLAGS="$CFLAGS"
+	  CFLAGS="$CFLAGS $MYSQL_CFLAGS"
+	  AC_TRY_COMPILE([
+	      #include <mysql.h>
+	  ],[
+	      int a = 1;
+	  ],[
+	      have_mysql_h=yes,
+	      have_mysql_h=no
+	  )
+	  CFLAGS="$old_CFLAGS"
+
+	  if test "x$have_mysql_h" = "xyes" ; then
+	    AC_MSG_RESULT(yes)
+	  else
+	    AC_MSG_RESULT(no)
+	  fi
+    fi
+
+
+    dnl
     dnl Check if required version of MySQL is available
     dnl
-
 
     mysql_version_req=ifelse([$1], [], [], [$1])
 
@@ -89,15 +114,15 @@ AC_DEFUN([AX_LIB_MYSQL],
             AC_MSG_RESULT([no])
         fi
     fi
-	
-	if test "$found_mysql $mysql_version_check" = "yes 1";
-	then
-		have_mysql="yes"
-	else
-		have_mysql="no"
-	fi
-	
-	AM_CONDITIONAL(HAVE_MYSQL, test $have_mysql = "yes")
+
+    if test "$found_mysql $have_mysql_h $mysql_version_check" = "yes yes 1";
+    then
+	   have_mysql="yes"
+    else
+	   have_mysql="no"
+    fi
+
+    AM_CONDITIONAL(HAVE_MYSQL, test $have_mysql = "yes")
 
     AC_SUBST([MYSQL_VERSION])
     AC_SUBST([MYSQL_CFLAGS])
