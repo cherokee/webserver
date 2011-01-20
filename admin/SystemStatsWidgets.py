@@ -58,13 +58,28 @@ setTimeout (update_meter_cpu, 1000);
 
 JS_MEMORY = """
 function update_meter_memory() {
-  var Gb_used      = system_stats['mem']['used'] / (1024 * 1024);
-  var Gb_free      = (system_stats['mem']['total'] - system_stats['mem']['used']) / (1024 * 1024);
+  var used_str;
+  var free_str;
+  var free_amount  = (system_stats['mem']['total'] - system_stats['mem']['used']);
   var used_percent = system_stats['mem']['used'] / system_stats['mem']['total'] * 100;
+
+  // 1048576 = 1024**2
+
+  if (system_stats['mem']['total'] < 1048576) {
+     used_str = (system_stats['mem']['used'] / 1024).toFixed(1) + "MB Used";
+  } else {
+     used_str = (system_stats['mem']['used'] / (1048576)).toFixed(1) + "GB Used";
+  }
+
+  if (free_amount < 1048576) {
+     free_str = (free_amount / 1024).toFixed(1) + "MB Free";
+  } else {
+     free_str = (free_amount / (1048576)).toFixed(1) + "GB Free";
+  }
 
   $('#%(bar_id)s').progressbar ('option', 'value', used_percent);
   $('#%(details_id)s').html (used_percent.toFixed(1) + '&#37;');
-  $('#%(extra_id)s').html (Gb_used.toFixed(1) + 'GB Used, '+ Gb_free.toFixed(1) + 'GB Free');
+  $('#%(extra_id)s').html (used_str + ', '+ free_str);
 
   setTimeout (update_meter_memory, 2000);
 }
