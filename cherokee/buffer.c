@@ -2241,3 +2241,44 @@ cherokee_buffer_insert_buffer (cherokee_buffer_t *buf,
 {
 	return cherokee_buffer_insert (buf, src->buf, src->len, pos);
 }
+
+
+ret_t
+cherokee_buffer_split_lines (cherokee_buffer_t *buf,
+			     int                columns)
+{
+	char *p;
+	char *end        = buf->buf + buf->len;
+	char *prev_space = NULL;
+	int   since_prev = 0;
+
+	for (p = buf->buf; p < end; p++) {
+		since_prev += 1;
+
+		if (*p != ' ') {
+			continue;
+		}
+
+		/* White found */
+		if ((prev_space == NULL) || (since_prev <= columns)) {
+			prev_space = p;
+		}
+
+		if (since_prev >= columns) {
+			if (prev_space) {
+				/* Split */
+				*prev_space = '\n';
+
+				/* Reset */
+				since_prev = (p - prev_space);
+				prev_space = NULL;
+			} else {
+				/* len(word) > columns */
+				*p = '\n';
+				since_prev = 0;
+			}
+		}
+	}
+
+	return ret_ok;
+}

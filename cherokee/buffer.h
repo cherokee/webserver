@@ -133,6 +133,7 @@ ret_t cherokee_buffer_escape_html        (cherokee_buffer_t  *buf, cherokee_buff
 ret_t cherokee_buffer_add_comma_marks    (cherokee_buffer_t  *buf);
 
 ret_t cherokee_buffer_to_lowcase         (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_split_lines        (cherokee_buffer_t  *buf, int columns);
 
 ret_t cherokee_buffer_print_debug        (cherokee_buffer_t  *buf, int length);
 
