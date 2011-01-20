@@ -1688,22 +1688,6 @@ cherokee_mkstemp (cherokee_buffer_t *buffer, int *fd)
 }
 
 
-void
-cherokee_print_wrapped (cherokee_buffer_t *buffer)
-{
-	char *p;
-
-	p = buffer->buf + TERMINAL_WIDTH;
-	for (; p < buffer->buf + buffer->len; p+=75) {
-		while (*p != ' ') p--;
-		*p = '\n';
-	}
-
-	printf ("%s\n", buffer->buf);
-	fflush (stdout);
-}
-
-
 ret_t
 cherokee_fix_dirpath (cherokee_buffer_t *buf)
 {

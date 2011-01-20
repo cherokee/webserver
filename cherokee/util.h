@@ -185,7 +185,6 @@ ret_t cherokee_fd_close           (int fd);
 ret_t cherokee_sys_fdlimit_get (cuint_t *limit);
 ret_t cherokee_sys_fdlimit_set (cuint_t  limit);
 ret_t cherokee_get_shell       (const char **shell, const char **binary);
-void  cherokee_print_wrapped   (cherokee_buffer_t *buffer);
 ret_t cherokee_tmp_dir_copy    (cherokee_buffer_t *buffer);
 
 /* IO vectors

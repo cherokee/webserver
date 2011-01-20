@@ -508,9 +508,12 @@ print_banner (cherokee_server_t *srv)
 	}
 #endif
 
-	/* Print it!
+	/* Print it to stdout
 	 */
-	cherokee_print_wrapped (&n);
+	cherokee_buffer_split_lines (&n, TERMINAL_WIDTH);
+	fprintf (stdout, "%s\n", n.buf);
+	fflush (stdout);
+
 	cherokee_buffer_mrproper (&n);
 
 	return ret_ok;
