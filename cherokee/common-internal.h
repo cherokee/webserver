@@ -106,7 +106,7 @@
 # define CHEROKEE_RWLOCK_T(n)          pthread_rwlock_t n
 # define CHEROKEE_THREAD_JOIN(t)       pthread_join(t,NULL)
 # define CHEROKEE_THREAD_KILL(t,s)     pthread_kill(t,s)
-# define CHEROKEE_THREAD_SELF          pthread_self
+# define CHEROKEE_THREAD_SELF          pthread_self()
 
 # define CHEROKEE_THREAD_PROP_GET(p)   pthread_getspecific(p)
 # define CHEROKEE_THREAD_PROP_SET(p,v) pthread_setspecific(p,v)
