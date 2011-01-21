@@ -147,7 +147,17 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	 */
 	cherokee_buffer_clean (&entries);
 	if (trace.print_thread) {
-		cherokee_buffer_add_va (&entries, "{%p} ", CHEROKEE_THREAD_SELF);
+		int        len;
+		char       tmp[32+1];
+		static int longest_len = 0;
+
+		len = snprintf (tmp, 32+1, "%llX", (unsigned long long) CHEROKEE_THREAD_SELF);
+		longest_len = MAX (longest_len, len);
+
+		cherokee_buffer_add_str    (&entries, "{0x");
+		cherokee_buffer_add_char_n (&entries, '0', longest_len - len);
+		cherokee_buffer_add        (&entries, tmp, len);
+		cherokee_buffer_add_str    (&entries, "} ");
 	}
 
 	if (trace.print_time) {
