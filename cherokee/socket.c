@@ -442,7 +442,10 @@ cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 {
 	/* Create the socket
 	 */
-	sock->socket = socket (type, SOCK_STREAM, 0);
+	do {
+		sock->socket = socket (type, SOCK_STREAM, 0);
+	} while ((sock->socket == -1) && (errno == EINTR));
+
 	if (sock->socket < 0) {
 #ifdef HAVE_IPV6
 		if ((type == AF_INET6) &&
@@ -553,7 +556,7 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 			return ret_error;
 		}
 
-		re = unlink (listen_to->buf);
+		re = cherokee_unlink (listen_to->buf);
 		if (re != 0) {
 			LOG_ERRNO (errno, cherokee_err_error,
 				   CHEROKEE_ERROR_SOCKET_REMOVE, listen_to->buf);
@@ -625,6 +628,7 @@ cherokee_socket_write (cherokee_socket_t *socket,
 		       size_t            *pcnt_written)
 {
 	ret_t   ret;
+	int     err;
 	ssize_t len;
 
 	*pcnt_written = 0;
@@ -635,45 +639,49 @@ cherokee_socket_write (cherokee_socket_t *socket,
 	return_if_fail (buf != NULL && buf_len > 0, ret_error);
 
 	if (likely (socket->is_tls != TLS)) {
-		len = send (SOCKET_FD(socket), buf, buf_len, 0);
+		do {
+			len = send (SOCKET_FD(socket), buf, buf_len, 0);
+		} while ((len < 0) && (errno == EINTR));
+
 		if (likely (len > 0) ) {
 			/* Return n. of bytes sent.
 			 */
 			*pcnt_written = len;
 			return ret_ok;
 		}
+
 		if (len == 0) {
 			/* Very strange, socket is ready but nothing
 			 * has been written, retry later.
 			 */
 			return ret_eagain;
 		}
-		/* else len < 0 */
-		{
-			int err = SOCK_ERRNO();
 
-			switch (err) {
+		/* Error handling
+		 */
+		err = SOCK_ERRNO();
+
+		switch (err) {
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
-			case EWOULDBLOCK:
+		case EWOULDBLOCK:
 #endif
-			case EAGAIN:
-			case EINTR:
-				return ret_eagain;
+		case EAGAIN:
+			return ret_eagain;
 
-			case EPIPE:
+		case EPIPE:
+		case ECONNRESET:
 #ifdef ENOTCONN
-			case ENOTCONN:
+		case ENOTCONN:
 #endif
-			case ECONNRESET:
-				socket->status = socket_closed;
-			case ETIMEDOUT:
-			case EHOSTUNREACH:
-				return ret_error;
-			}
-
-			LOG_ERRNO (errno, cherokee_err_error,
-				   CHEROKEE_ERROR_SOCKET_WRITE, SOCKET_FD(socket));
+			socket->status = socket_closed;
+		case ETIMEDOUT:
+		case EHOSTUNREACH:
+			return ret_error;
 		}
+
+		LOG_ERRNO (errno, cherokee_err_error,
+			   CHEROKEE_ERROR_SOCKET_WRITE, SOCKET_FD(socket));
+
 		return ret_error;
 
 	} else if (socket->cryptor != NULL) {
@@ -707,6 +715,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 		      size_t            *pcnt_read)
 {
 	ret_t   ret;
+	int     err;
 	ssize_t len;
 
 	*pcnt_read = 0;
@@ -724,7 +733,9 @@ cherokee_socket_read (cherokee_socket_t *socket,
 	if (likely (socket->is_tls != TLS)) {
 		/* Plain read
 		 */
-		len = recv (SOCKET_FD(socket), buf, buf_size, 0);
+		do {
+			len = recv (SOCKET_FD(socket), buf, buf_size, 0);
+		} while ((len < 0) && (errno == EINTR));
 
 		if (likely (len > 0)) {
 			*pcnt_read = len;
@@ -736,34 +747,33 @@ cherokee_socket_read (cherokee_socket_t *socket,
 			return ret_eof;
 		}
 
-		{	/* len < 0 */
-			int err = SOCK_ERRNO();
+		/* Error handling
+		 */
+		err = SOCK_ERRNO();
 
-			TRACE(ENTRIES",read", "Socket read error fd=%d: '%s'\n",
-			      SOCKET_FD(socket), strerror(errno));
+		TRACE(ENTRIES",read", "Socket read error fd=%d: '%s'\n",
+		      SOCKET_FD(socket), strerror(errno));
 
-			switch (err) {
+		switch (err) {
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
-			case EWOULDBLOCK:
+		case EWOULDBLOCK:
 #endif
-			case EINTR:
-			case EAGAIN:
-				return ret_eagain;
+		case EAGAIN:
+			return ret_eagain;
 
-			case EPIPE:
+		case EPIPE:
 #ifdef ENOTCONN
-			case ENOTCONN:
+		case ENOTCONN:
 #endif
-			case ECONNRESET:
-				socket->status = socket_closed;
-			case ETIMEDOUT:
-			case EHOSTUNREACH:
-				return ret_error;
-			}
-
-			LOG_ERRNO (errno, cherokee_err_error,
-				   CHEROKEE_ERROR_SOCKET_READ, SOCKET_FD(socket));
+		case ECONNRESET:
+			socket->status = socket_closed;
+		case ETIMEDOUT:
+		case EHOSTUNREACH:
+			return ret_error;
 		}
+
+		LOG_ERRNO (errno, cherokee_err_error,
+			   CHEROKEE_ERROR_SOCKET_READ, SOCKET_FD(socket));
 		return ret_error;
 
 	} else if (socket->cryptor != NULL) {
@@ -814,10 +824,8 @@ cherokee_socket_flush (cherokee_socket_t *socket)
 
 	TRACE (ENTRIES",flush", "flushing fd=%d\n", socket->socket);
 
-	do {
-		re = setsockopt (SOCKET_FD(socket), IPPROTO_TCP, TCP_NODELAY,
-				 (const void *) &op, sizeof(int));
-	} while ((re == -1) && (errno == EINTR));
+	re = setsockopt (SOCKET_FD(socket), IPPROTO_TCP, TCP_NODELAY,
+			 (const void *) &op, sizeof(int));
 
 	if (unlikely(re != 0))
 		return ret_error;
@@ -835,12 +843,14 @@ cherokee_socket_test_read (cherokee_socket_t *socket)
 	if (socket->socket != -1)
 		goto eof;
 
-	re = recv (socket->socket, &tmp, 1, MSG_PEEK);
+	do {
+		re = recv (socket->socket, &tmp, 1, MSG_PEEK);
+	} while ((re == -1) && (errno == EINTR));
+
 	if (re == 0) {
 		goto eof;
 	} else if (re == -1) {
-		if ((errno == EINTR)  ||
-		    (errno == EAGAIN) ||
+		if ((errno == EAGAIN) ||
 		    (errno == EWOULDBLOCK))
 		{
 			goto eagain;
@@ -893,7 +903,10 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 		for (i = 0, re = 0, total = 0; i < vector_len; i++) {
 			if (vector[i].iov_len == 0)
 				continue;
-			re = send (SOCKET_FD(socket), vector[i].iov_base, vector[i].iov_len, 0);
+			do {
+				re = send (SOCKET_FD(socket), vector[i].iov_base, vector[i].iov_len, 0);
+			} while ((re == -1) && (errno == EINTR));
+
 			if (re < 0)
 				break;
 
@@ -923,7 +936,9 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 
 #else	/* ! WIN32 */
 
-		re = writev (SOCKET_FD(socket), vector, vector_len);
+		do {
+			re = writev (SOCKET_FD(socket), vector, vector_len);
+		} while ((re == -1) && (errno == EINTR));
 
 		if (likely (re > 0)) {
 			*pcnt_written = (size_t) re;
@@ -952,7 +967,6 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 			case EWOULDBLOCK:
 #endif
 			case EAGAIN:
-			case EINTR:
 				return ret_eagain;
 
 			case EPIPE:
@@ -1338,40 +1352,42 @@ ret_t
 cherokee_socket_connect (cherokee_socket_t *sock)
 {
 	int r;
+	int err;
 
 	TRACE (ENTRIES",connect", "connect type=%s\n",
 	       SOCKET_AF(sock) == AF_INET  ? "AF_INET"  :
 	       SOCKET_AF(sock) == AF_INET6 ? "AF_INET6" :
 	       SOCKET_AF(sock) == AF_UNIX  ? "AF_UNIX"  : "Unknown");
 
-	switch (SOCKET_AF(sock)) {
-	case AF_INET:
-		r = connect (SOCKET_FD(sock),
-			     (struct sockaddr *) &SOCKET_ADDR(sock),
-			     sizeof(struct sockaddr_in));
-		break;
+	do {
+		switch (SOCKET_AF(sock)) {
+		case AF_INET:
+			r = connect (SOCKET_FD(sock),
+				     (struct sockaddr *) &SOCKET_ADDR(sock),
+				     sizeof(struct sockaddr_in));
+			break;
 #ifdef HAVE_IPV6
-	case AF_INET6:
-		r = connect (SOCKET_FD(sock),
-			     (struct sockaddr *) &SOCKET_ADDR(sock),
-			     sizeof(struct sockaddr_in6));
-		break;
+		case AF_INET6:
+			r = connect (SOCKET_FD(sock),
+				     (struct sockaddr *) &SOCKET_ADDR(sock),
+				     sizeof(struct sockaddr_in6));
+			break;
 #endif
 #ifdef HAVE_SOCKADDR_UN
-	case AF_UNIX:
-		r = connect (SOCKET_FD(sock),
-			     (struct sockaddr *) &SOCKET_ADDR(sock),
-			     SUN_LEN (SOCKET_ADDR_UNIX(sock)));
-		break;
+		case AF_UNIX:
+			r = connect (SOCKET_FD(sock),
+				     (struct sockaddr *) &SOCKET_ADDR(sock),
+				     SUN_LEN (SOCKET_ADDR_UNIX(sock)));
+			break;
 #endif
-	default:
-		SHOULDNT_HAPPEN;
-		return ret_no_sys;
-	}
+		default:
+			SHOULDNT_HAPPEN;
+			return ret_no_sys;
+		}
+	} while ((r == -1) && (errno == EINTR));
 
 	if (r < 0) {
-		int err = SOCK_ERRNO();
-
+		err = SOCK_ERRNO();
 		TRACE (ENTRIES",connect", "connect error=%d '%s'\n", err, strerror(err));
 
 		switch (err) {
@@ -1442,10 +1458,8 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 
 	if (enable) {
 		tmp = 0;
-		do {
-			re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
-		} while ((re == -1) && (errno == EINTR));
 
+		re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
 		if (unlikely (re < 0)) {
 			LOG_ERRNO (errno, cherokee_err_error,
 				   CHEROKEE_ERROR_SOCKET_RM_NODELAY, fd);
@@ -1456,10 +1470,7 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 
 #ifdef TCP_CORK
 		tmp = 1;
-		do {
-			re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
-		} while ((re == -1) && (errno == EINTR));
-
+		re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
 		if (unlikely (re < 0)) {
 			LOG_ERRNO (errno, cherokee_err_error,
 				   CHEROKEE_ERROR_SOCKET_SET_CORK, fd);
@@ -1474,9 +1485,7 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 
 #ifdef TCP_CORK
 	tmp = 0;
-	do {
-		re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
-	} while ((re == -1) && (errno == EINTR));
+	re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
 	if (unlikely (re < 0)) {
 		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_SOCKET_RM_CORK, fd);
@@ -1487,9 +1496,7 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 #endif
 
 	tmp = 1;
-	do {
-		re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
-	} while ((re == -1) && (errno == EINTR));
+	re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
 	if (unlikely (re < 0)) {
 		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_SOCKET_SET_NODELAY, fd);

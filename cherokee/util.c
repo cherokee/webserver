@@ -400,6 +400,17 @@ cherokee_localtime (const time_t *timep, struct tm *result)
 }
 
 
+DIR *
+cherokee_opendir (const char *dirname)
+{
+	DIR *re;
+
+	do {
+		re = opendir (dirname);
+	} while ((re == NULL) && (errno == EINTR));
+
+	return re;
+}
 
 
 #if defined(HAVE_PTHREAD) && !defined(HAVE_READDIR_R)
@@ -426,7 +437,10 @@ cherokee_readdir (DIR *dirstream, struct dirent *entry, struct dirent **result)
          */
         entry->d_name[0] = '\0';
 
-        readdir_r (dirstream, entry);
+	do {
+		errno = 0;
+		readdir_r (dirstream, entry);
+	} while (errno == EINTR);
 
 	if (entry->d_name[0] != '\0') {
                 *result = entry;
@@ -444,10 +458,12 @@ cherokee_readdir (DIR *dirstream, struct dirent *entry, struct dirent **result)
 
 	CHEROKEE_MUTEX_LOCK (&readdir_mutex);
 
-	errno = 0;
-	ptr = readdir(dirstream);
+	do {
+		errno = 0;
+		ptr = readdir (dirstream);
+	} while ((ptr == NULL) && (errno == EINTR));
 
-	if (!ptr && errno != 0)
+	if ((ptr == NULL) && (errno != 0))
 		ret = errno;
 
 	if (ptr)
@@ -461,6 +477,19 @@ cherokee_readdir (DIR *dirstream, struct dirent *entry, struct dirent **result)
 
 # endif
 #endif
+}
+
+
+int
+cherokee_closedir (DIR *dirstream)
+{
+	int re;
+
+	do {
+		re = closedir (dirstream);
+	} while ((re < 0) && (errno == EINTR));
+
+	return re;
 }
 
 
@@ -706,7 +735,10 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 
 	/* Resolv the host name
 	*/
-	host = gethostbyname (hostname);
+	do {
+		host = gethostbyname (hostname);
+	} while ((host == NULL) && (errno == EINTR));
+
 	if (host == NULL) {
 		if (h_errno == TRY_AGAIN) {
 			CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
@@ -1240,7 +1272,10 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 
 	CHEROKEE_MUTEX_LOCK (&__global_getpwnam_mutex);
 
-	tmp = getpwnam (name);
+	do {
+		tmp = getpwnam (name);
+	} while ((tmp == NULL) && (errno == EINTR));
+
 	if (tmp == NULL) {
 		CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
 		return ret_error;
@@ -1273,7 +1308,10 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
          *                 size_t          buflen,
 	 *                 struct passwd **pwbufp);
 	 */
-	re = getpwnam_r (name, pwbuf, buf, buflen, &tmp);
+	do {
+		re = getpwnam_r (name, pwbuf, buf, buflen, &tmp);
+	} while ((re != 0) && (errno == EINTR));
+
 	if ((re != 0) || (tmp == NULL))
 		return ret_error;
 
@@ -1284,11 +1322,20 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 
 #ifdef _POSIX_PTHREAD_SEMANTICS
 	int re;
-	re = getpwnam_r (name, pwbuf, buf, buflen, &result);
-	if (re != 0) return ret_error;
+
+	do {
+		re = getpwnam_r (name, pwbuf, buf, buflen, &result);
+	} while ((re != 0) && (errno == EINTR));
+
+	if (re != 0)
+		return ret_error;
 #else
-	result = getpwnam_r (name, pwbuf, buf, buflen);
-	if (result == NULL) return ret_error;
+	do {
+		result = getpwnam_r (name, pwbuf, buf, buflen);
+	} while ((result == NULL) && (errno == EINTR));
+
+	if (result == NULL)
+		return ret_error;
 #endif
 
 	return ret_ok;
@@ -1314,7 +1361,10 @@ cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
 	 * MacOS X:
 	 *  int getpwuid_r (uid_t uid, struct passwd *pwd, char *buffer, size_t bufsize, struct passwd **result);
 	 */
-	re = getpwuid_r (uid, pwbuf, buf, buflen, &result);
+	do {
+		re = getpwuid_r (uid, pwbuf, buf, buflen, &result);
+	} while ((re != 0) && (errno == EINTR));
+
 	if ((re != 0) || (result == NULL)) {
 		return ret_error;
 	}
@@ -1327,7 +1377,10 @@ cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
 	/* Solaris:
 	 * struct passwd *getpwuid_r (uid_t uid, struct passwd *pwd, char *buffer, int  buflen);
 	 */
-	result = getpwuid_r (uid, pwdbuf, buf, buflen);
+	do {
+		result = getpwuid_r (uid, pwdbuf, buf, buflen);
+	} while ((result == NULL) && (errno == EINTR));
+
 	if (result == NULL) {
 		return ret_error;
 	}
@@ -1341,7 +1394,10 @@ cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
 	 */
 	CHEROKEE_MUTEX_LOCK (&__global_getpwuid_mutex);
 
-	tmp = getpwuid (uid);
+	do {
+		tmp = getpwuid (uid);
+	} while ((tmp == NULL) && (errno == EINTR));
+
 	if (tmp == NULL) {
 		CHEROKEE_MUTEX_UNLOCK (&__global_getpwuid_mutex);
 		return ret_error;
@@ -1406,7 +1462,10 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 
 	CHEROKEE_MUTEX_LOCK (&__global_getgrnam_mutex);
 
-	tmp = getgrnam (name);
+	do {
+		tmp = getgrnam (name);
+	} while ((tmp == NULL) && (errno == EINTR));
+
 	if (tmp == NULL) {
 		CHEROKEE_MUTEX_UNLOCK (&__global_getgrnam_mutex);
 		return ret_error;
@@ -1449,7 +1508,10 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 	int           re;
 	struct group *tmp;
 
-	re = getgrnam_r (name, grbuf, buf, buflen, &tmp);
+	do {
+		re = getgrnam_r (name, grbuf, buf, buflen, &tmp);
+	} while ((re != 0) && (errno == EINTR));
+
 	if (re != 0)
 		return ret_error;
 
@@ -1460,11 +1522,17 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 
 #ifdef _POSIX_PTHREAD_SEMANTICS
 	int re;
-	re = getgrnam_r (name, grbuf, buf, buflen, &result);
+	do {
+		re = getgrnam_r (name, grbuf, buf, buflen, &result);
+	} while ((re != 0) && (errno == EINTR));
+
 	if (re != 0)
 		return ret_error;
 #else
-	result = getgrnam_r (name, grbuf, buf, buflen);
+	do {
+		result = getgrnam_r (name, grbuf, buf, buflen);
+	} while ((result == NULL) && (errno == EINTR));
+
 	if (result == NULL)
 		return ret_error;
 #endif
@@ -1492,7 +1560,10 @@ cherokee_getgrgid (gid_t gid, struct group *grbuf, char *buf, size_t buflen)
 	 * MacOS X:
 	 *  int getgrgid_r (gid_t gid, struct group *grp, char *buffer, size_t bufsize, struct group **result);
 	 */
-	re = getgrgid_r (gid, grbuf, buf, buflen, &result);
+	do {
+		re = getgrgid_r (gid, grbuf, buf, buflen, &result);
+	} while ((re != 0) && (errno == EINTR));
+
 	if ((re != 0) || (result == NULL)) {
 		return ret_error;
 	}
@@ -1505,7 +1576,10 @@ cherokee_getgrgid (gid_t gid, struct group *grbuf, char *buf, size_t buflen)
 	/* Solaris:
 	 *  struct group *getgrgid_r (gid_t gid, struct group *grp, char *buffer, int bufsize);
 	 */
-	result = getgrgid_r (gid, grdbuf, buf, buflen);
+	do {
+		result = getgrgid_r (gid, grdbuf, buf, buflen);
+	} while ((result == NULL) && (errno == EINTR));
+
 	if (result == NULL) {
 		return ret_error;
 	}
@@ -1517,7 +1591,10 @@ cherokee_getgrgid (gid_t gid, struct group *grbuf, char *buf, size_t buflen)
 
 	CHEROKEE_MUTEX_LOCK (&__global_getgrgid_mutex);
 
-	tmp = getgrgid (gid);
+	do {
+		tmp = getgrgid (gid);
+	} while ((tmp == NULL) && (errno == EINTR));
+
 	if (tmp == NULL) {
 		CHEROKEE_MUTEX_UNLOCK (&__global_getgrgid_mutex);
 		return ret_error;
@@ -2367,4 +2444,17 @@ cherokee_reset_signals (void)
 #endif
 
 	return ret_ok;
+}
+
+
+int
+cherokee_unlink (const char *path)
+{
+	int re;
+
+	do {
+		re = unlink (path);
+	} while ((re < 0) && (errno == EINTR));
+
+	return re;
 }

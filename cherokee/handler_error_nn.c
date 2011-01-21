@@ -38,6 +38,7 @@
 #include "connection.h"
 #include "levenshtein_distance.h"
 #include "handler_error.h"
+#include "util.h"
 
 
 /* Plug-in initialization
@@ -63,17 +64,23 @@ cherokee_handler_error_nn_configure (cherokee_config_node_t   *conf,
 static ret_t
 get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *output)
 {
+	ret_t              ret;
+	int                dis;
 	DIR               *dir;
+	char               entry_buf[512];
 	struct dirent     *entry;
 	int                min_diff = 9999;
 	cherokee_boolean_t found    = false;
 
-	dir = opendir(directory);
+	dir = cherokee_opendir (directory);
 	if (dir == NULL)
 		goto go_out;
 
-	while ((entry = readdir (dir)) != NULL) {
-		int dis;
+	for (;;) {
+		ret = cherokee_readdir (dir, (struct dirent *)entry_buf, &entry);
+		if (unlikely (ret != ret_ok)) {
+			return ret;
+		}
 
 		if (!strncmp (entry->d_name, ".",  1)) continue;
 		if (!strncmp (entry->d_name, "..", 2)) continue;
@@ -88,7 +95,8 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 		}
 
 	}
-	closedir (dir);
+
+	cherokee_closedir (dir);
 
 go_out:
 	return (found) ? ret_ok : ret_error;

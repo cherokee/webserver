@@ -783,7 +783,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);     /* 1 */
 
-	dir = opendir (conn->local_directory.buf);
+	dir = cherokee_opendir (conn->local_directory.buf);
 	if (dir == NULL) {
 		conn->error_code = http_not_found;
 		return ret_error;
@@ -817,7 +817,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 
 	/* Clean
 	 */
-	closedir(dir);
+	cherokee_closedir(dir);
 	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len); /* 2 */
 
 	/* Free local_realpath. It might have been built lazily,

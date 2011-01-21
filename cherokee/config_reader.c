@@ -74,7 +74,7 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 		struct dirent    *entry;
 		int               entry_len;
 
-		dir = opendir (path->buf);
+		dir = cherokee_opendir (path->buf);
 		if (dir == NULL) return ret_error;
 
 		while ((entry = readdir(dir)) != NULL) {
@@ -104,7 +104,7 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 			cherokee_buffer_mrproper (&full_new);
 		}
 
-		closedir (dir);
+		cherokee_closedir (dir);
 		return ret_ok;
 	}
 
