@@ -1339,7 +1339,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 {
 	int r;
 
-	TRACE (ENTRIES, "connect type=%s\n",
+	TRACE (ENTRIES",connect", "connect type=%s\n",
 	       SOCKET_AF(sock) == AF_INET  ? "AF_INET"  :
 	       SOCKET_AF(sock) == AF_INET6 ? "AF_INET6" :
 	       SOCKET_AF(sock) == AF_UNIX  ? "AF_UNIX"  : "Unknown");
@@ -1398,7 +1398,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		}
 	}
 
-	TRACE (ENTRIES",connect", "succeed %s", "\n");
+	TRACE (ENTRIES",connect", "succeed. fd=%d\n", SOCKET_FD(sock));
 
 	sock->status = socket_reading;
 	return ret_ok;
