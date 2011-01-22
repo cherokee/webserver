@@ -268,15 +268,15 @@ print_help (void)
 {
 	printf (APP_NAME "\n"
 		"Usage: cherokee [options]\n\n"
-		"  -h,  --help                   Print this help\n"
-		"  -V,  --version                Print version and exit\n"
-		"  -t,  --test                   Just test configuration file\n"
-		"  -d,  --detach                 Detach from the console\n"
-		"  -C,  --config=PATH            Configuration file\n"
-		"  -p,  --port=NUM               TCP port number\n"
-		"  -r,  --documentroot=PATH      Server directory content\n"
-		"  -i,  --print-server-info      Print server technical information\n"
-		"  -v,  --valgrind               Execute the worker process under valgrind\n\n"
+		"  -h,       --help                  Print this help\n"
+		"  -V,       --version               Print version and exit\n"
+		"  -t,       --test                  Just test configuration file\n"
+		"  -d,       --detach                Detach from the console\n"
+		"  -C<PATH>, --config=<PATH>         Configuration file\n"
+		"  -p<NUM>,  --port=<NUM>            TCP port number\n"
+		"  -r<PATH>, --documentroot=<PATH>   Server directory content\n"
+		"  -i,       --print-server-info     Print server technical information\n"
+		"  -v,       --valgrind              Execute the worker process under valgrind\n\n"
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
 
