@@ -71,10 +71,10 @@ union semun {
 #define VALGRIND_PREFIX   {"valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", NULL}
 
 pid_t               pid;
-char               *pid_file_path;
 char               *worker_uid;
 cherokee_boolean_t  graceful_restart;
 char               *cherokee_worker;
+char               *pid_file_path         = NULL;
 cherokee_boolean_t  use_valgrind          = false;
 char               *spawn_shared          = NULL;
 char               *spawn_shared_name     = NULL;
@@ -223,7 +223,7 @@ figure_use_valgrind (int argc, char **argv)
 		if ((strcmp(argv[i], "-v") == 0) ||
 		    (strcmp(argv[i], "--valgrind") == 0))
 		{
-			argv[i] = "";
+			argv[i] = (char *)"";
 			return true;
 		}
 	}
@@ -347,13 +347,16 @@ pid_file_clean (const char *pid_file)
 	char    *pid_file_worker;
 	cuint_t  len;
 
+	if (pid_file == NULL)
+		return;
+
 	/* Clean main choerkee pid file
 	 */
 	remove_pid_file (pid_file);
 
 	/* Clean also "worker" pid file
 	 */
-	len = strlen(pid_file);
+	len = strlen (pid_file);
 	pid_file_worker = (char *) malloc (len + 8);
 	if (unlikely (pid_file_worker == NULL)) {
 		return;
@@ -729,10 +732,7 @@ clean_up (void)
 #ifdef HAVE_POSIX_SHM
 	spawn_clean();
 #endif
-
-	if (pid_file_path) {
-		pid_file_clean (pid_file_path);
-	}
+	pid_file_clean (pid_file_path);
 }
 
 static ret_t
@@ -899,7 +899,7 @@ process_launch (const char *path, char *argv[])
 		total = 0;
 
 		for (len_valg=0; valgrind_args[len_valg]; len_valg++, total++) {
-			new_args[total] = valgrind_args[len_valg];
+			new_args[total] = (char *)valgrind_args[len_valg];
 		}
 
 		for (len_argv=0; argv[len_argv]; len_argv++, total++) {
