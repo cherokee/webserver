@@ -1905,8 +1905,9 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 	 */
 	cherokee_limiter_reactive (&thd->limiter, thd);
 
-	/* If thread has pending connections, it should do a
-	 * faster 'watch' (whenever possible)
+	/* Be quick when there are pending work:
+	 * - pending_conns_num: Pipelined requests
+	 * - pending_read_num:  SSL pending reads
 	 */
 	if (thd->pending_conns_num > 0) {
 		fdwatch_msecs          = 0;
