@@ -168,9 +168,9 @@ set_socket_opts (int socket)
 	/* To re-bind without wait to TIME_WAIT. It prevents 2MSL
 	 * delay on accept.
 	 */
-	on = 1;
-	re = setsockopt (socket, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
-	if (re != 0) return ret_error;
+	ret = cherokee_fd_set_reuseaddr (socket);
+	if (ret != ret_ok)
+		return ret;
 
 	/* TCP_MAXSEG:
 	 * The maximum size of a TCP segment is based on the network MTU for des-
@@ -282,7 +282,7 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 		if (ret != ret_ok) {
 			LOG_CRITICAL (CHEROKEE_ERROR_BIND_COULDNT_BIND_PORT,
 				      listener->port, getuid(), getgid());
-			return ret_error;
+			goto error;
 		}
 	}
 
@@ -290,24 +290,29 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 	 * If no clients are waiting, accept() will return -1 immediately
 	 */
 	ret = cherokee_fd_set_nodelay (listener->socket.socket, true);
-	if (ret != ret_ok)
-		return ret;
+	if (ret != ret_ok) {
+		goto error;
+	}
 
 	/* Listen
 	 */
 	ret = cherokee_socket_listen (&listener->socket, listen_queue);
 	if (ret != ret_ok) {
-		cherokee_socket_close (&listener->socket);
-		return ret_error;
+		goto error;
 	}
 
 	/* Build the strings
 	 */
 	ret = build_strings (listener, token);
-	if (ret != ret_ok)
-		return ret;
+	if (ret != ret_ok) {
+		goto error;
+	}
 
 	return ret_ok;
+
+error:
+	cherokee_socket_close (&listener->socket);
+	return ret_error;
 }
 
 
