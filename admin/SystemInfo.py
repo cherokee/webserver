@@ -38,7 +38,8 @@ LINUX_DISTS_ETC = [('gentoo-release',     'gentoo'),
                    ('slackware-version',  'slackware'),
                    ('slackware-release',  'slackware'),
                    ('redflag-release',    'redflag'),
-                   ('conectiva-release',  'conectiva')]
+                   ('conectiva-release',  'conectiva'),
+                   ('redhat-release',     'redhat')]
 
 
 _cache = None
