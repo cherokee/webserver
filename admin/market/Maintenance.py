@@ -115,10 +115,38 @@ def check_orphan_installations():
         fd = os.path.join (CHEROKEE_OWS_ROOT, d)
 
         if not re.findall (r'document_root.*'+fd, cfg_txt, re.M):
-            orphans.append(d)
+            # Check usage in information sources
+            if not used_in_active_sources (d):
+                orphans.append(d)
 
     orphan_installs_cache = orphans
     return orphans
+
+
+def used_in_sources (installation_id):
+    sources = []
+    for src in CTK.cfg.keys("source"):
+        interpreter = CTK.cfg.get_val("source!%s!interpreter" %(src))
+        directory   = os.path.join (CHEROKEE_OWS_ROOT, installation_id)
+        if directory in interpreter:
+            sources.append (src)
+
+    return sources
+
+
+def used_in_active_sources (installation_id):
+    sources = used_in_sources (installation_id)
+
+    src_list = []
+    for src_num in sources:
+        for vsrv in CTK.cfg.keys("vserver"):
+            for rule in CTK.cfg.keys("vserver!%s" %(vsrv)):
+                for s in CTK.cfg.keys("vserver!%s!rule!%s!handler!balancer!source" %(vsrv, rule)):
+                    value = CTK.cfg.get_val ("vserver!%s!rule!%s!handler!balancer!source!%s" %(vsrv, rule, s))
+                    if value == src_num:
+                        src_list (src_num)
+
+    return src_list
 
 
 def does_it_need_maintenance():
@@ -376,6 +404,12 @@ def ListApps_Apply():
                 popen.popen_sync ('rm -f /etc/rcS.d/S99%(service)s' %(locals()))
 
             print "Remove service", service
+
+    # Remove unused info sources created by the app
+    for app in apps_to_remove:
+        sources = used_in_sources (app)
+        for src in sources:
+            del (CTK.cfg ['source!%s' %(src)])
 
     # Perform the app removal
     for app in apps_to_remove:
