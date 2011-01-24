@@ -959,6 +959,22 @@ cherokee_fd_set_closexec (int fd)
 
 
 ret_t
+cherokee_fd_set_reuseaddr (int fd)
+{
+	int re;
+	int on = 1;
+
+	re = setsockopt (fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
+	if (re != 0) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+
+ret_t
 cherokee_syslog (int priority, cherokee_buffer_t *buf)
 {
 	char *p;

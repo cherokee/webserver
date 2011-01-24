@@ -182,6 +182,7 @@ ret_t cherokee_io_stat       (cherokee_iocache_t        *iocache,
 ret_t cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable);
 ret_t cherokee_fd_set_nodelay     (int fd, cherokee_boolean_t enable);
 ret_t cherokee_fd_set_closexec    (int fd);
+ret_t cherokee_fd_set_reuseaddr   (int fd);
 ret_t cherokee_fd_close           (int fd);
 
 /* Misc
