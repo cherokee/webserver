@@ -144,7 +144,7 @@ class InstructionBoxBase (CTK.Box):
         data   = SystemInfo.get_info()
         system = data.get('system','').lower()
         distro = data.get('linux_distro_id','').lower()
-        info   = instructions.get('generic')
+        info   = instructions.get('default')
 
         # Optional parameters
         bin_path = kwargs.get('bin_path')
