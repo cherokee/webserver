@@ -1391,7 +1391,7 @@ process_active_connections (cherokee_thread_t *thd)
 			default:
 				RET_UNKNOWN(ret);
 				close_active_connection (thd, conn, false);
-				break;
+				continue;
 			}
 			break;
 
@@ -1574,9 +1574,9 @@ accept_new_connection (cherokee_thread_t *thd,
 {
 	int                    re;
 	ret_t                  ret;
-	int                    new_fd;
 	cherokee_sockaddr_t    new_sa;
-	cherokee_connection_t *new_conn;
+	cherokee_connection_t *new_conn  = NULL;
+	int                    new_fd    = -1;
 	cherokee_server_t     *srv       = THREAD_SRV(thd);
 
 	/* Check whether there are connections waiting
@@ -1589,7 +1589,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	/* Try to get a new connection
 	 */
 	ret = cherokee_socket_accept_fd (&bind->socket, &new_fd, &new_sa);
-	if (ret != ret_ok) {
+	if ((ret != ret_ok) || (new_fd == -1)) {
 		return ret_deny;
 	}
 
@@ -1604,8 +1604,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	ret = get_new_connection (thd, &new_conn);
 	if (unlikely(ret < ret_ok)) {
 		LOG_ERROR_S (CHEROKEE_ERROR_THREAD_GET_CONN_OBJ);
-		cherokee_fd_close (new_fd);
-		return ret_deny;
+		goto error;
 	}
 
 	/* We got a new_conn object, on error we can goto error.
@@ -1633,8 +1632,8 @@ accept_new_connection (cherokee_thread_t *thd,
 		if ((srv->cryptor != NULL) &&
 		    (srv->cryptor->timeout_handshake > 0))
 		{
-			new_conn->timeout        = cherokee_bogonow_now + srv->cryptor->timeout_handshake;
-			new_conn->timeout_lapse  = srv->cryptor->timeout_handshake;
+			new_conn->timeout       = cherokee_bogonow_now + srv->cryptor->timeout_handshake;
+			new_conn->timeout_lapse = srv->cryptor->timeout_handshake;
 		}
 	}
 
@@ -1645,8 +1644,9 @@ accept_new_connection (cherokee_thread_t *thd,
 	/* Lets add the new connection
 	 */
 	ret = thread_add_connection (thd, new_conn);
-	if (unlikely (ret < ret_ok))
+	if (unlikely (ret < ret_ok)) {
 		goto error;
+	}
 
 	thd->conns_num++;
 
@@ -1661,14 +1661,16 @@ error:
 	TRACE (ENTRIES, "error accepting connection fd %d from port %d\n",
 	       new_fd, bind->port);
 
-	/* Close new socket and reset its socket fd to default value.
+	/* Close new socket
 	 */
 	cherokee_fd_close (new_fd);
-	S_SOCKET_FD(new_conn->socket) = -1;
 
-	/* Don't waste / reuse this new_conn object.
+	/* Recycle the new_conn object
 	 */
-	connection_reuse_or_free (thd, new_conn);
+	if (new_conn) {
+		S_SOCKET_FD(new_conn->socket) = -1;
+		connection_reuse_or_free (thd, new_conn);
+	}
 
 	/* Release the thread ownership
 	 */
@@ -1713,18 +1715,13 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	 */
 	cherokee_bogotime_try_update();
 
-#if 0
-	if (unlikely (cherokee_fdpoll_is_full (thd->fdpoll))) {
-		goto out;
-	}
-#endif
-
 	/* May have to reactive connections
 	 */
 	cherokee_limiter_reactive (&thd->limiter, thd);
 
-	/* If thread has pending connections, it should do a
-	 * faster 'watch' (whenever possible).
+	/* Be quick when there are pending work:
+	 * - pending_conns_num: Pipelined requests
+	 * - pending_read_num:  SSL pending reads
 	 */
 	if (thd->pending_conns_num > 0) {
 		fdwatch_msecs          = 0;
@@ -1743,7 +1740,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 
 	/* Graceful restart
 	 */
-	if (srv->wanna_reinit) {
+	if (unlikely (srv->wanna_reinit)) {
 		if ((thd->active_list_num == 0) &&
 		    (thd->polling_list_num == 0))
 		{
