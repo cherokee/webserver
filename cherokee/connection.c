@@ -1335,16 +1335,16 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size, &cnt_read);
 		switch (ret) {
 		case ret_eof:
-			TRACE(ENTRIES, "%s\n", "EOF");
+			TRACE (ENTRIES",linger", "%s\n", "EOF");
 			return ret_eof;
 		case ret_error:
-			TRACE(ENTRIES, "%s\n", "error");
+			TRACE (ENTRIES",linger", "%s\n", "error");
 			return ret_error;
 		case ret_eagain:
-			TRACE(ENTRIES, "read %u, eagain\n", cnt_read);
+			TRACE (ENTRIES",linger", "read %u, eagain\n", cnt_read);
 			return ret_eagain;
 		case ret_ok:
-			TRACE(ENTRIES, "%u bytes tossed away\n", cnt_read);
+			TRACE (ENTRIES",linger", "%u bytes tossed away\n", cnt_read);
 			retries--;
 			if (cnt_read == tmp1->size && retries > 0)
 				continue;
