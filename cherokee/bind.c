@@ -152,9 +152,6 @@ static ret_t
 set_socket_opts (int socket)
 {
 	ret_t                    ret;
-	int                      re;
-	int                      on;
-        struct linger            ling = {0, 0};
 #ifdef SO_ACCEPTFILTER
         struct accept_filter_arg afa;
 #endif
@@ -191,17 +188,6 @@ set_socket_opts (int socket)
 
 	/* Do no check the returned value */
 #endif
-
-	/* SO_LINGER:
-	 * Don't want to block on calls to close.
-	 *
-	 * kernels that map pages for IO end up failing if the pipe is full
-         * at exit and we take away the final buffer.  this is really a kernel
-         * bug but it's harmless on systems that are not broken, so...
-	 *
-	 * http://www.apache.org/docs/misc/fin_wait_2.html
-         */
-	setsockopt (socket, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
 
 	/* TCP_DEFER_ACCEPT:
 	 * Allows a listener to be awakened only when data arrives on the socket.
