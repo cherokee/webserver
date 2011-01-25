@@ -318,8 +318,17 @@ fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 		n->port_activefd[i] = -1;
 	}
 
-	if ( (n->port = port_create()) == -1 ) {
+	n->port = port_create();
+	if (n->port == -1 ) {
 		_free( n );
+		return ret_error;
+	}
+
+	re = fcntl (n->port, F_SETFD, FD_CLOEXEC);
+	if (re < 0) {
+		LOG_ERRNO (errno, cherokee_err_error,
+			   CHEROKEE_ERROR_FDPOLL_EPOLL_CLOEXEC);
+		_free (n);
 		return ret_error;
 	}
 

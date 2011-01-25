@@ -272,7 +272,9 @@ fdpoll_kqueue_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 ret_t
 fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 {
+	int                re;
 	cherokee_fdpoll_t *nfd;
+
 	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_kqueue);
 
 	nfd = FDPOLL(n);
@@ -309,6 +311,14 @@ fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 
 	n->kqueue = kqueue();
 	if (n->kqueue == -1) {
+		_free (n);
+		return ret_error;
+	}
+
+	re = fcntl (n->kqueue, F_SETFD, FD_CLOEXEC);
+	if (re < 0) {
+		LOG_ERRNO (errno, cherokee_err_error,
+			   CHEROKEE_ERROR_FDPOLL_EPOLL_CLOEXEC);
 		_free (n);
 		return ret_error;
 	}
