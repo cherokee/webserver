@@ -210,9 +210,11 @@ check_cached (cherokee_handler_file_t *fhdl)
 		/* Build local ETag
 		 */
 		if (cherokee_buffer_is_empty (etag_local)) {
+			cherokee_buffer_add_char     (etag_local, '"');
 			cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_mtime);
 			cherokee_buffer_add_str      (etag_local, "=");
 			cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_size);
+			cherokee_buffer_add_char     (etag_local, '"');
 		}
 
 		/* Compare ETag(s)
@@ -238,15 +240,17 @@ check_cached (cherokee_handler_file_t *fhdl)
 		tmp = *end;
 		*end = '\0';
 
-		/* "If-Rage: <Etag>"
+		/* If-Range: "<Etag>"
 		 */
 		if (strchr (header, '=')) {
 			/* Build local ETag if needed
 			 */
 			if (cherokee_buffer_is_empty (etag_local)) {
+				cherokee_buffer_add_char     (etag_local, '"');
 				cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_mtime);
 				cherokee_buffer_add_str      (etag_local, "=");
 				cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_size);
+				cherokee_buffer_add_char     (etag_local, '"');
 			}
 
 			/* Compare ETags
@@ -681,17 +685,16 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	 */
 	memset (&modified_tm, 0, sizeof(struct tm));
 
-	/* ETag:
+	/* ETag: "<etag>"
 	 */
 	if (conn->header.version >= http_version_11) {
-		/*
-		 * "ETag: %lx=" FMT_OFFSET_HEX CRLF
+		/* ETag: "%lx= FMT_OFFSET_HEX" CRLF
 		 */
-		cherokee_buffer_add_str     (buffer, "ETag: ");
+		cherokee_buffer_add_str     (buffer, "ETag: \"");
 		cherokee_buffer_add_ullong16(buffer, (cullong_t) fhdl->info->st_mtime);
 		cherokee_buffer_add_str     (buffer, "=");
 		cherokee_buffer_add_ullong16(buffer, (cullong_t) fhdl->info->st_size);
-		cherokee_buffer_add_str     (buffer, CRLF);
+		cherokee_buffer_add_str     (buffer, "\"" CRLF);
 	}
 
 	/* Last-Modified:
