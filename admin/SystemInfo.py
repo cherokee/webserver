@@ -39,7 +39,8 @@ LINUX_DISTS_ETC = [('gentoo-release',     'gentoo'),
                    ('slackware-release',  'slackware'),
                    ('redflag-release',    'redflag'),
                    ('conectiva-release',  'conectiva'),
-                   ('redhat-release',     'redhat')]
+                   ('redhat-release',     'redhat'), # rhel/centos
+                   ]
 
 
 _cache = None
@@ -113,6 +114,16 @@ def _figure_linux_info (info):
     for dp in LINUX_DISTS_ETC:
         if os.path.exists (os.path.join ('/etc', dp[0])):
             info['linux_distro_id'] = dp[1]
+
+            # Distinguish RedHat from CentOS
+            if dp[1] == 'redhat':
+                release = open (os.path.join ('/etc', dp[0])).read()
+                info['linux_distro_description'] = release
+                regex = '(.*)? release (.*)'
+                tmp = re.findall(regex, release)
+                if tmp:
+                    info['linux_distro_id'] = tmp[0].lower()
+                    info['linux_distro_release'] = tmp[1].lower()
 
 
 def _figure_macos_info (info):
