@@ -385,26 +385,10 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 		return ret_error;
 	}
 
-#if 0 /* DISABLED */
-
-	/* Deal with the FIN_WAIT2 state
+	/* It'd nice to be able to reuse the address even if the
+	 * socket is still in TIME_WAIT statue (2*RTT ~ 120 seg)
 	 */
-	re = 1;
-	re = setsockopt (new_socket, SOL_SOCKET, SO_KEEPALIVE, &re, sizeof(re));
-	if (re == -1) {
-		LOG_ERRNO (errno, cherokee_err_warning,
-			   CHEROKEE_ERROR_SOCKET_SET_KEEPALIVE, new_socket);
-	}
-
-	linger.l_onoff  = 1;
-	linger.l_linger = SECONDS_TO_LINGER;
-
-	re = setsockopt (new_socket, SOL_SOCKET, SO_LINGER, &linger, sizeof(linger));
-	if (re == -1) {
-		LOG_ERRNO (errno, cherokee_err_warning,
-			   CHEROKEE_ERROR_SOCKET_SET_LINGER, new_socket);
-	}
-#endif
+	cherokee_fd_set_reuseaddr (new_socket);
 
 	/* Close-on-exec: Child processes won't inherit this fd
 	 */
@@ -415,7 +399,6 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 	ret = cherokee_fd_set_nonblocking (new_socket, true);
 	if (ret != ret_ok) {
 		LOG_WARNING (CHEROKEE_ERROR_SOCKET_NON_BLOCKING, new_socket);
-
 		cherokee_fd_close (new_socket);
 		return ret_error;
 	}
@@ -427,7 +410,6 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 	ret = cherokee_fd_set_nodelay (new_socket, true);
 	if (ret != ret_ok) {
 		LOG_WARNING_S (CHEROKEE_ERROR_SOCKET_RM_NAGLES);
-
 		cherokee_fd_close (new_socket);
 		return ret_error;
 	}
