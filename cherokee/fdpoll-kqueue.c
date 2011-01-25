@@ -33,8 +33,9 @@
 #include <unistd.h>
 #include <errno.h>
 
-#define KQUEUE_READ_EVENT  0x1
-#define KQUEUE_WRITE_EVENT 0x2
+#define KQUEUE_READ_EVENT  1
+#define KQUEUE_WRITE_EVENT (1 << 1)
+#define KQUEUE_CLOSE       (1 << 2)
 
 
 /***********************************************************************/
@@ -173,7 +174,8 @@ again:
 			   FDPOLL(fdp)->nfiles,
 			   &timeout);
 
-	fdp->nchanges=0;
+	fdp->nchanges = 0;
+
 	if (unlikely (n_events < 0)) {
 		if (errno == EINTR)
 			goto again;
@@ -182,9 +184,10 @@ again:
 		return 0;
 
 	} else if (n_events > 0) {
-		memset (fdp->fdevents, 0, FDPOLL(fdp)->system_nfiles*sizeof(int));
+		memset (fdp->fdevents, 0, FDPOLL(fdp)->system_nfiles * sizeof(int));
 
 		for (i = 0; i < n_events; ++i) {
+			/* Filter */
 			if (fdp->changelist[i].filter == EVFILT_READ) {
 				fdp->fdevents[fdp->changelist[i].ident] = KQUEUE_READ_EVENT;
 			} else if (fdp->changelist[i].filter == EVFILT_WRITE) {
@@ -192,12 +195,16 @@ again:
 			} else {
 				SHOULDNT_HAPPEN;
 			}
+
+			/* Flags */
+			if (fdp->changelist[i].flags & (EV_EOF | EV_ERROR)) {
+				fdp->fdevents[fdp->changelist[i].ident] = KQUEUE_CLOSE;
+			}
 		}
 	}
 
 	return n_events;
 }
-
 
 static int
 _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
@@ -211,6 +218,10 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 	}
 
 	events = fdp->fdevents[fd];
+
+	if (events & KQUEUE_CLOSE) {
+		return 1;
+	}
 
 	switch (rw) {
 	case FDPOLL_MODE_READ:
@@ -300,7 +311,7 @@ fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 	 */
 	n->kqueue          = -1;
 	n->nchanges        = 0;
-	n->changelist      = (struct kevent *) calloc(nfd->nfiles * 2, sizeof(struct kevent));
+	n->changelist      = (struct kevent *) calloc (nfd->nfiles * 2, sizeof(struct kevent));
 	n->fdevents        = (int *) calloc (nfd->system_nfiles, sizeof(int));
 	n->fdinterest      = (int *) calloc (nfd->system_nfiles, sizeof(int));
 
