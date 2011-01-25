@@ -140,7 +140,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->conns_max        =  0;
 	n->conns_reuse_max  = -1;
 
-	n->listen_queue     = 1024;
+	n->listen_queue     = 65534;
 	n->sendfile.min     = SENDFILE_MIN_SIZE;
 	n->sendfile.max     = SENDFILE_MAX_SIZE;
 
@@ -622,8 +622,8 @@ initialize_server_threads (cherokee_server_t *srv)
 		return ret;
 	}
 
-	/* If Cherokee is compiled in single thread mode, it has to
-	 * add the server socket to the fdpoll of the sync thread
+	/* If Cherokee runs in single thread mode, it has to add the
+	 * server sockets to the fdpoll. They will remain in there.
 	 */
 	if (srv->thread_num == 1) {
 		cherokee_list_t *j;
