@@ -110,6 +110,7 @@ modules_validators_authlist.html \
 other.html \
 other_faq.html \
 other_goodies.html \
+other_os_tuning.html \
 other_signals.html \
 other_community.html \
 other_errors.html \
