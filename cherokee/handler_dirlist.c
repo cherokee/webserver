@@ -281,7 +281,9 @@ file_match_add_cb (char *entry, void *data)
 
 
 ret_t
-cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
+cherokee_handler_dirlist_configure (cherokee_config_node_t   *conf,
+				    cherokee_server_t        *srv,
+				    cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
 	cherokee_list_t                  *i;
@@ -370,9 +372,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	if (theme == NULL)
 		theme = "default";
 
-	ret = cherokee_buffer_add_va (&theme_path, CHEROKEE_THEMEDIR"/%s/", theme);
-	if (ret != ret_ok)
-		return ret;
+	cherokee_buffer_add_buffer (&theme_path, &srv->themes_dir);
+	cherokee_buffer_add_va     (&theme_path, "/%s/", theme);
 
 	ret = load_theme (&theme_path, props);
 	if (ret != ret_ok) {

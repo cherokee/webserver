@@ -176,9 +176,10 @@ struct cherokee_server {
 	 */
 	cherokee_config_node_t     config;
 
-	/* PID
+	/* Paths
 	 */
 	cherokee_buffer_t          pidfile;
+	cherokee_buffer_t          themes_dir;
 };
 
 

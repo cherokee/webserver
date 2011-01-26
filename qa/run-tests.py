@@ -224,6 +224,7 @@ server!pid_file = %(pid)s
 server!module_dir = %(CHEROKEE_MODS)s
 server!module_deps = %(CHEROKEE_DEPS)s
 server!fdlimit = 8192
+server!themes_dir = %(CHEROKEE_THEMES)s
 
 vserver!1!nick = default
 vserver!1!document_root = %(www)s
@@ -353,10 +354,11 @@ if port is None:
     else:
         print "Server"
         print_key ('PID', str(pid));
-        print_key ('Path',  CHEROKEE_PATH)
-        print_key ('Mods',  CHEROKEE_MODS)
-        print_key ('Deps',  CHEROKEE_DEPS)
-        print_key ('Panic', CHEROKEE_PANIC)
+        print_key ('Path',   CHEROKEE_PATH)
+        print_key ('Mods',   CHEROKEE_MODS)
+        print_key ('Deps',   CHEROKEE_DEPS)
+        print_key ('Panic',  CHEROKEE_PANIC)
+        print_key ('Themes', CHEROKEE_THEMES)
         if proxy_cfg_file:
             print_key ('Proxy conf', proxy_cfg_file)
         print

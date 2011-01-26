@@ -202,9 +202,12 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->nonces_cleanup_next   = 0;
 	n->nonces_cleanup_lapse = NONCE_CLEANUP_LAPSE;
 
-	/* PID
+	/* Paths
 	 */
 	cherokee_buffer_init (&n->pidfile);
+
+	cherokee_buffer_init    (&n->themes_dir);
+	cherokee_buffer_add_str (&n->themes_dir, CHEROKEE_THEMEDIR);
 
 	/* Config
 	 */
@@ -328,6 +331,7 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	cherokee_buffer_mrproper (&srv->chroot);
 	cherokee_buffer_mrproper (&srv->pidfile);
+	cherokee_buffer_mrproper (&srv->themes_dir);
 	cherokee_buffer_mrproper (&srv->panic_action);
 
 	/* Module loader: It must be the last action to be performed
@@ -1375,6 +1379,10 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "pid_file")) {
 		cherokee_buffer_clean (&srv->pidfile);
 		cherokee_buffer_add_buffer (&srv->pidfile, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "themes_dir")) {
+		cherokee_buffer_clean (&srv->themes_dir);
+		cherokee_buffer_add_buffer (&srv->themes_dir, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "bind")) {
 		ret = configure_bind (srv, conf);

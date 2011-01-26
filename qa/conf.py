@@ -8,6 +8,7 @@ CHEROKEE_PATH     = "../cherokee/cherokee-worker"
 CHEROKEE_MODS     = "../cherokee/.libs/"
 CHEROKEE_DEPS     = "../cherokee/"
 CHEROKEE_PANIC    = "../cherokee/cherokee-panic"
+CHEROKEE_THEMES   = "../themes"
 
 # Logging
 LOGGER_TYPE       = "combined"
