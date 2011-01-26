@@ -28,6 +28,7 @@ import re
 import os
 import imp
 import stat
+import sys
 import time
 import tarfile
 import traceback
@@ -390,6 +391,9 @@ def _Setup_unpack():
 
     # Uncompress
     try:
+        if sys.version_info < (2,5): # tarfile module prior to 2.5 is useless to us: http://bugs.python.org/issue1509889
+            raise tarfile.CompressionError
+
         Install_Log.log ("Unpacking %s with Python" %(package_path))
         tar = tarfile.open (package_path, 'r:gz')
         for tarinfo in tar:
