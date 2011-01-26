@@ -4,13 +4,13 @@ Other: System Tuning
 --------------------
 
 Depending on the environment you are running Cherokee into, the
-default OS setting might require adjustments. In most of the cases,
-the default settings work fine for low-cost, commodity hardware.
-However, if you are running Cherokee in a high-end or benchmark
-environment, it's recommended the check the following parameters.
+default OS setting might require adjustments. In most cases the
+default settings work fine for low-cost, commodity hardware.  However,
+if you are running Cherokee in a high-end or benchmark environment,
+it's recommended to check the following parameters.
 
 Please, bear in mind that values in the examples suppose Cherokee
-running on a system with at least 2Gb of memory.
+running on a system with at least 2GB of memory.
 
 
 [[linux]]
@@ -71,12 +71,12 @@ TIME_WAIT
 ^^^^^^^^^
 
 +/proc/sys/net/ipv4/tcp_max_tw_buckets+: Maximal number of timewait
-   sockets held by system simultaneously. If this number is exceeded
-   time-wait socket is immediately destroyed and warning is
+   sockets held by the system simultaneously. If this number is
+   exceeded time-wait socket is immediately destroyed and a warning is
    printed. This limit exists only to prevent simple DoS attacks, you
    _must_ not lower the limit artificially, but rather increase it
    (probably, after increasing installed memory), if network
-   conditions require more than default value.
+   conditions require more than the default value.
 
 ----
 echo 1800000 > /proc/sys/net/ipv4/tcp_max_tw_buckets
@@ -128,9 +128,9 @@ File descriptors
 ^^^^^^^^^^^^^^^^
 
 +/proc/sys/fs/file-max+: This is basically the number of file
-   descriptors available in the kernel. Which also effects the number
+   descriptors available in the kernel. Which also affects the number
    of fd's a process can have open. For large sites you will
-   definately need to upgrade this, and for some os'es you will need
+   definitely need to upgrade this, and for some OS'es you will need
    to use ulimit to increase the number of fds available for the
    server process.
 
@@ -197,7 +197,7 @@ Ephemeral port range
 
 +net.inet.ip.portrange.first+: Outgoing connection are bind to the
     ports from the 49152 – 65535 range (16 thousands). Depending on
-    the load of your server, it may good to lower the `first` value
+    the load of your server, it may be good to lower the `first` value
     (1024 – 65535). This parameter is specially important if keepalive
     is not being used.
 
