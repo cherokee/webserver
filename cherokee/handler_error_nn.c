@@ -64,7 +64,7 @@ cherokee_handler_error_nn_configure (cherokee_config_node_t   *conf,
 static ret_t
 get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *output)
 {
-	ret_t              ret;
+	int                re;
 	int                dis;
 	DIR               *dir;
 	char               entry_buf[512];
@@ -77,10 +77,9 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 		goto go_out;
 
 	for (;;) {
-		ret = cherokee_readdir (dir, (struct dirent *)entry_buf, &entry);
-		if (unlikely (ret != ret_ok)) {
-			return ret;
-		}
+		re = cherokee_readdir (dir, (struct dirent *)entry_buf, &entry);
+		if ((re != 0) || (entry == NULL))
+			break;
 
 		if (!strncmp (entry->d_name, ".",  1)) continue;
 		if (!strncmp (entry->d_name, "..", 2)) continue;
