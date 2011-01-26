@@ -61,4 +61,14 @@ def check_config():
                     errors.append (Error(_('Authentication rule without Realm'),
                                          '/vserver/%s/rule/%s#5'%(v,r)))
 
+    #
+    # Virtual server without document_root or nick
+    #
+    for v in CTK.cfg['vserver'] or []:
+        if not CTK.cfg.get_val ('vserver!%s!nick'%(v)):
+            errors.append (Error(_('Virtual Server without nickname'), '/vserver'))
+
+        if not CTK.cfg.get_val ('vserver!%s!document_root'%(v)):
+            errors.append (Error(_('Virtual Server without document root'), '/vserver'))
+
     return errors
