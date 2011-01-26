@@ -845,10 +845,6 @@ e('SOCKET_NEW_SOCKET',
   title = "Could not create socket: ${errno}",
   desc  = SYSTEM_ISSUE)
 
-e('SOCKET_SET_KEEPALIVE',
-  title = "Could not set SO_KEEPALIVE on fd=%d: ${errno}",
-  desc  = CODING_BUG)
-
 e('SOCKET_SET_LINGER',
   title = "Could not set SO_LINGER on fd=%d: ${errno}",
   desc  = CODING_BUG)
