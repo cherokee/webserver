@@ -3,7 +3,7 @@
 
 # Exit on error
 set -e
-set -o pipefail
+set -o pipefail 2> /dev/null || true
 
 # Basedir
 srcdir=`dirname $0`
