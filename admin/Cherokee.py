@@ -96,7 +96,7 @@ class PID:
 
 class Server:
     def is_alive (self):
-        return _pid_is_alive(pid.pid)
+        return _pid_is_alive (pid.pid)
 
     def stop (self):
         if not pid.pid: return
@@ -234,6 +234,13 @@ def _pid_is_alive (pid):
     if not pid:
         return False
 
+    # It might be a zombie process already
+    try:
+        os.waitpid (pid, os.WNOHANG)
+    except OSError:
+        pass
+
+    # Is it alive?
     try:
         os.kill (pid, 0)
     except OSError:
