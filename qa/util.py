@@ -98,10 +98,11 @@ def str_random (n):
 
 
 def check_php_interpreter (fullpath):
-    f = os.popen ("%s -v" % (fullpath))
-    all = reduce (lambda x,y: x+y, f.readlines())
-    f.close()
-    return "cgi-fcgi" in all
+    f = os.popen ('%s -v' %(fullpath), 'r')
+    all = f.read()
+    try: f.close()
+    except: pass
+    return 'fcgi' in all
 
 __php_ref = None
 def look_for_php():
