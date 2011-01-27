@@ -119,7 +119,7 @@ def _figure_linux_info (info):
             if dp[1] == 'redhat':
                 release = open (os.path.join ('/etc', dp[0])).read()
                 info['linux_distro_description'] = release
-                regex = '(.*)? release (.*)'
+                regex = '(.*?) release (.*)'
                 tmp = re.findall(regex, release)
                 if tmp:
                     info['linux_distro_id'] = tmp[0].lower()
