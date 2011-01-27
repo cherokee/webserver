@@ -115,7 +115,10 @@ class App:
             if Library.is_appID_in_library (app_id):
                 buy = CTK.Button (_("Install"))
             else:
-                buy = CTK.Button ("%s%s %s" %(currency_symbol, info['amount'], _("Buy")))
+                if info['amount']:
+                    buy = CTK.Button ("%s%s %s" %(currency_symbol, info['amount'], _("Buy")))
+                else:
+                    buy = CTK.Button ("%s, %s" %(_("Free"), _("Install")))
             buy.bind ('click', install.JS_to_show())
 
         else:
