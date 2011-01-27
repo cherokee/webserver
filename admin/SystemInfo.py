@@ -122,8 +122,8 @@ def _figure_linux_info (info):
                 regex = '(.*?) release (.*)'
                 tmp = re.findall(regex, release)
                 if tmp:
-                    info['linux_distro_id'] = tmp[0].lower()
-                    info['linux_distro_release'] = tmp[1].lower()
+                    info['linux_distro_id'] = tmp[0][0].lower()
+                    info['linux_distro_release'] = tmp[0][1].lower()
 
 
 def _figure_macos_info (info):
