@@ -31,9 +31,9 @@ import SavingChecks
 
 from configured import *
 
-SAVED_NOTICE     = N_("The Configuration has been Saved")
+SAVED_NOTICE     = N_("Save Configuration")
 SAVED_RESTART    = N_("Would you like to apply the changes to the running server now?")
-SAVED_NO_RUNNING = N_("The configuration file has been saved successfuly.")
+SAVED_NO_RUNNING = N_("The configuration file has been saved successfully.")
 
 URL_SAVE          = r'/save'
 URL_SAVE_GRACEFUL = r'/save/apply/graceful'
@@ -93,7 +93,7 @@ class Save:
             all = CTK.Box({'id': 'sanity-msg'})
             all += CTK.RawHTML ("<h2>%s</h2>"%(SAVE_CHECK_H1))
             all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P1))
-            all += CTK.Box({'id': "sanity-errors"}, ul)
+            all += CTK.Box ({'id': "sanity-errors"}, ul)
             all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P2))
 
             render = all.Render()
@@ -102,7 +102,8 @@ class Save:
         # Save
         CTK.cfg.save()
 
-        all = CTK.Box({'id': "buttons"})
+        all = CTK.Box ({'id': "buttons"})
+        all += CTK.RawHTML ("<h2>%s</h2>" %(_("Configuration successfully saved")))
 
         if Cherokee.server.is_alive():
             # Prompt about the reset
@@ -173,7 +174,7 @@ class Base (CTK.Page):
             template['market_menu_entry'] = ''
 
         # Save dialog
-        dialog = CTK.DialogProxyLazy (URL_SAVE, {'title': _(SAVED_NOTICE), 'autoOpen': False, 'draggable': False, 'width': 480})
+        dialog = CTK.DialogProxyLazy (URL_SAVE, {'title': _(SAVED_NOTICE), 'autoOpen': False, 'draggable': False, 'width': 500})
         CTK.publish (URL_SAVE, Save, dialog=dialog)
 
         # Default headers

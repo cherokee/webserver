@@ -1110,16 +1110,22 @@ img.icon_chooser_selected {
 }
 
 /* Save dialog */
+#buttons h2 {
+  text-align: left;
+}
+
 #buttons .submitter  {
   width: 148px;
-  margin: 16px 0 0 4px;
+  margin: 16px 0 16px 0;
   float: left;
 }
 #buttons .submitter .button {
   width: 120px;
 }
 
-#buttons #saved-no-running { width: 300px; }
+#buttons #saved-no-running {
+  width: 300px;
+}
 
 /* Dialog with selection panel */
 .ui-dialog .selection-panel {
@@ -1351,7 +1357,7 @@ img.icon_chooser_selected {
   padding-bottom: 16px;
 }
 
-#sanity-msg ul { 
+#sanity-msg ul {
   margin-bottom: 16px;
 }
 
