@@ -264,6 +264,111 @@ check_interpreter (cherokee_source_interpreter_t *src)
 	return ret;
 }
 
+
+static ret_t
+replace_environment_variables (cherokee_buffer_t *buf)
+{
+	char              *dollar;
+	char              *p;
+	char              *val;
+	cherokee_buffer_t  tmp     = CHEROKEE_BUF_INIT;
+
+	do {
+		/* Find $
+		 */
+		dollar = strchr (buf->buf, '$');
+		if (dollar == NULL) {
+			goto out;
+		}
+
+		/* End of the variable name
+		 */
+		p = dollar + 1;
+		while ((*p == '_') ||
+		       ((*p >= '0') && (*p <= '9')) ||
+		       ((*p >= 'A') && (*p <= 'Z')) ||
+		       ((*p >= 'a') && (*p <= 'z')))
+		{
+			p++;
+		}
+
+		/* Call getenv
+		 */
+		cherokee_buffer_clean (&tmp);
+		cherokee_buffer_add   (&tmp, dollar, p-dollar);
+
+		val = getenv (tmp.buf + 1);
+
+		/* Replacement
+		 */
+		if (val != NULL) {
+			cherokee_buffer_replace_string (buf, tmp.buf, tmp.len, val, strlen(val));
+		} else {
+			cherokee_buffer_remove_string (buf, tmp.buf, tmp.len);
+		}
+
+	} while (true);
+
+out:
+	cherokee_buffer_mrproper (&tmp);
+	return ret_ok;
+}
+
+
+static ret_t
+add_env (cherokee_source_interpreter_t *src,
+	 cherokee_buffer_t             *env,
+	 cherokee_buffer_t             *val_orig)
+{
+	ret_t              ret;
+	int                entry_len;
+	char              *entry;
+	cherokee_buffer_t *val        = NULL;
+
+	/* Replace $ENVs
+	 */
+	cherokee_buffer_dup (val_orig, &val);
+
+	ret = replace_environment_variables (val);
+	if (ret != ret_ok) {
+		ret = ret_error;
+		goto error;
+	}
+
+	/* Build the env entry
+	 */
+	entry_len = env->len + val->len + 2;
+
+	entry = (char *) malloc (entry_len);
+	if (entry == NULL) {
+		ret = ret_nomem;
+		goto error;
+	}
+
+	snprintf (entry, entry_len, "%s=%s", env->buf, val->buf);
+	TRACE(ENTRIES, "Adding env: %s\n", entry);
+
+	/* Add it into the env array
+	 */
+	if (src->custom_env_len == 0) {
+		src->custom_env = malloc (sizeof (char *) * 2);
+	} else {
+		src->custom_env = realloc (src->custom_env, (src->custom_env_len + 2) * sizeof (char *));
+	}
+	src->custom_env_len += 1;
+
+	src->custom_env[src->custom_env_len - 1] = entry;
+	src->custom_env[src->custom_env_len]     = NULL;
+
+	cherokee_buffer_free (val);
+	return ret_ok;
+
+error:
+	cherokee_buffer_free (val);
+	return ret;
+}
+
+
 ret_t
 cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 				       cherokee_config_node_t        *conf,
@@ -327,7 +432,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 			cherokee_config_node_foreach (j, child) {
 				cherokee_config_node_t *child2 = CONFIG_NODE(j);
 
-				ret = cherokee_source_interpreter_add_env (src, child2->key.buf, child2->val.buf);
+				ret = add_env (src, &child2->key, &child2->val);
 				if (ret != ret_ok) return ret;
 			}
 
@@ -367,43 +472,6 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 	return ret_ok;
 }
 
-
-ret_t
-cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *env, char *val)
-{
-	char    *entry;
-	cuint_t  env_len;
-	cuint_t  val_len;
-
-	/* Build the env entry
-	 */
-	env_len = strlen (env);
-	val_len = strlen (val);
-
-	entry = (char *) malloc (env_len + val_len + 2);
-	if (entry == NULL) {
-		return ret_nomem;
-	}
-
-	memcpy (entry, env, env_len);
-	entry[env_len] = '=';
-	memcpy (entry + env_len + 1, val, val_len);
-	entry[env_len + val_len + 1] = '\0';
-
-	/* Add it into the env array
-	 */
-	if (src->custom_env_len == 0) {
-		src->custom_env = malloc (sizeof (char *) * 2);
-	} else {
-		src->custom_env = realloc (src->custom_env, (src->custom_env_len + 2) * sizeof (char *));
-	}
-	src->custom_env_len += 1;
-
-	src->custom_env[src->custom_env_len - 1] = entry;
-	src->custom_env[src->custom_env_len]     = NULL;
-
-	return ret_ok;
-}
 
 #ifdef HAVE_POSIX_SHM
 static ret_t
