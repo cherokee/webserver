@@ -21,7 +21,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
 #
-
 import os
 import re
 import CTK
@@ -166,15 +165,21 @@ def app_database_exists (app):
     # MySQL
     if 'DB: Created MySQL database' in cont:
         return "MySQL"
+    if 'DB: Created PostgreSQL database' in cont:
+        return "PostgreSQL"
 
 
 def app_database_remove (app, user, passw, db_type):
     if db_type == 'MySQL':
         cmd = "mysql -u'%(user)s' -p'%(passw)s' -e 'DROP DATABASE IF EXISTS market_%(app)s'" %(locals())
+    elif db_type == 'PostgreSQL':
+        cmd = "PGUSER='%(user)s' PGPASSWORD='%(passw)s' psql -c 'DROP DATABASE IF EXISTS market_%(app)s'" %(locals())
+    else:
+        return
 
-        ret = popen.popen_sync (cmd)
-        if ret['retcode'] != 0:
-            return ret['stderr']
+    ret = popen.popen_sync (cmd)
+    if ret['retcode'] != 0:
+        return ret['stderr']
 
 
 #
