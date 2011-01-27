@@ -84,7 +84,7 @@ URL_INSTALL_DONE_APPLY     = "%s/install/done/apply"     %(URL_MAIN)
 
 class InstallDialog (CTK.Dialog):
     def __init__ (self, info):
-        title = "%s: %s" %(_("Installation"), info['application_name'])
+        title = "%s  —  %s" %(info['application_name'], _("Cherokee Market"))
 
         CTK.Dialog.__init__ (self, {'title': title, 'width': 600, 'minHeight': 300})
         self.info = info
@@ -224,7 +224,7 @@ class Pay_Check (Install_Stage):
         xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
         install_info = xmlrpc.get_install_info (app_id, info)
 
-        Install_Log.log ("Waiting for the payment acknowledge…")
+        Install_Log.log ("Waiting for the payment acknowledge..")
 
         box = CTK.Box()
         if install_info.get('due_payment'):
@@ -293,7 +293,7 @@ class Download (Install_Stage):
         Install_Log.log ("Downloading %s" %(url_download))
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Downloading"), app_name))
+        cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Installing"), app_name))
         cont += CTK.RawHTML ('<p>%s</p>' %(_('The application is being downloaded. Hold on tight!')))
         cont += downloader
         cont += buttons
@@ -309,7 +309,7 @@ class Download_Error (Install_Stage):
         Install_Log.log ("Downloading Error: %s" %(url_download))
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Downloading"), app_name))
+        cont += CTK.RawHTML ('<h2>%s %s</h2>' %(_("Installing"), app_name))
         cont += CTK.RawHTML (_("There was an error downloading the application. Please contact us if the problem persists."))
 
         buttons = CTK.DruidButtonsPanel()
@@ -427,8 +427,8 @@ class Setup (Install_Stage):
         app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
 
         box = CTK.Box()
-        box += CTK.RawHTML ("<h2>%s %s</h2>" %(_("Setting up"), app_name))
-        box += CTK.RawHTML ("<p>%s</p>" %(_("Unpacking application…")))
+        box += CTK.RawHTML ("<h2>%s %s</h2>" %(_("Installing"), app_name))
+        box += CTK.RawHTML ("<h1>%s</h1>" %(_("Unpacking application…")))
 
         # Unpack
         commands = [({'function': _Setup_unpack, 'description': _("The applicaction is being unpacked…")})]
@@ -462,8 +462,8 @@ class Post_unpack (Install_Stage):
             box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_SETUP_EXTERNAL))
             return box.Render().toStr()
 
-        box += CTK.RawHTML ("<h2>%s %s</h2>" %(_("Setting up"), app_name))
-        box += CTK.RawHTML ("<p>%s</p>" %(_("Post unpacking set up…")))
+        box += CTK.RawHTML ("<h2>%s %s</h2>" %(_("Installing"), app_name))
+        box += CTK.RawHTML ("<p>%s</p>" %(_("Setting it up…")))
 
         progress = CommandProgress.CommandProgress (commands, URL_INSTALL_SETUP_EXTERNAL)
         box += progress
