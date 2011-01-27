@@ -495,8 +495,6 @@ class Install_Done_Content (Install_Stage):
         app_name    = CTK.cfg.get_val('tmp!market!install!app!application_name')
         cfg_changes = CTK.cfg.get_val('tmp!market!install!cfg_previous_changes')
 
-        box = CTK.Box()
-
         # Finished
         finished_file = os.path.join (root, "finished")
         Install_Log.log ("Creating %s" %(finished_file))
@@ -506,12 +504,9 @@ class Install_Done_Content (Install_Stage):
         # Normalize CTK.cfg
         CTK.cfg.normalize ('vserver')
 
-        # Clean up CTK.cfg
-        for k in CTK.cfg.keys('tmp!market!install'):
-            if k != 'app':
-                del (CTK.cfg['tmp!market!install!%s'%(k)])
-
         # Save configuration
+        box = CTK.Box()
+
         if not int(cfg_changes):
             CTK.cfg.save()
             Install_Log.log ("Configuration saved.")
@@ -526,14 +521,38 @@ class Install_Done_Content (Install_Stage):
         box += CTK.RawHTML ('<h2>%s %s</h2>' %(app_name, _("has been installed successfully")))
         box += CTK.RawHTML ("<p>%s</p>" %(_(NOTE_THANKS_P1)))
 
+        # Save / Visit
         if int(cfg_changes):
             box += CTK.RawHTML ("<p>%s</p>" %(_(NOTE_SAVE_RESTART)))
+
+        elif Cherokee.server.is_alive():
+            install_type = CTK.cfg.get_val ('tmp!market!install!target')
+            nick         = CTK.cfg.get_val ('tmp!market!install!target!vserver')
+            vserver_n    = CTK.cfg.get_val ('tmp!market!install!target!vserver_n')
+            directory    = CTK.cfg.get_val ('tmp!market!install!target!directory')
+
+            url = ''
+            if install_type == 'vserver' and nick:
+                url  = 'http://%s/'%(nick)
+            elif install_type == 'directory' and vserver_n and directory:
+                nick = CTK.cfg.get_val ('vserver!%s!nick'%(vserver_n))
+                url  = 'http://%s/%s/'%(nick, directory)
+
+            if url:
+                box += CTK.RawHTML ('<p>%s ' %(_("You can now visit")))
+                box += CTK.LinkWindow (url, CTK.RawHTML (_('your new application')))
+                box += CTK.RawHTML (' on a new window.</p>')
 
         box += CTK.RawHTML ("<h1>%s</h1>" %(_(NOTE_THANKS_P2)))
 
         buttons = CTK.DruidButtonsPanel()
         buttons += CTK.DruidButton_Close(_('Close'))
         box += buttons
+
+        # Clean up CTK.cfg
+        for k in CTK.cfg.keys('tmp!market!install'):
+            if k != 'app':
+                del (CTK.cfg['tmp!market!install!%s'%(k)])
 
         return box.Render().toStr()
 
