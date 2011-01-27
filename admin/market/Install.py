@@ -432,7 +432,7 @@ class Setup (Install_Stage):
 
         # Unpack
         commands = [({'function': _Setup_unpack, 'description': _("The applicaction is being unpacked…")})]
-        progress = CommandProgress.CommandProgress (commands, URL_INSTALL_POST_UNPACK)
+        progress = CommandProgress.CommandProgress (commands, URL_INSTALL_POST_UNPACK, props={'style': 'display:none;'})
         box += progress
         return box.Render().toStr()
 

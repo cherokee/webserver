@@ -158,8 +158,8 @@ class CommandProgress (CTK.Box, Replacement_Commons):
         # Render
         return CTK.Box.Render (self)
 
-    def __init__ (self, commands, finished_url):
-        CTK.Box.__init__ (self)
+    def __init__ (self, commands, finished_url, props={}):
+        CTK.Box.__init__ (self, props.copy())
         Replacement_Commons.__init__ (self)
 
         self.finished_url   = finished_url
