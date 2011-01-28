@@ -1,5 +1,21 @@
+SUFFIXES = .py.pre .py
+
+.py.pre.py:
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%sbindir%|${sbindir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%libdir%|${libdir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%cgiroot%|${CGI_ROOT}|g; s|%version%|${PACKAGE_VERSION}|g; s|%phpcgi%|${PHPCGI}|g; s|%datadir%|${datadir}|g; s|%localedir%|${localedir}|g" $< > $@
+
+PY_PRE = \
+conf.py.pre
+
+PYS = \
+$(PY_PRE:.py.pre=.py)
+
+CLEANFILES = \
+%(PYS)
+
+all-local: $(PYS)
+
 EXTRA_DIST = \
-conf.py \
+$(PY_PRE) \
 base.py \
 util.py \
 help.py \

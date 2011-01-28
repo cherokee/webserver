@@ -1,3 +1,4 @@
+
 # Ports
 PORT              = 1978
 PORT_TLS          = 1979
@@ -25,7 +26,7 @@ SERVER_DELAY      = 10
 
 # Third party utilities
 PYTHON_PATH       = "auto"
-PHPCGI_PATH       = "auto"
+PHPCGI_PATH       = "%phpcgi%"
 PHP_FCGI_PORT     = 1980
 
 PHP_DIRS          = ["/usr/lib/cgi-bin/",
