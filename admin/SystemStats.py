@@ -123,9 +123,9 @@ class System_stats__Darwin (Thread, System_stats):
 
     def _read_profiler (self):
         tmp = self.profiler.stdout.read()
-        self.cpu.speed = re.findall (r'Processor Speed: (.*?)\n',     tmp)[0]
-        self.cpu.num   = re.findall (r'Number Of Processors: (\d+)',  tmp)[0]
-        self.cpu.cores = re.findall (r'Total Number Of Cores: (\d+)', tmp)[0]
+        self.cpu.speed = re.findall (r'Processor Speed: (.*?)\n',     tmp, re.I)[0]
+        self.cpu.num   = re.findall (r'Number of Processors: (\d+)',  tmp, re.I)[0]
+        self.cpu.cores = re.findall (r'Total Number of Cores: (\d+)', tmp, re.I)[0]
 
     def _read_cpu (self):
         # Read a new line
