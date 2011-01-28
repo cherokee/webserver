@@ -123,11 +123,12 @@ def check_orphan_installations():
 
 
 def used_in_sources (installation_id):
+    directory = os.path.join (CHEROKEE_OWS_ROOT, installation_id)
+
     sources = []
     for src in CTK.cfg.keys("source"):
         interpreter = CTK.cfg.get_val("source!%s!interpreter" %(src))
-        directory   = os.path.join (CHEROKEE_OWS_ROOT, installation_id)
-        if directory in interpreter:
+        if interpreter and (directory in interpreter):
             sources.append (src)
 
     return sources
