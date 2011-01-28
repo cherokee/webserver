@@ -37,6 +37,7 @@ import Maintenance
 import Library
 import Install_Log
 import SystemInfo
+import SystemStats
 import SaveButton
 import Cherokee
 import popen
@@ -531,12 +532,32 @@ class Install_Done_Content (Install_Stage):
             vserver_n    = CTK.cfg.get_val ('tmp!market!install!target!vserver_n')
             directory    = CTK.cfg.get_val ('tmp!market!install!target!directory')
 
+            # Host
+            if vserver_n and not nick:
+                nick = CTK.cfg.get_val ("vserver!%s!nick"%(vserver_n))
+
+            if nick.lower() == "default":
+                sys_stats = SystemStats.get_system_stats()
+                nick = sys_stats.hostname
+
+            # Ports
+            ports = []
+            for b in CTK.cfg['server!bind'] or []:
+                port = CTK.cfg.get_val ('server!bind!%s!port'%(b))
+                if port:
+                    ports.append (port)
+
+            nick_port = nick
+            if ports and not '80' in ports:
+                nick_port = '%s:%s' %(nick, ports[0])
+
+            # URL
             url = ''
             if install_type == 'vserver' and nick:
-                url  = 'http://%s/'%(nick)
+                url  = 'http://%s/'%(nick_port)
             elif install_type == 'directory' and vserver_n and directory:
                 nick = CTK.cfg.get_val ('vserver!%s!nick'%(vserver_n))
-                url  = 'http://%s/%s/'%(nick, directory)
+                url  = 'http://%s%s/'%(nick_port, directory)
 
             if url:
                 box += CTK.RawHTML ('<p>%s ' %(_("You can now visit")))
