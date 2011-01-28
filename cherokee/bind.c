@@ -169,6 +169,13 @@ set_socket_opts (int socket)
 	if (ret != ret_ok)
 		return ret;
 
+	/* Set no-delay mode:
+	 * If no clients are waiting, accept() will return -1 immediately
+	 */
+	ret = cherokee_fd_set_nodelay (socket, true);
+	if (ret != ret_ok)
+		return ret;
+
 	/* TCP_MAXSEG:
 	 * The maximum size of a TCP segment is based on the network MTU for des-
 	 * tinations on local networks or on a default MTU of 576 bytes for desti-
@@ -226,8 +233,8 @@ init_socket (cherokee_bind_t *listener, int family)
 	/* Create the socket, and set its properties
 	 */
 	ret = cherokee_socket_set_client (&listener->socket, family);
-	if (ret != ret_ok)
-		return ret;
+	if ((ret != ret_ok) || (SOCKET_FD(&listener->socket) < 0))
+		return ret_error;
 
 	ret = set_socket_opts (SOCKET_FD(&listener->socket));
 	if (ret != ret_ok)
@@ -270,14 +277,6 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 				      listener->port, getuid(), getgid());
 			goto error;
 		}
-	}
-
-	/* Set no-delay mode:
-	 * If no clients are waiting, accept() will return -1 immediately
-	 */
-	ret = cherokee_fd_set_nodelay (listener->socket.socket, true);
-	if (ret != ret_ok) {
-		goto error;
 	}
 
 	/* Listen
