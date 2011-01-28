@@ -1650,7 +1650,7 @@ msgstr "Nur anzeigen"
 
 #: cherokee-trunk/admin/plugins/dirlist.py:49
 msgid "Show Size"
-msgstr "Zeige die GröÃe an"
+msgstr "Zeige die Größe an"
 
 #: cherokee-trunk/admin/plugins/dirlist.py:49
 #: cherokee-trunk/admin/plugins/dirlist.py:50
@@ -5271,7 +5271,7 @@ msgstr "Port muss eine Nummer sein"
 
 #: cherokee-trunk/admin/validations.py:45
 msgid "Out of range (1 to 65535)"
-msgstr "AuÃerhalb der Grenzen (1 bis 65535)"
+msgstr "Außerhalb der Grenzen (1 bis 65535)"
 
 #: cherokee-trunk/admin/validations.py:53
 msgid "Port already in use"
@@ -5305,7 +5305,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/validations.py:150
 msgid "IPv4 entry out of range"
-msgstr "IPv4 Eintrag ist auÃerhalb der Grenzen"
+msgstr "IPv4 Eintrag ist außerhalb der Grenzen"
 
 #: cherokee-trunk/admin/validations.py:158
 msgid "Malformed IPv6"
@@ -5755,7 +5755,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/PageVServer.py:411
 msgid "Max Upload Size"
-msgstr "Maximale Upload GröÃe"
+msgstr "Maximale Upload Größe"
 
 #: cherokee-trunk/admin/PageVServer.py:413
 #: cherokee-trunk/admin/PageGeneral.py:254
@@ -6269,7 +6269,7 @@ msgstr "Gehe zum übergeordneten Ordner"
 
 #: cherokee-trunk/admin/Icons.py:206
 msgid "Modify"
-msgstr "Ãndern"
+msgstr "Ändern"
 
 #: cherokee-trunk/admin/Graph.py:40
 #, fuzzy
@@ -6512,7 +6512,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/PageGeneral.py:43
 msgid "Time interval until the server closes inactive connections."
-msgstr "Zeitintervall nach dem der Server inaktive Verbindungen schlieÃt."
+msgstr "Zeitintervall nach dem der Server inaktive Verbindungen schließt."
 
 #: cherokee-trunk/admin/PageGeneral.py:44
 msgid "Which, if any, should be the TLS/SSL backend."
@@ -6529,13 +6529,13 @@ msgstr ""
 #: cherokee-trunk/admin/PageGeneral.py:47
 msgid "Changes the effective user. User names and IDs are accepted."
 msgstr ""
-"Ãndert den Benutzer unter dem der Server ausgeführt wird. Benutzername und "
+"Ändert den Benutzer unter dem der Server ausgeführt wird. Benutzername und "
 "Benutzer-ID sind erlaubt"
 
 #: cherokee-trunk/admin/PageGeneral.py:48
 msgid "Changes the effective group. Group names and IDs are accepted."
 msgstr ""
-"Ãndert die Gruppe unter welcher der Server ausgeführt wird. Gruppenname oder "
+"Ändert die Gruppe unter welcher der Server ausgeführt wird. Gruppenname oder "
 "Gruppen-ID sind erlaubt."
 
 #: cherokee-trunk/admin/PageGeneral.py:49
@@ -6544,7 +6544,7 @@ msgid ""
 "measure."
 msgstr ""
 "Sperrt den Server in einem Ordner ein. Nutzen Sie dies nicht als einzige "
-"SicherheitsmaÃnahme."
+"Sicherheitsmaßnahme."
 
 #: cherokee-trunk/admin/PageGeneral.py:50
 msgid ""
