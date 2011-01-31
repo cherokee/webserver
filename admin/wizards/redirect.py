@@ -80,7 +80,7 @@ class Commit:
         # Add the new rules
         config = CONFIG_VSRV % (locals())
 
-        # Analise the source domain
+        # Analyze the source domain
         wildcard_domain = string.letters + "_-.*?"
         is_wildcard = reduce (lambda x,y: x and y, [c in wildcard_domain for c in host_src])
 
@@ -98,21 +98,17 @@ class Commit:
         return CTK.cfg_reply_ajax_ok()
 
     def __call__ (self):
-        if CTK.post.pop('final'):
-            CTK.cfg_apply_post()
-            return self.Commit_VServer()
-
-        return CTK.cfg_apply_post()
+        CTK.cfg_apply_post()
+        return self.Commit_VServer()
 
 
 class Redirection:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('Origin Domain'), CTK.TextCfg ('%s!host_src'%(PREFIX), False), _(NOTE_SRC_HOST))
-        table.Add (_('Target Domain'), CTK.TextCfg ('%s!host_trg'%(PREFIX), False, {'value': 'www.example.com'}), _(NOTE_TRG_HOST))
+        table.Add (_('Origin Domain'), CTK.TextCfg ('%s!host_src'%(PREFIX), False, {'class':'required'}), _(NOTE_SRC_HOST))
+        table.Add (_('Target Domain'), CTK.TextCfg ('%s!host_trg'%(PREFIX), False, {'class':'required'}), _(NOTE_TRG_HOST))
 
         submit = CTK.Submitter (URL_APPLY)
-        submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
@@ -138,7 +134,6 @@ class Welcome:
 VALS = [
     ('%s!host_src'%(PREFIX), validations.is_not_empty),
     ('%s!host_trg'%(PREFIX), validations.is_not_empty),
-
     ("%s!host_src"%(PREFIX), validations.is_new_vserver_nick),
 ]
 
