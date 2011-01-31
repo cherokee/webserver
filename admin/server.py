@@ -73,7 +73,7 @@ def init (scgi_port, cfg_file):
 
     # Init CTK
     if scgi_port.isdigit():
-        CTK.init (host="localhost", port=int(scgi_port))
+        CTK.init (host="localhost", port=int(scgi_port), sec_cookie=True)
 
     else:
         # Remove the unix socket if it already exists
@@ -85,7 +85,7 @@ def init (scgi_port, cfg_file):
         except OSError:
             pass
 
-        CTK.init (unix_socket=scgi_port)
+        CTK.init (unix_socket=scgi_port, sec_cookie=True)
 
     # At this moment, CTK must be forced to work as a syncronous
     # server. All the initial tests (config file readable, correct

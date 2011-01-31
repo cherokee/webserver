@@ -256,6 +256,10 @@ config_server (cherokee_server_t *srv)
 				  RULE_PRE "1!handler!balancer = round_robin\n"
 				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
 
+	cherokee_buffer_add_str  (&buf, RULE_PRE "1!handler!env!CTK_COOKIE = ");
+	generate_admin_password  (&buf);
+	cherokee_buffer_add_char (&buf, '\n');
+
 	if (! debug) {
 		cherokee_buffer_add_str (&buf, RULE_PRE "1!encoder!gzip = 1\n");
 	}
