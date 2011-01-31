@@ -312,13 +312,13 @@ class ListApps:
                     remove_apps[app]['service'] = service
 
         # Store in CTK.cfg
-        del (CTK.cfg ['admin!market!maintenance!remove'])
+        del (CTK.cfg ['tmp!market!maintenance!remove'])
         for app in remove_apps:
-            CTK.cfg ['admin!market!maintenance!remove!%s!del'    %(app)] = 0
-            CTK.cfg ['admin!market!maintenance!remove!%s!name'   %(app)] = remove_apps[app]['name']
-            CTK.cfg ['admin!market!maintenance!remove!%s!db'     %(app)] = remove_apps[app].get('db')
-            CTK.cfg ['admin!market!maintenance!remove!%s!service'%(app)] = remove_apps[app].get('service')
-            CTK.cfg ['admin!market!maintenance!remove!%s!date'   %(app)] = remove_apps[app].get('date')
+            CTK.cfg ['tmp!market!maintenance!remove!%s!del'    %(app)] = 0
+            CTK.cfg ['tmp!market!maintenance!remove!%s!name'   %(app)] = remove_apps[app]['name']
+            CTK.cfg ['tmp!market!maintenance!remove!%s!db'     %(app)] = remove_apps[app].get('db')
+            CTK.cfg ['tmp!market!maintenance!remove!%s!service'%(app)] = remove_apps[app].get('service')
+            CTK.cfg ['tmp!market!maintenance!remove!%s!date'   %(app)] = remove_apps[app].get('date')
 
         # Dialog buttons
         b_next   = CTK.DruidButton_Goto  (_('Remove'), URL_MAINTENANCE_DB, True)
@@ -402,7 +402,7 @@ def ListApps_Apply():
 
     # Store apps to remove
     for app in apps_to_remove:
-        CTK.cfg ['admin!market!maintenance!remove!%s!del' %(app)] = '1'
+        CTK.cfg ['tmp!market!maintenance!remove!%s!del' %(app)] = '1'
 
     return CTK.cfg_reply_ajax_ok()
 
@@ -413,11 +413,11 @@ class DatabaseRemoval:
         db_type  = None
         db_found = False
 
-        for app in CTK.cfg.keys ('admin!market!maintenance!remove'):
-            tmp = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!db'%(app))
+        for app in CTK.cfg.keys ('tmp!market!maintenance!remove'):
+            tmp = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!db'%(app))
             if tmp:
-                if not CTK.cfg.get_val ('admin!market!maintenance!db!%s!user'%(tmp)) or \
-                   not CTK.cfg.get_val ('admin!market!maintenance!db!%s!pass'%(tmp)):
+                if not CTK.cfg.get_val ('tmp!market!maintenance!db!%s!user'%(tmp)) or \
+                   not CTK.cfg.get_val ('tmp!market!maintenance!db!%s!pass'%(tmp)):
                     db_found = True
                     db_type  = tmp
 
@@ -451,18 +451,18 @@ def DatabaseRemoval_Apply():
     db_type = CTK.post.get_val('db_type')
 
     # Example:
-    #  admin!market!maintenance!db!mysql!user = root
-    #  admin!market!maintenance!db!mysql!pass = root
+    #  tmp!market!maintenance!db!mysql!user = root
+    #  tmp!market!maintenance!db!mysql!pass = root
 
-    CTK.cfg['admin!market!maintenance!db!%s!user'%(db_type)] = db_user
-    CTK.cfg['admin!market!maintenance!db!%s!pass'%(db_type)] = db_pass
+    CTK.cfg['tmp!market!maintenance!db!%s!user'%(db_type)] = db_user
+    CTK.cfg['tmp!market!maintenance!db!%s!pass'%(db_type)] = db_pass
 
     return CTK.cfg_reply_ajax_ok()
 
 
 def _remove_app (app):
     # Remove services
-    service = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!service'%(app))
+    service = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!service'%(app))
     if service:
         if OS == 'darwin':
             popen.popen_sync ('launchctl unload %(service)s' %(locals()))
@@ -481,15 +481,15 @@ def _remove_app (app):
     popen.popen_sync ("rm -rf '%s'" %(fp))
 
     # Database removal
-    db_type = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!db'%(app))
+    db_type = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!db'%(app))
     if db_type:
-        db_user = CTK.cfg.get_val('admin!market!maintenance!db!%s!user'%(db_type))
-        db_pass = CTK.cfg.get_val('admin!market!maintenance!db!%s!pass'%(db_type))
+        db_user = CTK.cfg.get_val('tmp!market!maintenance!db!%s!user'%(db_type))
+        db_pass = CTK.cfg.get_val('tmp!market!maintenance!db!%s!pass'%(db_type))
 
         app_database_remove (app, db_user, db_pass, db_type)
 
     # CTK.cfg clean up
-    del (CTK.cfg['admin!market!maintenance!remove!%s'%(app)])
+    del (CTK.cfg['tmp!market!maintenance!remove!%s'%(app)])
 
     return {'retcode': 0}
 
@@ -498,15 +498,15 @@ class RemoveApps:
     def __call__ (self):
         commands = []
 
-        for app in CTK.cfg.keys ('admin!market!maintenance!remove'):
+        for app in CTK.cfg.keys ('tmp!market!maintenance!remove'):
             # Should it be deleted?
-            delete = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!del'%(app), 0)
+            delete = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!del'%(app), 0)
             if not int(delete):
                 continue
 
             # Build the command list
-            name = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!name'%(app))
-            date = CTK.cfg.get_val ('admin!market!maintenance!remove!%s!date'%(app))
+            name = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!name'%(app))
+            date = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!date'%(app))
 
             entry = {}
             entry['description'] = _("Removing %s (%s)" %(name, date))
@@ -522,6 +522,9 @@ class RemoveApps:
 
 class Finished:
     def __call__ (self):
+        # Clean up
+        del (CTK.cfg ['tmp!market!maintenance'])
+
         # The cache is no longer valid
         Invalidate_Cache()
 
