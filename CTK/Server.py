@@ -92,6 +92,23 @@ class ServerHandler (pyscgi.SCGIHandler):
         # Get a copy of the server (it did fork!)
         server = get_server()
 
+        # Check security cookie
+        sec_error = False
+
+        if server.use_sec_cookie:
+            if not self.env['CTK_COOKIE']:
+                sec_error = True
+            elif not server.sec_cookie:
+                server.sec_cookie = self.env['CTK_COOKIE'][:]
+            else:
+                if server.sec_cookie != self.env['CTK_COOKIE']:
+                    sec_error = True
+
+        if sec_error:
+            response = HTTP_Response (error=403, body="Cookie check failed")
+            self.send (str(response))
+            return
+
         # Refer SCGI object by thread
         my_thread = threading.currentThread()
         my_thread.scgi_conn   = self
@@ -174,18 +191,24 @@ class ServerHandler (pyscgi.SCGIHandler):
 
 class Server:
     def __init__ (self):
-        self._web_paths = []
-        self._scgi        = None
-        self._is_init     = False
-        self.lock         = threading.RLock()
-        self.plugin_paths = []
-        self.exiting      = False
+        self._web_paths     = []
+        self._scgi          = None
+        self._is_init       = False
+        self.lock           = threading.RLock()
+        self.plugin_paths   = []
+        self.exiting        = False
+        self.use_sec_cookie = False
+        self.sec_cookie     = None
 
     def init_server (self, *args, **kwargs):
         # Is it already init?
         if self._is_init:
             return
         self._is_init = True
+
+        # Security cookie
+        if 'sec_cookie' in kwargs:
+            self.use_sec_cookie = kwargs.pop('sec_cookie')
 
         # Instance SCGI server
         self._scgi = pyscgi.ServerFactory (*args, **kwargs)
