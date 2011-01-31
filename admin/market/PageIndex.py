@@ -143,9 +143,9 @@ class Main:
         # Top
         page.mainarea += CTK.RawHTML("<h2>%s</h2>" %(_('Top Applications')))
         tabs = CTK.Tab()
-        tabs.Add (_('Paid'),   TopApps('paid'))
-        tabs.Add (_('Free'),   TopApps('free'))
-        tabs.Add (_('Ranked'), TopApps('any'))
+        tabs.Add (_('Paid'),    TopApps('paid'))
+        tabs.Add (_('Free'),    TopApps('free'))
+        tabs.Add (_('Popular'), TopApps('any'))
         page.mainarea += tabs
 
         # My Library
