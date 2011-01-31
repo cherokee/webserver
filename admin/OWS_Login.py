@@ -85,8 +85,14 @@ def Login_Apply():
         return {'ret':'error', 'errors': {'password': _("Can not be empty")}}
 
     # Authenticate
+    prev_changes = CTK.cfg.has_changed()
+
     logged = log_in (CTK.post['email'], CTK.post['password'])
     if logged == True:
+        # Auto-save it there were no prev changes
+        if not prev_changes:
+            CTK.cfg.save()
+
         return {'ret':'ok'}
 
     return {'ret':'error', 'errors': {'password': _("Authentication failed")}}
