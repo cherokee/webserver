@@ -9,8 +9,8 @@ conf.py.pre
 PYS = \
 $(PY_PRE:.py.pre=.py)
 
-CLEANFILES = \
-%(PYS)
+DISTCLEANFILES = \
+$(PYS)
 
 all-local: $(PYS)
 
