@@ -71,4 +71,71 @@ def check_config():
         if not CTK.cfg.get_val ('vserver!%s!document_root'%(v)):
             errors.append (Error(_('Virtual Server without document root'), '/vserver'))
 
+    #
+    # Broken rule matches
+    #
+    for v in CTK.cfg['vserver'] or []:
+        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
+            match = CTK.cfg.get_val ('vserver!%s!rule!%s!match'%(v, r))
+
+            if match == 'directory' and \
+               not CTK.cfg.get_val ('vserver!%s!rule!%s!match!directory'%(v,r)):
+                errors.append (Error(_('Directory match without a directory'),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'extensions' and \
+                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!extensions'%(v,r)):
+                errors.append (Error(_('Extensions match without any extension'),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'request' and \
+                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!request'%(v,r)):
+                errors.append (Error(_('RegEx match without a RegEx entry'),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'header':
+                if not CTK.cfg.get_val ('vserver!%s!rule!%s!match!header'%(v,r)):
+                    errors.append (Error(_('Header match without a defined header'),
+                                         '/vserver/%s/rule/%s#1'%(v,r)))
+                if not CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r)):
+                    errors.append (Error(_('Header match without a matching expression'),
+                                         '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'exists':
+                any = int (CTK.cfg.get_val ('vserver!%s!rule!%s!match!match_any'%(v,r), "0"))
+                if not any and not CTK.cfg.get_val ('vserver!%s!rule!%s!match!exists'%(v,r)):
+                    errors.append (Error(_("File exists rule without a file or 'Any file'"),
+                                         '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'method' and \
+                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!method'%(v,r)):
+                errors.append (Error(_('Method match without a defined method'),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'bind' and \
+                 not CTK.cfg['vserver!%s!rule!%s!match!bind'%(v,r)]:
+                errors.append (Error(_("Empty 'Incoming IP/Port' match"),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'fullpath' and \
+                 not CTK.cfg['vserver!%s!rule!%s!match!fullpath'%(v,r)]:
+                errors.append (Error(_("Empty 'Full path' rule match"),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'from' and \
+                 not CTK.cfg['vserver!%s!rule!%s!match!from'%(v,r)]:
+                errors.append (Error(_("Empty 'Connected from' rule match"),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'url_arg' and \
+                (not CTK.cfg.get_val ('vserver!%s!rule!%s!match!arg'%(v,r)) or \
+                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r))):
+                errors.append (Error(_("Incomplete 'URL Argument' rule match"),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
+            elif match == 'geoip' and \
+                 not CTK.cfg['vserver!%s!rule!%s!match!countries'%(v,r)]:
+                errors.append (Error(_("GeoIP match rule with no contries"),
+                                     '/vserver/%s/rule/%s#1'%(v,r)))
+
     return errors
