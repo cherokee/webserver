@@ -173,7 +173,7 @@ class InstructionBoxBase (CTK.Box):
             if x in distro:
                 return instructions.get('yum', info)
 
-        for x in ('fedora'):
+        for x in ('fedora',):
             if x in distro:
                 return instructions.get('yumfedora', instructions.get('yum', info))
 
