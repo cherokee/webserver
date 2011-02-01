@@ -200,16 +200,22 @@ class InstructionBox (CTK.Box):
                 (macports_path and bin_path.startswith (macports_path))):
                 return [instructions.get('macports', default)]
 
-        # FreeBSD: pkg_add and ports
+        # FreeBSD: pkg_add *and* ports
         if system == 'freebsd':
-            choices = [data.get('pkg_add')]
-            choices.append (data.get('ports'))
-            choices = filter(lambda x:x, choice)
+            choices = []
 
-            if len(choices) == 0:
-                return [default]
-            else:
+            if instructions.has_key('freebsd_pkg'):
+                choices += [instructions.get('freebsd_pkg')]
+            if instructions.has_key('freebsd_ports'):
+                choices += [instructions.get('freebsd_ports')]
+
+            if choices:
                 return choices
+
+        # Solaris' IPS
+        if system.startswith ('sunos'):
+            if os.path.exists ("/usr/bin/pkg"):
+                return [instructions.get ('ips', default)]
 
         # OS specific
         if instructions.has_key(system):
