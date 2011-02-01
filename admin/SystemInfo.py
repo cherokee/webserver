@@ -84,6 +84,8 @@ def build_info():
         _figure_linux_info (info)
     elif info['system'] == 'Darwin':
         _figure_macos_info (info)
+    elif info['system'] == 'FreeBSD':
+        _figure_freebsd_info (info)
 
     # Users and Groups
     if os.access ('/etc/group', os.R_OK):
@@ -132,6 +134,13 @@ def _figure_macos_info (info):
     info['macports_bin']  = port_bin
     if port_bin:
         info['macports_path'] = '/'.join (port_bin.split('/')[:-1])
+
+
+def _figure_freebsd_info (info):
+    path = '/usr/ports'
+    if os.path.isdir (path):
+        info['freebsd_ports_path'] = path
+
 
 if __name__ == '__main__':
     import pprint

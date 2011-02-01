@@ -206,7 +206,8 @@ class InstructionBox (CTK.Box):
 
             if instructions.has_key('freebsd_pkg'):
                 choices += [instructions.get('freebsd_pkg')]
-            if instructions.has_key('freebsd_ports'):
+
+            if data.get('freebsd_ports_path') and instructions.has_key('freebsd_ports'):
                 choices += [instructions.get('freebsd_ports')]
 
             if choices:
