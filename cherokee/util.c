@@ -1394,7 +1394,7 @@ cherokee_getpwuid (uid_t uid, struct passwd *pwbuf, char *buf, size_t buflen)
 	 * struct passwd *getpwuid_r (uid_t uid, struct passwd *pwd, char *buffer, int  buflen);
 	 */
 	do {
-		result = getpwuid_r (uid, pwdbuf, buf, buflen);
+		result = getpwuid_r (uid, pwbuf, buf, buflen);
 	} while ((result == NULL) && (errno == EINTR));
 
 	if (result == NULL) {
@@ -1593,7 +1593,7 @@ cherokee_getgrgid (gid_t gid, struct group *grbuf, char *buf, size_t buflen)
 	 *  struct group *getgrgid_r (gid_t gid, struct group *grp, char *buffer, int bufsize);
 	 */
 	do {
-		result = getgrgid_r (gid, grdbuf, buf, buflen);
+		result = getgrgid_r (gid, grbuf, buf, buflen);
 	} while ((result == NULL) && (errno == EINTR));
 
 	if (result == NULL) {
