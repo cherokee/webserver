@@ -61,6 +61,7 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/usr/gnu/bin',
                  '/usr/local/bin',
                  '/opt/local/bin',
+                 '/usr/php/*.*/bin',
                  '/usr/pkg/libexec/cgi-bin',
                  # FPM
                  '/usr/sbin',
