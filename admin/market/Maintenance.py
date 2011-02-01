@@ -517,6 +517,11 @@ class RemoveApps:
         cont  = CTK.Container()
         cont += CTK.RawHTML ("<h2>%s</h2>" %(_("Removing Applications")))
         cont += CommandProgress.CommandProgress (commands, URL_MAINTENANCE_FINISHED)
+
+        buttons = CTK.DruidButtonsPanel()
+        buttons += CTK.DruidButton_Close(_('Cancel'))
+        cont += buttons
+
         return cont.Render().toStr()
 
 
