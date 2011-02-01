@@ -47,8 +47,9 @@ def get_system_stats():
             _stats = System_stats__FreeBSD()
 	elif sys.platform.startswith ('openbsd'):
             _stats = System_stats__OpenBSD()
+        else:
+            _stats = System_stats()
 
-    assert _stats, "Not implemented"
     return _stats
 
 
