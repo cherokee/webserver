@@ -21,6 +21,7 @@ EXPLANATION="Please, provide the root password. Cherokee-admin requires system p
 
 DIALOG="display dialog \"$EXPLANATION\""
 DIALOG="$DIALOG default answer \"\" "
+DIALOG="$DIALOG buttons {\"Cancel\", \"OK\"} "
 DIALOG="$DIALOG default button \"OK\" "
 DIALOG="$DIALOG with title \"$TITLE\" "
 DIALOG="$DIALOG with icon note "
