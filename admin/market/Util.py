@@ -136,15 +136,56 @@ class PriceTag (CTK.Box):
             self += CTK.Box ({'class': 'free'},     CTK.RawHTML (_('Free')))
 
 
-class InstructionBoxBase (CTK.Box):
-    def __init__ (self):
+class InstructionBox (CTK.Box):
+    def __init__ (self, note, instructions=None, **kwargs):
         CTK.Box.__init__ (self)
+        assert type(instructions) in (dict, list, type(None))
+
+        self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
+
+        if type(instructions) == dict:
+            info = self.choose_instructions (instructions, kwargs)
+
+        elif type(instructions) == list: # This was the InstructionBoxAlternative behavior
+            info = []
+            for inst_dict in instructions:
+                info += self.choose_instructions (inst_dict, kwargs)
+
+        self.__add (info)
+
+
+    def __add (self, info):
+        if not info:
+            return
+        elif len(info) == 1:
+            self.__add_one (info)
+        else:
+            self.__add_many (info)
+
+
+    def __add_one (self, info):
+        notice  = CTK.Notice ()
+        notice += CTK.RawHTML ('<p>%s:</p>' %(_('Try the following instructions to install the required software')))
+        notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
+        self += notice
+
+
+    def __add_many (self, info_list):
+        lst     = CTK.List()
+        for info in info_list:
+            lst.Add (CTK.RawHTML('<pre>%s</pre>' %(_(info))))
+
+        notice  = CTK.Notice ()
+        notice += CTK.RawHTML ('<p>%s:</p>' %(_('Several alternatives can provide the software requirements for the installation. Try at least one of the following instructions to install your preferred option')))
+        notice += lst
+        self += notice
+
 
     def choose_instructions (self, instructions, kwargs):
-        data   = SystemInfo.get_info()
-        system = data.get('system','').lower()
-        distro = data.get('linux_distro_id','').lower()
-        info   = instructions.get('default')
+        data    = SystemInfo.get_info()
+        system  = data.get('system','').lower()
+        distro  = data.get('linux_distro_id','').lower()
+        default = instructions.get('default')
 
         # Optional parameters
         bin_path = kwargs.get('bin_path')
@@ -157,70 +198,43 @@ class InstructionBoxBase (CTK.Box):
             # /usr/local, for instance.
             if ((not bin_path) or
                 (macports_path and bin_path.startswith (macports_path))):
-                if instructions.has_key('macports'):
-                    return instructions['macports']
+                return [instructions.get('macports', default)]
+
+        # FreeBSD: pkg_add and ports
+        if system == 'freebsd':
+            choices = [data.get('pkg_add')]
+            choices.append (data.get('ports'))
+            choices = filter(lambda x:x, choice)
+
+            if len(choices) == 0:
+                return [default]
+            else:
+                return choices
 
         # OS specific
         if instructions.has_key(system):
-            return instructions[system]
+            return [instructions.get (system, default)]
 
         # Linux distro specific
         if instructions.has_key(distro):
-            return instructions[distro]
+            return [instructions.get (distro, default)]
 
         # Linux distro generic
         for x in ('red hat', 'redhat', 'centos'):
             if x in distro:
-                return instructions.get('yum', info)
+                return [instructions.get ('yum', default)]
 
         for x in ('fedora',):
             if x in distro:
-                return instructions.get('yumfedora', instructions.get('yum', info))
+                return [instructions.get ('yumfedora', instructions.get('yum', default))]
 
         for x in ('suse',):
             if x in distro:
-                return instructions.get('zypper', info)
+                return [instructions.get ('zypper', default)]
 
         for x in ('debian', 'ubuntu', 'knoppix', 'mint'):
             if x in distro:
-                return instructions.get('apt', info)
+                return [instructions.get ('apt', default)]
 
         # Default
-        return instructions['default']
-
-
-class InstructionBox (InstructionBoxBase):
-    def __init__ (self, note, instructions, **kwargs):
-        InstructionBoxBase.__init__(self)
-        assert type(instructions) in (dict, type(None))
-
-        self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
-
-        if instructions:
-            info = self.choose_instructions (instructions, kwargs)
-            if info:
-                notice  = CTK.Notice ()
-                notice += CTK.RawHTML ('<p>%s:</p>' %(_('Try the following instructions to install the required software')))
-                notice += CTK.RawHTML ('<pre>%s</pre>' %(_(info)))
-                self += notice
-
-
-class InstructionBoxAlternative (InstructionBoxBase):
-    def __init__ (self, note, instruction_list, **kwargs):
-        InstructionBoxBase.__init__(self)
-
-        assert type(instruction_list) == list
-
-        self += CTK.RawHTML ('<p>%s</p>' %(_(note)))
-
-        if instruction_list:
-            lst     = CTK.List()
-            for instructions in instruction_list:
-                info = self.choose_instructions (instructions, kwargs)
-                if info:
-                    lst.Add (CTK.RawHTML('<pre>%s</pre>' %(_(info))))
-
-            notice  = CTK.Notice ()
-            notice += CTK.RawHTML ('<p>%s:</p>' %(_('Several alternatives can provide the software requirements for the installation. Try at least one of the following instructions to install your preferred option')))
-            notice += lst
-            self += notice
+        return [default]
