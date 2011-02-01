@@ -47,6 +47,8 @@ def get_system_stats():
             _stats = System_stats__FreeBSD()
 	elif sys.platform.startswith ('openbsd'):
             _stats = System_stats__OpenBSD()
+        elif sys.platform.startswith ('sunos'):
+            _stats = System_stats__Solaris()
         else:
             _stats = System_stats()
 
@@ -133,7 +135,7 @@ class System_stats__Darwin (Thread, System_stats):
         line = self.iostat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " .0123456789", line)):
+        if len(filter (lambda x: x not in " -.0123456789", line)):
             return
 
         # Parse
@@ -154,7 +156,7 @@ class System_stats__Darwin (Thread, System_stats):
         line = self.vm_stat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " .0123456789", line)):
+        if len(filter (lambda x: x not in " -.0123456789", line)):
             return
 
         # Parse
@@ -294,6 +296,79 @@ class System_stats__Linux (Thread, System_stats):
             time.sleep (self.CHECK_INTERVAL)
 
 
+# Solaris
+class System_stats__Solaris (Thread, System_stats):
+    CHECK_INTERVAL = 1
+
+    def __init__ (self):
+        Thread.__init__ (self)
+        System_stats.__init__ (self)
+        self.daemon = True
+
+        # vmstat
+        self.vmstat_fd = subprocess.Popen ("/usr/bin/vmstat %d" %(self.CHECK_INTERVAL),
+                                            shell=True, stdout=subprocess.PIPE, close_fds=True)
+
+        # CPUs and Mem
+        self._read_mem_info()
+        self._read_cpu_info()
+
+        # Initial values
+        self._read_cpu_and_memory()
+        self.start()
+
+    def _read_mem_info (self):
+        ret = popen.popen_sync ("/usr/sbin/prtconf")
+
+        tmp = re.findall ("Memory size.* (\d+) Megabytes", ret['stdout'], re.I)
+        if tmp:
+            self.mem.total = int(tmp[0]) * 1024
+
+    def _read_cpu_info (self):
+        ret = popen.popen_sync ("/usr/sbin/psrinfo -v")
+
+        tmp = re.findall ("^Status of.+processor", ret['stdout'], re.I)
+        self.cpu.num = len(tmp)
+
+        tmp = re.findall ("operates at (\d+) MHz", ret['stdout'], re.I)
+        if tmp:
+            self.cpu.speed = '%s MHz' %(max([int(x) for x in tmp]))
+
+    def _read_cpu_and_memory (self):
+        for tries in range(3):
+            # Read a new line
+            line = self.vmstat_fd.stdout.readline().rstrip('\n')
+
+            # Skip headers
+            if len(filter (lambda x: x not in " -.0123456789", line)):
+                if tries == 2:
+                    return
+                continue
+            break
+
+        # Parse
+        fields = filter (lambda x: x, line.split(' '))
+
+        # CPU
+        user = int(fields[-3])
+        sys  = int(fields[-2])
+        idle = int(fields[-1])
+
+        self.cpu.usage = min(user + sys, 100)
+        self.cpu.idle  = idle
+
+        # Memory
+        free = int(fields[4])
+
+        self.mem.free = free
+        self.mem.used = self.mem.total - self.mem.free
+
+    def run (self):
+        while True:
+            self._read_cpu_and_memory()
+            time.sleep (self.CHECK_INTERVAL)
+
+
 
 # FreeBSD implementation
 class System_stats__FreeBSD (Thread, System_stats):
@@ -378,7 +453,7 @@ class System_stats__FreeBSD (Thread, System_stats):
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-	if len(filter (lambda x: x not in " .0123456789", line)):
+	if len(filter (lambda x: x not in " -.0123456789", line)):
 	    return
 
         # Parse
@@ -395,7 +470,7 @@ class System_stats__FreeBSD (Thread, System_stats):
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " .0123456789", line)):
+        if len(filter (lambda x: x not in " -.0123456789", line)):
             return
 
         # Parse
@@ -493,7 +568,7 @@ class System_stats__OpenBSD (Thread, System_stats):
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " .0123456789", line)):
+        if len(filter (lambda x: x not in " -.0123456789", line)):
             return
 
         # Parse
@@ -510,7 +585,7 @@ class System_stats__OpenBSD (Thread, System_stats):
         # Read a new line
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
         # Skip headers
-        if len(filter (lambda x: x not in " .0123456789", line)):
+        if len(filter (lambda x: x not in " -.0123456789", line)):
             return
 
         # Parse
