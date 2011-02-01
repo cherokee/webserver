@@ -279,6 +279,7 @@ fdpoll_port_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 ret_t
 fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 {
+	int                re;
 	cuint_t            i;
 	cherokee_fdpoll_t *nfd;
 	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_port);
