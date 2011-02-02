@@ -312,6 +312,7 @@ class System_stats__Solaris (Thread, System_stats):
         # CPUs and Mem
         self._read_mem_info()
         self._read_cpu_info()
+        self._read_hostname()
 
         # Initial values
         self._read_cpu_and_memory()
@@ -333,6 +334,10 @@ class System_stats__Solaris (Thread, System_stats):
         tmp = re.findall ("operates at (\d+) MHz", ret['stdout'], re.I)
         if tmp:
             self.cpu.speed = '%s MHz' %(max([int(x) for x in tmp]))
+
+    def _read_hostname (self):
+        fd = subprocess.Popen ("/bin/hostname", shell=True, stdout = subprocess.PIPE)
+        self.hostname = fd.stdout.readline().strip()
 
     def _read_cpu_and_memory (self):
         for tries in range(3):
