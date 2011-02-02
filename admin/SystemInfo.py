@@ -86,6 +86,8 @@ def build_info():
         _figure_macos_info (info)
     elif info['system'] == 'FreeBSD':
         _figure_freebsd_info (info)
+    elif info['system'] == 'SunOS':
+        _figure_solaris_info (info)
 
     # Users and Groups
     if os.access ('/etc/group', os.R_OK):
@@ -140,6 +142,10 @@ def _figure_freebsd_info (info):
     path = '/usr/ports'
     if os.path.isdir (path):
         info['freebsd_ports_path'] = path
+
+
+def _figure_solaris_info (info):
+    None
 
 
 if __name__ == '__main__':
