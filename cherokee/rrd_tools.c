@@ -117,7 +117,7 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 			ret = cherokee_find_exec_in_path ("rrdtool", &rrd_conn->path_rrdtool);
 			if (ret != ret_ok) {
 				rrd_conn->disabled = true;
-				LOG_ERROR (CHEROKEE_ERROR_RRD_NO_BINARY, getenv("PATH"));
+				LOG_WARNING (CHEROKEE_ERROR_RRD_NO_BINARY, getenv("PATH"));
 			}
 		}
 	}
