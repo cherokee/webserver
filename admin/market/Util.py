@@ -159,7 +159,7 @@ class InstructionBox (CTK.Box):
         if not info:
             return
         elif len(info) == 1:
-            self.__add_one (info)
+            self.__add_one (info[0])
         else:
             self.__add_many (info)
 
