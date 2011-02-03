@@ -44,17 +44,11 @@ class Carousel (Box):
             props['class'] = "carousel"
 
         Box.__init__ (self, props.copy())
-        self.images = List ({'class': 'overview'})
-        self.pager  = List ({'class': 'pager'})
+        self.images   = List ({'class': 'overview'})
+        self.pager    = List ({'class': 'pager'})
+        self.controls = None
 
         Box.__iadd__ (self, self.images)
-        arrows = Box({'class':'arrows'})
-        arrows += Link (None, RawHTML("%s"%(_('left'))), {'class': "buttons prev"})
-        arrows += Link (None, RawHTML("%s"%(_('right'))), {'class': "buttons next"})
-        controls = Box({'class':'controls'})
-        controls += arrows
-        controls += self.pager
-        Box.__iadd__ (self, controls)
 
     def __iadd__ (self, widget):
         link = Link (None, RawHTML ("%s" %(len(self.images.child) +1)))
@@ -66,6 +60,19 @@ class Carousel (Box):
         return self
 
     def Render (self):
+        # Add pager and arrows if there is more than 1 item
+        if len(self.pager) > 1 and not self.controls:
+            arrows = Box({'class':'arrows'})
+            arrows += Link (None, RawHTML("%s"%(_('left'))), {'class': "buttons prev"})
+            arrows += Link (None, RawHTML("%s"%(_('right'))), {'class': "buttons next"})
+
+            self.controls = Box({'class':'controls'})
+            self.controls += arrows
+            self.controls += self.pager
+
+            Box.__iadd__ (self, self.controls)
+
+        # Render
         render = Box.Render (self)
 
         render.headers += HEADERS
