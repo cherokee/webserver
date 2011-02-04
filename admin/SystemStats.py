@@ -385,17 +385,18 @@ class System_stats__FreeBSD (Thread, System_stats):
         self.daemon = True
 
         self.vmstat_fd = subprocess.Popen ("/usr/bin/vmstat -H -w%d" %(self.CHECK_INTERVAL),
-                                            shell=True, stdout = subprocess.PIPE, close_fds=True )
+                                            shell=True, stdout=subprocess.PIPE, close_fds=True )
 
-        # Read valid values
-        self._read_hostname()
-        self._read_cpu()
-        self._read_memory()
-        self._read_cpu_and_mem_info()
+        # Single read values
+        self._read_info_hostname()
+        self._read_info_cpu_and_mem()
+
+        # Initial status info
+        self._read_cpu_and_memory()
 
         self.start()
 
-    def _read_hostname (self):
+    def _read_info_hostname (self):
         # First try: uname()
 	self.hostname = os.uname()[1]
         if self.hostname:
@@ -410,13 +411,7 @@ class System_stats__FreeBSD (Thread, System_stats):
         # Could not figure it out
         self.hostname = "Unknown"
 
-    def _read_cpu_and_mem_info (self):
-        # Execute sysctl
-        ret = popen.popen_sync ("/sbin/sysctl hw.ncpu hw.clockrate kern.threads.virtual_cpu hw.pagesize vm.stats.vm.v_page_count")
-        lines = filter (lambda x: x, ret['stdout'].split('\n'))
-
-        # Parse output
-
+    def _read_info_cpu_and_mem (self):
 	# cpu related
         ncpus = 0
         vcpus = 0
@@ -426,18 +421,28 @@ class System_stats__FreeBSD (Thread, System_stats):
 	psize  = 0
 	pcount = 0
 
-	for line in lines:
-	    parts = line.split()
-	    if parts[0] == 'hw.ncpu:':
-		ncpus = int(parts[1])
-            elif parts[0] == 'hw.clockrate:':
-		clock = parts[1]
-            elif parts[0] == 'kern.threads.virtual_cpu:':
-		vcpus = parts[1]
-            elif parts[0] == 'vm.stats.vm.v_page_count:':
-		pcount = int(parts[1])
-            elif parts[0] == 'hw.pagesize:':
-		psize = int(parts[1])
+        # Execute sysctl. Depending on the version of FreeBSD some of
+        # these keys might not exist. Thus, /sbin/sysctl is executed
+        # with a single key, so in case one were not supported the
+        # rest would not be ignored. (~ Reliability for efficiency)
+        #
+        for key in ("hw.ncpu", "hw.clockrate", "hw.pagesize",
+                    "kern.threads.virtual_cpu", "vm.stats.vm.v_page_count"):
+            ret = popen.popen_sync ("/sbin/sysctl %s"%(key))
+            lines = filter (lambda x: x, ret['stdout'].split('\n'))
+
+            for line in lines:
+                parts = line.split()
+                if parts[0] == 'hw.ncpu:':
+                    ncpus = int(parts[1])
+                elif parts[0] == 'hw.clockrate:':
+                    clock = parts[1]
+                elif parts[0] == 'kern.threads.virtual_cpu:':
+                    vcpus = parts[1]
+                elif parts[0] == 'vm.stats.vm.v_page_count:':
+                    pcount = int(parts[1])
+                elif parts[0] == 'hw.pagesize:':
+                    psize = int(parts[1])
 
 	# Deal with cores
         if vcpus:
@@ -453,7 +458,7 @@ class System_stats__FreeBSD (Thread, System_stats):
 	# Physical mem
 	self.mem.total = (psize * pcount) / 1024
 
-    def _read_cpu (self):
+    def _read_cpu_and_memory (self):
 	# Read a new line
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
 
@@ -464,34 +469,19 @@ class System_stats__FreeBSD (Thread, System_stats):
         # Parse
 	parts = filter (lambda x: x, line.split(' '))
 
-	if not len(parts) == 18:
-		return
+        # Memory
+        self.mem.free = int(parts[4])
+        self.mem.used = self.mem.total - self.mem.free
 
-	self.cpu.idle  = int(parts[17])
+        # CPU
+	self.cpu.idle  = int(parts[-1])
 	self.cpu.usage = 100 - self.cpu.idle
-
-    def _read_memory (self):
-	# Read a new line
-        line = self.vmstat_fd.stdout.readline().rstrip('\n')
-
-        # Skip headers
-        if len(filter (lambda x: x not in " -.0123456789", line)):
-            return
-
-        # Parse
-        values = filter (lambda x: x, line.split(' '))
-
-	if not len(values) == 18:
-		return
-
-        self.mem.free  = int(values[4])
-        self.mem.used  = self.mem.total - self.mem.free
 
     def run (self):
         while True:
-            self._read_cpu()
-            self._read_memory()
+            self._read_cpu_and_memory()
             time.sleep (self.CHECK_INTERVAL)
+
 
 # OpenBSD implementation
 class System_stats__OpenBSD (Thread, System_stats):
