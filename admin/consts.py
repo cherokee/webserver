@@ -268,3 +268,7 @@ COMPRESSION_LEVELS = [
     ('8', N_('8')),
     ('9', N_('9 - Max compression'))
 ]
+
+HANDLERS_WITH_BALANCER = [
+    'fcgi', 'scgi', 'uwsgi', 'proxy', 'dbslayer'
+]

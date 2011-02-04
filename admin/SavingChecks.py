@@ -23,15 +23,12 @@
 #
 
 import CTK
+import consts
 
 class Error:
     def __init__ (self, title='', url=''):
         self.title = title[:]
         self.url   = url[:]
-
-
-def does_handler_use_balancer (handler_name):
-    return handler_name in ('fcgi', 'scgi', 'uwsgi', 'proxy')
 
 
 def check_config():
@@ -45,7 +42,8 @@ def check_config():
             handler_name  = CTK.cfg.get_val ('vserver!%s!rule!%s!handler'%(v,r))
             balancer_name = CTK.cfg.get_val ('vserver!%s!rule!%s!handler!balancer'%(v,r))
 
-            if does_handler_use_balancer (handler_name) or balancer_name:
+            if handler_name and \
+               handler_name in consts.HANDLERS_WITH_BALANCER:
                 srcs = CTK.cfg.keys ('vserver!%s!rule!%s!handler!balancer!source'%(v,r))
                 if not srcs:
                     errors.append (Error(_('Balancer without any source'),
