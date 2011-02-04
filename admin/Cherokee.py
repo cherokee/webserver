@@ -28,6 +28,7 @@ import CTK
 import os
 import time
 import errno
+import fcntl
 import signal
 
 from subprocess import *
@@ -42,8 +43,9 @@ from config_version import *
 
 
 DEFAULT_PATH = ['/usr/local/sbin', '/usr/local/bin', '/opt/local/sbin', '/opt/local/sbin', '/usr/sbin', '/usr/bin', '/sbin', '/bin']
-LAUNCH_DELAY = 2
 
+POLLING_LAPSE   = 1
+READ_CHUNK_SIZE = 2**20
 
 
 class PID:
@@ -116,6 +118,10 @@ class Server:
         def daemonize():
             os.setsid()
 
+        def set_non_blocking (fd):
+            fl = fcntl.fcntl (fd, fcntl.F_GETFL)
+            fcntl.fcntl (fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+
         # Ensure the a minimum $PATH is set
         environ = os.environ.copy()
         if not "PATH" in environ:
@@ -128,24 +134,48 @@ class Server:
 
         stdout_f,  stderr_f  = (p.stdout, p.stderr)
         stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
-        stdout,    stderr    = '', ''
+
+        stdout = ''
+        stderr = ''
+
+        set_non_blocking (stdout_fd)
+        set_non_blocking (stderr_fd)
 
         # Check the first few lines of the output
         while True:
-            r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
+            r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], POLLING_LAPSE)
 
+            # Error
             if e:
                 return _("Could not access file descriptors: ") + str(e)
 
+            # stdout
             if stdout_fd in r:
-                stdout += stdout_f.read(1)
+                data = ''
+                try:
+                    data = os.read (stdout_fd, READ_CHUNK_SIZE)
+                except OSError, e:
+                    if e[0] in (errno.EAGAIN,):
+                        raise
+                if data:
+                    stdout += data
+
+            # stderr
             if stderr_fd in r:
-                stderr += stderr_f.read(1)
+                data = ''
+                try:
+                    data = os.read (stderr_fd, READ_CHUNK_SIZE)
+                except OSError, e:
+                    if e[0] in (errno.EAGAIN,):
+                        raise
+                if data:
+                    stderr += data
+
 
             nl = stderr.find('\n')
             if nl != -1:
                 for e in ["{'type': \"error\"",
-                          "{'type': \"critical\"", 'ERROR', '(error) ', '(critical) ']:
+                          "{'type': \"critical\"", '(error) ', '(critical) ', 'ERROR']:
                     if e in stderr:
                         _pid_kill (p.pid)
                         return stderr
@@ -154,7 +184,6 @@ class Server:
             if stdout.count('\n') > 1:
                 break
 
-        time.sleep (LAUNCH_DELAY)
         return None
 
 
@@ -256,7 +285,7 @@ def _pid_kill (pid):
         return not _pid_is_alive(pid)
 
     # Ensure it died
-    retries = 3
+    retries = 6
     while retries:
         try:
             os.waitpid (pid, 0)
@@ -264,7 +293,7 @@ def _pid_kill (pid):
         except OSError, e:
             if e[0] == errno.ECHILD:
                 return True
-            time.sleep(1)
+            time.sleep (0.5)
             retries -= 1
 
     # Did not succeed
