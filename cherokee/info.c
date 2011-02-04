@@ -93,7 +93,7 @@ cherokee_info_build_print (cherokee_server_t *srv)
 	printf ("epoll ");
 #endif
 #ifdef HAVE_KQUEUE
-	printf ("kqueue");
+	printf ("kqueue ");
 #endif
 #ifdef HAVE_POLL
 	printf ("poll ");
