@@ -433,3 +433,15 @@ def is_email (value):
         raise ValueError, _("Please insert a valid email")
 
     return value
+
+def has_no_quotes (value):
+    if "'" in value:
+        raise ValueError, _("Cannot contain the quote (') character")
+    return value
+
+def has_no_double_quotes (value):
+    if '"' in value:
+        raise ValueError, _('Cannot contain the double quote (") character')
+    return value
+
+
