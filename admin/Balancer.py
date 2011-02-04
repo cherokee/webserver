@@ -70,7 +70,19 @@ class PluginBalancer (CTK.Plugin):
                 table.set_header(1)
 
                 for sb in balancer_sources:
-                    sg   = CTK.cfg.get_val ('%s!source!%s'%(key, sb))
+                    sg = CTK.cfg.get_val ('%s!source!%s'%(key, sb))
+
+                    # Detect missing sources
+                    if not CTK.cfg['source!%s'%(sg)]:
+                        remove = CTK.ImageStock('del')
+                        remove.bind('click', CTK.JS.Ajax (URL_APPLY,
+                                                          data     = {'%s!source!%s'%(key, sb): ''},
+                                                          complete = refresh.JS_to_refresh()))
+
+                        table += [None, None, CTK.RawHTML("%s: %s" %(_("Broken Source"), sg)), remove]
+                        continue
+
+                    # Regular table entry
                     nick = CTK.cfg.get_val ('source!%s!nick'%(sg))
                     host = CTK.cfg.get_val ('source!%s!host'%(sg))
                     link = CTK.Link ("/source/%s"%(sg), CTK.RawHTML (nick))
