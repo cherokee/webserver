@@ -204,7 +204,7 @@ class Maintenance_Box (CTK.Box):
         # Unfinished apps are not even orphans
         for u in unfinished:
             if u in orphan:
-                del (orphan[u])
+                orphan.remove(u)
 
         # GUI
         dialog = MaintenanceDialog()
@@ -289,10 +289,19 @@ class AppList (CTK.Table):
 
 class ListApps:
     def __call__ (self):
+        # Check the apps
+        orphan     = check_orphan_installations()
+        unfinished = check_unfinished_installations()
+
+        # Unfinished apps are not even orphans
+        for u in unfinished:
+            if u in orphan:
+                orphan.remove(u)
+
         # Build list of apps to remove
         remove_apps = {}
 
-        for app in check_orphan_installations():
+        for app in orphan:
             db      = app_database_exists (app)
             service = self._figure_app_service (app)
 
@@ -305,7 +314,7 @@ class ListApps:
             if service:
                 remove_apps[app]['service'] = service
 
-        for app in check_unfinished_installations():
+        for app in unfinished:
             if not app in remove_apps:
                 db      = app_database_exists (app)
                 service = self._figure_app_service (app)
