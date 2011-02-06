@@ -194,12 +194,19 @@ class Maintenance_Box (CTK.Box):
     def __init__ (self, refresh):
         CTK.Box.__init__ (self)
 
+        # Check apps
         unfinished = check_unfinished_installations()
         orphan     = check_orphan_installations()
 
         if not len(unfinished) and not len(orphan):
             return
 
+        # Unfinished apps are not even orphans
+        for u in unfinished:
+            if u in orphan:
+                del (orphan[u])
+
+        # GUI
         dialog = MaintenanceDialog()
         dialog.bind ('dialogclose', refresh.JS_to_refresh())
 
