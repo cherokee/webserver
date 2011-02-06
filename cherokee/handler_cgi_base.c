@@ -268,11 +268,17 @@ cherokee_handler_cgi_base_build_basic_env (
 	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
 	set_env (cgi, "PATH",              "/bin:/usr/bin:/sbin:/usr/sbin", 29);
 
-	/* Document Root of the current Virtual Server
+	/* Document Root:
 	 */
-	set_env (cgi, "DOCUMENT_ROOT",
-		 CONN_VSRV(conn)->root.buf,
-		 CONN_VSRV(conn)->root.len);
+	if (CONN_VSRV(conn)->evhost) {
+		set_env (cgi, "DOCUMENT_ROOT",
+			 conn->local_directory.buf,
+			 conn->local_directory.len);
+	} else {
+		set_env (cgi, "DOCUMENT_ROOT",
+			 CONN_VSRV(conn)->root.buf,
+			 CONN_VSRV(conn)->root.len);
+	}
 
 	/* REMOTE_(ADDR/PORT): X-Real-IP
 	 */
