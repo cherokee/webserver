@@ -50,6 +50,7 @@ PHP_NAMES         = ["php-fpm5",
                      "php4"]
 
 PYTHON_NAMES      = ["python",
+                     "python2",
                      "python2.7",
                      "python2.6",
                      "python2.5",

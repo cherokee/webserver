@@ -1413,7 +1413,7 @@ have_python="yes"
 AC_ARG_WITH([python], AC_HELP_STRING([--with-python=/path/to/python],[Path to Python interpreter]),
 		  PYTHON="$withval",
 [
-   AC_PATH_PROGS(PYTHON, python python2.7 python2.6 python2.5 python2.4)
+   AC_PATH_PROGS(PYTHON, python python2 python2.7 python2.6 python2.5 python2.4)
 ])
 
 if test "x$PYTHON" != "x"; then
