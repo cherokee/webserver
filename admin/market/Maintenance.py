@@ -38,7 +38,7 @@ from consts import *
 from ows_consts import *
 from configured import *
 
-NOTE_DBUSER = N_("Specify the name of a privileged DB user. It will be used to automatically create the required database.")
+NOTE_DBUSER = N_("Specify the name of a privileged DB user. It will be used to remove the databases.")
 NOTE_DBPASS = N_("Specify the password for this user account.")
 DB_DEL_P1   = N_("Please, provide an administrative user/password pair to connect to your database.")
 
