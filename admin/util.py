@@ -266,7 +266,7 @@ def version_cmp (x, y):
 # Paths
 #
 
-def path_find_binary (executable, extra_dirs=[], custom_test=None):
+def path_find_binary (executable, extra_dirs=[], custom_test=None, default=None):
     """Find an executable.
     It checks 'extra_dirs' and the PATH.
     The 'executable' parameter can be either a string or a list.
@@ -299,6 +299,9 @@ def path_find_binary (executable, extra_dirs=[], custom_test=None):
                     if not custom_test(fp):
                         continue
                 return fp
+
+    # Not found
+    return default
 
 def path_find_w_default (path_list, default=''):
     """Find a path.
