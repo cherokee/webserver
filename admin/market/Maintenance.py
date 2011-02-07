@@ -406,6 +406,10 @@ class ListApps:
             if tmp:
                 return tmp[0]
 
+            tmp = re.findall (r'Registered BSD service\: (.+)\n', cont, re.M)
+            if tmp:
+                return tmp[0]
+
 
 def ListApps_Apply():
     system_info = SystemInfo.get_info()
@@ -492,6 +496,12 @@ def _remove_app (app):
             popen.popen_sync ('launchctl unload %(service)s' %(locals()))
         elif OS == 'linux':
             popen.popen_sync ('rm -f /etc/rcS.d/S99%(service)s' %(locals()))
+        elif OS == 'freebsd':
+            rc_conf, src_line = service.split(':')
+            dst_line = src_line.replace('="YES"', '="NO"')
+            content = open(rc_conf, 'r').read()
+            content = content.replace(line).replace (src_line, dst_line)
+            open(rc_conf, 'w').write (content)
 
         print "Remove service", service
 
