@@ -39,7 +39,7 @@ NOTE_WELCOME_H1 = N_("Welcome to the Django wizard")
 NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://djangoproject.com/">Django</a> is a high-level Python Web framework that encourages rapid development and clean, pragmatic design.')
 NOTE_WELCOME_P2 = N_('It is the Web framework for perfectionists (with deadlines). Django makes it easier to build better Web apps more quickly and with less code.')
 NOTE_LOCAL_H1   = N_("Application Source Code")
-NOTE_LOCAL_DIR  = N_("Local directory where the Django source code is located. Example: /usr/share/django.")
+NOTE_LOCAL_DIR  = N_("Local directory where your Django project source code is located.")
 NOTE_HOST_H1    = N_("New Virtual Server Details")
 NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
 NOTE_WEBDIR     = N_("Web directory where you want Django to be accessible. (Example: /blog)")
@@ -48,15 +48,15 @@ NOTE_DROOT      = N_("Path to use as document root for the new virtual server.")
 ERROR_NO_SRC    = N_("Does not look like a Django source directory.")
 ERROR_NO_DROOT  = N_("The document root directory does not exist.")
 
-PREFIX    = 'tmp!wizard!django'
+PREFIX = 'tmp!wizard!django'
 
-URL_APPLY      = r'/wizard/vserver/django/apply'
+URL_APPLY = '/wizard/vserver/django/apply'
 
 SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = Django %(src_num)d
 source!%(src_num)d!host = 127.0.0.1:%(src_port)d
-source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protocol=scgi host=127.0.0.1 port=%(src_port)d
+source!%(src_num)d!interpreter = %(python_bin)s %(django_dir)s/manage.py runfcgi protocol=scgi host=127.0.0.1 port=%(src_port)d
 """
 
 CONFIG_VSERVER = SOURCE + """
@@ -89,14 +89,6 @@ CONFIG_DIR = SOURCE + """
 %(rule_pre)s!handler!balancer!source!1 = %(src_num)d
 """
 
-SRC_PATHS = [
-    "/usr/share/django",         # Debian, Fedora
-    "/var/www/*/htdocs/django",  # Gentoo
-    "/srv/www/htdocs/django",    # SuSE
-    "/usr/local/www/data/django" # BSD
-]
-
-
 class Commit:
     def Commit_VServer (self):
         # Create the new Virtual Server
@@ -115,6 +107,9 @@ class Commit:
 
         # Analize Django config file
         media_web_dir = django_figure_media_prefix (django_dir)
+
+        # Python
+        python_bin = path_find_binary (['python', 'python*'], default="python")
 
         # Add the new rules
         config = CONFIG_VSERVER %(locals())
@@ -144,6 +139,10 @@ class Commit:
         src_port = cfg_source_find_free_port ()
         src_num, src_pre  = cfg_source_get_next ()
 
+        # Python
+        python_bin = path_find_binary (['python', 'python*'], default="python")
+
+        # Add the new rules
         config = CONFIG_DIR %(locals())
         CTK.cfg.apply_chunk (config)
 
@@ -203,10 +202,8 @@ class Host:
 
 class LocalSource:
     def __call__ (self):
-        guessed_src = path_find_w_default (SRC_PATHS)
-
         table = CTK.PropsTable()
-        table.Add (_('Django Local Directory'), CTK.TextCfg ('%s!django_dir'%(PREFIX), False, {'value': guessed_src}), _(NOTE_LOCAL_DIR))
+        table.Add (_('Django Local Directory'), CTK.TextCfg ('%s!django_dir'%(PREFIX), False), _(NOTE_LOCAL_DIR))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
