@@ -315,27 +315,37 @@ class ListApps:
                 remove_apps[app]['service'] = service
 
         for app in unfinished:
-            if not app in remove_apps:
-                db      = app_database_exists (app)
-                service = self._figure_app_service (app)
+            if app in remove_apps:
+                continue
 
-                remove_apps[app] = {}
-                remove_apps[app]['type'] = _('Unfinished')
-                remove_apps[app]['name'] = self._figure_app_name (app)
-                remove_apps[app]['date'] = self._figure_app_date (app)
-                if db:
-                    remove_apps[app]['db'] = db
-                if service:
-                    remove_apps[app]['service'] = service
+            db      = app_database_exists (app)
+            service = self._figure_app_service (app)
+            app_fp  = os.path.join (CHEROKEE_OWS_ROOT, app)
+
+            remove_apps[app] = {}
+            remove_apps[app]['type'] = _('Unfinished')
+            remove_apps[app]['name'] = self._figure_app_name (app)
+            remove_apps[app]['date'] = self._figure_app_date (app)
+            if db:
+                remove_apps[app]['db'] = db
+            if service:
+                remove_apps[app]['service'] = service
+
+            # Even though it's a 'unfinished' app, a virtual server
+            # might exist already.
+            for v in CTK.cfg['vserver'] or []:
+                if CTK.cfg.get_val('vserver!%s!document_root'%(v)) == app_fp:
+                    remove_apps[app]['vserver'] = v
 
         # Store in CTK.cfg
         del (CTK.cfg ['tmp!market!maintenance!remove'])
         for app in remove_apps:
-            CTK.cfg ['tmp!market!maintenance!remove!%s!del'    %(app)] = 0
-            CTK.cfg ['tmp!market!maintenance!remove!%s!name'   %(app)] = remove_apps[app]['name']
-            CTK.cfg ['tmp!market!maintenance!remove!%s!db'     %(app)] = remove_apps[app].get('db')
-            CTK.cfg ['tmp!market!maintenance!remove!%s!service'%(app)] = remove_apps[app].get('service')
-            CTK.cfg ['tmp!market!maintenance!remove!%s!date'   %(app)] = remove_apps[app].get('date')
+            CTK.cfg ['tmp!market!maintenance!remove!%s!del'     %(app)] = 0
+            CTK.cfg ['tmp!market!maintenance!remove!%s!name'    %(app)] = remove_apps[app]['name']
+            CTK.cfg ['tmp!market!maintenance!remove!%s!db'      %(app)] = remove_apps[app].get('db')
+            CTK.cfg ['tmp!market!maintenance!remove!%s!service' %(app)] = remove_apps[app].get('service')
+            CTK.cfg ['tmp!market!maintenance!remove!%s!date'    %(app)] = remove_apps[app].get('date')
+            CTK.cfg ['tmp!market!maintenance!remove!%s!vserver' %(app)] = remove_apps[app].get('vserver')
 
         # Dialog buttons
         b_next   = CTK.DruidButton_Goto  (_('Remove'), URL_MAINTENANCE_DB, True)
@@ -493,6 +503,11 @@ def _remove_app (app):
     # Perform the app removal
     fp = os.path.join (CHEROKEE_OWS_ROOT, app)
     popen.popen_sync ("rm -rf '%s'" %(fp))
+
+    # Virtual Server
+    vserver_to_remove = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!vserver'%(app))
+    if vserver_to_remove:
+        del (CTK.cfg['vserver!%s'%(vserver_to_remove)])
 
     # Database removal
     db_type = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!db'%(app))
