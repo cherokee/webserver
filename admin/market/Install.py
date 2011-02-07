@@ -524,7 +524,7 @@ class Install_Done_Content (Install_Stage):
 
         # Save / Visit
         if int(cfg_changes):
-            box += CTK.RawHTML ("<p>%s</p>" %(_(NOTE_SAVE_RESTART)))
+            box += CTK.Notice ('information', CTK.RawHTML (_(NOTE_SAVE_RESTART)))
 
         elif Cherokee.server.is_alive():
             install_type = CTK.cfg.get_val ('tmp!market!install!target')
