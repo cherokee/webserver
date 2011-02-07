@@ -497,11 +497,9 @@ def _remove_app (app):
         elif OS == 'linux':
             popen.popen_sync ('rm -f /etc/rcS.d/S99%(service)s' %(locals()))
         elif OS == 'freebsd':
-            rc_conf, src_line = service.split(':')
-            dst_line = src_line.replace('="YES"', '="NO"')
-            content = open(rc_conf, 'r').read()
-            content = content.replace(line).replace (src_line, dst_line)
-            open(rc_conf, 'w').write (content)
+            content = open('/etc/rc.conf', 'r').read()
+            content = content.replace('%s="YES"\n'%(service), '')
+            open('/etc/rc.conf', 'w').write (content)
 
         print "Remove service", service
 
