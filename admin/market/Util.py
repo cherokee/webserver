@@ -188,7 +188,7 @@ class InstructionBox (CTK.Box):
         self += notice
 
 
-    def choose_instructions (self, instructions, **kwargs):
+    def choose_instructions (self, instructions, kwargs={}):
         data    = SystemInfo.get_info()
         system  = data.get('system','').lower()
         distro  = data.get('linux_distro_id','').lower()
