@@ -172,13 +172,16 @@ class InstructionBox (CTK.Box):
 
 
     def __add_many (self, info_list):
-        lst     = CTK.List()
-        for info in info_list:
-            lst.Add (CTK.RawHTML('<pre>%s</pre>' %(_(info))))
-
         notice  = CTK.Notice ()
         notice += CTK.RawHTML ('<p>%s:</p>' %(_('Several alternatives can provide the software requirements for the installation. Try at least one of the following instructions to install your preferred option')))
-        notice += lst
+
+        for info in info_list:
+            lst = CTK.List()
+            lst.Add (CTK.RawHTML('<pre>%s</pre>' %(_(info))))
+            notice += lst
+            if info != info_list[-1]:
+                notice += CTK.RawHTML('<em>%s</em>' %(_('or')))
+
         self += notice
 
 
