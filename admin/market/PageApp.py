@@ -159,14 +159,16 @@ class App:
         tabs = CTK.Tab()
 
         # Shots
+        shots = CTK.CarouselThumbnails()
         shot_entries = info.get('shots', [])
-        if shot_entries:
-            shots = CTK.CarouselThumbnails()
-            tabs.Add (_('Screenshots'), shots)
 
+        if shot_entries:
             for s in shot_entries:
                 shots += CTK.Image ({'src': "%s/%s" %(OWS_STATIC, s)})
+        else:
+            shots += CTK.Box ({'id': 'shot-box-empty'}, CTK.RawHTML ('<h2>%s</h2>' %(_("No screenshots"))))
 
+        tabs.Add (_('Screenshots'), shots)
         tabs.Add (_('Description'), desc_panel)
         app += tabs
 
