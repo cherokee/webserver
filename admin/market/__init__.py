@@ -26,6 +26,7 @@ from ows_consts import *
 
 from Menu import *
 from Review import *
+from Report import *
 
 from PageApp import *
 from PageSearch import *

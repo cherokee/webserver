@@ -10,6 +10,7 @@ PageApp.py \
 PageCategory.py \
 PageIndex.py \
 PageSearch.py \
+Report.py \
 Review.py \
 Library.py \
 Util.py \
