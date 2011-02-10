@@ -110,7 +110,7 @@ def check_orphan_installations():
 
     if not os.path.exists (CHEROKEE_OWS_ROOT) or \
        not os.access (CHEROKEE_OWS_ROOT, os.R_OK):
-        return unfinished
+        return orphans
 
     for d in os.listdir (CHEROKEE_OWS_ROOT):
         fd = os.path.join (CHEROKEE_OWS_ROOT, d)
