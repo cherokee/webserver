@@ -56,7 +56,8 @@ class Review_Fail:
     def __call__ (self):
         cont = CTK.Container()
         cont += CTK.RawHTML ("<h1>%s</h1>"%(_('Could not send the review')))
-        cont += CTK.RawHTML (_('We are sorry, but the review could not be sent.') + " bla"*50)
+        cont += CTK.RawHTML ("<p>%s</p>"%(_('We are sorry, but the review could not be sent.')))
+        cont += CTK.RawHTML ("<p>%s</p>"%(_('Make sure you are logged in and there are no connectivity issues. If the problem persists, please contact our support team.')))
 
         buttons = CTK.DruidButtonsPanel()
         buttons += CTK.DruidButton_Close(_('Close'))
