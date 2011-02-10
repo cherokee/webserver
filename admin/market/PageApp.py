@@ -149,11 +149,12 @@ class App:
             report_dialog += druid
             druid.bind ('druid_exiting', report_dialog.JS_to_close())
 
-            report_button = CTK.Button(_("Report"), {'id':'button-report'})
-            report_button.bind('click', report_dialog.JS_to_show() + \
-                                        druid.JS_to_goto('"%s"'%(URL_REPORT)))
+            report_link = CTK.Link (None, CTK.RawHTML(_("Report issue")))
+            report_link.bind ('click', report_dialog.JS_to_show() + \
+                                       druid.JS_to_goto('"%s"'%(URL_REPORT)))
+
             report += report_dialog
-            report += report_button
+            report += report_link
 
         app  = CTK.Box ({'class': 'market-app-desc'})
         app += CTK.Box ({'class': 'market-app-desc-icon'},        CTK.Image({'src': OWS_STATIC + info['icon_big']}))

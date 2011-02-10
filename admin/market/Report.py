@@ -37,6 +37,7 @@ URL_REPORT_OK    = '%s/ok'    %(URL_REPORT)
 URL_REPORT_FAIL  = '%s/fail'  %(URL_REPORT)
 URL_REPORT_APPLY = '%s/apply' %(URL_REPORT)
 
+NOTE_REPORT_H2      = N_('Contact Support & Customer Service')
 NOTE_REPORT_EXPLAIN = N_('You are about to submit a report for an application that is not working for you.')
 NOTE_REPORT_COMMENT = N_('Please, send your report to our support team. Some information <strong>will</strong> be attached upon submission for troubleshooting purposes. This includes your configuration file along with the installation logs for the application.')
 NOTE_REPORT_ERROR   = N_('We are sorry, but the report could not be sent.')
@@ -127,6 +128,7 @@ class Report:
         submit.bind ('submit_success', CTK.DruidContent__JS_to_goto (submit.id, URL_REPORT_OK))
 
         cont  = CTK.Container()
+        cont += CTK.RawHTML ("<h2>%s</h2>"%(_(NOTE_REPORT_H2)))
         cont += CTK.RawHTML ("<p>%s</p>"%(_(NOTE_REPORT_EXPLAIN)))
         cont += CTK.RawHTML ("<p>%s</p>"%(_(NOTE_REPORT_COMMENT)))
         cont += submit
