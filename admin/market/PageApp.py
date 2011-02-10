@@ -149,7 +149,7 @@ class App:
             report_dialog += druid
             druid.bind ('druid_exiting', report_dialog.JS_to_close())
 
-            report_button = CTK.Button(_("Report"), {'id':'button-review'})
+            report_button = CTK.Button(_("Report"), {'id':'button-report'})
             report_button.bind('click', report_dialog.JS_to_show() + \
                                         druid.JS_to_goto('"%s"'%(URL_REPORT)))
             report += report_dialog
@@ -162,8 +162,8 @@ class App:
         app += CTK.Box ({'class': 'market-app-desc-version'},     CTK.RawHTML("%s: %s" %(_("Version"), info['version_string'])))
         app += CTK.Box ({'class': 'market-app-desc-url'},         by)
         app += CTK.Box ({'class': 'market-app-desc-category'},    CTK.RawHTML("%s: %s" %(_("Category"), info['category_name'])))
-        app += CTK.Box ({'class': 'market-app-desc-report'},      report)
         app += CTK.Box ({'class': 'market-app-desc-short-desc'},  CTK.RawHTML(info['summary']))
+        app += CTK.Box ({'class': 'market-app-desc-report'},      report)
         cont += app
 
         ext_description = CTK.Box ({'class': 'market-app-desc-description'})
