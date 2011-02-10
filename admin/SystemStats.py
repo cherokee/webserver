@@ -226,7 +226,12 @@ class System_stats__Linux (Thread, System_stats):
             self.cpu.cores = cores[0]
 
         # Processors
-        self.cpu.num = str (len(re.findall (r'processor.+?(\d+)\n', tmp)))
+        processors = re.findall (r'processor.+?(\d+)\n', tmp, re.I)
+        if processors:
+            self.cpu.num = str (len(processors))
+        else:
+            processors = re.findall (r'Processor[\t ]+:', tmp, re.I)
+            self.cpu.num = str (len(processors))
 
         # Speed
         hz = re.findall (r'model name.+?([\d. ]+GHz)\n', tmp)
@@ -239,7 +244,16 @@ class System_stats__Linux (Thread, System_stats):
             self.cpu.speed = hz[0]
         else:
             mhzs = re.findall (r'cpu MHz.+?([\d.]+)\n', tmp)
-            self.cpu.speed = '%s MHz' %(' + '.join(mhzs))
+            if mhzs:
+                self.cpu.speed = '%s MHz' %(' + '.join(mhzs))
+
+        if self.cpu.speed:
+            return
+
+        # Last option: BogoMIPS
+        bogomips = re.findall (r'BogoMIPS[\t ]+:[\t ]+(\d+)', tmp)
+        if bogomips:
+            self.cpu.speed = '%s BogoMIPS' %(bogomips[0])
 
     def _read_cpu (self):
         fd = open("/proc/stat", 'r')
