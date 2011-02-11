@@ -102,7 +102,7 @@ class Commit:
         mono_bin      = CTK.cfg.get_val('%s!mono_bin'%(PREFIX))
 
         # Index
-        listdir = os.listdir (get_real_path (path))
+        listdir = os.listdir (get_real_path (document_root))
         files = {'index.aspx': 'index.aspx', 'default.aspx':'default.aspx'}
         for x in listdir:
             files[x.lower()] = x
