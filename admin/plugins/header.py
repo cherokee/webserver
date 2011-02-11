@@ -108,6 +108,6 @@ class Plugin_header (RulePlugin):
         type_  = CTK.cfg.get_val ('%s!type' %(self.key), '')
 
         if type_ == 'provided':
-            return _("Header %s is provided") %(header)
+            return _("Header %(header)s is provided") %(locals())
         else:
             return "%s %s ~ %s" % (_('Header'), header, match)

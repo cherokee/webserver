@@ -137,7 +137,7 @@ class Plugin_exists (RulePlugin):
 
         files = CTK.cfg.get_val ('%s!exists' %(self.key), '').split(',')
         if len(files) == 1:
-            return _("File %s exists") %(files[0])
+            return _("File %(fname)s exists") %({'fname':files[0]})
         elif len(files) == 0:
             return _("File exists (never matched)")
 

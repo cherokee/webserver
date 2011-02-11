@@ -75,12 +75,12 @@ class Review:
 
         submit = CTK.Submitter (URL_REVIEW_APPLY)
         submit += CTK.Hidden ('application_id', application_id)
-        submit += CTK.RawHTML (_("Please, describe your experience with %s:")%(application_name))
+        submit += CTK.RawHTML (_("Please, describe your experience with %(application_name)s:")%(locals()))
         submit += CTK.Box ({'class': 'title-text'}, CTK.RawHTML (_('Title')))
         submit += CTK.TextField  ({'name': 'title',  'class': 'noauto druid-review-title'})
         submit += CTK.Box ({'class': 'review-text'}, CTK.RawHTML (_('Review')))
         submit += CTK.TextArea   ({'name': 'review', 'class': 'noauto druid-review-review'})
-        submit += CTK.Box ({'class': 'rating-text'}, CTK.RawHTML (_('How do you rate %s?')%(application_name)))
+        submit += CTK.Box ({'class': 'rating-text'}, CTK.RawHTML (_('How do you rate %(application_name)s?')%(locals())))
         submit += CTK.StarRating ({'name': 'rate',   'class': 'noauto', 'can_set': True})
         submit.bind ('submit_fail', CTK.DruidContent__JS_to_goto (submit.id, URL_REVIEW_FAIL))
         cont += submit

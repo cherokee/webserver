@@ -47,7 +47,7 @@ URL_NEW_MANUAL = r'/vserver/new/manual'
 
 HELPS = [('config_virtual_servers', N_("Virtual Servers"))]
 
-NOTE_DELETE_DIALOG = N_('<p>You are about to delete the <b>%s</b> Virtual Server.</p><p>Are you sure you want to proceed?</p>')
+NOTE_DELETE_DIALOG = N_('<p>You are about to delete the <b>%(nick_esc)s</b> Virtual Server.</p><p>Are you sure you want to proceed?</p>')
 NOTE_CLONE_DIALOG  = N_('You are about to clone a Virtual Server. Would you like to proceed?')
 NOTE_NEW_NICK      = N_('Name of the Virtual Server you are about to create. A domain name is alright.')
 NOTE_NEW_DROOT     = N_('Document Root directory of the new Virtual Server.')
@@ -210,7 +210,7 @@ class Render:
                                                                 data    = {'vserver!%s'%(k):''},
                                                                 success = dialog.JS_to_close() + \
                                                                     refresh.JS_to_refresh()))
-                    dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(nick_esc))
+                    dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(locals()))
                     self += dialog
                     remove = CTK.ImageStock('del')
                     remove.bind ('click', dialog.JS_to_show() + "return false;")

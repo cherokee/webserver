@@ -75,10 +75,10 @@ NOTE_EMAIL          = N_("You will be sent an email requesting confirmation")
 NOTE_NAME           = N_("Optionally provide your name")
 
 MAILING_LIST_INFO   = N_("""\
-There is a number of Community <a href="%s" target="_blank">Mailing Lists</a>
+There are a number of Community <a href="%(link)s" target="_blank">Mailing Lists</a>
 available for you to subscribe. You can subscribe the General Discussion
 mailing list from this interface. There is where most of the discussions
-take place.""")%(LINK_LISTS)
+take place.""")%({'link':LINK_LISTS})
 
 # Server is..
 RUNNING_NOTICE      = N_('Server is Running')
@@ -441,7 +441,7 @@ class HaltAdmin (CTK.Box):
         dialog.AddButton (_('Cancel'), "close")
         dialog.AddButton (_('Shut down'), dialog.JS_to_trigger('submit'))
         dialog += CTK.RawHTML ("<h2>%s</h2>" %(_('You are about to shut down this instance of Cherokee-admin')))
-        dialog += CTK.RawHTML ("<p>%s</p>" %(_('Are you sure do you want to proceed?')))
+        dialog += CTK.RawHTML ("<p>%s</p>" %(_('Are you sure you want to proceed?')))
         dialog += submit
         dialog.bind ('submit', dialog.JS_to_close())
         dialog.bind ('submit', "$('body').html('<h1>%s</h1>');"%(_('Cherokee-admin has been shut down')))
