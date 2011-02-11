@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2010-11-14 15:00+0100\n"
+"POT-Creation-Date: 2011-02-11 11:24+0100\n"
 "PO-Revision-Date: 2010-11-15 18:24+0100\n"
 "Last-Translator: Stefan de Konink <stefan@konink.de>\n"
 "Language-Team: none\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: cherokee-trunk/admin/PageVServers.py:48
-#: cherokee-trunk/admin/PageVServers.py:281
+#: cherokee-trunk/admin/PageVServers.py:304
 #: cherokee-trunk/admin/PageSources.py:35
-#: cherokee-trunk/admin/PageVServer.py:107
+#: cherokee-trunk/admin/PageVServer.py:134
 msgid "Virtual Servers"
 msgstr "Virtuele Server"
 
@@ -47,160 +47,183 @@ msgstr "Naam van de Virtuele Server die je wilt maken. Een domeinnaam voldoet."
 msgid "Document Root directory of the new Virtual Server."
 msgstr "Document hoofdmap voor de nieuwe virtuele server."
 
-#: cherokee-trunk/admin/PageVServers.py:126
-#: cherokee-trunk/admin/PageSource.py:301
-#: cherokee-trunk/admin/PageSource.py:340 cherokee-trunk/admin/Balancer.py:67
+#: cherokee-trunk/admin/PageVServers.py:127
+#: cherokee-trunk/admin/PageSource.py:303
+#: cherokee-trunk/admin/PageSource.py:344 cherokee-trunk/admin/Balancer.py:69
 msgid "Nick"
 msgstr "Naam"
 
-#: cherokee-trunk/admin/PageVServers.py:127
+#: cherokee-trunk/admin/PageVServers.py:128
 #: cherokee-trunk/admin/wizards/mono.py:199
-#: cherokee-trunk/admin/wizards/django.py:190
-#: cherokee-trunk/admin/wizards/uwsgi.py:243
-#: cherokee-trunk/admin/wizards/php.py:36
-#: cherokee-trunk/admin/wizards/php.py:264
-#: cherokee-trunk/admin/PageEntry.py:364 cherokee-trunk/admin/PageEntry.py:366
-#: cherokee-trunk/admin/PageVServer.py:393
-#: cherokee-trunk/admin/PageVServer.py:395 cherokee-trunk/admin/Handler.py:43
+#: cherokee-trunk/admin/wizards/django.py:189
+#: cherokee-trunk/admin/wizards/uwsgi.py:271
+#: cherokee-trunk/admin/wizards/php.py:39
+#: cherokee-trunk/admin/wizards/php.py:334
+#: cherokee-trunk/admin/PageEntry.py:371 cherokee-trunk/admin/PageEntry.py:373
+#: cherokee-trunk/admin/PageVServer.py:420
+#: cherokee-trunk/admin/PageVServer.py:422 cherokee-trunk/admin/Handler.py:43
 msgid "Document Root"
 msgstr "Hoofdmap"
 
-#: cherokee-trunk/admin/PageVServers.py:133
-#: cherokee-trunk/admin/PageVServers.py:151
-#: cherokee-trunk/admin/PageRule.py:136 packages/common/database.py:39
-#: packages/nagios/installer.py:38
+#: cherokee-trunk/admin/PageVServers.py:134
+#: cherokee-trunk/admin/PageVServers.py:152
+#: cherokee-trunk/admin/PageRule.py:136 packages/common/database.py:49
+#: packages/nagios/installer.py:49
 msgid "Manual"
 msgstr "Handleiding"
 
-#: cherokee-trunk/admin/PageVServers.py:152
+#: cherokee-trunk/admin/PageVServers.py:153
 #: cherokee-trunk/admin/PageRule.py:137
 msgid "Manual configuration"
 msgstr "Handmatige configuratie"
 
-#: cherokee-trunk/admin/PageVServers.py:192
+#: cherokee-trunk/admin/PageVServers.py:195
 msgid "Market installation"
 msgstr "Markt installatie"
 
-#: cherokee-trunk/admin/PageVServers.py:200
-#: cherokee-trunk/admin/PageSource.py:273
-#: cherokee-trunk/admin/market/Maintenance.py:302
-#: cherokee-trunk/admin/market/Maintenance.py:311
-#: cherokee-trunk/admin/PageEntry.py:381
-#: cherokee-trunk/admin/PageVServer.py:637
+#: cherokee-trunk/admin/PageVServers.py:203
+#: cherokee-trunk/admin/PageSource.py:275
+#: cherokee-trunk/admin/market/Maintenance.py:376
+#: cherokee-trunk/admin/market/Maintenance.py:385
+#: cherokee-trunk/admin/PageEntry.py:388
+#: cherokee-trunk/admin/PageVServer.py:674
 #: cherokee-trunk/admin/PageStatus.py:70 cherokee-trunk/admin/Graph.py:118
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: cherokee-trunk/admin/PageVServers.py:204
-#: cherokee-trunk/admin/PageSource.py:420 cherokee-trunk/admin/PageRule.py:208
+#: cherokee-trunk/admin/PageVServers.py:207
+#: cherokee-trunk/admin/PageSource.py:424 cherokee-trunk/admin/PageRule.py:208
 msgid "Do you really want to remove it?"
 msgstr "Wil je het echt verwijderen?"
 
-#: cherokee-trunk/admin/PageVServers.py:205
-#: cherokee-trunk/admin/PageVServers.py:242
-#: cherokee-trunk/admin/PageVServers.py:268
-#: cherokee-trunk/admin/PageSource.py:242
-#: cherokee-trunk/admin/PageSource.py:421
-#: cherokee-trunk/admin/PageSource.py:438
-#: cherokee-trunk/admin/PageSource.py:452
+#: cherokee-trunk/admin/PageVServers.py:208
+#: cherokee-trunk/admin/PageVServers.py:263
+#: cherokee-trunk/admin/PageVServers.py:291
+#: cherokee-trunk/admin/PageSource.py:243
+#: cherokee-trunk/admin/PageSource.py:425
+#: cherokee-trunk/admin/PageSource.py:442
+#: cherokee-trunk/admin/PageSource.py:456
 #: cherokee-trunk/admin/PageIndex.py:367 cherokee-trunk/admin/PageIndex.py:441
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:189
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:196
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:204
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:212
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:218
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:208
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:215
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:223
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:231
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:237
 #: cherokee-trunk/admin/CTK/CTK/Dialog.py:131
-#: cherokee-trunk/admin/plugins/redir.py:121
-#: cherokee-trunk/admin/market/Review.py:87
-#: cherokee-trunk/admin/market/Maintenance.py:279
-#: cherokee-trunk/admin/market/Install.py:141
-#: cherokee-trunk/admin/market/Install.py:188
-#: cherokee-trunk/admin/market/Install.py:217
-#: cherokee-trunk/admin/market/Install.py:267
-#: cherokee-trunk/admin/market/Install.py:295
-#: cherokee-trunk/admin/market/Install.py:350
-#: cherokee-trunk/admin/OWS_Backup.py:152
-#: cherokee-trunk/admin/OWS_Backup.py:255 cherokee-trunk/admin/PageRule.py:209
+#: cherokee-trunk/admin/plugins/redir.py:120
+#: cherokee-trunk/admin/market/Review.py:90
+#: cherokee-trunk/admin/market/Maintenance.py:353
+#: cherokee-trunk/admin/market/Maintenance.py:559
+#: cherokee-trunk/admin/market/Install.py:136
+#: cherokee-trunk/admin/market/Install.py:163
+#: cherokee-trunk/admin/market/Install.py:210
+#: cherokee-trunk/admin/market/Install.py:239
+#: cherokee-trunk/admin/market/Install.py:289
+#: cherokee-trunk/admin/market/Install.py:317
+#: cherokee-trunk/admin/market/Install.py:359
+#: cherokee-trunk/admin/market/Report.py:138
+#: cherokee-trunk/admin/OWS_Backup.py:155
+#: cherokee-trunk/admin/OWS_Backup.py:258 cherokee-trunk/admin/PageRule.py:209
 #: cherokee-trunk/admin/PageRule.py:260 cherokee-trunk/admin/PageRule.py:286
 #: cherokee-trunk/admin/Mime.py:100 cherokee-trunk/admin/Icons.py:362
-#: cherokee-trunk/admin/PageGeneral.py:214 packages/joomla/installer.py:124
-#: packages/phpmyadmin/installer.py:80 packages/magnolia/installer.py:82
-#: packages/magnolia/installer.py:95 packages/magnolia/installer.py:160
-#: packages/alfresco/installer.py:64 packages/trac/installer.py:122
-#: packages/trac/installer.py:133 packages/trac/installer.py:172
-#: packages/trac/installer.py:205 packages/vanilla/installer.py:89
-#: packages/vanilla/installer.py:103 packages/moin/installer.py:161
-#: packages/moin/installer.py:174 packages/liferay/installer.py:74
-#: packages/liferay/installer.py:87 packages/liferay/installer.py:152
-#: packages/mediawiki/installer.py:97 packages/wordpress/installer.py:90
-#: packages/nagios/installer.py:142 packages/nagios/installer.py:156
-#: packages/nagios/installer.py:182 packages/nagios/installer.py:219
-#: packages/nagios/installer.py:346 packages/nagios/installer.py:388
-#: packages/nagios/installer.py:411 packages/nagios/installer.py:439
-#: packages/redmine/installer.py:107 packages/redmine/installer.py:121
-#: packages/redmine/installer.py:137 packages/redmine/installer.py:157
-#: packages/redmine/installer.py:199 packages/redmine/installer.py:260
-#: packages/wsgidav/installer.py:74 packages/wsgidav/installer.py:88
-#: packages/wsgidav/installer.py:110 packages/wsgidav/installer.py:133
-#: packages/zencart/installer.py:83 packages/nuxeo-dam/installer.py:88
-#: packages/nuxeo-dam/installer.py:106 packages/nuxeo-dam/installer.py:174
-#: packages/hello-world-php/installer.py:77 packages/statusnet/installer.py:87
-#: packages/statusnet/installer.py:101 packages/drupal/installer.py:132
-#: packages/openx/installer.py:64 packages/openx/installer.py:78
-#: packages/sugar/installer.py:92 packages/nuxeo-dm/installer.py:88
-#: packages/nuxeo-dm/installer.py:106 packages/nuxeo-dm/installer.py:174
-#: packages/moodle/installer.py:54 packages/phpbb/installer.py:65
+#: cherokee-trunk/admin/PageGeneral.py:214 packages/joomla/installer.py:138
+#: packages/joomla/installer.py:177 packages/joomla/installer.py:196
+#: packages/joomla/installer.py:265 packages/phpmyadmin/installer.py:88
+#: packages/phpmyadmin/installer.py:128 packages/phpmyadmin/installer.py:145
+#: packages/magnolia/installer.py:92 packages/magnolia/installer.py:105
+#: packages/trac/installer.py:138 packages/trac/installer.py:167
+#: packages/trac/installer.py:229 packages/trac/installer.py:263
+#: packages/vanilla/installer.py:124 packages/vanilla/installer.py:177
+#: packages/vanilla/installer.py:194 packages/vanilla/installer.py:260
+#: packages/moin/installer.py:196 packages/moin/installer.py:213
+#: packages/drupal7/installer.py:157 packages/drupal7/installer.py:221
+#: packages/drupal7/installer.py:239 packages/drupal7/installer.py:279
+#: packages/drupal7/installer.py:352 packages/silverstripe/installer.py:117
+#: packages/silverstripe/installer.py:172
+#: packages/silverstripe/installer.py:190
+#: packages/silverstripe/installer.py:256 packages/liferay/installer.py:82
+#: packages/liferay/installer.py:95 packages/mediawiki/installer.py:109
+#: packages/mediawiki/installer.py:133 packages/mediawiki/installer.py:219
+#: packages/wordpress/installer.py:129 packages/wordpress/installer.py:168
+#: packages/wordpress/installer.py:197 packages/wordpress/installer.py:217
+#: packages/wordpress/installer.py:296 packages/nagios/installer.py:154
+#: packages/nagios/installer.py:168 packages/nagios/installer.py:196
+#: packages/nagios/installer.py:233 packages/nagios/installer.py:361
+#: packages/nagios/installer.py:440 packages/nagios/installer.py:462
+#: packages/nagios/installer.py:507 packages/redmine/installer.py:109
+#: packages/redmine/installer.py:155 packages/redmine/installer.py:190
+#: packages/redmine/installer.py:202 packages/redmine/installer.py:236
+#: packages/redmine/installer.py:256 packages/redmine/installer.py:325
+#: packages/redmine/installer.py:386 packages/wsgidav/installer.py:96
+#: packages/wsgidav/installer.py:110 packages/wsgidav/installer.py:185
+#: packages/zencart/installer.py:98 packages/zencart/installer.py:137
+#: packages/zencart/installer.py:155 packages/zencart/installer.py:223
+#: packages/nuxeo-dam/installer.py:95 packages/nuxeo-dam/installer.py:113
+#: packages/hello-world-php/installer.py:85 packages/statusnet/installer.py:97
+#: packages/statusnet/installer.py:136 packages/statusnet/installer.py:155
+#: packages/statusnet/installer.py:221 packages/drupal/installer.py:147
+#: packages/drupal/installer.py:187 packages/drupal/installer.py:205
+#: packages/drupal/installer.py:274 packages/openx/installer.py:67
+#: packages/openx/installer.py:109 packages/openx/installer.py:181
+#: packages/sugar/installer.py:105 packages/sugar/installer.py:128
+#: packages/sugar/installer.py:194 packages/nuxeo-dm/installer.py:95
+#: packages/nuxeo-dm/installer.py:113 packages/moodle/installer.py:88
+#: packages/moodle/installer.py:151 packages/moodle/installer.py:169
+#: packages/moodle/installer.py:220 packages/moodle/installer.py:293
+#: packages/phpbb/installer.py:83 packages/phpbb/installer.py:132
+#: packages/phpbb/installer.py:152 packages/phpbb/installer.py:228
 msgid "Cancel"
 msgstr "Annuleer"
 
-#: cherokee-trunk/admin/PageVServers.py:206
-#: cherokee-trunk/admin/PageSource.py:422 cherokee-trunk/admin/PageEntry.py:85
-#: cherokee-trunk/admin/PageRule.py:210
+#: cherokee-trunk/admin/PageVServers.py:209
+#: cherokee-trunk/admin/PageSource.py:426
+#: cherokee-trunk/admin/market/Maintenance.py:351
+#: cherokee-trunk/admin/PageEntry.py:85 cherokee-trunk/admin/PageRule.py:210
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: cherokee-trunk/admin/PageVServers.py:240
-#: cherokee-trunk/admin/PageVServers.py:253
+#: cherokee-trunk/admin/PageVServers.py:261
+#: cherokee-trunk/admin/PageVServers.py:274
 msgid "Add New Virtual Server"
 msgstr "Voeg nieuwe Virtual Server toe"
 
-#: cherokee-trunk/admin/PageVServers.py:243
-#: cherokee-trunk/admin/PageSource.py:243
-#: cherokee-trunk/admin/PageSource.py:439
+#: cherokee-trunk/admin/PageVServers.py:264
+#: cherokee-trunk/admin/PageSource.py:244
+#: cherokee-trunk/admin/PageSource.py:443
 #: cherokee-trunk/admin/plugins/authlist.py:93
 #: cherokee-trunk/admin/plugins/target_ip.py:79
-#: cherokee-trunk/admin/plugins/proxy.py:119
-#: cherokee-trunk/admin/plugins/proxy.py:168
-#: cherokee-trunk/admin/plugins/proxy.py:215
+#: cherokee-trunk/admin/plugins/proxy.py:120
+#: cherokee-trunk/admin/plugins/proxy.py:169
+#: cherokee-trunk/admin/plugins/proxy.py:216
 #: cherokee-trunk/admin/plugins/wildcard.py:70
-#: cherokee-trunk/admin/plugins/error_redir.py:107
-#: cherokee-trunk/admin/plugins/redir.py:120
+#: cherokee-trunk/admin/plugins/error_redir.py:111
+#: cherokee-trunk/admin/plugins/redir.py:119
 #: cherokee-trunk/admin/plugins/rehost.py:71
-#: cherokee-trunk/admin/PageEntry.py:84 cherokee-trunk/admin/PageEntry.py:231
+#: cherokee-trunk/admin/PageEntry.py:84 cherokee-trunk/admin/PageEntry.py:228
 #: cherokee-trunk/admin/PageRule.py:261 cherokee-trunk/admin/Mime.py:101
 #: cherokee-trunk/admin/Icons.py:357 cherokee-trunk/admin/CgiBase.py:150
 #: cherokee-trunk/admin/PageGeneral.py:215
 msgid "Add"
 msgstr "Voeg toe"
 
-#: cherokee-trunk/admin/PageVServers.py:247
+#: cherokee-trunk/admin/PageVServers.py:268
 msgid "Virtual Server Configuration Assistant"
 msgstr "Virtuele Servers configuratie assistent"
 
-#: cherokee-trunk/admin/PageVServers.py:267
+#: cherokee-trunk/admin/PageVServers.py:290
 msgid "Clone Virtual Server"
 msgstr "Kloon Virtual server"
 
-#: cherokee-trunk/admin/PageVServers.py:269
-#: cherokee-trunk/admin/PageSource.py:453 cherokee-trunk/admin/PageRule.py:287
+#: cherokee-trunk/admin/PageVServers.py:292
+#: cherokee-trunk/admin/PageSource.py:457 cherokee-trunk/admin/PageRule.py:287
 msgid "Clone"
 msgstr "Kloon"
 
-#: cherokee-trunk/admin/PageVServers.py:272
+#: cherokee-trunk/admin/PageVServers.py:295
 msgid "Clone Selected Virtual Server"
 msgstr "Kloon geselecteerde Virtual server"
 
-#: cherokee-trunk/admin/PageVServers.py:296
+#: cherokee-trunk/admin/PageVServers.py:320
 #: cherokee-trunk/admin/PageStatus.py:119
 msgid "Virtual Server Filtering"
 msgstr "Virtuele Server filtering"
@@ -314,84 +337,95 @@ msgstr "Waarde van de variabele"
 msgid "The selected Information Source is about to be cloned."
 msgstr "De geselecteerde Informatie Bron gaat worden gekloond."
 
-#: cherokee-trunk/admin/PageSource.py:72
-#: cherokee-trunk/admin/PageSource.py:465
-#: cherokee-trunk/admin/PageSource.py:485
-#: cherokee-trunk/admin/PageSources.py:48 cherokee-trunk/admin/Balancer.py:108
+#: cherokee-trunk/admin/PageSource.py:73
+#: cherokee-trunk/admin/PageSource.py:469
+#: cherokee-trunk/admin/PageSource.py:489
+#: cherokee-trunk/admin/PageSources.py:48 cherokee-trunk/admin/Balancer.py:127
 msgid "Information Sources"
 msgstr "Informatie Bronnen"
 
-#: cherokee-trunk/admin/PageSource.py:206
-#: cherokee-trunk/admin/PageSource.py:234
+#: cherokee-trunk/admin/PageSource.py:207
+#: cherokee-trunk/admin/PageSource.py:235
 msgid "Variable"
 msgstr "Variabele"
 
-#: cherokee-trunk/admin/PageSource.py:206
-#: cherokee-trunk/admin/PageSource.py:235
-#: cherokee-trunk/admin/plugins/proxy.py:172
-#: cherokee-trunk/admin/PageEntry.py:235 cherokee-trunk/admin/CgiBase.py:90
+#: cherokee-trunk/admin/PageSource.py:207
+#: cherokee-trunk/admin/PageSource.py:236
+#: cherokee-trunk/admin/plugins/proxy.py:173
+#: cherokee-trunk/admin/PageEntry.py:232 cherokee-trunk/admin/CgiBase.py:90
 #: cherokee-trunk/admin/CgiBase.py:154
 msgid "Value"
 msgstr "Waarde"
 
-#: cherokee-trunk/admin/PageSource.py:208
+#: cherokee-trunk/admin/PageSource.py:209
 msgid "Environment Variables"
 msgstr "Omgevings Variabelen"
 
-#: cherokee-trunk/admin/PageSource.py:241
+#: cherokee-trunk/admin/PageSource.py:242
 msgid "Add new Environment variable"
 msgstr "Voeg een nieuwe Omgevings variable toe"
 
-#: cherokee-trunk/admin/PageSource.py:250
+#: cherokee-trunk/admin/PageSource.py:251
 msgid "Add new variable"
 msgstr "Voeg een nieuwe Omgevings Variabele toe"
 
-#: cherokee-trunk/admin/PageSource.py:269
+#: cherokee-trunk/admin/PageSource.py:268
+#, fuzzy
+msgid "Source Usage"
+msgstr "Bron gebruik"
+
+#: cherokee-trunk/admin/PageSource.py:271
 #: cherokee-trunk/admin/market/PageApp.py:41
-#: cherokee-trunk/admin/PageVServer.py:629 packages/common/target.py:148
+#: cherokee-trunk/admin/market/PageApp.py:79
+#: cherokee-trunk/admin/PageVServer.py:666 packages/common/target.py:186
 msgid "Virtual Server"
 msgstr "Virtuele Server"
 
-#: cherokee-trunk/admin/PageSource.py:269
-#: cherokee-trunk/admin/PageEntry.py:395
+#: cherokee-trunk/admin/PageSource.py:271
+#: cherokee-trunk/admin/PageEntry.py:402
 msgid "Rule"
 msgstr "Regel"
 
-#: cherokee-trunk/admin/PageSource.py:300
-#: cherokee-trunk/admin/plugins/error_redir.py:100
+#: cherokee-trunk/admin/PageSource.py:297
+#, fuzzy
+msgid "Source"
+msgstr "Bronnen"
+
+#: cherokee-trunk/admin/PageSource.py:302
+#: cherokee-trunk/admin/plugins/error_redir.py:105
 #: cherokee-trunk/admin/plugins/header.py:83
-#: cherokee-trunk/admin/plugins/redir.py:77
-#: cherokee-trunk/admin/PageEntry.py:187
+#: cherokee-trunk/admin/plugins/redir.py:76
+#: cherokee-trunk/admin/PageEntry.py:184
 msgid "Type"
 msgstr "Type"
 
-#: cherokee-trunk/admin/PageSource.py:302
-#: cherokee-trunk/admin/PageSource.py:341
+#: cherokee-trunk/admin/PageSource.py:304
+#: cherokee-trunk/admin/PageSource.py:345
 #: cherokee-trunk/admin/wizards/rtorrent.py:100
 msgid "Connection"
 msgstr "Verbinding"
 
-#: cherokee-trunk/admin/PageSource.py:304
+#: cherokee-trunk/admin/PageSource.py:307
 msgid "Interpreter"
 msgstr "Interpereter"
 
-#: cherokee-trunk/admin/PageSource.py:305
+#: cherokee-trunk/admin/PageSource.py:308
 msgid "Spawning timeout"
 msgstr "Herstart uitvaltijd"
 
-#: cherokee-trunk/admin/PageSource.py:306
+#: cherokee-trunk/admin/PageSource.py:309
 msgid "Execute as User"
 msgstr "Uitvoeren als Eigenaar"
 
-#: cherokee-trunk/admin/PageSource.py:307
+#: cherokee-trunk/admin/PageSource.py:310
 msgid "Execute as Group"
 msgstr "Uitvoeren als Groep"
 
-#: cherokee-trunk/admin/PageSource.py:308
+#: cherokee-trunk/admin/PageSource.py:311
 msgid "Inherit Environment"
 msgstr "Overgenomen Omgeving"
 
-#: cherokee-trunk/admin/PageSource.py:308
+#: cherokee-trunk/admin/PageSource.py:311
 #: cherokee-trunk/admin/CTK/CTK/Image.py:75
 #: cherokee-trunk/admin/plugins/exists.py:72
 #: cherokee-trunk/admin/plugins/exists.py:77
@@ -407,7 +441,7 @@ msgstr "Overgenomen Omgeving"
 #: cherokee-trunk/admin/plugins/ldap.py:53
 #: cherokee-trunk/admin/PageAdvanced.py:150
 #: cherokee-trunk/admin/PageEntry.py:118 cherokee-trunk/admin/PageEntry.py:127
-#: cherokee-trunk/admin/PageVServer.py:124 cherokee-trunk/admin/Graph.py:125
+#: cherokee-trunk/admin/PageVServer.py:151 cherokee-trunk/admin/Graph.py:125
 #: cherokee-trunk/admin/CgiBase.py:68 cherokee-trunk/admin/CgiBase.py:70
 #: cherokee-trunk/admin/CgiBase.py:123 cherokee-trunk/admin/CgiBase.py:124
 #: cherokee-trunk/admin/CgiBase.py:125 cherokee-trunk/admin/CgiBase.py:126
@@ -415,44 +449,47 @@ msgstr "Overgenomen Omgeving"
 msgid "Enabled"
 msgstr "Geactiveerd"
 
-#: cherokee-trunk/admin/PageSource.py:409
+#: cherokee-trunk/admin/PageSource.py:413
 msgid "Deletion is forbidden"
 msgstr "Verwijdering is niet toegestaan"
 
-#: cherokee-trunk/admin/PageSource.py:412
+#: cherokee-trunk/admin/PageSource.py:416
 #: cherokee-trunk/admin/PageIndex.py:340 cherokee-trunk/admin/PageIndex.py:412
 #: cherokee-trunk/admin/CTK/CTK/Dialog.py:132
 #: cherokee-trunk/admin/CTK/CTK/Dialog.py:211
-#: cherokee-trunk/admin/market/Review.py:60
-#: cherokee-trunk/admin/market/Maintenance.py:278
-#: cherokee-trunk/admin/market/Install.py:165
-#: cherokee-trunk/admin/market/Install.py:351
-#: cherokee-trunk/admin/market/Install.py:488
-#: cherokee-trunk/admin/OWS_Backup.py:170
-#: cherokee-trunk/admin/OWS_Backup.py:183
-#: cherokee-trunk/admin/OWS_Backup.py:233
-#: cherokee-trunk/admin/OWS_Backup.py:241
-#: cherokee-trunk/admin/OWS_Backup.py:263
-#: cherokee-trunk/admin/OWS_Backup.py:275
+#: cherokee-trunk/admin/plugins/error_redir.py:110
+#: cherokee-trunk/admin/market/Review.py:63
+#: cherokee-trunk/admin/market/Maintenance.py:352
+#: cherokee-trunk/admin/market/Install.py:187
+#: cherokee-trunk/admin/market/Install.py:360
+#: cherokee-trunk/admin/market/Install.py:570
+#: cherokee-trunk/admin/market/Report.py:99
+#: cherokee-trunk/admin/market/Report.py:112
+#: cherokee-trunk/admin/OWS_Backup.py:173
+#: cherokee-trunk/admin/OWS_Backup.py:186
+#: cherokee-trunk/admin/OWS_Backup.py:236
+#: cherokee-trunk/admin/OWS_Backup.py:244
+#: cherokee-trunk/admin/OWS_Backup.py:266
+#: cherokee-trunk/admin/OWS_Backup.py:278
 #: cherokee-trunk/admin/PageException.py:89
 #: cherokee-trunk/admin/PageException.py:93
 msgid "Close"
 msgstr "Sluit"
 
-#: cherokee-trunk/admin/PageSource.py:437
-#: cherokee-trunk/admin/PageSource.py:442
+#: cherokee-trunk/admin/PageSource.py:441
+#: cherokee-trunk/admin/PageSource.py:446
 msgid "Add New Information Source"
 msgstr "Maak nieuwe Informatie Bron"
 
-#: cherokee-trunk/admin/PageSource.py:451
+#: cherokee-trunk/admin/PageSource.py:455
 msgid "Clone Information Source"
 msgstr "Kloon Informatie Bronnen"
 
-#: cherokee-trunk/admin/PageSource.py:456
+#: cherokee-trunk/admin/PageSource.py:460
 msgid "Clone Selected Information Source"
 msgstr "Dupliceer geselecteerde Informatie Bron"
 
-#: cherokee-trunk/admin/PageSource.py:476
+#: cherokee-trunk/admin/PageSource.py:480
 msgid "Sources Filtering"
 msgstr "Bron Filteren"
 
@@ -520,8 +557,8 @@ msgid "Enable Remote Services"
 msgstr "Activeer Externe Diensten"
 
 #: cherokee-trunk/admin/PageIndex.py:103
-#: cherokee-trunk/admin/market/Maintenance.py:227
-#: cherokee-trunk/admin/PageAdvanced.py:150 cherokee-trunk/admin/Page.py:128
+#: cherokee-trunk/admin/market/Maintenance.py:274
+#: cherokee-trunk/admin/PageAdvanced.py:150 cherokee-trunk/admin/Page.py:155
 #: cherokee-trunk/admin/PageStatus.py:40
 #: cherokee-trunk/admin/PageStatus.py:112
 msgid "Status"
@@ -558,8 +595,8 @@ msgid "Server Information"
 msgstr "Server informatie"
 
 #: cherokee-trunk/admin/PageIndex.py:212
-#: cherokee-trunk/admin/market/PageApp.py:102
-#: cherokee-trunk/admin/OWS_Login.py:110
+#: cherokee-trunk/admin/market/PageApp.py:125
+#: cherokee-trunk/admin/OWS_Login.py:116
 msgid "Sign in"
 msgstr "Inloggen"
 
@@ -584,13 +621,13 @@ msgstr "Geheugen"
 #: cherokee-trunk/admin/plugins/method.py:31
 #: cherokee-trunk/admin/plugins/bind.py:69
 #: cherokee-trunk/admin/plugins/bind.py:121
-#: cherokee-trunk/admin/Balancer.py:117 cherokee-trunk/admin/PageRule.py:112
+#: cherokee-trunk/admin/Balancer.py:136 cherokee-trunk/admin/PageRule.py:112
 msgid "Choose"
 msgstr "Kies"
 
 #: cherokee-trunk/admin/PageIndex.py:295
 #: cherokee-trunk/admin/plugins/dbslayer.py:51
-#: packages/redmine/installer.py:151
+#: packages/wordpress/installer.py:190 packages/redmine/installer.py:250
 msgid "Language"
 msgstr "Taal"
 
@@ -703,35 +740,39 @@ msgstr "Sluit Cherokee-Admin af"
 msgid "Welcome to Cherokee Admin"
 msgstr "Welkom bij de Cherokee Admin"
 
-#: cherokee-trunk/admin/consts.py:26 packages/redmine/tools.py:20
+#: cherokee-trunk/admin/consts.py:26 packages/wordpress/installer.py:33
+#: packages/redmine/tools.py:28
 msgid "English"
 msgstr "Engels"
 
-#: cherokee-trunk/admin/consts.py:27 packages/redmine/tools.py:22
+#: cherokee-trunk/admin/consts.py:27 packages/wordpress/installer.py:34
+#: packages/redmine/tools.py:30
 msgid "Spanish"
 msgstr "Spaans"
 
-#: cherokee-trunk/admin/consts.py:28 packages/redmine/tools.py:18
+#: cherokee-trunk/admin/consts.py:28 packages/wordpress/installer.py:32
+#: packages/redmine/tools.py:26
 msgid "German"
 msgstr "Duits"
 
-#: cherokee-trunk/admin/consts.py:29 packages/redmine/tools.py:25
+#: cherokee-trunk/admin/consts.py:29 packages/wordpress/installer.py:35
+#: packages/redmine/tools.py:33
 msgid "French"
 msgstr "Frans"
 
-#: cherokee-trunk/admin/consts.py:30 packages/redmine/tools.py:31
+#: cherokee-trunk/admin/consts.py:30 packages/redmine/tools.py:39
 msgid "Italian"
 msgstr "Italiaans"
 
-#: cherokee-trunk/admin/consts.py:31 packages/redmine/tools.py:37
+#: cherokee-trunk/admin/consts.py:31 packages/redmine/tools.py:45
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: cherokee-trunk/admin/consts.py:32 packages/redmine/tools.py:39
+#: cherokee-trunk/admin/consts.py:32 packages/redmine/tools.py:47
 msgid "Polish"
 msgstr "Pools"
 
-#: cherokee-trunk/admin/consts.py:33 packages/redmine/tools.py:48
+#: cherokee-trunk/admin/consts.py:33 packages/redmine/tools.py:56
 msgid "Swedish"
 msgstr "Zweeds"
 
@@ -743,17 +784,17 @@ msgstr "Brazilisch Portugees"
 msgid "Chinese Simplified"
 msgstr "Chinees (eenvoudig)"
 
-#: cherokee-trunk/admin/consts.py:36 packages/redmine/tools.py:15
+#: cherokee-trunk/admin/consts.py:36 packages/redmine/tools.py:23
 msgid "Catalan"
 msgstr "Catalaans"
 
-#: cherokee-trunk/admin/consts.py:37 packages/redmine/tools.py:26
+#: cherokee-trunk/admin/consts.py:37 packages/redmine/tools.py:34
 msgid "Galician"
 msgstr "Galicisch"
 
-#: cherokee-trunk/admin/consts.py:41 cherokee-trunk/admin/consts.py:125
-#: cherokee-trunk/admin/Rule.py:174 cherokee-trunk/admin/Icons.py:197
-#: cherokee-trunk/admin/Icons.py:329
+#: cherokee-trunk/admin/consts.py:41 cherokee-trunk/admin/consts.py:126
+#: cherokee-trunk/admin/consts.py:259 cherokee-trunk/admin/Rule.py:174
+#: cherokee-trunk/admin/Icons.py:197 cherokee-trunk/admin/Icons.py:329
 msgid "Default"
 msgstr "Standaard"
 
@@ -788,7 +829,7 @@ msgid "List & Send"
 msgstr "Toon & Verstuur"
 
 #: cherokee-trunk/admin/consts.py:52 cherokee-trunk/admin/plugins/file.py:29
-#: cherokee-trunk/admin/PageNewConfig.py:160
+#: cherokee-trunk/admin/PageNewConfig.py:174
 msgid "Static Content"
 msgstr "Statische Inhoud"
 
@@ -797,7 +838,7 @@ msgid "Only Listing"
 msgstr "Alleen lijst"
 
 #: cherokee-trunk/admin/consts.py:54
-#: cherokee-trunk/admin/plugins/error_redir.py:99
+#: cherokee-trunk/admin/plugins/error_redir.py:104
 #: cherokee-trunk/admin/wizards/hotlinking.py:151
 msgid "Redirection"
 msgstr "Herleiding"
@@ -811,7 +852,7 @@ msgid "SCGI"
 msgstr "SCGI"
 
 #: cherokee-trunk/admin/consts.py:57 cherokee-trunk/admin/wizards/List.py:108
-#: cherokee-trunk/admin/wizards/uwsgi.py:43
+#: cherokee-trunk/admin/wizards/uwsgi.py:55
 msgid "uWSGI"
 msgstr "uWSGI"
 
@@ -952,227 +993,272 @@ msgstr "Rond verdelen"
 msgid "IP Hash"
 msgstr "IP Hash"
 
-#: cherokee-trunk/admin/consts.py:115
+#: cherokee-trunk/admin/consts.py:112
+#, fuzzy
+msgid "Failover"
+msgstr "Filter"
+
+#: cherokee-trunk/admin/consts.py:116
 msgid "Local interpreter"
 msgstr "Lokale interpreter"
 
-#: cherokee-trunk/admin/consts.py:116
+#: cherokee-trunk/admin/consts.py:117
 msgid "Remote host"
 msgstr "Externe Computer"
 
-#: cherokee-trunk/admin/consts.py:120
+#: cherokee-trunk/admin/consts.py:121
 msgid "GZip"
 msgstr "GZip"
 
-#: cherokee-trunk/admin/consts.py:121
+#: cherokee-trunk/admin/consts.py:122
 msgid "Deflate"
 msgstr "Deflate"
 
-#: cherokee-trunk/admin/consts.py:126
+#: cherokee-trunk/admin/consts.py:127
 msgid "FIFO"
 msgstr "FIFO"
 
-#: cherokee-trunk/admin/consts.py:127
+#: cherokee-trunk/admin/consts.py:128
 msgid "Round-robin"
 msgstr "Rond verdelen"
 
-#: cherokee-trunk/admin/consts.py:128
+#: cherokee-trunk/admin/consts.py:129
 msgid "Dynamic"
 msgstr "Dynamisch"
 
-#: cherokee-trunk/admin/consts.py:132 packages/common/database.py:38
-#: packages/nagios/installer.py:37
+#: cherokee-trunk/admin/consts.py:133 packages/common/database.py:48
+#: packages/nagios/installer.py:48
 msgid "Automatic"
 msgstr "Autotisch"
 
-#: cherokee-trunk/admin/consts.py:142
-#: cherokee-trunk/admin/plugins/error_redir.py:34
+#: cherokee-trunk/admin/consts.py:143
+#: cherokee-trunk/admin/plugins/error_redir.py:35
 msgid "External"
 msgstr "Externe"
 
-#: cherokee-trunk/admin/consts.py:143
-#: cherokee-trunk/admin/plugins/error_redir.py:33
+#: cherokee-trunk/admin/consts.py:144
+#: cherokee-trunk/admin/plugins/error_redir.py:34
 msgid "Internal"
 msgstr "Interne"
 
-#: cherokee-trunk/admin/consts.py:184
+#: cherokee-trunk/admin/consts.py:185
 #: cherokee-trunk/admin/plugins/directory.py:31
-#: cherokee-trunk/admin/Icons.py:198 cherokee-trunk/admin/Icons.py:330
-#: packages/common/target.py:149
+#: cherokee-trunk/admin/market/PageApp.py:80 cherokee-trunk/admin/Icons.py:198
+#: cherokee-trunk/admin/Icons.py:330 packages/common/target.py:187
 msgid "Directory"
 msgstr "Map"
 
-#: cherokee-trunk/admin/consts.py:185
+#: cherokee-trunk/admin/consts.py:186
 #: cherokee-trunk/admin/plugins/extensions.py:61
 #: cherokee-trunk/admin/Mime.py:86 cherokee-trunk/admin/Mime.py:121
 #: cherokee-trunk/admin/Icons.py:129 cherokee-trunk/admin/Icons.py:328
 msgid "Extensions"
 msgstr "Extenties"
 
-#: cherokee-trunk/admin/consts.py:186
+#: cherokee-trunk/admin/consts.py:187
 #: cherokee-trunk/admin/plugins/request.py:31
-#: cherokee-trunk/admin/plugins/proxy.py:93
-#: cherokee-trunk/admin/plugins/proxy.py:143
+#: cherokee-trunk/admin/plugins/proxy.py:94
+#: cherokee-trunk/admin/plugins/proxy.py:144
 #: cherokee-trunk/admin/plugins/url_arg.py:76
 #: cherokee-trunk/admin/plugins/url_arg.py:95
 #: cherokee-trunk/admin/plugins/header.py:86
-#: cherokee-trunk/admin/plugins/redir.py:77
-#: cherokee-trunk/admin/plugins/redir.py:107
+#: cherokee-trunk/admin/plugins/redir.py:76
+#: cherokee-trunk/admin/plugins/redir.py:106
 msgid "Regular Expression"
 msgstr "Reguliere Expressie"
 
-#: cherokee-trunk/admin/consts.py:187
-#: cherokee-trunk/admin/plugins/proxy.py:192
+#: cherokee-trunk/admin/consts.py:188
+#: cherokee-trunk/admin/plugins/proxy.py:193
 #: cherokee-trunk/admin/plugins/header.py:82
 #: cherokee-trunk/admin/plugins/header.py:113
-#: cherokee-trunk/admin/PageEntry.py:187 cherokee-trunk/admin/PageEntry.py:235
+#: cherokee-trunk/admin/PageEntry.py:184 cherokee-trunk/admin/PageEntry.py:232
 msgid "Header"
 msgstr "Hoofdregel"
 
-#: cherokee-trunk/admin/consts.py:188
+#: cherokee-trunk/admin/consts.py:189
 msgid "File Exists"
 msgstr "Bestand Bestaat"
 
-#: cherokee-trunk/admin/consts.py:189
+#: cherokee-trunk/admin/consts.py:190
 msgid "HTTP Method"
 msgstr "HTTP Methode"
 
-#: cherokee-trunk/admin/consts.py:190 cherokee-trunk/admin/plugins/bind.py:76
+#: cherokee-trunk/admin/consts.py:191 cherokee-trunk/admin/plugins/bind.py:76
 #: cherokee-trunk/admin/plugins/bind.py:129
 msgid "Incoming IP/Port"
 msgstr "Binnenkomende IP/Poort"
 
-#: cherokee-trunk/admin/consts.py:191
+#: cherokee-trunk/admin/consts.py:192
 msgid "SSL / TLS"
 msgstr ""
 
-#: cherokee-trunk/admin/consts.py:192
+#: cherokee-trunk/admin/consts.py:193
 #: cherokee-trunk/admin/plugins/fullpath.py:66
 #: cherokee-trunk/admin/plugins/fullpath.py:98
 msgid "Full Path"
 msgstr "Volledig pad"
 
-#: cherokee-trunk/admin/consts.py:193 cherokee-trunk/admin/plugins/from.py:71
+#: cherokee-trunk/admin/consts.py:194 cherokee-trunk/admin/plugins/from.py:71
 msgid "Connected from"
 msgstr "Verbonden van"
 
-#: cherokee-trunk/admin/consts.py:194
+#: cherokee-trunk/admin/consts.py:195
 msgid "URL Argument"
 msgstr "URL argument"
 
-#: cherokee-trunk/admin/consts.py:195
+#: cherokee-trunk/admin/consts.py:196
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: cherokee-trunk/admin/consts.py:199
+#: cherokee-trunk/admin/consts.py:200
 msgid "Match Nickname"
 msgstr "Bijnaam gelijk"
 
-#: cherokee-trunk/admin/consts.py:200
+#: cherokee-trunk/admin/consts.py:201
 msgid "Wildcards"
 msgstr "Jokers"
 
-#: cherokee-trunk/admin/consts.py:201 cherokee-trunk/admin/plugins/redir.py:39
+#: cherokee-trunk/admin/consts.py:202 cherokee-trunk/admin/plugins/redir.py:39
 #: cherokee-trunk/admin/plugins/rehost.py:53
 msgid "Regular Expressions"
 msgstr "Reguliere Expressies"
 
-#: cherokee-trunk/admin/consts.py:202
+#: cherokee-trunk/admin/consts.py:203
 msgid "Server IP"
 msgstr "Server IP"
 
-#: cherokee-trunk/admin/consts.py:206 cherokee-trunk/admin/consts.py:251
+#: cherokee-trunk/admin/consts.py:207 cherokee-trunk/admin/consts.py:252
 msgid "Not set"
 msgstr "Niet gezet"
 
-#: cherokee-trunk/admin/consts.py:207
+#: cherokee-trunk/admin/consts.py:208
 msgid "Already expired on 1970"
 msgstr "Reeks vervallen in 1970"
 
-#: cherokee-trunk/admin/consts.py:208
+#: cherokee-trunk/admin/consts.py:209
 msgid "Do not expire until 2038"
 msgstr "Vervalt niet tot 2038"
 
-#: cherokee-trunk/admin/consts.py:209
+#: cherokee-trunk/admin/consts.py:210
 msgid "Custom value"
 msgstr "Eigen waarde"
 
-#: cherokee-trunk/admin/consts.py:213
+#: cherokee-trunk/admin/consts.py:214
 msgid "No TLS/SSL"
 msgstr "Geen TLS/SSL"
 
-#: cherokee-trunk/admin/consts.py:214
+#: cherokee-trunk/admin/consts.py:215
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: cherokee-trunk/admin/consts.py:218 cherokee-trunk/admin/util.py:91
+#: cherokee-trunk/admin/consts.py:219 cherokee-trunk/admin/util.py:91
 msgid "Off"
 msgstr "Uit"
 
-#: cherokee-trunk/admin/consts.py:219
+#: cherokee-trunk/admin/consts.py:220
 msgid "Enhanced Virtual Hosting"
 msgstr "Uitgebreide Virtuele Hosting"
 
-#: cherokee-trunk/admin/consts.py:223
+#: cherokee-trunk/admin/consts.py:224 packages/nagios/installer.py:509
 msgid "Skip"
 msgstr "Sla over"
 
-#: cherokee-trunk/admin/consts.py:224 cherokee-trunk/admin/PageVServer.py:531
+#: cherokee-trunk/admin/consts.py:225 cherokee-trunk/admin/PageVServer.py:568
 msgid "Accept"
 msgstr "Accepteer"
 
-#: cherokee-trunk/admin/consts.py:225
+#: cherokee-trunk/admin/consts.py:226
 msgid "Require"
 msgstr "Vereist"
 
-#: cherokee-trunk/admin/consts.py:229 cherokee-trunk/admin/consts.py:246
-#: cherokee-trunk/admin/PageVServer.py:467
+#: cherokee-trunk/admin/consts.py:230 cherokee-trunk/admin/consts.py:247
+#: cherokee-trunk/admin/PageVServer.py:493
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: cherokee-trunk/admin/consts.py:230
+#: cherokee-trunk/admin/consts.py:231
 msgid "RRDtool graphs"
 msgstr "RRDtool grafieken"
 
-#: cherokee-trunk/admin/consts.py:234
+#: cherokee-trunk/admin/consts.py:235
 msgid "Local time"
 msgstr "Lokale tijd"
 
-#: cherokee-trunk/admin/consts.py:235
+#: cherokee-trunk/admin/consts.py:236
 msgid "UTC: Coordinated Universal Time"
 msgstr "UTC: Coordinated Universal Time"
 
-#: cherokee-trunk/admin/consts.py:239
+#: cherokee-trunk/admin/consts.py:240
 msgid "JSON"
 msgstr "JSON"
 
-#: cherokee-trunk/admin/consts.py:240
+#: cherokee-trunk/admin/consts.py:241
 msgid "Python"
 msgstr "Python"
 
-#: cherokee-trunk/admin/consts.py:241 cherokee-trunk/admin/wizards/List.py:119
+#: cherokee-trunk/admin/consts.py:242 cherokee-trunk/admin/wizards/List.py:119
 msgid "PHP"
 msgstr "PHP"
 
-#: cherokee-trunk/admin/consts.py:242
+#: cherokee-trunk/admin/consts.py:243
 msgid "Ruby"
 msgstr "Ruby"
 
-#: cherokee-trunk/admin/consts.py:247
+#: cherokee-trunk/admin/consts.py:248
 msgid "POST tracker"
 msgstr "POST volger"
 
-#: cherokee-trunk/admin/consts.py:252
+#: cherokee-trunk/admin/consts.py:253
 msgid "Public"
 msgstr "Publiek"
 
-#: cherokee-trunk/admin/consts.py:253
+#: cherokee-trunk/admin/consts.py:254
 msgid "Private"
 msgstr "Prive"
 
-#: cherokee-trunk/admin/consts.py:254
+#: cherokee-trunk/admin/consts.py:255
 msgid "No Cache"
 msgstr "Geen Cache"
+
+#: cherokee-trunk/admin/consts.py:260
+msgid "0 - No compression"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:261
+msgid "1"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:262
+msgid "2"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:263
+msgid "3"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:264
+msgid "4"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:265
+msgid "5"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:266
+msgid "6"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:267
+msgid "7"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:268
+msgid "8"
+msgstr ""
+
+#: cherokee-trunk/admin/consts.py:269
+msgid "9 - Max compression"
+msgstr ""
 
 #: cherokee-trunk/admin/CTK/CTK/Image.py:48
 #: cherokee-trunk/admin/CTK/CTK/Image.py:49
@@ -1201,44 +1287,52 @@ msgid "Disable"
 msgstr "Zet uit"
 
 #: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:121
-#: packages/nagios/installer.py:403
+#: packages/nagios/installer.py:454
 msgid "Enable"
 msgstr "Activeer"
 
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:190
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:197
-#: cherokee-trunk/admin/CTK/CTK/Paginator.py:83
-#: cherokee-trunk/admin/market/Maintenance.py:277
-#: packages/joomla/installer.py:125 packages/phpmyadmin/installer.py:81
-#: packages/magnolia/installer.py:96 packages/magnolia/installer.py:161
-#: packages/alfresco/installer.py:65 packages/trac/installer.py:123
-#: packages/trac/installer.py:206 packages/vanilla/installer.py:104
-#: packages/moin/installer.py:162 packages/moin/installer.py:175
-#: packages/liferay/installer.py:88 packages/liferay/installer.py:153
-#: packages/mediawiki/installer.py:98 packages/wordpress/installer.py:91
-#: packages/nagios/installer.py:157 packages/nagios/installer.py:183
-#: packages/nagios/installer.py:220 packages/nagios/installer.py:389
-#: packages/nagios/installer.py:412 packages/redmine/installer.py:122
-#: packages/redmine/installer.py:138 packages/redmine/installer.py:158
-#: packages/redmine/installer.py:261 packages/wsgidav/installer.py:89
-#: packages/wsgidav/installer.py:134 packages/zencart/installer.py:84
-#: packages/nuxeo-dam/installer.py:107 packages/nuxeo-dam/installer.py:175
-#: packages/hello-world-php/installer.py:78
-#: packages/statusnet/installer.py:102 packages/drupal/installer.py:133
-#: packages/openx/installer.py:79 packages/sugar/installer.py:93
-#: packages/nuxeo-dm/installer.py:107 packages/nuxeo-dm/installer.py:175
-#: packages/moodle/installer.py:55 packages/phpbb/installer.py:66
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:209
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:216
+#: cherokee-trunk/admin/CTK/CTK/Paginator.py:84
+#: cherokee-trunk/admin/CTK/tests/druid-submits.py:41
+#: packages/joomla/installer.py:178 packages/joomla/installer.py:197
+#: packages/phpmyadmin/installer.py:129 packages/phpmyadmin/installer.py:146
+#: packages/magnolia/installer.py:106 packages/magnolia/installer.py:174
+#: packages/trac/installer.py:168 packages/trac/installer.py:264
+#: packages/vanilla/installer.py:178 packages/vanilla/installer.py:195
+#: packages/moin/installer.py:197 packages/moin/installer.py:214
+#: packages/drupal7/installer.py:222 packages/drupal7/installer.py:240
+#: packages/drupal7/installer.py:280 packages/silverstripe/installer.py:173
+#: packages/silverstripe/installer.py:191 packages/liferay/installer.py:96
+#: packages/liferay/installer.py:164 packages/mediawiki/installer.py:134
+#: packages/wordpress/installer.py:169 packages/wordpress/installer.py:198
+#: packages/wordpress/installer.py:218 packages/nagios/installer.py:169
+#: packages/nagios/installer.py:197 packages/nagios/installer.py:234
+#: packages/nagios/installer.py:463 packages/redmine/installer.py:156
+#: packages/redmine/installer.py:203 packages/redmine/installer.py:237
+#: packages/redmine/installer.py:257 packages/redmine/installer.py:387
+#: packages/wsgidav/installer.py:111 packages/wsgidav/installer.py:186
+#: packages/zencart/installer.py:138 packages/zencart/installer.py:156
+#: packages/nuxeo-dam/installer.py:114 packages/nuxeo-dam/installer.py:185
+#: packages/hello-world-php/installer.py:86
+#: packages/statusnet/installer.py:137 packages/statusnet/installer.py:156
+#: packages/drupal/installer.py:188 packages/drupal/installer.py:206
+#: packages/openx/installer.py:110 packages/sugar/installer.py:129
+#: packages/nuxeo-dm/installer.py:114 packages/nuxeo-dm/installer.py:185
+#: packages/moodle/installer.py:152 packages/moodle/installer.py:170
+#: packages/moodle/installer.py:221 packages/phpbb/installer.py:133
+#: packages/phpbb/installer.py:153
 msgid "Next"
 msgstr "Volgende"
 
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:198
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:206
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:217
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:225
 msgid "Prev"
 msgstr "Vorige"
 
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:205
-#: cherokee-trunk/admin/CTK/CTK/Druid.py:213
-#: cherokee-trunk/admin/PageNewConfig.py:143
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:224
+#: cherokee-trunk/admin/CTK/CTK/Druid.py:232
+#: cherokee-trunk/admin/PageNewConfig.py:153
 msgid "Create"
 msgstr "Creeer"
 
@@ -1251,19 +1345,19 @@ msgstr "FOUT: Kan '%s' niet uitpakken"
 msgid "Could not copy configuration to "
 msgstr "Kan de configuratie niet kopieren naar"
 
-#: cherokee-trunk/admin/CTK/CTK/AjaxUpload.py:83
+#: cherokee-trunk/admin/CTK/CTK/AjaxUpload.py:106
 msgid "Upload"
 msgstr ""
 
-#: cherokee-trunk/admin/CTK/CTK/Carousel.py:52
+#: cherokee-trunk/admin/CTK/CTK/Carousel.py:66
 msgid "left"
 msgstr "links"
 
-#: cherokee-trunk/admin/CTK/CTK/Carousel.py:53
+#: cherokee-trunk/admin/CTK/CTK/Carousel.py:67
 msgid "right"
 msgstr "rechts"
 
-#: cherokee-trunk/admin/CTK/CTK/Paginator.py:62
+#: cherokee-trunk/admin/CTK/CTK/Paginator.py:63
 msgid "Previous"
 msgstr "Vorige"
 
@@ -1395,7 +1489,7 @@ msgstr ""
 "worden geaccepteerd:<br />"
 
 #: cherokee-trunk/admin/plugins/evhost.py:33
-#: cherokee-trunk/admin/PageVServer.py:421
+#: cherokee-trunk/admin/PageVServer.py:448
 msgid "Advanced Virtual Hosting"
 msgstr "Geavanceerde Virtuele Hosting"
 
@@ -1406,6 +1500,28 @@ msgstr "Dynamische Hoofdmap"
 #: cherokee-trunk/admin/plugins/evhost.py:42
 msgid "Check Document Root"
 msgstr "Controleer Hoofdmap"
+
+#: cherokee-trunk/admin/plugins/evhost.py:42
+#: cherokee-trunk/admin/plugins/extensions.py:62
+msgid "Check"
+msgstr "Controleer"
+
+#: cherokee-trunk/admin/plugins/gzip.py:29
+#: cherokee-trunk/admin/PageEntry.py:71
+msgid "GZip encoder"
+msgstr "GZip encoder"
+
+#: cherokee-trunk/admin/plugins/gzip.py:31
+#: cherokee-trunk/admin/plugins/deflate.py:31
+msgid ""
+"Compression Level from 0 to 9, where 0 is no compression, 1 best speed, and "
+"9 best compression."
+msgstr ""
+
+#: cherokee-trunk/admin/plugins/gzip.py:38
+#: cherokee-trunk/admin/plugins/deflate.py:38
+msgid "Compression Level"
+msgstr ""
 
 #: cherokee-trunk/admin/plugins/request.py:27
 msgid "Regular expression against which the request will be executed."
@@ -1466,6 +1582,11 @@ msgstr "Platte-tekst Wachtwoord Bestand"
 msgid "Is SSL/TLS"
 msgstr ""
 
+#: cherokee-trunk/admin/plugins/deflate.py:29
+#: cherokee-trunk/admin/PageEntry.py:72
+msgid "Deflate encoder"
+msgstr "Deflate encoder"
+
 #: cherokee-trunk/admin/plugins/authlist.py:32
 msgid "At least one user/password pair should be configured."
 msgstr ""
@@ -1478,16 +1599,16 @@ msgstr "Authenticatie lijst"
 
 #: cherokee-trunk/admin/plugins/authlist.py:63
 #: cherokee-trunk/admin/plugins/authlist.py:97
-#: cherokee-trunk/admin/PageGeneral.py:241 packages/magnolia/installer.py:153
+#: cherokee-trunk/admin/PageGeneral.py:241 packages/magnolia/installer.py:166
 msgid "User"
 msgstr "Gebruiker"
 
 #: cherokee-trunk/admin/plugins/authlist.py:63
 #: cherokee-trunk/admin/plugins/authlist.py:97
-#: cherokee-trunk/admin/OWS_Login.py:108 packages/magnolia/installer.py:155
-#: packages/common/database.py:448 packages/liferay/installer.py:147
-#: packages/nagios/installer.py:172 packages/redmine/installer.py:257
-#: packages/nuxeo-dam/installer.py:169 packages/nuxeo-dm/installer.py:169
+#: cherokee-trunk/admin/OWS_Login.py:114 packages/magnolia/installer.py:168
+#: packages/common/database.py:565 packages/liferay/installer.py:159
+#: packages/nagios/installer.py:186 packages/redmine/installer.py:383
+#: packages/nuxeo-dam/installer.py:180 packages/nuxeo-dm/installer.py:180
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -1515,10 +1636,10 @@ msgstr "Sta PathInfo toe"
 #: cherokee-trunk/admin/plugins/common.py:42
 #: cherokee-trunk/admin/plugins/common.py:43
 #: cherokee-trunk/admin/plugins/dirlist.py:55
-#: cherokee-trunk/admin/plugins/proxy.py:239
+#: cherokee-trunk/admin/plugins/proxy.py:240
 #: cherokee-trunk/admin/PageAdvanced.py:176
 #: cherokee-trunk/admin/PageEntry.py:79
-#: cherokee-trunk/admin/PageVServer.py:410
+#: cherokee-trunk/admin/PageVServer.py:437
 msgid "Allow"
 msgstr "Sta toe"
 
@@ -1578,7 +1699,7 @@ msgstr "Achtereenschakelen"
 
 #: cherokee-trunk/admin/plugins/dbslayer.py:65
 #: cherokee-trunk/admin/plugins/scgi.py:49
-#: cherokee-trunk/admin/plugins/proxy.py:276
+#: cherokee-trunk/admin/plugins/proxy.py:278
 #: cherokee-trunk/admin/plugins/uwsgi.py:49
 #: cherokee-trunk/admin/plugins/fcgi.py:49
 msgid "Balancer"
@@ -1655,7 +1776,7 @@ msgstr "Toon grootte"
 #: cherokee-trunk/admin/plugins/dirlist.py:52
 #: cherokee-trunk/admin/plugins/dirlist.py:53
 #: cherokee-trunk/admin/plugins/dirlist.py:54
-#: cherokee-trunk/admin/plugins/redir.py:106
+#: cherokee-trunk/admin/plugins/redir.py:105
 msgid "Show"
 msgstr "Toon"
 
@@ -1744,76 +1865,95 @@ msgstr ""
 "Behoud de originele \"Server: \" kopregel die is verzonden door de back-end "
 "server. (Standaard: Nee)"
 
-#: cherokee-trunk/admin/plugins/proxy.py:93
-#: cherokee-trunk/admin/plugins/proxy.py:123
-#: cherokee-trunk/admin/plugins/proxy.py:143
-#: cherokee-trunk/admin/plugins/redir.py:77
-#: cherokee-trunk/admin/plugins/redir.py:108
+#: cherokee-trunk/admin/plugins/proxy.py:41
+#, fuzzy
+msgid ""
+"Use the VServer error handler, whenever an error response is received from a "
+"back-end server. (Default: No)"
+msgstr ""
+"Behoud de originele \"Server: \" kopregel die is verzonden door de back-end "
+"server. (Standaard: Nee)"
+
+#: cherokee-trunk/admin/plugins/proxy.py:94
+#: cherokee-trunk/admin/plugins/proxy.py:124
+#: cherokee-trunk/admin/plugins/proxy.py:144
+#: cherokee-trunk/admin/plugins/redir.py:76
+#: cherokee-trunk/admin/plugins/redir.py:107
 msgid "Substitution"
 msgstr "Vervanging"
 
-#: cherokee-trunk/admin/plugins/proxy.py:123
+#: cherokee-trunk/admin/plugins/proxy.py:124
 msgid "Add RegEx"
 msgstr "Voeg Reguliere Expressie toe"
 
-#: cherokee-trunk/admin/plugins/proxy.py:172
+#: cherokee-trunk/admin/plugins/proxy.py:173
 msgid "Add Header Entry"
 msgstr "Maak Kopregel"
 
-#: cherokee-trunk/admin/plugins/proxy.py:219
+#: cherokee-trunk/admin/plugins/proxy.py:220
 msgid "Hide Header"
 msgstr "Verberg Kopregel"
 
-#: cherokee-trunk/admin/plugins/proxy.py:238
+#: cherokee-trunk/admin/plugins/proxy.py:239
 #: cherokee-trunk/admin/PageAdvanced.py:138
 msgid "Reuse connections"
 msgstr "Hergebruik verbindingen"
 
-#: cherokee-trunk/admin/plugins/proxy.py:239
+#: cherokee-trunk/admin/plugins/proxy.py:240
 msgid "Allow Keepalive"
 msgstr "Sta Blijf-inleven toe"
 
-#: cherokee-trunk/admin/plugins/proxy.py:240
+#: cherokee-trunk/admin/plugins/proxy.py:241
 msgid "Preserve Host Header"
 msgstr "Behoud kopregel"
 
-#: cherokee-trunk/admin/plugins/proxy.py:240
 #: cherokee-trunk/admin/plugins/proxy.py:241
+#: cherokee-trunk/admin/plugins/proxy.py:242
 msgid "Preserve"
 msgstr "Behoud"
 
-#: cherokee-trunk/admin/plugins/proxy.py:241
+#: cherokee-trunk/admin/plugins/proxy.py:242
 msgid "Preserve Server Header"
 msgstr "Behoud Serverkopregel"
 
-#: cherokee-trunk/admin/plugins/proxy.py:246
+#: cherokee-trunk/admin/plugins/proxy.py:243
+#, fuzzy
+msgid "Use VServer error handler"
+msgstr "Behoud Serverkopregel"
+
+#: cherokee-trunk/admin/plugins/proxy.py:243
+#, fuzzy
+msgid "Use it"
+msgstr "Gebruik TLS"
+
+#: cherokee-trunk/admin/plugins/proxy.py:248
 msgid "Reverse Proxy Settings"
 msgstr "Tegengestelde Proxy Instellingen"
 
-#: cherokee-trunk/admin/plugins/proxy.py:250
+#: cherokee-trunk/admin/plugins/proxy.py:252
 msgid "Request"
 msgstr "Verzoek"
 
-#: cherokee-trunk/admin/plugins/proxy.py:252
-#: cherokee-trunk/admin/plugins/proxy.py:264
+#: cherokee-trunk/admin/plugins/proxy.py:254
+#: cherokee-trunk/admin/plugins/proxy.py:266
 msgid "URL Rewriting"
 msgstr "URL Herschrijven"
 
-#: cherokee-trunk/admin/plugins/proxy.py:255
-#: cherokee-trunk/admin/plugins/proxy.py:267
+#: cherokee-trunk/admin/plugins/proxy.py:257
+#: cherokee-trunk/admin/plugins/proxy.py:269
 msgid "Header Addition"
 msgstr "Hoofdregel toevoeging"
 
-#: cherokee-trunk/admin/plugins/proxy.py:258
-#: cherokee-trunk/admin/plugins/proxy.py:270
+#: cherokee-trunk/admin/plugins/proxy.py:260
+#: cherokee-trunk/admin/plugins/proxy.py:272
 msgid "Hide Headers"
 msgstr "Verberg Regels"
 
-#: cherokee-trunk/admin/plugins/proxy.py:262
+#: cherokee-trunk/admin/plugins/proxy.py:264
 msgid "Reply"
 msgstr "Antwoord"
 
-#: cherokee-trunk/admin/plugins/proxy.py:278
+#: cherokee-trunk/admin/plugins/proxy.py:280
 msgid "Back-end Servers"
 msgstr "Achterliggende Servers"
 
@@ -1889,8 +2029,8 @@ msgid "Secret"
 msgstr "Beveiligd"
 
 #: cherokee-trunk/admin/plugins/secdownload.py:44
-#: cherokee-trunk/admin/PageEntry.py:282
-#: cherokee-trunk/admin/PageVServer.py:120
+#: cherokee-trunk/admin/PageEntry.py:279
+#: cherokee-trunk/admin/PageVServer.py:147
 msgid "Timeout"
 msgstr "Uitvaltijd"
 
@@ -1965,7 +2105,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/plugins/mysql.py:75
 #: cherokee-trunk/admin/wizards/coldfusion.py:194
-#: cherokee-trunk/admin/Balancer.py:67
+#: cherokee-trunk/admin/Balancer.py:69
 msgid "Host"
 msgstr "Systeem"
 
@@ -1984,8 +2124,8 @@ msgid "Unix Socket"
 msgstr "Unix Socket"
 
 #: cherokee-trunk/admin/plugins/mysql.py:80
-#: cherokee-trunk/admin/market/Maintenance.py:227
-#: packages/common/database.py:446
+#: cherokee-trunk/admin/market/Maintenance.py:274
+#: packages/common/database.py:563
 msgid "Database"
 msgstr "Databank"
 
@@ -2001,31 +2141,31 @@ msgstr "Wachtwoord Hash"
 msgid "MySQL Connection"
 msgstr "MySQL verbinding"
 
-#: cherokee-trunk/admin/plugins/error_redir.py:37
+#: cherokee-trunk/admin/plugins/error_redir.py:42
 msgid "HTTP Error to match."
 msgstr "HTTP Fout te toetsen."
 
-#: cherokee-trunk/admin/plugins/error_redir.py:38
+#: cherokee-trunk/admin/plugins/error_redir.py:43
 msgid "Target to access whenever the HTTP Error occurs."
 msgstr "Doel om te benaderen wanneer een HTTP Fout optreed."
 
-#: cherokee-trunk/admin/plugins/error_redir.py:39
+#: cherokee-trunk/admin/plugins/error_redir.py:44
 msgid "Whether the redirection should be Internal or External."
 msgstr "Of de herleiding Intern of Extern moet zijn."
 
-#: cherokee-trunk/admin/plugins/error_redir.py:94
+#: cherokee-trunk/admin/plugins/error_redir.py:99
 msgid "Default Error"
 msgstr "Standaard fout"
 
-#: cherokee-trunk/admin/plugins/error_redir.py:98
+#: cherokee-trunk/admin/plugins/error_redir.py:103
 msgid "Error"
 msgstr "Fout"
 
-#: cherokee-trunk/admin/plugins/error_redir.py:102
+#: cherokee-trunk/admin/plugins/error_redir.py:109
 msgid "Add New Custom Error"
 msgstr "Voeg nieuwe Eigen Foutmelding toe"
 
-#: cherokee-trunk/admin/plugins/error_redir.py:114
+#: cherokee-trunk/admin/plugins/error_redir.py:121
 #: cherokee-trunk/admin/Mime.py:104
 msgid "Add New"
 msgstr "Voeg toe"
@@ -2067,9 +2207,9 @@ msgstr "Publieke Web Map waar op de configuratie wordt uitgevoerd."
 #: cherokee-trunk/admin/wizards/concrete5.py:211
 #: cherokee-trunk/admin/wizards/moodle.py:165
 #: cherokee-trunk/admin/wizards/mono.py:182
-#: cherokee-trunk/admin/wizards/django.py:173
-#: cherokee-trunk/admin/wizards/phpmyadmin.py:176
-#: cherokee-trunk/admin/wizards/symfony.py:209
+#: cherokee-trunk/admin/wizards/django.py:172
+#: cherokee-trunk/admin/wizards/phpmyadmin.py:181
+#: cherokee-trunk/admin/wizards/symfony.py:214
 #: cherokee-trunk/admin/wizards/joomla.py:244
 #: cherokee-trunk/admin/wizards/rails.py:46
 #: cherokee-trunk/admin/wizards/rails.py:305
@@ -2081,9 +2221,9 @@ msgstr "Publieke Web Map waar op de configuratie wordt uitgevoerd."
 #: cherokee-trunk/admin/wizards/zend.py:184
 #: cherokee-trunk/admin/wizards/wordpress.py:202
 #: cherokee-trunk/admin/wizards/rtorrent.py:99
-#: cherokee-trunk/admin/wizards/phpbb.py:169
+#: cherokee-trunk/admin/wizards/phpbb.py:174
 #: cherokee-trunk/admin/wizards/liferay.py:153
-#: cherokee-trunk/admin/wizards/uwsgi.py:225
+#: cherokee-trunk/admin/wizards/uwsgi.py:253
 #: cherokee-trunk/admin/wizards/glassfish.py:154
 msgid "Web Directory"
 msgstr "Web Map"
@@ -2193,10 +2333,6 @@ msgstr ""
 msgid "Check local file"
 msgstr "Controleer lokaal bestand"
 
-#: cherokee-trunk/admin/plugins/extensions.py:62
-msgid "Check"
-msgstr "Controleer"
-
 #: cherokee-trunk/admin/plugins/fullpath.py:30
 msgid ""
 "Full path request to which content the configuration will be applied. (Eg: /"
@@ -2218,7 +2354,7 @@ msgid "Path"
 msgstr "Pad"
 
 #: cherokee-trunk/admin/plugins/fullpath.py:115
-#: cherokee-trunk/admin/PageVServer.py:399
+#: cherokee-trunk/admin/PageVServer.py:426
 msgid "Paths"
 msgstr "Paden"
 
@@ -2325,11 +2461,11 @@ msgstr "Herleidingen."
 msgid "Rule list"
 msgstr "Regellijst"
 
-#: cherokee-trunk/admin/plugins/redir.py:119
+#: cherokee-trunk/admin/plugins/redir.py:118
 msgid "Add New Regular Expression"
 msgstr "Maak Nieuwe Reguliere Expressie"
 
-#: cherokee-trunk/admin/plugins/redir.py:124
+#: cherokee-trunk/admin/plugins/redir.py:123
 msgid "Add New RegEx"
 msgstr "Maak Nieuwe RegEx"
 
@@ -2337,13 +2473,13 @@ msgstr "Maak Nieuwe RegEx"
 msgid "The HTTP method that should match this rule."
 msgstr "De HTTP methode dat deze regel beschrijft."
 
-#: cherokee-trunk/admin/plugins/method.py:94
-#: cherokee-trunk/admin/plugins/method.py:104
-#: cherokee-trunk/admin/PageVServer.py:163
-#: cherokee-trunk/admin/PageVServer.py:176
-#: cherokee-trunk/admin/PageVServer.py:191
-#: cherokee-trunk/admin/PageVServer.py:419
-#: cherokee-trunk/admin/PageVServer.py:454
+#: cherokee-trunk/admin/plugins/method.py:98
+#: cherokee-trunk/admin/plugins/method.py:108
+#: cherokee-trunk/admin/PageVServer.py:190
+#: cherokee-trunk/admin/PageVServer.py:203
+#: cherokee-trunk/admin/PageVServer.py:218
+#: cherokee-trunk/admin/PageVServer.py:446
+#: cherokee-trunk/admin/PageVServer.py:480
 msgid "Method"
 msgstr "Methode"
 
@@ -2409,28 +2545,43 @@ msgstr "Maak Nieuwe Regel"
 msgid "Add new entry…"
 msgstr "Voeg regel toe..."
 
-#: cherokee-trunk/admin/market/Util.py:53
-#: cherokee-trunk/admin/market/Util.py:55
-#: cherokee-trunk/admin/market/Util.py:83
+#: cherokee-trunk/admin/market/Util.py:54
+#: cherokee-trunk/admin/market/Util.py:56
+#: cherokee-trunk/admin/market/Util.py:84
+#: cherokee-trunk/admin/market/Install.py:88
 msgid "Cherokee Market"
 msgstr "Cherokee Markt"
 
-#: cherokee-trunk/admin/market/Util.py:62
-#: cherokee-trunk/admin/market/Util.py:89
+#: cherokee-trunk/admin/market/Util.py:63
+#: cherokee-trunk/admin/market/Util.py:90
 #: cherokee-trunk/admin/market/PageSearch.py:70
-#: cherokee-trunk/admin/Page.py:129
+#: cherokee-trunk/admin/Page.py:156
 msgid "Market"
 msgstr "Markt"
 
-#: cherokee-trunk/admin/market/Util.py:136
+#: cherokee-trunk/admin/market/Util.py:137
 #: cherokee-trunk/admin/market/PageIndex.py:147
-#: cherokee-trunk/admin/market/PageApp.py:112
+#: cherokee-trunk/admin/market/PageApp.py:121
+#: cherokee-trunk/admin/market/PageApp.py:135
 msgid "Free"
 msgstr "Gratis"
 
-#: cherokee-trunk/admin/market/Util.py:150
-msgid "These instructions will help you install the required software"
+#: cherokee-trunk/admin/market/Util.py:172
+#, fuzzy
+msgid "Try the following instructions to install the required software"
 msgstr "Deze instructies helpen je de benodigde software te installeren"
+
+#: cherokee-trunk/admin/market/Util.py:179
+msgid ""
+"Several alternatives can provide the software requirements for the "
+"installation. Try at least one of the following instructions to install your "
+"preferred option"
+msgstr ""
+
+#: cherokee-trunk/admin/market/Util.py:186
+#, fuzzy
+msgid "or"
+msgstr "Poort"
 
 #: cherokee-trunk/admin/market/PageIndex.py:50
 msgid "Featured Applications"
@@ -2445,48 +2596,59 @@ msgid "Paid"
 msgstr "Betaald"
 
 #: cherokee-trunk/admin/market/PageIndex.py:148
-#, fuzzy
-msgid "Ranked"
-msgstr "Gesorteerd"
+msgid "Popular"
+msgstr ""
 
-#: cherokee-trunk/admin/market/Review.py:56
+#: cherokee-trunk/admin/market/Review.py:58
 msgid "Could not send the review"
 msgstr "Kan de recentie niet opsturen"
 
-#: cherokee-trunk/admin/market/Review.py:57
+#: cherokee-trunk/admin/market/Review.py:59
 msgid "We are sorry, but the review could not be sent."
 msgstr "Onze excuses, de recentie kon niet worden verstuurd."
 
-#: cherokee-trunk/admin/market/Review.py:75
+#: cherokee-trunk/admin/market/Review.py:60
+#: cherokee-trunk/admin/market/Report.py:44
+msgid ""
+"Make sure you are logged in and there are no connectivity issues. If the "
+"problem persists, please contact our support team."
+msgstr ""
+
+#: cherokee-trunk/admin/market/Review.py:78
 #, python-format
 msgid "Please, describe your experience with %s:"
 msgstr "Beschrijf je ervaring met %s:"
 
-#: cherokee-trunk/admin/market/Review.py:76
+#: cherokee-trunk/admin/market/Review.py:79
 msgid "Title"
 msgstr "Titel"
 
-#: cherokee-trunk/admin/market/Review.py:78
-#: cherokee-trunk/admin/market/Review.py:86
-#: cherokee-trunk/admin/market/PageApp.py:188
-#: cherokee-trunk/admin/market/PageApp.py:193
+#: cherokee-trunk/admin/market/Review.py:81
+#: cherokee-trunk/admin/market/Review.py:89
+#: cherokee-trunk/admin/market/PageApp.py:231
+#: cherokee-trunk/admin/market/PageApp.py:236
 msgid "Review"
 msgstr "Recentie"
 
-#: cherokee-trunk/admin/market/Review.py:80
+#: cherokee-trunk/admin/market/Review.py:83
 #, python-format
 msgid "How do you rate %s?"
 msgstr "Hoe zou je %s beoordelen?"
 
-#: cherokee-trunk/admin/market/CommandProgress.py:33
+#: cherokee-trunk/admin/market/CommandProgress.py:34
 msgid "Show error details"
 msgstr "Toon fout defails"
 
-#: cherokee-trunk/admin/market/CommandProgress.py:34
+#: cherokee-trunk/admin/market/CommandProgress.py:35
 msgid "Hide error details"
 msgstr "Verberg fout details"
 
-#: cherokee-trunk/admin/market/CommandProgress.py:92
+#: cherokee-trunk/admin/market/CommandProgress.py:125
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Onbekende Processor"
+
+#: cherokee-trunk/admin/market/CommandProgress.py:134
 msgid "Error executing"
 msgstr "Fout bij uitvoeren"
 
@@ -2496,8 +2658,8 @@ msgstr "Categorieën"
 
 #: cherokee-trunk/admin/market/PageCategory.py:77
 #: cherokee-trunk/admin/market/PageCategory.py:90
-#: cherokee-trunk/admin/market/PageApp.py:125
-#: cherokee-trunk/admin/market/PageApp.py:235
+#: cherokee-trunk/admin/market/PageApp.py:165
+#: cherokee-trunk/admin/market/PageApp.py:278
 msgid "Category"
 msgstr "Categorie"
 
@@ -2507,29 +2669,25 @@ msgstr "Lege Categorie"
 
 #: cherokee-trunk/admin/market/PageCategory.py:89
 #: cherokee-trunk/admin/market/PageSearch.py:82
-#: cherokee-trunk/admin/market/PageApp.py:226
+#: cherokee-trunk/admin/market/PageApp.py:269
 msgid "Market Home"
 msgstr "Markt Begin"
 
-#: cherokee-trunk/admin/market/Maintenance.py:40
+#: cherokee-trunk/admin/market/Maintenance.py:41
+#, fuzzy
 msgid ""
-"Specify the name of a privileged DB user. It will be used to automatically "
-"create the required database."
+"Specify the name of a privileged DB user. It will be used to remove the "
+"databases."
 msgstr ""
 "Specificeer de naam van een bevoorrechte DB gebruiker. Het zal gebruikt "
 "worden om de benodigde database aan te maken."
 
-#: cherokee-trunk/admin/market/Maintenance.py:41
-#: packages/common/database.py:17
+#: cherokee-trunk/admin/market/Maintenance.py:42
+#: packages/common/database.py:26
 msgid "Specify the password for this user account."
 msgstr "Specificeer het wachtwoord voor dit account."
 
-#: cherokee-trunk/admin/market/Maintenance.py:42
-msgid "Database removal"
-msgstr "Databank verwijderen"
-
 #: cherokee-trunk/admin/market/Maintenance.py:43
-#: packages/common/database.py:22
 msgid ""
 "Please, provide an administrative user/password pair to connect to your "
 "database."
@@ -2537,64 +2695,80 @@ msgstr ""
 "Geef een beheerder gebruiker/wachtwoord paar om naar de database te "
 "verbinden."
 
-#: cherokee-trunk/admin/market/Maintenance.py:166
+#: cherokee-trunk/admin/market/Maintenance.py:213
 msgid "Maintanance"
 msgstr "Onderhoud"
 
-#: cherokee-trunk/admin/market/Maintenance.py:169
+#: cherokee-trunk/admin/market/Maintenance.py:216
 msgid "Clean up"
 msgstr "Opschonen"
 
-#: cherokee-trunk/admin/market/Maintenance.py:174
+#: cherokee-trunk/admin/market/Maintenance.py:221
 #, python-format
 msgid ""
 "Detected %(num_orphan)d orphan, and %(num_unfinished)d unfinished "
 "installations: "
 msgstr ""
 
-#: cherokee-trunk/admin/market/Maintenance.py:177
+#: cherokee-trunk/admin/market/Maintenance.py:224
 #, python-format
 msgid "Detected %(num_unfinished)d unfinished installations: "
 msgstr ""
 
-#: cherokee-trunk/admin/market/Maintenance.py:180
+#: cherokee-trunk/admin/market/Maintenance.py:227
 #, fuzzy, python-format
 msgid "Detected %(num_orphan)d orphan installations: "
 msgstr "wees installaties:"
 
-#: cherokee-trunk/admin/market/Maintenance.py:188
+#: cherokee-trunk/admin/market/Maintenance.py:235
 msgid "Maintenance"
 msgstr "Onderhoud"
 
-#: cherokee-trunk/admin/market/Maintenance.py:227
-#: cherokee-trunk/admin/market/PageApp.py:75
-#: cherokee-trunk/admin/market/PageApp.py:217
+#: cherokee-trunk/admin/market/Maintenance.py:274
+#: cherokee-trunk/admin/market/PageApp.py:95
+#: cherokee-trunk/admin/market/PageApp.py:260
 msgid "Application"
 msgstr "Applicatie"
 
-#: cherokee-trunk/admin/market/Maintenance.py:227
+#: cherokee-trunk/admin/market/Maintenance.py:274
 msgid "Date"
 msgstr "Datum"
 
-#: cherokee-trunk/admin/market/Maintenance.py:252
-msgid "Orphan application"
-msgstr "Wees applicatie"
+#: cherokee-trunk/admin/market/Maintenance.py:309
+msgid "Orphan"
+msgstr ""
 
-#: cherokee-trunk/admin/market/Maintenance.py:263
-msgid "Unfinished installation"
-msgstr "Niet afgemaakte installatie"
+#: cherokee-trunk/admin/market/Maintenance.py:326
+#, fuzzy
+msgid "Unfinished"
+msgstr "Ongedefinieerd.."
 
-#: cherokee-trunk/admin/market/Maintenance.py:291
+#: cherokee-trunk/admin/market/Maintenance.py:365
 msgid "Applications requiring maintenance"
 msgstr "Applicaties die onderhoud vereisen"
 
-#: cherokee-trunk/admin/market/Maintenance.py:372
+#: cherokee-trunk/admin/market/Maintenance.py:460
 msgid "DB user"
 msgstr "DB gebruiker"
 
-#: cherokee-trunk/admin/market/Maintenance.py:373
+#: cherokee-trunk/admin/market/Maintenance.py:461
 msgid "DB password"
 msgstr "DB wachtwoord"
+
+#: cherokee-trunk/admin/market/Maintenance.py:469
+#, fuzzy
+msgid "Database Credentials"
+msgstr "Databank verwijderen"
+
+#: cherokee-trunk/admin/market/Maintenance.py:549
+#, fuzzy, python-format
+msgid "Removing %(name)s (%(date)s)"
+msgstr "op %(date)s om %(time)s"
+
+#: cherokee-trunk/admin/market/Maintenance.py:555
+#, fuzzy
+msgid "Removing Applications"
+msgstr "Top Applicaties"
 
 #: cherokee-trunk/admin/market/Library.py:54
 msgid "You have not bought any app yet"
@@ -2606,7 +2780,7 @@ msgstr "Mijn Bibliotheek"
 
 #: cherokee-trunk/admin/market/PageSearch.py:48
 #: cherokee-trunk/admin/market/PageSearch.py:83
-#: cherokee-trunk/admin/market/PageApp.py:233
+#: cherokee-trunk/admin/market/PageApp.py:276
 msgid "Search"
 msgstr "Zoeken"
 
@@ -2618,80 +2792,110 @@ msgstr "Zoek resultaten"
 msgid "Empty Search"
 msgstr "Lege zoekopdracht"
 
-#: cherokee-trunk/admin/market/PageApp.py:62
+#: cherokee-trunk/admin/market/PageApp.py:49
 msgid "Supported"
 msgstr "Ondersteund"
 
-#: cherokee-trunk/admin/market/PageApp.py:64
+#: cherokee-trunk/admin/market/PageApp.py:52
 msgid "Unsupported"
 msgstr "Niet ondersteund"
 
-#: cherokee-trunk/admin/market/PageApp.py:87
+#: cherokee-trunk/admin/market/PageApp.py:78
+#, fuzzy
+msgid "Deployment methods"
+msgstr "Implementatiemethode"
+
+#: cherokee-trunk/admin/market/PageApp.py:82
+#, fuzzy
+msgid "Operating Systems"
+msgstr "Afrekenen"
+
+#: cherokee-trunk/admin/market/PageApp.py:85
+#, fuzzy
+msgid "Databases"
+msgstr "Databank"
+
+#: cherokee-trunk/admin/market/PageApp.py:107
 msgid "By"
 msgstr "Door"
 
-#: cherokee-trunk/admin/market/PageApp.py:96
-#: cherokee-trunk/admin/market/PageApp.py:112
+#: cherokee-trunk/admin/market/PageApp.py:116
+#: cherokee-trunk/admin/market/PageApp.py:121
+#: cherokee-trunk/admin/market/PageApp.py:135
 msgid "Install"
 msgstr "Installeer"
 
-#: cherokee-trunk/admin/market/PageApp.py:98
-#: cherokee-trunk/admin/market/PageApp.py:109
+#: cherokee-trunk/admin/market/PageApp.py:119
+#: cherokee-trunk/admin/market/PageApp.py:132
 msgid "Buy"
 msgstr "Koop"
 
-#: cherokee-trunk/admin/market/PageApp.py:110
+#: cherokee-trunk/admin/market/PageApp.py:133
 msgid "to buy"
 msgstr "te kopen"
 
-#: cherokee-trunk/admin/market/PageApp.py:113
+#: cherokee-trunk/admin/market/PageApp.py:136
 #, fuzzy
 msgid "to install"
 msgstr "Installeer"
 
-#: cherokee-trunk/admin/market/PageApp.py:123
+#: cherokee-trunk/admin/market/PageApp.py:148
+#, fuzzy
+msgid "Report Application"
+msgstr "Top Applicaties"
+
+#: cherokee-trunk/admin/market/PageApp.py:152
+#, fuzzy
+msgid "Report issue"
+msgstr "Rapporteer Probleem"
+
+#: cherokee-trunk/admin/market/PageApp.py:163
 msgid "Version"
 msgstr "Versie"
 
-#: cherokee-trunk/admin/market/PageApp.py:142
+#: cherokee-trunk/admin/market/PageApp.py:187
+msgid "No screenshots"
+msgstr ""
+
+#: cherokee-trunk/admin/market/PageApp.py:189
 msgid "Screenshots"
 msgstr ""
 
-#: cherokee-trunk/admin/market/PageApp.py:147
+#: cherokee-trunk/admin/market/PageApp.py:190
 msgid "Description"
 msgstr "Omschrijving"
 
-#: cherokee-trunk/admin/market/PageApp.py:161
+#: cherokee-trunk/admin/market/PageApp.py:204
 msgid "Reviews"
 msgstr "Recenties"
 
-#: cherokee-trunk/admin/market/PageApp.py:165
+#: cherokee-trunk/admin/market/PageApp.py:208
 msgid "You can be the first one to review the application"
 msgstr "Je kunt de eerste zijn om een recentie te schrijven"
 
-#: cherokee-trunk/admin/market/PageApp.py:178
+#: cherokee-trunk/admin/market/PageApp.py:221
 #, python-format
 msgid "on %(date)s at %(time)s"
 msgstr "op %(date)s om %(time)s"
 
-#: cherokee-trunk/admin/market/PageApp.py:202
+#: cherokee-trunk/admin/market/PageApp.py:245
 msgid "sign in"
 msgstr "inloggen"
 
-#: cherokee-trunk/admin/market/PageApp.py:206
+#: cherokee-trunk/admin/market/PageApp.py:249
 #, fuzzy
 msgid "Please"
 msgstr "Alstublief"
 
-#: cherokee-trunk/admin/market/PageApp.py:208
+#: cherokee-trunk/admin/market/PageApp.py:251
 msgid "to review the product"
 msgstr ""
 
-#: cherokee-trunk/admin/market/PageApp.py:222
+#: cherokee-trunk/admin/market/PageApp.py:265
 msgid "Application not found"
 msgstr "Applicatie niet gevonden"
 
-#: cherokee-trunk/admin/market/Install.py:53
+#: cherokee-trunk/admin/market/Install.py:56
 msgid ""
 "The application is already in your library, so there is no need the buy it "
 "again. Please, proceed to the installation."
@@ -2699,23 +2903,22 @@ msgstr ""
 "De applicatie is al in je bibliotheek, er is geen reden om het opnieuw te "
 "kopen. Ga door met de installatie."
 
-#: cherokee-trunk/admin/market/Install.py:54
+#: cherokee-trunk/admin/market/Install.py:58
 msgid ""
-"The application is available at the Octality Market. Please, check \"Check "
-"Out\" to proceed to the payment secction."
+"You are about to purchase the application. Please proceed with the Check Out "
+"to provide the payment details."
 msgstr ""
-"De applicatie is is beschikbaar in de Octality Markt. Controleer \"Afrekenen"
-"\" om door te gaan bij de betaal sectie."
 
-#: cherokee-trunk/admin/market/Install.py:55
+#: cherokee-trunk/admin/market/Install.py:59
+#, fuzzy
 msgid ""
-"The application will be downloaded and installed afterwards. It will also "
-"remain in your library for any future installation."
+"The application will be downloaded and installed afterwards, and will remain "
+"in your library for future installations."
 msgstr ""
 "De applicatie zal worden gedownload en daarna geinstalleerd. Hij zal ook in "
 "je bibliotheek blijven voor toekomstige installatie."
 
-#: cherokee-trunk/admin/market/Install.py:57
+#: cherokee-trunk/admin/market/Install.py:61
 msgid ""
 "Cherokee is now ready to run the application. Please, remember to backup "
 "your configuration if you are going to perform customizations."
@@ -2723,11 +2926,11 @@ msgstr ""
 "Cherokee is nu klaar om de applicatie te draaien. Maak backups van je "
 "configuratie als je zelf aanpassingen gaat doen."
 
-#: cherokee-trunk/admin/market/Install.py:58
+#: cherokee-trunk/admin/market/Install.py:62
 msgid "Thank you for buying at Cherokee's Market!"
 msgstr "Bedankt voor het kopen op Cherokee's Markt!"
 
-#: cherokee-trunk/admin/market/Install.py:59
+#: cherokee-trunk/admin/market/Install.py:63
 msgid ""
 "Since there were previous changes your configuration has not been applied "
 "automatically. Please do it yourself by clicking the SAVE button on the top-"
@@ -2736,7 +2939,7 @@ msgstr ""
 "Omdat er oude wijzigingen waren is de configuratie niet automatisch "
 "toegepast. Doe het zelf door op de BEWAAR knop te drukken, rechts bovenin."
 
-#: cherokee-trunk/admin/market/Install.py:61
+#: cherokee-trunk/admin/market/Install.py:65
 msgid ""
 "Your Cherokee version can no longer access many of the features of the "
 "Cherokee Market. Please, upgrade Cherokee to an up-to-date version."
@@ -2744,49 +2947,63 @@ msgstr ""
 "Je Cherokee versie kan niet langer alle onderdelen van de Cherokee Markt "
 "bereiken, update Cherokee naar een nieuwere versie."
 
-#: cherokee-trunk/admin/market/Install.py:62
+#: cherokee-trunk/admin/market/Install.py:66
 msgid "We apologize for the inconveniences."
 msgstr "We verontschuldigen ons voor de problemen."
 
-#: cherokee-trunk/admin/market/Install.py:80
-msgid "Installation"
-msgstr "Installatie"
+#: cherokee-trunk/admin/market/Install.py:68
+msgid "Privileges test failed"
+msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:135
-msgid "Connecting to Octality"
-msgstr "Verbinden naar Octality"
+#: cherokee-trunk/admin/market/Install.py:69
+msgid ""
+"Since the installations may require administrator to execute system "
+"administration commands, it is required to run Cherokee-admin under a user "
+"with  administrator privileges."
+msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:136
+#: cherokee-trunk/admin/market/Install.py:70
+msgid "Please, run cherokee-admin as root to solve the problem."
+msgstr ""
+
+#: cherokee-trunk/admin/market/Install.py:157
+#, fuzzy
+msgid "Connecting to Cherokee Market"
+msgstr "Log in op de Cherokee Markt"
+
+#: cherokee-trunk/admin/market/Install.py:158
 msgid "Retrieving package information…"
 msgstr "Ontvangen van pakketinformatie..."
 
-#: cherokee-trunk/admin/market/Install.py:160
+#: cherokee-trunk/admin/market/Install.py:182
 msgid "Cherokee Upgrade Required"
 msgstr "Cherokee Update Nodig"
 
-#: cherokee-trunk/admin/market/Install.py:179
-#: cherokee-trunk/admin/market/Install.py:211
+#: cherokee-trunk/admin/market/Install.py:201
+#: cherokee-trunk/admin/market/Install.py:233
 msgid "Checking out"
 msgstr "Afrekenen"
 
-#: cherokee-trunk/admin/market/Install.py:183
+#: cherokee-trunk/admin/market/Install.py:205
 msgid "Check Out"
 msgstr "Afrekenen"
 
-#: cherokee-trunk/admin/market/Install.py:212
+#: cherokee-trunk/admin/market/Install.py:234
 msgid "Waiting for the payment acknowledge…"
 msgstr "Wachten op de betalingsbevestiging..."
 
-#: cherokee-trunk/admin/market/Install.py:275
-#: cherokee-trunk/admin/market/Install.py:291
-msgid "Downloading"
-msgstr "Ophalen"
+#: cherokee-trunk/admin/market/Install.py:297
+#: cherokee-trunk/admin/market/Install.py:313
+#: cherokee-trunk/admin/market/Install.py:431
+#: cherokee-trunk/admin/market/Install.py:466 packages/redmine/installer.py:21
+msgid "Installing"
+msgstr "Installeren"
 
-#: cherokee-trunk/admin/market/Install.py:276
+#: cherokee-trunk/admin/market/Install.py:298
 msgid "The application is being downloaded. Hold on tight!"
 msgstr "De applicatie is gedownload. Hou je vast!"
 
-#: cherokee-trunk/admin/market/Install.py:292
+#: cherokee-trunk/admin/market/Install.py:314
 msgid ""
 "There was an error downloading the application. Please contact us if the "
 "problem persists."
@@ -2794,24 +3011,16 @@ msgstr ""
 "Er was een fout bij het downloaden van de applicatie. Neem contact met ons "
 "op als het probleem blijft."
 
-#: cherokee-trunk/admin/market/Install.py:308
-msgid "Setting up"
-msgstr "Instellen"
-
-#: cherokee-trunk/admin/market/Install.py:309
-msgid "Unpacking application…"
-msgstr "Uitpakken applicatie..."
-
-#: cherokee-trunk/admin/market/Install.py:333
+#: cherokee-trunk/admin/market/Install.py:342
 #: cherokee-trunk/admin/PageException.py:80
 msgid "Internal Error"
 msgstr "Interne Fout"
 
-#: cherokee-trunk/admin/market/Install.py:334
+#: cherokee-trunk/admin/market/Install.py:343
 msgid "An internal error occurred while deploying the application"
 msgstr "En interne fout is opgetreden bij het uitrollen van de applicatie"
 
-#: cherokee-trunk/admin/market/Install.py:335
+#: cherokee-trunk/admin/market/Install.py:344
 msgid ""
 "Information on the error has been collected so it can be reported and fixed "
 "up. Please help us improve it by sending the error information to the "
@@ -2821,25 +3030,96 @@ msgstr ""
 "repareren. Help ons het te maken door de informatie door te sturen naar het "
 "ontwikkelteam."
 
-#: cherokee-trunk/admin/market/Install.py:338
+#: cherokee-trunk/admin/market/Install.py:347
 msgid "Thank you for your feedback! We do appreciate it."
 msgstr "Heel erg bedankt voor je reactie! We waarderen je hulp."
 
-#: cherokee-trunk/admin/market/Install.py:342
+#: cherokee-trunk/admin/market/Install.py:351
 msgid "Comments"
 msgstr "Commentaar"
 
-#: cherokee-trunk/admin/market/Install.py:349
+#: cherokee-trunk/admin/market/Install.py:358
 msgid "Report Issue"
 msgstr "Rapporteer Probleem"
 
-#: cherokee-trunk/admin/market/Install.py:370
-msgid "Setting up application…"
-msgstr "Installeren applicatie..."
+#: cherokee-trunk/admin/market/Install.py:432
+msgid "Unpacking application…"
+msgstr "Uitpakken applicatie..."
 
-#: cherokee-trunk/admin/market/Install.py:479
+#: cherokee-trunk/admin/market/Install.py:435
+#, fuzzy
+msgid "The applicaction is being unpacked…"
+msgstr "De applicatie is gedownload. Hou je vast!"
+
+#: cherokee-trunk/admin/market/Install.py:467
+#, fuzzy
+msgid "Setting it up…"
+msgstr "Instellen"
+
+#: cherokee-trunk/admin/market/Install.py:522
 msgid "has been installed successfully"
 msgstr "is succesvol geïnstalleerd"
+
+#: cherokee-trunk/admin/market/Install.py:563
+msgid "You can now visit"
+msgstr ""
+
+#: cherokee-trunk/admin/market/Install.py:564
+#, fuzzy
+msgid "your new application"
+msgstr "Wees applicatie"
+
+#: cherokee-trunk/admin/market/Report.py:40
+msgid "Contact Support & Customer Service"
+msgstr ""
+
+#: cherokee-trunk/admin/market/Report.py:41
+msgid ""
+"You are about to submit a report for an application that is not working for "
+"you."
+msgstr ""
+
+#: cherokee-trunk/admin/market/Report.py:42
+msgid ""
+"Please, send your report to our support team. Some information <strong>will</"
+"strong> be attached upon submission for troubleshooting purposes. This "
+"includes your configuration file along with the installation logs for the "
+"application."
+msgstr ""
+
+#: cherokee-trunk/admin/market/Report.py:43
+#, fuzzy
+msgid "We are sorry, but the report could not be sent."
+msgstr "Onze excuses, de recentie kon niet worden verstuurd."
+
+#: cherokee-trunk/admin/market/Report.py:45
+#, fuzzy
+msgid ""
+"Thank you for submitting the application report. Our support team will "
+"review it as soon as possible."
+msgstr ""
+"Bedankt voor het rapporteren van het probleem. De Cherokee Webserver "
+"ontwikkelaars zullen het probleem zo snel mogelijk proberen te repareren."
+
+#: cherokee-trunk/admin/market/Report.py:94
+#, fuzzy
+msgid "Could not send the report"
+msgstr "Kan de recentie niet opsturen"
+
+#: cherokee-trunk/admin/market/Report.py:108
+#, fuzzy
+msgid "Report sent successfully"
+msgstr "is succesvol geïnstalleerd"
+
+#: cherokee-trunk/admin/market/Report.py:125
+#, fuzzy
+msgid "Request refund"
+msgstr "Verzoek"
+
+#: cherokee-trunk/admin/market/Report.py:137
+#, fuzzy
+msgid "Report"
+msgstr "Nieuwe poort"
 
 #: cherokee-trunk/admin/PageAdvanced.py:64
 msgid ""
@@ -3001,7 +3281,7 @@ msgstr ""
 "(Standaard: Nee)"
 
 #: cherokee-trunk/admin/PageAdvanced.py:97
-#: cherokee-trunk/admin/PageAdvanced.py:198 cherokee-trunk/admin/Page.py:133
+#: cherokee-trunk/admin/PageAdvanced.py:198 cherokee-trunk/admin/Page.py:160
 msgid "Advanced"
 msgstr "Geavanceerd"
 
@@ -3215,10 +3495,10 @@ msgstr ""
 #: cherokee-trunk/admin/wizards/wordpress.py:43
 #: cherokee-trunk/admin/wizards/phpbb.py:46
 #: cherokee-trunk/admin/wizards/liferay.py:46
-#: cherokee-trunk/admin/wizards/uwsgi.py:48
+#: cherokee-trunk/admin/wizards/uwsgi.py:60
 #: cherokee-trunk/admin/wizards/mailman.py:47
 #: cherokee-trunk/admin/wizards/glassfish.py:46
-#: cherokee-trunk/admin/wizards/php.py:39
+#: cherokee-trunk/admin/wizards/php.py:42
 #: cherokee-trunk/admin/wizards/trac.py:42
 msgid "New Virtual Server Details"
 msgstr "Nieuwe Virtuele Server Details"
@@ -3240,10 +3520,10 @@ msgstr "Nieuwe Virtuele Server Details"
 #: cherokee-trunk/admin/wizards/wordpress.py:44
 #: cherokee-trunk/admin/wizards/phpbb.py:47
 #: cherokee-trunk/admin/wizards/liferay.py:45
-#: cherokee-trunk/admin/wizards/uwsgi.py:49
+#: cherokee-trunk/admin/wizards/uwsgi.py:61
 #: cherokee-trunk/admin/wizards/mailman.py:48
 #: cherokee-trunk/admin/wizards/glassfish.py:45
-#: cherokee-trunk/admin/wizards/php.py:40
+#: cherokee-trunk/admin/wizards/php.py:43
 #: cherokee-trunk/admin/wizards/trac.py:43
 msgid "Host name of the virtual server that is about to be created."
 msgstr "Computer naam van de virtuele computer die zo wordt gemaakt."
@@ -3252,7 +3532,7 @@ msgstr "Computer naam van de virtuele computer die zo wordt gemaakt."
 #: cherokee-trunk/admin/wizards/alfresco.py:48
 #: cherokee-trunk/admin/wizards/moinmoin.py:48
 #: cherokee-trunk/admin/wizards/liferay.py:48
-#: cherokee-trunk/admin/wizards/uwsgi.py:52
+#: cherokee-trunk/admin/wizards/uwsgi.py:64
 #: cherokee-trunk/admin/wizards/glassfish.py:48
 msgid "Public web directory to access the project."
 msgstr "Publieke web map om het project te benaderen."
@@ -3274,7 +3554,7 @@ msgstr "Publieke web map om het project te benaderen."
 #: cherokee-trunk/admin/wizards/wordpress.py:46
 #: cherokee-trunk/admin/wizards/phpbb.py:50
 #: cherokee-trunk/admin/wizards/liferay.py:49
-#: cherokee-trunk/admin/wizards/uwsgi.py:53
+#: cherokee-trunk/admin/wizards/uwsgi.py:65
 #: cherokee-trunk/admin/wizards/glassfish.py:49
 msgid "Public Web Directory"
 msgstr "Publieke Web Map"
@@ -3287,9 +3567,9 @@ msgstr "ColdFusion draait niet op de gespecificeerde computer."
 #: cherokee-trunk/admin/wizards/concrete5.py:228
 #: cherokee-trunk/admin/wizards/moodle.py:182
 #: cherokee-trunk/admin/wizards/mono.py:198
-#: cherokee-trunk/admin/wizards/django.py:189
-#: cherokee-trunk/admin/wizards/phpmyadmin.py:192
-#: cherokee-trunk/admin/wizards/symfony.py:226
+#: cherokee-trunk/admin/wizards/django.py:188
+#: cherokee-trunk/admin/wizards/phpmyadmin.py:197
+#: cherokee-trunk/admin/wizards/symfony.py:231
 #: cherokee-trunk/admin/wizards/joomla.py:261
 #: cherokee-trunk/admin/wizards/rails.py:321
 #: cherokee-trunk/admin/wizards/mediawiki.py:224
@@ -3299,12 +3579,12 @@ msgstr "ColdFusion draait niet op de gespecificeerde computer."
 #: cherokee-trunk/admin/wizards/drupal.py:259
 #: cherokee-trunk/admin/wizards/zend.py:201
 #: cherokee-trunk/admin/wizards/wordpress.py:218
-#: cherokee-trunk/admin/wizards/phpbb.py:186
+#: cherokee-trunk/admin/wizards/phpbb.py:191
 #: cherokee-trunk/admin/wizards/liferay.py:169
-#: cherokee-trunk/admin/wizards/uwsgi.py:242
+#: cherokee-trunk/admin/wizards/uwsgi.py:270
 #: cherokee-trunk/admin/wizards/mailman.py:160
 #: cherokee-trunk/admin/wizards/glassfish.py:170
-#: cherokee-trunk/admin/wizards/php.py:243
+#: cherokee-trunk/admin/wizards/php.py:313
 #: cherokee-trunk/admin/wizards/trac.py:131
 msgid "New Host Name"
 msgstr "Nieuwe computer naam"
@@ -3363,9 +3643,9 @@ msgstr "Web map waar je Concrete5 wilt hebben. (Voorbeeld: /concrete5)"
 #: cherokee-trunk/admin/wizards/concrete5.py:229
 #: cherokee-trunk/admin/wizards/moodle.py:183
 #: cherokee-trunk/admin/wizards/mono.py:200
-#: cherokee-trunk/admin/wizards/django.py:191
-#: cherokee-trunk/admin/wizards/phpmyadmin.py:193
-#: cherokee-trunk/admin/wizards/symfony.py:227
+#: cherokee-trunk/admin/wizards/django.py:190
+#: cherokee-trunk/admin/wizards/phpmyadmin.py:198
+#: cherokee-trunk/admin/wizards/symfony.py:232
 #: cherokee-trunk/admin/wizards/joomla.py:262
 #: cherokee-trunk/admin/wizards/rails.py:322
 #: cherokee-trunk/admin/wizards/mediawiki.py:225
@@ -3373,19 +3653,19 @@ msgstr "Web map waar je Concrete5 wilt hebben. (Voorbeeld: /concrete5)"
 #: cherokee-trunk/admin/wizards/drupal.py:260
 #: cherokee-trunk/admin/wizards/zend.py:202
 #: cherokee-trunk/admin/wizards/wordpress.py:219
-#: cherokee-trunk/admin/wizards/phpbb.py:187
-#: cherokee-trunk/admin/wizards/uwsgi.py:244
+#: cherokee-trunk/admin/wizards/phpbb.py:192
+#: cherokee-trunk/admin/wizards/uwsgi.py:272
 #: cherokee-trunk/admin/wizards/mailman.py:161
-#: cherokee-trunk/admin/wizards/php.py:244
+#: cherokee-trunk/admin/wizards/php.py:314
 #: cherokee-trunk/admin/wizards/trac.py:132
 msgid "Use Same Logs as"
 msgstr "Gebruik zelfde logs als"
 
 #: cherokee-trunk/admin/wizards/concrete5.py:247
 #: cherokee-trunk/admin/wizards/moodle.py:201
-#: cherokee-trunk/admin/wizards/phpmyadmin.py:211
+#: cherokee-trunk/admin/wizards/phpmyadmin.py:216
 #: cherokee-trunk/admin/wizards/zend.py:218
-#: cherokee-trunk/admin/wizards/phpbb.py:205
+#: cherokee-trunk/admin/wizards/phpbb.py:210
 msgid "Source Directory"
 msgstr "Bron Map"
 
@@ -3504,9 +3784,8 @@ msgstr ""
 "het makkelijker om betere webapplicaties sneller te bouwen met minder code."
 
 #: cherokee-trunk/admin/wizards/django.py:42
-msgid ""
-"Local directory where the Django source code is located. Example: /usr/share/"
-"django."
+#, fuzzy
+msgid "Local directory where your Django project source code is located."
 msgstr ""
 "Lokale map waar de Django broncode is neergezet. Voorbeeld: /usr/share/"
 "django."
@@ -3516,7 +3795,7 @@ msgid "Web directory where you want Django to be accessible. (Example: /blog)"
 msgstr "Web map waar je Django wilt hebben. (Voorbeeld: /blog)"
 
 #: cherokee-trunk/admin/wizards/django.py:47
-#: cherokee-trunk/admin/wizards/uwsgi.py:50
+#: cherokee-trunk/admin/wizards/uwsgi.py:62
 msgid "Path to use as document root for the new virtual server."
 msgstr "Document hoofdmap voor de nieuwe virtuele server."
 
@@ -3526,15 +3805,14 @@ msgstr "Dat ziet er niet uit als een Drupal broncode map."
 
 #: cherokee-trunk/admin/wizards/django.py:49
 #: cherokee-trunk/admin/wizards/rails.py:58
-#: cherokee-trunk/admin/wizards/uwsgi.py:56
 msgid "The document root directory does not exist."
 msgstr "De document hoofdmap bestaat niet."
 
-#: cherokee-trunk/admin/wizards/django.py:209
+#: cherokee-trunk/admin/wizards/django.py:206
 msgid "Django Local Directory"
 msgstr "Django Lokale Map"
 
-#: cherokee-trunk/admin/wizards/django.py:272
+#: cherokee-trunk/admin/wizards/django.py:269
 msgid "Directory doesn't look like a Django based project."
 msgstr "Map ziet er niet uit als een op Django gebaseerd project."
 
@@ -3629,11 +3907,11 @@ msgid ""
 "Web directory where you want Symfony to be accessible. (Example: /symfony)"
 msgstr "Web map waar je Symfony wilt hebben. Voorbeeld: /symfony"
 
-#: cherokee-trunk/admin/wizards/symfony.py:245
+#: cherokee-trunk/admin/wizards/symfony.py:250
 msgid "Project Source"
 msgstr "Project Bron"
 
-#: cherokee-trunk/admin/wizards/symfony.py:246
+#: cherokee-trunk/admin/wizards/symfony.py:251
 msgid "Symfony Package"
 msgstr "Symfony Package"
 
@@ -3714,7 +3992,7 @@ msgid "Redirect"
 msgstr "Herleiding"
 
 #: cherokee-trunk/admin/wizards/hotlinking.py:171
-#: packages/common/target.py:134
+#: packages/common/target.py:145
 msgid "Domain Name"
 msgstr "Domein Naam"
 
@@ -3750,11 +4028,11 @@ msgstr ""
 msgid "Domain name to which requests will be redirected."
 msgstr "Domeinnaam waar de aanvragen naar worden doorgestuurd."
 
-#: cherokee-trunk/admin/wizards/redirect.py:111
+#: cherokee-trunk/admin/wizards/redirect.py:108
 msgid "Origin Domain"
 msgstr "Origineel domein"
 
-#: cherokee-trunk/admin/wizards/redirect.py:112
+#: cherokee-trunk/admin/wizards/redirect.py:109
 msgid "Target Domain"
 msgstr "Doel domein"
 
@@ -3918,7 +4196,10 @@ msgstr ""
 "PHP."
 
 #: cherokee-trunk/admin/wizards/List.py:109
-msgid "Fast, self-healing, developer-friendly WSGI server."
+#, fuzzy
+msgid ""
+"Fast, self-healing, developer-friendly, language-agnostic, application "
+"container."
 msgstr "Snelle, zelf herstellende, ontwikkelaar vriendelijke WSGI server."
 
 #: cherokee-trunk/admin/wizards/List.py:115
@@ -4657,25 +4938,28 @@ msgstr ""
 "Computernaam of IP van de server die Liferay draait. Je kunt er later mee "
 "toevoegen om de belasting te verdelen."
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:39
-msgid "Welcome to the uWsgi Wizard"
+#: cherokee-trunk/admin/wizards/uwsgi.py:51
+#, fuzzy
+msgid "Welcome to the uWSGI Wizard"
 msgstr "Welkom bij de uWsgi Assistent"
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:40
+#: cherokee-trunk/admin/wizards/uwsgi.py:52
+#, fuzzy
 msgid ""
 "<a target=\"_blank\" href=\"http://projects.unbit.it/uwsgi/\">uWSGI</a> is a "
-"fast (pure C), self-healing, developer-friendly WSGI server, aimed for "
-"professional python webapps deployment and development."
+"fast (pure C), self-healing, developer-friendly application container, aimed "
+"for professional webapps deployment and development."
 msgstr ""
 "<a target=\"_blank\" href=\"http://projects.unbit.it/uwsgi/\">uWSGI</a> is "
 "een snelle (pure C), zelf-reddende, ontwikkelvriendelijke WSGI server, "
 "gericht op professionele python webapplicatie ontwikkeling en inzet."
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:41
+#: cherokee-trunk/admin/wizards/uwsgi.py:53
+#, fuzzy
 msgid ""
-"Over time it has evolved in a complete stack for networked/clustered python "
-"applications, implementing message/object passing and process management. It "
-"uses the uwsgi (all lowercase) protocol for all the networking/interprocess "
+"It includes a complete stack for networked/clustered applications, "
+"implementing message/object passing and process management. It uses the "
+"uwsgi (all lowercase) protocol for all the networking/interprocess "
 "communications."
 msgstr ""
 "Het is geworden tot een compleet systeem voor verbonden/geclusterde python "
@@ -4683,23 +4967,24 @@ msgstr ""
 "Het gebruikt de uwsgi (kleine letters) protocol voor alle netwerk/"
 "interproces communicatie."
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:44
+#: cherokee-trunk/admin/wizards/uwsgi.py:56
+#, fuzzy
 msgid ""
-"Path to the uWSGI configuration file (XML or Python-only). Its mountpoint "
-"will be used."
+"Path to the uWSGI configuration file (XML, INI, YAML or .wsgi, .py, .psgi, ."
+"pl, .lua, .ws, .ru, .rb). Its mountpoint will be used."
 msgstr ""
 "Pad naar het uWSGI configuratie bestand (XML of alleen-Python). Zijn "
 "koppelpunt wordt gebruikt."
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:45
+#: cherokee-trunk/admin/wizards/uwsgi.py:57
 msgid "Location of the uWSGI binary"
 msgstr "Locatie van het uWSGI bestand"
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:46
+#: cherokee-trunk/admin/wizards/uwsgi.py:58
 msgid "It does not look like a uWSGI configuration file."
 msgstr "Dit lijkt niet op een uWSGI configuratie bestand."
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:54
+#: cherokee-trunk/admin/wizards/uwsgi.py:66
 msgid ""
 "The default value is extracted from the configuration file. Change it at "
 "your own risk."
@@ -4707,15 +4992,11 @@ msgstr ""
 "De standaard waarde is uit het configuratie bestand gehaald. Verander op "
 "eigen risico."
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:55
-msgid "Does not look like a Uwsgi source directory."
-msgstr "Dat ziet er niet uit als Uwsgi broncode map."
-
-#: cherokee-trunk/admin/wizards/uwsgi.py:263
+#: cherokee-trunk/admin/wizards/uwsgi.py:291
 msgid "uWSGI binary"
 msgstr "uWSGI bestand"
 
-#: cherokee-trunk/admin/wizards/uwsgi.py:264
+#: cherokee-trunk/admin/wizards/uwsgi.py:292
 msgid "Configuration File"
 msgstr "Configuratie bestand"
 
@@ -4829,11 +5110,11 @@ msgstr ""
 "Computernaam of IP van de server die GlassFish draait. Je kunt er later mee "
 "toevoegen om de belasting te verdelen."
 
-#: cherokee-trunk/admin/wizards/php.py:33
+#: cherokee-trunk/admin/wizards/php.py:36
 msgid "Welcome to the PHP Wizard"
 msgstr "Welkom bij de PHP Assistent"
 
-#: cherokee-trunk/admin/wizards/php.py:34
+#: cherokee-trunk/admin/wizards/php.py:37
 msgid ""
 "<a target=\"_blank\" href=\"http://php.net/\">PHP</a> is a widely-used "
 "general-purpose scripting language that is especially suited for Web "
@@ -4843,38 +5124,44 @@ msgstr ""
 "algemene scriptingtaal die speciaal geschikt is voor het web en kan worden "
 "gebruikt tussen HTML."
 
-#: cherokee-trunk/admin/wizards/php.py:37
+#: cherokee-trunk/admin/wizards/php.py:40
 msgid "Local directory that will contain the web documents. Example: /var/www."
 msgstr "Lokale map dat webpagina's bevat. Voorbeeld: /var/www."
 
-#: cherokee-trunk/admin/wizards/php.py:42
+#: cherokee-trunk/admin/wizards/php.py:45
 msgid "PHP Interpreter Not Found"
 msgstr "PHP Interpreter niet gevonden"
 
-#: cherokee-trunk/admin/wizards/php.py:43
+#: cherokee-trunk/admin/wizards/php.py:46
 msgid "A valid PHP interpreter could not be found in your system."
 msgstr "Een werkende PHP interpreter kan niet op het systeem worden gevonden."
 
-#: cherokee-trunk/admin/wizards/php.py:44
+#: cherokee-trunk/admin/wizards/php.py:47
 msgid ""
 "Please, check out Cherokee's PHP Documentation to learn how to set it up."
 msgstr "Lees Cherokee's PHP documentatie om het systeem goed in te stellen."
 
-#: cherokee-trunk/admin/wizards/php.py:108
+#: cherokee-trunk/admin/wizards/php.py:118
 msgid "Invalid Virtual Server reference."
 msgstr "Verkeerde Virtuele Server verwijzing."
 
-#: cherokee-trunk/admin/wizards/php.py:120
+#: cherokee-trunk/admin/wizards/php.py:130
 msgid "Could not find a suitable PHP interpreter."
 msgstr "Kan geen bruikbare PHP interpreter vinden."
 
-#: cherokee-trunk/admin/wizards/php.py:129
-msgid "Could not determine PHP-fpm settings."
+#: cherokee-trunk/admin/wizards/php.py:558 packages/common/php.py:430
+#, fuzzy
+msgid "Could not determine PHP-CGI settings."
 msgstr "Kan de PHP-fpm instellingen niet bepalen."
 
-#: cherokee-trunk/admin/wizards/php.py:133
-msgid "Could not determine correct interpreter settings."
-msgstr "Kan de juiste interpreter instellingen niet bepalen."
+#: cherokee-trunk/admin/wizards/php.py:561 packages/common/php.py:433
+#, fuzzy
+msgid "Could not determine PHP-CGI configuration file."
+msgstr "Kan configuratie bestand niet schrijven"
+
+#: cherokee-trunk/admin/wizards/php.py:586 packages/common/php.py:458
+msgid "Could not determine PHP-fpm settings."
+msgstr "Kan de PHP-fpm instellingen niet bepalen."
 
 #: cherokee-trunk/admin/wizards/trac.py:38
 msgid "Welcome to the Trac wizard"
@@ -4919,74 +5206,112 @@ msgstr "Dat ziet er niet uit als een Trac installatie."
 msgid "Trac Local Directory"
 msgstr "Trac Lokale Map"
 
-#: cherokee-trunk/admin/SystemStatsWidgets.py:118
+#: cherokee-trunk/admin/SystemStatsWidgets.py:134
 #, python-format
 msgid "%s Logical Processors"
 msgstr "%s Logische Processors"
 
-#: cherokee-trunk/admin/SystemStatsWidgets.py:121
+#: cherokee-trunk/admin/SystemStatsWidgets.py:136
+#, fuzzy, python-format
+msgid "%s Logical Processor"
+msgstr "%s Logische Processors"
+
+#: cherokee-trunk/admin/SystemStatsWidgets.py:140
 #, python-format
 msgid "%s Cores"
 msgstr "%s Cores"
 
-#: cherokee-trunk/admin/SystemStatsWidgets.py:126
+#: cherokee-trunk/admin/SystemStatsWidgets.py:142
+#, fuzzy, python-format
+msgid "%s Core"
+msgstr "%s Cores"
+
+#: cherokee-trunk/admin/SystemStatsWidgets.py:147
 msgid "Unknown Processor"
 msgstr "Onbekende Processor"
 
-#: cherokee-trunk/admin/SystemStatsWidgets.py:155
+#: cherokee-trunk/admin/SystemStatsWidgets.py:176
 msgid "Unknown RAM"
 msgstr "RAM onbekend"
 
-#: cherokee-trunk/admin/Page.py:33
-msgid "The Configuration has been Saved"
-msgstr "De configuratie is bewaard."
-
 #: cherokee-trunk/admin/Page.py:34
+#, fuzzy
+msgid "Save Configuration"
+msgstr "Geavanceerde Configuratie"
+
+#: cherokee-trunk/admin/Page.py:35
 msgid "Would you like to apply the changes to the running server now?"
 msgstr "Wil je de wijzigingen direct toepassen op de draaiend server?"
 
-#: cherokee-trunk/admin/Page.py:35
-msgid "The configuration file has been saved successfuly."
+#: cherokee-trunk/admin/Page.py:36
+#, fuzzy
+msgid "The configuration file has been saved successfully."
+msgstr "Het configuratiebestand is succesvol opgeslagen."
+
+#: cherokee-trunk/admin/Page.py:43
+#, fuzzy
+msgid "Sanity checks"
+msgstr "Controleer niet"
+
+#: cherokee-trunk/admin/Page.py:44
+msgid ""
+"Glitches were found in the current configuration. Please, fix the following "
+"issues:"
+msgstr ""
+
+#: cherokee-trunk/admin/Page.py:45
+#, fuzzy
+msgid "Note that the configuration file was not saved."
 msgstr "Het configuratiebestand is succesvol opgeslagen."
 
 #: cherokee-trunk/admin/Page.py:87
+#, fuzzy
+msgid "Solve"
+msgstr "Bewaar"
+
+#: cherokee-trunk/admin/Page.py:106
+#, fuzzy
+msgid "Configuration successfully saved"
+msgstr "Configuratie Bestand Succesvol geupload"
+
+#: cherokee-trunk/admin/Page.py:114
 msgid "Do not restart"
 msgstr "Herstart niet"
 
-#: cherokee-trunk/admin/Page.py:93
+#: cherokee-trunk/admin/Page.py:120
 msgid "Graceful restart"
 msgstr "Vriendelijke herstart"
 
-#: cherokee-trunk/admin/Page.py:99
+#: cherokee-trunk/admin/Page.py:126
 msgid "Hard restart"
 msgstr "Directe herstart"
 
-#: cherokee-trunk/admin/Page.py:126
+#: cherokee-trunk/admin/Page.py:153
 msgid "Save"
 msgstr "Bewaar"
 
-#: cherokee-trunk/admin/Page.py:127
+#: cherokee-trunk/admin/Page.py:154
 msgid "Home"
 msgstr "Begin"
 
-#: cherokee-trunk/admin/Page.py:130 cherokee-trunk/admin/PageStatus.py:101
+#: cherokee-trunk/admin/Page.py:157 cherokee-trunk/admin/PageStatus.py:101
 #: cherokee-trunk/admin/PageGeneral.py:260
 msgid "General"
 msgstr "Algemeen"
 
-#: cherokee-trunk/admin/Page.py:131
+#: cherokee-trunk/admin/Page.py:158
 msgid "vServers"
 msgstr "vServers"
 
-#: cherokee-trunk/admin/Page.py:132
+#: cherokee-trunk/admin/Page.py:159
 msgid "Sources"
 msgstr "Bronnen"
 
-#: cherokee-trunk/admin/Page.py:134
+#: cherokee-trunk/admin/Page.py:161
 msgid "Help"
 msgstr "Hulp"
 
-#: cherokee-trunk/admin/Page.py:135
+#: cherokee-trunk/admin/Page.py:162
 msgid "Updating..."
 msgstr "Bijwerken..."
 
@@ -5065,16 +5390,8 @@ msgstr "Proxyservers moeten de server benaderen om het object te hervalideren."
 msgid "Behavior rules"
 msgstr "Gedrag regels"
 
-#: cherokee-trunk/admin/PageEntry.py:71
-msgid "GZip encoder"
-msgstr "GZip encoder"
-
-#: cherokee-trunk/admin/PageEntry.py:72
-msgid "Deflate encoder"
-msgstr "Deflate encoder"
-
 #: cherokee-trunk/admin/PageEntry.py:73 cherokee-trunk/admin/PageEntry.py:141
-#: cherokee-trunk/admin/PageVServer.py:115
+#: cherokee-trunk/admin/PageVServer.py:142
 msgid "Authentication"
 msgstr "Authenticatie"
 
@@ -5094,8 +5411,8 @@ msgstr "Verbied"
 msgid "Limit traffic to"
 msgstr "Limiteer verkeer tot"
 
-#: cherokee-trunk/admin/PageEntry.py:107 cherokee-trunk/admin/PageEntry.py:400
-#: cherokee-trunk/admin/PageVServer.py:121
+#: cherokee-trunk/admin/PageEntry.py:107 cherokee-trunk/admin/PageEntry.py:407
+#: cherokee-trunk/admin/PageVServer.py:148
 msgid "Traffic Shaping"
 msgstr "Verkeer Limiteren"
 
@@ -5104,7 +5421,7 @@ msgid "Skip Logging"
 msgstr "Log Registratie Overslaan"
 
 #: cherokee-trunk/admin/PageEntry.py:122
-#: cherokee-trunk/admin/PageVServer.py:626
+#: cherokee-trunk/admin/PageVServer.py:663
 msgid "Logging"
 msgstr "Log registratie"
 
@@ -5126,94 +5443,163 @@ msgstr "Validatie Mechanisme"
 
 #: cherokee-trunk/admin/PageEntry.py:157 cherokee-trunk/admin/PageEntry.py:160
 #: cherokee-trunk/admin/OWS_Login.py:83 cherokee-trunk/admin/OWS_Login.py:85
-#: packages/common/target.py:103 packages/common/target.py:113
+#: packages/common/target.py:114 packages/common/target.py:124
 msgid "Can not be empty"
 msgstr "Kan niet leeg zijn"
 
-#: cherokee-trunk/admin/PageEntry.py:224
+#: cherokee-trunk/admin/PageEntry.py:221
 msgid "Header Operations"
 msgstr "Kopregel Operaties"
 
-#: cherokee-trunk/admin/PageEntry.py:235
+#: cherokee-trunk/admin/PageEntry.py:232
 msgid "Action"
 msgstr "Actie"
 
-#: cherokee-trunk/admin/PageEntry.py:246
+#: cherokee-trunk/admin/PageEntry.py:243
 msgid "Add New Header"
 msgstr "Voeg nieuwe regel toe"
 
-#: cherokee-trunk/admin/PageEntry.py:257
-#: cherokee-trunk/admin/PageVServer.py:119
+#: cherokee-trunk/admin/PageEntry.py:254
+#: cherokee-trunk/admin/PageVServer.py:146
 msgid "Expiration"
 msgstr "Vervaltijd"
 
-#: cherokee-trunk/admin/PageEntry.py:260
+#: cherokee-trunk/admin/PageEntry.py:257
 msgid "Time to expire"
 msgstr "Tijd om te vervallen"
 
-#: cherokee-trunk/admin/PageEntry.py:264
+#: cherokee-trunk/admin/PageEntry.py:261
 msgid "Management by caches"
 msgstr "Beheer door caches"
 
-#: cherokee-trunk/admin/PageEntry.py:266
+#: cherokee-trunk/admin/PageEntry.py:263
 msgid "No Store"
 msgstr "Niet Opslaan"
 
-#: cherokee-trunk/admin/PageEntry.py:267
+#: cherokee-trunk/admin/PageEntry.py:264
 msgid "No Transform"
 msgstr "Geen Wijzigingen"
 
-#: cherokee-trunk/admin/PageEntry.py:268
+#: cherokee-trunk/admin/PageEntry.py:265
 msgid "Must Revalidate"
 msgstr "Moet Hervalideren"
 
-#: cherokee-trunk/admin/PageEntry.py:269
+#: cherokee-trunk/admin/PageEntry.py:266
 msgid "Proxies Revalidate"
 msgstr "Proxy's Hervalideren"
 
-#: cherokee-trunk/admin/PageEntry.py:286
+#: cherokee-trunk/admin/PageEntry.py:283
 msgid "Connections Timeout"
 msgstr "Verbindinguitvaltijd"
 
-#: cherokee-trunk/admin/PageEntry.py:293
+#: cherokee-trunk/admin/PageEntry.py:290
 msgid "Content Expiration"
 msgstr "Inhoud Vervaltijd"
 
-#: cherokee-trunk/admin/PageEntry.py:308
+#: cherokee-trunk/admin/PageEntry.py:303
+msgid "Information Encoders"
+msgstr "Informatie Encoders"
+
+#: cherokee-trunk/admin/PageEntry.py:307
 #, python-format
 msgid "Use the %s encoder whenever the client requests it."
 msgstr "Gebruik de %s encoder wanneer de gebruiker er om vraagt."
 
-#: cherokee-trunk/admin/PageEntry.py:309
+#: cherokee-trunk/admin/PageEntry.py:310
 msgid "support"
 msgstr "ondersteuning"
 
-#: cherokee-trunk/admin/PageEntry.py:314
-msgid "Information Encoders"
-msgstr "Informatie Encoders"
-
-#: cherokee-trunk/admin/PageEntry.py:328
+#: cherokee-trunk/admin/PageEntry.py:335
 msgid "Matching Rule"
 msgstr "Kies Regel"
 
-#: cherokee-trunk/admin/PageEntry.py:354 cherokee-trunk/admin/PageEntry.py:371
-#: cherokee-trunk/admin/PageEntry.py:396
-#: cherokee-trunk/admin/PageVServer.py:114
+#: cherokee-trunk/admin/PageEntry.py:361 cherokee-trunk/admin/PageEntry.py:378
+#: cherokee-trunk/admin/PageEntry.py:403
+#: cherokee-trunk/admin/PageVServer.py:141
 msgid "Handler"
 msgstr "Uitvoerder"
 
-#: cherokee-trunk/admin/PageEntry.py:397
+#: cherokee-trunk/admin/PageEntry.py:404
 msgid "Encoding"
 msgstr "Codering"
 
-#: cherokee-trunk/admin/PageEntry.py:398
+#: cherokee-trunk/admin/PageEntry.py:405
 msgid "Time"
 msgstr "Tijd"
 
-#: cherokee-trunk/admin/PageEntry.py:399
-#: cherokee-trunk/admin/PageVServer.py:627
+#: cherokee-trunk/admin/PageEntry.py:406
+#: cherokee-trunk/admin/PageVServer.py:664
 msgid "Security"
 msgstr "Beveiliging"
+
+#: cherokee-trunk/admin/SavingChecks.py:49
+msgid "Balancer without any source"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:59
+#, fuzzy
+msgid "Authentication rule without Realm"
+msgstr "Authenticatie lijst"
+
+#: cherokee-trunk/admin/SavingChecks.py:67
+#, fuzzy
+msgid "Virtual Server without nickname"
+msgstr "Virtuele Server naam"
+
+#: cherokee-trunk/admin/SavingChecks.py:70
+#, fuzzy
+msgid "Virtual Server without document root"
+msgstr "Virtuele Server hoofdmap."
+
+#: cherokee-trunk/admin/SavingChecks.py:81
+#, fuzzy
+msgid "Directory match without a directory"
+msgstr "Pad is geen map"
+
+#: cherokee-trunk/admin/SavingChecks.py:86
+msgid "Extensions match without any extension"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:91
+msgid "RegEx match without a RegEx entry"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:96
+msgid "Header match without a defined header"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:99
+msgid "Header match without a matching expression"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:105
+msgid "File exists rule without a file or 'Any file'"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:110
+msgid "Method match without a defined method"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:115
+#, fuzzy
+msgid "Empty 'Incoming IP/Port' match"
+msgstr "Binnenkomende IP/Poort"
+
+#: cherokee-trunk/admin/SavingChecks.py:120
+msgid "Empty 'Full path' rule match"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:125
+msgid "Empty 'Connected from' rule match"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:131
+msgid "Incomplete 'URL Argument' rule match"
+msgstr ""
+
+#: cherokee-trunk/admin/SavingChecks.py:136
+msgid "GeoIP match rule with no contries"
+msgstr ""
 
 #: cherokee-trunk/admin/Balancer.py:32
 msgid "Specifies the policy used to dispatch the connections."
@@ -5243,11 +5629,16 @@ msgstr ""
 "Een verdeler moet worden geconfigureerd om minimaal een informatie bron te "
 "gebruiken."
 
-#: cherokee-trunk/admin/Balancer.py:112
+#: cherokee-trunk/admin/Balancer.py:82
+#, fuzzy
+msgid "Broken Source"
+msgstr "Project Bron"
+
+#: cherokee-trunk/admin/Balancer.py:131
 msgid "Assign Information Sources"
 msgstr "Koppel Informatie Bron"
 
-#: cherokee-trunk/admin/Balancer.py:123
+#: cherokee-trunk/admin/Balancer.py:142
 msgid "Application Server"
 msgstr "Applicatie Server"
 
@@ -5342,42 +5733,54 @@ msgstr ""
 "bestand."
 
 #: cherokee-trunk/admin/OWS_Backup.py:65
-msgid "The Configuration File was restored successfuly"
+#, fuzzy
+msgid "The Configuration File was restored successfully"
 msgstr "Het configuratiebestand is succesvol hersteld"
 
 #: cherokee-trunk/admin/OWS_Backup.py:66
-msgid ""
-"The configuration has been rolled back to a previous version. Please, click "
-"the Save button if you want to commit the changes."
+#, fuzzy
+msgid "The configuration has been rolled back to a previous version."
 msgstr ""
 "De configuratie is terug gegaan naar een vorige versie. Druk op de Bewaar "
 "knop om de wijzigingen toe te passen."
 
-#: cherokee-trunk/admin/OWS_Backup.py:131
+#: cherokee-trunk/admin/OWS_Backup.py:67
+#, fuzzy
+msgid "Please, click the Save button if you want to commit the changes."
+msgstr ""
+"De configuratie is terug gegaan naar een vorige versie. Druk op de Bewaar "
+"knop om de wijzigingen toe te passen."
+
+#: cherokee-trunk/admin/OWS_Backup.py:68
+#, fuzzy
+msgid "Your current Configuration file matches the restored version."
+msgstr "De geselecteerde configurati wordt gebackupt."
+
+#: cherokee-trunk/admin/OWS_Backup.py:134
 msgid "Back up…"
 msgstr "Backup..."
 
-#: cherokee-trunk/admin/OWS_Backup.py:153
+#: cherokee-trunk/admin/OWS_Backup.py:156
 msgid "Back Up"
 msgstr "Backup"
 
-#: cherokee-trunk/admin/OWS_Backup.py:160
+#: cherokee-trunk/admin/OWS_Backup.py:163
 msgid "Notes"
 msgstr "Aantekeningen"
 
-#: cherokee-trunk/admin/OWS_Backup.py:203
+#: cherokee-trunk/admin/OWS_Backup.py:206
 msgid "Back Up Date"
 msgstr "Backup Datum"
 
-#: cherokee-trunk/admin/OWS_Backup.py:203
+#: cherokee-trunk/admin/OWS_Backup.py:206
 msgid "Annotations"
 msgstr "Annotaties"
 
-#: cherokee-trunk/admin/OWS_Backup.py:256
+#: cherokee-trunk/admin/OWS_Backup.py:259
 msgid "Restore"
 msgstr "Herstel"
 
-#: cherokee-trunk/admin/OWS_Backup.py:293
+#: cherokee-trunk/admin/OWS_Backup.py:302
 msgid "Restore…"
 msgstr "Herstel..."
 
@@ -5406,97 +5809,110 @@ msgid "Port already in use"
 msgstr "Poort al in gebruik"
 
 #: cherokee-trunk/admin/validations.py:64
-#: cherokee-trunk/admin/validations.py:72
+#: cherokee-trunk/admin/validations.py:78
 msgid "Malformed path"
 msgstr "Misvormd pad"
 
-#: cherokee-trunk/admin/validations.py:103
+#: cherokee-trunk/admin/validations.py:109
 msgid "It is not executable"
 msgstr "Het is niet uitvoerbaar"
 
-#: cherokee-trunk/admin/validations.py:109
-#: cherokee-trunk/admin/validations.py:184
+#: cherokee-trunk/admin/validations.py:115
+#: cherokee-trunk/admin/validations.py:190
 msgid "Path is not a regular file"
 msgstr "Pad is geen regulier bestand"
 
-#: cherokee-trunk/admin/validations.py:127
+#: cherokee-trunk/admin/validations.py:133
 msgid "It cannot be negative"
 msgstr "Het kan niet negatief zijn"
 
-#: cherokee-trunk/admin/validations.py:143
+#: cherokee-trunk/admin/validations.py:149
 msgid "Malformed IPv4"
 msgstr "Misvormd IPv4"
 
-#: cherokee-trunk/admin/validations.py:148
+#: cherokee-trunk/admin/validations.py:154
 msgid "Malformed IPv4 entry"
 msgstr "Misvormd IPv4 veld"
 
-#: cherokee-trunk/admin/validations.py:150
+#: cherokee-trunk/admin/validations.py:156
 msgid "IPv4 entry out of range"
 msgstr "IPv4 buiten bereik"
 
-#: cherokee-trunk/admin/validations.py:158
+#: cherokee-trunk/admin/validations.py:164
 msgid "Malformed IPv6"
 msgstr "Misvormd IPv6"
 
-#: cherokee-trunk/admin/validations.py:169
-#: cherokee-trunk/admin/validations.py:181
+#: cherokee-trunk/admin/validations.py:175
+#: cherokee-trunk/admin/validations.py:187
 msgid "Path does not exist"
 msgstr "Pad bestaat niet"
 
-#: cherokee-trunk/admin/validations.py:172
+#: cherokee-trunk/admin/validations.py:178
 msgid "Path is not a directory"
 msgstr "Pad is geen map"
 
-#: cherokee-trunk/admin/validations.py:200
+#: cherokee-trunk/admin/validations.py:207
+#, fuzzy
+msgid "Path is a directory"
+msgstr "Pad is geen map"
+
+#: cherokee-trunk/admin/validations.py:215
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
 msgstr "Verkeerde teken. Accepteert: letters, cijfers, _, - en ."
 
-#: cherokee-trunk/admin/validations.py:226
+#: cherokee-trunk/admin/validations.py:241
 msgid "Neither a number or an IPv4"
 msgstr "Geen nummer of IPv4"
 
-#: cherokee-trunk/admin/validations.py:237
+#: cherokee-trunk/admin/validations.py:252
 msgid "Invalid mask"
 msgstr "Verkeerd masker"
 
-#: cherokee-trunk/admin/validations.py:261
+#: cherokee-trunk/admin/validations.py:276
 msgid "Malformed entry (netmask)"
 msgstr "Misvormd veld (netmask)"
 
-#: cherokee-trunk/admin/validations.py:286
+#: cherokee-trunk/admin/validations.py:301
 msgid "Cannot be empty"
 msgstr "Kan niet leeg zijn"
 
-#: cherokee-trunk/admin/validations.py:291
+#: cherokee-trunk/admin/validations.py:306
 msgid "Forced failure"
 msgstr "Geforceerde fout"
 
-#: cherokee-trunk/admin/validations.py:299
+#: cherokee-trunk/admin/validations.py:314
 msgid "http:// missing"
 msgstr "http:// mist"
 
-#: cherokee-trunk/admin/validations.py:336
+#: cherokee-trunk/admin/validations.py:351
 msgid "Time value contain invalid values"
 msgstr "Tijd waarde bevat onjuiste waarden"
 
-#: cherokee-trunk/admin/validations.py:339
+#: cherokee-trunk/admin/validations.py:354
 msgid "Malformed time"
 msgstr "Misvormde tijd"
 
-#: cherokee-trunk/admin/validations.py:347
+#: cherokee-trunk/admin/validations.py:362
 msgid "Virtual Server nick name is already being used."
 msgstr "Virtuele Server bijnaam is al in gebruik."
 
-#: cherokee-trunk/admin/validations.py:354
-#: cherokee-trunk/admin/validations.py:364
-#: cherokee-trunk/admin/validations.py:374
-#: cherokee-trunk/admin/validations.py:391
+#: cherokee-trunk/admin/validations.py:369
+#: cherokee-trunk/admin/validations.py:379
+#: cherokee-trunk/admin/validations.py:389
+#: cherokee-trunk/admin/validations.py:406
 msgid "Already in use"
 msgstr "Al in gebruik"
 
-#: cherokee-trunk/admin/validations.py:418
+#: cherokee-trunk/admin/validations.py:433
 msgid "Please insert a valid email"
+msgstr ""
+
+#: cherokee-trunk/admin/validations.py:439
+msgid "Cannot contain the quote (') character"
+msgstr ""
+
+#: cherokee-trunk/admin/validations.py:444
+msgid "Cannot contain the double quote (\") character"
 msgstr ""
 
 #: cherokee-trunk/admin/PageNewConfig.py:38
@@ -5504,6 +5920,11 @@ msgid "Index"
 msgstr "Index"
 
 #: cherokee-trunk/admin/PageNewConfig.py:40
+#, fuzzy
+msgid "Loading new configuration file.."
+msgstr "Maak een nieuw configuratie bestand"
+
+#: cherokee-trunk/admin/PageNewConfig.py:41
 msgid ""
 "<b>The configuration is not found</b>.<br />You can create a new "
 "configuration file and proceed to customize the web server."
@@ -5511,36 +5932,36 @@ msgstr ""
 "<b>De configuratie is niet gevonden</b>.<br />Je kan een nieuwe configuratie "
 "maken en doorgaan om de webserver in te stellen."
 
-#: cherokee-trunk/admin/PageNewConfig.py:152
+#: cherokee-trunk/admin/PageNewConfig.py:166
 #, fuzzy
 msgid "Create a new configuration file:"
 msgstr "Maak een nieuw configuratie bestand"
 
-#: cherokee-trunk/admin/PageNewConfig.py:155
+#: cherokee-trunk/admin/PageNewConfig.py:169
 msgid "Regular"
 msgstr "Reguliere"
 
-#: cherokee-trunk/admin/PageNewConfig.py:156
+#: cherokee-trunk/admin/PageNewConfig.py:170
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "Normale configuratie: Apache logs, MIME typen, iconen, etc."
 
-#: cherokee-trunk/admin/PageNewConfig.py:161
+#: cherokee-trunk/admin/PageNewConfig.py:175
 msgid "Optimized to send static content."
 msgstr "Geoptimiliseerd om statisch verkeerd te verzenden."
 
-#: cherokee-trunk/admin/PageNewConfig.py:165
+#: cherokee-trunk/admin/PageNewConfig.py:179
 msgid "Server Development"
 msgstr "Server Ontwikkelinig"
 
-#: cherokee-trunk/admin/PageNewConfig.py:166
+#: cherokee-trunk/admin/PageNewConfig.py:180
 msgid "No standard port, No log files, No PID file, etc."
 msgstr "Geen standaard poort, Geen log bestanden, Geen PID bestand, etc."
 
-#: cherokee-trunk/admin/PageNewConfig.py:169
+#: cherokee-trunk/admin/PageNewConfig.py:183
 msgid "New Configuration File"
 msgstr "Nieuw Configuratie Bestand"
 
-#: cherokee-trunk/admin/PageNewConfig.py:170
+#: cherokee-trunk/admin/PageNewConfig.py:184
 msgid "Configuration File Not Found"
 msgstr "Configuratie Bestand Niet Gevonden"
 
@@ -5548,7 +5969,7 @@ msgstr "Configuratie Bestand Niet Gevonden"
 msgid "On"
 msgstr "Aan"
 
-#: cherokee-trunk/admin/Cherokee.py:138
+#: cherokee-trunk/admin/Cherokee.py:150
 msgid "Could not access file descriptors: "
 msgstr "Kan niet bij bestandsbeschrijvers: "
 
@@ -5706,18 +6127,8 @@ msgstr ""
 "(Standaard: uit)"
 
 #: cherokee-trunk/admin/PageVServer.py:70
-msgid ""
-"The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
-"${protocol}, ${transport}, ${port_server}, ${query_string}, "
-"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-"${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
-"${vserver_name_req}, ${response_size}"
+msgid "The following variables are accepted: "
 msgstr ""
-"De volgende variabelen worden geaccepteerd: <br/>${ip_remote}, ${ip_local}, "
-"${protocol}, ${transport}, ${port_server}, ${query_string}, "
-"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-"${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
-"${vserver_name_req}, ${response_size}"
 
 #: cherokee-trunk/admin/PageVServer.py:71
 msgid "Allows the selection of domain matching method."
@@ -5745,274 +6156,373 @@ msgstr ""
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr "<p>De 'standaard' virtuele server voor alle domein namen.</p>"
 
-#: cherokee-trunk/admin/PageVServer.py:108
+#: cherokee-trunk/admin/PageVServer.py:79
+#, fuzzy
+msgid "Remote IP address"
+msgstr "LDAP server IP adres."
+
+#: cherokee-trunk/admin/PageVServer.py:80
+#, fuzzy
+msgid "Local IP address"
+msgstr "E-mail adres"
+
+#: cherokee-trunk/admin/PageVServer.py:81
+#, fuzzy
+msgid "Request Protocol"
+msgstr "Verzoek"
+
+#: cherokee-trunk/admin/PageVServer.py:82
+msgid "Transport type: http or https"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:83
+msgid "Port of the server serving the request"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:84
+msgid "The query string, if exists"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:85
+msgid "First line of HTTP request"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:86
+msgid "Response status code"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:87
+msgid "Time: in common log format time format"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:88
+msgid "Time: seconds since Epoch"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:89
+msgid "Time: milliseconds since Epoch"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:90
+#, fuzzy
+msgid "Remote user (authentication)"
+msgstr "Basis domein voor de webserver authenticaties."
+
+#: cherokee-trunk/admin/PageVServer.py:91
+msgid "URL path requested"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:92
+msgid "URL path requested before any rewrite"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:93
+#, fuzzy
+msgid "Virtual Server nick name"
+msgstr "Virtuele Server naam"
+
+#: cherokee-trunk/admin/PageVServer.py:94
+msgid "Requested host (Host: header)"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:95
+msgid "Size of the response in bytes"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:96
+msgid "'Host:' header of the request"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:97
+msgid "'Referrer:' header of the request"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:98
+msgid "'User-Agent:' header of the request"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:99
+msgid "'Cookie:' header of the request"
+msgstr ""
+
+#: cherokee-trunk/admin/PageVServer.py:135
 msgid "Loggers"
 msgstr "Loggers"
 
-#: cherokee-trunk/admin/PageVServer.py:109
+#: cherokee-trunk/admin/PageVServer.py:136
 msgid "SSL cookbook"
 msgstr "SSL kookboek"
 
-#: cherokee-trunk/admin/PageVServer.py:113
+#: cherokee-trunk/admin/PageVServer.py:140
 msgid "Rule Match"
 msgstr "Regel overeenkomst"
 
-#: cherokee-trunk/admin/PageVServer.py:113
+#: cherokee-trunk/admin/PageVServer.py:140
 msgid "Match"
 msgstr "Overeenkomst"
 
-#: cherokee-trunk/admin/PageVServer.py:114
+#: cherokee-trunk/admin/PageVServer.py:141
 msgid "Assigned Handler"
 msgstr "Toegepaste Uitvoerder"
 
-#: cherokee-trunk/admin/PageVServer.py:115
+#: cherokee-trunk/admin/PageVServer.py:142
 msgid "Auth"
 msgstr "Auth"
 
-#: cherokee-trunk/admin/PageVServer.py:116
+#: cherokee-trunk/admin/PageVServer.py:143
 msgid "Custom Document Root"
 msgstr "Eigen Hoofdmap"
 
-#: cherokee-trunk/admin/PageVServer.py:116
+#: cherokee-trunk/admin/PageVServer.py:143
 msgid "Root"
 msgstr "Hoofdmap"
 
-#: cherokee-trunk/admin/PageVServer.py:117
+#: cherokee-trunk/admin/PageVServer.py:144
 msgid "Only HTTPS"
 msgstr "Alleen HTTPS"
 
-#: cherokee-trunk/admin/PageVServer.py:117
+#: cherokee-trunk/admin/PageVServer.py:144
 msgid "Secure"
 msgstr "Beveiligd"
 
-#: cherokee-trunk/admin/PageVServer.py:118
+#: cherokee-trunk/admin/PageVServer.py:145
 msgid "Encoders"
 msgstr "Encodering"
 
-#: cherokee-trunk/admin/PageVServer.py:118
+#: cherokee-trunk/admin/PageVServer.py:145
 msgid "Enc"
 msgstr "Enc"
 
-#: cherokee-trunk/admin/PageVServer.py:119
+#: cherokee-trunk/admin/PageVServer.py:146
 msgid "Exp"
 msgstr "Exp"
 
-#: cherokee-trunk/admin/PageVServer.py:120
+#: cherokee-trunk/admin/PageVServer.py:147
 msgid "Connection Timeout"
 msgstr "Verbindinguitvaltijd"
 
-#: cherokee-trunk/admin/PageVServer.py:121
+#: cherokee-trunk/admin/PageVServer.py:148
 msgid "Shaping"
 msgstr "Verkeer Limiteren"
 
-#: cherokee-trunk/admin/PageVServer.py:122
+#: cherokee-trunk/admin/PageVServer.py:149
 msgid "Logging Enabled"
 msgstr "Log Registratie Geactiveerd"
 
-#: cherokee-trunk/admin/PageVServer.py:122
+#: cherokee-trunk/admin/PageVServer.py:149
 msgid "Log"
 msgstr "Log"
 
-#: cherokee-trunk/admin/PageVServer.py:123
+#: cherokee-trunk/admin/PageVServer.py:150
 msgid "Rule is Final"
 msgstr "Regel is definitief"
 
-#: cherokee-trunk/admin/PageVServer.py:123
+#: cherokee-trunk/admin/PageVServer.py:150
 #: cherokee-trunk/admin/PageRule.py:233
 msgid "Final"
 msgstr "Definieve"
 
-#: cherokee-trunk/admin/PageVServer.py:124
+#: cherokee-trunk/admin/PageVServer.py:151
 msgid "Rule is Active"
 msgstr "Regel is Actief"
 
-#: cherokee-trunk/admin/PageVServer.py:150
-#: cherokee-trunk/admin/PageVServer.py:623
+#: cherokee-trunk/admin/PageVServer.py:177
+#: cherokee-trunk/admin/PageVServer.py:660
 msgid "Host Match"
 msgstr "Computernaam Gelijk"
 
-#: cherokee-trunk/admin/PageVServer.py:169
-#: cherokee-trunk/admin/PageVServer.py:182
+#: cherokee-trunk/admin/PageVServer.py:196
+#: cherokee-trunk/admin/PageVServer.py:209
 msgid "Remove criteria"
 msgstr "Verwijder criteria"
 
-#: cherokee-trunk/admin/PageVServer.py:198
+#: cherokee-trunk/admin/PageVServer.py:225
 msgid "Add an additional matching criteria"
 msgstr "Voeg extra zoek criteria toe"
 
-#: cherokee-trunk/admin/PageVServer.py:289
+#: cherokee-trunk/admin/PageVServer.py:316
 msgid "Behavior Rules"
 msgstr "Gedragregels"
 
-#: cherokee-trunk/admin/PageVServer.py:298
+#: cherokee-trunk/admin/PageVServer.py:325
 msgid "Rule Management"
 msgstr "Regel beheer"
 
-#: cherokee-trunk/admin/PageVServer.py:324
+#: cherokee-trunk/admin/PageVServer.py:351
 msgid "Only accept Secure Connections"
 msgstr "Accepteer alleen beveiligde verbindingen"
 
-#: cherokee-trunk/admin/PageVServer.py:329
+#: cherokee-trunk/admin/PageVServer.py:356
 msgid "Encoding enabled"
 msgstr "Encodering geactiveerd"
 
-#: cherokee-trunk/admin/PageVServer.py:335
+#: cherokee-trunk/admin/PageVServer.py:362
 msgid "no"
 msgstr "nee"
 
-#: cherokee-trunk/admin/PageVServer.py:346
+#: cherokee-trunk/admin/PageVServer.py:373
 msgid " seconds"
 msgstr " seconden"
 
-#: cherokee-trunk/admin/PageVServer.py:351
+#: cherokee-trunk/admin/PageVServer.py:378
 msgid " bytes per second"
 msgstr " bytes per seconde"
 
-#: cherokee-trunk/admin/PageVServer.py:356
+#: cherokee-trunk/admin/PageVServer.py:383
 msgid "Logging enabled for this rule"
 msgstr "Log registratie voor deze regel is geactiveerd"
 
-#: cherokee-trunk/admin/PageVServer.py:361
+#: cherokee-trunk/admin/PageVServer.py:388
 msgid "Prevents further rule evaluation"
 msgstr "Voorkomt het gebruik van opvolgende regels"
 
-#: cherokee-trunk/admin/PageVServer.py:366
+#: cherokee-trunk/admin/PageVServer.py:393
 msgid "Rule is active"
 msgstr "Regel is actief"
 
-#: cherokee-trunk/admin/PageVServer.py:385
+#: cherokee-trunk/admin/PageVServer.py:412
 msgid "Virtual Server nickname"
 msgstr "Virtuele Server naam"
 
-#: cherokee-trunk/admin/PageVServer.py:387
+#: cherokee-trunk/admin/PageVServer.py:414
 msgid "Server ID"
 msgstr "Server ID"
 
-#: cherokee-trunk/admin/PageVServer.py:397
+#: cherokee-trunk/admin/PageVServer.py:424
 msgid "Directory Indexes"
 msgstr "Map indices"
 
-#: cherokee-trunk/admin/PageVServer.py:405
+#: cherokee-trunk/admin/PageVServer.py:432
 msgid "Neither are in use at the moment."
 msgstr "Geen zijn momenteel in gebruik."
 
-#: cherokee-trunk/admin/PageVServer.py:410
+#: cherokee-trunk/admin/PageVServer.py:437
 msgid "Keep-alive"
 msgstr "Blijf-in-leven"
 
-#: cherokee-trunk/admin/PageVServer.py:411
+#: cherokee-trunk/admin/PageVServer.py:438
 msgid "Max Upload Size"
 msgstr "Max Upload grootte"
 
-#: cherokee-trunk/admin/PageVServer.py:413
+#: cherokee-trunk/admin/PageVServer.py:440
 #: cherokee-trunk/admin/PageGeneral.py:254
 msgid "Network"
 msgstr "Netwerk"
 
-#: cherokee-trunk/admin/PageVServer.py:456
+#: cherokee-trunk/admin/PageVServer.py:482
 msgid "Error Handling hook"
 msgstr "Fout Afhandelaar onderbreking"
 
-#: cherokee-trunk/admin/PageVServer.py:471
+#: cherokee-trunk/admin/PageVServer.py:497
 msgid "Write errors to"
 msgstr "Schrijf fouten naar"
 
-#: cherokee-trunk/admin/PageVServer.py:475
-#: cherokee-trunk/admin/PageVServer.py:514
+#: cherokee-trunk/admin/PageVServer.py:501
+#: cherokee-trunk/admin/PageVServer.py:540
 msgid "Filename"
 msgstr "Bestandsnaam"
 
-#: cherokee-trunk/admin/PageVServer.py:477
-#: cherokee-trunk/admin/PageVServer.py:517
+#: cherokee-trunk/admin/PageVServer.py:503
+#: cherokee-trunk/admin/PageVServer.py:543
 msgid "Command"
 msgstr "Commando"
 
-#: cherokee-trunk/admin/PageVServer.py:483
+#: cherokee-trunk/admin/PageVServer.py:509
 msgid "Error Logging"
 msgstr "Fout Loggen"
 
-#: cherokee-trunk/admin/PageVServer.py:494
+#: cherokee-trunk/admin/PageVServer.py:520
 msgid "Format"
 msgstr "Formaat"
 
-#: cherokee-trunk/admin/PageVServer.py:501
+#: cherokee-trunk/admin/PageVServer.py:527
 msgid "Write accesses to"
 msgstr "Schrijf toegang naar"
 
-#: cherokee-trunk/admin/PageVServer.py:522
+#: cherokee-trunk/admin/PageVServer.py:550
+#, fuzzy
+msgid "Show macros"
+msgstr "Toon Groep"
+
+#: cherokee-trunk/admin/PageVServer.py:550
+#, fuzzy
+msgid "Hide"
+msgstr "Hoofdregel"
+
+#: cherokee-trunk/admin/PageVServer.py:559
 msgid "Template: "
 msgstr "Sjabloon:"
 
-#: cherokee-trunk/admin/PageVServer.py:524
+#: cherokee-trunk/admin/PageVServer.py:561
 msgid "Access Logging"
 msgstr "Toegangslogging"
 
-#: cherokee-trunk/admin/PageVServer.py:530
+#: cherokee-trunk/admin/PageVServer.py:567
 msgid "Time standard"
 msgstr "Tijd standaard"
 
-#: cherokee-trunk/admin/PageVServer.py:531
+#: cherokee-trunk/admin/PageVServer.py:568
 msgid "Accept Forwarded IPs"
 msgstr "Accepteer Doorgestuurde IPs"
 
-#: cherokee-trunk/admin/PageVServer.py:534 cherokee-trunk/admin/CgiBase.py:70
+#: cherokee-trunk/admin/PageVServer.py:571 cherokee-trunk/admin/CgiBase.py:70
 msgid "Don't check origin"
 msgstr "Controleer bron niet"
 
-#: cherokee-trunk/admin/PageVServer.py:534
+#: cherokee-trunk/admin/PageVServer.py:571
 msgid "Do not check"
 msgstr "Controleer niet"
 
-#: cherokee-trunk/admin/PageVServer.py:537 cherokee-trunk/admin/CgiBase.py:72
+#: cherokee-trunk/admin/PageVServer.py:574 cherokee-trunk/admin/CgiBase.py:72
 msgid "Accept from Hosts"
 msgstr "Accepteer van Computers"
 
-#: cherokee-trunk/admin/PageVServer.py:543
+#: cherokee-trunk/admin/PageVServer.py:580
 msgid "Logging Options"
 msgstr "Log opties"
 
-#: cherokee-trunk/admin/PageVServer.py:579
+#: cherokee-trunk/admin/PageVServer.py:616
 msgid "Certificate"
 msgstr "Certificaat"
 
-#: cherokee-trunk/admin/PageVServer.py:580
+#: cherokee-trunk/admin/PageVServer.py:617
 msgid "Certificate key"
 msgstr "Certificaat sleutel"
 
-#: cherokee-trunk/admin/PageVServer.py:585
+#: cherokee-trunk/admin/PageVServer.py:622
 msgid "Required SSL/TLS Values"
 msgstr "Verplichte SSL/TLS waarden"
 
-#: cherokee-trunk/admin/PageVServer.py:590
+#: cherokee-trunk/admin/PageVServer.py:627
 msgid "Ciphers"
 msgstr "Versleutelingen"
 
-#: cherokee-trunk/admin/PageVServer.py:591
+#: cherokee-trunk/admin/PageVServer.py:628
 msgid "Client Certs. Request"
 msgstr "Gebruiker Certificaat Aanvragen"
 
-#: cherokee-trunk/admin/PageVServer.py:594
+#: cherokee-trunk/admin/PageVServer.py:631
 msgid "CA List"
 msgstr "CA lijst"
 
-#: cherokee-trunk/admin/PageVServer.py:597
+#: cherokee-trunk/admin/PageVServer.py:634
 msgid "Verify Depth"
 msgstr "Verifiëer Diepte"
 
-#: cherokee-trunk/admin/PageVServer.py:603
+#: cherokee-trunk/admin/PageVServer.py:640
 msgid "Advanced Options"
 msgstr "Uitgebreide opties"
 
-#: cherokee-trunk/admin/PageVServer.py:622
+#: cherokee-trunk/admin/PageVServer.py:659
 msgid "Basics"
 msgstr "Basis"
 
-#: cherokee-trunk/admin/PageVServer.py:624
+#: cherokee-trunk/admin/PageVServer.py:661
 #: cherokee-trunk/admin/PageRule.py:298
 msgid "Behavior"
 msgstr "Gedrag"
 
-#: cherokee-trunk/admin/PageVServer.py:625
+#: cherokee-trunk/admin/PageVServer.py:662
 msgid "Error Handler"
 msgstr "Fout afhandelaar"
 
@@ -6321,17 +6831,17 @@ msgstr "Gebruikers"
 msgid "Authentication Details"
 msgstr "Authenticatie Details"
 
-#: cherokee-trunk/admin/server.py:62
+#: cherokee-trunk/admin/server.py:63
 #, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
 msgstr "Server %(version)s draait... PID=%(pid)d Poort=%(scgi_port)s"
 
-#: cherokee-trunk/admin/server.py:64
+#: cherokee-trunk/admin/server.py:65
 #, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "Server %(version)s draait... PID=%(pid)d Poort=%(scgi_port)s"
 
-#: cherokee-trunk/admin/server.py:148
+#: cherokee-trunk/admin/server.py:149
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Foutieve parameters: PORT CONFIG_FILE"
 
@@ -6364,9 +6874,10 @@ msgid "Select"
 msgstr "Selecteer"
 
 #: cherokee-trunk/admin/OWS_Cherokee_Info.py:36
+#, fuzzy, python-format
 msgid ""
-"Thank you for testing a development snapshot. It helps us to create the "
-"highest quality product."
+"Thank you for testing a development snapshot (%(VERSION)s). It helps us to "
+"create the highest quality product."
 msgstr ""
 "Bedankt voor het testen van een ontwikkel versie. Het helpt ons producten te "
 "maken van de hoogste kwaliteit."
@@ -6380,7 +6891,8 @@ msgid "Latest version could not be determined at the moment."
 msgstr "Laatste versie kan momenteel niet worden bepaald."
 
 #: cherokee-trunk/admin/OWS_Cherokee_Info.py:69
-msgid "Cherokee is up to date."
+#, fuzzy
+msgid "Cherokee is up to date"
 msgstr "Cherokee is recent."
 
 #: cherokee-trunk/admin/OWS_Cherokee_Info.py:71
@@ -6487,44 +6999,44 @@ msgstr ""
 "<span class=\"register-link\">Nog niet geregistreerd? <a target=\"_blank\" "
 "href=\"%s\">Meld je nu aan</a>.</span>"
 
-#: cherokee-trunk/admin/OWS_Login.py:92
+#: cherokee-trunk/admin/OWS_Login.py:98
 msgid "Authentication failed"
 msgstr "Authenticatie gefaald"
 
-#: cherokee-trunk/admin/OWS_Login.py:103
+#: cherokee-trunk/admin/OWS_Login.py:109
 msgid "Sign in to Cherokee Market"
 msgstr "Log in op de Cherokee Markt"
 
-#: cherokee-trunk/admin/OWS_Login.py:106
+#: cherokee-trunk/admin/OWS_Login.py:112
 msgid "Email address"
 msgstr "E-mail adres"
 
-#: cherokee-trunk/admin/OWS_Login.py:122
+#: cherokee-trunk/admin/OWS_Login.py:128
 msgid "Logged as "
 msgstr "Ingelogd als"
 
-#: cherokee-trunk/admin/OWS_Login.py:124
+#: cherokee-trunk/admin/OWS_Login.py:130
 msgid " ("
 msgstr ""
 
-#: cherokee-trunk/admin/OWS_Login.py:125
+#: cherokee-trunk/admin/OWS_Login.py:131
 msgid "Sign out"
 msgstr "Uitloggen"
 
-#: cherokee-trunk/admin/OWS_Login.py:126
+#: cherokee-trunk/admin/OWS_Login.py:132
 msgid ")"
 msgstr ""
 
-#: cherokee-trunk/admin/Wizard.py:41
+#: cherokee-trunk/admin/Wizard.py:43
 msgid "Check the cookbook for more details."
 msgstr "Bekijk het kookboek voor meer informatie."
 
-#: cherokee-trunk/admin/Wizard.py:197
+#: cherokee-trunk/admin/Wizard.py:208
 msgid "Use the same logging configuration as one of the other virtual servers."
 msgstr ""
 "Gebruik dezelfde log configuratie als een van de andere virtuele servers."
 
-#: cherokee-trunk/admin/Wizard.py:201
+#: cherokee-trunk/admin/Wizard.py:212
 msgid "Do not configure"
 msgstr "Configureer niet"
 
@@ -6834,7 +7346,54 @@ msgstr ""
 msgid "Learn more"
 msgstr "Lees verder"
 
-#: packages/magnolia/installer.py:20
+#: packages/joomla/installer.py:135 packages/phpmyadmin/installer.py:85
+#: packages/trac/installer.py:135 packages/vanilla/installer.py:121
+#: packages/drupal7/installer.py:154 packages/silverstripe/installer.py:114
+#: packages/mediawiki/installer.py:106 packages/wordpress/installer.py:126
+#: packages/redmine/installer.py:106 packages/zencart/installer.py:95
+#: packages/drupal/installer.py:144 packages/openx/installer.py:64
+#: packages/sugar/installer.py:102 packages/moodle/installer.py:85
+#: packages/phpbb/installer.py:80
+#, fuzzy
+msgid "Checking Requirements"
+msgstr "Controleren op de installatievereisten"
+
+#: packages/joomla/installer.py:139 packages/phpmyadmin/installer.py:89
+#: packages/magnolia/installer.py:93 packages/trac/installer.py:139
+#: packages/vanilla/installer.py:125 packages/drupal7/installer.py:158
+#: packages/silverstripe/installer.py:118 packages/liferay/installer.py:83
+#: packages/mediawiki/installer.py:110 packages/wordpress/installer.py:130
+#: packages/nagios/installer.py:155 packages/nagios/installer.py:362
+#: packages/nagios/installer.py:508 packages/redmine/installer.py:110
+#: packages/redmine/installer.py:191 packages/wsgidav/installer.py:97
+#: packages/zencart/installer.py:99 packages/nuxeo-dam/installer.py:96
+#: packages/statusnet/installer.py:98 packages/drupal/installer.py:148
+#: packages/openx/installer.py:68 packages/sugar/installer.py:106
+#: packages/nuxeo-dm/installer.py:96 packages/moodle/installer.py:89
+#: packages/phpbb/installer.py:84
+msgid "Retry"
+msgstr "Opnieuw"
+
+#: packages/joomla/installer.py:260 packages/vanilla/installer.py:255
+#: packages/silverstripe/installer.py:251 packages/mediawiki/installer.py:214
+#: packages/wordpress/installer.py:291 packages/zencart/installer.py:218
+#: packages/statusnet/installer.py:216 packages/drupal/installer.py:269
+#: packages/sugar/installer.py:189 packages/phpbb/installer.py:223
+msgid "Performing adjustments"
+msgstr ""
+
+#: packages/joomla/installer.py:261 packages/trac/installer.py:225
+#: packages/vanilla/installer.py:256 packages/drupal7/installer.py:348
+#: packages/silverstripe/installer.py:252 packages/mediawiki/installer.py:215
+#: packages/wordpress/installer.py:292 packages/nagios/installer.py:436
+#: packages/wsgidav/installer.py:157 packages/zencart/installer.py:219
+#: packages/statusnet/installer.py:217 packages/drupal/installer.py:270
+#: packages/openx/installer.py:177 packages/sugar/installer.py:190
+#: packages/moodle/installer.py:289 packages/phpbb/installer.py:224
+msgid "This process may take a while. Please, hold on."
+msgstr ""
+
+#: packages/magnolia/installer.py:27
 msgid ""
 "At the time being, this package can only be configured under a new virtual "
 "server."
@@ -6842,39 +7401,35 @@ msgstr ""
 "Op dit moment kan dit pakket alleen worden geconfigureerd onder een nieuwe "
 "virtuele server."
 
-#: packages/magnolia/installer.py:74 packages/liferay/installer.py:66
-#: packages/nuxeo-dam/installer.py:80 packages/nuxeo-dm/installer.py:80
+#: packages/magnolia/installer.py:84 packages/liferay/installer.py:74
+#: packages/nuxeo-dam/installer.py:87 packages/nuxeo-dm/installer.py:87
 msgid "Checking for installation requirements"
 msgstr "Controleren op de installatievereisten"
 
-#: packages/magnolia/installer.py:83 packages/trac/installer.py:173
-#: packages/vanilla/installer.py:90 packages/liferay/installer.py:75
-#: packages/nagios/installer.py:143 packages/nagios/installer.py:347
-#: packages/nagios/installer.py:440 packages/redmine/installer.py:108
-#: packages/wsgidav/installer.py:75 packages/wsgidav/installer.py:111
-#: packages/nuxeo-dam/installer.py:89 packages/statusnet/installer.py:88
-#: packages/openx/installer.py:65 packages/nuxeo-dm/installer.py:89
-msgid "Retry"
-msgstr "Opnieuw"
+#: packages/magnolia/installer.py:159 packages/liferay/installer.py:150
+#: packages/nuxeo-dam/installer.py:171 packages/nuxeo-dm/installer.py:171
+#, fuzzy
+msgid "Access details"
+msgstr "Bezoeken"
 
-#: packages/magnolia/installer.py:147
+#: packages/magnolia/installer.py:160
 msgid ""
-"Magnolia has been installed. It will be launched as soon as you access the "
-"selected URL."
+"Magnolia has been installed, and Cherokee is configured to automatically "
+"launch it whenever the resource is accessed if it is not already available. "
+"A one-time pre-launch has been issued to save time."
 msgstr ""
-"Magnolia is geinstalleerd. Het zal worden opgestart zodra je naar de "
-"geselecteerde URL gaat."
 
-#: packages/magnolia/installer.py:148
+#: packages/magnolia/installer.py:161
+#, fuzzy
 msgid ""
-"Note that launching Magnolia can take up quite some time, so please be "
-"patient the first time you access it."
+"Note that launching Magnolia can take up a couple of  minutes on modern "
+"servers, so please be patient the first time you access it."
 msgstr ""
-"Bedenk dat het starten van Magnolia een tijdje kan duren, dus wees geduldig "
-"bij de eerste keer bekijken."
+"Bedenk dat het starten van Liferay enige minuten kan duren, zelfs op moderne "
+"servers, dus wees geduldig de eerste keer dat je de pagina bekijkt."
 
-#: packages/magnolia/installer.py:149 packages/liferay/installer.py:141
-#: packages/nuxeo-dam/installer.py:163 packages/nuxeo-dm/installer.py:163
+#: packages/magnolia/installer.py:162 packages/nuxeo-dam/installer.py:174
+#: packages/nuxeo-dm/installer.py:174
 msgid ""
 "It is probably a good idea to pre-launch it instead of having the web-server "
 "do so on demand."
@@ -6882,52 +7437,52 @@ msgstr ""
 "Het is waarschijnlijk een goed idee om het vooraf te starten, in plaats van "
 "dat de webserver het doet na eerste aanvraag."
 
-#: packages/magnolia/installer.py:150 packages/liferay/installer.py:142
-#: packages/nuxeo-dam/installer.py:164 packages/nuxeo-dm/installer.py:164
+#: packages/magnolia/installer.py:163 packages/liferay/installer.py:154
+#: packages/nuxeo-dam/installer.py:175 packages/nuxeo-dm/installer.py:175
 msgid "These are the default access details:"
 msgstr "Dit zijn de standaard toegang gegevens:"
 
-#: packages/trac/installer.py:19 packages/wsgidav/installer.py:20
+#: packages/trac/installer.py:32 packages/wsgidav/installer.py:32
 msgid ""
 "There was an error during the installation of the required dependencies."
 msgstr "Er was een fout bij het installeren van de benodigde afhankelijkheden."
 
-#: packages/trac/installer.py:20
+#: packages/trac/installer.py:33
 msgid "There was an error during the creation of the Trac project."
 msgstr "Er was een fout bij het aan maken van het Trac project."
 
-#: packages/trac/installer.py:21
+#: packages/trac/installer.py:34
 msgid ""
 "Please try again if the problem can be solved manually issuing the following "
 "command."
 msgstr ""
 "Probeer zelf of het probleem kan worden opgelost met het volgende commando."
 
-#: packages/trac/installer.py:22
+#: packages/trac/installer.py:35
 msgid "Installing Trac."
 msgstr "Trac instaleren."
 
-#: packages/trac/installer.py:23
+#: packages/trac/installer.py:36
 msgid "Trac is being installed and a default Trac project is being created."
 msgstr "Trac wordt geïnstalleerd en een standaard Trac project wordt gemaakt."
 
-#: packages/trac/installer.py:24
+#: packages/trac/installer.py:37
 msgid "This might take some time. Please wait."
 msgstr "Dit duurt mogelijk even. Een moment geduld."
 
-#: packages/trac/installer.py:26
+#: packages/trac/installer.py:39
 msgid "Name of the initial user configured for Trac"
 msgstr "Naam van de eerste gebruiker geconfigureerd voor Trac"
 
-#: packages/trac/installer.py:27
+#: packages/trac/installer.py:40
 msgid "Password of the initial user configured for Trac"
 msgstr "Wachtwoord van de eerste gebruiker geconfigureerd voor Trac."
 
-#: packages/trac/installer.py:28
+#: packages/trac/installer.py:41 packages/nagios/installer.py:179
 msgid "User configuration"
 msgstr "Gebruiker configuratie"
 
-#: packages/trac/installer.py:29
+#: packages/trac/installer.py:42
 msgid ""
 "Trac relies on the web server for user authentication. After the "
 "installation you will be able to define more users through the Security tab "
@@ -6937,31 +7492,81 @@ msgstr ""
 "kun je meer gebruikers aanmaken door het Beveiligingstabblad van de '/login' "
 "regel in Cherokee-Admin."
 
-#: packages/trac/installer.py:197
+#: packages/trac/installer.py:217
+msgid "Satisfying pysqlite requirements"
+msgstr ""
+
+#: packages/trac/installer.py:224
+#, fuzzy
+msgid "Installing Trac"
+msgstr "Trac instaleren."
+
+#: packages/trac/installer.py:254
 msgid "Trac User"
 msgstr "Trac Gebruiker"
 
-#: packages/trac/installer.py:198
+#: packages/trac/installer.py:255
 msgid "Trac Password"
 msgstr "Trac Wachtwoord"
 
-#: packages/vanilla/installer.py:81 packages/nagios/installer.py:134
-#: packages/wsgidav/installer.py:66 packages/statusnet/installer.py:79
-#: packages/openx/installer.py:56
-msgid "Checking Dependencies"
-msgstr "Afhankelijkheden controleren"
-
-#: packages/vanilla/tools.py:10
-msgid ""
-"Required PHP module not installed. One or more of the following PHP modules "
-"is missing from your system and the StatusNet installer will be unable to "
-"proceed: curl, PDO, pdo_mysql, gd."
+#: packages/trac/tools.py:17 packages/trac/tools.py:18
+#: packages/common/database.py:65 packages/common/database.py:77
+#: packages/common/database.py:88 packages/common/database.py:93
+#: packages/common/cpp.py:35 packages/common/cc.py:34
+#: packages/common/php-mods.py:23 packages/common/php-mods.py:35
+#: packages/common/php-mods.py:47 packages/common/php-mods.py:58
+#: packages/common/php-mods.py:68 packages/common/php-mods.py:78
+#: packages/common/php-mods.py:89 packages/common/php-mods.py:109
+#: packages/common/php-mods.py:120 packages/common/php-mods.py:130
+#: packages/common/php-mods.py:229 packages/common/php-mods.py:237
+#: packages/common/php-mods.py:239 packages/wsgidav/tools.py:77
+msgid "TODO"
 msgstr ""
-"De benodigde PHP module is niet geïnstalleerd. Een van de volgende PHP "
-"modules ontbreekt op je systeem en de StatusNet installatie kan daarom niet "
-"doorgaan: curl, PDO, pdo_mysql, gd."
 
-#: packages/moin/installer.py:17
+#: packages/trac/tools.py:21
+msgid ""
+"Either a Python interface to SQLite3, or Python development files + SQLite3 "
+"development files are needed."
+msgstr ""
+
+#: packages/trac/tools.py:63
+msgid "The pysqlite module is not available and could not be built."
+msgstr ""
+
+#: packages/trac/tools.py:64
+msgid "The following command might aid in solving the issue."
+msgstr ""
+
+#: packages/trac/tools.py:66
+#, fuzzy
+msgid "Error report"
+msgstr "Fout afhandelaar"
+
+#: packages/vanilla/installer.py:153
+msgid ""
+"Some of your PHP settings do not meet Vanilla's requirements. Please edit "
+"your PHP configuration files and try again."
+msgstr ""
+
+#: packages/vanilla/installer.py:156 packages/drupal7/installer.py:199
+#: packages/silverstripe/installer.py:151 packages/moodle/installer.py:130
+#, fuzzy
+msgid "Setting"
+msgstr "Instellen"
+
+#: packages/vanilla/installer.py:156 packages/drupal7/installer.py:199
+#: packages/silverstripe/installer.py:151 packages/moodle/installer.py:130
+#, fuzzy
+msgid "Expected value"
+msgstr "Uitvoeren als Eigenaar"
+
+#: packages/vanilla/installer.py:156 packages/drupal7/installer.py:199
+#: packages/silverstripe/installer.py:151 packages/moodle/installer.py:130
+#, fuzzy
+msgid "Current value"
+msgstr "Eigen waarde"
+
+#: packages/moin/installer.py:25
 msgid ""
 "For cross-platform-compatibility, this package can only be configured in a "
 "new virtual server at the time being"
@@ -6969,35 +7574,114 @@ msgstr ""
 "Voor compatibiliteit tussen platformen kan dit pakket voorlopig alleen "
 "worden geconfigureerd als nieuwe virtuele server"
 
-#: packages/moin/installer.py:29
+#: packages/moin/installer.py:38
 msgid "Name to show as Wiki name-logo"
 msgstr "Naam om te tonen als Wiki naam-logo"
 
-#: packages/moin/installer.py:30
+#: packages/moin/installer.py:39
 msgid "Username of the administrator account"
 msgstr "Gebruikersnaam van het beheeraccount"
 
-#: packages/moin/installer.py:31
+#: packages/moin/installer.py:40
 msgid "Password of the administrator account"
 msgstr "Wachtwoord van het beheeraccount"
 
-#: packages/moin/installer.py:32
+#: packages/moin/installer.py:41
 msgid "Could not create Moin administrator account"
 msgstr "Kan het Moin beheerder account niet maken"
 
-#: packages/moin/installer.py:146
+#: packages/moin/installer.py:181
 msgid "Wiki Sitename"
 msgstr "Wiki Sitenaam"
 
-#: packages/moin/installer.py:147
+#: packages/moin/installer.py:182
 msgid "Admin User"
 msgstr "Beheerder"
 
-#: packages/moin/installer.py:148 packages/common/database.py:383
+#: packages/moin/installer.py:183 packages/common/database.py:496
 msgid "Admin Password"
 msgstr "Beheer Wachtwoord"
 
-#: packages/common/database.py:15
+#: packages/moin/installer.py:209
+#, fuzzy
+msgid "Wiki details"
+msgstr "Herleidingen details"
+
+#: packages/drupal7/installer.py:140
+#, fuzzy
+msgid "Username for the administrator account."
+msgstr "Gebruikersnaam van het beheeraccount"
+
+#: packages/drupal7/installer.py:141
+#, fuzzy
+msgid "Password for the administrator account."
+msgstr "Wachtwoord van het beheeraccount"
+
+#: packages/drupal7/installer.py:142
+msgid "Email address for notifications."
+msgstr ""
+
+#: packages/drupal7/installer.py:143
+msgid "Title to appear as full name of the website."
+msgstr ""
+
+#: packages/drupal7/installer.py:145 packages/moodle/installer.py:75
+#, fuzzy
+msgid "Site details"
+msgstr "Toon fout defails"
+
+#: packages/drupal7/installer.py:146
+msgid "The following information is required to install Drupal."
+msgstr ""
+
+#: packages/drupal7/installer.py:196
+msgid ""
+"Some of your PHP settings do not meet Drupal's requirements. Please edit "
+"your PHP configuration files and try again."
+msgstr ""
+
+#: packages/drupal7/installer.py:270 packages/moodle/installer.py:193
+#, fuzzy
+msgid "Admin user"
+msgstr "Beheerder"
+
+#: packages/drupal7/installer.py:271 packages/moodle/installer.py:194
+#, fuzzy
+msgid "Admin password"
+msgstr "Beheer Wachtwoord"
+
+#: packages/drupal7/installer.py:272
+#, fuzzy
+msgid "Admin email"
+msgstr "Beheerder"
+
+#: packages/drupal7/installer.py:273
+#, fuzzy
+msgid "Sitename"
+msgstr "Wiki Sitenaam"
+
+#: packages/drupal7/installer.py:339
+msgid "Using Drupal shell to install Drupal"
+msgstr ""
+
+#: packages/drupal7/installer.py:347
+#, fuzzy
+msgid "Performing Drupal installation"
+msgstr "halve installaties:"
+
+#: packages/drupal7/tools.py:20
+msgid ""
+"The PHP interpreter does not support any of the required database modules: "
+"'mysql', 'mysqli', or 'sqlite3'"
+msgstr ""
+
+#: packages/silverstripe/installer.py:148
+msgid ""
+"Some of your PHP settings do not meet SilverStripe's requirements. Please "
+"edit your PHP configuration files and try again."
+msgstr ""
+
+#: packages/common/database.py:24
 #, fuzzy
 msgid ""
 "The applications requires a database to work. Please choose how to configure "
@@ -7006,7 +7690,7 @@ msgstr ""
 "De applicatie heeft een database nodig om te werken. Kies welke je wilt door "
 "zelf de gegevens in te tikken of via automatische installatie."
 
-#: packages/common/database.py:16
+#: packages/common/database.py:25
 msgid ""
 "Specify the name of a privileged DB user. It will be used to automatically "
 "create the required user and database."
@@ -7014,19 +7698,19 @@ msgstr ""
 "Geef de naam van de bevoordeelde DB gebruiker. Het zal worden gebruikt om "
 "automatisch de benodigde gebruiker en database te maken."
 
-#: packages/common/database.py:18
+#: packages/common/database.py:27
 msgid "Specify the name of an existing database user."
 msgstr "Specificeer de naam van de beschikbare database gebruiker."
 
-#: packages/common/database.py:19
+#: packages/common/database.py:28
 msgid "Specify the password for the database user account."
 msgstr "Specificeer het wachtwoord voor het database gebruiker account."
 
-#: packages/common/database.py:20
+#: packages/common/database.py:29
 msgid "Specify the type of database that you want to use."
 msgstr "Specificeer het type database dat je wilt gebruiken."
 
-#: packages/common/database.py:21
+#: packages/common/database.py:30
 msgid ""
 "Specify the existing database that you want to use. The specified user must "
 "have privileges to use it."
@@ -7034,63 +7718,115 @@ msgstr ""
 "Specificeer de beschikbare database die je wilt gebruiken. De opgegeven "
 "gebruiker moet toegang hebben om het te gebruiken."
 
-#: packages/common/database.py:23
-msgid "Please, provide details of an existing database and user/password pair."
+#: packages/common/database.py:31
+#, fuzzy
+msgid ""
+"Please, provide an administrative user/password pair to connect to a "
+"database."
+msgstr ""
+"Geef een beheerder gebruiker/wachtwoord paar om naar de database te "
+"verbinden."
+
+#: packages/common/database.py:32
+#, fuzzy
+msgid ""
+"Please, provide details of an existing database and user/password pair to a "
+"database."
 msgstr ""
 "Geef de informatie over de beschikbare database en gebruikersnaam/wachtwoord "
 "combinatie."
 
-#: packages/common/database.py:167 packages/common/database.py:249
+#: packages/common/database.py:33
+msgid "Bare in mind that the database server must be running on the host."
+msgstr ""
+
+#: packages/common/database.py:62
+#, fuzzy
+msgid "MySQL 5 could not be found on your system."
+msgstr "Een werkende PHP interpreter kan niet op het systeem worden gevonden."
+
+#: packages/common/database.py:71
+msgid "MySQL is available at http://www.mysql.com/"
+msgstr ""
+
+#: packages/common/database.py:74
+#, fuzzy
+msgid "PostgreSQL 8 could not be found on your system."
+msgstr "Een werkende PHP interpreter kan niet op het systeem worden gevonden."
+
+#: packages/common/database.py:82
+msgid "PostgreSQL is available at http://www.postgresql.org/"
+msgstr ""
+
+#: packages/common/database.py:85
+#, fuzzy
+msgid "Sqlite3 could not be found on your system."
+msgstr "Een werkende PHP interpreter kan niet op het systeem worden gevonden."
+
+#: packages/common/database.py:94
+msgid "SQlite3 is available at http://www.sqlite.org/"
+msgstr ""
+
+#: packages/common/database.py:249 packages/common/database.py:340
 msgid "Database not present"
 msgstr "Database niet aanwezig"
 
-#: packages/common/database.py:223
+#: packages/common/database.py:314
 msgid "Username does not exist"
 msgstr "Gebruikersnaam bestaat niet"
 
-#: packages/common/database.py:247
+#: packages/common/database.py:338
 msgid "The specified user is not the owner of the database"
 msgstr "De opgegeven gebruiker is niet de eigenaar van de database."
 
-#: packages/common/database.py:287
+#: packages/common/database.py:392
 msgid "Engine"
 msgstr "Systeem"
 
-#: packages/common/database.py:311
+#: packages/common/database.py:418
 msgid "Configuration method"
 msgstr "Configuratie methode"
 
-#: packages/common/database.py:368 packages/common/database.py:432
+#: packages/common/database.py:476 packages/common/database.py:544
+#: packages/common/database.py:603
 msgid "No supported database engines were detected."
 msgstr "Geen van de ondersteunde databasesystemen werden herkend."
 
-#: packages/common/database.py:369 packages/common/database.py:433
+#: packages/common/database.py:477 packages/common/database.py:545
 msgid "The available options are"
 msgstr ""
 
-#: packages/common/database.py:382
+#: packages/common/database.py:495
 msgid "Admin Username"
 msgstr "Beheerder"
 
-#: packages/common/database.py:421
+#: packages/common/database.py:533
 msgid "Database does not exist."
 msgstr "Database bestaat niet"
 
-#: packages/common/database.py:447 packages/nagios/installer.py:171
-#: packages/redmine/installer.py:256 packages/nuxeo-dam/installer.py:167
-#: packages/nuxeo-dm/installer.py:167
+#: packages/common/database.py:564 packages/nagios/installer.py:185
+#: packages/redmine/installer.py:382 packages/nuxeo-dam/installer.py:178
+#: packages/nuxeo-dm/installer.py:178
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-#: packages/common/database.py:468
+#: packages/common/database.py:585
 msgid "Unknown method"
 msgstr "Onbekende methode"
 
-#: packages/common/database.py:478
+#: packages/common/database.py:595
 msgid "Database configuration"
 msgstr "Database configuratie"
 
-#: packages/common/target.py:11
+#: packages/common/database.py:606
+msgid "The only database supported by this installer is"
+msgstr ""
+
+#: packages/common/database.py:608
+msgid "The database options supported by this installer are"
+msgstr ""
+
+#: packages/common/target.py:19
 msgid ""
 "Will the package be configured in a new virtual server, or will it be "
 "configured as a directory of an existing virtual server?"
@@ -7098,7 +7834,7 @@ msgstr ""
 "Wordt het pakket geconfigureerd als nieuwe virtuele server of wordt het "
 "geconfigureerd als map binnen een bestaande virtuele server?"
 
-#: packages/common/target.py:12
+#: packages/common/target.py:20
 msgid ""
 "Domain name of the Virtual Host you are about to create. Wildcards are "
 "allowed. For example: *.example.com"
@@ -7106,12 +7842,12 @@ msgstr ""
 "Domeinnaam van de Virtuele Server die je wilt maken. Jokers zijn toegestaan. "
 "Bijvoorbeeld: *.voorbeeld.nl"
 
-#: packages/common/target.py:13
+#: packages/common/target.py:21
 msgid ""
 "Specify the web directory under which the application will be accessible."
 msgstr "Web map waaronder de applicatie toegankelijk wordt."
 
-#: packages/common/target.py:14
+#: packages/common/target.py:22
 msgid ""
 "Select the target Virtual Host under which the application should be "
 "installed."
@@ -7119,52 +7855,43 @@ msgstr ""
 "Selecteer de Virtuele Server waaronder de applicatie moet worden "
 "geïnstalleerd."
 
-#: packages/common/target.py:108
+#: packages/common/target.py:119
 msgid "Domain Name already in use"
 msgstr "Domeinnaam al in gebruik"
 
-#: packages/common/target.py:119
+#: packages/common/target.py:130
 msgid "Directory already configured"
 msgstr "Map reeks geconfigureerd"
 
-#: packages/common/target.py:165
-msgid "Install as a new.."
-msgstr "Installeer als nieuw.."
-
-#: packages/common/target.py:177
+#: packages/common/target.py:212
 msgid "Unknown target"
 msgstr "Onbekend doel"
 
-#: packages/common/target.py:187
-msgid "Package Deployment"
-msgstr "Pakket Uitrol"
+#: packages/common/target.py:227
+msgid "Install as a new.."
+msgstr "Installeer als nieuw.."
 
-#: packages/common/system.py:76
+#: packages/common/target.py:234
 #, fuzzy
-msgid "Could not create user."
-msgstr "Kan gebruiker niet maken"
+msgid "Deployment Type"
+msgstr "Implementatiemethode"
 
-#: packages/common/system.py:90
-#, fuzzy
-msgid "Could not create group."
-msgstr "Kan groep niet maken"
-
-#: packages/common/system.py:103
+#: packages/common/pwd_grp.py:97
 #, fuzzy, python-format
 msgid "Could not add <em>%(user)s</em> user to <em>%(group)s</em> group."
 msgstr "Kon geen gebruikers toevoegen aan de nagcmd groep"
 
-#: packages/common/system.py:127
-#, python-format
-msgid "Could not add <em>%(service)s</em> to list of system services."
-msgstr ""
+#: packages/common/pwd_grp.py:130
+#, fuzzy
+msgid "Could not create group."
+msgstr "Kan groep niet maken"
 
-#: packages/common/system.py:150
-#, python-format
-msgid "Could not launch <em>%(service)s</em> service."
-msgstr ""
+#: packages/common/pwd_grp.py:173
+#, fuzzy
+msgid "Could not create user."
+msgstr "Kan gebruiker niet maken"
 
-#: packages/common/ruby.py:28
+#: packages/common/ruby.py:37
 msgid ""
 "The Ruby 1.8 interpreter, RubyGems, or both, could not be found on your "
 "system. Please install Ruby 1.8 and RubyGems to proceed."
@@ -7172,7 +7899,11 @@ msgstr ""
 "De Ruby 1.8 interpreter, RubyGems of beide, konden niet worden gevonden op "
 "je systeem. Installeer Ruby 1.8 en RubyGems om door te gaan."
 
-#: packages/common/java.py:18
+#: packages/common/ruby.py:46
+msgid "Ruby is available at http://www.ruby-lang.org/"
+msgstr ""
+
+#: packages/common/java.py:24
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Java 6 or "
 "later is required."
@@ -7180,15 +7911,34 @@ msgstr ""
 "In je systeem ontbreken waarschijnlijk de benodigde afhankelijkheden. Java 6 "
 "of later is nodig."
 
-#: packages/common/java.py:20
-msgid "sudo apt-get install sun-java6-jdk"
+#: packages/common/java.py:32
+msgid "Please, install Java in your system"
 msgstr ""
 
-#: packages/common/java.py:21
-msgid "yum install java-1.6.0-openjdk"
+#: packages/common/cpp.py:29
+#, fuzzy
+msgid ""
+"Your system doesn't seem to provide the required dependecies. Please make "
+"sure there is a C++ development environment present."
+msgstr ""
+"In je systeem ontbreken waarschijnlijk de benodigde afhankelijkheden. Wees "
+"er zeker van dat je een C ontwikkelomgeving hebt."
+
+#: packages/common/cpp.py:34
+msgid "MacOS X is shipped with a copy of the GNU C++ compiler."
 msgstr ""
 
-#: packages/common/cc.py:20
+#: packages/common/services.py:34
+#, python-format
+msgid "Could not add <em>%(service)s</em> to list of system services."
+msgstr ""
+
+#: packages/common/services.py:130
+#, python-format
+msgid "Could not launch <em>%(service)s</em> service."
+msgstr ""
+
+#: packages/common/cc.py:28
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Please make "
 "sure there is a C development environment present."
@@ -7196,7 +7946,258 @@ msgstr ""
 "In je systeem ontbreken waarschijnlijk de benodigde afhankelijkheden. Wees "
 "er zeker van dat je een C ontwikkelomgeving hebt."
 
-#: packages/common/php.py:50
+#: packages/common/cc.py:33
+msgid "MacOS X is shipped with a copy of GCC."
+msgstr ""
+
+#: packages/common/php-mods.py:15
+msgid "The 'gd' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:26
+msgid ""
+"Neither the 'mysql' nor the 'mysqli' modules are supported by your PHP "
+"interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:38
+msgid "The 'pdo_mysql' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:50
+msgid "The 'pgsql' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:61
+msgid "The 'curl' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:71
+msgid "The 'sqlite' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:81
+msgid "The 'mcrypt' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:92
+msgid "The 'intl' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:98
+msgid "Make sure PEAR is installed and run: pecl install intl"
+msgstr ""
+
+#: packages/common/php-mods.py:101
+msgid "The 'iconv' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:108
+msgid "The iconv module should be built-in."
+msgstr ""
+
+#: packages/common/php-mods.py:112
+msgid "The 'openssl' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:119
+msgid "The openssl module should be built-in the php interpreter."
+msgstr ""
+
+#: packages/common/php-mods.py:123
+msgid "The 'xmlrpc' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:133
+msgid "The 'mbstring' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:140
+msgid "The mbstring module should be built-in the php interpreter."
+msgstr ""
+
+#: packages/common/php-mods.py:141 packages/common/php-mods.py:243
+msgid ""
+"This is an unusual issue. The 'mbstring' module is usualy provided by the "
+"PHP interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:144
+msgid "The 'session' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:148
+msgid ""
+"This is an unusual issue. The 'session' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:151
+msgid "The 'ctype' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:155
+msgid ""
+"This is an unusual issue. The 'ctype' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:158
+msgid ""
+"The Stantad PHP Library (SPL) module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:160
+msgid ""
+"This is an unusual issue. The 'spl' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:163
+msgid "The 'zlib' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:167
+msgid ""
+"This is an unusual issue. The 'zlib' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:170 packages/common/php-mods.py:235
+msgid "The 'zip' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:174
+msgid ""
+"This is an unusual issue. The 'zip' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:177
+msgid "The 'xml' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:182
+msgid ""
+"This is an unusual issue. The 'xml' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:185
+msgid "The 'xmlwriter' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:190
+msgid ""
+"This is an unusual issue. The 'xmlwriter' module is usualy provided by the "
+"PHP interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:193
+msgid "The 'xmlreader' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:198
+msgid ""
+"This is an unusual issue. The 'xmlreader' module is usualy provided by the "
+"PHP interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:201
+msgid "The 'SimpleXML' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:205
+msgid ""
+"This is an unusual issue. The 'SimpleXML' module is usualy provided by the "
+"PHP interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:208
+msgid "The 'pcre' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:210
+msgid ""
+"This is an unusual issue. The 'pcre' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:213
+msgid "The 'dom' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:217
+msgid ""
+"This is an unusual issue. The 'dom' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:220
+msgid "The 'json' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:224
+msgid ""
+"This is an unusual issue. The 'json' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:227
+msgid "The 'PDO' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:232
+msgid ""
+"This is an unusual issue. The 'PDO' (PHP Data Objects) extension is usualy "
+"provided by the PHP interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:242
+msgid "The zip module should be built-in the php interpreter."
+msgstr ""
+
+#: packages/common/php-mods.py:246
+msgid "The 'hash' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:250
+msgid ""
+"This is an unusual issue. The 'hash' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:253
+msgid "The 'filter' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:257
+msgid ""
+"This is an unusual issue. The 'filter' module is usualy provided by the PHP "
+"interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:260
+msgid "The 'tokenizer' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:264
+msgid ""
+"This is an unusual issue. The 'tokenizer' module is usualy provided by the "
+"PHP interpreter itself."
+msgstr ""
+
+#: packages/common/php-mods.py:267
+#, python-format
+msgid "The '%(module)s' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:271
+#, python-format
+msgid "No suggestion on how to install the '%(module)s' PHP module."
+msgstr ""
+
+#: packages/common/php.py:69
 msgid ""
 "PHP is required for the application to run, but it does not seem to be "
 "available in your system. Please install a FastCGI-enabled PHP interpeter to "
@@ -7206,52 +8207,73 @@ msgstr ""
 "systeem. Installeer een FastCGI-versie van de PHP interpreter om door te "
 "gaan."
 
-#: packages/common/php.py:51
+#: packages/common/php.py:70
+#, fuzzy
 msgid ""
 "You can check if your interpreter supports FastCGI by looking for the \"fcgi"
-"\" string in the output of the following command: \"php-cgi -v | grep fcgi\""
+"\" string in the output of the following command: php-cgi -v"
 msgstr ""
 "Je kunt controleren of de interpreter FastCGI ondersteunt door te zoeken "
 "naar de \"fcgi\" tekst in de uitvoer van het volgende commando: \"php-cgi -v "
 "| grep fcgi\""
 
-#: packages/common/php.py:65
+#: packages/common/php.py:72
+msgid ""
+"The user running PHP has no write-access to the path specified by the PHP "
+"session.save_path setting. PHP sessions will not work until either the user "
+"or the PHP settings are changed."
+msgstr ""
+
+#: packages/common/php.py:73
+msgid "The user configured to run PHP is not a valid user in your system"
+msgstr ""
+
+#: packages/common/php.py:83
+msgid ""
+"PHP is available at http://www.php.net/ . Remember to add the --enable-"
+"fastcgi parameter to ./configure."
+msgstr ""
+
+#: packages/common/php.py:93
 msgid "Configuring PHP"
 msgstr "PHP configureren"
 
-#: packages/common/php.py:74
+#: packages/common/php.py:94
+#, fuzzy
+msgid "Detecting a suitable PHP interpreter"
+msgstr "Kan geen bruikbare PHP interpreter vinden."
+
+#: packages/common/php.py:110
 msgid "Could not find the PHP interpreter"
 msgstr "Kan geen bruikbare PHP interpreter vinden"
 
-#: packages/common/php.py:79
+#: packages/common/php.py:114
 msgid "Check Again"
 msgstr "Controleer opnieuw"
 
-#: packages/common/php.py:86
+#: packages/common/php.py:121
 msgid "Internal Error while configuring PHP"
 msgstr "Interne Fout bij het configuren van PHP"
 
-#: packages/common/php.py:265
-msgid "Could not find a suitable local address"
-msgstr "Kan geen bruikbaar lokaal adres vinden"
-
-#: packages/common/php.py:282
-msgid "Could not parse the PHP-fpm settings file"
-msgstr "Kan de PHP-fpm instellingen niet lezen."
-
-#: packages/common/php.py:286
-msgid "Could not read the \"fpm_listen_address\" property"
-msgstr "Kan de \"fpm_listen_address\" eigenschap niet lezen"
-
-#: packages/liferay/installer.py:139
-msgid ""
-"Liferay has been installed. It will be launched as soon as you access the "
-"selected URL."
+#: packages/common/python.py:37
+#, python-format
+msgid "Python %(version2)s or later is required."
 msgstr ""
-"Liferay is geinstalleerd. Het zal worden opgestart zodra je naar de "
-"geselecteerde URL gaat."
 
-#: packages/liferay/installer.py:140
+#: packages/common/python.py:45
+#, python-format
+msgid ""
+"Please, install Python %(version2)s in your system: http://www.python.com/"
+msgstr ""
+
+#: packages/liferay/installer.py:151
+msgid ""
+"Liferay has been installed, and Cherokee is configured to automatically "
+"launch it whenever the resource is accessed if it is not already available. "
+"A one-time pre-launch has been issued to save time."
+msgstr ""
+
+#: packages/liferay/installer.py:152
 msgid ""
 "Note that launching Liferay can take up a couple of  minutes on modern "
 "servers, so please be patient the first time you access it."
@@ -7259,16 +8281,57 @@ msgstr ""
 "Bedenk dat het starten van Liferay enige minuten kan duren, zelfs op moderne "
 "servers, dus wees geduldig de eerste keer dat je de pagina bekijkt."
 
-#: packages/liferay/installer.py:145
+#: packages/liferay/installer.py:153
+#, fuzzy
+msgid ""
+"It is probably a good idea to pre-launch it on boot time instead of having "
+"the web-server do so on demand."
+msgstr ""
+"Het is waarschijnlijk een goed idee om het vooraf te starten, in plaats van "
+"dat de webserver het doet na eerste aanvraag."
+
+#: packages/liferay/installer.py:157
 msgid "Email Address"
 msgstr "E-mail adres"
 
-#: packages/nagios/installer.py:19
+#: packages/wordpress/installer.py:25 packages/redmine/installer.py:24
+msgid "List of available languages"
+msgstr "Lijst van beschikbare talen"
+
+#: packages/wordpress/installer.py:26 packages/redmine/installer.py:25
+msgid "Deployment Language"
+msgstr "Taal uitrollen"
+
+#: packages/wordpress/installer.py:27 packages/redmine/installer.py:26
+msgid "Please, specify the deployment language for the application."
+msgstr "Geef de taal waarmee de applicatie moet worden uitgerold."
+
+#: packages/wordpress/installer.py:31
+msgid "Arabic"
+msgstr ""
+
+#: packages/wordpress/installer.py:36 packages/redmine/tools.py:40
+msgid "Japanese"
+msgstr "Japans"
+
+#: packages/wordpress/installer.py:37 packages/redmine/tools.py:48
+msgid "Portuguese"
+msgstr "Portugees"
+
+#: packages/wordpress/installer.py:38 packages/redmine/tools.py:51
+msgid "Russian"
+msgstr "Russisch"
+
+#: packages/wordpress/installer.py:39 packages/redmine/tools.py:61
+msgid "Chinese"
+msgstr "Chinees"
+
+#: packages/nagios/installer.py:30
 #, fuzzy
 msgid "Administrator configuration"
 msgstr "Gebruiker configuratie"
 
-#: packages/nagios/installer.py:20
+#: packages/nagios/installer.py:31
 #, fuzzy
 msgid ""
 "Nagios relies on the web server for user authentication. Please provide a "
@@ -7278,115 +8341,135 @@ msgstr ""
 "Nagios gebruikt de webserver voor gebruikerauthenticatie. Geef een "
 "wachtwoord voor de beheerder."
 
-#: packages/nagios/installer.py:21
+#: packages/nagios/installer.py:32
 msgid "Email address you'd like to use for receiving alerts."
 msgstr "E-mail adres dat je wilt gebruiken om notificaties te ontvangen."
 
-#: packages/nagios/installer.py:22
+#: packages/nagios/installer.py:33
 #, fuzzy
 msgid "Username for the administrator user."
 msgstr "Gebruikersnaam van het beheeraccount"
 
-#: packages/nagios/installer.py:23
+#: packages/nagios/installer.py:34
 #, fuzzy
 msgid "Password for the administrator user."
 msgstr "Wachtwoord van het beheeraccount"
 
-#: packages/nagios/installer.py:25
+#: packages/nagios/installer.py:36
 msgid "Nagios system user"
 msgstr ""
 
-#: packages/nagios/installer.py:26
+#: packages/nagios/installer.py:37
 msgid ""
 "Nagios requires several user/group system-settings to run. Setting up a "
 "username and group for Nagios is mandatory. It can be done manually, or "
 "automatically generated for you."
 msgstr ""
 
-#: packages/nagios/installer.py:27
+#: packages/nagios/installer.py:38
 #, fuzzy
 msgid "User under which Nagios will be running"
 msgstr "Web map waardonder Glassfish toegankelijk is."
 
-#: packages/nagios/installer.py:28
+#: packages/nagios/installer.py:39
 msgid "Group under which Nagios will be running"
 msgstr ""
 
-#: packages/nagios/installer.py:29
+#: packages/nagios/installer.py:40
 msgid ""
 "Specify a group for allowing external commands to be submitted through the "
 "web interface."
 msgstr ""
 
-#: packages/nagios/installer.py:30
+#: packages/nagios/installer.py:41
 #, fuzzy
 msgid "Please choose the desired user configuration method."
 msgstr "Kan de configuratie niet kopieren naar"
 
-#: packages/nagios/installer.py:32
+#: packages/nagios/installer.py:43
 #, fuzzy
 msgid "User does not belong to the specified group"
 msgstr "ColdFusion draait niet op de gespecificeerde computer."
 
-#: packages/nagios/installer.py:122
+#: packages/nagios/installer.py:134
 #, fuzzy
 msgid "User does not exist"
 msgstr "Gebruikersnaam bestaat niet"
 
-#: packages/nagios/installer.py:127
+#: packages/nagios/installer.py:139
 #, fuzzy
 msgid "Group does not exist"
 msgstr "Pad bestaat niet"
 
-#: packages/nagios/installer.py:173
+#: packages/nagios/installer.py:146 packages/wsgidav/installer.py:78
+#: packages/statusnet/installer.py:94
+msgid "Checking Dependencies"
+msgstr "Afhankelijkheden controleren"
+
+#: packages/nagios/installer.py:187
 msgid "Email"
 msgstr "E-mail"
 
-#: packages/nagios/installer.py:279
+#: packages/nagios/installer.py:293
 msgid "Nagios user"
 msgstr ""
 
-#: packages/nagios/installer.py:280
+#: packages/nagios/installer.py:294
 msgid "Nagios group"
 msgstr ""
 
-#: packages/nagios/installer.py:281
+#: packages/nagios/installer.py:295
 msgid "Nagios command group"
 msgstr ""
 
-#: packages/nagios/installer.py:315
+#: packages/nagios/installer.py:329
 #, fuzzy
 msgid "User configuration method"
 msgstr "Configuratie methode"
 
-#: packages/nagios/installer.py:333
+#: packages/nagios/installer.py:347
 #, fuzzy
 msgid "Checking System Users"
 msgstr "Afrekenen"
 
-#: packages/nagios/installer.py:343 packages/nagios/installer.py:436
+#: packages/nagios/installer.py:357 packages/nagios/installer.py:497
 msgid "The installer could not successfully execute the following command:"
 msgstr ""
 
-#: packages/nagios/installer.py:399 packages/nagios/installer.py:422
+#: packages/nagios/installer.py:358 packages/nagios/installer.py:499
+msgid "The reported error was:"
+msgstr ""
+
+#: packages/nagios/installer.py:435
+#, fuzzy
+msgid "Installing Nagios"
+msgstr "Installeren"
+
+#: packages/nagios/installer.py:450 packages/nagios/installer.py:473
 msgid "Nagios start up"
 msgstr ""
 
-#: packages/nagios/installer.py:400
+#: packages/nagios/installer.py:451
 msgid ""
 "Nagios requires the Nagios system service to be launched at boot time. It is "
 "recommended that you allow the installer to add the service to your system."
 msgstr ""
 
-#: packages/nagios/installer.py:403
+#: packages/nagios/installer.py:454
 msgid "Add system service"
 msgstr ""
 
-#: packages/nagios/installer.py:403
+#: packages/nagios/installer.py:454
 msgid "Mark the checkbox to automatically launch Nagios on start up."
 msgstr ""
 
-#: packages/nagios/tools.py:22
+#: packages/nagios/installer.py:504
+msgid ""
+"You can either manually fix the problem and retry, or you can skip the step "
+"knowing that the Nagios system service will not be launched at boot time."
+msgstr ""
+
+#: packages/nagios/tools.py:19
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Please make "
 "sure there is a C development environment and the development libraries for "
@@ -7396,174 +8479,164 @@ msgstr ""
 "er een C ontwikkelomgeving is geïnstalleerd en de ontwikkel bibliotheken "
 "voor de <a href='http://www.boutell.com/gd/'>GD Graphics Library</a>"
 
-#: packages/redmine/installer.py:15
-msgid "Installing"
-msgstr "Installeren"
-
-#: packages/redmine/installer.py:16
+#: packages/redmine/installer.py:22
 msgid "Redmine is being installed. This might take some time. Please wait…"
 msgstr ""
 "Redmine wordt geïnstalleerd, Dit kan enige tijd duren. Een moment geduld..."
 
-#: packages/redmine/installer.py:18
-msgid "List of available languages"
-msgstr "Lijst van beschikbare talen"
-
-#: packages/redmine/installer.py:19
-msgid "Deployment Language"
-msgstr "Taal uitrollen"
-
-#: packages/redmine/installer.py:20
-msgid "Please, specify the deployment language for the application."
-msgstr "Geef de taal waarmee de applicatie moet worden uitgerold."
-
-#: packages/redmine/installer.py:22
+#: packages/redmine/installer.py:28
 msgid "Set up completed"
 msgstr "Instellen klaar"
 
-#: packages/redmine/installer.py:23
+#: packages/redmine/installer.py:29
 msgid "Redmine has been installed. These are the default access details:"
 msgstr "Redmine is geïnstalleerd. Dit is zijn de standaard toegang gegevens:"
 
-#: packages/redmine/installer.py:95
-msgid "Checking for Ruby"
-msgstr "Controleren op Ruby"
+#: packages/redmine/installer.py:31
+msgid ""
+"Redmine supports MySQL as database backend, but the version of Ruby on your "
+"system is lower than the minimum requirement (1.8.6). MySQL support will be "
+"disabled."
+msgstr ""
 
-#: packages/redmine/tools.py:13
+#: packages/redmine/installer.py:32
+msgid ""
+"Redmine supports SQLite3 as database backend, but the version of Ruby on "
+"your system is lower than the minimum requirement (1.8.7). SQLite3 support "
+"will be disabled."
+msgstr ""
+
+#: packages/redmine/installer.py:33
+msgid ""
+"Redmine supports several database backends: MySQL, PostgreSQL, and SQLite3. "
+"Unfortunately none of them seems to be available. Try again if you can fix "
+"the situation."
+msgstr ""
+
+#: packages/redmine/installer.py:172
+#, fuzzy
+msgid "Database Requirements"
+msgstr "Database niet aanwezig"
+
+#: packages/redmine/tools.py:21
 msgid "Bulgarian"
 msgstr "Bulgaars"
 
-#: packages/redmine/tools.py:14
+#: packages/redmine/tools.py:22
 msgid "Bosnian"
 msgstr "Bonisch"
 
-#: packages/redmine/tools.py:16
+#: packages/redmine/tools.py:24
 msgid "Czech"
 msgstr "Tjechisch"
 
-#: packages/redmine/tools.py:17
+#: packages/redmine/tools.py:25
 msgid "Danish"
 msgstr "Deens"
 
-#: packages/redmine/tools.py:19
+#: packages/redmine/tools.py:27
 msgid "Greek"
 msgstr "Grieks"
 
-#: packages/redmine/tools.py:21
+#: packages/redmine/tools.py:29
 msgid "English (GB)"
 msgstr "Engels (VK)"
 
-#: packages/redmine/tools.py:23
+#: packages/redmine/tools.py:31
 msgid "Basque"
 msgstr "Baskisch"
 
-#: packages/redmine/tools.py:24
+#: packages/redmine/tools.py:32
 msgid "Finnish"
 msgstr "Fins"
 
-#: packages/redmine/tools.py:27
+#: packages/redmine/tools.py:35
 msgid "Hebrew"
 msgstr "Hebreeuws"
 
-#: packages/redmine/tools.py:28
+#: packages/redmine/tools.py:36
 msgid "Croatian"
 msgstr "Kroatisch"
 
-#: packages/redmine/tools.py:29
+#: packages/redmine/tools.py:37
 msgid "Hungarian"
 msgstr "Hongaars"
 
-#: packages/redmine/tools.py:30
+#: packages/redmine/tools.py:38
 msgid "Indonesian"
 msgstr "Indonesisch"
 
-#: packages/redmine/tools.py:32
-msgid "Japanese"
-msgstr "Japans"
-
-#: packages/redmine/tools.py:33
+#: packages/redmine/tools.py:41
 msgid "Korean"
 msgstr "Koreaans"
 
-#: packages/redmine/tools.py:34
+#: packages/redmine/tools.py:42
 msgid "Lithuanian"
 msgstr "Litouws"
 
-#: packages/redmine/tools.py:35
+#: packages/redmine/tools.py:43
 msgid "Latvian"
 msgstr "Lets"
 
-#: packages/redmine/tools.py:36
+#: packages/redmine/tools.py:44
 msgid "Mongolian"
 msgstr "Mongools"
 
-#: packages/redmine/tools.py:38
+#: packages/redmine/tools.py:46
 msgid "Norwegian"
 msgstr "Noorweegs"
 
-#: packages/redmine/tools.py:40
-msgid "Portuguese"
-msgstr "Portugees"
-
-#: packages/redmine/tools.py:41
+#: packages/redmine/tools.py:49
 msgid "Portuguese (BR)"
 msgstr "Portugees (BR)"
 
-#: packages/redmine/tools.py:42
+#: packages/redmine/tools.py:50
 msgid "Romanian"
 msgstr "Roemeens"
 
-#: packages/redmine/tools.py:43
-msgid "Russian"
-msgstr "Russisch"
-
-#: packages/redmine/tools.py:44
+#: packages/redmine/tools.py:52
 msgid "Slovak"
 msgstr "Slovaaks"
 
-#: packages/redmine/tools.py:45
+#: packages/redmine/tools.py:53
 msgid "Slovenian"
 msgstr "Sloveens"
 
-#: packages/redmine/tools.py:46
+#: packages/redmine/tools.py:54
 msgid "Serbian"
 msgstr "Servisch"
 
-#: packages/redmine/tools.py:47
+#: packages/redmine/tools.py:55
 msgid "Serbian (YU)"
 msgstr "Servisch (YU)"
 
-#: packages/redmine/tools.py:49
+#: packages/redmine/tools.py:57
 msgid "Thai"
 msgstr "Thais"
 
-#: packages/redmine/tools.py:50
+#: packages/redmine/tools.py:58
 msgid "Turkish"
 msgstr "Turks"
 
-#: packages/redmine/tools.py:51
+#: packages/redmine/tools.py:59
 msgid "Ukrainian"
 msgstr "Oekraïens"
 
-#: packages/redmine/tools.py:52
+#: packages/redmine/tools.py:60
 msgid "Vietnamese"
 msgstr "Vietnamees"
 
-#: packages/redmine/tools.py:53
-msgid "Chinese"
-msgstr "Chinees"
-
-#: packages/redmine/tools.py:54
+#: packages/redmine/tools.py:62
 msgid "Chinese (TW)"
 msgstr "Chinees (TW)"
 
-#: packages/wsgidav/installer.py:21
+#: packages/wsgidav/installer.py:33
 msgid ""
 "Please try again if the problem can be solved manually by issuing the "
 "following command."
 msgstr "Probeer of het probleem kan worden opgelost met het volgende commando."
 
-#: packages/wsgidav/installer.py:22
+#: packages/wsgidav/installer.py:34
 msgid ""
 "The default installation will allow anonymous access to a predefined path of "
 "your choosing. This can be changed later on."
@@ -7571,15 +8644,27 @@ msgstr ""
 "De standaard installatie staat anonieme toegang toe op basis van een voor "
 "opgegeven pad. Dit kan later worden veranderd."
 
-#: packages/wsgidav/installer.py:23
-msgid "Path to the directory to share."
-msgstr "Pad naar de map om te delen."
+#: packages/wsgidav/installer.py:35
+msgid ""
+"This is the path to the local directory that will be exported via WebDAV."
+msgstr ""
 
-#: packages/wsgidav/installer.py:127
-msgid "WebDAV directory"
-msgstr "WebDAV map"
+#: packages/wsgidav/installer.py:156
+#, fuzzy
+msgid "Installing WsgiDAV"
+msgstr "Installeren"
 
-#: packages/wsgidav/tools.py:50
+#: packages/wsgidav/installer.py:177
+#, fuzzy
+msgid "Local directory"
+msgstr "Trac Lokale Map"
+
+#: packages/wsgidav/installer.py:181
+#, fuzzy
+msgid "WsgiDAV configuration"
+msgstr "Gebruiker configuratie"
+
+#: packages/wsgidav/tools.py:61
 msgid ""
 "Your system doesn't seem to provide the required dependecies. Please make "
 "sure there is a C development environment."
@@ -7587,69 +8672,84 @@ msgstr ""
 "Je systeem heeft niet de benodigde afhankelijkheden. Wees er zeker van dat "
 "een C ontwikkel omgeving is geïnstalleerd."
 
-#: packages/wsgidav/tools.py:52
-msgid "sudo apt-get install build-essential"
+#: packages/wsgidav/tools.py:66
+msgid "A C compiler is required to install this package"
 msgstr ""
 
-#: packages/wsgidav/tools.py:53
-msgid "yum install gcc glibc glibc-common"
+#: packages/wsgidav/tools.py:69
+msgid "This application requires Python 2.5 or higher."
 msgstr ""
 
-#: packages/nuxeo-dam/installer.py:101 packages/nuxeo-dm/installer.py:101
+#: packages/wsgidav/tools.py:71
+msgid "You must upgrade to Python 2.5, Python 2.6, or Python 2.7."
+msgstr ""
+
+#: packages/wsgidav/tools.py:74
+#, fuzzy
+msgid ""
+"Your system doesn't seem to provide the required dependecy 'xml2-config'"
+msgstr ""
+"In je systeem ontbreken waarschijnlijk de benodigde afhankelijkheden. Java 6 "
+"of later is nodig."
+
+#: packages/zencart/installer.py:209
+msgid "Registering database details"
+msgstr ""
+
+#: packages/nuxeo-dam/installer.py:108 packages/nuxeo-dm/installer.py:108
 msgid "Nuxeo can only be deployed under its default location /nuxeo."
 msgstr "Nuxeo kan alleen worden uitgerold onder de standaard locatie /nuxeo."
 
-#: packages/nuxeo-dam/installer.py:102 packages/nuxeo-dm/installer.py:102
+#: packages/nuxeo-dam/installer.py:109 packages/nuxeo-dm/installer.py:109
+#, fuzzy
 msgid ""
-"The appropriate redirection rule will be created regardles of the web path "
-"or deployment method chosen."
+"The appropriate redirection rule will be created if the specified web path "
+"or deployment method chosen should require this."
 msgstr ""
 "De toepasselijke herleiding kan worden gemaakt, los van het webpad of de "
 "gekozen uitrol methode."
 
-#: packages/nuxeo-dam/installer.py:161
+#: packages/nuxeo-dam/installer.py:172
 msgid ""
-"Nuxeo-DAM has been installed. It will be launched as soon as you access the "
-"selected URL."
+"Nuxeo-DAM has been installed, and Cherokee is configured to automatically "
+"launch it whenever the resource is accessed if it is not already available. "
+"A one-time pre-launch has been issued to save time."
 msgstr ""
-"Nuxeo-DAM is geïnstalleerd. Het wordt gestart zodra je de geselecteerde URL "
-"bezoekt."
 
-#: packages/nuxeo-dam/installer.py:162
+#: packages/nuxeo-dam/installer.py:173
+#, fuzzy
 msgid ""
-"Note that launching Nuxeo-DAM can take several minutes on modern servers, so "
-"please be patient the first time you access it."
+"Note that launching Nuxeo-DAM can take up a couple of  minutes on modern "
+"servers, so please be patient the first time you access it."
 msgstr ""
-"Bedenk dat het starten van Nuxeo-DAM enige minuten kan duren op moderne "
-"servers, heb dus even geduld bij het eerste bezoek."
+"Bedenk dat het starten van Nuxeo-DM enige minuten kan duren op moderne "
+"servers, dus heb even geduld bij het eerste bezoek."
 
-#: packages/statusnet/tools.py:10
+#: packages/statusnet/installer.py:209
+#, fuzzy
+msgid "Communicating DB details."
+msgstr "Authenticatie Details"
+
+#: packages/drupal/tools.py:17 packages/openx/tools.py:20
+#: packages/moodle/tools.py:31 packages/phpbb/tools.py:36
 msgid ""
-"Required PHP module not installed. One or more of the following PHP modules "
-"is missing from your system and the StatusNet installer will be unable to "
-"proceed: Curl, XMLWriter, MySQL, GD, mbstring."
+"The PHP interpreter does not support any of the required database modules: "
+"'mysql', 'mysqli', or 'pgsql'"
 msgstr ""
-"Benodigde PHP module is niet geïnstalleerd. Een van de volgende PHP modules "
-"ontbreek van je systeem en de StatusNet installatie kan niet verder gaan: "
-"Curl, XMLWriter, MySQL, GD, mbstring."
 
-#: packages/openx/tools.py:10
+#: packages/openx/installer.py:176 packages/moodle/installer.py:288
+#, fuzzy
+msgid "Performing automatic installation"
+msgstr "Niet afgemaakte installatie"
+
+#: packages/nuxeo-dm/installer.py:172
 msgid ""
-"Required PHP module not installed. The MySQL PHP modules is missing from "
-"your system."
+"Nuxeo-DM has been installed, and Cherokee is configured to automatically "
+"launch it whenever the resource is accessed if it is not already available. "
+"A one-time pre-launch has been issued to save time."
 msgstr ""
-"Benodigde PHP module niet geïnstalleerd. De MySQL PHP modules ontbreken van "
-"je systeem."
 
-#: packages/nuxeo-dm/installer.py:161
-msgid ""
-"Nuxeo-DM has been installed. It will be launched as soon as you access the "
-"selected URL."
-msgstr ""
-"Nuxeo-DM is geïnstalleerd. Het wordt gestart zodra je de geselecteerde URL "
-"bezoekt."
-
-#: packages/nuxeo-dm/installer.py:162
+#: packages/nuxeo-dm/installer.py:173
 msgid ""
 "Note that launching Nuxeo-DM can take up a couple of  minutes on modern "
 "servers, so please be patient the first time you access it."
@@ -7657,14 +8757,253 @@ msgstr ""
 "Bedenk dat het starten van Nuxeo-DM enige minuten kan duren op moderne "
 "servers, dus heb even geduld bij het eerste bezoek."
 
-#~ msgid "partial installations: "
-#~ msgstr "halve installaties:"
+#: packages/moodle/installer.py:69
+#, fuzzy
+msgid "Username for the administrator account. Only lower case allowed."
+msgstr "Gebruikersnaam van het beheeraccount"
+
+#: packages/moodle/installer.py:70
+msgid ""
+"Password for the administrator account. At least 8 mixed-case alphanumeric "
+"and non-alphanumeric characters required."
+msgstr ""
+
+#: packages/moodle/installer.py:71
+msgid "Full name of the website."
+msgstr ""
+
+#: packages/moodle/installer.py:72
+msgid "Short name of the website."
+msgstr ""
+
+#: packages/moodle/installer.py:73
+msgid ""
+"Domain name under which the virtual server can be accessed from the "
+"Internet, such as example.com for instance."
+msgstr ""
+
+#: packages/moodle/installer.py:76
+msgid "The installation needs to configure the following settings."
+msgstr ""
+
+#: packages/moodle/installer.py:127
+msgid ""
+"Some of your PHP settings do not meet Moodle's requirements. Please edit "
+"your PHP configuration files and try again."
+msgstr ""
+
+#: packages/moodle/installer.py:195
+#, fuzzy
+msgid "Full sitename"
+msgstr "Bestandsnaam"
+
+#: packages/moodle/installer.py:196
+#, fuzzy
+msgid "Short sitename"
+msgstr "Computernaam"
+
+#: packages/moodle/installer.py:207
+#, fuzzy
+msgid "Domain name"
+msgstr "Domein Naam"
+
+#: packages/moodle/installer.py:210
+msgid "Make sure you understand and accept the "
+msgstr ""
+
+#: packages/moodle/installer.py:211
+#, fuzzy
+msgid "Moodle License"
+msgstr "Licentie"
+
+#: packages/moodle/installer.py:212
+msgid " before proceeding. Moodle license must be accepted to proceed."
+msgstr ""
+
+#: packages/moodle/installer.py:213
+#, fuzzy
+msgid "Accept license"
+msgstr "Geaccepteerde Domeinen"
+
+#: packages/moodle/installer.py:280
+msgid ""
+"Moodle installation and database population is in progress. The process may "
+"take several minutes."
+msgstr ""
+
+#: packages/moodle/tools.py:186
+#, fuzzy
+msgid "At least 8 characters required."
+msgstr "Een webmap moet worden opgegeven."
+
+#: packages/moodle/tools.py:187
+#, fuzzy
+msgid "At least 1 digit required."
+msgstr "Een webmap moet worden opgegeven."
+
+#: packages/moodle/tools.py:188
+msgid "At least 1 lowercase letter required."
+msgstr ""
+
+#: packages/moodle/tools.py:189
+msgid "At least 1 uppercase letter required."
+msgstr ""
+
+#: packages/moodle/tools.py:190
+msgid "At least 1 non-alphanumeric character required."
+msgstr ""
+
+#: packages/moodle/tools.py:198
+msgid "Only lower case letters allowed."
+msgstr ""
+
+#: packages/moodle/tools.py:203
+msgid "Must accept License"
+msgstr ""
+
+#: packages/moodle/tools.py:208
+msgid "The default nick name is not accessible as such from the Internet"
+msgstr ""
+
+#: packages/moodle/tools.py:216
+msgid "Web path must be omitted"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Ranked"
+#~ msgstr "Gesorteerd"
+
+#~ msgid ""
+#~ "The application is available at the Octality Market. Please, check "
+#~ "\"Check Out\" to proceed to the payment secction."
+#~ msgstr ""
+#~ "De applicatie is is beschikbaar in de Octality Markt. Controleer "
+#~ "\"Afrekenen\" om door te gaan bij de betaal sectie."
+
+#~ msgid "Installation"
+#~ msgstr "Installatie"
+
+#~ msgid "Connecting to Octality"
+#~ msgstr "Verbinden naar Octality"
+
+#~ msgid "Downloading"
+#~ msgstr "Ophalen"
+
+#~ msgid "Setting up application…"
+#~ msgstr "Installeren applicatie..."
+
+#~ msgid "Does not look like a Uwsgi source directory."
+#~ msgstr "Dat ziet er niet uit als Uwsgi broncode map."
+
+#~ msgid "Could not determine correct interpreter settings."
+#~ msgstr "Kan de juiste interpreter instellingen niet bepalen."
+
+#~ msgid "The Configuration has been Saved"
+#~ msgstr "De configuratie is bewaard."
+
+#~ msgid ""
+#~ "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
+#~ "${protocol}, ${transport}, ${port_server}, ${query_string}, "
+#~ "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
+#~ "${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
+#~ "${vserver_name_req}, ${response_size}"
+#~ msgstr ""
+#~ "De volgende variabelen worden geaccepteerd: <br/>${ip_remote}, "
+#~ "${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, "
+#~ "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
+#~ "${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
+#~ "${vserver_name_req}, ${response_size}"
+
+#~ msgid ""
+#~ "Magnolia has been installed. It will be launched as soon as you access "
+#~ "the selected URL."
+#~ msgstr ""
+#~ "Magnolia is geinstalleerd. Het zal worden opgestart zodra je naar de "
+#~ "geselecteerde URL gaat."
+
+#~ msgid ""
+#~ "Note that launching Magnolia can take up quite some time, so please be "
+#~ "patient the first time you access it."
+#~ msgstr ""
+#~ "Bedenk dat het starten van Magnolia een tijdje kan duren, dus wees "
+#~ "geduldig bij de eerste keer bekijken."
+
+#~ msgid ""
+#~ "Required PHP module not installed. One or more of the following PHP "
+#~ "modules is missing from your system and the StatusNet installer will be "
+#~ "unable to proceed: curl, PDO, pdo_mysql, gd."
+#~ msgstr ""
+#~ "De benodigde PHP module is niet geïnstalleerd. Een van de volgende PHP "
+#~ "modules ontbreekt op je systeem en de StatusNet installatie kan daarom "
+#~ "niet doorgaan: curl, PDO, pdo_mysql, gd."
+
+#~ msgid "Package Deployment"
+#~ msgstr "Pakket Uitrol"
+
+#~ msgid "Could not find a suitable local address"
+#~ msgstr "Kan geen bruikbaar lokaal adres vinden"
+
+#~ msgid "Could not parse the PHP-fpm settings file"
+#~ msgstr "Kan de PHP-fpm instellingen niet lezen."
+
+#~ msgid "Could not read the \"fpm_listen_address\" property"
+#~ msgstr "Kan de \"fpm_listen_address\" eigenschap niet lezen"
+
+#~ msgid ""
+#~ "Liferay has been installed. It will be launched as soon as you access the "
+#~ "selected URL."
+#~ msgstr ""
+#~ "Liferay is geinstalleerd. Het zal worden opgestart zodra je naar de "
+#~ "geselecteerde URL gaat."
+
+#~ msgid "Checking for Ruby"
+#~ msgstr "Controleren op Ruby"
+
+#~ msgid "Path to the directory to share."
+#~ msgstr "Pad naar de map om te delen."
+
+#~ msgid "WebDAV directory"
+#~ msgstr "WebDAV map"
+
+#~ msgid ""
+#~ "Nuxeo-DAM has been installed. It will be launched as soon as you access "
+#~ "the selected URL."
+#~ msgstr ""
+#~ "Nuxeo-DAM is geïnstalleerd. Het wordt gestart zodra je de geselecteerde "
+#~ "URL bezoekt."
+
+#~ msgid ""
+#~ "Note that launching Nuxeo-DAM can take several minutes on modern servers, "
+#~ "so please be patient the first time you access it."
+#~ msgstr ""
+#~ "Bedenk dat het starten van Nuxeo-DAM enige minuten kan duren op moderne "
+#~ "servers, heb dus even geduld bij het eerste bezoek."
+
+#~ msgid ""
+#~ "Required PHP module not installed. One or more of the following PHP "
+#~ "modules is missing from your system and the StatusNet installer will be "
+#~ "unable to proceed: Curl, XMLWriter, MySQL, GD, mbstring."
+#~ msgstr ""
+#~ "Benodigde PHP module is niet geïnstalleerd. Een van de volgende PHP "
+#~ "modules ontbreek van je systeem en de StatusNet installatie kan niet "
+#~ "verder gaan: Curl, XMLWriter, MySQL, GD, mbstring."
+
+#~ msgid ""
+#~ "Required PHP module not installed. The MySQL PHP modules is missing from "
+#~ "your system."
+#~ msgstr ""
+#~ "Benodigde PHP module niet geïnstalleerd. De MySQL PHP modules ontbreken "
+#~ "van je systeem."
+
+#~ msgid ""
+#~ "Nuxeo-DM has been installed. It will be launched as soon as you access "
+#~ "the selected URL."
+#~ msgstr ""
+#~ "Nuxeo-DM is geïnstalleerd. Het wordt gestart zodra je de geselecteerde "
+#~ "URL bezoekt."
 
 #~ msgid "Application available"
 #~ msgstr "Applicatie beschikbaar"
-
-#~ msgid "New port"
-#~ msgstr "Nieuwe poort"
 
 #~ msgid ""
 #~ "Please, provide an administrative user/password pair to connect to your "
@@ -7678,9 +9017,6 @@ msgstr ""
 
 #~ msgid "Password configuration"
 #~ msgstr "Wachtwoord configuratie"
-
-#~ msgid "Could not write configuration file"
-#~ msgstr "Kan configuratie bestand niet schrijven"
 
 #~ msgid "Could not validate Nagios configuration"
 #~ msgstr "Kan Nagios configuratie niet valideren"
@@ -7960,9 +9296,6 @@ msgstr ""
 #~ msgid "Details:"
 #~ msgstr "Defails:"
 
-#~ msgid "Source usage"
-#~ msgstr "Bron gebruik"
-
 #~ msgid "Virtual server"
 #~ msgstr "Virtuele server"
 
@@ -8025,9 +9358,6 @@ msgstr ""
 #~ msgid "Statistics"
 #~ msgstr "Statistieken"
 
-#~ msgid "Accesses"
-#~ msgstr "Bezoeken"
-
 #~ msgid "Matching method"
 #~ msgstr "Kies methode"
 
@@ -8061,9 +9391,6 @@ msgstr ""
 
 #~ msgid "OR"
 #~ msgstr "OF"
-
-#~ msgid "Undefined.."
-#~ msgstr "Ongedefinieerd.."
 
 #~ msgid "Complex"
 #~ msgstr "Complexe"
@@ -8142,9 +9469,6 @@ msgstr ""
 
 #~ msgid "A name for the virtual server is required."
 #~ msgstr "Naam voor de virtuele server is verplicht."
-
-#~ msgid "A web directory is required."
-#~ msgstr "Een webmap moet worden opgegeven."
 
 #~ msgid "New virtual server based on a Django project."
 #~ msgstr "Nieuwe virtuele server gebaseerd op een Django project."
