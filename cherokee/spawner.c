@@ -199,8 +199,15 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	int               *pid_shm;
 	int                pid_prev;
 	int                k;
+	int                phase;
 	int                envs     = 0;
 	cherokee_buffer_t  tmp      = CHEROKEE_BUF_INIT;
+
+#define ALIGN4(buf)						\
+	while (buf.len & 0x3) {					\
+		cherokee_buffer_add_char (&buf, '\0');		\
+	}
+
 
 	/* Check it's initialized
 	 */
@@ -224,22 +231,27 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	cherokee_buffer_ensure_size (&tmp, SPAWN_SHARED_LEN);
 
 	/* 1.- Executable */
-	cherokee_buffer_add_char   (&tmp, 0xF0);
-	cherokee_buffer_add        (&tmp, (char *)&binary->len, sizeof(int));
+	phase = 0xF0;
+	cherokee_buffer_add        (&tmp, (char *)&phase, sizeof(int));
+	cherokee_buffer_add        (&tmp, (char *)&binary->len,   sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, binary);
 	cherokee_buffer_add_char   (&tmp, '\0');
+	ALIGN4 (tmp);
 
 	/* 2.- UID & GID */
-	cherokee_buffer_add_char   (&tmp, 0xF1);
+	phase = 0xF1;
+	cherokee_buffer_add        (&tmp, (char *)&phase, sizeof(int));
 	cherokee_buffer_add        (&tmp, (char *)&user->len, sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, user);
 	cherokee_buffer_add_char   (&tmp, '\0');
+	ALIGN4(tmp);
 
 	cherokee_buffer_add (&tmp, (char *)&uid, sizeof(uid_t));
 	cherokee_buffer_add (&tmp, (char *)&gid, sizeof(gid_t));
 
 	/* 3.- Environment */
-	cherokee_buffer_add_char (&tmp, 0xF2);
+	phase = 0xF2;
+	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
 	for (n=envp; *n; n++) {
 		envs ++;
@@ -253,14 +265,19 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 		cherokee_buffer_add      (&tmp, (char *)&len, sizeof(int));
 		cherokee_buffer_add      (&tmp, *n, len);
 		cherokee_buffer_add_char (&tmp, '\0');
+		ALIGN4(tmp);
 	}
 
 	/* 4.- Error log */
-	cherokee_buffer_add_char (&tmp, 0xF3);
+	phase = 0xF3;
+	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
+
 	write_logger (&tmp, error_writer);
+	ALIGN4 (tmp);
 
 	/* 5.- PID (will be rewritten by the other side) */
-	cherokee_buffer_add_char (&tmp, 0xF4);
+	phase = 0xF4;
+	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
 	pid_shm = (int *) (((char *)cherokee_spawn_shared.mem) + tmp.len);
 	k        = *pid_ret;

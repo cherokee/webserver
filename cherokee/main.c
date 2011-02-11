@@ -412,11 +412,13 @@ do_spawn (void)
 	const char  *argv[]       = {"sh", "-c", NULL, NULL};
 
 #define CHECK_MARK(val)							\
-	if (*p != (char)val) {						\
+	if ((*(int *)p) != val) {					\
 		goto cleanup;						\
 	} else {							\
-		p += 1;							\
+		p += sizeof(int);					\
 	}
+
+#define ALIGN4(buf) while ((long)p & 0x3) p++;
 
 	/* Read the shared memory
 	 */
@@ -426,7 +428,6 @@ do_spawn (void)
 
 	size = *((int *)p);
 	p += sizeof(int);
-
 	if (size <= 0) {
 		return;
 	}
@@ -435,6 +436,7 @@ do_spawn (void)
 	memcpy (interpreter, "exec ", 5);
 	memcpy (interpreter + 5, p, size + 1);
 	p += size + 1;
+	ALIGN4 (p);
 
 	/* 2.- UID & GID */
 	CHECK_MARK (0xF1);
@@ -444,6 +446,7 @@ do_spawn (void)
 		uid_str = strdup (p + sizeof(int));
 	}
 	p += sizeof(int) + size + 1;
+	ALIGN4 (p);
 
 	memcpy (&uid, p, sizeof(uid_t));
 	p += sizeof(uid_t);
@@ -475,6 +478,7 @@ do_spawn (void)
 
 		envp[n] = e;
 		p += size + 1;
+		ALIGN4 (p);
 	}
 
 	/* 4.- Error log */
@@ -491,6 +495,7 @@ do_spawn (void)
 		}
 
 		p += (size + 1);
+		ALIGN4 (p);
 	}
 
 	/* 5.- PID: it's -1 now */
