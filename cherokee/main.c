@@ -62,6 +62,10 @@ union semun {
 # define HAVE_SEMUN 1
 #endif
 
+#define SEM_LAUNCH_START 0
+#define SEM_LAUNCH_READY 1
+#define SEM_LAUNCH_TOTAL 2
+
 #define DELAY_ERROR       3000 * 1000
 #define DELAY_RESTARTING   500 * 1000
 
@@ -78,7 +82,7 @@ char               *pid_file_path         = NULL;
 cherokee_boolean_t  use_valgrind          = false;
 char               *spawn_shared          = NULL;
 char               *spawn_shared_name     = NULL;
-int                 spawn_shared_sem      = -1;
+int                 spawn_shared_sems     = -1;
 pthread_t           spawn_thread;
 
 static void
@@ -373,6 +377,23 @@ pid_file_clean (const char *pid_file)
 #ifdef HAVE_POSIX_SHM
 
 static void
+do_sem_op (int sem_num, int sem_op)
+{
+	int           re;
+	struct sembuf sops[1];
+
+	/* SEM_UNDO = Automatically undone when the process terminates */
+	sops[0].sem_num = sem_num;
+	sops[0].sem_op  = sem_op;
+	sops[0].sem_flg = SEM_UNDO;
+
+	do {
+		errno = 0;
+		re = semop (spawn_shared_sems, sops, 1);
+	} while ((re < 0) && (errno == EINTR));
+}
+
+static void
 do_spawn (void)
 {
 	int          n;
@@ -390,10 +411,19 @@ do_spawn (void)
 	char        *p            = spawn_shared;
 	const char  *argv[]       = {"sh", "-c", NULL, NULL};
 
+#define CHECK_MARK(val)							\
+	if (*p != (char)val) {						\
+		goto cleanup;						\
+	} else {							\
+		p += 1;							\
+	}
+
 	/* Read the shared memory
 	 */
 
 	/* 1.- Interpreter */
+	CHECK_MARK (0xF0);
+
 	size = *((int *)p);
 	p += sizeof(int);
 
@@ -407,6 +437,8 @@ do_spawn (void)
 	p += size + 1;
 
 	/* 2.- UID & GID */
+	CHECK_MARK (0xF1);
+
 	size = *((int *)p);
 	if (size > 0) {
 		uid_str = strdup (p + sizeof(int));
@@ -420,6 +452,8 @@ do_spawn (void)
 	p += sizeof(gid_t);
 
 	/* 3.- Environment */
+	CHECK_MARK (0xF2);
+
 	env_inherit = *((int *)p);
 	p += sizeof(int);
 
@@ -444,6 +478,8 @@ do_spawn (void)
 	}
 
 	/* 4.- Error log */
+	CHECK_MARK (0xF3);
+
 	size = *((int *)p);
 	p += sizeof(int);
 
@@ -454,10 +490,12 @@ do_spawn (void)
 			log_file = p+5;
 		}
 
-		p += size + 1;
+		p += (size + 1);
 	}
 
 	/* 5.- PID: it's -1 now */
+	CHECK_MARK (0xF4);
+
 	n = *((int *)p);
 	if (n > 0) {
 		kill (n, SIGTERM);
@@ -533,16 +571,25 @@ do_spawn (void)
 
 		PRINT_MSG ("(critical) Couldn't spawn: sh -c %s\n", interpreter);
 		exit (1);
+
 	case -1:
 		/* Error */
 		PRINT_MSG ("(critical) Couldn't fork(): %s\n", strerror(errno));
-		break;
+		goto cleanup;
+
 	default:
-		/* Return the PID */
-		memcpy (p, (char *)&child, sizeof(int));
-		printf ("PID %d: launched '/bin/sh -c %s' with uid=%d, gid=%d, env=%s\n", child, interpreter, uid, gid, env_inherit ? "inherited":"custom");
 		break;
 	}
+
+	/* Return the PID
+	 */
+	memcpy (p, (char *)&child, sizeof(int));
+	printf ("PID %d: launched '/bin/sh -c %s' with uid=%d, gid=%d, env=%s\n", child, interpreter, uid, gid, env_inherit ? "inherited":"custom");
+
+cleanup:
+	/* Unlock worker
+	 */
+	do_sem_op (SEM_LAUNCH_READY, 1);
 
 	/* Clean up
 	 */
@@ -558,21 +605,10 @@ do_spawn (void)
 static NORETURN void *
 spawn_thread_func (void *param)
 {
-	int           re;
-	struct sembuf sops[1];
-
 	UNUSED (param);
 
 	while (true) {
-		sops[0].sem_num = 0;
-		sops[0].sem_op  = -1;
-		sops[0].sem_flg = SEM_UNDO;
-
-		do {
-			errno = 0;
-			re = semop (spawn_shared_sem, sops, 1);
-		} while ((re < 0) && (errno == EINTR));
-
+		do_sem_op (SEM_LAUNCH_START, -1);
 		do_spawn ();
 	}
 }
@@ -580,31 +616,38 @@ spawn_thread_func (void *param)
 static int
 sem_new (void)
 {
+	int         i;
 	int         re;
 	int         sem;
 	union semun ctrl;
 
 	/* Create */
-	sem = semget (getpid(), 1, IPC_CREAT | SEM_R | SEM_A);
+	sem = semget (getpid(), SEM_LAUNCH_TOTAL, IPC_CREAT | SEM_R | SEM_A);
 	if (sem < 0) {
 		PRINT_MSG ("Could not create semaphore: %s\n", strerror(errno));
 		return -1;
 	}
 
 	/* Initialize */
-	ctrl.val = 0;
-	re = semctl (sem, 0, SETVAL, ctrl);
-	if (re < 0) {
-		PRINT_MSG ("Could not initialize semaphore: %s\n", strerror(errno));
-		return -1;
+	for (i=0; i < SEM_LAUNCH_TOTAL; i++) {
+		ctrl.val = 0;
+		re = semctl (sem, i, SETVAL, ctrl);
+		if (re < 0) {
+			goto error;
+		}
 	}
 
 	return sem;
+
+error:
+	PRINT_MSG ("Could not initialize semaphore: %s\n", strerror(errno));
+	return -1;
 }
 
 static int
 sem_chmod (int sem, char *worker_uid)
 {
+	int              i;
 	int              re;
 	struct semid_ds  buf;
 	union  semun     semopts;
@@ -635,17 +678,19 @@ sem_chmod (int sem, char *worker_uid)
 
 	/* Set the permissions
 	 */
-	re = semctl (sem, 0, IPC_STAT, semopts);
-	if (re != -0) {
-		PRINT_MSG ("(warning) Couldn't IPC_STAT: errno=%d\n", errno);
-		return -1;
-	}
+	for (i=0; i<SEM_LAUNCH_TOTAL; i++) {
+		re = semctl (sem, i, IPC_STAT, semopts);
+		if (re != -0) {
+			PRINT_MSG ("(warning) Couldn't IPC_STAT: errno=%d\n", errno);
+			return -1;
+		}
 
-	buf.sem_perm.uid = uid;
-	re = semctl (spawn_shared_sem, 0, IPC_SET, semopts);
-	if (re != 0) {
-		PRINT_MSG ("(warning) Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
-		return -1;
+		buf.sem_perm.uid = uid;
+		re = semctl (spawn_shared_sems, i, IPC_SET, semopts);
+		if (re != 0) {
+			PRINT_MSG ("(warning) Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
+			return -1;
+		}
 	}
 
 	return 0;
@@ -690,18 +735,18 @@ spawn_init (void)
 	close (fd);
 
 	/* Semaphore
-	*/
-	spawn_shared_sem = sem_new();
-	if (spawn_shared_sem < 0) {
+	 */
+	spawn_shared_sems = sem_new();
+	if (spawn_shared_sems < 0) {
 		return ret_error;
 	}
 
 	if (worker_uid != NULL) {
-		sem_chmod (spawn_shared_sem, worker_uid);
+		sem_chmod (spawn_shared_sems, worker_uid);
 	}
 
 	/* Thread
-	*/
+	 */
 	re = pthread_create (&spawn_thread, NULL, spawn_thread_func, NULL);
 	if (re != 0) {
 		PRINT_MSG_S ("(critical) Couldn't spawning thread..\n");
@@ -720,8 +765,8 @@ spawn_clean (void)
 		unlink (spawn_shared_name);
 	}
 
-	if (spawn_shared_sem != -1) {
-		semctl (spawn_shared_sem, 0, IPC_RMID, dummy);
+	if (spawn_shared_sems != -1) {
+		semctl (spawn_shared_sems, 0, IPC_RMID, dummy);
 	}
 }
 #endif /* HAVE_POSIX_SHM */

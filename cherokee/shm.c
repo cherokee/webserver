@@ -33,6 +33,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#define ENTRIES "shm"
+
 ret_t
 cherokee_shm_init (cherokee_shm_t *shm)
 {
@@ -86,6 +88,7 @@ cherokee_shm_create (cherokee_shm_t *shm, char *name, size_t len)
 	shm->len = len;
 	cherokee_buffer_add (&shm->name, name, strlen(name));
 
+	TRACE (ENTRIES, "SHM (mmap: '%s', len: %d) created\n", shm->name.buf, len);
 	return ret_ok;
 }
 
@@ -119,5 +122,6 @@ cherokee_shm_map (cherokee_shm_t    *shm,
 	cherokee_buffer_clean      (&shm->name);
 	cherokee_buffer_add_buffer (&shm->name, name);
 
+	TRACE (ENTRIES, "SHM (mmap: '%s', size: %d) opened\n", name->buf, info.st_size);
 	return ret_ok;
 }
