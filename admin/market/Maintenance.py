@@ -546,7 +546,7 @@ class RemoveApps:
             date = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!date'%(app))
 
             entry = {}
-            entry['description'] = _("Removing %s (%s)" %(name, date))
+            entry['description'] = _("Removing %(name)s (%(date)s)" %(locals()))
             entry['function']    = lambda app=app: _remove_app(app)
 
             commands += [entry]
