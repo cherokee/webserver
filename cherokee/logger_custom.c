@@ -257,7 +257,7 @@ add_time_secs (cherokee_template_t       *template,
 }
 
 static ret_t
-add_time_nsecs (cherokee_template_t       *template,
+add_time_msecs (cherokee_template_t       *template,
 		cherokee_template_token_t *token,
 		cherokee_buffer_t         *output,
 		void                      *param)
@@ -502,7 +502,7 @@ _set_template (cherokee_logger_custom_t *logger,
 		{"status",             add_status},
 		{"now",                add_now},
 		{"time_secs",          add_time_secs},
-		{"time_nsecs",         add_time_nsecs},
+		{"time_msecs",         add_time_msecs},
 		{"user_remote",        add_user_remote},
 		{"request",            add_request},
 		{"request_original",   add_request_original},
