@@ -40,6 +40,7 @@ import OWS_Login
 # Cherokee imports
 import config_version
 from configured import *
+import PageError
 
 
 def init (scgi_port, cfg_file):
@@ -162,7 +163,6 @@ if __name__ == "__main__":
         return reduce (lambda x,y: x and y, tmp)
 
     if not are_vsrvs_num():
-        import PageError
         CTK.publish (r'', PageError.AncientConfig, file=cfg_file)
 
         while not are_vsrvs_num():
@@ -172,7 +172,6 @@ if __name__ == "__main__":
 
     # Check config file and set up
     if os.path.exists (cfg_file) and os.path.isdir (cfg_file):
-        import PageError
         CTK.publish (r'', PageError.NotWritable, file=cfg_file)
 
         while os.path.isdir (cfg_file):
@@ -192,7 +191,6 @@ if __name__ == "__main__":
         CTK.cfg.load()
 
     if not os.access (cfg_file, os.W_OK):
-        import PageError
         CTK.publish (r'', PageError.NotWritable, file=cfg_file)
 
         while not os.access (cfg_file, os.W_OK):
@@ -200,14 +198,14 @@ if __name__ == "__main__":
 
         CTK.unpublish (r'')
 
-    if not os.path.isdir (CHEROKEE_ICONSDIR):
-        import PageError
-        CTK.publish (r'', PageError.IconsMissing, path=CHEROKEE_ICONSDIR)
+    for path in (CHEROKEE_WORKER, CHEROKEE_SERVER, CHEROKEE_ICONSDIR):
+        if not os.path.exists (path):
+            CTK.publish (r'', PageError.ResourceMissing, path=CHEROKEE_WORKER)
 
-        while not os.path.isdir (CHEROKEE_ICONSDIR):
-            CTK.step()
+            while not os.path.exists (path):
+                CTK.step()
 
-        CTK.unpublish (r'')
+            CTK.unpublish (r'')
 
     # OWS related checks
     if not os.path.isdir (CHEROKEE_OWS_DIR):
@@ -220,8 +218,6 @@ if __name__ == "__main__":
 
     if not os.access (CHEROKEE_OWS_DIR,  os.W_OK) or \
        not os.access (CHEROKEE_OWS_ROOT, os.W_OK):
-        import PageError
-
         CTK.publish (r'', PageError.OWSDirectory)
         while not os.access (CHEROKEE_OWS_DIR,  os.W_OK) or \
               not os.access (CHEROKEE_OWS_ROOT, os.W_OK):

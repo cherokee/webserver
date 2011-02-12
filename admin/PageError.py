@@ -129,10 +129,10 @@ def NotWritable (file):
 
 
 
-ICONS_MISSING_TITLE = N_('Could not find the icons directory: <code>%s</code>')
-ICONS_MISSING       = N_('You may need to reinstall the Web Server in order to sort out this issue.')
+RESOURCE_MISSING_TITLE = N_('Could not find a Cherokee resource: <code>%s</code>')
+RESOURCE_MISSING       = N_('You may need to reinstall the Web Server in order to sort out this issue.')
 
-class ConfigIconsMissing (CTK.Page):
+class ResourceMissingError (CTK.Page):
     def __init__ (self, path, **kwargs):
         srcdir = os.path.dirname (os.path.realpath (__file__))
         theme_file = os.path.join (srcdir, 'exception.html')
@@ -140,18 +140,18 @@ class ConfigIconsMissing (CTK.Page):
         # Set up the template
         template = CTK.Template (filename = theme_file)
         template['body_props'] = ' id="body-error"'
-        template['title']      = _('Icons Directory is Missing')
+        template['title']      = _('Cherokee resource is missing')
 
         # Parent's constructor
         CTK.Page.__init__ (self, template, **kwargs)
 
         # Body
-        self += CTK.RawHTML ('<h1>%s</h1>'%(_('Icons Directory is Missing')))
-        self += CTK.RawHTML ('<p><strong>%s</strong>'%(_(ICONS_MISSING_TITLE)%(path)))
-        self += CTK.RawHTML ('<p>%s</p>' %(ICONS_MISSING))
+        self += CTK.RawHTML ('<h1>%s</h1>'%(template['title']))
+        self += CTK.RawHTML ('<p><strong>%s</strong>'%(_(RESOURCE_MISSING_TITLE)%(path)))
+        self += CTK.RawHTML ('<p>%s</p>' %(RESOURCE_MISSING))
 
-def IconsMissing (path):
-    return ConfigIconsMissing(path).Render()
+def ResourceMissing (path):
+    return ResourceMissingError(path).Render()
 
 
 
