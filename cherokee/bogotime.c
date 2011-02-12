@@ -147,7 +147,7 @@ update_guts (void)
 
 	/* Update internal variables
 	 */
-	cherokee_bogonow_msec = ((cherokee_bogonow_tv.tv_sec * 1000) +
+	cherokee_bogonow_msec = (((unsigned long long)cherokee_bogonow_tv.tv_sec * 1000) +
 				 (cherokee_bogonow_tv.tv_usec) / 1000);
 
 	if (cherokee_bogonow_now == cherokee_bogonow_tv.tv_sec)
