@@ -86,7 +86,7 @@ CUSTOM_MACROS_LIST = [
     ('status',             N_("Response status code")),
     ('now',                N_("Time: in common log format time format")),
     ('time_secs',          N_("Time: seconds since Epoch")),
-    ('time_nsecs',         N_("Time: milliseconds since Epoch")),
+    ('time_msecs',         N_("Time: milliseconds since Epoch")),
     ('user_remote',        N_("Remote user (authentication)")),
     ('request',            N_("URL path requested")),
     ('request_original',   N_("URL path requested before any rewrite")),
