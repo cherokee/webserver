@@ -4925,7 +4925,7 @@ msgstr "%s Procesadores Lógicos"
 #: cherokee-trunk/admin/SystemStatsWidgets.py:121
 #, python-format
 msgid "%s Cores"
-msgstr "% Núcleos"
+msgstr "%s Núcleos"
 
 #: cherokee-trunk/admin/SystemStatsWidgets.py:126
 msgid "Unknown Processor"
