@@ -254,6 +254,8 @@ cherokee_handler_cgi_base_build_basic_env (
 	cuint_t                            p_len            = 0;
 	cherokee_bind_t                   *bind             = CONN_BIND(HANDLER_CONN(cgi));
 	cherokee_handler_cgi_base_props_t *cgi_props        = HANDLER_CGI_BASE_PROPS(cgi);
+	static char                       *env_PATH         = NULL;
+	static int                         env_PATH_len     = 0;
 
 	char remote_ip[CHE_INET_ADDRSTRLEN+1];
 	CHEROKEE_TEMP(temp, 32);
@@ -266,7 +268,19 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee Web Server</address>", 38);
 	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
-	set_env (cgi, "PATH",              "/bin:/usr/bin:/sbin:/usr/sbin", 29);
+
+	/* $PATH
+	 */
+	if (unlikely (env_PATH == NULL)) {
+		env_PATH = getenv("PATH");
+		if (env_PATH == NULL) {
+			env_PATH = "/bin:/usr/bin:/sbin:/usr/sbin";
+		}
+
+		env_PATH_len = strlen (env_PATH);
+	}
+
+	set_env (cgi, "PATH", env_PATH, env_PATH_len);
 
 	/* Document Root:
 	 */
