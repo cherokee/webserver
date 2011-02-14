@@ -90,9 +90,9 @@ class Page (Container):
         self.js_header_end = True
 
         if headers:
-            self._headers = HEADERS + headers
+            self._headers = HEADERS[:] + headers[:]
         else:
-            self._headers = HEADERS
+            self._headers = HEADERS[:]
 
         if template:
             self._template = template
