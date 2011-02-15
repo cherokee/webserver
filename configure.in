@@ -1465,7 +1465,7 @@ AC_ARG_ENABLE(static-module,
 	   AC_HELP_STRING([--enable-static-module=MODULE][]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
-modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or"
+modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or"
 
 # Remove modules that will not be compiles
 #
@@ -1540,6 +1540,7 @@ AM_CONDITIONAL(STATIC_HANDLER_PROXY,          grep proxy          $conf_h >/dev/
 AM_CONDITIONAL(STATIC_HANDLER_SSI,            grep ssi            $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_SECDOWNLOAD,    grep secdownload    $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_EMPTY_GIF,      grep empty_gif      $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_DROP,           grep drop           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_CUSTOM_ERROR,   grep custom_error   $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_DBSLAYER,       grep dbslayer       $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_STREAMING,      grep streaming      $conf_h >/dev/null)

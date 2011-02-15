@@ -836,6 +836,24 @@ endif
 
 
 #
+# Handler drop
+#
+handler_drop = \
+handler_drop.c \
+handler_drop.h
+
+libplugin_drop_la_LDFLAGS = $(module_ldflags)
+libplugin_drop_la_SOURCES = $(handler_drop)
+
+if STATIC_HANDLER_DROP
+static_handler_drop_src = $(handler_drop)
+else
+dynamic_handler_drop_lib = libplugin_drop.la
+endif
+
+
+
+#
 # Handler streaming
 #
 handler_streaming = \
@@ -1524,6 +1542,7 @@ $(static_handler_common_src) \
 $(static_handler_ssi_src) \
 $(static_handler_secdownload_src) \
 $(static_handler_empty_gif_src) \
+$(static_handler_drop_src) \
 $(static_handler_streaming_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
@@ -1707,6 +1726,7 @@ $(dynamic_handler_redir_lib) \
 $(dynamic_handler_ssi_lib) \
 $(dynamic_handler_secdownload_lib) \
 $(dynamic_handler_empty_gif_lib) \
+$(dynamic_handler_drop_lib) \
 $(dynamic_handler_streaming_lib) \
 $(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \

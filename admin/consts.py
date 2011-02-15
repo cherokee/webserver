@@ -65,7 +65,8 @@ HANDLERS = [
     ('dbslayer',     N_('MySQL Bridge')),
     ('custom_error', N_('HTTP Error')),
     ('admin',        N_('Remote Administration')),
-    ('empty_gif',    N_('1x1 Transparent GIF'))
+    ('empty_gif',    N_('1x1 Transparent GIF')),
+    ('drop',         N_('Drop Connection')),
 ]
 
 ERROR_HANDLERS = [

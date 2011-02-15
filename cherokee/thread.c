@@ -1041,6 +1041,10 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eagain:
 				cherokee_connection_clean_for_respin (conn);
 				continue;
+			case ret_eof:
+				/* Connection drop */
+				close_active_connection (thd, conn, true);
+				continue;
 			default:
 				cherokee_connection_setup_error_handler (conn);
 				continue;

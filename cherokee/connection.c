@@ -2203,6 +2203,7 @@ cherokee_connection_create_handler (cherokee_connection_t *conn, cherokee_config
 	ret = (config_entry->handler_new_func) ((void **)&conn->handler, conn, config_entry->handler_properties);
 	switch (ret) {
 	case ret_ok:
+	case ret_eof:
 	case ret_eagain:
 		return ret;
 	default:
