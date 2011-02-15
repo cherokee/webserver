@@ -94,6 +94,10 @@
 # define HOST_NAME_MAX 255
 #endif
 
+#ifndef NSIG
+# define NSIG 32
+#endif
+
 #define ENTRIES "util"
 
 const char *cherokee_version    = PACKAGE_VERSION;
@@ -2437,27 +2441,17 @@ cherokee_wait_pid (int pid, int *retcode)
 ret_t
 cherokee_reset_signals (void)
 {
-        signal (SIGHUP,  SIG_DFL);
-        signal (SIGINT,  SIG_DFL);
-        signal (SIGPIPE, SIG_DFL);
-        signal (SIGUSR1, SIG_DFL);
-        signal (SIGUSR2, SIG_DFL);
-        signal (SIGSEGV, SIG_DFL);
-        signal (SIGTERM, SIG_DFL);
-        signal (SIGCHLD, SIG_DFL);
+	int              i;
+	struct sigaction sig_action;
 
-#ifdef SIGBUS
-        signal (SIGBUS,  SIG_DFL);
-#endif
-#ifdef SIGTTOU
-        signal (SIGTTOU, SIG_DFL);
-#endif
-#ifdef SIGTTIN
-        signal (SIGTTIN, SIG_DFL);
-#endif
-#ifdef SIGTSTP
-        signal (SIGTSTP, SIG_DFL);
-#endif
+	/* Reset signal handlers */
+	sig_action.sa_handler = SIG_DFL;
+	sig_action.sa_flags   = 0;
+	sigemptyset (&sig_action.sa_mask);
+
+	for (i=0 ; i < NSIG ; i++) {
+		sigaction (i, &sig_action, NULL);
+	}
 
 	return ret_ok;
 }
