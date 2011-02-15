@@ -62,6 +62,10 @@ union semun {
 # define HAVE_SEMUN 1
 #endif
 
+#ifndef NSIG
+# define NSIG 32
+#endif
+
 #define SEM_LAUNCH_START 0
 #define SEM_LAUNCH_READY 1
 #define SEM_LAUNCH_TOTAL 2
@@ -511,7 +515,19 @@ do_spawn (void)
 	 */
 	child = fork();
 	switch (child) {
-	case 0:
+	case 0: {
+		int              i;
+		struct sigaction sig_action;
+
+		/* Reset signal handlers */
+		sig_action.sa_handler = SIG_DFL;
+		sig_action.sa_flags   = 0;
+		sigemptyset (&sig_action.sa_mask);
+
+		for (i=0 ; i < NSIG ; i++) {
+			sigaction (i, &sig_action, NULL);
+		}
+
 		/* Logging */
 		if (log_file) {
 			int fd;
@@ -576,6 +592,7 @@ do_spawn (void)
 
 		PRINT_MSG ("(critical) Couldn't spawn: sh -c %s\n", interpreter);
 		exit (1);
+	}
 
 	case -1:
 		/* Error */
