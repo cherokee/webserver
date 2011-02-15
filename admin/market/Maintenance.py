@@ -174,10 +174,17 @@ def app_database_exists (app):
 
 
 def app_database_remove (app, user, passw, db_type):
+    # MySQL
     if db_type == 'MySQL':
-        cmd = "mysql -u'%(user)s' -p'%(passw)s' -e 'DROP DATABASE IF EXISTS market_%(app)s'" %(locals())
+        params = "-u'%(user)s'" %(locals())
+        if passw:
+            params += " -p'%(passw)s'" %(locals())
+        cmd = "mysql %(params)s -e 'DROP DATABASE IF EXISTS market_%(app)s'" %(locals())
+
+    # PostgreSQL
     elif db_type == 'PostgreSQL':
         cmd = "PGUSER='%(user)s' PGPASSWORD='%(passw)s' psql -c 'DROP DATABASE IF EXISTS market_%(app)s'" %(locals())
+
     else:
         return
 
@@ -443,11 +450,12 @@ class DatabaseRemoval:
 
         for app in CTK.cfg.keys ('tmp!market!maintenance!remove'):
             tmp = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!db'%(app))
-            if tmp:
-                if not CTK.cfg.get_val ('tmp!market!maintenance!db!%s!user'%(tmp)) or \
-                   not CTK.cfg.get_val ('tmp!market!maintenance!db!%s!pass'%(tmp)):
-                    db_found = True
-                    db_type  = tmp
+            if not tmp:
+                continue
+
+            if not CTK.cfg.get_val ('tmp!market!maintenance!db!%s!user'%(tmp)):
+                db_found = True
+                db_type  = tmp
 
         # No DBs, we are done here
         if not db_found:
@@ -460,8 +468,9 @@ class DatabaseRemoval:
         table.Add (_('DB user'),     CTK.TextField        ({'name':'db_user', 'class':'noauto', 'value':'root'}), _(NOTE_DBUSER))
         table.Add (_('DB password'), CTK.TextFieldPassword({'name':'db_pass', 'class':'noauto'}), _(NOTE_DBPASS))
 
+        # Reload its content on submit success
         submit  = CTK.Submitter (URL_MAINTENANCE_DB_APPLY)
-        submit.bind ('submit_success', CTK.DruidContent__JS_to_goto (table.id, URL_MAINTENANCE_REMOVE))
+        submit.bind ('submit_success', CTK.DruidContent__JS_to_goto (table.id, URL_MAINTENANCE_DB))
         submit += CTK.Hidden ('db_type', db_type)
         submit += table
 
@@ -494,11 +503,13 @@ def _remove_app (app):
     if service:
         if OS == 'darwin':
             popen.popen_sync ('launchctl unload %(service)s' %(locals()))
+
         elif OS == 'linux':
             popen.popen_sync ('rm -f /etc/rcS.d/S99%(service)s' %(locals()))
+
         elif OS == 'freebsd':
             content = open('/etc/rc.conf', 'r').read()
-            content = content.replace('%s="YES"\n'%(service), '')
+            content = content.replace ('%s="YES"\n'%(service), '')
             open('/etc/rc.conf', 'w').write (content)
 
         print "Remove service", service
@@ -521,7 +532,7 @@ def _remove_app (app):
     db_type = CTK.cfg.get_val ('tmp!market!maintenance!remove!%s!db'%(app))
     if db_type:
         db_user = CTK.cfg.get_val('tmp!market!maintenance!db!%s!user'%(db_type))
-        db_pass = CTK.cfg.get_val('tmp!market!maintenance!db!%s!pass'%(db_type))
+        db_pass = CTK.cfg.get_val('tmp!market!maintenance!db!%s!pass'%(db_type), '')
 
         app_database_remove (app, db_user, db_pass, db_type)
 

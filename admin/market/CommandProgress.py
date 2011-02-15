@@ -178,6 +178,7 @@ class CommandProgress (CTK.Box, Replacement_Commons):
 class CommandExec_Thread (threading.Thread):
     def __init__ (self, command_progress):
         threading.Thread.__init__ (self)
+        self.daemon           = True
         self.command_progress = command_progress
 
     def run (self):
