@@ -95,7 +95,8 @@ find_empty_port (int starting, int *port)
 		if (ret == ret_ok)
 			break;
 
-		if (++p > 0XFFFF)
+		p += 1;
+		if (p > 0XFFFF)
 			return ret_error;
 	}
 
