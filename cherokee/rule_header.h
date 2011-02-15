@@ -48,6 +48,7 @@ typedef struct {
 	cherokee_common_header_t    header;
 	cherokee_buffer_t           match;
 	void                       *pcre;
+	cherokee_boolean_t          complete_header;
 } cherokee_rule_header_t;
 
 #define RULE_HEADER(x) ((cherokee_rule_header_t *)(x))

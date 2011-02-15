@@ -98,10 +98,47 @@ match_provided (cherokee_rule_header_t  *rule,
 
 
 static ret_t
+match_complete (cherokee_rule_header_t  *rule,
+		cherokee_connection_t   *conn,
+		cherokee_config_entry_t *ret_conf)
+{
+	int   re;
+	ret_t ret;
+
+	UNUSED(ret_conf);
+
+	/* Check whether it matches
+	 */
+	re = pcre_exec (rule->pcre, NULL,
+			conn->incoming_header.buf,
+			conn->incoming_header.len,
+			0, 0, NULL, 0);
+
+	if (re < 0) {
+		TRACE (ENTRIES, "Request '%s' didn't match complete header with '%s'\n",
+		       conn->request.buf, rule->match.buf);
+		return ret_not_found;
+	}
+
+	TRACE (ENTRIES, "Request '%s' matched complete header with '%s'\n",
+	       conn->request.buf, rule->match.buf);
+	return ret_ok;
+}
+
+
+static ret_t
 match (cherokee_rule_header_t  *rule,
        cherokee_connection_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
+	/* Match regex against complete header block
+	 */
+	if (rule->complete_header) {
+		return match_complete (rule, conn, ret_conf);
+	}
+
+	/* Check single header entry
+	 */
 	switch (rule->type) {
 	case rule_header_type_regex:
 		return match_regex (rule, conn, ret_conf);
@@ -167,31 +204,37 @@ configure (cherokee_rule_header_t    *rule,
 	cherokee_buffer_t      *header   = NULL;
 	cherokee_regex_table_t *regexs   = VSERVER_SRV(vsrv)->regexs;
 
-	/* Read the header
+	/* Complete header
 	 */
-	ret = cherokee_config_node_read (conf, "header", &header);
-	if (ret != ret_ok) {
-		LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-			   RULE(rule)->priority, "header");
-		return ret_error;
-	}
+	cherokee_config_node_read_bool (conf, "complete", &rule->complete_header);
 
-	ret = header_str_to_type (header, &rule->header);
-	if (ret != ret_ok) {
-		return ret;
-	}
-
-	/* Type
+	/* Read the header. Eg: Referer
 	 */
-	ret = cherokee_config_node_read (conf, "type", &type);
-	if (ret == ret_ok) {
-		ret = type_str_to_type (type, &rule->type);
+	if (! rule->complete_header) {
+		ret = cherokee_config_node_read (conf, "header", &header);
+		if (ret != ret_ok) {
+			LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
+				   RULE(rule)->priority, "header");
+			return ret_error;
+		}
+
+		ret = header_str_to_type (header, &rule->header);
 		if (ret != ret_ok) {
 			return ret;
 		}
+
+		/* Type: regex | provided
+		 */
+		ret = cherokee_config_node_read (conf, "type", &type);
+		if (ret == ret_ok) {
+			ret = type_str_to_type (type, &rule->type);
+			if (ret != ret_ok) {
+				return ret;
+			}
+		}
 	}
 
-	/* Read the match
+	/* Read regex match
 	 */
 	ret = cherokee_config_node_copy (conf, "match", &rule->match);
 	if (ret != ret_ok) {
@@ -244,8 +287,9 @@ cherokee_rule_header_new (cherokee_rule_header_t **rule)
 
 	/* Properties
 	 */
-	n->pcre = NULL;
-	n->type = rule_header_type_regex;
+	n->pcre            = NULL;
+	n->type            = rule_header_type_regex;
+	n->complete_header = false;
 
 	cherokee_buffer_init (&n->match);
 
