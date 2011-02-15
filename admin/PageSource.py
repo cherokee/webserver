@@ -160,12 +160,14 @@ def _all_sources_per_rule ():
 
 def _sources_per_rule (rule):
     """Return list of sources used by a given rule"""
-    sources  = []
-    pre      = '%s!handler!balancer!source'%(rule)
-    src_keys = CTK.cfg.keys(pre)
+    sources = []
+    handler = CTK.cfg.get_val('%s!handler'%(rule))
 
-    for src_key in src_keys:
-        sources.append (CTK.cfg.get_val('%s!%s'%(pre,src_key)))
+    if handler in HANDLERS_WITH_BALANCER:
+        pre      = '%s!handler!balancer!source'%(rule)
+        src_keys = CTK.cfg.keys(pre)
+        for src_key in src_keys:
+            sources.append (CTK.cfg.get_val('%s!%s'%(pre,src_key)))
     return list(set(sources))
 
 
