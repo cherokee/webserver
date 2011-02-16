@@ -278,7 +278,7 @@ EXTRA_DIST = \
 $(doc_DATA) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA) \
-test_images.py
+test_images.py \
 test_links.py
 
 serve:
