@@ -1,4 +1,4 @@
-== link:index.html[Index] -> link:modules.html[Modules]
+m t== link:index.html[Index] -> link:modules.html[Modules]
 
 Modules: Balancers
 ------------------
@@ -32,5 +32,5 @@ And these are the handlers that use balancing:
 
 * link:modules_handlers_fcgi.html[FastCGI]
 * link:modules_handlers_scgi.html[SCGI]
-* link:modules_handlers_wsgi.html[uWSGI]
+* link:modules_handlers_uwsgi.html[uWSGI]
 * link:modules_handlers_dbslayer.html[MySQL bridge]

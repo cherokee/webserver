@@ -80,8 +80,6 @@ Available Wizards
 
 * MediaWiki: Free wiki engine written in PHP for use in Wikipedia.
 
-* link:cookbook_moinmoin.html[MoinMoin]: Python Wiki enginge.
-
 * link:cookbook_mono.html[Mono.NET]: .NET open source framework.
 
 * link:cookbook_moodle.html[Moodle]: Course Management System.

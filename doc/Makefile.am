@@ -122,13 +122,16 @@ other_bundle_cherokee-admin.html \
 other_bundle_cherokee-config.html \
 other_bundle_cherokee-tweak.html \
 other_bundle_cherokee-worker.html \
+other_bundle_cherokee-admin-launcher.html \
 other_bundle_cget.html \
 dev.html \
 dev_debug.html \
 dev_cherokee.conf.html \
 dev_issues.html \
 dev_qa.html \
-dev_quickstart.html
+dev_quickstart.html \
+dev_api.html \
+dev_examples.html
 
 docmediacssdir = $(docdir)/media/css/
 docmediacss_DATA = \
@@ -276,9 +279,11 @@ $(doc_DATA) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA) \
 test_images.py
+test_links.py
 
 serve:
 	../cherokee/cherokee -r .
 
 test:
 	./test_images.py
+	./test_links.py
