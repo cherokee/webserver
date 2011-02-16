@@ -44,7 +44,7 @@ def check_images():
 
     for img in img_files:
         if not img in img_refs:
-            print "ERROR: %s: Not longer used" %(img)
+            print "ERROR: %s: No longer used" %(img)
             error = True
 
     automake_am = open("Makefile.am", 'r').read()
