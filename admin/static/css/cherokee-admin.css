@@ -1369,3 +1369,10 @@ img.icon_chooser_selected {
 .ui-dialog-content h2 {
   margin-bottom: 16px;
 }
+
+#maintenance-removal-list { width: 564px; }
+#maintenance-removal-list td, #maintenance-removal-list th { width: 24px; }
+#maintenance-removal-list td + td, #maintenance-removal-list th + th  { width: 168px; }
+#maintenance-removal-list td + td + td, #maintenance-removal-list th + th + th  { width: 74px; }
+#maintenance-removal-list td + td + td + td, #maintenance-removal-list th + th + th + th  { width: 138px; }
+#maintenance-removal-list td + td + td + td + td, #maintenance-removal-list th + th + th + th + th { width: 160px; }
