@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
 ///////////////////////////////////////////////////////////////////
-Last checked: Cherokee 1.0.5b
+Last checked: Cherokee 1.0.21b
 ///////////////////////////////////////////////////////////////////
 
 Man pages: cherokee-config
@@ -19,7 +19,7 @@ This is the full information provided by the manpage.
        of Cherokee
 
 *SYNOPSIS*::
-       `cherokee-config`  [--prefix[=DIR]]   [--libs]   [--cflags]   [--version]
+       `cherokee-config`  [--prefix=<DIR>]   [--libs]   [--cflags]   [--version]
        [--help]
 
 *DESCRIPTION*::

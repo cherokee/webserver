@@ -1,4 +1,4 @@
-m t== link:index.html[Index] -> link:modules.html[Modules]
+== link:index.html[Index] -> link:modules.html[Modules]
 
 Modules: Balancers
 ------------------

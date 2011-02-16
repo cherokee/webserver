@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
 ///////////////////////////////////////////////////////////////////
-Last checked: Cherokee 1.0.5b
+Last checked: Cherokee 1.0.21b
 ///////////////////////////////////////////////////////////////////
 
 Man pages: cherokee-admin
@@ -119,7 +119,7 @@ This is the full information provided by the manpage.
                development process. The usage of this parameter is
                strongly discouraged for regular users.
 
-       -b, --bind[=IP];;
+       -b[<IP>], --bind[=<IP>];;
                By  default `cherokee-admin` binds only to 127.0.0.1 (localhost),
                which means you can only connect to it from  the  same  system.
                With this parameter you can specify the network address
@@ -127,11 +127,11 @@ This is the full information provided by the manpage.
                interfaces.
 
 
-       -d, --appdir=DIR;;
+       -d<DIR>, --appdir=<DIR>;;
                Uses a custom admin-interface path where the source
                files of cherokee-admin reside.
 
-       -p, --port=NUM;;
+       -p<NUM>, --port=<NUM>;;
                Specifies an alternative port. By default, 9090.
 
        -t, --internal-unix;;
@@ -141,7 +141,12 @@ This is the full information provided by the manpage.
                behavior is the safest one, so this parameter should
                rarely by used.
 
-       -C, --target=PATH;;
+       -T<NUM>, --thread=<NUM>;;
+               Specify the number of threads that the program should
+               use. Useful for memory/power constrained machines.
+
+
+       -C<PATH>, --target=PATH;;
                Requests  a  configuration  file  different  than  the  default
                /etc/cherokee/cherokee.conf to be used
 

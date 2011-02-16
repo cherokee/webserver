@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:other.html[Other information] -> link:other_bundle.html[Man pages]
 ///////////////////////////////////////////////////////////////////
-Last checked: Cherokee 1.0.5b
+Last checked: Cherokee 1.0.21b
 ///////////////////////////////////////////////////////////////////
 
 Man pages: cherokee
@@ -30,28 +30,29 @@ This is the full information provided by the manpage.
                Prints a brief help message and terminates execution
 
        -V, --version;;
-               Prints Cherokee’s version and terminates execution
+               Prints Cherokee's version and terminates execution
 
        -t, --test;;
-               Perform a sanity check on the configuration  file. The  server will not run.
+               Perform a sanity check on the configuration file. The server will not run.
 
        -d, --detach;;
-               Launches  the server as a background process (default behavior is to stay attached to the controlling terminal).
+               Launches the server as a background process (default behaviour is to stay attached to the controlling terminal).
 
-       -C, --config=PATH;;
+       -C<PATH>, --config=<PATH>;;
                Specifies an alternative path for the configuration file to use instead of the default cherokee.conf
 
-       -p, --port=PORT;;
+       -p<PORT>, --port=<PORT>;;
                TCP port number to which the server will listen.
 
-       -r, --documentroot=PATH;;
-               Launches  a server exposing statically the specified directory. When launched with -r, the configuration file is  ignored,  and the Cherokee instance runs with its default values.
+       -r<PATH>, --documentroot=<PATH>;;
+               Launches a server exposing statically the specified directory. When launched with -r, the configuration file is ignored, and the Cherokee instance runs with its default values.
 
-       -i, --print;;
+       -i, --print-server-info;;
                Print server technical information.
 
        -v, --valgrind;;
                Execute the worker process under Valgrind. Used only for development and troubleshooting purposes.
+
 
 *SIGNALS*::
        The following signals are supported by Cherokee:
