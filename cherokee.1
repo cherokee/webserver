@@ -12,7 +12,7 @@
 .\" along with this program; see the file COPYING.  If not, write to
 .\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH Cherokee 1 "December 13, 2010"
+.TH Cherokee 1 "February 16, 2011"
 .\" Please update the above date whenever this man page is modified.
 .\"
 .\" Some roff macros, for reference:
@@ -50,14 +50,14 @@ Perform a sanity check on the configuration file. The server will not run.
 Launches the server as a background process (default behaviour is to
 stay attached to the controlling terminal).
 .TP 8
-.B \-C, --config=PATH
+.B \-C<PATH>, --config=<PATH>
 Specifies an alternative path for the configuration file to use instead
 of the default cherokee.conf
 .TP 8
-.B \-p, --port=PORT
+.B \-p<PORT>, --port=<PORT>
 TCP port number to which the server will listen.
 .TP 8
-.B \-r, --documentroot=PATH
+.B \-r<PATH>, --documentroot=<PATH>
 Launches a server exposing statically the specified directory. When
 launched with \-r, the configuration file is ignored, and the Cherokee
 instance runs with its default values.
@@ -84,7 +84,7 @@ I would appreciate hearing of any problems you have with Cherokee.  I
 would also like to hear from you if you have successfully used Cherokee,
 especially if you are using it for a distribution.
 .PP
-Report bugs to 
+Report bugs to
 .B http://bugs.cherokee-project.com
 .PP
 There is a mailing list for discussion among Cherokee users and for
@@ -100,7 +100,7 @@ Cherokee can be run either with this command or
 \&\fIcherokee-worker\fR\|(1).  This last option is discouraged if you
 are not developing though.
 .
-Note that, for most systems, a startup/shutdown script such as 
+Note that, for most systems, a startup/shutdown script such as
 /etc/init.d/cherokee is provided and will probably be the most
 convenient invocation method.
 .SH AUTHOR

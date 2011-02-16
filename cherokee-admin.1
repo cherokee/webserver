@@ -1,9 +1,9 @@
-.TH cherokee-admin 8 "September 20, 2010"
+.TH cherokee-admin 8 "February 16, 2011"
 .SH NAME
 cherokee-admin - Runs Cherokee's administrative interface
 .SH SYNOPSIS
 .B cherokee-admin
-[\-d DIR] [\-p PORT] [\-C FILE] [\-b] [\-x] [\-u] [\-t]
+[\-d<DIR>] [\-p<PORT>] [\-C<FILE>] [\-b] [\-x] [\-u] [\-t]
 .SH DESCRIPTION
 \fIcherokee-admin\fP runs the server for the administrative interface
 used to configure Cherokee. The interface itself will be available via
@@ -27,17 +27,17 @@ to authenticate. This disables a security measure and is only meant to
 ease the development process. The usage of this parameter is strongly
 discouraged for regular users.
 .TP 8
-.B  \-b, --bind[=IP]
+.B  \-b[<IP>], --bind[=<IP>]
 By default \fIcherokee-admin\fP binds only to 127.0.0.1 (localhost), which
 means you can only connect to it from the same system. With this parameter
 you can specify the network address to listen to. If no IP is provided,
 it will bind to all interfaces.
 .TP 8
-.B  \-d, --appdir=DIR
+.B  \-d<DIR>, --appdir=<DIR>
 Uses a custom admin-interface path where the source files of
 \fIcherokee-admin\fP reside.
 .TP 8
-.B \-p, --port=NUM
+.B \-p<NUM>, --port=<NUM>
 Specifies an alternative port. By default, 9090.
 .TP 8
 .B \-t,  --internal-unix
@@ -46,7 +46,11 @@ communications. This parameter specifies that a Unix domain socket
 should be used instead. The default behavior is the safest one, so
 this parameter should rarely by used.
 .TP 8
-.B  \-C, --target=PATH
+.B  \-T<NUM>, --thread=<NUM>
+Specify the number of threads that the program should use. Useful for
+memory/power constrained machines.
+.TP 8
+.B  \-C<PATH>, --target=PATH
 Requests a configuration file different than the default
 /etc/cherokee/cherokee.conf to be used
 .SH SEE ALSO
