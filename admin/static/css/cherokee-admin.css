@@ -901,6 +901,12 @@ img.icon_chooser_selected {
   margin-bottom: 16px;
 }
 
+.market-app-desc-report {
+  text-align: right;
+  font-size: 80%;
+  padding-right 8px;
+}
+
 .market-app-desc-description {
   margin: 16px 0 32px 0;
   width: 672px;
