@@ -595,8 +595,8 @@ process_polling_connections (cherokee_thread_t *thd)
 		case -1:
 			/* Error, move back the connection
 			 */
-			TRACE (ENTRIES",polling", "conn %p(fd=%d): status is Error\n",
-			       conn, SOCKET_FD(&conn->socket));
+			TRACE (ENTRIES",polling", "conn %p(fd=%d): status is Error (fd=%d)\n",
+			       conn, SOCKET_FD(&conn->socket), conn->polling_fd);
 
 			purge_closed_polling_connection (thd, conn);
 			continue;
