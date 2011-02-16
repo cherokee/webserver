@@ -30,6 +30,7 @@ a:active { outline: none; }
 a:focus { -moz-outline-style: none; outline: none; }
 h1 { color: #c00; font-weight: normal; padding: 16px 0 16px 16px; font-size: 20px; z-index: 9000; }
 h2 { color: #259; font-weight: normal; padding: 8px 0; font-size: 18px; z-index: 9000; border-bottom: 1px solid #def; }
+pre { white-space: pre-wrap; }
 
 /* Styles for cherokee-admin layout
  */
