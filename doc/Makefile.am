@@ -68,6 +68,7 @@ cookbook_coldfusion.html \
 cookbook_concrete5.html \
 cookbook_https_accelerator.html \
 cookbook_http_to_https.html \
+cookbook_global_redirects.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_failover.html \

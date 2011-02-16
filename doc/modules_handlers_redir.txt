@@ -132,3 +132,26 @@ matching requests:
 |===========================================================================================
 
 You might also want to check out the cookbook entry titled link:cookbook_http_to_https.html[HTTP to HTTPS] on how to redirect all traffic from HTTP to HTTPS.
+
+
+[[global]]
+Global redirections
+~~~~~~~~~~~~~~~~~~~
+
+If you want to implement global redirections that can be defined once
+and apply to every virtual server on your configuration, you will also
+have to perform matches against the host part of the request. This can
+be done by creating an additional virtual server using "Regular
+Expression" as method to match the host, which can be specified
+through the the `Host Match` tab. You will then have to define a substitution that uses both type of regex matches:
+
+.Match groups
+[cols="20%,80%"]
+|======================================
+| `^1,^2,^3,..` | These are substituted by the host name match.
+| `$1,$2,$3,..` | These are substituted by either the handler match (if any) or its own match groups.
+|======================================
+
+For more information, check out the practical example in the cookbook
+describing how to implement link:cookbook_global_redirects.html[global
+redirections].

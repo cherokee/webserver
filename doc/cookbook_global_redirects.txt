@@ -1,0 +1,56 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 1.0.21b
+///////////////////////////////////////////////////////////////////
+
+Cookbook: Global redirections
+-----------------------------
+
+Redirections are essential on any modern web server, not only to
+display pretty URLs, but also to address usability and SEO issues.
+
+A common scenario is that of a virtual server being accessible both
+with and without the `www` prefix. It is customary to have both, but
+it is also a good idea to have only one of them as main entry point to
+a website, so that the number of web hits isn't incorrectly halved
+when anlaysing web traffic.
+
+This can be done on a per-virtual-server basis, but it can be a
+cumbersome task if we're dealing with a huge amount of virtual
+servers.
+
+Of course, Cherokee alows a much more practical approach, and setting
+up only one rule to handle all redirects is painless and
+straightforward. Matches can be performed against the host name, the
+actual request, or both, so the mechanism is quite flexible.
+
+Goal:
+~~~~~
+Configure a www redirect for every (sub)domain name, where requests of
+the form http://www.domain.name must be redirected to
+http://domain.name.
+
+Steps:
+~~~~~~
+. Create a new virtual server that uses "Regular Expressions" in the "Host Match"
+. Add a regular expression to match the host names: www\.(.+)$
+. In the same virtual server, set a "Redirection" handler as the Default rule.
+. In the handler, add a new RegEx entry defined as follows:
+
+.Options
+[options="header"]
+|======================================
+|Field        |Value
+|Show |External
+|Regular Expression |/(.*)$
+|Substitution |http://^1/$1
+|======================================
+
+.Match parameters
+[cols="20%,80%"]
+|======================================
+| `^1,^2,^3,..` | These are substituted by the host name match.
+| `$1,$2,$3,..` | These are substituted by either the handler match (if any) or its own match groups.
+|======================================
+
