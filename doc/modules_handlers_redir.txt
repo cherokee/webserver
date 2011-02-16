@@ -69,6 +69,11 @@ link:config_virtual_servers_evhost.html#slicing[slicing support]. You
 should read more about this powerful feature if you are not already
 familiar with it.
 
+The maximum allowed number of substitutions on an expression is
+limited to 20, and even though it could be raised even more, this
+wouldn't actually make any difference for any real-life case.
+
+
 [[vhosts]]
 Virtual hosts and redirections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,7 +136,9 @@ matching requests:
 |__/https_redir/555__  |https://example.com/secure?photoid=555
 |===========================================================================================
 
-You might also want to check out the cookbook entry titled link:cookbook_http_to_https.html[HTTP to HTTPS] on how to redirect all traffic from HTTP to HTTPS.
+You might also want to check out the cookbook entry titled
+link:cookbook_http_to_https.html[HTTP to HTTPS] on how to redirect all
+traffic from HTTP to HTTPS.
 
 
 [[global]]
@@ -143,7 +150,8 @@ and apply to every virtual server on your configuration, you will also
 have to perform matches against the host part of the request. This can
 be done by creating an additional virtual server using "Regular
 Expression" as method to match the host, which can be specified
-through the the `Host Match` tab. You will then have to define a substitution that uses both type of regex matches:
+through the the `Host Match` tab. You will then have to define a
+substitution that uses both type of regex matches:
 
 .Match groups
 [cols="20%,80%"]
@@ -155,3 +163,4 @@ through the the `Host Match` tab. You will then have to define a substitution th
 For more information, check out the practical example in the cookbook
 describing how to implement link:cookbook_global_redirects.html[global
 redirections].
+
