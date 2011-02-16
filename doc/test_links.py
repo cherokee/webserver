@@ -21,6 +21,7 @@ def get_link_refs():
     return link_refs.keys()
 
 def get_txt_refs (link_refs):
+    """Discard external links, and return the reference to the source .txt of a link"""
     def is_txt (x):
         if not ('://' in x or x.startswith('mailto:')):
             return True
@@ -32,7 +33,6 @@ def check_links():
     error = False
 
     refs      = get_link_refs()
-    link_refs = [x for x in refs if x.startswith('http')]
     txt_refs  = get_txt_refs (refs)
     txt_files = filter(lambda x: x.endswith('.txt'), os.listdir('.'))
 
@@ -52,7 +52,8 @@ def check_links():
             print "ERROR: %s isn't covered in Makefile.am " %(txt)
             error = True
 
-    # TODO: check if link_refs are still accessible.
+    # TODO: check if external links are still accessible
+    # http_refs = [x for x in refs if x.startswith('http')]
 
     return error
 
