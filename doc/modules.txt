@@ -19,6 +19,7 @@
     - link:modules_handlers_dbslayer.html[MySQL bridge]: MySQL over HTTP bridge.
     - link:modules_handlers_admin.html[Remote Administration]: Cherokee administration handler.
     - link:modules_handlers_empty_gif.html[1x1 Transparent GIF]: Returns a 1x1 pixel transparent GIF.
+    - link:modules_handlers_drop.html[Drop Connection]: Immediately drop TCP connection.
   . link:modules_validators.html[Validators]: Authentication mechanisms.
     - link:modules_validators_plain.html[Plain]: Plain file mechanism.
     - link:modules_validators_htpasswd.html[htpasswd]: htpasswd mechanism.

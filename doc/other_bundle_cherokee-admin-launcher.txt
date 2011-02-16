@@ -23,5 +23,25 @@ course this step is not necessary when invoked with the
 development purposes.
 
 Refer to the link:other_bundle_cherokee-admin.html[cherokee-admin
-documentation ]for more in-depth explanations of all the parameters
+documentation] for more in-depth explanations of all the parameters
 and options.
+
+
+*SIGNALS*::
+       You can send the SIGHUP signal to cherokee-admin-launcher to
+       make it relaunch a web browser conviniently authenticated
+       agains cherokee-admin. This is useful in case you closed the
+       web browser and wished to access cherokee-admin again without
+       restarting it, since manual access would require you to provide
+       the one-time login details that you wouldn't have.
+
+
+.Command on Solaris
+----
+# pkill -HUP cherokee-admin-launcher
+----
+
+.Command on most Unix-like systems
+----
+# killall -HUP cherokee-admin-launcher
+----

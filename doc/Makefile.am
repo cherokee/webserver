@@ -69,6 +69,7 @@ cookbook_concrete5.html \
 cookbook_https_accelerator.html \
 cookbook_http_to_https.html \
 cookbook_global_redirects.html \
+cookbook_traffic_restriction.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_failover.html \
@@ -96,6 +97,7 @@ modules_handlers_proxy.html \
 modules_handlers_secdownload.html \
 modules_handlers_uwsgi.html \
 modules_handlers_empty_gif.html \
+modules_handlers_drop.html \
 modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \

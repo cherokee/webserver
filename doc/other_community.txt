@@ -47,6 +47,13 @@ around, so after the mailing lists it is the second best place to look
 for answers and help.
 
 
+[[forums]]
+Forums
+~~~~~~
+Multi-language forums are available at the
+link:http://forum.cherokee-project.com/[Cherokee-Project] site.
+
+
 The Cherokee Planet
 ~~~~~~~~~~~~~~~~~~~
 

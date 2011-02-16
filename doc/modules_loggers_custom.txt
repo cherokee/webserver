@@ -31,7 +31,7 @@ evaluated right before writing each log entry:
 |`${transport}`          |https                      |Transport type: `http` or `https`
 |`${user_remote}`        |guest                      |Remote user (authentication)
 |`${vserver_name}`       |default                    |Virtual Server nick name
-|`${vserver_name_req}`   |example.com                |Requested host (Host: header)
+|`${vserver_name_req}`   |example.com                |Requested host (Host: header), or vserver nickname if absent
 |`${http_host}`          |example.com                |"Host:" header of the request
 |`${http_referrer}`      |example.com/page           |"Referrer:" header of the request
 |`${http_user_agent}`    |Mozilla/1.0.0              |"User-Agent:" header of the request
@@ -60,3 +60,25 @@ would generate this entry in the log:
 [08/Apr/2009:12:02:11 +0200] 74.125.67.100: /file.txt (200)
 ----
 
+
+Apache's comined format
+~~~~~~~~~~~~~~~~~~~~~~~
+The following formats are all like Apache's combined format, except the second field not being the client ident but the (way more interesting) HTTP host or vserver name.
+
+* Virtual server name
++
+----
+${ip_remote} ${vserver_name} ${user_remote} [${now}] "${request_first_line}" ${status} ${response_size} "${http_referrer}" "${http_user_agent}"
+----
+
+* Host
++
+----
+${ip_remote} ${http_host} ${user_remote} [${now}] "${request_first_line}" ${status} ${response_size} "${http_referrer}" "${http_user_agent}"
+----
+
+* Host if present, otherwise virtual serven name
++
+----
+${ip_remote} ${vserver_name_req} ${user_remote} [${now}] "${request_first_line}" ${status} ${response_size} "${http_referrer}" "${http_user_agent}"
+----

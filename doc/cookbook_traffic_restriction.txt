@@ -1,0 +1,23 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Restricting traffic by IP
+-----------------------------------
+
+This section answers some general questions regarding the current
+behavior of several parts of Cherokee that might lead to
+missunderstandings.
+
+Some scenarios require web traffic to be restricted on a virtual
+server basd on incoming IP.  Although an IP/Subnet host match type is
+present on the `Host Match` tab of virtual servers, this can't be used
+as a security measure to enforce traffic restrictions. Its main
+purpose is explained elsewhere in the documentation, and suffice it to
+say that if this method were to be used, it could be easily overcomed by
+forging the `Host` header.
+
+If you want to restrict the traffic of one of your virtual servers
+based on the incoming IP, the best way to go is setting a non-final
+rule on top of your behavior rule list of the virtual server. That
+rule should match the forbidden IPs with an `Incoming IP/Port`-type
+rule (such as `(NOT Incoming IP: 127.0.0.1/8)`), and could be handled
+by custom error handler, or an appropriate redirection.

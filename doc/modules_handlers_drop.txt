@@ -1,0 +1,25 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
+
+Handler: Drop Connection
+------------------------
+
+This handler immediately drops the TCP connection without replying
+anything whatsoever.
+
+This handler can be used as security measure against some types of
+attack. For instance, an an error in the PHP and Java floating point
+library could be exploited to cause a denial of service against a web
+service. Under certain circumstances, attempting to convert the string
+'2.2250738585072011e-308' into a floating point value can hang the PHP
+runtime. Similarly, the Java runtime (and compiler) suffer from a
+related problem.
+
+By filtering incoming traffic and using this handler,
+requests that may seek to exploit this fault can be safely discarded.
+
+TIP: Any application code that parses input into a floating point
+could be vulnerable. More importantly, the family of 'Accept' HTTP
+headers use floating point scores that could be exploited on certain
+implementations. To prevent this problem, a solution could be to create a
+Header-type rule that matches the '2250738585072011' string and
+discards the requests.
