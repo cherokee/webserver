@@ -807,9 +807,9 @@ img.icon_chooser_selected {
 }
 
 .market-app-desc .ui-tabs-panel {
-  height: 480px;
-  max-height: 480px;
-  overflow: auto;
+  height: 544px;
+  max-height: 544px;
+  overflow: visible;
   border: 1px solid #cde;
   border-top: 0;
   margin-bottom: 32px;
