@@ -9,7 +9,7 @@ Cookbook: Redirections
 Every now and then a redirection example is requested in the
 link:other_community.html[mailing list]. This recipe is meant to be a
 central archive of such examples. Remember there are some more generic
-examples both in the link:config_quickstart.html[quickstart] and in
+examples both in the link:config_walkthrough.html[quickstart] and in
 the link:modules_handlers_redir.html[redirection] handler sections.
 
 There is also a wizard to automatically assist you with

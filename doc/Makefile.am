@@ -20,7 +20,7 @@ basics_installation_svn.html \
 basics_upgrade.html \
 basics_running_cherokee.html \
 config.html \
-config_quickstart.html \
+config_walkthrough.html \
 config_index.html \
 config_general.html \
 config_virtual_servers.html \

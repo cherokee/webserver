@@ -153,6 +153,6 @@ This is the full information provided by the manpage.
 
 **********************************************************************
 
-Refer to the link:config_quickstart.html[configuration section] for
+Refer to the link:config_walkthrough.html[configuration section] for
 more in-depth explanations of the usage of the interface as a
 configuration tool.

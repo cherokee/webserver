@@ -21,7 +21,7 @@ Cherokee:
 You will also find interesting information in the
 link:modules_validators_plain.html["Validator Modules Overview"] and
 step by step examples for Plain and PAM mechanisms in the
-link:config_quickstart.html["Quickstart"] section.
+link:config_walkthrough.html["Quickstart"] section.
 
 There are two types of authentication:
 
