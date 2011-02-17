@@ -10,13 +10,13 @@ for easy installations. It compiles and installs the latest version of
 the server with a single command:
 
 ----
-curl http://www.cherokee-project.com/install | python
+wget http://www.cherokee-project.com/install && python install
 ----
 
 or
 
 ----
-wget -O - http://www.cherokee-project.com/install | python
+curl http://www.cherokee-project.com/install -o install && python install
 ----
 
 The easy installation script is the express way to make a Cherokee
@@ -31,4 +31,27 @@ prepackaged version of Cherokee available for your architecture you
 should follow that route. That will provide you with automatic bootup
 scripts, consistency and dependency checks, and an easy upgrade path
 tailored to your system whenever a new package is available.
+
+
+Development mode
+~~~~~~~~~~~~~~~~
+
+The easy installation script supports several parameters. To see a
+full list of parameters, just add the `--help` parameter:
+
+----
+wget http://www.cherokee-project.com/install && python install --help
+----
+
+The only one really worth mentioning is the one to trigger the
+`development mode`:
+
+----
+wget http://www.cherokee-project.com/install && python install --devel
+----
+
+This will build a bleeding edge release, taking the sources from the
+latest development snapshot, enabling traces, and making the
+installation under `/opt/cherokee-dev`, so that it can coexist with a
+regular installation.
 
