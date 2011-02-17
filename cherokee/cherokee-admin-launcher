@@ -103,9 +103,9 @@ def find_sudo_askpass():
 
     X_display = os.getenv ("DISPLAY")
     if X_display:
-        ps = os.popen ("ps ax").read().lower()
-        procs_gnome = ps.count("gnome")
-        procs_kde   = ps.count("kde")
+        ps_lines = [l.lower() for l in os.popen ("ps ax").readlines()]
+        procs_gnome = len (filter (lambda l: "gnome" in l, ps_lines))
+        procs_kde   = len (filter (lambda l: "kde"   in l, ps_lines))
 
         # GNOME and KDE
         if procs_gnome > procs_kde:
