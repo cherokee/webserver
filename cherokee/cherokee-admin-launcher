@@ -425,7 +425,7 @@ def browser_signal (num, stack):
 
 
 def do_launching():
-   global desktop_preferred
+    global desktop_preferred
 
     # Find cherokee-admin
     error = find_cherokee_admin()
