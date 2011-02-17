@@ -47,6 +47,7 @@ cherokee_admin_path = 'cherokee-admin'
 cherokee_admin_envs = {}
 runner              = None
 exiting             = False
+desktop_preferred   = None
 
 # Defaults
 PATH_PREFIXES  = ['/usr', '/usr/local', '/opt/local', '/usr/gnu', '/opt/cherokee', '/opt/cherokee-dev']
@@ -103,21 +104,16 @@ def find_sudo_askpass():
 
     X_display = os.getenv ("DISPLAY")
     if X_display:
-        ps_lines = [l.lower() for l in os.popen ("ps ax").readlines()]
-        procs_gnome = len (filter (lambda l: "gnome" in l, ps_lines))
-        procs_kde   = len (filter (lambda l: "kde"   in l, ps_lines))
+        # Your desktop first
+        if desktop_preferred == 'gnome':
+            bin = check_gnome()
+            if bin: return bin
 
-        # GNOME and KDE
-        if procs_gnome > procs_kde:
-            bin = check_gnome()
-            if bin: return bin
+        if desktop_preferred == 'kde':
             bin = check_kde()
             if bin: return bin
-        else:
-            bin = check_kde()
-            if bin: return bin
-            bin = check_gnome()
-            if bin: return bin
+
+        # Then, a few neutral options
 
         # GTK+
         gtk_led_askpass_bin = bin_in_path ('gtk-led-askpass')
@@ -129,6 +125,15 @@ def find_sudo_askpass():
         x11_ssh_askpass_bin = bin_in_path ('x11-ssh-askpass', extra_paths)
         if x11_ssh_askpass_bin:
             return x11_ssh_askpass_bin
+
+        # Finally, the 'other' desktop
+        if desktop_preferred == 'gnome':
+            bin = check_kde()
+            if bin: return bin
+
+        if desktop_preferred == 'kde':
+            bin = check_gnome()
+            if bin: return bin
 
 
 def build_command_as_root (cmd, internal_envs=[]):
@@ -334,22 +339,34 @@ def launch_browser (url, user, password):
 
    # MacOS X
    if os.access ("/usr/bin/open", os.X_OK):
-      os.system ("open '%(URI)s'" %(locals()))
-   # KDE
-   elif bin_in_path ('kde-open'):
-      os.system ("kde-open '%(URI)s'" %(locals()))
-   elif bin_in_path ('kfmclient'):
-      os.system ("kfmclient openURL '%(URI)s'" %(locals()))
-   # Gnome
-   elif bin_in_path ('gnome-open'):
-      os.system ("gnome-open '%(URI)s'" %(locals()))
-   # LSB
-   elif bin_in_path ('xdg-open'):
-      os.system ("xdg-open '%(URI)s'" %(locals()))
+       return os.system ("open '%(URI)s'" %(locals()))
+
+   # Your desktop
+   if desktop_preferred == 'gnome' and bin_in_path ('gnome-open'):
+       return os.system ("gnome-open '%(URI)s'" %(locals()))
+
+   else desktop_preferred == 'kde':
+       if bin_in_path ('kde-open'):
+           return os.system ("kde-open '%(URI)s'" %(locals()))
+       elif bin_in_path ('kfmclient'):
+           return os.system ("kfmclient openURL '%(URI)s'" %(locals()))
+
+   # A few neutral options
+   if bin_in_path ('xdg-open'):
+      return os.system ("xdg-open '%(URI)s'" %(locals()))
+
+   # Last option: 'the other' desktop
+   if desktop_preferred == 'gnome':
+       if bin_in_path ('kde-open'):
+           return os.system ("kde-open '%(URI)s'" %(locals()))
+       elif bin_in_path ('kfmclient'):
+           return os.system ("kfmclient openURL '%(URI)s'" %(locals()))
+
+   else desktop_preferred == 'kde' and bin_in_path ('gnome-open'):
+       return os.system ("gnome-open '%(URI)s'" %(locals()))
 
    # Error
-   else:
-       report_error ("Did not find a way to open: %(url)s" %(locals()))
+   report_error ("Did not find a way to open: %(url)s" %(locals()))
 
 
 def find_cherokee_admin():
@@ -408,6 +425,8 @@ def browser_signal (num, stack):
 
 
 def do_launching():
+    global desktop_preferred
+
    # Find cherokee-admin
    error = find_cherokee_admin()
    if error:
@@ -418,6 +437,16 @@ def do_launching():
    if error:
        report_error ("Could not figure cherokee-admin environment variables")
        return
+
+   # Desktop preferrence
+   ps_lines = [l.lower() for l in os.popen ("ps ax").readlines()]
+   procs_gnome = len (filter (lambda l: "gnome" in l, ps_lines))
+   procs_kde   = len (filter (lambda l: "kde"   in l, ps_lines))
+
+   if procs_kde > procs_gnome:
+       desktop_preferred = 'kde'
+   else:
+       desktop_preferred = 'gnome'
 
    # Ensure port is empty
    print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
