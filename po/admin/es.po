@@ -6502,11 +6502,11 @@ msgstr "Dirección de correo"
 
 #: cherokee-trunk/admin/OWS_Login.py:122
 msgid "Logged as "
-msgstr "Registrado como"
+msgstr "Registrado como "
 
 #: cherokee-trunk/admin/OWS_Login.py:124
 msgid " ("
-msgstr "("
+msgstr " ("
 
 #: cherokee-trunk/admin/OWS_Login.py:125
 msgid "Sign out"

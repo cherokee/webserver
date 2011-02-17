@@ -14,7 +14,7 @@ License
 
 Mailing lists
 -------------
-  There are a few mailing list available. Please, do not hesitate to
+  There are a few mailing lists available. Please, do not hesitate to
   subscribe to any on them:
 
     http://lists.cherokee-project.com/
@@ -22,13 +22,13 @@ Mailing lists
   This is the main mailing list, where questions are sent and general
   discussion takes place.
 
-  There are also a few technical mailing list. Developers and package
-  maintainers usually subscribe to these mailing list as well:
+  There are also a few technical mailing lists. Developers and package
+  maintainers usually subscribe to these mailing lists as well:
 
     http://lists.cherokee-project.com/listinfo/cherokee-dev
     http://lists.cherokee-project.com/listinfo/cherokee-commits
 
-  The mailing lists archives are available  at:
+  The mailing lists' archives are available at:
 
     http://lists.cherokee-project.com/pipermail/cherokee/
 
@@ -50,7 +50,7 @@ Building from a tar.gz file
   That's all.
 
 
-Building form the repository
+Building from the repository
 ----------------------------
   Check out the code from SVN, following the instructions at:
 
