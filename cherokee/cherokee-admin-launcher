@@ -427,71 +427,71 @@ def browser_signal (num, stack):
 def do_launching():
    global desktop_preferred
 
-   # Find cherokee-admin
-   error = find_cherokee_admin()
-   if error:
-       report_error ("Could not find cherokee-admin")
-       return
+    # Find cherokee-admin
+    error = find_cherokee_admin()
+    if error:
+        report_error ("Could not find cherokee-admin")
+        return
 
-   error = figure_cherokee_admin_envs()
-   if error:
-       report_error ("Could not figure cherokee-admin environment variables")
-       return
+    error = figure_cherokee_admin_envs()
+    if error:
+        report_error ("Could not figure cherokee-admin environment variables")
+        return
 
-   # Desktop preferrence
-   ps_lines = [l.lower() for l in os.popen ("ps ax").readlines()]
-   procs_gnome = len (filter (lambda l: "gnome" in l, ps_lines))
-   procs_kde   = len (filter (lambda l: "kde"   in l, ps_lines))
+    # Desktop preferrence
+    ps_lines = [l.lower() for l in os.popen ("ps ax").readlines()]
+    procs_gnome = len (filter (lambda l: "gnome" in l, ps_lines))
+    procs_kde   = len (filter (lambda l: "kde"   in l, ps_lines))
 
-   if procs_kde > procs_gnome:
-       desktop_preferred = 'kde'
-   else:
-       desktop_preferred = 'gnome'
+    if procs_kde > procs_gnome:
+        desktop_preferred = 'kde'
+    else:
+        desktop_preferred = 'gnome'
 
-   # Ensure port is empty
-   print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
-   response = http_GET_admin()
-   if not response:
-       print "OK"
-   else:
-       print
-       report_error ("The 9090 port is already in use.")
-       raise SystemExit
+    # Ensure port is empty
+    print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
+    response = http_GET_admin()
+    if not response:
+        print "OK"
+    else:
+        print
+        report_error ("The 9090 port is already in use.")
+        raise SystemExit
 
-   # Launch Cherokee-admin
-   event_launched = threading.Event()
+    # Launch Cherokee-admin
+    event_launched = threading.Event()
 
-   global runner
-   runner  = Admin_Runner (event_launched)
-   command = runner.command[:]
+    global runner
+    runner  = Admin_Runner (event_launched)
+    command = runner.command[:]
 
-   runner.start()
+    runner.start()
 
-   print "Launching: %s" %(' '.join (command))
-   event_launched.wait()
+    print "Launching: %s" %(' '.join (command))
+    event_launched.wait()
 
-   # Wait for it to be available
-   print "Connecting..",
-   wait_timeout = time.time() + ADMIN_LAUNCH_TIMEOUT
+    # Wait for it to be available
+    print "Connecting..",
+    wait_timeout = time.time() + ADMIN_LAUNCH_TIMEOUT
 
-   while True:
-       if exiting:
-           return
+    while True:
+        if exiting:
+            return
 
-       response = http_GET_admin()
-       if response:
-           print "OK"
-           break
-       if time.time() < wait_timeout:
-           time.sleep(0.3)
-       else:
-           print "Timeout"
-           return
+        response = http_GET_admin()
+        if response:
+            print "OK"
+            break
+        if time.time() < wait_timeout:
+            time.sleep(0.3)
+        else:
+            print "Timeout"
+            return
 
-   # Launching browser
-   print "Launching browser..",
-   launch_browser (runner.url, runner.user, runner.password)
-   print "OK"
+    # Launching browser
+    print "Launching browser..",
+    launch_browser (runner.url, runner.user, runner.password)
+    print "OK"
 
 def clean_up():
    # Exiting
