@@ -226,7 +226,7 @@ class System_stats__Linux (Thread, System_stats):
             self.cpu.cores = cores[0]
 
         # Processors
-        processors = re.findall (r'processor.+?(\d+)\n', tmp, re.I)
+        processors = re.findall (r'processor.+?:.+?(\d+)\n', tmp, re.I)
         if processors:
             self.cpu.num = str (len(processors))
         else:
