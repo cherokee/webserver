@@ -49,7 +49,7 @@ runner              = None
 exiting             = False
 
 # Defaults
-PATH_PREFIXES  = ['/usr', '/usr/local', '/opt/local', '/usr/gnu', '/opt/cherokee']
+PATH_PREFIXES  = ['/usr', '/usr/local', '/opt/local', '/usr/gnu', '/opt/cherokee', '/opt/cherokee-dev']
 DEFAULT_PATHS  = [os.path.join (x,'sbin') for x in PATH_PREFIXES]
 DEFAULT_PATHS += [os.path.join (x,'bin')  for x in PATH_PREFIXES]
 
