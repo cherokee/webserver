@@ -345,7 +345,7 @@ def launch_browser (url, user, password):
    if desktop_preferred == 'gnome' and bin_in_path ('gnome-open'):
        return os.system ("gnome-open '%(URI)s'" %(locals()))
 
-   else desktop_preferred == 'kde':
+   elif desktop_preferred == 'kde':
        if bin_in_path ('kde-open'):
            return os.system ("kde-open '%(URI)s'" %(locals()))
        elif bin_in_path ('kfmclient'):
@@ -362,7 +362,7 @@ def launch_browser (url, user, password):
        elif bin_in_path ('kfmclient'):
            return os.system ("kfmclient openURL '%(URI)s'" %(locals()))
 
-   else desktop_preferred == 'kde' and bin_in_path ('gnome-open'):
+   elif desktop_preferred == 'kde' and bin_in_path ('gnome-open'):
        return os.system ("gnome-open '%(URI)s'" %(locals()))
 
    # Error
@@ -425,7 +425,7 @@ def browser_signal (num, stack):
 
 
 def do_launching():
-    global desktop_preferred
+   global desktop_preferred
 
    # Find cherokee-admin
    error = find_cherokee_admin()
