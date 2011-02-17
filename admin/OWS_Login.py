@@ -125,11 +125,11 @@ class LoggedAs_Text (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'class': 'login-box-logged-in'})
 
-        self += CTK.RawHTML(_("Logged as "))
+        self += CTK.RawHTML('%s ' %(_("Logged as")))
         self += CTK.LinkWindow (OWS_WEB_USER %(login_user), CTK.RawHTML(login_user))
-        self += CTK.RawHTML(_(" ("))
+        self += CTK.RawHTML(" (")
         self += CTK.Link (SIGNOUT_APPLY, CTK.RawHTML(_("Sign out")))
-        self += CTK.RawHTML(_(")"))
+        self += CTK.RawHTML(")")
 
 
 CTK.publish (r'^%s$'%(LOGIN_APPLY), Login_Apply, method="POST")
