@@ -20,7 +20,7 @@ link:basics.html[Getting started]: Cherokee basics
 link:config.html[Configuration]: Set up process explained
 *********************************
 
-  . link:config_quickstart.html[Quickstart]: Overview and walkthrough.
+  . link:config_quickstart.html[Walkthrough]: Overview and walkthrough.
   . link:config_index.html[Home]: Main section.
   . link:config_status.html[Status]: Server status information.
   . link:config_general.html[General]: General settings.

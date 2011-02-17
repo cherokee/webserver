@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
 ////
-Last checked: 2011/01/14 Cherokee 1.0.17b
+Last checked: 2011/02/16 Cherokee 1.0.21b
 ////
 
 Easy installation
@@ -10,13 +10,13 @@ for easy installations. It compiles and installs the latest version of
 the server with a single command:
 
 ----
-wget http://www.cherokee-project.com/install && python install
+wget http://cherokee-project.com/install && python install
 ----
 
 or
 
 ----
-curl http://www.cherokee-project.com/install -o install && python install
+curl -LO http://cherokee-project.com/install && python install
 ----
 
 The easy installation script is the express way to make a Cherokee
@@ -40,14 +40,14 @@ The easy installation script supports several parameters. To see a
 full list of parameters, just add the `--help` parameter:
 
 ----
-wget http://www.cherokee-project.com/install && python install --help
+wget http://cherokee-project.com/install && python install --help
 ----
 
 The only one really worth mentioning is the one to trigger the
 `development mode`:
 
 ----
-wget http://www.cherokee-project.com/install && python install --devel
+wget http://cherokee-project.com/install && python install --devel
 ----
 
 This will build a bleeding edge release, taking the sources from the

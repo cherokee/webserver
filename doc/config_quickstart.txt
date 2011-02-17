@@ -1,16 +1,17 @@
 == link:index.html[Index] -> link:config.html[Configuration]
 ////
-Last checked: 2010/04/26 Cherokee 0.99.46b
+Last checked: 2011/02/17 Cherokee 1.0.21b
 ////
 
-Configuration Quickstart
-------------------------
+Configuration Walkthrough
+-------------------------
 
-This section briefly describes the whole administration web interface
-provided by link:other_bundle_cherokee-admin.html[cherokee-admin]. This is
-the recommended way of configuring Cherokee. If you are looking for
+This section briefly describes a typical usage of the administration
+web interface provided by
+link:other_bundle_cherokee-admin.html[cherokee-admin]. This is the
+recommended way of configuring Cherokee. If you are looking for
 development information relevant to your automation and scripting
-needs, you should refer to the appropriate section, especially the
+needs, you should refer to the appropriate section, specifically the
 link:dev_cherokee.conf.html[cherokee.conf] file specification.
 
 We will first show a quick overview of the available options, followed
@@ -44,14 +45,14 @@ Overview
   will listen to, the default timeout, whether to support keep-alive
   connections, default icon and MIME type definitions and so on.
 
-* link:config_virtual_servers.html[Virtual servers]:
+* link:config_virtual_servers.html[vServers]:
   If you want your web server to work with more than one domain you
   will have to create link:config_virtual_servers.html[Virtual
   servers] other than the `default` one. Each one will have a
   completely independent configuration: paths, behavior, logging
   facilities, etc.
 
-* link:config_info_sources.html[Information Sources]:
+* link:config_info_sources.html[Sources]:
   Define the resources that will be providing information. For
   instance, PHP.
 
@@ -68,10 +69,11 @@ There is very little set up you must do to have a perfectly functional
 web server out of the box. Cherokee's default configuration can be
 used to serve any typical static website. For dynamic contents you
 should check the wizards, available using the buttons located at the
-top section of the left panel. This panel can either display
-information relevant to every virtual host in your system, or rule
-management information specific to a given virtual host. In the first
-scenario, the wizards will be able to create new virtual servers
+top section of the left panel in the `vServers` section. This panel
+can either display information relevant to every virtual host in your
+system, or rule management information specific to a given virtual
+host if you are browsing a specific virtual host at the moment. In the
+first scenario, the wizards will be able to create new virtual servers
 customized for a specific need, while the second case would apply to
 the -preexisting- selected virtual host.
 
@@ -99,8 +101,8 @@ link:other_bundle_cherokee-admin-launcher.html[cherokee-admin-launcher].
 Launching the admin through cherokee-admin-launcher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Assuming you are using a desktop environment, you can follow the
-launcher approach.
+Assuming you are using a desktop environment on the same host where
+Cherokee is installed, you can follow the launcher approach.
 
 ----
 # cherokee-admin-launcher
@@ -112,9 +114,9 @@ Connecting.. OK
 This will automatically open a web browser window pointing at
 http://localhost:9090, so you will be able to begin using
 `cherokee-admin` right away. If there is no web browser registered in
-your system, you will need to leave out the launcher option, and run
-`cherokee-admin` directly. If this is not your case, you can skip the
-details for the manual launch.
+your system, you will have to forget about using the launcher option,
+and run `cherokee-admin` directly. If this is not your case, you can
+skip the details for the manual launch.
 
 [[manual-launch]]
 Manually launching cherokee-admin
@@ -167,29 +169,29 @@ Of course, once we're done we will have to apply our changes and
 launch the server. The configuration changes must be submitted to the
 server, be it automatically if possible or by using the appropriate
 form submitting buttons. But no change is reflected in the
-configuration file until you `Save` the changes. You can be sure of
-not damaging anything while playing around with `cherokee-admin`. At
-least not until you `Save` the changes by using the `SAVE` button on
-the main toolbar. Note that, if the Cherokee server is running, the
-applied modifications will only affect the instance being executed if
-either `Graceful restart` or `Hard restart` are selected.  `No
-restart` simply modifies the configuration file, but doesn't affect
-the currently running instance. A `graceful restart` will preserve the
-old set-up for any prior connections, while a `hard restart` will kill
-every connection and instantly apply the changes.
+configuration file until you actually `Save` the changes. You can be
+sure of not damaging anything while playing around with
+`cherokee-admin`. At least not until you `Save` the changes by using
+the `SAVE` button on the main toolbar. Note that, if the Cherokee
+server is running, the applied modifications will only affect the
+instance being executed if either `Graceful restart` or `Hard restart`
+are selected.  `No restart` simply modifies the configuration file,
+but doesn't affect the currently running instance. A `graceful
+restart` will preserve the old set-up for any prior connections, while
+a `hard restart` will kill every connection and instantly apply the
+changes.
 
 This is what the `General` tab looks like:
 
 image::media/images/admin_general.png[General]
 
-We will only be modifying the *Server Permissions*. It usually is a
-poor choice to run services with super user privileges. Set both
-*User* and *Group* to `www-data`. Your system might already have
-another user account specifically for the purpose of running a
-webserver. Use that instead if so, or create the `www-data` user if
-you don't already have one.
+We will only be modifying the *Permissions* tab. It usually is a poor
+choice to run services with super user privileges. Set both *User* and
+*Group* to `www-data`. Your system might already have another user account
+specifically for the purpose of running a webserver. Use that instead
+if so, or create the `www-data` user if you don't already have one.
 
-Next is the link:config_virtual_servers.html[Virtual Servers] tab:
+Next is the link:config_virtual_servers.html[vServers] tab:
 
 image::media/images/admin_vserver.png[Virtual server]
 
@@ -197,14 +199,14 @@ When you start, you will only have one virtual server called
 `default`. You can begin by cloning it as `example`. This can be
 achieved with the `Clone Selected Virtual Server` button, which is
 placed in the upper side of the left panel, adjacent to the `Virtual
-Servers` title and the `Add New Virtual Server` button.
+Servers` label and the `Add New Virtual Server` button.
 
 While you are at it you should also append the following line to your
 `/etc/hosts` file (in Windows you will find this as
 `%WINDIR%\system32\drivers\etc\hosts`).
 
 ----
-127.0.0.1       example.net example.org
+127.0.0.1       example.com example.net example.org
 ----
 
 This is to allow your system to resolve requests for `example.net` or
@@ -261,24 +263,24 @@ Management` button to see the `Behavior` panel that will enable you to
 modify the rules of your virtual host.
 +
 For now this virtual server is an exact copy of the untouched
-`default` virtual server. Create some new directories
+`default` virtual server. Create some new directories by hand:
 '/var/www/example' and '/var/www/example/auth', and configure the
-first one as default document root path. This is easy using the `Add`
-button of the panel, which is marked with a `+ (plus)` symbol at the
-top of the panel.
+first one as default document root path. Just access the `Basics` tab,
+and set the `Document Root` field to '/var/www/example'.
 +
-Next, setup `example.net` and `example.com` in the `Host match`
-tab. To do so just choose `Wildcards` as method and add both names as
-wildcard strings.  We'll erase everything in the *Targets* list within
-the `Behavior` tab, except the `default` rule. With this we'll only be
-able to serve static content.
+Next, setup `example.net` and `example.com` in the `Host match` tab,
+so that requests to both domains can be managed byt your `example`
+virtual server. To do so just choose `Wildcards` as method, and add
+both names as wildcard strings.  We'll erase everything in the
+*Targets* list within the `Behavior` tab, except the `default`
+rule. With this we'll only be able to serve static content.
 +
 Accessing the URL http://example.org should now show a list of
 available files and directories under '/var/www/example/'.
 +
-Now lets password protect the `auth` directory. Add a new `Directory`
-class rule pointing to `/auth`. Then, through the `Security` tab, add
-a `Validation Mechanism` under `Authentication`.
+Now lets password protect the `auth` directory. Add a new
+`Directory`-type rule pointing to `/auth`. Then, through the
+`Security` tab, add a `Validation Mechanism` under `Authentication`.
 +
 The field `Realm` is mandatory. Lets set it as `Secured Area`.
 If you choose `PAM` and impose no more restrictions, only users with
@@ -321,11 +323,11 @@ details.
 +
 Note that the `Type` of the *Redirection* is `External`. This means
 the server will instruct the requesting web client to fetch the
-redirected URL, which means the client will always know what the
-final URL is. This also means the redirection can be done to servers
-other than your own. If it were internal, the redirection would be
-invisible (not showing the target  URL), but it would be limited to
-the same `virtual server`.
+redirected URL, which in turn means the client will always know what
+the final URL is. This also means the redirection can be done to
+servers other than your own. If it were internal, the redirection
+would be invisible (not showing the target URL), but it would be
+limited to the same `virtual server`.
 +
 A much more general redirection could be one using these values:
 +
