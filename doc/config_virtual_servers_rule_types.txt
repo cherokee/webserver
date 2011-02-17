@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
 ////
-Last checked: 2010/05/06 Cherokee 0.99.50b
+Last checked: 2011/02/17 Cherokee 1.0.21b
 ////
 
 Rule Types
@@ -61,19 +61,12 @@ This is the list of available rule types:
       COPY, LOCK, MKCOL, MOVE, NOTIFY, POLL, PROPFIND, PROPPATCH,
       SEARCH, SUBSCRIBE, UNLOCK or UNSUBSCRIBE.
 
-  * **GeoIP**: If GeoIP support is present, this type of rules can be
-      added. The GeoIP library has to be present at build time for
-      this to happen. If enabled, specific behavior can be offered
-      depending on the country of origin of the requests to the web
-      server. Note that the country is determined by matching the IPs
-      to the actual list of countries handled by the library, so the
-      usage of proxies on the user side will render this resolution
-      mechanism inaccurate. An initial country must be added to the
-      rule, and more selections can be added in further steps.
-
   * **Incoming IP/Port**: If the server is running on several ports,
       this rule type will let you specify to which port's pettitions
       will it apply.
+
+  * **SSL / TLS**: This rule type is applied to incomming HTTPS
+      connections.
 
   * **Full Path**: Full path request to which content the
       configuration will be applied. This means you can pinpoint a
@@ -86,3 +79,13 @@ This is the list of available rule types:
   * **URL Argument**: will allow you to match a Regular Expressions to
       the URL arguments, be it a specific one or any of the possible
       arguments.
+
+  * **GeoIP**: If GeoIP support is present, this type of rules can be
+      added. The GeoIP library has to be present at build time for
+      this to happen. If enabled, specific behavior can be offered
+      depending on the country of origin of the requests to the web
+      server. Note that the country is determined by matching the IPs
+      to the actual list of countries handled by the library, so the
+      usage of proxies on the user side will render this resolution
+      mechanism inaccurate. An initial country must be added to the
+      rule, and more selections can be added in further steps.
