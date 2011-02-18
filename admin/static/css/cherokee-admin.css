@@ -1202,6 +1202,12 @@ img.icon_chooser_selected {
   margin: 2px;
   float: left;
 }
+
+.ui-dialog .entry { padding: 8px 0; }
+.ui-dialog .entry .title { float: left; width: 144px; padding-top: 6px; font-weight: bold; }
+.ui-dialog .entry .notice { display: none; }
+.ui-dialog .entry .comment { text-align: left; color: #999; font-size: 11px; padding: 4px 0; }
+
 .ui-dialog .selection-panel .row_content .title {
   font-weight: bold;
 }
@@ -1224,6 +1230,8 @@ img.icon_chooser_selected {
 }
 
 .ui-dialog .vserver_new_content .ui-dialog-buttonpane { border: none; }
+
+
 
 .wizard-list li {
   border-bottom: 1px solid #cde;
