@@ -51,7 +51,8 @@ url_arg.py \
 uwsgi.py \
 wildcard.py \
 gzip.py \
-deflate.py
+deflate.py \
+drop.py
 
 EXTRA_DIST = \
 $(adminplugins_DATA)
