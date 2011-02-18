@@ -320,8 +320,8 @@ class Render:
         left += refresh
 
         # Refresh the list whenever the content change
-        right.bind ('changed',        refresh.JS_to_refresh());
-        right.bind ('submit_success', refresh.JS_to_refresh());
+        right.bind ('changed',          refresh.JS_to_refresh());
+        right.bind ('update_rule_list', refresh.JS_to_refresh());
 
         # Refresh the list when it's been reordered
         left.bind ('reordered', refresh.JS_to_refresh())

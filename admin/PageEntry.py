@@ -306,8 +306,11 @@ class EncodingWidget (CTK.Container):
             key  = '%s!%s'%(pre,e)
             note = _("Use the %s encoder whenever the client requests it.") %(_(e_name))
 
+            combo = CTK.ComboCfg(key, trans_options(ENCODE_OPTIONS))
+            combo.bind ('change', combo.JS_to_trigger('update_rule_list'))
+
             table = CTK.PropsTable()
-            table.Add ('%s %s'% (_(e_name), _("support")), CTK.ComboCfg(key, trans_options(ENCODE_OPTIONS)), note)
+            table.Add ('%s %s'% (_(e_name), _("support")), combo, note)
 
             submit = CTK.Submitter (apply)
             submit += table
@@ -334,6 +337,11 @@ class RuleWidget (CTK.Refreshable):
 
             self += CTK.RawHTML ("<h2>%s</h2>" % (_('Matching Rule')))
             self += CTK.Indenter (rule)
+
+            # Trigger the 'update_rule_list' so the Rule list sibling
+            # widget is updated.
+            #
+            rule.bind ('submit_success', rule.JS_to_trigger('update_rule_list'))
 
     def __init__ (self, vsrv, rule, apply, refresh_header):
         CTK.Refreshable.__init__ (self, {'id': 'rule'})
