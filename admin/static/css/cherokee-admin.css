@@ -1197,8 +1197,9 @@ img.icon_chooser_selected {
 .ui-dialog .selection-panel {
   background: #fff;
   width: 240px;
-  height: 320px;
+  height: 390px;
   border: 1px solid #cde;
+  margin: 2px;
   float: left;
 }
 .ui-dialog .selection-panel .row_content .title {
@@ -1207,10 +1208,11 @@ img.icon_chooser_selected {
 .ui-dialog .vserver_new_content,
 .ui-dialog .rule_new_content {
   background: #fff;
-  width: 432px;
-  height: 320px;
+  width: 460px;
+  padding: 6px;
+  height: 384px;
   float: right;
-  border: 1px solid #cde;
+  border-left: 1px solid #cde;
   overflow: auto;
   overflow-x: hidden;
 }
@@ -1249,6 +1251,8 @@ img.icon_chooser_selected {
 #dialog-new-vserver,
 #dialog-new-rule {
  background-color: #f0f7ff;
+ padding: 0;
+ margin: 0;
 }
 
 #error-redirection {
