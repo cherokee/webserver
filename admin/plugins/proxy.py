@@ -52,7 +52,7 @@ def commit():
         regex = CTK.post.pop ('tmp!new!%s!regex'%(e))
         subst = CTK.post.pop ('tmp!new!%s!substring'%(e))
 
-        if regex and subst:
+        if regex:
             next = CTK.cfg.get_next_entry_prefix ('%s!%s'%(key, e))
             CTK.cfg['%s!regex'%(next)]     = regex
             CTK.cfg['%s!substring'%(next)] = subst
