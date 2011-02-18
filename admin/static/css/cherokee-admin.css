@@ -255,6 +255,27 @@ a.helpbutton span {
   background: #fff;
 }
 
+#rule-table-bind {
+ width: 100%;
+ border-collapse: collapse;
+ border: 1px solid #cde;
+}
+
+#rule-table-bind td {
+  vertical-align: top;
+  padding: 6px 4px;
+  background: #fff;
+  border-bottom: 1px solid #def;
+}
+
+#rule-table-bind th {
+  background: #e6f3ff url(/static/images/bg-th.png) repeat-x;
+  border: none;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px;
+}
+
+
 /* Final On/Off */
 .panel td .final {
  font-size: 9px;
@@ -358,10 +379,17 @@ a.helpbutton span {
   padding: 8px;
   font-size: 80%;
   height: 16px;
+  float: right;
 }
 
 .flags-buttons button {
   padding: 4px;
+  margin-left: 4px;
+}
+
+.rule .check-list-flags {
+  border: 1px solid #def;
+  width: 630px;
 }
 
 /* Icon Chooser

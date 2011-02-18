@@ -89,7 +89,7 @@ class Plugin_bind (RulePlugin):
         if tmp:
             table = CTK.Table({'id': 'rule-table-bind'})
             table.set_header(1)
-            table += [CTK.RawHTML(x) for x in (_('Port'), _('Bind to'), _('TLS'))]
+            table += [CTK.RawHTML(x) for x in (_('Port'), _('Bind to'), _('TLS'), '')]
             for b in tmp:
                 server_bind = CTK.cfg.get_val('%s!%s'%(pre, b))
                 port = CTK.cfg.get_val ("server!bind!%s!port"%(server_bind))
