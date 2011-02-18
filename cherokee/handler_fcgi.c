@@ -646,7 +646,8 @@ send_post (cherokee_handler_fcgi_t *hdl,
 				}
                                 break;
                         case ret_eagain:
-                                return ret_eagain;
+				/* EAGAIN on write */
+				return ret_deny;
                         case ret_eof:
                         case ret_error:
                                 return ret_error;
