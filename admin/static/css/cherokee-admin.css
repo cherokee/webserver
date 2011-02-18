@@ -1110,6 +1110,65 @@ img.icon_chooser_selected {
   border-bottom: 1px solid #def;
 }
 
+#refreshable-mimetable-content .paginator-counter {
+  display: none;
+}
+
+#refreshable-mimetable-content .submitter {
+  margin: 0;
+  padding: 0;
+}
+
+#refreshable-mimetable-content .notice { display: none; }
+
+.mimeheader {
+  background: #e6f3ff url(/static/images/bg-th.png) repeat-x;
+  border: 1px solid #cde;
+  border-bottom: 2px solid #27c;
+  padding: 8px 4px;
+  font-weight: bold;
+  height: 24px;
+}
+
+.mimeheader div {
+  padding: 8px;
+  float: left;  
+  min-width: 32px;
+  margin-bottom: 8px;
+}
+
+#mh-type { width: 370px; }
+#mh-ext { width: 300px; }
+#mh-age { width: 132px; }
+#mh-del { width: 32px; }
+
+.mimeentry {
+  height: 38px;
+  border: 1px solid #def;
+  border-top: 0;
+  margin-top: 0px !important;
+}
+
+.mimeentry .md {
+  padding: 2px 8px;
+  float: left;  
+  min-width: 32px;
+  margin-top: 4px;
+}
+
+.md-type { width: 370px; }
+.md-type span { margin-top: 4px; display: block; }
+.md-ext { width: 300px; }
+.md-ext input { width: 300px; }
+.md-age { width: 132px; }
+.md-age input { width: 132px; }
+.md-del { width: 40px; display: block; text-align: center; }
+.md-del img { margin-top: 4px; }
+
+.mime-button {
+  margin-bottom: 64px; 
+}
+
 /* Page Advanced */
 #body-advanced .ui-tabs-panel {
  overflow: auto;

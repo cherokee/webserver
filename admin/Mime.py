@@ -116,9 +116,13 @@ class MIME_Table (CTK.Container):
         self += CTK.RawHTML ('<h2>%s</h2>' %_('Mime types'))
 
         # List
-        table = CTK.Table ({'class': "mimetable"})
-        table.set_header(1)
-        table += [CTK.RawHTML(x) for x in (_('MIME type'), _('Extensions'), _('MaxAge (<em>secs</em>)'), '')]
+        headerbox = CTK.Box ({'class': "mimeheader"})
+        headerbox += CTK.Box({'id': 'mh-type'}, CTK.RawHTML(_('MIME type')))
+        headerbox += CTK.Box({'id': 'mh-ext'}, CTK.RawHTML(_('Extensions')))
+        headerbox += CTK.Box({'id': 'mh-age'}, CTK.RawHTML(_('MaxAge (<em>secs</em>)')))
+        headerbox += CTK.Box({'id': 'mh-del'})
+
+        self += headerbox
 
         mimes = CTK.cfg.keys('mime')
         mimes.sort()
@@ -131,10 +135,16 @@ class MIME_Table (CTK.Container):
             rm.bind ('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
                                            complete = refreshable.JS_to_refresh()))
 
-            box  = CTK.Box ({'class': 'mimetable-entry'})
-            box += CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35})
-            box += CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6})
-            box += rm
+            box  = CTK.Box ({'class': 'mimeentry'})
+            box += CTK.Box ({'class': 'md md-type'}, CTK.RawHTML('<span>%s</span>' %(mime)))
+            box += CTK.Box ({'class': 'md md-ext'},  CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35}))
+            box += CTK.Box ({'class': 'md md-age'},  CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6}))
+            box += CTK.Box ({'class': 'md md-del'},  rm)
+
+            #box += CTK.RawHTML ('%s' %(mime))
+            #box += CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35})
+            #box += CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6})
+            #box += rm
 
             submit  = CTK.Submitter (URL_APPLY)
             submit += box
