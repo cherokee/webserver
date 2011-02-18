@@ -454,7 +454,7 @@ img.icon_chooser_selected {
 /* PageHelp
  */
 .help_toc { float: left; width: 220px; }
-.help_content { overflow: scroll; }
+.help_content { width: 680px; float: right; padding: 16px;}
 .help_selected { background: #eef3ff; font-weight: bold; }
 
 /* Wizard
