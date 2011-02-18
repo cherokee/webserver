@@ -327,19 +327,41 @@ a.helpbutton span {
 /* Flag list
  */
 .check-list-flags {
-	width: 400px;
-	height: 300px;
-	overflow-y: scroll;
-	text-align: left;
+  width: 462px;
+  height: 288px;
+  border-top: 1px solid #cde;
+  padding: 4px;
+  overflow-y: scroll;
+  text-align: left;
+}
+
+.check-list-flags strong {
+  padding-left: 8px;
+  margin: 8px 0;
+  display: block;
 }
 
 .check-list-flags-entry img {
-	margin-right: 5px;
-	margin-left: 5px;
+  margin-left: 4px;
+  margin-right: 8px;
 }
 
 .check-list-flags-entry input {
-	margin-left: 10px;
+  margin-left: 8px;
+}
+
+.check-list-flags-entry {
+  padding: 4px 0; 
+}
+
+.flags-buttons {
+  padding: 8px;
+  font-size: 80%;
+  height: 16px;
+}
+
+.flags-buttons button {
+  padding: 4px;
 }
 
 /* Icon Chooser
@@ -1214,12 +1236,12 @@ img.icon_chooser_selected {
 .ui-dialog .vserver_new_content,
 .ui-dialog .rule_new_content {
   background: #fff;
-  width: 460px;
-  padding: 6px;
-  height: 384px;
+  width: 472px;
+  /* padding: 6px; */
+  height: 396px;
   float: right;
   border-left: 1px solid #cde;
-  overflow: auto;
+  overflow: hidden;
   overflow-x: hidden;
 }
 
@@ -1227,6 +1249,10 @@ img.icon_chooser_selected {
 .ui-dialog .rule_new_content .submitter,
 .ui-dialog .rule_new_content .propstable {
   padding: 8px;
+}
+
+.ui-dialog .rule_new_content .submitter {
+  padding: 0px;
 }
 
 .ui-dialog .vserver_new_content .ui-dialog-buttonpane { border: none; }

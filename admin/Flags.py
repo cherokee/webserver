@@ -323,7 +323,7 @@ class CheckListFlags (CTK.Box):
         # Initial values
         selected = filter (lambda x: x, [x.strip() for x in CTK.cfg.get_val (key,'').split(',')])
 
-        self += CTK.RawHTML ('<b>%s</b>' %(_("Countries")))
+        self += CTK.RawHTML ('<strong>%s</strong>' %(_("Countries")))
         for k in codes:
             box = CTK.Box({'class': 'check-list-flags-entry'})
             box += CTK.CheckCfg ('%s!%s' %(key, k), k in selected, props)
@@ -331,7 +331,7 @@ class CheckListFlags (CTK.Box):
             box += CTK.RawHTML (ISO_3166[k])
             self += box
 
-        self += CTK.RawHTML ('<b>%s</b>' %(_("Extras")))
+        self += CTK.RawHTML ('<strong>%s</strong>' %(_("Extras")))
         for k in EXTRA_OPTIONS:
             box = CTK.Box({'class': 'check-list-flags-entry'})
             box += CTK.CheckCfg ('%s!%s' %(key, k[0]), k[0] in selected, props)

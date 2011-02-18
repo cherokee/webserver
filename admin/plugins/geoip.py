@@ -81,8 +81,10 @@ class Plugin_geoip (RulePlugin):
         select_none.bind ('click', CHECKBOX_JS % 'false' + submit.JS_to_submit())
 
         # GUI
-        submit += select_all
-        submit += select_none
+        box  = CTK.Box({'class': 'flags-buttons'})
+        box += select_all
+        box += select_none
+        submit += box
         submit += CheckListFlags ('%s!countries'%(self.key), props)
         submit += CTK.Hidden ('key', self.key)
         submit += CTK.Hidden ('vsrv_num', self.vsrv_num)
