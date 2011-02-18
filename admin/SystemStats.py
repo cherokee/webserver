@@ -89,10 +89,6 @@ class System_stats__Darwin (Thread, System_stats):
         System_stats.__init__ (self)
         self.daemon = True
 
-        # System Profiler
-        self.profiler = subprocess.Popen ("/usr/sbin/system_profiler SPHardwareDataType",
-                                           shell=True, stdout = subprocess.PIPE)
-
         # vm_stat (and skip the two first lines)
         self.vm_stat_fd = subprocess.Popen ("/usr/bin/vm_stat %d" %(self.CHECK_INTERVAL),
                                             shell=True, stdout = subprocess.PIPE)
@@ -121,14 +117,15 @@ class System_stats__Darwin (Thread, System_stats):
         self.start()
 
     def _read_hostname (self):
-        fd = subprocess.Popen ("/bin/hostname", shell=True, stdout = subprocess.PIPE)
-        self.hostname = fd.stdout.readline().strip()
+        ret = popen.popen_sync ("/bin/hostname")
+        self.hostname = ret['stdout'].split('\n')[0].strip()
 
     def _read_profiler (self):
-        tmp = self.profiler.stdout.read()
-        self.cpu.speed = re.findall (r'Processor Speed: (.*?)\n',     tmp, re.I)[0]
-        self.cpu.num   = re.findall (r'Number of Processors: (\d+)',  tmp, re.I)[0]
-        self.cpu.cores = re.findall (r'Total Number of Cores: (\d+)', tmp, re.I)[0]
+        ret = popen.popen_sync ("/usr/sbin/system_profiler SPHardwareDataType")
+
+        self.cpu.speed = re.findall (r'Processor Speed: (.*?)\n',     ret['stdout'], re.I)[0]
+        self.cpu.num   = re.findall (r'Number of Processors: (\d+)',  ret['stdout'], re.I)[0]
+        self.cpu.cores = re.findall (r'Total Number of Cores: (\d+)', ret['stdout'], re.I)[0]
 
     def _read_cpu (self):
         # Read a new line
@@ -212,8 +209,8 @@ class System_stats__Linux (Thread, System_stats):
             return
 
         # Execute /bin/hostname
-        fd = subprocess.Popen ("/bin/hostname", shell=True, stdout = subprocess.PIPE)
-        self.hostname = fd.stdout.readline().strip()
+        ret = popen.popen_sync ("/bin/hostname")
+        self.hostname = ret['stdout'].split('\n')[0].strip()
 
     def _read_cpu_info (self):
         fd = open("/proc/cpuinfo", 'r')
@@ -350,8 +347,8 @@ class System_stats__Solaris (Thread, System_stats):
             self.cpu.speed = '%s MHz' %(max([int(x) for x in tmp]))
 
     def _read_hostname (self):
-        fd = subprocess.Popen ("/bin/hostname", shell=True, stdout = subprocess.PIPE)
-        self.hostname = fd.stdout.readline().strip()
+        ret = popen.popen_sync ("/bin/hostname")
+        self.hostname = ret['stdout'].split('\n')[0].strip()
 
     def _read_cpu_and_memory (self):
         for tries in range(3):
