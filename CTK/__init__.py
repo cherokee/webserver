@@ -23,6 +23,7 @@
 import JS
 import i18n
 import util
+import MailHTML
 
 # Generic
 from Widget import Widget, RenderResponse

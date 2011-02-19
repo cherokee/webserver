@@ -55,7 +55,8 @@ Init.py \
 Paginator.py \
 StarRating.py \
 Carousel.py \
-Collapsible.py
+Collapsible.py \
+MailHTML.py
 
 EXTRA_DIST = \
 $(ctk_DATA)
