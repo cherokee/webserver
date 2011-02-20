@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # CTK: Cherokee Toolkit
 #
 # Authors:
@@ -75,8 +77,20 @@ class MailHTML:
             if props.has_key('txt_only'):
                 continue
 
-            if kind == 'p':
+            if kind == 'raw':
+                body += text
+            elif kind == 'p':
                 body += '<p>%s</p>'%(text)
+            elif kind == 'p,center':
+                body += '<p><div align="center">%s</div></p>'%(text)
+            elif kind == 'h2':
+                body += '<h2>%s</h2>'%(text)
+            elif kind == 'h3':
+                body += '<h3>%s</h3>'%(text)
+            elif kind == 'li':
+                body += '<li>%s</li>'%(text)
+            elif kind == 'pre':
+                body += '<pre>%s</pre>'%(text)
             else:
                 assert False, "Unknown type '%s'"%(kind)
 
@@ -93,8 +107,22 @@ class MailHTML:
             if props.has_key('html_only'):
                 continue
 
-            if kind == 'p':
+            if kind == 'raw':
+                body += text
+            elif kind == 'p':
                 body += '%s\n\n'%(wrap_text (text))
+            elif kind == 'p,center':
+                margin = max (0, int((TXT_LINE_WRAP - len(text)) / 2))
+                body += ' '*margin
+                body += '%s\n\n'%(text)
+            elif kind == 'h2':
+                body += '%s\n%s\n\n'%(text, '-'*len(text))
+            elif kind == 'h3':
+                body += '%s\n'%(text)
+            elif kind == 'li':
+                body += ' * %s\n'%(text)
+            elif kind == 'pre':
+                body += '%s\n'%(text)
             else:
                 assert False, "Unknown type '%s'"%(kind)
 
@@ -115,8 +143,8 @@ class MailHTML:
         msg['From']    = self.me
         msg['To']      = self.to
 
-        part1 = MIMEText (self.RenderTXT(),  'plain')
-        part2 = MIMEText (self.RenderHTML(), 'html')
+        part1 = MIMEText (self.RenderTXT(),  'plain', _charset='utf-8')
+        part2 = MIMEText (self.RenderHTML(), 'html',  _charset='utf-8')
 
         msg.attach (part1)
         msg.attach (part2)
@@ -155,10 +183,10 @@ class MailHTML:
 
         return msg_root
 
-    def Send (self):
+    def Send (self, mail_server=MAIL_SERVER):
         msg = self.RenderMessage()
 
-        s = smtplib.SMTP (MAIL_SERVER)
+        s = smtplib.SMTP (mail_server)
         s.sendmail (self.me, self.to, msg.as_string())
         s.quit()
 

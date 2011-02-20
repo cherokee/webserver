@@ -23,7 +23,6 @@
 import JS
 import i18n
 import util
-import MailHTML
 
 # Generic
 from Widget import Widget, RenderResponse
@@ -76,3 +75,9 @@ from Collapsible import Collapsible, CollapsibleEasy
 # Comodity
 from cgi import escape as escape_html
 from urllib import unquote as unescape_html
+
+# Python 2.5 or greater
+try:
+    import MailHTML
+except ImportError:
+    pass
