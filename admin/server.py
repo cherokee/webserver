@@ -74,6 +74,13 @@ def init (scgi_port, cfg_file):
 
     # Init CTK
     if scgi_port.isdigit():
+        # Ensure that 'localhost' can be resolved
+        try:
+            socket.getaddrinfo ("localhost", int(scgi_port))
+        except socket.gaierror:
+            print >> sys.stderr, "[FATAL ERROR]: The 'localhost' host name cannot be resolved.\n"
+            sys.exit(1)
+
         CTK.init (host="localhost", port=int(scgi_port), sec_cookie=True)
 
     else:
