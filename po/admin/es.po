@@ -6947,6 +6947,13 @@ msgstr "Contraseña de Trac"
 msgid "Checking Dependencies"
 msgstr "Comprobando dependencias"
 
+#: packages/vanilla/tools.py:10
+msgid ""
+"Required PHP module not installed. One or more of the following PHP modules "
+"is missing from your system and the StatusNet installer will be unable to "
+"proceed: curl, PDO, pdo_mysql, gd."
+msgstr ""
+
 #: packages/moin/installer.py:17
 msgid ""
 "For cross-platform-compatibility, this package can only be configured in a "
@@ -7164,6 +7171,14 @@ msgid ""
 msgstr ""
 "No parece que el sistema proporcione las dependencias necesarias. Se "
 "requiere Java 6 o superior."
+
+#: packages/common/java.py:20
+msgid "sudo apt-get install sun-java6-jdk"
+msgstr ""
+
+#: packages/common/java.py:21
+msgid "yum install java-1.6.0-openjdk"
+msgstr ""
 
 #: packages/common/cc.py:20
 msgid ""
@@ -7557,6 +7572,23 @@ msgstr "Ruta del directorio a compartir."
 msgid "WebDAV directory"
 msgstr "Directorio WebDAV"
 
+#: packages/wsgidav/tools.py:50
+#, fuzzy
+msgid ""
+"Your system doesn't seem to provide the required dependecies. Please make "
+"sure there is a C development environment."
+msgstr ""
+"No parece que el sistema proporcione las dependencias necesarias. Asegúrese "
+"de que haya un entorno de desarrollo C presente."
+
+#: packages/wsgidav/tools.py:52
+msgid "sudo apt-get install build-essential"
+msgstr ""
+
+#: packages/wsgidav/tools.py:53
+msgid "yum install gcc glibc glibc-common"
+msgstr ""
+
 #: packages/nuxeo-dam/installer.py:101 packages/nuxeo-dm/installer.py:101
 msgid "Nuxeo can only be deployed under its default location /nuxeo."
 msgstr "Nuxeo solamente puede ser instalado en su ruta predeterminada /nuxeo."
@@ -7584,6 +7616,19 @@ msgid ""
 msgstr ""
 "Tenga en cuenta que lanzar Nuxeo-DAM puede llevar varios minutos, así que "
 "por favor sea paciente la primera vez que acceda."
+
+#: packages/statusnet/tools.py:10
+msgid ""
+"Required PHP module not installed. One or more of the following PHP modules "
+"is missing from your system and the StatusNet installer will be unable to "
+"proceed: Curl, XMLWriter, MySQL, GD, mbstring."
+msgstr ""
+
+#: packages/openx/tools.py:10
+msgid ""
+"Required PHP module not installed. The MySQL PHP modules is missing from "
+"your system."
+msgstr ""
 
 #: packages/nuxeo-dm/installer.py:161
 msgid ""

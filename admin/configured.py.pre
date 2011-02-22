@@ -9,7 +9,7 @@ WWWROOT         = "%wwwroot%"
 SYSCONFDIR      = "%sysconfdir%"
 LOCALSTATE      = "%localstatedir%"
 VERSION         = "%version%"
-OWS_ENABLE      = '0'
+OWS_ENABLE      = '1'
 OWS_API_VERSION = '2'
 
 CHEROKEE_SERVER       = join (PREFIX, "sbin/cherokee")
