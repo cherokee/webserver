@@ -1,85 +1,141 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee 1.0.1
-* WordPress 2.8.4
+* Cherokee: 1.2.0
+* WordPress 3.0.5
+* 2011/02/23
 ///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up WordPress
 ------------------------------
 
 Setting up link:http://wordpress.org/[WordPress] with Cherokee is
-really easy. This recipe describes the WordPress 2.8.x installation,
+really easy. This recipe describes the WordPress 3.0.5 installation,
 which is the latest release at the time of writing.
-
-There is a
-link:http://www.cherokee-project.com/screencasts.html#wordpress[screencast]
-available at the
-link:http://www.cherokee-project.com/[Cherokee-Project website] to
-demonstrate how easy it is to use the WordPress wizard.
-
-image:media/images/screencast.png["WordPress wizard",
-link="http://www.cherokee-project.com/screencasts.html#wordpress"]
 
 There are two ways of installing WordPress: it can either be installed
 as a new virtual server or be installed inside a directory of some of
-the virtual servers that already exist.
+the virtual servers that already exist. We will be documenting the
+first scenario, as it is the most widely used.
+
+You will need PHP support correctly configured in Cherokee, and PHP
+with the MySQL module installed. The default configuration already
+provides a valid PHP configuration for Cherokee if you have php-cgi
+installed, but you can follow the appropriate recipe about
+link:cookbook_php.html[setting up PHP] in case you don't have it
+available for some reason.
+
+Under these conditions, you could start WordPress's installation and you
+would already be able to have your site up and running.
+
+However, we can add several refinements to Cherokee's setting. Mainly:
+
+. Forward all requests for www.example.net (or whatever domain is resolved
+  to our machine) to example.net
+
+. Set up an appropriate url rewrite configuration for WordPress, so
+  you can enable permalinks.
+
+. Serve directly as static content some specific file types and
+  directories, avoiding any other file requests and eliminating this
+  way any security risk related to vulnerable archives.
+
 
 [[cherokee_vserver]]
 Setting up WordPress as a new Virtual Server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The first step would be to go to the virtual server list page. Once in
-there, click on the `Add` button at the top of the panel to show the
-list of available wizards.
+Default virtual server
+^^^^^^^^^^^^^^^^^^^^^^
 
-image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
+We're assuming we have the default configuration initially provided by
+Cherokee Admin.
 
-Now, you will have to select the `CMS` category, and run the WordPress
-wizard.  At this stage the WordPress wizard will ask you for some
-basic parameters about the installation. It will try to auto-fill as
-many entries of the form as possible.  For instance, if it finds
-WordPress installed in a standard location it will use that path as
-the default directory.
+We will begin by cloning the default virtual server, just to keep the
+default PHP configuration. Create a clone named `example.net`.
 
-The new virtual server will be created after this form is submitted.
-The virtual server configuration will cover the vast majority of the
-cases. Most probably it will cover your needs, although you are free
-to modify it as you will.
+Then, we'll delete every erasable rule in the default virtual server
+since we are going to use it to redirect every petition not matched by
+the example.net virtual server. We will set the remaining one to be
+managed by the `Redirection` handler, like this:
 
-[[cherokee_dir]]
-Setting up WordPress inside a Directory
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-WordPress can also be configured inside a directory. Let's suppose we
-want to set up WordPress inside the `/blog` directory of one of our
-virtual servers.
+[cols="30%,30%,40%",options="header"]
+|=====================================================
+|Type     | Regular Expression | Redirection
+|External | ^(.*)$             | http://example.net/$1
+|=====================================================
 
-In this case, the first thing you will have to do is to enter the
-virtual server configuration you'd like to configure WordPress
-in. Visit the `Behavior` tab, use the `Rule Management` button and
-click on the `Add` button at the top of the panel.
+This clears the first milestone. The remaining ones will be
+accomplished by tweaking the `example.net` virtual server.
 
-image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 
-As in the previous case, this wizard will ask some very basic
-information, including the public web directory where WordPress will
-be set up and the local WordPress source directory.
+example.net
+^^^^^^^^^^^
+
+Remember to set up the `Document root` to `/var/www/wordpress`.
+
+image::media/images/cookbook_wp_example1.png[WP example.net]
+
+Delete all the rules except `php` and `Default`. We're heading right
+to the second milestone now.
+
+As previously, we will manage the `Default` rule with the redirection
+handler.
+
+[cols="30%,30%,40%",options="header"]
+|=====================================================
+|Type     | Regular Expression | Redirection
+|Internal | ^/(.*)$            | /index.php
+|=====================================================
+
+image::media/images/cookbook_wp_example2.png[WP example.net]
+
+After this, most of the redirections will work. We'll set some more
+rules to fine tune the rest of WordPress' features. Those will be
+`Directory` type rules for the following directories: `wp-includes`,
+`wp-content` and `wp-admin`. These are to be managed with the `List &
+Send` handler.
+
+The third milestone, directly serving static files, is an easy task to
+accomplish. This step is not required by WordPress, but we will be
+treating as static the contents of a couple of directories and the
+sitemap files generated by our Google XML Sitemaps plugin of choice.
+
+To do this, we will be creating `Directory` type rules for the
+`images` and `static` directory, and a `Regular Expression` type rule
+for the sitemap.
+
+[cols="40%,60%",options="header"]
+|=====================================================
+|Type               | Value
+|Directory          | /images
+|Directory          | /static
+|Regular Expression | /sitemap.xml.*
+|=====================================================
+
+Remeber to manage them with a handler that can serve files: `Static
+content` and `List & Send`.
+
+Almost any evaluation order of your rules will suffice, as long as the
+one that handles the PHP files is the first one. This is a valid one,
+for instance.
+
+image::media/images/cookbook_wp_example3.png[WP example.net]
 
 
 WARNING
 ^^^^^^^
-Beware of the long time it gets WordPress to get through the
-installation. It has been known to exceed the timeout that Cherokee
-uses as default, and while this will still sometimes allow for a
-complete installation, it will most probably cause a failure while
-delivering the last page of the process. Since this is the page that
-provides the random password needed to access the admin page of
-WordPress, you installation will be useless.
+Beware of the long time WordPress can need to get through the
+installation. It doesn't seem to be an issue currently, but in the
+past it has been known to exceed the timeout that Cherokee uses as
+default, and while this will still sometimes allow for a complete
+installation, it will most probably cause a failure while delivering
+the last page of the process.
 
-If you encounter this problem, please increase your server's `timeout`
-value, under the `Basic Behavior` paragraph of the `General` tab, and
-start over.
+If you encounter this problem and absolutely need to see the last
+screen, please increase your server's `timeout` value, under the
+`Basic Behavior` paragraph of the `General` tab, and start over.
 
 If you are going to attempt to make an installation as is, with no
 reconfiguration of Cherokee whatsoever, you can skip right to the
@@ -89,17 +145,17 @@ WordPress].
 WARNING
 ^^^^^^^
 Beware of another possible break point. The last step in the
-installation of WordPress involves mailing the details of the new
-account to the provided email. Normally the process will be painless:
-if the system is running an MTA, this report will be sent. If not, it
-will simply skip this step. In both cases the information will also be
-displayed on screen. However, there is a corner case that might make
-your installation fail: if the server is running a broken MTA, this
-could make PHP fail when trying to deliver the email, in turn
-resulting in a failure during the installation, and making Cherokee
-report an `Error 500`. Having a broken MTA on a production server is a
-very unlikely scenario, but double check your MTA in case you receive
-this error.
+installation of WordPress used to involve mailing the details of the
+new account to the provided email. Normally the process will be
+painless: if the system is running an MTA, this report will be
+sent. If not, it will simply skip this step. In both cases the
+information will also be displayed on screen. However, there is a
+corner case that might make your installation fail with old WordPress
+versions: if the server is running a broken MTA, this could make PHP
+fail when trying to deliver the email, in turn resulting in a failure
+during the installation, and making Cherokee report an `Error
+500`. Having a broken MTA on a production server is a very unlikely
+scenario, but double check your MTA in case you receive this error.
 
 [[wordpress]]
 Setting up WordPress
@@ -156,3 +212,105 @@ And voilà! You have a WordPress installation working flawlessly with
 Cherokee.
 
 image::media/images/cookbook_wp5.png[WP in action]
+
+////////////////////////////////////////////////////////////////////////
+# Snippet under subdirectory
+# 2010/09
+
+vserver!1000!rule!1060!encoder!gzip = 1
+vserver!1000!rule!1060!handler = fcgi
+vserver!1000!rule!1060!handler!balancer = round_robin
+vserver!1000!rule!1060!handler!balancer!source!1 = 1
+vserver!1000!rule!1060!handler!error_handler = 1
+vserver!1000!rule!1060!match = extensions
+vserver!1000!rule!1060!match!extensions = php
+vserver!1000!rule!1060!match!final = 0
+vserver!1000!rule!1060!timeout = 30
+vserver!1000!rule!1050!handler = redir
+vserver!1000!rule!1050!handler!rewrite!1!regex = (.*)/
+vserver!1000!rule!1050!handler!rewrite!1!show = 0
+vserver!1000!rule!1050!handler!rewrite!1!substring = $1/index.php
+vserver!1000!rule!1050!match = fullpath
+vserver!1000!rule!1050!match!fullpath!1 = /blog/wp-admin/
+vserver!1000!rule!1040!document_root = /var/www/wordpress
+vserver!1000!rule!1040!match = directory
+vserver!1000!rule!1040!match!directory = /blog
+vserver!1000!rule!1040!match!final = 0
+vserver!1000!rule!1030!handler = file
+vserver!1000!rule!1030!handler!iocache = 1
+vserver!1000!rule!1030!match = and
+vserver!1000!rule!1030!match!final = 1
+vserver!1000!rule!1030!match!left = directory
+vserver!1000!rule!1030!match!left!directory = /blog
+vserver!1000!rule!1030!match!right = exists
+vserver!1000!rule!1030!match!right!iocache = 1
+vserver!1000!rule!1030!match!right!match_any = 1
+vserver!1000!rule!1030!match!right!match_index_files = 0
+vserver!1000!rule!1030!match!right!match_only_files = 1
+vserver!1000!rule!1020!handler = redir
+vserver!1000!rule!1020!handler!rewrite!1!show = 0
+vserver!1000!rule!1020!handler!rewrite!1!substring = /blog/index.php?/$1
+vserver!1000!rule!1020!match = request
+vserver!1000!rule!1020!match!request = /blog/(.+)
+
+source!1!env!PHP_FCGI_CHILDREN = 5
+source!1!env!PHP_FCGI_MAX_REQUESTS = 490
+source!1!host = 127.0.0.1:47990
+source!1!interpreter = /usr/bin/php-cgi -b 127.0.0.1:47990
+source!1!nick = PHP Interpreter
+source!1!type = interpreter
+////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////
+# VServer snippet
+# 2010/09
+
+vserver!1020!directory_index = index.php,index.html
+vserver!1020!document_root = /var/www/wordpress
+vserver!1020!nick = example.net
+vserver!1020!rule!50!encoder!gzip = 1
+vserver!1020!rule!50!handler = fcgi
+vserver!1020!rule!50!handler!balancer = round_robin
+vserver!1020!rule!50!handler!balancer!source!1 = 1
+vserver!1020!rule!50!handler!error_handler = 1
+vserver!1020!rule!50!match = extensions
+vserver!1020!rule!50!match!extensions = php
+vserver!1020!rule!50!match!final = 0
+vserver!1020!rule!50!timeout = 30
+vserver!1020!rule!40!encoder!deflate = 0
+vserver!1020!rule!40!encoder!gzip = 0
+vserver!1020!rule!40!expiration = time
+vserver!1020!rule!40!expiration!time = 1h
+vserver!1020!rule!40!handler = file
+vserver!1020!rule!40!handler!iocache = 1
+vserver!1020!rule!40!match = fullpath
+vserver!1020!rule!40!match!fullpath!1 = /favicon.ico
+vserver!1020!rule!40!match!fullpath!2 = /robots.txt
+vserver!1020!rule!40!match!fullpath!3 = /crossdomain.xml
+vserver!1020!rule!30!handler = redir
+vserver!1020!rule!30!handler!rewrite!1!regex = (.*)/
+vserver!1020!rule!30!handler!rewrite!1!show = 0
+vserver!1020!rule!30!handler!rewrite!1!substring = $1/index.php
+vserver!1020!rule!30!match = fullpath
+vserver!1020!rule!30!match!fullpath!1 = /
+vserver!1020!rule!30!match!fullpath!2 = /wp-admin/
+vserver!1020!rule!20!handler = file
+vserver!1020!rule!20!handler!iocache = 1
+vserver!1020!rule!20!match = exists
+vserver!1020!rule!20!match!iocache = 1
+vserver!1020!rule!20!match!match_any = 1
+vserver!1020!rule!20!match!match_only_files = 1
+vserver!1020!rule!10!handler = redir
+vserver!1020!rule!10!handler!rewrite!1!regex = /(.+)
+vserver!1020!rule!10!handler!rewrite!1!show = 0
+vserver!1020!rule!10!handler!rewrite!1!substring = /index.php?/$1
+vserver!1020!rule!10!match = default
+
+source!1!env!PHP_FCGI_CHILDREN = 5
+source!1!env!PHP_FCGI_MAX_REQUESTS = 490
+source!1!host = 127.0.0.1:47990
+source!1!interpreter = /usr/bin/php-cgi -b 127.0.0.1:47990
+source!1!nick = PHP Interpreter
+source!1!type = interpreter
+////////////////////////////////////////////////////////////////////////
