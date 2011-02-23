@@ -1265,10 +1265,9 @@ img.icon_chooser_selected {
   float: left;
 }
 
-.ui-dialog .entry { padding: 8px 0; }
-.ui-dialog .entry .title { float: left; width: 144px; padding-top: 6px; font-weight: bold; }
-.ui-dialog .entry .notice { display: none; }
-.ui-dialog .entry .comment { text-align: left; color: #999; font-size: 11px; padding: 4px 0; }
+.vserver-new-box .propstable .entry .title { float: left; width: 144px; padding-top: 6px; font-weight: bold; }
+.rule_new_content .propstable .entry .title { float: left; width: 144px; padding-top: 6px; font-weight: bold; }
+.vserver-new-box h2 { padding-left: 8px; }
 
 .ui-dialog .selection-panel .row_content .title {
   font-weight: bold;
