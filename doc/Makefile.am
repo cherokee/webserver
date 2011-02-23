@@ -266,6 +266,17 @@ media/images/cookbook_zend1.png \
 media/images/cookbook_joomla.png \
 media/images/cookbook_https_accelerator_handler.png \
 media/images/cookbook_https_accelerator_sources.png \
+media/images/cookbook_drupal_dir_rules_1.png \
+media/images/cookbook_drupal_dir_rules_2.png \
+media/images/cookbook_drupal_dir_rules_3.png \
+media/images/cookbook_drupal_dir_rules_4.png \
+media/images/cookbook_drupal_dir_rules_6.png \
+media/images/cookbook_drupal_dir_rules_7.png \
+media/images/cookbook_drupal_dir_rules.png \
+media/images/cookbook_drupal_vserver_rules.png \
+media/images/cookbook_wp_example1.png \
+media/images/cookbook_wp_example2.png \
+media/images/cookbook_wp_example3.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/screencast.png \
@@ -274,7 +285,6 @@ media/images/other_graphs_timeouts.png \
 media/images/other_graphs_conns.png \
 media/images/other_graphs_logging.png \
 media/images/other_graphs_traffic.png
-
 
 EXTRA_DIST = \
 $(doc_DATA) \

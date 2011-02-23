@@ -1,138 +1,40 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee 1.0.1b
+* Cherokee: 1.2.0
 * Joomla   1.5.16 stable
-* Joomla   1.6.0  beta1
+* 2011/02/23
 ///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Joomla
 ---------------------------
 
 Setting up link:http://www.joomla.org/[Joomla] with Cherokee is really
-easy. A configuration wizard is provided that can either be used to
-install Joomla as a new dedicated Virtual Server, or to set it up
-inside a Directory.
+easy. Joomla is offered through the Cherokee Market and can be
+automatically installed as a new dedicated Virtual Server, or to set
+it up inside a Directory.
 
-This recipe contains three sections detailing how to:
-. Configure Cherokee for either installation mode using the Wizard.
+This recipe contains sections detailing how to:
+. Configure Cherokee for either installation mode using the Market.
 . Install Joomla v1.5.14 which is the last one available at the time
 of writing.
 . Configure Cherokee manually.
 
-You don't need to worry about the manual installation. It is legacy
-documentation from the time when the wizards weren't available. Every
-step described there is taken care of by the wizard.
+[[market_configuration]]
+Configure Cherokee using the Market
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[wizard_configuration]]
-Configure Cherokee using the Wizard
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The easiest way is to look for the application in the Market and
+follow the point and click interface.
 
-Two common scenarios are contemplated: installation on a dedicated
-virtual server (http://joomla.example.net/, for instance) or under a
-subdirectory on an existing virtual server (as could be
-http://example.net/joomla/).
-
-[[cherokee_vserver]]
-Setting up Joomla as a new Virtual Server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The first step would be visiting the virtual server list page and
-clicking on the `Add` button at the top of the panel to show the list
-of available wizards.
-
-image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
-
-Now, you will have to select the `CMS` category, and run the Joomla
-wizard.  At this stage the Joomla wizard will ask you for some basic
-parameters about the installation. It will try to auto-fill as many
-entries of the form as possible.  For instance, if it finds Joomla
-installed in a standard location it will use that path as the default
-directory.
-
-The new virtual server will be created after this form is submitted.
-The virtual server configuration will cover the vast majority of the
-cases. Most probably it will cover your needs, although you are free
-to modify it as you will.
-
-[[cherokee_dir]]
-Setting up Joomla inside a Directory
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Joomla can also be configured inside a directory. Let's suppose we
-want to set up Joomla inside the `/blog` directory of one of our
-virtual servers.
-
-In this case, the first thing you will have to do is to enter the
-virtual server configuration you'd like to configure Joomla in. Once
-in there, visit the `Behavior` tab and trigger the `Rule panel` by
-clicking on the `Rule Management` button. Then, use the `Add` button
-at the top of the panel to see the available wizards:
-
-image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
-
-As in the previous case, this wizard will ask some very basic
-information, including the public web directory where Joomla will be
-set up and the local Joomla source directory.
-
-
-
-[[package_installation]]
-Installing Joomla
-~~~~~~~~~~~~~~~~~
-
-Once Cherokee is ready, only the database issue remains to be able to
-install Joomla. Log in to MySQL:
-
-----------------
-mysql -u root -p
-----------------
-
-And create the database for Joomla. We will be using the name
-'joomla', the user 'joomlauser' and the password 'joomlapassword', but
-you should set up your own.
-
-------------------------------------------------------------------------
-CREATE DATABASE joomla;
-GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost IDENTIFIED BY 'joomlapassword';
-GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost.localdomain IDENTIFIED BY 'joomlapassword';
-FLUSH PRIVILEGES;
-quit;
-------------------------------------------------------------------------
-
-Then point your web browser to `http://localhost/joomla` and follow
-the instructions provided by the Joomla installer.
-
-There is not much else you must do for Cherokee to work with
-Joomla. If you follow the Joomla installer's instructions -providing
-valid database information in most cases will suffice-, you will go
-thorough every step swiftly. Once you are done you will have to
-eliminate the `installation` subdirectory, as Joomla does not allow
-going any further until you do so as a security precaution. It is also
-a good idea to make the `cache` directory world writable.
-
------------------------------------
-rm -rf /var/www/joomla/installation
-chmod 777 /var/www/joomla/cache
------------------------------------
-
-image::media/images/cookbook_joomla.png[Joomla Demo]
-
-Now to set up Joomla. Visit
-link:http://localhost/administration[http://localhost/administration]
-and log in. Go to the `Global Configuration` option and enable all the
-*SEO Settings*, including the ones for Apache mod_rewrite.
-
-Mission accomplished. You can skip the rest of the document unless you
-want some more insight on what exactly has been done by the
-Cherokee-Admin Joomla Wizard.
+However, these are the steps for those wanting to install it manually.
 
 [[manual_configuration]]
 Configuring Cherokee manually
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The wizard handles both series of Joomla, 1.5.x and 1.6.x. This manual
-process was documented for 1.5.x and does not work for 1.6.x.
+The Market can handle both series of Joomla, 1.5.x and 1.6.x. This manual
+process was documented for 1.5.x and might not work for 1.6.x.
 
 You will need PHP support correctly configured in Cherokee, and PHP
 with the MySQL module installed. For this you will require php-cgi
@@ -191,3 +93,52 @@ Each should be managed by a handler that returns an error:
 After this you are done! Remember that all these settings are
 refinements not really needed by Joomla to perform its basic
 functions.
+
+[[package_installation]]
+Installing Joomla
+~~~~~~~~~~~~~~~~~
+
+Both Cheroee and the system have to be prepared for Joomla to be
+installed. The database issue can be taken care of with the following
+steps. Log in to MySQL:
+
+----------------
+mysql -u root -p
+----------------
+
+And create the database for Joomla. We will be using the name
+'joomla', the user 'joomlauser' and the password 'joomlapassword', but
+you should set up your own.
+
+------------------------------------------------------------------------
+CREATE DATABASE joomla;
+GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost IDENTIFIED BY 'joomlapassword';
+GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost.localdomain IDENTIFIED BY 'joomlapassword';
+FLUSH PRIVILEGES;
+quit;
+------------------------------------------------------------------------
+
+Then point your web browser to `http://localhost/joomla` and follow
+the instructions provided by the Joomla installer.
+
+There is not much else you must do for Cherokee to work with
+Joomla. If you follow the Joomla installer's instructions -providing
+valid database information in most cases will suffice-, you will go
+thorough every step swiftly. Once you are done you will have to
+eliminate the `installation` subdirectory, as Joomla does not allow
+going any further until you do so as a security precaution. It is also
+a good idea to make the `cache` directory world writable.
+
+-----------------------------------
+rm -rf /var/www/joomla/installation
+chmod 777 /var/www/joomla/cache
+-----------------------------------
+
+image::media/images/cookbook_joomla.png[Joomla Demo]
+
+Now to set up Joomla. Visit
+link:http://localhost/administration[http://localhost/administration]
+and log in. Go to the `Global Configuration` option and enable all the
+*SEO Settings*, including the ones for Apache mod_rewrite.
+
+Mission accomplished!

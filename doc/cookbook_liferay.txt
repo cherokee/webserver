@@ -1,12 +1,20 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee 0.99.25
+* Cherokee: 1.2.0
 * Liferay
+* 2011/02/23
 ///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Liferay
 ----------------------------
+
+You could just use the automatic installer present in the Cherokee
+Market. It would download and install everything, and make the
+necessary adjustments for you, both to Cherokee and your system.
+
+But for those wanting to do everything manually, here is what you
+should do.
 
 For this recipe we will be using
 link:http://www.liferay.com/web/guest/downloads/portal[Liferay Portal
@@ -71,15 +79,7 @@ image::media/images/cookbook_liferay.png[Liferay]
 [[Cherokee]]
 Phase two: Cherokee
 ~~~~~~~~~~~~~~~~~~~
-
-Now to set up Cherokee. To do this, use the provided `Wizard`. Launch
-Cherokee-Admin on your proxy machine and then you will find this
-assistant under the `Platforms` category of the Wizards. Click, answer a few
-questions and you are done. You can then skip the rest of this
-document.
-
-Should you have any problem with the assistant, you can perform the
-same tasks manually. Simply set up Cherokee as reverse proxy. You can
+Simply set up Cherokee as reverse proxy. You can
 either create a new virtual server with a matching rule (be it
 `default` or anything else) if you are sharing the proxy machine, or
 dedicate another machine to the Proxy Handler. This will be our
@@ -92,8 +92,7 @@ server running Liferay at port 8080.
 Launch Cherokee-Admin on your proxy machine, create a rule that
 matches the desired path on your web server hierarchy -`/liferay` for
 instance- in your virtual server of choice, and define the `HTTP
-reverse proxy` handler from within the `Handler` tab. Make sure to
-enable the `Preserve Host` checkbox.
+reverse proxy` handler from within the `Handler` tab.
 
 You will need to assign it an information source you define for the
 server running Liferay. We will assume the IP is `192.168.1.100` in

@@ -1,8 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee 0.99.25
-* Moodle   1.9.5+
+* Cherokee: 1.2.0
+* Moodle   2.0
+* 2011/02/23
 ///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Moodle
@@ -20,50 +21,34 @@ requirements] at Moodle's site. Don't worry about this point. The
 installer will detail exactly what are the missing modules, soy you
 can install whatever you need during that part of the process.
 
-Cherokee can be configured in a breeze thanks to the provided Moodle
-Wizard.
+Cherokee can be configured in a breeze thanks to the Cherokee
+Market. After deploying it automatically you can feel free to manually
+tune whatever parameters you see fit, but no more intervention is
+really needed.
 
-[[wizard_configuration]]
-Configure Cherokee using the Wizard
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[[manual_configuration]]
+Setting up Moodle manually
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[cherokee_vserver]]
-Setting up Moodle as a new Virtual Server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using the Market is the recommended option to set up Moodle on
+Cherokee. However, should you wish to do it manually you will just
+need PHP support correctly configured in Cherokee. Please refer to the
+PHP Wizard or to the pertaining documentation section about
+link:cookbook_php.html[setting up PHP] in case you don't have it
+available for some reason.
 
-The first step would be to go to the virtual server list page. Then,
-click on the `Add` button at the top of the panel to show the list of
-available wizards.
+Besides the PHP requirement, nothing else is needed on Cherokee's
+part.
 
-image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
+Simply set the `Document root` to `/var/www/moodle` and you are ready
+to go. This is done within the `Basics` tab of the chosen `Virtual
+Server`.
 
-Then, select the `Misc` category, run the Moodle wizard and you are
-good to go.
-
-Feel free to manually tune whatever
-parameters you see fit, but no more intervention is needed.
-
-[[cherokee_dir]]
-Setting up Moodle inside a Directory
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moodle can also be configured inside a directory. Let's suppose we
-want to set up Moodle inside the `/course` directory of one of our
-virtual servers.
-
-In this case, the first thing you will have to do is to enter the
-virtual server configuration you'd like to configure Moodle in. Once
-in there, click on the rule addition button and choose the `Moodle`
-wizard.
-
-As in the previous case, this wizard will ask some very basic
-information, including the public web directory where Moodle will be
-set up and the local Moodle source directory.
-
+image::media/images/cookbook_moodle_document_root.png[Moodle settings]
 
 [[moodle]]
-Setting up Moodle
-~~~~~~~~~~~~~~~~~
+Moodle manula steps
+~~~~~~~~~~~~~~~~~~~
 
 Of course, you will need to download Moodle from the
 link:http://download.moodle.org/[download site] if you don't already
@@ -137,23 +122,3 @@ link:http://docs.moodle.org/en/Backup_settings[backup settings]. You
 can find all the information to create new courses and everything else
 there is to know in link:http://docs.moodle.org/[Moodle's
 documentation].
-
-
-[[manual_configuration]]
-Setting up Cherokee manually
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Using the wizard is the recommended option to set up Moodle on
-Cherokee. However, should you wish to do it manually you will just
-need PHP support correctly configured in Cherokee. Please refer to the
-PHP Wizard or to the pertaining documentation section about
-link:cookbook_php.html[setting up PHP] in case you don't have it
-available for some reason.
-
-Besides the PHP requirement, nothing else is needed.
-
-Simply set the `Document root` to `/var/www/moodle` and you are ready
-to go. This is done within the `Basics` tab of the chosen `Virtual
-Server`.
-
-image::media/images/cookbook_moodle_document_root.png[Moodle settings]

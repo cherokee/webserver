@@ -1,8 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee 0.99.25
-* Trac     0.11.1
+* Cherokee: 1.2.0
+* Trac     0.12
+* 2011/02/23
 ///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Trac
@@ -53,26 +54,25 @@ installation instructions] on the official site.
 
 Cherokee
 ~~~~~~~~
-
 The configuration on Cherokee's side is quite simple. In fact, the
-configuration of Cherokee is so simple that you only have to click on
-the Trac Wizard with Cherokee-Admin. You will be asked for the minimal
-information required, and everything else will be handled for you.
+configuration of Cherokee is so simple that you can find the
+application in the Market and have it deployed within seconds. You
+will be asked for the minimal information required, and everything
+else will be handled for you.
 
 By now, your Trac installation should be up and running. Try it out!
 
 .Complete Trac installation
 image::media/images/cookbook_trac.png[Trac]
 
-If you used the Wizard, you can skip the rest of the document. It only
-details what manual steps must be taken. You might find it interesting
-to know exactly what the wizard does for you, though.
+If you used the Market, you can skip the rest of the document. It only
+details what manual steps must be taken.
 
 You will only need to know that you can spawn Trac as an SCGI process.
 
 .Command to launch Trac
 -------
-/usr/bin/tracd --single-env --protocol=scgi /
+/usr/bin/tracd --single-env --daemonize --protocol=scgi /
 --hostname=localhost --port=4433 /path/to/project
 -------
 
@@ -90,7 +90,7 @@ image::media/images/cookbook_trac_info.png[Information source]
 [cols="20%,80%",options="header"]
 |=========================================================================
 |Host           |Interpreter
-|localhost:4433 |/usr/bin/tracd --single-env --protocol=scgi \
+|localhost:4433 |/usr/bin/tracd --single-env --daemonize --protocol=scgi \
                  --hostname=localhost --port=4433 /path/to/project/
 |=========================================================================
 
