@@ -22,6 +22,7 @@
 # 02110-1301, USA.
 #
 
+import os
 import time
 
 file = None
@@ -38,8 +39,10 @@ def set_file (filepath):
 
     assert type(filepath) == str
 
-    file = open (filepath, 'w+')
-    file.write (buf)
+    f = open (filepath, 'w+')
+    os.chmod (filepath, 0600)
+
+    f.write (buf)
     buf = ''
 
 def log (txt):
