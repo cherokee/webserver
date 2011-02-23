@@ -327,6 +327,7 @@ def Exception_Handler_Apply():
     info['user']     = OWS_Login.login_user
     info['comments'] = CTK.post['comments']
     info['platform'] = SystemInfo.get_info()
+    info['cfg']      = CTK.cfg.serialize()
     info['tmp!market!install'] = CTK.cfg['tmp!market!install'].serialize()
 
     # Send it
@@ -536,7 +537,7 @@ class Install_Done_Content (Install_Stage):
             if vserver_n and not nick:
                 nick = CTK.cfg.get_val ("vserver!%s!nick"%(vserver_n))
 
-            if nick.lower() == "default":
+            if not nick or nick.lower() == "default":
                 sys_stats = SystemStats.get_system_stats()
                 nick = sys_stats.hostname
 
