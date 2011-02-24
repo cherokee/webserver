@@ -56,6 +56,7 @@ class MailHTML:
         self.to      = to
         self.subject = subject
         self.images  = []
+        self.headers = {}
 
         self.html_header = ''
         self.html_footer = ''
@@ -139,9 +140,13 @@ class MailHTML:
 
     def RenderMessage_No_Images (self):
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = self.subject
-        msg['From']    = self.me
-        msg['To']      = self.to
+        msg.set_charset('utf-8')
+        msg['Subject']      = self.subject
+        msg['From']         = self.me
+        msg['To']           = self.to
+
+        for h in self.headers:
+            msg[h] = self.headers[h]
 
         part1 = MIMEText (self.RenderTXT(),  'plain', _charset='utf-8')
         part2 = MIMEText (self.RenderHTML(), 'html',  _charset='utf-8')
@@ -153,20 +158,28 @@ class MailHTML:
 
     def RenderMessage_Images (self):
         msg_root = MIMEMultipart('related')
-        msg_root['Subject'] = self.subject
-        msg_root['From']    = self.me
-        msg_root['To']      = self.to
-        msg_root.preamble   = 'This is a multi-part message in MIME format.'
+        msg_root.set_charset('utf-8')
+        msg_root['Subject']      = self.subject
+        msg_root['From']         = self.me
+        msg_root['To']           = self.to
+        msg_root.preamble        = 'This is a multi-part message in MIME format.'
+
+        for h in self.headers:
+            msg_root[h] = self.headers[h]
 
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = self.subject
-        msg['From']    = self.me
-        msg['To']      = self.to
+        msg.set_charset('utf-8')
+        msg['Subject']      = self.subject
+        msg['From']         = self.me
+        msg['To']           = self.to
+
+        for h in self.headers:
+            msg[h] = self.headers[h]
 
         msg_root.attach (msg)
 
-        part1 = MIMEText (self.RenderTXT(),  'plain')
-        part2 = MIMEText (self.RenderHTML(), 'html')
+        part1 = MIMEText (self.RenderTXT(),  'plain', _charset='utf-8')
+        part2 = MIMEText (self.RenderHTML(), 'html',  _charset='utf-8')
 
         msg.attach (part1)
         msg.attach (part2)
@@ -192,6 +205,9 @@ class MailHTML:
 
     def __repr__ (self):
         return self.RenderMessage().as_string()
+
+    def __setitem__ (self, key, value):
+        self.headers[key] = value
 
 
 if __name__ == "__main__":
