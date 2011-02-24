@@ -72,7 +72,11 @@ class Replacement_Commons (Replacement_Dict):
         root_group = InstallUtil.get_installation_GID()
 
         # Server user (www-data, server, nobody, etc)
-        groups = os.getgroups()
+        #
+        # Unusual case: getgroups() might return []. We try to cover
+        # the corner case by assuming a safety value of [0] (because
+        # we haven't any other better option, actually).
+        groups = os.getgroups() or [0]
         groups.sort()
 
         server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
