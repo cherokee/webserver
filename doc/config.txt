@@ -2,6 +2,7 @@
 
   . link:config_walkthrough.html[Walkthrough]: Overview and walkthrough.
   . link:config_index.html[Home]: Main section.
+  . link:config_market.html[Market]: Entry point to the Cherokee Market
   . link:config_status.html[Status]: Server status information.
   . link:config_general.html[General]: General settings.
   . link:config_virtual_servers.html[Virtual servers]: Server definition.

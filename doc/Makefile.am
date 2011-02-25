@@ -31,6 +31,7 @@ config_advanced.html \
 config_info_sources.html \
 config_status.html \
 config_wizards.html \
+config_market.html \
 cookbook.html \
 cookbook_managing_logs.html \
 cookbook_optimizations.html \
@@ -168,6 +169,8 @@ media/images/admin_handler_onlylisting.png \
 media/images/admin_handler_dbslayer.png \
 media/images/admin_handler_secdownload.png \
 media/images/admin_index.png \
+media/images/admin_index_backup.png \
+media/images/admin_index_restore.png \
 media/images/admin_launch.png \
 media/images/admin_noconfig.png \
 media/images/admin_notrunning.png \
@@ -277,6 +280,7 @@ media/images/cookbook_drupal_vserver_rules.png \
 media/images/cookbook_wp_example1.png \
 media/images/cookbook_wp_example2.png \
 media/images/cookbook_wp_example3.png \
+media/images/market_index.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/screencast.png \

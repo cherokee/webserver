@@ -1,0 +1,120 @@
+== link:index.html[Index] -> link:config.html[Configuration]
+////
+Last checked: 2011/02/25 Cherokee 1.2.0
+////
+
+Market
+------
+
+Through this section, Cherokee-Admin is fully integrated with
+link:http://cherokee-market.com[Cherokee Market], the first
+Marketplace for Web applications that can deliver and deploy
+applications directly into your web infrastructure.
+
+Cherokee Market is a revolutionary new distribution channel for Web
+applications, where developers can distribute and sell their apps,
+while Web infrastructure owners can easily deploy them within seconds.
+
+This section of Cherokee-Admin allows you to fully interact with the
+Market through a clean and intuitive interface.
+
+
+Main Market Screen
+~~~~~~~~~~~~~~~~~~
+
+The layout is composed by several sections.
+
+.Main Market Window
+image::media/images/market_index.png[Market]
+
+Search
+^^^^^^
+
+This is the search-bar located at the upper right corner of the
+interface. Through it you'll be able to locate specific
+applications. As the catalog of available applications gets bigger,
+the more importance this function will gain.  keeps getting
+
+
+Featured
+^^^^^^^^
+
+This box, located at the upper left part of the interface, will allow
+you to browse some featured applications. Just choose any of them and
+you'll be shown some basic information about the selected application,
+as well as a link to get to a page showing the full information.
+
+
+Top applications
+^^^^^^^^^^^^^^^^
+
+Located at the lower left part of the interface, you can browse
+through the tabs to access any of the applications at the top of the
+ranking.  You can browse the top applications of the available
+sections: `Paid applications`, `Free applications`, and `Popular
+applications` regardless of their price.
+
+Categories
+^^^^^^^^^^
+
+At the upper right side of the interface, you can click on any of the
+available application categories to recieve a screen with a list of
+all the applications for that category.
+
+My Library
+^^^^^^^^^^
+
+As you keep installing applications, free or otherwise, those will be
+added to the library associated to your account.
+
+
+Maintenance
+^^^^^^^^^^^
+
+Whenever there is any kind of maintenance to perform among the
+applications installed through the Market, you will be presented with
+this box. Located at the bottom right part, you just have to click to
+unravel a maintenance assitant. In case the installation has an
+associated database that also needs to be cleansed, you will be asked
+for access details so the operation can be performed for you.
+
+The maintenace process will help you clean up two kind of
+installations: `Orphan` and `Unifinished`.
+
+Orphan
+++++++
+
+Orphan installations are those that have been eliminated from your
+configuration and are no longer used by Cherokee. This can happen when
+you erase the virtual server associated to one of the applications
+installed through the Market, for instance.
+
+
+Unfinished
+++++++++++
+
+This refers to any installation that has not been completed. This can
+happen because you chose to interrupt an installtion already in
+progress, or because the installation couldn't proceed because of any
+reason (unmet dependencies, power error, or even because of a broken
+installer, although every effort is put into preventing this last
+scenario).
+
+
+Main Application Screen
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Every time you select a specific application, you will be brought to
+this screen. Through it you will be presented with a description,
+screenshots, a table summarizing the operating systems and database
+engines supported by the application, reviews written by other buyers
+of the application, etc.
+
+In case the application is free or present in your library, you will
+be able to install perform an automatic installation.
+
+If not, you will be able to initiate the Check out process. You will
+be redirected to the main link:http://cherokee-market.com[Cherokee
+Market] site to complete the transaction, and afterwards the
+application will be included in your library and the installation will
+proceed.
