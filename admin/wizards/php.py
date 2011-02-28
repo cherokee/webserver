@@ -87,7 +87,8 @@ STD_ETC_PATHS = ['/etc/php.ini',
                  '/opt/php*/etc/php.ini',
                  '/opt/local/etc/php*/php.ini',
                  '/etc/php*/*/php.ini',
-                 '/etc/php*/php.ini']
+                 '/etc/php*/php.ini',
+                 '/usr/local/lib*/php.ini']
 
 CFG_PREFIX    = 'tmp!wizard!php'
 
