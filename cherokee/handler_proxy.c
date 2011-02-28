@@ -134,10 +134,10 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		INIT_LIST_HEAD (&n->out_request_regexs);
 
 		cherokee_avl_init (&n->in_headers_hide);
-		cherokee_avl_set_case (&n->in_headers_hide, false);
+		cherokee_avl_set_case (&n->in_headers_hide, true);
 
 		cherokee_avl_init (&n->out_headers_hide);
-		cherokee_avl_set_case (&n->out_headers_hide, false);
+		cherokee_avl_set_case (&n->out_headers_hide, true);
 
 		*_props = MODULE_PROPS(n);
 	}
@@ -497,7 +497,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 		chr_end = *end;
 		*end = '\0';
 
-		/* Check the header entry  */
+		/* Remove these headers  */
 		if ((! strncasecmp (begin, "Host:", 5)) ||
 		    (! strncasecmp (begin, "Expect:", 7)) ||
 		    (! strncasecmp (begin, "Connection:", 11)) ||
@@ -507,7 +507,24 @@ build_request (cherokee_handler_proxy_t *hdl,
 		{
 			goto next;
 		}
-		else if (! strncasecmp (begin, "X-Forwarded-For:", 16))
+
+		/* Remove custom headers */
+		else {
+			colon = strchr (begin, ':');
+			if (unlikely (colon == NULL)) {
+				return ret_error;
+			}
+
+			*colon = '\0';
+			ret = cherokee_avl_get_ptr (&props->in_headers_hide, begin, NULL);
+			*colon = ':';
+
+			if (ret == ret_ok)
+				goto next;
+		}
+
+		/* A few special cases */
+		if (! strncasecmp (begin, "X-Forwarded-For:", 16))
 		{
 			XFF = begin + 16;
 			while ((*XFF == ' ') && (XFF < end))
@@ -524,25 +541,13 @@ build_request (cherokee_handler_proxy_t *hdl,
 		{
 			x_real_ip = true;
 		}
-		else {
-			colon = strchr (begin, ':');
-			if (unlikely (colon == NULL)) {
-				return ret_error;
-			}
 
-			*colon = '\0';
-			ret = cherokee_avl_get_ptr (&props->in_headers_hide, begin, NULL);
-			*colon = ':';
-
-			if (ret == ret_ok)
-				goto next;
-		}
-
+		/* Pass the header */
 		cherokee_buffer_add     (buf, begin, end-begin);
 		cherokee_buffer_add_str (buf, CRLF);
 
-		/* Prepare next iteration */
 	next:
+		/* Prepare next iteration */
 		*end = chr_end;
 		while ((*end == CHR_CR) || (*end == CHR_LF))
 			end++;
