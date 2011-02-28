@@ -5,7 +5,8 @@ import os, sys, time, random, fcntl, socket, math
 from conf import *
 
 term = os.getenv("TERM")
-if 'color' in term or term in ('rxvt', 'xterm'):
+if term and \
+   ('color' in term or term in ('rxvt', 'xterm')):
     MESSAGE_SUCCESS  = '\033[0;48;36m  Success \033[0m' # Blue
     MESSAGE_FAILED   = '\033[0;48;31m   Failed \033[0m' # Red
     MESSAGE_SKIPPED  = '\033[0;48;33m  Skipped \033[0m' # Yellow
