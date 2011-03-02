@@ -40,6 +40,7 @@ LINUX_DISTS_ETC = [('gentoo-release',     'gentoo'),
                    ('redflag-release',    'redflag'),
                    ('conectiva-release',  'conectiva'),
                    ('redhat-release',     'redhat'), # rhel/centos
+                   ('debian_version',     'debian'),
                    ]
 
 
@@ -104,16 +105,6 @@ def build_info():
 
 
 def _figure_linux_info (info):
-    # Check the LSB release file
-    if os.path.exists('/etc/lsb-release'):
-        release = open('/etc/lsb-release','r').read()
-
-        for key in ('id', 'release', 'description'):
-            regex = 'DISTRIB_%s\=(.*)' %(key.upper())
-            tmp = re.findall(regex, release)
-            if tmp:
-                info['linux_distro_%s'%(key)] = tmp[0]
-
     # Try to figure out the distro
     for dp in LINUX_DISTS_ETC:
         if os.path.exists (os.path.join ('/etc', dp[0])):
@@ -128,6 +119,22 @@ def _figure_linux_info (info):
                 if tmp:
                     info['linux_distro_id'] = tmp[0][0].lower()
                     info['linux_distro_release'] = tmp[0][1].lower()
+
+            # Populate version in case it is Debian based
+            elif dp[1] == 'debian':
+                release = open (os.path.join ('/etc', dp[0])).read().replace('\n','')
+                info['linux_distro_release'] = release
+                info['linux_distro_description'] = 'Debian %s' %(release)
+
+    # Check the LSB release file (do this last so LSB prevails in case of conflict)
+    if os.path.exists('/etc/lsb-release'):
+        release = open('/etc/lsb-release','r').read()
+
+        for key in ('id', 'release', 'description'):
+            regex = 'DISTRIB_%s\=(.*)' %(key.upper())
+            tmp = re.findall(regex, release)
+            if tmp:
+                info['linux_distro_%s'%(key)] = tmp[0]
 
 
 def _figure_macos_info (info):
