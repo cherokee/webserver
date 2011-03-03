@@ -28,8 +28,8 @@ you've previously written. If the script allows the user to access the
 file, it will generate a special encoded URL that Cherokee will handle
 through the **Hidden Downloads** module.
 
-If the URL is invalid, is modified or expires, Cherokee will not serve
-the file.
+If the URL is invalid, is modified, or expires, Cherokee will not
+serve the file.
 
 The encoding scheme is quite straightforward. It is basically the
 result of MD5-hash of: a shared secret string between Cherokee and the
@@ -44,7 +44,7 @@ Here you have a reference implementation in Python:
  def secure_download (prefix, url, secret):
     import time, hashlib
     t = '%08x' % (time.time())
-    return "/%s/%s/%s" % (hashlib.md5(secret + url + t).hexdigest(), t, url)
+    return "/%s/%s" % (hashlib.md5(secret + url + t).hexdigest(), t + url)
 ---------------------------------
 
 The same function written in PHP would be:
@@ -58,7 +58,10 @@ function secure_download ($prefix, $url, $secret) {
 
 It is important to notice that the URLs are only valid for a period of
 time. If an URL expires, the server will return an error instead of
-the file content. By default URLs last 60 seconds.
+the file contents. By default URLs last 60 seconds.
+
+NOTE: Please note that both sample implementations count on having an
+URL that starts with `/`.
 
 
 [[examples]]
@@ -80,31 +83,44 @@ located (`/mnt/isos`):
 
 image::media/images/admin_handler_secdownload.png[Hidden Downloads configuration]
 
+To summarize, its a four step process:
+ - Configure a Directory rule. Let's say: /downloads
+ - Set the rule to use "Hidden Downloads" handler
+ - Set the Document Root directory (this is important!)
+ - Set the Secret string
+
 Next step is to write the logic that will decide what is the user
-given access to. For instance, check out this example:
+given access to. For instance, check out this Pyton example:
 
 ---------------------------------
- SECRET = "Abracadabra"
- PREFIX = "/downloads"
+import time
+try:
+    from hashlib import md5
+except ImportError:
+    from md5 import md5
 
- def secure_download (url):
-    import time, hashlib
-    t = '%08x' % (time.time())
-    return PREFIX + "/%s/%s/%s" % (hashlib.md5(SECRET + url + t).hexdigest(), t, url)
+SECRET = "Abracadabra"
+DIR    = "downloads"
 
- if logged:
-    print '<a href="%s">Download</a>' % (secure_download (url))
- else:
-    print 'Sorry, you have to log in first.'
+def secure_download (url, secret):
+    t = "%08x"%(time.time())
+    return '/'+ DIR +'/'+ md5(secret + url + t).hexdigest() +'/'+ t + url
+
+# Example request
+file = "test.txt"
+host = "localhost"
+
+hidden_url = secure_download('/%s'%(file), SECRET)
+print "/%(DIR)s/%(file)s -> http://%(host)s%(hidden_url)s" %(locals())
 ---------------------------------
 
-According to this example, if a user tried to access
-`/bar/foo/example.iso` and access were granted, he would get a link to
-an URL like this:
+According to this example, if a user tries to access
+`/bar/foo/example.iso` and access is granted, working URL such as this
+would be provided:
 
  /downloads/ac003ebbb88c4fc9a75687223c72c6da/49b40a43/bar/foo/example.iso
 
-Since the `/download` web directory is configured with this "Hidden
+Since the `/downloads` web directory is configured with this "Hidden
 Downloads" handler, it will check the URL to ensure that it is valid
 and has not expired. Then, if everything was right, it would send the
 `/mnt/isos/bar/foo/example.iso` file to the client.
