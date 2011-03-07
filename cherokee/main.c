@@ -103,7 +103,7 @@ figure_worker_path (const char *arg0)
 
 	/* Invoked with the fullpath */
 	if (arg0[0] == '/') {
-		len = strlen(arg0) + sizeof("-worker") + 1;
+		len = strlen(arg0) + sizeof("-worker");
 		cherokee_worker = malloc (len);
 
 		snprintf (cherokee_worker, len, "%s-worker", arg0);
@@ -116,7 +116,7 @@ figure_worker_path (const char *arg0)
 
 	if ((arg0[0] == '.') || (*d == '/')) {
 		d = getcwd (tmp, sizeof(tmp));
-		len = strlen(arg0) + strlen(d) + sizeof("-worker") + 1;
+		len = strlen(arg0) + strlen(d) + sizeof("-worker");
 		cherokee_worker = malloc (len);
 
 		snprintf (cherokee_worker, len, "%s/%s-worker", d, arg0);
@@ -134,7 +134,7 @@ figure_worker_path (const char *arg0)
 		re = readlink (tmp, link, sizeof(link));
 		if (re > 0) {
 			link[re] = '\0';
-			len = re + sizeof("-worker") + 1;
+			len = re + sizeof("-worker");
 
 			cherokee_worker = malloc (len);
 			snprintf (cherokee_worker, len, "%s-worker", link);
