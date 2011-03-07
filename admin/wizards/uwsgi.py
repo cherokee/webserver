@@ -94,7 +94,6 @@ SINGLE_DIRECTORY = """
 
 """
 
-
 CONFIG_VSERVER = SOURCE + """
 %(vsrv_pre)s!nick = %(new_host)s
 %(vsrv_pre)s!document_root = %(document_root)s
@@ -154,7 +153,6 @@ class Commit:
         CTK.cfg['%s!nick'%(vsrv_pre)] = new_host
         Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
 
-
         uwsgi_binary = find_uwsgi_binary()
         if not uwsgi_binary:
             uwsgi_binary = CTK.cfg.get_val('%s!uwsgi_binary' %(PREFIX))
@@ -174,14 +172,13 @@ class Commit:
 
         # Build the config
         cvs = CONFIG_VSERVER
-        webdirs = uwsgi_find_mountpoint(uwsgi_cfg)
+        webdirs = uwsgi_find_mountpoint (uwsgi_cfg)
         rule_id = 2
         for webdir in webdirs:
             cvs += SINGLE_DIRECTORY %(locals())
 	    rule_id = rule_id + 1
 
 	cvs += DEFAULT_DIRECTORY
-
 
         # Add the new rules
         config = cvs %(locals())
@@ -393,17 +390,18 @@ def uwsgi_get_socket(filename):
 
     return s
 
-def uwsgi_find_mountpoint(filename):
-    mp = []
+def uwsgi_find_mountpoint (filename):
+    mp       = []
     found_mp = False
-    if filename.endswith('.xml'):
 
+    if filename.endswith('.xml'):
 	try:
             udom = minidom.parse(filename)
             uroot = udom.getElementsByTagName('uwsgi')[0]
 	    for m in uroot.getElementsByTagName('app'):
                 try:
-                    mp.append(m.attributes['mountpoint'].value)
+                    path = CTK.util.to_utf8 (m.attributes['mountpoint'].value)
+                    mp.append (path)
                     found_mp = True
                 except:
                     pass
@@ -412,6 +410,7 @@ def uwsgi_find_mountpoint(filename):
 
     if found_mp:
         return mp
+
     return ['/']
 
 def find_uwsgi_binary():
