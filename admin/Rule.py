@@ -108,8 +108,8 @@ class RuleButtons (CTK.Box):
 
 class Rule (CTK.Box):
     def __init__ (self, key, depth=0):
-        assert type(key) == str
-        assert type(depth) == int
+        assert type(key) == str, type(key)
+        assert type(depth) == int, type(depth)
 
         CTK.Box.__init__ (self, {'class': 'rule'})
         self.key   = key
