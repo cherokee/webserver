@@ -155,6 +155,7 @@ def _all_sources_per_rule ():
             sources = _sources_per_rule (rule)
             if sources:
                 result.append({rule: sources})
+
     return result
 
 
@@ -168,6 +169,7 @@ def _sources_per_rule (rule):
         src_keys = CTK.cfg.keys(pre)
         for src_key in src_keys:
             sources.append (CTK.cfg.get_val('%s!%s'%(pre,src_key)))
+
     return list(set(sources))
 
 
@@ -180,11 +182,12 @@ def _rules_per_source (source):
         rule_pre, sources = rule_dict.items()[0]
         if source in sources:
             pre = '%s!handler!balancer!source'%(rule_pre)
-            balanced = CTK.cfg.keys(pre)
+            balanced = CTK.cfg.keys (pre)
             for src in balanced:
                 rule = '%s!%s'%(pre,src)
                 if CTK.cfg.get_val(rule) == source:
-                    rules.append(rule)
+                    rules.append (rule)
+
     return list(set(rules))
 
 
@@ -410,9 +413,10 @@ class Render:
                     r = Rule.Rule('%s!match' %(rule_pre))
                     rule_name = r.GetName()
                     rule_link = rule_pre.replace('!','/')
-                    links.append(CTK.consts.LINK_HREF%(rule_link, rule_name))
+                    links.append (CTK.consts.LINK_HREF %(rule_link, rule_name))
 
                 dialog  = CTK.Dialog ({'title': _('Deletion is forbidden'), 'width': 480})
+                dialog += CTK.RawHTML (_('<h2>%s</h2>' %(_("Configuration consistency"))))
                 dialog += CTK.RawHTML (_(NOTE_FORBID_1))
                 dialog += CTK.RawHTML ('<p>%s: %s</p>'%(_(NOTE_FORBID_2), ', '.join(links)))
                 dialog.AddButton (_('Close'), "close")
