@@ -179,7 +179,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 
 		/* Parse the Date string
 		 */
-		ret = cherokee_dtm_str2time (header, &req_time);
+		ret = cherokee_dtm_str2time (header, header_len, &req_time);
 		if (unlikely (ret == ret_error)) {
 			LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
 
@@ -269,7 +269,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 		else {
 			time_t req_time = 0;
 
-			ret = cherokee_dtm_str2time (header, &req_time);
+			ret = cherokee_dtm_str2time (header, header_len, &req_time);
 			if (unlikely (ret == ret_error)) {
 				LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
 

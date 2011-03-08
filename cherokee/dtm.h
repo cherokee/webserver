@@ -48,7 +48,7 @@ char  *cherokee_dtm_wday_name (int idxName);
 const
 char  *cherokee_dtm_month_name(int idxName);
 
-ret_t  cherokee_dtm_str2time  (char* cstr, time_t *time);
+ret_t  cherokee_dtm_str2time  (char *cstr, int cstr_len, time_t *time);
 size_t cherokee_dtm_gmttm2str (char *bufstr, size_t bufsize, struct tm *ptm);
 
 CHEROKEE_END_DECLS

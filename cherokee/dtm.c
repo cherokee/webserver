@@ -551,11 +551,12 @@ cvt_tm2time( struct tm *ptm )
  *   ret_deny  - Parsed an invalid date
 */
 ret_t
-cherokee_dtm_str2time (char* cstr, time_t *time)
+cherokee_dtm_str2time (char* cstr, int cstr_len, time_t *time)
 {
-	struct tm  tm;
-	char      *psz = cstr;
-	size_t     idx = 0;
+	struct tm   tm;
+	char       *psz      = cstr;
+	size_t      idx      = 0;
+	const char *cstr_end = cstr + cstr_len;
 
 	/* Zero struct tm.
 	 */
@@ -586,6 +587,7 @@ cherokee_dtm_str2time (char* cstr, time_t *time)
 
 			/* -----------------------------
 			 * wdy, DD mth YYYY HH:MM:SS GMT
+			 * wdy, DD mth YYYY HH:MM:SS +0000
 			 * wdy, DD-mth-YY HH:MM:SS GMT
 			 * -----------------------------
 			 */
@@ -657,14 +659,14 @@ cherokee_dtm_str2time (char* cstr, time_t *time)
 
 			/* Deformat hours, minutes, seconds.
 			 */
-			if (!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
-			    psz[2] != ':' ||
-			    !isdigit( psz[3] ) || !isdigit( psz[4] ) ||
-			    psz[5] != ':' ||
-			    !isdigit( psz[6] ) || !isdigit( psz[7] )
-			   ) {
+			if ((cstr_end - psz < 7)||
+			    (! isdigit (psz[0]) || ! isdigit (psz[1]) || psz[2] != ':' ||
+			     ! isdigit (psz[3]) || ! isdigit (psz[4]) || psz[5] != ':' ||
+			     ! isdigit (psz[6]) || ! isdigit (psz[7])))
+			{
 				return ret_error;
 			}
+
 			tm.tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
 			tm.tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
 			tm.tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
@@ -672,16 +674,20 @@ cherokee_dtm_str2time (char* cstr, time_t *time)
 			/* Skip field separator(s).
 			 */
 			idx += 8;
-			while( psz[idx] == ' ')
+			while (psz[idx] == ' ')
 				++idx;
 			psz += idx;
 			idx = 0;
 
 			/* Time Zone (always Greenwitch Mean Time)
 			 */
-			if ( psz[0] != 'G' ||
-			     psz[1] != 'M' ||
-			     psz[2] != 'T') {
+			if (cstr_end - psz < 3) {
+				return ret_error;
+			}
+
+			if ((psz[0] != 'G' || psz[1] != 'M' || psz[2] != 'T') &&
+			    (psz[0] != '+' || psz[1] != '0' || psz[2] != '0'))
+			{
 				return ret_error;
 			}
 
@@ -739,15 +745,14 @@ cherokee_dtm_str2time (char* cstr, time_t *time)
 
 			/* Deformat hours, minutes, seconds.
 			 */
-			if (
-				!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
-				psz[2] != ':' ||
-				!isdigit( psz[3] ) || !isdigit( psz[4] ) ||
-				psz[5] != ':' ||
-				!isdigit( psz[6] ) || !isdigit( psz[7] )
-			   ) {
+			if ((cstr_end - psz < 7)||
+			    (! isdigit (psz[0]) || ! isdigit (psz[1]) || psz[2] != ':' ||
+			     ! isdigit (psz[3]) || ! isdigit (psz[4]) || psz[5] != ':' ||
+			     ! isdigit (psz[6]) || ! isdigit (psz[7])))
+			{
 				return ret_error;
 			}
+
 			tm.tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
 			tm.tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
 			tm.tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
