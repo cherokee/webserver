@@ -210,9 +210,10 @@ def can_create_file (value, nochroot=False):
 
 def is_safe_id (value):
     for v in value:
-        if v not in string.letters + string.digits and \
+        if v not in string.letters and \
+           v not in string.digits  and \
            v not in "_-.":
-           raise ValueError, _('Invalid char. Accepts: letters, digits, _, - and .')
+            raise ValueError, _('Invalid char. Accepts: letters, digits, _, - and .')
     return value
 
 def is_safe_id_list (value):
