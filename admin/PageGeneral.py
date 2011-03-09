@@ -98,8 +98,9 @@ def is_new_bind (port, ip=None):
 
 def commit():
     # Add a new port
-    port = CTK.post.pop('new_port')
+    port      = CTK.post.pop('new_port')
     interface = CTK.post.pop('new_if')
+
     if port:
         try:
             is_new_bind (port, interface)
@@ -109,9 +110,15 @@ def commit():
 
         # Look for the next entry
         pre = CTK.cfg.get_next_entry_prefix ('server!bind')
+
+        # Add new port
         CTK.cfg['%s!port'%(pre)] = port
         if interface:
             CTK.cfg['%s!interface'%(pre)] = interface
+
+        # Auto-set TLS/SSL flag
+        if int(port) == 443:
+            CTK.cfg['%s!tls'%(pre)] = "1"
 
     # Modifications
     return CTK.cfg_apply_post()
