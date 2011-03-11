@@ -43,6 +43,20 @@ supports SNI, things will just work. Every modern web browser does.
 For legacy scenarios where using SNI if not possible, there is a
 workaround detailed in the next question.
 
+[[ie-workarownd]]
+.I get certificate errors when having more than one. Workarounds?
+
+This is a scenario known to happen only with some web browsers running
+specific Operating Systems. Specifically, there was a report where the
+server was using 2 domains, 2 IPs, and 2 SSL Certificates on one
+server. Everything worked as expected with Firefox, Opera, and
+Chromium, but IE/Chrome on Windows kept showing a certificate error
+on the domain that was not configured as default.
+
+The workaround consists on creating a dummy default host with the
+second IP and certificate. The affected web browsers will then fall
+back to the IP and send the correct certificate.
+
 [[workaround]]
 .Are there workarounds when SNI can't be used?
 
