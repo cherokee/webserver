@@ -789,7 +789,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	 */
 	if (src->pid > 0) {
 		re = kill (src->pid, 0);
-		if (re != 0) {
+		if ((re != 0) && (errno == ESRCH)) {
 			/* It's death */
 			TRACE (ENTRIES, "PID %d is already death\n", src->pid);
 
