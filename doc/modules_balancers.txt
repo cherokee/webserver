@@ -30,6 +30,7 @@ This is the list of currently supported balancing strategies:
 
 And these are the handlers that use balancing:
 
+* link:modules_handlers_proxy.html[Reverse HTTP Proxy]
 * link:modules_handlers_fcgi.html[FastCGI]
 * link:modules_handlers_scgi.html[SCGI]
 * link:modules_handlers_uwsgi.html[uWSGI]
