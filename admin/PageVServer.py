@@ -72,6 +72,7 @@ NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
 NOTE_COLLECTOR        = N_('Whether or not it should collected statistics about the traffic of this virtual server.')
 NOTE_UTC_TIME         = N_('Time standard to use in the log file entries.')
 NOTE_INDEX_USAGE      = N_('Remember that only "File Exists" rules and "List & Send" handlers use the Directory Indexes setting.')
+NOTE_MATCH_NICK       = N_('Use this nickname as an additional host name for this virtual server (Default: yes)')
 
 DEFAULT_HOST_NOTE     = N_("<p>The 'default' virtual server matches all the domain names.</p>")
 
@@ -165,6 +166,23 @@ def commit_clone():
     return CTK.cfg_reply_ajax_ok()
 
 
+class HostMatchWidget_GeneralProps (CTK.Container):
+    def __init__ (self, vsrv_num, refresh):
+        CTK.Container.__init__ (self)
+
+        pre       = "vserver!%s" %(vsrv_num)
+        url_apply = "%s/%s" %(URL_APPLY, vsrv_num)
+
+        if CTK.cfg.get_val ('%s!match'%(pre)):
+            table = CTK.PropsAuto (url_apply)
+            table.Add (_('Match nickname'), CTK.CheckCfgText('%s!match!nick'%(pre), True, _('Match')), _(NOTE_MATCH_NICK))
+            submit = CTK.Submitter (url_apply)
+            submit += CTK.Indenter (table)
+
+            self += CTK.RawHTML ('<h2>%s</h2>' %(_('Host Match')))
+            self += submit
+
+
 class HostMatchWidget (CTK.Container):
     def __init__ (self, vsrv_num):
         CTK.Container.__init__ (self)
@@ -173,8 +191,6 @@ class HostMatchWidget (CTK.Container):
         url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
         is_default = CTK.cfg.get_lowest_entry("vserver") == int(vsrv_num)
         is_complex = CTK.cfg.get_val ('%s!match'%(pre)) == 'v_or'
-
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Host Match')))
 
         # Default Virtual Server
         if is_default:
@@ -185,6 +201,12 @@ class HostMatchWidget (CTK.Container):
 
         # Complex matches
         if is_complex:
+            # General Properties
+            refresh = CTK.Refreshable ({'id': 'vserver_match_props'})
+            refresh.register (lambda: HostMatchWidget_GeneralProps(vsrv_num, refresh).Render())
+            self += refresh
+
+            # Left side rule
             table = CTK.PropsAuto (url_apply)
             modul = CTK.PluginSelector ('%s!match!left'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
             table.Add ('%s 1'%(_('Method')), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
@@ -193,11 +215,14 @@ class HostMatchWidget (CTK.Container):
 
             submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
             submit += CTK.Hidden ('op', 'del_1')
+            submit.bind ('submit_success', refresh.JS_to_refresh())
+
             remove_1 = CTK.Link (None, CTK.RawHTML(_('Remove criteria')))
             remove_1.bind ('click', submit.JS_to_submit())
             self += submit
             self += remove_1
 
+            # Right side rule
             table = CTK.PropsAuto (url_apply)
             modul = CTK.PluginSelector ('%s!match!right'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
             table.Add ('%s 2'%(_('Method')), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
@@ -206,6 +231,8 @@ class HostMatchWidget (CTK.Container):
 
             submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
             submit += CTK.Hidden ('op', 'del_2')
+            submit.bind ('submit_success', refresh.JS_to_refresh())
+
             remove_2 = CTK.Link (None, CTK.RawHTML(_('Remove criteria')))
             remove_2.bind ('click', submit.JS_to_submit())
             self += submit
@@ -213,9 +240,18 @@ class HostMatchWidget (CTK.Container):
 
         # Simple match
         else:
+            # General Properties
+            refresh = CTK.Refreshable ({'id': 'vserver_match_props'})
+            refresh.register (lambda: HostMatchWidget_GeneralProps(vsrv_num, refresh).Render())
+            self += refresh
+
+            # Match module
             table = CTK.PropsAuto (url_apply)
             modul = CTK.PluginSelector ('%s!match'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+            modul.selector_widget.bind ('changed', refresh.JS_to_refresh())
             table.Add (_('Method'), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
+
+            self += CTK.RawHTML ('<h2>%s</h2>' %(_('How to match this Virtual Server')))
             self += CTK.Indenter (table)
             self += modul
 

@@ -1994,6 +1994,9 @@ cherokee_server_get_vserver (cherokee_server_t          *srv,
 	list_for_each (i, &srv->vservers) {
 		vserver = VSERVER(i);
 
+		if (! vserver->match_nick)
+			continue;
+
 		re = cherokee_buffer_cmp_buf (host, &vserver->name);
 		if (re == 0) {
 			TRACE (ENTRIES, "Virtual server '%s' matched by its nick\n", vserver->name.buf);

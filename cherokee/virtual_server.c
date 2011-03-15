@@ -61,6 +61,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->evhost          = NULL;
 	n->matching        = NULL;
 	n->collector       = NULL;
+	n->match_nick      = true;
 
 	/* Virtual entries
 	 */
@@ -966,6 +967,9 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "post_max_len")) {
 		vserver->post_max_len = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "nick")) {
+		vserver->match_nick = !!atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "ssl_verify_depth")) {
 		vserver->verify_depth = !!atoi (conf->val.buf);

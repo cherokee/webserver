@@ -47,6 +47,7 @@ typedef struct {
 	cherokee_buffer_t            name;            /* Name.    Eg: server1        */
 	cuint_t                      priority;        /* Evaluation priority         */
 	cherokee_vrule_t            *matching;        /* Matching rule               */
+	cherokee_boolean_t           match_nick;      /* Match nickname as well      */
 
 	cherokee_rule_list_t         rules;           /* Rule list: vserver behavior */
 	cherokee_boolean_t           keepalive;       /* Keep-alive support          */

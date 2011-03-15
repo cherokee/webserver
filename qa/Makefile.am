@@ -292,7 +292,8 @@ run-tests.py \
 268-Options-PHP1.py \
 269-Options-Dirlist1.py \
 270-Options-asterisk1.py \
-271-full-header-check1.py
+271-full-header-check1.py \
+272-Nick-match.py
 
 test:
 	python -m compileall .
