@@ -43,20 +43,6 @@ supports SNI, things will just work. Every modern web browser does.
 For legacy scenarios where using SNI if not possible, there is a
 workaround detailed in the next question.
 
-[[ie-workarownd]]
-.I get certificate errors when having more than one. Workarounds?
-
-This is a scenario known to happen only with some web browsers running
-specific Operating Systems. Specifically, there was a report where the
-server was using 2 domains, 2 IPs, and 2 SSL Certificates on one
-server. Everything worked as expected with Firefox, Opera, and
-Chromium, but IE/Chrome on Windows kept showing a certificate error
-on the domain that was not configured as default.
-
-The workaround consists on creating a dummy default host with the
-second IP and certificate. The affected web browsers will then fall
-back to the IP and send the correct certificate.
-
 [[workaround]]
 .Are there workarounds when SNI can't be used?
 
@@ -74,6 +60,7 @@ on that section. An IP/Subnet match plus a simultaneous wildcard match
 is a combination likely to cover every corner-case scenario you are
 presented with.
 
+[[ssl-support]]
 .How to enable the SSL support?
 
 SSL support is not enabled by default. You will have to perform three
@@ -88,17 +75,58 @@ straightforward actions is order to enable it:
     configured.  By default, HTTPS uses the port 443. Remember to add
     this port, and to check the TLS toggle button.
 
-  . The last step would be to assign SSL certificates to the virtual
-    servers, starting with the default virtual server.  Cherokee uses
+  . The next step would be to assign SSL certificates to the virtual
+    servers, starting with the default virtual server. Cherokee uses
     SNI to distinguish between virtual servers. The certificate
     specified in the default server will be used in the first
     negotiation. If not present, the startup sequence will fail. The
     configuration is found inside each
     link:config_virtual_servers.html#security[virtual server]
-    configuration, under the Security tab. This part is _very
-    important_: you have to concatenate your certificates into a
-    single file in order to use them in Cherokee.
+    configuration, under the Security tab. Only two fields are
+    required for this to work: `Certificate` and `Certificate
+    key`. Your mileage may vary, but assuming you are using a self
+    generated certificate created with the script provided with
+    Cherokee (more on this later on this same document), you would
+    have two files, 'cakey.pem' and 'server.pem'. Just provide the
+    full path to 'cakey.pem' for `Certificate`, and 'server.pem' for
+    `Certificate key`.
 
+  . This last step applies only if your certificate is not recognised
+    by the root CA and you don't want your visitors to manually have
+    to accept a security exception so that your certificate can be
+    validated. To correctly address this situation you need a
+    CA-signed certificate. Furthermore, computers will trust the root
+    CA, but don't normally know about the intermidiate CA that
+    actually sign your certificates, so a chained CA is required in
+    order to instruct your visitors on how to follow the chain of
+    trust. You will need to concatenate your intermidiate CA with the
+    root CA, and put the combined text into the `Certificate`
+    field. This part is _very important_: you have to concatenate your
+    certificates into a single file in order to use them in Cherokee.
+    The order in which you concatenate the files seems to be
+    important. Just issue the following command and you should be
+    ready to go:
++
+-----
+    cat signed_crt.pem unsigned.pem > final_chained_certificate.pem
+-----
+
+
+[[ie-workarownd]]
+.I get certificate errors when having more than one. Workarounds?
+
+This is a scenario known to happen only with some web browsers running
+specific Operating Systems. Specifically, there was a report where the
+server was using 2 domains, 2 IPs, and 2 SSL Certificates on one
+server. Everything worked as expected with Firefox, Opera, and
+Chromium, but IE/Chrome on Windows kept showing a certificate error
+on the domain that was not configured as default.
+
+The workaround consists on creating a dummy default host with the
+second IP and certificate. The affected web browsers will then fall
+back to the IP and send the correct certificate.
+
+[[manual-test]]
 .How to manually test HTTP/HTTPS?
 
 HTTP can easily be tested like this:
@@ -141,7 +169,7 @@ First some terminology:
 
 . CSR, or Certificate Signing Request: a digital file containing your
   public key and your name. It is sent to a Certifying Authority (CA)
-  that will convert sign it to convert it into a real Certificate.
+  that will sign it to convert it into a real Certificate.
 
 . Certificate: contains your RSA public key and name, the name of the
   CA, and is digitally signed by the CA. A browser that knows the CA
@@ -393,3 +421,23 @@ perform the same calculation on the CSR as follows:
 ----
 $ openssl req -noout -modulus -in server.csr | openssl md5
 ----
+
+[[free-certificates]]
+Free signed SSL/TLS certificates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Most services will require a fee to provide you with signed
+certificates, but some services will do this for free on their
+entry-product line.
+
+You need to make sure that whoever signs your certificate is trusted
+as root CA on your operating system of choice. One such service that
+works by default on Windows, Linux, and Mac is
+link:http://www.startssl.com[StartSSL] is one such service, although there
+are probably others out there.
+
+/////
+References on getting a free signed cert used while testing the documentation:
+https://ziyan.info/2009/10/how-to-secure-your-website-using-ssl-for-free/
+http://arstechnica.com/security/news/2009/12/how-to-get-set-with-a-secure-sertificate-for-free.ars
+/////

@@ -225,5 +225,9 @@ performed if you still need further clarification.
 [[faq20]]
 === SSLv2 is ancient, OpenSSL 1.0.0+ doesn't like it, how can I disable it?
 
-Within cherokee-admin, in the Advanced Menu, you can find the option to
-disable SSLv2 all together.
+Within cherokee-admin, in the Advanced Menu, you can find the option
+to enable/disable SSLv2 all together. It is disabled by default. No
+need to resort to special ciphers such
+(`ALL:!ADH:-LOW:-SSLv2:-EXP:-eNULL:@STRENGTH`), or anythingh else for
+that matter. If you need it, simply enable the check-box to allow
+SSLv2.
