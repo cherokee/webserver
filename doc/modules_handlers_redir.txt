@@ -161,6 +161,6 @@ substitution that uses both type of regex matches:
 |======================================
 
 For more information, check out the practical example in the cookbook
-describing how to implement link:cookbook_global_redirects.html[global
-redirections].
+describing how to implement
+link:cookbook_redirs.html#global-redirs[global redirections].
 

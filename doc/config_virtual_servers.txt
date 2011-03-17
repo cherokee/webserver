@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:config.html[Configuration]
 ////
-Last checked: 2010/04/26 Cherokee 0.99.46b
+Last checked: 2011/03/17 Cherokee 1.2.2b
 ////
 
 Virtual Server
@@ -11,8 +11,9 @@ a custom number of parameters and rules that have to be applied to one
 or more domains.
 
 In a Cherokee server there must be at least one virtual server named
-`default`, and there is no maximum number. It is important to know that
-this server cannot be deleted.
+`default`, and there is no maximum number. You can define and delete
+as many as you want, with the sole exception of `default` which must
+be present always.
 
 When the server receives a request it will try to match the domain
 name specified in the virtual server that should handle it. In case no
@@ -449,20 +450,22 @@ If you want HTTPS to work, you must remember this:
   and `Certificate key` fields. Providing the `CA List` and the
   `Client Certs` is optional. The trusted CA certificates file should
   be a single file with all the certificates concatenated. The `Client
-  Certs`, also PEM-encoded, is used to check the client certificates.
+  Certs`, also PEM-encoded, is used to check the client
+  certificates. You can read more about
+  link:cookbook_ssl.html#ssl-support[enabling SSL support] on the
+  SSL/TLS section of the documentation.
 
 
 . If you have several virtual servers, the `Security` section must be
-  configured for every one of them. At the moment you cannot have some
-  with HTTPS and some without. This makes sense, since by enabling the
-  feature in any one of them you are opening the HTTPS port in your
-  host, and receiving HTTPS requests for a virtual server that does
-  not provide the service would not be handled in a coherent
-  manner. None of the alternatives is very elegant in design: falling
-  back to HTTP, issuing an error that is likely to restart the HTTPS
-  handshake, etc. This behavior, however, might change in the future
-  depending on the popularity of any proposed mechanisms.
-
-/////
-The former paragraph will change after fixing issue 1041
-/////
+  configured for the `default` virtual server besides any other
+  virtual server you want to support HTTPS. This makes sense, since by
+  enabling the feature in any one of them you are opening the HTTPS
+  port in your host, and receiving HTTPS requests for a virtual server
+  that does not provide the service can not be handled correctly.
+  This situation can be dealt with in several ways, none of which are
+  really elegant in design: falling back to HTTP, issuing an error
+  that is likely to restart the HTTPS handshake, etc. The approach
+  taken by Cherokee is at least coherent, folding back to the
+  `default` virtual server. Of course, to do so it needs correct
+  `Security` settings to provide an HTTPS stream, as has just been
+  mentioned.

@@ -72,8 +72,8 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_zend.html[Zend]: How to run Zend apps with Cherokee.
   . link:cookbook_uwsgi.html[uWSGI]: Setting up Cherokee for uWSGI.
   . link:cookbook_http_to_https.html[HTTP to HTTPS]: How to redirect all traffic from HTTP to HTTPS.
-  . link:cookbook_global_redirects.html[Global redirections]: How to make a global redirectection for every (sub)domain.
-  . link:cookbook_traffic_restriction.html[Restricting traffic by IP]: how to restrict traffic based on incoming IP.
+  . link:cookbook_traffic_restriction.html[Restricting traffic by IP]: How to restrict traffic based on incoming IP.
+  . link:cookbook_domain_matching.html[Domain matching]: Matching domains and subdomains with Cherokee.
 
 
 *********************************
