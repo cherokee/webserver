@@ -229,18 +229,20 @@ Only after failing both with the domain names and the nicknames will
 Cherokee issue the failure, in which case the default virtual server
 is used to handle the request.
 
-IMPORTANT: It is easy to overlook the way in which virtual servers are
-evaluated, which leads to the common problem of not knowing exactly
-why some virtual servers work and some don't. The list of Frequently
-Asked Questions includes link:other_faq.html#faq19["Why are my
-nicknames not matched, while *.example.com does work?"]. A careful
-reinterpretation of what has just been explained in this section
-should clarify any doubts.
+[IMPORTANT]
+It is easy to overlook the way in which virtual servers are evaluated,
+which leads to the common problem of not knowing exactly why some
+virtual servers work and some don't. The list of Frequently Asked
+Questions includes link:other_faq.html#faq19["Why are my nicknames not
+matched, while *.example.com does work?"]. A careful reinterpretation
+of what has just been explained in this section should clarify any
+doubts.
 
-WARNING: Do not use the IP/Subnet host match as a security measure to
-prevent access to specific IP addresses. The purpose of the IP/Subnet
-match type was to implement the SSL certificate selection workaround
-that other web servers have been using for years. If it were to be
+[WARNING]
+Do not use the IP/Subnet host match as a security measure to prevent
+access to specific IP addresses. The purpose of the IP/Subnet match
+type was to implement the SSL certificate selection workaround that
+other web servers have been using for years. If it were to be
 attacked, it could be easily overcome by simply setting the Host
 header to the name of the virtual server. To restrict the traffic of
 one of your virtual servers based on the incoming IP, please read the
@@ -287,7 +289,8 @@ is presented, containing several fields of information:
 
   . *Final*: If this flag is present it means that no other rules will
     be applied after this one, even if the request also matches other
-    rules with lower priority.
+    rules with lower priority. The server will issue a response with
+    whatever behavior it has figured out by then.
 
   . *Enabled*: If the rule is currently enabled or not, which might
     completely alter the behavior of the virtual server.
@@ -296,9 +299,11 @@ These rules can be defined based on the directory that the request
 targets, the extension of the file that it is requesting, or a regular
 expression that may match the request among other options.
 
+[IMPORTANT]
 It is very important to know that these rules are prioritized. The
-higher its priority is, the sooner they are checked. You could think
-of a network routing table, it is quite similar. You can set the
+higher its priority is, the sooner they are checked. And this priority
+is represented by the position of the rule in the rule-list. You could
+think of a network routing table, it is quite similar. You can set the
 relative priorities among the rules from within the `Behavior` panel,
 which is accessed through the `Rule Management` button. This button
 will switch the left panel from `Virtual Server` mode to `Rule mode`,
@@ -350,6 +355,9 @@ time the request would end in `.php` and thus it would match the
 `Extension` rule meant to handle PHP files.
 
 //////////////////////////////////////////////////////////////////////
+# This section currently commented. The admin no longer supports this.
+# It will be implemented much more elegantly in the future.
+
 [[personal_webs]]
 Personal Webs
 ~~~~~~~~~~~~~
@@ -359,6 +367,32 @@ users' home directory that will be used as document root for personal
 web content. For instance, if `/foo` was specified, a user `bar` could
 publish the content of ~/foo at the relative URL /~bar
 This option is disabled if the 'Directory name' field is empty.
+
+This configuration snippet allows to manually restore the `Personal
+Webs` behavior.
+
+----
+vserver!10!user_dir = public_html
+vserver!10!user_dir!rule!100!encoder!deflate = 0
+vserver!10!user_dir!rule!100!encoder!gzip = 0
+vserver!10!user_dir!rule!100!handler = common
+vserver!10!user_dir!rule!100!handler!allow_dirlist = 1
+vserver!10!user_dir!rule!100!handler!allow_pathinfo = 0
+vserver!10!user_dir!rule!100!handler!backup = 0
+vserver!10!user_dir!rule!100!handler!date = 1
+vserver!10!user_dir!rule!100!handler!group = 0
+vserver!10!user_dir!rule!100!handler!hidden = 0
+vserver!10!user_dir!rule!100!handler!iocache = 1
+vserver!10!user_dir!rule!100!handler!redir_symlinks = 0
+vserver!10!user_dir!rule!100!handler!size = 1
+vserver!10!user_dir!rule!100!handler!symlinks = 1
+vserver!10!user_dir!rule!100!handler!theme = firefox3
+vserver!10!user_dir!rule!100!handler!user = 0
+vserver!10!user_dir!rule!100!match = default
+vserver!10!user_dir!rule!100!match!final = 1
+vserver!10!user_dir!rule!100!no_log = 0
+vserver!10!user_dir!rule!100!only_secure = 0
+----
 //////////////////////////////////////////////////////////////////////
 
 
