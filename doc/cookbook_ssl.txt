@@ -90,9 +90,9 @@ straightforward actions is order to enable it:
     gaining access to it). Your mileage may vary, but assuming you are
     using a self generated certificate created with the script
     provided with Cherokee (more on this later on this same document),
-    you would have two files, 'cakey.pem' and 'server.pem'. Just
+    you would have two files, 'cakey.pem' and cakey.key'. Just
     provide the full path to 'cakey.pem' for `Certificate`, and
-    'server.pem' for `Certificate key`.
+    'cakey.key' for `Certificate key`.
 
   . This last step applies only if your certificate is not recognised
     by the root CA and you don't want your visitors to manually have
