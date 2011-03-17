@@ -83,34 +83,40 @@ straightforward actions is order to enable it:
     configuration is found inside each
     link:config_virtual_servers.html#security[virtual server]
     configuration, under the Security tab. Only two fields are
-    required for this to work: `Certificate` and `Certificate
-    key`. Your mileage may vary, but assuming you are using a self
-    generated certificate created with the script provided with
-    Cherokee (more on this later on this same document), you would
-    have two files, 'cakey.pem' and 'server.pem'. Just provide the
-    full path to 'cakey.pem' for `Certificate`, and 'server.pem' for
-    `Certificate key`.
+    required for this to work: `Certificate` (the certificate itself,
+    which contains the public key and other data and is fed out to
+    clients to initiate a secure session), and `Certificate key` (the
+    private key that should be protected at all costs from anyone
+    gaining access to it). Your mileage may vary, but assuming you are
+    using a self generated certificate created with the script
+    provided with Cherokee (more on this later on this same document),
+    you would have two files, 'cakey.pem' and 'server.pem'. Just
+    provide the full path to 'cakey.pem' for `Certificate`, and
+    'server.pem' for `Certificate key`.
 
   . This last step applies only if your certificate is not recognised
     by the root CA and you don't want your visitors to manually have
     to accept a security exception so that your certificate can be
     validated. To correctly address this situation you need a
     CA-signed certificate. Furthermore, computers will trust the root
-    CA, but don't normally know about the intermidiate CA that
-    actually sign your certificates, so a chained CA is required in
-    order to instruct your visitors on how to follow the chain of
-    trust. You will need to concatenate your intermidiate CA with the
-    root CA, and put the combined text into the `Certificate`
-    field. This part is _very important_: you have to concatenate your
-    certificates into a single file in order to use them in Cherokee.
-    The order in which you concatenate the files seems to be
+    CA, but don't normally know about the intermediate CA that
+    actually signed your certificates, so you will need an
+    intermediate file which links such CA to a higher-level CA that
+    works with all browsers and operating systems.  You'll need a
+    chained certificate file in order to instruct your visitors on how
+    to follow the chain of trust. You can reed more about
+    link:#chained-certificates[chained certificates] later on this
+    document. You will only have to concatenate the certificate files
+    and put the combined text into a file used for the the
+    `Certificate` field. This part is _very important_: you have to
+    concatenate your certificates into a single file in order to use
+    them in Cherokee. The order in which you concatenate the files is
     important. Just issue the following command and you should be
     ready to go:
 +
 -----
-    cat signed_crt.pem unsigned.pem > final_chained_certificate.pem
+cat public.pem inter_ca_public.pem > chained.pem
 -----
-
 
 [[ie-workarownd]]
 .I get certificate errors when having more than one. Workarounds?
@@ -441,3 +447,48 @@ References on getting a free signed cert used while testing the documentation:
 https://ziyan.info/2009/10/how-to-secure-your-website-using-ssl-for-free/
 http://arstechnica.com/security/news/2009/12/how-to-get-set-with-a-secure-sertificate-for-free.ars
 /////
+
+
+[[chained-certificates]]
+Chained SSL certificates
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.What
+If your public certificate is signed by a Certificate Authority's
+intermediate certificate rather than a root certificate, you will need
+a chained CA. This is basically a list or path of certificates to
+instruct your visitors on how to follow the chain of trust. The list
+contains certificates that form the certificate chain (from the
+client/server certificate to the root CA certificate).
+
+.Why
+When using SSL, even a signed certificate can be worthless by
+itself. This is because the system will trust the root CA, but won't
+normally know about the intermediate CA that actually signed your
+certificates.
+
+.Where
+Where to go next while following this chain of trust is specified in
+the chained certificate.  The mechanism by which the certificate chain
+works is actually not that complex. When an unrecognized certificate
+is received, the certificate chain is used to obtain the root CA
+certificate. This chain is a list of certificates used to authenticate
+an entity. The path begins with the certificate of that entity, and
+each certificate in the chain is signed by the entity identified by
+the next certificate in the chain. The chain terminates with a root CA
+certificate, that is always signed by the CA itself. The signature of
+every certificate in the chain must be verified, all the way from the
+certificate owner until the root CA certificate is reached.
+
+.How
+To create a certificate chain file, you simply need to your public
+certificate and your Certificate Authority's intermediate certificate
+together. Assuming your public certificate is `public.pem` (the
+certificate that was signed by the Certificate Authority), and your
+CA's public certificate (the intermediate Certificate supplied by your
+Certificate Authority) is `inter_ca_public.pem`, simply appending both
+will suffice to create a valid chained certificate.
+
+----
+cat public.pem inter_ca_public.pem > chained.pem
+----
