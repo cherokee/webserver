@@ -1,4 +1,4 @@
-== link:index.html[Index] -> link:basics.html[Why Cherokee]
+== link:index.html[Index] -> link:basics.html[Getting started]
 
 Why Cherokee?
 -------------
