@@ -156,13 +156,13 @@ with the default settings.
 
 image::media/images/admin_noconfig.png[cherokee.conf not present]
 
-That is a good starting point. Right now your web server will not be
-running yet. We will only be using two of the available tabs to adjust
-some more settings: link:config_general.html[General] and
+The regular template is a good starting point. Right now your web
+server will not be running yet. We will only be using two of the
+available tabs to adjust some more settings:
+link:config_general.html[General] and
 link:config_virtual_servers.html[Virtual Servers].
 
-This is an example of what you'll be seeing:
-
+.Sample view
 image::media/images/admin_notrunning.png[Server not launched]
 
 Of course, once we're done we will have to apply our changes and
@@ -181,8 +181,7 @@ restart` will preserve the old set-up for any prior connections, while
 a `hard restart` will kill every connection and instantly apply the
 changes.
 
-This is what the `General` tab looks like:
-
+.Sample of tab for general settings
 image::media/images/admin_general.png[General]
 
 We will only be modifying the *Permissions* tab. It usually is a poor
@@ -191,8 +190,9 @@ choice to run services with super user privileges. Set both *User* and
 specifically for the purpose of running a webserver. Use that instead
 if so, or create the `www-data` user if you don't already have one.
 
-Next is the link:config_virtual_servers.html[vServers] tab:
+Next is the link:config_virtual_servers.html[vServers] tab.
 
+.Virtual server tab
 image::media/images/admin_vserver.png[Virtual server]
 
 When you start, you will only have one virtual server called
@@ -307,8 +307,17 @@ examples on the different options.
 +
 Lastly, lets configure a redirection rule by choosing a "Regular
 Expression" as the new rule type. Type the following regex: `^/rss.*$`
-Then, within the `Handler` selection tab specify a target: `/feed`
+Then, configure the `Handler` tab with the following settings.
+
+. *Handler*: `Redirection`
+. *Type*: `External`
+. *Regular Expression*: you can leave it empty or specify a series of
+  new matches. The shot has the base regex for ilustration purposes:
+  `^/rss.*$`
+. *Substitution*: this will be the target: `/feed`
+
 +
+.Redirection handler
 image::media/images/admin_rule_regex.png[Regex]
 +
 And voilà! A request of the form http://example.net/rss2 would be

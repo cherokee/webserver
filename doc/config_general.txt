@@ -10,7 +10,8 @@ General Configuration
 Network
 ~~~~~~~
 
-image::media/images/admin_general_networking.png[General]
+.Network settings
+image::media/images/admin_general_networking.png[Network]
 
 
 IPv6 support
@@ -60,6 +61,7 @@ the link:other_graphs.html[usage graphs] section for more details.
 Ports to listen
 ~~~~~~~~~~~~~~~
 
+.Ports
 image::media/images/admin_general_ports.png[Ports to listen]
 
 This section allows to configure the ports that the server will be
@@ -68,12 +70,13 @@ whether they will be used for HTTP or HTTPS.
 
 Each binding entry can be configured to listen to a network
 interface. In case the text entry is empty, the server will accept
-connection from the port on any interface.
+connections from that port on any interface.
 
 [[server_permissions]]
 Server Permissions
 ~~~~~~~~~~~~~~~~~~
 
+.Permissions
 image::media/images/admin_general_permissions.png[Server Permissions]
 
 User & Group
@@ -126,6 +129,7 @@ link:modules_handlers_dirlist.html[dirlist] handler.
     - **Default**: This is the icon that will be shown if any of the
         previous ones matched.
 
+.Icons
 image::media/images/admin_general_icons.png[Icons]
 
 
@@ -142,4 +146,5 @@ existing ones.
 * *Max Age*: defines for how long a file of this type must be cached at
   the client's side.
 
+.MIME Types
 image::media/images/admin_general_mime.png[MIME Types]

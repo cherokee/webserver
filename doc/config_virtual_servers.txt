@@ -19,7 +19,8 @@ When the server receives a request it will try to match the domain
 name specified in the virtual server that should handle it. In case no
 virtual server matches the request, `default` will be used.
 
-image::media/images/admin_vserver.png[Virtual server]
+.Host Match
+image::media/images/admin_vserver.png[Host Match]
 
 This section of the admin is divided in a left panel and main contents
 section on the right.
@@ -317,6 +318,7 @@ on the rule name, the rule's configuration options will be displayed
 in the main content area. If you click anywhere else, you will be able
 to drag and drop it into the desired position).
 
+.Rule list
 image::media/images/admin_behavior.png[Virtual server]
 
 Each of these behavior rules must specify the handler that the server
@@ -411,12 +413,14 @@ Several mechanisms exist to handle errors.
 Using the 'Custom redirections' error handler we can easily redirect
 errors to a custom path or website.
 
+.Error Handler
 image::media/images/admin_vserver_errors.png[Virtual server]
 
-In this case, the handled errors will be redirected to the specified
-resource, while non-defined errors will trigger an HTTP 500 error. In
-case this is not the desired behavior, you can set a `Default Error`
-to catch and redirect the non-defined ones.
+In this case, the handled errors (400, 401, and 500) will be
+redirected to the specified resources, while non-defined errors will
+trigger an HTTP 500 error. In case this is not the desired behavior,
+you can set a `Default Error` to catch and redirect the non-defined
+ones.
 
 The 'Closest match' error handler should never fail to deliver
 something. If a requested resource is not available, the closest match
@@ -439,7 +443,8 @@ and/or formats:
 
 If a virtual server doesn't have a logger set up it will not log anything.
 
-image::media/images/admin_vserver_loggers.png[Virtual server]
+.Logging
+image::media/images/admin_vserver_loggers.png[Logging configuration]
 
 By default Cherokee ships three loggers implementing three different
 logging formats:
@@ -476,6 +481,7 @@ Cherokee fully supports the usage of different certificates for each
 virtual server in a given host by using SNI as defined in
 link:http://www.rfc-archive.org/getrfc.php?rfc=3546[RFC 3546].
 
+.Security
 image::media/images/admin_vserver_security.png[Certificates]
 
 If you want HTTPS to work, you must remember this:
@@ -488,7 +494,6 @@ If you want HTTPS to work, you must remember this:
   certificates. You can read more about
   link:cookbook_ssl.html#ssl-support[enabling SSL support] on the
   SSL/TLS section of the documentation.
-
 
 . If you have several virtual servers, the `Security` section must be
   configured for the `default` virtual server besides any other

@@ -12,6 +12,7 @@ virtual server is built dynamically, so even if the domains share a
 common configuration they can use a number of different Document Root
 directories.
 
+.Basics
 image::media/images/admin_vserver_evhost.png[Advanced Virtual Hosting]
 
 The following replacement variables are supported. Let's suppose a

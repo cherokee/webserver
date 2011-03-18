@@ -11,6 +11,7 @@ parameters. You should not attempt to do so unless you really know
 what you are doing. For most cases the default parameters will work
 just fine.
 
+.Warning
 image::media/images/admin_advanced0.png[Cherokee Admin interface]
 
 You should at least read the chapter
@@ -47,6 +48,7 @@ Connections
   These allow to configure the range of file sizes that can be sent
   with `sendfile()`. Default: [32768 Bytes - 2 GB].
 
+.Connections
 image::media/images/admin_advanced1.png[Cherokee Admin interface]
 
 [[resources]]
@@ -91,6 +93,7 @@ Resources
   Time interval in seconds between Nonce cache clean ups. Defaults to
   60 seconds.
 
+.Resources
 image::media/images/admin_advanced2.png[Cherokee Admin interface]
 
 [[io_cache]]
@@ -116,6 +119,7 @@ I/O cache
 * Lasting _mmap_:
   Specifies how long the file contents last cached.
 
+.IO/Cache
 image::media/images/admin_advanced3.png[Cherokee Admin interface]
 
 [[special_files]]
@@ -135,6 +139,7 @@ Special Files
   If specified, a PID file will be created in that path. This is
   useful to trace what is going on with Cherokee.
 
+.Special files
 image::media/images/admin_advanced4.png[Cherokee Admin interface]
 
 [[tls]]
@@ -144,4 +149,5 @@ TLS
   Here you can specify the paths to your Diffie Hellman parameters PEM
   files for 512, 1024, 2048 and 4096 bits.
 
+.TLS
 image::media/images/admin_advanced5.png[Cherokee Admin interface]

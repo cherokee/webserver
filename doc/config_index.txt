@@ -14,7 +14,8 @@ Cherokee-Admin without leaving the web interface, which might be
 convenient particularly if you have launched it using
 link:other_bundle_cherokee-admin-launcher.html[cherokee-admin-launcher].
 
-image::media/images/admin_index.png[Status]
+.Cherokee Admin's home page
+image::media/images/admin_index.png[Home]
 
 This section also enables you to change Cherokee-Admin's current user
 language, and allows you to send feedback directly to Cherokee
@@ -62,10 +63,12 @@ You can associate description notes to each saved configuration, and
 it will be stored along the date of creation so that you can easily
 retrieve it in the future.
 
+.Backup dialog
 image::media/images/admin_index_backup.png[Backup]
 
 And of course, you can restore any previous configuration state at any
 given moment. This makes it very easy to experiment with Cherokee,
 without ever worrying about breaking your configuration.
 
+.Restore dialog
 image::media/images/admin_index_restore.png[Restore]
