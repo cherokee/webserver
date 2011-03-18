@@ -39,10 +39,10 @@ def set_file (filepath):
 
     assert type(filepath) == str
 
-    f = open (filepath, 'w+')
+    file = open (filepath, 'w+')
     os.chmod (filepath, 0600)
 
-    f.write (buf)
+    file.write (buf)
     buf = ''
 
 def log (txt):
