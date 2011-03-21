@@ -140,7 +140,7 @@ production environment. Isolation is generally a good idea.
 
 First, we edit the `default` virtual server. Since we will only be
 using it for database balancing, we can safely point it to an empty
-`Document Root`, in this case `/var/www/fake`.
+`Document Root`, in this case `/dev/null`.
 
 image::media/images/cookbook_dbslayer1.png[MySQL Bridge, step 1]
 
@@ -157,6 +157,22 @@ that is what we will use.
 
 image::media/images/cookbook_dbslayer2.png[MySQL Bridge, step 2]
 
+[cols="50%,50%"]
+.Source #1
+|=============================================================
+|Type		| Remote source
+|Nick		| mysql_0
+|Connection	| 10.0.0.100:3306
+|=============================================================
+
+[cols="50%,50%"]
+.Source #2
+|=============================================================
+|Type		| Remote source
+|Nick		| mysql_1
+|Connection	| 10.0.0.101:3306
+|=============================================================
+
 Next is removing every possible rule and configuring the default one
 to use the MySQL bridge handler. This is not required, but obeys the
 recommendations stated above.
@@ -164,20 +180,31 @@ recommendations stated above.
 image::media/images/cookbook_dbslayer3.png[MySQL Bridge, step 3]
 
 To do so, simply click on the rule in the `Behavior` tab and proceed
-to the `Handler` section, where you can adjust the following settings.
+to the `Handler` section, where you can adjust all the settings.
+
+After adding the information sources to be balanced, and setting up
+the information required to access an existing database, only the
+matter of selecting a language will remain. In this example we will be
+using Python because that is what the testing script will be written
+in. If your favorite language of choice is not available you can
+simply select JSON, which is widely supported in most programming
+languages. Using Python in this case will simply allow us to directly
+evaluate the results offered by the database, creating a native object
+that can be managed more comfortably.
+
+[cols="50%,50%"]
+.Sample configuration values
+|=============================================================
+|Handler		| `MySQL Bridge`
+|Language		| `Python`
+|DB User		| my_user
+|DB Password		| my_password
+|Database		| my_database
+|Balancer		| `Round Robin`
+|Information Sources	| mysql_0, mysql_1
+|=============================================================
 
 image::media/images/cookbook_dbslayer4.png[MySQL Bridge, step 4]
-
-After adding the information sources to be balanced, and setting up the
-information required to access an existing database, only the matter
-of selecting a language will remain.
-
-In this example we will be using Python because that is what the
-testing script will be written in. If your favorite language of choice
-is not available you can simply select JSON, which is widely supported
-in most programming languages. Using Python in this case will simply
-allow us to directly evaluate the results offered by the database,
-creating a native object that can be managed more comfortably.
 
 And these were all the steps required. You are ready to go!
 

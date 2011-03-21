@@ -113,8 +113,9 @@ database to fetch any content.
 First, lets define a unique rule in our virtual server managed by the
 `List and Send` handler. Through the `Security` tab we can configure
 it to use MySQL as authentication mechanism. Filling up just the
-essential fields will be enough. Realm, database name, user, password
-and an SQL query that must return one row with one column as password.
+essential fields will be enough. Those are realm, database name, user,
+password, and an SQL query that must return one row with one column as
+password.
 
 image::media/images/cookbook_mysql_validator.png[MySQL validator set up]
 
@@ -152,7 +153,9 @@ Query OK, 1 row affected (0.00 sec)
 mysql> quit
 ----
 
-When we are done, our simple virtual server should look like this:
+When we are done, our simple virtual server should only have a
+`Default` rule, managed by the `List & Send` hander, and with `MySQL`
+authentication set.
 
 image::media/images/cookbook_mysql_rule.png[MySQL Authenticated rule]
 
@@ -202,8 +205,8 @@ directory, just the second rule would apply.
 [[fixed_list]]
 === Fixed list
 
-For this validator you will only need to add user-password pairs. As
-always, the `realm` field is mandatory.
+For this validator you will only need to add user-password pairs, and
+the mandatory `realm` field.
 
 image::media/images/admin_validators_authlist.png[Fixed List]
 
@@ -214,5 +217,18 @@ image::media/images/admin_validators_authlist.png[Fixed List]
 Here is a basic example of the LDAP validator in action. It assumes
 you have a working LDAP service running at your localhost, and it uses
 no TLS of CA files.
+
+[cols="50%,50%",options="header"]
+|=============================================================
+|Field			| Value
+|Validation Mechanism	|`LDAP Server`
+|Methods		|  `Basic`
+|Realm			| secret
+|Server			| localhost
+|Port			| 389
+|Bind Domain		| my_domain
+|Bind Password		| my_password
+|Base Domain		| example.com
+|=============================================================
 
 image::media/images/admin_validators_ldap.png[LDAP example]

@@ -122,8 +122,7 @@ An example of usage would be:
 CHEROKEE_TRACE=thread,all ./cherokee | ../contrib/tracelor.py iocache
 ----
 +
-And it would yield an output such as the following. Even if it is
-not terribly complicated, it is a handy script to trace the server more
-easily.
+And it would yield a colorized output. Even if it is not terribly
+complicated, it is a handy script to trace the server more easily.
 
 image::media/images/tracelor.png[Output of tracelor.py]
