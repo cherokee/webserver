@@ -1,0 +1,185 @@
+== link:index.html[Index] -> link:dev.html[Development info] -> Cherokee Tool Kit
+Introduction
+------------
+
+CTK, the Cherokee ToolKit, is a toolkit to develop modern web
+applications in Python. It is built on top of jQuery, but no need of
+knowing jQuery or Javascript is necessary. Since Cherokee-Admin is
+written in Python, CTK aims to deliver all the fanciness in jQuery
+right to the hands of Python developers.
+
+CTK was developed to allow a fast development pace for Cherokee-Admin,
+while providing a modern & feature-rich web interface that fulfilled
+two essential requirements:
+
+. Maintainability of the code base
+. A low entry barrier to encourage participation in the development.
+
+CTK was developed with Cherokee-Admin in mind, but it is not confined
+to Cherokee, and in fact some of its widgets aren't even used in
+Cherokee-Admin. It is currently used in every Cherokee release since
+1.0, and is also used by some other third party applications.
+
+Rationale
+---------
+
+The design of CTK makes developing rich web-applications almost
+trivial once you've understood the rationale behind it.
+
+Everything is a widget in CTK. Everything, from the web page itself to
+any web element you might want to use, is a widget. You just have to
+instantiate a top-level widget (a container), add widgets to it, and
+let CTK take care of the rest.
+
+
+
+	widget -> container -> box
+	
+Most things are widgets. You just have to add widgets to a container, and the the container is rendered.
+	
+noauto required optional
+
+Simple examples
+---------------
+
+You can take a look at CTK/tests to see some very basic examples using
+CTK. Those have been written as quick tests for some of the basic
+widgets. Any of them can be run using the provided `run.py` script and
+Cherokee.
+
+----
+cd CTK/tests
+./run.py test1.py
+----
+
+This should launch an instance of Cherokee listeing to
+http://localhost:9091, where you will be able to access the test
+application.
+
+
+       Basic steps are as follows:
+       Import CTK into your app.
+       Publish some URLs and define what functions should take care of rendering such URLs, handle submissions, etc.
+       Add widgets
+       Define custom commit funcition if needed
+       Specify a port in which CTK must be launched and let it run. This port will be using the SCGI protocol.
+       Profit
+
+CTK will communicate with your webserver through the well known SCGI
+protocol, so you'll just have to setup an information source in
+Cherokee and access it through the SCGI handler to get started.
+
+  ----
+import CTK import time
+
+def error(x):
+    raise Exception("Bad dog!!!!")
+
+def ok(x):
+    return x.upper()
+
+VALIDATIONS = [
+    ("server!uno", ok),
+    ("server!dos", error),
+    ("server!dos", lambda x: None)
+]
+
+URL     = "http://www.cherokee-project.com/dynamic/cherokee-list.html"
+OPTIONS = [('one','uno'), ('two','dos'), ('three', 'tres')]
+
+def apply():
+    if CTK.post['server!tri']:
+        time.sleep(2)
+
+    return {'ret': "ok"}
+
+class default:
+    def __init__ (self):
+        a = CTK.PropsAuto ('/apply')
+        a.Add ('To upcase',   CTK.TextField({'name': "server!uno"}),  'Converts the content of the field to upcase')
+        a.Add ('Shows error', CTK.TextField({'name': "server!dos"}),  'It shows an error, it does not matter what you write')
+        a.Add ('Delay 2secs', CTK.TextField({'name': "server!tri"}),  'It delays response for 2 seconds, so the submitting message is shown')
+        a.Add ('Active',      CTK.Checkbox ({'name': "server!active", 'checked':1}), 'It\'s just a plain checkbox. Nothing to see here')
+
+        b = CTK.PropsAuto ('/apply')
+        b.Add ('Elige',   CTK.Combobox ({'name': "server!elec", 'selected': "two"}, OPTIONS), 'la lista')
+        b.Add ('iPhone',  CTK.iPhoneToggle({'name': "server!off"}), 'Fancy')
+        b.Add ('Carga',   CTK.Proxy("www.cherokee-project.com", '/dynamic/cherokee-list.html'), 'Lista')
+
+        self.tab = CTK.Tab()
+        self.tab.Add('Primero', a)
+        self.tab.Add('Segundo', b)
+
+    def __call__ (self):
+        page = CTK.Page ()
+        page += self.tab
+        return page.Render()
+
+
+CTK.publish ('', default)
+CTK.publish ('^/apply$', apply, method='POST', validation=VALIDATIONS)
+
+CTK.run (port=8000)
+----
+
+Widgets
+  . link:dev_ctk_intro.html[Introduction]: Introductory notes
+  . link:dev_ctk_widgets.html[Widgets]
+    - link:dev_ctk_widgets_AjaxUpload.html[AjaxUpload]: Ajax uploader
+    - link:dev_ctk_widgets_Box.html[Box]: The basic box, <div> element.
+    - link:dev_ctk_widgets_Button.html[Button]: Buttons
+    - link:dev_ctk_widgets_Carousel.html[Carousel]: Diplay a slideshow
+    - link:dev_ctk_widgets_Checkbox.html[Checkbox]: Checkboxes
+    - link:dev_ctk_widgets_Collapsible.html[Collapsible]: Collapsible elements
+    - link:dev_ctk_widgets_Combobox.html[Combobox]: Comboboxes
+    - link:dev_ctk_widgets_Container.html[Container]: Base container
+    - link:dev_ctk_widgets_DatePicker.html[DatePicker]: Builtin calendar chooser
+    - link:dev_ctk_widgets_Dialog.html[Dialog]: Dialogs and their options
+    - link:dev_ctk_widgets_Downloader.html[Downloader]: Downloader element
+    - link:dev_ctk_widgets_Druid.html[Druid]: Wizard-like widget
+    - link:dev_ctk_widgets_Help.html[Help]: Cherokee-Admins Help widget
+    - link:dev_ctk_widgets_HiddenField.html[HiddenField]: Hidden fields in your forms
+    - link:dev_ctk_widgets_Image.html[Image]: <image> element
+    - link:dev_ctk_widgets_Indenter.html[Indenter]: Indeting content
+    - link:dev_ctk_widgets_iPhoneToggle.html[iPhoneToggle]: iPhone-like toggle switch
+    - link:dev_ctk_widgets_JS.html[JS]: Javascript wrappers
+    - link:dev_ctk_widgets_Link.html[Link]: <a> element
+    - link:dev_ctk_widgets_List.html[List]: <ol> and <ul> elements
+    - link:dev_ctk_widgets_Notice.html[Notice]: Notices
+    - link:dev_ctk_widgets_Page.html[Page]: Container for pages
+    - link:dev_ctk_widgets_Paginator.html[Paginator]: Content pagination
+    - link:dev_ctk_widgets_Plugin.html[Plugin]: The plugins, on-demand loadable modules
+    - link:dev_ctk_widgets_ProgressBar.html[ProgressBar]: showing a progress bar
+    - link:dev_ctk_widgets_PropsTable.html[PropsTable]: fancy <table> elements
+    - link:dev_ctk_widgets_Proxy.html[Proxy]: proxied contents
+    - link:dev_ctk_widgets_Radio.html[Radio]: Radio buttons
+    - link:dev_ctk_widgets_RawHTML.html[RawHTML]: injecting raw HTML content
+    - link:dev_ctk_widgets_Refreshable.html[Refreshable]: content generation on-the-fly
+    - link:dev_ctk_widgets_SortableList.html[SortableList]: sortable lists
+    - link:dev_ctk_widgets_StarRating.html[StarRating]: star rating widget
+    - link:dev_ctk_widgets_Submitter.html[Submitter]: wrapping up your forms
+    - link:dev_ctk_widgets_Table.html[Table]: <table> elements
+    - link:dev_ctk_widgets_Tab.html[Tab]: tabs
+    - link:dev_ctk_widgets_Template.html[Template]: defining themes for your pages
+    - link:dev_ctk_widgets_TextArea.html[TextArea]: <textarea> elements
+    - link:dev_ctk_widgets_TextField.html[TextField]: <input> elements
+    - link:dev_ctk_widgets_ToggleButton.html[ToggleButton]: toggle buttons
+    - link:dev_ctk_widgets_Uploader.html[Uploader]: file uploads
+    - link:dev_ctk_widgets_Widget.html[Widget]: Base widget
+    - link:dev_ctk_widgets_XMLRPCProxy.html[XMLRPCProxy]: loading XMLRPC contents
+
+Other:
+	Config
+	Post
+	Server
+	consts
+	Config
+	i18n
+	Init
+	json_embedded
+	util
+	pyscgi
+	HTTP
+	PageCleaner
+	MailHTML: Mail sending goodies
+
