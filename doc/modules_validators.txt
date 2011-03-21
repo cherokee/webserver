@@ -30,8 +30,7 @@ Some can only handle one of those mechanisms because of technical
 limitations. In case the module supports both of them, the interface
 allows to choose whether one or both are to be used.
 
-Here is an interface example from a simple validator:
-
+.Interface sample for simple validator
 image::media/images/admin_validators_pam.png[Validator PAM]
 
 Refer to the link:cookbook_authentication.html[Authentication] recipe

@@ -39,20 +39,20 @@ steps.
   rules. It then dispatches the request to one of the machines in the
   pool of specified `information sources`.
 
+.Phase 1
 image::media/images/proxy_phase1.png[Phase 1]
 
 * Phase 2: Once the server that has received the request sends back the
   response, the reverse proxy deletes the unnecessary return HTTP
   headers and sends the response  back to the requesting client.
 
+.Phase 2
 image::media/images/proxy_phase2.png[Phase 2]
 
 To use the HTTP reverse proxy handler you simply have to specify
 several parameters. First define a series of
 link:config_info_sources.html[information sources]. Those will be the
 ones handling the requests in the end.
-
-image::media/images/admin_handler_proxy.png[Reverse Proxy]
 
 Then you will have to specify the Reverse Proxy Settings by adjusting
 the following settings.
@@ -107,3 +107,5 @@ Back-end Servers
   sources, which are all the servers from the set to be used in the
   cluster of web servers.
 
+.Reverse Proxy
+image::media/images/admin_handler_proxy.png[Reverse Proxy]

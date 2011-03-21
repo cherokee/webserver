@@ -63,6 +63,20 @@ This is a pretty common example. It defines a directory called `cgi`
 that points to a path out of the Sever root directory where the
 CGI programs are located.
 
+.Handler CGI configuration
+[cols="50%,50%"]
+|====================================================================
+|Handler              | CGI
+|Document Root        | /usr/lib/cgi-bin
+|Script Alias         | None
+|Change UID           | Disabled
+|Error handler        | Disabled
+|Check file           | Enabled
+|Pass Request Headers | Enabled
+|Allow X-Sendfile     | Disabled
+|====================================================================
+
+.Handler CGI intreface
 image::media/images/admin_handler_cgi.png[CGI]
 
 .Script Alias

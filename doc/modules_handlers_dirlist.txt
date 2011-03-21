@@ -16,8 +16,11 @@ Parameters: Listing
 |Parameters |Type    |Description
 |`size`     |boolean |Optional. Display the size of files in the
                       listings. Default: `Enabled`.
-|`date`     |boolean |Optional. Display the last modification date of                       the files and directories in the listings.
+
+|`date`     |boolean |Optional. Display the last modification date of
+                      the files and directories in the listings.
                       Default: `Enabled`.
+
 |`user`     |boolean |Optional. Display the owner of the files and
                       directories in the listings.
                       Default: `Disabled`.
@@ -60,10 +63,28 @@ the listed files and  you'll be able to select it in `cherokee-admin`.
 Examples
 ~~~~~~~~
 
-This configuration
+This is just one of many possible configurations.
 
+.Sample configuration
+|====================================================================
+|Field                   |Value
+|Handler                 | `Only listing`
+|Document Root           | None
+|Show Size               | Enabled
+|Show Date               | Enabled
+|Show User               | Disabled
+|Show Group              | Disabled
+|Show Backup files       | Disabled
+|Show Hidden files       | Disabled
+|Allow symbolic links    | Enabled
+|Redirect symbolic links | Disabled
+|Theme                   | `default`
+|====================================================================
+
+.Sample configuration screenshot
 image::media/images/admin_handler_onlylisting.png[Only listing configuration]
 
-will return something like
+The output given by such configuration is a simple directory listing
+that can be sorted by any of its columns.
 
 image::media/images/admin_handler_onlylisting_ex.png[Only listing example]

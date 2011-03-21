@@ -28,6 +28,7 @@ The parameter that specifies the file containing the pairs
 You can and should place the password file outside the web tree to
 prevent remote users from accessing the list.
 
+.Security tab
 image::media/images/admin_validators_plain.png[Validator Plain]
 
 This could be the contents of the the file `/var/www/passwd` specified

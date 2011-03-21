@@ -45,7 +45,23 @@ Examples
 
 Here is a basic example.
 
-.Configuration
+.Sample configuration
+|====================================================================
+|Field                   |Value
+|Handler                 | `Only listing`
+|Document Root           | None
+|Show Size               | Enabled
+|Show Date               | Enabled
+|Show User               | Disabled
+|Show Group              | Disabled
+|Show Backup files       | Disabled
+|Show Hidden files       | Disabled
+|Allow symbolic links    | Enabled
+|Redirect symbolic links | Disabled
+|Theme                   | `default`
+|====================================================================
+
+.Configuration screenshot
 image::media/images/admin_handler_dirlist.png[Dirlist configuration]
 
 .Actual output

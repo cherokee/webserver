@@ -81,6 +81,15 @@ handled by **Hidden Downloads**. We set a shared secret string
 (`Abracadabra`), and the document root where the real ISO files are
 located (`/mnt/isos`):
 
+.Configuration for directory /downloads
+[cols="50%,50%"]
+|==================================================================
+|Handler      | `Hidden Downloads`
+|Document Root| /mnt/isos
+|Secret       | Abracadabra
+|==================================================================
+
+.Hidden downloads configuration
 image::media/images/admin_handler_secdownload.png[Hidden Downloads configuration]
 
 To summarize, its a four step process:

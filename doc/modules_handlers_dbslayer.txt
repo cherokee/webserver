@@ -27,6 +27,7 @@ bandwidth.
 . More languages available: besides JSON, the handler can also return
 the information to be used directly by Python, Ruby and PHP.
 
+.Interface example
 image::media/images/admin_handler_dbslayer.png[DBSlayer]
 
 It also makes use of a link:modules_balancers.html[balancing strategy]

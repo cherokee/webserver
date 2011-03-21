@@ -28,6 +28,14 @@ Examples
 ~~~~~~~~
 Lets imagine your virtual server DocumentRoot points to /var/www.
 
+[cols="25%,75%"]
+|===================================================
+|Handler       | `Static Content`
+|Document Root | No custom Document Root will fall back to the default one defined for the virtual server.
+|Use I/O cache | `Enabled`
+|===================================================
+
+.Handler Static Content
 image::media/images/admin_handler_file.png[Handler file]
 
 This is a simple example that will make Cherokee able of serving each

@@ -49,4 +49,5 @@ examples on how to configure this
 handler. The recipe about link:cookbook_php.html[setting up PHP] is a
 good starting point.
 
+.FastCGI Interface
 image::media/images/admin_handler_fastcgi1.png[FastCGI]
