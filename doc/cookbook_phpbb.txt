@@ -34,6 +34,7 @@ domain `example.net`. You can modify this going to `Virtual servers`
 -> `default` -> `Basics` -> `Document Root`. You can delete all the
 unnecessary rules of your default out-of-the-box configuration.
 
+.Rule list
 image::media/images/cookbook_phpbb_rules.png[phpBB basic rules]
 
 This is all you need to do with Cherokee, for now.

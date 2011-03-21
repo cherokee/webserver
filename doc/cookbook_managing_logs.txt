@@ -42,6 +42,7 @@ directory-type rule.
 |=======================
 |Rule Type |Web Directory
 |Directory |/admin
+|Handler   |`Remote Administration`
 |=======================
 
 .Handler

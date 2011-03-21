@@ -54,18 +54,29 @@ purpose of redirecting petitions to the official subdomain. In our
 example, this could manage __*.example.net__ and the __.com__ and
 __.org__ variations.
 
+.Host Match
+|======================================
+| Host Match | `Wildcards`
+| Domain pattern #1 | *.example.net
+| Domain pattern #2 | *.example.org
+| Domain pattern #3 | *.example.com
+|======================================
+
+.Host Match interface
 image::media/images/cookbook_redir_domains.png[Managed domains]
 
 The official name would then be managed by another virtual host
 (just for __example.net__). The `redir` virtual host will have a
 `Default` managed by the `Redirection` handler.
 
+.Rule list
 image::media/images/cookbook_redir_behavior.png[Unique rule]
 
 This in turn would define an _external redirection_ with a _Regular
 Expression_ like __^/(.*)$__ and the appropriate _Substitution_:
 http://example.net/$1
 
+.New Regular Expression
 image::media/images/cookbook_redir_handler.png[Handler configuration]
 
 Keep in mind the redirection has to be external in order for Cherokee
@@ -88,6 +99,7 @@ by the `Redirection` handler.  And second, define an _external
 redirection_ with a _Regular Expression_ like __^/(.*)$__ and the
 appropriate _Substitution_: https://${host}/secure_dir/$1
 
+.Handler interface
 image::media/images/cookbook_redir_https.png[HTTPS redirections]
 
 [[global-redirs]]

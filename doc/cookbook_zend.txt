@@ -74,8 +74,9 @@ After that you will be asked for the minimal information required to
 correctly configure your server in a totally transparent way.
 
 And that's it. You are done with the configuration! You can now access
-your application. The demo provided by Zend will look like this:
+your application.
 
+.Zend-provided demo
 image::media/images/cookbook_zend1.png[Demo]
 
 Of course, you'll have to follow the complete tutorial if you expect

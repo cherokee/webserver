@@ -144,8 +144,7 @@ also as a directory.
 |List & Send |/var/lib/mailman/archives/public
 |=============================================
 
-This is a working example of the above mentioned handler configuration.
-
+.Resulting configuration
 image::media/images/cookbook_mailman.png[Mailman configuration]
 
 Once you have followed the rest of the
