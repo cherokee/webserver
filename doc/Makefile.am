@@ -134,7 +134,8 @@ dev_issues.html \
 dev_qa.html \
 dev_quickstart.html \
 dev_api.html \
-dev_examples.html
+dev_examples.html \
+dev_ctk.html
 
 docmediacssdir = $(docdir)/media/css/
 docmediacss_DATA = \

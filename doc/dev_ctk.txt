@@ -1,19 +1,18 @@
 == link:index.html[Index] -> link:dev.html[Development info] -> Cherokee Tool Kit
-Introduction
-------------
 
-CTK, the Cherokee ToolKit, is a toolkit to develop modern web
-applications in Python. It is built on top of jQuery, but no need of
-knowing jQuery or Javascript is necessary. Since Cherokee-Admin is
-written in Python, CTK aims to deliver all the fanciness in jQuery
-right to the hands of Python developers.
+Introduction to CTK
+-------------------
+
+CTK, the Cherokee ToolKit, is a toolkit originally implemented to
+develop Cherokee-admin in Python. It aims to deliver all the fanciness
+of modern web right to the hands of Python developers.
 
 CTK was developed to allow a fast development pace for Cherokee-Admin,
 while providing a modern & feature-rich web interface that fulfilled
 two essential requirements:
 
-. Maintainability of the code base
-. A low entry barrier to encourage participation in the development.
+. Having a maintainable code-base
+. Lowering the entry barrier to encourage participation in the development of Cherokee.
 
 CTK was developed with Cherokee-Admin in mind, but it is not confined
 to Cherokee, and in fact some of its widgets aren't even used in
@@ -21,165 +20,537 @@ Cherokee-Admin. It is currently used in every Cherokee release since
 1.0, and is also used by some other third party applications.
 
 Rationale
----------
+~~~~~~~~~
 
-The design of CTK makes developing rich web-applications almost
-trivial once you've understood the rationale behind it.
+The design of CTK makes developing rich web-applications easy and fun
+once you've understood the rationale behind it. Of course, some
+complex tasks might require a bit of extra effort, but overall you'll
+be gladly surprised by the ease of development.
 
 Everything is a widget in CTK. Everything, from the web page itself to
 any web element you might want to use, is a widget. You just have to
 instantiate a top-level widget (a container), add widgets to it, and
-let CTK take care of the rest.
+let CTK take care of the rest.  This includes asynchronous transfers,
+submitting and validating forms in the background, event binding to
+refresh the render of specific sections, and many other goodies you
+would expect in a modern web application. Just pick a widget from the
+extensive Widget Hierearchy provided by CTK, and append it to your
+container.
 
+Some of the things provided by CTK:
 
+. URL driven render
+. URLs mapped to functions or classes
+. Render as response (a page, or content)
+. Complete requests as results of a render, no partial results support
+  (sent as render)
+. Widget Hierarchy inspired in desktop-app toolkits like GTK+ or QT.
 
-	widget -> container -> box
-	
-Most things are widgets. You just have to add widgets to a container, and the the container is rendered.
-	
-noauto required optional
+What make CTK particularly interesting is that everything can be
+written and maintained in Python.
+
+Overview
+~~~~~~~~
+
+CTK will communicate your application with the web server through the
+well known SCGI protocol, so you'll just have to setup an information
+source in Cherokee and access it through the SCGI handler to get
+started.
+
+CTK-run
+^^^^^^^
+
+You can quickly try out your CTK applications by using the provided
+CTK-run command. It will launch an instance of Cherokee listening to
+port 9091, and it will be set to communicate with any SCGI application
+running on port 8000.
+
+The syntax of CTK-run is pretty straight forward:
+
+----
+ python CTK-run [-d /path/to/CTK] <file.py>
+-----
+
+Basic CTK app
+^^^^^^^^^^^^^
+
+The skeleton of a CTK application is also fairly simple:
+
+. Import CTK into your app.
+. Publish some URLs and define what functions or classes should take
+  care of rendering such URLs, handle submissions, etc.
+. Add widgets
+. Define a custom commit function if needed
+. Specify a port in which CTK must be launched and let it run.
 
 Simple examples
----------------
+~~~~~~~~~~~~~~~
 
-You can take a look at CTK/tests to see some very basic examples using
-CTK. Those have been written as quick tests for some of the basic
-widgets. Any of them can be run using the provided `run.py` script and
-Cherokee.
+The examples listed here will set port 8000 for SCGI, so all of them
+can be run quickly using CTK-run. Just copy and paste the scripts, and
+launch them with CTK-run. You will be able to check the output by
+accessing http://localhost:9091 on your web-browser.
+
+Besides the basic examples listed here, you can take a look at
+CTK/tests to see some very basic examples using CTK. Those have been
+written as quick tests for some of the basic widgets. Any of them can
+be run using the provided CTK-run command.
+
+Hello World
+^^^^^^^^^^^^^
+
+The one example that can never be missing: Hello World!
 
 ----
-cd CTK/tests
-./run.py test1.py
-----
-
-This should launch an instance of Cherokee listeing to
-http://localhost:9091, where you will be able to access the test
-application.
-
-
-       Basic steps are as follows:
-       Import CTK into your app.
-       Publish some URLs and define what functions should take care of rendering such URLs, handle submissions, etc.
-       Add widgets
-       Define custom commit funcition if needed
-       Specify a port in which CTK must be launched and let it run. This port will be using the SCGI protocol.
-       Profit
-
-CTK will communicate with your webserver through the well known SCGI
-protocol, so you'll just have to setup an information source in
-Cherokee and access it through the SCGI handler to get started.
-
-  ----
-import CTK import time
-
-def error(x):
-    raise Exception("Bad dog!!!!")
-
-def ok(x):
-    return x.upper()
-
-VALIDATIONS = [
-    ("server!uno", ok),
-    ("server!dos", error),
-    ("server!dos", lambda x: None)
-]
-
-URL     = "http://www.cherokee-project.com/dynamic/cherokee-list.html"
-OPTIONS = [('one','uno'), ('two','dos'), ('three', 'tres')]
-
-def apply():
-    if CTK.post['server!tri']:
-        time.sleep(2)
-
-    return {'ret': "ok"}
+# hello_world.py
+import CTK
 
 class default:
-    def __init__ (self):
-        a = CTK.PropsAuto ('/apply')
-        a.Add ('To upcase',   CTK.TextField({'name': "server!uno"}),  'Converts the content of the field to upcase')
-        a.Add ('Shows error', CTK.TextField({'name': "server!dos"}),  'It shows an error, it does not matter what you write')
-        a.Add ('Delay 2secs', CTK.TextField({'name': "server!tri"}),  'It delays response for 2 seconds, so the submitting message is shown')
-        a.Add ('Active',      CTK.Checkbox ({'name': "server!active", 'checked':1}), 'It\'s just a plain checkbox. Nothing to see here')
-
-        b = CTK.PropsAuto ('/apply')
-        b.Add ('Elige',   CTK.Combobox ({'name': "server!elec", 'selected': "two"}, OPTIONS), 'la lista')
-        b.Add ('iPhone',  CTK.iPhoneToggle({'name': "server!off"}), 'Fancy')
-        b.Add ('Carga',   CTK.Proxy("www.cherokee-project.com", '/dynamic/cherokee-list.html'), 'Lista')
-
-        self.tab = CTK.Tab()
-        self.tab.Add('Primero', a)
-        self.tab.Add('Segundo', b)
-
     def __call__ (self):
-        page = CTK.Page ()
-        page += self.tab
+        page = CTK.Page()
+        page += CTK.RawHTML('Hello World!')
         return page.Render()
 
-
 CTK.publish ('', default)
-CTK.publish ('^/apply$', apply, method='POST', validation=VALIDATIONS)
-
 CTK.run (port=8000)
 ----
 
-Widgets
-  . link:dev_ctk_intro.html[Introduction]: Introductory notes
-  . link:dev_ctk_widgets.html[Widgets]
-    - link:dev_ctk_widgets_AjaxUpload.html[AjaxUpload]: Ajax uploader
-    - link:dev_ctk_widgets_Box.html[Box]: The basic box, <div> element.
-    - link:dev_ctk_widgets_Button.html[Button]: Buttons
-    - link:dev_ctk_widgets_Carousel.html[Carousel]: Diplay a slideshow
-    - link:dev_ctk_widgets_Checkbox.html[Checkbox]: Checkboxes
-    - link:dev_ctk_widgets_Collapsible.html[Collapsible]: Collapsible elements
-    - link:dev_ctk_widgets_Combobox.html[Combobox]: Comboboxes
-    - link:dev_ctk_widgets_Container.html[Container]: Base container
-    - link:dev_ctk_widgets_DatePicker.html[DatePicker]: Builtin calendar chooser
-    - link:dev_ctk_widgets_Dialog.html[Dialog]: Dialogs and their options
-    - link:dev_ctk_widgets_Downloader.html[Downloader]: Downloader element
-    - link:dev_ctk_widgets_Druid.html[Druid]: Wizard-like widget
-    - link:dev_ctk_widgets_Help.html[Help]: Cherokee-Admins Help widget
-    - link:dev_ctk_widgets_HiddenField.html[HiddenField]: Hidden fields in your forms
-    - link:dev_ctk_widgets_Image.html[Image]: <image> element
-    - link:dev_ctk_widgets_Indenter.html[Indenter]: Indeting content
-    - link:dev_ctk_widgets_iPhoneToggle.html[iPhoneToggle]: iPhone-like toggle switch
-    - link:dev_ctk_widgets_JS.html[JS]: Javascript wrappers
-    - link:dev_ctk_widgets_Link.html[Link]: <a> element
-    - link:dev_ctk_widgets_List.html[List]: <ol> and <ul> elements
-    - link:dev_ctk_widgets_Notice.html[Notice]: Notices
-    - link:dev_ctk_widgets_Page.html[Page]: Container for pages
-    - link:dev_ctk_widgets_Paginator.html[Paginator]: Content pagination
-    - link:dev_ctk_widgets_Plugin.html[Plugin]: The plugins, on-demand loadable modules
-    - link:dev_ctk_widgets_ProgressBar.html[ProgressBar]: showing a progress bar
-    - link:dev_ctk_widgets_PropsTable.html[PropsTable]: fancy <table> elements
-    - link:dev_ctk_widgets_Proxy.html[Proxy]: proxied contents
-    - link:dev_ctk_widgets_Radio.html[Radio]: Radio buttons
-    - link:dev_ctk_widgets_RawHTML.html[RawHTML]: injecting raw HTML content
-    - link:dev_ctk_widgets_Refreshable.html[Refreshable]: content generation on-the-fly
-    - link:dev_ctk_widgets_SortableList.html[SortableList]: sortable lists
-    - link:dev_ctk_widgets_StarRating.html[StarRating]: star rating widget
-    - link:dev_ctk_widgets_Submitter.html[Submitter]: wrapping up your forms
-    - link:dev_ctk_widgets_Table.html[Table]: <table> elements
-    - link:dev_ctk_widgets_Tab.html[Tab]: tabs
-    - link:dev_ctk_widgets_Template.html[Template]: defining themes for your pages
-    - link:dev_ctk_widgets_TextArea.html[TextArea]: <textarea> elements
-    - link:dev_ctk_widgets_TextField.html[TextField]: <input> elements
-    - link:dev_ctk_widgets_ToggleButton.html[ToggleButton]: toggle buttons
-    - link:dev_ctk_widgets_Uploader.html[Uploader]: file uploads
-    - link:dev_ctk_widgets_Widget.html[Widget]: Base widget
-    - link:dev_ctk_widgets_XMLRPCProxy.html[XMLRPCProxy]: loading XMLRPC contents
+As you can see, CTK is mapping the URL `''` to the default
+class. Ordinarily you would map a specific URL, but since this
+application is so simple we are using an empty URL. CTK processes
+these mappings by matching the incoming requests against a list of
+published paths. Those can be specified as regular expressions, so the
+mechanism is very flexible. If a specific match is not found, every
+request will fall through to the entry for `''`. In this case it means
+that any request to http://localhost:9091 will yield a “Hello World”
+as response.
 
-Other:
-	Config
-	Post
-	Server
-	consts
-	Config
-	i18n
-	Init
-	json_embedded
-	util
-	pyscgi
-	HTTP
-	PageCleaner
-	MailHTML: Mail sending goodies
+Hello Button
+^^^^^^^^^^^^
 
+This one goes a little further, and binds click events to actions.
+
+----
+# hello_button.py
+import CTK
+
+class default:
+    def __call__ (self):
+        text = CTK.RawHTML ('Hello World!')
+        box  = CTK.Box (text)
+
+        hide = CTK.Button ('Hide')
+        hide.bind('click', box.JS_to_hide())
+
+        show = CTK.Button ('Show')
+        show.bind('click', box.JS_to_show())
+
+        page = CTK.Page()
+        page += box
+        page += hide
+        page += show
+
+        return page.Render()
+
+CTK.publish ('', default)
+CTK.run (port=8000)
+----
+
+It is embedding the HTML contents into a CTK.Box, which is in reality
+nothing more than the container that we will be showing and hiding on
+demand. All CTK Widgets provide some basic methods, such as:
+
+. bind: used to bind events and actions
+. JS_to_hide: that renders Javascript code tohide the element
+. JS_to_show: that renders Javascript code to show the element
+. JS_to_trigger: that renders Javascript code to trigger a specific
+  event (it accepts parameters and selectors other than the default
+  one -the unique ID of the widget-).
+
+Form submission
+^^^^^^^^^^^^^^^
+
+With CTK, validating, submitting, and processing forms is very
+simple. Take a look at the following script.
+
+----
+# form.py
+import CTK
+import time
+
+def validate_number (value):
+    try:
+        if int(value) in range(10):
+            return value
+    except:
+        raise ValueError('Not valid')
+    raise ValueError('Not in range')
+
+VALIDATIONS = [
+    ('number', validate_number),
+]
+
+def apply():
+    if CTK.post['show_delay']:
+        time.sleep(2)
+    return {'ret': 'ok'}
+
+class default:
+    def __call__ (self):
+        submit = CTK.Submitter ('/apply')
+        table  = CTK.PropsTable()
+        table.Add ('Delay 2secs', CTK.Checkbox ({'name': 'show_delay', 'checked': 0}), 'Delay response for 2 seconds to notice the submitting status')
+        table.Add ('Number',      CTK.TextField({'name': 'number'}),                   'Pick a number [0-9]')
+        submit += table
+
+        page  = CTK.Page ()
+        page += submit
+
+        return page.Render()
+
+CTK.publish ('', default)
+CTK.publish ('^/apply$', apply, method='POST', validation=VALIDATIONS)
+CTK.run (port=8000)
+----
+
+Notice the line where the '^/apply$' URL is published. As you can see,
+there is a difference when comapared to the others shown until
+now. Most remarkably, it specifies the method to be POST, since it
+will be mapping a custom commit function to that URL, and it also
+provides a list of validations to be applied when performing such
+POST.
+
+If specified, the validations will be checked even before the data
+flow reaches the specified function, `apply` in this case. The logic
+behind this is to raise an exception if validation tests are not
+passed, and CTK will display the error right beneath the field that
+fails to pass the tests.
+
+Also notice how the form is built. A Submitter object is instanced,
+that acts as a container for a variety of form elements (comboboxes,
+input fields, textareas, radio buttons, checkboxes, etc). Each of
+these is a widget itself. A submission button could have been added to
+the form, but we've left it out to keep it as simple as possible.
+
+As soon as the form can be submitted, all the data is sent using
+POST. Notice that this does not necessarily imply that every field in
+the form has been given a value. In fact, in the previous example,
+altering the value of any of the widgets will trigger the submission
+of the whole form. Every widget can be instanced with a set of
+specific parameters, so it is not complicated to specify which fields
+require being filled, which ones are optional, etc. Among those
+parameters, 'class' is undoubtedly the most important one, since it
+allows you to pass 'class' attributes directly to the HTML
+elements. Some of these actually influence how the submission is
+performed.
+
+.Important class attributes
+[cols="25%,75%"]
+|===================================================
+|required | Every widget marked as required needs to be filled up
+            before the submission can be performed
+|noauto   | Altering the value for the widget does not trigger the
+            submission of the form, as it would do by default.
+|===================================================
+
+Even when a SubmitterButton widget is present, all required fields
+must be present before any data is actually sent. Clicking on the
+button will do nothing unless all these are filled up.
+
+Each widget has a specific syntax, so better the API in detail or dig
+into the code.
+
+Dialogs
+^^^^^^^
+
+Using dialogs with CTK is also easy. In this example we will instance
+two dialogs, one of which is opened on-load, and the other one bound
+to the click event of a CTK.Button.
+
+----
+# dialog.py
+import CTK
+
+
+class content_box (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__(self)
+        self += CTK.RawHTML ('<h1>About</h1>')
+
+        note  = CTK.Notice()
+        note += CTK.RawHTML ('<p>CTK dialogs are highly customizable.</p>')
+
+        self += CTK.RawHTML ('<p>By default, CTK dialogs are:</p>')
+        defaults = CTK.List()
+        defaults.Add (CTK.RawHTML('Modal'))
+        defaults.Add (CTK.RawHTML('Not resizable'))
+        defaults.Add (CTK.RawHTML('Not opened automatically'))
+        defaults.Add (CTK.RawHTML('Not draggabale'))
+        defaults.Add (CTK.RawHTML('Rendered on the center of the screen'))
+        self += CTK.Indenter (defaults)
+
+class default:
+    def __call__ (self):
+        opened  = CTK.Dialog ({'title': _('Automatically opened dialog'), 'width': 450, 'autoOpen': True})
+        opened += content_box()
+        opened.AddButton (_('Close'), "close")
+
+        closed  = CTK.Dialog ({'title': _('Manually opened dialog'), 'width': 450})
+        closed += content_box()
+        closed.AddButton (_('Close'), "close")
+        button = CTK.Button('Open dialog')
+        button.bind('click', closed.JS_to_show())
+
+        page  = CTK.Page ()
+        page += opened
+        page += closed
+        page += button
+
+        return page.Render()
+
+CTK.publish ('', default)
+CTK.run (port=8000)
+----
+
+Tabs
+^^^^
+
+As was mentioned before, you can add widgets to other widgets. Thanks
+to this approach, using tabs is also intuitive. Just instantiate a
+CTK.Tab object, and add as many tabs as you want. The contents of each
+tab has to be a widget: an Image, a Box, etc.
+
+-----
+# tabs.py
+import CTK
+
+IMAGES = ['on', 'off', 'loading', 'tick', 'del']
+
+class default:
+    def __call__ (self):
+        page = CTK.Page()
+
+        tabs = CTK.Tab()
+        for img in IMAGES:
+            tabs.Add (img.capitalize(), CTK.ImageStock(img))
+
+        page += tabs
+        return page.Render()
+
+CTK.publish ('', default)
+CTK.run (port=8000)
+-----
+
+Refreshable elements
+^^^^^^^^^^^^^^^^^^^^
+
+The CTK.Refreshable class allows the creation of objects that can be
+rendered asynchronously in response to a given event. Normally every
+CTK widget has a unique identifier that is generated automatically,
+but since the contents of a Refreshable have to be written into a
+specific container that you'll need to know in advance, this class
+demands an explicit 'id' be given on instantiation.
+
+----
+# refresh.py
+import CTK
+import time
+
+class Default:
+    class Content (CTK.Box):
+        def __init__ (self, refresh):
+            CTK.Box.__init__ (self)
+            button = CTK.Button ('Refresh')
+            button.bind ('click', refresh.JS_to_refresh())
+
+            self += CTK.RawHTML('<p>Rendered on %s.</p>' %(time.ctime()))
+            self += button
+
+    def __call__ (self):
+        r1 = CTK.Refreshable ({'id': 'r1'})
+        r1.register (lambda: self.Content(r1).Render())
+
+        r2 = CTK.Refreshable ({'id': 'r2'})
+        r2.register (lambda: self.Content(r2).Render())
+
+        page  = CTK.Page ()
+        page += r1
+        page += r2
+
+        return page.Render()
+
+CTK.publish ('', Default)
+CTK.run (port=8000)
+----
+
+So, what does it do? It instantiates two CTK.Refreshable elements,
+each with its unique identifier, and each one is refreshed when the
+button is clicked. Easy, right?
+
+Remember that identifiers must be unique for every DOM
+element/node. Should you mistakenly provide the same identifier for
+both Refreshable objects, clicking on anyone of the buttons would
+probably update the same element (and only one of them).
+
+Advanced examples
+~~~~~~~~~~~~~~~~~
+
+If the basic examples don't seem enough for you, there are lots of
+more complex examples at your disposal. The best way to dive into CTK
+is reading the code of Cherokee-Admin, and checking the CTK code
+itself from time to time. Most of CTK has been written to provide the
+specific needs of Cherokee Admin, so most likely you'll find examples
+as complex as you want that will help you fully understand how things
+are working.
+
+Some considerations
+~~~~~~~~~~~~~~~~~~~
+
+So far you've seen some very basic examples. Before you begin hacking
+on Cherokee-Admin, you'll probably need to know some more about other
+CTK elements.
+
+CTK.post
+^^^^^^^^
+
+This is used to access every element submitted using the POST
+method. You've seen how it works on some of the previous examples. The
+most useful methods in this class involve accessing reading and
+popping values and keys. Elements can also be accessed using
+dictionary-like notation. In the examples above, both:
+
+-----
+CTK.post['show_delay']
+-----
+
+and
+
+-----
+CTK.get_val('show_delay')
+-----
+
+Would return the same value, although the second appearance lets you
+specify a default value as optional argument.
+
+CTK.cfg
+^^^^^^^
+
+The class CTK.Config seamlessly handles the Cherokee configuration
+tree. With it you can read and write a configuration file, parse and
+serialize the configuration tree, clone configuration elements, and
+manipulate branches ands leaves at will.
+
+The class is instanced as soon as Cherokee-Admin loads, and it can be
+accessed as CTK.cfg. Just like before, it can be accessed and
+manipulated using its many methods, and dictionary-like syntax can
+also be used. With little doubt, this is the most manipulated object
+throughout the whole code-base. Study CTK.Config if you are interested
+in the full details.
+
+The most used methods are the ones involving setting and gettings
+entry values. This is done just like in a dictionary. Among the other
+methods available, probably the most used are:
+
+. pop: to pop elements from the configuration tree.
+. keys: access the list of subnodes of any given node
+. get_val: retrieve the value of a configuration
+  key. CTK.cfg.get_val('server!timeout') would be equivalent to
+  CTK.cfg['server!timeout']
+. apply_chunk: to apply a configuration chunk directly to the
+  configuration tree. This is a lifesaver when dealing with wizards,
+  for examples, where you have tamplates as large chunks that only
+  require some customization.
+. normalize: also very useful when dealing with wizards, since it can
+  be used to renumber configuration entries. It is recommended to
+  always normalize the configuration after playing around with it.
+. get_next_entry_prefix: provided a path, it will yield the next entry
+  in the sequence of currenlty existing elements.This is very used
+  when having to add any new element to the configuration, such as a
+  new rule, a new virtual server, a new information source, and so on.
+
+The tmp configuration node
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Whenever the configuration three is altered, a flag is set indicating
+the configuration tree has been changed. In turn, the 'Save' button on
+the admin interface becomes clickable, and using it will dump the
+configuration tree to the configuration file that is being used at the
+moment. There is one exception to this rule: the *tmp* configuration
+node. Everything hanging from that branch is ignored when loading and
+saving the configuration tree. It is used extensively as a temporary
+repository. For example, on multi-stage wizards, it is used to store
+the intermediate values gathered along all the different stages.
+
+Every configuration entry hanging from this node can be set and
+retrieved exactly like the rest, but nothing will be saved to disk.
+
+Config related widgets
+^^^^^^^^^^^^^^^^^^^^^^
+
+You have been some Widgets being used in the example about form
+submission. What you haven't yet seen are all the variants specially
+conceived to interact with CTK.Config. Many widgets have a variant
+with a name ending in *Cfg*.
+
+Normally, you would process form submissions in custom commit
+functions that would extract the required data from CTK.post and
+inject it into CTK.cfg. The *Cfg* widgets are bound to the
+configuration tree itself, so the rest of the code can be simplified
+by avoiding the need of duplicating logic for such repetitive tasks.
+
+These widgets are instantiated with a configuration entry, and their
+values are retrieved from the configuration tree itself. Once
+submitted, one call to the method CTK.cfg_apply_post will set the new
+values in the configuration tree as well.
+
+HTTP responses
+^^^^^^^^^^^^^^
+
+Complex things can be achieved through the use of custom HTTP
+responses. Of course, CTK provides a convenient way to do this.
+
+For example, a custom commit function could decide that the user has
+to be redirected to another location. Making it return a
+CTK.HTTP_Redir response would redirect to whatever location was
+specified.
+
+Any response can be issued, just dig into the class and try it out if
+needed.
+
+CTK.url_request
+^^^^^^^^^^^^^^^
+
+Sometimes passing parameters through the URL migh come in handy. Just
+access the CTK.url_request property and you'll be able to parse to
+your heart's contempt.
+
+CTK.cookie
+^^^^^^^^^^
+
+Basic cookie support is provided through this object.  Cookies can be
+set an read using the well known bracket-syntax:
+
+-----
+CTK.cookie['user'] = 'my_user'
+-----
+
+and
+
+-----
+user = CTK.cookie['user']
+-----
+
+Final notes
+~~~~~~~~~~~
+
+Although CTK was conceived as a tool to help in the development of
+Cherokee-Admin, it has grown in complexity and flexibility to the
+point that it is an Open Source project all by itself. Detailing every
+last piece of it is far beyond the scope of this introductory
+tutorial.
+
+You can easily achieve relatively complex tasks using CTK with very
+little effort. Review the API, check the provided examples, and dig
+into Cherokee-Admin. As you can see, once you get the hang of it it is
+really not complicated, and you can always turn to our development
+mailing list for help.
