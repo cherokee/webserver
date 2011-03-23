@@ -45,23 +45,30 @@ def get_installation_UID():
 def get_installation_GID():
     root_group = SystemInfo.get_info()['group_root']
 
-    groups = os.getgroups()
-    groups.sort()
+    try:
+        groups = os.getgroups()
+        groups.sort()
+        first_group = str(groups[0])
+    except OSError,e:
+        # os.getgroups can fail when run as root (MacOS X 10.6)
+        if os.getuid() != 0:
+            raise e
+        first_group = str(root_group)
 
     # Systems
     if sys.platform == 'linux2':
         if os.getuid() == 0:
             return root_group
-        return str(groups[0])
+        return first_group
     elif sys.platform == 'darwin':
         if os.getuid() == 0:
             return root_group
-        return str(groups[0])
+        return first_group
 
     # Solaris RBAC, TODO
     if os.getuid() == 0:
         return root_group
-    return str(groups[0])
+    return first_group
 
 
 def current_UID_is_admin():
