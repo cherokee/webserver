@@ -130,11 +130,8 @@ other_bundle_cget.html \
 dev.html \
 dev_debug.html \
 dev_cherokee.conf.html \
-dev_issues.html \
 dev_qa.html \
 dev_quickstart.html \
-dev_api.html \
-dev_examples.html \
 dev_ctk.html
 
 docmediacssdir = $(docdir)/media/css/

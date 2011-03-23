@@ -1,6 +1,0 @@
-== link:index.html[Index] -> link:dev.html[Development info]
-
-Development: Examples
----------------------
-
-To be written

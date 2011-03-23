@@ -3,6 +3,5 @@
   . link:dev_quickstart.html[Quickstart]: Where to start?.
   . link:dev_debug.html[Debugging]: Resources available to debug Cherokee.
   . link:dev_cherokee.conf.html[cherokee.conf]: Internal configuration specs.
-  . link:dev_issues.html[Open issues]: Current development issues (proxy, wizards, extra ruletypes...)
   . link:dev_qa.html[Quality Assurance]: Some info about QA in Cherokee.
   . link:dev_ctk.html[CTK]: Dive into the Cherokee ToolKit
