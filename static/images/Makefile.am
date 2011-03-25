@@ -25,6 +25,7 @@ on.png \
 online.png \
 tabbg.png \
 tick.png \
+forbid.png \
 ui-bg_gloss-wave_35_f6a828_500x100.png \
 ui-bg_highlight-soft_100_eeeeee_1x100.png \
 ui-icons_222222_256x240.png \
