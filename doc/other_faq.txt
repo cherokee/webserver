@@ -231,3 +231,27 @@ need to resort to special ciphers such
 (`ALL:!ADH:-LOW:-SSLv2:-EXP:-eNULL:@STRENGTH`), or anythingh else for
 that matter. If you need it, simply enable the check-box to allow
 SSLv2.
+
+[[faq21]]
+=== I'm used to Apache's .htaccess. Will Cherokee ever support it?
+
+Short answer: No. Cherokee is designed to be efficient. Using
+.htaccess is not: it's not a scalable architecture at all, it's
+horrible for performance, you can't use it with Cherokee, and even if
+you could, you shouldn't. If you need .htaccess, you're probably doing
+it wrong. For .htaccess to work, Apache has to check *every* directory
+in the requested path for the existence of a .htaccess file, and if
+present, read and parse *every* one of them. This happens for *every*
+request. Sure, changes in .htaccess are effective instantly, but
+that's because Apache has to read and process the files every time. As
+the requests dig deeper into the directory tree, the associated
+overhead of stats an reads grows. And it is not negligible at all: an
+increase in anything from 5 to 50 is usual for very typical
+configurations.
+
+Yes, the use of .htaccess is very extended. Yes, it has been around
+for a while. No, that doesn't mean it is a good architecture. There
+are better ways of doing things. Converting the behavior of a
+.htaccess file to an efficient set of rules for Cherokee is not
+complicated. So plese, even if you are not using Cherokee, stop using
+.htaccess.
