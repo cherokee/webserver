@@ -253,5 +253,4 @@ Yes, the use of .htaccess is very extended. Yes, it has been around
 for a while. No, that doesn't mean it is a good architecture. There
 are better ways of doing things. Converting the behavior of a
 .htaccess file to an efficient set of rules for Cherokee is not
-complicated. So plese, even if you are not using Cherokee, stop using
-.htaccess.
+complicated.
