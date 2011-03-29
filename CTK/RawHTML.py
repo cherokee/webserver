@@ -45,7 +45,7 @@ class RawHTML (Widget):
         self.js   = js
 
     def __add__ (self, txt):
-        assert type(txt) == string
+        assert type(txt) == str
         self.html += txt
 
     def Render (self):
