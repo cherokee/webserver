@@ -199,8 +199,12 @@ class default:
     def __call__ (self):
         submit = CTK.Submitter ('/apply')
         table  = CTK.PropsTable()
-        table.Add ('Delay 2secs', CTK.Checkbox ({'name': 'show_delay', 'checked': 0}), 'Delay response for 2 seconds to notice the submitting status')
-        table.Add ('Number',      CTK.TextField({'name': 'number'}),                   'Pick a number [0-9]')
+        table.Add ('Delay 2secs',
+                   CTK.Checkbox ({'name': 'show_delay', 'checked': 0}),
+                   'Delay response for 2 seconds to notice the submitting status')
+        table.Add ('Number',
+                   CTK.TextField({'name': 'number'}),
+                   'Pick a number [0-9]')
         submit += table
 
         page  = CTK.Page ()
