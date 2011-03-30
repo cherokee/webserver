@@ -68,6 +68,23 @@ if ("%(value)s" == "1") {
 
 
 class ToggleButton (Widget):
+    """
+    Widget that toggles between two states on-click.
+
+       Arguments:
+           on:  CTK widget to display when ToggleButton is active.
+           off: CTK widget to display when ToggleButton is inactive.
+           active: Boolean to indicate initial state. Defaults to
+               True.
+           props: dictionary with optional properties for the HTML
+               element, such as {'name': 'foo', 'id': 'bar'}. Defaults
+               to {}
+
+       Examples:
+          toggle = CTK.ToggleButton (CTK.RawHTML('On'),
+                                     CTK.RawHTML('Off'),
+                                     active=False)
+    """
     def __init__ (self, on, off, active=True, props={}):
         Widget.__init__ (self)
 
@@ -115,6 +132,23 @@ class ToggleButton (Widget):
         return render
 
 class ToggleButtonOnOff (ToggleButton):
+    """
+    Widget that toggles between ON and OFF two states
+    on-click. Arguments are optional.
+
+       Arguments:
+           active: Boolean to indicate initial state. Defaults to
+               True.
+
+           props: dictionary with optional properties for the HTML
+               element, such as {'name': 'foo', 'id': 'bar'}. Defaults
+               to {}
+
+       Examples:
+          toggle = CTK.ToggleButtonOnOff (CTK.RawHTML('On'),
+                                          CTK.RawHTML('Off'),
+                                          active=False)
+    """
     def __init__ (self, active=True, props={}):
         ToggleButton.__init__ (self,
                                ImageStock('on',  {'title': _("Disable")}),

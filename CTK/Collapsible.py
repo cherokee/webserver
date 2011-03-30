@@ -27,6 +27,22 @@ from Widget import Widget
 from RawHTML import RawHTML
 
 class Collapsible (Box):
+    """
+    Widget to show content in an area that can be collapsed and
+    expanded on-click.
+
+       Arguments:
+           titles: Tuple containing two strings to use as
+               titles. Those are shown when the collpasible is
+               minimized and maximized respectively.
+
+           collapsed: Boolean to indicate initial state. Defaults to
+               True.
+
+       Examples:
+          container  = CTK.Collapsible (('Show', 'Hide'))
+          container += CTK.RawHTML ('<p>This text can be hidden, or not.</p>')
+    """
     def __init__ (self, (titles), collapsed=True):
         Box.__init__ (self, {'class': 'collapsible'})
 
@@ -69,6 +85,23 @@ class Collapsible (Box):
         return render
 
 class CollapsibleEasy (Collapsible):
+    """
+    Widget to show content in an area that can be collapsed and
+    expanded on-click. It works just like the Collapsible, but
+    prepends up/down arrows to the titles to indicate collapse/expand.
+
+       Arguments:
+           titles: Tuple containing two strings to use as
+               titles. Those are shown when the collpasible is
+               minimized and maximized respectively.
+
+           collapsed: Boolean to indicate initial state. Defaults to
+               True.
+
+       Examples:
+          container  = CTK.CollapsibleEasy (('Show', 'Hide'))
+          container += CTK.RawHTML ('<p>This text can be hidden, or not.</p>')
+    """
     def __init__ (self, (titles), collapsed=True):
         assert len(titles) == 2
         assert type(titles[0]) == str

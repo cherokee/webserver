@@ -85,6 +85,21 @@ def uniq (seq):
     return noDupes
 
 class Page (Container):
+    """
+    Base widget for web pages. Typically an instance of this class (or
+    a class inheriting from it) is used as top level container to
+    which every other CTK widget is added.
+
+    Arguments:
+        template: custom CTK Template for the pages
+        headers: list of entries for the <head> section.
+        helps: parameters for CTK HelpMenu, if any.
+
+    Example:
+        page = CTK.Page ()
+        page += CTK.RawHTML ('<p>Nothing to see here.</p>')
+        return page.Render()
+    """
     def __init__ (self, template=None, headers=None, helps=None, **kwargs):
         Container.__init__ (self, **kwargs)
         self.js_header_end = True
@@ -155,6 +170,18 @@ class Page (Container):
         return Postprocess (txt)
 
 class PageEmpty (Container):
+    """
+    Widget for minimalistic web pages. Simplified variant with less
+    arguments, but otherwise similar to Page.
+
+    Arguments:
+        headers: list of entries for the <head> section.
+
+    Example:
+        page = CTK.PageEmpty ()
+        page += CTK.RawHTML ('<p>Nothing to see here.</p>')
+        return page.Render()
+    """
     def __init__ (self, headers=[], **kwargs):
         Container.__init__ (self, **kwargs)
 

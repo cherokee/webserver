@@ -21,6 +21,16 @@
 #
 
 class HTTP_Response:
+    """
+    Base class for HTTP responses. Can be used to return specific HTTP
+    responses, being all arguments optional.
+
+      Arguments:
+        error: response code (200 by default).
+        headers: list of HTTP headers to send with the response.
+        body: optional response body, for responses that support it
+            (everyone except 100, 101, 204, 304).
+    """
     DESC = {
         100: 'CONTINUE',
         101: 'SWITCHING PROTOCOLS',
@@ -101,6 +111,10 @@ class HTTP_Response:
 
 
 class HTTP_Error (HTTP_Response):
+    """
+    Base class for HTTP errors. Optionally accepts an error code and a
+    description to display with the error.
+    """
     def __init__ (self, error=500, desc=None):
         HTTP_Response.__init__ (self, error)
         self.body  = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\r\n'
@@ -112,6 +126,10 @@ class HTTP_Error (HTTP_Response):
 
 
 class HTTP_Redir (HTTP_Response):
+    """
+    Base class for HTTP redirections. Typically used to send header
+    that will redirect the web browser to another location.
+    """
     def __init__ (self, location, error=307):
         HTTP_Response.__init__ (self, error)
         self['Location'] = location
@@ -119,6 +137,10 @@ class HTTP_Redir (HTTP_Response):
 
 
 class HTTP_XSendfile (HTTP_Response):
+    """
+    Returns the resource given by specified location using the special
+    non-standard X-Sendfile header.
+    """
     def __init__ (self, location, error=200):
         HTTP_Response.__init__ (self, error)
         self['X-Sendfile'] = location

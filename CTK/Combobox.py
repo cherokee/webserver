@@ -25,6 +25,20 @@ from Server import cfg
 from util import props_to_str
 
 class Combobox (Widget):
+    """
+    Widget for drop-down combo elements.
+
+        Arguments:
+            props: dictionary with properties for the HTML element,
+                such as {'name': 'foo', 'id': 'bar', 'class': 'noauto'}.
+
+                options: set of tuples in the form (value,
+                    description), (v2, d2), ...
+
+        Examples:
+            combo = CTK.Combobox({'name': 'language'},
+                                 [('en', 'English'), ('es', 'Spanish')])
+    """
     def __init__ (self, props, options):
         Widget.__init__ (self)
 
@@ -92,6 +106,12 @@ class Combobox (Widget):
 
 
 class ComboCfg (Combobox):
+    """
+    Configuration-Tree based Combobox widget. Pre-selects the
+    combo-entry corresponding to the value of the configuration tree
+    given by key argument if it exists. Everything else is like the
+    Combobox widget.
+    """
     def __init__ (self, key, options, _props={}):
         props = _props.copy()
 

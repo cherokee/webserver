@@ -25,6 +25,9 @@ from urllib import unquote
 
 
 class Post:
+    """
+    HTTP POST representation
+    """
     def __init__ (self, raw=''):
         self._vars    = {}
         self.raw_post = raw[:]
@@ -47,6 +50,8 @@ class Post:
         return vals[0]
 
     def get_val (self, key, not_found=None):
+        """Retrieve value of specific key if found, otherwise return
+        value of the not_found argument"""
         tmp = self._smart_chooser(key)
         if not tmp:
             return not_found
@@ -59,6 +64,8 @@ class Post:
         return filter(lambda x: len(x)>0, self._vars[key])
 
     def pop (self, key, not_found=None):
+        """Remove specified key and return the corresponding value. If
+        key is not found, value of not_found argument is returned."""
         val = self._smart_chooser(key)
         if val == None:
             return not_found
@@ -67,6 +74,7 @@ class Post:
         return val
 
     def keys (self):
+        """List of available keys"""
         return self._vars.keys()
 
     # Relay on the internal array methods

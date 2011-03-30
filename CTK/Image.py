@@ -25,6 +25,16 @@
 from Widget import Widget
 
 class Image (Widget):
+    """
+    Widget to represent images.
+
+       Arguments:
+           props: dictionary with properties for the HTML element,
+               such as {'src': '/path/foo/bar', 'clas': 'baz'}
+
+       Examples:
+          img = CTK.Image({'src': '/path/foo/bar', 'title': 'Baz'})
+    """
     def __init__ (self, props={}, **kwargs):
         Widget.__init__ (self, **kwargs)
         self.props = props.copy()
@@ -40,6 +50,20 @@ class Image (Widget):
         return render
 
 class ImageStock (Image):
+    """
+    Widget for predefined images.
+
+       Arguments:
+           title: mandatory argument indicating which stock-image must
+               be used. The currently supported list includes 'del',
+               'on', 'off', 'loading', 'tick', and 'forbid'.
+
+           props: dictionary with properties for the HTML element,
+               such as {'title': 'foo', 'class': 'bar'}
+
+       Examples:
+          img = CTK.ImageStock('loading', {'title': 'foo', 'class': 'bar'})
+    """
     def __init__ (self, name, _props={}):
         props = _props.copy()
 

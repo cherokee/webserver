@@ -109,6 +109,20 @@ class TableRow (Widget):
 
 
 class Table (Widget):
+    """Widget for the <table> HTML element. Arguments are
+    optional. Dynamically grows the number of rows as necessary.
+
+       Arguments:
+           props: dictionary with properties for the HTML element, such
+               as {'class': 'test', 'display': 'none'}
+
+       Example:
+           table = CTK.Table({'class': 'my_table'})
+           table.set_header (column=True, num=1)
+
+           for x in range(5): # insert five rows, 2 fields each
+               table += [CTK.RawHTML ('field1'), CTK.RawHTML ('field2')]
+    """
     def __init__ (self, props=None, **kwargs):
         Widget.__init__ (self)
         self.kwargs      = kwargs
@@ -235,6 +249,18 @@ class Table (Widget):
 
 
 class TableFixed (Table):
+    """Widget for the <table> HTML element. This is a regular,
+    fixed-table. No dynamic growing.
+
+       Arguments:
+           rows: number of rows in table.
+           cols: number of columns in table.
+
+       Example:
+           table = CTK.TableFixed(2,1)
+           table[(1,1)] = CTK.RawHTML ('row1')
+           table[(2,1)] = CTK.RawHTML ('row2')]
+    """
     def __init__ (self, rows, cols):
         Table.__init__ (self)
         self._fixed_rows = rows

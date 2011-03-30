@@ -29,6 +29,22 @@ HTML = """
 """
 
 class Indenter (Container):
+    """
+    Widget to indent other containers. Indenter widgets can be
+    recursively indented. Arguments are optional.
+
+       Arguments:
+           widget: initial widget to add to the indented
+               container. More widgets can still be added through
+               regular addition.
+
+           level: level of indentation given as a numeric value. By
+               default, 1.
+
+       Examples:
+          indent = CTK.Indenter()
+          indent += CTK.RawHTML('<p>This goes on an indented block.</p>')
+    """
     def __init__ (self, widget=None, level=1):
         Container.__init__ (self)
         self.level = level

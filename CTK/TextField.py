@@ -34,6 +34,31 @@ HEADER = [
 ]
 
 class TextField (Widget):
+    """
+    Widget for the base <input type="text"> element. Arguments are optional.
+
+       Arguments:
+           props: dictionary with properties for the HTML element,
+               such as {'name': 'foo', 'id': 'bar', 'class': 'noauto
+               required', optional: 'True', optional_string: 'Whatever
+               works...'}.
+
+               noauto: form will not be submitted instantly upon
+                   edition of the field.
+
+               optional: True|False, defines whether a grayed out
+                   'Optional' string should be overlayed on the input field.
+
+               optional_string: if optional flag is enabled, show
+                   this string instead of 'Optional'.
+
+       Examples:
+          field1 = CTK.TextField({'name': 'email1', 'class': 'noauto'})
+
+          field2 = CTK.TextField({'name': 'email2', 'class': 'noauto',
+                                  'optional': True, 'optional_string':
+                                  'Providing this field is optional}})
+    """
     def __init__ (self, props=None):
         Widget.__init__ (self)
         self.type = "text"
@@ -97,12 +122,22 @@ class TextField (Widget):
 
 
 class TextFieldPassword (TextField):
+    """
+    Widget for password fields. Behaves exactly like a TextField, but
+    renders a <input type="password> element instead.
+    """
     def __init__ (self, *a, **kw):
         TextField.__init__ (self, *a, **kw)
         self.type = "password"
 
 
 class TextCfg (TextField):
+    """
+    Configuration-Tree based TextField widget. Populates the input
+    field with the value of the configuration tree given by key
+    argument if it exists. It can be set as optional, and accepts
+    properties to pass to the base TextField object.
+    """
     def __init__ (self, key, optional=False, props={}):
         # Sanity checks
         assert type(key) == str
@@ -127,6 +162,12 @@ class TextCfg (TextField):
 
 
 class TextCfgPassword (TextCfg):
+    """
+    Configuration-Tree based TextPassword widget. Populates the input
+    field with the value of the configuration tree given by key
+    argument if it exists. It can be set as optional, and accepts
+    properties to pass to the base TextPassword object.
+    """
     def __init__ (self, *a, **kw):
         TextCfg.__init__ (self, *a, **kw)
         self.type = "password"
@@ -179,6 +220,16 @@ $("#%(id)s")
 """
 
 class TextCfgAuto (TextCfg):
+    """
+    Automatic variant of TextCfg widget. It needs a key for an entry
+    in the Configuration tree, and an url to which data is sent by
+    HTTP POST. It can be set as optional, and accepts properties to
+    pass to the base TextField object.
+
+    The field is automatically populated by the value of the
+    configuration entry given by key, and the configuration entry is
+    updated automatically when the input field is submitted.
+    """
     def __init__ (self, key, url, optional=False, props=None):
         self.key = key
         self.url = url

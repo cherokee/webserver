@@ -36,6 +36,18 @@ $("#%(id)s").Carousel();
 """
 
 class Carousel (Box):
+    """
+    Widget to render a slideshow box.
+
+        Optional arguments:
+            props: dictionary with properties for HTML element, such as
+                {'class': 'test', 'id': 'snapshots'}
+
+        Example:
+            shots = CTK.Carousel()
+            shots += CTK.Image ({'src': 'image1.png'})
+            shots += CTK.Image ({'src': 'image2.png'})
+    """
     def __init__ (self, props_={}):
         props = props_.copy()
         if 'class' in props:
@@ -82,6 +94,18 @@ class Carousel (Box):
 
 
 class CarouselThumbnails (Carousel):
+    """
+    Widget to render a slideshow box, with thumbnails.
+
+        Optional arguments:
+            props: dictionary with properties for HTML element, such as
+                {'class': 'test', 'id': 'snapshots'}
+
+        Example:
+            shots = CTK.CarouselThumbnails()
+            shots += CTK.Image ({'src': 'image1.png'})
+            shots += CTK.Image ({'src': 'image2.png'})
+    """
     def __init__ (self, props_={}):
         Carousel.__init__ (self, props_.copy())
 

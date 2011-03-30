@@ -46,6 +46,27 @@ $("#%(id)s").StarRating ({
 """
 
 class StarRating (Box):
+    """
+    Widget to display a star-rating bar with 5 possible vlues
+    [1-5]. Arguments are optional.
+
+       Arguments:
+
+           props: dictionary with additional properties for the HTML
+               element, such as {'name': 'foo', 'id': 'bar', 'class':
+               'baz'}. Some interesting properties are:
+
+                   selected: Number of stars to fill, as string
+                       (default, '5').
+                   can_set: Boolean that indicates whether or not the
+                       values can be changed by clicking on the stars.
+
+       Examples:
+          stars1 = CTK.StarRating({'can_set': False, 'selected': '1')
+
+          submit = CTK.Submitter ('/apply')
+          submit += CTK.StarRating ({'name': 'rate', 'can_set': True, 'selected': '3'})
+    """
     def __init__ (self, props={}):
         Box.__init__ (self, {'class': 'star-rating'})
 

@@ -50,6 +50,24 @@ class ListEntry (Container):
 
 
 class List (Container):
+    """
+    Widget for lists of elements. The list can grow dynamically, and
+    accept any kind of CTK widget as listed element. Arguments are
+    optional.
+
+       Arguments:
+           _props: dictionary with properties for the HTML element,
+               such as {'name': 'foo', 'id': 'bar', 'class': 'baz'}
+
+           tag: tag to use for the element, either 'ul' for unordered
+               lists, or 'ol' for ordered lists. By default, 'ul' is
+               used.
+
+       Examples:
+           lst = CTK.List()
+           lst.Add (CTK.RawHTML('One')
+           lst.Add (CTK.Image({'src': '/foo/bar/baz.png'})
+    """
     def __init__ (self, _props={}, tag='ul'):
         Container.__init__ (self)
         self.tag   = tag

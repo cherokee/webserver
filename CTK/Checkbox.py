@@ -45,6 +45,19 @@ CLICK_CHANGE_JS = """
 """
 
 class Checkbox (Widget):
+    """
+    Widget for the base <input type="checkbox"> element. Arguments are optional.
+
+       Arguments:
+           props: dictionary with properties for the HTML element,
+               such as {'name': 'foo', 'id': 'bar', 'class': 'noauto'}.
+
+               noauto: form will not be submitted instantly upon
+                   modification of the checkbox.
+
+       Examples:
+          check = CTK.Checkbox({'name': 'chekbox_test', 'class': 'noauto'})
+    """
     def __init__ (self, props={}):
         # Sanity check
         assert type(props) == dict
@@ -70,6 +83,17 @@ class Checkbox (Widget):
 
 
 class CheckCfg (Checkbox):
+    """
+    Configuration-Tree based Checkbox widget. Populates the input
+    checkbox with the value of the configuration tree given by key
+    argument if it exists. It accepts properties to pass to the base
+    Checkbox object.
+
+    Arguments:
+        key: key in the configuration tree.
+        default: default value to give to the checkbox.
+        props: additional properties for base Checkbox.
+    """
     def __init__ (self, key, default, props=None):
         # Sanity checks
         assert type(key) == str
@@ -96,6 +120,15 @@ class CheckCfg (Checkbox):
 
 
 class CheckboxText (Checkbox):
+    """
+    Widget that extends the base Checkbox widget to display a
+    label/text beside it. It accepts properties to pass to the base
+    Checkbox object.
+
+    Arguments:
+        props: additional properties for base Checkbox.
+        text: text to show beside the checkbox (by default, 'Enabled')
+    """
     def __init__ (self, props=None, text='Enabled'):
         Checkbox.__init__ (self, props)
         self.text = text
@@ -108,6 +141,18 @@ class CheckboxText (Checkbox):
 
 
 class CheckCfgText (CheckCfg):
+    """
+    Configuration-Tree based CheckboxText widget. Populates the input
+    checkbox with the value of the configuration tree given by key
+    argument if it exists. It accepts properties to pass to the base
+    CheckboxText object.
+
+    Arguments:
+        key: key in the configuration tree.
+        default: default value to give to the checkbox.
+        text: text to show beside the checkbox (by default, 'Enabled')
+        props: additional properties for base CheckboxText.
+    """
     def __init__ (self, key, default, text='Enabled', props=None):
         assert type(default) == bool
         assert type(text) == str

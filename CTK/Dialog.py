@@ -74,6 +74,35 @@ def py2js_dic (d):
 
 
 class Dialog (Container):
+    """
+    Widget to render dialogs. The dialogs are initially closed by
+    default. The behavior can be modified passing javascript
+    properties. Arguments are optional.
+
+       Arguments:
+
+           js_props: dictionary containing javascript properties.
+
+               Property   Values       Default
+               modal      True, False  True
+               resizable  True, False  False
+               autoOpen   True, False  false
+               draggable  True, False  False
+               position   [x,y]        ['center', 85]
+
+           props: dictionary with properties for the <div> HTML element,
+               such as {'title': 'My Dialog', 'width': 500}
+
+       Example:
+           dialog = CTK.Dialog ({'title': _('Dialog title'), 'width': 500})
+           dialog += CTK.RawHTML ("<p>Hello World!</p>")
+           dialog.AddButton (_('Cancel'), "close")
+           dialog.AddButton (_('Event'), dialog.JS_to_trigger('custom_event'))
+
+           # Show when button is clicked
+           button = CTK.Button('Show')
+           button.bind ('click', dialog.JS_to_show())
+    """
     def __init__ (self, js_props={}, props={}):
         Container.__init__ (self)
 
@@ -111,6 +140,10 @@ class Dialog (Container):
                 self.props['style'] = 'display:none;'
 
     def AddButton (self, caption, action):
+        """Add button to the dialog, specifying caption and action to
+        perform when clicked. Actions can be 'close' (to close
+        dialog), a path starting with '/' (to make that path the
+        current window location), or a custom Javascript snippet."""
         self.buttons.append ((caption, action))
 
     def Render (self):
@@ -161,12 +194,15 @@ class Dialog (Container):
         return js
 
     def JS_to_show (self):
+        """Return Javascript snippet to open the dialog."""
         return "$('#%s').show().dialog('open');" % (self.id)
 
     def JS_to_close (self):
+        """Return Javascript snippet to close the dialog."""
         return " $('#%s').dialog('close');" % (self.id)
 
     def JS_to_trigger (self, event, _params=[]):
+        """Return Javascript snippet to trigger specified event."""
         props = {'id': self.id, 'event': event}
 
         tmp = ["type: '%s'"%(event)]
@@ -179,6 +215,12 @@ class Dialog (Container):
 
 
 class DialogProxy (Dialog):
+    """
+    Dialog that synchronously embedds the contents of the provided
+    URL. This is a blocking operation, and the render is not completed
+    until the proxy receives all the required data. Accepts an
+    optional argument to pass properties to the base Dialog class.
+    """
     def __init__ (self, url, props={}):
         Dialog.__init__ (self, props.copy())
 
@@ -187,6 +229,12 @@ class DialogProxy (Dialog):
 
 
 class DialogProxyLazy (Dialog):
+    """
+    Dialog that embedds the contents of the provided URL. Accepts an
+    optional argument to pass properties to the base Dialog class. The
+    contents of the URL are retrieved asynchronously, so the render is
+    not blocked on retrieval.
+    """
     def __init__ (self, url, _props={}):
         # Properties
         props = _props.copy()
@@ -206,6 +254,19 @@ class DialogProxyLazy (Dialog):
 
 
 class Dialog2Buttons (Dialog):
+    """
+    Simplified dialog with close and custom buttons.
+
+    Arguments:
+        props: dialog properties to pass to base Dialog class.
+
+        button_name: caption for custom button.
+
+        button_action: action for custom button. Can be 'close' (to
+            close dialog), a path starting with '/' (to make that path
+            the current window location), or a custom Javascript
+            snippet.
+    """
     def __init__ (self, props, button_name, button_action):
         Dialog.__init__ (self, props.copy())
         self.AddButton (_('Close'), "close")

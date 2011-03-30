@@ -22,6 +22,10 @@
 # 02110-1301, USA.
 #
 
+"""
+The CTK.JS module wraps several utility Javascript functions.
+"""
+
 def Ajax (url, data='', type='POST', async=True, dataType='json',
           success=None, error=None, complete=None):
     if not success:

@@ -26,6 +26,18 @@ from util import props_to_str
 HTML = '<textarea id="%(id)s" %(props)s>%(content)s</textarea>'
 
 class TextArea (Widget):
+    """
+    Widget for <textarea> element. Arguments are optional.
+
+       Arguments:
+           props: dictionary with properties for the HTML element,
+               such as {'name': 'foo', 'id': 'bar', 'class': 'baz'}.
+           content: text initially contained in the textarea
+
+       Examples:
+          area = CTK.TextArea({'name': 'report'}, 'Report your problem')
+    """
+
     def __init__ (self, props=None, content=''):
         Widget.__init__ (self)
         self.props   = props

@@ -33,6 +33,29 @@ HTML = """
 """
 
 class Notice (Container):
+    """
+    Widget for notes, basically predefined information boxes. All
+    arguments are optional:
+
+       Arguments:
+
+          klass: valid values are 'information',
+              'important-information', 'warning', 'error', 'offline',
+              'online'. By default, 'information'.
+
+          content: a CTK widget to be added initially to the
+              container.
+
+          props: dictionary with properties for the HTML DIV element,
+              such as {'class': 'test_class', 'id': 'info-box'}
+
+       Examples:
+          notice1  = CTK.Notice()
+          notice1 += CTK.RawHTML('<p>This is an information point<p>')
+
+          notice2  = CTK.Notice('warning', CTK.RawHTML('<p>Broken element</p>'))
+    """
+
     def __init__ (self, klass='information', content=None, props={}):
         Container.__init__ (self)
 

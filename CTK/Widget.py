@@ -120,9 +120,13 @@ class Widget:
     # Javacript events
     #
     def bind (self, event, js):
+        """Bind events to event handlers. The specified Javascript
+        code is executed as soon as the event is triggered"""
         self.binds.append ((event, js))
 
     def JS_to_trigger (self, event, param=None, selector=None):
+        """Return the Javascript code required to trigger specified
+        event. Custom parameters and selector can be provided."""
         if not selector:
             selector = "$('#%s')" %(self.id)
 
@@ -132,11 +136,27 @@ class Widget:
             return "%s.trigger('%s');" %(selector, event)
 
     def JS_to_show (self, how='', selector=None):
+        """Return the Javascript code required to show the
+        widget. Custom duration and selector can be provided.
+
+        Durations are given in milliseconds; higher values indicate
+        slower animations, not faster ones. The strings 'fast' and
+        'slow' can be supplied to indicate durations of 200 and 600
+        milliseconds, respectively.
+        """
         if not selector:
             selector = "$('#%s')" %(self.id)
         return '%s.show(%s);' %(selector, how)
 
     def JS_to_hide (self, how='', selector=None):
+        """Return the Javascript code required to hide the
+        widget. Custom duration and selector can be provided.
+
+        Durations are given in milliseconds; higher values indicate
+        slower animations, not faster ones. The strings 'fast' and
+        'slow' can be supplied to indicate durations of 200 and 600
+        milliseconds, respectively.
+        """
         if not selector:
             selector = "$('#%s')" %(self.id)
         return '%s.hide(%s);' %(selector, how)

@@ -75,8 +75,16 @@ class PropsTableEntry (Box):
 
 
 class PropsTable (Box):
-    """Property Table: Formatting"""
+    """
+    Property Table: Displays a succession of rows consisting of title,
+    widget, and comment. Dynamically grows the number of rows as
+    necessary.
 
+    Example:
+       table = CTK.PropsTable()
+       table.Add ('My title1', CTK.TextField({'name': 'var1'}), 'First variable')
+       table.Add ('My title2', CTK.TextField({'name': 'var2'}), 'Second variable')
+    """
     def __init__ (self, **kwargs):
         Box.__init__ (self, {'class': "propstable"})
 
@@ -85,6 +93,28 @@ class PropsTable (Box):
 
 
 class PropsAuto (PropsTable):
+    """
+    Automatic Property Table: Displays a succession of rows consisting
+    of title, widget, and comment. Dynamically grows the number of
+    rows as necessary. It must be instanced with a URL to assign it to
+    an underlying Submitter element, that will send HTTP POST requests
+    when input elements are changed. This is done automatically.
+
+    Arguments:
+       url: the URL to receive the HTTP POST requests.
+
+    Example:
+       table = CTK.PropsAuto()
+
+       table.Add ('My title1',
+                  CTK.TextField({'name': 'var1'}),
+                  'First variable')
+
+       table.Add ('My title2',
+                  CTK.TextField({'name': 'var2'}),
+                  'Second variable. This is never sent.',
+                  use_submitter=False)
+    """
     def __init__ (self, url, **kwargs):
         PropsTable.__init__ (self, **kwargs)
         self.url       = url

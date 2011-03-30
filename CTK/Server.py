@@ -282,6 +282,8 @@ def cfg_reply_ajax_ok():
     return {'ret':'ok', 'not-modified': '#save-button'}
 
 def cfg_apply_post():
+    """Apply entries of the HTTP POST request to the Configuration
+    tree"""
     for k in post:
         cfg[k] = post[k]
 
@@ -297,6 +299,7 @@ def get_server():
     return __global_server
 
 def get_scgi():
+    """Retrieve SCGI object for current connection"""
     my_thread = threading.currentThread()
     return my_thread.scgi_conn
 
@@ -346,6 +349,8 @@ class Publish_FakeClass:
 
 
 def publish (regex_url, klass, **kwargs):
+    """Publish a path given by the regex_url regular expression, and
+    map it to the class of function given by the klass argument"""
     # Instance object
     if type(klass) == types.ClassType:
         obj = klass()
@@ -363,6 +368,7 @@ def publish (regex_url, klass, **kwargs):
     server.add_route (obj)
 
 def unpublish (regex_url):
+    """Unpublish a path from the global list of published URLs"""
     # Unregister
     server = get_server()
     server.remove_route (regex_url)

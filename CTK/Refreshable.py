@@ -49,6 +49,24 @@ def render_plain_html (build_func, **kwargs):
 
 
 class Refreshable (Widget):
+    """
+    Refreshable container. Can be bound to events to regenerate its
+    contents. Providing a unique id property is mandatory. Other
+    properties are optional.
+
+    Example:
+        class Content (CTK.Box):
+            def __init__ (self, refresh):
+                CTK.Box.__init__ (self)
+                button = CTK.Button ('Refresh')
+                button.bind ('click', refresh.JS_to_refresh())
+
+                self += CTK.RawHTML('<p>Rendered on %s.</p>' %(time.ctime()))
+                self += button
+
+        refresh = CTK.Refreshable ({'id': 'r1'})
+        refresh.register (lambda: Content(refresh).Render())
+    """
     def __init__ (self, _props={}):
         Widget.__init__ (self)
 
@@ -65,6 +83,9 @@ class Refreshable (Widget):
         self.build_func = None
 
     def register (self, build_func=None, **kwargs):
+        """Register the function used to populate the refreshable
+        container"""
+
         self.build_func = build_func
         self.params     = kwargs
 
@@ -82,6 +103,8 @@ class Refreshable (Widget):
         return render
 
     def JS_to_refresh (self, on_success='', selector=None, url=None):
+        """Return Javascript snippet required to update the contents
+        of the refreshable element."""
         if not selector:
             selector = "$('#%s')" %(self.id)
 
@@ -116,6 +139,10 @@ if ("%(url)s".length > 0) {
 """
 
 class RefreshableURL (Widget):
+    """
+    Refreshable container that loads the contents of the specified
+    URL.
+    """
     def __init__ (self, url='', _props={}):
         Widget.__init__ (self)
 
@@ -145,6 +172,8 @@ class RefreshableURL (Widget):
         return render
 
     def JS_to_load (self, url):
+        """Return Javascript snippet required to load the given url
+        into the RefreshableURL container."""
         props = {'id':  self.id,
                  'url': url}
         return JS_URL_LOAD %(props)

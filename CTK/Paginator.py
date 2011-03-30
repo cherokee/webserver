@@ -136,6 +136,27 @@ class Paginator_Refresh (Widget):
 
 
 class Paginator (Refreshable):
+    """
+    Widget that displays its contents in a paginated manner if
+    neccesary. If more than one page is generated, a navigation footer
+    will be generated.
+
+    Arguments:
+
+        name: a name to append to 'refreshable-' to generate the
+            automatically assigned id for the container. Remember that
+            DOM elements must have unique identifiers.
+
+        page_num: sub-page to open as default.
+
+        items_per_page: number of contained CTK widgets to show at
+            once.
+
+    Examples:
+        pags = CTK.Paginator('paginated-container', items_per_page=2)
+        for x in range(5):
+            pags += CTK.RawHTML('<p>%s.</p>' %(x))
+    """
     def __init__ (self, name, page_num=0, items_per_page=20):
         Refreshable.__init__ (self, {'id': 'refreshable-%s'%(name)})
 

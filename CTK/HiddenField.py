@@ -38,6 +38,10 @@ class HiddenField (Widget):
         return render
 
 class Hidden (HiddenField):
+    """
+    Widget for hidden input field. Requires a name for the
+    field. Optional value and properties can be passed.
+    """
     def __init__ (self, name, value='', _props={}):
         props = _props.copy()
         props['name']  = name

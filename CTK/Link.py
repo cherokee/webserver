@@ -29,6 +29,22 @@ LINK_ICON_HTML = '<div id="%(id)s"><span class="ui-icon ui-icon-%(icon)s"></span
 
 
 class Link (Container):
+    """
+    Widget for link HTML elements (<a> tag). All arguments are optional.
+
+       Arguments:
+           href: linked resource. Mind that an HTML <a> tag without an
+               href does not get selected when applying link styles.
+
+           content: CTK widget to show inside the <a>...</a> block.
+
+           props: dictionary with properties for the HTML element,
+               such as {'name': 'foo', 'id': 'bar', 'class': 'baz'}
+
+       Examples:
+          link1 = CTK.Link('http://example.com', CTK.RawHTML('Example'))
+          link2 = CTK.Link(content=CTK.Image({'src': '/var/www/static/image.png'})
+    """
     def __init__ (self, href=None, content=None, props={}):
         Container.__init__ (self)
         if href:
@@ -61,6 +77,23 @@ class Link (Container):
 
 
 class LinkWindow (Link):
+    """
+    Widget for link HTML elements (<a> tag) to be opened on seprate
+    window. All arguments are optional.
+
+       Arguments:
+           href: linked resource. Mind that an HTML <a> tag without an
+               href does not get selected when applying link styles.
+
+           content: CTK widget to show inside the <a>...</a> block.
+
+           props: dictionary with properties for the HTML element,
+               such as {'name': 'foo', 'id': 'bar', 'class': 'baz'}
+
+       Examples:
+          link1 = CTK.LinkWindow ('http://example.com', CTK.RawHTML('Example'))
+          link2 = CTK.LinkWindow (content=CTK.Image({'src': '/var/www/static/image.png'})
+    """
     def __init__ (self, href, content=None, props={}):
         self.props = props.copy()
         props['target'] = '_blank'

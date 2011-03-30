@@ -189,6 +189,11 @@ class ConfigNode (object):
 
 
 class Config:
+    """
+    Class to represent and interact with the configuration tree. An
+    optional configuration file can be passed as argument on
+    instantiation to load and parse an initial configuration tree.
+    """
     def __init__ (self, file=None):
         self.root      = ConfigNode()
         self.root_orig = None
@@ -199,6 +204,8 @@ class Config:
             self.load()
 
     def load (self):
+        """Load and Parse the configuration file specified on
+        initialization."""
         # Load and Parse
         try:
             f = open (self.file, "r")
@@ -249,6 +256,8 @@ class Config:
         return self.root[path]
 
     def clone (self, path_old, path_new):
+        """Clone a given branch into another location in the
+        configuration tree."""
         parent, parent_path, child_name = self._get_parent_node (path_old)
         if self.root[path_new]:
             return True
@@ -256,6 +265,8 @@ class Config:
         self.set_sub_node (path_new, copied)
 
     def rename (self, path_old, path_new):
+        """Rename a branch in the configuration tree given by path_old
+        to a new name given by path_new."""
         error = self.clone (path_old, path_new)
         if not error:
             del(self[path_old])
@@ -300,6 +311,9 @@ class Config:
         return (self[pres], pres, last)
 
     def get_val (self, path, default=None):
+        """Return the value of a configuration entry given by the
+        'path' argument. If not found, return the value of the
+        optional 'default' argument."""
         return self.root.get_val (path, default)
 
     def get_vals (self, paths, default=None):
@@ -315,18 +329,23 @@ class Config:
                 del (self.root[path])
 
     def keys (self, path):
+        """Show keys for a given configuration path."""
         tmp = self[path]
         if not tmp:
             return []
         return tmp.keys()
 
     def pop (self, key):
+        """Pop an element from the configuration tree given by
+        argument key."""
         tmp = self.get_val(key)
         del (self[key])
         return tmp
 
     # Serialization
     def serialize (self):
+        """Dump the contents of the configuration tree into a
+        string."""
         def sorter(x,y):
             order = ['config', 'server', 'vserver', 'source', 'icons', 'mime', 'admin']
             a = x.split('!')
@@ -359,6 +378,9 @@ class Config:
         return '\n'.join (filter (lambda x: len(x) > 1, tmp))
 
     def save (self):
+        """Save current configuration tree into the file specified on
+        initialization. Try to make a copy with the '.backup'
+        extension if possible."""
         # Try to make a copy
         try:
             t = open (self.file+'.backup', 'w+')
@@ -381,6 +403,7 @@ class Config:
 
     # Checks
     def is_writable (self):
+        """Check if configuration file is writeable."""
         import os
 
         if not os.path.exists (self.file):
@@ -388,10 +411,13 @@ class Config:
         return os.access (self.file, os.W_OK)
 
     def has_tree (self):
+        """Check if configuration tree exists."""
         return len(self.root._child) > 0
 
     # Utilities
     def get_next_entry_prefix (self, pre):
+        """Return next element to insert into a configuration node
+        given by the 'pre' prefix."""
         entries = [int(x) for x in self.keys(pre)]
         entries.sort()
 
@@ -401,6 +427,8 @@ class Config:
         return '%s!%d'%(pre, entries[-1] + 1)
 
     def get_lowest_entry (self, pre):
+        """Return first existing element of a configuration node given
+        by the 'pre' prefix."""
         entries = [int(x) for x in self.keys(pre)]
         entries.sort()
 
@@ -410,6 +438,8 @@ class Config:
         return 1
 
     def normalize (self, pre, step=10):
+        """Reenumerate the branch given by the 'pre' prefix for
+        normalization. An optional step can be provided."""
         keys = self.keys(pre)
         keys.sort (lambda x,y: cmp(int(x),int(y)))
 
@@ -425,6 +455,9 @@ class Config:
             self.rename ('tmp!normalize!%s'%(pre), pre)
 
     def apply_chunk (self, chunk):
+        """Insert a configuration chunk into the configuration tree,
+        all at once. This is an in-memory operation. Manual steps must
+        be taken to update the configuration file if needed."""
         lines = [l.strip() for l in chunk.split('\n')]
         lines = filter (lambda x: len(x) and x[0] != '#', lines)
 
@@ -433,6 +466,8 @@ class Config:
             self[left] = right
 
     def has_changed (self):
+        """Check if configuration tree differs from the last one that
+        was saved to the configuration file."""
         root = copy.deepcopy (self.root)
         orig = copy.deepcopy (self.root_orig)
 

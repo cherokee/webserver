@@ -28,6 +28,25 @@ from util import *
 HTML = '<div id="%(id)s" %(props)s>%(content)s%(embedded_js)s</div>'
 
 class Box (Container):
+    """
+    Widget for the base DIV element. All arguments are optional.
+
+       Arguments:
+          props: dictionary with properties for the DIV element, such
+              as {'class': 'test', 'display': 'none'}
+
+          content: if provided, it must be a CTK widget
+
+          embed_javascript: True|False. Disabled by default. If
+              enabled, Javascript code associated to the widget will
+              be rendered as part of the DIV definition instead of
+              using a separate Javascript block.
+
+       Examples:
+          box1 = CTK.Box()
+          box2 = CTK.Box({'class': 'test', 'id': 'test-box'},
+                         CTK.RawHTML('This is a test box'))
+    """
     def __init__ (self, props={}, content=None, embed_javascript=False):
         Container.__init__ (self)
         self.props = props.copy()

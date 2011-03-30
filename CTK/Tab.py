@@ -126,6 +126,19 @@ $("#tab_%(id)s").each(function() {
 
 
 class Tab (Widget):
+    """
+    Widget for tabs. Tabs can be added dynamically to the
+    container. Arguments are optional.
+
+       Arguments:
+           props: dictionary with properties for the HTML element,
+               such as {'class': 'foo bar'}
+
+       Examples:
+          tabs = CTK.Tabs()
+          tabs.Add ('Label_Tab_1', CTK.RawHTML('<p>Foo</p>')
+          tabs.Add ('Label_Tab_2', CTK.RawHTML('<p>Bar</p>')
+    """
     def __init__ (self, props=None):
         Widget.__init__ (self)
         self._tabs  = []
@@ -139,6 +152,9 @@ class Tab (Widget):
             self._props['id'] = 'widget%d'%(self.uniq_id)
 
     def Add (self, title, widget):
+        """Dynamically add CTK widgets as contents of new tab in the
+        tab container. A title for the tab must be specified, and a
+        CTK widget has to be provided as content."""
         assert type(title) == str
         assert isinstance(widget, Widget)
 

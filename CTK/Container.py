@@ -25,6 +25,11 @@
 from Widget import Widget
 
 class Container (Widget):
+    """
+    Base container widget. Calling the Render method will produce the
+    HTML associated with the widgets contained within. Thus, if no
+    such widget exists, no HTML will be rendered.
+    """
     def __init__ (self):
         Widget.__init__ (self)
         self.child = []

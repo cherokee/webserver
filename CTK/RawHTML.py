@@ -25,6 +25,20 @@ from util import to_utf8
 
 
 class RawHTML (Widget):
+    """
+    Widget for raw HTML contents. CTK Widgets can be added one to
+    another, so in order to append HTML code directly to an existing
+    CTK widget it has to be embedded into a RawHTML widget itself.
+    Arguments are optional.
+
+       Arguments:
+          html: text string containing HTML code.
+          js:   text string containing Javascript code.
+
+       Examples:
+          html1 = CTK.RawHTML('<h1>Header</h1>')
+          html2 = CTK.RawHTML(js='window.location.reload();')
+    """
     def __init__ (self, html='', js=''):
         Widget.__init__ (self)
 

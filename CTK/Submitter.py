@@ -56,6 +56,44 @@ JS_FOCUS = """
 """
 
 class Submitter (Container):
+    """
+    Widget to submit HTTP POST requests. This renders all the widgets
+    contained in it, and upon edition, will post all the input
+    elements contained in it to the specified submit_url. Currently,
+    the widgets for input elements are:
+
+      Input widgets (grouped by family):
+        Checkbox, CheckCfg, CheckboxText, CheckCfgText
+        Combobox, ComboCfg
+        DatePicker
+        HiddenField
+        iPhoneToggle, iPhoneCfg
+        Radio, RadioText
+        TextField, TextFieldPassword, TextCfg, TextCfgPassword, TextCfgAuto
+        ToggleButton, ToggleButtonOnOff
+
+      Example:
+        submit  = CTK.Submitter('/apply')
+        submit += CTK.HiddenField ('foo_name', 'bar_value')
+        submit += CTK.TextField({'name': 'baz'})
+
+      Note: All the fields are sent as soon as any one of them is
+      modified, unless they have been instanced with certain class
+      properties that modify this behavior. Such classes are:
+
+        noauto:   will not submit the data when field is modified.
+        required: all fields with this class must be provided before
+                  the submission can take effect.
+
+      Example:
+        submit  = CTK.Submitter('/apply')
+        submit += CTK.TextField({'name': 'foo', 'class': 'required'})
+        submit += CTK.TextField({'name': 'bar', 'class': 'required'})
+
+      To asynchronously send only one field, the appropriate approach
+      is to use a submitter for each one.
+    """
+
     def __init__ (self, submit_url):
         Container.__init__ (self)
         self.url = submit_url
@@ -95,6 +133,14 @@ $("#%(id)s").click(function() {
 """
 
 class SubmitterButton (Button):
+    """
+    Widget to display a submission button. It will submit the data
+    contained in the parent Submitter, unless required input fields
+    of such Submitter are not provided. Accepts an optional argument:
+
+    caption: text that should appear in the button. By default,
+             "Submit".
+    """
     def __init__ (self, caption="Submit"):
         Button.__init__ (self, caption)
 

@@ -24,6 +24,20 @@ from Widget import Widget
 from util import props_to_str
 
 class Button (Widget):
+    """
+    Widget for the BUTTON HTML element. All arguments are optional.
+
+       Arguments:
+          caption: text that should appear in the button. By default,
+              "Submit".
+
+          props: dictionary with properties for HTML element, such as
+              {'class': 'test', 'display': 'none'}
+
+       Examples:
+          button1 = CTK.Button()
+          button2 = CTK.Box('Validate', {'class': 'blue_button'})
+    """
     def __init__ (self, caption="Submit", props={}):
         Widget.__init__ (self)
         self.props = props.copy()
