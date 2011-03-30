@@ -24,6 +24,7 @@ import re
 import sys
 import types
 import traceback
+import compiler
 
 try:
     import json
@@ -164,3 +165,34 @@ def to_unicode (s, input_encoding='utf-8'):
 def print_exception (output = sys.stderr):
     print >> output, traceback.format_exc()
 
+
+
+#
+# Safe data struct parsing
+#
+def data_eval (node_or_string):
+    _safe_names = {'None': None, 'True': True, 'False': False}
+
+    if isinstance(node_or_string, basestring):
+        node_or_string = compiler.parse(node_or_string, mode='eval')
+
+    if isinstance(node_or_string, compiler.ast.Expression):
+        node_or_string = node_or_string.node
+
+    def _convert(node):
+        if isinstance(node, compiler.ast.Const) and isinstance(node.value, (basestring, int, float, long, complex)):
+            return node.value
+        elif isinstance(node, compiler.ast.Tuple):
+            return tuple(map(_convert, node.nodes))
+        elif isinstance(node, compiler.ast.List):
+            return list(map(_convert, node.nodes))
+        elif isinstance(node, compiler.ast.Dict):
+            return dict((_convert(k), _convert(v)) for k, v in node.items)
+        elif isinstance(node, compiler.ast.Name):
+            if node.name in _safe_names:
+                return _safe_names[node.name]
+        elif isinstance(node, compiler.ast.UnarySub):
+            return -_convert(node.expr)
+        raise ValueError('malformed string')
+
+    return _convert(node_or_string)
