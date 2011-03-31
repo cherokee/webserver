@@ -39,5 +39,3 @@ URL_SEARCH_APPLY = '/market/search/apply'
 URL_CATEGORY     = '/market/category'
 URL_REVIEW       = '/market/review'
 URL_REPORT       = '/market/report'
-
-REPO_MAIN        = 'http://alobbs.com/downloads/distro/'
