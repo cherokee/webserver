@@ -97,6 +97,7 @@ within the specific virtual server, visiting the `Behavior` tab and
 trigger the `Rule panel` by clicking on the `Rule Management`
 button.
 
+.Wizards
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
 Now, you will have to select the `Platforms` category, and run the
@@ -107,6 +108,7 @@ vast majority of the cases. Most probably it will cover your needs,
 although you are free to modify it as you will. No more configuration
 is needed after this step.
 
+.The wizard in action
 image::media/images/cookbook_ror_wizard.png[Rails Wizard]
 
 It is usually best to proxy one or several of the servers used by
@@ -144,6 +146,7 @@ checkbox since it will help you determine if an error is associated
 with your Ruby on Rails application or with Cherokee. This, however,
 is not required.
 
+.FastCGI handler
 image::media/images/cookbook_ror_common.png[Common CGI options]
 
 .FastCGI specific
@@ -170,9 +173,18 @@ our example uses the default values to set up ports 8000 through
 If any of those ports was not reachable, the `interpreter` command
 would be launched and the fallen one would be reinstantiated.
 
-Here is a snapshot to show the creation of *ror0*. The rest are
-similar using the port variation detailed above.
+According to that table, the creation of the *ror0* information source
+would use the following settings. The rest are similar using the port
+variation detailed above.
 
+.ror0 information source
+[cols="15%,20%,65%",options="header"]
+|===============================================================
+|Nick |Connection     |Interpreter
+|ror0 |localhost:8000 |`/home/foo/example/script/process/spawner fcgi`
+|===============================================================
+
+.ror0 information source
 image::media/images/cookbook_ror_fcgi.png[FastCGI specifics]
 
 Once everything is done you can check if Rails  is really

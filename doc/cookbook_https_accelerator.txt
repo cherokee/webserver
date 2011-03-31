@@ -42,6 +42,7 @@ The front-end server would have to balance the load among them.  For
 that, you will first have to add as many
 link:config_info_sources.html[Information Sources] as back-ends.
 
+.Multiple backends
 image::media/images/cookbook_https_accelerator_sources.png[Back-ends]
 
 Then you will have to configure the HTTP Reverse proxy. Visit your
@@ -49,6 +50,9 @@ front-end's virtual server through the
 link:config_virtual_servers.html[vServers] section, select the
 `Behavior` tab, and click on `Rule Management`. You will be able to
 choose the link:modules_handlers_proxy.html[HTTP Reverse Proxy]
-handler, and set it to balance the load among all your back-ends.
+handler, and set it to balance the load among all your back-ends. In
+the example, we will allow `Keepalive` connections, and assign all the
+information sources for the defined backends.
 
+.HTTP Reverse Proxy balancing
 image::media/images/cookbook_https_accelerator_handler.png[Back-ends]

@@ -39,6 +39,7 @@ available at the
 link:http://www.cherokee-project.com/[Cherokee-Project website] to
 demonstrate how easy it is to use the Django wizard.
 
+.Django wizard
 image:media/images/screencast.png["Django wizard",
 link="http://www.cherokee-project.com/screencasts.html#django_flup"]
 
@@ -88,6 +89,7 @@ tab inside one of your virtual servers. In this last scenario, the
 Django project will be accessible under the specified web directory of
 the selected virtual server.
 
+.Wizards
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
 Simply fill in the required fields. `Project Directory` applies to the
@@ -140,12 +142,14 @@ checkbox since it will help you determine if an error is associated
 with your Django application or with Cherokee. This, however, is not
 required.
 
+.SCGI handler
 image::media/images/cookbook_django_common.png[Common CGI options]
 
 .SCGI specific
 Under `SCGI specific` make sure to add the hosts providing the
 service. This is done by adding one or more information sources.
 
+.Django information source
 image::media/images/cookbook_django_infosources.png[Information Sources]
 
 Note that you will have to manually launch the `spawner` if
@@ -171,6 +175,7 @@ working. Just navigate to the path configured by your rule,
 http://localhost/example for instance, and you should see some notes
 about your recently created project.
 
+.It worked!
 image::media/images/cookbook_django.png[Django example]
 
 *********************************************************************

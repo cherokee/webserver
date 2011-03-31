@@ -25,12 +25,14 @@ It requires a single operation to get PHP configured on a pre-existing
 Virtual Server: Choose the virtual server your want to configure, and
 click on the `Behavior` tab and trigger the `Rule panel` by clicking
 on the `Rule Management` button. Once in there, use the `Add` button
-at the top of the panel to see the available wizards:
+at the top of the panel to see the available wizards.
 
+.Wizards
 image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 
 Now select `Languages` and run the PHP wizard. And, that's it. If you
-had `php-cgi` installed in your system, PHP should be configured now.
+had `php-fpm` or `php-cgi` installed in your system, PHP should be
+configured now.
 
 
 [[php_fastcgi]]
@@ -84,19 +86,39 @@ link:config_info_sources.html[information source] nicknamed `php` in
 this case. This connects to a FastCGI server located in localhost in
 port 47990. If no server is running, the webserver will run the
 FastCGI server by issuing the command defined as the *Interpreter*
-sub-parameter:
+sub-parameter of the information source that is being accessed.
 
+.FastCGI rule sample
 image::media/images/admin_handler_fastcgi1.png[Fastcgi]
+
+.Common CGI options in FastCGI rule
+[options="header"]
+|====================================================================
+|Checkbox        | Value
+|Error Handler   | Checked
+|Check file      | Checked
+|Pass request    | Checked
+|Allow XSendfile | Unchecked
+|====================================================================
 
 This other example shows a typical usage of multiple FastCGI servers.
 It connects to FastCGI servers in several locations. If no server is
 running in the local computer, the webserver will run the FastCGI
 server by issuing the specified command. Note that for *remote*
-FastCGI servers, you are responsible of running the FastCGI services
-there manually:
+FastCGI servers, you are responsible for running the FastCGI services
+there manually.
 
+.Load balancing among information sources
 image::media/images/admin_handler_fastcgi2.png[Fastcgi]
 
+.Load balancing among information sources
+[options="header"]
+|====================================================================
+|Nick              | Host
+|PHP interpreter   | localhost:47990
+|PHP interpreter 2 | php2.cluster:47990
+|PHP interpreter 3 | php3.cluster:47990
+|====================================================================
 
 [[multi-site]]
 Multi-site support

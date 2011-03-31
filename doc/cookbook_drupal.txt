@@ -192,8 +192,10 @@ First step
 
 Regular Expression internal redirection.
 
+.Redirection handler
 image::media/images/cookbook_drupal_dir_rules_1.png[Drupal Directory Rule]
 
+.Redirection handler
 [options="header"]
 |================================================
 |Type     |Regular Expression |Redirection
@@ -206,8 +208,10 @@ Second step
 
 Regular Expression internal redirection.
 
+.Redirection handler
 image::media/images/cookbook_drupal_dir_rules_2.png[Drupal Directory Rule]
 
+.Redirection handler
 [options="header"]
 |================================================
 |Type     |Regular Expression |Redirection
@@ -218,6 +222,7 @@ Third step
 ^^^^^^^^^^
 `/blog` directory rule with custom document root set to `/var/www/drupal`
 
+.Custom document root
 image::media/images/cookbook_drupal_dir_rules_3.png[Drupal Directory Rule]
 
 Fourth step
@@ -231,12 +236,15 @@ expression`-type rule matching the following expression:
 ----
 
 Handle this with the `HTTP error` handler:
+
+.HTTP error
 [options="header"]
 |=============
 |Error
 |403 Forbidden
 |=============
 
+.HTTP error
 image::media/images/cookbook_drupal_dir_rules_4.png[Drupal Directory Rule]
 
 
@@ -248,7 +256,30 @@ using both a `Directory` (set to `/blog`), and a `File Exist` types.
 
 Remember to enable caching, as in the screenshot.
 
+.Rule for static files
 image::media/images/cookbook_drupal_dir_rules_6.png[Drupal Directory Rule]
+
+.Rule for static files
+
+.First sub-rule
+[options="header"]
+|=================================
+|Field        | Value
+|Rule type    | Directory
+|Web directory| /blog
+|=================================
+
+*AND*
+
+.Second sub-rule
+[options="header"]
+|=================================
+|Rule type                 | File Exists
+|Match any file            | Enabled
+|Use I/O cache             | Enabled
+|Only match files          | Enabled
+|If dir, check index files | Disabled
+|=================================
 
 Sixth step
 ^^^^^^^^^^
@@ -256,8 +287,10 @@ Sixth step
 The last rule related to Drupal's configuration should be a catch-all
 internal redirection for a couple of regular expressions.
 
+.Redirection handler
 image::media/images/cookbook_drupal_dir_rules_7.png[Drupal Directory Rule]
 
+.Redirection handler
 [options="header"]
 |================================================
 |Type     |Regular Expression |Redirection
@@ -266,9 +299,11 @@ image::media/images/cookbook_drupal_dir_rules_7.png[Drupal Directory Rule]
 |================================================
 
 
-Finally, this is how your list of rules should look like. Rearrange
-yours accordingly if you seem something is wrong with your setup.
+At the end of the process you should end up with a list of 8
+rules. Rearrange from top to bottom according to the order given in
+the steps if you seem something is wrong with your setup.
 
+.Rule list
 image::media/images/cookbook_drupal_dir_rules.png[Drupal Directory Rules]
 
 The last one and any subsequent rules will belong to the previously
@@ -317,6 +352,7 @@ And the installation will be almost automatic. Just fill up the
 requested values and you will obtain the following results once your
 are through.
 
+.Drupal in action
 image::media/images/cookbook_drupal.png[Drupal in action!]
 
 [NOTE]

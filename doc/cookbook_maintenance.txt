@@ -27,32 +27,51 @@ Basic Example
 The steps are fairly simple:
 
 - Create a new virtual host, a copycat, that can handle the same
-  domain(s) as the ones managed by the host to be put offline.
+  domain(s) as the ones managed by the host to be put offline. In this
+  example it is cloed as 'copy'.
 +
+.Cloned virtual server
 image::media/images/cookbook_maintenance_copy.png[Copycat]
 
 - Don't forget to set up the domains handled by the virtual host.
 +
+.Domains
 image::media/images/cookbook_maintenance_domain.png[Domain]
++
+.Accepted Domains
+[options="header"]
+|====================================================================
+|Domain pattern
+|example.*
+|intranet_example
+|====================================================================
 
 - Also remember setting up whatever response you will be requiring (a
   custom error, some static content, and so on). We will be setting up
   the link:modules_handlers_custom_error.html[HTTP error] handler to
-  give a `503: Service unavailable' message.
+  give a `503: Service unavailable' message. This is done through the
+  `Handler` tab.
 +
+.Handler
 image::media/images/cookbook_maintenance_error.png[HTTP Error]
 +
 
-- After setting up this way our sole rule, it should look like this:
+- After this operation, we you should have a sole rule in the copied
+  virtual server managed by the HTTP Error handler.
 +
+.Rules
 image::media/images/cookbook_maintenance_rule.png[Rule]
+
+- The `Error Handler` tab should specify `Custom redirections` in the
+  `Error Handling hook` section.
++
+.Error Handler
+image::media/images/cookbook_maintenance_result.png[Final result]
 
 - Make sure the copycat is positioned above the original virtual host,
   effectively having a higher priority for it. By default the new
   virtual hosts are positioned on top of the rest. Just make sure you
   don't inadvertently change the relative priorities.
-+
-image::media/images/cookbook_maintenance_result.png[Final result]
 
 - Make a *graceful restart*.
 
@@ -87,9 +106,16 @@ the same domains.
   will be the the `Default` rule that will be redirecting every
   request to the first rule as an internal redirection.
 +
+.Rule list
 image::media/images/cookbook_maintenance_advanced_rules.png[Rules]
 
-- The `Default` rule should be set to redirect more or less like this:
+- The `Default` rule should be managed by the `Redirection` handler.
+.Redirections
+[cols="30%,70%",options="header"]
+|====================================================================
+|Type       |Regular Expression
+|Internal   |.*
+|====================================================================
 +
 image::media/images/cookbook_maintenance_advanced_redir.png[Default]
 
@@ -110,10 +136,12 @@ they can view the changes reflected while they are working.
 The tweaking here has to take place in the original virtual
 server. The steps are also fairly simple.
 
-- In this example we will be adding a new
-imaginary domain to the list of domains managed by the virtual
-host. This domain should be accessible from our intranet only.
+- In this example we will be adding a new imaginary domain to the list
+of domains managed by the virtual host. This domain should be
+accessible from our intranet only. For the purpose of this document,
+it will be we will use 'intranet_example'.
 +
+.Host Matches
 image::media/images/cookbook_maintenance_advanced_domains.png[Domains]
 +
 [NOTE]
