@@ -130,6 +130,7 @@ configuration.
   important. If it is not, FastCGI will not work and you will receive
   an _500 Internal Server Error_.
 
+.FastCGI handler
 image::media/images/cookbook_mono_handler.png[FastCGI handler options]
 
 And that is all. Once you upload your ASP.NET application to
@@ -139,9 +140,9 @@ application by pointing your web browser to, lets say
 
 For this recipe, the package asp.net2-examples (provided by Debian and
 Ubuntu thanks to some APT magic) was used. If you were to copy the
-examples to `/var/www` as final step of this tutorial, you should obtain
-something like the following screenshot.
+examples to `/var/www` as final step of this tutorial, you should see that Mono is working.
 
+.Demo in action
 image::media/images/cookbook_mono_demo.png[Mono Demo]
 
 When the package is installed, the examples will be placed in

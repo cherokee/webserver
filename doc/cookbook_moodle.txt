@@ -44,6 +44,7 @@ Simply set the `Document root` to `/var/www/moodle` and you are ready
 to go. This is done within the `Basics` tab of the chosen `Virtual
 Server`.
 
+.Custom document root
 image::media/images/cookbook_moodle_document_root.png[Moodle settings]
 
 [[moodle]]

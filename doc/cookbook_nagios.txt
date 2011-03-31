@@ -103,12 +103,30 @@ The first one will match the `/nagios/cgi-bin` directory, and will be
 handled by the `CGI` handler. We will map the `/usr/local/nagios/sbin`
 as the `Web Directory` for the rule, in the `Rule` tab.
 
+.First rule
 image::media/images/cookbook_nagios1.png[cgi-bin]
+
+.First rule
+[options="header"]
+|====================================================================
+|Field           | Value
+|Handler         | CGI
+|Document root   | /usr/local/nagios/sbin
+|====================================================================
 
 The second one will do something similar, only mapping `/nagios` to
 `/usr/local/nagios/share`.
 
+.Second rule
 image::media/images/cookbook_nagios2.png[nagios]
+
+.Second rule
+[options="header"]
+|====================================================================
+|Field           | Value
+|Handler         | List & Send
+|Document root   | /usr/local/nagios/share
+|====================================================================
 
 Finally, you can set up the authentication mechanism on both rules by
 configuring the `Security` tab. Choose the `Htpasswd file` validation
@@ -118,8 +136,10 @@ string, `Nagios` for instance. Note that this step is optional, since
 you can secure your application with any other validation mechanism
 provided by Cherokee.
 
+.Security configuration
 image::media/images/cookbook_nagios3.png[htpasswd]
 
 And that was all for today.
 
+.Nagios in action
 image::media/images/cookbook_nagios4.png[It's alive!]

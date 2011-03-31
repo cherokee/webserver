@@ -75,6 +75,7 @@ example.net
 
 Remember to set up the `Document root` to `/var/www/wordpress`.
 
+.Custom document root
 image::media/images/cookbook_wp_example1.png[WP example.net]
 
 Delete all the rules except `php` and `Default`. We're heading right
@@ -83,12 +84,14 @@ to the second milestone now.
 As previously, we will manage the `Default` rule with the redirection
 handler.
 
+.Redirection handler
 [cols="30%,30%,40%",options="header"]
 |=====================================================
 |Type     | Regular Expression | Redirection
 |Internal | ^/(.*)$            | /index.php
 |=====================================================
 
+.Redirection handler
 image::media/images/cookbook_wp_example2.png[WP example.net]
 
 After this, most of the redirections will work. We'll set some more
@@ -118,9 +121,9 @@ Remeber to manage them with a handler that can serve files: `Static
 content` and `List & Send`.
 
 Almost any evaluation order of your rules will suffice, as long as the
-one that handles the PHP files is the first one. This is a valid one,
-for instance.
+one that handles the PHP files is the first one.
 
+.Rule list
 image::media/images/cookbook_wp_example3.png[WP example.net]
 
 
@@ -185,23 +188,27 @@ quit;
 Then point your web browser to `http://localhost` and follow the
 instructions provided by the installer.
 
+.WordPress installation site info
 image::media/images/cookbook_wp1.png[WP installation]
 
 And the installation will be automatic. Just fill up the
 requested values and you will obtain the following results once your
 are through.
 
+.WordPress installation administrator info
 image::media/images/cookbook_wp2.png[WP installation]
 
 With that, you are done installing. Let's log in and make the last
 adjustments.
 
+.WordPress login
 image::media/images/cookbook_wp3.png[WP admin]
 
 Once we're logged, we can configure the way `permalinks` are
 displayed. Just use the `Settings`->`Permalinks` menu, and adjust the
 way the links are to be rewritten.
 
+.Permalinks
 image::media/images/cookbook_wp4.png[WP admin]
 
 Remember to set up the plugins that are of interest for you, such as
@@ -211,6 +218,7 @@ configured in Cherokee.
 And voilà! You have a WordPress installation working flawlessly with
 Cherokee.
 
+.WordPress in action
 image::media/images/cookbook_wp5.png[WP in action]
 
 ////////////////////////////////////////////////////////////////////////

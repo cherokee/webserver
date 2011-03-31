@@ -81,6 +81,7 @@ owner:
 Now point your web browser to `http://localhost/phpmyadmin`, and use
 the MySQL user information to access the databases.
 
+.phpMyAdmin in action
 image::media/images/cookbook_phpmyadmin.png[phpMyAdmin in action!]
 
 Generic setup
@@ -138,4 +139,5 @@ Considerations
   directory-type rules for those and manage them with the `HTTP Error`
   handler.
 
+.Handler HTTP Error
 image::media/images/cookbook_phpmyadmin_denied.png[Protected directories]
