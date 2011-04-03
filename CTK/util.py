@@ -196,3 +196,13 @@ def data_eval (node_or_string):
         raise ValueError('malformed string')
 
     return _convert(node_or_string)
+
+#
+# Hash
+#
+try:
+    # Python >= 2.5
+    from hashlib import md5
+except ImportError:
+    # Python <= 2.4
+    from md5 import md5
