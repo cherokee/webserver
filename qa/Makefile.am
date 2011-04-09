@@ -293,7 +293,8 @@ run-tests.py \
 269-Options-Dirlist1.py \
 270-Options-asterisk1.py \
 271-full-header-check1.py \
-272-Nick-match.py
+272-Nick-match.py \
+273-Unknown-method-redir.py
 
 test:
 	python -m compileall .

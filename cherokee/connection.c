@@ -2186,7 +2186,16 @@ cherokee_connection_check_http_method (cherokee_connection_t *conn, cherokee_con
 	if (config_entry->handler_methods == http_options)
 		return ret_ok;
 
+	/* Set the error
+	 */
 	conn->error_code = http_method_not_allowed;
+
+	/* If the HTTP method was not detected, set a safe one
+	 */
+	if (conn->header.method == http_unknown) {
+		conn->header.method = http_get;
+	}
+
 	return ret_error;
 }
 

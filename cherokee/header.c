@@ -278,9 +278,10 @@ parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char 
 
 
 static ret_t
-parse_method (cherokee_header_t *hdr, char *line, char **pointer)
+parse_method (cherokee_header_t *hdr, char *line, char *end, char **pointer)
 {
-	char chr = *line;
+	char *p;
+	char  chr = *line;
 
 #define detect_method(l,str,mthd)		\
 	if (cmp_str (line, (str" "))) {		\
@@ -375,6 +376,18 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 		break;
 	}
 
+	/* The method was not matched. Skip the first word.
+	 */
+	p = line;
+	while (p < end) {
+		if (*p == ' ') {
+			hdr->method = http_unknown;
+			*pointer += p - line;
+			return ret_ok;
+		}
+		p++;
+	}
+
 	return ret_error;
 }
 
@@ -432,7 +445,7 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 
 	/* Get the method
 	 */
-	ret = parse_method (hdr, line, &begin);
+	ret = parse_method (hdr, line, end, &begin);
 	if (unlikely (ret != ret_ok)) {
 		*error_code = http_not_implemented;
 		goto error;

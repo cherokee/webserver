@@ -183,7 +183,6 @@ do_redir_internal (cherokee_connection_t *conn,
 	/* Store the previous error code
 	 */
 	conn->error_internal_code = conn->error_code;
-
 	return ret_eagain;
 }
 
