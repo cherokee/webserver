@@ -16,7 +16,8 @@ Library.py \
 Util.py \
 Maintenance.py \
 ows_consts.py \
-CommandProgress.py
+CommandProgress.py \
+Distro.py
 
 marketpydir = "$(datadir)/cherokee/admin/market"
 marketpy_DATA = $(code)

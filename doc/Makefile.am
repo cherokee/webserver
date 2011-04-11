@@ -132,7 +132,8 @@ dev_debug.html \
 dev_cherokee.conf.html \
 dev_qa.html \
 dev_quickstart.html \
-dev_ctk.html
+dev_ctk.html \
+distro_dev_intro.html
 
 docmediacssdir = $(docdir)/media/css/
 docmediacss_DATA = \

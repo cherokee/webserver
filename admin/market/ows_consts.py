@@ -29,6 +29,7 @@ OWS_STATIC       = 'http://cherokee-market.com'
 OWS_APPS         = 'http://www.octality.com/api/v%s/open/market/apps/' %(OWS_API_VERSION)
 OWS_APPS_AUTH    = 'http://www.octality.com/api/v%s/market/apps/'      %(OWS_API_VERSION)
 OWS_APPS_INSTALL = 'http://www.octality.com/api/v%s/market/install/'   %(OWS_API_VERSION)
+OWS_APPS_CENTER  = 'http://www.octality.com/api/v%s/open/appscenter'   %(OWS_API_VERSION)
 
 OWS_DEBUG        = True
 
@@ -39,3 +40,5 @@ URL_SEARCH_APPLY = '/market/search/apply'
 URL_CATEGORY     = '/market/category'
 URL_REVIEW       = '/market/review'
 URL_REPORT       = '/market/report'
+
+REPO_MAIN        = 'http://www.cherokee-project.com/download/distribution'

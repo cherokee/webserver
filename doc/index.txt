@@ -121,7 +121,7 @@ link:modules.html[Modules]: Information about the standard modules
     - link:modules_balancers_failover.html[Failover]: Failover server strategy.
 
 *********************************
-link:other.html[Other information]: Miscellaneus
+link:other.html[Other information]: Miscellaneous
 *********************************
 
   . link:other_faq.html[FAQ]: List of Frequently Asked Questions.
@@ -148,7 +148,14 @@ link:dev.html[Development info]: Things of interest to developers
   . link:dev_debug.html[Debugging]: Resources available to debug Cherokee.
   . link:dev_cherokee.conf.html[cherokee.conf]: Internal configuration specs.
   . link:dev_qa.html[Quality Assurance]: Some info about QA in Cherokee.
-  . link:dev_ctk.html[CTK]: Dive into the Cherokee ToolKit
+  . link:dev_ctk.html[CTK]: Dive into the Cherokee Toolkit
+
+*********************************
+Cherokee's Distribution: Web Apps distribution on Cherokee
+*********************************
+
+  . link:distro_dev_intro.html[Introduction to Development]: How to build a package.
+
 
 ////////////////////////////////////////////////////
 

@@ -372,7 +372,7 @@ a.helpbutton span {
 }
 
 .check-list-flags-entry {
-  padding: 4px 0; 
+  padding: 4px 0;
 }
 
 .flags-buttons {
@@ -949,7 +949,7 @@ img.icon_chooser_selected {
 
 .free { color: #0b0; }
 
-.market-app-desc-version, .market-app-desc-url, .market-app-desc-category  {
+.market-app-desc-version, .market-app-desc-url, .market-app-desc-category, .market-app-desc-packager {
   margin-left: 168px;
   color: #666;
   font-size: 90%;
@@ -1194,7 +1194,7 @@ img.icon_chooser_selected {
 
 .mimeheader div {
   padding: 8px;
-  float: left;  
+  float: left;
   min-width: 32px;
   margin-bottom: 8px;
 }
@@ -1213,7 +1213,7 @@ img.icon_chooser_selected {
 
 .mimeentry .md {
   padding: 2px 8px;
-  float: left;  
+  float: left;
   min-width: 32px;
   margin-top: 4px;
 }
@@ -1228,7 +1228,7 @@ img.icon_chooser_selected {
 .md-del img { margin-top: 4px; }
 
 .mime-button {
-  margin-bottom: 64px; 
+  margin-bottom: 64px;
 }
 
 /* Page Advanced */

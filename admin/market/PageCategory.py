@@ -25,6 +25,7 @@
 import re
 import CTK
 import Page
+import Distro
 import OWS_Login
 
 from consts import *
@@ -33,69 +34,63 @@ from configured import *
 
 from Util import *
 from Menu import Menu
-from XMLServerDigest import XmlRpcServer
-
 
 class Categories_Widget (CTK.Box):
-    cached = None
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'class': 'cherokee-market-categories'})
+        index = Distro.Index()
 
-    def format_func (self, info):
-        # Format the list
+        # Build category list
+        category_names = []
+        for app_name in index.get('packages') or []:
+            cat_name = index.get_package (app_name, 'software').get('category')
+            if cat_name and not cat_name in category_names:
+                category_names.append (cat_name)
+
+        # Build Content
         cat_list = CTK.List()
-        for cat in info:
-            link = CTK.Link ('%s/%s/%s' %(URL_CATEGORY, cat['category_id'], cat['category_name']), CTK.RawHTML(cat['category_name']))
+        for cat_name in category_names:
+            link = CTK.Link ('%s/%s' %(URL_CATEGORY, cat_name), CTK.RawHTML(cat_name))
             cat_list += link
 
-        # Save a copy
-        render_str = cat_list.Render().toStr()
-        if len(info) > 2:
-            Categories_Widget.cached = render_str
-        return render_str
-
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'class': 'market-categories-list'})
+        # Layout
         self += CTK.RawHTML ('<h3>%s</h3>' %(_('Categories')))
-
-        if self.cached:
-            self += CTK.RawHTML (self.cached)
-        else:
-            self += CTK.XMLRPCProxy (name = 'cherokee-market-categories',
-                                     xmlrpc_func = lambda: XmlRpcServer(OWS_APPS).list_categories(),
-                                     format_func = self.format_func,
-                                     debug = OWS_DEBUG)
+        self += cat_list
 
 
 class Category:
-    def format_func (self, info):
-        pags = CTK.Paginator('category-results', items_per_page=10)
-        for app in info:
-            pags += RenderApp (app)
-
-        return pags.Render().toStr()
-
     def __call__ (self):
+        index = Distro.Index()
         page = Page_Market(_('Category'))
 
         # Parse URL
-        tmp = re.findall ('^%s/(\d+)/?(.*)$' %(URL_CATEGORY), CTK.request.url)
+        tmp = re.findall ('^%s/([\w ]+)$'%(URL_CATEGORY), CTK.request.url)
         if not tmp:
             page += CTK.RawHTML ('<h2>%s</h2>' %(_("Empty Category")))
             return page.Render()
 
-        self.categoty_num  = tmp[0][0]
-        self.category_name = tmp[0][1]
+        self.category_name = tmp[0]
 
         # Menu
         menu = Menu([CTK.Link(URL_MAIN, CTK.RawHTML (_('Market Home')))])
         menu += "%s: %s" %(_('Category'), self.category_name)
         page.mainarea += menu
 
-        # Perform the search
-        page.mainarea += CTK.XMLRPCProxy (name = 'cherokee-market-category',
-                                 xmlrpc_func = lambda: XmlRpcServer(OWS_APPS).list_apps_in_category (self.categoty_num, OWS_Login.login_session),
-                                 format_func = self.format_func,
-                                 debug = OWS_DEBUG)
+        # Add apps
+        pags = CTK.Paginator('category-results', items_per_page=10)
+
+        box = CTK.Box ({'class': 'cherokee-market-category'})
+        box += pags
+        page.mainarea += box
+
+        for app_name in index.get('packages'):
+            app = index.get_package(app_name, 'software')
+            cat = app.get('category')
+            if cat == self.category_name:
+                pags += RenderApp (app)
+
+        # Render
         return page.Render()
 
 
-CTK.publish ('^%s' %(URL_CATEGORY),     Category)
+CTK.publish ('^%s' %(URL_CATEGORY), Category)

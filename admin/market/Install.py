@@ -40,6 +40,7 @@ import SystemInfo
 import SystemStats
 import SaveButton
 import Cherokee
+import Distro
 import popen
 import CommandProgress
 import InstallUtil
@@ -66,6 +67,10 @@ NO_ROOT_H1 = N_("Privileges test failed")
 NO_ROOT_P1 = N_("Since the installations may require administrator to execute system administration commands, it is required to run Cherokee-admin under a user with  administrator privileges.")
 NO_ROOT_P2 = N_("Please, run cherokee-admin as root to solve the problem.")
 
+MIN_VER_H1 = N_("The package cannot be installed")
+MIN_VER_p1 = N_("This package required at least Cherokee %(version)s to be installed.")
+
+
 URL_INSTALL_WELCOME        = "%s/install/welcome"        %(URL_MAIN)
 URL_INSTALL_INIT_CHECK     = "%s/install/check"          %(URL_MAIN)
 URL_INSTALL_PAY_CHECK      = "%s/install/pay"            %(URL_MAIN)
@@ -81,14 +86,18 @@ URL_INSTALL_DONE_APPLY     = "%s/install/done/apply"     %(URL_MAIN)
 
 
 class InstallDialog (CTK.Dialog):
-    def __init__ (self, info):
-        title = "%s  —  %s" %(info['application_name'], _("Cherokee Market"))
+    def __init__ (self, app_name):
+        index = Distro.Index()
+        app   = index.get_package (app_name, 'software')
+
+        title = "%s  —  %s" %(app['name'], _("Cherokee Market"))
 
         CTK.Dialog.__init__ (self, {'title': title, 'width': 600, 'minHeight': 300})
-        self.info = info
+        self.info = app
 
-        for key in ('application_id', 'application_name', 'currency_symbol', 'amount', 'currency'):
-            CTK.cfg['tmp!market!install!app!%s'%(key)] = str(info[key])
+        # Copy a couple of preliminary config entries
+        CTK.cfg['tmp!market!install!app!application_id']   = app['id']
+        CTK.cfg['tmp!market!install!app!application_name'] = app['name']
 
         self.refresh = CTK.RefreshableURL()
         self.druid = CTK.Druid(self.refresh)
@@ -123,7 +132,7 @@ class Install_Stage:
 class Welcome (Install_Stage):
     def __safe_call__ (self):
         # Ensure the current UID has enough priviledges
-        if not InstallUtil.current_UID_is_admin():
+        if not InstallUtil.current_UID_is_admin() and 0:
             box = CTK.Box()
             box += CTK.RawHTML ('<h2>%s</h2>' %(_(NO_ROOT_H1)))
             box += CTK.RawHTML ('<p>%s</p>'   %(_(NO_ROOT_P1)))
@@ -134,6 +143,25 @@ class Welcome (Install_Stage):
             box += buttons
 
             return box.Render().toStr()
+
+        # Check the rest of pre-requisites
+        index  = Distro.Index()
+        app_id = CTK.cfg.get_val('tmp!market!install!app!application_id')
+        app    = index.get_package (app_id, 'software')
+
+        inst = index.get_package (app_id, 'installation')
+        if 'cherokee_min_ver' in inst:
+            version = inst['cherokee_min_ver']
+            if version_cmp (VERSION, version) < 0:
+                box = CTK.Box()
+                box += CTK.RawHTML ('<h2>%s</h2>' %(_(MIN_VER_H1)))
+                box += CTK.RawHTML ('<p>%s</p>'   %(_(MIN_VER_P1)%(locals())))
+
+                buttons = CTK.DruidButtonsPanel()
+                buttons += CTK.DruidButton_Close(_('Cancel'))
+
+                box += buttons
+                return box.Render().toStr()
 
         # Init the log file
         Install_Log.reset()
@@ -151,112 +179,23 @@ class Welcome (Install_Stage):
 
         # Render a welcome message
         box = CTK.Box()
-        box += CTK.RawHTML ('<h2>%s</h2>' %(_('Connecting to Cherokee Market')))
-        box += CTK.RawHTML ('<h1>%s</h1>' %(_('Retrieving package information…')))
-        box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_INIT_CHECK))
-
-        # Dialog buttons
-        buttons = CTK.DruidButtonsPanel()
-        buttons += CTK.DruidButton_Close(_('Cancel'))
-        box += buttons
-
-        return box.Render().toStr()
-
-
-class Init_Check (Install_Stage):
-    def __safe_call__ (self):
-        app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
-        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
-
-        info = {'cherokee_version': VERSION,
-                'system':           SystemInfo.get_info()}
-
-        cont = CTK.Box()
-        xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
-        install_info = xmlrpc.get_install_info (app_id, info)
-
-        if install_info.get('error'):
-            title  = install_info['error']['error_title']
-            errors = install_info['error']['error_strings']
-
-            cont += CTK.RawHTML ("<h2>%s</h2>"%(_(title)))
-            for error in errors:
-                cont += CTK.RawHTML ("<p>%s</p>"%(_(error)))
-
-            buttons = CTK.DruidButtonsPanel()
-            buttons += CTK.DruidButton_Close(_('Close'))
-            cont += buttons
-
-        elif install_info['installable']:
-            # Do not change this log line. It is used by the
-            # Maintenance.py file to figure out the app name
-            Install_Log.log ("Checking: %s, ID: %s = Installable, URL=%s" %(app_name, app_id, install_info['url']))
-
-            CTK.cfg['tmp!market!install!download'] = install_info['url']
-            cont += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (cont.id, URL_INSTALL_DOWNLOAD))
-
-        else:
-            Install_Log.log ("Checking: %s, ID: %s = Must check out first" %(app_name, app_id))
-
-            cont += CTK.RawHTML ("<h2>%s %s</h2>"%(_('Checking out'), app_name))
-            cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALL_READY_TO_BUY_1)))
-            cont += CTK.RawHTML ("<p>%s</p>"  %(_(NOTE_ALL_READY_TO_BUY_2)))
-
-            checkout = CTK.Button (_("Check Out"))
-            checkout.bind ('click', CTK.DruidContent__JS_to_goto (cont.id, URL_INSTALL_PAY_CHECK) +
-                                    CTK.JS.OpenWindow('%s/order/%s' %(OWS_STATIC, app_id)))
-
-            buttons = CTK.DruidButtonsPanel()
-            buttons += CTK.DruidButton_Close(_('Cancel'))
-            buttons += checkout
-            cont += buttons
-
-        return cont.Render().toStr()
-
-
-class Pay_Check (Install_Stage):
-    def __safe_call__ (self):
-        app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
-        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
-
-        info = {'cherokee_version': VERSION,
-                'system':           SystemInfo.get_info()}
-
-        xmlrpc = XmlRpcServer (OWS_APPS_INSTALL, user=OWS_Login.login_user, password=OWS_Login.login_password)
-        install_info = xmlrpc.get_install_info (app_id, info)
-
-        Install_Log.log ("Waiting for the payment acknowledge..")
-
-        box = CTK.Box()
-        if install_info.get('due_payment'):
-            set_timeout_js = "setTimeout (reload_druid, %s);" %(PAYMENT_CHECK_TIMEOUT)
-            box += CTK.RawHTML ("<h2>%s %s</h2>"%(_('Checking out'), app_name))
-            box += CTK.RawHTML ('<h1>%s</h1>' %(_("Waiting for the payment acknowledge…")))
-            box += CTK.RawHTML (js="function reload_druid() {%s %s}" %(CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_PAY_CHECK), set_timeout_js))
-            box += CTK.RawHTML (js=set_timeout_js)
-
-            buttons = CTK.DruidButtonsPanel()
-            buttons += CTK.DruidButton_Close(_('Cancel'))
-            box += buttons
-
-        else:
-            Install_Log.log ("Payment ACK!")
-
-            # Invalidate 'My Library' cache
-            Library.Invalidate_Cache()
-
-            # Move on
-            CTK.cfg['tmp!market!install!download'] = install_info['url']
-            box += CTK.RawHTML (js=CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_DOWNLOAD))
+        box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, URL_INSTALL_DOWNLOAD))
 
         return box.Render().toStr()
 
 
 class Download (Install_Stage):
     def __safe_call__ (self):
-        app_id       = CTK.cfg.get_val('tmp!market!install!app!application_id')
-        app_name     = CTK.cfg.get_val('tmp!market!install!app!application_name')
-        url_download = CTK.cfg.get_val('tmp!market!install!download')
+        app_id   = CTK.cfg.get_val('tmp!market!install!app!application_id')
+        app_name = CTK.cfg.get_val('tmp!market!install!app!application_name')
+
+        # URL Package
+        index = Distro.Index()
+        pkg   = index.get_package (app_id, 'package')
+
+        repo_url = CTK.cfg.get_val ('admin!ows!repository', REPO_MAIN)
+        url_download = os.path.join (repo_url, app_id, pkg['filename'])
+        CTK.cfg['tmp!market!install!download'] = url_download
 
         # Local storage shortcut
         pkg_filename_full = url_download.split('/')[-1]
@@ -271,7 +210,7 @@ class Download (Install_Stage):
                     pkg_revision = max (pkg_revision, int(tmp[0]))
 
         if pkg_revision > 0:
-            pkg_fullpath = os.path.join (CHEROKEE_OWS_DIR, "packages", app_id, '%s_%d.pkg' %(pkg_filename, pkg_revision))
+            pkg_fullpath = os.path.join (CHEROKEE_OWS_DIR, "packages", app_id, '%s_%d.cpk' %(pkg_filename, pkg_revision))
             CTK.cfg['tmp!market!install!local_package'] = pkg_fullpath
 
             Install_Log.log ("Using local repository package: %s" %(pkg_fullpath))
@@ -580,8 +519,8 @@ class Install_Done_Content (Install_Stage):
 
 
 CTK.publish ('^%s$'%(URL_INSTALL_WELCOME),        Welcome)
-CTK.publish ('^%s$'%(URL_INSTALL_INIT_CHECK),     Init_Check)
-CTK.publish ('^%s$'%(URL_INSTALL_PAY_CHECK),      Pay_Check)
+#CTK.publish ('^%s$'%(URL_INSTALL_INIT_CHECK),     Init_Check)
+#CTK.publish ('^%s$'%(URL_INSTALL_PAY_CHECK),      Pay_Check)
 CTK.publish ('^%s$'%(URL_INSTALL_DOWNLOAD),       Download)
 CTK.publish ('^%s$'%(URL_INSTALL_SETUP),          Setup)
 CTK.publish ('^%s$'%(URL_INSTALL_POST_UNPACK),    Post_unpack)

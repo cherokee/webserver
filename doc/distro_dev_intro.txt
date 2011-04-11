@@ -1,0 +1,390 @@
+= Building an installer
+
+Since release 1.2, Cherokee supports automatic application deployments. Packaging web applications is only a matter of knowing how to build an installer, which in turn is basically a Cherokee Wizard on steroids.
+
+To build an installer you’ll need some basic knowledge about the existing infrastructure, and also some rudimentary knowledge about CTK. Of course, some proficiency with Cherokee is required so that you can obtain a suitable configuration template, but that is pretty much it.
+
+== Installer
+
+A package is basically a tar.gz file containing a web application and some installation scripts. To build a package, at least the following files must be provided:
+. build.py: a definition file that contains the information required to download and build the package.
+. description.py: a definition file that provides the information about the package (name, release, revision, description, supported installation modes, etc). 
+. installer.py: initial installation script on which Cherokee-Admin relies once it has downloaded the package to be installed.
+. Additionally, delta files to apply patches can be provided (to use while building the package), as well as other auxiliary installer files to be used by the main installer.py script. Also it is recommended to provide a file with notes about the installer or detailing a QA procedur to ensure the quality of the package.
+
+Lets detail the structure of both essential files and then we can proceed with some more specifics.
+
+=== build.py
+This must provide all the details required to successfully download, patch, and build the installer. The building change is actually quite sophisticated and will cache things whenever possible: it will not attempt to re-download source files, or even rebuild the package if
+.build.py
+-----
+# Remember to modify package revision when upgrading, so that build
+# system doesn't miss it
+REVISION = 25
+
+PY_DEPS  = [
+
+'../common/php.py',
+           '../common/target.py',
+]
+
+PY_FILES = ['installer.py', 'tools.py']
+INCLUDE  = ['bar']
+
+DOWNLOADS = [
+
+{'dir': 'bar',
+'mv’: (('Bar-v2.0.17’, 'bar’),),
+             'url': 'http://example.com/downloads/Bar-v2.0.17.tar.bz2',
+             'patches': [('patch-01-hide_db_block.diff', '-p1')]},
+
+    {'dir': 'bar/plugins', 'fence': True,
+              'skip_if': 'bar/plugins/baz/flagged_file.php',
+              'url': 'http://example.com/downloads/plugins/baz-1.x-dev.tar.gz'},
+]
+-----
+
+You can see several interesting properties on this file, which deserve more specific descriptions.
+
+==== PY_DEPS
+
+List of script dependencies. Basically intended to include the modules provided under the `common` directory. These are modules that take care of common functionality used extensively throughout all the installers.
+
+At the moment of writing, it contains the following modules.
+
+    - cc.py: Functionality related to detection and installation of a C development environment.
+    - cpp.py: Functionality related to detection and installation of a C++ development environment.
+    - database.py: Functionality related to detection and usage of several database engines.
+    - java.py: Functionality related to detection and installation of a JRE.
+    - php-mods.py: Functionality related to detection and installation of a PHP modules.
+    - php.py: Functionality related to detection and installation of a PHP interpreter.
+    - pwd_grp.py: Functionality related to system users and groups.
+    - python.py: Functionality related to detection and installation of Python.
+    - ruby.py: Functionality related to detection and installation of Ruby and Ruby Gems.
+    - services.py: Functionality related to system services.
+    - target.py: Module that defines target types for installations (Virtual server, Web directory).
+
+
+==== PY_FILES
+
+This is the list of scripts that must be packed with your installer (besides the ones specified as dependencies.
+In this list you can also specify files from other installers, which is the case when packing extended versions and you want to have a unique source to maintain when upgrading releases.
+
+==== INCLUDE
+
+This is the list of directories that should be included in the package. It is usually a good idea to specify the names after they have been renamed by the building script, so that you can avoid the need of having to rename directories manually every time you upgrade your package. More on this on the following entry.
+
+==== DOWNLOADS
+
+List of files that have to be downloaded from third party repositories. It is provided as a list of dictionaries with several keys, which globally allow you to define precisely what to download and where to put it. It also includes the directions required to apply patches and rename files/directories on demand, which is a good idea since by setting the directory names you can isolate the build script from the installer script.
+
+===== Download entry
+
+Each entry is a dictionary. Providing the `dir` and `url` elements is mandatory. All the rest are optional.
+
+----
+entry = {
+      'dir':     'bar',
+      'url':     'http://example.com/downloads/Bar-v2.0.17.tar.bz2',
+      'mv’:      [('Bar-v2.0.17’, 'bar’),],
+      'patches': [('patch-01-hide_db_block.diff', '-p1')],
+      'fence':   True,
+      'skip_if': 'bar/plugins/baz/foo.php',
+}
+----
+
+[cols="20%,80%",options="header"]
+|==================================================================
+|Key     |Description
+|url     |URL of the remote resource to download. Valid formats are tar.gz, tar.bz2, and zip.
+|dir     |Directory where the file is unpacked. Should match an element of the INCLUDE property.
+|mv      |Renaming list, should contain tuples indicating source and target names.
+|patches |List of patches to apply
+|fence   |If True, create directory and change to it before decompression.
+|skip_if |If file or directory exists, skip download of this entry.
+|==================================================================
+
+=== description.py
+
+As has been mentioned, this file provides information about the package. The repository has to be indexed, and this is the source of such data.
+
+.description.py
+-----
+# Short summary to display in app-overview
+DESC_SHORT = """<p>This is the summary.</p>
+"""
+
+# Longer description to display in app-overview
+DESC_LONG = """<p>This is a longer description.</p>
+<p>You know the drill.</p>
+"""
+
+# Set software properties
+software = {
+ 'name':        'example',                  # part of the filename for the package
+ 'version':     '0.9.9',                    # part of the filename for the package
+ 'author':      'Foo Bar,                   # appears in app-overview
+ 'URL':         'http://example.com/',      # appears in app-overview
+ 'screenshots': ('shot1.png', 'shot2.png'), # files inside the screenshots directory to use
+ 'desc_short':  DESC_SHORT,
+ 'desc_long':   DESC_LONG,
+ 'category':    'Development',              # group the app under this category
+}
+
+# Define the support table: installation modes, supported OSes, and
+# database engines
+installation = {
+  'modes': ('vserver', 'webdir'),
+  'OS':    ('linux', 'macosx', 'freebsd', 'solaris'),
+  'DB':    ('mysql', 'postgresql', 'sqlite3')
+}
+
+# Info about the maintainer of the package
+maintainer = {
+ 'name':  'John Doe',
+ 'email': 'john@example.com
+}
+-----
+
+Everything is pretty self descriptive. The software dictionary should
+suffice to display information about the package within Cherokee
+Admin. It will be automatically put in place according to the category
+tag. Look for the one that better suits your app and use it, or create
+a new category if necessary.
+
+==== installation
+
+The installation properties define supported installation modes, supported Operating Systems, and supported database engines.
+These must be chosen among the following lists.
+
+.modes
+[cols="20%,80%",options="header"]
+|==================================================================
+|Value      |Description
+|vserver    |Can be installed as a new virtual server
+|webdir     |Can be installed as a web-directory of an existing virtual server
+|==================================================================
+
+.OS
+[cols="20%,80%",options="header"]
+|==================================================================
+|Value      |Description
+|linux      |Linux support
+|macosx     |MacOS X support
+|solaris    |Solaris support
+|freebsd    |FreeBSD support
+|==================================================================
+
+.DB
+[cols="20%,80%",options="header"]
+|==================================================================
+|Value      |Description
+|mysql      |MySQL engine supported by installer
+|postgresql |PostgreSQL engine supported by installer
+|sqlite3    |Sqlite3 engine supported by installer
+|==================================================================
+
+
+=== installer.py
+
+After downloading and decompressing a package, Cherokee Admin hands over the control to this script. It basically provides a configuration template, and follows the chain on installation stages until the common final installation stage is reached. Once this happens, Cherokee Admin will save and apply the configuration if possible, or will notify if pending changes remained before the installation so the step can be performed manually.
+
+Control is handed over by visiting a local URL that is used as entry point to the installer, and is returned when, upon completion, the installer visits another URL which is the exit point. In the middle, the chain of URLs must be published by the installer itself, that also has to establish the control flow between them.
+
+You are advised to make extensive use of the logging capabilities provided by market.Install_Log, so that it is easier to develop package-installers and report bugs if necessary.
+
+Have a look at the hello_world installer in the repository to see a thoroughly commented example.
+Here is an excerpt of a very basic example.
+
+.installer.py
+-----
+# Load external modules with CTK. Note that absolute paths are specified.
+target = CTK.load_module_pyc (os.path.join (os.path.dirname (os.path.realpath (__file__)), "target.pyo"), "target_util")
+
+# Batch commands, used to setup ownership and permissions, for example
+POST_UNPACK_COMMANDS = [
+    ({'command': 'chown -R root:${root_group} ${app_root}/package*'}),
+    ({'command': 'chmod 755 ${app_root}/package*'}),
+]
+
+# Cfg chunks
+CONFIG_VSERVER = """
+
+# Configuration snippet for virtual-server installations
+"""
+CONFIG_DIR = """
+
+# Configuration snippet for web-directory installations.
+"""
+NEXT_URL = "/market/install/example_app/config"
+
+## Step 1: Target
+class Target (Install_Stage):
+    def __safe_call__ (self):
+       box = CTK.Box()
+       target_wid = target.TargetSelection()
+       target_wid.bind ('goto_next_stage', CTK.DruidContent__JS_to_goto (box.id, NEXT_URL))
+       box += target_wid
+
+       buttons = CTK.DruidButtonsPanel()
+       buttons += CTK.DruidButton_Close(_('Cancel'))
+       buttons += CTK.DruidButton_Submit (_('Next'), do_close=False)
+       box += buttons
+       return box.Render().toStr()
+
+## Step 2: App configuration
+class App_Config (Install_Stage):
+    def __safe_call__ (self):
+       box = CTK.Box()
+       pre = 'tmp!market!install'
+
+       # Replacements
+       root         = CTK.cfg.get_val ('%s!root'   %(pre))
+       target_type  = CTK.cfg.get_val ('%s!target' %(pre))
+
+      # Apply the config
+       if target_type == 'vserver':
+               config = CONFIG_VSERVER %(locals())
+           elif target_type == 'directory':
+               config = CONFIG_DIR %(locals())
+
+           CTK.cfg.apply_chunk (config)
+
+       # Redirect to the Thanks page
+       box += CTK.RawHTML (js = CTK.DruidContent__JS_to_goto (box.id, market.Install.URL_INSTALL_DONE))
+       return box.Render().toStr()
+
+CTK.publish ('^%s$'%(market.Install.URL_INSTALL_SETUP_EXTERNAL), Target)
+CTK.publish ('^%s$'%(NEXT_URL), App_Config)
+-----
+
+An overview of each section follows.
+
+==== Load of external modules
+This part is where you would import all the accessory modules into your current name space. Those are the ones with common functionality, or the ones you’ve added to the package besides build.py and installer.py.
+Note that absolute paths are specified on each import.
+
+====Batch commands: POST_UNPACK_COMMANDS
+This is a list of command entries.
+If this property is present in the installer script, the entries will be executed sequentially right after downloading and unpacking the application. When an error occurs the problem is notified within the installation screen. Otherwise, execution proceeds towards the first defined stage.
+
+The list of POST_UNPACK_COMMANDS is comprised of command entries that will be processed through an instance of market.CommandProgress.CommandProgress. Please refer to it later on this document for the specifics.
+
+==== market.Install
+You need to know market.Install.Install_Stage.
+Every installation stage inherits from this class, and will render the  contents that need be displayed in the installation dialogs.
+
+The flow is determined by the mapped URLs/classes that are published by CTK in each installer.
+
+The entry point is *market.Install.URL_INSTALL_SETUP_EXTERNAL*. An hypothetical installer that wants to handle checks for  dependencies through a class called Precondition that inherits from market.Install.Install_Stage, would map the URL to the class with the following code:
+
+.Mapping the entry point
+-----
+CTK.publish ('^%s$'%(market.Install.URL_INSTALL_SETUP_EXTERNAL),        Precondition)
+-----
+
+Each stage must redirect the flow to the next URL, and each URL must be mapped to an Install_Stage with an analogous syntax. This mapping applies to every stage except the last one.  Upon successful completion, the last Install_Stage should redirect the flow towards the standard exit point,  *market.Install.URL_INSTALL_DONE*, which is already mapped
+
+=== DIFF files
+The build.py script can specify what patches have to be applied on build-time. Those are only applied if the entry specified in build.py is downloaded, so the caching mechanism for downloads and built packages remains consistent.
+
+It is recommended that these patches are generated using `diff -rcu` to maintain uniformity on the repositories and to provide context to the patches, possibly remaining valid after package upgrades.
+
+=== Important modules
+
+Some functionality is provided directly  ith Cherokee Admin, which is what will be described in the following lines. Also, there are a series of common elements that can be reused by different installer (target selection, database management, handling PHP and PHP modules, etc.). As was mentioned before, such elements are encapsulated as independent modules distributed under the `common` directory, and are usually well comment, so don’t forget to review them before you begin working on your custom installers.
+
+==== popen
+popen.popen_sync is a function that provides a subset of the functionality of the subprocess.Popen class, but it does so consistently along all Python 2.x versions. Installers frequently need to execute command-line tasks, and this is the function that should be used. It accepts the following arguments.
+
+.popen_sync arguments
+[cols="10%,10%,30%,50%",options="header"]
+|==================================================================
+|Argument  |Default     |Example             |Description
+|command   |*mandatory* |chown root /tmp/foo |Command to execute
+|env       |None        |{'PATH’: "/usr/bin} |Provide custom environment
+|stdout    |True        |False               |Include/exclude stdout in return value
+|stderr    |True        |False               |Include/exclude stderr in return value
+|retcode   |True        |False               |Include/exclude execution return code
+|cd        |None        |’/tmp/bar’          |Change to this directory before running
+|su        |None        |0                   |Set process’s user id if possible
+|==================================================================
+
+
+==== market.Install_Log
+
+The most important function is market.Install_Log.log, which should be used extensively to log absolutely everything performed during an installation. File creation, task execution, and database modifications are logged in a file called `install.log` in the application’s directory.
+
+When maintenance tasks are launched to completely erase orphan or broken installations, this file is parsed to revert the modifications done to your system.
+
+It is also useful to log everything to ease up the troubleshooting process if anything goes wrong.
+
+==== market.CommandProgress
+
+The most relevant class is market.CommandProgress.CommandProgress.
+
+This class provides a way to process time consuming tasks in a sequential manner, without having to worry about the connection timing out.
+It is a CTK widget, and as such can be added to an existing container and will begin execution once it has been rendered. Provided a list of command entries, these will be executed sequentialy, after which the control flow will proceed to the URL specified when CommandProgress object was instanced. During execution, it will display a progress bar, and additionaly the command being executed or a provided description.
+
+Command entries are dictionaries with the following arguments, where specifying either a "command" or a "function" argument is mandatory.
+
+.Arguments
+[cols="15%,35%,50%",options="header"]
+|==================================================================
+|Argument    |Default     |Example                       |Description
+|command     |            |chown ${web_user} ${app_root} |Command to execute
+|function    |            |func_name                     |Function to execute
+|params      |{}          |{'arg1’: "hello"}             |Arguments to pass to executed function
+|description |None        |chown root /tmp/foo           |Text to show instead of command or function name when command entry is being executed
+|env         |None        |{'PATH’: "/usr/bin}           |Provide custom environment
+|cd          |None        |’/tmp/bar’                    |Change to this directory before running
+|su          |None        |0                             |Set process’s user id if possible
+|check_ret   |True        |False                         |Report error if return code is not 0.
+|==================================================================
+
+The commands being executed can have some replacement macros enclosed in curly braces and preceded by '$’ (i.e., ${macro}). Those will be substituted before actually running the command. The most usual ones are provided by default, and more can be added arbitrarily.
+
+.Replacement macros
+[cols="20%,80%",options="header"]
+|==================================================================
+|Macro       |Description
+|web_user    |User under which Cherokee runs
+|web_group   |Group under which Cherokee runs
+|root_user   |The system’s root user
+|root_group  |The system’s root group (root, wheel, etc.)
+|app_root    |Path where the downloaded application is decompressed
+|==================================================================
+
+Additional replacement macros can be specified when the CommandProgress in instanced manually, which is always except for the one that processes the POST_UNPACK_COMMANDS property.
+It is as simple as setting the macros as properties of the CommandProgress object.
+
+.Example: adding custom replacement macros
+----
+next_url = '/market/installer/example_app/final_stage’ # this can be set arbitrarily.
+commands = [{'command’: touch ${foo}’},]
+progress = market.CommandProgress.CommandProgress (commands, next_url)
+progress["path"] = '/tmp/bar’
+----
+
+
+==== market.Util
+
+The class market.Util.InstructionBox is used extensively, particularly by stages that check for preconditions that need be fulfilled in order to complete the installation of an application.
+
+It is a CTK widget used to display instructions to install software, tailored specifically to the users’ platform. It must be instanced with a mandatory note, such as "PHP not detected in your system.", and a dictionary (or list of dictionaries, for multi-message instructions) with messages for each platform.
+
+.Example
+----
+PHP_INSTRUCTIONS = {
+    'apt':           "sudo apt-get install php5-fpm  or  sudo apt-get install php5-cgi",
+    'yum':           "sudo yum install php",
+    'zypper':        "sudo zypper install php5-fastcgi",
+    'macports':      "sudo port install php5 +fastcgi",
+    'freebsd_pkg':   "pkg_add -r php5",
+    'freebsd_ports': "cd /usr/ports/lang/php5 && make WITH_FASTCGI=yes WITH_FPM=yes install distclean",
+    'ips':           "pfexec pkg install 'pkg:/web/php-52'",
+    'default':       N_("PHP is available at http://www.php.net/ "),
+}
+----
+
+If instanced, the InstructionBox will determine which entry is apropriate for the user’s system, and show only that one (or fall through to the default entry and show that one if nothing more specific is found).

@@ -68,16 +68,14 @@ def get_logs (app_id):
 def Report_Apply():
     app_id   = CTK.post.get_val('app_id')
     report   = CTK.post.get_val('report')
-    refund   = CTK.post.get_val('refund')
     app_logs = get_logs (app_id)
     sysinfo  = SystemInfo.get_info()
     cfg      = str(CTK.cfg)
 
-    # OWS auth
-    xmlrpc = XmlRpcServer(OWS_APPS_INSTALL, OWS_Login.login_user, OWS_Login.login_password)
+    # OWS Open
+    xmlrpc = XmlRpcServer(OWS_APPS_CENTER, OWS_Login.login_user, OWS_Login.login_password)
     try:
         ok = xmlrpc.report_application (app_id,                        # int
-                                        bool(refund),                  # boolean
                                         CTK.util.to_unicode(report),   # string
                                         CTK.util.to_unicode(app_logs), # list
                                         CTK.util.to_unicode(sysinfo),  # dict
@@ -117,12 +115,11 @@ class Report_Success:
 
 class Report:
     def __call__ (self):
-        application_id   = CTK.cfg.get_val('tmp!market!report!app_id')
+        application_id = CTK.request.url.split('/')[-1]
 
         # Build the content
         submit = CTK.Submitter (URL_REPORT_APPLY)
         submit += CTK.TextArea ({'name': 'report', 'rows':10, 'cols': 60, 'class': 'noauto'})
-        submit += CTK.CheckboxText ({'name': 'refund', 'class': 'noauto'}, _('Request refund'))
         submit += CTK.Hidden ('app_id', application_id)
         submit.bind ('submit_fail', CTK.DruidContent__JS_to_goto (submit.id, URL_REPORT_FAIL))
         submit.bind ('submit_success', CTK.DruidContent__JS_to_goto (submit.id, URL_REPORT_OK))
@@ -141,7 +138,7 @@ class Report:
         return cont.Render().toStr()
 
 
-CTK.publish ('^%s$'%(URL_REPORT),       Report)
+CTK.publish ('^%s'%(URL_REPORT),        Report)
 CTK.publish ('^%s$'%(URL_REPORT_FAIL),  Report_Fail)
 CTK.publish ('^%s$'%(URL_REPORT_OK),    Report_Success)
 CTK.publish ('^%s$'%(URL_REPORT_APPLY), Report_Apply, method="POST")

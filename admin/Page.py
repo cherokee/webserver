@@ -153,7 +153,7 @@ class Base (CTK.Page):
         template['save']      = _('Save')
         template['home']      = _('Home')
         template['status']    = _('Status')
-        template['market']    = _('Market')
+        template['market']    = _('Apps')
         template['general']   = _('General')
         template['vservers']  = _('vServers')
         template['sources']   = _('Sources')
@@ -166,12 +166,6 @@ class Base (CTK.Page):
         # <body> property
         if body_id:
             template['body_props'] = ' id="body-%s"' %(body_id)
-
-        # Hide/Show Market icon
-        if int (CTK.cfg.get_val("admin!ows!enabled", OWS_ENABLE)):
-            template['market_menu_entry'] = '<li id="nav-market"><a href="/market">%(market)s</a></li>'
-        else:
-            template['market_menu_entry'] = ''
 
         # Save dialog
         dialog = CTK.DialogProxyLazy (URL_SAVE, {'title': _(SAVED_NOTICE), 'autoOpen': False, 'draggable': False, 'width': 500})

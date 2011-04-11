@@ -36,6 +36,7 @@ import thread
 sys.path.append (os.path.abspath (os.path.realpath(__file__) + '/../CTK'))
 import CTK
 import OWS_Login
+import market.Distro
 
 # Cherokee imports
 import config_version
@@ -132,20 +133,12 @@ def debug_set_up():
     signal.signal (signal.SIGUSR2, trace_callback)
 
 
-def do_OWS_login():
-    def thread_func (username, password):
-        try:
-            OWS_Login.log_in (username, password)
-        except ProtocolError:
-            # Do not give up so easily
-            OWS_Login.log_in (username, password)
+def download_distro_index():
+    def thread_func():
+        # First instance will trigger the update
+        index = market.Distro.Index()
 
-    username   = CTK.cfg.get_val("admin!ows!login!user")
-    password   = CTK.cfg.get_val("admin!ows!login!password")
-    ows_enable = int(CTK.cfg.get_val("admin!ows!enabled", OWS_ENABLE))
-
-    if all((ows_enable, username, password)):
-        thread.start_new_thread (thread_func, (username, password))
+    thread.start_new_thread (thread_func, ())
 
 
 if __name__ == "__main__":
@@ -274,7 +267,8 @@ if __name__ == "__main__":
     CTK.set_synchronous (False)
 
     # Log into OWS if feature is enabled
-    do_OWS_login()
+    ## do_OWS_login()
+    download_distro_index()
 
     # Run forever
     CTK.run()

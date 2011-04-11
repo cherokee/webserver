@@ -26,6 +26,7 @@ import CTK
 import Library
 import OWS_Login
 import Maintenance
+import Distro
 
 from Util import *
 from consts import *
@@ -34,99 +35,91 @@ from configured import *
 from XMLServerDigest import XmlRpcServer
 
 
-class FeaturedBox (CTK.Box):
-    cache = []
+class RenderApp_Featured (CTK.Box):
+    def __init__ (self, info, props):
+        assert type(info) == dict
+        CTK.Box.__init__ (self, props.copy())
 
-    def format_func (self, info):
-        cont = CTK.Container()
+        url_icon_big = '%s/%s/icons/%s' %(REPO_MAIN, info['id'], info['icon_big'])
+
+        self += CTK.Box ({'class': 'market-app-featured-icon'},     CTK.Image({'src': url_icon_big}))
+        self += CTK.Box ({'class': 'market-app-featured-name'},     CTK.Link ('%s/%s'%(URL_APP, info['id']), CTK.RawHTML(info['name'])))
+        self += CTK.Box ({'class': 'market-app-featured-category'}, CTK.RawHTML(info['category']))
+        self += CTK.Box ({'class': 'market-app-featured-summary'},  CTK.RawHTML(info['desc_short']))
+        self += CTK.Box ({'class': 'market-app-featured-score'},    CTK.StarRating({'selected': info.get('score', -1)}))
+
+
+class FeaturedBox (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'class': 'market-featured-box'})
+        index = Distro.Index()
 
         # List
         app_list    = CTK.List ({'class': 'market-featured-box-list'})
         app_content = CTK.Box  ({'class': 'market-featured-box-content'})
 
-        cont += app_content
-        cont += app_list
+        self += app_content
+        self += app_list
 
         app_content += CTK.RawHTML("<h2>%s</h2>" %(_('Featured Applications')))
 
         # Build the list
-        for app in info:
+        featured_apps = list(index.get('featured_apps') or [])
+        for app_id in featured_apps:
+            app = index.get_package (app_id, 'software')
+
             # Content entry
             props = {'class': 'market-app-featured',
-                     'id':    'market-app-featured-%s' %(app['application_id'])}
+                     'id':    'market-app-featured-%s' %(app_id)}
 
-            if info.index(app) != 0:
+            if featured_apps.index(app_id) != 0:
                 props['style'] = 'display:none'
 
             app_content += RenderApp_Featured (app, props)
 
             # List entry
+            url_icon_small = '%s/%s/icons/%s' %(REPO_MAIN, app['id'], app['icon_small'])
+
             list_cont  = CTK.Box ({'class': 'featured-list-entry'})
-            list_cont += CTK.Box ({'class': 'featured-list-icon'},     CTK.Image({'src': OWS_STATIC + app['icon_small']}))
-            list_cont += CTK.Box ({'class': 'featured-list-name'},     CTK.RawHTML(app['application_name']))
-            list_cont += CTK.Box ({'class': 'featured-list-category'}, CTK.RawHTML(app['category_name']))
-            if info.index(app) != 0:
-                app_list.Add(list_cont, {'id': 'featured-list-%s' %(app['application_id'])})
+            list_cont += CTK.Box ({'class': 'featured-list-icon'},     CTK.Image({'src': url_icon_small}))
+            list_cont += CTK.Box ({'class': 'featured-list-name'},     CTK.RawHTML(app['name']))
+            list_cont += CTK.Box ({'class': 'featured-list-category'}, CTK.RawHTML(app['category']))
+            if featured_apps.index(app_id) != 0:
+                app_list.Add(list_cont, {'id': 'featured-list-%s' %(app_id)})
             else:
-                app_list.Add(list_cont, {'id': 'featured-list-%s' %(app['application_id']), 'class': 'selected'})
+                app_list.Add(list_cont, {'id': 'featured-list-%s' %(app_id), 'class': 'selected'})
 
 
             list_cont.bind ('click',
                             "var list = $('.market-featured-box-list');" +
                             "list.find('li.selected').removeClass('selected');"     +
-                            "list.find('#featured-list-%s').addClass('selected');"  %(app['application_id']) +
+                            "list.find('#featured-list-%s').addClass('selected');"  %(app_id) +
                             "var content = $('.market-featured-box-content');" +
                             "content.find('.market-app-featured').hide();"     +
-                            "content.find('#market-app-featured-%s').show();"  %(app['application_id']))
+                            "content.find('#market-app-featured-%s').show();"  %(app_id))
 
-        # Render and cache
-        render = cont.Render().toStr()
-        if len(info) > 2 and not self.cache:
-            FeaturedBox.cache = info
 
-        return render
 
+class TopApps (CTK.Box):
     def __init__ (self):
-        CTK.Box.__init__ (self, {'class': 'market-featured-box'})
+        CTK.Box.__init__ (self, {'class': 'market-top-box'})
+        index = Distro.Index()
 
-        if self.cache:
-            # Cache hit
-            self += CTK.RawHTML (self.format_func(self.cache))
-        else:
-            # Cache miss
-            self += CTK.XMLRPCProxy(name = 'cherokee-featured-box',
-                                    xmlrpc_func = lambda: XmlRpcServer(OWS_APPS).get_featured_apps (OWS_Login.login_session),
-                                    format_func = self.format_func,
-                                    debug = OWS_DEBUG)
+        for app_name in index.get('top_apps') or []:
+            app = index.get_package(app_name, 'software')
+            self += RenderApp (app)
 
 
-class TopApps (CTK.Container):
-    cache = {}
+class RepoError (CTK.Box):
+    def __init__ (self):
+        CTK.Box.__init__ (self, {'class': 'market-repo-error'})
 
-    def format_func (self, info):
-        box = CTK.Box ({'class': 'market-top-box'})
-        for app in info:
-            box += RenderApp (app)
+        repo_url = CTK.cfg.get_val ('admin!ows!repository', REPO_MAIN)
 
-        render = box.Render().toStr()
-        if len(info) > 2:
-            self.cache[self.klass] = render
-
-        return render
-
-    def __init__ (self, klass):
-        CTK.Container.__init__ (self)
-        self.klass = klass
-
-        if self.cache.has_key(klass):
-            # Cache hit
-            self += CTK.RawHTML (self.cache[klass])
-        else:
-            # Cache miss
-            self += CTK.XMLRPCProxy(name = 'cherokee-market-category-%s'%(klass),
-                                    xmlrpc_func = lambda: XmlRpcServer(OWS_APPS).get_top_apps (klass, OWS_Login.login_session),
-                                    format_func = self.format_func,
-                                    debug = OWS_DEBUG)
+        self += CTK.RawHTML ('<h2>%s</h2>'%(_("Could not access the repository")))
+        self += CTK.RawHTML ('<p>%s: ' %(_("Cherokee could not reach the remote package repository")))
+        self += CTK.LinkWindow (repo_url, CTK.RawHTML(repo_url))
+        self += CTK.RawHTML ('.</p>')
 
 
 class Main:
@@ -137,20 +130,18 @@ class Main:
 
         page = Page_Market()
 
+        # Check repository is accessible
+        index = Distro.Index()
+        if index.error:
+            page.mainarea += RepoError()
+            return page.Render()
+
         # Featured
         page.mainarea += FeaturedBox()
 
         # Top
         page.mainarea += CTK.RawHTML("<h2>%s</h2>" %(_('Top Applications')))
-        tabs = CTK.Tab()
-        tabs.Add (_('Paid'),    TopApps('paid'))
-        tabs.Add (_('Free'),    TopApps('free'))
-        tabs.Add (_('Popular'), TopApps('any'))
-        page.mainarea += tabs
-
-        # My Library
-        if OWS_Login.is_logged():
-            page.sidebar += Library.MyLibrary()
+        page.mainarea += TopApps()
 
         # Maintanance
         if Maintenance.does_it_need_maintenance():

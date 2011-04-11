@@ -24,6 +24,7 @@
 
 import re
 import CTK
+import Distro
 
 from consts import *
 from ows_consts import *
@@ -48,27 +49,13 @@ class Search_Widget (CTK.Box):
         submit += CTK.TextField ({'name': 'search', 'optional_string': _('Search'), 'optional': True, 'class': 'filter'})
         self += submit
 
+
 class Search:
-    def format_func (self, info):
-        pags = CTK.Paginator('search-results', items_per_page=10)
-
-        # Title
-        cont = CTK.Container()
-        cont += CTK.RawHTML ("<h2>%d Result%s for: %s</h2>" %(len(info), ('','s')[len(info)>1], self.text_search))
-        cont += pags
-
-        # List of apps
-        for app in info:
-            pags += RenderApp (app)
-
-        return cont.Render().toStr()
-
     def __call__ (self):
         page = Page_Market(_('Search Result'))
 
         mainbox = CTK.Box ({'class': 'market-main-area'})
         mainbox += CTK.RawHTML("<h1>%s</h1>" %(_('Market')))
-
 
         # Parse the URL
         tmp = re.findall ('^%s/(.+)$' %(URL_SEARCH), CTK.request.url)
@@ -76,19 +63,32 @@ class Search:
             page += CTK.RawHTML ('<h2>%s</h2>' %(_("Empty Search")))
             return page.Render()
 
-        self.text_search = tmp[0]
+        search_term       = tmp[0]
+        search_term_lower = search_term.lower()
 
         # Menu
         menu = Menu([CTK.Link(URL_MAIN, CTK.RawHTML (_('Market Home')))])
-        menu += "%s %s"%(_("Search"), self.text_search)
+        menu += "%s %s"%(_("Search"), search_term)
         page.mainarea += menu
 
         # Perform the search
-        page.mainarea += CTK.XMLRPCProxy (
-            name = 'cherokee-market-search',
-            xmlrpc_func = lambda: XmlRpcServer (OWS_APPS).lookup_application (CTK.util.to_unicode (self.text_search), OWS_Login.login_session),
-            format_func = self.format_func,
-            debug = OWS_DEBUG)
+        index = Distro.Index()
+        matches = []
+
+        for pkg_name in index.get_package_list():
+            pkg = index.get_package (pkg_name)
+            if search_term_lower in str(pkg).lower():
+                matches.append (pkg_name)
+
+        # Render
+        pags = CTK.Paginator('search-results', items_per_page=10)
+
+        page.mainarea += CTK.RawHTML ("<h2>%d Result%s for: %s</h2>" %(len(matches), ('','s')[len(matches)>1], search_term))
+        page.mainarea += pags
+
+        for app_name in matches:
+            app = index.get_package (app_name, 'software')
+            pags += RenderApp (app)
 
         return page.Render()
 
