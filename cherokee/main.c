@@ -116,7 +116,7 @@ figure_worker_path (const char *arg0)
 
 	if ((arg0[0] == '.') || (*d == '/')) {
 		d = getcwd (tmp, sizeof(tmp));
-		len = strlen(arg0) + strlen(d) + sizeof("-worker");
+		len = strlen(arg0) + strlen(d) + sizeof("-worker") +1;
 		cherokee_worker = malloc (len);
 
 		snprintf (cherokee_worker, len, "%s/%s-worker", d, arg0);
