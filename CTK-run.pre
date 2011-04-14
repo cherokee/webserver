@@ -5,9 +5,10 @@ import os
 import sys
 import tempfile
 
+DFAULT_SCGI_PORT = 8000
 CTK_ROOT_DEFAULT = "%datadir%/cherokee/admin/CTK"
 
-def write_cherokee_conf (app_file, CTK_root):
+def write_cherokee_conf (app_file, CTK_root, SCGI_port):
     # Path to the CTK app
     if app_file.startswith ('/'):
         app_file_path = app_file
@@ -20,6 +21,8 @@ def write_cherokee_conf (app_file, CTK_root):
                              'vserver!10!document_root = %s' %(CTK_root))
     config = config.replace ('source!1!interpreter = /usr/bin/true',
                              'source!1!interpreter = python %s' %(app_file_path))
+    config = config.replace ('source!1!host = localhost:8000',
+                             'source!1!host = localhost:%s' %(SCGI_port))
     config = config.replace ('vserver!10!rule!200!document_root = /var/www/static',
                              'vserver!10!rule!200!document_root = %s/static' %(CTK_root))
 
@@ -35,7 +38,7 @@ def main():
     # Usage
     if len(sys.argv) < 2:
         print "USAGE:"
-        print "  %s [-d /path/to/CTK] <file.py>" %(sys.argv[0])
+        print "  %s [-d /path/to/CTK] [-s SCGI-port-num] <file.py>" %(sys.argv[0])
         raise SystemExit
 
     # Path to CTK
@@ -44,9 +47,15 @@ def main():
     else:
         CTK_root = CTK_ROOT_DEFAULT
 
+    # Internal SCGI port
+    if '-s' in sys.argv:
+        SCGI_port = sys.argv[sys.argv.index('-s') + 1]
+    else:
+        SCGI_port = DFAULT_SCGI_PORT
+
     # Write config file
     app_file = filter (lambda x: x.endswith('.py'), sys.argv)[-1]
-    cherokee_conf = write_cherokee_conf (app_file, CTK_root)
+    cherokee_conf = write_cherokee_conf (app_file, CTK_root, SCGI_port)
     command = "cherokee -C %s" %(cherokee_conf)
 
     # Run
