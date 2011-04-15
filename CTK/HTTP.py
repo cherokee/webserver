@@ -20,6 +20,9 @@
 # 02110-1301, USA.
 #
 
+import time
+import calendar
+
 class HTTP_Response:
     """
     Base class for HTTP responses. Can be used to return specific HTTP
@@ -144,3 +147,18 @@ class HTTP_XSendfile (HTTP_Response):
     def __init__ (self, location, error=200):
         HTTP_Response.__init__ (self, error)
         self['X-Sendfile'] = location
+
+class HTTP_Cacheable (HTTP_Response):
+    """
+    Standard response that automatically adds Expires and
+    Cache-Control headers.
+    """
+    def __init__ (self, secs_num, *args, **kwargs):
+        HTTP_Response.__init__ (self, *args, **kwargs)
+
+        # Set cache headers
+        t = calendar.timegm (time.gmtime())
+        t += secs_num
+
+        self["Expires"]       = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(t))
+        self["Cache-Control"] = "max-age=%d"%(secs_num)
