@@ -153,7 +153,7 @@ class System_stats__Darwin (Thread, System_stats):
         line = self.vm_stat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " -.0123456789", line)):
+        if len(filter (lambda x: x not in " -.0123456789K", line)):
             return
 
         # Parse
