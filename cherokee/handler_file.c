@@ -848,6 +848,11 @@ exit_sendfile:
 	/* Check the amount to read
 	 */
 	size = buffer->size - 1;
+
+	if (conn->encoder != NULL) {
+		size -= 96; /* Room for the header */
+	}
+
 	if (size > (conn->range_end - fhdl->offset + 1)) {
 		size = conn->range_end - fhdl->offset + 1;
 	} else {

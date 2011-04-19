@@ -776,6 +776,11 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 
 	/* 'Truco del almendruco': This is a method to bypass the
 	 * limitations of the libssl sockets regard to SSL_write.
+	 *
+	 * A buffer being sent cannot be modified. Since Cherokee's
+	 * core does that by default (it removes the chunk of info
+	 * already sent), we have to trick it. This piece of code
+	 * reports EAGAIN errors until the complete buffer is sent.
 	 */
 
 	/* Stage 1: Keep track of the buffer
