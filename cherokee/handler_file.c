@@ -328,7 +328,10 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_fi
 
 	/* Open it
 	 */
-	fhdl->fd = open (local_file->buf, O_RDONLY | O_BINARY);
+	do {
+		fhdl->fd = open (local_file->buf, O_RDONLY | O_BINARY);
+	} while ((fhdl->fd == -1) && (errno == EINTR));
+
 	if (fhdl->fd > 0) {
 		cherokee_fd_set_closexec (fhdl->fd);
 		return ret_ok;
@@ -868,7 +871,10 @@ exit_sendfile:
 
 	/* Read
 	 */
-	total = read (fhdl->fd, buffer->buf, size);
+	do {
+		total = read (fhdl->fd, buffer->buf, size);
+	} while ((total == -1) && (errno == EINTR));
+
 	switch (total) {
 	case 0:
 		return ret_eof;
