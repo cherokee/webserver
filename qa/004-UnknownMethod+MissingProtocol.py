@@ -5,7 +5,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Unknown Method + Missing Protocol"
 
-        self.expected_error = 501
+        self.expected_error = 400 # Bad Request
         self.request        = "XYZ / \r\n" +\
                               "Connection: Keep-alive\r\n"
 

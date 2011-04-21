@@ -5,7 +5,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Unknown Method"
 
-        self.expected_error = 501
+        self.expected_error = 405 # Method Not Allowed
         self.request        = "XYZ / HTTP/1.0\r\n" +\
                               "Connection: Keep-alive\r\n"
 
