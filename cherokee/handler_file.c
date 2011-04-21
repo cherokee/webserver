@@ -850,19 +850,7 @@ exit_sendfile:
 #endif
 	/* Check the amount to read
 	 */
-	size = buffer->size - 1;
-
-	if (conn->encoder != NULL) {
-		size -= 96; /* Room for the header */
-	}
-
-	if (size > (conn->range_end - fhdl->offset + 1)) {
-		size = conn->range_end - fhdl->offset + 1;
-	} else {
-		/* Align read size on a 4 byte limit
-		 */
-		size &= ~3;
-	}
+	size = MIN (DEFAULT_READ_SIZE, (conn->range_end - fhdl->offset + 1));
 
 	/* Check overflow */
 	if (unlikely (size > buffer->size)) {

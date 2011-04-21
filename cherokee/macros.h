@@ -86,8 +86,8 @@
 # define no_return
 #endif
 
-#define DEFAULT_RECV_SIZE             2048
-#define DEFAULT_READ_SIZE             8192
+#define DEFAULT_RECV_SIZE             ( 2 * 1024)
+#define DEFAULT_READ_SIZE             (16 * 1024)
 #define MAX_HEADER_LEN                8192
 #define MAX_HEADER_CRLF               8
 #define MAX_KEEPALIVE                 500

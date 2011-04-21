@@ -1419,6 +1419,9 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		 */
 		cherokee_buffer_swap_buffers (&conn->buffer, &conn->encoder_buffer);
 		cherokee_buffer_clean (&conn->encoder_buffer);
+
+		TRACE (ENTRIES",encoder", "Sizes: Conn %d bytes, Enc %d bytes\n",
+		       conn->buffer.size, conn->encoder_buffer.size);
 	}
 
 	/* Chunked encoding header
