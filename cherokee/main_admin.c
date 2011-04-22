@@ -58,6 +58,7 @@
 #define PASSWORD_LEN         16
 #define DEFAULT_PORT         9090
 #define TIMEOUT              "25"
+#define THREAD_MAX_AUTO      4
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
 #define DEFAULT_UNIX_SOCKET  TMPDIR "/cherokee-admin-scgi.socket"
@@ -181,6 +182,7 @@ config_server (cherokee_server_t *srv)
 {
 	ret_t                  ret;
 	cherokee_config_node_t conf;
+	cuint_t                nthreads;
 	cherokee_buffer_t      buf       = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t      rrd_dir   = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t      rrd_bin   = CHEROKEE_BUF_INIT;
@@ -215,7 +217,14 @@ config_server (cherokee_server_t *srv)
 	}
 
 	if (thread_num != -1) {
+		/* Manually set
+		 */
 		cherokee_buffer_add_va (&buf, "server!thread_number = %d\n", thread_num);
+	} else {
+		/* Automatically set
+		 */
+		nthreads = MIN (cherokee_cpu_number, THREAD_MAX_AUTO);
+		cherokee_buffer_add_va (&buf, "server!thread_number = %d\n", nthreads);
 	}
 
 	cherokee_buffer_add_str (&buf, "vserver!1!nick = default\n");
