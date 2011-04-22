@@ -34,6 +34,7 @@
 #include <cherokee/rule.h>
 #include <cherokee/header.h>
 #include <cherokee/regex.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -53,6 +54,7 @@ typedef struct {
 
 #define RULE_HEADER(x) ((cherokee_rule_header_t *)(x))
 
+void  PLUGIN_INIT_NAME(header) (cherokee_plugin_loader_t *loader);
 ret_t cherokee_rule_header_new (cherokee_rule_header_t **rule);
 
 CHEROKEE_END_DECLS

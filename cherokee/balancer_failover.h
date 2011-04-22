@@ -27,7 +27,7 @@
 
 #include "common-internal.h"
 #include "balancer.h"
-
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_balancer_t  balancer;
@@ -36,6 +36,7 @@ typedef struct {
 
 #define BAL_FAILOVER(x) ((cherokee_balancer_failover_t *)(x))
 
+void PLUGIN_INIT_NAME(failover) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_balancer_failover_new  (cherokee_balancer_t **balancer);
 ret_t cherokee_balancer_failover_free (cherokee_balancer_failover_t *balancer);

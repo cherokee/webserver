@@ -27,7 +27,7 @@
 
 #include "common-internal.h"
 #include "balancer.h"
-
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_balancer_t  balancer;
@@ -38,6 +38,7 @@ typedef struct {
 
 #define BAL_RR(x) ((cherokee_balancer_round_robin_t *)(x))
 
+void PLUGIN_INIT_NAME(round_robin) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_balancer_round_robin_new  (cherokee_balancer_t **balancer);
 ret_t cherokee_balancer_round_robin_free (cherokee_balancer_round_robin_t *balancer);

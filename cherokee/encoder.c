@@ -94,7 +94,7 @@ cherokee_encoder_init_base (cherokee_encoder_t       *enc,
 {
 	cherokee_module_init_base (MODULE(enc), NULL, info);
 
-	MODULE(enc)->props = props;
+	MODULE(enc)->props = MODULE_PROPS(props);
 	enc->encode        = NULL;
 	enc->add_headers   = NULL;
 	enc->flush         = NULL;

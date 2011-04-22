@@ -31,6 +31,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/vrule.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -41,6 +42,7 @@ typedef struct {
 
 #define VRULE_REHOST(x) ((cherokee_vrule_rehost_t *)(x))
 
+void  PLUGIN_INIT_NAME(rehost)  (cherokee_plugin_loader_t *loader);
 ret_t cherokee_vrule_rehost_new (cherokee_vrule_t **vrule);
 
 CHEROKEE_END_DECLS

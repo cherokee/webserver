@@ -27,6 +27,7 @@
 
 #include "validator.h"
 #include "connection.h"
+#include "plugin_loader.h"
 
 typedef struct {
 	   cherokee_validator_t validator;
@@ -35,6 +36,7 @@ typedef struct {
 
 #define PAM(x) ((cherokee_validator_pam_t *)(x))
 
+void PLUGIN_INIT_NAME(pam) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_pam_new  (cherokee_validator_pam_t **pam, cherokee_module_props_t *props);
 ret_t cherokee_validator_pam_free (cherokee_validator_pam_t  *pam);

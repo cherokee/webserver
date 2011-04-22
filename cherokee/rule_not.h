@@ -31,6 +31,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/rule.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -41,6 +42,7 @@ typedef struct {
 
 #define RULE_NOT(x) ((cherokee_rule_not_t *)(x))
 
+void  PLUGIN_INIT_NAME(not) (cherokee_plugin_loader_t *loader);
 ret_t cherokee_rule_not_new (cherokee_rule_t **rule);
 
 CHEROKEE_END_DECLS

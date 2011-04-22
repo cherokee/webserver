@@ -345,7 +345,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			if (info->configure) {
 				encoder_func_configure_t configure = info->configure;
 
-				ret = configure (CONFIG_NODE(i), srv, &encoder_props);
+				ret = configure (CONFIG_NODE(i), srv, (cherokee_module_props_t **)&encoder_props);
 				if (ret != ret_ok) {
 					return ret;
 				}

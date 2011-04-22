@@ -527,14 +527,14 @@ check_for_python (void)
 	int         re;
 	pid_t       pid;
 	int         exitcode = -1;
-	char *const args[]   = {"env", "python", "-c", "raise SystemExit", NULL};
+	char const *args[]   = {"env", "python", "-c", "raise SystemExit", NULL};
 
 	pid = fork();
 	if (pid == -1) {
 		return ret_error;
 
 	} else if (pid == 0) {
-		execv ("/usr/bin/env", args);
+		execv ("/usr/bin/env", (char * const *) args);
 
 	} else {
 		do {

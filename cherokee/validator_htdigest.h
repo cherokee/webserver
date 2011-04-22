@@ -27,6 +27,7 @@
 
 #include "validator_file.h"
 #include "connection.h"
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_validator_file_props_t base;
@@ -40,6 +41,7 @@ typedef struct {
 #define PROP_HTDIGEST(p)     ((cherokee_validator_htdigest_props_t *)(p))
 #define VAL_HTDIGEST_PROP(x) (PROP_HTDIGEST (MODULE(x)->props))
 
+void PLUGIN_INIT_NAME(htdigest) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_htdigest_new         (cherokee_validator_htdigest_t **htdigest, cherokee_module_props_t *props);
 ret_t cherokee_validator_htdigest_free        (cherokee_validator_htdigest_t  *htdigest);

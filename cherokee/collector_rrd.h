@@ -28,7 +28,7 @@
 #include "common-internal.h"
 #include "collector.h"
 #include "rrd_tools.h"
-
+#include "plugin_loader.h"
 
 /* Enums
  */
@@ -80,6 +80,7 @@ typedef struct {
 #define COLLECTOR_VSRV_RRD(c)     ((cherokee_collector_vsrv_rrd_t *)(c))
 #define COLLECTOR_VSRV_RRD_SRV(c) (COLLECTOR_RRD(VSERVER_SRV(COLLECTOR_VSRV_RRD(c)->vsrv_ref)->collector))
 
+void PLUGIN_INIT_NAME(rrd) (cherokee_plugin_loader_t *loader);
 
 /* Public methods
  */

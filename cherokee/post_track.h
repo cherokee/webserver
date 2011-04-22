@@ -29,6 +29,7 @@
 #include "post.h"
 #include "module.h"
 #include "avl.h"
+#include "plugin_loader.h"
 
 CHEROKEE_BEGIN_DECLS
 
@@ -56,6 +57,8 @@ typedef struct {
 } cherokee_post_track_t;
 
 #define POST_TRACK(x) ((cherokee_post_track_t *)(x))
+
+void  PLUGIN_INIT_NAME(post_track) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_generic_post_track_new       (cherokee_post_track_t **track);
 ret_t cherokee_generic_post_track_configure (cherokee_post_track_t  *track,

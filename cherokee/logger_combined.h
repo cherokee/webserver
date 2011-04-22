@@ -26,10 +26,13 @@
 #define CHEROKEE_LOGGER_COMBINED_H
 
 #include "logger_ncsa.h"
+#include "plugin_loader.h"
 
 typedef cherokee_logger_ncsa_t cherokee_logger_combined_t;
 
 #define LOG_COMBINED(x) ((cherokee_logger_combined_t *)(x))
+
+void PLUGIN_INIT_NAME(combined) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
 

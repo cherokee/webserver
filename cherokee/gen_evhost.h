@@ -35,6 +35,7 @@
 #include <cherokee/plugin.h>
 #include <cherokee/template.h>
 #include <cherokee/config_entry.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -56,6 +57,8 @@ typedef struct {
 } cherokee_generic_evhost_t;
 
 #define EVHOST(x) ((cherokee_generic_evhost_t *)(x))
+
+void  PLUGIN_INIT_NAME(evhost) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_generic_evhost_new       (cherokee_generic_evhost_t **evhost);
 ret_t cherokee_generic_evhost_configure (cherokee_generic_evhost_t  *evhost,

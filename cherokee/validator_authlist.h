@@ -27,6 +27,7 @@
 
 #include "validator.h"
 #include "connection.h"
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_module_props_t  base;
@@ -41,6 +42,7 @@ typedef struct {
 #define PROP_AUTHLIST(p)     ((cherokee_validator_authlist_props_t *)(p))
 #define VAL_AUTHLIST_PROP(x) (PROP_AUTHLIST (MODULE(x)->props))
 
+void PLUGIN_INIT_NAME(authlist) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_authlist_new         (cherokee_validator_authlist_t **authlist, cherokee_module_props_t *props);
 ret_t cherokee_validator_authlist_free        (cherokee_validator_authlist_t  *authlist);

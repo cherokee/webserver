@@ -27,6 +27,7 @@
 
 #include "validator_file.h"
 #include "connection.h"
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_validator_file_props_t base;
@@ -40,6 +41,7 @@ typedef struct {
 #define PROP_HTPASSWD(p)     ((cherokee_validator_htpasswd_props_t *)(p))
 #define VAL_HTPASSWD_PROP(x) (PROP_HTPASSWD (MODULE(x)->props))
 
+void PLUGIN_INIT_NAME(htpasswd) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_htpasswd_new         (cherokee_validator_htpasswd_t **htpasswd, cherokee_module_props_t *props);
 ret_t cherokee_validator_htpasswd_free        (cherokee_validator_htpasswd_t  *htpasswd);

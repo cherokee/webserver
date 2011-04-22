@@ -33,6 +33,7 @@
 #include "socket.h"
 #include "handler_cgi_base.h"
 #include "balancer.h"
+#include "plugin_loader.h"
 
 typedef enum {
 	fcgi_post_phase_read,
@@ -66,6 +67,8 @@ typedef struct {
 
 /* Methods
  */
+void PLUGIN_INIT_NAME(fcgi) (cherokee_plugin_loader_t *loader);
+
 ret_t cherokee_handler_fcgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl);
 

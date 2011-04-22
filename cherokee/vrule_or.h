@@ -32,6 +32,7 @@
 #include <cherokee/common.h>
 #include <cherokee/vrule.h>
 #include <cherokee/access.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -43,6 +44,7 @@ typedef struct {
 
 #define VRULE_OR(x) ((cherokee_vrule_or_t *)(x))
 
+void  PLUGIN_INIT_NAME(v_or)  (cherokee_plugin_loader_t *loader);
 ret_t cherokee_vrule_v_or_new (cherokee_vrule_t **vrule);
 
 CHEROKEE_END_DECLS

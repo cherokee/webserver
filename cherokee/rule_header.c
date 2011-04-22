@@ -102,8 +102,7 @@ match_complete (cherokee_rule_header_t  *rule,
 		cherokee_connection_t   *conn,
 		cherokee_config_entry_t *ret_conf)
 {
-	int   re;
-	ret_t ret;
+	int re;
 
 	UNUSED(ret_conf);
 

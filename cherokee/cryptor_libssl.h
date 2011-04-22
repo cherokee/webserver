@@ -46,6 +46,7 @@
 #include "avl_r.h"
 #include "module.h"
 #include "cryptor.h"
+#include "plugin_loader.h"
 
 #include <openssl/lhash.h>
 #include <openssl/ssl.h>
@@ -105,6 +106,8 @@ typedef struct {
 
 /* Methods
  */
+void PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader);
+
 ret_t cherokee_cryptor_libssl_new (cherokee_cryptor_libssl_t **encoder);
 
 #endif /* CHEROKEE_CRYPTOR_LIBSSL_H */

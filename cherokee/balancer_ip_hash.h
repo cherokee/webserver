@@ -27,7 +27,7 @@
 
 #include "common-internal.h"
 #include "balancer.h"
-
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_balancer_t  balancer;
@@ -39,6 +39,7 @@ typedef struct {
 
 #define BAL_IP_HASH(x) ((cherokee_balancer_ip_hash_t *)(x))
 
+void PLUGIN_INIT_NAME(ip_hash) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_balancer_ip_hash_new  (cherokee_balancer_t **balancer);
 ret_t cherokee_balancer_ip_hash_free (cherokee_balancer_ip_hash_t *balancer);

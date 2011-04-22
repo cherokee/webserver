@@ -43,6 +43,8 @@ match (cherokee_vrule_target_ip_t *vrule,
 	ret_t             ret;
 	cherokee_socket_t sock;
 
+	UNUSED (host);
+
 	/* There might not be a connection
 	 */
 	if (conn == NULL)

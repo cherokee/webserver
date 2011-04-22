@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "rule_tls.h"
+#include "util.h"
 
 #include "server-protected.h"
 #include "connection-protected.h"
@@ -64,6 +65,7 @@ configure (cherokee_rule_tls_t       *rule,
 static ret_t
 _free (void *p)
 {
+	UNUSED(p);
 	return ret_ok;
 }
 

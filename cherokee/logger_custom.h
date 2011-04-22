@@ -31,6 +31,7 @@
 #include "logger.h"
 #include "logger_writer.h"
 #include "virtual_server.h"
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_logger_t         logger;
@@ -39,6 +40,8 @@ typedef struct {
 } cherokee_logger_custom_t;
 
 #define LOG_CUSTOM(x) ((cherokee_logger_custom_t *)(x))
+
+void PLUGIN_INIT_NAME(custom) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_logger_custom_new              (cherokee_logger_t       **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
 ret_t cherokee_logger_custom_free             (cherokee_logger_custom_t *logger);

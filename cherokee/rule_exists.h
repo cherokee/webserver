@@ -33,6 +33,7 @@
 #include <cherokee/buffer.h>
 #include <cherokee/rule.h>
 #include <cherokee/list.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -47,6 +48,7 @@ typedef struct {
 
 #define RULE_EXISTS(x) ((cherokee_rule_exists_t *)(x))
 
+void  PLUGIN_INIT_NAME(exists) (cherokee_plugin_loader_t *loader);
 ret_t cherokee_rule_exists_new (cherokee_rule_exists_t **rule);
 
 CHEROKEE_END_DECLS

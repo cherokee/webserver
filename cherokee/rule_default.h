@@ -31,11 +31,14 @@
 
 #include <cherokee/common.h>
 #include <cherokee/rule.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
 typedef cherokee_rule_t cherokee_rule_default_t;
 #define RULE_DEFAULT(x) ((cherokee_rule_default_t *)(x))
+
+void PLUGIN_INIT_NAME(default) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_rule_default_new (cherokee_rule_t **rule);
 

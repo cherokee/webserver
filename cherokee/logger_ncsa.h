@@ -31,6 +31,7 @@
 #include "logger.h"
 #include "logger_writer.h"
 #include "virtual_server.h"
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_logger_t logger;
@@ -49,6 +50,7 @@ typedef struct {
 
 #define LOG_NCSA(x) ((cherokee_logger_ncsa_t *)(x))
 
+void PLUGIN_INIT_NAME(ncsa)          (cherokee_plugin_loader_t *loader);
 ret_t cherokee_logger_ncsa_new       (cherokee_logger_t     **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
 ret_t cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
 ret_t cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);

@@ -28,6 +28,7 @@
 #include "handler.h"
 #include "plugin_loader.h"
 #include "dwriter.h"
+#include "plugin_loader.h"
 
 typedef enum {
 	state_valid,
@@ -47,7 +48,7 @@ typedef struct {
 
 /* Library init function
  */
-void PLUGIN_INIT_NAME(admi) (cherokee_plugin_loader_t *loader);
+void PLUGIN_INIT_NAME(admin) (cherokee_plugin_loader_t *loader);
 ret_t cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
 
 /* virtual methods implementation

@@ -33,6 +33,7 @@
 #include <cherokee/buffer.h>
 #include <cherokee/rule.h>
 #include <cherokee/access.h>
+#include <cherokee/plugin_loader.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -43,6 +44,7 @@ typedef struct {
 
 #define RULE_FROM(x) ((cherokee_rule_from_t *)(x))
 
+void  PLUGIN_INIT_NAME(from) (cherokee_plugin_loader_t *loader);
 ret_t cherokee_rule_from_new (cherokee_rule_from_t **rule);
 
 CHEROKEE_END_DECLS
