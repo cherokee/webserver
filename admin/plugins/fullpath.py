@@ -88,14 +88,18 @@ class Plugin_fullpath (RulePlugin):
 
                 table += [CTK.TextCfg('%s!%s'%(pre,f)), delete]
 
+            submit = CTK.Submitter (URL_APPLY)
+            submit += table
+
             self += CTK.RawHTML ('<h3>%s</h3>' % (_("Full Web Paths")))
-            self += CTK.Indenter (table)
+            self += CTK.Indenter (submit)
 
         # Add new
         next_bind = CTK.cfg.get_next_entry_prefix ('%s!fullpath'%(self.key))
 
         table = CTK.PropsTable()
-        table.Add (_('Full Path'), CTK.TextCfg(next_bind, False), _(NOTE_FULLPATH))
+        table.Add (_('Full Path'), CTK.TextCfg (next_bind, False), _(NOTE_FULLPATH))
+
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
