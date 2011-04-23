@@ -470,10 +470,14 @@ process_parameters (int argc, char **argv)
 	while ((c = getopt_long(argc, argv, "hVxutib::d:p:C:T:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'b':
-			if (optarg)
+			if (optarg) {
 				bind_to = strdup(optarg);
-			else
+			} else if (argv[optind] && argv[optind][0] != '-') {
+				bind_to = strdup(argv[optind]);
+				optind++;
+			} else {
 				bind_to = NULL;
+			}
 			break;
 		case 'p':
 			port = atoi(optarg);
