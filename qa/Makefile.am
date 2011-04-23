@@ -294,7 +294,8 @@ run-tests.py \
 270-Options-asterisk1.py \
 271-full-header-check1.py \
 272-Nick-match.py \
-273-Unknown-method-redir.py
+273-Unknown-method-redir.py \
+274-header_op-remove-etag.py
 
 test:
 	python -m compileall .

@@ -795,13 +795,6 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	if (conn->encoder) {
 		cherokee_encoder_add_headers (conn->encoder, buffer);
 	}
-
-
-	/* Headers ops
-	 */
-	if (conn->header_ops) {
-		cherokee_header_op_render (conn->header_ops, buffer);
-	}
 }
 
 
@@ -879,12 +872,21 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	 */
 	build_response_header (conn, &conn->buffer);
 
-	/* Add handler headers end EOH
+	/* Add handler headers
 	 */
 	cherokee_buffer_add_buffer (&conn->buffer, &conn->header_buffer);
-	cherokee_buffer_add_str (&conn->buffer, CRLF);
 
+	/* Headers ops
+	 */
+	if (conn->header_ops) {
+		cherokee_header_op_render (conn->header_ops, &conn->buffer);
+	}
+
+	/* EOH
+	 */
+	cherokee_buffer_add_str (&conn->buffer, CRLF);
 	TRACE(ENTRIES, "Replying:\n%s", conn->buffer.buf);
+
 	return ret_ok;
 }
 
