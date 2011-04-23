@@ -22,7 +22,7 @@ class Test (TestBase):
         self.conf           = CONF%(globals())
 
     def CustomTest (self):
-        header = self.reply[:self.reply.find("\r\n\r\n")]
+        header = self.reply[:self.reply.find("\r\n\r\n")+2]
         if not "%(HEADER)s: %(VALUE)s\r\n" %(globals()) in header:
             return -1
         return 0
