@@ -429,7 +429,9 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 
 	/* Special cases of subnets
 	 */
-	mask = atoi(slash+1);
+	ret = cherokee_atoi (slash+1, &mask);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
 
 	if (colon && (mask == 128)) {
 		sep = *slash;

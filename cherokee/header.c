@@ -207,11 +207,12 @@ add_unknown_header (cherokee_header_t *hdr, off_t header_off, off_t info_off, in
 static ret_t
 parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char **next_pos, cherokee_http_t *error_code)
 {
-	char *line  = buf->buf;
-	char *begin = buf->buf;
-	char  tmp[4];
-	char *end;
+	ret_t   ret;
+	char    tmp[4];
+	char   *end;
 	size_t  len;
+	char   *line    = buf->buf;
+	char   *begin   = buf->buf;
 
 	/* NOTE: here we deal only with HTTP/1.0 or higher.
 	 */
@@ -271,7 +272,11 @@ parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char 
 	 */
 	memcpy (tmp, begin+9, 3);
 	tmp[3] = '\0';
-	hdr->response = (cherokee_http_t) atoi (tmp);
+
+	ret = cherokee_atoi (tmp, (int *)&hdr->response);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
 
 	return ret_ok;
 }

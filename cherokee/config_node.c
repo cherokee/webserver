@@ -271,7 +271,10 @@ cherokee_config_node_read_int (cherokee_config_node_t *conf, const char *key, in
 		return ret_not_found;
 	}
 
-	*num = atoi (tmp->val.buf);
+	ret = cherokee_atoi (tmp->val.buf, num);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
+
 	return ret_ok;
 }
 

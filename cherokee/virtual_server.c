@@ -274,6 +274,7 @@ static ret_t
 init_entry_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
+	int                        val;
 	cherokee_list_t           *i, *j;
 	cherokee_buffer_t         *tmp       = NULL;
 	cherokee_config_node_t    *subconf   = NULL;
@@ -401,7 +402,8 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		TRACE(ENTRIES, "Validator: %s\n", tmp->buf);
 
 	} else if (equal_buf_str (&conf->key, "only_secure")) {
-		entry->only_secure = !! atoi(conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, &entry->only_secure);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "expiration")) {
 		/* Expiration
@@ -442,22 +444,28 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 				}
 
 				cherokee_config_node_foreach (j, subconf) {
+					cherokee_boolean_t active = false;
+
 					subconf2 = CONFIG_NODE(j);
 
 					if (equal_buf_str (&subconf2->key, "no-store")) {
-						if (atoi (subconf2->val.buf)) {
+						ret = cherokee_atob (subconf2->val.buf, &active);
+						if ((ret == ret_ok) && (active)) {
 							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_no_store);
 						}
 					} else if (equal_buf_str (&subconf2->key, "no-transform")) {
-						if (atoi (subconf2->val.buf)) {
+						ret = cherokee_atob (subconf2->val.buf, &active);
+						if ((ret == ret_ok) && (active)) {
 							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_no_transform);
 						}
 					} else if (equal_buf_str (&subconf2->key, "must-revalidate")) {
-						if (atoi (subconf2->val.buf)) {
+						ret = cherokee_atob (subconf2->val.buf, &active);
+						if ((ret == ret_ok) && (active)) {
 							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_must_revalidate);
 						}
 					} else if (equal_buf_str (&subconf2->key, "proxy-revalidate")) {
-						if (atoi (subconf2->val.buf)) {
+						ret = cherokee_atob (subconf2->val.buf, &active);
+						if ((ret == ret_ok) && (active)) {
 							BIT_SET (entry->expiration_prop, cherokee_expiration_prop_proxy_revalidate);
 						}
 					}
@@ -466,7 +474,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		}
 
 	} else if (equal_buf_str (&conf->key, "rate")) {
-		entry->limit_bps = atoi(conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &val);
+		if (ret != ret_ok) return ret_error;
+		entry->limit_bps = val;
 
 	} else if (equal_buf_str (&conf->key, "no_log")) {
 		if (equal_buf_str (&conf->val, "1")) {
@@ -474,7 +484,8 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		}
 
 	} else if (equal_buf_str (&conf->key, "timeout")) {
-		entry->timeout_lapse = atoi(conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &entry->timeout_lapse);
+		if (ret != ret_ok) return ret_error;
 
 		if (entry->timeout_header != NULL) {
 			cherokee_buffer_free (entry->timeout_header);
@@ -653,13 +664,16 @@ add_rule (cherokee_config_node_t    *config,
 	  cherokee_rule_list_t      *rule_list)
 {
 	ret_t                   ret;
-	cuint_t                 prio;
+	int                     tmp;
+	cint_t                  prio;
 	cherokee_rule_t        *rule    = NULL;
 	cherokee_config_node_t *subconf = NULL;
 
 	/* Validate priority
 	 */
-	prio = atoi (config->key.buf);
+	ret = cherokee_atoi (config->key.buf, &prio);
+	if (ret != ret_ok) return ret_error;
+
 	if (prio <= CHEROKEE_RULE_PRIO_NONE) {
 		LOG_CRITICAL (CHEROKEE_ERROR_VSERVER_BAD_PRIORITY,
 			      config->key.buf, vserver->priority);
@@ -670,7 +684,8 @@ add_rule (cherokee_config_node_t    *config,
 	 */
 	ret = cherokee_config_node_get (config, "disabled", &subconf);
 	if (ret == ret_ok) {
-		if (atoi(subconf->val.buf)) {
+		ret = cherokee_atoi (subconf->val.buf, &tmp);
+		if ((ret == ret_ok) && (tmp)) {
 			TRACE(ENTRIES, "Skipping rule '%s'\n", config->key.buf);
 			return ret_ok;
 		}
@@ -931,7 +946,8 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_add_buffer (&vserver->name, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "keepalive")) {
-		vserver->keepalive = !!atoi (conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, &vserver->keepalive);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "user_dir")) {
 		ret = configure_user_dir (conf, vserver);
@@ -966,13 +982,16 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_config_node_read_list (conf, NULL, add_directory_index, vserver);
 
 	} else if (equal_buf_str (&conf->key, "post_max_len")) {
-		vserver->post_max_len = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &vserver->post_max_len);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "nick")) {
-		vserver->match_nick = !!atoi (conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, &vserver->match_nick);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "ssl_verify_depth")) {
-		vserver->verify_depth = !!atoi (conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, &vserver->verify_depth);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_file")) {
 		cherokee_buffer_add_buffer (&vserver->server_cert, &conf->val);
@@ -1039,6 +1058,7 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver,
 				   cherokee_config_node_t    *config)
 {
 	ret_t                   ret;
+	int                     tmp;
 	cherokee_config_node_t *subconf = NULL;
 
 	/* Set the priority
@@ -1049,7 +1069,8 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver,
 	*/
 	ret = cherokee_config_node_get (config, "disabled", &subconf);
 	if (ret == ret_ok) {
-		if (atoi(subconf->val.buf)) {
+		ret = cherokee_atoi (subconf->val.buf, &tmp);
+		if ((ret == ret_ok) && (tmp)) {
 			TRACE(ENTRIES, "Skipping VServer '%s'\n", config->key.buf);
 			return ret_deny;
 		}

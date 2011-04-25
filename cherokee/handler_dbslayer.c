@@ -112,13 +112,15 @@ cherokee_client_headers (cherokee_handler_dbslayer_t *hdl)
 
 	ret = cherokee_header_get_unknown (&conn->header, "X-Beautify", 10, &hdr, &len);
 	if ((ret == ret_ok) && hdr) {
-		hdl->writer.pretty = !! atoi(hdr);
+		ret = cherokee_atob (hdr, &hdl->writer.pretty);
+		if (ret != ret_ok) return ret;
 	}
 
 	hdr = NULL;
 	ret = cherokee_header_get_unknown (&conn->header, "X-Rollback", 10, &hdr, &len);
 	if ((ret == ret_ok) && hdr) {
-		hdl->rollback = !! atoi(hdr);
+		ret = cherokee_atob (hdr, &hdl->rollback);
+		if (ret != ret_ok) return ret;
 	}
 }
 

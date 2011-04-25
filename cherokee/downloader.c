@@ -394,8 +394,7 @@ downloader_header_read (cherokee_downloader_t *downloader,
 		if (ret == ret_ok) {
 			cherokee_buffer_clean (tmp1);
 			ret = cherokee_header_copy_known (downloader->header, header_content_length, tmp1);
-			downloader->content_length = atoi (tmp1->buf);
-
+			cherokee_atoi (tmp1->buf, &downloader->content_length);
 			TRACE (ENTRIES, "Known lenght: %d bytes\n", downloader->content_length);
 		}
 

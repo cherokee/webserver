@@ -450,7 +450,9 @@ print_help (void)
 static void
 process_parameters (int argc, char **argv)
 {
-	int c;
+	ret_t              ret;
+	int                c;
+	cherokee_boolean_t error = false;
 
 	struct option long_options[] = {
 		{"help",            no_argument,       NULL, 'h'},
@@ -480,10 +482,16 @@ process_parameters (int argc, char **argv)
 			}
 			break;
 		case 'p':
-			port = atoi(optarg);
+			ret = cherokee_atoi (optarg, &port);
+			if (ret != ret_ok) {
+				error = true;
+			}
 			break;
 		case 'T':
-			thread_num = atoi(optarg);
+			ret = cherokee_atoi (optarg, &thread_num);
+			if (ret != ret_ok) {
+				error = true;
+			}
 			break;
 		case 'd':
 			document_root = strdup(optarg);
@@ -510,6 +518,10 @@ process_parameters (int argc, char **argv)
 		case 'h':
 		case '?':
 		default:
+			error = true;
+		}
+
+		if (error) {
 			print_help();
 			exit (1);
 		}

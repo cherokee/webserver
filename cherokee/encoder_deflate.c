@@ -25,6 +25,7 @@
 #include "common-internal.h"
 #include "encoder_deflate.h"
 #include "plugin_loader.h"
+#include "util.h"
 
 
 /* Plug-in initialization
@@ -43,6 +44,7 @@ cherokee_encoder_deflate_configure (cherokee_config_node_t   *config,
 				    cherokee_server_t        *srv,
 				    cherokee_module_props_t **_props)
 {
+	ret_t                             ret;
 	cherokee_list_t                  *i;
 	cherokee_encoder_deflate_props_t *props;
 
@@ -64,7 +66,10 @@ cherokee_encoder_deflate_configure (cherokee_config_node_t   *config,
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "compression_level")) {
-			props->compression_level = atoi (subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &props->compression_level);
+			if (unlikely (ret != ret_ok)) {
+				return ret_error;
+			}
 		}
 	}
 

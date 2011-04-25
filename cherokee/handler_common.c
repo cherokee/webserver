@@ -93,12 +93,14 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 	 */
 	ret = cherokee_config_node_get (conf, "allow_pathinfo", &subconf);
 	if (ret == ret_ok) {
-		props->allow_pathinfo = !! atoi(subconf->val.buf);
+		ret = cherokee_atob (subconf->val.buf, &props->allow_pathinfo);
+		if (ret != ret_ok) return ret;
 	}
 
 	ret = cherokee_config_node_get (conf, "allow_dirlist", &subconf);
 	if (ret == ret_ok) {
-		props->allow_dirlist = !! atoi(subconf->val.buf);
+		ret = cherokee_atob (subconf->val.buf, &props->allow_dirlist);
+		if (ret != ret_ok) return ret;
 	}
 
 	/* Parse 'file' parameters

@@ -62,6 +62,7 @@ props_free (cherokee_validator_ldap_props_t *props)
 ret_t
 cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
+	ret_t                            ret;
 	cherokee_list_t                 *i;
 	cherokee_validator_ldap_props_t *props;
 
@@ -94,7 +95,8 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 			cherokee_buffer_add_buffer (&props->server, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "port")) {
-			props->port = atoi (subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &props->port);
+			if (ret != ret_ok) return ret_error;
 
 		} else if (equal_buf_str (&subconf->key, "bind_dn")) {
 			cherokee_buffer_add_buffer (&props->binddn, &subconf->val);
@@ -109,7 +111,8 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 			cherokee_buffer_add_buffer (&props->filter, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "tls")) {
-			props->tls = atoi (subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &props->tls);
+			if (ret != ret_ok) return ret_error;
 
 		} else if (equal_buf_str (&subconf->key, "ca_file")) {
 			cherokee_buffer_add_buffer (&props->ca_file, &subconf->val);

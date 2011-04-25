@@ -2336,6 +2336,23 @@ cherokee_atoi (const char *str, int *ret_value)
 	return ret_ok;
 }
 
+
+ret_t
+cherokee_atob (const char *str, cherokee_boolean_t *ret_value)
+{
+	ret_t ret;
+	int   tmp;
+
+	ret = cherokee_atoi (str, &tmp);
+	if (ret != ret_ok) {
+		return ret;
+	}
+
+	*ret_value = !!tmp;
+	return ret_ok;
+}
+
+
 ret_t
 cherokee_copy_local_address (void              *sock,
 			     cherokee_buffer_t *buf)

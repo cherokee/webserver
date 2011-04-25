@@ -332,21 +332,36 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t   *conf,
 		/* Convert the properties
 		 */
 		if (equal_buf_str (&subconf->key, "size")) {
-			props->show_size  = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->show_size);
+			if (ret != ret_ok) return ret;
+
 		} else if (equal_buf_str (&subconf->key, "date")) {
-			props->show_date  = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->show_date);
+			if (ret != ret_ok) return ret;
+
 		} else if (equal_buf_str (&subconf->key, "user")) {
-			props->show_user  = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->show_user);
+			if (ret != ret_ok) return ret;
+
 		} else if (equal_buf_str (&subconf->key, "group")) {
-			props->show_group = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->show_group);
+			if (ret != ret_ok) return ret;
+
 		} else if (equal_buf_str (&subconf->key, "symlinks")) {
-			props->show_symlinks = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->show_symlinks);
+			if (ret != ret_ok) return ret;
+
 		} else if (equal_buf_str (&subconf->key, "redir_symlinks")) {
-			props->redir_symlinks = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->redir_symlinks);
+			if (ret != ret_ok) return ret;
+
 		} else if (equal_buf_str (&subconf->key, "hidden")) {
-			props->show_hidden = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->show_hidden);
+			if (ret != ret_ok) return ret;
+
 		} else if (equal_buf_str (&subconf->key, "backup")) {
-			props->show_backup = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->show_backup);
+			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "theme")) {
 			theme = subconf->val.buf;

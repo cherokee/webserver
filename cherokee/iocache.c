@@ -190,17 +190,28 @@ cherokee_iocache_configure (cherokee_iocache_t     *iocache,
 	/* Configure it own properties
 	 */
 	cherokee_config_node_foreach (i, conf) {
+		int                     val;
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "max_file_size")) {
-			iocache->max_file_size = atoi(subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret_error;
+			iocache->max_file_size = val;
+
 		} else if (equal_buf_str (&subconf->key, "min_file_size")) {
-			iocache->min_file_size = atoi(subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret_error;
+			iocache->min_file_size = val;
 
 		} else if (equal_buf_str (&subconf->key, "lasting_stat")) {
-			iocache->lasting_stat = atoi(subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret_error;
+			iocache->lasting_stat = val;
+
 		} else if (equal_buf_str (&subconf->key, "lasting_mmap")) {
-			iocache->lasting_mmap = atoi(subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret_error;
+			iocache->lasting_mmap = val;
 		}
 	}
 

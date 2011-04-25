@@ -60,6 +60,7 @@ ret_t
 cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                           ret;
+	int                             val;
 	cherokee_list_t                *i;
 	cherokee_handler_uwsgi_props_t *props;
 
@@ -92,16 +93,22 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 			if (ret != ret_ok) return ret;
 		}
 		else if (equal_buf_str (&subconf->key, "modifier1")) {
-			props->modifier1 = (uint8_t) atoi(subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret;
+			props->modifier1 = val;
 		}
 		else if (equal_buf_str (&subconf->key, "modifier2")) {
-			props->modifier2 = (uint8_t) atoi(subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret;
+			props->modifier2 = val;
 		}
 		else if (equal_buf_str (&subconf->key, "pass_wsgi_vars")) {
-			props->pass_wsgi_vars = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->pass_wsgi_vars);
+			if (ret != ret_ok) return ret;
 		}
 		else if (equal_buf_str (&subconf->key, "pass_request_body")) {
-			props->pass_request_body = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->pass_request_body);
+			if (ret != ret_ok) return ret;
 		}
 	}
 

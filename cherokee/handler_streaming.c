@@ -59,6 +59,7 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 				      cherokee_server_t        *srv,
 				      cherokee_module_props_t **_props)
 {
+	ret_t                               ret;
 	cherokee_list_t                    *i;
 	cherokee_handler_streaming_props_t *props;
 
@@ -84,13 +85,15 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "rate")) {
-			props->auto_rate = !! atoi(subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->auto_rate);
+			if (ret != ret_ok) return ret_error;
 
 		} else if (equal_buf_str (&subconf->key, "rate_factor")) {
 			props->auto_rate_factor = strtof (subconf->val.buf, NULL);
 
 		} else if (equal_buf_str (&subconf->key, "rate_boost")) {
-			props->auto_rate_boost = atoi (subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &props->auto_rate_boost);
+			if (ret != ret_ok) return ret_error;
 		}
 	}
 

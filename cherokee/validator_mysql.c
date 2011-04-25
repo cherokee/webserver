@@ -56,6 +56,7 @@ props_free (cherokee_validator_mysql_props_t *props)
 ret_t
 cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
+	ret_t                             ret;
 	cherokee_list_t			 *i;
 	cherokee_validator_mysql_props_t *props;
 
@@ -88,7 +89,8 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 			cherokee_buffer_add_buffer (&props->host, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "port")) {
-			props->port = atoi (subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &props->port);
+			if (ret != ret_ok) return ret_error;
 
 		} else if (equal_buf_str (&subconf->key, "unix_socket")) {
 			cherokee_buffer_add_buffer (&props->unix_socket, &subconf->val);

@@ -133,8 +133,8 @@ ret_t   cherokee_buf_add_backtrace  (cherokee_buffer_t *buf, int n_skip, const c
 ret_t   cherokee_find_exec_in_path  (const char        *bin_name,
 				     cherokee_buffer_t *fullpath);
 
-ret_t   cherokee_atoi               (const char        *str,
-				     int               *ret_value);
+ret_t   cherokee_atoi               (const char *str, int *ret_value);
+ret_t   cherokee_atob               (const char *str, cherokee_boolean_t *ret_value);
 
 /* Time management functions
  */

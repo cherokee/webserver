@@ -254,13 +254,17 @@ ret_t
 cherokee_cache_configure (cherokee_cache_t       *cache,
 			  cherokee_config_node_t *conf)
 {
+	ret_t            ret;
 	cherokee_list_t *i;
 
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "max_size")) {
-			cache->max_size = atoi(subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &cache->max_size);
+			if (unlikely (ret != ret_ok)) {
+				return ret_error;
+			}
 		}
 	}
 

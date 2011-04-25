@@ -117,7 +117,9 @@ cherokee_bind_configure (cherokee_bind_t        *listener,
 	cherokee_boolean_t tls;
 	cherokee_buffer_t *buf;
 
-	listener->id = atoi(conf->key.buf);
+	ret = cherokee_atoi (conf->key.buf, &listener->id);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
 
 	ret = cherokee_config_node_read (conf, "interface", &buf);
 	if (ret == ret_ok) {

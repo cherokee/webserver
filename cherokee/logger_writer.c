@@ -200,7 +200,12 @@ cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_con
 	 */
 	ret = cherokee_config_node_read (config, "bufsize", &tmp);
 	if (ret == ret_ok) {
-		int buf_len = atoi (tmp->buf);
+		int buf_len;
+
+		ret = cherokee_atoi (tmp->buf, &buf_len);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
 
 		if (buf_len < LOGGER_MIN_BUFSIZE)
 			buf_len = LOGGER_MIN_BUFSIZE;

@@ -76,7 +76,9 @@ configure_base (cherokee_rule_t           *rule,
 	 */
 	ret = cherokee_config_node_read (conf, "final", &final);
 	if (ret == ret_ok) {
-		rule->final = !! atoi(final->buf);
+		ret = cherokee_atob (final->buf, &rule->final);
+		if (ret != ret_ok) return ret_error;
+
 		TRACE(ENTRIES, "Rule prio=%d set final to %d\n",
 		      rule->priority, rule->final);
 	}

@@ -1321,6 +1321,7 @@ static ret_t
 configure_server_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t              ret;
+	int                val;
 	char              *key = conf->key.buf;
 	cherokee_server_t *srv = SRV(data);
 	long               num;
@@ -1330,43 +1331,59 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		srv->fdlimit_custom = MAX(num, cherokee_fdlimit);
 
 	} else if (equal_buf_str (&conf->key, "listen_queue")) {
-		srv->listen_queue = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &srv->listen_queue);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "thread_number")) {
-		srv->thread_num = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &srv->thread_num);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "sendfile_min")) {
-		srv->sendfile.min = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &val);
+		if (ret != ret_ok) return ret_error;
+		srv->sendfile.min = val;
 
 	} else if (equal_buf_str (&conf->key, "sendfile_max")) {
-		srv->sendfile.max = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &val);
+		if (ret != ret_ok) return ret_error;
+		srv->sendfile.max = val;
 
 	} else if (equal_buf_str (&conf->key, "max_connection_reuse")) {
-		srv->conns_reuse_max = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &srv->conns_reuse_max);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "ipv6")) {
-		srv->ipv6 = !!atoi (conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, &srv->ipv6);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "timeout")) {
-		srv->timeout = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &srv->timeout);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "log_flush_lapse")) {
-		srv->log_flush_lapse = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &srv->log_flush_lapse);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "nonces_cleanup_lapse")) {
-		srv->nonces_cleanup_lapse = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &srv->nonces_cleanup_lapse);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "keepalive")) {
-		srv->keepalive = !!atoi (conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, &srv->keepalive);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "keepalive_max_requests")) {
-		srv->keepalive_max = atoi (conf->val.buf);
+		ret = cherokee_atoi (conf->val.buf, &val);
+		if (ret != ret_ok) return ret_error;
+		srv->keepalive_max = val;
 
 	} else if (equal_buf_str (&conf->key, "chunked_encoding")) {
-		srv->chunked_encoding = !!atoi (conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, &srv->chunked_encoding);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "readable_errors")) {
-		cherokee_readable_errors = !!atoi (conf->val.buf);
+		ret = cherokee_atob (conf->val.buf, (cherokee_boolean_t *)&cherokee_readable_errors);
+		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "panic_action")) {
 		cherokee_buffer_clean (&srv->panic_action);

@@ -81,7 +81,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 
 	cherokee_config_node_foreach (i, conf) {
 		error_entry_t          *entry;
-		cuint_t                 error      = 0;
+		cint_t                  error      = 0;
 		cherokee_config_node_t *subconf    = CONFIG_NODE(i);
 		cherokee_boolean_t      is_default = false;
 
@@ -93,7 +93,9 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		/* Check the error number
 		 */
 		} else {
-			error = atoi (subconf->key.buf);
+			ret = cherokee_atoi (subconf->key.buf, &error);
+			if (ret != ret_ok) return ret;
+
 			if (!http_type_300 (error) &&
 			    !http_type_400 (error) &&
 			    !http_type_500 (error))

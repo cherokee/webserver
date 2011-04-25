@@ -25,6 +25,7 @@
 #include "common-internal.h"
 #include "handler_custom_error.h"
 #include "connection-protected.h"
+#include "util.h"
 
 PLUGIN_INFO_HANDLER_EASIEST_INIT (custom_error, http_all_methods);
 
@@ -41,6 +42,8 @@ cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 					 cherokee_server_t        *srv,
 					 cherokee_module_props_t **_props)
 {
+	ret_t                                  ret;
+	int                                    val;
 	cherokee_list_t                       *i;
 	cherokee_config_node_t                *subconf;
 	cherokee_handler_custom_error_props_t *props;
@@ -62,7 +65,9 @@ cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 	cherokee_config_node_foreach (i, conf) {
 		subconf = CONFIG_NODE(i);
 		if (equal_buf_str (&subconf->key, "error")) {
-			props->error_code = atoi (subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret;
+			props->error_code = val;
 		}
 	}
 

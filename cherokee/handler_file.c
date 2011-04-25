@@ -67,6 +67,7 @@ cherokee_handler_file_configure (cherokee_config_node_t   *conf,
 				 cherokee_server_t        *srv,
 				 cherokee_module_props_t **_props)
 {
+	ret_t                          ret;
 	cherokee_list_t               *i;
 	cherokee_handler_file_props_t *props;
 
@@ -88,7 +89,8 @@ cherokee_handler_file_configure (cherokee_config_node_t   *conf,
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "iocache")) {
-			props->use_cache = atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->use_cache);
+			if (ret != ret_ok) return ret;
 		}
 	}
 

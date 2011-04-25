@@ -106,6 +106,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 				  cherokee_module_props_t **_props)
 {
 	ret_t                           ret;
+	int                             val;
 	cherokee_list_t                *i, *j;
 	cherokee_handler_proxy_props_t *props;
 
@@ -155,22 +156,29 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 			if (ret != ret_ok)
 				return ret;
 		} else if (equal_buf_str (&subconf->key, "reuse_max")) {
-			props->reuse_max = atoi (subconf->val.buf);
+			ret = cherokee_atoi (subconf->val.buf, &val);
+			if (ret != ret_ok) return ret;
+			props->reuse_max = val;
 
 		} else if (equal_buf_str (&subconf->key, "vserver_errors")) {
-			props->vserver_errors = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->vserver_errors);
+			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "in_allow_keepalive")) {
-			props->in_allow_keepalive = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->in_allow_keepalive);
+			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "in_preserve_host")) {
-			props->in_preserve_host = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->in_preserve_host);
+			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "out_preserve_server")) {
-			props->out_preserve_server = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->out_preserve_server);
+			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "out_flexible_EOH")) {
-			props->out_flexible_EOH = !! atoi (subconf->val.buf);
+			ret = cherokee_atob (subconf->val.buf, &props->out_flexible_EOH);
+			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "in_header_hide")) {
 			cherokee_config_node_foreach (j, subconf) {
@@ -1231,12 +1239,12 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                           *end;
 	char                           *colon;
 	char                           *header_end;
-	char   *xsendfile   = NULL;
-	cint_t  xsendfile_len;
 	cherokee_list_t                *i;
 	cherokee_http_version_t         version;
-	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
-	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
+	cint_t                          xsendfile_len;
+	char                           *xsendfile      = NULL;
+	cherokee_connection_t          *conn           = HANDLER_CONN(hdl);
+	cherokee_handler_proxy_props_t *props          = HDL_PROXY_PROPS(hdl);
 
 	p = buf_in->buf;
 	header_end = buf_in->buf + buf_in->len;
@@ -1273,7 +1281,12 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 	re = (int)p[3];
 	p[3] = '\0';
-	conn->error_code = atoi(p);
+
+	ret = cherokee_atoi (p, (int *)&conn->error_code);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
 	p[3] = (char)re;
 
 	p = strchr (p, CHR_CR);
