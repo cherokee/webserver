@@ -854,10 +854,9 @@ exit_sendfile:
 	 */
 	size = MIN (DEFAULT_READ_SIZE, (conn->range_end - fhdl->offset + 1));
 
-	/* Check overflow */
-	if (unlikely (size > buffer->size)) {
-		return ret_error;
-	}
+	/* Ensure there's enough memory
+	 */
+	cherokee_buffer_ensure_size (buffer, size);
 
 	/* Read
 	 */

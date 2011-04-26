@@ -1409,9 +1409,17 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		case ret_eof_have_data:
 			ret = cherokee_encoder_flush (conn->encoder, &conn->buffer, &conn->encoder_buffer);
 			step_ret = (conn->encoder_buffer.len == 0) ? ret_eof : ret_eof_have_data;
+
+			TRACE (ENTRIES",encoder", "Flush: in=(len %d, size %d) >> out=(len %d, size %d)\n",
+			       conn->buffer.len, conn->buffer.size,
+			       conn->encoder_buffer.len, conn->encoder_buffer.size);
 			break;
 		default:
 			ret = cherokee_encoder_encode (conn->encoder, &conn->buffer, &conn->encoder_buffer);
+
+			TRACE (ENTRIES",encoder", "Encode: in=(len %d, size %d) >> out=(len %d, size %d)\n",
+			       conn->buffer.len, conn->buffer.size,
+			       conn->encoder_buffer.len, conn->encoder_buffer.size);
 			break;
 		}
 		if (ret < ret_ok)
@@ -1421,9 +1429,6 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		 */
 		cherokee_buffer_swap_buffers (&conn->buffer, &conn->encoder_buffer);
 		cherokee_buffer_clean (&conn->encoder_buffer);
-
-		TRACE (ENTRIES",encoder", "Sizes: Conn %d bytes, Enc %d bytes\n",
-		       conn->buffer.size, conn->encoder_buffer.size);
 	}
 
 	/* Chunked encoding header
