@@ -296,16 +296,15 @@ run-tests.py \
 272-Nick-match.py \
 273-Unknown-method-redir.py \
 274-header_op-remove-etag.py \
-\
-273-Flcache-basic1.py \
-274-Flcache-cookie1.py \
-275-Flcache-cookie2.py \
-276-Flcache-headers1.py \
-277-Flcache-headers2.py \
-278-Flcache-gzip1.py \
-279-Flcache-expired1.py \
-280-Flcache-expired2.py \
-281-Flcache-expired3.py
+275-Flcache-basic1.py \
+276-Flcache-cookie1.py \
+277-Flcache-cookie2.py \
+278-Flcache-headers1.py \
+279-Flcache-headers2.py \
+280-Flcache-gzip1.py \
+281-Flcache-expired1.py \
+282-Flcache-expired2.py \
+283-Flcache-expired3.py
 
 test:
 	python -m compileall .
