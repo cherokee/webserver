@@ -1,6 +1,7 @@
 == link:index.html[Index] -> Other information
 
   . link:other_faq.html[FAQ]: List of Frequently Asked Questions.
+  . link:other_front_line_cache.html[Front-line Cache]: Specifics of the Caching subsystem.
   . link:other_os_tuning.html[System Tuning]: Tweaking the OS for maximum performance.
   . link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
   . link:other_graphs.html[Usage graphs]: Information on the several graphs available.

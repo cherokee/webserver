@@ -1105,8 +1105,14 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 			} else
 				goto unknown;
 			break;
+		case 'S':
+			if (header_equals ("Set-Cookie", header_set_cookie, begin, header_len)) {
+				ret = add_known_header (hdr, header_set_cookie, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
 		case 'T':
-			if (header_equals ("Transfer-Encoding", header_range, begin, header_len)) {
+			if (header_equals ("Transfer-Encoding", header_transfer_encoding, begin, header_len)) {
 				ret = add_known_header (hdr, header_transfer_encoding, val_offs, val_len);
 			} else
 				goto unknown;

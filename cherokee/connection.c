@@ -79,6 +79,7 @@
 #include "header-protected.h"
 #include "iocache.h"
 #include "dtm.h"
+#include "flcache.h"
 
 #define ENTRIES "core,connection"
 
@@ -90,47 +91,49 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	INIT_LIST_HEAD (&n->list_node);
 
-	n->error_code           = http_ok;
-	n->phase                = phase_reading_header;
-	n->auth_type            = http_auth_nothing;
-	n->req_auth_type        = http_auth_nothing;
-	n->upgrade              = http_upgrade_nothing;
-	n->options              = conn_op_nothing;
-	n->handler              = NULL;
-	n->encoder              = NULL;
-	n->encoder_new_func     = NULL;
-	n->encoder_props        = NULL;
-	n->logger_ref           = NULL;
-	n->keepalive            = 0;
-	n->range_start          = -1;
-	n->range_end            = -1;
-	n->vserver              = NULL;
-	n->arguments            = NULL;
-	n->realm_ref            = NULL;
-	n->mmaped               = NULL;
-	n->mmaped_len           = 0;
-	n->io_entry_ref         = NULL;
-	n->thread               = NULL;
-	n->rx                   = 0;
-	n->tx                   = 0;
-	n->rx_partial           = 0;
-	n->tx_partial           = 0;
-	n->traffic_next         = 0;
-	n->validator            = NULL;
-	n->timeout              = -1;
-	n->timeout_lapse        = -1;
-	n->timeout_header       = NULL;
-	n->polling_fd           = -1;
-	n->polling_multiple     = false;
-	n->polling_mode         = FDPOLL_MODE_NONE;
-	n->expiration           = cherokee_expiration_none;
-	n->expiration_time      = 0;
-	n->expiration_prop      = cherokee_expiration_prop_none;
-	n->respins              = 0;
-	n->limit_rate           = false;
-	n->limit_bps            = 0;
-	n->limit_blocked_until  = 0;
-	n->header_ops           = NULL;
+	n->error_code                = http_ok;
+	n->phase                     = phase_reading_header;
+	n->auth_type                 = http_auth_nothing;
+	n->req_auth_type             = http_auth_nothing;
+	n->upgrade                   = http_upgrade_nothing;
+	n->options                   = conn_op_nothing;
+	n->handler                   = NULL;
+	n->encoder                   = NULL;
+	n->encoder_new_func          = NULL;
+	n->encoder_props             = NULL;
+	n->logger_ref                = NULL;
+	n->keepalive                 = 0;
+	n->range_start               = -1;
+	n->range_end                 = -1;
+	n->vserver                   = NULL;
+	n->arguments                 = NULL;
+	n->realm_ref                 = NULL;
+	n->mmaped                    = NULL;
+	n->mmaped_len                = 0;
+	n->io_entry_ref              = NULL;
+	n->thread                    = NULL;
+	n->rx                        = 0;
+	n->tx                        = 0;
+	n->rx_partial                = 0;
+	n->tx_partial                = 0;
+	n->traffic_next              = 0;
+	n->validator                 = NULL;
+	n->timeout                   = -1;
+	n->timeout_lapse             = -1;
+	n->timeout_header            = NULL;
+	n->polling_fd                = -1;
+	n->polling_multiple          = false;
+	n->polling_mode              = FDPOLL_MODE_NONE;
+	n->expiration                = cherokee_expiration_none;
+	n->expiration_time           = 0;
+	n->expiration_prop           = cherokee_expiration_prop_none;
+	n->respins                   = 0;
+	n->limit_rate                = false;
+	n->limit_bps                 = 0;
+	n->limit_blocked_until       = 0;
+	n->header_ops                = NULL;
+	n->flcache_cookies_disregard = NULL;
+	n->flcache_policy            = flcache_policy_explicitly_allowed;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -170,6 +173,8 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->chunked_sent         = 0;
 	n->chunked_last_package = false;
 	cherokee_buffer_init (&n->chunked_len);
+
+	cherokee_flcache_conn_init (&n->flcache);
 
 	*conn = n;
 	return ret_ok;
@@ -255,6 +260,10 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		conn->io_entry_ref = NULL;
 	}
 
+	/* Front-line cache
+	 */
+	cherokee_flcache_conn_clean (&conn->flcache);
+
 	/* TCP cork
 	 */
 	if (conn->options & conn_op_tcp_cork) {
@@ -268,36 +277,38 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		srv->post_track->func_unregister (srv->post_track, &conn->post);
 	}
 
-	conn->phase                = phase_reading_header;
-	conn->auth_type            = http_auth_nothing;
-	conn->req_auth_type        = http_auth_nothing;
-	conn->upgrade              = http_upgrade_nothing;
-	conn->options              = conn_op_nothing;
-	conn->error_code           = http_ok;
-	conn->range_start          = -1;
-	conn->range_end            = -1;
-	conn->logger_ref           = NULL;
-	conn->realm_ref            = NULL;
-	conn->mmaped               = NULL;
-	conn->mmaped_len           = 0;
-	conn->rx                   = 0;
-	conn->tx                   = 0;
-	conn->rx_partial           = 0;
-	conn->tx_partial           = 0;
-	conn->traffic_next         = 0;
-	conn->polling_multiple     = false;
-	conn->polling_mode         = FDPOLL_MODE_NONE;
-	conn->expiration           = cherokee_expiration_none;
-	conn->expiration_time      = 0;
-	conn->expiration_prop      = cherokee_expiration_prop_none;
-	conn->chunked_encoding     = false;
-	conn->chunked_sent         = 0;
-	conn->chunked_last_package = false;
-	conn->respins              = 0;
-	conn->limit_rate           = false;
-	conn->limit_bps            = 0;
-	conn->limit_blocked_until  = 0;
-	conn->header_ops           = NULL;
+	conn->phase                     = phase_reading_header;
+	conn->auth_type                 = http_auth_nothing;
+	conn->req_auth_type             = http_auth_nothing;
+	conn->upgrade                   = http_upgrade_nothing;
+	conn->options                   = conn_op_nothing;
+	conn->error_code                = http_ok;
+	conn->range_start               = -1;
+	conn->range_end                 = -1;
+	conn->logger_ref                = NULL;
+	conn->realm_ref                 = NULL;
+	conn->mmaped                    = NULL;
+	conn->mmaped_len                = 0;
+	conn->rx                        = 0;
+	conn->tx                        = 0;
+	conn->rx_partial                = 0;
+	conn->tx_partial                = 0;
+	conn->traffic_next              = 0;
+	conn->polling_multiple          = false;
+	conn->polling_mode              = FDPOLL_MODE_NONE;
+	conn->expiration                = cherokee_expiration_none;
+	conn->expiration_time           = 0;
+	conn->expiration_prop           = cherokee_expiration_prop_none;
+	conn->chunked_encoding          = false;
+	conn->chunked_sent              = 0;
+	conn->chunked_last_package      = false;
+	conn->respins                   = 0;
+	conn->limit_rate                = false;
+	conn->limit_bps                 = 0;
+	conn->limit_blocked_until       = 0;
+	conn->header_ops                = NULL;
+	conn->flcache_cookies_disregard = NULL;
+	conn->flcache_policy            = flcache_policy_explicitly_allowed;
 
 	memset (conn->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_ovecsize = 0;
@@ -529,11 +540,13 @@ clean:
 	 */
 	if (conn->io_entry_ref != NULL) {
 		cherokee_iocache_entry_unref (&conn->io_entry_ref);
+		conn->io_entry_ref = NULL;
 	}
 
-	conn->io_entry_ref = NULL;
-	conn->mmaped       = NULL;
-	conn->mmaped_len   = 0;
+	conn->mmaped     = NULL;
+	conn->mmaped_len = 0;
+
+	cherokee_flcache_conn_clean (&conn->flcache);
 
 	/* It does not matter whether the previous handler wanted to
 	 * use Chunked encoding.
@@ -605,7 +618,8 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 
 void
 cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
-					   cherokee_buffer_t     *buffer)
+					   cherokee_buffer_t     *buffer,
+					   cherokee_boolean_t     use_maxage)
 {
 	time_t    exp_time;
 	struct tm exp_tm;
@@ -622,11 +636,13 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 			cherokee_buffer_add_str (buffer, "Cache-Control: ");
 		}
 		break;
+
 	case cherokee_expiration_max:
 		cherokee_buffer_add_str (buffer, "Expires: Thu, 31 Dec 2037 23:55:55 GMT" CRLF);
 		cherokee_buffer_add_str (buffer, "Cache-Control: max-age=315360000");
 		first_prop = false;
 		break;
+
 	case cherokee_expiration_time:
 		exp_time = (cherokee_bogonow_now + conn->expiration_time);
 		cherokee_gmtime (&exp_time, &exp_tm);
@@ -636,10 +652,15 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 		cherokee_buffer_add (buffer, bufstr, szlen);
 		cherokee_buffer_add_str (buffer, CRLF);
 
-		cherokee_buffer_add_str (buffer, "Cache-Control: max-age=");
-		cherokee_buffer_add_long10 (buffer, conn->expiration_time);
-		first_prop = false;
+		if (use_maxage) {
+			cherokee_buffer_add_str (buffer, "Cache-Control: max-age=");
+			cherokee_buffer_add_long10 (buffer, conn->expiration_time);
+			first_prop = false;
+		} else if (conn->expiration_prop) {
+			cherokee_buffer_add_str (buffer, "Cache-Control: ");
+		}
 		break;
+
 	default:
 		SHOULDNT_HAPPEN;
 	}
@@ -698,8 +719,11 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 
 
 static void
-build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
+build_response_header (cherokee_connection_t *conn,
+		       cherokee_buffer_t     *buffer)
 {
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(CONN_THREAD(conn));
+
 	/* Build the response header.
 	 */
 	cherokee_buffer_clean (buffer);
@@ -731,7 +755,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	if (conn->upgrade != http_upgrade_nothing) {
 		cherokee_buffer_add_str (buffer, "Connection: Upgrade"CRLF);
 
-	} else if (conn->handler && (conn->keepalive > 1)) {
+	} else if (conn->keepalive > 1) {
 		if (conn->header.version < http_version_11) {
 			cherokee_buffer_add_str     (buffer, "Connection: Keep-Alive"CRLF);
 			cherokee_buffer_add_buffer  (buffer, conn->timeout_header);
@@ -751,7 +775,8 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 
 	/* Exit now if the handler already added all the headers
 	 */
-	if (HANDLER_SUPPORTS (conn->handler, hsupport_full_headers))
+	if ((conn->handler != NULL) &&
+	    (HANDLER_SUPPORTS (conn->handler, hsupport_full_headers)))
 		return;
 
 	/* Date
@@ -779,7 +804,17 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Expiration
 	 */
 	if (conn->expiration != cherokee_expiration_none) {
-		cherokee_connection_add_expiration_header (conn, buffer);
+		/* Front-line Cache (in) */
+		if (conn->flcache.mode == flcache_mode_in) {
+			cherokee_buffer_clean (tmp1);
+			cherokee_connection_add_expiration_header (conn, tmp1, false);
+			cherokee_buffer_add_buffer (buffer, tmp1);
+			cherokee_buffer_add_buffer (&conn->flcache.header, tmp1);
+		}
+		/* Straight */
+		else {
+			cherokee_connection_add_expiration_header (conn, buffer, true);
+		}
 	}
 
 	/* Redirected connections
@@ -793,7 +828,23 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Encoder headers
 	 */
 	if (conn->encoder) {
-		cherokee_encoder_add_headers (conn->encoder, buffer);
+		/* Front-line Cache (in) */
+		if (conn->flcache.mode == flcache_mode_in) {
+			cherokee_buffer_clean (tmp1);
+			cherokee_encoder_add_headers (conn->encoder, tmp1);
+			cherokee_buffer_add_buffer (buffer, tmp1);
+			cherokee_buffer_add_buffer (&conn->flcache.header, tmp1);
+		}
+		/* Straight */
+		else {
+			cherokee_encoder_add_headers (conn->encoder, buffer);
+		}
+	}
+
+	/* Headers ops
+	 */
+	if (conn->header_ops) {
+		cherokee_header_op_render (conn->header_ops, buffer);
 	}
 }
 
@@ -814,12 +865,24 @@ cherokee_connection_read_post (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_build_header (cherokee_connection_t *conn)
 {
-	ret_t              ret;
+	ret_t ret;
+
+	/* Front-line cache
+	 */
+	if (conn->flcache.mode == flcache_mode_out) {
+		ret = cherokee_flcache_conn_send_header (&conn->flcache, conn);
+		if (ret != ret_ok) {
+			return ret;
+		}
+
+		goto out;
+	}
 
 	/* If the handler requires not to add headers, exit.
 	 */
-	if (HANDLER_SUPPORTS (conn->handler, hsupport_skip_headers))
+	else if (HANDLER_SUPPORTS (conn->handler, hsupport_skip_headers)) {
 		return ret_ok;
+	}
 
 	/* Try to get the headers from the handler
 	 */
@@ -834,6 +897,18 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 			RET_UNKNOWN(ret);
 			return ret_error;
 		}
+	}
+
+	/* Front-line Cache (in): Handler headers
+	 */
+	if (conn->flcache.mode == flcache_mode_in) {
+		cherokee_buffer_add_buffer (&conn->flcache.header, &conn->header_buffer);
+
+		/* Add X-Cache miss
+		 */
+		cherokee_buffer_add_str (&conn->header_buffer, "X-Cache: MISS from ");
+		cherokee_connection_build_host_port_string (conn, &conn->header_buffer);
+		cherokee_buffer_add_str (&conn->header_buffer, CRLF);
 	}
 
 	/* Replies with no body cannot use chunked encoding
@@ -868,6 +943,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		cherokee_connection_instance_encoder (conn);
 	}
 
+out:
 	/* Add the server headers
 	 */
 	build_response_header (conn, &conn->buffer);
@@ -1229,7 +1305,8 @@ out:
 	/* If this connection has a handler without Content-Length support
 	 * it has to count the bytes sent
 	 */
-	if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+	if ((conn->handler) &&
+	    (! HANDLER_SUPPORTS (conn->handler, hsupport_length))) {
 		conn->range_end += sent;
 	}
 
@@ -1253,7 +1330,8 @@ cherokee_connection_should_include_length (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 {
-	ret_t ret;
+	ret_t  ret;
+	char  *name = NULL;
 
 	/* Ensure that the content can be encoded
 	 */
@@ -1276,6 +1354,16 @@ cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 	ret = cherokee_encoder_init (conn->encoder, conn);
 	if (unlikely (ret != ret_ok))
 		goto error;
+
+	/* Update Front-Line cache
+	 */
+	if (conn->flcache.mode == flcache_mode_in) {
+		ret = cherokee_module_get_name (MODULE(conn->encoder), &name);
+		if (likely ((ret == ret_ok) || (name != NULL))) {
+			cherokee_buffer_add (&conn->flcache.avl_node_ref->content_encoding, name, strlen(name));
+			TRACE (ENTRIES, "New entry encoded entry '%s' - %s\n", conn->request.buf, name);
+		}
+	}
 
 	cherokee_buffer_clean (&conn->encoder_buffer);
 	return ret_ok;
@@ -1366,8 +1454,6 @@ cherokee_connection_step (cherokee_connection_t *conn)
 	ret_t ret;
 	ret_t step_ret = ret_ok;
 
-	return_if_fail (conn->handler != NULL, ret_error);
-
 	/* Need to 'read' from handler ?
 	 */
 	if (conn->buffer.len > 0) {
@@ -1377,8 +1463,34 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		return ret_eof;
 	}
 
+	/* Front-line cache: Serve content
+	 */
+	if (conn->flcache.mode == flcache_mode_out) {
+		ret = cherokee_flcache_conn_send_body (&conn->flcache, conn);
+		switch (ret) {
+		case ret_ok:
+			return ret_ok;
+
+		case ret_eof:
+		case ret_eof_have_data:
+			BIT_SET (conn->options, conn_op_got_eof);
+			return ret;
+
+		case ret_error:
+		case ret_eagain:
+		case ret_ok_and_sent:
+			return ret;
+
+		default:
+			RET_UNKNOWN(ret);
+			return ret;
+		}
+	}
+
 	/* Do a step in the handler
 	 */
+	return_if_fail (conn->handler != NULL, ret_error);
+
 	step_ret = cherokee_handler_step (conn->handler, &conn->buffer);
 	switch (step_ret) {
 	case ret_ok:
@@ -1429,6 +1541,14 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		 */
 		cherokee_buffer_swap_buffers (&conn->buffer, &conn->encoder_buffer);
 		cherokee_buffer_clean (&conn->encoder_buffer);
+	}
+
+	/* Front-line cache: Store content
+	 */
+	if ((conn->flcache.mode == flcache_mode_in) &&
+	    (! cherokee_buffer_is_empty (&conn->buffer)))
+	{
+		cherokee_flcache_conn_write_body (&conn->flcache, conn);
 	}
 
 	/* Chunked encoding header
@@ -1585,6 +1705,7 @@ get_encoding (cherokee_connection_t *conn,
 				conn->encoder_new_func = NULL;
 				conn->encoder_props    = NULL;
 				break;
+
 			} else if (props->perms == cherokee_encoder_unset) {
 				/* Let's it be
 				 */
@@ -2283,6 +2404,9 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 	if (conn->header.version == http_version_11)
 		goto granted;
 
+	if (conn->flcache.mode == flcache_mode_out)
+		goto granted;
+
 denied:
 	TRACE (ENTRIES, "Keep-alive %s\n", "denied");
 	conn->keepalive = 0;
@@ -2317,10 +2441,12 @@ cherokee_connection_set_chunked_encoding (cherokee_connection_t *conn)
 	 *  - The server configuration allows to use it
 	 *  - It's a keep-alive connection
 	 *  - It's a HTTP/1.1 connection
+	 *  - It's not serving content from the Front-line cache
 	 */
 	conn->chunked_encoding = ((CONN_SRV(conn)->chunked_encoding) &&
 				  (conn->keepalive > 0) &&
-				  (conn->header.version == http_version_11));
+				  (conn->header.version == http_version_11) &&
+				  (conn->flcache.mode != flcache_mode_out));
 }
 
 ret_t
@@ -2359,8 +2485,10 @@ cherokee_connection_create_encoder (cherokee_connection_t *conn,
 	/* No encoders are accepted
 	 */
 	if ((encoders_accepted == NULL) ||
-	    (encoders_accepted->root == NULL))
+	    (cherokee_avl_is_empty (AVL_GENERIC(encoders_accepted))))
+	{
 		return ret_ok;
+	}
 
 	/* Keepalive (Content-Length) connections cannot use encoders.
 	 * The transferred information length would change.
@@ -2725,4 +2853,39 @@ cherokee_connection_update_timeout (cherokee_connection_t *conn)
 	       conn, cherokee_connection_get_phase_str (conn), conn->timeout_lapse);
 
 	conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
+}
+
+
+ret_t
+cherokee_connection_build_host_port_string (cherokee_connection_t *conn,
+					    cherokee_buffer_t     *buf)
+{
+	/* 1st choice: Request host */
+	if (! cherokee_buffer_is_empty (&conn->host)) {
+		cherokee_buffer_add_buffer (buf, &conn->host);
+	}
+
+	/* 2nd choice: Bound IP */
+	else if ((conn->bind != NULL) &&
+		 (! cherokee_buffer_is_empty (&conn->bind->ip)))
+	{
+		cherokee_buffer_add_buffer (buf, &conn->bind->ip);
+	}
+
+	/* 3rd choice: Bound IP, rendered address */
+	else if ((conn->bind != NULL) &&
+		 (! cherokee_buffer_is_empty (&conn->bind->server_address)))
+	{
+		cherokee_buffer_add_buffer (buf, &conn->bind->server_address);
+	}
+
+	/* Port
+	 */
+	if (! http_port_is_standard (conn->bind->port, conn->socket.is_tls))
+	{
+		cherokee_buffer_add_char    (buf, ':');
+		cherokee_buffer_add_ulong10 (buf, conn->bind->port);
+	}
+
+	return ret_ok;
 }

@@ -380,8 +380,10 @@ class TestBase:
         return public_html, user
 
 
-class TestCollection:
-    def __init__ (self):
+class TestCollection (TestBase):
+    def __init__ (self, file):
+        TestBase.__init__(self, file)
+
         self.tests    = []
         self.num      = 0
         self.disabled = False

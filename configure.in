@@ -278,6 +278,7 @@ AC_CHECK_TYPE(ssize_t, int)
 AC_CHECK_TYPE(wchar_t, unsigned short)
 
 AC_CHECK_SIZEOF(int)
+AC_CHECK_SIZEOF(long)
 AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(unsigned long)
 AC_CHECK_SIZEOF(unsigned long long)
@@ -285,6 +286,7 @@ AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(off_t)
 AC_CHECK_SIZEOF(size_t)
 AC_CHECK_SIZEOF(sig_atomic_t)
+AC_CHECK_SIZEOF(time_t)
 
 AC_CACHE_CHECK([for long long],samba_cv_have_longlong,[
 AC_TRY_RUN([#include <stdio.h>

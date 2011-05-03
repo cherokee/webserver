@@ -661,8 +661,8 @@ fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi)
 
 	/* Creates the pipes ...
 	 */
-	re  = pipe (pipes.cgi);
-	re |= pipe (pipes.server);
+	re  = cherokee_pipe (pipes.cgi);
+	re |= cherokee_pipe (pipes.server);
 
 	if (re != 0) {
 		conn->error_code = http_internal_error;

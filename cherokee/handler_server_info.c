@@ -240,6 +240,8 @@
 "<div id=\"license\">" LICENSE "</div>"                                                             CRLF\
 "</div></div></body></html>"
 
+#define LOGO_CACHING_TIME (60 *60 * 24)  /* 1 day */
+
 
 /* Plug-in initialization
  */
@@ -572,7 +574,7 @@ add_modules (cherokee_dwriter_t *writer,
 	void    *params[]   = {&loggers, &handlers, &encoders, &validators, &generic,
 			       &balancers, &rules, &cryptors, &vrules, &collectors};
 
-	cherokee_avl_while (&srv->loader.table,
+	cherokee_avl_while (AVL_GENERIC (&srv->loader.table),
 			    (cherokee_avl_while_func_t) modules_while,
 			    params, NULL, NULL);
 
@@ -967,7 +969,11 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 	switch (hdl->action) {
 	case send_logo:
 		cherokee_buffer_add_str (buffer, "Content-Type: image/png"CRLF);
+
+		conn->expiration      = cherokee_expiration_time;
+		conn->expiration_time = LOGO_CACHING_TIME;
 		break;
+
 	case send_info:
 		conn->expiration = cherokee_expiration_epoch;
 
@@ -988,8 +994,11 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 			SHOULDNT_HAPPEN;
 		}
 		break;
+
 	case send_html:
 	default:
+		conn->expiration = cherokee_expiration_epoch;
+
 		cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
 		break;
 	}

@@ -186,12 +186,12 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 	TRACE (ENTRIES, "Spawning a new RRDtool instance: %s -\n", rrd_conn->path_rrdtool.buf);
 
 	/* Create communication pipes */
-	re = pipe(fds_to);
+	re = cherokee_pipe(fds_to);
 	if (re != 0) {
 		return ret_error;
 	}
 
-	re = pipe(fds_from);
+	re = cherokee_pipe(fds_from);
 	if (re != 0) {
 		return ret_error;
 	}

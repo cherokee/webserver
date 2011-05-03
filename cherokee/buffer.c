@@ -1024,7 +1024,7 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 
 	/* Open the file
 	 */
-	f = open (filename, O_RDONLY | O_BINARY);
+	f = cherokee_open (filename, O_RDONLY | O_BINARY, 0);
 	if (f < 0) {
 		LOG_ERRNO(errno, cherokee_err_error, CHEROKEE_ERROR_BUFFER_OPEN_FILE, filename);
 		return ret_error;
@@ -1066,12 +1066,14 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 
 	/* Read data at the end of the buffer
 	 */
-	len = read (fd, &(buf->buf[buf->len]), size);
+	do {
+		len = read (fd, &(buf->buf[buf->len]), size);
+	} while ((len == -1) && (errno == EINTR));
+
 	if (len < 0) {
 		/* On error
 		 */
 		switch (errno) {
-		case EINTR:
 		case EAGAIN:
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 		case EWOULDBLOCK:
@@ -1795,16 +1797,16 @@ ret_t
 cherokee_buffer_encode_sha1_digest (cherokee_buffer_t *buf)
 {
 	int           i;
-	unsigned char digest[20];
+	unsigned char digest[SHA1_DIGEST_SIZE];
 	SHA_INFO      sha1;
 
 	sha_init (&sha1);
 	sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
 	sha_final (&sha1, digest);
 
-	cherokee_buffer_ensure_size (buf, 2 * SHA1_DIGEST_SIZE);
+	cherokee_buffer_ensure_size (buf, (2 * SHA1_DIGEST_SIZE)+1);
 
-	for (i = 0; i < 20; ++i) {
+	for (i = 0; i < SHA1_DIGEST_SIZE; ++i) {
 		int tmp;
 
 		tmp = ((digest[i] >> 4) & 0xf);

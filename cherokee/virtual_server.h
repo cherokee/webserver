@@ -39,6 +39,7 @@
 #include "vrule.h"
 #include "gen_evhost.h"
 #include "collector.h"
+#include "flcache.h"
 
 typedef struct {
 	cherokee_list_t              list_node;
@@ -65,6 +66,7 @@ typedef struct {
 
 	cherokee_buffer_t            root;            /* Document root. Eg: /var/www */
 	cherokee_list_t              index_list;      /* Eg: index.html, index.php   */
+	cherokee_flcache_t          *flcache;         /* Front Line cache            */
 	void                        *evhost;
 
 	cuint_t                      verify_depth;

@@ -148,7 +148,7 @@ remove_old_socket (const char *path)
 
 	/* Remove it
 	 */
-	re = unlink (path);
+	re = cherokee_unlink (path);
 	if (re != 0) {
 		PRINT_MSG ("ERROR: Couldn't remove unix socket '%s'.\n", path);
 		return ret_error;

@@ -36,9 +36,10 @@ from consts import *
 from configured import *
 
 URL_BASE            = r'^/vserver/([\d]+)/rule/content/([\d]+)/?$'
-URL_APPLY           = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply$'
 URL_CLONE           = r'^/vserver/([\d]+)/rule/content/([\d]+)/clone$'
-URL_HEADER_OP_APPLY = r'^/vserver/([\d]+)/rule/content/([\d]+)/header_op$'
+URL_APPLY           = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply$'
+URL_HEADER_OP_APPLY = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply/header_op$'
+URL_FLCACHE_APPLY   = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply/flcache$'
 
 NOTE_TIMEOUT         = N_('Apply a custom timeout to the connections matching this rule.')
 NOTE_HANDLER         = N_('How the connection will be handled.')
@@ -48,6 +49,9 @@ NOTE_VALIDATOR       = N_('Which, if any, will be the authentication method.')
 NOTE_EXPIRATION      = N_('Points how long the files should be cached')
 NOTE_RATE            = N_("Set an outbound traffic limit. It must be specified in Bytes per second.")
 NOTE_NO_LOG          = N_("Do not log requests matching this rule.")
+NOTE_FLCACHE         = N_("Allow the server to cache the responses from this rule.")
+NOTE_FLCACHE_POLICY  = N_("How to behave when a response does not explicitly set a caching status.")
+NOTE_FLCACHE_COOKIES = N_("Allow to cache responses setting cookies. (Defualt: No)")
 NOTE_EXPIRATION_TIME = N_("""How long from the object can be cached.<br />
 The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d.
 """)
@@ -57,6 +61,7 @@ NOTE_CACHING_NO_STORE         = N_("Prevents the retention of sensitive informat
 NOTE_CACHING_NO_TRANSFORM     = N_("Forbid intermediate caches from transforming the content.")
 NOTE_CACHING_MUST_REVALIDATE  = N_("The client must contact the server to revalidate the object.")
 NOTE_CACHING_PROXY_REVALIDATE = N_("Proxy servers must contact the server to revalidate the object.")
+NOTE_FLCACHE_EXPERIMENTAL     = N_("This caching mechanism should still be considered an experimental technology. Use it with caution.")
 
 VALIDATIONS = [
     ("vserver![\d]+!rule![\d]+!document_root",   validations.is_dev_null_or_local_dir_exists),
@@ -80,6 +85,17 @@ ENCODE_OPTIONS = [
     ('forbid', N_('Forbid'))
 ]
 
+FLCACHE_OPTIONS = [
+    ('',       N_('Leave unset')),
+    ('allow',  N_('Allow Caching')),
+    ('forbid', N_('Forbid Caching'))
+]
+
+FLCACHE_POLICIES = [
+    ('explicitly_allowed', N_('Only explicitly cacheable responses')),
+    ('all_but_forbidden',  N_('All except explicitly forbidden responses'))
+]
+
 HEADER_OP_OPTIONS = [
     ('add', N_('Add')),
     ('del', N_('Remove'))
@@ -94,11 +110,21 @@ def Clone():
     return CTK.cfg_reply_ajax_ok()
 
 
-class TrafficWidget (CTK.Container):
+class RestrictionsWidget (CTK.Container):
     def __init__ (self, vsrv, rule, apply):
         CTK.Container.__init__ (self)
         pre = 'vserver!%s!rule!%s' %(vsrv, rule)
 
+        # Timeout
+        table = CTK.PropsTable()
+        table.Add (_('Timeout'), CTK.TextCfg ('%s!timeout'%(pre), True), _(NOTE_TIMEOUT))
+        submit = CTK.Submitter (apply)
+        submit += table
+
+        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Connections Timeout')))
+        self += CTK.Indenter (submit)
+
+        # Traffic Shaping
         table = CTK.PropsTable()
         table.Add (_('Limit traffic to'), CTK.TextCfg ('%s!rate'%(pre), False), _(NOTE_RATE))
         submit = CTK.Submitter (apply)
@@ -173,7 +199,7 @@ def HeaderOp_Apply():
 
 class HeaderOps (CTK.Container):
     class OpsTable (CTK.Box):
-        def __init__ (self, pre, apply, refresh):
+        def __init__ (self, pre, apply_url, refresh):
             CTK.Box.__init__ (self)
 
             def reorder (arg, pre=pre):
@@ -197,7 +223,7 @@ class HeaderOps (CTK.Container):
                     value     = CTK.TextCfg('%s!value' %(pre2))
 
                     delete = CTK.ImageStock('del')
-                    delete.bind('click', CTK.JS.Ajax (apply, data = {pre2: ''},
+                    delete.bind('click', CTK.JS.Ajax (apply_url, data = {pre2: ''},
                                                       complete = refresh.JS_to_refresh()))
 
                     if type_ == 'add':
@@ -210,13 +236,14 @@ class HeaderOps (CTK.Container):
 
                 self += table
 
-    def __init__ (self, vsrv, rule, apply):
+    def __init__ (self, vsrv, rule, apply_orig):
         CTK.Container.__init__ (self)
         pre = 'vserver!%s!rule!%s' %(vsrv, rule)
+        apply_url = '%s/header_op'%(apply_orig)
 
         # Operation Table
         refresh = CTK.Refreshable({'id': 'header_op'})
-        refresh.register (lambda: HeaderOps.OpsTable(pre, apply, refresh).Render())
+        refresh.register (lambda: HeaderOps.OpsTable(pre, apply_orig, refresh).Render())
 
         self += CTK.RawHTML ("<h2>%s</h2>" % (_('Header Operations')))
         self += CTK.Indenter (refresh)
@@ -236,7 +263,7 @@ class HeaderOps (CTK.Container):
         selector = ','.join (['#%s'%(row[3].id) for row in table])
         tipe.bind('change', "if ($(this).val()=='add'){ $('%s').show(); }else{ $('%s').hide();}" %(selector, selector))
 
-        submit = CTK.Submitter ('/vserver/%s/rule/content/%s/header_op'%(vsrv, rule))
+        submit = CTK.Submitter (apply_url)
         submit.bind ('submit_success', refresh.JS_to_refresh())
         submit += table
 
@@ -244,7 +271,119 @@ class HeaderOps (CTK.Container):
         self += CTK.Indenter (submit)
 
 
-class TimeWidget (CTK.Container):
+class FrontLine_Cache (CTK.Container):
+    class Apply:
+        def __call__ (self):
+            tmp = re.findall (r'^/vserver/([\d]+)/rule/content/([\d]+)/', CTK.request.url)
+            vsrv  = tmp[0][0]
+            rule  = tmp[0][1]
+
+            # Main operarion
+            op = CTK.post.pop('op')
+
+            if op == "docache_add":
+                # Validation
+                new_docache = CTK.post.pop('new_flcache_docache')
+                if not new_docache:
+                    return {'ret':'error', 'errors': {'new_flcache_docache': _("Can not be empty")}}
+
+                # Add the configuration entries
+                next_pre = CTK.cfg.get_next_entry_prefix ('vserver!%s!rule!%s!flcache!cookies!do_cache'%(vsrv, rule))
+
+                CTK.cfg['%s!regex'%(next_pre)] = new_docache
+                return CTK.cfg_reply_ajax_ok()
+
+            elif op == "docache_del":
+                pre = 'vserver!%s!rule!%s!flcache!cookies!do_cache'%(vsrv, rule)
+
+                to_del = CTK.post.pop('to_del')
+                if to_del:
+                    del (CTK.cfg['%s!%s'%(pre, to_del)])
+
+                return CTK.cfg_reply_ajax_ok()
+
+            return CTK.cfg_apply_post()
+
+
+    class docache_Table (CTK.Box):
+        def __init__ (self, pre, apply_url, refresh):
+            CTK.Box.__init__ (self)
+
+            do_cache_keys = CTK.cfg.keys('%s!cookies!do_cache'%(pre))
+
+            if do_cache_keys:
+                table = CTK.Table()
+                table.set_header(1)
+                table += [CTK.RawHTML(_('Regular Expressions'))]
+
+                submit = CTK.Submitter (apply_url)
+                submit += CTK.Indenter (table, 2)
+                self += submit
+
+                for k in do_cache_keys:
+                    pre2 = '%s!cookies!do_cache!%s!regex'%(pre, k)
+                    value = CTK.TextCfg (pre2, False)
+                    remove = CTK.ImageStock('del')
+                    remove.bind('click', CTK.JS.Ajax (apply_url, data = {'op':'docache_del', 'to_del':k},
+                                                      complete = refresh.JS_to_refresh()))
+                    table += [value, remove]
+
+
+    def __init__ (self, vsrv, rule, apply_url):
+        CTK.Container.__init__ (self)
+        pre = 'vserver!%s!rule!%s!flcache' %(vsrv, rule)
+        apply_url = '%s/flcache'%(apply_url)
+
+        # Enable
+        rest     = CTK.Box()
+        combo    = CTK.ComboCfg (pre, trans_options(FLCACHE_OPTIONS))
+        combo_js = "if ($('#%s').val() == 'allow'){ $('#%s').show(); }else{ $('#%s').hide(); }"%(combo.id, rest.id, rest.id)
+        combo.bind ('change', combo_js)
+
+        table = CTK.PropsTable()
+        table.Add (_('Content Caching'), combo, _(NOTE_FLCACHE))
+
+        submit = CTK.Submitter (apply_url)
+        submit += table
+
+        self += CTK.Indenter(submit)
+        self += rest
+        self += CTK.RawHTML (js=combo_js)
+
+        # Front-Line Cache Policies
+        table = CTK.PropsTable()
+        table.Add (_('Responses to cache'), CTK.ComboCfg ('%s!policy'%(pre), trans_options(FLCACHE_POLICIES)), _(NOTE_FLCACHE_POLICY))
+
+        submit = CTK.Submitter (apply_url)
+        submit += table
+
+        rest += CTK.RawHTML ('<h3>%s</h3>' %(_("Caching Policy")))
+        rest += CTK.Indenter(submit)
+
+        # Disregard Cookies
+        refresh = CTK.Refreshable ({'id': 'docache'})
+        refresh.register (lambda: FrontLine_Cache.docache_Table(pre, apply_url, refresh).Render())
+
+        new_regex = CTK.TextField ({'name': 'new_flcache_docache', 'class': 'noauto'})
+        new_add   = CTK.SubmitterButton (_('Add'))
+
+        table = CTK.Table()
+        table.set_header(1)
+        table += [CTK.RawHTML(_('New Regular Expression'))]
+        table += [new_regex, new_add]
+
+        submit = CTK.Submitter (apply_url)
+        submit.bind ('submit_success', refresh.JS_to_refresh() + new_regex.JS_to_clean())
+        submit += CTK.Indenter (table, 2)
+        submit += CTK.Hidden ('op', 'docache_add')
+
+        rest += CTK.RawHTML ('<h3>%s</h3>' %(_('Disregarded Cookies')))
+        rest += refresh
+        rest += submit
+
+
+
+class CachingWidget (CTK.Container):
     class Expiration (CTK.Container):
         def __init__ (self, pre, apply, refresh):
             CTK.Container.__init__ (self)
@@ -274,32 +413,26 @@ class TimeWidget (CTK.Container):
         CTK.Container.__init__ (self)
         pre = 'vserver!%s!rule!%s' %(vsrv, rule)
 
-        # Timeout
-        table = CTK.PropsTable()
-        table.Add (_('Timeout'), CTK.TextCfg ('%s!timeout'%(pre), True), _(NOTE_TIMEOUT))
-        submit = CTK.Submitter (apply)
-        submit += table
-
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Connections Timeout')))
-        self += CTK.Indenter (submit)
-
         # Expiration
         refresh = CTK.Refreshable({'id': 'time_expiration'})
-        refresh.register (lambda: TimeWidget.Expiration(pre, apply, refresh).Render())
+        refresh.register (lambda: CachingWidget.Expiration(pre, apply, refresh).Render())
 
         self += CTK.RawHTML ("<h2>%s</h2>" % (_('Content Expiration')))
         self += CTK.Indenter (refresh)
 
-        # tmp
-        self += HeaderOps (vsrv, rule, apply)
+        # Front-line cache
+        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Cache')))
+        self += CTK.Indenter (CTK.Notice (content = CTK.RawHTML(NOTE_FLCACHE_EXPERIMENTAL)))
+        self += FrontLine_Cache (vsrv, rule, apply)
 
 
-class EncodingWidget (CTK.Container):
+class TransformsWidget (CTK.Container):
     def __init__ (self, vsrv, rule, apply):
         CTK.Container.__init__ (self)
         pre = 'vserver!%s!rule!%s!encoder' %(vsrv, rule)
         encoders = trans_options(Cherokee.support.filter_available (ENCODERS))
 
+        # Encoders
         self += CTK.RawHTML ("<h2>%s</h2>" % (_('Information Encoders')))
 
         for e,e_name in encoders:
@@ -323,6 +456,9 @@ class EncodingWidget (CTK.Container):
 
             if CTK.cfg.get_val(key) in ['1', 'allow']:
                 self += CTK.Indenter (module, 2)
+
+        # Header Operations
+        self += HeaderOps (vsrv, rule, apply)
 
 
 class RuleWidget (CTK.Refreshable):
@@ -407,12 +543,12 @@ class Render:
 
         # Tabs
         tabs = CTK.Tab()
-        tabs.Add (_('Rule'),            RuleWidget (vsrv_num, rule_num, url_apply, refresh))
-        tabs.Add (_('Handler'),         HandlerWidget (vsrv_num, rule_num, url_apply))
-        tabs.Add (_('Encoding'),        EncodingWidget (vsrv_num, rule_num, url_apply))
-        tabs.Add (_('Time'),            TimeWidget (vsrv_num, rule_num, url_apply))
-        tabs.Add (_('Security'),        SecurityWidget (vsrv_num, rule_num, url_apply))
-        tabs.Add (_('Traffic Shaping'), TrafficWidget (vsrv_num, rule_num, url_apply))
+        tabs.Add (_('Rule'),         RuleWidget (vsrv_num, rule_num, url_apply, refresh))
+        tabs.Add (_('Handler'),      HandlerWidget (vsrv_num, rule_num, url_apply))
+        tabs.Add (_('Transforms'),   TransformsWidget (vsrv_num, rule_num, url_apply))
+        tabs.Add (_('Caching'),      CachingWidget (vsrv_num, rule_num, url_apply))
+        tabs.Add (_('Security'),     SecurityWidget (vsrv_num, rule_num, url_apply))
+        tabs.Add (_('Restrictions'), RestrictionsWidget (vsrv_num, rule_num, url_apply))
 
         cont = CTK.Container()
         cont += refresh
@@ -426,3 +562,4 @@ CTK.publish (URL_BASE, Render)
 CTK.publish (URL_CLONE, Clone, method="POST")
 CTK.publish (URL_APPLY, CTK.cfg_apply_post, validation=VALIDATIONS, method="POST")
 CTK.publish (URL_HEADER_OP_APPLY, HeaderOp_Apply, validation=VALIDATIONS, method="POST")
+CTK.publish (URL_FLCACHE_APPLY, FrontLine_Cache.Apply, validation=VALIDATIONS, method="POST")

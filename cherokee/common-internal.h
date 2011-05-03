@@ -217,6 +217,30 @@ char *strcasestr(char *s, char *find);
 # endif
 #endif
 
+/* Long limit
+ */
+#ifndef LONG_MAX
+# if (SIZEOF_LONG == 4)
+#  define LONG_MAX 0x7fffffffL
+# elif (SIZEOF_LONG == 8)
+#  define LONG_MAX 0x7fffffffffffffffL
+# else
+#  error "Can't define LONG_MAX"
+# endif
+#endif
+
+/* time_t limit
+ */
+#ifndef TIME_MAX
+# if (SIZEOF_TIME_T == SIZEOF_INT)
+#  define TIME_MAX ((time_t)INT_MAX)
+# elif (SIZEOF_TIME_T == SIZEOF_LONG)
+#  define TIME_MAX ((time_t)LONG_MAX)
+# else
+#  error "Can't define TIME_MAX"
+# endif
+#endif
+
 /* Depend on fcntl.h
  */
 #ifndef O_NOFOLLOW

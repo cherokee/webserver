@@ -199,8 +199,11 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Programmed tasks
 	 */
-	n->nonces_cleanup_next   = 0;
+	n->nonces_cleanup_next  = 0;
 	n->nonces_cleanup_lapse = NONCE_CLEANUP_LAPSE;
+
+	n->flcache_next         = 0;
+	n->flcache_lapse        = FLCACHE_LAPSE;
 
 	/* Paths
 	 */
@@ -1058,13 +1061,28 @@ flush_logs (cherokee_server_t *srv)
 	cherokee_list_t   *i;
 	cherokee_logger_t *logger;
 
-	/* Rest of the virtual servers
-	 */
 	list_for_each (i, &srv->vservers) {
 		logger = VSERVER_LOGGER(i);
 		if (logger) {
 			cherokee_logger_flush (VSERVER_LOGGER(i));
 		}
+	}
+}
+
+
+static void
+flcaches_cleanup (cherokee_server_t *srv)
+{
+	cherokee_list_t           *i;
+	cherokee_virtual_server_t *vsrv;
+
+	list_for_each (i, &srv->vservers) {
+		vsrv = VSERVER(i);
+
+		if (vsrv->flcache == NULL)
+			continue;
+
+		cherokee_flcache_cleanup (vsrv->flcache);
 	}
 }
 
@@ -1144,6 +1162,11 @@ cherokee_server_step (cherokee_server_t *srv)
 	if (srv->nonces_cleanup_next < cherokee_bogonow_now) {
 		cherokee_nonce_table_cleanup (srv->nonces);
 		srv->nonces_cleanup_next = cherokee_bogonow_now + srv->nonces_cleanup_lapse;
+	}
+
+	if (srv->flcache_next < cherokee_bogonow_now) {
+		flcaches_cleanup (srv);
+		srv->flcache_next = cherokee_bogonow_now + srv->flcache_lapse;
 	}
 
 #ifdef _WIN32
@@ -1363,6 +1386,9 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "log_flush_lapse")) {
 		ret = cherokee_atoi (conf->val.buf, &srv->log_flush_lapse);
 		if (ret != ret_ok) return ret_error;
+
+	} else if (equal_buf_str (&conf->key, "flcache_lapse")) {
+		srv->flcache_lapse = atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "nonces_cleanup_lapse")) {
 		ret = cherokee_atoi (conf->val.buf, &srv->nonces_cleanup_lapse);

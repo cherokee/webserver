@@ -350,7 +350,7 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	/* Maybe it is already opened
 	 */
 	if (fd_local < 0) {
-		fd_local = open (filename->buf, (O_RDONLY | O_BINARY));
+		fd_local = cherokee_open (filename->buf, (O_RDONLY | O_BINARY), 0);
 		if (unlikely (fd_local < 0)) {
 			TRACE(ENTRIES, "Couldn't open(): %s\n", filename->buf);
 			ret = ret_error;

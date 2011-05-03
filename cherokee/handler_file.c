@@ -330,10 +330,7 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_fi
 
 	/* Open it
 	 */
-	do {
-		fhdl->fd = open (local_file->buf, O_RDONLY | O_BINARY);
-	} while ((fhdl->fd == -1) && (errno == EINTR));
-
+	fhdl->fd = cherokee_open (local_file->buf, O_RDONLY | O_BINARY, 0);
 	if (fhdl->fd > 0) {
 		cherokee_fd_set_closexec (fhdl->fd);
 		return ret_ok;
@@ -626,6 +623,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 				(conn->encoder == NULL) &&
 				(conn->encoder_new_func == NULL) &&
 				(conn->socket.is_tls == non_TLS) &&
+				(conn->flcache.mode == flcache_mdoe_undef) &&
 				(fhdl->info->st_size >= srv->sendfile.min) &&
 				(fhdl->info->st_size <  srv->sendfile.max));
 

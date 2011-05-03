@@ -37,14 +37,6 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef enum {
-	hstat_unset,
-	hstat_sending,
-	hstat_forbidden,
-	hstat_file_not_found,
-	hstat_error
-} cherokee_handler_status_t;
-
-typedef enum {
 	hsupport_nothing       = 0,
 	hsupport_length        = 1,         /* Knows the length. Eg: for keep-alive    */
 	hsupport_maybe_length  = 1 << 1,    /* It might include content-length         */

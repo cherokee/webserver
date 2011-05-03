@@ -266,3 +266,15 @@ examples on the config_virtual_servers_evhost.html#slicing[Slicing]
 section of the link:config_virtual_servers_evhost.html[Advanced
 Virtual Hosting] documentation.
 
+[[caching]]
+Front-line Cache
+~~~~~~~~~~~~~~~~
+
+Cherokee has built-in support for efficient caching mechanisms. These
+allow it to cache anything that passes by (whether static or dynamic
+content), without having to depend on an additional caching layer such
+as Squid or Varnish. Typically such layers inherently introduce
+latency due to the round-trips associated to checking whether or not
+the contents have already been cached. Since Cherokee can process all
+of this on its own, this overhead can be totally avoided. Check out
+the link:other_front_line_cache.html[Front-line Cache] documentation.

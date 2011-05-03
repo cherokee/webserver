@@ -171,6 +171,13 @@ def wizard_php_add (key):
         CTK.cfg['%s!encoder!gzip' %(next)]              = '1'
         CTK.cfg['%s!timeout' %(next)]                   = timeout
 
+        # Front-Line Cache
+        CTK.cfg['%s!flcache' %(next)]                   = 'allow'
+        CTK.cfg['%s!flcache!policy' %(next)]            = 'explicitly_allowed'
+
+        # GZip encoder
+        CTK.cfg['%s!encoder!gzip' %(next)]              = 'allow'
+
     # Index files
     indexes = filter (None, CTK.cfg.get_val ('%s!directory_index' %(key), '').split(','))
     if not 'index.php' in indexes:

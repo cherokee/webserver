@@ -1119,6 +1119,11 @@ e('VSERVER_DROOT_MISSING',
   admin = "/vserver/%d#Basics-1",
   desc  = "You seem to have forgotten to provide a valid Document Root. This is the root path that contains the files and directories that will be made publicly available through the web server. It can be an empty path and even /dev/null, but it is a mandatory property.")
 
+e('VSERVER_FLCACHE_UNKNOWN_POLICY',
+  title = "Unknown Front-Line Cache caching policy: %s",
+  admin = "/vserver/%d/rule/%d",
+  desc  = BROKEN_CONFIG)
+
 
 # cherokee/regex.c
 #
@@ -1336,3 +1341,10 @@ e('SSL_PKCS11',
 e('SSL_DEFAULTS',
   title = "Could not set all defaults",
   desc  = SYSTEM_ISSUE)
+
+# Front-line cache
+#
+e('FLCACHE_MKDIR',
+  title = "Could not create the '%s' directory, or it doesn't have %s permissions",
+  desc  = SYSTEM_ISSUE)
+

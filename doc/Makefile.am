@@ -119,6 +119,7 @@ other_signals.html \
 other_community.html \
 other_errors.html \
 other_graphs.html \
+other_front_line_cache.html \
 other_bundle.html \
 other_bundle_cherokee.html \
 other_bundle_cherokee-admin.html \

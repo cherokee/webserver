@@ -2485,3 +2485,42 @@ cherokee_unlink (const char *path)
 
 	return re;
 }
+
+
+int
+cherokee_open (const char *path, int oflag, int mode)
+{
+	int re;
+
+	do {
+		re = open (path, oflag, mode);
+	} while ((re < 0) && (errno == EINTR));
+
+	return re;
+}
+
+
+ret_t
+cherokee_mkdir (const char *path, int mode)
+{
+	int re;
+
+	do {
+		re = mkdir (path, mode);
+	} while ((re < 0) && (errno == EINTR));
+
+	return re;
+}
+
+
+int
+cherokee_pipe (int fildes[2])
+{
+	int re;
+
+	do {
+		re = pipe (fildes);
+	} while ((re < 0) && (errno == EINTR));
+
+	return re;
+}

@@ -48,6 +48,7 @@ typedef enum {
 	header_connection,
 	header_content_length,
 	header_content_type,
+	header_set_cookie,
 	header_cookie,
 	header_host,
 	header_if_modified_since,

@@ -35,7 +35,7 @@ Mailing lists
 
 IRC channel
 -----------
-  irc.freenode.net, channel #cherokee  
+  irc.freenode.net, channel #cherokee
 
 
 Building from a tar.gz file
@@ -94,13 +94,13 @@ FAQ
   How to build a MacOS X binary package
   -----------------------------------
    ./autogen.sh --prefix=/usr/local --with-wwwroot=/Library/WebServer/Documents --with-wwwuser=www --with-wwwgroup=www --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta
-   make -j4
+   make -j8
    packages/osx/build.py
 
   Development
   -----------
    ./autogen.sh --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta --enable-trace --enable-backtraces --enable-maintainer-mode
-   make CFLAGS="-ggdb -O0" -j4
+   make CFLAGS="-ggdb -O0" -j8
 
   How to cross compile the Win32 version
   --------------------------------------

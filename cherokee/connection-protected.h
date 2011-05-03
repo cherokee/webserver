@@ -204,13 +204,18 @@ struct cherokee_connection {
 	off_t                         mmaped_len;
 	cherokee_iocache_entry_t     *io_entry_ref;
 
+	/* Front-line cache
+	 */
+	cherokee_flcache_conn_t       flcache;
+	cherokee_flcache_policy_t     flcache_policy;
+	cherokee_list_t              *flcache_cookies_disregard;
+
 	/* Regular expressions
 	 */
 	int                           regex_ovector[OVECTOR_LEN];
 	int                           regex_ovecsize;
 	int                           regex_host_ovector[OVECTOR_LEN];
 	int                           regex_host_ovecsize;
-
 
 	/* Content Expiration
 	 */
@@ -283,7 +288,8 @@ int   cherokee_connection_should_include_length  (cherokee_connection_t *conn);
 ret_t cherokee_connection_instance_encoder       (cherokee_connection_t *conn);
 ret_t cherokee_connection_sleep                  (cherokee_connection_t *conn, cherokee_msec_t msecs);
 void  cherokee_connection_update_timeout         (cherokee_connection_t *conn);
-void  cherokee_connection_add_expiration_header  (cherokee_connection_t *conn, cherokee_buffer_t *buffer);
+void  cherokee_connection_add_expiration_header  (cherokee_connection_t *conn, cherokee_buffer_t *buffer, cherokee_boolean_t use_maxage);
+ret_t cherokee_connection_build_host_port_string (cherokee_connection_t *conn, cherokee_buffer_t *buf);
 
 /* Iteration
  */

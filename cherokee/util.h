@@ -73,10 +73,8 @@ CHEROKEE_BEGIN_DECLS
 # define cherokee_stat(path,buf)   cherokee_win32_stat(path,buf)
 # define cherokee_lstat(path,buf)  cherokee_win32_stat(path,buf)
 # define cherokee_error            GetLastError()
-# define cherokee_mkdir(path,perm) mkdir(path)
 #else
 # define cherokee_error            errno
-# define cherokee_mkdir(path,perm) mkdir(path,perm)
 #endif
 
 /* Missing functions
@@ -151,7 +149,10 @@ int   cherokee_closedir      (DIR *dirstream);
 int   cherokee_stat          (const char *restrict path, struct stat *buf);
 int   cherokee_lstat         (const char *restrict path, struct stat *buf);
 int   cherokee_fstat         (int filedes, struct stat *buf);
+int   cherokee_open          (const char *path, int oflag, int mode);
 int   cherokee_unlink        (const char *path);
+int   cherokee_pipe          (int fildes[2]);
+
 ret_t cherokee_gethostbyname (const char *hostname, void *addr);
 ret_t cherokee_gethostname   (cherokee_buffer_t *buf);
 ret_t cherokee_syslog        (int priority, cherokee_buffer_t *buf);
@@ -164,9 +165,10 @@ ret_t cherokee_getgrgid      (gid_t gid, struct group *pwbuf, char *buf, size_t 
 ret_t cherokee_getgrnam_gid  (const char *name, struct group *pwbuf, char *buf, size_t buflen);
 
 ret_t cherokee_mkstemp       (cherokee_buffer_t *buffer, int *fd);
+ret_t cherokee_mkdir         (const char *path, int mode);
 ret_t cherokee_mkdir_p       (cherokee_buffer_t *path, int mode);
-ret_t cherokee_ntop          (int family, struct sockaddr *addr, char *dst, size_t cnt);
 ret_t cherokee_mkdir_p_perm  (cherokee_buffer_t *dir_path, int create_mode, int ensure_perm);
+ret_t cherokee_ntop          (int family, struct sockaddr *addr, char *dst, size_t cnt);
 ret_t cherokee_wait_pid      (int pid, int *retcode);
 ret_t cherokee_reset_signals (void);
 

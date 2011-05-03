@@ -1359,6 +1359,8 @@ init.h \
 init.c \
 threading.h \
 threading.c \
+avl_generic.h \
+avl_generic.c \
 avl.h \
 avl.c \
 avl_r.h \
@@ -1631,7 +1633,11 @@ spawner.c \
 collector.h \
 collector.c \
 header_op.h \
-header_op.c
+header_op.c \
+flcache.h \
+flcache.c \
+avl_flcache.h \
+avl_flcache.c
 
 
 #

@@ -65,7 +65,7 @@ cherokee_shm_create (cherokee_shm_t *shm, char *name, size_t len)
 	int re;
 	int fd;
 
-	fd = open (name, O_RDWR | O_EXCL | O_CREAT, 0600);
+	fd = cherokee_open (name, O_RDWR | O_EXCL | O_CREAT, 0600);
 	if (fd < 0) {
 		return ret_error;
 	}
@@ -100,7 +100,7 @@ cherokee_shm_map (cherokee_shm_t    *shm,
 	int         fd;
 	struct stat info;
 
-	fd = open (name->buf, O_RDWR, 0600);
+	fd = cherokee_open (name->buf, O_RDWR, 0600);
 	if (fd < 0) {
 		return ret_error;
 	}

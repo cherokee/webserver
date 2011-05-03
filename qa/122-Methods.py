@@ -14,7 +14,7 @@ vserver!1!rule!1220!handler = file
 
 class Test (TestCollection):
     def __init__ (self):
-        TestCollection.__init__ (self)
+        TestCollection.__init__ (self, __file__)
 
         self.name           = "HTTP Methods"
         self.conf           = CONF

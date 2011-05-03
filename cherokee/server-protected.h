@@ -96,6 +96,9 @@ struct cherokee_server {
 	int                        nonces_cleanup_lapse;
 	time_t                     nonces_cleanup_next;
 
+	int                        flcache_lapse;
+	time_t                     flcache_next;
+
 	/* Logging
 	 */
 	cherokee_logger_writer_t  *error_writer;

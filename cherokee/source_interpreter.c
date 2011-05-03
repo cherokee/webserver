@@ -588,7 +588,7 @@ _spawn_local (cherokee_source_interpreter_t *src,
 				dup2 (error_writer->fd, STDERR_FILENO);
 			}
 			else {
-				tmp_fd = open ("/dev/null", O_WRONLY);
+				tmp_fd = cherokee_open ("/dev/null", O_WRONLY, 0700);
 				if (tmp_fd != -1) {
 					dup2 (tmp_fd, STDOUT_FILENO);
 					dup2 (tmp_fd, STDERR_FILENO);

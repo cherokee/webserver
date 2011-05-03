@@ -41,6 +41,7 @@
 #include "util.h"
 #include "bogotime.h"
 #include "limiter.h"
+#include "flcache.h"
 
 
 #define DEBUG_BUFFER(b)  fprintf(stderr, "%s:%d len=%d crc=%d\n", __FILE__, __LINE__, b->len, cherokee_buffer_crc32(b))
@@ -925,22 +926,41 @@ process_active_connections (cherokee_thread_t *thd)
 			cherokee_rule_list_t    *rules;
 			cherokee_boolean_t       is_userdir;
 
-			TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", conn->request.buf);
-			TRACE_CONN(conn);
-
 			/* Turn the connection in write mode
 			 */
 			conn_set_mode (thd, conn, socket_writing);
 
 			/* Is it already an error response?
 			 */
-			if (http_type_300(conn->error_code) ||
-			    http_type_400(conn->error_code) ||
-			    http_type_500(conn->error_code))
+			if (http_type_300 (conn->error_code) ||
+			    http_type_400 (conn->error_code) ||
+			    http_type_500 (conn->error_code))
 			{
 				cherokee_connection_setup_error_handler (conn);
 				continue;
 			}
+
+			/* Front-line cache
+			 */
+			if ((CONN_VSRV(conn)->flcache) &&
+			    (conn->header.method == http_get))
+			{
+				TRACE (ENTRIES, "Front-line cache available: '%s'\n", CONN_VSRV(conn)->name.buf);
+
+				ret = cherokee_flcache_req_get_cached (CONN_VSRV(conn)->flcache, conn);
+				if (ret == ret_ok) {
+					/* Set Keepalive, Rate, and skip to add_headers
+					 */
+					cherokee_connection_set_keepalive (conn);
+					cherokee_connection_set_rate (conn, &entry);
+
+					conn->phase = phase_add_headers;
+					goto add_headers;
+				}
+			}
+
+			TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", conn->request.buf);
+			TRACE_CONN(conn);
 
 			cherokee_config_entry_init (&entry);
 
@@ -1032,6 +1052,11 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->header_ops = entry.header_ops;
 			}
 
+			conn->flcache_policy = entry.flcache_policy;
+			if (entry.flcache_cookies_disregard) {
+				conn->flcache_cookies_disregard = entry.flcache_cookies_disregard;
+			}
+
 			/* Create the handler
 			 */
 			ret = cherokee_connection_create_handler (conn, &entry);
@@ -1068,6 +1093,25 @@ process_active_connections (cherokee_thread_t *thd)
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				continue;
+			}
+
+			/* Front-line cache
+			 */
+			if ((entry.flcache == true) &&
+			    (CONN_VSRV(conn)->flcache != NULL) &&
+			    (cherokee_flcache_req_is_storable (CONN_VSRV(conn)->flcache, conn) == ret_ok))
+			{
+				cherokee_flcache_req_set_store (CONN_VSRV(conn)->flcache, conn);
+
+				/* Update expiration
+				 */
+				if (conn->flcache.mode == flcache_mode_in) {
+					if (entry.expiration == cherokee_expiration_epoch) {
+						conn->flcache.avl_node_ref->valid_until = 0;
+					} else if (entry.expiration == cherokee_expiration_time) {
+						conn->flcache.avl_node_ref->valid_until = cherokee_bogonow_now + entry.expiration_time;
+					}
+				}
 			}
 
 			conn->phase = phase_init;
@@ -1213,6 +1257,15 @@ process_active_connections (cherokee_thread_t *thd)
 			if (conn->mmaped != NULL)
 				goto phase_send_headers_EXIT;
 
+			/* Front-line cache: store
+			 */
+			if (conn->flcache.mode == flcache_mode_in) {
+				ret = cherokee_flcache_conn_commit_header (&conn->flcache, conn);
+				if (ret != ret_ok) {
+					/* Flcache has been disabled */
+				}
+			}
+
 			conn->phase = phase_send_headers;
 
 		case phase_send_headers:
@@ -1247,6 +1300,7 @@ process_active_connections (cherokee_thread_t *thd)
 			conn->phase = phase_stepping;
 
 		case phase_stepping:
+
 			/* Special case:
 			 * If the content is mmap()ed, it has to send the header +
 			 * the file content and stop processing the connection.
@@ -1272,6 +1326,7 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 
 			/* Handler step: read or make new data to send
+			 * Front-line cache handled internally.
 			 */
 			ret = cherokee_connection_step (conn);
 			switch (ret) {

@@ -15,16 +15,17 @@ This menu offers the following tabs:
  . link:#handler[Handler]: Specifies which handler should manage the
    requests that match the rule.
 
- . link:#encoding[Encoding]: to manage the compression of the contents to be sent.
+ . link:#transforms[Transforms]: Transofmration of output stream on the
+   fly (encoding, and HTTP header alteration).
 
- . link:#time[Time]: to manage the configuration of *HTTP Cache headers*
-   used to identify cacheable content.
+ . link:#caching[Caching]: Specifies content expiration and caching policies.
 
  . link:#security[Security]: in this section one can configure *Access Restrictions*
    and *Authentication*.
 
- . link:#traffic[Traffic Shaping]: Sets an outbound traffic limit for this rule,
-   specified in bytes per second.
+ . link:#restrictions[Restrictions]: Specify connection timeouts, and
+   also traffic shaping by setting an outbound traffic limit for this
+   rule, specified in bytes per second.
 
 
 [[rule]]
@@ -141,10 +142,17 @@ link:other_bundle_cherokee-tweak.html[cherokee-tweak].
 **********************************************************************
 
 
-[[encoding]]
-Encoding
+[[transforms]]
+Transforms
 ~~~~~~~~
-The content sent by Cherokee can be encoded or not.
+The content sent by Cherokee can be processed before being sent.
+
+Basically, you can apply encoders (or not), and alter HTTP headers by
+adding or removing the ones you choose.
+
+Information Encoders
+^^^^^^^^^^^^^^^^^^^^
+
 This tab is used to configure, on a per-rule basis,  what
 link:modules_encoders.html[encoders], if any, are to be applied.
 
@@ -157,13 +165,24 @@ following file types: `html`, `htm`, `txt`, `css` and `js` is a good
 idea. You are encouraged to use this. Hardware is cheap. Bandwidth is
 not.
 
+Header Operations
+^^^^^^^^^^^^^^^^^
 
-[[time]]
-Time
-~~~~
+You can specify any given HTTP header and either assign a value or
+delete the header completely.
 
-This tab specifies the connection timeout and content expiration
-settings.
+[[caching]]
+Caching
+~~~~~~~
+
+Cherokee allows to define per rule behaviors for content expiration
+and caching.
+
+Content Expiration
+^^^^^^^^^^^^^^^^^^
+
+This allows to manage the configuration of *HTTP Cache headers* used
+to identify cacheable content.
 
 HTTP/1.1 defines caching methods in HTTP. Cherokee-Admin can
 automatically adjust the `Cache-Control` and `Expire` headers depending
@@ -189,6 +208,27 @@ individually turned on and off to fine tune the behavior:
  . Must Revalidate: The client must contact the server to revalidate the object.
  . Proxies Revalidate: Proxy servers must contact the server to revalidate the object.
 
+
+Cache
+^^^^^
+
+Cherokee has very sophisticated caching mechanisms, allowing to cache
+anything (static files, dynamic content, or whatever) that passes
+by. You can read more into the specifics of this feature in the
+link:other_front_line_cache.html[Front-line Cache] documentation.
+
+Three settings are available on a per-rule basis for the `Content
+Caching` section: 'Leave unset', 'Allow' and 'Forbid'.
+
+The 'Leave unset' option means that, whenever a rule is applied, it
+will not change the status of the caching setting that has been
+inherited from previously matched rules.
+
+By default, contents that include cookies are not cached, but the
+setting to allowing cache on a rule gives you the possibility to
+disregard cookies using regular expressions (so that even that content
+can be cached), while a 'Forbid' setting will guarantee that the
+matched rule will not be cached no matter what.
 
 [[security]]
 Security
@@ -305,9 +345,21 @@ both of them, the interface allows to choose whether one or both are
 to be used.
 
 
-[[traffic]]
+[[restrictions]]
+Restriction
+~~~~~~~~~~~
+
+Both connection timeouts and bandwidth limits can be enforced through
+this tab.
+
+Connections Timeout
+^^^^^^^^^^^^^^^^^^^
+
+This allows to apply a custom timeout to any connection matching the
+given rule.
+
 Traffic Shaping
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 In order to limit the amount of traffic used for a specific rule you can set
 up a traffic shaper. By default no traffic shaping will occur, all possible

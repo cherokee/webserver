@@ -1,0 +1,66 @@
+== link:index.html[Index] -> link:other.html[Other information]
+
+Other: Front-line Cache
+-----------------------
+
+Cherokee has very sophisticated caching mechanisms, allowing to cache
+anything (static files, dynamic content, or whatever) that passes
+by. This is no small feat, since typically you would have to set up an
+independent front-line cache to achieve similar results, although such
+alternative inherently introduce latency due to the round-trips
+associated to checking whether or not the contents have already been
+cached. This would be the case for very well known products such as
+Squid or Varnish. Since Cherokee can process all of this on its own,
+this significant overhead can be totally avoided.
+
+The front-line cache accelerates HTTP delivery even on content-heavy
+dynamic websites.
+
+The caching policies can be specified on a per-rule basis. Caching of
+contents is decided according to two factors:
+
+. Whatever headers are returned by the back-end (i.e., Expires
+  Headers).
+. Whatever is specified in the matching rule.
+
+Caching can be customized for each and every rule of your virtual
+server's configuration, by specifying any of the three settings are
+available on a per-rule basis for the `Content Caching` section:
+'Leave unset', 'Allow' and 'Forbid'. As was explained elsewhere, the
+'Leave unset' option means that whenever a rule is applied it will not
+change the status of the caching setting that has been inherited from
+previously matched rules. Likewise, 'Forbid' will disable caching of
+the rule, and 'Allow' will cache whatever *can* be cached.
+
+The contents that can be cached are anything except:
+
+. Contents of an SSL/TLS stream.
+
+. Content that is server after having matched an authentication rule.
+
+. Rules that have set any of the properties 'No store', 'No
+  Transform', 'Must Revalidate', or 'Proxies Revalidate'.
+
+. Responses to user petitions requesting specific ranges.
+
+. Responses where the back-end sets a cookie.
+
+By default, contents that include cookies are not cached, but the
+setting to allowing cache on a rule gives you the possibility to
+disregard cookies using regular expressions (so that even that content
+can be cached).
+
+As you can see, the raw-power and flexibility of this feature allows
+you to do almost anything. For instance, take the following example
+that never caches contents from a restricted section of a website,
+while allowing to always cache the contents of another section
+regardless of cookies or anything else.
+
+This sort of configuration is possible by simple prepending these two
+rules to the behavior rule list, so that they take care of dealing
+with the cache and expiration setting:
+
+----
+Fullpath: /site/index.php - Non-final - Cache: Disregarded Cookies '.*', Expiration.
+Fullpath: /site/members/index.php - Non-final - Cache: Expiration: 1970
+----

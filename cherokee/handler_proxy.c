@@ -1470,7 +1470,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	 * expiration value defined in the rule.
 	 */
 	if (conn->expiration != cherokee_expiration_none) {
-		cherokee_connection_add_expiration_header (conn, buf_out);
+		cherokee_connection_add_expiration_header (conn, buf_out, true);
 	}
 
 	/* Deal with Content-Encoding: If the response is no encoded,

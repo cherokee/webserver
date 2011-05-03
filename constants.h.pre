@@ -10,12 +10,14 @@
 # define CHEROKEE_DOCDIR      "%docdir%"
 
 # define CHEROKEE_VAR_RUN     "%localstatedir%/run"
+# define CHEROKEE_FLCACHE     "%localstatedir%/lib/cherokee/flcache"
+# define CHEROKEE_RRD_DIR     "%localstatedir%/lib/cherokee/graphs"
+
 # define CHEROKEE_CONFDIR     "%sysconfdir%/cherokee"
 # define CHEROKEE_SERVER      "%prefix%/sbin/cherokee"
 # define CHEROKEE_WORKER      "%prefix%/sbin/cherokee-worker"
 # define CHEROKEE_ICONSDIR    "%prefix%/share/cherokee/icons"
 # define CHEROKEE_THEMEDIR    "%prefix%/share/cherokee/themes"
 # define CHEROKEE_PANIC_PATH  "%prefix%/bin/cherokee-panic"
-# define CHEROKEE_RRD_DIR     "%localstatedir%/lib/cherokee/graphs"
 
 #endif

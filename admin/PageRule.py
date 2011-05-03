@@ -187,6 +187,9 @@ class Render:
                     elif val == 'forbid':
                         comment.append ("no %s"%(e))
 
+                if CTK.cfg.get_val ('vserver!%s!rule!%s!flcache'%(vsrv_num, r)) == "allow":
+                    comment.append ('cache')
+
                 if CTK.cfg.get_val ('vserver!%s!rule!%s!timeout' %(vsrv_num, r)):
                     comment.append ('timeout')
 
