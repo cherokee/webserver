@@ -7,10 +7,10 @@ FILE    = "test.cgi"
 CONTENT = "Front-line checks back-end 'Expires' header"
 
 CONF = """
-vserver!1!rule!2810!match = directory
-vserver!1!rule!2810!match!directory = /%(DIR)s
-vserver!1!rule!2810!handler = cgi
-vserver!1!rule!2810!flcache = 1
+vserver!1!rule!2830!match = directory
+vserver!1!rule!2830!match!directory = /%(DIR)s
+vserver!1!rule!2830!handler = cgi
+vserver!1!rule!2830!flcache = 1
 """ %(globals())
 
 expires = time.time() + (24 * 60 * 60)

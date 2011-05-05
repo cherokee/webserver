@@ -5,10 +5,11 @@ FILE    = "file.txt"
 CONTENT = "Front-line cache boosts Cherokee performance"
 
 CONF = """
-vserver!1!rule!2730!match = directory
-vserver!1!rule!2730!match!directory = /%(DIR)s
-vserver!1!rule!2730!handler = file
-vserver!1!rule!2730!flcache = 1
+vserver!1!rule!2750!match = directory
+vserver!1!rule!2750!match!directory = /%(DIR)s
+vserver!1!rule!2750!handler = file
+vserver!1!rule!2750!flcache = 1
+vserver!1!rule!2750!flcache!policy = all_but_forbidden
 """ %(globals())
 
 

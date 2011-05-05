@@ -6,10 +6,10 @@ FILE    = "test.cgi"
 CONTENT = "Front-line checks back-end 'Expires' header"
 
 CONF = """
-vserver!1!rule!2800!match = directory
-vserver!1!rule!2800!match!directory = /%(DIR)s
-vserver!1!rule!2800!handler = cgi
-vserver!1!rule!2800!flcache = 1
+vserver!1!rule!2820!match = directory
+vserver!1!rule!2820!match!directory = /%(DIR)s
+vserver!1!rule!2820!handler = cgi
+vserver!1!rule!2820!flcache = 1
 """ %(globals())
 
 CGI_CODE = """#!/bin/sh

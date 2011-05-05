@@ -5,10 +5,10 @@ FILE    = "test.cgi274"
 CONTENT = "Front-line does not cache responses setting cookies"
 
 CONF = """
-vserver!1!rule!2740!match = directory
-vserver!1!rule!2740!match!directory = /%(DIR)s
-vserver!1!rule!2740!handler = cgi
-vserver!1!rule!2740!flcache = 1
+vserver!1!rule!2760!match = directory
+vserver!1!rule!2760!match!directory = /%(DIR)s
+vserver!1!rule!2760!handler = cgi
+vserver!1!rule!2760!flcache = 1
 """ %(globals())
 
 

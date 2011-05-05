@@ -6,10 +6,10 @@ FILE    = "test.cgi"
 CONTENT = "Front-line checks back-end Cache-control"
 
 CONF = """
-vserver!1!rule!2790!match = directory
-vserver!1!rule!2790!match!directory = /%(DIR)s
-vserver!1!rule!2790!handler = cgi
-vserver!1!rule!2790!flcache = 1
+vserver!1!rule!2810!match = directory
+vserver!1!rule!2810!match!directory = /%(DIR)s
+vserver!1!rule!2810!handler = cgi
+vserver!1!rule!2810!flcache = 1
 """ %(globals())
 
 CGI_CODE = """#!/bin/sh

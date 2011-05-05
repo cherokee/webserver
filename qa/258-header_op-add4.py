@@ -25,7 +25,7 @@ class Test (TestBase):
         self.conf           = CONF%(globals())
 
     def CustomTest (self):
-        header = self.reply[:self.reply.find("\r\n\r\n")]
+        header = self.reply[:self.reply.find("\r\n\r\n")+2]
 
         if HEADER in header:
             return -1

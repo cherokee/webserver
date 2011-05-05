@@ -7,12 +7,12 @@ CONTENT     = "Front-line supports encoded and non-encoded content"
 GZIP_HEADER = "\037\213"
 
 CONF = """
-vserver!1!rule!2780!match = directory
-vserver!1!rule!2780!match!directory = /%(DIR)s
-vserver!1!rule!2780!handler = file
-vserver!1!rule!2780!flcache = 1
-vserver!1!rule!2780!flcache!policy = all_but_forbidden
-vserver!1!rule!2780!encoder!gzip = 1
+vserver!1!rule!2800!match = directory
+vserver!1!rule!2800!match!directory = /%(DIR)s
+vserver!1!rule!2800!handler = file
+vserver!1!rule!2800!flcache = 1
+vserver!1!rule!2800!flcache!policy = all_but_forbidden
+vserver!1!rule!2800!encoder!gzip = 1
 """ %(globals())
 
 

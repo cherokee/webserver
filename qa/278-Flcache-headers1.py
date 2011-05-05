@@ -5,10 +5,11 @@ FILE    = "test.cgi"
 CONTENT = "Front-line tries to be a compliance proxy"
 
 CONF = """
-vserver!1!rule!2760!match = directory
-vserver!1!rule!2760!match!directory = /%(DIR)s
-vserver!1!rule!2760!handler = cgi
-vserver!1!rule!2760!flcache = 1
+vserver!1!rule!2780!match = directory
+vserver!1!rule!2780!match!directory = /%(DIR)s
+vserver!1!rule!2780!handler = cgi
+vserver!1!rule!2780!flcache = allow
+vserver!1!rule!2780!flcache!policy = all_but_forbidden
 """ %(globals())
 
 

@@ -5,13 +5,13 @@ FILE    = "test.cgi"
 CONTENT = "Front-line can cache responses setting 'diregarded cookies'"
 
 CONF = """
-vserver!1!rule!2750!match = directory
-vserver!1!rule!2750!match!directory = /%(DIR)s
-vserver!1!rule!2750!handler = cgi
-vserver!1!rule!2750!flcache = 1
-vserver!1!rule!2750!flcache!cookies!do_cache!1!regex = foo
-vserver!1!rule!2750!flcache!cookies!do_cache!2!regex = bogus
-vserver!1!rule!2750!flcache!cookies!do_cache!3!regex = bar
+vserver!1!rule!2770!match = directory
+vserver!1!rule!2770!match!directory = /%(DIR)s
+vserver!1!rule!2770!handler = cgi
+vserver!1!rule!2770!flcache = 1
+vserver!1!rule!2770!flcache!cookies!do_cache!1!regex = foo
+vserver!1!rule!2770!flcache!cookies!do_cache!2!regex = bogus
+vserver!1!rule!2770!flcache!cookies!do_cache!3!regex = bar
 """ %(globals())
 
 

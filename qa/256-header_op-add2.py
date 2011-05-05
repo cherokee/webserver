@@ -28,7 +28,7 @@ class Test (TestBase):
             n += 1
 
     def CustomTest (self):
-        header = self.reply[:self.reply.find("\r\n\r\n")]
+        header = self.reply[:self.reply.find("\r\n\r\n")+2]
 
         for h,v in HEADERS:
             if not "%s: %s\r\n" %(h,v) in header:

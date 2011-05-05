@@ -23,7 +23,7 @@ class Test (TestBase):
         self.conf           = CONF%(globals())
 
     def CustomTest (self):
-        header = self.reply[:self.reply.find("\r\n\r\n")]
+        header = self.reply[:self.reply.find("\r\n\r\n")+2]
 
         if re.findall (r'^Date: (\w+), \d+ \w+ \d+ \d+:\d+:\d+', header, re.M):
             return -1

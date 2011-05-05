@@ -6,10 +6,11 @@ FILE    = "test.cgi"
 CONTENT = "Front-line tries to be a compliance proxy"
 
 CONF = """
-vserver!1!rule!2770!match = directory
-vserver!1!rule!2770!match!directory = /%(DIR)s
-vserver!1!rule!2770!handler = file
-vserver!1!rule!2770!flcache = 1
+vserver!1!rule!2790!match = directory
+vserver!1!rule!2790!match!directory = /%(DIR)s
+vserver!1!rule!2790!handler = file
+vserver!1!rule!2790!flcache = 1
+vserver!1!rule!2790!flcache!policy = all_but_forbidden
 """ %(globals())
 
 
@@ -34,10 +35,12 @@ class Test (TestCollection):
         self.WriteFile (d, FILE, 0444, CONTENT)
 
         def CustomTest (self):
-            header = self.reply[:self.reply.find("\r\n\r\n")]
+            header = self.reply[:self.reply.find("\r\n\r\n")+2]
 
             # Check for dupped headers
             for l in header.split('\n')[1:]:
+                if not l:
+                    continue
                 h, _ = l.split(':', 1)
                 if header.count (h) > 1:
                     return -1
