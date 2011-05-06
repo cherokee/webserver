@@ -117,6 +117,10 @@ LIST = [
      'title': N_('Tasks'),
      'descr': N_('Common Maintenance Tasks'),
      'list':  [
+            {'name':  'flcache',
+             'title': N_('Content Caching'),
+             'descr': N_('Boost your server performance by enabling content caching.'),
+             'type':  TYPE_RULE},
             {'name':  'redirect',
              'title': N_('Virtual Server Redirection'),
              'descr': N_('Create a new virtual server redirecting every request to another domain host.'),

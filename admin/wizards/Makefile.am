@@ -21,7 +21,8 @@ static.py \
 streaming.py \
 symfony.py \
 uwsgi.py \
-zend.py
+zend.py \
+flcache.py
 
 EXTRA_DIST = \
 $(adminwizards_DATA)
