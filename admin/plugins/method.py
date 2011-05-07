@@ -37,6 +37,7 @@ METHODS = [
     ('delete',           'DELETE'),
     ('trace',            'TRACE'),
     ('connect',          'CONNECT'),
+    ('purge',            'PURGE'),
     ('copy',             'COPY'),
     ('lock',             'LOCK'),
     ('mkcol',            'MKCOL'),
@@ -95,7 +96,7 @@ class Plugin_method (RulePlugin):
             CTK.cfg ['%s!method'%(key)] = METHODS[idx:][0][0]
 
         table = CTK.PropsTable()
-        table.Add (_('Method'), CTK.ComboCfg('%s!method'%(key), METHODS[idx:]), _(NOTE_METHOD))
+        table.Add (_('Method'), CTK.ComboCfg('%s!method'%(key), METHODS[idx:], ({}, {'class': 'noauto'})[is_new]), _(NOTE_METHOD))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', key)
@@ -105,7 +106,7 @@ class Plugin_method (RulePlugin):
 
     def GetName (self):
         method = CTK.cfg.get_val ('%s!method' %(self.key), '')
-        return "%s %s" % (_('Method'), method)
+        return "%s %s" % (_('Method'), method.upper())
 
 
 CTK.publish (URL_APPLY, commit, method="POST")

@@ -208,6 +208,14 @@ cherokee_flcache_req_is_storable (cherokee_flcache_t    *flcache,
 }
 
 
+ret_t
+cherokee_flcache_purge_path (cherokee_flcache_t *flcache,
+			     cherokee_buffer_t  *path)
+{
+	return cherokee_avl_flcache_purge_path (&flcache->request_map, path);
+}
+
+
 /* Front-line cache connection
  */
 

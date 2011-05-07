@@ -35,7 +35,7 @@
 
 /* Plug-in initialization
  */
-PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_get | http_post);
+PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_get | http_post | http_purge);
 
 
 /* Methods implementation
@@ -130,6 +130,45 @@ process_request_line (cherokee_handler_admin_t *hdl, cherokee_buffer_t *line)
 	return ret_error;
 }
 
+
+static ret_t
+front_line_cache_purge (cherokee_handler_admin_t *hdl)
+{
+	ret_t                      ret;
+	cherokee_connection_t     *conn = HANDLER_CONN(hdl);
+	cherokee_virtual_server_t *vsrv = HANDLER_VSRV(hdl);
+
+	/* FLCache not active in the Virtual Server
+	 */
+	if (vsrv->flcache == NULL) {
+		conn->error_code = http_not_found;
+		return ret_error;
+	}
+
+	/* Remove the cache objects
+	 */
+	ret = cherokee_flcache_purge_path (vsrv->flcache, &conn->request);
+
+	switch (ret) {
+	case ret_ok:
+		cherokee_dwriter_cstring (&hdl->dwriter, "ok");
+		return ret_ok;
+	case ret_not_found:
+		cherokee_dwriter_cstring (&hdl->dwriter, "not found");
+		conn->error_code = http_not_found;
+		return ret_error;
+	default:
+		cherokee_dwriter_cstring (&hdl->dwriter, "error");
+		conn->error_code = http_internal_error;
+		return ret_error;
+
+	}
+
+	SHOULDNT_HAPPEN;
+	return ret_error;
+}
+
+
 ret_t
 cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
 {
@@ -148,9 +187,16 @@ cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
 		hdl->dwriter.lang = dwriter_ruby;
 	}
 
+	/* Front-Line Cache's PURGE
+	 */
+	if (conn->header.method == http_purge) {
+		return front_line_cache_purge (hdl);
+	}
+
 #undef finishes_by
 	return ret_ok;
 }
+
 
 ret_t
 cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
@@ -230,22 +276,24 @@ exit2:
 
 
 ret_t
-cherokee_handler_admin_step (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer)
-{
-	cherokee_buffer_add_buffer (buffer, &hdl->reply);
-	return ret_eof_have_data;
-}
-
-
-ret_t
 cherokee_handler_admin_add_headers (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
+	/* Regular request
+	 */
 	if (cherokee_connection_should_include_length(conn)) {
 		HANDLER(hdl)->support = hsupport_length;
 		cherokee_buffer_add_va (buffer, "Content-Length: %lu" CRLF, hdl->reply.len);
 	}
 
 	return ret_ok;
+}
+
+
+ret_t
+cherokee_handler_admin_step (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer)
+{
+	cherokee_buffer_add_buffer (buffer, &hdl->reply);
+	return ret_eof_have_data;
 }

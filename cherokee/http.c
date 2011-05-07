@@ -157,6 +157,8 @@ cherokee_http_string_to_method (cherokee_buffer_t      *string,
 		*method = http_merge;
 	else if (cherokee_buffer_case_cmp_str (string, "invalid") == 0)
 		*method = http_invalid;
+	else if (cherokee_buffer_case_cmp_str (string, "purge") == 0)
+		*method = http_purge;
 	else {
 		*method = http_unknown;
 		return ret_not_found;

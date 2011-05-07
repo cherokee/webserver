@@ -307,6 +307,8 @@ parse_method (cherokee_header_t *hdr, char *line, char *end, char **pointer)
 		else
 		detect_method (line, "PUT", put)
 		else
+		detect_method (line, "PURGE", purge)
+		else
 		detect_method (line, "POLL", poll)
 		else
 		detect_method (line, "PROPFIND", propfind)

@@ -188,16 +188,16 @@ class Render:
                         comment.append ("no %s"%(e))
 
                 if CTK.cfg.get_val ('vserver!%s!rule!%s!flcache'%(vsrv_num, r)) == "allow":
-                    comment.append ('cache')
+                    comment.append ('Cache')
 
                 if CTK.cfg.get_val ('vserver!%s!rule!%s!timeout' %(vsrv_num, r)):
-                    comment.append ('timeout')
+                    comment.append ('Timeout')
 
                 if CTK.cfg.get_val ('vserver!%s!rule!%s!rate' %(vsrv_num, r)):
-                    comment.append ('traffic')
+                    comment.append ('Traffic')
 
                 if int (CTK.cfg.get_val ('vserver!%s!rule!%s!no_log'%(vsrv_num, r), "0")) > 0:
-                    comment.append ('no log')
+                    comment.append ('No log')
 
                 # List entry
                 row_id = '%s_%s' %(r, vsrv_num)

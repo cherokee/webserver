@@ -41,6 +41,7 @@ APP_COPY_NOTICE =                                                               
 USAGE =                                                                     \
     "Usage:\n"                                                              \
     "  cherokee-tweak [options] URL info \n"                                \
+    "  cherokee-tweak [options] URL purge \n"                               \
     "  cherokee-tweak [options] URL sources \n"                             \
     "  cherokee-tweak [options] URL kill-source ID \n"                      \
     "  cherokee-tweak [options] URL logrotate   PATH \n"                    \
@@ -50,7 +51,8 @@ USAGE =                                                                     \
     "  trace                         Manipulates the tracing mechanism\n"   \
     "  logrotate                     Rotates a local log file\n"            \
     "  sources                       Prints a list of the info. sources\n"  \
-    "  kill-source                   Kill a remote information source\n\n"  \
+    "  kill-source                   Kill a remote information source\n"    \
+    "  purge                         Purge objects from the cache\n\n"      \
     " Parameters:\n"                                                        \
     "  -h,  --help                   Print this help\n"                     \
     "  -V,  --version                Print version and exit\n\n"            \
@@ -67,7 +69,6 @@ password = None
 log      = None
 trace    = None
 ksource  = None
-
 
 def parse_args():
     global command, url
@@ -125,6 +126,8 @@ def parse_args():
     # Check command
     if command == 'info':
         None
+    elif command == 'purge':
+        None
     elif command == 'trace':
         trace = sys.argv[argn]
         argn += 1
@@ -141,11 +144,7 @@ def parse_args():
         raise SystemExit
 
 
-def request (commands):
-    tmp       = url + '/py'
-    url_py    = tmp[:7] + tmp[7:].replace('//','/')
-    post_info = "%s\n" %('\n'.join(commands))
-
+def http_request (path, post_info=None, method=None):
     # Authtentication
     if user or password:
         passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
@@ -154,16 +153,34 @@ def request (commands):
         authhandler = urllib2.HTTPBasicAuthHandler (passman)
         opener = urllib2.build_opener (authhandler)
         urllib2.install_opener (opener)
+    else:
+        opener = urllib2.build_opener (urllib2.HTTPHandler)
 
     # Request
     try:
-        conn = urllib2.urlopen (url_py, post_info)
+        request = urllib2.Request (path, post_info)
+        if method:
+            request.get_method = lambda: method
+
+        conn = opener.open (request)
+
+        ## conn = urllib2.urlopen (url_py, post_info)
     except urllib2.HTTPError, e:
         if e.code == 401:
             print >> sys.stderr, "Error in Authentication"
             raise SystemExit
         raise
+
     return conn.read()
+
+
+def request (commands):
+    tmp       = url + '/py'
+    url_py    = tmp[:7] + tmp[7:].replace('//','/')
+    post_info = "%s\n" %('\n'.join(commands))
+
+    return http_request (url_py, post_info)
+
 
 def eval_safe (txt):
     try:
@@ -326,12 +343,27 @@ def do_logrotate():
     assert not backup[0]['backup_mode'], "Couldn't unset backup mode"
 
 
+#
+# Purge from Cache
+#
+
+def do_purge():
+    try:
+        response_py = http_request (url, method="PURGE")
+    except urllib2.HTTPError, e:
+        if e.code == 404:
+            print >> sys.stderr, "Object not found in the cache"
+            sys.exit(1)
+        raise
+
 
 def main():
     parse_args()
 
     if command == 'info':
         print_info()
+    elif command == 'purge':
+        do_purge()
     elif command == 'sources':
         print_sources()
     elif command == 'kill-source':

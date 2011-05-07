@@ -390,6 +390,38 @@ cherokee_avl_flcache_get (cherokee_avl_flcache_t       *avl,
 
 
 static ret_t
+del_list_of_entries (cherokee_avl_flcache_t *avl,
+		     cherokee_list_t        *to_delete)
+{
+	ret_t               ret;
+	cherokee_list_t    *i, *j;
+	cherokee_boolean_t  error = false;
+
+	list_for_each_safe (i, j, to_delete) {
+		cherokee_avl_flcache_node_t *node = list_entry (i, cherokee_avl_flcache_node_t, to_del);
+
+		if (node->ref_count > 0)
+			continue;
+
+		TRACE (ENTRIES, "Removing Front-line cache file: '%s'\n", node->file.buf ? node->file.buf : "");
+
+		/* Delete local file */
+		if (! cherokee_buffer_is_empty (&node->file)) {
+			cherokee_unlink (node->file.buf);
+		}
+
+		/* Delete try from the AVL tree*/
+		ret = cherokee_avl_generic_del (AVL_GENERIC(avl), AVL_GENERIC_NODE(node), NULL);
+		if (unlikely (ret != ret_ok)) {
+			error = true;
+		}
+	}
+
+	return (error) ? ret_error : ret_ok;
+}
+
+
+static ret_t
 cleanup_while_func (cherokee_avl_generic_node_t *node_generic, void *value, void *param)
 {
 	cherokee_list_t             *to_delete = LIST(param);
@@ -407,11 +439,10 @@ cleanup_while_func (cherokee_avl_generic_node_t *node_generic, void *value, void
 	return ret_ok;
 }
 
+
 ret_t
 cherokee_avl_flcache_cleanup (cherokee_avl_flcache_t *avl)
 {
-	ret_t            ret;
-	cherokee_list_t *i, *j;
 	cherokee_list_t  to_delete = LIST_HEAD_INIT(to_delete);
 
 	CHEROKEE_RWLOCK_WRITER (&avl->base_rwlock);
@@ -422,22 +453,7 @@ cherokee_avl_flcache_cleanup (cherokee_avl_flcache_t *avl)
 
 	/* Delete entries
 	 */
-	list_for_each_safe (i, j, &to_delete) {
-		cherokee_avl_flcache_node_t *node = list_entry (i, cherokee_avl_flcache_node_t, to_del);
-
-		TRACE (ENTRIES, "Removing Front-line cache file: '%s'\n", node->file.buf ? node->file.buf : "");
-
-		/* Delete local file */
-		if (! cherokee_buffer_is_empty (&node->file)) {
-			cherokee_unlink (node->file.buf);
-		}
-
-		/* Delete try from the AVL tree*/
-		ret = cherokee_avl_generic_del (AVL_GENERIC(avl), AVL_GENERIC_NODE(node), NULL);
-		if (unlikely (ret != ret_ok)) {
-			; // TO DO
-		}
-	}
+	del_list_of_entries (avl, &to_delete);
 
 	CHEROKEE_RWLOCK_UNLOCK (&avl->base_rwlock);
 
@@ -456,6 +472,63 @@ cherokee_avl_flcache_del (cherokee_avl_flcache_t      *avl,
 		ret = cherokee_avl_generic_del (AVL_GENERIC(avl), AVL_GENERIC_NODE(node), NULL);
 	}
 	CHEROKEE_RWLOCK_UNLOCK (&avl->base_rwlock);
+
+	return ret;
+}
+
+
+static ret_t
+purge_while_func (cherokee_avl_generic_node_t *node_generic, void *value, void **params)
+{
+	cherokee_avl_flcache_node_t *node       = AVL_FLCACHE_NODE(node_generic);
+	cherokee_buffer_t           *path       = (cherokee_buffer_t *)  (params[0]);
+	cuint_t                     *purged_num = (cuint_t *)            (params[1]);
+	cherokee_list_t             *to_delete  = (cherokee_list_t *)    (params[2]);
+
+	UNUSED(value);
+
+	/* Expire entries that match the path
+	 */
+	if (cherokee_buffer_cmp_buf (path, &node->request) == 0) {
+		*purged_num += 1;
+
+		/* Expire the object
+		 */
+		node->valid_until = 0;
+
+		/* Whenever possible, remove it from the cache
+		 */
+		cherokee_list_add (&node->to_del, to_delete);
+	}
+
+	return ret_ok;
+}
+
+ret_t
+cherokee_avl_flcache_purge_path (cherokee_avl_flcache_t *avl,
+				 cherokee_buffer_t      *path)
+{
+	ret_t            ret;
+	cuint_t          purged_num = 0;
+	cherokee_list_t  to_delete  = LIST_HEAD_INIT(to_delete);
+	void            *params[]   = {path, &purged_num, &to_delete};
+
+	/* FIXME: O(N) function. This is clearly sub-optimal.
+	 */
+	CHEROKEE_RWLOCK_WRITER (&avl->base_rwlock);
+
+	ret = cherokee_avl_generic_while (AVL_GENERIC(avl),
+					  (cherokee_avl_generic_while_func_t) purge_while_func,
+					  params, NULL, NULL);
+
+	del_list_of_entries (avl, &to_delete);
+	TRACE (ENTRIES, "Purging '%s' - %d objects were expired\n", path->buf, purged_num);
+
+	CHEROKEE_RWLOCK_UNLOCK (&avl->base_rwlock);
+
+	if (purged_num == 0) {
+		return ret_not_found;
+	}
 
 	return ret;
 }

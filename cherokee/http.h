@@ -79,7 +79,8 @@ typedef enum {
 	http_mkactivity       = 1LL << 29,
 	http_baseline_control = 1LL << 30,
 	http_merge            = 1LL << 31,
-	http_invalid          = 1LL << 32
+	http_invalid          = 1LL << 32,
+	http_purge            = 1LL << 33
 } cherokee_http_method_t;
 
 #define cherokee_http_method_LENGTH 33
