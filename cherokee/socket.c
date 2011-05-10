@@ -1438,13 +1438,22 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 	int tmp = 0;
 	int fd  = socket->socket;
 
+	if (unlikely (socket->socket < 0)) {
+		return ret_error;
+	}
+
 	if (enable) {
 		tmp = 0;
 
 		re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
 		if (unlikely (re < 0)) {
-			LOG_ERRNO (errno, cherokee_err_error,
-				   CHEROKEE_ERROR_SOCKET_RM_NODELAY, fd);
+			switch (errno) {
+			case ECONNRESET:
+				break;
+			default:
+				LOG_ERRNO (errno, cherokee_err_error,
+					   CHEROKEE_ERROR_SOCKET_RM_NODELAY, fd);
+			}
 			return ret_error;
 		}
 
@@ -1469,8 +1478,13 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 	tmp = 0;
 	re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
 	if (unlikely (re < 0)) {
-		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_SOCKET_RM_CORK, fd);
+		switch (errno) {
+		case ECONNRESET:
+			break;
+		default:
+			LOG_ERRNO (errno, cherokee_err_error,
+				   CHEROKEE_ERROR_SOCKET_RM_CORK, fd);
+		}
 		return ret_error;
 	}
 
