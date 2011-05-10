@@ -1828,14 +1828,16 @@ cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
 
 		*p = '\0';
 
-		re = stat(path->buf, &foo);
+		re = cherokee_stat (path->buf, &foo);
 		if (re != 0) {
 			re = cherokee_mkdir (path->buf, mode);
 			if ((re != 0) && (errno != EEXIST)) {
+				*p = '/';
 				LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf);
 				return ret_error;
 			}
 		}
+
 		*p = '/';
 
 		p++;
@@ -1876,7 +1878,7 @@ cherokee_mkdir_p_perm (cherokee_buffer_t *dir_path,
 
 	/* Check permissions
 	 */
-	re = access (dir_path->buf, ensure_perm);
+	re = cherokee_access (dir_path->buf, ensure_perm);
 	if (re != 0) {
 		return ret_deny;
 	}
@@ -2307,7 +2309,7 @@ cherokee_find_exec_in_path (const char        *bin_name,
 		cherokee_buffer_add_str (fullpath, "/");
 		cherokee_buffer_add     (fullpath, bin_name, strlen(bin_name));
 
-		re = access (fullpath->buf, X_OK);
+		re = cherokee_access (fullpath->buf, X_OK);
 		if (re == 0) {
 			free (path);
 			return ret_ok;
@@ -2415,6 +2417,18 @@ cherokee_fstat (int filedes, struct stat *buf)
 
 	do {
 		re = fstat (filedes, buf);
+	} while ((re == -1) && (errno == EINTR));
+
+	return re;
+}
+
+int
+cherokee_access (const char *pathname, int mode)
+{
+	int re;
+
+	do {
+		re = access (pathname, mode);
 	} while ((re == -1) && (errno == EINTR));
 
 	return re;

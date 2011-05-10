@@ -149,6 +149,7 @@ int   cherokee_closedir      (DIR *dirstream);
 int   cherokee_stat          (const char *restrict path, struct stat *buf);
 int   cherokee_lstat         (const char *restrict path, struct stat *buf);
 int   cherokee_fstat         (int filedes, struct stat *buf);
+int   cherokee_access        (const char *pathname, int mode);
 int   cherokee_open          (const char *path, int oflag, int mode);
 int   cherokee_unlink        (const char *path);
 int   cherokee_pipe          (int fildes[2]);
