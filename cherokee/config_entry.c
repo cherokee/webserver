@@ -254,7 +254,10 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry,
 		entry->flcache_policy = source->flcache_policy;
 	}
 
-	if ((! entry->flcache_cookies_disregard) && (source->flcache_cookies_disregard)) {
+	if ((entry->flcache) &&
+	    (! entry->flcache_cookies_disregard) &&
+	    ( source->flcache_cookies_disregard))
+	{
 		entry->flcache_cookies_disregard = source->flcache_cookies_disregard;
 	}
 

@@ -1052,8 +1052,8 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->header_ops = entry.header_ops;
 			}
 
-			conn->flcache_policy = entry.flcache_policy;
-			if (entry.flcache_cookies_disregard) {
+			if (NULLB_TO_BOOL(entry.flcache)) {
+				conn->flcache_policy            = entry.flcache_policy;
 				conn->flcache_cookies_disregard = entry.flcache_cookies_disregard;
 			}
 
