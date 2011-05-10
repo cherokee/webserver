@@ -1803,6 +1803,7 @@ cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
 {
 	int          re;
         char        *p;
+	int          err;
 	struct stat  foo;
 
 	/* There is no directory
@@ -1832,8 +1833,10 @@ cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
 		if (re != 0) {
 			re = cherokee_mkdir (path->buf, mode);
 			if ((re != 0) && (errno != EEXIST)) {
+				err = errno;
 				*p = '/';
-				LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf);
+
+				LOG_ERRNO (err, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf, getuid());
 				return ret_error;
 			}
 		}
@@ -1847,7 +1850,9 @@ cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
 
 	re = cherokee_mkdir (path->buf, mode);
 	if ((re != 0) && (errno != EEXIST)) {
-		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf);
+		err = errno;
+
+		LOG_ERRNO (err, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf, getuid());
 		return ret_error;
 	}
 

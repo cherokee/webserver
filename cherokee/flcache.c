@@ -80,7 +80,7 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 	cherokee_buffer_add_str    (&flcache->local_directory, CHEROKEE_FLCACHE "/");
 	cherokee_buffer_add_buffer (&flcache->local_directory, &vserver->name);
 
-	ret = cherokee_mkdir_p_perm (&flcache->local_directory, 0700, W_OK);
+	ret = cherokee_mkdir_p_perm (&flcache->local_directory, 0755, W_OK);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_FLCACHE_MKDIR, flcache->local_directory.buf, "write");
 		return ret;
@@ -487,7 +487,7 @@ create_flconn_file (cherokee_flcache_t    *flcache,
 
 		cherokee_buffer_add (&tmp, entry->file.buf, p - entry->file.buf);
 
-		ret = cherokee_mkdir_p_perm (&tmp, 0700, W_OK);
+		ret = cherokee_mkdir_p_perm (&tmp, 0755, W_OK);
 		if (ret != ret_ok) {
 			LOG_CRITICAL (CHEROKEE_ERROR_FLCACHE_MKDIR, tmp.buf, "write");
 			goto error;
@@ -545,6 +545,7 @@ cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn,
 	 */
 	ret = create_flconn_file (CONN_VSRV(conn)->flcache, conn);
 	if (ret != ret_ok) {
+		cherokee_flcache_del_entry (CONN_VSRV(conn)->flcache, entry);
 		return ret_error;
 	}
 

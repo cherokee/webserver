@@ -990,7 +990,7 @@ e('UTIL_F_SETFD',
   desc  = CODING_BUG)
 
 e('UTIL_MKDIR',
-  title = "Could not mkdir '%s': ${errno}",
+  title = "Could not mkdir '%s' (UID %d): ${errno}",
   desc  = "Most probably there you have to adjust some permissions.")
 
 
