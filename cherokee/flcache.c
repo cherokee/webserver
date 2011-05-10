@@ -286,11 +286,13 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		cherokee_buffer_t       *header,
 		cherokee_connection_t   *conn)
 {
+	ret_t                        ret;
 	char                        *value;
 	char                        *begin;
 	char                        *end;
 	const char                  *header_end;
 	char                         chr_end;
+	char                        *p, *q;
 	cherokee_avl_flcache_node_t *node        = flcache_conn->avl_node_ref;
 	cherokee_boolean_t           via_found   = false;
 	cherokee_buffer_t           *tmp         = THREAD_TMP_BUF2(CONN_THREAD(conn));
@@ -359,8 +361,28 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 				do_cache = true;
 			}
 
-			/* TODO: max-age= and s-maxage=
-			 */
+			p = strcasestr (begin, "max-age=");
+			if (p) {
+				p += 8;
+				q  = p;
+
+				while ((*q >= '0') && (*q <= '9'))
+					q++;
+
+				if (q > p) {
+					int  until = -1;
+					char c_tmp = *q;
+
+					*q = '\0';
+					ret = cherokee_atoi (p, &until);
+					*q = c_tmp;
+
+					if (ret == ret_ok) {
+						node->valid_until = cherokee_bogonow_now + until;
+						do_cache = true;
+					}
+				}
+			}
 		}
 
 		/* Set-cookie
