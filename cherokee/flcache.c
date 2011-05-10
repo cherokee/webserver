@@ -80,10 +80,18 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 	cherokee_buffer_add_str    (&flcache->local_directory, CHEROKEE_FLCACHE "/");
 	cherokee_buffer_add_buffer (&flcache->local_directory, &vserver->name);
 
+	/* Create directory
+	 */
 	ret = cherokee_mkdir_p_perm (&flcache->local_directory, 0755, W_OK);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_FLCACHE_MKDIR, flcache->local_directory.buf, "write");
 		return ret;
+	}
+
+	/* Set the directory permissions
+	 */
+	if (VSERVER_SRV(vserver)->user != VSERVER_SRV(vserver)->user_orig) {
+		chown (flcache->local_directory.buf, VSERVER_SRV(vserver)->user, VSERVER_SRV(vserver)->group);
 	}
 
 	TRACE (ENTRIES, "Created %s\n", flcache->local_directory.buf);
