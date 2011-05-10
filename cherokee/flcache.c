@@ -128,17 +128,15 @@ cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
 		return ret_deny;
 	}
 
-	/* Cache hit
-	 */
-	TRACE (ENTRIES, "Front Line Cache: hit; '%s' -> '%s' (%d refs)\n",
-	       conn->request.buf, entry->file.buf, entry->ref_count);
-
-	/* Open the cached file
+	/* Cache hit: Open the cached file
 	 */
 	conn->flcache.fd = cherokee_open (entry->file.buf, O_RDONLY | O_NOFOLLOW, 0);
 	if (unlikely (conn->flcache.fd == -1)) {
 		return ret_error;
 	}
+
+	TRACE (ENTRIES, "Front Line Cache: hit; '%s' -> '%s' (%d refs)\n",
+	       conn->request.buf, entry->file.buf, entry->ref_count);
 
 	/* Store the reference to the object
 	 */
@@ -501,11 +499,12 @@ create_flconn_file (cherokee_flcache_t    *flcache,
 		 */
 		conn->flcache.fd = cherokee_open (entry->file.buf, O_WRONLY | O_CREAT | O_TRUNC | O_NOFOLLOW, S_IRUSR|S_IWUSR);
 		if (conn->flcache.fd == -1) {
+			LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_FLCACHE_CREATE_FILE, tmp.buf);
 			goto error;
 		}
 	}
 
-	TRACE (ENTRIES, "Created flcache file %s\n", entry->file.buf);
+	TRACE (ENTRIES, "Created flcache file %s, fd=%d\n", entry->file.buf, conn->flcache.fd);
 	return ret_ok;
 
 error:
