@@ -3,38 +3,41 @@
 Other: Front-line Cache
 -----------------------
 
-Cherokee has very sophisticated caching mechanisms, allowing to cache
-anything (static files, dynamic content, or whatever) that passes
-by. This is no small feat, since typically you would have to set up an
-independent front-line cache to achieve similar results, although such
-alternative inherently introduce latency due to the round-trips
-associated to checking whether or not the contents have already been
-cached. This would be the case for very well known products such as
-Squid or Varnish. Since Cherokee can process all of this on its own,
-this significant overhead can be totally avoided.
+Cherokee has very sophisticated content caching mechanisms, 
+allowing it to cache anything (static files, dynamic content, etc.).  
+Cherokee's NEW version 1.2.3 Front-line Cache 
+replaces well known independent front-line caches (i.e., Varnish, Squid, etc.).  
+Independent front-line caches add additional latency to requests due to 
+TCPIP network based round-trips to check whether or not the content has 
+already been cached. With Cherokee, the front-line cache built in so 
+there are is no unnecessary network overhead due to caching.
 
-The front-line cache accelerates HTTP delivery even on content-heavy
-dynamic websites.
+Front-line cache accelerates HTTP delivery even on content-heavy
+dynamic websites (see example and notes on caching where cookies exist 
+and how to selectively ignore cookies).
 
-The caching policies can be specified on a per-rule basis. Caching of
-contents is decided according to two factors:
+Caching policies can be specified on a per-rule basis. Caching of
+content is decided by two things:
 
-. Whatever headers are returned by the back-end (i.e., Expires
-  Headers).
+. Headers returned by the back-end (i.e., Expires Header).
+
 . Whatever is specified in the matching rule.
 
 Caching can be customized for each and every rule of your virtual
-server's configuration, by specifying any of the three settings are
-available on a per-rule basis for the `Content Caching` section:
-'Leave unset', 'Allow' and 'Forbid'. As was explained elsewhere, the
-'Leave unset' option means that whenever a rule is applied it will not
+server's configuration, by specifying any of the three settings 
+available on a per-rule basis in the <tt>Content Caching</tt> section:
+<em>Leave unset</em>, <em>Allow</em> and <em>Forbid</em>. 
+
+. <em>Leave unset</em> option means that whenever a rule is applied it will not
 change the status of the caching setting that has been inherited from
-previously matched rules. Likewise, 'Forbid' will disable caching of
-the rule, and 'Allow' will cache whatever *can* be cached.
+previously matched rules.
+. <em>Forbid</em> will disable caching of
+the rule
+. <em>Allow</em> will cache whatever <strong>can</strong> be cached.
 
-The contents that can be cached are anything except:
+Any HTTP content can be cached by Cherokee, except the following:
 
-. Contents of an SSL/TLS stream.
+. Content in a SSL/TLS stream.
 
 . Content that is server after having matched an authentication rule.
 
@@ -43,22 +46,19 @@ The contents that can be cached are anything except:
 
 . Responses to user petitions requesting specific ranges.
 
-. Responses where the back-end sets a cookie.
+. Responses where the back-end sets a cookie (although you can tell Cherokee 
+to ignore such cookies).
 
-By default, contents that include cookies are not cached, but the
-setting to allowing cache on a rule gives you the possibility to
-disregard cookies using regular expressions (so that even that content
+By default, content that includes cookies are not cached, but the
+setting to allow caching on a rule gives you the ability to
+disregard cookies using regular expressions (so even that content
 can be cached).
 
-As you can see, the raw-power and flexibility of this feature allows
-you to do almost anything. For instance, take the following example
-that never caches contents from a restricted section of a website,
-while allowing to always cache the contents of another section
-regardless of cookies or anything else.
-
-This sort of configuration is possible by simple prepending these two
-rules to the behavior rule list, so that they take care of dealing
-with the cache and expiration setting:
+Cherokee's rules provide for great flexibility and control over caching. 
+For instance, take the following example where we never cache content from a 
+restricted "members" section of a website, while allowing Cherokee to always 
+cache the contents of another section of the website regardless of presence of cookies,
+by prepending two rules to the behavior rule list:
 
 ----
 Fullpath: /site/index.php - Non-final - Cache: Disregarded Cookies '.*', Expiration.
