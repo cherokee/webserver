@@ -2490,11 +2490,12 @@ cherokee_connection_create_encoder (cherokee_connection_t *conn,
 		return ret_ok;
 	}
 
-	/* Keepalive (Content-Length) connections cannot use encoders.
-	 * The transferred information length would change.
+	/* Keepalive (Content-Length) connections cannot use encoders
+	 * because the transferred information length would change.
 	 */
 	if ((conn->keepalive) &&
-	    (! conn->chunked_encoding))
+	    (! conn->chunked_encoding) &&
+	    HANDLER_SUPPORTS (conn->handler, hsupport_length))
 	{
 		return ret_ok;
 	}
