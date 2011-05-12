@@ -243,11 +243,12 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 				if (len <= 0) {
 					re = -1;
 				} else {
-					re = strncasecmp (p, node->content_encoding.buf, MIN(len, node->content_encoding.len));
+					re = strncasecmp (p, node->content_encoding.buf,
+							  MIN(len, node->content_encoding.len));
 				}
 
 				/* Restore original string */
-				p[header_len] = ',';
+				p[total_len] = ',';
 
 				if (re == 0) {
 					/* Matched */
