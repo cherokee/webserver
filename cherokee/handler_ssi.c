@@ -167,6 +167,7 @@ parse (cherokee_handler_ssi_t *hdl,
        cherokee_buffer_t      *in,
        cherokee_buffer_t      *out)
 {
+	ret_t              ret;
 	char              *p, *q;
 	char              *begin;
 	int                re;
@@ -310,10 +311,24 @@ parse (cherokee_handler_ssi_t *hdl,
 			 */
 			if (! ignore) {
 				switch (op) {
-				case op_include:
+				case op_include: {
+					cherokee_buffer_t file_content = CHEROKEE_BUF_INIT;
+
+					ret = cherokee_buffer_read_file (&file_content, fpath.buf);
+					if (unlikely (ret != ret_ok)) {
+						return ret_error;
+					}
+
 					TRACE(ENTRIES, "Including file '%s'\n", fpath.buf);
-					cherokee_buffer_read_file (out, fpath.buf);
+
+					ret = parse (hdl, &file_content, out);
+					if (unlikely (ret != ret_ok)) {
+						return ret_error;
+					}
+
+					cherokee_buffer_mrproper (&file_content);
 					break;
+				}
 
 				case op_size:
 					TRACE(ENTRIES, "Including file size '%s'\n", fpath.buf);
