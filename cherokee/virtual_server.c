@@ -112,6 +112,11 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	cherokee_buffer_mrproper (&vserver->req_client_certs);
 	cherokee_buffer_mrproper (&vserver->ciphers);
 
+	if (vserver->flcache != NULL) {
+		cherokee_flcache_free (vserver->flcache);
+		vserver->flcache = NULL;
+	}
+
 	if (vserver->error_handler != NULL) {
 		cherokee_config_entry_free (vserver->error_handler);
 		vserver->error_handler = NULL;

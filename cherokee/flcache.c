@@ -56,9 +56,111 @@ cherokee_flcache_new (cherokee_flcache_t **flcache)
 	return ret_ok;
 }
 
+static ret_t
+rm_rf (cherokee_buffer_t *path,
+       uid_t              uid)
+{
+	int               re;
+	DIR              *d;
+	struct dirent    *entry;
+	char              entry_buf[512];
+	struct stat       info;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+	/* Remove the directory contents
+	 */
+	d = cherokee_opendir (path->buf);
+	if (d == NULL) {
+		return ret_ok;
+	}
+
+	while (true) {
+		re = cherokee_readdir (d, (struct dirent *)entry_buf, &entry);
+		if ((re != 0) || (entry == NULL))
+			break;
+
+                if (!strncmp (entry->d_name, ".",  1)) continue;
+                if (!strncmp (entry->d_name, "..", 2)) continue;
+
+		cherokee_buffer_clean      (&tmp);
+		cherokee_buffer_add_buffer (&tmp, path);
+		cherokee_buffer_add_char   (&tmp, '/');
+		cherokee_buffer_add        (&tmp, entry->d_name, strlen(entry->d_name));
+
+		re = cherokee_stat (tmp.buf, &info);
+		if (re == 0) {
+			if (info.st_uid == uid) {
+				if (S_ISDIR (info.st_mode)) {
+					rm_rf (&tmp, uid);
+					TRACE (ENTRIES, "Removing cache dir: %s\n", tmp.buf, re);
+				} else if (S_ISREG (info.st_mode)) {
+					re = unlink (tmp.buf);
+					TRACE (ENTRIES, "Removing cache file: %s, re=%d\n", tmp.buf, re);
+				}
+			}
+		}
+	}
+
+	cherokee_closedir (d);
+
+	/* It should be empty by now
+	 */
+	re = rmdir (path->buf);
+	TRACE (ENTRIES, "Removing main vserver cache dir: %s, re=%d\n", path->buf, re);
+
+	/* Clean up
+	 */
+	cherokee_buffer_mrproper (&tmp);
+	return ret_ok;
+}
+
+
+static void
+may_rm_pid_dir (cherokee_buffer_t *path,
+		uid_t              uid)
+{
+	int          re;
+	char        *s;
+	struct stat  info;
+
+	/* The last flcache freed will try to remove its parent
+	 * directory (the one with the PID of the server).
+	 * Eg: /var/lib/cherokee/flcache/4657/default
+	 */
+
+	s = strrchr (path->buf, '/');
+	if (s == NULL) return;
+
+	*s = '\0';
+	re = cherokee_stat (path->buf, &info);
+	if (re == 0) {
+		if ((info.st_uid == uid) &&
+		    (S_ISDIR (info.st_mode)))
+		{
+			re = rmdir (path->buf);
+			TRACE (ENTRIES, "Removing main cache dir: %s, re=%d\n", path->buf, re);
+		}
+	}
+	*s = '/';
+}
+
+
 ret_t
 cherokee_flcache_free (cherokee_flcache_t *flcache)
 {
+	uid_t uid = getuid();
+
+	/* Remove its virtual server contents
+	 */
+	if (! cherokee_buffer_is_empty (&flcache->local_directory)) {
+		rm_rf (&flcache->local_directory, uid);
+
+		/* Remove global dir
+		 */
+		may_rm_pid_dir (&flcache->local_directory, uid);
+
+	}
+
 	cherokee_buffer_mrproper (&flcache->local_directory);
 	cherokee_avl_flcache_mrproper (&flcache->request_map, NULL);
 
@@ -77,7 +179,10 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 	/* Beware: conf might be NULL */
 	UNUSED (conf);
 
-	cherokee_buffer_add_str    (&flcache->local_directory, CHEROKEE_FLCACHE "/");
+	cherokee_buffer_add_str    (&flcache->local_directory, CHEROKEE_FLCACHE);
+	cherokee_buffer_add_str    (&flcache->local_directory, "/");
+	cherokee_buffer_add_long10 (&flcache->local_directory, getpid());
+	cherokee_buffer_add_str    (&flcache->local_directory, "/");
 	cherokee_buffer_add_buffer (&flcache->local_directory, &vserver->name);
 
 	/* Create directory
@@ -218,7 +323,10 @@ ret_t
 cherokee_flcache_purge_path (cherokee_flcache_t *flcache,
 			     cherokee_buffer_t  *path)
 {
-	return cherokee_avl_flcache_purge_path (&flcache->request_map, path);
+	ret_t ret;
+
+	ret = cherokee_avl_flcache_purge_path (&flcache->request_map, path);
+	return ret;
 }
 
 
