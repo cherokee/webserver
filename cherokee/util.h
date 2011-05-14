@@ -227,7 +227,11 @@ ret_t cherokee_split_arguments    (cherokee_buffer_t *request,
 ret_t cherokee_parse_query_string (cherokee_buffer_t *qstring,
 				   cherokee_avl_t  *arguments);
 
-char *cherokee_header_get_next_line (char *line);
+char  *cherokee_header_get_next_line (char *line);
+ret_t  cherokee_header_del_entry     (cherokee_buffer_t *header,
+				      const char        *header_name,
+				      int                header_name_len);
+
 
 CHEROKEE_END_DECLS
 

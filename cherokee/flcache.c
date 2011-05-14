@@ -340,7 +340,7 @@ cherokee_flcache_conn_init (cherokee_flcache_conn_t *flcache_conn)
 	flcache_conn->header_sent   = 0;
 	flcache_conn->response_sent = 0;
 	flcache_conn->avl_node_ref  = NULL;
-	flcache_conn->mode          = flcache_mdoe_undef;
+	flcache_conn->mode          = flcache_mode_undef;
 	flcache_conn->fd            = -1;
 
 	cherokee_buffer_init (&flcache_conn->header);
@@ -407,13 +407,16 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 	const char                  *header_end;
 	char                         chr_end;
 	char                        *p, *q;
-	cherokee_avl_flcache_node_t *node        = flcache_conn->avl_node_ref;
-	cherokee_boolean_t           via_found   = false;
-	cherokee_buffer_t           *tmp         = THREAD_TMP_BUF2(CONN_THREAD(conn));
-	cherokee_boolean_t           do_cache    = false;
+	cherokee_boolean_t           overwrite_control;
+	cherokee_avl_flcache_node_t *node               = flcache_conn->avl_node_ref;
+	cherokee_boolean_t           via_found          = false;
+	cherokee_buffer_t           *tmp                = THREAD_TMP_BUF2(CONN_THREAD(conn));
+	cherokee_boolean_t           do_cache           = false;
 
 	begin      = header->buf;
 	header_end = header->buf + header->len;
+
+	overwrite_control = (conn->expiration != cherokee_expiration_none);
 
 	while ((begin < header_end)) {
 		end = cherokee_header_get_next_line (begin);
@@ -427,10 +430,16 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		/* Expire
 		 */
 		if (strncasecmp (begin, "Expires:", 8) == 0) {
+			/* Cache control overridden */
+			if (overwrite_control) {
+				goto remove_line;
+			}
+
+			/* Regular Cache control */
 			value = begin + 8;
 			while ((*value == ' ') && (value < end)) value++;
 
-			node->valid_until = 0;
+ 			node->valid_until = 0;
 			cherokee_dtm_str2time (value, end - value, &node->valid_until);
 
 			if (node->valid_until > cherokee_bogonow_now + 1) {
@@ -441,20 +450,19 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		/* Content-length
 		 */
 		else if (strncasecmp (begin, "Content-Length:", 15) == 0) {
-			*end = chr_end;
-
-			while ((*end == CHR_CR) || (*end == CHR_LF))
-				end++;
-
-			cherokee_buffer_remove_chunk (header, begin - header->buf, end - begin);
-
-			end = begin;
-			continue;
+			goto remove_line;
 		}
 
 		/* Cache-Control
 		 */
 		else if (strncasecmp (begin, "Cache-Control:", 14) == 0) {
+
+			/* Cache control overridden */
+			if (overwrite_control) {
+				goto remove_line;
+			}
+
+			/* Regular Cache control */
 			value = begin + 8;
 			while ((*value == ' ') && (value < end)) value++;
 
@@ -560,6 +568,18 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		while ((*end == CHR_CR) || (*end == CHR_LF))
 			end++;
 		begin = end;
+		continue;
+
+	remove_line:
+		*end = chr_end;
+
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
+
+		cherokee_buffer_remove_chunk (header, begin - header->buf, end - begin);
+
+		end = begin;
+		continue;
 	}
 
 	/* Check the caching policy
@@ -576,6 +596,12 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		cherokee_buffer_add_str (header, "Via: ");
 		cherokee_connection_build_host_port_string (conn, header);
 		cherokee_buffer_add_str (header, " (Cherokee/"PACKAGE_VERSION")" CRLF);
+	}
+
+	/* Overwritten Cache-Control / Expiration
+	 */
+	if (overwrite_control) {
+		cherokee_connection_add_expiration_header (conn, header, false);
 	}
 
 	return ret_ok;
@@ -858,7 +884,7 @@ cherokee_flcache_conn_clean (cherokee_flcache_conn_t *flcache_conn)
 	 */
 	flcache_conn->header_sent   = 0;
 	flcache_conn->response_sent = 0;
-	flcache_conn->mode          = flcache_mdoe_undef;
+	flcache_conn->mode          = flcache_mode_undef;
 
 	if (flcache_conn->fd != -1) {
 		cherokee_fd_close (flcache_conn->fd);

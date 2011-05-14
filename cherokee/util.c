@@ -2033,6 +2033,42 @@ cherokee_header_get_next_line (char *string)
 	return end1;
 }
 
+ret_t
+cherokee_header_del_entry (cherokee_buffer_t *header,
+			   const char        *header_name,
+			   int                header_name_len)
+{
+	char                        *end;
+	char                        *begin;
+	const char                  *header_end;
+
+	begin      = header->buf;
+	header_end = header->buf + header->len;
+
+	while ((begin < header_end)) {
+		end = cherokee_header_get_next_line (begin);
+		if (end == NULL) {
+			break;
+		}
+
+		/* Is it the header? */
+		if (strncasecmp (begin, header_name, header_name_len) == 0) {
+			while ((*end == CHR_CR) || (*end == CHR_LF))
+				end++;
+
+			cherokee_buffer_remove_chunk (header, begin - header->buf, end - begin);
+			return ret_ok;
+		}
+
+		/* Next line */
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
+		begin = end;
+	}
+
+	return ret_not_found;
+}
+
 
 #ifndef HAVE_STRNSTR
 char *

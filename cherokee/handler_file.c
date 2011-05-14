@@ -484,7 +484,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 		  (conn->encoder_new_func == NULL) &&
 		  (HDL_FILE_PROP(fhdl)->use_cache) &&
 		  (conn->socket.is_tls == non_TLS) &&
-		  (conn->flcache.mode == flcache_mdoe_undef) &&
+		  (conn->flcache.mode == flcache_mode_undef) &&
 		  (http_method_with_body (conn->header.method)) &&
 		  (fhdl->info->st_size <= srv->iocache->max_file_size) &&
 		  (fhdl->info->st_size >= srv->iocache->min_file_size));
@@ -624,7 +624,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 				(conn->encoder == NULL) &&
 				(conn->encoder_new_func == NULL) &&
 				(conn->socket.is_tls == non_TLS) &&
-				(conn->flcache.mode == flcache_mdoe_undef) &&
+				(conn->flcache.mode == flcache_mode_undef) &&
 				(fhdl->info->st_size >= srv->sendfile.min) &&
 				(fhdl->info->st_size <  srv->sendfile.max));
 

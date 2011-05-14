@@ -616,16 +616,29 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 }
 
 
+ret_t
+cherokee_connection_read_post (cherokee_connection_t *conn)
+{
+	/* Shortcut
+	 */
+	if (conn->handler->read_post == NULL) {
+		return ret_ok;
+	}
+
+	return cherokee_handler_read_post (conn->handler);
+}
+
+
 void
 cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 					   cherokee_buffer_t     *buffer,
 					   cherokee_boolean_t     use_maxage)
 {
-	time_t    exp_time;
-	struct tm exp_tm;
-	char      bufstr[DTM_SIZE_GMTTM_STR + 2];
-	size_t    szlen               = 0;
-	cherokee_boolean_t first_prop = true;
+	time_t             exp_time;
+	struct tm          exp_tm;
+	char               bufstr[DTM_SIZE_GMTTM_STR + 2];
+	size_t             szlen               = 0;
+	cherokee_boolean_t first_prop          = true;
 
 	/* Expires, and Cache-Control: max-age
 	 */
@@ -801,22 +814,6 @@ build_response_header (cherokee_connection_t *conn,
 		}
 	}
 
-	/* Expiration
-	 */
-	if (conn->expiration != cherokee_expiration_none) {
-		/* Front-line Cache (in) */
-		if (conn->flcache.mode == flcache_mode_in) {
-			cherokee_buffer_clean (tmp1);
-			cherokee_connection_add_expiration_header (conn, tmp1, false);
-			cherokee_buffer_add_buffer (buffer, tmp1);
-			cherokee_buffer_add_buffer (&conn->flcache.header, tmp1);
-		}
-		/* Straight */
-		else {
-			cherokee_connection_add_expiration_header (conn, buffer, true);
-		}
-	}
-
 	/* Redirected connections
 	 */
 	if (conn->redirect.len >= 1) {
@@ -840,25 +837,36 @@ build_response_header (cherokee_connection_t *conn,
 			cherokee_encoder_add_headers (conn->encoder, buffer);
 		}
 	}
-
-	/* Headers ops
-	 */
-	if (conn->header_ops) {
-		cherokee_header_op_render (conn->header_ops, buffer);
-	}
 }
 
 
-ret_t
-cherokee_connection_read_post (cherokee_connection_t *conn)
+static void
+build_response_header_final (cherokee_connection_t *conn,
+			     cherokee_buffer_t     *buffer)
 {
-	/* Shortcut
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(CONN_THREAD(conn));
+
+	/* Expiration
 	 */
-	if (conn->handler->read_post == NULL) {
-		return ret_ok;
+	if (conn->expiration != cherokee_expiration_none) {
+		/* Add expiration headers if Front-Line Cache is not
+		 * enabled. If it were, the header was already stored
+		 * in the response file.
+		 */
+		if (conn->flcache.mode == flcache_mode_undef) {
+			cherokee_connection_add_expiration_header (conn, buffer, true);
+		} else if (conn->flcache.mode == flcache_mode_in) {
+			cherokee_header_del_entry (buffer, "Cache-Control", 13);
+			cherokee_connection_add_expiration_header (conn, buffer, true);
+		}
 	}
 
-	return cherokee_handler_read_post (conn->handler);
+	/* Headers ops:
+	 * This must be the last operation
+	 */
+	if (conn->header_ops) {
+		cherokee_header_op_render (conn->header_ops, &conn->buffer);
+	}
 }
 
 
@@ -944,7 +952,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	}
 
 out:
-	/* Add the server headers
+	/* Add the server headers (phase 1)
 	 */
 	build_response_header (conn, &conn->buffer);
 
@@ -952,11 +960,9 @@ out:
 	 */
 	cherokee_buffer_add_buffer (&conn->buffer, &conn->header_buffer);
 
-	/* Headers ops
+	/* Add the server headers (phase 2)
 	 */
-	if (conn->header_ops) {
-		cherokee_header_op_render (conn->header_ops, &conn->buffer);
-	}
+	build_response_header_final (conn, &conn->buffer);
 
 	/* EOH
 	 */

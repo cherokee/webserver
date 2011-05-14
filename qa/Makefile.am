@@ -305,7 +305,8 @@ run-tests.py \
 281-Flcache-expired1.py \
 282-Flcache-expired2.py \
 283-Flcache-expired3.py \
-284-SSI-include-recursive.py
+284-SSI-include-recursive.py \
+285-Flcache-overwrite.py
 
 test:
 	python -m compileall .

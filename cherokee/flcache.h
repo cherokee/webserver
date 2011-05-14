@@ -46,7 +46,7 @@ typedef struct cherokee_flcache_conn    cherokee_flcache_conn_t;
  */
 
 typedef enum {
-	flcache_mdoe_undef,
+	flcache_mode_undef,
 	flcache_mode_in,
 	flcache_mode_out,
 	flcache_mode_error
