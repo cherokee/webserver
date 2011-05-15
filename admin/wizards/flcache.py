@@ -166,7 +166,6 @@ class Create:
         admin_box += admin_table
 
         check_auth.bind ('change',
-                         "console.log($(this).is(':checked'));"+
                          "if ($(this).find(':checked').size() <= 0) {%s} else {%s}"
                          %(admin_box.JS_to_hide(), admin_box.JS_to_show()))
 
