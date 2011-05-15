@@ -117,6 +117,10 @@ LIST = [
      'title': N_('Tasks'),
      'descr': N_('Common Maintenance Tasks'),
      'list':  [
+            {'name':  'ssl_test',
+             'title': N_('SSL/TLS Testing'),
+             'descr': N_('Auto-configure SSL/TLS support with a self-signed certificate.'),
+             'type':  TYPE_RULE},
             {'name':  'flcache',
              'title': N_('Content Caching'),
              'descr': N_('Boost your server performance by enabling content caching.'),

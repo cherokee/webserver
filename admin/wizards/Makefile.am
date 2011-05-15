@@ -22,7 +22,8 @@ streaming.py \
 symfony.py \
 uwsgi.py \
 zend.py \
-flcache.py
+flcache.py \
+ssl_test.py
 
 EXTRA_DIST = \
 $(adminwizards_DATA)

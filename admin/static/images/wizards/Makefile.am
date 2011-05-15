@@ -28,6 +28,7 @@ phpmyadmin.png \
 rails.png \
 redirect.png \
 rtorrent.png \
+ssl_test.png \
 static.png \
 streaming.png \
 sugar.png \
