@@ -37,8 +37,9 @@ URL_APPLY = '/create_config/apply'
 
 HELPS = [('index', N_("Index"))]
 
-NOTE_LOADING      = N_("Loading new configuration file..")
-WARNING_NOT_FOUND = N_("<b>The configuration is not found</b>.<br />You can create a new configuration file and proceed to customize the web server.")
+NOTE_LOADING        = N_("Loading new configuration file..")
+WARNING_NOT_FOUND_1 = N_("The configuration file %(conf_file)s was not found.")
+WARNING_NOT_FOUND_2 = N_("You can create a new configuration file and proceed to customize the web server.")
 
 DEFAULT_PID_LOCATIONS = [
     '/var/run/cherokee.pid',
@@ -180,9 +181,14 @@ class Render:
         label      = _('No standard port, No log files, No PID file, etc.')
         container += Form (key, name, label)
 
+        conf_file = CTK.cfg.file
+        notice = CTK.Notice ('warning')
+        notice += CTK.RawHTML ("<b>%s</b><br/>"%(_(WARNING_NOT_FOUND_1)%(locals())))
+        notice += CTK.RawHTML (WARNING_NOT_FOUND_2)
+
         page = Page.Base(_('New Configuration File'), body_id='new-config', helps=HELPS)
         page += CTK.RawHTML("<h1>%s</h1>" %(_('Configuration File Not Found')))
-        page += CTK.Notice ('warning', CTK.RawHTML(_(WARNING_NOT_FOUND)))
+        page += notice
         page += CTK.Indenter (container)
         return page.Render()
 
