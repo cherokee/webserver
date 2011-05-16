@@ -36,6 +36,7 @@ admin_data = \
 About.py \
 Auth.py \
 Balancer.py \
+Certs.py \
 CgiBase.py \
 Cherokee.py \
 Flags.py \
