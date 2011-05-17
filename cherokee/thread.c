@@ -557,12 +557,24 @@ process_polling_connections (cherokee_thread_t *thd)
 				cherokee_collector_log_timeout (THREAD_SRV(thd)->collector);
 			}
 
-			/* Close it
+			/* Most likely a 'Gateway Timeout'
 			 */
 			if (conn->phase <= phase_add_headers) {
+				/* Push a hardcoded error
+				 */
 				send_hardcoded_error (&conn->socket,
 						      http_gateway_timeout_string,
 						      THREAD_TMP_BUF1(thd));
+
+				/* Assign the error code. Even though it wasn't used
+				 * before the handler::free function could check it.
+				 */
+				conn->error_code = http_gateway_timeout;
+
+				/* Purge the connection
+				 */
+				purge_closed_polling_connection (thd, conn);
+				continue;
 			}
 
 			/* Timed-out: Reactive the connection. The

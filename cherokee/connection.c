@@ -277,6 +277,31 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		srv->post_track->func_unregister (srv->post_track, &conn->post);
 	}
 
+	/* Free handlers before cleaning the conn properties. Its
+	 * free() function might require to read some of them.
+	 */
+	if (conn->handler != NULL) {
+		cherokee_handler_free (conn->handler);
+		conn->handler = NULL;
+	}
+
+	if (conn->encoder != NULL) {
+		cherokee_encoder_free (conn->encoder);
+		conn->encoder = NULL;
+	}
+	conn->encoder_new_func = NULL;
+	conn->encoder_props    = NULL;
+
+	if (conn->polling_fd != -1) {
+		cherokee_fd_close (conn->polling_fd);
+		conn->polling_fd = -1;
+	}
+
+	if (conn->validator != NULL) {
+		cherokee_validator_free (conn->validator);
+		conn->validator = NULL;
+	}
+
 	conn->phase                     = phase_reading_header;
 	conn->auth_type                 = http_auth_nothing;
 	conn->req_auth_type             = http_auth_nothing;
@@ -315,23 +340,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	memset (conn->regex_host_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_host_ovecsize = 0;
 
-	if (conn->handler != NULL) {
-		cherokee_handler_free (conn->handler);
-		conn->handler = NULL;
-	}
-
-	if (conn->encoder != NULL) {
-		cherokee_encoder_free (conn->encoder);
-		conn->encoder = NULL;
-	}
-	conn->encoder_new_func = NULL;
-	conn->encoder_props    = NULL;
-
-	if (conn->polling_fd != -1) {
-		cherokee_fd_close (conn->polling_fd);
-		conn->polling_fd = -1;
-	}
-
 	cherokee_post_clean (&conn->post);
 	cherokee_buffer_mrproper (&conn->encoder_buffer);
 
@@ -355,11 +363,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->error_internal_code = http_unset;
 	cherokee_buffer_clean (&conn->error_internal_url);
 	cherokee_buffer_clean (&conn->error_internal_qs);
-
-	if (conn->validator != NULL) {
-		cherokee_validator_free (conn->validator);
-		conn->validator = NULL;
-	}
 
 	if (conn->arguments != NULL) {
 		cherokee_avl_free (conn->arguments,

@@ -1847,6 +1847,22 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 ret_t
 cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 {
+	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
+
+	/* If the handler reached this point before running its
+	 * 'add_headers' phase, it's most likely because the info
+	 * source is unresponsive, and process_polling_connections()
+	 * [thread.c] is closing the connection.
+	 */
+	if ((conn->phase <= phase_add_headers) &&
+	    (conn->error_code == http_gateway_timeout))
+	{
+		cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+	}
+
+	/* Clean up
+	 */
 	cherokee_buffer_mrproper (&hdl->tmp);
 	cherokee_buffer_mrproper (&hdl->buffer);
 	cherokee_buffer_mrproper (&hdl->request);
