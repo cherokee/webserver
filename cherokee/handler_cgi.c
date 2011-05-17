@@ -625,13 +625,20 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 		char buferr[ERROR_MAX_BUFSIZE];
 
 		switch (err) {
+		case ENODEV:
+		case ENOTDIR:
 		case ENOENT:
 			printf ("Status: 404" CRLF_CRLF);
-			break;
+			exit(0);
+		case EPERM:
+		case EACCES:
+		case ENOEXEC:
+			printf ("Status: 403" CRLF_CRLF);
+			exit(0);
 		default:
 			printf ("Status: 500" CRLF_CRLF);
-			printf ("X-Debug: file=%s line=%d cmd=%s: %s" CRLF_CRLF,
-				__FILE__, __LINE__, absolute_path, strerror(err));
+			printf ("X-Debug: file=%s line=%d cmd=%s errno=%d: %s" CRLF_CRLF,
+				__FILE__, __LINE__, absolute_path, err, strerror(err));
 		}
 
 		/* Don't use the logging system (concurrency issues)
