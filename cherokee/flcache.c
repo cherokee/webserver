@@ -507,6 +507,21 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 			}
 		}
 
+		/* Pragma (HTTP/1.0)
+		 */
+		else if (strncasecmp (begin, "Pragma:", 7) == 0) {
+			if (strcasestr (begin + 7, "no-cache") != NULL) {
+				/* Cache control overridden */
+				if (overwrite_control) {
+					goto remove_line;
+				} else {
+					TRACE (ENTRIES, "'%s' header entry forbids caching\n", begin);
+					*end = chr_end;
+					return ret_deny;
+				}
+			}
+		}
+
 		/* Set-cookie
 		 */
 		else if (strncasecmp (begin, "Set-cookie:", 11) == 0) {
