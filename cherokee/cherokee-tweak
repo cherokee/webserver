@@ -144,27 +144,28 @@ def parse_args():
         raise SystemExit
 
 
-def http_request (path, post_info=None, method=None):
+def http_request (url_py, post_info=None, method=None):
     # Authtentication
     if user or password:
         passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
         passman.add_password (None, url, user, password)
 
-        authhandler = urllib2.HTTPBasicAuthHandler (passman)
-        opener = urllib2.build_opener (authhandler)
+        authhandler_digest = urllib2.HTTPDigestAuthHandler (passman)
+        authhandler_basic  = urllib2.HTTPBasicAuthHandler  (passman)
+
+        opener = urllib2.build_opener (authhandler_digest, authhandler_basic)
         urllib2.install_opener (opener)
     else:
         opener = urllib2.build_opener (urllib2.HTTPHandler)
 
     # Request
+    request = urllib2.Request (url_py, post_info)
+    if method:
+        request.get_method = lambda: method
+
+    # Perform
     try:
-        request = urllib2.Request (path, post_info)
-        if method:
-            request.get_method = lambda: method
-
-        conn = opener.open (request)
-
-        ## conn = urllib2.urlopen (url_py, post_info)
+        conn = urllib2.urlopen (url_py, post_info)
     except urllib2.HTTPError, e:
         if e.code == 401:
             print >> sys.stderr, "Error in Authentication"
