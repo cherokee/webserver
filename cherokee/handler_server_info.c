@@ -184,7 +184,7 @@
 "  var div = document.getElementById('information');"                                               CRLF\
 "  eval('data = ' + txt);"                                                                          CRLF\
 "  for (var section in info) {"                                                                     CRLF\
-"    if (data[section] === undefined) continue;"                                                    CRLF\
+"    if ((data[section] === undefined) || (data[section] == null)) continue;"                       CRLF\
 "    if (!document.getElementById(section)) {"                                                      CRLF\
 "      h2 = document.createElement('h2');"                                                          CRLF\
 "      h2.setAttribute('id', section);"                                                             CRLF\
