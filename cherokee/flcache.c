@@ -587,6 +587,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 	if ((! do_cache) &&
 	    (conn->flcache_policy == flcache_policy_explicitly_allowed))
 	{
+		TRACE(ENTRIES, "Doesn't explicitly allow caching.%s", "\n");
 		return ret_deny;
 	}
 
