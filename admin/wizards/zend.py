@@ -54,9 +54,9 @@ URL_APPLY       = r'/wizard/vserver/zend/apply'
 
 CONFIG_DIR = """
 %(pre_rule_plus1)s!document_root = %(local_src_dir)s
-%(pre_rule_plus)s!match = directory
+%(pre_rule_plus1)s!match = directory
 %(pre_rule_plus1)s!match!directory = %(web_dir)s
-%(pre_rule_plus11)s!match!final = 0
+%(pre_rule_plus1)s!match!final = 0
 
 # PHP rule
 
