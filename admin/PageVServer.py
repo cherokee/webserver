@@ -150,7 +150,6 @@ BEHAVIOR_TAGS = [
     (N_('Traffic Shaping'),      N_('Shaping')),
     (N_('Logging Enabled'),      N_('Log')),
     (N_('Rule is Final'),        N_('Final')),
-    (N_('Rule is Active'),       N_('Enabled'))
 ]
 
 
@@ -433,15 +432,7 @@ class BehaviorWidget (CTK.Container):
             tmp     = _('Forbids content caching')
             flcache = CTK.ImageStock ('forbid', {'alt': tmp, 'title': tmp})
 
-
-        tmp = not bool (int (CTK.cfg.get_val('vserver!%s!rule!%s!disabled'%(vsrv_num,r), "0")))
-        if tmp:
-            tmp    = _('Rule is active')
-            active = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
-        else:
-            active = CTK.Box({'class': 'inactive-rule'})
-
-        return [link, handler, auth, root, secure, enc, flcache, exp, timeout, shaping, log, final, active]
+        return [link, handler, auth, root, secure, enc, flcache, exp, timeout, shaping, log, final]
 
 
 class BasicsWidget (CTK.Container):
