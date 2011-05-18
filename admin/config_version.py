@@ -42,6 +42,12 @@ def upgrade_to_0_99_45 (cfg):
     if 'None' in cfg.keys('source'):
         del (cfg['source!None'])
 
+    # 'icons!suffix!package.png' included the 'z' and 'Z' extensions
+    # when the property is meant to be caseless.
+    tmp = cfg.get_val('icons!suffix!package.png')
+    if tmp:
+        cfg['icons!suffix!package.png'] = tmp.replace ('Z,', '')
+
 # Converts from 0.99.45 to 1.0.7
 def upgrade_to_1_0_7 (cfg):
     # Adds 'check_local_file' to Extension php
