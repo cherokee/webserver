@@ -1243,6 +1243,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	cherokee_http_version_t         version;
 	cint_t                          xsendfile_len;
 	char                           *xsendfile      = NULL;
+	cherokee_boolean_t              added_server   = false;
 	cherokee_connection_t          *conn           = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props          = HDL_PROXY_PROPS(hdl);
 
@@ -1360,6 +1361,8 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			cherokee_buffer_add_str (buf_out, "Server: ");
 			cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
 			cherokee_buffer_add_str (buf_out, CRLF);
+
+			added_server = true;
 			goto next;
 
 		} else  if (strncasecmp (begin, "Location:", 9) == 0) {
@@ -1464,6 +1467,14 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	/* Additional headers */
 	list_for_each (i, &props->out_headers_add) {
 		add_header (buf_out, &HEADER_ADD(i)->key, &HEADER_ADD(i)->val);
+	}
+
+	/* 'Server' header
+	 */
+	if (! added_server) {
+		cherokee_buffer_add_str (buf_out, "Server: ");
+		cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
+		cherokee_buffer_add_str (buf_out, CRLF);
 	}
 
 	/* Overwrite the 'Expires:' header is there was a custom
