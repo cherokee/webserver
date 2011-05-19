@@ -889,12 +889,6 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		goto out;
 	}
 
-	/* If the handler requires not to add headers, exit.
-	 */
-	else if (HANDLER_SUPPORTS (conn->handler, hsupport_skip_headers)) {
-		return ret_ok;
-	}
-
 	/* Try to get the headers from the handler
 	 */
 	ret = cherokee_handler_add_headers (conn->handler, &conn->header_buffer);
