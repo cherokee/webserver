@@ -27,16 +27,20 @@
 #include "buffer.h"
 #include "util.h"
 #include "bogotime.h"
+#include "access.h"
+#include "socket.h"
+#include "connection-protected.h"
 
 #ifdef HAVE_SYSLOG_H
 # include <syslog.h>
 #endif
 
 typedef struct {
-	cherokee_buffer_t  modules;
-	cherokee_boolean_t use_syslog;
-	cherokee_boolean_t print_time;
-	cherokee_boolean_t print_thread;
+	cherokee_buffer_t   modules;
+	cherokee_boolean_t  use_syslog;
+	cherokee_boolean_t  print_time;
+	cherokee_boolean_t  print_thread;
+	cherokee_access_t  *from_filter;
 } cherokee_trace_t;
 
 
@@ -44,8 +48,16 @@ static cherokee_trace_t trace = {
 	CHEROKEE_BUF_INIT,
 	false,
 	false,
-	false
+	false,
+	NULL
 };
+
+
+/* cherokee_trace_do_trace() calls complex functions that might do
+ * some tracing as well, and that would generate a loop. This flag is
+ * used to disable the tracing while a previous trace call is ongoin.
+ */
+static cherokee_boolean_t disabled = false;
 
 
 ret_t
@@ -72,9 +84,19 @@ cherokee_trace_init (void)
 ret_t
 cherokee_trace_set_modules (cherokee_buffer_t *modules)
 {
+	ret_t              ret;
+	char              *p;
+	char              *end;
+	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
+
 	/* Store a copy of the modules
 	 */
 	cherokee_buffer_clean (&trace.modules);
+
+	if (trace.from_filter != NULL) {
+		cherokee_access_free (trace.from_filter);
+	}
+	trace.from_filter = NULL;
 
 	if (cherokee_buffer_case_cmp_str (modules, "none") != 0) {
 		cherokee_buffer_add_buffer (&trace.modules, modules);
@@ -86,61 +108,122 @@ cherokee_trace_set_modules (cherokee_buffer_t *modules)
 	trace.print_time   = (strstr (modules->buf, "time") != NULL);
 	trace.print_thread = (strstr (modules->buf, "thread") != NULL);
 
-	return ret_ok;
+	/* Even a more special 'from' property
+	 */
+	p = strstr (modules->buf, "from=");
+	if (p != NULL) {
+		p += 5;
+
+		end = strchr(p, ',');
+		if (end == NULL) {
+			end = p + strlen(p);
+		}
+
+		if (end > p) {
+			ret = cherokee_access_new (&trace.from_filter);
+			if (ret != ret_ok) return ret_error;
+
+			cherokee_buffer_add (&tmp, p, end-p);
+
+			ret = cherokee_access_add (trace.from_filter, tmp.buf);
+			if (ret != ret_ok) {
+				ret = ret_error;
+				goto out;
+			}
+		}
+	}
+
+	ret = ret_ok;
+
+out:
+	cherokee_buffer_mrproper (&tmp);
+	return ret;
 }
 
 
-ret_t
+void
 cherokee_trace_do_trace (const char *entry, const char *file, int line, const char *func, const char *fmt, ...)
 {
-	char               *p;
-	char               *lentry;
-	char               *lentry_end;
-	va_list             args;
-	cherokee_buffer_t  *trace_modules = &trace.modules;
-	cherokee_boolean_t  do_log        = false;
-	cherokee_buffer_t   entries       = CHEROKEE_BUF_INIT;
+	ret_t                  ret;
+	char                  *p;
+	char                  *lentry;
+	char                  *lentry_end;
+	va_list                args;
+	cherokee_connection_t *conn;
+	cherokee_buffer_t     *trace_modules = &trace.modules;
+	cherokee_boolean_t     do_log        = false;
+	cherokee_buffer_t      entries       = CHEROKEE_BUF_INIT;
+
+	/* Prevents loops
+	 */
+	if (disabled) {
+		return;
+	}
+
+	disabled = true;
 
 	/* Return ASAP if nothing is being traced
 	 */
-	if (cherokee_buffer_is_empty (&trace.modules))
-		return ret_ok;
-
-	/* Parse the In-code module string
-	 */
-	cherokee_buffer_add (&entries, entry, strlen(entry));
-
-	for (lentry = entries.buf;;) {
-		lentry_end = strchr (lentry, ',');
-		if (lentry_end) *lentry_end = '\0';
-
-		/* Check for 'all'
-		 */
-		p = strstr (trace_modules->buf, "all");
-		if (p) {
-			do_log = true;
-			break;
-		}
-
-		/* Check the type
-		 */
-		p = strstr (trace_modules->buf, lentry);
-		if (p) {
-			char *tmp = p + strlen(lentry);
-			if ((*tmp == '\0') || (*tmp == ',') || (*tmp == ' '))
-				do_log = true;
-		}
-
-		if ((lentry_end == NULL) || (do_log))
-			break;
-
-		lentry = lentry_end + 1;
+	if (cherokee_buffer_is_empty (&trace.modules)) {
+		goto out;
 	}
 
-	/* Return if trace entry didn't match with the configured list
+	/* Check the connection source, if possible
 	 */
-	if (! do_log)
-		goto out;
+	if (trace.from_filter != NULL) {
+		conn = CONN (CHEROKEE_THREAD_PROP_GET (thread_connection_ptr));
+
+		/* No conn, no trace entry
+		 */
+		if (conn == NULL) {
+			goto out;
+		}
+
+		if (conn->socket.socket < 0) {
+			goto out;
+		}
+
+		/* Skip the trace if the conn doesn't match
+		 */
+		ret = cherokee_access_ip_match (trace.from_filter, &conn->socket);
+		if (ret != ret_ok) {
+			goto out;
+		}
+	}
+
+	/* Also, check for 'all'
+	 */
+	p = strstr (trace_modules->buf, "all");
+	if (p == NULL) {
+		/* Parse the In-code module string
+		 */
+		cherokee_buffer_add (&entries, entry, strlen(entry));
+
+		for (lentry = entries.buf;;) {
+			lentry_end = strchr (lentry, ',');
+			if (lentry_end) *lentry_end = '\0';
+
+			/* Check the type
+			 */
+			p = strstr (trace_modules->buf, lentry);
+			if (p) {
+				char *tmp = p + strlen(lentry);
+				if ((*tmp == '\0') || (*tmp == ',') || (*tmp == ' '))
+					do_log = true;
+			}
+
+			if ((lentry_end == NULL) || (do_log))
+				break;
+
+			lentry = lentry_end + 1;
+		}
+
+		/* Return if trace entry didn't match with the configured list
+		 */
+		if (! do_log) {
+			goto out;
+		}
+	}
 
 	/* Format the message and log it:
 	 * 'entries' is not needed at this stage, reuse it
@@ -186,7 +269,7 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 
 out:
 	cherokee_buffer_mrproper (&entries);
-	return ret_ok;
+	disabled = false;
 }
 
 

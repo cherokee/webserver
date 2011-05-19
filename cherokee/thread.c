@@ -174,6 +174,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	/* Thread Local Storage
 	 */
 	CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, NULL);
+	CHEROKEE_THREAD_PROP_SET (thread_connection_ptr,   NULL);
 
 	/* Event poll object
 	 */
@@ -535,13 +536,19 @@ process_polling_connections (cherokee_thread_t *thd)
 	list_for_each_safe (i, tmp, LIST(&thd->polling_list)) {
 		conn = CONN(i);
 
-		/* Thread's error logger
+		/* Thread's properties
 		 */
-		if (CONN_VSRV(conn) &&
-		    CONN_VSRV(conn)->error_writer)
-		{
-			CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
-						  CONN_VSRV(conn)->error_writer);
+		if (CONN_VSRV(conn)) {
+			/* Current connection
+			 */
+			CHEROKEE_THREAD_PROP_SET (thread_connection_ptr, conn);
+
+			/* Error writer
+			 */
+			if (CONN_VSRV(conn)->error_writer) {
+				CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
+							  CONN_VSRV(conn)->error_writer);
+			}
 		}
 
 		/* Has it been too much without any work?
@@ -668,13 +675,19 @@ process_active_connections (cherokee_thread_t *thd)
 		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn),
 		       conn->socket.socket, (conn->socket.status == socket_reading)? "read" : (conn->socket.status == socket_writing)? "writing" : "closed");
 
-		/* Thread's error logger
+		/* Thread's properties
 		 */
-		if (CONN_VSRV(conn) &&
-		    CONN_VSRV(conn)->error_writer)
-		{
-			CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
-						  CONN_VSRV(conn)->error_writer);
+		if (CONN_VSRV(conn)) {
+			/* Current connection
+			 */
+			CHEROKEE_THREAD_PROP_SET (thread_connection_ptr, conn);
+
+			/* Error writer
+			 */
+			if (CONN_VSRV(conn)->error_writer) {
+				CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
+							  CONN_VSRV(conn)->error_writer);
+			}
 		}
 
 		/* Has the connection been too much time w/o any work

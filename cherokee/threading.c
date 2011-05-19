@@ -35,6 +35,7 @@ pthread_mutexattr_t cherokee_mutexattr_errorcheck;
 /* Thread Local Storage variables */
 #ifdef HAVE_PTHREAD
 pthread_key_t thread_error_writer_ptr = 0;
+pthread_key_t thread_connection_ptr   = 0;
 #endif
 
 
@@ -62,6 +63,7 @@ cherokee_threading_init (void)
 
 #ifdef HAVE_PTHREAD
 	pthread_key_create (&thread_error_writer_ptr, NULL);
+	pthread_key_create (&thread_connection_ptr,   NULL);
 #endif
 
 	return ret_ok;
@@ -80,6 +82,7 @@ cherokee_threading_free (void)
 
 #ifdef HAVE_PTHREAD
 	pthread_key_delete (thread_error_writer_ptr);
+	pthread_key_delete (thread_connection_ptr);
 #endif
 
 	return ret_ok;
