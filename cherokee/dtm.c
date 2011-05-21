@@ -853,12 +853,12 @@ cherokee_dtm_gmttm2str( char *bufstr, size_t bufsize, struct tm *ptm )
 {
 	unsigned int uYear;
 
-	uYear = (unsigned int) ptm->tm_year + 1900;
-
 	if ( ptm == NULL || bufsize < DTM_SIZE_GMTTM_STR ) {
 		bufstr[0] = '\0';
 		return 0;
 	}
+
+	uYear = (unsigned int) ptm->tm_year + 1900;
 
 	bufstr[ 0] = wday_name_tab[ ptm->tm_wday ].name1[0];
 	bufstr[ 1] = wday_name_tab[ ptm->tm_wday ].name1[1];
