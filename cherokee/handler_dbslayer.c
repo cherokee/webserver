@@ -472,14 +472,16 @@ cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 	n->src_ref  = NULL;
 	n->rollback = false;
 
-	/* MySQL */
-	n->conn = mysql_init (NULL);
-	if (unlikely (n->conn == NULL))
-		return ret_nomem;
-
 	/* Data writer */
 	cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
 	n->writer.lang = PROP_DBSLAYER(props)->lang;
+
+	/* MySQL */
+	n->conn = mysql_init (NULL);
+	if (unlikely (n->conn == NULL)) {
+		cherokee_handler_free (HANDLER(n));
+		return ret_nomem;
+	}
 
 	*hdl = HANDLER(n);
 	return ret_ok;
