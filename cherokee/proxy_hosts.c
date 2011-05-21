@@ -63,7 +63,8 @@ cherokee_handler_proxy_hosts_get (cherokee_handler_proxy_hosts_t  *hosts,
 				  cherokee_handler_proxy_poll_t  **poll,
 				  cuint_t                          reuse_max)
 {
-	ret_t ret;
+	ret_t                          ret;
+	cherokee_handler_proxy_poll_t *n;
 
 	CHEROKEE_MUTEX_LOCK (&hosts->hosts_mutex);
 
@@ -79,11 +80,10 @@ cherokee_handler_proxy_hosts_get (cherokee_handler_proxy_hosts_t  *hosts,
 	case ret_ok:
 		break;
 	case ret_not_found: {
-		cherokee_handler_proxy_poll_t *n;
-
 		ret = cherokee_handler_proxy_poll_new (&n, reuse_max);
-		if (ret != ret_ok)
-			return ret;
+		if (ret != ret_ok) {
+			goto error;
+		}
 
 		cherokee_avl_add (&hosts->hosts, &hosts->tmp, n);
 		*poll = n;
