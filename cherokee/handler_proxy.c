@@ -1291,6 +1291,10 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	p[3] = (char)re;
 
 	p = strchr (p, CHR_CR);
+	if (unlikely (p == NULL)) {
+		return ret_error;
+	}
+
 	while ((*p == CHR_CR) || (*p == CHR_LF))
 		p++;
 
