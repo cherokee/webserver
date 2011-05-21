@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
 "POT-Creation-Date: 2011-03-28 15:00+0200\n"
-"PO-Revision-Date: 2011-05-21 17:03+0100\n"
+"PO-Revision-Date: 2011-05-21 17:11+0100\n"
 "Last-Translator: Stefan de Konink <stefan@konink.de>\n"
 "Language-Team: none\n"
 "Language: \n"
@@ -270,17 +270,17 @@ msgstr "Virtuele Servers configuratie assistent"
 
 #: cherokee-trunk/admin/PageVServers.py:290
 msgid "Clone Virtual Server"
-msgstr "Kloon Virtual server"
+msgstr "Dupliceer Virtual server"
 
 #: cherokee-trunk/admin/PageVServers.py:292
 #: cherokee-trunk/admin/PageSource.py:463
 #: cherokee-trunk/admin/PageRule.py:287
 msgid "Clone"
-msgstr "Kloon"
+msgstr "Dupliceer"
 
 #: cherokee-trunk/admin/PageVServers.py:295
 msgid "Clone Selected Virtual Server"
-msgstr "Kloon geselecteerde Virtual server"
+msgstr "Dupliceer geselecteerde Virtual server"
 
 #: cherokee-trunk/admin/PageVServers.py:320
 #: cherokee-trunk/admin/PageStatus.py:119
@@ -317,7 +317,7 @@ msgstr "Bronnen momenteel in gebruik. De laaste bron van elke regel kan niet wor
 
 #: cherokee-trunk/admin/PageSource.py:54
 msgid "Execute the interpreter under a different user. Default: Same UID as the server."
-msgstr "Voer de interpreter uit als andere eigenaar. Standaard: zelfde UID als de server."
+msgstr "Voer de interpreter uit met andere eigenaar. Standaard: zelfde UID als de server."
 
 #: cherokee-trunk/admin/PageSource.py:55
 msgid "Execute the interpreter under a different group. Default: Default GID of the new process UID."
@@ -513,11 +513,11 @@ msgstr "Sluit"
 #: cherokee-trunk/admin/PageSource.py:447
 #: cherokee-trunk/admin/PageSource.py:452
 msgid "Add New Information Source"
-msgstr "Maak nieuwe Informatie Bron"
+msgstr "Maak Nieuwe Informatie Bron"
 
 #: cherokee-trunk/admin/PageSource.py:461
 msgid "Clone Information Source"
-msgstr "Kloon Informatie Bronnen"
+msgstr "Dupliceer Informatie Bron"
 
 #: cherokee-trunk/admin/PageSource.py:466
 msgid "Clone Selected Information Source"
@@ -562,7 +562,7 @@ msgid ""
 "name and it will be listed on the Cherokee Project web site.\n"
 msgstr ""
 "We zouden graag horen dat je Cherokee gebruikt. Stuur je domeinnaam\n"
-"en het wordt getoond op de Cherokee Projects website.\n"
+"en het wordt getoond op de Cherokee Project website.\n"
 
 #: cherokee-trunk/admin/PageIndex.py:93
 msgid "The information has been successfully sent. Thank you!"
@@ -1135,7 +1135,7 @@ msgstr "Reguliere Expressie"
 #: cherokee-trunk/admin/PageEntry.py:184
 #: cherokee-trunk/admin/PageEntry.py:232
 msgid "Header"
-msgstr "Hoofdregel"
+msgstr "Kopregel"
 
 #: cherokee-trunk/admin/consts.py:190
 msgid "File Exists"
@@ -2000,7 +2000,7 @@ msgstr "URL Herschrijven"
 #: cherokee-trunk/admin/plugins/proxy.py:257
 #: cherokee-trunk/admin/plugins/proxy.py:269
 msgid "Header Addition"
-msgstr "Hoofdregel toevoeging"
+msgstr "Kopregel toevoeging"
 
 #: cherokee-trunk/admin/plugins/proxy.py:260
 #: cherokee-trunk/admin/plugins/proxy.py:272
@@ -2265,7 +2265,7 @@ msgstr "Web Map"
 
 #: cherokee-trunk/admin/plugins/header.py:30
 msgid "Header against which the regular expression will be evaluated."
-msgstr "Hoofdregel waar tegen de reguliere expressie wordt geevalueerd."
+msgstr "Kopregel waar tegen de reguliere expressie wordt vergeleken."
 
 #: cherokee-trunk/admin/plugins/header.py:31
 msgid "Regular expression."
@@ -2293,12 +2293,12 @@ msgstr "Volledige hoofdregel"
 
 #: cherokee-trunk/admin/plugins/header.py:88
 msgid "Complete Header"
-msgstr "Volledige Hoofdregel"
+msgstr "Volledige Kopregel"
 
 #: cherokee-trunk/admin/plugins/header.py:135
 #, python-format
 msgid "Header %(header)s is provided"
-msgstr "Hoofdregel %(header)s is gegeven"
+msgstr "Kopregel %(header)s is gegeven"
 
 #: cherokee-trunk/admin/plugins/uwsgi.py:51
 msgid "UWSGI Specific"
@@ -3314,7 +3314,7 @@ msgstr "Welkom bij de Standaard Statisch Assistent"
 
 #: cherokee-trunk/admin/wizards/static.py:39
 msgid "This wizard adds a rule to optimally serve the most common static files."
-msgstr "Deze tovenaar voegt een regel toe om de gebruikelijke statische bestanden optimaal te versturen."
+msgstr "Deze assistent voegt een regel toe om de gebruikelijke statische bestanden optimaal te versturen."
 
 #: cherokee-trunk/admin/wizards/static.py:40
 msgid "Current rules have been checked"
@@ -3322,7 +3322,7 @@ msgstr "Huidige regels zijn gecontroleerd"
 
 #: cherokee-trunk/admin/wizards/static.py:41
 msgid "The process is very simple. Let the wizard take over and don't worry about a thing."
-msgstr "Het proces is erg makkelijk. Laat de tovenaar z'n werk doen en maak je niet druk."
+msgstr "Het proces is erg makkelijk. Laat de assistent z'n werk doen en maak je niet druk."
 
 #: cherokee-trunk/admin/wizards/static.py:42
 msgid "Common files have been already configured, so there is nothing to be done."
@@ -3592,7 +3592,7 @@ msgstr "Welkom bij de Hotlinken Assistent"
 
 #: cherokee-trunk/admin/wizards/hotlinking.py:37
 msgid "This wizard stops other domains from hot-linking your media files."
-msgstr "Deze tovenaar stop andere domeinen gebruik te maken van je media bestanden."
+msgstr "Deze assistent stop andere domeinen gebruik te maken van je media bestanden."
 
 #: cherokee-trunk/admin/wizards/hotlinking.py:38
 msgid "Anti-HotLinking Information"
@@ -4024,7 +4024,7 @@ msgstr "Waar rTorrent XMLRPC beschikbaar is. Het computer:poort paar, of het pad
 
 #: cherokee-trunk/admin/wizards/rtorrent.py:38
 msgid "Web directory where you want rTorrent XMLRPC to be accessible. (Example: /RPC2)"
-msgstr "Web map  waar je rTorrent XMLRPC wilt hebben. (Voorbeeld: /RPC2)"
+msgstr "Web map waar je rTorrent XMLRPC wilt hebben. (Voorbeeld: /RPC2)"
 
 #: cherokee-trunk/admin/wizards/rtorrent.py:140
 #, python-format
@@ -4546,7 +4546,7 @@ msgstr "Kopregel vergelijking zonder gedefinieerde kopregel"
 
 #: cherokee-trunk/admin/SavingChecks.py:99
 msgid "Header match without a matching expression"
-msgstr "Hoofdregel vergelijking zonder een bijpassende expressie"
+msgstr "Kopregel vergelijking zonder een bijpassende expressie"
 
 #: cherokee-trunk/admin/SavingChecks.py:105
 msgid "File exists rule without a file or 'Any file'"
@@ -5723,7 +5723,7 @@ msgstr "De laatste versie is"
 
 #: cherokee-trunk/admin/PageStatus.py:66
 msgid "Server Wide Monitoring"
-msgstr "Server brede monitoring"
+msgstr "Serverbrede monitoring"
 
 #: cherokee-trunk/admin/PageStatus.py:71
 msgid "Virtual Server Monitoring"
