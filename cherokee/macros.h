@@ -267,7 +267,10 @@
 		CHEROKEE_NEW_STRUCT (n, klass);                       \
 		                                                      \
 		ret = cherokee_ ## klass ## _init (n);                \
-		if (unlikely (ret != ret_ok)) return ret;             \
+		if (unlikely (ret != ret_ok)) {			      \
+			free (n);				      \
+			return ret;				      \
+		}						      \
 		                                                      \
 		*obj = n;                                             \
 		return ret_ok;                                        \
@@ -276,7 +279,7 @@
 #define CHEROKEE_ADD_FUNC_FREE(klass)  \
 	ret_t                                                         \
 	cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
-		if (obj == NULL)				      \
+		if ((obj) == NULL)				      \
 			return ret_ok;				      \
 								      \
 		cherokee_ ## klass ## _mrproper (obj);                \
