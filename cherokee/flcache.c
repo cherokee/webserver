@@ -814,8 +814,8 @@ cherokee_flcache_conn_send_body (cherokee_flcache_conn_t *flcache_conn,
 				 cherokee_connection_t   *conn)
 {
 	ret_t              ret;
-	cherokee_boolean_t eof;
 	size_t             got = 0;
+	cherokee_boolean_t eof = false;
 
 	TRACE (ENTRIES, "Reading body from fd=%d\n", flcache_conn->fd);
 
