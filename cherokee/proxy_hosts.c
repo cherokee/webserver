@@ -441,7 +441,10 @@ cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
 	TRACE (ENTRIES, "Initializing proxy socket: %s\n",
 	       cherokee_string_is_ipv6 (&src->host) ? "IPv6": "IPv4");
 
-	/* Family */
+	/* Ensure that no fd leak happens */
+	cherokee_socket_close (socket);
+
+	/* Create socket & set Family */
 	if (cherokee_string_is_ipv6 (&src->host)) {
 		ret = cherokee_socket_set_client (socket, AF_INET6);
 	} else {
