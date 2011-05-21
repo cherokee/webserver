@@ -356,8 +356,10 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	/* Init
 	 */
 	ret = cherokee_cryptor_vserver_init_base (CRYPTOR_VSRV(n));
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
+		free (n);
 		return ret;
+	}
 
 	CRYPTOR_VSRV(n)->free = (cryptor_vsrv_func_free_t) _vserver_free;
 
@@ -366,7 +368,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	n->context = SSL_CTX_new (SSLv23_server_method());
 	if (n->context == NULL) {
 		LOG_ERROR_S(CHEROKEE_ERROR_SSL_ALLOCATE_CTX);
-		return ret_error;
+		goto error;
 	}
 
 	/* Callback to be used when a DH parameters are required
@@ -396,7 +398,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 			OPENSSL_LAST_ERROR(error);
 			LOG_ERROR(CHEROKEE_ERROR_SSL_CIPHER,
 				  vsrv->ciphers.buf, error);
-			return ret_error;
+			goto error;
 		}
 	}
 
@@ -412,7 +414,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR(CHEROKEE_ERROR_SSL_CERTIFICATE,
 			  vsrv->server_cert.buf, error);
-		return ret_error;
+		goto error;
 	}
 
 	/* Private key
@@ -424,7 +426,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR(CHEROKEE_ERROR_SSL_KEY, vsrv->server_key.buf, error);
-		return ret_error;
+		goto error;
 	}
 
 	/* Check private key
@@ -432,13 +434,13 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	rc = SSL_CTX_check_private_key (n->context);
 	if (rc != 1) {
 		LOG_ERROR_S(CHEROKEE_ERROR_SSL_KEY_MATCH);
-		return ret_error;
+		goto error;
 	}
 
 	if (! cherokee_buffer_is_empty (&vsrv->req_client_certs)) {
 		STACK_OF(X509_NAME) *X509_clients;
 
-		verify_mode = SSL_VERIFY_PEER|SSL_VERIFY_CLIENT_ONCE;
+		verify_mode = SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE;
 		if (cherokee_buffer_cmp_str (&vsrv->req_client_certs, "required") == 0) {
 			verify_mode |= SSL_VERIFY_FAIL_IF_NO_PEER_CERT;
 		}
@@ -451,7 +453,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 				OPENSSL_LAST_ERROR(error);
 				LOG_CRITICAL(CHEROKEE_ERROR_SSL_CA_READ,
 					     vsrv->certs_ca.buf, error);
-				return ret_error;
+				goto error;
 			}
 
 			X509_clients = SSL_load_client_CA_file (vsrv->certs_ca.buf);
@@ -459,7 +461,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 				OPENSSL_LAST_ERROR(error);
 				LOG_CRITICAL (CHEROKEE_ERROR_SSL_CA_LOAD,
 					      vsrv->certs_ca.buf, error);
-				return ret_error;
+				goto error;
 			}
 
 			CLEAR_LIBSSL_ERRORS;
@@ -498,20 +500,28 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SNI, vsrv->name.buf, error);
-		return ret_error;
+		goto error;
 	}
 
 	rc = SSL_CTX_set_tlsext_servername_arg (n->context, VSERVER_SRV(vsrv));
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SNI, vsrv->name.buf, error);
-		return ret_error;
+		goto error;
 	}
 #endif /* OPENSSL_NO_TLSEXT */
 
 	*cryp_vsrv = CRYPTOR_VSRV(n);
-
 	return ret_ok;
+
+error:
+	if (n->context != NULL) {
+		SSL_CTX_free (n->context);
+		n->context = NULL;
+	}
+
+	free (n);
+	return ret_error;
 }
 
 
