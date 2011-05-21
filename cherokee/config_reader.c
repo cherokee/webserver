@@ -40,7 +40,7 @@ do_parse_file (cherokee_config_node_t *conf, const char *file)
 	cherokee_buffer_t  buf = CHEROKEE_BUF_INIT;
 
 	ret = cherokee_buffer_read_file (&buf, (char *)file);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) goto error;
 
 	ret = cherokee_config_reader_parse_string (conf, &buf);
 	if (ret != ret_ok) goto error;
