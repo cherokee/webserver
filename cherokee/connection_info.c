@@ -204,14 +204,20 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 	/* Process each connection
 	 */
 	list_for_each (i, &thread->active_list) {
-		CHEROKEE_NEW(n,connection_info);
+		cherokee_connection_info_t *n;
+
+		ret = cherokee_connection_info_new (&n);
+		if (unlikely (ret != ret_ok)) goto out;
 
 		info_fill_up (n, CONN(i));
 		cherokee_list_add (LIST(n), list);
 	}
 
 	list_for_each (i, &thread->polling_list) {
-		CHEROKEE_NEW(n,connection_info);
+		cherokee_connection_info_t *n;
+
+		ret = cherokee_connection_info_new (&n);
+		if (unlikely (ret != ret_ok)) goto out;
 
 		info_fill_up (n, CONN(i));
 		cherokee_list_add (LIST(n), list);
@@ -221,6 +227,7 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 	if (cherokee_list_empty (list))
 		ret = ret_not_found;
 
+out:
 	/* Release it
 	 */
 	if (locked)
