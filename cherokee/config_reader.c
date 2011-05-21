@@ -84,6 +84,9 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 			/* Ignore backup files
 			 */
 			entry_len = strlen(entry->d_name);
+			if (unlikely (entry_len <= 0)) {
+				continue;
+			}
 
 			if ((entry->d_name[0] == '.') ||
 			    (entry->d_name[0] == '#') ||
