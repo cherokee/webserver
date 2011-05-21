@@ -155,7 +155,7 @@
 	(strncasecmp(m, str, sizeof(str)-1) == 0)
 
 #define equal_buf_str(b,str) \
-	(cherokee_buffer_case_cmp_str(b,str) == 0)
+	(cherokee_buffer_case_cmp_str((b),(str)) == 0)
 
 #define return_if_fail(expr,ret) \
 	do {								\
