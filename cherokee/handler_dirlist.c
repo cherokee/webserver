@@ -645,6 +645,7 @@ cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->footer))
 	{
 		LOG_CRITICAL_S (CHEROKEE_ERROR_HANDLER_DIRLIST_BAD_THEME);
+		cherokee_handler_free (n);
 		return ret_error;
 	}
 
