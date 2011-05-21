@@ -124,7 +124,7 @@ report_fail (cherokee_balancer_failover_t *balancer,
 	ret_t                      ret;
 	cherokee_list_t           *i;
 	cherokee_balancer_entry_t *entry;
-	cherokee_buffer_t          tmp    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t          tmp   = CHEROKEE_BUF_INIT;
 
 	UNUSED(conn);
 
@@ -173,8 +173,8 @@ dispatch (cherokee_balancer_failover_t  *balancer,
 	  cherokee_source_t            **src)
 {
 	cherokee_list_t           *i;
-	cherokee_balancer_entry_t *entry;
-	cherokee_balancer_t       *gbal   = BAL(balancer);
+	cherokee_balancer_entry_t *entry = NULL;
+	cherokee_balancer_t       *gbal  = BAL(balancer);
 
 	UNUSED(conn);
 	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
