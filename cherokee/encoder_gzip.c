@@ -138,8 +138,10 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t  **encoder,
 	workspacesize = zlib_deflate_workspacesize();
 
 	n->workspace = malloc (workspacesize);
-	if (unlikely (n->workspace == NULL))
+	if (unlikely (n->workspace == NULL)) {
+		free (n);
 		return ret_nomem;
+	}
 
 	memset (n->workspace, 0, workspacesize);
 	memset (&n->stream, 0, sizeof(z_stream));
