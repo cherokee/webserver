@@ -1852,8 +1852,10 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	cherokee_buffer_init (&n->buffer);
 
 	ret = cherokee_buffer_ensure_size (&n->buffer, DEFAULT_BUF_SIZE);
-	if (unlikely(ret != ret_ok))
+	if (unlikely(ret != ret_ok)) {
+		cherokee_handler_free (HANDLER(n));
 		return ret;
+	}
 
 	*hdl = HANDLER(n);
 	return ret_ok;
