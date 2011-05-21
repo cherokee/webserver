@@ -126,15 +126,9 @@ print_tuple_str (const char *title, const char *info)
 	whites = COLUM_NUM - strlen(title);
 
 	fprintf (stderr, "%s ", title);
-
-	if (whites > 0) {
-		tmp = (char *) malloc (whites +1);
-		memset (tmp, ' ', whites);
-		tmp[whites] = '\0';
-		fprintf (stderr, "%s", tmp);
-		free (tmp);
+	while (whites-- > 0) {
+		fprintf (stderr, " ");
 	}
-
 	fprintf (stderr, COLUM_SEP " %s\n", info);
 }
 
