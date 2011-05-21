@@ -64,6 +64,7 @@ cherokee_logger_writer_new (cherokee_logger_writer_t **writer)
 
 	n->priv = malloc (sizeof(priv_t));
 	if (n->priv == NULL) {
+		cherokee_buffer_mrproper (&n->buffer);
 		free(n);
 		return ret_nomem;
 	}
