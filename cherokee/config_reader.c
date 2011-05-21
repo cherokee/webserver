@@ -93,10 +93,13 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 			}
 
 			ret = cherokee_buffer_add_va (&full_new, "%s/%s", path->buf, entry->d_name);
-			if (unlikely (ret != ret_ok)) return ret;
+			if (unlikely (ret != ret_ok)) {
+				cherokee_buffer_mrproper (&full_new);
+				return ret;
+			}
 
 			ret = do_parse_file (conf, full_new.buf);
-			if (ret != ret_ok) {
+			if (unlikely (ret != ret_ok)) {
 				cherokee_buffer_mrproper (&full_new);
 				return ret;
 			}
