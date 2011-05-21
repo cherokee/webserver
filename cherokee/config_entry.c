@@ -290,7 +290,7 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("users:                     %p\n", entry->users);
 	printf ("expiration type:           %d\n", entry->expiration);
 	printf ("expiration time:           %lu\n", entry->expiration_time);
-	printf ("flcache:                   %d\n", NULLB_TO_STR(entry->flcache));
+	printf ("flcache:                   %s\n", NULLB_TO_STR(entry->flcache));
 	printf ("flcache policy:            %d\n", entry->flcache_policy);
 	printf ("encoders_accepted:         %p\n", entry->encoders);
 	printf ("limit bps:                 %d\n", entry->limit_bps);
