@@ -766,8 +766,8 @@ cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
 {
 	ret_t   ret;
 	ssize_t got;
-	int     len;
 	size_t  got2 = 0;
+	int     len  = -1;
 
 	/* Add cached headers
 	 */
@@ -776,6 +776,10 @@ cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
 	} while ((got == -1) && (errno == EINTR));
 
 	if (unlikely (got != sizeof(int))) {
+		return ret_error;
+	}
+
+	if (unlikely (len <= 0)) {
 		return ret_error;
 	}
 
