@@ -1107,10 +1107,17 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	/* Date
 	 */
 	if (props->show_date) {
+		struct tm *ltime;
+		struct tm  ltime_buf;
+
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_ensure_size (tmp, 33);
 
-		strftime (tmp->buf, 32, "%d-%b-%Y %H:%M", localtime(&file->stat.st_mtime));
+		ltime = cherokee_localtime (&file->stat.st_mtime, &ltime_buf);
+		if (ltime != NULL) {
+			strftime (tmp->buf, 32, "%d-%b-%Y %H:%M", ltime);
+		}
+
 		VTMP_SUBSTITUTE_TOKEN ("%date%", tmp->buf);
 	}
 

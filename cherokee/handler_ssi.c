@@ -342,11 +342,15 @@ parse (cherokee_handler_ssi_t *hdl,
 					TRACE(ENTRIES, "Including file modification date '%s'\n", fpath.buf);
 					re = cherokee_stat (fpath.buf, &info);
 					if (re >= 0) {
-						char tmp[50];
+						struct tm *ltime;
+						struct tm  ltime_buf;
+						char       tmp[50];
 
-						strftime (tmp, sizeof(tmp),
-							  "%d-%b-%Y %H:%M",
-							  localtime(&info.st_mtime));
+						ltime = cherokee_localtime (&info.st_mtime, &ltime_buf);
+						if (ltime != NULL) {
+							strftime (tmp, sizeof(tmp), "%d-%b-%Y %H:%M", ltime);
+						}
+
 						cherokee_buffer_add (out, tmp, strlen(tmp));
 					}
 					break;
