@@ -133,7 +133,7 @@ def check_config():
 
             elif match == 'geoip' and \
                  not CTK.cfg['vserver!%s!rule!%s!match!countries'%(v,r)]:
-                errors.append (Error(_("GeoIP match rule with no contries"),
+                errors.append (Error(_("GeoIP match rule with no countries"),
                                      '/vserver/%s/rule/%s#1'%(v,r)))
 
     return errors
