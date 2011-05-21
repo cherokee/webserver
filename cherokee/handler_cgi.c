@@ -580,9 +580,13 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	} else {
 		char *file = strrchr (absolute_path, '/');
 
-		*file = '\0';
-		re = chdir (absolute_path);
-		*file = '/';
+		if (file != NULL) {
+			*file = '\0';
+			re = chdir (absolute_path);
+			*file = '/';
+		} else {
+			re = -1;
+		}
 	}
 
 	if (re < 0) {
