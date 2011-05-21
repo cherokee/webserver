@@ -87,7 +87,12 @@ typedef struct {
 static env_item_t *
 env_item_new (cherokee_buffer_t *key, cherokee_buffer_t *val)
 {
-	env_item_t *n = malloc (sizeof (env_item_t));
+	env_item_t *n;
+
+	n = malloc (sizeof (env_item_t));
+	if (unlikely (n == NULL)) {
+		return NULL;
+	}
 
 	INIT_LIST_HEAD (&n->entry);
 	cherokee_buffer_init (&n->env);
