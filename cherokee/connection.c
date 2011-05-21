@@ -2885,7 +2885,8 @@ cherokee_connection_build_host_port_string (cherokee_connection_t *conn,
 
 	/* Port
 	 */
-	if (! http_port_is_standard (conn->bind->port, conn->socket.is_tls))
+	if ((conn->bind != NULL) &&
+	    (! http_port_is_standard (conn->bind->port, conn->socket.is_tls)))
 	{
 		cherokee_buffer_add_char    (buf, ':');
 		cherokee_buffer_add_ulong10 (buf, conn->bind->port);
