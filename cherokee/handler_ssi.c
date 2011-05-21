@@ -316,6 +316,7 @@ parse (cherokee_handler_ssi_t *hdl,
 
 					ret = cherokee_buffer_read_file (&file_content, fpath.buf);
 					if (unlikely (ret != ret_ok)) {
+						cherokee_buffer_mrproper (&file_content);
 						return ret_error;
 					}
 
