@@ -615,12 +615,12 @@ cleanup:
 
 	/* Clean up
 	 */
+	free (uid_str);
 	free (interpreter);
 
 	for (n=0; n<envs; n++) {
 		free (envp[n]);
 	}
-
 	free (envp);
 }
 
