@@ -43,7 +43,10 @@ matching_new (cherokee_buffer_t *file,
 {
 	file_matching_t *n;
 
-	n = (file_matching_t *)malloc (sizeof(file_matching_t));
+	n = (file_matching_t *) malloc(sizeof(file_matching_t));
+	if (unlikely (n == NULL))
+		return NULL;
+
 	INIT_LIST_HEAD (&n->entry);
 
 	cherokee_buffer_init (&n->match);
