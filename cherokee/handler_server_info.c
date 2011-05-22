@@ -884,21 +884,25 @@ cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
 	 */
 	ret = cherokee_buffer_init (&n->buffer);
 	if (unlikely(ret != ret_ok))
-		return ret;
+		goto error;
 
 	ret = cherokee_buffer_ensure_size (&n->buffer, 4*1024);
 	if (unlikely(ret != ret_ok))
-		return ret;
+		goto error;
 
 	ret = cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
 	if (unlikely(ret != ret_ok))
-		return ret;
+		goto error;
 
 	n->writer.pretty = true;
 	cherokee_dwriter_set_buffer (&n->writer, &n->buffer);
 
 	*hdl = HANDLER(n);
 	return ret_ok;
+
+error:
+	cherokee_handler_free (HANDLER(n));
+	return ret_error;
 }
 
 
