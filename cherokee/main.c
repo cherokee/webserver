@@ -104,7 +104,10 @@ figure_worker_path (const char *arg0)
 	/* Invoked with the fullpath */
 	if (arg0[0] == '/') {
 		len = strlen(arg0) + sizeof("-worker");
+
 		cherokee_worker = malloc (len);
+		if (cherokee_worker == NULL)
+			goto out;
 
 		snprintf (cherokee_worker, len, "%s-worker", arg0);
 		return;
@@ -117,7 +120,10 @@ figure_worker_path (const char *arg0)
 	if ((arg0[0] == '.') || (*d == '/')) {
 		d = getcwd (tmp, sizeof(tmp));
 		len = strlen(arg0) + strlen(d) + sizeof("-worker") +1;
+
 		cherokee_worker = malloc (len);
+		if (cherokee_worker == NULL)
+			goto out;
 
 		snprintf (cherokee_worker, len, "%s/%s-worker", d, arg0);
 		return;
@@ -137,14 +143,24 @@ figure_worker_path (const char *arg0)
 			len = re + sizeof("-worker");
 
 			cherokee_worker = malloc (len);
+			if (cherokee_worker == NULL)
+				goto out;
+
 			snprintf (cherokee_worker, len, "%s-worker", link);
 			return;
 		}
 	}
 
+out:
 	/* The very last option, use the default path
 	 */
 	cherokee_worker = malloc (sizeof(CHEROKEE_WORKER));
+	if (cherokee_worker == NULL) {
+		PRINT_MSG_S ("ERROR: Could not find cherokee-worker\n");
+		PRINT_MSG_S ("\n");
+		exit(1);
+	}
+
 	snprintf (cherokee_worker, sizeof(CHEROKEE_WORKER), CHEROKEE_WORKER);
 }
 
