@@ -437,8 +437,8 @@ do_spawn (void)
 	}
 
 	interpreter = malloc (sizeof("exec ") + size);
-	memcpy (interpreter, "exec ", 5);
-	memcpy (interpreter + 5, p, size + 1);
+	strncpy (interpreter, "exec ", 5);
+	strncpy (interpreter + 5, p, size + 1);
 	p += size + 1;
 	ALIGN4 (p);
 
