@@ -597,7 +597,11 @@ cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
 	} else {
 		ret = cherokee_handler_file_new ((cherokee_handler_t **)&n->file_hdl, cnt, MODULE_PROPS(PROP_RENDER_RRD(props)->file_props));
 		if (ret != ret_ok) {
-			return ret_ok;
+			if (n->file_hdl) {
+				cherokee_handler_free (HANDLER(n->file_hdl));
+			}
+			cherokee_handler_free (HANDLER(n));
+			return ret_error;
 		}
 
 		HANDLER(n)->support = HANDLER(n->file_hdl)->support;
