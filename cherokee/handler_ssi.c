@@ -285,6 +285,7 @@ parse (cherokee_handler_ssi_t *hdl,
 				TRACE(ENTRIES, "Path: virtual '%s'\n", fpath.buf);
 				break;
 			default:
+				ignore = true;
 				SHOULDNT_HAPPEN;
 			}
 
