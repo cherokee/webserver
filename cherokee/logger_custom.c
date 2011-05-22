@@ -619,18 +619,18 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	ret = cherokee_config_node_get (config, "access", &subconf);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_NO_KEY, "access");
-		return ret_error;
+		goto error;
 	}
 	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &n->writer_access);
 	if (ret != ret_ok) {
-		return ret_error;
+		goto error;
 	}
 
 	/* Template
 	 */
 	ret = _init_template (n, &n->template_conn, config, "access_template");
 	if (ret != ret_ok) {
-		return ret;
+		goto error;
 	}
 
 	/* Callback init
@@ -644,6 +644,10 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	 */
 	*logger = LOGGER(n);
 	return ret_ok;
+
+error:
+	cherokee_logger_free (LOGGER(n));
+	return ret_error;
 }
 
 ret_t
