@@ -203,7 +203,9 @@ check_worker_version (const char *this_exec)
 
 	PRINT_MSG ("(critical) Couldn't find the version string: '%s -i'\n", cherokee_worker);
 error:
-	pclose(f);
+	if (f != NULL) {
+		pclose(f);
+	}
 	return ret_error;
 }
 
