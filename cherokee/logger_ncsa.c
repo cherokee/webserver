@@ -79,6 +79,7 @@ cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
 
 	ret = cherokee_logger_ncsa_init_base (n, VSERVER(vsrv), config);
 	if (unlikely(ret < ret_ok)) {
+		cherokee_logger_free (LOGGER(n));
 		return ret;
 	}
 
