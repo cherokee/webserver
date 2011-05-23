@@ -55,7 +55,7 @@ static pthread_mutex_t dlerror_mutex = PTHREAD_MUTEX_INITIALIZER;
 typedef void *func_new_t;
 
 
-static void
+static ret_t
 add_static_entry (cherokee_plugin_loader_t *loader,
 		  const char               *name,
 		  void                     *info)
@@ -63,11 +63,16 @@ add_static_entry (cherokee_plugin_loader_t *loader,
 	entry_t *entry;
 
 	entry = malloc (sizeof(entry_t));
+	if (entry == NULL) {
+		return ret_nomem;
+	}
+
 	entry->dlopen_ref = dlopen (NULL, RTLD_BASE);
 	entry->info       = info;
 	entry->built_in   = true;
 
 	cherokee_avl_add_ptr (&loader->table, (char *)name, entry);
+	return ret_ok;
 }
 
 
