@@ -66,9 +66,9 @@
 #define RULE_PRE             "vserver!1!rule!"
 
 static int                port          = DEFAULT_PORT;
-static const char        *document_root = DEFAULT_DOCUMENTROOT;
-static const char        *config_file   = DEFAULT_CONFIG_FILE;
-static const char        *bind_to       = DEFAULT_BIND;
+static char              *document_root = NULL;
+static char              *config_file   = NULL;
+static char              *bind_to       = NULL;
 static int                debug         = 0;
 static int                unsecure      = 0;
 static int                iocache       = 1;
@@ -607,6 +607,17 @@ main (int argc, char **argv)
 	ret_t            ret;
 	struct sigaction act;
 
+	/* Globals */
+	document_root = strdup (DEFAULT_DOCUMENTROOT);
+	config_file   = strdup (DEFAULT_CONFIG_FILE);
+	bind_to       = strdup (DEFAULT_BIND);
+
+	if ((!bind_to) || (!config_file) || (!document_root)) {
+		PRINT_MSG ("ERROR: Couldn't allocate memory.\n");
+		exit (EXIT_ERROR);
+	}
+
+	/* Python */
 	ret = check_for_python();
 	if (ret != ret_ok) {
 		PRINT_MSG ("ERROR: Couldn't find python.\n");
