@@ -377,6 +377,10 @@ load_common (cherokee_plugin_loader_t *loader,
 	/* Add new entry
 	 */
 	entry = malloc (sizeof(entry_t));
+	if (entry == NULL) {
+		return ret_nomem;
+	}
+
 	entry->dlopen_ref = dl_handle;
 	entry->info       = info;
 	entry->built_in   = false;
