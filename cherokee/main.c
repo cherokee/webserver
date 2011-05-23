@@ -988,7 +988,12 @@ process_launch (const char *path, char *argv[])
 		 */
 		for (len_argv=0; argv[len_argv];          len_argv++);
 		for (len_valg=0; valgrind_args[len_valg]; len_valg++);
+
 		new_args = malloc ((len_argv + len_valg + 2) * sizeof(char *));
+		if (new_args == NULL) {
+			PRINT_MSG_S ("(critical) Could not allocate memory for valgrind args.\n");
+			exit(1);
+		}
 
 		/* Copy
 		 */
