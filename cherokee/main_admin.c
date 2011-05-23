@@ -97,17 +97,23 @@ find_empty_port (int starting, int *port)
 			break;
 
 		p += 1;
-		if (p > 0XFFFF)
-			return ret_error;
+		if (p > 0XFFFF) {
+			goto error;
+		}
 	}
 
 	cherokee_socket_close (&s);
-
 	cherokee_socket_mrproper (&s);
 	cherokee_buffer_mrproper (&bind_);
 
 	*port = p;
 	return ret_ok;
+
+error:
+	cherokee_socket_close (&s);
+	cherokee_socket_mrproper (&s);
+	cherokee_buffer_mrproper (&bind_);
+	return ret_error;
 }
 
 static ret_t
