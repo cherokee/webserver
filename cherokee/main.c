@@ -300,10 +300,15 @@ figure_pid_file_path (const char *config)
 	char *line;
 	char  tmp[512];
 
+	/* Open the config file
+	 */
 	f = fopen (config, "r");
-	if (f == NULL)
-		return NULL;
+	if (f == NULL) {
+		return strdup(DEFAULT_PID_FILE);
+	}
 
+	/* Look up for the right key
+	 */
 	while (! feof(f)) {
 		line = fgets (tmp, sizeof(tmp), f);
 		if ((line != NULL) &&
@@ -323,6 +328,9 @@ figure_pid_file_path (const char *config)
 	}
 
 	fclose(f);
+
+	/* Not found, use default
+	 */
 	return strdup(DEFAULT_PID_FILE);
 }
 
