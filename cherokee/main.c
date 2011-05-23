@@ -498,6 +498,8 @@ do_spawn (void)
 		p += sizeof(int);
 
 		e = malloc (size + 1);
+		if (e == NULL) return;
+
 		memcpy (e, p, size);
 		e[size] = '\0';
 
