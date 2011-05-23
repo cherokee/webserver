@@ -161,13 +161,11 @@ signals_handler (int sig, siginfo_t *si, void *context)
 static ret_t
 test_configuration_file (void)
 {
-	ret_t       ret;
-	const char *config;
+	ret_t ret;
 
-	config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
-	ret = cherokee_server_read_config_file (srv, config);
+	ret = cherokee_server_read_config_file (srv, config_file);
+	PRINT_MSG ("Test on %s: %s\n", config_file, (ret == ret_ok)? "OK": "Failed");
 
-	PRINT_MSG ("Test on %s: %s\n", config, (ret == ret_ok)? "OK": "Failed");
 	return ret;
 }
 
@@ -234,8 +232,6 @@ common_server_initialization (cherokee_server_t *srv)
 		}
 
 	} else {
-		const char *config;
-
 		/* Check parameter inconsistencies */
 		if (port_set) {
 			PRINT_MSG ("The -p parameter can only be used in conjunction with -r.");
@@ -244,11 +240,9 @@ common_server_initialization (cherokee_server_t *srv)
 
 		/* Read the configuration file
 		 */
-		config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
-		ret = cherokee_server_read_config_file (srv, config);
-
+		ret = cherokee_server_read_config_file (srv, config_file);
 		if (ret != ret_ok) {
-			PRINT_MSG ("Couldn't read the config file: %s\n", config);
+			PRINT_MSG ("Couldn't read the config file: %s\n", config_file);
 			return ret_error;
 		}
 	}
@@ -306,12 +300,14 @@ process_parameters (int argc, char **argv)
 	while ((c = getopt_long(argc, argv, "hVdtiap:r:C:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'C':
+			free (config_file);
 			config_file = strdup(optarg);
 			break;
 		case 'd':
 			daemon_mode = true;
 			break;
 		case 'r':
+			free (document_root);
 			document_root = strdup(optarg);
 			break;
 		case 'p':
@@ -356,6 +352,12 @@ main (int argc, char **argv)
 {
 	ret_t ret;
 
+	config_file = strdup (DEFAULT_CONFIG_FILE);
+	if (config_file == NULL) {
+		PRINT_MSG ("ERROR: Couldn't allocate memory.\n");
+		exit (EXIT_ERROR);
+	}
+
 	cherokee_init();
 
 	ret = cherokee_server_new (&srv);
@@ -387,9 +389,7 @@ main (int argc, char **argv)
 	cherokee_server_stop (srv);
 	cherokee_server_free (srv);
 
-	if (config_file)
-		free (config_file);
-
+	free (config_file);
 	cherokee_mrproper();
 	return EXIT_OK;
 }
