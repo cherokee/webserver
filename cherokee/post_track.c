@@ -161,8 +161,8 @@ _register (cherokee_post_track_t *track,
 	   cherokee_connection_t *conn)
 {
 	ret_t                        ret;
-	cherokee_post_track_entry_t *entry;
-	cherokee_buffer_t            tmp    = CHEROKEE_BUF_INIT;
+	cherokee_post_track_entry_t *entry = NULL;
+	cherokee_buffer_t            tmp   = CHEROKEE_BUF_INIT;
 
 	TRACE (ENTRIES, "Register conn ID: %d\n", conn->id);
 
@@ -179,10 +179,18 @@ _register (cherokee_post_track_t *track,
 		return ret_ok;
 	}
 
+	/* LOCK */
+	CHEROKEE_MUTEX_LOCK (&track->lock);
+
+	ret = cherokee_avl_get (&track->posts_lookup, &tmp, NULL);
+	if (ret == ret_ok) {
+		TRACE (ENTRIES, "Post X-Progress-ID='%s' already registered\n", tmp.buf);
+		goto ok;
+	}
+
 	ret = entry_new (&entry);
 	if (unlikely (ret != ret_ok)) {
-		cherokee_buffer_mrproper (&tmp);
-		return ret_error;
+		goto error;
 	}
 
 	/* Store the POST information
@@ -192,16 +200,6 @@ _register (cherokee_post_track_t *track,
 	cherokee_buffer_add_buffer (&entry->progress_id, &tmp);
 	cherokee_buffer_add_buffer (&conn->post.progress_id, &tmp);
 
-	/* Register it
-	 */
-	CHEROKEE_MUTEX_LOCK (&track->lock);
-
-	ret = cherokee_avl_get (&track->posts_lookup, &tmp, NULL);
-	if (ret == ret_ok) {
-		TRACE (ENTRIES, "Post X-Progress-ID='%s' already registered\n", tmp.buf);
-		goto ok;
-	}
-
 	ret = cherokee_avl_add (&track->posts_lookup, &tmp, entry);
 	if (unlikely (ret != ret_ok)) {
 		TRACE (ENTRIES, "Could not register X-Progress-ID='%s'\n", tmp.buf);
@@ -210,12 +208,16 @@ _register (cherokee_post_track_t *track,
 
 	cherokee_list_add (LIST(entry), &track->posts_list);
 
+	/* UNLOCK */
 ok:
 	cherokee_buffer_mrproper (&tmp);
 	CHEROKEE_MUTEX_UNLOCK (&track->lock);
 	return ret_ok;
 
 error:
+	if (entry) {
+		entry_free (entry);
+	}
 	cherokee_buffer_mrproper (&tmp);
 	CHEROKEE_MUTEX_UNLOCK (&track->lock);
 	return ret_error;
