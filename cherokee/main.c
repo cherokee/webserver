@@ -423,9 +423,9 @@ do_spawn (void)
 	uid_t        uid;
 	gid_t        gid;
 	int          env_inherit;
-	int          envs;
 	pid_t        child;
 	char        *interpreter;
+	int          envs         = 0;
 	int          log_stderr   = 0;
 	char        *log_file     = NULL;
 	char        *uid_str      = NULL;
