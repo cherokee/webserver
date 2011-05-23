@@ -432,9 +432,9 @@ do_spawn (void)
 	gid_t        gid;
 	int          env_inherit;
 	pid_t        child;
-	char        *interpreter;
 	int          envs         = 0;
 	int          log_stderr   = 0;
+	char        *interpreter  = NULL;
 	char        *log_file     = NULL;
 	char        *uid_str      = NULL;
 	char       **envp         = NULL;
