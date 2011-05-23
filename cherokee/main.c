@@ -486,6 +486,9 @@ do_spawn (void)
 	p += sizeof(int);
 
 	envp = malloc (sizeof(char *) * (envs + 1));
+	if (envp == NULL) {
+		return;
+	}
 	envp[envs] = NULL;
 
 	for (n=0; n<envs; n++) {
