@@ -102,52 +102,59 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Sockets
 	 */
-	n->ipv6             = true;
-	n->fdpoll_method    = cherokee_poll_UNSET;
+	n->ipv6              = true;
+	n->fdpoll_method     = cherokee_poll_UNSET;
 
 	/* Exit related
 	 */
-	n->wanna_exit       = false;
-	n->wanna_reinit     = false;
+	n->wanna_exit        = false;
+	n->wanna_reinit      = false;
 
 	/* Server config
 	 */
-	n->tls_enabled      = false;
-	n->cryptor          = NULL;
-	n->post_track       = NULL;
+	n->tls_enabled       = false;
+	n->cryptor           = NULL;
+	n->post_track        = NULL;
 
-	n->timeout          = 5;
-	n->fdwatch_msecs    = 1000;
+	n->timeout           = 5;
+	n->fdwatch_msecs     = 1000;
 
-	n->start_time       = time(NULL);
+	n->start_time        = time (NULL);
 
-	n->keepalive        = true;
-	n->keepalive_max    = MAX_KEEPALIVE;
-	n->chunked_encoding = true;
+	n->keepalive         = true;
+	n->keepalive_max     = MAX_KEEPALIVE;
+	n->chunked_encoding  = true;
 
-	n->thread_num       = -1;
-	n->thread_policy    = -1;
+	n->thread_num        = -1;
+	n->thread_policy     = -1;
+	n->conns_max         =  0;
+	n->conns_reuse_max   = -1;
 
-	n->chrooted         = false;
-	n->user_orig        = getuid();
-	n->user             = n->user_orig;
-	n->group_orig       = getgid();
-	n->group            = n->group_orig;
+	n->chrooted          = false;
+	n->user_orig         = getuid();
+	n->user              = n->user_orig;
+	n->group_orig        = getgid();
+	n->group             = n->group_orig;
+	n->server_token      = cherokee_version_full;
 
 	n->fdlimit_custom    = MAX (FD_NUM_CUSTOM_LIMIT, cherokee_fdlimit);
 	n->fdlimit_available = -1;
 
-	n->conns_max        =  0;
-	n->conns_reuse_max  = -1;
+	n->listen_queue      = 65534;
+	n->sendfile.min      = SENDFILE_MIN_SIZE;
+	n->sendfile.max      = SENDFILE_MAX_SIZE;
 
-	n->listen_queue     = 65534;
-	n->sendfile.min     = SENDFILE_MIN_SIZE;
-	n->sendfile.max     = SENDFILE_MAX_SIZE;
+	n->error_writer      = NULL;
+	n->regexs            = NULL;
+	n->nonces            = NULL;
 
-	n->mime             = NULL;
-	n->icons            = NULL;
-	n->regexs           = NULL;
-	n->collector        = NULL;
+	n->mime              = NULL;
+	n->icons             = NULL;
+	n->regexs            = NULL;
+	n->collector         = NULL;
+
+	n->iocache           = NULL;
+	n->iocache_enabled   = true;
 
 	cherokee_buffer_init (&n->chroot);
 	cherokee_buffer_init (&n->timeout_header);
@@ -155,39 +162,19 @@ cherokee_server_new  (cherokee_server_t **srv)
 	cherokee_buffer_init (&n->panic_action);
 	cherokee_buffer_add_str (&n->panic_action, CHEROKEE_PANIC_PATH);
 
-	/* IO Cache cache
+	/* Virtual servers list
 	 */
-	n->iocache         = NULL;
-	n->iocache_enabled = true;
-
-	/* Regexs
-	 */
-	cherokee_regex_table_new (&n->regexs);
-	return_if_fail (n->regexs != NULL, ret_nomem);
-
-	/* Active nonces
-	 */
-	ret = cherokee_nonce_table_new (&n->nonces);
-	if (unlikely(ret < ret_ok)) return ret;
+	INIT_LIST_HEAD (&n->vservers);
+	INIT_LIST_HEAD (&n->listeners);
+	CHEROKEE_MUTEX_INIT (&n->listeners_mutex, CHEROKEE_MUTEX_FAST);
 
 	/* Module loader
 	 */
 	cherokee_plugin_loader_init (&n->loader);
 
-	/* Virtual servers list
-	 */
-	INIT_LIST_HEAD (&n->vservers);
-
-	INIT_LIST_HEAD (&n->listeners);
-	CHEROKEE_MUTEX_INIT (&n->listeners_mutex, CHEROKEE_MUTEX_FAST);
-
 	/* Encoders
 	 */
 	cherokee_avl_init (&n->encoders);
-
-	/* Server string
-	 */
-	n->server_token = cherokee_version_full;
 
 	/* Logs
 	 */
@@ -220,16 +207,30 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	cherokee_avl_init (&n->sources);
 
+	/* Regexs
+	 */
+	cherokee_regex_table_new (&n->regexs);
+	if (unlikely (n->regexs == NULL)) {
+		goto error;
+	}
+
+	/* Active nonces
+	 */
+	ret = cherokee_nonce_table_new (&n->nonces);
+	if (unlikely(ret < ret_ok)) {
+		goto error;
+	}
+
 	/* Init the default error writer
 	 */
 	ret = cherokee_logger_writer_new_stderr (&n->error_writer);
 	if (ret != ret_ok) {
-		return ret_error;
+		goto error;
 	}
 
 	ret = cherokee_logger_writer_open (n->error_writer);
 	if (ret != ret_ok) {
-		return ret_error;
+		goto error;
 	}
 
 	cherokee_error_set_default (n->error_writer);
@@ -238,6 +239,10 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	*srv = n;
 	return ret_ok;
+
+error:
+	cherokee_handler_free (HANDLER(n));
+	return ret_error;
 }
 
 
@@ -265,7 +270,7 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	/* Kill the child processes
 	 */
-	cherokee_avl_mrproper (&srv->sources, (cherokee_func_free_t)cherokee_source_free);
+	cherokee_avl_mrproper (AVL_GENERIC(&srv->sources), (cherokee_func_free_t)cherokee_source_free);
 
 	/* Spawn mechanism
 	 */
@@ -292,7 +297,7 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	/* Attached objects
 	 */
-	cherokee_avl_mrproper (&srv->encoders, NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&srv->encoders), NULL);
 
 	cherokee_mime_free (srv->mime);
 	cherokee_icons_free (srv->icons);
@@ -322,7 +327,7 @@ cherokee_server_free (cherokee_server_t *srv)
 		cherokee_logger_writer_free (LOGGER_WRITER(i));
 	}
 
-	cherokee_avl_mrproper (&srv->logger_writers_index, NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&srv->logger_writers_index), NULL);
 
 	/* Virtual servers
 	 */
