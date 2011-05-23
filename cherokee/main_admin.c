@@ -478,6 +478,7 @@ process_parameters (int argc, char **argv)
 	while ((c = getopt_long(argc, argv, "hVxutib::d:p:C:T:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'b':
+			free (bind_to);
 			if (optarg) {
 				bind_to = strdup(optarg);
 			} else if (argv[optind] && argv[optind][0] != '-') {
@@ -500,9 +501,11 @@ process_parameters (int argc, char **argv)
 			}
 			break;
 		case 'd':
+			free (document_root);
 			document_root = strdup(optarg);
 			break;
 		case 'C':
+			free (config_file);
 			config_file = strdup(optarg);
 			break;
 		case 'x':
