@@ -56,7 +56,7 @@ cherokee_mime_free (cherokee_mime_t *mime)
 	if (mime == NULL)
 		return ret_ok;
 
-	cherokee_avl_mrproper (&mime->ext_table, NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&mime->ext_table), NULL);
 
 	list_for_each_safe (i, tmp, &mime->entry_list) {
 		cherokee_list_del (i);
@@ -95,15 +95,24 @@ get_by_mime_or_new (cherokee_mime_t *mime, cherokee_buffer_t *type, cherokee_mim
 {
 	ret_t ret;
 
+	/* Hit
+	 */
 	ret = get_by_mime (mime, type, entry);
 	if (ret == ret_ok)
 		return ret_ok;
 
+	/* Miss
+	 */
 	ret = cherokee_mime_entry_new (entry);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		return ret;
+	}
 
 	ret = cherokee_mime_entry_set_type (*entry, type);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		cherokee_mime_entry_free (*entry);
+		return ret;
+	}
 
 	cherokee_list_add (LIST(*entry), &mime->entry_list);
 
