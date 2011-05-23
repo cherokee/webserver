@@ -79,7 +79,7 @@ _free (cherokee_post_track_t *track)
 {
 	/* Rest of the properties
 	 */
-	cherokee_avl_mrproper (&track->posts_lookup, entry_free);
+	cherokee_avl_mrproper (AVL_GENERIC(&track->posts_lookup), entry_free);
 	CHEROKEE_MUTEX_DESTROY (&track->lock);
 	free (track);
 }

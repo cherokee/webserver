@@ -98,7 +98,7 @@ cherokee_handler_proxy_hosts_get (cherokee_handler_proxy_hosts_t  *hosts,
 	return ret_ok;
 
 error:
-	CHEROKEE_MUTEX_LOCK (&hosts->hosts_mutex);
+	CHEROKEE_MUTEX_UNLOCK (&hosts->hosts_mutex);
 	return ret_error;
 }
 
