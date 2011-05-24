@@ -760,7 +760,8 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		/* Spawn */
 		ret = cherokee_virtual_server_get_error_log (CONN_VSRV(conn), &error_writer);
 		if (ret != ret_ok) {
-			return ret_error;
+			ret = ret_error;
+			goto out;
 		}
 
 		ret = cherokee_source_interpreter_spawn (src, error_writer);
