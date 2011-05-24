@@ -457,9 +457,11 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 
 	/* Sanity checks
 	 */
-	if ((entry->auth_realm == NULL) ||
-	    (cherokee_buffer_is_empty (entry->auth_realm)))
-	{
+	if (entry->auth_realm == NULL) {
+		cherokee_buffer_new (&entry->auth_realm);
+	}
+
+	if (cherokee_buffer_is_empty (entry->auth_realm)) {
 		cherokee_buffer_add_str (entry->auth_realm, REALM_DEFAULT);
 		TRACE (ENTRIES, "No Realm was provided. Setting default realm: %s\n", REALM_DEFAULT);
 	}
