@@ -1341,8 +1341,10 @@ configure_bind (cherokee_server_t      *srv,
 			return ret;
 
 		ret = cherokee_bind_configure (listener, CONFIG_NODE(i));
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
+			cherokee_bind_free (listener);
 			return ret;
+		}
 
 		cherokee_list_add_tail (&listener->listed, &srv->listeners);
 	}
