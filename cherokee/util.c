@@ -858,7 +858,7 @@ ret_t
 cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 {
 	int re;
-	int flags;
+	int flags = 0;
 
 	/* Disable the Nagle algorithm. This means that segments are
          * always sent as soon as possible, even if there is only a
