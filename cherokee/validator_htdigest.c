@@ -190,8 +190,8 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 static ret_t
 validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *file)
 {
-	int                re;
 	ret_t              ret;
+	int                re     = -1;
 	char              *user   = NULL;
 	char              *realm  = NULL;
 	char              *passwd = NULL;
