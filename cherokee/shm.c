@@ -107,13 +107,14 @@ cherokee_shm_map (cherokee_shm_t    *shm,
 
 	re = cherokee_fstat (fd, &info);
 	if (re != 0) {
+		cherokee_fd_close (fd);
 		return ret_error;
 	}
 
 	shm->mem = mmap (0, info.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (shm->mem == MAP_FAILED) {
-		cherokee_fd_close (fd);
 		shm->mem = NULL;
+		cherokee_fd_close (fd);
 		return ret_error;
 	}
 
