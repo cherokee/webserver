@@ -199,7 +199,7 @@ cherokee_validator_mysql_new (cherokee_validator_mysql_t **mysql, cherokee_modul
 	 */
 	ret = init_mysql_connection (n, PROP_MYSQL(props));
 	if (ret != ret_ok) {
-		cherokee_validator_mysql_free (n);
+		cherokee_validator_free (n);
 		return ret;
 	}
 

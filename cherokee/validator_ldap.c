@@ -243,7 +243,7 @@ cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_module_p
 	 */
 	ret = init_ldap_connection (n, PROP_LDAP(props));
 	if (ret != ret_ok) {
-		cherokee_validator_ldap_free (n);
+		cherokee_validator_free (n);
 		return ret;
 	}
 
