@@ -1230,7 +1230,10 @@ add_source (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok) return ret;
 
 		ret = cherokee_source_interpreter_configure (src2, conf, prio);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) {
+			cherokee_source_free (SOURCE(src2));
+			return ret;
+		}
 
 		src = SOURCE(src2);
 
@@ -1239,7 +1242,10 @@ add_source (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok) return ret;
 
 		ret = cherokee_source_configure (src, conf);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) {
+			cherokee_source_free (src);
+			return ret;
+		}
 
 	} else {
 		LOG_CRITICAL (CHEROKEE_ERROR_SERVER_SOURCE_TYPE_UNKNOWN, prio, buf->buf);
