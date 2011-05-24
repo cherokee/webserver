@@ -2338,7 +2338,11 @@ cherokee_find_exec_in_path (const char        *bin_name,
 	}
 
 	path = strdup(p);
-	p    = path;
+	if (unlikely (path == NULL)) {
+		return ret_nomem;
+	}
+
+	p = path;
 	do {
 		q = strchr (p, ':');
 		if (q) {
