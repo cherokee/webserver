@@ -638,24 +638,25 @@ static ret_t
 add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                    ret;
-	cherokee_config_entry_t *entry;
-	cherokee_plugin_info_t  *info   = NULL;
-	cherokee_buffer_t       *name   = &config->val;
+	cherokee_config_entry_t *entry = NULL;
+	cherokee_plugin_info_t  *info  = NULL;
+	cherokee_buffer_t       *name  = &config->val;
 
 	ret = cherokee_config_entry_new (&entry);
 	if (unlikely (ret != ret_ok))
-		return ret;
+		goto error;
 
 	ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, name->buf, &info);
 	if (ret != ret_ok)
-		return ret;
+		goto error;
 
 	if (info->configure) {
 		handler_func_configure_t configure = info->configure;
 
 		ret = configure (config, vserver->server_ref, &entry->handler_properties);
-		if (ret != ret_ok)
-			return ret;
+		if (ret != ret_ok) {
+			goto error;
+		}
 	}
 
 	TRACE(ENTRIES, "Error handler: %s\n", name->buf);
@@ -664,6 +665,12 @@ add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vs
 	vserver->error_handler = entry;
 
 	return ret_ok;
+
+error:
+	if (entry) {
+		cherokee_config_entry_free (entry);
+	}
+	return ret_error;
 }
 
 
