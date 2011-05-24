@@ -340,7 +340,7 @@ add_env (cherokee_source_interpreter_t *src,
 	entry_len = env->len + val->len + 2;
 
 	entry = (char *) malloc (entry_len);
-	if (entry == NULL) {
+	if (unlikely (entry == NULL)) {
 		ret = ret_nomem;
 		goto error;
 	}
@@ -355,8 +355,14 @@ add_env (cherokee_source_interpreter_t *src,
 	} else {
 		src->custom_env = realloc (src->custom_env, (src->custom_env_len + 2) * sizeof (char *));
 	}
-	src->custom_env_len += 1;
 
+	if (unlikely (src->custom_env == NULL)) {
+		ret = ret_nomem;
+		free (entry);
+		goto error;
+	}
+
+	src->custom_env_len += 1;
 	src->custom_env[src->custom_env_len - 1] = entry;
 	src->custom_env[src->custom_env_len]     = NULL;
 
