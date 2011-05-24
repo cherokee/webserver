@@ -248,9 +248,12 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 		if (unlikely (re != 0)) {
 			LOG_ERRNO (re, cherokee_err_error, CHEROKEE_ERROR_THREAD_CREATE, re);
 
+			pthread_attr_destroy (&attr);
 			cherokee_thread_free (n);
 			return ret_error;
 		}
+
+		pthread_attr_destroy (&attr);
 #else
 		SHOULDNT_HAPPEN;
 #endif
@@ -1517,7 +1520,7 @@ cherokee_thread_free (cherokee_thread_t *thd)
 	/* FastCGI
 	 */
 	if (thd->fastcgi_servers != NULL) {
-		cherokee_avl_free (thd->fastcgi_servers, thd->fastcgi_free_func);
+		cherokee_avl_free (AVL_GENERIC(thd->fastcgi_servers), thd->fastcgi_free_func);
 		thd->fastcgi_servers = NULL;
 	}
 
