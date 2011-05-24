@@ -101,6 +101,7 @@ add_new_user (cherokee_validator_authlist_props_t *props,
 	ret = cherokee_config_node_read (conf, "user", &tmp);
 	if (ret != ret_ok) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_AUTHLIST_USER, conf->val.buf);
+		entry_free (entry);
 		return ret_error;
 	}
 	cherokee_buffer_add_buffer (&entry->user, tmp);
@@ -110,6 +111,7 @@ add_new_user (cherokee_validator_authlist_props_t *props,
 	ret = cherokee_config_node_read (conf, "password", &tmp);
 	if (ret != ret_ok) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_AUTHLIST_PASSWORD, conf->val.buf);
+		entry_free (entry);
 		return ret_error;
 	}
 	cherokee_buffer_add_buffer (&entry->password, tmp);
