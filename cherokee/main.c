@@ -459,10 +459,13 @@ do_spawn (void)
 	size = *((int *)p);
 	p += sizeof(int);
 	if (size <= 0) {
-		return;
+		goto cleanup;
 	}
 
 	interpreter = malloc (sizeof("exec ") + size);
+	if (interpreter == NULL) {
+		goto cleanup;
+	}
 	strncpy (interpreter, "exec ", 5);
 	strncpy (interpreter + 5, p, size + 1);
 	p += size + 1;
@@ -495,7 +498,7 @@ do_spawn (void)
 
 	envp = malloc (sizeof(char *) * (envs + 1));
 	if (envp == NULL) {
-		return;
+		goto cleanup;
 	}
 	envp[envs] = NULL;
 
@@ -506,7 +509,9 @@ do_spawn (void)
 		p += sizeof(int);
 
 		e = malloc (size + 1);
-		if (e == NULL) return;
+		if (e == NULL) {
+			goto cleanup;
+		}
 
 		memcpy (e, p, size);
 		e[size] = '\0';
