@@ -352,9 +352,8 @@ parse (cherokee_handler_ssi_t *hdl,
 						ltime = cherokee_localtime (&info.st_mtime, &ltime_buf);
 						if (ltime != NULL) {
 							strftime (tmp, sizeof(tmp), "%d-%b-%Y %H:%M", ltime);
+							cherokee_buffer_add (out, tmp, strlen(tmp));
 						}
-
-						cherokee_buffer_add (out, tmp, strlen(tmp));
 					}
 					break;
 				default:
