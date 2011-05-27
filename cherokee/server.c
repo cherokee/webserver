@@ -241,7 +241,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	return ret_ok;
 
 error:
-	cherokee_handler_free (HANDLER(n));
+	cherokee_server_free (n);
 	return ret_error;
 }
 
