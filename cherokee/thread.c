@@ -950,9 +950,8 @@ process_active_connections (cherokee_thread_t *thd)
 			/* fall down */
 
 		case phase_setup_connection: {
-			cherokee_config_entry_t  entry;
-			cherokee_rule_list_t    *rules;
-			cherokee_boolean_t       is_userdir;
+			cherokee_rule_list_t *rules;
+			cherokee_boolean_t    is_userdir;
 
 			/* Turn the connection in write mode
 			 */
@@ -980,7 +979,7 @@ process_active_connections (cherokee_thread_t *thd)
 					/* Set Keepalive, Rate, and skip to add_headers
 					 */
 					cherokee_connection_set_keepalive (conn);
-					cherokee_connection_set_rate (conn, &entry);
+					cherokee_connection_set_rate (conn, &conn->config_entry);
 
 					conn->phase = phase_add_headers;
 					goto add_headers;
@@ -990,7 +989,7 @@ process_active_connections (cherokee_thread_t *thd)
 			TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", conn->request.buf);
 			TRACE_CONN(conn);
 
-			cherokee_config_entry_init (&entry);
+			cherokee_config_entry_ref_clean (&conn->config_entry);
 
 			/* Choose the virtual entries table
 			 */
@@ -1011,9 +1010,12 @@ process_active_connections (cherokee_thread_t *thd)
 					ret = cherokee_connection_build_local_directory (conn, CONN_VSRV(conn));
 			}
 
-			/* Check against the rule list
+			/* Check against the rule list. It fills out ->config_entry, and
+			 * conn->auth_type
+			 * conn->expiration*
+			 * conn->timeout_*
 			 */
-			ret = cherokee_rule_list_match (rules, conn, &entry);
+			ret = cherokee_rule_list_match (rules, conn, &conn->config_entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				continue;
@@ -1021,17 +1023,17 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Local directory
 			 */
-			cherokee_connection_set_custom_droot (conn, &entry);
+			cherokee_connection_set_custom_droot (conn, &conn->config_entry);
 
 			/* Set the logger of the connection
 			 */
-			if (entry.no_log != true) {
+			if (conn->config_entry.no_log != true) {
 				conn->logger_ref = CONN_VSRV(conn)->logger;
 			}
 
 			/* Check of the HTTP method is supported by the handler
 			 */
-			ret = cherokee_connection_check_http_method (conn, &entry);
+			ret = cherokee_connection_check_http_method (conn, &conn->config_entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				continue;
@@ -1039,7 +1041,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Check Only-Secure connections
 			 */
-			ret = cherokee_connection_check_only_secure (conn, &entry);
+			ret = cherokee_connection_check_only_secure (conn, &conn->config_entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				continue;
@@ -1047,7 +1049,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Check for IP validation
 			 */
-			ret = cherokee_connection_check_ip_validation (conn, &entry);
+			ret = cherokee_connection_check_ip_validation (conn, &conn->config_entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				continue;
@@ -1055,7 +1057,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Check for authentication
 			 */
-			ret = cherokee_connection_check_authentication (conn, &entry);
+			ret = cherokee_connection_check_authentication (conn, &conn->config_entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				continue;
@@ -1067,27 +1069,11 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Traffic Shaping
 			 */
-			cherokee_connection_set_rate (conn, &entry);
-
-			/* Custom timeout
-			 */
-			if (! NULLI_IS_NULL(entry.timeout_lapse)) {
-				conn->timeout_lapse  = entry.timeout_lapse;
-				conn->timeout_header = entry.timeout_header;
-			}
-
-			if (entry.header_ops) {
-				conn->header_ops = entry.header_ops;
-			}
-
-			if (NULLB_TO_BOOL(entry.flcache)) {
-				conn->flcache_policy            = entry.flcache_policy;
-				conn->flcache_cookies_disregard = entry.flcache_cookies_disregard;
-			}
+			cherokee_connection_set_rate (conn, &conn->config_entry);
 
 			/* Create the handler
 			 */
-			ret = cherokee_connection_create_handler (conn, &entry);
+			ret = cherokee_connection_create_handler (conn, &conn->config_entry);
 			switch (ret) {
 			case ret_ok:
 				break;
@@ -1109,7 +1095,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Instance an encoder if needed
 			*/
-			ret = cherokee_connection_create_encoder (conn, entry.encoders);
+			ret = cherokee_connection_create_encoder (conn, conn->config_entry.encoders);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				continue;
@@ -1125,8 +1111,8 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Front-line cache
 			 */
-			if ((entry.flcache == true) &&
-			    (CONN_VSRV(conn)->flcache != NULL) &&
+			if ((CONN_VSRV(conn)->flcache != NULL) &&
+			    (conn->config_entry.flcache == true) &&
 			    (cherokee_flcache_req_is_storable (CONN_VSRV(conn)->flcache, conn) == ret_ok))
 			{
 				cherokee_flcache_req_set_store (CONN_VSRV(conn)->flcache, conn);
@@ -1134,19 +1120,15 @@ process_active_connections (cherokee_thread_t *thd)
 				/* Update expiration
 				 */
 				if (conn->flcache.mode == flcache_mode_in) {
-					if (entry.expiration == cherokee_expiration_epoch) {
+					if (conn->config_entry.expiration == cherokee_expiration_epoch) {
 						conn->flcache.avl_node_ref->valid_until = 0;
-					} else if (entry.expiration == cherokee_expiration_time) {
-						conn->flcache.avl_node_ref->valid_until = cherokee_bogonow_now + entry.expiration_time;
+					} else if (conn->config_entry.expiration == cherokee_expiration_time) {
+						conn->flcache.avl_node_ref->valid_until = cherokee_bogonow_now + conn->config_entry.expiration_time;
 					}
 				}
 			}
 
 			conn->phase = phase_init;
-
-			/* There isn't need of free entry, it is in the stack and the
-			 * buffers inside it are just references..
-			 */
 		}
 
 		case phase_init:

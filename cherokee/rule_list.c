@@ -64,8 +64,6 @@ static void
 update_connection (cherokee_connection_t   *conn,
 		   cherokee_config_entry_t *ret_config)
 {
-	if (! conn->realm_ref)
-		conn->realm_ref = ret_config->auth_realm;
 	if (! conn->auth_type)
 		conn->auth_type = ret_config->authentication;
 
@@ -75,6 +73,11 @@ update_connection (cherokee_connection_t   *conn,
 		conn->expiration      = ret_config->expiration;
 		conn->expiration_time = ret_config->expiration_time;
 		conn->expiration_prop = ret_config->expiration_prop;
+	}
+
+	if (! NULLI_IS_NULL(ret_config->timeout_lapse)) {
+		conn->timeout_lapse  = ret_config->timeout_lapse;
+		conn->timeout_header = ret_config->timeout_header;
 	}
 }
 
@@ -111,15 +114,9 @@ cherokee_rule_list_match (cherokee_rule_list_t    *list,
 		TRACE(ENTRIES, "Merging rule prio=%d\n", rule->priority);
 		cherokee_config_entry_complete (ret_config, &rule->config);
 
-		/* Update the connection
-		 */
-		update_connection (conn, ret_config);
-
 		/* Should it continue? */
 		if (rule->final) {
-			TRACE(ENTRIES, "Final rule prio=%d. Exiting.\n",
-			      rule->priority);
-			return ret_ok;
+			goto out;
 		}
 	}
 
@@ -128,10 +125,10 @@ cherokee_rule_list_match (cherokee_rule_list_t    *list,
 	list->def_rule->match(list->def_rule, conn, ret_config);
 	cherokee_config_entry_complete (ret_config, &list->def_rule->config);
 
+out:
 	/* Update the connection
 	 */
 	update_connection (conn, ret_config);
-
 	return ret_ok;
 }
 

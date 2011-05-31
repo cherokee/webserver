@@ -46,8 +46,8 @@ CHEROKEE_ADD_FUNC_NEW  (config_entry);
 CHEROKEE_ADD_FUNC_FREE (config_entry);
 
 
-ret_t
-cherokee_config_entry_init (cherokee_config_entry_t *entry)
+static ret_t
+init (struct cherokee_config_entry *entry)
 {
 	entry->handler_new_func          = NULL;
 	entry->handler_properties        = NULL;
@@ -81,6 +81,13 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 	entry->timeout_header            = NULL;
 
 	return ret_ok;
+}
+
+
+ret_t
+cherokee_config_entry_init (cherokee_config_entry_t *entry)
+{
+	return init (entry);
 }
 
 
@@ -303,4 +310,20 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	}
 
 	return ret_ok;
+}
+
+
+/* Entry reference
+ */
+
+ret_t
+cherokee_config_entry_ref_init (cherokee_config_entry_ref_t *entry)
+{
+	return init (entry);
+}
+
+ret_t
+cherokee_config_entry_ref_clean (cherokee_config_entry_ref_t *entry)
+{
+	return init (entry);
 }

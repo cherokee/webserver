@@ -69,7 +69,7 @@ typedef enum {
 } cherokee_expiration_props_t;
 
 
-typedef struct {
+struct cherokee_config_entry {
 	/* Properties
 	 */
 	cherokee_buffer_t           *document_root;
@@ -117,11 +117,15 @@ typedef struct {
 	 */
 	cherokee_null_int_t          timeout_lapse;
 	cherokee_buffer_t           *timeout_header;
-} cherokee_config_entry_t;
+};
+
+typedef struct cherokee_config_entry cherokee_config_entry_t;
+typedef struct cherokee_config_entry cherokee_config_entry_ref_t;
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))
 
-
+/* Entry
+ */
 ret_t cherokee_config_entry_new      (cherokee_config_entry_t **entry);
 ret_t cherokee_config_entry_free     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
@@ -139,5 +143,10 @@ ret_t cherokee_config_entry_complete    (cherokee_config_entry_t *entry,
 					 cherokee_config_entry_t *source);
 
 ret_t cherokee_config_entry_print       (cherokee_config_entry_t *entry);
+
+/* Entry Reference
+ */
+ret_t cherokee_config_entry_ref_init  (cherokee_config_entry_ref_t *entry);
+ret_t cherokee_config_entry_ref_clean (cherokee_config_entry_ref_t *entry);
 
 #endif /* CHEROKEE_CONFIG_ENTRY_H */

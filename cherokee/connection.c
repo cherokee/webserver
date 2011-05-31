@@ -107,7 +107,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->range_end                 = -1;
 	n->vserver                   = NULL;
 	n->arguments                 = NULL;
-	n->realm_ref                 = NULL;
 	n->mmaped                    = NULL;
 	n->mmaped_len                = 0;
 	n->io_entry_ref              = NULL;
@@ -131,9 +130,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->limit_rate                = false;
 	n->limit_bps                 = 0;
 	n->limit_blocked_until       = 0;
-	n->header_ops                = NULL;
-	n->flcache_cookies_disregard = NULL;
-	n->flcache_policy            = flcache_policy_explicitly_allowed;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -174,6 +170,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->chunked_last_package = false;
 	cherokee_buffer_init (&n->chunked_len);
 
+	cherokee_config_entry_ref_init (&n->config_entry);
 	cherokee_flcache_conn_init (&n->flcache);
 
 	*conn = n;
@@ -302,38 +299,34 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		conn->validator = NULL;
 	}
 
-	conn->phase                     = phase_reading_header;
-	conn->auth_type                 = http_auth_nothing;
-	conn->req_auth_type             = http_auth_nothing;
-	conn->upgrade                   = http_upgrade_nothing;
-	conn->options                   = conn_op_nothing;
-	conn->error_code                = http_ok;
-	conn->range_start               = -1;
-	conn->range_end                 = -1;
-	conn->logger_ref                = NULL;
-	conn->realm_ref                 = NULL;
-	conn->mmaped                    = NULL;
-	conn->mmaped_len                = 0;
-	conn->rx                        = 0;
-	conn->tx                        = 0;
-	conn->rx_partial                = 0;
-	conn->tx_partial                = 0;
-	conn->traffic_next              = 0;
-	conn->polling_multiple          = false;
-	conn->polling_mode              = FDPOLL_MODE_NONE;
-	conn->expiration                = cherokee_expiration_none;
-	conn->expiration_time           = 0;
-	conn->expiration_prop           = cherokee_expiration_prop_none;
-	conn->chunked_encoding          = false;
-	conn->chunked_sent              = 0;
-	conn->chunked_last_package      = false;
-	conn->respins                   = 0;
-	conn->limit_rate                = false;
-	conn->limit_bps                 = 0;
-	conn->limit_blocked_until       = 0;
-	conn->header_ops                = NULL;
-	conn->flcache_cookies_disregard = NULL;
-	conn->flcache_policy            = flcache_policy_explicitly_allowed;
+	conn->phase                = phase_reading_header;
+	conn->auth_type            = http_auth_nothing;
+	conn->req_auth_type        = http_auth_nothing;
+	conn->upgrade              = http_upgrade_nothing;
+	conn->options              = conn_op_nothing;
+	conn->error_code           = http_ok;
+	conn->range_start          = -1;
+	conn->range_end            = -1;
+	conn->logger_ref           = NULL;
+	conn->mmaped               = NULL;
+	conn->mmaped_len           = 0;
+	conn->rx                   = 0;
+	conn->tx                   = 0;
+	conn->rx_partial           = 0;
+	conn->tx_partial           = 0;
+	conn->traffic_next         = 0;
+	conn->polling_multiple     = false;
+	conn->polling_mode         = FDPOLL_MODE_NONE;
+	conn->expiration           = cherokee_expiration_none;
+	conn->expiration_time      = 0;
+	conn->expiration_prop      = cherokee_expiration_prop_none;
+	conn->chunked_encoding     = false;
+	conn->chunked_sent         = 0;
+	conn->chunked_last_package = false;
+	conn->respins              = 0;
+	conn->limit_rate           = false;
+	conn->limit_bps            = 0;
+	conn->limit_blocked_until  = 0;
 
 	memset (conn->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_ovecsize = 0;
@@ -363,6 +356,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->error_internal_code = http_unset;
 	cherokee_buffer_clean (&conn->error_internal_url);
 	cherokee_buffer_clean (&conn->error_internal_qs);
+
+	cherokee_config_entry_ref_clean (&conn->config_entry);
 
 	if (conn->arguments != NULL) {
 		cherokee_avl_free (conn->arguments,
@@ -570,7 +565,7 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 	 */
 	if (conn->auth_type & http_auth_basic) {
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Basic realm=\"");
-		cherokee_buffer_add_buffer (buffer, conn->realm_ref);
+		cherokee_buffer_add_buffer (buffer, conn->config_entry.auth_realm);
 		cherokee_buffer_add_str (buffer, "\""CRLF);
 	}
 
@@ -585,7 +580,7 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 		/* Realm
 		 */
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Digest realm=\"");
-		cherokee_buffer_add_buffer (buffer, conn->realm_ref);
+		cherokee_buffer_add_buffer (buffer, conn->config_entry.auth_realm);
 		cherokee_buffer_add_str (buffer, "\", ");
 
 		/* Nonce:
@@ -809,7 +804,7 @@ build_response_header (cherokee_connection_t *conn,
 
 	/* Authentication
 	 */
-	if (conn->realm_ref != NULL) {
+	if (conn->config_entry.auth_realm != NULL) {
 		if ((conn->error_code          == http_unauthorized) ||
 		    (conn->error_internal_code == http_unauthorized))
 		{
@@ -867,8 +862,8 @@ build_response_header_final (cherokee_connection_t *conn,
 	/* Headers ops:
 	 * This must be the last operation
 	 */
-	if (conn->header_ops) {
-		cherokee_header_op_render (conn->header_ops, &conn->buffer);
+	if (conn->config_entry.header_ops) {
+		cherokee_header_op_render (conn->config_entry.header_ops, &conn->buffer);
 	}
 }
 
@@ -1824,8 +1819,6 @@ ret_t
 cherokee_connection_set_custom_droot (cherokee_connection_t   *conn,
 				      cherokee_config_entry_t *entry)
 {
-	ret_t ret;
-
 	/* Shortcut
 	 */
 	if ((entry->document_root == NULL) ||
@@ -1837,7 +1830,7 @@ cherokee_connection_set_custom_droot (cherokee_connection_t   *conn,
 	BIT_SET (conn->options, conn_op_document_root);
 
 	cherokee_buffer_clean (&conn->local_directory);
-	ret = cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
+	cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
 
 	/* It has to drop the webdir from the request:
 	 *
@@ -2348,6 +2341,20 @@ cherokee_connection_create_handler (cherokee_connection_t *conn, cherokee_config
 	case ret_ok:
 	case ret_eof:
 	case ret_eagain:
+		/* Trace the name of the new handler
+		 */
+#ifdef TRACE_ENABLED
+		if ((conn->handler != NULL) &&
+		    (cherokee_trace_is_tracing()))
+		{
+			char *name = NULL;
+
+			ret = cherokee_module_get_name (MODULE (conn->handler), &name);
+			if ((ret == ret_ok) && (name != NULL)) {
+				TRACE(ENTRIES",handler", "Instanced handler: '%s'\n", name);
+			}
+		}
+#endif
 		return ret;
 	default:
 		if ((conn->handler == NULL) &&

@@ -97,7 +97,7 @@ cherokee_validator_htdigest_free (cherokee_validator_htdigest_t *htdigest)
 static ret_t
 build_HA1 (cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
-	cherokee_buffer_add_va (buf, "%s:%s:%s", conn->validator->user.buf, conn->realm_ref->buf, conn->validator->passwd.buf);
+	cherokee_buffer_add_va (buf, "%s:%s:%s", conn->validator->user.buf, conn->config_entry.auth_realm->buf, conn->validator->passwd.buf);
 	cherokee_buffer_encode_md5_digest (buf);
 	return ret_ok;
 }

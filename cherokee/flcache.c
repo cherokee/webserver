@@ -525,13 +525,13 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		/* Set-cookie
 		 */
 		else if (strncasecmp (begin, "Set-cookie:", 11) == 0) {
-			if (conn->flcache_cookies_disregard) {
+			if (conn->config_entry.flcache_cookies_disregard) {
 				int                 re;
 				void               *pcre;
 				cherokee_list_t    *i;
 				cherokee_boolean_t  matched = false;
 
-				list_for_each (i, conn->flcache_cookies_disregard) {
+				list_for_each (i, conn->config_entry.flcache_cookies_disregard) {
 					pcre = LIST_ITEM_INFO(i);
 
 					re = pcre_exec (pcre, NULL, begin, end-begin, 0, 0, NULL, 0);
@@ -600,7 +600,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 	/* Check the caching policy
 	 */
 	if ((! do_cache) &&
-	    (conn->flcache_policy == flcache_policy_explicitly_allowed))
+	    (conn->config_entry.flcache_policy == flcache_policy_explicitly_allowed))
 	{
 		TRACE(ENTRIES, "Doesn't explicitly allow caching.%s", "\n");
 		return ret_deny;

@@ -67,6 +67,7 @@
 #include "regex.h"
 #include "bind.h"
 #include "bogotime.h"
+#include "config_entry.h"
 
 typedef enum {
 	phase_nothing,
@@ -104,6 +105,7 @@ struct cherokee_connection {
 	void                         *vserver;
 	void                         *thread;
 	cherokee_bind_t              *bind;
+	cherokee_config_entry_ref_t   config_entry;
 
 	/* ID
 	 */
@@ -137,7 +139,6 @@ struct cherokee_connection {
 	/* Headers
 	 */
 	cherokee_header_t             header;
-	cherokee_list_t              *header_ops;
 
 	/* Encoders
 	 */
@@ -166,8 +167,6 @@ struct cherokee_connection {
 	/* Authentication
 	 */
 	cherokee_validator_t         *validator;           /* Validator object */
-	cherokee_buffer_t            *realm_ref;           /* "My private data" */
-
 	cherokee_http_auth_t          auth_type;           /* Auth type of the resource */
 	cherokee_http_auth_t          req_auth_type;       /* Auth type of the request  */
 
@@ -187,7 +186,6 @@ struct cherokee_connection {
 	 */
 	uint32_t                      keepalive;
 	time_t                        timeout;
-
 	time_t                        timeout_lapse;
 	cherokee_buffer_t            *timeout_header;
 
@@ -207,8 +205,6 @@ struct cherokee_connection {
 	/* Front-line cache
 	 */
 	cherokee_flcache_conn_t       flcache;
-	cherokee_flcache_policy_t     flcache_policy;
-	cherokee_list_t              *flcache_cookies_disregard;
 
 	/* Regular expressions
 	 */
