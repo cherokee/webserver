@@ -1786,6 +1786,20 @@ cherokee_mkstemp (cherokee_buffer_t *buffer, int *fd)
 
 
 ret_t
+cherokee_mkdtemp (char *template)
+{
+	char *re;
+
+	re = mkdtemp (template);
+	if (unlikely (re == NULL)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_fix_dirpath (cherokee_buffer_t *buf)
 {
 	while ((buf->len > 1) &&
