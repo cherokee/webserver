@@ -404,9 +404,9 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "20!expiration!caching = no-cache\n"
 				 RULE_PRE "20!expiration!caching!no-store = 1\n");
 
-	cherokee_buffer_add_str (&buf, RULE_PRE "20!document_root = ");
-	cherokee_tmp_dir_copy   (&buf);
-	cherokee_buffer_add_va  (&buf, "/cherokee/rrd-cache\n");
+	cherokee_buffer_add_str    (&buf, RULE_PRE "20!document_root = ");
+	cherokee_buffer_add_buffer (&buf, &cherokee_tmp_dir);
+	cherokee_buffer_add_va     (&buf, "/rrd-cache\n");
 
 	/* MIME types
 	 */

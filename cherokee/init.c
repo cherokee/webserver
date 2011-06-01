@@ -43,6 +43,23 @@ cherokee_null_bool_t cherokee_readable_errors;
 
 static cherokee_boolean_t _cherokee_init = false;
 
+static ret_t
+init_tmp_dir (void)
+{
+	ret_t ret;
+
+	cherokee_buffer_init    (&cherokee_tmp_dir);
+	cherokee_tmp_dir_copy   (&cherokee_tmp_dir);
+	cherokee_buffer_add_str (&cherokee_tmp_dir, "/cherokee.XXXXXXXXXXX");
+
+	ret = cherokee_mkdtemp (cherokee_tmp_dir.buf);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
 ret_t
 cherokee_init (void)
 {
@@ -90,8 +107,10 @@ cherokee_init (void)
 
 	/* Temp directory
 	 */
-	cherokee_buffer_init (&cherokee_tmp_dir);
-	cherokee_tmp_dir_copy (&cherokee_tmp_dir);
+	ret = init_tmp_dir();
+	if (ret != ret_ok) {
+		return ret;
+	}
 
 	cherokee_admin_child     = false;
 	cherokee_readable_errors = NULLB_NULL;

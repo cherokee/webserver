@@ -32,6 +32,7 @@
 #include <sys/wait.h>
 
 #include "rrd_tools.h"
+#include "init.h"
 #include "virtual_server.h"
 #include "util.h"
 
@@ -136,8 +137,8 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 	/* Build the image cache directory
 	 */
 	if (cherokee_buffer_is_empty (&rrd_conn->path_img_cache)) {
-		cherokee_tmp_dir_copy  (&rrd_conn->path_img_cache);
-		cherokee_buffer_add_va (&rrd_conn->path_img_cache, "/cherokee/rrd-cache");
+		cherokee_buffer_add_buffer (&rrd_conn->path_img_cache, &cherokee_tmp_dir);
+		cherokee_buffer_add_str    (&rrd_conn->path_img_cache, "/rrd-cache");
 	}
 
 	return ret_ok;
