@@ -1893,6 +1893,68 @@ cherokee_mkdir_p_perm (cherokee_buffer_t *dir_path,
 
 
 ret_t
+cherokee_rm_rf (cherokee_buffer_t *path,
+		uid_t              only_uid)
+{
+	int               re;
+	DIR              *d;
+	struct dirent    *entry;
+	char              entry_buf[512];
+	struct stat       info;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+	/* Remove the directory contents
+	 */
+	d = cherokee_opendir (path->buf);
+	if (d == NULL) {
+		return ret_ok;
+	}
+
+	while (true) {
+		re = cherokee_readdir (d, (struct dirent *)entry_buf, &entry);
+		if ((re != 0) || (entry == NULL))
+			break;
+
+                if (!strncmp (entry->d_name, ".",  1)) continue;
+                if (!strncmp (entry->d_name, "..", 2)) continue;
+
+		cherokee_buffer_clean      (&tmp);
+		cherokee_buffer_add_buffer (&tmp, path);
+		cherokee_buffer_add_char   (&tmp, '/');
+		cherokee_buffer_add        (&tmp, entry->d_name, strlen(entry->d_name));
+
+		if (only_uid != -1) {
+			re = cherokee_stat (tmp.buf, &info);
+			if (re != 0) continue;
+
+			if (info.st_uid != only_uid)
+				continue;
+		}
+
+		if (S_ISDIR (info.st_mode)) {
+			cherokee_rm_rf (&tmp, only_uid);
+			TRACE (ENTRIES, "Removing cache dir: %s\n", tmp.buf, re);
+		} else if (S_ISREG (info.st_mode)) {
+			re = unlink (tmp.buf);
+			TRACE (ENTRIES, "Removing cache file: %s, re=%d\n", tmp.buf, re);
+		}
+	}
+
+	cherokee_closedir (d);
+
+	/* It should be empty by now
+	 */
+	re = rmdir (path->buf);
+	TRACE (ENTRIES, "Removing main vserver cache dir: %s, re=%d\n", path->buf, re);
+
+	/* Clean up
+	 */
+	cherokee_buffer_mrproper (&tmp);
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_iovec_skip_sent (struct iovec *orig, uint16_t  orig_len,
 			  struct iovec *dest, uint16_t *dest_len,
 			  size_t sent)
