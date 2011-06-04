@@ -41,6 +41,7 @@ class Test (TestCollection):
         self.name           = "Front-line: Fresh Content (1day)"
         self.conf           = CONF
         self.proxy_suitable = True
+        self.delay          = 1
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)

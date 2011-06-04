@@ -34,6 +34,7 @@ class Test (TestCollection):
         self.name           = "Front-line: GZip, no-GZip, GZip, no-GZip"
         self.conf           = CONF
         self.proxy_suitable = True
+        self.delay          = 1
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)

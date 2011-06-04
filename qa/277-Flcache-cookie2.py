@@ -42,6 +42,7 @@ class Test (TestCollection):
         self.name           = "Front-line cache: Diregarded cookie"
         self.conf           = CONF
         self.proxy_suitable = True
+        self.delay          = 1
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)

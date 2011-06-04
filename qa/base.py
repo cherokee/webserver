@@ -11,6 +11,7 @@
 import os
 import imp
 import sys
+import time
 import types
 import socket
 import string
@@ -387,6 +388,7 @@ class TestCollection (TestBase):
         self.tests    = []
         self.num      = 0
         self.disabled = False
+        self.delay    = 0
 
     def Add (self, test):
         self.num += 1
@@ -437,8 +439,10 @@ class TestCollection (TestBase):
         for t in self.tests:
             self.current_test = t
             r = t.Run(host, port, ssl)
-
             if r == -1: return r
+
+            if self.delay > 0:
+                time.sleep (self.delay)
         return r
 
     def __str__ (self):
