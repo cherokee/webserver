@@ -75,6 +75,12 @@
 	 (size_t)(((struct sockaddr_un*)0)->sun_path))
 #endif
 
+#ifndef SUN_ABSTRACT_LEN
+#define SUN_ABSTRACT_LEN(sa)					\
+	(strlen((sa)->sun_path+1) + 2 +				\
+	 (size_t)(((struct sockaddr_un*)0)->sun_path))
+#endif
+
 
 /* Socket status
  */

@@ -194,7 +194,7 @@ set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 
 	/* Unix socket
 	 */
-	if (host->buf[0] == '/') {
+	if (host->buf[0] == '/' || host->buf[0] == '@') {
 		cherokee_buffer_add_buffer (&src->unix_socket, host);
 		return ret_ok;
 	}

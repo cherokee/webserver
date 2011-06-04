@@ -1309,24 +1309,32 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 ret_t
 cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hostname)
 {
+#ifndef _WIN32
 	if (SOCKET_AF(socket) == AF_UNIX) {
-#ifdef _WIN32
-		SHOULDNT_HAPPEN;
-		return ret_no_sys;
-#else
 		memset ((char*) SOCKET_SUN_PATH(socket), 0,
 			sizeof (SOCKET_ADDR_UNIX(socket)));
 
 		SOCKET_ADDR_UNIX(socket)->sun_family = AF_UNIX;
 
-		strncpy (SOCKET_SUN_PATH (socket), hostname->buf,
-			 sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - sizeof(short));
+		if (hostname->buf[0] == '@') {
+			strncpy (SOCKET_SUN_PATH (socket) + 1, hostname->buf + 1,
+				 (sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - 1) - sizeof(short));
+			SOCKET_SUN_PATH (socket)[0] = 0;
+		}
+		else {
+			strncpy (SOCKET_SUN_PATH (socket), hostname->buf,
+				 sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - sizeof(short));
+		}
 
 		return ret_ok;
-#endif
 	}
 
 	return cherokee_gethostbyname (hostname->buf, &SOCKET_SIN_ADDR(socket));
+
+#else
+	SHOULDNT_HAPPEN;
+	return ret_no_sys;
+#endif
 }
 
 
@@ -1357,9 +1365,16 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 #endif
 #ifdef HAVE_SOCKADDR_UN
 		case AF_UNIX:
-			r = connect (SOCKET_FD(sock),
-				     (struct sockaddr *) &SOCKET_ADDR(sock),
-				     SUN_LEN (SOCKET_ADDR_UNIX(sock)));
+			if (SOCKET_SUN_PATH (socket)[0] != 0) {
+				r = connect (SOCKET_FD(sock),
+					     (struct sockaddr *) &SOCKET_ADDR(sock),
+					     SUN_LEN (SOCKET_ADDR_UNIX(sock)));
+			}
+			else {
+				r = connect (SOCKET_FD(sock),
+					     (struct sockaddr *) &SOCKET_ADDR(sock),
+					     SUN_ABSTRACT_LEN (SOCKET_ADDR_UNIX(sock)));
+			}
 			break;
 #endif
 		default:
