@@ -849,6 +849,9 @@ cherokee_flcache_conn_clean (cherokee_flcache_conn_t *flcache_conn)
 	flcache_conn->mode          = flcache_mode_undef;
 
 	if (flcache_conn->fd != -1) {
+		TRACE (ENTRIES, "Front Line Cache: Closing fd=%d (%d refs)\n",
+		       flcache_conn->fd, entry->ref_count);
+
 		cherokee_fd_close (flcache_conn->fd);
 		flcache_conn->fd = -1;
 	}
