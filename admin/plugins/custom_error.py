@@ -51,4 +51,4 @@ class Plugin_custom_error (Handler.PluginHandler):
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('Custom Error')))
         self += CTK.Indenter (submit)
 
-CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")

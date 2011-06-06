@@ -57,4 +57,4 @@ class Plugin_secdownload (Handler.PluginHandler):
         VALS = [("%s!secret"%(key),  validations.is_not_empty),
                 ("%s!timeout"%(key), validations.is_number_gt_0)]
 
-        CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")

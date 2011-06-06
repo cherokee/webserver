@@ -50,4 +50,4 @@ class Plugin_common (Handler.PluginHandler):
         self += instance_plugin('file',    key, show_document_root=False)
         self += instance_plugin('dirlist', key, show_document_root=False)
 
-CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")

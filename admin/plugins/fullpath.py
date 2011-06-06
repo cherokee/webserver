@@ -123,4 +123,4 @@ class Plugin_fullpath (RulePlugin):
         else:
             return _("Path")
 
-CTK.publish (URL_APPLY, commit, method="POST")
+CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")

@@ -120,7 +120,7 @@ class Plugin_header (RulePlugin):
         self += submit
 
         # Validation, and Public URLs
-        CTK.publish (URL_APPLY, commit, method="POST")
+        CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")
 
     def GetName (self):
         header   = CTK.cfg.get_val ('%s!header'   %(self.key), '')

@@ -278,6 +278,6 @@ if not _is_init:
     init()
 
 
-CTK.publish (URL_CAT_LIST_VSRV_R, CategoryList_Vsrv)
-CTK.publish (URL_CAT_LIST_RULE_R, CategoryList_Rule)
-CTK.publish (URL_CAT_APPLY, CategoryList_Apply, method="POST")
+CTK.publish (URL_CAT_LIST_VSRV_R,   CategoryList_Vsrv)
+CTK.publish (URL_CAT_LIST_RULE_R,   CategoryList_Rule)
+CTK.publish ('^%s'%(URL_CAT_APPLY), CategoryList_Apply, method="POST")

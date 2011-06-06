@@ -141,4 +141,4 @@ VALS = [
 # Rule
 CTK.publish ('^/wizard/vserver/redirect$',   Welcome)
 CTK.publish ('^/wizard/vserver/redirect/2$', Redirection)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

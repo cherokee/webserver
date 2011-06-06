@@ -209,4 +209,4 @@ class Welcome:
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/flcache$',  Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/flcache/2', Create)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST")
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST")

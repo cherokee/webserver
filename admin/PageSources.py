@@ -34,7 +34,7 @@ URL_APPLY = r'/source/apply'
 
 HELPS = [('config_virtual_servers', N_("Virtual Servers"))]
 
-def apply():
+def commit():
     for k in CTK.post:
         CTK.cfg[k] = CTK.post[k]
     return {'ret': 'ok'}
@@ -53,5 +53,5 @@ class Render:
         return page.Render()
 
 
-CTK.publish (URL_BASE, Render)
-CTK.publish (URL_APPLY, apply, method="POST")
+CTK.publish (URL_BASE,  Render)
+CTK.publish (URL_APPLY, commit, method="POST")

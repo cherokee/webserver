@@ -242,4 +242,4 @@ CTK.publish ('^/wizard/vserver/(\d+)/alfresco/2$', Common)
 CTK.publish ('^/wizard/vserver/(\d+)/alfresco/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

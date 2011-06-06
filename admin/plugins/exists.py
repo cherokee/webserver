@@ -103,7 +103,7 @@ class Plugin_exists (RulePlugin):
         VALS = [("tmp!exists",      validations.is_list),
                 ("%s!exists"%(key), validations.is_list)]
 
-        CTK.publish (URL_APPLY, commit, validation=VALS, method="POST")
+        CTK.publish ("^%s"%(URL_APPLY), commit, validation=VALS, method="POST")
 
     def _GUI_new (self, key, vsrv_num):
         any = CTK.CheckCfgText('%s!match_any'%(key), False, _('Enabled'), {'class': 'noauto'})

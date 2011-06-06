@@ -70,4 +70,4 @@ class Plugin_streaming (Handler.PluginHandler):
         VALS = [("%s!rate_factor"%(key), validations.is_float),
                 ("%s!rate_boost"%(key),  validations.is_number_gt_0)]
 
-        CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")

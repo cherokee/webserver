@@ -77,7 +77,7 @@ class Plugin_dirlist (Handler.PluginHandler):
                 ("%s!notice_files"%(key), validations.is_path_list),
                 ("%s!hidden_files"%(key), validations.is_list)]
 
-        CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
 
     def _get_theme_list (self):
         themes = []

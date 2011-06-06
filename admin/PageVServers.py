@@ -154,12 +154,24 @@ class VirtualServerNew (CTK.Container):
         panel.Add ('manual', URL_NEW_MANUAL, content, draggable=False)
 
         # Wizard Categories
-        for cat in Wizard.Categories (Wizard.TYPE_VSERVER):
-            url_pre = '%s/%s' %(Wizard.URL_CAT_LIST_VSRV, cat['name'])
-            title, descr = cat['title'], cat['descr']
-            content = [CTK.Box({'class': 'title'},       CTK.RawHTML(_(title))),
-                       CTK.Box({'class': 'description'}, CTK.RawHTML(_(descr)))]
-            panel.Add (cat['name'], url_pre, content, draggable=False)
+        wizards2_path = os.path.realpath (__file__ + "/../wizards2")
+        if os.path.exists (wizards2_path):
+            # Wizards 2.0
+            import wizards2
+
+            categories = wizards2.Categories.get()
+            for cat in categories:
+                url_pre = '%s/%s' %(wizards2.Categories.URL_CAT_LIST_VSRV, categories[cat])
+                content = [CTK.Box({'class': 'title'}, CTK.RawHTML(_(cat)))]
+                panel.Add (categories[cat], url_pre, content, draggable=False)
+        else:
+            # Wizards 1.0
+            for cat in Wizard.Categories (Wizard.TYPE_VSERVER):
+                url_pre = '%s/%s' %(Wizard.URL_CAT_LIST_VSRV, cat['name'])
+                title, descr = cat['title'], cat['descr']
+                content = [CTK.Box({'class': 'title'},       CTK.RawHTML(_(title))),
+                           CTK.Box({'class': 'description'}, CTK.RawHTML(_(descr)))]
+                panel.Add (cat['name'], url_pre, content, draggable=False)
 
 
 class Render:
@@ -366,5 +378,5 @@ class RenderParticular:
 CTK.publish (r'^%s$'    %(URL_BASE),       Render)
 CTK.publish (r'^%s/\d+$'%(URL_BASE),       RenderParticular)
 CTK.publish (r'^%s$'    %(URL_NEW_MANUAL), NewManual, method="POST", validation=VALIDATIONS)
-CTK.publish (r'^%s$'    %(URL_APPLY),      Commit, method="POST", validation=VALIDATIONS)
+CTK.publish (r'^%s'     %(URL_APPLY),      Commit,    method="POST", validation=VALIDATIONS)
 

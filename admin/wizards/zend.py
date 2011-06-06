@@ -278,4 +278,4 @@ CTK.publish ('^/wizard/vserver/(\d+)/zend/3$', LocalSource)
 CTK.publish ('^/wizard/vserver/(\d+)/zend/4$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

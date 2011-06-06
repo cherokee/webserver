@@ -96,4 +96,4 @@ class Plugin_wildcard (CTK.Plugin):
         self += refresh
 
         # Validation, and Public URLs
-        CTK.publish ('^%s/[\d]+$'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+        CTK.publish ('^%s/[\d]+'%(URL_APPLY), CTK.cfg_apply_post, method="POST")

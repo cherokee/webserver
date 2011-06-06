@@ -46,7 +46,7 @@ URL_APPLY        = '/vserver/%s/rule/apply'
 URL_NEW_MANUAL   = '/vserver/%s/rule/new/manual'
 URL_NEW_MANUAL_R = r'/vserver/(\d+)/rule/new/manual'
 URL_BASE_R       = r'^/vserver/(\d+)/rule$'
-URL_APPLY_R      = r'^/vserver/(\d+)/rule/apply$'
+URL_APPLY_R      = r'^/vserver/(\d+)/rule/apply'
 URL_PARTICULAR_R = r'^/vserver/(\d+)/rule/\d+$'
 
 NOTE_DELETE_DIALOG = N_('<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure you want to proceed?</p>')

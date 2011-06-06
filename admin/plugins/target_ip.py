@@ -106,5 +106,5 @@ class Plugin_target_ip (CTK.Plugin):
 
         # Validation, and Public URLs
         VALS = [('%s!.+'%(pre), validations.is_ip_or_netmask)]
-        CTK.publish ('^%s/[\d]+$'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
-        CTK.publish ('^%s/[\d]+/del$'%(URL_APPLY), apply_del, method="POST")
+        CTK.publish ('^%s/[\d]+'    %(URL_APPLY), CTK.cfg_apply_post, method="POST", validation=VALS)
+        CTK.publish ('^%s/[\d]+/del'%(URL_APPLY), apply_del,          method="POST")

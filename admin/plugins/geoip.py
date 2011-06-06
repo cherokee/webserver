@@ -96,4 +96,4 @@ class Plugin_geoip (RulePlugin):
         return "From countries %s" %(match)
 
 # Validation, and Public URLs
-CTK.publish (URL_APPLY, commit, method="POST")
+CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")

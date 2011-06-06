@@ -53,4 +53,4 @@ class Plugin_post_report (Handler.PluginHandler):
 
         self += submit
 
-CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")

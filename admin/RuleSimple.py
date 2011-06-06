@@ -73,7 +73,7 @@ class PluginSimple (RulePlugin):
             validation = []
 
         # Public URL
-        CTK.publish (url_apply, apply, method="POST", validation=validation, extension=extension)
+        CTK.publish ('^%s'%(url_apply), apply, method="POST", validation=validation, extension=extension)
 
     def GetName (self):
         value = CTK.cfg.get_val ('%s!%s' %(self.key, self.extension), '')

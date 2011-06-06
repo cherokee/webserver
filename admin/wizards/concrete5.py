@@ -316,4 +316,4 @@ CTK.publish ('^/wizard/vserver/(\d+)/concrete5/3$', LocalSource)
 CTK.publish ('^/wizard/vserver/(\d+)/concrete5/4$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

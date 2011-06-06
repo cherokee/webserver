@@ -68,4 +68,4 @@ class Plugin_dbslayer (Handler.PluginHandler):
         self += CTK.Indenter (table)
         self += modul
 
-CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")

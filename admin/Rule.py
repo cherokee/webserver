@@ -206,4 +206,4 @@ class Rule (CTK.Box):
         return tmp.replace ('%', '&#37;')
 
 
-CTK.publish (r"^%s$"%(URL_APPLY_LOGIC), RuleButtons_apply, method="POST")
+CTK.publish (r"^%s"%(URL_APPLY_LOGIC), RuleButtons_apply, method="POST")

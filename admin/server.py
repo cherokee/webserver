@@ -82,7 +82,7 @@ def init (scgi_port, cfg_file):
             print >> sys.stderr, "[FATAL ERROR]: The 'localhost' host name cannot be resolved.\n"
             sys.exit(1)
 
-        CTK.init (host="localhost", port=int(scgi_port), sec_cookie=True)
+        CTK.init (host="localhost", port=int(scgi_port), sec_cookie=True, sec_submit=True)
 
     else:
         # Remove the unix socket if it already exists
@@ -94,7 +94,7 @@ def init (scgi_port, cfg_file):
         except OSError:
             pass
 
-        CTK.init (unix_socket=scgi_port, sec_cookie=True)
+        CTK.init (unix_socket=scgi_port, sec_cookie=True, sec_submit=True)
 
     # At this moment, CTK must be forced to work as a syncronous
     # server. All the initial tests (config file readable, correct
@@ -258,6 +258,12 @@ if __name__ == "__main__":
     import PageHelp
     import PageStatus
     import market
+
+    # Wizards 2.0 (TMP!)
+    wizards2_path = os.path.realpath (__file__ + "/../wizards2")
+    if os.path.exists (wizards2_path):
+        import wizards2
+        print "!!!"
 
     # Init translation
     if CTK.cfg['admin!lang']:

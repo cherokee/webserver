@@ -410,7 +410,7 @@ CTK.publish (URL_WIZARD_APPLY_R, Commit, method="POST")
 CTK.publish ('^/wizard/vserver/php$',   WelcomeVserver)
 CTK.publish ('^/wizard/vserver/php/2$', DocumentRoot)
 CTK.publish ('^/wizard/vserver/php/3$', Host)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY),        Commit, method="POST", validation=VALS)
 
 
 #

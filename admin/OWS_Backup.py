@@ -332,9 +332,9 @@ def _get_configs():
 CTK.publish (r'^%s$'%(URL_SAVE_NOTE),       Backup_Save_Note)
 CTK.publish (r'^%s$'%(URL_SAVE_FAIL),       Backup_Save_Fail)
 CTK.publish (r'^%s$'%(URL_SAVE_SUCCESS),    Backup_Save_Success)
-CTK.publish (r'^%s$'%(URL_SAVE_APPLY),      Apply.Save,    method="POST")
+CTK.publish (r'^%s' %(URL_SAVE_APPLY),      Apply.Save,    method="POST")
 
 CTK.publish (r'^%s$'%(URL_RESTORE_NOTE),    Backup_Restore_Note)
 CTK.publish (r'^%s$'%(URL_RESTORE_FAIL),    Backup_Restore_Fail)
 CTK.publish (r'^%s$'%(URL_RESTORE_SUCCESS), Backup_Restore_Success)
-CTK.publish (r'^%s$'%(URL_RESTORE_APPLY),   Apply.Restore, method="POST")
+CTK.publish (r'^%s' %(URL_RESTORE_APPLY),   Apply.Restore, method="POST")

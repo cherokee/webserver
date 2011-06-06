@@ -111,4 +111,4 @@ class Plugin_url_arg (RulePlugin):
 
 
 # Validation, and Public URLs
-CTK.publish (URL_APPLY, commit, method="POST")
+CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")

@@ -720,8 +720,8 @@ class Render:
 
 
 CTK.publish (r'^%s/[\d]+$'        %(URL_BASE),  Render)
-CTK.publish (r'^%s/[\d]+$'        %(URL_APPLY), CTK.cfg_apply_post,        validation=VALIDATIONS, method="POST")
-CTK.publish (r'^%s/[\d]+/log$'    %(URL_APPLY), LogginWidgetContent_Apply, validation=VALIDATIONS, method="POST")
-CTK.publish (r'^%s/[\d]+/vmatch$' %(URL_APPLY), HostMatchWidget_Apply, method="POST")
+CTK.publish (r'^%s/[\d]+'         %(URL_APPLY), CTK.cfg_apply_post,        method="POST", validation=VALIDATIONS)
+CTK.publish (r'^%s/[\d]+/log'     %(URL_APPLY), LogginWidgetContent_Apply, method="POST", validation=VALIDATIONS)
+CTK.publish (r'^%s/[\d]+/vmatch'  %(URL_APPLY), HostMatchWidget_Apply,     method="POST")
 CTK.publish (r'^%s/[\d]+/clone$'  %(URL_BASE),  commit_clone)
 

@@ -265,4 +265,4 @@ VALS = [
 CTK.publish ('^/wizard/vserver/mailman$',   Welcome)
 CTK.publish ('^/wizard/vserver/mailman/2$', LocalSource)
 CTK.publish ('^/wizard/vserver/mailman/3$', Host)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

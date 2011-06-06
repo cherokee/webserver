@@ -164,4 +164,4 @@ class PluginHandlerCGI (Handler.PluginHandler):
 
         # Publish
         VALS = [("%s!script_alias"%(self.key), validations.is_path)]
-        CTK.publish ('^%s$'%(URL_APPLY), commit, validation=VALS, method="POST")
+        CTK.publish ('^%s'%(URL_APPLY), commit, validation=VALS, method="POST")

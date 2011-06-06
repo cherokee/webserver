@@ -135,4 +135,4 @@ class Plugin_error_redir (CTK.Plugin):
         self += CTK.Indenter (refresh)
 
         # Validation, and Public URLs
-        CTK.publish ('^%s/[\d]+$'%(URL_APPLY), commit, method="POST", validation=VALIDATIONS)
+        CTK.publish ('^%s/[\d]+'%(URL_APPLY), commit, method="POST", validation=VALIDATIONS)

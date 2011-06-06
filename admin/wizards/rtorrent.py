@@ -151,4 +151,4 @@ CTK.publish ('^/wizard/vserver/(\d+)/rtorrent$',   Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/rtorrent/2$', LocalSource)
 
 # Common
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

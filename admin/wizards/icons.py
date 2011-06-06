@@ -143,4 +143,4 @@ class Welcome:
 
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/icons$',  Welcome)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST")
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST")

@@ -109,4 +109,4 @@ class Plugin_method (RulePlugin):
         return "%s %s" % (_('Method'), method.upper())
 
 
-CTK.publish (URL_APPLY, commit, method="POST")
+CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")

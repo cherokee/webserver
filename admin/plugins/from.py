@@ -58,7 +58,7 @@ class Plugin_from (RulePlugin):
         VAL = [('^%s!from$'%(key),   validations.is_ip_or_netmask),
                ('^%s!from!.+'%(key), validations.is_ip_or_netmask)]
 
-        CTK.publish (URL_APPLY, commit, validation=VAL, method="POST")
+        CTK.publish ("^%s"%(URL_APPLY), commit, validation=VAL, method="POST")
 
         if key.startswith('tmp'):
             return self.GUI_new()

@@ -185,4 +185,4 @@ class Welcome:
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/ssl_test$',  Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/ssl_test/2', Create)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

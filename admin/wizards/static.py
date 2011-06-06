@@ -124,4 +124,4 @@ class Welcome:
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/static$',  Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/static/2', Create)
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST")
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST")

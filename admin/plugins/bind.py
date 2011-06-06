@@ -161,4 +161,4 @@ class Plugin_bind (RulePlugin):
         txt += " or %s" %(render_entry(tmp[-1]))
         return txt
 
-CTK.publish (URL_APPLY, commit, method="POST")
+CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")

@@ -212,5 +212,5 @@ VALS = [
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/hotlinking$',   Welcome)
 CTK.publish ('^/wizard/vserver/(\d+)/hotlinking/2$', RuleData)
-CTK.publish (r'^%s$'%(URL_APPLY),         Commit,             method="POST", validation=VALS)
-CTK.publish (r'^%s$'%(URL_APPLY_REFRESH), CTK.cfg_apply_post, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY),         Commit,             method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY_REFRESH), CTK.cfg_apply_post, method="POST", validation=VALS)

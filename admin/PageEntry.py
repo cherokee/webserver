@@ -37,9 +37,9 @@ from configured import *
 
 URL_BASE            = r'^/vserver/([\d]+)/rule/content/([\d]+)/?$'
 URL_CLONE           = r'^/vserver/([\d]+)/rule/content/([\d]+)/clone$'
-URL_APPLY           = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply$'
-URL_HEADER_OP_APPLY = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply/header_op$'
-URL_FLCACHE_APPLY   = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply/flcache$'
+URL_APPLY           = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply'
+URL_HEADER_OP_APPLY = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply/header_op'
+URL_FLCACHE_APPLY   = r'^/vserver/([\d]+)/rule/content/([\d]+)/apply/flcache'
 
 NOTE_TIMEOUT         = N_('Apply a custom timeout to the connections matching this rule.')
 NOTE_HANDLER         = N_('How the connection will be handled.')

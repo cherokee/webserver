@@ -71,7 +71,7 @@ class Plugin_extensions (RulePlugin):
         VALS = [("tmp!extensions",       validations.is_extension_list),
                 ("%s!extensions"%(key),  validations.is_extension_list)]
 
-        CTK.publish (URL_APPLY, commit, validation=VALS, method="POST")
+        CTK.publish ("^%s"%(URL_APPLY), commit, validation=VALS, method="POST")
 
     def GetName (self):
         tmp = CTK.cfg.get_val ('%s!extensions' %(self.key), '')

@@ -240,4 +240,4 @@ CTK.publish ('^/wizard/vserver/(\d+)/glassfish/2$', Common)
 CTK.publish ('^/wizard/vserver/(\d+)/glassfish/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s$'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)

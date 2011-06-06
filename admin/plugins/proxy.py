@@ -281,4 +281,4 @@ class Plugin_proxy (Handler.PluginHandler):
         self += CTK.Indenter (table)
         self += modul
 
-CTK.publish ('^%s$'%(URL_APPLY), commit, method="POST", validation=VALS)
+CTK.publish ('^%s'%(URL_APPLY), commit, method="POST", validation=VALS)

@@ -132,5 +132,5 @@ class LoggedAs_Text (CTK.Box):
         self += CTK.RawHTML(")")
 
 
-CTK.publish (r'^%s$'%(LOGIN_APPLY), Login_Apply, method="POST")
+CTK.publish (r'^%s' %(LOGIN_APPLY), Login_Apply, method="POST")
 CTK.publish (r'^%s$'%(SIGNOUT_APPLY), SignOut_Apply)

@@ -128,4 +128,4 @@ class NextStep (CTK.Container):
 
 # Rule
 CTK.publish ('^/wizard/vserver/(\d+)/streaming$',   Welcome)
-CTK.publish (r'^%s$'%(APPLY), Commit, method="POST")
+CTK.publish (r'^%s'%(APPLY), Commit, method="POST")
