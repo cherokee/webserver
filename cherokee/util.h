@@ -173,6 +173,9 @@ ret_t cherokee_mkdir_p       (cherokee_buffer_t *path, int mode);
 ret_t cherokee_mkdir_p_perm  (cherokee_buffer_t *dir_path, int create_mode, int ensure_perm);
 ret_t cherokee_rm_rf         (cherokee_buffer_t *path, uid_t uid);
 
+void cherokee_random_seed    (void);
+long cherokee_random         (void);
+
 ret_t cherokee_ntop          (int family, struct sockaddr *addr, char *dst, size_t cnt);
 ret_t cherokee_wait_pid      (int pid, int *retcode);
 ret_t cherokee_reset_signals (void);

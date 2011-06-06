@@ -122,11 +122,14 @@ generate_admin_password (cherokee_buffer_t *buf)
 	cuint_t i;
 	cuint_t n;
 
-	cherokee_bogotime_update();
-	srand (cherokee_bogonow_msec * POINTER_TO_INT(buf));
+	/* Seed
+	 */
+	cherokee_random_seed();
 
+	/* Build password
+	 */
 	for (i=0; i<PASSWORD_LEN; i++) {
-		n = rand()%(sizeof(ALPHA_NUM)-1);
+		n = cherokee_random()%(sizeof(ALPHA_NUM)-1);
 		cherokee_buffer_add_char (buf, ALPHA_NUM[n]);
 	}
 

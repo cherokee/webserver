@@ -2659,3 +2659,64 @@ cherokee_pipe (int fildes[2])
 
 	return re;
 }
+
+
+void
+cherokee_random_seed (void)
+{
+#ifdef HAVE_SRANDOMDEV
+	srandomdev();
+#else
+	int      fd;
+	ssize_t  re;
+	unsigned seed;
+
+	/* Open device
+	 */
+	fd = open("/dev/urandom", O_RDONLY);
+	if (fd == -1) {
+		fd = open("/dev/random", O_RDONLY);
+	}
+
+	/* Read seed
+	 */
+	if (fd != -1) {
+		do {
+			re = read (fd, &seed, sizeof(seed));
+		} while ((re == -1) && (errno == EINTR));
+
+		cherokee_close(fd);
+
+		if (re == sizeof(seed))
+			goto out;
+	}
+
+	/* Home-made seed
+	 */
+	cherokee_bogotime_update();
+
+	seed = cherokee_bogonow_tv.tv_usec;
+	if (cherokee_bogonow_tv.tv_usec & 0xFF)
+		seed *= (cherokee_bogonow_tv.tv_usec & 0xFF);
+
+out:
+	/* Set the seed
+	 */
+# if HAVE_SRANDOM
+	srandom (seed);
+# else
+	srand (seed);
+# endif
+#endif
+}
+
+
+long
+cherokee_random (void)
+{
+#ifdef HAVE_RANDOM
+	return random();
+#else
+	return rand();
+#endif
+}

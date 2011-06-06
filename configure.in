@@ -300,7 +300,7 @@ AC_FUNC_MEMCMP
 AC_FUNC_MMAP
 AC_FUNC_FORK
 
-AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir readdir_r flockfile funlockfile strnstr backtrace)
+AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir readdir_r flockfile funlockfile strnstr backtrace random srandom srandomdev)
 
 FW_CHECK_PWD
 FW_CHECK_GRP
