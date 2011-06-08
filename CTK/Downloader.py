@@ -111,7 +111,12 @@ class DownloadEntry (threading.Thread):
             print e
             self.status = 'error'
 
-        self.size = int(self.response.headers.getheaders("Content-Length")[0])
+        length = self.response.headers.getheaders("Content-Length")
+        if length:
+            self.size = int(length[0])
+        else:
+            self.size = -1
+
         self.downloaded = 0
 
         self.status      = 'downloading'
@@ -142,7 +147,11 @@ class DownloadEntry (threading.Thread):
 
             # Stats
             self.downloaded += len(chunk)
-            self.percent = int(self.downloaded * 100 / self.size)
+
+            if self.size != -1:
+                self.percent = int(self.downloaded * 100 / self.size)
+            else:
+                self.percent = 50
 
 
 def DownloadEntry_Factory (url, *args, **kwargs):
