@@ -64,7 +64,7 @@ from Druid import Druid, DruidButtonsPanel, DruidButton, DruidButton_Goto, Druid
 from List import List, ListEntry
 from ProgressBar import ProgressBar
 from Downloader import Downloader, DownloadEntry_Factory
-from Radio import Radio, RadioText
+from Radio import Radio, RadioText, RadioGroupCfg
 from XMLRPCProxy import XMLRPCProxy
 from AjaxUpload import AjaxUpload, AjaxUpload_Generic
 from Paginator import Paginator
