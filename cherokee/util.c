@@ -2685,7 +2685,7 @@ cherokee_random_seed (void)
 			re = read (fd, &seed, sizeof(seed));
 		} while ((re == -1) && (errno == EINTR));
 
-		cherokee_close(fd);
+		cherokee_fd_close(fd);
 
 		if (re == sizeof(seed))
 			goto out;
