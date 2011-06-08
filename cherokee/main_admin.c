@@ -274,6 +274,10 @@ config_server (cherokee_server_t *srv)
 	generate_password  (&buf);
 	cherokee_buffer_add_char (&buf, '\n');
 
+	cherokee_buffer_add_str  (&buf, RULE_PRE "1!handler!env!CTK_SUBMITTER_SECRET = ");
+	generate_password  (&buf);
+	cherokee_buffer_add_char (&buf, '\n');
+
 	if (! debug) {
 		cherokee_buffer_add_str (&buf, RULE_PRE "1!encoder!gzip = 1\n");
 	}
