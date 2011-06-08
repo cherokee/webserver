@@ -28,6 +28,7 @@ from RawHTML import RawHTML
 from Widget import Widget
 from Server import cfg
 from util import to_utf8
+from Server import get_server
 
 HEADER = [
     '<script type="text/javascript" src="/CTK/js/jquery.form-defaults.js"></script>'
@@ -234,6 +235,11 @@ class TextCfgAuto (TextCfg):
         self.key = key
         self.url = url
         TextCfg.__init__ (self, key, optional, props)
+
+        # Secure submit
+        srv = get_server()
+        if srv.use_sec_submit:
+            self.url += '?key=%s' %(srv.sec_submit)
 
     def Render (self):
         value = cfg.get_val (self.key, '')

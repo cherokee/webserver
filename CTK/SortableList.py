@@ -21,6 +21,7 @@
 #
 
 from Table import Table
+from Server import get_server
 from PageCleaner import Uniq_Block
 from Server import publish, post, cfg, cfg_reply_ajax_ok
 
@@ -88,9 +89,14 @@ class SortableList (Table):
         self.url = "/sortablelist_%d"%(self.uniq_id)
         self.container = container
 
+        # Secure submit
+        srv = get_server()
+        if srv.use_sec_submit:
+            self.url += '?key=%s' %(srv.sec_submit)
+
         # Register the public URL
-        publish (self.url, changed_handler_func, method='POST',
-                 callback=callback, key_id='%s_order'%(self.id), **kwargs)
+        publish (r"^/sortablelist_%d"%(self.uniq_id), changed_handler_func,
+                 method='POST', callback=callback, key_id='%s_order'%(self.id), **kwargs)
 
     def Render (self):
         render = Table.Render (self)

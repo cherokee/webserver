@@ -92,20 +92,27 @@ class ServerHandler (pyscgi.SCGIHandler):
         # Get a copy of the server (it did fork!)
         server = get_server()
 
-        # Check security cookie
+        # Security Checks
         sec_error = False
-
         if server.use_sec_cookie:
             if not self.env['CTK_COOKIE']:
-                sec_error = True
+                sec_error = "Cookie"
             elif not server.sec_cookie:
                 server.sec_cookie = self.env['CTK_COOKIE'][:]
             else:
                 if server.sec_cookie != self.env['CTK_COOKIE']:
-                    sec_error = True
+                    sec_error = "Cookie"
+
+        if server.use_sec_submit:
+            if not server.sec_submit:
+                server.sec_submit = self.env['CTK_SUBMITTER_SECRET'][:]
+
+            if self.env['REQUEST_METHOD'] == 'POST':
+                if not server.sec_submit in url:
+                    sec_error = "Submit"
 
         if sec_error:
-            response = HTTP_Response (error=403, body="Cookie check failed")
+            response = HTTP_Response (error=403, body="%s check failed" %(sec_error))
             self.send (str(response))
             return
 
@@ -199,6 +206,8 @@ class Server:
         self.exiting        = False
         self.use_sec_cookie = False
         self.sec_cookie     = None
+        self.use_sec_submit = False
+        self.sec_submit     = None
 
     def init_server (self, *args, **kwargs):
         # Is it already init?
@@ -206,9 +215,12 @@ class Server:
             return
         self._is_init = True
 
-        # Security cookie
+        # Security cookie/submit
         if 'sec_cookie' in kwargs:
             self.use_sec_cookie = kwargs.pop('sec_cookie')
+
+        if 'sec_submit' in kwargs:
+            self.use_sec_submit = kwargs.pop('sec_submit')
 
         # Instance SCGI server
         self._scgi = pyscgi.ServerFactory (*args, **kwargs)

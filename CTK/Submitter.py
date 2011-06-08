@@ -26,6 +26,7 @@ from RawHTML import RawHTML
 from Container import Container
 from TextField import TextField
 from PageCleaner import Uniq_Block
+from Server import get_server
 
 HEADER = ['<script type="text/javascript" src="/CTK/js/Submitter.js"></script>']
 
@@ -98,6 +99,11 @@ class Submitter (Container):
         Container.__init__ (self)
         self.url = submit_url
         self.id  = "submitter%d" %(self.uniq_id)
+
+        # Secure submit
+        srv = get_server()
+        if srv.use_sec_submit:
+            self.url += '?key=%s' %(srv.sec_submit)
 
     def Render (self):
         # Child render
