@@ -208,7 +208,7 @@ were dealing with one such browser, you would have to prepend *(?i)*
 to your regular expression. That in turn would perform a
 case-insensitive evaluation, effectively solving the problem.
 
-The followgin Case-insensitive RegEx matches both example.com and Example.com::
+The following Case-insensitive RegEx matches both example.com and Example.com::
 +
 ----
 	(?i)example.com
