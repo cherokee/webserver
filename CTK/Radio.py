@@ -71,11 +71,15 @@ class RadioGroupCfg (Box):
         for o in options:
             val, desc = o
 
-            props = self.props.copy()
-            props['name']  = key
-            props['value'] = val
+            new_props = {}
+            new_props['name']  = key
+            new_props['value'] = val
 
-            self += RadioText (desc, props)
+            if 'checked' in self.props:
+                if self.props['checked'] == val:
+                    new_props['checked'] = 1
+
+            self += RadioText (desc, new_props)
 
 
 class RadioText (Box):
