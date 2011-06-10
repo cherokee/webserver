@@ -282,6 +282,9 @@ def DruidContent__JS_to_goto (internal_id, url):
                        'goto': '%s'
                });""" %(internal_id, url)
 
+def DruidContent__JS_to_goto_next (internal_id):
+    return DruidContent__JS_to_goto (internal_id, druid_url_next(request.url))
+
 def DruidContent__JS_to_close (internal_id):
     return '$("#%s").each(function() {%s});' %(internal_id, JS_BUTTON_CLOSE)
 
