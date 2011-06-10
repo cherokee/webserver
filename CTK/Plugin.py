@@ -114,15 +114,22 @@ class PluginSelector (Widget):
         # Properties
         self._key   = key
         self._mods  = modules
-        self._url   = '/plugin_content_%s' %(key_to_url(key))
         active_name = cfg.get_val (self._key)
+
+        # URL
+        self._url = '/plugin_content_%s' %(key_to_url(key))
+
+        srv = get_server()
+        if srv.use_sec_submit:
+            self._url += '?key=%s' %(srv.sec_submit)
 
         # Widgets
         self.selector_widget = ComboCfg (key, modules)
         self.plugin          = instance_plugin (active_name, key, **kwargs)
 
         # Register hidden URL for the plugin content
-        publish (self._url, PluginInstanceProxy, key=key, modules=modules, method='POST', **kwargs)
+        publish (r'^/plugin_content_%s' %(key_to_url(key)), PluginInstanceProxy,
+                 key=key, modules=modules, method='POST', **kwargs)
 
     def _get_helps (self):
         global_key  = self._key.replace('!','_')

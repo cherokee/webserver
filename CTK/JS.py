@@ -26,10 +26,17 @@
 The CTK.JS module wraps several utility Javascript functions.
 """
 
+from Server import get_server
+
 def Ajax (url, data='', type='POST', async=True, dataType='json',
           success=None, error=None, complete=None):
     if not success:
         success=''
+
+    if type.upper() == 'POST':
+        srv = get_server()
+        if srv.use_sec_submit:
+            url += '?key=%s' %(srv.sec_submit)
 
     async_s = ['false','true'][async]
     js = "$.ajax ({type: '%(type)s', url: '%(url)s', async: %(async_s)s" %(locals())
