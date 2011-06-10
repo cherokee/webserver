@@ -42,9 +42,10 @@ NOTE_SQL    = N_('SQL command to execute. ${user} is replaced with the user name
 NOTE_HASH   = N_('Choose an encryption type for the password. Only suitable for the "Basic" authentication mechanism.')
 
 HASHES = [
-    ('',     N_('None')),
-    ('md5',  N_('MD5')),
-    ('sha1', N_('SHA1'))
+    ('',       N_('None')),
+    ('md5',    N_('MD5')),
+    ('sha1',   N_('SHA1')),
+    ('sha512', N_('SHA512'))
 ]
 
 
