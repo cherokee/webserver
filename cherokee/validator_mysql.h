@@ -38,7 +38,8 @@ typedef struct {
 typedef enum {
 	cherokee_mysql_hash_none,
 	cherokee_mysql_hash_md5,
-	cherokee_mysql_hash_sha1
+	cherokee_mysql_hash_sha1,
+	cherokee_mysql_hash_sha512
 } cherokee_mysql_hash_t;
 
 typedef struct {

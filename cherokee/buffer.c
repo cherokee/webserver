@@ -39,6 +39,7 @@
 #include "util.h"
 #include "crc32.h"
 #include "sha1.h"
+#include "sha512.h"
 
 #define ENTRIES "core,buffer"
 
@@ -1843,6 +1844,54 @@ cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *e
 	 */
 	cherokee_buffer_clean (encoded);
 	cherokee_buffer_add_buffer (encoded, buf);
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_buffer_encode_sha512 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
+{
+	SHA512_CTX sha512;
+
+	SHA512_Init (&sha512);
+	SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
+
+	cherokee_buffer_ensure_size (encoded, SHA512_DIGEST_LENGTH + 1);
+	SHA512_Final (&sha512, (unsigned char *) encoded->buf);
+
+	encoded->len = SHA512_DIGEST_LENGTH;
+	encoded->buf[encoded->len] = '\0';
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_buffer_encode_sha512_digest (cherokee_buffer_t *buf)
+{
+	int           i;
+	unsigned char digest[SHA512_DIGEST_LENGTH];
+	SHA512_CTX    sha512;
+
+	SHA512_Init   (&sha512);
+	SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
+	SHA512_Final  (&sha512, digest);
+
+	cherokee_buffer_ensure_size (buf, (2 * SHA512_DIGEST_LENGTH)+1);
+
+	for (i = 0; i < SHA512_DIGEST_LENGTH; ++i) {
+		int tmp;
+
+		tmp = ((digest[i] >> 4) & 0xf);
+		buf->buf[i*2] = TO_HEX(tmp);
+
+		tmp = (digest[i] & 0xf);
+		buf->buf[(i*2)+1] = TO_HEX(tmp);
+	}
+
+	buf->buf[2 * SHA512_DIGEST_LENGTH] = '\0';
+	buf->len = 2 * SHA512_DIGEST_LENGTH;
 
 	return ret_ok;
 }

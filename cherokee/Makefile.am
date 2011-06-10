@@ -1416,6 +1416,8 @@ md5crypt.h \
 md5crypt.c \
 sha1.h \
 sha1.c \
+sha512.h \
+sha512.c \
 match.h \
 match.c \
 dtm.h \

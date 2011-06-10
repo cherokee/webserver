@@ -114,6 +114,9 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 			} else if (equal_buf_str (&subconf->val, "sha1")) {
 				props->hash_type = cherokee_mysql_hash_sha1;
 
+			} else if (equal_buf_str (&subconf->val, "sha512")) {
+				props->hash_type = cherokee_mysql_hash_sha512;
+
 			} else {
 				LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_MYSQL_HASH, subconf->val.buf);
 				return ret_error;
@@ -199,7 +202,7 @@ cherokee_validator_mysql_new (cherokee_validator_mysql_t **mysql, cherokee_modul
 	 */
 	ret = init_mysql_connection (n, PROP_MYSQL(props));
 	if (ret != ret_ok) {
-		cherokee_validator_free (n);
+		cherokee_validator_free (VALIDATOR(n));
 		return ret;
 	}
 
@@ -301,6 +304,8 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 			cherokee_buffer_encode_md5_digest (&user_passwd);
 		} else if (props->hash_type == cherokee_mysql_hash_sha1) {
 			cherokee_buffer_encode_sha1_digest (&user_passwd);
+		} else if (props->hash_type == cherokee_mysql_hash_sha512) {
+			cherokee_buffer_encode_sha512_digest (&user_passwd);
 		}
 
 		/* Compare passwords */

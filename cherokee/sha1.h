@@ -20,4 +20,3 @@ void sha_update (SHA_INFO *sha_info, unsigned char *buffer, int count);
 void sha_final  (SHA_INFO *sha_info, unsigned char digest[20]);
 
 #endif /* CHEROKEE_SHA1 */
-
