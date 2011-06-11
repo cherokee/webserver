@@ -68,6 +68,8 @@ class RadioGroupCfg (Box):
         if not 'id' in self.props:
             self.props['id'] = 'RadioGroup_%s' %(self.uniq_id)
 
+        cfg_value = cfg.get_val (key)
+
         for o in options:
             val, desc = o
 
@@ -75,7 +77,12 @@ class RadioGroupCfg (Box):
             new_props['name']  = key
             new_props['value'] = val
 
-            if 'checked' in self.props:
+            # Initial value
+            if cfg_value != None and \
+               cfg_value == val:
+                new_props['checked'] = 1
+
+            elif 'checked' in self.props:
                 if self.props['checked'] == val:
                     new_props['checked'] = 1
 
@@ -91,4 +98,4 @@ class RadioText (Box):
 
         self.text = Box ({'class': 'radio-text'}, RawHTML(txt))
         self += self.text
-        self.text.bind('click', "$('#%s').attr('checked', true);" %(self.radio.id))
+        self.text.bind ('click', "$('#%s').attr('checked', true).trigger('change');" %(self.radio.id))
