@@ -263,7 +263,6 @@ if __name__ == "__main__":
     wizards2_path = os.path.realpath (__file__ + "/../wizards2")
     if os.path.exists (wizards2_path):
         import wizards2
-        print "!!!"
 
     # Init translation
     if CTK.cfg['admin!lang']:
