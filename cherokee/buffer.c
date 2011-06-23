@@ -1897,6 +1897,28 @@ cherokee_buffer_encode_sha512_digest (cherokee_buffer_t *buf)
 }
 
 
+ret_t
+cherokee_buffer_encode_sha512_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
+{
+	/* Prepare destination buffer
+	 */
+	cherokee_buffer_ensure_size (encoded, (SHA512_DIGEST_LENGTH * 2) + 1);
+	cherokee_buffer_clean (encoded);
+
+	/* Encode sha1 + base64
+	 */
+	cherokee_buffer_encode_sha512 (buf, encoded);
+	cherokee_buffer_encode_base64 (encoded, buf);
+
+	/* Copy result to destination buffer
+	 */
+	cherokee_buffer_clean (encoded);
+	cherokee_buffer_add_buffer (encoded, buf);
+
+	return ret_ok;
+}
+
+
 /* Encode in hexadecimal characters, source buffer (buf) is not touched,
  * whereas destination buffer (encoded) is overwritten
  * but possibly not reallocated.
