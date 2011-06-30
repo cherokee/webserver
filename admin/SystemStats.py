@@ -123,9 +123,22 @@ class System_stats__Darwin (Thread, System_stats):
     def _read_profiler (self):
         ret = popen.popen_sync ("/usr/sbin/system_profiler SPHardwareDataType")
 
-        self.cpu.speed = re.findall (r'Processor Speed: (.*?)\n',     ret['stdout'], re.I)[0]
-        self.cpu.num   = re.findall (r'Number of Processors: (\d+)',  ret['stdout'], re.I)[0]
-        self.cpu.cores = re.findall (r'Total Number of Cores: (\d+)', ret['stdout'], re.I)[0]
+        # Processor Speed
+        self.cpu.speed = re.findall (r'Processor Speed: (.*?)\n', ret['stdout'], re.I)[0]
+
+        # Number of Processors
+        tmp = re.findall (r'Number of Processors: (\d+)', ret['stdout'], re.I)
+        if tmp:
+            self.cpu.num = tmp[0]
+        else:
+            self.cpu.num = re.findall (r'Number of CPUs: (\d+)', ret['stdout'], re.I)[0]
+
+        # Number of cores
+        tmp = re.findall (r'Total Number of Cores: (\d+)', ret['stdout'], re.I)
+        if tmp:
+            self.cpu.cores = tmp[0]
+        else:
+            self.cpu.cores = 1
 
     def _read_cpu (self):
         # Read a new line
