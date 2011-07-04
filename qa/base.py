@@ -220,7 +220,16 @@ class TestBase:
         return self._check_result()
 
     def __str__ (self):
-        src = "\tName     = %s\n" % (self.name)
+        # Figure the test number
+        tmp = self.file.split("-")
+        if len(tmp) and tmp[0].isdigit():
+            num = tmp[0]
+        else:
+            num = "???"
+
+        # Render the string
+        src  = "\tName     = %s\n" % (self.name)
+        src += "\tNumber   = %s\n" % (num)
 
         if self.version == 9:
             src += "\tProtocol = HTTP/0.9\n"
