@@ -1348,6 +1348,10 @@ e('FLCACHE_MKDIR',
   title = "Could not create the '%s' directory, or it doesn't have %s permissions",
   desc  = SYSTEM_ISSUE)
 
+e('FLCACHE_MKDIRS',
+  title = "Could not create the FLCache temporal directy neither under %s nor under %s, or it doesn't have %s permissions",
+  desc  = SYSTEM_ISSUE)
+
 e('FLCACHE_CREATE_FILE',
   title = "Could not create the '%s' cache object file: ${errno}",
   desc  = SYSTEM_ISSUE)

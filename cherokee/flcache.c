@@ -31,6 +31,7 @@
 #include "util.h"
 #include "avl_flcache.h"
 #include "dtm.h"
+#include "init.h"
 
 #define ENTRIES "flcache"
 
@@ -110,6 +111,26 @@ cherokee_flcache_free (cherokee_flcache_t *flcache)
 	return ret_ok;
 }
 
+static ret_t
+mkdir_flcache_directory (cherokee_flcache_t        *flcache,
+			 cherokee_virtual_server_t *vserver,
+			 const char                *basedir)
+{
+	/* Build the fullpath
+	 */
+	cherokee_buffer_clean      (&flcache->local_directory);
+	cherokee_buffer_add_str    (&flcache->local_directory, basedir);
+	cherokee_buffer_add_str    (&flcache->local_directory, "/");
+	cherokee_buffer_add_long10 (&flcache->local_directory, getpid());
+	cherokee_buffer_add_str    (&flcache->local_directory, "/");
+	cherokee_buffer_add_buffer (&flcache->local_directory, &vserver->name);
+
+	/* Create directory
+	 */
+	return cherokee_mkdir_p_perm (&flcache->local_directory, 0755, W_OK);
+}
+
+
 ret_t
 cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 			    cherokee_config_node_t *conf,
@@ -121,18 +142,23 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 	/* Beware: conf might be NULL */
 	UNUSED (conf);
 
-	cherokee_buffer_add_str    (&flcache->local_directory, CHEROKEE_FLCACHE);
-	cherokee_buffer_add_str    (&flcache->local_directory, "/");
-	cherokee_buffer_add_long10 (&flcache->local_directory, getpid());
-	cherokee_buffer_add_str    (&flcache->local_directory, "/");
-	cherokee_buffer_add_buffer (&flcache->local_directory, &vserver->name);
-
-	/* Create directory
-	 */
-	ret = cherokee_mkdir_p_perm (&flcache->local_directory, 0755, W_OK);
+	ret = mkdir_flcache_directory (flcache, vserver, CHEROKEE_FLCACHE);
 	if (ret != ret_ok) {
-		LOG_CRITICAL (CHEROKEE_ERROR_FLCACHE_MKDIR, flcache->local_directory.buf, "write");
-		return ret;
+		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+		
+		cherokee_buffer_add_buffer (&tmp, &cherokee_tmp_dir);
+		cherokee_buffer_add_str    (&tmp, "/flcache");
+
+		ret = mkdir_flcache_directory (flcache, vserver, tmp.buf);
+		if (ret != ret_ok) {
+			LOG_CRITICAL (CHEROKEE_ERROR_FLCACHE_MKDIRS,
+				      CHEROKEE_FLCACHE, cherokee_tmp_dir.buf, "write");
+		}
+
+		cherokee_buffer_mrproper (&tmp);
+		if (ret != ret_ok) {
+			return ret;
+		}
 	}
 
 	/* Set the directory permissions
@@ -568,7 +594,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 
 static ret_t
 create_flconn_file (cherokee_flcache_t    *flcache,
-		  cherokee_connection_t *conn)
+		    cherokee_connection_t *conn)
 {
 	ret_t                        ret;
 	cherokee_buffer_t            tmp   = CHEROKEE_BUF_INIT;
