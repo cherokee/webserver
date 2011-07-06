@@ -119,7 +119,7 @@ mkdir_flcache_directory (cherokee_flcache_t        *flcache,
 	/* Build the fullpath
 	 */
 	cherokee_buffer_clean      (&flcache->local_directory);
-	cherokee_buffer_add_str    (&flcache->local_directory, basedir);
+	cherokee_buffer_add        (&flcache->local_directory, basedir, strlen(basedir));
 	cherokee_buffer_add_str    (&flcache->local_directory, "/");
 	cherokee_buffer_add_long10 (&flcache->local_directory, getpid());
 	cherokee_buffer_add_str    (&flcache->local_directory, "/");
@@ -145,7 +145,7 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 	ret = mkdir_flcache_directory (flcache, vserver, CHEROKEE_FLCACHE);
 	if (ret != ret_ok) {
 		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-		
+
 		cherokee_buffer_add_buffer (&tmp, &cherokee_tmp_dir);
 		cherokee_buffer_add_str    (&tmp, "/flcache");
 
