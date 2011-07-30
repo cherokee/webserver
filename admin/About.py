@@ -32,8 +32,9 @@ BROUGHT_TO_YOU   = """
 <p>The Cherokee Web Server is proudly brought to you by Alvaro Lopez Ortega
 (contact info: <a href="mail:alvaro@alobbs.com">E-Mail</a>,
 <a href="http://www.alobbs.com/" target="_blank">Website</a>,
-<a href="http://twitter.com/alobbs" target="_blank">Twitter</a>,
 <a href="http://linkedin.com/in/alobbs" target="_blank">LinkedIn</a>,
+<a href="http://plus.google.com/103812555513034042317" target="_blank">Google+</a>,
+<a href="http://twitter.com/alobbs" target="_blank">Twitter</a>,
 <a href="http://www.facebook.com/alobbs" target="_blank">Facebook</a>),
 with the invaluable help of the Cherokee community.</p>
 """
