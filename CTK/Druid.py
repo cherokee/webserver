@@ -234,7 +234,12 @@ class DruidButtonsPanel_Create (DruidButtonsPanel):
 class DruidButtonsPanel_Cancel (DruidButtonsPanel):
     def __init__ (self, props={}):
         DruidButtonsPanel.__init__ (self, props.copy())
-        self += DruidButton_Close(_('Cancel'))
+        self += DruidButton_Close (_('Cancel'))
+
+class DruidButtonsPanel_Close (DruidButtonsPanel):
+    def __init__ (self, props={}):
+        DruidButtonsPanel.__init__ (self, props.copy())
+        self += DruidButton_Close (_('Close'))
 
 
 #
