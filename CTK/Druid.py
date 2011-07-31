@@ -77,6 +77,7 @@ if (submit_successes == submitters.length) {
 """
 
 JS_BUTTON_CLOSE = """
+$(this).parents('.ui-dialog:first').find('.druid:first').trigger('druid_exiting');
 $(this).parents('.ui-dialog:first').find('.ui-dialog-content:first').dialog('close');
 return false;
 """
