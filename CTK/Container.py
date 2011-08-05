@@ -49,6 +49,9 @@ class Container (Widget):
         self.child.append (widget)
         return self
 
+    def Empty (self):
+        self.child = []
+
     def Render (self):
         render = Widget.Render(self)
 
