@@ -66,7 +66,7 @@ class RadioGroupCfg (Box):
         self._options = options
 
         if not 'id' in self.props:
-            self.props['id'] = 'RadioGroup_%s' %(self.uniq_id)
+            self.id = 'RadioGroup_%s' %(self.uniq_id)
 
         cfg_value = cfg.get_val (key)
 
