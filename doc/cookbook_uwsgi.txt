@@ -82,7 +82,7 @@ uWSGI
 --------------------------------------------------------
 
 Since it is unlikely you'll have the Django project on your system
-path, it should be reflected on the 'pytonpath' line. In this example,
+path, it should be reflected on the 'pythonpath' line. In this example,
 it would be under '/var/www/example/'
 
 Cherokee
