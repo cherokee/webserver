@@ -6,6 +6,34 @@ Cookbook: SSL, TLS and certificates
 This section answers some general questions and details the procedure
 to generate SSL keys.
 
+[[configure-vserver-ssl-certificates]]
+Configure vServer SSL Certificates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To start serving HTTPS traffic from Cherokee you will have to
+link:#ssl-support[enable SSL support] and obtain a
+link:#free-certificates[signed certificate] (or
+link:#self_sign[signed your own]). Ensure that the certificate files
+have the appropriate permissions for your OS and that you know the locations
+of the following:
+
+  . Signed Certificate file
+  . Private Key file used to generate CSR for the above
+  . CA List or Chain file (Optional, depending on signing authority of your certificate)
+
+All files should be generated using PEM-encoding.
+
+.Configuration
+
+Certificates are configured at the vServer level in the *Security* tab. *This
+means you must have a vServer setup that corresponds to your Certificate's
+security scope*. Enter the full paths for your Certificate and corresponding Private
+Key file. To add a certificate chain file to you CA List set *Client Certs. Request*
+to _Accept_ then put the full path to your chain file in the _CA List_ box.
+
+image::media/images/admin_vserver_security_ssl.png[Virtual Server - Security]
+
+
 [[general]]
 General questions
 ~~~~~~~~~~~~~~~~~

@@ -185,6 +185,7 @@ media/images/admin_vserver_errors.png \
 media/images/admin_vserver_loggers.png \
 media/images/admin_vserver.png \
 media/images/admin_vserver_security.png \
+media/images/admin_vserver_security_ssl.png \
 media/images/admin_vserver_evhost.png \
 media/images/admin_handler_proxy.png \
 media/images/cookbook_django_common.png \
