@@ -192,6 +192,11 @@ def load_module_pyc (fullpath_pyc, namespace, use_cache=True, load_src=True):
             return imp.load_compiled (namespace, fullpath)
 
 
+def unload_module (name):
+    if name in sys.modules:
+        del (sys.modules[name])
+
+
 def load_module (name, dirname):
     # Sanity check
     if not name:

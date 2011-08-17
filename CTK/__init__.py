@@ -31,7 +31,7 @@ from Box import Box
 from Submitter import Submitter, SubmitterButton
 from Page import Page, PageEmpty
 from Config import Config
-from Plugin import Plugin, instance_plugin, load_module, load_module_pyc
+from Plugin import Plugin, instance_plugin, load_module, load_module_pyc, unload_module
 
 # Widgets
 from Table import Table, TableFixed
