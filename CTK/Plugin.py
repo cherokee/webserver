@@ -209,7 +209,11 @@ def load_module (name, dirname):
 
     # Shortcut: it might be loaded
     if sys.modules.has_key (name):
-        if sys.modules[name].__file__ == fullpath:
+        loaded_mod_file = sys.modules[name].__file__
+        if loaded_mod_file.endswith('.pyc'):
+            loaded_mod_file = loaded_mod_file[:-1]
+
+        if loaded_mod_file == fullpath:
             return sys.modules[name]
 
     # Load the plug-in
