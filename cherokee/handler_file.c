@@ -855,7 +855,7 @@ exit_sendfile:
 
 	/* Ensure there's enough memory
 	 */
-	cherokee_buffer_ensure_size (buffer, size);
+	cherokee_buffer_ensure_size (buffer, size + 1);
 
 	/* Read
 	 */
