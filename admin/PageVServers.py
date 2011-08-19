@@ -143,7 +143,7 @@ class VirtualServerNew (CTK.Container):
 
         # Build the panel list
         right_box = CTK.Box({'class': 'vserver_new_content'})
-        panel = SelectionPanel.SelectionPanel (None, right_box.id, URL_BASE, '', cookie_name='new_vsrv_selected')
+        panel = SelectionPanel.SelectionPanel (None, right_box.id, URL_BASE, '', draggable=False, cookie_name='new_vsrv_selected')
 
         self += panel
         self += right_box
