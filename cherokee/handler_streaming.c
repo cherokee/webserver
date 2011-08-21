@@ -438,7 +438,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	ret = cherokee_connection_parse_args (conn);
 	if (ret == ret_ok) {
 		ret = cherokee_avl_get_ptr (conn->arguments, "start", (void **) &value);
-		if (ret == ret_ok && value->len > 0) {
+		if (ret == ret_ok && value && value->len > 0) {
 			/* Set the starting point
 			 */
 			if (is_flv) {
