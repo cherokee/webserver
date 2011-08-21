@@ -460,6 +460,9 @@ cherokee_plugin_loader_get_info (cherokee_plugin_loader_t  *loader,
 	ret = cherokee_avl_get_ptr (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok)
 		return ret;
+	
+	if (entry == NULL)
+		return ret_error;
 
 	*info = entry->info;
 	return ret_ok;
@@ -485,7 +488,7 @@ cherokee_plugin_loader_get_sym  (cherokee_plugin_loader_t  *loader,
 	/* Even if we're trying to look for symbols in the executable,
 	 * using dlopen(NULL), the handler pointer should not be nil.
 	 */
-	if (entry->dlopen_ref == NULL)
+	if ((entry == NULL) || (entry->dlopen_ref == NULL))
 		return ret_not_found;
 
 	tmp = get_sym_from_dlopen_handler (entry->dlopen_ref, name);

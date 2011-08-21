@@ -1689,7 +1689,7 @@ get_encoding (cherokee_connection_t *conn,
 		ret = cherokee_avl_get_ptr (encoders_accepted, i1, (void **)&props);
 		*i2 = tmp;    /* (2') */
 
-		if (ret == ret_ok) {
+		if ((ret == ret_ok) && (props != NULL)) {
 			if (props->perms == cherokee_encoder_allow) {
 				/* Use encoder
 				 */

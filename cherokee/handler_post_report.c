@@ -142,11 +142,11 @@ _figure_x_progress_id (cherokee_connection_t  *conn,
 	}
 
 	ret = cherokee_avl_get_ptr (conn->arguments, "X-Progress-ID", (void **)id);
-	if ((ret != ret_ok) || (*id == NULL) || ((*id)->len <= 0)) {
-		return ret_error;
+	if ((ret == ret_ok) && (*id != NULL) && ((*id)->len > 0)) {
+		return ret_ok;
 	}
 
-	return ret_ok;
+	return ret_error;
 }
 
 ret_t

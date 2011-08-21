@@ -424,8 +424,9 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 		return ret_ok;
 	}
 
-	if ((source->type != source_interpreter) ||
-	    ((source->type == source_interpreter) && (SOURCE_INT(source)->pid <= 1)))
+	if ((source != NULL) &&
+	    ((source->type != source_interpreter) ||
+	    ((source->type == source_interpreter) && (SOURCE_INT(source)->pid <= 1))))
 	{
 		cherokee_dwriter_dict_open (dwriter);
 		cherokee_dwriter_cstring (dwriter, "source");

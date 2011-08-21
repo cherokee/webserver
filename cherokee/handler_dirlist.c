@@ -624,7 +624,7 @@ cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	n->sort  = Name_Down;
 
 	ret = cherokee_avl_get_ptr (HANDLER_CONN(n)->arguments, "order", (void **) &value);
-	if (ret == ret_ok) {
+	if ((ret == ret_ok) && (value != NULL) && (value->len > 0)) {
 		if      (value->buf[0] == 'N') n->sort = Name_Up;
 		else if (value->buf[0] == 'n') n->sort = Name_Down;
 		else if (value->buf[0] == 'D') n->sort = Date_Up;

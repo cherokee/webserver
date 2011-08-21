@@ -97,7 +97,7 @@ _figure_x_progress_id (cherokee_connection_t *conn,
 	ret = cherokee_connection_parse_args (conn);
 	if (ret == ret_ok) {
 		ret = cherokee_avl_get_ptr (conn->arguments, "X-Progress-ID", (void **)&tmp);
-		if ((ret == ret_ok) && (tmp->len > 0)) {
+		if ((ret == ret_ok) && (tmp != NULL) && (tmp->len > 0)) {
 			cherokee_buffer_add_buffer (track_id, tmp);
 
 			TRACE (ENTRIES, "X-Progress-ID in query-string: '%s'\n", track_id->buf);
