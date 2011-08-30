@@ -11,9 +11,6 @@ vserver!1!rule!1150!handler = common
 vserver!1!rule!1151!match = directory
 vserver!1!rule!1151!match!directory = /respin1-cgi
 vserver!1!rule!1151!handler = cgi
-# CGIs based on PHP need this if php was compiled
-# with the 'force-cgi-redirect' enabled.
-vserver!1!rule!1151!handler!env!REDIRECT_STATUS = 200
 
 vserver!1!rule!1152!match = request
 vserver!1!rule!1152!match!request = /respin1/.+/
@@ -24,8 +21,11 @@ vserver!1!rule!1152!handler!rewrite!1!substring = /respin1-cgi/file?param=$1
 """
 
 CGI_BASE = """#!%s
-<?php echo "param is ". $_GET["param"]; ?>
-""" % (look_for_php())
+import os,cgi
+print "Content-type: text/html"
+print
+print "param is " + cgi.parse_qs(os.getenv('QUERY_STRING'))['param'][0]
+""" % (look_for_python())
 
 class Test (TestBase):
     def __init__ (self):
@@ -39,6 +39,3 @@ class Test (TestBase):
     def Prepare (self, www):
         d = self.Mkdir (www, "%s-cgi"%(DIR))
         self.WriteFile (d, "file", 0755, CGI_BASE)
-
-    def Precondition (self):
-        return os.path.exists (look_for_php())
