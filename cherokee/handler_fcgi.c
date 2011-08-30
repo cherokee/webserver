@@ -397,9 +397,10 @@ set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 static ret_t
 add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 {
-	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(hdl);
-	cherokee_buffer_t            buffer   = CHEROKEE_BUF_INIT;
-	cherokee_connection_t       *conn     = HANDLER_CONN(hdl);
+	cherokee_handler_cgi_base_t       *cgi_base = HDL_CGI_BASE(hdl);
+	cherokee_buffer_t                  buffer   = CHEROKEE_BUF_INIT;
+	cherokee_connection_t             *conn     = HANDLER_CONN(hdl);
+	cherokee_handler_cgi_base_props_t *props    = HANDLER_CGI_BASE_PROPS(hdl);
 
 	/* POST management
 	 */
@@ -415,27 +416,35 @@ add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 		}
 	}
 
-	/* Add PATH_TRANSLATED only it there is pathinfo
-	 */
-#if 0
-	if (! cherokee_buffer_is_empty (&conn->pathinfo)) {
-		cherokee_buffer_add_buffer (&buffer, &conn->local_directory);
-		cherokee_buffer_add_buffer (&buffer, &conn->pathinfo);
-
-		set_env (cgi_base, "PATH_TRANSLATED", buffer.buf, buffer.len);
-		TRACE (ENTRIES, "PATH_TRANSLATED '%s'\n", cgi_base->executable.buf);
-	}
-#endif
-
-	/* The last one
+	/* MIND THIS: _Last_ entry
 	 */
 	*last_header_offset = hdl->write_buffer.len;
 
-	set_env (cgi_base, "SCRIPT_FILENAME",
-		 cgi_base->executable.buf,
-		 cgi_base->executable.len);
 
-	TRACE (ENTRIES, "SCRIPT_FILENAME '%s'\n", cgi_base->executable.buf);
+	/* SCRIPT_FILENAME = Virtual-to-physical mapping for SCRIPT_NAME.
+	 *
+	 * Example:
+	 *  http://host/folder/script.php/extra?a=b
+	 *  Document Root=/docroot
+	 *
+	 *  SCRIPT_FILENAME = /docroot/script.php
+	 */
+	if (cgi_base->executable.len > 0) {
+		set_env (cgi_base, "SCRIPT_FILENAME",
+			 cgi_base->executable.buf,
+			 cgi_base->executable.len);
+	} else {
+		cherokee_buffer_clean (&buffer);
+
+		if (props->check_file) {
+			cherokee_buffer_add_buffer (&buffer, &CONN_VSRV(conn)->root);
+			cherokee_buffer_add_buffer (&buffer, &conn->request);
+		} else {
+			cherokee_buffer_add_buffer (&buffer, &conn->request);
+		}
+
+		set_env (cgi_base, "SCRIPT_FILENAME", buffer.buf, buffer.len);
+	}
 
 	cherokee_buffer_mrproper (&buffer);
 	return ret_ok;
