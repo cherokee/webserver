@@ -235,8 +235,12 @@ vserver!1!rule!1!handler = common
 source!%(next_source)d!type = interpreter
 source!%(next_source)d!host = localhost:%(PHP_FCGI_PORT)d
 source!%(next_source)d!env!PHP_FCGI_CHILDREN = 5
-source!%(next_source)d!interpreter = %(php_interpreter)s -b %(PHP_FCGI_PORT)d
 """ % (locals())
+
+if 'fpm' in php_interpreter:
+    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -d listen=%(PHP_FCGI_PORT)d -d daemonize=Off\n"%(locals())
+else:
+    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -b %(PHP_FCGI_PORT)d\n" %(locals())
 
 php_ext = """\
 10000!match = extensions
