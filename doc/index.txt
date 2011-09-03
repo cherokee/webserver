@@ -152,7 +152,7 @@ link:dev.html[Development info]: Things of interest to developers
   . link:dev_ctk.html[CTK]: Dive into the Cherokee Toolkit
 
 *********************************
-Cherokee's Distribution: Web Apps distribution on Cherokee
+link:distro.html[Cherokee's Distribution]: Web Apps distribution on Cherokee
 *********************************
 
   . link:distro_dev_intro.html[Introduction to Development]: How to build a package.

@@ -134,6 +134,7 @@ dev_cherokee.conf.html \
 dev_qa.html \
 dev_quickstart.html \
 dev_ctk.html \
+distro.html \
 distro_dev_intro.html
 
 docmediacssdir = $(docdir)/media/css/
