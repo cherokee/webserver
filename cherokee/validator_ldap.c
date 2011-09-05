@@ -133,10 +133,7 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_LDAP_PROPERTY, "base_dn");
 		return ret_error;
 	}
-	if (cherokee_buffer_is_empty (&props->filter)) {
-		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_LDAP_PROPERTY, "filter");
-		return ret_error;
-	}
+
 	if (cherokee_buffer_is_empty (&props->server)) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_LDAP_PROPERTY, "server");
 		return ret_error;
@@ -300,20 +297,27 @@ error:
 
 
 static ret_t
-init_filter (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_props_t *props, cherokee_connection_t *conn)
+init_filter (cherokee_validator_ldap_t       *ldap,
+	     cherokee_validator_ldap_props_t *props,
+	     cherokee_connection_t           *conn)
 {
+	if (cherokee_buffer_is_empty (&props->filter)) {
+		TRACE_S (ENTRIES, "Empty filter\n");
+		return ret_ok;
+	}
+
 	cherokee_buffer_ensure_size (&ldap->filter, props->filter.len + conn->validator->user.len);
 	cherokee_buffer_add_buffer (&ldap->filter, &props->filter);
 	cherokee_buffer_replace_string (&ldap->filter, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
 
 	TRACE (ENTRIES, "filter %s\n", ldap->filter.buf);
-
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connection_t *conn)
+cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap,
+			       cherokee_connection_t     *conn)
 {
 	int                              re;
 	ret_t                            ret;
@@ -344,11 +348,12 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 	 */
 	re = ldap_search_s (ldap->conn, props->basedn.buf, LDAP_SCOPE_SUBTREE, ldap->filter.buf, attrs, 0, &message);
 	if (re != LDAP_SUCCESS) {
-		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_LDAP_SEARCH, props->filter.buf);
+		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_LDAP_SEARCH,
+			   props->filter.buf ? props->filter.buf : "");
 		return ret_error;
 	}
 
-	TRACE (ENTRIES, "subtree search (%s): done\n", ldap->filter.buf);
+	TRACE (ENTRIES, "subtree search (%s): done\n", ldap->filter.buf ? ldap->filter.buf : "");
 
 	/* Check that there a single entry
 	 */
