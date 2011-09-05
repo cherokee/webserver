@@ -1205,9 +1205,30 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	size_t to_send;
 	size_t sent     = 0;
 
-	/* Use writev to send the chunk-begin mark
+	/* EAGAIN handle of chunked responses over SSL. Due a libssl
+	 * restriction, the cryptor will NOT report ret_ok until the
+	 * full content is sent (the buffer can not be touched while
+	 * it is being sent). We generate the plain chunk in-memory in
+	 * order to let this mechanism handle the I/O events.
 	 */
-	if (conn->chunked_encoding)
+	if ((conn->chunked_encoding) &&
+	    (conn->socket.is_tls == TLS))
+	{
+		if (! (conn->options & conn_op_chunked_formatted)) {
+			if (! conn->chunked_last_package) {
+				cherokee_buffer_prepend_buf (&conn->buffer, &conn->chunked_len);
+				cherokee_buffer_add_str     (&conn->buffer, CRLF);
+
+				BIT_SET (conn->options, conn_op_chunked_formatted);
+			} else {
+				cherokee_buffer_add_str (&conn->buffer, CRLF "0" CRLF CRLF);
+			}
+		}
+	}
+
+	/* Use writev() to send the chunk-begin mark
+	 */
+	else if (conn->chunked_encoding)
 	{
 		struct iovec tmp[3];
 
@@ -1288,6 +1309,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	/* Drop out the sent info
 	 */
 	if (sent == conn->buffer.len) {
+		BIT_UNSET (conn->options, conn_op_chunked_formatted);
 		cherokee_buffer_clean (&conn->buffer);
 		ret = ret_ok;
 	} else if (sent != 0) {

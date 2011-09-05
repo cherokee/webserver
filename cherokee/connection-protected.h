@@ -85,13 +85,14 @@ typedef enum {
 } cherokee_connection_phase_t;
 
 
-#define conn_op_nothing        0
-#define conn_op_root_index    (1 << 1)
-#define conn_op_tcp_cork      (1 << 2)
-#define conn_op_document_root (1 << 3)
-#define conn_op_was_polling   (1 << 4)
-#define conn_op_cant_encoder  (1 << 5)
-#define conn_op_got_eof       (1 << 6)
+#define conn_op_nothing            0
+#define conn_op_root_index        (1 << 1)
+#define conn_op_tcp_cork          (1 << 2)
+#define conn_op_document_root     (1 << 3)
+#define conn_op_was_polling       (1 << 4)
+#define conn_op_cant_encoder      (1 << 5)
+#define conn_op_got_eof           (1 << 6)
+#define conn_op_chunked_formatted (1 << 7)
 
 typedef cuint_t cherokee_connection_options_t;
 
