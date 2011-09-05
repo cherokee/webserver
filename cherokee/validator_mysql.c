@@ -122,10 +122,10 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 				return ret_error;
 			}
 
-		} else if ((equal_buf_str (&subconf->key, "methods") ||
-			    equal_buf_str (&subconf->key, "realm")))
-		{
-			/* not handled here
+		} else if (equal_buf_str (&subconf->key, "methods") ||
+			   equal_buf_str (&subconf->key, "realm")   ||
+			   equal_buf_str (&subconf->key, "users")) {
+			/* Handled in validator.c
 			 */
 		} else {
 			LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_MYSQL_KEY, subconf->key.buf);
