@@ -302,7 +302,7 @@ init_filter (cherokee_validator_ldap_t       *ldap,
 	     cherokee_connection_t           *conn)
 {
 	if (cherokee_buffer_is_empty (&props->filter)) {
-		TRACE_S (ENTRIES, "Empty filter\n");
+		TRACE (ENTRIES, "Empty filter: %s\n", "Ignoring it");
 		return ret_ok;
 	}
 
