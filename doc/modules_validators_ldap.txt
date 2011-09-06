@@ -22,7 +22,10 @@ Parameters
 |__basedn__  |Base Distinguished Name.
 |__filter__  |A filter that defines the conditions that must be
               fulfilled in order for the search to match a given
-              entry.
+              entry. Use `${user}` in a filter as a substitution to
+              match the identifier inputted by a user accessing the
+              resource. The filter must resolve to a single user object.
+              For LDAP filter syntax, refer to RFC 2254.
 |__tls__     |Optional. Enable the use of TLS based integrity.
               Defaults to __0__.
 |__ca_file__ |Optional. It's the CA filename. Must be provided
@@ -45,3 +48,7 @@ Base DN, also known as search base, identifies the part of the
 directory tree you want to manage.
 
 Bind DN is the user name.
+
+To select any user from LDAP as part of the `filter`, specify
+`(uid=${user})`, where `uid` is the attribute that serves as your LDAP
+user identifier.
