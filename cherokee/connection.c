@@ -1215,14 +1215,14 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	    (conn->socket.is_tls == TLS))
 	{
 		if (! (conn->options & conn_op_chunked_formatted)) {
-			if (! conn->chunked_last_package) {
-				cherokee_buffer_prepend_buf (&conn->buffer, &conn->chunked_len);
-				cherokee_buffer_add_str     (&conn->buffer, CRLF);
+			cherokee_buffer_prepend_buf (&conn->buffer, &conn->chunked_len);
+			cherokee_buffer_add_str     (&conn->buffer, CRLF);
 
-				BIT_SET (conn->options, conn_op_chunked_formatted);
-			} else {
+			if (conn->chunked_last_package) {
 				cherokee_buffer_add_str (&conn->buffer, CRLF "0" CRLF CRLF);
 			}
+
+			BIT_SET (conn->options, conn_op_chunked_formatted);
 		}
 	}
 
