@@ -73,6 +73,13 @@ configure_branch (cherokee_rule_or_t        *rule,
 	if (ret != ret_ok)
 		return ret;
 
+	if ((branch_rule == NULL) || (*branch_rule) == NULL)
+		return ret_error;
+
+	/* Let the child rule know about its parent
+	 */
+	(*branch_rule)->parent_rule = RULE(rule);
+
 	return ret_ok;
 }
 

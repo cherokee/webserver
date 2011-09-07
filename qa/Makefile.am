@@ -307,7 +307,8 @@ run-tests.py \
 283-Flcache-expired3.py \
 284-SSI-include-recursive.py \
 285-Flcache-overwrite.py \
-286-CGI-Permissions.py
+286-CGI-Permissions.py \
+287-rule-inheritance.py
 
 test:
 	python -m compileall .

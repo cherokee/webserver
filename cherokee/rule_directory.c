@@ -38,6 +38,8 @@ match (cherokee_rule_directory_t *rule,
        cherokee_connection_t     *conn,
        cherokee_config_entry_t   *ret_conf)
 {
+	cherokee_config_entry_t *conf = NULL;
+
 	UNUSED(ret_conf);
 
 	/* Not the same lenght
@@ -90,8 +92,10 @@ match (cherokee_rule_directory_t *rule,
 
 	/* Copy the web directory property
 	 */
-	if ((RULE(rule)->config.handler_new_func != NULL) ||
-	    (RULE(rule)->config.document_root != NULL))
+	cherokee_rule_get_config (RULE(rule), &conf);
+
+	if ((conf->document_root != NULL) ||
+	    (conf->handler_new_func != NULL))
 	{
 		cherokee_buffer_clean      (&conn->web_directory);
 		cherokee_buffer_add_buffer (&conn->web_directory, &rule->directory);

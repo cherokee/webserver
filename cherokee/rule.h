@@ -49,7 +49,7 @@ typedef ret_t (* rule_func_match_t)     (void  *rule, void *cnt, void *ret_conf)
 
 /* Data types
  */
-typedef struct {
+struct cherokee_rule {
 	cherokee_module_t       module;
 
 	/* Properties */
@@ -58,12 +58,14 @@ typedef struct {
 
 	cherokee_boolean_t      final;
 	cuint_t                 priority;
+	struct cherokee_rule   *parent_rule;
 
 	/* Virtual methods */
 	rule_func_match_t       match;
 	rule_func_configure_t   configure;
-} cherokee_rule_t;
+};
 
+typedef struct cherokee_rule cherokee_rule_t;
 #define RULE(x) ((cherokee_rule_t *)(x))
 
 /* Easy initialization
@@ -89,6 +91,10 @@ ret_t cherokee_rule_init_base   (cherokee_rule_t *rule, cherokee_plugin_info_t *
  */
 ret_t cherokee_rule_match       (cherokee_rule_t *rule, void *cnt, void *ret_conf);
 ret_t cherokee_rule_configure   (cherokee_rule_t *rule, cherokee_config_node_t *conf, void *vsrv);
+
+/* Utilities
+ */
+void cherokee_rule_get_config  (cherokee_rule_t *rule, cherokee_config_entry_t **config);
 
 CHEROKEE_END_DECLS
 

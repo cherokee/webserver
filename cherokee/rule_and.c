@@ -71,8 +71,16 @@ configure_branch (cherokee_rule_and_t       *rule,
 	ret = cherokee_virtual_server_new_rule (vsrv, subconf,
 						RULE(rule)->priority,
 						branch_rule);
+
 	if (ret != ret_ok)
 		return ret;
+
+	if ((branch_rule == NULL) || (*branch_rule) == NULL)
+		return ret_error;
+
+	/* Let the child rule know about its parent
+	 */
+	(*branch_rule)->parent_rule = RULE(rule);
 
 	return ret_ok;
 }

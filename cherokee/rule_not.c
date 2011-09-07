@@ -76,6 +76,13 @@ configure (cherokee_rule_not_t       *rule,
 	if (ret != ret_ok)
 		return ret;
 
+	if (rule->right == NULL)
+		return ret_error;
+
+	/* Let the child rule know about its parent
+	 */
+	rule->right->parent_rule = RULE(rule);
+
 	return ret_ok;
 }
 

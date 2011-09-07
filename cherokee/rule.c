@@ -36,9 +36,10 @@ cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
 	cherokee_module_init_base (MODULE(rule), NULL, info);
 	INIT_LIST_HEAD (&rule->list_node);
 
-	rule->match    = NULL;
-	rule->final    = true;
-	rule->priority = CHEROKEE_RULE_PRIO_NONE;
+	rule->match       = NULL;
+	rule->final       = true;
+	rule->priority    = CHEROKEE_RULE_PRIO_NONE;
+	rule->parent_rule = NULL;
 
 	cherokee_config_entry_init (&rule->config);
 	return ret_ok;
@@ -115,3 +116,16 @@ cherokee_rule_match (cherokee_rule_t *rule, void *cnt, void *ret_conf)
 	return rule->match (rule, CONN(cnt), CONF_ENTRY(ret_conf));
 }
 
+
+void
+cherokee_rule_get_config (cherokee_rule_t          *rule,
+			  cherokee_config_entry_t **config)
+{
+	cherokee_rule_t *r = rule;
+
+	while (r->parent_rule != NULL) {
+		r = r->parent_rule;
+	}
+
+	*config = &r->config;
+}
