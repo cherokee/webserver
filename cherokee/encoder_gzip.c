@@ -27,7 +27,11 @@
 #include "crc32.h"
 #include "encoder_gzip.h"
 #include "plugin_loader.h"
+#include "connection-protected.h"
+#include "header.h"
 #include "util.h"
+
+#define ENTRIES "encoder,gzip"
 
 
 /* Plug-in initialization
@@ -92,6 +96,8 @@ cherokee_encoder_gzip_configure (cherokee_config_node_t   *config,
 						  MODULE_PROPS_FREE(props_free));
 
 		n->compression_level = Z_DEFAULT_COMPRESSION;
+		n->disable_old_IE    = true;
+
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -102,6 +108,12 @@ cherokee_encoder_gzip_configure (cherokee_config_node_t   *config,
 
 		if (equal_buf_str (&subconf->key, "compression_level")) {
 			ret = cherokee_atoi (subconf->val.buf, &props->compression_level);
+			if (unlikely (ret != ret_ok)) {
+				return ret_error;
+			}
+
+		} else if (equal_buf_str (&subconf->key, "disable_old_IE")) {
+			ret = cherokee_atob (subconf->val.buf, &props->disable_old_IE);
 			if (unlikely (ret != ret_ok)) {
 				return ret_error;
 			}
@@ -197,12 +209,57 @@ get_gzip_error_string (int err)
 	return "unknown";
 }
 
+static cherokee_boolean_t
+is_user_agent_IE_16 (cherokee_connection_t *conn)
+{
+	ret_t     ret;
+	char      tmp;
+	char     *m;
+	char     *ref     = NULL;
+	cuint_t   ref_len = 0;
+
+	ret = cherokee_header_get_known (&conn->header, header_user_agent, &ref, &ref_len);
+	if ((ret != ret_ok) || (ref == NULL) || (ref_len <= 7))
+		return false;
+
+	/* Set EOL boundary */
+	tmp = ref[ref_len];
+	ref[ref_len] = '\0';
+
+	/* MSIE [1-6] */
+	m = strcasestr (ref, "MSIE ");
+	if (m == NULL)
+		goto not_found;
+
+	if ((m[5] >= '1') && (m[5] <= '6'))
+		goto found;
+
+	/* Clean up */
+not_found:
+	ref[ref_len] = tmp;
+	return false;
+
+found:
+	ref[ref_len] = tmp;
+	return true;
+}
+
 
 ret_t
-cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder)
+cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder,
+			    cherokee_connection_t   *conn)
 {
 	int       err;
-	z_stream *z = &encoder->stream;
+	z_stream *z    = &encoder->stream;
+
+	/* Disable GZip for IE 1-6 clients
+	 */
+	if (likely (ENC_GZIP_PROP(encoder)->disable_old_IE)) {
+		if (is_user_agent_IE_16 (conn)) {
+			TRACE (ENTRIES, "Disabling encoder: %s\n", "MSIE [1-6] detected\n");
+			return ret_deny;
+		}
+	}
 
 	/* Set the workspace
 	 */

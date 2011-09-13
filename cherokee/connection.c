@@ -1368,12 +1368,22 @@ cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 	/* Instance and initialize the encoder
 	 */
 	ret = conn->encoder_new_func ((void **)&conn->encoder, conn->encoder_props);
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
+		ret = ret_error;
 		goto error;
+	}
 
 	ret = cherokee_encoder_init (conn->encoder, conn);
-	if (unlikely (ret != ret_ok))
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_deny:
+		/* Refuses to work. Eg: GZip for IE */
 		goto error;
+	default:
+		ret = ret_error;
+		goto error;
+	}
 
 	/* Update Front-Line cache
 	 */
@@ -1393,7 +1403,7 @@ error:
 		cherokee_encoder_free (conn->encoder);
 		conn->encoder = NULL;
 	}
-	return ret_error;
+	return ret;
 }
 
 

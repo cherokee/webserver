@@ -30,6 +30,7 @@
 #include "zlib/zlib.h"
 #include "module.h"
 #include "encoder.h"
+#include "connection.h"
 #include "plugin_loader.h"
 
 /* Data types
@@ -63,7 +64,7 @@ ret_t cherokee_encoder_deflate_new         (cherokee_encoder_deflate_t **encoder
 ret_t cherokee_encoder_deflate_free        (cherokee_encoder_deflate_t  *encoder);
 
 ret_t cherokee_encoder_deflate_add_headers (cherokee_encoder_deflate_t  *encoder, cherokee_buffer_t *buf);
-ret_t cherokee_encoder_deflate_init        (cherokee_encoder_deflate_t  *encoder);
+ret_t cherokee_encoder_deflate_init        (cherokee_encoder_deflate_t  *encoder, cherokee_connection_t *conn);
 ret_t cherokee_encoder_deflate_encode      (cherokee_encoder_deflate_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 ret_t cherokee_encoder_deflate_flush       (cherokee_encoder_deflate_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 

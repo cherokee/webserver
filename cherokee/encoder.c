@@ -141,7 +141,7 @@ cherokee_encoder_init (cherokee_encoder_t *enc, void *conn)
 	if (init_func == NULL)
 		return ret_error;
 
-	return init_func (enc);
+	return init_func (enc, conn);
 }
 
 

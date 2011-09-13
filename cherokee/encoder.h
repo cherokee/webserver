@@ -48,7 +48,7 @@ typedef enum {
 typedef ret_t (* encoder_func_new_t)         (void **encoder, void *props);
 typedef ret_t (* encoder_func_free_t)        (void  *encoder);
 typedef ret_t (* encoder_func_add_headers_t) (void  *encoder, cherokee_buffer_t *buf);
-typedef ret_t (* encoder_func_init_t)        (void  *encoder);
+typedef ret_t (* encoder_func_init_t)        (void  *encoder, void *conn);
 typedef ret_t (* encoder_func_encode_t)      (void  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 typedef ret_t (* encoder_func_flush_t)       (void  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 typedef ret_t (* encoder_func_configure_t)   (cherokee_config_node_t *, cherokee_server_t *, cherokee_module_props_t **);

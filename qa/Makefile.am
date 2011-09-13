@@ -308,7 +308,8 @@ run-tests.py \
 284-SSI-include-recursive.py \
 285-Flcache-overwrite.py \
 286-CGI-Permissions.py \
-287-rule-inheritance.py
+287-rule-inheritance.py \
+288-GZip-IE16.py
 
 test:
 	python -m compileall .

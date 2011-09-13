@@ -30,6 +30,7 @@
 #include "zlib/zlib.h"
 #include "module.h"
 #include "encoder.h"
+#include "connection.h"
 #include "plugin_loader.h"
 
 /* Data types
@@ -37,6 +38,7 @@
 typedef struct {
 	cherokee_encoder_props_t base;
 	int                      compression_level;
+	cherokee_boolean_t       disable_old_IE;
 } cherokee_encoder_gzip_props_t;
 
 
@@ -65,7 +67,7 @@ ret_t cherokee_encoder_gzip_new         (cherokee_encoder_gzip_t **encoder, cher
 ret_t cherokee_encoder_gzip_free        (cherokee_encoder_gzip_t  *encoder);
 
 ret_t cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *buf);
-ret_t cherokee_encoder_gzip_init        (cherokee_encoder_gzip_t  *encoder);
+ret_t cherokee_encoder_gzip_init        (cherokee_encoder_gzip_t  *encoder, cherokee_connection_t *conn);
 ret_t cherokee_encoder_gzip_encode      (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 ret_t cherokee_encoder_gzip_flush       (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 
