@@ -314,6 +314,13 @@ node_cmp (cherokee_avl_flcache_node_t *A,
 static int
 node_is_empty (cherokee_avl_flcache_node_t *key)
 {
+	/* The key object can be either be:
+	 * 1.- A reference to a cherokee_connection_t object
+	 * 2.- An object storing information
+	 */
+	if (key->conn_ref)
+		return false;
+
 	return cherokee_buffer_is_empty (&key->request);
 }
 
