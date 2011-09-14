@@ -413,6 +413,10 @@ class TestCollection (TestBase):
         self.tests.append (test)
         return test
 
+    def Empty (self):
+        self.tests = []
+        self.num   = 0
+
     def Clean (self):
         for t in self.tests:
             self.current_test = t

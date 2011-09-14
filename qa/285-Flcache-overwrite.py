@@ -1,7 +1,7 @@
+import itertools
 from base import *
 
 DIR     = "flcache-replace1"
-FILE    = "file.txt"
 CONTENT = "Front-line cache boosts Cherokee performance"
 
 CONF = """
@@ -26,14 +26,16 @@ echo "%(CONTENT)s"
 
 
 class TestEntry (TestBase):
-    def __init__ (self):
+    def __init__ (self, filename):
         TestBase.__init__ (self, __file__)
-        self.request        = "GET /%s/%s HTTP/1.0\r\n" %(DIR, FILE) +\
+        self.request        = "GET /%s/%s HTTP/1.0\r\n" %(DIR, filename) +\
                               "Connection: close\r\n"
         self.expected_error = 200
 
 
 class Test (TestCollection):
+    counter = itertools.count()
+
     def __init__ (self):
         TestCollection.__init__ (self, __file__)
 
@@ -42,16 +44,31 @@ class Test (TestCollection):
         self.proxy_suitable = True
         self.delay          = 1
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, DIR)
-        self.WriteFile (d, FILE, 0755, CGI_CODE)
+    def JustBefore (self, www):
+        test_num = Test.counter.next()
+        self.filename = "test275-id%s-test%s" %(id(self), test_num)
+
+        # Write the new file
+        self.WriteFile (self.local_dir, self.filename, 0755, CGI_CODE)
+
+        # Create sub-request objects
+        self.Empty()
 
         # First request
-        obj = self.Add (TestEntry())
+        obj = self.Add (TestEntry (self.filename))
         obj.expected_content  = ['X-Cache: MISS', CONTENT, "public"]
         obj.forbidden_content = ['no-store', 'no-cache']
 
         # Second request
-        obj = self.Add (TestEntry())
+        obj = self.Add (TestEntry (self.filename))
         obj.expected_content  = ['X-Cache: HIT', CONTENT, "public"]
         obj.forbidden_content = ['no-store', 'no-cache']
+
+    def JustAfter (self, www):
+        # Clean up the local file
+        fp = os.path.join (self.local_dir, self.filename)
+        os.unlink (fp)
+        self.filename = None
+
+    def Prepare (self, www):
+        self.local_dir = self.Mkdir (www, DIR)
