@@ -296,3 +296,16 @@ def chunk_encode (txt, size=None, pieces=None):
 
     out += '0\r\n'
     return out
+
+
+# Workarounds Python's BUG #1515:
+# "deepcopy doesn't copy instance methods"
+#
+# http://bugs.python.org/issue1515
+#
+import copy
+import types
+
+def _deepcopy_method(x, memo):
+    return type(x)(x.im_func, copy.deepcopy(x.im_self, memo), x.im_class)
+copy._deepcopy_dispatch[types.MethodType] = _deepcopy_method
