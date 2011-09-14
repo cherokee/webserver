@@ -422,7 +422,7 @@ def do_pause():
     sys.stdin.readline()
     pause = pause - 1
 
-def mainloop_iterator(objs, main_thread=True):
+def mainloop_iterator (objs, main_thread=True):
     global port
     global pause
     global its_clean
@@ -499,11 +499,16 @@ if pause == 1:
 
 # Maybe launch some threads
 for n in range(thds-1):
-    time.sleep (random.randint(0,50) / 100.0)
-    thread.start_new_thread (mainloop_iterator, (copy.deepcopy(objs), False))
+    # Delay launch a little
+    delay = ((random.randint(0,50) + len(objs)) / 100.0)
+    time.sleep (delay)
+
+    # Launch the thread
+    objs_copy = copy.deepcopy(objs)
+    thread.start_new_thread (mainloop_iterator, (objs_copy, False))
 
 # Execute the tests
 mainloop_iterator(objs)
 
-# It's time to kill Cherokee.. :-(
+# We're done. Kill the server.
 clean_up()
