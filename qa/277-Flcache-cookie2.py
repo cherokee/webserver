@@ -26,7 +26,6 @@ echo "%(CONTENT)s"
 """ %(globals())
 
 
-
 class TestEntry (TestBase):
     def __init__ (self, filename):
         TestBase.__init__ (self, __file__)
@@ -45,7 +44,6 @@ class Test (TestCollection):
         self.conf           = CONF
         self.proxy_suitable = True
         self.delay          = 1
-
 
     def JustBefore (self, www):
         test_num = Test.counter.next()

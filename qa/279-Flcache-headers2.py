@@ -54,4 +54,3 @@ class Test (TestCollection):
         obj = self.Add (TestEntry())
         obj.expected_content = [CONTENT]
         obj.CustomTest = types.MethodType (CustomTest, obj)
-

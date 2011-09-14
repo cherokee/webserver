@@ -24,7 +24,6 @@ echo "%(CONTENT)s"
 """ %(globals())
 
 
-
 class TestEntry (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
