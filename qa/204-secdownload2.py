@@ -3,15 +3,17 @@ from base import *
 DIR      = "sec_download_2"
 DIR_REAL = "real_204"
 
-SECRET = "Alvaro_alobbs.com"
-MAGIC  = str_random (100)
-FILE   = "filename.ext"
+SECRET  = "Alvaro_alobbs.com"
+MAGIC   = str_random (100)
+FILE    = "filename.ext"
+TIMEOUT = 7 * 24 * 60 * 60  # 1 week
 
 CONF = """
 vserver!1!rule!2040!match = directory
 vserver!1!rule!2040!match!directory = /%s
 vserver!1!rule!2040!handler = secdownload
 vserver!1!rule!2040!handler!secret = %s
+vserver!1!rule!2030!handler!timeout = %s
 vserver!1!rule!2040!document_root = %s
 """
 
@@ -26,4 +28,4 @@ class Test (TestBase):
         droot = self.Mkdir (www, DIR_REAL)
         self.WriteFile (droot, FILE, 0444, MAGIC)
 
-        self.conf = CONF % (DIR, SECRET, droot)
+        self.conf = CONF % (DIR, SECRET, TIMEOUT, droot)
