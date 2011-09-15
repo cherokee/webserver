@@ -2429,13 +2429,13 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
 	if (ret == ret_ok) {
 		if (conn->header.version == http_version_11) {
-			if (strncasecmp (ptr, "Close", 5) != 0)
+			if (strncasestrn (ptr, ptr_len, "close", 5) == NULL)
 				goto granted;
 			else
 				goto denied;
 
 		} else {
-			if (strncasecmp (ptr, "Keep-Alive", 10) == 0)
+			if (strncasestrn (ptr, ptr_len, "keep-alive", 10) != NULL)
 				goto granted;
 			else
 				goto denied;

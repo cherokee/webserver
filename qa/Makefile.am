@@ -309,7 +309,8 @@ run-tests.py \
 285-Flcache-overwrite.py \
 286-CGI-Permissions.py \
 287-rule-inheritance.py \
-288-GZip-IE16.py
+288-GZip-IE16.py \
+289-Connection_TE.py
 
 test:
 	python -m compileall .
