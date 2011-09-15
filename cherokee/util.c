@@ -298,6 +298,43 @@ strcasestr (register char *s, register char *find)
 }
 #endif
 
+char *
+strncasestrn (const char *s, size_t slen, const char *find, size_t findlen)
+{
+        char c;
+	char sc;
+
+	if (unlikely (find == NULL) || (findlen == 0))
+		return s;
+
+	if (unlikely (*find == '\0'))
+		return s;
+
+	c = *find;
+	find++;
+	findlen--;
+
+	do {
+		do {
+			if (slen-- < 1 || (sc = *s++) == '\0')
+				return NULL;
+		} while (CHEROKEE_CHAR_TO_LOWER(sc) != CHEROKEE_CHAR_TO_LOWER(c));
+		if (findlen > slen) {
+			return NULL;
+		}
+	} while (strncasecmp (s, find, findlen) != 0);
+
+	s--;
+        return (char *)s;
+}
+
+char *
+strncasestr (const char *s, const char *find, size_t slen)
+{
+	return strncasestrn (s, slen, find, strlen(find));
+}
+
+
 
 #ifndef HAVE_MALLOC
 void *

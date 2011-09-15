@@ -92,6 +92,9 @@ size_t strlcat (char *dst, const char *src, size_t siz);
 void *rpl_malloc (size_t n);
 #endif
 
+char *strncasestr  (const char *s, const char *find, size_t slen);
+char *strncasestrn (const char *s, size_t slen, const char *find, size_t findlen);
+
 /* Constants
  */
 extern const char hex2dec_tab[256];
