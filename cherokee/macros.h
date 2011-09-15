@@ -409,4 +409,12 @@
 		cherokee_buffer_mrproper (&tmp);		\
 	} while (0)
 
+
+#define CHEROKEE_CHAR_IS_WHITE(_ch)     (((_ch) == ' ') || ((_ch) == '\t') || ((_ch) == '\n'))
+#define CHEROKEE_CHAR_IS_UPPERCASE(_ch) (((_ch) >= 'A') && ((_ch) <= 'Z'))
+#define CHEROKEE_CHAR_IS_LOWERCASE(_ch) (((_ch) >= 'a') && ((_ch) <= 'z'))
+#define CHEROKEE_CHAR_TO_LOWER(_ch)     ((_ch) | 32)
+#define CHEROKEE_CHAT_TO_UPPER(_ch)     ((_ch) & ~32)
+
+
 #endif /* CHEROKEE_MACROS_H */
