@@ -35,9 +35,9 @@ NOTE_ERROR_HANDLER    = N_('Send errors exactly as they are generated.')
 NOTE_CHECK_FILE       = N_('Check whether the file is in place.')
 NOTE_PASS_REQ         = N_('Forward all the client headers to the CGI encoded as HTTP_*. headers.')
 NOTE_XSENDFILE        = N_('Allow the use of the non-standard X-Sendfile header.')
-NOTE_X_REAL_IP        = N_('Whether the handler should read and use the X-Real-IP header and use it in REMOTE_ADDR.')
-NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP headers. WARNING: Turn it on only if you are centain of what you are doing.')
-NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send the X-Real-IP header.')
+NOTE_X_REAL_IP        = N_('Whether the handler should read and use the X-Real-IP and X-Forwarded-For headers and use it in REMOTE_ADDR.')
+NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on only if you are centain of what you are doing.')
+NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send the X-Real-IP and X-Forwarded-For headers.')
 
 HELPS = [('modules_handlers_cgi', "CGIs")]
 
