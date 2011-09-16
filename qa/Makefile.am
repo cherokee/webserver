@@ -310,7 +310,8 @@ run-tests.py \
 286-CGI-Permissions.py \
 287-rule-inheritance.py \
 288-GZip-IE16.py \
-289-Connection_TE.py
+289-Connection_TE.py \
+290-Question-mark-in-name.py
 
 test:
 	python -m compileall .
