@@ -311,7 +311,8 @@ run-tests.py \
 287-rule-inheritance.py \
 288-GZip-IE16.py \
 289-Connection_TE.py \
-290-Question-mark-in-name.py
+290-Question-mark-in-name.py \
+291-Redir-keepalive.py
 
 test:
 	python -m compileall .
