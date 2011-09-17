@@ -1219,7 +1219,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 			cherokee_buffer_add_str     (&conn->buffer, CRLF);
 
 			if (conn->chunked_last_package) {
-				cherokee_buffer_add_str (&conn->buffer, CRLF "0" CRLF CRLF);
+				cherokee_buffer_add_str (&conn->buffer, "0" CRLF CRLF);
 			}
 
 			BIT_SET (conn->options, conn_op_chunked_formatted);
