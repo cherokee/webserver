@@ -48,7 +48,8 @@ NOTE_SOURCE        = N_('The source can be either a local interpreter or a remot
 NOTE_NICK          = N_('Source nick. It will be referenced by this name in the rest of the server.')
 NOTE_TYPE          = N_('It allows to choose whether it runs the local host or a remote server.')
 NOTE_HOST          = N_('Where the information source can be accessed. The host:port pair, or the Unix socket path.')
-NOTE_INTERPRETER   = N_('Command to spawn a new source in case it were not accessible.')
+NOTE_INTERPRETER1  = N_('Command to spawn a new source in case it were not running.')
+NOTE_INTERPRETER2  = N_('REMEMBER: The interpreter MUST NOT run as a daemon or detach itself from its parent process.')
 NOTE_TIMEOUT       = N_('How long should the server wait when spawning an interpreter before giving up (in seconds). Default: 3.')
 NOTE_USAGE         = N_('Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited.')
 NOTE_USER          = N_('Execute the interpreter under a different user. Default: Same UID as the server.')
@@ -309,7 +310,9 @@ class Render_Source:
         table.Add (_('Connection'), CTK.TextCfg ('source!%s!host'%(num), False), _(NOTE_HOST))
 
         if tipe == 'interpreter':
-            table.Add (_('Interpreter'),         CTK.TextCfg ('source!%s!interpreter'%(num),   False), _(NOTE_INTERPRETER))
+            NOTE_INTERPRETER = _(NOTE_INTERPRETER1) + '<br/>' + '<b>%s</b>'%(_(NOTE_INTERPRETER2))
+
+            table.Add (_('Interpreter'),         CTK.TextCfg ('source!%s!interpreter'%(num),   False), NOTE_INTERPRETER)
             table.Add (_('Spawning timeout'),    CTK.TextCfg ('source!%s!timeout'%(num),       True),  _(NOTE_TIMEOUT))
             table.Add (_('Execute as User'),     CTK.TextCfg ('source!%s!user'%(num),          True),  _(NOTE_USER))
             table.Add (_('Execute as Group'),    CTK.TextCfg ('source!%s!group'%(num),         True),  _(NOTE_GROUP))
