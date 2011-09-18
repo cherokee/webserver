@@ -35,7 +35,7 @@
 
 CHEROKEE_BEGIN_DECLS
 
-#define CHEROKEE_CIPHERS_DEFAULT "HIGH:!ADH:!MD5"
+#define CHEROKEE_CIPHERS_DEFAULT "HIGH:!aNULL:!MD5"
 
 /* Callback function prototipes
  */
