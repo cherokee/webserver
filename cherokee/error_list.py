@@ -1284,7 +1284,7 @@ e('SSL_SESSION_ID',
 
 e('SSL_SNI',
   title = "Could not activate TLS SNI for '%s': %s",
-  desc  = SYSTEM_ISSUE)
+  desc  = "It looks like Cherokee was compiled with TLS SNI support. However, it is currently using a SSL library (libssl/openssl) without TLS SNI support, and thus SNI is disabled.")
 
 e('SSL_CONNECTION',
   title = "OpenSSL: Unable to create a new SSL connection from the SSL context: %s",

@@ -499,15 +499,13 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	rc = SSL_CTX_set_tlsext_servername_callback (n->context, openssl_sni_servername_cb);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		LOG_ERROR (CHEROKEE_ERROR_SSL_SNI, vsrv->name.buf, error);
-		goto error;
-	}
-
-	rc = SSL_CTX_set_tlsext_servername_arg (n->context, VSERVER_SRV(vsrv));
-	if (rc != 1) {
-		OPENSSL_LAST_ERROR(error);
-		LOG_ERROR (CHEROKEE_ERROR_SSL_SNI, vsrv->name.buf, error);
-		goto error;
+		LOG_WARNING (CHEROKEE_ERROR_SSL_SNI, vsrv->name.buf, error);
+	} else {
+		rc = SSL_CTX_set_tlsext_servername_arg (n->context, VSERVER_SRV(vsrv));
+		if (rc != 1) {
+			OPENSSL_LAST_ERROR(error);
+			LOG_WARNING (CHEROKEE_ERROR_SSL_SNI, vsrv->name.buf, error);
+		}
 	}
 #endif /* OPENSSL_NO_TLSEXT */
 
