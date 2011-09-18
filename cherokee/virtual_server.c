@@ -82,7 +82,9 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	cherokee_buffer_init (&n->server_key);
 	cherokee_buffer_init (&n->certs_ca);
 	cherokee_buffer_init (&n->req_client_certs);
-	cherokee_buffer_init (&n->ciphers);
+
+	cherokee_buffer_init    (&n->ciphers);
+	cherokee_buffer_add_str (&n->ciphers, CHEROKEE_CIPHERS_DEFAULT);
 
 	ret = cherokee_buffer_init (&n->root);
 	if (unlikely(ret < ret_ok))
@@ -1119,6 +1121,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_add_buffer (&vserver->req_client_certs, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
+		cherokee_buffer_clean      (&vserver->ciphers);
 		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "flcache") ||
