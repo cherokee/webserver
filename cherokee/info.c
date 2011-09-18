@@ -107,5 +107,19 @@ cherokee_info_build_print (cherokee_server_t *srv)
 #ifdef HAVE_SELECT
 	printf ("select ");
 #endif
-	printf ("\n\n");
+	printf ("\n");
+
+#ifdef HAVE_OPENSSL
+	printf (" SSL/TLS: libssl\n");
+# ifndef OPENSSL_NO_TLSEXT
+	printf (" TLS SNI: yes\n");
+# else
+	printf (" TLS SNI: no\n");
+# endif
+#else
+	printf (" SSL/TLS: no\n");
+	printf (" TLS SNI: no\n");
+#endif
+
+	printf ("\n");
 }
