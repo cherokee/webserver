@@ -1359,15 +1359,15 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 			HANDLER(hdl)->support |= hsupport_length;
 
-		} else if ((! props->out_preserve_server) &&
-			   (strncasecmp (begin, "Server:", 7) == 0)) {
-
-			cherokee_buffer_add_str (buf_out, "Server: ");
-			cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
-			cherokee_buffer_add_str (buf_out, CRLF);
-
+		} else if (strncasecmp (begin, "Server:", 7) == 0) {
 			added_server = true;
-			goto next;
+
+			if (! props->out_preserve_server) {
+				cherokee_buffer_add_str (buf_out, "Server: ");
+				cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
+				cherokee_buffer_add_str (buf_out, CRLF);
+				goto next;
+			}
 
 		} else  if (strncasecmp (begin, "Location:", 9) == 0) {
 			cherokee_buffer_t *tmp1 = &HANDLER_THREAD(hdl)->tmp_buf1;
