@@ -1,23 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Alvaro Lopez Ortega
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# FIRST AUTHOR Jedrzej Nowak <pigmej@gmail.com>, 2010-07-03 00:09+0100.
 msgid ""
 msgstr ""
-"Project-Id-Version: cherokee 0.99.45\n"
+"Project-Id-Version: cherokee 1.0\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2011-03-28 15:00+0200\n"
-"PO-Revision-Date: 2010-07-03 00:09+0100\n"
-"Last-Translator: Jedrzej Nowak <pigmej@gmail.com>\n"
-"Language-Team: \n"
-"Language: \n"
+"POT-Creation-Date: 2011-05-02 15:00+0200\n"
+"PO-Revision-Date: 2011-09-24 17:51+0200\n"
+"Last-Translator: Paul Wysocki <pablow91@gmail.com>\n"
+"Language-Team: Polish <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Polish\n"
-"X-Poedit-Country: POLAND\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"Language: pl\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
 
 #: cherokee-trunk/admin/PageVServers.py:48
 #: cherokee-trunk/admin/PageVServers.py:304
@@ -27,7 +26,7 @@ msgid "Virtual Servers"
 msgstr "Serwery wirtualne"
 
 #: cherokee-trunk/admin/PageVServers.py:50
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "<p>You are about to delete the <b>%(nick_esc)s</b> Virtual Server.</p><p>Are "
 "you sure you want to proceed?</p>"
@@ -79,9 +78,8 @@ msgid "Manual configuration"
 msgstr "Ręczna konfiguracja"
 
 #: cherokee-trunk/admin/PageVServers.py:195
-#, fuzzy
 msgid "Market installation"
-msgstr "Zdalna administracja"
+msgstr "Instalacja Marketu"
 
 #: cherokee-trunk/admin/PageVServers.py:203
 #: cherokee-trunk/admin/PageSource.py:280
@@ -111,19 +109,17 @@ msgstr "Na pewno chcesz usunąć?"
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:223
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:231
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:237
-#: cherokee-trunk/admin/CTK/CTK/Dialog.py:131
+#: cherokee-trunk/admin/CTK/CTK/Dialog.py:164
 #: cherokee-trunk/admin/plugins/redir.py:120
 #: cherokee-trunk/admin/market/Review.py:90
 #: cherokee-trunk/admin/market/Maintenance.py:360
 #: cherokee-trunk/admin/market/Maintenance.py:570
-#: cherokee-trunk/admin/market/Install.py:133
-#: cherokee-trunk/admin/market/Install.py:160
-#: cherokee-trunk/admin/market/Install.py:210
-#: cherokee-trunk/admin/market/Install.py:239
-#: cherokee-trunk/admin/market/Install.py:289
-#: cherokee-trunk/admin/market/Install.py:317
-#: cherokee-trunk/admin/market/Install.py:360
-#: cherokee-trunk/admin/market/Report.py:138
+#: cherokee-trunk/admin/market/Install.py:142
+#: cherokee-trunk/admin/market/Install.py:161
+#: cherokee-trunk/admin/market/Install.py:228
+#: cherokee-trunk/admin/market/Install.py:256
+#: cherokee-trunk/admin/market/Install.py:299
+#: cherokee-trunk/admin/market/Report.py:135
 #: cherokee-trunk/admin/OWS_Backup.py:155
 #: cherokee-trunk/admin/OWS_Backup.py:258 cherokee-trunk/admin/PageRule.py:209
 #: cherokee-trunk/admin/PageRule.py:260 cherokee-trunk/admin/PageRule.py:286
@@ -133,8 +129,6 @@ msgstr "Na pewno chcesz usunąć?"
 #: packages/joomla/installer.py:268 packages/phpmyadmin/installer.py:87
 #: packages/phpmyadmin/installer.py:127 packages/phpmyadmin/installer.py:144
 #: packages/magnolia/installer.py:90 packages/magnolia/installer.py:103
-#: packages/example/installer.py:193 packages/example/installer.py:250
-#: packages/example/installer.py:294 packages/example/installer.py:418
 #: packages/trac/installer.py:137 packages/trac/installer.py:166
 #: packages/trac/installer.py:228 packages/trac/installer.py:262
 #: packages/vanilla/installer.py:124 packages/vanilla/installer.py:177
@@ -154,29 +148,32 @@ msgstr "Na pewno chcesz usunąć?"
 #: packages/nagios/installer.py:168 packages/nagios/installer.py:196
 #: packages/nagios/installer.py:233 packages/nagios/installer.py:361
 #: packages/nagios/installer.py:440 packages/nagios/installer.py:462
-#: packages/nagios/installer.py:507 packages/redmine/installer.py:111
+#: packages/nagios/installer.py:507 packages/nuxeo_dm/installer.py:95
+#: packages/nuxeo_dm/installer.py:113 packages/redmine/installer.py:111
 #: packages/redmine/installer.py:157 packages/redmine/installer.py:198
 #: packages/redmine/installer.py:210 packages/redmine/installer.py:245
 #: packages/redmine/installer.py:265 packages/redmine/installer.py:335
 #: packages/redmine/installer.py:396 packages/wsgidav/installer.py:97
 #: packages/wsgidav/installer.py:111 packages/wsgidav/installer.py:192
-#: packages/zencart/installer.py:97 packages/zencart/installer.py:136
-#: packages/zencart/installer.py:154 packages/zencart/installer.py:222
-#: packages/nuxeo-dam/installer.py:96 packages/nuxeo-dam/installer.py:114
-#: packages/hello-world-php/installer.py:85 packages/statusnet/installer.py:96
+#: packages/sugar_ce/installer.py:104 packages/sugar_ce/installer.py:127
+#: packages/sugar_ce/installer.py:193 packages/zencart/installer.py:97
+#: packages/zencart/installer.py:136 packages/zencart/installer.py:154
+#: packages/zencart/installer.py:222 packages/drupal_example/installer.py:193
+#: packages/drupal_example/installer.py:250
+#: packages/drupal_example/installer.py:294
+#: packages/drupal_example/installer.py:418 packages/statusnet/installer.py:96
 #: packages/statusnet/installer.py:135 packages/statusnet/installer.py:154
 #: packages/statusnet/installer.py:220 packages/drupal/installer.py:146
 #: packages/drupal/installer.py:186 packages/drupal/installer.py:204
 #: packages/drupal/installer.py:273 packages/openx/installer.py:67
 #: packages/openx/installer.py:109 packages/openx/installer.py:181
-#: packages/sugar/installer.py:104 packages/sugar/installer.py:127
-#: packages/sugar/installer.py:193 packages/nuxeo-dm/installer.py:95
-#: packages/nuxeo-dm/installer.py:113 packages/moodle/installer.py:88
-#: packages/moodle/installer.py:151 packages/moodle/installer.py:169
-#: packages/moodle/installer.py:220 packages/moodle/installer.py:293
-#: packages/broken_app/installer.py:22 packages/phpbb/installer.py:83
-#: packages/phpbb/installer.py:132 packages/phpbb/installer.py:152
-#: packages/phpbb/installer.py:228
+#: packages/nuxeo_dam/installer.py:96 packages/nuxeo_dam/installer.py:114
+#: packages/moodle/installer.py:88 packages/moodle/installer.py:151
+#: packages/moodle/installer.py:169 packages/moodle/installer.py:220
+#: packages/moodle/installer.py:293 packages/broken_app/installer.py:22
+#: packages/phpbb/installer.py:83 packages/phpbb/installer.py:132
+#: packages/phpbb/installer.py:152 packages/phpbb/installer.py:228
+#: packages/hello_world_php/installer.py:85
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -366,7 +363,6 @@ msgid "Environment Variables"
 msgstr "Własne zmienne środowiskowe"
 
 #: cherokee-trunk/admin/PageSource.py:247
-#, fuzzy
 msgid "Add new Environment variable"
 msgstr "Dodaj nową zmienną środowiskową"
 
@@ -375,13 +371,12 @@ msgid "Add new variable"
 msgstr "Dodaj nową zmienna"
 
 #: cherokee-trunk/admin/PageSource.py:273
-#, fuzzy
 msgid "Source Usage"
-msgstr "Źródła"
+msgstr ""
 
 #: cherokee-trunk/admin/PageSource.py:276
-#: cherokee-trunk/admin/market/PageApp.py:41
-#: cherokee-trunk/admin/market/PageApp.py:79
+#: cherokee-trunk/admin/market/PageApp.py:42
+#: cherokee-trunk/admin/market/PageApp.py:98
 #: cherokee-trunk/admin/PageVServer.py:702 packages/common/target.py:208
 msgid "Virtual Server"
 msgstr "Serwer wirtualny"
@@ -392,7 +387,6 @@ msgid "Rule"
 msgstr "Reguła"
 
 #: cherokee-trunk/admin/PageSource.py:302
-#, fuzzy
 msgid "Source"
 msgstr "Źródła"
 
@@ -416,7 +410,7 @@ msgstr "Interpreter"
 
 #: cherokee-trunk/admin/PageSource.py:313
 msgid "Spawning timeout"
-msgstr ""
+msgstr "Przekroczenie czasu uruchamiania"
 
 #: cherokee-trunk/admin/PageSource.py:314
 msgid "Execute as User"
@@ -431,7 +425,7 @@ msgid "Inherit Environment"
 msgstr "Dziedzicz środowisko"
 
 #: cherokee-trunk/admin/PageSource.py:316
-#: cherokee-trunk/admin/CTK/CTK/Image.py:75
+#: cherokee-trunk/admin/CTK/CTK/Image.py:99
 #: cherokee-trunk/admin/plugins/exists.py:72
 #: cherokee-trunk/admin/plugins/exists.py:77
 #: cherokee-trunk/admin/plugins/exists.py:78
@@ -459,27 +453,25 @@ msgid "Deletion is forbidden"
 msgstr "Skasowanie jest zabronione"
 
 #: cherokee-trunk/admin/PageSource.py:419
-#, fuzzy
 msgid "Configuration consistency"
-msgstr "Asystent konfiguracji"
+msgstr ""
 
 #: cherokee-trunk/admin/PageSource.py:419
 #, python-format
 msgid "<h2>%s</h2>"
-msgstr ""
+msgstr "<h2>%s</h2>"
 
 #: cherokee-trunk/admin/PageSource.py:422
 #: cherokee-trunk/admin/PageIndex.py:340 cherokee-trunk/admin/PageIndex.py:412
-#: cherokee-trunk/admin/CTK/CTK/Dialog.py:132
-#: cherokee-trunk/admin/CTK/CTK/Dialog.py:211
+#: cherokee-trunk/admin/CTK/CTK/Dialog.py:165
+#: cherokee-trunk/admin/CTK/CTK/Dialog.py:272
 #: cherokee-trunk/admin/plugins/error_redir.py:110
 #: cherokee-trunk/admin/market/Review.py:63
 #: cherokee-trunk/admin/market/Maintenance.py:359
-#: cherokee-trunk/admin/market/Install.py:187
-#: cherokee-trunk/admin/market/Install.py:361
-#: cherokee-trunk/admin/market/Install.py:571
-#: cherokee-trunk/admin/market/Report.py:99
-#: cherokee-trunk/admin/market/Report.py:112
+#: cherokee-trunk/admin/market/Install.py:300
+#: cherokee-trunk/admin/market/Install.py:510
+#: cherokee-trunk/admin/market/Report.py:97
+#: cherokee-trunk/admin/market/Report.py:110
 #: cherokee-trunk/admin/OWS_Backup.py:173
 #: cherokee-trunk/admin/OWS_Backup.py:186
 #: cherokee-trunk/admin/OWS_Backup.py:236
@@ -525,6 +517,9 @@ msgid ""
 "mailing list from this interface. There is where most of the discussions\n"
 "take place."
 msgstr ""
+"Są dostępne <a href=\"%(link)s\" target=\"_blank\">listy mailingowe</a>\n "
+"społeczności dostępne do subskrypcji. Możesz subskrybować listę ogólną z "
+"interfejsu. Większość dyskusji odbywa się na tej liście."
 
 #: cherokee-trunk/admin/PageIndex.py:84
 #, fuzzy
@@ -532,7 +527,6 @@ msgid "Server is Running"
 msgstr "Serwer jest uruchomiony."
 
 #: cherokee-trunk/admin/PageIndex.py:85
-#, fuzzy
 msgid "Server is not Running"
 msgstr "Serwer nie jest uruchomiony"
 
@@ -563,7 +557,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/PageIndex.py:99
 msgid "Enable Remote Services"
-msgstr ""
+msgstr "Włącz usługi zdalne"
 
 #: cherokee-trunk/admin/PageIndex.py:103
 #: cherokee-trunk/admin/market/Maintenance.py:281
@@ -582,9 +576,8 @@ msgid "Start Server"
 msgstr "Uruchom serwer"
 
 #: cherokee-trunk/admin/PageIndex.py:168
-#, fuzzy
 msgid "Hostname"
-msgstr "Nazwy hostów"
+msgstr "Nazwa hosta"
 
 #: cherokee-trunk/admin/PageIndex.py:170
 msgid "Modified"
@@ -604,28 +597,25 @@ msgstr "Plik konfiguracyjny"
 msgid "Server Information"
 msgstr "Informacje o serwerze"
 
-#: cherokee-trunk/admin/PageIndex.py:212
-#: cherokee-trunk/admin/market/PageApp.py:125
-#: cherokee-trunk/admin/OWS_Login.py:116
+#: cherokee-trunk/admin/PageIndex.py:212 cherokee-trunk/admin/OWS_Login.py:116
 msgid "Sign in"
-msgstr ""
+msgstr "Zaloguj się"
 
 #: cherokee-trunk/admin/PageIndex.py:225
-#, fuzzy
 msgid "Remote Services"
-msgstr "Zdalny host"
+msgstr "Usługi zdalne"
 
 #: cherokee-trunk/admin/PageIndex.py:238
 msgid "Backup Service"
-msgstr ""
+msgstr "Kopia zapasowa"
 
 #: cherokee-trunk/admin/PageIndex.py:247
 msgid "Processors"
-msgstr ""
+msgstr "Procesory"
 
 #: cherokee-trunk/admin/PageIndex.py:259
 msgid "Memory"
-msgstr ""
+msgstr "Pamięć"
 
 #: cherokee-trunk/admin/PageIndex.py:288
 #: cherokee-trunk/admin/plugins/custom_error.py:41
@@ -648,13 +638,11 @@ msgid "Proud Cherokee User List Submission"
 msgstr "Zapisz się na listę Proud Cherokee User List"
 
 #: cherokee-trunk/admin/PageIndex.py:342
-#, fuzzy
 msgid "Proud Cherokee Users"
-msgstr "Proud Cherokee Users"
+msgstr "Dumni użytkownicy Cherokee"
 
 #: cherokee-trunk/admin/PageIndex.py:344
-#, fuzzy
-msgid "View list…"
+msgid "View listâŚ"
 msgstr "Zobacz listę"
 
 #: cherokee-trunk/admin/PageIndex.py:344
@@ -685,77 +673,71 @@ msgstr "Wsparcie"
 
 #: cherokee-trunk/admin/PageIndex.py:391
 msgid "Getting started"
-msgstr ""
+msgstr "Pierwsze kroki"
 
 #: cherokee-trunk/admin/PageIndex.py:395
 msgid "Subscribe to mailing lists"
-msgstr ""
+msgstr "Subskrybuj listę mailingową"
 
 #: cherokee-trunk/admin/PageIndex.py:403
-#, fuzzy
 msgid "Report a bug"
-msgstr "Zgłoś to"
+msgstr "Zgłoś błąd"
 
 #: cherokee-trunk/admin/PageIndex.py:407
-#, fuzzy
 msgid "Purchase commercial support"
-msgstr "Wsparcie komercyjne"
+msgstr "Kup wsparcie komercyjne"
 
 #: cherokee-trunk/admin/PageIndex.py:411 cherokee-trunk/admin/PageIndex.py:415
-#, fuzzy
 msgid "About Cherokee"
-msgstr "Proud Cherokee Users"
+msgstr "O Cherokee"
 
 #: cherokee-trunk/admin/PageIndex.py:424
 msgid "Join the Cherokee Community:"
-msgstr ""
+msgstr "Dołącz do społeczności Cherokee:"
 
 #: cherokee-trunk/admin/PageIndex.py:427
 msgid "Visit the Cherokee Project Website"
-msgstr ""
+msgstr "Odwiedź stronę projektu Cherokee"
 
 #: cherokee-trunk/admin/PageIndex.py:428
 msgid "Follow us on Twitter"
-msgstr ""
+msgstr "Śledź nas na Twitterze"
 
 #: cherokee-trunk/admin/PageIndex.py:429
 msgid "Join us on Facebook"
-msgstr ""
+msgstr "Dołącz do nas na Facebooku"
 
 #: cherokee-trunk/admin/PageIndex.py:430
 msgid "Become a member of Cherokee group on LinkedIn"
-msgstr ""
+msgstr "Stań się członkiem grupy Cherokee na LinedIn"
 
 #: cherokee-trunk/admin/PageIndex.py:431
 msgid "Chat with us at irc.freenode.net"
-msgstr ""
+msgstr "Dołącz do chatu na irc.freenode.net"
 
 #: cherokee-trunk/admin/PageIndex.py:440
-#, fuzzy
 msgid "Shutdown Cherokee-admin"
-msgstr "Witaj w Cherokee Admin"
+msgstr "Wyłącz Cherokee Admin"
 
 #: cherokee-trunk/admin/PageIndex.py:442
 msgid "Shut down"
-msgstr ""
+msgstr "Wyłącz"
 
 #: cherokee-trunk/admin/PageIndex.py:443
 msgid "You are about to shut down this instance of Cherokee-admin"
-msgstr ""
+msgstr "Masz zamiar wyłączyć Cherokee-admin"
 
 #: cherokee-trunk/admin/PageIndex.py:444
-#, fuzzy
 msgid "Are you sure you want to proceed?"
-msgstr "Na pewno chcesz usunąć?"
+msgstr "Na pewno chcesz kontynuować?"
 
 #: cherokee-trunk/admin/PageIndex.py:447
 msgid "Cherokee-admin has been shut down"
-msgstr ""
+msgstr "Cherokee-admin został wyłączony"
 
 #: cherokee-trunk/admin/PageIndex.py:449
-#, fuzzy
 msgid "Shut down Cherokee-Admin"
-msgstr "Witaj w Cherokee Admin"
+msgstr "Wyłącz Cherokee Admin"
 
 #: cherokee-trunk/admin/PageIndex.py:462 cherokee-trunk/admin/PageIndex.py:497
 msgid "Welcome to Cherokee Admin"
@@ -764,30 +746,30 @@ msgstr "Witaj w Cherokee Admin"
 #: cherokee-trunk/admin/consts.py:26 packages/wordpress/installer.py:33
 #: packages/redmine/tools.py:28
 msgid "English"
-msgstr "English"
+msgstr "Angielski"
 
 #: cherokee-trunk/admin/consts.py:27 packages/wordpress/installer.py:34
 #: packages/redmine/tools.py:30
 msgid "Spanish"
-msgstr "Spanish"
+msgstr "Hiszpański"
 
 #: cherokee-trunk/admin/consts.py:28 packages/wordpress/installer.py:32
 #: packages/redmine/tools.py:26
 msgid "German"
-msgstr "German"
+msgstr "Niemiecki"
 
 #: cherokee-trunk/admin/consts.py:29 packages/wordpress/installer.py:35
 #: packages/redmine/tools.py:33
 msgid "French"
-msgstr "French"
+msgstr "Francuski"
 
 #: cherokee-trunk/admin/consts.py:30 packages/redmine/tools.py:39
 msgid "Italian"
-msgstr ""
+msgstr "Włoski"
 
 #: cherokee-trunk/admin/consts.py:31 packages/redmine/tools.py:45
 msgid "Dutch"
-msgstr "Dutch"
+msgstr "Holenderski"
 
 #: cherokee-trunk/admin/consts.py:32 packages/redmine/tools.py:47
 msgid "Polish"
@@ -795,23 +777,23 @@ msgstr "Polski"
 
 #: cherokee-trunk/admin/consts.py:33 packages/redmine/tools.py:56
 msgid "Swedish"
-msgstr "Swedish"
+msgstr "Szwedzki"
 
 #: cherokee-trunk/admin/consts.py:34
 msgid "Brazilian Portuguese"
-msgstr "Brazilian Portuguese"
+msgstr "Brazylijski portugalski"
 
 #: cherokee-trunk/admin/consts.py:35
 msgid "Chinese Simplified"
-msgstr "Chinese Simplified"
+msgstr "Chiński uproszczony"
 
 #: cherokee-trunk/admin/consts.py:36 packages/redmine/tools.py:23
 msgid "Catalan"
-msgstr ""
+msgstr "Kataloński"
 
 #: cherokee-trunk/admin/consts.py:37 packages/redmine/tools.py:34
 msgid "Galician"
-msgstr ""
+msgstr "Galicyjski"
 
 #: cherokee-trunk/admin/consts.py:41 cherokee-trunk/admin/consts.py:127
 #: cherokee-trunk/admin/consts.py:260 cherokee-trunk/admin/Rule.py:174
@@ -926,9 +908,8 @@ msgid "1x1 Transparent GIF"
 msgstr "Przeźroczysty GIF 1x1px"
 
 #: cherokee-trunk/admin/consts.py:69 cherokee-trunk/admin/plugins/drop.py:29
-#, fuzzy
 msgid "Drop Connection"
-msgstr "Połączenie LDAP"
+msgstr "Porzuć połaczenie"
 
 #: cherokee-trunk/admin/consts.py:73
 msgid "Default errors"
@@ -1020,9 +1001,8 @@ msgid "IP Hash"
 msgstr "IP Hash"
 
 #: cherokee-trunk/admin/consts.py:113
-#, fuzzy
 msgid "Failover"
-msgstr "Filtr"
+msgstr "Praca awaryjna"
 
 #: cherokee-trunk/admin/consts.py:117
 msgid "Local interpreter"
@@ -1069,7 +1049,7 @@ msgstr "Wewnętrzne"
 
 #: cherokee-trunk/admin/consts.py:186
 #: cherokee-trunk/admin/plugins/directory.py:31
-#: cherokee-trunk/admin/market/PageApp.py:80 cherokee-trunk/admin/Icons.py:198
+#: cherokee-trunk/admin/market/PageApp.py:99 cherokee-trunk/admin/Icons.py:198
 #: cherokee-trunk/admin/Icons.py:330 packages/common/target.py:209
 msgid "Directory"
 msgstr "Katalog"
@@ -1117,11 +1097,11 @@ msgstr "Przychodzące IP/Port"
 
 #: cherokee-trunk/admin/consts.py:193
 msgid "SSL / TLS"
-msgstr ""
+msgstr "SSL / TLS"
 
 #: cherokee-trunk/admin/consts.py:194
 #: cherokee-trunk/admin/plugins/fullpath.py:66
-#: cherokee-trunk/admin/plugins/fullpath.py:98
+#: cherokee-trunk/admin/plugins/fullpath.py:101
 msgid "Full Path"
 msgstr "Pełna scieżka"
 
@@ -1164,7 +1144,7 @@ msgstr "Wygasłe w 1970"
 
 #: cherokee-trunk/admin/consts.py:210
 msgid "Do not expire until 2038"
-msgstr "Nie wygasaj do 2038"
+msgstr "Nie wygasa do 2038"
 
 #: cherokee-trunk/admin/consts.py:211
 msgid "Custom value"
@@ -1237,88 +1217,87 @@ msgstr "Śledzenie POST"
 
 #: cherokee-trunk/admin/consts.py:254
 msgid "Public"
-msgstr ""
+msgstr "Publiczny"
 
 #: cherokee-trunk/admin/consts.py:255
 msgid "Private"
-msgstr ""
+msgstr "Prywatny"
 
 #: cherokee-trunk/admin/consts.py:256
 msgid "No Cache"
-msgstr ""
+msgstr "Brak cache"
 
 #: cherokee-trunk/admin/consts.py:261
 msgid "0 - No compression"
-msgstr ""
+msgstr "0 - Brak kompresji"
 
 #: cherokee-trunk/admin/consts.py:262
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: cherokee-trunk/admin/consts.py:263
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: cherokee-trunk/admin/consts.py:264
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: cherokee-trunk/admin/consts.py:265
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: cherokee-trunk/admin/consts.py:266
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: cherokee-trunk/admin/consts.py:267
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: cherokee-trunk/admin/consts.py:268
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: cherokee-trunk/admin/consts.py:269
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: cherokee-trunk/admin/consts.py:270
 msgid "9 - Max compression"
-msgstr ""
+msgstr "9 - Maksymalna kompresja"
 
-#: cherokee-trunk/admin/CTK/CTK/Image.py:48
-#: cherokee-trunk/admin/CTK/CTK/Image.py:49
+#: cherokee-trunk/admin/CTK/CTK/Image.py:72
+#: cherokee-trunk/admin/CTK/CTK/Image.py:73
 msgid "Delete"
 msgstr "Usuń"
 
-#: cherokee-trunk/admin/CTK/CTK/Image.py:60 cherokee-trunk/admin/util.py:88
+#: cherokee-trunk/admin/CTK/CTK/Image.py:84 cherokee-trunk/admin/util.py:88
 msgid "Active"
 msgstr "Aktywne"
 
-#: cherokee-trunk/admin/CTK/CTK/Image.py:65 cherokee-trunk/admin/util.py:88
+#: cherokee-trunk/admin/CTK/CTK/Image.py:89 cherokee-trunk/admin/util.py:88
 msgid "Inactive"
 msgstr "Nieaktywne"
 
-#: cherokee-trunk/admin/CTK/CTK/Image.py:70
+#: cherokee-trunk/admin/CTK/CTK/Image.py:94
 msgid "Loading"
 msgstr "Ładowanie"
 
-#: cherokee-trunk/admin/CTK/CTK/Image.py:80
-#, fuzzy
+#: cherokee-trunk/admin/CTK/CTK/Image.py:104
 msgid "Forbidden"
-msgstr "Zabroń"
+msgstr "Zabronione"
 
-#: cherokee-trunk/admin/CTK/CTK/Submitter.py:73
-#: cherokee-trunk/admin/CTK/CTK/TextField.py:72
+#: cherokee-trunk/admin/CTK/CTK/Submitter.py:111
+#: cherokee-trunk/admin/CTK/CTK/TextField.py:97
 msgid "Optional"
 msgstr "Opcjonalne"
 
-#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:120
+#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:154
 msgid "Disable"
 msgstr "Wyłącz"
 
-#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:121
+#: cherokee-trunk/admin/CTK/CTK/ToggleButton.py:155
 #: packages/nagios/installer.py:454
 msgid "Enable"
 msgstr "Włącz"
@@ -1330,7 +1309,6 @@ msgstr "Włącz"
 #: packages/joomla/installer.py:181 packages/joomla/installer.py:200
 #: packages/phpmyadmin/installer.py:128 packages/phpmyadmin/installer.py:145
 #: packages/magnolia/installer.py:104 packages/magnolia/installer.py:172
-#: packages/example/installer.py:251 packages/example/installer.py:295
 #: packages/trac/installer.py:167 packages/trac/installer.py:263
 #: packages/vanilla/installer.py:178 packages/vanilla/installer.py:195
 #: packages/moin/installer.py:197 packages/moin/installer.py:214
@@ -1341,22 +1319,23 @@ msgstr "Włącz"
 #: packages/wordpress/installer.py:169 packages/wordpress/installer.py:198
 #: packages/wordpress/installer.py:218 packages/nagios/installer.py:169
 #: packages/nagios/installer.py:197 packages/nagios/installer.py:234
-#: packages/nagios/installer.py:463 packages/redmine/installer.py:158
+#: packages/nagios/installer.py:463 packages/nuxeo_dm/installer.py:114
+#: packages/nuxeo_dm/installer.py:185 packages/redmine/installer.py:158
 #: packages/redmine/installer.py:211 packages/redmine/installer.py:246
 #: packages/redmine/installer.py:266 packages/redmine/installer.py:397
 #: packages/wsgidav/installer.py:112 packages/wsgidav/installer.py:193
-#: packages/zencart/installer.py:137 packages/zencart/installer.py:155
-#: packages/nuxeo-dam/installer.py:115 packages/nuxeo-dam/installer.py:186
-#: packages/hello-world-php/installer.py:86
+#: packages/sugar_ce/installer.py:128 packages/zencart/installer.py:137
+#: packages/zencart/installer.py:155 packages/drupal_example/installer.py:251
+#: packages/drupal_example/installer.py:295
 #: packages/statusnet/installer.py:136 packages/statusnet/installer.py:155
 #: packages/drupal/installer.py:187 packages/drupal/installer.py:205
-#: packages/openx/installer.py:110 packages/sugar/installer.py:128
-#: packages/nuxeo-dm/installer.py:114 packages/nuxeo-dm/installer.py:185
-#: packages/moodle/installer.py:152 packages/moodle/installer.py:170
-#: packages/moodle/installer.py:221 packages/phpbb/installer.py:133
-#: packages/phpbb/installer.py:153
+#: packages/openx/installer.py:110 packages/nuxeo_dam/installer.py:115
+#: packages/nuxeo_dam/installer.py:186 packages/moodle/installer.py:152
+#: packages/moodle/installer.py:170 packages/moodle/installer.py:221
+#: packages/phpbb/installer.py:133 packages/phpbb/installer.py:153
+#: packages/hello_world_php/installer.py:86
 msgid "Next"
-msgstr ""
+msgstr "Następny"
 
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:217
 #: cherokee-trunk/admin/CTK/CTK/Druid.py:225
@@ -1369,29 +1348,28 @@ msgstr "Poprzedni"
 msgid "Create"
 msgstr "Stwórz"
 
-#: cherokee-trunk/admin/CTK/CTK/Config.py:237
+#: cherokee-trunk/admin/CTK/CTK/Config.py:244
 #, python-format
 msgid "ERROR: Couldn't unpack '%s'"
-msgstr ""
+msgstr "BŁĄD: Nie można wypakować '%s'"
 
-#: cherokee-trunk/admin/CTK/CTK/Config.py:370
+#: cherokee-trunk/admin/CTK/CTK/Config.py:392
 msgid "Could not copy configuration to "
 msgstr "Nie można skopiować pliku conf. do"
 
 #: cherokee-trunk/admin/CTK/CTK/AjaxUpload.py:106
 msgid "Upload"
-msgstr ""
+msgstr "Wysyłanie"
 
-#: cherokee-trunk/admin/CTK/CTK/Carousel.py:66
+#: cherokee-trunk/admin/CTK/CTK/Carousel.py:78
 msgid "left"
 msgstr ""
 
-#: cherokee-trunk/admin/CTK/CTK/Carousel.py:67
+#: cherokee-trunk/admin/CTK/CTK/Carousel.py:79
 msgid "right"
 msgstr ""
 
 #: cherokee-trunk/admin/CTK/CTK/Paginator.py:63
-#, fuzzy
 msgid "Previous"
 msgstr "Poprzedni"
 
@@ -1430,7 +1408,7 @@ msgstr "Dopasowanie do listy plików."
 #: cherokee-trunk/admin/plugins/exists.py:72
 #: cherokee-trunk/admin/plugins/exists.py:113
 msgid "Match any file"
-msgstr ""
+msgstr "Dopasuj dowolny plik"
 
 #: cherokee-trunk/admin/plugins/exists.py:75
 #: cherokee-trunk/admin/plugins/exists.py:114
@@ -1455,12 +1433,11 @@ msgid "If dir, check index files"
 msgstr "Jeśli katalog, sprawdź pliki index"
 
 #: cherokee-trunk/admin/plugins/exists.py:136
-#, fuzzy
 msgid "File exists"
 msgstr "Plik istnieje"
 
 #: cherokee-trunk/admin/plugins/exists.py:140
-#, fuzzy, python-format
+#, python-format
 msgid "File %(fname)s exists"
 msgstr "Plik %s istnieje"
 
@@ -1468,9 +1445,8 @@ msgstr "Plik %s istnieje"
 msgid "File exists (never matched)"
 msgstr "Plik istnieje (nigdy nie dopasowane)"
 
-# Nie do konca wiem o co tutaj chodz
 #: cherokee-trunk/admin/plugins/exists.py:144
-#, fuzzy, python-format
+#, python-format
 msgid "File %(most)s or %(last)s exists"
 msgstr "Plik %(most)s lub %(last)s istnieje"
 
@@ -1530,15 +1506,15 @@ msgstr "Zaawansowany hosting wirtualny"
 
 #: cherokee-trunk/admin/plugins/evhost.py:41
 msgid "Dynamic Document Root"
-msgstr ""
+msgstr "Dynamiczna domyślna ścieżka"
 
 #: cherokee-trunk/admin/plugins/evhost.py:42
 msgid "Check Document Root"
-msgstr ""
+msgstr "Sprawdź domyślną ścieżkę"
 
 #: cherokee-trunk/admin/plugins/evhost.py:42
-#: cherokee-trunk/admin/plugins/extensions.py:62
 #, fuzzy
+#: cherokee-trunk/admin/plugins/extensions.py:62
 msgid "Check"
 msgstr "Sprawdź plik"
 
@@ -1553,11 +1529,13 @@ msgid ""
 "Compression Level from 0 to 9, where 0 is no compression, 1 best speed, and "
 "9 best compression."
 msgstr ""
+"Poziom kompresji od 0 do 9, gdzie 0 to brak kompresji, 1 oznacza największą "
+"szybkość, a 9 najlepszą kompresję."
 
 #: cherokee-trunk/admin/plugins/gzip.py:38
 #: cherokee-trunk/admin/plugins/deflate.py:38
 msgid "Compression Level"
-msgstr ""
+msgstr "Poziom kompresji"
 
 #: cherokee-trunk/admin/plugins/request.py:27
 msgid "Regular expression against which the request will be executed."
@@ -1640,8 +1618,8 @@ msgstr "User"
 #: cherokee-trunk/admin/plugins/authlist.py:97
 #: cherokee-trunk/admin/OWS_Login.py:114 packages/magnolia/installer.py:166
 #: packages/common/database.py:761 packages/liferay/installer.py:158
-#: packages/nagios/installer.py:186 packages/redmine/installer.py:393
-#: packages/nuxeo-dam/installer.py:181 packages/nuxeo-dm/installer.py:180
+#: packages/nagios/installer.py:186 packages/nuxeo_dm/installer.py:180
+#: packages/redmine/installer.py:393 packages/nuxeo_dam/installer.py:181
 msgid "Password"
 msgstr "Hasło"
 
@@ -1766,9 +1744,8 @@ msgid "Add new entry"
 msgstr "Dodaj nowy wpis"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:88
-#, fuzzy
-msgid "Add new IP/Subnet…"
-msgstr "Nowa IP/podsieć"
+msgid "Add new IP/SubnetâŚ"
+msgstr "Dodaj nowy adres IP/maskę podsieci"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:100
 msgid "Accepted Server IP Addresses and Subnets"
@@ -2035,9 +2012,8 @@ msgid "New host name"
 msgstr "Nowa nazwa hosta"
 
 #: cherokee-trunk/admin/plugins/wildcard.py:79
-#, fuzzy
-msgid "Add new wildcard…"
-msgstr "Dodaj nowy..."
+msgid "Add new wildcardâŚ"
+msgstr "Dodaj nową dziką kartę"
 
 #: cherokee-trunk/admin/plugins/wildcard.py:91
 msgid "Accepted Domains"
@@ -2057,7 +2033,7 @@ msgstr "Jak długo download powinien być dostępny - w sekundach. Domyślnie: 6
 
 #: cherokee-trunk/admin/plugins/secdownload.py:43
 msgid "Secret"
-msgstr ""
+msgstr "Tajny"
 
 #: cherokee-trunk/admin/plugins/secdownload.py:44
 #: cherokee-trunk/admin/PageEntry.py:279
@@ -2183,9 +2159,8 @@ msgid "Whether the redirection should be Internal or External."
 msgstr "Przekierowanie powinno być wewnętrzne czy zewnętrzne."
 
 #: cherokee-trunk/admin/plugins/error_redir.py:99
-#, fuzzy
 msgid "Default Error"
-msgstr "Domyślne błędy"
+msgstr "Domyślny błąd"
 
 #: cherokee-trunk/admin/plugins/error_redir.py:103
 msgid "Error"
@@ -2197,9 +2172,8 @@ msgstr "Dodaj nowy własny błąd"
 
 #: cherokee-trunk/admin/plugins/error_redir.py:121
 #: cherokee-trunk/admin/Mime.py:104
-#, fuzzy
 msgid "Add New"
-msgstr "Dodaj nową %s"
+msgstr "Dodaj nowy"
 
 #: cherokee-trunk/admin/plugins/url_arg.py:31
 msgid "Argument name"
@@ -2233,7 +2207,7 @@ msgid ""
 msgstr "Publiczny katalog web dla którego zastosowana będzie ta konfiguracja."
 
 #: cherokee-trunk/admin/plugins/directory.py:31
-#: cherokee-trunk/admin/market/PageApp.py:40
+#: cherokee-trunk/admin/market/PageApp.py:41
 #: cherokee-trunk/admin/wizards/coldfusion.py:162
 #: cherokee-trunk/admin/wizards/concrete5.py:211
 #: cherokee-trunk/admin/wizards/mono.py:182
@@ -2268,23 +2242,20 @@ msgid ""
 msgstr ""
 
 #: cherokee-trunk/admin/plugins/header.py:46
-#, fuzzy
 msgid "Matches a Regular Expression"
-msgstr "Nowe wyrażenie regularne"
+msgstr ""
 
 #: cherokee-trunk/admin/plugins/header.py:47
 msgid "Is Provided"
 msgstr ""
 
 #: cherokee-trunk/admin/plugins/header.py:85
-#, fuzzy
 msgid "Full header"
-msgstr "Nazwa pliku"
+msgstr ""
 
 #: cherokee-trunk/admin/plugins/header.py:88
-#, fuzzy
 msgid "Complete Header"
-msgstr "Ukrywaj nagłówek"
+msgstr ""
 
 #: cherokee-trunk/admin/plugins/header.py:135
 #, python-format
@@ -2350,15 +2321,13 @@ msgstr "Katalog dla Baz Round Robin"
 
 #: cherokee-trunk/admin/plugins/rrd.py:41
 msgid "Custom rrdtool binary"
-msgstr ""
+msgstr "Własna wersja rrdtool"
 
 #: cherokee-trunk/admin/plugins/extensions.py:31
-#, fuzzy
 msgid ""
 "Comma-separated list of File Extension to which the configuration will be "
 "applied."
 msgstr ""
-"Lista rozszerzeń plików przypisanych do typu MIME oddzielona przecinkami."
 
 #: cherokee-trunk/admin/plugins/extensions.py:32
 msgid "Ensure that the matched extension if part of a local file name."
@@ -2377,20 +2346,20 @@ msgstr ""
 "Pełna ścieżka do jakiej konfiguracja zostanie zastosowana. (Przykład: /"
 "favicon.ico)"
 
-#: cherokee-trunk/admin/plugins/fullpath.py:91
+#: cherokee-trunk/admin/plugins/fullpath.py:94
 msgid "Full Web Paths"
 msgstr "Pełna scieżka web"
 
-#: cherokee-trunk/admin/plugins/fullpath.py:102
+#: cherokee-trunk/admin/plugins/fullpath.py:106
 msgid "Add another path"
 msgstr "Dodaj inną ścieżkę"
 
-#: cherokee-trunk/admin/plugins/fullpath.py:113
-#: cherokee-trunk/admin/plugins/fullpath.py:120
+#: cherokee-trunk/admin/plugins/fullpath.py:117
+#: cherokee-trunk/admin/plugins/fullpath.py:124
 msgid "Path"
 msgstr "Scieżka"
 
-#: cherokee-trunk/admin/plugins/fullpath.py:115
+#: cherokee-trunk/admin/plugins/fullpath.py:119
 #: cherokee-trunk/admin/PageVServer.py:462
 msgid "Paths"
 msgstr "Scieżki"
@@ -2577,73 +2546,72 @@ msgid "Add New Entry"
 msgstr "Dodaj nowy wpis"
 
 #: cherokee-trunk/admin/plugins/rehost.py:80
-#, fuzzy
-msgid "Add new entry…"
+msgid "Add new entryâŚ"
 msgstr "Dodaj nowy wpis"
 
 #: cherokee-trunk/admin/market/Util.py:54
 #: cherokee-trunk/admin/market/Util.py:56
 #: cherokee-trunk/admin/market/Util.py:84
-#: cherokee-trunk/admin/market/Install.py:85
+#: cherokee-trunk/admin/market/Install.py:93
 msgid "Cherokee Market"
-msgstr ""
+msgstr "Cherokee Market"
 
 #: cherokee-trunk/admin/market/Util.py:63
+msgid "Apps Center"
+msgstr "Centrum aplikacji"
+
 #: cherokee-trunk/admin/market/Util.py:90
-#: cherokee-trunk/admin/market/PageSearch.py:70
-#: cherokee-trunk/admin/Page.py:156
+#: cherokee-trunk/admin/market/PageSearch.py:58
 msgid "Market"
-msgstr ""
+msgstr "Market"
 
-#: cherokee-trunk/admin/market/Util.py:137
-#: cherokee-trunk/admin/market/PageIndex.py:147
-#: cherokee-trunk/admin/market/PageApp.py:121
-#: cherokee-trunk/admin/market/PageApp.py:135
+#: cherokee-trunk/admin/market/Util.py:128
 msgid "Free"
-msgstr ""
+msgstr "Darmowe"
 
-#: cherokee-trunk/admin/market/Util.py:172
+#: cherokee-trunk/admin/market/Util.py:163
 msgid "Try the following instructions to install the required software"
 msgstr ""
+"Postaraj się wypełnić poniższą instrukcję, aby zainstalować wymagane "
+"oprogramowanie"
 
-#: cherokee-trunk/admin/market/Util.py:179
+#: cherokee-trunk/admin/market/Util.py:170
 msgid ""
 "Several alternatives can provide the software requirements for the "
 "installation. Try at least one of the following instructions to install your "
 "preferred option"
 msgstr ""
+"Można wybrać kilka alternatywnych rozwiązań, aby wypełnić wymagania do "
+"instalacji. Wypełnij chociaż jedną z poniższych instrukcji zależnie od twoich "
+"preferencji"
 
-#: cherokee-trunk/admin/market/Util.py:186
-#, fuzzy
+#: cherokee-trunk/admin/market/Util.py:177
 msgid "or"
-msgstr "Port"
+msgstr "lub"
 
-#: cherokee-trunk/admin/market/PageIndex.py:50
-#, fuzzy
+#: cherokee-trunk/admin/market/PageIndex.py:64
 msgid "Featured Applications"
-msgstr "Aplikacje webowe"
+msgstr "Polecane aplikacje"
 
-#: cherokee-trunk/admin/market/PageIndex.py:144
-#, fuzzy
+#: cherokee-trunk/admin/market/PageIndex.py:119
+msgid "Could not access the repository"
+msgstr "Brak dostępu do repozytorium"
+
+#: cherokee-trunk/admin/market/PageIndex.py:120
+msgid "Cherokee could not reach the remote package repository"
+msgstr "Cherokee nie mógł osiągnąć zewnętrznego repozytorium pakietów"
+
+#: cherokee-trunk/admin/market/PageIndex.py:143
 msgid "Top Applications"
-msgstr "Aplikacje webowe"
-
-#: cherokee-trunk/admin/market/PageIndex.py:146
-msgid "Paid"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageIndex.py:148
-msgid "Popular"
-msgstr ""
+msgstr "Najlepsze aplikacje"
 
 #: cherokee-trunk/admin/market/Review.py:58
-#, fuzzy
 msgid "Could not send the review"
-msgstr "Nie można raportować tego problemu"
+msgstr "Nie można wysłać recenzji"
 
 #: cherokee-trunk/admin/market/Review.py:59
 msgid "We are sorry, but the review could not be sent."
-msgstr ""
+msgstr "Przepraszamy, ale recenzja nie mogła być wysłana."
 
 #: cherokee-trunk/admin/market/Review.py:60
 #: cherokee-trunk/admin/market/Report.py:44
@@ -2651,94 +2619,94 @@ msgid ""
 "Make sure you are logged in and there are no connectivity issues. If the "
 "problem persists, please contact our support team."
 msgstr ""
+"Upewnij się, że jesteś zalogowany i nie posiadasz, żadnych problemów z "
+"połączeniem. Jeżeli problem będzie ciągle występował skontaktuj się z naszym "
+"działem pomocy technicznej."
 
 #: cherokee-trunk/admin/market/Review.py:78
 #, python-format
 msgid "Please, describe your experience with %(application_name)s:"
-msgstr ""
+msgstr "Proszę opisz swoje doświadczenia z %(application_name)s:"
 
 #: cherokee-trunk/admin/market/Review.py:79
-#, fuzzy
 msgid "Title"
-msgstr "tytuł"
+msgstr "Tytuł"
 
 #: cherokee-trunk/admin/market/Review.py:81
 #: cherokee-trunk/admin/market/Review.py:89
-#: cherokee-trunk/admin/market/PageApp.py:231
-#: cherokee-trunk/admin/market/PageApp.py:236
 msgid "Review"
-msgstr ""
+msgstr "Recenzja"
 
 #: cherokee-trunk/admin/market/Review.py:83
 #, python-format
 msgid "How do you rate %(application_name)s?"
-msgstr ""
+msgstr "Jak oceniasz aplikację %(application_name)s?"
 
 #: cherokee-trunk/admin/market/CommandProgress.py:34
 msgid "Show error details"
-msgstr ""
+msgstr "Pokaż szczegóły błędu"
 
 #: cherokee-trunk/admin/market/CommandProgress.py:35
-#, fuzzy
 msgid "Hide error details"
-msgstr "Zapisuj błędy do"
+msgstr "Ukryj szczegóły błędu"
 
 #: cherokee-trunk/admin/market/CommandProgress.py:129
-#, fuzzy
 msgid "Unknown Error"
-msgstr "Nieznane"
+msgstr "Nieznany błąd"
 
 #: cherokee-trunk/admin/market/CommandProgress.py:138
-#, fuzzy
 msgid "Error executing"
-msgstr "Logowanie błędów"
+msgstr "Błąd podczas przetwarzania"
 
 #: cherokee-trunk/admin/market/PageCategory.py:57
-#, fuzzy
 msgid "Categories"
-msgstr "Kraje"
+msgstr "Kategorie"
 
-#: cherokee-trunk/admin/market/PageCategory.py:77
-#: cherokee-trunk/admin/market/PageCategory.py:90
-#: cherokee-trunk/admin/market/PageApp.py:165
-#: cherokee-trunk/admin/market/PageApp.py:278
+#: cherokee-trunk/admin/market/PageCategory.py:64
+#: cherokee-trunk/admin/market/PageCategory.py:76
+#: cherokee-trunk/admin/market/PageApp.py:154
+#: cherokee-trunk/admin/market/PageApp.py:209
 msgid "Category"
-msgstr ""
+msgstr "Kategoria"
 
-#: cherokee-trunk/admin/market/PageCategory.py:82
+#: cherokee-trunk/admin/market/PageCategory.py:69
 msgid "Empty Category"
-msgstr ""
+msgstr "Pusta kategoria"
 
-#: cherokee-trunk/admin/market/PageCategory.py:89
-#: cherokee-trunk/admin/market/PageSearch.py:82
-#: cherokee-trunk/admin/market/PageApp.py:269
+#: cherokee-trunk/admin/market/PageCategory.py:75
+#: cherokee-trunk/admin/market/PageSearch.py:70
+#: cherokee-trunk/admin/market/PageApp.py:199
 msgid "Market Home"
-msgstr ""
+msgstr "Strona główna Marketu"
 
 #: cherokee-trunk/admin/market/Maintenance.py:41
 msgid ""
 "Specify the name of a privileged DB user. It will be used to remove the "
 "databases."
 msgstr ""
+"Podaj nazwę użytkownika z odpowiednimi uprawnieniami do bazy danych. Zostanie "
+"on użyty do usunięcie baz danych."
 
 #: cherokee-trunk/admin/market/Maintenance.py:42
 #: packages/common/database.py:35
 msgid "Specify the password for this user account."
-msgstr ""
+msgstr "Podaj hasło dla tego użytkownika."
 
 #: cherokee-trunk/admin/market/Maintenance.py:43
 msgid ""
 "Please, provide an administrative user/password pair to connect to your "
 "database."
 msgstr ""
+"Proszę wpisz login i hasło administratora do połączenia się z twoją bazą "
+"danych."
 
 #: cherokee-trunk/admin/market/Maintenance.py:220
 msgid "Maintanance"
-msgstr ""
+msgstr "Konserwacja"
 
 #: cherokee-trunk/admin/market/Maintenance.py:223
 msgid "Clean up"
-msgstr ""
+msgstr "Wyczyść"
 
 #: cherokee-trunk/admin/market/Maintenance.py:228
 #, python-format
@@ -2746,55 +2714,52 @@ msgid ""
 "Detected %(num_orphan)d orphan, and %(num_unfinished)d unfinished "
 "installations: "
 msgstr ""
+"Wykryto %(num_orphan)d sieroty i %(num_unfinished)d niedokończonych "
+"instalacji: "
 
 #: cherokee-trunk/admin/market/Maintenance.py:231
 #, python-format
 msgid "Detected %(num_unfinished)d unfinished installations: "
-msgstr ""
+msgstr "Znaleziono %(num_unfinished)d nieukończonych aplikacji: "
 
 #: cherokee-trunk/admin/market/Maintenance.py:234
-#, fuzzy, python-format
+#, python-format
 msgid "Detected %(num_orphan)d orphan installations: "
-msgstr "Zdalna administracja"
+msgstr "Znaleziono %(num_unfinished)d osieroconych aplikacji: "
 
 #: cherokee-trunk/admin/market/Maintenance.py:242
-#, fuzzy
 msgid "Maintenance"
-msgstr "Typowe zadania administracyjne"
+msgstr "Konserwacja"
 
 #: cherokee-trunk/admin/market/Maintenance.py:281
-#: cherokee-trunk/admin/market/PageApp.py:95
-#: cherokee-trunk/admin/market/PageApp.py:260
-#, fuzzy
+#: cherokee-trunk/admin/market/PageApp.py:188
 msgid "Application"
-msgstr "Aplikacje webowe"
+msgstr "Aplikacje"
 
 #: cherokee-trunk/admin/market/Maintenance.py:281
-#, fuzzy
 msgid "Date"
-msgstr "Pokaż datę"
+msgstr "Data"
 
 #: cherokee-trunk/admin/market/Maintenance.py:316
+#: cherokee-trunk/admin/market/PageApp.py:153
 msgid "Orphan"
-msgstr ""
+msgstr "Sierota"
 
 #: cherokee-trunk/admin/market/Maintenance.py:333
-#, fuzzy
 msgid "Unfinished"
-msgstr "Zdalna administracja"
+msgstr "Niezakończone"
 
 #: cherokee-trunk/admin/market/Maintenance.py:372
 msgid "Applications requiring maintenance"
-msgstr ""
+msgstr "Aplikacja wymaga konserwacji"
 
 #: cherokee-trunk/admin/market/Maintenance.py:468
 msgid "DB user"
-msgstr ""
+msgstr "Użytkownik bazy danych"
 
 #: cherokee-trunk/admin/market/Maintenance.py:469
-#, fuzzy
 msgid "DB password"
-msgstr "Hasło bazy danych"
+msgstr "Hasło do bazy danych"
 
 #: cherokee-trunk/admin/market/Maintenance.py:478
 #, fuzzy
@@ -2804,284 +2769,225 @@ msgstr "Scieżka nie istnieje"
 #: cherokee-trunk/admin/market/Maintenance.py:560
 #, python-format
 msgid "Removing %(name)s (%(date)s)"
-msgstr ""
+msgstr "Usuwanie %(name)s (%(date)s)"
 
 #: cherokee-trunk/admin/market/Maintenance.py:566
-#, fuzzy
 msgid "Removing Applications"
-msgstr "Aplikacje webowe"
+msgstr "Usuwanie aplikacji"
 
 #: cherokee-trunk/admin/market/Library.py:54
 msgid "You have not bought any app yet"
-msgstr ""
+msgstr "Nie zakupiłeś żadnej aplikacji do tej pory"
 
 #: cherokee-trunk/admin/market/Library.py:76
 msgid "My Library"
-msgstr ""
+msgstr "Moja biblioteka"
 
-#: cherokee-trunk/admin/market/PageSearch.py:48
-#: cherokee-trunk/admin/market/PageSearch.py:83
-#: cherokee-trunk/admin/market/PageApp.py:276
+#: cherokee-trunk/admin/market/PageSearch.py:49
+#: cherokee-trunk/admin/market/PageSearch.py:71
+#: cherokee-trunk/admin/market/PageApp.py:207
 msgid "Search"
-msgstr ""
+msgstr "Szukaj"
 
-#: cherokee-trunk/admin/market/PageSearch.py:67
+#: cherokee-trunk/admin/market/PageSearch.py:55
 msgid "Search Result"
-msgstr ""
+msgstr "Wyniki wyszukiwania"
 
-#: cherokee-trunk/admin/market/PageSearch.py:76
+#: cherokee-trunk/admin/market/PageSearch.py:63
 msgid "Empty Search"
 msgstr ""
 
-#: cherokee-trunk/admin/market/PageApp.py:49
-#, fuzzy
+#: cherokee-trunk/admin/market/PageApp.py:50
 msgid "Supported"
-msgstr "Wsparcie"
+msgstr "Wspierane"
 
-#: cherokee-trunk/admin/market/PageApp.py:52
-#, fuzzy
+#: cherokee-trunk/admin/market/PageApp.py:53
 msgid "Unsupported"
-msgstr "Wsparcie"
+msgstr "Niewspierane"
 
-#: cherokee-trunk/admin/market/PageApp.py:78
+#: cherokee-trunk/admin/market/PageApp.py:97
 msgid "Deployment methods"
-msgstr ""
+msgstr "Metody wdrażania"
 
-#: cherokee-trunk/admin/market/PageApp.py:82
+#: cherokee-trunk/admin/market/PageApp.py:101
 msgid "Operating Systems"
-msgstr ""
+msgstr "System operacyjny"
 
-#: cherokee-trunk/admin/market/PageApp.py:85
-#, fuzzy
+#: cherokee-trunk/admin/market/PageApp.py:104
 msgid "Databases"
-msgstr "Baza danych"
+msgstr "Bazy danych"
 
-#: cherokee-trunk/admin/market/PageApp.py:107
+#: cherokee-trunk/admin/market/PageApp.py:123
 msgid "By"
-msgstr ""
+msgstr "Przez"
 
-#: cherokee-trunk/admin/market/PageApp.py:116
-#: cherokee-trunk/admin/market/PageApp.py:121
-#: cherokee-trunk/admin/market/PageApp.py:135
+#: cherokee-trunk/admin/market/PageApp.py:126
 msgid "Install"
-msgstr ""
+msgstr "Instaluj"
 
-#: cherokee-trunk/admin/market/PageApp.py:119
-#: cherokee-trunk/admin/market/PageApp.py:132
-msgid "Buy"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:133
-msgid "to buy"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:136
-#, fuzzy
-msgid "to install"
-msgstr "Zdalna administracja"
-
-#: cherokee-trunk/admin/market/PageApp.py:148
-#, fuzzy
+#: cherokee-trunk/admin/market/PageApp.py:131
 msgid "Report Application"
-msgstr "Aplikacje webowe"
+msgstr "Raportuj aplikację"
 
-#: cherokee-trunk/admin/market/PageApp.py:152
-#, fuzzy
+#: cherokee-trunk/admin/market/PageApp.py:135
 msgid "Report issue"
-msgstr "Zgłoś to"
+msgstr "Zgłoś błąd"
 
-#: cherokee-trunk/admin/market/PageApp.py:163
+#: cherokee-trunk/admin/market/PageApp.py:151
 msgid "Version"
 msgstr "Wersja"
 
-#: cherokee-trunk/admin/market/PageApp.py:187
+#: cherokee-trunk/admin/market/PageApp.py:153
+msgid "Packager"
+msgstr ""
+
+#: cherokee-trunk/admin/market/PageApp.py:173
 msgid "No screenshots"
-msgstr ""
+msgstr "Brak zrzutów ekranu"
 
-#: cherokee-trunk/admin/market/PageApp.py:189
+#: cherokee-trunk/admin/market/PageApp.py:177
 msgid "Screenshots"
-msgstr ""
+msgstr "Zrzuty ekranu"
 
-#: cherokee-trunk/admin/market/PageApp.py:190
+#: cherokee-trunk/admin/market/PageApp.py:178
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
-#: cherokee-trunk/admin/market/PageApp.py:204
-msgid "Reviews"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:208
-msgid "You can be the first one to review the application"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:221
-#, python-format
-msgid "on %(date)s at %(time)s"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:245
-msgid "sign in"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:249
-msgid "Please"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:251
-msgid "to review the product"
-msgstr ""
-
-#: cherokee-trunk/admin/market/PageApp.py:265
-#, fuzzy
+#: cherokee-trunk/admin/market/PageApp.py:193
 msgid "Application not found"
-msgstr "Serwer aplikacji"
+msgstr "Aplikacja nie znaleziona"
 
-#: cherokee-trunk/admin/market/Install.py:56
+#: cherokee-trunk/admin/market/Install.py:57
 msgid ""
 "The application is already in your library, so there is no need the buy it "
 "again. Please, proceed to the installation."
 msgstr ""
+"Ta aplikacja jest już w twojej bibliotece, więc nie ma potrzeby kupowania jej "
+"ponownie. Kontynuuj instalację."
 
-#: cherokee-trunk/admin/market/Install.py:58
+#: cherokee-trunk/admin/market/Install.py:59
 msgid ""
 "You are about to purchase the application. Please proceed with the Check Out "
 "to provide the payment details."
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:59
+#: cherokee-trunk/admin/market/Install.py:60
 msgid ""
 "The application will be downloaded and installed afterwards, and will remain "
 "in your library for future installations."
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:61
+#: cherokee-trunk/admin/market/Install.py:62
 msgid ""
 "Cherokee is now ready to run the application. Please, remember to backup "
 "your configuration if you are going to perform customizations."
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:62
-msgid "Thank you for buying at Cherokee's Market!"
-msgstr ""
-
 #: cherokee-trunk/admin/market/Install.py:63
+msgid "Thank you for buying at Cherokee's Market!"
+msgstr "Dziękujemy za zakup w Markecie Cherokee."
+
+#: cherokee-trunk/admin/market/Install.py:64
 msgid ""
 "Since there were previous changes your configuration has not been applied "
 "automatically. Please do it yourself by clicking the SAVE button on the top-"
 "right corner."
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:65
-msgid "Privileges test failed"
-msgstr ""
-
 #: cherokee-trunk/admin/market/Install.py:66
+msgid "Privileges test failed"
+msgstr "Test uprawnieni oblany"
+
+#: cherokee-trunk/admin/market/Install.py:67
 msgid ""
 "Since the installations may require administrator to execute system "
 "administration commands, it is required to run Cherokee-admin under a user "
 "with  administrator privileges."
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:67
+#: cherokee-trunk/admin/market/Install.py:68
 msgid "Please, run cherokee-admin as root to solve the problem."
-msgstr ""
+msgstr "Uruchom cherokee-admin jako root, aby rozwiązać problem."
 
-#: cherokee-trunk/admin/market/Install.py:154
-#, fuzzy
-msgid "Connecting to Cherokee Market"
-msgstr "Timeout połączenia"
+#: cherokee-trunk/admin/market/Install.py:70
+msgid "The package cannot be installed"
+msgstr "Pakiet nie może został zainstalowany"
 
-#: cherokee-trunk/admin/market/Install.py:155
-msgid "Retrieving package information…"
-msgstr ""
+#: cherokee-trunk/admin/market/Install.py:71
+#, python-format
+msgid "This package required at least Cherokee %(version)s to be installed."
+msgstr "Ten pakiet wymaga Cherokiee co najmniej %(version)s."
 
-#: cherokee-trunk/admin/market/Install.py:201
-#: cherokee-trunk/admin/market/Install.py:233
-msgid "Checking out"
-msgstr ""
-
-#: cherokee-trunk/admin/market/Install.py:205
-#, fuzzy
-msgid "Check Out"
-msgstr "Sprawdź plik"
-
-#: cherokee-trunk/admin/market/Install.py:234
-msgid "Waiting for the payment acknowledge…"
-msgstr ""
-
-#: cherokee-trunk/admin/market/Install.py:297
-#: cherokee-trunk/admin/market/Install.py:313
-#: cherokee-trunk/admin/market/Install.py:432
-#: cherokee-trunk/admin/market/Install.py:467 packages/redmine/installer.py:21
+#: cherokee-trunk/admin/market/Install.py:236
+#: cherokee-trunk/admin/market/Install.py:252
+#: cherokee-trunk/admin/market/Install.py:371
+#: cherokee-trunk/admin/market/Install.py:406 packages/redmine/installer.py:21
 msgid "Installing"
-msgstr ""
+msgstr "Instalacja"
 
-#: cherokee-trunk/admin/market/Install.py:298
+#: cherokee-trunk/admin/market/Install.py:237
 msgid "The application is being downloaded. Hold on tight!"
-msgstr ""
+msgstr "Pobieranie aplikacji w trakcie."
 
-#: cherokee-trunk/admin/market/Install.py:314
+#: cherokee-trunk/admin/market/Install.py:253
 msgid ""
 "There was an error downloading the application. Please contact us if the "
 "problem persists."
 msgstr ""
+"Wystąpił błąd podczas pobierania aplikacji. Skontaktuj się z nami, jeżeli "
+"problem będzie ciągle występował."
 
-#: cherokee-trunk/admin/market/Install.py:343
+#: cherokee-trunk/admin/market/Install.py:282
 #: cherokee-trunk/admin/PageException.py:80
 msgid "Internal Error"
 msgstr "Błąd wewnętrzny"
 
-#: cherokee-trunk/admin/market/Install.py:344
+#: cherokee-trunk/admin/market/Install.py:283
 msgid "An internal error occurred while deploying the application"
-msgstr ""
+msgstr "Wystąpił wewnętrzny błąd podczas wdrażania aplikacji"
 
-#: cherokee-trunk/admin/market/Install.py:345
+#: cherokee-trunk/admin/market/Install.py:284
 msgid ""
 "Information on the error has been collected so it can be reported and fixed "
 "up. Please help us improve it by sending the error information to the "
 "development team."
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:348
+#: cherokee-trunk/admin/market/Install.py:287
 msgid "Thank you for your feedback! We do appreciate it."
-msgstr ""
+msgstr "Dziękujemy za twoje zgłoszenie! Doceniamy to."
 
-#: cherokee-trunk/admin/market/Install.py:352
-#, fuzzy
+#: cherokee-trunk/admin/market/Install.py:291
 msgid "Comments"
-msgstr "Społeczność"
+msgstr "Komentarze"
 
-#: cherokee-trunk/admin/market/Install.py:359
-#, fuzzy
+#: cherokee-trunk/admin/market/Install.py:298
 msgid "Report Issue"
-msgstr "Zgłoś to"
+msgstr "Zgłoś problem"
 
-#: cherokee-trunk/admin/market/Install.py:433
-msgid "Unpacking application…"
+#: cherokee-trunk/admin/market/Install.py:372
+msgid "Unpacking applicationâŚ"
+msgstr "Rozpakowywanie aplikacji"
+
+#: cherokee-trunk/admin/market/Install.py:375
+msgid "The applicaction is being unpackedâŚ"
+msgstr "Aplikacja jest rozpakowywana"
+
+#: cherokee-trunk/admin/market/Install.py:407
+msgid "Setting it upâŚ"
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:436
-msgid "The applicaction is being unpacked…"
-msgstr ""
-
-#: cherokee-trunk/admin/market/Install.py:468
-#, fuzzy
-msgid "Setting it up…"
-msgstr "Aplikacje przeznaczenia ogólnego"
-
-#: cherokee-trunk/admin/market/Install.py:523
-#, fuzzy
+#: cherokee-trunk/admin/market/Install.py:462
 msgid "has been installed successfully"
-msgstr "Konfiguracja została zapisana"
+msgstr "zostało pomyślnie zainstalowane"
 
-#: cherokee-trunk/admin/market/Install.py:564
+#: cherokee-trunk/admin/market/Install.py:503
 msgid "You can now visit"
 msgstr ""
 
-#: cherokee-trunk/admin/market/Install.py:565
-#, fuzzy
+#: cherokee-trunk/admin/market/Install.py:504
 msgid "your new application"
-msgstr "Aplikacje webowe"
+msgstr "twoja nowa aplikacja"
 
 #: cherokee-trunk/admin/market/Report.py:40
 msgid "Contact Support & Customer Service"
@@ -3106,7 +3012,6 @@ msgid "We are sorry, but the report could not be sent."
 msgstr ""
 
 #: cherokee-trunk/admin/market/Report.py:45
-#, fuzzy
 msgid ""
 "Thank you for submitting the application report. Our support team will "
 "review it as soon as possible."
@@ -3114,25 +3019,17 @@ msgstr ""
 "Dziękujemy za raportowanie problemu. Deweloperzy Cherokee postarają się "
 "usunąć problem tak szybko jak to tylko możliwe."
 
-#: cherokee-trunk/admin/market/Report.py:94
-#, fuzzy
+#: cherokee-trunk/admin/market/Report.py:92
 msgid "Could not send the report"
-msgstr "Nie można raportować tego problemu"
+msgstr "Nie udało się wysłać raportu"
 
-#: cherokee-trunk/admin/market/Report.py:108
-#, fuzzy
+#: cherokee-trunk/admin/market/Report.py:106
 msgid "Report sent successfully"
-msgstr "Konfiguracja została zapisana"
+msgstr "Raport został wysłany"
 
-#: cherokee-trunk/admin/market/Report.py:125
-#, fuzzy
-msgid "Request refund"
-msgstr "Zapytanie"
-
-#: cherokee-trunk/admin/market/Report.py:137
-#, fuzzy
+#: cherokee-trunk/admin/market/Report.py:134
 msgid "Report"
-msgstr "Nowy port"
+msgstr "Report"
 
 #: cherokee-trunk/admin/PageAdvanced.py:64
 msgid ""
@@ -3191,7 +3088,6 @@ msgid "Max. length of the incoming connection queue."
 msgstr "Maksymalna długość kolejki przychodzących połączeń"
 
 #: cherokee-trunk/admin/PageAdvanced.py:77
-#, fuzzy
 msgid ""
 "Set the number of how many internal connections can be held for reuse by "
 "each thread. Default: 20."
@@ -3212,7 +3108,6 @@ msgid "Time lapse (in seconds) between Nonce cache clean ups."
 msgstr "Odstęp czasu (w sekundach) pomiędzy kolejnymi czyszczeniami cache"
 
 #: cherokee-trunk/admin/PageAdvanced.py:80
-#, fuzzy
 msgid ""
 "Enables the server-wide keep-alive support. It increases the performance. It "
 "is usually set on."
@@ -3228,27 +3123,24 @@ msgstr ""
 "keepalive."
 
 #: cherokee-trunk/admin/PageAdvanced.py:82
-#, fuzzy
 msgid ""
 "Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
-msgstr "Pozwala na używanie Chunked encoding aby zostawić Keep-Alive włączone."
+msgstr ""
+"Pozwala na używanie kodowania Chunked aby zostawić Keep-Alive włączone."
 
 #: cherokee-trunk/admin/PageAdvanced.py:83
 msgid "Activate or deactivate the I/O cache globally."
 msgstr "Globalnie włącza lub wyłącza I/O cache."
 
 #: cherokee-trunk/admin/PageAdvanced.py:84
-#, fuzzy
 msgid "Number of pages that the cache should handle."
 msgstr "Liczba stron którą cache powinno obsługiwać."
 
 #: cherokee-trunk/admin/PageAdvanced.py:85
-#, fuzzy
 msgid "Files under this size (in bytes) will not be cached."
 msgstr "Pliki poniżej tego rozmiaru nie będą cacheowane."
 
 #: cherokee-trunk/admin/PageAdvanced.py:86
-#, fuzzy
 msgid "Files over this size (in bytes) will not be cached."
 msgstr "Pliki powyżej tej wielkości nie będą cacheowane."
 
@@ -3399,7 +3291,7 @@ msgstr "Pliki specjalne"
 
 #: cherokee-trunk/admin/PageAdvanced.py:176
 msgid "Allow SSL v2"
-msgstr ""
+msgstr "Zezwalaj na użycie SSL v2"
 
 #: cherokee-trunk/admin/PageAdvanced.py:177
 msgid "Handshake Timeout"
@@ -3456,7 +3348,7 @@ msgstr "Witamy w konfiguratorze ColdFusion"
 #: cherokee-trunk/admin/wizards/coldfusion.py:39
 msgid ""
 "<a target=\"_blank\" href=\"http://www.adobe.com/products/coldfusion/"
-"\">Adobe ColdFusion®</a> enable developers to rapidly build, deploy, and "
+"\">Adobe ColdFusionÂŽ</a> enable developers to rapidly build, deploy, and "
 "maintain robust Internet applications for the enterprise."
 msgstr ""
 
@@ -3491,6 +3383,7 @@ msgid "New Virtual Server Details"
 msgstr "Szczegóły nowego serwera wirtualnego"
 
 #: cherokee-trunk/admin/wizards/coldfusion.py:46
+#, fuzzy
 #: cherokee-trunk/admin/wizards/concrete5.py:47
 #: cherokee-trunk/admin/wizards/mono.py:46
 #: cherokee-trunk/admin/wizards/django.py:44
@@ -3501,7 +3394,6 @@ msgstr "Szczegóły nowego serwera wirtualnego"
 #: cherokee-trunk/admin/wizards/mailman.py:48
 #: cherokee-trunk/admin/wizards/glassfish.py:45
 #: cherokee-trunk/admin/wizards/php.py:43
-#, fuzzy
 msgid "Host name of the virtual server that is about to be created."
 msgstr "Nazwa serwera wirtualnego który chcesz stworzyć. Nazwa domeny jest ok."
 
@@ -3628,7 +3520,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/wizards/mono.py:47
 msgid "Document root (for non Mono related files)."
-msgstr ""
+msgstr "Domyślna ścieżka (dla niezwiązanych z Mono plików)."
 
 #: cherokee-trunk/admin/wizards/mono.py:49
 msgid "Web directory under which the Mono application will be published."
@@ -3663,6 +3555,9 @@ msgid ""
 "It is the Web framework for perfectionists (with deadlines). Django makes it "
 "easier to build better Web apps more quickly and with less code."
 msgstr ""
+"Jest to framework dla perfekcjonistów (z terminami). Django sprawia, że "
+"tworzenie aplikacji webowych jest szybsze oraz wymaga napisania mniejszej "
+"ilości kodu."
 
 #: cherokee-trunk/admin/wizards/django.py:42
 msgid "Local directory where your Django project source code is located."
@@ -3684,7 +3579,7 @@ msgstr ""
 #: cherokee-trunk/admin/wizards/django.py:49
 #: cherokee-trunk/admin/wizards/rails.py:58
 msgid "The document root directory does not exist."
-msgstr ""
+msgstr "Wskazany katalog jako domyślna ścieżka nie istnieje."
 
 #: cherokee-trunk/admin/wizards/django.py:206
 msgid "Django Local Directory"
@@ -3818,7 +3713,7 @@ msgstr "CMS"
 
 #: cherokee-trunk/admin/wizards/List.py:31
 msgid "Content Management Systems"
-msgstr "Content Management Systems"
+msgstr "Systemy zarządzania treścią"
 
 #: cherokee-trunk/admin/wizards/List.py:34
 msgid "Concrete 5"
@@ -3875,7 +3770,7 @@ msgstr "Django"
 
 #: cherokee-trunk/admin/wizards/List.py:65
 msgid "The Web framework for perfectionists (with deadlines)."
-msgstr ""
+msgstr "Framework webowy dla perfekcjonistów (z terminami)."
 
 #: cherokee-trunk/admin/wizards/List.py:68
 msgid "Ruby on Rails"
@@ -3884,6 +3779,7 @@ msgstr "Ruby on Rails"
 #: cherokee-trunk/admin/wizards/List.py:69
 msgid "Open-source web framework optimized for sustainable productivity."
 msgstr ""
+"Otwarty framework webowy zoptymalizowany dla zrównoważonej produktywności."
 
 #: cherokee-trunk/admin/wizards/List.py:72
 msgid "Zend"
@@ -3891,7 +3787,7 @@ msgstr "Zend"
 
 #: cherokee-trunk/admin/wizards/List.py:73
 msgid "Simple, straightforward, open-source software framework for PHP 5."
-msgstr ""
+msgstr "Prosty, bezpośredni, otwarty framework dla PHP 5."
 
 #: cherokee-trunk/admin/wizards/List.py:76
 msgid "Symfony"
@@ -3917,7 +3813,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/wizards/List.py:92
 msgid "Widely-used general-purpose scripting language."
-msgstr ""
+msgstr "Szeroko używany język skryptowy ogólnego użytku."
 
 #: cherokee-trunk/admin/wizards/List.py:95
 msgid ".NET with Mono"
@@ -3925,7 +3821,7 @@ msgstr ".NET przez Mono"
 
 #: cherokee-trunk/admin/wizards/List.py:96
 msgid "Cross-platform, open-source .NET development framework."
-msgstr ""
+msgstr "Wieloplatformowy otwarty framework dla .NET"
 
 #: cherokee-trunk/admin/wizards/List.py:102
 msgid "Web Applications"
@@ -4221,7 +4117,8 @@ msgid ""
 "<a target=\"_blank\" href=\"http://libtorrent.rakshasa.no/\">rTorrent</a> is "
 "a text-based ncurses BitTorrent client written in C++, based on the "
 "libTorrent libraries for Unix (not to be confused with libtorrent by Arvid "
-"Norberg), whose author's goal is “a focus on high performance and good code”"
+"Norberg), whose author's goal is âa focus on high performance and good "
+"codeâ"
 msgstr ""
 
 #: cherokee-trunk/admin/wizards/rtorrent.py:37
@@ -4252,6 +4149,10 @@ msgid ""
 "fast (pure C), self-healing, developer-friendly application container, aimed "
 "for professional webapps deployment and development."
 msgstr ""
+"<a target=\"_blank\" href=\"http://projects.unbit.it/uwsgi/\">uWSGI</a> jest "
+"szybkim (czyste C), samo naprawiającym, przyjaznym dla dewelopera kontenera "
+"aplikacji, przeznaczony dla rozwijania i wdrażania profesjonalnych aplikacji "
+"webowych."
 
 #: cherokee-trunk/admin/wizards/uwsgi.py:53
 msgid ""
@@ -4339,9 +4240,8 @@ msgid "Mail Archive directory"
 msgstr "Katalog archiwum mail"
 
 #: cherokee-trunk/admin/wizards/mailman.py:185
-#, fuzzy
 msgid "Mail Images directory"
-msgstr "Katalog Mailman CGI"
+msgstr ""
 
 #: cherokee-trunk/admin/wizards/mailman.py:223
 #, fuzzy
@@ -4427,24 +4327,24 @@ msgstr "Nieprawidłowe odniesienie do serwera wirtualnego"
 msgid "Could not find a suitable PHP interpreter."
 msgstr ""
 
-#: cherokee-trunk/admin/wizards/php.py:559 packages/common/php.py:432
+#: cherokee-trunk/admin/wizards/php.py:559 packages/common/php.py:457
 #, fuzzy
 msgid "Could not determine PHP-CGI settings."
 msgstr "Nie można pobrać listy plików konfiguracyjnych"
 
-#: cherokee-trunk/admin/wizards/php.py:562 packages/common/php.py:435
+#: cherokee-trunk/admin/wizards/php.py:562 packages/common/php.py:460
 #, fuzzy
 msgid "Could not determine PHP-CGI configuration file."
 msgstr "Nie można pobrać listy plików konfiguracyjnych"
 
-#: cherokee-trunk/admin/wizards/php.py:587 packages/common/php.py:460
+#: cherokee-trunk/admin/wizards/php.py:587 packages/common/php.py:485
 msgid "Could not determine PHP-fpm settings."
 msgstr ""
 
 #: cherokee-trunk/admin/SystemStatsWidgets.py:134
 #, python-format
 msgid "%s Logical Processors"
-msgstr ""
+msgstr "%s logiczne procesory"
 
 #: cherokee-trunk/admin/SystemStatsWidgets.py:136
 #, fuzzy, python-format
@@ -4454,35 +4354,32 @@ msgstr "Twój email"
 #: cherokee-trunk/admin/SystemStatsWidgets.py:140
 #, python-format
 msgid "%s Cores"
-msgstr ""
+msgstr "%s rdzeni"
 
 #: cherokee-trunk/admin/SystemStatsWidgets.py:142
 #, python-format
 msgid "%s Core"
-msgstr ""
+msgstr "%s rdzeń"
 
 #: cherokee-trunk/admin/SystemStatsWidgets.py:147
 msgid "Unknown Processor"
 msgstr ""
 
 #: cherokee-trunk/admin/SystemStatsWidgets.py:176
-#, fuzzy
 msgid "Unknown RAM"
-msgstr "Nieznane"
+msgstr "Nieznany RAM"
 
 #: cherokee-trunk/admin/Page.py:34
-#, fuzzy
 msgid "Save Configuration"
-msgstr "Konfiguracja zaawansowana"
+msgstr "Zapisz konfigurację"
 
 #: cherokee-trunk/admin/Page.py:35
 msgid "Would you like to apply the changes to the running server now?"
 msgstr "Chcesz teraz zastosować zmiany dla uruchomionego serwera ?"
 
 #: cherokee-trunk/admin/Page.py:36
-#, fuzzy
 msgid "The configuration file has been saved successfully."
-msgstr "Konfiguracja została zapisana"
+msgstr "Plik konfiguracyjny został pomyślnie zapisany."
 
 #: cherokee-trunk/admin/Page.py:43
 #, fuzzy
@@ -4496,9 +4393,8 @@ msgid ""
 msgstr ""
 
 #: cherokee-trunk/admin/Page.py:45
-#, fuzzy
 msgid "Note that the configuration file was not saved."
-msgstr "Konfiguracja została zapisana"
+msgstr "Plik konfiguracyjny nie został zapisany."
 
 #: cherokee-trunk/admin/Page.py:87
 #, fuzzy
@@ -4506,9 +4402,8 @@ msgid "Solve"
 msgstr "Zapisz"
 
 #: cherokee-trunk/admin/Page.py:106
-#, fuzzy
 msgid "Configuration successfully saved"
-msgstr "Plik konfiguracyjny pomyślnie wgrany"
+msgstr "Plik konfiguracyjny pomyślnie zapisany"
 
 #: cherokee-trunk/admin/Page.py:114
 msgid "Do not restart"
@@ -4529,6 +4424,10 @@ msgstr "Zapisz"
 #: cherokee-trunk/admin/Page.py:154
 msgid "Home"
 msgstr "Główna"
+
+#: cherokee-trunk/admin/Page.py:156
+msgid "Apps"
+msgstr "Aplikacje"
 
 #: cherokee-trunk/admin/Page.py:157 cherokee-trunk/admin/PageStatus.py:101
 #: cherokee-trunk/admin/PageGeneral.py:267
@@ -4672,26 +4571,23 @@ msgid "Validation Mechanism"
 msgstr "Mechanizm walidacji"
 
 #: cherokee-trunk/admin/PageEntry.py:157 cherokee-trunk/admin/PageEntry.py:160
+#, fuzzy
 #: cherokee-trunk/admin/OWS_Login.py:83 cherokee-trunk/admin/OWS_Login.py:85
 #: packages/common/target.py:126 packages/common/target.py:136
-#, fuzzy
 msgid "Can not be empty"
 msgstr "Nie może być puste"
 
 #: cherokee-trunk/admin/PageEntry.py:221
-#, fuzzy
 msgid "Header Operations"
-msgstr "Dodatki do nagłówków"
+msgstr ""
 
 #: cherokee-trunk/admin/PageEntry.py:232
-#, fuzzy
 msgid "Action"
-msgstr "Aktywne"
+msgstr "Akcja"
 
 #: cherokee-trunk/admin/PageEntry.py:243
-#, fuzzy
 msgid "Add New Header"
-msgstr "Dodaj nową parę"
+msgstr ""
 
 #: cherokee-trunk/admin/PageEntry.py:254
 #: cherokee-trunk/admin/PageVServer.py:147
@@ -4703,9 +4599,8 @@ msgid "Time to expire"
 msgstr "Czas do wygaśnięcia"
 
 #: cherokee-trunk/admin/PageEntry.py:261
-#, fuzzy
 msgid "Management by caches"
-msgstr "Content Management Systems"
+msgstr ""
 
 #: cherokee-trunk/admin/PageEntry.py:263
 msgid "No Store"
@@ -4773,19 +4668,16 @@ msgid "Balancer without any source"
 msgstr ""
 
 #: cherokee-trunk/admin/SavingChecks.py:59
-#, fuzzy
 msgid "Authentication rule without Realm"
-msgstr "Lista autoryzacyjna"
+msgstr "Lista autoryzacyjn"
 
 #: cherokee-trunk/admin/SavingChecks.py:67
-#, fuzzy
 msgid "Virtual Server without nickname"
-msgstr "Nazwa serwera wirtualnego"
+msgstr "Serwer wirtualny bez pseudonimu"
 
 #: cherokee-trunk/admin/SavingChecks.py:70
-#, fuzzy
 msgid "Virtual Server without document root"
-msgstr "Katalog główny "
+msgstr "Serwer wirtualny bez ścieżki domyślnej"
 
 #: cherokee-trunk/admin/SavingChecks.py:81
 #, fuzzy
@@ -4821,25 +4713,23 @@ msgid "Method match without a defined method"
 msgstr "Scieżka nie jest katalogiem"
 
 #: cherokee-trunk/admin/SavingChecks.py:115
-#, fuzzy
 msgid "Empty 'Incoming IP/Port' match"
-msgstr "Przychodzące IP/Port"
+msgstr ""
 
 #: cherokee-trunk/admin/SavingChecks.py:120
 msgid "Empty 'Full path' rule match"
 msgstr ""
 
 #: cherokee-trunk/admin/SavingChecks.py:125
-#, fuzzy
 msgid "Empty 'Connected from' rule match"
-msgstr "Przychodzące IP/Port"
+msgstr ""
 
 #: cherokee-trunk/admin/SavingChecks.py:131
 msgid "Incomplete 'URL Argument' rule match"
 msgstr ""
 
 #: cherokee-trunk/admin/SavingChecks.py:136
-msgid "GeoIP match rule with no countries"
+msgid "GeoIP match rule with no contries"
 msgstr ""
 
 #: cherokee-trunk/admin/Balancer.py:32
@@ -4867,9 +4757,8 @@ msgid ""
 msgstr "Load balancer musi używać przynajmniej jednego źródła danych."
 
 #: cherokee-trunk/admin/Balancer.py:82
-#, fuzzy
 msgid "Broken Source"
-msgstr "Źródła danych"
+msgstr "Zepsute źródła"
 
 #: cherokee-trunk/admin/Balancer.py:131
 msgid "Assign Information Sources"
@@ -4955,19 +4844,16 @@ msgid ""
 msgstr "Nie można przywrócić wybranego pliku konfiguracyjnego"
 
 #: cherokee-trunk/admin/OWS_Backup.py:65
-#, fuzzy
 msgid "The Configuration File was restored successfully"
 msgstr "Plik konfiguracyjny został pomyślnie przywrócony"
 
 #: cherokee-trunk/admin/OWS_Backup.py:66
-#, fuzzy
 msgid "The configuration has been rolled back to a previous version."
-msgstr "Konfiguracja została zapisana"
+msgstr "Konfiguracja została przywrócona do poprzedniej wersji."
 
 #: cherokee-trunk/admin/OWS_Backup.py:67
-#, fuzzy
 msgid "Please, click the Save button if you want to commit the changes."
-msgstr "Konfiguracja została zapisana"
+msgstr "Kliknij przycisk Zapisz jeżeli chcesz zatwierdzić zmiany."
 
 #: cherokee-trunk/admin/OWS_Backup.py:68
 #, fuzzy
@@ -4975,7 +4861,7 @@ msgid "Your current Configuration file matches the restored version."
 msgstr "Twoja obecna konfiguracja zostanie zbackupowana"
 
 #: cherokee-trunk/admin/OWS_Backup.py:134
-msgid "Back up…"
+msgid "Back upâŚ"
 msgstr ""
 
 #: cherokee-trunk/admin/OWS_Backup.py:156
@@ -4999,9 +4885,8 @@ msgid "Restore"
 msgstr "Przywróć"
 
 #: cherokee-trunk/admin/OWS_Backup.py:302
-#, fuzzy
-msgid "Restore…"
-msgstr "Przywróć"
+msgid "RestoreâŚ"
+msgstr ""
 
 #: cherokee-trunk/admin/validations.py:20
 msgid "Malformed number"
@@ -5169,7 +5054,6 @@ msgid "Optimized to send static content."
 msgstr "Zoptymalizowane pod pliki statyczne."
 
 #: cherokee-trunk/admin/PageNewConfig.py:179
-#, fuzzy
 msgid "Server Development"
 msgstr "Rozwój serwera"
 
@@ -5372,9 +5256,8 @@ msgid "<p>The 'default' virtual server matches all the domain names.</p>"
 msgstr "<p>Domyślny serwer wirtualny odpowiada każdej domenie.</p>"
 
 #: cherokee-trunk/admin/PageVServer.py:80
-#, fuzzy
 msgid "Remote IP address"
-msgstr "Adres IP serwera LDAP"
+msgstr "Zdalny adres IP "
 
 #: cherokee-trunk/admin/PageVServer.py:81
 #, fuzzy
@@ -5419,9 +5302,8 @@ msgid "Time: milliseconds since Epoch"
 msgstr ""
 
 #: cherokee-trunk/admin/PageVServer.py:91
-#, fuzzy
 msgid "Remote user (authentication)"
-msgstr "Bazowa domena dla autoryzacji serwera."
+msgstr "Zdalny użytkownik (autoryzacja)"
 
 #: cherokee-trunk/admin/PageVServer.py:92
 msgid "URL path requested"
@@ -5432,9 +5314,8 @@ msgid "URL path requested before any rewrite"
 msgstr ""
 
 #: cherokee-trunk/admin/PageVServer.py:94
-#, fuzzy
 msgid "Virtual Server nick name"
-msgstr "Nazwa serwera wirtualnego"
+msgstr "Pseudonim serwera wirtualnego"
 
 #: cherokee-trunk/admin/PageVServer.py:95
 msgid "Requested host (Host: header)"
@@ -5543,9 +5424,8 @@ msgid "Rule is Active"
 msgstr "Reguła jest aktywna"
 
 #: cherokee-trunk/admin/PageVServer.py:178
-#, fuzzy
 msgid "Match nickname"
-msgstr "Pasujący nickname"
+msgstr "Pasujący pseudonim"
 
 #: cherokee-trunk/admin/PageVServer.py:182
 #: cherokee-trunk/admin/PageVServer.py:696
@@ -5553,15 +5433,14 @@ msgid "Host Match"
 msgstr "Pasuje host"
 
 #: cherokee-trunk/admin/PageVServer.py:220
-#: cherokee-trunk/admin/PageVServer.py:236
 #, fuzzy
+#: cherokee-trunk/admin/PageVServer.py:236
 msgid "Remove criteria"
 msgstr "Zdalny host"
 
 #: cherokee-trunk/admin/PageVServer.py:254
-#, fuzzy
 msgid "How to match this Virtual Server"
-msgstr "Dodaj nowy serwer wirtualny"
+msgstr ""
 
 #: cherokee-trunk/admin/PageVServer.py:261
 msgid "Add an additional matching criteria"
@@ -5672,9 +5551,8 @@ msgid "Show macros"
 msgstr "Pokazuj Group"
 
 #: cherokee-trunk/admin/PageVServer.py:586
-#, fuzzy
 msgid "Hide"
-msgstr "Nagłówek"
+msgstr "Ukryj"
 
 #: cherokee-trunk/admin/PageVServer.py:595
 msgid "Template: "
@@ -5837,18 +5715,18 @@ msgid "or by launching cherokee-admin as root."
 msgstr "lub uruchamiając cherokee-admin jako root."
 
 #: cherokee-trunk/admin/PageError.py:95
-#, fuzzy, python-format
+#, python-format
 msgid "The specified configuration file <code>%s</code> is a directory."
-msgstr "Plik konfiguracyjny <code>%s</code> nie może być zmodyfikowany"
+msgstr "Wybrany plik konfiguracyjny <code>%s</code> jest katalogiem."
 
 #: cherokee-trunk/admin/PageError.py:96
-#, fuzzy
 msgid ""
 "You must change the name in order to allow cherokee-admin to work with it. "
 "You can try to fix it by renaming the directory so the file can be created: "
 msgstr ""
 "Musisz zmienić prawa dostępowe tak aby cherokee-admin mógł z nim pracować. "
-"Możesz to naprawić zmieniając prawa dostępowe pliku:"
+"Możesz to naprawić zmieniając prawa nazwę katalogu, tak aby plik mógł zostać "
+"utworzony:"
 
 #: cherokee-trunk/admin/PageError.py:97
 #, fuzzy
@@ -5928,9 +5806,8 @@ msgid "An Incomplete Installation was detected"
 msgstr ""
 
 #: cherokee-trunk/admin/PageError.py:209
-#, fuzzy
 msgid "Missing Directory"
-msgstr "Katalog MoinMoin"
+msgstr ""
 
 #: cherokee-trunk/admin/PageError.py:218
 msgid "Installation Problem"
@@ -6043,9 +5920,8 @@ msgid "Methods"
 msgstr "Metody"
 
 #: cherokee-trunk/admin/Auth.py:55
-#, fuzzy
 msgid "Realm"
-msgstr "Realm"
+msgstr ""
 
 #: cherokee-trunk/admin/Auth.py:56
 msgid "Users"
@@ -6055,17 +5931,17 @@ msgstr "Użytkownicy"
 msgid "Authentication Details"
 msgstr "Szczegóły autoryzacji"
 
-#: cherokee-trunk/admin/server.py:64
+#: cherokee-trunk/admin/server.py:65
 #, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
 msgstr "Serwer %(version)s jest uruchomiony.. PID=%(pid)d Port=%(scgi_port)s"
 
-#: cherokee-trunk/admin/server.py:66
+#: cherokee-trunk/admin/server.py:67
 #, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "Serwer %(version)s jest uruchomiony.. PID=%(pid)d Socket=%(scgi_port)s"
 
-#: cherokee-trunk/admin/server.py:157
+#: cherokee-trunk/admin/server.py:150
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Niepoprawne parametry: PORT PLIK_KONFIGURACYJNY"
 
@@ -6113,7 +5989,6 @@ msgid "Latest version could not be determined at the moment."
 msgstr "Nie można sprawdzić ostatniego wydania."
 
 #: cherokee-trunk/admin/OWS_Cherokee_Info.py:69
-#, fuzzy
 msgid "Cherokee is up to date"
 msgstr "Cherokee jest aktualne."
 
@@ -6213,11 +6088,13 @@ msgid "Collect Statistics"
 msgstr "Zbieraj statystyki"
 
 #: cherokee-trunk/admin/OWS_Login.py:38
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "<span class=\"register-link\">Not registered yet? <a target = \"_blank\" "
 "href=\"%s\">Join today</a>.</span>"
-msgstr "Dołącz do <a target=\"_blank\" href=\"%s\">Cherokee na Facebook</a>."
+msgstr ""
+"<span class=\"register-link\">Nie masz konta? <a target = \"_blank\" "
+"href=\"%s\">Dołącz dzisiaj</a>.</span>"
 
 #: cherokee-trunk/admin/OWS_Login.py:98
 #, fuzzy
@@ -6226,7 +6103,7 @@ msgstr "Szczegóły autoryzacji"
 
 #: cherokee-trunk/admin/OWS_Login.py:109
 msgid "Sign in to Cherokee Market"
-msgstr ""
+msgstr "Zaloguj się do Cherokee Market"
 
 #: cherokee-trunk/admin/OWS_Login.py:112
 #, fuzzy
@@ -6234,13 +6111,12 @@ msgid "Email address"
 msgstr "Twój email"
 
 #: cherokee-trunk/admin/OWS_Login.py:128
-#, fuzzy
 msgid "Logged as"
-msgstr "Loggery"
+msgstr "Zalogowany jako"
 
 #: cherokee-trunk/admin/OWS_Login.py:131
 msgid "Sign out"
-msgstr ""
+msgstr "Wyloguj się"
 
 #: cherokee-trunk/admin/Wizard.py:43
 msgid "Check the cookbook for more details."
@@ -6361,14 +6237,14 @@ msgid "Add New Custom Environment Variable"
 msgstr "Dodaj nową zmienną środowiskową"
 
 #: cherokee-trunk/admin/PageGeneral.py:39
-#, fuzzy
 msgid "Defines the TCP port that the server will listen to."
-msgstr "Określa port na jakim serwer będzie nasłuchiwał"
+msgstr "Określa port TCP na jakim serwer będzie nasłuchiwał"
 
 #: cherokee-trunk/admin/PageGeneral.py:40
-#, fuzzy
 msgid "Optionally defines an interface to bind to. For instance: 127.0.0.1"
-msgstr "Opcjonalnie określa interfejs na którym nastłuchiwać"
+msgstr ""
+"Opcjonalnie określa interfejs na którym będzie nasłuchiwać. Na przykład: 127."
+"0.0.1"
 
 #: cherokee-trunk/admin/PageGeneral.py:41
 msgid ""
@@ -6486,9 +6362,8 @@ msgid "Interface"
 msgstr "Interfejs"
 
 #: cherokee-trunk/admin/PageGeneral.py:220
-#, fuzzy
 msgid "Add a new listening port"
-msgstr "Dodaj nowy port"
+msgstr "Dodaj nowy nasłuchujący port"
 
 #: cherokee-trunk/admin/PageGeneral.py:230
 msgid "Add new port"
@@ -6526,11 +6401,13 @@ msgstr "Ikony"
 msgid "General Settings"
 msgstr "Ogólne ustawienia"
 
-#: ows/Market_Info/Block.py:12
+#: ows/Market_Info/Block.py:12 ows/Market_Info/Block.py:45
 msgid ""
 "We believe Web infrastructure software should evolve towards efficiency, "
 "scalability, and management simplicity."
 msgstr ""
+"Wierzymy, że oprogramowanie Web powinno stawiać na wydajność, skalowalność i "
+"łatwość zarządzania."
 
 #: ows/Market_Info/Block.py:13
 msgid ""
@@ -6538,16 +6415,35 @@ msgid ""
 "flagship, Cherokee, is the most powerful Web infrastructure software ever "
 "created."
 msgstr ""
+"Dlatego Ocatality stara się, aby produkty były najwyższej jakości. Nasz "
+"flagowy produkt Cherokee jest najpotężniejszym serwerem WWW jaki został "
+"kiedykolwiek stworzony."
 
 #: ows/Market_Info/Block.py:14
 msgid ""
 "The Cherokee Market represents a wide distribution channel for companies, "
 "and an astonishing new way for users to deploy Web applications."
 msgstr ""
+"Cherokee Market jest kanałem dystrybucyjnym dla film jest niesamowitym nowym "
+"sposobem dla użytkowników do wdrożenia aplikacji webowych."
 
-#: ows/Market_Info/Block.py:15
+#: ows/Market_Info/Block.py:15 ows/Market_Info/Block.py:48
 msgid "Learn more"
+msgstr "Dowiedz się więcej"
+
+#: ows/Market_Info/Block.py:46
+msgid ""
+"That is why the Cherokee Project challenges the state of the art. The App "
+"Center is a good example of our contribution to evolve Web Infrastructures."
 msgstr ""
+
+#: ows/Market_Info/Block.py:47
+msgid ""
+"The App Center is open for you to add new Web applications. Do not hesitate "
+"to become a maintainer of the first distribution for Web Apps!"
+msgstr ""
+"Centrum aplikacji jest otwarte na dodanie nowych aplikacji webowych. Nie "
+"wahaj się i został opiekunem aplikacji!"
 
 #: ows/Market_Install/Install.py:10
 msgid "Cherokee Upgrade Required"
@@ -6558,58 +6454,58 @@ msgid ""
 "Your Cherokee version can no longer access many of the features of the "
 "Cherokee Market. Please, upgrade Cherokee to an up-to-date version."
 msgstr ""
+"Twoja wersja Cherokee nie pozwala na dostęp do wielu funkcjonalności Cherokee "
+"Market. Proszę uaktualnij Cherokee do najnowszej wersji."
 
 #: ows/Market_Install/Install.py:12
-#, fuzzy
 msgid "We apologize for the inconveniences."
 msgstr "Przepraszamy za wszystkie niedogodności jakie to mogło wywołać."
 
 #: packages/joomla/installer.py:138 packages/phpmyadmin/installer.py:84
-#: packages/example/installer.py:189 packages/trac/installer.py:134
-#: packages/vanilla/installer.py:121 packages/drupal7/installer.py:153
-#: packages/silverstripe/installer.py:113 packages/mediawiki/installer.py:105
-#: packages/wordpress/installer.py:126 packages/redmine/installer.py:108
-#: packages/zencart/installer.py:94 packages/drupal/installer.py:143
-#: packages/openx/installer.py:64 packages/sugar/installer.py:101
+#: packages/trac/installer.py:134 packages/vanilla/installer.py:121
+#: packages/drupal7/installer.py:153 packages/silverstripe/installer.py:113
+#: packages/mediawiki/installer.py:105 packages/wordpress/installer.py:126
+#: packages/redmine/installer.py:108 packages/sugar_ce/installer.py:101
+#: packages/zencart/installer.py:94 packages/drupal_example/installer.py:189
+#: packages/drupal/installer.py:143 packages/openx/installer.py:64
 #: packages/moodle/installer.py:85 packages/phpbb/installer.py:80
-#, fuzzy
 msgid "Checking Requirements"
-msgstr "Połączenia / Zapytania"
+msgstr "Sprawdzanie wymagań"
 
 #: packages/joomla/installer.py:142 packages/phpmyadmin/installer.py:88
-#: packages/magnolia/installer.py:91 packages/example/installer.py:194
-#: packages/trac/installer.py:138 packages/vanilla/installer.py:125
-#: packages/drupal7/installer.py:157 packages/silverstripe/installer.py:117
-#: packages/liferay/installer.py:82 packages/mediawiki/installer.py:109
-#: packages/wordpress/installer.py:130 packages/nagios/installer.py:155
-#: packages/nagios/installer.py:362 packages/nagios/installer.py:508
+#: packages/magnolia/installer.py:91 packages/trac/installer.py:138
+#: packages/vanilla/installer.py:125 packages/drupal7/installer.py:157
+#: packages/silverstripe/installer.py:117 packages/liferay/installer.py:82
+#: packages/mediawiki/installer.py:109 packages/wordpress/installer.py:130
+#: packages/nagios/installer.py:155 packages/nagios/installer.py:362
+#: packages/nagios/installer.py:508 packages/nuxeo_dm/installer.py:96
 #: packages/redmine/installer.py:112 packages/redmine/installer.py:199
-#: packages/wsgidav/installer.py:98 packages/zencart/installer.py:98
-#: packages/nuxeo-dam/installer.py:97 packages/statusnet/installer.py:97
-#: packages/drupal/installer.py:147 packages/openx/installer.py:68
-#: packages/sugar/installer.py:105 packages/nuxeo-dm/installer.py:96
+#: packages/wsgidav/installer.py:98 packages/sugar_ce/installer.py:105
+#: packages/zencart/installer.py:98 packages/drupal_example/installer.py:194
+#: packages/statusnet/installer.py:97 packages/drupal/installer.py:147
+#: packages/openx/installer.py:68 packages/nuxeo_dam/installer.py:97
 #: packages/moodle/installer.py:89 packages/phpbb/installer.py:84
 msgid "Retry"
 msgstr ""
 
-#: packages/joomla/installer.py:263 packages/example/installer.py:413
-#: packages/vanilla/installer.py:255 packages/silverstripe/installer.py:250
-#: packages/mediawiki/installer.py:213 packages/wordpress/installer.py:291
-#: packages/zencart/installer.py:217 packages/statusnet/installer.py:215
-#: packages/drupal/installer.py:268 packages/sugar/installer.py:188
-#: packages/phpbb/installer.py:223
+#: packages/joomla/installer.py:263 packages/vanilla/installer.py:255
 #, fuzzy
+#: packages/silverstripe/installer.py:250 packages/mediawiki/installer.py:213
+#: packages/wordpress/installer.py:291 packages/sugar_ce/installer.py:188
+#: packages/zencart/installer.py:217 packages/drupal_example/installer.py:413
+#: packages/statusnet/installer.py:215 packages/drupal/installer.py:268
+#: packages/phpbb/installer.py:223
 msgid "Performing adjustments"
 msgstr "Zdalna administracja"
 
-#: packages/joomla/installer.py:264 packages/example/installer.py:414
-#: packages/trac/installer.py:224 packages/vanilla/installer.py:256
-#: packages/drupal7/installer.py:347 packages/silverstripe/installer.py:251
-#: packages/mediawiki/installer.py:214 packages/wordpress/installer.py:292
-#: packages/nagios/installer.py:436 packages/wsgidav/installer.py:164
-#: packages/zencart/installer.py:218 packages/statusnet/installer.py:216
-#: packages/drupal/installer.py:269 packages/openx/installer.py:177
-#: packages/sugar/installer.py:189 packages/moodle/installer.py:289
+#: packages/joomla/installer.py:264 packages/trac/installer.py:224
+#: packages/vanilla/installer.py:256 packages/drupal7/installer.py:347
+#: packages/silverstripe/installer.py:251 packages/mediawiki/installer.py:214
+#: packages/wordpress/installer.py:292 packages/nagios/installer.py:436
+#: packages/wsgidav/installer.py:164 packages/sugar_ce/installer.py:189
+#: packages/zencart/installer.py:218 packages/drupal_example/installer.py:414
+#: packages/statusnet/installer.py:216 packages/drupal/installer.py:269
+#: packages/openx/installer.py:177 packages/moodle/installer.py:289
 #: packages/phpbb/installer.py:224
 msgid "This process may take a while. Please, hold on."
 msgstr ""
@@ -6621,15 +6517,14 @@ msgid ""
 msgstr ""
 
 #: packages/magnolia/installer.py:82 packages/liferay/installer.py:73
-#: packages/nuxeo-dam/installer.py:88 packages/nuxeo-dm/installer.py:87
+#: packages/nuxeo_dm/installer.py:87 packages/nuxeo_dam/installer.py:88
 msgid "Checking for installation requirements"
 msgstr ""
 
 #: packages/magnolia/installer.py:157 packages/liferay/installer.py:149
-#: packages/nuxeo-dam/installer.py:172 packages/nuxeo-dm/installer.py:171
-#, fuzzy
+#: packages/nuxeo_dm/installer.py:171 packages/nuxeo_dam/installer.py:172
 msgid "Access details"
-msgstr "Ograniczenia dostępu"
+msgstr "Szczegóły dostępu"
 
 #: packages/magnolia/installer.py:158
 msgid ""
@@ -6644,24 +6539,16 @@ msgid ""
 "servers, so please be patient the first time you access it."
 msgstr ""
 
-#: packages/magnolia/installer.py:160 packages/nuxeo-dam/installer.py:175
-#: packages/nuxeo-dm/installer.py:174
+#: packages/magnolia/installer.py:160 packages/nuxeo_dm/installer.py:174
+#: packages/nuxeo_dam/installer.py:175
 msgid ""
 "It is probably a good idea to pre-launch it instead of having the web-server "
 "do so on demand."
 msgstr ""
 
 #: packages/magnolia/installer.py:161 packages/liferay/installer.py:153
-#: packages/nuxeo-dam/installer.py:176 packages/nuxeo-dm/installer.py:175
+#: packages/nuxeo_dm/installer.py:175 packages/nuxeo_dam/installer.py:176
 msgid "These are the default access details:"
-msgstr ""
-
-#: packages/example/tools.py:17 packages/drupal/tools.py:17
-#: packages/openx/tools.py:20 packages/moodle/tools.py:31
-#: packages/phpbb/tools.py:36
-msgid ""
-"The PHP interpreter does not support any of the required database modules: "
-"'mysql', 'mysqli', or 'pgsql'"
 msgstr ""
 
 #: packages/trac/installer.py:31 packages/wsgidav/installer.py:33
@@ -6700,9 +6587,8 @@ msgid "Password of the initial user configured for Trac"
 msgstr ""
 
 #: packages/trac/installer.py:40 packages/nagios/installer.py:179
-#, fuzzy
 msgid "User configuration"
-msgstr "Konfiguracja ogólna"
+msgstr "Konfiguracja użytkownika"
 
 #: packages/trac/installer.py:41
 msgid ""
@@ -6727,9 +6613,8 @@ msgid "Trac User"
 msgstr "User bazy danych"
 
 #: packages/trac/installer.py:254
-#, fuzzy
 msgid "Trac Password"
-msgstr "Hasło"
+msgstr "Hasło Trac"
 
 #: packages/trac/tools.py:21
 msgid ""
@@ -6746,9 +6631,8 @@ msgid "The following command might aid in solving the issue."
 msgstr ""
 
 #: packages/trac/tools.py:66
-#, fuzzy
 msgid "Error report"
-msgstr "Handler błędów"
+msgstr ""
 
 #: packages/vanilla/installer.py:153
 msgid ""
@@ -6757,20 +6641,20 @@ msgid ""
 msgstr ""
 
 #: packages/vanilla/installer.py:156 packages/drupal7/installer.py:198
-#: packages/silverstripe/installer.py:150 packages/moodle/installer.py:130
 #, fuzzy
+#: packages/silverstripe/installer.py:150 packages/moodle/installer.py:130
 msgid "Setting"
 msgstr "Ustawienia prywatności"
 
 #: packages/vanilla/installer.py:156 packages/drupal7/installer.py:198
-#: packages/silverstripe/installer.py:150 packages/moodle/installer.py:130
 #, fuzzy
+#: packages/silverstripe/installer.py:150 packages/moodle/installer.py:130
 msgid "Expected value"
 msgstr "Uruchom jako użytkownik"
 
 #: packages/vanilla/installer.py:156 packages/drupal7/installer.py:198
-#: packages/silverstripe/installer.py:150 packages/moodle/installer.py:130
 #, fuzzy
+#: packages/silverstripe/installer.py:150 packages/moodle/installer.py:130
 msgid "Current value"
 msgstr "Własna wartość"
 
@@ -6782,7 +6666,7 @@ msgstr ""
 
 #: packages/moin/installer.py:38
 msgid "Name to show as Wiki name-logo"
-msgstr ""
+msgstr "Konserwacja"
 
 #: packages/moin/installer.py:39
 #, fuzzy
@@ -6806,14 +6690,12 @@ msgid "Admin User"
 msgstr ""
 
 #: packages/moin/installer.py:183 packages/common/database.py:680
-#, fuzzy
 msgid "Admin Password"
-msgstr "Hasło"
+msgstr "Hasło administratora"
 
 #: packages/moin/installer.py:209
-#, fuzzy
 msgid "Wiki details"
-msgstr "Szczegóły przekierowania"
+msgstr "Szczegóły Wiki"
 
 #: packages/drupal7/installer.py:139
 #, fuzzy
@@ -6854,9 +6736,8 @@ msgid "Admin user"
 msgstr "User"
 
 #: packages/drupal7/installer.py:270 packages/moodle/installer.py:194
-#, fuzzy
 msgid "Admin password"
-msgstr "Hasło"
+msgstr "Hasło administratora"
 
 #: packages/drupal7/installer.py:271
 #, fuzzy
@@ -6864,9 +6745,8 @@ msgid "Admin email"
 msgstr "User"
 
 #: packages/drupal7/installer.py:272
-#, fuzzy
 msgid "Sitename"
-msgstr "Nazwa pliku"
+msgstr "Nazwa strony"
 
 #: packages/drupal7/installer.py:338
 msgid "Using Drupal shell to install Drupal"
@@ -6964,14 +6844,12 @@ msgid "SQLite3 is available at http://www.sqlite.org/"
 msgstr ""
 
 #: packages/common/database.py:338 packages/common/database.py:484
-#, fuzzy
 msgid "Database not present"
-msgstr "Scieżka nie istnieje"
+msgstr "Baza danych nie istnieje"
 
 #: packages/common/database.py:403 packages/common/database.py:531
-#, fuzzy
 msgid "Unknown privilege"
-msgstr "Nieznane"
+msgstr "Nieznane uprawnienia"
 
 #: packages/common/database.py:431 packages/common/database.py:547
 #, python-format
@@ -6980,9 +6858,8 @@ msgid ""
 msgstr ""
 
 #: packages/common/database.py:455
-#, fuzzy
 msgid "Username does not exist"
-msgstr "Scieżka nie istnieje"
+msgstr "Użytkownik nie istnieje"
 
 #: packages/common/database.py:482
 msgid "The specified user is not the owner of the database"
@@ -6990,48 +6867,42 @@ msgstr ""
 
 #: packages/common/database.py:576
 msgid "Engine"
-msgstr ""
+msgstr "Silnik"
 
 #: packages/common/database.py:602
-#, fuzzy
 msgid "Configuration method"
-msgstr "Plik konfiguracyjny"
+msgstr "Metoda konfiguracji"
 
 #: packages/common/database.py:660 packages/common/database.py:737
 #: packages/common/database.py:835
 msgid "No supported database engines were detected."
-msgstr ""
+msgstr "Nie wspierany silnik bazy danych został wykryty."
 
 #: packages/common/database.py:661 packages/common/database.py:738
 msgid "The available options are"
 msgstr ""
 
 #: packages/common/database.py:679
-#, fuzzy
 msgid "Admin Username"
-msgstr "User"
+msgstr "Nazwa administratora"
 
 #: packages/common/database.py:718
-#, fuzzy
 msgid "Database does not exist."
-msgstr "Scieżka nie istnieje"
+msgstr "Baza danych nie isnieje"
 
 #: packages/common/database.py:760 packages/nagios/installer.py:185
-#: packages/redmine/installer.py:392 packages/nuxeo-dam/installer.py:179
-#: packages/nuxeo-dm/installer.py:178
-#, fuzzy
+#: packages/nuxeo_dm/installer.py:178 packages/redmine/installer.py:392
+#: packages/nuxeo_dam/installer.py:179
 msgid "Username"
-msgstr "User"
+msgstr "Nazwa użytkownika"
 
 #: packages/common/database.py:784
-#, fuzzy
 msgid "Unknown method"
-msgstr "Nieznane"
+msgstr "Nieznana metoda"
 
 #: packages/common/database.py:820
-#, fuzzy
 msgid "Database configuration"
-msgstr "Ręczna konfiguracja"
+msgstr "Konfiguracja bazy danych"
 
 #: packages/common/database.py:838
 msgid "This installer doesn't seem to support any databases."
@@ -7052,14 +6923,14 @@ msgid ""
 msgstr ""
 
 #: packages/common/target.py:26
-#, fuzzy
 msgid ""
 "Domain name of the Virtual Host you are about to create. Wildcards are "
 "allowed. For example: *.example.com"
-msgstr "Nazwa serwera wirtualnego który chcesz stworzyć. Nazwa domeny jest ok."
+msgstr ""
+"Nazwa serwera wirtualnego który chcesz stworzyć. Dzikie karty są dozwolone. "
+"Na przykład: *.example.com"
 
 #: packages/common/target.py:27
-#, fuzzy
 msgid ""
 "Specify the web directory under which the application will be accessible."
 msgstr "Publiczny katalog web dla którego zastosowana będzie ta konfiguracja."
@@ -7071,44 +6942,40 @@ msgid ""
 msgstr ""
 
 #: packages/common/target.py:131
-#, fuzzy
 msgid "Domain Name already in use"
-msgstr "Port jest już używany"
+msgstr "Nazwa domeny jest już używana"
 
 #: packages/common/target.py:139
 msgid "Root directory is not allowed"
 msgstr ""
 
 #: packages/common/target.py:145
-#, fuzzy
 msgid "Directory already configured"
-msgstr "Już skonfigurowane: %s"
+msgstr "Katalog został już skonfigurowany"
 
 #: packages/common/target.py:234
-#, fuzzy
 msgid "Unknown target"
-msgstr "Nieznane"
+msgstr "Nieznany cel"
 
 #: packages/common/target.py:259
 msgid "Install as a new.."
 msgstr ""
 
 #: packages/common/target.py:272
-#, fuzzy
 msgid "Deployment Type"
-msgstr "Rozwój serwera"
+msgstr ""
 
-#: packages/common/pwd_grp.py:101
+#: packages/common/pwd_grp.py:119
 #, python-format
 msgid "Could not add <em>%(user)s</em> user to <em>%(group)s</em> group."
 msgstr ""
 
-#: packages/common/pwd_grp.py:134
+#: packages/common/pwd_grp.py:158
 #, fuzzy
 msgid "Could not create group."
 msgstr "Nie można raportować tego problemu"
 
-#: packages/common/pwd_grp.py:177
+#: packages/common/pwd_grp.py:210
 #, fuzzy
 msgid "Could not create user."
 msgstr "Nie można raportować tego problemu"
@@ -7328,55 +7195,55 @@ msgid ""
 "For more about this module visit http://php.net/manual/en/book.%(module)s.php"
 msgstr ""
 
-#: packages/common/php.py:70
+#: packages/common/php.py:89
 msgid ""
 "PHP is required for the application to run, but it does not seem to be "
 "available in your system. Please install a FastCGI-enabled PHP interpeter to "
 "proceed."
 msgstr ""
 
-#: packages/common/php.py:71
+#: packages/common/php.py:90
 msgid ""
 "You can check if your interpreter supports FastCGI by looking for the \"fcgi"
 "\" string in the output of the following command: php-cgi -v"
 msgstr ""
 
-#: packages/common/php.py:73
+#: packages/common/php.py:92
 msgid ""
 "The user running PHP has no write-access to the path specified by the PHP "
 "session.save_path setting. PHP sessions will not work until either the user "
 "or the PHP settings are changed."
 msgstr ""
 
-#: packages/common/php.py:74
+#: packages/common/php.py:93
 msgid "The user configured to run PHP is not a valid user in your system"
 msgstr ""
 
-#: packages/common/php.py:84
+#: packages/common/php.py:103
 msgid ""
 "PHP is available at http://www.php.net/ . Remember to add the --enable-"
 "fastcgi parameter to ./configure."
 msgstr ""
 
-#: packages/common/php.py:94
+#: packages/common/php.py:113
 #, fuzzy
 msgid "Configuring PHP"
 msgstr "Plik konfiguracyjny"
 
-#: packages/common/php.py:95
+#: packages/common/php.py:114
 msgid "Detecting a suitable PHP interpreter"
 msgstr ""
 
-#: packages/common/php.py:111
+#: packages/common/php.py:130
 msgid "Could not find the PHP interpreter"
 msgstr ""
 
-#: packages/common/php.py:115
+#: packages/common/php.py:134
 #, fuzzy
 msgid "Check Again"
 msgstr "Sprawdź plik"
 
-#: packages/common/php.py:122
+#: packages/common/php.py:141
 msgid "Internal Error while configuring PHP"
 msgstr ""
 
@@ -7411,47 +7278,44 @@ msgid ""
 msgstr ""
 
 #: packages/liferay/installer.py:156
-#, fuzzy
 msgid "Email Address"
-msgstr "Twój email"
+msgstr "Adres mail"
 
 #: packages/wordpress/installer.py:25 packages/redmine/installer.py:24
 msgid "List of available languages"
-msgstr ""
+msgstr "Lista dostępnych języków"
 
 #: packages/wordpress/installer.py:26 packages/redmine/installer.py:25
 msgid "Deployment Language"
-msgstr ""
+msgstr "Język wdrożenia"
 
 #: packages/wordpress/installer.py:27 packages/redmine/installer.py:26
 msgid "Please, specify the deployment language for the application."
-msgstr ""
+msgstr "Proszę określić język dla aplikacji"
 
 #: packages/wordpress/installer.py:31
 msgid "Arabic"
-msgstr ""
+msgstr "Arabski"
 
 #: packages/wordpress/installer.py:36 packages/redmine/tools.py:40
 msgid "Japanese"
-msgstr ""
+msgstr "Japoński"
 
 #: packages/wordpress/installer.py:37 packages/redmine/tools.py:48
-#, fuzzy
 msgid "Portuguese"
-msgstr "Brazilian Portuguese"
+msgstr "Portugalski"
 
 #: packages/wordpress/installer.py:38 packages/redmine/tools.py:51
 msgid "Russian"
-msgstr ""
+msgstr "Rosyjski"
 
 #: packages/wordpress/installer.py:39 packages/redmine/tools.py:61
 msgid "Chinese"
-msgstr ""
+msgstr "Chiński"
 
 #: packages/nagios/installer.py:30
-#, fuzzy
 msgid "Administrator configuration"
-msgstr "Konfiguracja ogólna"
+msgstr "Konfiguracja administratora"
 
 #: packages/nagios/installer.py:31
 msgid ""
@@ -7592,8 +7456,31 @@ msgid ""
 "the <a href='http://www.boutell.com/gd/'>GD Graphics Library</a>"
 msgstr ""
 
+#: packages/nuxeo_dm/installer.py:108 packages/nuxeo_dam/installer.py:109
+msgid "Nuxeo can only be deployed under its default location /nuxeo."
+msgstr ""
+
+#: packages/nuxeo_dm/installer.py:109 packages/nuxeo_dam/installer.py:110
+msgid ""
+"The appropriate redirection rule will be created if the specified web path "
+"or deployment method chosen should require this."
+msgstr ""
+
+#: packages/nuxeo_dm/installer.py:172
+msgid ""
+"Nuxeo-DM has been installed, and Cherokee is configured to automatically "
+"launch it whenever the resource is accessed if it is not already available. "
+"A one-time pre-launch has been issued to save time."
+msgstr ""
+
+#: packages/nuxeo_dm/installer.py:173
+msgid ""
+"Note that launching Nuxeo-DM can take up a couple of  minutes on modern "
+"servers, so please be patient the first time you access it."
+msgstr ""
+
 #: packages/redmine/installer.py:22
-msgid "Redmine is being installed. This might take some time. Please wait…"
+msgid "Redmine is being installed. This might take some time. Please waitâŚ"
 msgstr ""
 
 #: packages/redmine/installer.py:28
@@ -7639,118 +7526,115 @@ msgstr "Scieżka nie istnieje"
 
 #: packages/redmine/tools.py:21
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bułgarski"
 
 #: packages/redmine/tools.py:22
 msgid "Bosnian"
-msgstr ""
+msgstr "Bośniacki"
 
 #: packages/redmine/tools.py:24
 msgid "Czech"
-msgstr ""
+msgstr "Czeski"
 
 #: packages/redmine/tools.py:25
-#, fuzzy
 msgid "Danish"
-msgstr "Spanish"
+msgstr "Duński"
 
 #: packages/redmine/tools.py:27
 msgid "Greek"
-msgstr ""
+msgstr "Grecki"
 
 #: packages/redmine/tools.py:29
-#, fuzzy
 msgid "English (GB)"
-msgstr "English"
+msgstr "Angielski (GB)"
 
 #: packages/redmine/tools.py:31
 msgid "Basque"
-msgstr ""
+msgstr "Baskijski"
 
 #: packages/redmine/tools.py:32
 msgid "Finnish"
-msgstr ""
+msgstr "Fiński"
 
 #: packages/redmine/tools.py:35
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrajski"
 
 #: packages/redmine/tools.py:36
 msgid "Croatian"
-msgstr ""
+msgstr "Chorwacki"
 
 #: packages/redmine/tools.py:37
 msgid "Hungarian"
-msgstr ""
+msgstr "Węgierski"
 
 #: packages/redmine/tools.py:38
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonezyjski"
 
 #: packages/redmine/tools.py:41
 msgid "Korean"
-msgstr ""
+msgstr "Koreański"
 
 #: packages/redmine/tools.py:42
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litewski"
 
 #: packages/redmine/tools.py:43
 msgid "Latvian"
-msgstr ""
+msgstr "Łotewski"
 
 #: packages/redmine/tools.py:44
 msgid "Mongolian"
-msgstr ""
+msgstr "Mongolski"
 
 #: packages/redmine/tools.py:46
 msgid "Norwegian"
-msgstr ""
+msgstr "Norweski"
 
 #: packages/redmine/tools.py:49
 msgid "Portuguese (BR)"
-msgstr ""
+msgstr "Portugalski (BR)"
 
 #: packages/redmine/tools.py:50
 msgid "Romanian"
-msgstr ""
+msgstr "Rumuński"
 
 #: packages/redmine/tools.py:52
 msgid "Slovak"
-msgstr ""
+msgstr "Słowacki"
 
 #: packages/redmine/tools.py:53
 msgid "Slovenian"
-msgstr ""
+msgstr "Słoweński"
 
 #: packages/redmine/tools.py:54
 msgid "Serbian"
-msgstr ""
+msgstr "Serbski"
 
 #: packages/redmine/tools.py:55
 msgid "Serbian (YU)"
-msgstr ""
+msgstr "Serbski (YU)"
 
 #: packages/redmine/tools.py:57
 msgid "Thai"
-msgstr ""
+msgstr "Tajski"
 
 #: packages/redmine/tools.py:58
 msgid "Turkish"
-msgstr ""
+msgstr "Turecki"
 
 #: packages/redmine/tools.py:59
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukraiński"
 
 #: packages/redmine/tools.py:60
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Nazwa pliku"
+msgstr "Wietnamski"
 
 #: packages/redmine/tools.py:62
 msgid "Chinese (TW)"
-msgstr ""
+msgstr "Chiński (TW)"
 
 #: packages/wsgidav/installer.py:34
 msgid ""
@@ -7775,18 +7659,16 @@ msgid "Installing WsgiDAV"
 msgstr "Zdalna administracja"
 
 #: packages/wsgidav/installer.py:184
-#, fuzzy
 msgid "Local directory"
-msgstr "Katalog Trac"
+msgstr "Lokalny katalog"
 
 #: packages/wsgidav/installer.py:188
-#, fuzzy
 msgid "WsgiDAV configuration"
-msgstr "Konfiguracja ogólna"
+msgstr "Konfiguracja WsgiDAV"
 
 #: packages/wsgidav/tools.py:52
 msgid ""
-"Your system doesn't seem to provide the required dependency 'xml2-config'"
+"Your system doesn't seem to provide the required dependecy 'xml2-config'"
 msgstr ""
 
 #: packages/wsgidav/tools.py:55
@@ -7798,27 +7680,12 @@ msgstr ""
 msgid "Registering database details"
 msgstr ""
 
-#: packages/nuxeo-dam/installer.py:109 packages/nuxeo-dm/installer.py:108
-msgid "Nuxeo can only be deployed under its default location /nuxeo."
-msgstr ""
-
-#: packages/nuxeo-dam/installer.py:110 packages/nuxeo-dm/installer.py:109
+#: packages/drupal_example/tools.py:17 packages/drupal/tools.py:17
+#: packages/openx/tools.py:20 packages/moodle/tools.py:31
+#: packages/phpbb/tools.py:36
 msgid ""
-"The appropriate redirection rule will be created if the specified web path "
-"or deployment method chosen should require this."
-msgstr ""
-
-#: packages/nuxeo-dam/installer.py:173
-msgid ""
-"Nuxeo-DAM has been installed, and Cherokee is configured to automatically "
-"launch it whenever the resource is accessed if it is not already available. "
-"A one-time pre-launch has been issued to save time."
-msgstr ""
-
-#: packages/nuxeo-dam/installer.py:174
-msgid ""
-"Note that launching Nuxeo-DAM can take up a couple of  minutes on modern "
-"servers, so please be patient the first time you access it."
+"The PHP interpreter does not support any of the required database modules: "
+"'mysql', 'mysqli', or 'pgsql'"
 msgstr ""
 
 #: packages/statusnet/installer.py:208
@@ -7831,16 +7698,16 @@ msgstr "Szczegóły autoryzacji"
 msgid "Performing automatic installation"
 msgstr "Zdalna administracja"
 
-#: packages/nuxeo-dm/installer.py:172
+#: packages/nuxeo_dam/installer.py:173
 msgid ""
-"Nuxeo-DM has been installed, and Cherokee is configured to automatically "
+"Nuxeo-DAM has been installed, and Cherokee is configured to automatically "
 "launch it whenever the resource is accessed if it is not already available. "
 "A one-time pre-launch has been issued to save time."
 msgstr ""
 
-#: packages/nuxeo-dm/installer.py:173
+#: packages/nuxeo_dam/installer.py:174
 msgid ""
-"Note that launching Nuxeo-DM can take up a couple of  minutes on modern "
+"Note that launching Nuxeo-DAM can take up a couple of  minutes on modern "
 "servers, so please be patient the first time you access it."
 msgstr ""
 
@@ -7880,9 +7747,8 @@ msgid ""
 msgstr ""
 
 #: packages/moodle/installer.py:195
-#, fuzzy
 msgid "Full sitename"
-msgstr "Nazwa pliku"
+msgstr "Pełna nazwa strony"
 
 #: packages/moodle/installer.py:196
 #, fuzzy
@@ -7899,18 +7765,16 @@ msgid "Make sure you understand and accept the "
 msgstr ""
 
 #: packages/moodle/installer.py:211
-#, fuzzy
 msgid "Moodle License"
-msgstr "Moodle"
+msgstr "Licencja Moodle"
 
 #: packages/moodle/installer.py:212
 msgid " before proceeding. Moodle license must be accepted to proceed."
 msgstr ""
 
 #: packages/moodle/installer.py:213
-#, fuzzy
 msgid "Accept license"
-msgstr "Akceptowane domeny"
+msgstr "Akceptuj licencję"
 
 #: packages/moodle/installer.py:280
 msgid ""
@@ -7943,9 +7807,8 @@ msgid "Only lower case letters allowed."
 msgstr ""
 
 #: packages/moodle/tools.py:203
-#, fuzzy
 msgid "Must accept License"
-msgstr "Akceptowane domeny"
+msgstr "Musisz zaakceptować licencję"
 
 #: packages/moodle/tools.py:208
 msgid "The default nick name is not accessible as such from the Internet"
@@ -7956,312 +7819,6 @@ msgid "Web path must be omitted"
 msgstr ""
 
 #: packages/broken_app/installer.py:24
-#, fuzzy
 msgid "OWS Error"
-msgstr "Błąd"
+msgstr "Błąd OWS"
 
-#, fuzzy
-#~ msgid "Database removal"
-#~ msgstr "Baza danych"
-
-#, fuzzy
-#~ msgid "Unfinished installation"
-#~ msgstr "Zdalna administracja"
-
-#, fuzzy
-#~ msgid "Installation"
-#~ msgstr "Zdalna administracja"
-
-#, fuzzy
-#~ msgid "Downloading"
-#~ msgstr "Ładowanie"
-
-#, fuzzy
-#~ msgid "Setting up application…"
-#~ msgstr "Aplikacje webowe"
-
-#, fuzzy
-#~ msgid "Welcome to the Moodle Wizard"
-#~ msgstr "Witaj w konfiguratorze mono"
-
-#~ msgid "Welcome to the phpMyAdmin Wizard"
-#~ msgstr "Witaj w konfiguratorze phpMyAdmin"
-
-#~ msgid "Welcome to the Joomla wizard"
-#~ msgstr "Witaj w konfiguratorze Joomla"
-
-#~ msgid "Joomla Local Directory"
-#~ msgstr "Lokalny katalog Joomla"
-
-#~ msgid "Drupal"
-#~ msgstr "Drupal"
-
-#~ msgid ""
-#~ "CMS for everything from personal weblogs to large community-driven "
-#~ "websites."
-#~ msgstr "CMS od prywatnych blogów do dużych stron społecznościowych."
-
-#~ msgid "WordPress"
-#~ msgstr "WordPress"
-
-#~ msgid "Joomla"
-#~ msgstr "Joomla"
-
-#~ msgid "MoinMoin Wiki"
-#~ msgstr "MoinMoin Wiki"
-
-#~ msgid "Trac Bug Tracker System"
-#~ msgstr "System śledzenia błędów"
-
-#~ msgid "Liferay"
-#~ msgstr "Liferay"
-
-#~ msgid "phpMyAdmin"
-#~ msgstr "phpMyAdmin"
-
-#~ msgid "Moodle"
-#~ msgstr "Moodle"
-
-#~ msgid "phpBB Forum"
-#~ msgstr "phpBB Forum"
-
-#~ msgid "Sugar CRM"
-#~ msgstr "Sugar CRM"
-
-#~ msgid "Welcome to the Mediawiki wizard"
-#~ msgstr "Witaj w konfiguratorze Mediawiki"
-
-#~ msgid "Internal Web Directory"
-#~ msgstr "Wewnętrzny katalog web"
-
-#~ msgid "MediaWiki Local Directory"
-#~ msgstr "Katalog MediaWiki"
-
-#~ msgid "Sugar Local Directory"
-#~ msgstr "Katalog lokalny Sugar"
-
-#~ msgid "MoinMoin Directory"
-#~ msgstr "Katalog MoinMoin"
-
-#~ msgid "Welcome to the Drupal wizard"
-#~ msgstr "Witaj w konfiguratorze Drupal"
-
-#~ msgid "Welcome to the WordPress wizard"
-#~ msgstr "Witaj w konfiguratorze WordPress"
-
-#~ msgid "Welcome to the Liferay Wizard"
-#~ msgstr "Witamy w kreatorze Liferay"
-
-#~ msgid "Liferay Project"
-#~ msgstr "Liferay Project"
-
-#~ msgid ""
-#~ "Hostname or IP of the server running Liferay. You can add more later to "
-#~ "have the load balanced."
-#~ msgstr ""
-#~ "Hostname lub IP serwera Liferay. Możesz oczywiście dodać potem kilka "
-#~ "serwerów aby równoważyć obciążenie."
-
-#, fuzzy
-#~ msgid "Does not look like a Uwsgi source directory."
-#~ msgstr "To nie wygląda na na plik konfiguracyjny uWSGI."
-
-#, fuzzy
-#~ msgid "Could not determine correct interpreter settings."
-#~ msgstr "Nie można przywrócić wybranego pliku konfiguracyjnego"
-
-#~ msgid "Welcome to the Trac wizard"
-#~ msgstr "Witaj w konfiguratorze Trac"
-
-#~ msgid "Trac Local Directory"
-#~ msgstr "Katalog Trac"
-
-#~ msgid "The Configuration has been Saved"
-#~ msgstr "Konfiguracja została zapisana"
-
-#, fuzzy
-#~ msgid ""
-#~ "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
-#~ "${protocol}, ${transport}, ${port_server}, ${query_string}, "
-#~ "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-#~ "${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
-#~ "${vserver_name_req}, ${response_size}"
-#~ msgstr ""
-#~ "Następujące reguły są akceptowalne: <br/>${ip_remote}, ${ip_local}, "
-#~ "${protocol}, ${transport}, ${port_server}, ${query_string}, "
-#~ "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-#~ "${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
-#~ "${response_size}"
-
-#~ msgid "Icons Directory is Missing"
-#~ msgstr "Brakuje katalogu ikon"
-
-#, fuzzy
-#~ msgid "Package Deployment"
-#~ msgstr "Typ odpowiedzi"
-
-#, fuzzy
-#~ msgid "Could not parse the PHP-fpm settings file"
-#~ msgstr "Nie można przywrócić wybranego pliku konfiguracyjnego"
-
-#, fuzzy
-#~ msgid "Could not read the \"fpm_listen_address\" property"
-#~ msgstr "Nie można raportować tego problemu"
-
-#, fuzzy
-#~ msgid "Path to the directory to share."
-#~ msgstr "Scieżka nie jest katalogiem"
-
-#, fuzzy
-#~ msgid "WebDAV directory"
-#~ msgstr "Katalog web"
-
-#, fuzzy
-#~ msgid "Application available"
-#~ msgstr "Serwer aplikacji"
-
-#, fuzzy
-#~ msgid "Password configuration"
-#~ msgstr "Ręczna konfiguracja"
-
-#, fuzzy
-#~ msgid "Could not validate Nagios configuration"
-#~ msgstr "Nie można skopiować pliku conf. do"
-
-#, fuzzy
-#~ msgid "DB type"
-#~ msgstr "Typ MIME"
-
-#~ msgid "Host Names"
-#~ msgstr "Nazwy hostów"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Restore..."
-#~ msgstr "Przywróć"
-
-#~ msgid "Your email address is used as user account"
-#~ msgstr "Twój email jest używany jako konto użytkownika"
-
-#~ msgid "Login"
-#~ msgstr "Login"
-
-#, fuzzy
-#~ msgid ""
-#~ "Commercial support for Cherokee is provided by <a target=\"_blank\" href="
-#~ "\"%s\">Octality</a>. They provide top notch Consulting, Custom "
-#~ "Engineering, and Enterprise Support Services."
-#~ msgstr ""
-#~ "Komercyjne wsparcie dla Cherokee prowadzi <a target=\"_blank\" href=\"%s"
-#~ "\">Octality</a>. They provide top notch Consulting, Custom Engineering, "
-#~ "and Enterprise Support Services."
-
-#~ msgid ""
-#~ "The Community Mailing List is the place to go for help on Cherokee. <a id="
-#~ "\"subscribe-a\">Subscribe now!</a>"
-#~ msgstr ""
-#~ "Lista dyskusyjna Cherokee jest miejscem gdzie możesz uzyskać pomoc. <a id="
-#~ "\"subscribe-a\">Zapisz się!</a>"
-
-#~ msgid ""
-#~ "Join us at the <a target=\"_blank\" href=\"%s\">#cherokee</a> IRC Channel."
-#~ msgstr "Dołącz do nas na IRC<a target=\"_blank\" href=\"%s\">#cherokee</a>."
-
-#~ msgid ""
-#~ "Your feedback is important! Log Bug Reports and Requests for Enhancements "
-#~ "in our <a target=\"_blank\" href=\"%s\">bug tracker</a> to help us "
-#~ "improve Cherokee."
-#~ msgstr ""
-#~ "Informacje od Ciebie są bardzo istotne! Raportuj błędy i sugeruj nowe "
-#~ "rzeczy przez nasz <a target=\"_blank\" href=\"%s\">system śledzenia "
-#~ "błędów</a>, dzięki temu pomożesz nam rozwijać Cherokee"
-
-#~ msgid ""
-#~ "Find out what's going on with Cherokee on your favorite Social Media!"
-#~ msgstr "Sprawdź co słychać o Cherokee w sieciach społecznściowych!"
-
-#~ msgid "Follow <a target=\"_blank\" href=\"%s\">Cherokee on Twitter</a>."
-#~ msgstr "Follow <a target=\"_blank\" href=\"%s\">Cherokee on Twitter</a>."
-
-#~ msgid "Join <a target=\"_blank\" href=\"%s\">Cherokee on Facebook</a>."
-#~ msgstr ""
-#~ "Dołącz do <a target=\"_blank\" href=\"%s\">Cherokee na Facebook</a>."
-
-#~ msgid ""
-#~ "<h3>Beta testing</h3> <p>Individuals like yourself who download and\n"
-#~ "test the latest developer snapshots of Cherokee Web Server help us to\n"
-#~ "create the highest quality product. For that, we thank you.</p>\n"
-#~ msgstr ""
-#~ "<h3>Testowanie Beta</h3> <p>Dziękujemy za testowanie i pobieranie\n"
-#~ "najnowszych buildów Cherokee Web Server. Pomóż nam tworzyć lepszy\n"
-#~ "produkt. Jeszcze raz dziękujemy.</p>\n"
-
-#~ msgid "Information"
-#~ msgstr "Informacje"
-
-#~ msgid "PID"
-#~ msgstr "PID"
-
-#~ msgid "Not running"
-#~ msgstr "Nie uruchomiono"
-
-#~ msgid "Default WWW"
-#~ msgstr "Domyślne WWW"
-
-#~ msgid "Prefix"
-#~ msgstr "Prefix"
-
-#~ msgid "IRC"
-#~ msgstr "IRC"
-
-#~ msgid "Mailing List"
-#~ msgstr "Lista mailingowa"
-
-#~ msgid "Bug Tracker"
-#~ msgstr "Bug Tracker"
-
-#~ msgid "Purchase Support"
-#~ msgstr "Wykup wsparcie"
-
-#~ msgid "New"
-#~ msgstr "Nowa"
-
-#~ msgid "Domain"
-#~ msgstr "Domena"
-
-#, fuzzy
-#~ msgid "Add new"
-#~ msgstr "Dodaj nową %s"
-
-#, fuzzy
-#~ msgid "Information Source  nick name is already being used."
-#~ msgstr "Nazwa serwera wirtualnego jest już używana"
-
-#~ msgid "Report developers"
-#~ msgstr "Powiadom developerów"
-
-#, fuzzy
-#~ msgid "Choose…"
-#~ msgstr "Wybierz"
-
-#~ msgid "Clone…"
-#~ msgstr "Klonuj..."
-
-#~ msgid "BD Password"
-#~ msgstr "Hasło BD"
-
-#~ msgid "Choose.."
-#~ msgstr "Wybierz.."
-
-#~ msgid "MIME types"
-#~ msgstr "Typy MIME"
-
-#~ msgid "descr"
-#~ msgstr "opis"
-
-#~ msgid "<p>%s: %s</p>"
-#~ msgstr "<p>%s: %s</p>"
-
-#~ msgid "Deactived"
-#~ msgstr "Nie aktywne"
