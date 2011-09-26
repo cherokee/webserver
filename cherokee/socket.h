@@ -27,59 +27,11 @@
 
 #include "common-internal.h"
 
-#include <sys/types.h>
-
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#else
-#include <time.h>
-#endif
-
-#include <sys/types.h>
-
-#ifdef HAVE_SYS_SOCKET_H
-# include <sys/socket.h>
-# include <sys/un.h>
-#endif
-
-#ifdef HAVE_NETINET_IN_H
-# include <netinet/in.h>
-#endif
-
-#ifdef HAVE_ARPA_INET_H
-# include <arpa/inet.h>
-#endif
-
+#include "socket_lowlevel.h"
 #include "buffer.h"
 #include "virtual_server.h"
 #include "fdpoll.h"
 #include "cryptor.h"
-
-#ifdef INET6_ADDRSTRLEN
-# define CHE_INET_ADDRSTRLEN INET6_ADDRSTRLEN
-#else
-#  ifdef INET_ADDRSTRLEN
-#    define CHE_INET_ADDRSTRLEN INET_ADDRSTRLEN
-#  else
-#    define CHE_INET_ADDRSTRLEN 16
-#  endif
-#endif
-
-#ifndef AF_LOCAL
-# define AF_LOCAL AF_UNIX
-#endif
-
-#ifndef SUN_LEN
-#define SUN_LEN(sa)						\
-	(strlen((sa)->sun_path) +				\
-	 (size_t)(((struct sockaddr_un*)0)->sun_path))
-#endif
-
-#ifndef SUN_ABSTRACT_LEN
-#define SUN_ABSTRACT_LEN(sa)					\
-	(strlen((sa)->sun_path+1) + 2 +				\
-	 (size_t)(((struct sockaddr_un*)0)->sun_path))
-#endif
 
 
 /* Socket status
@@ -173,7 +125,7 @@ int   cherokee_socket_pending_read      (cherokee_socket_t *socket);
 ret_t cherokee_socket_flush             (cherokee_socket_t *socket);
 ret_t cherokee_socket_test_read         (cherokee_socket_t *socket);
 
-ret_t cherokee_socket_set_client        (cherokee_socket_t *socket, unsigned short int type);
+ret_t cherokee_socket_create_fd         (cherokee_socket_t *socket, unsigned short int family);
 ret_t cherokee_socket_bind              (cherokee_socket_t *socket, int port, cherokee_buffer_t *listen_to);
 ret_t cherokee_socket_listen            (cherokee_socket_t *socket, int backlog);
 
@@ -188,6 +140,7 @@ ret_t cherokee_socket_gethostbyname     (cherokee_socket_t *socket, cherokee_buf
 ret_t cherokee_socket_set_status        (cherokee_socket_t *socket, cherokee_socket_status_t status);
 ret_t cherokee_socket_set_cork          (cherokee_socket_t *socket, cherokee_boolean_t enable);
 
+
 /* Low level functions
  */
 ret_t cherokee_socket_read   (cherokee_socket_t *socket, char *buf, int buf_size, size_t *pcnt_read);
@@ -196,6 +149,7 @@ ret_t cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vec
 
 /* Extra
  */
-ret_t cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockaddr_t *sa);
+ret_t cherokee_socket_set_sockaddr         (cherokee_socket_t *socket, int fd, cherokee_sockaddr_t *sa);
+ret_t cherokee_socket_update_from_addrinfo (cherokee_socket_t *socket, const struct addrinfo *addr_info);
 
 #endif /* CHEROKEE_SOCKET_H */

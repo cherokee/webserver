@@ -32,17 +32,19 @@
 #endif
 
 #include "resolv_cache.h"
+#include "socket_lowlevel.h"
 #include "util.h"
 #include "avl.h"
 #include "socket.h"
 #include "bogotime.h"
 
+
 #define ENTRIES "resolve"
 
 
 typedef struct {
-	struct in_addr    addr;
-	cherokee_buffer_t ip_str;
+	struct addrinfo    *addr;
+	cherokee_buffer_t  ip_str;
 } cherokee_resolv_cache_entry_t;
 
 struct cherokee_resolv_cache {
@@ -60,8 +62,8 @@ entry_new (cherokee_resolv_cache_entry_t **entry)
 {
 	CHEROKEE_NEW_STRUCT(n, resolv_cache_entry);
 
+	n->addr = NULL;
 	cherokee_buffer_init (&n->ip_str);
-	memset (&n->addr, 0, sizeof(n->addr));
 
 	*entry = n;
 	return ret_ok;
@@ -73,6 +75,10 @@ entry_free (void *entry)
 {
 	cherokee_resolv_cache_entry_t *e = entry;
 
+	if (e->addr) {
+		freeaddrinfo (e->addr);
+	}
+
 	cherokee_buffer_mrproper (&e->ip_str);
 	free(entry);
 }
@@ -83,7 +89,7 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 	       cherokee_buffer_t             *domain)
 {
 	ret_t   ret;
-	char   *tmp;
+	char    tmp[46];       // Max IPv6 length is 45
 	time_t  eagain_at = 0;
 
 	while (true) {
@@ -108,8 +114,14 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 		}
 	}
 
-	tmp = inet_ntoa (entry->addr);
-	if (tmp == NULL) {
+	if (unlikely (entry->addr == NULL)) {
+		return ret_error;
+	}
+
+	/* Render the text representation
+	 */
+	ret = cherokee_ntop (entry->addr->ai_family, entry->addr->ai_addr, tmp, sizeof(tmp));
+	if (ret != ret_ok) {
 		return ret_error;
 	}
 
@@ -234,6 +246,7 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
 		if (ret != ret_ok) {
 			return ret;
 		}
+		TRACE (ENTRIES, "Resolve '%s': added succesfuly as '%s'.\n", domain->buf, entry->ip_str.buf);
 	} else {
 		TRACE (ENTRIES, "Resolve '%s': hit.\n", domain->buf);
 	}
@@ -253,8 +266,34 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 				cherokee_buffer_t       *domain,
 				void                    *sock_)
 {
+	ret_t                  ret;
+	const struct addrinfo *addr = NULL;
+	cherokee_socket_t     *sock = sock_;
+
+	/* Get addrinfo
+	 */
+	ret = cherokee_resolv_cache_get_addrinfo (resolv, domain, &addr);
+	if (ret != ret_ok) {
+		return ret;
+	}
+
+	/* Copy it to the socket object
+	 */
+	ret = cherokee_socket_update_from_addrinfo (sock, addr);
+	if (ret != ret_ok) {
+		return ret;
+	}
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_resolv_cache_get_addrinfo (cherokee_resolv_cache_t *resolv,
+				    cherokee_buffer_t       *domain,
+				    const struct addrinfo  **addr_info)
+{
 	ret_t                          ret;
-	cherokee_socket_t             *sock  = sock_;
 	cherokee_resolv_cache_entry_t *entry = NULL;
 
 	/* Look for the name in the cache
@@ -270,14 +309,14 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 		 */
 		ret = table_add_new_entry (resolv, domain, &entry);
 		if (ret != ret_ok) {
+			TRACE (ENTRIES, "Resolve '%s': error ret=%d.\n", domain->buf, ret);
 			return ret;
 		}
+		TRACE (ENTRIES, "Resolve '%s': added succesfuly as '%s'.\n", domain->buf, entry->ip_str.buf);
 	} else {
 		TRACE (ENTRIES, "Resolve '%s': hit.\n", domain->buf);
 	}
 
-	/* Copy the address
-	 */
-	memcpy (&SOCKET_SIN_ADDR(sock), &entry->addr, sizeof(entry->addr));
+	*addr_info = entry->addr;
 	return ret_ok;
 }

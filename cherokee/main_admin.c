@@ -89,12 +89,14 @@ find_empty_port (int starting, int *port)
 	cherokee_buffer_add_str (&bind_, "127.0.0.1");
 
 	cherokee_socket_init (&s);
-	cherokee_socket_set_client (&s, AF_INET);
+	cherokee_socket_create_fd (&s, AF_INET);
 
 	while (true) {
 		ret = cherokee_socket_bind (&s, p, &bind_);
 		if (ret == ret_ok)
 			break;
+
+		cherokee_socket_close (&s);
 
 		p += 1;
 		if (p > 0XFFFF) {
@@ -102,7 +104,6 @@ find_empty_port (int starting, int *port)
 		}
 	}
 
-	cherokee_socket_close (&s);
 	cherokee_socket_mrproper (&s);
 	cherokee_buffer_mrproper (&bind_);
 

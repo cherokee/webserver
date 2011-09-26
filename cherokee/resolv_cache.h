@@ -44,8 +44,9 @@ ret_t cherokee_resolv_cache_init      (cherokee_resolv_cache_t *resolv);
 ret_t cherokee_resolv_cache_mrproper  (cherokee_resolv_cache_t *resolv);
 ret_t cherokee_resolv_cache_clean     (cherokee_resolv_cache_t *resolv);
 
-ret_t cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, cherokee_buffer_t *domain, const char **ip);
-ret_t cherokee_resolv_cache_get_host  (cherokee_resolv_cache_t *resolv, cherokee_buffer_t *domain, void *sock);
+ret_t cherokee_resolv_cache_get_ipstr    (cherokee_resolv_cache_t *resolv, cherokee_buffer_t *domain, const char **ip);
+ret_t cherokee_resolv_cache_get_host     (cherokee_resolv_cache_t *resolv, cherokee_buffer_t *domain, void *sock);
+ret_t cherokee_resolv_cache_get_addrinfo (cherokee_resolv_cache_t *resolv, cherokee_buffer_t *domain, const struct addrinfo **addr_info);
 
 CHEROKEE_END_DECLS
 

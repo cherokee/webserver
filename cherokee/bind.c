@@ -234,7 +234,7 @@ init_socket (cherokee_bind_t *listener, int family)
 
 	/* Create the socket, and set its properties
 	 */
-	ret = cherokee_socket_set_client (&listener->socket, family);
+	ret = cherokee_socket_create_fd (&listener->socket, family);
 	if ((ret != ret_ok) || (SOCKET_FD(&listener->socket) < 0)) {
 		return ret_error;
 	}

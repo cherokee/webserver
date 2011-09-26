@@ -1399,6 +1399,7 @@ module.h \
 module.c \
 cryptor.h \
 cryptor.c \
+socket_lowlevel.h \
 socket.h \
 socket.c \
 fdpoll.h \

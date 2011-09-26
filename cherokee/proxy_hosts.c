@@ -437,36 +437,40 @@ cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
 {
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv;
+	const struct addrinfo   *addr_info = NULL;
 
-	TRACE (ENTRIES, "Initializing proxy socket: %s\n",
-	       cherokee_string_is_ipv6 (&src->host) ? "IPv6": "IPv4");
+	TRACE (ENTRIES, "Initializing proxy %s\n", "socket");
 
-	/* Ensure that no fd leak happens */
-	cherokee_socket_close (socket);
-
-	/* Create socket & set Family */
-	if (cherokee_string_is_ipv6 (&src->host)) {
-		ret = cherokee_socket_set_client (socket, AF_INET6);
-	} else {
-		ret = cherokee_socket_set_client (socket, AF_INET);
-	}
-
-        if (unlikely(ret != ret_ok))
-		return ret_error;
-
-	/* TCP port */
-        SOCKET_SIN_PORT(socket) = htons (src->port);
-
-        /* IP host */
+	/* Resolve the hostname of the target server */
 	ret = cherokee_resolv_cache_get_default (&resolv);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
-	ret = cherokee_resolv_cache_get_host (resolv, &src->host, socket);
-	if (ret != ret_ok) {
+	ret = cherokee_resolv_cache_get_addrinfo (resolv, &src->host, &addr_info);
+	if ((ret != ret_ok) || (addr_info == NULL)) {
 		return ret_error;
 	}
+
+	/* Ensure that no fd leak happens */
+	cherokee_socket_close (socket);
+
+	/* Create the socket descriptor */
+	ret = cherokee_socket_create_fd (socket, addr_info->ai_family);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	/* Update the new socket */
+        SOCKET_SIN_PORT(socket) = htons (src->port);
+
+	ret = cherokee_socket_update_from_addrinfo (socket, addr_info);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	TRACE (ENTRIES, "Proxy socket Initialized: %s, target: %s\n",
+	       SOCKET_AF(socket) == AF_INET6 ? "IPv6": "IPv4", src->host.buf);
 
 	/* Set a few properties */
 	cherokee_fd_set_closexec    (socket->socket);

@@ -80,58 +80,55 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		return cherokee_socket_connect (sock);
 	}
 
-	/* Get required objects
-	 */
-	ret = cherokee_resolv_cache_get_default (&resolv);
-        if (unlikely (ret!=ret_ok)) {
-		return ret;
-	}
-
-	/* UNIX socket
+	/* Create the new socket and set the target IP info
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
-		ret = cherokee_socket_set_client (sock, AF_UNIX);
+
+		/* Create the socket descriptor
+		 */
+		ret = cherokee_socket_create_fd (sock, AF_UNIX);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
 
-		/* Copy the unix socket path */
 		ret = cherokee_socket_gethostbyname (sock, &src->unix_socket);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
-
-		/* Set non-blocking */
-		ret = cherokee_fd_set_nonblocking (sock->socket, true);
-		if (unlikely (ret != ret_ok)) {
-			LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SOURCE_NONBLOCK, sock->socket);
-		}
-
-	/* INET socket
-	 */
 	} else {
-		if (cherokee_string_is_ipv6 (&src->host)) {
-			ret = cherokee_socket_set_client (sock, AF_INET6);
-		} else {
-			ret = cherokee_socket_set_client (sock, AF_INET);
-		}
-		if (unlikely (ret != ret_ok)) {
+		const struct addrinfo *addr_info = NULL;
+
+		/* Query the resolv cache
+		 */
+		ret = cherokee_resolv_cache_get_default (&resolv);
+		if (unlikely (ret!=ret_ok)) {
 			return ret;
 		}
 
-		/* Query the host */
-		ret = cherokee_resolv_cache_get_host (resolv, &src->host, sock);
-		if (unlikely (ret != ret_ok)) {
-			return ret;
+		ret = cherokee_resolv_cache_get_addrinfo (resolv, &src->host, &addr_info);
+		if ((ret != ret_ok) || (addr_info == NULL)) {
+			return ret_error;
 		}
 
+		/* Create the socket descriptor */
+		ret = cherokee_socket_create_fd (sock, addr_info->ai_family);
+		if (unlikely (ret != ret_ok)) {
+			return ret_error;
+		}
+
+		/* Update the new socket */
 		SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
 
-		/* Set non-blocking */
-		ret = cherokee_fd_set_nonblocking (sock->socket, true);
+		ret = cherokee_socket_update_from_addrinfo (sock, addr_info);
 		if (unlikely (ret != ret_ok)) {
-			LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SOURCE_NONBLOCK, sock->socket);
+			return ret_error;
 		}
+	}
+
+	/* Set non-blocking */
+	ret = cherokee_fd_set_nonblocking (sock->socket, true);
+	if (unlikely (ret != ret_ok)) {
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SOURCE_NONBLOCK, sock->socket);
 	}
 
 	/* Set close-on-exec and reuse-address */

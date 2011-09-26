@@ -93,6 +93,7 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
 #include "buffer.h"
 #include "server-protected.h"
 #include "virtual_server.h"
+#include "resolv_cache.h"
 
 
 /* Max. sendfile block size (bytes), limiting size of data sent by
@@ -365,6 +366,32 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 
 
 ret_t
+cherokee_socket_update_from_addrinfo (cherokee_socket_t     *socket,
+				      const struct addrinfo *addr)
+{
+       if (unlikely (addr == NULL))
+               return ret_error;
+
+       SOCKET_AF(socket)       = addr->ai_family;
+       socket->client_addr_len = addr->ai_addrlen;
+
+       switch (addr->ai_family) {
+       case AF_INET:
+	       memcpy (&SOCKET_SIN_ADDR(socket), &((struct sockaddr_in *) addr->ai_addr)->sin_addr, sizeof(struct in_addr));
+	       break;
+       case AF_INET6:
+	       memcpy (&SOCKET_SIN6_ADDR(socket), &((struct sockaddr_in6 *) addr->ai_addr)->sin6_addr, sizeof(struct in6_addr));
+	       break;
+       default:
+	       SHOULDNT_HAPPEN;
+	       return ret_error;
+       }
+
+       return ret_ok;
+}
+
+
+ret_t
 cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 			   int                 *new_fd,
 			   cherokee_sockaddr_t *sa)
@@ -420,17 +447,17 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 
 
 ret_t
-cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
+cherokee_socket_create_fd (cherokee_socket_t *sock, unsigned short int family)
 {
 	/* Create the socket
 	 */
 	do {
-		sock->socket = socket (type, SOCK_STREAM, 0);
+		sock->socket = socket (family, SOCK_STREAM, 0);
 	} while ((sock->socket == -1) && (errno == EINTR));
 
 	if (sock->socket < 0) {
 #ifdef HAVE_IPV6
-		if ((type == AF_INET6) &&
+		if ((family == AF_INET6) &&
 		    (errno == EAFNOSUPPORT))
 		{
 			LOG_WARNING (CHEROKEE_ERROR_SOCKET_NO_IPV6);
@@ -444,7 +471,7 @@ cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 
 	/* Set the family length
 	 */
-	switch (type) {
+	switch (family) {
 	case AF_INET:
 		sock->client_addr_len = sizeof (struct sockaddr_in);
 		memset (&sock->client_addr, 0, sock->client_addr_len);
@@ -467,7 +494,7 @@ cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 
 	/* Set the family
 	 */
-	SOCKET_AF(sock) = type;
+	SOCKET_AF(sock) = family;
 	return ret_ok;
 }
 
@@ -1310,6 +1337,11 @@ ret_t
 cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hostname)
 {
 #ifndef _WIN32
+	ret_t                    ret;
+	cherokee_resolv_cache_t *resolv = NULL;
+
+	/* Unix sockets
+	 */
 	if (SOCKET_AF(socket) == AF_UNIX) {
 		memset ((char*) SOCKET_SUN_PATH(socket), 0,
 			sizeof (SOCKET_ADDR_UNIX(socket)));
@@ -1329,8 +1361,19 @@ cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hos
 		return ret_ok;
 	}
 
-	return cherokee_gethostbyname (hostname->buf, &SOCKET_SIN_ADDR(socket));
+	/* TCP sockets
+	 */
+	ret = cherokee_resolv_cache_get_default (&resolv);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
 
+	ret = cherokee_resolv_cache_get_host (resolv, hostname, socket);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	return ret_ok;
 #else
 	SHOULDNT_HAPPEN;
 	return ret_no_sys;

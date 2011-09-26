@@ -216,7 +216,7 @@ connect_to (cherokee_downloader_t *downloader,
 
 	/* Create the socket
 	 */
-	ret = cherokee_socket_set_client (sock, AF_INET);
+	ret = cherokee_socket_create_fd (sock, AF_INET);
 	if (unlikely(ret != ret_ok)) return ret_error;
 
 	/* Set the port

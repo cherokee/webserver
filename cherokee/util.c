@@ -305,10 +305,10 @@ strncasestrn (const char *s, size_t slen, const char *find, size_t findlen)
 	char sc;
 
 	if (unlikely (find == NULL) || (findlen == 0))
-		return s;
+		return (char *)s;
 
 	if (unlikely (*find == '\0'))
-		return s;
+		return (char *)s;
 
 	c = *find;
 	find++;
@@ -756,104 +756,27 @@ cherokee_eval_formated_time (cherokee_buffer_t *buf)
 }
 
 
-
-/* gethostbyname_r () emulation
- */
-#if defined(HAVE_PTHREAD) && !defined(HAVE_GETHOSTBYNAME_R)
-static pthread_mutex_t __global_gethostbyname_mutex = PTHREAD_MUTEX_INITIALIZER;
-#endif
-
 ret_t
-cherokee_gethostbyname (const char *hostname, void *_addr)
+cherokee_gethostbyname (const char *hostname, struct addrinfo **addr)
 {
-	struct in_addr *addr = _addr;
+	int              n;
+	struct addrinfo  hints;
 
-#if !defined(HAVE_PTHREAD) || (defined(HAVE_PTHREAD) && !defined(HAVE_GETHOSTBYNAME_R))
+	/* What we are trying to get
+	 */
+	memset (&hints, 0, sizeof(struct addrinfo));
 
-	struct hostent *host;
+	hints.ai_family   = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
 
-	CHEROKEE_MUTEX_LOCK (&__global_gethostbyname_mutex);
-
-	/* Resolv the host name
-	*/
-	do {
-		host = gethostbyname (hostname);
-	} while ((host == NULL) && (errno == EINTR));
-
-	if (host == NULL) {
-		if (h_errno == TRY_AGAIN) {
-			CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
-			return ret_eagain;
-		}
-
-		CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
+	/* Resolve address
+	 */
+	n = getaddrinfo (hostname, NULL, &hints, addr);
+	if (n < 0) {
 		return ret_error;
 	}
 
-	/* Copy the address
-	*/
-	memcpy (addr, host->h_addr, host->h_length);
-	CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
 	return ret_ok;
-
-#elif defined(HAVE_PTHREAD) && defined(HAVE_GETHOSTBYNAME_R)
-
-/* Maximum size that should use gethostbyname_r() function.
- * It will return ERANGE, if more space is needed.
- */
-# define GETHOSTBYNAME_R_BUF_LEN 512
-
-	int             r;
-	struct hostent  hs;
-	int             h_errnop = 0;
-	struct hostent *hp       = NULL;
-	char   tmp[GETHOSTBYNAME_R_BUF_LEN];
-
-# if defined(SOLARIS) || defined(IRIX)
-	/* Solaris 10:
-	 * struct hostent *gethostbyname_r
-	 *        (const char *, struct hostent *, char *, int, int *h_errnop);
-	 */
-	hp = gethostbyname_r (hostname, &hs, tmp,
-			      GETHOSTBYNAME_R_BUF_LEN - 1, &h_errnop);
-
-	if (hp == NULL) {
-		if (h_errnop == TRY_AGAIN) {
-			return ret_eagain;
-		}
-		return ret_error;
-	}
-# else
-	/* Linux glibc2:
-	 *  int gethostbyname_r (const char *name,
-	 *         struct hostent *ret, char *buf, size_t buflen,
-	 *         struct hostent **result, int *h_errnop);
-	 */
-	r = gethostbyname_r (hostname,
-			&hs, tmp, GETHOSTBYNAME_R_BUF_LEN - 1,
-			&hp, &h_errnop);
-	if (r != 0) {
-		if (h_errnop == TRY_AGAIN) {
-			return ret_eagain;
-		}
-		return ret_error;
-	}
-# endif
-	/* Copy the address
-	 */
-	if (hp == NULL) {
-		return ret_not_found;
-	}
-
-	memcpy (addr, hp->h_addr, hp->h_length);
-	return ret_ok;
-
-#else
-	/* Bad case !
-	 */
-	SHOULDNT_HAPPEN;
-	return ret_error;
-#endif
 }
 
 
