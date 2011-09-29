@@ -31,7 +31,7 @@ msgid ""
 "<p>You are about to delete the <b>%(nick_esc)s</b> Virtual Server.</p><p>Are "
 "you sure you want to proceed?</p>"
 msgstr ""
-"<p>Chcesz usunąć serwer wirtualny <b>%s</b>.</p><p>Jesteś pewien że chcesz "
+"<p>Chcesz usunąć serwer wirtualny <b>%(nick_esc)s</b>.</p><p>Jesteś pewien że chcesz "
 "kontynuować?</p>"
 
 #: cherokee-trunk/admin/PageVServers.py:51
@@ -1439,7 +1439,7 @@ msgstr "Plik istnieje"
 #: cherokee-trunk/admin/plugins/exists.py:140
 #, python-format
 msgid "File %(fname)s exists"
-msgstr "Plik %s istnieje"
+msgstr "Plik %(fname)s istnieje"
 
 #: cherokee-trunk/admin/plugins/exists.py:142
 msgid "File exists (never matched)"
@@ -2725,7 +2725,7 @@ msgstr "Znaleziono %(num_unfinished)d nieukończonych aplikacji: "
 #: cherokee-trunk/admin/market/Maintenance.py:234
 #, python-format
 msgid "Detected %(num_orphan)d orphan installations: "
-msgstr "Znaleziono %(num_unfinished)d osieroconych aplikacji: "
+msgstr "Znaleziono %(num_orphan)d osieroconych aplikacji: "
 
 #: cherokee-trunk/admin/market/Maintenance.py:242
 msgid "Maintenance"
