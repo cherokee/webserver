@@ -115,9 +115,10 @@
 #define FD_NUM_MIN_PER_THREAD         8         /* range:  8 ... 65000 */
 #define FD_NUM_CUSTOM_LIMIT           4096      /* range: 16 ... 65000 */
 
-#define EXIT_OK                        0
-#define EXIT_ERROR                     1
-#define EXIT_OK_ONCE                   2
+#define EXIT_OK                       0
+#define EXIT_ERROR                    1
+#define EXIT_OK_ONCE                  2
+#define EXIT_ERROR_FATAL              3
 
 #if (FD_NUM_MIN_SYSTEM < 16)
 # error FD_NUM_MIN_SYSTEM too low, < 16

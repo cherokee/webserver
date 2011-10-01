@@ -875,6 +875,10 @@ process_wait (pid_t pid)
 		if (re == EXIT_OK_ONCE) {
 			clean_up();
 			exit (EXIT_OK);
+
+		} else if (re == EXIT_ERROR_FATAL) {
+			clean_up();
+			exit (EXIT_ERROR);
 		}
 
 		/* Child terminated normally */

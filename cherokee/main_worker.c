@@ -361,11 +361,14 @@ main (int argc, char **argv)
 	cherokee_init();
 
 	ret = cherokee_server_new (&srv);
-	if (ret < ret_ok) return 1;
+	if (ret < ret_ok) {
+		exit (EXIT_ERROR_FATAL);
+	}
 
 	ret = process_parameters (argc, argv);
-	if (ret != ret_ok)
-		exit (EXIT_OK_ONCE);
+	if (ret != ret_ok) {
+		exit (EXIT_ERROR_FATAL);
+	}
 
 	if (print_modules) {
 		cherokee_info_build_print (srv);
@@ -374,13 +377,16 @@ main (int argc, char **argv)
 
 	if (just_test) {
 		ret = test_configuration_file();
-		if (ret != ret_ok)
-			exit(EXIT_ERROR);
+		if (ret != ret_ok) {
+			exit (EXIT_ERROR);
+		}
 		exit (EXIT_OK_ONCE);
 	}
 
 	ret = common_server_initialization (srv);
-	if (ret < ret_ok) return 2;
+	if (ret < ret_ok) {
+		exit (EXIT_ERROR_FATAL);
+	}
 
 	do {
 		ret = cherokee_server_step (srv);
@@ -391,5 +397,6 @@ main (int argc, char **argv)
 
 	free (config_file);
 	cherokee_mrproper();
+
 	return EXIT_OK;
 }
