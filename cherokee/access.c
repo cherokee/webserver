@@ -325,8 +325,9 @@ static ret_t
 cherokee_access_add_domain (cherokee_access_t *entry, char *domain)
 {
 	ret_t                    ret;
-	const char              *ip;
+	char                     ip[46]; // Max IPv6 length is 45
 	cherokee_resolv_cache_t *resolv;
+	const struct addrinfo   *addr_info, *addr;
 	cherokee_buffer_t        domain_buf = CHEROKEE_BUF_INIT;
 
 	cherokee_buffer_fake (&domain_buf, domain, strlen(domain));
@@ -334,11 +335,22 @@ cherokee_access_add_domain (cherokee_access_t *entry, char *domain)
 	ret = cherokee_resolv_cache_get_default (&resolv);
 	if (unlikely(ret!=ret_ok)) return ret;
 
-	ret = cherokee_resolv_cache_get_ipstr (resolv, &domain_buf, &ip);
+	ret = cherokee_resolv_cache_get_addrinfo (resolv, &domain_buf, &addr_info);
 	if (unlikely(ret!=ret_ok)) return ret;
 
-	TRACE (ENTRIES, "Access: domain '%s'\n", domain);
-	return cherokee_access_add_ip (entry, (char *)ip);
+	addr = addr_info;
+	while (addr != NULL) {
+		ret = cherokee_ntop (addr->ai_family, addr->ai_addr, ip, sizeof(ip));
+		if (unlikely(ret!=ret_ok)) return ret;
+	
+		TRACE (ENTRIES, "Access: domain '%s' -> IP: %s\n", domain, ip);
+		ret = cherokee_access_add_ip (entry, (char *)ip);
+		if (unlikely(ret!=ret_ok)) return ret;
+
+		addr = addr->ai_next;
+	}
+
+	return ret_ok;
 }
 
 
