@@ -211,6 +211,7 @@ parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char 
 	char    tmp[4];
 	char   *end;
 	size_t  len;
+	int       n;
 	char   *line    = buf->buf;
 	char   *begin   = buf->buf;
 
@@ -244,9 +245,6 @@ parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char 
 	 * HTTP/1.0 403 Forbidden
 	 */
 	if (unlikely(! cmp_str(begin, "HTTP/1."))) {
-		/* TODO: improve parser
-		 * (if ! "HTTP/" then leave default http_bad_request).
-		 */
 		*error_code = http_version_not_supported;
 		return ret_error;
 	}
@@ -267,10 +265,24 @@ parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char 
 		break;
 	}
 
-	/* Read the response code
-	 * TODO: skip spaces properly (usually there is only one blank).
+	/* Skip whites - there must at least one
 	 */
-	memcpy (tmp, begin+9, 3);
+	if (unlikely (CHEROKEE_CHAR_IS_WHITE (begin[8]))) {
+		return ret_error;
+	}
+
+	n = 9;
+	while (CHEROKEE_CHAR_IS_WHITE (begin[n])) {
+		n++;
+	}
+
+	/* Read the response code
+	 */
+	if (unlikely ((begin + n + 3 > end))) {
+		return ret_error;
+	}
+
+	memcpy (tmp, begin+n, 3);
 	tmp[3] = '\0';
 
 	ret = cherokee_atoi (tmp, (int *)&hdr->response);
