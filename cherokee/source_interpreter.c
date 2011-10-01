@@ -484,7 +484,6 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 }
 
 
-#ifdef HAVE_POSIX_SHM
 static ret_t
 _spawn_shm (cherokee_source_interpreter_t *src,
 	    cherokee_logger_writer_t      *error_writer)
@@ -530,7 +529,6 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 
 	return ret_ok;
 }
-#endif
 
 
 static ret_t
@@ -653,7 +651,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 
 	/* Try with SHM first
 	 */
-#ifdef HAVE_POSIX_SHM
 	if ((src->spawn_type == spawn_shm) ||
 	    (src->spawn_type == spawn_unknown))
 	{
@@ -672,7 +669,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 			return ret_error;
 		}
 	}
-#endif
 
 	/* No luck, go 'local' then..
 	 */

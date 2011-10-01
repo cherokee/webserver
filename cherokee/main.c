@@ -405,7 +405,7 @@ pid_file_clean (const char *pid_file)
 	free (pid_file_worker);
 }
 
-#ifdef HAVE_POSIX_SHM
+#ifdef HAVE_SYSV_SEMAPHORES
 
 static void
 do_sem_op (int sem_num, int sem_op)
@@ -834,12 +834,14 @@ spawn_clean (void)
 		semctl (spawn_shared_sems, 0, IPC_RMID, dummy);
 	}
 }
-#endif /* HAVE_POSIX_SHM */
+
+#endif /* HAVE_SYSV_SEMAPHORES */
+
 
 static void
 clean_up (void)
 {
-#ifdef HAVE_POSIX_SHM
+#ifdef HAVE_SYSV_SEMAPHORES
 	spawn_clean();
 #endif
 	pid_file_clean (pid_file_path);
@@ -1109,7 +1111,7 @@ main (int argc, char *argv[])
 
 	/* Launch the spawning thread
 	 */
-#ifdef HAVE_POSIX_SHM
+#ifdef HAVE_SYSV_SEMAPHORES
 	if (! single_time) {
 		ret = spawn_init();
 		if (ret != ret_ok) {

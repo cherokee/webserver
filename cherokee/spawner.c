@@ -52,7 +52,7 @@ cherokee_spawner_set_active (cherokee_boolean_t active)
 ret_t
 cherokee_spawner_init (void)
 {
-#ifdef HAVE_POSIX_SHM
+#ifdef HAVE_SYSV_SEMAPHORES
 	ret_t             ret;
 	cherokee_buffer_t name = CHEROKEE_BUF_INIT;
 
@@ -102,13 +102,11 @@ cherokee_spawner_free (void)
 {
 	CHEROKEE_MUTEX_DESTROY (&spawning_mutex);
 
-#ifdef HAVE_POSIX_SHM
 	cherokee_shm_mrproper (&cherokee_spawn_shared);
-#endif
 	return ret_ok;
 }
 
-#ifdef HAVE_POSIX_SHM
+
 static ret_t
 write_logger (cherokee_buffer_t        *buf,
 	      cherokee_logger_writer_t *error_writer)
@@ -146,7 +144,7 @@ nothing:
 	cherokee_buffer_add (buf, (char *)&val, sizeof(int));
 	return ret_ok;
 }
-#endif
+
 
 static ret_t
 do_sem_op (int sem_ref, int sem_num, int sem_op)
@@ -194,7 +192,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 			cherokee_logger_writer_t  *error_writer,
 			pid_t                     *pid_ret)
 {
-#ifdef HAVE_POSIX_SHM
+#ifdef HAVE_SYSV_SEMAPHORES
 	char             **n;
 	int               *pid_shm;
 	int                pid_prev;
@@ -322,6 +320,7 @@ error:
 	return ret_error;
 #else
 	return ret_not_found;
-#endif
+
+#endif /* HAVE_SYSV_SEMAPHORES */
 }
 

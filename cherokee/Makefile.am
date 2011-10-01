@@ -1335,12 +1335,6 @@ win32_cservice.h \
 win32_cservice.c
 endif
 
-if USE_POSIX_SHM
-shm_src = \
-shm.h \
-shm.c
-endif
-
 
 libcherokee_base_la_SOURCES = \
 $(zlib_src) \
@@ -1353,7 +1347,6 @@ $(poll_port_src) \
 $(poll_select_src) \
 $(poll_win32_src) \
 $(win32_src) \
-$(shm_src) \
 cherokee.h \
 init.h \
 init.c \
@@ -1447,7 +1440,9 @@ logger.c \
 logger_writer.h \
 logger_writer.c \
 xrealip.h \
-xrealip.c
+xrealip.c \
+shm.h \
+shm.c
 
 
 libcherokee_client_la_SOURCES = \
@@ -1827,7 +1822,6 @@ errors.py \
 error_list.py \
 errors.h \
 errors_defs.h \
-$(shm_src) \
 $(pcre_src) \
 $(win32_src) \
 $(getopt_src) \

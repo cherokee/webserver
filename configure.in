@@ -779,29 +779,6 @@ if test x"$samba_cv_HAVE_OFF64_T" = x"yes"; then
     AC_DEFINE(HAVE_OFF64_T,1,[Whether off64_t is available])
 fi
 
-dnl
-dnl Shared Memory
-dnl
-AC_CHECK_FUNC(shm_open, have_shm_open=yes)
-
-RT_LIBS=
-if test "$have_shm_open" != "yes"; then
-  AC_CHECK_LIB(rt, shm_open, [
-  			    RT_LIBS="-lrt"
-			    have_shm_open=yes])
-fi
-if test "$have_shm_open" != "yes"; then
-  AC_CHECK_LIB(rt, shm_open, [
-  			    RT_LIBS="-lposix4"
-			    have_shm_open=yes])
-fi
-AC_SUBST(RT_LIBS)
-
-if test "$have_shm_open" = "yes"; then
-   AC_DEFINE(HAVE_POSIX_SHM, 1, [Define to 1 to use POSIX shared memory])
-fi
-AM_CONDITIONAL(USE_POSIX_SHM, test "$have_shm_open" = "yes")
-
 
 dnl
 dnl SYSV Semaphores
