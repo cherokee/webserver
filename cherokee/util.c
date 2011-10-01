@@ -768,6 +768,17 @@ cherokee_gethostbyname (const char *hostname, struct addrinfo **addr)
 
 	hints.ai_family   = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
+#ifdef AI_ADDRCONFIG
+	if ((strcmp(hostname, "127.0.0.1") != 0) &&
+	    (strcmp(hostname, "localhost") != 0) &&
+	    (strcmp(hostname, "localhost.localdomain") != 0) &&
+	    (strcmp(hostname, "::1") != 0) &&
+	    (strcmp(hostname, "localhost6") != 0) &&
+	    (strcmp(hostname, "localhost6.localdomain6") != 0))
+	{
+		hints.ai_flags = AI_ADDRCONFIG;
+	}
+#endif
 
 	/* Resolve address
 	 */
