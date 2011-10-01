@@ -25,6 +25,8 @@
 #include "common-internal.h"
 #include "admin_server.h"
 
+#include <signal.h>
+
 #include "bind.h"
 #include "server-protected.h"
 #include "connection-protected.h"
@@ -407,15 +409,43 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 {
 	ret_t              ret;
 	char              *begin;
+	char              *end;
+	char              *p;
+	cuint_t            n;
+	char               id[10];
 	cherokee_source_t *source = NULL;
 	cherokee_server_t *srv    = HANDLER_SRV(hdl);
 
+	/* Check the command
+	 */
 	if (strncmp (question->buf, "kill server.source ", sizeof("kill server.source ")-1)) {
 		return ret_error;
 	}
 	begin = question->buf + sizeof("kill server.source ")-1;
+	end   = question->buf + question->len;
 
-	ret = cherokee_avl_get_ptr (&srv->sources, begin, (void **)&source);
+	/* Check the source to be killed
+	 */
+	n = 0;
+	p = begin;
+	while (CHEROKEE_CHAR_IS_DIGIT(*p) && (p < end)) {
+		id[n] = *p;
+		p++;
+		n++;
+	}
+	id[n] = '\0';
+
+	if (unlikely ((n <= 0) || (n >= sizeof(n)))) {
+		cherokee_dwriter_dict_open (dwriter);
+		cherokee_dwriter_cstring (dwriter, "source");
+		cherokee_dwriter_cstring (dwriter, "invalid");
+		cherokee_dwriter_dict_close (dwriter);
+		return ret_ok;
+	}
+
+	/* Find it on the AVL tree
+	 */
+	ret = cherokee_avl_get_ptr (&srv->sources, id, (void **)&source);
 	if (ret != ret_ok) {
 		cherokee_dwriter_dict_open (dwriter);
 		cherokee_dwriter_cstring (dwriter, "source");
@@ -435,10 +465,21 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 		return ret_ok;
 	}
 
-	// TODO ****
-	printf ("killing PID: %d\n", SOURCE_INT(source)->pid);
-	// *********
+	/* Kill the process
+	 */
+	if (getuid() == 0) {
+		/* Looks like we can actully kill the process
+		 */
+		kill (SOURCE_INT(source)->pid, SIGTERM);
+		goto ok;
+	} else {
+		/* It should be the 'cherokee' supervisor (running as root)
+		 * the one in charge of killing the process.
+		 */
+		// TODO
+	}
 
+ok:
 	cherokee_dwriter_dict_open (dwriter);
 	cherokee_dwriter_cstring (dwriter, "source");
 	cherokee_dwriter_cstring (dwriter, "killed");
