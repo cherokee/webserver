@@ -696,7 +696,6 @@ cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn,
 	} while ((written == -1) && (errno == EINTR));
 
 	if (unlikely (written != flcache_conn->header.len)) {
-		// TODO: check errno
 		return ret_error;
 	}
 
@@ -719,7 +718,6 @@ cherokee_flcache_conn_write_body (cherokee_flcache_conn_t *flcache_conn,
 	       conn->buffer.len, flcache_conn->fd, written);
 
 	if (unlikely (written != conn->buffer.len)) {
-		// TODO: check errno
 		return ret_error;
 	}
 
@@ -755,7 +753,6 @@ cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
 
 	ret = cherokee_buffer_read_from_fd (&conn->header_buffer, flcache_conn->fd, len, &got2);
 	if (unlikely (ret != ret_ok)) {
-		// TODO: check errno
 		return ret_error;
 	}
 
