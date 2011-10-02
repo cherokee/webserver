@@ -262,7 +262,7 @@ def figure_php_user (pre_vsrv):
 
 URL_WIZARD_RULE_R  = r'^/wizard/vserver/(\d+)/php$'
 URL_WIZARD_APPLY   = '/wizard/vserver/%s/php/apply'
-URL_WIZARD_APPLY_R = r'^/wizard/vserver/(\d+)/php/apply$'
+URL_WIZARD_APPLY_R = r'^/wizard/vserver/(\d+)/php/apply'
 URL_APPLY          = '/wizard/vserver/php/apply'
 
 class Commit:
