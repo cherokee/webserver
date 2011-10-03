@@ -104,6 +104,7 @@ find_empty_port (int starting, int *port)
 		}
 	}
 
+	cherokee_socket_close (&s);
 	cherokee_socket_mrproper (&s);
 	cherokee_buffer_mrproper (&bind_);
 
