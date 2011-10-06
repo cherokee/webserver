@@ -944,7 +944,6 @@ process_active_connections (cherokee_thread_t *thd)
 				cherokee_collector_log_request (THREAD_SRV(thd)->collector);
 			}
 
-
 			conn->phase = phase_setup_connection;
 
 			/* fall down */
@@ -956,6 +955,15 @@ process_active_connections (cherokee_thread_t *thd)
 			/* Turn the connection in write mode
 			 */
 			conn_set_mode (thd, conn, socket_writing);
+
+			/* HSTS support
+			 */
+			if ((conn->socket.is_tls != TLS) &&
+			    (CONN_VSRV(conn)->hsts.enabled))
+			{
+				cherokee_connection_setup_hsts_handler (conn);
+				continue;
+			}
 
 			/* Is it already an error response?
 			 */

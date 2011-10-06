@@ -73,6 +73,9 @@ NOTE_COLLECTOR        = N_('Whether or not it should collected statistics about 
 NOTE_UTC_TIME         = N_('Time standard to use in the log file entries.')
 NOTE_INDEX_USAGE      = N_('Remember that only "File Exists" rules and "List & Send" handlers use the Directory Indexes setting.')
 NOTE_MATCH_NICK       = N_('Use this nickname as an additional host name for this virtual server (Default: yes)')
+NOTE_HSTS             = N_('Enforce HTTPS by using the HTTP Strict Transport Security.')
+NOTE_HSTS_MAXAGE      = N_("How long the client's browser should remember the forced HTTPS (in seconds).")
+NOTE_HSTS_SUBDOMAINS  = N_("Should HSTS be used in all the subdomains of this virtual verser (Default: yes).")
 
 DEFAULT_HOST_NOTE     = N_("<p>The 'default' virtual server matches all the domain names.</p>")
 
@@ -675,6 +678,21 @@ class SecutiryWidgetContent (CTK.Container):
         submit += table
 
         self += CTK.RawHTML ('<h2>%s</h2>' % (_('Advanced Options')))
+        self += CTK.Indenter (submit)
+
+        # HSTS
+        table = CTK.PropsTable()
+        table.Add (_('Enable HSTS'), CTK.CheckCfgText ('%s!hsts'%(pre), False, _('Accept')), _(NOTE_HSTS))
+
+        if int(CTK.cfg.get_val('%s!hsts' %(pre), "0")):
+            table.Add (_('HSTS Max-Age'),       CTK.TextCfg ('%s!hsts!max_age'%(pre), True, {'optional_string':_("One year")}), _(NOTE_HSTS_MAXAGE))
+            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
+
+        submit = CTK.Submitter (url_apply)
+        submit.bind ('submit_success', refreshable.JS_to_refresh())
+        submit += table
+
+        self += CTK.RawHTML ('<h2>%s</h2>' % (_('HTTP Strict Transport Security (HSTS)')))
         self += CTK.Indenter (submit)
 
 

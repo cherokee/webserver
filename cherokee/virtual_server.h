@@ -77,6 +77,12 @@ typedef struct {
 	cherokee_buffer_t            ciphers;
 	cherokee_cryptor_vserver_t  *cryptor;
 
+	struct {
+		cherokee_boolean_t   enabled;
+		cherokee_boolean_t   subdomains;
+		cuint_t              max_age;
+	} hsts;
+
 } cherokee_virtual_server_t;
 
 #define VSERVER(v)        ((cherokee_virtual_server_t *)(v))

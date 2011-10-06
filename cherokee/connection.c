@@ -555,6 +555,43 @@ clean:
 }
 
 
+ret_t
+cherokee_connection_setup_hsts_handler (cherokee_connection_t *conn)
+{
+	ret_t ret;
+
+	/* Redirect to:
+	 * "https://" + host + request + query_string
+	 */
+	cherokee_buffer_clean   (&conn->redirect);
+	cherokee_buffer_add_str (&conn->redirect, "https://");
+
+	cherokee_connection_build_host_port_string (conn, &conn->redirect);
+	cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
+
+	if (conn->query_string.len > 0) {
+		cherokee_buffer_add_char   (&conn->redirect, '?');
+		cherokee_buffer_add_buffer (&conn->redirect, &conn->query_string);
+	}
+
+	/* 301 response: Move Permanetly
+	 */
+	conn->error_code = http_moved_permanently;
+
+	/* Instance the handler object
+	 */
+	ret = cherokee_handler_error_new (&conn->handler, conn, NULL);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	TRACE (ENTRIES, "HSTS redirection handler set. Phase is '%s' now.\n", "init");
+	conn->phase = phase_init;
+
+	return ret_ok;
+}
+
+
 static void
 build_response_header_authentication (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {
