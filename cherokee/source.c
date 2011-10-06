@@ -119,7 +119,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		/* Update the new socket */
 		SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
 
-		ret = cherokee_socket_update_from_addrinfo (sock, addr_info);
+		ret = cherokee_socket_update_from_addrinfo (sock, addr_info, 0);
 		if (unlikely (ret != ret_ok)) {
 			return ret_error;
 		}

@@ -45,6 +45,7 @@
 typedef struct {
 	struct addrinfo    *addr;
 	cherokee_buffer_t  ip_str;
+	cherokee_buffer_t  ip_str_all;
 } cherokee_resolv_cache_entry_t;
 
 struct cherokee_resolv_cache {
@@ -64,6 +65,7 @@ entry_new (cherokee_resolv_cache_entry_t **entry)
 
 	n->addr = NULL;
 	cherokee_buffer_init (&n->ip_str);
+	cherokee_buffer_init (&n->ip_str_all);
 
 	*entry = n;
 	return ret_ok;
@@ -80,6 +82,7 @@ entry_free (void *entry)
 	}
 
 	cherokee_buffer_mrproper (&e->ip_str);
+	cherokee_buffer_mrproper (&e->ip_str_all);
 	free(entry);
 }
 
@@ -88,9 +91,10 @@ static ret_t
 entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 	       cherokee_buffer_t             *domain)
 {
-	ret_t   ret;
-	char    tmp[46];       // Max IPv6 length is 45
-	time_t  eagain_at = 0;
+	ret_t            ret;
+	char             tmp[46];       // Max IPv6 length is 45
+	struct addrinfo *addr;
+	time_t           eagain_at = 0;
 
 	while (true) {
 		ret = cherokee_gethostbyname (domain->buf, &entry->addr);
@@ -126,6 +130,24 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 	}
 
 	cherokee_buffer_add (&entry->ip_str, tmp, strlen(tmp));
+
+	/* Render the text representation (all the IPs)
+	 */
+	cherokee_buffer_add_buffer (&entry->ip_str_all, &entry->ip_str);
+
+	addr = entry->addr;
+	while (addr != NULL) {
+		ret = cherokee_ntop (entry->addr->ai_family, addr->ai_addr, tmp, sizeof(tmp));
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+
+		cherokee_buffer_add_char (&entry->ip_str_all, ',');
+		cherokee_buffer_add      (&entry->ip_str_all, tmp, strlen(tmp));
+
+		addr = addr->ai_next;
+	}
+
 	return ret_ok;
 }
 
@@ -246,9 +268,9 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
 		if (ret != ret_ok) {
 			return ret;
 		}
-		TRACE (ENTRIES, "Resolve '%s': added succesfuly as '%s'.\n", domain->buf, entry->ip_str.buf);
+		TRACE (ENTRIES, "Resolve '%s': added succesfuly as '%s'.\n", domain->buf, entry->ip_str_all.buf);
 	} else {
-		TRACE (ENTRIES, "Resolve '%s': hit.\n", domain->buf);
+		TRACE (ENTRIES, "Resolve '%s': hit: %s\n", domain->buf, entry->ip_str_all.buf);
 	}
 
 	/* Return the ip string
@@ -279,7 +301,7 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 
 	/* Copy it to the socket object
 	 */
-	ret = cherokee_socket_update_from_addrinfo (sock, addr);
+	ret = cherokee_socket_update_from_addrinfo (sock, addr, 0);
 	if (ret != ret_ok) {
 		return ret;
 	}

@@ -933,6 +933,14 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		hdl->init_phase = proxy_init_preconnect;
 		TRACE(ENTRIES, "Entering phase '%s'\n", "preconnect");
 
+		/* Get the addrinfo object */
+		if (hdl->pconn->addr_info_ref == NULL) {
+			ret = cherokee_handler_proxy_conn_get_addrinfo (hdl->pconn, hdl->src_ref);
+			if (ret != ret_ok) {
+				return ret_error;
+			}
+		}
+
 	case proxy_init_preconnect:
 		/* Configure if respinned
 		 */
@@ -959,7 +967,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 
 		if (! cherokee_socket_configured (&hdl->pconn->socket))
 		{
-			ret = cherokee_proxy_util_init_socket (&hdl->pconn->socket, hdl->src_ref);
+			ret = cherokee_handler_proxy_conn_init_socket (hdl->pconn, hdl->src_ref);
 			if (ret != ret_ok) {
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -985,6 +993,14 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			case ret_eagain:
 				return ret_eagain;
 			case ret_deny:
+				/* Multiple IPs on a single source */
+				if (hdl->pconn->addr_current < hdl->pconn->addr_total) {
+					hdl->pconn->addr_current += 1;
+					cherokee_socket_close (&hdl->pconn->socket);
+					cherokee_socket_clean (&hdl->pconn->socket);
+					goto reconnect;
+				}
+
 				if (hdl->respinned) {
 					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 					conn->error_code = http_bad_gateway;

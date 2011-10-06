@@ -176,7 +176,13 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 		if (ret != ret_ok)
 			goto error;
 
-		ret = cherokee_proxy_util_init_socket (&n->socket, src);
+		ret = cherokee_handler_proxy_conn_get_addrinfo (n, src);
+		if (ret != ret_ok) {
+			cherokee_handler_proxy_conn_free (n);
+			goto error;
+		}
+
+		ret = cherokee_handler_proxy_conn_init_socket (n, src);
 		if (ret != ret_ok) {
 			cherokee_handler_proxy_conn_free (n);
 			goto error;
@@ -266,6 +272,9 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 	n->size_in       = 0;
 	n->sent_out      = 0;
 	n->enc           = pconn_enc_none;
+	n->addr_total    = 0;
+	n->addr_current  = 0;
+	n->addr_info_ref = NULL;
 
 	*pconn = n;
 	return ret_ok;
@@ -432,50 +441,91 @@ error:
  */
 
 ret_t
-cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
-				 cherokee_source_t *src)
+cherokee_handler_proxy_conn_init_socket (cherokee_handler_proxy_conn_t *pconn,
+					 cherokee_source_t             *src)
 {
-	ret_t                    ret;
-	cherokee_resolv_cache_t *resolv;
-	const struct addrinfo   *addr_info = NULL;
+	ret_t              ret;
+	cherokee_socket_t *socket = &pconn->socket;
 
 	TRACE (ENTRIES, "Initializing proxy %s\n", "socket");
-
-	/* Resolve the hostname of the target server */
-	ret = cherokee_resolv_cache_get_default (&resolv);
-	if (unlikely (ret != ret_ok)) {
-		return ret_error;
-	}
-
-	ret = cherokee_resolv_cache_get_addrinfo (resolv, &src->host, &addr_info);
-	if ((ret != ret_ok) || (addr_info == NULL)) {
-		return ret_error;
-	}
 
 	/* Ensure that no fd leak happens */
 	cherokee_socket_close (socket);
 
 	/* Create the socket descriptor */
-	ret = cherokee_socket_create_fd (socket, addr_info->ai_family);
+	ret = cherokee_socket_create_fd (socket, pconn->addr_info_ref->ai_family);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
 	/* Update the new socket */
-        SOCKET_SIN_PORT(socket) = htons (src->port);
-
-	ret = cherokee_socket_update_from_addrinfo (socket, addr_info);
+	ret = cherokee_socket_update_from_addrinfo (socket, pconn->addr_info_ref, pconn->addr_current);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
-	TRACE (ENTRIES, "Proxy socket Initialized: %s, target: %s\n",
-	       SOCKET_AF(socket) == AF_INET6 ? "IPv6": "IPv4", src->host.buf);
+        SOCKET_SIN_PORT(socket) = htons (src->port);
 
 	/* Set a few properties */
 	cherokee_fd_set_closexec    (socket->socket);
 	cherokee_fd_set_nonblocking (socket->socket, true);
 	cherokee_fd_set_nodelay     (socket->socket, true);
+
+	/* Trace */
+#ifdef TRACE_ENABLED
+	if (cherokee_trace_is_tracing()) {
+		cuint_t          ip_num;
+		struct addrinfo *ai;
+		char             buf[50];
+
+		ai     = pconn->addr_info_ref;
+		ip_num = pconn->addr_current;
+
+		while (ip_num--) {
+			ai = ai->ai_next;
+		}
+
+		ret = cherokee_ntop (pconn->addr_info_ref->ai_family, ai->ai_addr, buf, 50);
+		if (ret == ret_ok) {
+			TRACE (ENTRIES, "Proxy socket Initialized: %s, target: %s, IP: %s\n",
+			       SOCKET_AF(socket) == AF_INET6 ? "IPv6": "IPv4", src->host.buf, buf);
+		}
+	}
+#endif
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_handler_proxy_conn_get_addrinfo (cherokee_handler_proxy_conn_t  *pconn,
+					  cherokee_source_t              *src)
+{
+	ret_t                    ret;
+	struct addrinfo         *ai;
+	cherokee_resolv_cache_t *resolv;
+
+	/* Resolve the hostname of the target server
+	 */
+	ret = cherokee_resolv_cache_get_default (&resolv);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	ret = cherokee_resolv_cache_get_addrinfo (resolv, &src->host, &pconn->addr_info_ref);
+	if ((ret != ret_ok) || (pconn->addr_info_ref == NULL)) {
+		return ret_error;
+	}
+
+	/* Count the number of IPs
+	 */
+	if (pconn->addr_total == 0) {
+		ai = pconn->addr_info_ref;
+		while (ai != NULL) {
+			pconn->addr_total += 1;
+			ai = ai->ai_next;
+		}
+	}
 
 	return ret_ok;
 }

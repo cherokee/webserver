@@ -150,6 +150,6 @@ ret_t cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vec
 /* Extra
  */
 ret_t cherokee_socket_set_sockaddr         (cherokee_socket_t *socket, int fd, cherokee_sockaddr_t *sa);
-ret_t cherokee_socket_update_from_addrinfo (cherokee_socket_t *socket, const struct addrinfo *addr_info);
+ret_t cherokee_socket_update_from_addrinfo (cherokee_socket_t *socket, const struct addrinfo *addr_info, cuint_t num);
 
 #endif /* CHEROKEE_SOCKET_H */

@@ -367,20 +367,36 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 
 ret_t
 cherokee_socket_update_from_addrinfo (cherokee_socket_t     *socket,
-				      const struct addrinfo *addr)
+				      const struct addrinfo *addr,
+				      cuint_t                num)
 {
+       struct addrinfo *ai;
+
        if (unlikely (addr == NULL))
                return ret_error;
 
+       /* Find the right address
+	*/
+       ai = addr;
+       while (num > 0) {
+	       num -= 1;
+	       ai   = ai->ai_next;
+	       if (ai == NULL) {
+		       return ret_not_found;
+	       }
+       }
+
+       /* Copy the information
+	*/
        SOCKET_AF(socket)       = addr->ai_family;
        socket->client_addr_len = addr->ai_addrlen;
 
        switch (addr->ai_family) {
        case AF_INET:
-	       memcpy (&SOCKET_SIN_ADDR(socket), &((struct sockaddr_in *) addr->ai_addr)->sin_addr, sizeof(struct in_addr));
+	       memcpy (&SOCKET_SIN_ADDR(socket), &((struct sockaddr_in *) ai->ai_addr)->sin_addr, sizeof(struct in_addr));
 	       break;
        case AF_INET6:
-	       memcpy (&SOCKET_SIN6_ADDR(socket), &((struct sockaddr_in6 *) addr->ai_addr)->sin6_addr, sizeof(struct in6_addr));
+	       memcpy (&SOCKET_SIN6_ADDR(socket), &((struct sockaddr_in6 *) ai->ai_addr)->sin6_addr, sizeof(struct in6_addr));
 	       break;
        default:
 	       SHOULDNT_HAPPEN;

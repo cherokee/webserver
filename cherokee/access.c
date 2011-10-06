@@ -342,7 +342,7 @@ cherokee_access_add_domain (cherokee_access_t *entry, char *domain)
 	while (addr != NULL) {
 		ret = cherokee_ntop (addr->ai_family, addr->ai_addr, ip, sizeof(ip));
 		if (unlikely(ret!=ret_ok)) return ret;
-	
+
 		TRACE (ENTRIES, "Access: domain '%s' -> IP: %s\n", domain, ip);
 		ret = cherokee_access_add_ip (entry, (char *)ip);
 		if (unlikely(ret!=ret_ok)) return ret;
