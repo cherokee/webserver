@@ -1198,8 +1198,10 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 		cherokee_buffer_clean (outbuf);
 
 		ret = cherokee_handler_file_add_headers (cgi->file_handler, outbuf);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
+			cherokee_buffer_mrproper (&cgi_header);
 			return ret_error;
+		}
 
 		/* Overwrite the handler properties
 		 */
@@ -1207,6 +1209,8 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 		conn->chunked_encoding = false;
 
 		mix_headers (outbuf, &cgi_header);
+
+		cherokee_buffer_mrproper (&cgi_header);
 		return ret_ok;
 	}
 
