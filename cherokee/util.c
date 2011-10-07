@@ -757,7 +757,7 @@ cherokee_eval_formated_time (cherokee_buffer_t *buf)
 
 
 ret_t
-cherokee_gethostbyname (const char *hostname, struct addrinfo **addr)
+cherokee_gethostbyname (cherokee_buffer_t *hostname, struct addrinfo **addr)
 {
 	int              n;
 	struct addrinfo  hints;
@@ -768,13 +768,24 @@ cherokee_gethostbyname (const char *hostname, struct addrinfo **addr)
 
 	hints.ai_family   = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
+
 #ifdef AI_ADDRCONFIG
-	if ((strcmp(hostname, "127.0.0.1") != 0) &&
-	    (strcmp(hostname, "localhost") != 0) &&
-	    (strcmp(hostname, "localhost.localdomain") != 0) &&
-	    (strcmp(hostname, "::1") != 0) &&
-	    (strcmp(hostname, "localhost6") != 0) &&
-	    (strcmp(hostname, "localhost6.localdomain6") != 0))
+	/* Workaround for loopback host addresses:
+	 *
+	 * If a computer does not have any outgoing IPv6 network
+	 * interface, but its loopback network interface supports
+	 * IPv6, a getaddrinfo call on "localhost" with AI_ADDRCONFIG
+	 * won't return the IPv6 loopback address "::1", because
+	 * getaddrinfo() thinks the computer cannot connect to any
+	 * IPv6 destination, ignoring the remote vs. local/loopback
+	 * distinction.
+	 */
+	if ((cherokee_buffer_cmp_str (hostname, "::1")       == 0) ||
+	    (cherokee_buffer_cmp_str (hostname, "127.0.0.1") == 0) ||
+	    (cherokee_buffer_cmp_str (hostname, "localhost")  == 0) ||
+	    (cherokee_buffer_cmp_str (hostname, "localhost6") == 0) ||
+	    (cherokee_buffer_cmp_str (hostname, "localhost.localdomain")   == 0) ||
+	    (cherokee_buffer_cmp_str (hostname, "localhost6.localdomain6") == 0))
 	{
 		hints.ai_flags = AI_ADDRCONFIG;
 	}
@@ -782,7 +793,7 @@ cherokee_gethostbyname (const char *hostname, struct addrinfo **addr)
 
 	/* Resolve address
 	 */
-	n = getaddrinfo (hostname, NULL, &hints, addr);
+	n = getaddrinfo (hostname->buf, NULL, &hints, addr);
 	if (n < 0) {
 		return ret_error;
 	}

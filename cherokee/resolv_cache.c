@@ -97,7 +97,7 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 	time_t           eagain_at = 0;
 
 	while (true) {
-		ret = cherokee_gethostbyname (domain->buf, &entry->addr);
+		ret = cherokee_gethostbyname (domain, &entry->addr);
 		if (ret == ret_ok) {
 			break;
 
