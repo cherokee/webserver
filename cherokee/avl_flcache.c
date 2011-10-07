@@ -91,6 +91,7 @@ node_mrproper (cherokee_avl_flcache_node_t *node)
 
 	cherokee_buffer_mrproper (&node->request);
 	cherokee_buffer_mrproper (&node->query_string);
+	cherokee_buffer_mrproper (&node->content_encoding);
 	cherokee_buffer_mrproper (&node->file);
 
 	return ret_ok;
