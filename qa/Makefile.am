@@ -313,7 +313,9 @@ run-tests.py \
 289-Connection_TE.py \
 290-Question-mark-in-name.py \
 291-Redir-keepalive.py \
-292-HSTS1.py
+292-HSTS1.py \
+293-HSTS-subdomains1.py \
+294-HSTS-subdomains2.py
 
 test:
 	python -m compileall .
