@@ -2714,7 +2714,9 @@ cherokee_connection_clean_error_headers (cherokee_connection_t *conn)
 	if (cherokee_buffer_is_empty (&conn->header_buffer))
 		return ret_ok;
 
-	begin = strcasestr (conn->header_buffer.buf, "Content-Length: ");
+	begin = strncasestrn_s (conn->header_buffer.buf,
+				conn->header_buffer.len,
+				"Content-Length: ");
 	if (begin != NULL) {
 		end = strchr (begin+16, CHR_CR);
 		if (end == NULL)

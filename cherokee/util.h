@@ -99,6 +99,8 @@ void *rpl_malloc (size_t n);
 char *strncasestr  (const char *s, const char *find, size_t slen);
 char *strncasestrn (const char *s, size_t slen, const char *find, size_t findlen);
 
+#define strncasestrn_s(s,s_len,lit) strncasestrn(s, s_len, lit, sizeof(lit)-1)
+
 /* Constants
  */
 extern const char hex2dec_tab[256];

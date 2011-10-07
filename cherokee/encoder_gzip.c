@@ -213,35 +213,28 @@ static cherokee_boolean_t
 is_user_agent_IE_16 (cherokee_connection_t *conn)
 {
 	ret_t     ret;
-	char      tmp;
 	char     *m;
 	char     *ref     = NULL;
 	cuint_t   ref_len = 0;
 
+	/* Get the User-Agent header
+	 */
 	ret = cherokee_header_get_known (&conn->header, header_user_agent, &ref, &ref_len);
-	if ((ret != ret_ok) || (ref == NULL) || (ref_len <= 7))
+	if ((ret != ret_ok) || (ref == NULL) || (ref_len <= 7)) {
 		return false;
-
-	/* Set EOL boundary */
-	tmp = ref[ref_len];
-	ref[ref_len] = '\0';
+	}
 
 	/* MSIE [1-6] */
-	m = strcasestr (ref, "MSIE ");
-	if (m == NULL)
-		goto not_found;
+	m = strncasestrn_s (ref, ref_len, "MSIE ");
+	if (m == NULL) {
+		return false;
+	}
 
-	if ((m[5] >= '1') && (m[5] <= '6'))
-		goto found;
+	if ((m[5] >= '1') && (m[5] <= '6')) {
+		return true;
+	}
 
-	/* Clean up */
-not_found:
-	ref[ref_len] = tmp;
 	return false;
-
-found:
-	ref[ref_len] = tmp;
-	return true;
 }
 
 

@@ -375,6 +375,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 	const char                  *header_end;
 	char                         chr_end;
 	char                        *p, *q;
+	cint_t                       line_left;
 	cherokee_boolean_t           overwrite_control;
 	cherokee_avl_flcache_node_t *node               = flcache_conn->avl_node_ref;
 	cherokee_boolean_t           via_found          = false;
@@ -405,7 +406,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 
 			/* Regular Cache control */
 			value = begin + 8;
-			while ((*value == ' ') && (value < end)) value++;
+			while ((CHEROKEE_CHAR_IS_WHITE(*value)) && (value < end)) value++;
 
  			node->valid_until = 0;
 			cherokee_dtm_str2time (value, end - value, &node->valid_until);
@@ -424,7 +425,6 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		/* Cache-Control
 		 */
 		else if (strncasecmp (begin, "Cache-Control:", 14) == 0) {
-
 			/* Cache control overridden */
 			if (overwrite_control) {
 				goto remove_line;
@@ -432,26 +432,28 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 
 			/* Regular Cache control */
 			value = begin + 8;
-			while ((*value == ' ') && (value < end)) value++;
+			while (CHEROKEE_CHAR_IS_WHITE(*value) && (value < end)) value++;
 
-			if (strcasestr (begin, "private") ||
-			    strcasestr (begin, "no-cache") ||
-			    strcasestr (begin, "no-store") ||
-			    strcasestr (begin, "must-revalidate") ||
-			    strcasestr (begin, "proxy-revalidate"))
+			line_left = end - value;
+
+			if (strncasestrn_s (value, line_left, "private") ||
+			    strncasestrn_s (value, line_left, "no-cache") ||
+			    strncasestrn_s (value, line_left, "no-store") ||
+			    strncasestrn_s (value, line_left, "must-revalidate") ||
+			    strncasestrn_s (value, line_left, "proxy-revalidate"))
 			{
-				TRACE (ENTRIES, "'%s' header entry forbids caching\n", begin);
+				TRACE (ENTRIES, "'%s' header entry forbids caching\n", value);
 				*end = chr_end;
 				return ret_deny;
 			}
 
-			if (strcasestr (begin, "public"))
+			if (strncasestrn_s (value, line_left, "public"))
 			{
-				TRACE (ENTRIES, "'%s' header entry allows caching\n", begin);
+				TRACE (ENTRIES, "'%s' header entry allows caching\n", value);
 				do_cache = true;
 			}
 
-			p = strcasestr (begin, "max-age=");
+			p = strncasestrn_s (value, line_left, "max-age=");
 			if (p) {
 				p += 8;
 				q  = p;
