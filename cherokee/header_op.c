@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "header_op.h"
+#include "util.h"
 
 ret_t
 cherokee_header_op_new (cherokee_header_op_t **op)
@@ -105,7 +106,8 @@ remove_header (cherokee_buffer_t *buffer,
 {
 	char *p, *s;
 
-	p = strcasestr (buffer->buf, header->buf);
+	p = strncasestrn (buffer->buf, buffer->len,
+			  header->buf, header->len);
 	if (p == NULL)
 		return ret_not_found;
 
