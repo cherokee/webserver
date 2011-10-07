@@ -633,6 +633,8 @@ create_flconn_file (cherokee_flcache_t    *flcache,
 	}
 
 	TRACE (ENTRIES, "Created flcache file %s, fd=%d\n", entry->file.buf, conn->flcache.fd);
+
+	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 
 error:
