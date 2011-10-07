@@ -42,16 +42,26 @@ typedef struct {
 } error_entry_t;
 
 
+static void
+free_error_entry (void *p)
+{
+	error_entry_t *entry = (error_entry_t *)p;
+
+	cherokee_buffer_mrproper (&entry->url);
+	free (entry);
+}
+
 static ret_t
 props_free (cherokee_handler_error_redir_props_t *props)
 {
 	cherokee_list_t *i, *j;
 
 	list_for_each_safe (i, j, &props->errors) {
-		error_entry_t *entry = (error_entry_t *)i;
+		free_error_entry (i);
+	}
 
-		cherokee_buffer_mrproper (&entry->url);
-		free (entry);
+	if (props->error_default) {
+		free_error_entry (props->error_default);
 	}
 
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
@@ -114,7 +124,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		if (error) {
 			entry->error = error;
 		}
-		entry->show  = false;
+		entry->show = false;
 
 		INIT_LIST_HEAD (&entry->entry);
 		cherokee_buffer_init (&entry->url);
@@ -124,6 +134,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		ret = cherokee_config_node_copy (subconf, "url", &entry->url);
 		if (ret != ret_ok) {
 			LOG_CRITICAL (CHEROKEE_ERROR_HANDLER_ERROR_REDIR_URL, error);
+			free (entry);
 			return ret_error;
 		}
 
