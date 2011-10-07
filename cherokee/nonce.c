@@ -64,6 +64,7 @@ entry_free (cherokee_nonce_table_t *nonces,
 {
 	cherokee_list_del (&entry->listed);
 	cherokee_avl_del (&nonces->table, &entry->nonce, NULL);
+	cherokee_buffer_mrproper (&entry->nonce);
 	free (entry);
 }
 
