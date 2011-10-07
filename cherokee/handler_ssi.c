@@ -102,6 +102,7 @@ cherokee_handler_ssi_configure (cherokee_config_node_t   *conf,
 
 	UNUSED(srv);
 	UNUSED(conf);
+	UNUSED(props);
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_ssi_props);
@@ -196,12 +197,15 @@ parse (cherokee_handler_ssi_t *hdl,
 		p = strstr (q, "<!--#");
 		if (p == NULL) {
 			cherokee_buffer_add (out, begin, (in->buf + in->len) - begin);
-			return ret_ok;
+			ret = ret_ok;
+			goto out;
 		}
 
 		q = strstr (p + 5, "-->");
-		if (q == NULL)
-			return ret_error;
+		if (q == NULL) {
+			ret = ret_error;
+			goto out;
+		}
 
 		len = q - p;
 		len -= 5;
@@ -318,7 +322,8 @@ parse (cherokee_handler_ssi_t *hdl,
 					ret = cherokee_buffer_read_file (&file_content, fpath.buf);
 					if (unlikely (ret != ret_ok)) {
 						cherokee_buffer_mrproper (&file_content);
-						return ret_error;
+						ret = ret_error;
+						goto out;
 					}
 
 					TRACE(ENTRIES, "Including file '%s'\n", fpath.buf);
@@ -326,7 +331,8 @@ parse (cherokee_handler_ssi_t *hdl,
 					ret = parse (hdl, &file_content, out);
 					if (unlikely (ret != ret_ok)) {
 						cherokee_buffer_mrproper (&file_content);
-						return ret_error;
+						ret = ret_error;
+						goto out;
 					}
 
 					cherokee_buffer_mrproper (&file_content);
@@ -367,7 +373,15 @@ parse (cherokee_handler_ssi_t *hdl,
 		} /* switch(op) */
 	} /* while */
 
-	return ret_ok;
+	ret = ret_ok;
+
+out:
+	cherokee_buffer_mrproper (&key);
+	cherokee_buffer_mrproper (&val);
+	cherokee_buffer_mrproper (&pair);
+	cherokee_buffer_mrproper (&fpath);
+
+	return ret;
 }
 
 
