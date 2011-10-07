@@ -48,6 +48,7 @@ typedef struct {
 	cherokee_buffer_t      unix_socket;
 	cherokee_buffer_t      host;
 	cint_t                 port;
+	const struct addrinfo *addr_current;
 
 	cherokee_func_free_t   free;
 } cherokee_source_t;
