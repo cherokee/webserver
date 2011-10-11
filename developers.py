@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 DEVELOPERS = {
-    'alo'          : "Alvaro Lopez Ortega  <alvaro@octality.com>",
-    'aperez'       : "Antonio Perez  <aperez@skarcha.com>",
+    'alobbs'       : "Alvaro Lopez Ortega  <alvaro@alobbs.com>",
+    'skarcha'      : "Antonio Perez  <aperez@skarcha.com>",
     'ion'          : "Jonathan Hernandez  <ion@suavizado.com>",
-    'taher'        : "Taher Shihadeh  <taher@unixwars.com>",
+    'taher'        : "Taher Shihadeh  <taher@octality.com>",
     'robertounbit' : "Roberto De Ioris <roberto@unbit.it>",
     'gefire'       : "李炅 <lijiong1986@126.com>",
     'skinkie'      : "Stefan de Konink <stefan@konink.de>",

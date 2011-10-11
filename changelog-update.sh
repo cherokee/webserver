@@ -8,7 +8,7 @@ TZ=UTC
 
 # The current ChangeLog file starts at revision number..
 FIRST_REV="5776"
-FIRST_ID="0ddb11e3c15767ee447a17174502131db462b2cb"
+FIRST_ID="b3593eabf88c4c5a74953881563ac44c14227297"
 
 # Local vars
 srcdir=`dirname $0`
