@@ -122,8 +122,10 @@ if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
 fi
 
 # Automake
+# --foreign = Do not enforce GNU standards
+#             (ChangeLog, NEWS, THANKS, etc. files)
 echo "Running: automake -a $am_opt..."
-$AUTOMAKE -a $am_opt
+$AUTOMAKE -a --foreign $am_opt
 
 # Autoconf
 echo "Running: autoconf..."
