@@ -45,7 +45,6 @@ typedef struct {
 
 	/* Strings */
 	cherokee_buffer_t  server_string;
-	cherokee_buffer_t  server_string_ext;
 	cherokee_buffer_t  server_string_w_port;
 
 	cherokee_buffer_t  server_address;
