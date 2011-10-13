@@ -994,7 +994,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				return ret_eagain;
 			case ret_deny:
 				/* Multiple IPs on a single source */
-				if (hdl->pconn->addr_current < hdl->pconn->addr_total) {
+				if (hdl->pconn->addr_current < hdl->pconn->addr_total - 1) {
 					hdl->pconn->addr_current += 1;
 					cherokee_socket_close (&hdl->pconn->socket);
 					cherokee_socket_clean (&hdl->pconn->socket);
@@ -1013,16 +1013,15 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 
 					/* Spawn a new process
 					 */
-					ret = cherokee_virtual_server_get_error_log (CONN_VSRV(conn),
-										     &error_writer);
+					ret = cherokee_virtual_server_get_error_log (CONN_VSRV(conn), &error_writer);
 					if (ret != ret_ok) {
 						return ret_error;
 					}
 
-					ret = cherokee_source_interpreter_spawn (SOURCE_INT(hdl->src_ref),
-										 error_writer);
+					ret = cherokee_source_interpreter_spawn (SOURCE_INT(hdl->src_ref), error_writer);
 					switch (ret) {
 					case ret_ok:
+						hdl->pconn->addr_current = 0;
 						break;
 					case ret_eagain:
 						return ret_eagain;
