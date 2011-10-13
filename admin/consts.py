@@ -51,6 +51,7 @@ HANDLERS = [
     ('',             N_('None')),
     ('common',       N_('List & Send')),
     ('file',         N_('Static Content')),
+    ('tile',         N_('Renderd Frontend')),
     ('dirlist',      N_('Only Listing')),
     ('redir',        N_('Redirection')),
     ('fcgi',         N_('FastCGI')),
@@ -186,6 +187,7 @@ ERROR_CODES = [
 RULES = [
     ('directory',  N_('Directory')),
     ('extensions', N_('Extensions')),
+    ('filetime',   N_('File Time')),
     ('request',    N_('Regular Expression')),
     ('header',     N_('Header')),
     ('exists',     N_('File Exists')),

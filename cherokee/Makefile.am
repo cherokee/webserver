@@ -151,6 +151,23 @@ endif
 
 
 #
+# Rule filetime
+#
+rule_filetime = \
+rule_filetime.c \
+rule_filetime.h
+
+libplugin_filetime_la_LDFLAGS = $(module_ldflags)
+libplugin_filetime_la_SOURCES = $(rule_filetime)
+
+if STATIC_RULE_FILETIME
+static_rule_filetime_src = $(rule_filetime)
+else
+dynamic_rule_filetime_lib = libplugin_filetime.la
+endif
+
+
+#
 # Rule request
 #
 rule_request = \
@@ -1502,6 +1519,7 @@ endif
 libcherokee_server_la_SOURCES = \
 $(static_rule_directory_src) \
 $(static_rule_extensions_src) \
+$(static_rule_filetime_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
 $(static_rule_exists_src) \
@@ -1696,6 +1714,7 @@ plugindir = "$(libdir)/cherokee"
 plugin_LTLIBRARIES = \
 $(dynamic_rule_directory_lib) \
 $(dynamic_rule_extensions_lib) \
+$(dynamic_rule_filetime_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
 $(dynamic_rule_exists_lib) \

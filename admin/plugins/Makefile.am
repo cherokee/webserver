@@ -21,6 +21,7 @@ extensions.py \
 failover.py \
 fcgi.py \
 file.py \
+filetime.py \
 from.py \
 fullpath.py \
 geoip.py \
