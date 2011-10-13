@@ -1479,7 +1479,9 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		}
 
 	} else if (equal_buf_str (&conf->key, "server_tokens")) {
-		if (equal_buf_str (&conf->val, "Product")) {
+		if (equal_buf_str (&conf->val, "Void")) {
+			srv->server_token = cherokee_version_void;
+		} else if (equal_buf_str (&conf->val, "Product")) {
 			srv->server_token = cherokee_version_product;
 		} else if (equal_buf_str (&conf->val, "Minor")) {
 			srv->server_token = cherokee_version_minor;

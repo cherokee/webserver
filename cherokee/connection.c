@@ -835,9 +835,11 @@ build_response_header (cherokee_connection_t *conn,
 
 	/* Add the Server header
 	 */
-	cherokee_buffer_add_str (buffer, "Server: ");
-	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string);
-	cherokee_buffer_add_str (buffer, CRLF);
+	if (&CONN_BIND(conn)->server_string.len > 0) {
+		cherokee_buffer_add_str (buffer, "Server: ");
+		cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string);
+		cherokee_buffer_add_str (buffer, CRLF);
+	}
 
 	/* Authentication
 	 */

@@ -195,8 +195,10 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 
 	/* Add page footer
 	 */
-	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
-	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string_w_port);
+	if (CONN_BIND(conn)->server_string_w_port.len > 0) {
+		cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
+		cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string_w_port);
+	}
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 
 	return ret_ok;

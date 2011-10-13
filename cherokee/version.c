@@ -32,6 +32,9 @@ cherokee_version_add (cherokee_buffer_t *buf, cherokee_server_token_t level)
 	ret_t ret;
 
 	switch (level) {
+	case cherokee_version_void:
+		ret = ret_ok;
+		break;
 	case cherokee_version_product:
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server");
 		break;
@@ -62,6 +65,9 @@ cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t lev
 	ret_t ret;
 
 	switch (level) {
+	case cherokee_version_void:
+		ret = ret_ok;
+		break;
 	case cherokee_version_product:
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server, Port %d", port);
 		break;
@@ -92,6 +98,9 @@ cherokee_version_add_simple (cherokee_buffer_t *buf, cherokee_server_token_t lev
 	ret_t ret;
 
 	switch (level) {
+	case cherokee_version_void:
+		ret = ret_ok;
+		break;	
 	case cherokee_version_product:
 		ret = cherokee_buffer_add_str (buf, "Cherokee");
 		break;

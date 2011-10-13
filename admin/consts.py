@@ -39,6 +39,7 @@ AVAILABLE_LANGUAGES = [
 
 PRODUCT_TOKENS = [
     ('',        N_('Default')),
+    ('void',    N_('No server string')),
     ('product', N_('Product only')),
     ('minor',   N_('Product + Minor version')),
     ('minimal', N_('Product + Minimal version')),
