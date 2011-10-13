@@ -214,6 +214,10 @@ struct cherokee_connection {
 	int                           regex_host_ovector[OVECTOR_LEN];
 	int                           regex_host_ovecsize;
 
+	/* Private timeout to be used in handlers
+	 */
+	time_t                        private_timeout;
+
 	/* Content Expiration
 	 */
 	cherokee_expiration_t         expiration;

@@ -567,6 +567,22 @@ else
 dynamic_handler_file_lib = libplugin_file.la
 endif
 
+#
+# Handler tile
+#
+handler_tile = \
+handler_tile.c \
+handler_tile.h
+
+libplugin_tile_la_LDFLAGS = $(module_ldflags)
+libplugin_tile_la_SOURCES = $(handler_tile)
+
+if STATIC_HANDLER_TILE
+static_handler_tile_src = $(handler_tile)
+else
+dynamic_handler_tile_lib = libplugin_tile.la
+endif
+
 
 #
 # Handler dirlist
@@ -1547,6 +1563,7 @@ $(static_handler_post_report_src) \
 $(static_collector_rrd_src) \
 \
 $(static_handler_file_src) \
+$(static_handler_tile_src) \
 $(static_handler_dirlist_src) \
 $(static_handler_cgi_src) \
 $(static_handler_fcgi_src) \
@@ -1737,6 +1754,7 @@ $(dynamic_gen_evhost_lib) \
 $(dynamic_post_track_lib) \
 $(dynamic_handler_post_report_lib) \
 $(dynamic_handler_file_lib) \
+$(dynamic_handler_tile_lib) \
 $(dynamic_handler_server_info_lib) \
 $(dynamic_handler_render_rrd_lib) \
 $(dynamic_handler_dirlist_lib) \

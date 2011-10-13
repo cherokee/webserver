@@ -123,6 +123,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->polling_fd                = -1;
 	n->polling_multiple          = false;
 	n->polling_mode              = FDPOLL_MODE_NONE;
+	n->private_timeout           = -1;
 	n->expiration                = cherokee_expiration_none;
 	n->expiration_time           = 0;
 	n->expiration_prop           = cherokee_expiration_prop_none;

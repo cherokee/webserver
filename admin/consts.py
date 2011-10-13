@@ -51,7 +51,6 @@ HANDLERS = [
     ('',             N_('None')),
     ('common',       N_('List & Send')),
     ('file',         N_('Static Content')),
-    ('tile',         N_('Renderd Frontend')),
     ('dirlist',      N_('Only Listing')),
     ('redir',        N_('Redirection')),
     ('fcgi',         N_('FastCGI')),
@@ -69,6 +68,7 @@ HANDLERS = [
     ('admin',        N_('Remote Administration')),
     ('empty_gif',    N_('1x1 Transparent GIF')),
     ('drop',         N_('Drop Connection')),
+    ('tile',         N_('Renderd Frontend')),
 ]
 
 ERROR_HANDLERS = [
