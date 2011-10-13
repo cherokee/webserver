@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
 "POT-Creation-Date: 2011-03-28 15:00+0200\n"
-"PO-Revision-Date: 2011-08-21 16:52+0100\n"
+"PO-Revision-Date: 2011-10-13 19:26+0100\n"
 "Last-Translator: Stefan de Konink <stefan@konink.de>\n"
 "Language-Team: none\n"
 "Language: \n"
@@ -842,7 +842,7 @@ msgstr "Standaard"
 
 #: cherokee-trunk/admin/consts.py:42
 msgid "Product only"
-msgstr "Allen Product"
+msgstr "Alleen Product"
 
 #: cherokee-trunk/admin/consts.py:43
 msgid "Product + Minor version"
