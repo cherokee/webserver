@@ -67,9 +67,6 @@ if test "$DIE" -eq 1; then
     exit 1
 fi
 
-# Build the Changelog file
-./changelog-update.sh
-
 # Update the POTFILES.in
 echo "Generating a fresh po/admin/POTFILES.in file.."
 po/admin/generate_POTFILESin.py > po/admin/POTFILES.in
