@@ -1,0 +1,58 @@
+# git ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+# For a project mostly in C, the following would be a good set of
+# exclude patterns (uncomment them if you want to use them):
+# *.[oa]
+# *~
+*.o
+*.lo
+*.la
+*.pyc
+*.pyo
+*~
+*.a
+*.gmo
+doc/*.html
+Makefile
+Makefile.in
+\.deps
+\.libs
+ChangeLog
+aclocal.m4
+admin/configured.py
+autom4te.cache/
+cherokee-*.tar.gz
+cherokee-config
+cherokee.pc
+cherokee.spec
+cherokee/errors.h
+cherokee/errors_defs.h
+cherokee/loader.autoconf.h
+cherokee/loader.autoconf.inc
+config.guess
+config.h
+config.h.in
+config.log
+config.status
+config.sub
+configure
+depcomp
+http-cherokee.xml
+install-sh
+libtool
+ltmain.sh
+m4/libtool.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
+missing
+org.cherokee.webserver.plist
+packages/osx/Description.plist
+packages/osx/Info.plist
+packages/windows/cherokee.nsi
+po/admin/POTFILES
+po/admin/POTFILES.in
+po/admin/cherokee.pot
+po/admin/remove-potcdate.sed
+po/admin/stamp-po
