@@ -56,3 +56,13 @@ po/admin/POTFILES.in
 po/admin/cherokee.pot
 po/admin/remove-potcdate.sed
 po/admin/stamp-po
+cget/cget
+cherokee.conf.sample
+cherokee/cherokee
+cherokee/cherokee-admin
+cherokee/cherokee-worker
+constants.h
+contrib/cherokee
+performance.conf.sample
+qa/conf.py
+stamp-h1
