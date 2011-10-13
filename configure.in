@@ -62,15 +62,10 @@ AC_ARG_ENABLE(beta, AC_HELP_STRING([--enable-beta], [Enable beta development]),
 
 if test x"$is_beta" = "xyes"; then
   dnl Figure revision
-  if test -d ".svn"; then
-     svn_rev="`svn info -R | grep Revision | sort | tail -1 | sed 's/Revision: //'`";
-  elif test -d ".git"; then
-	svn_rev="`git svn info | grep 'Last Changed Rev' | sed 's/Last Changed Rev: //'`";
-  elif test -f "ChangeLog"; then
-     svn_rev=$(head -10 ChangeLog | grep 'svn=' | sed -n 's|.*svn=\(.*\) .*|\1|p' | head -1)
-  fi
+  today=`date +'%y%m%d'`
+  git_hash=`git log -1 --pretty=tformat:%h`
 
-  PACKAGE_PATCH_VERSION="b$svn_rev"
+  PACKAGE_PATCH_VERSION="b${today}_${git_hash}"
 
   dnl Redefine versions
   PACKAGE_VERSION="$PACKAGE_MAJOR_VERSION.$PACKAGE_MINOR_VERSION.$PACKAGE_MICRO_VERSION$PACKAGE_PATCH_VERSION"
@@ -1653,7 +1648,7 @@ echo "GeoIP                 $have_geoip"
 echo "FFMpeg                $have_ffmpeg"
 echo "crypt support         $crypt_type"
 if test "x$is_beta" = "xyes"; then
-echo "Beta release          $svn_rev"
+echo "Beta release          $PACKAGE_PATCH_VERSION"
 fi
 echo
 eval eval echo "Installation dir      $bindir"
