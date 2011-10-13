@@ -161,13 +161,25 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 				addr = addr_info;
 				continue;
 			}
+
+			cherokee_socket_close(sock);
 		}
 
 		/* Update the new socket with the address info
 		 */
-		SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
+		switch (src->addr_current->ai_family) {
+		case AF_INET:
+			SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
+			break;
+		case AF_INET6:
+			SOCKET_ADDR_IPv6(sock)->sin6_port = htons(src->port);
+			break;
+		default:
+			SHOULDNT_HAPPEN;
+			return ret_error;
+		}
 
-		ret = cherokee_socket_update_from_addrinfo (sock, addr_info, 0);
+		ret = cherokee_socket_update_from_addrinfo (sock, src->addr_current, 0);
 		if (unlikely (ret != ret_ok)) {
 			return ret_error;
 		}
