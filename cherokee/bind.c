@@ -39,7 +39,6 @@ cherokee_bind_new (cherokee_bind_t **listener)
 	n->id   = 0;
 
 	cherokee_buffer_init (&n->server_string);
-	cherokee_buffer_init (&n->server_string_ext);
 	cherokee_buffer_init (&n->server_string_w_port);
 	cherokee_buffer_init (&n->server_address);
 	cherokee_buffer_init (&n->server_port);
@@ -62,7 +61,6 @@ cherokee_bind_free (cherokee_bind_t *listener)
 	cherokee_buffer_mrproper (&listener->ip);
 
 	cherokee_buffer_mrproper (&listener->server_string);
-	cherokee_buffer_mrproper (&listener->server_string_ext);
 	cherokee_buffer_mrproper (&listener->server_string_w_port);
 	cherokee_buffer_mrproper (&listener->server_address);
 	cherokee_buffer_mrproper (&listener->server_port);
@@ -84,11 +82,6 @@ build_strings (cherokee_bind_t         *listener,
 	cherokee_buffer_clean (&listener->server_string_w_port);
 	ret = cherokee_version_add_w_port (&listener->server_string_w_port,
 					   token, listener->port);
-	if (ret != ret_ok)
-		return ret;
-
-	cherokee_buffer_clean (&listener->server_string_ext);
-	ret = cherokee_version_add (&listener->server_string_ext, token);
 	if (ret != ret_ok)
 		return ret;
 
