@@ -45,6 +45,7 @@ rrd.py \
 scgi.py \
 secdownload.py \
 server_info.py \
+sphinx.py \
 ssi.py \
 streaming.py \
 target_ip.py \

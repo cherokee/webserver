@@ -568,6 +568,25 @@ dynamic_handler_file_lib = libplugin_file.la
 endif
 
 #
+# Handler sphinx
+#
+handler_sphinx = \
+handler_sphinx.h \
+handler_sphinx.c
+
+libplugin_sphinx_la_LDFLAGS = $(module_ldflags) $(SPHINXCLIENT_LDFLAGS)
+libplugin_sphinx_la_SOURCES = $(handler_sphinx)
+libplugin_sphinx_la_CFLAGS  = $(SPHINXCLIENT_CFLAGS)
+
+if STATIC_HANDLER_SPHINX
+static_handler_sphinx_src   = $(handler_sphinx)
+static_handler_sphinx_lib   = $(SPHINXCLIENT_LDFLAGS)
+static_handler_sphinx_flags = $(SPHINXCLIENT_CFLAGS)
+else
+dynamic_handler_sphinx_lib = libplugin_sphinx.la
+endif
+
+#
 # Handler tile
 #
 handler_tile = \
@@ -1563,6 +1582,7 @@ $(static_handler_post_report_src) \
 $(static_collector_rrd_src) \
 \
 $(static_handler_file_src) \
+$(static_handler_sphinx_src) \
 $(static_handler_tile_src) \
 $(static_handler_dirlist_src) \
 $(static_handler_cgi_src) \
@@ -1754,6 +1774,7 @@ $(dynamic_gen_evhost_lib) \
 $(dynamic_post_track_lib) \
 $(dynamic_handler_post_report_lib) \
 $(dynamic_handler_file_lib) \
+$(dynamic_handler_sphinx_lib) \
 $(dynamic_handler_tile_lib) \
 $(dynamic_handler_server_info_lib) \
 $(dynamic_handler_render_rrd_lib) \

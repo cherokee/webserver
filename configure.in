@@ -1441,12 +1441,13 @@ AC_ARG_ENABLE(static-module,
 
 modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or"
 
-beta_modules="filetime tile"
+beta_modules="filetime tile sphinx"
 
 # Include beta modules only when --enable-beta is provided
 #
 if test "x$is_beta" = "xyes"; then
 	modules="$modules $beta_modules"
+	SPHINX_LDFLAGS="-lsphinxclient"
 fi
 
 # Remove modules that will not be compiled
@@ -1473,6 +1474,9 @@ fi
 if test "x$have_ffmpeg" != "xyes"; then
 	modules=`echo $modules | sed s/streaming//`
 fi
+#if test "x$have_sphinxclient" != "xyes"; then
+#	modules=`echo $modules | sed s/sphinx//`
+#fi
 
 add_calls=""
 init_calls=""
@@ -1526,6 +1530,7 @@ AM_CONDITIONAL(STATIC_HANDLER_DROP,           grep drop           $conf_h >/dev/
 AM_CONDITIONAL(STATIC_HANDLER_CUSTOM_ERROR,   grep custom_error   $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_DBSLAYER,       grep dbslayer       $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_STREAMING,      grep streaming      $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_SPHINX,         grep sphinx         $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_RENDER_RRD,     grep render_rrd     $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_TILE,           grep tile           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_ENCODER_GZIP,           grep gzip           $conf_h >/dev/null)
@@ -1656,6 +1661,7 @@ echo "LDAP                  $have_ldap"
 echo "MySQL                 $have_mysql"
 echo "GeoIP                 $have_geoip"
 echo "FFMpeg                $have_ffmpeg"
+#echo "Sphinx Client         $have_sphinxclient"
 echo "crypt support         $crypt_type"
 if test "x$is_beta" = "xyes"; then
 echo "Beta release          $PACKAGE_PATCH_VERSION"
