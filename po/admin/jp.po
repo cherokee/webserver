@@ -1,0 +1,3710 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Alvaro Lopez Ortega
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cherokee 1.0\n"
+"Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
+"POT-Creation-Date: 2011-10-13 15:00+0200\n"
+"PO-Revision-Date: 2011-10-13 22:31+0900\n"
+"Last-Translator: Logue <logue@hotmail.co.jp>\n"
+"Language-Team: Logue <logue@hotmail.co.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: JAPAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ows/Market_Info/Block.py:12
+#: ows/Market_Info/Block.py:45
+msgid "We believe Web infrastructure software should evolve towards efficiency, scalability, and management simplicity."
+msgstr ""
+
+#: ows/Market_Info/Block.py:13
+msgid "That is why Octality's products challenge the state of the art. Its flagship, Cherokee, is the most powerful Web infrastructure software ever created."
+msgstr ""
+
+#: ows/Market_Info/Block.py:14
+msgid "The Cherokee Market represents a wide distribution channel for companies, and an astonishing new way for users to deploy Web applications."
+msgstr ""
+
+#: ows/Market_Info/Block.py:15
+#: ows/Market_Info/Block.py:48
+msgid "Learn more"
+msgstr "より詳しく"
+
+#: ows/Market_Info/Block.py:46
+msgid "That is why the Cherokee Project challenges the state of the art. The App Center is a good example of our contribution to evolve Web Infrastructures."
+msgstr ""
+
+#: ows/Market_Info/Block.py:47
+msgid "The App Center is open for you to add new Web applications. Do not hesitate to become a maintainer of the first distribution for Web Apps!"
+msgstr ""
+
+#: ows/Market_Install/Install.py:10
+msgid "Cherokee Upgrade Required"
+msgstr ""
+
+#: ows/Market_Install/Install.py:11
+msgid "Your Cherokee version can no longer access many of the features of the Cherokee Market. Please, upgrade Cherokee to an up-to-date version."
+msgstr ""
+
+#: ows/Market_Install/Install.py:12
+msgid "We apologize for the inconveniences."
+msgstr ""
+
+#: packages/joomla/installer.py:138
+#: packages/phpmyadmin/installer.py:84
+#: packages/trac/installer.py:134
+#: packages/vanilla/installer.py:121
+#: packages/drupal7/installer.py:153
+#: packages/silverstripe/installer.py:113
+#: packages/mediawiki/installer.py:105
+#: packages/wordpress/installer.py:126
+#: packages/redmine/installer.py:108
+#: packages/sugar_ce/installer.py:101
+#: packages/zencart/installer.py:94
+#: packages/drupal_example/installer.py:189
+#: packages/drupal/installer.py:143
+#: packages/openx/installer.py:64
+#: packages/moodle/installer.py:85
+#: packages/phpbb/installer.py:80
+msgid "Checking Requirements"
+msgstr "必要条件を確認中"
+
+#: packages/joomla/installer.py:141
+#: packages/joomla/installer.py:180
+#: packages/joomla/installer.py:199
+#: packages/joomla/installer.py:268
+#: packages/phpmyadmin/installer.py:87
+#: packages/phpmyadmin/installer.py:127
+#: packages/phpmyadmin/installer.py:144
+#: packages/magnolia/installer.py:90
+#: packages/magnolia/installer.py:103
+#: packages/trac/installer.py:137
+#: packages/trac/installer.py:166
+#: packages/trac/installer.py:228
+#: packages/trac/installer.py:262
+#: packages/vanilla/installer.py:124
+#: packages/vanilla/installer.py:177
+#: packages/vanilla/installer.py:194
+#: packages/vanilla/installer.py:260
+#: packages/moin/installer.py:196
+#: packages/moin/installer.py:213
+#: packages/drupal7/installer.py:156
+#: packages/drupal7/installer.py:220
+#: packages/drupal7/installer.py:238
+#: packages/drupal7/installer.py:278
+#: packages/drupal7/installer.py:351
+#: packages/silverstripe/installer.py:116
+#: packages/silverstripe/installer.py:171
+#: packages/silverstripe/installer.py:189
+#: packages/silverstripe/installer.py:255
+#: packages/liferay/installer.py:81
+#: packages/liferay/installer.py:94
+#: packages/mediawiki/installer.py:108
+#: packages/mediawiki/installer.py:132
+#: packages/mediawiki/installer.py:218
+#: packages/wordpress/installer.py:129
+#: packages/wordpress/installer.py:168
+#: packages/wordpress/installer.py:197
+#: packages/wordpress/installer.py:217
+#: packages/wordpress/installer.py:296
+#: packages/nagios/installer.py:154
+#: packages/nagios/installer.py:168
+#: packages/nagios/installer.py:196
+#: packages/nagios/installer.py:233
+#: packages/nagios/installer.py:361
+#: packages/nagios/installer.py:440
+#: packages/nagios/installer.py:462
+#: packages/nagios/installer.py:507
+#: packages/nuxeo_dm/installer.py:95
+#: packages/nuxeo_dm/installer.py:113
+#: packages/redmine/installer.py:111
+#: packages/redmine/installer.py:157
+#: packages/redmine/installer.py:198
+#: packages/redmine/installer.py:210
+#: packages/redmine/installer.py:245
+#: packages/redmine/installer.py:265
+#: packages/redmine/installer.py:335
+#: packages/redmine/installer.py:396
+#: packages/wsgidav/installer.py:97
+#: packages/wsgidav/installer.py:111
+#: packages/wsgidav/installer.py:192
+#: packages/sugar_ce/installer.py:104
+#: packages/sugar_ce/installer.py:127
+#: packages/sugar_ce/installer.py:193
+#: packages/zencart/installer.py:97
+#: packages/zencart/installer.py:136
+#: packages/zencart/installer.py:154
+#: packages/zencart/installer.py:222
+#: packages/drupal_example/installer.py:193
+#: packages/drupal_example/installer.py:250
+#: packages/drupal_example/installer.py:294
+#: packages/drupal_example/installer.py:418
+#: packages/statusnet/installer.py:96
+#: packages/statusnet/installer.py:135
+#: packages/statusnet/installer.py:154
+#: packages/statusnet/installer.py:220
+#: packages/drupal/installer.py:146
+#: packages/drupal/installer.py:186
+#: packages/drupal/installer.py:204
+#: packages/drupal/installer.py:273
+#: packages/openx/installer.py:67
+#: packages/openx/installer.py:109
+#: packages/openx/installer.py:181
+#: packages/nuxeo_dam/installer.py:96
+#: packages/nuxeo_dam/installer.py:114
+#: packages/moodle/installer.py:88
+#: packages/moodle/installer.py:151
+#: packages/moodle/installer.py:169
+#: packages/moodle/installer.py:220
+#: packages/moodle/installer.py:293
+#: packages/broken_app/installer.py:22
+#: packages/phpbb/installer.py:83
+#: packages/phpbb/installer.py:132
+#: packages/phpbb/installer.py:152
+#: packages/phpbb/installer.py:228
+#: packages/hello_world_php/installer.py:85
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: packages/joomla/installer.py:142
+#: packages/phpmyadmin/installer.py:88
+#: packages/magnolia/installer.py:91
+#: packages/trac/installer.py:138
+#: packages/vanilla/installer.py:125
+#: packages/drupal7/installer.py:157
+#: packages/silverstripe/installer.py:117
+#: packages/liferay/installer.py:82
+#: packages/mediawiki/installer.py:109
+#: packages/wordpress/installer.py:130
+#: packages/nagios/installer.py:155
+#: packages/nagios/installer.py:362
+#: packages/nagios/installer.py:508
+#: packages/nuxeo_dm/installer.py:96
+#: packages/redmine/installer.py:112
+#: packages/redmine/installer.py:199
+#: packages/wsgidav/installer.py:98
+#: packages/sugar_ce/installer.py:105
+#: packages/zencart/installer.py:98
+#: packages/drupal_example/installer.py:194
+#: packages/statusnet/installer.py:97
+#: packages/drupal/installer.py:147
+#: packages/openx/installer.py:68
+#: packages/nuxeo_dam/installer.py:97
+#: packages/moodle/installer.py:89
+#: packages/phpbb/installer.py:84
+msgid "Retry"
+msgstr "再試行"
+
+#: packages/joomla/installer.py:181
+#: packages/joomla/installer.py:200
+#: packages/phpmyadmin/installer.py:128
+#: packages/phpmyadmin/installer.py:145
+#: packages/magnolia/installer.py:104
+#: packages/magnolia/installer.py:172
+#: packages/trac/installer.py:167
+#: packages/trac/installer.py:263
+#: packages/vanilla/installer.py:178
+#: packages/vanilla/installer.py:195
+#: packages/moin/installer.py:197
+#: packages/moin/installer.py:214
+#: packages/drupal7/installer.py:221
+#: packages/drupal7/installer.py:239
+#: packages/drupal7/installer.py:279
+#: packages/silverstripe/installer.py:172
+#: packages/silverstripe/installer.py:190
+#: packages/liferay/installer.py:95
+#: packages/liferay/installer.py:163
+#: packages/mediawiki/installer.py:133
+#: packages/wordpress/installer.py:169
+#: packages/wordpress/installer.py:198
+#: packages/wordpress/installer.py:218
+#: packages/nagios/installer.py:169
+#: packages/nagios/installer.py:197
+#: packages/nagios/installer.py:234
+#: packages/nagios/installer.py:463
+#: packages/nuxeo_dm/installer.py:114
+#: packages/nuxeo_dm/installer.py:185
+#: packages/redmine/installer.py:158
+#: packages/redmine/installer.py:211
+#: packages/redmine/installer.py:246
+#: packages/redmine/installer.py:266
+#: packages/redmine/installer.py:397
+#: packages/wsgidav/installer.py:112
+#: packages/wsgidav/installer.py:193
+#: packages/sugar_ce/installer.py:128
+#: packages/zencart/installer.py:137
+#: packages/zencart/installer.py:155
+#: packages/drupal_example/installer.py:251
+#: packages/drupal_example/installer.py:295
+#: packages/statusnet/installer.py:136
+#: packages/statusnet/installer.py:155
+#: packages/drupal/installer.py:187
+#: packages/drupal/installer.py:205
+#: packages/openx/installer.py:110
+#: packages/nuxeo_dam/installer.py:115
+#: packages/nuxeo_dam/installer.py:186
+#: packages/moodle/installer.py:152
+#: packages/moodle/installer.py:170
+#: packages/moodle/installer.py:221
+#: packages/phpbb/installer.py:133
+#: packages/phpbb/installer.py:153
+#: packages/hello_world_php/installer.py:86
+msgid "Next"
+msgstr "次へ"
+
+#: packages/joomla/installer.py:263
+#: packages/vanilla/installer.py:255
+#: packages/silverstripe/installer.py:250
+#: packages/mediawiki/installer.py:213
+#: packages/wordpress/installer.py:291
+#: packages/sugar_ce/installer.py:188
+#: packages/zencart/installer.py:217
+#: packages/drupal_example/installer.py:413
+#: packages/statusnet/installer.py:215
+#: packages/drupal/installer.py:268
+#: packages/phpbb/installer.py:223
+msgid "Performing adjustments"
+msgstr ""
+
+#: packages/joomla/installer.py:264
+#: packages/trac/installer.py:224
+#: packages/vanilla/installer.py:256
+#: packages/drupal7/installer.py:347
+#: packages/silverstripe/installer.py:251
+#: packages/mediawiki/installer.py:214
+#: packages/wordpress/installer.py:292
+#: packages/nagios/installer.py:436
+#: packages/wsgidav/installer.py:164
+#: packages/sugar_ce/installer.py:189
+#: packages/zencart/installer.py:218
+#: packages/drupal_example/installer.py:414
+#: packages/statusnet/installer.py:216
+#: packages/drupal/installer.py:269
+#: packages/openx/installer.py:177
+#: packages/moodle/installer.py:289
+#: packages/phpbb/installer.py:224
+msgid "This process may take a while. Please, hold on."
+msgstr ""
+
+#: packages/magnolia/installer.py:27
+msgid "At the time being, this package can only be configured under a new virtual server."
+msgstr ""
+
+#: packages/magnolia/installer.py:82
+#: packages/liferay/installer.py:73
+#: packages/nuxeo_dm/installer.py:87
+#: packages/nuxeo_dam/installer.py:88
+msgid "Checking for installation requirements"
+msgstr ""
+
+#: packages/magnolia/installer.py:157
+#: packages/liferay/installer.py:149
+#: packages/nuxeo_dm/installer.py:171
+#: packages/nuxeo_dam/installer.py:172
+msgid "Access details"
+msgstr "アクセス詳細"
+
+#: packages/magnolia/installer.py:158
+msgid "Magnolia has been installed, and Cherokee is configured to automatically launch it whenever the resource is accessed if it is not already available. A one-time pre-launch has been issued to save time."
+msgstr ""
+
+#: packages/magnolia/installer.py:159
+msgid "Note that launching Magnolia can take up a couple of  minutes on modern servers, so please be patient the first time you access it."
+msgstr ""
+
+#: packages/magnolia/installer.py:160
+#: packages/nuxeo_dm/installer.py:174
+#: packages/nuxeo_dam/installer.py:175
+msgid "It is probably a good idea to pre-launch it instead of having the web-server do so on demand."
+msgstr ""
+
+#: packages/magnolia/installer.py:161
+#: packages/liferay/installer.py:153
+#: packages/nuxeo_dm/installer.py:175
+#: packages/nuxeo_dam/installer.py:176
+msgid "These are the default access details:"
+msgstr ""
+
+#: packages/magnolia/installer.py:164
+msgid "User"
+msgstr "ユーザ"
+
+#: packages/magnolia/installer.py:166
+#: packages/common/database.py:761
+#: packages/liferay/installer.py:158
+#: packages/nagios/installer.py:186
+#: packages/nuxeo_dm/installer.py:180
+#: packages/redmine/installer.py:393
+#: packages/nuxeo_dam/installer.py:181
+msgid "Password"
+msgstr "パスワード"
+
+#: packages/trac/installer.py:31
+#: packages/wsgidav/installer.py:33
+msgid "There was an error during the installation of the required dependencies."
+msgstr ""
+
+#: packages/trac/installer.py:32
+msgid "There was an error during the creation of the Trac project."
+msgstr ""
+
+#: packages/trac/installer.py:33
+msgid "Please try again if the problem can be solved manually issuing the following command."
+msgstr ""
+
+#: packages/trac/installer.py:34
+msgid "Installing Trac."
+msgstr "Tracのインストール中"
+
+#: packages/trac/installer.py:35
+msgid "Trac is being installed and a default Trac project is being created."
+msgstr ""
+
+#: packages/trac/installer.py:36
+msgid "This might take some time. Please wait."
+msgstr ""
+
+#: packages/trac/installer.py:38
+msgid "Name of the initial user configured for Trac"
+msgstr ""
+
+#: packages/trac/installer.py:39
+msgid "Password of the initial user configured for Trac"
+msgstr ""
+
+#: packages/trac/installer.py:40
+#: packages/nagios/installer.py:179
+msgid "User configuration"
+msgstr "ユーザ設定"
+
+#: packages/trac/installer.py:41
+msgid "Trac relies on the web server for user authentication. After the installation you will be able to define more users through the Security tab of the '/login' rule in Cherokee-Admin."
+msgstr ""
+
+#: packages/trac/installer.py:216
+msgid "Satisfying pysqlite requirements"
+msgstr ""
+
+#: packages/trac/installer.py:223
+msgid "Installing Trac"
+msgstr "Tracをインストールしています"
+
+#: packages/trac/installer.py:253
+msgid "Trac User"
+msgstr "Tracユーザ"
+
+#: packages/trac/installer.py:254
+msgid "Trac Password"
+msgstr "Tracパスワード"
+
+#: packages/trac/tools.py:21
+msgid "Either a Python interface to SQLite3, or Python development files + SQLite3 development files are needed."
+msgstr ""
+
+#: packages/trac/tools.py:63
+msgid "The pysqlite module is not available and could not be built."
+msgstr ""
+
+#: packages/trac/tools.py:64
+msgid "The following command might aid in solving the issue."
+msgstr ""
+
+#: packages/trac/tools.py:66
+msgid "Error report"
+msgstr "エラー報告"
+
+#: packages/vanilla/installer.py:153
+msgid "Some of your PHP settings do not meet Vanilla's requirements. Please edit your PHP configuration files and try again."
+msgstr ""
+
+#: packages/vanilla/installer.py:156
+#: packages/drupal7/installer.py:198
+#: packages/silverstripe/installer.py:150
+#: packages/moodle/installer.py:130
+msgid "Setting"
+msgstr "設定"
+
+#: packages/vanilla/installer.py:156
+#: packages/drupal7/installer.py:198
+#: packages/silverstripe/installer.py:150
+#: packages/moodle/installer.py:130
+msgid "Expected value"
+msgstr ""
+
+#: packages/vanilla/installer.py:156
+#: packages/drupal7/installer.py:198
+#: packages/silverstripe/installer.py:150
+#: packages/moodle/installer.py:130
+msgid "Current value"
+msgstr "現在の値"
+
+#: packages/moin/installer.py:25
+msgid "For cross-platform-compatibility, this package can only be configured in a new virtual server at the time being"
+msgstr ""
+
+#: packages/moin/installer.py:38
+msgid "Name to show as Wiki name-logo"
+msgstr ""
+
+#: packages/moin/installer.py:39
+msgid "Username of the administrator account"
+msgstr ""
+
+#: packages/moin/installer.py:40
+msgid "Password of the administrator account"
+msgstr ""
+
+#: packages/moin/installer.py:41
+msgid "Could not create Moin administrator account"
+msgstr ""
+
+#: packages/moin/installer.py:181
+msgid "Wiki Sitename"
+msgstr "Wikiサイト名"
+
+#: packages/moin/installer.py:182
+msgid "Admin User"
+msgstr "管理ユーザ"
+
+#: packages/moin/installer.py:183
+#: packages/common/database.py:680
+msgid "Admin Password"
+msgstr "管理パスワード"
+
+#: packages/moin/installer.py:209
+msgid "Wiki details"
+msgstr "Wikiの詳細"
+
+#: packages/drupal7/installer.py:139
+msgid "Username for the administrator account."
+msgstr ""
+
+#: packages/drupal7/installer.py:140
+msgid "Password for the administrator account."
+msgstr ""
+
+#: packages/drupal7/installer.py:141
+msgid "Email address for notifications."
+msgstr ""
+
+#: packages/drupal7/installer.py:142
+msgid "Title to appear as full name of the website."
+msgstr ""
+
+#: packages/drupal7/installer.py:144
+#: packages/moodle/installer.py:75
+msgid "Site details"
+msgstr "サイトの詳細"
+
+#: packages/drupal7/installer.py:145
+msgid "The following information is required to install Drupal."
+msgstr ""
+
+#: packages/drupal7/installer.py:195
+msgid "Some of your PHP settings do not meet Drupal's requirements. Please edit your PHP configuration files and try again."
+msgstr ""
+
+#: packages/drupal7/installer.py:269
+#: packages/moodle/installer.py:193
+msgid "Admin user"
+msgstr "管理人ユーザ"
+
+#: packages/drupal7/installer.py:270
+#: packages/moodle/installer.py:194
+msgid "Admin password"
+msgstr "管理人のパスワード"
+
+#: packages/drupal7/installer.py:271
+msgid "Admin email"
+msgstr "管理人のメールアドレス"
+
+#: packages/drupal7/installer.py:272
+msgid "Sitename"
+msgstr "サイト名"
+
+#: packages/drupal7/installer.py:338
+msgid "Using Drupal shell to install Drupal"
+msgstr ""
+
+#: packages/drupal7/installer.py:346
+msgid "Performing Drupal installation"
+msgstr ""
+
+#: packages/drupal7/tools.py:21
+msgid "The PHP interpreter does not support any of the required database modules: 'mysql', 'mysqli', or 'sqlite3'"
+msgstr ""
+
+#: packages/silverstripe/installer.py:147
+msgid "Some of your PHP settings do not meet SilverStripe's requirements. Please edit your PHP configuration files and try again."
+msgstr ""
+
+#: packages/common/database.py:33
+msgid "The application requires a database to work. Please choose how to configure it."
+msgstr ""
+
+#: packages/common/database.py:34
+msgid "Specify the name of a privileged DB user. It will be used to automatically create the required user and database."
+msgstr ""
+
+#: packages/common/database.py:35
+msgid "Specify the password for this user account."
+msgstr ""
+
+#: packages/common/database.py:36
+msgid "Specify the name of an existing database user."
+msgstr ""
+
+#: packages/common/database.py:37
+msgid "Specify the password for the database user account."
+msgstr ""
+
+#: packages/common/database.py:38
+msgid "Specify the type of database that you want to use."
+msgstr ""
+
+#: packages/common/database.py:39
+msgid "Specify the existing database that you want to use. The specified user must have privileges to use it."
+msgstr ""
+
+#: packages/common/database.py:40
+msgid "Please, provide an administrative user/password pair to connect to a database."
+msgstr ""
+
+#: packages/common/database.py:41
+msgid "Please, provide details of an existing database and user/password pair to a database."
+msgstr ""
+
+#: packages/common/database.py:42
+msgid "Bare in mind that the database server must be running on the host."
+msgstr ""
+
+#: packages/common/database.py:57
+#: packages/nagios/installer.py:48
+msgid "Automatic"
+msgstr "自動"
+
+#: packages/common/database.py:58
+#: packages/nagios/installer.py:49
+msgid "Manual"
+msgstr "手動"
+
+#: packages/common/database.py:71
+msgid "MySQL 5 could not be found on your system."
+msgstr ""
+
+#: packages/common/database.py:80
+#: packages/common/database.py:86
+msgid "MySQL is available at http://www.mysql.com/"
+msgstr ""
+
+#: packages/common/database.py:83
+msgid "MySQL development files could not be found on your system."
+msgstr ""
+
+#: packages/common/database.py:89
+msgid "PostgreSQL 8 could not be found on your system."
+msgstr ""
+
+#: packages/common/database.py:98
+msgid "PostgreSQL is available at http://www.postgresql.org/"
+msgstr ""
+
+#: packages/common/database.py:102
+msgid "Sqlite3 could not be found on your system."
+msgstr ""
+
+#: packages/common/database.py:111
+msgid "SQLite3 is available at http://www.sqlite.org/"
+msgstr ""
+
+#: packages/common/database.py:338
+#: packages/common/database.py:484
+msgid "Database not present"
+msgstr ""
+
+#: packages/common/database.py:403
+#: packages/common/database.py:531
+msgid "Unknown privilege"
+msgstr ""
+
+#: packages/common/database.py:431
+#: packages/common/database.py:547
+#, python-format
+msgid "User %(db_user)s is missing the following privileges on database %(db_name)s"
+msgstr ""
+
+#: packages/common/database.py:455
+msgid "Username does not exist"
+msgstr ""
+
+#: packages/common/database.py:482
+msgid "The specified user is not the owner of the database"
+msgstr ""
+
+#: packages/common/database.py:576
+msgid "Engine"
+msgstr "エンジン"
+
+#: packages/common/database.py:602
+msgid "Configuration method"
+msgstr "設定方法"
+
+#: packages/common/database.py:660
+#: packages/common/database.py:737
+#: packages/common/database.py:835
+msgid "No supported database engines were detected."
+msgstr ""
+
+#: packages/common/database.py:661
+#: packages/common/database.py:738
+msgid "The available options are"
+msgstr ""
+
+#: packages/common/database.py:679
+msgid "Admin Username"
+msgstr "管理人のユーザ名"
+
+#: packages/common/database.py:718
+msgid "Database does not exist."
+msgstr "データーベースが存在しません。"
+
+#: packages/common/database.py:759
+msgid "Database"
+msgstr "データーベース"
+
+#: packages/common/database.py:760
+#: packages/nagios/installer.py:185
+#: packages/nuxeo_dm/installer.py:178
+#: packages/redmine/installer.py:392
+#: packages/nuxeo_dam/installer.py:179
+msgid "Username"
+msgstr "ユーザ名"
+
+#: packages/common/database.py:784
+msgid "Unknown method"
+msgstr "不明なメソッド"
+
+#: packages/common/database.py:820
+msgid "Database configuration"
+msgstr "データーベース設定"
+
+#: packages/common/database.py:838
+msgid "This installer doesn't seem to support any databases."
+msgstr ""
+
+#: packages/common/database.py:840
+msgid "The only database supported by this installer is"
+msgstr ""
+
+#: packages/common/database.py:842
+msgid "The database options supported by this installer are"
+msgstr ""
+
+#: packages/common/target.py:25
+msgid "Will the package be configured in a new virtual server, or will it be configured as a directory of an existing virtual server?"
+msgstr ""
+
+#: packages/common/target.py:26
+msgid "Domain name of the Virtual Host you are about to create. Wildcards are allowed. For example: *.example.com"
+msgstr ""
+
+#: packages/common/target.py:27
+msgid "Specify the web directory under which the application will be accessible."
+msgstr ""
+
+#: packages/common/target.py:28
+msgid "Select the target Virtual Host under which the application should be installed."
+msgstr ""
+
+#: packages/common/target.py:126
+#: packages/common/target.py:136
+msgid "Can not be empty"
+msgstr ""
+
+#: packages/common/target.py:131
+msgid "Domain Name already in use"
+msgstr "そのドメイン名はすでに使われています。"
+
+#: packages/common/target.py:139
+msgid "Root directory is not allowed"
+msgstr ""
+
+#: packages/common/target.py:145
+msgid "Directory already configured"
+msgstr ""
+
+#: packages/common/target.py:160
+msgid "Domain Name"
+msgstr "ドメイン名"
+
+#: packages/common/target.py:208
+msgid "Virtual Server"
+msgstr "仮想サーバー"
+
+#: packages/common/target.py:209
+msgid "Directory"
+msgstr "ディレクトリ"
+
+#: packages/common/target.py:234
+msgid "Unknown target"
+msgstr "不明なターゲット"
+
+#: packages/common/target.py:259
+msgid "Install as a new.."
+msgstr "新規インストールする"
+
+#: packages/common/target.py:272
+msgid "Deployment Type"
+msgstr ""
+
+#: packages/common/pwd_grp.py:119
+#, python-format
+msgid "Could not add <em>%(user)s</em> user to <em>%(group)s</em> group."
+msgstr ""
+
+#: packages/common/pwd_grp.py:158
+msgid "Could not create group."
+msgstr "グループの作成ができません。"
+
+#: packages/common/pwd_grp.py:210
+msgid "Could not create user."
+msgstr "ユーザの作成ができません。"
+
+#: packages/common/ruby.py:41
+msgid "The Ruby 1.8 interpreter, RubyGems, or both, could not be found on your system. Please install Ruby 1.8 and RubyGems to proceed."
+msgstr ""
+
+#: packages/common/ruby.py:50
+msgid "Ruby is available at http://www.ruby-lang.org/"
+msgstr ""
+
+#: packages/common/java.py:28
+msgid "Your system doesn't seem to provide the required dependecies. Java 6 or later is required."
+msgstr ""
+
+#: packages/common/java.py:36
+msgid "Please, install Java in your system"
+msgstr ""
+
+#: packages/common/cpp.py:33
+msgid "Your system doesn't seem to provide the required dependecies. Please make sure there is a C++ development environment present."
+msgstr ""
+
+#: packages/common/cpp.py:38
+msgid "MacOS X is shipped with a copy of the GNU C++ compiler."
+msgstr ""
+
+#: packages/common/cpp.py:39
+#: packages/common/cc.py:38
+msgid "GCC is available at http://gcc.gnu.org/"
+msgstr ""
+
+#: packages/common/services.py:49
+#, python-format
+msgid "Could not add <em>%(service)s</em> to list of system services."
+msgstr ""
+
+#: packages/common/services.py:154
+#, python-format
+msgid "Could not launch <em>%(service)s</em> service."
+msgstr ""
+
+#: packages/common/cc.py:32
+msgid "Your system doesn't seem to provide the required dependecies. Please make sure there is a C development environment present."
+msgstr ""
+
+#: packages/common/cc.py:37
+msgid "MacOS X is shipped with a copy of GCC."
+msgstr ""
+
+#: packages/common/php-mods.py:18
+msgid "The 'gd' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:26
+#: packages/common/php-mods.py:38
+#: packages/common/php-mods.py:50
+#: packages/common/php-mods.py:62
+#: packages/common/php-mods.py:72
+#: packages/common/php-mods.py:82
+#: packages/common/php-mods.py:93
+#: packages/common/php-mods.py:102
+#: packages/common/php-mods.py:113
+#: packages/common/php-mods.py:124
+#: packages/common/php-mods.py:134
+#: packages/common/php-mods.py:145
+#: packages/common/php-mods.py:152
+#: packages/common/php-mods.py:159
+#: packages/common/php-mods.py:164
+#: packages/common/php-mods.py:171
+#: packages/common/php-mods.py:178
+#: packages/common/php-mods.py:186
+#: packages/common/php-mods.py:194
+#: packages/common/php-mods.py:202
+#: packages/common/php-mods.py:209
+#: packages/common/php-mods.py:214
+#: packages/common/php-mods.py:221
+#: packages/common/php-mods.py:228
+#: packages/common/php-mods.py:235
+#: packages/common/php-mods.py:244
+#: packages/common/php-mods.py:251
+#: packages/common/php-mods.py:258
+#: packages/common/php-mods.py:265
+#, python-format
+msgid "For more about this module visit %(url)s"
+msgstr ""
+
+#: packages/common/php-mods.py:29
+msgid "Neither the 'mysql' nor the 'mysqli' modules are supported by your PHP interpreter"
+msgstr "PHPに『mysql』や、『mysqli』モジュールがインストールされていません。"
+
+#: packages/common/php-mods.py:41
+msgid "The 'pdo_mysql' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:53
+msgid "The 'pgsql' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:65
+msgid "The 'curl' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:75
+msgid "The 'sqlite' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:85
+msgid "The 'mcrypt' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:96
+msgid "The 'intl' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:105
+msgid "The 'iconv' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:112
+msgid "The iconv module should be built-in."
+msgstr ""
+
+#: packages/common/php-mods.py:116
+msgid "The 'openssl' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:123
+msgid "The openssl module should be built-in the php interpreter."
+msgstr ""
+
+#: packages/common/php-mods.py:127
+msgid "The 'xmlrpc' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:137
+msgid "The 'mbstring' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:144
+msgid "The mbstring module should be built-in the php interpreter."
+msgstr ""
+
+#: packages/common/php-mods.py:148
+msgid "The 'session' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:155
+msgid "The 'ctype' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:162
+msgid "The Stantad PHP Library (SPL) module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:167
+msgid "The 'zlib' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:174
+#: packages/common/php-mods.py:238
+msgid "The 'zip' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:181
+msgid "The 'xml' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:189
+msgid "The 'xmlwriter' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:197
+msgid "The 'xmlreader' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:205
+msgid "The 'SimpleXML' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:212
+msgid "The 'pcre' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:217
+msgid "The 'dom' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:224
+msgid "The 'json' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:231
+msgid "The 'PDO' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:243
+msgid "The zip module should be built-in the php interpreter."
+msgstr ""
+
+#: packages/common/php-mods.py:247
+msgid "The 'hash' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:254
+msgid "The 'filter' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:261
+msgid "The 'tokenizer' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:268
+#, python-format
+msgid "The '%(module)s' module is not supported by your PHP interpreter"
+msgstr ""
+
+#: packages/common/php-mods.py:272
+#, python-format
+msgid "For more about this module visit http://php.net/manual/en/book.%(module)s.php"
+msgstr ""
+
+#: packages/common/php.py:89
+msgid "PHP is required for the application to run, but it does not seem to be available in your system. Please install a FastCGI-enabled PHP interpeter to proceed."
+msgstr ""
+
+#: packages/common/php.py:90
+msgid "You can check if your interpreter supports FastCGI by looking for the \"fcgi\" string in the output of the following command: php-cgi -v"
+msgstr ""
+
+#: packages/common/php.py:92
+msgid "The user running PHP has no write-access to the path specified by the PHP session.save_path setting. PHP sessions will not work until either the user or the PHP settings are changed."
+msgstr ""
+
+#: packages/common/php.py:93
+msgid "The user configured to run PHP is not a valid user in your system"
+msgstr ""
+
+#: packages/common/php.py:103
+msgid "PHP is available at http://www.php.net/ . Remember to add the --enable-fastcgi parameter to ./configure."
+msgstr ""
+
+#: packages/common/php.py:113
+msgid "Configuring PHP"
+msgstr "PHP設定"
+
+#: packages/common/php.py:114
+msgid "Detecting a suitable PHP interpreter"
+msgstr ""
+
+#: packages/common/php.py:130
+msgid "Could not find the PHP interpreter"
+msgstr "PHPが見つかりません"
+
+#: packages/common/php.py:134
+msgid "Check Again"
+msgstr "再確認"
+
+#: packages/common/php.py:141
+msgid "Internal Error while configuring PHP"
+msgstr "PHP設定にエラーが発生しました。"
+
+#: packages/common/php.py:457
+msgid "Could not determine PHP-CGI settings."
+msgstr ""
+
+#: packages/common/php.py:460
+msgid "Could not determine PHP-CGI configuration file."
+msgstr ""
+
+#: packages/common/php.py:485
+msgid "Could not determine PHP-fpm settings."
+msgstr ""
+
+#: packages/common/python.py:41
+#, python-format
+msgid "Python %(version2)s or later is required."
+msgstr "Python %(version2)以上が必要です。"
+
+#: packages/common/python.py:49
+#, python-format
+msgid "Please, install Python %(version2)s in your system: http://www.python.com/"
+msgstr ""
+
+#: packages/liferay/installer.py:150
+msgid "Liferay has been installed, and Cherokee is configured to automatically launch it whenever the resource is accessed if it is not already available. A one-time pre-launch has been issued to save time."
+msgstr ""
+
+#: packages/liferay/installer.py:151
+msgid "Note that launching Liferay can take up a couple of  minutes on modern servers, so please be patient the first time you access it."
+msgstr ""
+
+#: packages/liferay/installer.py:152
+msgid "It is probably a good idea to pre-launch it on boot time instead of having the web-server do so on demand."
+msgstr ""
+
+#: packages/liferay/installer.py:156
+msgid "Email Address"
+msgstr "メールアドレス"
+
+#: packages/wordpress/installer.py:25
+#: packages/redmine/installer.py:24
+msgid "List of available languages"
+msgstr ""
+
+#: packages/wordpress/installer.py:26
+#: packages/redmine/installer.py:25
+msgid "Deployment Language"
+msgstr ""
+
+#: packages/wordpress/installer.py:27
+#: packages/redmine/installer.py:26
+msgid "Please, specify the deployment language for the application."
+msgstr ""
+
+#: packages/wordpress/installer.py:31
+msgid "Arabic"
+msgstr "アラビア語"
+
+#: packages/wordpress/installer.py:32
+#: packages/redmine/tools.py:26
+msgid "German"
+msgstr "ドイツ語"
+
+#: packages/wordpress/installer.py:33
+#: packages/redmine/tools.py:28
+msgid "English"
+msgstr "英語"
+
+#: packages/wordpress/installer.py:34
+#: packages/redmine/tools.py:30
+msgid "Spanish"
+msgstr "スペイン語"
+
+#: packages/wordpress/installer.py:35
+#: packages/redmine/tools.py:33
+msgid "French"
+msgstr "フランス語"
+
+#: packages/wordpress/installer.py:36
+#: packages/redmine/tools.py:40
+msgid "Japanese"
+msgstr "日本語"
+
+#: packages/wordpress/installer.py:37
+#: packages/redmine/tools.py:48
+msgid "Portuguese"
+msgstr "ポルトガル語"
+
+#: packages/wordpress/installer.py:38
+#: packages/redmine/tools.py:51
+msgid "Russian"
+msgstr "ロシア語"
+
+#: packages/wordpress/installer.py:39
+#: packages/redmine/tools.py:61
+msgid "Chinese"
+msgstr "中国語"
+
+#: packages/wordpress/installer.py:190
+#: packages/redmine/installer.py:259
+msgid "Language"
+msgstr "言語"
+
+#: packages/nagios/installer.py:30
+msgid "Administrator configuration"
+msgstr "管理設定"
+
+#: packages/nagios/installer.py:31
+msgid "Nagios relies on the web server for user authentication. Please provide a user and password to access the web interface, as well as an email for notifications."
+msgstr ""
+
+#: packages/nagios/installer.py:32
+msgid "Email address you'd like to use for receiving alerts."
+msgstr ""
+
+#: packages/nagios/installer.py:33
+msgid "Username for the administrator user."
+msgstr "管理人ユーザのユーザ名"
+
+#: packages/nagios/installer.py:34
+msgid "Password for the administrator user."
+msgstr "管理人ユーザのパスワード"
+
+#: packages/nagios/installer.py:36
+msgid "Nagios system user"
+msgstr "Nagiosのシステムユーザ"
+
+#: packages/nagios/installer.py:37
+msgid "Nagios requires several user/group system-settings to run. Setting up a username and group for Nagios is mandatory. It can be done manually, or automatically generated for you."
+msgstr ""
+
+#: packages/nagios/installer.py:38
+msgid "User under which Nagios will be running"
+msgstr ""
+
+#: packages/nagios/installer.py:39
+msgid "Group under which Nagios will be running"
+msgstr ""
+
+#: packages/nagios/installer.py:40
+msgid "Specify a group for allowing external commands to be submitted through the web interface."
+msgstr ""
+
+#: packages/nagios/installer.py:41
+msgid "Please choose the desired user configuration method."
+msgstr ""
+
+#: packages/nagios/installer.py:43
+msgid "User does not belong to the specified group"
+msgstr ""
+
+#: packages/nagios/installer.py:134
+msgid "User does not exist"
+msgstr "そのユーザは存在しません"
+
+#: packages/nagios/installer.py:139
+msgid "Group does not exist"
+msgstr "そのグループは存在しません"
+
+#: packages/nagios/installer.py:146
+#: packages/wsgidav/installer.py:79
+#: packages/statusnet/installer.py:93
+msgid "Checking Dependencies"
+msgstr "依存性を確認中"
+
+#: packages/nagios/installer.py:187
+msgid "Email"
+msgstr "メールアドレス"
+
+#: packages/nagios/installer.py:293
+msgid "Nagios user"
+msgstr "Nagiosユーザ"
+
+#: packages/nagios/installer.py:294
+msgid "Nagios group"
+msgstr "Nagiosグループ"
+
+#: packages/nagios/installer.py:295
+msgid "Nagios command group"
+msgstr ""
+
+#: packages/nagios/installer.py:329
+msgid "User configuration method"
+msgstr "ユーザ設定方法"
+
+#: packages/nagios/installer.py:347
+msgid "Checking System Users"
+msgstr "システムユーザの確認"
+
+#: packages/nagios/installer.py:357
+#: packages/nagios/installer.py:497
+msgid "The installer could not successfully execute the following command:"
+msgstr ""
+
+#: packages/nagios/installer.py:358
+#: packages/nagios/installer.py:499
+msgid "The reported error was:"
+msgstr ""
+
+#: packages/nagios/installer.py:435
+msgid "Installing Nagios"
+msgstr "Nagiosをインストールします。"
+
+#: packages/nagios/installer.py:450
+#: packages/nagios/installer.py:473
+msgid "Nagios start up"
+msgstr "Nagiosのスタートアップ"
+
+#: packages/nagios/installer.py:451
+msgid "Nagios requires the Nagios system service to be launched at boot time. It is recommended that you allow the installer to add the service to your system."
+msgstr ""
+
+#: packages/nagios/installer.py:454
+msgid "Add system service"
+msgstr "システムサービスを追加"
+
+#: packages/nagios/installer.py:454
+msgid "Enable"
+msgstr "有効"
+
+#: packages/nagios/installer.py:454
+msgid "Mark the checkbox to automatically launch Nagios on start up."
+msgstr ""
+
+#: packages/nagios/installer.py:504
+msgid "You can either manually fix the problem and retry, or you can skip the step knowing that the Nagios system service will not be launched at boot time."
+msgstr ""
+
+#: packages/nagios/installer.py:509
+msgid "Skip"
+msgstr "スキップ"
+
+#: packages/nagios/tools.py:19
+msgid "Your system doesn't seem to provide the required dependecies. Please make sure there is a C development environment and the development libraries for the <a href='http://www.boutell.com/gd/'>GD Graphics Library</a>"
+msgstr ""
+
+#: packages/nuxeo_dm/installer.py:108
+#: packages/nuxeo_dam/installer.py:109
+msgid "Nuxeo can only be deployed under its default location /nuxeo."
+msgstr ""
+
+#: packages/nuxeo_dm/installer.py:109
+#: packages/nuxeo_dam/installer.py:110
+msgid "The appropriate redirection rule will be created if the specified web path or deployment method chosen should require this."
+msgstr ""
+
+#: packages/nuxeo_dm/installer.py:172
+msgid "Nuxeo-DM has been installed, and Cherokee is configured to automatically launch it whenever the resource is accessed if it is not already available. A one-time pre-launch has been issued to save time."
+msgstr ""
+
+#: packages/nuxeo_dm/installer.py:173
+msgid "Note that launching Nuxeo-DM can take up a couple of  minutes on modern servers, so please be patient the first time you access it."
+msgstr ""
+
+#: packages/redmine/installer.py:21
+msgid "Installing"
+msgstr "インストール"
+
+#: packages/redmine/installer.py:22
+msgid "Redmine is being installed. This might take some time. Please wait…"
+msgstr ""
+
+#: packages/redmine/installer.py:28
+msgid "Set up completed"
+msgstr ""
+
+#: packages/redmine/installer.py:29
+msgid "Redmine has been installed. These are the default access details:"
+msgstr ""
+
+#: packages/redmine/installer.py:31
+msgid "Redmine supports MySQL as database backend, but the version of Ruby on your system is lower than the minimum requirement (1.8.6). MySQL support will be disabled."
+msgstr ""
+
+#: packages/redmine/installer.py:32
+msgid "Redmine supports MySQL as database backend, but your system does not provide the MySQL development files required to support it. MySQL support will be disabled."
+msgstr ""
+
+#: packages/redmine/installer.py:33
+msgid "Redmine supports SQLite3 as database backend, but the version of Ruby on your system is lower than the minimum requirement (1.8.7). SQLite3 support will be disabled."
+msgstr ""
+
+#: packages/redmine/installer.py:34
+msgid "Redmine supports several database backends: MySQL, PostgreSQL, and SQLite3. Unfortunately none of them seems to be available. Try again if you can fix the situation."
+msgstr ""
+
+#: packages/redmine/installer.py:174
+msgid "Database Requirements"
+msgstr "データーベースの必須条件"
+
+#: packages/redmine/tools.py:21
+msgid "Bulgarian"
+msgstr "ブルガリア語"
+
+#: packages/redmine/tools.py:22
+msgid "Bosnian"
+msgstr "ボスニア語"
+
+#: packages/redmine/tools.py:23
+msgid "Catalan"
+msgstr ""
+
+#: packages/redmine/tools.py:24
+msgid "Czech"
+msgstr "チェコ語"
+
+#: packages/redmine/tools.py:25
+msgid "Danish"
+msgstr ""
+
+#: packages/redmine/tools.py:27
+msgid "Greek"
+msgstr "ギリシア語"
+
+#: packages/redmine/tools.py:29
+msgid "English (GB)"
+msgstr "英語（GB）"
+
+#: packages/redmine/tools.py:31
+msgid "Basque"
+msgstr ""
+
+#: packages/redmine/tools.py:32
+msgid "Finnish"
+msgstr "フィンランド語"
+
+#: packages/redmine/tools.py:34
+msgid "Galician"
+msgstr ""
+
+#: packages/redmine/tools.py:35
+msgid "Hebrew"
+msgstr ""
+
+#: packages/redmine/tools.py:36
+msgid "Croatian"
+msgstr ""
+
+#: packages/redmine/tools.py:37
+msgid "Hungarian"
+msgstr "ハンガリー語"
+
+#: packages/redmine/tools.py:38
+msgid "Indonesian"
+msgstr "インドネシア語"
+
+#: packages/redmine/tools.py:39
+msgid "Italian"
+msgstr "イタリア語"
+
+#: packages/redmine/tools.py:41
+msgid "Korean"
+msgstr "韓国語"
+
+#: packages/redmine/tools.py:42
+msgid "Lithuanian"
+msgstr ""
+
+#: packages/redmine/tools.py:43
+msgid "Latvian"
+msgstr ""
+
+#: packages/redmine/tools.py:44
+msgid "Mongolian"
+msgstr "モンゴル語"
+
+#: packages/redmine/tools.py:45
+msgid "Dutch"
+msgstr "オランダ語"
+
+#: packages/redmine/tools.py:46
+msgid "Norwegian"
+msgstr "ノルウェー語"
+
+#: packages/redmine/tools.py:47
+msgid "Polish"
+msgstr "ポルトガル語"
+
+#: packages/redmine/tools.py:49
+msgid "Portuguese (BR)"
+msgstr "ポルトガル語（ブラジル）"
+
+#: packages/redmine/tools.py:50
+msgid "Romanian"
+msgstr ""
+
+#: packages/redmine/tools.py:52
+msgid "Slovak"
+msgstr "スロバキア語"
+
+#: packages/redmine/tools.py:53
+msgid "Slovenian"
+msgstr "スロベニア語"
+
+#: packages/redmine/tools.py:54
+msgid "Serbian"
+msgstr "セルビア語"
+
+#: packages/redmine/tools.py:55
+msgid "Serbian (YU)"
+msgstr "セルビア語（YU）"
+
+#: packages/redmine/tools.py:56
+msgid "Swedish"
+msgstr "スウェーデン語"
+
+#: packages/redmine/tools.py:57
+msgid "Thai"
+msgstr "タイ語"
+
+#: packages/redmine/tools.py:58
+msgid "Turkish"
+msgstr "トルコ語"
+
+#: packages/redmine/tools.py:59
+msgid "Ukrainian"
+msgstr "ウクライナ語"
+
+#: packages/redmine/tools.py:60
+msgid "Vietnamese"
+msgstr "ベトナム語"
+
+#: packages/redmine/tools.py:62
+msgid "Chinese (TW)"
+msgstr "中国語（台湾）"
+
+#: packages/wsgidav/installer.py:34
+msgid "Please try again if the problem can be solved manually by issuing the following command."
+msgstr ""
+
+#: packages/wsgidav/installer.py:35
+msgid "The default installation will allow anonymous access to a predefined path of your choosing. This can be changed later on."
+msgstr ""
+
+#: packages/wsgidav/installer.py:36
+msgid "This is the path to the local directory that will be exported via WebDAV."
+msgstr ""
+
+#: packages/wsgidav/installer.py:163
+msgid "Installing WsgiDAV"
+msgstr "WsgiDAVのインストール"
+
+#: packages/wsgidav/installer.py:184
+msgid "Local directory"
+msgstr "ローカルディレクトリ"
+
+#: packages/wsgidav/installer.py:188
+msgid "WsgiDAV configuration"
+msgstr "WsgiDAV設定"
+
+#: packages/wsgidav/tools.py:52
+msgid "Your system doesn't seem to provide the required dependecy 'xml2-config'"
+msgstr "使用中のシステムは、動作に必要な『xml2-config』が無いようです。"
+
+#: packages/wsgidav/tools.py:55
+msgid "The XML C parser and toolkit of Gnome is available at http://xmlsoft.org/"
+msgstr ""
+
+#: packages/zencart/installer.py:208
+msgid "Registering database details"
+msgstr "登録されたデーターベースの詳細"
+
+#: packages/drupal_example/tools.py:17
+#: packages/drupal/tools.py:17
+#: packages/openx/tools.py:20
+#: packages/moodle/tools.py:31
+#: packages/phpbb/tools.py:36
+msgid "The PHP interpreter does not support any of the required database modules: 'mysql', 'mysqli', or 'pgsql'"
+msgstr ""
+
+#: packages/statusnet/installer.py:208
+msgid "Communicating DB details."
+msgstr "DB通信の詳細"
+
+#: packages/openx/installer.py:176
+#: packages/moodle/installer.py:288
+msgid "Performing automatic installation"
+msgstr "自動インストールの試行"
+
+#: packages/nuxeo_dam/installer.py:173
+msgid "Nuxeo-DAM has been installed, and Cherokee is configured to automatically launch it whenever the resource is accessed if it is not already available. A one-time pre-launch has been issued to save time."
+msgstr ""
+
+#: packages/nuxeo_dam/installer.py:174
+msgid "Note that launching Nuxeo-DAM can take up a couple of  minutes on modern servers, so please be patient the first time you access it."
+msgstr ""
+
+#: packages/moodle/installer.py:69
+msgid "Username for the administrator account. Only lower case allowed."
+msgstr ""
+
+#: packages/moodle/installer.py:70
+msgid "Password for the administrator account. At least 8 mixed-case alphanumeric and non-alphanumeric characters required."
+msgstr ""
+
+#: packages/moodle/installer.py:71
+msgid "Full name of the website."
+msgstr "このサイトの長い名前"
+
+#: packages/moodle/installer.py:72
+msgid "Short name of the website."
+msgstr "このサイトの短い名前"
+
+#: packages/moodle/installer.py:73
+msgid "Domain name under which the virtual server can be accessed from the Internet, such as example.com for instance."
+msgstr ""
+
+#: packages/moodle/installer.py:76
+msgid "The installation needs to configure the following settings."
+msgstr ""
+
+#: packages/moodle/installer.py:127
+msgid "Some of your PHP settings do not meet Moodle's requirements. Please edit your PHP configuration files and try again."
+msgstr "使用中のPHPの設定は、Moodleを実行する上で適切な値になっていません。まず、PHPの設定ファイルを編集してやり直してください。"
+
+#: packages/moodle/installer.py:195
+msgid "Full sitename"
+msgstr "サイト名"
+
+#: packages/moodle/installer.py:196
+msgid "Short sitename"
+msgstr "短いサイト名"
+
+#: packages/moodle/installer.py:207
+msgid "Domain name"
+msgstr "ドメイン名"
+
+#: packages/moodle/installer.py:210
+msgid "Make sure you understand and accept the "
+msgstr ""
+
+#: packages/moodle/installer.py:211
+msgid "Moodle License"
+msgstr "Moodleのライセンス"
+
+#: packages/moodle/installer.py:212
+msgid " before proceeding. Moodle license must be accepted to proceed."
+msgstr ""
+
+#: packages/moodle/installer.py:213
+msgid "Accept license"
+msgstr "ライセンスに同意"
+
+#: packages/moodle/installer.py:280
+msgid "Moodle installation and database population is in progress. The process may take several minutes."
+msgstr ""
+
+#: packages/moodle/tools.py:186
+msgid "At least 8 characters required."
+msgstr "最低8文字の英数字を入れてください。"
+
+#: packages/moodle/tools.py:187
+msgid "At least 1 digit required."
+msgstr "少なくとも数字一文字を含める必要があります。"
+
+#: packages/moodle/tools.py:188
+msgid "At least 1 lowercase letter required."
+msgstr "少なくとも小文字一文字を含める必要があります。"
+
+#: packages/moodle/tools.py:189
+msgid "At least 1 uppercase letter required."
+msgstr "少なくとも大文字一文字を含める必要があります。"
+
+#: packages/moodle/tools.py:190
+msgid "At least 1 non-alphanumeric character required."
+msgstr "少なくとも英数字以外の文字を一文字を含める必要があります。"
+
+#: packages/moodle/tools.py:198
+msgid "Only lower case letters allowed."
+msgstr "小文字のみ許可されています。"
+
+#: packages/moodle/tools.py:203
+msgid "Must accept License"
+msgstr "ライセンスに同意する必要があります。"
+
+#: packages/moodle/tools.py:208
+msgid "The default nick name is not accessible as such from the Internet"
+msgstr "このデフォルトのニックネームは、インターネットなどからアクセス可能ではありません。"
+
+#: packages/moodle/tools.py:216
+msgid "Web path must be omitted"
+msgstr "Webのパスが入力されていません。"
+
+#: packages/broken_app/installer.py:24
+msgid "OWS Error"
+msgstr "OWSエラー"
+
+#~ msgid "Virtual Servers"
+#~ msgstr "仮想サーバー"
+
+#~ msgid ""
+#~ "<p>You are about to delete the <b>%(nick_esc)s</b> Virtual Server.</"
+#~ "p><p>Are you sure you want to proceed?</p>"
+#~ msgstr ""
+#~ "<p>あなたは、<b>%(nick_esc)s</b>の仮想サーバーを削除しようとしています。</"
+#~ "p><p>続けてもよろしいですか？</p>"
+
+#~ msgid "You are about to clone a Virtual Server. Would you like to proceed?"
+#~ msgstr ""
+#~ "あなたは、仮想サーバーを複製しようとしています。続けてもよろしいですか？"
+
+#~ msgid "Document Root directory of the new Virtual Server."
+#~ msgstr "仮想サーバーのDocument Rootディレクトリ"
+
+#~ msgid "Nick"
+#~ msgstr "ニックネーム"
+
+#~ msgid "Document Root"
+#~ msgstr "ドキュメントルート"
+
+#~ msgid "Manual configuration"
+#~ msgstr "手動設定"
+
+#~ msgid "Market installation"
+#~ msgstr "マーケットインストール"
+
+#~ msgid "Unknown"
+#~ msgstr "不明"
+
+#~ msgid "Do you really want to remove it?"
+#~ msgstr "本当に削除してもよろしいですか？"
+
+#~ msgid "Remove"
+#~ msgstr "削除"
+
+#~ msgid "Add New Virtual Server"
+#~ msgstr "仮想サーバーを追加"
+
+#~ msgid "Add"
+#~ msgstr "追加"
+
+#~ msgid "Virtual Server Configuration Assistant"
+#~ msgstr "仮想サーバー設定アシスタント"
+
+#~ msgid "Clone Virtual Server"
+#~ msgstr "仮想サーバー複製"
+
+#~ msgid "Clone"
+#~ msgstr "複製"
+
+#~ msgid "Clone Selected Virtual Server"
+#~ msgstr "選択した仮想サーバーを複製"
+
+#~ msgid "Virtual Server Filtering"
+#~ msgstr "仮想サーバーのフィルタリング"
+
+#~ msgid "Name of the environment variable"
+#~ msgstr "環境変数名"
+
+#~ msgid "Value of the environment variable"
+#~ msgstr "環境変数値"
+
+#~ msgid "The selected Information Source is about to be cloned."
+#~ msgstr "選択した情報ソースは、複製されました。"
+
+#~ msgid "Information Sources"
+#~ msgstr "ソース情報"
+
+#~ msgid "Variable"
+#~ msgstr "変数"
+
+#~ msgid "Value"
+#~ msgstr "値"
+
+#~ msgid "Environment Variables"
+#~ msgstr "環境変数"
+
+#~ msgid "Add new Environment variable"
+#~ msgstr "環境変数を追加"
+
+#~ msgid "Add new variable"
+#~ msgstr "変数を追加"
+
+#~ msgid "Source Usage"
+#~ msgstr "ソースの使用率"
+
+#~ msgid "Rule"
+#~ msgstr "ルール"
+
+#~ msgid "Source"
+#~ msgstr "ソース"
+
+#~ msgid "Type"
+#~ msgstr "種類"
+
+#~ msgid "Connection"
+#~ msgstr "接続"
+
+#~ msgid "Interpreter"
+#~ msgstr "インタプリタ"
+
+#~ msgid "Spawning timeout"
+#~ msgstr "子プロセスのタイムアウト"
+
+#~ msgid "Execute as User"
+#~ msgstr "ユーザ権限で実行"
+
+#~ msgid "Execute as Group"
+#~ msgstr "グループ権限で実行"
+
+#~ msgid "Inherit Environment"
+#~ msgstr "環境を継承"
+
+#~ msgid "Enabled"
+#~ msgstr "有効"
+
+#~ msgid "Deletion is forbidden"
+#~ msgstr "削除は禁止されています"
+
+#~ msgid "Configuration consistency"
+#~ msgstr "設定の整合性"
+
+#~ msgid "Close"
+#~ msgstr "閉じる"
+
+#~ msgid "Add New Information Source"
+#~ msgstr "新規ソース情報"
+
+#~ msgid "Clone Information Source"
+#~ msgstr "ソース情報を複製"
+
+#~ msgid "Clone Selected Information Source"
+#~ msgstr "選択されたソース情報を複製"
+
+#~ msgid "Sources Filtering"
+#~ msgstr "ソースのフィルタリング"
+
+#~ msgid "Optionally provide your name"
+#~ msgstr "必要に応じて自分の名前を提供する"
+
+#~ msgid "Server is Running"
+#~ msgstr "サーバーは起動中です"
+
+#~ msgid "Server is not Running"
+#~ msgstr "サーバーは起動していません"
+
+#~ msgid ""
+#~ "Please, try again. Do not hesitate to report the problem if it persists."
+#~ msgstr ""
+#~ "お手数ですが、もう一度やり直してください。解決しない場合は、気軽に問題を報"
+#~ "告してください。"
+
+#~ msgid "Enable Remote Services"
+#~ msgstr "リモートサービスを有効化"
+
+#~ msgid "Status"
+#~ msgstr "ステータス"
+
+#~ msgid "Stop Server"
+#~ msgstr "サーバー停止"
+
+#~ msgid "Start Server"
+#~ msgstr "サーバー起動"
+
+#~ msgid "Hostname"
+#~ msgstr "ホスト名"
+
+#~ msgid "Modified"
+#~ msgstr "修正日"
+
+#~ msgid "Not found"
+#~ msgstr "見つかりません"
+
+#~ msgid "Config File"
+#~ msgstr "設定ファイル"
+
+#~ msgid "Server Information"
+#~ msgstr "サーバー情報"
+
+#~ msgid "Sign in"
+#~ msgstr "サインイン"
+
+#~ msgid "Remote Services"
+#~ msgstr "リモートサービス"
+
+#~ msgid "Backup Service"
+#~ msgstr "サービスをバックアップ"
+
+#~ msgid "Processors"
+#~ msgstr "プロセス数"
+
+#~ msgid "Memory"
+#~ msgstr "メモリ"
+
+#~ msgid "Choose"
+#~ msgstr "選択"
+
+#~ msgid "Proud Cherokee User List Submission"
+#~ msgstr "Cherokee利用ユーザリストへ登録"
+
+#~ msgid "Proud Cherokee Users"
+#~ msgstr "Cherokee利用ユーザ"
+
+#~ msgid "View list…"
+#~ msgstr "リスト一覧…"
+
+#~ msgid "Send your domains"
+#~ msgstr "ドメインを送信"
+
+#~ msgid "Mailing List Subscription"
+#~ msgstr "メーリングリストの申し込み"
+
+#~ msgid "Subscribe"
+#~ msgstr "通知"
+
+#~ msgid "Your email address"
+#~ msgstr "あなたのメールアドレス"
+
+#~ msgid "Your name"
+#~ msgstr "あなたの名前"
+
+#~ msgid "Support"
+#~ msgstr "サポート"
+
+#~ msgid "Getting started"
+#~ msgstr "はじめに"
+
+#~ msgid "Subscribe to mailing lists"
+#~ msgstr "メーリングリストを購読"
+
+#~ msgid "Report a bug"
+#~ msgstr "バグを報告"
+
+#~ msgid "Purchase commercial support"
+#~ msgstr "有償サポートを受ける"
+
+#~ msgid "About Cherokee"
+#~ msgstr "Cherokeeについて"
+
+#~ msgid "Join the Cherokee Community:"
+#~ msgstr "Cherokeeのコミュニティに参加："
+
+#~ msgid "Visit the Cherokee Project Website"
+#~ msgstr "Cherokeeプロジェクトサイトに行く"
+
+#~ msgid "Follow us on Twitter"
+#~ msgstr "Twitterでフォロー"
+
+#~ msgid "Join us on Facebook"
+#~ msgstr "Facebookに参加"
+
+#~ msgid "Become a member of Cherokee group on LinkedIn"
+#~ msgstr "LinkedInのCherokeeグループのメンバーになる"
+
+#~ msgid "Chat with us at irc.freenode.net"
+#~ msgstr "irc.freenode.netで、チャットする"
+
+#~ msgid "Shutdown Cherokee-admin"
+#~ msgstr "Cherokee-adminをシャットダウン"
+
+#~ msgid "Shut down"
+#~ msgstr "シャットダウン"
+
+#~ msgid "Are you sure you want to proceed?"
+#~ msgstr "続けてもよろしいですか？"
+
+#~ msgid "Cherokee-admin has been shut down"
+#~ msgstr "Cherokee-adminは、シャットダウンされました"
+
+#~ msgid "Shut down Cherokee-Admin"
+#~ msgstr "Cherokee-adminをシャットダウン"
+
+#~ msgid "Welcome to Cherokee Admin"
+#~ msgstr "Cherokee管理人室へようこそ"
+
+#~ msgid "Brazilian Portuguese"
+#~ msgstr "ブラジル語"
+
+#~ msgid "Chinese Simplified"
+#~ msgstr "簡体中国語"
+
+#~ msgid "Default"
+#~ msgstr "デフォルト"
+
+#~ msgid "Product only"
+#~ msgstr "プロダクト名のみ"
+
+#~ msgid "Product + Minor version"
+#~ msgstr "プロダクト名＋マイナーバージョン"
+
+#~ msgid "Product + Minimal version"
+#~ msgstr "プロダクト名＋ミニマムバージョン"
+
+#~ msgid "Product + Platform"
+#~ msgstr "プロダクト名＋プラットフォーム"
+
+#~ msgid "Full Server string"
+#~ msgstr "全サーバー情報"
+
+#~ msgid "None"
+#~ msgstr "なし"
+
+#~ msgid "Static Content"
+#~ msgstr "静的コンテンツ"
+
+#~ msgid "Only Listing"
+#~ msgstr "リスティングのみ"
+
+#~ msgid "Redirection"
+#~ msgstr "リダイレクト"
+
+#~ msgid "HTTP Reverse Proxy"
+#~ msgstr "HTTP逆プロクシ"
+
+#~ msgid "Upload Reporting"
+#~ msgstr "アップロードリポート"
+
+#~ msgid "Audio/Video Streaming"
+#~ msgstr "音声／動画ストリーミング"
+
+#~ msgid "Server Side Includes"
+#~ msgstr "サーバーサイドインクルード"
+
+#~ msgid "Hidden Downloads"
+#~ msgstr "隠れたダウンロード"
+
+#~ msgid "Server Info"
+#~ msgstr "サーバー情報"
+
+#~ msgid "MySQL Bridge"
+#~ msgstr "MySQLブリッジ"
+
+#~ msgid "HTTP Error"
+#~ msgstr "HTTPエラー"
+
+#~ msgid "Remote Administration"
+#~ msgstr "リモート管理"
+
+#~ msgid "1x1 Transparent GIF"
+#~ msgstr "1x1の透過GIF"
+
+#~ msgid "Drop Connection"
+#~ msgstr "接続をドロップ"
+
+#~ msgid "Default errors"
+#~ msgstr "デフォルトのエラー"
+
+#~ msgid "Custom redirections"
+#~ msgstr "カスタムリダイレクト設定"
+
+#~ msgid "Closest match"
+#~ msgstr "クローゼット一致"
+
+#~ msgid "Plain text file"
+#~ msgstr "平文テキストファイル"
+
+#~ msgid "Htpasswd file"
+#~ msgstr "Htpasswdファイル"
+
+#~ msgid "Htdigest file"
+#~ msgstr "Htdigestファイル"
+
+#~ msgid "LDAP server"
+#~ msgstr "LDAPサーバー"
+
+#~ msgid "MySQL server"
+#~ msgstr "MySQLサーバー"
+
+#~ msgid "PAM"
+#~ msgstr "PAM認証"
+
+#~ msgid "Fixed list"
+#~ msgstr "完了リスト"
+
+#~ msgid "Basic"
+#~ msgstr "Basic認証"
+
+#~ msgid "Digest"
+#~ msgstr "Digest認証"
+
+#~ msgid "Basic or Digest"
+#~ msgstr "BasicかDigestか"
+
+#~ msgid "Apache compatible"
+#~ msgstr "Apache互換"
+
+#~ msgid "Custom"
+#~ msgstr "カスタム"
+
+#~ msgid "File"
+#~ msgstr "ファイル"
+
+#~ msgid "System logger"
+#~ msgstr "システムログ"
+
+#~ msgid "Standard Error"
+#~ msgstr "標準エラー"
+
+#~ msgid "Execute program"
+#~ msgstr "実行プログラム"
+
+#~ msgid "Round Robin"
+#~ msgstr "ラウンドロビン"
+
+#~ msgid "IP Hash"
+#~ msgstr "IPハッシュ"
+
+#~ msgid "Failover"
+#~ msgstr "フェールオーバー"
+
+#~ msgid "Local interpreter"
+#~ msgstr "ローカルインタプリタ"
+
+#~ msgid "Remote host"
+#~ msgstr "リモートホスト"
+
+#~ msgid "Round-robin"
+#~ msgstr "ラウンドロビン"
+
+#~ msgid "Dynamic"
+#~ msgstr "動的"
+
+#~ msgid "External"
+#~ msgstr "外部"
+
+#~ msgid "Internal"
+#~ msgstr "内部"
+
+#~ msgid "Extensions"
+#~ msgstr "拡張子"
+
+#~ msgid "Regular Expression"
+#~ msgstr "正規表現"
+
+#~ msgid "Header"
+#~ msgstr "ヘッダー"
+
+#~ msgid "File Exists"
+#~ msgstr "ファイル存在"
+
+#~ msgid "HTTP Method"
+#~ msgstr "HTTPメソッド"
+
+#~ msgid "Incoming IP/Port"
+#~ msgstr "入力IP／ポート"
+
+#~ msgid "Full Path"
+#~ msgstr "フルパス"
+
+#~ msgid "Connected from"
+#~ msgstr "接続元"
+
+#~ msgid "Match Nickname"
+#~ msgstr "ニックネームに一致"
+
+#~ msgid "Wildcards"
+#~ msgstr "ワイルドカード"
+
+#~ msgid "Regular Expressions"
+#~ msgstr "正規表現"
+
+#~ msgid "Server IP"
+#~ msgstr "サーバーのIP"
+
+#~ msgid "Not set"
+#~ msgstr "設定なし"
+
+#~ msgid "Already expired on 1970"
+#~ msgstr "期限を1970にする"
+
+#~ msgid "Do not expire until 2038"
+#~ msgstr "期限を2038年にして定めない"
+
+#~ msgid "Custom value"
+#~ msgstr "カスタム値"
+
+#~ msgid "No TLS/SSL"
+#~ msgstr "TLS/SSLなし"
+
+#~ msgid "Off"
+#~ msgstr "切り"
+
+#~ msgid "Enhanced Virtual Hosting"
+#~ msgstr "仮想ホスティングを強化"
+
+#~ msgid "Accept"
+#~ msgstr "了承"
+
+#~ msgid "Require"
+#~ msgstr "必須"
+
+#~ msgid "Disabled"
+#~ msgstr "無効"
+
+#~ msgid "RRDtool graphs"
+#~ msgstr "RRDtoolグラフ"
+
+#~ msgid "Local time"
+#~ msgstr "ローカル時間"
+
+#~ msgid "UTC: Coordinated Universal Time"
+#~ msgstr "UTC：協定された世界時間"
+
+#~ msgid "POST tracker"
+#~ msgstr "POSTトラッカー"
+
+#~ msgid "Public"
+#~ msgstr "パブリック"
+
+#~ msgid "Private"
+#~ msgstr "プライベート"
+
+#~ msgid "No Cache"
+#~ msgstr "キャッシュなし"
+
+#~ msgid "0 - No compression"
+#~ msgstr "0 - 無圧縮"
+
+#~ msgid "9 - Max compression"
+#~ msgstr "9 - 最大圧縮"
+
+#~ msgid "Delete"
+#~ msgstr "削除"
+
+#~ msgid "Active"
+#~ msgstr "アクティブ"
+
+#~ msgid "Inactive"
+#~ msgstr "非アクティブ"
+
+#~ msgid "Loading"
+#~ msgstr "読込中"
+
+#~ msgid "Forbidden"
+#~ msgstr "アクセス拒否"
+
+#~ msgid "Optional"
+#~ msgstr "オプション"
+
+#~ msgid "Disable"
+#~ msgstr "無効"
+
+#~ msgid "Prev"
+#~ msgstr "前へ"
+
+#~ msgid "Create"
+#~ msgstr "作成"
+
+#~ msgid "ERROR: Couldn't unpack '%s'"
+#~ msgstr "エラー：「%s」の展開に失敗しました。"
+
+#~ msgid "Could not copy configuration to "
+#~ msgstr "以下へ設定をコピーすることができませんでした："
+
+#~ msgid "Upload"
+#~ msgstr "アップロード"
+
+#~ msgid "left"
+#~ msgstr "左"
+
+#~ msgid "right"
+#~ msgstr "右"
+
+#~ msgid "Previous"
+#~ msgstr "前へ"
+
+#~ msgid "Comma separated list of files. Rule applies if one exists."
+#~ msgstr ""
+#~ "ファイルの一覧をカンマ区切りで入力してください。どれか一つがマッチします。"
+
+#~ msgid "Match the request if any file exists."
+#~ msgstr "リクエストしたファイルが存在したときにマッチ"
+
+#~ msgid "Match a specific list of files"
+#~ msgstr "特定のリストのファイルにマッチ"
+
+#~ msgid "Match any file"
+#~ msgstr "すべてのファイルにマッチ"
+
+#~ msgid "Files"
+#~ msgstr "ファイル"
+
+#~ msgid "Use I/O cache"
+#~ msgstr "I/Oキャッシュを使用"
+
+#~ msgid "Only match files"
+#~ msgstr "マッチしたファイルのみ"
+
+#~ msgid "If dir, check index files"
+#~ msgstr "ディレクトリの場合、indexファイルをチェック"
+
+#~ msgid "File exists"
+#~ msgstr "ファイル存在"
+
+#~ msgid "File %(fname)s exists"
+#~ msgstr "ファイル「%(fname)s」が存在するとき"
+
+#~ msgid "File exists (never matched)"
+#~ msgstr "ファイルが存在するとき（マッチしない）"
+
+#~ msgid "Select all"
+#~ msgstr "すべてを選択"
+
+#~ msgid "Select none"
+#~ msgstr "選択を解除"
+
+#~ msgid "File Sending"
+#~ msgstr "ファイルの送信"
+
+#~ msgid "Advanced Virtual Hosting"
+#~ msgstr "拡張バーチャルホスト"
+
+#~ msgid "Dynamic Document Root"
+#~ msgstr "動的なドキュメントルート"
+
+#~ msgid "Check Document Root"
+#~ msgstr "ドキュメントルートを確認"
+
+#~ msgid "Check"
+#~ msgstr "確認"
+
+#~ msgid "GZip encoder"
+#~ msgstr "GZipエンコーダー"
+
+#~ msgid ""
+#~ "Compression Level from 0 to 9, where 0 is no compression, 1 best speed, "
+#~ "and 9 best compression."
+#~ msgstr ""
+#~ "圧縮レベルは0～9を指定できます。0の場合は無圧縮で、1はスピード優先、9は圧"
+#~ "縮率優先です。"
+
+#~ msgid "Compression Level"
+#~ msgstr "圧縮レベル"
+
+#~ msgid "Regular expression against which the request will be executed."
+#~ msgstr "リクエスト時に正規表現を行います。"
+
+#~ msgid "Full path to the Htpasswd formated password file."
+#~ msgstr ".htpasswd形式のパスワードファイルへのフルパス"
+
+#~ msgid "Password File"
+#~ msgstr "パスワードファイル"
+
+#~ msgid "Htpasswd Password File"
+#~ msgstr "Htpasswdのパスワードファイル"
+
+#~ msgid "POST Report"
+#~ msgstr "POSTリクエスト"
+
+#~ msgid "Target language"
+#~ msgstr "ターゲット言語"
+
+#~ msgid "Plain text"
+#~ msgstr "平文テキスト"
+
+#~ msgid "Full path to the plain text password file."
+#~ msgstr "平文テキストのパスワードファイルへのパス"
+
+#~ msgid "Plain Password File"
+#~ msgstr "平文パスワードファイル"
+
+#~ msgid "Deflate encoder"
+#~ msgstr "Deflateエンコーダー"
+
+#~ msgid "Authentication list"
+#~ msgstr "認証リスト"
+
+#~ msgid "Fixed Authentication List"
+#~ msgstr "修正された認証リスト"
+
+#~ msgid "Add New Pair"
+#~ msgstr "新しいペアを追加"
+
+#~ msgid "Allow PathInfo"
+#~ msgstr "PathInfoを許可"
+
+#~ msgid "Allow"
+#~ msgstr "許可"
+
+#~ msgid "Allow Directory Listing"
+#~ msgstr "ディレクトリ一覧表示を許可"
+
+#~ msgid "Parsing"
+#~ msgstr "パース"
+
+#~ msgid "1x1 Empty GIF"
+#~ msgstr "1x1の空のGIF"
+
+#~ msgid "MySQL balancing"
+#~ msgstr "MySQLバランサを使用"
+
+#~ msgid "DB balancig recipe"
+#~ msgstr "データーベースの負荷分散方法"
+
+#~ msgid "User to access the database."
+#~ msgstr "データーベースにアクセスするユーザ"
+
+#~ msgid "Database to connect to."
+#~ msgstr "データーベースの接続先"
+
+#~ msgid "DB User"
+#~ msgstr "DBユーザ"
+
+#~ msgid "DB Password"
+#~ msgstr "DBパスワード"
+
+#~ msgid "Data Base"
+#~ msgstr "データーベース"
+
+#~ msgid "Serialization"
+#~ msgstr "シリアライズ"
+
+#~ msgid "Balancer"
+#~ msgstr "バランサ"
+
+#~ msgid "Data Base Balancing"
+#~ msgstr "データーベースのバランシング"
+
+#~ msgid "IP or Subnet"
+#~ msgstr "IPかサブネット"
+
+#~ msgid "New IP/Subnet"
+#~ msgstr "新規IP／サブネット"
+
+#~ msgid "Add new entry"
+#~ msgstr "新規エントリ"
+
+#~ msgid "Add new IP/Subnet…"
+#~ msgstr "IP／サブネットを追加…"
+
+#~ msgid "SCGI Specific"
+#~ msgstr "SCGIの詳細"
+
+#~ msgid "Choose the listing theme."
+#~ msgstr "一覧表示で使用するテーマ"
+
+#~ msgid ""
+#~ "Web directory where the icon files are located. Default: <i>/icons</i>."
+#~ msgstr "Web上のアイコンの格納ディレクトリ。デフォルト：<i>/icons</i>"
+
+#~ msgid "Only listing"
+#~ msgstr "一覧表示のみ"
+
+#~ msgid "Show Size"
+#~ msgstr "サイズを表示"
+
+#~ msgid "Show"
+#~ msgstr "表示"
+
+#~ msgid "Show Date"
+#~ msgstr "日付を表示"
+
+#~ msgid "Show User"
+#~ msgstr "ユーザを表示"
+
+#~ msgid "Show Group"
+#~ msgstr "グループを表示"
+
+#~ msgid "Show Backup files"
+#~ msgstr "バックアップを表示"
+
+#~ msgid "Show Hidden files"
+#~ msgstr "隠されたファイルを表示"
+
+#~ msgid "Allow symbolic links"
+#~ msgstr "シンボリックリンクを表示"
+
+#~ msgid "Redirect symbolic links"
+#~ msgstr "シンボリックリンクのリダイレクト先"
+
+#~ msgid "Listing"
+#~ msgstr "一欄"
+
+#~ msgid "Theme"
+#~ msgstr "テーマ"
+
+#~ msgid "Icons dir"
+#~ msgstr "アイコンディレクトリ"
+
+#~ msgid "Notice files"
+#~ msgstr "注意書きファイル"
+
+#~ msgid "Hidden files"
+#~ msgstr "隠されたファイル"
+
+#~ msgid "Theming"
+#~ msgstr "テーマ"
+
+#~ msgid "Reverse Proxy"
+#~ msgstr "逆プロクシ"
+
+#~ msgid "Add RegEx"
+#~ msgstr "正規表現を追加"
+
+#~ msgid "Add Header Entry"
+#~ msgstr "ヘッダーエントリを追加"
+
+#~ msgid "Hide Header"
+#~ msgstr "ヘッダーを隠す"
+
+#~ msgid "Reuse connections"
+#~ msgstr "再接続"
+
+#~ msgid "Allow Keepalive"
+#~ msgstr "KeepAliveを許可"
+
+#~ msgid "Preserve"
+#~ msgstr "保持"
+
+#~ msgid "Preserve Server Header"
+#~ msgstr "サーバーのヘッダーを保持"
+
+#~ msgid "Use VServer error handler"
+#~ msgstr "仮想サーバーエラーハンドラを使用"
+
+#~ msgid "Use it"
+#~ msgstr "使用する"
+
+#~ msgid "Reverse Proxy Settings"
+#~ msgstr "リバースプロクシ設定"
+
+#~ msgid "Request"
+#~ msgstr "リクエスト"
+
+#~ msgid "URL Rewriting"
+#~ msgstr "URLのリライト"
+
+#~ msgid "Header Addition"
+#~ msgstr "追加するヘッダー"
+
+#~ msgid "Hide Headers"
+#~ msgstr "ヘッダーを隠す"
+
+#~ msgid "Reply"
+#~ msgstr "変身"
+
+#~ msgid "Back-end Servers"
+#~ msgstr "バックエンドサーバー"
+
+#~ msgid "Speedup Factor"
+#~ msgstr "スピードアップ要因"
+
+#~ msgid "Initial Boost"
+#~ msgstr "開始時ブースト"
+
+#~ msgid "Domain pattern"
+#~ msgstr "ドメインパターン"
+
+#~ msgid "New host name"
+#~ msgstr "新規ホスト名"
+
+#~ msgid "Add new wildcard…"
+#~ msgstr "新規ワイルドカード"
+
+#~ msgid "Accepted Domains"
+#~ msgstr "許可ドメイン"
+
+#~ msgid "Hidden Download"
+#~ msgstr "隠されたダウンロード"
+
+#~ msgid "Secret"
+#~ msgstr "秘密"
+
+#~ msgid "Timeout"
+#~ msgstr "タイムアウト"
+
+#~ msgid "Covering Parameters"
+#~ msgstr "パラメーターの変換"
+
+#~ msgid "Htdigest Password File"
+#~ msgstr "Htdigestパスワードファイル"
+
+#~ msgid "HTTP Custom Error"
+#~ msgstr "カスタムHTTPエラー"
+
+#~ msgid "Custom Error"
+#~ msgstr "カスタムエラー"
+
+#~ msgid "MySQL server IP address."
+#~ msgstr "MｙSQLサーバーのIPアドレス"
+
+#~ msgid "Server port to connect to."
+#~ msgstr "接続するサーバーのポート"
+
+#~ msgid "Full path of Unix socket to communicate with the data base."
+#~ msgstr "データーベースへ接続するためのUnixソケットへのフルパス"
+
+#~ msgid "Host"
+#~ msgstr "ホスト"
+
+#~ msgid "Port"
+#~ msgstr "ポート"
+
+#~ msgid "Unix Socket"
+#~ msgstr "Unixソケット"
+
+#~ msgid "SQL Query"
+#~ msgstr "SQLクエリ"
+
+#~ msgid "Password Hash"
+#~ msgstr "パスワードハッシュ"
+
+#~ msgid "MySQL Connection"
+#~ msgstr "MySQL接続"
+
+#~ msgid "HTTP Error to match."
+#~ msgstr "一致するHTTPエラー"
+
+#~ msgid "Default Error"
+#~ msgstr "デフォルトのエラー"
+
+#~ msgid "Error"
+#~ msgstr "エラー"
+
+#~ msgid "Add New Custom Error"
+#~ msgstr "新しいカスタムエラーを追加"
+
+#~ msgid "Add New"
+#~ msgstr "追加"
+
+#~ msgid "Argument name"
+#~ msgstr "引数名"
+
+#~ msgid "Regular Expression for the match"
+#~ msgstr "正規表現に一致"
+
+#~ msgid "Match a specific argument"
+#~ msgstr "固有の引数と一致"
+
+#~ msgid "Match any argument"
+#~ msgstr "すべての引数と一致"
+
+#~ msgid "Match type"
+#~ msgstr "マッチタイプ"
+
+#~ msgid "Argument"
+#~ msgstr "引数"
+
+#~ msgid "Web Directory"
+#~ msgstr "Webディレクトリ"
+
+#~ msgid "Regular expression."
+#~ msgstr "正規表現"
+
+#~ msgid "Matches a Regular Expression"
+#~ msgstr "正規表現にマッチ"
+
+#~ msgid "Full header"
+#~ msgstr "全ヘッダー"
+
+#~ msgid "Only version information"
+#~ msgstr "バージョン情報のみ"
+
+#~ msgid "Show Information"
+#~ msgstr "情報表示"
+
+#~ msgid "Privacy Settings"
+#~ msgstr "プライバシー設定"
+
+#~ msgid "IPs and Subnets"
+#~ msgstr "IPとサブネット"
+
+#~ msgid "Add another entry"
+#~ msgstr "他のエントリを追加"
+
+#~ msgid "From"
+#~ msgstr "元"
+
+#~ msgid "Round Robin Database directory"
+#~ msgstr "ラウンドロビンのデーターベースのディレクトリ"
+
+#~ msgid "Custom rrdtool binary"
+#~ msgstr "rrdtoolのバイナリを指定"
+
+#~ msgid ""
+#~ "Comma-separated list of File Extension to which the configuration will be "
+#~ "applied."
+#~ msgstr ""
+#~ "設定を反映させたいファイルの拡張子をコンマで区切って指定してください。"
+
+#~ msgid "Check local file"
+#~ msgstr "ローカルのファイルをチェック"
+
+#~ msgid "Full Web Paths"
+#~ msgstr "全Webのパス"
+
+#~ msgid "Add another path"
+#~ msgstr "他のパスを追加"
+
+#~ msgid "Path"
+#~ msgstr "パス"
+
+#~ msgid "Paths"
+#~ msgstr "パス"
+
+#~ msgid "FastCGI Specific"
+#~ msgstr "FastCGIの詳細"
+
+#~ msgid "LDAP"
+#~ msgstr "LDAP認証"
+
+#~ msgid "LDAP server IP address."
+#~ msgstr "LDAPサーバーのIPアドレス"
+
+#~ msgid "LDAP server port to connect to. Default: 389"
+#~ msgstr "LDAPサーバーの接続ポート。デフォルトは389です。"
+
+#~ msgid "CA File for the TLS connections."
+#~ msgstr "TLS接続で使用するCAファイル"
+
+#~ msgid "Server"
+#~ msgstr "サーバー"
+
+#~ msgid "Base Domain"
+#~ msgstr "基準ドメイン"
+
+#~ msgid "Filter"
+#~ msgstr "フィルタ"
+
+#~ msgid "Use TLS"
+#~ msgstr "TLSを使用"
+
+#~ msgid "CA File"
+#~ msgstr "CAファイル"
+
+#~ msgid "LDAP Connection"
+#~ msgstr "LDAP接続"
+
+#~ msgid "Redirections"
+#~ msgstr "リダイレクト"
+
+#~ msgid "Rule list"
+#~ msgstr "ルール一覧"
+
+#~ msgid "Add New Regular Expression"
+#~ msgstr "正規表現を追加"
+
+#~ msgid "Add New RegEx"
+#~ msgstr "正規表現を追加"
+
+#~ msgid "Method"
+#~ msgstr "方法"
+
+#~ msgid "IP (Port):"
+#~ msgstr "IP（ポート）："
+
+#~ msgid "Port:"
+#~ msgstr "ポート："
+
+#~ msgid "No"
+#~ msgstr "いいえ"
+
+#~ msgid "Yes"
+#~ msgstr "はい"
+
+#~ msgid "Selected Ports"
+#~ msgstr "選択されたポート"
+
+#~ msgid "Assign new IP/Port"
+#~ msgstr "新しいIP／ポートを割り当て"
+
+#~ msgid "Ports"
+#~ msgstr "ポート"
+
+#~ msgid "New Regular Expression"
+#~ msgstr "新規正規表現"
+
+#~ msgid "Add New Entry"
+#~ msgstr "新規エントリ"
+
+#~ msgid "Add new entry…"
+#~ msgstr "エントリを追加…"
+
+#~ msgid "Cherokee Market"
+#~ msgstr "Cherokeeマーケット"
+
+#~ msgid "Apps Center"
+#~ msgstr "アプリセンター"
+
+#~ msgid "Market"
+#~ msgstr "マーケット"
+
+#~ msgid "Free"
+#~ msgstr "無料"
+
+#~ msgid "or"
+#~ msgstr "か、"
+
+#~ msgid "Featured Applications"
+#~ msgstr "おすすめアプリケーション"
+
+#~ msgid "Could not access the repository"
+#~ msgstr "リポジトリにアクセスすることができませんでした。"
+
+#~ msgid "Top Applications"
+#~ msgstr "人気のアプリケーション"
+
+#~ msgid "Could not send the review"
+#~ msgstr "レビューを送ることができませんでした。"
+
+#~ msgid "Title"
+#~ msgstr "タイトル"
+
+#~ msgid "Review"
+#~ msgstr "レビュー"
+
+#~ msgid "How do you rate %(application_name)s?"
+#~ msgstr "「%(application_name)s」への評価はいくつですか？"
+
+#~ msgid "Show error details"
+#~ msgstr "詳細なエラーを表示"
+
+#~ msgid "Hide error details"
+#~ msgstr "詳細なエラーを隠す"
+
+#~ msgid "Unknown Error"
+#~ msgstr "不明なエラー"
+
+#~ msgid "Error executing"
+#~ msgstr "エラー発生"
+
+#~ msgid "Categories"
+#~ msgstr "カテゴリ"
+
+#~ msgid "Category"
+#~ msgstr "カテゴリ"
+
+#~ msgid "Empty Category"
+#~ msgstr "空のカテゴリ"
+
+#~ msgid "Market Home"
+#~ msgstr "マーケットホーム"
+
+#~ msgid "Maintanance"
+#~ msgstr "メンテナンス"
+
+#~ msgid "Clean up"
+#~ msgstr "クリーンナップ"
+
+#~ msgid "Maintenance"
+#~ msgstr "メンテナンス"
+
+#~ msgid "Application"
+#~ msgstr "アプリケーション"
+
+#~ msgid "Date"
+#~ msgstr "日付"
+
+#~ msgid "Unfinished"
+#~ msgstr "未完"
+
+#~ msgid "DB user"
+#~ msgstr "DBユーザ"
+
+#~ msgid "DB password"
+#~ msgstr "DBのパスワード"
+
+#~ msgid "My Library"
+#~ msgstr "私のライブラリ"
+
+#~ msgid "Search"
+#~ msgstr "検索"
+
+#~ msgid "Search Result"
+#~ msgstr "検索結果"
+
+#~ msgid "Supported"
+#~ msgstr "サポート済み"
+
+#~ msgid "Unsupported"
+#~ msgstr "未サポート"
+
+#~ msgid "Deployment methods"
+#~ msgstr "デプロイ方法"
+
+#~ msgid "Operating Systems"
+#~ msgstr "オペレーティングシステム"
+
+#~ msgid "Databases"
+#~ msgstr "データーベース"
+
+#~ msgid "Install"
+#~ msgstr "インストール"
+
+#~ msgid "Report Application"
+#~ msgstr "アプリケーションを報告"
+
+#~ msgid "Report issue"
+#~ msgstr "問題を報告"
+
+#~ msgid "Version"
+#~ msgstr "バージョン"
+
+#~ msgid "Packager"
+#~ msgstr "パッケージャー"
+
+#~ msgid "No screenshots"
+#~ msgstr "スクリーンショットなし"
+
+#~ msgid "Screenshots"
+#~ msgstr "スクリーンショット"
+
+#~ msgid "Description"
+#~ msgstr "概要"
+
+#~ msgid "Application not found"
+#~ msgstr "アプリケーションがありません"
+
+#~ msgid "The package cannot be installed"
+#~ msgstr "そのパッケージはインストールされていません。"
+
+#~ msgid "Internal Error"
+#~ msgstr "内部エラー"
+
+#~ msgid "Comments"
+#~ msgstr "コメント"
+
+#~ msgid "Report Issue"
+#~ msgstr "問題を報告"
+
+#~ msgid "Unpacking application…"
+#~ msgstr "アプリケーションを展開中…"
+
+#~ msgid "The applicaction is being unpacked…"
+#~ msgstr "アプリケーションは展開されました…"
+
+#~ msgid "Setting it up…"
+#~ msgstr "設定中…"
+
+#~ msgid "has been installed successfully"
+#~ msgstr "のインストールは成功しました。"
+
+#~ msgid "your new application"
+#~ msgstr "あなたの新しいアプリケーション"
+
+#~ msgid "Contact Support & Customer Service"
+#~ msgstr "サポートとカスタマーサービスにコンタクト"
+
+#~ msgid ""
+#~ "You are about to submit a report for an application that is not working "
+#~ "for you."
+#~ msgstr ""
+#~ "アプリケーションが正常に動作しなかった場合は、その時のレポートを送信するこ"
+#~ "とができます。"
+
+#~ msgid "We are sorry, but the report could not be sent."
+#~ msgstr "レポートの送信ができませんでした。"
+
+#~ msgid ""
+#~ "Thank you for submitting the application report. Our support team will "
+#~ "review it as soon as possible."
+#~ msgstr ""
+#~ "アプリケーションのレポートを送信していただきありがとうございます。私たちの"
+#~ "サポートチームは、この問題を再調査します。"
+
+#~ msgid "Could not send the report"
+#~ msgstr "報告の送信ができませんでした"
+
+#~ msgid "Report sent successfully"
+#~ msgstr "報告は正常に送られました"
+
+#~ msgid "Report"
+#~ msgstr "報告"
+
+#~ msgid ""
+#~ "<p><b>WARNING</b>: This section contains advanced\n"
+#~ "configuration parameters. Changing things is not recommended unless\n"
+#~ "you really know what you are doing.</p>"
+#~ msgstr ""
+#~ "<p><b>警告</b>：このセクションは特別なパラメータを変更します。\n"
+#~ "もしも、どういうことをするのかわからない場合は、絶対にいじらないで\n"
+#~ "ください。</p>"
+
+#~ msgid "Advanced"
+#~ msgstr "拡張"
+
+#~ msgid "Allowed"
+#~ msgstr "許可"
+
+#~ msgid "Chunked Encoding"
+#~ msgstr "エンコードの区別"
+
+#~ msgid "Polling Method"
+#~ msgstr "ポーリング方法"
+
+#~ msgid "Sendfile min size"
+#~ msgstr "Sendfileの最小サイズ"
+
+#~ msgid "Sendfile max size"
+#~ msgstr "Sendfileの最大サイズ"
+
+#~ msgid "Connections"
+#~ msgstr "接続数"
+
+#~ msgid "Thread Number"
+#~ msgstr "スレッド番号"
+
+#~ msgid "Thread Policy"
+#~ msgstr "スレッドポリシー"
+
+#~ msgid "File descriptors"
+#~ msgstr "ファイルの概要"
+
+#~ msgid "Log flush time"
+#~ msgstr "ログをフラッシュするまでの時間"
+
+#~ msgid "Nonces clean up time"
+#~ msgstr "臨時のクリーンアップ時間"
+
+#~ msgid "Resources"
+#~ msgstr "リソース"
+
+#~ msgid "Max pages"
+#~ msgstr "最大ページ数"
+
+#~ msgid "File Min Size"
+#~ msgstr "最小ファイルサイズ"
+
+#~ msgid "File Max Size"
+#~ msgstr "最大ファイルサイズ"
+
+#~ msgid "I/O cache"
+#~ msgstr "I/Oキャッシュ"
+
+#~ msgid "Panic action"
+#~ msgstr "パニック時のアクション"
+
+#~ msgid "PID file"
+#~ msgstr "PIDファイル"
+
+#~ msgid "Special Files"
+#~ msgstr "特別なファイル"
+
+#~ msgid "Allow SSL v2"
+#~ msgstr "SSL v2を許可"
+
+#~ msgid "Handshake Timeout"
+#~ msgstr "ハンドシェイクのタイムアウト"
+
+#~ msgid "DH parameters: 512 bits"
+#~ msgstr "DHパラメーター：512ビット"
+
+#~ msgid "DH parameters: 1024 bits"
+#~ msgstr "DHパラメーター：1024ビット"
+
+#~ msgid "DH parameters: 2048 bits"
+#~ msgstr "DHパラメーター：2048ビット"
+
+#~ msgid "DH parameters: 4096 bits"
+#~ msgstr "DHパラメーター：4096ビット"
+
+#~ msgid "Advanced Configuration"
+#~ msgstr "拡張設定"
+
+#~ msgid "Welcome to the ColdFusion Wizard"
+#~ msgstr "ColdFusionウィザードへようこそ"
+
+#~ msgid "ColdFusion Details"
+#~ msgstr "ColdFusionの詳細"
+
+#~ msgid "New Virtual Server Details"
+#~ msgstr "新規仮想サーバーの詳細"
+
+#~ msgid "Public Web Directory"
+#~ msgstr "Web上に公開するディレクトリ"
+
+#~ msgid "New Host Name"
+#~ msgstr "新規ホスト名"
+
+#~ msgid "Welcome to the Concrete5 Wizard"
+#~ msgstr "Concrete5ウィザードへようこそ"
+
+#~ msgid "Application Source Code"
+#~ msgstr "アプリケーションのソースコード"
+
+#~ msgid "Use Same Logs as"
+#~ msgstr "以下のログと同じ："
+
+#~ msgid "Source Directory"
+#~ msgstr "ソースのディレクトリ"
+
+#~ msgid "Welcome to the mono Wizard"
+#~ msgstr "monoウィザードへようこそ"
+
+#~ msgid "Mono Project"
+#~ msgstr "Monoプロジェクト"
+
+#~ msgid "Project Directory"
+#~ msgstr "プロジェクトディレクトリ"
+
+#~ msgid "Mono Server Binary"
+#~ msgstr "Monoサーバーバイナリ"
+
+#~ msgid "Welcome to the Django wizard"
+#~ msgstr "Djangoウィザードへようこそ"
+
+#~ msgid "Django Local Directory"
+#~ msgstr "Djangoのローカルディレクトリ"
+
+#~ msgid "Welcome to the Symfony Wizard"
+#~ msgstr "Symfonyウィザードへようこそ"
+
+#~ msgid "Project Source"
+#~ msgstr "プロジェクトソース"
+
+#~ msgid "Symfony Package"
+#~ msgstr "Symfonyパッケージ"
+
+#~ msgid "Welcome to the Hotlinking Wizard"
+#~ msgstr "直リンクウィザードへようこそ"
+
+#~ msgid "This wizard stops other domains from hot-linking your media files."
+#~ msgstr ""
+#~ "このウィザードは、外部ドメインからメディアファイルへの直リンクを禁止させま"
+#~ "す。"
+
+#~ msgid "Anti-HotLinking Information"
+#~ msgstr "アンチ直リンク情報"
+
+#~ msgid "Domain allowed to access the files. Eg: example.com"
+#~ msgstr "ファイルへのアクセスを許可するドメイン。例：example.com"
+
+#~ msgid "Show error"
+#~ msgstr "エラーの表示"
+
+#~ msgid "Redirect"
+#~ msgstr "リダイレクト"
+
+#~ msgid "Welcome to the Redirection Wizard"
+#~ msgstr "リダイレクトウィザードへようこそ"
+
+#~ msgid "Origin Domain"
+#~ msgstr "元のドメイン"
+
+#~ msgid "Target Domain"
+#~ msgstr "目標のドメイン"
+
+#~ msgid "Content Management Systems"
+#~ msgstr "コンテンツマネージメントシステム"
+
+#~ msgid "Concrete 5"
+#~ msgstr "コンクリート5"
+
+#~ msgid "Application Servers"
+#~ msgstr "アプリケーションのサーバー"
+
+#~ msgid "Platforms"
+#~ msgstr "プラットフォーム"
+
+#~ msgid "Web Development Platforms"
+#~ msgstr "Web開発プラットフォーム"
+
+#~ msgid "Languages"
+#~ msgstr "言語"
+
+#~ msgid "Cross-platform, open-source .NET development framework."
+#~ msgstr ""
+#~ "クロスプラットフォームかつ、オープンソースの.NETの開発フレームワークです。"
+
+#~ msgid "Web Applications"
+#~ msgstr "Webアプリケーション"
+
+#~ msgid ""
+#~ "BitTorrent client written in C++, based on the libTorrent libraries for "
+#~ "Unix."
+#~ msgstr ""
+#~ "C++で書かれたBitTorrentのクライアントで、UnixのlibTorrentをベースとしてい"
+#~ "ます。"
+
+#~ msgid "Tasks"
+#~ msgstr "作業"
+
+#~ msgid "Common Maintenance Tasks"
+#~ msgstr "共通メンテナンスタスク"
+
+#~ msgid "Virtual Server Redirection"
+#~ msgstr "仮想サーバーのリダイレクト"
+
+#~ msgid "Anti Hot-Linking"
+#~ msgstr "直リンク禁止"
+
+#~ msgid "Stop other domains from hot-linking your media files."
+#~ msgstr "他のドメインのサイトからメディアファイルへの直リンクを抑止します。"
+
+#~ msgid "Directory-listing Icons"
+#~ msgstr "ディレクトリ一覧のアイコン"
+
+#~ msgid "Static-file support"
+#~ msgstr "静的ファイルサポート"
+
+#~ msgid "Media file streaming"
+#~ msgstr "メディアファイルのストリーミング"
+
+#~ msgid "Welcome to the Ruby on Rails wizard"
+#~ msgstr "Ruby on Railsウィザードへようこそ"
+
+#~ msgid "Ruby on Rails Project"
+#~ msgstr "Ruby on Railsプロジェクト"
+
+#~ msgid "New Virtual Server"
+#~ msgstr "新規仮想サーバー"
+
+#~ msgid "Value of the RAILS_ENV variable."
+#~ msgstr "RAILS_ENVの値"
+
+#~ msgid "Production"
+#~ msgstr "常用"
+
+#~ msgid "Test"
+#~ msgstr "テスト"
+
+#~ msgid "Development"
+#~ msgstr "開発"
+
+#~ msgid "Empty"
+#~ msgstr "空"
+
+#~ msgid "HTTP proxy"
+#~ msgstr "HTTPプロクシ"
+
+#~ msgid "RAILS_ENV environment"
+#~ msgstr "RAILS_ENVの環境変数"
+
+#~ msgid "Welcome to the Icons Wizard"
+#~ msgstr "Iconsウィザードへようこそ"
+
+#~ msgid ""
+#~ "This wizard adds the /icons and /cherokee_themes directories so Cherokee "
+#~ "can use icons when listing directories."
+#~ msgstr "このウィザードでは、/iconsと/cherokee_themeディレクトリに"
+
+#~ msgid "Welcome to the Alfresco Wizard"
+#~ msgstr "Alfrescoウィザードへようこそ"
+
+#~ msgid "Alfresco Project"
+#~ msgstr "Alfrescoプロジェクト"
+
+#~ msgid ""
+#~ "Hostname or IP of the server running Alfresco. You can add more later to "
+#~ "have the load balanced."
+#~ msgstr ""
+#~ "Alfrescoの動作しているホスト名もしくはIPを入力してください。追記するとサー"
+#~ "バーごとに負荷調整を行います。"
+
+#~ msgid "Port running the service in said host. (Example: 8080)"
+#~ msgstr ""
+#~ "サービスを実行しているホストのポートを入力してください。（例：8080）"
+
+#~ msgid "Source host"
+#~ msgstr "ソースのホスト"
+
+#~ msgid "Source port"
+#~ msgstr "ソースのポート"
+
+#~ msgid "Configuration File"
+#~ msgstr "設定ファイル"
+
+#~ msgid "Welcome to the Mailman Wizard"
+#~ msgstr "Mailmanウィザードへようこそ"
+
+#~ msgid ""
+#~ "Mailman supports built-in archiving, automatic bounce processing, content "
+#~ "filtering, digest delivery, spam filters, and more."
+#~ msgstr ""
+#~ "Mailmanは、ビルドインのメールアーカイブ機能、自動転送処理、コンテンツフィ"
+#~ "ルタ、ダイジェストデリバリ、スパムフィルタなどの機能を持っています。"
+
+#~ msgid "Mailman Details"
+#~ msgstr "Mailmanの詳細"
+
+#~ msgid "Local path to the Mailman CGI directory."
+#~ msgstr "MailmanのCGIの設置ディレクトリへのパス"
+
+#~ msgid "Local path to the Mailman data directory."
+#~ msgstr "Mailmanのデーターディレクトリへのパス"
+
+#~ msgid "Local path to the Mailman mail archive directory."
+#~ msgstr "Mailmanのメールアーカイブディレクトリへのパス"
+
+#~ msgid "Local path to the Mailman mail images directory."
+#~ msgstr "Mailmanの画像ディレクトリへのパス"
+
+#~ msgid "Mailman CGI directory"
+#~ msgstr "MailmanのCGIディレクトリ"
+
+#~ msgid "Mailman Data directory"
+#~ msgstr "Mailmanデーターディレクトリ"
+
+#~ msgid "Mail Archive directory"
+#~ msgstr "メールアーカイブディレクトリ"
+
+#~ msgid "Mail Images directory"
+#~ msgstr "メール画像ディレクトリ"
+
+#~ msgid "It does not look like a Mailman data directory."
+#~ msgstr ""
+#~ "そのディレクトリは、Mailmanのデーターのディレクトリではないようです。"
+
+#~ msgid "It does not look like a Mailman CGI directory."
+#~ msgstr "そのディレクトリは、MailmanのCGIのディレクトリではないようです。"
+
+#~ msgid "It does not look like a Mailman archive directory."
+#~ msgstr ""
+#~ "そのディレクトリは、Mailmanのメールアーカイブのディレクトリではないようで"
+#~ "す。"
+
+#~ msgid "It does not look like a Mailman images directory."
+#~ msgstr "そのディレクトリは、Mailmanの画像のディレクトリではないようです。"
+
+#~ msgid "Welcome to the GlassFish Wizard"
+#~ msgstr "GlassFishウィザードへようこそ"
+
+#~ msgid "GlassFish Project"
+#~ msgstr "GlassFishプロジェクト"
+
+#~ msgid "Welcome to the PHP Wizard"
+#~ msgstr "PHPウィザードへようこそ"
+
+#~ msgid "PHP Interpreter Not Found"
+#~ msgstr "PHPのインタプリタが見つかりません"
+
+#~ msgid "A valid PHP interpreter could not be found in your system."
+#~ msgstr "使用中のシステムには、有効なPHPインタプリタが見つかりません。"
+
+#~ msgid "Invalid Virtual Server reference."
+#~ msgstr "無効な仮想サーバー設定です"
+
+#~ msgid "%s Cores"
+#~ msgstr "%sコア"
+
+#~ msgid "%s Core"
+#~ msgstr "%sコア"
+
+#~ msgid "Unknown Processor"
+#~ msgstr "不明なプロセッサ"
+
+#~ msgid "Unknown RAM"
+#~ msgstr "不明なRAM"
+
+#~ msgid "Save Configuration"
+#~ msgstr "設定を保存"
+
+#~ msgid "Configuration successfully saved"
+#~ msgstr "設定の保存に成功しました"
+
+#~ msgid "Do not restart"
+#~ msgstr "リスタートしない"
+
+#~ msgid "Graceful restart"
+#~ msgstr "簡易リスタート"
+
+#~ msgid "Hard restart"
+#~ msgstr "通常リスタート"
+
+#~ msgid "Save"
+#~ msgstr "保存"
+
+#~ msgid "Home"
+#~ msgstr "ホーム"
+
+#~ msgid "Apps"
+#~ msgstr "アプリ"
+
+#~ msgid "General"
+#~ msgstr "一般"
+
+#~ msgid "vServers"
+#~ msgstr "仮想サーバー"
+
+#~ msgid "Sources"
+#~ msgstr "ソース"
+
+#~ msgid "Help"
+#~ msgstr "ヘルプ"
+
+#~ msgid "Updating..."
+#~ msgstr "更新中…"
+
+#~ msgid "support"
+#~ msgstr "サポート"
+
+#~ msgid "Matching Rule"
+#~ msgstr "一致条件"
+
+#~ msgid "Handler"
+#~ msgstr "ハンドラ"
+
+#~ msgid "Encoding"
+#~ msgstr "エンコード"
+
+#~ msgid "Time"
+#~ msgstr "時間"
+
+#~ msgid "Security"
+#~ msgstr "セキュリティ"
+
+#~ msgid "Virtual Server without nickname"
+#~ msgstr "ニックネームのない仮想サーバー"
+
+#~ msgid "Virtual Server without document root"
+#~ msgstr "ドキュメントルートがない仮想サーバー"
+
+#~ msgid "Directory match without a directory"
+#~ msgstr "ディレクトリ名が入力されていないディレクトリの一致条件"
+
+#~ msgid "Extensions match without any extension"
+#~ msgstr "拡張子が入力されていない拡張子の一致条件"
+
+#~ msgid "RegEx match without a RegEx entry"
+#~ msgstr "正規表現が入力されていない正規表現一致条件"
+
+#~ msgid "GeoIP match rule with no contries"
+#~ msgstr "国が入力されていないGeoIP一致"
+
+#~ msgid "Broken Source"
+#~ msgstr "壊れたソース"
+
+#~ msgid "Application Server"
+#~ msgstr "アプリケーションサーバー"
+
+#~ msgid "Back up…"
+#~ msgstr "バックアップ中…"
+
+#~ msgid "Back Up"
+#~ msgstr "バックアップ"
+
+#~ msgid "Notes"
+#~ msgstr "但し書き"
+
+#~ msgid "Restore"
+#~ msgstr "リストア"
+
+#~ msgid "Restore…"
+#~ msgstr "リストア中…"
+
+#~ msgid "Malformed number"
+#~ msgstr "無効な数字"
+
+#~ msgid "Malformed float number"
+#~ msgstr "無効な少数点数字"
+
+#~ msgid "Must be greater than zero"
+#~ msgstr "0よりも大きくする必要があります。"
+
+#~ msgid "Port must be a number"
+#~ msgstr "ポートは、数字である必要があります。"
+
+#~ msgid "Out of range (1 to 65535)"
+#~ msgstr "範囲外です（1～65535）"
+
+#~ msgid "Port already in use"
+#~ msgstr "そのポートはすでに使用中です。"
+
+#~ msgid "Malformed path"
+#~ msgstr "無効なパス"
+
+#~ msgid "It is not executable"
+#~ msgstr "実行可能ではありません"
+
+#~ msgid "Malformed IPv4"
+#~ msgstr "無効なIPv4"
+
+#~ msgid "Malformed IPv4 entry"
+#~ msgstr "無効なIPv4指定です"
+
+#~ msgid "IPv4 entry out of range"
+#~ msgstr "IPv4の指定が範囲外です"
+
+#~ msgid "Malformed IPv6"
+#~ msgstr "無効なIPv6"
+
+#~ msgid "Path does not exist"
+#~ msgstr "そのパスは見つかりません"
+
+#~ msgid "Path is not a directory"
+#~ msgstr "そのパスはディレクトリではありません"
+
+#~ msgid "Path is a directory"
+#~ msgstr "そのパスはディレクトリです"
+
+#~ msgid "Invalid char. Accepts: letters, digits, _, - and ."
+#~ msgstr ""
+#~ "無効な文字が含まれています。半角英数字と_（アンダーバー）、-（ハイフ"
+#~ "ン）、.（ピリオド）が使えます。"
+
+#~ msgid "Cannot be empty"
+#~ msgstr "空欄にはできません。"
+
+#~ msgid "Malformed time"
+#~ msgstr "無効な時間です"
+
+#~ msgid "Already in use"
+#~ msgstr "すでに使用済みです"
+
+#~ msgid "Index"
+#~ msgstr "インデックス"
+
+#~ msgid "On"
+#~ msgstr "入"
+
+#~ msgid "Virtual Server root directory."
+#~ msgstr "仮想サーバーのルートディレクトリ"
+
+#~ msgid "Log"
+#~ msgstr "ログ"
+
+#~ msgid "Host Match"
+#~ msgstr "ホストと一致"
+
+#~ msgid "Encoding enabled"
+#~ msgstr "エンコーディングが有効です"
+
+#~ msgid "no"
+#~ msgstr "切"
+
+#~ msgid " seconds"
+#~ msgstr "秒"
+
+#~ msgid " bytes per second"
+#~ msgstr "バイト／秒"
+
+#~ msgid "Rule is active"
+#~ msgstr "条件はアクティブです。"
+
+#~ msgid "Virtual Server nickname"
+#~ msgstr "仮想サーバーのニックネーム"
+
+#~ msgid "Server ID"
+#~ msgstr "サーバーID"
+
+#~ msgid "Directory Indexes"
+#~ msgstr "ディレクトリの一覧表示"
+
+#~ msgid "Max Upload Size"
+#~ msgstr "アップロード可能な最大サイズ"
+
+#~ msgid "Network"
+#~ msgstr "ネットワーク"
+
+#~ msgid "Filename"
+#~ msgstr "ファイル名"
+
+#~ msgid "Command"
+#~ msgstr "コマンド"
+
+#~ msgid "Error Logging"
+#~ msgstr "エラーのロギング"
+
+#~ msgid "Format"
+#~ msgstr "初期化"
+
+#~ msgid "Show macros"
+#~ msgstr "マクロを表示"
+
+#~ msgid "Hide"
+#~ msgstr "隠す"
+
+#~ msgid "Template: "
+#~ msgstr "ひな形："
+
+#~ msgid "Access Logging"
+#~ msgstr "アクセスログ"
+
+#~ msgid "Time standard"
+#~ msgstr "標準時間"
+
+#~ msgid "Don't check origin"
+#~ msgstr "参照元をチェックしない"
+
+#~ msgid "Do not check"
+#~ msgstr "チェックしない"
+
+#~ msgid "Accept from Hosts"
+#~ msgstr "ホストから許可"
+
+#~ msgid "Logging Options"
+#~ msgstr "ロギングのオプション"
+
+#~ msgid "Certificate"
+#~ msgstr "証明書"
+
+#~ msgid "Certificate key"
+#~ msgstr "証明書のキー"
+
+#~ msgid "Ciphers"
+#~ msgstr "暗号化方式"
+
+#~ msgid "CA List"
+#~ msgstr "CA一覧"
+
+#~ msgid "Error Handler"
+#~ msgstr "エラー発生時の処理"
+
+#~ msgid "Report this"
+#~ msgstr "これを報告"
+
+#~ msgid "Server Launch Error"
+#~ msgstr "サーバーの起動エラー"
+
+#~ msgid "Mime Type"
+#~ msgstr "Mimeタイプ"
+
+#~ msgid "Mime types"
+#~ msgstr "Mimeタイプ"
+
+#~ msgid "MIME type"
+#~ msgstr "MIMEタイプ"
+
+#~ msgid "Copyright"
+#~ msgstr "著作権"
+
+#~ msgid "License"
+#~ msgstr "ライセンス"
+
+#~ msgid "Methods"
+#~ msgstr "方法"
+
+#~ msgid "Realm"
+#~ msgstr "役割"
+
+#~ msgid "Users"
+#~ msgstr "ユーザ"
+
+#~ msgid "Table of Contents"
+#~ msgstr "目次"
+
+#~ msgid "Documentation"
+#~ msgstr "説明書"
+
+#~ msgid "Select"
+#~ msgstr "選択"
+
+#~ msgid "Latest Release"
+#~ msgstr "最新リリース"
+
+#~ msgid "Cherokee is up to date"
+#~ msgstr "Cherokeeは最新です"
+
+#~ msgid "Latest release is "
+#~ msgstr "最新リリースは、"
+
+#~ msgid "Virtual Server Monitoring"
+#~ msgstr "仮想サーバーのモニタリング"
+
+#~ msgid "Extension List"
+#~ msgstr "拡張子一覧"
+
+#~ msgid "Add New Extension"
+#~ msgstr "新しい拡張子を追加"
+
+#~ msgid "File Matches"
+#~ msgstr "ファイルの一致"
+
+#~ msgid "Add New File"
+#~ msgstr "新しいファイルを追加"
+
+#~ msgid "Modify"
+#~ msgstr "修正"
+
+#~ msgid "Server Traffic"
+#~ msgstr "サーバーのトラフィック"
+
+#~ msgid "Connections / Requests"
+#~ msgstr "接続数／リクエスト数"
+
+#~ msgid "Connection Timeouts"
+#~ msgstr "接続タイムアウト"
+
+#~ msgid "1 Hour"
+#~ msgstr "１時間毎"
+
+#~ msgid "6 Hours"
+#~ msgstr "６時間毎"
+
+#~ msgid "1 Day"
+#~ msgstr "１日毎"
+
+#~ msgid "1 Week"
+#~ msgstr "週間毎"
+
+#~ msgid "1 Month"
+#~ msgstr "月間毎"
+
+#~ msgid "Sign in to Cherokee Market"
+#~ msgstr "Cherokeeマーケットにサインイン"
+
+#~ msgid "Email address"
+#~ msgstr "メールアドレス"
+
+#~ msgid "Logged as"
+#~ msgstr "以下でログイン："
+
+#~ msgid "Sign out"
+#~ msgstr "サインアウト"
+
+#~ msgid "Countries"
+#~ msgstr "国"
+
+#~ msgid "Extras"
+#~ msgstr "エクストラ"
+
+#~ msgid "Read X-Real-IP"
+#~ msgstr "X-Real-IPヘッダを読む"
+
+#~ msgid "Name"
+#~ msgstr "名前"
+
+#~ msgid "Script Alias"
+#~ msgstr "スクリプトのエイリアス"
+
+#~ msgid "Change UID"
+#~ msgstr "UIDを変更"
+
+#~ msgid "Change"
+#~ msgstr "変更"
+
+#~ msgid "Error handler"
+#~ msgstr "エラーハンドラ"
+
+#~ msgid "Check file"
+#~ msgstr "ファイルのチェック"
+
+#~ msgid "Allow X-Sendfile"
+#~ msgstr "X-Sendfileヘッダを許可"
+
+#~ msgid "Common CGI Options"
+#~ msgstr "CGIの共通設定"
+
+#~ msgid "Custom Environment Variables"
+#~ msgstr "カスタム環境変数"
+
+#~ msgid "Add New Custom Environment Variable"
+#~ msgstr "新しいカスタム環境変数を追加"
+
+#~ msgid "General Configuration"
+#~ msgstr "一般設定"
+
+#~ msgid "Server Tokens"
+#~ msgstr "サーバー情報"
+
+#~ msgid "Graphs Type"
+#~ msgstr "グラフの種類"
+
+#~ msgid "Information Collector"
+#~ msgstr "情報収集"
+
+#~ msgid "Upload Tracking"
+#~ msgstr "アップロードのトラッキング"
+
+#~ msgid "TLS/SSL port"
+#~ msgstr "TLS/SSLポート"
+
+#~ msgid "TLS/SSL support disabled"
+#~ msgstr "TLS/SSLサポートは無効化されています。"
+
+#~ msgid "Interface"
+#~ msgstr "インターフェース"
+
+#~ msgid "Add a new listening port"
+#~ msgstr "新しい待受けポートを追加"
+
+#~ msgid "Add new port"
+#~ msgstr "新しいポートを追加"
+
+#~ msgid "Listening to Ports"
+#~ msgstr "待ち受けポート"
+
+#~ msgid "Execution Permissions"
+#~ msgstr "実行可能パーミッション"
+
+#~ msgid "Group"
+#~ msgstr "グループ"
+
+#~ msgid "Ports to listen"
+#~ msgstr "待ち受け用のポート"
+
+#~ msgid "Permissions"
+#~ msgstr "パーミッション"
+
+#~ msgid "Icons"
+#~ msgstr "アイコン"
+
+#~ msgid "General Settings"
+#~ msgstr "一般設定"
