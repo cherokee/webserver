@@ -50,6 +50,10 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (tile, http_get);
 static ret_t 
 props_free (cherokee_handler_tile_props_t *props)
 {
+	if (props->file_props != NULL) {
+		cherokee_handler_file_props_free (props->file_props);
+	}
+
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
@@ -64,11 +68,16 @@ cherokee_handler_tile_configure (cherokee_config_node_t *conf, cherokee_server_t
 		CHEROKEE_NEW_STRUCT (n, handler_tile_props);
 
 		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(props_free));		
+						 MODULE_PROPS_FREE(props_free));
+
+		n->timeout = 3;
+		n->expiration_time = 0;
+
+		/* Sub-handler properties */
+		n->file_props = NULL;
+		cherokee_handler_file_configure (conf, srv, (cherokee_module_props_t **) &n->file_props);
+		n->file_props->use_cache = false;
         
-        /* Look at handler_tile.h
-         * This is an tile of configuration.
-         */
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -81,6 +90,10 @@ cherokee_handler_tile_configure (cherokee_config_node_t *conf, cherokee_server_t
                         ret_t ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer);
                         if (ret != ret_ok)
                                 return ret;
+		} else if (equal_buf_str (&subconf->key, "timeout")) {
+			props->timeout = atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "expiration")) {
+			props->expiration_time = cherokee_eval_formated_time (&subconf->val);
 		} else {
 			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
 			return ret_error;
@@ -100,20 +113,31 @@ ret_t
 cherokee_handler_tile_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_tile);
+	ret_t ret;
 	
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base(HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(tile));
 	   
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_tile_init;
-	MODULE(n)->free         = (module_func_free_t) cherokee_handler_tile_free;
+	MODULE(n)->free         = (module_func_free_t)  cherokee_handler_tile_free;
+	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_tile_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_tile_add_headers;
 
 	HANDLER(n)->support = hsupport_nothing;
 
-	n->src_ref   = NULL;
-	n->send_done = false;
+	n->src_ref     = NULL;
+	n->mystatus    = parsing;
+	bzero(&n->cmd, sizeof(struct protocol));
 	cherokee_socket_init (&n->socket);
+	
+	/* Instance file sub-handler
+	 */
+	ret = cherokee_handler_file_new ((cherokee_handler_t **)&n->file_hdl, cnt, MODULE_PROPS(PROP_TILE(props)->file_props));
+	if (ret != ret_ok) {
+		return ret_ok;
+	}
+	HANDLER(n)->support = HANDLER(n->file_hdl)->support;
 
 	/* Init
 	 */
@@ -129,11 +153,16 @@ cherokee_handler_tile_free (cherokee_handler_tile_t *hdl)
 
 	cherokee_socket_close(&hdl->socket);
 	cherokee_socket_mrproper(&hdl->socket);
+
+	if (hdl->file_hdl != NULL) {
+		cherokee_handler_file_free (hdl->file_hdl);
+	}
+
 	return ret_ok;
 }
 
 
-	static ret_t
+static ret_t
 connect_to_server (cherokee_handler_tile_t *hdl)
 {
 	ret_t                          ret;
@@ -164,71 +193,80 @@ connect_to_server (cherokee_handler_tile_t *hdl)
 }
 
 
-	ret_t 
+ret_t 
 cherokee_handler_tile_init (cherokee_handler_tile_t *hdl)
 {
-	struct protocol cmd;
-	char   *from, *to;
-	size_t  len;
 	ret_t ret;
+	size_t  len;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-	bzero(&cmd, sizeof(struct protocol));
 
-	from = conn->request.buf+conn->web_directory.len+1;
-	to   = strchr(from, '/');
+	if (hdl->mystatus == parsing) {
+		char   *from, *to;
 
-	if (to && (len = (to - from)) < (XMLCONFIG_MAX - 1)) {
-		strncpy(cmd.xmlname, from, len);
-	} else {
-		TRACE(ENTRIES, "Could not extract xmlname from %s\n", from);
-		return ret_error;
-	}
+		from = conn->request.buf+conn->web_directory.len+1;
+		to   = strchr(from, '/');
 
-	from = to + 1;
-	cmd.z = (int) strtol(from, &to, 10);
-
-	from = to + 1;
-	cmd.x = (int) strtol(from, &to, 10); 
-
-	from = to + 1;
-	cmd.y = (int) strtol(from, &to, 10); 
-
-	TRACE(ENTRIES, "Found parameters: %d %d %d\n", cmd.z, cmd.x, cmd.y);
-
-	if (cmd.z < 0 || cmd.x < 0 || cmd.y < 0 ||
-			cmd.z == INT_MAX || cmd.x == INT_MAX || cmd.y == INT_MAX) {
-		TRACE(ENTRIES, "Found parameters exceed specifications\n");
-		return ret_error;
-	}
-
-	cmd.ver = 2;
-	cmd.cmd = cmdRenderPrio;
-
-	/* Connect
-	*/
-	ret = connect_to_server (hdl);
-	switch (ret) {
-		case ret_ok:
-			break;
-		case ret_eagain:
-			return ret_eagain;
-		case ret_deny:
-//			conn->error_code = http_gateway_timeout;
-			conn->error_code = http_not_found;
-			return ret_error;
-		default:
-			conn->error_code = http_service_unavailable;
-			return ret_error;
-	}
-	
-	if (hdl->send_done == false) {
-		TRACE(ENTRIES, "Writing to socket...\n");
-		cherokee_socket_write (&hdl->socket, (const char *) &cmd, sizeof(struct protocol), &len);
-		if (len != sizeof(struct protocol)) {
-			TRACE(ENTRIES, "Unexpected return size!\n");
-			return ret_error;
+		if (to && (len = (to - from)) < (XMLCONFIG_MAX - 1)) {
+			strncpy(hdl->cmd.xmlname, from, len);
+		} else {
+			TRACE(ENTRIES, "Could not extract xmlname from %s\n", from);
+			goto besteffort;
 		}
 
+		from = to + 1;
+		hdl->cmd.z = (int) strtol(from, &to, 10);
+
+		from = to + 1;
+		hdl->cmd.x = (int) strtol(from, &to, 10); 
+
+		from = to + 1;
+		hdl->cmd.y = (int) strtol(from, &to, 10); 
+
+		TRACE(ENTRIES, "Found parameters: %d %d %d\n", hdl->cmd.z, hdl->cmd.x, hdl->cmd.y);
+
+		if (hdl->cmd.z < 0 || hdl->cmd.x < 0 || hdl->cmd.y < 0 ||
+				hdl->cmd.z == INT_MAX || hdl->cmd.x == INT_MAX || hdl->cmd.y == INT_MAX) {
+			TRACE(ENTRIES, "Found parameters exceed specifications\n");
+			goto besteffort;
+		}
+
+		hdl->cmd.ver = 2;
+		if (HDL_TILE_PROPS(hdl)->timeout == 0) {
+			hdl->cmd.cmd = cmdRender;
+		} else {
+			hdl->cmd.cmd = cmdRenderPrio;
+		}
+
+		hdl->mystatus = sending;
+	}
+
+	if (hdl->mystatus == sending) {
+		/* Connect
+		*/
+
+		ret = connect_to_server (hdl);
+		switch (ret) {
+			case ret_ok:
+				break;
+			case ret_eagain:
+				return ret_eagain;
+			case ret_deny:
+			default:
+				goto besteffort;
+		}
+	
+		TRACE(ENTRIES, "Writing to socket...\n");
+		cherokee_socket_write (&hdl->socket, (const char *) &hdl->cmd, sizeof(struct protocol), &len);
+		if (len != sizeof(struct protocol)) {
+			TRACE(ENTRIES, "Unexpected return size!\n");
+			goto besteffort;
+		}
+		hdl->mystatus = senddone;
+	}
+
+	if (HDL_TILE_PROPS(hdl)->timeout == 0) {
+		TRACE(ENTRIES, "Rendering started, we continue serving...\n");
+		goto besteffort;
 	}
 
 	TRACE(ENTRIES, "Reading from socket...\n");
@@ -238,49 +276,53 @@ cherokee_handler_tile_init (cherokee_handler_tile_t *hdl)
 	
 	ret = cherokee_socket_read(&hdl->socket, (char *) &resp, sizeof(struct protocol), &len);
 
-	if (ret == ret_eagain) {
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-						     HANDLER_CONN(hdl),
-						     S_SOCKET_FD(hdl->socket),
-						     FDPOLL_MODE_READ, false);
-		conn->error_code = http_not_found;
+	if (ret == ret_eagain && hdl->mystatus != timeout) {
+		cherokee_thread_deactive_to_polling_timeout (HANDLER_THREAD(hdl),
+						             HANDLER_CONN(hdl),
+						             S_SOCKET_FD(hdl->socket),
+   						             FDPOLL_MODE_READ, false,
+							     HDL_TILE_PROPS(hdl)->timeout);
+		hdl->mystatus = timeout;
 		return ret_eagain;
 	}
 
-	conn->error_code = http_unset;
-
 	if (ret != ret_ok || len != sizeof(struct protocol)) {
 		TRACE(ENTRIES, "Unexpected return size!\n");
-		return ret_error;
+		goto besteffort;
 	}
 	
-	if (cmd.x == resp.x && cmd.y == resp.y && cmd.z == resp.z &&
-	    !strcmp(cmd.xmlname, resp.xmlname)) {
+	if (hdl->cmd.x == resp.x && hdl->cmd.y == resp.y && hdl->cmd.z == resp.z &&
+	    !strcmp(hdl->cmd.xmlname, resp.xmlname)) {
 		if (resp.cmd == cmdDone) {
 			TRACE(ENTRIES, "Command succesful\n");
 			cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
-			conn->error_code = http_moved_temporarily;
-			return ret_ok;
+			goto succesful;
 		} else {
 			TRACE(ENTRIES, "The command was not done\n");
-			conn->error_code = http_not_found;
-			return ret_error;
+			goto besteffort;
 		}
 	} else {
 		TRACE(ENTRIES, "We didn't get back what we asked for\n");
-		return ret_error;
+		goto besteffort;
 	}
 
-	SHOULDNT_HAPPEN;
-	return ret_error;
+besteffort:
+	conn->expiration = cherokee_expiration_time;
+	conn->expiration_time = HDL_TILE_PROPS(hdl)->expiration_time;
+
+succesful:
+	return cherokee_handler_file_init (hdl->file_hdl);
 }
 
 
 ret_t 
 cherokee_handler_tile_add_headers (cherokee_handler_tile_t *hdl, cherokee_buffer_t *buffer)
 {
-	UNUSED(hdl);
-	UNUSED(buffer);
+	return cherokee_handler_file_add_headers (hdl->file_hdl, buffer);
+}
 
-	return ret_ok;
+ret_t 
+cherokee_handler_tile_step (cherokee_handler_tile_t *hdl, cherokee_buffer_t *buffer)
+{
+	return cherokee_handler_file_step (hdl->file_hdl, buffer);
 }

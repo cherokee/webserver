@@ -26,19 +26,36 @@
 import CTK
 import Handler
 import Cherokee
+import validations
 import Balancer
 
 from util import *
 from consts import *
 
+NOTE_TIMEOUT = N_("A value in seconds after which we don't wait for the rendering anymore.")
+NOTE_EXPIRATION_TIME = N_("""How long the older tile should be cached.<br />
+The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 10m.
+""")
+
 URL_APPLY = '/plugin/tile/apply'
 HELPS     = []
+
+VALIDATIONS = [
+	("vserver![\d]+!rule![\d]+!handler!timeout",    validations.is_number),
+	("vserver![\d]+!rule![\d]+!handler!expiration", validations.is_time)
+]
 
 class Plugin_tile (Handler.PluginHandler):
     def __init__ (self, key, **kwargs):
         kwargs['show_document_root'] = False
         Handler.PluginHandler.__init__ (self, key, **kwargs)
         Handler.PluginHandler.AddCommon (self)
+
+        # GUI
+        table = CTK.PropsAuto (URL_APPLY)
+        table.Add (_("Static Tile Expiration"), CTK.TextCfg('%s!expiration'%(key), True), _(NOTE_EXPIRATION_TIME))
+        table.Add (_("Render Timeout"),   CTK.TextCfg('%s!timeout'%(key), True), _(NOTE_TIMEOUT))
+	self += CTK.Indenter (table)
 
         # Load Balancing
         modul = CTK.PluginSelector('%s!balancer'%(key), trans_options(Cherokee.support.filter_available (BALANCERS)))
@@ -49,4 +66,4 @@ class Plugin_tile (Handler.PluginHandler):
         self += CTK.Indenter (table)
         self += modul
 
-CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish ('^%s$'%(URL_APPLY), CTK.cfg_apply_post, validation=VALIDATIONS, method="POST")

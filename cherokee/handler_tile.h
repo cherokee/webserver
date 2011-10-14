@@ -32,12 +32,13 @@
 #include "buffer.h"
 #include "socket.h"
 #include "balancer.h"
+#include "util.h"
 #include "plugin_loader.h"
+#include "handler_file.h"
 
 #include <sys/time.h>
 
 /* This we should load from protocol.h */
-#define RENDER_SOCKET "/tmp/osm-renderd"
 #define XMLCONFIG_MAX 41
 enum protoCmd { cmdIgnore, cmdRender, cmdDirty, cmdDone, cmdNotDone, cmdRenderPrio, cmdRenderBulk };
 
@@ -53,8 +54,11 @@ struct protocol {
 /* Data types
  */
 typedef struct {
-	cherokee_module_props_t  base;
-	cherokee_balancer_t     *balancer;
+	cherokee_module_props_t        base;
+	cherokee_balancer_t           *balancer;
+	cherokee_handler_file_props_t *file_props;
+	time_t			       expiration_time;
+	int			       timeout;
 } cherokee_handler_tile_props_t;
 
 typedef struct {
@@ -62,8 +66,15 @@ typedef struct {
 	cherokee_handler_t       handler;
         cherokee_source_t       *src_ref;
         cherokee_socket_t        socket;
-	cherokee_boolean_t	 send_done;
+	enum { parsing,
+	       sending,
+	       senddone,
+	       timeout
+	} mystatus;
+	struct protocol          cmd;
+	cherokee_handler_file_t *file_hdl;
 } cherokee_handler_tile_t;
+
 
 #define HDL_TILE(x)       ((cherokee_handler_tile_t *)(x))
 #define PROP_TILE(x)      ((cherokee_handler_tile_props_t *)(x))
