@@ -578,12 +578,14 @@ libplugin_sphinx_la_LDFLAGS = $(module_ldflags) $(SPHINXCLIENT_LDFLAGS)
 libplugin_sphinx_la_SOURCES = $(handler_sphinx)
 libplugin_sphinx_la_CFLAGS  = $(SPHINXCLIENT_CFLAGS)
 
+if HAVE_SPHINXCLIENT
 if STATIC_HANDLER_SPHINX
 static_handler_sphinx_src   = $(handler_sphinx)
 static_handler_sphinx_lib   = $(SPHINXCLIENT_LDFLAGS)
 static_handler_sphinx_flags = $(SPHINXCLIENT_CFLAGS)
 else
 dynamic_handler_sphinx_lib = libplugin_sphinx.la
+endif
 endif
 
 #

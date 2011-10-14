@@ -1288,6 +1288,12 @@ fi
 
 AM_CONDITIONAL(HAVE_FFMPEG, test "x$have_ffmpeg" = "xyes")
 
+dnl
+dnl Sphinx Client
+dnl
+have_sphinxclient="no"
+
+AM_CONDITIONAL(HAVE_SPHINXCLIENT, test "x$have_sphinxclient" = "xyes")
 
 dnl
 dnl WWW root directory, and user/group
@@ -1474,9 +1480,9 @@ fi
 if test "x$have_ffmpeg" != "xyes"; then
 	modules=`echo $modules | sed s/streaming//`
 fi
-#if test "x$have_sphinxclient" != "xyes"; then
-#	modules=`echo $modules | sed s/sphinx//`
-#fi
+if test "x$have_sphinxclient" != "xyes"; then
+	modules=`echo $modules | sed s/sphinx//`
+fi
 
 add_calls=""
 init_calls=""
@@ -1661,7 +1667,7 @@ echo "LDAP                  $have_ldap"
 echo "MySQL                 $have_mysql"
 echo "GeoIP                 $have_geoip"
 echo "FFMpeg                $have_ffmpeg"
-#echo "Sphinx Client         $have_sphinxclient"
+echo "Sphinx Client         $have_sphinxclient"
 echo "crypt support         $crypt_type"
 if test "x$is_beta" = "xyes"; then
 echo "Beta release          $PACKAGE_PATCH_VERSION"
