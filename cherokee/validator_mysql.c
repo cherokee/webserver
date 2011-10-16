@@ -260,6 +260,7 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	 */
 	cherokee_buffer_add_buffer (&query, &props->query);
 	cherokee_buffer_replace_string (&query, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
+	cherokee_buffer_replace_string (&query, "${passwd}", 9, conn->validator->passwd.buf, conn->validator->passwd.len);
 
 	TRACE (ENTRIES, "Query: %s\n", query.buf);
 

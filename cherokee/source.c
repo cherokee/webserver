@@ -119,6 +119,12 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		if (src->addr_current) {
 			tested_all = false;
 			addr = src->addr_current;
+			#if 0
+			/* The following allows to 'loadbalance' and/or check other sources */
+			addr = src->addr_current->ai_next;
+			if (addr == NULL)
+				addr = addr_info;
+			#endif
 		} else {
 			tested_all = true;
 			addr = addr_info;

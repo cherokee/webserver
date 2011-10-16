@@ -1378,9 +1378,11 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			added_server = true;
 
 			if (! props->out_preserve_server) {
-				cherokee_buffer_add_str (buf_out, "Server: ");
-				cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
-				cherokee_buffer_add_str (buf_out, CRLF);
+				if (CONN_BIND(conn)->server_string.len > 0) {
+					cherokee_buffer_add_str (buf_out, "Server: ");
+					cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
+					cherokee_buffer_add_str (buf_out, CRLF);
+				}
 				goto next;
 			}
 
@@ -1490,7 +1492,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 	/* 'Server' header
 	 */
-	if (! added_server) {
+	if (! added_server && CONN_BIND(conn)->server_string.len > 0) {
 		cherokee_buffer_add_str (buf_out, "Server: ");
 		cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
 		cherokee_buffer_add_str (buf_out, CRLF);

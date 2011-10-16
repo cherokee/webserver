@@ -40,6 +40,7 @@ AVAILABLE_LANGUAGES = [
 
 PRODUCT_TOKENS = [
     ('',        N_('Default')),
+    ('void',    N_('No server string')),
     ('product', N_('Product only')),
     ('minor',   N_('Product + Minor version')),
     ('minimal', N_('Product + Minimal version')),
@@ -68,6 +69,7 @@ HANDLERS = [
     ('admin',        N_('Remote Administration')),
     ('empty_gif',    N_('1x1 Transparent GIF')),
     ('drop',         N_('Drop Connection')),
+    ('tile',         N_('Renderd Frontend')),
 ]
 
 ERROR_HANDLERS = [
@@ -186,6 +188,7 @@ ERROR_CODES = [
 RULES = [
     ('directory',  N_('Directory')),
     ('extensions', N_('Extensions')),
+    ('filetime',   N_('File Time')),
     ('request',    N_('Regular Expression')),
     ('header',     N_('Header')),
     ('exists',     N_('File Exists')),

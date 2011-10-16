@@ -151,6 +151,23 @@ endif
 
 
 #
+# Rule filetime
+#
+rule_filetime = \
+rule_filetime.c \
+rule_filetime.h
+
+libplugin_filetime_la_LDFLAGS = $(module_ldflags)
+libplugin_filetime_la_SOURCES = $(rule_filetime)
+
+if STATIC_RULE_FILETIME
+static_rule_filetime_src = $(rule_filetime)
+else
+dynamic_rule_filetime_lib = libplugin_filetime.la
+endif
+
+
+#
 # Rule request
 #
 rule_request = \
@@ -548,6 +565,43 @@ if STATIC_HANDLER_FILE
 static_handler_file_src = $(handler_file)
 else
 dynamic_handler_file_lib = libplugin_file.la
+endif
+
+#
+# Handler sphinx
+#
+handler_sphinx = \
+handler_sphinx.h \
+handler_sphinx.c
+
+libplugin_sphinx_la_LDFLAGS = $(module_ldflags) $(SPHINXCLIENT_LDFLAGS)
+libplugin_sphinx_la_SOURCES = $(handler_sphinx)
+libplugin_sphinx_la_CFLAGS  = $(SPHINXCLIENT_CFLAGS)
+
+if HAVE_SPHINXCLIENT
+if STATIC_HANDLER_SPHINX
+static_handler_sphinx_src   = $(handler_sphinx)
+static_handler_sphinx_lib   = $(SPHINXCLIENT_LDFLAGS)
+static_handler_sphinx_flags = $(SPHINXCLIENT_CFLAGS)
+else
+dynamic_handler_sphinx_lib = libplugin_sphinx.la
+endif
+endif
+
+#
+# Handler tile
+#
+handler_tile = \
+handler_tile.c \
+handler_tile.h
+
+libplugin_tile_la_LDFLAGS = $(module_ldflags)
+libplugin_tile_la_SOURCES = $(handler_tile)
+
+if STATIC_HANDLER_TILE
+static_handler_tile_src = $(handler_tile)
+else
+dynamic_handler_tile_lib = libplugin_tile.la
 endif
 
 
@@ -1502,6 +1556,7 @@ endif
 libcherokee_server_la_SOURCES = \
 $(static_rule_directory_src) \
 $(static_rule_extensions_src) \
+$(static_rule_filetime_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
 $(static_rule_exists_src) \
@@ -1529,6 +1584,8 @@ $(static_handler_post_report_src) \
 $(static_collector_rrd_src) \
 \
 $(static_handler_file_src) \
+$(static_handler_sphinx_src) \
+$(static_handler_tile_src) \
 $(static_handler_dirlist_src) \
 $(static_handler_cgi_src) \
 $(static_handler_fcgi_src) \
@@ -1696,6 +1753,7 @@ plugindir = "$(libdir)/cherokee"
 plugin_LTLIBRARIES = \
 $(dynamic_rule_directory_lib) \
 $(dynamic_rule_extensions_lib) \
+$(dynamic_rule_filetime_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
 $(dynamic_rule_exists_lib) \
@@ -1718,6 +1776,8 @@ $(dynamic_gen_evhost_lib) \
 $(dynamic_post_track_lib) \
 $(dynamic_handler_post_report_lib) \
 $(dynamic_handler_file_lib) \
+$(dynamic_handler_sphinx_lib) \
+$(dynamic_handler_tile_lib) \
 $(dynamic_handler_server_info_lib) \
 $(dynamic_handler_render_rrd_lib) \
 $(dynamic_handler_dirlist_lib) \

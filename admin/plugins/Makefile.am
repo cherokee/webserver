@@ -21,6 +21,7 @@ extensions.py \
 failover.py \
 fcgi.py \
 file.py \
+filetime.py \
 from.py \
 fullpath.py \
 geoip.py \
@@ -44,9 +45,11 @@ rrd.py \
 scgi.py \
 secdownload.py \
 server_info.py \
+sphinx.py \
 ssi.py \
 streaming.py \
 target_ip.py \
+tile.py \
 url_arg.py \
 uwsgi.py \
 wildcard.py \
