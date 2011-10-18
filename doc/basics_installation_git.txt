@@ -1,34 +1,22 @@
 == link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
 
-Installation from SVN
+Installation from GIT
 ---------------------
 
 The latest, bleeding edge Cherokee release can always be retrieved via
-SVN. Note that this is the development release and could very well be
+GIT. Note that this is the development release and could very well be
 unstable. In general it is not recommended to run this release in
 production environments.
 
-Briefly, SVN is a system tool used to store and maintain files and a
-history of their changes over time, and it is an invaluable development
-tool. The Cherokee source code and related files are kept on a SVN
-server at svn.cherokee-project.com.
 
-To download the SVN repository you will need a special piece of
-software called an SVN client.
-
-[[checkout]]
-Checking out the sources
+[[clone]]
+Clonning the sourcess
 ~~~~~~~~~~~~~~~~~~~~~~~~
-To list the available modules, type:
-
-----
-svn list svn://svn.cherokee-project.com/
-----
 
 To check out the sources for the first time from the repository, use this command:
 
 ----
-svn co svn://svn.cherokee-project.com/cherokee/trunk cherokee
+git clone -b dev --recursive https://github.com/cherokee/webserver.git
 ----
 
 [[update]]
@@ -38,7 +26,7 @@ Updating the sources
 To update your sources every day, you use this command:
 
 ----
-svn up cherokee
+git pull -u
 ----
 
 
@@ -46,11 +34,11 @@ svn up cherokee
 Compiling and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Once you have downloaded the latest SVN revision, you will need to
+Once you have downloaded the latest GIT head, you will need to
 follow the installation instructions for your specific platform.
 
 Note that some of the files present in the tarball are not present in
-SVN. Most noticeably, the file `./configure` that will be needed for the
+GIT. Most noticeably, the file `./configure` that will be needed for the
 installation process.
 
 To generate the missing files simply run this command:
