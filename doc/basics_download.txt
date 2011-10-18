@@ -25,22 +25,21 @@ wget http://www.cherokee-project.com/download/x.y/x.y.z/cherokee-x.y.z.tar.gz \
 The latest release is at your disposal with:
 
 ------------------------------------------------------------------------------
-wget http://www.cherokee-project.com/cherokee-latest-tarball -O -| tar zxvf -
+wget https://github.com/cherokee/webserver/tarball/master -O - | tar zxvf -
 ------------------------------------------------------------------------------
 
 Finally, if you are a developer or simply want to test out the bleeding edge
-version, you can access our Subversion repository. Be advised, this is the
+version, you can access our Git repository. Be advised, this is the
 development branch, so use it at your own risk!
 
-To download simply use your Subversion client:
+To download simply use:
 
 ---------------------------------------------------------------------------
-svn co svn://svn.cherokee-project.com/cherokee/trunk cherokee
+git clone -b dev --recursive https://github.com/cherokee/webserver.git
 ---------------------------------------------------------------------------
 
-You can also download a package with the latest SVN contents:
+You can also download a package with the latest GIT contents:
 
 ---------------------------------------------------------------------------
-wget http://www.cherokee-project.com/download/trunk/cherokee-latest-svn.tar.gz \
--O - | gzip -dc - | tar xfv -
+wget https://github.com/cherokee/webserver/tarball/dev -O - | tar zxvf -
 ---------------------------------------------------------------------------
