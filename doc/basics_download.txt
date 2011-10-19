@@ -25,7 +25,7 @@ wget http://www.cherokee-project.com/download/x.y/x.y.z/cherokee-x.y.z.tar.gz \
 The latest release is at your disposal with:
 
 ------------------------------------------------------------------------------
-wget https://github.com/cherokee/webserver/zipball/master
+wget http://www.cherokee-project.com/cherokee-latest-tarball -O -| tar zxvf -
 ------------------------------------------------------------------------------
 
 Finally, if you are a developer or simply want to test out the bleeding edge
