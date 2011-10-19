@@ -39,7 +39,7 @@ RC=i586-mingw32msvc-windres
 Check out the last version of Cherokee trunk:
 
 ----
-$ svn co svn://svn.cherokee-project.com/cherokee/trunk cherokee
+$ git clone -b dev --recursive https://github.com/cherokee/webserver.git
 ----
 
 and execute a quite long "configure" command:

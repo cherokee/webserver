@@ -134,8 +134,8 @@ link:cookbook_maintenance.html[recipe on the subject].
 Cherokee is licensed under the GNU General Public License, version 2,
 which can be found in the file *COPYING* distributed with the source
 code. For more details, read the
-link:http://svn.cherokee-project.com/browser/cherokee/trunk/COPYING[full
-license] in the project's SVN repository.
+link:https://github.com/cherokee/webserver/blob/dev/COPYING[full
+license] in the project's GIT repository.
 
 If for whatever reason this license does not suit your needs, other
 licensing schemes can be negotiated on a particular basis. Contact
@@ -162,8 +162,8 @@ please take a look at the
 link:http://powerman.name/doc/asciidoc[AsciiDoc Cheatsheet] and start
 editing the documentation sources right ahead. They are distributed
 with the source code and are located under `./doc` of the source tree.
-If you don't have SVN access, simply mail your contributions to
-link:mailto:feedback@cherokee-project.com[feedback@cherokee-project.com].
+If you don't have GIT access, simply mail your contributions to
+link:mailto:feedback@cherokee-project.com[feedback@cherokee-project.com] or create fork on github and request pull.
 
 [[faq14]]
 === Can encoders be set for specific file types?
