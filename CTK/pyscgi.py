@@ -5,7 +5,7 @@ This module has been written as part of the Cherokee project:
                http://www.cherokee-project.com/
 """
 
-# Copyright (c) 2006-2011, Alvaro Lopez Ortega <alvaro@alobbs.com>
+# Copyright (c) 2006-2010, Alvaro Lopez Ortega <alvaro@alobbs.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@ import os
 
 __version__   = '1.15'
 __author__    = 'Alvaro Lopez Ortega'
-__copyright__ = 'Copyright 2010-2011, Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
 __license__   = 'BSD'
 
 
@@ -185,7 +185,38 @@ class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
 
 
 class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer): pass
-class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer): pass
+class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer):
+    def server_bind(self):
+        HOST, PORT = self.server_address
+        s = None
+        # loop over ifaces for the HOST and PORT pair
+        for res in socket.getaddrinfo(HOST,
+                                      PORT,
+                                      socket.AF_UNSPEC,
+                                      socket.SOCK_STREAM,
+                                      0,
+                                      socket.AI_PASSIVE):
+            af, socktype, protocol, canonicalname, sa = res
+            try:
+                s = socket.socket(af, socktype, protocol)
+            except socket.error:
+                s = None
+                continue
+            try:
+                if self.allow_reuse_address:
+                    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                s.bind(sa)
+            except socket.error:
+                s.close()
+                s = None
+                continue
+            break
+        # if none successfully bind report error
+        if s is None:
+            raise socket.error, "Can't open socket"
+        self.socket = s
+        # fix the server_address
+        self.server_address = self.socket.getsockname()               
 
 
 # TCP port
