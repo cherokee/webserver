@@ -5,7 +5,7 @@ This module has been written as part of the Cherokee project:
                http://www.cherokee-project.com/
 """
 
-# Copyright (c) 2006-2010, Alvaro Lopez Ortega <alvaro@alobbs.com>
+# Copyright (c) 2006-2011, Alvaro Lopez Ortega <alvaro@alobbs.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -43,9 +43,9 @@ import time
 import sys
 import os
 
-__version__   = '1.15'
+__version__   = '1.16'
 __author__    = 'Alvaro Lopez Ortega'
-__copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2011, Alvaro Lopez Ortega'
 __license__   = 'BSD'
 
 
