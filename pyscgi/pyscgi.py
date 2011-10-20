@@ -184,39 +184,55 @@ class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
         return SocketServer.ThreadingMixIn.process_request (self, request, client_address)
 
 
-class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer): pass
+class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer):
+    pass
+
 class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer):
-    def server_bind(self):
-        HOST, PORT = self.server_address
+    def server_bind (self):
+        host, port = self.server_address
+
+        # Binding to a IP/host
+        if host:
+            return self.server_bind_multifamily()
+
+        # Binding all interfaces
+        return SocketServer.TCPServer.server_bind (self)
+
+    def server_bind_multifamily (self):
         s = None
-        # loop over ifaces for the HOST and PORT pair
-        for res in socket.getaddrinfo(HOST,
-                                      PORT,
-                                      socket.AF_UNSPEC,
-                                      socket.SOCK_STREAM,
-                                      0,
-                                      socket.AI_PASSIVE):
+        host, port = self.server_address
+
+        # Loop over the different options of 'host'
+        for res in socket.getaddrinfo (host, port, socket.AF_UNSPEC,
+                                       socket.SOCK_STREAM, 0, socket.AI_PASSIVE):
+            s = None
             af, socktype, protocol, canonicalname, sa = res
+
+            # Create socket
             try:
-                s = socket.socket(af, socktype, protocol)
+                s = socket.socket (af, socktype, protocol)
             except socket.error:
-                s = None
                 continue
+
+            # Bind
             try:
                 if self.allow_reuse_address:
-                    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                    s.setsockopt (socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 s.bind(sa)
             except socket.error:
                 s.close()
-                s = None
                 continue
+
             break
-        # if none successfully bind report error
+
+        # If none successfully bind report error
         if s is None:
-            raise socket.error, "Can't open socket"
+            raise socket.error, "Could not create server socket"
+
         self.socket = s
-        # fix the server_address
-        self.server_address = self.socket.getsockname()               
+
+        # Finally, fix the server_address
+        self.server_address = self.socket.getsockname()
 
 
 # TCP port
