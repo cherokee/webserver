@@ -43,7 +43,7 @@ import time
 import sys
 import os
 
-__version__   = '1.16'
+__version__   = '1.16.1'
 __author__    = 'Alvaro Lopez Ortega'
 __copyright__ = 'Copyright 2011, Alvaro Lopez Ortega'
 __license__   = 'BSD'
@@ -199,19 +199,21 @@ class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer):
         return SocketServer.TCPServer.server_bind (self)
 
     def server_bind_multifamily (self):
-        s = None
+        # Loop over the different addresses of 'host'
         host, port = self.server_address
+        addresses = socket.getaddrinfo (host, port, socket.AF_UNSPEC,
+                                        socket.SOCK_STREAM, 0, socket.AI_PASSIVE)
 
-        # Loop over the different options of 'host'
-        for res in socket.getaddrinfo (host, port, socket.AF_UNSPEC,
-                                       socket.SOCK_STREAM, 0, socket.AI_PASSIVE):
-            s = None
+        # Find a suitable address
+        s = None
+        for res in addresses:
             af, socktype, protocol, canonicalname, sa = res
 
             # Create socket
             try:
                 s = socket.socket (af, socktype, protocol)
             except socket.error:
+                s = None
                 continue
 
             # Bind
@@ -221,12 +223,13 @@ class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer):
                 s.bind(sa)
             except socket.error:
                 s.close()
+                s = None
                 continue
 
             break
 
         # If none successfully bind report error
-        if s is None:
+        if not s:
             raise socket.error, "Could not create server socket"
 
         self.socket = s
