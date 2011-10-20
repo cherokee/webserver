@@ -43,7 +43,7 @@ import time
 import sys
 import os
 
-__version__   = '1.16'
+__version__   = '1.16.1'
 __author__    = 'Alvaro Lopez Ortega'
 __copyright__ = 'Copyright 2011, Alvaro Lopez Ortega'
 __license__   = 'BSD'
