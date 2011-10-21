@@ -86,7 +86,8 @@ VALIDATORS = [
     ('ldap',     N_('LDAP server')),
     ('mysql',    N_('MySQL server')),
     ('pam',      N_('PAM')),
-    ('authlist', N_('Fixed list'))
+    ('authlist', N_('Fixed list')),
+    ('dummy',    N_('Dummy Authentication')),
 ]
 
 VALIDATOR_METHODS = [

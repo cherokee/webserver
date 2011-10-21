@@ -1232,6 +1232,23 @@ endif
 
 
 #
+# Validator dummy
+#
+validator_dummy = \
+validator_dummy.c \
+validator_dummy.h
+
+libplugin_dummy_la_LDFLAGS = $(module_ldflags)
+libplugin_dummy_la_SOURCES = $(validator_dummy)
+
+if STATIC_VALIDATOR_DUMMY
+static_validator_dummy_src = $(validator_dummy)
+else
+dynamic_validator_dummy_lib = libplugin_dummy.la
+endif
+
+
+#
 # Cryptor libssl
 #
 cryptor_libssl = \
@@ -1621,6 +1638,7 @@ $(static_validator_htdigest_src) \
 $(static_validator_htpasswd_src) \
 $(static_validator_authlist_src) \
 $(static_validator_mysql_src) \
+$(static_validator_dummy_src) \
 \
 $(static_cryptor_libssl_src) \
 \
@@ -1810,6 +1828,7 @@ $(dynamic_validator_htdigest_lib) \
 $(dynamic_validator_htpasswd_lib) \
 $(dynamic_validator_authlist_lib) \
 $(dynamic_validator_mysql_lib) \
+$(dynamic_validator_dummy_lib) \
 $(dynamic_cryptor_libssl_lib) \
 $(dynamic_balancer_round_robin_lib) \
 $(dynamic_balancer_ip_hash_lib) \
