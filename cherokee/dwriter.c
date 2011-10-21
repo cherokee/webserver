@@ -22,6 +22,13 @@
  * 02110-1301, USA.
  */
 
+/* TODO:
+ * XML-RPC also supports Base64 and a Datetime field in ISO8601. Since this is not yet
+ * handled in DBSlayer, I cannot yet test Dbslayer code I'll leave the addiction of
+ * DATE_TYTE2S to the next brave young soul. In essence it would be duplicating the
+ * string function, and replace 'string' with 'dateTime.iso8601'.
+ */
+
 #include "common-internal.h"
 #include "dwriter.h"
 
