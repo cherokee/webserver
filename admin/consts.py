@@ -245,7 +245,8 @@ DWRITER_LANGS = [
     ('json',     N_('JSON')),
     ('python',   N_('Python')),
     ('php',      N_('PHP')),
-    ('ruby',     N_('Ruby'))
+    ('ruby',     N_('Ruby')),
+    ('xmlrpc',   N_('XML-RPC')),
 ]
 
 POST_TRACKERS = [
