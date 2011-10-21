@@ -50,7 +50,7 @@
 #define ADD_WHITE							\
 	do {								\
 		unsigned int i;						\
-		if (w->pretty) {					\
+		if (w->pretty && w->lang != dwriter_csv) {		\
 			if (CS != dwriter_dict_val) {			\
 				for (i=0; i<w->depth; i++)		\
 					cherokee_buffer_add_str (OUT, "  "); \
@@ -242,6 +242,8 @@ add_null (cherokee_dwriter_t *w)
 	case dwriter_ruby:
 		cherokee_buffer_add_str (OUT, "nil");
 		break;
+	case dwriter_csv:
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 	}
@@ -291,6 +293,7 @@ cherokee_dwriter_bool (cherokee_dwriter_t *w, cherokee_boolean_t b)
 	switch (w->lang) {
 	case dwriter_json:
 	case dwriter_ruby:
+	case dwriter_csv:
 		if (b)
 			cherokee_buffer_add_str (OUT, "true");
 		else
@@ -335,6 +338,8 @@ cherokee_dwriter_dict_open (cherokee_dwriter_t *w)
 	case dwriter_php:
 		cherokee_buffer_add_str (OUT, "array(");
 		break;
+	case dwriter_csv:
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 	}
@@ -367,6 +372,8 @@ cherokee_dwriter_dict_close (cherokee_dwriter_t *w)
 	case dwriter_php:
 		cherokee_buffer_add_str (OUT, ")");
 		break;
+	case dwriter_csv:
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 	}
@@ -393,6 +400,8 @@ cherokee_dwriter_list_open (cherokee_dwriter_t *w)
 		break;
 	case dwriter_php:
 		cherokee_buffer_add_str (OUT, "array(");
+		break;
+	case dwriter_csv:
 		break;
 	default:
 		SHOULDNT_HAPPEN;
@@ -426,6 +435,9 @@ cherokee_dwriter_list_close (cherokee_dwriter_t *w)
 	case dwriter_php:
 		cherokee_buffer_add_str (OUT, ")");
 		break;
+	case dwriter_csv:
+		cherokee_buffer_add_str (OUT, "\n");
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 	}
@@ -456,6 +468,11 @@ cherokee_dwriter_lang_to_type (cherokee_buffer_t       *buf,
 
 	if (equal_buf_str (buf, "ruby")) {
 		*lang = dwriter_ruby;
+		return ret_ok;
+	}
+
+	if (equal_buf_str (buf, "csv")) {
+		*lang = dwriter_csv;
 		return ret_ok;
 	}
 

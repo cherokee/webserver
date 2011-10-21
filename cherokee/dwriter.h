@@ -51,7 +51,8 @@ typedef enum {
 	dwriter_json,
 	dwriter_python,
 	dwriter_php,
-	dwriter_ruby
+	dwriter_ruby,
+	dwriter_csv
 } cherokee_dwriter_lang_t;
 
 typedef struct {
