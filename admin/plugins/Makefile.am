@@ -56,7 +56,8 @@ uwsgi.py \
 wildcard.py \
 gzip.py \
 deflate.py \
-drop.py
+drop.py \
+xslt.py
 
 EXTRA_DIST = \
 $(adminplugins_DATA)

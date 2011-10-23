@@ -532,6 +532,23 @@ else
 dynamic_handler_post_report_lib = libplugin_post_report.la
 endif
 
+#
+# Handler xslt
+#
+handler_xslt = \
+handler_xslt.c \
+handler_xslt.h \
+logo.inc 
+
+libplugin_xslt_la_LDFLAGS = $(module_ldflags) `pkg-config libxslt libexslt --libs`
+libplugin_xslt_la_SOURCES = $(handler_xslt)
+libplugin_xslt_la_CFLAGS  = `pkg-config libxslt libexslt --cflags`
+
+if STATIC_HANDLER_SERVER_INFO
+static_handler_xslt_src = $(handler_xslt)
+else
+dynamic_handler_xslt_lib = libplugin_xslt.la
+endif
 
 #
 # Handler server_info
@@ -1622,6 +1639,7 @@ $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
 $(static_handler_render_rrd_src) \
 $(static_handler_dbslayer_src) \
+$(static_handler_xslt_src) \
 $(static_handler_admin_src) \
 \
 $(static_logger_ncsa_src) \
@@ -1815,6 +1833,7 @@ $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_error_nn_lib) \
 $(dynamic_handler_common_lib) \
 $(dynamic_handler_dbslayer_lib) \
+$(dynamic_handler_xslt_lib) \
 $(dynamic_handler_admin_lib) \
 $(dynamic_encoder_gzip_lib) \
 $(dynamic_encoder_deflate_lib) \
