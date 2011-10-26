@@ -15,12 +15,14 @@ def write_cherokee_conf (app_file, CTK_root, SCGI_port):
     else:
         app_file_path = os.path.join (os.getcwd(), app_file)
 
+    # Get python executable, to make CTK work in virtualenv for example
+    python_executable = sys.executable
     # Write the custom configuration file
     config = CONFIG_BASE[:]
     config = config.replace ('vserver!10!document_root = /var/www',
                              'vserver!10!document_root = %s' %(CTK_root))
     config = config.replace ('source!1!interpreter = /usr/bin/true',
-                             'source!1!interpreter = python %s' %(app_file_path))
+                             'source!1!interpreter = %s %s' %(python_executable, app_file_path))
     config = config.replace ('source!1!host = localhost:8000',
                              'source!1!host = localhost:%s' %(SCGI_port))
     config = config.replace ('vserver!10!rule!200!document_root = /var/www/static',
