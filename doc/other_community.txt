@@ -35,7 +35,7 @@ These are the lists currently in existence:
 
 - link:http://lists.octality.com/listinfo/cherokee[General list]
 - link:http://lists.octality.com/listinfo/cherokee-dev[Development list]
-- link:http://lists.octality.com/listinfo/cherokee-commits[SVN Reports]
+- link:http://lists.octality.com/listinfo/cherokee-commits[GIT Reports]
 
 
 #cherokee IRC channel
