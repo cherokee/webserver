@@ -588,7 +588,7 @@ class Finished:
 
 
 CTK.publish ('^%s$'%(URL_MAINTENANCE_LIST),       ListApps)
-CTK.publish ('^%s$'%(URL_MAINTENANCE_LIST_APPLY), ListApps_Apply, method="POST")
+CTK.publish ('^%s'%(URL_MAINTENANCE_LIST_APPLY),  ListApps_Apply, method="POST")
 CTK.publish ('^%s$'%(URL_MAINTENANCE_DB),         DatabaseRemoval)
 CTK.publish ('^%s$'%(URL_MAINTENANCE_DB_APPLY),   DatabaseRemoval_Apply, method="POST")
 CTK.publish ('^%s$'%(URL_MAINTENANCE_REMOVE),     RemoveApps)
