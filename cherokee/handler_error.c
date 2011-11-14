@@ -275,23 +275,6 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 		cherokee_buffer_add_str     (buffer, CRLF);
 	}
 
-	/* HSTS support
-	 */
-	if ((conn->socket.is_tls != TLS)    &&
-	    (CONN_VSRV(conn)->hsts.enabled) &&
-	    (conn->error_code == http_moved_permanently))
-	{
-		cherokee_buffer_add_str     (buffer, "Strict-Transport-Security: ");
-		cherokee_buffer_add_str     (buffer, "max-age=");
-		cherokee_buffer_add_ulong10 (buffer, (culong_t) CONN_VSRV(conn)->hsts.max_age);
-
-		if (CONN_VSRV(conn)->hsts.subdomains) {
-			cherokee_buffer_add_str (buffer, "; includeSubdomains");
-		}
-
-		cherokee_buffer_add_str (buffer, CRLF);
-	}
-
 	/* Usual headers
 	 */
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);

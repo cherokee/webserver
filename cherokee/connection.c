@@ -872,6 +872,22 @@ build_response_header (cherokee_connection_t *conn,
 			cherokee_encoder_add_headers (conn->encoder, buffer);
 		}
 	}
+
+	/* HSTS support
+	 */
+	if ((conn->socket.is_tls == TLS)    &&
+	    (CONN_VSRV(conn)->hsts.enabled))
+	{
+		cherokee_buffer_add_str     (buffer, "Strict-Transport-Security: ");
+		cherokee_buffer_add_str     (buffer, "max-age=");
+		cherokee_buffer_add_ulong10 (buffer, (culong_t) CONN_VSRV(conn)->hsts.max_age);
+
+		if (CONN_VSRV(conn)->hsts.subdomains) {
+			cherokee_buffer_add_str (buffer, "; includeSubdomains");
+		}
+
+		cherokee_buffer_add_str (buffer, CRLF);
+	}
 }
 
 
