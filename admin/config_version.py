@@ -72,6 +72,16 @@ def upgrade_to_1_0_13 (cfg):
                     del(cfg[key])
 
 
+# Converts from 1.0.13 to 1.2.102
+def upgrade_to_1_2_102 (cfg):
+    # Fix HSTS entries with the value "One year".
+    # Eg: vserver!1!hsts!max_age = One year
+    for v in cfg.keys('vserver'):
+        max_age_val = cfg.get_val ('vserver!%s!hsts!max_age'%(v))
+        if max_age_val and not max_age_val.isdigit():
+            cfg['vserver!%s!hsts!max_age'%(v)] = "31536000"
+
+
 def config_version_get_current():
     ver = configured.VERSION.split ('b')[0]
     v1,v2,v3 = ver.split (".")
@@ -144,6 +154,10 @@ def config_version_update_cfg (cfg):
     # Update to.. 1.0.13
     if ver_config_i < 1000013:
         upgrade_to_1_0_13 (cfg)
+
+    # Update to.. 1.2.102
+    if ver_config_i < 1200102:
+        upgrade_to_1_2_102 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True
