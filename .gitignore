@@ -1,0 +1,7 @@
+*.pyc
+*.pyo
+*~
+Makefile
+Makefile.in
+Makefile.in.in
+CTK-run
