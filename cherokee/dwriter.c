@@ -133,16 +133,16 @@
 
 #define ENSURE_NOT_KEY						\
 	if (CS == dwriter_dict_key)				\
-		return ret_error;
+		return ret_error
 
 #define ENSURE_VALID_STATE					\
 	if ((CS == dwriter_error) || (CS == dwriter_error))	\
-		return ret_error;
+		return ret_error
 
 #define INCREMENT_DEPTH						\
 	w->depth += 1;						\
 	if (w->depth >= DWRITER_STACK_LEN)			\
-		return ret_error;
+		return ret_error
 
 
 ret_t
