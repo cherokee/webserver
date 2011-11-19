@@ -20,6 +20,7 @@ Makefile.in
 ChangeLog
 aclocal.m4
 admin/configured.py
+admin/wizards2
 autom4te.cache/
 cherokee-*.tar.gz
 cherokee-config

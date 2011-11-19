@@ -10,7 +10,7 @@ several platforms.
 * link:basics_installation_unix.html[Unix installation]
 * link:basics_installation_osx.html[OSX installation]
 * link:basics_installation_windows.html[Windows installation]
-* link:basics_installation_svn.html[Installation From SVN]
+* link:basics_installation_git.html[Installation From GIT]
 
 For insight on more specific subjects such as cross-compilation or
 embedding Cherokee, check the link:cookbook.html[Cookbook].
