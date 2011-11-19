@@ -88,6 +88,17 @@ on that section. An IP/Subnet match plus a simultaneous wildcard match
 is a combination likely to cover every corner-case scenario you are
 presented with.
 
+[[hsts]]
+.Can clients be forced to use HTTPS?
+
+After enabling HTTP Strict Transport Security per Virtual Server, a client
+get automatically redirected to HTTPS upon connection to HTTP. In principle
+this equals to the match rule "Is TLS/SSL" with an external redirection.
+HSTS additionally adds a HTTP Header "Strict-Transport-Security" to the
+secure connection which informs the browser that all other content on
+the page should be accessed over HTTPS. The max-age options defines when the
+browser can check HTTP again.
+
 [[ssl-support]]
 .How to enable the SSL support?
 
