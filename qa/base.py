@@ -49,6 +49,7 @@ class TestBase:
 
     def _initialize (self):
         self.ssl                     = None
+        self.is_ssl                  = False
         self.reply                   = ""      # "200 OK"..
         self.version                 = None    # HTTP/x.y: 9, 0 or 1
         self.reply_err               = None    # 200
@@ -67,7 +68,7 @@ class TestBase:
                     continue
             raise
 
-    def _do_request (self, host, port, ssl):
+    def _do_request (self, host, port):
         for res in socket.getaddrinfo (host, port, socket.AF_UNSPEC, socket.SOCK_STREAM):
             af, socktype, proto, canonname, sa = res
 
@@ -87,7 +88,7 @@ class TestBase:
         if s is None:
             raise Exception("Couldn't connect to the server")
 
-        if ssl:
+        if self.is_ssl:
             try:
                 self.ssl = socket.ssl (s)
             except:
@@ -214,8 +215,8 @@ class TestBase:
     def CustomTest (self):
 	   return 0
 
-    def Run (self, host, port, ssl):
-        self._do_request(host, port, ssl)
+    def Run (self, host, port):
+        self._do_request(host, port)
         self._parse_output()
         return self._check_result()
 
@@ -448,10 +449,10 @@ class TestCollection (TestBase):
 
         self.current_test = current
 
-    def Run (self, host, port, ssl):
+    def Run (self, host, port):
         for t in self.tests:
             self.current_test = t
-            r = t.Run(host, port, ssl)
+            r = t.Run(host, port)
             if r == -1: return r
 
             if self.delay > 0:
