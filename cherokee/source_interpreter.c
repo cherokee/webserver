@@ -724,6 +724,14 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		/* reset by peer: spawn process? */
 		TRACE (ENTRIES, "Connection refused (closing fd=%d)\n", socket->socket);
 		cherokee_socket_close (socket);
+
+		/* Try the next address quickly, if any */
+		if (SOURCE(src)->addr_current) {
+			SOURCE(src)->addr_current = SOURCE(src)->addr_current->ai_next;
+			if (SOURCE(src)->addr_current) {
+				return ret_eagain;
+			}
+		}
 		break;
 
 	default:
