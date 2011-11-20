@@ -217,7 +217,6 @@ server!bind!1!port = %(PORT)d
 server!bind!1!interface = %(listen)s
 server!bind!2!port = %(PORT_TLS)d
 server!bind!2!tls = 1
-server!bind!2!interface = %(listen)s
 server!keepalive = 1
 server!panic_action = %(panic)s
 server!pid_file = %(pid)s
@@ -260,10 +259,9 @@ if method:
 if ssl:
     CONF_BASE += """
 server!tls = libssl
-vserver!1!ssl_certificate_file = %s
-vserver!1!ssl_certificate_key_file = %s
-vserver!1!ssl_ca_list_file = %s
-""" % (SSL_CERT_FILE, SSL_CERT_KEY_FILE, SSL_CA_FILE)
+vserver!1!ssl_certificate_file = %(SSL_CERT_FILE)s
+vserver!1!ssl_certificate_key_file = %(SSL_CERT_KEY_FILE)s
+""" % (globals())
 
 if log:
     CONF_BASE += """
