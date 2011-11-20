@@ -294,6 +294,7 @@ for m in mods:
     obj.tmp      = tmp
     obj.nobody   = nobody
     obj.php_conf = php_ext
+    obj.is_ssl   = ssl
     objs.append(obj)
 
 # Prepare www files
@@ -465,7 +466,7 @@ def mainloop_iterator (objs, main_thread=True):
 
             try:
                 obj.JustBefore(www)
-                ret = obj.Run (client_host, client_port, ssl)
+                ret = obj.Run (client_host, client_port)
                 obj.JustAfter(www)
             except Exception, e:
                 if not its_clean:
