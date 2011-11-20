@@ -91,8 +91,8 @@ class TestBase:
         if self.is_ssl:
             try:
                 self.ssl = socket.ssl (s)
-            except:
-                raise Exception("Couldn't handshake SSL")
+            except Exception, e:
+                raise Exception("Couldn't handshake SSL: "+str(e))
 
         request = self.request + "\r\n"
         if self.post is not None:
