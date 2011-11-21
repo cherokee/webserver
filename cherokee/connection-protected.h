@@ -214,6 +214,10 @@ struct cherokee_connection {
 	int                           regex_host_ovector[OVECTOR_LEN];
 	int                           regex_host_ovecsize;
 
+	/* Private timeout to be used in handlers
+	 */
+	time_t                        private_timeout;
+
 	/* Content Expiration
 	 */
 	cherokee_expiration_t         expiration;
@@ -287,6 +291,7 @@ ret_t cherokee_connection_instance_encoder       (cherokee_connection_t *conn);
 ret_t cherokee_connection_sleep                  (cherokee_connection_t *conn, cherokee_msec_t msecs);
 void  cherokee_connection_update_timeout         (cherokee_connection_t *conn);
 void  cherokee_connection_add_expiration_header  (cherokee_connection_t *conn, cherokee_buffer_t *buffer, cherokee_boolean_t use_maxage);
+ret_t cherokee_connection_build_host_string      (cherokee_connection_t *conn, cherokee_buffer_t *buf);
 ret_t cherokee_connection_build_host_port_string (cherokee_connection_t *conn, cherokee_buffer_t *buf);
 
 /* Iteration

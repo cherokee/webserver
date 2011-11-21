@@ -12,6 +12,7 @@ custom_error.py \
 dbslayer.py \
 directory.py \
 dirlist.py \
+dummy.py \
 empty_gif.py \
 error_nn.py \
 error_redir.py \
@@ -21,6 +22,7 @@ extensions.py \
 failover.py \
 fcgi.py \
 file.py \
+filetime.py \
 from.py \
 fullpath.py \
 geoip.py \
@@ -44,15 +46,18 @@ rrd.py \
 scgi.py \
 secdownload.py \
 server_info.py \
+sphinx.py \
 ssi.py \
 streaming.py \
 target_ip.py \
+tile.py \
 url_arg.py \
 uwsgi.py \
 wildcard.py \
 gzip.py \
 deflate.py \
-drop.py
+drop.py \
+xslt.py
 
 EXTRA_DIST = \
 $(adminplugins_DATA)

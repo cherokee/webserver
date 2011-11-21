@@ -206,6 +206,9 @@ dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl,
 	case dwriter_ruby:
 		cherokee_buffer_add_str (buffer, "Content-Type: application/x-ruby" CRLF);
 		break;
+	case dwriter_xmlrpc:
+		cherokee_buffer_add_str (buffer, "Content-Type: application/xml+rpc" CRLF);
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 		return ret_error;

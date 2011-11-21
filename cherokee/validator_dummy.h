@@ -20,36 +20,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */ 
+
+#ifndef CHEROKEE_VALIDATOR_DUMMY_H
+#define CHEROKEE_VALIDATOR_DUMMY_H
+
+#include "validator.h"
+#include "connection.h"
+
+typedef struct {
+	cherokee_module_props_t   base;
+} cherokee_validator_dummy_props_t;
+
+typedef struct {
+	cherokee_validator_t      validator;
+} cherokee_validator_dummy_t;
+
+/* Validator
  */
 
-#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
-# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
-#endif
+ret_t cherokee_validator_dummy_new (cherokee_validator_dummy_t **dummy,
+                                    cherokee_module_props_t     *props);
 
+ret_t cherokee_validator_dummy_configure (cherokee_config_node_t    *conf,
+					  cherokee_server_t         *srv,
+					  cherokee_module_props_t **_props);
 
-#ifndef CHEROKEE_VERSION_H
-#define CHEROKEE_VERSION_H
+ret_t cherokee_validator_dummy_check (cherokee_validator_dummy_t *dummy,
+                                      cherokee_connection_t      *conn);
 
-#include <cherokee/common.h>
-#include <cherokee/buffer.h>
-
-CHEROKEE_BEGIN_DECLS
-
-
-typedef enum {
-	cherokee_version_void,
-	cherokee_version_product,
-	cherokee_version_minor,
-	cherokee_version_minimal,
-	cherokee_version_os,
-	cherokee_version_full
-} cherokee_server_token_t;
-
-ret_t cherokee_version_add        (cherokee_buffer_t *buf, cherokee_server_token_t level);
-ret_t cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t level, cuint_t port);
-ret_t cherokee_version_add_simple (cherokee_buffer_t *buf, cherokee_server_token_t level);
-
-
-CHEROKEE_END_DECLS
-
-#endif /* CHEROKEE_VERSION_H */
+#endif /* CHEROKEE_VALIDATOR_DUMMY_H */

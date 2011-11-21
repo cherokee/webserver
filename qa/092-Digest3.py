@@ -30,7 +30,7 @@ class Test (TestBase):
         #
         nested = TestBase(__file__)
         nested.request = "GET /digest3/file HTTP/1.0\r\n"
-        nested.Run(HOST, PORT, 0)
+        nested.Run(HOST, PORT)
 
         # Parse the authentication information line
         #

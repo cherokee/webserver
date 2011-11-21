@@ -46,6 +46,7 @@ NOTE_CERT             = N_('This directive points to the PEM-encoded Certificate
 NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full path to the file)')
 NOTE_CA_LIST          = N_('File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
 NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: HIGH:!aNULL:!MD5).')
+NOTE_CIPHER_SERVER_PREFERENCE = N_('The cipher sequence that is specified by the server should have preference over the preference of the client. (Default: False).')
 NOTE_CLIENT_CERTS     = N_('Skip, Accept or Require client certificates.')
 NOTE_VERIFY_DEPTH     = N_('Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)')
 NOTE_ERROR_HANDLER    = N_('Allows the selection of how to generate the error responses.')
@@ -665,6 +666,7 @@ class SecutiryWidgetContent (CTK.Container):
         # Advanced options
         table = CTK.PropsTable()
         table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
+        table.Add (_('Server Preference'),     CTK.CheckCfgText ('%s!ssl_cipher_server_preference' % (pre), False, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
         table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
 
         if CTK.cfg.get_val('%s!ssl_client_certs' %(pre)):
@@ -685,8 +687,8 @@ class SecutiryWidgetContent (CTK.Container):
         table.Add (_('Enable HSTS'), CTK.CheckCfgText ('%s!hsts'%(pre), False, _('Accept')), _(NOTE_HSTS))
 
         if int(CTK.cfg.get_val('%s!hsts' %(pre), "0")):
-            table.Add (_('HSTS Max-Age'),       CTK.TextCfg ('%s!hsts!max_age'%(pre), True, {'optional_string':_("One year")}), _(NOTE_HSTS_MAXAGE))
-            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
+            table.Add (_('HSTS Max-Age'),       CTK.TextCfg      ('%s!hsts!max_age'   %(pre), True, {'optional_string':_("31536000")}), _(NOTE_HSTS_MAXAGE))
+            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!hsts!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
 
         submit = CTK.Submitter (url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())

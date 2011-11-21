@@ -151,6 +151,23 @@ endif
 
 
 #
+# Rule filetime
+#
+rule_filetime = \
+rule_filetime.c \
+rule_filetime.h
+
+libplugin_filetime_la_LDFLAGS = $(module_ldflags)
+libplugin_filetime_la_SOURCES = $(rule_filetime)
+
+if STATIC_RULE_FILETIME
+static_rule_filetime_src = $(rule_filetime)
+else
+dynamic_rule_filetime_lib = libplugin_filetime.la
+endif
+
+
+#
 # Rule request
 #
 rule_request = \
@@ -515,6 +532,23 @@ else
 dynamic_handler_post_report_lib = libplugin_post_report.la
 endif
 
+#
+# Handler xslt
+#
+handler_xslt = \
+handler_xslt.c \
+handler_xslt.h \
+logo.inc 
+
+libplugin_xslt_la_LDFLAGS = $(module_ldflags) `pkg-config libxslt libexslt --libs`
+libplugin_xslt_la_SOURCES = $(handler_xslt)
+libplugin_xslt_la_CFLAGS  = `pkg-config libxslt libexslt --cflags`
+
+if STATIC_HANDLER_SERVER_INFO
+static_handler_xslt_src = $(handler_xslt)
+else
+dynamic_handler_xslt_lib = libplugin_xslt.la
+endif
 
 #
 # Handler server_info
@@ -548,6 +582,43 @@ if STATIC_HANDLER_FILE
 static_handler_file_src = $(handler_file)
 else
 dynamic_handler_file_lib = libplugin_file.la
+endif
+
+#
+# Handler sphinx
+#
+handler_sphinx = \
+handler_sphinx.h \
+handler_sphinx.c
+
+libplugin_sphinx_la_LDFLAGS = $(module_ldflags) $(SPHINXCLIENT_LDFLAGS)
+libplugin_sphinx_la_SOURCES = $(handler_sphinx)
+libplugin_sphinx_la_CFLAGS  = $(SPHINXCLIENT_CFLAGS)
+
+if HAVE_SPHINXCLIENT
+if STATIC_HANDLER_SPHINX
+static_handler_sphinx_src   = $(handler_sphinx)
+static_handler_sphinx_lib   = $(SPHINXCLIENT_LDFLAGS)
+static_handler_sphinx_flags = $(SPHINXCLIENT_CFLAGS)
+else
+dynamic_handler_sphinx_lib = libplugin_sphinx.la
+endif
+endif
+
+#
+# Handler tile
+#
+handler_tile = \
+handler_tile.c \
+handler_tile.h
+
+libplugin_tile_la_LDFLAGS = $(module_ldflags)
+libplugin_tile_la_SOURCES = $(handler_tile)
+
+if STATIC_HANDLER_TILE
+static_handler_tile_src = $(handler_tile)
+else
+dynamic_handler_tile_lib = libplugin_tile.la
 endif
 
 
@@ -1178,6 +1249,23 @@ endif
 
 
 #
+# Validator dummy
+#
+validator_dummy = \
+validator_dummy.c \
+validator_dummy.h
+
+libplugin_dummy_la_LDFLAGS = $(module_ldflags)
+libplugin_dummy_la_SOURCES = $(validator_dummy)
+
+if STATIC_VALIDATOR_DUMMY
+static_validator_dummy_src = $(validator_dummy)
+else
+dynamic_validator_dummy_lib = libplugin_dummy.la
+endif
+
+
+#
 # Cryptor libssl
 #
 cryptor_libssl = \
@@ -1502,6 +1590,7 @@ endif
 libcherokee_server_la_SOURCES = \
 $(static_rule_directory_src) \
 $(static_rule_extensions_src) \
+$(static_rule_filetime_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
 $(static_rule_exists_src) \
@@ -1529,6 +1618,8 @@ $(static_handler_post_report_src) \
 $(static_collector_rrd_src) \
 \
 $(static_handler_file_src) \
+$(static_handler_sphinx_src) \
+$(static_handler_tile_src) \
 $(static_handler_dirlist_src) \
 $(static_handler_cgi_src) \
 $(static_handler_fcgi_src) \
@@ -1548,6 +1639,7 @@ $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
 $(static_handler_render_rrd_src) \
 $(static_handler_dbslayer_src) \
+$(static_handler_xslt_src) \
 $(static_handler_admin_src) \
 \
 $(static_logger_ncsa_src) \
@@ -1564,6 +1656,7 @@ $(static_validator_htdigest_src) \
 $(static_validator_htpasswd_src) \
 $(static_validator_authlist_src) \
 $(static_validator_mysql_src) \
+$(static_validator_dummy_src) \
 \
 $(static_cryptor_libssl_src) \
 \
@@ -1696,6 +1789,7 @@ plugindir = "$(libdir)/cherokee"
 plugin_LTLIBRARIES = \
 $(dynamic_rule_directory_lib) \
 $(dynamic_rule_extensions_lib) \
+$(dynamic_rule_filetime_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
 $(dynamic_rule_exists_lib) \
@@ -1718,6 +1812,8 @@ $(dynamic_gen_evhost_lib) \
 $(dynamic_post_track_lib) \
 $(dynamic_handler_post_report_lib) \
 $(dynamic_handler_file_lib) \
+$(dynamic_handler_sphinx_lib) \
+$(dynamic_handler_tile_lib) \
 $(dynamic_handler_server_info_lib) \
 $(dynamic_handler_render_rrd_lib) \
 $(dynamic_handler_dirlist_lib) \
@@ -1737,6 +1833,7 @@ $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_error_nn_lib) \
 $(dynamic_handler_common_lib) \
 $(dynamic_handler_dbslayer_lib) \
+$(dynamic_handler_xslt_lib) \
 $(dynamic_handler_admin_lib) \
 $(dynamic_encoder_gzip_lib) \
 $(dynamic_encoder_deflate_lib) \
@@ -1750,6 +1847,7 @@ $(dynamic_validator_htdigest_lib) \
 $(dynamic_validator_htpasswd_lib) \
 $(dynamic_validator_authlist_lib) \
 $(dynamic_validator_mysql_lib) \
+$(dynamic_validator_dummy_lib) \
 $(dynamic_cryptor_libssl_lib) \
 $(dynamic_balancer_round_robin_lib) \
 $(dynamic_balancer_ip_hash_lib) \

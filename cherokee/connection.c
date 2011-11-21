@@ -123,6 +123,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->polling_fd                = -1;
 	n->polling_multiple          = false;
 	n->polling_mode              = FDPOLL_MODE_NONE;
+	n->private_timeout           = -1;
 	n->expiration                = cherokee_expiration_none;
 	n->expiration_time           = 0;
 	n->expiration_prop           = cherokee_expiration_prop_none;
@@ -558,15 +559,38 @@ clean:
 ret_t
 cherokee_connection_setup_hsts_handler (cherokee_connection_t *conn)
 {
-	ret_t ret;
+	ret_t              ret;
+	cherokee_list_t   *i;
+	int                port = -1;
+	cherokee_server_t *srv  = CONN_SRV(conn);
 
 	/* Redirect to:
 	 * "https://" + host + request + query_string
 	 */
-	cherokee_buffer_clean   (&conn->redirect);
+	cherokee_buffer_clean (&conn->redirect);
+
+	/* 1.- Proto */
 	cherokee_buffer_add_str (&conn->redirect, "https://");
 
-	cherokee_connection_build_host_port_string (conn, &conn->redirect);
+	/* 2.- Host */
+	cherokee_connection_build_host_string (conn, &conn->redirect);
+
+	/* 3.- Port */
+	list_for_each (i, &srv->listeners) {
+		if (BIND_IS_TLS(i)) {
+			port = BIND(i)->port;
+			break;
+		}
+	}
+
+	if ((port != -1) &&
+	    (! http_port_is_standard (port, true)))
+	{
+		cherokee_buffer_add_char    (&conn->redirect, ':');
+		cherokee_buffer_add_ulong10 (&conn->redirect, port);
+	}
+
+	/* 4.- Request */
 	cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
 
 	if (conn->query_string.len > 0) {
@@ -835,9 +859,11 @@ build_response_header (cherokee_connection_t *conn,
 
 	/* Add the Server header
 	 */
-	cherokee_buffer_add_str (buffer, "Server: ");
-	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string);
-	cherokee_buffer_add_str (buffer, CRLF);
+	if (&CONN_BIND(conn)->server_string.len > 0) {
+		cherokee_buffer_add_str (buffer, "Server: ");
+		cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string);
+		cherokee_buffer_add_str (buffer, CRLF);
+	}
 
 	/* Authentication
 	 */
@@ -871,6 +897,22 @@ build_response_header (cherokee_connection_t *conn,
 		else {
 			cherokee_encoder_add_headers (conn->encoder, buffer);
 		}
+	}
+
+	/* HSTS support
+	 */
+	if ((conn->socket.is_tls == TLS)    &&
+	    (CONN_VSRV(conn)->hsts.enabled))
+	{
+		cherokee_buffer_add_str     (buffer, "Strict-Transport-Security: ");
+		cherokee_buffer_add_str     (buffer, "max-age=");
+		cherokee_buffer_add_ulong10 (buffer, (culong_t) CONN_VSRV(conn)->hsts.max_age);
+
+		if (CONN_VSRV(conn)->hsts.subdomains) {
+			cherokee_buffer_add_str (buffer, "; includeSubdomains");
+		}
+
+		cherokee_buffer_add_str (buffer, CRLF);
 	}
 }
 
@@ -2939,8 +2981,8 @@ cherokee_connection_update_timeout (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_build_host_port_string (cherokee_connection_t *conn,
-					    cherokee_buffer_t     *buf)
+cherokee_connection_build_host_string (cherokee_connection_t *conn,
+				       cherokee_buffer_t     *buf)
 {
 	/* 1st choice: Request host */
 	if (! cherokee_buffer_is_empty (&conn->host)) {
@@ -2959,6 +3001,22 @@ cherokee_connection_build_host_port_string (cherokee_connection_t *conn,
 		 (! cherokee_buffer_is_empty (&conn->bind->server_address)))
 	{
 		cherokee_buffer_add_buffer (buf, &conn->bind->server_address);
+	}
+
+	return ret_ok;
+}
+
+ret_t
+cherokee_connection_build_host_port_string (cherokee_connection_t *conn,
+					    cherokee_buffer_t     *buf)
+{
+	ret_t ret;
+
+	/* Host
+	 */
+	ret = cherokee_connection_build_host_string (conn, buf);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
 	}
 
 	/* Port

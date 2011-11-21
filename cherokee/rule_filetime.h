@@ -4,6 +4,7 @@
  *
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *      Stefan de Konink <stefan@konink.de>
  *
  * Copyright (C) 2001-2011 Alvaro Lopez Ortega
  *
@@ -26,30 +27,41 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-
-#ifndef CHEROKEE_VERSION_H
-#define CHEROKEE_VERSION_H
+#ifndef CHEROKEE_RULE_FILETIME_H
+#define CHEROKEE_RULE_FILETIME_H
 
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
+#include <cherokee/rule.h>
+#include <cherokee/list.h>
 
 CHEROKEE_BEGIN_DECLS
 
+typedef struct {
+	cherokee_rule_t    rule;
+	cherokee_boolean_t use_iocache;
 
-typedef enum {
-	cherokee_version_void,
-	cherokee_version_product,
-	cherokee_version_minor,
-	cherokee_version_minimal,
-	cherokee_version_os,
-	cherokee_version_full
-} cherokee_server_token_t;
+	time_t		   time;
 
-ret_t cherokee_version_add        (cherokee_buffer_t *buf, cherokee_server_token_t level);
-ret_t cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t level, cuint_t port);
-ret_t cherokee_version_add_simple (cherokee_buffer_t *buf, cherokee_server_token_t level);
+	enum {
+		ft_atime,
+		ft_ctime,
+		ft_mtime
+	}                  type;
 
+	enum {
+		equal,
+		equalless,
+		equalgreater,
+		equallessnow,
+		equalgreaternow
+	}		   comparison;
+} cherokee_rule_filetime_t;
+
+#define RULE_FILETIME(x) ((cherokee_rule_filetime_t *)(x))
+
+ret_t cherokee_rule_filetime_new (cherokee_rule_filetime_t **rule);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_VERSION_H */
+#endif /* CHEROKEE_RULE_FILETIME_H */

@@ -88,6 +88,17 @@ on that section. An IP/Subnet match plus a simultaneous wildcard match
 is a combination likely to cover every corner-case scenario you are
 presented with.
 
+[[hsts]]
+.Can clients be forced to use HTTPS?
+
+After enabling HTTP Strict Transport Security per Virtual Server, a client
+gets automatically redirected to HTTPS upon connection to HTTP. In principle
+this equals to the match rule "Is TLS/SSL" with an external redirection.
+Additionally HSTS adds the HTTP Header "Strict-Transport-Security" to a
+secure connection which informs the browser that all other content on
+the page must be accessed over HTTPS. The max-age options defines when the
+browser can check HTTP again.
+
 [[ssl-support]]
 .How to enable the SSL support?
 
@@ -145,6 +156,24 @@ straightforward actions is order to enable it:
 -----
 cat public.pem inter_ca_public.pem > chained.pem
 -----
+
+[[advanced]]
+.Advanced options
+
+In other te make SSL more secure, Cherokee offers the following advanced
+options:
+
+  . The `Ciphers` field can be set up to to allow specific cipher suites,
+    making communication with the client bound to stronger ciphers.
+    A good choice might be:
+    `ECDHE-RSA-AES256-SHA:AES256-SHA:CAMELLIA256-SHA:DES-CBC3-SHA`
+
+  . By default SSL communication prefers the cipher suite preference by
+    the client. You may understand that if a client prefers a weak cipher
+    but supports a strong cipher, the strong cipher would never be used.
+    We have introduced the option `Server Preference` to enforce our
+    preference on the client. Setting a specific order is possible using
+    the `Ciphers` field.
 
 [[ie-workarownd]]
 .I get certificate errors when having more than one. Workarounds?

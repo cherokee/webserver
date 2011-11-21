@@ -1246,7 +1246,9 @@ render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl,
 	/* Replacements
 	 */
 	VTMP_SUBSTITUTE_TOKEN ("%public_dir%",      dhdl->public_dir.buf);
-	VTMP_SUBSTITUTE_TOKEN ("%server_software%", bind->server_string_w_port.buf);
+	if (bind->server_string_w_port.len > 0) {
+		VTMP_SUBSTITUTE_TOKEN ("%server_software%", bind->server_string_w_port.buf);
+	}
 	VTMP_SUBSTITUTE_TOKEN ("%notice%",          dhdl->header.buf);
 	VTMP_SUBSTITUTE_TOKEN ("%icon_dir%",        props->icon_web_dir.buf);
 

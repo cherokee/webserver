@@ -195,8 +195,10 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 
 	/* Add page footer
 	 */
-	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
-	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string_w_port);
+	if (CONN_BIND(conn)->server_string_w_port.len > 0) {
+		cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
+		cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string_w_port);
+	}
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 
 	return ret_ok;
@@ -273,23 +275,6 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 		cherokee_buffer_add_str     (buffer, "Content-Length: ");
 		cherokee_buffer_add_ulong10 (buffer, (culong_t) hdl->content.len);
 		cherokee_buffer_add_str     (buffer, CRLF);
-	}
-
-	/* HSTS support
-	 */
-	if ((conn->socket.is_tls != TLS)    &&
-	    (CONN_VSRV(conn)->hsts.enabled) &&
-	    (conn->error_code == http_moved_permanently))
-	{
-		cherokee_buffer_add_str     (buffer, "Strict-Transport-Security: ");
-		cherokee_buffer_add_str     (buffer, "max-age=");
-		cherokee_buffer_add_ulong10 (buffer, (culong_t) CONN_VSRV(conn)->hsts.max_age);
-
-		if (CONN_VSRV(conn)->hsts.subdomains) {
-			cherokee_buffer_add_str (buffer, "; includeSubdomains");
-		}
-
-		cherokee_buffer_add_str (buffer, CRLF);
 	}
 
 	/* Usual headers
