@@ -70,11 +70,106 @@ cherokee_source_mrproper (cherokee_source_t *src)
 }
 
 
+static ret_t
+source_set_address (cherokee_source_t *src,
+			     cherokee_socket_t *sock)
+{
+	ret_t                    ret;
+	cherokee_boolean_t       tested_all;
+	cherokee_resolv_cache_t *resolv;
+	const struct addrinfo   *addr;
+	const struct addrinfo   *addr_info = NULL;
+
+	/* Query the resolv cache
+	 */
+	ret = cherokee_resolv_cache_get_default (&resolv);
+	if (unlikely (ret!=ret_ok)) {
+		return ret;
+	}
+
+	ret = cherokee_resolv_cache_get_addrinfo (resolv, &src->host, &addr_info);
+	if ((ret != ret_ok) || (addr_info == NULL)) {
+		return ret_error;
+	}
+
+	/* Current address
+	 */
+	if (src->addr_current) {
+		tested_all = false;
+		addr = src->addr_current;
+	} else {
+		tested_all = true;
+		addr = addr_info;
+	}
+
+	/* Create the fd for the address family
+	 *
+	 * Iterates through the different addresses of the
+	 * host and stores a pointer to the first one with
+	 * a supported family.
+	 */
+	while (addr != NULL) {
+		ret = cherokee_socket_create_fd (sock, addr->ai_family);
+
+#ifdef TRACE_ENABLED
+		if (cherokee_trace_is_tracing()) {
+			ret_t ret2;
+			char ip[46];
+
+			ret2 = cherokee_ntop (addr->ai_family, addr->ai_addr, ip, sizeof(ip));
+			if (ret2 == ret_ok) {
+				TRACE (ENTRIES, "Connecting to %s, ret=%d\n", ip, ret);
+			}
+		}
+#endif
+
+		if (ret == ret_ok) {
+			src->addr_current = addr;
+			break;
+		}
+
+		addr = addr->ai_next;
+		if (addr == NULL) {
+			if (tested_all) {
+				return ret_error;
+			}
+
+			tested_all = true;
+			src->addr_current = NULL;
+			addr = addr_info;
+			continue;
+		}
+
+		cherokee_socket_close(sock);
+	}
+
+	/* Update the new socket with the address info
+	 */
+	switch (src->addr_current->ai_family) {
+	case AF_INET:
+		SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
+		break;
+	case AF_INET6:
+		SOCKET_ADDR_IPv6(sock)->sin6_port = htons(src->port);
+		break;
+	default:
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+
+	ret = cherokee_socket_update_from_addrinfo (sock, src->addr_current, 0);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
 ret_t
 cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 {
-	ret_t                    ret;
-	cherokee_resolv_cache_t *resolv;
+	ret_t ret;
 
 	/* Short path: it's already connecting
 	 */
@@ -98,96 +193,12 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 			return ret;
 		}
 	} else {
-		cherokee_boolean_t     tested_all;
-		const struct addrinfo *addr;
-		const struct addrinfo *addr_info = NULL;
 
-		/* Query the resolv cache
+		/* Set next IP address
 		 */
-		ret = cherokee_resolv_cache_get_default (&resolv);
-		if (unlikely (ret!=ret_ok)) {
+		ret = source_set_address (src, sock);
+		if (ret != ret_ok) {
 			return ret;
-		}
-
-		ret = cherokee_resolv_cache_get_addrinfo (resolv, &src->host, &addr_info);
-		if ((ret != ret_ok) || (addr_info == NULL)) {
-			return ret_error;
-		}
-
-		/* Current address
-		 */
-		if (src->addr_current) {
-			tested_all = false;
-			addr = src->addr_current;
-			#if 0
-			/* The following allows to 'loadbalance' and/or check other sources */
-			addr = src->addr_current->ai_next;
-			if (addr == NULL)
-				addr = addr_info;
-			#endif
-		} else {
-			tested_all = true;
-			addr = addr_info;
-		}
-
-		/* Create the fd for the address family
-		 *
-		 * Iterates through the different addresses of the
-		 * host and stores a pointer to the first one with
-		 * a supported family.
-		 */
-		while (addr != NULL) {
-			ret = cherokee_socket_create_fd (sock, addr->ai_family);
-
-#ifdef TRACE_ENABLED
-			if (cherokee_trace_is_tracing()) {
-				ret_t ret2;
-				char ip[46];
-
-				ret2 = cherokee_ntop (addr->ai_family, addr->ai_addr, ip, sizeof(ip));
-				if (ret2 == ret_ok) {
-					TRACE (ENTRIES, "Connecting to %s, ret=%d\n", ip, ret);
-				}
-			}
-#endif
-
-			if (ret == ret_ok) {
-				src->addr_current = addr;
-				break;
-			}
-
-			addr = addr->ai_next;
-			if (addr == NULL) {
-				if (tested_all) {
-					return ret_error;
-				}
-
-				tested_all = true;
-				src->addr_current = NULL;
-				addr = addr_info;
-				continue;
-			}
-
-			cherokee_socket_close(sock);
-		}
-
-		/* Update the new socket with the address info
-		 */
-		switch (src->addr_current->ai_family) {
-		case AF_INET:
-			SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
-			break;
-		case AF_INET6:
-			SOCKET_ADDR_IPv6(sock)->sin6_port = htons(src->port);
-			break;
-		default:
-			SHOULDNT_HAPPEN;
-			return ret_error;
-		}
-
-		ret = cherokee_socket_update_from_addrinfo (sock, src->addr_current, 0);
-		if (unlikely (ret != ret_ok)) {
-			return ret_error;
 		}
 	}
 

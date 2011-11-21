@@ -5,7 +5,7 @@ This module has been written as part of the Cherokee project:
                http://www.cherokee-project.com/
 """
 
-# Copyright (c) 2006-2010, Alvaro Lopez Ortega <alvaro@alobbs.com>
+# Copyright (c) 2006-2011, Alvaro Lopez Ortega <alvaro@alobbs.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -43,9 +43,9 @@ import time
 import sys
 import os
 
-__version__   = '1.15'
+__version__   = '1.16.1'
 __author__    = 'Alvaro Lopez Ortega'
-__copyright__ = 'Copyright 2010, Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2011, Alvaro Lopez Ortega'
 __license__   = 'BSD'
 
 
@@ -184,8 +184,58 @@ class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
         return SocketServer.ThreadingMixIn.process_request (self, request, client_address)
 
 
-class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer): pass
-class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer): pass
+class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer):
+    pass
+
+class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer):
+    def server_bind (self):
+        host, port = self.server_address
+
+        # Binding to a IP/host
+        if host:
+            return self.server_bind_multifamily()
+
+        # Binding all interfaces
+        return SocketServer.TCPServer.server_bind (self)
+
+    def server_bind_multifamily (self):
+        # Loop over the different addresses of 'host'
+        host, port = self.server_address
+        addresses = socket.getaddrinfo (host, port, socket.AF_UNSPEC,
+                                        socket.SOCK_STREAM, 0, socket.AI_PASSIVE)
+
+        # Find a suitable address
+        s = None
+        for res in addresses:
+            af, socktype, protocol, canonicalname, sa = res
+
+            # Create socket
+            try:
+                s = socket.socket (af, socktype, protocol)
+            except socket.error:
+                s = None
+                continue
+
+            # Bind
+            try:
+                if self.allow_reuse_address:
+                    s.setsockopt (socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                s.bind(sa)
+            except socket.error:
+                s.close()
+                s = None
+                continue
+
+            break
+
+        # If none successfully bind report error
+        if not s:
+            raise socket.error, "Could not create server socket"
+
+        self.socket = s
+
+        # Finally, fix the server_address
+        self.server_address = self.socket.getsockname()
 
 
 # TCP port

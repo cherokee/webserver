@@ -14,10 +14,10 @@ vserver!2940!rule!1!handler = dirlist
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
-        self.name              = "HSTS: without Subdomains"
-        self.request           = "HTTP / HTTP/1.0\r\n" + \
+        self.name              = "HSTS over SSL: without Subdomains"
+        self.request           = "GET / HTTP/1.0\r\n" + \
                                  "Host: %s\r\n" %(NICK)
-        self.expected_error    = 301
+        self.expected_error    = 200
         self.expected_content  = ["Strict-Transport-Security:"]
         self.forbidden_content = ["includeSubdomains"]
 
@@ -27,3 +27,6 @@ class Test (TestBase):
         vars = globals()
         vars.update(locals())
         self.conf = CONF %(vars)
+
+    def Precondition (self):
+        return self.is_ssl
