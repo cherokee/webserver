@@ -41,5 +41,5 @@ git clone -b dev --recursive https://github.com/cherokee/webserver.git
 You can also download a package with the latest GIT contents:
 
 ---------------------------------------------------------------------------
-wget https://github.com/cherokee/webserver/zipball/dev
+wget https://github.com/cherokee/webserver/tarball/dev -O - | tar zxvf -
 ---------------------------------------------------------------------------
