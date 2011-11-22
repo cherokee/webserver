@@ -51,5 +51,5 @@ git submodule update --init
 You can also download a package with the latest contents of the Git repository:
 
 ---------------------------------------------------------------------------
-wget https://github.com/cherokee/webserver/zipball/dev
+wget https://github.com/cherokee/webserver/tarball/dev -O - | tar zxvf -
 ---------------------------------------------------------------------------
