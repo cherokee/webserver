@@ -529,6 +529,22 @@ send_hardcoded_error (cherokee_socket_t *sock,
 
 
 static ret_t
+move_conn_to_polling (cherokee_thread_t     *thd,
+		      cherokee_connection_t *conn)
+{
+	if (conn->socket.status & FDPOLL_MODE_WRITE) {
+		return cherokee_thread_deactive_to_polling (thd, conn, conn->socket.socket, 1, 0);
+	}
+
+	if (conn->socket.status & FDPOLL_MODE_READ) {
+		return cherokee_thread_deactive_to_polling (thd, conn, conn->socket.socket, 0, 0);
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
 process_polling_connections (cherokee_thread_t *thd)
 {
 	int                    re;
@@ -596,7 +612,6 @@ process_polling_connections (cherokee_thread_t *thd)
 				continue;
 			}
 
-			BIT_UNSET (conn->options, conn_op_was_polling);
 			continue;
 		}
 
@@ -645,7 +660,6 @@ process_polling_connections (cherokee_thread_t *thd)
 static ret_t
 process_active_connections (cherokee_thread_t *thd)
 {
-	int                       re;
 	ret_t                     ret;
 	off_t                     len;
 	cherokee_list_t          *i, *tmp;
@@ -747,32 +761,6 @@ process_active_connections (cherokee_thread_t *thd)
 			continue;
 		}
 
-		/* Check if the connection is active
-		 */
-		if (conn->options & conn_op_was_polling) {
-			BIT_UNSET (conn->options, conn_op_was_polling);
-		}
-		else if (conn->phase == phase_shutdown) {
-			; /* No FD check*/
-		}
-		else if ((conn->phase == phase_reading_header) && (conn->incoming_header.len > 0)) {
-			; /* No need, there's info already */
-		}
-		else {
-			re = cherokee_fdpoll_check (thd->fdpoll,
-						    SOCKET_FD(&conn->socket),
-						    conn->socket.status);
-			switch (re) {
-			case -1:
-				close_active_connection (thd, conn, false);
-				continue;
-			case 0:
-				if (! cherokee_socket_pending_read (&conn->socket)) {
-					continue;
-				}
-			}
-		}
-
 		TRACE (ENTRIES, "conn on phase n=%d: %s\n",
 		       conn->phase, cherokee_connection_get_phase_str (conn));
 
@@ -808,7 +796,6 @@ process_active_connections (cherokee_thread_t *thd)
 				 * the server shouldn't stop on fdpoll->watch(), the
 				 * connection is marked as ready as well.
 				 */
-				BIT_SET (conn->options, conn_op_was_polling);
 				thd->pending_read_num++;
 
 				/* Set mode and update timeout
@@ -859,6 +846,7 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				break;
 			case ret_eagain:
+				move_conn_to_polling (thd, conn);
 				continue;
 			case ret_eof:
 			case ret_error:
@@ -1219,11 +1207,11 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eagain:
 				/* Blocking on socket read */
 				conn_set_mode (thd, conn, socket_reading);
+				move_conn_to_polling (thd, conn);
 				continue;
 			case ret_deny:
 				/* Blocking on back-end write.
 				 * Skip next fd check */
-				BIT_SET (conn->options, conn_op_was_polling);
 				continue;
 			case ret_eof:
 			case ret_error:
@@ -1249,6 +1237,7 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				break;
 			case ret_eagain:
+				move_conn_to_polling (thd, conn);
 				continue;
 			case ret_eof:
 			case ret_error:
@@ -1294,6 +1283,7 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_send_header (conn);
 			switch (ret) {
 			case ret_eagain:
+				move_conn_to_polling (thd, conn);
 				continue;
 
 			case ret_ok:
@@ -1328,6 +1318,7 @@ process_active_connections (cherokee_thread_t *thd)
 				ret = cherokee_connection_send_header_and_mmaped (conn);
 				switch (ret) {
 				case ret_eagain:
+					move_conn_to_polling (thd, conn);
 					continue;
 
 				case ret_eof:
@@ -1350,6 +1341,7 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_step (conn);
 			switch (ret) {
 			case ret_eagain:
+				move_conn_to_polling (thd, conn);
 				break;
 
 			case ret_eof_have_data:
@@ -1376,6 +1368,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_ok:
 					continue;
 				case ret_eagain:
+					move_conn_to_polling (thd, conn);
 					break;
 				case ret_eof:
 				case ret_error:
@@ -1418,6 +1411,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 				case ret_eagain:
 					conn_set_mode (thd, conn, socket_reading);
+					move_conn_to_polling (thd, conn);
 					return ret_eagain;
 
 				default:
@@ -2147,8 +2141,6 @@ reactive_conn_from_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 	conn->polling_fd       = -1;
 	conn->polling_multiple = false;
 	conn->polling_mode     = FDPOLL_MODE_NONE;
-
-	BIT_SET (conn->options, conn_op_was_polling);
 
 	return move_connection_to_active (thd, conn);
 }
