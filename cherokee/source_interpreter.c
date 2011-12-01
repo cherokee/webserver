@@ -713,7 +713,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		/* wait for the fd */
 		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
 							   conn, SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE, false);
+							   FDPOLL_MODE_WRITE);
 		if (ret != ret_ok) {
 			return ret_error;
 		}

@@ -97,7 +97,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 	case ret_eagain:
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
 						     HANDLER_CONN(cgi), cgi->pipeInput,
-						     FDPOLL_MODE_READ, false);
+						     FDPOLL_MODE_READ);
 		return ret_eagain;
 
 	case ret_ok:
@@ -455,7 +455,7 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 		if (blocking == socket_writing) {
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
 							     conn, cgi->pipeOutput,
-							     FDPOLL_MODE_WRITE, false);
+							     FDPOLL_MODE_WRITE);
 			return ret_deny;
 		}
 

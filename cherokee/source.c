@@ -234,8 +234,7 @@ cherokee_source_connect_polling (cherokee_source_t     *src,
 		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
 							   conn,
 							   SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE,
-							   false);
+							   FDPOLL_MODE_WRITE);
 		if (ret != ret_ok) {
 			return ret_deny;
 		}

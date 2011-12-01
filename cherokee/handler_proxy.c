@@ -638,7 +638,7 @@ do_connect (cherokee_handler_proxy_t *hdl)
 		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							   HANDLER_CONN(hdl),
 							   hdl->pconn->socket.socket,
-							   FDPOLL_MODE_WRITE, false);
+							   FDPOLL_MODE_WRITE);
 		if (ret != ret_ok) {
 			return ret_deny;
 		}
@@ -709,7 +709,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
 			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
 								   hdl->pconn->socket.socket,
-								   FDPOLL_MODE_WRITE, false);
+								   FDPOLL_MODE_WRITE);
 			if (ret != ret_ok) {
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -755,7 +755,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
 			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
 								   hdl->pconn->socket.socket,
-								   FDPOLL_MODE_WRITE, false);
+								   FDPOLL_MODE_WRITE);
 			if (ret != ret_ok) {
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -791,7 +791,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
 			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn,
 								   hdl->pconn->socket.socket,
-								   FDPOLL_MODE_WRITE, false);
+								   FDPOLL_MODE_WRITE);
 			if (ret != ret_ok) {
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -850,7 +850,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							   HANDLER_CONN(hdl),
 							   conn->socket.socket,
-							   FDPOLL_MODE_READ, false);
+							   FDPOLL_MODE_READ);
 		if (ret != ret_ok) {
 			hdl->pconn->keepalive_in = false;
 			conn->error_code = http_bad_gateway;
@@ -1156,7 +1156,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 								   HANDLER_CONN(hdl),
 								   hdl->pconn->socket.socket,
-								   FDPOLL_MODE_READ, false);
+								   FDPOLL_MODE_READ);
 			if (ret != ret_ok) {
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -1707,7 +1707,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							     HANDLER_CONN(hdl),
 							     hdl->pconn->socket.socket,
-							     FDPOLL_MODE_READ, false);
+							     FDPOLL_MODE_READ);
 			return ret_eagain;
 		default:
 			RET_UNKNOWN(ret);
@@ -1818,7 +1818,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
  			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
  							     HANDLER_CONN(hdl),
  							     hdl->pconn->socket.socket,
- 							     FDPOLL_MODE_READ, false);
+ 							     FDPOLL_MODE_READ);
 			return ret_eagain;
 		}
 

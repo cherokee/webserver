@@ -68,6 +68,7 @@
 #include "bind.h"
 #include "bogotime.h"
 #include "config_entry.h"
+#include "connection-poll.h"
 
 typedef enum {
 	phase_nothing,
@@ -191,9 +192,7 @@ struct cherokee_connection {
 
 	/* Polling
 	 */
-	int                           polling_fd;
-	cherokee_socket_status_t      polling_mode;
-	cherokee_boolean_t            polling_multiple;
+	cherokee_connection_pool_t    polling_aim;
 
 	off_t                         range_start;
 	off_t                         range_end;

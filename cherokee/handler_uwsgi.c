@@ -175,7 +175,7 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base,
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base),
 						     HANDLER_CONN(cgi_base),
 						     uwsgi->socket.socket,
-						     FDPOLL_MODE_READ, false);
+						     FDPOLL_MODE_READ);
 		return ret_eagain;
 
 	case ret_ok:
@@ -454,7 +454,7 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 		if (blocking == socket_writing) {
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							     conn, hdl->socket.socket,
-							     FDPOLL_MODE_WRITE, false);
+							     FDPOLL_MODE_WRITE);
 			return ret_deny;
 		}
 

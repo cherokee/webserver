@@ -170,8 +170,7 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	switch (ret) {
 	case ret_eagain:
 		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), HANDLER_CONN(cgi),
-							   fcgi->socket.socket, FDPOLL_MODE_READ,
-							   false);
+							   fcgi->socket.socket, FDPOLL_MODE_READ);
 		if (unlikely (ret != ret_ok)) {
 			cgi->got_eof = true;
 			return ret_error;
@@ -672,7 +671,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							     HANDLER_CONN(hdl),
 							     hdl->socket.socket,
-							     FDPOLL_MODE_WRITE, false);
+							     FDPOLL_MODE_WRITE);
 			return ret_deny;
 		}
 
