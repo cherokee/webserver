@@ -68,9 +68,10 @@ _free (cherokee_fdpoll_poll_t *fdp)
 
 
 static ret_t
-_add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
+_add (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 {
-	cherokee_fdpoll_t *nfd = FDPOLL(fdp);
+	short              events = 0;
+	cherokee_fdpoll_t *nfd    = FDPOLL(fdp);
 
 	/* Check the fd limit
 	 */
@@ -82,17 +83,13 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 	fdp->pollfds[nfd->npollfds].fd      = fd;
 	fdp->pollfds[nfd->npollfds].revents = 0;
 
-	switch (rw) {
-	case FDPOLL_MODE_READ:
-		fdp->pollfds[nfd->npollfds].events = POLLIN;
-		break;
-	case FDPOLL_MODE_WRITE:
-		fdp->pollfds[nfd->npollfds].events = POLLOUT;
-		break;
-	default:
-		SHOULDNT_HAPPEN;
-		return ret_error;
+	if (rw_mode & poll_mode_read) {
+		events &= POLLIN;
 	}
+	if (rw_mode & poll_mode_write) {
+		events &= POLLOUT;
+	}
+	fdp->pollfds[nfd->npollfds].events = events;
 
 	fdp->fdidx[fd] = nfd->npollfds;
 	nfd->npollfds++;
@@ -102,9 +99,18 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 
 
 static ret_t
-_set_mode (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
+_set_mode (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 {
-	fdp->pollfds[fdp->fdidx[fd]].events = (rw == FDPOLL_MODE_WRITE ? POLLOUT : POLLIN);
+	short events = 0;
+
+	if (rw_mode & poll_mode_read) {
+		events &= POLLIN;
+	}
+	if (rw_mode & poll_mode_write) {
+		events &= POLLOUT;
+	}
+
+	fdp->pollfds[fdp->fdidx[fd]].events = events;
 	return ret_ok;
 }
 
@@ -150,25 +156,22 @@ _del (cherokee_fdpoll_poll_t *fdp, int fd)
 
 
 static int
-_check (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
+_check (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 {
 	int revents;
-	int idx = fdp->fdidx[fd];
+	int idx      = fdp->fdidx[fd];
 
 	if (idx < 0 || idx >= FDPOLL(fdp)->nfiles)
 		return -1;
 
 	revents = fdp->pollfds[idx].revents;
 
-	switch (rw) {
-		case FDPOLL_MODE_READ:
-			return revents & POLL_READ;
-		case FDPOLL_MODE_WRITE:
-			return revents & POLL_WRITE;
-		default:
-			SHOULDNT_HAPPEN;
-			return -1;
-	}
+	if ((rw_mode & poll_mode_read) && (revents & POLL_READ))
+		return 1;
+	if ((rw_mode & poll_mode_write) && (revents & POLL_WRITE))
+		return 1;
+
+	return 0;
 }
 
 

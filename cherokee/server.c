@@ -649,7 +649,7 @@ initialize_server_threads (cherokee_server_t *srv)
 		list_for_each (j, &srv->listeners) {
 			ret = cherokee_fdpoll_add (srv->main_thread->fdpoll,
 						   S_SOCKET_FD(BIND(j)->socket),
-						   FDPOLL_MODE_READ);
+						   poll_mode_read);
 			if (ret < ret_ok)
 				return ret;
 		}

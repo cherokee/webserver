@@ -30,16 +30,12 @@
 #define CHEROKEE_CONNECTION_POLL_H
 
 #include "common.h"
+#include "fdpoll.h"
 
-typedef enum {
-	   conn_poll_nothing    = 0,
-	   conn_poll_read       = 1,
-	   conn_poll_write      = (1 << 1)
-} cherokee_conn_poll_mode_t;
 
 typedef struct {
-	cherokee_conn_poll_mode_t mode;
-	int                       fd;
+	cherokee_poll_mode_t mode;
+	int                  fd;
 } cherokee_connection_pool_t;
 
 

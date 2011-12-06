@@ -81,6 +81,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 	ret_t                   ret;
  	size_t                  read_ = 0;
 	cherokee_handler_cgi_t *cgi   = HDL_CGI(cgi_base);
+	cherokee_connection_t  *conn  = HANDLER_CONN(cgi);
 
 	/* Sanity check: pipe() accessed
 	 */
@@ -95,9 +96,10 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 
 	switch (ret) {
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
-						     HANDLER_CONN(cgi), cgi->pipeInput,
-						     FDPOLL_MODE_READ);
+		conn->polling_aim.fd   = cgi->pipeInput;
+		conn->polling_aim.mode = poll_mode_read;
+
+		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn);
 		return ret_eagain;
 
 	case ret_ok:
@@ -453,9 +455,10 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 		break;
 	case ret_eagain:
 		if (blocking == socket_writing) {
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
-							     conn, cgi->pipeOutput,
-							     FDPOLL_MODE_WRITE);
+			conn->polling_aim.fd   = cgi->pipeOutput;
+			conn->polling_aim.mode = poll_mode_write;
+
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn);
 			return ret_deny;
 		}
 

@@ -27,6 +27,7 @@
 
 #include "common-internal.h"
 
+#include "poll.h"
 #include "socket_lowlevel.h"
 #include "buffer.h"
 #include "virtual_server.h"
@@ -37,9 +38,9 @@
 /* Socket status
  */
 typedef enum {
-	socket_reading = FDPOLL_MODE_READ,
-	socket_writing = FDPOLL_MODE_WRITE,
-	socket_closed  = FDPOLL_MODE_NONE
+	socket_reading = poll_mode_read,
+	socket_writing = poll_mode_write,
+	socket_closed  = poll_mode_nothing
 } cherokee_socket_status_t;
 
 

@@ -164,13 +164,16 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	ret_t                    ret;
 	size_t                   read = 0;
 	cherokee_handler_fcgi_t *fcgi = HDL_FCGI(cgi);
+	cherokee_connection_t   *conn = HANDLER_CONN(cgi);
 
 	ret = cherokee_socket_bufread (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
 
 	switch (ret) {
 	case ret_eagain:
-		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), HANDLER_CONN(cgi),
-							   fcgi->socket.socket, FDPOLL_MODE_READ);
+		conn->polling_aim.fd   = fcgi->socket.socket;
+		conn->polling_aim.mode = poll_mode_read;
+
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn);
 		if (unlikely (ret != ret_ok)) {
 			cgi->got_eof = true;
 			return ret_error;
@@ -668,10 +671,10 @@ send_post (cherokee_handler_fcgi_t *hdl,
 		/* Next iteration
 		 */
 		if (! cherokee_buffer_is_empty (buf)) {
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							     HANDLER_CONN(hdl),
-							     hdl->socket.socket,
-							     FDPOLL_MODE_WRITE);
+			conn->polling_aim.fd   = hdl->socket.socket;
+			conn->polling_aim.mode = poll_mode_write;
+
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
 			return ret_deny;
 		}
 

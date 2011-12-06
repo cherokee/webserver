@@ -29,7 +29,7 @@ ret_t
 cherokee_connection_poll_init (cherokee_connection_pool_t *conn_poll)
 {
 	   conn_poll->fd   = -1;
-	   conn_poll->mode = conn_poll_nothing;
+	   conn_poll->mode = poll_mode_nothing;
 
 	   return ret_ok;
 }
@@ -45,7 +45,7 @@ ret_t
 cherokee_connection_poll_clean (cherokee_connection_pool_t *conn_poll)
 {
 	   conn_poll->fd   = -1;
-	   conn_poll->mode = conn_poll_nothing;
+	   conn_poll->mode = poll_mode_nothing;
 
 	   return ret_ok;
 }

@@ -489,9 +489,8 @@ static ret_t
 move_conn_to_polling (cherokee_thread_t     *thd,
 		      cherokee_connection_t *conn)
 {
-	return cherokee_thread_deactive_to_polling (thd, conn,
-						    conn->polling_aim.fd,
-						    conn->polling_aim.mode);
+	return cherokee_thread_deactive_to_polling (thd, conn);
+
 /*
 
 	if (conn->socket.status & FDPOLL_MODE_WRITE) {
@@ -1491,7 +1490,7 @@ thread_full_handler (cherokee_thread_t *thd,
 
 	/* Short path: nothing to accept
 	 */
-	if (cherokee_fdpoll_check (thd->fdpoll, S_SOCKET_FD(bind->socket), FDPOLL_MODE_READ) <= 0) {
+	if (cherokee_fdpoll_check (thd->fdpoll, S_SOCKET_FD(bind->socket), poll_mode_read) <= 0) {
 		return;
 	}
 
@@ -1589,21 +1588,6 @@ get_new_connection (cherokee_thread_t *thd, cherokee_connection_t **conn)
 
 
 static ret_t
-thread_add_connection (cherokee_thread_t *thd, cherokee_connection_t  *conn)
-{
-	ret_t ret;
-
-	ret = cherokee_fdpoll_add (thd->fdpoll, SOCKET_FD(&conn->socket), FDPOLL_MODE_READ);
-	if (unlikely (ret < ret_ok)) return ret;
-
-	conn_set_mode (thd, conn, socket_reading);
-	add_connection (thd, conn);
-
-	return ret_ok;
-}
-
-
-static ret_t
 accept_new_connection (cherokee_thread_t *thd,
 		       cherokee_bind_t   *bind)
 {
@@ -1616,7 +1600,7 @@ accept_new_connection (cherokee_thread_t *thd,
 
 	/* Check whether there are connections waiting
 	 */
-	re = cherokee_fdpoll_check (thd->fdpoll, S_SOCKET_FD(bind->socket), FDPOLL_MODE_READ);
+	re = cherokee_fdpoll_check (thd->fdpoll, S_SOCKET_FD(bind->socket), poll_mode_read);
 	if (re <= 0) {
 		return ret_deny;
 	}
@@ -1678,10 +1662,8 @@ accept_new_connection (cherokee_thread_t *thd,
 
 	/* Lets add the new connection
 	 */
-	ret = thread_add_connection (thd, new_conn);
-	if (unlikely (ret < ret_ok)) {
-		goto error;
-	}
+	conn_set_mode (thd, new_conn, socket_reading);
+	add_connection (thd, new_conn);
 
 	thd->conns_num++;
 
@@ -1860,7 +1842,7 @@ watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
 	list_for_each (i, &srv->listeners) {
 		ret = cherokee_fdpoll_add (thd->fdpoll,
 					   S_SOCKET_FD(BIND(i)->socket),
-					   FDPOLL_MODE_READ);
+					   poll_mode_read);
 		if (unlikely (ret < ret_ok)) {
 			ret = ret_error;
 			goto out;
@@ -2104,30 +2086,32 @@ reactive_conn_from_polling (cherokee_thread_t     *thd,
 
 ret_t
 cherokee_thread_deactive_to_polling (cherokee_thread_t     *thd,
-				     cherokee_connection_t *conn,
-				     int                    fd,
-				     int                    mode)
+				     cherokee_connection_t *conn)
 {
 	ret_t              ret;
 	cherokee_socket_t *socket = &conn->socket;
 
-	if (fd <= 0)
-		return ret_ok;
-
-	TRACE (ENTRIES",polling", "conn=%p(fd=%d) (fd=%d, mode=%d)\n",
-	       conn, SOCKET_FD(socket), fd, mode);
-
-	/* Add the fd to the fdpoll
+	/* Sanity check:
+	 * conn->polling_aim must be have been set previously
 	 */
-	ret = cherokee_fdpoll_add (thd->fdpoll, fd, mode);
-	if (unlikely (ret != ret_ok)) {
+	if ((conn->polling_aim.fd < 0) ||
+	    (conn->polling_aim.mode == poll_mode_nothing))
+	{
+		SHOULDNT_HAPPEN;
 		return ret_error;
 	}
 
-	/* Set the information in the connection
+	TRACE (ENTRIES",polling", "conn=%p(fd=%d) (fd=%d, mode=%d)\n",
+	       conn, SOCKET_FD(socket), conn->polling_aim.fd, conn->polling_aim.mode);
+
+	/* Add the fd to the fdpoll
 	 */
-	conn->polling_aim.fd   = fd;
-	conn->polling_aim.mode = mode;
+	ret = cherokee_fdpoll_add (thd->fdpoll,
+				   conn->polling_aim.fd,
+				   conn->polling_aim.mode);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
 
 	return move_connection_to_polling (thd, conn);
 }

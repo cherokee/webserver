@@ -1059,7 +1059,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 
 			case ret_eagain:
 				conn->polling_aim.fd   = conn->socket.socket;
-				conn->polling_aim.mode = conn_poll_write;
+				conn->polling_aim.mode = poll_mode_write;
 				return ret_eagain;
 
 			case ret_error:
@@ -1101,7 +1101,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 
 		case ret_eagain:
 			conn->polling_aim.fd   = conn->socket.socket;
-			conn->polling_aim.mode = conn_poll_write;
+			conn->polling_aim.mode = poll_mode_write;
 			return ret_eagain;
 
 		case ret_error:
@@ -1205,7 +1205,7 @@ cherokee_connection_recv (cherokee_connection_t *conn,
 		}
 
 		conn->polling_aim.fd   = conn->socket.socket;
-		conn->polling_aim.mode = conn_poll_read;
+		conn->polling_aim.mode = poll_mode_read;
 
 		return ret_eagain;
 
@@ -1270,7 +1270,7 @@ cherokee_connection_send_header (cherokee_connection_t *conn)
 
 	case ret_eagain:
 		conn->polling_aim.fd   = conn->socket.socket;
-		conn->polling_aim.mode = conn_poll_write;
+		conn->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
 
 	default:
@@ -1365,7 +1365,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 
 		case ret_eagain:
 			conn->polling_aim.fd   = conn->socket.socket;
-			conn->polling_aim.mode = conn_poll_write;
+			conn->polling_aim.mode = poll_mode_write;
 			return ret_eagain;
 
 		case ret_error:
@@ -1410,7 +1410,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 
 	case ret_eagain:
 		conn->polling_aim.fd   = conn->socket.socket;
-		conn->polling_aim.mode = conn_poll_write;
+		conn->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
 
 	default:
