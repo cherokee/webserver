@@ -486,27 +486,6 @@ send_hardcoded_error (cherokee_socket_t *sock,
 
 
 static ret_t
-move_conn_to_polling (cherokee_thread_t     *thd,
-		      cherokee_connection_t *conn)
-{
-	return cherokee_thread_deactive_to_polling (thd, conn);
-
-/*
-
-	if (conn->socket.status & FDPOLL_MODE_WRITE) {
-		return cherokee_thread_deactive_to_polling (thd, conn, conn->socket.socket, 1, 0);
-	}
-
-	if (conn->socket.status & FDPOLL_MODE_READ) {
-		return cherokee_thread_deactive_to_polling (thd, conn, conn->socket.socket, 0, 0);
-	}
-
-	return ret_ok;
-*/
-}
-
-
-static ret_t
 process_polling_connections (cherokee_thread_t *thd)
 {
 	int                    re;
@@ -808,7 +787,7 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				break;
 			case ret_eagain:
-				move_conn_to_polling (thd, conn);
+				cherokee_thread_deactive_to_polling (thd, conn);
 				continue;
 			case ret_eof:
 			case ret_error:
@@ -1169,7 +1148,7 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eagain:
 				/* Blocking on socket read */
 				conn_set_mode (thd, conn, socket_reading);
-				move_conn_to_polling (thd, conn);
+				cherokee_thread_deactive_to_polling (thd, conn);
 				continue;
 			case ret_deny:
 				/* Blocking on back-end write.
@@ -1199,7 +1178,7 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				break;
 			case ret_eagain:
-				move_conn_to_polling (thd, conn);
+				cherokee_thread_deactive_to_polling (thd, conn);
 				continue;
 			case ret_eof:
 			case ret_error:
@@ -1245,7 +1224,7 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_send_header (conn);
 			switch (ret) {
 			case ret_eagain:
-				move_conn_to_polling (thd, conn);
+				cherokee_thread_deactive_to_polling (thd, conn);
 				continue;
 
 			case ret_ok:
@@ -1280,7 +1259,7 @@ process_active_connections (cherokee_thread_t *thd)
 				ret = cherokee_connection_send_header_and_mmaped (conn);
 				switch (ret) {
 				case ret_eagain:
-					move_conn_to_polling (thd, conn);
+					cherokee_thread_deactive_to_polling (thd, conn);
 					continue;
 
 				case ret_eof:
@@ -1303,7 +1282,7 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_step (conn);
 			switch (ret) {
 			case ret_eagain:
-				move_conn_to_polling (thd, conn);
+				cherokee_thread_deactive_to_polling (thd, conn);
 				break;
 
 			case ret_eof_have_data:
@@ -1330,7 +1309,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_ok:
 					continue;
 				case ret_eagain:
-					move_conn_to_polling (thd, conn);
+					cherokee_thread_deactive_to_polling (thd, conn);
 					break;
 				case ret_eof:
 				case ret_error:
@@ -1373,7 +1352,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 				case ret_eagain:
 					conn_set_mode (thd, conn, socket_reading);
-					move_conn_to_polling (thd, conn);
+					cherokee_thread_deactive_to_polling (thd, conn);
 					return ret_eagain;
 
 				default:
