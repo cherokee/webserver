@@ -159,16 +159,17 @@ _add (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw_mode)
 static ret_t
 _del (cherokee_fdpoll_kqueue_t *fdp, int fd)
 {
-	ret_t              ret = ret_not_found;
-	cherokee_boolean_t error = false;
+	ret_t              ret      = ret_not_found;
+	int                interest = fdp->fdinterest[fd];
+	cherokee_boolean_t error    = false;
 
-	if (fdp->fdinterest[fd] & poll_mode_read) {
+	if (interest & poll_mode_read) {
 		ret = _add_change (fdp, fd, poll_mode_read, EV_DELETE);
 		if (ret != ret_ok)
 			error = true;
 	}
 
-	if (fdp->fdinterest[fd] & poll_mode_write) {
+	if (interest & poll_mode_write) {
 		ret = _add_change (fdp, fd, poll_mode_write, EV_DELETE);
 		if (ret != ret_ok)
 			error |= true;
@@ -178,7 +179,7 @@ _del (cherokee_fdpoll_kqueue_t *fdp, int fd)
 		FDPOLL(fdp)->npollfds--;
 	}
 
-
+	fdp->fdinterest[fd] = 0;
 	return ret;
 }
 
@@ -277,39 +278,27 @@ _reset (cherokee_fdpoll_kqueue_t *fdp, int fd)
 static ret_t
 _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw_mode)
 {
+	int prev_interest = fdp->fdinterest[fd];
+
 	/* If transitioning from R->W or from W->R disable any active
 	 * event on the fd as we are no longer interested on it.
 	 */
 
 	/* No longer reading */
-	if ((rw_mode & poll_mode_read) &&
-	    (! (fdp->fdinterest[fd] & poll_mode_read)))
+	if ((! (rw_mode & poll_mode_read)) &&
+	    (prev_interest & poll_mode_read))
 	{
 		_add_change (fdp, fd, poll_mode_read, EV_DELETE);
 	}
 
 	/* No longer writing */
-	if ((rw_mode & poll_mode_write) &&
-	    (! (fdp->fdinterest[fd] & poll_mode_write)))
+	if ((! (rw_mode & poll_mode_write)) &&
+	    (prev_interest & poll_mode_write))
 	{
 		_add_change (fdp, fd, poll_mode_write, EV_DELETE);
 	}
 
 	return _add_change (fdp, fd, rw_mode, EV_ADD);
-
-
-	/* if ((rw == FDPOLL_MODE_WRITE) && */
-	/*     (fdp->fdinterest[fd] == FDPOLL_MODE_READ)) */
-	/* { */
-	/* 	_add_change (fdp, fd, FDPOLL_MODE_READ, EV_DELETE); */
-
-	/* } else if ((rw == FDPOLL_MODE_READ) && */
-	/* 	   (fdp->fdinterest[fd] == FDPOLL_MODE_WRITE)) */
-	/* { */
-	/* 	_add_change (fdp, fd, FDPOLL_MODE_WRITE, EV_DELETE); */
-	/* } */
-
-	/* return _add_change (fdp, fd, rw, EV_ADD); */
 }
 
 

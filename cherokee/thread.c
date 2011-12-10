@@ -511,7 +511,7 @@ process_polling_connections (cherokee_thread_t *thd)
 			}
 		}
 
-		/* Has it been too much without any work?
+		/* Has the connection expired?
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES",polling,timeout",
@@ -582,6 +582,7 @@ process_polling_connections (cherokee_thread_t *thd)
 		case 0:
 			/* Nothing to do.. wait longer
 			 */
+			;
 			continue;
 		}
 
@@ -2080,8 +2081,10 @@ cherokee_thread_deactive_to_polling (cherokee_thread_t     *thd,
 		return ret_error;
 	}
 
-	TRACE (ENTRIES",polling", "conn=%p(fd=%d) (fd=%d, mode=%d)\n",
-	       conn, SOCKET_FD(socket), conn->polling_aim.fd, conn->polling_aim.mode);
+	TRACE (ENTRIES",polling", "conn=%p(fd=%d) (fd=%d, mode=%s -> polling)\n",
+	       conn, SOCKET_FD(socket), conn->polling_aim.fd,
+	       conn->polling_aim.mode == poll_mode_read  ? "read"  :
+	       conn->polling_aim.mode == poll_mode_write ? "write" : "???");
 
 	/* Add the fd to the fdpoll
 	 */

@@ -290,7 +290,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	if (conn->polling_aim.fd != -1) {
                 cherokee_fd_close (conn->polling_aim.fd);
 	}
-	cherokee_connection_poll_mrproper (&conn->polling_aim);
+	cherokee_connection_poll_clean (&conn->polling_aim);
 
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
