@@ -384,19 +384,10 @@ close_active_connection (cherokee_thread_t     *thread,
 			 cherokee_connection_t *conn,
 			 cherokee_boolean_t     reset)
 {
-	ret_t ret;
-
 	/* Force to send a RST
 	 */
 	if (reset) {
 		cherokee_socket_reset (&conn->socket);
-	}
-
-	/* Delete from file descriptors poll
-	 */
-	ret = cherokee_fdpoll_del (thread->fdpoll, SOCKET_FD(&conn->socket));
-	if (ret != ret_ok) {
-		LOG_ERROR (CHEROKEE_ERROR_THREAD_RM_FD_POLL, SOCKET_FD(&conn->socket));
 	}
 
 	/* Remove from active connections list
