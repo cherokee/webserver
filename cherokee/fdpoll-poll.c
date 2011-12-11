@@ -82,10 +82,10 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 	/* Translate mode */
 	events = 0;
 	if (rw_mode & poll_mode_read) {
-		events &= POLLIN;
+		events |= POLLIN;
 	}
 	if (rw_mode & poll_mode_write) {
-		events &= POLLOUT;
+		events |= POLLOUT;
 	}
 
 	/* Set values */
@@ -106,10 +106,10 @@ _set_mode (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 	short events = 0;
 
 	if (rw_mode & poll_mode_read) {
-		events &= POLLIN;
+		events |= POLLIN;
 	}
 	if (rw_mode & poll_mode_write) {
-		events &= POLLOUT;
+		events |= POLLOUT;
 	}
 
 	fdp->pollfds[fdp->fdidx[fd]].events = events;
@@ -169,14 +169,17 @@ _check (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 	revents = fdp->pollfds[idx].revents;
 
 	/* Actual result */
-	if ((rw_mode & poll_mode_read) && (revents & POLLIN))
+	if ((rw_mode & poll_mode_read) && (revents & POLLIN)) {
 		return 1;
-	if ((rw_mode & poll_mode_write) && (revents & POLLOUT))
+	}
+	if ((rw_mode & poll_mode_write) && (revents & POLLOUT)) {
 		return 1;
+	}
 
 	/* Error */
-	if (revents & (POLLERR|POLLHUP|POLLNVAL))
+	if (revents & (POLLERR|POLLHUP|POLLNVAL)) {
 		return 1;
+	}
 
 	return 0;
 }

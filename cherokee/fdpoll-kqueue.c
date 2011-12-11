@@ -255,10 +255,10 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw_mode)
 	}
 
 	if (rw_mode & poll_mode_read) {
-		events &= KQUEUE_READ_EVENT;
+		events |= KQUEUE_READ_EVENT;
 	}
 	if (rw_mode & poll_mode_write) {
-		events &= KQUEUE_WRITE_EVENT;
+		events |= KQUEUE_WRITE_EVENT;
 	}
 
 	return events;
