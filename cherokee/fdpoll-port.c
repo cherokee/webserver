@@ -32,9 +32,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#define WRITE ""
-#define READ  NULL
-
 #define POLL_READ   (POLLIN)
 #define POLL_WRITE  (POLLOUT)
 #define POLL_ERROR  (POLLHUP | POLLERR | POLLNVAL)
@@ -70,16 +67,24 @@ typedef struct {
 
 
 static ret_t
-fd_associate( cherokee_fdpoll_port_t *fdp, int fd, void *rw )
+fd_associate (cherokee_fdpoll_port_t *fdp, int fd, void *rw_mode)
 {
 	int rc;
+	int events = 0;
 
-	rc = port_associate (fdp->port,                /* port */
-	                     PORT_SOURCE_FD,           /* source */
-	                     fd,                       /* object */
-	                     rw?POLL_WRITE:POLL_READ,  /* events */
-	                     rw);                      /* user data */
+	if (*rw_mode & poll_mode_read) {
+		events |= POLL_READ;
+	}
 
+	if (*rw_mode & poll_mode_write) {
+		events |= POLL_WRITE;
+	}
+
+	rc = port_associate (fdp->port,       /* port */
+	                     PORT_SOURCE_FD,  /* source */
+	                     fd,              /* object */
+	                     events,          /* events */
+	                     rw_mode);        /* user data */
 	if ( rc == -1 ) {
 		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
@@ -114,12 +119,12 @@ _free (cherokee_fdpoll_port_t *fdp)
 
 
 static ret_t
-_add (cherokee_fdpoll_port_t *fdp, int fd, int rw)
+_add (cherokee_fdpoll_port_t *fdp, int fd, int rw_mode)
 {
 	int rc;
 
-	rc = fd_associate(fdp, fd, (rw == FDPOLL_MODE_WRITE ? WRITE : READ));
-	if ( rc == -1 ) {
+	rc = fd_associate (fdp, fd, rw_mode);
+	if (rc == -1) {
 		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, fd);
 		return ret_error;
@@ -212,27 +217,36 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 
 
 static int
-_check (cherokee_fdpoll_port_t *fdp, int fd, int rw)
+_check (cherokee_fdpoll_port_t *fdp, int fd, int rw_mode)
 {
-	uint32_t events;
+	uint32_t events = 0;
 
 	/* Sanity check: is it a wrong fd?
 	 */
-	if ( fd < 0 ) return -1;
-
-	events = fdp->port_activefd[fd];
-	if ( events == -1 ) return 0;
-
-	switch (rw) {
-	case FDPOLL_MODE_READ:
-		events &= (POLL_READ | POLL_ERROR);
-		break;
-	case FDPOLL_MODE_WRITE:
-		events &= (POLL_WRITE | POLL_ERROR);
-		break;
+	if (unlikely (fd < 0)) {
+		return -1;
 	}
 
-	return events;
+	events = fdp->port_activefd[fd];
+	if (events == -1) {
+		return 0;
+	}
+
+	/* Check
+	 */
+	if ((rw_mode & poll_mode_read) && (events & POLL_READ)) {
+		return 1;
+	}
+
+	if ((rw_mode & poll_mode_write) && (events & POLL_WRITE)) {
+		return 1;
+	}
+
+	if (events & POLL_ERROR) {
+		return 1;
+	}
+
+	return 0;
 }
 
 
@@ -247,15 +261,26 @@ _reset (cherokee_fdpoll_port_t *fdp, int fd)
 
 
 static ret_t
-_set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
+_set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw_mode)
 {
 	int rc;
+	int events = 0;
 
-	rc = port_associate( fdp->port,
+	/* Events
+	 */
+	if (rw_mode & poll_mode_read) {
+		events |= POLLIN;
+	}
+
+	if (rw_mode & poll_mode_write) {
+		events |= POLLOUT;
+	}
+
+	/* Set it
+	 */
+	rc = port_associate (fdp->port,
 	                     PORT_SOURCE_FD,
-	                     fd,
-	                    (rw == FDPOLL_MODE_WRITE ? POLLOUT : POLLIN),
-	                    (rw == FDPOLL_MODE_WRITE ? WRITE   : READ));
+	                     fd, events, rw_mode);
 	if ( rc == -1 ) {
 		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
