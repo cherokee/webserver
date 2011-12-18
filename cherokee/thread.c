@@ -271,15 +271,20 @@ conn_set_mode (cherokee_thread_t        *thd,
 	       cherokee_connection_t    *conn,
 	       cherokee_socket_status_t  s)
 {
+	UNUSED(thd);
+
 	if (conn->socket.status == s) {
-		TRACE (ENTRIES, "Connection already in mode = %s\n", (s == socket_reading)? "reading" : "writing");
+		TRACE (ENTRIES, "Connection already in mode = %s\n",
+		       (s == socket_reading)? "reading" :
+		       (s == socket_writing)? "writing" : "???");
 		return;
 	}
 
-	TRACE (ENTRIES, "Connection mode = %s\n", (s == socket_reading)? "reading" : "writing");
+	TRACE (ENTRIES, "Connection mode = %s\n",
+	       (s == socket_reading)? "reading" :
+	       (s == socket_writing)? "writing" : "???");
 
 	cherokee_socket_set_status (&conn->socket, s);
-	cherokee_fdpoll_set_mode (thd->fdpoll, SOCKET_FD(&conn->socket), s);
 }
 
 
@@ -476,7 +481,7 @@ send_hardcoded_error (cherokee_socket_t *sock,
 }
 
 
-static ret_t
+static void
 process_polling_connections (cherokee_thread_t *thd)
 {
 	int                    re;
@@ -506,8 +511,8 @@ process_polling_connections (cherokee_thread_t *thd)
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES",polling,timeout",
-			       "thread (%p) processing polling conn (%p, %s): Time out\n",
-			       thd, conn, cherokee_connection_get_phase_str (conn));
+			       "processing polling conn (%p, %s): Time out\n",
+			       conn, cherokee_connection_get_phase_str (conn));
 
 			/* Information collection
 			 */
@@ -585,12 +590,10 @@ process_polling_connections (cherokee_thread_t *thd)
 			continue;
 		}
 	}
-
-	return ret_ok;
 }
 
 
-static ret_t
+static void
 process_active_connections (cherokee_thread_t *thd)
 {
 	ret_t                     ret;
@@ -609,9 +612,10 @@ process_active_connections (cherokee_thread_t *thd)
 		list_for_each_safe (i, tmp, &thd->active_list) {
 			conn = CONN(i);
 
-			TRACE (ENTRIES",active", "   \\- thread (%p) processing conn (%p), phase %d '%s', socket=%d,%s\n",
-			       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn),
-			       conn->socket.socket, (conn->socket.status == socket_reading)? "read" : (conn->socket.status == socket_writing)? "writing" : "closed");
+			TRACE (ENTRIES",active", "   \\- processing conn (%p), phase %d '%s', socket=%d,%s\n",
+			       conn, conn->phase, cherokee_connection_get_phase_str (conn), conn->socket.socket,
+			       (conn->socket.status == socket_reading)? "read" :
+			       (conn->socket.status == socket_writing)? "writing" : "closed");
 		}
 	}
 #endif
@@ -621,9 +625,10 @@ process_active_connections (cherokee_thread_t *thd)
 	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
 		conn = CONN(i);
 
-		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s', socket=%d, %s\n",
-		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn),
-		       conn->socket.socket, (conn->socket.status == socket_reading)? "read" : (conn->socket.status == socket_writing)? "writing" : "closed");
+		TRACE (ENTRIES, "processing conn (%p), phase %d '%s', socket=%d, %s\n",
+		       conn, conn->phase, cherokee_connection_get_phase_str (conn), conn->socket.socket,
+		       (conn->socket.status == socket_reading)? "read" :
+		       (conn->socket.status == socket_writing)? "writing" : "closed");
 
 		/* Thread's properties
 		 */
@@ -644,8 +649,8 @@ process_active_connections (cherokee_thread_t *thd)
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES",polling,timeout",
-			       "thread (%p) processing active conn (%p, %s): Time out\n",
-			       thd, conn, cherokee_connection_get_phase_str (conn));
+			       "processing active conn (%p, %s): Time out\n",
+			       conn, cherokee_connection_get_phase_str (conn));
 
 			/* The lingering close timeout expired.
 			 * Proceed to close the connection.
@@ -1345,7 +1350,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_eagain:
 					conn_set_mode (thd, conn, socket_reading);
 					cherokee_thread_deactive_to_polling (thd, conn);
-					return ret_eagain;
+					continue;
 
 				default:
 					RET_UNKNOWN (ret);
@@ -1370,9 +1375,7 @@ process_active_connections (cherokee_thread_t *thd)
 				conn_set_mode (thd, conn, socket_reading);
 				conn->phase = phase_lingering;
 
-				/* Go to polling..
-				 */
-				continue;
+				break;
 			default:
 				/* Error, no linger and no last read,
 				 * just close the connection.
@@ -1405,8 +1408,6 @@ process_active_connections (cherokee_thread_t *thd)
 		}
 
 	} /* list */
-
-	return ret_ok;
 }
 
 
@@ -1721,6 +1722,10 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 		thd->pending_read_num = 0;
 	}
 
+	if (thd->active_list_num > 0) {
+		fdwatch_msecs = 0;
+	}
+
 	/* Reactive sleeping connections
 	 */
 	fdwatch_msecs = cherokee_limiter_get_time_limit (&thd->limiter,
@@ -1763,13 +1768,15 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 out:
 	thread_update_bogo_now (thd);
 
+	/* Process active connections
+	 */
+	process_active_connections (thd);
+
 	/* Process polling connections
 	 */
 	process_polling_connections (thd);
 
-	/* Process active connections
-	 */
-	return process_active_connections (thd);
+	return ret_ok;
 }
 
 
@@ -1964,12 +1971,13 @@ out:
 
 	/* Process active connections
 	 */
-	ret = process_active_connections (thd);
+	process_active_connections (thd);
 
 	/* Release the thread
 	 */
 	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
-	return ret;
+
+	return ret_ok;
 }
 
 #endif /* HAVE_PTHREAD */
@@ -2062,13 +2070,12 @@ cherokee_thread_deactive_to_polling (cherokee_thread_t     *thd,
 	ret_t              ret;
 	cherokee_socket_t *socket = &conn->socket;
 
-	/* Sanity check:
-	 * conn->polling_aim must be have been set previously
+	/* If either the 'aim polling' file descriptor or mode
+	 * is not set, the connection is not deactived.
 	 */
 	if ((conn->polling_aim.fd < 0) ||
 	    (conn->polling_aim.mode == poll_mode_nothing))
 	{
-		SHOULDNT_HAPPEN;
 		return ret_error;
 	}
 

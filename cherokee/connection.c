@@ -1563,7 +1563,12 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 	while (true) {
 		/* Read from the socket to nowhere
 		 */
-		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size, &cnt_read);
+		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size - 1, &cnt_read);
+
+		if (cnt_read > 0) {
+			cherokee_buffer_clean (tmp1);
+		}
+
 		switch (ret) {
 		case ret_eof:
 			TRACE (ENTRIES",linger", "%s\n", "EOF");
@@ -1576,9 +1581,11 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			return ret_eagain;
 		case ret_ok:
 			TRACE (ENTRIES",linger", "%u bytes tossed away\n", cnt_read);
+
 			retries--;
-			if (cnt_read == tmp1->size && retries > 0)
+			if ((cnt_read >= tmp1->size - 2) && (retries > 0))
 				continue;
+
 			return ret_eof;
 		default:
 			RET_UNKNOWN(ret);

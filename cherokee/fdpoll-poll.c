@@ -200,11 +200,28 @@ _reset (cherokee_fdpoll_poll_t *fdp, int fd)
 static int
 _watch (cherokee_fdpoll_poll_t *fdp, int timeout_msecs)
 {
+	int re;
+
 	if (unlikely (FDPOLL(fdp)->npollfds < 0)) {
 		SHOULDNT_HAPPEN;
 	}
 
-	return poll (fdp->pollfds, FDPOLL(fdp)->npollfds, timeout_msecs);
+	re = poll (fdp->pollfds, FDPOLL(fdp)->npollfds, timeout_msecs);
+
+#if 0
+	{
+		int                i;
+		cherokee_fdpoll_t *nfd = FDPOLL(fdp);
+
+		printf ("total=%d = ", nfd->npollfds);
+		for (i=0; i < nfd->npollfds; i++) {
+			printf ("fd=%d[%d,%d], ", fdp->pollfds[i].fd, fdp->pollfds[i].events, fdp->pollfds[i].revents);
+		}
+		printf ("\n");
+	}
+#endif
+
+	return re;
 }
 
 
