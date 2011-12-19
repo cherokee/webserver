@@ -1768,13 +1768,13 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 out:
 	thread_update_bogo_now (thd);
 
-	/* Process active connections
-	 */
-	process_active_connections (thd);
-
 	/* Process polling connections
 	 */
 	process_polling_connections (thd);
+
+	/* Process active connections
+	 */
+	process_active_connections (thd);
 
 	return ret_ok;
 }
@@ -1911,6 +1911,10 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 	if (thd->pending_read_num > 0) {
 		fdwatch_msecs         = 0;
 		thd->pending_read_num = 0;
+	}
+
+	if (thd->active_list_num > 0) {
+		fdwatch_msecs = 0;
 	}
 
 	/* Reactive sleeping connections
