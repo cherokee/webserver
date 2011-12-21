@@ -2080,6 +2080,7 @@ cherokee_thread_deactive_to_polling (cherokee_thread_t     *thd,
 	if ((conn->polling_aim.fd < 0) ||
 	    (conn->polling_aim.mode == poll_mode_nothing))
 	{
+		SHOULDNT_HAPPEN;
 		return ret_error;
 	}
 
