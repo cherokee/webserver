@@ -155,7 +155,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	cherokee_socket_init (&n->socket);
 	cherokee_header_init (&n->header, header_type_request);
-	cherokee_post_init (&n->post);
+	cherokee_post_init (&n->post, n);
 	cherokee_connection_poll_init (&n->polling_aim);
 
 	memset (n->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
@@ -2218,7 +2218,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	 */
 	if (read_post)
 	{
-		ret = cherokee_post_read_header (&conn->post, conn);
+		ret = cherokee_post_read_header (&conn->post);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}

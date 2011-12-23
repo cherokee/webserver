@@ -1136,6 +1136,7 @@ process_active_connections (cherokee_thread_t *thd)
 			conn->phase = phase_reading_post;
 
 		case phase_reading_post:
+
 			/* Read/Send the POST info
 			 */
 			ret = cherokee_connection_read_post (conn);
@@ -1143,13 +1144,11 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				break;
 			case ret_eagain:
-				/* Blocking on socket read */
-				conn_set_mode (thd, conn, socket_reading);
-				cherokee_thread_deactive_to_polling (thd, conn);
-				continue;
-			case ret_deny:
-				/* Blocking on back-end write.
-				 * Skip next fd check */
+				if (cherokee_connection_poll_is_set (&conn->polling_aim)) {
+					cherokee_thread_deactive_to_polling (thd, conn);
+				}
+
+//				conn_set_mode (thd, conn, socket_reading);
 				continue;
 			case ret_eof:
 			case ret_error:
@@ -1162,7 +1161,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Turn the connection in write mode
 			 */
-			conn_set_mode (thd, conn, socket_writing);
+//			conn_set_mode (thd, conn, socket_writing);
 			conn->phase = phase_add_headers;
 
 		case phase_add_headers:
@@ -1279,8 +1278,10 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_step (conn);
 			switch (ret) {
 			case ret_eagain:
-				cherokee_thread_deactive_to_polling (thd, conn);
-				break;
+				if (cherokee_connection_poll_is_set (&conn->polling_aim)) {
+					cherokee_thread_deactive_to_polling (thd, conn);
+				}
+				continue;
 
 			case ret_eof_have_data:
 				ret = cherokee_connection_send (conn);
@@ -1722,7 +1723,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 		thd->pending_read_num = 0;
 	}
 
-	if (thd->active_list_num > 0) {
+	if (! cherokee_list_empty (&thd->active_list)) {
 		fdwatch_msecs = 0;
 	}
 
@@ -1913,7 +1914,7 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 		thd->pending_read_num = 0;
 	}
 
-	if (thd->active_list_num > 0) {
+	if (! cherokee_list_empty (&thd->active_list)) {
 		fdwatch_msecs = 0;
 	}
 
@@ -2081,6 +2082,7 @@ cherokee_thread_deactive_to_polling (cherokee_thread_t     *thd,
 	    (conn->polling_aim.mode == poll_mode_nothing))
 	{
 		SHOULDNT_HAPPEN;
+		CHEROKEE_PRINT_BACKTRACE;
 		return ret_error;
 	}
 

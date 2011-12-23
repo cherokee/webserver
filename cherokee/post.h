@@ -45,13 +45,14 @@ typedef enum {
 } cherokee_post_send_phase_t;
 
 typedef struct {
-	off_t                    len;
-	cherokee_boolean_t       has_info;
-	cherokee_post_encoding_t encoding;
-	cherokee_post_rh_phase_t read_header_phase;
-	cherokee_buffer_t        read_header_100cont;
-	cherokee_buffer_t        header_surplus;
-	cherokee_buffer_t        progress_id;
+	void                     *conn;
+	off_t                     len;
+	cherokee_boolean_t        has_info;
+	cherokee_post_encoding_t  encoding;
+	cherokee_post_rh_phase_t  read_header_phase;
+	cherokee_buffer_t         read_header_100cont;
+	cherokee_buffer_t         header_surplus;
+	cherokee_buffer_t         progress_id;
 
 	struct {
 		off_t                      read;
@@ -73,36 +74,34 @@ typedef struct {
 
 CHEROKEE_BEGIN_DECLS
 
-ret_t cherokee_post_init              (cherokee_post_t *post);
+ret_t cherokee_post_init              (cherokee_post_t *post, void *conn);
 ret_t cherokee_post_clean             (cherokee_post_t *post);
 ret_t cherokee_post_mrproper          (cherokee_post_t *post);
 
-ret_t cherokee_post_read_header       (cherokee_post_t *post, void *conn);
+ret_t cherokee_post_read_header       (cherokee_post_t *post);
 int   cherokee_post_read_finished     (cherokee_post_t *post);
 int   cherokee_post_has_buffered_info (cherokee_post_t *post);
 
 
 /* Read
  */
-ret_t cherokee_post_read              (cherokee_post_t          *post,
-				       cherokee_socket_t        *sock_in,
-				       cherokee_buffer_t        *buffer);
+ret_t cherokee_post_read              (cherokee_post_t    *post,
+				       cherokee_socket_t  *sock_in,
+				       cherokee_buffer_t  *buffer);
 
 /* Read + Send
  */
-ret_t cherokee_post_send_to_socket    (cherokee_post_t          *post,
-				       cherokee_socket_t        *sock_in,
-				       cherokee_socket_t        *sock_out,
-				       cherokee_buffer_t        *buffer,
-				       cherokee_socket_status_t *blocking,
-				       cherokee_boolean_t       *did_IO);
+ret_t cherokee_post_send_to_socket    (cherokee_post_t    *post,
+				       cherokee_socket_t  *sock_in,
+				       cherokee_socket_t  *sock_out,
+				       cherokee_buffer_t  *buffer,
+				       cherokee_boolean_t *did_IO);
 
-ret_t cherokee_post_send_to_fd        (cherokee_post_t          *post,
-				       cherokee_socket_t        *sock_in,
-				       int                       fd_out,
-				       cherokee_buffer_t        *tmp,
-				       cherokee_socket_status_t *blocking,
-				       cherokee_boolean_t       *did_IO);
+ret_t cherokee_post_send_to_fd        (cherokee_post_t    *post,
+				       cherokee_socket_t  *sock_in,
+				       int                 fd_out,
+				       cherokee_buffer_t  *tmp,
+				       cherokee_boolean_t *did_IO);
 
 CHEROKEE_END_DECLS
 

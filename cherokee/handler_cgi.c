@@ -434,17 +434,16 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 ret_t
 cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 {
-	ret_t                     ret;
-	cherokee_connection_t    *conn     = HANDLER_CONN(cgi);
-	cherokee_socket_status_t  blocking = socket_closed;
-	cherokee_boolean_t        did_IO   = false;
+	ret_t                  ret;
+	cherokee_connection_t *conn   = HANDLER_CONN(cgi);
+	cherokee_boolean_t     did_IO = false;
 
 	if (! conn->post.has_info) {
 		return ret_ok;
 	}
 
 	ret = cherokee_post_send_to_fd (&conn->post, &conn->socket,
-					cgi->pipeOutput, NULL, &blocking, &did_IO);
+					cgi->pipeOutput, NULL, &did_IO);
 
 	if (did_IO) {
 		cherokee_connection_update_timeout (conn);
@@ -454,20 +453,9 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 	case ret_ok:
 		break;
 	case ret_eagain:
-		if (blocking == socket_writing) {
-			conn->polling_aim.fd   = cgi->pipeOutput;
-			conn->polling_aim.mode = poll_mode_write;
-
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn);
-			return ret_deny;
-		}
-
-		/* ret_eagain - Block on read
-		 * ret_deny   - Block on back-end write
+		/* conn->polling_aim.{fd,mode} was previously set by
+		 * cherokee_post_send_to_fd()
 		 */
-		if (cherokee_post_has_buffered_info (&conn->post)) {
-			return ret_deny;
-		}
 		return ret_eagain;
 
 	default:
