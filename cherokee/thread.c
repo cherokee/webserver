@@ -1291,6 +1291,9 @@ process_active_connections (cherokee_thread_t *thd)
 					maybe_purge_closed_connection (thd, conn);
 					continue;
 				case ret_eagain:
+					if (cherokee_connection_poll_is_set (&conn->polling_aim)) {
+						cherokee_thread_deactive_to_polling (thd, conn);
+					}
 					break;
 				case ret_eof:
 				case ret_error:
@@ -1307,7 +1310,9 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_ok:
 					continue;
 				case ret_eagain:
-					cherokee_thread_deactive_to_polling (thd, conn);
+					if (cherokee_connection_poll_is_set (&conn->polling_aim)) {
+						cherokee_thread_deactive_to_polling (thd, conn);
+					}
 					break;
 				case ret_eof:
 				case ret_error:
