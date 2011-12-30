@@ -161,8 +161,6 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->conns_max           = conns_max;
 	n->conns_keepalive_max = keepalive_max;
 
-	n->active_list_num     = 0;
-	n->polling_list_num    = 0;
 	n->reuse_list_num      = 0;
 
 	n->fastcgi_servers     = NULL;
@@ -289,28 +287,26 @@ static void
 add_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
 	cherokee_list_add_tail (LIST(conn), &thd->active_list);
-	thd->active_list_num++;
 }
 
 static void
 add_connection_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
 	cherokee_list_add_tail (LIST(conn), &thd->polling_list);
-	thd->polling_list_num++;
 }
 
 static void
 del_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
+	UNUSED (thd);
 	cherokee_list_del (LIST(conn));
-	thd->active_list_num--;
 }
 
 static void
 del_connection_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
+	UNUSED (thd);
 	cherokee_list_del (LIST(conn));
-	thd->polling_list_num--;
 }
 
 
@@ -1718,8 +1714,8 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	/* Graceful restart
 	 */
 	if (unlikely (srv->wanna_reinit)) {
-		if ((thd->active_list_num == 0) &&
-		    (thd->polling_list_num == 0))
+		if (cherokee_list_empty (&thd->active_list) &&
+		    cherokee_list_empty (&thd->polling_list))
 		{
 			thd->exit = true;
 			return ret_eof;
@@ -1793,8 +1789,8 @@ watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
 	/* Shortcut: don't waste time on watch() */
 	if (unlikely ((srv->wanna_exit) ||
 		      ((srv->wanna_reinit) &&
-		       (thd->active_list_num  == 0) &&
-		       (thd->polling_list_num == 0))))
+		       (cherokee_list_empty (&thd->active_list)) &&
+		       (cherokee_list_empty (&thd->polling_list)))))
 	{
 		goto out;
 	}
@@ -1903,8 +1899,8 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 
 	if (unlikely (srv->wanna_reinit))
 	{
-		if ((thd->active_list_num == 0) &&
-		    (thd->polling_list_num == 0))
+		if ((cherokee_list_empty (&thd->active_list)) &&
+		    (cherokee_list_empty (&thd->polling_list)))
 		{
 			thd->exit = true;
 			return ret_eof;
@@ -1924,9 +1920,9 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 	 */
 	can_block = ((dont_block == false) &&
 		     (thd->exit == false) &&
-		     (thd->active_list_num == 0) &&
-		     (thd->polling_list_num == 0) &&
-		     (thd->limiter.conns_num == 0));
+		     (thd->limiter.conns_num == 0) &&
+		     (cherokee_list_empty (&thd->active_list)) &&
+		     (cherokee_list_empty (&thd->polling_list)));
 
 	watch_accept_MULTI_THREAD (thd, can_block, fdwatch_msecs);
 
@@ -1962,7 +1958,11 @@ out:
 int
 cherokee_thread_connection_num (cherokee_thread_t *thd)
 {
-	return thd->active_list_num;
+	size_t len = 0;
+
+	cherokee_list_get_len (&thd->active_list, &len);
+
+	return len;
 }
 
 

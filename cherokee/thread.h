@@ -74,9 +74,7 @@ typedef struct {
 	cuint_t                 conns_max;           /* max opened conns */
 	cuint_t                 conns_keepalive_max; /* max opened conns */
 
-	int                     active_list_num;     /* active connections */
 	cherokee_list_t         active_list;
-	int                     polling_list_num;    /* polling connections */
 	cherokee_list_t         polling_list;
 	cherokee_list_t         reuse_list;
 	int                     reuse_list_num;      /* reusable connections objs */
