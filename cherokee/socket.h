@@ -122,7 +122,6 @@ ret_t cherokee_socket_shutdown          (cherokee_socket_t *socket, int how);
 ret_t cherokee_socket_reset             (cherokee_socket_t *socket);
 ret_t cherokee_socket_accept            (cherokee_socket_t *socket, cherokee_socket_t *server_socket);
 ret_t cherokee_socket_accept_fd         (cherokee_socket_t *socket, int *new_fd, cherokee_sockaddr_t *sa);
-int   cherokee_socket_pending_read      (cherokee_socket_t *socket);
 ret_t cherokee_socket_flush             (cherokee_socket_t *socket);
 ret_t cherokee_socket_test_read         (cherokee_socket_t *socket);
 

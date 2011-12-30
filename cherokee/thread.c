@@ -166,7 +166,6 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->reuse_list_num      = 0;
 
 	n->pending_conns_num   = 0;
-	n->pending_read_num    = 0;
 
 	n->fastcgi_servers     = NULL;
 	n->fastcgi_free_func   = NULL;
@@ -728,13 +727,6 @@ process_active_connections (cherokee_thread_t *thd)
 
 			case ret_ok:
 				TRACE(ENTRIES, "Handshake %s\n", "finished");
-
-				/* The client might have sent the request on the same
-				 * package as the last piece of the handshake. Thus,
-				 * the server shouldn't stop on fdpoll->watch(), the
-				 * connection is marked as ready as well.
-				 */
-				thd->pending_read_num++;
 
 				/* Set mode and update timeout
 				 */
@@ -1716,16 +1708,10 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 
 	/* Be quick when there are pending work:
 	 * - pending_conns_num: Pipelined requests
-	 * - pending_read_num:  SSL pending reads
 	 */
 	if (thd->pending_conns_num > 0) {
 		fdwatch_msecs          = 0;
 		thd->pending_conns_num = 0;
-	}
-
-	if (thd->pending_read_num > 0) {
-		fdwatch_msecs         = 0;
-		thd->pending_read_num = 0;
 	}
 
 	if (! cherokee_list_empty (&thd->active_list)) {
@@ -1907,16 +1893,10 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 
 	/* Be quick when there are pending work:
 	 * - pending_conns_num: Pipelined requests
-	 * - pending_read_num:  SSL pending reads
 	 */
 	if (thd->pending_conns_num > 0) {
 		fdwatch_msecs          = 0;
 		thd->pending_conns_num = 0;
-	}
-
-	if (thd->pending_read_num > 0) {
-		fdwatch_msecs         = 0;
-		thd->pending_read_num = 0;
 	}
 
 	if (! cherokee_list_empty (&thd->active_list)) {

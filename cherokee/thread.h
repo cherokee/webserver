@@ -84,7 +84,6 @@ typedef struct {
 	cherokee_boolean_t      is_full;
 
 	int                     pending_conns_num;   /* Waiting pipelining connections */
-	int                     pending_read_num;    /* Conns with SSL deping read */
 
 	cherokee_avl_t         *fastcgi_servers;
 	cherokee_func_free_t    fastcgi_free_func;

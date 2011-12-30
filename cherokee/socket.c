@@ -822,25 +822,6 @@ cherokee_socket_read (cherokee_socket_t *socket,
 }
 
 
-int
-cherokee_socket_pending_read (cherokee_socket_t *socket)
-{
-	if (socket->is_tls != TLS)
-		return 0;
-
-	if (unlikely ((socket->status != socket_reading) &&
-		      (socket->status != socket_writing)))
-		return 0;
-
-	if (socket->cryptor != NULL) {
-		return cherokee_cryptor_socket_pending (socket->cryptor);
-	}
-
-	SHOULDNT_HAPPEN;
-	return 0;
-}
-
-
 ret_t
 cherokee_socket_flush (cherokee_socket_t *socket)
 {
