@@ -382,13 +382,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 	cherokee_buffer_move_to_begin (&conn->incoming_header, header_len);
 
-	/* If the connection has incoming headers to be processed,
-	 * then increment the pending counter from the thread
-	 */
-	if (! cherokee_buffer_is_empty (&conn->incoming_header)) {
-		CONN_THREAD(conn)->pending_conns_num++;
-	}
-
 	TRACE (ENTRIES, "conn %p, has headers %d\n", conn,
 	       !cherokee_buffer_is_empty (&conn->incoming_header));
 

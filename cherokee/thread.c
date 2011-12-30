@@ -165,8 +165,6 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->polling_list_num    = 0;
 	n->reuse_list_num      = 0;
 
-	n->pending_conns_num   = 0;
-
 	n->fastcgi_servers     = NULL;
 	n->fastcgi_free_func   = NULL;
 
@@ -1706,14 +1704,8 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	 */
 	cherokee_limiter_reactive (&thd->limiter, thd);
 
-	/* Be quick when there are pending work:
-	 * - pending_conns_num: Pipelined requests
+	/* Quick polling if there are active connections
 	 */
-	if (thd->pending_conns_num > 0) {
-		fdwatch_msecs          = 0;
-		thd->pending_conns_num = 0;
-	}
-
 	if (! cherokee_list_empty (&thd->active_list)) {
 		fdwatch_msecs = 0;
 	}
@@ -1891,14 +1883,8 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 	 */
 	cherokee_limiter_reactive (&thd->limiter, thd);
 
-	/* Be quick when there are pending work:
-	 * - pending_conns_num: Pipelined requests
+	/* Quick polling if there are active connections
 	 */
-	if (thd->pending_conns_num > 0) {
-		fdwatch_msecs          = 0;
-		thd->pending_conns_num = 0;
-	}
-
 	if (! cherokee_list_empty (&thd->active_list)) {
 		fdwatch_msecs = 0;
 	}

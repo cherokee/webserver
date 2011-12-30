@@ -83,8 +83,6 @@ typedef struct {
 	cherokee_limiter_t      limiter;             /* Traffic shaping */
 	cherokee_boolean_t      is_full;
 
-	int                     pending_conns_num;   /* Waiting pipelining connections */
-
 	cherokee_avl_t         *fastcgi_servers;
 	cherokee_func_free_t    fastcgi_free_func;
 
