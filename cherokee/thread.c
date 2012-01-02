@@ -514,7 +514,9 @@ process_polling_connections (cherokee_thread_t *thd)
 
 			/* Most likely a 'Gateway Timeout'
 			 */
-			if (conn->phase <= phase_add_headers) {
+			if ((conn->phase >= phase_processing_header) ||
+			    (conn->phase == phase_reading_header) && (conn->incoming_header.len >= 1))
+			{
 				/* Push a hardcoded error
 				 */
 				send_hardcoded_error (&conn->socket,
