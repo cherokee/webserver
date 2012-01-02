@@ -500,13 +500,12 @@ send_hardcoded_error (cherokee_socket_t *sock,
 	cherokee_boolean_t done  = false;
 
 	cherokee_buffer_clean (tmp);
-	cherokee_buffer_add_va (
-		tmp,
-		"HTTP/1.0 %s" CRLF_CRLF					\
-		"<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">" CRLF \
-		"<html><head><title>%s</title></head>" CRLF		\
-		"<body><h1>%s</h1></body></html>",
-		error, error, error);
+	cherokee_buffer_add_va (tmp,
+				"HTTP/1.0 %s" CRLF_CRLF			\
+				"<!DOCTYPE html>" CRLF			\
+				"<html><head><title>%s</title></head>" CRLF \
+				"<body><h1>%s</h1></body></html>",
+				error, error, error);
 
 	do {
 		write = 0;
