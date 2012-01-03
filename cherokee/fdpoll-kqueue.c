@@ -214,7 +214,7 @@ again:
 		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_KQUEUE);
 		return 0;
 
-	} else if (n_events > 0) {
+	} else if (n_events >= 0) {
 		memset (fdp->fdevents, 0, FDPOLL(fdp)->system_nfiles * sizeof(int));
 
 		for (i = 0; i < n_events; ++i) {
@@ -254,11 +254,16 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw_mode)
 		return 1;
 	}
 
-	if (rw_mode & poll_mode_read) {
-		events |= KQUEUE_READ_EVENT;
+	if ((rw_mode & poll_mode_read) &&
+	    (events & KQUEUE_READ_EVENT))
+	{
+		return 1;
 	}
-	if (rw_mode & poll_mode_write) {
-		events |= KQUEUE_WRITE_EVENT;
+
+	if ((rw_mode & poll_mode_write) &&
+	    (events & KQUEUE_WRITE_EVENT))
+	{
+		return 1;
 	}
 
 	return events;
