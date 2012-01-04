@@ -262,28 +262,6 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 
 
 static void
-conn_set_mode (cherokee_thread_t        *thd,
-	       cherokee_connection_t    *conn,
-	       cherokee_socket_status_t  s)
-{
-	UNUSED(thd);
-
-	if (conn->socket.status == s) {
-		TRACE (ENTRIES, "Connection already in mode = %s\n",
-		       (s == socket_reading)? "reading" :
-		       (s == socket_writing)? "writing" : "???");
-		return;
-	}
-
-	TRACE (ENTRIES, "Connection mode = %s\n",
-	       (s == socket_reading)? "reading" :
-	       (s == socket_writing)? "writing" : "???");
-
-	cherokee_socket_set_status (&conn->socket, s);
-}
-
-
-static void
 add_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
 	cherokee_list_add_tail (LIST(conn), &thd->active_list);
@@ -428,7 +406,6 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	/* Clean the connection
 	 */
 	cherokee_connection_clean (conn);
-	conn_set_mode (thread, conn, socket_reading);
 
 	/* Update the timeout value
 	 */
@@ -606,10 +583,8 @@ process_active_connections (cherokee_thread_t *thd)
 		list_for_each_safe (i, tmp, &thd->active_list) {
 			conn = CONN(i);
 
-			TRACE (ENTRIES",active", "   \\- processing conn (%p), phase %d '%s', socket=%d,%s\n",
-			       conn, conn->phase, cherokee_connection_get_phase_str (conn), conn->socket.socket,
-			       (conn->socket.status == socket_reading)? "read" :
-			       (conn->socket.status == socket_writing)? "writing" : "closed");
+			TRACE (ENTRIES",active", "   \\- processing conn (%p), phase %d '%s', socket=%d\n",
+			       conn, conn->phase, cherokee_connection_get_phase_str (conn), conn->socket.socket);
 		}
 	}
 #endif
@@ -619,10 +594,8 @@ process_active_connections (cherokee_thread_t *thd)
 	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
 		conn = CONN(i);
 
-		TRACE (ENTRIES, "processing conn (%p), phase %d '%s', socket=%d, %s\n",
-		       conn, conn->phase, cherokee_connection_get_phase_str (conn), conn->socket.socket,
-		       (conn->socket.status == socket_reading)? "read" :
-		       (conn->socket.status == socket_writing)? "writing" : "closed");
+		TRACE (ENTRIES, "processing conn (%p), phase %d '%s', socket=%d\n",
+		       conn, conn->phase, cherokee_connection_get_phase_str (conn), conn->socket.socket);
 
 		/* Thread's properties
 		 */
@@ -707,11 +680,9 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eagain:
 				switch (blocking) {
 				case socket_reading:
-					conn_set_mode (thd, conn, socket_reading);
 					break;
 
 				case socket_writing:
-					conn_set_mode (thd, conn, socket_writing);
 					break;
 
 				default:
@@ -725,7 +696,6 @@ process_active_connections (cherokee_thread_t *thd)
 
 				/* Set mode and update timeout
 				 */
-				conn_set_mode (thd, conn, socket_reading);
 				cherokee_connection_update_timeout (conn);
 
 				conn->phase = phase_reading_header;
@@ -827,7 +797,6 @@ process_active_connections (cherokee_thread_t *thd)
 
 			default:
 				cherokee_connection_setup_error_handler (conn);
-				conn_set_mode (thd, conn, socket_writing);
 				continue;
 			}
 
@@ -864,10 +833,6 @@ process_active_connections (cherokee_thread_t *thd)
 		case phase_setup_connection: {
 			cherokee_rule_list_t *rules;
 			cherokee_boolean_t    is_userdir;
-
-			/* Turn the connection in write mode
-			 */
-			conn_set_mode (thd, conn, socket_writing);
 
 			/* HSTS support
 			 */
@@ -1134,8 +1099,6 @@ process_active_connections (cherokee_thread_t *thd)
 				if (cherokee_connection_poll_is_set (&conn->polling_aim)) {
 					cherokee_thread_deactive_to_polling (thd, conn);
 				}
-
-//				conn_set_mode (thd, conn, socket_reading);
 				continue;
 			case ret_eof:
 			case ret_error:
@@ -1148,7 +1111,6 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Turn the connection in write mode
 			 */
-//			conn_set_mode (thd, conn, socket_writing);
 			conn->phase = phase_add_headers;
 
 		case phase_add_headers:
@@ -1341,7 +1303,6 @@ process_active_connections (cherokee_thread_t *thd)
 					break;
 
 				case ret_eagain:
-					conn_set_mode (thd, conn, socket_reading);
 					cherokee_thread_deactive_to_polling (thd, conn);
 					continue;
 
@@ -1365,7 +1326,6 @@ process_active_connections (cherokee_thread_t *thd)
 				/* Wait for the socket to be readable:
 				 * FIN + ACK will have arrived by then
 				 */
-				conn_set_mode (thd, conn, socket_reading);
 				conn->phase = phase_lingering;
 
 				break;
@@ -1627,7 +1587,6 @@ accept_new_connection (cherokee_thread_t *thd,
 
 	/* Lets add the new connection
 	 */
-	conn_set_mode (thd, new_conn, socket_reading);
 	add_connection (thd, new_conn);
 
 	thd->conns_num++;

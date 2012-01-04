@@ -175,8 +175,6 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base,
 	case ret_eagain:
 		conn->polling_aim.fd   = uwsgi->socket.socket;
 		conn->polling_aim.mode = poll_mode_read;
-
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base), conn);
 		return ret_eagain;
 
 	case ret_ok:

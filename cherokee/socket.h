@@ -37,6 +37,8 @@
 
 /* Socket status
  */
+
+// TODO: Get rid of this type
 typedef enum {
 	socket_reading = poll_mode_read,
 	socket_writing = poll_mode_write,
@@ -76,7 +78,7 @@ typedef struct {
 	int                        socket;
 	cherokee_sockaddr_t        client_addr;
 	socklen_t                  client_addr_len;
-	cherokee_socket_status_t   status;
+	cherokee_boolean_t         closed;
 	cherokee_socket_type_t     is_tls;
 	cherokee_cryptor_socket_t *cryptor;
 } cherokee_socket_t;
@@ -88,7 +90,6 @@ typedef struct {
 #define SOCKET(s)              ((cherokee_socket_t *)(s))
 #define SOCKET_FD(s)           (SOCKET(s)->socket)
 #define SOCKET_AF(s)           (SOCKET(s)->client_addr.sa.sa_family)
-#define SOCKET_STATUS(s)       (SOCKET(s)->status)
 
 #define SOCKET_ADDR(s)         (SOCKET(s)->client_addr)
 #define SOCKET_ADDR_UNIX(s)    ((struct sockaddr_un  *) &SOCKET_ADDR(s))
@@ -106,9 +107,7 @@ typedef struct {
 
 
 #define cherokee_socket_configured(c)    (SOCKET_FD(c) >= 0)
-#define cherokee_socket_is_connected(c)  (cherokee_socket_configured(c) && \
-					  (SOCKET_STATUS(c) != socket_closed))
-
+#define cherokee_socket_is_connected(c)  (cherokee_socket_configured(c) && (!SOCKET(c)->closed))
 
 ret_t cherokee_socket_init              (cherokee_socket_t *socket);
 ret_t cherokee_socket_mrproper          (cherokee_socket_t *socket);
@@ -137,7 +136,6 @@ ret_t cherokee_socket_connect           (cherokee_socket_t *socket);
 ret_t cherokee_socket_ntop              (cherokee_socket_t *socket, char *buf, size_t buf_size);
 ret_t cherokee_socket_pton              (cherokee_socket_t *socket, cherokee_buffer_t *buf);
 ret_t cherokee_socket_gethostbyname     (cherokee_socket_t *socket, cherokee_buffer_t *hostname);
-ret_t cherokee_socket_set_status        (cherokee_socket_t *socket, cherokee_socket_status_t status);
 ret_t cherokee_socket_set_cork          (cherokee_socket_t *socket, cherokee_boolean_t enable);
 
 

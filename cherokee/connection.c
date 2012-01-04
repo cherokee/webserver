@@ -1547,7 +1547,7 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 	cherokee_thread_t *thread   = CONN_THREAD(conn);
 	cherokee_buffer_t *tmp1     = THREAD_TMP_BUF1(thread);
 
-	TRACE(ENTRIES",linger", "Linger read, socket status %d\n", conn->socket.status);
+	TRACE(ENTRIES",linger", "Linger read, socket %s closed\n", conn->socket.closed ? "is" : "isn't");
 
 	while (true) {
 		/* Read from the socket to nowhere
