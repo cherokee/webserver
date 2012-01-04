@@ -382,8 +382,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 	cherokee_buffer_move_to_begin (&conn->incoming_header, header_len);
 
-	TRACE (ENTRIES, "conn %p, has headers %d\n", conn,
-	       !cherokee_buffer_is_empty (&conn->incoming_header));
+	TRACE (ENTRIES, "conn %p, %s headers\n", conn,
+	       !cherokee_buffer_is_empty (&conn->incoming_header) ? "has" : "doesn't have");
 
 	return ret_ok;
 }
