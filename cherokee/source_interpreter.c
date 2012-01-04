@@ -713,11 +713,6 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		/* wait for the fd */
 		conn->polling_aim.fd   = SOCKET_FD(socket);
 		conn->polling_aim.mode = poll_mode_write;
-
-		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn), conn);
-		if (ret != ret_ok) {
-			return ret_error;
-		}
 		return ret_eagain;
 
 	case ret_deny:

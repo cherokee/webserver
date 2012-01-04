@@ -638,11 +638,6 @@ do_connect (cherokee_handler_proxy_t *hdl)
 	case ret_eagain:
 		conn->polling_aim.fd   = hdl->pconn->socket.socket;
 		conn->polling_aim.mode = poll_mode_write;
-
-		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
-		if (ret != ret_ok) {
-			return ret_deny;
-		}
 		return ret_eagain;
 	default:
 		RET_UNKNOWN(ret);
@@ -711,13 +706,6 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 			conn->polling_aim.fd   = hdl->pconn->socket.socket;
 			conn->polling_aim.mode = poll_mode_write;
-
-			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
-			if (ret != ret_ok) {
-				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
-				return ret_error;
-			}
 			return ret_eagain;
 		default:
 			return ret_error;
@@ -759,13 +747,6 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 			conn->polling_aim.fd   = hdl->pconn->socket.socket;
 			conn->polling_aim.mode = poll_mode_write;
-
-			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
-			if (ret != ret_ok) {
-				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
-				return ret_error;
-			}
 			return ret_eagain;
 		default:
 			return ret_error;
@@ -797,13 +778,6 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 			conn->polling_aim.fd   = hdl->pconn->socket.socket;
 			conn->polling_aim.mode = poll_mode_write;
-
-			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
-			if (ret != ret_ok) {
-				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
-				return ret_error;
-			}
 			return ret_eagain;
 		default:
 			return ret_error;
@@ -857,13 +831,6 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 		conn->polling_aim.fd   = conn->socket.socket;
 		conn->polling_aim.mode = poll_mode_read;
-
-		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
-		if (ret != ret_ok) {
-			hdl->pconn->keepalive_in = false;
-			conn->error_code = http_bad_gateway;
-			return ret_error;
-		}
 		return ret_eagain;
 	default:
 		return ret;
@@ -1163,13 +1130,6 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		case ret_eagain:
 			conn->polling_aim.fd   = hdl->pconn->socket.socket;
 			conn->polling_aim.mode = poll_mode_read;
-
-			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
-			if (ret != ret_ok) {
-				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
-				return ret_error;
-			}
 			return ret_eagain;
 		case ret_eof:
 		case ret_error:
@@ -1715,8 +1675,6 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 		case ret_eagain:
 			conn->polling_aim.fd   = hdl->pconn->socket.socket;
 			conn->polling_aim.mode = poll_mode_read;
-
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
 			return ret_eagain;
 		default:
 			RET_UNKNOWN(ret);
@@ -1826,8 +1784,6 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 		if (ret_read == ret_eagain) {
 			conn->polling_aim.fd   = hdl->pconn->socket.socket;
 			conn->polling_aim.mode = poll_mode_read;
-
- 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn);
 			return ret_eagain;
 		}
 

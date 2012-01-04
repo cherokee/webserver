@@ -172,12 +172,6 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	case ret_eagain:
 		conn->polling_aim.fd   = fcgi->socket.socket;
 		conn->polling_aim.mode = poll_mode_read;
-
-		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), conn);
-		if (unlikely (ret != ret_ok)) {
-			cgi->got_eof = true;
-			return ret_error;
-		}
 		return ret_eagain;
 
 	case ret_ok:

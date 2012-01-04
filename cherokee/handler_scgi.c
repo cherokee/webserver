@@ -148,8 +148,6 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 	case ret_eagain:
 		conn->polling_aim.fd   = scgi->socket.socket;
 		conn->polling_aim.mode = poll_mode_read;
-
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base), conn);
 		return ret_eagain;
 
 	case ret_ok:
