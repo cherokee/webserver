@@ -74,17 +74,12 @@ typedef struct {
 	cuint_t                 conns_max;           /* max opened conns */
 	cuint_t                 conns_keepalive_max; /* max opened conns */
 
-	int                     active_list_num;     /* active connections */
 	cherokee_list_t         active_list;
-	int                     polling_list_num;    /* polling connections */
 	cherokee_list_t         polling_list;
 	cherokee_list_t         reuse_list;
 	int                     reuse_list_num;      /* reusable connections objs */
 	cherokee_limiter_t      limiter;             /* Traffic shaping */
 	cherokee_boolean_t      is_full;
-
-	int                     pending_conns_num;   /* Waiting pipelining connections */
-	int                     pending_read_num;    /* Conns with SSL deping read */
 
 	cherokee_avl_t         *fastcgi_servers;
 	cherokee_func_free_t    fastcgi_free_func;
@@ -120,9 +115,9 @@ ret_t cherokee_thread_free                       (cherokee_thread_t  *thd);
 ret_t cherokee_thread_unlock                     (cherokee_thread_t *thd);
 ret_t cherokee_thread_wait_end                   (cherokee_thread_t *thd);
 
-ret_t cherokee_thread_deactive_to_polling        (cherokee_thread_t *thd, cherokee_connection_t *conn, int fd, int rw, char multi);
 int   cherokee_thread_connection_num             (cherokee_thread_t *thd);
 
+ret_t cherokee_thread_deactive_to_polling        (cherokee_thread_t *thd, cherokee_connection_t *conn);
 ret_t cherokee_thread_retire_active_connection   (cherokee_thread_t *thd, cherokee_connection_t *conn);
 ret_t cherokee_thread_inject_active_connection   (cherokee_thread_t *thd, cherokee_connection_t *conn);
 
