@@ -1430,14 +1430,14 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		switch (err) {
 		case EISCONN:
 			break;
-		case EINVAL:
-		case ENOENT:
-		case ECONNRESET:
-		case EHOSTUNREACH:
-		case ECONNREFUSED:
-		case EADDRNOTAVAIL:
+		case ENOENT:               /* No such file or directory */
+		case ECONNRESET:           /* Connection reset by peer */
+		case ECONNREFUSED:         /* Connection refused */
+		case ETIMEDOUT:            /* Operation timed out */
 			return ret_deny;
-		case ETIMEDOUT:
+		case EINVAL:               /* Invalid argument */
+		case EHOSTUNREACH:         /* No route to host */
+		case EADDRNOTAVAIL:        /* Can't assign requested address */
 			return ret_error;
 		case EAGAIN:
 		case EALREADY:
