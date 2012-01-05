@@ -1433,6 +1433,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		case EINVAL:
 		case ENOENT:
 		case ECONNRESET:
+		case EHOSTUNREACH:
 		case ECONNREFUSED:
 		case EADDRNOTAVAIL:
 			return ret_deny;
