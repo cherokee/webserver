@@ -1567,6 +1567,9 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			return ret_error;
 		case ret_eagain:
 			TRACE (ENTRIES",linger", "read %u, eagain\n", cnt_read);
+
+			conn->polling_aim.fd   = conn->socket.socket;
+			conn->polling_aim.mode = poll_mode_read;
 			return ret_eagain;
 		case ret_ok:
 			TRACE (ENTRIES",linger", "%u bytes tossed away\n", cnt_read);

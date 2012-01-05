@@ -492,7 +492,7 @@ process_polling_connections (cherokee_thread_t *thd)
 			/* Most likely a 'Gateway Timeout'
 			 */
 			if ((conn->phase >= phase_processing_header) ||
-			    (conn->phase == phase_reading_header) && (conn->incoming_header.len >= 1))
+			    ((conn->phase == phase_reading_header) && (conn->incoming_header.len >= 1)))
 			{
 				/* Push a hardcoded error
 				 */
@@ -1343,7 +1343,9 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_linger_read (conn);
 			switch (ret) {
 			case ret_ok:
+				continue;
 			case ret_eagain:
+				cherokee_thread_deactive_to_polling (thd, conn);
 				continue;
 			case ret_eof:
 			case ret_error:
