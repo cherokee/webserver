@@ -1124,7 +1124,9 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_ok:
 				break;
 			case ret_eagain:
-				cherokee_thread_deactive_to_polling (thd, conn);
+				if (cherokee_connection_poll_is_set (&conn->polling_aim)) {
+					cherokee_thread_deactive_to_polling (thd, conn);
+				}
 				continue;
 			case ret_eof:
 			case ret_error:
