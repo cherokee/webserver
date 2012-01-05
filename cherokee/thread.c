@@ -377,7 +377,8 @@ close_active_connection (cherokee_thread_t     *thread,
 
 
 static void
-maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
+finalize_request (cherokee_thread_t     *thread,
+		  cherokee_connection_t *conn)
 {
 	/* CONNECTION CLOSE: If it isn't a keep-alive connection, it
 	 * should try to perform a lingering close (there is no need
@@ -405,7 +406,7 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 
 	/* Clean the connection
 	 */
-	cherokee_connection_clean (conn);
+	cherokee_connection_clean (conn, true);
 
 	/* Update the timeout value
 	 */
@@ -1174,11 +1175,11 @@ process_active_connections (cherokee_thread_t *thd)
 
 			case ret_ok:
 				if (!http_method_with_body (conn->header.method)) {
-					maybe_purge_closed_connection (thd, conn);
+					finalize_request (thd, conn);
 					continue;
 				}
 				if (!http_code_with_body (conn->error_code)) {
-					maybe_purge_closed_connection (thd, conn);
+					finalize_request (thd, conn);
 					continue;
 				}
 				break;
@@ -1208,7 +1209,7 @@ process_active_connections (cherokee_thread_t *thd)
 					continue;
 
 				case ret_eof:
-					maybe_purge_closed_connection (thd, conn);
+					finalize_request (thd, conn);
 					continue;
 
 				case ret_error:
@@ -1216,7 +1217,7 @@ process_active_connections (cherokee_thread_t *thd)
 					continue;
 
 				default:
-					maybe_purge_closed_connection (thd, conn);
+					finalize_request (thd, conn);
 					continue;
 				}
 			}
@@ -1237,7 +1238,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 				switch (ret) {
 				case ret_ok:
-					maybe_purge_closed_connection (thd, conn);
+					finalize_request (thd, conn);
 					continue;
 				case ret_eagain:
 					if (cherokee_connection_poll_is_set (&conn->polling_aim)) {
@@ -1275,7 +1276,7 @@ process_active_connections (cherokee_thread_t *thd)
 				break;
 
 			case ret_eof:
-				maybe_purge_closed_connection (thd, conn);
+				finalize_request (thd, conn);
 				continue;
 
 			case ret_error:

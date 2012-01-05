@@ -252,7 +252,7 @@ struct cherokee_connection {
  */
 ret_t cherokee_connection_new                    (cherokee_connection_t **conn);
 ret_t cherokee_connection_free                   (cherokee_connection_t  *conn);
-ret_t cherokee_connection_clean                  (cherokee_connection_t  *conn);
+ret_t cherokee_connection_clean                  (cherokee_connection_t  *conn, cherokee_boolean_t reuse);
 ret_t cherokee_connection_clean_close            (cherokee_connection_t  *conn);
 
 /* Close

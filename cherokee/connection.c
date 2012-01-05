@@ -242,7 +242,8 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 
 
 ret_t
-cherokee_connection_clean (cherokee_connection_t *conn)
+cherokee_connection_clean (cherokee_connection_t *conn,
+			   cherokee_boolean_t     reuse)
 {
 	size_t             crlf_len;
 	uint32_t           header_len;
@@ -371,19 +372,23 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_buffer_clean (&conn->buffer);
 	cherokee_buffer_clean (&conn->header_buffer);
 
-	/* Skip trailing CRLF (which may be sent by some HTTP clients)
-	 * only if the number of CRLFs is within the predefine count
-	 * limit otherwise ignore trailing CRLFs so that they will be
-	 * handled in next request.  This may avoid a subsequent real
-	 * move_to_begin of the contents left in the buffer.
-	 */
-	crlf_len = cherokee_buffer_cnt_spn (&conn->incoming_header, header_len, CRLF);
-	header_len += (crlf_len <= MAX_HEADER_CRLF) ? crlf_len : 0;
+	if (reuse) {
+		/* Skip trailing CRLF (which may be sent by some HTTP clients)
+		 * only if the number of CRLFs is within the predefine count
+		 * limit otherwise ignore trailing CRLFs so that they will be
+		 * handled in next request.  This may avoid a subsequent real
+		 * move_to_begin of the contents left in the buffer.
+		 */
+		crlf_len = cherokee_buffer_cnt_spn (&conn->incoming_header, header_len, CRLF);
+		header_len += (crlf_len <= MAX_HEADER_CRLF) ? crlf_len : 0;
 
-	cherokee_buffer_move_to_begin (&conn->incoming_header, header_len);
+		cherokee_buffer_move_to_begin (&conn->incoming_header, header_len);
 
-	TRACE (ENTRIES, "conn %p, %s headers\n", conn,
-	       !cherokee_buffer_is_empty (&conn->incoming_header) ? "has" : "doesn't have");
+		TRACE (ENTRIES, "conn %p, %s headers\n", conn,
+		       !cherokee_buffer_is_empty (&conn->incoming_header) ? "has" : "doesn't have");
+	} else {
+		cherokee_buffer_clean (&conn->incoming_header);
+	}
 
 	return ret_ok;
 }
@@ -404,7 +409,7 @@ cherokee_connection_clean_close (cherokee_connection_t *conn)
 
 	/* Clean the connection object
 	 */
-	cherokee_connection_clean (conn);
+	cherokee_connection_clean (conn, false);
 	return ret_ok;
 }
 
