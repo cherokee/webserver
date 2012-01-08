@@ -1622,8 +1622,8 @@ source_interpreter.h \
 source_interpreter.c \
 info.h \
 info.c \
-connection_info.h \
-connection_info.c \
+request_info.h \
+request_info.c \
 dwriter.h \
 dwriter.c \
 limiter.h \
@@ -1685,7 +1685,7 @@ validator.h \
 \
 downloader.h \
 \
-connection_info.h \
+request_info.h \
 \
 avl.h \
 avl_r.h

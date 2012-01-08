@@ -30,7 +30,7 @@
 #include "bind.h"
 #include "server-protected.h"
 #include "request-protected.h"
-#include "connection_info.h"
+#include "request_info.h"
 #include "source_interpreter.h"
 #include "util.h"
 

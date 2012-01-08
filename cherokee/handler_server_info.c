@@ -36,7 +36,7 @@
 #include "server.h"
 #include "server-protected.h"
 #include "plugin_loader.h"
-#include "connection_info.h"
+#include "request_info.h"
 
 
 #define PAGE_HEADER                                                                                     \
