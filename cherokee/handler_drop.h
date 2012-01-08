@@ -35,7 +35,7 @@
  */
 void  PLUGIN_INIT_NAME(drop)          (cherokee_plugin_loader_t *loader);
 
-ret_t cherokee_handler_drop_new       (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
+ret_t cherokee_handler_drop_new       (cherokee_handler_t **hdl, cherokee_request_t *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_drop_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
 
 #endif /* CHEROKEE_HANDLER_DROP_H */

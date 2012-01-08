@@ -1948,7 +1948,7 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 		CHEROKEE_MUTEX_LOCK (&thread->ownership);
 
 		list_for_each (c, &THREAD(t)->active_list) {
-			cherokee_connection_t *conn = CONN(c);
+			cherokee_request_t *conn = REQ(c);
 
 			if (conn->id == id) {
 				if ((conn->phase != phase_nothing) &&
@@ -2029,7 +2029,7 @@ cherokee_server_get_backup_mode (cherokee_server_t *srv, cherokee_boolean_t *act
 ret_t
 cherokee_server_get_vserver (cherokee_server_t          *srv,
 			     cherokee_buffer_t          *host,
-			     cherokee_connection_t      *conn,
+			     cherokee_request_t      *conn,
 			     cherokee_virtual_server_t **vsrv)
 {
 	int                        re;

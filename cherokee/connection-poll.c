@@ -26,7 +26,7 @@
 #include "connection-poll.h"
 
 ret_t
-cherokee_connection_poll_init (cherokee_connection_pool_t *conn_poll)
+cherokee_request_poll_init (cherokee_connection_pool_t *conn_poll)
 {
 	conn_poll->fd   = -1;
 	conn_poll->mode = poll_mode_nothing;
@@ -35,14 +35,14 @@ cherokee_connection_poll_init (cherokee_connection_pool_t *conn_poll)
 }
 
 ret_t
-cherokee_connection_poll_mrproper (cherokee_connection_pool_t *conn_poll)
+cherokee_request_poll_mrproper (cherokee_connection_pool_t *conn_poll)
 {
 	UNUSED (conn_poll);
 	return ret_ok;
 }
 
 ret_t
-cherokee_connection_poll_clean (cherokee_connection_pool_t *conn_poll)
+cherokee_request_poll_clean (cherokee_connection_pool_t *conn_poll)
 {
 	conn_poll->fd   = -1;
 	conn_poll->mode = poll_mode_nothing;
@@ -51,7 +51,7 @@ cherokee_connection_poll_clean (cherokee_connection_pool_t *conn_poll)
 }
 
 int
-cherokee_connection_poll_is_set (cherokee_connection_pool_t *conn_poll)
+cherokee_request_poll_is_set (cherokee_connection_pool_t *conn_poll)
 {
 	return ((conn_poll->fd != -1) ||
 		(conn_poll->mode != poll_mode_nothing));

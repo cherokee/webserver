@@ -74,7 +74,7 @@ ret_t cherokee_validator_file_props_free_base  (cherokee_validator_file_props_t 
  */
 
 ret_t cherokee_validator_file_get_full_path    (cherokee_validator_file_t  *validator,
-						cherokee_connection_t      *conn,
+						cherokee_request_t      *conn,
 						cherokee_buffer_t         **ret_buf,
 						cherokee_buffer_t          *tmp);
 

@@ -48,7 +48,7 @@ cherokee_handler_error_configure (cherokee_config_node_t *conf, cherokee_server_
 
 
 ret_t
-cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
+cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_request_t *cnt, cherokee_module_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_error);
@@ -88,7 +88,7 @@ cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 
 
 static ret_t
-build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
+build_hardcoded_response_page (cherokee_request_t *conn, cherokee_buffer_t *buffer)
 {
 	/* Avoid too many reallocations.
 	 */
@@ -121,7 +121,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 			cherokee_buffer_add_escape_html (buffer, &conn->request_original);
 		}
 		else if (! cherokee_buffer_is_empty (&conn->request)) {
-			if (cherokee_connection_use_webdir (conn)) {
+			if (cherokee_request_use_webdir (conn)) {
 				cherokee_buffer_add_buffer (buffer, &conn->web_directory);
 			}
 			cherokee_buffer_add_escape_html (buffer, &conn->request);
@@ -196,7 +196,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	/* Add page footer
 	 */
 	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
-	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string_w_port);
+	cherokee_buffer_add_buffer (buffer, &REQ_BIND(conn)->server_string_w_port);
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 
 	return ret_ok;
@@ -207,7 +207,7 @@ ret_t
 cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	/* If needed then generate the error web page.
 	 * Some HTTP response codes should not include body
@@ -226,7 +226,7 @@ cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 ret_t
 cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	/* It has special headers on protocol upgrading
 	 */
@@ -254,7 +254,7 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 		return ret_ok;
 	}
 
-	if (cherokee_connection_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(conn)) {
 
 		HANDLER(hdl)->support |= hsupport_length;
 

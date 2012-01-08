@@ -26,8 +26,8 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_CONNECTION_H
-#define CHEROKEE_CONNECTION_H
+#ifndef CHEROKEE_REQUEST_H
+#define CHEROKEE_REQUEST_H
 
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
@@ -35,19 +35,19 @@
 
 CHEROKEE_BEGIN_DECLS
 
-typedef struct cherokee_connection cherokee_connection_t;
-#define CONN(c)        ((cherokee_connection_t *)(c))
+typedef struct cherokee_request cherokee_request_t;
+#define REQ(c)        ((cherokee_request_t *)(c))
 
 
 /* Public methods
  */
-ret_t  cherokee_connection_set_cork      (cherokee_connection_t *conn, cherokee_boolean_t enable);
-ret_t  cherokee_connection_parse_args    (cherokee_connection_t *conn);
+ret_t  cherokee_request_set_cork      (cherokee_request_t *conn, cherokee_boolean_t enable);
+ret_t  cherokee_request_parse_args    (cherokee_request_t *conn);
 
 /* Handy functions
  */
-const char *cherokee_connection_get_phase_str (cherokee_connection_t *conn);
+const char *cherokee_request_get_phase_str (cherokee_request_t *conn);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_CONNECTION_H */
+#endif /* CHEROKEE_REQUEST_H */

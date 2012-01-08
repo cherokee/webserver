@@ -44,7 +44,7 @@ cherokee_limiter_mrproper (cherokee_limiter_t *limiter)
 	cherokee_list_t *i, *tmp;
 
 	list_for_each_safe (i, tmp, &limiter->conns) {
-		cherokee_connection_free (CONN(i));
+		cherokee_request_free (REQ(i));
 	}
 
 	return ret_ok;
@@ -62,7 +62,7 @@ cherokee_limiter_add_conn (cherokee_limiter_t *limiter,
 	 */
 	prev = &limiter->conns;
 	list_for_each (i, &limiter->conns) {
-		if (CONN(i)->limit_blocked_until > CONN(conn)->limit_blocked_until)
+		if (REQ(i)->limit_blocked_until > REQ(conn)->limit_blocked_until)
 			break;
 
 		prev = i;
@@ -80,7 +80,7 @@ cherokee_limiter_get_time_limit (cherokee_limiter_t *limiter,
 				 cherokee_msec_t     fdwatch_msecs)
 {
 	long long              time_delta;
-	cherokee_connection_t *conn;
+	cherokee_request_t *conn;
 
 	/* Shortcut
 	 */
@@ -92,7 +92,7 @@ cherokee_limiter_get_time_limit (cherokee_limiter_t *limiter,
 
 	/* Pick the first connection
 	 */
-	conn = CONN(limiter->conns.next);
+	conn = REQ(limiter->conns.next);
 
 	/* Return the delta time of the first connection (the
 	 * connection that will be enabled sooner)
@@ -116,7 +116,7 @@ cherokee_limiter_reactive (cherokee_limiter_t *limiter,
 	list_for_each_safe (i, tmp, &limiter->conns) {
 		/* Check whether the limit has expired
 		 */
-		if (CONN(i)->limit_blocked_until > cherokee_bogonow_msec)
+		if (REQ(i)->limit_blocked_until > cherokee_bogonow_msec)
 			break;
 
 		/* Re-active the connection
@@ -124,8 +124,8 @@ cherokee_limiter_reactive (cherokee_limiter_t *limiter,
 		limiter->conns_num--;
 		cherokee_list_del(i);
 
-		CONN(i)->limit_blocked_until = 0;
-		cherokee_thread_inject_active_connection (thread, CONN(i));
+		REQ(i)->limit_blocked_until = 0;
+		cherokee_thread_inject_active_connection (thread, REQ(i));
 	}
 
 	return ret_ok;

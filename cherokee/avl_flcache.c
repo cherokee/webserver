@@ -34,7 +34,7 @@
 
 
 static ret_t
-conn_to_node (cherokee_connection_t       *conn,
+conn_to_node (cherokee_request_t       *conn,
 	      cherokee_avl_flcache_node_t *node)
 {
 	cherokee_avl_generic_node_init (AVL_GENERIC_NODE(node));
@@ -63,7 +63,7 @@ conn_to_node (cherokee_connection_t       *conn,
 
 static ret_t
 node_new (cherokee_avl_flcache_node_t **node,
-	  cherokee_connection_t        *conn)
+	  cherokee_request_t        *conn)
 {
 	CHEROKEE_NEW_STRUCT (n, avl_flcache_node);
 
@@ -115,11 +115,11 @@ cmp_request (cherokee_avl_flcache_node_t *A,
 	     cherokee_avl_flcache_node_t *B)
 {
 	int                          re;
-	cherokee_connection_t       *conn;
+	cherokee_request_t       *conn;
 	cherokee_avl_flcache_node_t *node;
 	cherokee_boolean_t           invert;
 
-	/* Comparing against a cherokee_connection_t
+	/* Comparing against a cherokee_request_t
 	 */
 	if (A->conn_ref || B->conn_ref) {
 		if (A->conn_ref) {
@@ -151,11 +151,11 @@ cmp_query_string (cherokee_avl_flcache_node_t *A,
 		  cherokee_avl_flcache_node_t *B)
 {
 	int                          re;
-	cherokee_connection_t       *conn;
+	cherokee_request_t       *conn;
 	cherokee_avl_flcache_node_t *node;
 	cherokee_boolean_t           invert;
 
-	/* Comparing against a cherokee_connection_t
+	/* Comparing against a cherokee_request_t
 	 */
 	if (A->conn_ref || B->conn_ref) {
 		if (A->conn_ref) {
@@ -189,13 +189,13 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 	ret_t                        ret;
 	int                          re;
 	char                        *p;
-	cherokee_connection_t       *conn;
+	cherokee_request_t       *conn;
 	cherokee_avl_flcache_node_t *node;
 	cherokee_boolean_t           invert;
 	char                        *header      = NULL;
 	cuint_t                      header_len;
 
-	/* Comparing against a cherokee_connection_t
+	/* Comparing against a cherokee_request_t
 	 */
 	if (A->conn_ref || B->conn_ref) {
 		if (A->conn_ref) {
@@ -316,7 +316,7 @@ static int
 node_is_empty (cherokee_avl_flcache_node_t *key)
 {
 	/* The key object can be either be:
-	 * 1.- A reference to a cherokee_connection_t object
+	 * 1.- A reference to a cherokee_request_t object
 	 * 2.- An object storing information
 	 */
 	if (key->conn_ref)
@@ -354,7 +354,7 @@ cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl,
 
 ret_t
 cherokee_avl_flcache_add (cherokee_avl_flcache_t       *avl,
-			  cherokee_connection_t        *conn,
+			  cherokee_request_t        *conn,
 			  cherokee_avl_flcache_node_t **node)
 {
 	ret_t                       ret;
@@ -382,7 +382,7 @@ cherokee_avl_flcache_add (cherokee_avl_flcache_t       *avl,
 
 ret_t
 cherokee_avl_flcache_get (cherokee_avl_flcache_t       *avl,
-			  cherokee_connection_t        *conn,
+			  cherokee_request_t        *conn,
 			  cherokee_avl_flcache_node_t **node)
 {
 	ret_t                       ret;

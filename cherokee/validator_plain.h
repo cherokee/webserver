@@ -46,7 +46,7 @@ void PLUGIN_INIT_NAME(plain) (cherokee_plugin_loader_t *loader);
 ret_t cherokee_validator_plain_new         (cherokee_validator_plain_t **plain, cherokee_module_props_t *props);
 ret_t cherokee_validator_plain_free        (cherokee_validator_plain_t  *plain);
 
-ret_t cherokee_validator_plain_check       (cherokee_validator_plain_t  *plain, cherokee_connection_t *conn);
-ret_t cherokee_validator_plain_add_headers (cherokee_validator_plain_t  *plain, cherokee_connection_t *conn, cherokee_buffer_t *buf);
+ret_t cherokee_validator_plain_check       (cherokee_validator_plain_t  *plain, cherokee_request_t *conn);
+ret_t cherokee_validator_plain_add_headers (cherokee_validator_plain_t  *plain, cherokee_request_t *conn, cherokee_buffer_t *buf);
 
 #endif /* CHEROKEE_VALIDATOR_PLAIN_H */

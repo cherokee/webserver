@@ -140,7 +140,7 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 	ret_t                    ret;
 	size_t                   read = 0;
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);
-	cherokee_connection_t   *conn = HANDLER_CONN(cgi_base);
+	cherokee_request_t   *conn = HANDLER_REQ(cgi_base);
 
 	ret = cherokee_socket_bufread (&scgi->socket, buffer, 4096, &read);
 
@@ -251,7 +251,7 @@ build_header (cherokee_handler_scgi_t *hdl)
 {
 	cuint_t                len;
 	char                   tmp[64];
-	cherokee_connection_t *conn     = HANDLER_CONN(hdl);
+	cherokee_request_t *conn     = HANDLER_REQ(hdl);
 
 	len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)conn->post.len);
 
@@ -269,7 +269,7 @@ static ret_t
 connect_to_server (cherokee_handler_scgi_t *hdl)
 {
 	ret_t                          ret;
-	cherokee_connection_t         *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t         *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_scgi_props_t *props = HANDLER_SCGI_PROPS(hdl);
 
 	/* Get a reference to the target host
@@ -302,7 +302,7 @@ send_header (cherokee_handler_scgi_t *hdl)
 {
 	ret_t                  ret;
 	size_t                 written = 0;
-	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
+	cherokee_request_t *conn    = HANDLER_REQ(hdl);
 
 	ret = cherokee_socket_bufwrite (&hdl->socket, &hdl->header, &written);
 	if (ret != ret_ok) {
@@ -328,7 +328,7 @@ ret_t
 cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	switch (HDL_CGI_BASE(hdl)->init_phase) {
 	case hcgi_phase_build_headers:
@@ -393,7 +393,7 @@ ret_t
 cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+	cherokee_request_t *conn   = HANDLER_REQ(hdl);
 	cherokee_boolean_t     did_IO = false;
 
 	/* Client Socket -> Back-end SCGI
@@ -401,7 +401,7 @@ cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
 					    &hdl->socket, NULL, &did_IO);
 	if (did_IO) {
-		cherokee_connection_update_timeout (conn);
+		cherokee_request_update_timeout (conn);
 	}
 
 	/* Check return

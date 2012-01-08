@@ -688,7 +688,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 ret_t
 cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 					     cherokee_socket_t             *socket,
-					     cherokee_connection_t         *conn)
+					     cherokee_request_t         *conn)
 {
 	int   re;
 	ret_t ret;
@@ -740,7 +740,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	 */
 	unlocked = CHEROKEE_MUTEX_TRY_LOCK (&src->launching_mutex);
 	if (unlocked) {
-		cherokee_connection_sleep (conn, 1000);
+		cherokee_request_sleep (conn, 1000);
 		return ret_eagain;
 	}
 
@@ -764,7 +764,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		}
 
 		/* Spawn */
-		ret = cherokee_virtual_server_get_error_log (CONN_VSRV(conn), &error_writer);
+		ret = cherokee_virtual_server_get_error_log (REQ_VSRV(conn), &error_writer);
 		if (ret != ret_ok) {
 			ret = ret_error;
 			goto out;
@@ -778,7 +778,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 			goto out;
 
 		case ret_eagain:
-			cherokee_connection_sleep (conn, 1000);
+			cherokee_request_sleep (conn, 1000);
 			ret = ret_eagain;
 			goto out;
 
@@ -827,7 +827,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 
 	/* Spawning on-going
 	 */
-	cherokee_connection_sleep (conn, 1000);
+	cherokee_request_sleep (conn, 1000);
 	ret = ret_eagain;
 
 out:

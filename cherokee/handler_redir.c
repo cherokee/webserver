@@ -53,7 +53,7 @@ substitute (cherokee_handler_redir_t *hdl,
 	ret_t                  ret;
 	char                  *token;
 	cint_t                 offset;
-	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+	cherokee_request_t *conn   = HANDLER_REQ(hdl);
 	cherokee_buffer_t     *tmp    = THREAD_TMP_BUF2(HANDLER_THREAD(hdl));
 
 	cherokee_buffer_clean (tmp);
@@ -109,7 +109,7 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 {
 	cherokee_list_t       *i;
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 	cherokee_buffer_t     *tmp  = THREAD_TMP_BUF1(HANDLER_THREAD(hdl));
 
 	/* Append the query string
@@ -287,8 +287,8 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 	/* If there is an explitic redirection on the connection don't
 	 * even bother looking in the properties. Go straight for it.
 	 */
-	if (! cherokee_buffer_is_empty (&CONN(cnt)->redirect)) {
-		TRACE (ENTRIES, "Explicit redirection to '%s'\n", CONN(cnt)->redirect.buf);
+	if (! cherokee_buffer_is_empty (&REQ(cnt)->redirect)) {
+		TRACE (ENTRIES, "Explicit redirection to '%s'\n", REQ(cnt)->redirect.buf);
 	} else {
 		if (! cherokee_list_empty (&HDL_REDIR_PROPS(n)->regex_list)) {
 
@@ -323,7 +323,7 @@ cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 {
 	int                    request_end;
 	char                  *request_ending;
-	cherokee_connection_t *conn = HANDLER_CONN(n);
+	cherokee_request_t *conn = HANDLER_REQ(n);
 
 	/* Maybe ::new -> match_and_substitute() has already set
 	 * this redirection

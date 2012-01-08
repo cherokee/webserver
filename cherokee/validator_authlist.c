@@ -171,7 +171,7 @@ authlist_free (cherokee_validator_authlist_t *authlist)
 
 static ret_t
 authlist_check (cherokee_validator_authlist_t *authlist,
-		cherokee_connection_t         *conn)
+		cherokee_request_t         *conn)
 {
 	int                                  re;
 	ret_t                                ret;
@@ -224,7 +224,7 @@ authlist_check (cherokee_validator_authlist_t *authlist,
 
 static ret_t
 authlist_add_headers (cherokee_validator_authlist_t *authlist,
-		      cherokee_connection_t         *conn,
+		      cherokee_request_t         *conn,
 		      cherokee_buffer_t             *buf)
 {
 	UNUSED(authlist);

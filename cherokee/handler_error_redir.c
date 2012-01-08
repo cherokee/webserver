@@ -158,7 +158,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 
 static ret_t
 do_redir_external (cherokee_handler_t     **hdl,
-		   cherokee_connection_t   *conn,
+		   cherokee_request_t   *conn,
 		   cherokee_module_props_t *props,
 		   error_entry_t           *entry)
 {
@@ -170,7 +170,7 @@ do_redir_external (cherokee_handler_t     **hdl,
 }
 
 static ret_t
-do_redir_internal (cherokee_connection_t *conn,
+do_redir_internal (cherokee_request_t *conn,
 		   error_entry_t         *entry)
 {
 	/* Set REDIRECT_URL
@@ -201,7 +201,7 @@ do_redir_internal (cherokee_connection_t *conn,
 
 ret_t
 cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
-				  cherokee_connection_t   *conn,
+				  cherokee_request_t   *conn,
 				  cherokee_module_props_t *props)
 {
 	cherokee_list_t *i;

@@ -126,8 +126,8 @@ ret_t cherokee_validator_add_headers     (cherokee_validator_t *validator, void 
  */
 ret_t cherokee_validator_parse_basic     (cherokee_validator_t *validator, char *str, cuint_t str_len);
 ret_t cherokee_validator_parse_digest    (cherokee_validator_t *validator, char *str, cuint_t str_len);
-ret_t cherokee_validator_digest_response (cherokee_validator_t *validator, char *A1, cherokee_buffer_t *buf, cherokee_connection_t *conn);
-ret_t cherokee_validator_digest_check    (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_connection_t *conn);
+ret_t cherokee_validator_digest_response (cherokee_validator_t *validator, char *A1, cherokee_buffer_t *buf, cherokee_request_t *conn);
+ret_t cherokee_validator_digest_check    (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_request_t *conn);
 
 /* Validator properties methods
  */

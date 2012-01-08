@@ -35,7 +35,7 @@ PLUGIN_INFO_RULE_EASIEST_INIT(tls);
 
 static ret_t
 match (cherokee_rule_tls_t     *rule,
-       cherokee_connection_t   *conn,
+       cherokee_request_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
 	UNUSED(rule);

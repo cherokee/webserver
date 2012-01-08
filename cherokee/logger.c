@@ -140,7 +140,7 @@ cherokee_logger_init (cherokee_logger_t *logger)
 }
 
 static ret_t
-parse_x_real_ip (cherokee_logger_t *logger, cherokee_connection_t *conn)
+parse_x_real_ip (cherokee_logger_t *logger, cherokee_request_t *conn)
 {
 	ret_t    ret;
 	cuint_t  len  = 0;
@@ -200,7 +200,7 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 	/* Deal with X-Real-IP
 	 */
 	if (logger->priv->x_real_ip.enabled) {
-		ret = parse_x_real_ip (logger, CONN(conn));
+		ret = parse_x_real_ip (logger, REQ(conn));
 		if (unlikely (ret == ret_error)) {
 			return ret_error;
 		}

@@ -85,9 +85,9 @@
 
 
 ret_t
-cherokee_connection_new  (cherokee_connection_t **conn)
+cherokee_request_new  (cherokee_request_t **conn)
 {
-	CHEROKEE_NEW_STRUCT(n, connection);
+	CHEROKEE_NEW_STRUCT(n, request);
 
 	INIT_LIST_HEAD (&n->list_node);
 
@@ -156,7 +156,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_socket_init (&n->socket);
 	cherokee_header_init (&n->header, header_type_request);
 	cherokee_post_init (&n->post, n);
-	cherokee_connection_poll_init (&n->polling_aim);
+	cherokee_request_poll_init (&n->polling_aim);
 
 	memset (n->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	n->regex_ovecsize = 0;
@@ -177,7 +177,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 
 ret_t
-cherokee_connection_free (cherokee_connection_t  *conn)
+cherokee_request_free (cherokee_request_t  *conn)
 {
 	cherokee_header_mrproper (&conn->header);
 	cherokee_socket_mrproper (&conn->socket);
@@ -234,7 +234,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	if (conn->polling_aim.fd != -1) {
                 cherokee_fd_close (conn->polling_aim.fd);
 	}
-	cherokee_connection_poll_mrproper (&conn->polling_aim);
+	cherokee_request_poll_mrproper (&conn->polling_aim);
 
 	free (conn);
 	return ret_ok;
@@ -242,12 +242,12 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 
 
 ret_t
-cherokee_connection_clean (cherokee_connection_t *conn,
+cherokee_request_clean (cherokee_request_t *conn,
 			   cherokee_boolean_t     reuse)
 {
 	size_t             crlf_len;
 	uint32_t           header_len;
-	cherokee_server_t *srv         = CONN_SRV(conn);
+	cherokee_server_t *srv         = REQ_SRV(conn);
 
 	/* I/O cache entry reference
 	 */
@@ -263,7 +263,7 @@ cherokee_connection_clean (cherokee_connection_t *conn,
 	/* TCP cork
 	 */
 	if (conn->options & conn_op_tcp_cork) {
-		cherokee_connection_set_cork (conn, false);
+		cherokee_request_set_cork (conn, false);
 		BIT_UNSET (conn->options, conn_op_tcp_cork);
 	}
 
@@ -291,7 +291,7 @@ cherokee_connection_clean (cherokee_connection_t *conn,
 	if (conn->polling_aim.fd != -1) {
                 cherokee_fd_close (conn->polling_aim.fd);
 	}
-	cherokee_connection_poll_clean (&conn->polling_aim);
+	cherokee_request_poll_clean (&conn->polling_aim);
 
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
@@ -330,7 +330,7 @@ cherokee_connection_clean (cherokee_connection_t *conn,
 	memset (conn->regex_host_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_host_ovecsize = 0;
 
-	cherokee_connection_poll_clean (&conn->polling_aim);
+	cherokee_request_poll_clean (&conn->polling_aim);
 
 	cherokee_post_clean (&conn->post);
 	cherokee_buffer_mrproper (&conn->encoder_buffer);
@@ -395,7 +395,7 @@ cherokee_connection_clean (cherokee_connection_t *conn,
 
 
 ret_t
-cherokee_connection_clean_close (cherokee_connection_t *conn)
+cherokee_request_clean_close (cherokee_request_t *conn)
 {
 	/* Close and clean the socket
 	 */
@@ -409,13 +409,13 @@ cherokee_connection_clean_close (cherokee_connection_t *conn)
 
 	/* Clean the connection object
 	 */
-	cherokee_connection_clean (conn, false);
+	cherokee_request_clean (conn, false);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
+cherokee_request_setup_error_handler (cherokee_request_t *conn)
 {
 	ret_t                       ret;
 	cherokee_server_t          *srv;
@@ -427,8 +427,8 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	 * call continue (becase conn->error_code might have changed).
 	 */
 
-	srv   = CONN_SRV(conn);
-	vsrv  = CONN_VSRV(conn);
+	srv   = REQ_SRV(conn);
+	vsrv  = REQ_VSRV(conn);
 	entry = vsrv->error_handler;
 
 	TRACE(ENTRIES, "Setting up error handler: %d (respins=%d)\n",
@@ -552,12 +552,12 @@ clean:
 
 
 ret_t
-cherokee_connection_setup_hsts_handler (cherokee_connection_t *conn)
+cherokee_request_setup_hsts_handler (cherokee_request_t *conn)
 {
 	ret_t              ret;
 	cherokee_list_t   *i;
 	int                port = -1;
-	cherokee_server_t *srv  = CONN_SRV(conn);
+	cherokee_server_t *srv  = REQ_SRV(conn);
 
 	/* Redirect to:
 	 * "https://" + host + request + query_string
@@ -568,7 +568,7 @@ cherokee_connection_setup_hsts_handler (cherokee_connection_t *conn)
 	cherokee_buffer_add_str (&conn->redirect, "https://");
 
 	/* 2.- Host */
-	cherokee_connection_build_host_string (conn, &conn->redirect);
+	cherokee_request_build_host_string (conn, &conn->redirect);
 
 	/* 3.- Port */
 	list_for_each (i, &srv->listeners) {
@@ -612,7 +612,7 @@ cherokee_connection_setup_hsts_handler (cherokee_connection_t *conn)
 
 
 static void
-build_response_header_authentication (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
+build_response_header_authentication (cherokee_request_t *conn, cherokee_buffer_t *buffer)
 {
 	ret_t ret;
 
@@ -630,7 +630,7 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 	 *                   nonce="", opaque=""
 	 */
 	if (conn->auth_type & http_auth_digest) {
-		cherokee_thread_t *thread    = CONN_THREAD(conn);
+		cherokee_thread_t *thread    = REQ_THREAD(conn);
 		cherokee_buffer_t *new_nonce = THREAD_TMP_BUF1(thread);
 
 		/* Realm
@@ -647,14 +647,14 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 		if ((conn->validator != NULL) &&
 		    (! cherokee_buffer_is_empty (&conn->validator->nonce)))
 		{
-			ret = cherokee_nonce_table_check (CONN_SRV(conn)->nonces,
+			ret = cherokee_nonce_table_check (REQ_SRV(conn)->nonces,
 							  &conn->validator->nonce);
 		}
 
 		cherokee_buffer_add_str (buffer, "nonce=\"");
 		if (ret != ret_ok) {
 			cherokee_buffer_clean (new_nonce);
-			cherokee_nonce_table_generate (CONN_SRV(conn)->nonces, conn, new_nonce);
+			cherokee_nonce_table_generate (REQ_SRV(conn)->nonces, conn, new_nonce);
 			cherokee_buffer_add_buffer (buffer, new_nonce);
 		} else {
 			cherokee_buffer_add_buffer (buffer, &conn->validator->nonce);
@@ -671,7 +671,7 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 
 
 ret_t
-cherokee_connection_read_post (cherokee_connection_t *conn)
+cherokee_request_read_post (cherokee_request_t *conn)
 {
 	/* Shortcut
 	 */
@@ -684,7 +684,7 @@ cherokee_connection_read_post (cherokee_connection_t *conn)
 
 
 void
-cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
+cherokee_request_add_expiration_header (cherokee_request_t *conn,
 					   cherokee_buffer_t     *buffer,
 					   cherokee_boolean_t     use_maxage)
 {
@@ -786,10 +786,10 @@ cherokee_connection_add_expiration_header (cherokee_connection_t *conn,
 
 
 static void
-build_response_header (cherokee_connection_t *conn,
+build_response_header (cherokee_request_t *conn,
 		       cherokee_buffer_t     *buffer)
 {
-	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(CONN_THREAD(conn));
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(REQ_THREAD(conn));
 
 	/* Build the response header.
 	 */
@@ -855,7 +855,7 @@ build_response_header (cherokee_connection_t *conn,
 	/* Add the Server header
 	 */
 	cherokee_buffer_add_str (buffer, "Server: ");
-	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string);
+	cherokee_buffer_add_buffer (buffer, &REQ_BIND(conn)->server_string);
 	cherokee_buffer_add_str (buffer, CRLF);
 
 	/* Authentication
@@ -895,13 +895,13 @@ build_response_header (cherokee_connection_t *conn,
 	/* HSTS support
 	 */
 	if ((conn->socket.is_tls == TLS)    &&
-	    (CONN_VSRV(conn)->hsts.enabled))
+	    (REQ_VSRV(conn)->hsts.enabled))
 	{
 		cherokee_buffer_add_str     (buffer, "Strict-Transport-Security: ");
 		cherokee_buffer_add_str     (buffer, "max-age=");
-		cherokee_buffer_add_ulong10 (buffer, (culong_t) CONN_VSRV(conn)->hsts.max_age);
+		cherokee_buffer_add_ulong10 (buffer, (culong_t) REQ_VSRV(conn)->hsts.max_age);
 
-		if (CONN_VSRV(conn)->hsts.subdomains) {
+		if (REQ_VSRV(conn)->hsts.subdomains) {
 			cherokee_buffer_add_str (buffer, "; includeSubdomains");
 		}
 
@@ -911,10 +911,10 @@ build_response_header (cherokee_connection_t *conn,
 
 
 static void
-build_response_header_final (cherokee_connection_t *conn,
+build_response_header_final (cherokee_request_t *conn,
 			     cherokee_buffer_t     *buffer)
 {
-	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(CONN_THREAD(conn));
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(REQ_THREAD(conn));
 
 	/* Expiration
 	 */
@@ -924,10 +924,10 @@ build_response_header_final (cherokee_connection_t *conn,
 		 * in the response file.
 		 */
 		if (conn->flcache.mode == flcache_mode_undef) {
-			cherokee_connection_add_expiration_header (conn, buffer, true);
+			cherokee_request_add_expiration_header (conn, buffer, true);
 		} else if (conn->flcache.mode == flcache_mode_in) {
 			cherokee_header_del_entry (buffer, "Cache-Control", 13);
-			cherokee_connection_add_expiration_header (conn, buffer, true);
+			cherokee_request_add_expiration_header (conn, buffer, true);
 		}
 	}
 
@@ -941,7 +941,7 @@ build_response_header_final (cherokee_connection_t *conn,
 
 
 ret_t
-cherokee_connection_build_header (cherokee_connection_t *conn)
+cherokee_request_build_header (cherokee_request_t *conn)
 {
 	ret_t ret;
 
@@ -979,7 +979,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		/* Add X-Cache miss
 		 */
 		cherokee_buffer_add_str (&conn->header_buffer, "X-Cache: MISS from ");
-		cherokee_connection_build_host_port_string (conn, &conn->header_buffer);
+		cherokee_request_build_host_port_string (conn, &conn->header_buffer);
 		cherokee_buffer_add_str (&conn->header_buffer, CRLF);
 	}
 
@@ -1012,7 +1012,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	    (conn->encoder_new_func))
 	{
 		/* Internally checks conn_op_cant_encoder */
-		cherokee_connection_instance_encoder (conn);
+		cherokee_request_instance_encoder (conn);
 	}
 
 out:
@@ -1038,7 +1038,7 @@ out:
 
 
 ret_t
-cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
+cherokee_request_send_header_and_mmaped (cherokee_request_t *conn)
 {
 	size_t  re = 0;
 	ret_t   ret;
@@ -1070,7 +1070,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 				return ret_error;
 			}
 		}
-		cherokee_connection_tx_add (conn, re);
+		cherokee_request_tx_add (conn, re);
 
 		/* NOTE: conn->mmaped is a ptr. to void
 		 * so we have to apply ptr. math carefully.
@@ -1113,7 +1113,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 	}
 	/* Add to the connection traffic counter
 	 */
-	cherokee_connection_tx_add (conn, re);
+	cherokee_request_tx_add (conn, re);
 
 	/* writev() may not have sent all headers data.
 	 */
@@ -1141,7 +1141,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 
 
 void
-cherokee_connection_rx_add (cherokee_connection_t *conn, ssize_t rx)
+cherokee_request_rx_add (cherokee_request_t *conn, ssize_t rx)
 {
 	if (likely (rx > 0)) {
 		conn->rx += rx;
@@ -1151,7 +1151,7 @@ cherokee_connection_rx_add (cherokee_connection_t *conn, ssize_t rx)
 
 
 void
-cherokee_connection_tx_add (cherokee_connection_t *conn, ssize_t tx)
+cherokee_request_tx_add (cherokee_request_t *conn, ssize_t tx)
 {
 	cuint_t to_sleep;
 
@@ -1172,7 +1172,7 @@ cherokee_connection_tx_add (cherokee_connection_t *conn, ssize_t tx)
 
 
 ret_t
-cherokee_connection_recv (cherokee_connection_t *conn,
+cherokee_request_recv (cherokee_request_t *conn,
 			  cherokee_buffer_t     *buffer,
 			  off_t                  to_read,
 			  off_t                 *len)
@@ -1183,7 +1183,7 @@ cherokee_connection_recv (cherokee_connection_t *conn,
 	ret = cherokee_socket_bufread (&conn->socket, buffer, to_read, &cnt_read);
 	switch (ret) {
 	case ret_ok:
-		cherokee_connection_rx_add (conn, cnt_read);
+		cherokee_request_rx_add (conn, cnt_read);
 		*len = cnt_read;
 		return ret_ok;
 
@@ -1193,7 +1193,7 @@ cherokee_connection_recv (cherokee_connection_t *conn,
 
 	case ret_eagain:
 		if (cnt_read > 0) {
-			cherokee_connection_rx_add (conn, cnt_read);
+			cherokee_request_rx_add (conn, cnt_read);
 			*len = cnt_read;
 			return ret_ok;
 		}
@@ -1212,7 +1212,7 @@ cherokee_connection_recv (cherokee_connection_t *conn,
 
 
 ret_t
-cherokee_connection_reading_check (cherokee_connection_t *conn)
+cherokee_request_reading_check (cherokee_request_t *conn)
 {
 	/* Check for too long headers
 	 */
@@ -1226,7 +1226,7 @@ cherokee_connection_reading_check (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_set_cork (cherokee_connection_t *conn,
+cherokee_request_set_cork (cherokee_request_t *conn,
 			      cherokee_boolean_t     enable)
 {
 	ret_t ret;
@@ -1247,7 +1247,7 @@ cherokee_connection_set_cork (cherokee_connection_t *conn,
 
 
 ret_t
-cherokee_connection_send_header (cherokee_connection_t *conn)
+cherokee_request_send_header (cherokee_request_t *conn)
 {
 	ret_t  ret;
 	size_t sent = 0;
@@ -1273,7 +1273,7 @@ cherokee_connection_send_header (cherokee_connection_t *conn)
 
 	/* Add to the connection traffic counter
 	 */
-	cherokee_connection_tx_add (conn, sent);
+	cherokee_request_tx_add (conn, sent);
 
 	/* Drop out the sent data
 	 */
@@ -1290,7 +1290,7 @@ cherokee_connection_send_header (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_send (cherokee_connection_t *conn)
+cherokee_request_send (cherokee_request_t *conn)
 {
 	ret_t  ret;
 	size_t to_send;
@@ -1425,7 +1425,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 out:
 	/* Add to the connection traffic counter
 	 */
-	cherokee_connection_tx_add (conn, sent);
+	cherokee_request_tx_add (conn, sent);
 
 	/* If this connection has a handler without Content-Length support
 	 * it has to count the bytes sent
@@ -1439,7 +1439,7 @@ out:
 }
 
 int
-cherokee_connection_should_include_length (cherokee_connection_t *conn)
+cherokee_request_should_include_length (cherokee_request_t *conn)
 {
 	if (conn->encoder_new_func) {
 		return false;
@@ -1453,7 +1453,7 @@ cherokee_connection_should_include_length (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_instance_encoder (cherokee_connection_t *conn)
+cherokee_request_instance_encoder (cherokee_request_t *conn)
 {
 	ret_t  ret;
 	char  *name = NULL;
@@ -1513,7 +1513,7 @@ error:
 
 
 ret_t
-cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
+cherokee_request_shutdown_wr (cherokee_request_t *conn)
 {
 	ret_t ret;
 
@@ -1521,7 +1521,7 @@ cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 	 */
 	if (conn->options & conn_op_tcp_cork) {
 		cherokee_socket_flush (&conn->socket);
-		cherokee_connection_set_cork (conn, false);
+		cherokee_request_set_cork (conn, false);
 	}
 
 	/* At this point, we don't want to follow the TLS protocol
@@ -1544,12 +1544,12 @@ cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_linger_read (cherokee_connection_t *conn)
+cherokee_request_linger_read (cherokee_request_t *conn)
 {
 	ret_t              ret;
 	size_t             cnt_read = 0;
 	int                retries  = 2;
-	cherokee_thread_t *thread   = CONN_THREAD(conn);
+	cherokee_thread_t *thread   = REQ_THREAD(conn);
 	cherokee_buffer_t *tmp1     = THREAD_TMP_BUF1(thread);
 
 	TRACE(ENTRIES",linger", "Linger read, socket %s closed\n", conn->socket.closed ? "is" : "isn't");
@@ -1594,7 +1594,7 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_step (cherokee_connection_t *conn)
+cherokee_request_step (cherokee_request_t *conn)
 {
 	ret_t ret;
 	ret_t step_ret = ret_ok;
@@ -1708,7 +1708,7 @@ cherokee_connection_step (cherokee_connection_t *conn)
 			return ret_eof_have_data;
 		}
 
-		/* On last package: point cherokee_connection_send
+		/* On last package: point cherokee_request_send
 		 * about it.  It will add the trailer.
 		 */
 		if (step_ret == ret_eof_have_data)
@@ -1732,7 +1732,7 @@ cherokee_connection_step (cherokee_connection_t *conn)
 
 
 static ret_t
-get_host (cherokee_connection_t *conn,
+get_host (cherokee_request_t *conn,
 	  char                  *ptr,
 	  int                    size)
 {
@@ -1797,7 +1797,7 @@ get_host (cherokee_connection_t *conn,
 
 
 static ret_t
-get_encoding (cherokee_connection_t *conn,
+get_encoding (cherokee_request_t *conn,
 	      char                  *ptr,
 	      cherokee_avl_t        *encoders_accepted)
 {
@@ -1875,7 +1875,7 @@ get_encoding (cherokee_connection_t *conn,
 
 
 static ret_t
-get_authorization (cherokee_connection_t *conn,
+get_authorization (cherokee_request_t *conn,
 		   cherokee_http_auth_t   type,
 		   cherokee_validator_t  *validator,
 		   char                  *ptr,
@@ -1955,7 +1955,7 @@ get_authorization (cherokee_connection_t *conn,
 
 
 int
-cherokee_connection_is_userdir (cherokee_connection_t *conn)
+cherokee_request_is_userdir (cherokee_request_t *conn)
 {
 	return ((conn->request.len > 3) &&
 		(conn->request.buf[1] == '~'));
@@ -1963,7 +1963,7 @@ cherokee_connection_is_userdir (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_set_custom_droot (cherokee_connection_t   *conn,
+cherokee_request_set_custom_droot (cherokee_request_t   *conn,
 				      cherokee_config_entry_t *entry)
 {
 	/* Shortcut
@@ -2009,7 +2009,7 @@ cherokee_connection_set_custom_droot (cherokee_connection_t   *conn,
 
 
 ret_t
-cherokee_connection_build_local_directory (cherokee_connection_t     *conn,
+cherokee_request_build_local_directory (cherokee_request_t     *conn,
 					   cherokee_virtual_server_t *vsrv)
 {
 	ret_t ret;
@@ -2047,7 +2047,7 @@ error:
 
 
 ret_t
-cherokee_connection_build_local_directory_userdir (cherokee_connection_t     *conn,
+cherokee_request_build_local_directory_userdir (cherokee_request_t     *conn,
 						   cherokee_virtual_server_t *vsrv)
 {
 	ret_t         ret;
@@ -2073,7 +2073,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t     *co
 
 
 static ret_t
-get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
+get_range (cherokee_request_t *conn, char *ptr, int ptr_len)
 {
 	cuint_t num_len = 0;
 	CHEROKEE_TEMP(tmp, ptr_len+1);
@@ -2134,7 +2134,7 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 
 
 static ret_t
-parse_userdir (cherokee_connection_t *conn)
+parse_userdir (cherokee_request_t *conn)
 {
 	char *begin;
 	char *end_username;
@@ -2179,7 +2179,7 @@ parse_userdir (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_get_request (cherokee_connection_t *conn)
+cherokee_request_get_request (cherokee_request_t *conn)
 {
 	ret_t               ret;
 	char               *host;
@@ -2286,7 +2286,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 
 		/* Set the virtual server reference
 		 */
-		ret = cherokee_server_get_vserver (CONN_SRV(conn), &conn->host, conn,
+		ret = cherokee_server_get_vserver (REQ_SRV(conn), &conn->host, conn,
 						   (cherokee_virtual_server_t **)&conn->vserver);
 		if (unlikely (ret != ret_ok)) {
 			LOG_ERROR (CHEROKEE_ERROR_CONNECTION_GET_VSERVER, conn->host.buf);
@@ -2301,8 +2301,8 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 
 	/* Userdir requests
 	 */
-	if ((!cherokee_buffer_is_empty (&CONN_VSRV(conn)->userdir)) &&
-	    (cherokee_connection_is_userdir (conn)))
+	if ((!cherokee_buffer_is_empty (&REQ_VSRV(conn)->userdir)) &&
+	    (cherokee_request_is_userdir (conn)))
 	{
 		ret = parse_userdir (conn);
 		if (ret != ret_ok) return ret;
@@ -2310,8 +2310,8 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 
 	/* Check Upload limit
 	 */
-	if ((CONN_VSRV(conn)->post_max_len > 0) &&
-	    (conn->post.len > CONN_VSRV(conn)->post_max_len))
+	if ((REQ_VSRV(conn)->post_max_len > 0) &&
+	    (conn->post.len > REQ_VSRV(conn)->post_max_len))
 	{
 		conn->error_code = http_request_entity_too_large;
 		return ret_error;
@@ -2326,15 +2326,15 @@ error:
 	/* Since the request could not be parsed, the connection is
 	 * about to be closed. Log the error now before it's too late.
 	 */
-	if (CONN_VSRV(conn)->logger) {
-		cherokee_logger_write_access (CONN_VSRV(conn)->logger, conn);
+	if (REQ_VSRV(conn)->logger) {
+		cherokee_logger_write_access (REQ_VSRV(conn)->logger, conn);
 	}
 	return ret_error;
 }
 
 
 ret_t
-cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_authentication (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
 {
 	ret_t    ret;
 	char    *ptr;
@@ -2412,7 +2412,7 @@ error:
 
 
 ret_t
-cherokee_connection_check_ip_validation (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_ip_validation (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
 {
 	ret_t ret;
 
@@ -2431,7 +2431,7 @@ cherokee_connection_check_ip_validation (cherokee_connection_t *conn, cherokee_c
 
 
 ret_t
-cherokee_connection_check_only_secure (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_only_secure (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
 {
 	if (config_entry->only_secure == false) {
 		/* No Only-Secure connection..
@@ -2452,7 +2452,7 @@ cherokee_connection_check_only_secure (cherokee_connection_t *conn, cherokee_con
 
 
 ret_t
-cherokee_connection_check_http_method (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_http_method (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
 {
 	if (config_entry->handler_methods & conn->header.method)
 		return ret_ok;
@@ -2475,7 +2475,7 @@ cherokee_connection_check_http_method (cherokee_connection_t *conn, cherokee_con
 
 
 ret_t
-cherokee_connection_create_handler (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_create_handler (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
 {
 	ret_t ret;
 
@@ -2515,13 +2515,13 @@ cherokee_connection_create_handler (cherokee_connection_t *conn, cherokee_config
 
 
 void
-cherokee_connection_set_keepalive (cherokee_connection_t *conn)
+cherokee_request_set_keepalive (cherokee_request_t *conn)
 {
 	ret_t              ret;
 	char              *ptr;
 	cuint_t            ptr_len;
-	cherokee_server_t *srv    = CONN_SRV(conn);
-	cherokee_thread_t *thread = CONN_THREAD(conn);
+	cherokee_server_t *srv    = REQ_SRV(conn);
+	cherokee_thread_t *thread = REQ_THREAD(conn);
 
 	/* Check whether server allows keep-alive
 	 */
@@ -2535,7 +2535,7 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 
 	/* Does the virtual server support Keep-Alive?
 	 */
-	if (CONN_VSRV(conn)->keepalive == false)
+	if (REQ_VSRV(conn)->keepalive == false)
 		goto denied;
 
 	/* Set Keep-alive according with the 'Connection' header
@@ -2571,14 +2571,14 @@ denied:
 
 granted:
 	if (conn->keepalive == 0)
-		conn->keepalive = CONN_SRV(conn)->keepalive_max;
+		conn->keepalive = REQ_SRV(conn)->keepalive_max;
 
 	TRACE (ENTRIES, "Keep-alive %d\n", conn->keepalive);
 }
 
 
 ret_t
-cherokee_connection_set_rate (cherokee_connection_t   *conn,
+cherokee_request_set_rate (cherokee_request_t   *conn,
 			      cherokee_config_entry_t *entry)
 {
 	if (entry->limit_bps <= 0)
@@ -2592,7 +2592,7 @@ cherokee_connection_set_rate (cherokee_connection_t   *conn,
 
 
 void
-cherokee_connection_set_chunked_encoding (cherokee_connection_t *conn)
+cherokee_request_set_chunked_encoding (cherokee_request_t *conn)
 {
 	/* Conditions to activate Chunked-Encodiog:
 	 *  - The server configuration allows to use it
@@ -2600,14 +2600,14 @@ cherokee_connection_set_chunked_encoding (cherokee_connection_t *conn)
 	 *  - It's a HTTP/1.1 connection
 	 *  - It's not serving content from the Front-line cache
 	 */
-	conn->chunked_encoding = ((CONN_SRV(conn)->chunked_encoding) &&
+	conn->chunked_encoding = ((REQ_SRV(conn)->chunked_encoding) &&
 				  (conn->keepalive > 0) &&
 				  (conn->header.version == http_version_11) &&
 				  (conn->flcache.mode != flcache_mode_out));
 }
 
 ret_t
-cherokee_connection_parse_range (cherokee_connection_t *conn)
+cherokee_request_parse_range (cherokee_request_t *conn)
 {
 	ret_t    ret;
 	char    *ptr;
@@ -2632,7 +2632,7 @@ cherokee_connection_parse_range (cherokee_connection_t *conn)
 }
 
 ret_t
-cherokee_connection_create_encoder (cherokee_connection_t *conn,
+cherokee_request_create_encoder (cherokee_request_t *conn,
 				    cherokee_avl_t        *encoders_accepted)
 {
 	ret_t    ret;
@@ -2672,7 +2672,7 @@ cherokee_connection_create_encoder (cherokee_connection_t *conn,
 
 
 ret_t
-cherokee_connection_parse_args (cherokee_connection_t *conn)
+cherokee_request_parse_args (cherokee_request_t *conn)
 {
 	ret_t ret;
 
@@ -2701,7 +2701,7 @@ cherokee_connection_parse_args (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_open_request (cherokee_connection_t *conn)
+cherokee_request_open_request (cherokee_request_t *conn)
 {
 	TRACE (ENTRIES, "web_directory='%s' request='%s' local_directory='%s'\n",
 	       conn->web_directory.buf,
@@ -2720,7 +2720,7 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_log (cherokee_connection_t *conn)
+cherokee_request_log (cherokee_request_t *conn)
 {
 	/* Check whether if needs to log now of not
 	 */
@@ -2735,13 +2735,13 @@ cherokee_connection_log (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_update_vhost_traffic (cherokee_connection_t *conn)
+cherokee_request_update_vhost_traffic (cherokee_request_t *conn)
 {
-	if (CONN_VSRV(conn)->collector == NULL) {
+	if (REQ_VSRV(conn)->collector == NULL) {
 		return ret_ok;
 	}
 
-	cherokee_collector_vsrv_count (CONN_VSRV(conn)->collector,
+	cherokee_collector_vsrv_count (REQ_VSRV(conn)->collector,
 				       conn->rx_partial,
 				       conn->tx_partial);
 
@@ -2759,7 +2759,7 @@ cherokee_connection_update_vhost_traffic (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
+cherokee_request_clean_for_respin (cherokee_request_t *conn)
 {
 	TRACE(ENTRIES, "Clean for respin: conn=%p\n", conn);
 
@@ -2770,7 +2770,7 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 		return ret_error;
 	}
 
-	if (cherokee_connection_use_webdir(conn)) {
+	if (cherokee_request_use_webdir(conn)) {
 		cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
 		cherokee_buffer_clean (&conn->local_directory);
 		BIT_UNSET (conn->options, conn_op_document_root);
@@ -2778,13 +2778,13 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 
 	cherokee_buffer_clean (&conn->web_directory);
 
-	TRACE_CONN(conn);
+	TRACE_REQ(conn);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_connection_clean_error_headers (cherokee_connection_t *conn)
+cherokee_request_clean_error_headers (cherokee_request_t *conn)
 {
 	char *begin;
 	char *end;
@@ -2813,7 +2813,7 @@ cherokee_connection_clean_error_headers (cherokee_connection_t *conn)
 
 
 int
-cherokee_connection_use_webdir (cherokee_connection_t *conn)
+cherokee_request_use_webdir (cherokee_request_t *conn)
 {
 	if (! (conn->options & conn_op_document_root))
 		return 0;
@@ -2827,7 +2827,7 @@ cherokee_connection_use_webdir (cherokee_connection_t *conn)
 
 #ifdef TRACE_ENABLED
 char *
-cherokee_connection_print (cherokee_connection_t *conn)
+cherokee_request_print (cherokee_request_t *conn)
 {
 	const char        *phase;
 	cherokee_buffer_t *buf    = &conn->self_trace;
@@ -2847,7 +2847,7 @@ cherokee_connection_print (cherokee_connection_t *conn)
 		return buf->buf;
 	}
 
-	phase = cherokee_connection_get_phase_str (conn);
+	phase = cherokee_request_get_phase_str (conn);
 	cherokee_buffer_add_va (buf, "Connection %p info\n", conn);
 
 #define print_buf(title,name)						\
@@ -2916,7 +2916,7 @@ cherokee_connection_print (cherokee_connection_t *conn)
 #endif
 
 const char *
-cherokee_connection_get_phase_str (cherokee_connection_t *conn)
+cherokee_request_get_phase_str (cherokee_request_t *conn)
 {
 	switch (conn->phase) {
 	case phase_nothing:           return "Nothing";
@@ -2939,7 +2939,7 @@ cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 
 
 ret_t
-cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t *address)
+cherokee_request_set_redirect (cherokee_request_t *conn, cherokee_buffer_t *address)
 {
 	cuint_t len;
 
@@ -2978,7 +2978,7 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 	/* In case the connection has a custom Document Root directory,
 	 * it must add the web equivalent directory to the path (web_directory).
 	 */
-	if (cherokee_connection_use_webdir (conn)) {
+	if (cherokee_request_use_webdir (conn)) {
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
 	}
 
@@ -2988,7 +2988,7 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 
 
 ret_t
-cherokee_connection_sleep (cherokee_connection_t *conn,
+cherokee_request_sleep (cherokee_request_t *conn,
 			   cherokee_msec_t        msecs)
 {
 	conn->limit_blocked_until = cherokee_bogonow_msec + msecs;
@@ -2997,25 +2997,25 @@ cherokee_connection_sleep (cherokee_connection_t *conn,
 
 
 void
-cherokee_connection_update_timeout (cherokee_connection_t *conn)
+cherokee_request_update_timeout (cherokee_request_t *conn)
 {
 	if (conn->timeout_lapse == -1) {
 		TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
-		       conn, cherokee_connection_get_phase_str (conn), CONN_SRV(conn)->timeout);
+		       conn, cherokee_request_get_phase_str (conn), REQ_SRV(conn)->timeout);
 
-		conn->timeout = cherokee_bogonow_now + CONN_SRV(conn)->timeout;
+		conn->timeout = cherokee_bogonow_now + REQ_SRV(conn)->timeout;
 		return;
 	}
 
 	TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
-	       conn, cherokee_connection_get_phase_str (conn), conn->timeout_lapse);
+	       conn, cherokee_request_get_phase_str (conn), conn->timeout_lapse);
 
 	conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
 }
 
 
 ret_t
-cherokee_connection_build_host_string (cherokee_connection_t *conn,
+cherokee_request_build_host_string (cherokee_request_t *conn,
 				       cherokee_buffer_t     *buf)
 {
 	/* 1st choice: Request host */
@@ -3041,14 +3041,14 @@ cherokee_connection_build_host_string (cherokee_connection_t *conn,
 }
 
 ret_t
-cherokee_connection_build_host_port_string (cherokee_connection_t *conn,
+cherokee_request_build_host_port_string (cherokee_request_t *conn,
 					    cherokee_buffer_t     *buf)
 {
 	ret_t ret;
 
 	/* Host
 	 */
-	ret = cherokee_connection_build_host_string (conn, buf);
+	ret = cherokee_request_build_host_string (conn, buf);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}

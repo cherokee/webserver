@@ -101,7 +101,7 @@ cherokee_validator_plain_free (cherokee_validator_plain_t *plain)
 
 ret_t
 cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
-				cherokee_connection_t      *conn)
+				cherokee_request_t      *conn)
 {
 	int                re;
 	ret_t              ret;
@@ -120,7 +120,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 
 	/* Get the full path to the file */
 	ret = cherokee_validator_file_get_full_path (VFILE(plain), conn, &fpass,
-						     &CONN_THREAD(conn)->tmp_buf1);
+						     &REQ_THREAD(conn)->tmp_buf1);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto out;
@@ -226,7 +226,7 @@ out:
 
 
 ret_t
-cherokee_validator_plain_add_headers (cherokee_validator_plain_t *plain, cherokee_connection_t *conn, cherokee_buffer_t *buf)
+cherokee_validator_plain_add_headers (cherokee_validator_plain_t *plain, cherokee_request_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(plain);
 	UNUSED(conn);

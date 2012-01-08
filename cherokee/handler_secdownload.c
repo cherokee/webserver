@@ -129,7 +129,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 	time_t                 time_url;
 	char                  *time_s;
 	cherokee_buffer_t      md5      = CHEROKEE_BUF_INIT;
-	cherokee_connection_t *conn     = CONN(cnt);
+	cherokee_request_t *conn     = REQ(cnt);
 
 	TRACE(ENTRIES, "Analyzing request '%s'\n", conn->request.buf);
 

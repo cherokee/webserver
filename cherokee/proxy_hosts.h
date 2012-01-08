@@ -79,7 +79,7 @@ typedef struct {
 
 #define PROXY_HOSTS(h) ((cherokee_handler_proxy_hosts_t *)(h))
 #define PROXY_POLL(p)  ((cherokee_handler_proxy_poll_t *)(p))
-#define PROXY_CONN(c)  ((cherokee_handler_proxy_conn_t *)(c))
+#define PROXY_REQ(c)  ((cherokee_handler_proxy_conn_t *)(c))
 
 
 /* Hosts

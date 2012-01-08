@@ -95,7 +95,7 @@ cherokee_validator_htdigest_free (cherokee_validator_htdigest_t *htdigest)
 
 
 static ret_t
-build_HA1 (cherokee_connection_t *conn, cherokee_buffer_t *buf)
+build_HA1 (cherokee_request_t *conn, cherokee_buffer_t *buf)
 {
 	cherokee_buffer_add_va (buf, "%s:%s:%s", conn->validator->user.buf, conn->config_entry.auth_realm->buf, conn->validator->passwd.buf);
 	cherokee_buffer_encode_md5_digest (buf);
@@ -157,7 +157,7 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 
 
 static ret_t
-validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *file)
+validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_request_t *conn, cherokee_buffer_t *file)
 {
 	ret_t               ret;
 	cherokee_boolean_t  equal;
@@ -188,7 +188,7 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 
 
 static ret_t
-validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *file)
+validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_request_t *conn, cherokee_buffer_t *file)
 {
 	ret_t              ret;
 	int                re     = -1;
@@ -227,7 +227,7 @@ go_out:
 
 ret_t
 cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
-				   cherokee_connection_t         *conn)
+				   cherokee_request_t         *conn)
 {
 	ret_t              ret;
 	cherokee_buffer_t *fpass;
@@ -242,7 +242,7 @@ cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
 	/* Get the full path to the file
 	 */
 	ret = cherokee_validator_file_get_full_path (VFILE(htdigest), conn, &fpass,
-						     &CONN_THREAD(conn)->tmp_buf1);
+						     &REQ_THREAD(conn)->tmp_buf1);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto out;
@@ -275,7 +275,7 @@ out:
 
 
 ret_t
-cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *buf)
+cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *htdigest, cherokee_request_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(htdigest);
 	UNUSED(conn);

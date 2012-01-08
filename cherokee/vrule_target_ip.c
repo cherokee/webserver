@@ -37,7 +37,7 @@ PLUGIN_INFO_VRULE_EASIEST_INIT(target_ip);
 static ret_t
 match (cherokee_vrule_target_ip_t *vrule,
        cherokee_buffer_t          *host,
-       cherokee_connection_t      *conn)
+       cherokee_request_t      *conn)
 {
 	int               re;
 	ret_t             ret;

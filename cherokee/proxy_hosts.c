@@ -131,13 +131,13 @@ cherokee_handler_proxy_poll_free (cherokee_handler_proxy_poll_t *poll)
 	cherokee_handler_proxy_conn_t *poll_conn;
 
 	list_for_each_safe (i, j, &poll->active) {
-		poll_conn = PROXY_CONN(i);
+		poll_conn = PROXY_REQ(i);
 		cherokee_list_del (&poll_conn->listed);
 		cherokee_handler_proxy_conn_free (poll_conn);
 	}
 
 	list_for_each_safe (i, j, &poll->reuse) {
-		poll_conn = PROXY_CONN(i);
+		poll_conn = PROXY_REQ(i);
 
 		poll->reuse_len -= 1;
 		cherokee_list_del (&poll_conn->listed);
@@ -167,7 +167,7 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 		cherokee_list_del (i);
 		cherokee_list_add (i, &poll->active);
 
-		*pconn = PROXY_CONN(i);
+		*pconn = PROXY_REQ(i);
 	} else {
 		cherokee_handler_proxy_conn_t *n;
 
@@ -219,7 +219,7 @@ poll_release (cherokee_handler_proxy_poll_t *poll,
 	if (poll->reuse_len > poll->reuse_max) {
 		cherokee_handler_proxy_conn_t *oldest;
 
-		oldest = PROXY_CONN(poll->reuse.prev);
+		oldest = PROXY_REQ(poll->reuse.prev);
 		cherokee_list_del (&oldest->listed);
 		poll->reuse_len -= 1;
 

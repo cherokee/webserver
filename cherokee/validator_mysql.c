@@ -225,7 +225,7 @@ cherokee_validator_mysql_free (cherokee_validator_mysql_t *mysql)
 
 
 ret_t
-cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_connection_t *conn)
+cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_request_t *conn)
 {
 	int                               re;
 	ret_t                             ret;
@@ -350,7 +350,7 @@ error:
 
 ret_t
 cherokee_validator_mysql_add_headers (cherokee_validator_mysql_t *mysql,
-				      cherokee_connection_t      *conn,
+				      cherokee_request_t      *conn,
 				      cherokee_buffer_t          *buf)
 {
 	UNUSED (mysql);

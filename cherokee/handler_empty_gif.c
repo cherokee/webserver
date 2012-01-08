@@ -40,7 +40,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (empty_gif, http_get | http_head);
 
 ret_t
 cherokee_handler_empty_gif_new (cherokee_handler_t     **hdl,
-				cherokee_connection_t   *cnt,
+				cherokee_request_t   *cnt,
 				cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_empty_gif);
@@ -76,7 +76,7 @@ ret_t
 cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl,
 					cherokee_buffer_t            *buffer)
 {
-	if (cherokee_connection_should_include_length (HANDLER_CONN(hdl))) {
+	if (cherokee_request_should_include_length (HANDLER_REQ(hdl))) {
 		cherokee_buffer_add_str (buffer,
 					 "Content-Type: image/gif"CRLF
 					 "Content-Length: 43"CRLF);

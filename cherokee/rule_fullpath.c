@@ -79,7 +79,7 @@ _free (cherokee_rule_fullpath_t *rule)
 
 static ret_t
 match (cherokee_rule_fullpath_t *rule,
-       cherokee_connection_t    *conn,
+       cherokee_request_t    *conn,
        cherokee_config_entry_t  *ret_conf)
 {
 	ret_t ret;

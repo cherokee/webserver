@@ -125,9 +125,9 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	cherokee_iocache_entry_t *io_entry    = NULL;
 	cherokee_iocache_t       *iocache     = NULL;
  	cherokee_boolean_t        use_iocache = true;
-	cherokee_connection_t    *conn        = CONN(cnt);
+	cherokee_request_t    *conn        = REQ(cnt);
 
-	TRACE_CONN(conn);
+	TRACE_REQ(conn);
 
 	/* Check some properties
 	 */
@@ -135,14 +135,14 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		use_iocache = PROP_COMMON(props)->props_file->use_cache;
 	}
 
-	use_iocache &= (CONN_SRV(cnt)->iocache != NULL);
+	use_iocache &= (REQ_SRV(cnt)->iocache != NULL);
 
 	/* Check the request
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 
 	if (use_iocache)
-		iocache = CONN_SRV(conn)->iocache;
+		iocache = REQ_SRV(conn)->iocache;
 
 	ret = cherokee_io_stat (iocache, &conn->local_directory, use_iocache, &nocache_info, &io_entry, &info);
 	exists = (ret == ret_ok);
@@ -196,7 +196,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		cherokee_buffer_clean (&conn->local_directory);
 		cherokee_iocache_entry_unref (&io_entry);
 
-		TRACE_CONN(conn);
+		TRACE_REQ(conn);
 		return ret_eagain;
 	}
 
@@ -214,7 +214,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	/* Is it a directory
 	 */
 	if (S_ISDIR(info->st_mode)) {
-		cherokee_thread_t *thread = CONN_THREAD(conn);
+		cherokee_thread_t *thread = REQ_THREAD(conn);
 		cherokee_list_t   *i;
 
 		cherokee_iocache_entry_unref (&io_entry);
@@ -232,7 +232,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 		/* Have an index file inside?
 		 */
-		list_for_each (i, &CONN_VSRV(conn)->index_list) {
+		list_for_each (i, &REQ_VSRV(conn)->index_list) {
 			int                is_dir;
 			cherokee_buffer_t *index = BUF(LIST_ITEM_INFO(i));
 
@@ -253,7 +253,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				/* Lets reconstruct the local directory
 				 */
 				cherokee_buffer_clean (new_local_dir);
-				cherokee_buffer_add_buffer (new_local_dir, &CONN_VSRV(conn)->root);
+				cherokee_buffer_add_buffer (new_local_dir, &REQ_VSRV(conn)->root);
 				cherokee_buffer_add_buffer (new_local_dir, index);
 
 				ret = cherokee_io_stat (iocache, new_local_dir, use_iocache, &nocache_info, &io_entry, &info);
@@ -278,7 +278,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 				BIT_SET (conn->options, conn_op_root_index);
 
-				TRACE_CONN(conn);
+				TRACE_REQ(conn);
 				return ret_eagain;
 			}
 
@@ -311,7 +311,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 			cherokee_buffer_add_buffer (&conn->request, index);
 
-			TRACE_CONN(conn);
+			TRACE_REQ(conn);
 			return ret_eagain;
 		}
 

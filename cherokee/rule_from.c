@@ -36,7 +36,7 @@ PLUGIN_INFO_RULE_EASIEST_INIT(from);
 
 static ret_t
 match (cherokee_rule_from_t    *rule,
-       cherokee_connection_t   *conn,
+       cherokee_request_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
 	ret_t ret;

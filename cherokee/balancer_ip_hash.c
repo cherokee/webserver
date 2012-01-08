@@ -104,7 +104,7 @@ reactivate_entry (cherokee_balancer_ip_hash_t *balancer,
 
 static ret_t
 report_fail (cherokee_balancer_ip_hash_t *balancer,
-	     cherokee_connection_t       *conn,
+	     cherokee_request_t       *conn,
 	     cherokee_source_t           *src)
 {
 	ret_t                      ret;
@@ -157,7 +157,7 @@ out:
 
 static ret_t
 dispatch (cherokee_balancer_ip_hash_t  *balancer,
-	  cherokee_connection_t        *conn,
+	  cherokee_request_t        *conn,
 	  cherokee_source_t           **src)
 {
 	cint_t                     n;

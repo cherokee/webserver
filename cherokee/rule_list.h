@@ -31,7 +31,7 @@
 
 #include <cherokee/rule.h>
 #include <cherokee/list.h>
-#include <cherokee/connection.h>
+#include <cherokee/request.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -48,7 +48,7 @@ ret_t cherokee_rule_list_add      (cherokee_rule_list_t *list, cherokee_rule_t *
 ret_t cherokee_rule_list_sort     (cherokee_rule_list_t *list);
 
 ret_t cherokee_rule_list_match    (cherokee_rule_list_t    *list,
-				   cherokee_connection_t   *conn,
+				   cherokee_request_t   *conn,
 				   cherokee_config_entry_t *ret_config);
 
 CHEROKEE_END_DECLS

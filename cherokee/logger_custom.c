@@ -53,7 +53,7 @@ add_ip_remote (cherokee_template_t       *template,
 	       void                      *param)
 {
 	cuint_t                prev_len;
-	cherokee_connection_t *conn      = CONN(param);
+	cherokee_request_t *conn      = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -84,7 +84,7 @@ add_ip_local (cherokee_template_t       *template,
 	      cherokee_buffer_t         *output,
 	      void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -104,7 +104,7 @@ add_status (cherokee_template_t       *template,
 	    cherokee_buffer_t         *output,
 	    void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -124,7 +124,7 @@ add_transport (cherokee_template_t       *template,
 	       cherokee_buffer_t         *output,
 	       void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -144,7 +144,7 @@ add_protocol (cherokee_template_t       *template,
 	      cherokee_buffer_t         *output,
 	      void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -172,7 +172,7 @@ add_port_server (cherokee_template_t       *template,
 		 cherokee_buffer_t         *output,
 		 void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -187,7 +187,7 @@ add_query_string (cherokee_template_t       *template,
 		  cherokee_buffer_t         *output,
 		  void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -209,7 +209,7 @@ add_request_first_line (cherokee_template_t       *template,
 {
 	char                  *p;
 	char                  *end;
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -275,7 +275,7 @@ add_user_remote (cherokee_template_t       *template,
 		 cherokee_buffer_t         *output,
 		 void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -297,7 +297,7 @@ add_request (cherokee_template_t       *template,
 	     cherokee_buffer_t         *output,
 	     void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -312,7 +312,7 @@ add_request_original (cherokee_template_t       *template,
 		      cherokee_buffer_t         *output,
 		      void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -332,12 +332,12 @@ add_vserver_name (cherokee_template_t       *template,
 		  cherokee_buffer_t         *output,
 		  void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	cherokee_buffer_add_buffer (output, &CONN_VSRV(conn)->name);
+	cherokee_buffer_add_buffer (output, &REQ_VSRV(conn)->name);
 	return ret_ok;
 }
 
@@ -351,7 +351,7 @@ add_vserver_name_req (cherokee_template_t       *template,
 	char                  *colon;
 	char                  *header     = NULL;
 	cuint_t                header_len = 0;
-	cherokee_connection_t *conn       = CONN(param);
+	cherokee_request_t *conn       = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -371,7 +371,7 @@ add_vserver_name_req (cherokee_template_t       *template,
 
 	/* Plan B: Use the virtual server nick
 	 */
-	cherokee_buffer_add_buffer (output, &CONN_VSRV(conn)->name);
+	cherokee_buffer_add_buffer (output, &REQ_VSRV(conn)->name);
 	return ret_ok;
 }
 
@@ -381,7 +381,7 @@ add_response_size (cherokee_template_t       *template,
 		   cherokee_buffer_t         *output,
 		   void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -396,7 +396,7 @@ add_http_host  (cherokee_template_t       *template,
 		cherokee_buffer_t         *output,
 		void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -419,7 +419,7 @@ add_http_referer  (cherokee_template_t       *template,
 	ret_t                  ret;
 	char                  *referer     = NULL;
 	cuint_t                referer_len = 0;
-	cherokee_connection_t *conn        = CONN(param);
+	cherokee_request_t *conn        = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -443,7 +443,7 @@ add_http_user_agent  (cherokee_template_t       *template,
 	ret_t                  ret;
 	char                  *user_agent     = NULL;
 	cuint_t                user_agent_len = 0;
-	cherokee_connection_t *conn           = CONN(param);
+	cherokee_request_t *conn           = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -467,7 +467,7 @@ add_http_cookie  (cherokee_template_t       *template,
 	ret_t                  ret;
 	char                  *cookie     = NULL;
 	cuint_t                cookie_len = 0;
-	cherokee_connection_t *conn       = CONN(param);
+	cherokee_request_t *conn       = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
@@ -691,7 +691,7 @@ cherokee_logger_custom_reopen (cherokee_logger_custom_t *logger)
 
 ret_t
 cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
-				     cherokee_connection_t    *conn)
+				     cherokee_request_t    *conn)
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;

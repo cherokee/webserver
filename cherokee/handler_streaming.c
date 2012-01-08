@@ -171,7 +171,7 @@ parse_time_start (cherokee_handler_streaming_t *hdl,
 {
 	float                  start;
 	char                  *end    = NULL;
-	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+	cherokee_request_t *conn   = HANDLER_REQ(hdl);
 
 	start = strtof (value->buf, &end);
 	if (*end != '\0') {
@@ -198,7 +198,7 @@ parse_offset_start (cherokee_handler_streaming_t *hdl,
 {
 	long                   start;
 	char                  *end    = NULL;
-	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+	cherokee_request_t *conn   = HANDLER_REQ(hdl);
 
 	start = strtol (value->buf, &end, 10);
 	if (*end != '\0') {
@@ -271,7 +271,7 @@ seek_mp3 (cherokee_handler_streaming_t *hdl)
 
 static ret_t
 set_rate (cherokee_handler_streaming_t *hdl,
-	  cherokee_connection_t        *conn,
+	  cherokee_request_t        *conn,
 	  long                          rate)
 {
 	cherokee_handler_streaming_props_t *props = HDL_STREAMING_PROP(hdl);
@@ -342,7 +342,7 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 	long                   rate;
 	long                   secs;
 	void                  *tmp    = NULL;
-	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+	cherokee_request_t *conn   = HANDLER_REQ(hdl);
 
 	/* Check the cache
 	 */
@@ -405,7 +405,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	cherokee_boolean_t                  is_flv = false;
 	cherokee_boolean_t                  is_mp3 = false;
 	cherokee_buffer_t                  *mime   = NULL;
-	cherokee_connection_t              *conn   = HANDLER_CONN(hdl);
+	cherokee_request_t              *conn   = HANDLER_REQ(hdl);
 	cherokee_handler_streaming_props_t *props  = HDL_STREAMING_PROP(hdl);
 
 	/* Local File
@@ -435,7 +435,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 
 	/* Parse arguments
 	 */
-	ret = cherokee_connection_parse_args (conn);
+	ret = cherokee_request_parse_args (conn);
 	if (ret == ret_ok) {
 		ret = cherokee_avl_get_ptr (conn->arguments, "start", (void **) &value);
 		if ((ret == ret_ok) && (value != NULL) && (value->len > 0)) {
@@ -506,7 +506,7 @@ ret_t
 cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 				 cherokee_buffer_t            *buffer)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	/* FLV's "start" parameter
 	 */

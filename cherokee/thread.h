@@ -117,9 +117,9 @@ ret_t cherokee_thread_wait_end                   (cherokee_thread_t *thd);
 
 int   cherokee_thread_connection_num             (cherokee_thread_t *thd);
 
-ret_t cherokee_thread_deactive_to_polling        (cherokee_thread_t *thd, cherokee_connection_t *conn);
-ret_t cherokee_thread_retire_active_connection   (cherokee_thread_t *thd, cherokee_connection_t *conn);
-ret_t cherokee_thread_inject_active_connection   (cherokee_thread_t *thd, cherokee_connection_t *conn);
+ret_t cherokee_thread_deactive_to_polling        (cherokee_thread_t *thd, cherokee_request_t *conn);
+ret_t cherokee_thread_retire_active_connection   (cherokee_thread_t *thd, cherokee_request_t *conn);
+ret_t cherokee_thread_inject_active_connection   (cherokee_thread_t *thd, cherokee_request_t *conn);
 
 ret_t cherokee_thread_close_all_connections      (cherokee_thread_t *thd);
 ret_t cherokee_thread_close_polling_connections  (cherokee_thread_t *thd, int fd, cuint_t *num);

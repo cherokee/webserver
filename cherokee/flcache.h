@@ -32,7 +32,7 @@
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 #include <cherokee/avl_flcache.h>
-#include <cherokee/connection.h>
+#include <cherokee/request.h>
 #include <cherokee/config_node.h>
 
 CHEROKEE_BEGIN_DECLS
@@ -83,9 +83,9 @@ ret_t cherokee_flcache_free            (cherokee_flcache_t  *flcache);
 ret_t cherokee_flcache_configure       (cherokee_flcache_t  *flcache, cherokee_config_node_t *conf, void *vserver);
 
 ret_t cherokee_flcache_cleanup         (cherokee_flcache_t *flcache);
-ret_t cherokee_flcache_req_get_cached  (cherokee_flcache_t *flcache, cherokee_connection_t *conn);
-ret_t cherokee_flcache_req_is_storable (cherokee_flcache_t *flcache, cherokee_connection_t *conn);
-ret_t cherokee_flcache_req_set_store   (cherokee_flcache_t *flcache, cherokee_connection_t *conn);
+ret_t cherokee_flcache_req_get_cached  (cherokee_flcache_t *flcache, cherokee_request_t *conn);
+ret_t cherokee_flcache_req_is_storable (cherokee_flcache_t *flcache, cherokee_request_t *conn);
+ret_t cherokee_flcache_req_set_store   (cherokee_flcache_t *flcache, cherokee_request_t *conn);
 ret_t cherokee_flcache_del_entry       (cherokee_flcache_t *flcache, cherokee_avl_flcache_node_t *entry);
 ret_t cherokee_flcache_purge_path      (cherokee_flcache_t *flcache, cherokee_buffer_t *path);
 
@@ -94,12 +94,12 @@ ret_t cherokee_flcache_purge_path      (cherokee_flcache_t *flcache, cherokee_bu
 ret_t cherokee_flcache_conn_init          (cherokee_flcache_conn_t *flcache_conn);
 ret_t cherokee_flcache_conn_clean         (cherokee_flcache_conn_t *flcache_conn);
 
-ret_t cherokee_flcache_conn_write_header  (cherokee_flcache_conn_t *flcache_conn, cherokee_connection_t *conn);
-ret_t cherokee_flcache_conn_write_body    (cherokee_flcache_conn_t *flcache_conn, cherokee_connection_t *conn);
-ret_t cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn, cherokee_connection_t *conn);
+ret_t cherokee_flcache_conn_write_header  (cherokee_flcache_conn_t *flcache_conn, cherokee_request_t *conn);
+ret_t cherokee_flcache_conn_write_body    (cherokee_flcache_conn_t *flcache_conn, cherokee_request_t *conn);
+ret_t cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn, cherokee_request_t *conn);
 
-ret_t cherokee_flcache_conn_send_header   (cherokee_flcache_conn_t *flcache_conn, cherokee_connection_t *conn);
-ret_t cherokee_flcache_conn_send_body     (cherokee_flcache_conn_t *flcache_conn, cherokee_connection_t *conn);
+ret_t cherokee_flcache_conn_send_header   (cherokee_flcache_conn_t *flcache_conn, cherokee_request_t *conn);
+ret_t cherokee_flcache_conn_send_body     (cherokee_flcache_conn_t *flcache_conn, cherokee_request_t *conn);
 
 
 CHEROKEE_END_DECLS

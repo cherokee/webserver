@@ -303,7 +303,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	const char                        *dash;
 	cherokee_collector_rrd_interval_t *interval;
 	cherokee_boolean_t                 fresh;
-	cherokee_connection_t             *conn       = HANDLER_CONN(hdl);
+	cherokee_request_t             *conn       = HANDLER_REQ(hdl);
 	cherokee_buffer_t                  tmp        = CHEROKEE_BUF_INIT;
 
 	/* The handler might be disabled
@@ -354,7 +354,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_connection_sleep (conn, 200);
+				cherokee_request_sleep (conn, 200);
 				return ret_eagain;
 			}
 
@@ -384,7 +384,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_connection_sleep (conn, 200);
+				cherokee_request_sleep (conn, 200);
 				return ret_eagain;
 			}
 
@@ -414,7 +414,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_connection_sleep (conn, 200);
+				cherokee_request_sleep (conn, 200);
 				return ret_eagain;
 			}
 
@@ -461,7 +461,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_connection_sleep (conn, 200);
+				cherokee_request_sleep (conn, 200);
 				return ret_eagain;
 			}
 
@@ -490,7 +490,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	/* Has everything gone alright?
 	 */
 	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
-		cherokee_connection_t *conn = HANDLER_CONN(hdl);
+		cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 		conn->error_code = http_service_unavailable;
 		BIT_SET (HANDLER(hdl)->support, hsupport_error);

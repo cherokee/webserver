@@ -37,12 +37,12 @@ PLUGIN_INFO_RULE_EASIEST_INIT(request);
 
 static ret_t
 match (cherokee_rule_request_t *rule,
-       cherokee_connection_t   *conn,
+       cherokee_request_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
 	int                     re;
 	ret_t                   ret;
-	cherokee_regex_table_t *regexs = CONN_SRV(conn)->regexs;
+	cherokee_regex_table_t *regexs = REQ_SRV(conn)->regexs;
 
 	UNUSED(ret_conf);
 

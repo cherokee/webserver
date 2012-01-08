@@ -67,7 +67,7 @@ ret_t cherokee_encoder_gzip_new         (cherokee_encoder_gzip_t **encoder, cher
 ret_t cherokee_encoder_gzip_free        (cherokee_encoder_gzip_t  *encoder);
 
 ret_t cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *buf);
-ret_t cherokee_encoder_gzip_init        (cherokee_encoder_gzip_t  *encoder, cherokee_connection_t *conn);
+ret_t cherokee_encoder_gzip_init        (cherokee_encoder_gzip_t  *encoder, cherokee_request_t *conn);
 ret_t cherokee_encoder_gzip_encode      (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 ret_t cherokee_encoder_gzip_flush       (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 

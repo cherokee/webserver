@@ -35,7 +35,7 @@ PLUGIN_INFO_RULE_EASIEST_INIT(directory);
 
 static ret_t
 match (cherokee_rule_directory_t *rule,
-       cherokee_connection_t     *conn,
+       cherokee_request_t     *conn,
        cherokee_config_entry_t   *ret_conf)
 {
 	cherokee_config_entry_t *conf = NULL;
@@ -82,7 +82,7 @@ match (cherokee_rule_directory_t *rule,
 	    (cherokee_buffer_cmp_buf (&conn->request, &rule->directory) == 0))
 	{
 		cherokee_buffer_add_str (&conn->request, "/");
-		cherokee_connection_set_redirect (conn, &conn->request);
+		cherokee_request_set_redirect (conn, &conn->request);
 		cherokee_buffer_drop_ending (&conn->request, 1);
 
 		TRACE(ENTRIES, "Had to redirect to: %s\n", conn->redirect.buf);

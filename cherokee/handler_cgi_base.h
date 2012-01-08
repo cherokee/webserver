@@ -114,7 +114,7 @@ typedef struct {
 /* Base handler methods
  */
 ret_t cherokee_handler_cgi_base_init            (cherokee_handler_cgi_base_t              *hdl,
-						 cherokee_connection_t                    *conn,
+						 cherokee_request_t                    *conn,
 						 cherokee_plugin_info_handler_t           *info,
 						 cherokee_handler_props_t                 *props,
 						 cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
@@ -131,10 +131,10 @@ ret_t cherokee_handler_cgi_base_split_pathinfo  (cherokee_handler_cgi_base_t *cg
 						 int                          pos,
 						 int                          allow_dirs);
 
-ret_t cherokee_handler_cgi_base_build_envp      (cherokee_handler_cgi_base_t *cgi, cherokee_connection_t *conn);
+ret_t cherokee_handler_cgi_base_build_envp      (cherokee_handler_cgi_base_t *cgi, cherokee_request_t *conn);
 ret_t cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t              *cgi,
 						 cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
-						 cherokee_connection_t                    *conn,
+						 cherokee_request_t                    *conn,
 						 cherokee_buffer_t                        *tmp);
 
 ret_t cherokee_handler_cgi_base_configure       (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);

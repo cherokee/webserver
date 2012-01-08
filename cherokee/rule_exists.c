@@ -150,7 +150,7 @@ check_is_file (cherokee_server_t  *srv,
 
 static ret_t
 match_file (cherokee_rule_exists_t *rule,
-	    cherokee_connection_t  *conn,
+	    cherokee_request_t  *conn,
 	    cherokee_buffer_t      *fullpath)
 {
 	ret_t                     ret;
@@ -159,7 +159,7 @@ match_file (cherokee_rule_exists_t *rule,
 	cherokee_boolean_t        is_dir;
 	cherokee_boolean_t        is_file;
 	cherokee_iocache_entry_t *io_entry = NULL;
-	cherokee_server_t        *srv      = CONN_SRV(conn);
+	cherokee_server_t        *srv      = REQ_SRV(conn);
 
 	ret = cherokee_io_stat (srv->iocache,
 				fullpath,
@@ -199,7 +199,7 @@ match_file (cherokee_rule_exists_t *rule,
 			cherokee_buffer_t  *index_file;
 			cherokee_boolean_t  is_file;
 
-			list_for_each (i, &CONN_VSRV(conn)->index_list) {
+			list_for_each (i, &REQ_VSRV(conn)->index_list) {
 				index_file = BUF(LIST_ITEM_INFO(i));
 
 				cherokee_buffer_add_buffer (fullpath, index_file);
@@ -238,13 +238,13 @@ match_file (cherokee_rule_exists_t *rule,
 
 static ret_t
 match (cherokee_rule_exists_t  *rule,
-       cherokee_connection_t   *conn,
+       cherokee_request_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
 	int                re;
 	ret_t              ret;
 	cherokee_list_t   *i;
-	cherokee_buffer_t *tmp  = THREAD_TMP_BUF1(CONN_THREAD(conn));
+	cherokee_buffer_t *tmp  = THREAD_TMP_BUF1(REQ_THREAD(conn));
 
 	/* Path base */
 	cherokee_buffer_clean (tmp);

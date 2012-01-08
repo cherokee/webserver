@@ -74,7 +74,7 @@ ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t  *src
 
 ret_t cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 						   cherokee_socket_t             *socket,
-						   cherokee_connection_t         *conn);
+						   cherokee_request_t         *conn);
 
 CHEROKEE_END_DECLS
 

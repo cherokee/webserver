@@ -219,7 +219,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 ret_t
 cherokee_source_connect_polling (cherokee_source_t     *src,
 				 cherokee_socket_t     *socket,
-				 cherokee_connection_t *conn)
+				 cherokee_request_t *conn)
 {
 	ret_t ret;
 

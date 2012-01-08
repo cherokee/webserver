@@ -38,7 +38,7 @@ PLUGIN_INFO_VRULE_EASIEST_INIT(rehost);
 static ret_t
 match (cherokee_vrule_rehost_t *vrule,
        cherokee_buffer_t       *host,
-       cherokee_connection_t   *conn)
+       cherokee_request_t   *conn)
 {
 	int              re;
 	cherokee_list_t *i;

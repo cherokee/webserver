@@ -197,7 +197,7 @@ cherokee_logger_ncsa_flush (cherokee_logger_ncsa_t *logger)
 
 static ret_t
 build_log_string (cherokee_logger_ncsa_t *logger,
-		  cherokee_connection_t  *cnt,
+		  cherokee_request_t  *cnt,
 		  cherokee_buffer_t      *buf)
 {
 	ret_t              ret;
@@ -318,7 +318,7 @@ build_log_string (cherokee_logger_ncsa_t *logger,
 
 
 ret_t
-cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt)
+cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_request_t *cnt)
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;

@@ -81,7 +81,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 	ret_t                   ret;
  	size_t                  read_ = 0;
 	cherokee_handler_cgi_t *cgi   = HDL_CGI(cgi_base);
-	cherokee_connection_t  *conn  = HANDLER_CONN(cgi);
+	cherokee_request_t  *conn  = HANDLER_REQ(cgi);
 
 	/* Sanity check: pipe() accessed
 	 */
@@ -355,11 +355,11 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 static ret_t
 add_environment (cherokee_handler_cgi_t *cgi,
-		 cherokee_connection_t  *conn)
+		 cherokee_request_t  *conn)
 {
 	ret_t                        ret;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
-	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(CONN_THREAD(conn));
+	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(REQ_THREAD(conn));
 
 	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
 	if (unlikely (ret != ret_ok))
@@ -391,7 +391,7 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 {
 	ret_t                        ret;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
-	cherokee_connection_t       *conn     = HANDLER_CONN(cgi);
+	cherokee_request_t       *conn     = HANDLER_REQ(cgi);
 
 	switch (cgi_base->init_phase) {
 	case hcgi_phase_build_headers:
@@ -433,7 +433,7 @@ ret_t
 cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn   = HANDLER_CONN(cgi);
+	cherokee_request_t *conn   = HANDLER_REQ(cgi);
 	cherokee_boolean_t     did_IO = false;
 
 	if (! conn->post.has_info) {
@@ -444,7 +444,7 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 					cgi->pipeOutput, NULL, &did_IO);
 
 	if (did_IO) {
-		cherokee_connection_update_timeout (conn);
+		cherokee_request_update_timeout (conn);
 	}
 
 	switch (ret) {
@@ -501,7 +501,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	 */
 	int                          re;
 	char                        *script;
-	cherokee_connection_t       *conn          = HANDLER_CONN(cgi);
+	cherokee_request_t       *conn          = HANDLER_REQ(cgi);
 	cherokee_handler_cgi_base_t *cgi_base      = HDL_CGI_BASE(cgi);
 	char                        *absolute_path = cgi_base->executable.buf;
 	char                        *argv[2]       = { NULL, NULL };
@@ -538,11 +538,11 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Redirect the stderr
 	 */
-	if ((CONN_VSRV(conn)->error_writer != NULL) &&
-	    (CONN_VSRV(conn)->error_writer->fd != -1))
+	if ((REQ_VSRV(conn)->error_writer != NULL) &&
+	    (REQ_VSRV(conn)->error_writer->fd != -1))
 	{
 		cherokee_fd_close (STDERR_FILENO);
-		dup2 (CONN_VSRV(conn)->error_writer->fd, STDERR_FILENO);
+		dup2 (REQ_VSRV(conn)->error_writer->fd, STDERR_FILENO);
 	}
 
 # if 0
@@ -652,7 +652,7 @@ fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi)
 {
 	int                    re;
 	int                    pid;
-	cherokee_connection_t *conn = HANDLER_CONN(cgi);
+	cherokee_request_t *conn = HANDLER_REQ(cgi);
 
 	struct {
 		int cgi[2];
@@ -725,7 +725,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	char                  *cmd;
 	cherokee_buffer_t      cmd_line = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t      exec_dir = CHEROKEE_BUF_INIT;
-	cherokee_connection_t *conn     = HANDLER_CONN(cgi);
+	cherokee_request_t *conn     = HANDLER_REQ(cgi);
 
 	SECURITY_ATTRIBUTES saSecAtr;
 	HANDLE hProc;

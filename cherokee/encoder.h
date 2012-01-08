@@ -82,7 +82,7 @@ typedef struct {
 } cherokee_encoder_t;
 
 #define ENCODER(x)      ((cherokee_encoder_t *)(x))
-#define ENCODER_CONN(x) (CONN(ENCODER(x)->conn))
+#define ENCODER_REQ(x)  (REQ(ENCODER(x)->conn))
 
 
 /* Easy initialization

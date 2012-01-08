@@ -113,7 +113,7 @@ cherokee_rule_match (cherokee_rule_t *rule, void *cnt, void *ret_conf)
 
 	/* Call the real method
 	 */
-	return rule->match (rule, CONN(cnt), CONF_ENTRY(ret_conf));
+	return rule->match (rule, REQ(cnt), CONF_ENTRY(ret_conf));
 }
 
 

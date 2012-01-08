@@ -48,7 +48,7 @@ connect_to_database (cherokee_handler_dbslayer_t *hdl)
 {
 	MYSQL                             *conn;
 	cherokee_handler_dbslayer_props_t *props      = HANDLER_DBSLAYER_PROPS(hdl);
-	cherokee_connection_t             *connection = HANDLER_CONN(hdl);
+	cherokee_request_t             *connection = HANDLER_REQ(hdl);
 
 	conn = mysql_real_connect (hdl->conn,
 				   hdl->src_ref->host.buf,
@@ -73,7 +73,7 @@ send_query (cherokee_handler_dbslayer_t *hdl)
 {
 	int                    re;
 	cuint_t                len;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(hdl)->tmp_buf1;
 
 	/* Extract the SQL query
@@ -108,7 +108,7 @@ cherokee_client_headers (cherokee_handler_dbslayer_t *hdl)
 	ret_t                  ret;
 	char                  *hdr   = NULL;
 	cuint_t                len   = 0;
-	cherokee_connection_t *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t *conn  = HANDLER_REQ(hdl);
 
 	ret = cherokee_header_get_unknown (&conn->header, "X-Beautify", 10, &hdr, &len);
 	if ((ret == ret_ok) && hdr) {
@@ -158,7 +158,7 @@ ret_t
 cherokee_handler_dbslayer_init (cherokee_handler_dbslayer_t *hdl)
 {
 	ret_t                              ret;
-	cherokee_connection_t             *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t             *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_dbslayer_props_t *props = HANDLER_DBSLAYER_PROPS(hdl);
 
 	/* Check client headers
@@ -473,7 +473,7 @@ cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 	n->rollback = false;
 
 	/* Data writer */
-	cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
+	cherokee_dwriter_init (&n->writer, &REQ_THREAD(cnt)->tmp_buf1);
 	n->writer.lang = PROP_DBSLAYER(props)->lang;
 
 	/* MySQL */

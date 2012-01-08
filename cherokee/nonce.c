@@ -143,7 +143,7 @@ cherokee_nonce_table_check (cherokee_nonce_table_t *nonces,
 
 ret_t
 cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
-			       cherokee_connection_t  *conn,
+			       cherokee_request_t  *conn,
 			       cherokee_buffer_t      *nonce)
 {
 	entry_t *entry;

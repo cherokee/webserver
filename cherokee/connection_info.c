@@ -32,9 +32,9 @@
 
 
 ret_t
-cherokee_connection_info_new (cherokee_connection_info_t **info)
+cherokee_request_info_new (cherokee_request_info_t **info)
 {
-	CHEROKEE_NEW_STRUCT(n, connection_info);
+	CHEROKEE_NEW_STRUCT(n, request_info);
 
 	INIT_LIST_HEAD(&n->list_node);
 
@@ -55,7 +55,7 @@ cherokee_connection_info_new (cherokee_connection_info_t **info)
 
 
 ret_t
-cherokee_connection_info_free (cherokee_connection_info_t *info)
+cherokee_request_info_free (cherokee_request_info_t *info)
 {
 	cherokee_buffer_mrproper (&info->id);
 	cherokee_buffer_mrproper (&info->phase);
@@ -74,13 +74,13 @@ cherokee_connection_info_free (cherokee_connection_info_t *info)
 
 
 static ret_t
-info_fill_up (cherokee_connection_info_t *info,
-	      cherokee_connection_t      *conn)
+info_fill_up (cherokee_request_info_t *info,
+	      cherokee_request_t      *conn)
 {
 	ret_t             ret;
 	const char       *phase        = NULL;
 	const char       *handler_name = NULL;
- 	cherokee_icons_t *icons        = CONN_SRV(conn)->icons;
+ 	cherokee_icons_t *icons        = REQ_SRV(conn)->icons;
 
 	/* ID
 	 */
@@ -88,7 +88,7 @@ info_fill_up (cherokee_connection_info_t *info,
 
 	/* Phase
 	 */
-	phase = cherokee_connection_get_phase_str (conn);
+	phase = cherokee_request_get_phase_str (conn);
 	cherokee_buffer_add (&info->phase, phase, strlen(phase));
 
 	/* From
@@ -175,7 +175,7 @@ info_fill_up (cherokee_connection_info_t *info,
 
 
 ret_t
-cherokee_connection_info_list_thread (cherokee_list_t    *list,
+cherokee_request_info_list_thread (cherokee_list_t    *list,
 				      void               *_thread,
 				      cherokee_handler_t *self_handler)
 {
@@ -204,22 +204,22 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 	/* Process each connection
 	 */
 	list_for_each (i, &thread->active_list) {
-		cherokee_connection_info_t *n;
+		cherokee_request_info_t *n;
 
-		ret = cherokee_connection_info_new (&n);
+		ret = cherokee_request_info_new (&n);
 		if (unlikely (ret != ret_ok)) goto out;
 
-		info_fill_up (n, CONN(i));
+		info_fill_up (n, REQ(i));
 		cherokee_list_add (LIST(n), list);
 	}
 
 	list_for_each (i, &thread->polling_list) {
-		cherokee_connection_info_t *n;
+		cherokee_request_info_t *n;
 
-		ret = cherokee_connection_info_new (&n);
+		ret = cherokee_request_info_new (&n);
 		if (unlikely (ret != ret_ok)) goto out;
 
-		info_fill_up (n, CONN(i));
+		info_fill_up (n, REQ(i));
 		cherokee_list_add (LIST(n), list);
 	}
 
@@ -238,16 +238,16 @@ out:
 
 
 ret_t
-cherokee_connection_info_list_server (cherokee_list_t    *list,
+cherokee_request_info_list_server (cherokee_list_t    *list,
 				      cherokee_server_t  *server,
 				      cherokee_handler_t *self)
 {
 	cherokee_list_t *i;
 
-	cherokee_connection_info_list_thread (list, server->main_thread, self);
+	cherokee_request_info_list_thread (list, server->main_thread, self);
 
 	list_for_each (i, &server->thread_list) {
-		cherokee_connection_info_list_thread (list, i, self);
+		cherokee_request_info_list_thread (list, i, self);
 	}
 
 	if (cherokee_list_empty (list))

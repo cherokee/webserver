@@ -32,7 +32,7 @@
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 #include <cherokee/module.h>
-#include <cherokee/connection.h>
+#include <cherokee/request.h>
 
 CHEROKEE_BEGIN_DECLS
 

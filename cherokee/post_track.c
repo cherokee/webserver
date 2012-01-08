@@ -86,7 +86,7 @@ _free (cherokee_post_track_t *track)
 
 
 static ret_t
-_figure_x_progress_id (cherokee_connection_t *conn,
+_figure_x_progress_id (cherokee_request_t *conn,
 		       cherokee_buffer_t     *track_id)
 {
 	ret_t              ret;
@@ -94,7 +94,7 @@ _figure_x_progress_id (cherokee_connection_t *conn,
 
 	/* Check the query-string
 	 */
-	ret = cherokee_connection_parse_args (conn);
+	ret = cherokee_request_parse_args (conn);
 	if (ret == ret_ok) {
 		ret = cherokee_avl_get_ptr (conn->arguments, "X-Progress-ID", (void **)&tmp);
 		if ((ret == ret_ok) && (tmp != NULL) && (tmp->len > 0)) {
@@ -158,7 +158,7 @@ _purge_unreg (cherokee_post_track_t *track)
 
 static ret_t
 _register (cherokee_post_track_t *track,
-	   cherokee_connection_t *conn)
+	   cherokee_request_t *conn)
 {
 	ret_t                        ret;
 	cherokee_post_track_entry_t *entry = NULL;

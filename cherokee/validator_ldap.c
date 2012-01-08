@@ -299,7 +299,7 @@ error:
 static ret_t
 init_filter (cherokee_validator_ldap_t       *ldap,
 	     cherokee_validator_ldap_props_t *props,
-	     cherokee_connection_t           *conn)
+	     cherokee_request_t           *conn)
 {
 	if (cherokee_buffer_is_empty (&props->filter)) {
 		TRACE (ENTRIES, "Empty filter: %s\n", "Ignoring it");
@@ -317,7 +317,7 @@ init_filter (cherokee_validator_ldap_t       *ldap,
 
 ret_t
 cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap,
-			       cherokee_connection_t     *conn)
+			       cherokee_request_t     *conn)
 {
 	int                              re;
 	ret_t                            ret;
@@ -401,7 +401,7 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap,
 }
 
 ret_t
-cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t *ldap, cherokee_connection_t *conn, cherokee_buffer_t *buf)
+cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t *ldap, cherokee_request_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(ldap);
 	UNUSED(conn);

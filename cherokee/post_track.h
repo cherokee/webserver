@@ -35,7 +35,7 @@ CHEROKEE_BEGIN_DECLS
 
 typedef ret_t (* post_track_new_t)        (void **track);
 typedef ret_t (* post_track_configure_t)  (void *track, cherokee_config_node_t *config);
-typedef ret_t (* post_track_register_t)   (void *track, cherokee_connection_t *);
+typedef ret_t (* post_track_register_t)   (void *track, cherokee_request_t *);
 typedef ret_t (* post_track_unregister_t) (void *track, cherokee_post_t *);
 
 typedef struct {

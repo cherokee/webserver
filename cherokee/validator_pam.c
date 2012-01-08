@@ -97,7 +97,7 @@ auth_pam_talker (int                        num_msg,
 {
 	unsigned short         i        = 0;
 	struct pam_response   *response = NULL;
-	cherokee_connection_t *conn     = CONN(appdata_ptr);
+	cherokee_request_t *conn     = REQ(appdata_ptr);
 
 	/* parameter sanity checking
 	 */
@@ -145,7 +145,7 @@ auth_pam_talker (int                        num_msg,
 
 ret_t
 cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
-			      cherokee_connection_t    *conn)
+			      cherokee_request_t    *conn)
 {
 	int                  ret;
 	pam_handle_t        *pamhandle = NULL;
@@ -223,7 +223,7 @@ unauthorized:
 
 ret_t
 cherokee_validator_pam_add_headers (cherokee_validator_pam_t *pam,
-				    cherokee_connection_t    *conn,
+				    cherokee_request_t    *conn,
 				    cherokee_buffer_t        *buf)
 {
 	UNUSED(pam);

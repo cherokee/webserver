@@ -60,7 +60,7 @@
 #include <cherokee/logger.h>
 #include <cherokee/handler.h>
 #include <cherokee/encoder.h>
-#include <cherokee/connection.h>
+#include <cherokee/request.h>
 #include <cherokee/plugin.h>
 #include <cherokee/plugin_loader.h>
 #include <cherokee/nonce.h>

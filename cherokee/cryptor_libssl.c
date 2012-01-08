@@ -201,7 +201,7 @@ ret_t
 cherokee_cryptor_libssl_find_vserver (SSL *ssl,
 				      cherokee_server_t     *srv,
 				      cherokee_buffer_t     *servername,
-				      cherokee_connection_t *conn)
+				      cherokee_request_t *conn)
 {
 	ret_t                      ret;
 	cherokee_virtual_server_t *vsrv = NULL;
@@ -257,7 +257,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	ret_t                      ret;
 	int                        re;
 	const char                *servername;
-	cherokee_connection_t     *conn;
+	cherokee_request_t     *conn;
 	cherokee_buffer_t          tmp;
 	cherokee_server_t         *srv       = SRV(arg);
 	cherokee_virtual_server_t *vsrv      = NULL;
@@ -533,7 +533,7 @@ static ret_t
 socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 		   cherokee_socket_t                *socket,
 		   cherokee_virtual_server_t        *vserver,
-		   cherokee_connection_t            *conn)
+		   cherokee_request_t            *conn)
 {
 	int                                re;
 	const char                        *error;
@@ -587,7 +587,7 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	 */
 	cherokee_buffer_ensure_size(&servername, 40);
 	cherokee_socket_ntop (&conn->socket, servername.buf, servername.size);
-	cherokee_cryptor_libssl_find_vserver (cryp->session, CONN_SRV(conn), &servername, conn);
+	cherokee_cryptor_libssl_find_vserver (cryp->session, REQ_SRV(conn), &servername, conn);
 	cherokee_buffer_mrproper (&servername);
 #endif
 
@@ -599,7 +599,7 @@ static ret_t
 _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 		  cherokee_socket_t                *sock,
 		  cherokee_virtual_server_t        *vsrv,
-		  cherokee_connection_t            *conn,
+		  cherokee_request_t            *conn,
 		  cherokee_socket_status_t         *blocking)
 {
 	int   re;

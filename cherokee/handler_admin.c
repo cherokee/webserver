@@ -74,7 +74,7 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 
 	/* Configure the data writer object
 	 */
-	cherokee_dwriter_init       (&n->dwriter, THREAD_TMP_BUF1(CONN_THREAD(cnt)));
+	cherokee_dwriter_init       (&n->dwriter, THREAD_TMP_BUF1(REQ_THREAD(cnt)));
 	cherokee_dwriter_set_buffer (&n->dwriter, &n->reply);
 
 	/* Return the object
@@ -135,7 +135,7 @@ static ret_t
 front_line_cache_purge (cherokee_handler_admin_t *hdl)
 {
 	ret_t                      ret;
-	cherokee_connection_t     *conn = HANDLER_CONN(hdl);
+	cherokee_request_t     *conn = HANDLER_REQ(hdl);
 	cherokee_virtual_server_t *vsrv = HANDLER_VSRV(hdl);
 
 	/* FLCache not active in the Virtual Server
@@ -172,7 +172,7 @@ front_line_cache_purge (cherokee_handler_admin_t *hdl)
 ret_t
 cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 #define finishes_by(s) ((conn->request.len > sizeof(s)-1) && \
 			(!strncmp (conn->request.buf + conn->request.len - (sizeof(s)-1), s, sizeof(s)-1)))
@@ -206,7 +206,7 @@ cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 	char                    *tmp;
 	cherokee_buffer_t        post = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t        line = CHEROKEE_BUF_INIT;
-	cherokee_connection_t   *conn = HANDLER_CONN(hdl);
+	cherokee_request_t   *conn = HANDLER_REQ(hdl);
 
 	/* Check for the post info
 	 */
@@ -278,11 +278,11 @@ exit2:
 ret_t
 cherokee_handler_admin_add_headers (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	/* Regular request
 	 */
-	if (cherokee_connection_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(conn)) {
 		HANDLER(hdl)->support = hsupport_length;
 		cherokee_buffer_add_va (buffer, "Content-Length: %lu" CRLF, hdl->reply.len);
 	}

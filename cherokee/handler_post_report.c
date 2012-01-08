@@ -81,7 +81,7 @@ cherokee_handler_post_report_configure (cherokee_config_node_t   *conf,
 
 ret_t
 cherokee_handler_post_report_new  (cherokee_handler_t      **hdl,
-				   cherokee_connection_t    *cnt,
+				   cherokee_request_t    *cnt,
 				   cherokee_module_props_t  *props)
 {
 	ret_t ret;
@@ -107,7 +107,7 @@ cherokee_handler_post_report_new  (cherokee_handler_t      **hdl,
 		return ret;
 	}
 
-	ret = cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
+	ret = cherokee_dwriter_init (&n->writer, &REQ_THREAD(cnt)->tmp_buf1);
 	if (unlikely(ret != ret_ok)) {
 		return ret;
 	}
@@ -131,12 +131,12 @@ cherokee_handler_post_report_free (cherokee_handler_post_report_t *hdl)
 }
 
 static ret_t
-_figure_x_progress_id (cherokee_connection_t  *conn,
+_figure_x_progress_id (cherokee_request_t  *conn,
 		       cherokee_buffer_t     **id)
 {
 	ret_t ret;
 
-	ret = cherokee_connection_parse_args (conn);
+	ret = cherokee_request_parse_args (conn);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -158,7 +158,7 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 	off_t                  received  = 0;
 	cherokee_buffer_t     *id        = NULL;
 	cherokee_server_t     *srv       = HANDLER_SRV(hdl);
-	cherokee_connection_t *conn      = HANDLER_CONN(hdl);
+	cherokee_request_t *conn      = HANDLER_REQ(hdl);
 
 	/* POST tracking is disabled
 	 */
@@ -217,9 +217,9 @@ ret_t
 cherokee_handler_post_report_add_headers (cherokee_handler_post_report_t *hdl,
 					  cherokee_buffer_t              *buffer)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
-	if (cherokee_connection_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(conn)) {
 		HANDLER(hdl)->support |= hsupport_length;
 		cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->buffer.len);
 	}

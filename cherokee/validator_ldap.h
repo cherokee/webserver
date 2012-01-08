@@ -66,7 +66,7 @@ typedef struct {
 ret_t cherokee_validator_ldap_new         (cherokee_validator_ldap_t **ldap, cherokee_module_props_t *props);
 ret_t cherokee_validator_ldap_free        (cherokee_validator_ldap_t  *ldap);
 
-ret_t cherokee_validator_ldap_check       (cherokee_validator_ldap_t  *ldap, cherokee_connection_t *conn);
-ret_t cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t  *ldap, cherokee_connection_t *conn, cherokee_buffer_t *buf);
+ret_t cherokee_validator_ldap_check       (cherokee_validator_ldap_t  *ldap, cherokee_request_t *conn);
+ret_t cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t  *ldap, cherokee_request_t *conn, cherokee_buffer_t *buf);
 
 #endif /* CHEROKEE_VALIDATOR_LDAP_H */

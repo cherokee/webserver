@@ -31,15 +31,15 @@
 
 #include <cherokee/common.h>
 #include <cherokee/module.h>
-#include <cherokee/connection.h>
+#include <cherokee/request.h>
 #include <cherokee/source.h>
 
 #define BAL_DISABLE_TIMEOUT 5*60
 
 CHEROKEE_BEGIN_DECLS
 
-typedef ret_t (* balancer_dispatch_func_t)    (void *balancer, cherokee_connection_t *conn, cherokee_source_t **src);
-typedef ret_t (* balancer_report_fail_func_t) (void *balancer, cherokee_connection_t *conn, cherokee_source_t  *src);
+typedef ret_t (* balancer_dispatch_func_t)    (void *balancer, cherokee_request_t *conn, cherokee_source_t **src);
+typedef ret_t (* balancer_report_fail_func_t) (void *balancer, cherokee_request_t *conn, cherokee_source_t  *src);
 typedef ret_t (* balancer_configure_func_t)   (void *balancer, cherokee_server_t *srv, cherokee_config_node_t *conf);
 
 typedef struct {
@@ -100,11 +100,11 @@ ret_t cherokee_balancer_free           (cherokee_balancer_t *balancer);
 /* Virtual methods
  */
 ret_t cherokee_balancer_dispatch    (cherokee_balancer_t    *balancer,
-				     cherokee_connection_t  *conn,
+				     cherokee_request_t  *conn,
 				     cherokee_source_t     **source);
 
 ret_t cherokee_balancer_report_fail (cherokee_balancer_t    *balancer,
-				     cherokee_connection_t  *conn,
+				     cherokee_request_t  *conn,
 				     cherokee_source_t      *source);
 
 /* Commodity

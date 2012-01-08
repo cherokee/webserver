@@ -164,7 +164,7 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	ret_t                    ret;
 	size_t                   read = 0;
 	cherokee_handler_fcgi_t *fcgi = HDL_FCGI(cgi);
-	cherokee_connection_t   *conn = HANDLER_CONN(cgi);
+	cherokee_request_t   *conn = HANDLER_REQ(cgi);
 
 	ret = cherokee_socket_bufread (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
 
@@ -395,7 +395,7 @@ add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 {
 	cherokee_handler_cgi_base_t       *cgi_base = HDL_CGI_BASE(hdl);
 	cherokee_buffer_t                  buffer   = CHEROKEE_BUF_INIT;
-	cherokee_connection_t             *conn     = HANDLER_CONN(hdl);
+	cherokee_request_t             *conn     = HANDLER_REQ(hdl);
 	cherokee_handler_cgi_base_props_t *props    = HANDLER_CGI_BASE_PROPS(hdl);
 
 	/* POST management
@@ -433,7 +433,7 @@ add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 		cherokee_buffer_clean (&buffer);
 
 		if (props->check_file) {
-			cherokee_buffer_add_buffer (&buffer, &CONN_VSRV(conn)->root);
+			cherokee_buffer_add_buffer (&buffer, &REQ_VSRV(conn)->root);
 			cherokee_buffer_add_buffer (&buffer, &conn->request);
 		} else {
 			cherokee_buffer_add_buffer (&buffer, &conn->request);
@@ -487,7 +487,7 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 {
 	FCGI_BeginRequestRecord  request;
 	cuint_t                  last_header_offset;
-	cherokee_connection_t   *conn                = HANDLER_CONN(hdl);
+	cherokee_request_t   *conn                = HANDLER_REQ(hdl);
 
 	cherokee_buffer_clean (buffer);
 
@@ -526,7 +526,7 @@ static ret_t
 connect_to_server (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                          ret;
-	cherokee_connection_t         *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t         *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_fcgi_props_t *props = HANDLER_FCGI_PROPS(hdl);
 
 	/* Get a reference to the target host
@@ -560,7 +560,7 @@ do_send (cherokee_handler_fcgi_t *hdl,
 {
 	ret_t                  ret;
 	size_t                 written = 0;
-	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
+	cherokee_request_t *conn    = HANDLER_REQ(hdl);
 
 	ret = cherokee_socket_bufwrite (&hdl->socket, buffer, &written);
 	switch (ret) {
@@ -592,7 +592,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 {
 	ret_t                  ret;
 	int                    prev_buf_len;
-	cherokee_connection_t *conn          = HANDLER_CONN(hdl);
+	cherokee_request_t *conn          = HANDLER_REQ(hdl);
 	static FCGI_Header     empty_header  = {0,0,0,0,0,0,0,0};
 
 	switch (hdl->post_phase) {
@@ -616,7 +616,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 
 		/* Did something, increase timeout
 		 */
-		cherokee_connection_update_timeout (conn);
+		cherokee_request_update_timeout (conn);
 
 		/* Complete the header
 		 */
@@ -645,7 +645,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 				/* Did something, increase timeout
 				 */
 				if (buf->len < prev_buf_len) {
-					cherokee_connection_update_timeout (conn);
+					cherokee_request_update_timeout (conn);
 				}
 
                                 break;
@@ -687,7 +687,7 @@ ret_t
 cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                              ret;
-	cherokee_connection_t             *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t             *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_cgi_base_props_t *props = HANDLER_CGI_BASE_PROPS(hdl);
 
 	switch (HDL_CGI_BASE(hdl)->init_phase) {

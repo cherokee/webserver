@@ -76,7 +76,7 @@ entry_free (cherokee_wc_entry_t *wc)
 static ret_t
 match (cherokee_vrule_wildcard_t *vrule,
        cherokee_buffer_t         *host,
-       cherokee_connection_t     *conn)
+       cherokee_request_t     *conn)
 {
 	int              re;
 	ret_t            ret;

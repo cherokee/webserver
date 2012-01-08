@@ -103,14 +103,14 @@ go_out:
 
 
 static ret_t
-get_nearest_name (cherokee_connection_t *conn,
+get_nearest_name (cherokee_request_t *conn,
 		  cherokee_buffer_t     *local_dir,
 		  cherokee_buffer_t     *request,
 		  cherokee_buffer_t     *output)
 {
 	ret_t              ret;
 	char              *rest;
-	cherokee_thread_t *thread = CONN_THREAD(conn);
+	cherokee_thread_t *thread = REQ_THREAD(conn);
 	cherokee_buffer_t *req    = THREAD_TMP_BUF1(thread);
 
 	/* Build the local request path
@@ -143,7 +143,7 @@ static ret_t
 error_nn_init (cherokee_handler_error_t *hdl)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	cherokee_buffer_clean (&conn->redirect);
 
@@ -186,7 +186,7 @@ error_nn_free (cherokee_handler_error_t *hdl)
 
 ret_t
 cherokee_handler_error_nn_new (cherokee_handler_t      **hdl,
-			       cherokee_connection_t    *conn,
+			       cherokee_request_t    *conn,
 			       cherokee_module_props_t  *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_error_nn);

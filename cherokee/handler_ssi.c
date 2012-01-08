@@ -55,7 +55,7 @@ typedef enum {
 
 ret_t
 cherokee_handler_ssi_new (cherokee_handler_t     **hdl,
-			  cherokee_connection_t   *cnt,
+			  cherokee_request_t   *cnt,
 			  cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_ssi);
@@ -391,7 +391,7 @@ init (cherokee_handler_ssi_t *hdl,
 {
 	int                    re;
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	/* Stat the file
 	 */
@@ -430,7 +430,7 @@ ret_t
 cherokee_handler_ssi_init (cherokee_handler_ssi_t *hdl)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	/* Build the local directory
 	 */
@@ -485,7 +485,7 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 	char                  *ext;
 	cherokee_buffer_t     *mime = NULL;
 	cherokee_server_t     *srv  = HANDLER_SRV(hdl);
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);;
+	cherokee_request_t *conn = HANDLER_REQ(hdl);;
 
 	/* MIME type
 	 */
@@ -506,7 +506,7 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 
 	/* Length
 	 */
-	if (cherokee_connection_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(conn)) {
 		HANDLER(hdl)->support = hsupport_length;
 
 		cherokee_buffer_add_str     (buffer, "Content-Length: ");

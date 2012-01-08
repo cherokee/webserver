@@ -89,7 +89,7 @@ cherokee_handler_custom_error_new  (cherokee_handler_t     **hdl,
 {
 	UNUSED(hdl);
 
-	CONN(cnt)->error_code = PROP_CUSTOM_ERROR(props)->error_code;
+	REQ(cnt)->error_code = PROP_CUSTOM_ERROR(props)->error_code;
 	return ret_error;
 }
 

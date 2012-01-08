@@ -210,7 +210,7 @@ get_gzip_error_string (int err)
 }
 
 static cherokee_boolean_t
-is_user_agent_IE_16 (cherokee_connection_t *conn)
+is_user_agent_IE_16 (cherokee_request_t *conn)
 {
 	ret_t     ret;
 	char     *m;
@@ -240,7 +240,7 @@ is_user_agent_IE_16 (cherokee_connection_t *conn)
 
 ret_t
 cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder,
-			    cherokee_connection_t   *conn)
+			    cherokee_request_t   *conn)
 {
 	int       err;
 	z_stream *z    = &encoder->stream;

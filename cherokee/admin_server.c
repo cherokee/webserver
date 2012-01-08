@@ -116,7 +116,7 @@ cherokee_admin_server_reply_get_traffic (cherokee_handler_t *hdl,
 
 
 static void
-render_connection_info (cherokee_connection_info_t *conn_info,
+render_connection_info (cherokee_request_info_t *conn_info,
 			cherokee_dwriter_t         *dwriter)
 {
 	cherokee_dwriter_dict_open (dwriter);
@@ -173,7 +173,7 @@ cherokee_admin_server_reply_get_conns (cherokee_handler_t *hdl,
 	 */
 	INIT_LIST_HEAD (&connections);
 
-	ret = cherokee_connection_info_list_server (&connections, srv, HANDLER(hdl));
+	ret = cherokee_request_info_list_server (&connections, srv, HANDLER(hdl));
 	if (unlikely (ret == ret_error)) {
 		return ret_error;
 	}
@@ -182,7 +182,7 @@ cherokee_admin_server_reply_get_conns (cherokee_handler_t *hdl,
 	 */
 	cherokee_dwriter_list_open (dwriter);
 	list_for_each (i, &connections) {
-		cherokee_connection_info_t *conn_info = CONN_INFO(i);
+		cherokee_request_info_t *conn_info = REQ_INFO(i);
 
 		/* It won't include details about the admin requests
 		 */
@@ -197,7 +197,7 @@ cherokee_admin_server_reply_get_conns (cherokee_handler_t *hdl,
 	/* Free the connection info objects
 	 */
 	list_for_each_safe (i, tmp, &connections) {
-		cherokee_connection_info_free (CONN_INFO(i));
+		cherokee_request_info_free (REQ_INFO(i));
 	}
 
 	return ret_ok;

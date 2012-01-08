@@ -100,12 +100,12 @@ cherokee_handler_file_configure (cherokee_config_node_t   *conf,
 
 ret_t
 cherokee_handler_file_new (cherokee_handler_t     **hdl,
-			   cherokee_connection_t   *cnt,
+			   cherokee_request_t   *cnt,
 			   cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_file);
 
-	TRACE_CONN(cnt);
+	TRACE_REQ(cnt);
 
 	/* Init the base class object
 	 */
@@ -158,7 +158,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 	cherokee_boolean_t     has_etag           = false;
 	cherokee_boolean_t     not_modified_ms    = false;
 	cherokee_boolean_t     not_modified_etag  = false;
-	cherokee_connection_t *conn               = HANDLER_CONN(fhdl);
+	cherokee_request_t *conn               = HANDLER_REQ(fhdl);
 	cherokee_thread_t     *thread             = HANDLER_THREAD(fhdl);
 	cherokee_buffer_t     *etag_local         = THREAD_TMP_BUF1(thread);
 
@@ -321,7 +321,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 static ret_t
 open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_file)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
+	cherokee_request_t *conn = HANDLER_REQ(fhdl);
 
 	/* Check if it is already open
 	 */
@@ -360,8 +360,8 @@ stat_local_directory (cherokee_handler_file_t   *fhdl,
 {
 	int                    re;
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
-	cherokee_server_t     *srv  = CONN_SRV(conn);
+	cherokee_request_t *conn = HANDLER_REQ(fhdl);
+	cherokee_server_t     *srv  = REQ_SRV(conn);
 
 	/* I/O cache
 	 */
@@ -428,7 +428,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 	char                     *ext;
 	cherokee_iocache_entry_t *io_entry = NULL;
 	cherokee_boolean_t        use_io   = false;
-	cherokee_connection_t    *conn     = HANDLER_CONN(fhdl);
+	cherokee_request_t    *conn     = HANDLER_REQ(fhdl);
 	cherokee_server_t        *srv      = HANDLER_SRV(fhdl);
 
 	/* Query the I/O cache
@@ -629,7 +629,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 				(fhdl->info->st_size <  srv->sendfile.max));
 
 	if (fhdl->using_sendfile) {
-		cherokee_connection_set_cork (conn, true);
+		cherokee_request_set_cork (conn, true);
 		BIT_SET (conn->options, conn_op_tcp_cork);
 	}
 #endif
@@ -646,11 +646,11 @@ ret_t
 cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 {
 	ret_t                  ret;
- 	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
+ 	cherokee_request_t *conn = HANDLER_REQ(fhdl);
 
 	/* OPTIONS request
 	 */
-	if (unlikely (HANDLER_CONN(fhdl)->header.method == http_options)) {
+	if (unlikely (HANDLER_REQ(fhdl)->header.method == http_options)) {
 		return ret_ok;
 	}
 
@@ -675,11 +675,11 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	struct tm              modified_tm;
 	size_t                 szlen          = 0;
 	off_t                  content_length = 0;
-	cherokee_connection_t *conn           = HANDLER_CONN(fhdl);
+	cherokee_request_t *conn           = HANDLER_REQ(fhdl);
 
 	/* OPTIONS request
 	 */
-	if (unlikely (HANDLER_CONN(fhdl)->header.method == http_options)) {
+	if (unlikely (HANDLER_REQ(fhdl)->header.method == http_options)) {
 		cherokee_buffer_add_str (buffer, "Content-Length: 0"CRLF);
 		cherokee_handler_add_header_options (HANDLER(fhdl), buffer);
 		return ret_ok;
@@ -747,7 +747,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	}
 
 
-	if (cherokee_connection_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(conn)) {
 
 		HANDLER(fhdl)->support |= hsupport_length;
 
@@ -789,11 +789,11 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 {
 	off_t                  total;
 	size_t                 size;
-	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
+	cherokee_request_t *conn = HANDLER_REQ(fhdl);
 
 	/* OPTIONS request
 	 */
-	if (unlikely (HANDLER_CONN(fhdl)->header.method == http_options)) {
+	if (unlikely (HANDLER_REQ(fhdl)->header.method == http_options)) {
 		return ret_eof;
 	}
 
@@ -822,7 +822,7 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 		 * time to turn off the TCP_CORK flag again.
 		 */
 		if (conn->options & conn_op_tcp_cork) {
-			cherokee_connection_set_cork (conn, false);
+			cherokee_request_set_cork (conn, false);
 			BIT_UNSET (conn->options, conn_op_tcp_cork);
 		}
 
@@ -835,10 +835,10 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 			return ret;
 		}
 
-		/* This connection is not using the cherokee_connection_send() method,
+		/* This connection is not using the cherokee_request_send() method,
 		 * so we have to update the connection traffic counter here.
 		 */
-		cherokee_connection_tx_add (conn, sent);
+		cherokee_request_tx_add (conn, sent);
 
 		if (fhdl->offset >= conn->range_end) {
 			return ret_eof;
@@ -887,7 +887,7 @@ ret_t
 cherokee_handler_file_seek (cherokee_handler_file_t *hdl,
 			    off_t                    start)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	conn->range_start = start;
 	hdl->offset       = start;

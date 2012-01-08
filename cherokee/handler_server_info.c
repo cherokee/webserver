@@ -628,8 +628,8 @@ server_info_build_html (cherokee_handler_server_info_t *hdl,
 	cherokee_buffer_mrproper (&ver);
 
 	cherokee_buffer_replace_string (buffer, "{request}", 9,
-					HANDLER_CONN(hdl)->request.buf,
-					HANDLER_CONN(hdl)->request.len);
+					HANDLER_REQ(hdl)->request.buf,
+					HANDLER_REQ(hdl)->request.len);
 
 	cherokee_buffer_add_str (buffer, PAGE_FOOT);
 	return ret_ok;
@@ -740,7 +740,7 @@ add_detailed_connections (cherokee_dwriter_t *writer,
 	cherokee_dwriter_list_open (writer);
 
 	list_for_each_safe (i, j, infos) {
-		cherokee_connection_info_t *info = CONN_INFO(i);
+		cherokee_request_info_t *info = REQ_INFO(i);
 
 		cherokee_dwriter_dict_open (writer);
 		cherokee_dwriter_cstring (writer, "id");
@@ -789,7 +789,7 @@ add_detailed_connections (cherokee_dwriter_t *writer,
 		}
 
 		cherokee_dwriter_dict_close (writer);
-		cherokee_connection_info_free (info);
+		cherokee_request_info_free (info);
 	}
 
 	cherokee_dwriter_list_close (writer);
@@ -846,7 +846,7 @@ server_info_build_info (cherokee_handler_server_info_t *hdl)
 		cherokee_list_t infos;
 		INIT_LIST_HEAD (&infos);
 
-		ret = cherokee_connection_info_list_server (&infos, HANDLER_SRV(hdl), HANDLER(hdl));
+		ret = cherokee_request_info_list_server (&infos, HANDLER_SRV(hdl), HANDLER(hdl));
 		if (ret == ret_ok) {
 			cherokee_dwriter_cstring (writer, "detailed_connections");
 			add_detailed_connections (writer, &infos);
@@ -861,7 +861,7 @@ out:
 
 ret_t
 cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
-				   cherokee_connection_t    *cnt,
+				   cherokee_request_t    *cnt,
 				   cherokee_module_props_t  *props)
 {
 	ret_t ret;
@@ -890,7 +890,7 @@ cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
 	if (unlikely(ret != ret_ok))
 		goto error;
 
-	ret = cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
+	ret = cherokee_dwriter_init (&n->writer, &REQ_THREAD(cnt)->tmp_buf1);
 	if (unlikely(ret != ret_ok))
 		goto error;
 
@@ -918,18 +918,18 @@ cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 ret_t
 cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 {
-	if (strstr (HANDLER_CONN(hdl)->request.buf, "/logo.gif")) {
+	if (strstr (HANDLER_REQ(hdl)->request.buf, "/logo.gif")) {
 		server_info_build_logo (hdl, &hdl->buffer);
 		hdl->action = send_logo;
 
-	} else if (strstr (HANDLER_CONN(hdl)->request.buf + 1, "/info")) {
-		if (strstr (HANDLER_CONN(hdl)->request.buf, "/js")) {
+	} else if (strstr (HANDLER_REQ(hdl)->request.buf + 1, "/info")) {
+		if (strstr (HANDLER_REQ(hdl)->request.buf, "/js")) {
 			hdl->writer.lang = dwriter_json;
-		} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/py")) {
+		} else if (strstr (HANDLER_REQ(hdl)->request.buf, "/py")) {
 			hdl->writer.lang = dwriter_python;
-		} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/php")) {
+		} else if (strstr (HANDLER_REQ(hdl)->request.buf, "/php")) {
 			hdl->writer.lang = dwriter_php;
-		} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/ruby")) {
+		} else if (strstr (HANDLER_REQ(hdl)->request.buf, "/ruby")) {
 			hdl->writer.lang = dwriter_ruby;
 		}
 
@@ -963,9 +963,9 @@ ret_t
 cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 					  cherokee_buffer_t              *buffer)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
-	if (cherokee_connection_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(conn)) {
 		HANDLER(hdl)->support |= hsupport_length;
 		cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->buffer.len);
 	}

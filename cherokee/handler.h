@@ -75,10 +75,10 @@ typedef struct {
 
 
 #define HANDLER(x)             ((cherokee_handler_t *)(x))
-#define HANDLER_CONN(h)        (CONN(HANDLER(h)->connection))
-#define HANDLER_VSRV(h)        (CONN_VSRV(HANDLER_CONN(h)))
-#define HANDLER_SRV(h)         (CONN_SRV(HANDLER_CONN(h)))
-#define HANDLER_THREAD(h)      (CONN_THREAD(HANDLER_CONN(h)))
+#define HANDLER_REQ(h)         (REQ(HANDLER(h)->connection))
+#define HANDLER_VSRV(h)        (REQ_VSRV(HANDLER_REQ(h)))
+#define HANDLER_SRV(h)         (REQ_SRV(HANDLER_REQ(h)))
+#define HANDLER_THREAD(h)      (REQ_THREAD(HANDLER_REQ(h)))
 #define HANDLER_SUPPORTS(h,s)  (HANDLER(h)->support & s)
 
 

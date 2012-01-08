@@ -156,7 +156,7 @@ cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 
 ret_t
 cherokee_balancer_dispatch (cherokee_balancer_t    *balancer,
-			    cherokee_connection_t  *conn,
+			    cherokee_request_t  *conn,
 			    cherokee_source_t     **source)
 {
 	if (unlikely (balancer->dispatch == NULL))
@@ -168,7 +168,7 @@ cherokee_balancer_dispatch (cherokee_balancer_t    *balancer,
 
 ret_t
 cherokee_balancer_report_fail (cherokee_balancer_t   *balancer,
-			       cherokee_connection_t *conn,
+			       cherokee_request_t *conn,
 			       cherokee_source_t     *source)
 {
 	if (unlikely (balancer->report_fail == NULL))

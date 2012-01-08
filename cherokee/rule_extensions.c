@@ -90,7 +90,7 @@ _free (void *p)
 
 static ret_t
 local_file_exists (cherokee_rule_extensions_t *rule,
-		   cherokee_connection_t      *conn,
+		   cherokee_request_t      *conn,
 		   cherokee_config_entry_t    *ret_conf)
 {
 	ret_t                     ret;
@@ -98,8 +98,8 @@ local_file_exists (cherokee_rule_extensions_t *rule,
 	struct stat               nocache_info;
 	cherokee_boolean_t        is_file;
 	cherokee_iocache_entry_t *io_entry      = NULL;
-	cherokee_server_t        *srv           = CONN_SRV(conn);
-	cherokee_buffer_t        *tmp           = THREAD_TMP_BUF1(CONN_THREAD(conn));
+	cherokee_server_t        *srv           = REQ_SRV(conn);
+	cherokee_buffer_t        *tmp           = THREAD_TMP_BUF1(REQ_THREAD(conn));
 
 	UNUSED(rule);
 
@@ -154,7 +154,7 @@ local_file_exists (cherokee_rule_extensions_t *rule,
 
 static ret_t
 match (cherokee_rule_extensions_t *rule,
-       cherokee_connection_t      *conn,
+       cherokee_request_t      *conn,
        cherokee_config_entry_t    *ret_conf)
 {
 	ret_t  ret;

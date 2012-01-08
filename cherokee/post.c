@@ -104,7 +104,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 
 static ret_t
 parse_header (cherokee_post_t       *post,
-	      cherokee_connection_t *conn)
+	      cherokee_request_t *conn)
 {
 	ret_t    ret;
 	char    *info      = NULL;
@@ -167,7 +167,7 @@ parse_header (cherokee_post_t       *post,
 
 static ret_t
 reply_100_continue (cherokee_post_t       *post,
-		    cherokee_connection_t *conn)
+		    cherokee_request_t *conn)
 {
 	ret_t  ret;
 	size_t written;
@@ -192,7 +192,7 @@ reply_100_continue (cherokee_post_t       *post,
 
 static ret_t
 remove_surplus (cherokee_post_t       *post,
-		cherokee_connection_t *conn)
+		cherokee_request_t *conn)
 {
 	ret_t   ret;
 	cuint_t header_len;
@@ -244,7 +244,7 @@ cherokee_post_read_header (cherokee_post_t *post)
 	ret_t                  ret;
 	char                  *info     = NULL;
 	cuint_t                info_len = 0;
-	cherokee_connection_t *conn     = CONN(post->conn);
+	cherokee_request_t *conn     = REQ(post->conn);
 
 	switch (post->read_header_phase) {
 	case cherokee_post_read_header_init:
@@ -396,7 +396,7 @@ do_read_plain (cherokee_post_t   *post,
 {
 	ret_t                  ret;
 	size_t                 len;
-	cherokee_connection_t *conn = CONN(post->conn);
+	cherokee_request_t *conn = REQ(post->conn);
 
 	/* Surplus from header read
 	 */
@@ -515,7 +515,7 @@ do_send_socket (cherokee_post_t   *post,
 {
 	ret_t                  ret;
 	size_t                 written = 0;
-	cherokee_connection_t *conn    = CONN(post->conn);
+	cherokee_request_t *conn    = REQ(post->conn);
 
 	ret = cherokee_socket_bufwrite (sock, buffer, &written);
 	switch (ret) {
@@ -644,7 +644,7 @@ cherokee_post_send_to_fd (cherokee_post_t    *post,
 {
 	ret_t                  ret;
 	int                    r;
-	cherokee_connection_t *conn   = CONN(post->conn);
+	cherokee_request_t *conn   = REQ(post->conn);
 	cherokee_buffer_t     *buffer = tmp ? tmp : &post->send.buffer;
 
 

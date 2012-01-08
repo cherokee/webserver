@@ -112,7 +112,7 @@ main (int argc, char *argv[])
 
 	{
 		list_for_each (i, &conns) {
-			cherokee_connection_info_t *conn = CONN_INFO(i);
+			cherokee_request_info_t *conn = REQ_INFO(i);
 
 			printf ("Request: '%s', phase: '%s', rx: '%s', tx: '%s', size: '%s'\n",
 				conn->request.buf, conn->phase.buf, conn->rx.buf,
@@ -121,7 +121,7 @@ main (int argc, char *argv[])
 	}
 
 	list_for_each_safe (i, tmp, &conns) {
-		cherokee_connection_info_free (CONN_INFO(i));
+		cherokee_request_info_free (REQ_INFO(i));
 	}
 
 	cherokee_buffer_mrproper (&buf);

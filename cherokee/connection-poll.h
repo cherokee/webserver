@@ -39,9 +39,9 @@ typedef struct {
 } cherokee_connection_pool_t;
 
 
-ret_t cherokee_connection_poll_init     (cherokee_connection_pool_t *conn_poll);
-ret_t cherokee_connection_poll_clean    (cherokee_connection_pool_t *conn_poll);
-ret_t cherokee_connection_poll_mrproper (cherokee_connection_pool_t *conn_poll);
-int   cherokee_connection_poll_is_set   (cherokee_connection_pool_t *conn_poll);
+ret_t cherokee_request_poll_init     (cherokee_connection_pool_t *conn_poll);
+ret_t cherokee_request_poll_clean    (cherokee_connection_pool_t *conn_poll);
+ret_t cherokee_request_poll_mrproper (cherokee_connection_pool_t *conn_poll);
+int   cherokee_request_poll_is_set   (cherokee_connection_pool_t *conn_poll);
 
 #endif /* CHEROKEE_CONNECTION_POLL_H */

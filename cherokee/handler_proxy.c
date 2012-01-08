@@ -287,7 +287,7 @@ add_request (cherokee_handler_proxy_t *hdl,
 {
 	int                             re;
 	ret_t                           ret;
-	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
 	cherokee_buffer_t              *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
@@ -397,7 +397,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 	cherokee_boolean_t              is_keepalive = false;
 	cherokee_boolean_t              is_close     = false;
 	cherokee_boolean_t              x_real_ip    = false;
-	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn         = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
 	cherokee_buffer_t              *tmp          = &HANDLER_THREAD(hdl)->tmp_buf1;
 
@@ -626,7 +626,7 @@ static ret_t
 do_connect (cherokee_handler_proxy_t *hdl)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	ret = cherokee_socket_connect (&hdl->pconn->socket);
 	switch (ret) {
@@ -650,7 +650,7 @@ do_connect (cherokee_handler_proxy_t *hdl)
 static ret_t
 send_post_reset (cherokee_handler_proxy_t *hdl)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	if (hdl->pconn == NULL) {
 		TRACE (ENTRIES, "Post reset: %s\n", "no pconn");
@@ -685,7 +685,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 {
 	ret_t                  ret;
 	size_t                 written  = 0;
-	cherokee_connection_t *conn     = HANDLER_CONN(hdl);
+	cherokee_request_t *conn     = HANDLER_REQ(hdl);
 	cherokee_buffer_t     *buffer   = &hdl->pconn->post.buf_temp;
 
 	/* Send: buffered
@@ -824,7 +824,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 	switch (ret) {
 	case ret_ok:
 		TRACE (ENTRIES, "Post has %d bytes - after the addition\n", buffer->len);
-		cherokee_connection_update_timeout (conn);
+		cherokee_request_update_timeout (conn);
 		break;
 	case ret_eagain:
 		TRACE (ENTRIES, "Post read: EAGAIN, buffer has %d bytes\n", buffer->len);
@@ -855,7 +855,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 {
 	ret_t                           ret;
 	cherokee_handler_proxy_poll_t  *poll;
-	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 
@@ -988,7 +988,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 
 					/* Spawn a new process
 					 */
-					ret = cherokee_virtual_server_get_error_log (CONN_VSRV(conn), &error_writer);
+					ret = cherokee_virtual_server_get_error_log (REQ_VSRV(conn), &error_writer);
 					if (ret != ret_ok) {
 						return ret_error;
 					}
@@ -1227,7 +1227,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	cint_t                          xsendfile_len;
 	char                           *xsendfile      = NULL;
 	cherokee_boolean_t              added_server   = false;
-	cherokee_connection_t          *conn           = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn           = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props          = HDL_PROXY_PROPS(hdl);
 
 	p = buf_in->buf;
@@ -1336,7 +1336,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			hdl->pconn->enc     = pconn_enc_known_size;
 			hdl->pconn->size_in = strtoll (c, NULL, 10);
 
-			if (! cherokee_connection_should_include_length(conn)) {
+			if (! cherokee_request_should_include_length(conn)) {
 				goto next;
 			}
 
@@ -1347,7 +1347,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 			if (! props->out_preserve_server) {
 				cherokee_buffer_add_str (buf_out, "Server: ");
-				cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
+				cherokee_buffer_add_buffer (buf_out, &REQ_BIND(conn)->server_string);
 				cherokee_buffer_add_str (buf_out, CRLF);
 				goto next;
 			}
@@ -1445,7 +1445,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 		cherokee_buffer_add   (&conn->request, xsendfile, xsendfile_len);
 
 		/* Respin connection */
-		cherokee_connection_clean_for_respin (conn);
+		cherokee_request_clean_for_respin (conn);
 		conn->phase = phase_setup_connection;
 
 		return ret_ok_and_sent;
@@ -1460,7 +1460,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	 */
 	if (! added_server) {
 		cherokee_buffer_add_str (buf_out, "Server: ");
-		cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
+		cherokee_buffer_add_buffer (buf_out, &REQ_BIND(conn)->server_string);
 		cherokee_buffer_add_str (buf_out, CRLF);
 	}
 
@@ -1468,7 +1468,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	 * expiration value defined in the rule.
 	 */
 	if (conn->expiration != cherokee_expiration_none) {
-		cherokee_connection_add_expiration_header (conn, buf_out, true);
+		cherokee_request_add_expiration_header (conn, buf_out, true);
 	}
 
 	/* Deal with Content-Encoding: If the response is no encoded,
@@ -1476,7 +1476,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	 * encoder headers at this point.
 	 */
 	if (conn->encoder_new_func) {
-		ret = cherokee_connection_instance_encoder (conn);
+		ret = cherokee_request_instance_encoder (conn);
 		if (ret == ret_ok) {
 			cherokee_encoder_add_headers (conn->encoder, buf_out);
 		}
@@ -1487,7 +1487,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	 */
 	if ((conn->keepalive) &&
 	    (hdl->pconn->enc != pconn_enc_known_size) &&
-	    (! http_code_with_body (HANDLER_CONN(hdl)->error_code)))
+	    (! http_code_with_body (HANDLER_REQ(hdl)->error_code)))
 	{
 		cherokee_buffer_add_str (buf_out, "Content-Length: 0"CRLF);
 	}
@@ -1511,7 +1511,7 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 				    cherokee_buffer_t        *buf)
 {
 	ret_t                           ret;
-	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 	if (unlikely (hdl->pconn == NULL)) {
@@ -1537,11 +1537,11 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 
 	/* If the reply has no body, let's mark it
 	 */
-	if (! http_code_with_body (HANDLER_CONN(hdl)->error_code)) {
+	if (! http_code_with_body (HANDLER_REQ(hdl)->error_code)) {
 		hdl->got_all = true;
 
 		TRACE(ENTRIES, "Reply is %d, it has no body. Marking as 'got all'.\n",
-		      HANDLER_CONN(hdl)->error_code);
+		      HANDLER_REQ(hdl)->error_code);
 	}
 
 	/* Should the Vserver's error handler come into the scene?
@@ -1553,7 +1553,7 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 		{
 			cherokee_buffer_clean (&conn->header_buffer);
 
-			ret = cherokee_connection_setup_error_handler (conn);
+			ret = cherokee_request_setup_error_handler (conn);
 			if (unlikely ((ret != ret_eagain) && (ret != ret_ok))) {
 				return ret_error;
 			}
@@ -1627,7 +1627,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 {
 	ret_t                  ret;
 	size_t                 size = 0;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	/* No-encoding: known size
 	 */
@@ -1801,7 +1801,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 
 ret_t
 cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
-			    cherokee_connection_t   *cnt,
+			    cherokee_request_t   *cnt,
 			    cherokee_module_props_t *props)
 {
 	ret_t ret;
@@ -1844,7 +1844,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 ret_t
 cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 {
-	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 	/* If the handler reached this point before running its

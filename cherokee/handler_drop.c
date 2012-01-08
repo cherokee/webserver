@@ -35,7 +35,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (drop, http_all_methods);
 
 ret_t
 cherokee_handler_drop_new (cherokee_handler_t     **hdl,
-			   cherokee_connection_t   *cnt,
+			   cherokee_request_t   *cnt,
 			   cherokee_module_props_t *props)
 {
 	UNUSED (hdl);

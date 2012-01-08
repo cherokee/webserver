@@ -90,7 +90,7 @@ geoip_release (void)
 
 static ret_t
 match (cherokee_rule_t         *rule_,
-       cherokee_connection_t   *conn,
+       cherokee_request_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
 	ret_t                  ret;

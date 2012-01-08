@@ -61,7 +61,7 @@ cherokee_rule_list_mrproper (cherokee_rule_list_t *list)
 }
 
 static void
-update_connection (cherokee_connection_t   *conn,
+update_connection (cherokee_request_t   *conn,
 		   cherokee_config_entry_t *ret_config)
 {
 	if (! conn->auth_type)
@@ -83,7 +83,7 @@ update_connection (cherokee_connection_t   *conn,
 
 ret_t
 cherokee_rule_list_match (cherokee_rule_list_t    *list,
-			  cherokee_connection_t   *conn,
+			  cherokee_request_t   *conn,
 			  cherokee_config_entry_t *ret_config)
 {
 	ret_t            ret;

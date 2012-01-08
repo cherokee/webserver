@@ -38,7 +38,7 @@ PLUGIN_INFO_RULE_EASIEST_INIT(header);
 
 static ret_t
 match_regex (cherokee_rule_header_t  *rule,
-	     cherokee_connection_t   *conn,
+	     cherokee_request_t   *conn,
 	     cherokee_config_entry_t *ret_conf)
 {
 	int      re;
@@ -79,7 +79,7 @@ match_regex (cherokee_rule_header_t  *rule,
 
 static ret_t
 match_provided (cherokee_rule_header_t  *rule,
-		cherokee_connection_t   *conn,
+		cherokee_request_t   *conn,
 		cherokee_config_entry_t *ret_conf)
 {
 	ret_t ret;
@@ -99,7 +99,7 @@ match_provided (cherokee_rule_header_t  *rule,
 
 static ret_t
 match_complete (cherokee_rule_header_t  *rule,
-		cherokee_connection_t   *conn,
+		cherokee_request_t   *conn,
 		cherokee_config_entry_t *ret_conf)
 {
 	int re;
@@ -127,7 +127,7 @@ match_complete (cherokee_rule_header_t  *rule,
 
 static ret_t
 match (cherokee_rule_header_t  *rule,
-       cherokee_connection_t   *conn,
+       cherokee_request_t   *conn,
        cherokee_config_entry_t *ret_conf)
 {
 	/* Match regex against complete header block

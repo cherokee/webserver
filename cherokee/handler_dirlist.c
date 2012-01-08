@@ -582,7 +582,7 @@ cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	cherokee_buffer_t *value;
 	CHEROKEE_NEW_STRUCT (n, handler_dirlist);
 
-	TRACE_CONN(cnt);
+	TRACE_REQ(cnt);
 
 	/* Init the base class object
 	 */
@@ -599,7 +599,7 @@ cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 
 	/* Process the request_string, and build the arguments table..
 	 */
-	cherokee_connection_parse_args (cnt);
+	cherokee_request_parse_args (cnt);
 
 	/* Init
 	 */
@@ -623,7 +623,7 @@ cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	n->phase = dirlist_phase_add_header;
 	n->sort  = Name_Down;
 
-	ret = cherokee_avl_get_ptr (HANDLER_CONN(n)->arguments, "order", (void **) &value);
+	ret = cherokee_avl_get_ptr (HANDLER_REQ(n)->arguments, "order", (void **) &value);
 	if ((ret == ret_ok) && (value != NULL) && (value->len > 0)) {
 		if      (value->buf[0] == 'N') n->sort = Name_Up;
 		else if (value->buf[0] == 'n') n->sort = Name_Down;
@@ -679,13 +679,13 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 static ret_t
 check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
+	cherokee_request_t *conn = HANDLER_REQ(dhdl);
 
 	if ((cherokee_buffer_is_empty (&conn->request)) ||
 	    (!cherokee_buffer_is_ending (&conn->request, '/')))
 	{
 		cherokee_buffer_add_str (&conn->request, "/");
-		cherokee_connection_set_redirect (conn, &conn->request);
+		cherokee_request_set_redirect (conn, &conn->request);
 		cherokee_buffer_drop_ending (&conn->request, 1);
 
 		conn->error_code = http_moved_permanently;
@@ -793,7 +793,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	file_entry_t          *item;
 	int                    is_dir;
 	int                    is_link;
-	cherokee_connection_t *conn           = HANDLER_CONN(dhdl);
+	cherokee_request_t *conn           = HANDLER_REQ(dhdl);
 	cherokee_buffer_t      local_realpath = CHEROKEE_BUF_INIT;
 
 	/* Build the local directory path
@@ -869,7 +869,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 static ret_t
 build_public_path (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buf)
 {
-	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
+	cherokee_request_t *conn = HANDLER_REQ(dhdl);
 
 	if (!cherokee_buffer_is_empty (&conn->userdir)) {
 		/* ~user local dir request
@@ -892,7 +892,7 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 {
 	ret_t                  ret;
 	cherokee_list_t       *i;
-	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
+	cherokee_request_t *conn = HANDLER_REQ(dhdl);
 
 	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {
 		file_match_t      *file_match = ((file_match_t*)(i));
@@ -931,7 +931,7 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 
 	/* OPTIONS request: no need to build the file list
 	 */
-	if (HANDLER_CONN(dhdl)->header.method == http_options) {
+	if (HANDLER_REQ(dhdl)->header.method == http_options) {
 		return ret_ok;
 	}
 
@@ -1236,7 +1236,7 @@ render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl,
 	cherokee_buffer_t                *vtmp[2];
 	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
 	size_t                            idx_tmp  = 0;
-	cherokee_bind_t                  *bind     = CONN_BIND(HANDLER_CONN(dhdl));
+	cherokee_bind_t                  *bind     = REQ_BIND(HANDLER_REQ(dhdl));
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
 
 	/* Initialize temporary substitution buffers
@@ -1273,7 +1273,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl,
 
 	/* OPTIONS request
 	 */
-	if (HANDLER_CONN(dhdl)->header.method == http_options) {
+	if (HANDLER_REQ(dhdl)->header.method == http_options) {
 		return ret_eof;
 	}
 
@@ -1353,7 +1353,7 @@ cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl,
 
 	/* OPTIONS request
 	 */
-	if (HANDLER_CONN(dhdl)->header.method == http_options) {
+	if (HANDLER_REQ(dhdl)->header.method == http_options) {
 		cherokee_buffer_add_str (buffer, "Content-Length: 0"CRLF);
 		cherokee_handler_add_header_options (HANDLER(dhdl), buffer);
 		return ret_ok;

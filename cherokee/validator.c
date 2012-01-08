@@ -102,7 +102,7 @@ cherokee_validator_check (cherokee_validator_t *validator, void *conn)
 		return ret_error;
 	}
 
-	return validator->check (validator, CONN(conn));
+	return validator->check (validator, REQ(conn));
 }
 
 
@@ -115,7 +115,7 @@ cherokee_validator_add_headers (cherokee_validator_t *validator,
 		return ret_error;
 	}
 
-	return validator->add_headers (validator, CONN(conn), buf);
+	return validator->add_headers (validator, REQ(conn), buf);
 }
 
 
@@ -261,7 +261,7 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 
 
 static ret_t
-digest_HA2 (cherokee_validator_t *validator, cherokee_buffer_t *buf, cherokee_connection_t *conn)
+digest_HA2 (cherokee_validator_t *validator, cherokee_buffer_t *buf, cherokee_request_t *conn)
 {
 	ret_t       ret;
 	const char *method;
@@ -292,7 +292,7 @@ ret_t
 cherokee_validator_digest_response (cherokee_validator_t  *validator,
 				    char                  *A1,
 				    cherokee_buffer_t     *buf,
-				    cherokee_connection_t *conn)
+				    cherokee_request_t *conn)
 {
 	ret_t             ret;
 	cherokee_buffer_t a2   = CHEROKEE_BUF_INIT;
@@ -348,7 +348,7 @@ error:
 
 
 ret_t
-cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_connection_t *conn)
+cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_request_t *conn)
 {
 	ret_t             ret;
 	int               re   = -1;

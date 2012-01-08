@@ -45,7 +45,7 @@ _free (cherokee_generic_evhost_t *evhost)
 }
 
 static ret_t
-_check_document_root (cherokee_connection_t *conn)
+_check_document_root (cherokee_request_t *conn)
 
 {
 	ret_t                     ret;
@@ -53,9 +53,9 @@ _check_document_root (cherokee_connection_t *conn)
 	struct stat              *info;
 	cherokee_iocache_entry_t *io_entry = NULL;
 
-	ret = cherokee_io_stat (CONN_SRV(conn)->iocache,
+	ret = cherokee_io_stat (REQ_SRV(conn)->iocache,
 				&conn->local_directory,
-				(CONN_SRV(conn)->iocache != NULL),
+				(REQ_SRV(conn)->iocache != NULL),
 				&stat_mem, &io_entry, &info);
 
 	if (ret != ret_ok) {
@@ -79,7 +79,7 @@ out:
 
 static ret_t
 _render_document_root (cherokee_generic_evhost_t *evhost,
-		       cherokee_connection_t     *conn)
+		       cherokee_request_t     *conn)
 {
 	ret_t ret;
 
@@ -137,7 +137,7 @@ add_domain (cherokee_template_t       *template,
             cherokee_buffer_t         *output,
             void                      *param)
 {
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 	UNUSED(template);
 	UNUSED(token);
 	return cherokee_buffer_add_buffer (output, &conn->host);
@@ -152,7 +152,7 @@ add_tld (cherokee_template_t       *template,
 {
 	const char            *p;
 	const char            *end;
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED(template);
 	UNUSED(token);
@@ -188,7 +188,7 @@ add_domain_no_tld (cherokee_template_t       *template,
 {
 	const char            *p;
 	const char            *end;
-	cherokee_connection_t *conn = CONN(param);
+	cherokee_request_t *conn = REQ(param);
 
 	UNUSED(template);
 	UNUSED(token);
@@ -218,7 +218,7 @@ add_domain_no_tld (cherokee_template_t       *template,
 
 static ret_t
 _add_subdomain (cherokee_buffer_t     *output,
-		cherokee_connection_t *conn,
+		cherokee_request_t *conn,
 		int                    starting_dot)
 {
 	const char *p;
@@ -271,7 +271,7 @@ add_root_domain (cherokee_template_t       *template,
 	UNUSED(template);
 	UNUSED(token);
 
-	return _add_subdomain (output, CONN(param), 1);
+	return _add_subdomain (output, REQ(param), 1);
 }
 
 static ret_t
@@ -283,7 +283,7 @@ add_subdomain1 (cherokee_template_t      *template,
 	UNUSED(template);
 	UNUSED(token);
 
-	return _add_subdomain (output, CONN(param), 2);
+	return _add_subdomain (output, REQ(param), 2);
 }
 
 static ret_t
@@ -295,7 +295,7 @@ add_subdomain2 (cherokee_template_t      *template,
 	UNUSED(template);
 	UNUSED(token);
 
-	return _add_subdomain (output, CONN(param), 3);
+	return _add_subdomain (output, REQ(param), 3);
 }
 
 ret_t

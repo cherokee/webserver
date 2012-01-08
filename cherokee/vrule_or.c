@@ -37,7 +37,7 @@ PLUGIN_INFO_VRULE_EASIEST_INIT(v_or);
 static ret_t
 match (cherokee_vrule_or_t   *vrule,
        cherokee_buffer_t     *host,
-       cherokee_connection_t *conn)
+       cherokee_request_t *conn)
 {
 	ret_t ret;
 

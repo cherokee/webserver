@@ -167,7 +167,7 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base,
 	ret_t                     ret;
 	size_t                    read  = 0;
 	cherokee_handler_uwsgi_t *uwsgi = HDL_UWSGI(cgi_base);
-	cherokee_connection_t    *conn  = HANDLER_CONN(cgi_base);
+	cherokee_request_t    *conn  = HANDLER_REQ(cgi_base);
 
 	ret = cherokee_socket_bufread (&uwsgi->socket, buffer, 4096, &read);
 
@@ -279,7 +279,7 @@ build_header (cherokee_handler_uwsgi_t *hdl)
 {
 	cuint_t                         len;
         char                            tmp[64];
-	cherokee_connection_t          *conn     = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn     = HANDLER_REQ(hdl);
 	cherokee_handler_uwsgi_props_t *props    = HANDLER_UWSGI_PROPS(hdl);
 
 	if (props->pass_request_body == true && props->pass_wsgi_vars == true) {
@@ -288,7 +288,7 @@ build_header (cherokee_handler_uwsgi_t *hdl)
 	}
 
 	if (props->pass_wsgi_vars == true) {
-		cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), HANDLER_CONN(hdl));
+		cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), HANDLER_REQ(hdl));
 	}
 
 	return uwsgi_fix_packet (&hdl->header, props->modifier1, props->modifier2);
@@ -300,7 +300,7 @@ static ret_t
 connect_to_server (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                           ret;
-	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
 	cherokee_handler_uwsgi_props_t *props = HANDLER_UWSGI_PROPS(hdl);
 
 	/* Get a reference to the target host
@@ -333,7 +333,7 @@ send_header (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                  ret;
 	size_t                 written = 0;
-	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
+	cherokee_request_t *conn    = HANDLER_REQ(hdl);
 
 	ret = cherokee_socket_bufwrite (&hdl->socket, &hdl->header, &written);
 	if (ret != ret_ok) {
@@ -359,7 +359,7 @@ ret_t
 cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_request_t *conn = HANDLER_REQ(hdl);
 
 	switch (HDL_CGI_BASE(hdl)->init_phase) {
 	case hcgi_phase_build_headers:
@@ -425,7 +425,7 @@ ret_t
 cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                           ret;
-	cherokee_connection_t          *conn   = HANDLER_CONN(hdl);
+	cherokee_request_t          *conn   = HANDLER_REQ(hdl);
 	cherokee_handler_uwsgi_props_t *props  = HANDLER_UWSGI_PROPS(hdl);
 	cherokee_boolean_t              did_IO = false;
 
@@ -441,7 +441,7 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 					    &hdl->socket, NULL, &did_IO);
 
 	if (did_IO) {
-		cherokee_connection_update_timeout (conn);
+		cherokee_request_update_timeout (conn);
 	}
 
 	switch (ret) {

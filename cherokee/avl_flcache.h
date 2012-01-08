@@ -31,7 +31,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/avl_generic.h>
-#include <cherokee/connection.h>
+#include <cherokee/request.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -54,7 +54,7 @@ typedef struct {
 	cherokee_buffer_t            query_string;
 	cherokee_buffer_t            content_encoding;
 
-	cherokee_connection_t       *conn_ref;
+	cherokee_request_t       *conn_ref;
 
 	cherokee_flcache_status_t    status;
 	cherokee_buffer_t            file;
@@ -82,11 +82,11 @@ ret_t cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl, cherokee_func_
 ret_t cherokee_avl_flcache_cleanup  (cherokee_avl_flcache_t *avl);
 
 ret_t cherokee_avl_flcache_add        (cherokee_avl_flcache_t       *avl,
-				       cherokee_connection_t        *conn,
+				       cherokee_request_t        *conn,
 				       cherokee_avl_flcache_node_t **node);
 
 ret_t cherokee_avl_flcache_get        (cherokee_avl_flcache_t       *avl,
-				       cherokee_connection_t        *conn,
+				       cherokee_request_t        *conn,
 				       cherokee_avl_flcache_node_t **node);
 
 ret_t cherokee_avl_flcache_del        (cherokee_avl_flcache_t       *avl,

@@ -90,7 +90,7 @@ match_avl_func (cherokee_buffer_t *key, void *val, void *param)
 
 static ret_t
 match (cherokee_rule_url_arg_t  *rule,
-       cherokee_connection_t    *conn,
+       cherokee_request_t    *conn,
        cherokee_config_entry_t  *ret_conf)
 {
 	ret_t              ret;
@@ -100,7 +100,7 @@ match (cherokee_rule_url_arg_t  *rule,
 
 	/* Parse HTTP arguments
 	 */
-	ret = cherokee_connection_parse_args (conn);
+	ret = cherokee_request_parse_args (conn);
 	if (ret != ret_ok) {
 		return ret_not_found;
 	}

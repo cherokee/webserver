@@ -163,14 +163,14 @@ check_crypt (char *passwd, char *salt, const char *compared)
 
 
 static ret_t
-validate_plain (cherokee_connection_t *conn, const char *crypted)
+validate_plain (cherokee_request_t *conn, const char *crypted)
 {
 	return (strcmp (conn->validator->passwd.buf, crypted) == 0) ? ret_ok : ret_error;
 }
 
 
 static ret_t
-validate_crypt (cherokee_connection_t *conn, const char *crypted)
+validate_crypt (cherokee_request_t *conn, const char *crypted)
 {
 	ret_t ret;
 	char  salt[CRYPT_SALT_LENGTH];
@@ -183,7 +183,7 @@ validate_crypt (cherokee_connection_t *conn, const char *crypted)
 
 
 static ret_t
-validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
+validate_md5 (cherokee_request_t *conn, const char *magic, char *crypted)
 {
 	ret_t  ret;
 	char  *new_md5_crypt;
@@ -203,10 +203,10 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 
 
 static ret_t
-validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
+validate_non_salted_sha (cherokee_request_t *conn, char *crypted)
 {
 	cuint_t           c_len      = strlen (crypted);
-	cherokee_thread_t *thread    = CONN_THREAD(conn);
+	cherokee_thread_t *thread    = REQ_THREAD(conn);
 	cherokee_buffer_t *sha1_buf1 = THREAD_TMP_BUF1(thread);
 	cherokee_buffer_t *sha1_buf2 = THREAD_TMP_BUF2(thread);
 
@@ -233,7 +233,7 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 
 static ret_t
 request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd,
-			  cherokee_connection_t         *conn,
+			  cherokee_request_t         *conn,
 			  cherokee_buffer_t             *full_path)
 {
 	char    *p;
@@ -267,7 +267,7 @@ request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd,
 
 ret_t
 cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
-				   cherokee_connection_t         *conn)
+				   cherokee_request_t         *conn)
 {
 	FILE              *f;
 	int                len;
@@ -290,7 +290,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 	/* Get the full path to the file
 	 */
 	ret = cherokee_validator_file_get_full_path (VFILE(htpasswd), conn, &fpass,
-						     &CONN_THREAD(conn)->tmp_buf1);
+						     &REQ_THREAD(conn)->tmp_buf1);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -386,7 +386,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 
 
 ret_t
-cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t *htpasswd, cherokee_connection_t *conn, cherokee_buffer_t *buf)
+cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t *htpasswd, cherokee_request_t *conn, cherokee_buffer_t *buf)
 {
 	UNUSED(htpasswd);
 	UNUSED(conn);

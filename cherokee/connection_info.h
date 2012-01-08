@@ -32,7 +32,7 @@
 #include <cherokee/common.h>
 #include <cherokee/list.h>
 #include <cherokee/buffer.h>
-#include <cherokee/connection.h>
+#include <cherokee/request.h>
 #include <cherokee/server.h>
 #include <cherokee/handler.h>
 
@@ -51,16 +51,16 @@ typedef struct {
 	cherokee_buffer_t    percent;         /* tx * 100 / total_size */
 	cherokee_buffer_t    handler;         /* Connection handler */
 	cherokee_buffer_t    icon;            /* Icon filename */
-} cherokee_connection_info_t;
+} cherokee_request_info_t;
 
-#define CONN_INFO(i)  ((cherokee_connection_info_t *)(i))
+#define REQ_INFO(i)  ((cherokee_request_info_t *)(i))
 
 
-ret_t cherokee_connection_info_new  (cherokee_connection_info_t **info);
-ret_t cherokee_connection_info_free (cherokee_connection_info_t  *info);
+ret_t cherokee_request_info_new  (cherokee_request_info_t **info);
+ret_t cherokee_request_info_free (cherokee_request_info_t  *info);
 
-ret_t cherokee_connection_info_list_thread (cherokee_list_t *infos_list, void *thread, cherokee_handler_t *self);
-ret_t cherokee_connection_info_list_server (cherokee_list_t *infos_list, cherokee_server_t *server, cherokee_handler_t *self);
+ret_t cherokee_request_info_list_thread (cherokee_list_t *infos_list, void *thread, cherokee_handler_t *self);
+ret_t cherokee_request_info_list_server (cherokee_list_t *infos_list, cherokee_server_t *server, cherokee_handler_t *self);
 
 CHEROKEE_END_DECLS
 
