@@ -1448,8 +1448,8 @@ shm.c
 libcherokee_client_la_SOURCES = \
 url.h \
 url.c \
-request.h \
-request.c \
+client_request.h \
+client_request.c \
 downloader.h \
 downloader-protected.h \
 downloader.c \

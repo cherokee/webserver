@@ -56,7 +56,7 @@
 #include "url.h"
 #include "header.h"
 #include "fdpoll.h"
-#include "request.h"
+#include "client_request.h"
 #include "downloader.h"
 #include "downloader-protected.h"
 #include "socket.h"

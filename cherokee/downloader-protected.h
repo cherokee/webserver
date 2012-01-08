@@ -28,7 +28,7 @@
 
 #include "common-internal.h"
 #include "buffer.h"
-#include "request.h"
+#include "client_request.h"
 #include "socket.h"
 #include "header.h"
 #include "post.h"
@@ -47,24 +47,24 @@ typedef enum {
 
 
 struct cherokee_downloader {
-	cherokee_header_t           *header;
- 	cherokee_request_header_t    request;
+	cherokee_header_t                *header;
+ 	cherokee_client_request_header_t  request;
 
-	cherokee_buffer_t            request_header;
-	cherokee_buffer_t            reply_header;
-	cherokee_buffer_t            body;
+	cherokee_buffer_t                 request_header;
+	cherokee_buffer_t                 reply_header;
+	cherokee_buffer_t                 body;
 
-	cherokee_buffer_t            post;
-	cherokee_buffer_t            proxy;
-	cuint_t                      proxy_port;
+	cherokee_buffer_t                 post;
+	cherokee_buffer_t                 proxy;
+	cuint_t                           proxy_port;
 
-	cherokee_socket_t            socket;
-	cherokee_sockaddr_t          sockaddr;
+	cherokee_socket_t                 socket;
+	cherokee_sockaddr_t               sockaddr;
 
-	cherokee_downloader_phase_t  phase;
-	cherokee_downloader_status_t status;
+	cherokee_downloader_phase_t       phase;
+	cherokee_downloader_status_t      status;
 
-	cuint_t                      content_length;
+	cuint_t                           content_length;
 
 	/* Information
 	 */
@@ -75,8 +75,8 @@ struct cherokee_downloader {
 		uint32_t body_recv;
 	} info;
 
-	cherokee_buffer_t            tmp1;
-	cherokee_buffer_t            tmp2;
+	cherokee_buffer_t                 tmp1;
+	cherokee_buffer_t                 tmp2;
 };
 
 

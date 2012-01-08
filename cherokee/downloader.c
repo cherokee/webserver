@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "downloader.h"
 #include "downloader-protected.h"
-#include "request.h"
+#include "client_request.h"
 #include "url.h"
 #include "header-protected.h"
 #include "util.h"
@@ -53,7 +53,7 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 
 	/* Build
 	 */
-	ret = cherokee_request_header_init (&n->request);
+	ret = cherokee_client_request_header_init (&n->request);
 	if (unlikely(ret != ret_ok)) return ret;
 
 	ret = cherokee_buffer_init (&n->request_header);
@@ -104,7 +104,7 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 {
 	/* Free the memory
 	 */
-	cherokee_request_header_mrproper (&downloader->request);
+	cherokee_client_request_header_mrproper (&downloader->request);
 
 	cherokee_buffer_mrproper (&downloader->request_header);
 	cherokee_buffer_mrproper (&downloader->reply_header);
@@ -131,7 +131,7 @@ CHEROKEE_ADD_FUNC_FREE (downloader);
 ret_t
 cherokee_downloader_set_url (cherokee_downloader_t *downloader, cherokee_buffer_t *url_string)
 {
-	return cherokee_request_header_parse_string (&downloader->request, url_string);
+	return cherokee_client_request_header_parse_string (&downloader->request, url_string);
 }
 
 
@@ -173,7 +173,7 @@ cherokee_downloader_set_auth (cherokee_downloader_t *downloader,
 			      cherokee_buffer_t     *user,
 			      cherokee_buffer_t     *password)
 {
-	return cherokee_request_header_set_auth (&downloader->request, http_auth_basic, user, password);
+	return cherokee_client_request_header_set_auth (&downloader->request, http_auth_basic, user, password);
 }
 
 
@@ -267,7 +267,7 @@ cherokee_downloader_connect (cherokee_downloader_t *downloader)
 	/* Does it use a proxy?
 	 */
 	uses_proxy = ! cherokee_buffer_is_empty (&downloader->proxy);
-	ret = cherokee_request_header_uses_proxy (&downloader->request, uses_proxy);
+	ret = cherokee_client_request_header_uses_proxy (&downloader->request, uses_proxy);
 	if (ret != ret_ok) return ret;
 
 	/* Connect
@@ -466,7 +466,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 	 */
 	switch (downloader->phase) {
 	case downloader_phase_init: {
-		cherokee_request_header_t *req = &downloader->request;
+		cherokee_client_request_header_t *req = &downloader->request;
 
 		TRACE(ENTRIES, "Phase %s\n", "init");
 
@@ -479,7 +479,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 
 		/* Build the request header
 		 */
-		ret = cherokee_request_header_build_string (req, &downloader->request_header, tmp1, tmp2);
+		ret = cherokee_client_request_header_build_string (req, &downloader->request_header, tmp1, tmp2);
 		if (unlikely(ret < ret_ok))
 			return ret;
 
@@ -604,7 +604,7 @@ cherokee_downloader_reuse (cherokee_downloader_t *downloader)
 	cherokee_buffer_clean (&downloader->body);
 	cherokee_buffer_clean (&downloader->post);
 
-	cherokee_request_header_clean (&downloader->request);
+	cherokee_client_request_header_clean (&downloader->request);
 	return ret_ok;
 }
 
