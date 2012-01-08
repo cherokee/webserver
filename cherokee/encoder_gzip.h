@@ -30,7 +30,7 @@
 #include "zlib/zlib.h"
 #include "module.h"
 #include "encoder.h"
-#include "connection.h"
+#include "request.h"
 #include "plugin_loader.h"
 
 /* Data types

@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "nonce.h"
 #include "avl.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "server-protected.h"
 #include "bogotime.h"
 

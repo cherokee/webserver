@@ -26,7 +26,7 @@
 #include "rule_list.h"
 
 #include "util.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "rule_default.h"
 
 #define ENTRIES "rules"

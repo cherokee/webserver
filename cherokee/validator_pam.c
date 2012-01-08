@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "http.h"
 #include "validator_pam.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "plugin_loader.h"
 
 #include <security/pam_appl.h>

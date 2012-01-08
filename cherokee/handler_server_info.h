@@ -28,7 +28,7 @@
 #include "common-internal.h"
 #include "buffer.h"
 #include "handler.h"
-#include "connection.h"
+#include "request.h"
 #include "plugin_loader.h"
 #include "dwriter.h"
 

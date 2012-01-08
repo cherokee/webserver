@@ -26,7 +26,7 @@
 #define CHEROKEE_VALIDATOR_PAM_H
 
 #include "validator.h"
-#include "connection.h"
+#include "request.h"
 #include "plugin_loader.h"
 
 typedef struct {

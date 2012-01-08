@@ -25,8 +25,8 @@
 #include "common-internal.h"
 #include "validator.h"
 
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "header-protected.h"
 #include "config_entry.h"
 #include "util.h"

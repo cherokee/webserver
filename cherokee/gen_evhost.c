@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "gen_evhost.h"
 #include "plugin_loader.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "server-protected.h"
 #include "util.h"
 

@@ -33,7 +33,7 @@
 #include "buffer.h"
 #include "module.h"
 #include "http.h"
-#include "connection.h"
+#include "request.h"
 #include "config_node.h"
 
 

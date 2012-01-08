@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "handler_drop.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 
 #define ENTRIES "handler,drop"
 

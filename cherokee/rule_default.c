@@ -25,8 +25,8 @@
 #include "common-internal.h"
 #include "rule_default.h"
 #include "plugin_loader.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES "rule,default"

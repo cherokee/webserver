@@ -28,7 +28,7 @@
 
 #include "handler_fcgi.h"
 #include "header.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 #include "thread.h"
 #include "source_interpreter.h"

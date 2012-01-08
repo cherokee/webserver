@@ -27,7 +27,7 @@
 #include "plugin_loader.h"
 #include "virtual_server.h"
 #include "socket.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES "rule,geoip"

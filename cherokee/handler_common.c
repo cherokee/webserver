@@ -38,12 +38,12 @@
 #endif
 
 #include "util.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "server.h"
 #include "server-protected.h"
 #include "module.h"
-#include "connection.h"
+#include "request.h"
 
 #define ENTRIES "handler,common"
 #define DEFAULT_ALLOW_PATHINFO false

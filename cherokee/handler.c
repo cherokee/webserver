@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "connection.h"
+#include "request.h"
 
 
 ret_t

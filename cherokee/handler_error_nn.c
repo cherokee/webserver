@@ -31,11 +31,11 @@
 #include <dirent.h>
 
 #include "thread.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "module.h"
 #include "plugin_loader.h"
-#include "connection.h"
+#include "request.h"
 #include "levenshtein_distance.h"
 #include "handler_error.h"
 #include "util.h"

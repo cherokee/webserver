@@ -24,7 +24,7 @@
 
 #include "handler_post_report.h"
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "thread.h"
 #include "plugin_loader.h"
 #include "util.h"

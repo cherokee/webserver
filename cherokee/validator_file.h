@@ -26,7 +26,7 @@
 #define CHEROKEE_VALIDATOR_FILE_H
 
 #include "validator.h"
-#include "connection.h"
+#include "request.h"
 
 typedef enum {
 	val_path_full,

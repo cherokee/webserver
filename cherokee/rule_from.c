@@ -26,7 +26,7 @@
 #include "rule_from.h"
 
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES "rule,from"

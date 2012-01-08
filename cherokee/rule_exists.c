@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "rule_exists.h"
 #include "plugin_loader.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 #include "thread.h"
 #include "server-protected.h"

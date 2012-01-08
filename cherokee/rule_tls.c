@@ -27,7 +27,7 @@
 #include "util.h"
 
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 
 #define ENTRIES "rule,tls"
 

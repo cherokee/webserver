@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "limiter.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "bogotime.h"
 #include "thread.h"
 

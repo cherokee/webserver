@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "flcache.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "handler_file.h"
 #include "server-protected.h"
 #include "plugin_loader.h"

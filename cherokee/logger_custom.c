@@ -26,8 +26,8 @@
 #include "logger_custom.h"
 
 #include "util.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "module.h"
 #include "server.h"
 #include "server-protected.h"

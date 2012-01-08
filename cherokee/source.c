@@ -28,7 +28,7 @@
 #include "resolv_cache.h"
 #include "util.h"
 #include "thread.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 
 #define ENTRIES "source,src"
 

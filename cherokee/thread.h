@@ -33,8 +33,8 @@
 
 #include "list.h"
 #include "socket.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "fdpoll.h"
 #include "avl.h"
 #include "limiter.h"

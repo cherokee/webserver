@@ -23,8 +23,8 @@
  */
 
 #include "common-internal.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "bogotime.h"
 
 #include <errno.h>

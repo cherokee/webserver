@@ -27,7 +27,7 @@
 #include "balancer_failover.h"
 #include "plugin_loader.h"
 #include "bogotime.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES "balancer,iphash"

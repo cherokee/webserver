@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "handler_render_rrd.h"
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "thread.h"
 #include "rrd_tools.h"
 #include "util.h"

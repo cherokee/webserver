@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "validator_htdigest.h"
 #include "plugin_loader.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "thread.h"
 
 /* Plug-in initialization

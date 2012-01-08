@@ -34,7 +34,7 @@
 
 #include "buffer.h"
 #include "handler.h"
-#include "connection.h"
+#include "request.h"
 #include "mime.h"
 #include "plugin_loader.h"
 

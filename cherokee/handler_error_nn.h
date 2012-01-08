@@ -27,7 +27,7 @@
 
 #include "common-internal.h"
 #include "handler.h"
-#include "connection.h"
+#include "request.h"
 #include "plugin_loader.h"
 
 typedef struct {

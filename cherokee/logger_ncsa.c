@@ -37,13 +37,13 @@
 #endif
 
 #include "util.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "header.h"
 #include "header-protected.h"
 #include "server.h"
 #include "server-protected.h"
-#include "connection.h"
+#include "request.h"
 #include "module.h"
 
 

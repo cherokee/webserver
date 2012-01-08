@@ -30,7 +30,7 @@
 #include "handler.h"
 #include "dwriter.h"
 #include "plugin_loader.h"
-#include "connection.h"
+#include "request.h"
 
 
 /* Data types

@@ -27,7 +27,7 @@
 
 #include <time.h>
 #include "common-internal.h"
-#include "connection.h"
+#include "request.h"
 #include "logger.h"
 #include "logger_writer.h"
 #include "virtual_server.h"

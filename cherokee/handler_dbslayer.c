@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "handler_dbslayer.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "thread.h"
 
 #define add_cstr_str(w,key,val,len)					\

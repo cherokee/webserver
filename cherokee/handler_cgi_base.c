@@ -28,7 +28,7 @@
 #include "socket.h"
 #include "util.h"
 
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "server-protected.h"
 #include "header-protected.h"
 #include "handler_file.h"

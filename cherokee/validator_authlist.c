@@ -25,8 +25,8 @@
 #include "common-internal.h"
 #include "validator_authlist.h"
 
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "plugin_loader.h"
 #include "util.h"
 

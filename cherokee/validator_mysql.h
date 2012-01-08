@@ -26,7 +26,7 @@
 #define CHEROKEE_VALIDATOR_MYSQL_H
 
 #include "validator.h"
-#include "connection.h"
+#include "request.h"
 
 #include <mysql.h>
 

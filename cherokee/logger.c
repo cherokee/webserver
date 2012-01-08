@@ -26,7 +26,7 @@
 #include "logger.h"
 #include "access.h"
 #include "header.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "xrealip.h"
 
 #include <stdlib.h>

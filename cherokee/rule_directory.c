@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "rule_directory.h"
 #include "plugin_loader.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES "rule,directory"

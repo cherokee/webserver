@@ -26,7 +26,7 @@
 #define CHEROKEE_LOGGER_CUSTOM_H
 
 #include "common-internal.h"
-#include "connection.h"
+#include "request.h"
 #include "template.h"
 #include "logger.h"
 #include "logger_writer.h"

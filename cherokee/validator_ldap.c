@@ -28,7 +28,7 @@
 
 #include "plugin_loader.h"
 #include "validator_ldap.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 

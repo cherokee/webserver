@@ -27,7 +27,7 @@
 
 #include "server.h"
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "header-protected.h"
 
 

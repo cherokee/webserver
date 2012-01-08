@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "handler_empty_gif.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 
 #define ENTRIES "handler,empty_gif"
 

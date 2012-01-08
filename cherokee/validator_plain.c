@@ -26,8 +26,8 @@
 #include "validator_plain.h"
 #include "thread.h"
 
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "plugin_loader.h"
 
 

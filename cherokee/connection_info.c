@@ -25,7 +25,7 @@
 #include "common-internal.h"
 
 #include "connection_info.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "thread.h"
 #include "server-protected.h"
 #include "handler_file.h"

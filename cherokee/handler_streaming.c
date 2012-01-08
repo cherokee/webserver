@@ -25,8 +25,8 @@
 #include "common-internal.h"
 #include "handler_streaming.h"
 
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "avl.h"
 #include "util.h"
 

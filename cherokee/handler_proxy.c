@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "handler_proxy.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 #include "thread.h"
 #include "server-protected.h"

@@ -25,9 +25,9 @@
 #include "common-internal.h"
 #include "handler_redir.h"
 
-#include "connection.h"
+#include "request.h"
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "pcre/pcre.h"
 #include "regex.h"
 #include "util.h"

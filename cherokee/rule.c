@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "rule.h"
-#include "connection.h"
+#include "request.h"
 #include "virtual_server.h"
 #include "util.h"
 

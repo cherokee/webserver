@@ -26,7 +26,7 @@
 #define CHEROKEE_VALIDATOR_PLAIN_H
 
 #include "validator_file.h"
-#include "connection.h"
+#include "request.h"
 #include "plugin_loader.h"
 
 typedef struct {

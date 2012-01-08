@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "post.h"
 
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES           "post"

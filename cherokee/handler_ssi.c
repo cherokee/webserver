@@ -29,7 +29,7 @@
 
 #include "util.h"
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "virtual_server.h"
 
 #define ENTRIES "handler,ssi"

@@ -31,8 +31,8 @@
 
 #include "plugin_loader.h"
 #include "thread.h"
-#include "connection.h"
-#include "connection-protected.h"
+#include "request.h"
+#include "request-protected.h"
 #include "sha1.h"
 #include "md5crypt.h"
 #include "util.h"

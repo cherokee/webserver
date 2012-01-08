@@ -1575,11 +1575,11 @@ $(common_cgi) \
 $(common_val_file) \
 $(common_rrd_tools) \
 \
-connection.h \
-connection-protected.h \
+request-protected.h \
+request.h \
+request.c \
 connection-poll.h \
 connection-poll.c \
-connection.c \
 handler.h \
 handler.c \
 rule.h \
@@ -1676,7 +1676,7 @@ server.h \
 logger.h \
 handler.h \
 encoder.h \
-connection.h \
+request.h \
 plugin.h \
 plugin_loader.h \
 nonce.h \

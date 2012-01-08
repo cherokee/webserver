@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "source_interpreter.h"
 #include "util.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "thread.h"
 #include "bogotime.h"
 #include "spawner.h"

@@ -25,11 +25,11 @@
 #include "common-internal.h"
 #include "handler_uwsgi.h"
 
-#include "connection.h"
+#include "request.h"
 #include "source_interpreter.h"
 #include "thread.h"
 #include "util.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "bogotime.h"
 
 #define ENTRIES "handler,cgi"

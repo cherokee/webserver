@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "handler_secdownload.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES "handler,secdownload"

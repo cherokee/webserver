@@ -26,7 +26,7 @@
 #include "rule_request.h"
 #include "plugin_loader.h"
 #include "server-protected.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 #include "pcre/pcre.h"
 

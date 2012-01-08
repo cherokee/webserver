@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "handler_custom_error.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 PLUGIN_INFO_HANDLER_EASIEST_INIT (custom_error, http_all_methods);

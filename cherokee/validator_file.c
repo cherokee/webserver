@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "validator_file.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 
 /* Properties
  */

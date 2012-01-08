@@ -27,7 +27,7 @@
 #include "crc32.h"
 #include "encoder_gzip.h"
 #include "plugin_loader.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "header.h"
 #include "util.h"
 

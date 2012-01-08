@@ -27,9 +27,9 @@
 #include "handler_redir.h"
 #include "handler_error_redir.h"
 
-#include "connection.h"
+#include "request.h"
 #include "plugin_loader.h"
-#include "connection-protected.h"
+#include "request-protected.h"
 #include "util.h"
 
 #define ENTRIES "handler,error_handler,redir"

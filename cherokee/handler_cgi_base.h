@@ -30,7 +30,7 @@
 #include "buffer.h"
 #include "handler.h"
 #include "list.h"
-#include "connection.h"
+#include "request.h"
 #include "xrealip.h"
 
 #define SUPPORT_XSENDFILE

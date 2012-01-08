@@ -34,7 +34,7 @@
 #include "ldap.h"
 
 #include "validator.h"
-#include "connection.h"
+#include "request.h"
 
 
 typedef struct {
