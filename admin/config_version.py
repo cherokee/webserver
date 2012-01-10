@@ -88,7 +88,7 @@ def config_version_get_current():
 
     major = int(v1)
     minor = int(v2)
-    micro = int(v3)
+    micro = int(v3.strip('A1'))    
 
     return "%03d%03d%03d" %(major, minor, micro)
 
