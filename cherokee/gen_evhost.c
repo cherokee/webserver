@@ -45,7 +45,7 @@ _free (cherokee_generic_evhost_t *evhost)
 }
 
 static ret_t
-_check_document_root (cherokee_request_t *conn)
+_check_document_root (cherokee_request_t *req)
 
 {
 	ret_t                     ret;
@@ -53,9 +53,9 @@ _check_document_root (cherokee_request_t *conn)
 	struct stat              *info;
 	cherokee_iocache_entry_t *io_entry = NULL;
 
-	ret = cherokee_io_stat (REQ_SRV(conn)->iocache,
-				&conn->local_directory,
-				(REQ_SRV(conn)->iocache != NULL),
+	ret = cherokee_io_stat (REQ_SRV(req)->iocache,
+				&req->local_directory,
+				(REQ_SRV(req)->iocache != NULL),
 				&stat_mem, &io_entry, &info);
 
 	if (ret != ret_ok) {
@@ -79,14 +79,14 @@ out:
 
 static ret_t
 _render_document_root (cherokee_generic_evhost_t *evhost,
-		       cherokee_request_t     *conn)
+		       cherokee_request_t        *req)
 {
 	ret_t ret;
 
 	/* Render the document root
 	 */
 	ret = cherokee_template_render (&evhost->tpl_document_root,
-					&conn->local_directory, conn);
+					&req->local_directory, req);
 	if (unlikely (ret != ret_ok))
 		return ret_error;
 
@@ -95,13 +95,13 @@ _render_document_root (cherokee_generic_evhost_t *evhost,
 
 	/* Check the Document Root
 	 */
-	ret = _check_document_root (conn);
+	ret = _check_document_root (req);
 	if (ret != ret_ok) {
-		TRACE(ENTRIES, "Dynamic Document Root '%s' doesn't exist\n", conn->local_directory.buf);
+		TRACE(ENTRIES, "Dynamic Document Root '%s' doesn't exist\n", req->local_directory.buf);
 		return ret_not_found;
 	}
 
-	TRACE(ENTRIES, "Dynamic Document Root '%s' exists\n", conn->local_directory.buf);
+	TRACE(ENTRIES, "Dynamic Document Root '%s' exists\n", req->local_directory.buf);
 	return ret_ok;
 }
 
@@ -137,10 +137,12 @@ add_domain (cherokee_template_t       *template,
             cherokee_buffer_t         *output,
             void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
+
 	UNUSED(template);
 	UNUSED(token);
-	return cherokee_buffer_add_buffer (output, &conn->host);
+
+	return cherokee_buffer_add_buffer (output, &req->host);
 }
 
 
@@ -150,14 +152,14 @@ add_tld (cherokee_template_t       *template,
 	 cherokee_buffer_t         *output,
 	 void                      *param)
 {
-	const char            *p;
-	const char            *end;
-	cherokee_request_t *conn = REQ(param);
+	const char         *p;
+	const char         *end;
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED(template);
 	UNUSED(token);
 
-	end = conn->host.buf + conn->host.len;
+	end = req->host.buf + req->host.len;
 	p   = end - 1;
 
 	if (unlikely (*p == '.')) {
@@ -165,7 +167,7 @@ add_tld (cherokee_template_t       *template,
 		return ret_deny;
 	}
 
-	while (p > conn->host.buf) {
+	while (p > req->host.buf) {
 		if (*p != '.') {
 			p--;
 			continue;
@@ -186,14 +188,14 @@ add_domain_no_tld (cherokee_template_t       *template,
 		   cherokee_buffer_t         *output,
 		   void                      *param)
 {
-	const char            *p;
-	const char            *end;
-	cherokee_request_t *conn = REQ(param);
+	const char         *p;
+	const char         *end;
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED(template);
 	UNUSED(token);
 
-	end = conn->host.buf + conn->host.len;
+	end = req->host.buf + req->host.len;
 	p   = end - 1;
 
 	if (unlikely (*p == '.')) {
@@ -201,13 +203,13 @@ add_domain_no_tld (cherokee_template_t       *template,
 		return ret_deny;
 	}
 
-	while (p > conn->host.buf) {
+	while (p > req->host.buf) {
 		if (*p != '.') {
 			p--;
 			continue;
 		}
 
-		cherokee_buffer_add (output, conn->host.buf, p - conn->host.buf);
+		cherokee_buffer_add (output, req->host.buf, p - req->host.buf);
 		return ret_ok;
 	}
 
@@ -217,15 +219,15 @@ add_domain_no_tld (cherokee_template_t       *template,
 
 
 static ret_t
-_add_subdomain (cherokee_buffer_t     *output,
-		cherokee_request_t *conn,
-		int                    starting_dot)
+_add_subdomain (cherokee_buffer_t  *output,
+		cherokee_request_t *req,
+		int                 starting_dot)
 {
 	const char *p;
 	const char *end;
 	const char *dom_end = NULL;
 
-	end = conn->host.buf + conn->host.len;
+	end = req->host.buf + req->host.len;
 	p   = end - 1;
 
 	if (unlikely (*p == '.')) {
@@ -233,7 +235,7 @@ _add_subdomain (cherokee_buffer_t     *output,
 		return ret_deny;
 	}
 
-	while (p > conn->host.buf) {
+	while (p > req->host.buf) {
 		if (*p != '.') {
 			p--;
 			continue;

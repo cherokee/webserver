@@ -103,15 +103,15 @@ go_out:
 
 
 static ret_t
-get_nearest_name (cherokee_request_t *conn,
-		  cherokee_buffer_t     *local_dir,
-		  cherokee_buffer_t     *request,
-		  cherokee_buffer_t     *output)
+get_nearest_name (cherokee_request_t *req,
+		  cherokee_buffer_t  *local_dir,
+		  cherokee_buffer_t  *request,
+		  cherokee_buffer_t  *output)
 {
 	ret_t              ret;
 	char              *rest;
-	cherokee_thread_t *thread = REQ_THREAD(conn);
-	cherokee_buffer_t *req    = THREAD_TMP_BUF1(thread);
+	cherokee_thread_t *thread = REQ_THREAD(req);
+	cherokee_buffer_t *tmp    = THREAD_TMP_BUF1(thread);
 
 	/* Build the local request path
 	 */
@@ -121,13 +121,13 @@ get_nearest_name (cherokee_request_t *conn,
 	}
 	rest++;
 
-	cherokee_buffer_clean (req);
-	cherokee_buffer_add_buffer (req, local_dir);
-	cherokee_buffer_add (req, request->buf, rest - request->buf);
+	cherokee_buffer_clean (tmp);
+	cherokee_buffer_add_buffer (tmp, local_dir);
+	cherokee_buffer_add (tmp, request->buf, rest - request->buf);
 
 	/* Copy the new filename to the output buffer
 	 */
-	ret = get_nearest_from_directory (req->buf, rest, output);
+	ret = get_nearest_from_directory (tmp->buf, rest, output);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -142,18 +142,18 @@ get_nearest_name (cherokee_request_t *conn,
 static ret_t
 error_nn_init (cherokee_handler_error_t *hdl)
 {
-	ret_t                  ret;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	ret_t               ret;
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
-	cherokee_buffer_clean (&conn->redirect);
+	cherokee_buffer_clean (&req->redirect);
 
-	ret = get_nearest_name (conn, &conn->local_directory, &conn->request, &conn->redirect);
+	ret = get_nearest_name (req, &req->local_directory, &req->request, &req->redirect);
 	if (unlikely (ret != ret_ok)) {
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 
-	conn->error_code = http_moved_temporarily;
+	req->error_code = http_moved_temporarily;
 	return ret_error;
 }
 
@@ -185,13 +185,13 @@ error_nn_free (cherokee_handler_error_t *hdl)
 
 
 ret_t
-cherokee_handler_error_nn_new (cherokee_handler_t      **hdl,
-			       cherokee_request_t    *conn,
-			       cherokee_module_props_t  *props)
+cherokee_handler_error_nn_new (cherokee_handler_t     **hdl,
+			       cherokee_request_t      *req,
+			       cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_error_nn);
 
-	cherokee_handler_init_base (HANDLER(n), conn, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(error_nn));
+	cherokee_handler_init_base (HANDLER(n), req, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(error_nn));
 	HANDLER(n)->support = hsupport_error | hsupport_length;
 
 	MODULE(n)->init         = (handler_func_init_t) error_nn_init;

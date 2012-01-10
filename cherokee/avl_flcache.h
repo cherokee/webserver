@@ -54,7 +54,7 @@ typedef struct {
 	cherokee_buffer_t            query_string;
 	cherokee_buffer_t            content_encoding;
 
-	cherokee_request_t       *conn_ref;
+	cherokee_request_t          *req_ref;
 
 	cherokee_flcache_status_t    status;
 	cherokee_buffer_t            file;

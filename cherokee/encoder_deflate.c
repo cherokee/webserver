@@ -161,12 +161,12 @@ get_deflate_error_string (int err)
 
 ret_t
 cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder,
-			       cherokee_request_t      *conn)
+			       cherokee_request_t         *req)
 {
 	int       err;
 	z_stream *z = &encoder->stream;
 
-	UNUSED (conn);
+	UNUSED (req);
 
 	/* Set the workspace
 	 */

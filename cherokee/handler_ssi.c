@@ -389,9 +389,9 @@ static ret_t
 init (cherokee_handler_ssi_t *hdl,
       cherokee_buffer_t      *local_path)
 {
-	int                    re;
-	ret_t                  ret;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	int                 re;
+	ret_t               ret;
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	/* Stat the file
 	 */
@@ -399,13 +399,13 @@ init (cherokee_handler_ssi_t *hdl,
 	if (re < 0) {
 		switch (errno) {
 		case ENOENT:
-			conn->error_code = http_not_found;
+			req->error_code = http_not_found;
 			break;
 		case EACCES:
-			conn->error_code = http_access_denied;
+			req->error_code = http_access_denied;
 			break;
 		default:
-			conn->error_code = http_internal_error;
+			req->error_code = http_internal_error;
 		}
 		return ret_error;
 	}
@@ -429,13 +429,13 @@ init (cherokee_handler_ssi_t *hdl,
 ret_t
 cherokee_handler_ssi_init (cherokee_handler_ssi_t *hdl)
 {
-	ret_t                  ret;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	ret_t               ret;
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	/* Build the local directory
 	 */
-	cherokee_buffer_add_buffer (&hdl->dir, &conn->local_directory);
-	cherokee_buffer_add_buffer (&hdl->dir, &conn->request);
+	cherokee_buffer_add_buffer (&hdl->dir, &req->local_directory);
+	cherokee_buffer_add_buffer (&hdl->dir, &req->request);
 
 	while (true) {
 		if (cherokee_buffer_is_empty (&hdl->dir))
@@ -450,9 +450,9 @@ cherokee_handler_ssi_init (cherokee_handler_ssi_t *hdl)
 
 	/* Real init function
 	 */
-	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
-	ret = init (hdl, &conn->local_directory);
-	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
+	cherokee_buffer_add_buffer (&req->local_directory, &req->request);
+	ret = init (hdl, &req->local_directory);
+	cherokee_buffer_drop_ending (&req->local_directory, req->request.len);
 
 	return ret;
 }
@@ -481,16 +481,16 @@ ret_t
 cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 				  cherokee_buffer_t      *buffer)
 {
-	ret_t                  ret;
-	char                  *ext;
-	cherokee_buffer_t     *mime = NULL;
-	cherokee_server_t     *srv  = HANDLER_SRV(hdl);
-	cherokee_request_t *conn = HANDLER_REQ(hdl);;
+	ret_t               ret;
+	char               *ext;
+	cherokee_buffer_t  *mime = NULL;
+	cherokee_server_t  *srv  = HANDLER_SRV(hdl);
+	cherokee_request_t *req  = HANDLER_REQ(hdl);;
 
 	/* MIME type
 	 */
 	if (srv->mime != NULL) {
-		ext = strrchr (conn->request.buf, '.');
+		ext = strrchr (req->request.buf, '.');
 		if (ext == NULL)
 			return ret_ok;
 
@@ -506,7 +506,7 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 
 	/* Length
 	 */
-	if (cherokee_request_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(req)) {
 		HANDLER(hdl)->support = hsupport_length;
 
 		cherokee_buffer_add_str     (buffer, "Content-Length: ");

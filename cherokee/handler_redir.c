@@ -50,19 +50,19 @@ substitute (cherokee_handler_redir_t *hdl,
 	    cint_t                   *ovector,
 	    cint_t                    ovector_size)
 {
-	ret_t                  ret;
-	char                  *token;
-	cint_t                 offset;
-	cherokee_request_t *conn   = HANDLER_REQ(hdl);
-	cherokee_buffer_t     *tmp    = THREAD_TMP_BUF2(HANDLER_THREAD(hdl));
+	ret_t               ret;
+	char               *token;
+	cint_t              offset;
+	cherokee_request_t *req     = HANDLER_REQ(hdl);
+	cherokee_buffer_t  *tmp     = THREAD_TMP_BUF2(HANDLER_THREAD(hdl));
 
 	cherokee_buffer_clean (tmp);
 
 	/* Replace regex matches (vserver match)
 	 */
-	ret = cherokee_regex_substitute (regex, &conn->host, tmp,
-					 conn->regex_host_ovector,
-					 conn->regex_host_ovecsize, '^');
+	ret = cherokee_regex_substitute (regex, &req->host, tmp,
+					 req->regex_host_ovector,
+					 req->regex_host_ovecsize, '^');
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -79,18 +79,18 @@ substitute (cherokee_handler_redir_t *hdl,
 	token = strnstr (target->buf, "${host}", target->len);
 	if (token != NULL) {
 		offset = token - target->buf;
-		if (! cherokee_buffer_is_empty (&conn->host)) {
-			cherokee_buffer_insert_buffer (target, &conn->host, offset);
-			cherokee_buffer_remove_chunk (target,  offset + conn->host.len, 7);
+		if (! cherokee_buffer_is_empty (&req->host)) {
+			cherokee_buffer_insert_buffer (target, &req->host, offset);
+			cherokee_buffer_remove_chunk (target,  offset + req->host.len, 7);
 
-		} else if (! cherokee_buffer_is_empty (&conn->bind->ip)) {
-			cherokee_buffer_insert_buffer (target, &conn->bind->ip, offset);
-			cherokee_buffer_remove_chunk (target, offset + conn->bind->ip.len, 7);
+		} else if (! cherokee_buffer_is_empty (&req->bind->ip)) {
+			cherokee_buffer_insert_buffer (target, &req->bind->ip, offset);
+			cherokee_buffer_remove_chunk (target, offset + req->bind->ip.len, 7);
 
 		} else {
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
-			ret = cherokee_copy_local_address (&conn->socket, &tmp);
+			ret = cherokee_copy_local_address (&req->socket, &tmp);
 			if (ret == ret_ok) {
 				cherokee_buffer_insert_buffer (target, &tmp, offset);
 				cherokee_buffer_remove_chunk (target, offset + tmp.len, 7);
@@ -107,22 +107,22 @@ substitute (cherokee_handler_redir_t *hdl,
 static ret_t
 match_and_substitute (cherokee_handler_redir_t *hdl)
 {
-	cherokee_list_t       *i;
-	ret_t                  ret;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
-	cherokee_buffer_t     *tmp  = THREAD_TMP_BUF1(HANDLER_THREAD(hdl));
+	cherokee_list_t    *i;
+	ret_t               ret;
+	cherokee_request_t *req  = HANDLER_REQ(hdl);
+	cherokee_buffer_t  *tmp  = THREAD_TMP_BUF1(HANDLER_THREAD(hdl));
 
 	/* Append the query string
 	 */
-	if ((conn->web_directory.len > 1) &&
-	    (conn->options & conn_op_document_root))
+	if ((req->web_directory.len > 1) &&
+	    (req->options & conn_op_document_root))
 	{
-		cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
+		cherokee_buffer_prepend_buf (&req->request, &req->web_directory);
 	}
 
-	if  (! cherokee_buffer_is_empty (&conn->query_string)) {
-		cherokee_buffer_add_str (&conn->request, "?");
-		cherokee_buffer_add_buffer (&conn->request, &conn->query_string);
+	if  (! cherokee_buffer_is_empty (&req->query_string)) {
+		cherokee_buffer_add_str (&req->request, "?");
+		cherokee_buffer_add_buffer (&req->request, &req->query_string);
 	}
 
 	/* Try to match it
@@ -141,31 +141,31 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 		 * There is an special case though. When a connection is using the default
 		 * directory ("/"), it has to remove one character less.
 		 */
-		if (conn->web_directory.len == 1)
-			subject = conn->request.buf + (conn->web_directory.len - 1);
+		if (req->web_directory.len == 1)
+			subject = req->request.buf + (req->web_directory.len - 1);
 		else
-			subject = conn->request.buf + conn->web_directory.len;
+			subject = req->request.buf + req->web_directory.len;
 
 		subject_len = strlen (subject);
 
 		/* Case 1: No conn substitution, No local regex
 		 */
 		if ((list->re == NULL) &&
-		    (conn->regex_ovecsize == 0))
+		    (req->regex_ovecsize == 0))
 		{
-			TRACE (ENTRIES, "Using conn->ovector, size=%d\n",
-			       conn->regex_ovecsize);
+			TRACE (ENTRIES, "Using req->ovector, size=%d\n",
+			       req->regex_ovecsize);
 		}
 
 		/* Case 2: Cached conn substitution
 		 */
 		else if (list->re == NULL) {
 			memcpy (ovector,
-				conn->regex_ovector,
+				req->regex_ovector,
 				OVECTOR_LEN * sizeof(cint_t));
 
-			rc = conn->regex_ovecsize;
-			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", rc);
+			rc = req->regex_ovecsize;
+			TRACE (ENTRIES, "Using req->ovector, size=%d\n", rc);
 		}
 
 		/* Case 3: Use the rule-subentry regex
@@ -177,7 +177,7 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 			}
 
 			TRACE (ENTRIES, "subject = \"%s\" + len(\"%s\")-1=%d\n",
-			       conn->request.buf, conn->web_directory.buf, conn->web_directory.len - 1);
+			       req->request.buf, req->web_directory.buf, req->web_directory.len - 1);
 			TRACE (ENTRIES, "pcre_exec: subject=\"%s\" -> %d\n", subject, rc);
 
 			if (rc <= 0) {
@@ -187,8 +187,8 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 
 		/* Make a copy of the original request before rewrite it
 		 */
-		if (cherokee_buffer_is_empty (&conn->request_original)) {
-			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		if (cherokee_buffer_is_empty (&req->request_original)) {
+			cherokee_buffer_add_buffer (&req->request_original, &req->request);
 		}
 
 		cherokee_buffer_clean (tmp);
@@ -200,49 +200,49 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 			int   len;
 			char *args;
 
-			cherokee_buffer_clean (&conn->request);
-			cherokee_buffer_clean (&conn->pathinfo);
-			cherokee_buffer_clean (&conn->web_directory);
-			cherokee_buffer_clean (&conn->local_directory);
+			cherokee_buffer_clean (&req->request);
+			cherokee_buffer_clean (&req->pathinfo);
+			cherokee_buffer_clean (&req->web_directory);
+			cherokee_buffer_clean (&req->local_directory);
 
-			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
+			cherokee_buffer_ensure_size (&req->request, req->request.len + subject_len);
 			substitute (hdl,
 				    &list->subs,    /* regex str */
 				    tmp,            /* source    */
-				    &conn->request, /* target    */
+				    &req->request, /* target    */
 				    ovector, rc);   /* ovector   */
 
 
 			/* Arguments */
-			cherokee_split_arguments (&conn->request, 0, &args, &len);
+			cherokee_split_arguments (&req->request, 0, &args, &len);
 			if (len > 0) {
-				cherokee_buffer_clean (&conn->query_string);
-				cherokee_buffer_add (&conn->query_string, args, len);
-				cherokee_buffer_drop_ending (&conn->request, len+1);
+				cherokee_buffer_clean (&req->query_string);
+				cherokee_buffer_add (&req->query_string, args, len);
+				cherokee_buffer_drop_ending (&req->request, len+1);
 			}
 
 			/* Non-global redirection */
-			if (conn->request.buf[0] != '/') {
-				cherokee_buffer_prepend_str (&conn->request, "/");
+			if (req->request.buf[0] != '/') {
+				cherokee_buffer_prepend_str (&req->request, "/");
 			}
 
 			TRACE (ENTRIES, "Hidden redirect to: request=\"%s\" query_string=\"%s\"\n",
-			       conn->request.buf, conn->query_string.buf);
+			       req->request.buf, req->query_string.buf);
 
 			return ret_eagain;
 		}
 
 		/* External redirect
 		 */
-		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
+		cherokee_buffer_ensure_size (&req->redirect, req->request.len + subject_len);
 
 		substitute (hdl,
 			    &list->subs,     /* regex str */
 			    tmp,             /* source    */
-			    &conn->redirect, /* target    */
+			    &req->redirect, /* target    */
 			    ovector, rc);    /* ovector   */
 
-		TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
+		TRACE (ENTRIES, "Redirect %s -> %s\n", req->request_original.buf, req->redirect.buf);
 
 		ret = ret_ok;
 		goto out;
@@ -251,14 +251,14 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 	ret = ret_ok;
 
 out:
-	if (! cherokee_buffer_is_empty (&conn->query_string)) {
-		cherokee_buffer_drop_ending (&conn->request, conn->query_string.len + 1);
+	if (! cherokee_buffer_is_empty (&req->query_string)) {
+		cherokee_buffer_drop_ending (&req->request, req->query_string.len + 1);
 	}
 
-	if ((conn->web_directory.len > 1) &&
-	    (conn->options & conn_op_document_root))
+	if ((req->web_directory.len > 1) &&
+	    (req->options & conn_op_document_root))
 	{
-		cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
+		cherokee_buffer_move_to_begin (&req->request, req->web_directory.len);
 	}
 
 	return ret;
@@ -321,35 +321,35 @@ cherokee_handler_redir_free (cherokee_handler_redir_t *rehdl)
 ret_t
 cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 {
-	int                    request_end;
-	char                  *request_ending;
-	cherokee_request_t *conn = HANDLER_REQ(n);
+	int                 request_end;
+	char               *request_ending;
+	cherokee_request_t *req             = HANDLER_REQ(n);
 
 	/* Maybe ::new -> match_and_substitute() has already set
 	 * this redirection
 	 */
-	if (! cherokee_buffer_is_empty (&conn->redirect)) {
-		conn->error_code = http_moved_permanently;
+	if (! cherokee_buffer_is_empty (&req->redirect)) {
+		req->error_code = http_moved_permanently;
 		return ret_error;
 	}
 
 	/* Check if it has the URL
 	 */
 	if (HDL_REDIR_PROPS(n)->url.len <= 0) {
-		conn->error_code = http_internal_error;
+		req->error_code = http_internal_error;
 		return ret_error;
 	}
 
 	/* Try with URL directive
 	 */
-	request_end = (conn->request.len - conn->web_directory.len);
-	request_ending = conn->request.buf + conn->web_directory.len;
+	request_end = (req->request.len - req->web_directory.len);
+	request_ending = req->request.buf + req->web_directory.len;
 
-	cherokee_buffer_ensure_size (&conn->redirect, request_end + HDL_REDIR_PROPS(n)->url.len +1);
-	cherokee_buffer_add_buffer (&conn->redirect, &HDL_REDIR_PROPS(n)->url);
-	cherokee_buffer_add (&conn->redirect, request_ending, request_end);
+	cherokee_buffer_ensure_size (&req->redirect, request_end + HDL_REDIR_PROPS(n)->url.len +1);
+	cherokee_buffer_add_buffer (&req->redirect, &HDL_REDIR_PROPS(n)->url);
+	cherokee_buffer_add (&req->redirect, request_ending, request_end);
 
-	conn->error_code = http_moved_permanently;
+	req->error_code = http_moved_permanently;
 	return ret_ok;
 }
 

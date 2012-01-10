@@ -88,7 +88,8 @@ cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 
 
 static ret_t
-build_hardcoded_response_page (cherokee_request_t *conn, cherokee_buffer_t *buffer)
+build_hardcoded_response_page (cherokee_request_t *req,
+			       cherokee_buffer_t  *buffer)
 {
 	/* Avoid too many reallocations.
 	 */
@@ -101,33 +102,33 @@ build_hardcoded_response_page (cherokee_request_t *conn, cherokee_buffer_t *buff
 	/* Add page title
 	 */
 	cherokee_buffer_add_str (buffer, "<html>" CRLF "<head><title>");
-	cherokee_http_code_copy (conn->error_code, buffer);
+	cherokee_http_code_copy (req->error_code, buffer);
 
 	/* Add big banner
 	 */
 	cherokee_buffer_add_str (buffer, "</title>" CRLF
 				 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" CRLF
 				 "</head>" CRLF "<body>" CRLF "<h1>");
-	cherokee_http_code_copy (conn->error_code, buffer);
+	cherokee_http_code_copy (req->error_code, buffer);
 	cherokee_buffer_add_str (buffer, "</h1>" CRLF);
 
 	/* Maybe add some info
 	 */
-	switch (conn->error_code) {
+	switch (req->error_code) {
 	case http_not_found:
 	case http_gone:
 		cherokee_buffer_add_str (buffer, "The requested URL ");
-		if (! cherokee_buffer_is_empty (&conn->request_original)) {
-			cherokee_buffer_add_escape_html (buffer, &conn->request_original);
+		if (! cherokee_buffer_is_empty (&req->request_original)) {
+			cherokee_buffer_add_escape_html (buffer, &req->request_original);
 		}
-		else if (! cherokee_buffer_is_empty (&conn->request)) {
-			if (cherokee_request_use_webdir (conn)) {
-				cherokee_buffer_add_buffer (buffer, &conn->web_directory);
+		else if (! cherokee_buffer_is_empty (&req->request)) {
+			if (cherokee_request_use_webdir (req)) {
+				cherokee_buffer_add_buffer (buffer, &req->web_directory);
 			}
-			cherokee_buffer_add_escape_html (buffer, &conn->request);
+			cherokee_buffer_add_escape_html (buffer, &req->request);
 		}
 
-		if (conn->error_code == http_not_found) {
+		if (req->error_code == http_not_found) {
 			cherokee_buffer_add_str (buffer, " was not found on this server.");
 		} else {
 			cherokee_buffer_add_str (buffer,
@@ -139,7 +140,7 @@ build_hardcoded_response_page (cherokee_request_t *conn, cherokee_buffer_t *buff
 		cherokee_buffer_add_str (buffer,
 			"Your browser sent a request that this server could not understand.");
 		cherokee_buffer_add_str   (buffer, "<p><pre>");
-		cherokee_buffer_add_escape_html (buffer, conn->header.input_buffer);
+		cherokee_buffer_add_escape_html (buffer, req->header.input_buffer);
 		cherokee_buffer_add_str   (buffer, "</pre>");
 		break;
 
@@ -166,7 +167,7 @@ build_hardcoded_response_page (cherokee_request_t *conn, cherokee_buffer_t *buff
 	case http_moved_permanently:
 	case http_moved_temporarily:
 		cherokee_buffer_add_str         (buffer, "The document has moved <a href=\"");
-		cherokee_buffer_add_escape_html (buffer, &conn->redirect);
+		cherokee_buffer_add_escape_html (buffer, &req->redirect);
 		cherokee_buffer_add_str         (buffer, "\">here</a>.");
 		break;
 
@@ -196,7 +197,7 @@ build_hardcoded_response_page (cherokee_request_t *conn, cherokee_buffer_t *buff
 	/* Add page footer
 	 */
 	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
-	cherokee_buffer_add_buffer (buffer, &REQ_BIND(conn)->server_string_w_port);
+	cherokee_buffer_add_buffer (buffer, &REQ_BIND(req)->server_string_w_port);
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 
 	return ret_ok;
@@ -206,15 +207,15 @@ build_hardcoded_response_page (cherokee_request_t *conn, cherokee_buffer_t *buff
 ret_t
 cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 {
-	ret_t                  ret;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	ret_t               ret;
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	/* If needed then generate the error web page.
 	 * Some HTTP response codes should not include body
 	 * because it's forbidden by the RFC.
 	 */
-	if (http_code_with_body (conn->error_code)) {
-		ret = build_hardcoded_response_page (conn, &hdl->content);
+	if (http_code_with_body (req->error_code)) {
+		ret = build_hardcoded_response_page (req, &hdl->content);
 		if (unlikely(ret < ret_ok))
 			return ret;
 	}
@@ -226,11 +227,11 @@ cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 ret_t
 cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	/* It has special headers on protocol upgrading
 	 */
-	switch (conn->upgrade) {
+	switch (req->upgrade) {
 	case http_upgrade_nothing:
 		break;
 	case http_upgrade_tls10:
@@ -250,23 +251,23 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	 * 304 responses should only include the
 	 * Last-Modified, ETag, Expires and Cache-Control headers.
 	 */
-	if (!http_code_with_body (conn->error_code)) {
+	if (!http_code_with_body (req->error_code)) {
 		return ret_ok;
 	}
 
-	if (cherokee_request_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(req)) {
 
 		HANDLER(hdl)->support |= hsupport_length;
 
-		if (conn->error_code == http_range_not_satisfiable) {
+		if (req->error_code == http_range_not_satisfiable) {
 			/* The handler that attended the request has put the content
-			* length in conn->range_end in order to allow it to send the
+			* length in req->range_end in order to allow it to send the
 			* right length to the client.
 			*
 			* "Content-Range: bytes *" "/" FMT_OFFSET CRLF
 			*/
 			cherokee_buffer_add_str     (buffer, "Content-Range: bytes */");
-			cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_end);
+			cherokee_buffer_add_ullong10(buffer, (cullong_t)req->range_end);
 			cherokee_buffer_add_str     (buffer, CRLF);
 		}
 
@@ -279,8 +280,8 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	 */
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
 
-	if (http_type_400(conn->error_code) ||
-	    http_type_500(conn->error_code))
+	if (http_type_400(req->error_code) ||
+	    http_type_500(req->error_code))
 	{
 		cherokee_buffer_add_str (buffer, "Cache-Control: no-cache"CRLF);
 		cherokee_buffer_add_str (buffer, "Pragma: no-cache"CRLF);

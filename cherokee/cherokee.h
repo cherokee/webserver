@@ -74,7 +74,7 @@
 /* Config library
  */
 #include <cherokee/admin_client.h>
-#include <cherokee/connection_info.h>
+#include <cherokee/request_info.h>
 
 
 #undef CHEROKEE_INSIDE_CHEROKEE_H

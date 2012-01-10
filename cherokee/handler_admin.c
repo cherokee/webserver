@@ -135,19 +135,19 @@ static ret_t
 front_line_cache_purge (cherokee_handler_admin_t *hdl)
 {
 	ret_t                      ret;
-	cherokee_request_t     *conn = HANDLER_REQ(hdl);
+	cherokee_request_t        *req  = HANDLER_REQ(hdl);
 	cherokee_virtual_server_t *vsrv = HANDLER_VSRV(hdl);
 
 	/* FLCache not active in the Virtual Server
 	 */
 	if (vsrv->flcache == NULL) {
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 
 	/* Remove the cache objects
 	 */
-	ret = cherokee_flcache_purge_path (vsrv->flcache, &conn->request);
+	ret = cherokee_flcache_purge_path (vsrv->flcache, &req->request);
 
 	switch (ret) {
 	case ret_ok:
@@ -155,11 +155,11 @@ front_line_cache_purge (cherokee_handler_admin_t *hdl)
 		return ret_ok;
 	case ret_not_found:
 		cherokee_dwriter_cstring (&hdl->dwriter, "not found");
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	default:
 		cherokee_dwriter_cstring (&hdl->dwriter, "error");
-		conn->error_code = http_internal_error;
+		req->error_code = http_internal_error;
 		return ret_error;
 
 	}
@@ -172,10 +172,10 @@ front_line_cache_purge (cherokee_handler_admin_t *hdl)
 ret_t
 cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
 {
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
-#define finishes_by(s) ((conn->request.len > sizeof(s)-1) && \
-			(!strncmp (conn->request.buf + conn->request.len - (sizeof(s)-1), s, sizeof(s)-1)))
+#define finishes_by(s) ((req->request.len > sizeof(s)-1) && \
+			(!strncmp (req->request.buf + req->request.len - (sizeof(s)-1), s, sizeof(s)-1)))
 
 	if (finishes_by ("/py")) {
 		hdl->dwriter.lang = dwriter_python;
@@ -189,7 +189,7 @@ cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
 
 	/* Front-Line Cache's PURGE
 	 */
-	if (conn->header.method == http_purge) {
+	if (req->header.method == http_purge) {
 		return front_line_cache_purge (hdl);
 	}
 
@@ -201,29 +201,29 @@ cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
 ret_t
 cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 {
-	int                      re;
-	ret_t                    ret;
-	char                    *tmp;
-	cherokee_buffer_t        post = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t        line = CHEROKEE_BUF_INIT;
-	cherokee_request_t   *conn = HANDLER_REQ(hdl);
+	int                 re;
+	ret_t               ret;
+	char               *tmp;
+	cherokee_buffer_t   post = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   line = CHEROKEE_BUF_INIT;
+	cherokee_request_t *req  = HANDLER_REQ(hdl);
 
 	/* Check for the post info
 	 */
-	if (! conn->post.has_info) {
-		conn->error_code = http_bad_request;
+	if (! req->post.has_info) {
+		req->error_code = http_bad_request;
 		return ret_error;
 	}
 
 	/* Process line per line
 	 */
-	ret = cherokee_post_read (&conn->post, &conn->socket, &post);
+	ret = cherokee_post_read (&req->post, &req->socket, &post);
 	switch (ret) {
 	case ret_ok:
 	case ret_eagain:
 		break;
 	default:
-		conn->error_code = http_bad_request;
+		req->error_code = http_bad_request;
 		return ret_error;
 	}
 
@@ -251,7 +251,7 @@ cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 		 */
 		ret = process_request_line (hdl, &line);
 		if (ret == ret_error) {
-			conn->error_code = http_bad_request;
+			req->error_code = http_bad_request;
 			ret = ret_error;
 			goto exit2;
 		}
@@ -265,7 +265,7 @@ cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 
 	/* There might be more POST to read
 	 */
-	re = cherokee_post_read_finished (&conn->post);
+	re = cherokee_post_read_finished (&req->post);
 	ret = re ? ret_ok : ret_eagain;
 
 exit2:
@@ -278,11 +278,11 @@ exit2:
 ret_t
 cherokee_handler_admin_add_headers (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	/* Regular request
 	 */
-	if (cherokee_request_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(req)) {
 		HANDLER(hdl)->support = hsupport_length;
 		cherokee_buffer_add_va (buffer, "Content-Length: %lu" CRLF, hdl->reply.len);
 	}

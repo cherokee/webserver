@@ -125,9 +125,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	cherokee_iocache_entry_t *io_entry    = NULL;
 	cherokee_iocache_t       *iocache     = NULL;
  	cherokee_boolean_t        use_iocache = true;
-	cherokee_request_t    *conn        = REQ(cnt);
-
-	TRACE_REQ(conn);
+	cherokee_request_t       *req         = REQ(cnt);
 
 	/* Check some properties
 	 */
@@ -139,16 +137,16 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 	/* Check the request
 	 */
-	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
+	cherokee_buffer_add_buffer (&req->local_directory, &req->request);
 
 	if (use_iocache)
-		iocache = REQ_SRV(conn)->iocache;
+		iocache = REQ_SRV(req)->iocache;
 
-	ret = cherokee_io_stat (iocache, &conn->local_directory, use_iocache, &nocache_info, &io_entry, &info);
+	ret = cherokee_io_stat (iocache, &req->local_directory, use_iocache, &nocache_info, &io_entry, &info);
 	exists = (ret == ret_ok);
 
 	TRACE (ENTRIES, "request: '%s', local: '%s', exists %d\n",
-	       conn->request.buf, conn->local_directory.buf, exists);
+	       req->request.buf, req->local_directory.buf, exists);
 
 	if (!exists) {
 		ret_t  ret;
@@ -159,48 +157,48 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		/* If PathInfo is not allowed just return 'Not Found'
 		 */
 		if (! PROP_COMMON(props)->allow_pathinfo) {
-			TRACE(ENTRIES, "Returns conn->error_code: %s\n", "http_not_found");
+			TRACE(ENTRIES, "Returns req->error_code: %s\n", "http_not_found");
 			cherokee_iocache_entry_unref (&io_entry);
 
-			conn->error_code = http_not_found;
+			req->error_code = http_not_found;
 			return ret_error;
 		}
 
 		/* Maybe it could stat() the file because the request contains
 		 * a PathInfo string at the end..
 		 */
-		begin = conn->local_directory.len - conn->request.len;
+		begin = req->local_directory.len - req->request.len;
 
-		ret = cherokee_split_pathinfo (&conn->local_directory, begin, true, &pathinfo, &pathinfo_len);
+		ret = cherokee_split_pathinfo (&req->local_directory, begin, true, &pathinfo, &pathinfo_len);
 		if ((ret == ret_not_found) || (pathinfo_len <= 0)) {
-			TRACE(ENTRIES, "Returns conn->error_code: %s\n", "http_not_found");
+			TRACE(ENTRIES, "Returns req->error_code: %s\n", "http_not_found");
 			cherokee_iocache_entry_unref (&io_entry);
 
-			conn->error_code = http_not_found;
+			req->error_code = http_not_found;
 			return ret_error;
 		}
 
 		/* Copy the PathInfo and clean the request
 		 */
-		if (cherokee_buffer_is_empty (&conn->request_original)) {
-			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
-			cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
+		if (cherokee_buffer_is_empty (&req->request_original)) {
+			cherokee_buffer_add_buffer (&req->request_original, &req->request);
+			cherokee_buffer_add_buffer (&req->query_string_original, &req->query_string);
 		}
 
-		cherokee_buffer_add (&conn->pathinfo, pathinfo, pathinfo_len);
-		cherokee_buffer_drop_ending (&conn->request, pathinfo_len);
+		cherokee_buffer_add (&req->pathinfo, pathinfo, pathinfo_len);
+		cherokee_buffer_drop_ending (&req->request, pathinfo_len);
 
 		/* Clean the local_directory, this connection is going
 		 * to restart the connection setup phase
 		 */
-		cherokee_buffer_clean (&conn->local_directory);
+		cherokee_buffer_clean (&req->local_directory);
 		cherokee_iocache_entry_unref (&io_entry);
 
-		TRACE_REQ(conn);
+		TRACE_REQ(req);
 		return ret_eagain;
 	}
 
-	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
+	cherokee_buffer_drop_ending (&req->local_directory, req->request.len);
 
 	/* Is it a file?
 	 */
@@ -214,25 +212,25 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	/* Is it a directory
 	 */
 	if (S_ISDIR(info->st_mode)) {
-		cherokee_thread_t *thread = REQ_THREAD(conn);
+		cherokee_thread_t *thread = REQ_THREAD(req);
 		cherokee_list_t   *i;
 
 		cherokee_iocache_entry_unref (&io_entry);
 
 		/* Maybe it has to be redirected
 		 */
-		if (cherokee_buffer_end_char (&conn->request) != '/') {
+		if (cherokee_buffer_end_char (&req->request) != '/') {
 			TRACE (ENTRIES, "going for %s\n", "handler_dir");
 			return cherokee_handler_dirlist_new (hdl, cnt, MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 		}
 
 		/* Add the request
 		 */
-		cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
+		cherokee_buffer_add_buffer (&req->local_directory, &req->request);
 
 		/* Have an index file inside?
 		 */
-		list_for_each (i, &REQ_VSRV(conn)->index_list) {
+		list_for_each (i, &REQ_VSRV(req)->index_list) {
 			int                is_dir;
 			cherokee_buffer_t *index = BUF(LIST_ITEM_INFO(i));
 
@@ -248,12 +246,12 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 				/* Build the secondary path
 				 */
-				cherokee_buffer_add_buffer (&conn->effective_directory, &conn->local_directory);
+				cherokee_buffer_add_buffer (&req->effective_directory, &req->local_directory);
 
 				/* Lets reconstruct the local directory
 				 */
 				cherokee_buffer_clean (new_local_dir);
-				cherokee_buffer_add_buffer (new_local_dir, &REQ_VSRV(conn)->root);
+				cherokee_buffer_add_buffer (new_local_dir, &REQ_VSRV(req)->root);
 				cherokee_buffer_add_buffer (new_local_dir, index);
 
 				ret = cherokee_io_stat (iocache, new_local_dir, use_iocache, &nocache_info, &io_entry, &info);
@@ -265,33 +263,33 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 				/* Build the new request before respin
 				 */
-				cherokee_buffer_clean (&conn->local_directory);
-				if (cherokee_buffer_is_empty (&conn->request_original)) {
-					cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
-					cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
+				cherokee_buffer_clean (&req->local_directory);
+				if (cherokee_buffer_is_empty (&req->request_original)) {
+					cherokee_buffer_add_buffer (&req->request_original, &req->request);
+					cherokee_buffer_add_buffer (&req->query_string_original, &req->query_string);
 				}
 
-				cherokee_buffer_clean (&conn->request);
-				cherokee_buffer_add_buffer (&conn->request, index);
+				cherokee_buffer_clean (&req->request);
+				cherokee_buffer_add_buffer (&req->request, index);
 
 				TRACE (ENTRIES, "top level index matched %s\n", index->buf);
 
-				BIT_SET (conn->options, conn_op_root_index);
+				BIT_SET (req->options, conn_op_root_index);
 
-				TRACE_REQ(conn);
+				TRACE_REQ(req);
 				return ret_eagain;
 			}
 
 			/* stat() the possible new path
 			 */
-			cherokee_buffer_add_buffer (&conn->local_directory, index);
-			ret = cherokee_io_stat (iocache, &conn->local_directory, use_iocache, &nocache_info, &io_entry, &info);
+			cherokee_buffer_add_buffer (&req->local_directory, index);
+			ret = cherokee_io_stat (iocache, &req->local_directory, use_iocache, &nocache_info, &io_entry, &info);
 
 			exists =  (ret == ret_ok);
 			is_dir = ((ret == ret_ok) && S_ISDIR(info->st_mode));
 
 			cherokee_iocache_entry_unref (&io_entry);
-			cherokee_buffer_drop_ending (&conn->local_directory, index->len);
+			cherokee_buffer_drop_ending (&req->local_directory, index->len);
 
 			TRACE (ENTRIES, "trying index '%s', exists %d\n", index->buf, exists);
 
@@ -302,36 +300,36 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 			/* Add the index file to the request and clean up
 			 */
-			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
+			cherokee_buffer_drop_ending (&req->local_directory, req->request.len);
 
-			if (cherokee_buffer_is_empty (&conn->request_original)) {
-				cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
-				cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
+			if (cherokee_buffer_is_empty (&req->request_original)) {
+				cherokee_buffer_add_buffer (&req->request_original, &req->request);
+				cherokee_buffer_add_buffer (&req->query_string_original, &req->query_string);
 			}
 
-			cherokee_buffer_add_buffer (&conn->request, index);
+			cherokee_buffer_add_buffer (&req->request, index);
 
-			TRACE_REQ(conn);
+			TRACE_REQ(req);
 			return ret_eagain;
 		}
 
 		/* If the dir hasn't a index file, it uses dirlist
 		 */
-		cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
+		cherokee_buffer_drop_ending (&req->local_directory, req->request.len);
 		if (PROP_COMMON(props)->allow_dirlist) {
 			return cherokee_handler_dirlist_new (hdl, cnt,
 							     MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 		}
 
-		conn->error_code = http_access_denied;
+		req->error_code = http_access_denied;
 		return ret_error;
 	}
 
 	/* Unknown request type
 	 */
-	TRACE(ENTRIES, "Returns conn->error_code: %s\n", "http_unsupported_media_type");
+	TRACE(ENTRIES, "Returns req->error_code: %s\n", "http_unsupported_media_type");
 
-	conn->error_code = http_unsupported_media_type;
+	req->error_code = http_unsupported_media_type;
 	return ret_error;
 }
 

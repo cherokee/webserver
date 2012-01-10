@@ -36,9 +36,9 @@
  */
 
 ret_t
-cherokee_post_init (cherokee_post_t *post, void *conn)
+cherokee_post_init (cherokee_post_t *post, void *req)
 {
-	post->conn               = conn;
+	post->conn               = req;
 
 	post->len                = 0;
 	post->has_info           = false;
@@ -103,8 +103,8 @@ cherokee_post_mrproper (cherokee_post_t *post)
 
 
 static ret_t
-parse_header (cherokee_post_t       *post,
-	      cherokee_request_t *conn)
+parse_header (cherokee_post_t    *post,
+	      cherokee_request_t *req)
 {
 	ret_t    ret;
 	char    *info      = NULL;
@@ -120,7 +120,7 @@ parse_header (cherokee_post_t       *post,
 
 	/* Check "Transfer-Encoding"
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_transfer_encoding, &info, &info_len);
+	ret = cherokee_header_get_known (&req->header, header_transfer_encoding, &info, &info_len);
 	if (ret == ret_ok) {
 		if (strncasecmp (info, "chunked", MIN(info_len, 7)) == 0) {
 			TRACE (ENTRIES, "Post type: %s\n", "chunked");
@@ -133,9 +133,9 @@ parse_header (cherokee_post_t       *post,
 
 	/* Check "Content-Length"
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_content_length, &info, &info_len);
+	ret = cherokee_header_get_known (&req->header, header_content_length, &info, &info_len);
 	if (unlikely (ret != ret_ok)) {
-		conn->error_code = http_length_required;
+		req->error_code = http_length_required;
 		return ret_error;
 	}
 
@@ -145,7 +145,7 @@ parse_header (cherokee_post_t       *post,
 		      (info_len == 0) ||
 		      (info_len >= buf_size)))
 	{
-		conn->error_code = http_bad_request;
+		req->error_code = http_bad_request;
 		return ret_error;
 	}
 
@@ -156,7 +156,7 @@ parse_header (cherokee_post_t       *post,
 	 */
 	post->len = (off_t) atoll(buf);
 	if (unlikely (post->len < 0)) {
-		conn->error_code = http_bad_request;
+		req->error_code = http_bad_request;
 		return ret_error;
 	}
 
@@ -166,13 +166,13 @@ parse_header (cherokee_post_t       *post,
 
 
 static ret_t
-reply_100_continue (cherokee_post_t       *post,
-		    cherokee_request_t *conn)
+reply_100_continue (cherokee_post_t    *post,
+		    cherokee_request_t *req)
 {
 	ret_t  ret;
 	size_t written;
 
-	ret = cherokee_socket_bufwrite (&conn->socket, &post->read_header_100cont, &written);
+	ret = cherokee_socket_bufwrite (&req->socket, &post->read_header_100cont, &written);
 	if (ret != ret_ok) {
 		TRACE(ENTRIES, "Could not send a '100 Continue' response. Error=500.\n");
 		return ret;
@@ -191,8 +191,8 @@ reply_100_continue (cherokee_post_t       *post,
 
 
 static ret_t
-remove_surplus (cherokee_post_t       *post,
-		cherokee_request_t *conn)
+remove_surplus (cherokee_post_t    *post,
+		cherokee_request_t *req)
 {
 	ret_t   ret;
 	cuint_t header_len;
@@ -200,7 +200,7 @@ remove_surplus (cherokee_post_t       *post,
 
 	/* Get the HTTP request length
 	 */
-	ret = cherokee_header_get_length (&conn->header, &header_len);
+	ret = cherokee_header_get_length (&req->header, &header_len);
 	if (unlikely(ret != ret_ok)) {
 		return ret;
 	}
@@ -210,11 +210,11 @@ remove_surplus (cherokee_post_t       *post,
 	if (post->len > 0) {
 		/* Plain post: read what's pointed by Content-Length
 		 */
-		surplus_len = MIN (conn->incoming_header.len - header_len, post->len);
+		surplus_len = MIN (req->incoming_header.len - header_len, post->len);
 	} else {
 		/* Chunked: Assume everything after the header is POST
 		 */
-		surplus_len = conn->incoming_header.len - header_len;
+		surplus_len = req->incoming_header.len - header_len;
 	}
 	if (surplus_len <= 0) {
 		return ret_ok;
@@ -225,14 +225,14 @@ remove_surplus (cherokee_post_t       *post,
 	/* Move the surplus
 	 */
 	cherokee_buffer_add (&post->header_surplus,
-			     conn->incoming_header.buf + header_len,
+			     req->incoming_header.buf + header_len,
 			     surplus_len);
 
-	cherokee_buffer_remove_chunk (&conn->incoming_header,
+	cherokee_buffer_remove_chunk (&req->incoming_header,
 				      header_len, surplus_len);
 
 	TRACE (ENTRIES, "POST surplus: incoming_header is %d bytes (header len=%d)\n",
-	       conn->incoming_header.len, header_len);
+	       req->incoming_header.len, header_len);
 
 	return ret_ok;
 }
@@ -241,23 +241,23 @@ remove_surplus (cherokee_post_t       *post,
 ret_t
 cherokee_post_read_header (cherokee_post_t *post)
 {
-	ret_t                  ret;
-	char                  *info     = NULL;
-	cuint_t                info_len = 0;
-	cherokee_request_t *conn     = REQ(post->conn);
+	ret_t               ret;
+	char               *info     = NULL;
+	cuint_t             info_len = 0;
+	cherokee_request_t *req      = REQ(post->conn);
 
 	switch (post->read_header_phase) {
 	case cherokee_post_read_header_init:
 		/* Read the header
 		 */
-		ret = parse_header (post, conn);
+		ret = parse_header (post, req);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
 
 		post->has_info = true;
 
-		ret = remove_surplus (post, conn);
+		ret = remove_surplus (post, req);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
@@ -265,7 +265,7 @@ cherokee_post_read_header (cherokee_post_t *post)
 		/* Expect: 100-continue
 		 * http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html
 		 */
-		ret = cherokee_header_get_known (&conn->header, header_expect, &info, &info_len);
+		ret = cherokee_header_get_known (&req->header, header_expect, &info, &info_len);
 		if (likely (ret != ret_ok)) {
 			return ret_ok;
 		}
@@ -274,7 +274,7 @@ cherokee_post_read_header (cherokee_post_t *post)
 		post->read_header_phase = cherokee_post_read_header_100cont;
 
 	case cherokee_post_read_header_100cont:
-		return reply_100_continue (post, conn);
+		return reply_100_continue (post, req);
 	}
 
 	SHOULDNT_HAPPEN;
@@ -379,7 +379,7 @@ process_chunk (cherokee_post_t   *post,
 	 */
 	if (! cherokee_buffer_is_empty(in)) {
 		TRACE (ENTRIES, "There are %d left-over bytes in the post buffer -> incoming header", in->len);
-/* 		cherokee_buffer_add_buffer (&conn->incoming_header, in); */
+/* 		cherokee_buffer_add_buffer (&req->incoming_header, in); */
 /* 		cherokee_buffer_clean (in); */
 	}
 
@@ -394,9 +394,9 @@ do_read_plain (cherokee_post_t   *post,
 	       cherokee_buffer_t *buffer,
 	       off_t              to_read)
 {
-	ret_t                  ret;
-	size_t                 len;
-	cherokee_request_t *conn = REQ(post->conn);
+	ret_t               ret;
+	size_t              len;
+	cherokee_request_t *req = REQ(post->conn);
 
 	/* Surplus from header read
 	 */
@@ -426,8 +426,8 @@ do_read_plain (cherokee_post_t   *post,
 		return ret_ok;
 
 	case ret_eagain:
-		conn->polling_aim.fd   = sock_in->socket;
-		conn->polling_aim.mode = poll_mode_read;
+		req->polling_aim.fd   = sock_in->socket;
+		req->polling_aim.mode = poll_mode_read;
 		return ret_eagain;
 
 	default:
@@ -453,7 +453,7 @@ do_read_chunked (cherokee_post_t   *post,
 	case ret_ok:
 		break;
 	case ret_eagain:
-		/* conn->polling_aim is set */
+		/* req->polling_aim is set */
 		return ret_eagain;
 	default:
 		RET_UNKNOWN(ret);
@@ -513,9 +513,9 @@ do_send_socket (cherokee_post_t   *post,
 		cherokee_socket_t *sock,
 		cherokee_buffer_t *buffer)
 {
-	ret_t                  ret;
-	size_t                 written = 0;
-	cherokee_request_t *conn    = REQ(post->conn);
+	ret_t               ret;
+	size_t              written = 0;
+	cherokee_request_t *req     = REQ(post->conn);
 
 	ret = cherokee_socket_bufwrite (sock, buffer, &written);
 	switch (ret) {
@@ -529,8 +529,8 @@ do_send_socket (cherokee_post_t   *post,
 
 		TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
 
-		conn->polling_aim.fd   = sock->socket;
-		conn->polling_aim.mode = poll_mode_write;
+		req->polling_aim.fd   = sock->socket;
+		req->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
 
 	default:
@@ -642,10 +642,10 @@ cherokee_post_send_to_fd (cherokee_post_t    *post,
 			  cherokee_buffer_t  *tmp,
 			  cherokee_boolean_t *did_IO)
 {
-	ret_t                  ret;
-	int                    r;
-	cherokee_request_t *conn   = REQ(post->conn);
-	cherokee_buffer_t     *buffer = tmp ? tmp : &post->send.buffer;
+	ret_t               ret;
+	int                 r;
+	cherokee_request_t *req    = REQ(post->conn);
+	cherokee_buffer_t  *buffer = tmp ? tmp : &post->send.buffer;
 
 
 	switch (post->send.phase) {
@@ -680,8 +680,8 @@ cherokee_post_send_to_fd (cherokee_post_t    *post,
 			r = write (fd_out, buffer->buf, buffer->len);
 			if (r < 0) {
 				if (errno == EAGAIN) {
-					conn->polling_aim.fd   = fd_out;
-					conn->polling_aim.mode = poll_mode_write;
+					req->polling_aim.fd   = fd_out;
+					req->polling_aim.mode = poll_mode_write;
 					return ret_eagain;
 				}
 

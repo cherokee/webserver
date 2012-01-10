@@ -52,16 +52,16 @@ add_ip_remote (cherokee_template_t       *template,
 	       cherokee_buffer_t         *output,
 	       void                      *param)
 {
-	cuint_t                prev_len;
-	cherokee_request_t *conn      = REQ(param);
+	cuint_t             prev_len;
+	cherokee_request_t *req       = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
 	/* It has a X-Real-IP
 	 */
-	if (! cherokee_buffer_is_empty (&conn->logger_real_ip)) {
-		cherokee_buffer_add_buffer (output, &conn->logger_real_ip);
+	if (! cherokee_buffer_is_empty (&req->logger_real_ip)) {
+		cherokee_buffer_add_buffer (output, &req->logger_real_ip);
 		return ret_ok;
 	}
 
@@ -70,7 +70,7 @@ add_ip_remote (cherokee_template_t       *template,
 	prev_len = output->len;
 
 	cherokee_buffer_ensure_addlen (output, CHE_INET_ADDRSTRLEN);
-	cherokee_socket_ntop (&conn->socket,
+	cherokee_socket_ntop (&req->socket,
 			      (output->buf + output->len),
 			      (output->size - output->len) -1);
 
@@ -84,13 +84,13 @@ add_ip_local (cherokee_template_t       *template,
 	      cherokee_buffer_t         *output,
 	      void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	if (! cherokee_buffer_is_empty (&conn->bind->ip)) {
-		cherokee_buffer_add_buffer (output, &conn->bind->ip);
+	if (! cherokee_buffer_is_empty (&req->bind->ip)) {
+		cherokee_buffer_add_buffer (output, &req->bind->ip);
 	} else {
 		cherokee_buffer_add_str (output, "-");
 	}
@@ -104,15 +104,15 @@ add_status (cherokee_template_t       *template,
 	    cherokee_buffer_t         *output,
 	    void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	if (unlikely (conn->error_internal_code != http_unset)) {
-		cherokee_buffer_add_long10 (output, conn->error_internal_code);
+	if (unlikely (req->error_internal_code != http_unset)) {
+		cherokee_buffer_add_long10 (output, req->error_internal_code);
 	} else {
-		cherokee_buffer_add_ulong10 (output, conn->error_code);
+		cherokee_buffer_add_ulong10 (output, req->error_code);
 	}
 
 	return ret_ok;
@@ -124,12 +124,12 @@ add_transport (cherokee_template_t       *template,
 	       cherokee_buffer_t         *output,
 	       void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	if (conn->socket.is_tls) {
+	if (req->socket.is_tls) {
 		cherokee_buffer_add_str (output, "https");
 	} else {
 		cherokee_buffer_add_str (output, "http");
@@ -144,12 +144,12 @@ add_protocol (cherokee_template_t       *template,
 	      cherokee_buffer_t         *output,
 	      void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	switch (conn->header.version) {
+	switch (req->header.version) {
 	case http_version_11:
 		cherokee_buffer_add_str (output, "HTTP/1.1");
 		break;
@@ -172,12 +172,12 @@ add_port_server (cherokee_template_t       *template,
 		 cherokee_buffer_t         *output,
 		 void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	cherokee_buffer_add_buffer (output, &conn->bind->server_port);
+	cherokee_buffer_add_buffer (output, &req->bind->server_port);
 	return ret_ok;
 }
 
@@ -187,13 +187,13 @@ add_query_string (cherokee_template_t       *template,
 		  cherokee_buffer_t         *output,
 		  void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	if (! cherokee_buffer_is_empty(&conn->query_string)) {
-		cherokee_buffer_add_buffer (output, &conn->query_string);
+	if (! cherokee_buffer_is_empty(&req->query_string)) {
+		cherokee_buffer_add_buffer (output, &req->query_string);
 	} else {
 		cherokee_buffer_add_str (output, "-");
 	}
@@ -207,25 +207,25 @@ add_request_first_line (cherokee_template_t       *template,
 			cherokee_buffer_t         *output,
 			void                      *param)
 {
-	char                  *p;
-	char                  *end;
-	cherokee_request_t *conn = REQ(param);
+	char               *p;
+	char               *end;
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	end = (conn->header.input_buffer->buf +
-	       conn->header.input_buffer->len);
+	end = (req->header.input_buffer->buf +
+	       req->header.input_buffer->len);
 
-	p =  conn->header.input_buffer->buf;
-	p += conn->header.request_off;
+	p =  req->header.input_buffer->buf;
+	p += req->header.request_off;
 
 	while ((*p != CHR_CR) && (*p != CHR_LF) && (p < end))
 		p++;
 
 	cherokee_buffer_add (output,
-			     conn->header.input_buffer->buf,
-			     p - conn->header.input_buffer->buf);
+			     req->header.input_buffer->buf,
+			     p - req->header.input_buffer->buf);
 
 	return ret_ok;
 }
@@ -275,15 +275,15 @@ add_user_remote (cherokee_template_t       *template,
 		 cherokee_buffer_t         *output,
 		 void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	if ((conn->validator) &&
-	    (! cherokee_buffer_is_empty (&conn->validator->user)))
+	if ((req->validator) &&
+	    (! cherokee_buffer_is_empty (&req->validator->user)))
 	{
-		cherokee_buffer_add_buffer (output, &conn->validator->user);
+		cherokee_buffer_add_buffer (output, &req->validator->user);
 	} else {
 		cherokee_buffer_add_str (output, "-");
 	}
@@ -297,12 +297,12 @@ add_request (cherokee_template_t       *template,
 	     cherokee_buffer_t         *output,
 	     void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	cherokee_buffer_add_buffer (output, &conn->request);
+	cherokee_buffer_add_buffer (output, &req->request);
 	return ret_ok;
 }
 
@@ -312,15 +312,15 @@ add_request_original (cherokee_template_t       *template,
 		      cherokee_buffer_t         *output,
 		      void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	if (cherokee_buffer_is_empty (&conn->request_original)) {
-		cherokee_buffer_add_buffer (output, &conn->request);
+	if (cherokee_buffer_is_empty (&req->request_original)) {
+		cherokee_buffer_add_buffer (output, &req->request);
 	} else  {
-		cherokee_buffer_add_buffer (output, &conn->request_original);
+		cherokee_buffer_add_buffer (output, &req->request_original);
 	}
 
 	return ret_ok;
@@ -332,12 +332,12 @@ add_vserver_name (cherokee_template_t       *template,
 		  cherokee_buffer_t         *output,
 		  void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	cherokee_buffer_add_buffer (output, &REQ_VSRV(conn)->name);
+	cherokee_buffer_add_buffer (output, &REQ_VSRV(req)->name);
 	return ret_ok;
 }
 
@@ -347,18 +347,18 @@ add_vserver_name_req (cherokee_template_t       *template,
 		      cherokee_buffer_t         *output,
 		      void                      *param)
 {
-	ret_t                  ret;
-	char                  *colon;
-	char                  *header     = NULL;
-	cuint_t                header_len = 0;
-	cherokee_request_t *conn       = REQ(param);
+	ret_t               ret;
+	char               *colon;
+	char               *header     = NULL;
+	cuint_t             header_len = 0;
+	cherokee_request_t *req        = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
 	/* Log the 'Host:' header
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_host, &header, &header_len);
+	ret = cherokee_header_get_known (&req->header, header_host, &header, &header_len);
 	if ((ret == ret_ok) && (header)) {
 		colon = strchr (header, ':');
 		if (colon) {
@@ -371,7 +371,7 @@ add_vserver_name_req (cherokee_template_t       *template,
 
 	/* Plan B: Use the virtual server nick
 	 */
-	cherokee_buffer_add_buffer (output, &REQ_VSRV(conn)->name);
+	cherokee_buffer_add_buffer (output, &REQ_VSRV(req)->name);
 	return ret_ok;
 }
 
@@ -381,12 +381,12 @@ add_response_size (cherokee_template_t       *template,
 		   cherokee_buffer_t         *output,
 		   void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	cherokee_buffer_add_ullong10 (output, conn->tx);
+	cherokee_buffer_add_ullong10 (output, req->tx);
 	return ret_ok;
 }
 
@@ -396,13 +396,13 @@ add_http_host  (cherokee_template_t       *template,
 		cherokee_buffer_t         *output,
 		void                      *param)
 {
-	cherokee_request_t *conn = REQ(param);
+	cherokee_request_t *req = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	if (! cherokee_buffer_is_empty (&conn->host)) {
-		cherokee_buffer_add_buffer (output, &conn->host);
+	if (! cherokee_buffer_is_empty (&req->host)) {
+		cherokee_buffer_add_buffer (output, &req->host);
 	} else {
 		cherokee_buffer_add_char (output, '-');
 	}
@@ -416,15 +416,15 @@ add_http_referer  (cherokee_template_t       *template,
 		   cherokee_buffer_t         *output,
 		   void                      *param)
 {
-	ret_t                  ret;
-	char                  *referer     = NULL;
-	cuint_t                referer_len = 0;
-	cherokee_request_t *conn        = REQ(param);
+	ret_t               ret;
+	char               *referer     = NULL;
+	cuint_t             referer_len = 0;
+	cherokee_request_t *req         = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	ret = cherokee_header_get_known (&conn->header, header_referer, &referer, &referer_len);
+	ret = cherokee_header_get_known (&req->header, header_referer, &referer, &referer_len);
 	if (ret != ret_ok) {
 		cherokee_buffer_add_char (output, '-');
 		return ret_ok;
@@ -440,15 +440,15 @@ add_http_user_agent  (cherokee_template_t       *template,
 		      cherokee_buffer_t         *output,
 		      void                      *param)
 {
-	ret_t                  ret;
-	char                  *user_agent     = NULL;
-	cuint_t                user_agent_len = 0;
-	cherokee_request_t *conn           = REQ(param);
+	ret_t               ret;
+	char               *user_agent     = NULL;
+	cuint_t             user_agent_len = 0;
+	cherokee_request_t *req            = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	ret = cherokee_header_get_known (&conn->header, header_user_agent, &user_agent, &user_agent_len);
+	ret = cherokee_header_get_known (&req->header, header_user_agent, &user_agent, &user_agent_len);
 	if (ret != ret_ok) {
 		cherokee_buffer_add_char (output, '-');
 		return ret_ok;
@@ -464,15 +464,15 @@ add_http_cookie  (cherokee_template_t       *template,
 		  cherokee_buffer_t         *output,
 		  void                      *param)
 {
-	ret_t                  ret;
-	char                  *cookie     = NULL;
-	cuint_t                cookie_len = 0;
-	cherokee_request_t *conn       = REQ(param);
+	ret_t               ret;
+	char               *cookie     = NULL;
+	cuint_t             cookie_len = 0;
+	cherokee_request_t *req        = REQ(param);
 
 	UNUSED (template);
 	UNUSED (token);
 
-	ret = cherokee_header_get_known (&conn->header, header_cookie, &cookie, &cookie_len);
+	ret = cherokee_header_get_known (&req->header, header_cookie, &cookie, &cookie_len);
 	if (ret != ret_ok) {
 		cherokee_buffer_add_char (output, '-');
 		return ret_ok;
@@ -691,7 +691,7 @@ cherokee_logger_custom_reopen (cherokee_logger_custom_t *logger)
 
 ret_t
 cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
-				     cherokee_request_t    *conn)
+				     cherokee_request_t       *req)
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;
@@ -702,7 +702,7 @@ cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
 
 	/* Render the template
 	 */
-	ret = cherokee_template_render (&logger->template_conn, log, conn);
+	ret = cherokee_template_render (&logger->template_conn, log, req);
 	if (unlikely (ret != ret_ok)) {
 		goto error;
 	}

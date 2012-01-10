@@ -87,14 +87,14 @@ reactivate_entry (cherokee_balancer_entry_t *entry)
 
 static ret_t
 dispatch (cherokee_balancer_round_robin_t *balancer,
-	  cherokee_request_t           *conn,
+	  cherokee_request_t              *req,
 	  cherokee_source_t              **src)
 {
 	cherokee_balancer_entry_t *entry;
 	cuint_t                    tries  = 0;
 	cherokee_balancer_t       *gbal   = BAL(balancer);
 
-	UNUSED(conn);
+	UNUSED(req);
 	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
 
 	/* Pick the next entry */
@@ -135,7 +135,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 static ret_t
 report_fail (cherokee_balancer_round_robin_t *balancer,
-	     cherokee_request_t           *conn,
+	     cherokee_request_t              *req,
 	     cherokee_source_t               *src)
 {
 	ret_t                      ret;
@@ -143,7 +143,7 @@ report_fail (cherokee_balancer_round_robin_t *balancer,
 	cherokee_balancer_entry_t *entry;
 	cherokee_buffer_t          tmp    = CHEROKEE_BUF_INIT;
 
-	UNUSED(conn);
+	UNUSED(req);
 	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
 
 	list_for_each (i, &BAL(balancer)->entries) {

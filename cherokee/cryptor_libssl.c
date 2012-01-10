@@ -198,10 +198,10 @@ _vserver_free (cherokee_cryptor_vserver_libssl_t *cryp_vsrv)
 }
 
 ret_t
-cherokee_cryptor_libssl_find_vserver (SSL *ssl,
-				      cherokee_server_t     *srv,
-				      cherokee_buffer_t     *servername,
-				      cherokee_request_t *conn)
+cherokee_cryptor_libssl_find_vserver (SSL                *ssl,
+				      cherokee_server_t  *srv,
+				      cherokee_buffer_t  *servername,
+				      cherokee_request_t *req)
 {
 	ret_t                      ret;
 	cherokee_virtual_server_t *vsrv = NULL;
@@ -210,7 +210,7 @@ cherokee_cryptor_libssl_find_vserver (SSL *ssl,
 	/* Try to match the connection to a server
 	 */
 
-	ret = cherokee_server_get_vserver(srv, servername, conn, &vsrv);
+	ret = cherokee_server_get_vserver(srv, servername, req, &vsrv);
 	if ((ret != ret_ok) || (vsrv == NULL)) {
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SRV_MATCH, servername->buf);
 		return ret_error;
@@ -257,17 +257,17 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	ret_t                      ret;
 	int                        re;
 	const char                *servername;
-	cherokee_request_t     *conn;
+	cherokee_request_t        *req;
 	cherokee_buffer_t          tmp;
-	cherokee_server_t         *srv       = SRV(arg);
-	cherokee_virtual_server_t *vsrv      = NULL;
+	cherokee_server_t         *srv          = SRV(arg);
+	cherokee_virtual_server_t *vsrv         = NULL;
 
 	UNUSED(ad);
 
 	/* Get the pointer to the socket
 	 */
-	conn = SSL_get_app_data (ssl);
-	if (unlikely (conn == NULL)) {
+	req = SSL_get_app_data (ssl);
+	if (unlikely (req == NULL)) {
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SOCKET, ssl);
 		return SSL_TLSEXT_ERR_ALERT_FATAL;
 	}
@@ -281,7 +281,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	if (servername == NULL) {
 		/* Set the server name to the IP address if we couldn't get the host name via SNI
 		 */
-		cherokee_socket_ntop (&conn->socket, tmp.buf, tmp.size);
+		cherokee_socket_ntop (&req->socket, tmp.buf, tmp.size);
 		TRACE (ENTRIES, "No SNI: Did not provide a server name, using IP='%s' as servername.\n", tmp.buf);
 	} else {
 		cherokee_buffer_add (&tmp, servername, strlen(servername));
@@ -290,7 +290,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 
 	/* Look up and change the vserver
 	 */
-	ret = cherokee_cryptor_libssl_find_vserver(ssl, srv, &tmp, conn);
+	ret = cherokee_cryptor_libssl_find_vserver(ssl, srv, &tmp, req);
 	if (ret != ret_ok) {
 		re = SSL_TLSEXT_ERR_NOACK;
 	}
@@ -533,7 +533,7 @@ static ret_t
 socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 		   cherokee_socket_t                *socket,
 		   cherokee_virtual_server_t        *vserver,
-		   cherokee_request_t            *conn)
+		   cherokee_request_t               *req)
 {
 	int                                re;
 	const char                        *error;
@@ -581,13 +581,13 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	}
 
 #ifndef OPENSSL_NO_TLSEXT
-	SSL_set_app_data (cryp->session, conn);
+	SSL_set_app_data (cryp->session, req);
 #else
 	/* Attempt to determine the vserver without SNI.
 	 */
 	cherokee_buffer_ensure_size(&servername, 40);
-	cherokee_socket_ntop (&conn->socket, servername.buf, servername.size);
-	cherokee_cryptor_libssl_find_vserver (cryp->session, REQ_SRV(conn), &servername, conn);
+	cherokee_socket_ntop (&req->socket, servername.buf, servername.size);
+	cherokee_cryptor_libssl_find_vserver (cryp->session, REQ_SRV(req), &servername, req);
 	cherokee_buffer_mrproper (&servername);
 #endif
 
@@ -599,7 +599,7 @@ static ret_t
 _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 		  cherokee_socket_t                *sock,
 		  cherokee_virtual_server_t        *vsrv,
-		  cherokee_request_t            *conn,
+		  cherokee_request_t               *req,
 		  cherokee_socket_status_t         *blocking)
 {
 	int   re;
@@ -608,7 +608,7 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	/* Initialize
 	 */
 	if (CRYPTOR_SOCKET(cryp)->initialized == false) {
-		ret = socket_initialize (cryp, sock, vsrv, conn);
+		ret = socket_initialize (cryp, sock, vsrv, req);
 		if (ret != ret_ok) {
 			return ret_error;
 		}

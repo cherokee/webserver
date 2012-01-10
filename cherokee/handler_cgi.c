@@ -81,7 +81,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 	ret_t                   ret;
  	size_t                  read_ = 0;
 	cherokee_handler_cgi_t *cgi   = HDL_CGI(cgi_base);
-	cherokee_request_t  *conn  = HANDLER_REQ(cgi);
+	cherokee_request_t     *req   = HANDLER_REQ(cgi);
 
 	/* Sanity check: pipe() accessed
 	 */
@@ -96,8 +96,8 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 
 	switch (ret) {
 	case ret_eagain:
-		conn->polling_aim.fd   = cgi->pipeInput;
-		conn->polling_aim.mode = poll_mode_read;
+		req->polling_aim.fd   = cgi->pipeInput;
+		req->polling_aim.mode = poll_mode_read;
 		return ret_eagain;
 
 	case ret_ok:
@@ -355,21 +355,21 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 static ret_t
 add_environment (cherokee_handler_cgi_t *cgi,
-		 cherokee_request_t  *conn)
+		 cherokee_request_t     *req)
 {
 	ret_t                        ret;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
-	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(REQ_THREAD(conn));
+	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(REQ_THREAD(req));
 
-	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
+	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), req);
 	if (unlikely (ret != ret_ok))
 		return ret;
 
 	/* CONTENT_LENGTH
 	 */
-	if (http_method_with_input (conn->header.method)) {
+	if (http_method_with_input (req->header.method)) {
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_add_ullong10 (tmp, conn->post.len);
+		cherokee_buffer_add_ullong10 (tmp, req->post.len);
 		set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);
 	}
 
@@ -391,7 +391,7 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 {
 	ret_t                        ret;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
-	cherokee_request_t       *conn     = HANDLER_REQ(cgi);
+	cherokee_request_t          *req      = HANDLER_REQ(cgi);
 
 	switch (cgi_base->init_phase) {
 	case hcgi_phase_build_headers:
@@ -409,7 +409,7 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 		 * otherwhise the server will drop it for the CGI
 		 * isn't fast enough
 		 */
-		conn->timeout = cherokee_bogonow_now + CGI_TIMEOUT;
+		req->timeout = cherokee_bogonow_now + CGI_TIMEOUT;
 		cgi_base->init_phase = hcgi_phase_connect;
 
 	case hcgi_phase_connect:
@@ -432,26 +432,26 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 ret_t
 cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 {
-	ret_t                  ret;
-	cherokee_request_t *conn   = HANDLER_REQ(cgi);
-	cherokee_boolean_t     did_IO = false;
+	ret_t               ret;
+	cherokee_request_t *req    = HANDLER_REQ(cgi);
+	cherokee_boolean_t  did_IO = false;
 
-	if (! conn->post.has_info) {
+	if (! req->post.has_info) {
 		return ret_ok;
 	}
 
-	ret = cherokee_post_send_to_fd (&conn->post, &conn->socket,
+	ret = cherokee_post_send_to_fd (&req->post, &req->socket,
 					cgi->pipeOutput, NULL, &did_IO);
 
 	if (did_IO) {
-		cherokee_request_update_timeout (conn);
+		cherokee_request_update_timeout (req);
 	}
 
 	switch (ret) {
 	case ret_ok:
 		break;
 	case ret_eagain:
-		/* conn->polling_aim.{fd,mode} was previously set by
+		/* req->polling_aim.{fd,mode} was previously set by
 		 * cherokee_post_send_to_fd()
 		 */
 		return ret_eagain;
@@ -501,7 +501,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	 */
 	int                          re;
 	char                        *script;
-	cherokee_request_t       *conn          = HANDLER_REQ(cgi);
+	cherokee_request_t          *req           = HANDLER_REQ(cgi);
 	cherokee_handler_cgi_base_t *cgi_base      = HDL_CGI_BASE(cgi);
 	char                        *absolute_path = cgi_base->executable.buf;
 	char                        *argv[2]       = { NULL, NULL };
@@ -509,8 +509,8 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 #ifdef TRACE_ENABLED
 	TRACE(ENTRIES, "About to execute: '%s'\n", absolute_path);
 
-	if (! cherokee_buffer_is_empty (&conn->effective_directory))
-		TRACE(ENTRIES, "Effective directory: '%s'\n", conn->effective_directory.buf);
+	if (! cherokee_buffer_is_empty (&req->effective_directory))
+		TRACE(ENTRIES, "Effective directory: '%s'\n", req->effective_directory.buf);
 	else
 		TRACE(ENTRIES, "No Effective directory %s", "\n");
 #endif
@@ -538,11 +538,11 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Redirect the stderr
 	 */
-	if ((REQ_VSRV(conn)->error_writer != NULL) &&
-	    (REQ_VSRV(conn)->error_writer->fd != -1))
+	if ((REQ_VSRV(req)->error_writer != NULL) &&
+	    (REQ_VSRV(req)->error_writer->fd != -1))
 	{
 		cherokee_fd_close (STDERR_FILENO);
-		dup2 (REQ_VSRV(conn)->error_writer->fd, STDERR_FILENO);
+		dup2 (REQ_VSRV(req)->error_writer->fd, STDERR_FILENO);
 	}
 
 # if 0
@@ -560,12 +560,12 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Sets the new environ.
 	 */
-	add_environment (cgi, conn);
+	add_environment (cgi, req);
 
 	/* Change the directory
 	 */
-	if (! cherokee_buffer_is_empty (&conn->effective_directory)) {
-		re = chdir (conn->effective_directory.buf);
+	if (! cherokee_buffer_is_empty (&req->effective_directory)) {
+		re = chdir (req->effective_directory.buf);
 	} else {
 		char *file = strrchr (absolute_path, '/');
 
@@ -650,9 +650,9 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 static ret_t
 fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi)
 {
-	int                    re;
-	int                    pid;
-	cherokee_request_t *conn = HANDLER_REQ(cgi);
+	int                 re;
+	int                 pid;
+	cherokee_request_t *req = HANDLER_REQ(cgi);
 
 	struct {
 		int cgi[2];
@@ -665,7 +665,7 @@ fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi)
 	re |= cherokee_pipe (pipes.server);
 
 	if (re != 0) {
-		conn->error_code = http_internal_error;
+		req->error_code = http_internal_error;
 		return ret_error;
 	}
 
@@ -686,7 +686,7 @@ fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi)
 		cherokee_fd_close (pipes.server[0]);
 		cherokee_fd_close (pipes.server[1]);
 
-		conn->error_code = http_internal_error;
+		req->error_code = http_internal_error;
 		return ret_error;
 	}
 
@@ -725,7 +725,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	char                  *cmd;
 	cherokee_buffer_t      cmd_line = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t      exec_dir = CHEROKEE_BUF_INIT;
-	cherokee_request_t *conn     = HANDLER_REQ(cgi);
+	cherokee_request_t    *req      = HANDLER_REQ(cgi);
 
 	SECURITY_ATTRIBUTES saSecAtr;
 	HANDLE hProc;
@@ -736,7 +736,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 
 	/* Create the environment for the process
 	 */
-	add_environment (cgi, conn);
+	add_environment (cgi, req);
 	cherokee_buffer_add (&cgi->envp, "\0", 1);
 
 	/* Command line
@@ -747,8 +747,8 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 
 	/* Execution directory
 	 */
-	if (! cherokee_buffer_is_empty (&conn->effective_directory)) {
-		cherokee_buffer_add_buffer (&exec_dir, &conn->effective_directory);
+	if (! cherokee_buffer_is_empty (&req->effective_directory)) {
+		cherokee_buffer_add_buffer (&exec_dir, &req->effective_directory);
 	} else {
 		char *file = strrchr (cmd, '/');
 		char *end  = HDL_CGI_BASE(cgi)->executable.buf + HDL_CGI_BASE(cgi)->executable.len;
@@ -822,7 +822,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 		CloseHandle (pi.hProcess);
 		CloseHandle (pi.hThread);
 
-		conn->error_code = http_internal_error;
+		req->error_code = http_internal_error;
 		return ret_error;
 	}
 
@@ -840,7 +840,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	 */
 	cgi->pipeInput  = _open_osfhandle((LONG)hChildStdoutRd, O_BINARY|_O_RDONLY);
 
-	if (! conn->post.len <= 0) {
+	if (! req->post.len <= 0) {
 		CloseHandle (hChildStdinWr);
 	} else {
 		cgi->pipeOutput = _open_osfhandle((LONG)hChildStdinWr,  O_BINARY|_O_WRONLY);

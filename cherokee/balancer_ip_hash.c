@@ -104,7 +104,7 @@ reactivate_entry (cherokee_balancer_ip_hash_t *balancer,
 
 static ret_t
 report_fail (cherokee_balancer_ip_hash_t *balancer,
-	     cherokee_request_t       *conn,
+	     cherokee_request_t          *req,
 	     cherokee_source_t           *src)
 {
 	ret_t                      ret;
@@ -112,7 +112,7 @@ report_fail (cherokee_balancer_ip_hash_t *balancer,
 	cherokee_balancer_entry_t *entry;
 	cherokee_buffer_t          tmp    = CHEROKEE_BUF_INIT;
 
-	UNUSED(conn);
+	UNUSED(req);
 
 	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
 
@@ -157,7 +157,7 @@ out:
 
 static ret_t
 dispatch (cherokee_balancer_ip_hash_t  *balancer,
-	  cherokee_request_t        *conn,
+	  cherokee_request_t           *req,
 	  cherokee_source_t           **src)
 {
 	cint_t                     n;
@@ -166,7 +166,7 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	cherokee_list_t           *i;
 	cherokee_balancer_entry_t *entry  = NULL;
 	culong_t                   hash   = 0;
-	cherokee_socket_t         *socket = &conn->socket;
+	cherokee_socket_t         *socket = &req->socket;
 
 	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
 

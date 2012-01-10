@@ -287,7 +287,7 @@ add_request (cherokee_handler_proxy_t *hdl,
 {
 	int                             re;
 	ret_t                           ret;
-	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
+	cherokee_request_t             *req   = HANDLER_REQ(hdl);
 	cherokee_buffer_t              *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
@@ -295,22 +295,22 @@ add_request (cherokee_handler_proxy_t *hdl,
 
 	/* Build the URL
 	 */
-	ret = cherokee_buffer_escape_uri (tmp, &conn->request);
+	ret = cherokee_buffer_escape_uri (tmp, &req->request);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
 
-	if (! cherokee_buffer_is_empty (&conn->pathinfo)) {
-		ret = cherokee_buffer_escape_uri (tmp, &conn->pathinfo);
+	if (! cherokee_buffer_is_empty (&req->pathinfo)) {
+		ret = cherokee_buffer_escape_uri (tmp, &req->pathinfo);
 		if (ret != ret_ok) {
 			return ret_error;
 		}
 	}
 
-	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+	if (! cherokee_buffer_is_empty (&req->query_string)) {
 		cherokee_buffer_add_char (tmp, '?');
 
-		ret = cherokee_buffer_add_buffer (tmp, &conn->query_string);
+		ret = cherokee_buffer_add_buffer (tmp, &req->query_string);
 		if (ret != ret_ok) {
 			return ret_error;
 		}
@@ -397,12 +397,12 @@ build_request (cherokee_handler_proxy_t *hdl,
 	cherokee_boolean_t              is_keepalive = false;
 	cherokee_boolean_t              is_close     = false;
 	cherokee_boolean_t              x_real_ip    = false;
-	cherokee_request_t          *conn         = HANDLER_REQ(hdl);
+	cherokee_request_t             *req          = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
 	cherokee_buffer_t              *tmp          = &HANDLER_THREAD(hdl)->tmp_buf1;
 
 	/* Method */
-	ret = cherokee_http_method_to_string (conn->header.method, &str, &len);
+	ret = cherokee_http_method_to_string (req->header.method, &str, &len);
 	if (ret != ret_ok)
 		goto error;
 
@@ -415,7 +415,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 		goto error;
 
 	/* HTTP version */
-	ret = cherokee_http_version_to_string (conn->header.version, &str, &len);
+	ret = cherokee_http_version_to_string (req->header.version, &str, &len);
 	if (ret != ret_ok)
 		goto error;
 
@@ -427,17 +427,17 @@ build_request (cherokee_handler_proxy_t *hdl,
 	cherokee_buffer_add_str (buf, "Host: ");
 
 	if ((props->in_preserve_host) &&
-	    (! cherokee_buffer_is_empty (&conn->host)))
+	    (! cherokee_buffer_is_empty (&req->host)))
 	{
-		cherokee_buffer_add_buffer (buf, &conn->host);
-		if (conn->host_port.len > 0) {
+		cherokee_buffer_add_buffer (buf, &req->host);
+		if (req->host_port.len > 0) {
 			cherokee_buffer_add_str    (buf, ":");
-			cherokee_buffer_add_buffer (buf, &conn->host_port);
+			cherokee_buffer_add_buffer (buf, &req->host_port);
 		}
 	}
 	else {
 		cherokee_buffer_add_buffer (buf, &hdl->src_ref->host);
-		if (! http_port_is_standard (hdl->src_ref->port, conn->socket.is_tls)) {
+		if (! http_port_is_standard (hdl->src_ref->port, req->socket.is_tls)) {
 			cherokee_buffer_add_char    (buf, ':');
 			cherokee_buffer_add_ulong10 (buf, hdl->src_ref->port);
 		}
@@ -445,7 +445,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 	cherokee_buffer_add_str (buf, CRLF);
 
 	/* Add header: "Connection: " */
-	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
+	ret = cherokee_header_get_known (&req->header, header_connection, &ptr, &ptr_len);
 	if (ret == ret_ok) {
 		if (! strncasecmp (ptr, "Keep-Alive", 10)) {
 			is_keepalive = true;
@@ -456,12 +456,12 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 	if ((props->in_allow_keepalive) &&
 	    ((is_keepalive) ||
-	     ((conn->header.version == http_version_11) && (! is_close))))
+	     ((req->header.version == http_version_11) && (! is_close))))
 	{
 		cherokee_buffer_add_str (buf, "Connection: Keep-Alive" CRLF);
 		hdl->pconn->keepalive_in = true;
 
-		ret = cherokee_header_get_known (&conn->header, header_keepalive, &ptr, &ptr_len);
+		ret = cherokee_header_get_known (&req->header, header_keepalive, &ptr, &ptr_len);
 		if (ret == ret_ok) {
 			cherokee_buffer_add_str (buf, "Keep-Alive: ");
 			cherokee_buffer_add     (buf, ptr, ptr_len);
@@ -473,15 +473,15 @@ build_request (cherokee_handler_proxy_t *hdl,
 	}
 
 	/* Add header "Content-Length:" */
-	if (conn->post.has_info) {
+	if (req->post.has_info) {
 		cherokee_buffer_add_str      (buf, "Content-Length: ");
-		cherokee_buffer_add_ullong10 (buf, conn->post.len);
+		cherokee_buffer_add_ullong10 (buf, req->post.len);
 		cherokee_buffer_add_str      (buf, CRLF);
 	}
 
 	/* Headers
 	 */
-	str = strchr (conn->incoming_header.buf, CHR_CR);
+	str = strchr (req->incoming_header.buf, CHR_CR);
 	if (str == NULL)
 		goto error;
 
@@ -489,10 +489,10 @@ build_request (cherokee_handler_proxy_t *hdl,
 		str++;
 
 	/* Add the client headers  */
-	cherokee_header_get_length (&conn->header, &header_len);
+	cherokee_header_get_length (&req->header, &header_len);
 
 	begin      = (char *)str;
-	header_end = conn->incoming_header.buf + (header_len - 2);
+	header_end = req->incoming_header.buf + (header_len - 2);
 
 	while (begin < header_end) {
 		char chr_end;
@@ -565,7 +565,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 	/* X-Forwarded-For */
 	cherokee_buffer_ensure_size (tmp, CHE_INET_ADDRSTRLEN+1);
-	cherokee_socket_ntop (&conn->socket, tmp->buf, tmp->size-1);
+	cherokee_socket_ntop (&req->socket, tmp->buf, tmp->size-1);
 
 	cherokee_buffer_add_str (buf, "X-Forwarded-For: ");
 	if (XFF != NULL) {
@@ -584,15 +584,15 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 	/* X-Forwarded-Host */
 	if ((XFH == false) &&
-	    (! cherokee_buffer_is_empty (&conn->host)))
+	    (! cherokee_buffer_is_empty (&req->host)))
 	{
 		cherokee_buffer_add_str    (buf, "X-Forwarded-Host: ");
-		cherokee_buffer_add_buffer (buf, &conn->host);
+		cherokee_buffer_add_buffer (buf, &req->host);
 
-		if (! http_port_is_standard (conn->bind->port, conn->socket.is_tls))
+		if (! http_port_is_standard (req->bind->port, req->socket.is_tls))
 		{
 			cherokee_buffer_add_char    (buf, ':');
-			cherokee_buffer_add_ulong10 (buf, conn->bind->port);
+			cherokee_buffer_add_ulong10 (buf, req->bind->port);
 		}
 
 		cherokee_buffer_add_str    (buf, CRLF);
@@ -600,7 +600,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 	/* X-Forwarded-SSL */
 	cherokee_buffer_add_str (buf, "X-Forwarded-SSL: ");
-	if(conn->socket.is_tls) {
+	if(req->socket.is_tls) {
 		cherokee_buffer_add_str (buf, "on");
 	} else {
 		cherokee_buffer_add_str (buf, "off");
@@ -625,8 +625,8 @@ error:
 static ret_t
 do_connect (cherokee_handler_proxy_t *hdl)
 {
-	ret_t                  ret;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	ret_t               ret;
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	ret = cherokee_socket_connect (&hdl->pconn->socket);
 	switch (ret) {
@@ -636,8 +636,8 @@ do_connect (cherokee_handler_proxy_t *hdl)
 	case ret_error:
 		return ret;
 	case ret_eagain:
-		conn->polling_aim.fd   = hdl->pconn->socket.socket;
-		conn->polling_aim.mode = poll_mode_write;
+		req->polling_aim.fd   = hdl->pconn->socket.socket;
+		req->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
 	default:
 		RET_UNKNOWN(ret);
@@ -650,14 +650,14 @@ do_connect (cherokee_handler_proxy_t *hdl)
 static ret_t
 send_post_reset (cherokee_handler_proxy_t *hdl)
 {
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	if (hdl->pconn == NULL) {
 		TRACE (ENTRIES, "Post reset: %s\n", "no pconn");
 		return ret_ok;
 	}
 
-	if (conn->post.send.read == 0) {
+	if (req->post.send.read == 0) {
 		TRACE (ENTRIES, "Did not read POST. No need to %s\n", "reset");
 		return ret_ok;
 	}
@@ -675,7 +675,7 @@ send_post_reset (cherokee_handler_proxy_t *hdl)
 	TRACE (ENTRIES, "Recovering POST from buffer: %s\n", "ok");
 
 	hdl->pconn->post.sent = 0;
-	conn->post.send.read  = 0;
+	req->post.send.read  = 0;
 
 	return ret_ok;
 }
@@ -683,10 +683,10 @@ send_post_reset (cherokee_handler_proxy_t *hdl)
 static ret_t
 send_post (cherokee_handler_proxy_t *hdl)
 {
-	ret_t                  ret;
-	size_t                 written  = 0;
-	cherokee_request_t *conn     = HANDLER_REQ(hdl);
-	cherokee_buffer_t     *buffer   = &hdl->pconn->post.buf_temp;
+	ret_t               ret;
+	size_t              written = 0;
+	cherokee_request_t *req     = HANDLER_REQ(hdl);
+	cherokee_buffer_t  *buffer  = &hdl->pconn->post.buf_temp;
 
 	/* Send: buffered
 	 */
@@ -704,14 +704,14 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
 
-			conn->polling_aim.fd   = hdl->pconn->socket.socket;
-			conn->polling_aim.mode = poll_mode_write;
+			req->polling_aim.fd   = hdl->pconn->socket.socket;
+			req->polling_aim.mode = poll_mode_write;
 			return ret_eagain;
 		default:
 			return ret_error;
 		}
 
-		conn->post.send.read += written;
+		req->post.send.read += written;
 
 		cherokee_buffer_move_to_begin (buffer, written);
 		TRACE (ENTRIES, "sent=%d, remaining=%d\n", written, buffer->len);
@@ -745,8 +745,8 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
 
-			conn->polling_aim.fd   = hdl->pconn->socket.socket;
-			conn->polling_aim.mode = poll_mode_write;
+			req->polling_aim.fd   = hdl->pconn->socket.socket;
+			req->polling_aim.mode = poll_mode_write;
 			return ret_eagain;
 		default:
 			return ret_error;
@@ -776,8 +776,8 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 			TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
 
-			conn->polling_aim.fd   = hdl->pconn->socket.socket;
-			conn->polling_aim.mode = poll_mode_write;
+			req->polling_aim.fd   = hdl->pconn->socket.socket;
+			req->polling_aim.mode = poll_mode_write;
 			return ret_eagain;
 		default:
 			return ret_error;
@@ -791,7 +791,7 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 	/* Has it finished?
 	 */
-	if (cherokee_post_read_finished (&conn->post)) {
+	if (cherokee_post_read_finished (&req->post)) {
 		TRACE(ENTRIES, "POST has been read completely: %s\n", "ok");
 
 		if (hdl->pconn->post.do_buf_sent) {
@@ -820,17 +820,17 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 	/* Read from the client
 	 */
-	ret = cherokee_post_read (&conn->post, &conn->socket, buffer);
+	ret = cherokee_post_read (&req->post, &req->socket, buffer);
 	switch (ret) {
 	case ret_ok:
 		TRACE (ENTRIES, "Post has %d bytes - after the addition\n", buffer->len);
-		cherokee_request_update_timeout (conn);
+		cherokee_request_update_timeout (req);
 		break;
 	case ret_eagain:
 		TRACE (ENTRIES, "Post read: EAGAIN, buffer has %d bytes\n", buffer->len);
 
-		conn->polling_aim.fd   = conn->socket.socket;
-		conn->polling_aim.mode = poll_mode_read;
+		req->polling_aim.fd   = req->socket.socket;
+		req->polling_aim.mode = poll_mode_read;
 		return ret_eagain;
 	default:
 		return ret;
@@ -855,7 +855,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 {
 	ret_t                           ret;
 	cherokee_handler_proxy_poll_t  *poll;
-	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
+	cherokee_request_t             *req   = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 
@@ -863,7 +863,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	case proxy_init_start:
 		/* Send the Post if needed
 		 */
-		if (conn->post.has_info) {
+		if (req->post.has_info) {
 			// TODO: Is it necessary?
 		}
 
@@ -874,10 +874,10 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		/* Check with the load balancer
 		 */
 		if (hdl->src_ref == NULL) {
-			ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
+			ret = cherokee_balancer_dispatch (props->balancer, req, &hdl->src_ref);
 			if (ret != ret_ok) {
 				BIT_UNSET (HANDLER(hdl)->support, hsupport_error);
-				conn->error_code = http_service_unavailable;
+				req->error_code = http_service_unavailable;
 				return ret_error;
 			}
 
@@ -892,7 +892,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		ret = cherokee_handler_proxy_hosts_get (&props->hosts, hdl->src_ref,
 							&poll, props->reuse_max);
 		if (unlikely (ret != ret_ok)) {
-			conn->error_code = http_service_unavailable;
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -900,7 +900,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		 */
 		ret = cherokee_handler_proxy_poll_get (poll, &hdl->pconn, hdl->src_ref);
 		if (unlikely (ret != ret_ok)) {
-			conn->error_code = http_service_unavailable;
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -925,12 +925,12 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			cherokee_socket_close (&hdl->pconn->socket);
 			cherokee_socket_clean (&hdl->pconn->socket);
 
-			if  (conn->post.has_info) {
+			if  (req->post.has_info) {
 				ret = send_post_reset (hdl);
 				if (ret != ret_ok) {
-					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+					cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
 					hdl->pconn->keepalive_in = false;
-					conn->error_code = http_bad_gateway;
+					req->error_code = http_bad_gateway;
 					return ret_error;
 				}
 
@@ -945,7 +945,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			ret = cherokee_handler_proxy_conn_init_socket (hdl->pconn, hdl->src_ref);
 			if (ret != ret_ok) {
 				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
+				req->error_code = http_bad_gateway;
 				return ret_error;
 			}
 		}
@@ -962,7 +962,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			case ret_ok:
 				break;
 			case ret_error:
-				conn->error_code = http_bad_gateway;
+				req->error_code = http_bad_gateway;
 				hdl->pconn->keepalive_in = false;
 				return ret_error;
 			case ret_eagain:
@@ -977,8 +977,8 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				}
 
 				if (hdl->respinned) {
-					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
-					conn->error_code = http_bad_gateway;
+					cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
+					req->error_code = http_bad_gateway;
 					hdl->pconn->keepalive_in = false;
 					return ret_error;
 				}
@@ -988,7 +988,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 
 					/* Spawn a new process
 					 */
-					ret = cherokee_virtual_server_get_error_log (REQ_VSRV(conn), &error_writer);
+					ret = cherokee_virtual_server_get_error_log (REQ_VSRV(req), &error_writer);
 					if (ret != ret_ok) {
 						return ret_error;
 					}
@@ -1009,7 +1009,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				goto reconnect;
 			default:
 				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
+				req->error_code = http_bad_gateway;
 				RET_UNKNOWN(ret);
 				return ret_error;
 			}
@@ -1024,7 +1024,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		if (cherokee_buffer_is_empty (&hdl->request)) {
 			ret = build_request (hdl, &hdl->request);
 			if (unlikely (ret != ret_ok)) {
-				conn->error_code = http_bad_gateway;
+				req->error_code = http_bad_gateway;
 				hdl->pconn->keepalive_in = false;
 				return ret_error;
 			}
@@ -1045,8 +1045,8 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		case ret_eof:
 		case ret_error:
 			if (hdl->respinned) {
-				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
-				conn->error_code = http_bad_gateway;
+				cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
+				req->error_code = http_bad_gateway;
 				hdl->pconn->keepalive_in = false;
 				return ret_error;
 			}
@@ -1055,7 +1055,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			goto reconnect;
 		default:
 			hdl->pconn->keepalive_in = false;
-			conn->error_code = http_bad_gateway;
+			req->error_code = http_bad_gateway;
 			RET_UNKNOWN(ret);
 			return ret_error;
 		}
@@ -1064,7 +1064,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		TRACE(ENTRIES, "Entering phase '%s'\n", "send post");
 
 	case proxy_init_send_post:
-		if (conn->post.has_info) {
+		if (req->post.has_info) {
 			/* Preventive read: The back-end server might send
 			 * a reply before the POST is actually sent.
 			 */
@@ -1095,15 +1095,15 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 					hdl->respinned = true;
 					goto reconnect;
 				} else {
-					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
-					conn->error_code = http_bad_gateway;
+					cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
+					req->error_code = http_bad_gateway;
 					hdl->pconn->keepalive_in = false;
 					return ret_error;
 				}
 
 			default:
 				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
+				req->error_code = http_bad_gateway;
 				RET_UNKNOWN(ret);
 				return ret_error;
 			}
@@ -1128,17 +1128,17 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			 */
 			break;
 		case ret_eagain:
-			conn->polling_aim.fd   = hdl->pconn->socket.socket;
-			conn->polling_aim.mode = poll_mode_read;
+			req->polling_aim.fd   = hdl->pconn->socket.socket;
+			req->polling_aim.mode = poll_mode_read;
 			return ret_eagain;
 		case ret_eof:
 		case ret_error:
 			/* The socket isn't really connected
 			 */
 			if (hdl->respinned) {
-				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+				cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
 				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
+				req->error_code = http_bad_gateway;
 				return ret_error;
 			}
 
@@ -1146,7 +1146,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			goto reconnect;
 		default:
 			hdl->pconn->keepalive_in = false;
-			conn->error_code = http_bad_gateway;
+			req->error_code = http_bad_gateway;
 			RET_UNKNOWN(ret);
 			return ret_error;
 		}
@@ -1227,7 +1227,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	cint_t                          xsendfile_len;
 	char                           *xsendfile      = NULL;
 	cherokee_boolean_t              added_server   = false;
-	cherokee_request_t          *conn           = HANDLER_REQ(hdl);
+	cherokee_request_t             *req            = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props          = HDL_PROXY_PROPS(hdl);
 
 	p = buf_in->buf;
@@ -1266,7 +1266,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	re = (int)p[3];
 	p[3] = '\0';
 
-	ret = cherokee_atoi (p, (int *)&conn->error_code);
+	ret = cherokee_atoi (p, (int *)&req->error_code);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -1284,7 +1284,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	/* Skip 100 Continue headers - pseudo responses to the
 	 * "Expect: 100-Continue" client header.
 	 */
-	if (conn->error_code == http_continue) {
+	if (req->error_code == http_continue) {
 		cherokee_buffer_move_to_begin (buf_in, header_end - buf_in->buf);
 		return ret_eagain;
 	}
@@ -1336,7 +1336,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			hdl->pconn->enc     = pconn_enc_known_size;
 			hdl->pconn->size_in = strtoll (c, NULL, 10);
 
-			if (! cherokee_request_should_include_length(conn)) {
+			if (! cherokee_request_should_include_length(req)) {
 				goto next;
 			}
 
@@ -1347,7 +1347,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 			if (! props->out_preserve_server) {
 				cherokee_buffer_add_str (buf_out, "Server: ");
-				cherokee_buffer_add_buffer (buf_out, &REQ_BIND(conn)->server_string);
+				cherokee_buffer_add_buffer (buf_out, &REQ_BIND(req)->server_string);
 				cherokee_buffer_add_str (buf_out, CRLF);
 				goto next;
 			}
@@ -1389,13 +1389,13 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			goto next;
 
 		} else if (strncasecmp (begin, "Content-Encoding:", 17) == 0) {
-			BIT_SET (conn->options, conn_op_cant_encoder);
+			BIT_SET (req->options, conn_op_cant_encoder);
 
-		} else if ((conn->expiration != cherokee_expiration_none) &&
+		} else if ((req->expiration != cherokee_expiration_none) &&
 			   (strncasecmp (begin, "Expires:", 8) == 0)) {
 			goto next;
 
-		} else if ((conn->expiration != cherokee_expiration_none) &&
+		} else if ((req->expiration != cherokee_expiration_none) &&
 			   (strncasecmp (begin, "Cache-Control:", 14) == 0) &&
 			   (strncasecmp (begin, "max-age=", 8) == 0)) {
 			goto next;
@@ -1432,21 +1432,21 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	{
 		/* Clean buffers */
 
-		cherokee_buffer_clean (&conn->buffer);
-		xsendfile_header_clean_up (&conn->header_buffer);
+		cherokee_buffer_clean (&req->buffer);
+		xsendfile_header_clean_up (&req->header_buffer);
 
 		/* Store original request */
-		if (cherokee_buffer_is_empty (&conn->request_original)) {
-			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		if (cherokee_buffer_is_empty (&req->request_original)) {
+			cherokee_buffer_add_buffer (&req->request_original, &req->request);
 		}
 
 		/* Set new request */
-		cherokee_buffer_clean (&conn->request);
-		cherokee_buffer_add   (&conn->request, xsendfile, xsendfile_len);
+		cherokee_buffer_clean (&req->request);
+		cherokee_buffer_add   (&req->request, xsendfile, xsendfile_len);
 
 		/* Respin connection */
-		cherokee_request_clean_for_respin (conn);
-		conn->phase = phase_setup_connection;
+		cherokee_request_clean_for_respin (req);
+		req->phase = phase_setup_connection;
 
 		return ret_ok_and_sent;
 	}
@@ -1460,32 +1460,32 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	 */
 	if (! added_server) {
 		cherokee_buffer_add_str (buf_out, "Server: ");
-		cherokee_buffer_add_buffer (buf_out, &REQ_BIND(conn)->server_string);
+		cherokee_buffer_add_buffer (buf_out, &REQ_BIND(req)->server_string);
 		cherokee_buffer_add_str (buf_out, CRLF);
 	}
 
 	/* Overwrite the 'Expires:' header is there was a custom
 	 * expiration value defined in the rule.
 	 */
-	if (conn->expiration != cherokee_expiration_none) {
-		cherokee_request_add_expiration_header (conn, buf_out, true);
+	if (req->expiration != cherokee_expiration_none) {
+		cherokee_request_add_expiration_header (req, buf_out, true);
 	}
 
 	/* Deal with Content-Encoding: If the response is no encoded,
 	 * and the handler is configured to encode, it has to add the
 	 * encoder headers at this point.
 	 */
-	if (conn->encoder_new_func) {
-		ret = cherokee_request_instance_encoder (conn);
+	if (req->encoder_new_func) {
+		ret = cherokee_request_instance_encoder (req);
 		if (ret == ret_ok) {
-			cherokee_encoder_add_headers (conn->encoder, buf_out);
+			cherokee_encoder_add_headers (req->encoder, buf_out);
 		}
 	}
 
 	/* Special case: Client uses Keepalive, the back-end sent a
 	 * no-body reply with no Content-Length.
 	 */
-	if ((conn->keepalive) &&
+	if ((req->keepalive) &&
 	    (hdl->pconn->enc != pconn_enc_known_size) &&
 	    (! http_code_with_body (HANDLER_REQ(hdl)->error_code)))
 	{
@@ -1501,7 +1501,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	return ret_ok;
 
 error:
-	conn->error_code = http_version_not_supported;
+	req->error_code = http_version_not_supported;
 	return ret_error;
 }
 
@@ -1511,7 +1511,7 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 				    cherokee_buffer_t        *buf)
 {
 	ret_t                           ret;
-	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
+	cherokee_request_t             *req   = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 	if (unlikely (hdl->pconn == NULL)) {
@@ -1526,7 +1526,7 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 		break;
 	case ret_eagain:
 		hdl->init_phase = proxy_init_read_header;
-		conn->phase     = phase_init;
+		req->phase     = phase_init;
 		return ret_eagain;
 	case ret_ok_and_sent:
 		/* X-Sendfile */
@@ -1547,13 +1547,13 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 	/* Should the Vserver's error handler come into the scene?
 	 */
 	if (props->vserver_errors) {
-		if (http_type_300(conn->error_code) ||
-		    http_type_400(conn->error_code) ||
-		    http_type_500(conn->error_code))
+		if (http_type_300(req->error_code) ||
+		    http_type_400(req->error_code) ||
+		    http_type_500(req->error_code))
 		{
-			cherokee_buffer_clean (&conn->header_buffer);
+			cherokee_buffer_clean (&req->header_buffer);
 
-			ret = cherokee_request_setup_error_handler (conn);
+			ret = cherokee_request_setup_error_handler (req);
 			if (unlikely ((ret != ret_eagain) && (ret != ret_ok))) {
 				return ret_error;
 			}
@@ -1625,9 +1625,9 @@ ret_t
 cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			     cherokee_buffer_t        *buf)
 {
-	ret_t                  ret;
-	size_t                 size = 0;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	ret_t               ret;
+	size_t              size = 0;
+	cherokee_request_t *req  = HANDLER_REQ(hdl);
 
 	/* No-encoding: known size
 	 */
@@ -1673,8 +1673,8 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			hdl->pconn->keepalive_in = false;
 			return ret;
 		case ret_eagain:
-			conn->polling_aim.fd   = hdl->pconn->socket.socket;
-			conn->polling_aim.mode = poll_mode_read;
+			req->polling_aim.fd   = hdl->pconn->socket.socket;
+			req->polling_aim.mode = poll_mode_read;
 			return ret_eagain;
 		default:
 			RET_UNKNOWN(ret);
@@ -1782,8 +1782,8 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 		}
 
 		if (ret_read == ret_eagain) {
-			conn->polling_aim.fd   = hdl->pconn->socket.socket;
-			conn->polling_aim.mode = poll_mode_read;
+			req->polling_aim.fd   = hdl->pconn->socket.socket;
+			req->polling_aim.mode = poll_mode_read;
 			return ret_eagain;
 		}
 
@@ -1844,7 +1844,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 ret_t
 cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 {
-	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
+	cherokee_request_t             *req   = HANDLER_REQ(hdl);
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 	/* If the handler reached this point before running its
@@ -1852,10 +1852,10 @@ cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 	 * source is unresponsive, and process_polling_connections()
 	 * [thread.c] is closing the connection.
 	 */
-	if ((conn->phase <= phase_add_headers) &&
-	    (conn->error_code == http_gateway_timeout))
+	if ((req->phase <= phase_add_headers) &&
+	    (req->error_code == http_gateway_timeout))
 	{
-		cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+		cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
 	}
 
 	/* Clean up

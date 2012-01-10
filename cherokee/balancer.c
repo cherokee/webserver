@@ -156,25 +156,25 @@ cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 
 ret_t
 cherokee_balancer_dispatch (cherokee_balancer_t    *balancer,
-			    cherokee_request_t  *conn,
+			    cherokee_request_t     *req,
 			    cherokee_source_t     **source)
 {
 	if (unlikely (balancer->dispatch == NULL))
 		return ret_error;
 
-	return balancer->dispatch (balancer, conn, source);
+	return balancer->dispatch (balancer, req, source);
 }
 
 
 ret_t
 cherokee_balancer_report_fail (cherokee_balancer_t   *balancer,
-			       cherokee_request_t *conn,
+			       cherokee_request_t    *req,
 			       cherokee_source_t     *source)
 {
 	if (unlikely (balancer->report_fail == NULL))
 		return ret_error;
 
-	return balancer->report_fail (balancer, conn, source);
+	return balancer->report_fail (balancer, req, source);
 }
 
 

@@ -963,9 +963,9 @@ ret_t
 cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 					  cherokee_buffer_t              *buffer)
 {
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
-	if (cherokee_request_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(req)) {
 		HANDLER(hdl)->support |= hsupport_length;
 		cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->buffer.len);
 	}
@@ -974,12 +974,12 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 	case send_logo:
 		cherokee_buffer_add_str (buffer, "Content-Type: image/png"CRLF);
 
-		conn->expiration      = cherokee_expiration_time;
-		conn->expiration_time = LOGO_CACHING_TIME;
+		req->expiration      = cherokee_expiration_time;
+		req->expiration_time = LOGO_CACHING_TIME;
 		break;
 
 	case send_info:
-		conn->expiration = cherokee_expiration_epoch;
+		req->expiration = cherokee_expiration_epoch;
 
 		switch (hdl->writer.lang) {
 		case dwriter_json:
@@ -1001,7 +1001,7 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 
 	case send_html:
 	default:
-		conn->expiration = cherokee_expiration_epoch;
+		req->expiration = cherokee_expiration_epoch;
 
 		cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
 		break;

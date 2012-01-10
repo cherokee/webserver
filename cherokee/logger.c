@@ -140,7 +140,7 @@ cherokee_logger_init (cherokee_logger_t *logger)
 }
 
 static ret_t
-parse_x_real_ip (cherokee_logger_t *logger, cherokee_request_t *conn)
+parse_x_real_ip (cherokee_logger_t *logger, cherokee_request_t *req)
 {
 	ret_t    ret;
 	cuint_t  len  = 0;
@@ -148,13 +148,13 @@ parse_x_real_ip (cherokee_logger_t *logger, cherokee_request_t *conn)
 
 	/* Look for the X-Real-IP header
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_x_real_ip, &val, &len);
+	ret = cherokee_header_get_known (&req->header, header_x_real_ip, &val, &len);
 	if (ret != ret_ok) {
 		char *p;
 
 		/* Look for the X-Forwarded-For header
 		 */
-		ret = cherokee_header_get_known (&conn->header, header_x_forwarded_for, &val, &len);
+		ret = cherokee_header_get_known (&req->header, header_x_forwarded_for, &val, &len);
 		if (ret != ret_ok) {
 			return ret_not_found;
 		}
@@ -171,14 +171,14 @@ parse_x_real_ip (cherokee_logger_t *logger, cherokee_request_t *conn)
 
 	/* Is the client allowed to use X-Real-IP?
 	 */
-	ret = cherokee_x_real_ip_is_allowed (&logger->priv->x_real_ip, &conn->socket);
+	ret = cherokee_x_real_ip_is_allowed (&logger->priv->x_real_ip, &req->socket);
 	if (ret != ret_ok) {
 		return ret_deny;
 	}
 
 	/* Store the X-Real-IP value
 	 */
-	ret = cherokee_buffer_add (&conn->logger_real_ip, val, len);
+	ret = cherokee_buffer_add (&req->logger_real_ip, val, len);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -187,7 +187,7 @@ parse_x_real_ip (cherokee_logger_t *logger, cherokee_request_t *conn)
 }
 
 ret_t
-cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
+cherokee_logger_write_access (cherokee_logger_t *logger, void *req)
 {
 	ret_t ret;
 
@@ -200,7 +200,7 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 	/* Deal with X-Real-IP
 	 */
 	if (logger->priv->x_real_ip.enabled) {
-		ret = parse_x_real_ip (logger, REQ(conn));
+		ret = parse_x_real_ip (logger, REQ(req));
 		if (unlikely (ret == ret_error)) {
 			return ret_error;
 		}
@@ -209,7 +209,7 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 	/* Call the virtual method
 	 */
 	CHEROKEE_MUTEX_LOCK (&PRIV(logger)->mutex);
-	ret = logger->write_access (logger, conn);
+	ret = logger->write_access (logger, req);
 	CHEROKEE_MUTEX_UNLOCK (&PRIV(logger)->mutex);
 
 	return ret;

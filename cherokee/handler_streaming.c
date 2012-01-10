@@ -169,9 +169,9 @@ static ret_t
 parse_time_start (cherokee_handler_streaming_t *hdl,
 		  cherokee_buffer_t            *value)
 {
-	float                  start;
-	char                  *end    = NULL;
-	cherokee_request_t *conn   = HANDLER_REQ(hdl);
+	float               start;
+	char               *end    = NULL;
+	cherokee_request_t *req    = HANDLER_REQ(hdl);
 
 	start = strtof (value->buf, &end);
 	if (*end != '\0') {
@@ -187,7 +187,7 @@ parse_time_start (cherokee_handler_streaming_t *hdl,
 	return ret_ok;
 
 error:
-	conn->error_code = http_range_not_satisfiable;
+	req->error_code = http_range_not_satisfiable;
 	return ret_error;
 }
 
@@ -196,9 +196,9 @@ static ret_t
 parse_offset_start (cherokee_handler_streaming_t *hdl,
 		    cherokee_buffer_t            *value)
 {
-	long                   start;
-	char                  *end    = NULL;
-	cherokee_request_t *conn   = HANDLER_REQ(hdl);
+	long                start;
+	char               *end    = NULL;
+	cherokee_request_t *req    = HANDLER_REQ(hdl);
 
 	start = strtol (value->buf, &end, 10);
 	if (*end != '\0') {
@@ -218,7 +218,7 @@ parse_offset_start (cherokee_handler_streaming_t *hdl,
 	return ret_ok;
 
 error:
-	conn->error_code = http_range_not_satisfiable;
+	req->error_code = http_range_not_satisfiable;
 	return ret_error;
 }
 
@@ -271,7 +271,7 @@ seek_mp3 (cherokee_handler_streaming_t *hdl)
 
 static ret_t
 set_rate (cherokee_handler_streaming_t *hdl,
-	  cherokee_request_t        *conn,
+	  cherokee_request_t           *req,
 	  long                          rate)
 {
 	cherokee_handler_streaming_props_t *props = HDL_STREAMING_PROP(hdl);
@@ -285,19 +285,19 @@ set_rate (cherokee_handler_streaming_t *hdl,
 
 	/* Special 'initial boosting' limit
 	 */
-	conn->limit_bps = props->auto_rate_boost * hdl->auto_rate_bps;
-	conn->limit_rate = true;
+	req->limit_bps = props->auto_rate_boost * hdl->auto_rate_bps;
+	req->limit_rate = true;
 
 	/* How long the initial boost last..
 	 */
 	if (hdl->start > 0) {
-		hdl->boost_until = hdl->start + conn->limit_bps;
+		hdl->boost_until = hdl->start + req->limit_bps;
 	} else {
-		hdl->boost_until = conn->limit_bps;
+		hdl->boost_until = req->limit_bps;
 	}
 
 	TRACE(ENTRIES, "Limiting rate (initial boost): %d bytes, until=%d\n",
-	      conn->limit_bps, hdl->boost_until);
+	      req->limit_bps, hdl->boost_until);
 	return ret_ok;
 }
 
@@ -338,11 +338,11 @@ error:
 static ret_t
 set_auto_rate (cherokee_handler_streaming_t *hdl)
 {
-	ret_t                  ret;
-	long                   rate;
-	long                   secs;
-	void                  *tmp    = NULL;
-	cherokee_request_t *conn   = HANDLER_REQ(hdl);
+	ret_t               ret;
+	long                rate;
+	long                secs;
+	void               *tmp   = NULL;
+	cherokee_request_t *req   = HANDLER_REQ(hdl);
 
 	/* Check the cache
 	 */
@@ -353,7 +353,7 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 		if (rate <= 0)
 			return ret_ok;
 
-		return set_rate (hdl, conn, rate);
+		return set_rate (hdl, req, rate);
 	}
 
 	/* Open the media stream
@@ -387,7 +387,7 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 		}
 	}
 
-	ret = set_rate (hdl, conn, rate);
+	ret = set_rate (hdl, req, rate);
 
 	cherokee_avl_add (&_streaming_cache,
 			  &hdl->local_file,
@@ -405,13 +405,13 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	cherokee_boolean_t                  is_flv = false;
 	cherokee_boolean_t                  is_mp3 = false;
 	cherokee_buffer_t                  *mime   = NULL;
-	cherokee_request_t              *conn   = HANDLER_REQ(hdl);
+	cherokee_request_t                 *req    = HANDLER_REQ(hdl);
 	cherokee_handler_streaming_props_t *props  = HDL_STREAMING_PROP(hdl);
 
 	/* Local File
 	 */
-	cherokee_buffer_add_buffer (&hdl->local_file, &conn->local_directory);
-	cherokee_buffer_add_buffer (&hdl->local_file, &conn->request);
+	cherokee_buffer_add_buffer (&hdl->local_file, &req->local_directory);
+	cherokee_buffer_add_buffer (&hdl->local_file, &req->request);
 
 	/* Init sub-handler
 	 */
@@ -435,9 +435,9 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 
 	/* Parse arguments
 	 */
-	ret = cherokee_request_parse_args (conn);
+	ret = cherokee_request_parse_args (req);
 	if (ret == ret_ok) {
-		ret = cherokee_avl_get_ptr (conn->arguments, "start", (void **) &value);
+		ret = cherokee_avl_get_ptr (req->arguments, "start", (void **) &value);
 		if ((ret == ret_ok) && (value != NULL) && (value->len > 0)) {
 			/* Set the starting point
 			 */
@@ -506,7 +506,7 @@ ret_t
 cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 				 cherokee_buffer_t            *buffer)
 {
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	/* FLV's "start" parameter
 	 */
@@ -518,13 +518,13 @@ cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 
 	/* Check the initial boost
 	 */
-	if ((conn->limit_bps > hdl->auto_rate_bps) &&
+	if ((req->limit_bps > hdl->auto_rate_bps) &&
 	    (hdl->handler_file->offset > hdl->boost_until))
 	{
-		conn->limit_bps  = hdl->auto_rate_bps;
-		conn->limit_rate = true;
+		req->limit_bps  = hdl->auto_rate_bps;
+		req->limit_rate = true;
 
-		TRACE(ENTRIES, "Limiting rate: %d bytes/s\n", conn->limit_bps);
+		TRACE(ENTRIES, "Limiting rate: %d bytes/s\n", req->limit_bps);
 	}
 
 	/* Call the real step

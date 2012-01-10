@@ -167,14 +167,14 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base,
 	ret_t                     ret;
 	size_t                    read  = 0;
 	cherokee_handler_uwsgi_t *uwsgi = HDL_UWSGI(cgi_base);
-	cherokee_request_t    *conn  = HANDLER_REQ(cgi_base);
+	cherokee_request_t       *req   = HANDLER_REQ(cgi_base);
 
 	ret = cherokee_socket_bufread (&uwsgi->socket, buffer, 4096, &read);
 
 	switch (ret) {
 	case ret_eagain:
-		conn->polling_aim.fd   = uwsgi->socket.socket;
-		conn->polling_aim.mode = poll_mode_read;
+		req->polling_aim.fd   = uwsgi->socket.socket;
+		req->polling_aim.mode = poll_mode_read;
 		return ret_eagain;
 
 	case ret_ok:
@@ -279,11 +279,11 @@ build_header (cherokee_handler_uwsgi_t *hdl)
 {
 	cuint_t                         len;
         char                            tmp[64];
-	cherokee_request_t          *conn     = HANDLER_REQ(hdl);
+	cherokee_request_t             *req      = HANDLER_REQ(hdl);
 	cherokee_handler_uwsgi_props_t *props    = HANDLER_UWSGI_PROPS(hdl);
 
 	if (props->pass_request_body == true && props->pass_wsgi_vars == true) {
-        	len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)conn->post.len);
+        	len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)req->post.len);
         	add_env_pair(HDL_CGI_BASE(hdl), "CONTENT_LENGTH", 14, tmp, len);
 	}
 
@@ -300,13 +300,13 @@ static ret_t
 connect_to_server (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                           ret;
-	cherokee_request_t          *conn  = HANDLER_REQ(hdl);
+	cherokee_request_t             *req   = HANDLER_REQ(hdl);
 	cherokee_handler_uwsgi_props_t *props = HANDLER_UWSGI_PROPS(hdl);
 
 	/* Get a reference to the target host
 	 */
 	if (hdl->src_ref == NULL) {
-		ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
+		ret = cherokee_balancer_dispatch (props->balancer, req, &hdl->src_ref);
 		if (ret != ret_ok)
 			return ret;
 	}
@@ -314,14 +314,14 @@ connect_to_server (cherokee_handler_uwsgi_t *hdl)
 	/* Try to connect
 	 */
 	if (hdl->src_ref->type == source_host) {
-		ret = cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);
+		ret = cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, req);
 		if ((ret == ret_deny) || (ret == ret_error))
 		{
-			cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+			cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
 		}
 	} else {
 		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
-								   &hdl->socket, conn);
+								   &hdl->socket, req);
 	}
 
 	return ret;
@@ -331,13 +331,13 @@ connect_to_server (cherokee_handler_uwsgi_t *hdl)
 static ret_t
 send_header (cherokee_handler_uwsgi_t *hdl)
 {
-	ret_t                  ret;
-	size_t                 written = 0;
-	cherokee_request_t *conn    = HANDLER_REQ(hdl);
+	ret_t               ret;
+	size_t              written = 0;
+	cherokee_request_t *req     = HANDLER_REQ(hdl);
 
 	ret = cherokee_socket_bufwrite (&hdl->socket, &hdl->header, &written);
 	if (ret != ret_ok) {
-		conn->error_code = http_bad_gateway;
+		req->error_code = http_bad_gateway;
 		return ret;
 	}
 
@@ -358,8 +358,8 @@ send_header (cherokee_handler_uwsgi_t *hdl)
 ret_t
 cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 {
-	ret_t                  ret;
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	ret_t               ret;
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
 	switch (HDL_CGI_BASE(hdl)->init_phase) {
 	case hcgi_phase_build_headers:
@@ -369,7 +369,7 @@ cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 		 */
 		ret = cherokee_handler_cgi_base_extract_path (HDL_CGI_BASE(hdl), false);
 		if (unlikely (ret < ret_ok)) {
-			conn->error_code = http_internal_error;
+			req->error_code = http_internal_error;
 			return ret_error;
 		}
 
@@ -377,7 +377,7 @@ cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 		 */
 		ret = build_header (hdl);
 		if (unlikely (ret != ret_ok)) {
-			conn->error_code = http_internal_error;
+			req->error_code = http_internal_error;
 			return ret_error;
 		}
 
@@ -395,10 +395,10 @@ cherokee_handler_uwsgi_init (cherokee_handler_uwsgi_t *hdl)
 		case ret_eagain:
 			return ret_eagain;
 		case ret_deny:
-			conn->error_code = http_gateway_timeout;
+			req->error_code = http_gateway_timeout;
 			return ret_error;
 		default:
-			conn->error_code = http_service_unavailable;
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -425,7 +425,7 @@ ret_t
 cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                           ret;
-	cherokee_request_t          *conn   = HANDLER_REQ(hdl);
+	cherokee_request_t             *req    = HANDLER_REQ(hdl);
 	cherokee_handler_uwsgi_props_t *props  = HANDLER_UWSGI_PROPS(hdl);
 	cherokee_boolean_t              did_IO = false;
 
@@ -437,11 +437,11 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 
 	/* Send it
 	 */
-	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
+	ret = cherokee_post_send_to_socket (&req->post, &req->socket,
 					    &hdl->socket, NULL, &did_IO);
 
 	if (did_IO) {
-		cherokee_request_update_timeout (conn);
+		cherokee_request_update_timeout (req);
 	}
 
 	switch (ret) {
@@ -449,12 +449,12 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 		break;
 
 	case ret_eagain:
-		/* cherokee_post_send_to_socket() filled out conn->polling_aim
+		/* cherokee_post_send_to_socket() filled out req->polling_aim
 		 */
 		return ret_eagain;
 
 	default:
-		conn->error_code = http_bad_gateway;
+		req->error_code = http_bad_gateway;
 		return ret;
 	}
 

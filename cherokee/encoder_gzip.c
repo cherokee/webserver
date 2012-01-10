@@ -210,7 +210,7 @@ get_gzip_error_string (int err)
 }
 
 static cherokee_boolean_t
-is_user_agent_IE_16 (cherokee_request_t *conn)
+is_user_agent_IE_16 (cherokee_request_t *req)
 {
 	ret_t     ret;
 	char     *m;
@@ -219,7 +219,7 @@ is_user_agent_IE_16 (cherokee_request_t *conn)
 
 	/* Get the User-Agent header
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_user_agent, &ref, &ref_len);
+	ret = cherokee_header_get_known (&req->header, header_user_agent, &ref, &ref_len);
 	if ((ret != ret_ok) || (ref == NULL) || (ref_len <= 7)) {
 		return false;
 	}
@@ -240,7 +240,7 @@ is_user_agent_IE_16 (cherokee_request_t *conn)
 
 ret_t
 cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder,
-			    cherokee_request_t   *conn)
+			    cherokee_request_t      *req)
 {
 	int       err;
 	z_stream *z    = &encoder->stream;
@@ -248,7 +248,7 @@ cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder,
 	/* Disable GZip for IE 1-6 clients
 	 */
 	if (likely (ENC_GZIP_PROP(encoder)->disable_old_IE)) {
-		if (is_user_agent_IE_16 (conn)) {
+		if (is_user_agent_IE_16 (req)) {
 			TRACE (ENTRIES, "Disabling encoder: %s\n", "MSIE [1-6] detected\n");
 			return ret_deny;
 		}

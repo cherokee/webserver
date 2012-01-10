@@ -34,23 +34,23 @@
 
 
 static ret_t
-conn_to_node (cherokee_request_t       *conn,
-	      cherokee_avl_flcache_node_t *node)
+req_to_node (cherokee_request_t          *req,
+	     cherokee_avl_flcache_node_t *node)
 {
 	cherokee_avl_generic_node_init (AVL_GENERIC_NODE(node));
 
 	/* Request */
 	cherokee_buffer_init (&node->request);
 
-	if (conn->request_original.len > 0) {
-		cherokee_buffer_add_buffer (&node->request, &conn->request_original);
+	if (req->request_original.len > 0) {
+		cherokee_buffer_add_buffer (&node->request, &req->request_original);
 	} else {
-		cherokee_buffer_add_buffer (&node->request, &conn->request);
+		cherokee_buffer_add_buffer (&node->request, &req->request);
 	}
 
 	/* Query string */
 	cherokee_buffer_init (&node->query_string);
-	cherokee_buffer_add_buffer (&node->query_string, &conn->query_string);
+	cherokee_buffer_add_buffer (&node->query_string, &req->query_string);
 
 	/* Encoder:
 	 * It will be filled in when the encoder object is instanced
@@ -63,7 +63,7 @@ conn_to_node (cherokee_request_t       *conn,
 
 static ret_t
 node_new (cherokee_avl_flcache_node_t **node,
-	  cherokee_request_t        *conn)
+	  cherokee_request_t           *req)
 {
 	CHEROKEE_NEW_STRUCT (n, avl_flcache_node);
 
@@ -71,14 +71,14 @@ node_new (cherokee_avl_flcache_node_t **node,
 	cherokee_buffer_init (&n->file);
 	CHEROKEE_MUTEX_INIT (&n->ref_count_mutex, CHEROKEE_MUTEX_FAST);
 
-	n->conn_ref    = NULL;
+	n->req_ref    = NULL;
 	n->status      = flcache_status_undef;
 	n->ref_count   = 0;
 	n->file_size   = 0;
 	n->valid_until = TIME_MAX;
 	n->created_at  = cherokee_bogonow_now;
 
-	conn_to_node (conn, n);
+	req_to_node (req, n);
 
 	*node = n;
 	return ret_ok;
@@ -115,27 +115,27 @@ cmp_request (cherokee_avl_flcache_node_t *A,
 	     cherokee_avl_flcache_node_t *B)
 {
 	int                          re;
-	cherokee_request_t       *conn;
+	cherokee_request_t          *req;
 	cherokee_avl_flcache_node_t *node;
 	cherokee_boolean_t           invert;
 
 	/* Comparing against a cherokee_request_t
 	 */
-	if (A->conn_ref || B->conn_ref) {
-		if (A->conn_ref) {
-			conn   = A->conn_ref;
+	if (A->req_ref || B->req_ref) {
+		if (A->req_ref) {
+			req   = A->req_ref;
 			node   = B;
 			invert = false;
 		} else {
-			conn = B->conn_ref;
+			req = B->req_ref;
 			node = A;
 			invert = true;
 		}
 
-		if (conn->request_original.len > 0) {
-			re = cherokee_buffer_case_cmp_buf (&conn->request_original, &node->request);
+		if (req->request_original.len > 0) {
+			re = cherokee_buffer_case_cmp_buf (&req->request_original, &node->request);
 		} else {
-			re = cherokee_buffer_case_cmp_buf (&conn->request, &node->request);
+			re = cherokee_buffer_case_cmp_buf (&req->request, &node->request);
 		}
 
 		return (invert) ? -re : re;
@@ -151,27 +151,27 @@ cmp_query_string (cherokee_avl_flcache_node_t *A,
 		  cherokee_avl_flcache_node_t *B)
 {
 	int                          re;
-	cherokee_request_t       *conn;
+	cherokee_request_t       *req;
 	cherokee_avl_flcache_node_t *node;
 	cherokee_boolean_t           invert;
 
 	/* Comparing against a cherokee_request_t
 	 */
-	if (A->conn_ref || B->conn_ref) {
-		if (A->conn_ref) {
-			conn   = A->conn_ref;
+	if (A->req_ref || B->req_ref) {
+		if (A->req_ref) {
+			req   = A->req_ref;
 			node   = B;
 			invert = false;
 		} else {
-			conn = B->conn_ref;
+			req = B->req_ref;
 			node = A;
 			invert = true;
 		}
 
-		if (conn->query_string_original.len > 0) {
-			re = cherokee_buffer_case_cmp_buf (&conn->query_string_original, &node->query_string);
+		if (req->query_string_original.len > 0) {
+			re = cherokee_buffer_case_cmp_buf (&req->query_string_original, &node->query_string);
 		} else {
-			re = cherokee_buffer_case_cmp_buf (&conn->query_string, &node->query_string);
+			re = cherokee_buffer_case_cmp_buf (&req->query_string, &node->query_string);
 		}
 
 		return (invert) ? -re : re;
@@ -189,7 +189,7 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 	ret_t                        ret;
 	int                          re;
 	char                        *p;
-	cherokee_request_t       *conn;
+	cherokee_request_t          *req;
 	cherokee_avl_flcache_node_t *node;
 	cherokee_boolean_t           invert;
 	char                        *header      = NULL;
@@ -197,20 +197,20 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 
 	/* Comparing against a cherokee_request_t
 	 */
-	if (A->conn_ref || B->conn_ref) {
-		if (A->conn_ref) {
-			conn   = A->conn_ref;
+	if (A->req_ref || B->req_ref) {
+		if (A->req_ref) {
+			req   = A->req_ref;
 			node   = B;
 			invert = false;
 		} else {
-			conn = B->conn_ref;
+			req = B->req_ref;
 			node = A;
 			invert = true;
 		}
 
  		/* No "Content-encoding:"
 		 */
-		ret = cherokee_header_get_known (&conn->header, header_accept_encoding, &header, &header_len);
+		ret = cherokee_header_get_known (&req->header, header_accept_encoding, &header, &header_len);
 		if (ret != ret_ok) {
 			/* Node not encoded */
 			if (cherokee_buffer_is_empty (&node->content_encoding)) {
@@ -319,7 +319,7 @@ node_is_empty (cherokee_avl_flcache_node_t *key)
 	 * 1.- A reference to a cherokee_request_t object
 	 * 2.- An object storing information
 	 */
-	if (key->conn_ref)
+	if (key->req_ref)
 		return false;
 
 	return cherokee_buffer_is_empty (&key->request);
@@ -354,13 +354,13 @@ cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl,
 
 ret_t
 cherokee_avl_flcache_add (cherokee_avl_flcache_t       *avl,
-			  cherokee_request_t        *conn,
+			  cherokee_request_t           *req,
 			  cherokee_avl_flcache_node_t **node)
 {
 	ret_t                       ret;
 	cherokee_avl_flcache_node_t *n   = NULL;
 
-	ret = node_new (&n, conn);
+	ret = node_new (&n, req);
 	if ((ret != ret_ok) || (n == NULL)) {
 		node_free (n);
 		return ret;
@@ -382,13 +382,13 @@ cherokee_avl_flcache_add (cherokee_avl_flcache_t       *avl,
 
 ret_t
 cherokee_avl_flcache_get (cherokee_avl_flcache_t       *avl,
-			  cherokee_request_t        *conn,
+			  cherokee_request_t           *req,
 			  cherokee_avl_flcache_node_t **node)
 {
 	ret_t                       ret;
 	cherokee_avl_flcache_node_t tmp;
 
-	tmp.conn_ref = conn;
+	tmp.req_ref = req;
 
 	CHEROKEE_RWLOCK_READER (&avl->base_rwlock);
 	ret = cherokee_avl_generic_get (AVL_GENERIC(avl), AVL_GENERIC_NODE(&tmp), (void **)node);

@@ -81,11 +81,11 @@
 #include "dtm.h"
 #include "flcache.h"
 
-#define ENTRIES "core,connection"
+#define ENTRIES "core,request"
 
 
 ret_t
-cherokee_request_new  (cherokee_request_t **conn)
+cherokee_request_new  (cherokee_request_t **req)
 {
 	CHEROKEE_NEW_STRUCT(n, request);
 
@@ -171,206 +171,206 @@ cherokee_request_new  (cherokee_request_t **conn)
 	cherokee_config_entry_ref_init (&n->config_entry);
 	cherokee_flcache_conn_init (&n->flcache);
 
-	*conn = n;
+	*req = n;
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_free (cherokee_request_t  *conn)
+cherokee_request_free (cherokee_request_t *req)
 {
-	cherokee_header_mrproper (&conn->header);
-	cherokee_socket_mrproper (&conn->socket);
+	cherokee_header_mrproper (&req->header);
+	cherokee_socket_mrproper (&req->socket);
 
-	if (conn->handler != NULL) {
-		cherokee_handler_free (conn->handler);
-		conn->handler = NULL;
+	if (req->handler != NULL) {
+		cherokee_handler_free (req->handler);
+		req->handler = NULL;
 	}
 
-	if (conn->encoder != NULL) {
-		cherokee_encoder_free (conn->encoder);
-		conn->encoder = NULL;
+	if (req->encoder != NULL) {
+		cherokee_encoder_free (req->encoder);
+		req->encoder = NULL;
 	}
 
-	cherokee_post_mrproper (&conn->post);
+	cherokee_post_mrproper (&req->post);
 
-	cherokee_buffer_mrproper (&conn->request);
-	cherokee_buffer_mrproper (&conn->request_original);
-	cherokee_buffer_mrproper (&conn->query_string_original);
-	cherokee_buffer_mrproper (&conn->logger_real_ip);
+	cherokee_buffer_mrproper (&req->request);
+	cherokee_buffer_mrproper (&req->request_original);
+	cherokee_buffer_mrproper (&req->query_string_original);
+	cherokee_buffer_mrproper (&req->logger_real_ip);
 
-	cherokee_buffer_mrproper (&conn->pathinfo);
-	cherokee_buffer_mrproper (&conn->buffer);
-	cherokee_buffer_mrproper (&conn->header_buffer);
-	cherokee_buffer_mrproper (&conn->incoming_header);
-	cherokee_buffer_mrproper (&conn->query_string);
-	cherokee_buffer_mrproper (&conn->encoder_buffer);
+	cherokee_buffer_mrproper (&req->pathinfo);
+	cherokee_buffer_mrproper (&req->buffer);
+	cherokee_buffer_mrproper (&req->header_buffer);
+	cherokee_buffer_mrproper (&req->incoming_header);
+	cherokee_buffer_mrproper (&req->query_string);
+	cherokee_buffer_mrproper (&req->encoder_buffer);
 
-	cherokee_buffer_mrproper (&conn->local_directory);
-	cherokee_buffer_mrproper (&conn->web_directory);
-	cherokee_buffer_mrproper (&conn->effective_directory);
-	cherokee_buffer_mrproper (&conn->userdir);
-	cherokee_buffer_mrproper (&conn->redirect);
-	cherokee_buffer_mrproper (&conn->host);
-	cherokee_buffer_mrproper (&conn->host_port);
-	cherokee_buffer_mrproper (&conn->self_trace);
-	cherokee_buffer_mrproper (&conn->chunked_len);
+	cherokee_buffer_mrproper (&req->local_directory);
+	cherokee_buffer_mrproper (&req->web_directory);
+	cherokee_buffer_mrproper (&req->effective_directory);
+	cherokee_buffer_mrproper (&req->userdir);
+	cherokee_buffer_mrproper (&req->redirect);
+	cherokee_buffer_mrproper (&req->host);
+	cherokee_buffer_mrproper (&req->host_port);
+	cherokee_buffer_mrproper (&req->self_trace);
+	cherokee_buffer_mrproper (&req->chunked_len);
 
-	cherokee_buffer_mrproper (&conn->error_internal_url);
-	cherokee_buffer_mrproper (&conn->error_internal_qs);
+	cherokee_buffer_mrproper (&req->error_internal_url);
+	cherokee_buffer_mrproper (&req->error_internal_qs);
 
-	if (conn->validator != NULL) {
-		cherokee_validator_free (conn->validator);
-		conn->validator = NULL;
+	if (req->validator != NULL) {
+		cherokee_validator_free (req->validator);
+		req->validator = NULL;
 	}
 
-	if (conn->arguments != NULL) {
-		cherokee_avl_free (conn->arguments,
+	if (req->arguments != NULL) {
+		cherokee_avl_free (req->arguments,
 				   (cherokee_func_free_t) cherokee_buffer_free);
-		conn->arguments = NULL;
+		req->arguments = NULL;
 	}
 
 
-	if (conn->polling_aim.fd != -1) {
-                cherokee_fd_close (conn->polling_aim.fd);
+	if (req->polling_aim.fd != -1) {
+                cherokee_fd_close (req->polling_aim.fd);
 	}
-	cherokee_request_poll_mrproper (&conn->polling_aim);
+	cherokee_request_poll_mrproper (&req->polling_aim);
 
-	free (conn);
+	free (req);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_clean (cherokee_request_t *conn,
-			   cherokee_boolean_t     reuse)
+cherokee_request_clean (cherokee_request_t *req,
+			cherokee_boolean_t  reuse)
 {
 	size_t             crlf_len;
 	uint32_t           header_len;
-	cherokee_server_t *srv         = REQ_SRV(conn);
+	cherokee_server_t *srv         = REQ_SRV(req);
 
 	/* I/O cache entry reference
 	 */
-	if (conn->io_entry_ref != NULL) {
-		cherokee_iocache_entry_unref (&conn->io_entry_ref);
-		conn->io_entry_ref = NULL;
+	if (req->io_entry_ref != NULL) {
+		cherokee_iocache_entry_unref (&req->io_entry_ref);
+		req->io_entry_ref = NULL;
 	}
 
 	/* Front-line cache
 	 */
-	cherokee_flcache_conn_clean (&conn->flcache);
+	cherokee_flcache_conn_clean (&req->flcache);
 
 	/* TCP cork
 	 */
-	if (conn->options & conn_op_tcp_cork) {
-		cherokee_request_set_cork (conn, false);
-		BIT_UNSET (conn->options, conn_op_tcp_cork);
+	if (req->options & conn_op_tcp_cork) {
+		cherokee_request_set_cork (req, false);
+		BIT_UNSET (req->options, conn_op_tcp_cork);
 	}
 
 	/* POST track
 	 */
 	if (srv && srv->post_track) {
-		srv->post_track->func_unregister (srv->post_track, &conn->post);
+		srv->post_track->func_unregister (srv->post_track, &req->post);
 	}
 
 	/* Free handlers before cleaning the conn properties. Its
 	 * free() function might require to read some of them.
 	 */
-	if (conn->handler != NULL) {
-		cherokee_handler_free (conn->handler);
-		conn->handler = NULL;
+	if (req->handler != NULL) {
+		cherokee_handler_free (req->handler);
+		req->handler = NULL;
 	}
 
-	if (conn->encoder != NULL) {
-		cherokee_encoder_free (conn->encoder);
-		conn->encoder = NULL;
+	if (req->encoder != NULL) {
+		cherokee_encoder_free (req->encoder);
+		req->encoder = NULL;
 	}
-	conn->encoder_new_func = NULL;
-	conn->encoder_props    = NULL;
+	req->encoder_new_func = NULL;
+	req->encoder_props    = NULL;
 
-	if (conn->polling_aim.fd != -1) {
-                cherokee_fd_close (conn->polling_aim.fd);
+	if (req->polling_aim.fd != -1) {
+                cherokee_fd_close (req->polling_aim.fd);
 	}
-	cherokee_request_poll_clean (&conn->polling_aim);
+	cherokee_request_poll_clean (&req->polling_aim);
 
-	if (conn->validator != NULL) {
-		cherokee_validator_free (conn->validator);
-		conn->validator = NULL;
+	if (req->validator != NULL) {
+		cherokee_validator_free (req->validator);
+		req->validator = NULL;
 	}
 
-	conn->phase                = phase_reading_header;
-	conn->auth_type            = http_auth_nothing;
-	conn->req_auth_type        = http_auth_nothing;
-	conn->upgrade              = http_upgrade_nothing;
-	conn->options              = conn_op_nothing;
-	conn->error_code           = http_ok;
-	conn->range_start          = -1;
-	conn->range_end            = -1;
-	conn->logger_ref           = NULL;
-	conn->mmaped               = NULL;
-	conn->mmaped_len           = 0;
-	conn->rx                   = 0;
-	conn->tx                   = 0;
-	conn->rx_partial           = 0;
-	conn->tx_partial           = 0;
-	conn->traffic_next         = 0;
-	conn->expiration           = cherokee_expiration_none;
-	conn->expiration_time      = 0;
-	conn->expiration_prop      = cherokee_expiration_prop_none;
-	conn->chunked_encoding     = false;
-	conn->chunked_sent         = 0;
-	conn->chunked_last_package = false;
-	conn->respins              = 0;
-	conn->limit_rate           = false;
-	conn->limit_bps            = 0;
-	conn->limit_blocked_until  = 0;
+	req->phase                = phase_reading_header;
+	req->auth_type            = http_auth_nothing;
+	req->req_auth_type        = http_auth_nothing;
+	req->upgrade              = http_upgrade_nothing;
+	req->options              = conn_op_nothing;
+	req->error_code           = http_ok;
+	req->range_start          = -1;
+	req->range_end            = -1;
+	req->logger_ref           = NULL;
+	req->mmaped               = NULL;
+	req->mmaped_len           = 0;
+	req->rx                   = 0;
+	req->tx                   = 0;
+	req->rx_partial           = 0;
+	req->tx_partial           = 0;
+	req->traffic_next         = 0;
+	req->expiration           = cherokee_expiration_none;
+	req->expiration_time      = 0;
+	req->expiration_prop      = cherokee_expiration_prop_none;
+	req->chunked_encoding     = false;
+	req->chunked_sent         = 0;
+	req->chunked_last_package = false;
+	req->respins              = 0;
+	req->limit_rate           = false;
+	req->limit_bps            = 0;
+	req->limit_blocked_until  = 0;
 
-	memset (conn->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
-	conn->regex_ovecsize = 0;
-	memset (conn->regex_host_ovector, 0, OVECTOR_LEN * sizeof(int));
-	conn->regex_host_ovecsize = 0;
+	memset (req->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
+	req->regex_ovecsize = 0;
+	memset (req->regex_host_ovector, 0, OVECTOR_LEN * sizeof(int));
+	req->regex_host_ovecsize = 0;
 
-	cherokee_request_poll_clean (&conn->polling_aim);
+	cherokee_request_poll_clean (&req->polling_aim);
 
-	cherokee_post_clean (&conn->post);
-	cherokee_buffer_mrproper (&conn->encoder_buffer);
+	cherokee_post_clean (&req->post);
+	cherokee_buffer_mrproper (&req->encoder_buffer);
 
-	cherokee_buffer_clean (&conn->request);
-	cherokee_buffer_clean (&conn->request_original);
-	cherokee_buffer_clean (&conn->query_string_original);
-	cherokee_buffer_clean (&conn->logger_real_ip);
+	cherokee_buffer_clean (&req->request);
+	cherokee_buffer_clean (&req->request_original);
+	cherokee_buffer_clean (&req->query_string_original);
+	cherokee_buffer_clean (&req->logger_real_ip);
 
-	cherokee_buffer_clean (&conn->pathinfo);
-	cherokee_buffer_clean (&conn->local_directory);
-	cherokee_buffer_clean (&conn->web_directory);
-	cherokee_buffer_clean (&conn->effective_directory);
-	cherokee_buffer_clean (&conn->userdir);
-	cherokee_buffer_clean (&conn->redirect);
-	cherokee_buffer_clean (&conn->host);
-	cherokee_buffer_clean (&conn->host_port);
-	cherokee_buffer_clean (&conn->query_string);
-	cherokee_buffer_clean (&conn->self_trace);
-	cherokee_buffer_clean (&conn->chunked_len);
+	cherokee_buffer_clean (&req->pathinfo);
+	cherokee_buffer_clean (&req->local_directory);
+	cherokee_buffer_clean (&req->web_directory);
+	cherokee_buffer_clean (&req->effective_directory);
+	cherokee_buffer_clean (&req->userdir);
+	cherokee_buffer_clean (&req->redirect);
+	cherokee_buffer_clean (&req->host);
+	cherokee_buffer_clean (&req->host_port);
+	cherokee_buffer_clean (&req->query_string);
+	cherokee_buffer_clean (&req->self_trace);
+	cherokee_buffer_clean (&req->chunked_len);
 
-	conn->error_internal_code = http_unset;
-	cherokee_buffer_clean (&conn->error_internal_url);
-	cherokee_buffer_clean (&conn->error_internal_qs);
+	req->error_internal_code = http_unset;
+	cherokee_buffer_clean (&req->error_internal_url);
+	cherokee_buffer_clean (&req->error_internal_qs);
 
-	cherokee_config_entry_ref_clean (&conn->config_entry);
+	cherokee_config_entry_ref_clean (&req->config_entry);
 
-	if (conn->arguments != NULL) {
-		cherokee_avl_free (conn->arguments,
+	if (req->arguments != NULL) {
+		cherokee_avl_free (req->arguments,
 				   (cherokee_func_free_t) cherokee_buffer_free);
-		conn->arguments = NULL;
+		req->arguments = NULL;
 	}
 
 	/* Drop out the last incoming header
 	 */
-	cherokee_header_get_length (&conn->header, &header_len);
+	cherokee_header_get_length (&req->header, &header_len);
 
-	cherokee_header_clean (&conn->header);
-	cherokee_buffer_clean (&conn->buffer);
-	cherokee_buffer_clean (&conn->header_buffer);
+	cherokee_header_clean (&req->header);
+	cherokee_buffer_clean (&req->buffer);
+	cherokee_buffer_clean (&req->header_buffer);
 
 	if (reuse) {
 		/* Skip trailing CRLF (which may be sent by some HTTP clients)
@@ -379,15 +379,15 @@ cherokee_request_clean (cherokee_request_t *conn,
 		 * handled in next request.  This may avoid a subsequent real
 		 * move_to_begin of the contents left in the buffer.
 		 */
-		crlf_len = cherokee_buffer_cnt_spn (&conn->incoming_header, header_len, CRLF);
+		crlf_len = cherokee_buffer_cnt_spn (&req->incoming_header, header_len, CRLF);
 		header_len += (crlf_len <= MAX_HEADER_CRLF) ? crlf_len : 0;
 
-		cherokee_buffer_move_to_begin (&conn->incoming_header, header_len);
+		cherokee_buffer_move_to_begin (&req->incoming_header, header_len);
 
-		TRACE (ENTRIES, "conn %p, %s headers\n", conn,
-		       !cherokee_buffer_is_empty (&conn->incoming_header) ? "has" : "doesn't have");
+		TRACE (ENTRIES, "conn %p, %s headers\n", req,
+		       !cherokee_buffer_is_empty (&req->incoming_header) ? "has" : "doesn't have");
 	} else {
-		cherokee_buffer_clean (&conn->incoming_header);
+		cherokee_buffer_clean (&req->incoming_header);
 	}
 
 	return ret_ok;
@@ -395,27 +395,27 @@ cherokee_request_clean (cherokee_request_t *conn,
 
 
 ret_t
-cherokee_request_clean_close (cherokee_request_t *conn)
+cherokee_request_clean_close (cherokee_request_t *req)
 {
 	/* Close and clean the socket
 	 */
-	cherokee_socket_close (&conn->socket);
-	cherokee_socket_clean (&conn->socket);
+	cherokee_socket_close (&req->socket);
+	cherokee_socket_clean (&req->socket);
 
 	/* Make sure the connection Keep-Alive is disabled
 	 */
-	conn->keepalive = 0;
-	cherokee_buffer_clean (&conn->incoming_header);
+	req->keepalive = 0;
+	cherokee_buffer_clean (&req->incoming_header);
 
 	/* Clean the connection object
 	 */
-	cherokee_request_clean (conn, false);
+	cherokee_request_clean (req, false);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_setup_error_handler (cherokee_request_t *conn)
+cherokee_request_setup_error_handler (cherokee_request_t *req)
 {
 	ret_t                       ret;
 	cherokee_server_t          *srv;
@@ -424,53 +424,53 @@ cherokee_request_setup_error_handler (cherokee_request_t *conn)
 
 	/* NOTE ABOUT THIS FUNCTION: It ought to be call only from
 	 * cherokee/thread.c. Right after calling the function it must
-	 * call continue (becase conn->error_code might have changed).
+	 * call continue (becase req->error_code might have changed).
 	 */
 
-	srv   = REQ_SRV(conn);
-	vsrv  = REQ_VSRV(conn);
+	srv   = REQ_SRV(req);
+	vsrv  = REQ_VSRV(req);
 	entry = vsrv->error_handler;
 
 	TRACE(ENTRIES, "Setting up error handler: %d (respins=%d)\n",
-	      conn->error_code, conn->respins);
+	      req->error_code, req->respins);
 
 	/* It has a common handler. It has to be freed.
 	 */
-	if (conn->handler != NULL) {
-		cherokee_handler_free (conn->handler);
-		conn->handler = NULL;
+	if (req->handler != NULL) {
+		cherokee_handler_free (req->handler);
+		req->handler = NULL;
 	}
 
 	/* The rid of the encoder as well.
 	 */
-	if (conn->encoder_new_func) {
-		conn->encoder_new_func = NULL;
-		conn->encoder_props    = NULL;
+	if (req->encoder_new_func) {
+		req->encoder_new_func = NULL;
+		req->encoder_props    = NULL;
 	}
 
-	if (conn->encoder != NULL) {
-		cherokee_encoder_free (conn->encoder);
-		conn->encoder = NULL;
+	if (req->encoder != NULL) {
+		cherokee_encoder_free (req->encoder);
+		req->encoder = NULL;
 	}
 
 	/* Loop detection: Set the default error handler and exit.
 	 */
-	conn->respins += 1;
-	if (conn->respins > RESPINS_MAX) {
+	req->respins += 1;
+	if (req->respins > RESPINS_MAX) {
 		goto safe;
 	}
 
 	/* Create a new error handler
 	 */
 	if ((entry != NULL) && (entry->handler_new_func != NULL)) {
-		ret = entry->handler_new_func ((void **) &conn->handler, conn, entry->handler_properties);
+		ret = entry->handler_new_func ((void **) &req->handler, req, entry->handler_properties);
 		switch (ret) {
 		case ret_ok:
 			/* At this point, two different things might happen:
 			 * - It has got a common handler like handler_redir
 			 * - It has got an error handler like handler_error
 			 */
-			conn->phase = phase_init;
+			req->phase = phase_init;
 
 			TRACE(ENTRIES, "Error handler set. Phase is '%s' now.\n", "init");
 			goto out;
@@ -478,15 +478,15 @@ cherokee_request_setup_error_handler (cherokee_request_t *conn)
 		case ret_eagain:
 			/* It's an internal error redirection
 			 */
- 			cherokee_buffer_clean (&conn->pathinfo);
- 			cherokee_buffer_clean (&conn->query_string);
-			cherokee_buffer_clean (&conn->web_directory);
-			cherokee_buffer_clean (&conn->local_directory);
+ 			cherokee_buffer_clean (&req->pathinfo);
+ 			cherokee_buffer_clean (&req->query_string);
+			cherokee_buffer_clean (&req->web_directory);
+			cherokee_buffer_clean (&req->local_directory);
 
-			conn->error_code = http_ok;
-			conn->phase = phase_setup_connection;
+			req->error_code = http_ok;
+			req->phase = phase_setup_connection;
 
-			TRACE(ENTRIES, "Internal redir. Switching to phase 'setup_connection', respins=%d, request=%s\n", conn->respins, conn->request.buf);
+			TRACE(ENTRIES, "Internal redir. Switching to phase 'setup_connection', respins=%d, request=%s\n", req->respins, req->request.buf);
 			goto clean;
 
 		default:
@@ -498,33 +498,33 @@ cherokee_request_setup_error_handler (cherokee_request_t *conn)
 safe:
 	/* If something was wrong, try with the default error handler
 	 */
-	ret = cherokee_handler_error_new (&conn->handler, conn, NULL);
+	ret = cherokee_handler_error_new (&req->handler, req, NULL);
 	if (unlikely (ret != ret_ok))
 		return ret_error;
 
 	TRACE(ENTRIES, "Default Error handler set. Phase is '%s' now.\n", "init");
-	conn->phase = phase_init;
+	req->phase = phase_init;
 
 out:
 #ifdef TRACE_ENABLED
 	{
 		const char *name = NULL;
 
-		cherokee_module_get_name (MODULE(conn->handler), &name);
+		cherokee_module_get_name (MODULE(req->handler), &name);
 		TRACE(ENTRIES, "New handler '%s'\n", name ? name : "unknown");
 	}
 #endif
 
 	/* Let's keep alive 3xx, 404, and 410 responses.
 	 */
-	if (http_type_500 (conn->error_code)) {
-		conn->keepalive = 0;
+	if (http_type_500 (req->error_code)) {
+		req->keepalive = 0;
 
-	} else if (! http_type_300 (conn->error_code) &&   /* 3xx */
-		   (conn->error_code != http_gone) &&      /* 410 */
-		   (conn->error_code != http_not_found))   /* 404 */
+	} else if (! http_type_300 (req->error_code) &&   /* 3xx */
+		   (req->error_code != http_gone) &&      /* 410 */
+		   (req->error_code != http_not_found))   /* 404 */
 	{
-		conn->keepalive = 0;
+		req->keepalive = 0;
 	}
 
 	ret = ret_ok;
@@ -532,43 +532,43 @@ out:
 clean:
 	/* Nothing should be mmaped any longer
 	 */
-	if (conn->io_entry_ref != NULL) {
-		cherokee_iocache_entry_unref (&conn->io_entry_ref);
-		conn->io_entry_ref = NULL;
+	if (req->io_entry_ref != NULL) {
+		cherokee_iocache_entry_unref (&req->io_entry_ref);
+		req->io_entry_ref = NULL;
 	}
 
-	conn->mmaped     = NULL;
-	conn->mmaped_len = 0;
+	req->mmaped     = NULL;
+	req->mmaped_len = 0;
 
-	cherokee_flcache_conn_clean (&conn->flcache);
+	cherokee_flcache_conn_clean (&req->flcache);
 
 	/* It does not matter whether the previous handler wanted to
 	 * use Chunked encoding.
 	 */
-	conn->chunked_encoding = false;
+	req->chunked_encoding = false;
 
 	return ret;
 }
 
 
 ret_t
-cherokee_request_setup_hsts_handler (cherokee_request_t *conn)
+cherokee_request_setup_hsts_handler (cherokee_request_t *req)
 {
 	ret_t              ret;
 	cherokee_list_t   *i;
 	int                port = -1;
-	cherokee_server_t *srv  = REQ_SRV(conn);
+	cherokee_server_t *srv  = REQ_SRV(req);
 
 	/* Redirect to:
 	 * "https://" + host + request + query_string
 	 */
-	cherokee_buffer_clean (&conn->redirect);
+	cherokee_buffer_clean (&req->redirect);
 
 	/* 1.- Proto */
-	cherokee_buffer_add_str (&conn->redirect, "https://");
+	cherokee_buffer_add_str (&req->redirect, "https://");
 
 	/* 2.- Host */
-	cherokee_request_build_host_string (conn, &conn->redirect);
+	cherokee_request_build_host_string (req, &req->redirect);
 
 	/* 3.- Port */
 	list_for_each (i, &srv->listeners) {
@@ -581,47 +581,47 @@ cherokee_request_setup_hsts_handler (cherokee_request_t *conn)
 	if ((port != -1) &&
 	    (! http_port_is_standard (port, true)))
 	{
-		cherokee_buffer_add_char    (&conn->redirect, ':');
-		cherokee_buffer_add_ulong10 (&conn->redirect, port);
+		cherokee_buffer_add_char    (&req->redirect, ':');
+		cherokee_buffer_add_ulong10 (&req->redirect, port);
 	}
 
 	/* 4.- Request */
-	cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
+	cherokee_buffer_add_buffer (&req->redirect, &req->request);
 
-	if (conn->query_string.len > 0) {
-		cherokee_buffer_add_char   (&conn->redirect, '?');
-		cherokee_buffer_add_buffer (&conn->redirect, &conn->query_string);
+	if (req->query_string.len > 0) {
+		cherokee_buffer_add_char   (&req->redirect, '?');
+		cherokee_buffer_add_buffer (&req->redirect, &req->query_string);
 	}
 
 	/* 301 response: Move Permanetly
 	 */
-	conn->error_code = http_moved_permanently;
+	req->error_code = http_moved_permanently;
 
 	/* Instance the handler object
 	 */
-	ret = cherokee_handler_error_new (&conn->handler, conn, NULL);
+	ret = cherokee_handler_error_new (&req->handler, req, NULL);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
 	TRACE (ENTRIES, "HSTS redirection handler set. Phase is '%s' now.\n", "init");
-	conn->phase = phase_init;
+	req->phase = phase_init;
 
 	return ret_ok;
 }
 
 
 static void
-build_response_header_authentication (cherokee_request_t *conn, cherokee_buffer_t *buffer)
+build_response_header_authentication (cherokee_request_t *req, cherokee_buffer_t *buffer)
 {
 	ret_t ret;
 
 	/* Basic Authenticatiom
 	 * Eg: WWW-Authenticate: Basic realm=""
 	 */
-	if (conn->auth_type & http_auth_basic) {
+	if (req->auth_type & http_auth_basic) {
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Basic realm=\"");
-		cherokee_buffer_add_buffer (buffer, conn->config_entry.auth_realm);
+		cherokee_buffer_add_buffer (buffer, req->config_entry.auth_realm);
 		cherokee_buffer_add_str (buffer, "\""CRLF);
 	}
 
@@ -629,14 +629,14 @@ build_response_header_authentication (cherokee_request_t *conn, cherokee_buffer_
 	 * WWW-Authenticate: Digest realm="", qop="auth,auth-int",
 	 *                   nonce="", opaque=""
 	 */
-	if (conn->auth_type & http_auth_digest) {
-		cherokee_thread_t *thread    = REQ_THREAD(conn);
+	if (req->auth_type & http_auth_digest) {
+		cherokee_thread_t *thread    = REQ_THREAD(req);
 		cherokee_buffer_t *new_nonce = THREAD_TMP_BUF1(thread);
 
 		/* Realm
 		 */
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Digest realm=\"");
-		cherokee_buffer_add_buffer (buffer, conn->config_entry.auth_realm);
+		cherokee_buffer_add_buffer (buffer, req->config_entry.auth_realm);
 		cherokee_buffer_add_str (buffer, "\", ");
 
 		/* Nonce:
@@ -644,20 +644,20 @@ build_response_header_authentication (cherokee_request_t *conn, cherokee_buffer_
 		 */
 		ret = ret_not_found;
 
-		if ((conn->validator != NULL) &&
-		    (! cherokee_buffer_is_empty (&conn->validator->nonce)))
+		if ((req->validator != NULL) &&
+		    (! cherokee_buffer_is_empty (&req->validator->nonce)))
 		{
-			ret = cherokee_nonce_table_check (REQ_SRV(conn)->nonces,
-							  &conn->validator->nonce);
+			ret = cherokee_nonce_table_check (REQ_SRV(req)->nonces,
+							  &req->validator->nonce);
 		}
 
 		cherokee_buffer_add_str (buffer, "nonce=\"");
 		if (ret != ret_ok) {
 			cherokee_buffer_clean (new_nonce);
-			cherokee_nonce_table_generate (REQ_SRV(conn)->nonces, conn, new_nonce);
+			cherokee_nonce_table_generate (REQ_SRV(req)->nonces, req, new_nonce);
 			cherokee_buffer_add_buffer (buffer, new_nonce);
 		} else {
-			cherokee_buffer_add_buffer (buffer, &conn->validator->nonce);
+			cherokee_buffer_add_buffer (buffer, &req->validator->nonce);
 		}
 		cherokee_buffer_add_str (buffer, "\", ");
 
@@ -671,22 +671,22 @@ build_response_header_authentication (cherokee_request_t *conn, cherokee_buffer_
 
 
 ret_t
-cherokee_request_read_post (cherokee_request_t *conn)
+cherokee_request_read_post (cherokee_request_t *req)
 {
 	/* Shortcut
 	 */
-	if (conn->handler->read_post == NULL) {
+	if (req->handler->read_post == NULL) {
 		return ret_ok;
 	}
 
-	return cherokee_handler_read_post (conn->handler);
+	return cherokee_handler_read_post (req->handler);
 }
 
 
 void
-cherokee_request_add_expiration_header (cherokee_request_t *conn,
-					   cherokee_buffer_t     *buffer,
-					   cherokee_boolean_t     use_maxage)
+cherokee_request_add_expiration_header (cherokee_request_t *req,
+					cherokee_buffer_t  *buffer,
+					cherokee_boolean_t  use_maxage)
 {
 	time_t             exp_time;
 	struct tm          exp_tm;
@@ -696,10 +696,10 @@ cherokee_request_add_expiration_header (cherokee_request_t *conn,
 
 	/* Expires, and Cache-Control: max-age
 	 */
-	switch (conn->expiration) {
+	switch (req->expiration) {
 	case cherokee_expiration_epoch:
 		cherokee_buffer_add_str (buffer, "Expires: Tue, 01 Jan 1970 00:00:01 GMT" CRLF);
-		if (conn->expiration_prop != cherokee_expiration_prop_none) {
+		if (req->expiration_prop != cherokee_expiration_prop_none) {
 			cherokee_buffer_add_str (buffer, "Cache-Control: ");
 		}
 		break;
@@ -711,7 +711,7 @@ cherokee_request_add_expiration_header (cherokee_request_t *conn,
 		break;
 
 	case cherokee_expiration_time:
-		exp_time = (cherokee_bogonow_now + conn->expiration_time);
+		exp_time = (cherokee_bogonow_now + req->expiration_time);
 		cherokee_gmtime (&exp_time, &exp_tm);
 		szlen = cherokee_dtm_gmttm2str (bufstr, sizeof(bufstr), &exp_tm);
 
@@ -721,9 +721,9 @@ cherokee_request_add_expiration_header (cherokee_request_t *conn,
 
 		if (use_maxage) {
 			cherokee_buffer_add_str (buffer, "Cache-Control: max-age=");
-			cherokee_buffer_add_long10 (buffer, conn->expiration_time);
+			cherokee_buffer_add_long10 (buffer, req->expiration_time);
 			first_prop = false;
-		} else if (conn->expiration_prop) {
+		} else if (req->expiration_prop) {
 			cherokee_buffer_add_str (buffer, "Cache-Control: ");
 		}
 		break;
@@ -734,7 +734,7 @@ cherokee_request_add_expiration_header (cherokee_request_t *conn,
 
 	/* No properties shortcut
 	 */
-	if (conn->expiration_prop == cherokee_expiration_prop_none) {
+	if (req->expiration_prop == cherokee_expiration_prop_none) {
 		if (! first_prop)
 			cherokee_buffer_add_str (buffer, CRLF);
 		return;
@@ -751,30 +751,30 @@ cherokee_request_add_expiration_header (cherokee_request_t *conn,
 		}						\
 	} while (false)
 
-	if (conn->expiration_prop & cherokee_expiration_prop_public) {
+	if (req->expiration_prop & cherokee_expiration_prop_public) {
 		handle_comma;
 		cherokee_buffer_add_str (buffer, "public");
-	} else if (conn->expiration_prop & cherokee_expiration_prop_private) {
+	} else if (req->expiration_prop & cherokee_expiration_prop_private) {
 		handle_comma;
 		cherokee_buffer_add_str (buffer, "private");
-	} else if (conn->expiration_prop & cherokee_expiration_prop_no_cache) {
+	} else if (req->expiration_prop & cherokee_expiration_prop_no_cache) {
 		handle_comma;
 		cherokee_buffer_add_str (buffer, "no-cache");
 	}
 
-	if (conn->expiration_prop & cherokee_expiration_prop_no_store) {
+	if (req->expiration_prop & cherokee_expiration_prop_no_store) {
 		handle_comma;
 		cherokee_buffer_add_str (buffer, "no-store");
 	}
-	if (conn->expiration_prop & cherokee_expiration_prop_no_transform) {
+	if (req->expiration_prop & cherokee_expiration_prop_no_transform) {
 		handle_comma;
 		cherokee_buffer_add_str (buffer, "no-transform");
 	}
-	if (conn->expiration_prop & cherokee_expiration_prop_must_revalidate) {
+	if (req->expiration_prop & cherokee_expiration_prop_must_revalidate) {
 		handle_comma;
 		cherokee_buffer_add_str (buffer, "must-revalidate");
 	}
-	if (conn->expiration_prop & cherokee_expiration_prop_proxy_revalidate) {
+	if (req->expiration_prop & cherokee_expiration_prop_proxy_revalidate) {
 		handle_comma;
 		cherokee_buffer_add_str (buffer, "proxy-revalidate");
 	}
@@ -786,10 +786,10 @@ cherokee_request_add_expiration_header (cherokee_request_t *conn,
 
 
 static void
-build_response_header (cherokee_request_t *conn,
-		       cherokee_buffer_t     *buffer)
+build_response_header (cherokee_request_t *req,
+		       cherokee_buffer_t  *buffer)
 {
-	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(REQ_THREAD(conn));
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(REQ_THREAD(req));
 
 	/* Build the response header.
 	 */
@@ -797,7 +797,7 @@ build_response_header (cherokee_request_t *conn,
 
 	/* Add protocol string
 	 */
-	switch (conn->header.version) {
+	switch (req->header.version) {
 	case http_version_10:
 		cherokee_buffer_add_str (buffer, "HTTP/1.0 ");
 		break;
@@ -809,25 +809,25 @@ build_response_header (cherokee_request_t *conn,
 
 	/* HTTP response code
 	 */
-	if (unlikely (conn->error_internal_code != http_unset)) {
-		cherokee_http_code_copy (conn->error_internal_code, buffer);
+	if (unlikely (req->error_internal_code != http_unset)) {
+		cherokee_http_code_copy (req->error_internal_code, buffer);
 	} else {
-		cherokee_http_code_copy (conn->error_code, buffer);
+		cherokee_http_code_copy (req->error_code, buffer);
 	}
 
 	cherokee_buffer_add_str (buffer, CRLF);
 
 	/* Add the "Connection:" header
 	 */
-	if (conn->upgrade != http_upgrade_nothing) {
+	if (req->upgrade != http_upgrade_nothing) {
 		cherokee_buffer_add_str (buffer, "Connection: Upgrade"CRLF);
 
-	} else if (conn->keepalive > 1) {
-		if (conn->header.version < http_version_11) {
+	} else if (req->keepalive > 1) {
+		if (req->header.version < http_version_11) {
 			cherokee_buffer_add_str     (buffer, "Connection: Keep-Alive"CRLF);
-			cherokee_buffer_add_buffer  (buffer, conn->timeout_header);
+			cherokee_buffer_add_buffer  (buffer, req->timeout_header);
 			cherokee_buffer_add_str     (buffer, ", max=");
-			cherokee_buffer_add_ulong10 (buffer, conn->keepalive);
+			cherokee_buffer_add_ulong10 (buffer, req->keepalive);
 			cherokee_buffer_add_str     (buffer, CRLF);
 		}
 	} else {
@@ -836,14 +836,14 @@ build_response_header (cherokee_request_t *conn,
 
 	/* Chunked transfer
 	 */
-	if (conn->chunked_encoding) {
+	if (req->chunked_encoding) {
 		cherokee_buffer_add_str (buffer, "Transfer-Encoding: chunked" CRLF);
 	}
 
 	/* Exit now if the handler already added all the headers
 	 */
-	if ((conn->handler != NULL) &&
-	    (HANDLER_SUPPORTS (conn->handler, hsupport_full_headers)))
+	if ((req->handler != NULL) &&
+	    (HANDLER_SUPPORTS (req->handler, hsupport_full_headers)))
 		return;
 
 	/* Date
@@ -855,53 +855,53 @@ build_response_header (cherokee_request_t *conn,
 	/* Add the Server header
 	 */
 	cherokee_buffer_add_str (buffer, "Server: ");
-	cherokee_buffer_add_buffer (buffer, &REQ_BIND(conn)->server_string);
+	cherokee_buffer_add_buffer (buffer, &REQ_BIND(req)->server_string);
 	cherokee_buffer_add_str (buffer, CRLF);
 
 	/* Authentication
 	 */
-	if (conn->config_entry.auth_realm != NULL) {
-		if ((conn->error_code          == http_unauthorized) ||
-		    (conn->error_internal_code == http_unauthorized))
+	if (req->config_entry.auth_realm != NULL) {
+		if ((req->error_code          == http_unauthorized) ||
+		    (req->error_internal_code == http_unauthorized))
 		{
-			build_response_header_authentication (conn, buffer);
+			build_response_header_authentication (req, buffer);
 		}
 	}
 
 	/* Redirected connections
 	 */
-	if (conn->redirect.len >= 1) {
+	if (req->redirect.len >= 1) {
 		cherokee_buffer_add_str (buffer, "Location: ");
-		cherokee_buffer_add_buffer (buffer, &conn->redirect);
+		cherokee_buffer_add_buffer (buffer, &req->redirect);
 		cherokee_buffer_add_str (buffer, CRLF);
 	}
 
 	/* Encoder headers
 	 */
-	if (conn->encoder) {
+	if (req->encoder) {
 		/* Front-line Cache (in) */
-		if (conn->flcache.mode == flcache_mode_in) {
+		if (req->flcache.mode == flcache_mode_in) {
 			cherokee_buffer_clean (tmp1);
-			cherokee_encoder_add_headers (conn->encoder, tmp1);
+			cherokee_encoder_add_headers (req->encoder, tmp1);
 			cherokee_buffer_add_buffer (buffer, tmp1);
-			cherokee_buffer_add_buffer (&conn->flcache.header, tmp1);
+			cherokee_buffer_add_buffer (&req->flcache.header, tmp1);
 		}
 		/* Straight */
 		else {
-			cherokee_encoder_add_headers (conn->encoder, buffer);
+			cherokee_encoder_add_headers (req->encoder, buffer);
 		}
 	}
 
 	/* HSTS support
 	 */
-	if ((conn->socket.is_tls == TLS)    &&
-	    (REQ_VSRV(conn)->hsts.enabled))
+	if ((req->socket.is_tls == TLS)    &&
+	    (REQ_VSRV(req)->hsts.enabled))
 	{
 		cherokee_buffer_add_str     (buffer, "Strict-Transport-Security: ");
 		cherokee_buffer_add_str     (buffer, "max-age=");
-		cherokee_buffer_add_ulong10 (buffer, (culong_t) REQ_VSRV(conn)->hsts.max_age);
+		cherokee_buffer_add_ulong10 (buffer, (culong_t) REQ_VSRV(req)->hsts.max_age);
 
-		if (REQ_VSRV(conn)->hsts.subdomains) {
+		if (REQ_VSRV(req)->hsts.subdomains) {
 			cherokee_buffer_add_str (buffer, "; includeSubdomains");
 		}
 
@@ -911,44 +911,44 @@ build_response_header (cherokee_request_t *conn,
 
 
 static void
-build_response_header_final (cherokee_request_t *conn,
-			     cherokee_buffer_t     *buffer)
+build_response_header_final (cherokee_request_t *req,
+			     cherokee_buffer_t  *buffer)
 {
-	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(REQ_THREAD(conn));
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(REQ_THREAD(req));
 
 	/* Expiration
 	 */
-	if (conn->expiration != cherokee_expiration_none) {
+	if (req->expiration != cherokee_expiration_none) {
 		/* Add expiration headers if Front-Line Cache is not
 		 * enabled. If it were, the header was already stored
 		 * in the response file.
 		 */
-		if (conn->flcache.mode == flcache_mode_undef) {
-			cherokee_request_add_expiration_header (conn, buffer, true);
-		} else if (conn->flcache.mode == flcache_mode_in) {
+		if (req->flcache.mode == flcache_mode_undef) {
+			cherokee_request_add_expiration_header (req, buffer, true);
+		} else if (req->flcache.mode == flcache_mode_in) {
 			cherokee_header_del_entry (buffer, "Cache-Control", 13);
-			cherokee_request_add_expiration_header (conn, buffer, true);
+			cherokee_request_add_expiration_header (req, buffer, true);
 		}
 	}
 
 	/* Headers ops:
 	 * This must be the last operation
 	 */
-	if (conn->config_entry.header_ops) {
-		cherokee_header_op_render (conn->config_entry.header_ops, &conn->buffer);
+	if (req->config_entry.header_ops) {
+		cherokee_header_op_render (req->config_entry.header_ops, &req->buffer);
 	}
 }
 
 
 ret_t
-cherokee_request_build_header (cherokee_request_t *conn)
+cherokee_request_build_header (cherokee_request_t *req)
 {
 	ret_t ret;
 
 	/* Front-line cache
 	 */
-	if (conn->flcache.mode == flcache_mode_out) {
-		ret = cherokee_flcache_conn_send_header (&conn->flcache, conn);
+	if (req->flcache.mode == flcache_mode_out) {
+		ret = cherokee_flcache_conn_send_header (&req->flcache, req);
 		if (ret != ret_ok) {
 			return ret;
 		}
@@ -958,7 +958,7 @@ cherokee_request_build_header (cherokee_request_t *conn)
 
 	/* Try to get the headers from the handler
 	 */
-	ret = cherokee_handler_add_headers (conn->handler, &conn->header_buffer);
+	ret = cherokee_handler_add_headers (req->handler, &req->header_buffer);
 	if (unlikely (ret != ret_ok)) {
 		switch (ret) {
 		case ret_eof:
@@ -973,72 +973,72 @@ cherokee_request_build_header (cherokee_request_t *conn)
 
 	/* Front-line Cache (in): Handler headers
 	 */
-	if (conn->flcache.mode == flcache_mode_in) {
-		cherokee_buffer_add_buffer (&conn->flcache.header, &conn->header_buffer);
+	if (req->flcache.mode == flcache_mode_in) {
+		cherokee_buffer_add_buffer (&req->flcache.header, &req->header_buffer);
 
 		/* Add X-Cache miss
 		 */
-		cherokee_buffer_add_str (&conn->header_buffer, "X-Cache: MISS from ");
-		cherokee_request_build_host_port_string (conn, &conn->header_buffer);
-		cherokee_buffer_add_str (&conn->header_buffer, CRLF);
+		cherokee_buffer_add_str (&req->header_buffer, "X-Cache: MISS from ");
+		cherokee_request_build_host_port_string (req, &req->header_buffer);
+		cherokee_buffer_add_str (&req->header_buffer, CRLF);
 	}
 
 	/* Replies with no body cannot use chunked encoding
 	 */
-	if ((! http_code_with_body (conn->error_code)) ||
-	    (! http_method_with_body (conn->header.method)))
+	if ((! http_code_with_body (req->error_code)) ||
+	    (! http_method_with_body (req->header.method)))
 	{
-		conn->chunked_encoding = false;
+		req->chunked_encoding = false;
 	}
 
 	/* If the connection is using Keep-Alive, it must either know
 	 * the length or use chunked encoding. Otherwise, Keep-Alive
 	 * has to be turned off.
 	 */
-	if (conn->keepalive != 0) {
-		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
-			if (! conn->chunked_encoding) {
-				conn->keepalive = 0;
+	if (req->keepalive != 0) {
+		if (! HANDLER_SUPPORTS (req->handler, hsupport_length)) {
+			if (! req->chunked_encoding) {
+				req->keepalive = 0;
 			}
 		} else {
-			conn->chunked_encoding = false;
+			req->chunked_encoding = false;
 		}
 	}
 
 	/* Instance an encoder if needed. Special-case: the proxy
 	 * handler might have instanced a encoded at this stage.
 	 */
-	if ((conn->encoder == NULL) &&
-	    (conn->encoder_new_func))
+	if ((req->encoder == NULL) &&
+	    (req->encoder_new_func))
 	{
 		/* Internally checks conn_op_cant_encoder */
-		cherokee_request_instance_encoder (conn);
+		cherokee_request_instance_encoder (req);
 	}
 
 out:
 	/* Add the server headers (phase 1)
 	 */
-	build_response_header (conn, &conn->buffer);
+	build_response_header (req, &req->buffer);
 
 	/* Add handler headers
 	 */
-	cherokee_buffer_add_buffer (&conn->buffer, &conn->header_buffer);
+	cherokee_buffer_add_buffer (&req->buffer, &req->header_buffer);
 
 	/* Add the server headers (phase 2)
 	 */
-	build_response_header_final (conn, &conn->buffer);
+	build_response_header_final (req, &req->buffer);
 
 	/* EOH
 	 */
-	cherokee_buffer_add_str (&conn->buffer, CRLF);
-	TRACE(ENTRIES, "Replying:\n%s", conn->buffer.buf);
+	cherokee_buffer_add_str (&req->buffer, CRLF);
+	TRACE(ENTRIES, "Replying:\n%s", req->buffer.buf);
 
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_send_header_and_mmaped (cherokee_request_t *conn)
+cherokee_request_send_header_and_mmaped (cherokee_request_t *req)
 {
 	size_t  re = 0;
 	ret_t   ret;
@@ -1048,49 +1048,49 @@ cherokee_request_send_header_and_mmaped (cherokee_request_t *conn)
 	/* 1.- Special case: There is not header to send
 	 * because it has been sent by writev() (see below)
 	 */
-	if (cherokee_buffer_is_empty (&conn->buffer)) {
-		ret = cherokee_socket_write (&conn->socket, conn->mmaped, conn->mmaped_len, &re);
+	if (cherokee_buffer_is_empty (&req->buffer)) {
+		ret = cherokee_socket_write (&req->socket, req->mmaped, req->mmaped_len, &re);
 		if (unlikely (ret != ret_ok) ) {
 			switch (ret) {
 			case ret_eof:
 				return ret_eof;
 
 			case ret_eagain:
-				conn->polling_aim.fd   = conn->socket.socket;
-				conn->polling_aim.mode = poll_mode_write;
+				req->polling_aim.fd   = req->socket.socket;
+				req->polling_aim.mode = poll_mode_write;
 				return ret_eagain;
 
 			case ret_error:
-				conn->keepalive = 0;
+				req->keepalive = 0;
 				return ret;
 
 			default:
-				conn->keepalive = 0;
+				req->keepalive = 0;
 				RET_UNKNOWN(ret);
 				return ret_error;
 			}
 		}
-		cherokee_request_tx_add (conn, re);
+		cherokee_request_tx_add (req, re);
 
-		/* NOTE: conn->mmaped is a ptr. to void
+		/* NOTE: req->mmaped is a ptr. to void
 		 * so we have to apply ptr. math carefully.
 		 */
-		conn->mmaped      = (void *) ( ((char *)conn->mmaped) + re );
-		conn->mmaped_len -= (off_t) re;
+		req->mmaped      = (void *) ( ((char *)req->mmaped) + re );
+		req->mmaped_len -= (off_t) re;
 
-		return (conn->mmaped_len > 0) ? ret_eagain : ret_ok;
+		return (req->mmaped_len > 0) ? ret_eagain : ret_ok;
 	}
 
 	/* 2.- There are header and mmaped content to send
 	 */
-	bufs[0].iov_base = conn->buffer.buf;
-	bufs[0].iov_len  = conn->buffer.len;
-	if (likely (conn->mmaped_len > 0)) {
-		bufs[1].iov_base = conn->mmaped;
-		bufs[1].iov_len  = conn->mmaped_len;
+	bufs[0].iov_base = req->buffer.buf;
+	bufs[0].iov_len  = req->buffer.len;
+	if (likely (req->mmaped_len > 0)) {
+		bufs[1].iov_base = req->mmaped;
+		bufs[1].iov_len  = req->mmaped_len;
 		nvec = 2;
 	}
-	ret = cherokee_socket_writev (&conn->socket, bufs, nvec, &re);
+	ret = cherokee_socket_writev (&req->socket, bufs, nvec, &re);
 	if (unlikely (ret != ret_ok)) {
 		switch (ret) {
 
@@ -1098,12 +1098,12 @@ cherokee_request_send_header_and_mmaped (cherokee_request_t *conn)
 			return ret_eof;
 
 		case ret_eagain:
-			conn->polling_aim.fd   = conn->socket.socket;
-			conn->polling_aim.mode = poll_mode_write;
+			req->polling_aim.fd   = req->socket.socket;
+			req->polling_aim.mode = poll_mode_write;
 			return ret_eagain;
 
 		case ret_error:
-			conn->keepalive = 0;
+			req->keepalive = 0;
 			return ret_error;
 
 		default:
@@ -1113,77 +1113,77 @@ cherokee_request_send_header_and_mmaped (cherokee_request_t *conn)
 	}
 	/* Add to the connection traffic counter
 	 */
-	cherokee_request_tx_add (conn, re);
+	cherokee_request_tx_add (req, re);
 
 	/* writev() may not have sent all headers data.
 	 */
-	if (unlikely (re < (size_t) conn->buffer.len)) {
+	if (unlikely (re < (size_t) req->buffer.len)) {
 		/* Partial header data sent.
 		 */
-		cherokee_buffer_move_to_begin (&conn->buffer, re);
+		cherokee_buffer_move_to_begin (&req->buffer, re);
 		return ret_eagain;
 	}
 
 	/* OK, all headers have been sent,
 	 * subtract from amount sent and clean header buffer.
 	 */
-	re -= (size_t) conn->buffer.len;
-	cherokee_buffer_clean (&conn->buffer);
+	re -= (size_t) req->buffer.len;
+	cherokee_buffer_clean (&req->buffer);
 
-	/* NOTE: conn->mmaped is a ptr. to void
+	/* NOTE: req->mmaped is a ptr. to void
 	 * so we have to apply ptr. math carefully.
 	 */
-	conn->mmaped      = (void *) ( ((char *)conn->mmaped) + re );
-	conn->mmaped_len -= (off_t) re;
+	req->mmaped      = (void *) ( ((char *)req->mmaped) + re );
+	req->mmaped_len -= (off_t) re;
 
-	return (conn->mmaped_len > 0) ? ret_eagain : ret_ok;
+	return (req->mmaped_len > 0) ? ret_eagain : ret_ok;
 }
 
 
 void
-cherokee_request_rx_add (cherokee_request_t *conn, ssize_t rx)
+cherokee_request_rx_add (cherokee_request_t *req, ssize_t rx)
 {
 	if (likely (rx > 0)) {
-		conn->rx += rx;
-		conn->rx_partial += rx;
+		req->rx += rx;
+		req->rx_partial += rx;
 	}
 }
 
 
 void
-cherokee_request_tx_add (cherokee_request_t *conn, ssize_t tx)
+cherokee_request_tx_add (cherokee_request_t *req, ssize_t tx)
 {
 	cuint_t to_sleep;
 
 	/* Count it
 	 */
-	conn->tx += tx;
-	conn->tx_partial += tx;
+	req->tx += tx;
+	req->tx_partial += tx;
 
 	/* Traffic shaping
 	 */
-	if (conn->limit_rate) {
-		to_sleep = (tx * 1000) / conn->limit_bps;
+	if (req->limit_rate) {
+		to_sleep = (tx * 1000) / req->limit_bps;
 
 		/* It's meant to sleep for a while */
-		conn->limit_blocked_until = cherokee_bogonow_msec + to_sleep;
+		req->limit_blocked_until = cherokee_bogonow_msec + to_sleep;
 	}
 }
 
 
 ret_t
-cherokee_request_recv (cherokee_request_t *conn,
-			  cherokee_buffer_t     *buffer,
-			  off_t                  to_read,
-			  off_t                 *len)
+cherokee_request_recv (cherokee_request_t *req,
+		       cherokee_buffer_t  *buffer,
+		       off_t               to_read,
+		       off_t              *len)
 {
 	ret_t  ret;
 	size_t cnt_read = 0;
 
-	ret = cherokee_socket_bufread (&conn->socket, buffer, to_read, &cnt_read);
+	ret = cherokee_socket_bufread (&req->socket, buffer, to_read, &cnt_read);
 	switch (ret) {
 	case ret_ok:
-		cherokee_request_rx_add (conn, cnt_read);
+		cherokee_request_rx_add (req, cnt_read);
 		*len = cnt_read;
 		return ret_ok;
 
@@ -1193,13 +1193,13 @@ cherokee_request_recv (cherokee_request_t *conn,
 
 	case ret_eagain:
 		if (cnt_read > 0) {
-			cherokee_request_rx_add (conn, cnt_read);
+			cherokee_request_rx_add (req, cnt_read);
 			*len = cnt_read;
 			return ret_ok;
 		}
 
-		conn->polling_aim.fd   = conn->socket.socket;
-		conn->polling_aim.mode = poll_mode_read;
+		req->polling_aim.fd   = req->socket.socket;
+		req->polling_aim.mode = poll_mode_read;
 
 		return ret_eagain;
 
@@ -1212,12 +1212,12 @@ cherokee_request_recv (cherokee_request_t *conn,
 
 
 ret_t
-cherokee_request_reading_check (cherokee_request_t *conn)
+cherokee_request_reading_check (cherokee_request_t *req)
 {
 	/* Check for too long headers
 	 */
-	if (conn->incoming_header.len > MAX_HEADER_LEN) {
-		conn->error_code = http_request_entity_too_large;
+	if (req->incoming_header.len > MAX_HEADER_LEN) {
+		req->error_code = http_request_entity_too_large;
 		return ret_error;
 	}
 
@@ -1226,20 +1226,20 @@ cherokee_request_reading_check (cherokee_request_t *conn)
 
 
 ret_t
-cherokee_request_set_cork (cherokee_request_t *conn,
-			      cherokee_boolean_t     enable)
+cherokee_request_set_cork (cherokee_request_t *req,
+			   cherokee_boolean_t  enable)
 {
 	ret_t ret;
 
-	ret = cherokee_socket_set_cork (&conn->socket, enable);
+	ret = cherokee_socket_set_cork (&req->socket, enable);
 	if (unlikely (ret != ret_ok)) {
 		return ret;
 	}
 
 	if (enable) {
-		BIT_SET (conn->options, conn_op_tcp_cork);
+		BIT_SET (req->options, conn_op_tcp_cork);
 	} else {
-		BIT_UNSET (conn->options, conn_op_tcp_cork);
+		BIT_UNSET (req->options, conn_op_tcp_cork);
 	}
 
 	return ret_ok;
@@ -1247,24 +1247,24 @@ cherokee_request_set_cork (cherokee_request_t *conn,
 
 
 ret_t
-cherokee_request_send_header (cherokee_request_t *conn)
+cherokee_request_send_header (cherokee_request_t *req)
 {
 	ret_t  ret;
 	size_t sent = 0;
 
-	if (cherokee_buffer_is_empty (&conn->buffer))
+	if (cherokee_buffer_is_empty (&req->buffer))
 		return ret_ok;
 
 	/* Send the buffer content
 	 */
-	ret = cherokee_socket_bufwrite (&conn->socket, &conn->buffer, &sent);
+	ret = cherokee_socket_bufwrite (&req->socket, &req->buffer, &sent);
 	switch (ret) {
 	case ret_ok:
 		break;
 
 	case ret_eagain:
-		conn->polling_aim.fd   = conn->socket.socket;
-		conn->polling_aim.mode = poll_mode_write;
+		req->polling_aim.fd   = req->socket.socket;
+		req->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
 
 	default:
@@ -1273,24 +1273,24 @@ cherokee_request_send_header (cherokee_request_t *conn)
 
 	/* Add to the connection traffic counter
 	 */
-	cherokee_request_tx_add (conn, sent);
+	cherokee_request_tx_add (req, sent);
 
 	/* Drop out the sent data
 	 */
-	if (sent == conn->buffer.len) {
-		cherokee_buffer_clean (&conn->buffer);
+	if (sent == req->buffer.len) {
+		cherokee_buffer_clean (&req->buffer);
 		return ret_ok;
 	}
 
 	/* There is still some data waiting to be sent
 	 */
-	cherokee_buffer_move_to_begin (&conn->buffer, sent);
+	cherokee_buffer_move_to_begin (&req->buffer, sent);
 	return ret_eagain;
 }
 
 
 ret_t
-cherokee_request_send (cherokee_request_t *conn)
+cherokee_request_send (cherokee_request_t *req)
 {
 	ret_t  ret;
 	size_t to_send;
@@ -1302,42 +1302,42 @@ cherokee_request_send (cherokee_request_t *conn)
 	 * it is being sent). We generate the plain chunk in-memory in
 	 * order to let this mechanism handle the I/O events.
 	 */
-	if ((conn->chunked_encoding) &&
-	    (conn->socket.is_tls == TLS))
+	if ((req->chunked_encoding) &&
+	    (req->socket.is_tls == TLS))
 	{
-		if (! (conn->options & conn_op_chunked_formatted)) {
-			cherokee_buffer_prepend_buf (&conn->buffer, &conn->chunked_len);
-			cherokee_buffer_add_str     (&conn->buffer, CRLF);
+		if (! (req->options & conn_op_chunked_formatted)) {
+			cherokee_buffer_prepend_buf (&req->buffer, &req->chunked_len);
+			cherokee_buffer_add_str     (&req->buffer, CRLF);
 
-			if (conn->chunked_last_package) {
-				cherokee_buffer_add_str (&conn->buffer, "0" CRLF CRLF);
+			if (req->chunked_last_package) {
+				cherokee_buffer_add_str (&req->buffer, "0" CRLF CRLF);
 			}
 
-			BIT_SET (conn->options, conn_op_chunked_formatted);
+			BIT_SET (req->options, conn_op_chunked_formatted);
 		}
 	}
 
 	/* Use writev() to send the chunk-begin mark
 	 */
-	else if (conn->chunked_encoding)
+	else if (req->chunked_encoding)
 	{
 		struct iovec tmp[3];
 
 		/* Build the data vector */
-		tmp[0].iov_base = conn->chunked_len.buf;
-		tmp[0].iov_len  = conn->chunked_len.len;
-		tmp[1].iov_base = conn->buffer.buf;
-		tmp[1].iov_len  = conn->buffer.len;
+		tmp[0].iov_base = req->chunked_len.buf;
+		tmp[0].iov_len  = req->chunked_len.len;
+		tmp[1].iov_base = req->buffer.buf;
+		tmp[1].iov_len  = req->buffer.len;
 
 		/* Traffic shaping */
-		if ((conn->limit_bps > 0) &&
-		    (conn->limit_bps < conn->buffer.len))
+		if ((req->limit_bps > 0) &&
+		    (req->limit_bps < req->buffer.len))
 		{
-			tmp[1].iov_len = conn->limit_bps;
+			tmp[1].iov_len = req->limit_bps;
 		}
 
 		/* Trailer */
-		if (conn->chunked_last_package) {
+		if (req->chunked_last_package) {
 			tmp[2].iov_base = CRLF "0" CRLF CRLF;
 			tmp[2].iov_len  = 7;
 		} else {
@@ -1346,10 +1346,10 @@ cherokee_request_send (cherokee_request_t *conn)
 		}
 
 		cherokee_iovec_skip_sent (tmp, 3,
-					  conn->chunks, &conn->chunksn,
-					  conn->chunked_sent);
+					  req->chunks, &req->chunksn,
+					  req->chunked_sent);
 
-		ret = cherokee_socket_writev (&conn->socket, conn->chunks, conn->chunksn, &sent);
+		ret = cherokee_socket_writev (&req->socket, req->chunks, req->chunksn, &sent);
 		switch (ret) {
 		case ret_ok:
 			break;
@@ -1358,12 +1358,12 @@ cherokee_request_send (cherokee_request_t *conn)
 			return ret_eof;
 
 		case ret_eagain:
-			conn->polling_aim.fd   = conn->socket.socket;
-			conn->polling_aim.mode = poll_mode_write;
+			req->polling_aim.fd   = req->socket.socket;
+			req->polling_aim.mode = poll_mode_write;
 			return ret_eagain;
 
 		case ret_error:
-			conn->keepalive = 0;
+			req->keepalive = 0;
 			return ret_error;
 
 		default:
@@ -1371,15 +1371,15 @@ cherokee_request_send (cherokee_request_t *conn)
 			return ret_error;
 		}
 
-		conn->chunked_sent += sent;
+		req->chunked_sent += sent;
 
 		/* Clean the information buffer only when everything
 		 * has been sent.
 		 */
-		ret = cherokee_iovec_was_sent (tmp, 3, conn->chunked_sent);
+		ret = cherokee_iovec_was_sent (tmp, 3, req->chunked_sent);
 		if (ret == ret_ok) {
-			cherokee_buffer_clean (&conn->chunked_len);
-			cherokee_buffer_clean (&conn->buffer);
+			cherokee_buffer_clean (&req->chunked_len);
+			cherokee_buffer_clean (&req->buffer);
 			ret = ret_ok;
 		} else {
 			ret = ret_eagain;
@@ -1390,21 +1390,21 @@ cherokee_request_send (cherokee_request_t *conn)
 
 	/* Send the buffer content
 	 */
-	to_send = conn->buffer.len;
-	if ((conn->limit_bps > 0) &&
-	    (conn->limit_bps < to_send))
+	to_send = req->buffer.len;
+	if ((req->limit_bps > 0) &&
+	    (req->limit_bps < to_send))
 	{
-		to_send = conn->limit_bps;
+		to_send = req->limit_bps;
 	}
 
-	ret = cherokee_socket_write (&conn->socket, conn->buffer.buf, to_send, &sent);
+	ret = cherokee_socket_write (&req->socket, req->buffer.buf, to_send, &sent);
 	switch (ret) {
 	case ret_ok:
 		break;
 
 	case ret_eagain:
-		conn->polling_aim.fd   = conn->socket.socket;
-		conn->polling_aim.mode = poll_mode_write;
+		req->polling_aim.fd   = req->socket.socket;
+		req->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
 
 	default:
@@ -1413,38 +1413,38 @@ cherokee_request_send (cherokee_request_t *conn)
 
 	/* Drop out the sent info
 	 */
-	if (sent == conn->buffer.len) {
-		BIT_UNSET (conn->options, conn_op_chunked_formatted);
-		cherokee_buffer_clean (&conn->buffer);
+	if (sent == req->buffer.len) {
+		BIT_UNSET (req->options, conn_op_chunked_formatted);
+		cherokee_buffer_clean (&req->buffer);
 		ret = ret_ok;
 	} else if (sent != 0) {
-		cherokee_buffer_move_to_begin (&conn->buffer, sent);
+		cherokee_buffer_move_to_begin (&req->buffer, sent);
 		ret = ret_eagain;
 	}
 
 out:
 	/* Add to the connection traffic counter
 	 */
-	cherokee_request_tx_add (conn, sent);
+	cherokee_request_tx_add (req, sent);
 
 	/* If this connection has a handler without Content-Length support
 	 * it has to count the bytes sent
 	 */
-	if ((conn->handler) &&
-	    (! HANDLER_SUPPORTS (conn->handler, hsupport_length))) {
-		conn->range_end += sent;
+	if ((req->handler) &&
+	    (! HANDLER_SUPPORTS (req->handler, hsupport_length))) {
+		req->range_end += sent;
 	}
 
 	return ret;
 }
 
 int
-cherokee_request_should_include_length (cherokee_request_t *conn)
+cherokee_request_should_include_length (cherokee_request_t *req)
 {
-	if (conn->encoder_new_func) {
+	if (req->encoder_new_func) {
 		return false;
 	}
-	if (conn->encoder) {
+	if (req->encoder) {
 		return false;
 	}
 
@@ -1453,32 +1453,32 @@ cherokee_request_should_include_length (cherokee_request_t *conn)
 
 
 ret_t
-cherokee_request_instance_encoder (cherokee_request_t *conn)
+cherokee_request_instance_encoder (cherokee_request_t *req)
 {
 	ret_t  ret;
 	char  *name = NULL;
 
 	/* Ensure that the content can be encoded
 	 */
-	if (conn->options & conn_op_cant_encoder)
+	if (req->options & conn_op_cant_encoder)
 		return ret_deny;
 
-	if ((! http_code_with_body (conn->error_code)) ||
-	    (! http_method_with_body (conn->header.method)))
+	if ((! http_code_with_body (req->error_code)) ||
+	    (! http_method_with_body (req->header.method)))
 		return ret_deny;
 
-	if (! http_type_200 (conn->error_code))
+	if (! http_type_200 (req->error_code))
 		return ret_deny;
 
 	/* Instance and initialize the encoder
 	 */
-	ret = conn->encoder_new_func ((void **)&conn->encoder, conn->encoder_props);
+	ret = req->encoder_new_func ((void **)&req->encoder, req->encoder_props);
 	if (unlikely (ret != ret_ok)) {
 		ret = ret_error;
 		goto error;
 	}
 
-	ret = cherokee_encoder_init (conn->encoder, conn);
+	ret = cherokee_encoder_init (req->encoder, req);
 	switch (ret) {
 	case ret_ok:
 		break;
@@ -1492,72 +1492,72 @@ cherokee_request_instance_encoder (cherokee_request_t *conn)
 
 	/* Update Front-Line cache
 	 */
-	if (conn->flcache.mode == flcache_mode_in) {
-		ret = cherokee_module_get_name (MODULE(conn->encoder), &name);
+	if (req->flcache.mode == flcache_mode_in) {
+		ret = cherokee_module_get_name (MODULE(req->encoder), &name);
 		if (likely ((ret == ret_ok) || (name != NULL))) {
-			cherokee_buffer_add (&conn->flcache.avl_node_ref->content_encoding, name, strlen(name));
-			TRACE (ENTRIES, "New entry encoded entry '%s' - %s\n", conn->request.buf, name);
+			cherokee_buffer_add (&req->flcache.avl_node_ref->content_encoding, name, strlen(name));
+			TRACE (ENTRIES, "New entry encoded entry '%s' - %s\n", req->request.buf, name);
 		}
 	}
 
-	cherokee_buffer_clean (&conn->encoder_buffer);
+	cherokee_buffer_clean (&req->encoder_buffer);
 	return ret_ok;
 
 error:
-	if (conn->encoder) {
-		cherokee_encoder_free (conn->encoder);
-		conn->encoder = NULL;
+	if (req->encoder) {
+		cherokee_encoder_free (req->encoder);
+		req->encoder = NULL;
 	}
 	return ret;
 }
 
 
 ret_t
-cherokee_request_shutdown_wr (cherokee_request_t *conn)
+cherokee_request_shutdown_wr (cherokee_request_t *req)
 {
 	ret_t ret;
 
 	/* Turn TCP-cork off
 	 */
-	if (conn->options & conn_op_tcp_cork) {
-		cherokee_socket_flush (&conn->socket);
-		cherokee_request_set_cork (conn, false);
+	if (req->options & conn_op_tcp_cork) {
+		cherokee_socket_flush (&req->socket);
+		cherokee_request_set_cork (req, false);
 	}
 
 	/* At this point, we don't want to follow the TLS protocol
 	 * any longer.
 	 */
-	conn->socket.is_tls = non_TLS;
+	req->socket.is_tls = non_TLS;
 
 	/* Shut down the socket for write, which will send a FIN to
 	 * the peer. If shutdown fails then the socket is unusable.
          */
-	ret = cherokee_socket_shutdown (&conn->socket, SHUT_WR);
+	ret = cherokee_socket_shutdown (&req->socket, SHUT_WR);
 	if (unlikely (ret != ret_ok)) {
-		TRACE (ENTRIES, "Could not shutdown (%d, SHUT_WR)\n", conn->socket.socket);
+		TRACE (ENTRIES, "Could not shutdown (%d, SHUT_WR)\n", req->socket.socket);
 		return ret_error;
 	}
 
-	TRACE (ENTRIES, "Shutdown (%d, SHUT_WR): successful\n", conn->socket.socket);
+	TRACE (ENTRIES, "Shutdown (%d, SHUT_WR): successful\n", req->socket.socket);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_linger_read (cherokee_request_t *conn)
+cherokee_request_linger_read (cherokee_request_t *req)
 {
 	ret_t              ret;
 	size_t             cnt_read = 0;
 	int                retries  = 2;
-	cherokee_thread_t *thread   = REQ_THREAD(conn);
+	cherokee_thread_t *thread   = REQ_THREAD(req);
 	cherokee_buffer_t *tmp1     = THREAD_TMP_BUF1(thread);
 
-	TRACE(ENTRIES",linger", "Linger read, socket %s closed\n", conn->socket.closed ? "is" : "isn't");
+	TRACE(ENTRIES",linger", "Linger read, socket %s closed\n", req->socket.closed ? "is" : "isn't");
 
 	while (true) {
 		/* Read from the socket to nowhere
 		 */
-		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size - 1, &cnt_read);
+		ret = cherokee_socket_read (&req->socket, tmp1->buf, tmp1->size - 1, &cnt_read);
 
 		if (cnt_read > 0) {
 			cherokee_buffer_clean (tmp1);
@@ -1573,8 +1573,8 @@ cherokee_request_linger_read (cherokee_request_t *conn)
 		case ret_eagain:
 			TRACE (ENTRIES",linger", "read %u, eagain\n", cnt_read);
 
-			conn->polling_aim.fd   = conn->socket.socket;
-			conn->polling_aim.mode = poll_mode_read;
+			req->polling_aim.fd   = req->socket.socket;
+			req->polling_aim.mode = poll_mode_read;
 			return ret_eagain;
 		case ret_ok:
 			TRACE (ENTRIES",linger", "%u bytes tossed away\n", cnt_read);
@@ -1594,31 +1594,31 @@ cherokee_request_linger_read (cherokee_request_t *conn)
 
 
 ret_t
-cherokee_request_step (cherokee_request_t *conn)
+cherokee_request_step (cherokee_request_t *req)
 {
 	ret_t ret;
 	ret_t step_ret = ret_ok;
 
 	/* Need to 'read' from handler ?
 	 */
-	if (conn->buffer.len > 0) {
+	if (req->buffer.len > 0) {
 		return ret_ok;
 
-	} else if (unlikely (conn->options & conn_op_got_eof)) {
+	} else if (unlikely (req->options & conn_op_got_eof)) {
 		return ret_eof;
 	}
 
 	/* Front-line cache: Serve content
 	 */
-	if (conn->flcache.mode == flcache_mode_out) {
-		ret = cherokee_flcache_conn_send_body (&conn->flcache, conn);
+	if (req->flcache.mode == flcache_mode_out) {
+		ret = cherokee_flcache_conn_send_body (&req->flcache, req);
 		switch (ret) {
 		case ret_ok:
 			return ret_ok;
 
 		case ret_eof:
 		case ret_eof_have_data:
-			BIT_SET (conn->options, conn_op_got_eof);
+			BIT_SET (req->options, conn_op_got_eof);
 			return ret;
 
 		case ret_error:
@@ -1634,16 +1634,16 @@ cherokee_request_step (cherokee_request_t *conn)
 
 	/* Do a step in the handler
 	 */
-	return_if_fail (conn->handler != NULL, ret_error);
+	return_if_fail (req->handler != NULL, ret_error);
 
-	step_ret = cherokee_handler_step (conn->handler, &conn->buffer);
+	step_ret = cherokee_handler_step (req->handler, &req->buffer);
 	switch (step_ret) {
 	case ret_ok:
 		break;
 
 	case ret_eof:
 	case ret_eof_have_data:
-		BIT_SET (conn->options, conn_op_got_eof);
+		BIT_SET (req->options, conn_op_got_eof);
 		break;
 
 	case ret_error:
@@ -1658,25 +1658,25 @@ cherokee_request_step (cherokee_request_t *conn)
 
 	/* Return now if no encoding is needed.
 	 */
-	if (conn->encoder != NULL) {
+	if (req->encoder != NULL) {
 		/* Encode handler output.
 		 */
 		switch (step_ret) {
 		case ret_eof:
 		case ret_eof_have_data:
-			ret = cherokee_encoder_flush (conn->encoder, &conn->buffer, &conn->encoder_buffer);
-			step_ret = (conn->encoder_buffer.len == 0) ? ret_eof : ret_eof_have_data;
+			ret = cherokee_encoder_flush (req->encoder, &req->buffer, &req->encoder_buffer);
+			step_ret = (req->encoder_buffer.len == 0) ? ret_eof : ret_eof_have_data;
 
 			TRACE (ENTRIES",encoder", "Flush: in=(len %d, size %d) >> out=(len %d, size %d)\n",
-			       conn->buffer.len, conn->buffer.size,
-			       conn->encoder_buffer.len, conn->encoder_buffer.size);
+			       req->buffer.len, req->buffer.size,
+			       req->encoder_buffer.len, req->encoder_buffer.size);
 			break;
 		default:
-			ret = cherokee_encoder_encode (conn->encoder, &conn->buffer, &conn->encoder_buffer);
+			ret = cherokee_encoder_encode (req->encoder, &req->buffer, &req->encoder_buffer);
 
 			TRACE (ENTRIES",encoder", "Encode: in=(len %d, size %d) >> out=(len %d, size %d)\n",
-			       conn->buffer.len, conn->buffer.size,
-			       conn->encoder_buffer.len, conn->encoder_buffer.size);
+			       req->buffer.len, req->buffer.size,
+			       req->encoder_buffer.len, req->encoder_buffer.size);
 			break;
 		}
 		if (ret < ret_ok)
@@ -1684,26 +1684,26 @@ cherokee_request_step (cherokee_request_t *conn)
 
 		/* Swap buffers
 		 */
-		cherokee_buffer_swap_buffers (&conn->buffer, &conn->encoder_buffer);
-		cherokee_buffer_clean (&conn->encoder_buffer);
+		cherokee_buffer_swap_buffers (&req->buffer, &req->encoder_buffer);
+		cherokee_buffer_clean (&req->encoder_buffer);
 	}
 
 	/* Front-line cache: Store content
 	 */
-	if ((conn->flcache.mode == flcache_mode_in) &&
-	    (! cherokee_buffer_is_empty (&conn->buffer)))
+	if ((req->flcache.mode == flcache_mode_in) &&
+	    (! cherokee_buffer_is_empty (&req->buffer)))
 	{
-		cherokee_flcache_conn_write_body (&conn->flcache, conn);
+		cherokee_flcache_conn_write_body (&req->flcache, req);
 	}
 
 	/* Chunked encoding header
 	 */
-	if (conn->chunked_encoding) {
+	if (req->chunked_encoding) {
 		/* On EOF: Turn off chunked and send the trailer
 		 */
 		if (step_ret == ret_eof) {
-			conn->chunked_encoding = false;
-			cherokee_buffer_add_str (&conn->buffer, "0" CRLF CRLF);
+			req->chunked_encoding = false;
+			cherokee_buffer_add_str (&req->buffer, "0" CRLF CRLF);
 
 			return ret_eof_have_data;
 		}
@@ -1713,18 +1713,18 @@ cherokee_request_step (cherokee_request_t *conn)
 		 */
 		if (step_ret == ret_eof_have_data)
 		{
-			conn->chunked_last_package = true;
+			req->chunked_last_package = true;
 		}
 
 		/* Build the Chunked package header:
 		 * len(str(hex(4294967295))+"\r\n\0") = 13
 		 */
-		cherokee_buffer_clean       (&conn->chunked_len);
-		cherokee_buffer_ensure_size (&conn->chunked_len, 13);
-		cherokee_buffer_add_ulong16 (&conn->chunked_len, conn->buffer.len);
-		cherokee_buffer_add_str     (&conn->chunked_len, CRLF);
+		cherokee_buffer_clean       (&req->chunked_len);
+		cherokee_buffer_ensure_size (&req->chunked_len, 13);
+		cherokee_buffer_add_ulong16 (&req->chunked_len, req->buffer.len);
+		cherokee_buffer_add_str     (&req->chunked_len, CRLF);
 
-		conn->chunked_sent = 0;
+		req->chunked_sent = 0;
 	}
 
 	return step_ret;
@@ -1732,9 +1732,9 @@ cherokee_request_step (cherokee_request_t *conn)
 
 
 static ret_t
-get_host (cherokee_request_t *conn,
-	  char                  *ptr,
-	  int                    size)
+get_host (cherokee_request_t *req,
+	  char               *ptr,
+	  int                 size)
 {
 	ret_t  ret;
 	char  *i;
@@ -1765,31 +1765,31 @@ get_host (cherokee_request_t *conn,
 	/* Copy the host and port
 	 */
 	if (colon) {
-		ret = cherokee_buffer_add (&conn->host_port, colon+1, end-(colon+1));
+		ret = cherokee_buffer_add (&req->host_port, colon+1, end-(colon+1));
 		if (unlikely (ret != ret_ok))
 			return ret;
 
-		ret = cherokee_buffer_add (&conn->host, ptr, colon - ptr);
+		ret = cherokee_buffer_add (&req->host, ptr, colon - ptr);
 		if (unlikely (ret != ret_ok))
 			return ret;
 	} else {
-		ret = cherokee_buffer_add (&conn->host, ptr, size);
+		ret = cherokee_buffer_add (&req->host, ptr, size);
 		if (unlikely (ret != ret_ok))
 			return ret;
 	}
 
 	/* Security check: Hostname shouldn't start with a dot
 	 */
-	if ((conn->host.len >= 1) && (*conn->host.buf == '.')) {
+	if ((req->host.len >= 1) && (*req->host.buf == '.')) {
 		return ret_error;
 	}
 
 	/* RFC-1034: Dot ending host names
 	 */
-	while ((cherokee_buffer_end_char (&conn->host) == '.') &&
-	       (! cherokee_buffer_is_empty (&conn->host)))
+	while ((cherokee_buffer_end_char (&req->host) == '.') &&
+	       (! cherokee_buffer_is_empty (&req->host)))
 	{
-		cherokee_buffer_drop_ending (&conn->host, 1);
+		cherokee_buffer_drop_ending (&req->host, 1);
 	}
 
 	return ret_ok;
@@ -1797,9 +1797,9 @@ get_host (cherokee_request_t *conn,
 
 
 static ret_t
-get_encoding (cherokee_request_t *conn,
-	      char                  *ptr,
-	      cherokee_avl_t        *encoders_accepted)
+get_encoding (cherokee_request_t *req,
+	      char               *ptr,
+	      cherokee_avl_t     *encoders_accepted)
 {
 	ret_t                     ret;
 	char                      tmp;
@@ -1840,15 +1840,15 @@ get_encoding (cherokee_request_t *conn,
 			if (props->perms == cherokee_encoder_allow) {
 				/* Use encoder
 				 */
-				conn->encoder_new_func = props->instance_func;
-				conn->encoder_props    = props;
+				req->encoder_new_func = props->instance_func;
+				req->encoder_props    = props;
 				break;
 
 			} else if (props->perms == cherokee_encoder_forbid) {
 				/* Explicitly forbidden
 				 */
-				conn->encoder_new_func = NULL;
-				conn->encoder_props    = NULL;
+				req->encoder_new_func = NULL;
+				req->encoder_props    = NULL;
 				break;
 
 			} else if (props->perms == cherokee_encoder_unset) {
@@ -1875,11 +1875,11 @@ get_encoding (cherokee_request_t *conn,
 
 
 static ret_t
-get_authorization (cherokee_request_t *conn,
-		   cherokee_http_auth_t   type,
-		   cherokee_validator_t  *validator,
-		   char                  *ptr,
-	           int                    ptr_len)
+get_authorization (cherokee_request_t   *req,
+		   cherokee_http_auth_t  type,
+		   cherokee_validator_t *validator,
+		   char                 *ptr,
+	           int                   ptr_len)
 {
 	ret_t    ret;
 	char    *end, *end2;
@@ -1896,7 +1896,7 @@ get_authorization (cherokee_request_t *conn,
 		if (!(type & http_auth_basic))
 			return ret_error;
 
-		conn->req_auth_type = http_auth_basic;
+		req->req_auth_type = http_auth_basic;
 		pre_len = 6;
 
 	} else if (equal_str (ptr, "Digest ")) {
@@ -1906,7 +1906,7 @@ get_authorization (cherokee_request_t *conn,
 		if (!(type & http_auth_digest))
 			return ret_error;
 
-		conn->req_auth_type = http_auth_digest;
+		req->req_auth_type = http_auth_digest;
 		pre_len = 7;
 	}
 
@@ -1928,7 +1928,7 @@ get_authorization (cherokee_request_t *conn,
 
 	/* Parse the request
 	 */
-	switch (conn->req_auth_type) {
+	switch (req->req_auth_type) {
 	case http_auth_basic:
 		ret = cherokee_validator_parse_basic (validator, ptr, ptr_len);
 		if (ret != ret_ok) return ret;
@@ -1955,16 +1955,16 @@ get_authorization (cherokee_request_t *conn,
 
 
 int
-cherokee_request_is_userdir (cherokee_request_t *conn)
+cherokee_request_is_userdir (cherokee_request_t *req)
 {
-	return ((conn->request.len > 3) &&
-		(conn->request.buf[1] == '~'));
+	return ((req->request.len > 3) &&
+		(req->request.buf[1] == '~'));
 }
 
 
 ret_t
-cherokee_request_set_custom_droot (cherokee_request_t   *conn,
-				      cherokee_config_entry_t *entry)
+cherokee_request_set_custom_droot (cherokee_request_t      *req,
+				   cherokee_config_entry_t *entry)
 {
 	/* Shortcut
 	 */
@@ -1974,10 +1974,10 @@ cherokee_request_set_custom_droot (cherokee_request_t   *conn,
 
 	/* Have a special DocumentRoot
 	 */
-	BIT_SET (conn->options, conn_op_document_root);
+	BIT_SET (req->options, conn_op_document_root);
 
-	cherokee_buffer_clean (&conn->local_directory);
-	cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
+	cherokee_buffer_clean (&req->local_directory);
+	cherokee_buffer_add_buffer (&req->local_directory, entry->document_root);
 
 	/* It has to drop the webdir from the request:
 	 *
@@ -1988,29 +1988,29 @@ cherokee_request_set_custom_droot (cherokee_request_t   *conn,
 	 * on petition: http://server/thing/cherokee
 	 * should read: /usr/share/this/rocks/cherokee
 	 */
-	if (cherokee_buffer_is_empty (&conn->request_original)) {
-		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
-		if (! cherokee_buffer_is_empty (&conn->query_string)) {
-			cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
+	if (cherokee_buffer_is_empty (&req->request_original)) {
+		cherokee_buffer_add_buffer (&req->request_original, &req->request);
+		if (! cherokee_buffer_is_empty (&req->query_string)) {
+			cherokee_buffer_add_buffer (&req->query_string_original, &req->query_string);
 		}
 	}
 
-	if (conn->web_directory.len > 1) {
-		cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
+	if (req->web_directory.len > 1) {
+		cherokee_buffer_move_to_begin (&req->request, req->web_directory.len);
 	}
 
-	if ((conn->request.len >= 2) && (strncmp(conn->request.buf, "//", 2) == 0)) {
-		cherokee_buffer_move_to_begin (&conn->request, 1);
+	if ((req->request.len >= 2) && (strncmp(req->request.buf, "//", 2) == 0)) {
+		cherokee_buffer_move_to_begin (&req->request, 1);
 	}
 
-	TRACE(ENTRIES, "Set Custom Local Directory: '%s'\n", conn->local_directory.buf);
+	TRACE(ENTRIES, "Set Custom Local Directory: '%s'\n", req->local_directory.buf);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_build_local_directory (cherokee_request_t     *conn,
-					   cherokee_virtual_server_t *vsrv)
+cherokee_request_build_local_directory (cherokee_request_t        *req,
+					cherokee_virtual_server_t *vsrv)
 {
 	ret_t ret;
 
@@ -2018,26 +2018,26 @@ cherokee_request_build_local_directory (cherokee_request_t     *conn,
 	 */
 	if (vsrv->evhost != NULL) {
 		TRACE(ENTRIES, "About to evaluate EVHost. Now Document root is: '%s'\n",
-		      conn->local_directory.buf ? conn->local_directory.buf : "");
+		      req->local_directory.buf ? req->local_directory.buf : "");
 
-		ret = EVHOST(vsrv->evhost)->func_document_root (vsrv->evhost, conn);
+		ret = EVHOST(vsrv->evhost)->func_document_root (vsrv->evhost, req);
 		if (ret == ret_ok)
 			goto ok;
 
 		/* Fall to use the default document root
 		 */
-		cherokee_buffer_clean (&conn->local_directory);
+		cherokee_buffer_clean (&req->local_directory);
 	}
 
 	/* Regular request
 	 */
-	ret = cherokee_buffer_add_buffer (&conn->local_directory, &vsrv->root);
+	ret = cherokee_buffer_add_buffer (&req->local_directory, &vsrv->root);
 	if (unlikely (ret != ret_ok)) {
 		goto error;
 	}
 
 ok:
-	TRACE(ENTRIES, "Set Local Directory: '%s'\n", conn->local_directory.buf);
+	TRACE(ENTRIES, "Set Local Directory: '%s'\n", req->local_directory.buf);
 	return ret_ok;
 
 error:
@@ -2047,8 +2047,8 @@ error:
 
 
 ret_t
-cherokee_request_build_local_directory_userdir (cherokee_request_t     *conn,
-						   cherokee_virtual_server_t *vsrv)
+cherokee_request_build_local_directory_userdir (cherokee_request_t        *req,
+						cherokee_virtual_server_t *vsrv)
 {
 	ret_t         ret;
 	struct passwd pwd;
@@ -2056,24 +2056,24 @@ cherokee_request_build_local_directory_userdir (cherokee_request_t     *conn,
 
 	/* Default: it is inside the UserDir in home
 	 */
-	ret = cherokee_getpwnam (conn->userdir.buf, &pwd, tmp, sizeof(tmp));
+	ret = cherokee_getpwnam (req->userdir.buf, &pwd, tmp, sizeof(tmp));
 	if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 
 	/* Build the local_directory:
 	 */
-	cherokee_buffer_add (&conn->local_directory, pwd.pw_dir, strlen(pwd.pw_dir));
-	cherokee_buffer_add_char   (&conn->local_directory, '/');
-	cherokee_buffer_add_buffer (&conn->local_directory, &vsrv->userdir);
+	cherokee_buffer_add (&req->local_directory, pwd.pw_dir, strlen(pwd.pw_dir));
+	cherokee_buffer_add_char   (&req->local_directory, '/');
+	cherokee_buffer_add_buffer (&req->local_directory, &vsrv->userdir);
 
 	return ret_ok;
 }
 
 
 static ret_t
-get_range (cherokee_request_t *conn, char *ptr, int ptr_len)
+get_range (cherokee_request_t *req, char *ptr, int ptr_len)
 {
 	cuint_t num_len = 0;
 	CHEROKEE_TEMP(tmp, ptr_len+1);
@@ -2088,8 +2088,8 @@ get_range (cherokee_request_t *conn, char *ptr, int ptr_len)
 	}
 	tmp[num_len] = '\0';
 	if (num_len != 0) {
-		conn->range_start = strtoll (tmp, (char **)NULL, 10);
-		if (conn->range_start < 0) {
+		req->range_start = strtoll (tmp, (char **)NULL, 10);
+		if (req->range_start < 0) {
 			return ret_error;
 		}
 	}
@@ -2114,17 +2114,17 @@ get_range (cherokee_request_t *conn, char *ptr, int ptr_len)
 			num_len++;
 		}
 		tmp[num_len] = '\0';
-		conn->range_end = strtoll (tmp, (char **)NULL, 10);
-		if (conn->range_end < 0){
+		req->range_end = strtoll (tmp, (char **)NULL, 10);
+		if (req->range_end < 0){
 			return ret_error;
 		}
 	}
 
 	/* Sanity check: switched range
 	 */
-	if ((conn->range_start != -1) && (conn->range_end != -1)) {
-		if (conn->range_start > conn->range_end) {
-			conn->error_code = http_range_not_satisfiable;
+	if ((req->range_start != -1) && (req->range_end != -1)) {
+		if (req->range_start > req->range_end) {
+			req->error_code = http_range_not_satisfiable;
 			return ret_error;
 		}
 	}
@@ -2134,14 +2134,14 @@ get_range (cherokee_request_t *conn, char *ptr, int ptr_len)
 
 
 static ret_t
-parse_userdir (cherokee_request_t *conn)
+parse_userdir (cherokee_request_t *req)
 {
 	char *begin;
 	char *end_username;
 
 	/* Find user name ending:
 	 */
-	begin = &conn->request.buf[2];
+	begin = &req->request.buf[2];
 
 	end_username = strchr (begin, '/');
 	if (end_username == NULL) {
@@ -2151,10 +2151,10 @@ parse_userdir (cherokee_request_t *conn)
 		 * from http://www.alobbs.com/~alo
 		 * to   http://www.alobbs.com/~alo/
 		 */
-		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
-		cherokee_buffer_add_char   (&conn->redirect, '/');
+		cherokee_buffer_add_buffer (&req->redirect, &req->request);
+		cherokee_buffer_add_char   (&req->redirect, '/');
 
-		conn->error_code = http_moved_permanently;
+		req->error_code = http_moved_permanently;
 		return ret_error;
 	}
 
@@ -2162,24 +2162,24 @@ parse_userdir (cherokee_request_t *conn)
 	 * The username has to be at least a char long
 	 */
 	if ((end_username - begin) <= 0) {
-		conn->error_code = http_bad_request;
+		req->error_code = http_bad_request;
 		return ret_error;
 	}
 
 	/* Get the user home directory
 	 */
-	cherokee_buffer_add (&conn->userdir, begin, end_username - begin);
+	cherokee_buffer_add (&req->userdir, begin, end_username - begin);
 
 	/* Drop username from the request
 	 */
-	cherokee_buffer_move_to_begin (&conn->request, (end_username - conn->request.buf));
+	cherokee_buffer_move_to_begin (&req->request, (end_username - req->request.buf));
 
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_get_request (cherokee_request_t *conn)
+cherokee_request_get_request (cherokee_request_t *req)
 {
 	ret_t               ret;
 	char               *host;
@@ -2189,22 +2189,22 @@ cherokee_request_get_request (cherokee_request_t *conn)
 
 	/* Header parsing
 	 */
-	ret = cherokee_header_parse (&conn->header, &conn->incoming_header, &error_code);
+	ret = cherokee_header_parse (&req->header, &req->incoming_header, &error_code);
 	if (unlikely (ret < ret_ok)) {
 		goto error;
 	}
 
 	/* Check is request body is present
 	 */
-	if (http_method_with_input (conn->header.method)) {
+	if (http_method_with_input (req->header.method)) {
 		read_post = true;
 	}
-	else if (http_method_with_optional_input (conn->header.method)) {
-		ret = cherokee_header_has_known (&conn->header, header_content_length);
+	else if (http_method_with_optional_input (req->header.method)) {
+		ret = cherokee_header_has_known (&req->header, header_content_length);
 		if (ret == ret_ok) {
 			read_post = true;
 		} else {
-			ret = cherokee_header_has_known (&conn->header, header_transfer_encoding);
+			ret = cherokee_header_has_known (&req->header, header_transfer_encoding);
 			if (ret == ret_ok) {
 				read_post = true;
 			}
@@ -2215,7 +2215,7 @@ cherokee_request_get_request (cherokee_request_t *conn)
 	 */
 	if (read_post)
 	{
-		ret = cherokee_post_read_header (&conn->post);
+		ret = cherokee_post_read_header (&req->post);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
@@ -2223,73 +2223,73 @@ cherokee_request_get_request (cherokee_request_t *conn)
 
 	/* Copy the request and query string
 	 */
-	ret = cherokee_header_copy_request (&conn->header, &conn->request);
+	ret = cherokee_header_copy_request (&req->header, &req->request);
 	if (unlikely (ret < ret_ok))
 		goto error;
 
-	ret = cherokee_header_copy_query_string (&conn->header, &conn->query_string);
+	ret = cherokee_header_copy_query_string (&req->header, &req->query_string);
 	if (unlikely (ret < ret_ok))
 		goto error;
 
 
 	/* "OPTIONS *" special case
 	 */
-	if (unlikely ((conn->header.method == http_options) &&
-		      (cherokee_buffer_cmp_str (&conn->request, "*") == 0)))
+	if (unlikely ((req->header.method == http_options) &&
+		      (cherokee_buffer_cmp_str (&req->request, "*") == 0)))
 	{
-		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		cherokee_buffer_add_buffer (&req->request_original, &req->request);
 
-		cherokee_buffer_clean   (&conn->request);
-		cherokee_buffer_add_str (&conn->request, "/");
+		cherokee_buffer_clean   (&req->request);
+		cherokee_buffer_add_str (&req->request, "/");
 	}
 
 	/* Look for starting '/' in the request
 	 */
-	if (unlikely (conn->request.buf[0] != '/')) {
+	if (unlikely (req->request.buf[0] != '/')) {
 		goto error;
 	}
 
 #ifdef _WIN32
 	/* Prevent back-slashes in the request on Windows
 	 */
-	TRACE (ENTRIES, "Win32 req before: %s\n", conn->request.buf);
-	cherokee_buffer_swap_chars (&conn->request, '\\', '/');
-	TRACE (ENTRIES, "Win32 req after: %s\n", conn->request.buf);
+	TRACE (ENTRIES, "Win32 req before: %s\n", req->request.buf);
+	cherokee_buffer_swap_chars (&req->request, '\\', '/');
+	TRACE (ENTRIES, "Win32 req after: %s\n", req->request.buf);
 #endif
 
 	/* Short the path. It transforms the request:
 	 * /dir1/dir2/../file in /dir1/file
 	 */
-	cherokee_path_short (&conn->request);
+	cherokee_path_short (&req->request);
 
 	/* Look for "//"
 	 */
-	cherokee_buffer_remove_dups (&conn->request, '/');
+	cherokee_buffer_remove_dups (&req->request, '/');
 
 	/* Read the Host header
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_host, &host, &host_len);
+	ret = cherokee_header_get_known (&req->header, header_host, &host, &host_len);
 	switch (ret) {
 	case ret_error:
 	case ret_not_found:
-		if (conn->header.version == http_version_11) {
+		if (req->header.version == http_version_11) {
 			/* It is needed in HTTP/1.1
 			 */
-			TRACE(ENTRIES, "conn %p, HTTP/1.1 with no Host header entry\n", conn);
+			TRACE(ENTRIES, "conn %p, HTTP/1.1 with no Host header entry\n", req);
 			goto error;
 		}
 		break;
 
 	case ret_ok:
-		ret = get_host (conn, host, host_len);
+		ret = get_host (req, host, host_len);
 		if (unlikely(ret < ret_ok)) goto error;
 
 		/* Set the virtual server reference
 		 */
-		ret = cherokee_server_get_vserver (REQ_SRV(conn), &conn->host, conn,
-						   (cherokee_virtual_server_t **)&conn->vserver);
+		ret = cherokee_server_get_vserver (REQ_SRV(req), &req->host, req,
+						   (cherokee_virtual_server_t **)&req->vserver);
 		if (unlikely (ret != ret_ok)) {
-			LOG_ERROR (CHEROKEE_ERROR_CONNECTION_GET_VSERVER, conn->host.buf);
+			LOG_ERROR (CHEROKEE_ERROR_CONNECTION_GET_VSERVER, req->host.buf);
 			return ret_error;
 		}
 		break;
@@ -2301,40 +2301,40 @@ cherokee_request_get_request (cherokee_request_t *conn)
 
 	/* Userdir requests
 	 */
-	if ((!cherokee_buffer_is_empty (&REQ_VSRV(conn)->userdir)) &&
-	    (cherokee_request_is_userdir (conn)))
+	if ((!cherokee_buffer_is_empty (&REQ_VSRV(req)->userdir)) &&
+	    (cherokee_request_is_userdir (req)))
 	{
-		ret = parse_userdir (conn);
+		ret = parse_userdir (req);
 		if (ret != ret_ok) return ret;
 	}
 
 	/* Check Upload limit
 	 */
-	if ((REQ_VSRV(conn)->post_max_len > 0) &&
-	    (conn->post.len > REQ_VSRV(conn)->post_max_len))
+	if ((REQ_VSRV(req)->post_max_len > 0) &&
+	    (req->post.len > REQ_VSRV(req)->post_max_len))
 	{
-		conn->error_code = http_request_entity_too_large;
+		req->error_code = http_request_entity_too_large;
 		return ret_error;
 	}
 
-	conn->error_code = http_ok;
+	req->error_code = http_ok;
 	return ret_ok;
 
 error:
-	conn->error_code = error_code;
+	req->error_code = error_code;
 
 	/* Since the request could not be parsed, the connection is
 	 * about to be closed. Log the error now before it's too late.
 	 */
-	if (REQ_VSRV(conn)->logger) {
-		cherokee_logger_write_access (REQ_VSRV(conn)->logger, conn);
+	if (REQ_VSRV(req)->logger) {
+		cherokee_logger_write_access (REQ_VSRV(req)->logger, req);
 	}
 	return ret_error;
 }
 
 
 ret_t
-cherokee_request_check_authentication (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_authentication (cherokee_request_t *req, cherokee_config_entry_t *config_entry)
 {
 	ret_t    ret;
 	char    *ptr;
@@ -2348,14 +2348,14 @@ cherokee_request_check_authentication (cherokee_request_t *conn, cherokee_config
 	/* Look for authentication in the headers:
 	 * It's done on demand because the directory maybe don't have protection
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_authorization, &ptr, &len);
+	ret = cherokee_header_get_known (&req->header, header_authorization, &ptr, &len);
 	if (ret != ret_ok) {
 		goto unauthorized;
 	}
 
 	/* Create the validator object
 	 */
-	ret = config_entry->validator_new_func ((void **) &conn->validator,
+	ret = config_entry->validator_new_func ((void **) &req->validator,
 						config_entry->validator_properties);
 	if (ret != ret_ok) {
 		goto error;
@@ -2363,7 +2363,7 @@ cherokee_request_check_authentication (cherokee_request_t *conn, cherokee_config
 
 	/* Read the header information
 	 */
-	ret = get_authorization (conn, config_entry->authentication, conn->validator, ptr, len);
+	ret = get_authorization (req, config_entry->authentication, req->validator, ptr, len);
 	if (ret != ret_ok) {
 		goto unauthorized;
 	}
@@ -2373,11 +2373,11 @@ cherokee_request_check_authentication (cherokee_request_t *conn, cherokee_config
 	if (config_entry->users != NULL) {
 		void *foo;
 
-		if (cherokee_buffer_is_empty (&conn->validator->user)) {
+		if (cherokee_buffer_is_empty (&req->validator->user)) {
 			goto unauthorized;
 		}
 
-		ret = cherokee_avl_get (config_entry->users, &conn->validator->user, &foo);
+		ret = cherokee_avl_get (config_entry->users, &req->validator->user, &foo);
 		if (ret != ret_ok) {
 			goto unauthorized;
 		}
@@ -2385,13 +2385,13 @@ cherokee_request_check_authentication (cherokee_request_t *conn, cherokee_config
 
 	/* Check if the validator is suitable
 	 */
-	if ((conn->validator->support & conn->req_auth_type) == 0) {
+	if ((req->validator->support & req->req_auth_type) == 0) {
 		goto error;
 	}
 
 	/* Check the login/password
 	 */
-	ret = cherokee_validator_check (conn->validator, conn);
+	ret = cherokee_validator_check (req->validator, req);
 
 	if (ret != ret_ok) {
 		goto unauthorized;
@@ -2400,19 +2400,19 @@ cherokee_request_check_authentication (cherokee_request_t *conn, cherokee_config
 	return ret_ok;
 
 unauthorized:
-	conn->keepalive = 0;
-	conn->error_code = http_unauthorized;
+	req->keepalive = 0;
+	req->error_code = http_unauthorized;
 	return ret_error;
 
 error:
-	conn->keepalive = 0;
-	conn->error_code = http_internal_error;
+	req->keepalive = 0;
+	req->error_code = http_internal_error;
 	return ret_error;
 }
 
 
 ret_t
-cherokee_request_check_ip_validation (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_ip_validation (cherokee_request_t *req, cherokee_config_entry_t *config_entry)
 {
 	ret_t ret;
 
@@ -2420,18 +2420,18 @@ cherokee_request_check_ip_validation (cherokee_request_t *conn, cherokee_config_
 		return ret_ok;
 	}
 
-	ret = cherokee_access_ip_match (config_entry->access, &conn->socket);
+	ret = cherokee_access_ip_match (config_entry->access, &req->socket);
 	if (ret == ret_ok) {
 		return ret_ok;
 	}
 
-	conn->error_code = http_access_denied;
+	req->error_code = http_access_denied;
 	return ret_error;
 }
 
 
 ret_t
-cherokee_request_check_only_secure (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_only_secure (cherokee_request_t *req, cherokee_config_entry_t *config_entry)
 {
 	if (config_entry->only_secure == false) {
 		/* No Only-Secure connection..
@@ -2439,22 +2439,22 @@ cherokee_request_check_only_secure (cherokee_request_t *conn, cherokee_config_en
 		return ret_ok;
 	}
 
-	if (conn->socket.is_tls == TLS) {
+	if (req->socket.is_tls == TLS) {
 		/* It is secure
 		 */
 		return ret_ok;
 	}
 
-	conn->error_code = http_upgrade_required;
-	conn->upgrade    = http_upgrade_tls10;
+	req->error_code = http_upgrade_required;
+	req->upgrade    = http_upgrade_tls10;
 	return ret_error;
 }
 
 
 ret_t
-cherokee_request_check_http_method (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_check_http_method (cherokee_request_t *req, cherokee_config_entry_t *config_entry)
 {
-	if (config_entry->handler_methods & conn->header.method)
+	if (config_entry->handler_methods & req->header.method)
 		return ret_ok;
 
 	if (config_entry->handler_methods == http_options)
@@ -2462,12 +2462,12 @@ cherokee_request_check_http_method (cherokee_request_t *conn, cherokee_config_en
 
 	/* Set the error
 	 */
-	conn->error_code = http_method_not_allowed;
+	req->error_code = http_method_not_allowed;
 
 	/* If the HTTP method was not detected, set a safe one
 	 */
-	if (conn->header.method == http_unknown) {
-		conn->header.method = http_get;
+	if (req->header.method == http_unknown) {
+		req->header.method = http_get;
 	}
 
 	return ret_error;
@@ -2475,7 +2475,7 @@ cherokee_request_check_http_method (cherokee_request_t *conn, cherokee_config_en
 
 
 ret_t
-cherokee_request_create_handler (cherokee_request_t *conn, cherokee_config_entry_t *config_entry)
+cherokee_request_create_handler (cherokee_request_t *req, cherokee_config_entry_t *config_entry)
 {
 	ret_t ret;
 
@@ -2483,7 +2483,7 @@ cherokee_request_create_handler (cherokee_request_t *conn, cherokee_config_entry
 
 	/* Create and assign a handler object
 	 */
-	ret = (config_entry->handler_new_func) ((void **)&conn->handler, conn, config_entry->handler_properties);
+	ret = (config_entry->handler_new_func) ((void **)&req->handler, req, config_entry->handler_properties);
 	switch (ret) {
 	case ret_ok:
 	case ret_eof:
@@ -2491,12 +2491,12 @@ cherokee_request_create_handler (cherokee_request_t *conn, cherokee_config_entry
 		/* Trace the name of the new handler
 		 */
 #ifdef TRACE_ENABLED
-		if ((conn->handler != NULL) &&
+		if ((req->handler != NULL) &&
 		    (cherokee_trace_is_tracing()))
 		{
 			char *name = NULL;
 
-			ret = cherokee_module_get_name (MODULE (conn->handler), &name);
+			ret = cherokee_module_get_name (MODULE (req->handler), &name);
 			if ((ret == ret_ok) && (name != NULL)) {
 				TRACE(ENTRIES",handler", "Instanced handler: '%s'\n", name);
 			}
@@ -2504,9 +2504,9 @@ cherokee_request_create_handler (cherokee_request_t *conn, cherokee_config_entry
 #endif
 		return ret;
 	default:
-		if ((conn->handler == NULL) &&
-		    (conn->error_code == http_ok))
-			conn->error_code = http_internal_error;
+		if ((req->handler == NULL) &&
+		    (req->error_code == http_ok))
+			req->error_code = http_internal_error;
 		return ret_error;
 	}
 
@@ -2515,13 +2515,13 @@ cherokee_request_create_handler (cherokee_request_t *conn, cherokee_config_entry
 
 
 void
-cherokee_request_set_keepalive (cherokee_request_t *conn)
+cherokee_request_set_keepalive (cherokee_request_t *req)
 {
 	ret_t              ret;
 	char              *ptr;
 	cuint_t            ptr_len;
-	cherokee_server_t *srv    = REQ_SRV(conn);
-	cherokee_thread_t *thread = REQ_THREAD(conn);
+	cherokee_server_t *srv    = REQ_SRV(req);
+	cherokee_thread_t *thread = REQ_THREAD(req);
 
 	/* Check whether server allows keep-alive
 	 */
@@ -2535,15 +2535,15 @@ cherokee_request_set_keepalive (cherokee_request_t *conn)
 
 	/* Does the virtual server support Keep-Alive?
 	 */
-	if (REQ_VSRV(conn)->keepalive == false)
+	if (REQ_VSRV(req)->keepalive == false)
 		goto denied;
 
 	/* Set Keep-alive according with the 'Connection' header
 	 * HTTP 1.1 uses Keep-Alive by default: rfc2616 sec8.1.2
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
+	ret = cherokee_header_get_known (&req->header, header_connection, &ptr, &ptr_len);
 	if (ret == ret_ok) {
-		if (conn->header.version == http_version_11) {
+		if (req->header.version == http_version_11) {
 			if (strncasestrn (ptr, ptr_len, "close", 5) == NULL)
 				goto granted;
 			else
@@ -2558,41 +2558,41 @@ cherokee_request_set_keepalive (cherokee_request_t *conn)
 		return;
 	}
 
-	if (conn->header.version == http_version_11)
+	if (req->header.version == http_version_11)
 		goto granted;
 
-	if (conn->flcache.mode == flcache_mode_out)
+	if (req->flcache.mode == flcache_mode_out)
 		goto granted;
 
 denied:
 	TRACE (ENTRIES, "Keep-alive %s\n", "denied");
-	conn->keepalive = 0;
+	req->keepalive = 0;
 	return;
 
 granted:
-	if (conn->keepalive == 0)
-		conn->keepalive = REQ_SRV(conn)->keepalive_max;
+	if (req->keepalive == 0)
+		req->keepalive = REQ_SRV(req)->keepalive_max;
 
-	TRACE (ENTRIES, "Keep-alive %d\n", conn->keepalive);
+	TRACE (ENTRIES, "Keep-alive %d\n", req->keepalive);
 }
 
 
 ret_t
-cherokee_request_set_rate (cherokee_request_t   *conn,
-			      cherokee_config_entry_t *entry)
+cherokee_request_set_rate (cherokee_request_t      *req,
+			   cherokee_config_entry_t *entry)
 {
 	if (entry->limit_bps <= 0)
 		return ret_ok;
 
-	conn->limit_rate = true;
-	conn->limit_bps  = entry->limit_bps;
+	req->limit_rate = true;
+	req->limit_bps  = entry->limit_bps;
 
 	return ret_ok;
 }
 
 
 void
-cherokee_request_set_chunked_encoding (cherokee_request_t *conn)
+cherokee_request_set_chunked_encoding (cherokee_request_t *req)
 {
 	/* Conditions to activate Chunked-Encodiog:
 	 *  - The server configuration allows to use it
@@ -2600,14 +2600,14 @@ cherokee_request_set_chunked_encoding (cherokee_request_t *conn)
 	 *  - It's a HTTP/1.1 connection
 	 *  - It's not serving content from the Front-line cache
 	 */
-	conn->chunked_encoding = ((REQ_SRV(conn)->chunked_encoding) &&
-				  (conn->keepalive > 0) &&
-				  (conn->header.version == http_version_11) &&
-				  (conn->flcache.mode != flcache_mode_out));
+	req->chunked_encoding = ((REQ_SRV(req)->chunked_encoding) &&
+				  (req->keepalive > 0) &&
+				  (req->header.version == http_version_11) &&
+				  (req->flcache.mode != flcache_mode_out));
 }
 
 ret_t
-cherokee_request_parse_range (cherokee_request_t *conn)
+cherokee_request_parse_range (cherokee_request_t *req)
 {
 	ret_t    ret;
 	char    *ptr;
@@ -2615,13 +2615,13 @@ cherokee_request_parse_range (cherokee_request_t *conn)
 
 	/* Look for "Range:"
 	 */
-	if (HANDLER_SUPPORTS (conn->handler, hsupport_range)) {
-		ret = cherokee_header_get_known (&conn->header, header_range, &ptr, &ptr_len);
+	if (HANDLER_SUPPORTS (req->handler, hsupport_range)) {
+		ret = cherokee_header_get_known (&req->header, header_range, &ptr, &ptr_len);
 		if (ret == ret_ok) {
 			if (strncmp (ptr, "bytes=", 6) == 0) {
-				ret = get_range (conn, ptr+6, ptr_len-6);
+				ret = get_range (req, ptr+6, ptr_len-6);
 				if (ret < ret_ok) {
-					conn->error_code = http_range_not_satisfiable;
+					req->error_code = http_range_not_satisfiable;
 					return ret;
 				}
 			}
@@ -2632,8 +2632,8 @@ cherokee_request_parse_range (cherokee_request_t *conn)
 }
 
 ret_t
-cherokee_request_create_encoder (cherokee_request_t *conn,
-				    cherokee_avl_t        *encoders_accepted)
+cherokee_request_create_encoder (cherokee_request_t *req,
+				 cherokee_avl_t     *encoders_accepted)
 {
 	ret_t    ret;
 	char    *ptr;
@@ -2650,18 +2650,18 @@ cherokee_request_create_encoder (cherokee_request_t *conn,
 	/* Keepalive (Content-Length) connections cannot use encoders
 	 * because the transferred information length would change.
 	 */
-	if ((conn->keepalive) &&
-	    (! conn->chunked_encoding) &&
-	    HANDLER_SUPPORTS (conn->handler, hsupport_length))
+	if ((req->keepalive) &&
+	    (! req->chunked_encoding) &&
+	    HANDLER_SUPPORTS (req->handler, hsupport_length))
 	{
 		return ret_ok;
 	}
 
 	/* Process the "Accept-Encoding" header
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_accept_encoding, &ptr, &ptr_len);
+	ret = cherokee_header_get_known (&req->header, header_accept_encoding, &ptr, &ptr_len);
 	if (ret == ret_ok) {
-		ret = get_encoding (conn, ptr, encoders_accepted);
+		ret = get_encoding (req, ptr, encoders_accepted);
 		if (ret < ret_ok) {
 			return ret;
 		}
@@ -2672,26 +2672,26 @@ cherokee_request_create_encoder (cherokee_request_t *conn,
 
 
 ret_t
-cherokee_request_parse_args (cherokee_request_t *conn)
+cherokee_request_parse_args (cherokee_request_t *req)
 {
 	ret_t ret;
 
 	/* Parse arguments only once
 	 */
-	if (conn->arguments != NULL) {
+	if (req->arguments != NULL) {
 		return ret_ok;
 	}
 
 	/* Build a new table
 	 */
-	ret = cherokee_avl_new (&conn->arguments);
+	ret = cherokee_avl_new (&req->arguments);
 	if (unlikely(ret != ret_ok)) {
 		return ret;
 	}
 
 	/* Parse the header
 	 */
-	ret = cherokee_parse_query_string (&conn->query_string, conn->arguments);
+	ret = cherokee_parse_query_string (&req->query_string, req->arguments);
 	if (unlikely(ret != ret_ok)) {
 		return ret;
 	}
@@ -2701,99 +2701,99 @@ cherokee_request_parse_args (cherokee_request_t *conn)
 
 
 ret_t
-cherokee_request_open_request (cherokee_request_t *conn)
+cherokee_request_open_request (cherokee_request_t *req)
 {
 	TRACE (ENTRIES, "web_directory='%s' request='%s' local_directory='%s'\n",
-	       conn->web_directory.buf,
-	       conn->request.buf,
-	       conn->local_directory.buf);
+	       req->web_directory.buf,
+	       req->request.buf,
+	       req->local_directory.buf);
 
 	/* Ensure the space for headers and I/O buffer
 	 */
-	cherokee_buffer_ensure_size (&conn->header_buffer, 384);
-	cherokee_buffer_ensure_size (&conn->buffer, DEFAULT_READ_SIZE+1);
+	cherokee_buffer_ensure_size (&req->header_buffer, 384);
+	cherokee_buffer_ensure_size (&req->buffer, DEFAULT_READ_SIZE+1);
 
 	/* Init the connection handler object
 	 */
-	return cherokee_handler_init (conn->handler);
+	return cherokee_handler_init (req->handler);
 }
 
 
 ret_t
-cherokee_request_log (cherokee_request_t *conn)
+cherokee_request_log (cherokee_request_t *req)
 {
 	/* Check whether if needs to log now of not
 	 */
-	if (conn->logger_ref == NULL) {
+	if (req->logger_ref == NULL) {
 		return ret_ok;
 	}
 
 	/* Log it
 	 */
-	return cherokee_logger_write_access (conn->logger_ref, conn);
+	return cherokee_logger_write_access (req->logger_ref, req);
 }
 
 
 ret_t
-cherokee_request_update_vhost_traffic (cherokee_request_t *conn)
+cherokee_request_update_vhost_traffic (cherokee_request_t *req)
 {
-	if (REQ_VSRV(conn)->collector == NULL) {
+	if (REQ_VSRV(req)->collector == NULL) {
 		return ret_ok;
 	}
 
-	cherokee_collector_vsrv_count (REQ_VSRV(conn)->collector,
-				       conn->rx_partial,
-				       conn->tx_partial);
+	cherokee_collector_vsrv_count (REQ_VSRV(req)->collector,
+				       req->rx_partial,
+				       req->tx_partial);
 
 	/* Update the time for the next update
 	 */
-	conn->traffic_next = cherokee_bogonow_now + DEFAULT_TRAFFIC_UPDATE;
+	req->traffic_next = cherokee_bogonow_now + DEFAULT_TRAFFIC_UPDATE;
 
 	/* Reset partial counters
 	 */
-	conn->rx_partial = 0;
-	conn->tx_partial = 0;
+	req->rx_partial = 0;
+	req->tx_partial = 0;
 
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_clean_for_respin (cherokee_request_t *conn)
+cherokee_request_clean_for_respin (cherokee_request_t *req)
 {
-	TRACE(ENTRIES, "Clean for respin: conn=%p\n", conn);
+	TRACE(ENTRIES, "Clean for respin: conn=%p\n", req);
 
-	conn->respins += 1;
-	if (conn->respins > RESPINS_MAX) {
+	req->respins += 1;
+	if (req->respins > RESPINS_MAX) {
 		TRACE(ENTRIES, "Internal redirection limit (%d) exceeded\n", RESPINS_MAX);
-		conn->error_code = http_internal_error;
+		req->error_code = http_internal_error;
 		return ret_error;
 	}
 
-	if (cherokee_request_use_webdir(conn)) {
-		cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
-		cherokee_buffer_clean (&conn->local_directory);
-		BIT_UNSET (conn->options, conn_op_document_root);
+	if (cherokee_request_use_webdir(req)) {
+		cherokee_buffer_prepend_buf (&req->request, &req->web_directory);
+		cherokee_buffer_clean (&req->local_directory);
+		BIT_UNSET (req->options, conn_op_document_root);
 	}
 
-	cherokee_buffer_clean (&conn->web_directory);
+	cherokee_buffer_clean (&req->web_directory);
 
-	TRACE_REQ(conn);
+	TRACE_REQ(req);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_clean_error_headers (cherokee_request_t *conn)
+cherokee_request_clean_error_headers (cherokee_request_t *req)
 {
 	char *begin;
 	char *end;
 
-	if (cherokee_buffer_is_empty (&conn->header_buffer))
+	if (cherokee_buffer_is_empty (&req->header_buffer))
 		return ret_ok;
 
-	begin = strncasestrn_s (conn->header_buffer.buf,
-				conn->header_buffer.len,
+	begin = strncasestrn_s (req->header_buffer.buf,
+				req->header_buffer.len,
 				"Content-Length: ");
 	if (begin != NULL) {
 		end = strchr (begin+16, CHR_CR);
@@ -2803,8 +2803,8 @@ cherokee_request_clean_error_headers (cherokee_request_t *conn)
 		if (end[1] == CHR_LF)
 			end++;
 
-		cherokee_buffer_remove_chunk (&conn->header_buffer,
-					      begin - conn->header_buffer.buf,
+		cherokee_buffer_remove_chunk (&req->header_buffer,
+					      begin - req->header_buffer.buf,
 					      (end-begin)+1);
 	}
 
@@ -2813,12 +2813,12 @@ cherokee_request_clean_error_headers (cherokee_request_t *conn)
 
 
 int
-cherokee_request_use_webdir (cherokee_request_t *conn)
+cherokee_request_use_webdir (cherokee_request_t *req)
 {
-	if (! (conn->options & conn_op_document_root))
+	if (! (req->options & conn_op_document_root))
 		return 0;
 
-	if (cherokee_buffer_is_empty (&conn->web_directory))
+	if (cherokee_buffer_is_empty (&req->web_directory))
 		return 0;
 
 	return 1;
@@ -2827,10 +2827,10 @@ cherokee_request_use_webdir (cherokee_request_t *conn)
 
 #ifdef TRACE_ENABLED
 char *
-cherokee_request_print (cherokee_request_t *conn)
+cherokee_request_print (cherokee_request_t *req)
 {
 	const char        *phase;
-	cherokee_buffer_t *buf    = &conn->self_trace;
+	cherokee_buffer_t *buf    = &req->self_trace;
 
 	/* Shortcut: Don't render if not tracing
 	 */
@@ -2842,23 +2842,23 @@ cherokee_request_print (cherokee_request_t *conn)
 	 */
 	cherokee_buffer_clean (buf);
 
-	if (conn == NULL) {
+	if (req == NULL) {
 		cherokee_buffer_add_str (buf, "Connection is NULL\n");
 		return buf->buf;
 	}
 
-	phase = cherokee_request_get_phase_str (conn);
-	cherokee_buffer_add_va (buf, "Connection %p info\n", conn);
+	phase = cherokee_request_get_phase_str (req);
+	cherokee_buffer_add_va (buf, "Connection %p info\n", req);
 
 #define print_buf(title,name)						\
 	cherokee_buffer_add_va (buf, "\t| %s: '%s' (%d)\n", title,	\
 				(name)->buf ? (name)->buf : "",		\
 				(name)->len);
 #define print_cbuf(title,name)						\
-	print_buf(title, &conn->name)
+	print_buf(title, &req->name)
 
 #define print_cint(title,name)						\
-	cherokee_buffer_add_va (buf, "\t| %s: %d\n", title, conn->name);
+	cherokee_buffer_add_va (buf, "\t| %s: %d\n", title, req->name);
 
 #define print_str(title,name)						\
 	cherokee_buffer_add_va (buf, "\t| %s: %s\n", title, name);
@@ -2883,7 +2883,7 @@ cherokee_request_print (cherokee_request_t *conn)
 	print_cint ("     Range start", range_start);
 	print_cint ("       Range end", range_end);
 	print_cint ("            Rate", limit_rate);
-	if (conn->limit_rate) {
+	if (req->limit_rate) {
 		print_cint ("        Rate BPS", limit_rate);
 	}
 
@@ -2891,15 +2891,15 @@ cherokee_request_print (cherokee_request_t *conn)
 	/* Options bit fields
 	 */
 	print_add ("\t|     Option bits:");
-	if (conn->options & conn_op_root_index)
+	if (req->options & conn_op_root_index)
 		print_add (" root_index");
-	if (conn->options & conn_op_tcp_cork)
+	if (req->options & conn_op_tcp_cork)
 		print_add (" tcp_cork");
-	if (conn->options & conn_op_document_root)
+	if (req->options & conn_op_document_root)
 		print_add (" document_root");
-	if (conn->options & conn_op_cant_encoder)
+	if (req->options & conn_op_cant_encoder)
 		print_add (" cant_encoder");
-	if (conn->options & conn_op_got_eof)
+	if (req->options & conn_op_got_eof)
 		print_add (" got_eof");
 
 	print_add ("\n");
@@ -2916,9 +2916,9 @@ cherokee_request_print (cherokee_request_t *conn)
 #endif
 
 const char *
-cherokee_request_get_phase_str (cherokee_request_t *conn)
+cherokee_request_get_phase_str (cherokee_request_t *req)
 {
-	switch (conn->phase) {
+	switch (req->phase) {
 	case phase_nothing:           return "Nothing";
 	case phase_tls_handshake:     return "TLS handshake";
 	case phase_reading_header:    return "Reading header";
@@ -2939,127 +2939,127 @@ cherokee_request_get_phase_str (cherokee_request_t *conn)
 
 
 ret_t
-cherokee_request_set_redirect (cherokee_request_t *conn, cherokee_buffer_t *address)
+cherokee_request_set_redirect (cherokee_request_t *req, cherokee_buffer_t *address)
 {
 	cuint_t len;
 
 	/* Build the redirection address
 	 */
-	cherokee_buffer_clean (&conn->redirect);
+	cherokee_buffer_clean (&req->redirect);
 
-	len = conn->web_directory.len +
+	len = req->web_directory.len +
 		address->len +
-		conn->userdir.len +
-		conn->host.len +
+		req->userdir.len +
+		req->host.len +
 		sizeof(":65535") +
 		sizeof("https://") + 4;
 
-	cherokee_buffer_ensure_size (&conn->redirect, len);
+	cherokee_buffer_ensure_size (&req->redirect, len);
 
-	if (! cherokee_buffer_is_empty (&conn->host)) {
-		if (conn->socket.is_tls == TLS)
-			cherokee_buffer_add_str (&conn->redirect, "https://");
+	if (! cherokee_buffer_is_empty (&req->host)) {
+		if (req->socket.is_tls == TLS)
+			cherokee_buffer_add_str (&req->redirect, "https://");
 		else
-			cherokee_buffer_add_str (&conn->redirect, "http://");
+			cherokee_buffer_add_str (&req->redirect, "http://");
 
-		cherokee_buffer_add_buffer (&conn->redirect, &conn->host);
+		cherokee_buffer_add_buffer (&req->redirect, &req->host);
 
-		if (conn->host_port.len > 0) {
-			cherokee_buffer_add_str    (&conn->redirect, ":");
-			cherokee_buffer_add_buffer (&conn->redirect, &conn->host_port);
+		if (req->host_port.len > 0) {
+			cherokee_buffer_add_str    (&req->redirect, ":");
+			cherokee_buffer_add_buffer (&req->redirect, &req->host_port);
 		}
 	}
 
-	if (! cherokee_buffer_is_empty (&conn->userdir)) {
-		cherokee_buffer_add_str (&conn->redirect, "/~");
-		cherokee_buffer_add_buffer (&conn->redirect, &conn->userdir);
+	if (! cherokee_buffer_is_empty (&req->userdir)) {
+		cherokee_buffer_add_str (&req->redirect, "/~");
+		cherokee_buffer_add_buffer (&req->redirect, &req->userdir);
 	}
 
 	/* In case the connection has a custom Document Root directory,
 	 * it must add the web equivalent directory to the path (web_directory).
 	 */
-	if (cherokee_request_use_webdir (conn)) {
-		cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
+	if (cherokee_request_use_webdir (req)) {
+		cherokee_buffer_add_buffer (&req->redirect, &req->web_directory);
 	}
 
-	cherokee_buffer_add_buffer (&conn->redirect, address);
+	cherokee_buffer_add_buffer (&req->redirect, address);
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_request_sleep (cherokee_request_t *conn,
-			   cherokee_msec_t        msecs)
+cherokee_request_sleep (cherokee_request_t *req,
+			cherokee_msec_t     msecs)
 {
-	conn->limit_blocked_until = cherokee_bogonow_msec + msecs;
+	req->limit_blocked_until = cherokee_bogonow_msec + msecs;
 	return ret_ok;
 }
 
 
 void
-cherokee_request_update_timeout (cherokee_request_t *conn)
+cherokee_request_update_timeout (cherokee_request_t *req)
 {
-	if (conn->timeout_lapse == -1) {
+	if (req->timeout_lapse == -1) {
 		TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
-		       conn, cherokee_request_get_phase_str (conn), REQ_SRV(conn)->timeout);
+		       req, cherokee_request_get_phase_str (req), REQ_SRV(req)->timeout);
 
-		conn->timeout = cherokee_bogonow_now + REQ_SRV(conn)->timeout;
+		req->timeout = cherokee_bogonow_now + REQ_SRV(req)->timeout;
 		return;
 	}
 
 	TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
-	       conn, cherokee_request_get_phase_str (conn), conn->timeout_lapse);
+	       req, cherokee_request_get_phase_str (req), req->timeout_lapse);
 
-	conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
+	req->timeout = cherokee_bogonow_now + req->timeout_lapse;
 }
 
 
 ret_t
-cherokee_request_build_host_string (cherokee_request_t *conn,
-				       cherokee_buffer_t     *buf)
+cherokee_request_build_host_string (cherokee_request_t *req,
+				    cherokee_buffer_t  *buf)
 {
 	/* 1st choice: Request host */
-	if (! cherokee_buffer_is_empty (&conn->host)) {
-		cherokee_buffer_add_buffer (buf, &conn->host);
+	if (! cherokee_buffer_is_empty (&req->host)) {
+		cherokee_buffer_add_buffer (buf, &req->host);
 	}
 
 	/* 2nd choice: Bound IP */
-	else if ((conn->bind != NULL) &&
-		 (! cherokee_buffer_is_empty (&conn->bind->ip)))
+	else if ((req->bind != NULL) &&
+		 (! cherokee_buffer_is_empty (&req->bind->ip)))
 	{
-		cherokee_buffer_add_buffer (buf, &conn->bind->ip);
+		cherokee_buffer_add_buffer (buf, &req->bind->ip);
 	}
 
 	/* 3rd choice: Bound IP, rendered address */
-	else if ((conn->bind != NULL) &&
-		 (! cherokee_buffer_is_empty (&conn->bind->server_address)))
+	else if ((req->bind != NULL) &&
+		 (! cherokee_buffer_is_empty (&req->bind->server_address)))
 	{
-		cherokee_buffer_add_buffer (buf, &conn->bind->server_address);
+		cherokee_buffer_add_buffer (buf, &req->bind->server_address);
 	}
 
 	return ret_ok;
 }
 
 ret_t
-cherokee_request_build_host_port_string (cherokee_request_t *conn,
-					    cherokee_buffer_t     *buf)
+cherokee_request_build_host_port_string (cherokee_request_t *req,
+					 cherokee_buffer_t  *buf)
 {
 	ret_t ret;
 
 	/* Host
 	 */
-	ret = cherokee_request_build_host_string (conn, buf);
+	ret = cherokee_request_build_host_string (req, buf);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
 	/* Port
 	 */
-	if ((conn->bind != NULL) &&
-	    (! http_port_is_standard (conn->bind->port, conn->socket.is_tls)))
+	if ((req->bind != NULL) &&
+	    (! http_port_is_standard (req->bind->port, req->socket.is_tls)))
 	{
 		cherokee_buffer_add_char    (buf, ':');
-		cherokee_buffer_add_ulong10 (buf, conn->bind->port);
+		cherokee_buffer_add_ulong10 (buf, req->bind->port);
 	}
 
 	return ret_ok;

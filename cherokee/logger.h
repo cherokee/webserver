@@ -44,7 +44,7 @@ typedef ret_t (* logger_func_init_t)         (void  *logger);
 typedef ret_t (* logger_func_free_t)         (void  *logger);
 typedef ret_t (* logger_func_flush_t)        (void  *logger);
 typedef ret_t (* logger_func_reopen_t)       (void  *logger);
-typedef ret_t (* logger_func_write_access_t) (void  *logger, void *conn);
+typedef ret_t (* logger_func_write_access_t) (void  *logger, void *req);
 
 
 typedef struct {
@@ -87,7 +87,7 @@ ret_t cherokee_logger_free            (cherokee_logger_t *logger);
 
 ret_t cherokee_logger_reopen          (cherokee_logger_t *logger);
 ret_t cherokee_logger_flush           (cherokee_logger_t *logger);
-ret_t cherokee_logger_write_access    (cherokee_logger_t *logger, void *conn);
+ret_t cherokee_logger_write_access    (cherokee_logger_t *logger, void *req);
 
 ret_t cherokee_logger_set_backup_mode (cherokee_logger_t *logger, cherokee_boolean_t active);
 ret_t cherokee_logger_get_backup_mode (cherokee_logger_t *logger, cherokee_boolean_t *active);

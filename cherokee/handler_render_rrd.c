@@ -303,8 +303,8 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	const char                        *dash;
 	cherokee_collector_rrd_interval_t *interval;
 	cherokee_boolean_t                 fresh;
-	cherokee_request_t             *conn       = HANDLER_REQ(hdl);
-	cherokee_buffer_t                  tmp        = CHEROKEE_BUF_INIT;
+	cherokee_request_t                *req       = HANDLER_REQ(hdl);
+	cherokee_buffer_t                  tmp       = CHEROKEE_BUF_INIT;
 
 	/* The handler might be disabled
 	 */
@@ -314,27 +314,27 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 	/* Sanity checks
 	 */
-	if (strncmp (conn->request.buf + conn->request.len - 4, ".png", 4) != 0) {
+	if (strncmp (req->request.buf + req->request.len - 4, ".png", 4) != 0) {
 		TRACE (ENTRIES, "Malformed RRD image request\n");
-		conn->error_code = http_service_unavailable;
+		req->error_code = http_service_unavailable;
 		return ret_error;
 	}
 
 	/* Parse the interval
 	 */
-	dash = conn->request.buf + conn->request.len - (3 + 4);
+	dash = req->request.buf + req->request.len - (3 + 4);
 
 	ret = find_interval (dash+1, &interval);
 	if (ret != ret_ok) {
 		TRACE (ENTRIES, "No interval detected: %s\n", dash+1);
-		conn->error_code = http_service_unavailable;
+		req->error_code = http_service_unavailable;
 		return ret_error;
 	}
 
-	begin = strrchr (conn->request.buf, '/');
+	begin = strrchr (req->request.buf, '/');
 	if (begin == NULL) {
 		TRACE (ENTRIES, "Malformed RRD image request. No slash.\n");
-		conn->error_code = http_service_unavailable;
+		req->error_code = http_service_unavailable;
 		return ret_error;
 	}
 
@@ -342,8 +342,8 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	 */
 	if (! strncmp (begin, "/server_accepts_", 16)) {
 		if (strlen(begin) != 18 + 4) {
-			TRACE (ENTRIES, "Bad length: %d. Expected 18+4\n", conn->request.len);
-			conn->error_code = http_service_unavailable;
+			TRACE (ENTRIES, "Bad length: %d. Expected 18+4\n", req->request.len);
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -354,16 +354,16 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_request_sleep (conn, 200);
+				cherokee_request_sleep (req, 200);
 				return ret_eagain;
 			}
 
 			ret = render_srv_accepts (hdl, interval);
 			if (ret != ret_ok) {
-				TRACE (ENTRIES, "Couldn't render image: %s\n", conn->request.buf);
+				TRACE (ENTRIES, "Couldn't render image: %s\n", req->request.buf);
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
-				conn->error_code = http_service_unavailable;
+				req->error_code = http_service_unavailable;
 				return ret_error;
 			}
 
@@ -372,8 +372,8 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 	} else if (! strncmp (begin, "/server_timeouts_", 17)) {
 		if (strlen(begin) != 19 + 4) {
-			TRACE (ENTRIES, "Bad length: %d. Expected 19+4.\n", conn->request.len);
-			conn->error_code = http_service_unavailable;
+			TRACE (ENTRIES, "Bad length: %d. Expected 19+4.\n", req->request.len);
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -384,16 +384,16 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_request_sleep (conn, 200);
+				cherokee_request_sleep (req, 200);
 				return ret_eagain;
 			}
 
 			ret = render_srv_timeouts (hdl, interval);
 			if (ret != ret_ok) {
-				TRACE (ENTRIES, "Couldn't render image: %s\n", conn->request.buf);
+				TRACE (ENTRIES, "Couldn't render image: %s\n", req->request.buf);
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
-				conn->error_code = http_service_unavailable;
+				req->error_code = http_service_unavailable;
 				return ret_error;
 			}
 
@@ -402,8 +402,8 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 	} else if (! strncmp (begin, "/server_traffic_", 16)) {
 		if (strlen(begin) != 18 + 4) {
-			TRACE (ENTRIES, "Bad length: %d. Expected 18+4.\n", conn->request.len);
-			conn->error_code = http_service_unavailable;
+			TRACE (ENTRIES, "Bad length: %d. Expected 18+4.\n", req->request.len);
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -414,16 +414,16 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_request_sleep (conn, 200);
+				cherokee_request_sleep (req, 200);
 				return ret_eagain;
 			}
 
 			ret = render_srv_traffic (hdl, interval);
 			if (ret != ret_ok) {
-				TRACE (ENTRIES, "Couldn't render image: %s\n", conn->request.buf);
+				TRACE (ENTRIES, "Couldn't render image: %s\n", req->request.buf);
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
-				conn->error_code = http_service_unavailable;
+				req->error_code = http_service_unavailable;
 				return ret_error;
 			}
 
@@ -443,7 +443,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 		if (vserver_len <= 0) {
 			TRACE (ENTRIES, "Bad virtual server name. Length: %d\n", vserver_len);
-			conn->error_code = http_service_unavailable;
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -461,7 +461,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		if (! fresh) {
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
-				cherokee_request_sleep (conn, 200);
+				cherokee_request_sleep (req, 200);
 				return ret_eagain;
 			}
 
@@ -471,10 +471,10 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 			cherokee_buffer_mrproper (&vserver_buf);
 
 			if (ret != ret_ok) {
-				TRACE (ENTRIES, "Couldn't render image: %s\n", conn->request.buf);
+				TRACE (ENTRIES, "Couldn't render image: %s\n", req->request.buf);
 
 				CHEROKEE_MUTEX_UNLOCK (&rrd_connection->mutex);
-				conn->error_code = http_service_unavailable;
+				req->error_code = http_service_unavailable;
 				return ret_error;
 			}
 
@@ -482,17 +482,17 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		}
 
 	} else {
-		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_INVALID_REQ, conn->request.buf);
-		conn->error_code = http_service_unavailable;
+		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_INVALID_REQ, req->request.buf);
+		req->error_code = http_service_unavailable;
 		return ret_error;
 	}
 
 	/* Has everything gone alright?
 	 */
 	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
-		cherokee_request_t *conn = HANDLER_REQ(hdl);
+		cherokee_request_t *req = HANDLER_REQ(hdl);
 
-		conn->error_code = http_service_unavailable;
+		req->error_code = http_service_unavailable;
 		BIT_SET (HANDLER(hdl)->support, hsupport_error);
 
 		return ret_ok;
@@ -500,11 +500,11 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 	/* Rewrite the request
 	 */
-	if (cherokee_buffer_is_empty (&conn->request_original)) {
-		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+	if (cherokee_buffer_is_empty (&req->request_original)) {
+		cherokee_buffer_add_buffer (&req->request_original, &req->request);
 	}
 
-	cherokee_buffer_replace_string (&conn->request, " ", 1, "_", 1);
+	cherokee_buffer_replace_string (&req->request, " ", 1, "_", 1);
 
 	/* Handler file init
 	 */

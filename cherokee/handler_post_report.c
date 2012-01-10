@@ -131,17 +131,17 @@ cherokee_handler_post_report_free (cherokee_handler_post_report_t *hdl)
 }
 
 static ret_t
-_figure_x_progress_id (cherokee_request_t  *conn,
-		       cherokee_buffer_t     **id)
+_figure_x_progress_id (cherokee_request_t  *req,
+		       cherokee_buffer_t  **id)
 {
 	ret_t ret;
 
-	ret = cherokee_request_parse_args (conn);
+	ret = cherokee_request_parse_args (req);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
 
-	ret = cherokee_avl_get_ptr (conn->arguments, "X-Progress-ID", (void **)id);
+	ret = cherokee_avl_get_ptr (req->arguments, "X-Progress-ID", (void **)id);
 	if ((ret == ret_ok) && (*id != NULL) && ((*id)->len > 0)) {
 		return ret_ok;
 	}
@@ -152,13 +152,13 @@ _figure_x_progress_id (cherokee_request_t  *conn,
 ret_t
 cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 {
-	ret_t                  ret;
-	const char            *state;
-	off_t                  size      = 0;
-	off_t                  received  = 0;
-	cherokee_buffer_t     *id        = NULL;
-	cherokee_server_t     *srv       = HANDLER_SRV(hdl);
-	cherokee_request_t *conn      = HANDLER_REQ(hdl);
+	ret_t               ret;
+	const char         *state;
+	off_t               size     = 0;
+	off_t               received = 0;
+	cherokee_buffer_t  *id       = NULL;
+	cherokee_server_t  *srv      = HANDLER_SRV(hdl);
+	cherokee_request_t *req      = HANDLER_REQ(hdl);
 
 	/* POST tracking is disabled
 	 */
@@ -174,7 +174,7 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 
 	/* Figure X-Progress-ID
 	 */
-	ret = _figure_x_progress_id (conn, &id);
+	ret = _figure_x_progress_id (req, &id);
 	if (ret != ret_ok) {
 		cherokee_dwriter_dict_open (&hdl->writer);
 		cherokee_dwriter_cstring (&hdl->writer, "error");
@@ -217,9 +217,9 @@ ret_t
 cherokee_handler_post_report_add_headers (cherokee_handler_post_report_t *hdl,
 					  cherokee_buffer_t              *buffer)
 {
-	cherokee_request_t *conn = HANDLER_REQ(hdl);
+	cherokee_request_t *req = HANDLER_REQ(hdl);
 
-	if (cherokee_request_should_include_length(conn)) {
+	if (cherokee_request_should_include_length(req)) {
 		HANDLER(hdl)->support |= hsupport_length;
 		cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->buffer.len);
 	}

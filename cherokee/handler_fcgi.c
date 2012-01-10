@@ -164,14 +164,14 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	ret_t                    ret;
 	size_t                   read = 0;
 	cherokee_handler_fcgi_t *fcgi = HDL_FCGI(cgi);
-	cherokee_request_t   *conn = HANDLER_REQ(cgi);
+	cherokee_request_t      *req  = HANDLER_REQ(cgi);
 
 	ret = cherokee_socket_bufread (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
 
 	switch (ret) {
 	case ret_eagain:
-		conn->polling_aim.fd   = fcgi->socket.socket;
-		conn->polling_aim.mode = poll_mode_read;
+		req->polling_aim.fd   = fcgi->socket.socket;
+		req->polling_aim.mode = poll_mode_read;
 		return ret_eagain;
 
 	case ret_ok:
@@ -395,20 +395,20 @@ add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 {
 	cherokee_handler_cgi_base_t       *cgi_base = HDL_CGI_BASE(hdl);
 	cherokee_buffer_t                  buffer   = CHEROKEE_BUF_INIT;
-	cherokee_request_t             *conn     = HANDLER_REQ(hdl);
+	cherokee_request_t                *req      = HANDLER_REQ(hdl);
 	cherokee_handler_cgi_base_props_t *props    = HANDLER_CGI_BASE_PROPS(hdl);
 
 	/* POST management
 	 */
-	if (http_method_with_input (conn->header.method)) {
-		if (conn->post.encoding == post_enc_regular) {
-			cherokee_buffer_add_ullong10 (&buffer, conn->post.len);
+	if (http_method_with_input (req->header.method)) {
+		if (req->post.encoding == post_enc_regular) {
+			cherokee_buffer_add_ullong10 (&buffer, req->post.len);
 			set_env (cgi_base, "CONTENT_LENGTH", buffer.buf, buffer.len);
 
-		} else if (conn->post.encoding == post_enc_chunked) {
+		} else if (req->post.encoding == post_enc_chunked) {
 			TRACE (ENTRIES",post", "Setting Chunked Post: %s flag\n", "retransmit");
 			set_env (cgi_base, "CONTENT_TRANSFER_ENCODING", "chunked", 7);
-			conn->post.chunked.retransmit = true;
+			req->post.chunked.retransmit = true;
 		}
 	}
 
@@ -433,10 +433,10 @@ add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 		cherokee_buffer_clean (&buffer);
 
 		if (props->check_file) {
-			cherokee_buffer_add_buffer (&buffer, &REQ_VSRV(conn)->root);
-			cherokee_buffer_add_buffer (&buffer, &conn->request);
+			cherokee_buffer_add_buffer (&buffer, &REQ_VSRV(req)->root);
+			cherokee_buffer_add_buffer (&buffer, &req->request);
 		} else {
-			cherokee_buffer_add_buffer (&buffer, &conn->request);
+			cherokee_buffer_add_buffer (&buffer, &req->request);
 		}
 
 		set_env (cgi_base, "SCRIPT_FILENAME", buffer.buf, buffer.len);
@@ -487,7 +487,7 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 {
 	FCGI_BeginRequestRecord  request;
 	cuint_t                  last_header_offset;
-	cherokee_request_t   *conn                = HANDLER_REQ(hdl);
+	cherokee_request_t      *req                 = HANDLER_REQ(hdl);
 
 	cherokee_buffer_clean (buffer);
 
@@ -501,7 +501,7 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 
 	/* Add enviroment variables
 	 */
-	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), conn);
+	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), req);
 
 	add_extra_fcgi_env (hdl, &last_header_offset);
 	fixup_padding (buffer, last_header_offset);
@@ -512,7 +512,7 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 
 	/* No POST?
 	 */
-	if ((! http_method_with_input (conn->header.method)) || (! conn->post.has_info) || (! conn->post.len)) {
+	if ((! http_method_with_input (req->header.method)) || (! req->post.has_info) || (! req->post.len)) {
 		TRACE (ENTRIES",post", "Post: %s\n", "has no post");
 		add_empty_packet (hdl, FCGI_STDIN);
 	}
@@ -526,13 +526,13 @@ static ret_t
 connect_to_server (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                          ret;
-	cherokee_request_t         *conn  = HANDLER_REQ(hdl);
+	cherokee_request_t            *req   = HANDLER_REQ(hdl);
 	cherokee_handler_fcgi_props_t *props = HANDLER_FCGI_PROPS(hdl);
 
 	/* Get a reference to the target host
 	 */
 	if (hdl->src_ref == NULL) {
-		ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
+		ret = cherokee_balancer_dispatch (props->balancer, req, &hdl->src_ref);
 		if (ret != ret_ok)
 			return ret;
 	}
@@ -540,14 +540,14 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 	/* Try to connect
 	 */
 	if (hdl->src_ref->type == source_host) {
-		ret = cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);
+		ret = cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, req);
 		if ((ret == ret_deny) || (ret == ret_error))
 		{
-			cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+			cherokee_balancer_report_fail (props->balancer, req, hdl->src_ref);
 		}
 	} else {
 		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
-								   &hdl->socket, conn);
+								   &hdl->socket, req);
 	}
 
 	return ret;
@@ -558,9 +558,9 @@ static ret_t
 do_send (cherokee_handler_fcgi_t *hdl,
 	 cherokee_buffer_t       *buffer)
 {
-	ret_t                  ret;
-	size_t                 written = 0;
-	cherokee_request_t *conn    = HANDLER_REQ(hdl);
+	ret_t               ret;
+	size_t              written = 0;
+	cherokee_request_t *req     = HANDLER_REQ(hdl);
 
 	ret = cherokee_socket_bufwrite (&hdl->socket, buffer, &written);
 	switch (ret) {
@@ -570,12 +570,12 @@ do_send (cherokee_handler_fcgi_t *hdl,
 		if (written > 0)
 			break;
 
-		conn->polling_aim.fd   = hdl->socket.socket;
-		conn->polling_aim.mode = poll_mode_write;
+		req->polling_aim.fd   = hdl->socket.socket;
+		req->polling_aim.mode = poll_mode_write;
 
 		return ret_eagain;
 	default:
-		conn->error_code = http_bad_gateway;
+		req->error_code = http_bad_gateway;
 		return ret_error;
 	}
 
@@ -590,10 +590,10 @@ static ret_t
 send_post (cherokee_handler_fcgi_t *hdl,
 	   cherokee_buffer_t       *buf)
 {
-	ret_t                  ret;
-	int                    prev_buf_len;
-	cherokee_request_t *conn          = HANDLER_REQ(hdl);
-	static FCGI_Header     empty_header  = {0,0,0,0,0,0,0,0};
+	ret_t               ret;
+	int                 prev_buf_len;
+	cherokee_request_t *req           = HANDLER_REQ(hdl);
+	static FCGI_Header  empty_header  = {0,0,0,0,0,0,0,0};
 
 	switch (hdl->post_phase) {
 	case fcgi_post_phase_read:
@@ -607,7 +607,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 
 		/* Take a chunck of post
 		 */
-		ret = cherokee_post_read (&conn->post, &conn->socket, buf);
+		ret = cherokee_post_read (&req->post, &req->socket, buf);
 		if (ret != ret_ok) {
 			return ret;
 		}
@@ -616,7 +616,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 
 		/* Did something, increase timeout
 		 */
-		cherokee_request_update_timeout (conn);
+		cherokee_request_update_timeout (req);
 
 		/* Complete the header
 		 */
@@ -627,7 +627,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 
 		/* Close STDIN if it was the last chunck
 		 */
-		if (cherokee_post_read_finished (&conn->post)) {
+		if (cherokee_post_read_finished (&req->post)) {
 			add_empty_packet (hdl, FCGI_STDIN);
 		}
 
@@ -645,12 +645,12 @@ send_post (cherokee_handler_fcgi_t *hdl,
 				/* Did something, increase timeout
 				 */
 				if (buf->len < prev_buf_len) {
-					cherokee_request_update_timeout (conn);
+					cherokee_request_update_timeout (req);
 				}
 
                                 break;
                         case ret_eagain:
-				/* conn->polling_aim set */
+				/* req->polling_aim set */
 				return ret_eagain;
                         case ret_eof:
                         case ret_error:
@@ -667,7 +667,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 			return ret_eagain;
 		}
 
-		if (! cherokee_post_read_finished (&conn->post)) {
+		if (! cherokee_post_read_finished (&req->post)) {
 			hdl->post_phase = fcgi_post_phase_read;
 			return ret_eagain;
 		}
@@ -687,7 +687,7 @@ ret_t
 cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                              ret;
-	cherokee_request_t             *conn  = HANDLER_REQ(hdl);
+	cherokee_request_t                *req   = HANDLER_REQ(hdl);
 	cherokee_handler_cgi_base_props_t *props = HANDLER_CGI_BASE_PROPS(hdl);
 
 	switch (HDL_CGI_BASE(hdl)->init_phase) {
@@ -718,10 +718,10 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		case ret_eagain:
 			return ret_eagain;
 		case ret_deny:
-			conn->error_code = http_gateway_timeout;
+			req->error_code = http_gateway_timeout;
 			return ret_error;
 		default:
-			conn->error_code = http_service_unavailable;
+			req->error_code = http_service_unavailable;
 			return ret_error;
 		}
 

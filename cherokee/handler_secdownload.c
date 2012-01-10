@@ -122,42 +122,42 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 				  void                    *cnt,
 				  cherokee_module_props_t *props)
 {
-	int                    re;
-	ret_t                  ret;
-	char                  *p;
-	cuint_t                path_len;
-	time_t                 time_url;
-	char                  *time_s;
-	cherokee_buffer_t      md5      = CHEROKEE_BUF_INIT;
-	cherokee_request_t *conn     = REQ(cnt);
+	int                 re;
+	ret_t               ret;
+	char               *p;
+	cuint_t             path_len;
+	time_t              time_url;
+	char               *time_s;
+	cherokee_buffer_t   md5       = CHEROKEE_BUF_INIT;
+	cherokee_request_t *req       = REQ(cnt);
 
-	TRACE(ENTRIES, "Analyzing request '%s'\n", conn->request.buf);
+	TRACE(ENTRIES, "Analyzing request '%s'\n", req->request.buf);
 
 	/* Sanity check
 	 */
-	if (conn->request.len <= 1 + 32 + 2) {
-		TRACE(ENTRIES, "Malformed URL. Too short: len=%d.\n", conn->request.len);
-		conn->error_code = http_not_found;
+	if (req->request.len <= 1 + 32 + 2) {
+		TRACE(ENTRIES, "Malformed URL. Too short: len=%d.\n", req->request.len);
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 
-	if (conn->request.buf[0] != '/') {
+	if (req->request.buf[0] != '/') {
 		TRACE(ENTRIES, "Malformed URL: %s\n", "Not slash (1)");
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 
-	p = conn->request.buf + 1;
+	p = req->request.buf + 1;
 	if (check_hex (p, 32)) {
 		TRACE(ENTRIES, "Malformed URL: %s\n", "No MD5");
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 	p += 32;
 
 	if (*p != '/') {
 		TRACE(ENTRIES, "Malformed URL: %s\n", "Not slash (2)");
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 	p += 1;
@@ -165,7 +165,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 
 	if (check_hex (p, 8)) {
 		TRACE(ENTRIES, "Malformed URL: %s\n", "No MD5 (2)");
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 	p += 8;
@@ -175,14 +175,14 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 	time_url = get_time (time_s);
 	if ((cherokee_bogonow_now - time_url) > (int)PROP_SECDOWN(props)->timeout) {
 		TRACE(ENTRIES, "Time out: %d (now=%d)\n", time_url, cherokee_bogonow_now);
-		conn->error_code = http_gone;
+		req->error_code = http_gone;
 		return ret_error;
 	}
 
 	/* Check the MD5
 	 * [secret][path][hex(time)]
 	 */
-	path_len = (conn->request.buf + conn->request.len) - p;
+	path_len = (req->request.buf + req->request.len) - p;
 
 	cherokee_buffer_add_buffer (&md5, &PROP_SECDOWN(props)->secret);
 	cherokee_buffer_add        (&md5, p, path_len);
@@ -190,7 +190,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 
 	cherokee_buffer_encode_md5_digest (&md5);
 
-	re = strncasecmp (md5.buf, &conn->request.buf[1], 32);
+	re = strncasecmp (md5.buf, &req->request.buf[1], 32);
 	if (re != 0) {
 #ifdef TRACE_ENABLED
 		if (cherokee_trace_is_tracing()) {
@@ -210,7 +210,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 #endif
 
 		cherokee_buffer_mrproper(&md5);
-		conn->error_code = http_access_denied;
+		req->error_code = http_access_denied;
 		return ret_error;
 	}
 
@@ -218,13 +218,13 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 
 	/* At this point the request has been validated
 	 */
-	if (cherokee_buffer_is_empty (&conn->request_original)) {
-		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
-		cherokee_buffer_add_buffer (&conn->query_string_original, &conn->query_string);
+	if (cherokee_buffer_is_empty (&req->request_original)) {
+		cherokee_buffer_add_buffer (&req->request_original, &req->request);
+		cherokee_buffer_add_buffer (&req->query_string_original, &req->query_string);
 	}
 
-	cherokee_buffer_clean (&conn->request);
-	cherokee_buffer_add   (&conn->request, p, path_len);
+	cherokee_buffer_clean (&req->request);
+	cherokee_buffer_add   (&req->request, p, path_len);
 
 	/* Instance the File handler
 	 */

@@ -158,51 +158,51 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 
 static ret_t
 do_redir_external (cherokee_handler_t     **hdl,
-		   cherokee_request_t   *conn,
+		   cherokee_request_t      *req,
 		   cherokee_module_props_t *props,
 		   error_entry_t           *entry)
 {
-	cherokee_buffer_clean (&conn->redirect);
-	cherokee_buffer_add_buffer (&conn->redirect, &entry->url);
+	cherokee_buffer_clean (&req->redirect);
+	cherokee_buffer_add_buffer (&req->redirect, &entry->url);
 
-	conn->error_code = http_moved_permanently;
-	return cherokee_handler_redir_new (hdl, conn, props);
+	req->error_code = http_moved_permanently;
+	return cherokee_handler_redir_new (hdl, req, props);
 }
 
 static ret_t
-do_redir_internal (cherokee_request_t *conn,
-		   error_entry_t         *entry)
+do_redir_internal (cherokee_request_t *req,
+		   error_entry_t      *entry)
 {
 	/* Set REDIRECT_URL
 	 */
-	cherokee_buffer_clean (&conn->error_internal_url);
-	cherokee_buffer_add_buffer (&conn->error_internal_url, &conn->request);
+	cherokee_buffer_clean (&req->error_internal_url);
+	cherokee_buffer_add_buffer (&req->error_internal_url, &req->request);
 
 	/* Set REDIRECT_QUERY_STRING
 	 */
-	cherokee_buffer_clean (&conn->error_internal_qs);
-	cherokee_buffer_add_buffer (&conn->error_internal_qs, &conn->query_string);
+	cherokee_buffer_clean (&req->error_internal_qs);
+	cherokee_buffer_add_buffer (&req->error_internal_qs, &req->query_string);
 
 	/* Clean up the connection
 	 */
-	cherokee_buffer_clean (&conn->pathinfo);
-	cherokee_buffer_clean (&conn->request);
-	cherokee_buffer_clean (&conn->local_directory);
+	cherokee_buffer_clean (&req->pathinfo);
+	cherokee_buffer_clean (&req->request);
+	cherokee_buffer_clean (&req->local_directory);
 
 	/* Set the new request
 	 */
-	cherokee_buffer_add_buffer (&conn->request, &entry->url);
+	cherokee_buffer_add_buffer (&req->request, &entry->url);
 
 	/* Store the previous error code
 	 */
-	conn->error_internal_code = conn->error_code;
+	req->error_internal_code = req->error_code;
 	return ret_eagain;
 }
 
 ret_t
-cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
-				  cherokee_request_t   *conn,
-				  cherokee_module_props_t *props)
+cherokee_handler_error_redir_new (cherokee_handler_t      **hdl,
+				  cherokee_request_t       *req,
+				  cherokee_module_props_t  *props)
 {
 	cherokee_list_t *i;
 	error_entry_t   *default_error;
@@ -212,14 +212,14 @@ cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
 	list_for_each (i, &PROP_ERREDIR(props)->errors) {
 		error_entry_t *entry = (error_entry_t *)i;
 
-		if (entry->error != conn->error_code) {
+		if (entry->error != req->error_code) {
 			continue;
 		}
 
 		if (entry->show) {
-			return do_redir_external (hdl, conn, props, entry);
+			return do_redir_external (hdl, req, props, entry);
 		} else {
-			return do_redir_internal (conn, entry);
+			return do_redir_internal (req, entry);
 		}
 	}
 
@@ -228,9 +228,9 @@ cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
 	default_error = (error_entry_t *) PROP_ERREDIR(props)->error_default;
 	if (default_error) {
 		if (default_error->show) {
-			return do_redir_external (hdl, conn, props, default_error);
+			return do_redir_external (hdl, req, props, default_error);
 		} else {
-			return do_redir_internal (conn, default_error);
+			return do_redir_internal (req, default_error);
 		}
 	}
 

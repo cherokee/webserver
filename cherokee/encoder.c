@@ -127,13 +127,13 @@ cherokee_encoder_add_headers (cherokee_encoder_t *enc, cherokee_buffer_t *buf)
 
 
 ret_t
-cherokee_encoder_init (cherokee_encoder_t *enc, void *conn)
+cherokee_encoder_init (cherokee_encoder_t *enc, void *req)
 {
 	encoder_func_init_t init_func;
 
 	/* Properties
 	 */
-	enc->conn = conn;
+	enc->req = req;
 
 	/* Call the virtual method
 	 */
@@ -141,7 +141,7 @@ cherokee_encoder_init (cherokee_encoder_t *enc, void *conn)
 	if (init_func == NULL)
 		return ret_error;
 
-	return init_func (enc, conn);
+	return init_func (enc, req);
 }
 
 

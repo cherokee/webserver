@@ -679,16 +679,16 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 static ret_t
 check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 {
-	cherokee_request_t *conn = HANDLER_REQ(dhdl);
+	cherokee_request_t *req = HANDLER_REQ(dhdl);
 
-	if ((cherokee_buffer_is_empty (&conn->request)) ||
-	    (!cherokee_buffer_is_ending (&conn->request, '/')))
+	if ((cherokee_buffer_is_empty (&req->request)) ||
+	    (!cherokee_buffer_is_ending (&req->request, '/')))
 	{
-		cherokee_buffer_add_str (&conn->request, "/");
-		cherokee_request_set_redirect (conn, &conn->request);
-		cherokee_buffer_drop_ending (&conn->request, 1);
+		cherokee_buffer_add_str (&req->request, "/");
+		cherokee_request_set_redirect (req, &req->request);
+		cherokee_buffer_drop_ending (&req->request, 1);
 
-		conn->error_code = http_moved_permanently;
+		req->error_code = http_moved_permanently;
 		return ret_error;
 	}
 
@@ -789,20 +789,20 @@ list_sort_by_type (cherokee_list_t *list, cherokee_dirlist_sort_t sort)
 static ret_t
 build_file_list (cherokee_handler_dirlist_t *dhdl)
 {
-	DIR                   *dir;
-	file_entry_t          *item;
-	int                    is_dir;
-	int                    is_link;
-	cherokee_request_t *conn           = HANDLER_REQ(dhdl);
-	cherokee_buffer_t      local_realpath = CHEROKEE_BUF_INIT;
+	DIR                *dir;
+	file_entry_t       *item;
+	int                 is_dir;
+	int                 is_link;
+	cherokee_request_t *req            = HANDLER_REQ(dhdl);
+	cherokee_buffer_t   local_realpath = CHEROKEE_BUF_INIT;
 
 	/* Build the local directory path
 	 */
-	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);     /* 1 */
+	cherokee_buffer_add_buffer (&req->local_directory, &req->request);     /* 1 */
 
-	dir = cherokee_opendir (conn->local_directory.buf);
+	dir = cherokee_opendir (req->local_directory.buf);
 	if (dir == NULL) {
-		conn->error_code = http_not_found;
+		req->error_code = http_not_found;
 		return ret_error;
 	}
 
@@ -811,7 +811,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	for (;;) {
 		ret_t ret;
 
-		ret = generate_file_entry (dhdl, dir, &conn->local_directory, &local_realpath, &item);
+		ret = generate_file_entry (dhdl, dir, &req->local_directory, &local_realpath, &item);
 		if (ret == ret_eof)
 			break;
 		if ((ret == ret_nomem) ||
@@ -835,7 +835,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	/* Clean
 	 */
 	cherokee_closedir(dir);
-	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len); /* 2 */
+	cherokee_buffer_drop_ending (&req->local_directory, req->request.len); /* 2 */
 
 	/* Free local_realpath. It might have been built lazily,
 	 * inside the generate_file_entry() function.
@@ -869,19 +869,19 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 static ret_t
 build_public_path (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buf)
 {
-	cherokee_request_t *conn = HANDLER_REQ(dhdl);
+	cherokee_request_t *req = HANDLER_REQ(dhdl);
 
-	if (!cherokee_buffer_is_empty (&conn->userdir)) {
+	if (!cherokee_buffer_is_empty (&req->userdir)) {
 		/* ~user local dir request
  		 */
 		cherokee_buffer_add_str (buf, "/~");
-		cherokee_buffer_add_buffer (buf, &conn->userdir);
+		cherokee_buffer_add_buffer (buf, &req->userdir);
 	}
 
-	if (cherokee_buffer_is_empty (&conn->request_original))
-		cherokee_buffer_add_buffer (buf, &conn->request);
+	if (cherokee_buffer_is_empty (&req->request_original))
+		cherokee_buffer_add_buffer (buf, &req->request);
 	else
-		cherokee_buffer_add_buffer (buf, &conn->request_original);
+		cherokee_buffer_add_buffer (buf, &req->request_original);
 
 	return ret_ok;
 }
@@ -890,9 +890,9 @@ build_public_path (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buf)
 static ret_t
 read_notice_file (cherokee_handler_dirlist_t *dhdl)
 {
-	ret_t                  ret;
-	cherokee_list_t       *i;
-	cherokee_request_t *conn = HANDLER_REQ(dhdl);
+	ret_t               ret;
+	cherokee_list_t    *i;
+	cherokee_request_t *req = HANDLER_REQ(dhdl);
 
 	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {
 		file_match_t      *file_match = ((file_match_t*)(i));
@@ -901,11 +901,11 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 		cherokee_buffer_clean (&dhdl->header);
 
 		if (filename->buf[0] != '/') {
-			cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);                     /* do   */
-			cherokee_buffer_add_buffer (&conn->local_directory, filename);
+			cherokee_buffer_add_buffer (&req->local_directory, &req->request);                     /* do   */
+			cherokee_buffer_add_buffer (&req->local_directory, filename);
 
-			ret = cherokee_buffer_read_file (&dhdl->header, conn->local_directory.buf);
-			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len + filename->len); /* undo */
+			ret = cherokee_buffer_read_file (&dhdl->header, req->local_directory.buf);
+			cherokee_buffer_drop_ending (&req->local_directory, req->request.len + filename->len); /* undo */
 		} else {
 			ret = cherokee_buffer_read_file (&dhdl->header, filename->buf);
 		}

@@ -143,7 +143,7 @@ cherokee_nonce_table_check (cherokee_nonce_table_t *nonces,
 
 ret_t
 cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
-			       cherokee_request_t  *conn,
+			       cherokee_request_t     *req,
 			       cherokee_buffer_t      *nonce)
 {
 	entry_t *entry;
@@ -152,7 +152,7 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
 	 */
 	cherokee_buffer_add_ullong16(nonce, (cullong_t) cherokee_bogonow_now);
 	cherokee_buffer_add_ulong16 (nonce, (culong_t) rand());
-	cherokee_buffer_add_ulong16 (nonce, (culong_t) POINTER_TO_INT(conn));
+	cherokee_buffer_add_ulong16 (nonce, (culong_t) POINTER_TO_INT(req));
 
 	/* Compute MD5 and overwrite buffer content without reallocating it !
 	 */

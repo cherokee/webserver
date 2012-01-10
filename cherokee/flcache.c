@@ -173,18 +173,18 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 
 
 ret_t
-cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
-				 cherokee_request_t *conn)
+cherokee_flcache_req_get_cached (cherokee_flcache_t *flcache,
+				 cherokee_request_t *req)
 {
 	ret_t                        ret;
 	cherokee_avl_flcache_node_t *entry = NULL;
 
 	/* Check the cache
 	 */
-	ret = cherokee_avl_flcache_get (&flcache->request_map, conn, &entry);
+	ret = cherokee_avl_flcache_get (&flcache->request_map, req, &entry);
 	if ((ret != ret_ok) || (entry == NULL)) {
 		TRACE (ENTRIES, "Front Line Cache: miss: '%s' qs='%s'\n",
-		       conn->request.buf, conn->query_string.buf ? conn->query_string.buf : "");
+		       req->request.buf, req->query_string.buf ? req->query_string.buf : "");
 		return ret_not_found;
 	}
 
@@ -192,7 +192,7 @@ cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
 	 */
 	if (entry->status != flcache_status_ready) {
 		TRACE (ENTRIES, "Front Line Cache: almost-hit; '%s' being cached (%d refs)\n",
-		       conn->request.buf, entry->ref_count);
+		       req->request.buf, entry->ref_count);
 		return ret_deny;
 	}
 
@@ -200,7 +200,7 @@ cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
 	 */
 	if (entry->valid_until < cherokee_bogonow_now) {
 		TRACE (ENTRIES, "Front Line Cache: almost-hit; '%s' expired already (%d refs)\n",
-		       conn->request.buf, entry->ref_count);
+		       req->request.buf, entry->ref_count);
 
 		if (entry->ref_count == 0) {
 			cherokee_flcache_del_entry (flcache, entry);
@@ -211,13 +211,13 @@ cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
 
 	/* Cache hit: Open the cached file
 	 */
-	conn->flcache.fd = cherokee_open (entry->file.buf, O_RDONLY | O_NOFOLLOW, 0);
-	if (unlikely (conn->flcache.fd == -1)) {
+	req->flcache.fd = cherokee_open (entry->file.buf, O_RDONLY | O_NOFOLLOW, 0);
+	if (unlikely (req->flcache.fd == -1)) {
 		return ret_error;
 	}
 
 	TRACE (ENTRIES, "Front Line Cache: hit; '%s' -> '%s' (%d refs)\n",
-	       conn->request.buf, entry->file.buf, entry->ref_count);
+	       req->request.buf, entry->file.buf, entry->ref_count);
 
 	/* Store the reference to the object
 	 */
@@ -225,60 +225,60 @@ cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
 	entry->ref_count += 1;
 	CHEROKEE_MUTEX_UNLOCK (&entry->ref_count_mutex);
 
-	conn->flcache.avl_node_ref = entry;
-	conn->flcache.mode         = flcache_mode_out;
+	req->flcache.avl_node_ref = entry;
+	req->flcache.mode         = flcache_mode_out;
 
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_flcache_req_is_storable (cherokee_flcache_t    *flcache,
-				  cherokee_request_t *conn)
+cherokee_flcache_req_is_storable (cherokee_flcache_t *flcache,
+				  cherokee_request_t *req)
 {
 	UNUSED (flcache);
 
 	/* HTTP Method
 	 */
-	if (conn->header.method != http_get) {
-		TRACE (ENTRIES, "Not storable: method(%d) != GET\n", conn->header.method);
+	if (req->header.method != http_get) {
+		TRACE (ENTRIES, "Not storable: method(%d) != GET\n", req->header.method);
 		return ret_deny;
 	}
 
 	/* HTTPs
 	 */
-	if (conn->socket.is_tls == TLS) {
+	if (req->socket.is_tls == TLS) {
 		TRACE (ENTRIES, "Not storable: Connection is %s\n", "TLS");
 		return ret_deny;
 	}
 
 	/* Authenticated
 	 */
-	if (conn->validator != NULL) {
+	if (req->validator != NULL) {
 		TRACE (ENTRIES, "Not storable: Content requires %s\n", "authentication");
 		return ret_deny;
 	}
 
 	/* Expiration
 	 */
-	if (conn->expiration == cherokee_expiration_epoch) {
+	if (req->expiration == cherokee_expiration_epoch) {
 		TRACE (ENTRIES, "Not storable: Alredy expired at '%s'\n", "epoch");
 		return ret_deny;
 	}
 
-	if ((conn->expiration_prop & cherokee_expiration_prop_no_cache) ||
-	    (conn->expiration_prop & cherokee_expiration_prop_no_store) ||
-	    (conn->expiration_prop & cherokee_expiration_prop_must_revalidate) ||
-	    (conn->expiration_prop & cherokee_expiration_prop_proxy_revalidate))
+	if ((req->expiration_prop & cherokee_expiration_prop_no_cache) ||
+	    (req->expiration_prop & cherokee_expiration_prop_no_store) ||
+	    (req->expiration_prop & cherokee_expiration_prop_must_revalidate) ||
+	    (req->expiration_prop & cherokee_expiration_prop_proxy_revalidate))
 	{
-		TRACE (ENTRIES, "Not storable: Expiration props: %d\n", conn->expiration_prop);
+		TRACE (ENTRIES, "Not storable: Expiration props: %d\n", req->expiration_prop);
 		return ret_deny;
 	}
 
 	/* Range
 	 */
-	if ((conn->range_end != -1) || (conn->range_start != -1)) {
-		TRACE (ENTRIES, "Not storable: Requested a range (%d, %d)\n", conn->range_start, conn->range_end);
+	if ((req->range_end != -1) || (req->range_start != -1)) {
+		TRACE (ENTRIES, "Not storable: Requested a range (%d, %d)\n", req->range_start, req->range_end);
 		return ret_deny;
 	}
 
@@ -318,8 +318,8 @@ cherokee_flcache_conn_init (cherokee_flcache_conn_t *flcache_conn)
 
 
 ret_t
-cherokee_flcache_req_set_store (cherokee_flcache_t    *flcache,
-				cherokee_request_t *conn)
+cherokee_flcache_req_set_store (cherokee_flcache_t *flcache,
+				cherokee_request_t *req)
 {
 	ret_t                        ret;
 	int                          dir;
@@ -328,7 +328,7 @@ cherokee_flcache_req_set_store (cherokee_flcache_t    *flcache,
 
 	/* Add it to the tree
 	 */
-	ret = cherokee_avl_flcache_add (&flcache->request_map, conn, &entry);
+	ret = cherokee_avl_flcache_add (&flcache->request_map, req, &entry);
 	if ((ret != ret_ok) || (entry == NULL)) {
 		return ret;
 	}
@@ -356,8 +356,8 @@ cherokee_flcache_req_set_store (cherokee_flcache_t    *flcache,
 
 	/* Status
 	 */
-	conn->flcache.mode         = flcache_mode_in;
-	conn->flcache.avl_node_ref = entry;
+	req->flcache.mode         = flcache_mode_in;
+	req->flcache.avl_node_ref = entry;
 
 	return ret_ok;
 }
@@ -366,7 +366,7 @@ cherokee_flcache_req_set_store (cherokee_flcache_t    *flcache,
 static ret_t
 inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		cherokee_buffer_t       *header,
-		cherokee_request_t   *conn)
+		cherokee_request_t      *req)
 {
 	ret_t                        ret;
 	char                        *value;
@@ -379,13 +379,13 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 	cherokee_boolean_t           overwrite_control;
 	cherokee_avl_flcache_node_t *node               = flcache_conn->avl_node_ref;
 	cherokee_boolean_t           via_found          = false;
-	cherokee_buffer_t           *tmp                = THREAD_TMP_BUF2(REQ_THREAD(conn));
+	cherokee_buffer_t           *tmp                = THREAD_TMP_BUF2(REQ_THREAD(req));
 	cherokee_boolean_t           do_cache           = false;
 
 	begin      = header->buf;
 	header_end = header->buf + header->len;
 
-	overwrite_control = (conn->expiration != cherokee_expiration_none);
+	overwrite_control = (req->expiration != cherokee_expiration_none);
 
 	while ((begin < header_end)) {
 		end = cherokee_header_get_next_line (begin);
@@ -495,13 +495,13 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 		/* Set-cookie
 		 */
 		else if (strncasecmp (begin, "Set-cookie:", 11) == 0) {
-			if (conn->config_entry.flcache_cookies_disregard) {
+			if (req->config_entry.flcache_cookies_disregard) {
 				int                 re;
 				void               *pcre;
 				cherokee_list_t    *i;
 				cherokee_boolean_t  matched = false;
 
-				list_for_each (i, conn->config_entry.flcache_cookies_disregard) {
+				list_for_each (i, req->config_entry.flcache_cookies_disregard) {
 					pcre = LIST_ITEM_INFO(i);
 
 					re = pcre_exec (pcre, NULL, begin, end-begin, 0, 0, NULL, 0);
@@ -536,7 +536,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 			/* Build string */
 			cherokee_buffer_clean (tmp);
 			cherokee_buffer_add_str (tmp, ", ");
-			cherokee_request_build_host_port_string (conn, tmp);
+			cherokee_request_build_host_port_string (req, tmp);
 			cherokee_buffer_add_str (tmp, " (Cherokee/"PACKAGE_VERSION")");
 
 			/* Insert at the end */
@@ -570,7 +570,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 	/* Check the caching policy
 	 */
 	if ((! do_cache) &&
-	    (conn->config_entry.flcache_policy == flcache_policy_explicitly_allowed))
+	    (req->config_entry.flcache_policy == flcache_policy_explicitly_allowed))
 	{
 		TRACE(ENTRIES, "Doesn't explicitly allow caching.%s", "\n");
 		return ret_deny;
@@ -580,14 +580,14 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 	 */
 	if (! via_found) {
 		cherokee_buffer_add_str (header, "Via: ");
-		cherokee_request_build_host_port_string (conn, header);
+		cherokee_request_build_host_port_string (req, header);
 		cherokee_buffer_add_str (header, " (Cherokee/"PACKAGE_VERSION")" CRLF);
 	}
 
 	/* Overwritten Cache-Control / Expiration
 	 */
 	if (overwrite_control) {
-		cherokee_request_add_expiration_header (conn, header, false);
+		cherokee_request_add_expiration_header (req, header, false);
 	}
 
 	return ret_ok;
@@ -595,15 +595,15 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 
 
 static ret_t
-create_flconn_file (cherokee_flcache_t    *flcache,
-		    cherokee_request_t *conn)
+create_flconn_file (cherokee_flcache_t *flcache,
+		    cherokee_request_t *req)
 {
 	ret_t                        ret;
 	cherokee_buffer_t            tmp   = CHEROKEE_BUF_INIT;
-	cherokee_avl_flcache_node_t *entry = conn->flcache.avl_node_ref;
+	cherokee_avl_flcache_node_t *entry = req->flcache.avl_node_ref;
 
-	conn->flcache.fd = cherokee_open (entry->file.buf, O_WRONLY | O_CREAT | O_TRUNC | O_NOFOLLOW, S_IRUSR|S_IWUSR);
-	if (conn->flcache.fd == -1) {
+	req->flcache.fd = cherokee_open (entry->file.buf, O_WRONLY | O_CREAT | O_TRUNC | O_NOFOLLOW, S_IRUSR|S_IWUSR);
+	if (req->flcache.fd == -1) {
 		char *p;
 
 		/* Try to create 'dir'
@@ -625,14 +625,14 @@ create_flconn_file (cherokee_flcache_t    *flcache,
 
 		/* Second chance
 		 */
-		conn->flcache.fd = cherokee_open (entry->file.buf, O_WRONLY | O_CREAT | O_TRUNC | O_NOFOLLOW, S_IRUSR|S_IWUSR);
-		if (conn->flcache.fd == -1) {
+		req->flcache.fd = cherokee_open (entry->file.buf, O_WRONLY | O_CREAT | O_TRUNC | O_NOFOLLOW, S_IRUSR|S_IWUSR);
+		if (req->flcache.fd == -1) {
 			LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_FLCACHE_CREATE_FILE, tmp.buf);
 			goto error;
 		}
 	}
 
-	TRACE (ENTRIES, "Created flcache file %s, fd=%d\n", entry->file.buf, conn->flcache.fd);
+	TRACE (ENTRIES, "Created flcache file %s, fd=%d\n", entry->file.buf, req->flcache.fd);
 
 	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
@@ -644,38 +644,38 @@ error:
 
 ret_t
 cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn,
-				     cherokee_request_t   *conn)
+				     cherokee_request_t      *req)
 {
 	ret_t                        ret;
 	ssize_t                      written;
-	cherokee_avl_flcache_node_t *entry    = conn->flcache.avl_node_ref;
+	cherokee_avl_flcache_node_t *entry    = req->flcache.avl_node_ref;
 
 	/* Do not cache non-200 responses
 	 */
-	if (conn->error_code != http_ok) {
+	if (req->error_code != http_ok) {
 		TRACE (ENTRIES, "Front Line Cache: Non %d response. Cache object cancelled.\n", 200);
 
 		cherokee_flcache_conn_clean (flcache_conn);
-		cherokee_flcache_del_entry (REQ_VSRV(conn)->flcache, entry);
+		cherokee_flcache_del_entry (REQ_VSRV(req)->flcache, entry);
 
 		return ret_deny;
 	}
 
 	/* Inspect header
 	 */
-	ret = inspect_header (flcache_conn, &flcache_conn->header, conn);
+	ret = inspect_header (flcache_conn, &flcache_conn->header, req);
 	if (ret == ret_deny) {
 		cherokee_flcache_conn_clean (flcache_conn);
-		cherokee_flcache_del_entry (REQ_VSRV(conn)->flcache, entry);
+		cherokee_flcache_del_entry (REQ_VSRV(req)->flcache, entry);
 
 		return ret_ok;
 	}
 
 	/* Create the cache file
 	 */
-	ret = create_flconn_file (REQ_VSRV(conn)->flcache, conn);
+	ret = create_flconn_file (REQ_VSRV(req)->flcache, req);
 	if (ret != ret_ok) {
-		cherokee_flcache_del_entry (REQ_VSRV(conn)->flcache, entry);
+		cherokee_flcache_del_entry (REQ_VSRV(req)->flcache, entry);
 		return ret_error;
 	}
 
@@ -710,18 +710,18 @@ cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn,
 
 ret_t
 cherokee_flcache_conn_write_body (cherokee_flcache_conn_t *flcache_conn,
-				  cherokee_request_t   *conn)
+				  cherokee_request_t      *req)
 {
 	ssize_t written;
 
 	do {
-		written = write (flcache_conn->fd, conn->buffer.buf, conn->buffer.len);
+		written = write (flcache_conn->fd, req->buffer.buf, req->buffer.len);
 	} while ((written == -1) && (errno == EINTR));
 
 	TRACE (ENTRIES, "Writing body: %d bytes to fd=%d (%d has been written)\n",
-	       conn->buffer.len, flcache_conn->fd, written);
+	       req->buffer.len, flcache_conn->fd, written);
 
-	if (unlikely (written != conn->buffer.len)) {
+	if (unlikely (written != req->buffer.len)) {
 		return ret_error;
 	}
 
@@ -732,7 +732,7 @@ cherokee_flcache_conn_write_body (cherokee_flcache_conn_t *flcache_conn,
 
 ret_t
 cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
-				   cherokee_request_t   *conn)
+				   cherokee_request_t      *req)
 {
 	ret_t   ret;
 	ssize_t got;
@@ -755,28 +755,28 @@ cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
 
 	TRACE (ENTRIES, "Reading header: len %d from fd=%d\n", len, flcache_conn->fd);
 
-	ret = cherokee_buffer_read_from_fd (&conn->header_buffer, flcache_conn->fd, len, &got2);
+	ret = cherokee_buffer_read_from_fd (&req->header_buffer, flcache_conn->fd, len, &got2);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
 	/* Add Content-Length
 	 */
-	cherokee_buffer_add_str      (&conn->header_buffer, "Content-Length: ");
-	cherokee_buffer_add_ullong10 (&conn->header_buffer, flcache_conn->avl_node_ref->file_size);
-	cherokee_buffer_add_str      (&conn->header_buffer, CRLF);
+	cherokee_buffer_add_str      (&req->header_buffer, "Content-Length: ");
+	cherokee_buffer_add_ullong10 (&req->header_buffer, flcache_conn->avl_node_ref->file_size);
+	cherokee_buffer_add_str      (&req->header_buffer, CRLF);
 
 	/* X-Cache
 	 */
-	cherokee_buffer_add_str (&conn->header_buffer, "X-Cache: HIT from ");
-	cherokee_request_build_host_port_string (conn, &conn->header_buffer);
-	cherokee_buffer_add_str (&conn->header_buffer, CRLF);
+	cherokee_buffer_add_str (&req->header_buffer, "X-Cache: HIT from ");
+	cherokee_request_build_host_port_string (req, &req->header_buffer);
+	cherokee_buffer_add_str (&req->header_buffer, CRLF);
 
 	/* Age (RFC2616, section 14.6)
 	 */
-	cherokee_buffer_add_str    (&conn->header_buffer, "Age: ");
-	cherokee_buffer_add_long10 (&conn->header_buffer, cherokee_bogonow_now - flcache_conn->avl_node_ref->created_at);
-	cherokee_buffer_add_str    (&conn->header_buffer, CRLF);
+	cherokee_buffer_add_str    (&req->header_buffer, "Age: ");
+	cherokee_buffer_add_long10 (&req->header_buffer, cherokee_bogonow_now - flcache_conn->avl_node_ref->created_at);
+	cherokee_buffer_add_str    (&req->header_buffer, CRLF);
 
 	return ret_ok;
 }
@@ -784,7 +784,7 @@ cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
 
 ret_t
 cherokee_flcache_conn_send_body (cherokee_flcache_conn_t *flcache_conn,
-				 cherokee_request_t   *conn)
+				 cherokee_request_t      *req)
 {
 	ret_t              ret;
 	size_t             got = 0;
@@ -792,7 +792,7 @@ cherokee_flcache_conn_send_body (cherokee_flcache_conn_t *flcache_conn,
 
 	TRACE (ENTRIES, "Reading body from fd=%d\n", flcache_conn->fd);
 
-	ret = cherokee_buffer_read_from_fd (&conn->buffer, flcache_conn->fd, DEFAULT_READ_SIZE, &got);
+	ret = cherokee_buffer_read_from_fd (&req->buffer, flcache_conn->fd, DEFAULT_READ_SIZE, &got);
 
 	if (got != 0) {
 		flcache_conn->response_sent += got;
