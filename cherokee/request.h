@@ -41,12 +41,12 @@ typedef struct cherokee_request cherokee_request_t;
 
 /* Public methods
  */
-ret_t  cherokee_request_set_cork      (cherokee_request_t *conn, cherokee_boolean_t enable);
-ret_t  cherokee_request_parse_args    (cherokee_request_t *conn);
+ret_t cherokee_request_set_cork   (cherokee_request_t *req, cherokee_boolean_t enable);
+ret_t cherokee_request_parse_args (cherokee_request_t *req);
 
 /* Handy functions
  */
-const char *cherokee_request_get_phase_str (cherokee_request_t *conn);
+const char *cherokee_request_get_phase_str (cherokee_request_t *req);
 
 CHEROKEE_END_DECLS
 

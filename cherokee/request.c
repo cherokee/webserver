@@ -102,7 +102,6 @@ cherokee_request_new  (cherokee_request_t **req)
 	n->encoder_new_func          = NULL;
 	n->encoder_props             = NULL;
 	n->logger_ref                = NULL;
-	n->keepalive                 = 0;
 	n->range_start               = -1;
 	n->range_end                 = -1;
 	n->vserver                   = NULL;
@@ -111,6 +110,7 @@ cherokee_request_new  (cherokee_request_t **req)
 	n->mmaped_len                = 0;
 	n->io_entry_ref              = NULL;
 	n->thread                    = NULL;
+	n->conn                      = NULL;
 	n->rx                        = 0;
 	n->tx                        = 0;
 	n->rx_partial                = 0;
@@ -153,10 +153,8 @@ cherokee_request_new  (cherokee_request_t **req)
 	cherokee_buffer_init (&n->request_original);
 	cherokee_buffer_init (&n->query_string_original);
 
-	cherokee_socket_init (&n->socket);
 	cherokee_header_init (&n->header, header_type_request);
 	cherokee_post_init (&n->post, n);
-	cherokee_request_poll_init (&n->polling_aim);
 
 	memset (n->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	n->regex_ovecsize = 0;
@@ -180,7 +178,6 @@ ret_t
 cherokee_request_free (cherokee_request_t *req)
 {
 	cherokee_header_mrproper (&req->header);
-	cherokee_socket_mrproper (&req->socket);
 
 	if (req->handler != NULL) {
 		cherokee_handler_free (req->handler);
@@ -229,12 +226,6 @@ cherokee_request_free (cherokee_request_t *req)
 				   (cherokee_func_free_t) cherokee_buffer_free);
 		req->arguments = NULL;
 	}
-
-
-	if (req->polling_aim.fd != -1) {
-                cherokee_fd_close (req->polling_aim.fd);
-	}
-	cherokee_request_poll_mrproper (&req->polling_aim);
 
 	free (req);
 	return ret_ok;
@@ -287,11 +278,6 @@ cherokee_request_clean (cherokee_request_t *req,
 	}
 	req->encoder_new_func = NULL;
 	req->encoder_props    = NULL;
-
-	if (req->polling_aim.fd != -1) {
-                cherokee_fd_close (req->polling_aim.fd);
-	}
-	cherokee_request_poll_clean (&req->polling_aim);
 
 	if (req->validator != NULL) {
 		cherokee_validator_free (req->validator);

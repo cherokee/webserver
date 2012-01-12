@@ -145,10 +145,9 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 
 	/* Init
 	 */
-	INIT_LIST_HEAD (LIST(&n->base));
-	INIT_LIST_HEAD (LIST(&n->active_list));
-	INIT_LIST_HEAD (LIST(&n->reuse_list));
-	INIT_LIST_HEAD (LIST(&n->polling_list));
+	INIT_LIST_HEAD (&n->base);
+	INIT_LIST_HEAD (&n->active_list);
+	INIT_LIST_HEAD (&n->polling_list);
 
 	n->exit                = false;
 	n->ended               = false;
@@ -161,10 +160,15 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->conns_max           = conns_max;
 	n->conns_keepalive_max = keepalive_max;
 
-	n->reuse_list_num      = 0;
-
 	n->fastcgi_servers     = NULL;
 	n->fastcgi_free_func   = NULL;
+
+	/* Reuse */
+	INIT_LIST_HEAD (&n->reuse.reqs);
+	INIT_LIST_HEAD (&n->reuse.conns);
+
+	n->reuse.reqs_num  = 0;
+	n->reuse.conns_num = 0;
 
 	/* Thread Local Storage
 	 */
@@ -288,23 +292,80 @@ del_connection_polling (cherokee_thread_t *thd, cherokee_request_t *req)
 }
 
 
-static ret_t
-connection_reuse_or_free (cherokee_thread_t *thread, cherokee_request_t *req)
+ret_t
+cherokee_thread_get_new_connection (cherokee_thread_t      *thd,
+				    cherokee_connection_t **conn)
+{
+	/* New obj */
+	if (thread->reuse.conns_num <= 0) {
+		return cherokee_connection_new (conn);
+	}
+
+	/* Reuse obj */
+	*conn = CONN(thd->reuse.conns.prev);
+	cherokee_list_del (LIST(*conn));
+	INIT_LIST_HEAD (LIST(*conn));
+	thread->reuse.conns_num--;
+
+	return ret_ok;
+}
+
+ret_t
+cherokee_thread_recycle_connection (cherokee_thread_t     *thd,
+				    cherokee_connection_t *conn)
 {
 	/* Disable keepalive in the connection
 	 */
-	req->keepalive = 0;
+	conn->keepalive = 0;
 
 	/* Check the max connection reuse number
 	 */
-	if (thread->reuse_list_num >= THREAD_SRV(thread)->conns_reuse_max) {
+	if (thread->reuse.conns_num >= THREAD_SRV(thread)->conns_reuse_max) {
+		return cherokee_connection_free (conn);
+	}
+
+	/* Add it to the reusable connection list
+	 */
+	cherokee_list_add (LIST(conn), &thread->reuse.conns);
+	thread->reuse.conns_num++;
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_thread_get_new_request (cherokee_thread_t   *thd,
+				 cherokee_request_t **req)
+{
+	/* New obj */
+	if (thread->reuse.reqs_num <= 0) {
+		return cherokee_request_new (req);
+	}
+
+	/* Reuse obj */
+	*req = REQ(thd->reuse.reqs.prev);
+	cherokee_list_del (LIST(*req));
+	INIT_LIST_HEAD (LIST(*req));
+	thread->reuse.reqs_num--;
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_thread_recycle_request (cherokee_thread_t     *thd,
+				 cherokee_connection_t *req)
+{
+	/* Check the max connection reuse number
+	 */
+	if (thread->reuse.reqs_num >= THREAD_SRV(thread)->conns_reuse_max) {
 		return cherokee_request_free (req);
 	}
 
 	/* Add it to the reusable connection list
 	 */
-	cherokee_list_add (LIST(req), &thread->reuse_list);
-	thread->reuse_list_num++;
+	cherokee_list_add (LIST(req), &thread->reuse.reqs);
+	thread->reuse.reqs_num++;
 
 	return ret_ok;
 }
@@ -328,7 +389,7 @@ purge_connection (cherokee_thread_t *thread, cherokee_request_t *req)
 
 	/* Add it to the reusable list
 	 */
-	connection_reuse_or_free (thread, req);
+	cherokee_thread_recycle_connection (thread, conn);
 }
 
 
@@ -454,13 +515,13 @@ send_hardcoded_error (cherokee_socket_t *sock,
 static void
 process_polling_connections (cherokee_thread_t *thd)
 {
-	int                 re;
-	ret_t               ret;
-	cherokee_list_t    *tmp, *i;
-	cherokee_request_t *req;
+	int                    re;
+	ret_t                  ret;
+	cherokee_connection_t *conn;
+	cherokee_list_t       *tmp, *i;
 
 	list_for_each_safe (i, tmp, LIST(&thd->polling_list)) {
-		req = REQ(i);
+		conn = CONN(i);
 
 		/* Thread's properties
 		 */
@@ -1472,38 +1533,25 @@ out:
 
 
 static ret_t
-get_new_connection (cherokee_thread_t *thd, cherokee_request_t **req)
+get_new_connection (cherokee_thread_t      *thd,
+		    cherokee_connection_t **conn)
 {
-	cherokee_request_t *new_connection;
-	cherokee_server_t  *server;
-	static cuint_t      last_conn_id = 0;
+	cherokee_connection_t *new_connection;
+	cherokee_server_t     *server          = SRV(thd->server);
+	static cuint_t         last_conn_id    = 0;
 
-	server = SRV(thd->server);
-
-	if (cherokee_list_empty (&thd->reuse_list)) {
-		ret_t ret;
-
-		/* Create new connection object
-		 */
-		ret = cherokee_request_new (&new_connection);
-		if (unlikely(ret < ret_ok)) return ret;
-	} else {
-		/* Reuse an old one
-		 */
-		new_connection = REQ(thd->reuse_list.prev);
-		cherokee_list_del (LIST(new_connection));
-		thd->reuse_list_num--;
-
-		INIT_LIST_HEAD (LIST(new_connection));
+	/* New connection object */
+	ret = cherokee_thread_get_new_connection (thd, &new_connection);
+	if (unlikely(ret < ret_ok)) {
+		return ret;
 	}
 
 	/* Set the basic information to the connection
 	 */
-	new_connection->id        = last_conn_id++;
-	new_connection->thread    = thd;
-	new_connection->server    = server;
-	new_connection->vserver   = VSERVER(server->vservers.prev);
-
+	new_connection->id           = last_conn_id++;
+	new_connection->thread       = thd;
+	new_connection->server       = server;
+	new_connection->vserver      = VSERVER(server->vservers.prev);
 	new_connection->traffic_next = cherokee_bogonow_now + DEFAULT_TRAFFIC_UPDATE;
 
 	/* Set the default server timeout
@@ -1512,7 +1560,7 @@ get_new_connection (cherokee_thread_t *thd, cherokee_request_t **req)
 	new_connection->timeout_lapse  = server->timeout;
 	new_connection->timeout_header = &server->timeout_header;
 
-	*req = new_connection;
+	*conn = new_connection;
 	return ret_ok;
 }
 
@@ -1527,6 +1575,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	cherokee_request_t  *new_conn  = NULL;
 	int                  new_fd    = -1;
 	cherokee_server_t   *srv       = THREAD_SRV(thd);
+	cherokee_boolean_t   lock_set  = false;
 
 	/* Check whether there are connections waiting
 	 */
@@ -1556,20 +1605,20 @@ accept_new_connection (cherokee_thread_t *thd,
 		goto error;
 	}
 
-	/* We got a new_conn object, on error we can goto error.
+	/* Set the actual fd info in the connection
 	 */
 	ret = cherokee_socket_set_sockaddr (&new_conn->socket, new_fd, &new_sa);
+	if (unlikely(ret < ret_ok)) {
+		LOG_ERROR_S (CHEROKEE_ERROR_THREAD_SET_SOCKADDR);
+		goto error;
+	}
 
 	/* It is about to add a new connection to the thread,
 	 * so it MUST adquire the thread ownership
 	 * (do it now to better handle error cases).
 	 */
+	lock_set = true;
 	CHEROKEE_MUTEX_LOCK (&thd->ownership);
-
-	if (unlikely(ret < ret_ok)) {
-		LOG_ERROR_S (CHEROKEE_ERROR_THREAD_SET_SOCKADDR);
-		goto error;
-	}
 
 	/* TLS support, set initial connection phase.
 	 */
@@ -1593,7 +1642,6 @@ accept_new_connection (cherokee_thread_t *thd,
 	/* Lets add the new connection
 	 */
 	add_connection (thd, new_conn);
-
 	thd->conns_num++;
 
 	/* Release the thread ownership
@@ -1615,12 +1663,14 @@ error:
 	 */
 	if (new_conn) {
 		S_SOCKET_FD(new_conn->socket) = -1;
-		connection_reuse_or_free (thd, new_conn);
+		cherokee_thread_recycle_connection (thd, new_conn);
 	}
 
 	/* Release the thread ownership
 	 */
-	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
+	if (lock_set) {
+		CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
+	}
 	return ret_deny;
 }
 

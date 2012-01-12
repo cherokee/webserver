@@ -149,7 +149,7 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	char                  *lentry;
 	char                  *lentry_end;
 	va_list                args;
-	cherokee_request_t    *conn;
+	cherokee_connection_t *conn;
 	cherokee_buffer_t     *trace_modules = &trace.modules;
 	cherokee_boolean_t     do_log        = false;
 	cherokee_buffer_t      entries       = CHEROKEE_BUF_INIT;
@@ -171,7 +171,7 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	/* Check the connection source, if possible
 	 */
 	if (trace.from_filter != NULL) {
-		conn = REQ (CHEROKEE_THREAD_PROP_GET (thread_connection_ptr));
+		conn = CONN(CHEROKEE_THREAD_PROP_GET (thread_connection_ptr));
 
 		/* No conn, no trace entry
 		 */

@@ -1578,6 +1578,8 @@ $(common_rrd_tools) \
 request-protected.h \
 request.h \
 request.c \
+connection.h \
+connection.c \
 connection-poll.h \
 connection-poll.c \
 handler.h \
@@ -1677,6 +1679,7 @@ logger.h \
 handler.h \
 encoder.h \
 request.h \
+connection.h \
 plugin.h \
 plugin_loader.h \
 nonce.h \

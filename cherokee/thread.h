@@ -76,8 +76,17 @@ typedef struct {
 
 	cherokee_list_t         active_list;
 	cherokee_list_t         polling_list;
-	cherokee_list_t         reuse_list;
-	int                     reuse_list_num;      /* reusable connections objs */
+
+	struct {
+		cherokee_list_t conns;
+		int             conns_num;
+		cherokee_list_t reqs;
+		int             reqs_num;
+	} reuse;
+
+
+//	cherokee_list_t         reuse_list;
+//	int                     reuse_list_num;      /* reusable connections objs */
 	cherokee_limiter_t      limiter;             /* Traffic shaping */
 	cherokee_boolean_t      is_full;
 
@@ -123,5 +132,10 @@ ret_t cherokee_thread_inject_active_connection   (cherokee_thread_t *thd, cherok
 
 ret_t cherokee_thread_close_all_connections      (cherokee_thread_t *thd);
 ret_t cherokee_thread_close_polling_connections  (cherokee_thread_t *thd, int fd, cuint_t *num);
+
+ret_t cherokee_thread_get_new_request            (cherokee_thread_t *thd, cherokee_request_t    **req);
+ret_t cherokee_thread_recycle_request            (cherokee_thread_t *thd, cherokee_request_t     *req);
+ret_t cherokee_thread_get_new_connection         (cherokee_thread_t *thd, cherokee_connection_t **conn);
+ret_t cherokee_thread_recycle_connection         (cherokee_thread_t *thd, cherokee_connection_t  *conn);
 
 #endif /* CHEROKEE_THREAD_H */

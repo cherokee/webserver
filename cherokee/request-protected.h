@@ -105,6 +105,7 @@ struct cherokee_request {
 	void                         *server;
 	void                         *vserver;
 	void                         *thread;
+	void                         *conn;
 	cherokee_bind_t              *bind;
 	cherokee_config_entry_ref_t   config_entry;
 
@@ -115,9 +116,8 @@ struct cherokee_request {
 
 	/* Socket stuff
 	 */
-	cherokee_socket_t             socket;
 	cherokee_http_upgrade_t       upgrade;
-	cherokee_request_options_t options;
+	cherokee_request_options_t    options;
 	cherokee_handler_t           *handler;
 
 	cherokee_logger_t            *logger_ref;
@@ -131,7 +131,7 @@ struct cherokee_request {
 
 	/* State
 	 */
-	cherokee_request_phase_t   phase;
+	cherokee_request_phase_t      phase;
 	cherokee_http_t               error_code;
 	cherokee_buffer_t             error_internal_url;
 	cherokee_buffer_t             error_internal_qs;
@@ -185,14 +185,12 @@ struct cherokee_request {
 
 	/* Net connection
 	 */
-	uint32_t                      keepalive;
 	time_t                        timeout;
 	time_t                        timeout_lapse;
 	cherokee_buffer_t            *timeout_header;
 
 	/* Polling
 	 */
-	cherokee_connection_pool_t    polling_aim;
 
 	off_t                         range_start;
 	off_t                         range_end;
@@ -239,12 +237,13 @@ struct cherokee_request {
 	cherokee_msec_t               limit_blocked_until;
 };
 
-#define REQ_SRV(c)    (SRV(REQ(c)->server))
-#define REQ_HDR(c)    (HDR(REQ(c)->header))
-#define REQ_SOCK(c)   (SOCKET(REQ(c)->socket))
-#define REQ_VSRV(c)   (VSERVER(REQ(c)->vserver))
-#define REQ_THREAD(c) (THREAD(REQ(c)->thread))
-#define REQ_BIND(c)   (BIND(REQ(c)->bind))
+#define REQ_CONN(r)   (CONN(REQ(r)->conn))
+#define REQ_SRV(r)    (SRV(REQ(r)->server))
+#define REQ_HDR(r)    (HDR(REQ(r)->header))
+#define REQ_SOCK(r)   (SOCKET(REQ(r)->socket))
+#define REQ_VSRV(r)   (VSERVER(REQ(r)->vserver))
+#define REQ_THREAD(r) (THREAD(REQ(r)->thread))
+#define REQ_BIND(r)   (BIND(REQ(r)->bind))
 
 #define TRACE_REQ(c)  TRACE("conn", "%s", cherokee_request_print(c));
 
