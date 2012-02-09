@@ -124,10 +124,6 @@ _del (cherokee_fdpoll_epoll_t *fdp, int fd)
 {
 	struct epoll_event ev;
 
-	ev.events   = 0;
-	ev.data.u64 = 0;  /* <- I just wanna be sure there aren't */
-	ev.data.fd  = fd; /* <- 4 bytes uninitialized */
-
 	/* Check the fd limit
 	 */
 	if (unlikely (cherokee_fdpoll_is_empty (FDPOLL(fdp)))) {
