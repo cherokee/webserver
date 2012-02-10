@@ -111,11 +111,6 @@ cherokee_request_new  (cherokee_request_t **req)
 	n->io_entry_ref              = NULL;
 	n->thread                    = NULL;
 	n->conn                      = NULL;
-	n->rx                        = 0;
-	n->tx                        = 0;
-	n->rx_partial                = 0;
-	n->tx_partial                = 0;
-	n->traffic_next              = 0;
 	n->validator                 = NULL;
 	n->expiration                = cherokee_expiration_none;
 	n->expiration_time           = 0;
@@ -291,11 +286,6 @@ cherokee_request_clean (cherokee_request_t *req,
 	req->logger_ref           = NULL;
 	req->mmaped               = NULL;
 	req->mmaped_len           = 0;
-	req->rx                   = 0;
-	req->tx                   = 0;
-	req->rx_partial           = 0;
-	req->tx_partial           = 0;
-	req->traffic_next         = 0;
 	req->expiration           = cherokee_expiration_none;
 	req->expiration_time      = 0;
 	req->expiration_prop      = cherokee_expiration_prop_none;
@@ -1125,37 +1115,6 @@ cherokee_request_send_header_and_mmaped (cherokee_request_t *req)
 	req->mmaped_len -= (off_t) re;
 
 	return (req->mmaped_len > 0) ? ret_eagain : ret_ok;
-}
-
-
-void
-cherokee_request_rx_add (cherokee_request_t *req, ssize_t rx)
-{
-	if (likely (rx > 0)) {
-		req->rx += rx;
-		req->rx_partial += rx;
-	}
-}
-
-
-void
-cherokee_request_tx_add (cherokee_request_t *req, ssize_t tx)
-{
-	cuint_t to_sleep;
-
-	/* Count it
-	 */
-	req->tx += tx;
-	req->tx_partial += tx;
-
-	/* Traffic shaping
-	 */
-	if (req->limit_rate) {
-		to_sleep = (tx * 1000) / req->limit_bps;
-
-		/* It's meant to sleep for a while */
-		req->limit_blocked_until = cherokee_bogonow_msec + to_sleep;
-	}
 }
 
 
