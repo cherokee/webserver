@@ -64,6 +64,7 @@ cherokee_threading_init (void)
 #ifdef HAVE_PTHREAD
 	pthread_key_create (&thread_error_writer_ptr, NULL);
 	pthread_key_create (&thread_connection_ptr,   NULL);
+	pthread_key_create (&thread_request_ptr,      NULL);
 #endif
 
 	return ret_ok;
@@ -83,6 +84,7 @@ cherokee_threading_free (void)
 #ifdef HAVE_PTHREAD
 	pthread_key_delete (thread_error_writer_ptr);
 	pthread_key_delete (thread_connection_ptr);
+	pthread_key_delete (thread_request_ptr);
 #endif
 
 	return ret_ok;

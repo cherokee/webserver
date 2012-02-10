@@ -125,9 +125,8 @@ struct cherokee_request {
 
 	/* Buffers
 	 */
-	cherokee_buffer_t             incoming_header;  /* -> header               */
-	cherokee_buffer_t             header_buffer;    /* <- header, -> post data */
-	cherokee_buffer_t             buffer;           /* <- data                 */
+	/* cherokee_buffer_t             header_buffer;    /\* <- header, -> post data *\/ */
+	/* cherokee_buffer_t             buffer;           /\* <- data                 *\/ */
 
 	/* State
 	 */
@@ -140,6 +139,8 @@ struct cherokee_request {
 	/* Headers
 	 */
 	cherokee_header_t             header;
+	cherokee_buffer_t             header_buffer_in;
+	cherokee_buffer_t             header_buffer_out;
 
 	/* Encoders
 	 */
@@ -171,23 +172,9 @@ struct cherokee_request {
 	cherokee_http_auth_t          auth_type;           /* Auth type of the resource */
 	cherokee_http_auth_t          req_auth_type;       /* Auth type of the request  */
 
-	/* Traffic
-	 */
-	off_t                         rx;                  /* Bytes received */
-	size_t                        rx_partial;          /* RX partial counter */
-	off_t                         tx;                  /* Bytes sent */
-	size_t                        tx_partial;          /* TX partial counter */
-	time_t                        traffic_next;        /* Time to update traffic */
-
 	/* Post info
 	 */
 	cherokee_post_t               post;
-
-	/* Net connection
-	 */
-	time_t                        timeout;
-	time_t                        timeout_lapse;
-	cherokee_buffer_t            *timeout_header;
 
 	/* Polling
 	 */
@@ -316,10 +303,5 @@ int   cherokee_request_use_webdir             (cherokee_request_t *conn);
 ret_t cherokee_request_log                    (cherokee_request_t *conn);
 ret_t cherokee_request_update_vhost_traffic   (cherokee_request_t *conn);
 char *cherokee_request_print                  (cherokee_request_t *conn);
-
-/* Transfers
- */
-void cherokee_request_rx_add                  (cherokee_request_t *conn, ssize_t rx);
-void cherokee_request_tx_add                  (cherokee_request_t *conn, ssize_t tx);
 
 #endif /* CHEROKEE_REQUEST_PROTECTED_H */

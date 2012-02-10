@@ -47,6 +47,7 @@ extern pthread_mutexattr_t cherokee_mutexattr_errorcheck;
 
 extern pthread_key_t thread_error_writer_ptr;
 extern pthread_key_t thread_connection_ptr;
+extern pthread_key_t thread_request_ptr;
 
 /* Global if */
 #endif

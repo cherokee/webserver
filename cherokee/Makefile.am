@@ -1578,6 +1578,11 @@ $(common_rrd_tools) \
 request-protected.h \
 request.h \
 request.c \
+protocol.h \
+protocol_http.h \
+protocol_http.c \
+protocol_spdy.h \
+protocol_spdy.c \
 connection.h \
 connection.c \
 connection-poll.h \

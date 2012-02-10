@@ -471,7 +471,7 @@ finalize_request (cherokee_thread_t  *thread,
 
 	/* Update the timeout value
 	 */
-	req->timeout = cherokee_bogonow_now + req->timeout_lapse;
+	conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
 }
 
 
@@ -540,10 +540,10 @@ process_polling_connections (cherokee_thread_t *thd)
 
 		/* Has the connection expired?
 		 */
-		if (req->timeout < cherokee_bogonow_now) {
+		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES",polling,timeout",
 			       "processing polling conn (%p, %s): Time out\n",
-			       req, cherokee_request_get_phase_str (req));
+			       conn, cherokee_request_get_phase_str (req));
 
 			/* Information collection
 			 */
@@ -629,12 +629,15 @@ process_polling_connections (cherokee_thread_t *thd)
 static void
 process_active_connections (cherokee_thread_t *thd)
 {
-	ret_t                     ret;
-	off_t                     len;
-	cherokee_list_t          *i, *tmp;
-	cherokee_request_t       *req       = NULL;
-	cherokee_server_t        *srv       = SRV(thd->server);
-	cherokee_socket_status_t  blocking;
+	ret_t                      ret;
+	off_t                      len;
+	cherokee_list_t           *i, *tmp1;
+	cherokee_list_t           *j, *tmp2;
+	cherokee_request_t        *req       = NULL;
+	cherokee_connection_t     *conn      = NULL;
+	cherokee_virtual_server_t *vsrv      = NULL;
+	cherokee_server_t         *srv       = SRV(thd->server);
+	cherokee_socket_status_t   blocking;
 
 #ifdef TRACE_ENABLED
 	if (cherokee_trace_is_tracing()) {
@@ -653,33 +656,21 @@ process_active_connections (cherokee_thread_t *thd)
 
 	/* Process active connections
 	 */
-	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
-		req = REQ(i);
+	list_for_each_safe (i, tmp1, LIST(&thd->active_list)) {
+		conn = CONN(i);
 
-		TRACE (ENTRIES, "processing conn (%p), phase %d '%s', socket=%d\n",
-		       req, req->phase, cherokee_request_get_phase_str (req), req->socket.socket);
-
-		/* Thread's properties
+		/* Thread property: Current connection
 		 */
-		if (REQ_VSRV(req)) {
-			/* Current connection
-			 */
-			CHEROKEE_THREAD_PROP_SET (thread_connection_ptr, req);
+		CHEROKEE_THREAD_PROP_SET (thread_connection_ptr, conn);
 
-			/* Error writer
-			 */
-			if (REQ_VSRV(req)->error_writer) {
-				CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
-							  REQ_VSRV(req)->error_writer);
-			}
-		}
+
 
 		/* Has the connection been too much time w/o any work
 		 */
-		if (req->timeout < cherokee_bogonow_now) {
+		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES",polling,timeout",
 			       "processing active conn (%p, %s): Time out\n",
-			       req, cherokee_request_get_phase_str (req));
+			       conn, cherokee_request_get_phase_str (conn));
 
 			/* The lingering close timeout expired.
 			 * Proceed to close the connection.
@@ -691,742 +682,785 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			}
 
-			/* Information collection
-			 */
-			if (THREAD_SRV(thd)->collector != NULL) {
-				cherokee_collector_log_timeout (THREAD_SRV(thd)->collector);
-			}
-
-			goto shutdown;
-		}
-
-		/* Update the connection timeout
-		 */
-		if ((req->phase != phase_tls_handshake) &&
-		    (req->phase != phase_reading_header) &&
-		    (req->phase != phase_reading_post) &&
-		    (req->phase != phase_shutdown) &&
-		    (req->phase != phase_lingering))
-		{
-			cherokee_request_update_timeout (req);
-		}
-
-		/* Maybe update traffic counters
-		 */
-		if ((REQ_VSRV(req)->collector) &&
-		    (req->traffic_next < cherokee_bogonow_now) &&
-		    ((req->rx_partial != 0) || (req->tx_partial != 0)))
-		{
-			cherokee_request_update_vhost_traffic (req);
-		}
-
-		/* Traffic shaping limiter
-		 */
-		if (req->limit_blocked_until > 0) {
-			cherokee_thread_retire_active_connection (thd, req);
-			cherokee_limiter_add_conn (&thd->limiter, req);
-			continue;
-		}
-
-		TRACE (ENTRIES, "conn on phase n=%d: %s\n",
-		       req->phase, cherokee_request_get_phase_str (req));
-
-		/* Phases
-		 */
-		switch (req->phase) {
-		case phase_tls_handshake:
-			blocking = socket_closed;
-
-			ret = cherokee_socket_init_tls (&req->socket, REQ_VSRV(req), req, &blocking);
-			switch (ret) {
-			case ret_eagain:
-				switch (blocking) {
-				case socket_reading:
-					break;
-
-				case socket_writing:
-					break;
-
-				default:
-					break;
+				/* Information collection
+				 */
+				if (THREAD_SRV(thd)->collector != NULL) {
+					cherokee_collector_log_timeout (THREAD_SRV(thd)->collector);
 				}
 
-				continue;
-
-			case ret_ok:
-				TRACE(ENTRIES, "Handshake %s\n", "finished");
-
-				/* Set mode and update timeout
-				 */
-				cherokee_request_update_timeout (req);
-
-				req->phase = phase_reading_header;
-				break;
-
-			case ret_eof:
-			case ret_error:
 				goto shutdown;
 
-			default:
-				RET_UNKNOWN(ret);
+
+
+
+
+
+		list_for_each_safe (j, tmp2, LIST(conn->requests)) {
+			req  = REQ(i);
+			vsrv = REQ_VSRV(i);
+
+			TRACE (ENTRIES, "processing req (c=%p,r=%p), phase %d '%s', socket=%d\n",
+			       conn, req, req->phase, cherokee_request_get_phase_str (req), req->socket.socket);
+
+			/* Thread properties: Current request
+			 */
+			CHEROKEE_THREAD_PROP_SET (thread_request_ptr, req);
+
+			/* Error writer */
+			if ((vsrv != NULL) && (vsrv->error_writer != NULL)) {
+				CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, vsrv->error_writer);
+			}
+
+			/* Has the connection been too much time w/o any work
+			 */
+			if (conn->timeout < cherokee_bogonow_now) {
+				TRACE (ENTRIES",polling,timeout",
+				       "processing active conn (%p, %s): Time out\n",
+				       req, cherokee_request_get_phase_str (req));
+
+				/* The lingering close timeout expired.
+				 * Proceed to close the connection.
+				 */
+				if ((req->phase == phase_shutdown) ||
+				    (req->phase == phase_lingering))
+				{
+					close_active_connection (thd, req, false);
+					continue;
+				}
+
+				/* Information collection
+				 */
+				if (THREAD_SRV(thd)->collector != NULL) {
+					cherokee_collector_log_timeout (THREAD_SRV(thd)->collector);
+				}
+
 				goto shutdown;
 			}
-			break;
 
-		case phase_reading_header:
-			/* Maybe the buffer has a request (previous pipelined)
+			/* Update the connection timeout
 			 */
-			if (! cherokee_buffer_is_empty (&req->incoming_header))
+			if ((req->phase != phase_tls_handshake) &&
+			    (req->phase != phase_reading_header) &&
+			    (req->phase != phase_reading_post) &&
+			    (req->phase != phase_shutdown) &&
+			    (req->phase != phase_lingering))
 			{
-				ret = cherokee_header_has_header (&req->header,
-								  &req->incoming_header,
-								  req->incoming_header.len);
+				cherokee_request_update_timeout (req);
+			}
+
+			/* Maybe update traffic counters
+			 */
+			if ((vsrv->collector) &&
+			    (req->traffic_next < cherokee_bogonow_now) &&
+			    ((req->rx_partial != 0) || (req->tx_partial != 0)))
+			{
+				cherokee_request_update_vhost_traffic (req);
+			}
+
+			/* Traffic shaping limiter
+			 */
+			if (req->limit_blocked_until > 0) {
+				cherokee_thread_retire_active_connection (thd, req);
+				cherokee_limiter_add_conn (&thd->limiter, req);
+				continue;
+			}
+
+			TRACE (ENTRIES, "conn on phase n=%d: %s\n",
+			       req->phase, cherokee_request_get_phase_str (req));
+
+			/* Phases
+			 */
+			switch (req->phase) {
+			case phase_tls_handshake:
+				blocking = socket_closed;
+
+				ret = cherokee_socket_init_tls (&req->socket, vsrv, req, &blocking);
+				switch (ret) {
+				case ret_eagain:
+					switch (blocking) {
+					case socket_reading:
+						break;
+
+					case socket_writing:
+						break;
+
+					default:
+						break;
+					}
+
+					continue;
+
+				case ret_ok:
+					TRACE(ENTRIES, "Handshake %s\n", "finished");
+
+					/* Set mode and update timeout
+					 */
+					cherokee_request_update_timeout (req);
+
+					req->phase = phase_reading_header;
+					break;
+
+				case ret_eof:
+				case ret_error:
+					goto shutdown;
+
+				default:
+					RET_UNKNOWN(ret);
+					goto shutdown;
+				}
+				break;
+
+			case phase_reading_header:
+				/* Maybe the buffer has a request (previous pipelined)
+				 */
+				if (! cherokee_buffer_is_empty (&req->incoming_header))
+				{
+					ret = cherokee_header_has_header (&req->header,
+									  &req->incoming_header,
+									  req->incoming_header.len);
+					switch (ret) {
+					case ret_ok:
+						goto phase_reading_header_EXIT;
+					case ret_not_found:
+						break;
+					case ret_error:
+						goto shutdown;
+					default:
+						RET_UNKNOWN(ret);
+						goto shutdown;
+					}
+				}
+
+				/* Read from the client
+				 */
+				ret = cherokee_request_recv (req,
+							     &req->incoming_header,
+							     DEFAULT_RECV_SIZE, &len);
 				switch (ret) {
 				case ret_ok:
-					goto phase_reading_header_EXIT;
-				case ret_not_found:
 					break;
+				case ret_eagain:
+					cherokee_thread_deactive_to_polling (thd, req);
+					continue;
+				case ret_eof:
 				case ret_error:
 					goto shutdown;
 				default:
 					RET_UNKNOWN(ret);
 					goto shutdown;
 				}
-			}
 
-			/* Read from the client
-			 */
-			ret = cherokee_request_recv (req,
-						     &req->incoming_header,
-						     DEFAULT_RECV_SIZE, &len);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_eagain:
-				cherokee_thread_deactive_to_polling (thd, req);
-				continue;
-			case ret_eof:
-			case ret_error:
-				goto shutdown;
-			default:
-				RET_UNKNOWN(ret);
-				goto shutdown;
-			}
+				/* Check security after read
+				 */
+				ret = cherokee_request_reading_check (req);
+				if (ret != ret_ok) {
+					req->keepalive      = 0;
+					req->phase          = phase_setup_connection;
+					req->header.version = http_version_11;
+					continue;
+				}
 
-			/* Check security after read
-			 */
-			ret = cherokee_request_reading_check (req);
-			if (ret != ret_ok) {
-				req->keepalive      = 0;
-				req->phase          = phase_setup_connection;
-				req->header.version = http_version_11;
-				continue;
-			}
+				/* May it already has the full header
+				 */
+				ret = cherokee_header_has_header (&req->header, &req->incoming_header, len+4);
+				switch (ret) {
+				case ret_ok:
+					break;
+				case ret_not_found:
+					req->phase = phase_reading_header;
+					continue;
+				case ret_error:
+					goto shutdown;
+				default:
+					RET_UNKNOWN(ret);
+					goto shutdown;
+				}
 
-			/* May it already has the full header
-			 */
-			ret = cherokee_header_has_header (&req->header, &req->incoming_header, len+4);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_not_found:
-				req->phase = phase_reading_header;
-				continue;
-			case ret_error:
-				goto shutdown;
-			default:
-				RET_UNKNOWN(ret);
-				goto shutdown;
-			}
+				/* fall down */
 
-			/* fall down */
+			phase_reading_header_EXIT:
+				req->phase = phase_processing_header;
 
-		phase_reading_header_EXIT:
-			req->phase = phase_processing_header;
+				/* fall down */
 
-			/* fall down */
+			case phase_processing_header:
+				/* Get the request
+				 */
+				ret = cherokee_request_get_request (req);
+				switch (ret) {
+				case ret_ok:
+					break;
 
-		case phase_processing_header:
-			/* Get the request
-			 */
-			ret = cherokee_request_get_request (req);
-			switch (ret) {
-			case ret_ok:
-				break;
+				case ret_eagain:
+					continue;
 
-			case ret_eagain:
-				continue;
+				default:
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
 
-			default:
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
+				/* Thread's error logger
+				 */
+				if (vsrv && vsrv->error_writer) {
+					CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, vsrv->error_writer);
+				}
 
-			/* Thread's error logger
-			 */
-			if (REQ_VSRV(req) &&
-			    REQ_VSRV(req)->error_writer)
-			{
-				CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr,
-							  REQ_VSRV(req)->error_writer);
-			}
+				/* Update timeout of the Keep-alive connections carried over..
+				 * The previous timeout was set to allow them to linger open
+				 * for a while. The new one is set to allow the server to serve
+				 * the new request.
+				 */
+				if ((req->keepalive > 0) &&
+				    (req->keepalive < REQ_SRV(req)->keepalive_max))
+				{
+					cherokee_request_update_timeout (req);
+				}
 
-			/* Update timeout of the Keep-alive connections carried over..
-			 * The previous timeout was set to allow them to linger open
-			 * for a while. The new one is set to allow the server to serve
-			 * the new request.
-			 */
-			if ((req->keepalive > 0) &&
-			    (req->keepalive < REQ_SRV(req)->keepalive_max))
-			{
-				cherokee_request_update_timeout (req);
-			}
+				/* Information collection
+				 */
+				if (THREAD_SRV(thd)->collector != NULL) {
+					cherokee_collector_log_request (THREAD_SRV(thd)->collector);
+				}
 
-			/* Information collection
-			 */
-			if (THREAD_SRV(thd)->collector != NULL) {
-				cherokee_collector_log_request (THREAD_SRV(thd)->collector);
-			}
+				req->phase = phase_setup_connection;
 
-			req->phase = phase_setup_connection;
+				/* fall down */
 
-			/* fall down */
+			case phase_setup_connection: {
+				cherokee_rule_list_t *rules;
+				cherokee_boolean_t    is_userdir;
 
-		case phase_setup_connection: {
-			cherokee_rule_list_t *rules;
-			cherokee_boolean_t    is_userdir;
+				/* HSTS support
+				 */
+				if ((req->socket.is_tls != TLS) &&
+				    (vsrv->hsts.enabled))
+				{
+					cherokee_request_setup_hsts_handler (req);
+					continue;
+				}
 
-			/* HSTS support
-			 */
-			if ((req->socket.is_tls != TLS) &&
-			    (REQ_VSRV(req)->hsts.enabled))
-			{
-				cherokee_request_setup_hsts_handler (req);
-				continue;
-			}
+				/* Is it already an error response?
+				 */
+				if (http_type_300 (req->error_code) ||
+				    http_type_400 (req->error_code) ||
+				    http_type_500 (req->error_code))
+				{
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
 
-			/* Is it already an error response?
-			 */
-			if (http_type_300 (req->error_code) ||
-			    http_type_400 (req->error_code) ||
-			    http_type_500 (req->error_code))
-			{
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
+				/* Front-line cache
+				 */
+				if ((vsrv->flcache) &&
+				    (req->header.method == http_get))
+				{
+					TRACE (ENTRIES, "Front-line cache available: '%s'\n", vsrv->name.buf);
 
-			/* Front-line cache
-			 */
-			if ((REQ_VSRV(req)->flcache) &&
-			    (req->header.method == http_get))
-			{
-				TRACE (ENTRIES, "Front-line cache available: '%s'\n", REQ_VSRV(req)->name.buf);
+					ret = cherokee_flcache_req_get_cached (vsrv->flcache, req);
+					if (ret == ret_ok) {
+						/* Set Keepalive, Rate, and skip to add_headers
+						 */
+						cherokee_request_set_keepalive (req);
+						cherokee_request_set_rate (req, &req->config_entry);
 
-				ret = cherokee_flcache_req_get_cached (REQ_VSRV(req)->flcache, req);
-				if (ret == ret_ok) {
-					/* Set Keepalive, Rate, and skip to add_headers
+						req->phase = phase_add_headers;
+						goto add_headers;
+					}
+				}
+
+				TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", req->request.buf);
+				TRACE_REQ(req);
+
+				cherokee_config_entry_ref_clean (&req->config_entry);
+
+				/* Choose the virtual entries table
+				 */
+				is_userdir = ((vsrv->userdir.len > 0) && (req->userdir.len > 0));
+
+				if (is_userdir) {
+					rules = &vsrv->userdir_rules;
+				} else {
+					rules = &vsrv->rules;
+				}
+
+				/* Local directory
+				 */
+				if (cherokee_buffer_is_empty (&req->local_directory)) {
+					if (is_userdir)
+						ret = cherokee_request_build_local_directory_userdir (req, vsrv);
+					else
+						ret = cherokee_request_build_local_directory (req, vsrv);
+				}
+
+				/* Check against the rule list. It fills out ->config_entry, and
+				 * req->auth_type
+				 * req->expiration*
+				 * conn->timeout_*
+				 */
+				ret = cherokee_rule_list_match (rules, req, &req->config_entry);
+				if (unlikely (ret != ret_ok)) {
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Local directory
+				 */
+				cherokee_request_set_custom_droot (req, &req->config_entry);
+
+				/* Set the logger of the connection
+				 */
+				if (req->config_entry.no_log != true) {
+					req->logger_ref = vsrv->logger;
+				}
+
+				/* Check of the HTTP method is supported by the handler
+				 */
+				ret = cherokee_request_check_http_method (req, &req->config_entry);
+				if (unlikely (ret != ret_ok)) {
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Check Only-Secure connections
+				 */
+				ret = cherokee_request_check_only_secure (req, &req->config_entry);
+				if (unlikely (ret != ret_ok)) {
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Check for IP validation
+				 */
+				ret = cherokee_request_check_ip_validation (req, &req->config_entry);
+				if (unlikely (ret != ret_ok)) {
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Check for authentication
+				 */
+				ret = cherokee_request_check_authentication (req, &req->config_entry);
+				if (unlikely (ret != ret_ok)) {
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Update the keep-alive property
+				 */
+				cherokee_request_set_keepalive (req);
+
+				/* Traffic Shaping
+				 */
+				cherokee_request_set_rate (req, &req->config_entry);
+
+				/* Create the handler
+				 */
+				ret = cherokee_request_create_handler (req, &req->config_entry);
+				switch (ret) {
+				case ret_ok:
+					break;
+				case ret_eagain:
+					cherokee_request_clean_for_respin (req);
+					continue;
+				case ret_eof:
+					/* Connection drop */
+					close_active_connection (thd, req, true);
+					continue;
+				default:
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Turn chunked encoding on, if possible
+				 */
+				cherokee_request_set_chunked_encoding (req);
+
+				/* Instance an encoder if needed
+				 */
+				ret = cherokee_request_create_encoder (req, req->config_entry.encoders);
+				if (unlikely (ret != ret_ok)) {
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Parse the rest of headers
+				 */
+				ret = cherokee_request_parse_range (req);
+				if (unlikely (ret != ret_ok)) {
+					cherokee_request_setup_error_handler (req);
+					continue;
+				}
+
+				/* Front-line cache
+				 */
+				if ((vsrv->flcache != NULL) &&
+				    (req->config_entry.flcache == true) &&
+				    (cherokee_flcache_req_is_storable (vsrv->flcache, req) == ret_ok))
+				{
+					cherokee_flcache_req_set_store (vsrv->flcache, req);
+
+					/* Update expiration
 					 */
-					cherokee_request_set_keepalive (req);
-					cherokee_request_set_rate (req, &req->config_entry);
+					if (req->flcache.mode == flcache_mode_in) {
+						if (req->config_entry.expiration == cherokee_expiration_epoch) {
+							req->flcache.avl_node_ref->valid_until = 0;
+						} else if (req->config_entry.expiration == cherokee_expiration_time) {
+							req->flcache.avl_node_ref->valid_until = cherokee_bogonow_now + req->config_entry.expiration_time;
+						}
+					}
+				}
 
+				req->phase = phase_init;
+			}
+
+			case phase_init:
+				/* Look for the request
+				 */
+				ret = cherokee_request_open_request (req);
+				switch (ret) {
+				case ret_ok:
+				case ret_error:
+					break;
+
+				case ret_eagain:
+					continue;
+
+				default:
+					if ((MODULE(req->handler)->info) &&
+					    (MODULE(req->handler)->info->name))
+						LOG_ERROR (CHEROKEE_ERROR_THREAD_HANDLER_RET,
+							   ret, MODULE(req->handler)->info->name);
+					else
+						RET_UNKNOWN(ret);
+					break;
+				}
+
+				/* If it is an error, and the connection has not a handler to manage
+				 * this error, the handler has to be changed by an error_handler.
+				 */
+				if (req->handler == NULL) {
+					goto shutdown;
+				}
+
+				if (http_type_300(req->error_code) ||
+				    http_type_400(req->error_code) ||
+				    http_type_500(req->error_code))
+				{
+					if (HANDLER_SUPPORTS (req->handler, hsupport_error)) {
+						ret = cherokee_request_clean_error_headers (req);
+						if (unlikely (ret != ret_ok)) {
+							goto shutdown;
+						}
+					} else {
+						/* Try to setup an error handler
+						 */
+						ret = cherokee_request_setup_error_handler (req);
+						if ((ret != ret_ok) &&
+						    (ret != ret_eagain))
+						{
+							/* Critical error: It couldn't instance the handler
+							 */
+							goto shutdown;
+						}
+						continue;
+					}
+				}
+
+				/* Figure next state
+				 */
+				if (! (http_method_with_input (req->header.method) ||
+				       http_method_with_optional_input (req->header.method)))
+				{
 					req->phase = phase_add_headers;
 					goto add_headers;
 				}
-			}
 
-			TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", req->request.buf);
-			TRACE_REQ(req);
+				/* Register with the POST tracker
+				 */
+				if ((srv->post_track) && (req->post.has_info)) {
+					srv->post_track->func_register (srv->post_track, req);
+				}
 
-			cherokee_config_entry_ref_clean (&req->config_entry);
+				req->phase = phase_reading_post;
 
-			/* Choose the virtual entries table
-			 */
-			is_userdir = ((REQ_VSRV(req)->userdir.len > 0) && (req->userdir.len > 0));
+			case phase_reading_post:
 
-			if (is_userdir) {
-				rules = &REQ_VSRV(req)->userdir_rules;
-			} else {
-				rules = &REQ_VSRV(req)->rules;
-			}
+				/* Read/Send the POST info
+				 */
+				ret = cherokee_request_read_post (req);
+				switch (ret) {
+				case ret_ok:
+					break;
+				case ret_eagain:
+					if (cherokee_request_poll_is_set (&req->polling_aim)) {
+						cherokee_thread_deactive_to_polling (thd, req);
+					}
+					continue;
+				case ret_eof:
+				case ret_error:
+					req->error_code = http_internal_error;
+					cherokee_request_setup_error_handler (req);
+					continue;
+				default:
+					RET_UNKNOWN(ret);
+				}
 
-			/* Local directory
-			 */
-			if (cherokee_buffer_is_empty (&req->local_directory)) {
-				if (is_userdir)
-					ret = cherokee_request_build_local_directory_userdir (req, REQ_VSRV(req));
-				else
-					ret = cherokee_request_build_local_directory (req, REQ_VSRV(req));
-			}
+				/* Turn the connection in write mode
+				 */
+				req->phase = phase_add_headers;
 
-			/* Check against the rule list. It fills out ->config_entry, and
-			 * req->auth_type
-			 * req->expiration*
-			 * req->timeout_*
-			 */
-			ret = cherokee_rule_list_match (rules, req, &req->config_entry);
-			if (unlikely (ret != ret_ok)) {
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
+			case phase_add_headers:
+			add_headers:
 
-			/* Local directory
-			 */
-			cherokee_request_set_custom_droot (req, &req->config_entry);
+				/* Build the header
+				 */
+				ret = cherokee_request_build_header (req);
+				switch (ret) {
+				case ret_ok:
+					break;
+				case ret_eagain:
+					if (cherokee_request_poll_is_set (&req->polling_aim)) {
+						cherokee_thread_deactive_to_polling (thd, req);
+					}
+					continue;
+				case ret_eof:
+				case ret_error:
+					req->error_code = http_internal_error;
+					cherokee_request_setup_error_handler (req);
+					continue;
+				default:
+					RET_UNKNOWN(ret);
+				}
 
-			/* Set the logger of the connection
-			 */
-			if (req->config_entry.no_log != true) {
-				req->logger_ref = REQ_VSRV(req)->logger;
-			}
+				/* If it is an error, we have to respin the connection
+				 * to install a proper error handler.
+				 */
+				if ((http_type_300 (req->error_code) ||
+				     http_type_400 (req->error_code) ||
+				     http_type_500 (req->error_code)) &&
+				    (!HANDLER_SUPPORTS (req->handler, hsupport_error))) {
+					req->phase = phase_setup_connection;
+					continue;
+				}
 
-			/* Check of the HTTP method is supported by the handler
-			 */
-			ret = cherokee_request_check_http_method (req, &req->config_entry);
-			if (unlikely (ret != ret_ok)) {
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
+				/* If it has mmaped content, skip next stage
+				 */
+				if (req->mmaped != NULL)
+					goto phase_send_headers_EXIT;
 
-			/* Check Only-Secure connections
-			 */
-			ret = cherokee_request_check_only_secure (req, &req->config_entry);
-			if (unlikely (ret != ret_ok)) {
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
-
-			/* Check for IP validation
-			 */
-			ret = cherokee_request_check_ip_validation (req, &req->config_entry);
-			if (unlikely (ret != ret_ok)) {
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
-
-			/* Check for authentication
-			 */
-			ret = cherokee_request_check_authentication (req, &req->config_entry);
-			if (unlikely (ret != ret_ok)) {
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
-
-			/* Update the keep-alive property
-			 */
-			cherokee_request_set_keepalive (req);
-
-			/* Traffic Shaping
-			 */
-			cherokee_request_set_rate (req, &req->config_entry);
-
-			/* Create the handler
-			 */
-			ret = cherokee_request_create_handler (req, &req->config_entry);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_eagain:
-				cherokee_request_clean_for_respin (req);
-				continue;
-			case ret_eof:
-				/* Connection drop */
-				close_active_connection (thd, req, true);
-				continue;
-			default:
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
-
-			/* Turn chunked encoding on, if possible
-			*/
-			cherokee_request_set_chunked_encoding (req);
-
-			/* Instance an encoder if needed
-			*/
-			ret = cherokee_request_create_encoder (req, req->config_entry.encoders);
-			if (unlikely (ret != ret_ok)) {
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
-
-			/* Parse the rest of headers
-			 */
-			ret = cherokee_request_parse_range (req);
-			if (unlikely (ret != ret_ok)) {
-				cherokee_request_setup_error_handler (req);
-				continue;
-			}
-
-			/* Front-line cache
-			 */
-			if ((REQ_VSRV(req)->flcache != NULL) &&
-			    (req->config_entry.flcache == true) &&
-			    (cherokee_flcache_req_is_storable (REQ_VSRV(req)->flcache, req) == ret_ok))
-			{
-				cherokee_flcache_req_set_store (REQ_VSRV(req)->flcache, req);
-
-				/* Update expiration
+				/* Front-line cache: store
 				 */
 				if (req->flcache.mode == flcache_mode_in) {
-					if (req->config_entry.expiration == cherokee_expiration_epoch) {
-						req->flcache.avl_node_ref->valid_until = 0;
-					} else if (req->config_entry.expiration == cherokee_expiration_time) {
-						req->flcache.avl_node_ref->valid_until = cherokee_bogonow_now + req->config_entry.expiration_time;
+					ret = cherokee_flcache_conn_commit_header (&req->flcache, req);
+					if (ret != ret_ok) {
+						/* Disabled Front-Line Cache */
+						req->flcache.mode = flcache_mode_error;
 					}
 				}
-			}
 
-			req->phase = phase_init;
-		}
+				req->phase = phase_send_headers;
 
-		case phase_init:
-			/* Look for the request
-			 */
-			ret = cherokee_request_open_request (req);
-			switch (ret) {
-			case ret_ok:
-			case ret_error:
-				break;
+			case phase_send_headers:
 
-			case ret_eagain:
-				continue;
-
-			default:
-				if ((MODULE(req->handler)->info) &&
-				    (MODULE(req->handler)->info->name))
-					LOG_ERROR (CHEROKEE_ERROR_THREAD_HANDLER_RET,
-						   ret, MODULE(req->handler)->info->name);
-				else
-					RET_UNKNOWN(ret);
-				break;
-			}
-
-			/* If it is an error, and the connection has not a handler to manage
-			 * this error, the handler has to be changed by an error_handler.
-			 */
-			if (req->handler == NULL) {
-				goto shutdown;
-			}
-
- 			if (http_type_300(req->error_code) ||
-			    http_type_400(req->error_code) ||
-			    http_type_500(req->error_code))
-			{
-				if (HANDLER_SUPPORTS (req->handler, hsupport_error)) {
-					ret = cherokee_request_clean_error_headers (req);
-					if (unlikely (ret != ret_ok)) {
-						goto shutdown;
-					}
-				} else {
-					/* Try to setup an error handler
-					 */
-					ret = cherokee_request_setup_error_handler (req);
-					if ((ret != ret_ok) &&
-					    (ret != ret_eagain))
-					{
-						/* Critical error: It couldn't instance the handler
-						 */
-						goto shutdown;
-					}
-					continue;
-				}
-			}
-
-			/* Figure next state
-			 */
-			if (! (http_method_with_input (req->header.method) ||
-			       http_method_with_optional_input (req->header.method)))
-			{
-				req->phase = phase_add_headers;
-				goto add_headers;
-			}
-
-			/* Register with the POST tracker
-			 */
-			if ((srv->post_track) && (req->post.has_info)) {
-				srv->post_track->func_register (srv->post_track, req);
-			}
-
-			req->phase = phase_reading_post;
-
-		case phase_reading_post:
-
-			/* Read/Send the POST info
-			 */
-			ret = cherokee_request_read_post (req);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_eagain:
-				if (cherokee_request_poll_is_set (&req->polling_aim)) {
-					cherokee_thread_deactive_to_polling (thd, req);
-				}
-				continue;
-			case ret_eof:
-			case ret_error:
-				req->error_code = http_internal_error;
-				cherokee_request_setup_error_handler (req);
-				continue;
-			default:
-				RET_UNKNOWN(ret);
-			}
-
-			/* Turn the connection in write mode
-			 */
-			req->phase = phase_add_headers;
-
-		case phase_add_headers:
-		add_headers:
-
-			/* Build the header
-			 */
-			ret = cherokee_request_build_header (req);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_eagain:
-				if (cherokee_request_poll_is_set (&req->polling_aim)) {
-					cherokee_thread_deactive_to_polling (thd, req);
-				}
-				continue;
-			case ret_eof:
-			case ret_error:
-				req->error_code = http_internal_error;
-				cherokee_request_setup_error_handler (req);
-				continue;
-			default:
-				RET_UNKNOWN(ret);
-			}
-
-			/* If it is an error, we have to respin the connection
-			 * to install a proper error handler.
-			 */
-			if ((http_type_300 (req->error_code) ||
-			     http_type_400 (req->error_code) ||
-			     http_type_500 (req->error_code)) &&
-			    (!HANDLER_SUPPORTS (req->handler, hsupport_error))) {
-				req->phase = phase_setup_connection;
-				continue;
-			}
-
-			/* If it has mmaped content, skip next stage
-			 */
-			if (req->mmaped != NULL)
-				goto phase_send_headers_EXIT;
-
-			/* Front-line cache: store
-			 */
-			if (req->flcache.mode == flcache_mode_in) {
-				ret = cherokee_flcache_conn_commit_header (&req->flcache, req);
-				if (ret != ret_ok) {
-					/* Disabled Front-Line Cache */
-					req->flcache.mode = flcache_mode_error;
-				}
-			}
-
-			req->phase = phase_send_headers;
-
-		case phase_send_headers:
-
-			/* Send headers to the client
-			 */
-			ret = cherokee_request_send_header (req);
-			switch (ret) {
-			case ret_eagain:
-				cherokee_thread_deactive_to_polling (thd, req);
-				continue;
-
-			case ret_ok:
-				if (!http_method_with_body (req->header.method)) {
-					finalize_request (thd, req);
-					continue;
-				}
-				if (!http_code_with_body (req->error_code)) {
-					finalize_request (thd, req);
-					continue;
-				}
-				break;
-
-			case ret_eof:
-			case ret_error:
-				goto shutdown;
-
-			default:
-				RET_UNKNOWN(ret);
-			}
-
-		phase_send_headers_EXIT:
-			req->phase = phase_stepping;
-
-		case phase_stepping:
-
-			/* Special case:
-			 * If the content is mmap()ed, it has to send the header +
-			 * the file content and stop processing the connection.
-			 */
-			if (req->mmaped != NULL) {
-				ret = cherokee_request_send_header_and_mmaped (req);
+				/* Send headers to the client
+				 */
+				ret = cherokee_request_send_header (req);
 				switch (ret) {
 				case ret_eagain:
 					cherokee_thread_deactive_to_polling (thd, req);
 					continue;
+
+				case ret_ok:
+					if (!http_method_with_body (req->header.method)) {
+						finalize_request (thd, req);
+						continue;
+					}
+					if (!http_code_with_body (req->error_code)) {
+						finalize_request (thd, req);
+						continue;
+					}
+					break;
+
+				case ret_eof:
+				case ret_error:
+					goto shutdown;
+
+				default:
+					RET_UNKNOWN(ret);
+				}
+
+			phase_send_headers_EXIT:
+				req->phase = phase_stepping;
+
+			case phase_stepping:
+
+				/* Special case:
+				 * If the content is mmap()ed, it has to send the header +
+				 * the file content and stop processing the connection.
+				 */
+				if (req->mmaped != NULL) {
+					ret = cherokee_request_send_header_and_mmaped (req);
+					switch (ret) {
+					case ret_eagain:
+						cherokee_thread_deactive_to_polling (thd, req);
+						continue;
+
+					case ret_eof:
+						finalize_request (thd, req);
+						continue;
+
+					case ret_error:
+						close_active_connection (thd, req, true);
+						continue;
+
+					default:
+						finalize_request (thd, req);
+						continue;
+					}
+				}
+
+				/* Handler step: read or make new data to send
+				 * Front-line cache handled internally.
+				 */
+				ret = cherokee_request_step (req);
+				switch (ret) {
+				case ret_eagain:
+					if (cherokee_request_poll_is_set (&req->polling_aim)) {
+						cherokee_thread_deactive_to_polling (thd, req);
+					}
+					continue;
+
+				case ret_eof_have_data:
+					ret = cherokee_request_send (req);
+
+					switch (ret) {
+					case ret_ok:
+						finalize_request (thd, req);
+						continue;
+					case ret_eagain:
+						if (cherokee_request_poll_is_set (&req->polling_aim)) {
+							cherokee_thread_deactive_to_polling (thd, req);
+						}
+						break;
+					case ret_eof:
+					case ret_error:
+					default:
+						close_active_connection (thd, req, false);
+						continue;
+					}
+					break;
+
+				case ret_ok:
+					ret = cherokee_request_send (req);
+
+					switch (ret) {
+					case ret_ok:
+						continue;
+					case ret_eagain:
+						if (cherokee_request_poll_is_set (&req->polling_aim)) {
+							cherokee_thread_deactive_to_polling (thd, req);
+						}
+						break;
+					case ret_eof:
+					case ret_error:
+					default:
+						close_active_connection (thd, req, false);
+						continue;
+					}
+					break;
+
+				case ret_ok_and_sent:
+					break;
 
 				case ret_eof:
 					finalize_request (thd, req);
 					continue;
 
 				case ret_error:
+					close_active_connection (thd, req, false);
+					continue;
+
+				default:
+					RET_UNKNOWN(ret);
+					goto shutdown;
+				}
+				break;
+
+			shutdown:
+				req->phase = phase_shutdown;
+
+			case phase_shutdown:
+				/* Perform a proper SSL/TLS shutdown
+				 */
+				if (req->socket.is_tls == TLS) {
+					ret = req->socket.cryptor->shutdown (req->socket.cryptor);
+					switch (ret) {
+					case ret_ok:
+					case ret_eof:
+					case ret_error:
+						break;
+
+					case ret_eagain:
+						cherokee_thread_deactive_to_polling (thd, req);
+						continue;
+
+					default:
+						RET_UNKNOWN (ret);
+						close_active_connection (thd, req, false);
+						continue;
+					}
+				}
+
+				/* Shutdown socket for writing
+				 */
+				ret = cherokee_request_shutdown_wr (req);
+				switch (ret) {
+				case ret_ok:
+					/* Extend the timeout
+					 */
+					conn->timeout = cherokee_bogonow_now + SECONDS_TO_LINGER;
+					TRACE (ENTRIES, "Lingering-close timeout = now + %d secs\n", SECONDS_TO_LINGER);
+
+					/* Wait for the socket to be readable:
+					 * FIN + ACK will have arrived by then
+					 */
+					req->phase = phase_lingering;
+
+					break;
+				default:
+					/* Error, no linger and no last read,
+					 * just close the connection.
+					 */
 					close_active_connection (thd, req, true);
 					continue;
-
-				default:
-					finalize_request (thd, req);
-					continue;
 				}
-			}
 
-			/* Handler step: read or make new data to send
-			 * Front-line cache handled internally.
-			 */
-			ret = cherokee_request_step (req);
-			switch (ret) {
-			case ret_eagain:
-				if (cherokee_request_poll_is_set (&req->polling_aim)) {
-					cherokee_thread_deactive_to_polling (thd, req);
-				}
-				continue;
+				/* fall down */
 
-			case ret_eof_have_data:
-				ret = cherokee_request_send (req);
-
-				switch (ret) {
-				case ret_ok:
-					finalize_request (thd, req);
-					continue;
-				case ret_eagain:
-					if (cherokee_request_poll_is_set (&req->polling_aim)) {
-						cherokee_thread_deactive_to_polling (thd, req);
-					}
-					break;
-				case ret_eof:
-				case ret_error:
-				default:
-					close_active_connection (thd, req, false);
-					continue;
-				}
-				break;
-
-			case ret_ok:
-				ret = cherokee_request_send (req);
-
+			case phase_lingering:
+				ret = cherokee_request_linger_read (req);
 				switch (ret) {
 				case ret_ok:
 					continue;
-				case ret_eagain:
-					if (cherokee_request_poll_is_set (&req->polling_aim)) {
-						cherokee_thread_deactive_to_polling (thd, req);
-					}
-					break;
-				case ret_eof:
-				case ret_error:
-				default:
-					close_active_connection (thd, req, false);
-					continue;
-				}
-				break;
-
-			case ret_ok_and_sent:
-				break;
-
-			case ret_eof:
-				finalize_request (thd, req);
-				continue;
-
-			case ret_error:
-				close_active_connection (thd, req, false);
-				continue;
-
-			default:
-				RET_UNKNOWN(ret);
-				goto shutdown;
-			}
-			break;
-
-		shutdown:
-			req->phase = phase_shutdown;
-
-		case phase_shutdown:
-			/* Perform a proper SSL/TLS shutdown
-			 */
-			if (req->socket.is_tls == TLS) {
-				ret = req->socket.cryptor->shutdown (req->socket.cryptor);
-				switch (ret) {
-				case ret_ok:
-				case ret_eof:
-				case ret_error:
-					break;
-
 				case ret_eagain:
 					cherokee_thread_deactive_to_polling (thd, req);
 					continue;
-
+				case ret_eof:
+				case ret_error:
+					close_active_connection (thd, req, false);
+					continue;
 				default:
-					RET_UNKNOWN (ret);
+					RET_UNKNOWN(ret);
 					close_active_connection (thd, req, false);
 					continue;
 				}
-			}
-
-			/* Shutdown socket for writing
-			 */
-			ret = cherokee_request_shutdown_wr (req);
-			switch (ret) {
-			case ret_ok:
-				/* Extend the timeout
-				 */
-				req->timeout = cherokee_bogonow_now + SECONDS_TO_LINGER;
-				TRACE (ENTRIES, "Lingering-close timeout = now + %d secs\n", SECONDS_TO_LINGER);
-
-				/* Wait for the socket to be readable:
-				 * FIN + ACK will have arrived by then
-				 */
-				req->phase = phase_lingering;
-
 				break;
+
 			default:
-				/* Error, no linger and no last read,
-				 * just close the connection.
-				 */
-				close_active_connection (thd, req, true);
-				continue;
+				SHOULDNT_HAPPEN;
 			}
-
-			/* fall down */
-
-		case phase_lingering:
-			ret = cherokee_request_linger_read (req);
-			switch (ret) {
-			case ret_ok:
-				continue;
-			case ret_eagain:
-				cherokee_thread_deactive_to_polling (thd, req);
-				continue;
-			case ret_eof:
-			case ret_error:
-				close_active_connection (thd, req, false);
-				continue;
-			default:
-				RET_UNKNOWN(ret);
-				close_active_connection (thd, req, false);
-				continue;
-			}
-			break;
-
-		default:
- 			SHOULDNT_HAPPEN;
-		}
-
-	} /* list */
+		} /* list (req) */
+	} /* list (conn)*/
 }
 
 

@@ -117,9 +117,6 @@ cherokee_request_new  (cherokee_request_t **req)
 	n->tx_partial                = 0;
 	n->traffic_next              = 0;
 	n->validator                 = NULL;
-	n->timeout                   = -1;
-	n->timeout_lapse             = -1;
-	n->timeout_header            = NULL;
 	n->expiration                = cherokee_expiration_none;
 	n->expiration_time           = 0;
 	n->expiration_prop           = cherokee_expiration_prop_none;
@@ -129,8 +126,7 @@ cherokee_request_new  (cherokee_request_t **req)
 	n->limit_blocked_until       = 0;
 
 	cherokee_buffer_init (&n->buffer);
-	cherokee_buffer_init (&n->header_buffer);
-	cherokee_buffer_init (&n->incoming_header);
+	cherokee_buffer_init (&n->header_buffer_out);
 	cherokee_buffer_init (&n->encoder_buffer);
 	cherokee_buffer_init (&n->logger_real_ip);
 
@@ -198,8 +194,8 @@ cherokee_request_free (cherokee_request_t *req)
 
 	cherokee_buffer_mrproper (&req->pathinfo);
 	cherokee_buffer_mrproper (&req->buffer);
-	cherokee_buffer_mrproper (&req->header_buffer);
-	cherokee_buffer_mrproper (&req->incoming_header);
+	cherokee_buffer_mrproper (&req->header_buffer_in);
+	cherokee_buffer_mrproper (&req->header_buffer_out);
 	cherokee_buffer_mrproper (&req->query_string);
 	cherokee_buffer_mrproper (&req->encoder_buffer);
 
@@ -337,6 +333,7 @@ cherokee_request_clean (cherokee_request_t *req,
 	cherokee_buffer_clean (&req->query_string);
 	cherokee_buffer_clean (&req->self_trace);
 	cherokee_buffer_clean (&req->chunked_len);
+	cherokee_buffer_clean (&req->header_buffer_out);
 
 	req->error_internal_code = http_unset;
 	cherokee_buffer_clean (&req->error_internal_url);
@@ -356,7 +353,6 @@ cherokee_request_clean (cherokee_request_t *req,
 
 	cherokee_header_clean (&req->header);
 	cherokee_buffer_clean (&req->buffer);
-	cherokee_buffer_clean (&req->header_buffer);
 
 	if (reuse) {
 		/* Skip trailing CRLF (which may be sent by some HTTP clients)
@@ -365,15 +361,15 @@ cherokee_request_clean (cherokee_request_t *req,
 		 * handled in next request.  This may avoid a subsequent real
 		 * move_to_begin of the contents left in the buffer.
 		 */
-		crlf_len = cherokee_buffer_cnt_spn (&req->incoming_header, header_len, CRLF);
+		crlf_len = cherokee_buffer_cnt_spn (&req->header_buffer_in, header_len, CRLF);
 		header_len += (crlf_len <= MAX_HEADER_CRLF) ? crlf_len : 0;
 
-		cherokee_buffer_move_to_begin (&req->incoming_header, header_len);
+		cherokee_buffer_move_to_begin (&req->header_buffer_in, header_len);
 
 		TRACE (ENTRIES, "conn %p, %s headers\n", req,
-		       !cherokee_buffer_is_empty (&req->incoming_header) ? "has" : "doesn't have");
+		       !cherokee_buffer_is_empty (&req->header_buffer_in) ? "has" : "doesn't have");
 	} else {
-		cherokee_buffer_clean (&req->incoming_header);
+		cherokee_buffer_clean (&req->header_buffer_in);
 	}
 
 	return ret_ok;
@@ -383,20 +379,26 @@ cherokee_request_clean (cherokee_request_t *req,
 ret_t
 cherokee_request_clean_close (cherokee_request_t *req)
 {
-	/* Close and clean the socket
-	 */
-	cherokee_socket_close (&req->socket);
-	cherokee_socket_clean (&req->socket);
-
-	/* Make sure the connection Keep-Alive is disabled
-	 */
-	req->keepalive = 0;
-	cherokee_buffer_clean (&req->incoming_header);
-
-	/* Clean the connection object
-	 */
-	cherokee_request_clean (req, false);
+	// TODO: Implement properties clean
+	//
+	//
 	return ret_ok;
+
+
+	/* /\* Close and clean the socket */
+	/*  *\/ */
+	/* cherokee_socket_close (&req->socket); */
+	/* cherokee_socket_clean (&req->socket); */
+
+	/* /\* Make sure the connection Keep-Alive is disabled */
+	/*  *\/ */
+	/* req->keepalive = 0; */
+	/* cherokee_buffer_clean (&req->incoming_header); */
+
+	/* /\* Clean the connection object */
+	/*  *\/ */
+	/* cherokee_request_clean (req, false); */
+	/* return ret_ok; */
 }
 
 
@@ -944,7 +946,7 @@ cherokee_request_build_header (cherokee_request_t *req)
 
 	/* Try to get the headers from the handler
 	 */
-	ret = cherokee_handler_add_headers (req->handler, &req->header_buffer);
+	ret = cherokee_handler_add_headers (req->handler, &req->header_buffer_out);
 	if (unlikely (ret != ret_ok)) {
 		switch (ret) {
 		case ret_eof:
@@ -960,13 +962,13 @@ cherokee_request_build_header (cherokee_request_t *req)
 	/* Front-line Cache (in): Handler headers
 	 */
 	if (req->flcache.mode == flcache_mode_in) {
-		cherokee_buffer_add_buffer (&req->flcache.header, &req->header_buffer);
+		cherokee_buffer_add_buffer (&req->flcache.header, &req->header_buffer_out);
 
 		/* Add X-Cache miss
 		 */
-		cherokee_buffer_add_str (&req->header_buffer, "X-Cache: MISS from ");
-		cherokee_request_build_host_port_string (req, &req->header_buffer);
-		cherokee_buffer_add_str (&req->header_buffer, CRLF);
+		cherokee_buffer_add_str (&req->header_buffer_out, "X-Cache: MISS from ");
+		cherokee_request_build_host_port_string (req, &req->header_buffer_out);
+		cherokee_buffer_add_str (&req->header_buffer_out, CRLF);
 	}
 
 	/* Replies with no body cannot use chunked encoding
@@ -1008,7 +1010,7 @@ out:
 
 	/* Add handler headers
 	 */
-	cherokee_buffer_add_buffer (&req->buffer, &req->header_buffer);
+	cherokee_buffer_add_buffer (&req->buffer, &req->header_buffer_out);
 
 	/* Add the server headers (phase 2)
 	 */
@@ -1202,7 +1204,7 @@ cherokee_request_reading_check (cherokee_request_t *req)
 {
 	/* Check for too long headers
 	 */
-	if (req->incoming_header.len > MAX_HEADER_LEN) {
+	if (req->header_buffer_in.len > MAX_HEADER_LEN) {
 		req->error_code = http_request_entity_too_large;
 		return ret_error;
 	}
@@ -2175,7 +2177,7 @@ cherokee_request_get_request (cherokee_request_t *req)
 
 	/* Header parsing
 	 */
-	ret = cherokee_header_parse (&req->header, &req->incoming_header, &error_code);
+	ret = cherokee_header_parse (&req->header, &req->header_buffer_in, &error_code);
 	if (unlikely (ret < ret_ok)) {
 		goto error;
 	}
@@ -2696,7 +2698,7 @@ cherokee_request_open_request (cherokee_request_t *req)
 
 	/* Ensure the space for headers and I/O buffer
 	 */
-	cherokee_buffer_ensure_size (&req->header_buffer, 384);
+	cherokee_buffer_ensure_size (&req->header_buffer_out, 384);
 	cherokee_buffer_ensure_size (&req->buffer, DEFAULT_READ_SIZE+1);
 
 	/* Init the connection handler object
@@ -2775,11 +2777,11 @@ cherokee_request_clean_error_headers (cherokee_request_t *req)
 	char *begin;
 	char *end;
 
-	if (cherokee_buffer_is_empty (&req->header_buffer))
+	if (cherokee_buffer_is_empty (&req->header_buffer_out))
 		return ret_ok;
 
-	begin = strncasestrn_s (req->header_buffer.buf,
-				req->header_buffer.len,
+	begin = strncasestrn_s (req->header_buffer_out.buf,
+				req->header_buffer_out.len,
 				"Content-Length: ");
 	if (begin != NULL) {
 		end = strchr (begin+16, CHR_CR);
@@ -2789,8 +2791,8 @@ cherokee_request_clean_error_headers (cherokee_request_t *req)
 		if (end[1] == CHR_LF)
 			end++;
 
-		cherokee_buffer_remove_chunk (&req->header_buffer,
-					      begin - req->header_buffer.buf,
+		cherokee_buffer_remove_chunk (&req->header_buffer_out,
+					      begin - req->header_buffer_out.buf,
 					      (end-begin)+1);
 	}
 
