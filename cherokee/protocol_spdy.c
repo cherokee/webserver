@@ -31,3 +31,12 @@ cherokee_protocol_spdy_dispatch (cherokee_protocol_t *proto)
 {
 	return ret_ok;
 }
+
+ret_t
+cherokee_protocol_spdy_add_response (cherokee_protocol_t     *proto,
+				     cherokee_http_version_t  version,
+				     cherokee_http_t          status,
+				     cherokee_buffer_t       *header)
+{
+	return ret_ok;
+}

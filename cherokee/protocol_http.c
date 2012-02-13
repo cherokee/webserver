@@ -111,3 +111,40 @@ receive:
 
 	return ret_ok;
 }
+
+
+
+ret_t
+cherokee_protocol_http_add_response (cherokee_protocol_t     *proto,
+				     cherokee_http_version_t  version,
+				     cherokee_http_t          status,
+				     cherokee_buffer_t       *header)
+{
+	ret_t                  ret;
+	const char            *str;
+	cuint_t               *str_len;
+	cherokee_connection_t *conn   = CONN (PROTOCOL_BASE(proto)->conn);
+
+	/* Version */
+	ret = cherokee_http_version_to_string (version, &str, &str_len);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
+	cherokee_buffer_add      (&conn->buffer_out, str, str_len);
+	cherokee_buffer_add_char (&conn->buffer_out, ' ');
+
+	/* Status */
+	ret = cherokee_http_code_copy (status, &conn->buffer_out);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
+	/* Headers */
+	if (header != NULL) {
+		cherokee_buffer_add_buf (&conn->buffer_out, header);
+	}
+
+	/* End of header*/
+	cherokee_buffer_add_str (&conn->buffer_out, CRLF_CRLF);
+
+	return ret_ok;
+}

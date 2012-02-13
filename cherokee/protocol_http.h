@@ -29,7 +29,12 @@
 
 CHEROKEE_BEGIN_DECLS
 
-ret_t cherokee_protocol_http_dispatch (cherokee_protocol_t *proto);
+ret_t cherokee_protocol_http_dispatch     (cherokee_protocol_t     *proto);
+
+ret_t cherokee_protocol_http_add_response (cherokee_protocol_t     *proto,
+					   cherokee_http_version_t  version,
+					   cherokee_http_t          status,
+					   cherokee_buffer_t       *header);
 
 CHEROKEE_END_DECLS
 

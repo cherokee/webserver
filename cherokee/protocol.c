@@ -88,3 +88,23 @@ cherokee_protocol_dispatch (cherokee_protocol_t *proto)
 	SHOULDNT_HAPPEN;
 	return ret_error;
 }
+
+
+ret_t
+cherokee_protocol_add_response (cherokee_protocol_t     *proto,
+				cherokee_http_version_t  version,
+				cherokee_http_t          status,
+				cherokee_buffer_t       *header)
+{
+	switch (PROTOCOL_BASE(proto)->type) {
+	case proto_http:
+		return cherokee_protocol_http_add_response (proto, version, status, header);
+	case http_spdy:
+		return cherokee_protocol_spdy_add_response (proto, version, status, header);
+	default:
+		break;
+	}
+
+	SHOULDNT_HAPPEN;
+	return ret_error;
+}

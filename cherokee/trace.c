@@ -29,6 +29,7 @@
 #include "bogotime.h"
 #include "access.h"
 #include "socket.h"
+#include "connection.h"
 #include "request-protected.h"
 
 #ifdef HAVE_SYSLOG_H

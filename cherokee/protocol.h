@@ -79,6 +79,11 @@ ret_t cherokee_protocol_mrproper (cherokee_protocol_t *proto);
 ret_t cherokee_protocol_set      (cherokee_protocol_t *proto, cherokee_protocol_type_t type);
 ret_t cherokee_protocol_dispatch (cherokee_protocol_t *proto);
 
+ret_t cherokee_protocol_add_response (cherokee_protocol_t     *proto,
+				      cherokee_http_version_t  version,
+				      cherokee_http_t          status,
+				      cherokee_buffer_t       *header);
+
 CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_PROTOCOL_H */

@@ -29,7 +29,7 @@
 #include "util.h"
 
 #define ENTRIES           "post"
-#define HTTP_100_RESPONSE "HTTP/1.1 100 Continue" CRLF CRLF
+// #define HTTP_100_RESPONSE "HTTP/1.1 100 Continue" CRLF CRLF
 
 
 /* Base functions
@@ -241,10 +241,11 @@ remove_surplus (cherokee_post_t    *post,
 ret_t
 cherokee_post_read_header (cherokee_post_t *post)
 {
-	ret_t               ret;
-	char               *info     = NULL;
-	cuint_t             info_len = 0;
-	cherokee_request_t *req      = REQ(post->conn);
+	ret_t                  ret;
+	char                  *info     = NULL;
+	cuint_t                info_len = 0;
+	cherokee_request_t    *req      = REQ(post->conn);
+	cherokee_connection_t *conn     = REQ_CONN(post->conn);
 
 	switch (post->read_header_phase) {
 	case cherokee_post_read_header_init:
@@ -270,7 +271,9 @@ cherokee_post_read_header (cherokee_post_t *post)
 			return ret_ok;
 		}
 
-		cherokee_buffer_add_str (&post->read_header_100cont, HTTP_100_RESPONSE);
+//		cherokee_buffer_add_str (&post->read_header_100cont, HTTP_100_RESPONSE);
+		cherokee_protocol_add_response (&conn->protocol, http_version_11, http_continue, NULL);
+
 		post->read_header_phase = cherokee_post_read_header_100cont;
 
 	case cherokee_post_read_header_100cont:

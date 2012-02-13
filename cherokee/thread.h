@@ -38,6 +38,7 @@
 #include "fdpoll.h"
 #include "avl.h"
 #include "limiter.h"
+#include "connection.h"
 
 
 typedef enum {

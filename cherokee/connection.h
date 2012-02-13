@@ -22,8 +22,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CHEROKEE_REQUEST_H
-#define CHEROKEE_REQUEST_H
+#ifndef CHEROKEE_CONNECTION_H
+#define CHEROKEE_CONNECTION_H
 
 #include "common.h"
 #include "buffer.h"
@@ -81,4 +81,4 @@ void cherokee_connection_tx_add    (cherokee_connection_t *conn, ssize_t tx);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_REQUEST_H */
+#endif /* CHEROKEE_CONNECTION_H */
