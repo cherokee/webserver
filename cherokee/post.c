@@ -28,8 +28,7 @@
 #include "request-protected.h"
 #include "util.h"
 
-#define ENTRIES           "post"
-// #define HTTP_100_RESPONSE "HTTP/1.1 100 Continue" CRLF CRLF
+#define ENTRIES "post"
 
 
 /* Base functions
@@ -166,31 +165,6 @@ parse_header (cherokee_post_t    *post,
 
 
 static ret_t
-reply_100_continue (cherokee_post_t    *post,
-		    cherokee_request_t *req)
-{
-	ret_t  ret;
-	size_t written;
-
-	ret = cherokee_socket_bufwrite (&req->socket, &post->read_header_100cont, &written);
-	if (ret != ret_ok) {
-		TRACE(ENTRIES, "Could not send a '100 Continue' response. Error=500.\n");
-		return ret;
-	}
-
-	if (written >= post->read_header_100cont.len) {
-		TRACE(ENTRIES, "Sent a '100 Continue' response.\n");
-		return ret_ok;
-	}
-
-	TRACE(ENTRIES, "Sent partial '100 Continue' response: %d bytes\n", written);
-	cherokee_buffer_move_to_begin (&post->read_header_100cont, written);
-
-	return ret_ok;
-}
-
-
-static ret_t
 remove_surplus (cherokee_post_t    *post,
 		cherokee_request_t *req)
 {
@@ -271,13 +245,18 @@ cherokee_post_read_header (cherokee_post_t *post)
 			return ret_ok;
 		}
 
-//		cherokee_buffer_add_str (&post->read_header_100cont, HTTP_100_RESPONSE);
-		cherokee_protocol_add_response (&conn->protocol, http_version_11, http_continue, NULL);
-
 		post->read_header_phase = cherokee_post_read_header_100cont;
 
+		/* Build the response
+		 */
+		cherokee_protocol_add_response (&conn->protocol, http_version_11, http_continue, NULL);
+
+		/* fall down*/
+
 	case cherokee_post_read_header_100cont:
-		return reply_100_continue (post, req);
+		// TODO: Is this necessary??
+		// Should the buffer forced to be sent?
+		;
 	}
 
 	SHOULDNT_HAPPEN;
