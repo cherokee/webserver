@@ -184,11 +184,11 @@ remove_surplus (cherokee_post_t    *post,
 	if (post->len > 0) {
 		/* Plain post: read what's pointed by Content-Length
 		 */
-		surplus_len = MIN (req->incoming_header.len - header_len, post->len);
+		surplus_len = MIN (req->header_buffer_in.len - header_len, post->len);
 	} else {
 		/* Chunked: Assume everything after the header is POST
 		 */
-		surplus_len = req->incoming_header.len - header_len;
+		surplus_len = req->header_buffer_in.len - header_len;
 	}
 	if (surplus_len <= 0) {
 		return ret_ok;
@@ -199,14 +199,14 @@ remove_surplus (cherokee_post_t    *post,
 	/* Move the surplus
 	 */
 	cherokee_buffer_add (&post->header_surplus,
-			     req->incoming_header.buf + header_len,
+			     req->header_buffer_in.buf + header_len,
 			     surplus_len);
 
-	cherokee_buffer_remove_chunk (&req->incoming_header,
+	cherokee_buffer_remove_chunk (&req->header_buffer_in,
 				      header_len, surplus_len);
 
 	TRACE (ENTRIES, "POST surplus: incoming_header is %d bytes (header len=%d)\n",
-	       req->incoming_header.len, header_len);
+	       req->header_buffer_in.len, header_len);
 
 	return ret_ok;
 }
@@ -361,7 +361,7 @@ process_chunk (cherokee_post_t   *post,
 	 */
 	if (! cherokee_buffer_is_empty(in)) {
 		TRACE (ENTRIES, "There are %d left-over bytes in the post buffer -> incoming header", in->len);
-/* 		cherokee_buffer_add_buffer (&req->incoming_header, in); */
+/* 		cherokee_buffer_add_buffer (&req->header_buffer_in, in); */
 /* 		cherokee_buffer_clean (in); */
 	}
 
