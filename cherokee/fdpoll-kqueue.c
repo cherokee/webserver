@@ -91,10 +91,14 @@ _free (cherokee_fdpoll_kqueue_t *fdp)
 
 
 static ret_t
-_add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
+_add_change (cherokee_fdpoll_kqueue_t *fdp, int fd, int mode, int change)
 {
 	int            index;
 	struct kevent *event;
+
+	/* The 'mode' variable should contain a single mode here. This
+	 * function does not support multiple modes.
+	 */
 
 	index = fdp->nchanges;
 	if (unlikely (index >= FDPOLL(fdp)->nfiles)) {
@@ -104,21 +108,23 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 
 	event = &fdp->changelist[index];
 	event->ident = fd;
-	switch (rw) {
-	case FDPOLL_MODE_READ:
+
+	switch (mode) {
+	case poll_mode_read:
 		event->filter = EVFILT_READ;
 		break;
-	case FDPOLL_MODE_WRITE:
+	case poll_mode_write:
 		event->filter = EVFILT_WRITE;
 		break;
 	default:
+		event->filter = 0;
 		SHOULDNT_HAPPEN;
-        }
+	}
 
 	event->flags  = change;
 	event->fflags = 0;
 
-	fdp->fdinterest[fd] = rw;
+	fdp->fdinterest[fd] = mode;
 	fdp->nchanges++;
 
 	return ret_ok;
@@ -126,30 +132,55 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 
 
 static ret_t
-_add (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
+_add (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw_mode)
 {
-	int re;
+	ret_t ret = ret_not_found;
 
-	re = _add_change (fdp, fd, rw, EV_ADD);
-	if (re == ret_ok) {
+	if (rw_mode & poll_mode_read) {
+		ret = _add_change (fdp, fd, poll_mode_read, EV_ADD);
+		if (ret != ret_ok)
+			return ret;
+	}
+
+	if (rw_mode & poll_mode_write) {
+		ret = _add_change (fdp, fd, poll_mode_write, EV_ADD);
+		if (ret != ret_ok)
+			return ret;
+	}
+
+	if (ret == ret_ok) {
 		FDPOLL(fdp)->npollfds++;
 	}
 
-	return re;
+	return ret;
 }
 
 
 static ret_t
 _del (cherokee_fdpoll_kqueue_t *fdp, int fd)
 {
-	int re;
+	ret_t              ret      = ret_not_found;
+	int                interest = fdp->fdinterest[fd];
+	cherokee_boolean_t error    = false;
 
-	re = _add_change (fdp, fd, fdp->fdinterest[fd], EV_DELETE);
-	if (re == ret_ok) {
+	if (interest & poll_mode_read) {
+		ret = _add_change (fdp, fd, poll_mode_read, EV_DELETE);
+		if (ret != ret_ok)
+			error = true;
+	}
+
+	if (interest & poll_mode_write) {
+		ret = _add_change (fdp, fd, poll_mode_write, EV_DELETE);
+		if (ret != ret_ok)
+			error |= true;
+	}
+
+	if ((ret == ret_ok) && (! error)) {
 		FDPOLL(fdp)->npollfds--;
 	}
 
-	return re;
+	fdp->fdinterest[fd] = 0;
+	return ret;
 }
 
 
@@ -183,7 +214,7 @@ again:
 		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_KQUEUE);
 		return 0;
 
-	} else if (n_events > 0) {
+	} else if (n_events >= 0) {
 		memset (fdp->fdevents, 0, FDPOLL(fdp)->system_nfiles * sizeof(int));
 
 		for (i = 0; i < n_events; ++i) {
@@ -207,7 +238,7 @@ again:
 }
 
 static int
-_check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
+_check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw_mode)
 {
 	uint32_t events;
 
@@ -223,15 +254,16 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 		return 1;
 	}
 
-	switch (rw) {
-	case FDPOLL_MODE_READ:
-		events &= KQUEUE_READ_EVENT;
-		break;
-	case FDPOLL_MODE_WRITE:
-		events &= KQUEUE_WRITE_EVENT;
-		break;
-	default:
-		SHOULDNT_HAPPEN;
+	if ((rw_mode & poll_mode_read) &&
+	    (events & KQUEUE_READ_EVENT))
+	{
+		return 1;
+	}
+
+	if ((rw_mode & poll_mode_write) &&
+	    (events & KQUEUE_WRITE_EVENT))
+	{
+		return 1;
 	}
 
 	return events;
@@ -249,24 +281,29 @@ _reset (cherokee_fdpoll_kqueue_t *fdp, int fd)
 
 
 static ret_t
-_set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
+_set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw_mode)
 {
-	/* If transitioning from r -> w or from w -> r
-	 * disable any active event on the fd as we are
-	 * no longer interested on it.
-	 */
-	if ((rw == FDPOLL_MODE_WRITE) &&
-	    (fdp->fdinterest[fd] == FDPOLL_MODE_READ))
-	{
-		_add_change (fdp, fd, FDPOLL_MODE_READ, EV_DELETE);
+	int prev_interest = fdp->fdinterest[fd];
 
-	} else if ((rw == FDPOLL_MODE_READ) &&
-		   (fdp->fdinterest[fd] == FDPOLL_MODE_WRITE))
+	/* If transitioning from R->W or from W->R disable any active
+	 * event on the fd as we are no longer interested on it.
+	 */
+
+	/* No longer reading */
+	if ((! (rw_mode & poll_mode_read)) &&
+	    (prev_interest & poll_mode_read))
 	{
-		_add_change (fdp, fd, FDPOLL_MODE_WRITE, EV_DELETE);
+		_add_change (fdp, fd, poll_mode_read, EV_DELETE);
 	}
 
-	return _add_change (fdp, fd, rw, EV_ADD);
+	/* No longer writing */
+	if ((! (rw_mode & poll_mode_write)) &&
+	    (prev_interest & poll_mode_write))
+	{
+		_add_change (fdp, fd, poll_mode_write, EV_DELETE);
+	}
+
+	return _add_change (fdp, fd, rw_mode, EV_ADD);
 }
 
 

@@ -93,7 +93,7 @@ cherokee_downloader_async_connect (cherokee_downloader_async_t *adownloader)
 	ret = cherokee_fd_set_nonblocking (down->socket.socket, true);
 	if (ret != ret_ok) return ret;
 
-	ret = cherokee_fdpoll_add (fdpoll, down->socket.socket, FDPOLL_MODE_WRITE);
+	ret = cherokee_fdpoll_add (fdpoll, down->socket.socket, poll_mode_write);
 	if (ret != ret_ok) return ret;
 
 	adownloader->fd_added = down->socket.socket;
@@ -123,9 +123,9 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 	/* Check whether we are reading or writting
 	 */
 	if (down->phase <= downloader_phase_send_post)
-		rw = FDPOLL_MODE_WRITE;
+		rw = poll_mode_write;
 	else
-		rw = FDPOLL_MODE_READ;
+		rw = poll_mode_read;
 
 	TRACE(ENTRIES, "rw = %d\n", rw);
 

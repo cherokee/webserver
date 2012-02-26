@@ -120,9 +120,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->timeout                   = -1;
 	n->timeout_lapse             = -1;
 	n->timeout_header            = NULL;
-	n->polling_fd                = -1;
-	n->polling_multiple          = false;
-	n->polling_mode              = FDPOLL_MODE_NONE;
 	n->expiration                = cherokee_expiration_none;
 	n->expiration_time           = 0;
 	n->expiration_prop           = cherokee_expiration_prop_none;
@@ -158,7 +155,8 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	cherokee_socket_init (&n->socket);
 	cherokee_header_init (&n->header, header_type_request);
-	cherokee_post_init (&n->post);
+	cherokee_post_init (&n->post, n);
+	cherokee_connection_poll_init (&n->polling_aim);
 
 	memset (n->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	n->regex_ovecsize = 0;
@@ -232,11 +230,11 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 		conn->arguments = NULL;
 	}
 
-        if (conn->polling_fd != -1) {
-                cherokee_fd_close (conn->polling_fd);
-                conn->polling_fd   = -1;
-		conn->polling_mode = FDPOLL_MODE_NONE;
-        }
+
+	if (conn->polling_aim.fd != -1) {
+                cherokee_fd_close (conn->polling_aim.fd);
+	}
+	cherokee_connection_poll_mrproper (&conn->polling_aim);
 
 	free (conn);
 	return ret_ok;
@@ -244,7 +242,8 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 
 
 ret_t
-cherokee_connection_clean (cherokee_connection_t *conn)
+cherokee_connection_clean (cherokee_connection_t *conn,
+			   cherokee_boolean_t     reuse)
 {
 	size_t             crlf_len;
 	uint32_t           header_len;
@@ -289,10 +288,10 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->encoder_new_func = NULL;
 	conn->encoder_props    = NULL;
 
-	if (conn->polling_fd != -1) {
-		cherokee_fd_close (conn->polling_fd);
-		conn->polling_fd = -1;
+	if (conn->polling_aim.fd != -1) {
+                cherokee_fd_close (conn->polling_aim.fd);
 	}
+	cherokee_connection_poll_clean (&conn->polling_aim);
 
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
@@ -315,8 +314,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->rx_partial           = 0;
 	conn->tx_partial           = 0;
 	conn->traffic_next         = 0;
-	conn->polling_multiple     = false;
-	conn->polling_mode         = FDPOLL_MODE_NONE;
 	conn->expiration           = cherokee_expiration_none;
 	conn->expiration_time      = 0;
 	conn->expiration_prop      = cherokee_expiration_prop_none;
@@ -332,6 +329,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->regex_ovecsize = 0;
 	memset (conn->regex_host_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_host_ovecsize = 0;
+
+	cherokee_connection_poll_clean (&conn->polling_aim);
 
 	cherokee_post_clean (&conn->post);
 	cherokee_buffer_mrproper (&conn->encoder_buffer);
@@ -373,26 +372,23 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_buffer_clean (&conn->buffer);
 	cherokee_buffer_clean (&conn->header_buffer);
 
-	/* Skip trailing CRLF (which may be sent by some HTTP clients)
-	 * only if the number of CRLFs is within the predefine count
-	 * limit otherwise ignore trailing CRLFs so that they will be
-	 * handled in next request.  This may avoid a subsequent real
-	 * move_to_begin of the contents left in the buffer.
-	 */
-	crlf_len = cherokee_buffer_cnt_spn (&conn->incoming_header, header_len, CRLF);
-	header_len += (crlf_len <= MAX_HEADER_CRLF) ? crlf_len : 0;
+	if (reuse) {
+		/* Skip trailing CRLF (which may be sent by some HTTP clients)
+		 * only if the number of CRLFs is within the predefine count
+		 * limit otherwise ignore trailing CRLFs so that they will be
+		 * handled in next request.  This may avoid a subsequent real
+		 * move_to_begin of the contents left in the buffer.
+		 */
+		crlf_len = cherokee_buffer_cnt_spn (&conn->incoming_header, header_len, CRLF);
+		header_len += (crlf_len <= MAX_HEADER_CRLF) ? crlf_len : 0;
 
-	cherokee_buffer_move_to_begin (&conn->incoming_header, header_len);
+		cherokee_buffer_move_to_begin (&conn->incoming_header, header_len);
 
-	/* If the connection has incoming headers to be processed,
-	 * then increment the pending counter from the thread
-	 */
-	if (! cherokee_buffer_is_empty (&conn->incoming_header)) {
-		CONN_THREAD(conn)->pending_conns_num++;
+		TRACE (ENTRIES, "conn %p, %s headers\n", conn,
+		       !cherokee_buffer_is_empty (&conn->incoming_header) ? "has" : "doesn't have");
+	} else {
+		cherokee_buffer_clean (&conn->incoming_header);
 	}
-
-	TRACE (ENTRIES, "conn %p, has headers %d\n", conn,
-	       !cherokee_buffer_is_empty (&conn->incoming_header));
 
 	return ret_ok;
 }
@@ -413,7 +409,7 @@ cherokee_connection_clean_close (cherokee_connection_t *conn)
 
 	/* Clean the connection object
 	 */
-	cherokee_connection_clean (conn);
+	cherokee_connection_clean (conn, false);
 	return ret_ok;
 }
 
@@ -1057,8 +1053,12 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 		if (unlikely (ret != ret_ok) ) {
 			switch (ret) {
 			case ret_eof:
+				return ret_eof;
+
 			case ret_eagain:
-				return ret;
+				conn->polling_aim.fd   = conn->socket.socket;
+				conn->polling_aim.mode = poll_mode_write;
+				return ret_eagain;
 
 			case ret_error:
 				conn->keepalive = 0;
@@ -1095,8 +1095,12 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 		switch (ret) {
 
 		case ret_eof:
+			return ret_eof;
+
 		case ret_eagain:
-			return ret;
+			conn->polling_aim.fd   = conn->socket.socket;
+			conn->polling_aim.mode = poll_mode_write;
+			return ret_eagain;
 
 		case ret_error:
 			conn->keepalive = 0;
@@ -1188,15 +1192,15 @@ cherokee_connection_recv (cherokee_connection_t *conn,
 		return ret;
 
 	case ret_eagain:
-		if (cherokee_socket_pending_read (&conn->socket)) {
-			CONN_THREAD(conn)->pending_read_num += 1;
-		}
-
 		if (cnt_read > 0) {
 			cherokee_connection_rx_add (conn, cnt_read);
 			*len = cnt_read;
 			return ret_ok;
 		}
+
+		conn->polling_aim.fd   = conn->socket.socket;
+		conn->polling_aim.mode = poll_mode_read;
+
 		return ret_eagain;
 
 	default:
@@ -1254,7 +1258,18 @@ cherokee_connection_send_header (cherokee_connection_t *conn)
 	/* Send the buffer content
 	 */
 	ret = cherokee_socket_bufwrite (&conn->socket, &conn->buffer, &sent);
-	if (unlikely(ret != ret_ok)) return ret;
+	switch (ret) {
+	case ret_ok:
+		break;
+
+	case ret_eagain:
+		conn->polling_aim.fd   = conn->socket.socket;
+		conn->polling_aim.mode = poll_mode_write;
+		return ret_eagain;
+
+	default:
+		return ret;
+	}
 
 	/* Add to the connection traffic counter
 	 */
@@ -1340,8 +1355,12 @@ cherokee_connection_send (cherokee_connection_t *conn)
 			break;
 
 		case ret_eof:
+			return ret_eof;
+
 		case ret_eagain:
-			return ret;
+			conn->polling_aim.fd   = conn->socket.socket;
+			conn->polling_aim.mode = poll_mode_write;
+			return ret_eagain;
 
 		case ret_error:
 			conn->keepalive = 0;
@@ -1379,8 +1398,18 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	}
 
 	ret = cherokee_socket_write (&conn->socket, conn->buffer.buf, to_send, &sent);
-	if (unlikely(ret != ret_ok))
+	switch (ret) {
+	case ret_ok:
+		break;
+
+	case ret_eagain:
+		conn->polling_aim.fd   = conn->socket.socket;
+		conn->polling_aim.mode = poll_mode_write;
+		return ret_eagain;
+
+	default:
 		return ret;
+	}
 
 	/* Drop out the sent info
 	 */
@@ -1523,12 +1552,17 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 	cherokee_thread_t *thread   = CONN_THREAD(conn);
 	cherokee_buffer_t *tmp1     = THREAD_TMP_BUF1(thread);
 
-	TRACE(ENTRIES",linger", "Linger read, socket status %d\n", conn->socket.status);
+	TRACE(ENTRIES",linger", "Linger read, socket %s closed\n", conn->socket.closed ? "is" : "isn't");
 
 	while (true) {
 		/* Read from the socket to nowhere
 		 */
-		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size, &cnt_read);
+		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size - 1, &cnt_read);
+
+		if (cnt_read > 0) {
+			cherokee_buffer_clean (tmp1);
+		}
+
 		switch (ret) {
 		case ret_eof:
 			TRACE (ENTRIES",linger", "%s\n", "EOF");
@@ -1538,12 +1572,17 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			return ret_error;
 		case ret_eagain:
 			TRACE (ENTRIES",linger", "read %u, eagain\n", cnt_read);
+
+			conn->polling_aim.fd   = conn->socket.socket;
+			conn->polling_aim.mode = poll_mode_read;
 			return ret_eagain;
 		case ret_ok:
 			TRACE (ENTRIES",linger", "%u bytes tossed away\n", cnt_read);
+
 			retries--;
-			if (cnt_read == tmp1->size && retries > 0)
+			if ((cnt_read >= tmp1->size - 2) && (retries > 0))
 				continue;
+
 			return ret_eof;
 		default:
 			RET_UNKNOWN(ret);
@@ -2176,7 +2215,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	 */
 	if (read_post)
 	{
-		ret = cherokee_post_read_header (&conn->post, conn);
+		ret = cherokee_post_read_header (&conn->post);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
@@ -2858,8 +2897,6 @@ cherokee_connection_print (cherokee_connection_t *conn)
 		print_add (" tcp_cork");
 	if (conn->options & conn_op_document_root)
 		print_add (" document_root");
-	if (conn->options & conn_op_was_polling)
-		print_add (" was_polling");
 	if (conn->options & conn_op_cant_encoder)
 		print_add (" cant_encoder");
 	if (conn->options & conn_op_got_eof)

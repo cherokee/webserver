@@ -1577,6 +1577,8 @@ $(common_rrd_tools) \
 \
 connection.h \
 connection-protected.h \
+connection-poll.h \
+connection-poll.c \
 connection.c \
 handler.h \
 handler.c \

@@ -231,14 +231,8 @@ cherokee_source_connect_polling (cherokee_source_t     *src,
 	case ret_deny:
 		break;
 	case ret_eagain:
-		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
-							   conn,
-							   SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE,
-							   false);
-		if (ret != ret_ok) {
-			return ret_deny;
-		}
+		conn->polling_aim.fd   = SOCKET_FD(socket);
+		conn->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
 	case ret_error:
 		return ret_error;

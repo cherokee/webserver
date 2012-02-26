@@ -87,7 +87,7 @@ _free (cherokee_fdpoll_select_t *fdp)
 
 
 static ret_t
-_add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
+_add (cherokee_fdpoll_select_t *fdp, int fd, int rw_mode)
 {
 	cherokee_fdpoll_t *nfd = FDPOLL(fdp);
 
@@ -99,15 +99,12 @@ _add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 	}
 
 	fdp->select_fds[nfd->npollfds] = fd;
-	switch (rw) {
-	case FDPOLL_MODE_READ:
+
+	if (rw_mode & poll_mode_read) {
 		FD_SET (fd, &fdp->master_rfdset);
-		break;
-	case FDPOLL_MODE_WRITE:
+	}
+	if (rw_mode & poll_mode_write) {
 		FD_SET (fd, &fdp->master_wfdset);
-		break;
-	default:
-		break;
 	}
 
 	if (fd > fdp->maxfd) {
@@ -115,7 +112,7 @@ _add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 	}
 
 	fdp->select_fdidx[fd] = nfd->npollfds;
-	fdp->fd_rw[fd]        = rw;
+	fdp->fd_rw[fd]        = rw_mode;
 	nfd->npollfds++;
 
 	return ret_ok;
@@ -165,15 +162,20 @@ _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 
 
 static int
-_check (cherokee_fdpoll_select_t *fdp, int fd, int rw)
+_check (cherokee_fdpoll_select_t *fdp, int fd, int rw_mode)
 {
-	UNUSED(rw);
+	UNUSED(rw_mode);
 
-	switch (fdp->fd_rw[fd]) {
-		case FDPOLL_MODE_READ:
-			return FD_ISSET (fd, &fdp->working_rfdset);
-		case FDPOLL_MODE_WRITE:
-			return FD_ISSET (fd, &fdp->working_wfdset);
+	if ((fdp->fd_rw[fd] & poll_mode_read) &&
+	    (FD_ISSET (fd, &fdp->working_rfdset)))
+	{
+		return 1;
+	}
+
+	if ((fdp->fd_rw[fd] & poll_mode_write) &&
+	    FD_ISSET (fd, &fdp->working_wfdset))
+	{
+		return 1;
 	}
 
 	return 0;

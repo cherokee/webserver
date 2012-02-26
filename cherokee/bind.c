@@ -171,33 +171,12 @@ set_socket_opts (int socket)
 	if (ret != ret_ok)
 		return ret;
 
-	/* TCP_MAXSEG:
-	 * The maximum size of a TCP segment is based on the network MTU for des-
-	 * tinations on local networks or on a default MTU of 576 bytes for desti-
-	 * nations on nonlocal networks.  The default behavior can be altered by
-	 * setting the TCP_MAXSEG option to an integer value from 1 to 65,535.
-	 * However, TCP will not use a maximum segment size smaller than 32 or
-	 * larger than the local network MTU.  Setting the TCP_MAXSEG option to a
-	 * value of zero results in default behavior.  The TCP_MAXSEG option can
-	 * only be set prior to calling listen or connect on the socket.  For pas-
-	 * sive connections, the TCP_MAXSEG option value is inherited from the
-	 * listening socket. This option takes an int value, with a range of 0 to
-	 * 65535.
-	 */
-#ifdef TCP_MAXSEG
-	on = 64000;
-	setsockopt (socket, SOL_SOCKET, TCP_MAXSEG, &on, sizeof(on));
-
-	/* Do no check the returned value */
-#endif
-
 	/* TCP_DEFER_ACCEPT:
 	 * Allows a listener to be awakened only when data arrives on the socket.
 	 * Takes an integer value (seconds), this can bound the maximum number of
-	 * attempts TCP will make to complete the connection. This option should
-	 * not be used in code intended to be portable.
+	 * attempts TCP will make to complete the connection.
 	 *
-	 * Give clients 5s to send first data packet
+	 * Gives clients 5secs to send the first data packet
 	 */
 #ifdef TCP_DEFER_ACCEPT
 	on = 5;

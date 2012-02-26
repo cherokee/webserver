@@ -68,6 +68,7 @@
 #include "bind.h"
 #include "bogotime.h"
 #include "config_entry.h"
+#include "connection-poll.h"
 
 typedef enum {
 	phase_nothing,
@@ -89,10 +90,9 @@ typedef enum {
 #define conn_op_root_index        (1 << 1)
 #define conn_op_tcp_cork          (1 << 2)
 #define conn_op_document_root     (1 << 3)
-#define conn_op_was_polling       (1 << 4)
-#define conn_op_cant_encoder      (1 << 5)
-#define conn_op_got_eof           (1 << 6)
-#define conn_op_chunked_formatted (1 << 7)
+#define conn_op_cant_encoder      (1 << 4)
+#define conn_op_got_eof           (1 << 5)
+#define conn_op_chunked_formatted (1 << 6)
 
 typedef cuint_t cherokee_connection_options_t;
 
@@ -192,9 +192,7 @@ struct cherokee_connection {
 
 	/* Polling
 	 */
-	int                           polling_fd;
-	cherokee_socket_status_t      polling_mode;
-	cherokee_boolean_t            polling_multiple;
+	cherokee_connection_pool_t    polling_aim;
 
 	off_t                         range_start;
 	off_t                         range_end;
@@ -254,7 +252,7 @@ struct cherokee_connection {
  */
 ret_t cherokee_connection_new                    (cherokee_connection_t **conn);
 ret_t cherokee_connection_free                   (cherokee_connection_t  *conn);
-ret_t cherokee_connection_clean                  (cherokee_connection_t  *conn);
+ret_t cherokee_connection_clean                  (cherokee_connection_t  *conn, cherokee_boolean_t reuse);
 ret_t cherokee_connection_clean_close            (cherokee_connection_t  *conn);
 
 /* Close

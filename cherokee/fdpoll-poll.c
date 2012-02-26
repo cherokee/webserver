@@ -32,7 +32,6 @@
 #define POLL_READ   (POLLIN  | POLL_ERROR)
 #define POLL_WRITE  (POLLOUT | POLL_ERROR)
 
-
 /***********************************************************************/
 /* poll()                                                              */
 /*                                                                     */
@@ -68,9 +67,10 @@ _free (cherokee_fdpoll_poll_t *fdp)
 
 
 static ret_t
-_add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
+_add (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 {
-	cherokee_fdpoll_t *nfd = FDPOLL(fdp);
+	short              events;
+	cherokee_fdpoll_t *nfd     = FDPOLL(fdp);
 
 	/* Check the fd limit
 	 */
@@ -79,20 +79,19 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 		return ret_error;
 	}
 
+	/* Translate mode */
+	events = 0;
+	if (rw_mode & poll_mode_read) {
+		events |= POLLIN;
+	}
+	if (rw_mode & poll_mode_write) {
+		events |= POLLOUT;
+	}
+
+	/* Set values */
+	fdp->pollfds[nfd->npollfds].events  = events;
 	fdp->pollfds[nfd->npollfds].fd      = fd;
 	fdp->pollfds[nfd->npollfds].revents = 0;
-
-	switch (rw) {
-	case FDPOLL_MODE_READ:
-		fdp->pollfds[nfd->npollfds].events = POLLIN;
-		break;
-	case FDPOLL_MODE_WRITE:
-		fdp->pollfds[nfd->npollfds].events = POLLOUT;
-		break;
-	default:
-		SHOULDNT_HAPPEN;
-		return ret_error;
-	}
 
 	fdp->fdidx[fd] = nfd->npollfds;
 	nfd->npollfds++;
@@ -102,9 +101,18 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 
 
 static ret_t
-_set_mode (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
+_set_mode (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 {
-	fdp->pollfds[fdp->fdidx[fd]].events = (rw == FDPOLL_MODE_WRITE ? POLLOUT : POLLIN);
+	short events = 0;
+
+	if (rw_mode & poll_mode_read) {
+		events |= POLLIN;
+	}
+	if (rw_mode & poll_mode_write) {
+		events |= POLLOUT;
+	}
+
+	fdp->pollfds[fdp->fdidx[fd]].events = events;
 	return ret_ok;
 }
 
@@ -150,25 +158,30 @@ _del (cherokee_fdpoll_poll_t *fdp, int fd)
 
 
 static int
-_check (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
+_check (cherokee_fdpoll_poll_t *fdp, int fd, int rw_mode)
 {
 	int revents;
-	int idx = fdp->fdidx[fd];
+	int idx      = fdp->fdidx[fd];
 
 	if (idx < 0 || idx >= FDPOLL(fdp)->nfiles)
 		return -1;
 
 	revents = fdp->pollfds[idx].revents;
 
-	switch (rw) {
-		case FDPOLL_MODE_READ:
-			return revents & POLL_READ;
-		case FDPOLL_MODE_WRITE:
-			return revents & POLL_WRITE;
-		default:
-			SHOULDNT_HAPPEN;
-			return -1;
+	/* Actual result */
+	if ((rw_mode & poll_mode_read) && (revents & POLLIN)) {
+		return 1;
 	}
+	if ((rw_mode & poll_mode_write) && (revents & POLLOUT)) {
+		return 1;
+	}
+
+	/* Error */
+	if (revents & (POLLERR|POLLHUP|POLLNVAL)) {
+		return 1;
+	}
+
+	return 0;
 }
 
 
@@ -187,11 +200,28 @@ _reset (cherokee_fdpoll_poll_t *fdp, int fd)
 static int
 _watch (cherokee_fdpoll_poll_t *fdp, int timeout_msecs)
 {
+	int re;
+
 	if (unlikely (FDPOLL(fdp)->npollfds < 0)) {
 		SHOULDNT_HAPPEN;
 	}
 
-	return poll (fdp->pollfds, FDPOLL(fdp)->npollfds, timeout_msecs);
+	re = poll (fdp->pollfds, FDPOLL(fdp)->npollfds, timeout_msecs);
+
+#if 0
+	{
+		int                i;
+		cherokee_fdpoll_t *nfd = FDPOLL(fdp);
+
+		printf ("total=%d = ", nfd->npollfds);
+		for (i=0; i < nfd->npollfds; i++) {
+			printf ("fd=%d[%d,%d], ", fdp->pollfds[i].fd, fdp->pollfds[i].events, fdp->pollfds[i].revents);
+		}
+		printf ("\n");
+	}
+#endif
+
+	return re;
 }
 
 
