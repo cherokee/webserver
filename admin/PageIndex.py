@@ -52,7 +52,7 @@ from configured import *
 LINK_OCTALITY   = 'http://www.octality.com/'
 LINK_SUPPORT    = 'http://www.octality.com/engineering.html'
 OWS_PROUD       = 'http://www.octality.com/api/v%s/open/proud/' %(OWS_API_VERSION)
-PROUD_USERS_WEB = "http://www.cherokee-project.com/cherokee-domain-list.html"
+PROUD_USERS_WEB = "http://www.cherokee-project.com/community.html"
 
 # Links
 LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
