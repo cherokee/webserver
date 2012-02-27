@@ -114,7 +114,7 @@ cherokee_socket_init (cherokee_socket_t *socket)
 	socket->client_addr_len = -1;
 
 	socket->socket  = -1;
-	socket->closed  = true;
+	socket->status  = socket_closed;
 	socket->is_tls  = non_TLS;
 	socket->cryptor = NULL;
 
@@ -149,7 +149,7 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 	/* Properties
 	 */
 	socket->socket = -1;
-	socket->closed = true;
+	socket->status = socket_closed;
 
 	/* Client address
 	 */
@@ -210,7 +210,7 @@ cherokee_socket_close (cherokee_socket_t *socket)
 	       socket->socket, socket->is_tls, (int) ret);
 
 	socket->socket = -1;
-	socket->closed = true;
+	socket->status = socket_closed;
 	socket->is_tls = non_TLS;
 
 	return ret;
@@ -358,9 +358,9 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 
 	/* Status is no more closed.
 	 */
-	socket->closed = false;
-	SOCKET_FD(socket) = fd;
+	socket->status = socket_reading;
 
+	SOCKET_FD(socket) = fd;
 	return ret_ok;
 }
 
@@ -698,7 +698,7 @@ cherokee_socket_write (cherokee_socket_t *socket,
 #ifdef ENOTCONN
 		case ENOTCONN:
 #endif
-			socket->closed = true;
+			socket->status = socket_closed;
 		case ETIMEDOUT:
 		case EHOSTUNREACH:
 			return ret_error;
@@ -718,7 +718,7 @@ cherokee_socket_write (cherokee_socket_t *socket,
 		case ret_eagain:
 			return ret;
 		case ret_eof:
-			socket->closed = true;
+			socket->status = socket_closed;
 			return ret_eof;
 		default:
 			RET_UNKNOWN(ret);
@@ -750,7 +750,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 	 */
 	return_if_fail (buf != NULL && buf_size > 0, ret_error);
 
-	if (unlikely (socket->closed)) {
+	if (unlikely (socket->status == socket_closed)) {
 		TRACE(ENTRIES, "Reading a closed socket: fd=%d (TLS=%d)\n", SOCKET_FD(socket), (socket->is_tls == TLS));
 		return ret_eof;
 	}
@@ -768,7 +768,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 		}
 
 		if (len == 0) {
-			socket->closed = true;
+			socket->status = socket_closed;
 			return ret_eof;
 		}
 
@@ -791,7 +791,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 		case ENOTCONN:
 #endif
 		case ECONNRESET:
-			socket->closed = true;
+			socket->status = socket_closed;
 		case ETIMEDOUT:
 		case EHOSTUNREACH:
 			return ret_error;
@@ -810,7 +810,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 		case ret_eagain:
 			return ret;
 		case ret_eof:
-			socket->closed = true;
+			socket->status = socket_closed;
 			return ret_eof;
 		default:
 			RET_UNKNOWN(ret);
@@ -819,6 +819,25 @@ cherokee_socket_read (cherokee_socket_t *socket,
 	}
 
 	return ret_error;
+}
+
+
+int
+cherokee_socket_pending_read (cherokee_socket_t *socket)
+{
+	if (socket->is_tls != TLS)
+		return 0;
+
+	if (unlikely ((socket->status != socket_reading) &&
+		      (socket->status != socket_writing)))
+		return 0;
+
+	if (socket->cryptor != NULL) {
+		return cherokee_cryptor_socket_pending (socket->cryptor);
+	}
+
+	SHOULDNT_HAPPEN;
+	return 0;
 }
 
 
@@ -980,7 +999,7 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 			case ENOTCONN:
 #endif
 			case ECONNRESET:
-				socket->closed = true;
+				socket->status = socket_closed;
 			case ETIMEDOUT:
 			case EHOSTUNREACH:
 				return ret_error;
@@ -1430,14 +1449,13 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		switch (err) {
 		case EISCONN:
 			break;
-		case ENOENT:               /* No such file or directory */
-		case ECONNRESET:           /* Connection reset by peer */
-		case ECONNREFUSED:         /* Connection refused */
-		case ETIMEDOUT:            /* Operation timed out */
+		case EINVAL:
+		case ENOENT:
+		case ECONNRESET:
+		case ECONNREFUSED:
+		case EADDRNOTAVAIL:
 			return ret_deny;
-		case EINVAL:               /* Invalid argument */
-		case EHOSTUNREACH:         /* No route to host */
-		case EADDRNOTAVAIL:        /* Can't assign requested address */
+		case ETIMEDOUT:
 			return ret_error;
 		case EAGAIN:
 		case EALREADY:
@@ -1454,7 +1472,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 
 	TRACE (ENTRIES",connect", "succeed. fd=%d\n", SOCKET_FD(sock));
 
-	sock->closed = false;
+	sock->status = socket_reading;
 	return ret_ok;
 }
 
@@ -1475,6 +1493,14 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket,
 		return ret;
 
 	socket->is_tls = TLS;
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_socket_set_status (cherokee_socket_t *socket, cherokee_socket_status_t status)
+{
+	socket->status = status;
 	return ret_ok;
 }
 

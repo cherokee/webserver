@@ -186,7 +186,7 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 
 	/* Does it has active connections?
 	 */
-	if (cherokee_list_empty (&thread->active_list))
+	if (thread->active_list_num <= 0)
 		return ret_not_found;
 
 	/* If it tries to adquire the thread ownership of the thread

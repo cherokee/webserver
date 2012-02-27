@@ -80,7 +80,7 @@ _free (cherokee_fdpoll_epoll_t *fdp)
 
 
 static ret_t
-_add (cherokee_fdpoll_epoll_t *fdp, int fd, int mode_rw)
+_add (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 {
 	struct epoll_event ev;
 
@@ -94,20 +94,16 @@ _add (cherokee_fdpoll_epoll_t *fdp, int fd, int mode_rw)
 	/* Add the new descriptor
 	 */
 	ev.data.u64 = 0;
-	ev.data.fd  = fd;
-	ev.events   = 0;
-
-	/* Set mode
-	 */
-	if (mode_rw & poll_mode_read) {
-		ev.events |= (EPOLLIN | EPOLLERR | EPOLLHUP);
-	}
-
-	if (mode_rw & poll_mode_write) {
-		ev.events |= (EPOLLOUT | EPOLLERR | EPOLLHUP);
-	}
-
-	if (unlikely (ev.events == 0)) {
+	ev.data.fd = fd;
+	switch (rw) {
+	case FDPOLL_MODE_READ:
+		ev.events = EPOLLIN | EPOLLERR | EPOLLHUP;
+		break;
+	case FDPOLL_MODE_WRITE:
+		ev.events = EPOLLOUT | EPOLLERR | EPOLLHUP;
+		break;
+	default:
+		ev.events = 0;
 		SHOULDNT_HAPPEN;
 		return ret_error;
 	}
@@ -128,6 +124,10 @@ _del (cherokee_fdpoll_epoll_t *fdp, int fd)
 {
 	struct epoll_event ev;
 
+	ev.events   = 0;
+	ev.data.u64 = 0;  /* <- I just wanna be sure there aren't */
+	ev.data.fd  = fd; /* <- 4 bytes uninitialized */
+
 	/* Check the fd limit
 	 */
 	if (unlikely (cherokee_fdpoll_is_empty (FDPOLL(fdp)))) {
@@ -147,7 +147,7 @@ _del (cherokee_fdpoll_epoll_t *fdp, int fd)
 
 
 static int
-_check (cherokee_fdpoll_epoll_t *fdp, int fd, int rw_mode)
+_check (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 {
 	int      fdidx;
 	uint32_t events;
@@ -181,19 +181,14 @@ _check (cherokee_fdpoll_epoll_t *fdp, int fd, int rw_mode)
 	 */
 	events = fdp->ep_events[fdidx].events;
 
-	if ((rw_mode & poll_mode_read) && (events & EPOLLIN)) {
-		return 1;
+	switch (rw) {
+	case FDPOLL_MODE_READ:
+		return events & (EPOLLIN  | EPOLLERR | EPOLLHUP);
+	case FDPOLL_MODE_WRITE:
+		return events & (EPOLLOUT | EPOLLERR | EPOLLHUP);
+	default:
+		return -1;
 	}
-
-	if ((rw_mode & poll_mode_write) && (events & EPOLLOUT)) {
-		return 1;
-	}
-
-	if (events & (EPOLLERR | EPOLLHUP)) {
-		return 1;
-	}
-
-	return -1;
 }
 
 
@@ -212,36 +207,30 @@ _reset (cherokee_fdpoll_epoll_t *fdp, int fd)
 
 
 static ret_t
-_set_mode (cherokee_fdpoll_epoll_t *fdp, int fd, int rw_mode)
+_set_mode (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 {
 	struct epoll_event ev;
 
 	ev.data.u64 = 0;
 	ev.data.fd  = fd;
-	ev.events   = 0;
 
-	/* Set mode
-	 */
-	if (rw_mode & poll_mode_read) {
-		ev.events |= (EPOLLIN | EPOLLERR | EPOLLHUP);
-	}
-
-	if (rw_mode & poll_mode_write) {
-		ev.events |= (EPOLLOUT | EPOLLERR | EPOLLHUP);
-	}
-
-	if (unlikely (ev.events == 0)) {
+	switch (rw) {
+	case FDPOLL_MODE_READ:
+		ev.events = EPOLLIN;
+		break;
+	case FDPOLL_MODE_WRITE:
+		ev.events = EPOLLOUT;
+		break;
+	default:
+		ev.events = 0;
 		return ret_error;
 	}
 
-	/* Apply it
-	 */
-	if (epoll_ctl (fdp->ep_fd, EPOLL_CTL_MOD, fd, &ev) < 0) {
+	if (epoll_ctl(fdp->ep_fd, EPOLL_CTL_MOD, fd, &ev) < 0) {
 		LOG_ERRNO (errno, cherokee_err_error,
 			   CHEROKEE_ERROR_FDPOLL_EPOLL_CTL_MOD, fdp->ep_fd, fd);
 		return ret_error;
 	}
-
 	return ret_ok;
 }
 

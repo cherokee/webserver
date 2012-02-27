@@ -164,14 +164,18 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	ret_t                    ret;
 	size_t                   read = 0;
 	cherokee_handler_fcgi_t *fcgi = HDL_FCGI(cgi);
-	cherokee_connection_t   *conn = HANDLER_CONN(cgi);
 
 	ret = cherokee_socket_bufread (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
 
 	switch (ret) {
 	case ret_eagain:
-		conn->polling_aim.fd   = fcgi->socket.socket;
-		conn->polling_aim.mode = poll_mode_read;
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), HANDLER_CONN(cgi),
+							   fcgi->socket.socket, FDPOLL_MODE_READ,
+							   false);
+		if (unlikely (ret != ret_ok)) {
+			cgi->got_eof = true;
+			return ret_error;
+		}
 		return ret_eagain;
 
 	case ret_ok:
@@ -569,10 +573,6 @@ do_send (cherokee_handler_fcgi_t *hdl,
 	case ret_eagain:
 		if (written > 0)
 			break;
-
-		conn->polling_aim.fd   = hdl->socket.socket;
-		conn->polling_aim.mode = poll_mode_write;
-
 		return ret_eagain;
 	default:
 		conn->error_code = http_bad_gateway;
@@ -648,10 +648,15 @@ send_post (cherokee_handler_fcgi_t *hdl,
 					cherokee_connection_update_timeout (conn);
 				}
 
+				/* Block on back-end write
+				 */
+				if (buf->len > 0) {
+					return ret_deny;
+				}
                                 break;
                         case ret_eagain:
-				/* conn->polling_aim set */
-				return ret_eagain;
+				/* EAGAIN on write */
+				return ret_deny;
                         case ret_eof:
                         case ret_error:
                                 return ret_error;
@@ -664,7 +669,11 @@ send_post (cherokee_handler_fcgi_t *hdl,
 		/* Next iteration
 		 */
 		if (! cherokee_buffer_is_empty (buf)) {
-			return ret_eagain;
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							     HANDLER_CONN(hdl),
+							     hdl->socket.socket,
+							     FDPOLL_MODE_WRITE, false);
+			return ret_deny;
 		}
 
 		if (! cherokee_post_read_finished (&conn->post)) {
