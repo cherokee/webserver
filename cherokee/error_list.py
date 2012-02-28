@@ -904,10 +904,6 @@ e('SOCKET_RM_CORK',
 
 # cherokee/thread.c
 #
-e('THREAD_RM_FD_POLL',
-  title = "Could not remove fd(%d) from fdpoll",
-  desc  = CODING_BUG)
-
 e('THREAD_HANDLER_RET',
   title = "Unknown ret %d from handler %s",
   desc  = CODING_BUG)

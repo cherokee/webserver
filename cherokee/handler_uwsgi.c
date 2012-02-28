@@ -167,15 +167,14 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base,
 	ret_t                     ret;
 	size_t                    read  = 0;
 	cherokee_handler_uwsgi_t *uwsgi = HDL_UWSGI(cgi_base);
+	cherokee_connection_t    *conn  = HANDLER_CONN(cgi_base);
 
 	ret = cherokee_socket_bufread (&uwsgi->socket, buffer, 4096, &read);
 
 	switch (ret) {
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base),
-						     HANDLER_CONN(cgi_base),
-						     uwsgi->socket.socket,
-						     FDPOLL_MODE_READ, false);
+		conn->polling_aim.fd   = uwsgi->socket.socket;
+		conn->polling_aim.mode = poll_mode_read;
 		return ret_eagain;
 
 	case ret_ok:
@@ -426,10 +425,9 @@ ret_t
 cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 {
 	ret_t                           ret;
-	cherokee_connection_t          *conn     = HANDLER_CONN(hdl);
-	cherokee_socket_status_t        blocking = socket_closed;
-	cherokee_handler_uwsgi_props_t *props    = HANDLER_UWSGI_PROPS(hdl);
-	cherokee_boolean_t              did_IO   = false;
+	cherokee_connection_t          *conn   = HANDLER_CONN(hdl);
+	cherokee_handler_uwsgi_props_t *props  = HANDLER_UWSGI_PROPS(hdl);
+	cherokee_boolean_t              did_IO = false;
 
 	/* Should it send the post?
 	 */
@@ -440,7 +438,7 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 	/* Send it
 	 */
 	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
-					    &hdl->socket, NULL, &blocking, &did_IO);
+					    &hdl->socket, NULL, &did_IO);
 
 	if (did_IO) {
 		cherokee_connection_update_timeout (conn);
@@ -451,19 +449,8 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 		break;
 
 	case ret_eagain:
-		if (blocking == socket_writing) {
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							     conn, hdl->socket.socket,
-							     FDPOLL_MODE_WRITE, false);
-			return ret_deny;
-		}
-
-		/* ret_eagain - Block on read
-		 * ret_deny   - Block on back-end write
+		/* cherokee_post_send_to_socket() filled out conn->polling_aim
 		 */
-		if (cherokee_post_has_buffered_info (&conn->post)) {
-			return ret_deny;
-		}
 		return ret_eagain;
 
 	default:

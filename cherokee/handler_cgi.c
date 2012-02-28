@@ -81,6 +81,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 	ret_t                   ret;
  	size_t                  read_ = 0;
 	cherokee_handler_cgi_t *cgi   = HDL_CGI(cgi_base);
+	cherokee_connection_t  *conn  = HANDLER_CONN(cgi);
 
 	/* Sanity check: pipe() accessed
 	 */
@@ -95,9 +96,8 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 
 	switch (ret) {
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
-						     HANDLER_CONN(cgi), cgi->pipeInput,
-						     FDPOLL_MODE_READ, false);
+		conn->polling_aim.fd   = cgi->pipeInput;
+		conn->polling_aim.mode = poll_mode_read;
 		return ret_eagain;
 
 	case ret_ok:
@@ -432,17 +432,16 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 ret_t
 cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 {
-	ret_t                     ret;
-	cherokee_connection_t    *conn     = HANDLER_CONN(cgi);
-	cherokee_socket_status_t  blocking = socket_closed;
-	cherokee_boolean_t        did_IO   = false;
+	ret_t                  ret;
+	cherokee_connection_t *conn   = HANDLER_CONN(cgi);
+	cherokee_boolean_t     did_IO = false;
 
 	if (! conn->post.has_info) {
 		return ret_ok;
 	}
 
 	ret = cherokee_post_send_to_fd (&conn->post, &conn->socket,
-					cgi->pipeOutput, NULL, &blocking, &did_IO);
+					cgi->pipeOutput, NULL, &did_IO);
 
 	if (did_IO) {
 		cherokee_connection_update_timeout (conn);
@@ -452,19 +451,9 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 	case ret_ok:
 		break;
 	case ret_eagain:
-		if (blocking == socket_writing) {
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
-							     conn, cgi->pipeOutput,
-							     FDPOLL_MODE_WRITE, false);
-			return ret_deny;
-		}
-
-		/* ret_eagain - Block on read
-		 * ret_deny   - Block on back-end write
+		/* conn->polling_aim.{fd,mode} was previously set by
+		 * cherokee_post_send_to_fd()
 		 */
-		if (cherokee_post_has_buffered_info (&conn->post)) {
-			return ret_deny;
-		}
 		return ret_eagain;
 
 	default:

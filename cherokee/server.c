@@ -649,7 +649,7 @@ initialize_server_threads (cherokee_server_t *srv)
 		list_for_each (j, &srv->listeners) {
 			ret = cherokee_fdpoll_add (srv->main_thread->fdpoll,
 						   S_SOCKET_FD(BIND(j)->socket),
-						   FDPOLL_MODE_READ);
+						   poll_mode_read);
 			if (ret < ret_ok)
 				return ret;
 		}
@@ -1827,21 +1827,25 @@ cherokee_server_get_conns_num (cherokee_server_t *srv, cuint_t *num)
 ret_t
 cherokee_server_get_active_conns (cherokee_server_t *srv, cuint_t *num)
 {
+	size_t           len;
 	cuint_t          active = 0;
 	cherokee_list_t *thread;
 
 	/* Active connections number
 	 */
 	list_for_each (thread, &srv->thread_list) {
-		active += THREAD(thread)->active_list_num;
+		len = 0;
+		cherokee_list_get_len (&THREAD(thread)->active_list, &len);
+		active += len;
 	}
 
-	active += srv->main_thread->active_list_num;
+	len = 0;
+	cherokee_list_get_len (&srv->main_thread->active_list, &len);
+	active += len;
 
 	/* Return out parameters
 	 */
 	*num = active;
-
 	return ret_ok;
 }
 

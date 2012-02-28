@@ -36,8 +36,10 @@
  */
 
 ret_t
-cherokee_post_init (cherokee_post_t *post)
+cherokee_post_init (cherokee_post_t *post, void *conn)
 {
+	post->conn               = conn;
+
 	post->len                = 0;
 	post->has_info           = false;
 	post->encoding           = post_enc_regular;
@@ -184,7 +186,7 @@ reply_100_continue (cherokee_post_t       *post,
 	TRACE(ENTRIES, "Sent partial '100 Continue' response: %d bytes\n", written);
 	cherokee_buffer_move_to_begin (&post->read_header_100cont, written);
 
-	return ret_eagain;
+	return ret_ok;
 }
 
 
@@ -237,13 +239,12 @@ remove_surplus (cherokee_post_t       *post,
 
 
 ret_t
-cherokee_post_read_header (cherokee_post_t *post,
-			   void            *cnt)
+cherokee_post_read_header (cherokee_post_t *post)
 {
 	ret_t                  ret;
 	char                  *info     = NULL;
 	cuint_t                info_len = 0;
-	cherokee_connection_t *conn     = CONN(cnt);
+	cherokee_connection_t *conn     = CONN(post->conn);
 
 	switch (post->read_header_phase) {
 	case cherokee_post_read_header_init:
@@ -393,8 +394,9 @@ do_read_plain (cherokee_post_t   *post,
 	       cherokee_buffer_t *buffer,
 	       off_t              to_read)
 {
-	ret_t  ret;
-	size_t len;
+	ret_t                  ret;
+	size_t                 len;
+	cherokee_connection_t *conn = CONN(post->conn);
 
 	/* Surplus from header read
 	 */
@@ -418,12 +420,22 @@ do_read_plain (cherokee_post_t   *post,
 	ret = cherokee_socket_bufread (sock_in, buffer, to_read, &len);
 	TRACE (ENTRIES, "Post read from client: ret=%d len=%d\n", ret, len);
 
-	if (ret != ret_ok) {
+	switch (ret) {
+	case ret_ok:
+		post->send.read += len;
+		return ret_ok;
+
+	case ret_eagain:
+		conn->polling_aim.fd   = sock_in->socket;
+		conn->polling_aim.mode = poll_mode_read;
+		return ret_eagain;
+
+	default:
 		return ret;
 	}
 
-	post->send.read += len;
-	return ret_ok;
+	SHOULDNT_HAPPEN;
+	return ret_error;
 }
 
 
@@ -441,6 +453,7 @@ do_read_chunked (cherokee_post_t   *post,
 	case ret_ok:
 		break;
 	case ret_eagain:
+		/* conn->polling_aim is set */
 		return ret_eagain;
 	default:
 		RET_UNKNOWN(ret);
@@ -496,25 +509,30 @@ cherokee_post_read_finished (cherokee_post_t *post)
 
 
 static ret_t
-do_send_socket (cherokee_socket_t        *sock,
-		cherokee_buffer_t        *buffer,
-		cherokee_socket_status_t *blocking)
+do_send_socket (cherokee_post_t   *post,
+		cherokee_socket_t *sock,
+		cherokee_buffer_t *buffer)
 {
-	ret_t  ret;
-	size_t written = 0;
+	ret_t                  ret;
+	size_t                 written = 0;
+	cherokee_connection_t *conn    = CONN(post->conn);
 
 	ret = cherokee_socket_bufwrite (sock, buffer, &written);
 	switch (ret) {
 	case ret_ok:
 		break;
+
 	case ret_eagain:
 		if (written > 0) {
 			break;
 		}
 
 		TRACE (ENTRIES, "Post write: EAGAIN, wrote nothing of %d\n", buffer->len);
-		*blocking = socket_writing;
+
+		conn->polling_aim.fd   = sock->socket;
+		conn->polling_aim.mode = poll_mode_write;
 		return ret_eagain;
+
 	default:
 		return ret_error;
 	}
@@ -538,12 +556,11 @@ cherokee_post_has_buffered_info (cherokee_post_t *post)
 
 
 ret_t
-cherokee_post_send_to_socket (cherokee_post_t          *post,
-			      cherokee_socket_t        *sock_in,
-			      cherokee_socket_t        *sock_out,
-			      cherokee_buffer_t        *tmp,
-			      cherokee_socket_status_t *blocking,
-			      cherokee_boolean_t       *did_IO)
+cherokee_post_send_to_socket (cherokee_post_t    *post,
+			      cherokee_socket_t  *sock_in,
+			      cherokee_socket_t  *sock_out,
+			      cherokee_buffer_t  *tmp,
+			      cherokee_boolean_t *did_IO)
 {
 	ret_t              ret;
 	cherokee_buffer_t *buffer = tmp ? tmp : &post->send.buffer;
@@ -559,7 +576,6 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 		case ret_ok:
 			break;
 		case ret_eagain:
-			*blocking = socket_reading;
 			return ret_eagain;
 		default:
 			return ret;
@@ -578,7 +594,7 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 		TRACE (ENTRIES, "Post send, phase: write. Buffered: %d bytes\n", buffer->len);
 
 		if (! cherokee_buffer_is_empty (buffer)) {
-			ret = do_send_socket (sock_out, buffer, blocking);
+			ret = do_send_socket (post, sock_out, buffer);
 			switch (ret) {
                         case ret_ok:
                                 break;
@@ -620,16 +636,16 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 
 
 ret_t
-cherokee_post_send_to_fd (cherokee_post_t          *post,
-			  cherokee_socket_t        *sock_in,
-			  int                       fd_out,
-			  cherokee_buffer_t        *tmp,
-			  cherokee_socket_status_t *blocking,
-			  cherokee_boolean_t       *did_IO)
+cherokee_post_send_to_fd (cherokee_post_t    *post,
+			  cherokee_socket_t  *sock_in,
+			  int                 fd_out,
+			  cherokee_buffer_t  *tmp,
+			  cherokee_boolean_t *did_IO)
 {
-	ret_t              ret;
-	int                r;
-	cherokee_buffer_t *buffer = tmp ? tmp : &post->send.buffer;
+	ret_t                  ret;
+	int                    r;
+	cherokee_connection_t *conn   = CONN(post->conn);
+	cherokee_buffer_t     *buffer = tmp ? tmp : &post->send.buffer;
 
 
 	switch (post->send.phase) {
@@ -643,7 +659,6 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 		case ret_ok:
 			break;
 		case ret_eagain:
-			*blocking = socket_reading;
 			return ret_eagain;
 		default:
 			return ret;
@@ -665,7 +680,8 @@ cherokee_post_send_to_fd (cherokee_post_t          *post,
 			r = write (fd_out, buffer->buf, buffer->len);
 			if (r < 0) {
 				if (errno == EAGAIN) {
-					*blocking = socket_writing;
+					conn->polling_aim.fd   = fd_out;
+					conn->polling_aim.mode = poll_mode_write;
 					return ret_eagain;
 				}
 
