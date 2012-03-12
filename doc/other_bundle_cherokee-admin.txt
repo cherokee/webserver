@@ -82,7 +82,7 @@ path:
 
 ----
 cherokee-admin -b -p 9091 -C /etc/cherokee/cherokee2.conf \
-                 -d /path/to/svn/trunk/cherokee-admin/
+                 -d /path/to/git_master/cherokee-admin/
 ----
 
 This is the full information provided by the manpage.
