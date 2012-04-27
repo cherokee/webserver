@@ -28,6 +28,7 @@ import types
 import errno
 import threading
 import traceback
+import urlparse
 
 import pyscgi
 import Cookie
@@ -121,8 +122,10 @@ class ServerHandler (pyscgi.SCGIHandler):
         my_thread.scgi_conn   = self
         my_thread.request_url = url
 
+        base_path = urlparse.urlsplit(url).path
+
         for published in server._web_paths:
-            if re.match (published._regex, url):
+            if re.match (published._regex, base_path):
                 # POST
                 if published._method == 'POST':
                     post = self._process_post()
