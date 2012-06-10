@@ -927,6 +927,7 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 static int
 _socket_pending (cherokee_cryptor_socket_libssl_t *cryp)
 {
+	SSL_read(cryp->session, NULL, 0);
 	return (SSL_pending (cryp->session) > 0);
 }
 
