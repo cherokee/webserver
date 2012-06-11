@@ -16,8 +16,9 @@ at github.com/cherokee/webserver.git.
 To download the Git repository you will need a special piece of
 software called a Git client.
 
-[[checkout]]
-Checking out the sources
+
+[[clone]]
+Clonning the sourcess
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 To check out the sources for the first time from the repository, use this command:
@@ -33,7 +34,7 @@ Updating the sources
 To update your sources every day, you use this command:
 
 ----
-git pull
+git pull -u
 ----
 
 
@@ -41,12 +42,12 @@ git pull
 Compiling and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Once you have downloaded the latest Git revision, you will need to
+Once you have downloaded the latest GIT head, you will need to
 follow the installation instructions for your specific platform.
 
-Note that some of the files present in the tarball are not present in the
-Git repository. Most noticeably, the file `./configure` that will be needed 
-for the installation process.
+Note that some of the files present in the tarball are not present in
+GIT. Most noticeably, the file `./configure` that will be needed for the
+installation process.
 
 To generate the missing files simply run this command:
 

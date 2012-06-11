@@ -29,17 +29,17 @@ wget http://www.cherokee-project.com/cherokee-latest-tarball -O -| tar zxvf -
 ------------------------------------------------------------------------------
 
 Finally, if you are a developer or simply want to test out the bleeding edge
-version, you can access our Github repository. Be advised, this is the
+version, you can access our Git repository. Be advised, this is the
 development branch, so use it at your own risk!
 
-To download simply use your Git client:
+To download simply use:
 
 ---------------------------------------------------------------------------
-git clone git://github.com/cherokee/webserver.git cherokee
+git clone https://github.com/cherokee/webserver.git
 ---------------------------------------------------------------------------
 
-You can also download a ZIP or tar package with the latest contents by visiting:
+You can also download a package with the latest GIT contents:
 
 ---------------------------------------------------------------------------
-https://github.com/cherokee/webserver/downloads
+wget https://github.com/cherokee/webserver/zipball/dev
 ---------------------------------------------------------------------------

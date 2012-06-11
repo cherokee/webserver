@@ -162,8 +162,8 @@ please take a look at the
 link:http://powerman.name/doc/asciidoc[AsciiDoc Cheatsheet] and start
 editing the documentation sources right ahead. They are distributed
 with the source code and are located under `./doc` of the source tree.
-If you don't have Git access, simply mail your contributions to
-link:mailto:feedback@cherokee-project.com[feedback@cherokee-project.com].
+If you don't have GIT access, simply mail your contributions to
+link:mailto:feedback@cherokee-project.com[feedback@cherokee-project.com] or create fork on github and request pull.
 
 [[faq14]]
 === Can encoders be set for specific file types?
