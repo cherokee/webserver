@@ -11,14 +11,14 @@ environming for Cherokee.
 
 The relevant documents would be those about
 link:basics_requirements.html[software requirements],
-link:basics_download.html[downloading the SVN repository], and the
+link:basics_download.html[downloading the Git repository], and the
 link:basics_installation_unix.html[quickstart installation notes].
 
 In principle, provided you have the required tools in your system, it
 should be as easy as:
 
 ----
-    svn co svn://svn.cherokee-project.com/cherokee/trunk ~/cherokee_dev
+    git clone git://github.com/cherokee/webserver.git ~/cherokee_dev
     cd ~/cherokee_dev
     ./autogen.sh --enable-beta --enable-trace
     make

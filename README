@@ -52,9 +52,9 @@ Building from a tar.gz file
 
 Building from the repository
 ----------------------------
-  Check out the code from SVN, following the instructions at:
+  Check out the code from Github, using e.g.
 
-    http://svn.cherokee-project.com/
+    git clone http://github.com/cherokee/webserver.git
 
   cd into the source directory and run ./autogen.sh to setup the
   environment (you need the standard autoconf tools to do so).
