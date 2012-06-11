@@ -40,6 +40,9 @@ Check out the last development version of Cherokee:
 
 ----
 $ git clone git://github.com/cherokee/webserver.git cherokee
+$ cd cherokee
+$ git submodule init
+$ git submodule update
 ----
 
 and execute a quite long "configure" command:

@@ -20,6 +20,8 @@ should be as easy as:
 ----
     git clone git://github.com/cherokee/webserver.git ~/cherokee_dev
     cd ~/cherokee_dev
+    git submodule init
+    git submodule update
     ./autogen.sh --enable-beta --enable-trace
     make
 ----
