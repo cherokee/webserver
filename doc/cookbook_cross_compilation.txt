@@ -36,10 +36,10 @@ AR=i586-mingw32msvc-ar
 RC=i586-mingw32msvc-windres
 ----
 
-Check out the last version of Cherokee trunk:
+Check out the last development version of Cherokee:
 
 ----
-$ svn co svn://svn.cherokee-project.com/cherokee/trunk cherokee
+$ git clone git://github.com/cherokee/webserver.git cherokee
 ----
 
 and execute a quite long "configure" command:
