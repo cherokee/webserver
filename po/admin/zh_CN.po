@@ -1538,7 +1538,7 @@ msgstr "压缩等级"
 
 #: cherokee-trunk/admin/plugins/request.py:27
 msgid "Regular expression against which the request will be executed."
-msgstr ""
+msgstr "正则表达式和将要执行的请求冲突"
 
 #: cherokee-trunk/admin/plugins/htpasswd.py:32
 msgid "Full path to the Htpasswd formated password file."
@@ -1725,29 +1725,29 @@ msgstr ""
 
 #: cherokee-trunk/admin/plugins/target_ip.py:32
 msgid "At least one IP or Subnet entry must be defined."
-msgstr ""
+msgstr "至少定义一个IP或者子网入口"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:61
 msgid "IP or Subnet"
-msgstr ""
+msgstr "IP或者子网"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:76
 msgid "New IP/Subnet"
-msgstr ""
+msgstr "新的IP/子网"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:79
 #: cherokee-trunk/admin/plugins/wildcard.py:70
 msgid "Add new entry"
-msgstr ""
+msgstr "添加新的入口"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:88
 #, fuzzy
 msgid "Add new IP/Subnet…"
-msgstr "新的IP地址和子网"
+msgstr "添加新的IP地址和子网"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:100
 msgid "Accepted Server IP Addresses and Subnets"
-msgstr ""
+msgstr "可接受的服务器IP地址和子网"
 
 #: cherokee-trunk/admin/plugins/scgi.py:51
 msgid "SCGI Specific"
