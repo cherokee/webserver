@@ -1479,6 +1479,17 @@ process_active_connections (cherokee_thread_t *thd)
 
 	} /* list */
 
+	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
+		conn = CONN(i);
+
+		/* Check whether we have data sitting in SSL buffers that needs
+		* to be processed before we wait for file descriptors. */
+		if (conn->socket.cryptor &&
+		   cherokee_cryptor_socket_pending(conn->socket.cryptor)) {
+			thd->pending_read_num++;
+		}
+	} /* list */
+
 	return ret_ok;
 }
 

@@ -574,6 +574,8 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 		return ret_error;
 	}
 
+	cryp->is_pending = false;
+
 #ifndef OPENSSL_NO_TLSEXT
 	SSL_set_app_data (cryp->session, conn);
 #else
@@ -882,11 +884,22 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 
 	CLEAR_LIBSSL_ERRORS;
 
-	len = SSL_read (cryp->session, buf, buf_size);
-	if (likely (len > 0)) {
-		*pcnt_read = len;
-		if (SSL_pending (cryp->session))
-			return ret_eagain;
+	*pcnt_read = 0;
+
+	while (buf_size > 0) {
+		len = SSL_read (cryp->session, buf, buf_size);
+		if (len < 1)
+			break;
+		*pcnt_read += len;
+		buf += len;
+		buf_size -= len;
+	}
+
+    /* We have more data than buffer space. Mark the socket as
+	 * having pending data. */
+    cryp->is_pending = (buf_size == 0);
+
+	if (*pcnt_read > 0) {
 		return ret_ok;
 	}
 
@@ -927,8 +940,7 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 static int
 _socket_pending (cherokee_cryptor_socket_libssl_t *cryp)
 {
-	SSL_read(cryp->session, NULL, 0);
-	return (SSL_pending (cryp->session) > 0);
+	return cryp->is_pending;
 }
 
 static ret_t

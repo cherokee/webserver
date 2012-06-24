@@ -80,6 +80,7 @@ typedef struct {
 	cherokee_cryptor_socket_t  base;
 	SSL                       *session;
 	SSL_CTX                   *ssl_ctx;
+	cherokee_boolean_t         is_pending;
 	struct {
 		char              *buf;
 		off_t              buf_len;
