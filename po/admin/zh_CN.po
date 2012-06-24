@@ -9,7 +9,7 @@ msgstr ""
 "POT-Creation-Date: 2011-03-28 15:00+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
-"Language-Team: ownlinux.cn\n"
+"Language-Team: ownlinux.org\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -543,7 +543,7 @@ msgstr "如果这个错误再次发生，请务必提交这个信息."
 
 #: cherokee-trunk/admin/PageIndex.py:99
 msgid "Enable Remote Services"
-msgstr ""
+msgstr "开启远程服务"
 
 #: cherokee-trunk/admin/PageIndex.py:103
 #: cherokee-trunk/admin/market/Maintenance.py:281
@@ -582,13 +582,13 @@ msgstr "配置文件"
 #: cherokee-trunk/admin/plugins/server_info.py:32
 #: cherokee-trunk/admin/plugins/server_info.py:35
 msgid "Server Information"
-msgstr ""
+msgstr "服务器信息"
 
 #: cherokee-trunk/admin/PageIndex.py:212
 #: cherokee-trunk/admin/market/PageApp.py:125
 #: cherokee-trunk/admin/OWS_Login.py:116
 msgid "Sign in"
-msgstr ""
+msgstr "登录"
 
 #: cherokee-trunk/admin/PageIndex.py:225
 #, fuzzy
@@ -602,11 +602,11 @@ msgstr "后端服务器"
 
 #: cherokee-trunk/admin/PageIndex.py:247
 msgid "Processors"
-msgstr ""
+msgstr "处理器"
 
 #: cherokee-trunk/admin/PageIndex.py:259
 msgid "Memory"
-msgstr ""
+msgstr "内存"
 
 #: cherokee-trunk/admin/PageIndex.py:288
 #: cherokee-trunk/admin/plugins/custom_error.py:41
@@ -669,7 +669,7 @@ msgstr "持续：stat"
 
 #: cherokee-trunk/admin/PageIndex.py:395
 msgid "Subscribe to mailing lists"
-msgstr ""
+msgstr "订阅邮件列表"
 
 #: cherokee-trunk/admin/PageIndex.py:403
 #, fuzzy
@@ -688,27 +688,27 @@ msgstr "Cherokee用户"
 
 #: cherokee-trunk/admin/PageIndex.py:424
 msgid "Join the Cherokee Community:"
-msgstr ""
+msgstr "加入Cherokee社区"
 
 #: cherokee-trunk/admin/PageIndex.py:427
 msgid "Visit the Cherokee Project Website"
-msgstr ""
+msgstr "访问Cherokee项目网站"
 
 #: cherokee-trunk/admin/PageIndex.py:428
 msgid "Follow us on Twitter"
-msgstr ""
+msgstr "关注我们的Twitter"
 
 #: cherokee-trunk/admin/PageIndex.py:429
 msgid "Join us on Facebook"
-msgstr ""
+msgstr "在Facebook加入我们"
 
 #: cherokee-trunk/admin/PageIndex.py:430
 msgid "Become a member of Cherokee group on LinkedIn"
-msgstr ""
+msgstr "成为Cherokee在LinkedIn上的小组成员"
 
 #: cherokee-trunk/admin/PageIndex.py:431
 msgid "Chat with us at irc.freenode.net"
-msgstr ""
+msgstr "在irc.freenode.net上同我们交谈"
 
 #: cherokee-trunk/admin/PageIndex.py:440
 #, fuzzy
@@ -717,11 +717,11 @@ msgstr "欢迎进入Cherokee管理中心"
 
 #: cherokee-trunk/admin/PageIndex.py:442
 msgid "Shut down"
-msgstr ""
+msgstr "关闭"
 
 #: cherokee-trunk/admin/PageIndex.py:443
 msgid "You are about to shut down this instance of Cherokee-admin"
-msgstr ""
+msgstr "你将要关闭Cherokee-admin实例"
 
 #: cherokee-trunk/admin/PageIndex.py:444
 #, fuzzy
@@ -730,7 +730,7 @@ msgstr "您真的想要删除它吗？"
 
 #: cherokee-trunk/admin/PageIndex.py:447
 msgid "Cherokee-admin has been shut down"
-msgstr ""
+msgstr "Cherokee-admin已经被关闭"
 
 #: cherokee-trunk/admin/PageIndex.py:449
 #, fuzzy
@@ -763,7 +763,7 @@ msgstr "法语"
 
 #: cherokee-trunk/admin/consts.py:30 packages/redmine/tools.py:39
 msgid "Italian"
-msgstr ""
+msgstr "意大利语"
 
 #: cherokee-trunk/admin/consts.py:31 packages/redmine/tools.py:45
 msgid "Dutch"
@@ -787,11 +787,11 @@ msgstr "简体中文"
 
 #: cherokee-trunk/admin/consts.py:36 packages/redmine/tools.py:23
 msgid "Catalan"
-msgstr ""
+msgstr "加泰罗尼亚语"
 
 #: cherokee-trunk/admin/consts.py:37 packages/redmine/tools.py:34
 msgid "Galician"
-msgstr ""
+msgstr "加里西亚语"
 
 #: cherokee-trunk/admin/consts.py:41 cherokee-trunk/admin/consts.py:127
 #: cherokee-trunk/admin/consts.py:260 cherokee-trunk/admin/Rule.py:174
@@ -1358,7 +1358,7 @@ msgstr "创建"
 #: cherokee-trunk/admin/CTK/CTK/Config.py:237
 #, python-format
 msgid "ERROR: Couldn't unpack '%s'"
-msgstr ""
+msgstr "错误: 不能解压 '%s'"
 
 #: cherokee-trunk/admin/CTK/CTK/Config.py:370
 #, fuzzy
@@ -1367,15 +1367,15 @@ msgstr "手动配置"
 
 #: cherokee-trunk/admin/CTK/CTK/AjaxUpload.py:106
 msgid "Upload"
-msgstr ""
+msgstr "上传"
 
 #: cherokee-trunk/admin/CTK/CTK/Carousel.py:66
 msgid "left"
-msgstr ""
+msgstr "左"
 
 #: cherokee-trunk/admin/CTK/CTK/Carousel.py:67
 msgid "right"
-msgstr ""
+msgstr "右"
 
 #: cherokee-trunk/admin/CTK/CTK/Paginator.py:63
 #, fuzzy
@@ -1529,16 +1529,16 @@ msgstr "GZip 压缩"
 msgid ""
 "Compression Level from 0 to 9, where 0 is no compression, 1 best speed, and "
 "9 best compression."
-msgstr ""
+msgstr "压缩等级从0到9，其中0是不压缩，1是最快速，9是最高压缩率。"
 
 #: cherokee-trunk/admin/plugins/gzip.py:38
 #: cherokee-trunk/admin/plugins/deflate.py:38
 msgid "Compression Level"
-msgstr ""
+msgstr "压缩等级"
 
 #: cherokee-trunk/admin/plugins/request.py:27
 msgid "Regular expression against which the request will be executed."
-msgstr ""
+msgstr "正则表达式和将要执行的请求冲突"
 
 #: cherokee-trunk/admin/plugins/htpasswd.py:32
 msgid "Full path to the Htpasswd formated password file."
@@ -1725,29 +1725,29 @@ msgstr ""
 
 #: cherokee-trunk/admin/plugins/target_ip.py:32
 msgid "At least one IP or Subnet entry must be defined."
-msgstr ""
+msgstr "至少定义一个IP或者子网入口"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:61
 msgid "IP or Subnet"
-msgstr ""
+msgstr "IP或者子网"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:76
 msgid "New IP/Subnet"
-msgstr ""
+msgstr "新的IP/子网"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:79
 #: cherokee-trunk/admin/plugins/wildcard.py:70
 msgid "Add new entry"
-msgstr ""
+msgstr "添加新的入口"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:88
 #, fuzzy
 msgid "Add new IP/Subnet…"
-msgstr "新的IP地址和子网"
+msgstr "添加新的IP地址和子网"
 
 #: cherokee-trunk/admin/plugins/target_ip.py:100
 msgid "Accepted Server IP Addresses and Subnets"
-msgstr ""
+msgstr "可接受的服务器IP地址和子网"
 
 #: cherokee-trunk/admin/plugins/scgi.py:51
 msgid "SCGI Specific"
