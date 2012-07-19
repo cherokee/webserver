@@ -78,6 +78,7 @@ update_connection (cherokee_connection_t   *conn,
 	if (! NULLI_IS_NULL(ret_config->timeout_lapse)) {
 		conn->timeout_lapse  = ret_config->timeout_lapse;
 		conn->timeout_header = ret_config->timeout_header;
+		cherokee_connection_update_timeout (conn);
 	}
 }
 

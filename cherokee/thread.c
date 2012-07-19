@@ -814,6 +814,8 @@ process_active_connections (cherokee_thread_t *thd)
 				/* Set mode and update timeout
 				 */
 				conn_set_mode (thd, conn, socket_reading);
+
+				conn->timeout_lapse  = srv->timeout;
 				cherokee_connection_update_timeout (conn);
 
 				conn->phase = phase_reading_header;
