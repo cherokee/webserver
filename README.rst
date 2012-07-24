@@ -33,13 +33,16 @@ or, if using a version of Git < 1.6.5, run::
     git submodule update --init
 
 Once cloned, ``cd`` into the resulting source directory and run 
-``./autogen.sh`` to set up the environment (and generate ``./configure``
-and so forth)::
+``./autogen.sh`` to set up the environment and generate ``./configure``::
 
     cd webserver
     ./autogen.sh [options]
     make
     make install
+
+``./autogen.sh`` will accept any optional parameters otherwise typically passed
+to ``./configure``; in doing so you can avoid needing to run ``./configure``
+separately.
 
 Several examples of using ``./autogen.sh`` follow shortly in the
 `Frequently Asked Questions (FAQ)`_ section.
