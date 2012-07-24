@@ -178,9 +178,9 @@ Development
 How to cross compile the Win32 version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-From Linux: http://alobbs.com/news/1201
-From MacOS: http://alobbs.com/news/1299
-From Win32: http://unixwars.com/2008/07/17/c/
+* From Linux: http://alobbs.com/news/1201
+* From MacOS: http://alobbs.com/news/1299
+* From Win32: http://unixwars.com/2008/07/17/c/
 
 How to create a self signed certificate for TLS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
