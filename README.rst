@@ -91,13 +91,14 @@ at:
 The main mailing list, where questions should be sent and general
 discussion takes place, is:
 
-    http://lists.octality.com/listinfo/cherokee
+    http://lists.cherokee-project.com/listinfo/cherokee
 
 There are also a few technical mailing lists. Developers and package
 maintainers should subscribe to these mailing lists as well as the main mailing
 list:
 
     http://lists.cherokee-project.com/listinfo/cherokee-dev
+
     http://lists.cherokee-project.com/listinfo/cherokee-commits
 
 The mailing lists' archives are available at:
