@@ -32,13 +32,23 @@ Finally, if you are a developer or simply want to test out the bleeding edge
 version, you can access our Git repository. Be advised, this is the
 development branch, so use it at your own risk!
 
-To download simply use:
+To take a copy of our source code repository, simply use:
+
+---------------------------------------------------------------------------
+git clone --recursive https://github.com/cherokee/webserver.git
+---------------------------------------------------------------------------
+
+This will also retrieve the relevant Git submodules we use for this project.
+If you are using a version of Git that is earlier than version 1.6.5, then
+you will need to use the following commands:
 
 ---------------------------------------------------------------------------
 git clone https://github.com/cherokee/webserver.git
+cd webserver
+git submodule update --init
 ---------------------------------------------------------------------------
 
-You can also download a package with the latest GIT contents:
+You can also download a package with the latest contents of the Git repository:
 
 ---------------------------------------------------------------------------
 wget https://github.com/cherokee/webserver/zipball/dev
