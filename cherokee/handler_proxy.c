@@ -815,12 +815,10 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 		if (hdl->pconn->post.do_buf_sent) {
 			if (hdl->pconn->post.sent >= buffer->len) {
-				hdl->got_all = true;
 				return ret_ok;
 			}
 		} else {
 			if (cherokee_buffer_is_empty (buffer)) {
-				hdl->got_all = true;
 				return ret_ok;
 			}
 		}
