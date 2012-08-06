@@ -39,10 +39,9 @@ RC=i586-mingw32msvc-windres
 Check out the last development version of Cherokee:
 
 ----
-$ git clone git://github.com/cherokee/webserver.git cherokee
+$ git clone --recursive git://github.com/cherokee/webserver.git cherokee
 $ cd cherokee
-$ git submodule init
-$ git submodule update
+$ git submodule update --init #Not needed on Git >= 1.6.5
 ----
 
 and execute a quite long "configure" command:

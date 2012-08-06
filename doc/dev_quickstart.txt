@@ -18,10 +18,9 @@ In principle, provided you have the required tools in your system, it
 should be as easy as:
 
 ----
-    git clone git://github.com/cherokee/webserver.git ~/cherokee
+    git clone --recursive git://github.com/cherokee/webserver.git ~/cherokee
     cd ~/cherokee_dev
-    git submodule init
-    git submodule update
+    git submodule update --init #not needed on Git >= 1.6.5
     ./autogen.sh --enable-beta --enable-trace
     make
 ----
