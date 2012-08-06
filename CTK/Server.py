@@ -122,7 +122,9 @@ class ServerHandler (pyscgi.SCGIHandler):
         my_thread.scgi_conn   = self
         my_thread.request_url = url
 
-        base_path = urlparse.urlsplit(url).path
+        base_path = urlparse.urlsplit(url).path        
+        if len(base_path) > 1 and base_path[-1] == '/':
+            base_path = base_path[:-1]  # remove trailing '/' if it exists
 
         for published in server._web_paths:
             if re.match (published._regex, base_path):
