@@ -505,7 +505,7 @@ class Render:
 CTK.publish (r'^/$',       Render)
 CTK.publish (r'^/launch$', Launch)
 CTK.publish (r'^/stop$',   Stop)
-CTK.publish (r'^/halt$',   Halt)
+CTK.publish (r'^/halt',   Halt)
 CTK.publish (r'^/lang/apply',             Lang_Apply,           method="POST")
 CTK.publish (r'^/proud/apply',            ProudUsers_Apply,     method="POST")
 CTK.publish (r'^%s'%(SUBSCRIBE_APPLY),    Subscribe_Apply,      method="POST")
