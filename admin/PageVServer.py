@@ -686,7 +686,7 @@ class SecutiryWidgetContent (CTK.Container):
 
         if int(CTK.cfg.get_val('%s!hsts' %(pre), "0")):
             table.Add (_('HSTS Max-Age'),       CTK.TextCfg ('%s!hsts!max_age'%(pre), True, {'optional_string':_("One year")}), _(NOTE_HSTS_MAXAGE))
-            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
+            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!hsts!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
 
         submit = CTK.Submitter (url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())
