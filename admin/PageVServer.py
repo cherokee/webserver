@@ -75,7 +75,7 @@ NOTE_INDEX_USAGE      = N_('Remember that only "File Exists" rules and "List & S
 NOTE_MATCH_NICK       = N_('Use this nickname as an additional host name for this virtual server (Default: yes)')
 NOTE_HSTS             = N_('Enforce HTTPS by using the HTTP Strict Transport Security.')
 NOTE_HSTS_MAXAGE      = N_("How long the client's browser should remember the forced HTTPS (in seconds).")
-NOTE_HSTS_SUBDOMAINS  = N_("Should HSTS be used in all the subdomains of this virtual verser (Default: yes).")
+NOTE_HSTS_SUBDOMAINS  = N_("Should HSTS be used in all the subdomains of this virtual server (Default: yes).")
 
 DEFAULT_HOST_NOTE     = N_("<p>The 'default' virtual server matches all the domain names.</p>")
 
