@@ -516,7 +516,7 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 
 	/* No POST?
 	 */
-	if ((! http_method_with_input (conn->header.method)) || (! conn->post.has_info)) {
+	if ((! http_method_with_input (conn->header.method)) || (! conn->post.has_info) || (! conn->post.len)) {
 		TRACE (ENTRIES",post", "Post: %s\n", "has no post");
 		add_empty_packet (hdl, FCGI_STDIN);
 	}
