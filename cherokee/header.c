@@ -321,6 +321,8 @@ parse_method (cherokee_header_t *hdr, char *line, char *end, char **pointer)
 		else
 		detect_method (line, "PURGE", purge)
 		else
+		detect_method (line, "PATCH", patch)
+		else
 		detect_method (line, "POLL", poll)
 		else
 		detect_method (line, "PROPFIND", propfind)
@@ -385,10 +387,10 @@ parse_method (cherokee_header_t *hdr, char *line, char *end, char **pointer)
 		detect_method (line, "REPORT", report)
 	        break;
 	case 'V':
-		detect_method (line, "VERSION_CONTROL", version_control)
+		detect_method (line, "VERSION-CONTROL", version_control)
 	        break;
 	case 'B':
-		detect_method (line, "BASELINE_CONTROL", baseline_control)
+		detect_method (line, "BASELINE-CONTROL", baseline_control)
 		break;
 	case 'I':
 		detect_method (line, "INVALID", invalid)

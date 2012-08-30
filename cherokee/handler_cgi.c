@@ -367,7 +367,7 @@ add_environment (cherokee_handler_cgi_t *cgi,
 
 	/* CONTENT_LENGTH
 	 */
-	if (http_method_with_input (conn->header.method)) {
+	if (conn->post.has_info) {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add_ullong10 (tmp, conn->post.len);
 		set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);

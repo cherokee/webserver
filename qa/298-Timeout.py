@@ -71,7 +71,7 @@ class Test (TestCollection):
         # Instant return and 1 second less than timeout should work,
         # but past the timeout should return no content.
         for dir, timeout in ((DIR, SERVER_TIMEOUT), (DIR_RULE, RULE_TIMEOUT)):
-            for script_runtime in (0, timeout-1, timeout+1):
+            for script_runtime in (0, timeout-2, timeout+2):
                 # Write the new script files
                 filename = 'test-%i-seconds.cgi' % script_runtime
                 code = CGI_CODE % dict(runtime=script_runtime, content=CONTENT)
