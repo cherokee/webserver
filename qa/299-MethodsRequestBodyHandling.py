@@ -1,7 +1,11 @@
+import os
 from base import *
 
-DIR = "299-MethodsRequestBodyHandling"
+DIR = "/299-MethodsRequestBodyHandling/"
 MAGIC = "Report bugs to http://bugs.cherokee-project.com"
+PORT   = get_free_port()
+PYTHON = look_for_python()
+SOURCE = get_next_source()
 
 METHODS = {
     'required': [
@@ -35,10 +39,34 @@ METHODS = {
 }
 
 CONF = """
-vserver!1!rule!1280!match = directory
-vserver!1!rule!1280!match!directory = /%s
-vserver!1!rule!1280!handler = common
-""" % (DIR)
+vserver!1!rule!2990!match = directory
+vserver!1!rule!2990!match!directory = %(DIR)s
+vserver!1!rule!2990!handler = fcgi
+vserver!1!rule!2990!handler!check_file = 0
+vserver!1!rule!2990!handler!balancer = round_robin
+vserver!1!rule!2990!handler!balancer!source!1 = %(SOURCE)d
+
+source!%(SOURCE)d!type = interpreter
+source!%(SOURCE)d!host = localhost:%(PORT)d
+source!%(SOURCE)d!interpreter = %(PYTHON)s %(fcgi_file)s
+"""
+
+SCRIPT = """
+from fcgi import *
+
+def app (environ, start_response):
+    start_response('200 OK', [("Content-Type", "text/plain")])
+    
+    response = "Method: %%s\\n" %% environ['REQUEST_METHOD']
+    if 'CONTENT_LENGTH' in environ:
+        request_body_size = int(environ.get('CONTENT_LENGTH', 0))
+        request_body = environ['wsgi.input'].read(request_body_size)
+        response += "Body: %%s\\n" %% request_body
+
+    return [response]
+
+WSGIServer(app, bindAddress=("localhost",%d)).run()
+""" % (PORT)
 
 
 class TestEntry (TestBase):
@@ -48,7 +76,7 @@ class TestEntry (TestBase):
 
     def __init__ (self, method, send_input, input_required):
         TestBase.__init__ (self, __file__)
-        self.request = "%s /%s/ HTTP/1.0\r\n" % (method, DIR) +\
+        self.request = "%s %s HTTP/1.0\r\n" % (method, DIR) +\
                        "Content-type: text/xml\r\n"
         self.expected_content = []
         
@@ -70,24 +98,18 @@ class Test (TestCollection):
 
     def __init__ (self):
         TestCollection.__init__ (self, __file__)
-
         self.name = "Method Request Body Handling"
-        self.conf = CONF
-        self.proxy_suitable = True
 
     def Prepare (self, www):
-        d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, "test_index.php", 0444,
-                            """
-<?php echo 'Method: '.$_SERVER['REQUEST_METHOD']; ?>
+        fcgi_file = self.WriteFile (www, "fcgi_test_methods.cgi", 0444, SCRIPT)
+        
+        fcgi = os.path.join (www, 'fcgi.py')
+        if not os.path.exists (fcgi):
+            self.CopyFile ('fcgi.py', fcgi)
 
-<?php
-    $body = @file_get_contents('php://input');
-    if (strlen($body) > 0):
-        echo "Body: $body";
-    endif;
-?>
-                            """)
+        vars = globals()
+        vars['fcgi_file'] = fcgi_file
+        self.conf = CONF % (vars)
 
     def JustBefore (self, www):
         # Create sub-request objects
