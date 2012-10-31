@@ -8,6 +8,7 @@
    - link:basics_installation_unix.html[Unix]: Installation on Unix/Linux platforms.
    - link:basics_installation_osx.html[OSX]: Installation on Mac OSX platform.
    - link:basics_installation_windows.html[Windows]: Installation on Windows platform.
-   - link:basics_installation_git.html[From GIT]: Installation of the development release.
+   - link:basics_installation_freebsd.html[FreeBSD]: Installation on FreeBSD platforms.
+   - link:basics_installation_git.html[From GIT]: Installation of the development release.	
  . link:basics_upgrade.html[Upgrading Cherokee]: Upgrading from a previous release?
  . link:basics_running_cherokee.html[Running Cherokee]: Basic steps to run Cherokee.
