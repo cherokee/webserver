@@ -57,7 +57,6 @@ typedef struct {
  */
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
-	cherokee_list_t              server_list;
 	cherokee_balancer_t         *balancer;
 } cherokee_handler_fcgi_props_t;
 

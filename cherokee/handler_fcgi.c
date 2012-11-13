@@ -228,7 +228,6 @@ cherokee_handler_fcgi_configure (cherokee_config_node_t   *conf,
 		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n),
 							   MODULE_PROPS_FREE(props_free));
 
-		INIT_LIST_HEAD (&n->server_list);
 		n->balancer = NULL;
 
 		*_props = MODULE_PROPS(n);
