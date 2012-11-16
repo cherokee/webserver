@@ -1,0 +1,45 @@
+== link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
+////
+Last checked: 2010/04/26 Cherokee 0.99.46b
+////
+
+Installation on FreeBSD
+--------------------
+
+If you have a prepackaged version of Cherokee available in FreeBSD, 
+please use the provided installation mechanism of choice. 
+This will provide you with automatic bootup scripts, consistency and 
+dependency checks, and an easy upgrade path
+tailored to your system whenever a new package is available.
+
+If you do not find a prepackaged version that suits your needs, you
+can always download and compile your own.
+
+[[quickstart]]
+Quickstart
+~~~~~~~~~~
+
+. link:basics_download.html[Download] a fresh copy of Cherokee
+. Configure the package for your system:
++
+-----------------------------------------
+8.x,9.x
+As root:
+if using pkgng:
+pkg install cherokee
+if using ports:
+cd /usr/ports/www/cherokee && make install clean
+Read the pkg-message after install.
+-----------------------------------------
+
+[[autostart]]
+Autostart
+~~~~~~~~~
+
+If you need the cherokee webserver to start at boot
+
+-----------------------------------------
+echo 'cherokee_enable="YES"' >> /etc/rc.conf
+-----------------------------------------
+
+That's it.
