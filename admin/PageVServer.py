@@ -47,6 +47,7 @@ NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full pa
 NOTE_CA_LIST          = N_('File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
 NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: HIGH:!aNULL:!MD5).')
 NOTE_CIPHER_SERVER_PREFERENCE = N_('The cipher sequence that is specified by the server should have preference over the preference of the client. (Default: False).')
+NOTE_COMPRESSION      = N_('Explicitly enable or disable serverside compression support. (Default: True).')
 NOTE_CLIENT_CERTS     = N_('Skip, Accept or Require client certificates.')
 NOTE_VERIFY_DEPTH     = N_('Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)')
 NOTE_ERROR_HANDLER    = N_('Allows the selection of how to generate the error responses.')
@@ -668,6 +669,7 @@ class SecutiryWidgetContent (CTK.Container):
         table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
         table.Add (_('Server Preference'),     CTK.CheckCfgText ('%s!ssl_cipher_server_preference' % (pre), False, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
         table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
+        table.Add (_('Compression'),           CTK.CheckCfgText ('%s!ssl_compression' % (pre), False, _('Prefer')), _(NOTE_COMPRESSION))
 
         if CTK.cfg.get_val('%s!ssl_client_certs' %(pre)):
             table.Add (_('CA List'), CTK.TextCfg ('%s!ssl_ca_list_file' %(pre), False), _(NOTE_CA_LIST))

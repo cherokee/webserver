@@ -394,6 +394,16 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	}
 #endif
 
+#ifndef OPENSSL_NO_COMP
+	if (! vsrv->ssl_compression) {
+#ifdef SSL_OP_NO_COMPRESSION
+		options |= SSL_OP_NO_COMPRESSION;
+#elif OPENSSL_VERSION_NUMBER >= 0x00908000L
+		sk_SSL_COMP_zero(SSL_COMP_get_compression_methods());
+#endif
+	}
+#endif
+
 	SSL_CTX_set_options (n->context, options);
 
 	/* Set cipher list that vserver will accept.
