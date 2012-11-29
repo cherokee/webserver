@@ -388,6 +388,12 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		options |= SSL_OP_NO_SSLv2;
 	}
 
+#ifdef SSL_OP_CIPHER_SERVER_PREFERENCE
+	if (vsrv->cipher_server_preference) {
+		options |= SSL_OP_CIPHER_SERVER_PREFERENCE;
+	}
+#endif
+
 	SSL_CTX_set_options (n->context, options);
 
 	/* Set cipher list that vserver will accept.

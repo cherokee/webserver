@@ -69,6 +69,8 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->hsts.subdomains = true;
 	n->hsts.max_age    = 365 * 24 * 60 * 60;
 
+	n->cipher_server_preference = false;
+
 	/* Virtual entries
 	 */
 	ret = cherokee_rule_list_init (&n->rules);
@@ -1148,6 +1150,11 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
 		cherokee_buffer_clean      (&vserver->ciphers);
 		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "ssl_cipher_server_preference")) {
+		ret = cherokee_atob (conf->val.buf, &vserver->cipher_server_preference);
+		if (ret != ret_ok)
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "flcache") ||
 		   equal_buf_str (&conf->key, "collector")) {
