@@ -47,7 +47,7 @@ NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full pa
 NOTE_CA_LIST          = N_('File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
 NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: HIGH:!aNULL:!MD5).')
 NOTE_CIPHER_SERVER_PREFERENCE = N_('The cipher sequence that is specified by the server should have preference over the preference of the client. (Default: False).')
-NOTE_COMPRESSION      = N_('Explicitly enable or disable serverside compression support. (Default: True).')
+NOTE_COMPRESSION      = N_('Explicitly enable or disable serverside compression support. (Default: Disabled).')
 NOTE_CLIENT_CERTS     = N_('Skip, Accept or Require client certificates.')
 NOTE_VERIFY_DEPTH     = N_('Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)')
 NOTE_ERROR_HANDLER    = N_('Allows the selection of how to generate the error responses.')
