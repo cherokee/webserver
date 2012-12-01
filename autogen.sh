@@ -29,7 +29,8 @@ test -z "$AUTOMAKE" && AUTOMAKE=automake
 test -z "$ACLOCAL" && ACLOCAL=aclocal
 test -z "$AUTOCONF" && AUTOCONF=autoconf
 test -z "$AUTOHEADER" && AUTOHEADER=autoheader
-if [ -x /usr/bin/glibtool ]; then
+
+if hash glibtool 2>&-; then
  test -z "$LIBTOOL" && LIBTOOL=glibtool
  test -z "$LIBTOOLIZE" && LIBTOOLIZE=glibtoolize
 else
