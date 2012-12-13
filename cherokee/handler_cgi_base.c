@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright © 2001–2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -381,7 +381,7 @@ cherokee_handler_cgi_base_build_basic_env (
 	}
 
 	/* HTTP_HOST and SERVER_NAME. The difference between them is that
-	 * HTTP_HOST can include the �:PORT� text, and SERVER_NAME only
+	 * HTTP_HOST can include the «:PORT» text, and SERVER_NAME only
 	 * the name
 	 */
 	cherokee_header_copy_known (&conn->header, header_host, tmp);
