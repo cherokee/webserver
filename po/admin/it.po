@@ -1,6 +1,6 @@
 # Italian Translation for cherokee package
 # Traduzione Italiana per il pacchetto cherokee
-# Copyright (C) YEAR Alvaro Lopez Ortega
+# Copyright © 2001–2013 Alvaro Lopez Ortega
 # This file is distributed under the same license as the PACKAGE package.
 # Claudio Tancioni <c.tancioni@gmail.com>, 2010.
 #

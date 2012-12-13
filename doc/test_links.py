@@ -5,7 +5,7 @@
 # Authors:
 #      Taher Shihadeh <taher@unixwars.com>
 #
-# Copyright (C) 2001-2011 Alvaro Lopez Ortega
+# Copyright © 2001–2013 Alvaro Lopez Ortega
 # This file is distributed under the GPL2 license.
 
 import os
