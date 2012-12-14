@@ -1,5 +1,5 @@
 # Galician translations for cherokee package
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 # Xose M. <pikamoku@gmail.com>, 2010.
 #
 msgid ""
