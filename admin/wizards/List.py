@@ -135,7 +135,7 @@ LIST = [
              'type':  TYPE_RULE},
             {'name':  'icons',
              'title': N_('Directory-listing Icons'),
-             'descr': N_('Add the /icons and /cherokee_themes directories used for directory listing.'),
+             'descr': N_('Add the /cherokee_icons and /cherokee_themes directories used for directory listing.'),
              'type':  TYPE_RULE},
             {'name':  'static',
              'title': N_('Static-file support'),

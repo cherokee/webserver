@@ -1758,8 +1758,8 @@ msgid "Choose the listing theme."
 msgstr "选择主题"
 
 #: cherokee-trunk/admin/plugins/dirlist.py:35
-msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
-msgstr "图标文件目录,默认:<i>/icons</i>."
+msgid "Web directory where the icon files are located. Default: <i>/cherokee_icons</i>."
+msgstr "图标文件目录,默认:<i>/cherokee_icons</i>."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:36
 msgid "List of notice files to be inserted."
@@ -3909,7 +3909,7 @@ msgstr ""
 
 #: cherokee-trunk/admin/wizards/List.py:130
 msgid ""
-"Add the /icons and /cherokee_themes directories used for directory listing."
+"Add the /cherokee_icons and /cherokee_themes directories used for directory listing."
 msgstr ""
 
 #: cherokee-trunk/admin/wizards/List.py:133
@@ -4037,13 +4037,13 @@ msgstr ""
 
 #: cherokee-trunk/admin/wizards/icons.py:38
 msgid ""
-"This wizard adds the /icons and /cherokee_themes directories so Cherokee can "
+"This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can "
 "use icons when listing directories."
 msgstr ""
 
 #: cherokee-trunk/admin/wizards/icons.py:39
 msgid ""
-"The /icons and /cherokee_themes directories are already configured. There is "
+"The /cherokee_icons and /cherokee_themes directories are already configured. There is "
 "nothing left to do."
 msgstr ""
 

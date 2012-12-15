@@ -97,6 +97,19 @@ def upgrade_to_1_2_102 (cfg):
             rule_key = 'vserver!%s!rule!%s!match' % (v,r)
             rule_node = cfg[rule_key]
             update_rules_methods(cfg, rule_key, rule_node)
+            
+# Converts to 1.2.103
+def upgrade_to_1_2_103 (cfg):
+    # Replace the obsolete virtual path to /icons with /cherokee_icons:
+    # Search for rules where the value of key "document_root" ends with
+    # the string "share/cherokee/icons", and update the value of rule's
+    # key "match" to "/cherokee_icons".
+    for v in cfg.keys('vserver'):
+        for r in cfg.keys('vserver!%s!rule'%(v)):
+            if cfg.get_val('vserver!%s!rule!%s!document_root'%(v,r)) and \
+               cfg.get_val('vserver!%s!rule!%s!document_root'%(v,r)).endswith('share/cherokee/icons') and \
+               cfg.get_val('vserver!%s!rule!%s!match!directory'%(v,r)) == "/icons":
+                    cfg['vserver!%s!rule!%s!match!directory'%(v,r)] = '/cherokee_icons'
 
 def config_version_get_current():
     ver = configured.VERSION.split ('b')[0]
@@ -174,6 +187,10 @@ def config_version_update_cfg (cfg):
     # Update to.. 1.2.102
     if ver_config_i < 1002102:
         upgrade_to_1_2_102 (cfg)
+        
+    # Update to.. 1.2.103
+    if ver_config_i < 1002103:
+        upgrade_to_1_2_103 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True

@@ -32,7 +32,7 @@ URL_APPLY     = '/plugin/dirlist/apply'
 DEFAULT_THEME = "default"
 
 NOTE_THEME        = N_("Choose the listing theme.")
-NOTE_ICON_DIR     = N_("Web directory where the icon files are located. Default: <i>/icons</i>.")
+NOTE_ICON_DIR     = N_("Web directory where the icon files are located. Default: <i>/cherokee_icons</i>.")
 NOTE_NOTICE_FILES = N_("List of notice files to be inserted.")
 NOTE_HIDDEN_FILES = N_("List of files that should not be listed.")
 

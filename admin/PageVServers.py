@@ -89,7 +89,7 @@ def Commit():
         CTK.cfg['%s!rule!1!handler'         %(next)] = 'common'
 
         CTK.cfg['%s!rule!2!match'           %(next)] = 'directory'
-        CTK.cfg['%s!rule!2!match!directory' %(next)] = '/icons'
+        CTK.cfg['%s!rule!2!match!directory' %(next)] = '/cherokee_icons'
         CTK.cfg['%s!rule!2!handler'         %(next)] = 'file'
         CTK.cfg['%s!rule!2!document_root'   %(next)] = CHEROKEE_ICONSDIR
 
