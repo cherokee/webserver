@@ -201,12 +201,7 @@ class Render:
             for k in vservers:
                 # Document root widget
                 droot_str = CTK.cfg.get_val ('vserver!%s!document_root'%(k), '')
-
-                # Market install base scenario
-                if self.__is_market_installation (k, droot_str):
-                    droot_widget = CTK.Box ({'class': 'droot'}, CTK.RawHTML(_('Market installation')))
-                else:
-                    droot_widget = CTK.Box ({'class': 'droot'}, CTK.RawHTML(CTK.escape_html (droot_str)))
+                droot_widget = CTK.Box ({'class': 'droot'}, CTK.RawHTML(CTK.escape_html (droot_str)))
 
                 if k == vservers[-1]:
                     content = [entry('nick', 'vserver!%s!nick'%(k)), droot_widget]
@@ -246,24 +241,6 @@ class Render:
 
                     # List entry
                     panel.Add (k, '/vserver/content/%s'%(k), content, True, disclass)
-
-
-        def __is_market_installation (self, k, droot_str):
-            # Market install base scenario
-            if droot_str.startswith (CHEROKEE_OWS_ROOT):
-                return True
-
-            # Market install with no droot
-            elif droot_str == '/dev/null':
-                rules = CTK.cfg['vserver!%s!rule'%(k)].keys()
-                for rule_num in rules:
-                    src_num = CTK.cfg.get_val ('vserver!%s!rule!%s!handler!balancer!source!1' %(k,rule_num), '')
-                    src_int = CTK.cfg.get_val ('source!%s!interpreter'%(src_num), '')
-                    if CHEROKEE_OWS_ROOT in src_int:
-                        return True
-
-            return False
-
 
     class PanelButtons (CTK.Box):
         def __init__ (self):

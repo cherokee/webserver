@@ -59,7 +59,6 @@ VALIDATIONS = [
     ("server!tls!dh_param1024",       validations.is_local_file_exists),
     ("server!tls!dh_param2048",       validations.is_local_file_exists),
     ("server!tls!dh_param4096",       validations.is_local_file_exists),
-    ("admin!ows!repository",          validations.is_http_url),
 ]
 
 WARNING = N_("""<p><b>WARNING</b>: This section contains advanced
@@ -93,7 +92,6 @@ NOTE_DH2048       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 2048 
 NOTE_DH4096       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits.')
 NOTE_TLS_TIMEOUT  = N_('Timeout for the TLS/SSL handshake. Default: 15 seconds.')
 NOTE_TLS_SSLv2    = N_('Allow clients to use SSL version 2 - Beware: it is vulnerable. (Default: No)')
-NOTE_APPS_REPO    = N_('HTTP address of an anternative Cherokee applications repository.')
 
 
 HELPS = [('config_advanced', N_('Advanced'))]
@@ -185,17 +183,6 @@ class TLSWidget (CTK.Container):
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('TLS')))
         self += CTK.Indenter(table)
 
-class AppsWidget (CTK.Container):
-    def __init__ (self):
-        CTK.Container.__init__ (self)
-
-        table = CTK.PropsAuto(URL_APPLY)
-        table.Add (_('Repository Address'), CTK.TextCfg('admin!ows!repository', True, {'optional_string':_("Main repository")}), _(NOTE_APPS_REPO))
-
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Apps Center')))
-        self += CTK.Indenter(table)
-
-
 class Render:
     def __call__ (self):
         tabs = CTK.Tab()
@@ -204,7 +191,6 @@ class Render:
         tabs.Add (_('I/O cache'),     IOCacheWidget())
         tabs.Add (_('Special Files'), SpecialFilesWidget())
         tabs.Add (_('TLS'),           TLSWidget())
-        tabs.Add (_('Apps'),          AppsWidget())
 
         notice = CTK.Notice('warning')
         notice += CTK.RawHTML(_(WARNING))
