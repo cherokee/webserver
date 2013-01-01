@@ -3,7 +3,7 @@
 # Authors:
 #      Taher Shihadeh <taher@octality.com>
 #
-# Copyright (C) 2009-2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
