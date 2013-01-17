@@ -383,7 +383,7 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 	if (likely (secs > 0)) {
 		long tmp;
 
-		tmp = (avio_size(hdl->avformat) / secs);
+		tmp = (hdl->handler_file->info->st_size / secs);
 		if (tmp > rate) {
 			rate = tmp;
 			TRACE(ENTRIES, "New rate: %d bytes/s\n", rate);
