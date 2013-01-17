@@ -218,7 +218,7 @@ the server name and prepare a database accessible with the parameters
 detailed above (database name, user parameters and so on).
 
 --------------------------------------
-#!/usr/bin/env python
+#!/usr/bin/env python2
 import urllib
 
 sql="SELECT * FROM my_table;"
