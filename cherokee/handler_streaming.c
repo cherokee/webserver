@@ -110,10 +110,6 @@ cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 		cherokee_handler_file_free (hdl->handler_file);
 	}
 
-	if (hdl->avformat != NULL) {
-		av_close_input_file (hdl->avformat);
-	}
-
 	cherokee_buffer_mrproper (&hdl->local_file);
 	return ret_ok;
 }
@@ -386,6 +382,9 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 			TRACE(ENTRIES, "New rate: %d bytes/s\n", rate);
 		}
 	}
+
+	av_close_input_file (hdl->avformat);
+	hdl->avformat = NULL;
 
 	ret = set_rate (hdl, conn, rate);
 
