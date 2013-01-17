@@ -22,6 +22,10 @@ or, for Yum-based systems, such as RedHat, CentOS or Fedora::
 
     sudo yum install autoconf automake libtool
 
+or, for Pacman-based systems such as ArchLinux::
+
+    sudo pacman -Sy autoconf automake libtool
+
 To check out the code from GitHub, including all dependencies that are
 specified as Git submodules, do the following::
 
