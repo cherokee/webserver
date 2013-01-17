@@ -212,7 +212,7 @@ dnl Set the Version
 AM_INIT_AUTOMAKE(cherokee, $VERSION)
 AM_MAINTAINER_MODE
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 AC_SUBST(VERSION)
 
 dnl Initialize Libtool
