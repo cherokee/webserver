@@ -309,14 +309,14 @@ open_media_file (cherokee_handler_streaming_t *hdl)
 	/* Open the media stream
 	 */
 	TRACE(ENTRIES, "open_media_file %s\n", hdl->local_file.buf);
-	re = av_open_input_file (&hdl->avformat, hdl->local_file.buf, NULL, 0, NULL);
+	re = avformat_open_input (&hdl->avformat, hdl->local_file.buf, NULL, NULL);
 	if (re != 0) {
 		goto error;
 	}
 
 	/* Read the info
 	 */
-	re = av_find_stream_info (hdl->avformat);
+	re = avformat_find_stream_info (hdl->avformat, NULL);
 	if (re < 0) {
 		goto error;
 	}
@@ -325,7 +325,7 @@ open_media_file (cherokee_handler_streaming_t *hdl)
 error:
 	if (hdl->avformat != NULL) {
 		TRACE(ENTRIES, "close_file (error) %s\n", hdl->local_file.buf);
-		av_close_input_file (hdl->avformat);
+		avformat_close_input (&hdl->avformat);
 		hdl->avformat = NULL;
 	}
 
@@ -484,7 +484,7 @@ out:
 	 */
 	if (hdl->avformat != NULL) {
 		TRACE(ENTRIES, "close_file %s\n", hdl->local_file.buf);
-		av_close_input_file (hdl->avformat);
+		avformat_close_input (&hdl->avformat);
 	}
 
 	return ret_ok;
