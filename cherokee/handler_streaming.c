@@ -110,11 +110,6 @@ cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 		cherokee_handler_free ((void *) hdl->handler_file);
 	}
 
-	if (hdl->avformat != NULL) {
-		TRACE(ENTRIES, "close_file (free) %s\n", hdl->local_file.buf);
-		av_close_input_file (hdl->avformat);
-	}
-
 	cherokee_buffer_mrproper (&hdl->local_file);
 	return ret_ok;
 }
@@ -474,7 +469,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 
 		ret = seek_mp3 (hdl);
 		if (unlikely (ret != ret_ok)) {
-			return ret_error;
+			goto out;
 		}
 	}
 
@@ -482,6 +477,14 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	 */
 	if (props->auto_rate) {
 		set_auto_rate (hdl);
+	}
+
+out:
+	/* Close our ffmpeg handle, all information has been gathered
+	 */
+	if (hdl->avformat != NULL) {
+		TRACE(ENTRIES, "close_file %s\n", hdl->local_file.buf);
+		av_close_input_file (hdl->avformat);
 	}
 
 	return ret_ok;
