@@ -1,4 +1,4 @@
-ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --conf-file=$(top_srcdir)/doc/build/doc.conf
+ASCIIDOC=$(PYTHON) $(top_srcdir)/doc/build/asciidoc.py --conf-file=$(top_srcdir)/doc/build/doc.conf
 
 SUFFIXES = .txt .html
 
