@@ -71,10 +71,10 @@ errors.h \
 errors_defs.h
 
 errors.h: errors.py error_list.py
-	python errors.py --errors $@
+	$(PYTHON) errors.py --errors $@
 
 errors_defs.h: errors.py error_list.py
-	python errors.py --defines $@
+	$(PYTHON) errors.py --defines $@
 
 
 #
