@@ -107,7 +107,7 @@ ret_t
 cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 {
 	if (hdl->handler_file != NULL) {
-		cherokee_handler_file_free (hdl->handler_file);
+		cherokee_handler_free ((void *) hdl->handler_file);
 	}
 
 	if (hdl->avformat != NULL) {

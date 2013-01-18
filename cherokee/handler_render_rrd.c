@@ -556,7 +556,7 @@ handler_free (cherokee_handler_render_rrd_t *hdl)
 	cherokee_buffer_mrproper (&hdl->rrd_error);
 
 	if (hdl->file_hdl != NULL) {
-		cherokee_handler_file_free (hdl->file_hdl);
+		cherokee_handler_free ((void *) hdl->file_hdl);
 	}
 
 	return ret_ok;
