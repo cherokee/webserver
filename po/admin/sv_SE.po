@@ -1823,8 +1823,8 @@ msgid "Choose the listing theme."
 msgstr "Välj tema för listor."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:35
-msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
-msgstr "Webkatalog där ikonerna finns.  Förvalt värde: <i>/icons</i>."
+msgid "Web directory where the icon files are located. Default: <i>/cherokee_icons</i>."
+msgstr "Webkatalog där ikonerna finns.  Förvalt värde: <i>/cherokee_icons</i>."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:36
 msgid "List of notice files to be inserted."
@@ -4165,9 +4165,9 @@ msgstr "Tillåt kataloglistning"
 
 #: cherokee-trunk/admin/wizards/List.py:130
 msgid ""
-"Add the /icons and /cherokee_themes directories used for directory listing."
+"Add the /cherokee_icons and /cherokee_themes directories used for directory listing."
 msgstr ""
-"Lägg till /icons och /cherokee_themes-kataloger som skall användas för visa "
+"Lägg till /cherokee_icons och /cherokee_themes-kataloger som skall användas för visa "
 "innehållet i kataloger."
 
 #: cherokee-trunk/admin/wizards/List.py:133
@@ -4307,18 +4307,18 @@ msgstr "Välkommen till Cherokee Admin"
 
 #: cherokee-trunk/admin/wizards/icons.py:38
 msgid ""
-"This wizard adds the /icons and /cherokee_themes directories so Cherokee can "
+"This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can "
 "use icons when listing directories."
 msgstr ""
-"Denna guiden lägger till /icons och /cherokee_theme så att Cherokee kan "
+"Denna guiden lägger till /cherokee_icons och /cherokee_theme så att Cherokee kan "
 "använda ikoner medans den visar innehållet kataloger."
 
 #: cherokee-trunk/admin/wizards/icons.py:39
 msgid ""
-"The /icons and /cherokee_themes directories are already configured. There is "
+"The /cherokee_icons and /cherokee_themes directories are already configured. There is "
 "nothing left to do."
 msgstr ""
-"/icons och /cherokee_themes-katalogerna är redan konfigurerade. Det finns "
+"/cherokee_icons och /cherokee_themes-katalogerna är redan konfigurerade. Det finns "
 "inget kvar att göra."
 
 #: cherokee-trunk/admin/wizards/alfresco.py:37
@@ -9115,7 +9115,7 @@ msgstr "Fel"
 #~ msgstr "Nytt värdnamn"
 
 #, fuzzy
-#~ msgid "Add the /icons directory"
+#~ msgid "Add the /cherokee_icons directory"
 #~ msgstr "Sökvägen är inte en katalog"
 
 #, fuzzy

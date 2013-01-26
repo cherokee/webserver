@@ -1779,9 +1779,9 @@ msgid "Choose the listing theme."
 msgstr "Elija el tema para mostrar."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:35
-msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
+msgid "Web directory where the icon files are located. Default: <i>/cherokee_icons</i>."
 msgstr ""
-"Directorio web donde se encuentran los iconos. Por defecto: <i>/icons</i>."
+"Directorio web donde se encuentran los iconos. Por defecto: <i>/cherokee_icons</i>."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:36
 msgid "List of notice files to be inserted."
@@ -4049,9 +4049,9 @@ msgstr "Iconos para listado de directorios."
 
 #: cherokee-trunk/admin/wizards/List.py:130
 msgid ""
-"Add the /icons and /cherokee_themes directories used for directory listing."
+"Add the /cherokee_icons and /cherokee_themes directories used for directory listing."
 msgstr ""
-"Añadir los directorios /icons y /cherokee_themes utilizados para listar "
+"Añadir los directorios /cherokee_icons y /cherokee_themes utilizados para listar "
 "directorios."
 
 #: cherokee-trunk/admin/wizards/List.py:133
@@ -4191,18 +4191,18 @@ msgstr "Bienvenido al asistente de Iconos"
 
 #: cherokee-trunk/admin/wizards/icons.py:38
 msgid ""
-"This wizard adds the /icons and /cherokee_themes directories so Cherokee can "
+"This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can "
 "use icons when listing directories."
 msgstr ""
-"Este asistente añade los directorios /icons y /cherokee_themes necesarios "
+"Este asistente añade los directorios /cherokee_icons y /cherokee_themes necesarios "
 "para que Cherokee pueda utlizar iconos al hacer listados de directorios."
 
 #: cherokee-trunk/admin/wizards/icons.py:39
 msgid ""
-"The /icons and /cherokee_themes directories are already configured. There is "
+"The /cherokee_icons and /cherokee_themes directories are already configured. There is "
 "nothing left to do."
 msgstr ""
-"Los directorios /icons y /cherokee_themes ya han sido configurados. No queda "
+"Los directorios /cherokee_icons y /cherokee_themes ya han sido configurados. No queda "
 "nada por hacer. "
 
 #: cherokee-trunk/admin/wizards/alfresco.py:37

@@ -68,7 +68,7 @@
 	"vserver!1!rule!3!handler = file\n"				\
 	"vserver!1!rule!3!document_root = " CHEROKEE_THEMEDIR "\n"	\
 	"vserver!1!rule!2!match = directory\n"				\
-	"vserver!1!rule!2!match!directory = /icons\n"			\
+	"vserver!1!rule!2!match!directory = /cherokee_icons\n"			\
 	"vserver!1!rule!2!handler = file\n"				\
 	"vserver!1!rule!2!document_root = " CHEROKEE_ICONSDIR "\n"	\
 	"vserver!1!rule!1!match = default\n"				\

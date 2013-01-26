@@ -1829,8 +1829,8 @@ msgid "Choose the listing theme."
 msgstr "Kies de lijst weergave thema."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:35
-msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
-msgstr "Web map waar de icoonen te vinden zijn. Standaard <i>/icons</i>."
+msgid "Web directory where the icon files are located. Default: <i>/cherokee_icons</i>."
+msgstr "Web map waar de icoonen te vinden zijn. Standaard <i>/cherokee_icons</i>."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:36
 msgid "List of notice files to be inserted."
@@ -3820,8 +3820,8 @@ msgid "Directory-listing Icons"
 msgstr "Map-lijsten Iconen"
 
 #: cherokee-trunk/admin/wizards/List.py:130
-msgid "Add the /icons and /cherokee_themes directories used for directory listing."
-msgstr "Voeg de /icons en /cherokee_themes mappen toe om te tonen bij een map overzicht."
+msgid "Add the /cherokee_icons and /cherokee_themes directories used for directory listing."
+msgstr "Voeg de /cherokee_icons en /cherokee_themes mappen toe om te tonen bij een map overzicht."
 
 #: cherokee-trunk/admin/wizards/List.py:133
 msgid "Static-file support"
@@ -3928,12 +3928,12 @@ msgid "Welcome to the Icons Wizard"
 msgstr "Welkom bij de Iconen Assistent"
 
 #: cherokee-trunk/admin/wizards/icons.py:38
-msgid "This wizard adds the /icons and /cherokee_themes directories so Cherokee can use icons when listing directories."
-msgstr "Voeg de /icons en /cherokee_themes mappen toe om Cherokee iconen te laten tonen bij een map overzicht."
+msgid "This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can use icons when listing directories."
+msgstr "Voeg de /cherokee_icons en /cherokee_themes mappen toe om Cherokee iconen te laten tonen bij een map overzicht."
 
 #: cherokee-trunk/admin/wizards/icons.py:39
-msgid "The /icons and /cherokee_themes directories are already configured. There is nothing left to do."
-msgstr "De /icons en /cherokee_themes mappen zijn al geconfigureerd. Er is verder niets te doen."
+msgid "The /cherokee_icons and /cherokee_themes directories are already configured. There is nothing left to do."
+msgstr "De /cherokee_icons en /cherokee_themes mappen zijn al geconfigureerd. Er is verder niets te doen."
 
 #: cherokee-trunk/admin/wizards/alfresco.py:37
 msgid "Welcome to the Alfresco Wizard"
@@ -8529,8 +8529,8 @@ msgstr "OWS Fout"
 #~ msgid "Local Host Name"
 #~ msgstr "Locale Computer Naam"
 
-#~ msgid "Add the /icons directory"
-#~ msgstr "Voeg de /icons map toe"
+#~ msgid "Add the /cherokee_icons directory"
+#~ msgstr "Voeg de /cherokee_icons map toe"
 
 #~ msgid "Configure a new virtual server using Joomla."
 #~ msgstr "Configureer een nieuwe virtuele server met Joomla."
