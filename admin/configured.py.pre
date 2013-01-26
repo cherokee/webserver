@@ -9,8 +9,6 @@ WWWROOT         = "%wwwroot%"
 SYSCONFDIR      = "%sysconfdir%"
 LOCALSTATE      = "%localstatedir%"
 VERSION         = "%version%"
-OWS_ENABLE      = '1'
-OWS_API_VERSION = '2'
 
 CHEROKEE_SERVER       = join (PREFIX, "sbin/cherokee")
 CHEROKEE_WORKER       = join (PREFIX, "sbin/cherokee-worker")
@@ -26,5 +24,3 @@ CHEROKEE_VAR_LOG      = join (LOCALSTATE, "log")
 CHEROKEE_VAR_RUN      = join (LOCALSTATE, "run")
 CHEROKEE_VAR_LIB      = join (LOCALSTATE, "lib/cherokee")
 CHEROKEE_RRD_DIR      = join (LOCALSTATE, "lib/cherokee/graphs")
-CHEROKEE_OWS_DIR      = join (LOCALSTATE, "lib/cherokee/ows")
-CHEROKEE_OWS_ROOT     = join (LOCALSTATE, "lib/cherokee/ows/root")

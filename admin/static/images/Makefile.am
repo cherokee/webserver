@@ -23,7 +23,6 @@ home.png \
 host.png \
 icons.png \
 information.png \
-market.png \
 mime.png \
 nav-selected.gif \
 nav-sep.png \
@@ -33,7 +32,6 @@ panel-new.png \
 ram.png \
 remote.png \
 sidebar-bg.png \
-sidebar-market.png \
 sources.png \
 status.png \
 uptime.png \

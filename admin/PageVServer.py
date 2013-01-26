@@ -458,11 +458,7 @@ class BasicsWidget (CTK.Container):
 
         # Paths
         table = CTK.PropsAuto (url_apply)
-        if not CTK.cfg.get_val ('%s!document_root'%(pre),'').startswith(CHEROKEE_OWS_ROOT):
-            table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre)),   _(NOTE_DOCUMENT_ROOT))
-        else:
-            table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre), False, {'disabled':True}), _(NOTE_DOCUMENT_ROOT))
-
+        table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre)),   _(NOTE_DOCUMENT_ROOT))
         table.Add (_('Directory Indexes'), CTK.TextCfg('%s!directory_index'%(pre)), _(NOTE_DIRECTORY_INDEX))
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Paths')))

@@ -1588,7 +1588,6 @@ www/Makefile
 dbslayer/Makefile
 admin/Makefile
 admin/icons/Makefile
-admin/market/Makefile
 admin/plugins/Makefile
 admin/wizards/Makefile
 admin/static/Makefile

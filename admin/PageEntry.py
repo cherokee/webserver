@@ -511,10 +511,7 @@ class HandlerWidget (CTK.Container):
             key = 'vserver!%s!rule!%s!document_root'%(vsrv, rule)
 
             table2 = CTK.PropsTable()
-            if not CTK.cfg.get_val (key, '').startswith(CHEROKEE_OWS_ROOT):
-                table2.Add (_('Document Root'), CTK.TextCfg(key, True), _(Handler.NOTE_DOCUMENT_ROOT))
-            else:
-                table2.Add (_('Document Root'), CTK.TextCfg(key, True, {'disabled':True}), _(Handler.NOTE_DOCUMENT_ROOT))
+            table2.Add (_('Document Root'), CTK.TextCfg(key, True), _(Handler.NOTE_DOCUMENT_ROOT))
 
             submit = CTK.Submitter (apply)
             submit += table2
