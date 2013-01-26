@@ -52,7 +52,7 @@
 #include "human_strcmp.h"
 #include "match.h"
 
-#define ICON_WEB_DIR_DEFAULT "/icons"
+#define ICON_WEB_DIR_DEFAULT "/cherokee_icons"
 #define ENTRIES "handler,dirlist"
 
 
