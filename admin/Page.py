@@ -153,7 +153,6 @@ class Base (CTK.Page):
         template['save']      = _('Save')
         template['home']      = _('Home')
         template['status']    = _('Status')
-        template['market']    = _('Apps')
         template['general']   = _('General')
         template['vservers']  = _('vServers')
         template['sources']   = _('Sources')
