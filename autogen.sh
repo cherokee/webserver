@@ -103,7 +103,7 @@ if test -z "$ACLOCAL_FLAGS"; then
 fi
 
 # Libtool
-if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
+if grep "^AM_PROG_LIBTOOL" configure.ac >/dev/null; then
   echo "Running: libtoolize --force --copy..."
   $LIBTOOLIZE --force --copy
 fi
@@ -114,7 +114,7 @@ rm -f aclocal.m4
 $ACLOCAL $ACLOCAL_FLAGS
 
 # Autoheader
-if grep "^AC_CONFIG_HEADERS" configure.in >/dev/null; then
+if grep "^AC_CONFIG_HEADERS" configure.ac >/dev/null; then
   echo "Running: autoheader..."
   $AUTOHEADER
 fi

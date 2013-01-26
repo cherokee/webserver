@@ -129,7 +129,7 @@ AC_MSG_CHECKING([host platform characteristics])
           libdl="-ldl"
           ;;
 	*)
-		AC_MSG_WARN([*** Please add $host to configure.in checks!])
+		AC_MSG_WARN([*** Please add $host to configure.ac checks!])
           libdl="-ldl"
           ;;
 esac
