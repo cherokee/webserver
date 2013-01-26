@@ -364,7 +364,7 @@ have_epoll=no
 if test "x$have_epoll_include" = "xyes" && test "x$wants_epoll" = "xyes"; then
  	AC_MSG_CHECKING(for epoll system call)
 
-     AC_RUN_IFELSE([
+     AC_RUN_IFELSE([AC_LANG_SOURCE([
 		#include <stdint.h>
 		#include <sys/param.h>
 		#include <sys/types.h>
@@ -381,7 +381,7 @@ if test "x$have_epoll_include" = "xyes" && test "x$wants_epoll" = "xyes"; then
 	        epfd = epoll_create(256);
 	    	   exit (epfd == -1 ? 1 : 0);
 		}
-	],
+	])],
 	have_epoll=yes,
 	have_epoll=no,
 	have_epoll=yes)
@@ -397,7 +397,7 @@ have_port=no
 if test "x$have_port_include" = "xyes"; then
     	AC_MSG_CHECKING(for event ports support)
 
-     AC_RUN_IFELSE([
+     AC_RUN_IFELSE([AC_LANG_SOURCE([
 		#include <stdint.h>
 		#include <unistd.h>
 		#include <port.h>
@@ -407,7 +407,7 @@ if test "x$have_port_include" = "xyes"; then
 		   port = port_create();
 	    	   exit (port < 0 ? 1 : 0);
 		}
-	],
+	])],
 	have_port=yes,
 	have_port=no,
 	have_port=cross)
@@ -626,12 +626,12 @@ AC_CHECK_FUNCS(syslog vsyslog strsep strcasestr memmove strerror bcopy strlcat)
 dnl
 dnl Check for Glib (usually Linux)
 dnl
-AC_PREPROC_IFELSE([
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([
 #include <features.h>
 #ifndef __GLIBC__
     chokeme
 #endif
-], [
+])], [
     AC_DEFINE([HAVE_GLIBC], [1], [Define to 1 if you have glibc.])
     AC_DEFINE([_GNU_SOURCE], [1], [Define to 1 if you have glibc.])
 ])
