@@ -367,7 +367,7 @@ class Dispatcher (CTK.Container):
 class LocalSource:
     def __call__ (self):
         # Trim deployment options if needed
-        if not path_find_binary (DEFAULT_BINS):
+        if not path_find_binary (DEFAULT_BINS) and len(RAILS_METHOD) == 2:
             RAILS_METHOD.remove(('fcgi', 'FastCGI'))
 
         submit  = CTK.Submitter (URL_APPLY)
@@ -376,11 +376,7 @@ class LocalSource:
 
         table.Add (_('Project Directory'), CTK.TextCfg ('%s!ror_dir'%(PREFIX), False), _(NOTE_ROR_DIR))
         table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), trans_options(RAILS_ENV), {'class': 'noauto'}), _(NOTE_ENV))
-
-        if len(RAILS_METHOD) > 1:
-            table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans_options(RAILS_METHOD), {'class': 'noauto'}), _(NOTE_METHOD))
-        else:
-            submit += CTK.Hidden('%s!ror_method'%(PREFIX), RAILS_METHOD[0][0])
+        table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans_options(RAILS_METHOD), {'class': 'noauto'}), _(NOTE_METHOD))
 
         cont = CTK.Container()
         cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
