@@ -49,6 +49,8 @@ LINK_SUPPORT    = 'http://www.octality.com/engineering.html'
 LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
 LINK_TWITTER    = 'http://twitter.com/webserver'
 LINK_FACEBOOK   = 'http://www.facebook.com/cherokee.project'
+LINK_GOOGLEPLUS = 'https://plus.google.com/u/1/communities/109478817835447552345'
+LINK_GITHUB     = 'https://github.com/cherokee/webserver'
 LINK_DOWNLOAD   = 'http://www.cherokee-project.com/download/'
 LINK_LISTS      = 'http://lists.octality.com/'
 LINK_LIST       = 'http://lists.octality.com/listinfo/cherokee'
@@ -287,11 +289,13 @@ class CommunityBar (CTK.Box):
         self += CTK.RawHTML('<h3>%s</h3>' % _('Join the Cherokee Community:'))
         self += slist
 
-        slist += CTK.LinkWindow (LINK_CHEROKEE, CTK.Image({'src': '/static/images/other/web.png',      'title': _('Visit the Cherokee Project Website')}))
-        slist += CTK.LinkWindow (LINK_TWITTER,  CTK.Image({'src': '/static/images/other/twitter.png',  'title': _('Follow us on Twitter')}))
-        slist += CTK.LinkWindow (LINK_FACEBOOK, CTK.Image({'src': '/static/images/other/facebook.png', 'title': _('Join us on Facebook')}))
-        slist += CTK.LinkWindow (LINK_LINKEDIN, CTK.Image({'src': '/static/images/other/linkedin.png', 'title': _('Become a member of Cherokee group on LinkedIn')}))
-        slist += CTK.LinkWindow (LINK_IRC,      CTK.Image({'src': '/static/images/other/irc.png',      'title': _('Chat with us at irc.freenode.net')}))
+        slist += CTK.LinkWindow (LINK_CHEROKEE,   CTK.Image({'src': '/static/images/other/web.png',        'title': _('Visit the Cherokee Project Website')}))
+        slist += CTK.LinkWindow (LINK_TWITTER,    CTK.Image({'src': '/static/images/other/twitter.png',    'title': _('Follow us on Twitter')}))
+        slist += CTK.LinkWindow (LINK_FACEBOOK,   CTK.Image({'src': '/static/images/other/facebook.png',   'title': _('Join us on Facebook')}))
+        slist += CTK.LinkWindow (LINK_GOOGLEPLUS, CTK.Image({'src': '/static/images/other/googleplus.png', 'title': _('Join us on Google+')}))
+        slist += CTK.LinkWindow (LINK_GITHUB,     CTK.Image({'src': '/static/images/other/github.png',     'title': _('Fork us on Github')}))
+        slist += CTK.LinkWindow (LINK_LINKEDIN,   CTK.Image({'src': '/static/images/other/linkedin.png',   'title': _('Become a member of Cherokee group on LinkedIn')}))
+        slist += CTK.LinkWindow (LINK_IRC,        CTK.Image({'src': '/static/images/other/irc.png',        'title': _('Chat with us at irc.freenode.net')}))
 
 class HaltAdmin (CTK.Box):
     def __init__ (self):
