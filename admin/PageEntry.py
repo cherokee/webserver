@@ -234,7 +234,10 @@ class HeaderOps (CTK.Container):
                     table[-1].props['id']       = n
                     table[-1][1].props['class'] = 'dragHandle'
 
-                self += table
+                submit = CTK.Submitter (apply_url)
+                submit += table
+
+                self += submit
 
     def __init__ (self, vsrv, rule, apply_orig):
         CTK.Container.__init__ (self)
