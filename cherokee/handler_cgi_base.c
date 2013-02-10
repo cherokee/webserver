@@ -375,7 +375,7 @@ cherokee_handler_cgi_base_build_basic_env (
 	}
 
 	/* HTTP_HOST and SERVER_NAME. The difference between them is that
-	 * HTTP_HOST can include the �:PORT� text, and SERVER_NAME only
+	 * HTTP_HOST can include the ":PORT" text, and SERVER_NAME only
 	 * the name
 	 */
 	cherokee_header_copy_known (&conn->header, header_host, tmp);
