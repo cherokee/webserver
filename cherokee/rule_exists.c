@@ -256,8 +256,6 @@ match (cherokee_rule_exists_t  *rule,
 		cherokee_buffer_add_buffer (tmp, &conn->local_directory);
 	}
 
-	cherokee_buffer_add_str (tmp, "/");
-
 	/* Always match */
 	if (rule->match_any) {
 		if (! cherokee_buffer_is_empty (&conn->web_directory)) {
