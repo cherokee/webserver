@@ -294,15 +294,9 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Document Root:
 	 */
-	if (CONN_VSRV(conn)->evhost) {
-		set_env (cgi, "DOCUMENT_ROOT",
+	set_env (cgi, "DOCUMENT_ROOT",
 			 conn->local_directory.buf,
 			 conn->local_directory.len);
-	} else {
-		set_env (cgi, "DOCUMENT_ROOT",
-			 CONN_VSRV(conn)->root.buf,
-			 CONN_VSRV(conn)->root.len);
-	}
 
 	/* REMOTE_(ADDR/PORT): X-Real-IP
 	 */
