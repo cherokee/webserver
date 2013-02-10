@@ -381,7 +381,7 @@ cherokee_handler_cgi_base_build_basic_env (
 	}
 
 	/* HTTP_HOST and SERVER_NAME. The difference between them is that
-	 * HTTP_HOST can include the «:PORT» text, and SERVER_NAME only
+	 * HTTP_HOST can include the ï¿½:PORTï¿½ text, and SERVER_NAME only
 	 * the name
 	 */
 	cherokee_header_copy_known (&conn->header, header_host, tmp);
@@ -885,7 +885,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	 */
 	if (! props->check_file)
 	{
-		if (conn->web_directory.len == 1) {
+		if (conn->web_directory.len == 1 || cherokee_connection_use_webdir (conn)) {
 			cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
 
 		} else {
