@@ -1,3 +1,3 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = windows osx
+SUBDIRS = osx
