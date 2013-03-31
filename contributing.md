@@ -4,9 +4,16 @@ We love to see your interest in contributing to Cherokee Webserver!
 
 This guide covers all you need to know to make this a fluid experience.
 
-## Issues List
+## Table of contents
 
-### Writing a new issue
+1 [Issues list](#issues-iist)  
+1.1 [Writing a new issue](#writing-a-new-issue)  
+1.1.1 [Finding a suitable title](#finding-a-suitable-title)  
+1.2 [Issue labels](#issue-labels)  
+
+## Issues list
+
+### Writing new issues
 
 So you found a bug, have a feature request, would like to see a functionality being enhanced or just have a simple question? Well -- that is just marvelous. Here is how you write a good ticket to make the process as easy as possible.
 
@@ -27,8 +34,10 @@ And here are some not so good:
 
 But **don't get to technical** over the fact that we prefer precise titles. Remember, you already know the defect behind that issue, and even the problematic line of code, the developer might just not and needs to read the description to understand what exactly is the problem. Such information are appropriate for the descripton, not for the title.
 
-Bad example:
+A bad example:
 - *“fdpoll-epoll.c:113: epoll_ctl(6, EPOLL_CTL_ADD, 3): 'File exists'”*
 
 At the same time the opener provided a perfect line title just in the description.
 - *“Cherokee isn’t aware of EPOLLs and fails when it’s already present.”*
+
+### Comprehending issue labels
