@@ -14,13 +14,12 @@ So you found a bug, have a feature request, would like to see a functionality be
 
 Give your issue a caption that is both, descriptive and precise. If your title makes it possible to grasp the meaning of your request, it is more likely to be read and successively worked on. But don't get to technical, that is the description for. Here are some example of good titles:
 
-- #28
-- #29
-- #21
-- #66
-- #101
+- Ensure HTTP method handling is correct
+- Worker using 100% cpu with big files.
+- Information Source ignoring Spawning Timeout
+- Content-Encoding header not implemented for static files already compressed
 
-A rather bad title would be one of the following:
+Rather bad examples are:
 
-- #502 (Better: Random 504 gateway errors in reverse proxy mode.)
-- #693 (Better: `cherokee-admin -u` throws: could not create socket.)
+- 504 Gateway error (Better: Random 504 gateway errors in reverse proxy mode.)
+- error message running cherokee-admin (Better: `cherokee-admin -u` throws: could not create socket.)
