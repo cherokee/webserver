@@ -1,3 +1,0 @@
-[submodule "admin/CTK"]
-	path = admin/CTK
-	url = git://github.com/cherokee/CTK.git

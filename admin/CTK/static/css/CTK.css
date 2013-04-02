@@ -1,0 +1,408 @@
+/* CTK: Cherokee Toolkit
+ *
+ * Authors:
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *
+ * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU General Public
+ * License as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
+/* Activity notifier
+ */
+.no-see {
+    display: none;
+}
+
+#activity {
+    z-index: 1;
+    position: absolute;
+    margin-left: 840px;
+    display: inline;
+    bottom: 24px;
+    color: #27c;
+    height: 15px;
+}
+#activity span {
+    background: transparent url(/CTK/images/loader.gif) no-repeat ;
+    padding: 1px 8px 0 19px;
+}
+
+/* Reset styles
+ */
+body,div,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,input,button,textarea,p,blockquote,th,td {margin:0; padding:0;}
+table{ border-collapse: collapse; border-spacing:0; }
+fieldset,img{border:0;}
+th{text-align:left;}
+input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
+input,button,textarea,select{*font-size:100%;}
+strong {font-weight: bold;}
+em {font-style: italic;}
+code {font-family: courier;}
+img { border: none;}
+ul {list-style: none;}
+
+/* Form Styles
+ */
+input[type=text], input[type=password], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+input[type=text]focus, input[type=password]focus, textarea:focus { border: 2px solid #2d70cb; margin: 0; }
+input[type=text], input[type=password] { width: 240px; }
+select { border: 1px solid #b0bfce; ibackground: #fff; padding: 2px; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px;}
+.checkbox-text { padding: 4px; }
+.checkbox-text .description { display: inline-block; }
+
+
+/* JQuery Helpers
+*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+/* Error
+ */
+.error { color: #c00; font-weight: bold; font-size: 90%; }
+
+/* Del
+ */
+.del { cursor: pointer; }
+
+/* Button
+ */
+button {
+    border: 0;
+    margin: 0;
+    padding: 6px 8px;
+    outline: none;
+    color: #27c;
+    font-weight: bold;
+    text-shadow: #fff 0px 1px 0px;
+    border: 1px solid #cde;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    background: #ddeeff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ddeeff));
+    background: -moz-linear-gradient(top,  #ffffff,  #ddeeff);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ddeeff');
+    -moz-box-shadow: inset 1px 1px 0 #fff;
+    -webkit-box-shadow: inset 1px 1px 0 #fff;
+    box-shadow: inset 1px 1px 0 #fff;
+}
+button:active {
+    -moz-box-shadow: inset 0 1px 4px #def;
+    -webkit-box-shadow: inset 0 1px 4px #def;
+    box-shadow: inset 0 1px 4px #def;
+    padding: 7px 8px 5px 8px;
+}
+
+button:hover { cursor: pointer; }
+
+.druid-button {
+    color: #fff;
+    text-shadow: #14335d 0px 1px 0px;
+    border: 1px solid #17457e;
+    background: #235699;
+    background: -webkit-gradient(linear, left top, left bottom, from(#5e8bc9), to(#235699));
+    background: -moz-linear-gradient(top,  #396aae,  #235699);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#396aae', endColorstr='#235699');
+    -moz-box-shadow: inset 1px 1px 0 #7798c2;
+    -webkit-box-shadow: inset 1px 1px 0 #7798c2;
+    box-shadow: inset 1px 1px 0 #7798c2;
+}
+
+.druid-button:active {
+    -moz-box-shadow: inset 0 1px 4px #24589b;
+    -webkit-box-shadow: inset 0 1px 4px #24589b;
+    box-shadow: inset 0 1px 4px #24589b;
+}
+
+.close-button {
+    color: #27c;
+    text-shadow: #fff 0px 1px 0px;
+    border: 1px solid #cde;
+    background: #2277cc;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ddeeff));
+    background: -moz-linear-gradient(top,  #ffffff,  #ddeeff);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ddeeff');
+    -moz-box-shadow: inset 1px 1px 0 #fff;
+    -webkit-box-shadow: inset 1px 1px 0 #fff;
+    box-shadow: inset 1px 1px 0 #fff;
+}
+
+/* Styles for CTK/Tabs.py
+ */
+.ui-tabs { zoom: 1; background: transparent url(/CTK/images/tabbg.png) 0 -240px repeat-x; }
+.ui-tabs .ui-tabs-nav { list-style: none; position: relative; clear: both;}
+.ui-tabs-nav li { float: left; background: transparent url(/CTK/images/tabbg.png) 0 -30px; width: 86px; height: 17px; font-size: 11px; text-align: center; padding-top: 6px; padding-left: 21px; position: relative; text-shadow: #fff 0px 1px 0px; white-space: nowrap; }
+.ui-tabs-nav li.ui-tabs-first { background: transparent url(/CTK/images/tabbg.png) 0 0; }
+.ui-tabs-nav li.ui-tabs-last { background: transparent url(/CTK/images/tabbg.png) 0 -60px; width: 126px; padding-left: 0; }
+.ui-tabs-nav li.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -120px; }
+.ui-tabs-nav li.ui-tabs-first.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -90px; }
+.ui-tabs-nav li.ui-tabs-last.ui-tabs-selected { background: transparent url(/CTK/images/tabbg.png) 0 -150px; width: 128px; padding-left: 0; }
+.ui-tabs-nav li.ui-tabs-selected-next { background: transparent url(/CTK/images/tabbg.png) 0 -180px; }
+.ui-tabs-nav li.ui-tabs-selected-next-last { background: transparent url(/CTK/images/tabbg.png) 0 -210px; width: 128px; padding-left: 0;}
+.ui-tabs-nav a { color: #79b; text-decoration: none; display: block; }
+.ui-tabs-nav a:hover { color: #79b; text-decoration: none; }
+.ui-tabs-nav li.ui-tabs-selected a { color: #000; font-weight: bold; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
+
+/* Styles for CTK/PropsTable.py
+ */
+.propstable { width: 100%; }
+.propstable .entry { padding: 8px 0; }
+.propstable .entry .title { float: left; width: 240px; padding-top: 6px; font-weight: bold; }
+.propstable .entry .notice { display: none; }
+.propstable .entry .comment { text-align: left; color: #999; font-size: 11px; padding: 4px 0; }
+
+/* Optional text entries
+ */
+.optional-grey { color: #ccc; }
+
+
+/* Loading Message
+ */
+.notice { display: inline; padding-left: 8px; }
+
+/* CTK/Indenter.py
+ */
+.indenter {
+ margin-left: 20px;
+ margin-top: 8px;
+ margin-bottom: 16px;
+}
+
+/* CTK/Notice.py
+ */
+.dialog-information {
+ background: #f9fcff url(/CTK/images/dialog-information.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #d4e1f1;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+}
+.dialog-important-information {
+ background: #e9ffd4 url(/CTK/images/dialog-information.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #73d216;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+}
+.dialog-warning {
+ background: #fff2b3 url(/CTK/images/dialog-warning.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #b90;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+}
+.dialog-error {
+ background: #ffe7e7 url(/CTK/images/dialog-error.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #c00;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+}
+
+.dialog-information h2,
+.dialog-warning h2,
+.dialog-error h2
+{
+ margin: 0 0 0.3em 0;
+ padding: 0;
+ font-size: 100%;
+ font-weight: bold;
+ letter-spacing: 1px;
+ color: #000;
+}
+
+.dialog-proxy-lazy-loader {
+ text-align: center;
+}
+
+/* Overlays */
+.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+/* CTK/Dialog.py
+ */
+.ui-dialog { position: relative; padding: 8px; width: 300px; background: transparent url(/CTK/images/bg-dialog.png); text-align: left; }
+.ui-dialog .ui-dialog-titlebar { height: 28px; position: relative;  background: transparent; }
+.ui-dialog .ui-dialog-title { float: left; margin: 2px 0 0 4px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: #00122e 0px 1px 0px; }
+.ui-dialog .ui-dialog-titlebar-close { position: absolute; right: 4px; top: 4px; background: transparent url(/CTK/images/bg-dialog-titlebar-close.gif) no-repeat; text-indent: -99999px; overflow: hidden; width: 14px;}
+.ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
+.ui-dialog .ui-dialog-content { border: 0; padding: 16px; background: #fff; overflow: auto; zoom: 1; }
+.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background: #fff; padding: 16px; border-top: 1px solid #cde; }
+.ui-dialog .ui-dialog-buttonpane button { float: right; margin-left: 8px; cursor: pointer; width:auto; overflow:visible; }
+.ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-draggable .ui-dialog-titlebar { cursor: move; }
+.ui-dialog.ui-corner-all { -moz-border-radius: 8px; -webkit-border-radius: 8px; }
+.ui-dialog .button { float: right; }
+.ui-dialog .propstable { width: 100%; }
+.ui-dialog p { margin: 0.5em 0 1em 0; }
+
+/* PageException.py
+ */
+.backtrace { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; background: #fafafa; border: 1px solid #ddd; color: #c00; padding: 16px; margin: 16px 0; }
+.shell { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; background: #fafafa; border: 1px solid #ddd; color: #0b0; padding: 16px; margin: 16px 0 16px 48px; }
+#body-error h1 { background: #fff url(/CTK/images/dialog-error.png) 8px 12px no-repeat; padding-left: 48px; }
+#body-error h2 { margin-bottom: 1em; }
+#body-error #main { padding: 16px; width: 926px; }
+#body-error p { padding-left: 48px; line-height: 1.5em; margin-bottom: 1.5em; }
+#body-error textarea { width: 912px;  clear: both; margin: 16px 0; }
+#body-error .button { float: right; clear: both; }
+.cherokee-link { float: right; }
+
+#body-error .description { padding-left: 48px; margin-bottom: 16px; }
+#body-error .admin-url { padding-left: 48px; margin-bottom: 16px; }
+#body-error .time { float: right; color: #666; margin-bottom: 16px;  }
+
+
+/* Sortable Table
+ */
+.panel {
+  border-right: 1px solid #cde;
+  background-color: #f0f7ff;
+  width: 240px;
+  float: left;
+  z-index: 9000;
+}
+
+.panel h2 {
+  padding-left: 8px;
+  width: 172px;
+  font-size: 16px;
+  color: #27c;
+  text-shadow: #fff 0px 1px 0px;
+  border: none;
+  float: left;
+}
+
+.panel .filterbox {
+  clear: both;
+  background: transparent url(/CTK/images/bg-filter.png) repeat-x;
+  border: 1px solid #cde;
+  border-bottom: 0;
+  margin: 0 2px;
+  padding: 4px;
+}
+
+.panel .filter { width: 214px; }
+
+.panel table {
+  background-color: #fff;
+  border-collapse: collapse;
+  width: 234px;
+  overflow-x: hidden;
+}
+
+.panel table tr td {
+  background-color: #fff;
+  border-bottom: 1px solid #cde;
+  max-width: 180px;
+}
+
+.panel td .sel-actions {
+ float: right;
+ width: 28px;
+ height: 14px;
+ background: transparent;
+ padding: 0;
+}
+
+
+.panel #source_panel td .sel-actions {
+ width: 14px;
+}
+.hasScroll td .sel-actions {
+ padding: 0 10px 0 0;
+}
+
+.dragHandle {
+  width: 18px;
+  background: transparent url(/CTK/images/arrow_ns.png) center center no-repeat;
+  cursor: move;
+}
+
+.row_content {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.panel #rules_panel .row_content {  height: 38px;  }
+.panel #status_panel .row_content {  height: 28px;  }
+
+tr.tDnD_whileDrag td.dragHandle,
+tr.tDnD_whileDrag td.nodrag {
+  background-color: #def;
+}
+
+tr.panel-selected td.dragHandle {
+  background: #27c url(/CTK/images/arrow_ns.png) center center no-repeat;
+}
+
+tr.panel-selected, tr.panel-selected td.nodragHandle {
+  width: 18px;
+  background-color: #27c;
+  color: #fff;
+}
+
+tr.panel-selected td div.row_content {
+  background-color: #27c;
+  color: #fff;
+}
+
+tr.panel-selected td div.row_content .sel-actions {
+ background: transparent url(/CTK/images/bg-sel-actions-sel.png) no-repeat;
+}
+
+.sel-actions .togglebutton { float: left; }
+
+.ui-tabs-panel h3 { color: #666; font-weight: bold; padding: 8px 0; font-size: 12px; z-index: 9000; padding-left: 16px; }
+
+/* Progressbar
+ */
+.ui-widget .ui-widget { font-size: 1em; }
+
+.ui-progressbar.ui-widget-content { border: 1px solid #dddddd; background: #eeeeee url(/CTK/images/ui-bg_highlight-soft_100_eeeeee_1x100.png) 50% top repeat-x; color: #333333; }
+.ui-progressbar.ui-widget-content a { color: #333333; }
+.ui-progressbar-value.ui-widget-header { border: 1px solid #184582; background: #24579a url(/CTK/images/ui-bg_gloss-wave_35_f6a828_500x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
+.ui-progressbar-value.ui-widget-header a { color: #ffffff; }
+
+.ui-progressbar { height:16px; text-align: left; }
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
+
+.ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+.ui-corner-left { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; }
+
+.ui-stars-star {float:left; display:block; overflow:hidden; text-indent:-999em; cursor:pointer; }
+.ui-stars-star a {width:16px; height:15px; display:block; background:url(/CTK/images/jquery.ui.stars.gif) no-repeat 0 0;}
+.ui-stars-star a {background-position:0 -48px;}
+.ui-stars-star-on a {background-position:0 -32px;}
+.ui-stars-star-hover a:hover {background-position:0 -64px; }
+.ui-stars-star-disabled,.ui-stars-star-disabled a {cursor:default!important;}
+.ui-stars-star-disabled.ui-stars-star-hover a:hover { background-position:0 -48px; }
+
+/* Collapsible
+ */
+.collapsible-title { cursor: pointer; }
+
