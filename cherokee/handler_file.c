@@ -672,7 +672,6 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 {
 	ret_t                  ret;
 	char                   bufstr[DTM_SIZE_GMTTM_STR];
-	struct tm              modified_tm;
 	size_t                 szlen          = 0;
 	off_t                  content_length = 0;
 	cherokee_connection_t *conn           = HANDLER_CONN(fhdl);
@@ -687,7 +686,6 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 	/* Regular request
 	 */
-	memset (&modified_tm, 0, sizeof(struct tm));
 
 	/* ETag: "<etag>"
 	 */
@@ -704,6 +702,9 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	/* Last-Modified:
 	 */
 	if (!(fhdl->not_modified)) {
+		struct tm modified_tm;
+
+		memset (&modified_tm, 0, sizeof(struct tm));
 		cherokee_gmtime (&fhdl->info->st_mtime, &modified_tm);
 
 		szlen = cherokee_dtm_gmttm2str(bufstr, DTM_SIZE_GMTTM_STR, &modified_tm);
