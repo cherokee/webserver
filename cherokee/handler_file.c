@@ -703,26 +703,29 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 	/* Last-Modified:
 	 */
-	cherokee_gmtime (&fhdl->info->st_mtime, &modified_tm);
+	if (!(fhdl->not_modified)) {
+		cherokee_gmtime (&fhdl->info->st_mtime, &modified_tm);
 
-	szlen = cherokee_dtm_gmttm2str(bufstr, DTM_SIZE_GMTTM_STR, &modified_tm);
+		szlen = cherokee_dtm_gmttm2str(bufstr, DTM_SIZE_GMTTM_STR, &modified_tm);
 
-	cherokee_buffer_add_str(buffer, "Last-Modified: ");
-	cherokee_buffer_add    (buffer, bufstr, szlen);
-	cherokee_buffer_add_str(buffer, CRLF);
+		cherokee_buffer_add_str(buffer, "Last-Modified: ");
+		cherokee_buffer_add    (buffer, bufstr, szlen);
+		cherokee_buffer_add_str(buffer, CRLF);
+	}
 
 	/* Add MIME related headers:
 	 * "Content-Type:" and "Cache-Control: max-age="
 	 */
 	if (fhdl->mime != NULL) {
 		cuint_t            maxage;
-		cherokee_buffer_t *mime   = NULL;
+		if (!(fhdl->not_modified)) {
+			cherokee_buffer_t *mime   = NULL;
 
-		cherokee_mime_entry_get_type (fhdl->mime, &mime);
-		cherokee_buffer_add_str    (buffer, "Content-Type: ");
-		cherokee_buffer_add_buffer (buffer, mime);
-		cherokee_buffer_add_str    (buffer, CRLF);
-
+			cherokee_mime_entry_get_type (fhdl->mime, &mime);
+			cherokee_buffer_add_str    (buffer, "Content-Type: ");
+			cherokee_buffer_add_buffer (buffer, mime);
+			cherokee_buffer_add_str    (buffer, CRLF);
+		}
 		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);
 		if (ret == ret_ok) {
 			/* Set the expiration if there wasn't a
