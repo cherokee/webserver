@@ -63,9 +63,6 @@ typedef union {
 #ifdef HAVE_SOCKADDR_IN6
 	struct sockaddr_in6     sa_in6;
 #endif
-#ifdef HAVE_SOCKADDR_STORAGE
-	struct sockaddr_storage sa_stor;
-#endif
 } cherokee_sockaddr_t;
 
 
