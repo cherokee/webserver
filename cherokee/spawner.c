@@ -155,7 +155,7 @@ do_sem_op (int sem_ref, int sem_num, int sem_op)
 	do {
 		so.sem_num = sem_num;
 		so.sem_op  = sem_op;
-		so.sem_flg = SEM_UNDO;
+		so.sem_flg = 0;
 
 		errno = 0;
 		re = semop (sem_ref, &so, 1);
