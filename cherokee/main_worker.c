@@ -79,7 +79,10 @@
 	"icons!parent_directory = arrow_turn_left.png\n"
 
 #define ENTRIES "main"
-
+extern char *mp4link;
+extern char *jpglink;
+extern char *m3u8link;
+extern int ios4vf;
 static cherokee_server_t  *srv           = NULL;
 static char               *config_file   = NULL;
 static char               *document_root = NULL;
@@ -262,6 +265,10 @@ print_help (void)
 {
 	printf (APP_NAME "\n"
 		"Usage: cherokee [options]\n\n"
+		"  -j,       --jpglink               Enable jpg link support\n"
+		"  -s,       --smooth-out            Enable http get smooth-out\n"
+		"  -m,       --mp4link               Enable mp4 link support\n"
+		"  -o,       --ios4vf                Enable ios4 vf support\n"
 		"  -h,       --help                  Print this help\n"
 		"  -V,       --version               Print version and exit\n"
 		"  -t,       --test                  Just test configuration file\n"
@@ -291,13 +298,17 @@ process_parameters (int argc, char **argv)
 		{"test",              no_argument,       NULL, 't'},
 		{"print-server-info", no_argument,       NULL, 'i'},
 		{"admin_child",       no_argument,       NULL, 'a'},
+		{"jpglink",           no_argument,       NULL, 'j'},
+		{"mp4link",           no_argument,       NULL, 'm'},
+		{"ios4vf",            no_argument,       NULL, 'o'},
+		{"smooth-out",        no_argument,       NULL, 's'},
 		{"port",              required_argument, NULL, 'p'},
 		{"documentroot",      required_argument, NULL, 'r'},
 		{"config",            required_argument, NULL, 'C'},
 		{NULL, 0, NULL, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "hVdtiap:r:C:", long_options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVdtiap:r:C:msoj", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'C':
 			free (config_file);
@@ -326,6 +337,18 @@ process_parameters (int argc, char **argv)
 		case 'V':
 			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
 			return ret_eof;
+		case 'j':
+			jpglink = strdup("/mjpeg/amba.jpg");
+			break;
+		case 'm':
+			mp4link = strdup("/live/amba.mp4");
+			break;
+		case 's':
+			m3u8link = strdup("/live/amba.m3u8");
+			break;
+		case 'o':
+			ios4vf = 1;
+			break;
 		case 'h':
 		case '?':
 		default:

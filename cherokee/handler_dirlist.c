@@ -1222,7 +1222,7 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 
 	/* Add final result to buffer
 	 */
-	cherokee_buffer_add_buffer (buffer, vtmp[idx_tmp]);
+	//cherokee_buffer_add_buffer (buffer, vtmp[idx_tmp]);
 
 	return ret_ok;
 }

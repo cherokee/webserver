@@ -897,6 +897,106 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 	return ret_error;
 }
 
+/* AMBA modification */
+char *mp4link = NULL;
+char *jpglink = NULL;
+char *m3u8link = NULL;
+int ios4vf = 0;
+void nsleep(int nsec)
+{
+ struct timespec req;
+
+ req.tv_nsec = nsec;
+ req.tv_sec = 0;
+ nanosleep(&req, NULL);
+}
+
+int get_defer(struct timeval *lastwrite, struct timeval *curwrite, int intervl, int divide)
+{
+ int timediff;
+ int nsec;
+
+// fprintf(stderr, "lastwrite %d.%d\n",
+// (int)lastwrite->tv_sec, (int)lastwrite->tv_usec);
+ gettimeofday(curwrite, NULL);
+// fprintf(stderr, "curwrite %d.%d\n",
+// (int)curwrite->tv_sec, (int)curwrite->tv_usec);
+ timediff = curwrite->tv_usec - lastwrite->tv_usec + ((curwrite->tv_sec - lastwrite->tv_sec)*1000000);
+// fprintf(stderr, "timediff %d\n", timediff);
+
+ *lastwrite = *curwrite;
+
+ if (timediff <= 0) {
+ return -1;
+}
+
+ return (intervl - timediff)/divide;
+
+ return 0;
+}
+
+int wait_nextclip(int *lastclip, int *absolute_seq)
+{
+ int k;
+ FILE *srcfp;
+ FILE *dstfp;
+ char buf[1024];
+ int size = 0;
+ int mediaseq;
+
+ //fprintf(stderr, "lastclip = %d \n", *lastclip);
+ for (k = 1; k <= 20; k++) {
+ if (-1 != readlink("/tmp/live/amba.mp4", buf, sizeof(buf))) {
+ *absolute_seq = atoi(buf+strlen("amba_hls-"));
+ }
+
+ //fprintf(stderr, " %d \n", *absolute_seq);
+ if(*absolute_seq != *lastclip) {
+ break;
+ }
+ fprintf(stderr, ".");
+ nsleep(5000*1000);
+ }
+
+ for (k = 1; k <= 20; k++) {
+ if (NULL == (srcfp = fopen("/tmp/live/amba.m3u8", "r"))) {
+ fprintf(stderr, "%s(%d) open failed\n", __func__, __LINE__);
+ return -1;
+ }
+ size = fread(buf, 1, sizeof(buf), srcfp);
+ fclose(srcfp);
+ if (size) {
+ break;
+ }
+ fprintf(stderr, ",");
+ nsleep(5000*1000);
+ }
+
+ dstfp = fopen("/tmp/live/aaba.m3u8", "w");
+ /*mediaseq=atoi(strstr(buf, "#EXT-X-MEDIA-SEQUENCE:")
+ strlen("#EXT-X-MEDIASEQUENCE:"));
+ fprintf(dstfp, "#EXTM3U\n"
+ "#EXT-X-TARGETDURATION:1\n"
+ "#EXT-X-VERSION:3\n"
+ "#EXT-X-ALLOW-CACHE:NO\n"
+ "#EXT-X-MEDIA-SEQUENCE:%d\n", mediaseq);
+ for (k = 7; k >= 0; k--) {
+ fprintf(dstfp, "#EXTINF:0.26693,\n"
+  "amba_hls-%d.ts\n", (*absolute_seq-k>0) ? (*absolute_seq-k):(*absolute_seq-k+16));
+ }*/
+ fwrite(buf, 1, size, dstfp);
+ fclose(dstfp);
+
+ fprintf(stderr, " %d \n", *absolute_seq);
+
+ /*if (*absolute_seq == *lastclip) {
+ fprintf( stderr, "freeze at clip %d\n", *absolute_seq);
+ }*/
+
+ *lastclip = *absolute_seq;
+
+ return 0;
+} 
 
 ret_t
 cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherokee_http_t *error_code)
@@ -908,7 +1008,13 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	char  chr_header_end;
 	char  *begin           = buffer->buf;
 	char  *end             = NULL;
-
+	char *tokp;
+	int k, deferus, absolute_seq = 0;
+	static int lastclip = 0, ios4_hack = 0;
+	static struct timeval lastwrite;
+	struct timeval curwrite;
+	struct timeval curtime;
+	char getpath[32];
 	/* Set default error code.
 	 */
 	*error_code = http_bad_request;
@@ -958,7 +1064,59 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	/* Parse the special first line
 	 */
 	switch (hdr->type) {
-	case header_type_request:
+		case header_type_request:
+			if (!jpglink)
+				goto nojpglink;
+			if (0 == strncmp("/mjpeg/amba.jpg", buffer->buf + strlen("GET "), strlen("/mjpeg/amba.jpg"))) {
+				*(strstr(buffer->buf, "mba.jpg")) = 'a';
+				k = readlink("/tmp/mjpeg/amba.jpg", getpath, sizeof(getpath));
+				if (-1 != k) {
+					getpath[k] = '\0';
+					fprintf(stderr, "%s \n", getpath );
+					unlink("/tmp/mjpeg/aaba.jpg");
+					symlink(getpath, "/tmp/mjpeg/aaba.jpg");
+				}
+			}
+			nojpglink:
+				if (!mp4link)
+					goto nomp4link;
+				if (0 == strncmp(mp4link, buffer->buf + strlen("GET "), strlen(mp4link))) 
+		
+					wait_nextclip(&lastclip, &absolute_seq);
+nomp4link:
+		if (!m3u8link)
+			goto nosmoothout;
+		snprintf(getpath, sizeof(getpath) - 1, "%s", buffer->buf + strlen("GET "));
+		if (NULL != (tokp = strchr(getpath, ' ')))
+		*tokp='\0';
+		fprintf(stderr, "%s\n", getpath);
+		if ( (ios4vf) && (0 == strncmp("/live/amba_hls-", getpath, strlen("/live/amba_hls-"))) && (strstr(getpath, ".ts")) ) {
+			deferus = get_defer(&lastwrite, &curwrite, 500*1000, 10);
+			if (ios4_hack > 0) {
+				fprintf(stderr, "ios4_hack %d\n", ios4_hack);
+				if (deferus > 0) {
+					fprintf(stderr, "sleep %d ms\n\n", deferus/100);
+					for (k = 1; k <= 10; k++) {
+						nsleep(deferus*1000);
+					}
+				}
+				ios4_hack--;
+			}
+		} else if (0 == strncmp("/live/amba.m3u8", getpath, strlen("/live/amba.m3u8"))) {
+			wait_nextclip(&lastclip, &absolute_seq);
+			*(strstr(buffer->buf, "mba.m3u8")) = 'a';
+			if(ios4vf) {
+				gettimeofday(&curtime, NULL);
+				k = curtime.tv_sec - lastwrite.tv_sec;
+				if (k > 2) {
+					if (ios4_hack <= 0) {
+						ios4_hack = 16;
+						fprintf(stderr, "%d timeout, reset ios4_hack=%d\n", k, ios4_hack);
+					}
+				}
+			}
+		}
+nosmoothout:
 		/* Parse request. Something like this:
 		 * GET /icons/compressed.png HTTP/1.1CRLF
 		 */
@@ -970,23 +1128,23 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 		}
 		break;
 
-	case header_type_response:
-		ret = parse_response_first_line (hdr, buffer, &begin, error_code);
-		if (unlikely(ret < ret_ok)) {
-			PRINT_DEBUG ("ERROR: Failed to parse header_type_response:\n===\n%s===\n", buffer->buf);
-			*header_end = chr_header_end;
-			return ret;
-		}
-		break;
+		case header_type_response:
+			ret = parse_response_first_line (hdr, buffer, &begin, error_code);
+			if (unlikely(ret < ret_ok)) {
+				PRINT_DEBUG ("ERROR: Failed to parse header_type_response:\n===\n%s===\n", buffer->buf);
+				*header_end = chr_header_end;
+				return ret;
+			}
+			break;
 
-	case header_type_basic:
+		case header_type_basic:
 		/* Don't do anything
 		 */
-		break;
+			break;
 
-	default:
-		*header_end = chr_header_end;
-		SHOULDNT_HAPPEN;
+		default:
+			*header_end = chr_header_end;
+			SHOULDNT_HAPPEN;
 	}
 
 
