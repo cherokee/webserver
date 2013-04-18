@@ -2,7 +2,7 @@
 # Run this to generate all the initial makefiles, etc.
 
 # Exit on error
-set -e
+#set -e
 
 # Exit on pipe fails (if possible)
 ( set -o pipefail 2> /dev/null ) || true
@@ -64,9 +64,65 @@ fi
     DIE=1
 }
 
+echo "Checking for the existence of python2 binary..."
+	
+hash python2 2>&- || {
+
+	echo "python2 binary does not exist. Searching for appropriate python2.x binary to symlink..."
+	
+	PYTHON2EXISTS=false
+	
+	for python2 in python2.7 python2.6 python2.5 python2.4; do
+		echo "Testing for $python2..."
+		hash $python2 2>&-
+		STATUS=$?
+
+		if [[ $STATUS -eq 0 ]]
+		then
+			echo "$python2 binary found."
+			PYTHON2EXISTS=true
+			PYTHON2BIN=$(which $python2)
+			
+			#Terminal colors
+			RESTORE='\033[0m'
+			RED='\033[00;31m'
+			WHITE='\033[01;37m'
+			LYELLOW='\033[01;33m'
+			
+			prompt=$(echo "${RED}Would you like to create a symlink from $PYTHON2BIN to /usr/local/bin/python2? ${WHITE}[${LYELLOW}Yes${RESTORE}|no${WHITE}]: ${RESTORE}")
+			
+			read -e -p "$prompt" CREATESYMLINK
+			CREATESYMLINK=${CREATESYMLINK:-no}
+
+			if [[ "$CREATESYMLINK" == "Yes" ]]
+			then
+				echo "Symlinking $PYTHON2BIN to /usr/local/bin/python2"
+				ln -s $PYTHON2BIN /usr/local/bin/python2
+			else
+				echo "${RED}A python2 symlink to a Python 2.x binary (e.g. ${WHITE}$PYTHON2BIN${RED}) is required to continue."
+				echo "Please use a Python installation script of your choice that will create the required"
+				echo "symlink or manually create a symlink in a location accessible from your ${WHITE}\$PATH${RED} environment"
+				echo "variable and then rerun this script.${RESTORE}"
+				DIE=1
+			fi
+			break
+		fi
+	done
+
+	if [[ "$PYTHON2EXISTS" == "false" ]]
+	then
+		echo "No compatible Python 2.x binary found. Exiting."
+		DIE=1
+	fi
+}
+
+
 if test "$DIE" -eq 1; then
     exit 1
 fi
+
+# Exit on error
+set -e
 
 # Update the POTFILES.in
 echo "Generating a fresh po/admin/POTFILES.in file.."
