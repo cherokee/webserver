@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -70,13 +70,6 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 	case cherokee_poll_poll:
 #if HAVE_POLL
 		return fdpoll_poll_get_fdlimits (sys_fd_limit, fd_limit);
-#else
-		return ret_no_sys;
-#endif
-
-	case cherokee_poll_win32:
-#ifdef HAVE_WIN32_SELECT
-		return fdpoll_win32_get_fdlimits (sys_fd_limit, fd_limit);
 #else
 		return ret_no_sys;
 #endif
@@ -149,13 +142,6 @@ cherokee_fdpoll_new (cherokee_fdpoll_t    **fdp,
 		return ret_no_sys;
 #endif
 
-	case cherokee_poll_win32:
-#ifdef HAVE_WIN32_SELECT
-		return fdpoll_win32_new (fdp, sys_fd_limit, fd_limit);
-#else
-		return ret_no_sys;
-#endif
-
 	case cherokee_poll_select:
 #if HAVE_SELECT
 		return fdpoll_select_new (fdp, sys_fd_limit, fd_limit);
@@ -186,9 +172,6 @@ cherokee_fdpoll_best_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	if (ret == ret_ok) return ret_ok;
 
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_port, sys_limit, limit);
-	if (ret == ret_ok) return ret_ok;
-
-	ret = cherokee_fdpoll_new (fdp, cherokee_poll_win32, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
 
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_select, sys_limit, limit);
@@ -222,9 +205,6 @@ cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, const char **str)
 		break;
 	case cherokee_poll_poll:
 		*str = "poll";
-		break;
-	case cherokee_poll_win32:
-		*str = "win32";
 		break;
 	case cherokee_poll_select:
 		*str = "select";
@@ -264,17 +244,12 @@ cherokee_fdpoll_str_to_method (char *str, cherokee_poll_type_t *poll_type)
 		return ret_ok;
 	}
 
-	if (equal_str(str, "win32")) {
-		*poll_type = cherokee_poll_win32;
-		return ret_ok;
-	}
-
 	if (equal_str(str, "select")) {
 		*poll_type = cherokee_poll_select;
 		return ret_ok;
 	}
 
-	/* Unknown type.
+	/* Unknown type
 	 */
 	return ret_error;
 }
@@ -362,4 +337,3 @@ cherokee_fdpoll_watch (cherokee_fdpoll_t *fdp, int timeout_msecs)
 
 	return fdp->watch (fdp, timeout_msecs);
 }
-

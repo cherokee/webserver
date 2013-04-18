@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -294,15 +294,9 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Document Root:
 	 */
-	if (CONN_VSRV(conn)->evhost) {
-		set_env (cgi, "DOCUMENT_ROOT",
+	set_env (cgi, "DOCUMENT_ROOT",
 			 conn->local_directory.buf,
 			 conn->local_directory.len);
-	} else {
-		set_env (cgi, "DOCUMENT_ROOT",
-			 CONN_VSRV(conn)->root.buf,
-			 CONN_VSRV(conn)->root.len);
-	}
 
 	/* REMOTE_(ADDR/PORT): X-Real-IP
 	 */
@@ -381,7 +375,7 @@ cherokee_handler_cgi_base_build_basic_env (
 	}
 
 	/* HTTP_HOST and SERVER_NAME. The difference between them is that
-	 * HTTP_HOST can include the «:PORT» text, and SERVER_NAME only
+	 * HTTP_HOST can include the ":PORT" text, and SERVER_NAME only
 	 * the name
 	 */
 	cherokee_header_copy_known (&conn->header, header_host, tmp);
@@ -885,7 +879,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	 */
 	if (! props->check_file)
 	{
-		if (conn->web_directory.len == 1) {
+		if (conn->web_directory.len == 1 || cherokee_connection_use_webdir (conn)) {
 			cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
 
 		} else {
@@ -1031,8 +1025,13 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
 			end2 = begin;
 
-			conn->error_code = code;
-			continue;
+			if (unlikely (conn->error_internal_code != http_unset)) {
+                conn->error_internal_code = code;
+            } else {
+                conn->error_code = code;
+            }
+
+            continue;
 		}
 
 		else if (strncasecmp ("HTTP/", begin, 5) == 0) {
@@ -1050,8 +1049,13 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
 			end2 = begin;
+			
+            if (unlikely (conn->error_internal_code != http_unset)) {
+                conn->error_internal_code = code;
+            } else {
+                conn->error_code = code;
+            }
 
-			conn->error_code = code;
 			continue;
 		}
 

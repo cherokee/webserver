@@ -1,5 +1,5 @@
 # Galician translations for cherokee package
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 # Xose M. <pikamoku@gmail.com>, 2010.
 #
 msgid ""
@@ -1768,9 +1768,9 @@ msgid "Choose the listing theme."
 msgstr "Elexir o tema do listado"
 
 #: cherokee-trunk/admin/plugins/dirlist.py:35
-msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
+msgid "Web directory where the icon files are located. Default: <i>/cherokee_icons</i>."
 msgstr ""
-"Directorio onde están os ficheiros de iconas. Por omisión: <i>/icons</i>."
+"Directorio onde están os ficheiros de iconas. Por omisión: <i>/cherokee_icons</i>."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:36
 msgid "List of notice files to be inserted."
@@ -4041,9 +4041,9 @@ msgstr "Listado de directorios de Iconas"
 
 #: cherokee-trunk/admin/wizards/List.py:130
 msgid ""
-"Add the /icons and /cherokee_themes directories used for directory listing."
+"Add the /cherokee_icons and /cherokee_themes directories used for directory listing."
 msgstr ""
-"Engadir os directorios /icons e /cherokee_themes usados para o listado de "
+"Engadir os directorios /cherokee_icons e /cherokee_themes usados para o listado de "
 "directorios."
 
 #: cherokee-trunk/admin/wizards/List.py:133
@@ -4187,18 +4187,18 @@ msgstr "Ben vido ó asistente Icons"
 
 #: cherokee-trunk/admin/wizards/icons.py:38
 msgid ""
-"This wizard adds the /icons and /cherokee_themes directories so Cherokee can "
+"This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can "
 "use icons when listing directories."
 msgstr ""
-"Este asistente engade os directorios /icons e /cherokee_themes así Cherokee "
+"Este asistente engade os directorios /cherokee_icons e /cherokee_themes así Cherokee "
 "pode usar iconas cando lista directorios."
 
 #: cherokee-trunk/admin/wizards/icons.py:39
 msgid ""
-"The /icons and /cherokee_themes directories are already configured. There is "
+"The /cherokee_icons and /cherokee_themes directories are already configured. There is "
 "nothing left to do."
 msgstr ""
-"Os directorios /icons e /cherokee_theme xa están configurados. Non queda "
+"Os directorios /cherokee_icons e /cherokee_theme xa están configurados. Non queda "
 "nada por facer."
 
 #: cherokee-trunk/admin/wizards/alfresco.py:37

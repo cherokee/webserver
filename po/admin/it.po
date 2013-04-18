@@ -1,6 +1,6 @@
 # Italian Translation for cherokee package
 # Traduzione Italiana per il pacchetto cherokee
-# Copyright (C) YEAR Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 # This file is distributed under the same license as the PACKAGE package.
 # Claudio Tancioni <c.tancioni@gmail.com>, 2010.
 #
@@ -1780,9 +1780,9 @@ msgid "Choose the listing theme."
 msgstr "Scegli il tema."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:35
-msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
+msgid "Web directory where the icon files are located. Default: <i>/cherokee_icons</i>."
 msgstr ""
-"Web directory dove si trovano i file icona. Predefinito: <i>/icons </i>."
+"Web directory dove si trovano i file icona. Predefinito: <i>/cherokee_icons </i>."
 
 #: cherokee-trunk/admin/plugins/dirlist.py:36
 msgid "List of notice files to be inserted."
@@ -4062,9 +4062,9 @@ msgstr "Elenca Directory come Icone"
 
 #: cherokee-trunk/admin/wizards/List.py:130
 msgid ""
-"Add the /icons and /cherokee_themes directories used for directory listing."
+"Add the /cherokee_icons and /cherokee_themes directories used for directory listing."
 msgstr ""
-"Aggiungere le cartelle /icons e /cherokee_themes utilizzate per elencare "
+"Aggiungere le cartelle /cherokee_icons e /cherokee_themes utilizzate per elencare "
 "directory."
 
 #: cherokee-trunk/admin/wizards/List.py:133
@@ -4205,18 +4205,18 @@ msgstr "Benvenuto nella procedura guidata delle Icone"
 
 #: cherokee-trunk/admin/wizards/icons.py:38
 msgid ""
-"This wizard adds the /icons and /cherokee_themes directories so Cherokee can "
+"This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can "
 "use icons when listing directories."
 msgstr ""
-"Questa procedura guidata aggiunge le directory /icons e /cherokee_themes "
+"Questa procedura guidata aggiunge le directory /cherokee_icons e /cherokee_themes "
 "cosà¬ che Cherokee può utilizzare le icone quando elenca le directory."
 
 #: cherokee-trunk/admin/wizards/icons.py:39
 msgid ""
-"The /icons and /cherokee_themes directories are already configured. There is "
+"The /cherokee_icons and /cherokee_themes directories are already configured. There is "
 "nothing left to do."
 msgstr ""
-"Le directory /icons e /cherokee_themes sono già  configurate. Non è rimasto "
+"Le directory /cherokee_icons e /cherokee_themes sono già  configurate. Non è rimasto "
 "nullà altro da fare."
 
 #: cherokee-trunk/admin/wizards/alfresco.py:37

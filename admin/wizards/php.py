@@ -6,7 +6,7 @@
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #      Taher Shihadeh <taher@octality.com>
 #
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -29,7 +29,6 @@ import CTK
 import Wizard
 import validations
 import popen
-import market
 
 from util import *
 
@@ -586,6 +585,41 @@ def __source_add_std (php_path):
 
     return next
 
+def get_installation_UID():
+	whoami = os.getuid()
+	try:
+		info = pwd.getpwuid (whoami)
+		return info.pw_name
+	except:
+		return str(whoami)
+
+def get_installation_GID():
+    root_group = SystemInfo.get_info()['group_root']
+
+    try:
+        groups = os.getgroups()
+        groups.sort()
+        first_group = str(groups[0])
+    except OSError,e:
+        # os.getgroups can fail when run as root (MacOS X 10.6)
+        if os.getuid() != 0:
+            raise e
+        first_group = str(root_group)
+
+    # Systems
+    if sys.platform == 'linux2':
+        if os.getuid() == 0:
+            return root_group
+        return first_group
+    elif sys.platform == 'darwin':
+        if os.getuid() == 0:
+            return root_group
+        return first_group
+
+    # Solaris RBAC, TODO
+    if os.getuid() == 0:
+        return root_group
+    return first_group
 
 def __source_add_fpm (php_path):
     # Read settings
@@ -610,8 +644,8 @@ def __source_add_fpm (php_path):
     server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
     server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
 
-    root_user    = market.InstallUtil.get_installation_UID()
-    root_group   = market.InstallUtil.get_installation_GID()
+    root_user    = get_installation_UID()
+    root_group   = get_installation_GID()
     php_user     = fpm_info.get('user',  server_user)
     php_group    = fpm_info.get('group', server_group)
 

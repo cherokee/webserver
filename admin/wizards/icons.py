@@ -6,7 +6,7 @@
 #      Taher Shihadeh <taher@octality.com>
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -35,15 +35,15 @@ from util import *
 from configured import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the Icons Wizard")
-NOTE_WELCOME_P1 = N_("This wizard adds the /icons and /cherokee_themes directories so Cherokee can use icons when listing directories.")
-NOTE_WELCOME_ERR= N_("The /icons and /cherokee_themes directories are already configured. There is nothing left to do.")
+NOTE_WELCOME_P1 = N_("This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can use icons when listing directories.")
+NOTE_WELCOME_ERR= N_("The /cherokee_icons and /cherokee_themes directories are already configured. There is nothing left to do.")
 
 PREFIX    = 'tmp!wizard!icons'
 URL_APPLY = r'/wizard/vserver/icons/apply'
 
 CONFIG_ICONS = """
 %(rule_pre_2)s!match = directory
-%(rule_pre_2)s!match!directory = /icons
+%(rule_pre_2)s!match!directory = /cherokee_icons
 %(rule_pre_2)s!handler = file
 %(rule_pre_2)s!handler!iocache = 1
 %(rule_pre_2)s!document_root = %(droot_icons)s
@@ -107,7 +107,7 @@ class Welcome:
         icons, themes = False, False
         for r in rules:
             if CTK.get_val ('%s!rule!%s!match'%(vsrv_pre, r)) == 'directory' and \
-               CTK.cfg.get_val ('%s!rule!%s!match!directory'%(vsrv_pre, r)) == '/icons':
+               CTK.cfg.get_val ('%s!rule!%s!match!directory'%(vsrv_pre, r)) == '/cherokee_icons':
                 icons = True
             if CTK.cfg.get_val ('%s!rule!%s!match'%(vsrv_pre, r)) == 'directory' and \
                CTK.cfg.get_val ('%s!rule!%s!match!directory'%(vsrv_pre, r)) == '/cherokee_themes':

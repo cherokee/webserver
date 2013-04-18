@@ -1,0 +1,102 @@
+== link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
+
+Installation from GitHub
+------------------------
+
+The latest, bleeding edge Cherokee release can always be retrieved via
+Git. Note that this is the development release and could very well be
+unstable. In general it is not recommended to run this release in
+production environments.
+
+Briefly, Git is a system tool used to store and maintain files and a
+history of their changes over time, and it is an invaluable development
+tool. The Cherokee source code and related files are kept in a Git repository
+on link:https://github.com/cherokee/webserver[GitHub].
+
+You can read more about Git at link:http://git-scm.com/[git-scm.com].
+
+To download the Git repository you will need a special piece of
+software called a Git client. On a Linux-based system, the official 
+command-line client, simply named ``git``, can typically be installed
+from repositories.  For instance, on an Ubuntu or Debian-based system
+install using:
+
+----
+sudo apt-get install git
+----
+
+or on a Yum-based system, such as Fedora, RHEL or CentOS install using:
+
+----
+sudo yum install git-core
+----
+
+
+[[clone]]
+Cloning the sources
+~~~~~~~~~~~~~~~~~~~
+
+To take a copy of the sources for the first time from the repository, use this
+command:
+
+----
+git clone --recursive git://github.com/cherokee/webserver cherokee
+----
+
+If you are on a system with a version of Git earlier than 1.6.5, then you
+will also need to manually update the Git submodules for this repository:
+
+----
+git clone git://github.com/cherokee/webserver cherokee
+cd cherokee
+git submodule update --init
+----
+ 
+
+[[update]]
+Updating the sources
+~~~~~~~~~~~~~~~~~~~~
+
+To update the source with latest changes, you use this command within your
+local repository:
+
+----
+git pull -u
+----
+
+
+[[compile]]
+Compiling and installing
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once you have downloaded the latest source from Git, you will need to
+follow the installation instructions for your specific platform.
+
+Note that some of the files present in a release tarball are not present in
+Git - the most notable of which is the `./configure` file that will be needed
+for the compilation and installation process.
+
+To generate the missing files simply run this command within your local
+repository:
+
+----
+./autogen.sh
+----
+
+As optional parameters, you can specify any option you want passed
+to `./configure`. This way you can avoid issuing another command for
+the configuration.
+
+For instance, this line will configure your local copy with the four
+specified parameters:
+
+----
+./autogen.sh --prefix=/usr        --sysconfdir=/etc \
+             --localstatedir=/var --enable-trace
+----
+
+Once you have done this, you are now ready to proceed with the standard
+compilation process for your platform:
+
+* link:basics_installation_unix.html[Unix installation]
+* link:basics_installation_windows.html[Windows installation]

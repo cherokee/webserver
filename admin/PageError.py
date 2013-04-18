@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -179,56 +179,3 @@ class AncientConfigError (CTK.Page):
 
 def AncientConfig (file):
     return AncientConfigError(file).Render()
-
-
-
-OWS_DIR_P1 = N_("A problem with the installation directories has been found.  The %s directory is missing and it could not be created by Cherokee-Admin.")
-OWS_DIR_P2 = N_("Please, create it and try again:")
-
-OWS_PERM_P1 = N_("A problem with the installation directories has been found.  The %(dir)s directory has the wrong permissions. It must be writable by the UID %(uid)s.")
-OWS_PERM_P2 = N_("Please, fix it and try again:")
-
-class OWSDirectoryError (CTK.Page):
-    def __init__ (self, **kwargs):
-        srcdir = os.path.dirname (os.path.realpath (__file__))
-        theme_file = os.path.join (srcdir, 'exception.html')
-
-        # Set up the template
-        template = CTK.Template (filename = theme_file)
-        template['body_props'] = ' id="body-error"'
-        template['title']      = _('An Incomplete Installation was detected')
-
-        # Parent's constructor
-        CTK.Page.__init__ (self, template, **kwargs)
-
-        # Write the right message
-        errors = False
-
-        for d in (CHEROKEE_OWS_DIR, CHEROKEE_OWS_ROOT):
-            if not os.path.isdir (d):
-                self += CTK.RawHTML ('<h1>%s</h1>'%(_('Missing Directory')))
-                self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_DIR_P1)%(d)))
-                self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_DIR_P2)))
-                self += CTK.RawHTML ("<p><pre>mkdir -p -m 0755 '%s'</pre>" %(d))
-                self += CTK.RawHTML ("<pre>chown -R %d '%s'</pre></p>" %(os.getuid(), d))
-                errors = True
-                break
-
-            if not os.access (d, os.W_OK):
-                self += CTK.RawHTML ('<h1>%s</h1>'%(_('Installation Problem')))
-                self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_PERM_P1)%({'dir':d, 'uid':os.getuid()})))
-                self += CTK.RawHTML ('<p>%s</p>'%(_(OWS_PERM_P2)))
-                self += CTK.RawHTML ("<pre>chown -R %d '%s'</pre></p>" %(os.getuid(), d))
-                self += CTK.RawHTML ("<pre>chmod -R 0775 '%s'</pre></p>" %(d))
-                errors = True
-                break
-
-        if errors:
-            button = CTK.Button (_("Try Again"))
-            button.bind ('click', CTK.JS.ReloadURL())
-            self += button
-        else:
-            self += CTK.RawHTML (js = CTK.JS.ReloadURL())
-
-def OWSDirectory():
-    return OWSDirectoryError().Render()

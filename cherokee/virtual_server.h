@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -75,6 +75,8 @@ typedef struct {
 	cherokee_buffer_t            certs_ca;
 	cherokee_buffer_t            req_client_certs;
 	cherokee_buffer_t            ciphers;
+	cherokee_boolean_t           cipher_server_preference;
+	cherokee_boolean_t           ssl_compression;
 	cherokee_cryptor_vserver_t  *cryptor;
 
 	struct {

@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2001-2011 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -46,6 +46,8 @@ NOTE_CERT             = N_('This directive points to the PEM-encoded Certificate
 NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full path to the file)')
 NOTE_CA_LIST          = N_('File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
 NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: HIGH:!aNULL:!MD5).')
+NOTE_CIPHER_SERVER_PREFERENCE = N_('The cipher sequence that is specified by the server should have preference over the preference of the client. (Default: False).')
+NOTE_COMPRESSION      = N_('Explicitly enable or disable serverside compression support. (Default: Disabled).')
 NOTE_CLIENT_CERTS     = N_('Skip, Accept or Require client certificates.')
 NOTE_VERIFY_DEPTH     = N_('Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)')
 NOTE_ERROR_HANDLER    = N_('Allows the selection of how to generate the error responses.')
@@ -75,7 +77,7 @@ NOTE_INDEX_USAGE      = N_('Remember that only "File Exists" rules and "List & S
 NOTE_MATCH_NICK       = N_('Use this nickname as an additional host name for this virtual server (Default: yes)')
 NOTE_HSTS             = N_('Enforce HTTPS by using the HTTP Strict Transport Security.')
 NOTE_HSTS_MAXAGE      = N_("How long the client's browser should remember the forced HTTPS (in seconds).")
-NOTE_HSTS_SUBDOMAINS  = N_("Should HSTS be used in all the subdomains of this virtual verser (Default: yes).")
+NOTE_HSTS_SUBDOMAINS  = N_("Should HSTS be used in all the subdomains of this virtual server (Default: yes).")
 
 DEFAULT_HOST_NOTE     = N_("<p>The 'default' virtual server matches all the domain names.</p>")
 
@@ -456,11 +458,7 @@ class BasicsWidget (CTK.Container):
 
         # Paths
         table = CTK.PropsAuto (url_apply)
-        if not CTK.cfg.get_val ('%s!document_root'%(pre),'').startswith(CHEROKEE_OWS_ROOT):
-            table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre)),   _(NOTE_DOCUMENT_ROOT))
-        else:
-            table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre), False, {'disabled':True}), _(NOTE_DOCUMENT_ROOT))
-
+        table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre)),   _(NOTE_DOCUMENT_ROOT))
         table.Add (_('Directory Indexes'), CTK.TextCfg('%s!directory_index'%(pre)), _(NOTE_DIRECTORY_INDEX))
 
         self += CTK.RawHTML ('<h2>%s</h2>' %(_('Paths')))
@@ -665,7 +663,9 @@ class SecutiryWidgetContent (CTK.Container):
         # Advanced options
         table = CTK.PropsTable()
         table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
+        table.Add (_('Server Preference'),     CTK.CheckCfgText ('%s!ssl_cipher_server_preference' % (pre), False, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
         table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
+        table.Add (_('Compression'),           CTK.CheckCfgText ('%s!ssl_compression' % (pre), False, _('Prefer')), _(NOTE_COMPRESSION))
 
         if CTK.cfg.get_val('%s!ssl_client_certs' %(pre)):
             table.Add (_('CA List'), CTK.TextCfg ('%s!ssl_ca_list_file' %(pre), False), _(NOTE_CA_LIST))
@@ -686,7 +686,7 @@ class SecutiryWidgetContent (CTK.Container):
 
         if int(CTK.cfg.get_val('%s!hsts' %(pre), "0")):
             table.Add (_('HSTS Max-Age'),       CTK.TextCfg ('%s!hsts!max_age'%(pre), True, {'optional_string':_("One year")}), _(NOTE_HSTS_MAXAGE))
-            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
+            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!hsts!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
 
         submit = CTK.Submitter (url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())

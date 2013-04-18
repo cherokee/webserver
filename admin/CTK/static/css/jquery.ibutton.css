@@ -1,0 +1,195 @@
+.ibutton-container {
+  position: relative;
+  height: 15px;
+  cursor: pointer;
+  overflow: hidden;
+	/* set max width to that of sprite */
+	max-width: 400px;
+	/* prevent text selection */
+	-khtml-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-moz-user-focus: ignore;
+	-moz-user-input: disabled;
+	/* set default width based on ON/OFF labels */
+	width: 40px;
+}
+
+.ibutton-container input {
+  position: absolute;
+	top: 0;
+	left: 0;
+
+	/* hide the element */
+	filter:alpha(opacity=0);
+	-moz-opacity: 0.0;
+	opacity: 0.0;
+
+	/* allow checking of input if visible */
+	-moz-user-input: enabled  !important;
+}
+
+.ibutton-handle {
+  display: block;
+  height: 15px;
+  cursor: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 0 -27px;
+  z-index: 3;
+  padding-left: 3px;
+	/* set default width based on ON/OFF labels */
+	width: 12px;
+}
+
+.ibutton-handle-right {
+  height: 100%;
+  width: 100%;
+  padding-right: 3px;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 100% -27px;
+  z-index: 3;
+}
+
+.ibutton-handle-middle {
+  height: 100%;
+  width: 100%;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 50% -27px;
+  z-index: 3;
+}
+
+div.ibutton-label-on, div.ibutton-label-off {
+  white-space: nowrap;
+  font-size: 8px;
+  line-height: 8px;
+  font-weight: bold;
+  font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+  cursor: inherit;
+  display: block;
+  height: 15px;
+  position: absolute;
+  width: auto;
+  top: 0;
+  padding-top: 5px;
+  overflow: hidden;
+  background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 0 0;
+}
+
+div.ibutton-label-on {
+  color: #fff;
+  text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.4);
+  left: 0;
+  padding-top: 5px;
+  z-index: 1;
+}
+
+div.ibutton-label-on span {
+  padding-left: 3px;
+}
+
+div.ibutton-label-off {
+  color: #7c7c7c;
+  background-position: 100% 0;
+  text-shadow: 0 -1px 2px rgba(153, 153, 153, 0.4);
+  text-align: right;
+  right: 0;
+	/* the off label needs to near the left edge (ideally just 5px away)
+	 * it just needs to be close enough that it won't show under the handle if dragged to the left
+	 */
+	width: 95%;
+}
+
+div.ibutton-label-off span {
+  padding-right: 2px;
+}
+
+/* create an outline when button gets focus via keyboard */
+.ibutton-container label {
+	cursor: inherit;
+	border: 1px dotted transparent;
+}
+
+.ibutton-focus label {
+	/* we must use border, since outline doesn't work in IE */
+	border: 1px dotted #666 !important;
+}
+
+.ibutton-focus div.ibutton-label-on span label {
+	/* use white for more contrast */
+	border-color: #fff !important;
+}
+
+/* add padding to right/left so that text gets clipped before absolute edge */
+.ibutton-padding-left, .ibutton-padding-right {
+	position: absolute;
+	top: 4px;
+	z-index: 2;
+	background: transparent url(/CTK/images/ibutton-slider-default.png) no-repeat scroll 0 -4px;
+	width: 3px;
+	height: 20px;
+}
+
+.ibutton-padding-left {
+	left: 0;
+}
+
+.ibutton-padding-right {
+	right: 0;
+	background-position: 100% -4px;
+}
+
+/* change the styles of the handle when being dragged */
+.ibutton-active-handle .ibutton-handle {
+	background-position: 0 -108px;
+}
+
+.ibutton-active-handle .ibutton-handle-right {
+	background-position: 100% -108px;
+}
+
+.ibutton-active-handle .ibutton-handle-middle {
+	background-position: 50% -108px;
+}
+
+/* styles to use when the button is disabled */
+.ibutton-disabled {
+	cursor: not-allowed !important; /* cursor options: default or not-allowed */
+}
+
+.ibutton-disabled .ibutton-handle {
+	background-position: 0 -81px;
+}
+
+.ibutton-disabled .ibutton-handle-right {
+	background-position: 100% -81px;
+}
+
+.ibutton-disabled .ibutton-handle-middle {
+	background-position: 50% -81px;
+}
+
+.ibutton-disabled div.ibutton-label-on {
+	background-position: 0 -54px;
+}
+
+.ibutton-disabled div.ibutton-label-off {
+	background-position: 100% -54px;
+}
+
+.ibutton-disabled .ibutton-padding-left {
+	background-position: 0 -54px;
+}
+
+.ibutton-disabled .ibutton-padding-right {
+	background-position: 100% -54px;
+}
+
+.ibutton-disabled div.ibutton-label-on {
+	color: #fff;
+}
+
+.ibutton-disabled div.ibutton-label-off {
+	color: #cbcbcb;
+}

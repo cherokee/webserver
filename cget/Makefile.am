@@ -1,6 +1,6 @@
 ## Cherokee: src/cget/Makefile.am  -*- makefile -*-
 
-INCLUDES = -I. \
+AM_CPPFLAGS = -I. \
 -I${top_srcdir} \
 -I${top_srcdir}/cherokee \
 $(PTHREAD_CFLAGS)

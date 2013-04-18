@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -388,6 +388,22 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		options |= SSL_OP_NO_SSLv2;
 	}
 
+#ifdef SSL_OP_CIPHER_SERVER_PREFERENCE
+	if (vsrv->cipher_server_preference) {
+		options |= SSL_OP_CIPHER_SERVER_PREFERENCE;
+	}
+#endif
+
+#ifndef OPENSSL_NO_COMP
+	if (! vsrv->ssl_compression) {
+#ifdef SSL_OP_NO_COMPRESSION
+		options |= SSL_OP_NO_COMPRESSION;
+#elif OPENSSL_VERSION_NUMBER >= 0x00908000L
+		sk_SSL_COMP_zero(SSL_COMP_get_compression_methods());
+#endif
+	}
+#endif
+
 	SSL_CTX_set_options (n->context, options);
 
 	/* Set cipher list that vserver will accept.
@@ -573,6 +589,8 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 			   socket->socket, error);
 		return ret_error;
 	}
+
+	cryp->is_pending = false;
 
 #ifndef OPENSSL_NO_TLSEXT
 	SSL_set_app_data (cryp->session, conn);
@@ -882,11 +900,22 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 
 	CLEAR_LIBSSL_ERRORS;
 
-	len = SSL_read (cryp->session, buf, buf_size);
-	if (likely (len > 0)) {
-		*pcnt_read = len;
-		if (SSL_pending (cryp->session))
-			return ret_eagain;
+	*pcnt_read = 0;
+
+	while (buf_size > 0) {
+		len = SSL_read (cryp->session, buf, buf_size);
+		if (len < 1)
+			break;
+		*pcnt_read += len;
+		buf += len;
+		buf_size -= len;
+	}
+
+    /* We have more data than buffer space. Mark the socket as
+	 * having pending data. */
+    cryp->is_pending = (buf_size == 0);
+
+	if (*pcnt_read > 0) {
 		return ret_ok;
 	}
 
@@ -927,7 +956,7 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 static int
 _socket_pending (cherokee_cryptor_socket_libssl_t *cryp)
 {
-	return (SSL_pending (cryp->session) > 0);
+	return cryp->is_pending;
 }
 
 static ret_t

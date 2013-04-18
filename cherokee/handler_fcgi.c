@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -228,7 +228,6 @@ cherokee_handler_fcgi_configure (cherokee_config_node_t   *conf,
 		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n),
 							   MODULE_PROPS_FREE(props_free));
 
-		INIT_LIST_HEAD (&n->server_list);
 		n->balancer = NULL;
 
 		*_props = MODULE_PROPS(n);
@@ -404,7 +403,7 @@ add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 
 	/* POST management
 	 */
-	if (http_method_with_input (conn->header.method)) {
+	if (conn->post.has_info) {
 		if (conn->post.encoding == post_enc_regular) {
 			cherokee_buffer_add_ullong10 (&buffer, conn->post.len);
 			set_env (cgi_base, "CONTENT_LENGTH", buffer.buf, buffer.len);
@@ -516,7 +515,7 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 
 	/* No POST?
 	 */
-	if ((! http_method_with_input (conn->header.method)) || (! conn->post.has_info)) {
+	if ((! conn->post.has_info) || (! conn->post.len)) {
 		TRACE (ENTRIES",post", "Post: %s\n", "has no post");
 		add_empty_packet (hdl, FCGI_STDIN);
 	}

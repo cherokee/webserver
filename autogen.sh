@@ -29,7 +29,8 @@ test -z "$AUTOMAKE" && AUTOMAKE=automake
 test -z "$ACLOCAL" && ACLOCAL=aclocal
 test -z "$AUTOCONF" && AUTOCONF=autoconf
 test -z "$AUTOHEADER" && AUTOHEADER=autoheader
-if [ -x /usr/bin/glibtool ]; then
+
+if hash glibtool 2>&-; then
  test -z "$LIBTOOL" && LIBTOOL=glibtool
  test -z "$LIBTOOLIZE" && LIBTOOLIZE=glibtoolize
 else
@@ -102,7 +103,7 @@ if test -z "$ACLOCAL_FLAGS"; then
 fi
 
 # Libtool
-if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
+if grep "^AM_PROG_LIBTOOL" configure.ac >/dev/null; then
   echo "Running: libtoolize --force --copy..."
   $LIBTOOLIZE --force --copy
 fi
@@ -113,7 +114,7 @@ rm -f aclocal.m4
 $ACLOCAL $ACLOCAL_FLAGS
 
 # Autoheader
-if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
+if grep "^AC_CONFIG_HEADERS" configure.ac >/dev/null; then
   echo "Running: autoheader..."
   $AUTOHEADER
 fi

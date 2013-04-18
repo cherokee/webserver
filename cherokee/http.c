@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -65,7 +65,7 @@ cherokee_http_method_to_string (cherokee_http_method_t method, const char **str,
 		entry (http_unsubscribe, "UNSUBSCRIBE");
 		entry (http_report, "REPORT");
 		entry (http_patch, "PATCH");
-		entry (http_version_control, "VERSION_CONTROL");
+		entry (http_version_control, "VERSION-CONTROL");
 		entry (http_checkout, "CHECKOUT");
 		entry (http_uncheckout, "UNCHECKOUT");
 		entry (http_checkin, "CHECKIN");
@@ -73,7 +73,7 @@ cherokee_http_method_to_string (cherokee_http_method_t method, const char **str,
 		entry (http_label, "LABEL");
 		entry (http_mkworkspace, "MKWORKSPACE");
 		entry (http_mkactivity, "MKACTIVITY");
-		entry (http_baseline_control, "BASELINE_CONTROL");
+		entry (http_baseline_control, "BASELINE-CONTROL");
 		entry (http_merge, "MERGE");
 		entry (http_invalid, "INVALID");
 
@@ -135,7 +135,7 @@ cherokee_http_string_to_method (cherokee_buffer_t      *string,
 		*method = http_report;
 	else if (cherokee_buffer_case_cmp_str (string, "patch") == 0)
 		*method = http_patch;
-	else if (cherokee_buffer_case_cmp_str (string, "version_control") == 0)
+	else if (cherokee_buffer_case_cmp_str (string, "version-control") == 0)
 		*method = http_version_control;
 	else if (cherokee_buffer_case_cmp_str (string, "checkout") == 0)
 		*method = http_checkout;
@@ -151,7 +151,7 @@ cherokee_http_string_to_method (cherokee_buffer_t      *string,
 		*method = http_mkworkspace;
 	else if (cherokee_buffer_case_cmp_str (string, "mkactivity") == 0)
 		*method = http_mkactivity;
-	else if (cherokee_buffer_case_cmp_str (string, "baseline_control") == 0)
+	else if (cherokee_buffer_case_cmp_str (string, "baseline-control") == 0)
 		*method = http_baseline_control;
 	else if (cherokee_buffer_case_cmp_str (string, "merge") == 0)
 		*method = http_merge;

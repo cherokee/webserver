@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -815,12 +815,10 @@ send_post (cherokee_handler_proxy_t *hdl)
 
 		if (hdl->pconn->post.do_buf_sent) {
 			if (hdl->pconn->post.sent >= buffer->len) {
-				hdl->got_all = true;
 				return ret_ok;
 			}
 		} else {
 			if (cherokee_buffer_is_empty (buffer)) {
-				hdl->got_all = true;
 				return ret_ok;
 			}
 		}

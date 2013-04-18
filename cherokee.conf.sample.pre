@@ -38,7 +38,7 @@ vserver!1!rule!1!handler = common
 vserver!1!rule!1!handler!iocache = 1
 
 vserver!1!rule!2!match = directory
-vserver!1!rule!2!match!directory = /icons
+vserver!1!rule!2!match!directory = /cherokee_icons
 vserver!1!rule!2!handler = file
 vserver!1!rule!2!document_root = %prefix%/share/cherokee/icons
 

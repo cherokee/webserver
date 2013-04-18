@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -566,7 +566,12 @@ cherokee_connection_setup_hsts_handler (cherokee_connection_t *conn)
 	cherokee_buffer_clean   (&conn->redirect);
 	cherokee_buffer_add_str (&conn->redirect, "https://");
 
-	cherokee_connection_build_host_port_string (conn, &conn->redirect);
+	/* TODO: this currently redirects to the host without port
+	 * but as you can imagine, a non-standard TLS port could have
+	 * been configured. The full redirect might be configured in
+	 * the future when such demand is considered necessary.
+	 */
+	cherokee_connection_build_host_string (conn, &conn->redirect);
 	cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
 
 	if (conn->query_string.len > 0) {
@@ -2935,6 +2940,33 @@ cherokee_connection_update_timeout (cherokee_connection_t *conn)
 	       conn, cherokee_connection_get_phase_str (conn), conn->timeout_lapse);
 
 	conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
+}
+
+
+ret_t
+cherokee_connection_build_host_string (cherokee_connection_t *conn,
+				       cherokee_buffer_t     *buf)
+{
+	/* 1st choice: Request host */
+	if (! cherokee_buffer_is_empty (&conn->host)) {
+		cherokee_buffer_add_buffer (buf, &conn->host);
+	}
+
+	/* 2nd choice: Bound IP */
+	else if ((conn->bind != NULL) &&
+		 (! cherokee_buffer_is_empty (&conn->bind->ip)))
+	{
+		cherokee_buffer_add_buffer (buf, &conn->bind->ip);
+	}
+
+	/* 3rd choice: Bound IP, rendered address */
+	else if ((conn->bind != NULL) &&
+		 (! cherokee_buffer_is_empty (&conn->bind->server_address)))
+	{
+		cherokee_buffer_add_buffer (buf, &conn->bind->server_address);
+	}
+
+	return ret_ok;
 }
 
 

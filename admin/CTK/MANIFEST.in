@@ -1,0 +1,6 @@
+include README
+include LICENSE 
+include ChangeLog
+include pyscgi/pyscgi.py
+include tests/test1_env.py
+include tests/test2_post.py

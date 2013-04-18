@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2001-2011 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -153,7 +153,6 @@ class Base (CTK.Page):
         template['save']      = _('Save')
         template['home']      = _('Home')
         template['status']    = _('Status')
-        template['market']    = _('Apps')
         template['general']   = _('General')
         template['vservers']  = _('vServers')
         template['sources']   = _('Sources')

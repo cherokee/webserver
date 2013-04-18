@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Layout for cherokee-project.com
-ASCIIDOC_HTML="python asciidoc.py --conf-file=web.conf"
+ASCIIDOC_HTML="python2 asciidoc.py --conf-file=web.conf"
 
 for i in ../*.txt
  do

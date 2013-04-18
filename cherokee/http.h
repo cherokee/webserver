@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -224,18 +224,32 @@ typedef enum {                               /* Protocol   RFC  Section */
 
 #define http_method_with_body(m)  ((m) != http_head)
 
+/* RFC 2518, RFC 2616, RFC3253, RFC 5789 */
 #define http_method_with_input(m) ((m == http_post)      || \
 				   (m == http_put)       || \
-				   (m == http_mkcol)     || \
 				   (m == http_merge)     || \
 				   (m == http_search)    || \
 				   (m == http_report)    || \
-				   (m == http_checkout)  || \
+				   (m == http_patch)     || \
 				   (m == http_propfind)  || \
 				   (m == http_proppatch) || \
-				   (m == http_mkactivity))
+				   (m == http_update)    || \
+				   (m == http_label))
 
-#define http_method_with_optional_input(m) (m == http_options)
+#define http_method_with_optional_input(m) ((m == http_options)		  || \
+					    (m == http_delete)		  || \
+					    (m == http_mkcol)		  || \
+					    (m == http_copy)		  || \
+					    (m == http_move)		  || \
+					    (m == http_lock)		  || \
+					    (m == http_unlock)		  || \
+					    (m == http_version_control)	  || \
+					    (m == http_checkout)	  || \
+					    (m == http_uncheckout)	  || \
+					    (m == http_checkin)		  || \
+					    (m == http_mkworkspace)	  || \
+					    (m == http_mkactivity)	  || \
+					    (m == http_baseline_control))
 
 
 /* RFC 2616: Section 4.3 */

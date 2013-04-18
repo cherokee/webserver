@@ -6,7 +6,7 @@
 #      Taher Shihadeh <taher@octality.com>
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -108,8 +108,9 @@ class Commit:
         # Analize Django config file
         media_web_dir = django_figure_media_prefix (django_dir)
 
-        # Python
-        python_bin = path_find_binary (['python', 'python*'], default="python")
+        # Python 2
+        # (When Django supports python3, this should be updated. Django 1.5?)
+        python_bin = path_find_binary (['python2', 'python', 'python*'], default="python2")
 
         # Add the new rules
         config = CONFIG_VSERVER %(locals())
@@ -139,8 +140,9 @@ class Commit:
         src_port = cfg_source_find_free_port ()
         src_num, src_pre  = cfg_source_get_next ()
 
-        # Python
-        python_bin = path_find_binary (['python', 'python*'], default="python")
+        # Python 2
+        # (When Django supports python3, this should be updated. Django 1.5?)
+        python_bin = path_find_binary (['python2', 'python', 'python*'], default="python2")
 
         # Add the new rules
         config = CONFIG_DIR %(locals())

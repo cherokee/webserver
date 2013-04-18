@@ -5,6 +5,8 @@ other_DATA = \
 contact-bug.png \
 contact-list.png \
 facebook.png \
+googleplus.png \
+github.png \
 linkedin.png \
 irc.png \
 latest.png \

@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -135,7 +135,7 @@ LIST = [
              'type':  TYPE_RULE},
             {'name':  'icons',
              'title': N_('Directory-listing Icons'),
-             'descr': N_('Add the /icons and /cherokee_themes directories used for directory listing.'),
+             'descr': N_('Add the /cherokee_icons and /cherokee_themes directories used for directory listing.'),
              'type':  TYPE_RULE},
             {'name':  'static',
              'title': N_('Static-file support'),

@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -367,7 +367,7 @@ add_environment (cherokee_handler_cgi_t *cgi,
 
 	/* CONTENT_LENGTH
 	 */
-	if (http_method_with_input (conn->header.method)) {
+	if (conn->post.has_info) {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add_ullong10 (tmp, conn->post.len);
 		set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);

@@ -71,6 +71,45 @@ def upgrade_to_1_0_13 (cfg):
                 elif val == '0':
                     del(cfg[key])
 
+# Converts to 1.2.102
+METHODS_MAP = {'baseline_control': 'baseline-control',
+               'version_control': 'version-control'
+              }
+def update_rules_methods(cfg, key, node):
+    if node.value == 'method':
+        method_key = '%s!method' % key
+        method_value = cfg.get_val(method_key)
+        # Check rule's method key value and replace if problematic
+        if method_value in METHODS_MAP:
+            cfg[method_key] = METHODS_MAP[method_value]
+    else:
+        for k in node.keys():
+            child_key = '%s!%s' % (key, k)
+            child_node = cfg[child_key]
+            update_rules_methods(cfg, child_key, child_node)
+
+def upgrade_to_1_2_102 (cfg):
+    # Update HTTP method specifications for those that were incorrect
+
+    for v in cfg.keys('vserver'):
+        for r in cfg.keys('vserver!%s!rule' % (v)):
+            # Traverse rules and look for HTTP method 'match' elements
+            rule_key = 'vserver!%s!rule!%s!match' % (v,r)
+            rule_node = cfg[rule_key]
+            update_rules_methods(cfg, rule_key, rule_node)
+            
+# Converts to 1.2.103
+def upgrade_to_1_2_103 (cfg):
+    # Replace the obsolete virtual path to /icons with /cherokee_icons:
+    # Search for rules where the value of key "document_root" ends with
+    # the string "share/cherokee/icons", and update the value of rule's
+    # key "match" to "/cherokee_icons".
+    for v in cfg.keys('vserver'):
+        for r in cfg.keys('vserver!%s!rule'%(v)):
+            if cfg.get_val('vserver!%s!rule!%s!document_root'%(v,r)) and \
+               cfg.get_val('vserver!%s!rule!%s!document_root'%(v,r)).endswith('share/cherokee/icons') and \
+               cfg.get_val('vserver!%s!rule!%s!match!directory'%(v,r)) == "/icons":
+                    cfg['vserver!%s!rule!%s!match!directory'%(v,r)] = '/cherokee_icons'
 
 def config_version_get_current():
     ver = configured.VERSION.split ('b')[0]
@@ -144,6 +183,14 @@ def config_version_update_cfg (cfg):
     # Update to.. 1.0.13
     if ver_config_i < 1000013:
         upgrade_to_1_0_13 (cfg)
+
+    # Update to.. 1.2.102
+    if ver_config_i < 1002102:
+        upgrade_to_1_2_102 (cfg)
+        
+    # Update to.. 1.2.103
+    if ver_config_i < 1002103:
+        upgrade_to_1_2_103 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True

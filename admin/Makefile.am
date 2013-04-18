@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = market plugins wizards CTK icons
+SUBDIRS = plugins wizards CTK icons
 
 if INSTALL_ADMIN
 SUBDIRS += static
@@ -44,10 +44,6 @@ Graph.py \
 Handler.py \
 Icons.py \
 Mime.py \
-OWS_Backup.py \
-OWS_Cherokee_Info.py \
-OWS_Login.py \
-OWS_Market_Info.py \
 Page.py \
 PageAdvanced.py \
 PageEntry.py \

@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -260,6 +260,7 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	 */
 	cherokee_buffer_add_buffer (&query, &props->query);
 	cherokee_buffer_replace_string (&query, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
+	cherokee_buffer_replace_string (&query, "${passwd}", 9, conn->validator->passwd.buf, conn->validator->passwd.len);
 
 	TRACE (ENTRIES, "Query: %s\n", query.buf);
 

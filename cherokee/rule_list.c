@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -78,6 +78,7 @@ update_connection (cherokee_connection_t   *conn,
 	if (! NULLI_IS_NULL(ret_config->timeout_lapse)) {
 		conn->timeout_lapse  = ret_config->timeout_lapse;
 		conn->timeout_header = ret_config->timeout_header;
+		cherokee_connection_update_timeout (conn);
 	}
 }
 

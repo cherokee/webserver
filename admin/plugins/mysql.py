@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2010 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -38,7 +38,7 @@ NOTE_UNIX   = N_('Full path of Unix socket to communicate with the data base.')
 NOTE_USER   = N_('User name for connecting to the database.')
 NOTE_PASSWD = N_('Password for connecting to the database.')
 NOTE_DB     = N_('Database name containing the user/password pair list.')
-NOTE_SQL    = N_('SQL command to execute. ${user} is replaced with the user name.')
+NOTE_SQL    = N_('SQL command to execute. ${user} is replaced with the user name, and ${passwd} is replaced with the user supplied password.')
 NOTE_HASH   = N_('Choose an encryption type for the password. Only suitable for the "Basic" authentication mechanism.')
 
 HASHES = [

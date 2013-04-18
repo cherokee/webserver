@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -814,6 +814,8 @@ process_active_connections (cherokee_thread_t *thd)
 				/* Set mode and update timeout
 				 */
 				conn_set_mode (thd, conn, socket_reading);
+
+				conn->timeout_lapse  = srv->timeout;
 				cherokee_connection_update_timeout (conn);
 
 				conn->phase = phase_reading_header;
@@ -1477,6 +1479,17 @@ process_active_connections (cherokee_thread_t *thd)
  			SHOULDNT_HAPPEN;
 		}
 
+	} /* list */
+
+	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
+		conn = CONN(i);
+
+		/* Check whether we have data sitting in SSL buffers that needs
+		* to be processed before we wait for file descriptors. */
+		if (conn->socket.cryptor &&
+		   cherokee_cryptor_socket_pending(conn->socket.cryptor)) {
+			thd->pending_read_num++;
+		}
 	} /* list */
 
 	return ret_ok;

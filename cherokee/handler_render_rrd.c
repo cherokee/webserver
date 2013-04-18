@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -556,7 +556,7 @@ handler_free (cherokee_handler_render_rrd_t *hdl)
 	cherokee_buffer_mrproper (&hdl->rrd_error);
 
 	if (hdl->file_hdl != NULL) {
-		cherokee_handler_file_free (hdl->file_hdl);
+		cherokee_handler_free ((void *) hdl->file_hdl);
 	}
 
 	return ret_ok;

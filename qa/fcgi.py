@@ -34,7 +34,7 @@ For more information about the Web Server Gateway Interface, see
 
 Example usage:
 
-  #!/usr/bin/env python
+  #!/usr/bin/env python2
   from myapplication import app # Assume app is your WSGI application object
   from fcgi import WSGIServer
   WSGIServer(app).run()

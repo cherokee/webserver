@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -155,7 +155,7 @@ do_sem_op (int sem_ref, int sem_num, int sem_op)
 	do {
 		so.sem_num = sem_num;
 		so.sem_op  = sem_op;
-		so.sem_flg = SEM_UNDO;
+		so.sem_flg = 0;
 
 		errno = 0;
 		re = semop (sem_ref, &so, 1);

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # -*- coding: utf-8 -*-
 #
@@ -7,7 +7,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2001-2011 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -35,8 +35,6 @@ import thread
 # Import CTK
 sys.path.append (os.path.abspath (os.path.realpath(__file__) + '/../CTK'))
 import CTK
-import OWS_Login
-import market.Distro
 
 # Cherokee imports
 import config_version
@@ -132,15 +130,6 @@ def debug_set_up():
     signal.signal (signal.SIGUSR1, debug_callback)
     signal.signal (signal.SIGUSR2, trace_callback)
 
-
-def download_distro_index():
-    def thread_func():
-        # First instance will trigger the update
-        index = market.Distro.Index()
-
-    thread.start_new_thread (thread_func, ())
-
-
 if __name__ == "__main__":
     # Read the arguments
     try:
@@ -207,35 +196,6 @@ if __name__ == "__main__":
 
             CTK.unpublish (r'')
 
-    # OWS related checks
-    if not os.path.isdir (CHEROKEE_OWS_DIR):
-        try: os.makedirs (CHEROKEE_OWS_DIR, 0755)
-        except OSError: pass
-
-    if not os.path.isdir (CHEROKEE_OWS_ROOT):
-        try: os.makedirs (CHEROKEE_OWS_ROOT, 0755)
-        except OSError: pass
-
-    if not os.access (CHEROKEE_OWS_DIR,  os.W_OK) or \
-       not os.access (CHEROKEE_OWS_ROOT, os.W_OK):
-        CTK.publish (r'', PageError.OWSDirectory)
-        while not os.access (CHEROKEE_OWS_DIR,  os.W_OK) or \
-              not os.access (CHEROKEE_OWS_ROOT, os.W_OK):
-            CTK.step()
-
-            if not os.path.isdir (CHEROKEE_OWS_DIR):
-                try: os.makedirs (CHEROKEE_OWS_DIR, 0755)
-                except OSError: pass
-
-            if not os.path.isdir (CHEROKEE_OWS_ROOT):
-                try: os.makedirs (CHEROKEE_OWS_ROOT, 0755)
-                except OSError: pass
-
-        CTK.unpublish (r'')
-
-    # Add the OWS plug-in directory
-    CTK.add_plugin_dir (CHEROKEE_OWS_DIR)
-
     # Set up the error page
     import PageException
     CTK.error.page = PageException.Page
@@ -257,7 +217,6 @@ if __name__ == "__main__":
     import PageNewConfig
     import PageHelp
     import PageStatus
-    import market
 
     # Wizards 2.0 (TMP!)
     wizards2_path = os.path.realpath (__file__ + "/../wizards2")
@@ -270,10 +229,6 @@ if __name__ == "__main__":
 
     # Let's get asyncronous..
     CTK.set_synchronous (False)
-
-    # Log into OWS if feature is enabled
-    ## do_OWS_login()
-    download_distro_index()
 
     # Run forever
     CTK.run()

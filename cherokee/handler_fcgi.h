@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2011 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2013 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -57,7 +57,6 @@ typedef struct {
  */
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
-	cherokee_list_t              server_list;
 	cherokee_balancer_t         *balancer;
 } cherokee_handler_fcgi_props_t;
 

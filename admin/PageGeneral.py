@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2001-2011 Alvaro Lopez Ortega
+# Copyright (C) 2001-2013 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -28,6 +28,7 @@ import Cherokee
 import Icons
 import Mime
 import validations
+import Rule
 
 from util import *
 from consts import *
@@ -49,6 +50,9 @@ NOTE_GROUP       = N_('Changes the effective group. Group names and IDs are acce
 NOTE_CHROOT      = N_('Jail the server inside the directory. Don\'t use it as the only security measure.')
 NOTE_NO_BINDS    = N_('No ports to listen have been defined. By default the server will listen to TCP port 80 on all the network interfaces.')
 NOTE_PORTS_INFO  = N_('Remember: The HTTP standard port is 80. The HTTPS port is 443.')
+NOTE_FORBID_1    = N_('This is the last bind in use by a rule. Deleting it would break the configuration.')
+NOTE_FORBID_2    = N_('First edit the offending rule(s)')
+NOTE_DELETE_DIALOG = N_('You are about to delete an binding. Are you sure you want to proceed?')
 
 HELPS = [('config_general',    N_("General Configuration")),
          ('config_quickstart', N_("Configuration Quickstart"))]
@@ -124,6 +128,63 @@ def commit():
     return CTK.cfg_apply_post()
 
 
+def _all_bindings_per_rule ():
+    """Return list of {rule: [bindings used by rule]}"""
+    result = []
+    vservers = CTK.cfg.keys('vserver')
+
+    for vsrv in vservers:
+        rules = CTK.cfg.keys('vserver!%s!rule'%(vsrv))
+        for rule_num in rules:
+            rule    = 'vserver!%s!rule!%s'%(vsrv,rule_num)
+            bindings = _bindings_per_rule (rule)
+            if bindings:
+                result.append({rule: bindings})
+
+    return result
+
+
+def _bindings_per_rule (rule):
+    """Return list of bindings used by a given rule"""
+    bindings = []
+    pre      = '%s!match!bind'%(rule)
+    src_keys = CTK.cfg.keys(pre)
+    for src_key in src_keys:
+        bindings.append (CTK.cfg.get_val('%s!%s'%(pre,src_key)))
+
+    return list(set(bindings))
+
+
+def _rules_per_bind (bind):
+    """Return list of complete rules using a given bind number"""
+    rules = []
+    bind_usage = _all_bindings_per_rule ()
+
+    for rule_dict in bind_usage:
+        rule_pre, bindings = rule_dict.items()[0]
+        if bind in bindings:
+            pre = '%s!match!bind'%(rule_pre)
+            balanced = CTK.cfg.keys (pre)
+            for src in balanced:
+                rule = '%s!%s'%(pre,src)
+                if CTK.cfg.get_val(rule) == bind:
+                    rules.append (rule)
+
+    return list(set(rules))
+
+
+def _protected_bindings ():
+    """Return list of bindings that must be protected"""
+    protect = []
+    rules   = _all_bindings_per_rule()
+    for rule in rules:
+        bindings = rule.values()[0]
+        if len(bindings) == 1:
+            protect.append(bindings[0])
+    return protect
+
+
+
 class NetworkWidget (CTK.Box):
     def __init__ (self):
         CTK.Box.__init__ (self, {'class':'network'})
@@ -163,6 +224,8 @@ class PortsTable (CTK.Submitter):
     def __init__ (self, refreshable, **kwargs):
         CTK.Submitter.__init__ (self, URL_APPLY)
 
+        self.protected_bindings = _protected_bindings ()
+
         table   = CTK.Table({'class':'ports'})
         binds   = CTK.cfg.keys('server!bind')
         has_tls = CTK.cfg.get_val('server!tls') != None
@@ -192,13 +255,46 @@ class PortsTable (CTK.Submitter):
 
             delete = None
             if len(binds) >= 2:
-                delete = CTK.ImageStock('del')
-                delete.bind('click', CTK.JS.Ajax (URL_APPLY,
-                                                  data     = {pre: ''},
-                                                  complete = refreshable.JS_to_refresh()))
+                dialog = self._get_dialog (k, refreshable)
+                self += dialog
 
+                delete = CTK.ImageStock('del')
+                delete.bind('click', dialog.JS_to_show() + "return false;")
+                
             table[(n,1)] = [port, listen, tls, delete]
             n += 1
+
+    def _get_dialog (self, k, refresh):
+        if k in self.protected_bindings:
+            rules = _rules_per_bind (k)
+
+            links = []
+            for rule in rules:
+                rule_pre = rule.split('!match')[0]
+                r = Rule.Rule('%s!match' %(rule_pre))
+                rule_name = r.GetName()
+                rule_link = rule_pre.replace('!','/')
+                links.append (CTK.consts.LINK_HREF %(rule_link, rule_name))
+
+            dialog  = CTK.Dialog ({'title': _('Deletion is forbidden'), 'width': 480})
+            dialog += CTK.RawHTML (_('<h2>%s</h2>' %(_("Configuration consistency"))))
+            dialog += CTK.RawHTML (_(NOTE_FORBID_1))
+            dialog += CTK.RawHTML ('<p>%s: %s</p>'%(_(NOTE_FORBID_2), ', '.join(links)))
+            dialog.AddButton (_('Close'), "close")
+
+        else:
+            pre = 'server!bind!%s'%(k)
+            
+            dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
+            dialog.AddButton (_('Cancel'), "close")
+            dialog.AddButton (_('Remove'), CTK.JS.Ajax (URL_APPLY, async=False,
+                                                        data    = {pre: ''},
+                                                        success = dialog.JS_to_close() + \
+                                                        refresh.JS_to_refresh()))
+            dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG))
+
+        return dialog
+
 
 
 class PortsWidget (CTK.Container):

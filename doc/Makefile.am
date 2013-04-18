@@ -1,4 +1,4 @@
-ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --conf-file=$(top_srcdir)/doc/build/doc.conf
+ASCIIDOC=$(PYTHON) $(top_srcdir)/doc/build/asciidoc.py --conf-file=$(top_srcdir)/doc/build/doc.conf
 
 SUFFIXES = .txt .html
 
@@ -16,7 +16,7 @@ basics_installation_easy-install.html \
 basics_installation_unix.html \
 basics_installation_osx.html \
 basics_installation_windows.html \
-basics_installation_svn.html \
+basics_installation_git.html \
 basics_upgrade.html \
 basics_running_cherokee.html \
 config.html \

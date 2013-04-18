@@ -1,0 +1,58 @@
+Cherokee's SCGI Python implementation
+=====================================
+
+I have written this package because the original SCGI python module
+(written by Neil Schemenauer) didn't fit for my needs. The problem is
+that it depends on a C source file that needs to be compiled in order
+to make the module work, and even if Python provides tools for the
+task, it still makes the distribution a bit more difficult under some
+circumstances.
+
+This implementation of the SCGI protocol has been completely written
+in Python to easy as much as possible the deploy for SCGI based apps.
+
+This module is BSD licensed. Read the LICENSE file or the notice at
+the beginning of the source code files for more information.
+
+
+Tests
+=====
+There are a few tests programs for checking the module.  Each one of
+them test an specific feature of the module.
+
+
+Configuration
+=============
+This module is suitable for all the web servers that support SCGI:
+Cherokee, Apache or any one else.
+
+However, here is an configuration example for Cherokee 0.6 (actually,
+this is what I've used to test it out):
+
+vserver!default!directory!/!handler = scgi
+vserver!default!directory!/!handler!balancer = round_robin
+vserver!default!directory!/!handler!balancer!type = interpreter
+vserver!default!directory!/!handler!balancer!local1!host = localhost:4000
+vserver!default!directory!/!priority = 99999
+
+Just write that on a file, lets suppose /var/tmp/test_scgi.conf, and
+execute Cherokee with the -C parameter to point to the configuration
+file:
+
+   # cherokee -C /var/tmp/test_scgi.conf
+
+Then, launch one of the test programs provided with this package. It
+will start a new SCGI server instance that will be used to execute the
+web server requests. Finally, go to your browser and try to browser
+and type http://localhost.
+
+
+References
+==========
+SCGI:       http://www.mems-exchange.org/software/scgi/
+Cherokee:   http://www.cherokee-project.com/
+
+
+--
+Alvaro Lopez Ortega
+<alvaro@alobbs.com>
