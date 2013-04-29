@@ -1258,6 +1258,48 @@ AM_CONDITIONAL(HAVE_FFMPEG, test "x$have_ffmpeg" = "xyes")
 
 
 dnl
+dnl GDBM
+dnl
+AC_ARG_WITH([gdbm],
+        AC_HELP_STRING([--with-gdbm=@<:@ARG@:>@],
+            [use the GDBM library @<:@default=yes@:>@, optionally specify path to dev libs]
+        ),
+        [
+        if test "$withval" = "no"; then
+            want_gdbm="no"
+        elif test "$withval" = "yes"; then
+            want_gdbm="yes"
+        else
+            want_gdbm="yes"
+            GDBM_CONFIG="$withval"
+        fi
+        ],
+        [want_gdbm="yes"]
+)
+
+if test "x$want_gdbm" = "xyes"; then
+   AC_CHECK_LIB([gdbm], [main], [
+	 GDBM_LIBS="-lgdbm"
+   	 have_gdbm_lib=yes
+   ],[have_gdbm_lib=no])
+
+   AC_CHECK_HEADERS([gdbm.h], [
+      have_gdbm_include=yes
+   ],[have_gdbm_include=no])
+fi
+
+have_gdbm="no"
+if test "$have_gdbm_lib $have_gdbm_include" = "yes yes"; then
+   have_gdbm="yes"
+   AC_SUBST(GDBM_LIBS)
+   AC_SUBST(GDBM_CFLAGS)
+   AC_DEFINE([USE_GDBM], 1, [Whether to use GDBM])
+fi
+
+AM_CONDITIONAL(HAVE_GDBM, test "x$have_gdbm" = "xyes")
+
+
+dnl
 dnl WWW root directory, and user/group
 dnl
 AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),
@@ -1407,7 +1449,7 @@ AC_ARG_ENABLE(static-module,
 	   AC_HELP_STRING([--enable-static-module=MODULE][]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
-modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or"
+modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or fairuse"
 
 # Remove modules that will not be compiles
 #
@@ -1432,6 +1474,9 @@ if test "$have_openssl" != "yes"; then
 fi
 if test "x$have_ffmpeg" != "xyes"; then
 	modules=`echo $modules | sed s/streaming//`
+fi
+if test "x$have_gdbm" != "xyes"; then
+	modules=`echo $modules | sed s/fairuse//`
 fi
 
 add_calls=""
@@ -1523,6 +1568,7 @@ AM_CONDITIONAL(STATIC_GEN_EVHOST,             grep evhost         $conf_h >/dev/
 AM_CONDITIONAL(STATIC_POST_TRACK,             grep post_track     $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_POST_REPORT,            grep post_report    $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_COLLECTOR_RRD,          grep rrd            $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_RULE_FAIRUSE,           grep fairuse        $conf_h >/dev/null)
 # These must be at the end
 AM_CONDITIONAL(STATIC_RULE_NOT,               grep _not_          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_AND,               grep _and_          $conf_h >/dev/null)
@@ -1608,6 +1654,7 @@ echo "Compatible PAM        $have_pam"
 echo "Python                $have_python"
 echo "LDAP                  $have_ldap"
 echo "MySQL                 $have_mysql"
+echo "GDBM                  $have_gdbm"
 echo "GeoIP                 $have_geoip"
 echo "FFMpeg                $have_ffmpeg"
 echo "crypt support         $crypt_type"

@@ -192,6 +192,7 @@ RULES = [
     ('method',     N_('HTTP Method')),
     ('bind',       N_('Incoming IP/Port')),
     ('tls',        N_('SSL / TLS')),
+    ('fairuse',    N_('Fair Use')),
     ('fullpath',   N_('Full Path')),
     ('from',       N_('Connected from')),
     ('url_arg',    N_('URL Argument')),

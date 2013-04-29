@@ -371,6 +371,29 @@ endif
 
 
 #
+# Rule fairuse
+#
+rule_fairuse = \
+rule_fairuse.c \
+rule_fairuse.h
+
+libplugin_fairuse_la_LDFLAGS = $(module_ldflags) 
+libplugin_fairuse_la_SOURCES = $(rule_fairuse)
+libplugin_fairuse_la_LIBADD  = $(GDBM_LIBS)
+libplugin_fairuse_la_CFLAGS  = $(GDBM_CFLAGS)
+
+if HAVE_GDBM 
+if STATIC_RULE_FAIRUSE
+static_rule_fairuse_src   = $(rule_fairuse)
+static_rule_fairuse_lib   = $(GDBM_LIBS)
+static_rule_fairuse_flags = $(GDBM_CFLAGS)
+else
+dynamic_rule_fairuse_lib = libplugin_fairuse.la
+endif
+endif
+
+
+#
 # VRule or
 #
 vrule_or = \
@@ -1482,6 +1505,7 @@ $(static_rule_geoip_src) \
 $(static_rule_not_src) \
 $(static_rule_and_src) \
 $(static_rule_or_src) \
+$(static_rule_fairuse_src) \
 \
 $(static_vrule_or_src) \
 $(static_vrule_wildcard_src) \
@@ -1676,6 +1700,7 @@ $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \
+$(dynamic_rule_fairuse_lib) \
 $(dynamic_vrule_or_lib) \
 $(dynamic_vrule_wildcard_lib) \
 $(dynamic_vrule_rehost_lib) \

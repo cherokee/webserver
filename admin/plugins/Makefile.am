@@ -19,6 +19,7 @@ evhost.py \
 exists.py \
 extensions.py \
 failover.py \
+fairuse.py \
 fcgi.py \
 file.py \
 from.py \
