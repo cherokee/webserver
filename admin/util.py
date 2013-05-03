@@ -341,7 +341,7 @@ def path_eval_exist (path_list):
 def os_get_document_root():
     if sys.platform == 'darwin':
         return "/Library/WebServer/Documents"
-    elif sys.platform == 'linux2':
+    elif sys.platform.startswith('linux'):
         if os.path.exists ("/etc/redhat-release"):
             return '/var/www'
         elif os.path.exists ("/etc/fedora-release"):

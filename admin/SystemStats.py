@@ -39,7 +39,7 @@ def get_system_stats():
     global _stats
 
     if not _stats:
-        if sys.platform == 'linux2':
+        if sys.platform.startswith('linux'):
             _stats = System_stats__Linux()
         elif sys.platform == 'darwin':
             _stats = System_stats__Darwin()
