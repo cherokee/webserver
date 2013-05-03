@@ -607,7 +607,7 @@ def get_installation_GID():
         first_group = str(root_group)
 
     # Systems
-    if sys.platform == 'linux2':
+    if sys.platform.startswith('linux'):
         if os.getuid() == 0:
             return root_group
         return first_group
