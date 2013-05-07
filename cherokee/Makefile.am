@@ -860,6 +860,29 @@ endif
 
 
 #
+# Handler tmi
+#
+handler_tmi = \
+handler_tmi.c \
+handler_tmi.h
+
+libplugin_tmi_la_LDFLAGS = $(module_ldflags)
+libplugin_tmi_la_SOURCES = $(handler_tmi)
+libplugin_tmi_la_LIBADD  = $(ZMQ_LIBS) $(XML_LIBS)
+libplugin_tmi_la_CFLAGS  = $(ZMQ_CFLAGS) $(XML_CPPFLAGS)
+
+if HAVE_ZMQ
+if STATIC_HANDLER_ZEROMQ
+static_handler_tmi_src   = $(handler_tmi)
+static_handler_tmi_lib   = $(ZMQ_LIBS) $(XML_LIBS)
+static_handler_tmi_flags = $(ZMQ_CFLAGS) $(XML_CPPFLAGS)
+else
+dynamic_handler_tmi_lib = libplugin_tmi.la
+endif
+endif
+
+
+#
 # Handler streaming
 #
 handler_streaming = \
@@ -1287,6 +1310,7 @@ $(static_validator_mysql_flags) \
 $(static_cryptor_libssl_flags) \
 $(static_handler_dbslayer_flags) \
 $(static_handler_zeromq_flags) \
+$(static_handler_tmi_flags) \
 $(static_handler_streaming_flags)
 
 libcherokee_server_la_LIBADD = \
@@ -1300,6 +1324,7 @@ $(static_validator_mysql_lib) \
 $(static_handler_proxy_lib) \
 $(static_handler_dbslayer_lib) \
 $(static_handler_zeromq_lib) \
+$(static_handler_tmi_lib) \
 $(static_handler_streaming_lib) \
 $(static_cryptor_libssl_lib) \
 libcherokee-base.la
@@ -1532,6 +1557,7 @@ $(static_handler_secdownload_src) \
 $(static_handler_empty_gif_src) \
 $(static_handler_drop_src) \
 $(static_handler_zeromq_src) \
+$(static_handler_tmi_src) \
 $(static_handler_streaming_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
@@ -1721,6 +1747,7 @@ $(dynamic_handler_secdownload_lib) \
 $(dynamic_handler_empty_gif_lib) \
 $(dynamic_handler_drop_lib) \
 $(dynamic_handler_zeromq_lib) \
+$(dynamic_handler_tmi_lib) \
 $(dynamic_handler_streaming_lib) \
 $(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \

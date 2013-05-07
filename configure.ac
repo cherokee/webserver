@@ -1303,6 +1303,20 @@ AM_CONDITIONAL(HAVE_ZMQ, test "x$have_zmq" = "xyes")
 
 
 dnl
+dnl libxml2
+dnl
+AM_PATH_XML2(2.4.0)
+
+have_libxml2="no"
+if test "x$XML2_CONFIG" != "x"; then
+   have_libxml2="yes"
+   AC_DEFINE([USE_LIBXML2], 1, [Whether to use libxml2])
+fi
+
+AM_CONDITIONAL(HAVE_LIBXML, test "x$have_libxml2" = "xyes")
+
+
+dnl
 dnl WWW root directory, and user/group
 dnl
 AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),
@@ -1455,7 +1469,7 @@ AC_ARG_ENABLE(static-module,
 	   AC_HELP_STRING([--enable-static-module=MODULE][]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
-modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or zeromq"
+modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or zeromq tmi"
 
 # Remove modules that will not be compiles
 #
@@ -1483,6 +1497,7 @@ if test "x$have_ffmpeg" != "xyes"; then
 fi
 if test "x$have_zmq" != "xyes"; then
 	modules=`echo $modules | sed s/zeromq//`
+	modules=`echo $modules | sed s/tmi//`
 fi
 
 add_calls=""
@@ -1538,6 +1553,7 @@ AM_CONDITIONAL(STATIC_HANDLER_CUSTOM_ERROR,   grep custom_error   $conf_h >/dev/
 AM_CONDITIONAL(STATIC_HANDLER_DBSLAYER,       grep dbslayer       $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_STREAMING,      grep streaming      $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_ZEROMQ,         grep zeromq         $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_TMI,            grep tmi            $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_RENDER_RRD,     grep render_rrd     $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_ENCODER_GZIP,           grep gzip           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_ENCODER_DEFLATE,        grep deflate        $conf_h >/dev/null)
@@ -1663,6 +1679,7 @@ echo "MySQL                 $have_mysql"
 echo "GeoIP                 $have_geoip"
 echo "FFMpeg                $have_ffmpeg"
 echo "ZeroMQ                $have_zmq"
+echo "libxml                $have_libxml2"
 echo "crypt support         $crypt_type"
 if test "x$is_beta" = "xyes"; then
 echo "Beta release          $PACKAGE_PATCH_VERSION"

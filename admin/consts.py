@@ -68,6 +68,7 @@ HANDLERS = [
     ('admin',        N_('Remote Administration')),
     ('empty_gif',    N_('1x1 Transparent GIF')),
     ('zeromq',       N_('ZeroMQ PUSH')),
+    ('tmi',          N_('TMI ZeroMQ PUSH')),
     ('drop',         N_('Drop Connection')),
 ]
 
