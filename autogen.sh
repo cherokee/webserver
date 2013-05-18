@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Run this to generate all the initial makefiles, etc.
 
 # Exit on error
@@ -64,48 +64,46 @@ fi
     DIE=1
 }
 
-echo "Checking for the existence of python2 binary..."
+echo -n "Checking for python2 binary ..."
 	
 hash python2 2>&- || {
 
-	echo "python2 binary does not exist. Searching for appropriate python2.x binary to symlink..."
-	
+	echo " NOT found."
+
 	PYTHON2EXISTS=false
 	
 	for python2 in python2.7 python2.6 python2.5 python2.4; do
-		echo "Testing for $python2..."
+		echo -n "  Checking for $python2 ..."
 		hash $python2 2>&-
 		STATUS=$?
 
 		if [[ $STATUS -eq 0 ]]
 		then
-			echo "$python2 binary found."
+			echo " found. :)"
 			PYTHON2EXISTS=true
 			PYTHON2BIN=$(which $python2)
 			
-			#Terminal colors
-			RESTORE='\033[0m'
-			RED='\033[00;31m'
-			WHITE='\033[01;37m'
-			LYELLOW='\033[01;33m'
-			
-			prompt=$(echo "${RED}Would you like to create a symlink from $PYTHON2BIN to /usr/local/bin/python2? ${WHITE}[${LYELLOW}Yes${RESTORE}|no${WHITE}]: ${RESTORE}")
+			prompt=$(echo -en "Create symlink from $PYTHON2BIN to /usr/local/bin/python2? [Yes|no] ")
 			
 			read -e -p "$prompt" CREATESYMLINK
 			CREATESYMLINK=${CREATESYMLINK:-no}
 
-			if [[ "$CREATESYMLINK" == "Yes" ]]
+			if [[ "$CREATESYMLINK" == "Yes" || "$CREATESYMLINK" == "yes" || "$CREATESYMLINK" == "Y" || "$CREATESYMLINK" == "y" ]]
 			then
 				echo "Symlinking $PYTHON2BIN to /usr/local/bin/python2"
 				ln -s $PYTHON2BIN /usr/local/bin/python2
 			else
-				echo "${RED}A python2 symlink to a Python 2.x binary (e.g. ${WHITE}$PYTHON2BIN${RED}) is required to continue."
-				echo "Please use a Python installation script of your choice that will create the required"
-				echo "symlink or manually create a symlink in a location accessible from your ${WHITE}\$PATH${RED} environment"
-				echo "variable and then rerun this script.${RESTORE}"
+				echo ""
+				echo "Exiting:"
+				echo "  A python2 symlink to a Python 2.x binary (e.g. $PYTHON2BIN) is required to continue."
+				echo "  Please use a Python installation script of your choice that will create the required"
+				echo "  symlink or manually create a symlink in a location accessible from your \$PATH environment"
+				echo "  variable and then rerun this script."
 				DIE=1
 			fi
 			break
+		else
+			echo " NOT found."
 		fi
 	done
 
@@ -115,7 +113,7 @@ hash python2 2>&- || {
 		DIE=1
 	fi
 }
-
+echo ""
 
 if test "$DIE" -eq 1; then
     exit 1
