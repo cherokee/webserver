@@ -240,10 +240,11 @@ cherokee_handler_tmi_step (cherokee_handler_tmi_t *hdl, cherokee_buffer_t *buffe
 	len = strftime(time_buf, 21, "%Y-%m-%dT%H:%S:%MZ", &cherokee_bogonow_tmgmt);
 	cherokee_buffer_add_buffer (buffer, &HANDLER_TMI_PROPS(hdl)->reply);
 	cherokee_buffer_add (buffer, time_buf, len);
-	cherokee_buffer_add_str (buffer, "</tmi8:Timestamp><tmi8:ResponseCode>");
 
 #ifdef LIBXML_PUSH_ENABLED
 	if (hdl->validate_xml) {
+		cherokee_buffer_add_str (buffer, "</tmi8:Timestamp><tmi8:ResponseCode>");
+
 		if (hdl->inflated && hdl->z_ret != Z_OK) {
 			cherokee_buffer_add_str(buffer, "PE");
 		} else {
@@ -254,10 +255,13 @@ cherokee_handler_tmi_step (cherokee_handler_tmi_t *hdl, cherokee_buffer_t *buffe
 				cherokee_buffer_add_str(buffer, "SE");
 			}
 		}
+
+		cherokee_buffer_add_str (buffer, "</tmi8:ResponseCode></tmi8:VV_TM_RES>");
+
+		return ret_eof_have_data;
 	}
 #endif
-
-	cherokee_buffer_add_str (buffer, "</tmi8:ResponseCode></tmi8:VV_TM_RES>");
+	cherokee_buffer_add_str (buffer, "</tmi8:Timestamp><tmi8:ResponseCode>OK</tmi8:ResponseCode></tmi8:VV_TM_RES>");
 
 	return ret_eof_have_data;
 }
