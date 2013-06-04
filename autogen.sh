@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
 # Exit on error
@@ -77,18 +77,18 @@ hash python2 2>&- || {
 		hash $python2 2>&-
 		STATUS=$?
 
-		if [[ $STATUS -eq 0 ]]
+		if [ $STATUS -eq 0 ]
 		then
 			echo " found. :)"
 			PYTHON2EXISTS=true
 			PYTHON2BIN=$(which $python2)
 			
-			prompt=$(echo -en "Create symlink from $PYTHON2BIN to /usr/local/bin/python2? [Yes|no] ")
+			prompt=$(echo -n "Create symlink from $PYTHON2BIN to /usr/local/bin/python2? [Yes|no] ")
 			
-			read -e -p "$prompt" CREATESYMLINK
+			read -p "$prompt" CREATESYMLINK
 			CREATESYMLINK=${CREATESYMLINK:-no}
 
-			if [[ "$CREATESYMLINK" == "Yes" || "$CREATESYMLINK" == "yes" || "$CREATESYMLINK" == "Y" || "$CREATESYMLINK" == "y" ]]
+			if [ "$CREATESYMLINK" = "Yes" ] || [ "$CREATESYMLINK" = "yes" ] || [ "$CREATESYMLINK" = "Y" ] || [ "$CREATESYMLINK" = "y" ]
 			then
 				echo "Symlinking $PYTHON2BIN to /usr/local/bin/python2"
 				ln -s $PYTHON2BIN /usr/local/bin/python2
@@ -107,7 +107,7 @@ hash python2 2>&- || {
 		fi
 	done
 
-	if [[ "$PYTHON2EXISTS" == "false" ]]
+	if [ "$PYTHON2EXISTS" = "false" ]
 	then
 		echo "No compatible Python 2.x binary found. Exiting."
 		DIE=1
