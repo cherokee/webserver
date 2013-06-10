@@ -23,10 +23,10 @@ application), there are some helpful tools available for you.
   with debug information just execute make like this:
 +
 ----
-  make CFLAGS="-O0 -g3"
+  make V=1 CFLAGS="-O0 -gdb3"
 ----
 +
-And then you'll be able to execute gdb, cgdb, gdbtui..
+And then you will be able to execute under a debugger (gdb).
 
 * You can use autoconf to set up Cherokee to use static modules:
 +

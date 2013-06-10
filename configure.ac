@@ -86,6 +86,8 @@ dnl Initial CFLAGS
 AC_MSG_CHECKING(initial CFLAGS)
 AC_MSG_RESULT($CFLAGS)
 
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
 dnl Check for CPU / vendor / OS
 AC_CANONICAL_HOST
 
