@@ -7,7 +7,7 @@ So, you have found things in Cherokee worth improving and feel the
 urge to contribute to the project. But where to start?
 
 The first thing, of course, is setting up a development/testing
-environming for Cherokee.
+environment for Cherokee.
 
 The relevant documents would be those about
 link:basics_requirements.html[software requirements],
