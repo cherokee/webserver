@@ -559,19 +559,37 @@ ret_t
 cherokee_connection_setup_hsts_handler (cherokee_connection_t *conn)
 {
 	ret_t ret;
+	cherokee_list_t   *i;
+	int                port = -1;
+	cherokee_server_t *srv  = CONN_SRV(conn);
 
 	/* Redirect to:
 	 * "https://" + host + request + query_string
 	 */
 	cherokee_buffer_clean   (&conn->redirect);
+
+	/* 1.- Proto */
 	cherokee_buffer_add_str (&conn->redirect, "https://");
 
-	/* TODO: this currently redirects to the host without port
-	 * but as you can imagine, a non-standard TLS port could have
-	 * been configured. The full redirect might be configured in
-	 * the future when such demand is considered necessary.
-	 */
+	/* 2.- Host */
 	cherokee_connection_build_host_string (conn, &conn->redirect);
+
+	/* 3.- Port */
+	list_for_each (i, &srv->listeners) {
+		if (BIND_IS_TLS(i)) {
+			port = BIND(i)->port;
+			break;
+		}
+	}
+
+	if ((port != -1) &&
+	    (! http_port_is_standard (port, true)))
+	{
+		cherokee_buffer_add_char    (&conn->redirect, ':');
+		cherokee_buffer_add_ulong10 (&conn->redirect, port);
+	}
+
+	/* 4.- Request */
 	cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
 
 	if (conn->query_string.len > 0) {
@@ -2990,23 +3008,13 @@ ret_t
 cherokee_connection_build_host_port_string (cherokee_connection_t *conn,
 					    cherokee_buffer_t     *buf)
 {
-	/* 1st choice: Request host */
-	if (! cherokee_buffer_is_empty (&conn->host)) {
-		cherokee_buffer_add_buffer (buf, &conn->host);
-	}
+	ret_t ret;
 
-	/* 2nd choice: Bound IP */
-	else if ((conn->bind != NULL) &&
-		 (! cherokee_buffer_is_empty (&conn->bind->ip)))
-	{
-		cherokee_buffer_add_buffer (buf, &conn->bind->ip);
-	}
-
-	/* 3rd choice: Bound IP, rendered address */
-	else if ((conn->bind != NULL) &&
-		 (! cherokee_buffer_is_empty (&conn->bind->server_address)))
-	{
-		cherokee_buffer_add_buffer (buf, &conn->bind->server_address);
+	/* Host
+	 */
+	ret = cherokee_connection_build_host_string (conn, buf);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
 	}
 
 	/* Port
