@@ -294,7 +294,11 @@
  */
 #if defined(__GNUC__) || ( defined(__SUNPRO_C) && __SUNPRO_C > 0x590 )
 # define PRINT_MSG(fmt,arg...)    do { fprintf(stderr, fmt, ##arg); fflush(stderr); } while(0)
-# define PRINT_ERROR(fmt,arg...)  do { fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg); fflush(stderr); } while(0)
+# ifdef __cplusplus
+#  define PRINT_ERROR(fmt,arg...)  do { fprintf(stderr, "%s:%d - ", __FILE__, __LINE__, ##arg); fflush(stderr); } while(0)
+# else
+#  define PRINT_ERROR(fmt,arg...)  do { fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg); fflush(stderr); } while(0)
+# endif
 #else
 # define PRINT_MSG(fmt,...)       do { fprintf(stderr, fmt, __VA_ARGS__); fflush(stderr); } while(0)
 # define PRINT_ERROR(fmt,...)     do { fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__); fflush(stderr); } while(0)
