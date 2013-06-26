@@ -57,7 +57,7 @@ def commit():
     return CTK.cfg_apply_post()
 
 
-class Plugin_gdbm (RulePlugin):
+class Plugin_fairuse (RulePlugin):
     def __init__ (self, key, **kwargs):
         RulePlugin.__init__ (self, key)
         props = ({},{'class': 'noauto'})[key.startswith('tmp')]
