@@ -63,7 +63,7 @@ provided by the certificate. Since virtual hosts are in use, the CN of
 the first available certificate may or may not match the one specified
 in the early stages of TLS negotiation.
 
-Fortunately this can be overcomed by using SNI (Server Name
+Fortunately this can be overcome by using SNI (Server Name
 Indication), which places the host information in the SSL
 handshake. If the web server is accessed through a web browser that
 supports SNI, things will just work. Every modern web browser does.
@@ -146,7 +146,7 @@ straightforward actions is order to enable it:
     to follow the chain of trust. You can reed more about
     link:#chained-certificates[chained certificates] later on this
     document. You will only have to concatenate the certificate files
-    and put the combined text into a file used for the the
+    and put the combined text into a file used for the
     `Certificate` field. This part is _very important_: you have to
     concatenate your certificates into a single file in order to use
     them in Cherokee. The order in which you concatenate the files is
@@ -160,7 +160,7 @@ cat public.pem inter_ca_public.pem > chained.pem
 [[advanced]]
 .Advanced options
 
-In other te make SSL more secure, Cherokee offers the following advanced
+In order to make SSL more secure, Cherokee offers the following advanced
 options:
 
   . The `Ciphers` field can be set up to to allow specific cipher suites,
