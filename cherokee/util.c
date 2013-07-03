@@ -1654,13 +1654,11 @@ cherokee_fd_close (int fd)
 		return ret_error;
 	}
 
-	do {
 #ifdef _WIN32
-		re = closesocket (fd);
+	re = closesocket (fd);
 #else
-		re = close (fd);
+	re = close (fd);
 #endif
-	} while ((re == -1) && (errno == EINTR));
 
 	TRACE (ENTRIES",close_fd", "fd=%d re=%d\n", fd, re);
 	return (re == 0) ? ret_ok : ret_error;
