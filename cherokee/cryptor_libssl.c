@@ -348,6 +348,9 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	const char *error;
 	long        options;
 	int         verify_mode = SSL_VERIFY_NONE;
+#if !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x10000000L && OPENSSL_VERSION_NUMBER < 0x10002000L
+	EC_KEY *ecdh;
+#endif
 
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
 
@@ -375,10 +378,35 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	 */
 	SSL_CTX_set_tmp_dh_callback (n->context, tmp_dh_cb);
 
+	/* Set ecliptic curve key parameters
+	 */
+#if !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x10002000L
+	/* OpenSSL >= 1.0.2 automatically handles ECDH temporary key parameter
+	 * selection. */
+	SSL_CTX_set_ecdh_auto(n->context, 1);
+#elif !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x10000000L
+	/* For OpenSSL < 1.0.2, ECDH temporary key parameter selection must be
+	 * performed manually. Default to the NIST P-384 (secp384r1) curve
+	 * to be compliant with RFC 6460 when AES-256 TLS cipher suites are in
+	 * use. This does make Cherokee non-compliant with RFC 6460 when
+	 * AES-128 TLS cipher suites are in use as they "MUST" support
+	 * NIST P-256 (prime256v1) but only "SHOULD" support NIST P-384
+	 * (secp384v1). However 99.9% of clients support both or neither.
+	 */
+	ecdh = EC_KEY_new_by_curve_name(NID_secp384r1);
+	if (ecdh != NULL) {
+		SSL_CTX_set_tmp_ecdh(n->context, ecdh);
+		EC_KEY_free(ecdh);
+	}
+#endif
+
 	/* Set the SSL context options:
 	 */
 	options  = SSL_OP_ALL;
 	options |= SSL_OP_SINGLE_DH_USE;
+#ifdef SSL_OP_SINGLE_ECDH_USE
+	options |= SSL_OP_SINGLE_ECDH_USE;
+#endif
 
 #ifdef SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS
 	options |= SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS;
