@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 USA
 ])
 
-dnl require autoconf 2.60
-AC_PREREQ([2.60])
+dnl require autoconf 2.68
+AC_PREREQ([2.68])
 
 dnl Version
 m4_define([cherokee_major_version], [1])
