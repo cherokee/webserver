@@ -333,8 +333,12 @@ cherokee_handler_cgi_base_build_basic_env (
 					}
 
 					if (p[i] == ':') {
+						if (colon != NULL) {
+							/* This must be an IPv6 address */
+							colon = NULL;
+							break;
+						}
 						colon = &p[i];
-						break;
 					}
 				}
 
