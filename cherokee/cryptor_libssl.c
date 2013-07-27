@@ -528,7 +528,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	 */
 	rc = SSL_CTX_set_session_id_context (n->context,
 					     (unsigned char *) vsrv->name.buf,
-					     (unsigned int)    vsrv->name.len);
+					     MIN(SSL_MAX_SSL_SESSION_ID_LENGTH, (unsigned int) vsrv->name.len));
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SESSION_ID, vsrv->name.buf, error);
