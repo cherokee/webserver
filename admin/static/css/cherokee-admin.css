@@ -753,7 +753,7 @@ img.icon_chooser_selected {
 
 #mh-type { width: 370px; }
 #mh-ext { width: 300px; }
-#mh-age { width: 132px; }
+#mh-age { width: 130px; }
 #mh-del { width: 32px; }
 
 .mimeentry {
@@ -774,8 +774,8 @@ img.icon_chooser_selected {
 .md-type span { margin-top: 4px; display: block; }
 .md-ext { width: 300px; }
 .md-ext input { width: 300px; }
-.md-age { width: 132px; }
-.md-age input { width: 132px; }
+.md-age { width: 130px; }
+.md-age input { width: 130px; }
 .md-del { width: 40px; display: block; text-align: center; }
 .md-del img { margin-top: 4px; }
 
