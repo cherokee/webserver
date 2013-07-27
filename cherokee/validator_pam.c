@@ -124,10 +124,10 @@ auth_pam_talker (int                        num_msg,
 		 */
 		switch (msg[i]->msg_style) {
 		case PAM_PROMPT_ECHO_ON:
-			response[i].resp = strdup(conn->validator->user.buf);
+			response[i].resp = strdup((conn->validator->user.buf ? conn->validator->user.buf : ""));
 			break;
 		case PAM_PROMPT_ECHO_OFF:
-			response[i].resp = strdup(conn->validator->passwd.buf);
+			response[i].resp = strdup((conn->validator->passwd.buf ? conn->validator->passwd.buf : ""));
 			break;
 		default:
 			if (response)
