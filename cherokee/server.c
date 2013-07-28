@@ -740,7 +740,7 @@ vservers_check_tls (cherokee_server_t *srv)
 			if (srv->cryptor == NULL) {
 				LOG_CRITICAL (CHEROKEE_ERROR_SERVER_NO_CRYPTOR,
 					      VSERVER(i)->name.buf);
-				return ret_error;
+				return ret_not_found;
 			}
 
 			TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", VSERVER(i)->name.buf);
