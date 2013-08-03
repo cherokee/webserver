@@ -29,6 +29,7 @@ import CTK
 import Wizard
 import validations
 import popen
+import SystemInfo
 
 from util import *
 
