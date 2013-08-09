@@ -1329,7 +1329,10 @@ fi
 
 dnl Last, desperate option
 if test "x$PHPCGI" = "x"; then
-   PHPCGI="php-cgi"
+   php-cgi -v 1>/dev/null 2>&1
+   if test "$?" != "0"; then
+      PHPCGI="php-cgi"
+   fi
 fi
 
 AC_SUBST(PHPCGI)
