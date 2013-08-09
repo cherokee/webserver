@@ -26,9 +26,7 @@
 import re
 import CTK
 import Page
-import Cherokee
 import SelectionPanel
-import validations
 import Rule
 
 from util import *
@@ -62,14 +60,6 @@ NOTE_FORBID_2      = N_('First edit the offending rule(s)')
 NOTE_ADD_VARIABLE  = N_('Name of the environment variable')
 NOTE_ADD_VALUE     = N_('Value of the environment variable')
 NOTE_CLONE_DIALOG  = N_('The selected Information Source is about to be cloned.')
-
-VALIDATIONS = [
-    ('source!.+?!timeout',     validations.is_positive_int),
-    ('tmp!new_host',           validations.is_safe_information_source_host),
-    ('tmp!new_nick',           validations.is_safe_information_source_nick),
-    ("source_clone_trg",       validations.is_safe_id),
-    ("source!.+?!interpreter", validations.is_not_empty),
-]
 
 HELPS = [('config_info_sources', N_("Information Sources"))]
 
@@ -125,21 +115,6 @@ def commit():
     if new_variable and new_value:
         CTK.cfg['%s!%s'%(source_pre,new_variable)] = new_value
         return CTK.cfg_reply_ajax_ok()
-
-    # Modification
-    errors = {}
-    for key in CTK.post.keys():
-        try:
-            value = CTK.post.get_val (key)
-            if key.endswith('!nick'):
-                validations.is_safe_information_source_nick (value, key)
-            elif key.endswith('!host'):
-                validations.is_safe_information_source_host (value, key)
-        except ValueError, e:
-            errors[key] = str(e)
-
-    if errors:
-        return { "ret": "error", "errors": errors }
 
     return CTK.cfg_apply_post()
 
@@ -506,4 +481,4 @@ CTK.publish ('^%s/\d+$'          %(URL_BASE), Render_Particular)
 CTK.publish ('^%s/content/[\d]+$'%(URL_BASE), Render_Source)
 CTK.publish ('^%s/content/empty$'%(URL_BASE), Render_Source)
 CTK.publish ('^%s/content/[\d]+/clone$'%(URL_BASE), commit_clone)
-CTK.publish ('^%s'               %(URL_APPLY), commit, validation=VALIDATIONS, method="POST")
+CTK.publish ('^%s'               %(URL_APPLY), commit, method="POST")

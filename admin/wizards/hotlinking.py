@@ -156,6 +156,9 @@ class RuleData:
                 self += submit
 
     def __call__ (self):
+        cont = CTK.Container()
+        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_RULE_H1)))
+
         vsrv_num = CTK.cfg.get_val("%s!vsrv_num"%(PREFIX))
         nick = CTK.cfg.get_val("vserver!%s!nick"%(vsrv_num))
         if not '.' in nick:
@@ -171,15 +174,17 @@ class RuleData:
         table.Add (_('Domain Name'), CTK.TextCfg ('%s!domain'%(PREFIX), False, {'value': nick}), _(NOTE_DOMAIN))
         table.Add (_('Reply type'), combo_widget, _(NOTE_TYPE))
 
+        submit = CTK.Submitter (URL_APPLY_REFRESH)
+        submit += table
+        submit += refresh
+        cont += submit
+
+        # Global Submit
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
-        submit += table
-
-        cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_RULE_H1)))
         cont += submit
-        cont += refresh
-        cont  += CTK.DruidButtonsPanel_PrevCreate_Auto()
+
+        cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
 
 
