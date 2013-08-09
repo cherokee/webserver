@@ -13,5 +13,6 @@ DEVELOPERS = {
     'sberlotto'    : "Sérgio H. Berlotto Jr <sergio.berlotto@gmail.com>",
     'pigmej'       : "Jędrzej Nowak <me@pigmej.eu>",
     'rodrigo'      : "Rodrigo Fernandez-Vizarra <rfvizarra@gmail.com>",
-    'pubcrawler'   : "Paul Batis <pubcrawler.com@gmail.com>"
+    'pubcrawler'   : "Paul Batis <pubcrawler.com@gmail.com>",
+    'borkason'     : "Daniel Niccoli <daniel.niccoli@gmail.com>"
 }
