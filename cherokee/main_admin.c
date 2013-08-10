@@ -282,18 +282,6 @@ config_server (cherokee_server_t *srv)
 		cherokee_buffer_add_str (&buf, RULE_PRE "1!encoder!gzip = 1\n");
 	}
 
-	if ((unsecure == 0) &&
-	    (!cherokee_buffer_is_empty (&password)))
-	{
-		cherokee_buffer_add_va (&buf,
-					RULE_PRE "1!auth = authlist\n"
-					RULE_PRE "1!auth!methods = digest\n"
-					RULE_PRE "1!auth!realm = Cherokee-admin\n"
-					RULE_PRE "1!auth!list!1!user = admin\n"
-					RULE_PRE "1!auth!list!1!password = %s\n",
-					password.buf);
-	}
-
 	cherokee_buffer_add_str (&buf,
 				 RULE_PRE "2!match = directory\n"
 				 RULE_PRE "2!match!directory = /about\n"
@@ -409,6 +397,21 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str    (&buf, RULE_PRE "20!document_root = ");
 	cherokee_buffer_add_buffer (&buf, &cherokee_tmp_dir);
 	cherokee_buffer_add_va     (&buf, "/rrd-cache\n");
+
+	if ((unsecure == 0) &&
+	    (!cherokee_buffer_is_empty (&password)))
+	{
+		cherokee_buffer_add_va (&buf,
+					RULE_PRE "100!auth = authlist\n"
+					RULE_PRE "100!auth!methods = digest\n"
+					RULE_PRE "100!auth!realm = Cherokee-admin\n"
+					RULE_PRE "100!auth!list!1!user = admin\n"
+					RULE_PRE "100!auth!list!1!password = %s\n"
+					RULE_PRE "100!match = request\n"
+					RULE_PRE "100!match!final = 0\n"
+					RULE_PRE "100!match!request = .*\n",
+					password.buf);
+	}
 
 	/* MIME types
 	 */
