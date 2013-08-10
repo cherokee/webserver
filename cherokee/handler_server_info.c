@@ -223,7 +223,7 @@
 "<a href=\"http://www.alobbs.com/\">Alvaro Lopez Ortega</a> &lt;alvaro@alobbs.com&gt;"
 
 #define LICENSE                                                                                         \
-"<p>Copyright (C) 2001 - 2011 " AUTHOR "</p>"                                                       CRLF\
+"<p>Copyright (C) 2001 - 2013 " AUTHOR "</p>"                                                       CRLF\
 "<p>This program is free software; you can redistribute it and/or"                                  CRLF\
 "modify it under the terms of version 2 of the GNU General Public"                                  CRLF\
 "License as published by the Free Software Foundation.</p>"                                         CRLF\
