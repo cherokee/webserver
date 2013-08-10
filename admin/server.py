@@ -24,6 +24,11 @@
 # 02110-1301, USA.
 #
 
+# Remote Debugging
+# Uncomment the following two lines to enable remote debugging
+#import pydevd
+#pydevd.settrace('localhost', port=9091, stdoutToServer=True, stderrToServer=True)
+
 # System
 import os
 import sys
