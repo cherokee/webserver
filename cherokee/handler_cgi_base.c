@@ -72,11 +72,12 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	/* Read the properties
 	 */
-	HANDLER(cgi)->support = hsupport_range;
-	/* If hsupport_range is not specified, we can't do X-Sendfile,
-	 * because cherokee_connection_parse_range checks for it.
-	 */
-
+	if (PROP_CGI_BASE(props)->allow_xsendfile == false) {
+		HANDLER(cgi)->support = hsupport_nothing;
+	} else {
+		HANDLER(cgi)->support = hsupport_range;
+	}
+    
 	return ret_ok;
 }
 
