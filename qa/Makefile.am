@@ -315,7 +315,12 @@ run-tests.py \
 291-Redir-keepalive.py \
 292-HSTS1.py \
 293-HSTS-subdomains1.py \
-294-HSTS-subdomains2.py
+294-HSTS-subdomains2.py \
+295-custom-error-cgi.py \
+296-EVHost4.py \
+297-EVHost5.py \
+298-Timeout.py \
+299-MethodsRequestBodyHandling.py
 
 test:
 	python -m compileall .
