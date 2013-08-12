@@ -69,7 +69,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->hsts.subdomains = true;
 	n->hsts.max_age    = 365 * 24 * 60 * 60;
 
-	n->cipher_server_preference = false;
+	n->cipher_server_preference = true;
 	n->ssl_compression = false; /* This might prevent a SSL CRIME attack */
 
 	/* Virtual entries

@@ -166,7 +166,15 @@ options:
   . The `Ciphers` field can be set up to to allow specific cipher suites,
     making communication with the client bound to stronger ciphers.
     A good choice might be:
-    `ECDHE-RSA-AES256-SHA:AES256-SHA:CAMELLIA256-SHA:DES-CBC3-SHA`
+    `ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:
+     ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:
+     ECDHE-RSA-RC4-SHA:ECDHE-RSA-AES256-SHA:
+     DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:
+     DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-SHA256:
+     DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:RC4-SHA:
+     AES256-GCM-SHA384:AES256-SHA256:CAMELLIA256-SHA:
+     ECDHE-RSA-AES128-SHA:AES128-GCM-SHA256:AES128-SHA256:
+     AES128-SHA:CAMELLIA128-SHA`
 
   . By default SSL communication prefers the cipher suite preference by
     the client. You may understand that if a client prefers a weak cipher
@@ -174,6 +182,10 @@ options:
     We have introduced the option `Server Preference` to enforce our
     preference on the client. Setting a specific order is possible using
     the `Ciphers` field.
+
+  . To help any with server administration, we have made the SSL settings
+    secure by default. Hence, use Server Preference, specified strong
+    ciphers and disabled SSL compression.
 
 [[ie-workarownd]]
 .I get certificate errors when having more than one. Workarounds?
