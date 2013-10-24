@@ -60,14 +60,22 @@ def check_config():
                                          '/vserver/%s/rule/%s#5'%(v,r)))
 
     #
-    # Virtual server without document_root or nick
+    # Virtual server without document_root, nick or no wildcard match
     #
     for v in CTK.cfg['vserver'] or []:
-        if not CTK.cfg.get_val ('vserver!%s!nick'%(v)):
-            errors.append (Error(_('Virtual Server without nickname'), '/vserver'))
-
         if not CTK.cfg.get_val ('vserver!%s!document_root'%(v)):
-            errors.append (Error(_('Virtual Server without document root'), '/vserver'))
+            errors.append (Error(_('Virtual Server without document root'),
+                                 '/vserver/%s#1'%(v)))
+
+        if not CTK.cfg.get_val ('vserver!%s!nick'%(v)):
+            errors.append (Error(_('Virtual Server without nickname'),
+                                 '/vserver/%s#2'%(v)))
+
+        if CTK.cfg.get_val ('vserver!%s!match'%(v)) == 'wildcard':
+            wildcards = CTK.cfg.keys ('vserver!%s!match!domain'%(v))
+            if not wildcards:
+                errors.append (Error(_('Virtual Server without wildcard string'),
+                                     '/vserver/%s#2'%(v)))
 
     #
     # Broken rule matches
