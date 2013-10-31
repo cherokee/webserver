@@ -1009,6 +1009,23 @@ endif
 
 
 #
+# Logger Multi
+#
+logger_multi = \
+logger_multi.h \
+logger_multi.c
+
+libplugin_multi_la_LDFLAGS = $(module_ldflags)
+libplugin_multi_la_SOURCES = $(logger_multi)
+
+if STATIC_LOGGER_COMBINED
+static_logger_multi_src = $(logger_multi)
+else
+dynamic_logger_multi_lib = libplugin_multi.la
+endif
+
+
+#
 # Validator PAM
 #
 if HAVE_PAM
@@ -1520,6 +1537,7 @@ $(static_handler_admin_src) \
 $(static_logger_ncsa_src) \
 $(static_logger_custom_src) \
 $(static_logger_combined_src) \
+$(static_logger_multi_src) \
 \
 $(static_encoder_gzip_src) \
 $(static_encoder_deflate_src) \
@@ -1710,6 +1728,7 @@ $(dynamic_encoder_deflate_lib) \
 $(dynamic_logger_ncsa_lib) \
 $(dynamic_logger_custom_lib) \
 $(dynamic_logger_combined_lib) \
+$(dynamic_logger_multi_lib) \
 $(dynamic_validator_pam_lib) \
 $(dynamic_validator_ldap_lib) \
 $(dynamic_validator_plain_lib) \
