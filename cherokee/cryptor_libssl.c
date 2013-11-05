@@ -348,7 +348,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	const char *error;
 	long        options;
 	int         verify_mode = SSL_VERIFY_NONE;
-#if !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x10000000L && OPENSSL_VERSION_NUMBER < 0x10002000L
+#if !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x0090800L && OPENSSL_VERSION_NUMBER < 0x10002000L
 	EC_KEY *ecdh;
 #endif
 
@@ -384,7 +384,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	/* OpenSSL >= 1.0.2 automatically handles ECDH temporary key parameter
 	 * selection. */
 	SSL_CTX_set_ecdh_auto(n->context, 1);
-#elif !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x10000000L
+#elif !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x0090800L
 	/* For OpenSSL < 1.0.2, ECDH temporary key parameter selection must be
 	 * performed manually. Default to the NIST P-384 (secp384r1) curve
 	 * to be compliant with RFC 6460 when AES-256 TLS cipher suites are in
