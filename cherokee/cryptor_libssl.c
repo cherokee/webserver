@@ -273,7 +273,6 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	}
 
 	cherokee_buffer_init(&tmp);
-	cherokee_buffer_ensure_size(&tmp, 40);
 
 	/* Read the SNI server name
 	 */
@@ -281,8 +280,17 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	if (servername == NULL) {
 		/* Set the server name to the IP address if we couldn't get the host name via SNI
 		 */
-		cherokee_socket_ntop (&conn->socket, tmp.buf, tmp.size);
-		TRACE (ENTRIES, "No SNI: Did not provide a server name, using IP='%s' as servername.\n", tmp.buf);
+		char ip_str[40];
+		cherokee_sockaddr_t sa;
+		socklen_t sa_len = sizeof(sa);
+
+		re = getsockname (SOCKET_FD(&conn->socket),
+		                  (struct sockaddr *) &sa,
+		                  &sa_len);
+
+		cherokee_ntop (sa.sa.sa_family, (struct sockaddr *) &sa, ip_str, sizeof(ip_str));
+		cherokee_buffer_add (&tmp, ip_str, strlen(ip_str));
+		TRACE (ENTRIES, "No SNI: Did not provide a server name, using IP='%s' as servername.\n", ip_str);
 	} else {
 		cherokee_buffer_add (&tmp, servername, strlen(servername));
 		TRACE (ENTRIES, "SNI: Switching to servername='%s'\n", servername);
