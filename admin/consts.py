@@ -224,6 +224,7 @@ EVHOSTS = [
 
 CLIENT_CERTS = [
     ('',         N_('Skip')),
+    ('tolerate', N_('Tolerate')),
     ('accept',   N_('Accept')),
     ('required', N_('Require'))
 ]
