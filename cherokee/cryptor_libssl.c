@@ -498,11 +498,11 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		goto error;
 	}
 
-	if (! cherokee_buffer_is_empty (&vsrv->req_client_certs)) {
+	if (vsrv->req_client_certs != req_client_cert_skip) {
 		STACK_OF(X509_NAME) *X509_clients;
 
 		verify_mode = SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE;
-		if (cherokee_buffer_cmp_str (&vsrv->req_client_certs, "required") == 0) {
+		if (vsrv->req_client_certs == req_client_cert_require) {
 			verify_mode |= SSL_VERIFY_FAIL_IF_NO_PEER_CERT;
 		}
 
@@ -532,12 +532,14 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		} else {
 			verify_mode = SSL_VERIFY_NONE;
 		}
+
+		if (vsrv->req_client_certs == req_client_cert_tolerate) {
+			SSL_CTX_set_verify (n->context, verify_mode, verify_tolerate_cb);
+		} else {
+			SSL_CTX_set_verify (n->context, verify_mode, NULL);
+		}
 	}
 
-	if (cherokee_buffer_cmp_str (&vsrv->req_client_certs, "tolerate") == 0)
-		SSL_CTX_set_verify (n->context, verify_mode, verify_tolerate_cb);
-	else
-		SSL_CTX_set_verify (n->context, verify_mode, NULL);
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
 	SSL_CTX_set_read_ahead (n->context, 1);

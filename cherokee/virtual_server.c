@@ -89,7 +89,6 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	cherokee_buffer_init (&n->server_cert);
 	cherokee_buffer_init (&n->server_key);
 	cherokee_buffer_init (&n->certs_ca);
-	cherokee_buffer_init (&n->req_client_certs);
 
 	cherokee_buffer_init    (&n->ciphers);
 	cherokee_buffer_add_str (&n->ciphers, CHEROKEE_CIPHERS_DEFAULT);
@@ -119,7 +118,6 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	cherokee_buffer_mrproper (&vserver->server_cert);
 	cherokee_buffer_mrproper (&vserver->server_key);
 	cherokee_buffer_mrproper (&vserver->certs_ca);
-	cherokee_buffer_mrproper (&vserver->req_client_certs);
 	cherokee_buffer_mrproper (&vserver->ciphers);
 
 	if (vserver->flcache != NULL) {
@@ -1147,7 +1145,17 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_add_buffer (&vserver->certs_ca, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "ssl_client_certs")) {
-		cherokee_buffer_add_buffer (&vserver->req_client_certs, &conf->val);
+        if (cherokee_buffer_cmp_str (&conf->val, "skip") == 0) {
+            vserver->req_client_certs = req_client_cert_skip;
+        } else if (cherokee_buffer_cmp_str (&conf->val, "tolerate") == 0) {
+            vserver->req_client_certs = req_client_cert_tolerate;
+        } else if (cherokee_buffer_cmp_str (&conf->val, "accept") == 0) {
+            vserver->req_client_certs = req_client_cert_accept;
+        } else if (cherokee_buffer_cmp_str (&conf->val, "require") == 0) {
+            vserver->req_client_certs = req_client_cert_require;
+        } else {
+            return ret_error;
+        }
 
 	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
 		cherokee_buffer_clean      (&vserver->ciphers);
