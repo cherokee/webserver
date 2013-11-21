@@ -337,6 +337,12 @@ tmp_dh_cb (SSL *ssl, int export, int keylen)
 	return NULL;
 }
 
+static int
+verify_tolerate_cb(int preverify_ok, X509_STORE_CTX *x509_store)
+{
+	return 1;
+}
+
 
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
@@ -528,7 +534,10 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		}
 	}
 
-	SSL_CTX_set_verify (n->context, verify_mode, NULL);
+	if (cherokee_buffer_cmp_str (&vsrv->req_client_certs, "tolerate") == 0)
+		SSL_CTX_set_verify (n->context, verify_mode, verify_tolerate_cb);
+	else
+		SSL_CTX_set_verify (n->context, verify_mode, NULL);
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
 	SSL_CTX_set_read_ahead (n->context, 1);
