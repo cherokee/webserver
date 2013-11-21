@@ -71,6 +71,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 
 	n->cipher_server_preference = false;
 	n->ssl_compression = false; /* This might prevent a SSL CRIME attack */
+	n->ssl_dh_length   = 0;
 
 	/* Virtual entries
 	 */
@@ -1159,6 +1160,11 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "ssl_compression")) {
 		ret = cherokee_atob (conf->val.buf, &vserver->ssl_compression);
+		if (ret != ret_ok)
+			return ret;
+
+	} else if (equal_buf_str (&conf->key, "ssl_dh_length")) {
+		ret = cherokee_atoi (conf->val.buf, &vserver->ssl_dh_length);
 		if (ret != ret_ok)
 			return ret;
 

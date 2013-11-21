@@ -374,9 +374,20 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		goto error;
 	}
 
-	/* Callback to be used when a DH parameters are required
+	/* Setup DH parameters
 	 */
-	SSL_CTX_set_tmp_dh_callback (n->context, tmp_dh_cb);
+	switch (vsrv->ssl_dh_length)
+	{
+	case 512:
+	case 1024:
+	case 2048:
+	case 4096:
+		SSL_CTX_set_tmp_dh (n->context, tmp_dh_cb(NULL, 0, vsrv->ssl_dh_length));
+		break;
+
+	default:
+		SSL_CTX_set_tmp_dh_callback (n->context, tmp_dh_cb);
+	}
 
 	/* Set ecliptic curve key parameters
 	 */
