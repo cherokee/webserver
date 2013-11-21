@@ -337,12 +337,32 @@ tmp_dh_cb (SSL *ssl, int export, int keylen)
 	return NULL;
 }
 
+#ifdef TRACE_ENABLED
+static int
+verify_trace_cb(int preverify_ok, X509_STORE_CTX *x509_store)
+{
+	X509 *peer_certificate = X509_STORE_CTX_get_current_cert(x509_store);
+	if (peer_certificate) {
+		BIO *mem = BIO_new(BIO_s_mem());
+		char *ptr;
+		X509_print (mem, peer_certificate);
+		BIO_get_mem_data(mem, &ptr);
+		TRACE (ENTRIES, "SSL: %s", ptr);
+		BIO_free (mem);
+	}
+
+	return preverify_ok;
+}
+#endif
+
 static int
 verify_tolerate_cb(int preverify_ok, X509_STORE_CTX *x509_store)
 {
+#ifdef TRACE_ENABLED
+	verify_trace_cb(preverify_ok, x509_store);
+#endif
 	return 1;
 }
-
 
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
@@ -533,11 +553,16 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 			verify_mode = SSL_VERIFY_NONE;
 		}
 
-		if (vsrv->req_client_certs == req_client_cert_tolerate) {
-			SSL_CTX_set_verify (n->context, verify_mode, verify_tolerate_cb);
-		} else {
-			SSL_CTX_set_verify (n->context, verify_mode, NULL);
-		}
+	}
+
+	if (vsrv->req_client_certs == req_client_cert_tolerate) {
+		SSL_CTX_set_verify (n->context, verify_mode, verify_tolerate_cb);
+	} else {
+#ifdef TRACE_ENABLED
+		SSL_CTX_set_verify (n->context, verify_mode, verify_trace_cb);
+#else
+		SSL_CTX_set_verify (n->context, verify_mode, NULL);
+#endif
 	}
 
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
