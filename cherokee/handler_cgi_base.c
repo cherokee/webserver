@@ -77,7 +77,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	} else {
 		HANDLER(cgi)->support = hsupport_range;
 	}
-    
+
 	return ret_ok;
 }
 
@@ -1054,7 +1054,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
 			end2 = begin;
-			
+
             if (unlikely (conn->error_internal_code != http_unset)) {
                 conn->error_internal_code = code;
             } else {
