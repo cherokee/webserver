@@ -35,8 +35,9 @@ cherokee_bind_new (cherokee_bind_t **listener)
 
 	cherokee_buffer_init (&n->ip);
 	cherokee_socket_init (&n->socket);
-	n->port = 0;
-	n->id   = 0;
+	n->port   = 0;
+	n->id     = 0;
+	n->family = 0;
 
 	cherokee_buffer_init (&n->server_string);
 	cherokee_buffer_init (&n->server_string_w_port);
@@ -118,6 +119,11 @@ cherokee_bind_configure (cherokee_bind_t        *listener,
 	if (ret == ret_ok) {
 		cherokee_buffer_mrproper (&listener->ip);
 		cherokee_buffer_add_buffer (&listener->ip, buf);
+		if (cherokee_string_is_ipv6 (&listener->ip)) {
+			listener->family = AF_INET6;
+		} else {
+			listener->family = AF_INET;
+		}
 	}
 
 	ret = cherokee_config_node_read_int (conf, "port", &listener->port);
@@ -148,7 +154,7 @@ set_socket_opts (int socket)
 {
 	ret_t                    ret;
 #ifdef SO_ACCEPTFILTER
-        struct accept_filter_arg afa;
+	struct accept_filter_arg afa;
 #endif
 
 	/* Set 'close-on-exec'
@@ -221,13 +227,13 @@ set_socket_opts (int socket)
 
 
 static ret_t
-init_socket (cherokee_bind_t *listener, int family)
+init_socket (cherokee_bind_t *listener)
 {
 	ret_t ret;
 
 	/* Create the socket, and set its properties
 	 */
-	ret = cherokee_socket_create_fd (&listener->socket, family);
+	ret = cherokee_socket_create_fd (&listener->socket, listener->family);
 	if ((ret != ret_ok) || (SOCKET_FD(&listener->socket) < 0)) {
 		return ret_error;
 	}
@@ -267,22 +273,22 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 	/* Init the port
 	 */
 #ifdef HAVE_IPV6
-	if (ipv6) {
-		ret = init_socket (listener, AF_INET6);
+	if (ipv6 && listener->family == AF_INET6) {
+		ret = init_socket (listener);
 	} else
 #endif
 	{
 		ret = ret_not_found;
 	}
 
-	if (ret != ret_ok) {
-		ret = init_socket (listener, AF_INET);
+	if (ret != ret_ok && listener->family == AF_INET) {
+		ret = init_socket (listener);
+	}
 
-		if (ret != ret_ok) {
-			LOG_CRITICAL (CHEROKEE_ERROR_BIND_COULDNT_BIND_PORT,
-				      listener->port, getuid(), getgid());
-			goto error;
-		}
+	if (ret != ret_ok) {
+		LOG_CRITICAL (CHEROKEE_ERROR_BIND_COULDNT_BIND_PORT,
+			      listener->port, getuid(), getgid());
+		goto error;
 	}
 
 	/* Listen
