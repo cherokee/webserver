@@ -24,7 +24,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name             = "SOAPAction"
-        self.request          = "GET /%s/file HTTP/1.0\r\n" % (DIR) + \
+        self.request          = "GET /%s/file.php HTTP/1.0\r\n" % (DIR) + \
                                 "%s: %s\r\n" % (HEADER, VALUE)
         self.expected_error   = 200
         self.expected_content = "%s: %s" % (HEADER, VALUE)
@@ -32,7 +32,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        self.WriteFile (d, "file", 0444,
+        self.WriteFile (d, "file.php", 0444,
                         '<?php /* %s */ echo "%s: ".$_SERVER["HTTP_SOAPACTION"]; ?>' %
                         (FORBIDDEN, HEADER))
 
