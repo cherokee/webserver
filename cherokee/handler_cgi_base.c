@@ -1031,12 +1031,12 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			end2 = begin;
 
 			if (unlikely (conn->error_internal_code != http_unset)) {
-                conn->error_internal_code = code;
-            } else {
-                conn->error_code = code;
-            }
+				conn->error_internal_code = code;
+			} else {
+				conn->error_code = code;
+			}
 
-            continue;
+			continue;
 		}
 
 		else if (strncasecmp ("HTTP/", begin, 5) == 0) {
@@ -1055,11 +1055,11 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
 			end2 = begin;
 
-            if (unlikely (conn->error_internal_code != http_unset)) {
-                conn->error_internal_code = code;
-            } else {
-                conn->error_code = code;
-            }
+			if (unlikely (conn->error_internal_code != http_unset)) {
+				conn->error_internal_code = code;
+			} else {
+				conn->error_code = code;
+			}
 
 			continue;
 		}
