@@ -135,9 +135,9 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 	 */
 	cherokee_buffer_add_buffer (&entry->ip_str_all, &entry->ip_str);
 
-	addr = entry->addr;
+	addr = entry->addr->ai_next;
 	while (addr != NULL) {
-		ret = cherokee_ntop (entry->addr->ai_family, addr->ai_addr, tmp, sizeof(tmp));
+		ret = cherokee_ntop (addr->ai_family, addr->ai_addr, tmp, sizeof(tmp));
 		if (ret != ret_ok) {
 			return ret_error;
 		}
