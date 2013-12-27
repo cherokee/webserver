@@ -681,6 +681,11 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		return ret;
 	}
 
+	/* Since we managed to spawn something, clear any current address
+	 * in the source so that it can retry connecting from the top.
+	 */
+	src->source.addr_current = NULL;
+
 	return ret_ok;
 }
 

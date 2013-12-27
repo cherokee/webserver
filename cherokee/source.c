@@ -79,9 +79,15 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	/* Short path: it's already connecting
 	 */
 	if (sock->socket >= 0) {
-		return cherokee_socket_connect (sock);
+		ret = cherokee_socket_connect (sock);
+		if (ret != ret_deny || src->addr_current->ai_next == NULL)
+			return ret;
+		/* Fall through and attempt to try another address... */
+		cherokee_socket_close(sock);
+		src->addr_current = src->addr_current->ai_next;
 	}
 
+long_path:
 	/* Create the new socket and set the target IP info
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
@@ -195,7 +201,17 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	cherokee_fd_set_closexec  (sock->socket);
 	cherokee_fd_set_reuseaddr (sock->socket);
 
-	return cherokee_socket_connect (sock);
+	/* On the off-chance a connect completes early, handle a deny here
+	 * in addition to at the top of this routine.
+	 */
+	ret = cherokee_socket_connect (sock);
+	if (ret == ret_deny && src->addr_current->ai_next != NULL) {
+		src->addr_current = src->addr_current->ai_next;
+		cherokee_socket_close(sock);
+		goto long_path;
+	}
+
+	return ret;
 }
 
 
