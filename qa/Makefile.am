@@ -321,7 +321,8 @@ run-tests.py \
 297-EVHost5.py \
 298-Timeout.py \
 299-MethodsRequestBodyHandling.py \
-300-xsendfile3.py
+300-xsendfile3.py \
+301-XForwardedFor-4.py
 
 test:
 	python -m compileall .
