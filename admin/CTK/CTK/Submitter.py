@@ -24,6 +24,7 @@ from consts import *
 from Button import Button
 from RawHTML import RawHTML
 from Container import Container
+from TextArea import TextArea
 from TextField import TextField
 from PageCleaner import Uniq_Block
 from Server import get_server
@@ -70,6 +71,7 @@ class Submitter (Container):
         HiddenField
         iPhoneToggle, iPhoneCfg
         Radio, RadioText
+        TextArea, TextAreaCfg
         TextField, TextFieldPassword, TextCfg, TextCfgPassword, TextCfgAuto
         ToggleButton, ToggleButtonOnOff
 
