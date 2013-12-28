@@ -444,3 +444,11 @@ def has_no_double_quotes (value):
     if '"' in value:
         raise ValueError, _('Cannot contain the double quote (") character')
     return value
+
+def is_valid_certkey(value):
+    is_local_file_exists(value)
+
+    cert_data = open(value, 'r').read()
+    if "ENCRYPTED" in cert_data:
+        raise UserWarning, (_('The private key contains a passphrase which has to be entered manually after launching the webserver.'), value)
+    return value

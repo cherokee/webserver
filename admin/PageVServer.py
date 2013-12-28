@@ -127,7 +127,7 @@ VALIDATIONS = [
     ("vserver![\d]+!document_root",              validations.is_dev_null_or_local_dir_exists),
     ("vserver![\d]+!post_max_len",               validations.is_positive_int),
     ("vserver![\d]+!ssl_certificate_file",       validations.is_local_file_exists),
-    ("vserver![\d]+!ssl_certificate_key_file",   validations.is_local_file_exists),
+    ("vserver![\d]+!ssl_certificate_key_file",   validations.is_valid_certkey),
     ("vserver![\d]+!ssl_ca_list_file",           validation_ca_list),
     ("vserver![\d]+!ssl_verify_depth",           validations.is_positive_int),
     ("vserver![\d]+!error_writer!filename",      validations.can_create_file),
