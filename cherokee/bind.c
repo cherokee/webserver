@@ -269,11 +269,13 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 			 cherokee_server_token_t  token)
 {
 	ret_t ret;
+	int family = listener->family;
 
 	/* Init the port
 	 */
 #ifdef HAVE_IPV6
-	if (ipv6 && listener->family == AF_INET6) {
+	if (ipv6 && (family == 0 || family == AF_INET6)) {
+		listener->family = AF_INET6;
 		ret = init_socket (listener);
 	} else
 #endif
@@ -281,7 +283,8 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 		ret = ret_not_found;
 	}
 
-	if (ret != ret_ok && listener->family == AF_INET) {
+	if (ret != ret_ok && (family == 0 || family == AF_INET)) {
+		listener->family = AF_INET;
 		ret = init_socket (listener);
 	}
 
