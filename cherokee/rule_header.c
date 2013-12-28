@@ -154,7 +154,7 @@ static ret_t
 header_str_to_type (cherokee_buffer_t        *header,
 		    cherokee_common_header_t *common_header)
 {
-	switch (header[0]) {
+	switch (header->buf[0]) {
 	case 'A':
 		if (equal_buf_str (header, "Accept-Encoding")) {
 			*common_header = header_accept_encoding;
