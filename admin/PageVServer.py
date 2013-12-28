@@ -45,8 +45,8 @@ NOTE_NICKNAME         = N_('Nickname for the virtual server.')
 NOTE_CERT             = N_('This directive points to the PEM-encoded Certificate file for the server (Full path to the file)')
 NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full path to the file)')
 NOTE_CA_LIST          = N_('File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
-NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: HIGH:!aNULL:!MD5).')
-NOTE_CIPHER_SERVER_PREFERENCE = N_('The cipher sequence that is specified by the server should have preference over the preference of the client. (Default: False).')
+NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default enables Forward Secrecy).')
+NOTE_CIPHER_SERVER_PREFERENCE = N_('The cipher sequence that is specified by the server should have preference over the client preference. (Default: True).')
 NOTE_COMPRESSION      = N_('Explicitly enable or disable serverside compression support. (Default: Disabled).')
 NOTE_DH_LENGTH        = N_('Explicitely sets the Diffie-Hellman parameters length. (Default: Let openssl choose).')
 NOTE_CLIENT_CERTS     = N_('Skip, Tolerate, Accept or Require client certificates.')
@@ -664,9 +664,9 @@ class SecutiryWidgetContent (CTK.Container):
         # Advanced options
         table = CTK.PropsTable()
         table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
-        table.Add (_('Server Preference'),     CTK.CheckCfgText ('%s!ssl_cipher_server_preference' % (pre), False, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
+        table.Add (_('Server Preference'),     CTK.CheckCfgText ('%s!ssl_cipher_server_preference' % (pre), True, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
         table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
-        table.Add (_('Compression'),           CTK.CheckCfgText ('%s!ssl_compression' % (pre), False, _('Prefer')), _(NOTE_COMPRESSION))
+        table.Add (_('Compression'),           CTK.CheckCfgText ('%s!ssl_compression' % (pre), False, _('Enable')), _(NOTE_COMPRESSION))
         table.Add (_('DH length'),             CTK.ComboCfg('%s!ssl_dh_length' %(pre), [('','Auto'), ('512', '512 bits'), ('1024', '1024 bits'), ('2048', '2048 bits'), ('4096', '4096 bits')]), _(NOTE_DH_LENGTH))
 
         if CTK.cfg.get_val('%s!ssl_client_certs' %(pre)):
