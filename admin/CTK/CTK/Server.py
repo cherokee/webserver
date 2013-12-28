@@ -49,6 +49,7 @@ class PostValidator:
     def Validate (self):
         errors  = {}
         updates = {}
+        ret     = "warning"
 
         for key in self.post:
             for regex, func in self.validation_list:
@@ -60,8 +61,12 @@ class PostValidator:
 
                         try:
                             tmp = func (val)
+                        except UserWarning, e:
+                            errors[key] = str(e[0])
+                            tmp = str(e[1])
                         except Exception, e:
                             errors[key] = str(e)
+                            ret = "unsatisfactory"
                             break
 
                         if tmp and tmp != val:
@@ -69,7 +74,7 @@ class PostValidator:
                             updates[key] = tmp
 
         if errors or updates:
-            return {'ret': "unsatisfactory",
+            return {'ret': ret,
                     'errors':  errors,
                     'updates': updates}
 
@@ -122,12 +127,14 @@ class ServerHandler (pyscgi.SCGIHandler):
         my_thread.scgi_conn   = self
         my_thread.request_url = url
 
-        base_path = urlparse.urlsplit(url).path        
+        base_path = urlparse.urlsplit(url).path
         if len(base_path) > 1 and base_path[-1] == '/':
             base_path = base_path[:-1]  # remove trailing '/' if it exists
 
         for published in server._web_paths:
             if re.match (published._regex, base_path):
+                warnings = {}
+
                 # POST
                 if published._method == 'POST':
                     post = self._process_post()
@@ -137,9 +144,12 @@ class ServerHandler (pyscgi.SCGIHandler):
                     validator = PostValidator (post, published._validation)
                     errors = validator.Validate()
                     if errors:
-                        resp = HTTP_Response(200, body=json_dump(errors))
-                        resp['Content-Type'] = "application/json"
-                        return resp
+                        if errors['ret'] == 'warning':
+                            warnings = errors
+                        else:
+                            resp = HTTP_Response(200, body=json_dump(errors))
+                            resp['Content-Type'] = "application/json"
+                            return resp
 
                 # Execute handler
                 ret = published (**published._kwargs)
@@ -150,7 +160,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                     return self.response
 
                 elif type(ret) == dict:
-                    info = json_dump(ret)
+                    info = json_dump(dict(ret.items() + warnings.items()))
                     self.response += info
                     self.response['Content-Type'] = "application/json"
                     return self.response
