@@ -50,6 +50,18 @@ def check_config():
                                          '/vserver/%s/rule/%s#2'%(v,r)))
 
     #
+    # Sources without interpreter
+    #
+    for s in CTK.cfg['source'] or []:
+        sourcetype = CTK.cfg.get_val ('source!%s!type'%(s))
+
+        if sourcetype == 'interpreter' and \
+            (not CTK.cfg.get_val ('source!%s!interpreter'%(s)) or \
+             CTK.cfg.get_val ('source!%s!interpreter'%(s)).strip() == ''):
+            errors.append (Error(_('Source without Interpreter'),
+                                 '/source/%s'%(s)))
+
+    #
     # Validators without Realm
     #
     for v in CTK.cfg['vserver'] or []:
