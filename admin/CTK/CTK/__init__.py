@@ -58,7 +58,7 @@ from Notice import Notice
 from Link import Link, LinkWindow, LinkIcon
 from DatePicker import DatePicker
 from Button import Button
-from TextArea import TextArea
+from TextArea import TextArea, TextAreaCfg
 from ToggleButton import ToggleButton, ToggleButtonOnOff
 from Druid import Druid, DruidButtonsPanel, DruidButton, DruidButton_Goto, DruidButton_Close, DruidButton_Submit, DruidButtonsPanel_Next, DruidButtonsPanel_PrevNext, DruidButtonsPanel_PrevCreate, DruidButtonsPanel_Create, DruidButtonsPanel_Cancel, DruidButtonsPanel_Close, DruidButtonsPanel_Next_Auto, DruidButtonsPanel_PrevNext_Auto, DruidButtonsPanel_PrevCreate_Auto, DruidContent_TriggerNext, DruidContent__JS_to_goto, DruidContent__JS_to_goto_next, DruidContent__JS_to_close, DruidContent__JS_if_external_submit, DruidContent__JS_if_internal_submit
 from List import List, ListEntry

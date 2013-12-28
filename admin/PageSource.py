@@ -287,7 +287,7 @@ class Render_Source:
         if tipe == 'interpreter':
             NOTE_INTERPRETER = _(NOTE_INTERPRETER1) + '<br/>' + '<b>%s</b>'%(_(NOTE_INTERPRETER2))
 
-            table.Add (_('Interpreter'),         CTK.TextCfg ('source!%s!interpreter'%(num),   False), NOTE_INTERPRETER)
+            table.Add (_('Interpreter'),         CTK.TextAreaCfg ('source!%s!interpreter'%(num), False), NOTE_INTERPRETER)
             table.Add (_('Spawning timeout'),    CTK.TextCfg ('source!%s!timeout'%(num),       True),  _(NOTE_TIMEOUT))
             table.Add (_('Execute as User'),     CTK.TextCfg ('source!%s!user'%(num),          True),  _(NOTE_USER))
             table.Add (_('Execute as Group'),    CTK.TextCfg ('source!%s!group'%(num),         True),  _(NOTE_GROUP))
