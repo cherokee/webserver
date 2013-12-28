@@ -46,6 +46,7 @@ typedef enum {
 	header_accept_language,
 	header_authorization,
 	header_connection,
+	header_content_encoding,
 	header_content_length,
 	header_content_type,
 	header_set_cookie,

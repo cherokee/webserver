@@ -103,7 +103,9 @@ def check_config():
                 if not CTK.cfg.get_val ('vserver!%s!rule!%s!match!header'%(v,r)):
                     errors.append (Error(_('Header match without a defined header'),
                                          '/vserver/%s/rule/%s#1'%(v,r)))
-                if not CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r)):
+                if CTK.cfg.get_val ('vserver!%s!rule!%s!match!type'%(v,r)) == 'regex' and \
+                   (not CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r)) or \
+                        CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r)).strip() == ''):
                     errors.append (Error(_('Header match without a matching expression'),
                                          '/vserver/%s/rule/%s#1'%(v,r)))
 

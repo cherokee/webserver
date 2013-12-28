@@ -154,21 +154,121 @@ static ret_t
 header_str_to_type (cherokee_buffer_t        *header,
 		    cherokee_common_header_t *common_header)
 {
-	if (equal_buf_str (header, "Accept-Encoding")) {
-		*common_header = header_accept_encoding;
-	} else if (equal_buf_str (header, "Accept-Charset")) {
-		*common_header = header_accept_charset;
-	} else if (equal_buf_str (header, "Accept-Language")) {
-		*common_header = header_accept_language;
-	} else if (equal_buf_str (header, "Referer")) {
-		*common_header = header_referer;
-	} else if (equal_buf_str (header, "User-Agent")) {
-		*common_header = header_user_agent;
-	} else if (equal_buf_str (header, "Cookie")) {
-		*common_header = header_cookie;
-	} else if (equal_buf_str (header, "Host")) {
-		*common_header = header_host;
-	} else {
+	switch (header->buf[0]) {
+	case 'A':
+		if (equal_buf_str (header, "Accept-Encoding")) {
+			*common_header = header_accept_encoding;
+		} else if (equal_buf_str (header, "Accept-Charset")) {
+			*common_header = header_accept_charset;
+		} else if (equal_buf_str (header, "Accept-Language")) {
+			*common_header = header_accept_language;
+		} else if (equal_buf_str (header, "Accept")) {
+			*common_header = header_accept;
+		} else if (equal_buf_str (header, "Authorization")) {
+			*common_header = header_authorization;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'C':
+		if (equal_buf_str (header, "Connection")) {
+			*common_header = header_connection;
+		} else if (equal_buf_str (header, "Content-Encoding")) {
+			*common_header = header_content_encoding;
+		} else if (equal_buf_str (header, "Content-Length")) {
+			*common_header = header_content_length;
+		} else if (equal_buf_str (header, "Content-Type")) {
+			*common_header = header_content_type;
+		} else if (equal_buf_str (header, "Cookie")) {
+			*common_header = header_cookie;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'E':
+		if (equal_buf_str (header, "Expect")) {
+			*common_header = header_expect;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'H':
+		if (equal_buf_str (header, "Host")) {
+			*common_header = header_host;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'I':
+		if (equal_buf_str (header, "If-Modified-Since")) {
+			*common_header = header_if_modified_since;
+		} else if (equal_buf_str (header, "If-None-Match")) {
+			*common_header = header_if_none_match;
+		} else if (equal_buf_str (header, "If-Range")) {
+			*common_header = header_if_range;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'K':
+		if (equal_buf_str (header, "Keep-Alive")) {
+			*common_header = header_keepalive;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'L':
+		if (equal_buf_str (header, "Location")) {
+			*common_header = header_location;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'R':
+		if (equal_buf_str (header, "Range")) {
+			*common_header = header_range;
+		} else if (equal_buf_str (header, "Referer")) {
+			*common_header = header_referer;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'S':
+		if (equal_buf_str (header, "Set-Cookie")) {
+			*common_header = header_set_cookie;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'T':
+		if (equal_buf_str (header, "Transfer-Encoding")) {
+			*common_header = header_transfer_encoding;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'U':
+		if (equal_buf_str (header, "Upgrade")) {
+			*common_header = header_upgrade;
+		} else if (equal_buf_str (header, "User-Agent")) {
+			*common_header = header_user_agent;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'X':
+		if (equal_buf_str (header, "X-Forwarded-For")) {
+			*common_header = header_x_forwarded_for;
+		} else if (equal_buf_str (header, "X-Forwarded-Host")) {
+			*common_header = header_x_forwarded_host;
+		} else if (equal_buf_str (header, "X-Real-IP")) {
+			*common_header = header_x_real_ip;
+		} else {
+			goto unknown;
+		}
+		break;
+	default:
+	unknown:
 		LOG_CRITICAL (CHEROKEE_ERROR_RULE_HEADER_UNKNOWN_HEADER, header->buf);
 		return ret_error;
 	}
