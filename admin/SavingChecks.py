@@ -24,6 +24,7 @@
 
 import CTK
 import consts
+import os
 
 class Error:
     def __init__ (self, title='', url=''):
@@ -54,12 +55,16 @@ def check_config():
     #
     for s in CTK.cfg['source'] or []:
         sourcetype = CTK.cfg.get_val ('source!%s!type'%(s))
+        interpreter = CTK.cfg.get_val ('source!%s!interpreter'%(s))
 
-        if sourcetype == 'interpreter' and \
-            (not CTK.cfg.get_val ('source!%s!interpreter'%(s)) or \
-             CTK.cfg.get_val ('source!%s!interpreter'%(s)).strip() == ''):
-            errors.append (Error(_('Source without Interpreter'),
-                                 '/source/%s'%(s)))
+        if sourcetype == 'interpreter':
+            if (not CTK.cfg.get_val ('source!%s!interpreter'%(s)) or \
+                interpreter.strip() == ''):
+                errors.append (Error(_('Source without Interpreter'),
+                                       '/source/%s'%(s)))
+            elif not os.path.exists(interpreter.split(' ')[0]):
+                 errors.append (Error(_('Interpreter does not exist'),
+                                       '/source/%s'%(s)))
 
     #
     # Validators without Realm
