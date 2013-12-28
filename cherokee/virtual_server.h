@@ -41,6 +41,13 @@
 #include "collector.h"
 #include "flcache.h"
 
+typedef enum {
+	req_client_cert_skip = 0,
+	req_client_cert_tolerate,
+	req_client_cert_accept,
+	req_client_cert_require
+} cherokee_req_client_cert_t;
+
 typedef struct {
 	cherokee_list_t              list_node;
 	void                        *server_ref;      /* Ref to server */
@@ -73,7 +80,7 @@ typedef struct {
 	cherokee_buffer_t            server_cert;
 	cherokee_buffer_t            server_key;
 	cherokee_buffer_t            certs_ca;
-	cherokee_buffer_t            req_client_certs;
+	cherokee_req_client_cert_t   req_client_certs;
 	cherokee_buffer_t            ciphers;
 	cherokee_boolean_t           cipher_server_preference;
 	cherokee_boolean_t           ssl_compression;

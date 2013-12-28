@@ -337,12 +337,32 @@ tmp_dh_cb (SSL *ssl, int export, int keylen)
 	return NULL;
 }
 
+#ifdef TRACE_ENABLED
+static int
+verify_trace_cb(int preverify_ok, X509_STORE_CTX *x509_store)
+{
+	X509 *peer_certificate = X509_STORE_CTX_get_current_cert(x509_store);
+	if (peer_certificate) {
+		BIO *mem = BIO_new(BIO_s_mem());
+		char *ptr;
+		X509_print (mem, peer_certificate);
+		BIO_get_mem_data(mem, &ptr);
+		TRACE (ENTRIES, "SSL: %s", ptr);
+		BIO_free (mem);
+	}
+
+	return preverify_ok;
+}
+#endif
+
 static int
 verify_tolerate_cb(int preverify_ok, X509_STORE_CTX *x509_store)
 {
+#ifdef TRACE_ENABLED
+	verify_trace_cb(preverify_ok, x509_store);
+#endif
 	return 1;
 }
-
 
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
@@ -498,11 +518,11 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		goto error;
 	}
 
-	if (! cherokee_buffer_is_empty (&vsrv->req_client_certs)) {
+	if (vsrv->req_client_certs != req_client_cert_skip) {
 		STACK_OF(X509_NAME) *X509_clients;
 
 		verify_mode = SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE;
-		if (cherokee_buffer_cmp_str (&vsrv->req_client_certs, "required") == 0) {
+		if (vsrv->req_client_certs == req_client_cert_require) {
 			verify_mode |= SSL_VERIFY_FAIL_IF_NO_PEER_CERT;
 		}
 
@@ -532,12 +552,19 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		} else {
 			verify_mode = SSL_VERIFY_NONE;
 		}
+
 	}
 
-	if (cherokee_buffer_cmp_str (&vsrv->req_client_certs, "tolerate") == 0)
+	if (vsrv->req_client_certs == req_client_cert_tolerate) {
 		SSL_CTX_set_verify (n->context, verify_mode, verify_tolerate_cb);
-	else
+	} else {
+#ifdef TRACE_ENABLED
+		SSL_CTX_set_verify (n->context, verify_mode, verify_trace_cb);
+#else
 		SSL_CTX_set_verify (n->context, verify_mode, NULL);
+#endif
+	}
+
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
 	SSL_CTX_set_read_ahead (n->context, 1);
@@ -959,9 +986,9 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 		buf_size -= len;
 	}
 
-    /* We have more data than buffer space. Mark the socket as
+	/* We have more data than buffer space. Mark the socket as
 	 * having pending data. */
-    cryp->is_pending = (buf_size == 0);
+	cryp->is_pending = (buf_size == 0);
 
 	if (*pcnt_read > 0) {
 		return ret_ok;
@@ -1308,26 +1335,26 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 
 # if HAVE_OPENSSL_ENGINE_H
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
-        ENGINE_load_builtin_engines();
+	ENGINE_load_builtin_engines();
 	OpenSSL_add_all_algorithms();
 #  endif
-        e = ENGINE_by_id("pkcs11");
-        while (e != NULL) {
-                if(! ENGINE_init(e)) {
-                        ENGINE_free (e);
-                        LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_PKCS11);
+	e = ENGINE_by_id("pkcs11");
+	while (e != NULL) {
+		if(! ENGINE_init(e)) {
+			ENGINE_free (e);
+			LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_PKCS11);
 			break;
-                }
+		}
 
-                if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-                        ENGINE_free (e);
-                        LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_DEFAULTS);
+		if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+			ENGINE_free (e);
+			LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_DEFAULTS);
 			break;
-                }
+		}
 
-                ENGINE_finish(e);
-                ENGINE_free(e);
+		ENGINE_finish(e);
+		ENGINE_free(e);
 		break;
-        }
+	}
 #endif
 }
