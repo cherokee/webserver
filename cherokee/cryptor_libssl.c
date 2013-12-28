@@ -986,9 +986,9 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 		buf_size -= len;
 	}
 
-    /* We have more data than buffer space. Mark the socket as
+	/* We have more data than buffer space. Mark the socket as
 	 * having pending data. */
-    cryp->is_pending = (buf_size == 0);
+	cryp->is_pending = (buf_size == 0);
 
 	if (*pcnt_read > 0) {
 		return ret_ok;
@@ -1335,26 +1335,26 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 
 # if HAVE_OPENSSL_ENGINE_H
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
-        ENGINE_load_builtin_engines();
+	ENGINE_load_builtin_engines();
 	OpenSSL_add_all_algorithms();
 #  endif
-        e = ENGINE_by_id("pkcs11");
-        while (e != NULL) {
-                if(! ENGINE_init(e)) {
-                        ENGINE_free (e);
-                        LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_PKCS11);
+	e = ENGINE_by_id("pkcs11");
+	while (e != NULL) {
+		if(! ENGINE_init(e)) {
+			ENGINE_free (e);
+			LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_PKCS11);
 			break;
-                }
+		}
 
-                if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-                        ENGINE_free (e);
-                        LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_DEFAULTS);
+		if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+			ENGINE_free (e);
+			LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_DEFAULTS);
 			break;
-                }
+		}
 
-                ENGINE_finish(e);
-                ENGINE_free(e);
+		ENGINE_finish(e);
+		ENGINE_free(e);
 		break;
-        }
+	}
 #endif
 }
