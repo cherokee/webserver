@@ -116,7 +116,7 @@ class URL_Rewrite (CTK.Container):
 
         # New
         new_regex  = CTK.TextCfg('tmp!new!%s!regex'%(key_entry), False, {'class': 'noauto'})
-        new_subst  = CTK.TextCfg('tmp!new!%s!substring'%(key_entry), True, {'class': 'noauto'})
+        new_subst  = CTK.TextCfg('tmp!new!%s!substring'%(key_entry), False, {'class': 'noauto'})
         add_button = CTK.SubmitterButton(_('Add'))
 
         table = CTK.Table()

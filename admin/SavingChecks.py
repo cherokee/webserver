@@ -163,4 +163,39 @@ def check_config():
                 errors.append (Error(_("GeoIP match rule with no countries"),
                                      '/vserver/%s/rule/%s#1'%(v,r)))
 
+    #
+    # Incomplete regular expressions
+    #
+    for v in CTK.cfg['vserver'] or []:
+        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
+            handler = CTK.cfg.get_val ('vserver!%s!rule!%s!handler'%(v,r))
+
+            if handler == 'proxy':
+                for x in CTK.cfg['vserver!%s!rule!%s!handler!in_rewrite_request'%(v,r)] or []:
+                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!in_rewrite_request!%s!regex'%(v,r,x)):
+                        errors.append (Error(_("Request URL Rewriting rule list has a missing Regular Expression"),
+                                            '/vserver/%s/rule/%s#2'%(v,r)))
+
+                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!in_rewrite_request!%s!substring'%(v,r,x)):
+                        errors.append (Error(_("Request URL Rewriting rule list has a missing Substitution"),
+                                            '/vserver/%s/rule/%s#2'%(v,r)))
+
+                for x in CTK.cfg['vserver!%s!rule!%s!handler!out_rewrite_request'%(v,r)] or []:
+                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!out_rewrite_request!%s!regex'%(v,r,x)):
+                        errors.append (Error(_("Reply URL Rewriting rule list has a missing Regular Expression"),
+                                            '/vserver/%s/rule/%s#2'%(v,r)))
+
+                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!out_rewrite_request!%s!substring'%(v,r,x)):
+                        errors.append (Error(_("Reply URL Rewriting rule list has a missing Substitution"),
+                                            '/vserver/%s/rule/%s#2'%(v,r)))
+
+            elif handler == 'redir':
+                for x in CTK.cfg['vserver!%s!rule!%s!handler!rewrite'%(v,r)] or []:
+                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!rewrite!%s!regex'%(v,r,x)):
+                        errors.append (Error(_("Redirection rule list has a missing Regular Expression"),
+                                            '/vserver/%s/rule/%s#2'%(v,r)))
+
+                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!rewrite!%s!substring'%(v,r,x)):
+                        errors.append (Error(_("Redirection rule list has a missing Substitution"),
+                                            '/vserver/%s/rule/%s#2'%(v,r)))
     return errors
