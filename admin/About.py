@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2001-2013 Alvaro Lopez Ortega
+# Copyright (C) 2001-2014 Alvaro Lopez Ortega
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 2 of the GNU General Public
@@ -27,7 +27,7 @@ from configured import *
 
 URL_ABOUT_CONTENT = "/about-cherokee"
 
-COPYRIGHT_NOTICE = """Copyright ©2001-2011 Alvaro Lopez Ortega. All Rights Reserved."""
+COPYRIGHT_NOTICE = """Copyright © 2001-2014 Alvaro Lopez Ortega. All Rights Reserved."""
 BROUGHT_TO_YOU   = """
 <p>The Cherokee Web Server is proudly brought to you by Alvaro Lopez Ortega
 (contact info: <a href="mail:alvaro@alobbs.com">E-Mail</a>,

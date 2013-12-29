@@ -1,6 +1,6 @@
 # Spanish translations for cherokee package
 # Traducciones al español para el paquete cherokee.
-# Copyright (C) 2001-2013 Alvaro Lopez Ortega
+# Copyright (C) 2001-2014 Alvaro Lopez Ortega
 #
 # Authors:
 #  Antonio Pérez Jiménez <aperez@skarcha.com>

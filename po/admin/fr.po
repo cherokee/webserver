@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2001-2013 Alvaro Lopez Ortega
+# Copyright (C) 2001-2014 Alvaro Lopez Ortega
 # This file is distributed under the same license as the PACKAGE package.
 # Vincent Knecht <vknecht@users.sourceforge.net>, 2009.
 #

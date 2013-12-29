@@ -5,7 +5,7 @@ This module has been written as part of the Cherokee project:
                http://www.cherokee-project.com/
 """
 
-# Copyright (c) 2006-2011, Alvaro Lopez Ortega <alvaro@alobbs.com>
+# Copyright (C) 2006-2014 Alvaro Lopez Ortega
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
