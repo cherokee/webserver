@@ -1424,10 +1424,10 @@ cherokee_buffer_escape_uri_delims (cherokee_buffer_t *buffer, cherokee_buffer_t 
 	 * sibling, plus a number of delimiters. Please check RFC 3986
 	 * (Uniform Resource Identifier) for further information:
 	 *
-	 *  ":", "?", "#", "[", "]", "@"
+	 *  ":", "?", "#", "[", "]", "@", """
 	 */
 	static uint32_t escape_uri[] = {
-		0xffffffff, 0x84000029, 0x28000001, 0x80000000,
+		0xffffffff, 0x8400002D, 0x28000001, 0x80000000,
 		0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	};
 

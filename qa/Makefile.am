@@ -322,7 +322,8 @@ run-tests.py \
 298-Timeout.py \
 299-MethodsRequestBodyHandling.py \
 300-xsendfile3.py \
-301-XForwardedFor-4.py
+301-XForwardedFor-4.py \
+302-DirIndex3.py
 
 test:
 	python -m compileall .
