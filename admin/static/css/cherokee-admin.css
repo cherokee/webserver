@@ -493,7 +493,7 @@ img.icon_chooser_selected {
 #bottom-box { padding: 8px 0; margin: 8px 16px; }
 #bottom-box h2 { font-size: 16px; margin-bottom: 16px; }
 #enterprise-box { width: 256px; float: right; }
-#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top 30px; padding-top:64px; }
+#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top; padding-top:64px; }
 #enterprise-link { text-align: right; margin-top: 16px; color: #def; }
 
 
@@ -970,7 +970,7 @@ img.icon_chooser_selected {
 #halt-admin-box a:hover { color: #c00; }
 
 #maintenance-removal { overflow: auto; overflow-x: hidden; height: 260px; }
-#maintenance-removal-list { table-layout: fixed; width: 100%; border-collapse: collapse; border: 1px solid #cde; }{}
+#maintenance-removal-list { table-layout: fixed; width: 100%; border-collapse: collapse; border: 1px solid #cde; }
 #maintenance-removal-list th { background: #e6f3ff url(/static/images/bg-th.png) repeat-x; border: none; border-bottom: 2px solid #27c; padding: 8px 4px; }
 #maintenance-removal-list td { border-bottom: 1px solid #cde; padding: 4px; }
 
