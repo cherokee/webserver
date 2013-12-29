@@ -1,4 +1,5 @@
 from base import *
+import os
 
 DIR       = "php_dir_documentroot"
 MAGIC     = '<a href="http://www.alobbs.com/">Alvaro</a>'
@@ -29,6 +30,7 @@ class Test (TestBase):
     def Prepare (self, www):
         # Temp dir outside of the path document root
         d = tempfile.mkdtemp ("che193")
+        os.chmod(d, 0755)
         self.WriteFile (d, "index.php", 0444, PHP_SCRIPT)
         self.conf = CONF % (DIR, d)
 
