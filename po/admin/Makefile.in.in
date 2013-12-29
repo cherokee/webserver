@@ -183,7 +183,7 @@ OLD-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 
 $(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	if [ ! -f $(srcdir)/$(DOMAIN).pot ]; then \
-       wget -O tmp.po http://www.cherokee-project.com/download/trunk/cherokee.pot; \
+	  xgettext --files-from=$(srcdir)/POTFILES.in --directory=../.. --output=tmp.po; \
 	  rm -f $(srcdir)/$(DOMAIN).pot; \
 	  mv tmp.po $(srcdir)/$(DOMAIN).pot; \
      fi
