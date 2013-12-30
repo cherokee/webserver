@@ -39,6 +39,7 @@ typedef enum {
 typedef struct {
 	cherokee_source_t    source;
 	cherokee_buffer_t    interpreter;
+	cherokee_buffer_t    chroot;
 
 	cherokee_boolean_t   env_inherited;
 	char               **custom_env;

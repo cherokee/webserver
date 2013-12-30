@@ -52,6 +52,7 @@ NOTE_TIMEOUT       = N_('How long should the server wait when spawning an interp
 NOTE_USAGE         = N_('Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited.')
 NOTE_USER          = N_('Execute the interpreter under a different user. Default: Same UID as the server.')
 NOTE_GROUP         = N_('Execute the interpreter under a different group. Default: Default GID of the new process UID.')
+NOTE_CHROOT        = N_('Execute the interpreter under a different root. Default: no.')
 NOTE_ENV_INHERIT   = N_('Whether the new child process should inherit the environment variables from the server process. Default: yes.')
 NOTE_DELETE_DIALOG = N_('You are about to delete an Information Source. Are you sure you want to proceed?')
 NOTE_NO_ENTRIES    = N_('The Information Source list is currently empty.')
@@ -291,6 +292,7 @@ class Render_Source:
             table.Add (_('Spawning timeout'),    CTK.TextCfg ('source!%s!timeout'%(num),       True),  _(NOTE_TIMEOUT))
             table.Add (_('Execute as User'),     CTK.TextCfg ('source!%s!user'%(num),          True),  _(NOTE_USER))
             table.Add (_('Execute as Group'),    CTK.TextCfg ('source!%s!group'%(num),         True),  _(NOTE_GROUP))
+            table.Add (_('Chroot Directory'),    CTK.TextCfg ('source!%s!chroot'%(num),        True),  _(NOTE_CHROOT))
             table.Add (_('Inherit Environment'), CTK.CheckCfgText ('source!%s!env_inherited'%(num), True, _('Enabled')), _(NOTE_ENV_INHERIT))
 
         submit = CTK.Submitter (URL_APPLY)

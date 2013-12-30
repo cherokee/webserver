@@ -438,6 +438,7 @@ do_spawn (void)
 	char        *interpreter  = NULL;
 	char        *log_file     = NULL;
 	char        *uid_str      = NULL;
+	char        *chroot_dir   = NULL;
 	char       **envp         = NULL;
 	char        *p            = spawn_shared;
 	const char  *argv[]       = {"sh", "-c", NULL, NULL};
@@ -488,8 +489,19 @@ do_spawn (void)
 	memcpy (&gid, p, sizeof(gid_t));
 	p += sizeof(gid_t);
 
-	/* 3.- Environment */
+	/* 3.- Chroot directory */
 	CHECK_MARK (0xF2);
+	size = *((int *) p);
+	p += sizeof(int);
+	if (size > 0) {
+		chroot_dir = malloc(size + 1);
+		memcpy(chroot_dir, p, size + 1);
+	}
+	p += size + 1;
+	ALIGN4 (p);
+
+	/* 4.- Environment */
+	CHECK_MARK (0xF3);
 
 	env_inherit = *((int *)p);
 	p += sizeof(int);
@@ -522,8 +534,8 @@ do_spawn (void)
 		ALIGN4 (p);
 	}
 
-	/* 4.- Error log */
-	CHECK_MARK (0xF3);
+	/* 5.- Error log */
+	CHECK_MARK (0xF4);
 
 	size = *((int *)p);
 	p += sizeof(int);
@@ -539,8 +551,8 @@ do_spawn (void)
 		ALIGN4 (p);
 	}
 
-	/* 5.- PID: it's -1 now */
-	CHECK_MARK (0xF4);
+	/* 6.- PID: it's -1 now */
+	CHECK_MARK (0xF5);
 
 	n = *((int *)p);
 	if (n > 0) {
@@ -586,6 +598,15 @@ do_spawn (void)
 			close (STDERR_FILENO);
 			dup2 (tmp_fd, STDOUT_FILENO);
 			dup2 (tmp_fd, STDERR_FILENO);
+		}
+
+		/* Change root */
+		if (chroot_dir) {
+			int re = chroot(chroot_dir);
+			if (re < 0) {
+				PRINT_ERROR ("(critial) Couldn't chroot to %s\n", chroot_dir);
+				exit (1);
+			}
 		}
 
 		/* Change user & group */
@@ -643,7 +664,7 @@ do_spawn (void)
 	/* Return the PID
 	 */
 	memcpy (p, (char *)&child, sizeof(int));
-	printf ("PID %d: launched '/bin/sh -c %s' with uid=%d, gid=%d, env=%s\n", child, interpreter, uid, gid, env_inherit ? "inherited":"custom");
+	printf ("PID %d: launched '/bin/sh -c %s' with uid=%d, gid=%d, chroot=%s, env=%s\n", child, interpreter, uid, gid, chroot_dir, env_inherit ? "inherited":"custom");
 
 cleanup:
 	/* Unlock worker
@@ -654,6 +675,7 @@ cleanup:
 	 */
 	free (uid_str);
 	free (interpreter);
+	free (chroot_dir);
 
 	if (envp != NULL) {
 		for (n=0; n<envs; n++) {
