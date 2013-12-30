@@ -511,7 +511,6 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	/* Child process
 	 */
 	int                          re;
-	char                        *script;
 	cherokee_connection_t       *conn          = HANDLER_CONN(cgi);
 	cherokee_handler_cgi_base_t *cgi_base      = HDL_CGI_BASE(cgi);
 	char                        *absolute_path = cgi_base->executable.buf;
@@ -597,21 +596,28 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Build de argv array
 	 */
-	script  = absolute_path;
 	argv[0] = absolute_path;
 
 	/* Change the execution user?
 	 */
 	if (HANDLER_CGI_PROPS(cgi_base)->change_user) {
-		struct stat info;
+		struct stat                        nocache_info;
+		struct stat                       *info;
+		cherokee_iocache_entry_t          *io_entry = NULL;
+		cherokee_server_t                 *srv      = CONN_SRV(conn);
+		cherokee_handler_cgi_base_props_t *props    = HANDLER_CGI_BASE_PROPS(cgi);
 
-		re = cherokee_stat (script, &info);
-		if (re >= 0) {
-			re = setuid (info.st_uid);
-			if (re != 0) {
-				LOG_ERROR (CHEROKEE_ERROR_HANDLER_CGI_SETID, script, info.st_uid);
-			}
+		ret_t ret = cherokee_io_stat (srv->iocache, &cgi_base->executable, props->use_cache, &nocache_info, &io_entry, &info);
+		if (ret != ret_ok) {
+			info = &nocache_info;
 		}
+
+		re = setuid (info->st_uid);
+		if (re != 0) {
+			LOG_ERROR (CHEROKEE_ERROR_HANDLER_CGI_SETID, absolute_path, info->st_uid);
+		}
+
+		cherokee_iocache_entry_unref(&io_entry);
 	}
 
 	/* Reset the server-wide signal handlers

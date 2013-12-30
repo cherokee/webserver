@@ -171,6 +171,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 	props->check_file       = true;
 	props->allow_xsendfile  = false;
 	props->pass_req_headers = true;
+	props->use_cache        = true;
 
 	/* Parse the configuration tree
 	 */
@@ -211,6 +212,10 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 
 		} else if (equal_buf_str (&subconf->key, "pass_req_headers")) {
 			ret = cherokee_atob (subconf->val.buf, &props->pass_req_headers);
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "iocache")) {
+			ret = cherokee_atob (subconf->val.buf, &props->use_cache);
 			if (ret != ret_ok) return ret;
 		}
 	}
@@ -849,10 +854,13 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	ret_t                              ret;
 	cint_t                             req_len;
 	cint_t                             local_len;
-	struct stat                        st;
+	struct stat                        nocache_info;
+	struct stat                       *info;
+	cherokee_iocache_entry_t          *io_entry     = NULL;
 	cint_t                             pathinfo_len = 0;
 	cherokee_connection_t             *conn         = HANDLER_CONN(cgi);
 	cherokee_handler_cgi_base_props_t *props        = HANDLER_CGI_BASE_PROPS(cgi);
+	cherokee_server_t                 *srv          = CONN_SRV(conn);
 
 	/* ScriptAlias: If there is a ScriptAlias directive, it
 	 * doesn't need to find the executable file..
@@ -860,7 +868,9 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	if (! cherokee_buffer_is_empty (&props->script_alias)) {
 		TRACE (ENTRIES, "Script alias '%s'\n", props->script_alias.buf);
 
-		if (cherokee_stat (props->script_alias.buf, &st) == -1) {
+		ret = cherokee_io_stat (srv->iocache, &props->script_alias, props->use_cache, &nocache_info, &io_entry, &info);
+		cherokee_iocache_entry_unref (&io_entry);
+		if (ret != ret_ok) {
 			conn->error_code = http_not_found;
 			return ret_error;
 		}
@@ -965,7 +975,9 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	 */
 	ret = ret_ok;
 	if (check_filename) {
-		if (cherokee_stat (conn->local_directory.buf, &st) == -1) {
+		ret = cherokee_io_stat (srv->iocache, &conn->local_directory, props->use_cache, &nocache_info, &io_entry, &info);
+		cherokee_iocache_entry_unref (&io_entry);
+		if (ret != ret_ok) {
 			conn->error_code = http_not_found;
 			ret = ret_error;
 			goto bye;

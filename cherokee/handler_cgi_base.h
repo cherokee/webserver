@@ -104,6 +104,7 @@ typedef struct {
 	cherokee_boolean_t                 allow_xsendfile;
 	cherokee_boolean_t                 is_error_handler;
 	cherokee_boolean_t                 pass_req_headers;
+	cherokee_boolean_t                 use_cache;
 	cherokee_x_real_ip_t               x_real_ip;
 } cherokee_handler_cgi_base_props_t;
 
