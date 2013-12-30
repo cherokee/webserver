@@ -187,6 +187,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 			cherokee_buffer_t         *user,
 			uid_t                      uid,
 			gid_t                      gid,
+			cherokee_buffer_t         *chroot,
 			int                        env_inherited,
 			char                     **envp,
 			cherokee_logger_writer_t  *error_writer,
@@ -246,6 +247,11 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 
 	cherokee_buffer_add (&tmp, (char *)&uid, sizeof(uid_t));
 	cherokee_buffer_add (&tmp, (char *)&gid, sizeof(gid_t));
+
+	/* 3.- Chroot directory */
+	cherokee_buffer_add        (&tmp, (char *)&chroot->len, sizeof(int));
+	cherokee_buffer_add_buffer (&tmp, chroot);
+	cherokee_buffer_add_char   (&tmp, '\0');
 
 	/* 3.- Environment */
 	phase = 0xF2;

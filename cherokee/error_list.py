@@ -752,6 +752,9 @@ e('SRC_INTER_SPAWN',
   title = "Could not spawn '%s'",
   desc  = SYSTEM_ISSUE)
 
+e('SRC_INTER_CHROOT',
+  title = "Could not chroot() to '%s'",
+  desc  = SYSTEM_ISSUE)
 
 # cherokee/config_reader.c
 #
