@@ -249,12 +249,14 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	cherokee_buffer_add (&tmp, (char *)&gid, sizeof(gid_t));
 
 	/* 3.- Chroot directory */
+	phase = 0xF2;
+	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 	cherokee_buffer_add        (&tmp, (char *)&chroot->len, sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, chroot);
 	cherokee_buffer_add_char   (&tmp, '\0');
 
-	/* 3.- Environment */
-	phase = 0xF2;
+	/* 4.- Environment */
+	phase = 0xF3;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
 	for (n=envp; *n; n++) {
@@ -272,15 +274,15 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 		ALIGN4(tmp);
 	}
 
-	/* 4.- Error log */
-	phase = 0xF3;
+	/* 5.- Error log */
+	phase = 0xF4;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
 	write_logger (&tmp, error_writer);
 	ALIGN4 (tmp);
 
-	/* 5.- PID (will be rewritten by the other side) */
-	phase = 0xF4;
+	/* 6.- PID (will be rewritten by the other side) */
+	phase = 0xF5;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
 	pid_shm = (int *) (((char *)cherokee_spawn_shared.mem) + tmp.len);

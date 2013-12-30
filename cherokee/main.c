@@ -490,6 +490,7 @@ do_spawn (void)
 	p += sizeof(gid_t);
 
 	/* 3.- Chroot directory */
+	CHECK_MARK (0xF2);
 	size = *((int *) p);
 	p += sizeof(int);
 	if (size > 0) {
@@ -497,9 +498,10 @@ do_spawn (void)
 		memcpy(chroot_dir, p, size + 1);
 	}
 	p += size + 1;
+	ALIGN4 (p);
 
-	/* 3.- Environment */
-	CHECK_MARK (0xF2);
+	/* 4.- Environment */
+	CHECK_MARK (0xF3);
 
 	env_inherit = *((int *)p);
 	p += sizeof(int);
@@ -532,8 +534,8 @@ do_spawn (void)
 		ALIGN4 (p);
 	}
 
-	/* 4.- Error log */
-	CHECK_MARK (0xF3);
+	/* 5.- Error log */
+	CHECK_MARK (0xF4);
 
 	size = *((int *)p);
 	p += sizeof(int);
@@ -549,8 +551,8 @@ do_spawn (void)
 		ALIGN4 (p);
 	}
 
-	/* 5.- PID: it's -1 now */
-	CHECK_MARK (0xF4);
+	/* 6.- PID: it's -1 now */
+	CHECK_MARK (0xF5);
 
 	n = *((int *)p);
 	if (n > 0) {
@@ -603,7 +605,7 @@ do_spawn (void)
 			int re = chroot(chroot_dir);
 			if (re < 0) {
 				PRINT_ERROR ("(critial) Couldn't chroot to %s\n", chroot_dir);
-                exit (1);
+				exit (1);
 			}
 		}
 
