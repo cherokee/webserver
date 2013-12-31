@@ -82,7 +82,7 @@ fd_associate( cherokee_fdpoll_port_t *fdp, int fd, void *rw )
 
 	if ( rc == -1 ) {
 		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
+		           CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
 		return ret_error;
 	}
 
@@ -121,7 +121,7 @@ _add (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 	rc = fd_associate(fdp, fd, (rw == FDPOLL_MODE_WRITE ? WRITE : READ));
 	if ( rc == -1 ) {
 		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, fd);
+		           CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, fd);
 		return ret_error;
 	}
 
@@ -140,7 +140,7 @@ _del (cherokee_fdpoll_port_t *fdp, int fd)
 	                      fd);            /* object */
 	if ( rc == -1 ) {
 		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
+		           CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
 		return ret_error;
 	}
 
@@ -170,8 +170,8 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 	/* First call to get the number of file descriptors with activity
 	 */
 	rc = port_getn (fdp->port, fdp->port_events, 0,
-			(uint_t *)&fdp->port_readyfds,
-		        &timeout);
+	                (uint_t *)&fdp->port_readyfds,
+	                &timeout);
 	if ( rc < 0 ) {
 		LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_PORTS_GETN);
 		return 0;
@@ -187,7 +187,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 	 * activity
 	 */
 	rc = port_getn (fdp->port, fdp->port_events,FDPOLL(fdp)->nfiles,
-			&fdp->port_readyfds, &timeout);
+	                &fdp->port_readyfds, &timeout);
 	if ( ( (rc < 0) && (errno != ETIME) ) || (fdp->port_readyfds == -1)) {
 		LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_PORTS_GETN);
 		return 0;
@@ -203,7 +203,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 		                   fdp->port_events[i].portev_user);
 		if ( rc < 0 ) {
 			LOG_ERRNO (errno, cherokee_err_error,
-				   CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, nfd);
+			           CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, nfd);
 		}
 	}
 
@@ -258,7 +258,7 @@ _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 	                    (rw == FDPOLL_MODE_WRITE ? WRITE   : READ));
 	if ( rc == -1 ) {
 		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
+		           CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
 		return ret_error;
 	}
 
@@ -328,7 +328,7 @@ fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	re = fcntl (n->port, F_SETFD, FD_CLOEXEC);
 	if (re < 0) {
 		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_FDPOLL_EPOLL_CLOEXEC);
+		           CHEROKEE_ERROR_FDPOLL_EPOLL_CLOEXEC);
 		_free (n);
 		return ret_error;
 	}

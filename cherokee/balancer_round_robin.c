@@ -36,8 +36,8 @@ PLUGIN_INFO_BALANCER_EASIEST_INIT (round_robin);
 
 ret_t
 cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer,
-					 cherokee_server_t      *srv,
-					 cherokee_config_node_t *conf)
+                                         cherokee_server_t      *srv,
+                                         cherokee_config_node_t *conf)
 {
 	ret_t                            ret;
 	cherokee_balancer_round_robin_t *bal_rr = BAL_RR(balancer);
@@ -87,8 +87,8 @@ reactivate_entry (cherokee_balancer_entry_t *entry)
 
 static ret_t
 dispatch (cherokee_balancer_round_robin_t *balancer,
-	  cherokee_connection_t           *conn,
-	  cherokee_source_t              **src)
+          cherokee_connection_t           *conn,
+          cherokee_source_t              **src)
 {
 	cherokee_balancer_entry_t *entry;
 	cuint_t                    tries  = 0;
@@ -135,8 +135,8 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 static ret_t
 report_fail (cherokee_balancer_round_robin_t *balancer,
-	     cherokee_connection_t           *conn,
-	     cherokee_source_t               *src)
+             cherokee_connection_t           *conn,
+             cherokee_source_t               *src)
 {
 	ret_t                      ret;
 	cherokee_list_t           *i;

@@ -43,7 +43,7 @@
 
 static void interpreter_free (void *src);
 
-#define source_is_unresponsive(src)					\
+#define source_is_unresponsive(src) \
 	(cherokee_bogonow_now > (src)->spawning_since + (src)->timeout)
 
 ret_t
@@ -334,9 +334,7 @@ out:
 
 
 static ret_t
-add_env (cherokee_source_interpreter_t *src,
-	 cherokee_buffer_t             *env,
-	 cherokee_buffer_t             *val_orig)
+add_env (cherokee_source_interpreter_t *src, cherokee_buffer_t *env, cherokee_buffer_t *val_orig)
 {
 	ret_t              ret;
 	int                entry_len;
@@ -395,8 +393,8 @@ error:
 
 ret_t
 cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
-				       cherokee_config_node_t        *conf,
-				       int                            prio)
+                                       cherokee_config_node_t        *conf,
+                                       int                            prio)
 {
 	ret_t                   ret;
 	int                     val;
@@ -507,7 +505,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 
 static ret_t
 _spawn_shm (cherokee_source_interpreter_t *src,
-	    cherokee_logger_writer_t      *error_writer)
+            cherokee_logger_writer_t *error_writer)
 {
 	ret_t   ret;
 	char  **envp;
@@ -532,14 +530,14 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 	/* Invoke the spawn mechanism
 	 */
 	ret = cherokee_spawner_spawn (&src->interpreter,
-				      &src->change_user_name,
-				      src->change_user,
-				      src->change_group,
-				      &src->chroot,
-				      src->env_inherited,
-				      envp,
-				      error_writer,
-				      &src->pid);
+	                              &src->change_user_name,
+	                              src->change_user,
+	                              src->change_group,
+	                              &src->chroot,
+	                              src->env_inherited,
+	                              envp,
+	                              error_writer,
+	                              &src->pid);
 	switch (ret) {
 	case ret_ok:
 		break;
@@ -555,7 +553,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 
 static ret_t
 _spawn_local (cherokee_source_interpreter_t *src,
-	      cherokee_logger_writer_t      *error_writer)
+              cherokee_logger_writer_t *error_writer)
 {
 	int                re;
 	int                tmp_fd;
@@ -669,7 +667,7 @@ error:
 
 ret_t
 cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
-				   cherokee_logger_writer_t      *error_writer)
+                                   cherokee_logger_writer_t      *error_writer)
 {
 	ret_t ret;
 
@@ -722,8 +720,8 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 
 ret_t
 cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
-					     cherokee_socket_t             *socket,
-					     cherokee_connection_t         *conn)
+                                             cherokee_socket_t             *socket,
+                                             cherokee_connection_t         *conn)
 {
 	int   re;
 	ret_t ret;
@@ -732,7 +730,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 
 	/* Connect
 	 */
- 	ret = cherokee_source_connect (SOURCE(src), socket);
+	ret = cherokee_source_connect (SOURCE(src), socket);
 	switch (ret) {
 	case ret_ok:
 		/* connected */
@@ -747,8 +745,8 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	case ret_eagain:
 		/* wait for the fd */
 		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
-							   conn, SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE, false);
+		                                           conn, SOCKET_FD(socket),
+		                                           FDPOLL_MODE_WRITE, false);
 		if (ret != ret_ok) {
 			return ret_error;
 		}

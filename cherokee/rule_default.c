@@ -52,8 +52,8 @@ match (cherokee_rule_t         *rule,
 
 static ret_t
 configure (cherokee_rule_default_t   *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	UNUSED(rule);
 	UNUSED(conf);

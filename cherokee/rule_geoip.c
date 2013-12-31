@@ -103,12 +103,12 @@ match (cherokee_rule_t         *rule_,
 	country = GeoIP_country_code_by_ipnum (rule->geoip, SOCKET_ADDRESS_IPv4(&conn->socket));
 	if (country == NULL) {
 		TRACE(ENTRIES, "Rule geoip did found the country for ip='%lu'\n",
-			SOCKET_ADDRESS_IPv4(&conn->socket));
+		      SOCKET_ADDRESS_IPv4(&conn->socket));
 		return ret_not_found;
 	}
 
 	ret = cherokee_avl_get_ptr (&rule->countries, country, &foo);
-        if (ret != ret_ok) {
+	if (ret != ret_ok) {
 		TRACE(ENTRIES, "Rule geoip did not match '%s'\n", country);
 		return ret;
 	}
@@ -141,8 +141,8 @@ parse_contry_list (cherokee_buffer_t *value, cherokee_avl_t *countries)
 
 static ret_t
 configure (cherokee_rule_geoip_t       *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp = NULL;

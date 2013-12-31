@@ -48,9 +48,9 @@ static cherokee_buffer_t now;
  */
 static ret_t
 add_ip_remote (cherokee_template_t       *template,
-	       cherokee_template_token_t *token,
-	       cherokee_buffer_t         *output,
-	       void                      *param)
+               cherokee_template_token_t *token,
+               cherokee_buffer_t         *output,
+               void                      *param)
 {
 	cuint_t                prev_len;
 	cherokee_connection_t *conn      = CONN(param);
@@ -71,8 +71,8 @@ add_ip_remote (cherokee_template_t       *template,
 
 	cherokee_buffer_ensure_addlen (output, CHE_INET_ADDRSTRLEN);
 	cherokee_socket_ntop (&conn->socket,
-			      (output->buf + output->len),
-			      (output->size - output->len) -1);
+	                      (output->buf + output->len),
+	                      (output->size - output->len) -1);
 
 	output->len += strlen(output->buf + prev_len);
 	return ret_ok;
@@ -80,9 +80,9 @@ add_ip_remote (cherokee_template_t       *template,
 
 static ret_t
 add_ip_local (cherokee_template_t       *template,
-	      cherokee_template_token_t *token,
-	      cherokee_buffer_t         *output,
-	      void                      *param)
+              cherokee_template_token_t *token,
+              cherokee_buffer_t         *output,
+              void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -100,9 +100,9 @@ add_ip_local (cherokee_template_t       *template,
 
 static ret_t
 add_status (cherokee_template_t       *template,
-	    cherokee_template_token_t *token,
-	    cherokee_buffer_t         *output,
-	    void                      *param)
+            cherokee_template_token_t *token,
+            cherokee_buffer_t         *output,
+            void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -120,9 +120,9 @@ add_status (cherokee_template_t       *template,
 
 static ret_t
 add_transport (cherokee_template_t       *template,
-	       cherokee_template_token_t *token,
-	       cherokee_buffer_t         *output,
-	       void                      *param)
+               cherokee_template_token_t *token,
+               cherokee_buffer_t         *output,
+               void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -140,9 +140,9 @@ add_transport (cherokee_template_t       *template,
 
 static ret_t
 add_protocol (cherokee_template_t       *template,
-	      cherokee_template_token_t *token,
-	      cherokee_buffer_t         *output,
-	      void                      *param)
+              cherokee_template_token_t *token,
+              cherokee_buffer_t         *output,
+              void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -168,9 +168,9 @@ add_protocol (cherokee_template_t       *template,
 
 static ret_t
 add_port_server (cherokee_template_t       *template,
-		 cherokee_template_token_t *token,
-		 cherokee_buffer_t         *output,
-		 void                      *param)
+                 cherokee_template_token_t *token,
+                 cherokee_buffer_t         *output,
+                 void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -183,9 +183,9 @@ add_port_server (cherokee_template_t       *template,
 
 static ret_t
 add_query_string (cherokee_template_t       *template,
-		  cherokee_template_token_t *token,
-		  cherokee_buffer_t         *output,
-		  void                      *param)
+                  cherokee_template_token_t *token,
+                  cherokee_buffer_t         *output,
+                  void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -203,9 +203,9 @@ add_query_string (cherokee_template_t       *template,
 
 static ret_t
 add_request_first_line (cherokee_template_t       *template,
-			cherokee_template_token_t *token,
-			cherokee_buffer_t         *output,
-			void                      *param)
+                        cherokee_template_token_t *token,
+                        cherokee_buffer_t         *output,
+                        void                      *param)
 {
 	char                  *p;
 	char                  *end;
@@ -224,17 +224,17 @@ add_request_first_line (cherokee_template_t       *template,
 		p++;
 
 	cherokee_buffer_add (output,
-			     conn->header.input_buffer->buf,
-			     p - conn->header.input_buffer->buf);
+	                     conn->header.input_buffer->buf,
+	                     p - conn->header.input_buffer->buf);
 
 	return ret_ok;
 }
 
 static ret_t
 add_now (cherokee_template_t       *template,
-	 cherokee_template_token_t *token,
-	 cherokee_buffer_t         *output,
-	 void                      *param)
+         cherokee_template_token_t *token,
+         cherokee_buffer_t         *output,
+         void                      *param)
 {
 	UNUSED (template);
 	UNUSED (token);
@@ -245,9 +245,9 @@ add_now (cherokee_template_t       *template,
 
 static ret_t
 add_time_secs (cherokee_template_t       *template,
-	       cherokee_template_token_t *token,
-	       cherokee_buffer_t         *output,
-	       void                      *param)
+               cherokee_template_token_t *token,
+               cherokee_buffer_t         *output,
+               void                      *param)
 {
 	UNUSED (template);
 	UNUSED (token);
@@ -258,9 +258,9 @@ add_time_secs (cherokee_template_t       *template,
 
 static ret_t
 add_time_msecs (cherokee_template_t       *template,
-		cherokee_template_token_t *token,
-		cherokee_buffer_t         *output,
-		void                      *param)
+                cherokee_template_token_t *token,
+                cherokee_buffer_t         *output,
+                void                      *param)
 {
 	UNUSED (template);
 	UNUSED (token);
@@ -271,9 +271,9 @@ add_time_msecs (cherokee_template_t       *template,
 
 static ret_t
 add_user_remote (cherokee_template_t       *template,
-		 cherokee_template_token_t *token,
-		 cherokee_buffer_t         *output,
-		 void                      *param)
+                 cherokee_template_token_t *token,
+                 cherokee_buffer_t         *output,
+                 void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -293,9 +293,9 @@ add_user_remote (cherokee_template_t       *template,
 
 static ret_t
 add_request (cherokee_template_t       *template,
-	     cherokee_template_token_t *token,
-	     cherokee_buffer_t         *output,
-	     void                      *param)
+             cherokee_template_token_t *token,
+             cherokee_buffer_t         *output,
+             void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -308,9 +308,9 @@ add_request (cherokee_template_t       *template,
 
 static ret_t
 add_request_original (cherokee_template_t       *template,
-		      cherokee_template_token_t *token,
-		      cherokee_buffer_t         *output,
-		      void                      *param)
+                      cherokee_template_token_t *token,
+                      cherokee_buffer_t         *output,
+                      void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -328,9 +328,9 @@ add_request_original (cherokee_template_t       *template,
 
 static ret_t
 add_vserver_name (cherokee_template_t       *template,
-		  cherokee_template_token_t *token,
-		  cherokee_buffer_t         *output,
-		  void                      *param)
+                  cherokee_template_token_t *token,
+                  cherokee_buffer_t         *output,
+                  void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -343,9 +343,9 @@ add_vserver_name (cherokee_template_t       *template,
 
 static ret_t
 add_vserver_name_req (cherokee_template_t       *template,
-		      cherokee_template_token_t *token,
-		      cherokee_buffer_t         *output,
-		      void                      *param)
+                      cherokee_template_token_t *token,
+                      cherokee_buffer_t         *output,
+                      void                      *param)
 {
 	ret_t                  ret;
 	char                  *colon;
@@ -377,9 +377,9 @@ add_vserver_name_req (cherokee_template_t       *template,
 
 static ret_t
 add_response_size (cherokee_template_t       *template,
-		   cherokee_template_token_t *token,
-		   cherokee_buffer_t         *output,
-		   void                      *param)
+                   cherokee_template_token_t *token,
+                   cherokee_buffer_t         *output,
+                   void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -392,9 +392,9 @@ add_response_size (cherokee_template_t       *template,
 
 static ret_t
 add_http_host  (cherokee_template_t       *template,
-		cherokee_template_token_t *token,
-		cherokee_buffer_t         *output,
-		void                      *param)
+                cherokee_template_token_t *token,
+                cherokee_buffer_t         *output,
+                void                      *param)
 {
 	cherokee_connection_t *conn = CONN(param);
 
@@ -412,9 +412,9 @@ add_http_host  (cherokee_template_t       *template,
 
 static ret_t
 add_http_referer  (cherokee_template_t       *template,
-		   cherokee_template_token_t *token,
-		   cherokee_buffer_t         *output,
-		   void                      *param)
+                   cherokee_template_token_t *token,
+                   cherokee_buffer_t         *output,
+                   void                      *param)
 {
 	ret_t                  ret;
 	char                  *referer     = NULL;
@@ -436,9 +436,9 @@ add_http_referer  (cherokee_template_t       *template,
 
 static ret_t
 add_http_user_agent  (cherokee_template_t       *template,
-		      cherokee_template_token_t *token,
-		      cherokee_buffer_t         *output,
-		      void                      *param)
+                      cherokee_template_token_t *token,
+                      cherokee_buffer_t         *output,
+                      void                      *param)
 {
 	ret_t                  ret;
 	char                  *user_agent     = NULL;
@@ -460,9 +460,9 @@ add_http_user_agent  (cherokee_template_t       *template,
 
 static ret_t
 add_http_cookie  (cherokee_template_t       *template,
-		  cherokee_template_token_t *token,
-		  cherokee_buffer_t         *output,
-		  void                      *param)
+                  cherokee_template_token_t *token,
+                  cherokee_buffer_t         *output,
+                  void                      *param)
 {
 	ret_t                  ret;
 	char                  *cookie     = NULL;
@@ -516,10 +516,10 @@ _set_template (cherokee_logger_custom_t *logger,
 		{NULL, NULL}
 	};
 
-	for (p=macros; p->name; p++) {
+	for (p = macros; p->name; p++) {
 		ret = cherokee_template_set_token (template, p->name,
-						   (cherokee_tem_repl_func_t) p->func,
-						   logger, NULL);
+		                                   (cherokee_tem_repl_func_t) p->func,
+		                                   logger, NULL);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
@@ -531,9 +531,9 @@ _set_template (cherokee_logger_custom_t *logger,
 
 static ret_t
 _init_template (cherokee_logger_custom_t *logger,
-		cherokee_template_t      *template,
-		cherokee_config_node_t   *config,
-		const char               *key_config)
+                cherokee_template_t      *template,
+                cherokee_config_node_t   *config,
+                const char               *key_config)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp;
@@ -580,23 +580,23 @@ bogotime_callback (void *param)
 	 */
 	cherokee_buffer_clean  (&now);
 	cherokee_buffer_add_va (&now,
-				"%02d/%s/%d:%02d:%02d:%02d %c%02d%02d",
-				pnow_tm->tm_mday,
-				month[pnow_tm->tm_mon],
-				1900 + pnow_tm->tm_year,
-				pnow_tm->tm_hour,
-				pnow_tm->tm_min,
-				pnow_tm->tm_sec,
-				(cherokee_bogonow_tzloc < 0) ? '-' : '+',
-				(int) (abs(cherokee_bogonow_tzloc) / 60),
-				(int) (abs(cherokee_bogonow_tzloc) % 60));
+	                        "%02d/%s/%d:%02d:%02d:%02d %c%02d%02d",
+	                        pnow_tm->tm_mday,
+	                        month[pnow_tm->tm_mon],
+	                        1900 + pnow_tm->tm_year,
+	                        pnow_tm->tm_hour,
+	                        pnow_tm->tm_min,
+	                        pnow_tm->tm_sec,
+	                        (cherokee_bogonow_tzloc < 0) ? '-' : '+',
+	                        (int) (abs(cherokee_bogonow_tzloc) / 60),
+	                        (int) (abs(cherokee_bogonow_tzloc) % 60));
 }
 
 
 ret_t
 cherokee_logger_custom_new (cherokee_logger_t         **logger,
-			    cherokee_virtual_server_t  *vsrv,
-			    cherokee_config_node_t     *config)
+                            cherokee_virtual_server_t  *vsrv,
+                            cherokee_config_node_t     *config)
 {
 	ret_t                   ret;
 	static int              callback_init = 0;
@@ -691,7 +691,7 @@ cherokee_logger_custom_reopen (cherokee_logger_custom_t *logger)
 
 ret_t
 cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
-				     cherokee_connection_t    *conn)
+                                     cherokee_connection_t    *conn)
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;
@@ -731,7 +731,7 @@ error:
 
 ret_t
 cherokee_logger_custom_write_string (cherokee_logger_custom_t *logger,
-				     const char               *string)
+                                     const char               *string)
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;
@@ -741,13 +741,13 @@ cherokee_logger_custom_write_string (cherokee_logger_custom_t *logger,
 	cherokee_logger_writer_get_buf (logger->writer_access, &log);
 
 	ret = cherokee_buffer_add (log, string, strlen(string));
- 	if (unlikely (ret != ret_ok)) {
+	if (unlikely (ret != ret_ok)) {
 		goto error;
 	}
 
 	/* Flush buffer if full
 	 */
-  	if (log->len < logger->writer_access->max_bufsize) {
+	if (log->len < logger->writer_access->max_bufsize) {
 		goto ok;
 	}
 

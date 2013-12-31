@@ -72,10 +72,10 @@
 #endif
 
 #if defined(__GNUC__)
-# define __GNUC_VERSION	\
- 	(__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+# define __GNUC_VERSION \
+	(__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 # else
-# define __GNUC_VERSION	0
+# define __GNUC_VERSION 0
 #endif
 
 #if __GNUC_VERSION >= 30000
@@ -159,27 +159,27 @@
 	(cherokee_buffer_case_cmp_str((b),(str)) == 0)
 
 #define return_if_fail(expr,ret) \
-	do {								\
-		if (!(expr)) {						\
-			PRINT_ERROR ("assertion `%s' failed\n", #expr);	\
-			return (ret);					\
-		}							\
+	do {                                                            \
+		if (!(expr)) {                                          \
+			PRINT_ERROR ("assertion `%s' failed\n", #expr); \
+			return (ret);                                   \
+		}                                                       \
 	} while(0)
 
-#define SHOULDNT_HAPPEN							\
-	do {								\
-		fprintf (stderr,					\
-			 "file %s:%d (%s): this should not happen\n",	\
-			 __FILE__, __LINE__, __cherokee_func__);	\
-		fflush (stderr);					\
+#define SHOULDNT_HAPPEN                                                 \
+	do {                                                            \
+		fprintf (stderr,                                        \
+			 "file %s:%d (%s): this should not happen\n",   \
+			 __FILE__, __LINE__, __cherokee_func__);        \
+		fflush (stderr);                                        \
 	} while (0)
 
-#define RET_UNKNOWN(ret)						\
-	do {								\
-		fprintf (stderr,					\
-			 "file %s:%d (%s): ret code unknown ret=%d\n",	\
-			 __FILE__, __LINE__, __cherokee_func__, ret);	\
-		fflush (stderr);					\
+#define RET_UNKNOWN(ret)                                                \
+	do {                                                            \
+		fprintf (stderr,                                        \
+			 "file %s:%d (%s): ret code unknown ret=%d\n",  \
+			 __FILE__, __LINE__, __cherokee_func__, ret);   \
+		fflush (stderr);                                        \
 	} while (0)
 
 #define UNUSED(x) ((void)(x))
@@ -240,15 +240,15 @@
 
 /* We assume to have a C ANSI free().
  */
-#define CHEROKEE_FREE(obj) \
-	do {		\
- 	  free (obj);	\
-	  (obj) = NULL;	\
+#define CHEROKEE_FREE(obj)    \
+	do {                  \
+		free (obj);   \
+		(obj) = NULL; \
 	} while (0)
 
 #define CHEROKEE_TEMP(obj, size)                 \
-        const unsigned int obj ## _size = size;  \
-	char obj[size]
+    const unsigned int obj ## _size = size;  \
+char obj[size]
 
 #ifndef MIN
 # define MIN(x,y) ((x<y) ? x : y)
@@ -262,36 +262,36 @@
  * These macros implement _new/_free by using _init/_mrproper.
  */
 #define CHEROKEE_ADD_FUNC_NEW(klass)  \
-	ret_t                                                         \
-	cherokee_ ## klass ## _new (cherokee_ ## klass ## _t **obj) { \
-		ret_t ret;                                            \
-		CHEROKEE_NEW_STRUCT (n, klass);                       \
-		                                                      \
-		ret = cherokee_ ## klass ## _init (n);                \
-		if (unlikely (ret != ret_ok)) {			      \
-			free (n);				      \
-			return ret;				      \
-		}						      \
-		                                                      \
-		*obj = n;                                             \
-		return ret_ok;                                        \
-	}
+    ret_t                                                         \
+cherokee_ ## klass ## _new (cherokee_ ## klass ## _t **obj) { \
+    ret_t ret;                                            \
+    CHEROKEE_NEW_STRUCT (n, klass);                       \
+    \
+    ret = cherokee_ ## klass ## _init (n);                \
+    if (unlikely (ret != ret_ok)) {                       \
+	free (n);                                     \
+	return ret;                                   \
+    }                                                     \
+    \
+    *obj = n;                                             \
+    return ret_ok;                                        \
+}
 
 #define CHEROKEE_ADD_FUNC_FREE(klass)  \
-	ret_t                                                         \
-	cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
-		if ((obj) == NULL)				      \
-			return ret_ok;				      \
-								      \
-		cherokee_ ## klass ## _mrproper (obj);                \
-		                                                      \
-		free (obj);                                           \
-		return ret_ok;                                        \
-	}
+    ret_t                                                         \
+cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
+    if ((obj) == NULL)                                    \
+    return ret_ok;                                \
+    \
+    cherokee_ ## klass ## _mrproper (obj);                \
+    \
+    free (obj);                                           \
+    return ret_ok;                                        \
+}
 
 
 /* Printing macros
- */
+*/
 #if defined(__GNUC__) || ( defined(__SUNPRO_C) && __SUNPRO_C > 0x590 )
 # define PRINT_MSG(fmt,arg...)    do { fprintf(stderr, fmt, ##arg); fflush(stderr); } while(0)
 # define PRINT_ERROR(fmt,arg...)  do { fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg); fflush(stderr); } while(0)
@@ -318,7 +318,7 @@
 #define PRINT_MSG_S(str)          PRINT_MSG("%s",str)
 
 /* Tracing facility
- */
+*/
 #define TRACE_ENV "CHEROKEE_TRACE"
 
 #ifdef TRACE_ENABLED
@@ -336,17 +336,17 @@
 #endif
 
 /* Conversions
- */
+*/
 #define POINTER_TO_INT(pointer) ((long)(pointer))
 #define INT_TO_POINTER(integer) ((void*)((long)(integer)))
 
 /* Bit masks
- */
+*/
 #define BIT_SET(var,bit)    var |= (bit)
 #define BIT_UNSET(var,bit)  var &= ~(bit)
 
 /* Format string for off_t and size_t
- */
+*/
 #if (SIZEOF_OFF_T == SIZEOF_UNSIGNED_LONG_LONG)
 # define FMT_OFFSET "%llu"
 # define FMT_OFFSET_HEX "%llx"
@@ -397,17 +397,17 @@
 # define SLASH '/'
 #endif
 
-#define CHEROKEE_CRASH				\
-	do {					\
-		*((int *)(0)) = 1;		\
+#define CHEROKEE_CRASH             \
+	do {                       \
+		*((int *)(0)) = 1; \
 	} while(0)
 
-#define CHEROKEE_PRINT_BACKTRACE				\
-	do {							\
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;	\
-		cherokee_buf_add_backtrace (&tmp, 0, "\n", "");	\
-		PRINT_MSG ("%s", tmp.buf);			\
-		cherokee_buffer_mrproper (&tmp);		\
+#define CHEROKEE_PRINT_BACKTRACE                                \
+	do {                                                    \
+		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;      \
+		cherokee_buf_add_backtrace (&tmp, 0, "\n", ""); \
+		PRINT_MSG ("%s", tmp.buf);                      \
+		cherokee_buffer_mrproper (&tmp);                \
 	} while (0)
 
 

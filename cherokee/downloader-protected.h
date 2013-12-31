@@ -48,7 +48,7 @@ typedef enum {
 
 struct cherokee_downloader {
 	cherokee_header_t           *header;
- 	cherokee_request_header_t    request;
+	cherokee_request_header_t    request;
 
 	cherokee_buffer_t            request_header;
 	cherokee_buffer_t            reply_header;

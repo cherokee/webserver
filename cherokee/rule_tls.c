@@ -52,8 +52,8 @@ match (cherokee_rule_tls_t     *rule,
 
 static ret_t
 configure (cherokee_rule_tls_t       *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	UNUSED (rule);
 	UNUSED (conf);
@@ -86,5 +86,5 @@ cherokee_rule_tls_new (cherokee_rule_tls_t **rule)
 	MODULE(n)->free    = (module_func_free_t) _free;
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

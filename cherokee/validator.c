@@ -37,8 +37,8 @@
 
 ret_t
 cherokee_validator_init_base (cherokee_validator_t             *validator,
-			      cherokee_validator_props_t       *props,
-			      cherokee_plugin_info_validator_t *info)
+                              cherokee_validator_props_t       *props,
+                              cherokee_plugin_info_validator_t *info)
 {
 	cherokee_module_init_base (MODULE(validator), MODULE_PROPS(props), PLUGIN_INFO(info));
 
@@ -108,8 +108,8 @@ cherokee_validator_check (cherokee_validator_t *validator, void *conn)
 
 ret_t
 cherokee_validator_add_headers (cherokee_validator_t *validator,
-				void                 *conn,
-				cherokee_buffer_t    *buf)
+                                void                 *conn,
+                                cherokee_buffer_t    *buf)
 {
 	if (validator->add_headers == NULL) {
 		return ret_error;
@@ -156,7 +156,7 @@ error:
 
 ret_t
 cherokee_validator_parse_digest (cherokee_validator_t *validator,
-				 char *str, cuint_t str_len)
+                                 char *str, cuint_t str_len)
 {
 	cuint_t             len;
 	char               *end;
@@ -226,8 +226,11 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 		len = strlen(equal);
 		while ((len > 0) &&
 		       ((equal[len-1] == '"')  ||
-			(equal[len-1] == CHR_CR) ||
-			(equal[len-1] == CHR_LF))) len--;
+		       (equal[len-1] == CHR_CR) ||
+		       (equal[len-1] == CHR_LF))) {
+
+			len--;
+		}
 
 		/* Copy the entry value
 		 */
@@ -290,9 +293,9 @@ digest_HA2 (cherokee_validator_t *validator, cherokee_buffer_t *buf, cherokee_co
 
 ret_t
 cherokee_validator_digest_response (cherokee_validator_t  *validator,
-				    char                  *A1,
-				    cherokee_buffer_t     *buf,
-				    cherokee_connection_t *conn)
+                                    char                  *A1,
+                                    cherokee_buffer_t     *buf,
+                                    cherokee_connection_t *conn)
 {
 	ret_t             ret;
 	cherokee_buffer_t a2   = CHEROKEE_BUF_INIT;
@@ -364,9 +367,9 @@ cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffe
 	/* Build A1
 	 */
 	cherokee_buffer_ensure_size (&a1,
-				     validator->user.len  + 1 +
-				     validator->realm.len + 1 +
-				     passwd->len);
+	                             validator->user.len  + 1 +
+	                             validator->realm.len + 1 +
+	                             passwd->len);
 
 	cherokee_buffer_add_buffer (&a1, &validator->user);
 	cherokee_buffer_add_str    (&a1, ":");
@@ -405,7 +408,7 @@ add_method (char *method, void *data)
 		entry->authentication |= http_auth_digest;
 	else {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_METHOD_UNKNOWN, method);
- 		return ret_error;
+		return ret_error;
 	}
 
 	return ret_ok;

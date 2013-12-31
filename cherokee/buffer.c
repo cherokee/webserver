@@ -44,7 +44,7 @@
 #define ENTRIES "core,buffer"
 
 #define REALLOC_EXTRA_SIZE     16
-#define IOS_NUMBUF             64	/* I/O size of digits buffer */
+#define IOS_NUMBUF             64 /* I/O size of digits buffer */
 
 #define TO_HEX(c)               ((c) > 9 ? (c) + 'a' - 10 : (c) + '0')
 
@@ -211,9 +211,9 @@ cherokee_buffer_add_buffer (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 
 ret_t
 cherokee_buffer_add_buffer_slice (cherokee_buffer_t *buf,
-				  cherokee_buffer_t *buf2,
-				  ssize_t            begin,
-				  ssize_t            end)
+                                  cherokee_buffer_t *buf2,
+                                  ssize_t            begin,
+                                  ssize_t            end)
 {
 	ssize_t pos_end;
 	ssize_t pos_begin;
@@ -271,9 +271,9 @@ cherokee_buffer_add_buffer_slice (cherokee_buffer_t *buf,
 	/* Sanity check
 	 */
 	if (unlikely ((pos_begin < 0)       ||
-		      (pos_end < 0)         ||
-		      (pos_end > buf2->len) ||
-		      (pos_end < pos_begin)))
+	              (pos_end < 0)         ||
+	              (pos_end > buf2->len) ||
+	              (pos_end < pos_begin)))
 	{
 		return ret_ok;
 	}
@@ -553,7 +553,7 @@ cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 		}
 	}
 
-	/* Copy	including '\0'
+	/* Copy including '\0'
 	 */
 	strcpy (buf->buf + buf->len, &szOutBuf[i]);
 
@@ -567,7 +567,7 @@ ret_t
 cherokee_buffer_add_va_fixed (cherokee_buffer_t *buf, const char *format, ...)
 {
 	int len;
-	int size = buf->size - buf->len;	/* final '\0' is always available */
+	int size = buf->size - buf->len; /* final '\0' is always available */
 	va_list ap;
 
 	/* Test for minimum buffer size.
@@ -634,7 +634,7 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 #if 0
 	if (unlikely (estimation < len)) {
 		LOG_ERROR (CHEROKEE_ERROR_BUFFER_BAD_ESTIMATION,
-			   format, buf->buf + buf->len, estimation, len, size);
+		           format, buf->buf + buf->len, estimation, len, size);
 	}
 #endif
 
@@ -645,7 +645,7 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 	 */
 	if (len >= size) {
 		LOG_ERROR (CHEROKEE_ERROR_BUFFER_AVAIL_SIZE,
-			   estimation, len, size, format);
+		           estimation, len, size, format);
 
 		cherokee_buffer_ensure_size (buf, buf->len + len + 2);
 		size = buf->size - buf->len;
@@ -1258,7 +1258,7 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 	char *ptgt;
 	int   len;
 
-#define hex2dec_m(c)	   ( (int) hex2dec_tab[ ( (unsigned char )(c) ) ] )
+#define hex2dec_m(c)       ( (int) hex2dec_tab[ ( (unsigned char )(c) ) ] )
 #define hex2dec_m2(c1, c2) ( hex2dec_m(c1) * 16 + hex2dec_m(c2) )
 
 	TRACE(ENTRIES, "Prev: %s\n", buffer->buf);
@@ -1312,8 +1312,8 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 
 static ret_t
 escape_with_table (cherokee_buffer_t *buffer,
-		   cherokee_buffer_t *src,
-		   uint32_t          *is_char_escaped)
+                   cherokee_buffer_t *src,
+                   uint32_t          *is_char_escaped)
 {
 	unsigned char *t;
 	unsigned char *s,*s_next;
@@ -1380,17 +1380,18 @@ escape_with_table (cherokee_buffer_t *buffer,
 	} while (s < end);
 
 
-
-/* 	for (i=0; i<src->len; i++) { */
-/* 		if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) { */
-/* 			*t++ = '%'; */
-/* 			*t++ = hex_chars[*s >> 4]; */
-/* 			*t++ = hex_chars[*s & 0xf]; */
-/* 			s++; */
-/* 		} else { */
-/* 			*t++ = *s++; */
-/* 		} */
-/* 	} */
+#if 0
+	for (i=0; i<src->len; i++) {
+		if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) {
+			*t++ = '%';
+			*t++ = hex_chars[*s >> 4];
+			*t++ = hex_chars[*s & 0xf];
+			s++;
+		} else {
+			*t++ = *s++;
+		}
+	}
+#endif
 
 	/* ..and the final touch
 	 */
@@ -1979,8 +1980,8 @@ cherokee_buffer_decode_hex (cherokee_buffer_t *buf)
 		cint_t b1 = buf->buf[(i << 1)] & 127;
 		cint_t b2 = buf->buf[(i << 1) + 1] & 127;
 
- 		b1 = hex_to_bin[b1];
- 		b2 = hex_to_bin[b2];
+		b1 = hex_to_bin[b1];
+		b2 = hex_to_bin[b2];
 
 		if ((b1 == -1) || (b2 == -1))
 			break;
@@ -2007,8 +2008,8 @@ cherokee_buffer_end_char (cherokee_buffer_t *buf)
 
 ret_t
 cherokee_buffer_replace_string (cherokee_buffer_t *buf,
-				const char *substring,   int substring_length,
-				const char *replacement, int replacement_length)
+                                const char *substring,   int substring_length,
+                                const char *replacement, int replacement_length)
 {
 	int         remaining_length;
 	int         result_length;
@@ -2118,9 +2119,9 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
  */
 ret_t
 cherokee_buffer_substitute_string (cherokee_buffer_t *bufsrc,
-				   cherokee_buffer_t *bufdst,
-				   char *substring,   int substring_length,
-				   char *replacement, int replacement_length)
+                                   cherokee_buffer_t *bufdst,
+                                   char *substring,   int substring_length,
+                                   char *replacement, int replacement_length)
 {
 	ret_t       ret;
 	int         remaining_length;
@@ -2286,16 +2287,16 @@ cherokee_buffer_to_lowcase (cherokee_buffer_t *buf)
 
 ret_t
 cherokee_buffer_insert (cherokee_buffer_t *buf,
-			char              *txt,
-			size_t             txt_len,
-			size_t             pos)
+                        char              *txt,
+                        size_t             txt_len,
+                        size_t             pos)
 {
 	cherokee_buffer_ensure_size (buf, buf->len + txt_len + 1);
 
 	/* Make room */
 	memmove (buf->buf + pos + txt_len,
-		 buf->buf + pos,
-		 buf->len - pos);
+	         buf->buf + pos,
+	         buf->len - pos);
 
 	/* Insert the string */
 	memcpy (buf->buf + pos, txt, txt_len);
@@ -2309,8 +2310,8 @@ cherokee_buffer_insert (cherokee_buffer_t *buf,
 
 ret_t
 cherokee_buffer_insert_buffer (cherokee_buffer_t *buf,
-			       cherokee_buffer_t *src,
-			       size_t             pos)
+                               cherokee_buffer_t *src,
+                               size_t             pos)
 {
 	return cherokee_buffer_insert (buf, src->buf, src->len, pos);
 }
@@ -2318,8 +2319,8 @@ cherokee_buffer_insert_buffer (cherokee_buffer_t *buf,
 
 ret_t
 cherokee_buffer_split_lines (cherokee_buffer_t *buf,
-			     int                columns,
-			     const char        *indent)
+                             int                columns,
+                             const char        *indent)
 {
 	char *p;
 	char *prev_space     = NULL;
@@ -2364,7 +2365,7 @@ cherokee_buffer_split_lines (cherokee_buffer_t *buf,
 				int offset = p - buf->buf;
 
 				cherokee_buffer_insert (buf, (char *)indent, indent_len,
-							(latest_newline - buf->buf)+1);
+				                        (latest_newline - buf->buf)+1);
 
 				since_prev += indent_len;
 				p = buf->buf + offset + indent_len;

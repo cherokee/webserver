@@ -28,46 +28,46 @@ typedef unsigned long ULONG;
 /* #define UNROLL_LOOPS */
 
 /* SHA f()-functions */
-#define f1(x,y,z)	((x & y) | (~x & z))
-#define f2(x,y,z)	(x ^ y ^ z)
-#define f3(x,y,z)	((x & y) | (x & z) | (y & z))
-#define f4(x,y,z)	(x ^ y ^ z)
+#define f1(x,y,z) ((x & y) | (~x & z))
+#define f2(x,y,z) (x ^ y ^ z)
+#define f3(x,y,z) ((x & y) | (x & z) | (y & z))
+#define f4(x,y,z) (x ^ y ^ z)
 
 /* SHA constants */
-#define CONST1		0x5a827999L
-#define CONST2		0x6ed9eba1L
-#define CONST3		0x8f1bbcdcL
-#define CONST4		0xca62c1d6L
+#define CONST1 0x5a827999L
+#define CONST2 0x6ed9eba1L
+#define CONST3 0x8f1bbcdcL
+#define CONST4 0xca62c1d6L
 
 /* truncate to 32 bits -- should be a null op on 32-bit machines */
-#define T32(x)	((x) & 0xffffffffL)
+#define T32(x) ((x) & 0xffffffffL)
 
 /* 32-bit rotate */
-#define R32(x,n)	T32(((x << n) | (x >> (32 - n))))
+#define R32(x,n) T32(((x << n) | (x >> (32 - n))))
 
 /* the generic case, for when the overall rotation is not unraveled */
-#define FG(n)	\
-    T = T32(R32(A,5) + f##n(B,C,D) + E + *WP++ + CONST##n);	\
-    E = D; D = C; C = R32(B,30); B = A; A = T
+#define FG(n)                                                   \
+	T = T32(R32(A,5) + f##n(B,C,D) + E + *WP++ + CONST##n); \
+	E = D; D = C; C = R32(B,30); B = A; A = T
 
 /* specific cases, for when the overall rotation is unraveled */
-#define FA(n)	\
-    T = T32(R32(A,5) + f##n(B,C,D) + E + *WP++ + CONST##n); B = R32(B,30)
+#define FA(n) \
+	T = T32(R32(A,5) + f##n(B,C,D) + E + *WP++ + CONST##n); B = R32(B,30)
 
-#define FB(n)	\
-    E = T32(R32(T,5) + f##n(A,B,C) + D + *WP++ + CONST##n); A = R32(A,30)
+#define FB(n) \
+	E = T32(R32(T,5) + f##n(A,B,C) + D + *WP++ + CONST##n); A = R32(A,30)
 
-#define FC(n)	\
-    D = T32(R32(E,5) + f##n(T,A,B) + C + *WP++ + CONST##n); T = R32(T,30)
+#define FC(n) \
+	D = T32(R32(E,5) + f##n(T,A,B) + C + *WP++ + CONST##n); T = R32(T,30)
 
-#define FD(n)	\
-    C = T32(R32(D,5) + f##n(E,T,A) + B + *WP++ + CONST##n); E = R32(E,30)
+#define FD(n) \
+	C = T32(R32(D,5) + f##n(E,T,A) + B + *WP++ + CONST##n); E = R32(E,30)
 
-#define FE(n)	\
-    B = T32(R32(C,5) + f##n(D,E,T) + A + *WP++ + CONST##n); D = R32(D,30)
+#define FE(n) \
+	B = T32(R32(C,5) + f##n(D,E,T) + A + *WP++ + CONST##n); D = R32(D,30)
 
-#define FT(n)	\
-    A = T32(R32(B,5) + f##n(C,D,E) + T + *WP++ + CONST##n); C = R32(C,30)
+#define FT(n) \
+	A = T32(R32(B,5) + f##n(C,D,E) + T + *WP++ + CONST##n); C = R32(C,30)
 
 
 static void
@@ -95,7 +95,7 @@ nether regions of the anatomy...
 		dp += 4;
 		W[i] =  ((T << 24) & 0xff000000) | ((T <<  8) & 0x00ff0000) |
 		        ((T >>  8) & 0x0000ff00) | ((T >> 24) & 0x000000ff);
-    }
+	}
 #endif
 
 #if BYTE_ORDER == 4321
@@ -229,7 +229,7 @@ sha_update (SHA_INFO *sha_info, U8 *buffer, int count)
 		} else {
 			return;
 		}
-    }
+	}
 	while (count >= SHA_BLOCKSIZE) {
 		memcpy(sha_info->data, buffer, SHA_BLOCKSIZE);
 		buffer += SHA_BLOCKSIZE;

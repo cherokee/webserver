@@ -41,8 +41,8 @@ props_free (cherokee_encoder_deflate_t *props)
 
 ret_t
 cherokee_encoder_deflate_configure (cherokee_config_node_t   *config,
-				    cherokee_server_t        *srv,
-				    cherokee_module_props_t **_props)
+                                    cherokee_server_t        *srv,
+                                    cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
 	cherokee_list_t                  *i;
@@ -54,7 +54,7 @@ cherokee_encoder_deflate_configure (cherokee_config_node_t   *config,
 		CHEROKEE_NEW_STRUCT (n, encoder_deflate_props);
 
 		cherokee_encoder_props_init_base (ENCODER_PROPS(n),
-						  MODULE_PROPS_FREE(props_free));
+		                                  MODULE_PROPS_FREE(props_free));
 
 		n->compression_level = 4;
 		*_props = MODULE_PROPS(n);
@@ -79,7 +79,7 @@ cherokee_encoder_deflate_configure (cherokee_config_node_t   *config,
 
 ret_t
 cherokee_encoder_deflate_new (cherokee_encoder_deflate_t **encoder,
-			      cherokee_encoder_props_t    *props)
+                              cherokee_encoder_props_t    *props)
 {
 	cuint_t workspacesize;
 	CHEROKEE_NEW_STRUCT (n, encoder_deflate);
@@ -128,7 +128,7 @@ cherokee_encoder_deflate_free (cherokee_encoder_deflate_t *encoder)
 
 ret_t
 cherokee_encoder_deflate_add_headers (cherokee_encoder_deflate_t *encoder,
-				   cherokee_buffer_t       *buf)
+                                   cherokee_buffer_t       *buf)
 {
 	UNUSED(encoder);
 
@@ -161,7 +161,7 @@ get_deflate_error_string (int err)
 
 ret_t
 cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder,
-			       cherokee_connection_t      *conn)
+                               cherokee_connection_t      *conn)
 {
 	int       err;
 	z_stream *z = &encoder->stream;
@@ -175,15 +175,15 @@ cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder,
 	/* -MAX_WBITS: suppresses zlib header & trailer
 	 */
 	err = zlib_deflateInit2 (z,
-				 ENC_DEFLATE_PROP(encoder)->compression_level,
-				 Z_DEFLATED,
-				 -MAX_WBITS,
-				 MAX_MEM_LEVEL,
-				 Z_DEFAULT_STRATEGY);
+	                         ENC_DEFLATE_PROP(encoder)->compression_level,
+	                         Z_DEFLATED,
+	                         -MAX_WBITS,
+	                         MAX_MEM_LEVEL,
+	                         Z_DEFAULT_STRATEGY);
 
 	if (err != Z_OK) {
 		LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATEINIT2,
-			   get_deflate_error_string(err));
+		           get_deflate_error_string(err));
 
 		return ret_error;
 	}
@@ -194,9 +194,9 @@ cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder,
 
 static ret_t
 do_encode (cherokee_encoder_deflate_t *encoder,
-	   cherokee_buffer_t          *in,
-	   cherokee_buffer_t          *out,
-	   int                         flush)
+           cherokee_buffer_t          *in,
+           cherokee_buffer_t          *out,
+           int                         flush)
 {
 	int       err;
 	cchar_t   buf[DEFAULT_READ_SIZE];
@@ -233,14 +233,14 @@ do_encode (cherokee_encoder_deflate_t *encoder,
 			err = zlib_deflateEnd (z);
 			if (err != Z_OK) {
 				LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATEEND,
-					   get_deflate_error_string(err));
+				           get_deflate_error_string(err));
 				return ret_error;
 			}
 			cherokee_buffer_add (out, buf, sizeof(buf) - z->avail_out);
 			break;
 		default:
 			LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATE,
-				   get_deflate_error_string(err), z->avail_in);
+			           get_deflate_error_string(err), z->avail_in);
 
 			zlib_deflateEnd (z);
 			return ret_error;
@@ -254,8 +254,8 @@ do_encode (cherokee_encoder_deflate_t *encoder,
 
 ret_t
 cherokee_encoder_deflate_encode (cherokee_encoder_deflate_t *encoder,
-				 cherokee_buffer_t          *in,
-				 cherokee_buffer_t          *out)
+                                 cherokee_buffer_t          *in,
+                                 cherokee_buffer_t          *out)
 {
 	return do_encode (encoder, in, out, Z_PARTIAL_FLUSH);
 }
@@ -263,8 +263,8 @@ cherokee_encoder_deflate_encode (cherokee_encoder_deflate_t *encoder,
 
 ret_t
 cherokee_encoder_deflate_flush (cherokee_encoder_deflate_t *encoder,
-				cherokee_buffer_t          *in,
-				cherokee_buffer_t          *out)
+                                cherokee_buffer_t          *in,
+                                cherokee_buffer_t          *out)
 {
 	return do_encode (encoder, in, out, Z_FINISH);
 }

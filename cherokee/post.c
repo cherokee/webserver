@@ -102,7 +102,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 
 static ret_t
 parse_header (cherokee_post_t       *post,
-	      cherokee_connection_t *conn)
+              cherokee_connection_t *conn)
 {
 	ret_t    ret;
 	char    *info      = NULL;
@@ -165,7 +165,7 @@ parse_header (cherokee_post_t       *post,
 
 static ret_t
 reply_100_continue (cherokee_post_t       *post,
-		    cherokee_connection_t *conn)
+                    cherokee_connection_t *conn)
 {
 	ret_t  ret;
 	size_t written;
@@ -190,7 +190,7 @@ reply_100_continue (cherokee_post_t       *post,
 
 static ret_t
 remove_surplus (cherokee_post_t       *post,
-		cherokee_connection_t *conn)
+                cherokee_connection_t *conn)
 {
 	ret_t   ret;
 	cuint_t header_len;
@@ -238,7 +238,7 @@ remove_surplus (cherokee_post_t       *post,
 
 ret_t
 cherokee_post_read_header (cherokee_post_t *post,
-			   void            *cnt)
+                           void            *cnt)
 {
 	ret_t                  ret;
 	char                  *info     = NULL;
@@ -283,67 +283,68 @@ cherokee_post_read_header (cherokee_post_t *post,
 
 static ret_t
 process_chunk (cherokee_post_t   *post,
-	       cherokee_buffer_t *in,
-	       cherokee_buffer_t *out)
+               cherokee_buffer_t *in,
+               cherokee_buffer_t *out)
 {
 	char    *p;
 	char    *begin;
 	char    *end;
-        ssize_t  content_size;
+	size_t  content_size;
 
-        TRACE (ENTRIES, "Post in-buffer len=%d\n", in->len);
+	TRACE (ENTRIES, "Post in-buffer len=%d\n", in->len);
 
 	p     = in->buf;
 	begin = in->buf;
 
-        while (true) {
-                end = in->buf + in->len;
+	while (true) {
+		end = in->buf + in->len;
 
-                /* Iterate through the number
+		/* Iterate through the number
 		 */
-                while ((p < end) &&
-                       (((*p >= '0') && (*p <= '9')) ||
-                        ((*p >= 'a') && (*p <= 'f')) ||
-                        ((*p >= 'A') && (*p <= 'F'))))
-                        p++;
-
-                if (unlikely (p+2 > end)) {
-                        return ret_ok;
+		while ((p < end) &&
+				(((*p >= '0') && (*p <= '9')) ||
+				((*p >= 'a') && (*p <= 'f')) ||
+				((*p >= 'A') && (*p <= 'F')))) {
+			p++;
 		}
 
-                /* Check the CRLF after the length
-		 */
-                if (p[0] != CHR_CR) {
-                        return ret_error;
+		if (unlikely (p+2 > end)) {
+			return ret_ok;
 		}
-                if (p[1] != CHR_LF) {
-                        return ret_error;
+
+		/* Check the CRLF after the length
+		*/
+		if (p[0] != CHR_CR) {
+			return ret_error;
+		}
+		if (p[1] != CHR_LF) {
+			return ret_error;
 		}
 
 		p += 2;
 
-                /* Read the length
-		 */
-                content_size = (size_t) strtoul (begin, NULL, 16);
-                if (unlikely (content_size < 0)) {
-                        return ret_error;
+		/* Read the length
+		*/
+		content_size = (size_t) strtoul (begin, NULL, 16);
+		if (unlikely (content_size < 0)) {
+			return ret_error;
 		}
 
-                /* Check if there's enough info
-		 */
-                if (content_size == 0) {
-                        post->chunked.last = true;
+		/* Check if there's enough info
+		*/
+		if (content_size == 0) {
+			post->chunked.last = true;
 
 		} else if (p + content_size + 2 > end) {
-                        TRACE (ENTRIES, "Unfinished chunk(len="FMT_OFFSET"), has=%d, out->len="FMT_OFFSET"\n",
-                               content_size, (int)(end-p), out->len);
+			TRACE (ENTRIES, "Unfinished chunk(len="FMT_OFFSET"), has=%d, out->len="FMT_OFFSET"\n",
+			                content_size, (int)(end-p), out->len);
 			break;
-                }
+		}
 
 		/* Last block check
-		 */
-                if (post->chunked.last) {
-                        TRACE(ENTRIES, "Last chunk: %s\n", "exiting");
+		*/
+		if (post->chunked.last) {
+			TRACE(ENTRIES, "Last chunk: %s\n", "exiting");
 
 			if (post->chunked.retransmit) {
 				cherokee_buffer_add_str (out, "0" CRLF);
@@ -360,11 +361,11 @@ process_chunk (cherokee_post_t   *post,
 			cherokee_buffer_add (out, p, content_size);
 		}
 
-                TRACE (ENTRIES, "Processing chunk len=%d\n", content_size);
+		TRACE (ENTRIES, "Processing chunk len=%d\n", content_size);
 
-                /* Next iteration
+		/* Next iteration
 		 */
-                begin = p + content_size + 2;
+		begin = p + content_size + 2;
 		p = begin;
 	}
 
@@ -378,8 +379,10 @@ process_chunk (cherokee_post_t   *post,
 	 */
 	if (! cherokee_buffer_is_empty(in)) {
 		TRACE (ENTRIES, "There are %d left-over bytes in the post buffer -> incoming header", in->len);
-/* 		cherokee_buffer_add_buffer (&conn->incoming_header, in); */
-/* 		cherokee_buffer_clean (in); */
+#if 0
+		cherokee_buffer_add_buffer (&conn->incoming_header, in);
+		cherokee_buffer_clean (in);
+#endif
 	}
 
 	TRACE (ENTRIES, "Un-chunked buffer len=%d\n", out->len);
@@ -389,9 +392,9 @@ process_chunk (cherokee_post_t   *post,
 
 static ret_t
 do_read_plain (cherokee_post_t   *post,
-	       cherokee_socket_t *sock_in,
-	       cherokee_buffer_t *buffer,
-	       off_t              to_read)
+               cherokee_socket_t *sock_in,
+               cherokee_buffer_t *buffer,
+               off_t              to_read)
 {
 	ret_t  ret;
 	size_t len;
@@ -429,8 +432,8 @@ do_read_plain (cherokee_post_t   *post,
 
 static ret_t
 do_read_chunked (cherokee_post_t   *post,
-		 cherokee_socket_t *sock_in,
-		 cherokee_buffer_t *buffer)
+                 cherokee_socket_t *sock_in,
+                 cherokee_buffer_t *buffer)
 {
 	ret_t ret;
 
@@ -464,8 +467,8 @@ do_read_chunked (cherokee_post_t   *post,
 
 ret_t
 cherokee_post_read (cherokee_post_t   *post,
-		    cherokee_socket_t *sock_in,
-		    cherokee_buffer_t *buffer)
+                    cherokee_socket_t *sock_in,
+                    cherokee_buffer_t *buffer)
 {
 	off_t to_read;
 
@@ -497,8 +500,8 @@ cherokee_post_read_finished (cherokee_post_t *post)
 
 static ret_t
 do_send_socket (cherokee_socket_t        *sock,
-		cherokee_buffer_t        *buffer,
-		cherokee_socket_status_t *blocking)
+                cherokee_buffer_t        *buffer,
+                cherokee_socket_status_t *blocking)
 {
 	ret_t  ret;
 	size_t written = 0;
@@ -539,11 +542,11 @@ cherokee_post_has_buffered_info (cherokee_post_t *post)
 
 ret_t
 cherokee_post_send_to_socket (cherokee_post_t          *post,
-			      cherokee_socket_t        *sock_in,
-			      cherokee_socket_t        *sock_out,
-			      cherokee_buffer_t        *tmp,
-			      cherokee_socket_status_t *blocking,
-			      cherokee_boolean_t       *did_IO)
+                              cherokee_socket_t        *sock_in,
+                              cherokee_socket_t        *sock_out,
+                              cherokee_buffer_t        *tmp,
+                              cherokee_socket_status_t *blocking,
+                              cherokee_boolean_t       *did_IO)
 {
 	ret_t              ret;
 	cherokee_buffer_t *buffer = tmp ? tmp : &post->send.buffer;
@@ -580,17 +583,17 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 		if (! cherokee_buffer_is_empty (buffer)) {
 			ret = do_send_socket (sock_out, buffer, blocking);
 			switch (ret) {
-                        case ret_ok:
-                                break;
-                        case ret_eagain:
-                                return ret_eagain;
-                        case ret_eof:
-                        case ret_error:
-                                return ret_error;
-                        default:
+			case ret_ok:
+				break;
+			case ret_eagain:
+				return ret_eagain;
+			case ret_eof:
+			case ret_error:
+				return ret_error;
+			default:
 				RET_UNKNOWN(ret);
 				return ret_error;
-                        }
+			}
 
 			/* Did something, increase timeout
 			 */
@@ -621,11 +624,11 @@ cherokee_post_send_to_socket (cherokee_post_t          *post,
 
 ret_t
 cherokee_post_send_to_fd (cherokee_post_t          *post,
-			  cherokee_socket_t        *sock_in,
-			  int                       fd_out,
-			  cherokee_buffer_t        *tmp,
-			  cherokee_socket_status_t *blocking,
-			  cherokee_boolean_t       *did_IO)
+                          cherokee_socket_t        *sock_in,
+                          int                       fd_out,
+                          cherokee_buffer_t        *tmp,
+                          cherokee_socket_status_t *blocking,
+                          cherokee_boolean_t       *did_IO)
 {
 	ret_t              ret;
 	int                r;

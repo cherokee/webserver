@@ -217,12 +217,12 @@ long_path:
 
 ret_t
 cherokee_source_connect_polling (cherokee_source_t     *src,
-				 cherokee_socket_t     *socket,
-				 cherokee_connection_t *conn)
+                                 cherokee_socket_t     *socket,
+                                 cherokee_connection_t *conn)
 {
 	ret_t ret;
 
- 	ret = cherokee_source_connect (src, socket);
+	ret = cherokee_source_connect (src, socket);
 	switch (ret) {
 	case ret_ok:
 		TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
@@ -231,10 +231,10 @@ cherokee_source_connect_polling (cherokee_source_t     *src,
 		break;
 	case ret_eagain:
 		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
-							   conn,
-							   SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE,
-							   false);
+		                                           conn,
+		                                           SOCKET_FD(socket),
+		                                           FDPOLL_MODE_WRITE,
+		                                           false);
 		if (ret != ret_ok) {
 			return ret_deny;
 		}
@@ -282,7 +282,7 @@ set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 	/* Resolve and cache it
 	 */
 	ret = cherokee_resolv_cache_get_default (&resolv);
-        if (unlikely (ret!=ret_ok)) {
+	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
@@ -314,7 +314,7 @@ cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t *conf)
 
 ret_t
 cherokee_source_copy_name (cherokee_source_t *src,
-			   cherokee_buffer_t *buf)
+                           cherokee_buffer_t *buf)
 {
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
 		cherokee_buffer_add_buffer (buf, &src->unix_socket);

@@ -62,10 +62,10 @@
 
 int
 getopt_long (int argc,
-	     char *const *argv,
-	     const char *options,
-	     const struct option *long_options,
-	     int *opt_index)
+             char *const *argv,
+             const char *options,
+             const struct option *long_options,
+             int *opt_index)
 {
   return _getopt_internal (argc, argv, options, long_options, opt_index, 0);
 }
@@ -77,10 +77,10 @@ getopt_long (int argc,
 
 int
 getopt_long_only (int argc,
-		  char *const *argv,
-		  const char *options,
-		  const struct option *long_options,
-		  int *opt_index)
+                  char *const *argv,
+                  const char *options,
+                  const struct option *long_options,
+                  int *opt_index)
 {
   return _getopt_internal (argc, argv, options, long_options, opt_index, 1);
 }
@@ -90,4 +90,4 @@ libc_hidden_def (getopt_long)
 libc_hidden_def (getopt_long_only)
 # endif
 
-#endif	/* Not ELIDE_CODE.  */
+#endif /* Not ELIDE_CODE.  */

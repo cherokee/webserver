@@ -121,8 +121,8 @@ add_source (cherokee_balancer_t *balancer, cherokee_source_t *source)
 
 ret_t
 cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
-				  cherokee_server_t      *srv,
-				  cherokee_config_node_t *conf)
+                                  cherokee_server_t      *srv,
+                                  cherokee_config_node_t *conf)
 {
 	ret_t                   ret;
 	cherokee_list_t        *i;
@@ -156,8 +156,8 @@ cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 
 ret_t
 cherokee_balancer_dispatch (cherokee_balancer_t    *balancer,
-			    cherokee_connection_t  *conn,
-			    cherokee_source_t     **source)
+                            cherokee_connection_t  *conn,
+                            cherokee_source_t     **source)
 {
 	if (unlikely (balancer->dispatch == NULL))
 		return ret_error;
@@ -168,8 +168,8 @@ cherokee_balancer_dispatch (cherokee_balancer_t    *balancer,
 
 ret_t
 cherokee_balancer_report_fail (cherokee_balancer_t   *balancer,
-			       cherokee_connection_t *conn,
-			       cherokee_source_t     *source)
+                               cherokee_connection_t *conn,
+                               cherokee_source_t     *source)
 {
 	if (unlikely (balancer->report_fail == NULL))
 		return ret_error;
@@ -207,9 +207,9 @@ cherokee_balancer_free (cherokee_balancer_t *bal)
 
 ret_t
 cherokee_balancer_instance (cherokee_buffer_t       *name,
-			    cherokee_config_node_t  *conf,
-			    cherokee_server_t       *srv,
-			    cherokee_balancer_t    **balancer)
+                            cherokee_config_node_t  *conf,
+                            cherokee_server_t       *srv,
+                            cherokee_balancer_t    **balancer)
 {
 	ret_t                      ret;
 	balancer_new_func_t        new_func;

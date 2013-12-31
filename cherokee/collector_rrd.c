@@ -204,7 +204,7 @@ vsrv_free (cherokee_collector_vsrv_rrd_t *rrd)
 
 static ret_t
 vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
-	   cherokee_virtual_server_t      *vsrv)
+           cherokee_virtual_server_t      *vsrv)
 
 {
 	ret_t                     ret;
@@ -240,8 +240,8 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 
 static ret_t
 vsrv_new (cherokee_collector_t           *collector,
-	  cherokee_config_node_t         *config,
-	  cherokee_collector_vsrv_rrd_t **collector_vsrv)
+          cherokee_config_node_t         *config,
+          cherokee_collector_vsrv_rrd_t **collector_vsrv)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, collector_vsrv_rrd);
@@ -325,8 +325,8 @@ rrd_thread_worker_func (void *param)
 
 ret_t
 cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
-			    cherokee_plugin_info_t    *info,
-			    cherokee_config_node_t    *config)
+                            cherokee_plugin_info_t    *info,
+                            cherokee_config_node_t    *config)
 {
 	int   re;
 	ret_t ret;

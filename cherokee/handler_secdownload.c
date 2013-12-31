@@ -45,8 +45,8 @@ cherokee_handler_secdownload_props_free (cherokee_handler_secdownload_props_t *p
 
 ret_t
 cherokee_handler_secdownload_configure (cherokee_config_node_t   *conf,
-					cherokee_server_t        *srv,
-					cherokee_module_props_t **_props)
+                                        cherokee_server_t        *srv,
+                                        cherokee_module_props_t **_props)
 {
 	ret_t                                 ret;
 	cherokee_handler_secdownload_props_t *props;
@@ -55,7 +55,7 @@ cherokee_handler_secdownload_configure (cherokee_config_node_t   *conf,
 		CHEROKEE_NEW_STRUCT (n, handler_secdownload_props);
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
-			MODULE_PROPS_FREE(cherokee_handler_secdownload_props_free));
+		     MODULE_PROPS_FREE(cherokee_handler_secdownload_props_free));
 
 		cherokee_buffer_init (&n->secret);
 		n->timeout = 60;
@@ -91,14 +91,14 @@ check_hex (char *p, int len)
 {
 	int i;
 
-        for (i=0; i < len; i++) {
-                if (!((p[i] >= '0' && p[i] <= '9') ||
-                      (p[i] >= 'a' && p[i] <= 'f') ||
-                      (p[i] >= 'A' && p[i] <= 'F')))
+	for (i = 0; i < len; i++) {
+		if (!((p[i] >= '0' && p[i] <= '9') ||
+		      (p[i] >= 'a' && p[i] <= 'f') ||
+		      (p[i] >= 'A' && p[i] <= 'F')))
 		{
-                        return 1;
-                }
-        }
+			return 1;
+		}
+	}
 
 	return 0;
 }
@@ -109,7 +109,7 @@ get_time (char *p)
 	int    i;
 	time_t time = 0;
 
-	for (i=0; i<8; i++) {
+	for (i = 0; i < 8; i++) {
 		time = (time << 4) + hex2dec_tab[(int)p[i]];
 	}
 
@@ -119,8 +119,8 @@ get_time (char *p)
 
 ret_t
 cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
-				  void                    *cnt,
-				  cherokee_module_props_t *props)
+                                  void                    *cnt,
+                                  cherokee_module_props_t *props)
 {
 	int                    re;
 	ret_t                  ret;

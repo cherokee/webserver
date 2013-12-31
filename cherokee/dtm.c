@@ -43,16 +43,16 @@
 
 /* Local macro.
 */
-#define is_leap(y)	( (y) % 4 == 0 && ( (y) % 100 || (y) % 400 == 0 ) )
+#define is_leap(y) ( (y) % 4 == 0 && ( (y) % 100 || (y) % 400 == 0 ) )
 
 
 /* Local structs and types.
  */
 typedef struct DtmNameLen_s {
-	const char  *name1;		/* first name  (short, 3 letters) */
-	size_t       len1;		/* first name length */
-	const char  *name2;		/* second name (long) */
-	size_t       len2;		/* second name length */
+	const char  *name1; /* first name  (short, 3 letters) */
+	size_t       len1;  /* first name length */
+	const char  *name2; /* second name (long) */
+	size_t       len2;  /* second name length */
 } DtmNameLen_t;
 
 
@@ -66,7 +66,7 @@ static DtmNameLen_t wday_name_tab[] = {
 	{ "Thu", 3, "Thursday",  8 },
 	{ "Fri", 3, "Friday",    6 },
 	{ "Sat", 3, "Saturday",  8 }
-	};
+};
 
 
 /* Month names (short and long names).
@@ -84,26 +84,26 @@ static DtmNameLen_t month_name_tab[] = {
 	{ "Oct", 3, "October",   7 },
 	{ "Nov", 3, "November",  8 },
 	{ "Dec", 3, "December",  8 }
-	};
+};
 
 
 /* Number of days in each month (non leap year).
  */
 static const int month_days_tab[12] = {
 	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-	};
+};
 
 
 /* Number of days in the years for each month (non leap year).
  */
 static const int month_ydays_tab[12] = {
 	0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334
-	};
+};
 
 
 /* Given the weekday index (...6),
-** it returns the short name of the weekday.
-*/
+ * it returns the short name of the weekday.
+ */
 const char *
 cherokee_dtm_wday_name(int idxName)
 {
@@ -114,8 +114,8 @@ cherokee_dtm_wday_name(int idxName)
 
 
 /* Given the index of the month (0...11),
-** it returns the short name of the month.
-*/
+ * it returns the short name of the month.
+ */
 const char *
 cherokee_dtm_month_name(int idxName)
 {
@@ -126,20 +126,20 @@ cherokee_dtm_month_name(int idxName)
 
 
 /*
-** Returns TRUE if it matches an existing weekday name.
-*/
+ * Returns TRUE if it matches an existing weekday name.
+ */
 static int
 cvt_wday_name2idx( const char* str_wday, size_t len_wday, struct tm *ptm )
 {
 	int tm_wday = 0;
 
 	/* Fast test on min. length.
-	*/
+	 */
 	if (len_wday < 3)
 		return 0;
 
 	/* Fast guess of day of week (Sunday ... Saturday).
-	*/
+	 */
 	switch( str_wday[0] ) {
 		case 's':
 		case 'S':
@@ -182,25 +182,25 @@ cvt_wday_name2idx( const char* str_wday, size_t len_wday, struct tm *ptm )
 	ptm->tm_wday = tm_wday;
 
 	/* If length matches the length of short name, then compare the name.
-	*/
+	 */
 	if ( len_wday == wday_name_tab[tm_wday].len1 ) {
 		return ( strncasecmp(
-			str_wday,
-			wday_name_tab[tm_wday].name1,
-			wday_name_tab[tm_wday].len1 ) == 0 );
+		          str_wday,
+		          wday_name_tab[tm_wday].name1,
+		          wday_name_tab[tm_wday].len1 ) == 0 );
 	}
 
 	/* If length matches the length of long name, then compare the name.
-	*/
+	 */
 	if ( len_wday == wday_name_tab[tm_wday].len2 ) {
 		return ( strncasecmp(
-			str_wday,
-			wday_name_tab[tm_wday].name2,
-			wday_name_tab[tm_wday].len2 ) == 0 );
+		          str_wday,
+		          wday_name_tab[tm_wday].name2,
+		          wday_name_tab[tm_wday].len2 ) == 0 );
 	}
 
 	/* No match.
-	*/
+	 */
 	return 0;
 }
 
@@ -212,12 +212,12 @@ cvt_mon_name2idx( const char* str_mon, size_t len_mon, struct tm *ptm )
 	int tm_mon = 0;
 
 	/* First fast test on min. length.
-	*/
+	 */
 	if (len_mon < 3)
 		return 0;
 
 	/* Fast guess of month name (January ... December).
-	*/
+	 */
 	switch( str_mon[0] ) {
 		case 'j':
 		case 'J':
@@ -279,27 +279,27 @@ cvt_mon_name2idx( const char* str_mon, size_t len_mon, struct tm *ptm )
 			return 0;
 	}
 	/* Assign the value.
-	*/
+	 */
 	ptm->tm_mon = tm_mon;
 
 	/* If length matches the length of short name, then compare the name.
-	*/
+	 */
 	if ( len_mon == month_name_tab[tm_mon].len1 )
 	{
 		return ( strncasecmp(
-			str_mon,
-			month_name_tab[tm_mon].name1,
-			month_name_tab[tm_mon].len1 ) == 0 );
+		          str_mon,
+		          month_name_tab[tm_mon].name1,
+		          month_name_tab[tm_mon].len1 ) == 0 );
 	}
 
 	/* If length matches the length of long name, then compare the name.
-	*/
+	 */
 	if ( len_mon == month_name_tab[tm_mon].len2 )
 	{
 		return ( strncasecmp(
-			str_mon,
-			month_name_tab[tm_mon].name2,
-			month_name_tab[tm_mon].len2 ) == 0 );
+		          str_mon,
+		          month_name_tab[tm_mon].name2,
+		          month_name_tab[tm_mon].len2 ) == 0 );
 	}
 
 	/* No match.
@@ -309,16 +309,16 @@ cvt_mon_name2idx( const char* str_mon, size_t len_mon, struct tm *ptm )
 
 
 /* HH:MM:SS GMT DD-mth-YY
-** DD-mth-YY HH:MM:SS GMT
-** Returns TRUE if it matches one of the above date-time formats.
-*/
+ * DD-mth-YY HH:MM:SS GMT
+ * Returns TRUE if it matches one of the above date-time formats.
+ */
 static int
 dft_dmyhms2tm( char *psz, struct tm *ptm )
 {
 	size_t idx = 0;
 
 	/* Caller has already skipped blank characters.
-	*/
+	 */
 	ptm->tm_wday = 0;
 
 	/* Date formats known here, start with two digits.
@@ -329,10 +329,10 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 	if ( psz[2] == ':' ) {
 
 		/* HH:MM:SS GMT DD-mth-YY
-		*/
+		 */
 
 		/* hour, min, sec
-		*/
+		 */
 		if (
 		/*	!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
 		 *	psz[2] != ':' ||
@@ -372,7 +372,7 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 		psz += idx;
 
 		/* day
-		*/
+		 */
 		ptm->tm_mday = 0;
 		for ( idx = 0; idx < 2 && isdigit( psz[idx] ); ++idx ) {
 			ptm->tm_mday = ptm->tm_mday * 10 + (psz[idx] - '0');
@@ -387,7 +387,7 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 		psz += idx;
 
 		/* month
-		*/
+		 */
 		ptm->tm_mon = 0;
 		for ( idx = 0; isalpha( psz[idx] ); ++idx )
 			;
@@ -402,7 +402,7 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 		psz += idx;
 
 		/* year
-		*/
+		 */
 		ptm->tm_year = 0;
 		for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
 			ptm->tm_year = ptm->tm_year * 10 + (psz[idx] - '0');
@@ -421,10 +421,10 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 	if ( psz[2] == '-') {
 
 		/* DD-mth-YY HH:MM:SS GMT
-		*/
+		 */
 
 		/* day
-		*/
+		 */
 		ptm->tm_mday = (psz[0] - '0') * 10 + (psz[1] - '0');
 		psz += 3;
 
@@ -442,7 +442,7 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 		psz += idx;
 
 		/* year
-		*/
+		 */
 		ptm->tm_year = 0;
 		for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
 			ptm->tm_year = ptm->tm_year * 10 + (psz[idx] - '0');
@@ -462,7 +462,7 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 		idx = 0;
 
 		/* hour, min, sec
-		*/
+		 */
 		if (
 			!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
 			psz[2] != ':' ||
@@ -504,11 +504,11 @@ dft_dmyhms2tm( char *psz, struct tm *ptm )
 
 
 /* It's almost the same as mktime(),
-** excepted for the following assumptions:
-**    - it assumes to handle only UTC/GMT times,
-**      thus ignoring time zone and daylight saving time;
-**    - field values must be right (within the expected ranges).
-*/
+ * excepted for the following assumptions:
+ *    - it assumes to handle only UTC/GMT times,
+ *      thus ignoring time zone and daylight saving time;
+ *    - field values must be right (within the expected ranges).
+ */
 static time_t
 cvt_tm2time( struct tm *ptm )
 {
@@ -529,7 +529,7 @@ cvt_tm2time( struct tm *ptm )
 		++t;
 
 	/* Days since the beginning of this month. */
-	t += ptm->tm_mday - 1;	/* 1-based field */
+	t += ptm->tm_mday - 1; /* 1-based field */
 
 	/* Hours, minutes, and seconds. */
 	t = t * 24 + ptm->tm_hour;
@@ -549,7 +549,7 @@ cvt_tm2time( struct tm *ptm )
  *   ret_ok    - Parsed okay
  *   ret_error - Invalid date string
  *   ret_deny  - Parsed an invalid date
-*/
+ */
 ret_t
 cherokee_dtm_str2time (char* cstr, int cstr_len, time_t *time)
 {
@@ -845,9 +845,9 @@ cherokee_dtm_str2time (char* cstr, int cstr_len, time_t *time)
 
 
 /* Format an RFC1123 GMT time assuming that (ptm) parameter
-** refers to GMT timezone without daylight savings (of course).
-** NOTE: in HTTP headers, week day and month names MUST be in English !
-*/
+ * refers to GMT timezone without daylight savings (of course).
+ * NOTE: in HTTP headers, week day and month names MUST be in English !
+ */
 size_t
 cherokee_dtm_gmttm2str( char *bufstr, size_t bufsize, struct tm *ptm )
 {
@@ -896,7 +896,7 @@ cherokee_dtm_gmttm2str( char *bufstr, size_t bufsize, struct tm *ptm )
 #endif /* DTM_LEN_GMTTM_STR */
 
 	/* Return constant length
-	*/
+	 */
 	return DTM_LEN_GMTTM_STR;
 }
 

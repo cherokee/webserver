@@ -118,10 +118,11 @@
 # define CHEROKEE_MUTEX_DESTROY(m)     pthread_mutex_destroy(m)
 # define CHEROKEE_MUTEX_TRY_LOCK(m)    pthread_mutex_trylock(m)
 
-# define CHEROKEE_RWLOCK_INIT(m,n)     do {                                       \
-		                         memset (m, 0, sizeof(pthread_rwlock_t)); \
-					 pthread_rwlock_init(m,n);                \
-                                       } while(0)
+# define CHEROKEE_RWLOCK_INIT(m,n)                       \
+	do {                                             \
+		memset (m, 0, sizeof(pthread_rwlock_t)); \
+		pthread_rwlock_init(m,n);                \
+	} while(0)
 # define CHEROKEE_RWLOCK_READER(m)     pthread_rwlock_rdlock(m)
 # define CHEROKEE_RWLOCK_WRITER(m)     pthread_rwlock_wrlock(m)
 # define CHEROKEE_RWLOCK_TRYREADER(m)  pthread_rwlock_tryrdlock(m)

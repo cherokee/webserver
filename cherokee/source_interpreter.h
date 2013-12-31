@@ -67,15 +67,15 @@ typedef struct {
 ret_t cherokee_source_interpreter_new       (cherokee_source_interpreter_t **src);
 
 ret_t cherokee_source_interpreter_configure (cherokee_source_interpreter_t  *src,
-					     cherokee_config_node_t         *conf,
-					     int                             prio);
+                                             cherokee_config_node_t         *conf,
+                                             int                             prio);
 
 ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t  *src,
-					     cherokee_logger_writer_t       *error_writer);
+                                             cherokee_logger_writer_t       *error_writer);
 
 ret_t cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
-						   cherokee_socket_t             *socket,
-						   cherokee_connection_t         *conn);
+                                                   cherokee_socket_t             *socket,
+                                                   cherokee_connection_t         *conn);
 
 CHEROKEE_END_DECLS
 

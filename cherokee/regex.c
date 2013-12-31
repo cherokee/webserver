@@ -185,8 +185,8 @@ configure_rewrite_entry (cherokee_list_t        *list,
 
 ret_t
 cherokee_regex_list_configure (cherokee_list_t        *list,
-			       cherokee_config_node_t *conf,
-			       cherokee_regex_table_t *regexs)
+                               cherokee_config_node_t *conf,
+                               cherokee_regex_table_t *regexs)
 {
 	ret_t            ret;
 	cherokee_list_t *i;
@@ -219,11 +219,11 @@ cherokee_regex_list_mrproper (cherokee_list_t *list)
 
 ret_t
 cherokee_regex_substitute (cherokee_buffer_t *regex_str,
-			   cherokee_buffer_t *source,
-			   cherokee_buffer_t *target,
-			   cint_t             ovector[],
-			   cint_t             stringcount,
-			   char               dollar_char)
+                           cherokee_buffer_t *source,
+                           cherokee_buffer_t *target,
+                           cint_t             ovector[],
+                           cint_t             stringcount,
+                           char               dollar_char)
 {
 	cint_t              re;
 	char               *s;

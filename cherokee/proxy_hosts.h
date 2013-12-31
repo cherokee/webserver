@@ -88,18 +88,18 @@ ret_t cherokee_handler_proxy_hosts_init     (cherokee_handler_proxy_hosts_t *hos
 ret_t cherokee_handler_proxy_hosts_mrproper (cherokee_handler_proxy_hosts_t *hosts);
 
 ret_t cherokee_handler_proxy_hosts_get      (cherokee_handler_proxy_hosts_t  *hosts,
-					     cherokee_source_t               *src,
-					     cherokee_handler_proxy_poll_t  **poll,
-					     cuint_t                          reuse_max);
+                                             cherokee_source_t               *src,
+                                             cherokee_handler_proxy_poll_t  **poll,
+                                             cuint_t                          reuse_max);
 
 /* Polls
  */
 ret_t cherokee_handler_proxy_poll_new       (cherokee_handler_proxy_poll_t  **poll,
-					     cuint_t                          reuse_max);
+                                             cuint_t                          reuse_max);
 ret_t cherokee_handler_proxy_poll_free      (cherokee_handler_proxy_poll_t   *poll);
 ret_t cherokee_handler_proxy_poll_get       (cherokee_handler_proxy_poll_t   *poll,
-					     cherokee_handler_proxy_conn_t  **pconn,
-					     cherokee_source_t               *src);
+                                             cherokee_handler_proxy_conn_t  **pconn,
+                                             cherokee_source_t               *src);
 
 
 /* Conns
@@ -108,14 +108,14 @@ ret_t cherokee_handler_proxy_conn_new          (cherokee_handler_proxy_conn_t **
 ret_t cherokee_handler_proxy_conn_free         (cherokee_handler_proxy_conn_t  *pconn);
 ret_t cherokee_handler_proxy_conn_release      (cherokee_handler_proxy_conn_t  *pconn);
 ret_t cherokee_handler_proxy_conn_send         (cherokee_handler_proxy_conn_t  *pconn,
-					        cherokee_buffer_t              *buf);
+                                                cherokee_buffer_t              *buf);
 ret_t cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *pconn,
-						cherokee_buffer_t              *body,
-						cherokee_boolean_t              flexible);
+                                                cherokee_buffer_t              *body,
+                                                cherokee_boolean_t              flexible);
 ret_t cherokee_handler_proxy_conn_get_addrinfo (cherokee_handler_proxy_conn_t  *pconn,
-						cherokee_source_t              *src);
+                                                cherokee_source_t              *src);
 ret_t cherokee_handler_proxy_conn_init_socket  (cherokee_handler_proxy_conn_t  *pconn,
-						cherokee_source_t              *src);
+                                                cherokee_source_t              *src);
 
 #endif /* CHEROKEE_HANDLER_PROXY_HOSTS_H */
 

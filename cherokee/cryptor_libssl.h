@@ -94,11 +94,12 @@ typedef struct {
 	SSL_CTX                   *ssl_ctx;
 } cherokee_cryptor_client_libssl_t;
 
-#define OPENSSL_LAST_ERROR(error)					\
-	do { int n;							\
-		error = "unknown";					\
-		while ((n = ERR_get_error()))				\
-			error = ERR_error_string(n, NULL);		\
+#define OPENSSL_LAST_ERROR(error)                          \
+	do {                                               \
+		int n;                                     \
+		error = "unknown";                         \
+		while ((n = ERR_get_error()))              \
+			error = ERR_error_string(n, NULL); \
 	} while (0)
 
 #define CRYPTOR_SSL(x)      ((cherokee_cryptor_libssl_t *)(x))

@@ -31,7 +31,7 @@
 
 ret_t
 cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
-			    cherokee_plugin_info_t  *info)
+                            cherokee_plugin_info_t  *info)
 {
 	ret_t ret;
 
@@ -74,8 +74,8 @@ cherokee_cryptor_free (cherokee_cryptor_t *cryp)
 
 ret_t
 cherokee_cryptor_configure (cherokee_cryptor_t     *cryp,
-			    cherokee_config_node_t *conf,
-			    cherokee_server_t      *srv)
+                            cherokee_config_node_t *conf,
+                            cherokee_server_t      *srv)
 {
 	ret_t ret;
 
@@ -100,8 +100,8 @@ cherokee_cryptor_configure (cherokee_cryptor_t     *cryp,
 
 ret_t
 cherokee_cryptor_vserver_new (cherokee_cryptor_t          *cryp,
-			      void                        *vsrv,
-			      cherokee_cryptor_vserver_t **cryp_vsrv)
+                              void                        *vsrv,
+                              cherokee_cryptor_vserver_t **cryp_vsrv)
 {
 	if (unlikely (cryp->vserver_new == NULL))
 		return ret_error;
@@ -112,7 +112,7 @@ cherokee_cryptor_vserver_new (cherokee_cryptor_t          *cryp,
 
 ret_t
 cherokee_cryptor_socket_new (cherokee_cryptor_t         *cryp,
-			     cherokee_cryptor_socket_t **cryp_sock)
+                             cherokee_cryptor_socket_t **cryp_sock)
 {
 	if (unlikely (cryp->socket_new == NULL))
 		return ret_error;
@@ -123,7 +123,7 @@ cherokee_cryptor_socket_new (cherokee_cryptor_t         *cryp,
 
 ret_t
 cherokee_cryptor_client_new (cherokee_cryptor_t         *cryp,
-			     cherokee_cryptor_client_t **cryp_client)
+                             cherokee_cryptor_client_t **cryp_client)
 {
 	if (unlikely (cryp->socket_new == NULL))
 		return ret_error;
@@ -202,10 +202,10 @@ cherokee_cryptor_socket_clean (cherokee_cryptor_socket_t *cryp)
 
 ret_t
 cherokee_cryptor_socket_init_tls (cherokee_cryptor_socket_t *cryp,
-				  void                      *sock,
-				  void                      *vsrv,
-				  void                      *conn,
-				  void                      *blocking)
+                                  void                      *sock,
+                                  void                      *vsrv,
+                                  void                      *conn,
+                                  void                      *blocking)
 {
 	if (unlikely (cryp->init_tls == NULL))
 		return ret_error;
@@ -224,7 +224,7 @@ cherokee_cryptor_socket_shutdown (cherokee_cryptor_socket_t *cryp)
 
 ret_t
 cherokee_cryptor_socket_read (cherokee_cryptor_socket_t *cryp,
-			      char *buf, int len, size_t *re_len)
+                              char *buf, int len, size_t *re_len)
 {
 	if (unlikely (cryp->read == NULL))
 		return ret_error;
@@ -234,7 +234,7 @@ cherokee_cryptor_socket_read (cherokee_cryptor_socket_t *cryp,
 
 ret_t
 cherokee_cryptor_socket_write (cherokee_cryptor_socket_t *cryp,
-			       char *buf, int len, size_t *re_len)
+                               char *buf, int len, size_t *re_len)
 {
 	if (unlikely (cryp->write == NULL))
 		return ret_error;
@@ -259,8 +259,8 @@ cherokee_cryptor_socket_pending (cherokee_cryptor_socket_t *cryp)
 
 ret_t
 cherokee_cryptor_client_init (cherokee_cryptor_client_t *cryp,
-			      cherokee_buffer_t         *host,
-			      void                      *socket)
+                              cherokee_buffer_t         *host,
+                              void                      *socket)
 {
 	cherokee_socket_status_t foo = socket_closed;
 

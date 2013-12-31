@@ -62,7 +62,7 @@ typedef struct {
 
 	/* Visible properties
 	 */
- 	cherokee_boolean_t       show_size;
+	cherokee_boolean_t       show_size;
 	cherokee_boolean_t       show_date;
 	cherokee_boolean_t       show_user;
 	cherokee_boolean_t       show_group;
@@ -103,7 +103,7 @@ typedef struct {
 	cuint_t                  longest_filename;
 	cherokee_list_t         *dir_ptr;
 	cherokee_list_t         *file_ptr;
- 	cherokee_buffer_t        header;
+	cherokee_buffer_t        header;
 
 	cherokee_buffer_t        public_dir;
 } cherokee_handler_dirlist_t;

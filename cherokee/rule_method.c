@@ -36,8 +36,8 @@ PLUGIN_INFO_RULE_EASIEST_INIT(method);
 
 static ret_t
 configure (cherokee_rule_method_t    *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp = NULL;
@@ -47,7 +47,7 @@ configure (cherokee_rule_method_t    *rule,
 	ret = cherokee_config_node_read (conf, "method", &tmp);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-			      RULE(rule)->priority, "method");
+		              RULE(rule)->priority, "method");
 		return ret_error;
 	}
 
@@ -104,5 +104,5 @@ cherokee_rule_method_new (cherokee_rule_method_t **rule)
 	n->method = http_unknown;
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

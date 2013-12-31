@@ -51,9 +51,9 @@ ret_t cherokee_header_op_new       (cherokee_header_op_t **op);
 ret_t cherokee_header_op_free      (cherokee_header_op_t  *op);
 
 ret_t cherokee_header_op_configure (cherokee_header_op_t   *op,
-				    cherokee_config_node_t *config);
+                                    cherokee_config_node_t *config);
 
 ret_t cherokee_header_op_render    (cherokee_list_t        *ops_list,
-				    cherokee_buffer_t      *header);
+                                    cherokee_buffer_t      *header);
 
 #endif /* CHEROKEE_HEADER_OP_H */

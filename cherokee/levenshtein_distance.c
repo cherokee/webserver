@@ -16,7 +16,7 @@ static int  _prefix_distance(char *A, char *B, int lA, int lB);
 static int  _min(int a, int b, int c);
 static void score(int *pD, char *A, char *B, int lA, int lB);
 
-#define D(r,c)	pD[(r)*lB1+(c)]
+#define D(r,c) pD[(r)*lB1+(c)]
 
 int distance(char *A, char *B)
 {
@@ -47,8 +47,8 @@ int prefix_distance(char *A, char *B)
 	int lB  = strlen(B);
 
 	return lA < lB ?
-		_prefix_distance(A, B, lA, lB) :
-		_prefix_distance(B, A, lB, lA);
+	    _prefix_distance(A, B, lA, lB) :
+	    _prefix_distance(B, A, lB, lA);
 }
 
 

@@ -574,9 +574,9 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 			memcpy (&ip4_sock, &SOCKET_ADDR_IPv6(sock)->sin6_addr.s6_addr[12], 4);
 
 			masqued_list.ip4.s_addr   = (IP_NODE(i)->ip.ip4.s_addr &
-						     SUBNET_NODE(i)->mask.ip4.s_addr);
+			                             SUBNET_NODE(i)->mask.ip4.s_addr);
 			masqued_remote.ip4.s_addr = (ip4_sock &
-						     SUBNET_NODE(i)->mask.ip4.s_addr);
+			                             SUBNET_NODE(i)->mask.ip4.s_addr);
 
 			if (masqued_remote.ip4.s_addr == masqued_list.ip4.s_addr) {
 				return ret_ok;
@@ -588,9 +588,9 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 			switch (IP_NODE(i)->type) {
 			case ipv4:
 				masqued_list.ip4.s_addr   = (IP_NODE(i)->ip.ip4.s_addr &
-							     SUBNET_NODE(i)->mask.ip4.s_addr);
+				                             SUBNET_NODE(i)->mask.ip4.s_addr);
 				masqued_remote.ip4.s_addr = (SOCKET_ADDR_IPv4(sock)->sin_addr.s_addr &
-							     SUBNET_NODE(i)->mask.ip4.s_addr);
+				                             SUBNET_NODE(i)->mask.ip4.s_addr);
 
 				TRACE (ENTRIES, "Checking IPv4 net: (mask=%x) %x == %x ?\n",
 				       SUBNET_NODE(i)->mask.ip4.s_addr,
@@ -609,11 +609,11 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 
 				for (j=0; j<16; j++) {
 					masqued_list.ip6.s6_addr[j] = (
-						IP_NODE(i)->ip.ip6.s6_addr[j] &
-						SUBNET_NODE(i)->mask.ip6.s6_addr[j]);
+					        IP_NODE(i)->ip.ip6.s6_addr[j] &
+					        SUBNET_NODE(i)->mask.ip6.s6_addr[j]);
 					masqued_remote.ip6.s6_addr[j] = (
-						SOCKET_ADDR_IPv6(sock)->sin6_addr.s6_addr[j] &
-						SUBNET_NODE(i)->mask.ip6.s6_addr[j]);
+					        SOCKET_ADDR_IPv6(sock)->sin6_addr.s6_addr[j] &
+					        SUBNET_NODE(i)->mask.ip6.s6_addr[j]);
 
 					if (masqued_list.ip6.s6_addr[j] !=
 					    masqued_remote.ip6.s6_addr[j])

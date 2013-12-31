@@ -55,8 +55,8 @@ match (cherokee_rule_bind_t    *rule,
 
 static ret_t
 configure (cherokee_rule_bind_t      *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
 	cherokee_list_t        *i;
@@ -130,5 +130,5 @@ cherokee_rule_bind_new (cherokee_rule_bind_t **rule)
 	INIT_LIST_HEAD(&n->binds);
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

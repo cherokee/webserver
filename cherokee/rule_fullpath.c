@@ -36,8 +36,8 @@ PLUGIN_INFO_RULE_EASIEST_INIT(fullpath);
 
 static ret_t
 configure (cherokee_rule_fullpath_t  *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
@@ -50,7 +50,7 @@ configure (cherokee_rule_fullpath_t  *rule,
 	ret = cherokee_config_node_get (conf, "fullpath", &subconf);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-			      RULE(rule)->priority, "fullpath");
+		              RULE(rule)->priority, "fullpath");
 		return ret_error;
 	}
 
@@ -131,6 +131,6 @@ cherokee_rule_fullpath_new (cherokee_rule_fullpath_t **rule)
 	}
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }
 

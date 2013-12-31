@@ -49,7 +49,7 @@
 	"Cherokee Web Server: Admin"
 
 #define APP_COPY_NOTICE \
-	"Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"	               \
+	"Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"                       \
 	"Copyright (C) 2001-2013 Alvaro Lopez Ortega.\n"                               \
 	"This is free software; see the source for copying conditions.  There is NO\n" \
 	"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -236,27 +236,27 @@ config_server (cherokee_server_t *srv)
 
 	if (scgi_port <= 0) {
 		cherokee_buffer_add_va  (&buf,
-					 "source!1!nick = app-logic\n"
-					 "source!1!type = interpreter\n"
-					 "source!1!timeout = " TIMEOUT "\n"
-					 "source!1!host = %s\n"
-					 "source!1!interpreter = %s/server.py %s %s %s\n"
-					 "source!1!env_inherited = 1\n",
-					 DEFAULT_UNIX_SOCKET, document_root,
-					 DEFAULT_UNIX_SOCKET, config_file,
-					 (debug) ? "-x" : "");
+		                         "source!1!nick = app-logic\n"
+		                         "source!1!type = interpreter\n"
+		                         "source!1!timeout = " TIMEOUT "\n"
+		                         "source!1!host = %s\n"
+		                         "source!1!interpreter = %s/server.py %s %s %s\n"
+		                         "source!1!env_inherited = 1\n",
+		                         DEFAULT_UNIX_SOCKET, document_root,
+		                         DEFAULT_UNIX_SOCKET, config_file,
+		                         (debug) ? "-x" : "");
 
 	} else {
 		cherokee_buffer_add_va  (&buf,
-					 "source!1!nick = app-logic\n"
-					 "source!1!type = interpreter\n"
-					 "source!1!timeout = " TIMEOUT "\n"
-					 "source!1!host = localhost:%d\n"
-					 "source!1!interpreter = %s/server.py %d %s %s\n"
-					 "source!1!env_inherited = 1\n",
-					 scgi_port, document_root,
-					 scgi_port, config_file,
-					 (debug) ? "-x" : "");
+		                         "source!1!nick = app-logic\n"
+		                         "source!1!type = interpreter\n"
+		                         "source!1!timeout = " TIMEOUT "\n"
+		                         "source!1!host = localhost:%d\n"
+		                         "source!1!interpreter = %s/server.py %d %s %s\n"
+		                         "source!1!env_inherited = 1\n",
+		                         scgi_port, document_root,
+		                         scgi_port, config_file,
+		                         (debug) ? "-x" : "");
 	}
 
 	if (debug) {
@@ -264,11 +264,11 @@ config_server (cherokee_server_t *srv)
 	}
 
 	cherokee_buffer_add_str  (&buf,
-				  RULE_PRE "1!match = default\n"
-				  RULE_PRE "1!handler = scgi\n"
-				  RULE_PRE "1!timeout = " TIMEOUT "\n"
-				  RULE_PRE "1!handler!balancer = round_robin\n"
-				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
+	                          RULE_PRE "1!match = default\n"
+	                          RULE_PRE "1!handler = scgi\n"
+	                          RULE_PRE "1!timeout = " TIMEOUT "\n"
+	                          RULE_PRE "1!handler!balancer = round_robin\n"
+	                          RULE_PRE "1!handler!balancer!source!1 = 1\n");
 
 	cherokee_buffer_add_str  (&buf, RULE_PRE "1!handler!env!CTK_COOKIE = ");
 	generate_password  (&buf);
@@ -283,86 +283,86 @@ config_server (cherokee_server_t *srv)
 	}
 
 	cherokee_buffer_add_str (&buf,
-				 RULE_PRE "2!match = directory\n"
-				 RULE_PRE "2!match!directory = /about\n"
-				 RULE_PRE "2!handler = server_info\n");
+	                         RULE_PRE "2!match = directory\n"
+	                         RULE_PRE "2!match!directory = /about\n"
+	                         RULE_PRE "2!handler = server_info\n");
 
 	cherokee_buffer_add_str (&buf,
-				 RULE_PRE "3!match = directory\n"
-				 RULE_PRE "3!match!directory = /static\n"
-				 RULE_PRE "3!handler = file\n"
-				 RULE_PRE "3!expiration = time\n"
-				 RULE_PRE "3!expiration!time = 30d\n");
+	                         RULE_PRE "3!match = directory\n"
+	                         RULE_PRE "3!match!directory = /static\n"
+	                         RULE_PRE "3!handler = file\n"
+	                         RULE_PRE "3!expiration = time\n"
+	                         RULE_PRE "3!expiration!time = 30d\n");
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "4!match = request\n"
-				 RULE_PRE "4!match!request = ^/favicon.ico$\n"
-				 RULE_PRE "4!document_root = %s/static/images\n"
-				 RULE_PRE "4!handler = file\n"
-				 RULE_PRE "4!expiration = time\n"
-				 RULE_PRE "4!expiration!time = 30d\n",
-				 document_root);
+	                         RULE_PRE "4!match = request\n"
+	                         RULE_PRE "4!match!request = ^/favicon.ico$\n"
+	                         RULE_PRE "4!document_root = %s/static/images\n"
+	                         RULE_PRE "4!handler = file\n"
+	                         RULE_PRE "4!expiration = time\n"
+	                         RULE_PRE "4!expiration!time = 30d\n",
+	                         document_root);
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "5!match = directory\n"
-				 RULE_PRE "5!match!directory = /icons_local\n"
-				 RULE_PRE "5!handler = file\n"
-				 RULE_PRE "5!document_root = %s\n"
-				 RULE_PRE "5!expiration = time\n"
-				 RULE_PRE "5!expiration!time = 30d\n",
-				 CHEROKEE_ICONSDIR);
+	                         RULE_PRE "5!match = directory\n"
+	                         RULE_PRE "5!match!directory = /icons_local\n"
+	                         RULE_PRE "5!handler = file\n"
+	                         RULE_PRE "5!document_root = %s\n"
+	                         RULE_PRE "5!expiration = time\n"
+	                         RULE_PRE "5!expiration!time = 30d\n",
+	                         CHEROKEE_ICONSDIR);
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "6!match = directory\n"
-				 RULE_PRE "6!match!directory = /CTK\n"
-				 RULE_PRE "6!handler = file\n"
-				 RULE_PRE "6!document_root = %s/CTK/static\n"
-				 RULE_PRE "6!expiration = time\n"
-				 RULE_PRE "6!expiration!time = 30d\n",
-				 document_root);
+	                         RULE_PRE "6!match = directory\n"
+	                         RULE_PRE "6!match!directory = /CTK\n"
+	                         RULE_PRE "6!handler = file\n"
+	                         RULE_PRE "6!document_root = %s/CTK/static\n"
+	                         RULE_PRE "6!expiration = time\n"
+	                         RULE_PRE "6!expiration!time = 30d\n",
+	                         document_root);
 
 	/* Embedded help
 	 */
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "7!match = and\n"
-				 RULE_PRE "7!match!left = directory\n"
-				 RULE_PRE "7!match!left!directory = /help\n"
-				 RULE_PRE "7!match!right = not\n"
-				 RULE_PRE "7!match!right!right = extensions\n"
-				 RULE_PRE "7!match!right!right!extensions = html\n"
-				 RULE_PRE "7!handler = file\n");
+	                         RULE_PRE "7!match = and\n"
+	                         RULE_PRE "7!match!left = directory\n"
+	                         RULE_PRE "7!match!left!directory = /help\n"
+	                         RULE_PRE "7!match!right = not\n"
+	                         RULE_PRE "7!match!right!right = extensions\n"
+	                         RULE_PRE "7!match!right!right!extensions = html\n"
+	                         RULE_PRE "7!handler = file\n");
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "8!match = fullpath\n"
-				 RULE_PRE "8!match!fullpath!1 = /static/help_404.html\n"
-				 RULE_PRE "8!handler = file\n"
-				 RULE_PRE "8!document_root = %s\n", document_root);
+	                         RULE_PRE "8!match = fullpath\n"
+	                         RULE_PRE "8!match!fullpath!1 = /static/help_404.html\n"
+	                         RULE_PRE "8!handler = file\n"
+	                         RULE_PRE "8!document_root = %s\n", document_root);
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "9!match = and\n"
-				 RULE_PRE "9!match!left = directory\n"
-				 RULE_PRE "9!match!left!directory = /help\n"
-				 RULE_PRE "9!match!right = not\n"
-				 RULE_PRE "9!match!right!right = exists\n"
-				 RULE_PRE "9!match!right!right!match_any = 1\n"
-				 RULE_PRE "9!handler = redir\n"
-				 RULE_PRE "9!handler!rewrite!1!show = 1\n"
-				 RULE_PRE "9!handler!rewrite!1!substring = /static/help_404.html\n");
+	                         RULE_PRE "9!match = and\n"
+	                         RULE_PRE "9!match!left = directory\n"
+	                         RULE_PRE "9!match!left!directory = /help\n"
+	                         RULE_PRE "9!match!right = not\n"
+	                         RULE_PRE "9!match!right!right = exists\n"
+	                         RULE_PRE "9!match!right!right!match_any = 1\n"
+	                         RULE_PRE "9!handler = redir\n"
+	                         RULE_PRE "9!handler!rewrite!1!show = 1\n"
+	                         RULE_PRE "9!handler!rewrite!1!substring = /static/help_404.html\n");
 
 	cherokee_buffer_add_va  (&buf,
-				 RULE_PRE "10!match = directory\n"
-				 RULE_PRE "10!match!directory = /help\n"
-				 RULE_PRE "10!match!final = 0\n"
-				 RULE_PRE "10!document_root = %s\n", CHEROKEE_DOCDIR);
+	                         RULE_PRE "10!match = directory\n"
+	                         RULE_PRE "10!match!directory = /help\n"
+	                         RULE_PRE "10!match!final = 0\n"
+	                         RULE_PRE "10!document_root = %s\n", CHEROKEE_DOCDIR);
 
 	/* GZip
 	 */
 	if (! debug) {
 		cherokee_buffer_add_va (&buf,
-					RULE_PRE "15!match = extensions\n"
-					RULE_PRE "15!match!extensions = css,js,html\n"
-					RULE_PRE "15!match!final = 0\n"
-					RULE_PRE "15!encoder!gzip = 1\n");
+		                        RULE_PRE "15!match = extensions\n"
+		                        RULE_PRE "15!match!extensions = css,js,html\n"
+		                        RULE_PRE "15!match!final = 0\n"
+		                        RULE_PRE "15!encoder!gzip = 1\n");
 	}
 
 	/* RRDtool graphs
@@ -378,21 +378,21 @@ config_server (cherokee_server_t *srv)
 
 	if (! cherokee_buffer_is_empty (&rrd_bin)) {
 		cherokee_buffer_add_va  (&buf,
-					 RULE_PRE "20!handler!rrdtool_path = %s\n", rrd_bin.buf);
+		                         RULE_PRE "20!handler!rrdtool_path = %s\n", rrd_bin.buf);
 	}
 
 	if (! cherokee_buffer_is_empty (&rrd_dir)) {
 		cherokee_buffer_add_va  (&buf,
-					 RULE_PRE "20!handler!database_dir = %s\n", rrd_dir.buf);
+		                         RULE_PRE "20!handler!database_dir = %s\n", rrd_dir.buf);
 	}
 
 	cherokee_buffer_add_str (&buf,
-				 RULE_PRE "20!match = directory\n"
-				 RULE_PRE "20!match!directory = /graphs\n"
-				 RULE_PRE "20!handler = render_rrd\n"
-				 RULE_PRE "20!expiration = epoch\n"
-				 RULE_PRE "20!expiration!caching = no-cache\n"
-				 RULE_PRE "20!expiration!caching!no-store = 1\n");
+	                         RULE_PRE "20!match = directory\n"
+	                         RULE_PRE "20!match!directory = /graphs\n"
+	                         RULE_PRE "20!handler = render_rrd\n"
+	                         RULE_PRE "20!expiration = epoch\n"
+	                         RULE_PRE "20!expiration!caching = no-cache\n"
+	                         RULE_PRE "20!expiration!caching!no-store = 1\n");
 
 	cherokee_buffer_add_str    (&buf, RULE_PRE "20!document_root = ");
 	cherokee_buffer_add_buffer (&buf, &cherokee_tmp_dir);
@@ -402,26 +402,26 @@ config_server (cherokee_server_t *srv)
 	    (!cherokee_buffer_is_empty (&password)))
 	{
 		cherokee_buffer_add_va (&buf,
-					RULE_PRE "100!auth = authlist\n"
-					RULE_PRE "100!auth!methods = digest\n"
-					RULE_PRE "100!auth!realm = Cherokee-admin\n"
-					RULE_PRE "100!auth!list!1!user = admin\n"
-					RULE_PRE "100!auth!list!1!password = %s\n"
-					RULE_PRE "100!match = request\n"
-					RULE_PRE "100!match!final = 0\n"
-					RULE_PRE "100!match!request = .*\n",
-					password.buf);
+		                        RULE_PRE "100!auth = authlist\n"
+		                        RULE_PRE "100!auth!methods = digest\n"
+		                        RULE_PRE "100!auth!realm = Cherokee-admin\n"
+		                        RULE_PRE "100!auth!list!1!user = admin\n"
+		                        RULE_PRE "100!auth!list!1!password = %s\n"
+		                        RULE_PRE "100!match = request\n"
+		                        RULE_PRE "100!match!final = 0\n"
+		                        RULE_PRE "100!match!request = .*\n",
+		                        password.buf);
 	}
 
 	/* MIME types
 	 */
 	cherokee_buffer_add_str (&buf,
-				 "mime!text/javascript!extensions = js\n"
-				 "mime!text/css!extensions = css\n"
-				 "mime!image/png!extensions = png\n"
-				 "mime!image/jpeg!extensions = jpeg,jpg\n"
-				 "mime!image/svg+xml!extensions = svg,svgz\n"
-				 "mime!image/gif!extensions = gif\n");
+	                         "mime!text/javascript!extensions = js\n"
+	                         "mime!text/css!extensions = css\n"
+	                         "mime!image/png!extensions = png\n"
+	                         "mime!image/jpeg!extensions = jpeg,jpg\n"
+	                         "mime!image/svg+xml!extensions = svg,svgz\n"
+	                         "mime!image/gif!extensions = gif\n");
 
 	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) {
@@ -443,19 +443,19 @@ static void
 print_help (void)
 {
 	printf (APP_NAME "\n"
-		"Usage: cherokee-admin [options]\n\n"
-		"  -h,        --help                 Print this help\n"
-		"  -V,        --version              Print version and exit\n"
-		"  -x,        --debug                Enables debug\n"
-		"  -u,        --unsecure             Turn off the authentication\n"
-		"  -b[<IP>],  --bind[=<IP>]          Bind net iface; no arg means all\n"
-		"  -d<DIR>,   --appdir=<DIR>         Application directory\n"
-		"  -p<NUM>,   --port=<NUM>           TCP port\n"
-		"  -t,        --internal-unix        Use a Unix domain socket internally\n"
-		"  -i,        --disable-iocache      Disable I/O cache: reduces mem usage\n"
-                "  -T<NUM>,   --threads=<NUM>        Threads number\n"
-		"  -C<PATH>,  --target=<PATH>        Configuration file to modify\n\n"
-		"Report bugs to " PACKAGE_BUGREPORT "\n");
+	        "Usage: cherokee-admin [options]\n\n"
+	        "  -h,        --help                 Print this help\n"
+	        "  -V,        --version              Print version and exit\n"
+	        "  -x,        --debug                Enables debug\n"
+	        "  -u,        --unsecure             Turn off the authentication\n"
+	        "  -b[<IP>],  --bind[=<IP>]          Bind net iface; no arg means all\n"
+	        "  -d<DIR>,   --appdir=<DIR>         Application directory\n"
+	        "  -p<NUM>,   --port=<NUM>           TCP port\n"
+	        "  -t,        --internal-unix        Use a Unix domain socket internally\n"
+	        "  -i,        --disable-iocache      Disable I/O cache: reduces mem usage\n"
+	        "  -T<NUM>,   --threads=<NUM>        Threads number\n"
+	        "  -C<PATH>,  --target=<PATH>        Configuration file to modify\n\n"
+	        "Report bugs to " PACKAGE_BUGREPORT "\n");
 }
 
 static void

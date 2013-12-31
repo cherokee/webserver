@@ -51,10 +51,10 @@ match (cherokee_rule_t         *rule,
 
 static ret_t
 configure_branch (cherokee_rule_or_t        *rule,
-		  cherokee_config_node_t    *conf,
-		  cherokee_virtual_server_t *vsrv,
-		  const char                *branch,
-		  cherokee_rule_t          **branch_rule)
+                  cherokee_config_node_t    *conf,
+                  cherokee_virtual_server_t *vsrv,
+                  const char                *branch,
+                  cherokee_rule_t          **branch_rule)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf = NULL;
@@ -68,8 +68,8 @@ configure_branch (cherokee_rule_or_t        *rule,
 	/* Instance the sub-rule match
 	 */
 	ret = cherokee_virtual_server_new_rule (vsrv, subconf,
-						RULE(rule)->priority,
-						branch_rule);
+	                                        RULE(rule)->priority,
+	                                        branch_rule);
 	if (ret != ret_ok)
 		return ret;
 

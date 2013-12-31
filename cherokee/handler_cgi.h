@@ -86,8 +86,8 @@ ret_t cherokee_handler_cgi_step        (cherokee_handler_cgi_t *hdl, cherokee_bu
  * set enviroment variables, work with pathinfo, etc..
  */
 void  cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi,
-					   const char *name,    int name_len,
-					   const char *content, int content_len);
+                                           const char *name,    int name_len,
+                                           const char *content, int content_len);
 
 ret_t cherokee_handler_cgi_props_free     (cherokee_handler_cgi_props_t *props);
 

@@ -33,15 +33,15 @@
 PLUGIN_INFO_HANDLER_EASIEST_INIT (empty_gif, http_get | http_head);
 
 /* 43 chars */
-#define HARDCODED_GIF							\
-	"GIF89a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00\xff\xff"	\
-	"\xff\x21\xf9\x04\x01\x00\x00\x01\x00\x2c\x00\x00\x00"		\
+#define HARDCODED_GIF                                            \
+	"GIF89a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00\xff\xff" \
+	"\xff\x21\xf9\x04\x01\x00\x00\x01\x00\x2c\x00\x00\x00"   \
 	"\x00\x01\x00\x01\x00\x00\x02\x02\x4c\x01\x00\x3B"
 
 ret_t
 cherokee_handler_empty_gif_new (cherokee_handler_t     **hdl,
-				cherokee_connection_t   *cnt,
-				cherokee_module_props_t *props)
+                                cherokee_connection_t   *cnt,
+                                cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_empty_gif);
 
@@ -64,7 +64,7 @@ cherokee_handler_empty_gif_new (cherokee_handler_t     **hdl,
 
 ret_t
 cherokee_handler_empty_gif_step (cherokee_handler_empty_gif_t *hdl,
-				 cherokee_buffer_t            *buffer)
+                                 cherokee_buffer_t            *buffer)
 {
 	UNUSED(hdl);
 
@@ -74,12 +74,12 @@ cherokee_handler_empty_gif_step (cherokee_handler_empty_gif_t *hdl,
 
 ret_t
 cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl,
-					cherokee_buffer_t            *buffer)
+                                        cherokee_buffer_t            *buffer)
 {
 	if (cherokee_connection_should_include_length (HANDLER_CONN(hdl))) {
 		cherokee_buffer_add_str (buffer,
-					 "Content-Type: image/gif"CRLF
-					 "Content-Length: 43"CRLF);
+		                         "Content-Type: image/gif"CRLF
+		                         "Content-Length: 43"CRLF);
 	} else {
 		cherokee_buffer_add_str (buffer, "Content-Type: image/gif"CRLF);
 	}
@@ -90,8 +90,8 @@ cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl,
 
 ret_t
 cherokee_handler_empty_gif_configure (cherokee_config_node_t   *conf,
-				      cherokee_server_t        *srv,
-				      cherokee_module_props_t **_props)
+                                      cherokee_server_t        *srv,
+                                      cherokee_module_props_t **_props)
 {
 	UNUSED(conf);
 	UNUSED(srv);

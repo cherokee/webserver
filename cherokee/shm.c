@@ -94,7 +94,7 @@ cherokee_shm_create (cherokee_shm_t *shm, char *name, size_t len)
 
 ret_t
 cherokee_shm_map (cherokee_shm_t    *shm,
-		  cherokee_buffer_t *name)
+                  cherokee_buffer_t *name)
 {
 	int         re;
 	int         fd;

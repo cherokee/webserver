@@ -14,11 +14,11 @@
  * Original code by Spencer Garrett <srg@quick.com>
  */
 
-#define _CRC32_(crc, ch)	 (crc = (crc >> 8) ^ crc32tab[(crc ^ (ch)) & 0xff])
+#define _CRC32_(crc, ch)  (crc = (crc >> 8) ^ crc32tab[(crc ^ (ch)) & 0xff])
 
 /* generated using the AUTODIN II polynomial
- *	x^32 + x^26 + x^23 + x^22 + x^16 +
- *	x^12 + x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x^1 + 1
+ * x^32 + x^26 + x^23 + x^22 + x^16 +
+ * x^12 + x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x^1 + 1
  */
 
 static const unsigned int crc32tab[256] = {
@@ -100,8 +100,8 @@ crc_t
 crc32_partial_sz (crc_t crc_in, char *buf, int size)
 {
 	unsigned int crc = ~crc_in;
-	char	*p;
-	int		nr;
+	char *p;
+	int   nr;
 
 	for (nr = size, p = buf; nr--; ++p)
 		_CRC32_(crc, *p);

@@ -31,7 +31,7 @@
 
 ret_t
 cherokee_vrule_init_base (cherokee_vrule_t       *vrule,
-			  cherokee_plugin_info_t *info)
+                          cherokee_plugin_info_t *info)
 {
 	cherokee_module_init_base (MODULE(vrule), NULL, info);
 	INIT_LIST_HEAD (&vrule->list_node);
@@ -58,7 +58,7 @@ cherokee_vrule_free (cherokee_vrule_t *vrule)
 
 static ret_t
 configure_base (cherokee_vrule_t       *vrule,
-		cherokee_config_node_t *conf)
+                cherokee_config_node_t *conf)
 {
 	UNUSED(vrule);
 	UNUSED(conf);
@@ -69,8 +69,8 @@ configure_base (cherokee_vrule_t       *vrule,
 
 ret_t
 cherokee_vrule_configure (cherokee_vrule_t       *vrule,
-			  cherokee_config_node_t *conf,
-			  void                   *vsrv)
+                          cherokee_config_node_t *conf,
+                          void                   *vsrv)
 {
 	ret_t ret;
 
@@ -88,8 +88,8 @@ cherokee_vrule_configure (cherokee_vrule_t       *vrule,
 
 ret_t
 cherokee_vrule_match (cherokee_vrule_t  *vrule,
-		      cherokee_buffer_t *buffer,
-		      void              *conn)
+                      cherokee_buffer_t *buffer,
+                      void              *conn)
 {
 	return_if_fail (vrule, ret_error);
 	return_if_fail (vrule->match, ret_error);

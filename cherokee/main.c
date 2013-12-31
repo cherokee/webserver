@@ -98,9 +98,9 @@ figure_worker_path (const char *arg0)
 	int         len, re, i;
 	const char *d;
 	const char *unix_paths[] = {"/proc/%d/exe",        /* Linux   */
-				    "/proc/%d/path/a.out", /* Solaris */
-				    "/proc/%d/file",       /* BSD     */
-				    NULL};
+	                            "/proc/%d/path/a.out", /* Solaris */
+	                            "/proc/%d/file",       /* BSD     */
+	                            NULL};
 
 	/* Invoked with the fullpath */
 	if (arg0[0] == '/') {
@@ -443,11 +443,11 @@ do_spawn (void)
 	char        *p            = spawn_shared;
 	const char  *argv[]       = {"sh", "-c", NULL, NULL};
 
-#define CHECK_MARK(val)							\
-	if ((*(int *)p) != val) {					\
-		goto cleanup;						\
-	} else {							\
-		p += sizeof(int);					\
+#define CHECK_MARK(val)           \
+	if ((*(int *)p) != val) { \
+		goto cleanup;     \
+	} else {                  \
+		p += sizeof(int); \
 	}
 
 #define ALIGN4(buf) while ((long)p & 0x3) p++;

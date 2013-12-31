@@ -444,9 +444,7 @@ extern int deflateInit2 (z_streamp strm,
    not perform any compression: this will be done by deflate().
 */
 
-extern int zlib_deflateSetDictionary (z_streamp strm,
-						     const Byte *dictionary,
-						     uInt  dictLength);
+extern int zlib_deflateSetDictionary (z_streamp strm, const Byte *dictionary, uInt  dictLength);
 /*
      Initializes the compression dictionary from the given byte sequence
    without producing any compressed output. This function must be called
@@ -549,9 +547,7 @@ extern int inflateInit2 (z_streamp strm, int  windowBits);
    modified, but next_out and avail_out are unchanged.)
 */
 
-extern int zlib_inflateSetDictionary (z_streamp strm,
-						     const Byte *dictionary,
-						     uInt  dictLength);
+extern int zlib_inflateSetDictionary (z_streamp strm, const Byte *dictionary, uInt  dictLength);
 /*
      Initializes the decompression dictionary from the given uncompressed byte
    sequence. This function must be called immediately after a call of inflate
@@ -607,16 +603,13 @@ extern int zlib_inflateIncomp (z_stream *strm);
 /* deflateInit and inflateInit are macros to allow checking the zlib version
  * and the compiler's view of z_stream:
  */
-extern int zlib_deflateInit_ (z_streamp strm, int level,
-                                     const char *version, int stream_size);
-extern int zlib_inflateInit_ (z_streamp strm,
-                                     const char *version, int stream_size);
+extern int zlib_deflateInit_ (z_streamp strm, int level, const char *version, int stream_size);
+extern int zlib_inflateInit_ (z_streamp strm, const char *version, int stream_size);
 extern int zlib_deflateInit2_ (z_streamp strm, int  level, int  method,
                                       int windowBits, int memLevel,
                                       int strategy, const char *version,
                                       int stream_size);
-extern int zlib_inflateInit2_ (z_streamp strm, int  windowBits,
-                                      const char *version, int stream_size);
+extern int zlib_inflateInit2_ (z_streamp strm, int  windowBits, const char *version, int stream_size);
 #define zlib_deflateInit(strm, level) \
         zlib_deflateInit_((strm), (level), ZLIB_VERSION, sizeof(z_stream))
 #define zlib_inflateInit(strm) \

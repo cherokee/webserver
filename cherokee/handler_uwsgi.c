@@ -70,7 +70,7 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 		CHEROKEE_NEW_STRUCT (n, handler_uwsgi_props);
 
 		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n),
-							   MODULE_PROPS_FREE(props_free));
+		                                           MODULE_PROPS_FREE(props_free));
 
 		n->balancer = NULL;
 		n->modifier1 = 0 ;
@@ -130,8 +130,8 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 
 static void
 add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
-	      const char *key, int key_len,
-	      const char *val, int val_len)
+              const char *key, int key_len,
+              const char *val, int val_len)
 {
 	uint16_t                  u_key_len = (uint16_t) key_len ;
 	uint16_t                  u_val_len = (uint16_t) val_len ;
@@ -162,7 +162,7 @@ add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 static ret_t
 read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base,
-		 cherokee_buffer_t           *buffer)
+                 cherokee_buffer_t           *buffer)
 {
 	ret_t                     ret;
 	size_t                    read  = 0;
@@ -173,9 +173,9 @@ read_from_uwsgi (cherokee_handler_cgi_base_t *cgi_base,
 	switch (ret) {
 	case ret_eagain:
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base),
-						     HANDLER_CONN(cgi_base),
-						     uwsgi->socket.socket,
-						     FDPOLL_MODE_READ, false);
+		                                     HANDLER_CONN(cgi_base),
+		                                     uwsgi->socket.socket,
+		                                     FDPOLL_MODE_READ, false);
 		return ret_eagain;
 
 	case ret_ok:
@@ -204,10 +204,10 @@ cherokee_handler_uwsgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 	/* Init the base class
 	 */
 	cherokee_handler_cgi_base_init (
-			HDL_CGI_BASE(n), cnt,
-			PLUGIN_INFO_HANDLER_PTR(uwsgi),
-			HANDLER_PROPS(props),
-			add_env_pair, read_from_uwsgi);
+	                HDL_CGI_BASE(n), cnt,
+	                PLUGIN_INFO_HANDLER_PTR(uwsgi),
+	                HANDLER_PROPS(props),
+	                add_env_pair, read_from_uwsgi);
 
 	/* Virtual methods
 	 */
@@ -254,8 +254,8 @@ cherokee_handler_uwsgi_free (cherokee_handler_uwsgi_t *hdl)
 
 static ret_t
 uwsgi_fix_packet (cherokee_buffer_t *buf,
-		  uint8_t            modifier1,
-		  uint8_t            modifier2)
+                  uint8_t            modifier1,
+                  uint8_t            modifier2)
 {
 
 	uwsgi_header uh;
@@ -279,13 +279,13 @@ static ret_t
 build_header (cherokee_handler_uwsgi_t *hdl)
 {
 	cuint_t                         len;
-        char                            tmp[64];
+	char                            tmp[64];
 	cherokee_connection_t          *conn     = HANDLER_CONN(hdl);
 	cherokee_handler_uwsgi_props_t *props    = HANDLER_UWSGI_PROPS(hdl);
 
 	if (props->pass_request_body == true && props->pass_wsgi_vars == true) {
-        	len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)conn->post.len);
-        	add_env_pair(HDL_CGI_BASE(hdl), "CONTENT_LENGTH", 14, tmp, len);
+		len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)conn->post.len);
+		add_env_pair(HDL_CGI_BASE(hdl), "CONTENT_LENGTH", 14, tmp, len);
 	}
 
 	if (props->pass_wsgi_vars == true) {
@@ -322,7 +322,7 @@ connect_to_server (cherokee_handler_uwsgi_t *hdl)
 		}
 	} else {
 		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
-								   &hdl->socket, conn);
+		                                                   &hdl->socket, conn);
 	}
 
 	return ret;
@@ -440,7 +440,7 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 	/* Send it
 	 */
 	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
-					    &hdl->socket, NULL, &blocking, &did_IO);
+	                                    &hdl->socket, NULL, &blocking, &did_IO);
 
 	if (did_IO) {
 		cherokee_connection_update_timeout (conn);
@@ -453,8 +453,8 @@ cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl)
 	case ret_eagain:
 		if (blocking == socket_writing) {
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							     conn, hdl->socket.socket,
-							     FDPOLL_MODE_WRITE, false);
+			                                     conn, hdl->socket.socket,
+			                                     FDPOLL_MODE_WRITE, false);
 			return ret_deny;
 		}
 

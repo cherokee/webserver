@@ -58,20 +58,20 @@ match (cherokee_rule_request_t *rule,
 		return ret_error;
 	}
 
-        /* Build the request string
-         */
-        if (! cherokee_buffer_is_empty (&conn->query_string)) {
-                cherokee_buffer_add_str (&conn->request, "?");
-                cherokee_buffer_add_buffer (&conn->request, &conn->query_string);
-        }
+	/* Build the request string
+	 */
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+		cherokee_buffer_add_str (&conn->request, "?");
+		cherokee_buffer_add_buffer (&conn->request, &conn->query_string);
+	}
 
 	/* Evaluate the pcre
 	 */
 	re = pcre_exec (rule->pcre, NULL,
-			conn->request.buf,
-			conn->request.len,
-			0, 0,
-			conn->regex_ovector, OVECTOR_LEN);
+	                conn->request.buf,
+	                conn->request.len,
+	                0, 0,
+	                conn->regex_ovector, OVECTOR_LEN);
 
 	if (re < 0) {
 		TRACE (ENTRIES, "Request \"%s\" didn't match with \"%s\"\n",
@@ -89,9 +89,9 @@ match (cherokee_rule_request_t *rule,
 	ret = ret_ok;
 
 restore:
-        if (! cherokee_buffer_is_empty (&conn->query_string)) {
-                cherokee_buffer_drop_ending (&conn->request, conn->query_string.len + 1);
-        }
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+		cherokee_buffer_drop_ending (&conn->request, conn->query_string.len + 1);
+	}
 
 	return ret;
 }
@@ -99,8 +99,8 @@ restore:
 
 static ret_t
 configure (cherokee_rule_request_t   *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
 	cherokee_regex_table_t *regexs = VSERVER_SRV(vsrv)->regexs;
@@ -110,7 +110,7 @@ configure (cherokee_rule_request_t   *rule,
 	ret = cherokee_config_node_copy (conf, "request", &rule->pattern);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-			      RULE(rule)->priority, "request");
+		              RULE(rule)->priority, "request");
 		return ret_error;
 	}
 
@@ -159,5 +159,5 @@ cherokee_rule_request_new (cherokee_rule_request_t  **rule)
 	cherokee_buffer_init (&n->pattern);
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

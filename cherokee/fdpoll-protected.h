@@ -57,9 +57,9 @@ struct cherokee_fdpoll {
 
 	/* Properties
 	 */
-        int nfiles;            /* Max. fds in this FD poll */
-        int system_nfiles;     /* Max. fds in the system   */
-        int npollfds;          /* Currently, how many FDs  */
+	int nfiles;            /* Max. fds in this FD poll */
+	int system_nfiles;     /* Max. fds in the system   */
+	int npollfds;          /* Currently, how many FDs  */
 
 	/* Virtual methods
 	 */

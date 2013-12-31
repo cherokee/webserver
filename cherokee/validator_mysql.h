@@ -31,8 +31,8 @@
 #include <mysql.h>
 
 typedef struct {
-	cherokee_validator_t	validator;
-	MYSQL		       *conn;
+	cherokee_validator_t   validator;
+	MYSQL                 *conn;
 } cherokee_validator_mysql_t;
 
 typedef enum {
@@ -43,16 +43,16 @@ typedef enum {
 } cherokee_mysql_hash_t;
 
 typedef struct {
-	cherokee_module_props_t	base;
+	cherokee_module_props_t base;
 
-	cherokee_buffer_t	host;
-	cint_t			port;
+	cherokee_buffer_t       host;
+	cint_t                  port;
 	cherokee_buffer_t       unix_socket;
 
 	cherokee_buffer_t       user;
-	cherokee_buffer_t	passwd;
-	cherokee_buffer_t	database;
-	cherokee_buffer_t	query;
+	cherokee_buffer_t       passwd;
+	cherokee_buffer_t       database;
+	cherokee_buffer_t       query;
 
 	cherokee_mysql_hash_t   hash_type;
 } cherokee_validator_mysql_props_t;

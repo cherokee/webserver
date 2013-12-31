@@ -91,9 +91,9 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 
 ret_t
 cherokee_fdpoll_new (cherokee_fdpoll_t    **fdp,
-		     cherokee_poll_type_t   type,
-		     int                    sys_fd_limit,
-		     int                    fd_limit)
+                     cherokee_poll_type_t   type,
+                     int                    sys_fd_limit,
+                     int                    fd_limit)
 {
 	/* Set default values if needed
 	 */

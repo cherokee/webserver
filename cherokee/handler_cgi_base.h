@@ -42,11 +42,11 @@
 	PLUGIN_INFO_HANDLER_EASY_INIT (name, (methods))
 #else
 # define CGI_LIB_INIT(name, methods)                          \
-	PLUGIN_INIT_PROTOTYPE(name) {	   	              \
+	PLUGIN_INIT_PROTOTYPE(name) {                         \
 		PLUGIN_INIT_ONCE_CHECK(name);                 \
 		cherokee_plugin_loader_load (loader, "file"); \
 	}                                                     \
-        PLUGIN_INFO_HANDLER_EASY_INIT (name, (methods))
+	PLUGIN_INFO_HANDLER_EASY_INIT (name, (methods))
 #endif
 
 /* Function types
@@ -54,11 +54,11 @@
 typedef struct cherokee_handler_cgi_base cherokee_handler_cgi_base_t;
 
 typedef void  (* cherokee_handler_cgi_base_add_env_pair_t)  (cherokee_handler_cgi_base_t *cgi,
-							     const char *name,    int name_len,
-							     const char *content, int content_len);
+                                                             const char *name,    int name_len,
+                                                             const char *content, int content_len);
 
 typedef ret_t (* cherokee_handler_cgi_base_read_from_cgi_t) (cherokee_handler_cgi_base_t *cgi,
-							     cherokee_buffer_t *buffer);
+                                                             cherokee_buffer_t *buffer);
 
 typedef enum {
 	hcgi_phase_build_headers,
@@ -100,7 +100,7 @@ typedef struct {
 	cherokee_list_t                    system_env;
 	cuint_t                            change_user;
 	cherokee_buffer_t                  script_alias;
- 	cherokee_boolean_t                 check_file;
+	cherokee_boolean_t                 check_file;
 	cherokee_boolean_t                 allow_xsendfile;
 	cherokee_boolean_t                 is_error_handler;
 	cherokee_boolean_t                 pass_req_headers;
@@ -115,11 +115,11 @@ typedef struct {
 /* Base handler methods
  */
 ret_t cherokee_handler_cgi_base_init            (cherokee_handler_cgi_base_t              *hdl,
-						 cherokee_connection_t                    *conn,
-						 cherokee_plugin_info_handler_t           *info,
-						 cherokee_handler_props_t                 *props,
-						 cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
-						 cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi);
+                                                 cherokee_connection_t                    *conn,
+                                                 cherokee_plugin_info_handler_t           *info,
+                                                 cherokee_handler_props_t                 *props,
+                                                 cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
+                                                 cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi);
 
 ret_t cherokee_handler_cgi_base_free            (cherokee_handler_cgi_base_t *hdl);
 
@@ -128,15 +128,15 @@ ret_t cherokee_handler_cgi_base_step            (cherokee_handler_cgi_base_t *cg
 
 ret_t cherokee_handler_cgi_base_extract_path    (cherokee_handler_cgi_base_t *cgi, cherokee_boolean_t check_filename);
 ret_t cherokee_handler_cgi_base_split_pathinfo  (cherokee_handler_cgi_base_t *cgi,
-					  	 cherokee_buffer_t           *buf,
-						 int                          pos,
-						 int                          allow_dirs);
+                                                 cherokee_buffer_t           *buf,
+                                                 int                          pos,
+                                                 int                          allow_dirs);
 
 ret_t cherokee_handler_cgi_base_build_envp      (cherokee_handler_cgi_base_t *cgi, cherokee_connection_t *conn);
 ret_t cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t              *cgi,
-						 cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
-						 cherokee_connection_t                    *conn,
-						 cherokee_buffer_t                        *tmp);
+                                                 cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
+                                                 cherokee_connection_t                    *conn,
+                                                 cherokee_buffer_t                        *tmp);
 
 ret_t cherokee_handler_cgi_base_configure       (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 

@@ -116,7 +116,7 @@ typedef enum {                               /* Protocol   RFC  Section */
 	http_multiple_choices         = 300, /* HTTP/1.1  2616  10.3.1  */
 	http_moved_permanently        = 301, /* HTTP/1.1  2616  10.3.2  */
 	http_moved_temporarily        = 302, /* HTTP/1.1  2616  10.3.3  */
- 	http_see_other                = 303, /* HTTP/1.1  2616  10.3.4  */
+	http_see_other                = 303, /* HTTP/1.1  2616  10.3.4  */
 	http_not_modified             = 304, /* HTTP/1.1  2616  10.3.5  */
 	http_use_proxy                = 305, /* HTTP/1.1  2616  10.3.6  */
 	http_temporary_redirect       = 307, /* HTTP/1.1  2616  10.3.8  */
@@ -133,7 +133,7 @@ typedef enum {                               /* Protocol   RFC  Section */
 	http_gone                     = 410, /* HTTP/1.1  2616  10.4.11 */
 	http_length_required          = 411, /* HTTP/1.1  2616  10.4.12 */
 	http_precondition_failed      = 412, /* HTTP/1.1  2616  10.4.13 */
- 	http_request_entity_too_large = 413, /* HTTP/1.1  2616  10.4.14 */
+	http_request_entity_too_large = 413, /* HTTP/1.1  2616  10.4.14 */
 	http_request_uri_too_long     = 414, /* HTTP/1.1  2616  10.4.15 */
 	http_unsupported_media_type   = 415, /* HTTP/1.1  2616  10.4.16 */
 	http_range_not_satisfiable    = 416, /* HTTP/1.1  2616  10.4.17 */
@@ -226,39 +226,39 @@ typedef enum {                               /* Protocol   RFC  Section */
 
 /* RFC 2518, RFC 2616, RFC3253, RFC 5789 */
 #define http_method_with_input(m) ((m == http_post)      || \
-				   (m == http_put)       || \
-				   (m == http_merge)     || \
-				   (m == http_search)    || \
-				   (m == http_report)    || \
-				   (m == http_patch)     || \
-				   (m == http_propfind)  || \
-				   (m == http_proppatch) || \
-				   (m == http_update)    || \
-				   (m == http_label))
+                                   (m == http_put)       || \
+                                   (m == http_merge)     || \
+                                   (m == http_search)    || \
+                                   (m == http_report)    || \
+                                   (m == http_patch)     || \
+                                   (m == http_propfind)  || \
+                                   (m == http_proppatch) || \
+                                   (m == http_update)    || \
+                                   (m == http_label))
 
-#define http_method_with_optional_input(m) ((m == http_options)		  || \
-					    (m == http_delete)		  || \
-					    (m == http_mkcol)		  || \
-					    (m == http_copy)		  || \
-					    (m == http_move)		  || \
-					    (m == http_lock)		  || \
-					    (m == http_unlock)		  || \
-					    (m == http_version_control)	  || \
-					    (m == http_checkout)	  || \
-					    (m == http_uncheckout)	  || \
-					    (m == http_checkin)		  || \
-					    (m == http_mkworkspace)	  || \
-					    (m == http_mkactivity)	  || \
-					    (m == http_baseline_control))
+#define http_method_with_optional_input(m) ((m == http_options)           || \
+                                            (m == http_delete)            || \
+                                            (m == http_mkcol)             || \
+                                            (m == http_copy)              || \
+                                            (m == http_move)              || \
+                                            (m == http_lock)              || \
+                                            (m == http_unlock)            || \
+                                            (m == http_version_control)   || \
+                                            (m == http_checkout)          || \
+                                            (m == http_uncheckout)        || \
+                                            (m == http_checkin)           || \
+                                            (m == http_mkworkspace)       || \
+                                            (m == http_mkactivity)        || \
+                                            (m == http_baseline_control))
 
 
 /* RFC 2616: Section 4.3 */
 #define http_code_with_body(e)    ((! http_type_100(e))            /* 1xx */ && \
-				   ((e) != http_no_content)        /* 204 */ && \
-				   ((e) != http_not_modified))     /* 304 */
+                                   ((e) != http_no_content)        /* 204 */ && \
+                                   ((e) != http_not_modified))     /* 304 */
 
 #define http_port_is_standard(port,is_tls)  (((! is_tls) && (port == 80)) || \
-					     ((  is_tls) && (port == 443)))
+                                             ((  is_tls) && (port == 443)))
 
 ret_t cherokee_http_method_to_string  (cherokee_http_method_t  method,  const char **str, cuint_t *str_len);
 ret_t cherokee_http_string_to_method  (cherokee_buffer_t *string, cherokee_http_method_t *method);

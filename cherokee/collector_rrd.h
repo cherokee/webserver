@@ -85,7 +85,7 @@ void PLUGIN_INIT_NAME(rrd) (cherokee_plugin_loader_t *loader);
 /* Public methods
  */
 ret_t cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
-				  cherokee_plugin_info_t    *info,
-				  cherokee_config_node_t    *config);
+                                  cherokee_plugin_info_t    *info,
+                                  cherokee_config_node_t    *config);
 
 #endif /* CHEROKEE_COLLECTOR_RRD_H */

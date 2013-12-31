@@ -72,8 +72,7 @@ int dcc_ncpus(int *ncpus)
 
 #include <module_info.h>
 
-extern void s$get_module_info (char_varying *module_name, void *mip,
-          short int *code);
+extern void s$get_module_info (char_varying *module_name, void *mip, short int *code);
 
 int dcc_ncpus(int *ncpus)
 {
@@ -94,9 +93,9 @@ int dcc_ncpus(int *ncpus)
 #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__APPLE__)
 
 /* http://www.FreeBSD.org/cgi/man.cgi?query=sysctl&sektion=3&manpath=FreeBSD+4.6-stable
-   http://www.openbsd.org/cgi-bin/man.cgi?query=sysctl&sektion=3&manpath=OpenBSD+Current
-   http://www.tac.eu.org/cgi-bin/man-cgi?sysctl+3+NetBSD-current
-*/
+ * http://www.openbsd.org/cgi-bin/man.cgi?query=sysctl&sektion=3&manpath=OpenBSD+Current
+ * http://www.tac.eu.org/cgi-bin/man-cgi?sysctl+3+NetBSD-current
+ */
 
 #include <sys/types.h>
 #include <sys/param.h>
@@ -107,22 +106,22 @@ int dcc_ncpus(int *ncpus)
 	size_t len = sizeof(*ncpus);
 	mib[0] = CTL_HW;
 	mib[1] = HW_NCPU;
-	if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0)
-         return 0;
-	else {
-         LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_HW_NCPU);
-         return EXIT_DISTCC_FAILED;
+	if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0) {
+		return 0;
+	} else {
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_HW_NCPU);
+		return EXIT_DISTCC_FAILED;
 	}
 }
 
 #elif !defined (_WIN32) /* every other system but Windows */
 
 /*
-  http://www.opengroup.org/onlinepubs/007904975/functions/sysconf.html
-  http://docs.sun.com/?p=/doc/816-0213/6m6ne38dd&a=view
-  http://www.tru64unix.compaq.com/docs/base_doc/DOCUMENTATION/V40G_HTML/MAN/MAN3/0629____.HTM
-  http://techpubs.sgi.com/library/tpl/cgi-bin/getdoc.cgi?coll=0650&db=man&fname=/usr/share/catman/p_man/cat3c/sysconf.z
-*/
+ * http://www.opengroup.org/onlinepubs/007904975/functions/sysconf.html
+ * http://docs.sun.com/?p=/doc/816-0213/6m6ne38dd&a=view
+ * http://www.tru64unix.compaq.com/docs/base_doc/DOCUMENTATION/V40G_HTML/MAN/MAN3/0629____.HTM
+ * http://techpubs.sgi.com/library/tpl/cgi-bin/getdoc.cgi?coll=0650&db=man&fname=/usr/share/catman/p_man/cat3c/sysconf.z
+ */
 
 int dcc_ncpus(int *ncpus)
 {
@@ -138,8 +137,8 @@ int dcc_ncpus(int *ncpus)
 #endif
 
 	if (*ncpus == -1) {
-         LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_SYSCONF);
-         return EXIT_DISTCC_FAILED;
+		LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_SYSCONF);
+		return EXIT_DISTCC_FAILED;
 	} else if (*ncpus == 0) {
 		/* If there are no cpus, what are we running on ?
 		 * NOTE: it has apparently been observed to happen on ARM Linux

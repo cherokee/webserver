@@ -79,8 +79,8 @@ ret_t cherokee_handler_streaming_props_free (cherokee_handler_streaming_props_t 
  */
 ret_t cherokee_handler_streaming_init        (cherokee_handler_streaming_t *hdl);
 ret_t cherokee_handler_streaming_add_headers (cherokee_handler_streaming_t *hdl,
-					      cherokee_buffer_t            *buffer);
+                                              cherokee_buffer_t            *buffer);
 ret_t cherokee_handler_streaming_step        (cherokee_handler_streaming_t *hdl,
-					      cherokee_buffer_t            *buffer);
+                                              cherokee_buffer_t            *buffer);
 
 #endif /* CHEROKEE_HANDLER_STREAMING_H */

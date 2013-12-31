@@ -45,8 +45,8 @@ props_free (cherokee_validator_plain_props_t *props)
 
 ret_t
 cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
-				    cherokee_server_t        *srv,
-				    cherokee_module_props_t **_props)
+                                    cherokee_server_t        *srv,
+                                    cherokee_module_props_t **_props)
 {
 	cherokee_validator_plain_props_t *props;
 
@@ -55,7 +55,7 @@ cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_plain_props);
 		cherokee_validator_file_props_init_base (PROP_VFILE(n),
-							 MODULE_PROPS_FREE(props_free));
+		                                         MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -69,15 +69,15 @@ cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
 
 ret_t
 cherokee_validator_plain_new (cherokee_validator_plain_t **plain,
-			      cherokee_module_props_t     *props)
+                              cherokee_module_props_t     *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_plain);
 
 	/* Init
 	 */
 	cherokee_validator_file_init_base (VFILE(n),
-					   PROP_VFILE(props),
-					   PLUGIN_INFO_VALIDATOR_PTR(plain));
+	                                   PROP_VFILE(props),
+	                                   PLUGIN_INFO_VALIDATOR_PTR(plain));
 
 	VALIDATOR(n)->support = http_auth_basic | http_auth_digest;
 
@@ -101,7 +101,7 @@ cherokee_validator_plain_free (cherokee_validator_plain_t *plain)
 
 ret_t
 cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
-				cherokee_connection_t      *conn)
+                                cherokee_connection_t      *conn)
 {
 	int                re;
 	ret_t              ret;
@@ -120,7 +120,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 
 	/* Get the full path to the file */
 	ret = cherokee_validator_file_get_full_path (VFILE(plain), conn, &fpass,
-						     &CONN_THREAD(conn)->tmp_buf1);
+	                                             &CONN_THREAD(conn)->tmp_buf1);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto out;
@@ -218,9 +218,9 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 	}
 
 out:
- 	cherokee_buffer_mrproper (&file);
- 	cherokee_buffer_mrproper (&buser);
- 	cherokee_buffer_mrproper (&bpass);
+	cherokee_buffer_mrproper (&file);
+	cherokee_buffer_mrproper (&buser);
+	cherokee_buffer_mrproper (&bpass);
 	return ret;
 }
 

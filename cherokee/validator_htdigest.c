@@ -51,7 +51,7 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 		CHEROKEE_NEW_STRUCT (n, validator_htdigest_props);
 
 		cherokee_validator_file_props_init_base (PROP_VFILE(n),
-							 MODULE_PROPS_FREE(props_free));
+		                                         MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -71,8 +71,8 @@ cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, chero
 	/* Init
 	 */
 	cherokee_validator_file_init_base (VFILE(n),
-					   PROP_VFILE(props),
-					   PLUGIN_INFO_VALIDATOR_PTR(htdigest));
+	                                   PROP_VFILE(props),
+	                                   PLUGIN_INFO_VALIDATOR_PTR(htdigest));
 
 	VALIDATOR(n)->support = http_auth_basic | http_auth_digest;
 
@@ -227,7 +227,7 @@ go_out:
 
 ret_t
 cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
-				   cherokee_connection_t         *conn)
+                                   cherokee_connection_t         *conn)
 {
 	ret_t              ret;
 	cherokee_buffer_t *fpass;
@@ -242,7 +242,7 @@ cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
 	/* Get the full path to the file
 	 */
 	ret = cherokee_validator_file_get_full_path (VFILE(htdigest), conn, &fpass,
-						     &CONN_THREAD(conn)->tmp_buf1);
+	                                             &CONN_THREAD(conn)->tmp_buf1);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto out;

@@ -61,8 +61,8 @@ match (cherokee_vrule_target_ip_t *vrule,
 	sock.client_addr_len = conn->socket.client_addr_len;
 
 	re = getsockname (SOCKET_FD(&conn->socket),
-			  (struct sockaddr *) &(sock.client_addr),
-			  &sock.client_addr_len);
+	                  (struct sockaddr *) &(sock.client_addr),
+	                  &sock.client_addr_len);
 	if (re != 0) {
 		TRACE(ENTRIES, "VRule target_ip could %s get the server IP\n", "not");
 		goto deny;
@@ -87,8 +87,8 @@ deny:
 
 static ret_t
 configure (cherokee_vrule_target_ip_t   *vrule,
-	   cherokee_config_node_t       *conf,
-	   cherokee_virtual_server_t    *vsrv)
+           cherokee_config_node_t       *conf,
+           cherokee_virtual_server_t    *vsrv)
 {
 	ret_t                   ret;
 	cherokee_list_t        *i;

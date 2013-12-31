@@ -77,7 +77,7 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
 #endif
 
 #ifdef HAVE_SYS_UIO_H
-# include <sys/uio.h>		/* sendfile and writev() */
+# include <sys/uio.h> /* sendfile and writev() */
 #endif
 
 #define ENTRIES "socket"
@@ -103,8 +103,8 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
  * NOTE: try to reduce block size (down to 64 KB) on small or old
  * systems and see if something improves under heavy load.
  */
-#define MAX_SF_BLK_SIZE		(65536 * 16)	          /* limit size of block size */
-#define MAX_SF_BLK_SIZE2	(MAX_SF_BLK_SIZE + 65536) /* upper limit */
+#define MAX_SF_BLK_SIZE  (65536 * 16)              /* limit size of block size */
+#define MAX_SF_BLK_SIZE2 (MAX_SF_BLK_SIZE + 65536) /* upper limit */
 
 
 ret_t
@@ -162,9 +162,9 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 
 ret_t
 cherokee_socket_init_tls (cherokee_socket_t         *socket,
-			  cherokee_virtual_server_t *vserver,
-			  cherokee_connection_t     *conn,
-			  cherokee_socket_status_t  *blocking)
+                          cherokee_virtual_server_t *vserver,
+                          cherokee_connection_t     *conn,
+                          cherokee_socket_status_t  *blocking)
 {
 	ret_t              ret;
 	cherokee_server_t *srv = VSERVER_SRV(vserver);
@@ -367,50 +367,50 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 
 ret_t
 cherokee_socket_update_from_addrinfo (cherokee_socket_t     *socket,
-				      const struct addrinfo *addr,
-				      cuint_t                num)
+                                      const struct addrinfo *addr,
+                                      cuint_t                num)
 {
-       struct addrinfo *ai;
+	struct addrinfo *ai;
 
-       if (unlikely (addr == NULL))
-               return ret_error;
+	if (unlikely (addr == NULL))
+		return ret_error;
 
-       /* Find the right address
-	*/
-       ai = addr;
-       while (num > 0) {
-	       num -= 1;
-	       ai   = ai->ai_next;
-	       if (ai == NULL) {
-		       return ret_not_found;
-	       }
-       }
+	/* Find the right address
+	 */
+	ai = addr;
+	while (num > 0) {
+		num -= 1;
+		ai   = ai->ai_next;
+		if (ai == NULL) {
+			return ret_not_found;
+		}
+	}
 
-       /* Copy the information
-	*/
-       SOCKET_AF(socket)       = addr->ai_family;
-       socket->client_addr_len = addr->ai_addrlen;
+	/* Copy the information
+	 */
+	SOCKET_AF(socket)       = addr->ai_family;
+	socket->client_addr_len = addr->ai_addrlen;
 
-       switch (addr->ai_family) {
-       case AF_INET:
-	       memcpy (&SOCKET_SIN_ADDR(socket), &((struct sockaddr_in *) ai->ai_addr)->sin_addr, sizeof(struct in_addr));
-	       break;
-       case AF_INET6:
-	       memcpy (&SOCKET_SIN6_ADDR(socket), &((struct sockaddr_in6 *) ai->ai_addr)->sin6_addr, sizeof(struct in6_addr));
-	       break;
-       default:
-	       SHOULDNT_HAPPEN;
-	       return ret_error;
-       }
+	switch (addr->ai_family) {
+	case AF_INET:
+		memcpy (&SOCKET_SIN_ADDR(socket), &((struct sockaddr_in *) ai->ai_addr)->sin_addr, sizeof(struct in_addr));
+		break;
+	case AF_INET6:
+		memcpy (&SOCKET_SIN6_ADDR(socket), &((struct sockaddr_in6 *) ai->ai_addr)->sin6_addr, sizeof(struct in6_addr));
+		break;
+	default:
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
 
-       return ret_ok;
+	return ret_ok;
 }
 
 
 ret_t
 cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
-			   int                 *new_fd,
-			   cherokee_sockaddr_t *sa)
+                           int                 *new_fd,
+                           cherokee_sockaddr_t *sa)
 {
 	ret_t     ret;
 	socklen_t len;
@@ -595,8 +595,8 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 	sock->client_addr_len = sizeof(SOCKET_ADDR_UNIX(sock)->sun_family) + listen_to->len;
 
 	re = bind (SOCKET_FD(sock),
-		   (const struct sockaddr *)SOCKET_ADDR_UNIX(sock),
-		   sock->client_addr_len);
+	           (const struct sockaddr *)SOCKET_ADDR_UNIX(sock),
+	           sock->client_addr_len);
 	if (re != 0) return ret_error;
 
 	return ret_ok;
@@ -648,9 +648,9 @@ cherokee_socket_listen (cherokee_socket_t *socket, int backlog)
  */
 ret_t
 cherokee_socket_write (cherokee_socket_t *socket,
-		       const char        *buf,
-		       int                buf_len,
-		       size_t            *pcnt_written)
+                       const char        *buf,
+                       int                buf_len,
+                       size_t            *pcnt_written)
 {
 	ret_t   ret;
 	int     err;
@@ -711,7 +711,7 @@ cherokee_socket_write (cherokee_socket_t *socket,
 
 	} else if (socket->cryptor != NULL) {
 		ret = cherokee_cryptor_socket_write (socket->cryptor,
-						     (char *)buf, buf_len, pcnt_written);
+		                                     (char *)buf, buf_len, pcnt_written);
 		switch (ret) {
 		case ret_ok:
 		case ret_error:
@@ -735,9 +735,9 @@ cherokee_socket_write (cherokee_socket_t *socket,
  */
 ret_t
 cherokee_socket_read (cherokee_socket_t *socket,
-		      char              *buf,
-		      int                buf_size,
-		      size_t            *pcnt_read)
+                      char              *buf,
+                      int                buf_size,
+                      size_t            *pcnt_read)
 {
 	ret_t   ret;
 	int     err;
@@ -803,7 +803,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 
 	} else if (socket->cryptor != NULL) {
 		ret = cherokee_cryptor_socket_read (socket->cryptor,
-						    buf, buf_size, pcnt_read);
+		                                    buf, buf_size, pcnt_read);
 		switch (ret) {
 		case ret_ok:
 		case ret_error:
@@ -850,7 +850,7 @@ cherokee_socket_flush (cherokee_socket_t *socket)
 	TRACE (ENTRIES",flush", "flushing fd=%d\n", socket->socket);
 
 	re = setsockopt (SOCKET_FD(socket), IPPROTO_TCP, TCP_NODELAY,
-			 (const void *) &op, sizeof(int));
+	                 (const void *) &op, sizeof(int));
 
 	if (unlikely(re != 0))
 		return ret_error;
@@ -903,9 +903,9 @@ error:
  */
 ret_t
 cherokee_socket_writev (cherokee_socket_t  *socket,
-			const struct iovec *vector,
-			uint16_t            vector_len,
-			size_t             *pcnt_written)
+                        const struct iovec *vector,
+                        uint16_t            vector_len,
+                        size_t             *pcnt_written)
 {
 	int    re;
 	int    i;
@@ -959,7 +959,7 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 			return ret_eagain;
 		}
 
-#else	/* ! WIN32 */
+#else /* ! WIN32 */
 
 		do {
 			re = writev (SOCKET_FD(socket), vector, vector_len);
@@ -1060,9 +1060,9 @@ cherokee_socket_bufwrite (cherokee_socket_t *socket, cherokee_buffer_t *buf, siz
  */
 ret_t
 cherokee_socket_bufread (cherokee_socket_t *socket,
-			 cherokee_buffer_t *buf,
-			 size_t             count,
-			 size_t            *pcnt_read)
+                         cherokee_buffer_t *buf,
+                         size_t             count,
+                         size_t            *pcnt_read)
 {
 	ret_t    ret;
 	char    *starting;
@@ -1090,10 +1090,10 @@ cherokee_socket_bufread (cherokee_socket_t *socket,
 
 ret_t
 cherokee_socket_sendfile (cherokee_socket_t *socket,
-			  int      fd,
-			  size_t   size,
-			  off_t   *offset,
-			  ssize_t *sent)
+                          int      fd,
+                          size_t   size,
+                          off_t   *offset,
+                          ssize_t *sent)
 {
 	int                       re;
 	off_t                     _sent  = size;
@@ -1104,10 +1104,10 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	if (unlikely (no_sys))
 		return ret_no_sys;
 
- 	/* If there is nothing to send then return now, this may be
- 	 * needed in some systems (i.e. *BSD) because value 0 may have
- 	 * special meanings or trigger occasional hidden bugs.
- 	 */
+	/* If there is nothing to send then return now, this may be
+	 * needed in some systems (i.e. *BSD) because value 0 may have
+	 * special meanings or trigger occasional hidden bugs.
+	 */
 	if (unlikely (size == 0))
 		return ret_ok;
 
@@ -1138,9 +1138,9 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 * sendfile64 (int out_fd, int in_fd, off64_t *offset, size_t *count);
 	 */
 	*sent = sendfile (SOCKET_FD(socket),     /* int     out_fd */
-			  fd,                    /* int     in_fd  */
-			  offset,                /* off_t  *offset */
-			  size);                 /* size_t  count  */
+	                  fd,                    /* int     in_fd  */
+	                  offset,                /* off_t  *offset */
+	                  size);                 /* size_t  count  */
 
 	if (*sent < 0) {
 		switch (errno) {
@@ -1179,11 +1179,11 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 *           struct sf_hdtr *hdtr, int flags);
 	 */
 	re = sendfile (fd,                        /* int             fd     */
-		       SOCKET_FD(socket),         /* int             s      */
-		       *offset,                   /* off_t           offset */
-		       &_sent,                    /* off_t          *len    */
-		       NULL,                      /* struct sf_hdtr *hdtr   */
-		       0);                        /* int             flags  */
+	               SOCKET_FD(socket),         /* int             s      */
+	               *offset,                   /* off_t           offset */
+	               &_sent,                    /* off_t          *len    */
+	               NULL,                      /* struct sf_hdtr *hdtr   */
+	               0);                        /* int             flags  */
 
 	if (re == -1) {
 		switch (errno) {
@@ -1214,9 +1214,9 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 #elif SOLARIS_SENDFILE_API
 
 	*sent = sendfile (SOCKET_FD(socket),     /* int   out_fd */
-			  fd,                    /* int    in_fd */
-			  offset,                /* off_t   *off */
-			  size);                 /* size_t   len */
+	                  fd,                    /* int    in_fd */
+	                  offset,                /* off_t   *off */
+	                  size);                 /* size_t   len */
 
 	if (*sent < 0) {
 		switch (errno) {
@@ -1262,12 +1262,12 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 *           struct sf_hdtr *hdtr, off_t *sbytes, int flags);
 	 */
 	re = sendfile (fd,                        /* int             fd     */
-		       SOCKET_FD(socket),         /* int             s      */
-		       *offset,                   /* off_t           offset */
-		       size,                      /* size_t          nbytes */
-		       &hdr,                      /* struct sf_hdtr *hdtr   */
-		       sent,                      /* off_t          *sbytes */
-		       0);                        /* int             flags  */
+	               SOCKET_FD(socket),         /* int             s      */
+	               *offset,                   /* off_t           offset */
+	               size,                      /* size_t          nbytes */
+	               &hdr,                      /* struct sf_hdtr *hdtr   */
+	               sent,                      /* off_t          *sbytes */
+	               0);                        /* int             flags  */
 
 	if (re == -1) {
 		switch (errno) {
@@ -1309,11 +1309,11 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 * nwritten includes the header data sent.
 	 */
 	*sent = sendfile (SOCKET_FD(socket),     /* socket          */
-			  fd,                    /* fd to send      */
-			  *offset,               /* where to start  */
-			  size,                  /* bytes to send   */
-			  NULL,                  /* Headers/footers */
-			  0);                    /* flags           */
+	                  fd,                    /* fd to send      */
+	                  *offset,               /* where to start  */
+	                  size,                  /* bytes to send   */
+	                  NULL,                  /* Headers/footers */
+	                  0);                    /* flags           */
 	if (*sent < 0) {
 		switch (errno) {
 		case EINTR:
@@ -1366,12 +1366,12 @@ cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hos
 
 		if (hostname->buf[0] == '@') {
 			strncpy (SOCKET_SUN_PATH (socket) + 1, hostname->buf + 1,
-				 (sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - 1) - sizeof(short));
+			         (sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - 1) - sizeof(short));
 			SOCKET_SUN_PATH (socket)[0] = 0;
 		}
 		else {
 			strncpy (SOCKET_SUN_PATH (socket), hostname->buf,
-				 sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - sizeof(short));
+			         sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - sizeof(short));
 		}
 
 		return ret_ok;
@@ -1412,27 +1412,27 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		switch (SOCKET_AF(sock)) {
 		case AF_INET:
 			r = connect (SOCKET_FD(sock),
-				     (struct sockaddr *) &SOCKET_ADDR(sock),
-				     sizeof(struct sockaddr_in));
+			             (struct sockaddr *) &SOCKET_ADDR(sock),
+			             sizeof(struct sockaddr_in));
 			break;
 #ifdef HAVE_IPV6
 		case AF_INET6:
 			r = connect (SOCKET_FD(sock),
-				     (struct sockaddr *) &SOCKET_ADDR(sock),
-				     sizeof(struct sockaddr_in6));
+			             (struct sockaddr *) &SOCKET_ADDR(sock),
+			             sizeof(struct sockaddr_in6));
 			break;
 #endif
 #ifdef HAVE_SOCKADDR_UN
 		case AF_UNIX:
 			if (SOCKET_SUN_PATH (socket)[0] != 0) {
 				r = connect (SOCKET_FD(sock),
-					     (struct sockaddr *) &SOCKET_ADDR(sock),
-					     SUN_LEN (SOCKET_ADDR_UNIX(sock)));
+				             (struct sockaddr *) &SOCKET_ADDR(sock),
+				             SUN_LEN (SOCKET_ADDR_UNIX(sock)));
 			}
 			else {
 				r = connect (SOCKET_FD(sock),
-					     (struct sockaddr *) &SOCKET_ADDR(sock),
-					     SUN_ABSTRACT_LEN (SOCKET_ADDR_UNIX(sock)));
+				             (struct sockaddr *) &SOCKET_ADDR(sock),
+				             SUN_ABSTRACT_LEN (SOCKET_ADDR_UNIX(sock)));
 			}
 			break;
 #endif
@@ -1479,7 +1479,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 
 ret_t
 cherokee_socket_init_client_tls (cherokee_socket_t *socket,
-				 cherokee_buffer_t *host)
+                                 cherokee_buffer_t *host)
 {
 	ret_t ret;
 
@@ -1526,7 +1526,7 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 				break;
 			default:
 				LOG_ERRNO (errno, cherokee_err_error,
-					   CHEROKEE_ERROR_SOCKET_RM_NODELAY, fd);
+				           CHEROKEE_ERROR_SOCKET_RM_NODELAY, fd);
 			}
 			return ret_error;
 		}
@@ -1538,7 +1538,7 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 		re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
 		if (unlikely (re < 0)) {
 			LOG_ERRNO (errno, cherokee_err_error,
-				   CHEROKEE_ERROR_SOCKET_SET_CORK, fd);
+			           CHEROKEE_ERROR_SOCKET_SET_CORK, fd);
 			return ret_error;
 		}
 
@@ -1557,7 +1557,7 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 			break;
 		default:
 			LOG_ERRNO (errno, cherokee_err_error,
-				   CHEROKEE_ERROR_SOCKET_RM_CORK, fd);
+			           CHEROKEE_ERROR_SOCKET_RM_CORK, fd);
 		}
 		return ret_error;
 	}
@@ -1569,7 +1569,7 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 	re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
 	if (unlikely (re < 0)) {
 		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_SOCKET_SET_NODELAY, fd);
+		           CHEROKEE_ERROR_SOCKET_SET_NODELAY, fd);
 		return ret_error;
 	}
 

@@ -58,13 +58,13 @@ static DH *dh_param_4096 = NULL;
 #include "cryptor_libssl_dh_2048.c"
 #include "cryptor_libssl_dh_4096.c"
 
-#define CLEAR_LIBSSL_ERRORS						\
-	do {								\
-		unsigned long openssl_error;				\
-		while ((openssl_error = ERR_get_error())) {		\
-			TRACE(ENTRIES, "Ignoring libssl error: %s\n",	\
-			      ERR_error_string(openssl_error, NULL));	\
-		}							\
+#define CLEAR_LIBSSL_ERRORS                                             \
+	do {                                                            \
+		unsigned long openssl_error;                            \
+		while ((openssl_error = ERR_get_error())) {             \
+			TRACE(ENTRIES, "Ignoring libssl error: %s\n",   \
+			      ERR_error_string(openssl_error, NULL));   \
+		}                                                       \
 	} while(0)
 
 
@@ -107,8 +107,8 @@ _free (cherokee_cryptor_libssl_t *cryp)
 
 static ret_t
 try_read_dh_param(cherokee_config_node_t  *conf,
-		  DH                     **dh,
-		  int                      bitsize)
+                  DH                     **dh,
+                  int                      bitsize)
 {
 	ret_t              ret;
 	cherokee_buffer_t *buf;
@@ -158,8 +158,8 @@ out:
 
 static ret_t
 _configure (cherokee_cryptor_t     *cryp,
-	    cherokee_config_node_t *conf,
-	    cherokee_server_t      *srv)
+            cherokee_config_node_t *conf,
+            cherokee_server_t      *srv)
 {
 	ret_t ret;
 
@@ -199,9 +199,9 @@ _vserver_free (cherokee_cryptor_vserver_libssl_t *cryp_vsrv)
 
 ret_t
 cherokee_cryptor_libssl_find_vserver (SSL *ssl,
-				      cherokee_server_t     *srv,
-				      cherokee_buffer_t     *servername,
-				      cherokee_connection_t *conn)
+                                      cherokee_server_t     *srv,
+                                      cherokee_buffer_t     *servername,
+                                      cherokee_connection_t *conn)
 {
 	ret_t                      ret;
 	cherokee_virtual_server_t *vsrv = NULL;
@@ -366,8 +366,8 @@ verify_tolerate_cb(int preverify_ok, X509_STORE_CTX *x509_store)
 
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
-	      cherokee_virtual_server_t   *vsrv,
-	      cherokee_cryptor_vserver_t **cryp_vsrv)
+              cherokee_virtual_server_t   *vsrv,
+              cherokee_cryptor_vserver_t **cryp_vsrv)
 {
 	ret_t       ret;
 	int         rc;
@@ -478,7 +478,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		if (rc != 1) {
 			OPENSSL_LAST_ERROR(error);
 			LOG_ERROR(CHEROKEE_ERROR_SSL_CIPHER,
-				  vsrv->ciphers.buf, error);
+			          vsrv->ciphers.buf, error);
 			goto error;
 		}
 	}
@@ -494,7 +494,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR(CHEROKEE_ERROR_SSL_CERTIFICATE,
-			  vsrv->server_cert.buf, error);
+		          vsrv->server_cert.buf, error);
 		goto error;
 	}
 
@@ -533,7 +533,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 			if (rc != 1) {
 				OPENSSL_LAST_ERROR(error);
 				LOG_CRITICAL(CHEROKEE_ERROR_SSL_CA_READ,
-					     vsrv->certs_ca.buf, error);
+				             vsrv->certs_ca.buf, error);
 				goto error;
 			}
 
@@ -541,7 +541,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 			if (X509_clients == NULL) {
 				OPENSSL_LAST_ERROR(error);
 				LOG_CRITICAL (CHEROKEE_ERROR_SSL_CA_LOAD,
-					      vsrv->certs_ca.buf, error);
+				              vsrv->certs_ca.buf, error);
 				goto error;
 			}
 
@@ -569,13 +569,13 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	SSL_CTX_set_read_ahead (n->context, 1);
 	SSL_CTX_set_mode (n->context,
-			  SSL_CTX_get_mode(n->context) | SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER);
+	                  SSL_CTX_get_mode(n->context) | SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER);
 
 	/* Set the SSL context cache
 	 */
 	rc = SSL_CTX_set_session_id_context (n->context,
-					     (unsigned char *) vsrv->name.buf,
-					     MIN(SSL_MAX_SSL_SESSION_ID_LENGTH, (unsigned int) vsrv->name.len));
+	                                     (unsigned char *) vsrv->name.buf,
+	                                     MIN(SSL_MAX_SSL_SESSION_ID_LENGTH, (unsigned int) vsrv->name.len));
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR (CHEROKEE_ERROR_SSL_SESSION_ID, vsrv->name.buf, error);
@@ -616,9 +616,9 @@ error:
 
 static ret_t
 socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
-		   cherokee_socket_t                *socket,
-		   cherokee_virtual_server_t        *vserver,
-		   cherokee_connection_t            *conn)
+                   cherokee_socket_t                *socket,
+                   cherokee_virtual_server_t        *vserver,
+                   cherokee_connection_t            *conn)
 {
 	int                                re;
 	const char                        *error;
@@ -661,7 +661,7 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	if (re != 1) {
 		OPENSSL_LAST_ERROR(error);
 		LOG_ERROR (CHEROKEE_ERROR_SSL_FD,
-			   socket->socket, error);
+		           socket->socket, error);
 		return ret_error;
 	}
 
@@ -684,10 +684,10 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 
 static ret_t
 _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
-		  cherokee_socket_t                *sock,
-		  cherokee_virtual_server_t        *vsrv,
-		  cherokee_connection_t            *conn,
-		  cherokee_socket_status_t         *blocking)
+                  cherokee_socket_t                *sock,
+                  cherokee_virtual_server_t        *vsrv,
+                  cherokee_connection_t            *conn,
+                  cherokee_socket_status_t         *blocking)
 {
 	int   re;
 	ret_t ret;
@@ -867,9 +867,9 @@ _socket_shutdown (cherokee_cryptor_socket_libssl_t *cryp)
 
 static ret_t
 _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
-	       char                             *buf,
-	       int                               buf_len,
-	       size_t                           *pcnt_written)
+               char                             *buf,
+               int                               buf_len,
+               size_t                           *pcnt_written)
 {
 	int     re;
 	ssize_t len;
@@ -944,7 +944,7 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 			return ret_eof;
 		default:
 			LOG_ERRNO_S (error, cherokee_err_error,
-				     CHEROKEE_ERROR_SSL_SW_DEFAULT);
+			             CHEROKEE_ERROR_SSL_SW_DEFAULT);
 		}
 
 		TRACE (ENTRIES",write", "write len=%d (written=0), ERROR: %s\n", buf_len, ERR_error_string(re, NULL));
@@ -956,7 +956,7 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 	}
 
 	LOG_ERROR (CHEROKEE_ERROR_SSL_SW_ERROR,
-		   SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
+	           SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
 
 	TRACE (ENTRIES",write", "write len=%d (written=0), ERROR: %s\n", buf_len, ERR_error_string(re, NULL));
 	return ret_error;
@@ -965,9 +965,9 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 
 static ret_t
 _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
-	      char                             *buf,
-	      int                               buf_size,
-	      size_t                           *pcnt_read)
+              char                             *buf,
+              int                               buf_size,
+              size_t                           *pcnt_read)
 {
 	int     re;
 	int     error;
@@ -1018,13 +1018,13 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 			return ret_eof;
 		default:
 			LOG_ERRNO_S (error, cherokee_err_error,
-				     CHEROKEE_ERROR_SSL_SR_DEFAULT);
+			             CHEROKEE_ERROR_SSL_SR_DEFAULT);
 		}
 		return ret_error;
 	}
 
 	LOG_ERROR (CHEROKEE_ERROR_SSL_SR_ERROR,
-		   SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
+	           SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
 	return ret_error;
 }
 
@@ -1063,7 +1063,7 @@ _socket_free (cherokee_cryptor_socket_libssl_t *cryp_socket)
 
 static ret_t
 _socket_new (cherokee_cryptor_libssl_t         *cryp,
-	     cherokee_cryptor_socket_libssl_t **cryp_socket)
+             cherokee_cryptor_socket_libssl_t **cryp_socket)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, cryptor_socket_libssl);
@@ -1097,8 +1097,8 @@ _socket_new (cherokee_cryptor_libssl_t         *cryp,
 
 static ret_t
 _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
-		  cherokee_buffer_t                *host,
-		  cherokee_socket_t                *socket)
+                  cherokee_buffer_t                *host,
+                  cherokee_socket_t                *socket)
 {
 	int         re;
 	const char *error;
@@ -1112,11 +1112,13 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 		return ret_error;
 	}
 
+#if 0
 	/* CA verifications
+	 */
 	re = cherokee_buffer_is_empty (&cryp->vserver_ref->certs_ca);
 	if (! re) {
 		re = SSL_CTX_load_verify_locations (socket->ssl_ctx,
-						    socket->vserver_ref->certs_ca.buf, NULL);
+		                                    socket->vserver_ref->certs_ca.buf, NULL);
 		if (! re) {
 			OPENSSL_LAST_ERROR(error);
 			LOG_ERROR (CHEROKEE_ERROR_SSL_CTX_LOAD,
@@ -1131,7 +1133,7 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 			return ret_error;
 		}
 	}
-	 */
+#endif
 
 	SSL_CTX_set_verify (cryp->ssl_ctx, SSL_VERIFY_NONE, NULL);
 
@@ -1197,7 +1199,7 @@ _client_free (cherokee_cryptor_client_libssl_t *cryp)
 
 static ret_t
 _client_new (cherokee_cryptor_t         *cryp,
-	     cherokee_cryptor_client_t **cryp_client)
+             cherokee_cryptor_client_t **cryp_client)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, cryptor_client_libssl);
@@ -1229,9 +1231,9 @@ _client_new (cherokee_cryptor_t         *cryp,
 
 
 PLUGIN_INFO_INIT (libssl,
-		  cherokee_cryptor,
-		  cherokee_cryptor_libssl_new,
-		  NULL);
+                  cherokee_cryptor,
+                  cherokee_cryptor_libssl_new,
+                  NULL);
 
 
 ret_t

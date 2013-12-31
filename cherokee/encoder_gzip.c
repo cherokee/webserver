@@ -59,12 +59,14 @@ enum {
 
 
 #define gzip_header_len 10
-static unsigned char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: IDentification     */
-						     Z_DEFLATED,   /*  b bits: Compression Method */
-						     0,            /*  8 bits: FLags              */
-						     0, 0, 0, 0,   /* 32 bits: Modification TIME  */
-						     0,            /*  8 bits: Extra Flags        */
-						     OS_UNIX};     /*  8 bits: Operating System   */
+static unsigned char gzip_header[gzip_header_len] = {
+	0x1F, 0x8B,   /* 16 bits: IDentification     */
+	Z_DEFLATED,   /*  b bits: Compression Method */
+	0,            /*  8 bits: FLags              */
+	0, 0, 0, 0,   /* 32 bits: Modification TIME  */
+	0,            /*  8 bits: Extra Flags        */
+	OS_UNIX       /*  8 bits: Operating System   */
+};
 
 /* GZIP
  * ====
@@ -80,8 +82,8 @@ props_free (cherokee_encoder_gzip_t *props)
 
 ret_t
 cherokee_encoder_gzip_configure (cherokee_config_node_t   *config,
-				 cherokee_server_t        *srv,
-				 cherokee_module_props_t **_props)
+                                 cherokee_server_t        *srv,
+                                 cherokee_module_props_t **_props)
 {
 	ret_t                          ret;
 	cherokee_list_t               *i;
@@ -93,7 +95,7 @@ cherokee_encoder_gzip_configure (cherokee_config_node_t   *config,
 		CHEROKEE_NEW_STRUCT (n, encoder_gzip_props);
 
 		cherokee_encoder_props_init_base (ENCODER_PROPS(n),
-						  MODULE_PROPS_FREE(props_free));
+		                                  MODULE_PROPS_FREE(props_free));
 
 		n->compression_level = Z_DEFAULT_COMPRESSION;
 		n->disable_old_IE    = true;
@@ -126,7 +128,7 @@ cherokee_encoder_gzip_configure (cherokee_config_node_t   *config,
 
 ret_t
 cherokee_encoder_gzip_new (cherokee_encoder_gzip_t  **encoder,
-			   cherokee_encoder_props_t  *props)
+                           cherokee_encoder_props_t  *props)
 {
 	cuint_t workspacesize;
 	CHEROKEE_NEW_STRUCT (n, encoder_gzip);
@@ -179,7 +181,7 @@ cherokee_encoder_gzip_free (cherokee_encoder_gzip_t *encoder)
 
 ret_t
 cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t *encoder,
-				   cherokee_buffer_t       *buf)
+                                   cherokee_buffer_t       *buf)
 {
 	UNUSED(encoder);
 
@@ -240,7 +242,7 @@ is_user_agent_IE_16 (cherokee_connection_t *conn)
 
 ret_t
 cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder,
-			    cherokee_connection_t   *conn)
+                            cherokee_connection_t   *conn)
 {
 	int       err;
 	z_stream *z    = &encoder->stream;
@@ -262,15 +264,15 @@ cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder,
 	 * windowBits is passed < 0 to suppress zlib header & trailer
 	 */
 	err = zlib_deflateInit2 (z,
-				 ENC_GZIP_PROP(encoder)->compression_level,
-				 Z_DEFLATED,
-				 -MAX_WBITS,
-				 MAX_MEM_LEVEL,
-				 Z_DEFAULT_STRATEGY);
+	                         ENC_GZIP_PROP(encoder)->compression_level,
+	                         Z_DEFLATED,
+	                         -MAX_WBITS,
+	                         MAX_MEM_LEVEL,
+	                         Z_DEFAULT_STRATEGY);
 
 	if (err != Z_OK) {
 		LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATEINIT2,
-			   get_gzip_error_string(err));
+		           get_gzip_error_string(err));
 
 		return ret_error;
 	}
@@ -298,9 +300,9 @@ cherokee_encoder_gzip_init (cherokee_encoder_gzip_t *encoder,
  */
 static ret_t
 do_encode (cherokee_encoder_gzip_t *encoder,
-	   cherokee_buffer_t       *in,
-	   cherokee_buffer_t       *out,
-	   int                      flush)
+           cherokee_buffer_t       *in,
+           cherokee_buffer_t       *out,
+           int                      flush)
 {
 	int       err;
 	cchar_t   buf[DEFAULT_READ_SIZE];
@@ -324,8 +326,8 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 
 	/* Add the GZip header:
 	 * +---+---+---+---+---+---+---+---+---+---+
-         * |ID1|ID2|CM |FLG|     MTIME     |XFL|OS |
-         * +---+---+---+---+---+---+---+---+---+---+
+	 * |ID1|ID2|CM |FLG|     MTIME     |XFL|OS |
+	 * +---+---+---+---+---+---+---+---+---+---+
 	 */
 	if (encoder->add_header) {
 		cherokee_buffer_add (out, (const char *)gzip_header, gzip_header_len);
@@ -350,7 +352,7 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 			err = zlib_deflateEnd (z);
 			if (err != Z_OK) {
 				LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATEEND,
-					   get_gzip_error_string(err));
+				           get_gzip_error_string(err));
 
 				return ret_error;
 			}
@@ -359,7 +361,7 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 			break;
 		default:
 			LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATE,
-				   get_gzip_error_string(err), z->avail_in);
+			           get_gzip_error_string(err), z->avail_in);
 
 			zlib_deflateEnd (z);
 			return ret_error;
@@ -374,8 +376,8 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 
 ret_t
 cherokee_encoder_gzip_encode (cherokee_encoder_gzip_t *encoder,
-			      cherokee_buffer_t       *in,
-			      cherokee_buffer_t       *out)
+                              cherokee_buffer_t       *in,
+                              cherokee_buffer_t       *out)
 {
 	return do_encode (encoder, in, out, Z_PARTIAL_FLUSH);
 }
@@ -386,15 +388,15 @@ cherokee_encoder_gzip_flush (cherokee_encoder_gzip_t *encoder, cherokee_buffer_t
 	ret_t ret;
 	char  footer[8];
 
- 	ret = do_encode (encoder, in, out, Z_FINISH);
- 	if (unlikely (ret != ret_ok)) {
- 		return ret;
- 	}
+	ret = do_encode (encoder, in, out, Z_FINISH);
+	if (unlikely (ret != ret_ok)) {
+		return ret;
+	}
 
 	/* Add the ending:
 	 * +---+---+---+---+---+---+---+---+
 	 * |     CRC32     |     ISIZE     |
-         * +---+---+---+---+---+---+---+---+
+	 * +---+---+---+---+---+---+---+---+
 	 */
 	footer[0] = (char)  encoder->crc32        & 0xFF;
 	footer[1] = (char) (encoder->crc32 >> 8)  & 0xFF;
@@ -409,7 +411,7 @@ cherokee_encoder_gzip_flush (cherokee_encoder_gzip_t *encoder, cherokee_buffer_t
 	cherokee_buffer_add (out, footer, 8);
 
 #if 0
- 	cherokee_buffer_print_debug (out, -1);
+	cherokee_buffer_print_debug (out, -1);
 #endif
 
 	return ret_ok;

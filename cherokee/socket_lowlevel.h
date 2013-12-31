@@ -66,14 +66,14 @@
 #endif
 
 #ifndef SUN_LEN
-#define SUN_LEN(sa)						\
-	(strlen((sa)->sun_path) +				\
+#define SUN_LEN(sa)                                    \
+	(strlen((sa)->sun_path) +                      \
 	 (size_t)(((struct sockaddr_un*)0)->sun_path))
 #endif
 
 #ifndef SUN_ABSTRACT_LEN
-#define SUN_ABSTRACT_LEN(sa)					\
-	(strlen((sa)->sun_path+1) + 2 +				\
+#define SUN_ABSTRACT_LEN(sa)                           \
+	(strlen((sa)->sun_path+1) + 2 +                \
 	 (size_t)(((struct sockaddr_un*)0)->sun_path))
 #endif
 
@@ -82,7 +82,7 @@ typedef struct {
 	union {
 		struct in_addr  addr_ipv4;
 		struct in6_addr addr_ipv6;
-	}              addr;
+	} addr;
 	unsigned short family;
 } cherokee_in_addr_t;
 

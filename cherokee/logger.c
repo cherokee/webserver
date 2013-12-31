@@ -45,8 +45,8 @@ struct cherokee_logger_private {
 
 ret_t
 cherokee_logger_init_base (cherokee_logger_t      *logger,
-			   cherokee_plugin_info_t *info,
-			   cherokee_config_node_t *config)
+                           cherokee_plugin_info_t *info,
+                           cherokee_config_node_t *config)
 {
 	ret_t ret;
 	CHEROKEE_NEW_TYPE(priv, struct cherokee_logger_private);
@@ -65,7 +65,7 @@ cherokee_logger_init_base (cherokee_logger_t      *logger,
 	 */
 	logger->priv->backup_mode = false;
 
-       	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
+	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
 	cherokee_x_real_ip_init (&logger->priv->x_real_ip);
 
 	/* Read the configuration

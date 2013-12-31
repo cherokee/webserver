@@ -109,7 +109,7 @@ cherokee_spawner_free (void)
 
 static ret_t
 write_logger (cherokee_buffer_t        *buf,
-	      cherokee_logger_writer_t *error_writer)
+              cherokee_logger_writer_t *error_writer)
 {
 	int val;
 
@@ -184,14 +184,14 @@ sem_adquire (int sem_ref, int sem_num)
 
 ret_t
 cherokee_spawner_spawn (cherokee_buffer_t         *binary,
-			cherokee_buffer_t         *user,
-			uid_t                      uid,
-			gid_t                      gid,
-			cherokee_buffer_t         *chroot,
-			int                        env_inherited,
-			char                     **envp,
-			cherokee_logger_writer_t  *error_writer,
-			pid_t                     *pid_ret)
+                        cherokee_buffer_t         *user,
+                        uid_t                      uid,
+                        gid_t                      gid,
+                        cherokee_buffer_t         *chroot,
+                        int                        env_inherited,
+                        char                     **envp,
+                        cherokee_logger_writer_t  *error_writer,
+                        pid_t                     *pid_ret)
 {
 #ifdef HAVE_SYSV_SEMAPHORES
 	char             **n;
@@ -202,9 +202,9 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	int                envs     = 0;
 	cherokee_buffer_t  tmp      = CHEROKEE_BUF_INIT;
 
-#define ALIGN4(buf)						\
-	while (buf.len & 0x3) {					\
-		cherokee_buffer_add_char (&buf, '\0');		\
+#define ALIGN4(buf)                                    \
+	while (buf.len & 0x3) {                        \
+		cherokee_buffer_add_char (&buf, '\0'); \
 	}
 
 
