@@ -223,6 +223,11 @@ cherokee_buffer_add_buffer_slice (cherokee_buffer_t *buf,
 	if (unlikely (cherokee_buffer_is_empty (buf2)))
 		return ret_ok;
 
+	if (unlikely ((end <= begin) &&
+	    (end   != CHEROKEE_BUF_SLIDE_NONE) &&
+	    (begin != CHEROKEE_BUF_SLIDE_NONE)))
+		return ret_ok;
+
 	/* Check the end
 	 */
 	if (end == CHEROKEE_BUF_SLIDE_NONE) {
@@ -233,7 +238,7 @@ cherokee_buffer_add_buffer_slice (cherokee_buffer_t *buf,
 			/* [__:x] */
 			pos_end = end;
 		} else {
-			if ((-end) > buf2->len) {
+			if ((-end) <= buf2->len) {
 				/* [__:-x] */
 				pos_end = buf2->len - (-end);
 			} else {
@@ -260,7 +265,7 @@ cherokee_buffer_add_buffer_slice (cherokee_buffer_t *buf,
 		} else {
 			if ((-begin) < buf2->len) {
 				/* [-x:__] */
-				pos_begin = buf2->len - begin;
+				pos_begin = buf2->len - (-begin);
 			} else {
 				/* [-xxxx:__] */
 				pos_begin = 0;
