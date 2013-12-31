@@ -68,7 +68,7 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 		CHEROKEE_NEW_STRUCT (n, handler_scgi_props);
 
 		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n),
-							   MODULE_PROPS_FREE(props_free));
+		                                           MODULE_PROPS_FREE(props_free));
 
 		INIT_LIST_HEAD(&n->scgi_env_ref);   /* TODO: finish this */
 		n->balancer = NULL;
@@ -107,8 +107,8 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 
 static void
 add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
-	      const char *key, int key_len,
-	      const char *val, int val_len)
+              const char *key, int key_len,
+              const char *val, int val_len)
 {
 	static char              zero = '\0';
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);
@@ -146,9 +146,9 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 	switch (ret) {
 	case ret_eagain:
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base),
-						     HANDLER_CONN(cgi_base),
-						     scgi->socket.socket,
-						     FDPOLL_MODE_READ, false);
+		                                     HANDLER_CONN(cgi_base),
+		                                     scgi->socket.socket,
+		                                     FDPOLL_MODE_READ, false);
 		return ret_eagain;
 
 	case ret_ok:
@@ -177,10 +177,10 @@ cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	/* Init the base class
 	 */
 	cherokee_handler_cgi_base_init (
-			HDL_CGI_BASE(n), cnt,
-			PLUGIN_INFO_HANDLER_PTR(scgi),
-			HANDLER_PROPS(props),
-			add_env_pair, read_from_scgi);
+	                HDL_CGI_BASE(n), cnt,
+	                PLUGIN_INFO_HANDLER_PTR(scgi),
+	                HANDLER_PROPS(props),
+	                add_env_pair, read_from_scgi);
 
 	/* Virtual methods
 	 */
@@ -291,7 +291,7 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 		}
 	} else {
 		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
-								   &hdl->socket, conn);
+		                                                   &hdl->socket, conn);
 	}
 
 	return ret;
@@ -401,7 +401,7 @@ cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 	/* Client Socket -> Back-end SCGI
 	 */
 	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
-					    &hdl->socket, NULL, &blocking, &did_IO);
+	                                    &hdl->socket, NULL, &blocking, &did_IO);
 	if (did_IO) {
 		cherokee_connection_update_timeout (conn);
 	}
@@ -415,8 +415,8 @@ cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 	case ret_eagain:
 		if (blocking == socket_writing) {
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							     conn, hdl->socket.socket,
-							     FDPOLL_MODE_WRITE, false);
+			                                     conn, hdl->socket.socket,
+			                                     FDPOLL_MODE_WRITE, false);
 			return ret_deny;
 		}
 

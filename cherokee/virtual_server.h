@@ -104,17 +104,17 @@ ret_t cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);
 ret_t cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
 
 ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver,
-					 cuint_t                     prio,
-					 cherokee_config_node_t     *config);
+                                         cuint_t                     prio,
+                                         cherokee_config_node_t     *config);
 
 ret_t cherokee_virtual_server_new_rule  (cherokee_virtual_server_t  *vserver,
-					 cherokee_config_node_t     *config,
-					 cuint_t                     priority,
-					 cherokee_rule_t           **rule);
+                                         cherokee_config_node_t     *config,
+                                         cuint_t                     priority,
+                                         cherokee_rule_t           **rule);
 
 ret_t cherokee_virtual_server_new_vrule (cherokee_virtual_server_t  *vserver,
-					 cherokee_config_node_t     *config,
-					 cherokee_vrule_t          **vrule);
+                                         cherokee_config_node_t     *config,
+                                         cherokee_vrule_t          **vrule);
 
 ret_t cherokee_virtual_server_init_tls  (cherokee_virtual_server_t *vserver);
 ret_t cherokee_virtual_server_has_tls   (cherokee_virtual_server_t *vserver);
@@ -123,6 +123,6 @@ void  cherokee_virtual_server_add_rx    (cherokee_virtual_server_t *vserver, siz
 void  cherokee_virtual_server_add_tx    (cherokee_virtual_server_t *vserver, size_t tx);
 
 ret_t cherokee_virtual_server_get_error_log (cherokee_virtual_server_t  *vserver,
-					     cherokee_logger_writer_t  **writer);
+                                             cherokee_logger_writer_t  **writer);
 
 #endif /* CHEROKEE_VIRTUAL_SERVER_H */

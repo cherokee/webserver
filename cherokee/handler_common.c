@@ -77,7 +77,7 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 		CHEROKEE_NEW_STRUCT (n, handler_common_props);
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
-			MODULE_PROPS_FREE(cherokee_handler_common_props_free));
+		        MODULE_PROPS_FREE(cherokee_handler_common_props_free));
 
 		n->props_file     = NULL;
 		n->props_dirlist  = NULL;
@@ -124,7 +124,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	struct stat              *info;
 	cherokee_iocache_entry_t *io_entry    = NULL;
 	cherokee_iocache_t       *iocache     = NULL;
- 	cherokee_boolean_t        use_iocache = true;
+	cherokee_boolean_t        use_iocache = true;
 	cherokee_connection_t    *conn        = CONN(cnt);
 
 	TRACE_CONN(conn);
@@ -320,7 +320,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 		if (PROP_COMMON(props)->allow_dirlist) {
 			return cherokee_handler_dirlist_new (hdl, cnt,
-							     MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
+			           MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 		}
 
 		conn->error_code = http_access_denied;

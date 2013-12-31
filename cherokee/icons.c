@@ -39,7 +39,7 @@ typedef struct {
 
 static file_matching_t *
 matching_new (cherokee_buffer_t *file,
-	      cherokee_buffer_t *icon)
+              cherokee_buffer_t *icon)
 {
 	file_matching_t *n;
 
@@ -218,8 +218,8 @@ cherokee_icons_set_default (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 
 ret_t
 cherokee_icons_get_icon (cherokee_icons_t   *icons,
-			 cherokee_buffer_t  *file,
-			 cherokee_buffer_t **icon_ret)
+                         cherokee_buffer_t  *file,
+                         cherokee_buffer_t **icon_ret)
 {
 	ret_t            ret;
 	char            *suffix;

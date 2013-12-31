@@ -41,7 +41,7 @@ PLUGIN_INFO_HANDLER_EASY_INIT (render_rrd, http_get | http_head);
  */
 static ret_t
 find_interval (const char                         *txt,
-	       cherokee_collector_rrd_interval_t **interval)
+               cherokee_collector_rrd_interval_t **interval)
 {
 	cherokee_collector_rrd_interval_t *i;
 
@@ -58,7 +58,7 @@ find_interval (const char                         *txt,
 
 static cherokee_boolean_t
 check_image_freshness (cherokee_buffer_t                 *buf,
-		       cherokee_collector_rrd_interval_t *interval)
+                       cherokee_collector_rrd_interval_t *interval)
 {
 	int         re;
 	struct stat info;
@@ -91,7 +91,7 @@ check_image_freshness (cherokee_buffer_t                 *buf,
 
 static ret_t
 command_rrdtool (cherokee_handler_render_rrd_t *hdl,
-		 cherokee_buffer_t             *buf)
+                 cherokee_buffer_t             *buf)
 {
 	ret_t ret;
 
@@ -106,7 +106,7 @@ command_rrdtool (cherokee_handler_render_rrd_t *hdl,
 
 	/* Check everything was alright
 	 */
-        if (cherokee_buffer_is_empty (buf)) {
+	if (cherokee_buffer_is_empty (buf)) {
 		LOG_ERROR_S (CHEROKEE_ERROR_HANDLER_RENDER_RRD_EMPTY_REPLY);
 		return ret_error;
 
@@ -124,7 +124,7 @@ command_rrdtool (cherokee_handler_render_rrd_t *hdl,
 
 static ret_t
 render_srv_accepts (cherokee_handler_render_rrd_t     *hdl,
-		    cherokee_collector_rrd_interval_t *interval)
+                    cherokee_collector_rrd_interval_t *interval)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
@@ -171,7 +171,7 @@ render_srv_accepts (cherokee_handler_render_rrd_t     *hdl,
 
 static ret_t
 render_srv_timeouts (cherokee_handler_render_rrd_t     *hdl,
-		     cherokee_collector_rrd_interval_t *interval)
+                     cherokee_collector_rrd_interval_t *interval)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
@@ -206,7 +206,7 @@ render_srv_timeouts (cherokee_handler_render_rrd_t     *hdl,
 
 static ret_t
 render_srv_traffic (cherokee_handler_render_rrd_t     *hdl,
-		    cherokee_collector_rrd_interval_t *interval)
+                    cherokee_collector_rrd_interval_t *interval)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
@@ -246,8 +246,8 @@ render_srv_traffic (cherokee_handler_render_rrd_t     *hdl,
 
 static ret_t
 render_vsrv_traffic (cherokee_handler_render_rrd_t     *hdl,
-		     cherokee_collector_rrd_interval_t *interval,
-		     cherokee_buffer_t                 *vserver_name)
+                     cherokee_collector_rrd_interval_t *interval,
+                     cherokee_buffer_t                 *vserver_name)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
@@ -514,7 +514,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 static ret_t
 handler_add_headers (cherokee_handler_render_rrd_t *hdl,
-		     cherokee_buffer_t             *buffer)
+                     cherokee_buffer_t             *buffer)
 {
 	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
 		cherokee_buffer_add_str (buffer, "Content-Type: text/html" CRLF);
@@ -534,7 +534,7 @@ handler_add_headers (cherokee_handler_render_rrd_t *hdl,
 
 static ret_t
 handler_step (cherokee_handler_render_rrd_t *hdl,
-	      cherokee_buffer_t             *buffer)
+              cherokee_buffer_t             *buffer)
 {
 	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
 		cherokee_buffer_add_buffer (buffer, &hdl->rrd_error);
@@ -565,8 +565,8 @@ handler_free (cherokee_handler_render_rrd_t *hdl)
 
 ret_t
 cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
-				 void                    *cnt,
-				 cherokee_module_props_t *props)
+                                 void                    *cnt,
+                                 cherokee_module_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_render_rrd);
@@ -625,8 +625,8 @@ props_free (cherokee_handler_render_rrd_props_t *props)
 
 ret_t
 cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
-				       cherokee_server_t       *srv,
-				       cherokee_module_props_t **_props)
+                                       cherokee_server_t       *srv,
+                                       cherokee_module_props_t **_props)
 {
 	ret_t ret;
 
@@ -634,13 +634,13 @@ cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
 		CHEROKEE_NEW_STRUCT (n, handler_render_rrd_props);
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
-						  MODULE_PROPS_FREE(props_free));
+		                                  MODULE_PROPS_FREE(props_free));
 
 		/* Sub-handler properties */
 		n->disabled   = false;
 		n->file_props = NULL;
 		cherokee_handler_file_configure (conf, srv,
-						 (cherokee_module_props_t **) &n->file_props);
+		                                 (cherokee_module_props_t **) &n->file_props);
 
 		/* Force IO-cache off */
 		n->file_props->use_cache = false;

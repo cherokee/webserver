@@ -39,8 +39,8 @@ props_free (cherokee_handler_custom_error_props_t *props)
 
 ret_t
 cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
-					 cherokee_server_t        *srv,
-					 cherokee_module_props_t **_props)
+                                         cherokee_server_t        *srv,
+                                         cherokee_module_props_t **_props)
 {
 	ret_t                                  ret;
 	int                                    val;
@@ -54,7 +54,7 @@ cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 		CHEROKEE_NEW_STRUCT (n, handler_custom_error_props);
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
-						  MODULE_PROPS_FREE(props_free));
+		                                  MODULE_PROPS_FREE(props_free));
 
 		n->error_code = http_unset;
 		*_props = MODULE_PROPS(n);
@@ -84,8 +84,8 @@ cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 
 ret_t
 cherokee_handler_custom_error_new  (cherokee_handler_t     **hdl,
-				    void                    *cnt,
-				    cherokee_module_props_t *props)
+                                    void                    *cnt,
+                                    cherokee_module_props_t *props)
 {
 	UNUSED(hdl);
 

@@ -199,9 +199,9 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 
 ret_t
 cherokee_request_header_set_auth (cherokee_request_header_t *request,
-				  cherokee_http_auth_t       auth,
-				  cherokee_buffer_t         *user,
-				  cherokee_buffer_t         *password)
+                                  cherokee_http_auth_t       auth,
+                                  cherokee_buffer_t         *user,
+                                  cherokee_buffer_t         *password)
 {
 	request->auth = auth;
 

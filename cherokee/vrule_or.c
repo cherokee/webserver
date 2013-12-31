@@ -55,9 +55,9 @@ match (cherokee_vrule_or_t   *vrule,
 
 static ret_t
 configure_branch (cherokee_config_node_t    *conf,
-		  cherokee_virtual_server_t *vsrv,
-		  const char                *branch,
-		  cherokee_vrule_t         **branch_vrule)
+                  cherokee_virtual_server_t *vsrv,
+                  const char                *branch,
+                  cherokee_vrule_t         **branch_vrule)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf = NULL;
@@ -80,8 +80,8 @@ configure_branch (cherokee_config_node_t    *conf,
 
 static ret_t
 configure (cherokee_vrule_or_t       *vrule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t ret;
 

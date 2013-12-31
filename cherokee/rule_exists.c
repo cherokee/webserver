@@ -42,7 +42,7 @@ typedef struct {
 
 static ret_t
 parse_value (cherokee_buffer_t *value,
-	     cherokee_list_t   *files)
+             cherokee_list_t   *files)
 {
 	char              *val;
 	char              *tmpp;
@@ -74,8 +74,8 @@ parse_value (cherokee_buffer_t *value,
 
 static ret_t
 configure (cherokee_rule_exists_t    *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp = NULL;
@@ -121,8 +121,8 @@ _free (void *p)
 
 static cherokee_boolean_t
 check_is_file (cherokee_server_t  *srv,
-	       cherokee_boolean_t  use_iocache,
-	       cherokee_buffer_t  *fullpath)
+               cherokee_boolean_t  use_iocache,
+               cherokee_buffer_t  *fullpath)
 {
 	ret_t                     ret;
 	cherokee_boolean_t        is_file;
@@ -131,11 +131,11 @@ check_is_file (cherokee_server_t  *srv,
 	cherokee_iocache_entry_t *io_entry = NULL;
 
 	ret = cherokee_io_stat (srv->iocache,
-				fullpath,
-				use_iocache,
-				&nocache_info,
-				&io_entry,
-				&info);
+	                        fullpath,
+	                        use_iocache,
+	                        &nocache_info,
+	                        &io_entry,
+	                        &info);
 
 	if (ret == ret_ok) {
 		is_file = S_ISREG(info->st_mode);
@@ -162,11 +162,11 @@ match_file (cherokee_rule_exists_t *rule,
 	cherokee_server_t        *srv      = CONN_SRV(conn);
 
 	ret = cherokee_io_stat (srv->iocache,
-				fullpath,
-				rule->use_iocache,
-				&nocache_info,
-				&io_entry,
-				&info);
+	                        fullpath,
+	                        rule->use_iocache,
+	                        &nocache_info,
+	                        &io_entry,
+	                        &info);
 
 	if (ret == ret_ok) {
 		is_dir  = S_ISDIR(info->st_mode);
@@ -260,8 +260,8 @@ match (cherokee_rule_exists_t  *rule,
 	if (rule->match_any) {
 		if (! cherokee_buffer_is_empty (&conn->web_directory)) {
 			cherokee_buffer_add (tmp,
-					     conn->request.buf + conn->web_directory.len,
-					     conn->request.len - conn->web_directory.len);
+			                     conn->request.buf + conn->web_directory.len,
+			                     conn->request.len - conn->web_directory.len);
 		} else {
 			cherokee_buffer_add_buffer (tmp, &conn->request);
 		}
@@ -283,8 +283,8 @@ match (cherokee_rule_exists_t  *rule,
 			continue;
 
 		re = strncmp (entry->file.buf,
-			      &conn->request.buf[conn->request.len - entry->file.len],
-			      entry->file.len);
+		              &conn->request.buf[conn->request.len - entry->file.len],
+		              entry->file.len);
 		if (re != 0)
 			continue;
 
@@ -327,5 +327,5 @@ cherokee_rule_exists_new (cherokee_rule_exists_t **rule)
 	n->match_index_files = true;
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

@@ -30,8 +30,7 @@
 #include "plugin_loader.h"
 
 typedef struct {
-	   cherokee_validator_t validator;
-
+	cherokee_validator_t validator;
 } cherokee_validator_pam_t;
 
 #define PAM(x) ((cherokee_validator_pam_t *)(x))

@@ -87,7 +87,7 @@ _free (cherokee_post_track_t *track)
 
 static ret_t
 _figure_x_progress_id (cherokee_connection_t *conn,
-		       cherokee_buffer_t     *track_id)
+                       cherokee_buffer_t     *track_id)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp;
@@ -158,7 +158,7 @@ _purge_unreg (cherokee_post_track_t *track)
 
 static ret_t
 _register (cherokee_post_track_t *track,
-	   cherokee_connection_t *conn)
+           cherokee_connection_t *conn)
 {
 	ret_t                        ret;
 	cherokee_post_track_entry_t *entry = NULL;
@@ -226,7 +226,7 @@ error:
 
 static ret_t
 _unregister (cherokee_post_track_t *track,
-	     cherokee_post_t       *post)
+             cherokee_post_t       *post)
 {
 	ret_t                        ret;
 	cherokee_post_track_entry_t *entry;
@@ -272,7 +272,7 @@ cherokee_generic_post_track_free (cherokee_post_track_t *track)
 
 ret_t
 cherokee_generic_post_track_configure (cherokee_post_track_t  *track,
-				       cherokee_config_node_t *config)
+                                       cherokee_config_node_t *config)
 {
 	UNUSED (config);
 	UNUSED (track);
@@ -314,10 +314,10 @@ cherokee_generic_post_track_new (cherokee_post_track_t **track)
 
 ret_t
 cherokee_generic_post_track_get (cherokee_post_track_t  *track,
-				 cherokee_buffer_t      *progress_id,
-				 const char            **out_state,
-				 off_t                  *out_size,
-				 off_t                  *out_received)
+                                 cherokee_buffer_t      *progress_id,
+                                 const char            **out_state,
+                                 off_t                  *out_size,
+                                 off_t                  *out_received)
 {
 	ret_t                        ret;
 	cherokee_post_track_entry_t *entry;

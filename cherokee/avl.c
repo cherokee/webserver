@@ -62,14 +62,14 @@ node_free (cherokee_avl_node_t *key)
 
 static int
 node_cmp (cherokee_avl_node_t *A,
-	  cherokee_avl_node_t *B,
-	  cherokee_avl_t      *avl)
+          cherokee_avl_node_t *B,
+          cherokee_avl_t      *avl)
 {
-        if (AVL(avl)->case_insensitive) {
-                return cherokee_buffer_case_cmp_buf (&A->key, &B->key);
-        } else {
-                return cherokee_buffer_cmp_buf (&A->key, &B->key);
-        }
+	if (AVL(avl)->case_insensitive) {
+		return cherokee_buffer_case_cmp_buf (&A->key, &B->key);
+	} else {
+		return cherokee_buffer_cmp_buf (&A->key, &B->key);
+	}
 }
 
 static int
@@ -172,8 +172,8 @@ cherokee_avl_get_ptr (cherokee_avl_t *avl, const char *key, void **value)
 
 static ret_t
 while_func_wrap (cherokee_avl_generic_node_t *node,
-		 void                        *value,
-		 void                        *params_internal)
+                 void                        *value,
+                 void                        *params_internal)
 {
 	cherokee_buffer_t          *key;
 	void                      **params    = (void **)params_internal;
@@ -187,10 +187,10 @@ while_func_wrap (cherokee_avl_generic_node_t *node,
 
 ret_t
 cherokee_avl_while (cherokee_avl_generic_t     *avl,
-		    cherokee_avl_while_func_t   func,
-		    void                       *param,
-		    cherokee_buffer_t         **key,
-		    void                      **value)
+                    cherokee_avl_while_func_t   func,
+                    void                       *param,
+                    cherokee_buffer_t         **key,
+                    void                      **value)
 {
 	void *params_internal[] = {func, param};
 
@@ -200,7 +200,7 @@ cherokee_avl_while (cherokee_avl_generic_t     *avl,
 
 ret_t
 cherokee_avl_set_case (cherokee_avl_t     *avl,
-		       cherokee_boolean_t  case_insensitive)
+                       cherokee_boolean_t  case_insensitive)
 {
 	avl->case_insensitive = case_insensitive;
 	return ret_ok;

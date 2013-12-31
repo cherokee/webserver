@@ -38,45 +38,45 @@ struct cherokee_cache_priv {
 	int foo;
 };
 
-#define cache_list_add(list,entry)					\
-	do  {								\
-		cherokee_list_add (LIST(entry), &cache->_ ## list);	\
- 		cache->len_ ## list += 1;				\
-		CACHE_ENTRY(entry)->in_list = cache_ ## list;		\
+#define cache_list_add(list,entry)                                  \
+	do  {                                                       \
+		cherokee_list_add (LIST(entry), &cache->_ ## list); \
+		cache->len_ ## list += 1;                           \
+		CACHE_ENTRY(entry)->in_list = cache_ ## list;       \
 	} while (false)
 
-#define cache_list_del(list,entry)				\
-	do {							\
-		CACHE_ENTRY(entry)->in_list = cache_no_list;	\
-		cherokee_list_del (LIST(entry));		\
-		cache->len_ ## list -= 1;			\
+#define cache_list_del(list,entry)                              \
+	do {                                                    \
+		CACHE_ENTRY(entry)->in_list = cache_no_list;    \
+		cherokee_list_del (LIST(entry));                \
+		cache->len_ ## list -= 1;                       \
 	} while (false)
 
-#define cache_list_get_lru(list,ret_entry)				\
-	do {								\
-		if (! cherokee_list_empty (&cache->_## list)) {		\
-			ret_entry = CACHE_ENTRY((cache->_## list).prev);\
-		}							\
+#define cache_list_get_lru(list,ret_entry)                               \
+	do {                                                             \
+		if (! cherokee_list_empty (&cache->_## list)) {          \
+			ret_entry = CACHE_ENTRY((cache->_## list).prev); \
+		}                                                        \
 	} while (false)
 
-#define cache_list_del_lru(list,ret_entry)				\
-	do {								\
-		if (! cherokee_list_empty (&cache->_## list)) {		\
-			ret_entry = CACHE_ENTRY((cache->_## list).prev);\
-			cache_list_del (list,ret_entry);		\
-		}							\
+#define cache_list_del_lru(list,ret_entry)                               \
+	do {                                                             \
+		if (! cherokee_list_empty (&cache->_## list)) {          \
+			ret_entry = CACHE_ENTRY((cache->_## list).prev); \
+			cache_list_del (list,ret_entry);                 \
+		}                                                        \
 	} while (false)
 
-#define cache_list_make_first(list,entry)				\
-	do {								\
-		cherokee_list_del (LIST(entry));			\
-		cherokee_list_add (LIST(entry), &cache->_ ## list);	\
+#define cache_list_make_first(list,entry)                           \
+	do {                                                        \
+		cherokee_list_del (LIST(entry));                    \
+		cherokee_list_add (LIST(entry), &cache->_ ## list); \
 	} while (false)
 
-#define cache_list_swap(from,to,entry)		\
-	do {					\
-		cache_list_del(from, entry);	\
-		cache_list_add(to, entry);	\
+#define cache_list_swap(from,to,entry)       \
+	do {                                 \
+		cache_list_del(from, entry); \
+		cache_list_add(to, entry);   \
 	} while (false)
 
 
@@ -84,8 +84,8 @@ struct cherokee_cache_priv {
  */
 ret_t
 cherokee_cache_entry_init (cherokee_cache_entry_t *entry,
-			   cherokee_buffer_t      *key,
-			   cherokee_cache_t       *cache,
+                           cherokee_buffer_t      *key,
+                           cherokee_cache_t       *cache,
                            void                   *mutex)
 {
 	entry->in_list   = cache_no_list;
@@ -157,7 +157,7 @@ entry_ref (cherokee_cache_entry_t *entry)
 
 static ret_t
 entry_unref_guts (cherokee_cache_entry_t **entry_p,
-		  cherokee_boolean_t       lock_object)
+                  cherokee_boolean_t       lock_object)
 {
 	cherokee_cache_t       *cache;
 	cherokee_cache_entry_t *entry;
@@ -252,7 +252,7 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 
 ret_t
 cherokee_cache_configure (cherokee_cache_t       *cache,
-			  cherokee_config_node_t *conf)
+                          cherokee_config_node_t *conf)
 {
 	ret_t            ret;
 	cherokee_list_t *i;
@@ -333,7 +333,7 @@ cherokee_cache_mrproper (cherokee_cache_t *cache)
 
 static ret_t
 replace (cherokee_cache_t       *cache,
-	 cherokee_cache_entry_t *x)
+         cherokee_cache_entry_t *x)
 {
 	/* cache->priv->mutex is LOCKED
 	 * x->mutex           is LOCKED
@@ -414,7 +414,7 @@ on_new_added (cherokee_cache_t *cache)
 
 static ret_t
 update_ghost_b1 (cherokee_cache_t       *cache,
-		 cherokee_cache_entry_t *entry)
+                 cherokee_cache_entry_t *entry)
 {
 	/* cache->priv->mutex is LOCKED
 	 * entry->mutex       is LOCKED
@@ -424,7 +424,7 @@ update_ghost_b1 (cherokee_cache_t       *cache,
 	/* B1 hit: favour recency
 	 */
 	cache->target_t1 = MIN (cache->max_size,
-				(cache->target_t1 + MAX (1, (cache->len_b2 / cache->len_b1))));
+	                        (cache->target_t1 + MAX (1, (cache->len_b2 / cache->len_b1))));
 
 	/* Replace a page if needed
 	 */
@@ -455,7 +455,7 @@ update_ghost_b1 (cherokee_cache_t       *cache,
 
 static ret_t
 update_ghost_b2 (cherokee_cache_t       *cache,
-		 cherokee_cache_entry_t *entry)
+                 cherokee_cache_entry_t *entry)
 {
 	/* cache->priv->mutex is LOCKED
 	 * entry->mutex       is LOCKED
@@ -493,7 +493,7 @@ update_ghost_b2 (cherokee_cache_t       *cache,
 
 static ret_t
 update_cache (cherokee_cache_t       *cache,
-	      cherokee_cache_entry_t *entry)
+              cherokee_cache_entry_t *entry)
 {
 	/* cache->priv->mutex is LOCKED
 	 * entry->mutex       is LOCKED
@@ -561,8 +561,8 @@ update_cache (cherokee_cache_t       *cache,
 
 ret_t
 cherokee_cache_get (cherokee_cache_t        *cache,
-		    cherokee_buffer_t       *key,
-		    cherokee_cache_entry_t **ret_entry)
+                    cherokee_buffer_t       *key,
+                    cherokee_cache_entry_t **ret_entry)
 {
 	ret_t ret;
 
@@ -646,7 +646,7 @@ out:
 
 ret_t
 cherokee_cache_get_stats (cherokee_cache_t  *cache,
-			  cherokee_buffer_t *info)
+                          cherokee_buffer_t *info)
 {
 	size_t len  = 0;
 	float  rate = 0;

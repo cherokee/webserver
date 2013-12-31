@@ -34,37 +34,37 @@
 static ret_t
 find_proxy_environment (cherokee_buffer_t *proxy, cuint_t *port)
 {
-	   char *env;
-	   char *colon;
+	char *env;
+	char *colon;
 
-	   env = getenv (PROXY_ENV_VAR);
-	   if (!env) return ret_not_found;
+	env = getenv (PROXY_ENV_VAR);
+	if (!env) return ret_not_found;
 
-	   colon = strrchr(env, ':');
-	   if (colon) {
-			 cherokee_buffer_add (proxy, env, colon-env);
-			 *port = atoi(colon+1);
-	   } else {
-			 cherokee_buffer_add (proxy, env, strlen(env));
-			 *port = PROXY_PORT_DEFAULT;
-	   }
+	colon = strrchr(env, ':');
+	if (colon) {
+		cherokee_buffer_add (proxy, env, colon-env);
+		*port = atoi(colon+1);
+	} else {
+		cherokee_buffer_add (proxy, env, strlen(env));
+		*port = PROXY_PORT_DEFAULT;
+	}
 
-	   return ret_ok;
+	return ret_ok;
 }
 
 
 ret_t
 cget_find_proxy (cherokee_buffer_t *proxy, cuint_t *port)
 {
-	   ret_t ret;
+	ret_t ret;
 
-	   ret = find_proxy_environment (proxy, port);
-	   if (ret == ret_ok) goto found;
+	ret = find_proxy_environment (proxy, port);
+	if (ret == ret_ok) goto found;
 
-	   TRACE(ENTRIES, "Not found %s\n", "");
-	   return ret_not_found;
+	TRACE(ENTRIES, "Not found %s\n", "");
+	return ret_not_found;
 
 found:
-	   TRACE(ENTRIES, "proxy='%s' port=%d\n", proxy->buf, *port);
-	   return ret_ok;
+	TRACE(ENTRIES, "proxy='%s' port=%d\n", proxy->buf, *port);
+	return ret_ok;
 }

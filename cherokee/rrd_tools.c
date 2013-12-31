@@ -98,7 +98,7 @@ cherokee_rrd_connection_get (cherokee_rrd_connection_t **rrd_conn)
 
 ret_t
 cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
-				   cherokee_config_node_t    *config)
+                                   cherokee_config_node_t    *config)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
@@ -164,10 +164,10 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 {
 #ifdef HAVE_FORK
 	int    re;
-        pid_t  pid;
+	pid_t  pid;
 	char  *argv[3];
 	int    fds_to[2];
-        int    fds_from[2];
+	int    fds_from[2];
 
 	/* Do not spawn if the server it exiting */
 	if ((rrd_conn->exiting) ||
@@ -200,20 +200,20 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 	/* Spawn the new child process */
 	pid = fork();
 	switch (pid) {
-        case 0:
+	case 0:
 		argv[0] = rrd_conn->path_rrdtool.buf;
 		argv[1] = (char *) "-";
 		argv[2] = NULL;
 
 		/* Move stdout to fd_from[1] */
 		dup2 (fds_from[1], STDOUT_FILENO);
-                cherokee_fd_close (fds_from[1]);
-                cherokee_fd_close (fds_from[0]);
+		cherokee_fd_close (fds_from[1]);
+		cherokee_fd_close (fds_from[0]);
 
-                /* Move the stdin to fd_to[0] */
-                dup2 (fds_to[0], STDIN_FILENO);
-                cherokee_fd_close (fds_to[0]);
-                cherokee_fd_close (fds_to[1]);
+		/* Move the stdin to fd_to[0] */
+		dup2 (fds_to[0], STDIN_FILENO);
+		cherokee_fd_close (fds_to[0]);
+		cherokee_fd_close (fds_to[1]);
 
 		/* Execute it */
 		do {
@@ -223,20 +223,20 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_RRD_EXECV, argv[0]);
 		exit (EXIT_ERROR);
 
-        case -1:
+	case -1:
 		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_RRD_FORK, pid);
-                break;
+		break;
 
-        default:
-                cherokee_fd_close (fds_from[1]);
-                cherokee_fd_close (fds_to[0]);
+	default:
+		cherokee_fd_close (fds_from[1]);
+		cherokee_fd_close (fds_to[0]);
 
-                rrd_conn->write_fd = fds_to[1];
-                rrd_conn->read_fd  = fds_from[0];
-                rrd_conn->pid      = pid;
+		rrd_conn->write_fd = fds_to[1];
+		rrd_conn->read_fd  = fds_from[0];
+		rrd_conn->pid      = pid;
 
-                fcntl (rrd_conn->write_fd, F_SETFD, FD_CLOEXEC);
-                fcntl (rrd_conn->read_fd,  F_SETFD, FD_CLOEXEC);
+		fcntl (rrd_conn->write_fd, F_SETFD, FD_CLOEXEC);
+		fcntl (rrd_conn->read_fd,  F_SETFD, FD_CLOEXEC);
 		break;
 	}
 
@@ -249,7 +249,7 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 
 ret_t
 cherokee_rrd_connection_kill (cherokee_rrd_connection_t *rrd_conn,
-			      cherokee_boolean_t         do_kill)
+                              cherokee_boolean_t         do_kill)
 {
 	int re;
 	int status;
@@ -294,7 +294,7 @@ read_rrdtool (cherokee_rrd_connection_t *rrd_conn,
 
 	do {
 		ret = cherokee_buffer_read_from_fd (buffer, rrd_conn->read_fd,
-						    DEFAULT_RECV_SIZE, &got);
+		                                    DEFAULT_RECV_SIZE, &got);
 	} while (ret == ret_eagain);
 
 	return ret;
@@ -303,7 +303,7 @@ read_rrdtool (cherokee_rrd_connection_t *rrd_conn,
 
 static ret_t
 write_rrdtool (cherokee_rrd_connection_t *rrd_conn,
-	       cherokee_buffer_t         *buffer)
+               cherokee_buffer_t         *buffer)
 {
 	ssize_t written;
 
@@ -334,7 +334,7 @@ write_rrdtool (cherokee_rrd_connection_t *rrd_conn,
 
 ret_t
 cherokee_rrd_connection_execute (cherokee_rrd_connection_t *rrd_conn,
-				 cherokee_buffer_t         *buf)
+                                 cherokee_buffer_t         *buf)
 {
 	ret_t ret;
 
@@ -493,7 +493,7 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 
 ret_t
 cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t *rrd_conn,
-					cherokee_buffer_t         *dbpath)
+                                        cherokee_buffer_t         *dbpath)
 {
 	ret_t              ret;
 	cherokee_boolean_t exist;

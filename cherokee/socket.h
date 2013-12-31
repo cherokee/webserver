@@ -103,7 +103,7 @@ typedef struct {
 
 #define cherokee_socket_configured(c)    (SOCKET_FD(c) >= 0)
 #define cherokee_socket_is_connected(c)  (cherokee_socket_configured(c) && \
-					  (SOCKET_STATUS(c) != socket_closed))
+                                          (SOCKET_STATUS(c) != socket_closed))
 
 
 ret_t cherokee_socket_init              (cherokee_socket_t *socket);

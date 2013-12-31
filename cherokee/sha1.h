@@ -3,15 +3,15 @@
 
 #include "common.h"
 
-#define SHA_BLOCKSIZE		64
-#define SHA_DIGESTSIZE		20
-#define SHA1_DIGEST_SIZE		20
+#define SHA_BLOCKSIZE    64
+#define SHA_DIGESTSIZE   20
+#define SHA1_DIGEST_SIZE 20
 
 typedef struct {
-    unsigned long digest[5];		     /* message digest */
-    unsigned long count_lo, count_hi;	/* 64-bit bit count */
-    unsigned char data[SHA_BLOCKSIZE];	/* SHA data buffer */
-    int local;	   		               /* unprocessed amount in data */
+	unsigned long digest[5];           /* message digest */
+	unsigned long count_lo, count_hi;  /* 64-bit bit count */
+	unsigned char data[SHA_BLOCKSIZE]; /* SHA data buffer */
+	int local;                         /* unprocessed amount in data */
 } SHA_INFO;
 
 

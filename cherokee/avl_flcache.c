@@ -35,7 +35,7 @@
 
 static ret_t
 conn_to_node (cherokee_connection_t       *conn,
-	      cherokee_avl_flcache_node_t *node)
+              cherokee_avl_flcache_node_t *node)
 {
 	cherokee_avl_generic_node_init (AVL_GENERIC_NODE(node));
 
@@ -63,7 +63,7 @@ conn_to_node (cherokee_connection_t       *conn,
 
 static ret_t
 node_new (cherokee_avl_flcache_node_t **node,
-	  cherokee_connection_t        *conn)
+          cherokee_connection_t        *conn)
 {
 	CHEROKEE_NEW_STRUCT (n, avl_flcache_node);
 
@@ -112,7 +112,7 @@ node_free (cherokee_avl_flcache_node_t *node)
 
 static int
 cmp_request (cherokee_avl_flcache_node_t *A,
-	     cherokee_avl_flcache_node_t *B)
+             cherokee_avl_flcache_node_t *B)
 {
 	int                          re;
 	cherokee_connection_t       *conn;
@@ -148,7 +148,7 @@ cmp_request (cherokee_avl_flcache_node_t *A,
 
 static int
 cmp_query_string (cherokee_avl_flcache_node_t *A,
-		  cherokee_avl_flcache_node_t *B)
+                  cherokee_avl_flcache_node_t *B)
 {
 	int                          re;
 	cherokee_connection_t       *conn;
@@ -184,7 +184,7 @@ cmp_query_string (cherokee_avl_flcache_node_t *A,
 
 static int
 cmp_encoding (cherokee_avl_flcache_node_t *A,
-	      cherokee_avl_flcache_node_t *B)
+              cherokee_avl_flcache_node_t *B)
 {
 	ret_t                        ret;
 	int                          re;
@@ -208,7 +208,7 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 			invert = true;
 		}
 
- 		/* No "Content-encoding:"
+		/* No "Content-encoding:"
 		 */
 		ret = cherokee_header_get_known (&conn->header, header_accept_encoding, &header, &header_len);
 		if (ret != ret_ok) {
@@ -237,7 +237,7 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 				/* Skip training CR, LF chars */
 				len = total_len;
 				while ((len > 1) && ((p[len -1] == '\r')||
-						     (p[len -1] == '\n')))
+				                     (p[len -1] == '\n')))
 					len--;
 
 				/* Compare */
@@ -245,7 +245,7 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 					re = -1;
 				} else {
 					re = strncasecmp (p, node->content_encoding.buf,
-							  MIN(len, node->content_encoding.len));
+					                  MIN(len, node->content_encoding.len));
 				}
 
 				/* Restore original string */
@@ -276,8 +276,8 @@ cmp_encoding (cherokee_avl_flcache_node_t *A,
 
 static int
 node_cmp (cherokee_avl_flcache_node_t *A,
-	  cherokee_avl_flcache_node_t *B,
-	  cherokee_avl_flcache_t      *avl)
+          cherokee_avl_flcache_node_t *B,
+          cherokee_avl_flcache_t      *avl)
 {
 	int re;
 
@@ -344,7 +344,7 @@ cherokee_avl_flcache_init (cherokee_avl_flcache_t *avl)
 
 ret_t
 cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl,
-			       cherokee_func_free_t    free_value)
+                               cherokee_func_free_t    free_value)
 {
 	CHEROKEE_RWLOCK_DESTROY (&avl->base_rwlock);
 	cherokee_avl_mrproper (AVL_GENERIC(avl), free_value);
@@ -354,8 +354,8 @@ cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl,
 
 ret_t
 cherokee_avl_flcache_add (cherokee_avl_flcache_t       *avl,
-			  cherokee_connection_t        *conn,
-			  cherokee_avl_flcache_node_t **node)
+                          cherokee_connection_t        *conn,
+                          cherokee_avl_flcache_node_t **node)
 {
 	ret_t                       ret;
 	cherokee_avl_flcache_node_t *n   = NULL;
@@ -382,8 +382,8 @@ cherokee_avl_flcache_add (cherokee_avl_flcache_t       *avl,
 
 ret_t
 cherokee_avl_flcache_get (cherokee_avl_flcache_t       *avl,
-			  cherokee_connection_t        *conn,
-			  cherokee_avl_flcache_node_t **node)
+                          cherokee_connection_t        *conn,
+                          cherokee_avl_flcache_node_t **node)
 {
 	ret_t                       ret;
 	cherokee_avl_flcache_node_t tmp;
@@ -400,7 +400,7 @@ cherokee_avl_flcache_get (cherokee_avl_flcache_t       *avl,
 
 static ret_t
 del_list_of_entries (cherokee_avl_flcache_t *avl,
-		     cherokee_list_t        *to_delete)
+                     cherokee_list_t        *to_delete)
 {
 	ret_t               ret;
 	cherokee_list_t    *i, *j;
@@ -472,7 +472,7 @@ cherokee_avl_flcache_cleanup (cherokee_avl_flcache_t *avl)
 
 ret_t
 cherokee_avl_flcache_del (cherokee_avl_flcache_t      *avl,
-			  cherokee_avl_flcache_node_t *node)
+                          cherokee_avl_flcache_node_t *node)
 {
 	ret_t ret = ret_ok;
 
@@ -515,7 +515,7 @@ purge_while_func (cherokee_avl_generic_node_t *node_generic, void *value, void *
 
 ret_t
 cherokee_avl_flcache_purge_path (cherokee_avl_flcache_t *avl,
-				 cherokee_buffer_t      *path)
+                                 cherokee_buffer_t      *path)
 {
 	ret_t            ret;
 	cuint_t          purged_num = 0;
@@ -527,8 +527,8 @@ cherokee_avl_flcache_purge_path (cherokee_avl_flcache_t *avl,
 	CHEROKEE_RWLOCK_WRITER (&avl->base_rwlock);
 
 	ret = cherokee_avl_generic_while (AVL_GENERIC(avl),
-					  (cherokee_avl_generic_while_func_t) purge_while_func,
-					  params, NULL, NULL);
+	                                  (cherokee_avl_generic_while_func_t) purge_while_func,
+	                                  params, NULL, NULL);
 
 	del_list_of_entries (avl, &to_delete);
 	TRACE (ENTRIES, "Purging '%s' - %d objects were expired\n", path->buf, purged_num);

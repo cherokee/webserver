@@ -57,7 +57,7 @@ cherokee_header_op_free (cherokee_header_op_t *op)
 
 ret_t
 cherokee_header_op_configure (cherokee_header_op_t   *op,
-			      cherokee_config_node_t *conf)
+                              cherokee_config_node_t *conf)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp;
@@ -102,12 +102,12 @@ cherokee_header_op_configure (cherokee_header_op_t   *op,
 
 static ret_t
 remove_header (cherokee_buffer_t *buffer,
-	       cherokee_buffer_t *header)
+               cherokee_buffer_t *header)
 {
 	char *p, *s;
 
 	p = strncasestrn (buffer->buf, buffer->len,
-			  header->buf, header->len);
+	                  header->buf, header->len);
 	if (p == NULL)
 		return ret_not_found;
 
@@ -125,7 +125,7 @@ remove_header (cherokee_buffer_t *buffer,
 
 ret_t
 cherokee_header_op_render (cherokee_list_t   *ops_list,
-			   cherokee_buffer_t *buffer)
+                           cherokee_buffer_t *buffer)
 {
 	cherokee_list_t      *i;
 	cherokee_header_op_t *op;

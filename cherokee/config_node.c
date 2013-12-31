@@ -338,9 +338,9 @@ cherokee_config_node_read_path (cherokee_config_node_t *conf, const char *key, c
 
 ret_t
 cherokee_config_node_read_list (cherokee_config_node_t           *conf,
-				const char                       *key,
-				cherokee_config_node_list_func_t  func,
-				void                             *param)
+                                const char                       *key,
+                                cherokee_config_node_list_func_t  func,
+                                void                             *param)
 {
 	ret_t                   ret;
 	char                   *ptr;

@@ -60,22 +60,22 @@
  */
 #define DEFAULT_CONFIG_FILE CHEROKEE_CONFDIR "/cherokee.conf"
 
-#define BASIC_CONFIG							\
-	"vserver!1!nick = default\n"					\
-	"vserver!1!error_writer!type = stderr\n"                        \
-	"vserver!1!rule!3!match = directory\n"				\
-	"vserver!1!rule!3!match!directory = /cherokee_themes\n"		\
-	"vserver!1!rule!3!handler = file\n"				\
-	"vserver!1!rule!3!document_root = " CHEROKEE_THEMEDIR "\n"	\
-	"vserver!1!rule!2!match = directory\n"				\
-	"vserver!1!rule!2!match!directory = /cherokee_icons\n"			\
-	"vserver!1!rule!2!handler = file\n"				\
-	"vserver!1!rule!2!document_root = " CHEROKEE_ICONSDIR "\n"	\
-	"vserver!1!rule!1!match = default\n"				\
-	"vserver!1!rule!1!handler = common\n"				\
-	"vserver!1!rule!1!handler!iocache = 0\n"			\
-	"icons!default = page_white.png\n"				\
-	"icons!directory = folder.png\n"				\
+#define BASIC_CONFIG                                               \
+	"vserver!1!nick = default\n"                               \
+	"vserver!1!error_writer!type = stderr\n"                   \
+	"vserver!1!rule!3!match = directory\n"                     \
+	"vserver!1!rule!3!match!directory = /cherokee_themes\n"    \
+	"vserver!1!rule!3!handler = file\n"                        \
+	"vserver!1!rule!3!document_root = " CHEROKEE_THEMEDIR "\n" \
+	"vserver!1!rule!2!match = directory\n"                     \
+	"vserver!1!rule!2!match!directory = /cherokee_icons\n"     \
+	"vserver!1!rule!2!handler = file\n"                        \
+	"vserver!1!rule!2!document_root = " CHEROKEE_ICONSDIR "\n" \
+	"vserver!1!rule!1!match = default\n"                       \
+	"vserver!1!rule!1!handler = common\n"                      \
+	"vserver!1!rule!1!handler!iocache = 0\n"                   \
+	"icons!default = page_white.png\n"                         \
+	"icons!directory = folder.png\n"                           \
 	"icons!parent_directory = arrow_turn_left.png\n"
 
 #define ENTRIES "main"
@@ -215,9 +215,9 @@ common_server_initialization (cherokee_server_t *srv)
 		cherokee_path_arg_eval (&droot);
 
 		cherokee_buffer_add_va (&tmp,
-					"server!bind!1!port = %d\n"
-					"vserver!1!document_root = %s\n"
-					BASIC_CONFIG, port, droot.buf);
+		                        "server!bind!1!port = %d\n"
+		                        "vserver!1!document_root = %s\n"
+		                        BASIC_CONFIG, port, droot.buf);
 
 		/* Apply it
 		 */
@@ -261,17 +261,17 @@ static void
 print_help (void)
 {
 	printf (APP_NAME "\n"
-		"Usage: cherokee [options]\n\n"
-		"  -h,       --help                  Print this help\n"
-		"  -V,       --version               Print version and exit\n"
-		"  -t,       --test                  Just test configuration file\n"
-		"  -d,       --detach                Detach from the console\n"
-		"  -C<PATH>, --config=<PATH>         Configuration file\n"
-		"  -p<NUM>,  --port=<NUM>            TCP port number\n"
-		"  -r<PATH>, --documentroot=<PATH>   Server directory content\n"
-		"  -i,       --print-server-info     Print server technical information\n"
-		"  -v,       --valgrind              Execute the worker process under valgrind\n\n"
-		"Report bugs to " PACKAGE_BUGREPORT "\n");
+	        "Usage: cherokee [options]\n\n"
+	        "  -h,       --help                  Print this help\n"
+	        "  -V,       --version               Print version and exit\n"
+	        "  -t,       --test                  Just test configuration file\n"
+	        "  -d,       --detach                Detach from the console\n"
+	        "  -C<PATH>, --config=<PATH>         Configuration file\n"
+	        "  -p<NUM>,  --port=<NUM>            TCP port number\n"
+	        "  -r<PATH>, --documentroot=<PATH>   Server directory content\n"
+	        "  -i,       --print-server-info     Print server technical information\n"
+	        "  -v,       --valgrind              Execute the worker process under valgrind\n\n"
+	        "Report bugs to " PACKAGE_BUGREPORT "\n");
 }
 
 static ret_t

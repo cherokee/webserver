@@ -72,15 +72,15 @@ typedef struct {
 #endif
 
 ret_t cherokee_error_log         (cherokee_error_type_t  type,
-				  const char            *filename,
-				  int                    line,
-				  int                    error_num, ...);
+                                  const char            *filename,
+                                  int                    line,
+                                  int                    error_num, ...);
 
 ret_t cherokee_error_errno_log   (int                    errnumber,
-				  cherokee_error_type_t  type,
-				  const char            *filename,
-				  int                    line,
-				  int                    error_num, ...);
+                                  cherokee_error_type_t  type,
+                                  const char            *filename,
+                                  int                    line,
+                                  int                    error_num, ...);
 
 ret_t cherokee_error_set_default (cherokee_logger_writer_t *writer);
 

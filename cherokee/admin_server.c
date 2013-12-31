@@ -37,7 +37,7 @@
 
 ret_t
 cherokee_admin_server_reply_get_ports (cherokee_handler_t *hdl,
-				       cherokee_dwriter_t  *dwriter)
+                                       cherokee_dwriter_t  *dwriter)
 {
 	cherokee_list_t   *i;
 	cherokee_bind_t   *bind_entry;
@@ -71,7 +71,7 @@ cherokee_admin_server_reply_get_ports (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_admin_server_reply_get_traffic (cherokee_handler_t *hdl,
-					 cherokee_dwriter_t *dwriter)
+                                         cherokee_dwriter_t *dwriter)
 {
 	cherokee_server_t *srv = HANDLER_SRV(hdl);
 	cherokee_buffer_t *tmp = THREAD_TMP_BUF2 (HANDLER_THREAD(hdl));
@@ -117,7 +117,7 @@ cherokee_admin_server_reply_get_traffic (cherokee_handler_t *hdl,
 
 static void
 render_connection_info (cherokee_connection_info_t *conn_info,
-			cherokee_dwriter_t         *dwriter)
+                        cherokee_dwriter_t         *dwriter)
 {
 	cherokee_dwriter_dict_open (dwriter);
 
@@ -162,7 +162,7 @@ render_connection_info (cherokee_connection_info_t *conn_info,
 
 ret_t
 cherokee_admin_server_reply_get_conns (cherokee_handler_t *hdl,
-				       cherokee_dwriter_t *dwriter)
+                                       cherokee_dwriter_t *dwriter)
 {
 	ret_t              ret;
 	cherokee_list_t    connections;
@@ -206,8 +206,8 @@ cherokee_admin_server_reply_get_conns (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_admin_server_reply_close_conn (cherokee_handler_t *hdl,
-					cherokee_dwriter_t *dwriter,
-					cherokee_buffer_t  *question)
+                                        cherokee_dwriter_t *dwriter,
+                                        cherokee_buffer_t  *question)
 {
 	ret_t              ret;
 	char              *begin;
@@ -231,7 +231,7 @@ cherokee_admin_server_reply_close_conn (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_admin_server_reply_get_trace (cherokee_handler_t *hdl,
-				       cherokee_dwriter_t *dwriter)
+                                       cherokee_dwriter_t *dwriter)
 {
 	ret_t              ret;
 	cherokee_buffer_t *traces_ref = NULL;
@@ -258,8 +258,8 @@ cherokee_admin_server_reply_get_trace (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_admin_server_reply_set_trace (cherokee_handler_t *hdl,
-				       cherokee_dwriter_t *dwriter,
-				       cherokee_buffer_t  *question)
+                                       cherokee_dwriter_t *dwriter,
+                                       cherokee_buffer_t  *question)
 {
 	ret_t ret;
 
@@ -291,8 +291,8 @@ cherokee_admin_server_reply_set_trace (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_admin_server_reply_set_backup_mode (cherokee_handler_t *hdl,
-					     cherokee_dwriter_t *dwriter,
-					     cherokee_buffer_t  *question)
+                                             cherokee_dwriter_t *dwriter,
+                                             cherokee_buffer_t  *question)
 {
 	ret_t              ret;
 	cherokee_server_t *srv = HANDLER_SRV(hdl);
@@ -328,7 +328,7 @@ cherokee_admin_server_reply_set_backup_mode (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_admin_server_reply_get_thread_num (cherokee_handler_t *hdl,
-					    cherokee_dwriter_t *dwriter)
+                                            cherokee_dwriter_t *dwriter)
 {
 	cherokee_server_t *srv = HANDLER_SRV(hdl);
 
@@ -391,7 +391,7 @@ sources_while (cherokee_buffer_t *key, void *value, void *param)
 
 ret_t
 cherokee_admin_server_reply_get_sources (cherokee_handler_t *hdl,
-					 cherokee_dwriter_t *dwriter)
+                                         cherokee_dwriter_t *dwriter)
 {
 	cherokee_server_t *srv = HANDLER_SRV(hdl);
 
@@ -404,8 +404,8 @@ cherokee_admin_server_reply_get_sources (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
-					 cherokee_dwriter_t *dwriter,
-					 cherokee_buffer_t  *question)
+                                         cherokee_dwriter_t *dwriter,
+                                         cherokee_buffer_t  *question)
 {
 	ret_t              ret;
 	char              *begin;

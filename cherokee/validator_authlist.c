@@ -88,7 +88,7 @@ props_free (cherokee_validator_authlist_props_t *props)
 
 static ret_t
 add_new_user (cherokee_validator_authlist_props_t *props,
-	      cherokee_config_node_t              *conf)
+              cherokee_config_node_t              *conf)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp;
@@ -122,8 +122,8 @@ add_new_user (cherokee_validator_authlist_props_t *props,
 
 ret_t
 cherokee_validator_authlist_configure (cherokee_config_node_t   *conf,
-				       cherokee_server_t        *srv,
-				       cherokee_module_props_t **_props)
+                                       cherokee_server_t        *srv,
+                                       cherokee_module_props_t **_props)
 {
 	ret_t                                ret;
 	cherokee_list_t                     *i;
@@ -171,7 +171,7 @@ authlist_free (cherokee_validator_authlist_t *authlist)
 
 static ret_t
 authlist_check (cherokee_validator_authlist_t *authlist,
-		cherokee_connection_t         *conn)
+                cherokee_connection_t         *conn)
 {
 	int                                  re;
 	ret_t                                ret;
@@ -201,14 +201,14 @@ authlist_check (cherokee_validator_authlist_t *authlist,
 			/* Check the real password
 			 */
 			re = cherokee_buffer_cmp_buf (&entry->password,
-						      &conn->validator->passwd);
+			                              &conn->validator->passwd);
 			if (re == 0)
 				return ret_ok;
 			break;
 
 		case http_auth_digest:
 			ret = cherokee_validator_digest_check (VALIDATOR(authlist),
-							       &entry->password, conn);
+			                                       &entry->password, conn);
 			if (ret == ret_ok)
 				return ret;
 			break;
@@ -224,8 +224,8 @@ authlist_check (cherokee_validator_authlist_t *authlist,
 
 static ret_t
 authlist_add_headers (cherokee_validator_authlist_t *authlist,
-		      cherokee_connection_t         *conn,
-		      cherokee_buffer_t             *buf)
+                      cherokee_connection_t         *conn,
+                      cherokee_buffer_t             *buf)
 {
 	UNUSED(authlist);
 	UNUSED(conn);
@@ -237,7 +237,7 @@ authlist_add_headers (cherokee_validator_authlist_t *authlist,
 
 ret_t
 cherokee_validator_authlist_new (cherokee_validator_authlist_t **authlist,
-				 cherokee_module_props_t        *props)
+                                 cherokee_module_props_t        *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_authlist);
 

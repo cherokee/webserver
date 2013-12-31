@@ -33,10 +33,10 @@
 #define WATCH_SLEEP 1000
 
 #define CHECK_ERROR(msg)             \
-	 if (ret != ret_ok) {        \
-	    PRINT_ERROR_S (msg"\n"); \
-	    return ERROR;            \
-	 }
+	if (ret != ret_ok) {        \
+		PRINT_ERROR_S (msg"\n"); \
+		return ERROR;            \
+	}
 
 int
 main (int argc, char *argv[])
@@ -75,13 +75,13 @@ main (int argc, char *argv[])
 	/* Prepare the admin client object
 	 */
 	ret = cherokee_admin_client_prepare (client, fdpoll, &url);
- 	if (ret != ret_ok) {
+	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Client prepare failed\n");
 		return ERROR;
 	}
 
 	ret = cherokee_admin_client_connect (client);
- 	if (ret != ret_ok) {
+	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Couldn't connect\n");
 		return ERROR;
 	}
@@ -115,8 +115,8 @@ main (int argc, char *argv[])
 			cherokee_connection_info_t *conn = CONN_INFO(i);
 
 			printf ("Request: '%s', phase: '%s', rx: '%s', tx: '%s', size: '%s'\n",
-				conn->request.buf, conn->phase.buf, conn->rx.buf,
-				conn->tx.buf, conn->total_size.buf);
+			        conn->request.buf, conn->phase.buf, conn->rx.buf,
+			        conn->tx.buf, conn->total_size.buf);
 		}
 	}
 

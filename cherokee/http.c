@@ -28,10 +28,10 @@
 #include <stdio.h>
 
 #define entry(name,name_str)                           \
-	    case name:	                               \
-	         if (len) *len = sizeof(name_str) - 1; \
-	         *str = name_str;                      \
- 		 return ret_ok;
+	case name:	                               \
+		if (len) *len = sizeof(name_str) - 1; \
+		*str = name_str;                      \
+		return ret_ok;
 
 
 ret_t
@@ -89,7 +89,7 @@ cherokee_http_method_to_string (cherokee_http_method_t method, const char **str,
 
 ret_t
 cherokee_http_string_to_method (cherokee_buffer_t      *string,
-				cherokee_http_method_t *method)
+                                cherokee_http_method_t *method)
 {
 	if (cherokee_buffer_case_cmp_str (string, "get") == 0)
 		*method = http_get;
@@ -343,9 +343,9 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (processing);
 
 	default:
- 		LOG_WARNING (CHEROKEE_ERROR_HTTP_UNKNOWN_CODE, code);
- 		cherokee_buffer_add_str (buf, http_internal_error_string);
- 		return ret_error;
+		LOG_WARNING (CHEROKEE_ERROR_HTTP_UNKNOWN_CODE, code);
+		cherokee_buffer_add_str (buf, http_internal_error_string);
+		return ret_error;
 	}
 
 	SHOULDNT_HAPPEN;

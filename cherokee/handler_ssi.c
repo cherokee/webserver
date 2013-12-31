@@ -55,8 +55,8 @@ typedef enum {
 
 ret_t
 cherokee_handler_ssi_new (cherokee_handler_t     **hdl,
-			  cherokee_connection_t   *cnt,
-			  cherokee_module_props_t *props)
+                          cherokee_connection_t   *cnt,
+                          cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_ssi);
 
@@ -95,8 +95,8 @@ props_free (cherokee_handler_ssi_props_t *props)
 
 ret_t
 cherokee_handler_ssi_configure (cherokee_config_node_t   *conf,
-				cherokee_server_t        *srv,
-				cherokee_module_props_t **_props)
+                                cherokee_server_t        *srv,
+                                cherokee_module_props_t **_props)
 {
 	cherokee_handler_ssi_props_t *props;
 
@@ -108,7 +108,7 @@ cherokee_handler_ssi_configure (cherokee_config_node_t   *conf,
 		CHEROKEE_NEW_STRUCT (n, handler_ssi_props);
 
 		cherokee_module_props_init_base (MODULE_PROPS(n),
-						 MODULE_PROPS_FREE(props_free));
+		                                 MODULE_PROPS_FREE(props_free));
 		n->foo = 1;
 		*_props = MODULE_PROPS(n);
 	}
@@ -120,7 +120,7 @@ cherokee_handler_ssi_configure (cherokee_config_node_t   *conf,
 
 static ret_t
 get_pair (cherokee_buffer_t *key,
-	  cherokee_buffer_t *pair)
+          cherokee_buffer_t *pair)
 {
 	char *i = key->buf;
 
@@ -133,7 +133,7 @@ get_pair (cherokee_buffer_t *key,
 
 static ret_t
 get_val (char              *begin,
-	 cherokee_buffer_t *val)
+         cherokee_buffer_t *val)
 {
 	char    *j;
 	char    *i = begin;
@@ -304,8 +304,8 @@ parse (cherokee_handler_ssi_t *hdl,
 
 				}  else {
 					re = strncmp (fpath.buf,
-						      HANDLER_VSRV(hdl)->root.buf,
-						      HANDLER_VSRV(hdl)->root.len);
+					              HANDLER_VSRV(hdl)->root.buf,
+					              HANDLER_VSRV(hdl)->root.len);
 					if (re != 0) {
 						ignore = true;
 					}
@@ -387,7 +387,7 @@ out:
 
 static ret_t
 init (cherokee_handler_ssi_t *hdl,
-      cherokee_buffer_t      *local_path)
+          cherokee_buffer_t      *local_path)
 {
 	int                    re;
 	ret_t                  ret;
@@ -470,7 +470,7 @@ cherokee_handler_ssi_free (cherokee_handler_ssi_t *hdl)
 
 ret_t
 cherokee_handler_ssi_step (cherokee_handler_ssi_t *hdl,
-			   cherokee_buffer_t      *buffer)
+                           cherokee_buffer_t      *buffer)
 {
 	cherokee_buffer_add_buffer (buffer, &hdl->render);
 	return ret_eof_have_data;
@@ -479,7 +479,7 @@ cherokee_handler_ssi_step (cherokee_handler_ssi_t *hdl,
 
 ret_t
 cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
-				  cherokee_buffer_t      *buffer)
+                                  cherokee_buffer_t      *buffer)
 {
 	ret_t                  ret;
 	char                  *ext;

@@ -110,8 +110,8 @@ match (cherokee_rule_directory_t *rule,
 
 static ret_t
 configure (cherokee_rule_directory_t *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t ret;
 
@@ -120,7 +120,7 @@ configure (cherokee_rule_directory_t *rule,
 	ret = cherokee_config_node_copy (conf, "directory", &rule->directory);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-			      RULE(rule)->priority, "directory");
+		              RULE(rule)->priority, "directory");
 		return ret_error;
 	}
 
@@ -157,5 +157,5 @@ cherokee_rule_directory_new (cherokee_rule_directory_t **rule)
 	cherokee_buffer_init (&n->directory);
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

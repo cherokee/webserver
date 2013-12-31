@@ -60,7 +60,7 @@ cherokee_flcache_new (cherokee_flcache_t **flcache)
 
 static void
 may_rm_pid_dir (cherokee_buffer_t *path,
-		uid_t              uid)
+                uid_t              uid)
 {
 	int          re;
 	char        *s;
@@ -113,8 +113,8 @@ cherokee_flcache_free (cherokee_flcache_t *flcache)
 
 static ret_t
 mkdir_flcache_directory (cherokee_flcache_t        *flcache,
-			 cherokee_virtual_server_t *vserver,
-			 const char                *basedir)
+                         cherokee_virtual_server_t *vserver,
+                         const char                *basedir)
 {
 	/* Build the fullpath
 	 */
@@ -133,8 +133,8 @@ mkdir_flcache_directory (cherokee_flcache_t        *flcache,
 
 ret_t
 cherokee_flcache_configure (cherokee_flcache_t     *flcache,
-			    cherokee_config_node_t *conf,
-			    void                   *vsrv)
+                            cherokee_config_node_t *conf,
+                            void                   *vsrv)
 {
 	ret_t                      ret;
 	cherokee_virtual_server_t *vserver = vsrv;
@@ -174,7 +174,7 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 
 ret_t
 cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
-				 cherokee_connection_t *conn)
+                                 cherokee_connection_t *conn)
 {
 	ret_t                        ret;
 	cherokee_avl_flcache_node_t *entry = NULL;
@@ -234,7 +234,7 @@ cherokee_flcache_req_get_cached (cherokee_flcache_t    *flcache,
 
 ret_t
 cherokee_flcache_req_is_storable (cherokee_flcache_t    *flcache,
-				  cherokee_connection_t *conn)
+                                  cherokee_connection_t *conn)
 {
 	UNUSED (flcache);
 
@@ -289,7 +289,7 @@ cherokee_flcache_req_is_storable (cherokee_flcache_t    *flcache,
 
 ret_t
 cherokee_flcache_purge_path (cherokee_flcache_t *flcache,
-			     cherokee_buffer_t  *path)
+                             cherokee_buffer_t  *path)
 {
 	ret_t ret;
 
@@ -319,7 +319,7 @@ cherokee_flcache_conn_init (cherokee_flcache_conn_t *flcache_conn)
 
 ret_t
 cherokee_flcache_req_set_store (cherokee_flcache_t    *flcache,
-				cherokee_connection_t *conn)
+                                cherokee_connection_t *conn)
 {
 	ret_t                        ret;
 	int                          dir;
@@ -365,8 +365,8 @@ cherokee_flcache_req_set_store (cherokee_flcache_t    *flcache,
 
 static ret_t
 inspect_header (cherokee_flcache_conn_t *flcache_conn,
-		cherokee_buffer_t       *header,
-		cherokee_connection_t   *conn)
+                cherokee_buffer_t       *header,
+                cherokee_connection_t   *conn)
 {
 	ret_t                        ret;
 	char                        *value;
@@ -408,7 +408,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 			value = begin + 8;
 			while ((CHEROKEE_CHAR_IS_WHITE(*value)) && (value < end)) value++;
 
- 			node->valid_until = 0;
+			node->valid_until = 0;
 			cherokee_dtm_str2time (value, end - value, &node->valid_until);
 
 			if (node->valid_until > cherokee_bogonow_now + 1) {
@@ -596,7 +596,7 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 
 static ret_t
 create_flconn_file (cherokee_flcache_t    *flcache,
-		    cherokee_connection_t *conn)
+                    cherokee_connection_t *conn)
 {
 	ret_t                        ret;
 	cherokee_buffer_t            tmp   = CHEROKEE_BUF_INIT;
@@ -644,7 +644,7 @@ error:
 
 ret_t
 cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn,
-				     cherokee_connection_t   *conn)
+                                     cherokee_connection_t   *conn)
 {
 	ret_t                        ret;
 	ssize_t                      written;
@@ -710,7 +710,7 @@ cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn,
 
 ret_t
 cherokee_flcache_conn_write_body (cherokee_flcache_conn_t *flcache_conn,
-				  cherokee_connection_t   *conn)
+                                  cherokee_connection_t   *conn)
 {
 	ssize_t written;
 
@@ -732,7 +732,7 @@ cherokee_flcache_conn_write_body (cherokee_flcache_conn_t *flcache_conn,
 
 ret_t
 cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
-				   cherokee_connection_t   *conn)
+                                   cherokee_connection_t   *conn)
 {
 	ret_t   ret;
 	ssize_t got;
@@ -784,7 +784,7 @@ cherokee_flcache_conn_send_header (cherokee_flcache_conn_t *flcache_conn,
 
 ret_t
 cherokee_flcache_conn_send_body (cherokee_flcache_conn_t *flcache_conn,
-				 cherokee_connection_t   *conn)
+                                 cherokee_connection_t   *conn)
 {
 	ret_t              ret;
 	size_t             got = 0;
@@ -834,7 +834,7 @@ cherokee_flcache_cleanup (cherokee_flcache_t *flcache)
 
 ret_t
 cherokee_flcache_del_entry (cherokee_flcache_t          *flcache,
-			    cherokee_avl_flcache_node_t *entry)
+                            cherokee_avl_flcache_node_t *entry)
 {
 	ret_t ret;
 

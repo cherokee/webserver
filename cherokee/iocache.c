@@ -118,7 +118,7 @@ free_cb (cherokee_cache_entry_t *entry)
 
 static ret_t
 get_stats_cb (cherokee_cache_t  *cache,
-	      cherokee_buffer_t *info)
+              cherokee_buffer_t *info)
 {
 	size_t total = 0;
 
@@ -134,9 +134,9 @@ get_stats_cb (cherokee_cache_t  *cache,
 
 static ret_t
 iocache_entry_new_cb (cherokee_cache_t        *cache,
-		      cherokee_buffer_t       *key,
-		      void                    *param,
-		      cherokee_cache_entry_t **ret_entry)
+                      cherokee_buffer_t       *key,
+                      void                    *param,
+                      cherokee_cache_entry_t **ret_entry)
 {
 	CHEROKEE_NEW_STRUCT(n, iocache_entry_extension);
 
@@ -176,7 +176,7 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 
 ret_t
 cherokee_iocache_configure (cherokee_iocache_t     *iocache,
-			    cherokee_config_node_t *conf)
+                            cherokee_config_node_t *conf)
 {
 	ret_t            ret;
 	cherokee_list_t *i;
@@ -320,7 +320,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 
 static ret_t
 ioentry_update_mmap (cherokee_iocache_entry_t *entry,
-		     int                      *fd)
+                     int                      *fd)
 {
 	ret_t              ret;
 	int                fd_local = -1;
@@ -393,12 +393,12 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	/* Map the file into memory
 	 */
 	entry->mmaped =
-		mmap (NULL,                 /* void   *start  */
-		      entry->state.st_size, /* size_t  length */
-		      PROT_READ,            /* int     prot   */
-		      MAP_OPTIONS,          /* int     flag   */
-		      fd_local,             /* int     fd     */
-		      0);                   /* off_t   offset */
+	      mmap (NULL,                 /* void   *start  */
+	            entry->state.st_size, /* size_t  length */
+	            PROT_READ,            /* int     prot   */
+	            MAP_OPTIONS,          /* int     flag   */
+	            fd_local,             /* int     fd     */
+	            0);                   /* off_t   offset */
 
 	if (entry->mmaped == MAP_FAILED) {
 		int err = errno;
@@ -440,8 +440,8 @@ error:
 
 static ret_t
 entry_update_fd (cherokee_iocache_entry_t *entry,
-		 cherokee_iocache_info_t   info,
-		 int                      *fd)
+                 cherokee_iocache_info_t   info,
+                 int                      *fd)
 {
 	ret_t               ret;
 	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
@@ -514,7 +514,7 @@ entry_update_fd (cherokee_iocache_entry_t *entry,
 
 static ret_t
 entry_update (cherokee_iocache_entry_t *entry,
-	      cherokee_iocache_info_t    info)
+              cherokee_iocache_info_t    info)
 {
 	return entry_update_fd (entry, info, NULL);
 }
@@ -527,7 +527,7 @@ fetch_info_cb (cherokee_cache_entry_t *entry)
 	 * entry->mutex       is LOCKED
 	 */
 	entry_update (IOCACHE_ENTRY(entry),
-		      (iocache_stat | iocache_mmap));
+	              (iocache_stat | iocache_mmap));
 	return ret_ok;
 }
 

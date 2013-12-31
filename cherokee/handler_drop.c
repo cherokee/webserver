@@ -35,8 +35,8 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (drop, http_all_methods);
 
 ret_t
 cherokee_handler_drop_new (cherokee_handler_t     **hdl,
-			   cherokee_connection_t   *cnt,
-			   cherokee_module_props_t *props)
+                           cherokee_connection_t   *cnt,
+                           cherokee_module_props_t *props)
 {
 	UNUSED (hdl);
 	UNUSED (cnt);
@@ -47,8 +47,8 @@ cherokee_handler_drop_new (cherokee_handler_t     **hdl,
 
 ret_t
 cherokee_handler_drop_configure (cherokee_config_node_t   *conf,
-				 cherokee_server_t        *srv,
-				 cherokee_module_props_t **props)
+                                 cherokee_server_t        *srv,
+                                 cherokee_module_props_t **props)
 {
 	UNUSED(conf);
 	UNUSED(srv);

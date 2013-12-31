@@ -80,7 +80,7 @@
 "<a href=\"{request}/info/js\">JavaScript</a> and "                                                 CRLF\
 "<a href=\"{request}/info/php\">PHP</a>.</div>"
 
-#define AJAX_JS	\
+#define AJAX_JS                                                                                         \
 "<script type=\"text/javascript\">"                                                                 CRLF\
 "function ajaxObject (url) {"                                                                       CRLF\
 "   var that = this;"                                                                               CRLF\
@@ -88,7 +88,7 @@
 "   this.callback = function(txt) {}"                                                               CRLF\
 "   this.update = function(passData) {"                                                             CRLF\
 "      if (updating == true)"                                                                       CRLF\
-"		    return false;"                                                                  CRLF\
+"          return false;"                                                                           CRLF\
 "      updating = true;"                                                                            CRLF\
 "      var AJAX = null;"                                                                            CRLF\
 "      if (window.XMLHttpRequest) {"                                                                CRLF\
@@ -269,7 +269,7 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 		CHEROKEE_NEW_STRUCT (n, handler_server_info_props);
 
 		cherokee_module_props_init_base (MODULE_PROPS(n),
-						 MODULE_PROPS_FREE(props_free));
+		                                 MODULE_PROPS_FREE(props_free));
 		n->just_about         = false;
 		n->connection_details = false;
 
@@ -302,8 +302,7 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 
 
 static void
-add_uptime (cherokee_dwriter_t *writer,
-	    cherokee_server_t  *srv)
+add_uptime (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	cuint_t           days;
 	cuint_t           hours;
@@ -327,13 +326,13 @@ add_uptime (cherokee_dwriter_t *writer,
 
 	if (days > 0) {
 		cherokee_buffer_add_va (&tmp, "%d Day%s, %d Hour%s, %d Minute%s, %d Seconds",
-					days, days>1?"s":"", hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
+		                        days, days>1?"s":"", hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (hours > 0) {
 		cherokee_buffer_add_va (&tmp, "%d Hour%s, %d Minute%s, %d Seconds",
-					hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
+		                        hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (mins > 0) {
 		cherokee_buffer_add_va (&tmp, "%d Minute%s, %d Seconds",
-					mins, mins>1?"s":"", lapse);
+		                        mins, mins>1?"s":"", lapse);
 	} else {
 		cherokee_buffer_add_va (&tmp, "%d Seconds", lapse);
 	}
@@ -347,8 +346,7 @@ add_uptime (cherokee_dwriter_t *writer,
 
 
 static void
-add_traffic (cherokee_dwriter_t *writer,
-	     cherokee_server_t  *srv)
+add_traffic (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	cherokee_list_t  *i;
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
@@ -453,8 +451,7 @@ add_traffic (cherokee_dwriter_t *writer,
 
 
 static void
-add_config (cherokee_dwriter_t *writer,
-	    cherokee_server_t  *srv)
+add_config (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	cherokee_dwriter_dict_open (writer);
 
@@ -489,8 +486,7 @@ add_config (cherokee_dwriter_t *writer,
 
 
 static void
-add_connections (cherokee_dwriter_t *writer,
-		 cherokee_server_t  *srv)
+add_connections (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	cuint_t conns_num = 0;
 	cuint_t active    = 0;
@@ -558,8 +554,7 @@ modules_while (cherokee_buffer_t *key, void *value, void *params[])
 }
 
 static void
-add_modules (cherokee_dwriter_t *writer,
-	     cherokee_server_t  *srv)
+add_modules (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	cuint_t  loggers    = 0;
 	cuint_t  handlers   = 0;
@@ -572,11 +567,11 @@ add_modules (cherokee_dwriter_t *writer,
 	cuint_t  vrules     = 0;
 	cuint_t  collectors = 0;
 	void    *params[]   = {&loggers, &handlers, &encoders, &validators, &generic,
-			       &balancers, &rules, &cryptors, &vrules, &collectors};
+	                       &balancers, &rules, &cryptors, &vrules, &collectors};
 
 	cherokee_avl_while (AVL_GENERIC (&srv->loader.table),
-			    (cherokee_avl_while_func_t) modules_while,
-			    params, NULL, NULL);
+	                    (cherokee_avl_while_func_t) modules_while,
+	                    params, NULL, NULL);
 
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "loggers");
@@ -604,8 +599,7 @@ add_modules (cherokee_dwriter_t *writer,
 
 
 static ret_t
-server_info_build_logo (cherokee_handler_server_info_t *hdl,
-			cherokee_buffer_t              *buffer)
+server_info_build_logo (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer)
 {
 	ret_t ret;
 	UNUSED(hdl);
@@ -615,8 +609,7 @@ server_info_build_logo (cherokee_handler_server_info_t *hdl,
 }
 
 static ret_t
-server_info_build_html (cherokee_handler_server_info_t *hdl,
-			cherokee_buffer_t              *buffer)
+server_info_build_html (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer)
 {
 	cherokee_buffer_t ver = CHEROKEE_BUF_INIT;
 
@@ -628,8 +621,8 @@ server_info_build_html (cherokee_handler_server_info_t *hdl,
 	cherokee_buffer_mrproper (&ver);
 
 	cherokee_buffer_replace_string (buffer, "{request}", 9,
-					HANDLER_CONN(hdl)->request.buf,
-					HANDLER_CONN(hdl)->request.len);
+	                                HANDLER_CONN(hdl)->request.buf,
+	                                HANDLER_CONN(hdl)->request.len);
 
 	cherokee_buffer_add_str (buffer, PAGE_FOOT);
 	return ret_ok;
@@ -637,8 +630,7 @@ server_info_build_html (cherokee_handler_server_info_t *hdl,
 
 
 static void
-add_icons (cherokee_dwriter_t *writer,
-	   cherokee_server_t  *srv)
+add_icons (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	if (srv->icons == NULL) {
 		cherokee_dwriter_null (writer);
@@ -657,8 +649,7 @@ add_icons (cherokee_dwriter_t *writer,
 
 
 static void
-add_iocache (cherokee_dwriter_t *writer,
-	     cherokee_server_t  *srv)
+add_iocache (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	float               percent;
 	size_t              mmaped  = 0;
@@ -731,8 +722,7 @@ add_iocache (cherokee_dwriter_t *writer,
 
 
 static void
-add_detailed_connections (cherokee_dwriter_t *writer,
-			  cherokee_list_t    *infos)
+add_detailed_connections (cherokee_dwriter_t *writer, cherokee_list_t *infos)
 {
 	cherokee_list_t   *i, *j;
 	cherokee_buffer_t tmp    = CHEROKEE_BUF_INIT;
@@ -756,7 +746,7 @@ add_detailed_connections (cherokee_dwriter_t *writer,
 		cherokee_dwriter_cstring (writer, "percentage");
 		if (!cherokee_buffer_is_empty (&info->percent)) {
 			cherokee_dwriter_number  (writer,
-						  info->percent.buf, info->percent.len);
+			                          info->percent.buf, info->percent.len);
 		} else {
 			cherokee_dwriter_null (writer);
 		}
@@ -861,8 +851,8 @@ out:
 
 ret_t
 cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
-				   cherokee_connection_t    *cnt,
-				   cherokee_module_props_t  *props)
+                                   cherokee_connection_t    *cnt,
+                                   cherokee_module_props_t  *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_server_info);
@@ -947,7 +937,7 @@ cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 
 ret_t
 cherokee_handler_server_info_step (cherokee_handler_server_info_t *hdl,
-				   cherokee_buffer_t              *buffer)
+                                   cherokee_buffer_t              *buffer)
 {
 	ret_t ret;
 
@@ -961,7 +951,7 @@ cherokee_handler_server_info_step (cherokee_handler_server_info_t *hdl,
 
 ret_t
 cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
-					  cherokee_buffer_t              *buffer)
+                                          cherokee_buffer_t              *buffer)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 

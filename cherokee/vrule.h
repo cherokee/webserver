@@ -67,11 +67,11 @@ typedef struct {
  */
 #define PLUGIN_INFO_VRULE_EASY_INIT(name)                         \
 	PLUGIN_INFO_INIT(name, cherokee_vrule,                    \
-		(void *)cherokee_vrule_ ## name ## _new,          \
-		(void *)NULL)
+	                 (void *)cherokee_vrule_ ## name ## _new, \
+	                 (void *)NULL)
 
 #define PLUGIN_INFO_VRULE_EASIEST_INIT(name)                      \
-	PLUGIN_EMPTY_INIT_FUNCTION(name)			  \
+	PLUGIN_EMPTY_INIT_FUNCTION(name)                          \
 	PLUGIN_INFO_VRULE_EASY_INIT(name)
 
 /* Methods

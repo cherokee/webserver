@@ -57,8 +57,8 @@ typedef void *func_new_t;
 
 static ret_t
 add_static_entry (cherokee_plugin_loader_t *loader,
-		  const char               *name,
-		  void                     *info)
+                  const char               *name,
+                  void                     *info)
 {
 	entry_t *entry;
 
@@ -173,9 +173,9 @@ get_sym_from_dlopen_handler (void *dl_handle, const char *sym)
 
 static ret_t
 dylib_open (cherokee_plugin_loader_t  *loader,
-	    const char                *libname,
-	    int                        extra_flags,
-	    void                     **handler_out)
+            const char                *libname,
+            int                        extra_flags,
+            void                     **handler_out)
 {
 	ret_t             ret;
 	void             *lib;
@@ -214,8 +214,8 @@ dylib_open (cherokee_plugin_loader_t  *loader,
 
 static ret_t
 execute_init_func (cherokee_plugin_loader_t *loader,
-		   const char               *module,
-		   entry_t                  *entry)
+                   const char               *module,
+                   entry_t                  *entry)
 {
 	ret_t ret;
 	void (*init_func) (cherokee_plugin_loader_t *);
@@ -259,10 +259,10 @@ execute_init_func (cherokee_plugin_loader_t *loader,
 
 static ret_t
 get_info (cherokee_plugin_loader_t  *loader,
-	  const char                *module,
-	  int                        flags,
-	  cherokee_plugin_info_t   **info,
-	  void                     **dl_handler)
+          const char                *module,
+          int                        flags,
+          cherokee_plugin_info_t   **info,
+          void                     **dl_handler)
 {
 	ret_t             ret;
 	cherokee_buffer_t info_name = CHEROKEE_BUF_INIT;
@@ -294,7 +294,7 @@ get_info (cherokee_plugin_loader_t  *loader,
 
 static ret_t
 check_deps_file (cherokee_plugin_loader_t *loader,
-		 const char               *modname)
+                 const char               *modname)
 {
 	FILE             *file;
 	char              temp[128];
@@ -337,8 +337,8 @@ exit:
 
 static ret_t
 load_common (cherokee_plugin_loader_t *loader,
-	     const char               *modname,
-	     int                       flags)
+             const char               *modname,
+             int                       flags)
 {
 	ret_t                   ret;
 	entry_t                *entry     = NULL;
@@ -405,7 +405,7 @@ load_common (cherokee_plugin_loader_t *loader,
 
 ret_t
 cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader,
-				       const char               *modname)
+                                       const char               *modname)
 {
 	return load_common (loader, modname, 0);
 }
@@ -413,7 +413,7 @@ cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader,
 
 ret_t
 cherokee_plugin_loader_load (cherokee_plugin_loader_t *loader,
-			     const char               *modname)
+                             const char               *modname)
 {
 #ifdef HAVE_RTLDGLOBAL
 	return load_common (loader, modname, RTLD_GLOBAL);
@@ -425,7 +425,7 @@ cherokee_plugin_loader_load (cherokee_plugin_loader_t *loader,
 
 ret_t
 cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader,
-			       const char               *modname)
+                               const char               *modname)
 {
 	int      re     = 0;
 	ret_t    ret;
@@ -451,8 +451,8 @@ cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader,
 
 ret_t
 cherokee_plugin_loader_get_info (cherokee_plugin_loader_t  *loader,
-				 const char                *modname,
-				 cherokee_plugin_info_t   **info)
+                                 const char                *modname,
+                                 cherokee_plugin_info_t   **info)
 {
 	ret_t    ret;
 	entry_t *entry;
@@ -460,7 +460,7 @@ cherokee_plugin_loader_get_info (cherokee_plugin_loader_t  *loader,
 	ret = cherokee_avl_get_ptr (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok)
 		return ret;
-	
+
 	if (entry == NULL)
 		return ret_error;
 
@@ -471,9 +471,9 @@ cherokee_plugin_loader_get_info (cherokee_plugin_loader_t  *loader,
 
 ret_t
 cherokee_plugin_loader_get_sym  (cherokee_plugin_loader_t  *loader,
-				 const char                *modname,
-				 const char                *name,
-				 void                     **sym)
+                                 const char                *modname,
+                                 const char                *name,
+                                 void                     **sym)
 {
 	ret_t    ret;
 	entry_t *entry;
@@ -502,8 +502,8 @@ cherokee_plugin_loader_get_sym  (cherokee_plugin_loader_t  *loader,
 
 ret_t
 cherokee_plugin_loader_get (cherokee_plugin_loader_t  *loader,
-			    const char                *modname,
-			    cherokee_plugin_info_t   **info)
+                            const char                *modname,
+                            cherokee_plugin_info_t   **info)
 {
 	ret_t ret;
 
@@ -555,7 +555,7 @@ while_print_name (cherokee_buffer_t *key, void *value, void *param)
 
 ret_t
 cherokee_plugin_loader_get_mods_info (cherokee_plugin_loader_t *loader,
-				      cherokee_buffer_t        *builtin)
+                                      cherokee_buffer_t        *builtin)
 {
 	/* Build the built-in module string
 	 */

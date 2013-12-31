@@ -88,42 +88,45 @@ typedef struct {
 /* Convenience macros
  */
 #define PLUGIN_INFO_INIT(name, type, func, conf)                    \
- 	cherokee_plugin_info_t                                      \
-	        PLUGIN_INFO_NAME(name) =   	                    \
-		{	type,	 		  	  	    \
-			func,		 			    \
+	cherokee_plugin_info_t                                      \
+		PLUGIN_INFO_NAME(name) =                            \
+		{                                                   \
+			type,                                       \
+			func,                                       \
 			conf,                                       \
 			#name                                       \
 		}
 
 #define PLUGIN_INFO_HANDLER_INIT(name, type, func, conf, methods)   \
- 	cherokee_plugin_info_handler_t                              \
-	        PLUGIN_INFO_NAME(name) = {  	                    \
-		{	type,	 		  	  	    \
-			func,		 			    \
+	cherokee_plugin_info_handler_t                              \
+		PLUGIN_INFO_NAME(name) = {                          \
+		{                                                   \
+			type,                                       \
+			func,                                       \
 			conf,                                       \
 			#name                                       \
-		},			                            \
-		(methods)				  	    \
- 	}
+		},                                                  \
+		(methods)                                           \
+	}
 
 #define PLUGIN_INFO_VALIDATOR_INIT(name, type, func, conf, methods) \
- 	cherokee_plugin_info_validator_t                            \
-	        PLUGIN_INFO_NAME(name) = {	                    \
-		{	type,	 				    \
-			func,		 			    \
+	cherokee_plugin_info_validator_t                            \
+		PLUGIN_INFO_NAME(name) = {                          \
+		{                                                   \
+			type,                                       \
+			func,                                       \
 			conf,                                       \
 			#name                                       \
-		},				 		    \
-		(methods)				  	    \
- 	}
+		},                                                  \
+		(methods)                                           \
+	}
 
 
 /* Easy init macros
  */
 #define PLUGIN_INFO_EASY_INIT(type,name)                            \
 	PLUGIN_INFO_INIT(name, type,                                \
-		(void *)type ## _ ## name ## _new,     \
+		(void *)type ## _ ## name ## _new,                  \
 		(void *)type ## _ ## name ## _configure)
 
 
@@ -132,21 +135,21 @@ typedef struct {
 #define PLUGIN_INIT_NAME(name)  cherokee_plugin_ ## name ## _init
 #define PLUGIN_IS_INIT(name)    _## name ##_is_init
 
-#define PLUGIN_INIT_PROTOTYPE(name)         			    \
+#define PLUGIN_INIT_PROTOTYPE(name)                                 \
 	static cherokee_boolean_t PLUGIN_IS_INIT(name) = false;     \
-        void                                                        \
+	void                                                        \
 	PLUGIN_INIT_NAME(name) (cherokee_plugin_loader_t *loader)
 
-#define PLUGIN_INIT_ONCE_CHECK(name)         		            \
-	if (PLUGIN_IS_INIT(name))				    \
-		return;						    \
+#define PLUGIN_INIT_ONCE_CHECK(name)                                \
+	if (PLUGIN_IS_INIT(name))                                   \
+		return;                                             \
 	PLUGIN_IS_INIT(name) = true
 
 #define PLUGIN_EMPTY_INIT_FUNCTION(name)                            \
 	void                                                        \
 	PLUGIN_INIT_NAME(name) (cherokee_plugin_loader_t *loader)   \
 	{                                                           \
-		UNUSED(loader);					    \
+		UNUSED(loader);                                     \
 	}                                                           \
 
 

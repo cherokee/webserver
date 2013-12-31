@@ -68,13 +68,12 @@ add_access (char *address, void *data)
 	}
 
 	return ret_ok;
-
 }
 
 
 ret_t
 cherokee_x_real_ip_configure (cherokee_x_real_ip_t   *real_ip,
-			      cherokee_config_node_t *config)
+                              cherokee_config_node_t *config)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
@@ -97,7 +96,7 @@ cherokee_x_real_ip_configure (cherokee_x_real_ip_t   *real_ip,
 
 ret_t
 cherokee_x_real_ip_is_allowed (cherokee_x_real_ip_t  *real_ip,
-			       cherokee_socket_t     *sock)
+                               cherokee_socket_t     *sock)
 {
 	ret_t ret;
 

@@ -58,8 +58,8 @@ static cherokee_buffer_t now;
 
 ret_t
 cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
-			  cherokee_virtual_server_t  *vsrv,
-			  cherokee_config_node_t     *config)
+                          cherokee_virtual_server_t  *vsrv,
+                          cherokee_config_node_t     *config)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, logger_ncsa);
@@ -108,23 +108,23 @@ bogotime_callback (void *param)
 	 */
 	cherokee_buffer_clean  (&now);
 	cherokee_buffer_add_va (&now,
-				" [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"",
-				pnow_tm->tm_mday,
-				month[pnow_tm->tm_mon],
-				1900 + pnow_tm->tm_year,
-				pnow_tm->tm_hour,
-				pnow_tm->tm_min,
-				pnow_tm->tm_sec,
-				(cherokee_bogonow_tzloc < 0) ? '-' : '+',
-				(int) (abs(cherokee_bogonow_tzloc) / 60),
-				(int) (abs(cherokee_bogonow_tzloc) % 60));
+	                        " [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"",
+	                        pnow_tm->tm_mday,
+	                        month[pnow_tm->tm_mon],
+	                        1900 + pnow_tm->tm_year,
+	                        pnow_tm->tm_hour,
+	                        pnow_tm->tm_min,
+	                        pnow_tm->tm_sec,
+	                        (cherokee_bogonow_tzloc < 0) ? '-' : '+',
+	                        (int) (abs(cherokee_bogonow_tzloc) / 60),
+	                        (int) (abs(cherokee_bogonow_tzloc) % 60));
 }
 
 
 ret_t
 cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t    *logger,
-				cherokee_virtual_server_t *vsrv,
-				cherokee_config_node_t    *config)
+                                cherokee_virtual_server_t *vsrv,
+                                cherokee_config_node_t    *config)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
@@ -197,8 +197,8 @@ cherokee_logger_ncsa_flush (cherokee_logger_ncsa_t *logger)
 
 static ret_t
 build_log_string (cherokee_logger_ncsa_t *logger,
-		  cherokee_connection_t  *cnt,
-		  cherokee_buffer_t      *buf)
+                  cherokee_connection_t  *cnt,
+                  cherokee_buffer_t      *buf)
 {
 	ret_t              ret;
 	const char        *method;

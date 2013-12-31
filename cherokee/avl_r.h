@@ -35,8 +35,8 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	   cherokee_avl_t  avl;
-	   void           *priv;
+	cherokee_avl_t  avl;
+	void           *priv;
 } cherokee_avl_r_t;
 
 #define AVL_R(a) ((cherokee_avl_t *)(a))

@@ -38,8 +38,8 @@ PLUGIN_INFO_RULE_EASIEST_INIT(header);
 
 static ret_t
 match_regex (cherokee_rule_header_t  *rule,
-	     cherokee_connection_t   *conn,
-	     cherokee_config_entry_t *ret_conf)
+             cherokee_connection_t   *conn,
+             cherokee_config_entry_t *ret_conf)
 {
 	int      re;
 	ret_t    ret;
@@ -51,8 +51,8 @@ match_regex (cherokee_rule_header_t  *rule,
 	/* Find the header
 	 */
 	ret = cherokee_header_get_known (&conn->header,
-					 rule->header,
-					 &info, &info_len);
+	                                 rule->header,
+	                                 &info, &info_len);
 
 	if ((ret != ret_ok) || (info == NULL)) {
 		TRACE (ENTRIES, "Request '%s'; couldn't find header(%d)\n",
@@ -63,8 +63,8 @@ match_regex (cherokee_rule_header_t  *rule,
 	/* Check whether it matches
 	 */
 	re = pcre_exec (rule->pcre, NULL,
-			info, info_len,
-			0, 0, NULL, 0);
+	                info, info_len,
+	                0, 0, NULL, 0);
 
 	if (re < 0) {
 		TRACE (ENTRIES, "Request '%s' didn't match header(%d) with '%s'\n",
@@ -79,8 +79,8 @@ match_regex (cherokee_rule_header_t  *rule,
 
 static ret_t
 match_provided (cherokee_rule_header_t  *rule,
-		cherokee_connection_t   *conn,
-		cherokee_config_entry_t *ret_conf)
+                cherokee_connection_t   *conn,
+                cherokee_config_entry_t *ret_conf)
 {
 	ret_t ret;
 
@@ -99,8 +99,8 @@ match_provided (cherokee_rule_header_t  *rule,
 
 static ret_t
 match_complete (cherokee_rule_header_t  *rule,
-		cherokee_connection_t   *conn,
-		cherokee_config_entry_t *ret_conf)
+                cherokee_connection_t   *conn,
+                cherokee_config_entry_t *ret_conf)
 {
 	int re;
 
@@ -109,9 +109,9 @@ match_complete (cherokee_rule_header_t  *rule,
 	/* Check whether it matches
 	 */
 	re = pcre_exec (rule->pcre, NULL,
-			conn->incoming_header.buf,
-			conn->incoming_header.len,
-			0, 0, NULL, 0);
+	                conn->incoming_header.buf,
+	                conn->incoming_header.len,
+	                0, 0, NULL, 0);
 
 	if (re < 0) {
 		TRACE (ENTRIES, "Request '%s' didn't match complete header with '%s'\n",
@@ -152,7 +152,7 @@ match (cherokee_rule_header_t  *rule,
 
 static ret_t
 header_str_to_type (cherokee_buffer_t        *header,
-		    cherokee_common_header_t *common_header)
+                    cherokee_common_header_t *common_header)
 {
 	switch (header->buf[0]) {
 	case 'A':
@@ -278,7 +278,7 @@ header_str_to_type (cherokee_buffer_t        *header,
 
 static ret_t
 type_str_to_type (cherokee_buffer_t           *type_str,
-		  cherokee_rule_header_type_t *type)
+                  cherokee_rule_header_type_t *type)
 {
 	if (equal_buf_str (type_str, "regex")) {
 		*type = rule_header_type_regex;
@@ -295,8 +295,8 @@ type_str_to_type (cherokee_buffer_t           *type_str,
 
 static ret_t
 configure (cherokee_rule_header_t    *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
 	cherokee_buffer_t      *type     = NULL;
@@ -313,7 +313,7 @@ configure (cherokee_rule_header_t    *rule,
 		ret = cherokee_config_node_read (conf, "header", &header);
 		if (ret != ret_ok) {
 			LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-				   RULE(rule)->priority, "header");
+			           RULE(rule)->priority, "header");
 			return ret_error;
 		}
 
@@ -339,7 +339,7 @@ configure (cherokee_rule_header_t    *rule,
 	if (ret != ret_ok) {
 		if ((type) && equal_buf_str (type, "regex")) {
 			LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-				   RULE(rule)->priority, "match");
+			           RULE(rule)->priority, "match");
 			return ret_error;
 		}
 	}
@@ -393,5 +393,5 @@ cherokee_rule_header_new (cherokee_rule_header_t **rule)
 	cherokee_buffer_init (&n->match);
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

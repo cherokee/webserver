@@ -74,16 +74,16 @@ typedef ret_t (* balancer_free_func_t) (cherokee_balancer_t  *balancer);
  */
 #define BALANCER_CONF_PROTOTYPE(name)                              \
 	ret_t cherokee_balancer_ ## name ## _configure (           \
-		cherokee_balancer_t    *,                          \
-		cherokee_server_t      *,			   \
-		cherokee_config_node_t *)
+	        cherokee_balancer_t    *,                          \
+	        cherokee_server_t      *,                          \
+	        cherokee_config_node_t *)
 
 #define PLUGIN_INFO_BALANCER_EASY_INIT(name)                       \
 	BALANCER_CONF_PROTOTYPE(name);                             \
-                                                                   \
+	                                                           \
 	PLUGIN_INFO_INIT(name, cherokee_balancer,                  \
-		(void *)cherokee_balancer_ ## name ## _new,        \
-		(void *)cherokee_balancer_ ## name ## _configure)
+	        (void *)cherokee_balancer_ ## name ## _new,        \
+	        (void *)cherokee_balancer_ ## name ## _configure)
 
 #define PLUGIN_INFO_BALANCER_EASIEST_INIT(name)                    \
 	PLUGIN_EMPTY_INIT_FUNCTION(name)                           \
@@ -100,19 +100,19 @@ ret_t cherokee_balancer_free           (cherokee_balancer_t *balancer);
 /* Virtual methods
  */
 ret_t cherokee_balancer_dispatch    (cherokee_balancer_t    *balancer,
-				     cherokee_connection_t  *conn,
-				     cherokee_source_t     **source);
+                                     cherokee_connection_t  *conn,
+                                     cherokee_source_t     **source);
 
 ret_t cherokee_balancer_report_fail (cherokee_balancer_t    *balancer,
-				     cherokee_connection_t  *conn,
-				     cherokee_source_t      *source);
+                                     cherokee_connection_t  *conn,
+                                     cherokee_source_t      *source);
 
 /* Commodity
  */
 ret_t cherokee_balancer_instance   (cherokee_buffer_t       *name,
-				    cherokee_config_node_t  *conf,
-				    cherokee_server_t       *srv,
-				    cherokee_balancer_t    **balancer);
+                                    cherokee_config_node_t  *conf,
+                                    cherokee_server_t       *srv,
+                                    cherokee_balancer_t    **balancer);
 
 CHEROKEE_END_DECLS
 

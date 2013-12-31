@@ -138,7 +138,7 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 		PRINT_ERROR("Error polling fd=%d rw=%d\n", fd, rw);
 		return ret_error;
 	case 0:
- 		TRACE(ENTRIES, "fd=%d rw=%d, not ready\n", fd, rw);
+		TRACE(ENTRIES, "fd=%d rw=%d, not ready\n", fd, rw);
 /*		return ret_eagain; */
 	}
 

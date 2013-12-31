@@ -106,8 +106,8 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	/* Add big banner
 	 */
 	cherokee_buffer_add_str (buffer, "</title>" CRLF
-				 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" CRLF
-				 "</head>" CRLF "<body>" CRLF "<h1>");
+	                         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" CRLF
+	                         "</head>" CRLF "<body>" CRLF "<h1>");
 	cherokee_http_code_copy (conn->error_code, buffer);
 	cherokee_buffer_add_str (buffer, "</h1>" CRLF);
 
@@ -128,16 +128,17 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 		}
 
 		if (conn->error_code == http_not_found) {
-			cherokee_buffer_add_str (buffer, " was not found on this server.");
+			cherokee_buffer_add_str (buffer,
+			    " was not found on this server.");
 		} else {
 			cherokee_buffer_add_str (buffer,
-				" is no longer available on this server and there is no forwarding address.");
+			    " is no longer available on this server and there is no forwarding address.");
 		}
 		break;
 
 	case http_bad_request:
 		cherokee_buffer_add_str (buffer,
-			"Your browser sent a request that this server could not understand.");
+		    "Your browser sent a request that this server could not understand.");
 		cherokee_buffer_add_str   (buffer, "<p><pre>");
 		cherokee_buffer_add_escape_html (buffer, conn->header.input_buffer);
 		cherokee_buffer_add_str   (buffer, "</pre>");
@@ -145,22 +146,22 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 
 	case http_access_denied:
 		cherokee_buffer_add_str (buffer,
-			"You have no access to the requested URL");
+		    "You have no access to the requested URL");
 		break;
 
 	case http_request_entity_too_large:
 		cherokee_buffer_add_str (buffer,
-			"The length of request entity exceeds the capacity limit for this server.");
+		    "The length of request entity exceeds the capacity limit for this server.");
 		break;
 
 	case http_request_uri_too_long:
 		cherokee_buffer_add_str (buffer,
-			"The length of requested URL exceeds the capacity limit for this server.");
+		    "The length of requested URL exceeds the capacity limit for this server.");
 		break;
 
 	case http_range_not_satisfiable:
 		cherokee_buffer_add_str (buffer,
-			"The requested range was not satisfiable.");
+		    "The requested range was not satisfiable.");
 		break;
 
 	case http_moved_permanently:
@@ -172,17 +173,17 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 
 	case http_unauthorized:
 		cherokee_buffer_add_str (buffer,
-			"This server could not verify that you are authorized to access the requested URL.  "
-			"Either you supplied the wrong credentials (e.g., bad password), "
-			"or your browser doesn't know how to supply the credentials required.");
+		    "This server could not verify that you are authorized to access the requested URL.  "
+		    "Either you supplied the wrong credentials (e.g., bad password), "
+		    "or your browser doesn't know how to supply the credentials required.");
 		break;
 
 	case http_upgrade_required:
 		cherokee_buffer_add_str (buffer,
-			"The requested resource can only be retrieved using SSL.  The server is "
-			"willing to upgrade the current connection to SSL, but your client doesn't "
-			"support it. Either upgrade your client, or try requesting the page "
-			"using https://");
+		    "The requested resource can only be retrieved using SSL.  The server is "
+		    "willing to upgrade the current connection to SSL, but your client doesn't "
+		    "support it. Either upgrade your client, or try requesting the page "
+		    "using https://");
 		break;
 
 	case http_unset:

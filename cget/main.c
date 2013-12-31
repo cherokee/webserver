@@ -85,23 +85,23 @@ static void
 print_help (void)
 {
 	printf ("Cherokee Downloader %s\n"
-		"Usage: cget [options] URL\n\n"
-		"Mandatory arguments to long options are mandatory for short options too.\n\n"
-		"Startup:\n"
-		"  -V,  --version                Print version and exit\n"
-		"  -h,  --help                   Print this help\n"
-		"\n"
-		"Logging and input file:\n"
-		"  -q,  --quiet                  Quiet (no output)\n"
-		"\n"
-		"Download:\n"
-		"  -O   --output-document=FILE   Write documents to FILE\n"
-		"\n"
-		"HTTP options:\n"
-		"  -s,  --save-headers           Save the HTTP headers to file\n"
-		"       --header=STRING          insert STRING among the headers\n"
-		"\n"
-		"Report bugs to alvaro@alobbs.com\n", PACKAGE_VERSION);
+	        "Usage: cget [options] URL\n\n"
+	        "Mandatory arguments to long options are mandatory for short options too.\n\n"
+	        "Startup:\n"
+	        "  -V,  --version                Print version and exit\n"
+	        "  -h,  --help                   Print this help\n"
+	        "\n"
+	        "Logging and input file:\n"
+	        "  -q,  --quiet                  Quiet (no output)\n"
+	        "\n"
+	        "Download:\n"
+	        "  -O   --output-document=FILE   Write documents to FILE\n"
+	        "\n"
+	        "HTTP options:\n"
+	        "  -s,  --save-headers           Save the HTTP headers to file\n"
+	        "       --header=STRING          insert STRING among the headers\n"
+	        "\n"
+	        "Report bugs to alvaro@alobbs.com\n", PACKAGE_VERSION);
 }
 
 
@@ -109,8 +109,8 @@ static void
 print_usage (void)
 {
 	printf ("Cherokee Downloader %s\n"
-		"Usage: cget [options] URL\n\n"
-		"Try `cget --help' for more options.\n", PACKAGE_VERSION);
+	        "Usage: cget [options] URL\n\n"
+	        "Try `cget --help' for more options.\n", PACKAGE_VERSION);
 }
 
 
@@ -368,11 +368,11 @@ main (int argc, char **argv)
 		switch (val) {
 		case 'V':
 			printf ("Cherokee Downloader %s\n"
-				"Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"
-				"Copyright (C) 2001-2014 Alvaro Lopez Ortega.\n"
-				"This is free software; see the source for copying conditions.  There is NO\n"
-				"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
-				PACKAGE_VERSION);
+			        "Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"
+			        "Copyright (C) 2001-2014 Alvaro Lopez Ortega.\n"
+			        "This is free software; see the source for copying conditions.  There is NO\n"
+			        "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
+			        PACKAGE_VERSION);
 			return EXIT_OK;
 
 		case 'O':

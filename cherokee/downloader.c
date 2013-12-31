@@ -145,8 +145,8 @@ cherokee_downloader_set_keepalive (cherokee_downloader_t *downloader, cherokee_b
 
 ret_t
 cherokee_downloader_set_proxy (cherokee_downloader_t *downloader,
-			       cherokee_buffer_t     *proxy,
-			       cuint_t                port)
+                               cherokee_buffer_t     *proxy,
+                               cuint_t                port)
 {
 	char *tmp;
 
@@ -170,8 +170,8 @@ cherokee_downloader_set_proxy (cherokee_downloader_t *downloader,
 
 ret_t
 cherokee_downloader_set_auth (cherokee_downloader_t *downloader,
-			      cherokee_buffer_t     *user,
-			      cherokee_buffer_t     *password)
+                              cherokee_buffer_t     *user,
+                              cherokee_buffer_t     *password)
 {
 	return cherokee_request_header_set_auth (&downloader->request, http_auth_basic, user, password);
 }
@@ -179,7 +179,7 @@ cherokee_downloader_set_auth (cherokee_downloader_t *downloader,
 
 ret_t
 cherokee_downloader_set_cryptor (cherokee_downloader_t *downloader,
-				 cherokee_cryptor_t    *cryptor)
+                                 cherokee_cryptor_t    *cryptor)
 {
 	ret_t              ret;
 	cherokee_socket_t *sock = &downloader->socket;
@@ -205,9 +205,9 @@ cherokee_downloader_get_reply_code (cherokee_downloader_t *downloader, cherokee_
 
 static ret_t
 connect_to (cherokee_downloader_t *downloader,
-	    cherokee_buffer_t     *host,
-	    cuint_t                port,
-	    int                    protocol)
+            cherokee_buffer_t     *host,
+            cuint_t                port,
+            int                    protocol)
 {
 	ret_t              ret;
 	cherokee_socket_t *sock = &downloader->socket;
@@ -230,7 +230,7 @@ connect_to (cherokee_downloader_t *downloader,
 
 		/* Oops! It might be a hostname. Try to resolve it.
 		 */
- 		ret = cherokee_socket_gethostbyname (sock, host);
+		ret = cherokee_socket_gethostbyname (sock, host);
 		if (unlikely(ret != ret_ok)) return ret_error;
 	}
 
@@ -321,8 +321,8 @@ downloader_send_buffer (cherokee_downloader_t *downloader, cherokee_buffer_t *bu
 
 static ret_t
 downloader_header_read (cherokee_downloader_t *downloader,
-			cherokee_buffer_t     *tmp1,
-			cherokee_buffer_t     *tmp2)
+                        cherokee_buffer_t     *tmp1,
+                        cherokee_buffer_t     *tmp2)
 {
 	ret_t               ret;
 	cuint_t             len;
@@ -448,8 +448,8 @@ downloader_step (cherokee_downloader_t *downloader)
 
 ret_t
 cherokee_downloader_step (cherokee_downloader_t *downloader,
-			  cherokee_buffer_t     *ext_tmp1,
-			  cherokee_buffer_t     *ext_tmp2)
+                          cherokee_buffer_t     *ext_tmp1,
+                          cherokee_buffer_t     *ext_tmp2)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp1;
@@ -636,7 +636,7 @@ cherokee_downloader_finished(cherokee_downloader_t *downloader)
 
 	if (downloader->info.body_recv >= downloader->content_length) {
 		ret = ret_ok;
-	} else 	if (downloader->phase == downloader_phase_finished) {
+	} else if (downloader->phase == downloader_phase_finished) {
 		ret = ret_ok;
 	}
 	return ret;

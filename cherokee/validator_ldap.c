@@ -161,8 +161,8 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 	ldap->conn = ldap_init (props->server.buf, props->port);
 	if (ldap->conn == NULL) {
 		LOG_ERRNO (errno, cherokee_err_critical,
-			   CHEROKEE_ERROR_VALIDATOR_LDAP_CONNECT,
-			   props->server.buf, props->port);
+		           CHEROKEE_ERROR_VALIDATOR_LDAP_CONNECT,
+		           props->server.buf, props->port);
 		return ret_error;
 	}
 
@@ -209,8 +209,8 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 
 	if (re != LDAP_SUCCESS) {
 		LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_LDAP_BIND,
-			      props->server.buf, props->port, props->binddn.buf,
-			      props->bindpw.buf, ldap_err2string(re));
+		              props->server.buf, props->port, props->binddn.buf,
+		              props->bindpw.buf, ldap_err2string(re));
 		return ret_error;
 	}
 
@@ -317,7 +317,7 @@ init_filter (cherokee_validator_ldap_t       *ldap,
 
 ret_t
 cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap,
-			       cherokee_connection_t     *conn)
+                               cherokee_connection_t     *conn)
 {
 	int                              re;
 	ret_t                            ret;
@@ -349,7 +349,7 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap,
 	re = ldap_search_s (ldap->conn, props->basedn.buf, LDAP_SCOPE_SUBTREE, ldap->filter.buf, attrs, 0, &message);
 	if (re != LDAP_SUCCESS) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_LDAP_SEARCH,
-			   props->filter.buf ? props->filter.buf : "");
+		           props->filter.buf ? props->filter.buf : "");
 		return ret_error;
 	}
 

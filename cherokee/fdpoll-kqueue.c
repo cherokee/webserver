@@ -113,7 +113,7 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 		break;
 	default:
 		SHOULDNT_HAPPEN;
-        }
+	}
 
 	event->flags  = change;
 	event->fflags = 0;
@@ -168,11 +168,11 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 	 */
 again:
 	n_events = kevent (fdp->kqueue,
-			   fdp->changelist,
-			   fdp->nchanges,
-			   fdp->changelist,
-			   FDPOLL(fdp)->nfiles,
-			   &timeout);
+	                   fdp->changelist,
+	                   fdp->nchanges,
+	                   fdp->changelist,
+	                   FDPOLL(fdp)->nfiles,
+	                   &timeout);
 
 	fdp->nchanges = 0;
 

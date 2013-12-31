@@ -43,7 +43,7 @@
 
 static void interpreter_free (void *src);
 
-#define source_is_unresponsive(src)					\
+#define source_is_unresponsive(src) \
 	(cherokee_bogonow_now > (src)->spawning_since + (src)->timeout)
 
 ret_t
@@ -54,6 +54,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	cherokee_source_init (SOURCE(n));
 	cherokee_buffer_init (&n->interpreter);
 	cherokee_buffer_init (&n->change_user_name);
+	cherokee_buffer_init (&n->chroot);
 
 	n->custom_env           = NULL;
 	n->custom_env_len       = 0;
@@ -115,6 +116,7 @@ interpreter_free (void *ptr)
 
 	cherokee_buffer_mrproper (&src->interpreter);
 	cherokee_buffer_mrproper (&src->change_user_name);
+	cherokee_buffer_mrproper (&src->chroot);
 
 	if (src->custom_env)
 		free_custom_env (src);
@@ -143,17 +145,30 @@ find_next_stop (char *p)
 }
 
 static ret_t
-check_interpreter_full (cherokee_buffer_t *fullpath)
+check_interpreter_full (cherokee_buffer_t *fullpath, cherokee_buffer_t *chroot_dir)
 {
+	ret_t        ret = ret_error;
 	int          re;
 	struct stat  inter;
 	char        *p;
 	char         tmp;
-	const char  *end    = fullpath->buf + fullpath->len;
+	const char  *end;
+	cherokee_buffer_t completepath = CHEROKEE_BUF_INIT;
 
-	p = find_next_stop (fullpath->buf + 1);
+	cherokee_buffer_clean(&completepath);
+	if (chroot_dir->len > 0) {
+		/* Chroot and relative path, it doesn't make sense */
+		if (fullpath->len == 0 || fullpath->buf[0] != '/')
+			goto done;
+
+		cherokee_buffer_add_buffer (&completepath, chroot_dir);
+	}
+	cherokee_buffer_add_buffer(&completepath, fullpath);
+	end = completepath.buf + completepath.len;
+
+	p = find_next_stop (completepath.buf + 1);
 	if (p == NULL)
-		return ret_error;
+		goto done;
 
 	while (p <= end) {
 		/* Set a temporal end */
@@ -161,12 +176,13 @@ check_interpreter_full (cherokee_buffer_t *fullpath)
 		*p  = '\0';
 
 		/* Does the file exist? */
-		re = cherokee_stat (fullpath->buf, &inter);
+		re = cherokee_stat (completepath.buf, &inter);
 		if ((re == 0) &&
 		    (! S_ISDIR(inter.st_mode)))
 		{
 			*p = tmp;
-			return ret_ok;
+			ret = ret_ok;
+			goto done;
 		}
 
 		*p = tmp;
@@ -181,12 +197,14 @@ check_interpreter_full (cherokee_buffer_t *fullpath)
 			p = (char *)end;
 	}
 
-	return ret_error;
+done:
+	cherokee_buffer_mrproper(&completepath);
+	return ret;
 }
 
 
 static ret_t
-check_interpreter_path (cherokee_buffer_t *partial_path)
+check_interpreter_path (cherokee_buffer_t *partial_path, cherokee_buffer_t *chroot_dir)
 {
 	ret_t              ret;
 	char              *p;
@@ -213,7 +231,7 @@ check_interpreter_path (cherokee_buffer_t *partial_path)
 		cherokee_buffer_add_char   (&fullpath, '/');
 		cherokee_buffer_add_buffer (&fullpath, partial_path);
 
-		ret = check_interpreter_full (&fullpath);
+		ret = check_interpreter_full (&fullpath, chroot_dir);
 		if (ret == ret_ok)
 			goto done;
 
@@ -256,9 +274,9 @@ check_interpreter (cherokee_source_interpreter_t *src)
 	ret_t ret;
 
 	if (src->interpreter.buf[0] == '/') {
-		ret = check_interpreter_full (&src->interpreter);
+		ret = check_interpreter_full (&src->interpreter, &src->chroot);
 	} else {
-		ret = check_interpreter_path (&src->interpreter);
+		ret = check_interpreter_path (&src->interpreter, &src->chroot);
 	}
 
 	return ret;
@@ -316,9 +334,7 @@ out:
 
 
 static ret_t
-add_env (cherokee_source_interpreter_t *src,
-	 cherokee_buffer_t             *env,
-	 cherokee_buffer_t             *val_orig)
+add_env (cherokee_source_interpreter_t *src, cherokee_buffer_t *env, cherokee_buffer_t *val_orig)
 {
 	ret_t              ret;
 	int                entry_len;
@@ -377,8 +393,8 @@ error:
 
 ret_t
 cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
-				       cherokee_config_node_t        *conf,
-				       int                            prio)
+                                       cherokee_config_node_t        *conf,
+                                       int                            prio)
 {
 	ret_t                   ret;
 	int                     val;
@@ -438,6 +454,9 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 
 			src->change_group = grp.gr_gid;
 
+		} else if (equal_buf_str (&child->key, "chroot")) {
+			cherokee_buffer_add_buffer (&src->chroot, &child->val);
+
 		} else if (equal_buf_str (&child->key, "env")) {
 			cherokee_config_node_foreach (j, child) {
 				cherokee_config_node_t *child2 = CONFIG_NODE(j);
@@ -486,7 +505,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 
 static ret_t
 _spawn_shm (cherokee_source_interpreter_t *src,
-	    cherokee_logger_writer_t      *error_writer)
+            cherokee_logger_writer_t *error_writer)
 {
 	ret_t   ret;
 	char  **envp;
@@ -511,13 +530,14 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 	/* Invoke the spawn mechanism
 	 */
 	ret = cherokee_spawner_spawn (&src->interpreter,
-				      &src->change_user_name,
-				      src->change_user,
-				      src->change_group,
-				      src->env_inherited,
-				      envp,
-				      error_writer,
-				      &src->pid);
+	                              &src->change_user_name,
+	                              src->change_user,
+	                              src->change_group,
+	                              &src->chroot,
+	                              src->env_inherited,
+	                              envp,
+	                              error_writer,
+	                              &src->pid);
 	switch (ret) {
 	case ret_ok:
 		break;
@@ -533,7 +553,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 
 static ret_t
 _spawn_local (cherokee_source_interpreter_t *src,
-	      cherokee_logger_writer_t      *error_writer)
+              cherokee_logger_writer_t *error_writer)
 {
 	int                re;
 	int                tmp_fd;
@@ -600,6 +620,14 @@ _spawn_local (cherokee_source_interpreter_t *src,
 			}
 		}
 
+		if (src->chroot.len > 0) {
+			re = chroot(src->chroot.buf);
+			if (re < 0) {
+				LOG_ERROR (CHEROKEE_ERROR_SRC_INTER_CHROOT, src->chroot.buf);
+				exit(1);
+			}
+		}
+
 		argv[2] = (char *)tmp.buf;
 		if (src->env_inherited) {
 			do {
@@ -639,7 +667,7 @@ error:
 
 ret_t
 cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
-				   cherokee_logger_writer_t      *error_writer)
+                                   cherokee_logger_writer_t      *error_writer)
 {
 	ret_t ret;
 
@@ -692,8 +720,8 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 
 ret_t
 cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
-					     cherokee_socket_t             *socket,
-					     cherokee_connection_t         *conn)
+                                             cherokee_socket_t             *socket,
+                                             cherokee_connection_t         *conn)
 {
 	int   re;
 	ret_t ret;
@@ -702,7 +730,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 
 	/* Connect
 	 */
- 	ret = cherokee_source_connect (SOURCE(src), socket);
+	ret = cherokee_source_connect (SOURCE(src), socket);
 	switch (ret) {
 	case ret_ok:
 		/* connected */
@@ -717,8 +745,8 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	case ret_eagain:
 		/* wait for the fd */
 		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
-							   conn, SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE, false);
+		                                           conn, SOCKET_FD(socket),
+		                                           FDPOLL_MODE_WRITE, false);
 		if (ret != ret_ok) {
 			return ret_error;
 		}

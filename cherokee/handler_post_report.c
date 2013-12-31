@@ -46,8 +46,8 @@ props_free (cherokee_handler_post_report_props_t *props)
 
 ret_t
 cherokee_handler_post_report_configure (cherokee_config_node_t   *conf,
-					cherokee_server_t        *srv,
-					cherokee_module_props_t **_props)
+                                        cherokee_server_t        *srv,
+                                        cherokee_module_props_t **_props)
 {
 	ret_t                                 ret;
 	cherokee_list_t                      *i;
@@ -59,7 +59,7 @@ cherokee_handler_post_report_configure (cherokee_config_node_t   *conf,
 		CHEROKEE_NEW_STRUCT (n, handler_post_report_props);
 
 		cherokee_module_props_init_base (MODULE_PROPS(n),
-						 MODULE_PROPS_FREE(props_free));
+		                                 MODULE_PROPS_FREE(props_free));
 		n->lang = dwriter_json;
 		*_props = MODULE_PROPS(n);
 	}
@@ -81,8 +81,8 @@ cherokee_handler_post_report_configure (cherokee_config_node_t   *conf,
 
 ret_t
 cherokee_handler_post_report_new  (cherokee_handler_t      **hdl,
-				   cherokee_connection_t    *cnt,
-				   cherokee_module_props_t  *props)
+                                   cherokee_connection_t    *cnt,
+                                   cherokee_module_props_t  *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_post_report);
@@ -132,7 +132,7 @@ cherokee_handler_post_report_free (cherokee_handler_post_report_t *hdl)
 
 static ret_t
 _figure_x_progress_id (cherokee_connection_t  *conn,
-		       cherokee_buffer_t     **id)
+                       cherokee_buffer_t     **id)
 {
 	ret_t ret;
 
@@ -188,7 +188,7 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 	/* Check in the POST tracker
 	 */
 	ret = cherokee_generic_post_track_get (srv->post_track, id,
-					       &state, &size, &received);
+	                                       &state, &size, &received);
 	if (ret != ret_ok) {
 		cherokee_dwriter_dict_open (&hdl->writer);
 		cherokee_dwriter_cstring (&hdl->writer, "error");
@@ -215,7 +215,7 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 
 ret_t
 cherokee_handler_post_report_add_headers (cherokee_handler_post_report_t *hdl,
-					  cherokee_buffer_t              *buffer)
+                                          cherokee_buffer_t              *buffer)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
@@ -231,7 +231,7 @@ cherokee_handler_post_report_add_headers (cherokee_handler_post_report_t *hdl,
 
 ret_t
 cherokee_handler_post_report_step (cherokee_handler_post_report_t *hdl,
-				   cherokee_buffer_t              *buffer)
+                                   cherokee_buffer_t              *buffer)
 {
 	ret_t ret;
 

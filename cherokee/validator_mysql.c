@@ -57,7 +57,7 @@ ret_t
 cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
-	cherokee_list_t			 *i;
+	cherokee_list_t                  *i;
 	cherokee_validator_mysql_props_t *props;
 
 	UNUSED(srv);
@@ -158,7 +158,7 @@ init_mysql_connection (cherokee_validator_mysql_t *mysql, cherokee_validator_mys
 	MYSQL *conn;
 
 	if (unlikely ((props->host.buf == NULL) &&
-		      (props->unix_socket.buf == NULL))) {
+	              (props->unix_socket.buf == NULL))) {
 		LOG_ERROR_S (CHEROKEE_ERROR_VALIDATOR_MYSQL_SOURCE);
 		return ret_error;
 	}
@@ -168,12 +168,12 @@ init_mysql_connection (cherokee_validator_mysql_t *mysql, cherokee_validator_mys
 		return ret_nomem;
 
 	conn = mysql_real_connect (mysql->conn,
-				   props->host.buf,
-				   props->user.buf,
-				   props->passwd.buf,
-				   props->database.buf,
-				   props->port,
-				   props->unix_socket.buf, 0);
+	                           props->host.buf,
+	                           props->user.buf,
+	                           props->passwd.buf,
+	                           props->database.buf,
+	                           props->port,
+	                           props->unix_socket.buf, 0);
 	if (conn == NULL) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_MYSQL_NOCONN,
 			   props->host.buf, props->port, mysql_error (mysql->conn));
@@ -229,24 +229,24 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 {
 	int                               re;
 	ret_t                             ret;
-	MYSQL_ROW	                  row;
-	MYSQL_RES	                 *result;
+	MYSQL_ROW                         row;
+	MYSQL_RES                        *result;
 	unsigned long                    *lengths;
 	cherokee_buffer_t                 db_passwd   = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t                 user_passwd = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t                 query       = CHEROKEE_BUF_INIT;
-	cherokee_validator_mysql_props_t *props	      = VAL_MYSQL_PROP(mysql);
+	cherokee_validator_mysql_props_t *props       = VAL_MYSQL_PROP(mysql);
 
 	/* Sanity checks
 	 */
 	if (unlikely ((conn->validator == NULL) ||
-		      cherokee_buffer_is_empty (&conn->validator->user))) {
+	    cherokee_buffer_is_empty (&conn->validator->user))) {
 		return ret_error;
 	}
 
 	if (unlikely ((strcasestr (conn->validator->user.buf, " or ") != NULL) ||
-		      (strcasestr (conn->validator->user.buf, " or/") != NULL) ||
-		      (strcasestr (conn->validator->user.buf, "/or ") != NULL)))
+	    (strcasestr (conn->validator->user.buf, " or/") != NULL) ||
+	    (strcasestr (conn->validator->user.buf, "/or ") != NULL)))
 	{
 		return ret_error;
 	}
@@ -351,8 +351,8 @@ error:
 
 ret_t
 cherokee_validator_mysql_add_headers (cherokee_validator_mysql_t *mysql,
-				      cherokee_connection_t      *conn,
-				      cherokee_buffer_t          *buf)
+                                      cherokee_connection_t      *conn,
+                                      cherokee_buffer_t          *buf)
 {
 	UNUSED (mysql);
 	UNUSED (conn);

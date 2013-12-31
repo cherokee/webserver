@@ -157,9 +157,9 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 
 ret_t
 cherokee_config_entry_set_encoder (cherokee_config_entry_t  *entry,
-				   cherokee_buffer_t        *encoder_name,
-				   cherokee_plugin_info_t   *plugin_info,
-				   cherokee_encoder_props_t *encoder_props)
+                                   cherokee_buffer_t        *encoder_name,
+                                   cherokee_plugin_info_t   *plugin_info,
+                                   cherokee_encoder_props_t *encoder_props)
 {
 	/* Sanity checks
 	 */
@@ -182,7 +182,7 @@ cherokee_config_entry_set_encoder (cherokee_config_entry_t  *entry,
 
 ret_t
 cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,
-				   cherokee_plugin_info_handler_t *plugin_info)
+                                   cherokee_plugin_info_handler_t *plugin_info)
 {
 	return_if_fail (plugin_info != NULL, ret_error);
 
@@ -200,7 +200,7 @@ cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,
 
 ret_t
 cherokee_config_entry_complete (cherokee_config_entry_t *entry,
-				cherokee_config_entry_t *source)
+                                cherokee_config_entry_t *source)
 {
 	/* This method is assigning pointer to the server data. The
 	 * target entry properties must NOT be freed. Take care.
@@ -230,10 +230,10 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry,
 		entry->validator_new_func = source->validator_new_func;
 
 	if (! entry->document_root)
- 		entry->document_root = source->document_root;
+		entry->document_root = source->document_root;
 
 	if (! entry->auth_realm)
- 		entry->auth_realm = source->auth_realm;
+		entry->auth_realm = source->auth_realm;
 
 	if (! entry->users)
 		entry->users = source->users;
@@ -304,9 +304,9 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("no_log:                    %s\n", NULLB_TO_STR(entry->no_log));
 
 	if (NULLI_IS_NULL(entry->timeout_lapse)) {
-		printf ("timeout custom:          	  no\n");
+		printf ("timeout custom:                  no\n");
 	} else {
-		printf ("timeout custom:          	  %d\n", entry->timeout_lapse);
+		printf ("timeout custom:                  %d\n", entry->timeout_lapse);
 	}
 
 	return ret_ok;

@@ -56,15 +56,30 @@ def check_config():
     for s in CTK.cfg['source'] or []:
         sourcetype = CTK.cfg.get_val ('source!%s!type'%(s))
         interpreter = CTK.cfg.get_val ('source!%s!interpreter'%(s))
+        chroot = CTK.cfg.get_val ('source!%s!chroot'%(s))
 
         if sourcetype == 'interpreter':
             if (not CTK.cfg.get_val ('source!%s!interpreter'%(s)) or \
                 interpreter.strip() == ''):
                 errors.append (Error(_('Source without Interpreter'),
                                        '/source/%s'%(s)))
+
+            if chroot:
+                if chroot[0] != '/':
+                    errors.append (Error(_('Chroot folder is not an absolute path'),
+                                           '/source/%s'%(s)))
+                else:
+                    if not os.path.exists(chroot):
+                        errors.append (Error(_('Chroot folder does not exist'),
+                                               '/source/%s'%(s)))
+
+                    elif not os.path.exists(chroot+interpreter.split(' ')[0]):
+                        errors.append (Error(_('Interpreter does not exist inside chroot'),
+                                               '/source/%s'%(s)))
+
             elif not os.path.exists(interpreter.split(' ')[0]):
                  errors.append (Error(_('Interpreter does not exist'),
-                                       '/source/%s'%(s)))
+                                        '/source/%s'%(s)))
 
     #
     # Validators without Realm

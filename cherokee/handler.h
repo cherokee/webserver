@@ -102,11 +102,10 @@ typedef struct {
 
 #define PLUGIN_INFO_HANDLER_EASY_INIT(name, methods)                \
 	HANDLER_CONF_PROTOTYPE(name);                               \
-                                                                    \
+	                                                            \
 	PLUGIN_INFO_HANDLER_INIT(name, cherokee_handler,            \
 		(void *)cherokee_handler_ ## name ## _new,          \
-		(void *)cherokee_handler_ ## name ## _configure,    \
-                methods)
+		(void *)cherokee_handler_ ## name ## _configure, methods)
 
 #define PLUGIN_INFO_HANDLER_EASIEST_INIT(name, methods)             \
 	PLUGIN_EMPTY_INIT_FUNCTION(name)                            \

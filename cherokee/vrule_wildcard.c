@@ -35,9 +35,9 @@
 PLUGIN_INFO_VRULE_EASIEST_INIT(wildcard);
 
 typedef struct {
-        cherokee_list_t     node;
-        cherokee_buffer_t   domain;
-        cherokee_boolean_t  is_wildcard;
+	cherokee_list_t     node;
+	cherokee_buffer_t   domain;
+	cherokee_boolean_t  is_wildcard;
 } cherokee_wc_entry_t;
 
 
@@ -46,7 +46,7 @@ typedef struct {
 
 static ret_t
 entry_new (cherokee_wc_entry_t **wc,
-	   cherokee_buffer_t    *domain)
+           cherokee_buffer_t    *domain)
 {
 	CHEROKEE_NEW_STRUCT (n, wc_entry);
 
@@ -56,7 +56,7 @@ entry_new (cherokee_wc_entry_t **wc,
 	cherokee_buffer_add_buffer (&n->domain, domain);
 
 	n->is_wildcard = (strchr (domain->buf, '*') ||
-			  strchr (domain->buf, '?'));
+	                  strchr (domain->buf, '?'));
 
 	*wc = n;
 	return ret_ok;
@@ -107,8 +107,8 @@ match (cherokee_vrule_wildcard_t *vrule,
 
 static ret_t
 configure (cherokee_vrule_wildcard_t   *vrule,
-	   cherokee_config_node_t      *conf,
-	   cherokee_virtual_server_t   *vsrv)
+           cherokee_config_node_t      *conf,
+           cherokee_virtual_server_t   *vsrv)
 {
 	ret_t                   ret;
 	cherokee_list_t        *i;

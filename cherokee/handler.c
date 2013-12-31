@@ -33,9 +33,9 @@
 
 ret_t
 cherokee_handler_init_base (cherokee_handler_t             *hdl,
-			    void                           *conn,
-			    cherokee_handler_props_t       *props,
-			    cherokee_plugin_info_handler_t *info)
+                            void                           *conn,
+                            cherokee_handler_props_t       *props,
+                            cherokee_plugin_info_handler_t *info)
 {
 	/* Init the base class
 	 */
@@ -110,7 +110,7 @@ cherokee_handler_read_post (cherokee_handler_t *hdl)
 
 ret_t
 cherokee_handler_add_headers (cherokee_handler_t *hdl,
-			      cherokee_buffer_t  *buffer)
+                              cherokee_buffer_t  *buffer)
 {
 	/* Sanity check
 	 */
@@ -126,7 +126,7 @@ cherokee_handler_add_headers (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_handler_step (cherokee_handler_t *hdl,
-		       cherokee_buffer_t  *buffer)
+                       cherokee_buffer_t  *buffer)
 {
 	/* Sanity check
 	 */
@@ -146,7 +146,7 @@ cherokee_handler_step (cherokee_handler_t *hdl,
 
 ret_t
 cherokee_handler_props_init_base (cherokee_handler_props_t *props,
-				  module_func_props_free_t  free_func)
+                                  module_func_props_free_t  free_func)
 {
 	props->valid_methods = http_unknown;
 
@@ -165,7 +165,7 @@ cherokee_handler_props_free_base (cherokee_handler_props_t *props)
  */
 ret_t
 cherokee_handler_add_header_options (cherokee_handler_t *hdl,
-				     cherokee_buffer_t  *buffer)
+                                     cherokee_buffer_t  *buffer)
 {
 	ret_t                   ret;
 	int                     http_n;

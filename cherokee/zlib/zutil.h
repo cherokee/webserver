@@ -54,8 +54,7 @@ typedef unsigned long  ulg;
 
          /* functions */
 
-typedef uLong (*check_func) (uLong check, const Byte *buf,
-				       uInt len);
+typedef uLong (*check_func) (uLong check, const Byte *buf, uInt len);
 
 
                         /* checksum functions */
@@ -85,9 +84,7 @@ typedef uLong (*check_func) (uLong check, const Byte *buf,
      }
      if (adler != original_adler) error();
 */
-static inline uLong zlib_adler32(uLong adler,
-				 const Byte *buf,
-				 uInt len)
+static inline uLong zlib_adler32(uLong adler, const Byte *buf, uInt len)
 {
     unsigned long s1 = adler & 0xffff;
     unsigned long s2 = (adler >> 16) & 0xffff;
@@ -100,12 +97,12 @@ static inline uLong zlib_adler32(uLong adler,
         len -= k;
         while (k >= 16) {
             DO16(buf);
-	    buf += 16;
+            buf += 16;
             k -= 16;
         }
         if (k != 0) do {
             s1 += *buf++;
-	    s2 += s1;
+            s2 += s1;
         } while (--k);
         s1 %= BASE;
         s2 %= BASE;

@@ -77,8 +77,8 @@ typedef struct {
 /* Logger methods
  */
 ret_t cherokee_logger_init_base       (cherokee_logger_t      *logger,
-				       cherokee_plugin_info_t *info,
-				       cherokee_config_node_t *config);
+                                       cherokee_plugin_info_t *info,
+                                       cherokee_config_node_t *config);
 
 /* Logger virtual methods
  */

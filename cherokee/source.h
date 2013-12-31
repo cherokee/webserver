@@ -64,11 +64,11 @@ ret_t cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t 
 ret_t cherokee_source_connect   (cherokee_source_t *src, cherokee_socket_t *socket);
 
 ret_t cherokee_source_connect_polling (cherokee_source_t     *src,
-				       cherokee_socket_t     *socket,
-				       cherokee_connection_t *conn);
+                                       cherokee_socket_t     *socket,
+                                       cherokee_connection_t *conn);
 
 ret_t cherokee_source_copy_name       (cherokee_source_t     *src,
-				       cherokee_buffer_t     *buf);
+                                       cherokee_buffer_t     *buf);
 
 CHEROKEE_END_DECLS
 

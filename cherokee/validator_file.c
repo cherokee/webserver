@@ -31,7 +31,7 @@
 
 ret_t
 cherokee_validator_file_props_init_base (cherokee_validator_file_props_t *props,
-					 module_func_props_free_t         free_func)
+                                         module_func_props_free_t         free_func)
 {
 	props->password_path_type = val_path_full;
 	cherokee_buffer_init (&props->password_file);
@@ -49,8 +49,8 @@ cherokee_validator_file_props_free_base (cherokee_validator_file_props_t *props)
 
 ret_t
 cherokee_validator_file_configure (cherokee_config_node_t     *conf,
-				   cherokee_server_t          *srv,
-				   cherokee_module_props_t  **_props)
+                                   cherokee_server_t          *srv,
+                                   cherokee_module_props_t  **_props)
 {
 	ret_t                            ret;
 	cherokee_config_node_t          *subconf;
@@ -95,11 +95,11 @@ cherokee_validator_file_configure (cherokee_config_node_t     *conf,
 
 ret_t
 cherokee_validator_file_init_base (cherokee_validator_file_t        *validator,
-				   cherokee_validator_file_props_t  *props,
-				   cherokee_plugin_info_validator_t *info)
+                                   cherokee_validator_file_props_t  *props,
+                                   cherokee_plugin_info_validator_t *info)
 {
 	return cherokee_validator_init_base (VALIDATOR(validator),
-					     VALIDATOR_PROPS(props), info);
+	                                     VALIDATOR_PROPS(props), info);
 }
 
 ret_t
@@ -114,9 +114,9 @@ cherokee_validator_file_free_base (cherokee_validator_file_t *validator)
 
 ret_t
 cherokee_validator_file_get_full_path (cherokee_validator_file_t  *validator,
-				       cherokee_connection_t      *conn,
-				       cherokee_buffer_t         **ret_buf,
-				       cherokee_buffer_t          *tmp)
+                                       cherokee_connection_t      *conn,
+                                       cherokee_buffer_t         **ret_buf,
+                                       cherokee_buffer_t          *tmp)
 {
 	cherokee_validator_file_props_t *props = VAL_VFILE_PROP(validator);
 

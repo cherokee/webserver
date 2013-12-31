@@ -55,8 +55,8 @@ match (cherokee_rule_from_t    *rule,
 
 static ret_t
 configure (cherokee_rule_from_t      *rule,
-	   cherokee_config_node_t    *conf,
-	   cherokee_virtual_server_t *vsrv)
+           cherokee_config_node_t    *conf,
+           cherokee_virtual_server_t *vsrv)
 {
 	ret_t                   ret;
 	cherokee_list_t        *i;
@@ -67,7 +67,7 @@ configure (cherokee_rule_from_t      *rule,
 	ret = cherokee_config_node_get (conf, "from", &subconf);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
-			      RULE(rule)->priority, "from");
+		              RULE(rule)->priority, "from");
 		return ret_error;
 	}
 
@@ -116,5 +116,5 @@ cherokee_rule_from_new (cherokee_rule_from_t **rule)
 	if (ret != ret_ok) return ret;
 
 	*rule = n;
- 	return ret_ok;
+	return ret_ok;
 }

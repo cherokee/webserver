@@ -82,7 +82,7 @@ build_strings (cherokee_bind_t         *listener,
 	 */
 	cherokee_buffer_clean (&listener->server_string_w_port);
 	ret = cherokee_version_add_w_port (&listener->server_string_w_port,
-					   token, listener->port);
+	                                   token, listener->port);
 	if (ret != ret_ok)
 		return ret;
 
@@ -105,7 +105,7 @@ build_strings (cherokee_bind_t         *listener,
 
 ret_t
 cherokee_bind_configure (cherokee_bind_t        *listener,
-			 cherokee_config_node_t *conf)
+                         cherokee_config_node_t *conf)
 {
 	ret_t              ret;
 	cherokee_boolean_t tls;
@@ -264,9 +264,9 @@ error:
 
 ret_t
 cherokee_bind_init_port (cherokee_bind_t         *listener,
-			 cuint_t                  listen_queue,
-			 cherokee_boolean_t       ipv6,
-			 cherokee_server_token_t  token)
+                         cuint_t                  listen_queue,
+                         cherokee_boolean_t       ipv6,
+                         cherokee_server_token_t  token)
 {
 	ret_t ret;
 	int family = listener->family;
@@ -290,7 +290,7 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_BIND_COULDNT_BIND_PORT,
-			      listener->port, getuid(), getgid());
+		              listener->port, getuid(), getgid());
 		goto error;
 	}
 
@@ -318,7 +318,7 @@ error:
 
 ret_t
 cherokee_bind_accept_more (cherokee_bind_t *listener,
-			   ret_t            prev_ret)
+                           ret_t            prev_ret)
 {
 	/* Failed to accept
 	 */

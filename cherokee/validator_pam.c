@@ -42,8 +42,8 @@ PLUGIN_INFO_VALIDATOR_EASIEST_INIT (pam, http_auth_basic);
 
 ret_t
 cherokee_validator_pam_configure (cherokee_config_node_t   *conf,
-				  cherokee_server_t        *srv,
-				  cherokee_module_props_t **props)
+                                  cherokee_server_t        *srv,
+                                  cherokee_module_props_t **props)
 {
 	UNUSED(conf);
 	UNUSED(srv);
@@ -55,7 +55,7 @@ cherokee_validator_pam_configure (cherokee_config_node_t   *conf,
 
 ret_t
 cherokee_validator_pam_new (cherokee_validator_pam_t **pam,
-			    cherokee_module_props_t  *props)
+                            cherokee_module_props_t  *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_pam);
 
@@ -91,9 +91,9 @@ cherokee_validator_pam_free (cherokee_validator_pam_t *pam)
  */
 static int
 auth_pam_talker (int                        num_msg,
-		 const struct pam_message **msg,
-		 struct pam_response      **resp,
-		 void                      *appdata_ptr)
+                 const struct pam_message **msg,
+                 struct pam_response      **resp,
+                 void                      *appdata_ptr)
 {
 	unsigned short         i        = 0;
 	struct pam_response   *response = NULL;
@@ -145,7 +145,7 @@ auth_pam_talker (int                        num_msg,
 
 ret_t
 cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
-			      cherokee_connection_t    *conn)
+                              cherokee_connection_t    *conn)
 {
 	int                  ret;
 	pam_handle_t        *pamhandle = NULL;
@@ -195,8 +195,8 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 
 	if (ret != PAM_SUCCESS) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_PAM_AUTH,
-			   conn->validator->user.buf,
-			   pam_strerror(pamhandle, ret));
+		           conn->validator->user.buf,
+		           pam_strerror(pamhandle, ret));
 
 		goto unauthorized;
 	}
@@ -206,8 +206,8 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 	ret = pam_acct_mgmt (pamhandle, PAM_DISALLOW_NULL_AUTHTOK);
 	if (ret != PAM_SUCCESS) {
 		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_PAM_ACCOUNT,
-			   conn->validator->user.buf,
-			   pam_strerror(pamhandle, ret));
+		           conn->validator->user.buf,
+		           pam_strerror(pamhandle, ret));
 
 		goto unauthorized;
 	}
@@ -223,8 +223,8 @@ unauthorized:
 
 ret_t
 cherokee_validator_pam_add_headers (cherokee_validator_pam_t *pam,
-				    cherokee_connection_t    *conn,
-				    cherokee_buffer_t        *buf)
+                                    cherokee_connection_t    *conn,
+                                    cherokee_buffer_t        *buf)
 {
 	UNUSED(pam);
 	UNUSED(conn);

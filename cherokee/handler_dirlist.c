@@ -282,8 +282,8 @@ file_match_add_cb (char *entry, void *data)
 
 ret_t
 cherokee_handler_dirlist_configure (cherokee_config_node_t   *conf,
-				    cherokee_server_t        *srv,
-				    cherokee_module_props_t **_props)
+                                    cherokee_server_t        *srv,
+                                    cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
 	cherokee_list_t                  *i;
@@ -427,7 +427,7 @@ is_file_in_list (cherokee_list_t *list, char *filename, cuint_t len)
 
 static ret_t
 realpath_buf (cherokee_buffer_t *in,
-	      cherokee_buffer_t *resolved)
+              cherokee_buffer_t *resolved)
 {
 	char *re;
 
@@ -445,10 +445,10 @@ realpath_buf (cherokee_buffer_t *in,
 
 static ret_t
 generate_file_entry (cherokee_handler_dirlist_t  *dhdl,
-		     DIR                         *dir,
-		     cherokee_buffer_t           *path,
-		     cherokee_buffer_t           *local_realpath,
-		     file_entry_t               **ret_entry)
+                     DIR                         *dir,
+                     cherokee_buffer_t           *path,
+                     cherokee_buffer_t           *local_realpath,
+                     file_entry_t               **ret_entry)
 {
 	int            re;
 	ret_t          ret;
@@ -515,7 +515,7 @@ generate_file_entry (cherokee_handler_dirlist_t  *dhdl,
 			return ret_error;
 		}
 
-	        if (S_ISLNK(n->stat.st_mode)) {
+		if (S_ISLNK(n->stat.st_mode)) {
 			/* Info about the (target) linked file
 			 */
 			ret = cherokee_stat (path->buf, &n->rstat);
@@ -703,7 +703,7 @@ cmp_name_down (cherokee_list_t *a, cherokee_list_t *b)
 	file_entry_t *f2 = (file_entry_t *)b;
 
 	return cherokee_human_strcmp ((const char *) &f1->info.d_name,
-				      (const char *) &f2->info.d_name);
+	                              (const char *) &f2->info.d_name);
 }
 
 
@@ -873,7 +873,7 @@ build_public_path (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buf)
 
 	if (!cherokee_buffer_is_empty (&conn->userdir)) {
 		/* ~user local dir request
- 		 */
+		 */
 		cherokee_buffer_add_str (buf, "/~");
 		cherokee_buffer_add_buffer (buf, &conn->userdir);
 	}
@@ -955,7 +955,7 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	if (unlikely (ret != ret_ok))
 		return ret;
 
- 	return ret_ok;
+	return ret_ok;
 }
 
 
@@ -969,10 +969,10 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
  */
 static ret_t
 substitute_vbuf_token (cherokee_buffer_t **vbuf,
-		       size_t             *pidx_buf,
-		       const char         *token,
-		       int                 token_len,
-		       const char         *replacement)
+                       size_t             *pidx_buf,
+                       const char         *token,
+                       int                 token_len,
+                       const char         *replacement)
 {
 	ret_t ret;
 
@@ -985,9 +985,9 @@ substitute_vbuf_token (cherokee_buffer_t **vbuf,
 	 * NOTE: *pidx_buf ^= 1 is faster than *pidx_buf = (*pidx_buf + 1) % 2
 	 */
 	ret = cherokee_buffer_substitute_string (vbuf[*pidx_buf],
-						 vbuf[*pidx_buf ^ 1],
-						 (char *)token, token_len,
-						 (char *)replacement, strlen(replacement));
+	                                         vbuf[*pidx_buf ^ 1],
+	                                         (char *)token, token_len,
+	                                         (char *)replacement, strlen(replacement));
 	if (ret == ret_ok)
 		*pidx_buf ^= 1;
 
@@ -1000,10 +1000,10 @@ substitute_vbuf_token (cherokee_buffer_t **vbuf,
  */
 
 #define VTMP_INIT_SUBST(thread, vtmp, buffer_pattern) \
-	vtmp[0] = THREAD_TMP_BUF1(thread);	      \
-	vtmp[1] = THREAD_TMP_BUF2(thread);	      \
+	vtmp[0] = THREAD_TMP_BUF1(thread);            \
+	vtmp[1] = THREAD_TMP_BUF2(thread);            \
 	cherokee_buffer_clean (vtmp[0]);              \
-	cherokee_buffer_clean (vtmp[1]);	      \
+	cherokee_buffer_clean (vtmp[1]);              \
 	cherokee_buffer_add_buffer (vtmp[0], (buffer_pattern))
 
 #define VTMP_SUBSTITUTE_TOKEN(token, val)             \
@@ -1186,7 +1186,7 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	cherokee_buffer_t                *icon     = NULL;
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
- 	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
+	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
 	cherokee_buffer_t                *tmp      = &dhdl->header;
 	size_t                            idx_tmp  = 0;
 
@@ -1230,8 +1230,8 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 
 static ret_t
 render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl,
-			    cherokee_buffer_t          *buffer,
-			    cherokee_buffer_t          *buf_pattern)
+                            cherokee_buffer_t          *buffer,
+                            cherokee_buffer_t          *buf_pattern)
 {
 	cherokee_buffer_t                *vtmp[2];
 	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
@@ -1266,7 +1266,7 @@ render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl,
 
 ret_t
 cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl,
-			       cherokee_buffer_t          *buffer)
+                               cherokee_buffer_t          *buffer)
 {
 	ret_t                             ret = ret_ok;
 	cherokee_handler_dirlist_props_t *props = HDL_DIRLIST_PROP(dhdl);
@@ -1347,7 +1347,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl,
 
 ret_t
 cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl,
-				      cherokee_buffer_t          *buffer)
+                                      cherokee_buffer_t          *buffer)
 {
 	UNUSED(dhdl);
 

@@ -70,10 +70,10 @@ ret_t cherokee_avl_get_ptr (cherokee_avl_t *avl, const char *key, void **value);
 typedef ret_t (* cherokee_avl_while_func_t) (cherokee_buffer_t *key, void *value, void *param);
 
 ret_t cherokee_avl_while (cherokee_avl_generic_t       *avl,
-			  cherokee_avl_while_func_t     func,
-			  void                         *param,
-			  cherokee_buffer_t           **key,
-			  void                        **value);
+                          cherokee_avl_while_func_t     func,
+                          void                         *param,
+                          cherokee_buffer_t           **key,
+                          void                        **value);
 
 
 CHEROKEE_END_DECLS

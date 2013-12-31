@@ -60,22 +60,22 @@ ret_t cherokee_template_init       (cherokee_template_t *tem);
 ret_t cherokee_template_mrproper   (cherokee_template_t *tem);
 
 ret_t cherokee_template_new_token  (cherokee_template_t        *tem,
-				    cherokee_template_token_t **token);
+                                    cherokee_template_token_t **token);
 ret_t cherokee_template_set_token  (cherokee_template_t        *tem,
-				    const char                 *name,
-				    cherokee_tem_repl_func_t    func,
-				    void                       *param,
-				    cherokee_template_token_t **token);
+                                    const char                 *name,
+                                    cherokee_tem_repl_func_t    func,
+                                    void                       *param,
+                                    cherokee_template_token_t **token);
 
 ret_t cherokee_template_parse      (cherokee_template_t *tem,
-				    cherokee_buffer_t   *incoming);
+                                    cherokee_buffer_t   *incoming);
 
 ret_t cherokee_template_parse_file (cherokee_template_t *tem,
-				    const char          *file);
+                                    const char          *file);
 
 ret_t cherokee_template_render     (cherokee_template_t *tem,
-				    cherokee_buffer_t   *output,
-				    void                *param);
+                                    cherokee_buffer_t   *output,
+                                    void                *param);
 
 CHEROKEE_END_DECLS
 

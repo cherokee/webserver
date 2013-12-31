@@ -71,8 +71,8 @@ priv_free (priv_t *priv)
 
 static ret_t
 base_init (cherokee_collector_base_t *collector,
-	   cherokee_plugin_info_t    *info,
-	   cherokee_config_node_t    *config)
+           cherokee_plugin_info_t    *info,
+           cherokee_config_node_t    *config)
 {
 	ret_t ret;
 
@@ -115,8 +115,8 @@ base_free (cherokee_collector_base_t *collector)
 
 static ret_t
 base_count (cherokee_collector_base_t *collector,
-	    off_t                      rx,
-	    off_t                      tx)
+            off_t                      rx,
+            off_t                      tx)
 {
 	collector->rx         += rx;
 	collector->rx_partial += rx;
@@ -132,8 +132,8 @@ base_count (cherokee_collector_base_t *collector,
 
 ret_t
 cherokee_collector_init_base (cherokee_collector_t  *collector,
-			      cherokee_plugin_info_t *info,
-			      cherokee_config_node_t *config)
+                              cherokee_plugin_info_t *info,
+                              cherokee_config_node_t *config)
 {
 	/* Init the base class
 	 */
@@ -220,8 +220,8 @@ cherokee_collector_log_timeout (cherokee_collector_t *collector)
 
 ret_t
 cherokee_collector_vsrv_new (cherokee_collector_t       *collector,
-			     cherokee_config_node_t     *config,
-			     cherokee_collector_vsrv_t **collector_vsrv)
+                             cherokee_config_node_t     *config,
+                             cherokee_collector_vsrv_t **collector_vsrv)
 {
 	ret_t ret;
 
@@ -244,7 +244,7 @@ cherokee_collector_vsrv_new (cherokee_collector_t       *collector,
 
 ret_t
 cherokee_collector_vsrv_init_base (cherokee_collector_vsrv_t  *collector_vsrv,
-				   cherokee_config_node_t     *config)
+                                   cherokee_config_node_t     *config)
 {
 	/* Init the base class
 	 */
@@ -271,8 +271,8 @@ cherokee_collector_vsrv_free (cherokee_collector_vsrv_t *collector_vsrv)
 
 ret_t
 cherokee_collector_vsrv_count (cherokee_collector_vsrv_t  *collector_vsrv,
-			       off_t                       rx,
-			       off_t                       tx)
+                               off_t                       rx,
+                               off_t                       tx)
 {
 	/* Add it to the virtual server collector
 	 */
@@ -288,8 +288,8 @@ cherokee_collector_vsrv_count (cherokee_collector_vsrv_t  *collector_vsrv,
 		LOCK(collector_vsrv->srv_collector);
 
 		base_count (COLLECTOR_BASE(collector_vsrv->srv_collector),
-			    collector_vsrv->srv_rx_partial,
-			    collector_vsrv->srv_tx_partial);
+		            collector_vsrv->srv_rx_partial,
+		            collector_vsrv->srv_tx_partial);
 
 		collector_vsrv->srv_rx_partial  = 0;
 		collector_vsrv->srv_tx_partial  = 0;
@@ -305,7 +305,7 @@ cherokee_collector_vsrv_count (cherokee_collector_vsrv_t  *collector_vsrv,
 
 ret_t
 cherokee_collector_vsrv_init (cherokee_collector_vsrv_t *collector,
-			      void                      *vsrv)
+                              void                      *vsrv)
 {
 	if (collector->init == NULL) {
 		return ret_error;

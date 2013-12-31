@@ -68,7 +68,7 @@ cherokee_rule_free (cherokee_rule_t *rule)
 
 static ret_t
 configure_base (cherokee_rule_t           *rule,
-		cherokee_config_node_t    *conf)
+                cherokee_config_node_t    *conf)
 {
 	ret_t              ret;
 	cherokee_buffer_t *final = NULL;
@@ -119,7 +119,7 @@ cherokee_rule_match (cherokee_rule_t *rule, void *cnt, void *ret_conf)
 
 void
 cherokee_rule_get_config (cherokee_rule_t          *rule,
-			  cherokee_config_entry_t **config)
+                          cherokee_config_entry_t **config)
 {
 	cherokee_rule_t *r = rule;
 

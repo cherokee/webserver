@@ -92,10 +92,10 @@ ret_t cherokee_avl_generic_del (cherokee_avl_generic_t *avl, cherokee_avl_generi
 ret_t cherokee_avl_generic_get (cherokee_avl_generic_t *avl, cherokee_avl_generic_node_t *key, void **value);
 
 ret_t cherokee_avl_generic_while (cherokee_avl_generic_t             *avl,
-				  cherokee_avl_generic_while_func_t   func,
-				  void                               *param,
-				  cherokee_avl_generic_node_t       **key,
-				  void                              **value);
+                                  cherokee_avl_generic_while_func_t   func,
+                                  void                               *param,
+                                  cherokee_avl_generic_node_t       **key,
+                                  void                              **value);
 
 CHEROKEE_END_DECLS
 

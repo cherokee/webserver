@@ -80,7 +80,7 @@ info_fill_up (cherokee_connection_info_t *info,
 	ret_t             ret;
 	const char       *phase        = NULL;
 	const char       *handler_name = NULL;
- 	cherokee_icons_t *icons        = CONN_SRV(conn)->icons;
+	cherokee_icons_t *icons        = CONN_SRV(conn)->icons;
 
 	/* ID
 	 */
@@ -176,8 +176,8 @@ info_fill_up (cherokee_connection_info_t *info,
 
 ret_t
 cherokee_connection_info_list_thread (cherokee_list_t    *list,
-				      void               *_thread,
-				      cherokee_handler_t *self_handler)
+                                      void               *_thread,
+                                      cherokee_handler_t *self_handler)
 {
 	ret_t               ret;
 	cherokee_list_t    *i;
@@ -239,8 +239,8 @@ out:
 
 ret_t
 cherokee_connection_info_list_server (cherokee_list_t    *list,
-				      cherokee_server_t  *server,
-				      cherokee_handler_t *self)
+                                      cherokee_server_t  *server,
+                                      cherokee_handler_t *self)
 {
 	cherokee_list_t *i;
 

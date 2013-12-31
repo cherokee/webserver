@@ -646,7 +646,7 @@ ret_t
 cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 {
 	ret_t                  ret;
- 	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
+	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
 
 	/* OPTIONS request
 	 */

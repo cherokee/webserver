@@ -54,9 +54,9 @@ _check_document_root (cherokee_connection_t *conn)
 	cherokee_iocache_entry_t *io_entry = NULL;
 
 	ret = cherokee_io_stat (CONN_SRV(conn)->iocache,
-				&conn->local_directory,
-				(CONN_SRV(conn)->iocache != NULL),
-				&stat_mem, &io_entry, &info);
+	                        &conn->local_directory,
+	                        (CONN_SRV(conn)->iocache != NULL),
+	                        &stat_mem, &io_entry, &info);
 
 	if (ret != ret_ok) {
 		ret = ret_not_found;
@@ -79,14 +79,14 @@ out:
 
 static ret_t
 _render_document_root (cherokee_generic_evhost_t *evhost,
-		       cherokee_connection_t     *conn)
+                       cherokee_connection_t     *conn)
 {
 	ret_t ret;
 
 	/* Render the document root
 	 */
 	ret = cherokee_template_render (&evhost->tpl_document_root,
-					&conn->local_directory, conn);
+	                                &conn->local_directory, conn);
 	if (unlikely (ret != ret_ok))
 		return ret_error;
 
@@ -107,15 +107,15 @@ _render_document_root (cherokee_generic_evhost_t *evhost,
 
 ret_t
 cherokee_generic_evhost_configure (cherokee_generic_evhost_t *evhost,
-				   cherokee_config_node_t    *config)
+                                   cherokee_config_node_t    *config)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp;
 
 	cherokee_config_node_read_bool (config, "check_document_root",
-					&evhost->check_document_root);
+	                                &evhost->check_document_root);
 
-	ret = cherokee_config_node_read (config, "tpl_document_root", &tmp);
+        ret = cherokee_config_node_read (config, "tpl_document_root", &tmp);
 	if (ret != ret_ok) {
 		LOG_CRITICAL_S (CHEROKEE_ERROR_GEN_EVHOST_TPL_DROOT);
 		return ret;
@@ -182,9 +182,9 @@ add_tld (cherokee_template_t       *template,
 
 static ret_t
 add_domain_no_tld (cherokee_template_t       *template,
-		   cherokee_template_token_t *token,
-		   cherokee_buffer_t         *output,
-		   void                      *param)
+                   cherokee_template_token_t *token,
+                   cherokee_buffer_t         *output,
+                   void                      *param)
 {
 	const char            *p;
 	const char            *end;
@@ -218,8 +218,8 @@ add_domain_no_tld (cherokee_template_t       *template,
 
 static ret_t
 _add_subdomain (cherokee_buffer_t     *output,
-		cherokee_connection_t *conn,
-		int                    starting_dot)
+                cherokee_connection_t *conn,
+                int                    starting_dot)
 {
 	const char *p;
 	const char *end;
@@ -276,9 +276,9 @@ add_root_domain (cherokee_template_t       *template,
 
 static ret_t
 add_subdomain1 (cherokee_template_t      *template,
-	       cherokee_template_token_t *token,
-	       cherokee_buffer_t         *output,
-	       void                      *param)
+                cherokee_template_token_t *token,
+                cherokee_buffer_t         *output,
+                void                      *param)
 {
 	UNUSED(template);
 	UNUSED(token);
@@ -288,9 +288,9 @@ add_subdomain1 (cherokee_template_t      *template,
 
 static ret_t
 add_subdomain2 (cherokee_template_t      *template,
-	       cherokee_template_token_t *token,
-	       cherokee_buffer_t         *output,
-	       void                      *param)
+                cherokee_template_token_t *token,
+                cherokee_buffer_t         *output,
+                void                      *param)
 {
 	UNUSED(template);
 	UNUSED(token);
@@ -319,18 +319,18 @@ cherokee_generic_evhost_new (cherokee_generic_evhost_t **evhost)
 		return ret_error;
 	}
 
-        cherokee_template_set_token (&n->tpl_document_root, "domain",
-                                     TEMPLATE_FUNC(add_domain), n, NULL);
-        cherokee_template_set_token (&n->tpl_document_root, "tld",
-                                     TEMPLATE_FUNC(add_tld), n, NULL);
-        cherokee_template_set_token (&n->tpl_document_root, "domain_no_tld",
-                                     TEMPLATE_FUNC(add_domain_no_tld), n, NULL);
+	cherokee_template_set_token (&n->tpl_document_root, "domain",
+	                             TEMPLATE_FUNC(add_domain), n, NULL);
+	cherokee_template_set_token (&n->tpl_document_root, "tld",
+	                             TEMPLATE_FUNC(add_tld), n, NULL);
+	cherokee_template_set_token (&n->tpl_document_root, "domain_no_tld",
+	                             TEMPLATE_FUNC(add_domain_no_tld), n, NULL);
 	cherokee_template_set_token (&n->tpl_document_root, "root_domain",
-                                     TEMPLATE_FUNC(add_root_domain), n, NULL);
-        cherokee_template_set_token (&n->tpl_document_root, "subdomain1",
-                                     TEMPLATE_FUNC(add_subdomain1), n, NULL);
-        cherokee_template_set_token (&n->tpl_document_root, "subdomain2",
-                                     TEMPLATE_FUNC(add_subdomain2), n, NULL);
+	                             TEMPLATE_FUNC(add_root_domain), n, NULL);
+	cherokee_template_set_token (&n->tpl_document_root, "subdomain1",
+	                             TEMPLATE_FUNC(add_subdomain1), n, NULL);
+	cherokee_template_set_token (&n->tpl_document_root, "subdomain2",
+	                             TEMPLATE_FUNC(add_subdomain2), n, NULL);
 
 	*evhost = n;
 	return ret_ok;

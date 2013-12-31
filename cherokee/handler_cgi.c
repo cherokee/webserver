@@ -79,7 +79,7 @@ static ret_t
 read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 {
 	ret_t                   ret;
- 	size_t                  read_ = 0;
+	size_t                  read_ = 0;
 	cherokee_handler_cgi_t *cgi   = HDL_CGI(cgi_base);
 
 	/* Sanity check: pipe() accessed
@@ -96,8 +96,8 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 	switch (ret) {
 	case ret_eagain:
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
-						     HANDLER_CONN(cgi), cgi->pipeInput,
-						     FDPOLL_MODE_READ, false);
+		                                     HANDLER_CONN(cgi), cgi->pipeInput,
+		                                     FDPOLL_MODE_READ, false);
 		return ret_eagain;
 
 	case ret_ok:
@@ -127,7 +127,7 @@ cherokee_handler_cgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_p
 	/* Init the base class
 	 */
 	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(cgi),
-					HANDLER_PROPS(props), cherokee_handler_cgi_add_env_pair, read_from_cgi);
+	                                HANDLER_PROPS(props), cherokee_handler_cgi_add_env_pair, read_from_cgi);
 
 	/* Virtual methods
 	 */
@@ -200,7 +200,7 @@ do_reap (void)
 ret_t
 cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 {
- 	int i;
+	int i;
 
 	/* Free the rest of the handler CGI memory
 	 */
@@ -218,7 +218,7 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 		cgi->pipeOutput = -1;
 	}
 
-        /* Kill the CGI
+	/* Kill the CGI
 	 */
 #ifndef _WIN32
 	if (cgi->pid > 0) {
@@ -257,7 +257,7 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 	}
 #endif
 
-        /* Free the environment variables
+	/* Free the environment variables
 	 */
 #ifdef _WIN32
 	cherokee_buffer_mrproper (&cgi->envp);
@@ -313,8 +313,8 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 
 void
 cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
-				   const char *name,    int name_len,
-				   const char *content, int content_len)
+                                   const char *name,    int name_len,
+                                   const char *content, int content_len)
 {
 	cherokee_handler_cgi_t *cgi = HDL_CGI(cgi_base);
 
@@ -355,7 +355,7 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 static ret_t
 add_environment (cherokee_handler_cgi_t *cgi,
-		 cherokee_connection_t  *conn)
+                 cherokee_connection_t  *conn)
 {
 	ret_t                        ret;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
@@ -442,7 +442,7 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 	}
 
 	ret = cherokee_post_send_to_fd (&conn->post, &conn->socket,
-					cgi->pipeOutput, NULL, &blocking, &did_IO);
+	                                cgi->pipeOutput, NULL, &blocking, &did_IO);
 
 	if (did_IO) {
 		cherokee_connection_update_timeout (conn);
@@ -454,8 +454,8 @@ cherokee_handler_cgi_read_post (cherokee_handler_cgi_t *cgi)
 	case ret_eagain:
 		if (blocking == socket_writing) {
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi),
-							     conn, cgi->pipeOutput,
-							     FDPOLL_MODE_WRITE, false);
+			                                     conn, cgi->pipeOutput,
+			                                     FDPOLL_MODE_WRITE, false);
 			return ret_deny;
 		}
 
@@ -497,7 +497,7 @@ _fd_set_properties (int fd, int add_flags, int remove_flags)
 
 	if (fcntl (fd, F_SETFL, flags) == -1) {
 		LOG_ERRNO (errno, cherokee_err_error,
-			   CHEROKEE_ERROR_HANDLER_CGI_SET_PROP, fd);
+		           CHEROKEE_ERROR_HANDLER_CGI_SET_PROP, fd);
 		return ret_error;
 	}
 
@@ -511,7 +511,6 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	/* Child process
 	 */
 	int                          re;
-	char                        *script;
 	cherokee_connection_t       *conn          = HANDLER_CONN(cgi);
 	cherokee_handler_cgi_base_t *cgi_base      = HDL_CGI_BASE(cgi);
 	char                        *absolute_path = cgi_base->executable.buf;
@@ -597,21 +596,28 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Build de argv array
 	 */
-	script  = absolute_path;
 	argv[0] = absolute_path;
 
 	/* Change the execution user?
 	 */
 	if (HANDLER_CGI_PROPS(cgi_base)->change_user) {
-		struct stat info;
+		struct stat                        nocache_info;
+		struct stat                       *info;
+		cherokee_iocache_entry_t          *io_entry = NULL;
+		cherokee_server_t                 *srv      = CONN_SRV(conn);
+		cherokee_handler_cgi_base_props_t *props    = HANDLER_CGI_BASE_PROPS(cgi);
 
-		re = cherokee_stat (script, &info);
-		if (re >= 0) {
-			re = setuid (info.st_uid);
-			if (re != 0) {
-				LOG_ERROR (CHEROKEE_ERROR_HANDLER_CGI_SETID, script, info.st_uid);
-			}
+		ret_t ret = cherokee_io_stat (srv->iocache, &cgi_base->executable, props->use_cache, &nocache_info, &io_entry, &info);
+		if (ret != ret_ok) {
+			info = &nocache_info;
 		}
+
+		re = setuid (info->st_uid);
+		if (re != 0) {
+			LOG_ERROR (CHEROKEE_ERROR_HANDLER_CGI_SETID, absolute_path, info->st_uid);
+		}
+
+		cherokee_iocache_entry_unref(&io_entry);
 	}
 
 	/* Reset the server-wide signal handlers
@@ -642,13 +648,13 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 		default:
 			printf ("Status: 500" CRLF_CRLF);
 			printf ("X-Debug: file=%s line=%d cmd=%s errno=%d: %s" CRLF_CRLF,
-				__FILE__, __LINE__, absolute_path, err, strerror(err));
+			        __FILE__, __LINE__, absolute_path, err, strerror(err));
 		}
 
 		/* Don't use the logging system (concurrency issues)
 		 */
 		LOG_ERROR (CHEROKEE_ERROR_HANDLER_CGI_EXECUTE,
-			   absolute_path, cherokee_strerror_r(err, buferr, sizeof(buferr)));
+		           absolute_path, cherokee_strerror_r(err, buferr, sizeof(buferr)));
 		exit(1);
 	}
 
@@ -765,7 +771,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 		char *end  = HDL_CGI_BASE(cgi)->executable.buf + HDL_CGI_BASE(cgi)->executable.len;
 
 		cherokee_buffer_add (&exec_dir, cmd,
-				     HDL_CGI_BASE(cgi)->executable.len - (end - file));
+		                     HDL_CGI_BASE(cgi)->executable.len - (end - file));
 	}
 
 	/* Set the bInheritHandle flag so pipe handles are inherited.
@@ -788,15 +794,15 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	/* Make them inheritable
 	 */
 	re = DuplicateHandle (hProc,  hChildStdoutRd,
-			      hProc, &hChildStdoutRd,
-			      0, TRUE,
-			      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
+	                      hProc, &hChildStdoutRd,
+	                      0, TRUE,
+	                      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
 	if (!re) return ret_error;
 
 	re = DuplicateHandle (hProc,  hChildStdinWr,
-			      hProc, &hChildStdinWr,
-			      0, TRUE,
-			      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
+	                      hProc, &hChildStdinWr,
+	                      0, TRUE,
+	                      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
 	if (!re) return ret_error;
 
 
@@ -814,15 +820,15 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	/* Launch the child process
 	 */
 	re = CreateProcess (cmd,              /* ApplicationName */
-			    cmd_line.buf,     /* Command line */
-			    NULL,             /* Process handle not inheritable */
-			    NULL,             /* Thread handle not inheritable */
-			    TRUE,             /* Handle inheritance */
-			    0,                /* Creation flags */
-			    cgi->envp.buf,    /* Use parent's environment block */
-			    exec_dir.buf,     /* Use parent's starting directory */
-			    &si,              /* Pointer to STARTUPINFO structure */
-			    &pi);             /* Pointer to PROCESS_INFORMATION structure */
+	                    cmd_line.buf,     /* Command line */
+	                    NULL,             /* Process handle not inheritable */
+	                    NULL,             /* Thread handle not inheritable */
+	                    TRUE,             /* Handle inheritance */
+	                    0,                /* Creation flags */
+	                    cgi->envp.buf,    /* Use parent's environment block */
+	                    exec_dir.buf,     /* Use parent's starting directory */
+	                    &si,              /* Pointer to STARTUPINFO structure */
+	                    &pi);             /* Pointer to PROCESS_INFORMATION structure */
 
 	CloseHandle (hChildStdinRd);
 	CloseHandle (hChildStdoutWr);

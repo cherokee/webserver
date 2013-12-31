@@ -174,8 +174,9 @@ cherokee_handler_admin_init (cherokee_handler_admin_t *hdl)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
-#define finishes_by(s) ((conn->request.len > sizeof(s)-1) && \
-			(!strncmp (conn->request.buf + conn->request.len - (sizeof(s)-1), s, sizeof(s)-1)))
+#define finishes_by(s) \
+	((conn->request.len > sizeof(s)-1) && \
+	 (!strncmp (conn->request.buf + conn->request.len - (sizeof(s)-1), s, sizeof(s)-1)))
 
 	if (finishes_by ("/py")) {
 		hdl->dwriter.lang = dwriter_python;

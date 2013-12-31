@@ -35,8 +35,8 @@ PLUGIN_INFO_LOGGER_EASY_INIT(combined);
 
 ret_t
 cherokee_logger_combined_new (cherokee_logger_t         **logger,
-			      cherokee_virtual_server_t  *vsrv,
-			      cherokee_config_node_t     *config)
+                              cherokee_virtual_server_t  *vsrv,
+                              cherokee_config_node_t     *config)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n, logger_combined);

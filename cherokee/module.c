@@ -27,8 +27,8 @@
 
 ret_t
 cherokee_module_init_base (cherokee_module_t       *module,
-			   cherokee_module_props_t *props,
-			   cherokee_plugin_info_t  *info)
+                           cherokee_module_props_t *props,
+                           cherokee_plugin_info_t  *info)
 {
 	/* Properties
 	 */

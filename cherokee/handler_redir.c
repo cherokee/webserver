@@ -44,11 +44,11 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
  */
 static ret_t
 substitute (cherokee_handler_redir_t *hdl,
-	    cherokee_buffer_t        *regex,
-	    cherokee_buffer_t        *source,
-	    cherokee_buffer_t        *target,
-	    cint_t                   *ovector,
-	    cint_t                    ovector_size)
+            cherokee_buffer_t        *regex,
+            cherokee_buffer_t        *source,
+            cherokee_buffer_t        *target,
+            cint_t                   *ovector,
+            cint_t                    ovector_size)
 {
 	ret_t                  ret;
 	char                  *token;
@@ -61,8 +61,8 @@ substitute (cherokee_handler_redir_t *hdl,
 	/* Replace regex matches (vserver match)
 	 */
 	ret = cherokee_regex_substitute (regex, &conn->host, tmp,
-					 conn->regex_host_ovector,
-					 conn->regex_host_ovecsize, '^');
+	                                 conn->regex_host_ovector,
+	                                 conn->regex_host_ovecsize, '^');
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -207,10 +207,10 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 
 			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
 			substitute (hdl,
-				    &list->subs,    /* regex str */
-				    tmp,            /* source    */
-				    &conn->request, /* target    */
-				    ovector, rc);   /* ovector   */
+			            &list->subs,    /* regex str */
+			            tmp,            /* source    */
+			            &conn->request, /* target    */
+			            ovector, rc);   /* ovector   */
 
 
 			/* Arguments */
@@ -237,10 +237,10 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
 
 		substitute (hdl,
-			    &list->subs,     /* regex str */
-			    tmp,             /* source    */
-			    &conn->redirect, /* target    */
-			    ovector, rc);    /* ovector   */
+		            &list->subs,     /* regex str */
+		            tmp,             /* source    */
+		            &conn->redirect, /* target    */
+		            ovector, rc);    /* ovector   */
 
 		TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
 
@@ -385,7 +385,7 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 		CHEROKEE_NEW_STRUCT (n,handler_redir_props);
 
 		cherokee_module_props_init_base (MODULE_PROPS(n),
-						 MODULE_PROPS_FREE(props_free));
+		                                 MODULE_PROPS_FREE(props_free));
 
 		cherokee_buffer_init (&n->url);
 		INIT_LIST_HEAD (&n->regex_list);
@@ -404,7 +404,7 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 
 		} else if (equal_buf_str (&subconf->key, "rewrite")) {
 			ret = cherokee_regex_list_configure (&props->regex_list,
-							     subconf, srv->regexs);
+			                                     subconf, srv->regexs);
 			if (ret != ret_ok)
 				return ret;
 

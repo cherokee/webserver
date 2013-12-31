@@ -46,7 +46,7 @@ typedef struct {
 	cherokee_handler_t      base;
 	cherokee_dwriter_t      writer;
 	cherokee_source_t      *src_ref;
-	MYSQL		       *conn;
+	MYSQL                  *conn;
 	cherokee_boolean_t      rollback;
 } cherokee_handler_dbslayer_t;
 
