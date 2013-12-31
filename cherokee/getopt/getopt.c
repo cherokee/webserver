@@ -160,7 +160,7 @@ int optopt = '?';
    stop option processing when the first non-option is seen.
    This is what Unix does.
    This mode of operation is selected by either setting the environment
-   nvariable POSIXLY_CORRECT, or using `+' as the first character
+   variable POSIXLY_CORRECT, or using `+' as the first character
    of the list of option characters.
 
    PERMUTE is the default.  We permute the contents of ARGV as we scan,
