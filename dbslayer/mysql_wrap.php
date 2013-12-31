@@ -4,7 +4,7 @@
  * Authors:
  *      Taher Shihadeh <taher@unixwars.com>
  *
- * Copyright (C) 2001-2013 Alvaro Lopez Ortega <alvaro@alobbs.com>
+ * Copyright (C) 2001-2014 Alvaro Lopez Ortega <alvaro@alobbs.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

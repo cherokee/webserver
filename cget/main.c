@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2013 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2014 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -369,7 +369,7 @@ main (int argc, char **argv)
 		case 'V':
 			printf ("Cherokee Downloader %s\n"
 			        "Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"
-			        "Copyright (C) 2001-2013 Alvaro Lopez Ortega.\n"
+			        "Copyright (C) 2001-2014 Alvaro Lopez Ortega.\n"
 			        "This is free software; see the source for copying conditions.  There is NO\n"
 			        "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
 			        PACKAGE_VERSION);
