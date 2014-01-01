@@ -141,7 +141,7 @@ configure_rewrite_entry (cherokee_list_t        *list,
 	ret_t                   ret;
 	cherokee_regex_entry_t *n;
 	cherokee_buffer_t      *substring;
-	cint_t                  hidden     = 1;
+	cherokee_boolean_t      hidden     = true;
 	pcre                   *re         = NULL;
 	cherokee_buffer_t      *regex      = NULL;
 
@@ -149,7 +149,7 @@ configure_rewrite_entry (cherokee_list_t        *list,
 
 	/* Query conf
 	 */
-	cherokee_config_node_read_int (conf, "show", &hidden);
+	cherokee_config_node_read_bool (conf, "show", &hidden);
 	hidden = !hidden;
 
 	ret = cherokee_config_node_read (conf, "regex", &regex);
