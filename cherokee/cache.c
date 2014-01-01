@@ -326,7 +326,7 @@ cherokee_cache_mrproper (cherokee_cache_t *cache)
 		cache->priv = NULL;
 	}
 
-	cherokee_avl_mrproper (&cache->map, (cherokee_func_free_t)entry_free);
+	cherokee_avl_mrproper (AVL_GENERIC(&cache->map), (cherokee_func_free_t)entry_free);
 	return ret_ok;
 }
 
@@ -666,7 +666,7 @@ cherokee_cache_get_stats (cherokee_cache_t  *cache,
 	cherokee_buffer_add_va (info, "Max size: %d\n", cache->max_size);
 	cherokee_buffer_add_va (info, "Target T1 size: %d\n", cache->target_t1);
 
-	cherokee_avl_len (&cache->map, &len);
+	cherokee_avl_len (AVL_GENERIC(&cache->map), &len);
 	cherokee_buffer_add_va (info, "AVL size: %d\n", len);
 
 	cherokee_buffer_add_va (info, "Total count: %d\n", cache->count);

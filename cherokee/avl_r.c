@@ -59,7 +59,7 @@ cherokee_avl_r_mrproper (cherokee_avl_r_t *avl_r, cherokee_func_free_t free_func
 		free (avl_r->priv);
 	}
 
-	return cherokee_avl_mrproper (&avl_r->avl, free_func);
+	return cherokee_avl_mrproper (AVL_GENERIC(&avl_r->avl), free_func);
 }
 
 

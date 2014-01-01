@@ -51,7 +51,7 @@ ret_t
 cherokee_handler_proxy_hosts_mrproper (cherokee_handler_proxy_hosts_t *hosts)
 {
 	CHEROKEE_MUTEX_DESTROY (&hosts->hosts_mutex);
-	cherokee_avl_mrproper (&hosts->hosts, poll_free);
+	cherokee_avl_mrproper (AVL_GENERIC(&hosts->hosts), poll_free);
 	cherokee_buffer_mrproper (&hosts->tmp);
 
 	return ret_ok;
@@ -474,9 +474,9 @@ cherokee_handler_proxy_conn_init_socket (cherokee_handler_proxy_conn_t *pconn,
 	/* Trace */
 #ifdef TRACE_ENABLED
 	if (cherokee_trace_is_tracing()) {
-		cuint_t          ip_num;
-		struct addrinfo *ai;
-		char             buf[50];
+		cuint_t                ip_num;
+		const struct addrinfo *ai;
+		char                   buf[50];
 
 		ai     = pconn->addr_info_ref;
 		ip_num = pconn->addr_current;
@@ -502,7 +502,7 @@ cherokee_handler_proxy_conn_get_addrinfo (cherokee_handler_proxy_conn_t  *pconn,
                                           cherokee_source_t              *src)
 {
 	ret_t                    ret;
-	struct addrinfo         *ai;
+	const struct addrinfo   *ai;
 	cherokee_resolv_cache_t *resolv;
 
 	/* Resolve the hostname of the target server

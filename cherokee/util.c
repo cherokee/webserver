@@ -2446,6 +2446,22 @@ cherokee_atoi (const char *str, int *ret_value)
 
 
 ret_t
+cherokee_atou (const char *str, cuint_t *ret_value)
+{
+	cuint_t tmp;
+
+	errno = 0;
+	tmp = strtoul (str, NULL, 10);
+	if (errno != 0) {
+		return ret_error;
+	}
+
+	*ret_value = tmp;
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_atob (const char *str, cherokee_boolean_t *ret_value)
 {
 	ret_t ret;

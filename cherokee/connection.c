@@ -227,7 +227,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	}
 
 	if (conn->arguments != NULL) {
-		cherokee_avl_free (conn->arguments,
+		cherokee_avl_free (AVL_GENERIC(conn->arguments),
 		                   (cherokee_func_free_t) cherokee_buffer_free);
 		conn->arguments = NULL;
 	}
@@ -360,7 +360,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_config_entry_ref_clean (&conn->config_entry);
 
 	if (conn->arguments != NULL) {
-		cherokee_avl_free (conn->arguments,
+		cherokee_avl_free (AVL_GENERIC(conn->arguments),
 		                   (cherokee_func_free_t) cherokee_buffer_free);
 		conn->arguments = NULL;
 	}
@@ -1427,7 +1427,7 @@ ret_t
 cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 {
 	ret_t  ret;
-	char  *name = NULL;
+	const char *name = NULL;
 
 	/* Ensure that the content can be encoded
 	 */
@@ -2454,7 +2454,7 @@ cherokee_connection_create_handler (cherokee_connection_t *conn, cherokee_config
 		if ((conn->handler != NULL) &&
 		    (cherokee_trace_is_tracing()))
 		{
-			char *name = NULL;
+			const char *name = NULL;
 
 			ret = cherokee_module_get_name (MODULE (conn->handler), &name);
 			if ((ret == ret_ok) && (name != NULL)) {

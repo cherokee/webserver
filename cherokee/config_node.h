@@ -71,6 +71,7 @@ ret_t cherokee_config_node_copy       (cherokee_config_node_t *conf, const char 
 
 ret_t cherokee_config_node_read_path  (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
 ret_t cherokee_config_node_read_int   (cherokee_config_node_t *conf, const char *key, int *num);
+ret_t cherokee_config_node_read_uint  (cherokee_config_node_t *conf, const char *key, cuint_t *num);
 ret_t cherokee_config_node_read_long  (cherokee_config_node_t *conf, const char *key, long *num);
 ret_t cherokee_config_node_read_bool  (cherokee_config_node_t *conf, const char *key, cherokee_boolean_t *val);
 ret_t cherokee_config_node_read_list  (cherokee_config_node_t *conf, const char *key,

@@ -370,7 +370,7 @@ cherokee_socket_update_from_addrinfo (cherokee_socket_t     *socket,
                                       const struct addrinfo *addr,
                                       cuint_t                num)
 {
-	struct addrinfo *ai;
+	const struct addrinfo *ai;
 
 	if (unlikely (addr == NULL))
 		return ret_error;
@@ -516,7 +516,7 @@ cherokee_socket_create_fd (cherokee_socket_t *sock, unsigned short int family)
 
 
 static ret_t
-cherokee_bind_v4 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_to)
+cherokee_bind_v4 (cherokee_socket_t *sock, cuint_t port, cherokee_buffer_t *listen_to)
 {
 	int   re;
 	ret_t ret;
@@ -538,7 +538,7 @@ cherokee_bind_v4 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_t
 
 
 static ret_t
-cherokee_bind_v6 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_to)
+cherokee_bind_v6 (cherokee_socket_t *sock, cuint_t port, cherokee_buffer_t *listen_to)
 {
 	int   re;
 	ret_t ret;
@@ -607,7 +607,7 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 
 
 ret_t
-cherokee_socket_bind (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_to)
+cherokee_socket_bind (cherokee_socket_t *sock, cuint_t port, cherokee_buffer_t *listen_to)
 {
 	/* Bind
 	 */

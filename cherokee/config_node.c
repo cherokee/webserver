@@ -280,6 +280,27 @@ cherokee_config_node_read_int (cherokee_config_node_t *conf, const char *key, in
 
 
 ret_t
+cherokee_config_node_read_uint (cherokee_config_node_t *conf, const char *key, cuint_t *num)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *tmp;
+
+	ret = cherokee_config_node_get (conf, key, &tmp);
+	if (ret != ret_ok) return ret;
+
+	if (cherokee_buffer_is_empty (&tmp->val)) {
+		return ret_not_found;
+	}
+
+	ret = cherokee_atou (tmp->val.buf, num);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
+
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_config_node_read_long (cherokee_config_node_t *conf, const char *key, long *num)
 {
 	ret_t                   ret;

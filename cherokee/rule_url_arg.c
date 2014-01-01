@@ -125,7 +125,7 @@ match (cherokee_rule_url_arg_t  *rule,
 	/* Check all arguments
 	 */
 	else {
-		ret = cherokee_avl_while (conn->arguments, match_avl_func, rule, NULL, NULL);
+		ret = cherokee_avl_while (AVL_GENERIC(conn->arguments), match_avl_func, rule, NULL, NULL);
 		if (ret == ret_eof) {
 			return ret_ok;
 		}

@@ -737,6 +737,9 @@ cherokee_buffer_prepend (cherokee_buffer_t *buf, const char *txt, size_t size)
 {
 	int free = buf->size - buf->len;
 
+	if (size <= 0)
+		return ret_ok;
+
 	/* Get memory
 	 */
 	if ((cuint_t) free < (size+1)) {
@@ -1320,9 +1323,9 @@ escape_with_table (cherokee_buffer_t *buffer,
                    cherokee_buffer_t *src,
                    uint32_t          *is_char_escaped)
 {
-	unsigned char *t;
-	unsigned char *s,*s_next;
-	unsigned char *end;
+	char *t;
+	const char *s,*s_next;
+	char *end;
 	cuint_t        n_escape    = 0;
 	static char    hex_chars[] = "0123456789abcdef";
 

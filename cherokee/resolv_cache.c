@@ -174,7 +174,7 @@ cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 ret_t
 cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv)
 {
-	cherokee_avl_mrproper (&resolv->table, entry_free);
+	cherokee_avl_mrproper (AVL_GENERIC(&resolv->table), entry_free);
 	CHEROKEE_RWLOCK_DESTROY (&resolv->lock);
 
 	return ret_ok;
@@ -204,7 +204,7 @@ ret_t
 cherokee_resolv_cache_clean (cherokee_resolv_cache_t *resolv)
 {
 	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
-	cherokee_avl_mrproper (&resolv->table, entry_free);
+	cherokee_avl_mrproper (AVL_GENERIC(&resolv->table), entry_free);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	return ret_ok;

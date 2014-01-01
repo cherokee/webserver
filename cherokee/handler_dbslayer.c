@@ -26,6 +26,7 @@
 #include "handler_dbslayer.h"
 #include "connection-protected.h"
 #include "thread.h"
+#include "util.h"
 
 #define add_cstr_str(w,key,val,len)                               \
 	do {                                                      \
@@ -122,6 +123,8 @@ cherokee_client_headers (cherokee_handler_dbslayer_t *hdl)
 		ret = cherokee_atob (hdr, &hdl->rollback);
 		if (ret != ret_ok) return ret;
 	}
+
+	return ret_ok;
 }
 
 

@@ -122,12 +122,12 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 	}
 
 	if (entry->users != NULL) {
-		cherokee_avl_free (entry->users, free);
+		cherokee_avl_free (AVL_GENERIC(entry->users), free);
 		entry->users = NULL;
 	}
 
 	if (entry->encoders) {
-		cherokee_avl_free (entry->encoders, cherokee_module_props_free);
+		cherokee_avl_free (AVL_GENERIC(entry->encoders), (cherokee_func_free_t) cherokee_module_props_free);
 		entry->encoders = NULL;
 	}
 

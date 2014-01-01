@@ -80,8 +80,8 @@ props_free (cherokee_handler_proxy_props_t *props)
 
 	cherokee_handler_proxy_hosts_mrproper (&props->hosts);
 
-	cherokee_avl_mrproper (&props->in_headers_hide, NULL);
-	cherokee_avl_mrproper (&props->out_headers_hide, NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&props->in_headers_hide), NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&props->out_headers_hide), NULL);
 
 	cherokee_regex_list_mrproper (&props->in_request_regexs);
 	cherokee_regex_list_mrproper (&props->out_request_regexs);

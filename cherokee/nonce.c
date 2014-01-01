@@ -92,7 +92,7 @@ cherokee_nonce_table_free (cherokee_nonce_table_t *nonces)
 		entry_free (nonces, (entry_t *)i);
 	}
 
-	cherokee_avl_mrproper (&nonces->table, NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&nonces->table), NULL);
 	CHEROKEE_MUTEX_DESTROY (&nonces->access);
 
 	free (nonces);

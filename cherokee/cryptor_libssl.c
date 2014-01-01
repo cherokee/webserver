@@ -761,7 +761,7 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 #ifdef TRACE_ENABLED
 	{
 		CHEROKEE_TEMP (buf,256);
-		SSL_CIPHER *cipher = SSL_get_current_cipher (cryp->session);
+		const SSL_CIPHER *cipher = SSL_get_current_cipher (cryp->session);
 
 		if (cipher) {
 			SSL_CIPHER_description (cipher, &buf[0], buf_size-1);
@@ -1231,7 +1231,7 @@ _client_new (cherokee_cryptor_t         *cryp,
 
 	/* Client */
 	CRYPTOR_SOCKET(n)->free     = (cryptor_socket_func_free_t) _client_free;
-	CRYPTOR_SOCKET(n)->init_tls = (cryptor_client_func_init_t) _client_init_tls;
+	CRYPTOR_SOCKET(n)->init_tls = (cryptor_socket_func_init_tls_t) _client_init_tls;
 
 	*cryp_client = CRYPTOR_CLIENT(n);
 	return ret_ok;
