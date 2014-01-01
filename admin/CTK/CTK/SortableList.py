@@ -35,12 +35,12 @@ $("#%(id)s").tableDnD({
        $.ajax ({url:      "%(url)s",
                 async:    true,
                 type:     "POST",
-		dataType: "text",
+                dataType: "text",
                 data:     $.tableDnD.serialize_plain(),
-	        success:   function (data_raw) {
+                success:   function (data_raw) {
                   var data = eval('(' + data_raw + ')');
 
-		  if (data['ret'] == 'ok') {
+                  if (data['ret'] == 'ok') {
                     /* Modified: Save button */
                     var modified     = data['modified'];
                     var not_modified = data['not-modified'];

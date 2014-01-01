@@ -189,24 +189,24 @@ $("#%(id)s")
                 dataType: 'json',
                 url:      '%(url)s',
                 data:     '%(key)s='+value,
-	 success: function (data) {
-            self.data('last_value', value);
+                success: function (data) {
+                    self.data('last_value', value);
 
-            var name = self.attr('name');
-	    for (var key in data['updates']) {
-               if (key == name) {
-                  self.val (data['updates'][key]);
-                  break;
-               }
-            }
-         },
-         error: function() {
-            event.stopPropagation();
-            self.val (self.data('last_value'));
-         },
-         complete: function (XMLHttpRequest, textStatus) {
-	    $("#activity").fadeOut('fast');
-         }
+                    var name = self.attr('name');
+                    for (var key in data['updates']) {
+                       if (key == name) {
+                          self.val (data['updates'][key]);
+                          break;
+                       }
+                    }
+                },
+                error: function() {
+                    event.stopPropagation();
+                    self.val (self.data('last_value'));
+                },
+                complete: function (XMLHttpRequest, textStatus) {
+                    $("#activity").fadeOut('fast');
+                }
        });
     }
 })
