@@ -56,10 +56,10 @@ ul {list-style: none;}
 
 /* Form Styles
  */
-input[type=text], input[type=password], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+input[type=text], input[type=password], textarea { border: 1px solid #b0bfce; margin: 1px; padding: 4px; color: #000; background: #fff url(/CTK/images/input-bg.png) left top repeat-x; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
 input[type=text]:focus, input[type=password]:focus, textarea:focus { border: 2px solid #2d70cb; margin: 0; }
 input[type=text], input[type=password], textarea { width: 240px; }
-select { border: 1px solid #b0bfce; background: #fff; padding: 2px; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px;}
+select { border: 1px solid #b0bfce; color: #000; background: #fff; padding: 2px; outline: none; -moz-border-radius: 4px; -webkit-border-radius: 4px;}
 .checkbox-text { padding: 4px; }
 .checkbox-text .description { display: inline-block; }
 
@@ -250,8 +250,8 @@ button:hover { cursor: pointer; }
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: 4px; top: 4px; background: transparent url(/CTK/images/bg-dialog-titlebar-close.gif) no-repeat; text-indent: -99999px; overflow: hidden; width: 14px;}
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
-.ui-dialog .ui-dialog-content { border: 0; padding: 16px; background: #fff; overflow: auto; zoom: 1; }
-.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background: #fff; padding: 16px; border-top: 1px solid #cde; }
+.ui-dialog .ui-dialog-content { border: 0; padding: 16px; color: #000; background: #fff; overflow: auto; zoom: 1; }
+.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; color: #000; background: #fff; padding: 16px; border-top: 1px solid #cde; }
 .ui-dialog .ui-dialog-buttonpane button { float: right; margin-left: 8px; cursor: pointer; width:auto; overflow:visible; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
@@ -264,7 +264,7 @@ button:hover { cursor: pointer; }
  */
 .backtrace { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; background: #fafafa; border: 1px solid #ddd; color: #c00; padding: 16px; margin: 16px 0; }
 .shell { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; background: #fafafa; border: 1px solid #ddd; color: #0b0; padding: 16px; margin: 16px 0 16px 48px; }
-#body-error h1 { background: #fff url(/CTK/images/dialog-error.png) 8px 12px no-repeat; padding-left: 48px; }
+#body-error h1 { color: #000; background: #fff url(/CTK/images/dialog-error.png) 8px 12px no-repeat; padding-left: 48px; }
 #body-error h2 { margin-bottom: 1em; }
 #body-error #main { padding: 16px; width: 926px; }
 #body-error p { padding-left: 48px; line-height: 1.5em; margin-bottom: 1.5em; }
@@ -309,6 +309,7 @@ button:hover { cursor: pointer; }
 .panel .filter { width: 214px; }
 
 .panel table {
+  color: #000;
   background-color: #fff;
   border-collapse: collapse;
   width: 234px;
@@ -316,6 +317,7 @@ button:hover { cursor: pointer; }
 }
 
 .panel table tr td {
+  color: #000;
   background-color: #fff;
   border-bottom: 1px solid #cde;
   max-width: 180px;
