@@ -108,6 +108,9 @@ class Refreshable (Widget):
         if not selector:
             selector = "$('#%s')" %(self.id)
 
+        if len(on_success) > 0:
+             on_success = "$(document).ready(function(){ %s });" % on_success
+
         props = {'selector':   selector,
                  'url':        url or self.url,
                  'on_success': on_success}
