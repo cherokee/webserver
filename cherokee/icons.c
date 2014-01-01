@@ -120,8 +120,8 @@ cherokee_icons_free (cherokee_icons_t *icons)
 		matching_free((file_matching_t *)i);
 	}
 
-	cherokee_avl_mrproper (&icons->files, free_entry);
-	cherokee_avl_mrproper (&icons->suffixes, free_entry);
+	cherokee_avl_mrproper (AVL_GENERIC(&icons->files), free_entry);
+	cherokee_avl_mrproper (AVL_GENERIC(&icons->suffixes), free_entry);
 
 	/* Free the special icons buffers
 	 */

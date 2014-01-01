@@ -370,7 +370,7 @@ cherokee_socket_update_from_addrinfo (cherokee_socket_t     *socket,
                                       const struct addrinfo *addr,
                                       cuint_t                num)
 {
-	struct addrinfo *ai;
+	const struct addrinfo *ai;
 
 	if (unlikely (addr == NULL))
 		return ret_error;

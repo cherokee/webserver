@@ -72,7 +72,7 @@ configure (cherokee_rule_fullpath_t  *rule,
 static ret_t
 _free (cherokee_rule_fullpath_t *rule)
 {
-	cherokee_avl_mrproper (&rule->paths, NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&rule->paths), NULL);
 	return ret_ok;
 }
 

@@ -270,7 +270,7 @@ cherokee_admin_server_reply_set_trace (cherokee_handler_t *hdl,
 	if (strncmp (question->buf, "set server.trace ", sizeof("set server.trace ")-1)) {
 		return ret_error;
 	}
-	cherokee_buffer_move_to_begin (question, sizeof("set server.trace "-1));
+	cherokee_buffer_move_to_begin (question, sizeof("set server.trace ")-1);
 
 	/* Set the traces
 	 */
@@ -396,7 +396,7 @@ cherokee_admin_server_reply_get_sources (cherokee_handler_t *hdl,
 	cherokee_server_t *srv = HANDLER_SRV(hdl);
 
 	cherokee_dwriter_list_open (dwriter);
-	cherokee_avl_while (&srv->sources, sources_while, dwriter, NULL, NULL);
+	cherokee_avl_while (AVL_GENERIC(&srv->sources), sources_while, dwriter, NULL, NULL);
 	cherokee_dwriter_list_close (dwriter);
 
 	return ret_ok;

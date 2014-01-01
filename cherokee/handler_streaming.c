@@ -92,7 +92,7 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 			props->auto_rate_factor = strtof (subconf->val.buf, NULL);
 
 		} else if (equal_buf_str (&subconf->key, "rate_boost")) {
-			ret = cherokee_atoi (subconf->val.buf, &props->auto_rate_boost);
+			ret = cherokee_atou (subconf->val.buf, &props->auto_rate_boost);
 			if (ret != ret_ok) return ret_error;
 		}
 	}

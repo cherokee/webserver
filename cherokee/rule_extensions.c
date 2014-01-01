@@ -84,7 +84,7 @@ _free (void *p)
 {
 	cherokee_rule_extensions_t *rule = RULE_EXTENSIONS(p);
 
-	cherokee_avl_mrproper (&rule->extensions, NULL);
+	cherokee_avl_mrproper (AVL_GENERIC(&rule->extensions), NULL);
 	return ret_ok;
 }
 

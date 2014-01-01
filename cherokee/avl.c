@@ -194,7 +194,7 @@ cherokee_avl_while (cherokee_avl_generic_t     *avl,
 {
 	void *params_internal[] = {func, param};
 
-	return cherokee_avl_generic_while (avl, while_func_wrap, params_internal, key, value);
+	return cherokee_avl_generic_while (avl, while_func_wrap, params_internal, (cherokee_avl_generic_node_t **) key, value);
 }
 
 

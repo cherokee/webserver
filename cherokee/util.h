@@ -141,6 +141,7 @@ ret_t   cherokee_find_exec_in_path  (const char        *bin_name,
                                      cherokee_buffer_t *fullpath);
 
 ret_t   cherokee_atoi               (const char *str, int *ret_value);
+ret_t   cherokee_atou               (const char *str, cuint_t *ret_value);
 ret_t   cherokee_atob               (const char *str, cherokee_boolean_t *ret_value);
 
 /* Time management functions

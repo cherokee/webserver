@@ -962,7 +962,7 @@ add_hsts (cherokee_config_node_t    *config,
 	ret = cherokee_atob (config->val.buf, &vserver->hsts.enabled);
 	if (ret != ret_ok) return ret_error;
 
-	cherokee_config_node_read_int  (config, "max_age",    &vserver->hsts.max_age);
+	cherokee_config_node_read_uint (config, "max_age",    &vserver->hsts.max_age);
 	cherokee_config_node_read_bool (config, "subdomains", &vserver->hsts.subdomains);
 
 	return ret_ok;
@@ -1172,7 +1172,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 			return ret;
 
 	} else if (equal_buf_str (&conf->key, "ssl_dh_length")) {
-		ret = cherokee_atoi (conf->val.buf, &vserver->ssl_dh_length);
+		ret = cherokee_atou (conf->val.buf, &vserver->ssl_dh_length);
 		if (ret != ret_ok)
 			return ret;
 

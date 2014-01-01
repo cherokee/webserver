@@ -143,7 +143,7 @@ cherokee_plugin_loader_mrproper (cherokee_plugin_loader_t *loader)
 	cherokee_buffer_mrproper (&loader->module_dir);
 	cherokee_buffer_mrproper (&loader->deps_dir);
 
-	cherokee_avl_mrproper (&loader->table, free_entry);
+	cherokee_avl_mrproper (AVL_GENERIC(&loader->table), free_entry);
 	return ret_ok;
 }
 
@@ -559,7 +559,7 @@ cherokee_plugin_loader_get_mods_info (cherokee_plugin_loader_t *loader,
 {
 	/* Build the built-in module string
 	 */
-	cherokee_avl_while (&loader->table, while_print_name, builtin, NULL, NULL);
+	cherokee_avl_while (AVL_GENERIC(&loader->table), while_print_name, builtin, NULL, NULL);
 	if ((builtin->len >= 2) &&
 	    (cherokee_buffer_end_char (builtin) == ' '))
 	{
