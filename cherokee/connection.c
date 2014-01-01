@@ -1412,6 +1412,9 @@ out:
 int
 cherokee_connection_should_include_length (cherokee_connection_t *conn)
 {
+	if (conn->options & conn_op_cant_encoder) {
+		return true;
+	}
 	if (conn->encoder_new_func) {
 		return false;
 	}
