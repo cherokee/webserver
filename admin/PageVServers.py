@@ -261,6 +261,7 @@ class Render:
                         self.JS_to_trigger('submit_success'))
 
             button = CTK.Button('<img src="/static/images/panel-new.png" />', {'id': 'vserver-new-button', 'class': 'panel-button', 'title': _('Add New Virtual Server')})
+	    # JS_ACTIVATE_FIRST will move the left selection pane inside the dialog up.
             button.bind ('click',
                          JS_ACTIVATE_FIRST %(dialog.id) +
                          dialog.JS_to_show())
