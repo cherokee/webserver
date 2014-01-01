@@ -143,7 +143,7 @@ add_extension (char *val, void *data)
 }
 
 static ret_t
-set_maxage (cherokee_mime_t *mime, cherokee_buffer_t *type, int maxage)
+set_maxage (cherokee_mime_t *mime, cherokee_buffer_t *type, cuint_t maxage)
 {
 	ret_t                  ret;
 	cherokee_mime_entry_t *entry = NULL;
@@ -166,7 +166,7 @@ static ret_t
 configure_mime (cherokee_config_node_t *config, void *data)
 {
 	ret_t                   ret;
-	cint_t                  maxage;
+	cuint_t                 maxage;
 	cherokee_config_node_t *subconf;
 	cherokee_mime_t        *mime     = MIME(data);
 	void                   *params[] = {mime, &config->key};
@@ -176,7 +176,7 @@ configure_mime (cherokee_config_node_t *config, void *data)
 		cherokee_config_node_read_list (subconf, NULL, add_extension, params);
 	}
 
-	ret = cherokee_config_node_read_int (config, "max-age", &maxage);
+	ret = cherokee_config_node_read_uint (config, "max-age", &maxage);
 	if (ret == ret_ok) {
 		ret = set_maxage (mime, &config->key, maxage);
 		if (ret != ret_ok) return ret;
