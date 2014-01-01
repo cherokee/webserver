@@ -212,8 +212,11 @@ cherokee_admin_server_reply_close_conn (cherokee_handler_t *hdl,
 	ret_t              ret;
 	char              *begin;
 	cherokee_server_t *server = HANDLER_SRV(hdl);
+	cherokee_buffer_t  match  = CHEROKEE_BUF_INIT;
 
-	if (strncmp (question->buf, "del server.connection ", 22)) {
+	cherokee_buffer_fake_str (&match, "del server.connection ");
+
+	if (cherokee_buffer_cmp_buf (question, &match)) {
 		return ret_error;
 	}
 
@@ -262,15 +265,18 @@ cherokee_admin_server_reply_set_trace (cherokee_handler_t *hdl,
                                        cherokee_buffer_t  *question)
 {
 	ret_t ret;
+	cherokee_buffer_t match = CHEROKEE_BUF_INIT;
 
 	UNUSED (hdl);
 
+	cherokee_buffer_fake_str(&match, "set server.trace ");
+
 	/* Process question
 	 */
-	if (strncmp (question->buf, "set server.trace ", sizeof("set server.trace ")-1)) {
+	if (cherokee_buffer_cmp_buf (question, &match)) {
 		return ret_error;
 	}
-	cherokee_buffer_move_to_begin (question, sizeof("set server.trace ")-1);
+	cherokee_buffer_move_to_begin (question, match.len);
 
 	/* Set the traces
 	 */
@@ -415,13 +421,16 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 	char               id[10];
 	cherokee_source_t *source = NULL;
 	cherokee_server_t *srv    = HANDLER_SRV(hdl);
+	cherokee_buffer_t  match  = CHEROKEE_BUF_INIT;
+
+	cherokee_buffer_fake_str (&match, "kill server.source ");
 
 	/* Check the command
 	 */
-	if (strncmp (question->buf, "kill server.source ", sizeof("kill server.source ")-1)) {
+	if (cherokee_buffer_cmp_buf (question, &match)) {
 		return ret_error;
 	}
-	begin = question->buf + sizeof("kill server.source ")-1;
+	begin = question->buf + match->len;
 	end   = question->buf + question->len;
 
 	/* Check the source to be killed
