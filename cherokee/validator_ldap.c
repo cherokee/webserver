@@ -118,8 +118,8 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 			cherokee_buffer_add_buffer (&props->ca_file, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "methods") ||
-			   equal_buf_str (&subconf->key, "realm")   ||
-			   equal_buf_str (&subconf->key, "users")) {
+		           equal_buf_str (&subconf->key, "realm")   ||
+		           equal_buf_str (&subconf->key, "users")) {
 			/* Handled in validator.c
 			 */
 		} else {
@@ -187,7 +187,7 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 			re = ldap_set_option (NULL, LDAP_OPT_X_TLS_CACERTFILE, props->ca_file.buf);
 			if (re != LDAP_OPT_SUCCESS) {
 				LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_LDAP_CA,
-					      props->ca_file.buf, ldap_err2string (re));
+				              props->ca_file.buf, ldap_err2string (re));
 				return ret_error;
 			}
 		}
