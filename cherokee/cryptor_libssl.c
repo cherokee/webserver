@@ -260,7 +260,6 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	cherokee_connection_t     *conn;
 	cherokee_buffer_t          tmp;
 	cherokee_server_t         *srv       = SRV(arg);
-	cherokee_virtual_server_t *vsrv      = NULL;
 
 	UNUSED(ad);
 
