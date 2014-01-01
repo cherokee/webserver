@@ -430,7 +430,7 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 	if (cherokee_buffer_cmp_buf (question, &match)) {
 		return ret_error;
 	}
-	begin = question->buf + match->len;
+	begin = question->buf + match.len;
 	end   = question->buf + question->len;
 
 	/* Check the source to be killed

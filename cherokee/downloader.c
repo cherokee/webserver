@@ -399,9 +399,10 @@ downloader_header_read (cherokee_downloader_t *downloader,
 #ifdef TRACE_ENABLED
 				if (ret == ret_ok) {
 					TRACE (ENTRIES, "Known length: %d bytes\n", downloader->content_length);
-				} elss {
+				} else {
 					TRACE (ENTRIES, "Could not parse Content-Length\n");
 				}
+			}
 #endif
 		}
 
