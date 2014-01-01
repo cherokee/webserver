@@ -1095,9 +1095,13 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
                           off_t   *offset,
                           ssize_t *sent)
 {
-	int                       re;
-	off_t                     _sent  = size;
 	static cherokee_boolean_t no_sys = false;
+#if DARWIN_SENDFILE_API || FREEBSD_SENDFILE_API
+	int                       re;
+#endif
+#if DARWIN_SENDFILE_API
+	off_t                     _sent  = size;
+#endif
 
 	/* Exit if there is no sendfile() function in the system
 	 */
