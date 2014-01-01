@@ -269,7 +269,7 @@ cherokee_admin_server_reply_set_trace (cherokee_handler_t *hdl,
 
 	UNUSED (hdl);
 
-	cherokee_buffer_fake_str(&match, "set server.trace ");
+	cherokee_buffer_fake_str (&match, "set server.trace ");
 
 	/* Process question
 	 */
