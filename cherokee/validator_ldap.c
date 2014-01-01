@@ -111,10 +111,8 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 			cherokee_buffer_add_buffer (&props->filter, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "tls")) {
-			int tmp;
-			ret = cherokee_atoi (subconf->val.buf, &tmp);
+			ret = cherokee_atob (subconf->val.buf, &props->tls);
 			if (ret != ret_ok) return ret_error;
-			props->tls = !! tmp;
 
 		} else if (equal_buf_str (&subconf->key, "ca_file")) {
 			cherokee_buffer_add_buffer (&props->ca_file, &subconf->val);
