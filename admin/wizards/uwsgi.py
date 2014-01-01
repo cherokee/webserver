@@ -182,7 +182,7 @@ class Commit:
         # Add the new rules
         config = cvs %(locals())
 
-        CTK.cfg.apply_chunk (config)
+        CTK.cfg.apply_chunk (str(config))
 
         # Clean up
         CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
@@ -219,7 +219,7 @@ class Commit:
         # Add the new rules
         webdir = uwsgi_find_mountpoint(uwsgi_cfg)[0]
         config = CONFIG_DIR %(locals())
-        CTK.cfg.apply_chunk (config)
+        CTK.cfg.apply_chunk (str(config))
 
         # Clean up
         CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
