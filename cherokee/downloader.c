@@ -394,8 +394,15 @@ downloader_header_read (cherokee_downloader_t *downloader,
 		if (ret == ret_ok) {
 			cherokee_buffer_clean (tmp1);
 			ret = cherokee_header_copy_known (downloader->header, header_content_length, tmp1);
-			cherokee_atou (tmp1->buf, &downloader->content_length);
-			TRACE (ENTRIES, "Known lenght: %d bytes\n", downloader->content_length);
+			if (ret == ret_ok) {
+				ret = cherokee_atou (tmp1->buf, &downloader->content_length);
+#ifdef TRACE_ENABLED
+				if (ret == ret_ok) {
+					TRACE (ENTRIES, "Known length: %d bytes\n", downloader->content_length);
+				} elss {
+					TRACE (ENTRIES, "Could not parse Content-Length\n");
+				}
+#endif
 		}
 
 		return ret_ok;
