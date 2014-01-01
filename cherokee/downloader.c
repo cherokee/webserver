@@ -402,8 +402,8 @@ downloader_header_read (cherokee_downloader_t *downloader,
 				} else {
 					TRACE (ENTRIES, "Could not parse Content-Length\n");
 				}
-			}
 #endif
+			}
 		}
 
 		return ret_ok;
