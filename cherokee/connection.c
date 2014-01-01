@@ -918,8 +918,6 @@ static void
 build_response_header_final (cherokee_connection_t *conn,
                              cherokee_buffer_t     *buffer)
 {
-	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(CONN_THREAD(conn));
-
 	/* Expiration
 	 */
 	if (conn->expiration != cherokee_expiration_none) {
