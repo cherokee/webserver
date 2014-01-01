@@ -1015,6 +1015,55 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 	TRACE (ENTRIES, "CGI header: '%s'\n", buffer->buf);
 
+	/* When an X-Sendfile header is send, we should not try to encode
+	 * this file. In all likelihood the developer knows what happens,
+	 * and might even have added Content-Length to the connection.
+	 *
+	 * This section should take preference over Content-Length parsing
+	 * because it allows the Content-Length header to be added from CGI.
+	 */
+
+	if (HANDLER_CGI_BASE_PROPS(cgi)->allow_xsendfile) {
+		begin = buffer->buf;
+		while ((begin != NULL) && *begin)
+		{
+			end1 = strchr (begin, CHR_CR);
+			end2 = strchr (begin, CHR_LF);
+
+			end = cherokee_min_str (end1, end2);
+			if (end == NULL) break;
+
+			end2 = end;
+			while ((*end2 == CHR_CR) || (*end2 == CHR_LF))
+				end2++;
+
+			if (begin[0] == 'X' || begin[0] == 'x') {
+				if (strncasecmp ("X-Sendfile: ", begin, 12) == 0) {
+					cherokee_buffer_add (&cgi->xsendfile, begin+12, end - (begin+12));
+					cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
+					end2 = begin;
+
+					TRACE (ENTRIES, "Found X-Sendfile header: '%s'\n", cgi->xsendfile.buf);
+
+					BIT_SET (conn->options, conn_op_cant_encoder);
+				}
+
+				else if (strncasecmp ("X-Accel-Redirect: ", begin, 18) == 0)
+				{
+					cherokee_buffer_add (&cgi->xsendfile, begin+18, end - (begin+18));
+					cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
+					end2 = begin;
+
+					TRACE (ENTRIES, "Found X-Accel-Redirect header: '%s'\n", cgi->xsendfile.buf);
+
+					BIT_SET (conn->options, conn_op_cant_encoder);
+				}
+			}
+
+			begin = end2;
+		}
+	}
+
 	/* Process the header line by line
 	 */
 	begin = buffer->buf;
@@ -1104,26 +1153,6 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 		else if (strncasecmp ("Content-Encoding: ", begin, 18) == 0) {
 			BIT_SET (conn->options, conn_op_cant_encoder);
-		}
-
-		else if ((HANDLER_CGI_BASE_PROPS(cgi)->allow_xsendfile) &&
-			 (strncasecmp ("X-Sendfile: ", begin, 12) == 0))
-		{
-			cherokee_buffer_add (&cgi->xsendfile, begin+12, end - (begin+12));
-			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
-			end2 = begin;
-
-			TRACE (ENTRIES, "Found X-Sendfile header: '%s'\n", cgi->xsendfile.buf);
-		}
-
-		else if ((HANDLER_CGI_BASE_PROPS(cgi)->allow_xsendfile) &&
-			 (strncasecmp ("X-Accel-Redirect: ", begin, 18) == 0))
-		{
-			cherokee_buffer_add (&cgi->xsendfile, begin+18, end - (begin+18));
-			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
-			end2 = begin;
-
-			TRACE (ENTRIES, "Found X-Accel-Redirect header: '%s'\n", cgi->xsendfile.buf);
 		}
 
 		begin = end2;
