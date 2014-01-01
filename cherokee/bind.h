@@ -41,8 +41,8 @@ typedef struct {
 
 	/* Information */
 	cherokee_buffer_t  ip;
-	int                port;
-	int                family;
+	cuint_t            port;
+	cuint_t            family;
 
 	/* Strings */
 	cherokee_buffer_t  server_string;

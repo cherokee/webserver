@@ -123,7 +123,7 @@ ret_t cherokee_socket_flush             (cherokee_socket_t *socket);
 ret_t cherokee_socket_test_read         (cherokee_socket_t *socket);
 
 ret_t cherokee_socket_create_fd         (cherokee_socket_t *socket, unsigned short int family);
-ret_t cherokee_socket_bind              (cherokee_socket_t *socket, int port, cherokee_buffer_t *listen_to);
+ret_t cherokee_socket_bind              (cherokee_socket_t *socket, cuint_t port, cherokee_buffer_t *listen_to);
 ret_t cherokee_socket_listen            (cherokee_socket_t *socket, int backlog);
 
 ret_t cherokee_socket_bufwrite          (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t *written);
