@@ -125,7 +125,7 @@ class PluginHandlerCGI (Handler.PluginHandler):
         table.Add (_('Check file'),           CTK.CheckCfgText('%s!check_file'%(self.key),       True,  _('Enabled')), _(NOTE_CHECK_FILE))
         table.Add (_('Pass Request Headers'), CTK.CheckCfgText('%s!pass_req_headers'%(self.key), True,  _('Enabled')), _(NOTE_PASS_REQ))
         table.Add (_('Allow X-Sendfile'),     CTK.CheckCfgText('%s!xsendfile'%(self.key),        False, _('Enabled')), _(NOTE_XSENDFILE))
-        table.Add (_('Use I/O cache'),        CTK.CheckCfgText('%s!iocache'%(key),               True,  _('Enabled')), _(NOTE_IOCACHE))
+        table.Add (_('Use I/O cache'),        CTK.CheckCfgText('%s!iocache'%(self.key),          True,  _('Enabled')), _(NOTE_IOCACHE))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter (table)
