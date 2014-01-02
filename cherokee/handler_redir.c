@@ -232,20 +232,26 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 			return ret_eagain;
 		}
 
-		/* External redirect
-		 */
-		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
+		else {
+		    /* External redirect
+		    */
+		    cherokee_buffer_t redirect = CHEROKEE_BUF_INIT;
+		    cherokee_buffer_ensure_size (&redirect, conn->request.len + subject_len);
 
-		substitute (hdl,
-		            &list->subs,     /* regex str */
-		            tmp,             /* source    */
-		            &conn->redirect, /* target    */
-		            ovector, rc);    /* ovector   */
+		    substitute (hdl,
+				&list->subs,     /* regex str */
+				tmp,             /* source    */
+				&redirect,       /* target    */
+				ovector, rc);    /* ovector   */
 
-		TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
+		    cherokee_buffer_escape_uri (&conn->redirect, &redirect);
+		    cherokee_buffer_mrproper (&redirect);
 
-		ret = ret_ok;
-		goto out;
+		    TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
+
+		    ret = ret_ok;
+		    goto out;
+		}
 	}
 
 	ret = ret_ok;
