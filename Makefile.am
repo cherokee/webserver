@@ -140,10 +140,10 @@ install-data-local: $(CONFS) install-data-local-config
 	$(mkinstalldirs) $(DESTDIR)$(localstatedir)
 
 uninstall-local: uninstall-local-config
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf ; then \
-		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
-	fi
+#	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf ; then \
+#		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf"; \
+#		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
+#	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample ; then \
 		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
