@@ -78,6 +78,11 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 
 	props = PROP_SCGI(*_props);
 
+	/* Init base class
+	 */
+	ret = cherokee_handler_cgi_base_configure (conf, srv, _props);
+	if (ret != ret_ok) return ret;
+
 	/* Parse the configuration tree
 	 */
 	cherokee_config_node_foreach (i, conf) {
@@ -88,11 +93,6 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 			if (ret != ret_ok) return ret;
 		}
 	}
-
-	/* Init base class
-	 */
-	ret = cherokee_handler_cgi_base_configure (conf, srv, _props);
-	if (ret != ret_ok) return ret;
 
 	/* Final checks
 	 */

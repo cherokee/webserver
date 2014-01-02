@@ -1292,6 +1292,7 @@ add_vserver (cherokee_config_node_t *conf, void *data)
 		cherokee_virtual_server_free (vsrv);
 		return ret_ok;
 	} else if (ret != ret_ok) {
+		cherokee_virtual_server_free (vsrv);
 		return ret;
 	}
 
