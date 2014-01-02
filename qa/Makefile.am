@@ -323,7 +323,8 @@ run-tests.py \
 299-MethodsRequestBodyHandling.py \
 300-xsendfile3.py \
 301-XForwardedFor-4.py \
-302-DirIndex3.py
+302-DirIndex3.py \
+303-RedirSpecialChar.py
 
 test:
 	python -m compileall .
