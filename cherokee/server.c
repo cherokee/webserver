@@ -408,10 +408,12 @@ cherokee_server_set_min_latency (cherokee_server_t *srv, int msecs)
 static ret_t
 print_banner (cherokee_server_t *srv)
 {
+#ifdef TRACE_ENABLED
 	ret_t              ret;
+	cherokee_buffer_t *buf;
+#endif
 	const char        *method;
 	cherokee_list_t   *i;
-	cherokee_buffer_t *buf;
 	size_t             b   = 0;
 	size_t             len = 0;
 	cherokee_buffer_t  n   = CHEROKEE_BUF_INIT;
