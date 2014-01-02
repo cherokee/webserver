@@ -118,7 +118,6 @@ static void
 print_tuple_str (const char *title, const char *info)
 {
 	int   whites;
-	char *tmp;
 
 	if (quiet == true)
 		return;
