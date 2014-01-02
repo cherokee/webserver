@@ -48,8 +48,7 @@ LINK_FACEBOOK   = 'http://www.facebook.com/cherokee.project'
 LINK_GOOGLEPLUS = 'https://plus.google.com/u/1/communities/109478817835447552345'
 LINK_GITHUB     = 'https://github.com/cherokee/webserver'
 LINK_DOWNLOAD   = 'http://www.cherokee-project.com/download/'
-LINK_LISTS      = 'https://groups.google.com/forum/#!forum/cherokee-http'
-LINK_LIST       = 'http://lists.octality.com/listinfo/cherokee'
+LINK_LIST       = 'https://groups.google.com/forum/#!forum/cherokee-http'
 LINK_IRC        = 'irc://irc.freenode.net/cherokee'
 LINK_HELP       = '/help/basics.html'
 LINK_CHEROKEE   = 'http://www.cherokee-project.com/'
@@ -67,7 +66,7 @@ MAILING_LIST_INFO   = N_("""\
 There are a number of Community <a href="%(link)s" target="_blank">Mailing Lists</a>
 available for you to subscribe. You can subscribe the General Discussion
 mailing list from this interface. There is where most of the discussions
-take place.""")%({'link':LINK_LISTS})
+take place.""")%({'link':LINK_LIST})
 
 # Server is..
 RUNNING_NOTICE      = N_('Server is Running')
