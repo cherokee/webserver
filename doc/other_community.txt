@@ -33,9 +33,9 @@ entries and will probably give you an answer a lot faster.
 
 These are the lists currently in existence:
 
-- link:http://lists.octality.com/listinfo/cherokee[General list]
-- link:http://lists.octality.com/listinfo/cherokee-dev[Development list]
-- link:http://lists.octality.com/listinfo/cherokee-commits[GIT Reports]
+- link:https://groups.google.com/forum/#!forum/cherokee-http[General list]
+- link:https://groups.google.com/forum/#!forum/cherokee-http-dev[Development list]
+- link:https://github.com/cherokee/webserver/commits[GitHub Commits]
 
 
 #cherokee IRC channel
