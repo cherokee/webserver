@@ -666,6 +666,8 @@ cherokee_logger_custom_init (cherokee_logger_custom_t *logger)
 ret_t
 cherokee_logger_custom_free (cherokee_logger_custom_t *logger)
 {
+	cherokee_buffer_mrproper (&now);
+
 	cherokee_template_mrproper (&logger->template_conn);
 	return ret_ok;
 }
