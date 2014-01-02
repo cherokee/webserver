@@ -140,6 +140,8 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		cherokee_avl_init (&n->out_headers_hide);
 		cherokee_avl_set_case (&n->out_headers_hide, true);
 
+		cherokee_handler_proxy_hosts_init (&n->hosts);
+
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -233,10 +235,6 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 			cherokee_list_invert (&props->out_request_regexs);
 		}
 	}
-
-	/* Init properties
-	 */
-	cherokee_handler_proxy_hosts_init (&props->hosts);
 
 	/* Final checks
 	 */
