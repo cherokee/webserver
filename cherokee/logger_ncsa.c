@@ -180,6 +180,8 @@ cherokee_logger_ncsa_init (cherokee_logger_ncsa_t *logger)
 ret_t
 cherokee_logger_ncsa_free (cherokee_logger_ncsa_t *logger)
 {
+	cherokee_buffer_mrproper (&now);
+
 	cherokee_buffer_mrproper (&logger->now_dtm);
 	cherokee_buffer_mrproper (&logger->referer);
 	cherokee_buffer_mrproper (&logger->useragent);

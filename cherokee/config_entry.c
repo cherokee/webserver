@@ -118,7 +118,7 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 
 	if (entry->auth_realm != NULL) {
 		cherokee_buffer_free (entry->auth_realm);
-		entry->document_root = NULL;
+		entry->auth_realm = NULL;
 	}
 
 	if (entry->users != NULL) {
@@ -149,6 +149,11 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 
 		free (entry->flcache_cookies_disregard);
 		entry->flcache_cookies_disregard = NULL;
+	}
+
+	if (entry->timeout_header != NULL) {
+		cherokee_buffer_free (entry->timeout_header);
+		entry->timeout_header = NULL;
 	}
 
 	return ret_ok;

@@ -96,6 +96,9 @@ props_free (cherokee_handler_proxy_props_t *props)
 		header_add_free (HEADER_ADD(i));
 	}
 
+	if (props->balancer)
+		cherokee_balancer_free (props->balancer);
+
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
