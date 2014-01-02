@@ -41,10 +41,6 @@ from util import *
 from consts import *
 from configured import *
 
-# URLs
-LINK_SUPPORT    = 'http://www.octality.com/engineering.html'
-
-
 # Links
 LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
 LINK_TWITTER    = 'http://twitter.com/webserver'
@@ -266,10 +262,6 @@ class SupportBox (CTK.Box):
 
         # Bug report
         link = CTK.LinkWindow (LINK_BUGTRACKER, CTK.RawHTML (_('Report a bug')))
-        qlist += link
-
-        # Commercial Support
-        link = CTK.LinkWindow (LINK_SUPPORT, CTK.RawHTML (_('Purchase commercial support')))
         qlist += link
 
         # About..
