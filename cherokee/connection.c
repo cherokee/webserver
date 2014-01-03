@@ -422,7 +422,6 @@ ret_t
 cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 {
 	ret_t                       ret;
-	cherokee_server_t          *srv;
 	cherokee_virtual_server_t  *vsrv;
 	cherokee_config_entry_t    *entry;
 
@@ -431,7 +430,6 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	 * call continue (becase conn->error_code might have changed).
 	 */
 
-	srv   = CONN_SRV(conn);
 	vsrv  = CONN_VSRV(conn);
 	entry = vsrv->error_handler;
 

@@ -43,9 +43,7 @@ props_free (cherokee_validator_htdigest_props_t *props)
 ret_t
 cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
-	cherokee_validator_htdigest_props_t *props;
-
-	UNUSED(srv);
+	UNUSED (srv);
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htdigest_props);
@@ -54,8 +52,6 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 		                                         MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
-
-	props = PROP_HTDIGEST(*_props);
 
 	/* Call the file based validator configure
 	 */
