@@ -1192,7 +1192,6 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 static void
 xsendfile_header_clean_up (cherokee_buffer_t *header)
 {
-	char *p;
 	char *begin;
 	char *end;
 	char  chr_end;
@@ -1200,7 +1199,6 @@ xsendfile_header_clean_up (cherokee_buffer_t *header)
 	end   = header->buf + header->len;
 	begin = header->buf;
 
-	p = begin;
 	while (begin < end) {
 		end = cherokee_header_get_next_line (begin);
 		if (end == NULL)
@@ -1252,7 +1250,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                           *colon;
 	char                           *header_end;
 	cherokee_list_t                *i;
-	cherokee_http_version_t         version;
+	// cherokee_http_version_t      version;
 	cint_t                          xsendfile_len;
 	char                           *xsendfile      = NULL;
 	cherokee_boolean_t              added_server   = false;
@@ -1270,14 +1268,14 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	p+= 5;
 
 	if (strncmp (p, "1.1", 3) == 0) {
-		version = http_version_11;
+	//	version = http_version_11;
 
 	} else if (strncmp (p, "1.0", 3) == 0) {
-		version                  = http_version_10;
+	//	version                  = http_version_10;
 		hdl->pconn->keepalive_in = false;
 
 	} else if (strncmp (p, "0.9", 3) == 0) {
-		version                  = http_version_09;
+	//	version                  = http_version_09;
 		hdl->pconn->keepalive_in = false;
 	} else
 		goto error;
