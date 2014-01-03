@@ -294,13 +294,10 @@ add_request (cherokee_handler_proxy_t *hdl,
 
 	cherokee_buffer_clean (tmp);
 
+	cherokee_connection_set_pathinfo (conn);
+
 	/* Build the URL
 	 */
-	ret = cherokee_buffer_escape_uri (tmp, &conn->request);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
 	if (! cherokee_buffer_is_empty (&conn->pathinfo)) {
 		ret = cherokee_buffer_escape_uri (tmp, &conn->pathinfo);
 		if (ret != ret_ok) {
@@ -1297,7 +1294,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	re = (int)p[3];
 	p[3] = '\0';
 
-	ret = cherokee_atoi (p, (int *)&conn->error_code);
+	ret = cherokee_atou (p, (cuint_t *)&conn->error_code);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
