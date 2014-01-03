@@ -398,6 +398,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
 	cherokee_buffer_t              *tmp          = &HANDLER_THREAD(hdl)->tmp_buf1;
+	cherokee_boolean_t              XFS          = (conn->socket.is_tls == TLS);
 
 	/* Method */
 	ret = cherokee_http_method_to_string (conn->header.method, &str, &len);
@@ -509,7 +510,6 @@ build_request (cherokee_handler_proxy_t *hdl,
 		    (! strncasecmp (begin, "Connection:", 11)) ||
 		    (! strncasecmp (begin, "Keep-Alive:", 11)) ||
 		    (! strncasecmp (begin, "Content-Length:", 15)) ||
-		    (! strncasecmp (begin, "X-Forwarded-SSL:", 16)) ||
 		    (! strncasecmp (begin, "Transfer-Encoding:", 18)))
 		{
 			goto next;
@@ -543,6 +543,14 @@ build_request (cherokee_handler_proxy_t *hdl,
 		else if (! strncasecmp (begin, "X-Forwarded-Host:", 17))
 		{
 			XFH = true;
+		}
+		else if (! strncasecmp (begin, "X-Forwarded-SSL:", 16))
+		{
+			char *c = begin + 16;
+			while (*c == ' ') c++;
+
+			XFS &= (strncasecmp (c, "on", 7) == 0);
+			goto next;
 		}
 		else if (! strncasecmp (begin, "X-Real-IP:", 10))
 		{
@@ -599,7 +607,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 	/* X-Forwarded-SSL */
 	cherokee_buffer_add_str (buf, "X-Forwarded-SSL: ");
-	if(conn->socket.is_tls) {
+	if (XFS) {
 		cherokee_buffer_add_str (buf, "on");
 	} else {
 		cherokee_buffer_add_str (buf, "off");
