@@ -1010,6 +1010,9 @@ cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, cuint_t offset, const char *st
 crc_t
 cherokee_buffer_crc32 (cherokee_buffer_t *buf)
 {
+	if (cherokee_buffer_is_empty (buf))
+		return 0;
+
 	return crc32_sz (buf->buf, buf->len);
 }
 
