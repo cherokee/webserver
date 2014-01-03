@@ -110,7 +110,7 @@ is.png \
 it.png \
 jm.png \
 jo.png \
-jp.png \
+ja.png \
 ke.png \
 kg.png \
 kh.png \

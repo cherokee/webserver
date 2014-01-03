@@ -127,7 +127,7 @@ e('VALIDATOR_PAM_AUTH',
 
 e('VALIDATOR_PAM_ACCOUNT',
   title = "User '%s' - invalid account: %s",
-  desc  = "The specified user does not exist on the sytem.")
+  desc  = "The specified user does not exist on the system.")
 
 
 # cherokee/validator_ldap.c
