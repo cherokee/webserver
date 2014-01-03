@@ -63,7 +63,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	cuint_t      len;
 	char        *data;
 	cuint_t      type;
-	cuint_t      id;
+/*	cuint_t      id; */
 	cuint_t      padding;
 
 	/* Is there enough information?
@@ -93,7 +93,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	 */
 	type    =  header->type;
 	padding =  header->paddingLength;
-	id      = (header->requestIdB0     | (header->requestIdB1 << 8));
+/*	id      = (header->requestIdB0     | (header->requestIdB1 << 8)); */
 	len     = (header->contentLengthB0 | (header->contentLengthB1 << 8));
 	data    = inbuf->buf +  FCGI_HEADER_LEN;
 
