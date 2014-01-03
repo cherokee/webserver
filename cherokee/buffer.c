@@ -1077,6 +1077,9 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 {
 	int  len;
 
+	if (fd < 0)
+		return ret_error;
+
 	/* Ensure there is enough space in buffer
 	 * NOTE: usually the caller should have already allocated
 	 *       enough space for the buffer, so this is a security measure
