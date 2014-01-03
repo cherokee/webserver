@@ -847,18 +847,6 @@ mix_headers (cherokee_buffer_t *target,
 }
 
 
-static void
-set_pathinfo(cherokee_connection_t *conn) {
-	if (conn->web_directory.len == 1 || cherokee_connection_use_webdir (conn)) {
-		cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
-	} else {
-		cherokee_buffer_add (&conn->pathinfo,
-		                     conn->request.buf + conn->web_directory.len,
-		                     conn->request.len - conn->web_directory.len);
-	}
-}
-
-
 ret_t
 cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
                                         cherokee_boolean_t           check_filename)
@@ -892,7 +880,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 		/* Check the path_info even if it uses a  scriptalias. The PATH_INFO
 		 * is the rest of the substraction of request - configured directory.
 		 */
-		set_pathinfo(conn);
+		cherokee_connection_set_pathinfo (conn);
 		return ret_ok;
 	}
 
@@ -903,7 +891,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
 	 */
 	if (! props->check_file)
 	{
-		set_pathinfo(conn);
+		cherokee_connection_set_pathinfo (conn);
 		return ret_ok;
 	}
 

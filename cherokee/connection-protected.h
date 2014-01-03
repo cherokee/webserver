@@ -306,13 +306,14 @@ int   cherokee_connection_is_userdir             (cherokee_connection_t *conn);
 
 ret_t cherokee_connection_build_local_directory  (cherokee_connection_t *conn, cherokee_virtual_server_t *vsrv);
 ret_t cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, cherokee_virtual_server_t *vsrv);
-ret_t cherokee_connection_set_custom_droot       (cherokee_connection_t   *conn, cherokee_config_entry_t *entry);
+ret_t cherokee_connection_set_custom_droot       (cherokee_connection_t *conn, cherokee_config_entry_t *entry);
 
 ret_t cherokee_connection_clean_error_headers    (cherokee_connection_t *conn);
 ret_t cherokee_connection_set_redirect           (cherokee_connection_t *conn, cherokee_buffer_t *address);
 
 ret_t cherokee_connection_clean_for_respin       (cherokee_connection_t *conn);
 int   cherokee_connection_use_webdir             (cherokee_connection_t *conn);
+void  cherokee_connection_set_pathinfo           (cherokee_connection_t *conn);
 
 /* Log
  */

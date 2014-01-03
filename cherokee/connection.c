@@ -2786,6 +2786,19 @@ cherokee_connection_use_webdir (cherokee_connection_t *conn)
 }
 
 
+void
+cherokee_connection_set_pathinfo(cherokee_connection_t *conn)
+{
+        if (conn->web_directory.len == 1 || cherokee_connection_use_webdir (conn)) {
+                cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
+        } else {
+                cherokee_buffer_add (&conn->pathinfo,
+                                     conn->request.buf + conn->web_directory.len,
+                                     conn->request.len - conn->web_directory.len);
+        }
+}
+
+
 #ifdef TRACE_ENABLED
 char *
 cherokee_connection_print (cherokee_connection_t *conn)
