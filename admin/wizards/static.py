@@ -3,7 +3,7 @@
 # Cherokee-admin's Common Static wizard
 #
 # Authors:
-#      Taher Shihadeh <taher@octality.com>
+#      Taher Shihadeh <taher@unixwars.com>
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
 # Copyright (C) 2001-2014 Alvaro Lopez Ortega
