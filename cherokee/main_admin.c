@@ -584,11 +584,14 @@ signals_handler (int sig, siginfo_t *si, void *context)
 	ret_t ret;
 	int   retcode;
 
-	UNUSED(context);
+	UNUSED (context);
 
 	switch (sig) {
 	case SIGCHLD:
 		ret = cherokee_wait_pid (si->si_pid, &retcode);
+		if (ret == ret_ok) {
+			UNUSED (retcode);
+		}
 		break;
 
 	case SIGINT:
