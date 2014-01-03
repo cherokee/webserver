@@ -509,6 +509,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 		    (! strncasecmp (begin, "Connection:", 11)) ||
 		    (! strncasecmp (begin, "Keep-Alive:", 11)) ||
 		    (! strncasecmp (begin, "Content-Length:", 15)) ||
+		    (! strncasecmp (begin, "X-Forwarded-SSL:", 16)) ||
 		    (! strncasecmp (begin, "Transfer-Encoding:", 18)))
 		{
 			goto next;
