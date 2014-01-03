@@ -139,7 +139,7 @@ license] in the project's Git repository.
 
 If for whatever reason this license does not suit your needs, other
 licensing schemes can be negotiated on a particular basis. Contact
-Alvaro Lopez Ortega (alvaro@alobbs.com) if this is your case.
+mailto:alvaro@alobbs.com[Alvaro Lopez Ortega] if this is your case.
 
 [[faq12]]
 === And what about the documentation?
