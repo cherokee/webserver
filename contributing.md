@@ -10,6 +10,7 @@ This guide covers all you need to know to make this a fluid experience.
 1.1 [Writing a new issue](#writing-a-new-issue)  
 1.1.1 [Finding a suitable title](#finding-a-suitable-title)  
 1.2 [Issue labels](#issue-labels)  
+2.0 [Indentation](#indentation)
 
 ## Issues list
 
@@ -41,3 +42,27 @@ At the same time the opener provided a perfect line title just in the descriptio
 - *“Cherokee isn’t aware of EPOLLs and fails when it’s already present.”*
 
 ### Comprehending issue labels
+
+## Indentation
+
+We ident with tabs to mark a different scope. For all other identation we use plain spaces as example:
+static ret_t
+```
+dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl,
+< s p a c e s >       cherokee_buffer_t           *buffer)
+{
+<tab>   switch (HANDLER_DBSLAYER_PROPS(hdl)->lang) {
+<tab>   case dwriter_json:
+<tab><tab>      cherokee_buffer_add_str (buffer,
+<tab><tab>      <spaces from here>       "Content-Type: "   <spaces> \
+<tab><tab>      <spaces from here>       "application/json" <spaces> \
+<tab><tab>      <spaces from here>       CRLF);
+<tab><tab>      break;
+<tab>   default:
+<tab><tab>      SHOULDNT_HAPPEN;
+<tab><tab>      return ret_error;
+<tab>   }
+<empty>
+<tab>   return ret_ok;
+}
+```
