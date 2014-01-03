@@ -506,13 +506,12 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			subconf2 = NULL;
 			ret = cherokee_config_node_get (subconf, "do_cache", &subconf2);
 			if ((ret == ret_ok) && (subconf2 != NULL)) {
-				cherokee_list_t        *i;
-				cherokee_config_node_t *child;
+				cherokee_list_t *i;
 
 				cherokee_config_node_foreach (i, subconf2) {
-					child = CONFIG_NODE(i);
+					cherokee_config_node_t *child = CONFIG_NODE(i);
 
-					ret = add_flcache_cookies_do_cache (entry, CONFIG_NODE(i), srv);
+					ret = add_flcache_cookies_do_cache (entry, child, srv);
 					if (ret != ret_ok)
 						return ret;
 				}
