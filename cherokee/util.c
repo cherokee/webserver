@@ -625,7 +625,6 @@ cherokee_estimate_va_length (const char *fmt, va_list ap)
 	cherokee_boolean_t  lflag;
 	cherokee_boolean_t  llflag;
 	cuint_t             width;
-	char                padc;
 	cuint_t             len = 0;
 
 #define LEN_NUM(var,base)    \
@@ -637,7 +636,6 @@ cherokee_estimate_va_length (const char *fmt, va_list ap)
 
 	for (;;) {
 		width = 0;
-		padc  = ' ';
 
 		while ((ch = *fmt++) != '%') {
 			if (ch == '\0')
@@ -675,7 +673,7 @@ reswitch:
 			LEN_NUM(ul,10);
 			break;
 		case '0':
-			padc = '0';
+			len++;
 			goto reswitch;
 		case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
