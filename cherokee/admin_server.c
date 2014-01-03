@@ -212,7 +212,7 @@ cherokee_admin_server_reply_close_conn (cherokee_handler_t *hdl,
 	ret_t              ret;
 	char              *begin;
 	cherokee_server_t *server = HANDLER_SRV(hdl);
-	cherokee_buffer_t  match  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  match;
 
 	cherokee_buffer_fake_str (&match, "del server.connection ");
 
@@ -265,7 +265,7 @@ cherokee_admin_server_reply_set_trace (cherokee_handler_t *hdl,
                                        cherokee_buffer_t  *question)
 {
 	ret_t ret;
-	cherokee_buffer_t match = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t match;
 
 	UNUSED (hdl);
 
@@ -421,7 +421,7 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 	char               id[10];
 	cherokee_source_t *source = NULL;
 	cherokee_server_t *srv    = HANDLER_SRV(hdl);
-	cherokee_buffer_t  match  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  match;
 
 	cherokee_buffer_fake_str (&match, "kill server.source ");
 

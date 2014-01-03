@@ -64,7 +64,7 @@ ret_t
 cherokee_trace_init (void)
 {
 	const char        *env;
-	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
 
 	/* Read the environment variable
 	 */

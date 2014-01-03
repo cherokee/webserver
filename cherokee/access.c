@@ -328,7 +328,7 @@ cherokee_access_add_domain (cherokee_access_t *entry, char *domain)
 	char                     ip[46]; // Max IPv6 length is 45
 	cherokee_resolv_cache_t *resolv;
 	const struct addrinfo   *addr_info, *addr;
-	cherokee_buffer_t        domain_buf = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t        domain_buf;
 
 	cherokee_buffer_fake (&domain_buf, domain, strlen(domain));
 
