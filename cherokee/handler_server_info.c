@@ -872,9 +872,7 @@ cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
 
 	/* Init
 	 */
-	ret = cherokee_buffer_init (&n->buffer);
-	if (unlikely(ret != ret_ok))
-		goto error;
+	cherokee_buffer_init (&n->buffer);
 
 	ret = cherokee_buffer_ensure_size (&n->buffer, 4*1024);
 	if (unlikely(ret != ret_ok))

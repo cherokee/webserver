@@ -56,14 +56,11 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 	ret = cherokee_request_header_init (&n->request);
 	if (unlikely(ret != ret_ok)) return ret;
 
-	ret = cherokee_buffer_init (&n->request_header);
-	if (unlikely(ret != ret_ok)) return ret;
+	cherokee_buffer_init (&n->request_header);
 
-	ret = cherokee_buffer_init (&n->reply_header);
-	if (unlikely(ret != ret_ok)) return ret;
+	cherokee_buffer_init (&n->reply_header);
 
-	ret = cherokee_buffer_init (&n->body);
-	if (unlikely(ret != ret_ok)) return ret;
+	cherokee_buffer_init (&n->body);
 
 	ret = cherokee_socket_init (&n->socket);
 	if (unlikely(ret != ret_ok)) return ret;

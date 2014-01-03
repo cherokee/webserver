@@ -68,9 +68,7 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 
 	/* Init
 	 */
-	ret = cherokee_buffer_init (&n->content);
-	if (unlikely(ret < ret_ok))
-		return ret;
+	cherokee_buffer_init (&n->content);
 
 	/* Return the object
 	 */

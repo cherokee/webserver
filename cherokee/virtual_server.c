@@ -93,17 +93,9 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	cherokee_buffer_init    (&n->ciphers);
 	cherokee_buffer_add_str (&n->ciphers, CHEROKEE_CIPHERS_DEFAULT);
 
-	ret = cherokee_buffer_init (&n->root);
-	if (unlikely(ret < ret_ok))
-		return ret;
-
-	ret = cherokee_buffer_init (&n->name);
-	if (unlikely(ret < ret_ok))
-		return ret;
-
-	ret = cherokee_buffer_init (&n->userdir);
-	if (unlikely(ret < ret_ok))
-		return ret;
+	cherokee_buffer_init (&n->root);
+	cherokee_buffer_init (&n->name);
+	cherokee_buffer_init (&n->userdir);
 
 	/* Return the object
 	 */

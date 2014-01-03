@@ -115,17 +115,13 @@ cherokee_plugin_loader_init (cherokee_plugin_loader_t *loader)
 
 	/* Plug-in dir
 	 */
-	ret = cherokee_buffer_init (&loader->module_dir);
-	if (unlikely(ret < ret_ok))
-		return ret;
+	cherokee_buffer_init (&loader->module_dir);
 
 	cherokee_buffer_add_str (&loader->module_dir, CHEROKEE_PLUGINDIR);
 
 	/* Plug-in dependencies dir
 	 */
-	ret = cherokee_buffer_init (&loader->deps_dir);
-	if (unlikely(ret < ret_ok))
-		return ret;
+	cherokee_buffer_init (&loader->deps_dir);
 
 	cherokee_buffer_add_str (&loader->deps_dir, CHEROKEE_DEPSDIR);
 
