@@ -1035,12 +1035,6 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	if (S_ISREG(info.st_mode) == 0)
 		return ret_error;
 
-	/* Maybe get memory
-	 */
-	ret = cherokee_buffer_ensure_size (buf, buf->len + info.st_size + 1);
-	if (unlikely (ret != ret_ok))
-		return ret;
-
 	/* Open the file
 	 */
 	f = cherokee_open (filename, O_RDONLY | O_BINARY, 0);
@@ -1050,6 +1044,12 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	}
 
 	cherokee_fd_set_closexec (f);
+
+	/* Maybe get memory
+	 */
+	ret = cherokee_buffer_ensure_size (buf, buf->len + info.st_size + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Read the content
 	 */
