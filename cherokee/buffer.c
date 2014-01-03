@@ -312,8 +312,10 @@ cherokee_buffer_add_fsize (cherokee_buffer_t *buf, CST_OFFSET size)
 			continue;
 		}
 		if (size < 9 || (size == 9 && remain < 973)) {
-			if ((remain = ((remain * 5) + 256) / 512) >= 10)
+			remain = ((remain * 5) + 256) / 512;
+			if (remain >= 10) {
 				++size, remain = 0;
+			}
 			return cherokee_buffer_add_va_fixed (buf, "%d.%d%c", (int) size, remain, *o);
 		}
 		if (remain >= 512)
