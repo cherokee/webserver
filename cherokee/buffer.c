@@ -929,13 +929,16 @@ cherokee_buffer_remove_chunk (cherokee_buffer_t *buf, cuint_t from, cuint_t len)
 	char *end;
 	char *begin;
 
-	if (len == buf->len) {
+	if (from >= buf->len)
+		return ret_ok;
+
+	if ((from == 0) && (len >= buf->len)) {
 		cherokee_buffer_clean (buf);
 		return ret_ok;
 	}
 
 	begin = buf->buf + from;
-	end   = begin + len;
+	end   = MIN ((begin + len), (buf->buf + buf->len));
 
 	memmove (begin, end, ((buf->buf + buf->len) - end) + 1);
 	buf->len -= len;
