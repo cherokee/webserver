@@ -312,8 +312,10 @@ cherokee_buffer_add_fsize (cherokee_buffer_t *buf, CST_OFFSET size)
 			continue;
 		}
 		if (size < 9 || (size == 9 && remain < 973)) {
-			if ((remain = ((remain * 5) + 256) / 512) >= 10)
+			remain = ((remain * 5) + 256) / 512;
+			if (remain >= 10) {
 				++size, remain = 0;
+			}
 			return cherokee_buffer_add_va_fixed (buf, "%d.%d%c", (int) size, remain, *o);
 		}
 		if (remain >= 512)
@@ -771,6 +773,9 @@ cherokee_buffer_is_ending (cherokee_buffer_t *buf, char c)
 ret_t
 cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, cuint_t pos)
 {
+	if (pos == 0)
+		return ret_ok;
+
 	if (pos >= buf->len) {
 		cherokee_buffer_clean(buf);
 		return ret_ok;
@@ -905,9 +910,8 @@ cherokee_buffer_remove_string (cherokee_buffer_t *buf, char *string, int string_
 	char *tmp;
 	int   offset;
 
-	if (buf->len <= 0) {
+	if ((buf->len <= 0) || (string == NULL) || (string_len <= 0))
 		return ret_ok;
-	}
 
 	while ((tmp = strstr (buf->buf, string)) != NULL) {
 		offset = tmp - buf->buf;
@@ -925,13 +929,16 @@ cherokee_buffer_remove_chunk (cherokee_buffer_t *buf, cuint_t from, cuint_t len)
 	char *end;
 	char *begin;
 
-	if (len == buf->len) {
+	if (from >= buf->len)
+		return ret_ok;
+
+	if ((from == 0) && (len >= buf->len)) {
 		cherokee_buffer_clean (buf);
 		return ret_ok;
 	}
 
 	begin = buf->buf + from;
-	end   = begin + len;
+	end   = MIN ((begin + len), (buf->buf + buf->len));
 
 	memmove (begin, end, ((buf->buf + buf->len) - end) + 1);
 	buf->len -= len;
@@ -1003,6 +1010,9 @@ cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, cuint_t offset, const char *st
 crc_t
 cherokee_buffer_crc32 (cherokee_buffer_t *buf)
 {
+	if (cherokee_buffer_is_empty (buf))
+		return 0;
+
 	return crc32_sz (buf->buf, buf->len);
 }
 
@@ -1025,12 +1035,6 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	if (S_ISREG(info.st_mode) == 0)
 		return ret_error;
 
-	/* Maybe get memory
-	 */
-	ret = cherokee_buffer_ensure_size (buf, buf->len + info.st_size + 1);
-	if (unlikely (ret != ret_ok))
-		return ret;
-
 	/* Open the file
 	 */
 	f = cherokee_open (filename, O_RDONLY | O_BINARY, 0);
@@ -1040,6 +1044,12 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	}
 
 	cherokee_fd_set_closexec (f);
+
+	/* Maybe get memory
+	 */
+	ret = cherokee_buffer_ensure_size (buf, buf->len + info.st_size + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Read the content
 	 */
@@ -1066,6 +1076,9 @@ ret_t
 cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_t *ret_size)
 {
 	int  len;
+
+	if (fd < 0)
+		return ret_error;
 
 	/* Ensure there is enough space in buffer
 	 * NOTE: usually the caller should have already allocated
@@ -1124,7 +1137,7 @@ cherokee_buffer_multiply (cherokee_buffer_t *buf, int num)
 	initial_size = buf->len;
 	cherokee_buffer_ensure_size (buf, buf->len * num + 1);
 
-	for (i=0; i<num; i++) {
+	for (i = 1; i < num; i++) {
 		cherokee_buffer_add (buf, buf->buf, initial_size);
 	}
 
