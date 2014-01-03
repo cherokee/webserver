@@ -42,7 +42,7 @@ exec 2>&1
 	    echo
 	fi
 
-	if [ $os = "Linux" ]; then 
+	if [ $os = "Linux" ]; then
 	    BINARYNAME=`readlink "/proc/$pid/exe"`
 	    known_os=yes
 	elif [ $os = "SunOS" ]; then
@@ -54,14 +54,14 @@ exec 2>&1
 	echo "The Cherokee 'panic action' script, $0,"
 	echo "was called for pid $pid ($BINARYNAME)."
 	echo
-	
+
      # Ensure /proc/$pid exists if it should
 	if test "x${known_os}" = "xyes"; then
 	    if [ ! -d "/proc/$pid" ]; then
 		   echo "$0: No such process: $pid"
 		   exit 1
 	    fi
-	    if test "x${BINARYNAME}" = "x"; then 
+	    if test "x${BINARYNAME}" = "x"; then
 		   echo "This means there was a problem with the program, such as a segfault."
 		   echo "However, the executable could not be found for process $pid."
 		   echo "It may have died unexpectedly, or you may not have permission to"
@@ -90,15 +90,15 @@ exec 2>&1
 	echo "Below is a backtrace for this process generated with gdb, which shows"
 	echo "the state of the program at the time the error occured.  You are"
 	echo "encouraged to submit this information as a bug report in the Cherokee"
-	echo "bug traq system:  http://bugs.cherokee-project.com"
+	echo "bug tracking system:  http://bugs.cherokee-project.com"
 	echo
 	echo "Operating System: `uname -a`"
 	echo "Debugger: $debugger"
 	echo
 
 	# Get the backtrace
-	if [ x$debugger = x$gdb ]; then 
-	    
+	if [ x$debugger = x$gdb ]; then
+
 	    # Use /dev/shm as temp dir
 	    test -d /dev/shm &&    \
 		   TMPDIR=/dev/shm || \
@@ -124,7 +124,7 @@ exec 2>&1
 
 	elif [ x$debugger = x$dbx ]; then
 	     #Solaris
-	     
+
 	     echo "Related processes were:"
 	     /usr/bin/ptree $pid
 		echo
@@ -136,7 +136,7 @@ exec 2>&1
 		echo "Flags were:"
 		/usr/bin/pflags $pid
 		echo
-		
+
 		echo "Credentials were:"
 		/usr/bin/pcred $pid
 		echo
@@ -156,13 +156,13 @@ exec 2>&1
 		echo "Directory in use was:"
 		/usr/bin/pwdx $pid
 		echo
-		
+
 		echo "Backtrace"
 	     $dbx -c "print (char *)cherokee_version; where -v -l ; quit" "$BINARYNAME" "$pid"
 		echo
 	fi
 
-) | ( 
+) | (
     case "$action" in
 	   mail)
 		  /usr/sbin/sendmail -t
