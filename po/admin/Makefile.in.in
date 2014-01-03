@@ -137,7 +137,7 @@ stamp-po: $(srcdir)/$(DOMAIN).pot
 
 # This target rebuilds $(DOMAIN).pot; it is an expensive operation.
 # Note that $(DOMAIN).pot is not touched if it doesn't need to be changed.
-OLD-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
+$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	if LC_ALL=C grep 'GNU @PACKAGE@' $(top_srcdir)/* 2>/dev/null | grep -v 'libtool:' >/dev/null; then \
 	  package_gnu='GNU '; \
 	else \
@@ -181,8 +181,11 @@ OLD-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	  fi; \
 	}
 
-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
+DEPRECATED-$(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	if [ ! -f $(srcdir)/$(DOMAIN).pot ]; then \
+# The following xgettext is missing keyword, sorting, packaging-vars, etc and I shall declare it broken ;)
+# Don't wanna delete it yet.
+# - DN
 	  xgettext --files-from=$(srcdir)/POTFILES.in --directory=../.. --output=tmp.po; \
 	  rm -f $(srcdir)/$(DOMAIN).pot; \
 	  mv tmp.po $(srcdir)/$(DOMAIN).pot; \
