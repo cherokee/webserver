@@ -46,8 +46,9 @@ At the same time the opener provided a perfect line title just in the descriptio
 ## Indentation
 
 We ident with tabs to mark a different scope. For all other identation we use plain spaces as example:
-static ret_t
+
 ```
+static ret_t
 dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl,
 < s p a c e s >       cherokee_buffer_t           *buffer)
 {
