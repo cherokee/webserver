@@ -50,7 +50,7 @@ We ident with tabs to mark a different scope. For all other identation we use pl
 ```
 static ret_t
 dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl,
-< s p a c e s >       cherokee_buffer_t           *buffer)
+< s p a c e s >       cherokee_buffer_t <space>   *buffer)
 {
 <tab>   switch (HANDLER_DBSLAYER_PROPS(hdl)->lang) {
 <tab>   case dwriter_json:
