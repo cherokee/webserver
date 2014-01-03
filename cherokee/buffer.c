@@ -910,9 +910,8 @@ cherokee_buffer_remove_string (cherokee_buffer_t *buf, char *string, int string_
 	char *tmp;
 	int   offset;
 
-	if (buf->len <= 0) {
+	if ((buf->len <= 0) || (string == NULL) || (string_len <= 0))
 		return ret_ok;
-	}
 
 	while ((tmp = strstr (buf->buf, string)) != NULL) {
 		offset = tmp - buf->buf;
