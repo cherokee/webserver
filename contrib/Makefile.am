@@ -16,18 +16,18 @@ SUFFIXES = .pre
 	        s|%localedir%|${localedir}|g" $< > $@
 
 EXTRA_DIST = \
-cherokee_debian-init.pre \
+cherokee_init-script.pre \
 bin2buffer.py \
 tracelor.py \
 make-cert.sh \
 make-dh_params.sh
 
 CLEANFILES = \
-cherokee_debian-init \
+cherokee_init-script \
 server.pem \
 rand.dat \
 cakey.key \
 cakey.csr \
 cakey.pem
 
-all-local: cherokee_debian-init
+all-local: cherokee_init-script
