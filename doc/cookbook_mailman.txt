@@ -151,5 +151,5 @@ Once you have followed the rest of the
 link:http://www.gnu.org/software/mailman/mailman-install/[installation
 instructions], you will be able to access your instance of Mailman. If
 you want to see a live example of the above mentioned configuration,
-simply visit the link:http://lists.octality.com/[Cherokee Project
+simply visit the link:https://groups.google.com/forum/#!forum/cherokee-http[Cherokee Project
 Mailing Lists].

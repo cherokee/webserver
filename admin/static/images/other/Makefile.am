@@ -11,7 +11,6 @@ linkedin.png \
 irc.png \
 latest.png \
 left.png \
-octality-logo.png \
 proud.png \
 right.png \
 twitter.png \

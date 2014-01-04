@@ -211,7 +211,6 @@ class MailHTML:
 if __name__ == "__main__":
     # Mail Headers
     mail = MailHTML ("Alvaro Lopez Ortega <alvaro@alobbs.com>",
-                     "Alvaro Lopez Ortega <alvaro@octality.com>",
                      "Good looking HTML mail")
 
     # Template

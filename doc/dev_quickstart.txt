@@ -32,7 +32,7 @@ make sure you are not wasting your effort working on something already
 solved.
 
 Joining the
-link:http://lists.octality.com/listinfo/cherokee-dev[development list]
+link:https://groups.google.com/forum/#!forum/cherokee-http-dev[development list]
 and hanging out at the link:irc://irc.freenode.net/cherokee[#cherokee
 IRC channel] are also good ideas.
 

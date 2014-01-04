@@ -3,7 +3,7 @@
 # Symfony Wizard
 #
 # Authors:
-#      Taher Shihadeh <taher@octality.com>
+#      Taher Shihadeh <taher@unixwars.com>
 #
 # Copyright (C) 2001-2014 Alvaro Lopez Ortega
 #

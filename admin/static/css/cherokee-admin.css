@@ -490,13 +490,6 @@ img.icon_chooser_selected {
 #login-dialog input[type="text"], #login-dialog input[type="password"] { width: 256px; }
 
 
-#bottom-box { padding: 8px 0; margin: 8px 16px; }
-#bottom-box h2 { font-size: 16px; margin-bottom: 16px; }
-#enterprise-box { width: 256px; float: right; }
-#enterprise-notice { background: #fff url(/static/images/other/octality-logo.png) no-repeat top; padding-top:64px; }
-#enterprise-link { text-align: right; margin-top: 16px; color: #def; }
-
-
 #proud-users { background: transparent url(/static/images/other/proud.png) no-repeat right top; padding-right: 32px; }
 #proud-link { text-align: right; margin-top: 8px; color: #def; }
 #proud-link a { margin: 0 4px; }

@@ -4,7 +4,7 @@
 #
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
-#      Taher Shihadeh <taher@octality.com>
+#      Taher Shihadeh <taher@unixwars.com>
 #
 # Copyright (C) 2001-2014 Alvaro Lopez Ortega
 #
@@ -41,10 +41,6 @@ from util import *
 from consts import *
 from configured import *
 
-# URLs
-LINK_SUPPORT    = 'http://www.octality.com/engineering.html'
-
-
 # Links
 LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
 LINK_TWITTER    = 'http://twitter.com/webserver'
@@ -52,33 +48,15 @@ LINK_FACEBOOK   = 'http://www.facebook.com/cherokee.project'
 LINK_GOOGLEPLUS = 'https://plus.google.com/u/1/communities/109478817835447552345'
 LINK_GITHUB     = 'https://github.com/cherokee/webserver'
 LINK_DOWNLOAD   = 'http://www.cherokee-project.com/download/'
-LINK_LISTS      = 'http://lists.octality.com/'
-LINK_LIST       = 'http://lists.octality.com/listinfo/cherokee'
+LINK_LIST       = 'https://groups.google.com/forum/#!forum/cherokee-http'
 LINK_IRC        = 'irc://irc.freenode.net/cherokee'
 LINK_HELP       = '/help/basics.html'
 LINK_CHEROKEE   = 'http://www.cherokee-project.com/'
 LINK_LINKEDIN   = 'http://www.linkedin.com/groups?gid=1819726'
 
-# Subscription
-SUBSCRIBE_URL       = 'http://lists.octality.com/subscribe/cherokee-dev'
-SUBSCRIBE_CHECK     = 'Your subscription request has been received'
-SUBSCRIBE_APPLY     = '/index/subscribe/apply'
-
-NOTE_EMAIL          = N_("You will be sent an email requesting confirmation")
-NOTE_NAME           = N_("Optionally provide your name")
-
-MAILING_LIST_INFO   = N_("""\
-There are a number of Community <a href="%(link)s" target="_blank">Mailing Lists</a>
-available for you to subscribe. You can subscribe the General Discussion
-mailing list from this interface. There is where most of the discussions
-take place.""")%({'link':LINK_LISTS})
-
 # Server is..
 RUNNING_NOTICE      = N_('Server is Running')
 STOPPED_NOTICE      = N_('Server is not Running')
-
-
-
 
 # Help entries
 HELPS = [('config_status', N_("Status"))]
@@ -211,38 +189,6 @@ class LanguageSelector (CTK.Box):
         self += CTK.RawHTML('%s: ' %(_('Language')))
         self += submit
 
-def Subscribe_Apply ():
-    values = {}
-    for k in CTK.post:
-        values[k] = CTK.post[k]
-
-    data = urllib.urlencode(values)
-    req  = urllib2.Request(SUBSCRIBE_URL, data)
-    response = urllib2.urlopen(req)
-    results_page = response.read()
-    if SUBSCRIBE_CHECK in results_page:
-        return {'ret':'ok'}
-
-    return {'ret':'error'}
-
-
-class MailingListDialog (CTK.Dialog):
-    def __init__ (self):
-        CTK.Dialog.__init__ (self, {'title': _('Mailing List Subscription'), 'width': 560})
-        self.AddButton (_('Cancel'), "close")
-        self.AddButton (_('Subscribe'), self.JS_to_trigger('submit'))
-
-        table = CTK.PropsTable()
-        table.Add (_('Your email address'), CTK.TextField({'name': 'email', 'class': 'noauto'}), _(NOTE_EMAIL))
-        table.Add (_('Your name'),          CTK.TextField({'name': 'fullname', 'class': 'noauto', 'optional':True}), _(NOTE_NAME))
-
-        submit = CTK.Submitter (SUBSCRIBE_APPLY)
-        submit.bind ('submit_success', self.JS_to_close())
-        submit += table
-
-        self += CTK.RawHTML ("<p>%s</p>" %(_(MAILING_LIST_INFO)))
-        self += submit
-
 
 class SupportBox (CTK.Box):
     def __init__ (self):
@@ -257,19 +203,11 @@ class SupportBox (CTK.Box):
         qlist += link
 
         # Mailing List
-        link = CTK.Link ('#', CTK.RawHTML (_('Subscribe to mailing lists')))
-        dialog = MailingListDialog()
-
-        link.bind ('click', dialog.JS_to_show())
-        self += dialog
+        link = CTK.LinkWindow (LINK_LIST, CTK.RawHTML (_('Visit the mailing list')))
         qlist += link
 
         # Bug report
         link = CTK.LinkWindow (LINK_BUGTRACKER, CTK.RawHTML (_('Report a bug')))
-        qlist += link
-
-        # Commercial Support
-        link = CTK.LinkWindow (LINK_SUPPORT, CTK.RawHTML (_('Purchase commercial support')))
         qlist += link
 
         # About..
@@ -360,4 +298,3 @@ CTK.publish (r'^/launch$', Launch)
 CTK.publish (r'^/stop$',   Stop)
 CTK.publish (r'^/halt$',   Halt)
 CTK.publish (r'^/lang/apply',             Lang_Apply,           method="POST")
-CTK.publish (r'^%s'%(SUBSCRIBE_APPLY),    Subscribe_Apply,      method="POST")
