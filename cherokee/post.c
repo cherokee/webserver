@@ -326,7 +326,7 @@ process_chunk (cherokee_post_t   *post,
 		/* Read the length
 		*/
 		content_size = (size_t) strtoul (begin, NULL, 16);
-		if (unlikely (content_size < 0)) {
+		if (unlikely (errno != 0)) {
 			return ret_error;
 		}
 
