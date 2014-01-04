@@ -34,7 +34,10 @@ static void
 poll_free (void *p)
 {
 	cherokee_handler_proxy_poll_t *poll = p;
-	poll = p;
+
+	cherokee_handler_proxy_poll_free (poll);
+
+	free (poll);
 }
 
 ret_t
