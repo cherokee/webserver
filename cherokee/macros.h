@@ -262,19 +262,19 @@ char obj[size]
  * These macros implement _new/_free by using _init/_mrproper.
  */
 #define CHEROKEE_ADD_FUNC_NEW(klass)  \
-    ret_t                                                         \
+ret_t                                                         \
 cherokee_ ## klass ## _new (cherokee_ ## klass ## _t **obj) { \
-    ret_t ret;                                            \
-    CHEROKEE_NEW_STRUCT (n, klass);                       \
-    \
-    ret = cherokee_ ## klass ## _init (n);                \
-    if (unlikely (ret != ret_ok)) {                       \
-	free (n);                                     \
-	return ret;                                   \
-    }                                                     \
-    \
-    *obj = n;                                             \
-    return ret_ok;                                        \
+	ret_t ret;                                            \
+	CHEROKEE_NEW_STRUCT (n, klass);                       \
+	                                                      \
+	ret = cherokee_ ## klass ## _init (n);                \
+	if (unlikely (ret != ret_ok)) {                       \
+		free (n);                                     \
+		return ret;                                   \
+	}                                                     \
+	                                                      \
+	*obj = n;                                             \
+	return ret_ok;                                        \
 }
 
 #define CHEROKEE_ADD_FUNC_FREE(klass)  \
