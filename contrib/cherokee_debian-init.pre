@@ -23,7 +23,7 @@ DESC="Cherokee web server"
 NAME=cherokee
 DAEMON=%sbindir%/$NAME
 DAEMON_ARGS="-d"
-PIDFILE=%localstatedir%/$NAME.pid
+PIDFILE=%localstatedir%/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Exit if the package is not installed
