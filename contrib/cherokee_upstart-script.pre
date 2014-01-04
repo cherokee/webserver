@@ -4,7 +4,9 @@
 # easy to configure open source web server designed for the
 # next generation of highly concurrent secured web applications.
 
-description "Cherokee web server %version%"
+author "Daniel Niccoli <daniel.niccoli@gmail.com>"
+description "Cherokee web server"
+version "%version%"
 
 start on (
     net-device-up
