@@ -5,15 +5,16 @@
 # Required-Stop:     $remote_fs $network $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Cherokee web server init script.
-# Description:       Cherokee web server init script for Debian-based
-#                    Distributions. (http://www.cherokee-project.com)
+# Short-Description: Cherokee - Evolved Web Infrastructure Software.
+# Description:       Cherokee is an innovative, feature rich, lightning fast and
+#                    easy to configure open source web server designed for the
+#                    next generation of highly concurrent secured web applications.
+#                    (http://www.cherokee-project.com)
 ### END INIT INFO
 
 # Authors: Daniel Niccoli <daniel.niccoli@gmail.com>
-#
-# Please remove the "Author" lines above and replace them
-# with your own name if you copy and modify this script.
+# 
+# Please add yourself as an "Author" if you modify this script.
 
 # Do NOT "set -e"
 
