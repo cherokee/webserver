@@ -17,7 +17,6 @@ SUFFIXES = .pre
 
 EXTRA_DIST = \
 cherokee_debian-init.pre \
-cherokee_generic-init.pre \
 bin2buffer.py \
 tracelor.py \
 make-cert.sh \
@@ -25,11 +24,10 @@ make-dh_params.sh
 
 CLEANFILES = \
 cherokee_debian-init \
-cherokee_generic-init \
 server.pem \
 rand.dat \
 cakey.key \
 cakey.csr \
 cakey.pem
 
-all-local: cherokee_generic-init cherokee_debian-init
+all-local: cherokee_debian-init
