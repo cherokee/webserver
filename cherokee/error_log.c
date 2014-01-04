@@ -300,6 +300,9 @@ render_human_backtrace (const cherokee_error_t *error,
 	if (error->show_backtrace) {
 		cherokee_buf_add_backtrace (output, 2, "\n", "  ");
 	}
+#else
+	UNUSED (error);
+	UNUSED (output);
 #endif
 	return ret_ok;
 }
