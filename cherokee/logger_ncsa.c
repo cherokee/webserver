@@ -135,9 +135,15 @@ cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t    *logger,
 	cherokee_buffer_init (&logger->now_dtm);
 	cherokee_buffer_init (&logger->referer);
 	cherokee_buffer_init (&logger->useragent);
-	cherokee_buffer_ensure_size (&logger->now_dtm,   64);
-	cherokee_buffer_ensure_size (&logger->referer, 1024);
-	cherokee_buffer_ensure_size (&logger->useragent, 512);
+
+	ret = cherokee_buffer_ensure_size (&logger->now_dtm,   64);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_ensure_size (&logger->referer, 1024);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_ensure_size (&logger->useragent, 512);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Init the logger writer
 	 */
@@ -300,7 +306,9 @@ build_log_string (cherokee_logger_ncsa_t *logger,
 
 	cherokee_header_copy_known (&cnt->header, header_referer, referer);
 	cherokee_header_copy_known (&cnt->header, header_user_agent, useragent);
-	cherokee_buffer_ensure_addlen (buf, 8 + referer->len + referer->len);
+
+	ret = cherokee_buffer_ensure_addlen (buf, 8 + referer->len + referer->len);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	if (referer->len > 0) {
 		cherokee_buffer_add_str    (buf, " \"");

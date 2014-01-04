@@ -35,8 +35,8 @@
 
 #define ENTRIES "cgibase"
 
-#define set_env(cgi,key,val,len) \
-	set_env_pair (cgi, key, sizeof(key)-1, val, len)
+#define set_env(cgi,key,val,len)                          \
+	set_env_pair (cgi, key, sizeof(key)-1, val, len); \
 
 static cherokee_handler_file_props_t handler_file_props;
 
@@ -48,6 +48,8 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
                                 cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
                                 cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi)
 {
+	ret_t ret;
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(cgi), conn, props, info);
@@ -63,7 +65,8 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	cherokee_buffer_init (&cgi->executable);
 
 	cherokee_buffer_init (&cgi->data);
-	cherokee_buffer_ensure_size (&cgi->data, 2*1024);
+	ret = cherokee_buffer_ensure_size (&cgi->data, 2*1024);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Virtual methods
 	 */
@@ -245,7 +248,7 @@ cherokee_handler_cgi_base_free (cherokee_handler_cgi_base_t *cgi)
 
 
 #ifdef _WIN32
-static void
+static ret_t
 add_win32_systemroot_env (cherokee_handler_cgi_base_t              *cgi,
                           cherokee_handler_cgi_base_add_env_pair_t  set_env_pair)
 {
@@ -253,9 +256,9 @@ add_win32_systemroot_env (cherokee_handler_cgi_base_t              *cgi,
 
 	root = getenv("SYSTEMROOT");
 	if (!root)
-		return;
+		return ret_ok;
 
-	set_env (cgi, "SYSTEMROOT", root, strlen(root));
+	return set_env (cgi, "SYSTEMROOT", root, strlen(root));
 }
 #endif
 
@@ -282,12 +285,16 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Set the basic variables
 	 */
-	set_env (cgi, "SERVER_SOFTWARE",
-	         bind->server_string.buf,
-	         bind->server_string.len);
+	ret = set_env (cgi, "SERVER_SOFTWARE",
+	               bind->server_string.buf,
+	               bind->server_string.len);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee Web Server</address>", 38);
-	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
+	ret = set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee Web Server</address>", 38);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* $PATH
 	 */
@@ -300,13 +307,15 @@ cherokee_handler_cgi_base_build_basic_env (
 		env_PATH_len = strlen (env_PATH);
 	}
 
-	set_env (cgi, "PATH", env_PATH, env_PATH_len);
+	ret = set_env (cgi, "PATH", env_PATH, env_PATH_len);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Document Root:
 	 */
-	set_env (cgi, "DOCUMENT_ROOT",
+	ret = set_env (cgi, "DOCUMENT_ROOT",
 	                 conn->local_directory.buf,
 	                 conn->local_directory.len);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* REMOTE_(ADDR/PORT): X-Real-IP
 	 */
@@ -362,10 +371,13 @@ cherokee_handler_cgi_base_build_basic_env (
 						port_end++;
 					}
 
-					set_env (cgi, "REMOTE_ADDR", p, colon - p);
-					set_env (cgi, "REMOTE_PORT", colon+1, port_end - (colon+1));
+					ret = set_env (cgi, "REMOTE_ADDR", p, colon - p);
+					if (unlikely (ret != ret_ok)) return ret;
+					ret = set_env (cgi, "REMOTE_PORT", colon+1, port_end - (colon+1));
+					if (unlikely (ret != ret_ok)) return ret;
 				} else {
-					set_env (cgi, "REMOTE_ADDR", p, end - p);
+					ret = set_env (cgi, "REMOTE_ADDR", p, end - p);
+					if (unlikely (ret != ret_ok)) return ret;
 				}
 
 				remote_addr_set = true;
@@ -379,12 +391,14 @@ cherokee_handler_cgi_base_build_basic_env (
 		/* REMOTE_ADDR */
 		memset (remote_ip, 0, sizeof(remote_ip));
 		cherokee_socket_ntop (&conn->socket, remote_ip, sizeof(remote_ip)-1);
-		set_env (cgi, "REMOTE_ADDR", remote_ip, strlen(remote_ip));
+		ret = set_env (cgi, "REMOTE_ADDR", remote_ip, strlen(remote_ip));
+		if (unlikely (ret != ret_ok)) return ret;
 
 		/* REMOTE_PORT */
 		re = snprintf (temp, temp_size, "%d", SOCKET_SIN_PORT(&conn->socket));
 		if (re > 0) {
-			set_env (cgi, "REMOTE_PORT", temp, re);
+			ret = set_env (cgi, "REMOTE_PORT", temp, re);
+			if (unlikely (ret != ret_ok)) return ret;
 		}
 	}
 
@@ -394,18 +408,22 @@ cherokee_handler_cgi_base_build_basic_env (
 	 */
 	cherokee_header_copy_known (&conn->header, header_host, tmp);
 	if (! cherokee_buffer_is_empty(tmp)) {
-		set_env (cgi, "HTTP_HOST", tmp->buf, tmp->len);
+		ret = set_env (cgi, "HTTP_HOST", tmp->buf, tmp->len);
+		if (unlikely (ret != ret_ok)) return ret;
 
 		p = strchr (tmp->buf, ':');
 		if (p != NULL) {
-			set_env (cgi, "SERVER_NAME", tmp->buf, p - tmp->buf);
+			ret = set_env (cgi, "SERVER_NAME", tmp->buf, p - tmp->buf);
+			if (unlikely (ret != ret_ok)) return ret;
 		} else {
-			set_env (cgi, "SERVER_NAME", tmp->buf, tmp->len);
+			ret = set_env (cgi, "SERVER_NAME", tmp->buf, tmp->len);
+			if (unlikely (ret != ret_ok)) return ret;
 		}
 	} else {
 		ret = cherokee_gethostname (tmp);
 		if (ret == ret_ok) {
-			set_env (cgi, "SERVER_NAME", tmp->buf, tmp->len);
+			ret = set_env (cgi, "SERVER_NAME", tmp->buf, tmp->len);
+			if (unlikely (ret != ret_ok)) return ret;
 		} else {
 			LOG_WARNING_S (CHEROKEE_ERROR_HANDLER_CGI_GET_HOSTNAME);
 		}
@@ -416,47 +434,60 @@ cherokee_handler_cgi_base_build_basic_env (
 	cherokee_buffer_clean (tmp);
 	ret = cherokee_header_copy_known (&conn->header, header_content_type, tmp);
 	if (ret == ret_ok) {
-		set_env (cgi, "CONTENT_TYPE", tmp->buf, tmp->len);
+		ret = set_env (cgi, "CONTENT_TYPE", tmp->buf, tmp->len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* SYSTEMROOT environment for Win32
 	 */
 #ifdef _WIN32
 	add_win32_systemroot_env (cgi, set_env_pair);
+	if (unlikely (ret != ret_ok)) return ret;
 #endif
 
 	/* Query string
 	 */
-	if (conn->query_string.len > 0)
-		set_env (cgi, "QUERY_STRING", conn->query_string.buf, conn->query_string.len);
-	else
-		set_env (cgi, "QUERY_STRING", "", 0);
+	if (conn->query_string.len > 0) {
+		ret = set_env (cgi, "QUERY_STRING", conn->query_string.buf, conn->query_string.len);
+		if (unlikely (ret != ret_ok)) return ret;
+	} else {
+		ret = set_env (cgi, "QUERY_STRING", "", 0);
+		if (unlikely (ret != ret_ok)) return ret;
+	}
 
 	/* HTTP protocol version
 	 */
 	ret = cherokee_http_version_to_string (conn->header.version, (const char **) &p, &p_len);
-	if (ret >= ret_ok)
-		set_env (cgi, "SERVER_PROTOCOL", p, p_len);
+	if (ret >= ret_ok) {
+		ret = set_env (cgi, "SERVER_PROTOCOL", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
+	}
 
 	/* Set the method
 	 */
 	ret = cherokee_http_method_to_string (conn->header.method, (const char **) &p, &p_len);
-	if (ret >= ret_ok)
-		set_env (cgi, "REQUEST_METHOD", p, p_len);
+	if (ret >= ret_ok) {
+		ret = set_env (cgi, "REQUEST_METHOD", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
+	}
 
 	/* Remote user
 	 */
 	if (conn->validator && !cherokee_buffer_is_empty (&conn->validator->user)) {
 		/* Only set when user authenticated (bug #467) */
-		set_env (cgi, "REMOTE_USER", conn->validator->user.buf, conn->validator->user.len);
+		ret = set_env (cgi, "REMOTE_USER", conn->validator->user.buf, conn->validator->user.len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* Set PATH_INFO
 	 */
-	if (! cherokee_buffer_is_empty (&conn->pathinfo))
-		set_env (cgi, "PATH_INFO", conn->pathinfo.buf, conn->pathinfo.len);
-	else
-		set_env (cgi, "PATH_INFO", "", 0);
+	if (! cherokee_buffer_is_empty (&conn->pathinfo)) {
+		ret = set_env (cgi, "PATH_INFO", conn->pathinfo.buf, conn->pathinfo.len);
+		if (unlikely (ret != ret_ok)) return ret;
+	} else {
+		ret = set_env (cgi, "PATH_INFO", "", 0);
+		if (unlikely (ret != ret_ok)) return ret;
+	}
 
 	/* Set REQUEST_URI:
 	 *
@@ -466,7 +497,8 @@ cherokee_handler_cgi_base_build_basic_env (
 	cherokee_buffer_clean (tmp);
 
 	if (conn->options & conn_op_root_index) {
-		cherokee_header_copy_request_w_args (&conn->header, tmp);
+		ret = cherokee_header_copy_request_w_args (&conn->header, tmp);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 	else {
 		if (! cherokee_buffer_is_empty (&conn->userdir)) {
@@ -489,7 +521,8 @@ cherokee_handler_cgi_base_build_basic_env (
 			}
 		}
 	}
-	set_env (cgi, "REQUEST_URI", tmp->buf, tmp->len);
+	ret = set_env (cgi, "REQUEST_URI", tmp->buf, tmp->len);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Set SCRIPT_URL
 	 */
@@ -498,22 +531,27 @@ cherokee_handler_cgi_base_build_basic_env (
 		cherokee_buffer_add_str    (tmp, "/~");
 		cherokee_buffer_add_buffer (tmp, &conn->userdir);
 		cherokee_buffer_add_buffer (tmp, &conn->request);
-		set_env (cgi, "SCRIPT_URL", tmp->buf, tmp->len);
+		ret = set_env (cgi, "SCRIPT_URL", tmp->buf, tmp->len);
+		if (unlikely (ret != ret_ok)) return ret;
 	} else {
-		set_env (cgi, "SCRIPT_URL", conn->request.buf, conn->request.len);
+		ret = set_env (cgi, "SCRIPT_URL", conn->request.buf, conn->request.len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* Set HTTPS and SERVER_PORT
 	 */
 	if (conn->socket.is_tls) {
-		set_env (cgi, "HTTPS", "on", 2);
+		ret = set_env (cgi, "HTTPS", "on", 2);
+		if (unlikely (ret != ret_ok)) return ret;
 	} else  {
-		set_env (cgi, "HTTPS", "off", 3);
+		ret = set_env (cgi, "HTTPS", "off", 3);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
-	set_env (cgi, "SERVER_PORT",
-		 bind->server_port.buf,
-		 bind->server_port.len);
+	ret = set_env (cgi, "SERVER_PORT",
+	               bind->server_port.buf,
+	               bind->server_port.len);
+ 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Set SERVER_ADDR
 	 */
@@ -531,26 +569,30 @@ cherokee_handler_cgi_base_build_basic_env (
 				       (struct sockaddr *) &my_address,
 				       ip_str, sizeof(ip_str)-1);
 
-			set_env (cgi, "SERVER_ADDR",
-				 ip_str, strlen(ip_str));
+			ret = set_env (cgi, "SERVER_ADDR",
+			               ip_str, strlen(ip_str));
+			if (unlikely (ret != ret_ok)) return ret;
 		}
 	} else {
-		set_env (cgi, "SERVER_ADDR",
-			 bind->server_address.buf,
-			 bind->server_address.len);
+		ret = set_env (cgi, "SERVER_ADDR",
+		               bind->server_address.buf,
+		               bind->server_address.len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* Internal error redirection:
 	 * It is okay if the QS is empty.
 	 */
 	if (! cherokee_buffer_is_empty (&conn->error_internal_url)) {
-		set_env (cgi, "REDIRECT_URL",
-			 conn->error_internal_url.buf,
-			 conn->error_internal_url.len);
+		ret = set_env (cgi, "REDIRECT_URL",
+		               conn->error_internal_url.buf,
+		               conn->error_internal_url.len);
+		if (unlikely (ret != ret_ok)) return ret;
 
-		set_env (cgi, "REDIRECT_QUERY_STRING",
-			 conn->error_internal_qs.buf,
-			 conn->error_internal_qs.len);
+		ret = set_env (cgi, "REDIRECT_QUERY_STRING",
+		               conn->error_internal_qs.buf,
+		               conn->error_internal_qs.len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* Authentication
@@ -559,10 +601,12 @@ cherokee_handler_cgi_base_build_basic_env (
 	case http_auth_nothing:
 		break;
 	case http_auth_basic:
-		set_env (cgi, "AUTH_TYPE", "Basic", 5);
+		ret = set_env (cgi, "AUTH_TYPE", "Basic", 5);
+		if (unlikely (ret != ret_ok)) return ret;
 		break;
 	case http_auth_digest:
-		set_env (cgi, "AUTH_TYPE", "Digest", 6);
+		ret = set_env (cgi, "AUTH_TYPE", "Digest", 6);
+		if (unlikely (ret != ret_ok)) return ret;
 		break;
 	}
 
@@ -570,82 +614,98 @@ cherokee_handler_cgi_base_build_basic_env (
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_accept, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_ACCEPT", p, p_len);
+		ret = set_env (cgi, "HTTP_ACCEPT", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_accept_charset, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_ACCEPT_CHARSET", p, p_len);
+		ret = set_env (cgi, "HTTP_ACCEPT_CHARSET", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_accept_encoding, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_ACCEPT_ENCODING", p, p_len);
+		ret = set_env (cgi, "HTTP_ACCEPT_ENCODING", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_accept_language, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_ACCEPT_LANGUAGE", p, p_len);
+		ret = set_env (cgi, "HTTP_ACCEPT_LANGUAGE", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_authorization, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_AUTHORIZATION", p, p_len);
+		ret = set_env (cgi, "HTTP_AUTHORIZATION", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_connection, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_CONNECTION", p, p_len);
+		ret = set_env (cgi, "HTTP_CONNECTION", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_cookie, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_COOKIE", p, p_len);
+		ret = set_env (cgi, "HTTP_COOKIE", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_if_modified_since, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_IF_MODIFIED_SINCE", p, p_len);
+		ret = set_env (cgi, "HTTP_IF_MODIFIED_SINCE", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_if_none_match, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_IF_NONE_MATCH", p, p_len);
+		ret = set_env (cgi, "HTTP_IF_NONE_MATCH", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_if_range, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_IF_RANGE", p, p_len);
+		ret = set_env (cgi, "HTTP_IF_RANGE", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_keepalive, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_KEEP_ALIVE", p, p_len);
+		ret = set_env (cgi, "HTTP_KEEP_ALIVE", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_range, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_RANGE", p, p_len);
+		ret = set_env (cgi, "HTTP_RANGE", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_referer, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_REFERER", p, p_len);
+		ret = set_env (cgi, "HTTP_REFERER", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_user_agent, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_USER_AGENT", p, p_len);
+		ret = set_env (cgi, "HTTP_USER_AGENT", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_x_forwarded_for, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_X_FORWARDED_FOR", p, p_len);
+		ret = set_env (cgi, "HTTP_X_FORWARDED_FOR", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_x_forwarded_host, &p, &p_len);
 	if (ret == ret_ok) {
-		set_env (cgi, "HTTP_X_FORWARDED_HOST", p, p_len);
+		ret = set_env (cgi, "HTTP_X_FORWARDED_HOST", p, p_len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* TODO: Fill the others CGI environment variables
@@ -658,11 +718,12 @@ cherokee_handler_cgi_base_build_basic_env (
 }
 
 
-static ret_t
+static ret_t must_check
 foreach_header_add_unknown_variable (cherokee_buffer_t *header,
                                      cherokee_buffer_t *content,
                                      void              *data)
 {
+	ret_t                        ret;
 	cuint_t                      i;
 	cherokee_handler_cgi_base_t *cgi = HDL_CGI_BASE(data);
 
@@ -679,14 +740,16 @@ foreach_header_add_unknown_variable (cherokee_buffer_t *header,
 		}
 	}
 
-	cherokee_buffer_prepend_str (header, "HTTP_");
+	ret = cherokee_buffer_prepend_str (header, "HTTP_");
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Add it to the *CGI environment
 	 */
-	cgi->add_env_pair (cgi,
-	                   header->buf, header->len,
-	                   content->buf, content->len);
-	return ret_ok;
+	ret = cgi->add_env_pair (cgi,
+	                         header->buf, header->len,
+	                         content->buf, content->len);
+
+	return ret;
 }
 
 
@@ -710,9 +773,10 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	 */
 	list_for_each (i, &cgi_props->system_env) {
 		env_item_t *env = (env_item_t *)i;
-		cgi->add_env_pair (cgi,
-		                   env->env.buf, env->env.len,
-		                   env->val.buf, env->val.len);
+		ret = cgi->add_env_pair (cgi,
+		                         env->env.buf, env->env.len,
+		                         env->val.buf, env->val.len);
+		if (unlikely (ret != ret_ok)) goto out;
 	}
 
 	/* Pass request headers.
@@ -726,10 +790,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	/* Add the basic enviroment variables
 	 */
 	ret = cherokee_handler_cgi_base_build_basic_env (cgi, cgi->add_env_pair, conn, &tmp);
-	if (unlikely (ret != ret_ok)) {
-		cherokee_buffer_mrproper (&tmp);
-		return ret;
-	}
+	if (unlikely (ret != ret_ok)) goto out;
 
 	/* SCRIPT_NAME:
 	 */
@@ -740,11 +801,13 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		 * - Otherwise, it is the web_directory.
 		 */
 		if (conn->web_directory.len > 1) {
-			cgi->add_env_pair (cgi, "SCRIPT_NAME", 11,
-			                   conn->web_directory.buf,
-			                   conn->web_directory.len);
+			ret = cgi->add_env_pair (cgi, "SCRIPT_NAME", 11,
+			                         conn->web_directory.buf,
+			                         conn->web_directory.len);
+			if (unlikely (ret != ret_ok)) goto out;
 		} else {
-			cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, "", 0);
+			ret = cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, "", 0);
+			if (unlikely (ret != ret_ok)) goto out;
 		}
 
 	} else {
@@ -778,7 +841,8 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		if (len > 0)
 			cherokee_buffer_add (&tmp, p, len);
 
-		cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
+		ret = cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
+		if (unlikely (ret != ret_ok)) goto out;
 	}
 
 	/* Set PATH_TRANSLATED; only if PATH_INFO is set
@@ -787,9 +851,11 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		cherokee_buffer_add_buffer (&conn->local_directory,
 		                            &conn->pathinfo);
 
-		cgi->add_env_pair (cgi, "PATH_TRANSLATED", 15,
-		                   conn->local_directory.buf,
-		                   conn->local_directory.len);
+		ret = cgi->add_env_pair (cgi, "PATH_TRANSLATED", 15,
+		                         conn->local_directory.buf,
+		                         conn->local_directory.len);
+
+		if (unlikely (ret != ret_ok)) goto out;
 
 		cherokee_buffer_drop_ending (&conn->local_directory,
 		                             conn->pathinfo.len);
@@ -799,8 +865,11 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	 * It depends on the type of CGI (CGI, SCGI o FastCGI):
 	 *    http://php.net/reserved.variables
 	 */
+	ret = ret_ok;
+
+out:
 	cherokee_buffer_mrproper (&tmp);
-	return ret_ok;
+	return ret;
 }
 
 
@@ -1199,7 +1268,9 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 	 */
 	len = content - inbuf->buf;
 
-	cherokee_buffer_ensure_size (outbuf, len+6);
+	ret = cherokee_buffer_ensure_size (outbuf, len+6);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add (outbuf, inbuf->buf, len);
 	cherokee_buffer_add_str (outbuf, CRLF_CRLF);
 
@@ -1216,9 +1287,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 	/* Parse the header.. it is likely we will have something to do with it.
 	 */
 	ret = parse_header (cgi, outbuf);
-	if (unlikely (ret != ret_ok)) {
-		return ret;
-	}
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Handle X-Sendfile
 	 */

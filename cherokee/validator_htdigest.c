@@ -90,12 +90,11 @@ cherokee_validator_htdigest_free (cherokee_validator_htdigest_t *htdigest)
 }
 
 
-static ret_t
+static ret_t must_check
 build_HA1 (cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
 	cherokee_buffer_add_va (buf, "%s:%s:%s", conn->validator->user.buf, conn->config_entry.auth_realm->buf, conn->validator->passwd.buf);
-	cherokee_buffer_encode_md5_digest (buf);
-	return ret_ok;
+	return cherokee_buffer_encode_md5_digest (buf);
 }
 
 
@@ -152,7 +151,7 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 }
 
 
-static ret_t
+static ret_t must_check
 validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *file)
 {
 	ret_t               ret;
@@ -176,7 +175,8 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 
 	/* Build the hash
 	 */
-	build_HA1 (conn, &ha1);
+	ret = build_HA1 (conn, &ha1);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Compare it with the stored hash, clean, and return
 	 */

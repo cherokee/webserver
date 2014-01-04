@@ -213,12 +213,15 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 static ret_t
 add_directory_index (char *index, void *data)
 {
+	ret_t                      ret;
 	cherokee_buffer_t         *new_buf;
 	cherokee_virtual_server_t *vserver = VSERVER(data);
 
 	TRACE(ENTRIES, "Adding directory index '%s'\n", index);
 
-	cherokee_buffer_new (&new_buf);
+	ret = cherokee_buffer_new (&new_buf);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add (new_buf, index, strlen(index));
 
 	cherokee_list_add_tail_content (&vserver->index_list, new_buf);
@@ -355,10 +358,12 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			return ret_error;
 		}
 
-		if (entry->document_root == NULL)
-			cherokee_buffer_new (&entry->document_root);
-		else
+		if (entry->document_root == NULL) {
+			ret = cherokee_buffer_new (&entry->document_root);
+			if (unlikely (ret != ret_ok)) return ret;
+		} else {
 			cherokee_buffer_clean (entry->document_root);
+		}
 
 		cherokee_buffer_add_buffer (entry->document_root, tmp);
 		cherokee_fix_dirpath (entry->document_root);
@@ -595,7 +600,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		if (entry->timeout_header != NULL) {
 			cherokee_buffer_free (entry->timeout_header);
 		}
-		cherokee_buffer_new (&entry->timeout_header);
+		ret = cherokee_buffer_new (&entry->timeout_header);
+		if (unlikely (ret != ret_ok)) return ret;
+
 		cherokee_buffer_add_va (entry->timeout_header, "Keep-Alive: timeout=%d"CRLF, entry->timeout_lapse);
 
 	} else if (equal_buf_str (&conf->key, "match")) {

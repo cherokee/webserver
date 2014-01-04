@@ -54,14 +54,6 @@
 CHEROKEE_ADD_FUNC_NEW  (buffer);
 CHEROKEE_ADD_FUNC_FREE (buffer);
 
-void
-cherokee_buffer_fake (cherokee_buffer_t *buf, const char *str, cuint_t len)
-{
-	buf->buf  = (char *)str;
-	buf->len  = len;
-	buf->size = len + 1;
-}
-
 
 ret_t
 cherokee_buffer_mrproper (cherokee_buffer_t *buf)
@@ -77,15 +69,17 @@ cherokee_buffer_mrproper (cherokee_buffer_t *buf)
 	return ret_ok;
 }
 
-void
+ret_t
 cherokee_buffer_clean (cherokee_buffer_t *buf)
 {
 	if (buf->buf != NULL)
 		buf->buf[0] = '\0';
 	buf->len = 0;
+
+	return ret_ok;
 }
 
-void
+ret_t
 cherokee_buffer_swap_buffers (cherokee_buffer_t *buf, cherokee_buffer_t *second)
 {
 	char    *tmp_buf;
@@ -103,6 +97,8 @@ cherokee_buffer_swap_buffers (cherokee_buffer_t *buf, cherokee_buffer_t *second)
 	second->buf = tmp_buf;
 	second->len = tmp_len;
 	second->size = tmp_size;
+
+	return ret_ok;
 }
 
 ret_t
@@ -126,7 +122,7 @@ cherokee_buffer_dup (cherokee_buffer_t *buf, cherokee_buffer_t **dup)
 }
 
 
-static ret_t
+static ret_t must_check
 realloc_inc_bufsize (cherokee_buffer_t *buf, size_t incsize)
 {
 	char   *pbuf;
@@ -144,7 +140,7 @@ realloc_inc_bufsize (cherokee_buffer_t *buf, size_t incsize)
 }
 
 
-static ret_t
+static ret_t must_check
 realloc_new_bufsize (cherokee_buffer_t *buf, size_t newsize)
 {
 	char *pbuf;
@@ -792,7 +788,7 @@ cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, cuint_t pos)
 ret_t
 cherokee_buffer_ensure_addlen (cherokee_buffer_t *buf, size_t addlen)
 {
-	if (buf->len + addlen < buf->size)
+	if ((buf->len + addlen) < buf->size)
 		return ret_ok;
 
 	return cherokee_buffer_ensure_size (buf, ((size_t)buf->len + addlen + 1));

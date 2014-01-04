@@ -230,7 +230,7 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	int                               re;
 	ret_t                             ret;
 	MYSQL_ROW                         row;
-	MYSQL_RES                        *result;
+	MYSQL_RES                        *result      = NULL;
 	unsigned long                    *lengths;
 	cherokee_buffer_t                 db_passwd;
 	cherokee_buffer_t                 user_passwd;
@@ -264,8 +264,11 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	/* Build query
 	 */
 	cherokee_buffer_add_buffer (&query, &props->query);
-	cherokee_buffer_replace_string (&query, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
-	cherokee_buffer_replace_string (&query, "${passwd}", 9, conn->validator->passwd.buf, conn->validator->passwd.len);
+	ret = cherokee_buffer_replace_string (&query, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_replace_string (&query, "${passwd}", 9, conn->validator->passwd.buf, conn->validator->passwd.len);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	TRACE (ENTRIES, "Query: %s\n", query.buf);
 
@@ -307,11 +310,16 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 
 		/* Hashes */
 		if (props->hash_type == cherokee_mysql_hash_md5) {
-			cherokee_buffer_encode_md5_digest (&user_passwd);
+			ret = cherokee_buffer_encode_md5_digest (&user_passwd);
+			if (unlikely (ret != ret_ok)) return ret;
+
 		} else if (props->hash_type == cherokee_mysql_hash_sha1) {
-			cherokee_buffer_encode_sha1_digest (&user_passwd);
+			ret = cherokee_buffer_encode_sha1_digest (&user_passwd);
+			if (unlikely (ret != ret_ok)) return ret;
+
 		} else if (props->hash_type == cherokee_mysql_hash_sha512) {
-			cherokee_buffer_encode_sha512_digest (&user_passwd);
+			ret = cherokee_buffer_encode_sha512_digest (&user_passwd);
+			if (unlikely (ret != ret_ok)) return ret;
 		}
 
 		/* Compare passwords */
@@ -337,6 +345,7 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 
 	TRACE (ENTRIES, "Access to user %s has been granted\n", conn->validator->user.buf);
 
+error:
 	/* Clean-up
 	 */
 	cherokee_buffer_mrproper (&query);
@@ -344,12 +353,6 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	cherokee_buffer_mrproper (&user_passwd);
 
 	mysql_free_result (result);
-	return ret_ok;
-
-error:
-	cherokee_buffer_mrproper (&query);
-	cherokee_buffer_mrproper (&db_passwd);
-	cherokee_buffer_mrproper (&user_passwd);
 	return ret;
 }
 

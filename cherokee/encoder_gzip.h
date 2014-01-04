@@ -66,7 +66,7 @@ void  PLUGIN_INIT_NAME(gzip)            (cherokee_plugin_loader_t *loader);
 ret_t cherokee_encoder_gzip_new         (cherokee_encoder_gzip_t **encoder, cherokee_encoder_props_t *props);
 ret_t cherokee_encoder_gzip_free        (cherokee_encoder_gzip_t  *encoder);
 
-ret_t cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *buf);
+ret_t must_check cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *buf);
 ret_t cherokee_encoder_gzip_init        (cherokee_encoder_gzip_t  *encoder, cherokee_connection_t *conn);
 ret_t cherokee_encoder_gzip_encode      (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 ret_t cherokee_encoder_gzip_flush       (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);

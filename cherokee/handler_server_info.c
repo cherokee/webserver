@@ -618,6 +618,7 @@ server_info_build_logo (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *
 static ret_t
 server_info_build_html (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer)
 {
+	ret_t ret;
 	cherokee_buffer_t ver;
 
 	cherokee_buffer_add_str (buffer, PAGE_HEADER);
@@ -625,12 +626,14 @@ server_info_build_html (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *
 
 	cherokee_buffer_init (&ver);
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
-	cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);
+	ret = cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);
 	cherokee_buffer_mrproper (&ver);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	cherokee_buffer_replace_string (buffer, "{request}", 9,
-	                                HANDLER_CONN(hdl)->request.buf,
-	                                HANDLER_CONN(hdl)->request.len);
+	ret = cherokee_buffer_replace_string (buffer, "{request}", 9,
+	                                      HANDLER_CONN(hdl)->request.buf,
+	                                      HANDLER_CONN(hdl)->request.len);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	cherokee_buffer_add_str (buffer, PAGE_FOOT);
 	return ret_ok;

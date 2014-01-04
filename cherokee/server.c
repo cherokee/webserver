@@ -536,13 +536,18 @@ print_banner (cherokee_server_t *srv)
 
 	/* Print it to stdout
 	 */
-	cherokee_buffer_split_lines (&n, TERMINAL_WIDTH, NULL);
+	ret = cherokee_buffer_split_lines (&n, TERMINAL_WIDTH, NULL);
+	if (unlikely (ret != ret_ok)) goto out;
+
 	fprintf (stdout, "%s\n", n.buf);
 	fflush (stdout);
 
+	ret = ret_ok;
+
+out:
 	cherokee_buffer_mrproper (&n);
 
-	return ret_ok;
+	return ret;
 }
 
 

@@ -130,9 +130,13 @@ ret_t
 cherokee_encoder_deflate_add_headers (cherokee_encoder_deflate_t *encoder,
                                    cherokee_buffer_t       *buf)
 {
+	ret_t ret;
+
 	UNUSED(encoder);
 
-	cherokee_buffer_ensure_addlen (buf, 50);
+	ret = cherokee_buffer_ensure_addlen (buf, 50);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add_str (buf, "Content-Encoding: deflate"CRLF);
 	cherokee_buffer_add_str (buf, "Vary: Accept-Encoding"CRLF);
 

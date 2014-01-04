@@ -563,7 +563,9 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 
 	/* X-Forwarded-For */
-	cherokee_buffer_ensure_size (tmp, CHE_INET_ADDRSTRLEN+1);
+	ret = cherokee_buffer_ensure_size (tmp, CHE_INET_ADDRSTRLEN+1);
+	if (unlikely (ret != ret_ok)) goto error;
+
 	cherokee_socket_ntop (&conn->socket, tmp->buf, tmp->size-1);
 
 	cherokee_buffer_add_str (buf, "X-Forwarded-For: ");

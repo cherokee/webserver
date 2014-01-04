@@ -134,8 +134,7 @@ get_nearest_name (cherokee_connection_t *conn,
 
 	/* Prepend the rest of the old request to the new filename
 	 */
-	cherokee_buffer_prepend (output, request->buf, rest - request->buf);
-	return ret_ok;
+	return cherokee_buffer_prepend (output, request->buf, rest - request->buf);
 }
 
 

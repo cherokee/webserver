@@ -197,6 +197,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
                         pid_t                     *pid_ret)
 {
 #ifdef HAVE_SYSV_SEMAPHORES
+	ret_t              ret;
 	char             **n;
 	int               *pid_shm;
 	int                pid_prev;
@@ -234,7 +235,8 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	/* Build the string
 	 * The first character of each block is a mark.
 	 */
-	cherokee_buffer_ensure_size (&tmp, SPAWN_SHARED_LEN);
+	ret = cherokee_buffer_ensure_size (&tmp, SPAWN_SHARED_LEN);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* 1.- Executable */
 	phase = 0xF0;

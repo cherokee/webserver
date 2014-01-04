@@ -72,6 +72,7 @@ connect_to_database (cherokee_handler_dbslayer_t *hdl)
 static ret_t
 send_query (cherokee_handler_dbslayer_t *hdl)
 {
+	ret_t                  ret;
 	int                    re;
 	cuint_t                len;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
@@ -92,7 +93,8 @@ send_query (cherokee_handler_dbslayer_t *hdl)
 	                       conn->request.buf + len,
 	                       conn->request.len - len);
 
-	cherokee_buffer_unescape_uri (tmp);
+	ret = cherokee_buffer_unescape_uri (tmp);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Send the query
 	 */

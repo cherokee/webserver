@@ -105,11 +105,12 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 }
 
 
-static void
+static ret_t
 add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
               const char *key, int key_len,
               const char *val, int val_len)
 {
+	ret_t                    ret;
 	static char              zero = '\0';
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);
 
@@ -125,12 +126,15 @@ add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	TRACE (ENTRIES, "%s", tmp->buf);
 #endif
 
-	cherokee_buffer_ensure_size (&scgi->header, scgi->header.len + key_len + val_len + 3);
+	ret = cherokee_buffer_ensure_size (&scgi->header, scgi->header.len + key_len + val_len + 3);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	cherokee_buffer_add (&scgi->header, key, key_len);
 	cherokee_buffer_add (&scgi->header, &zero, 1);
 	cherokee_buffer_add (&scgi->header, val, val_len);
 	cherokee_buffer_add (&scgi->header, &zero, 1);
+
+	return ret_ok;
 }
 
 
@@ -225,9 +229,10 @@ cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl)
 }
 
 
-static ret_t
+static ret_t must_check
 netstringer (cherokee_buffer_t *buf)
 {
+	ret_t ret;
 	cint_t len;
 	CHEROKEE_TEMP(num,16);
 
@@ -235,9 +240,14 @@ netstringer (cherokee_buffer_t *buf)
 	if (len < 0)
 		return ret_error;
 
-	cherokee_buffer_ensure_size (buf, buf->len + len + 2);
-	cherokee_buffer_prepend (buf, num, len);
-	cherokee_buffer_add (buf, ",", 1);
+	ret = cherokee_buffer_ensure_size (buf, buf->len + len + 2);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_prepend (buf, num, len);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_add (buf, ",", 1);
+	if (unlikely (ret != ret_ok)) return ret;
 
 #if 0
 	cherokee_buffer_print_debug (buf, -1);
@@ -250,14 +260,18 @@ netstringer (cherokee_buffer_t *buf)
 static ret_t
 build_header (cherokee_handler_scgi_t *hdl)
 {
+	ret_t                  ret;
 	cuint_t                len;
 	char                   tmp[64];
 	cherokee_connection_t *conn     = HANDLER_CONN(hdl);
 
 	len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)conn->post.len);
 
-	set_env (HDL_CGI_BASE(hdl), "CONTENT_LENGTH", tmp, len);
-	set_env (HDL_CGI_BASE(hdl), "SCGI", "1", 1);
+	ret = set_env (HDL_CGI_BASE(hdl), "CONTENT_LENGTH", tmp, len);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = set_env (HDL_CGI_BASE(hdl), "SCGI", "1", 1);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), conn);
 

@@ -38,6 +38,8 @@
 
 CHEROKEE_BEGIN_DECLS
 
+#define dont_check
+#define should_chk
 
 typedef struct {
 	char    *buf;        /**< Memory chunk           */
@@ -45,15 +47,25 @@ typedef struct {
 	cuint_t  len;        /**< Length of the string   */
 } cherokee_buffer_t;
 
-/* Placing the function here allows the compiler to inline
+/* Placing the functions here allows the compiler to inline
  * the code without the use of link-time optimisation #1081
  */
-static inline ret_t
+static inline ret_t dont_check
 cherokee_buffer_init (cherokee_buffer_t *buf)
 {
 	buf->buf  = NULL;
 	buf->len  = 0;
 	buf->size = 0;
+
+	return ret_ok;
+}
+
+static inline ret_t dont_check
+cherokee_buffer_fake (cherokee_buffer_t *buf, const char *str, cuint_t len)
+{
+	buf->buf  = (char *)str;
+	buf->len  = len;
+	buf->size = len + 1;
 
 	return ret_ok;
 }
@@ -69,88 +81,87 @@ cherokee_buffer_init (cherokee_buffer_t *buf)
 #define cherokee_buffer_case_cmp_str(b,s)  cherokee_buffer_case_cmp (b, (char *)(s), sizeof(s)-1)
 #define cherokee_buffer_fake_str(b,s)      cherokee_buffer_fake (b, s, sizeof(s)-1)
 
-ret_t cherokee_buffer_new                  (cherokee_buffer_t **buf);
-ret_t cherokee_buffer_free                 (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_init                 (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_mrproper             (cherokee_buffer_t  *buf);
-void  cherokee_buffer_fake                 (cherokee_buffer_t  *buf, const char *str, cuint_t len);
+ret_t must_check cherokee_buffer_new                  (cherokee_buffer_t **buf);
+ret_t dont_check cherokee_buffer_free                 (cherokee_buffer_t  *buf);
+ret_t dont_check cherokee_buffer_init                 (cherokee_buffer_t  *buf);
+ret_t dont_check cherokee_buffer_mrproper             (cherokee_buffer_t  *buf);
 
-void  cherokee_buffer_clean                (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_dup                  (cherokee_buffer_t  *buf, cherokee_buffer_t **dup);
-void  cherokee_buffer_swap_buffers         (cherokee_buffer_t  *buf, cherokee_buffer_t *second);
+ret_t dont_check cherokee_buffer_clean                (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_dup                  (cherokee_buffer_t  *buf, cherokee_buffer_t **dup);
+ret_t dont_check cherokee_buffer_swap_buffers         (cherokee_buffer_t  *buf, cherokee_buffer_t *second);
 
-ret_t cherokee_buffer_add                  (cherokee_buffer_t  *buf, const char *txt, size_t size);
-ret_t cherokee_buffer_add_long10           (cherokee_buffer_t  *buf, clong_t lNum);
-ret_t cherokee_buffer_add_llong10          (cherokee_buffer_t  *buf, cllong_t lNum);
-ret_t cherokee_buffer_add_ulong10          (cherokee_buffer_t  *buf, culong_t ulNum);
-ret_t cherokee_buffer_add_ullong10         (cherokee_buffer_t  *buf, cullong_t ulNum);
-ret_t cherokee_buffer_add_ulong16          (cherokee_buffer_t  *buf, culong_t ulNum);
-ret_t cherokee_buffer_add_ullong16         (cherokee_buffer_t  *buf, cullong_t ulNum);
-ret_t cherokee_buffer_add_va               (cherokee_buffer_t  *buf, const char *format, ...);
-ret_t cherokee_buffer_add_va_fixed         (cherokee_buffer_t  *buf, const char *format, ...);
-ret_t cherokee_buffer_add_va_list          (cherokee_buffer_t  *buf, const char *format, va_list args);
-ret_t cherokee_buffer_add_char             (cherokee_buffer_t  *buf, char c);
-ret_t cherokee_buffer_add_char_n           (cherokee_buffer_t  *buf, char c, int n);
-ret_t cherokee_buffer_add_buffer           (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
-ret_t cherokee_buffer_add_buffer_slice     (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2, ssize_t begin, ssize_t end);
-ret_t cherokee_buffer_add_fsize            (cherokee_buffer_t  *buf, CST_OFFSET size);
-ret_t cherokee_buffer_prepend              (cherokee_buffer_t  *buf, const char *txt, size_t size);
+ret_t should_chk cherokee_buffer_add                  (cherokee_buffer_t  *buf, const char *txt, size_t size);
+ret_t should_chk cherokee_buffer_add_long10           (cherokee_buffer_t  *buf, clong_t lNum);
+ret_t should_chk cherokee_buffer_add_llong10          (cherokee_buffer_t  *buf, cllong_t lNum);
+ret_t should_chk cherokee_buffer_add_ulong10          (cherokee_buffer_t  *buf, culong_t ulNum);
+ret_t should_chk cherokee_buffer_add_ullong10         (cherokee_buffer_t  *buf, cullong_t ulNum);
+ret_t must_check cherokee_buffer_add_ulong16          (cherokee_buffer_t  *buf, culong_t ulNum);
+ret_t should_chk cherokee_buffer_add_ullong16         (cherokee_buffer_t  *buf, cullong_t ulNum);
+ret_t should_chk cherokee_buffer_add_va               (cherokee_buffer_t  *buf, const char *format, ...);
+ret_t must_check cherokee_buffer_add_va_fixed         (cherokee_buffer_t  *buf, const char *format, ...);
+ret_t should_chk cherokee_buffer_add_va_list          (cherokee_buffer_t  *buf, const char *format, va_list args);
+ret_t should_chk cherokee_buffer_add_char             (cherokee_buffer_t  *buf, char c);
+ret_t must_check cherokee_buffer_add_char_n           (cherokee_buffer_t  *buf, char c, int n);
+ret_t should_chk cherokee_buffer_add_buffer           (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+ret_t must_check cherokee_buffer_add_buffer_slice     (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2, ssize_t begin, ssize_t end);
+ret_t should_chk cherokee_buffer_add_fsize            (cherokee_buffer_t  *buf, CST_OFFSET size);
+ret_t must_check cherokee_buffer_prepend              (cherokee_buffer_t  *buf, const char *txt, size_t size);
 
-cint_t cherokee_buffer_cmp                 (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
-cint_t cherokee_buffer_cmp_buf             (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
-cint_t cherokee_buffer_case_cmp            (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
-cint_t cherokee_buffer_case_cmp_buf        (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+cint_t must_check cherokee_buffer_cmp                 (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
+cint_t must_check cherokee_buffer_cmp_buf             (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+cint_t must_check cherokee_buffer_case_cmp            (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
+cint_t must_check cherokee_buffer_case_cmp_buf        (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
 
-ret_t cherokee_buffer_read_file            (cherokee_buffer_t  *buf, char *filename);
-ret_t cherokee_buffer_read_from_fd         (cherokee_buffer_t  *buf, int fd, size_t size, size_t *ret_size);
+ret_t must_check cherokee_buffer_read_file            (cherokee_buffer_t  *buf, char *filename);
+ret_t must_check cherokee_buffer_read_from_fd         (cherokee_buffer_t  *buf, int fd, size_t size, size_t *ret_size);
 
-ret_t cherokee_buffer_move_to_begin        (cherokee_buffer_t  *buf, cuint_t pos);
-ret_t cherokee_buffer_drop_ending          (cherokee_buffer_t  *buf, cuint_t num_chars);
-ret_t cherokee_buffer_multiply             (cherokee_buffer_t  *buf, int num);
-ret_t cherokee_buffer_swap_chars           (cherokee_buffer_t  *buf, char a, char b);
-ret_t cherokee_buffer_remove_dups          (cherokee_buffer_t  *buf, char c);
-ret_t cherokee_buffer_remove_string        (cherokee_buffer_t  *buf, char *string, int string_len);
-ret_t cherokee_buffer_remove_chunk         (cherokee_buffer_t  *buf, cuint_t from, cuint_t len);
-ret_t cherokee_buffer_replace_string       (cherokee_buffer_t  *buf, const char *subs, int subs_len, const char *repl, int repl_len);
-ret_t cherokee_buffer_substitute_string    (cherokee_buffer_t  *bufsrc, cherokee_buffer_t *bufdst, char *subs, int subs_len, char *repl, int repl_len);
-ret_t cherokee_buffer_trim                 (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_insert               (cherokee_buffer_t  *buf, char *txt, size_t txt_len, size_t pos);
-ret_t cherokee_buffer_insert_buffer        (cherokee_buffer_t  *buf, cherokee_buffer_t *src, size_t pos);
+ret_t dont_check cherokee_buffer_move_to_begin        (cherokee_buffer_t  *buf, cuint_t pos);
+ret_t dont_check cherokee_buffer_drop_ending          (cherokee_buffer_t  *buf, cuint_t num_chars);
+ret_t must_check cherokee_buffer_multiply             (cherokee_buffer_t  *buf, int num);
+ret_t dont_check cherokee_buffer_swap_chars           (cherokee_buffer_t  *buf, char a, char b);
+ret_t dont_check cherokee_buffer_remove_dups          (cherokee_buffer_t  *buf, char c);
+ret_t dont_check cherokee_buffer_remove_string        (cherokee_buffer_t  *buf, char *string, int string_len);
+ret_t dont_check cherokee_buffer_remove_chunk         (cherokee_buffer_t  *buf, cuint_t from, cuint_t len);
+ret_t must_check cherokee_buffer_replace_string       (cherokee_buffer_t  *buf, const char *subs, int subs_len, const char *repl, int repl_len);
+ret_t must_check cherokee_buffer_substitute_string    (cherokee_buffer_t  *bufsrc, cherokee_buffer_t *bufdst, char *subs, int subs_len, char *repl, int repl_len);
+ret_t dont_check cherokee_buffer_trim                 (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_insert               (cherokee_buffer_t  *buf, char *txt, size_t txt_len, size_t pos);
+ret_t must_check cherokee_buffer_insert_buffer        (cherokee_buffer_t  *buf, cherokee_buffer_t *src, size_t pos);
 
-ret_t cherokee_buffer_get_utf8_len         (cherokee_buffer_t  *buf, cuint_t *len);
-ret_t cherokee_buffer_ensure_addlen        (cherokee_buffer_t  *buf, size_t alen);
-ret_t cherokee_buffer_ensure_size          (cherokee_buffer_t  *buf, size_t size);
+ret_t dont_check cherokee_buffer_get_utf8_len         (cherokee_buffer_t  *buf, cuint_t *len);
+ret_t must_check cherokee_buffer_ensure_addlen        (cherokee_buffer_t  *buf, size_t alen);
+ret_t must_check cherokee_buffer_ensure_size          (cherokee_buffer_t  *buf, size_t size);
 
-int    cherokee_buffer_is_ending           (cherokee_buffer_t  *buf, char c);
-char   cherokee_buffer_end_char            (cherokee_buffer_t  *buf);
-size_t cherokee_buffer_cnt_spn             (cherokee_buffer_t  *buf, cuint_t offset, const char *str);
-size_t cherokee_buffer_cnt_cspn            (cherokee_buffer_t  *buf, cuint_t offset, const char *str);
+int    must_check cherokee_buffer_is_ending           (cherokee_buffer_t  *buf, char c);
+char   must_check cherokee_buffer_end_char            (cherokee_buffer_t  *buf);
+size_t must_check cherokee_buffer_cnt_spn             (cherokee_buffer_t  *buf, cuint_t offset, const char *str);
+size_t must_check cherokee_buffer_cnt_cspn            (cherokee_buffer_t  *buf, cuint_t offset, const char *str);
 
-crc_t cherokee_buffer_crc32                (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_encode_base64        (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
-ret_t cherokee_buffer_decode_base64        (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_encode_md5           (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
-ret_t cherokee_buffer_encode_md5_digest    (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_encode_sha1          (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
-ret_t cherokee_buffer_encode_sha1_digest   (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_encode_sha1_base64   (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
-ret_t cherokee_buffer_encode_sha512        (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
-ret_t cherokee_buffer_encode_sha512_digest (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_encode_sha512_base64 (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
-ret_t cherokee_buffer_encode_hex           (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
-ret_t cherokee_buffer_decode_hex           (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_unescape_uri         (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_escape_uri           (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
-ret_t cherokee_buffer_escape_uri_delims    (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
-ret_t cherokee_buffer_escape_arg           (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
-ret_t cherokee_buffer_add_escape_html      (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
-ret_t cherokee_buffer_escape_html          (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
-ret_t cherokee_buffer_add_comma_marks      (cherokee_buffer_t  *buf);
+crc_t must_check cherokee_buffer_crc32                (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_encode_base64        (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t dont_check cherokee_buffer_decode_base64        (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_encode_md5           (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t must_check cherokee_buffer_encode_md5_digest    (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_encode_sha1          (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t must_check cherokee_buffer_encode_sha1_digest   (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_encode_sha1_base64   (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t must_check cherokee_buffer_encode_sha512        (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t must_check cherokee_buffer_encode_sha512_digest (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_encode_sha512_base64 (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t must_check cherokee_buffer_encode_hex           (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t dont_check cherokee_buffer_decode_hex           (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_unescape_uri         (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_escape_uri           (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
+ret_t must_check cherokee_buffer_escape_uri_delims    (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
+ret_t must_check cherokee_buffer_escape_arg           (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
+ret_t must_check cherokee_buffer_add_escape_html      (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
+ret_t must_check cherokee_buffer_escape_html          (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
+ret_t must_check cherokee_buffer_add_comma_marks      (cherokee_buffer_t  *buf);
 
-ret_t cherokee_buffer_to_lowcase           (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_split_lines          (cherokee_buffer_t  *buf, int columns, const char *indent);
+ret_t dont_check cherokee_buffer_to_lowcase           (cherokee_buffer_t  *buf);
+ret_t must_check cherokee_buffer_split_lines          (cherokee_buffer_t  *buf, int columns, const char *indent);
 
-ret_t cherokee_buffer_print_debug          (cherokee_buffer_t  *buf, int length);
+ret_t dont_check cherokee_buffer_print_debug          (cherokee_buffer_t  *buf, int length);
 
 
 CHEROKEE_END_DECLS

@@ -97,7 +97,7 @@ ret_t cherokee_header_foreach_unknown     (cherokee_header_t *hdr, cherokee_head
 
 ret_t cherokee_header_copy_request        (cherokee_header_t *hdr, cherokee_buffer_t *request);
 ret_t cherokee_header_copy_query_string   (cherokee_header_t *hdr, cherokee_buffer_t *query_string);
-ret_t cherokee_header_copy_request_w_args (cherokee_header_t *hdr, cherokee_buffer_t *request);
+ret_t must_check cherokee_header_copy_request_w_args (cherokee_header_t *hdr, cherokee_buffer_t *request);
 ret_t cherokee_header_get_request_w_args  (cherokee_header_t *hdr, char **req, int *req_len);
 
 ret_t cherokee_header_has_known           (cherokee_header_t *hdr, cherokee_common_header_t header);

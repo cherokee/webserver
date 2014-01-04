@@ -300,19 +300,24 @@ error:
 }
 
 
-static ret_t
+static ret_t must_check
 init_filter (cherokee_validator_ldap_t       *ldap,
 	     cherokee_validator_ldap_props_t *props,
 	     cherokee_connection_t           *conn)
 {
+	ret_t ret;
+
 	if (cherokee_buffer_is_empty (&props->filter)) {
 		TRACE (ENTRIES, "Empty filter: %s\n", "Ignoring it");
 		return ret_ok;
 	}
 
-	cherokee_buffer_ensure_size (&ldap->filter, props->filter.len + conn->validator->user.len);
+	ret = cherokee_buffer_ensure_size (&ldap->filter, props->filter.len + conn->validator->user.len);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add_buffer (&ldap->filter, &props->filter);
-	cherokee_buffer_replace_string (&ldap->filter, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
+	ret = cherokee_buffer_replace_string (&ldap->filter, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	TRACE (ENTRIES, "filter %s\n", ldap->filter.buf);
 	return ret_ok;

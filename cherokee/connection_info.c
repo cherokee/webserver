@@ -94,7 +94,9 @@ info_fill_up (cherokee_connection_info_t *info,
 	/* From
 	 */
 	if (conn->socket.socket >= 0) {
-		cherokee_buffer_ensure_size (&info->ip, CHE_INET_ADDRSTRLEN + 1);
+		ret = cherokee_buffer_ensure_size (&info->ip, CHE_INET_ADDRSTRLEN + 1);
+		if (unlikely (ret != ret_ok)) return ret;
+
 		memset (info->ip.buf, 0, info->ip.size);
 		cherokee_socket_ntop (&conn->socket, info->ip.buf, info->ip.size - 1);
 		info->ip.len = strlen(info->ip.buf);
@@ -211,6 +213,7 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 		if (unlikely (ret != ret_ok)) goto out;
 
 		info_fill_up (n, CONN(i));
+		if (unlikely (ret != ret_ok)) goto out;
 		cherokee_list_add (LIST(n), list);
 	}
 
@@ -221,6 +224,7 @@ cherokee_connection_info_list_thread (cherokee_list_t    *list,
 		if (unlikely (ret != ret_ok)) goto out;
 
 		info_fill_up (n, CONN(i));
+		if (unlikely (ret != ret_ok)) goto out;
 		cherokee_list_add (LIST(n), list);
 	}
 

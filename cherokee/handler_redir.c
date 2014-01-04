@@ -42,7 +42,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
 
 /* Methods implementation
  */
-static ret_t
+static ret_t must_check
 substitute (cherokee_handler_redir_t *hdl,
             cherokee_buffer_t        *regex,
             cherokee_buffer_t        *source,
@@ -80,11 +80,13 @@ substitute (cherokee_handler_redir_t *hdl,
 	if (token != NULL) {
 		offset = token - target->buf;
 		if (! cherokee_buffer_is_empty (&conn->host)) {
-			cherokee_buffer_insert_buffer (target, &conn->host, offset);
+			ret = cherokee_buffer_insert_buffer (target, &conn->host, offset);
+			if (unlikely (ret != ret_ok)) return ret;
 			cherokee_buffer_remove_chunk (target,  offset + conn->host.len, 7);
 
 		} else if (! cherokee_buffer_is_empty (&conn->bind->ip)) {
-			cherokee_buffer_insert_buffer (target, &conn->bind->ip, offset);
+			ret = cherokee_buffer_insert_buffer (target, &conn->bind->ip, offset);
+			if (unlikely (ret != ret_ok)) return ret;
 			cherokee_buffer_remove_chunk (target, offset + conn->bind->ip.len, 7);
 
 		} else {
@@ -93,7 +95,8 @@ substitute (cherokee_handler_redir_t *hdl,
 
 			ret = cherokee_copy_local_address (&conn->socket, &tmp);
 			if (ret == ret_ok) {
-				cherokee_buffer_insert_buffer (target, &tmp, offset);
+				ret = cherokee_buffer_insert_buffer (target, &tmp, offset);
+				if (unlikely (ret != ret_ok)) return ret;
 				cherokee_buffer_remove_chunk (target, offset + tmp.len, 7);
 			}
 
@@ -105,7 +108,7 @@ substitute (cherokee_handler_redir_t *hdl,
 }
 
 
-static ret_t
+static ret_t must_check
 match_and_substitute (cherokee_handler_redir_t *hdl)
 {
 	cherokee_list_t       *i;
@@ -118,7 +121,8 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 	if ((conn->web_directory.len > 1) &&
 	    (conn->options & conn_op_document_root))
 	{
-		cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
+		ret = cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	if  (! cherokee_buffer_is_empty (&conn->query_string)) {
@@ -206,12 +210,15 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 			cherokee_buffer_clean (&conn->web_directory);
 			cherokee_buffer_clean (&conn->local_directory);
 
-			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
-			substitute (hdl,
-			            &list->subs,    /* regex str */
-			            tmp,            /* source    */
-			            &conn->request, /* target    */
-			            ovector, rc);   /* ovector   */
+			ret = cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
+			if (unlikely (ret != ret_ok)) return ret;
+
+			ret = substitute (hdl,
+			                  &list->subs,    /* regex str */
+			                  tmp,            /* source    */
+			                  &conn->request, /* target    */
+			                  ovector, rc);   /* ovector   */
+			if (unlikely (ret != ret_ok)) return ret;
 
 
 			/* Arguments */
@@ -224,7 +231,8 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 
 			/* Non-global redirection */
 			if (conn->request.buf[0] != '/') {
-				cherokee_buffer_prepend_str (&conn->request, "/");
+				ret = cherokee_buffer_prepend_str (&conn->request, "/");
+				if (unlikely (ret != ret_ok)) return ret;
 			}
 
 			TRACE (ENTRIES, "Hidden redirect to: request=\"%s\" query_string=\"%s\"\n",
@@ -235,21 +243,21 @@ match_and_substitute (cherokee_handler_redir_t *hdl)
 
 		/* External redirect
 		 */
-		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
+		ret = cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
+		if (unlikely (ret != ret_ok)) return ret;
 
-		substitute (hdl,
-		            &list->subs,     /* regex str */
-		            tmp,             /* source    */
-		            &conn->redirect, /* target    */
-		            ovector, rc);    /* ovector   */
+		ret = substitute (hdl,
+		                  &list->subs,     /* regex str */
+		                  tmp,             /* source    */
+		                  &conn->redirect, /* target    */
+		                  ovector, rc);    /* ovector   */
+		if (unlikely (ret != ret_ok)) return ret;
 
 		TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
 
 		ret = ret_ok;
 		goto out;
 	}
-
-	ret = ret_ok;
 
 out:
 	if (! cherokee_buffer_is_empty (&conn->query_string)) {
@@ -262,7 +270,7 @@ out:
 		cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
 	}
 
-	return ret;
+	return ret_ok;
 }
 
 
@@ -299,6 +307,8 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 			if (ret == ret_eagain) {
 				cherokee_handler_free (HANDLER(n));
 				return ret_eagain;
+			} else if (unlikely (ret != ret_ok)) {
+				return ret;
 			}
 		}
 	}
@@ -322,6 +332,7 @@ cherokee_handler_redir_free (cherokee_handler_redir_t *rehdl)
 ret_t
 cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 {
+	ret_t                  ret;
 	int                    request_end;
 	char                  *request_ending;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
@@ -346,7 +357,9 @@ cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 	request_end = (conn->request.len - conn->web_directory.len);
 	request_ending = conn->request.buf + conn->web_directory.len;
 
-	cherokee_buffer_ensure_size (&conn->redirect, request_end + HDL_REDIR_PROPS(n)->url.len +1);
+	ret = cherokee_buffer_ensure_size (&conn->redirect, request_end + HDL_REDIR_PROPS(n)->url.len +1);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add_buffer (&conn->redirect, &HDL_REDIR_PROPS(n)->url);
 	cherokee_buffer_add (&conn->redirect, request_ending, request_end);
 

@@ -85,7 +85,7 @@ ret_t cherokee_handler_cgi_step        (cherokee_handler_cgi_t *hdl, cherokee_bu
 /* This handler export these extra functions to allow phpcgi
  * set enviroment variables, work with pathinfo, etc..
  */
-void  cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi,
+ret_t must_check cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi,
                                            const char *name,    int name_len,
                                            const char *content, int content_len);
 

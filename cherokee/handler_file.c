@@ -791,6 +791,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 ret_t
 cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *buffer)
 {
+	ret_t                  ret;
 	off_t                  total;
 	size_t                 size;
 	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
@@ -859,7 +860,8 @@ exit_sendfile:
 
 	/* Ensure there's enough memory
 	 */
-	cherokee_buffer_ensure_size (buffer, size + 1);
+	ret = cherokee_buffer_ensure_size (buffer, size + 1);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Read
 	 */

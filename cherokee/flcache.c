@@ -364,7 +364,7 @@ cherokee_flcache_req_set_store (cherokee_flcache_t    *flcache,
 }
 
 
-static ret_t
+static ret_t must_check
 inspect_header (cherokee_flcache_conn_t *flcache_conn,
                 cherokee_buffer_t       *header,
                 cherokee_connection_t   *conn)
@@ -541,7 +541,8 @@ inspect_header (cherokee_flcache_conn_t *flcache_conn,
 			cherokee_buffer_add_str (tmp, " (Cherokee/"PACKAGE_VERSION")");
 
 			/* Insert at the end */
-			cherokee_buffer_insert_buffer (header, tmp, end - header->buf);
+			ret = cherokee_buffer_insert_buffer (header, tmp, end - header->buf);
+			if (unlikely (ret != ret_ok)) return ret;
 
 			/* The buffer might have been relocated */
 			begin = header->buf + pos1;
@@ -674,6 +675,8 @@ cherokee_flcache_conn_commit_header (cherokee_flcache_conn_t *flcache_conn,
 		cherokee_flcache_del_entry (CONN_VSRV(conn)->flcache, entry);
 
 		return ret_ok;
+	} else if (unlikely (ret != ret_ok)) {
+		return ret;
 	}
 
 	/* Create the cache file

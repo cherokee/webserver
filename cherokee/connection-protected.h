@@ -225,6 +225,7 @@ struct cherokee_connection {
 	cherokee_boolean_t            chunked_encoding;
 	cherokee_boolean_t            chunked_last_package;
 	cherokee_buffer_t             chunked_len;
+	char                          chunked_len_buf[13];
 	size_t                        chunked_sent;
 	struct iovec                  chunks[3];
 	uint16_t                      chunksn;
@@ -299,7 +300,7 @@ ret_t cherokee_connection_step                   (cherokee_connection_t *conn);
 /* Headers
  */
 ret_t cherokee_connection_read_post              (cherokee_connection_t *conn);
-ret_t cherokee_connection_build_header           (cherokee_connection_t *conn);
+ret_t must_check cherokee_connection_build_header           (cherokee_connection_t *conn);
 ret_t cherokee_connection_get_request            (cherokee_connection_t *conn);
 ret_t cherokee_connection_parse_range            (cherokee_connection_t *conn);
 int   cherokee_connection_is_userdir             (cherokee_connection_t *conn);

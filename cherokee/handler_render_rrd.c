@@ -60,13 +60,17 @@ static cherokee_boolean_t
 check_image_freshness (cherokee_buffer_t                 *buf,
                        cherokee_collector_rrd_interval_t *interval)
 {
+	ret_t       ret;
 	int         re;
 	struct stat info;
 
 	/* cache_img_dir + "/" + buf + "_" + interval + ".png"
 	 */
-	cherokee_buffer_prepend_str (buf, "/");
-	cherokee_buffer_prepend_buf (buf, &rrd_connection->path_img_cache);
+	ret = cherokee_buffer_prepend_str (buf, "/");
+	if (unlikely (ret != ret_ok)) return false;
+
+	ret = cherokee_buffer_prepend_buf (buf, &rrd_connection->path_img_cache);
+	if (unlikely (ret != ret_ok)) return false;
 
 	cherokee_buffer_add_char    (buf, '_');
 	cherokee_buffer_add         (buf, interval->interval, strlen(interval->interval));
@@ -453,7 +457,8 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 		cherokee_buffer_init (&vserver_buf);
 		cherokee_buffer_add (&vserver_buf, vserver_name, vserver_len);
-		cherokee_buffer_replace_string (&vserver_buf, " ", 1, "_", 1);
+		ret = cherokee_buffer_replace_string (&vserver_buf, " ", 1, "_", 1);
+		if (unlikely (ret != ret_ok)) return ret;
 
 		/* Is it fresh enough?
 		 */
@@ -510,7 +515,8 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
 	}
 
-	cherokee_buffer_replace_string (&conn->request, " ", 1, "_", 1);
+	ret = cherokee_buffer_replace_string (&conn->request, " ", 1, "_", 1);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Handler file init
 	 */

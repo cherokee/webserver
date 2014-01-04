@@ -254,6 +254,7 @@ poll_release (cherokee_handler_proxy_poll_t *poll,
 ret_t
 cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 {
+	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_proxy_conn);
 
 	/* Socket stuff
@@ -265,7 +266,8 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 	cherokee_buffer_init (&n->post.buf_temp);
 
 	cherokee_buffer_init (&n->header_in_raw);
-	cherokee_buffer_ensure_size (&n->header_in_raw, 512);
+	ret = cherokee_buffer_ensure_size (&n->header_in_raw, 512);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	n->poll_ref      = NULL;
 	n->keepalive_in  = false;

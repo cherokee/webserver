@@ -142,6 +142,7 @@ file_entry_free (file_entry_t *file)
 static ret_t
 load_theme_load_file (cherokee_buffer_t *theme_path, const char *file, cherokee_buffer_t *output)
 {
+	ret_t ret;
 	cherokee_buffer_t path;
 
 	cherokee_buffer_init (&path);
@@ -149,7 +150,8 @@ load_theme_load_file (cherokee_buffer_t *theme_path, const char *file, cherokee_
 	cherokee_buffer_add (&path, file, strlen(file));
 
 	cherokee_buffer_clean (output);
-	cherokee_buffer_read_file (output, path.buf);
+	ret = cherokee_buffer_read_file (output, path.buf);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	cherokee_buffer_mrproper (&path);
 	return ret_ok;
@@ -428,13 +430,15 @@ is_file_in_list (cherokee_list_t *list, char *filename, cuint_t len)
 }
 
 
-static ret_t
+static ret_t must_check
 realpath_buf (cherokee_buffer_t *in,
               cherokee_buffer_t *resolved)
 {
+	ret_t ret;
 	char *re;
 
-	cherokee_buffer_ensure_size (resolved, PATH_MAX);
+	ret = cherokee_buffer_ensure_size (resolved, PATH_MAX);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	re = realpath (in->buf, resolved->buf);
 	if (re == NULL) {
@@ -1088,7 +1092,8 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	/* File
 	 */
 	cherokee_buffer_clean (tmp);
-	cherokee_buffer_add_escape_html (tmp, &name_buf);
+	ret = cherokee_buffer_add_escape_html (tmp, &name_buf);
+	if (unlikely (ret != ret_ok)) return ret;
 	VTMP_SUBSTITUTE_TOKEN ("%file_name%", tmp->buf);
 
 	if ((is_link) && (props->redir_symlinks)) {
@@ -1097,17 +1102,20 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		}
 
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_escape_uri_delims (tmp, &file->realpath);
+		ret = cherokee_buffer_escape_uri_delims (tmp, &file->realpath);
+		if (unlikely (ret != ret_ok)) return ret;
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else if (! is_dir) {
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_escape_uri_delims (tmp, &name_buf);
+		ret = cherokee_buffer_escape_uri_delims (tmp, &name_buf);
+		if (unlikely (ret != ret_ok)) return ret;
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else {
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_escape_uri_delims (tmp, &name_buf);
+		ret = cherokee_buffer_escape_uri_delims (tmp, &name_buf);
+		if (unlikely (ret != ret_ok)) return ret;
 		cherokee_buffer_add_str (tmp, "/");
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 	}
@@ -1119,7 +1127,8 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		struct tm  ltime_buf;
 
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_ensure_size (tmp, 33);
+		ret = cherokee_buffer_ensure_size (tmp, 33);
+		if (unlikely (ret != ret_ok)) return ret;
 
 		ltime = cherokee_localtime (&file->stat.st_mtime, &ltime_buf);
 		if (ltime != NULL) {
@@ -1142,7 +1151,9 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 			char *unit;
 
 			cherokee_buffer_clean (tmp);
-			cherokee_buffer_ensure_size (tmp, 8);
+			ret = cherokee_buffer_ensure_size (tmp, 8);
+			if (unlikely (ret != ret_ok)) return ret;
+
 			cherokee_buffer_add_fsize (tmp, file->stat.st_size);
 
 			unit = tmp->buf;

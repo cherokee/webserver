@@ -307,7 +307,7 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 }
 
 
-void
+ret_t
 cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
                                    const char *name,    int name_len,
                                    const char *content, int content_len)
@@ -323,11 +323,11 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	/* Build the new envp entry
 	 */
 	if (name == NULL)
-		return;
+		return ret_error;
 
 	entry = (char *) malloc (name_len + content_len + 2);
 	if (entry == NULL)
-		return;
+		return ret_nomem;
 
 	memcpy (entry, name, name_len);
 	entry[name_len] = '=';
@@ -347,6 +347,7 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 		SHOULDNT_HAPPEN;
 	}
 #endif
+	return ret_ok;
 }
 
 static ret_t
@@ -358,15 +359,15 @@ add_environment (cherokee_handler_cgi_t *cgi,
 	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(CONN_THREAD(conn));
 
 	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* CONTENT_LENGTH
 	 */
 	if (conn->post.has_info) {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add_ullong10 (tmp, conn->post.len);
-		set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);
+		ret = set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* SCRIPT_FILENAME
@@ -374,9 +375,11 @@ add_environment (cherokee_handler_cgi_t *cgi,
 	if (cgi_base->executable.len <= 0)
 		return ret_error;
 
-	set_env (cgi_base, "SCRIPT_FILENAME",
+	ret = set_env (cgi_base, "SCRIPT_FILENAME",
 		 cgi_base->executable.buf,
 		 cgi_base->executable.len);
+
+	if (unlikely (ret != ret_ok)) return ret;
 
 	return ret_ok;
 }

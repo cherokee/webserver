@@ -289,6 +289,7 @@ check_interpreter (cherokee_source_interpreter_t *src)
 static ret_t
 replace_environment_variables (cherokee_buffer_t *buf)
 {
+	ret_t              ret;
 	char              *dollar;
 	char              *p;
 	char              *val;
@@ -325,16 +326,19 @@ replace_environment_variables (cherokee_buffer_t *buf)
 		/* Replacement
 		 */
 		if (val != NULL) {
-			cherokee_buffer_replace_string (buf, tmp.buf, tmp.len, val, strlen(val));
+			ret = cherokee_buffer_replace_string (buf, tmp.buf, tmp.len, val, strlen(val));
+			if (unlikely (ret != ret_ok)) goto out;
 		} else {
 			cherokee_buffer_remove_string (buf, tmp.buf, tmp.len);
 		}
 
 	} while (true);
 
+	ret = ret_ok;
+
 out:
 	cherokee_buffer_mrproper (&tmp);
-	return ret_ok;
+	return ret;
 }
 
 
@@ -348,13 +352,11 @@ add_env (cherokee_source_interpreter_t *src, cherokee_buffer_t *env, cherokee_bu
 
 	/* Replace $ENVs
 	 */
-	cherokee_buffer_dup (val_orig, &val);
+	ret = cherokee_buffer_dup (val_orig, &val);
+	if (unlikely (ret != ret_ok)) goto error;
 
 	ret = replace_environment_variables (val);
-	if (ret != ret_ok) {
-		ret = ret_error;
-		goto error;
-	}
+	if (unlikely (ret != ret_ok)) goto error;
 
 	/* Build the env entry
 	 */

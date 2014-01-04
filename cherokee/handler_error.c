@@ -88,9 +88,12 @@ cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 static ret_t
 build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {
+	ret_t ret;
+
 	/* Avoid too many reallocations.
 	 */
-	cherokee_buffer_ensure_addlen (buffer, 1000);
+	ret = cherokee_buffer_ensure_addlen (buffer, 1000);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Add document header
 	 */
@@ -116,13 +119,15 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	case http_gone:
 		cherokee_buffer_add_str (buffer, "The requested URL ");
 		if (! cherokee_buffer_is_empty (&conn->request_original)) {
-			cherokee_buffer_add_escape_html (buffer, &conn->request_original);
+			ret = cherokee_buffer_add_escape_html (buffer, &conn->request_original);
+			if (unlikely (ret != ret_ok)) return ret;
 		}
 		else if (! cherokee_buffer_is_empty (&conn->request)) {
 			if (cherokee_connection_use_webdir (conn)) {
 				cherokee_buffer_add_buffer (buffer, &conn->web_directory);
 			}
-			cherokee_buffer_add_escape_html (buffer, &conn->request);
+			ret = cherokee_buffer_add_escape_html (buffer, &conn->request);
+			if (unlikely (ret != ret_ok)) return ret;
 		}
 
 		if (conn->error_code == http_not_found) {
@@ -138,7 +143,8 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 		cherokee_buffer_add_str (buffer,
 		    "Your browser sent a request that this server could not understand.");
 		cherokee_buffer_add_str   (buffer, "<p><pre>");
-		cherokee_buffer_add_escape_html (buffer, conn->header.input_buffer);
+		ret = cherokee_buffer_add_escape_html (buffer, conn->header.input_buffer);
+		if (unlikely (ret != ret_ok)) return ret;
 		cherokee_buffer_add_str   (buffer, "</pre>");
 		break;
 
@@ -165,7 +171,8 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	case http_moved_permanently:
 	case http_moved_temporarily:
 		cherokee_buffer_add_str         (buffer, "The document has moved <a href=\"");
-		cherokee_buffer_add_escape_html (buffer, &conn->redirect);
+		ret = cherokee_buffer_add_escape_html (buffer, &conn->redirect);
+		if (unlikely (ret != ret_ok)) return ret;
 		cherokee_buffer_add_str         (buffer, "\">here</a>.");
 		break;
 

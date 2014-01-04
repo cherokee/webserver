@@ -239,7 +239,8 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 		longest_len = MAX (longest_len, len);
 
 		cherokee_buffer_add_str    (&entries, "{0x");
-		cherokee_buffer_add_char_n (&entries, '0', longest_len - len);
+		ret = cherokee_buffer_add_char_n (&entries, '0', longest_len - len);
+		if (unlikely (ret != ret_ok)) goto out;
 		cherokee_buffer_add        (&entries, tmp, len);
 		cherokee_buffer_add_str    (&entries, "} ");
 	}

@@ -1072,8 +1072,11 @@ cherokee_path_arg_eval (cherokee_buffer_t *path)
 	if (path->buf[0] != '/') {
 		d = getcwd (tmp, sizeof(tmp));
 
-		cherokee_buffer_prepend (path, (char *)"/", 1);
-		cherokee_buffer_prepend (path, d, strlen(d));
+		ret = cherokee_buffer_prepend (path, (char *)"/", 1);
+		if (unlikely (ret != ret_ok)) return ret;
+
+		ret = cherokee_buffer_prepend (path, d, strlen(d));
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_path_short (path);

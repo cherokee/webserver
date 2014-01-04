@@ -129,17 +129,19 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 }
 
 
-static void
+static ret_t must_check
 add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
               const char *key, int key_len,
               const char *val, int val_len)
 {
+	ret_t                     ret;
 	uint16_t                  u_key_len = (uint16_t) key_len ;
 	uint16_t                  u_val_len = (uint16_t) val_len ;
 	cherokee_handler_uwsgi_t *uwsgi     = HDL_UWSGI(cgi_base);
 
 	/* 2 bytes for every string (16 bit le) */
-	cherokee_buffer_ensure_size (&uwsgi->header, uwsgi->header.len + key_len + val_len + 4);
+	ret = cherokee_buffer_ensure_size (&uwsgi->header, uwsgi->header.len + key_len + val_len + 4);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* force to le if cherokee is big-endian */
 #if BYTE_ORDER  == BIG_ENDIAN
@@ -158,6 +160,8 @@ add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	u_val_len = uwsgi_swap16(u_val_len);
 #endif
 	cherokee_buffer_add (&uwsgi->header, val, val_len);
+
+	return ret_ok;
 }
 
 
@@ -253,12 +257,12 @@ cherokee_handler_uwsgi_free (cherokee_handler_uwsgi_t *hdl)
 }
 
 
-static ret_t
+static ret_t must_check
 uwsgi_fix_packet (cherokee_buffer_t *buf,
                   uint8_t            modifier1,
                   uint8_t            modifier2)
 {
-
+	ret_t ret;
 	uwsgi_header uh;
 
 	uh.modifier1 = modifier1 ;
@@ -269,16 +273,17 @@ uwsgi_fix_packet (cherokee_buffer_t *buf,
 	uh.env_size = (uint16_t) buf->len ;
 #endif
 
-	cherokee_buffer_ensure_size (buf, buf->len + 4);
-	cherokee_buffer_prepend (buf, (const char * )&uh, 4);
+	ret = cherokee_buffer_ensure_size (buf, buf->len + 4);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	return ret_ok;
+	return cherokee_buffer_prepend (buf, (const char * )&uh, 4);
 }
 
 
 static ret_t
 build_header (cherokee_handler_uwsgi_t *hdl)
 {
+	ret_t                           ret;
 	cuint_t                         len;
 	char                            tmp[64];
 	cherokee_connection_t          *conn     = HANDLER_CONN(hdl);
@@ -286,7 +291,8 @@ build_header (cherokee_handler_uwsgi_t *hdl)
 
 	if (props->pass_request_body == true && props->pass_wsgi_vars == true) {
 		len = snprintf (tmp, sizeof(tmp), FMT_OFFSET, (CST_OFFSET)conn->post.len);
-		add_env_pair(HDL_CGI_BASE(hdl), "CONTENT_LENGTH", 14, tmp, len);
+		ret = add_env_pair(HDL_CGI_BASE(hdl), "CONTENT_LENGTH", 14, tmp, len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	if (props->pass_wsgi_vars == true) {

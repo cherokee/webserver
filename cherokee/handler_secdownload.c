@@ -189,7 +189,8 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 	cherokee_buffer_add        (&md5, p, path_len);
 	cherokee_buffer_add        (&md5, time_s, 8);
 
-	cherokee_buffer_encode_md5_digest (&md5);
+	ret = cherokee_buffer_encode_md5_digest (&md5);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	re = strncasecmp (md5.buf, &conn->request.buf[1], 32);
 	if (re != 0) {

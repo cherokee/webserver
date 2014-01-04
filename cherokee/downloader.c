@@ -485,14 +485,14 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 		/* Build the request header
 		 */
 		ret = cherokee_request_header_build_string (req, &downloader->request_header, tmp1, tmp2);
-		if (unlikely(ret < ret_ok))
+		if (unlikely(ret != ret_ok))
 			return ret;
 
 		/* Deal with the connection
 		 */
 		if (! is_connected (downloader)) {
 			ret = cherokee_downloader_connect (downloader);
-			if (ret < ret_ok) return ret;
+			if (ret != ret_ok) return ret;
 		}
 
 		/* Everything is ok, go ahead!

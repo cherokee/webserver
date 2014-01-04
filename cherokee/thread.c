@@ -205,8 +205,11 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	 */
 	cherokee_buffer_init (&n->tmp_buf1);
 	cherokee_buffer_init (&n->tmp_buf2);
-	cherokee_buffer_ensure_size (&n->tmp_buf1, 4096);
-	cherokee_buffer_ensure_size (&n->tmp_buf2, 4096);
+	ret = cherokee_buffer_ensure_size (&n->tmp_buf1, 4096);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_ensure_size (&n->tmp_buf2, 4096);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Traffic shaping
 	 */
