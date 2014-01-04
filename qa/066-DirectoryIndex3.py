@@ -10,17 +10,17 @@ vserver!0660!rule!1!handler = common
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name           = "Directory indexer, /index, vbles"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Directory indexer, /index, vbles"
         self.request        = "GET /inside/ HTTP/1.0\r\n" +\
                               "Host: directoryindex3\r\n"
         self.expected_error = 200
 
-    def Prepare (self, www):
+    def Prepare(self, www):
         # Generate files and dir
-        self.dr = self.Mkdir (www, "directoryindex3")
-        self.Mkdir (www, "directoryindex3/inside/foo")
+        self.dr = self.Mkdir(www, "directoryindex3")
+        self.Mkdir(www, "directoryindex3/inside/foo")
 
         self.WriteFile (self.dr, "super_test_index.php", 0666, """<?php
                         echo "DocumentRoot ".$_SERVER['DOCUMENT_ROOT']."\n";
@@ -38,5 +38,5 @@ class Test (TestBase):
                                  "ScriptName /super_test_index.php",
                                  "RequestUri /inside/"]
 
-    def Precondition (self):
-        return os.path.exists (look_for_php())
+    def Precondition(self):
+        return os.path.exists(look_for_php())

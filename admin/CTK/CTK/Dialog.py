@@ -55,18 +55,18 @@ buttons.addClass('druid-button');
 buttons.filter(':contains("%(cancel_str)s"), :contains("%(close_str)s")').addClass('close-button');
 """
 
-def py2js_dic (d):
+def py2js_dic(d):
     js_pairs = []
 
     for key in d:
         val = d[key]
         if type(val) in (bool, int, float, list):
-             js_pairs.append ("'%s': %s" %(key, json_dump(val)))
+             js_pairs.append("'%s': %s" % (key, json_dump(val)))
         elif type(val) == str:
             if '/* code */' in val:
-                js_pairs.append ("'%s': %s" %(key, val))
+                js_pairs.append("'%s': %s" % (key, val))
             else:
-                js_pairs.append ("'%s': '%s'" %(key, val))
+                js_pairs.append("'%s': '%s'" % (key, val))
         else:
             assert False, "Unknown data type"
 
@@ -103,17 +103,17 @@ class Dialog (Container):
            button = CTK.Button('Show')
            button.bind ('click', dialog.JS_to_show())
     """
-    def __init__ (self, js_props={}, props={}):
-        Container.__init__ (self)
+    def __init__(self, js_props={}, props={}):
+        Container.__init__(self)
 
         self.js_props = js_props.copy()
-        self.props    = props.copy()
-        self.title    = self.js_props.pop('title', '')
-        self.buttons  = []
+        self.props = props.copy()
+        self.title = self.js_props.pop('title', '')
+        self.buttons = []
         if 'id' in self.props:
             self.id = self.props.pop('id')
         else:
-            self.id = 'dialog%d'%(self.uniq_id)
+            self.id = 'dialog%d' % (self.uniq_id)
 
         # Defaults
         if 'modal' not in self.js_props:
@@ -139,41 +139,41 @@ class Dialog (Container):
             else:
                 self.props['style'] = 'display:none;'
 
-    def AddButton (self, caption, action):
+    def AddButton(self, caption, action):
         """Add button to the dialog, specifying caption and action to
         perform when clicked. Actions can be 'close' (to close
         dialog), a path starting with '/' (to make that path the
         current window location), or a custom Javascript snippet."""
-        self.buttons.append ((caption, action))
+        self.buttons.append((caption, action))
 
-    def Render (self):
+    def Render(self):
         # Build buttons
         if self.buttons:
             self.js_props['buttons'] = self._render_buttons_property()
 
         # Render
-        render       = Container.Render (self)
-        dialog_props = py2js_dic (self.js_props)
-        div_props    = props_to_str (self.props)
+        render = Container.Render(self)
+        dialog_props = py2js_dic(self.js_props)
+        div_props = props_to_str(self.props)
 
-        props = {'id':           self.id,
-                 'title':        self.title,
-                 'content':      render.html,
+        props = {'id': self.id,
+                 'title': self.title,
+                 'content': render.html,
                  'dialog_props': dialog_props,
-                 'div_props':    div_props,
-                 'cancel_str':   _("Cancel"),
-                 'close_str':    _("Close")}
+                 'div_props': div_props,
+                 'cancel_str': _("Cancel"),
+                 'close_str': _("Close")}
 
-        html = DIALOG_HTML %(props)
-        js   = DIALOG_JS   %(props)
+        html = DIALOG_HTML % (props)
+        js = DIALOG_JS % (props)
 
-        render.html     = html
-        render.js      += js
+        render.html = html
+        render.js += js
         render.headers += HEADERS
 
         return render
 
-    def _render_buttons_property (self):
+    def _render_buttons_property(self):
         buttons_js = []
 
         # Render the button entries
@@ -187,31 +187,31 @@ class Dialog (Container):
             else:
                 tmp += action
             tmp += '}'
-            buttons_js.append (tmp%(locals()))
+            buttons_js.append(tmp % (locals()))
 
         # Add the property
-        js = '/* code */ { %s }' %(','.join(buttons_js))
+        js = '/* code */ { %s }' % (','.join(buttons_js))
         return js
 
-    def JS_to_show (self):
+    def JS_to_show(self):
         """Return Javascript snippet to open the dialog."""
         return "$('#%s').show().dialog('open');" % (self.id)
 
-    def JS_to_close (self):
+    def JS_to_close(self):
         """Return Javascript snippet to close the dialog."""
         return " $('#%s').dialog('close');" % (self.id)
 
-    def JS_to_trigger (self, event, _params=[]):
+    def JS_to_trigger(self, event, _params=[]):
         """Return Javascript snippet to trigger specified event."""
         props = {'id': self.id, 'event': event}
 
-        tmp = ["type: '%s'"%(event)]
+        tmp = ["type: '%s'" % (event)]
         for p in _params:
             assert type(p) == tuple and len(p) == 2
-            tmp.append ('%s:%s' %(p[0],p[1]))
+            tmp.append('%s:%s' % (p[0], p[1]))
 
         props['details'] = ','.join(tmp)
-        return "$('#%(id)s .submitter').trigger({%(details)s});" %(props)
+        return "$('#%(id)s .submitter').trigger({%(details)s});" % (props)
 
 
 class DialogProxy (Dialog):
@@ -221,11 +221,11 @@ class DialogProxy (Dialog):
     until the proxy receives all the required data. Accepts an
     optional argument to pass properties to the base Dialog class.
     """
-    def __init__ (self, url, props={}):
-        Dialog.__init__ (self, props.copy())
+    def __init__(self, url, props={}):
+        Dialog.__init__(self, props.copy())
 
         scgi = get_scgi()
-        self += Proxy (scgi.env['HTTP_HOST'], url)
+        self += Proxy(scgi.env['HTTP_HOST'], url)
 
 
 class DialogProxyLazy (Dialog):
@@ -235,10 +235,10 @@ class DialogProxyLazy (Dialog):
     contents of the URL are retrieved asynchronously, so the render is
     not blocked on retrieval.
     """
-    def __init__ (self, url, _props={}):
+    def __init__(self, url, _props={}):
         # Properties
         props = _props.copy()
-        Dialog.__init__ (self, props)
+        Dialog.__init__(self, props)
 
         # Widget content
         img = ImageStock('loading', {'class': 'no-see'})
@@ -248,9 +248,9 @@ class DialogProxyLazy (Dialog):
         self += box
 
         # Event
-        self.bind ('dialogopen', "$('#%s').show();" %(img.id) + \
-                                 JS.Ajax(url, type = 'GET',
-                                         success = '$("#%s").html(data);'%(box.id)))
+        self.bind('dialogopen', "$('#%s').show();" % (img.id) + \
+                                 JS.Ajax(url, type='GET',
+                                         success='$("#%s").html(data);' % (box.id)))
 
 
 class Dialog2Buttons (Dialog):
@@ -267,7 +267,7 @@ class Dialog2Buttons (Dialog):
             the current window location), or a custom Javascript
             snippet.
     """
-    def __init__ (self, props, button_name, button_action):
-        Dialog.__init__ (self, props.copy())
-        self.AddButton (_('Close'), "close")
-        self.AddButton (button_name, button_action)
+    def __init__(self, props, button_name, button_action):
+        Dialog.__init__(self, props.copy())
+        self.AddButton(_('Close'), "close")
+        self.AddButton(button_name, button_action)

@@ -84,7 +84,7 @@ return false;
 
 
 class Druid (Box):
-    def __init__ (self, refreshable, _props={}):
+    def __init__(self, refreshable, _props={}):
         # Properties
         props = _props.copy()
         if 'class' in props:
@@ -93,17 +93,17 @@ class Druid (Box):
             props['class'] = 'druid'
 
         # Parent's constructor
-        Box.__init__ (self, props)
+        Box.__init__(self, props)
 
         # Widget
-        assert isinstance (refreshable, RefreshableURL)
+        assert isinstance(refreshable, RefreshableURL)
         self.refreshable = refreshable
         self += self.refreshable
 
-    def JS_to_goto (self, url):
+    def JS_to_goto(self, url):
         props = {'refresh': self.refreshable.id,
-                 'url':     url}
-        return "$('#%(refresh)s').trigger({'type':'refresh_goto', 'goto': %(url)s});" %(props)
+                 'url': url}
+        return "$('#%(refresh)s').trigger({'type':'refresh_goto', 'goto': %(url)s});" % (props)
 
 
 #
@@ -111,7 +111,7 @@ class Druid (Box):
 #
 
 class DruidButton (Button):
-    def __init__ (self, caption, _props={}):
+    def __init__(self, caption, _props={}):
         # Properties
         props = _props.copy()
         if 'class' in props:
@@ -120,42 +120,42 @@ class DruidButton (Button):
             props['class'] = 'druid-button'
 
         # Parent's constructor
-        Button.__init__ (self, caption, props)
+        Button.__init__(self, caption, props)
 
 class DruidButton_Goto (DruidButton):
-    def __init__ (self, caption, url, do_submit, _props={}):
-        DruidButton.__init__ (self, caption, _props.copy())
+    def __init__(self, caption, url, do_submit, _props={}):
+        DruidButton.__init__(self, caption, _props.copy())
 
-        props = {'url':       url,
-                 'do_close':  'false',
-                 'do_submit': ('false','true')[do_submit]}
+        props = {'url': url,
+                 'do_close': 'false',
+                 'do_submit': ('false', 'true')[do_submit]}
 
         # Event
-        self.bind ('click', JS_BUTTON_GOTO %(props))
+        self.bind('click', JS_BUTTON_GOTO % (props))
 
 class DruidButton_Close (DruidButton):
-    def __init__ (self, caption, _props={}):
+    def __init__(self, caption, _props={}):
         props = _props.copy()
         if 'class' in props:
             props['class'] += ' close-button'
         else:
             props['class'] = 'close-button'
 
-        DruidButton.__init__ (self, caption, props)
+        DruidButton.__init__(self, caption, props)
 
         # Event
-        self.bind ('click', JS_BUTTON_CLOSE)
+        self.bind('click', JS_BUTTON_CLOSE)
 
 class DruidButton_Submit (DruidButton):
-    def __init__ (self, caption, do_close=True, _props={}):
-        DruidButton.__init__ (self, caption, _props.copy())
+    def __init__(self, caption, do_close=True, _props={}):
+        DruidButton.__init__(self, caption, _props.copy())
 
-        props = {'url':       '',
+        props = {'url': '',
                  'do_submit': 'true',
-                 'do_close':  ('false','true')[do_close]}
+                 'do_close': ('false', 'true')[do_close]}
 
         # Event
-        self.bind ('click', JS_BUTTON_GOTO%(props))
+        self.bind('click', JS_BUTTON_GOTO % (props))
 
 #
 # Button Panels
@@ -182,7 +182,7 @@ panel_orig.appendTo (dialog);
 # moving it to the right place.
 
 class DruidButtonsPanel (Box):
-    def __init__ (self, _props={}):
+    def __init__(self, _props={}):
         # Properties
         props = _props.copy()
         if 'class' in props:
@@ -193,119 +193,119 @@ class DruidButtonsPanel (Box):
         props['class'] += ' ui-widget-content ui-helper-clearfix'
 
         # Parent's constructor
-        Box.__init__ (self, props)
+        Box.__init__(self, props)
         self.buttons = []
 
-    def Render (self):
+    def Render(self):
         render = Box.Render(self)
-        render.js = BUTTONS_PANEL_JS%(self.id) + render.js
+        render.js = BUTTONS_PANEL_JS % (self.id) + render.js
         return render
 
 
 class DruidButtonsPanel_Next (DruidButtonsPanel):
-    def __init__ (self, url, cancel=True, do_submit=True, props={}):
-        DruidButtonsPanel.__init__ (self, props.copy())
+    def __init__(self, url, cancel=True, do_submit=True, props={}):
+        DruidButtonsPanel.__init__(self, props.copy())
         if cancel:
             self += DruidButton_Close(_('Cancel'))
-        self += DruidButton_Goto (_('Next'), url, do_submit)
+        self += DruidButton_Goto(_('Next'), url, do_submit)
 
 class DruidButtonsPanel_PrevNext (DruidButtonsPanel):
-    def __init__ (self, url_prev, url_next, cancel=True, do_submit=True, props={}):
-        DruidButtonsPanel.__init__ (self, props.copy())
+    def __init__(self, url_prev, url_next, cancel=True, do_submit=True, props={}):
+        DruidButtonsPanel.__init__(self, props.copy())
         if cancel:
             self += DruidButton_Close(_('Cancel'))
-        self += DruidButton_Goto (_('Next'), url_next, do_submit)
-        self += DruidButton_Goto (_('Prev'), url_prev, False)
+        self += DruidButton_Goto(_('Next'), url_next, do_submit)
+        self += DruidButton_Goto(_('Prev'), url_prev, False)
 
 class DruidButtonsPanel_PrevCreate (DruidButtonsPanel):
-    def __init__ (self, url_prev, cancel=True, props={}):
-        DruidButtonsPanel.__init__ (self, props.copy())
+    def __init__(self, url_prev, cancel=True, props={}):
+        DruidButtonsPanel.__init__(self, props.copy())
         if cancel:
             self += DruidButton_Close(_('Cancel'))
-        self += DruidButton_Submit (_('Create'))
-        self += DruidButton_Goto (_('Prev'), url_prev, False)
+        self += DruidButton_Submit(_('Create'))
+        self += DruidButton_Goto(_('Prev'), url_prev, False)
 
 class DruidButtonsPanel_Create (DruidButtonsPanel):
-    def __init__ (self, cancel=True, props={}):
-        DruidButtonsPanel.__init__ (self, props.copy())
+    def __init__(self, cancel=True, props={}):
+        DruidButtonsPanel.__init__(self, props.copy())
         if cancel:
             self += DruidButton_Close(_('Cancel'))
-        self += DruidButton_Submit (_('Create'))
+        self += DruidButton_Submit(_('Create'))
 
 class DruidButtonsPanel_Cancel (DruidButtonsPanel):
-    def __init__ (self, props={}):
-        DruidButtonsPanel.__init__ (self, props.copy())
-        self += DruidButton_Close (_('Cancel'))
+    def __init__(self, props={}):
+        DruidButtonsPanel.__init__(self, props.copy())
+        self += DruidButton_Close(_('Cancel'))
 
 class DruidButtonsPanel_Close (DruidButtonsPanel):
-    def __init__ (self, props={}):
-        DruidButtonsPanel.__init__ (self, props.copy())
-        self += DruidButton_Close (_('Close'))
+    def __init__(self, props={}):
+        DruidButtonsPanel.__init__(self, props.copy())
+        self += DruidButton_Close(_('Close'))
 
 
 #
 # Helper
 #
-def druid_url_next (url):
+def druid_url_next(url):
     parts = url.split('/')
 
     try:
         num = int(parts[-1])
     except ValueError:
-        return '%s/2' %(url)
+        return '%s/2' % (url)
 
-    return '%s/%d' %('/'.join(parts[:-1]), num+1)
+    return '%s/%d' % ('/'.join(parts[:-1]), num + 1)
 
-def druid_url_prev (url):
+def druid_url_prev(url):
     parts = url.split('/')
     num = int(parts[-1])
 
     if num == 2:
         return '/'.join(parts[:-1])
-    return '%s/%d' %('/'.join(parts[:-1]), num-1)
+    return '%s/%d' % ('/'.join(parts[:-1]), num - 1)
 
 
 class DruidButtonsPanel_Next_Auto (DruidButtonsPanel_Next):
-    def __init__ (self, **kwargs):
+    def __init__(self, **kwargs):
         kwargs['url'] = druid_url_next(request.url)
-        DruidButtonsPanel_Next.__init__ (self, **kwargs)
+        DruidButtonsPanel_Next.__init__(self, **kwargs)
 
 class DruidButtonsPanel_PrevNext_Auto (DruidButtonsPanel_PrevNext):
-    def __init__ (self, **kwargs):
+    def __init__(self, **kwargs):
         kwargs['url_prev'] = druid_url_prev(request.url)
         kwargs['url_next'] = druid_url_next(request.url)
-        DruidButtonsPanel_PrevNext.__init__ (self, **kwargs)
+        DruidButtonsPanel_PrevNext.__init__(self, **kwargs)
 
 class DruidButtonsPanel_PrevCreate_Auto (DruidButtonsPanel_PrevCreate):
-    def __init__ (self, **kwargs):
+    def __init__(self, **kwargs):
         kwargs['url_prev'] = druid_url_prev(request.url)
-        DruidButtonsPanel_PrevCreate.__init__ (self, **kwargs)
+        DruidButtonsPanel_PrevCreate.__init__(self, **kwargs)
 
 
-def DruidContent__JS_to_goto (internal_id, url):
+def DruidContent__JS_to_goto(internal_id, url):
     return """$("#%s").parents('.refreshable-url').eq(0).trigger({
                        'type': 'refresh_goto',
                        'goto': '%s'
-               });""" %(internal_id, url)
+               });""" % (internal_id, url)
 
-def DruidContent__JS_to_goto_next (internal_id):
-    return DruidContent__JS_to_goto (internal_id, druid_url_next(request.url))
+def DruidContent__JS_to_goto_next(internal_id):
+    return DruidContent__JS_to_goto(internal_id, druid_url_next(request.url))
 
-def DruidContent__JS_to_close (internal_id):
-    return '$("#%s").each(function() {%s});' %(internal_id, JS_BUTTON_CLOSE)
+def DruidContent__JS_to_close(internal_id):
+    return '$("#%s").each(function() {%s});' % (internal_id, JS_BUTTON_CLOSE)
 
-def DruidContent__JS_if_external_submit (code):
+def DruidContent__JS_if_external_submit(code):
     return "if ((typeof (CTK_druid_external_submit) != 'undefined') && " +\
-           "    (CTK_druid_external_submit)) {%s}" %(code)
+           "    (CTK_druid_external_submit)) {%s}" % (code)
 
-def DruidContent__JS_if_internal_submit (code):
+def DruidContent__JS_if_internal_submit(code):
     return "if ((typeof (CTK_druid_external_submit) == 'undefined') || " +\
-           "    (! CTK_druid_external_submit)) {%s}" %(code)
+           "    (! CTK_druid_external_submit)) {%s}" % (code)
 
 
 class DruidContent_TriggerNext (Box):
-    def __init__ (self):
-        Box.__init__ (self)
+    def __init__(self):
+        Box.__init__(self)
 
-        url = druid_url_next (request.url)
-        self += RawHTML (js = DruidContent__JS_to_goto (self.id, url))
+        url = druid_url_next(request.url)
+        self += RawHTML(js=DruidContent__JS_to_goto(self.id, url))

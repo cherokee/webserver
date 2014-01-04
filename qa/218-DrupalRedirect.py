@@ -1,6 +1,6 @@
 from base import *
 
-DOMAIN  = "218_drupal_clean_urls"
+DOMAIN = "218_drupal_clean_urls"
 REQUEST = "/users/1/edit"
 
 CONF = """
@@ -25,19 +25,19 @@ echo "REQUEST_URI: ($REQUEST_URI)"
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Drupal: clean URLs"
 
-        self.request           = "GET %s HTTP/1.1\r\n" %(REQUEST) +\
-                                 "Host: %s\r\n" %(DOMAIN)         +\
+        self.request           = "GET %s HTTP/1.1\r\n" % (REQUEST) +\
+                                 "Host: %s\r\n" % (DOMAIN)         +\
                                  "Connection: Close\r\n"
 
-        self.expected_error    = 200
-        self.expected_content  = "REQUEST_URI: (%s)" % (REQUEST)
+        self.expected_error = 200
+        self.expected_content = "REQUEST_URI: (%s)" % (REQUEST)
 
-    def Prepare (self, www):
-        srvr = self.Mkdir (www, "domain_%s" % (DOMAIN))
+    def Prepare(self, www):
+        srvr = self.Mkdir(www, "domain_%s" % (DOMAIN))
         self.conf = CONF % (DOMAIN, srvr)
 
-        self.WriteFile (srvr, "index.cgi", 0755, CGI_BASE)
+        self.WriteFile(srvr, "index.cgi", 0755, CGI_BASE)

@@ -26,23 +26,23 @@ import CTK
 import Handler
 
 URL_APPLY = '/plugin/file/apply'
-HELPS     = [('modules_handlers_file', _("Static Content"))]
+HELPS = [('modules_handlers_file', _("Static Content"))]
 
 NOTE_IO_CACHE = N_('Enables an internal I/O cache that improves performance.')
 
 
 class Plugin_file (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+    def __init__(self, key, **kwargs):
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)
 
         table = CTK.PropsTable()
-        table.Add (_("Use I/O cache"), CTK.CheckCfgText("%s!iocache"%(self.key), True, _('Enabled')), _(NOTE_IO_CACHE))
+        table.Add(_("Use I/O cache"), CTK.CheckCfgText("%s!iocache" % (self.key), True, _('Enabled')), _(NOTE_IO_CACHE))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' % (_('File Sending')))
-        self += CTK.Indenter (submit)
+        self += CTK.RawHTML('<h2>%s</h2>' % (_('File Sending')))
+        self += CTK.Indenter(submit)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, method="POST")

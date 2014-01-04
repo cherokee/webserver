@@ -85,15 +85,15 @@ class ToggleButton (Widget):
                                      CTK.RawHTML('Off'),
                                      active=False)
     """
-    def __init__ (self, on, off, active=True, props={}):
-        Widget.__init__ (self)
+    def __init__(self, on, off, active=True, props={}):
+        Widget.__init__(self)
 
-        assert isinstance(on,  Widget)
+        assert isinstance(on, Widget)
         assert isinstance(off, Widget)
 
-        self.props      = props.copy()
-        self.active     = active
-        self.widget_on  = on
+        self.props = props.copy()
+        self.active = active
+        self.widget_on = on
         self.widget_off = off
 
         if 'class' in props:
@@ -101,30 +101,30 @@ class ToggleButton (Widget):
         else:
             self.props['class'] = "togglebutton"
 
-        self.id = props.pop('id', "togglebutton_%d"%(self.uniq_id))
+        self.id = props.pop('id', "togglebutton_%d" % (self.uniq_id))
 
     # Public interface
     #
-    def Render (self):
-        id      = self.id
-        props   = props_to_str (self.props)
-        on_id   = self.widget_on.id
-        off_id  = self.widget_off.id
-        value   = "01"[int(self.active)]
+    def Render(self):
+        id = self.id
+        props = props_to_str(self.props)
+        on_id = self.widget_on.id
+        off_id = self.widget_off.id
+        value = "01"[int(self.active)]
 
         # Render embedded widgets
-        render_on  = self.widget_on.Render()
+        render_on = self.widget_on.Render()
         render_off = self.widget_off.Render()
-        on_html  = render_on.html
+        on_html = render_on.html
         off_html = render_off.html
 
         # Render
-        render = Widget.Render (self)
-        render.html += HTML %(locals())
-        render.js   += JS   %(locals())
+        render = Widget.Render(self)
+        render.html += HTML % (locals())
+        render.js += JS % (locals())
 
         # Merge the image renders, just in case
-        render_on.html  = ''
+        render_on.html = ''
         render_off.html = ''
         render += render_on
         render += render_off
@@ -149,9 +149,9 @@ class ToggleButtonOnOff (ToggleButton):
                                           CTK.RawHTML('Off'),
                                           active=False)
     """
-    def __init__ (self, active=True, props={}):
-        ToggleButton.__init__ (self,
-                               ImageStock('on',  {'title': _("Disable")}),
+    def __init__(self, active=True, props={}):
+        ToggleButton.__init__(self,
+                               ImageStock('on', {'title': _("Disable")}),
                                ImageStock('off', {'title': _("Enable")}),
                                active, props.copy())
 

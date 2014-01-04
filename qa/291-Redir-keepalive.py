@@ -3,8 +3,8 @@ from base import *
 DIR = "redir-keepalive-1"
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Keep-alive after 301 response"
         self.expected_error = 301
 
@@ -17,17 +17,17 @@ class Test (TestBase):
                        request_base + \
                        "Connection: close\r\n"
 
-    def Prepare (self, www):
+    def Prepare(self, www):
         # Local directory
-        self.Mkdir (www, DIR)
+        self.Mkdir(www, DIR)
 
-    def CustomTest (self):
+    def CustomTest(self):
 
-        parts = self.reply.split ('HTTP/1.1 301')
+        parts = self.reply.split('HTTP/1.1 301')
         if len(parts) != 3:
             return -1
 
-        first_response  = parts[1]
+        first_response = parts[1]
         second_response = parts[2]
 
         if "close" in first_response.lower():

@@ -1,8 +1,8 @@
 from base import *
 
-DIR       = "extension2"
-FILE      = "test.def080"
-REQUIRED  = "This is working! :-)"
+DIR = "extension2"
+FILE = "test.def080"
+REQUIRED = "This is working! :-)"
 FORBIDDEN = "It shouldn't appear in the text"
 
 CONF = """
@@ -23,16 +23,16 @@ echo '%s'
 """ % (FORBIDDEN, REQUIRED)
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name              = "Custom extensions, list"
-        self.request           = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE)
-        self.expected_error    = 200
-        self.expected_content  = REQUIRED
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Custom extensions, list"
+        self.request = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE)
+        self.expected_error = 200
+        self.expected_content = REQUIRED
         self.forbidden_content = FORBIDDEN
-        self.conf              = CONF
+        self.conf = CONF
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, DIR)
-        self.WriteFile (d, FILE, 0755, CGI_BASE)
+    def Prepare(self, www):
+        d = self.Mkdir(www, DIR)
+        self.WriteFile(d, FILE, 0755, CGI_BASE)
 

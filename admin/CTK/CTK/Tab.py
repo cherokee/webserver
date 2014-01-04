@@ -139,9 +139,9 @@ class Tab (Widget):
           tabs.Add ('Label_Tab_1', CTK.RawHTML('<p>Foo</p>')
           tabs.Add ('Label_Tab_2', CTK.RawHTML('<p>Bar</p>')
     """
-    def __init__ (self, props=None):
-        Widget.__init__ (self)
-        self._tabs  = []
+    def __init__(self, props=None):
+        Widget.__init__(self)
+        self._tabs = []
 
         if props:
             self._props = props
@@ -149,32 +149,32 @@ class Tab (Widget):
             self._props = {}
 
         if not 'id' in self._props:
-            self._props['id'] = 'widget%d'%(self.uniq_id)
+            self._props['id'] = 'widget%d' % (self.uniq_id)
 
-    def Add (self, title, widget):
+    def Add(self, title, widget):
         """Dynamically add CTK widgets as contents of new tab in the
         tab container. A title for the tab must be specified, and a
         CTK widget has to be provided as content."""
         assert type(title) == str
         assert isinstance(widget, Widget)
 
-        self._tabs.append ((title, widget))
+        self._tabs.append((title, widget))
 
-    def Render (self):
+    def Render(self):
         render = Widget.Render(self)
-        id     = self._props['id']
+        id = self._props['id']
 
-        ul_html  = ''
+        ul_html = ''
         tab_html = ''
 
-        num  = 1
+        num = 1
         for title, widget in self._tabs:
             r = widget.Render()
 
             # Keep record of dependencies
-            render.js      += r.js
+            render.js += r.js
             render.headers += r.headers
-            render.helps   += r.helps
+            render.helps += r.helps
 
             tab_ref = ''
             for c in title:
@@ -182,31 +182,31 @@ class Tab (Widget):
                     tab_ref += c
                 else:
                     tab_ref += '_'
-            tab_ref += '-%d' %(num)
+            tab_ref += '-%d' % (num)
 
             # Render <ul>
-            props = {'id':      id,
+            props = {'id': id,
                      'tab_ref': tab_ref,
-                     'widget':  r.html,
-                     'title':   title}
+                     'widget': r.html,
+                     'title': title}
 
-            ul_html  += HTML_LI  %(props)
-            tab_html += HTML_TAB %(props)
+            ul_html += HTML_LI % (props)
+            tab_html += HTML_TAB % (props)
 
-            num  += 1
+            num += 1
 
         # Render the whole thing
-        tmp  = HTML_UL %({'li_tabs': ul_html})
+        tmp = HTML_UL % ({'li_tabs': ul_html})
         tmp += tab_html
 
-        html = HTML %({'id':   id,
+        html = HTML % ({'id': id,
                        'html': tmp})
 
-        props = {'id':   id,
+        props = {'id': id,
                  'tabs': html}
 
-        render.html     = html
-        render.js      += JS_INIT %(props)
+        render.html = html
+        render.js += JS_INIT % (props)
         render.headers += HEADER
 
         return render

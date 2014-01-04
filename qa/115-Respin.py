@@ -1,6 +1,6 @@
 from base import *
 
-DIR   = "respin1"
+DIR = "respin1"
 MAGIC = "Cherokee_is_pure_magic"
 
 CONF = """
@@ -28,14 +28,14 @@ print "param is " + cgi.parse_qs(os.getenv('QUERY_STRING'))['param'][0]
 """ % (look_for_python())
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name             = "Redirection to PHP"
-        self.request          = "GET /%s/%s/ HTTP/1.0\r\n" % (DIR, MAGIC)
-        self.expected_error   = 200
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Redirection to PHP"
+        self.request = "GET /%s/%s/ HTTP/1.0\r\n" % (DIR, MAGIC)
+        self.expected_error = 200
         self.expected_content = "param is %s" % (MAGIC)
-        self.conf             = CONF
+        self.conf = CONF
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "%s-cgi"%(DIR))
-        self.WriteFile (d, "file", 0755, CGI_BASE)
+    def Prepare(self, www):
+        d = self.Mkdir(www, "%s-cgi" % (DIR))
+        self.WriteFile(d, "file", 0755, CGI_BASE)

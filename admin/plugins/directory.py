@@ -27,5 +27,5 @@ import validations
 NOTE_DIRECTORY = N_("Public Web Directory to which content the configuration will be applied.")
 
 class Plugin_directory (RuleSimple.PluginSimple):
-    def __init__ (self, key, **kwargs):
-        RuleSimple.PluginSimple.__init__ (self, key, _('Web Directory'), "directory", _(NOTE_DIRECTORY), _('Directory'), validations.is_web_path, **kwargs)
+    def __init__(self, key, **kwargs):
+        RuleSimple.PluginSimple.__init__(self, key, _('Web Directory'), "directory", _(NOTE_DIRECTORY), _('Directory'), validations.is_web_path, **kwargs)

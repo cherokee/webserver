@@ -30,27 +30,27 @@ from util import formatter
 class Template (Widget):
     cache = {}
 
-    def __init__ (self, **kwargs):
-        Widget.__init__ (self)
+    def __init__(self, **kwargs):
+        Widget.__init__(self)
         self.filename = None
-        self.content  = None
-        self.vars     = {}
+        self.content = None
+        self.vars = {}
 
         if kwargs.has_key('filename'):
             self.filename = kwargs['filename']
         elif kwargs.has_key('content'):
-            self.content  = kwargs['content']
+            self.content = kwargs['content']
 
-    def _content_update (self):
+    def _content_update(self):
         content = open(self.filename, 'r').read()
-        mtime   = os.stat (self.filename)[stat.ST_MTIME]
-        Template.cache[self.filename] = {'mtime':   mtime,
+        mtime = os.stat(self.filename)[stat.ST_MTIME]
+        Template.cache[self.filename] = {'mtime': mtime,
                                          'content': content}
 
-    def _content_get (self):
+    def _content_get(self):
         try:
             cached = Template.cache[self.filename]
-            s = os.stat (self.filename)
+            s = os.stat(self.filename)
             mtime = s[stat.ST_MTIME]
             if mtime <= cached['mtime']:
                 # Hit
@@ -60,32 +60,32 @@ class Template (Widget):
 
         # Miss
         if (self.filename and
-            os.path.exists (self.filename)):
+            os.path.exists(self.filename)):
             self._content_update()
             return Template.cache[self.filename]['content']
         else:
             return self.content
 
-    def __setitem__ (self, key, val):
+    def __setitem__(self, key, val):
         self.vars[key] = val
 
-    def __getitem__ (self, key):
+    def __getitem__(self, key):
         return self.vars.get(key)
 
-    def Render (self):
+    def Render(self):
         content = self._content_get()
         while True:
             prev = content[:]
-            content = formatter (content, self.vars)
+            content = formatter(content, self.vars)
 
             if content == prev:
                 break
 
         # Get rid of %%s
-        return content %({})
+        return content % ({})
 
-    def _figure_vars (self):
+    def _figure_vars(self):
         vars = globals()
-        vars.update (inspect.currentframe(1).f_locals)
+        vars.update(inspect.currentframe(1).f_locals)
         return vars
 

@@ -1,8 +1,8 @@
 from base import *
 from base64 import encodestring
 
-LOGIN="Aladdin"
-PASSWD="open sesame"
+LOGIN = "Aladdin"
+PASSWD = "open sesame"
 
 CONF = """
 vserver!1!rule!400!match = directory
@@ -15,15 +15,15 @@ vserver!1!rule!400!auth!passwdfile = %s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name             = "Auth basic II"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Auth basic II"
         self.request          = "GET /auth2/ HTTP/1.0\r\n" + \
-                                "Authorization: Basic %s\r\n" % (encodestring ("%s:%s"%(LOGIN,PASSWD))[:-1])
-        self.expected_error   = 200
+                                "Authorization: Basic %s\r\n" % (encodestring("%s:%s" % (LOGIN, PASSWD))[:-1])
+        self.expected_error = 200
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "auth2")
-        self.WriteFile (d, "passwd", 0444, '%s:%s\n' %(LOGIN,PASSWD))
+    def Prepare(self, www):
+        d = self.Mkdir(www, "auth2")
+        self.WriteFile(d, "passwd", 0444, '%s:%s\n' % (LOGIN, PASSWD))
 
-        self.conf = CONF % (d+"/passwd")
+        self.conf = CONF % (d + "/passwd")

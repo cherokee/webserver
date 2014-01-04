@@ -1,14 +1,14 @@
 from base import *
 
-DIR            = "chunked_scgi_1"
-MAGIC          = letters_random (300)
+DIR = "chunked_scgi_1"
+MAGIC = letters_random(300)
 
-CHUNKED_BEGIN  = hex(len(MAGIC))[2:] + '\r\n'
+CHUNKED_BEGIN = hex(len(MAGIC))[2:] + '\r\n'
 CHUNKED_FINISH = "0\r\n\r\n"
 
-PORT           = get_free_port()
-PYTHON         = look_for_python()
-source         = get_next_source()
+PORT = get_free_port()
+PYTHON = look_for_python()
+source = get_next_source()
 
 SCRIPT = """
 from pyscgi import *
@@ -36,8 +36,8 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Chunked encoding: scgi"
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
@@ -45,16 +45,16 @@ class Test (TestBase):
                                  "Connection: Keep-Alive\r\n\r\n"    + \
                                  "OPTIONS / HTTP/1.0\r\n"
 
-        self.expected_error    = 200
-        self.expected_content  = ["Transfer-Encoding: chunked",
+        self.expected_error = 200
+        self.expected_content = ["Transfer-Encoding: chunked",
                                   CHUNKED_BEGIN, MAGIC, CHUNKED_FINISH]
 
-    def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_chunked1.scgi", 0444, SCRIPT)
+    def Prepare(self, www):
+        scgi_file = self.WriteFile(www, "scgi_chunked1.scgi", 0444, SCRIPT)
 
-        pyscgi = os.path.join (www, 'pyscgi.py')
-        if not os.path.exists (pyscgi):
-            self.CopyFile ('pyscgi.py', pyscgi)
+        pyscgi = os.path.join(www, 'pyscgi.py')
+        if not os.path.exists(pyscgi):
+            self.CopyFile('pyscgi.py', pyscgi)
 
         vars = globals()
         vars['scgi_file'] = scgi_file

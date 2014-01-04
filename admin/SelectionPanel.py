@@ -35,29 +35,29 @@ JS_INIT = """
 """
 
 class SelectionPanel (CTK.Box):
-    def __init__ (self, callback, content_id, web_url, web_empty, draggable=True, container=None, cookie_name=COOKIE_NAME_DEFAULT):
-        CTK.Box.__init__ (self, {'class': 'selection-panel', 'style':'display:none;'})
+    def __init__(self, callback, content_id, web_url, web_empty, draggable=True, container=None, cookie_name=COOKIE_NAME_DEFAULT):
+        CTK.Box.__init__(self, {'class': 'selection-panel', 'style': 'display:none;'})
 
-        self.table       = CTK.SortableList (callback, container)
-        self.content_id  = content_id
-        self.web_url     = web_url
-        self.web_empty   = web_empty
-        self.draggable   = draggable
+        self.table = CTK.SortableList(callback, container)
+        self.content_id = content_id
+        self.web_url = web_url
+        self.web_empty = web_empty
+        self.draggable = draggable
         self.cookie_name = cookie_name
 
         self += self.table
 
-    def Add (self, id_content, url, content, draggable=True, extraClass=''):
+    def Add(self, id_content, url, content, draggable=True, extraClass=''):
         assert type(url) == str
         assert type(content) == list
 
         # Row ID
-        row_id = ''.join([('_',x)[x in string.letters+string.digits] for x in url])
+        row_id = ''.join([('_', x)[x in string.letters + string.digits] for x in url])
 
         # Row Content
         row_content = CTK.Box({'class': 'row_content ' + extraClass,
-                               'pid':   id_content,
-                               'url':   url})
+                               'pid': id_content,
+                               'url': url})
         for w in content:
             row_content += w
 
@@ -73,17 +73,17 @@ class SelectionPanel (CTK.Box):
             self.table[-1][1].props['class'] = 'nodragHandle'
             self.table[-1].props['class'] = 'nodrag nodrop'
 
-    def Render (self):
-        render = CTK.Box.Render (self)
+    def Render(self):
+        render = CTK.Box.Render(self)
 
-        props = {'id':            self.id,
-                 'table_id':      self.table.id,
-                 'content_id':    self.content_id,
-                 'cookie':        self.cookie_name,
+        props = {'id': self.id,
+                 'table_id': self.table.id,
+                 'content_id': self.content_id,
+                 'cookie': self.cookie_name,
                  'cookie_domain': self.web_url,
-                 'web_empty':     self.web_empty}
+                 'web_empty': self.web_empty}
 
-        render.js      += JS_INIT %(props)
+        render.js += JS_INIT % (props)
         render.headers += HEADER
 
         return render

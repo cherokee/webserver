@@ -42,19 +42,19 @@ vserver!1!rule!1050!handler = file
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "If-Range header, 200 error"
 
-        self.conf             = CONF
-        self.expected_error   = 200
+        self.conf = CONF
+        self.expected_error = 200
         self.expected_content = DOCUMENTATION
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "if_range1")
-        f = self.WriteFile (d, "file", 0444, DOCUMENTATION)
+    def Prepare(self, www):
+        d = self.Mkdir(www, "if_range1")
+        f = self.WriteFile(d, "file", 0444, DOCUMENTATION)
 
-        st = os.stat (f)
+        st = os.stat(f)
         mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime = st
         times = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime - 1))
 

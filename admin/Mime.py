@@ -34,9 +34,9 @@ from configured import *
 
 URL_APPLY = '/mime/apply'
 
-NOTE_NEW_MIME       = N_('New MIME type to be added.')
+NOTE_NEW_MIME = N_('New MIME type to be added.')
 NOTE_NEW_EXTENSIONS = N_('Comma separated list of file extensions associated with the MIME type.')
-NOTE_NEW_MAXAGE     = N_('Maximum time that this sort of content can be cached (in seconds).')
+NOTE_NEW_MAXAGE = N_('Maximum time that this sort of content can be cached (in seconds).')
 
 
 VALIDATIONS = [
@@ -53,9 +53,9 @@ def commit():
 
     if mime:
         if mage:
-            CTK.cfg['mime!%s!max-age'%(mime)] = mage
+            CTK.cfg['mime!%s!max-age' % (mime)] = mage
         if exts:
-            CTK.cfg['mime!%s!extensions'%(mime)] = exts
+            CTK.cfg['mime!%s!extensions' % (mime)] = exts
 
         return CTK.cfg_reply_ajax_ok()
 
@@ -65,20 +65,20 @@ def commit():
         if k.endswith('!extensions'):
             new = CTK.post[k]
             try:
-                val = validations.is_safe_mime_exts (new, CTK.cfg.get_val(k))
-                if util.lists_differ (val, new):
+                val = validations.is_safe_mime_exts(new, CTK.cfg.get_val(k))
+                if util.lists_differ(val, new):
                     updates[k] = val
             except ValueError, e:
-                return { "ret": "error", "errors": { k: str(e) }}
+                return {"ret": "error", "errors": {k: str(e)}}
         elif k.endswith('!max-age'):
             new = CTK.post[k]
             if new:
                 try:
-                    val = validations.is_positive_int (new)
+                    val = validations.is_positive_int(new)
                     if val != new:
                         updates[k] = val
                 except ValueError, e:
-                    return { "ret": "error", "errors": { k: str(e) }}
+                    return {"ret": "error", "errors": {k: str(e)}}
         CTK.cfg[k] = CTK.post[k]
 
     if updates:
@@ -88,13 +88,13 @@ def commit():
 
 
 class AddMime (CTK.Container):
-    def __init__ (self):
-        CTK.Container.__init__ (self)
+    def __init__(self):
+        CTK.Container.__init__(self)
 
         table = CTK.PropsTable()
-        table.Add (_('Mime Type'),  CTK.TextField({'name': 'new_mime', 'class': 'noauto'}), _(NOTE_NEW_MIME))
-        table.Add (_('Extensions'), CTK.TextField({'name': 'new_exts', 'class': 'noauto optional'}), _(NOTE_NEW_EXTENSIONS))
-        table.Add (_('Max Age'),    CTK.TextField({'name': 'new_mage', 'class': 'noauto optional'}), _(NOTE_NEW_MAXAGE))
+        table.Add(_('Mime Type'), CTK.TextField({'name': 'new_mime', 'class': 'noauto'}), _(NOTE_NEW_MIME))
+        table.Add(_('Extensions'), CTK.TextField({'name': 'new_exts', 'class': 'noauto optional'}), _(NOTE_NEW_EXTENSIONS))
+        table.Add(_('Max Age'), CTK.TextField({'name': 'new_mage', 'class': 'noauto optional'}), _(NOTE_NEW_MAXAGE))
 
         submit = CTK.Submitter(URL_APPLY)
         submit += table
@@ -102,31 +102,31 @@ class AddMime (CTK.Container):
 
 
 class AddNew_Button (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'class': 'mime-button'})
+    def __init__(self):
+        CTK.Box.__init__(self, {'class': 'mime-button'})
 
         # Add New
-        dialog = CTK.Dialog ({'title': _('Add New MIME-Type'), 'width': 550})
-        dialog.AddButton (_('Cancel'), "close")
-        dialog.AddButton (_('Add'), dialog.JS_to_trigger('submit'))
+        dialog = CTK.Dialog({'title': _('Add New MIME-Type'), 'width': 550})
+        dialog.AddButton(_('Cancel'), "close")
+        dialog.AddButton(_('Add'), dialog.JS_to_trigger('submit'))
         dialog += AddMime()
 
         button = CTK.Button(_('Add New'))
-        button.bind ('click', dialog.JS_to_show())
-        dialog.bind ('submit_success', dialog.JS_to_close())
-        dialog.bind ('submit_success', self.JS_to_trigger('submit_success'));
+        button.bind('click', dialog.JS_to_show())
+        dialog.bind('submit_success', dialog.JS_to_close())
+        dialog.bind('submit_success', self.JS_to_trigger('submit_success'));
 
         self += button
         self += dialog
 
 
 class MIME_Table (CTK.Container):
-    def __init__ (self, refreshable, **kwargs):
-        CTK.Container.__init__ (self, **kwargs)
-        self += CTK.RawHTML ('<h2>%s</h2>' %_('Mime types'))
+    def __init__(self, refreshable, **kwargs):
+        CTK.Container.__init__(self, **kwargs)
+        self += CTK.RawHTML('<h2>%s</h2>' % _('Mime types'))
 
         # List
-        headerbox = CTK.Box ({'class': "mimeheader"})
+        headerbox = CTK.Box({'class': "mimeheader"})
         headerbox += CTK.Box({'id': 'mh-type'}, CTK.RawHTML(_('MIME type')))
         headerbox += CTK.Box({'id': 'mh-ext'}, CTK.RawHTML(_('Extensions')))
         headerbox += CTK.Box({'id': 'mh-age'}, CTK.RawHTML(_('MaxAge (<em>secs</em>)')))
@@ -137,51 +137,51 @@ class MIME_Table (CTK.Container):
         mimes = CTK.cfg.keys('mime')
         mimes.sort()
 
-        pag = CTK.Paginator ('mimetable-content')
+        pag = CTK.Paginator('mimetable-content')
         for mime in mimes:
-            pre = "mime!%s"%(mime)
+            pre = "mime!%s" % (mime)
 
             rm = CTK.ImageStock('del')
-            rm.bind ('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
-                                           complete = refreshable.JS_to_refresh()))
+            rm.bind('click', CTK.JS.Ajax(URL_APPLY, data={pre: ''},
+                                           complete=refreshable.JS_to_refresh()))
 
-            box  = CTK.Box ({'class': 'mimeentry'})
-            box += CTK.Box ({'class': 'md md-type'}, CTK.RawHTML('<span>%s</span>' %(mime)))
-            box += CTK.Box ({'class': 'md md-ext'},  CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35}))
-            box += CTK.Box ({'class': 'md md-age'},  CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6}))
-            box += CTK.Box ({'class': 'md md-del'},  rm)
+            box = CTK.Box({'class': 'mimeentry'})
+            box += CTK.Box({'class': 'md md-type'}, CTK.RawHTML('<span>%s</span>' % (mime)))
+            box += CTK.Box({'class': 'md md-ext'}, CTK.TextCfg('%s!extensions' % (pre), False, {'size': 35}))
+            box += CTK.Box({'class': 'md md-age'}, CTK.TextCfg('%s!max-age' % (pre), True, {'size': 6, 'maxlength': 6}))
+            box += CTK.Box({'class': 'md md-del'}, rm)
 
-            #box += CTK.RawHTML ('%s' %(mime))
-            #box += CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35})
-            #box += CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6})
-            #box += rm
+            # box += CTK.RawHTML ('%s' %(mime))
+            # box += CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35})
+            # box += CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6})
+            # box += rm
 
-            submit  = CTK.Submitter (URL_APPLY)
+            submit = CTK.Submitter(URL_APPLY)
             submit += box
 
             pag += submit
 
         # Add New
         button = AddNew_Button()
-        button.bind ('submit_success', refreshable.JS_to_refresh ())
+        button.bind('submit_success', refreshable.JS_to_refresh())
 
         self += pag
         self += button
 
 class MIME_Table_Instancer (CTK.Container):
-    def __init__ (self):
-        CTK.Container.__init__ (self)
+    def __init__(self):
+        CTK.Container.__init__(self)
 
         # Refresher
-        refresh = CTK.Refreshable ({'id': 'mime_table'})
-        refresh.register (lambda: MIME_Table(refresh).Render())
+        refresh = CTK.Refreshable({'id': 'mime_table'})
+        refresh.register(lambda: MIME_Table(refresh).Render())
         self += refresh
 
 
 class MIME_Widget (CTK.Box):
-    def __init__ (self, **kwargs):
-        CTK.Box.__init__ (self, {'class':'mime_types'}, **kwargs)
+    def __init__(self, **kwargs):
+        CTK.Box.__init__(self, {'class': 'mime_types'}, **kwargs)
         self += MIME_Table_Instancer()
 
 
-CTK.publish ('^%s'%(URL_APPLY), commit, validation=VALIDATIONS, method="POST")
+CTK.publish('^%s' % (URL_APPLY), commit, validation=VALIDATIONS, method="POST")

@@ -39,8 +39,8 @@ from configured import CHEROKEE_PLUGINDIR
 NOTE_WELCOME_H1 = N_("Welcome to the Streaming Wizard")
 NOTE_WELCOME_P1 = N_("This Wizard Adds a rule to stream media files.")
 
-PREFIX    = 'tmp!wizard!streaming'
-APPLY     = r'/wizard/vserver/streaming/apply'
+PREFIX = 'tmp!wizard!streaming'
+APPLY = r'/wizard/vserver/streaming/apply'
 
 EXTENSIONS = 'mp3,ogv,flv,mov,ogg,mp4,webm'
 
@@ -54,23 +54,23 @@ CONFIG = """
 """
 
 class Commit:
-    def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        vsrv_pre = 'vserver!%s'%(vsrv_num)
-        prio, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
+    def Commit_Rule(self):
+        vsrv_num = CTK.cfg.get_val('%s!vsrv_num' % (PREFIX))
+        vsrv_pre = 'vserver!%s' % (vsrv_num)
+        prio, rule_pre = cfg_vsrv_rule_get_next(vsrv_pre)
         extensions = EXTENSIONS
 
         config = CONFIG % (locals())
 
-        CTK.cfg.apply_chunk (config)
+        CTK.cfg.apply_chunk(config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize('%s!rule' % (vsrv_pre))
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
-    def __call__ (self):
+    def __call__(self):
         if CTK.post.pop('final'):
             CTK.cfg_apply_post()
             return self.Commit_Rule()
@@ -79,53 +79,53 @@ class Commit:
 
 
 class Welcome:
-    def __call__ (self):
+    def __call__(self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
-        cont += Wizard.Icon ('streaming', {'class': 'wizard-descr'})
-        box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += Wizard.CookBookBox ('cookbook_streaming')
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon('streaming', {'class': 'wizard-descr'})
+        box = CTK.Box({'class': 'wizard-welcome'})
+        box += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_P1)))
+        box += Wizard.CookBookBox('cookbook_streaming')
 
         # Send the VServer num
-        vsrv_num = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
-        submit = CTK.Submitter (APPLY)
-        submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), vsrv_num)
+        vsrv_num = re.findall(r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
+        submit = CTK.Submitter(APPLY)
+        submit += CTK.Hidden('%s!vsrv_num' % (PREFIX), vsrv_num)
         submit += CTK.Hidden('final', '1')
         cont += submit
 
         cont += box
-        cont += NextStep (vsrv_num)
+        cont += NextStep(vsrv_num)
         return cont.Render().toStr()
 
 
 class NextStep (CTK.Container):
-    def __init__ (self, vsrv_num):
-        CTK.Container.__init__ (self)
+    def __init__(self, vsrv_num):
+        CTK.Container.__init__(self)
 
-        self._pre = 'vserver!%s'%(vsrv_num)
-        if self._can_proceed ():
+        self._pre = 'vserver!%s' % (vsrv_num)
+        if self._can_proceed():
             self += CTK.DruidButtonsPanel_Create()
         else:
-            self += CTK.RawHTML ('<p>%s</p>' %(self._msg))
+            self += CTK.RawHTML('<p>%s</p>' % (self._msg))
             self += CTK.DruidButtonsPanel_Cancel()
 
-    def _can_proceed (self):
+    def _can_proceed(self):
         mods = filter(lambda x: 'streaming' in x, os.listdir(CHEROKEE_PLUGINDIR))
         if not len(mods):
             self._msg = _("The media streaming plug-in is not installed.")
             return False
 
-        rules = CTK.cfg.keys('%s!rule'%(self._pre))
+        rules = CTK.cfg.keys('%s!rule' % (self._pre))
         for r in rules:
-            if CTK.cfg.get_val ('%s!rule!%s!match'%(self._pre, r)) != 'extensions':
+            if CTK.cfg.get_val('%s!rule!%s!match' % (self._pre, r)) != 'extensions':
                 continue
-            if CTK.cfg.get_val ('%s!rule!%s!match!extensions'%(self._pre, r)) == EXTENSIONS:
+            if CTK.cfg.get_val('%s!rule!%s!match!extensions' % (self._pre, r)) == EXTENSIONS:
                 self._msg = _("Media streaming is already configured.")
                 return False
         return True
 
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/streaming$',   Welcome)
-CTK.publish (r'^%s'%(APPLY), Commit, method="POST")
+CTK.publish('^/wizard/vserver/(\d+)/streaming$', Welcome)
+CTK.publish(r'^%s' % (APPLY), Commit, method="POST")

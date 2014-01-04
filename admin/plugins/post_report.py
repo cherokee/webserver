@@ -29,28 +29,28 @@ from util import *
 from consts import *
 
 URL_APPLY = '/plugin/post_report/apply'
-HELPS     = [('modules_handlers_post_report', _("POST Report"))]
+HELPS = [('modules_handlers_post_report', _("POST Report"))]
 
-NOTE_LANGUAGES   = N_("Target language for which the information will be encoded. (Default: JSON)")
+NOTE_LANGUAGES = N_("Target language for which the information will be encoded. (Default: JSON)")
 WARNING_NO_TRACK = N_('The <a href="/general">Upload tracking mechanism</a> must be enabled for this handler to work.')
 
 class Plugin_post_report (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
+    def __init__(self, key, **kwargs):
         kwargs['show_document_root'] = False
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)
 
         # Ensure POST track is enabled
         if not CTK.cfg.get_val('server!post_track'):
-            self += CTK.Notice ('warning', CTK.RawHTML (_(WARNING_NO_TRACK)))
+            self += CTK.Notice('warning', CTK.RawHTML(_(WARNING_NO_TRACK)))
 
         # Properties
         table = CTK.PropsTable()
-        table.Add (_('Target language'), CTK.ComboCfg('%s!lang'%(key), trans_options(DWRITER_LANGS)), _(NOTE_LANGUAGES))
+        table.Add(_('Target language'), CTK.ComboCfg('%s!lang' % (key), trans_options(DWRITER_LANGS)), _(NOTE_LANGUAGES))
 
-        submit = CTK.Submitter (URL_APPLY)
-        submit += CTK.Indenter (table)
+        submit = CTK.Submitter(URL_APPLY)
+        submit += CTK.Indenter(table)
 
         self += submit
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, method="POST")

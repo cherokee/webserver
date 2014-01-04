@@ -39,11 +39,11 @@ from configured import *
 NOTE_WELCOME_H1 = N_("Welcome to the Redirection Wizard")
 NOTE_WELCOME_P1 = N_("This Wizard creates a new virtual server redirecting every request to another domain host.")
 
-NOTE_REDIR_H1   = N_("Redirection details")
-NOTE_SRC_HOST   = N_("This domain name will be used as nickname for the new virtual server. More domain names can be added to the virtual server later on.")
-NOTE_TRG_HOST   = N_("Domain name to which requests will be redirected.")
+NOTE_REDIR_H1 = N_("Redirection details")
+NOTE_SRC_HOST = N_("This domain name will be used as nickname for the new virtual server. More domain names can be added to the virtual server later on.")
+NOTE_TRG_HOST = N_("Domain name to which requests will be redirected.")
 
-PREFIX    = 'tmp!wizard!redirect'
+PREFIX = 'tmp!wizard!redirect'
 URL_APPLY = r'/wizard/vserver/redirect/apply'
 
 CONFIG_VSRV = """
@@ -69,10 +69,10 @@ EXTRA_REHOST = """
 
 
 class Commit:
-    def Commit_VServer (self):
+    def Commit_VServer(self):
         # Incoming info
-        host_src = CTK.cfg.get_val ('%s!host_src'%(PREFIX))
-        host_trg = CTK.cfg.get_val ('%s!host_trg'%(PREFIX))
+        host_src = CTK.cfg.get_val('%s!host_src' % (PREFIX))
+        host_trg = CTK.cfg.get_val('%s!host_trg' % (PREFIX))
 
         # Locals
         pre_vsrv = CTK.cfg.get_next_entry_prefix('vserver')
@@ -82,63 +82,63 @@ class Commit:
 
         # Analyze the source domain
         wildcard_domain = string.letters + "_-.*?"
-        is_wildcard = reduce (lambda x,y: x and y, [c in wildcard_domain for c in host_src])
+        is_wildcard = reduce(lambda x, y: x and y, [c in wildcard_domain for c in host_src])
 
         if is_wildcard:
             config += EXTRA_WILDCARD % (locals())
         else:
             config += EXTRA_REHOST % (locals())
 
-        CTK.cfg.apply_chunk (config)
+        CTK.cfg.apply_chunk(config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(pre_vsrv))
+        CTK.cfg.normalize('%s!rule' % (pre_vsrv))
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
-    def __call__ (self):
+    def __call__(self):
         CTK.cfg_apply_post()
         return self.Commit_VServer()
 
 
 class Redirection:
-    def __call__ (self):
+    def __call__(self):
         table = CTK.PropsTable()
-        table.Add (_('Origin Domain'), CTK.TextCfg ('%s!host_src'%(PREFIX), False, {'class':'required'}), _(NOTE_SRC_HOST))
-        table.Add (_('Target Domain'), CTK.TextCfg ('%s!host_trg'%(PREFIX), False, {'class':'required'}), _(NOTE_TRG_HOST))
+        table.Add(_('Origin Domain'), CTK.TextCfg('%s!host_src' % (PREFIX), False, {'class': 'required'}), _(NOTE_SRC_HOST))
+        table.Add(_('Target Domain'), CTK.TextCfg('%s!host_trg' % (PREFIX), False, {'class': 'required'}), _(NOTE_TRG_HOST))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_REDIR_H1)))
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_REDIR_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
 
 
 class Welcome:
-    def __call__ (self):
+    def __call__(self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
-        cont += Wizard.Icon ('redirect', {'class': 'wizard-descr'})
-        box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += Wizard.CookBookBox ('cookbook_redirs')
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon('redirect', {'class': 'wizard-descr'})
+        box = CTK.Box({'class': 'wizard-welcome'})
+        box += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_P1)))
+        box += Wizard.CookBookBox('cookbook_redirs')
         cont += box
         cont += CTK.DruidButtonsPanel_Next_Auto()
         return cont.Render().toStr()
 
 
 VALS = [
-    ('%s!host_src'%(PREFIX), validations.is_not_empty),
-    ('%s!host_trg'%(PREFIX), validations.is_not_empty),
-    ("%s!host_src"%(PREFIX), validations.is_new_vserver_nick),
+    ('%s!host_src' % (PREFIX), validations.is_not_empty),
+    ('%s!host_trg' % (PREFIX), validations.is_not_empty),
+    ("%s!host_src" % (PREFIX), validations.is_new_vserver_nick),
 ]
 
 
 # Rule
-CTK.publish ('^/wizard/vserver/redirect$',   Welcome)
-CTK.publish ('^/wizard/vserver/redirect/2$', Redirection)
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish('^/wizard/vserver/redirect$', Welcome)
+CTK.publish('^/wizard/vserver/redirect/2$', Redirection)
+CTK.publish(r'^%s' % (URL_APPLY), Commit, method="POST", validation=VALS)

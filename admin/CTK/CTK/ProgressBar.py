@@ -38,10 +38,10 @@ $('#%(id)s').progressbar({ value: %(value)s });
 """
 
 class ProgressBar (Widget):
-    def __init__ (self, props={}):
-        Widget.__init__ (self)
-        self.id    = "progressbar_%d" %(self.uniq_id)
-        self.value = props.pop ('value', 0)
+    def __init__(self, props={}):
+        Widget.__init__(self)
+        self.id = "progressbar_%d" % (self.uniq_id)
+        self.value = props.pop('value', 0)
 
         self.props = props.copy()
         if 'class' in props:
@@ -49,18 +49,18 @@ class ProgressBar (Widget):
         else:
             self.props['class'] = 'progressbar'
 
-    def Render (self):
-        render = Widget.Render (self)
+    def Render(self):
+        render = Widget.Render(self)
 
-        props = {'id':    self.id,
+        props = {'id': self.id,
                  'value': self.value,
-                 'props': props_to_str (self.props)}
+                 'props': props_to_str(self.props)}
 
-        render.html    += HTML %(props)
-        render.js      += PERCENT_INIT_JS %(props)
+        render.html += HTML % (props)
+        render.js += PERCENT_INIT_JS % (props)
         render.headers += HEADERS
 
         return render
 
-    def JS_to_set (self, value):
-        return "$('#%s').progressbar ('option', 'value', %s);" %(self.id, value)
+    def JS_to_set(self, value):
+        return "$('#%s').progressbar ('option', 'value', %s);" % (self.id, value)

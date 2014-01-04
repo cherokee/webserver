@@ -1,10 +1,10 @@
 from base import *
 
-HOST      = 'host191'
-FILE      = 'special_file_for_191'
-VSRV_DIR  = '191_vserver'
-DIR       = 'what/ever'
-MAGIC     = '<a href="http://www.alobbs.com/">Alvaro</a>'
+HOST = 'host191'
+FILE = 'special_file_for_191'
+VSRV_DIR = '191_vserver'
+DIR = 'what/ever'
+MAGIC = '<a href="http://www.alobbs.com/">Alvaro</a>'
 FORBIDDEN = 'This is forbidden string'
 
 CONF = """
@@ -36,19 +36,19 @@ EOF
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name              = "Rule Exists: match any (in dir)"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Rule Exists: match any (in dir)"
         self.request           = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE) +\
-                                 "Host: %s\r\n" %(HOST)
+                                 "Host: %s\r\n" % (HOST)
         self.forbidden_content = ['/bin/sh', 'echo', FORBIDDEN]
-        self.expected_error    = 200
-        self.expected_content  = MAGIC
+        self.expected_error = 200
+        self.expected_content = MAGIC
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, VSRV_DIR)
+    def Prepare(self, www):
+        d = self.Mkdir(www, VSRV_DIR)
         self.conf = CONF % (HOST, d, DIR)
 
-        e = self.Mkdir (d, DIR)
-        self.WriteFile (e, FILE, 0555, CGI_BASE%(FORBIDDEN, MAGIC))
+        e = self.Mkdir(d, DIR)
+        self.WriteFile(e, FILE, 0555, CGI_BASE % (FORBIDDEN, MAGIC))
 

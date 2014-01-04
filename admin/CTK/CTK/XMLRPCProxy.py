@@ -42,10 +42,10 @@ $.ajax({
 """
 
 class ProxyRequest:
-    def __call__ (self, xmlrpc_func, format_func, debug):
+    def __call__(self, xmlrpc_func, format_func, debug):
         try:
-            raw = util.to_utf8 (xmlrpc_func ())
-            fmt = format_func (raw)
+            raw = util.to_utf8(xmlrpc_func())
+            fmt = format_func(raw)
             return fmt
         except:
             if debug:
@@ -53,34 +53,34 @@ class ProxyRequest:
             return ''
 
 class XMLRPCProxy (Widget):
-    def __init__ (self, name, xmlrpc_func, format_func, debug=False, props={}):
+    def __init__(self, name, xmlrpc_func, format_func, debug=False, props={}):
         assert type(name) == str
 
-        Widget.__init__ (self)
-        self._url_local = '/proxy_widget_%s' %(name)
-        self.props      = props.copy()
+        Widget.__init__(self)
+        self._url_local = '/proxy_widget_%s' % (name)
+        self.props = props.copy()
 
         # Sanity checks
         assert type(xmlrpc_func) in (types.FunctionType, types.MethodType, types.InstanceType)
         assert type(format_func) in (types.FunctionType, types.MethodType, types.InstanceType)
 
         # Register the proxy path
-        publish (self._url_local, ProxyRequest,
-                 xmlrpc_func = xmlrpc_func,
-                 format_func = format_func,
-                 debug       = debug)
+        publish(self._url_local, ProxyRequest,
+                 xmlrpc_func=xmlrpc_func,
+                 format_func=format_func,
+                 debug=debug)
 
-    def Render (self):
+    def Render(self):
        render = Widget.Render(self)
 
-       props = {'id_widget':   self.id,
-                'proxy_url':   self._url_local,
+       props = {'id_widget': self.id,
+                'proxy_url': self._url_local,
                 'extra_props': util.props_to_str(self.props)}
 
-       render.html += HTML       %(props)
-       render.js   += JAVASCRIPT %(props)
+       render.html += HTML % (props)
+       render.js += JAVASCRIPT % (props)
        return render
 
-    def JS_to_refresh (self):
-        return JAVASCRIPT %({'id_widget': self.id,
+    def JS_to_refresh(self):
+        return JAVASCRIPT % ({'id_widget': self.id,
                              'proxy_url': self._url_local})

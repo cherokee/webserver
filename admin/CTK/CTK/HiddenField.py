@@ -24,13 +24,13 @@ from Widget import Widget
 from util import props_to_str
 
 class HiddenField (Widget):
-    def __init__ (self, props={}):
-        Widget.__init__ (self)
+    def __init__(self, props={}):
+        Widget.__init__(self)
         self.props = props.copy()
 
-    def Render (self):
+    def Render(self):
         # Render the text field
-        html = '<input type="hidden" id="%s" %s/>' %(self.id, props_to_str(self.props))
+        html = '<input type="hidden" id="%s" %s/>' % (self.id, props_to_str(self.props))
 
         render = Widget.Render(self)
         render.html += html
@@ -42,9 +42,9 @@ class Hidden (HiddenField):
     Widget for hidden input field. Requires a name for the
     field. Optional value and properties can be passed.
     """
-    def __init__ (self, name, value='', _props={}):
+    def __init__(self, name, value='', _props={}):
         props = _props.copy()
-        props['name']  = name
+        props['name'] = name
         props['value'] = value[:]
 
-        HiddenField.__init__ (self, props)
+        HiddenField.__init__(self, props)

@@ -34,7 +34,7 @@ import SelectionPanel
 from CTK.Submitter import HEADER as Submit_HEADER
 from configured import *
 
-URL_BASE  = '/status'
+URL_BASE = '/status'
 
 # Help entries
 HELPS = [('config_status', N_("Status"))]
@@ -42,23 +42,23 @@ HELPS = [('config_status', N_("Status"))]
 
 class LiveLogs_Instancer (CTK.Container):
     class LiveLogs (CTK.Box):
-        def __init__ (self, refreshable, vserver = None, **kwargs):
-            CTK.Box.__init__ (self, **kwargs)
+        def __init__(self, refreshable, vserver=None, **kwargs):
+            CTK.Box.__init__(self, **kwargs)
 
             self.refreshable = refreshable
-            self.vserver     = vserver
+            self.vserver = vserver
 
-    def __init__ (self, vserver):
-        CTK.Container.__init__ (self)
+    def __init__(self, vserver):
+        CTK.Container.__init__(self)
 
         # Refresher
-        refresh = CTK.Refreshable ({'id': 'log-area'})
-        refresh.register (lambda: self.LiveLogs(refresh, vserver).Render())
+        refresh = CTK.Refreshable({'id': 'log-area'})
+        refresh.register(lambda: self.LiveLogs(refresh, vserver).Render())
         self += refresh
 
 
 class Render_Content (CTK.Container):
-    def __call__ (self, vsrv = None):
+    def __call__(self, vsrv=None):
 
         # Render graphs
         if CTK.request.url.endswith('/general'):
@@ -67,12 +67,12 @@ class Render_Content (CTK.Container):
             graph = Graph.GraphServer_Instancer()
         else:
             vsrv_num = CTK.request.url.split('/')[-1]
-            vsrv_nam = CTK.cfg.get_val ("vserver!%s!nick" %(vsrv_num), _("Unknown"))
-            title    ='%s: %s' %(_('Virtual Server Monitoring'), vsrv_nam)
-            graph    = Graph.GraphVServer_Instancer(vsrv_num)
+            vsrv_nam = CTK.cfg.get_val("vserver!%s!nick" % (vsrv_num), _("Unknown"))
+            title = '%s: %s' % (_('Virtual Server Monitoring'), vsrv_nam)
+            graph = Graph.GraphVServer_Instancer(vsrv_num)
 
-        cont  = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(title))
+        cont = CTK.Container()
+        cont += CTK.RawHTML('<h2>%s</h2>' % (title))
         cont += graph
 
         render = cont.Render()
@@ -81,43 +81,43 @@ class Render_Content (CTK.Container):
 
 class Render:
     class PanelList (CTK.Container):
-        def __init__ (self, right_box):
-            CTK.Container.__init__ (self)
+        def __init__(self, right_box):
+            CTK.Container.__init__(self)
 
             # Helpers
-            entry   = lambda klass, key: CTK.Box ({'class': klass}, CTK.RawHTML (CTK.cfg.get_val(key, '')))
-            special = lambda klass, txt: CTK.Box ({'class': klass}, CTK.RawHTML (txt))
+            entry = lambda klass, key: CTK.Box({'class': klass}, CTK.RawHTML(CTK.cfg.get_val(key, '')))
+            special = lambda klass, txt: CTK.Box({'class': klass}, CTK.RawHTML(txt))
 
             # Build the panel list
-            panel = SelectionPanel.SelectionPanel (None, right_box.id, URL_BASE, '', container='status_panel')
+            panel = SelectionPanel.SelectionPanel(None, right_box.id, URL_BASE, '', container='status_panel')
             self += panel
 
             # Build the Virtual Server list
             vservers = CTK.cfg.keys('vserver')
-            vservers.sort (lambda x,y: cmp(int(x), int(y)))
+            vservers.sort(lambda x, y: cmp(int(x), int(y)))
             vservers.reverse()
 
             # Special Panel entries
-            content = [special('nick',  _('General')),
+            content = [special('nick', _('General')),
                        special('droot', _('System wide status'))]
-            panel.Add ('general', '%s/content/general'%(URL_BASE), content, draggable=False)
+            panel.Add('general', '%s/content/general' % (URL_BASE), content, draggable=False)
 
             # Regular list entries
             for k in vservers:
-                content = [entry('nick', 'vserver!%s!nick'%(k))]
-                panel.Add (k, '%s/content/%s'%(URL_BASE, k), content, draggable=False)
+                content = [entry('nick', 'vserver!%s!nick' % (k))]
+                panel.Add(k, '%s/content/%s' % (URL_BASE, k), content, draggable=False)
 
 
-    def __call__ (self):
+    def __call__(self):
         title = _('Status')
 
         # Content
-        left  = CTK.Box({'class': 'panel'})
-        left += CTK.RawHTML('<h2>%s</h2>'%(title))
+        left = CTK.Box({'class': 'panel'})
+        left += CTK.RawHTML('<h2>%s</h2>' % (title))
 
         right = CTK.Box({'class': 'status_content'})
-        left += CTK.Box({'class': 'filterbox'}, CTK.TextField({'class':'filter', 'optional_string': _('Virtual Server Filtering'), 'optional': True}))
-        left += CTK.Box ({'id': 'status_panel'}, self.PanelList(right))
+        left += CTK.Box({'class': 'filterbox'}, CTK.TextField({'class': 'filter', 'optional_string': _('Virtual Server Filtering'), 'optional': True}))
+        left += CTK.Box({'id': 'status_panel'}, self.PanelList(right))
 
         # Build the page
         page = Page.Base(title, body_id='status', helps=HELPS, headers=Submit_HEADER)
@@ -127,6 +127,6 @@ class Render:
         return page.Render()
 
 
-CTK.publish (r'^%s$'               %(URL_BASE), Render)
-CTK.publish ('^%s/content/[\d]+$'  %(URL_BASE), Render_Content)
-CTK.publish ('^%s/content/general$'%(URL_BASE), Render_Content)
+CTK.publish(r'^%s$' % (URL_BASE), Render)
+CTK.publish('^%s/content/[\d]+$' % (URL_BASE), Render_Content)
+CTK.publish('^%s/content/general$' % (URL_BASE), Render_Content)

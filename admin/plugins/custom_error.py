@@ -26,29 +26,29 @@ import CTK
 import Handler
 from consts import *
 
-URL_APPLY   = '/plugin/custom_error/apply'
+URL_APPLY = '/plugin/custom_error/apply'
 NOTE_ERRORS = N_('HTTP Error that you be used to reply the request.')
 
 HELPS = [('modules_handlers_custom_error', N_("HTTP Custom Error"))]
 
 
 class Plugin_custom_error (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
+    def __init__(self, key, **kwargs):
         kwargs['show_document_root'] = False
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)
 
         error_codes = [('', _('Choose'))] + ERROR_CODES
-        if CTK.cfg.get_val('%s!error'%(key)):
+        if CTK.cfg.get_val('%s!error' % (key)):
             error_codes.pop(0)
 
         table = CTK.PropsTable()
-        table.Add (_("HTTP Error"), CTK.ComboCfg('%s!error'%(key), error_codes), _(NOTE_ERRORS))
+        table.Add(_("HTTP Error"), CTK.ComboCfg('%s!error' % (key), error_codes), _(NOTE_ERRORS))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Custom Error')))
-        self += CTK.Indenter (submit)
+        self += CTK.RawHTML("<h2>%s</h2>" % (_('Custom Error')))
+        self += CTK.Indenter(submit)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, method="POST")

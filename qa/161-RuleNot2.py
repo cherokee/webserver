@@ -1,8 +1,8 @@
 from base import *
 
 VSERVER = "rulenot2"
-MAGIC   = "Just a not rule test"
-DIR     = "DIR1"
+MAGIC = "Just a not rule test"
+DIR = "DIR1"
 
 CONF = """
 vserver!1610!nick = %s
@@ -25,22 +25,22 @@ echo "%s"
 """ % (MAGIC)
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Rule not: match"
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
                                  "Host: %s\r\n" % (VSERVER)          + \
                                  "Connection: Close\r\n"
 
-        self.expected_error    = 200
-        self.expected_content  = MAGIC
+        self.expected_error = 200
+        self.expected_content = MAGIC
         self.forbidden_content = ["/bin/sh", "echo"]
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, VSERVER)
-        d2 = self.Mkdir (d, DIR)
+    def Prepare(self, www):
+        d = self.Mkdir(www, VSERVER)
+        d2 = self.Mkdir(d, DIR)
 
         self.conf = CONF % (VSERVER, d)
 
-        f = self.WriteFile (d2, 'test', 0755, CGI)
+        f = self.WriteFile(d2, 'test', 0755, CGI)

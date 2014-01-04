@@ -84,34 +84,34 @@ $('#%(id)s_form').uploadProgress({
 # Field Storage classes
 #
 class FieldStorage_Direct(FieldStorage):
-    def __init__ (self, fp=None, headers=None, outerboundary="",
+    def __init__(self, fp=None, headers=None, outerboundary="",
                   environ=os.environ, keep_blank_values=0, strict_parsing=0):
         self.environ = environ
-        FieldStorage.__init__ (self, fp, headers, outerboundary,
+        FieldStorage.__init__(self, fp, headers, outerboundary,
                                environ, keep_blank_values, strict_parsing)
 
-    def make_file (self, binary=None):
-        target_dir  = self.environ.get('CTK_hack__target_path')
-        target_path = os.path.join (target_dir, self.filename)
-        return open (target_path, 'w+b')
+    def make_file(self, binary=None):
+        target_dir = self.environ.get('CTK_hack__target_path')
+        target_path = os.path.join(target_dir, self.filename)
+        return open(target_path, 'w+b')
 
 
 class FieldStorage_Temporal (FieldStorage):
-    def __init__ (self, fp=None, headers=None, outerboundary="",
+    def __init__(self, fp=None, headers=None, outerboundary="",
                   environ=os.environ, keep_blank_values=0, strict_parsing=0):
         self.environ = environ
-        FieldStorage.__init__ (self, fp, headers, outerboundary,
+        FieldStorage.__init__(self, fp, headers, outerboundary,
                                environ, keep_blank_values, strict_parsing)
 
-    def make_file (self, binary=None):
-        os_fd_str  = self.environ.get('CTK_hack__os_fd')
-        return os.fdopen (int(os_fd_str), 'w+b')
+    def make_file(self, binary=None):
+        os_fd_str = self.environ.get('CTK_hack__os_fd')
+        return os.fdopen(int(os_fd_str), 'w+b')
 
 
 # Internal Proxy
 #
 class UploadRequest:
-   def __call__ (self, handler, target_dir, params, direct):
+   def __call__(self, handler, target_dir, params, direct):
        scgi = get_scgi()
 
        # *REMEMBER*: Do not print the 'form'. Python's cgi module will
@@ -126,53 +126,53 @@ class UploadRequest:
            environ['CTK_hack__target_path'] = target_dir
 
            # Receive the POST
-           form = FieldStorage_Direct (fp=scgi.rfile, environ=environ, keep_blank_values=1)
+           form = FieldStorage_Direct(fp=scgi.rfile, environ=environ, keep_blank_values=1)
 
            # Callback
-           return handler (form['file'].filename, target_dir,
+           return handler(form['file'].filename, target_dir,
                            form['file'].filename, params)
 
        # Upload to a temporal file
-       os_fd, target_path = tempfile.mkstemp (prefix='CTK_upload_', dir=target_dir)
+       os_fd, target_path = tempfile.mkstemp(prefix='CTK_upload_', dir=target_dir)
 
        environ = scgi.env.copy()
        environ['CTK_hack__os_fd'] = str(os_fd)
 
-       form = FieldStorage_Temporal (fp=scgi.rfile, environ=environ, keep_blank_values=1)
-       return handler (form['file'].filename, target_dir, target_path, params)
+       form = FieldStorage_Temporal(fp=scgi.rfile, environ=environ, keep_blank_values=1)
+       return handler(form['file'].filename, target_dir, target_path, params)
 
 
 
 # Uploader CTK widget
 #
 class Uploader (Widget):
-    def __init__ (self, props=None, params=None, direct=True):
-        Widget.__init__ (self)
-        self._url_local = '/uploader_widget_%d' %(self.uniq_id)
+    def __init__(self, props=None, params=None, direct=True):
+        Widget.__init__(self)
+        self._url_local = '/uploader_widget_%d' % (self.uniq_id)
 
         if props:
             self.props = props
         else:
             self.props = {}
 
-        self.id = 'uplodaer%d'%(self.uniq_id)
-        handler    = self.props.get('handler')
+        self.id = 'uplodaer%d' % (self.uniq_id)
+        handler = self.props.get('handler')
         target_dir = self.props.get('target_dir')
 
         # Register the uploader path
-        publish (self._url_local, UploadRequest,
+        publish(self._url_local, UploadRequest,
                  handler=handler, target_dir=target_dir, params=params, direct=direct)
 
-    def Render (self):
-        props = {'id':         self.id,
+    def Render(self):
+        props = {'id': self.id,
                  'upload_url': self._url_local}
 
-        raw_html  = Uniq_Block(CSS)
+        raw_html = Uniq_Block(CSS)
         raw_html += HTML
 
-        render = Widget.Render (self)
-        render.html    += raw_html %(props)
-        render.js      += JS       %(props)
+        render = Widget.Render(self)
+        render.html += raw_html % (props)
+        render.js += JS % (props)
         render.headers += HEADERS
 
         return render

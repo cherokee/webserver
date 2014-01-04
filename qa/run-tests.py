@@ -32,83 +32,83 @@ except ImportError:
 
 # Deals with UTF-8
 if sys.getdefaultencoding() != 'utf-8':
-    reload (sys)
+    reload(sys)
     sys.setdefaultencoding('utf-8')
 
 # Configuration parameters
-num       = 1
-thds      = 1
-pause     = 0
-tpause    = 0.0
-bpause    = None
-srv_thds  = None
-ssl       = False
-clean     = True
-kill      = True
-quiet     = False
-valgrind  = None
-strace    = False
-port      = None
-method    = None
-nobody    = False
-log       = False
-help      = False
-memproc   = False
+num = 1
+thds = 1
+pause = 0
+tpause = 0.0
+bpause = None
+srv_thds = None
+ssl = False
+clean = True
+kill = True
+quiet = False
+valgrind = None
+strace = False
+port = None
+method = None
+nobody = False
+log = False
+help = False
+memproc = False
 randomize = False
-proxy     = None
+proxy = None
 
-server    = CHEROKEE_PATH
-delay     = SERVER_DELAY
+server = CHEROKEE_PATH
+delay = SERVER_DELAY
 
 # Make the DocumentRoot directory
-www = tempfile.mkdtemp ("cherokee_www")
+www = tempfile.mkdtemp("cherokee_www")
 tmp = www + "/_tmp/"
 pid = tmp + "cherokee.pid"
-os.makedirs (tmp)
+os.makedirs(tmp)
 
-map (lambda x: os.chmod (x, 0777), [www, tmp])
+map(lambda x: os.chmod(x, 0777), [www, tmp])
 
 # Make the files list
-files   = []
-param   = []
+files = []
+param = []
 skipped = []
 if len(sys.argv) > 1:
     argv = sys.argv[1:]
-    files = filter (lambda x: x[0] != '-', argv)
-    param = filter (lambda x: x[0] == '-', argv)
+    files = filter(lambda x: x[0] != '-', argv)
+    param = filter(lambda x: x[0] == '-', argv)
 
 # If not files were specified, use all of them
 if len(files) == 0:
     files = os.listdir('.')
-    files = filter (lambda x: x[-3:] == '.py', files)
-    files = filter (lambda x: x[3] == '-', files)
-    files = filter (lambda x: x[2] in string.digits, files)
+    files = filter(lambda x: x[-3:] == '.py', files)
+    files = filter(lambda x: x[3] == '-', files)
+    files = filter(lambda x: x[2] in string.digits, files)
     files.sort()
 
 # Process the parameters
 for p in param:
-    if   p     == '-c': clean     = False
-    elif p     == '-k': kill      = False
-    elif p     == '-q': quiet     = True
-    elif p     == '-s': ssl       = True
-    elif p     == '-x': strace    = True
-    elif p     == '-b': nobody    = True
-    elif p     == '-l': log       = True
-    elif p     == '-h': help      = True
-    elif p     == '-o': memproc   = True
-    elif p     == '-a': randomize = True
-    elif p[:2] == '-n': num       = int(p[2:])
-    elif p[:2] == '-t': thds      = int(p[2:])
-    elif p[:2] == '-p': port      = int(p[2:])
-    elif p[:2] == '-r': delay     = int(p[2:])
-    elif p[:2] == '-T': srv_thds  = int(p[2:])
-    elif p[:2] == '-j': tpause    = float(p[2:])
-    elif p[:2] == '-d': pause     = p[2:]
-    elif p[:2] == '-D': bpause    = p[2:]
-    elif p[:2] == '-m': method    = p[2:]
-    elif p[:2] == '-e': server    = p[2:]
-    elif p[:2] == '-v': valgrind  = p[2:]
-    elif p[:2] == '-P': proxy     = p[2:]
+    if p == '-c': clean = False
+    elif p == '-k': kill = False
+    elif p == '-q': quiet = True
+    elif p == '-s': ssl = True
+    elif p == '-x': strace = True
+    elif p == '-b': nobody = True
+    elif p == '-l': log = True
+    elif p == '-h': help = True
+    elif p == '-o': memproc = True
+    elif p == '-a': randomize = True
+    elif p[:2] == '-n': num = int(p[2:])
+    elif p[:2] == '-t': thds = int(p[2:])
+    elif p[:2] == '-p': port = int(p[2:])
+    elif p[:2] == '-r': delay = int(p[2:])
+    elif p[:2] == '-T': srv_thds = int(p[2:])
+    elif p[:2] == '-j': tpause = float(p[2:])
+    elif p[:2] == '-d': pause = p[2:]
+    elif p[:2] == '-D': bpause = p[2:]
+    elif p[:2] == '-m': method = p[2:]
+    elif p[:2] == '-e': server = p[2:]
+    elif p[:2] == '-v': valgrind = p[2:]
+    elif p[:2] == '-P': proxy = p[2:]
     else:
         help = True
 
@@ -130,7 +130,7 @@ if thds > 1 and pause > 1:
     sys.exit(1)
 
 # Check the interpreters
-php_interpreter    = look_for_php()
+php_interpreter = look_for_php()
 python_interpreter = look_for_python()
 
 print "Interpreters"
@@ -154,7 +154,7 @@ if fake_php > 0:
 panic = CHEROKEE_PANIC
 
 if panic[0] != '/':
-    panic = os.path.normpath (os.path.join (os.getcwd(), CHEROKEE_PANIC))
+    panic = os.path.normpath(os.path.join(os.getcwd(), CHEROKEE_PANIC))
 
 # Proxy
 if not proxy:
@@ -163,8 +163,8 @@ if not proxy:
     else:
         client_port = PORT
 
-    client_host    = HOST
-    listen         = '127.0.0.1'
+    client_host = HOST
+    listen = '127.0.0.1'
     proxy_cfg_file = None
 else:
     pieces = proxy.split(':')
@@ -202,8 +202,8 @@ source!1!type = host
 """ % (locals())
 
     proxy_cfg_file = tempfile.mktemp("cherokee_proxy_cfg")
-    f = open (proxy_cfg_file, 'w')
-    f.write (PROXY_CONF)
+    f = open(proxy_cfg_file, 'w')
+    f.write(PROXY_CONF)
     f.close()
 
 # Configuration file base
@@ -237,9 +237,9 @@ source!%(next_source)d!env!PHP_FCGI_CHILDREN = 5
 """ % (locals())
 
 if 'fpm' in php_interpreter:
-    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -d listen=%(PHP_FCGI_PORT)d -d daemonize=Off\n"%(locals())
+    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -d listen=%(PHP_FCGI_PORT)d -d daemonize=Off\n" % (locals())
 else:
-    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -b %(PHP_FCGI_PORT)d\n" %(locals())
+    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -b %(PHP_FCGI_PORT)d\n" % (locals())
 
 php_ext = """\
 10000!match = extensions
@@ -282,8 +282,8 @@ server!thread_number = %d
 # Import modules
 mods = []
 for f in files:
-    mod = importfile (f)
-    mods.append (mod)
+    mod = importfile(f)
+    mods.append(mod)
 
 # Build objects
 objs = []
@@ -291,10 +291,10 @@ for m in mods:
     obj = m.Test()
     # Update 'base.py': TestCollection if new
     # properties are added here!
-    obj.tmp      = tmp
-    obj.nobody   = nobody
+    obj.tmp = tmp
+    obj.nobody = nobody
     obj.php_conf = php_ext
-    obj.is_ssl   = ssl
+    obj.is_ssl = ssl
     objs.append(obj)
 
 # Prepare www files
@@ -306,13 +306,13 @@ for obj in objs:
 mod_conf = ""
 for obj in objs:
     if obj.conf is not None:
-        mod_conf += obj.conf+"\n"
+        mod_conf += obj.conf + "\n"
 
 # Write down the configuration file
 cfg = CONF_BASE + mod_conf
 cfg_file = tempfile.mktemp("cherokee_tmp_cfg")
-cfg_fd = open (cfg_file, 'w')
-cfg_fd.write (cfg)
+cfg_fd = open(cfg_file, 'w')
+cfg_fd.write(cfg)
 cfg_fd.close()
 
 # Launch Cherokee
@@ -321,7 +321,7 @@ if port is None:
     pid = os.fork()
     if pid == 0:
         if valgrind != None:
-            valgrind_path = look_for_exec_in_path ("valgrind")
+            valgrind_path = look_for_exec_in_path("valgrind")
 
             params = [valgrind_path, "valgrind"]
             if sys.platform == 'darwin':
@@ -337,15 +337,15 @@ if port is None:
                 params += ["--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high"]
 
             params += [server, "-C", cfg_file]
-            os.execl (*params)
+            os.execl(*params)
         elif strace:
             if sys.platform.startswith('darwin') or \
                sys.platform.startswith('sunos'):
-                dtruss_path = look_for_exec_in_path ("dtruss")
-                os.execl (dtruss_path, "dtruss", server, "-C", cfg_file)
+                dtruss_path = look_for_exec_in_path("dtruss")
+                os.execl(dtruss_path, "dtruss", server, "-C", cfg_file)
             else:
-                strace_path = look_for_exec_in_path ("strace")
-                os.execl (strace_path, "strace", server, "-C", cfg_file)
+                strace_path = look_for_exec_in_path("strace")
+                os.execl(strace_path, "strace", server, "-C", cfg_file)
         else:
             name = server[server.rfind('/') + 1:]
 
@@ -353,17 +353,17 @@ if port is None:
             if not env.has_key('CHEROKEE_PANIC_OUTPUT'):
                 env['CHEROKEE_PANIC_OUTPUT'] = 'stdout'
 
-            os.execle (server, name, "-C", cfg_file, env)
+            os.execle(server, name, "-C", cfg_file, env)
     else:
         print "Server"
-        print_key ('PID', str(pid));
-        print_key ('Path',   CHEROKEE_PATH)
-        print_key ('Mods',   CHEROKEE_MODS)
-        print_key ('Deps',   CHEROKEE_DEPS)
-        print_key ('Panic',  CHEROKEE_PANIC)
-        print_key ('Themes', CHEROKEE_THEMES)
+        print_key('PID', str(pid));
+        print_key('Path', CHEROKEE_PATH)
+        print_key('Mods', CHEROKEE_MODS)
+        print_key('Deps', CHEROKEE_DEPS)
+        print_key('Panic', CHEROKEE_PANIC)
+        print_key('Themes', CHEROKEE_THEMES)
         if proxy_cfg_file:
-            print_key ('Proxy conf', proxy_cfg_file)
+            print_key('Proxy conf', proxy_cfg_file)
         print
 
         if memproc:
@@ -378,7 +378,7 @@ if port is None:
             os.system(cmd)
 
         # Count down
-        count_down ("Tests will start in %d secs", delay)
+        count_down("Tests will start in %d secs", delay)
 
 its_clean = False
 def clean_up():
@@ -392,11 +392,11 @@ def clean_up():
 
     # Clean up
     if clean:
-        os.unlink (cfg_file)
-        shutil.rmtree (www, True)
+        os.unlink(cfg_file)
+        shutil.rmtree(www, True)
     else:
-        print_key ("Testdir", www)
-        print_key ("Config",  cfg_file)
+        print_key("Testdir", www)
+        print_key("Config", cfg_file)
         print
 
     # Skipped tests
@@ -406,14 +406,14 @@ def clean_up():
     # Kill the server
     if kill and pid > 0:
         print "Sending SIGTERM.."
-        os.kill (pid, signal.SIGTERM)
+        os.kill(pid, signal.SIGTERM)
         if valgrind != None:
             linger = 8
         else:
             linger = 4
-        count_down ("Will kill the server in %d secs", linger)
+        count_down("Will kill the server in %d secs", linger)
         print "Sending SIGKILL.."
-        os.kill (pid, signal.SIGKILL)
+        os.kill(pid, signal.SIGKILL)
 
 def do_pause():
     global pause
@@ -421,12 +421,12 @@ def do_pause():
     sys.stdin.readline()
     pause = pause - 1
 
-def mainloop_iterator (objs, main_thread=True):
+def mainloop_iterator(objs, main_thread=True):
     global port
     global pause
     global its_clean
 
-    time.sleep (.2)
+    time.sleep(.2)
 
     for n in range(num):
         # Randomize files
@@ -451,7 +451,7 @@ def mainloop_iterator (objs, main_thread=True):
 
             if not quiet:
                 if ssl: print "SSL:",
-                print "%s: " % (obj.name) + " "*(40 - len(obj.name)),
+                print "%s: " % (obj.name) + " " * (40 - len(obj.name)),
                 sys.stdout.flush()
 
             if not go_ahead:
@@ -466,7 +466,7 @@ def mainloop_iterator (objs, main_thread=True):
 
             try:
                 obj.JustBefore(www)
-                ret = obj.Run (client_host, client_port)
+                ret = obj.Run(client_host, client_port)
                 obj.JustAfter(www)
             except Exception, e:
                 if not its_clean:
@@ -478,7 +478,7 @@ def mainloop_iterator (objs, main_thread=True):
             if ret is not 0:
                 if not its_clean:
                     print MESSAGE_FAILED
-                    print_sec (obj)
+                    print_sec(obj)
                     clean_up()
                 sys.exit(1)
             elif not quiet:
@@ -489,7 +489,7 @@ def mainloop_iterator (objs, main_thread=True):
                 if not quiet:
                     print "Sleeping %2.2f seconds..\r" % (tpause),
                     sys.stdout.flush()
-                time.sleep (tpause)
+                time.sleep(tpause)
 
 
 # If we want to pause once do it before launching the threads
@@ -497,14 +497,14 @@ if pause == 1:
     do_pause()
 
 # Maybe launch some threads
-for n in range(thds-1):
+for n in range(thds - 1):
     # Delay launch a little
-    delay = ((random.randint(0,50) + len(objs)) / 100.0)
-    time.sleep (delay)
+    delay = ((random.randint(0, 50) + len(objs)) / 100.0)
+    time.sleep(delay)
 
     # Launch the thread
     objs_copy = copy.deepcopy(objs)
-    thread.start_new_thread (mainloop_iterator, (objs_copy, False))
+    thread.start_new_thread(mainloop_iterator, (objs_copy, False))
 
 # Execute the tests
 mainloop_iterator(objs)

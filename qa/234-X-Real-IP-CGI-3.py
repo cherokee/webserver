@@ -21,18 +21,18 @@ echo
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "X-Real-IP denied: CGI"
 
         self.request           = "GET /%s/test HTTP/1.0\r\n" % (DIR)  + \
                                  "X-Real-IP: 1.1.1.1\r\n"
-        self.expected_error    = 200
-        self.conf              = CONF
-        self.proxy_suitable    = False
+        self.expected_error = 200
+        self.conf = CONF
+        self.proxy_suitable = False
 
-    def CustomTest (self):
-        body = self.reply.split ("\r\n\r\n")[1]
+    def CustomTest(self):
+        body = self.reply.split("\r\n\r\n")[1]
 
         if "REMOTE_ADDR ->127.0.0.1<-" in body:
             return 0
@@ -42,6 +42,6 @@ class Test (TestBase):
 
         return -1
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, DIR, 0777)
-        self.WriteFile (d, "test", 0555, CGI_CODE)
+    def Prepare(self, www):
+        d = self.Mkdir(www, DIR, 0777)
+        self.WriteFile(d, "test", 0555, CGI_CODE)

@@ -1,8 +1,8 @@
 from base import *
 
-FILE1     = 'special_file_for_180'
-FILE2     = 'foobar180_file'
-MAGIC     = 'Alvaro: http://www.alobbs.com/'
+FILE1 = 'special_file_for_180'
+FILE2 = 'foobar180_file'
+MAGIC = 'Alvaro: http://www.alobbs.com/'
 FORBIDDEN = 'This is forbidden string'
 
 CONF = """
@@ -26,15 +26,15 @@ EOF
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name              = "Rule Exists: match 2"
-        self.request           = "GET /%s HTTP/1.0\r\n" % (FILE2)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Rule Exists: match 2"
+        self.request = "GET /%s HTTP/1.0\r\n" % (FILE2)
         self.forbidden_content = ['/bin/sh', 'echo', FORBIDDEN]
-        self.expected_error    = 200
-        self.conf              = CONF
+        self.expected_error = 200
+        self.conf = CONF
 
-    def Prepare (self, www):
-        self.WriteFile (www, FILE1, 0555, FORBIDDEN)
-        self.WriteFile (www, FILE2, 0555, CGI_BASE % (MAGIC))
+    def Prepare(self, www):
+        self.WriteFile(www, FILE1, 0555, FORBIDDEN)
+        self.WriteFile(www, FILE2, 0555, CGI_BASE % (MAGIC))
 

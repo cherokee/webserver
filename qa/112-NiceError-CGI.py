@@ -1,6 +1,6 @@
 from base import *
 
-ERROR     = 403
+ERROR = 403
 ERROR_MSG = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
@@ -50,15 +50,15 @@ EOF
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "CGI error message"
 
-        self.request           = "GET /cgi_error_403_1/exec.cgi HTTP/1.0\r\n"
-        self.expected_error    = ERROR
-        self.expected_content  = ERROR_MSG
-        self.conf              = CONF
+        self.request = "GET /cgi_error_403_1/exec.cgi HTTP/1.0\r\n"
+        self.expected_error = ERROR
+        self.expected_content = ERROR_MSG
+        self.conf = CONF
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "cgi_error_403_1")
-        f = self.WriteFile (d, "exec.cgi", 0555, CGI_BASE % (ERROR, ERROR_MSG))
+    def Prepare(self, www):
+        d = self.Mkdir(www, "cgi_error_403_1")
+        f = self.WriteFile(d, "exec.cgi", 0555, CGI_BASE % (ERROR, ERROR_MSG))

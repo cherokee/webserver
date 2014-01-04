@@ -34,20 +34,20 @@ from consts import *
 HELPS = CgiBase.HELPS + [('modules_handlers_fcgi', "FastCGI")]
 
 class Plugin_fcgi (CgiBase.PluginHandlerCGI):
-    def __init__ (self, key, **kwargs):
-        kwargs['show_script_alias']  = True
-        kwargs['show_change_uid']    = False
+    def __init__(self, key, **kwargs):
+        kwargs['show_script_alias'] = True
+        kwargs['show_change_uid'] = False
         kwargs['show_document_root'] = True
 
         # CGI Generic
-        CgiBase.PluginHandlerCGI.__init__ (self, key, **kwargs)
-        CgiBase.PluginHandlerCGI.AddCommon (self)
+        CgiBase.PluginHandlerCGI.__init__(self, key, **kwargs)
+        CgiBase.PluginHandlerCGI.AddCommon(self)
 
         # Balancer
-        modul = CTK.PluginSelector('%s!balancer'%(key), trans_options(Cherokee.support.filter_available (BALANCERS)))
+        modul = CTK.PluginSelector('%s!balancer' % (key), trans_options(Cherokee.support.filter_available(BALANCERS)))
         table = CTK.PropsTable()
-        table.Add (_("Balancer"), modul.selector_widget, _(Balancer.NOTE_BALANCER))
+        table.Add(_("Balancer"), modul.selector_widget, _(Balancer.NOTE_BALANCER))
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('FastCGI Specific')))
-        self += CTK.Indenter (table)
+        self += CTK.RawHTML('<h2>%s</h2>' % (_('FastCGI Specific')))
+        self += CTK.Indenter(table)
         self += modul

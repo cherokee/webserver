@@ -28,6 +28,6 @@ import Auth
 HELPS = [('modules_validators_pam', "PAM")]
 
 class Plugin_pam (Auth.PluginAuth):
-    def __init__ (self, key, **kwargs):
-        Auth.PluginAuth.__init__ (self, key, **kwargs)
-        self.AddCommon (supported_methods=('basic',))
+    def __init__(self, key, **kwargs):
+        Auth.PluginAuth.__init__(self, key, **kwargs)
+        self.AddCommon(supported_methods=('basic',))

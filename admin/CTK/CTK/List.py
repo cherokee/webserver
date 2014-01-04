@@ -29,23 +29,23 @@ from util import props_to_str
 ENTRY_HTML = '<%(tag)s id="%(id)s" %(props)s>%(content)s</%(tag)s>'
 
 class ListEntry (Container):
-    def __init__ (self, _props={}, tag='li'):
-        Container.__init__ (self)
-        self.tag   = tag
+    def __init__(self, _props={}, tag='li'):
+        Container.__init__(self)
+        self.tag = tag
         self.props = _props.copy()
 
-    def Render (self):
-        render = Container.Render (self)
+    def Render(self):
+        render = Container.Render(self)
 
         if 'id' in self.props:
             self.id = self.props['id']
 
-        props = {'id':      self.id,
-                 'tag':     self.tag,
-                 'props':   props_to_str(self.props),
+        props = {'id': self.id,
+                 'tag': self.tag,
+                 'props': props_to_str(self.props),
                  'content': render.html}
 
-        render.html = ENTRY_HTML %(props)
+        render.html = ENTRY_HTML % (props)
         return render
 
 
@@ -68,15 +68,15 @@ class List (Container):
            lst.Add (CTK.RawHTML('One')
            lst.Add (CTK.Image({'src': '/foo/bar/baz.png'})
     """
-    def __init__ (self, _props={}, tag='ul'):
-        Container.__init__ (self)
-        self.tag   = tag
+    def __init__(self, _props={}, tag='ul'):
+        Container.__init__(self)
+        self.tag = tag
         self.props = _props.copy()
 
-    def Add (self, widget, props={}):
+    def Add(self, widget, props={}):
         assert isinstance(widget, Widget) or widget is None or type(widget) is list
 
-        entry = ListEntry (props.copy())
+        entry = ListEntry(props.copy())
         if widget:
             if type(widget) == list:
                 for w in widget:
@@ -84,19 +84,19 @@ class List (Container):
             else:
                 entry += widget
 
-        Container.__iadd__ (self, entry)
+        Container.__iadd__(self, entry)
 
-    def __iadd__ (self, widget):
-        self.Add (widget)
+    def __iadd__(self, widget):
+        self.Add(widget)
         return self
 
-    def Render (self):
-        render = Container.Render (self)
+    def Render(self):
+        render = Container.Render(self)
 
-        props = {'id':      self.id,
-                 'tag':     self.tag,
-                 'props':   props_to_str(self.props),
+        props = {'id': self.id,
+                 'tag': self.tag,
+                 'props': props_to_str(self.props),
                  'content': render.html}
 
-        render.html = ENTRY_HTML %(props)
+        render.html = ENTRY_HTML % (props)
         return render

@@ -1,13 +1,13 @@
 from base import *
 
-DOMAIN       = "test200"
+DOMAIN = "test200"
 DOESNT_EXIST = "This_does_not_exist"
-CGI_FILE     = "handle_404.cgi"
+CGI_FILE = "handle_404.cgi"
 CGI_PATHINFO = "this/is/pathinfo"
-CGI_QS       = "foo=bar&two=2"
-DIR_WEB      = "public"
-DIR_LOCAL    = "actual_directory"
-FORBIDDEN    = "This text shouldn't appear"
+CGI_QS = "foo=bar&two=2"
+DIR_WEB = "public"
+DIR_LOCAL = "actual_directory"
+FORBIDDEN = "This text shouldn't appear"
 
 
 CONF = """
@@ -40,25 +40,25 @@ echo "PATH_INFO: $PATH_INFO"
 """ % (FORBIDDEN)
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Internal redir on error: QS, Pathinfo"
 
         self.request           = "GET /%s?%s HTTP/1.0\r\n" % (DOESNT_EXIST, CGI_QS) + \
                                  "Host: %s\r\n" % (DOMAIN)
-        self.expected_error    = 404
+        self.expected_error = 404
         self.forbidden_content = FORBIDDEN
-        self.expected_content  = ["REDIRECT_URL: /%s" % (DOESNT_EXIST),
+        self.expected_content = ["REDIRECT_URL: /%s" % (DOESNT_EXIST),
                                   "REDIRECT_QUERY_STRING: %s" % (CGI_QS),
                                   "PATH_INFO: /%s" % (CGI_PATHINFO)]
 
-    def Prepare (self, www):
-        droot = self.Mkdir (www, DOMAIN)
-        local_dir = self.Mkdir (droot, DIR_LOCAL)
-        self.WriteFile (local_dir, CGI_FILE, 0755, CGI_BASE)
+    def Prepare(self, www):
+        droot = self.Mkdir(www, DOMAIN)
+        local_dir = self.Mkdir(droot, DIR_LOCAL)
+        self.WriteFile(local_dir, CGI_FILE, 0755, CGI_BASE)
 
         vars = globals()
-        vars['droot']     = droot
+        vars['droot'] = droot
         vars['local_dir'] = local_dir
 
         self.conf = CONF % (vars)

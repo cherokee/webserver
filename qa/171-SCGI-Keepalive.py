@@ -1,9 +1,9 @@
 import os
 from base import *
 
-DIR    = "/SCGI_Keepalive1"
-MAGIC  = "It is a kind of magic.. :-)"
-PORT   = get_free_port()
+DIR = "/SCGI_Keepalive1"
+MAGIC = "It is a kind of magic.. :-)"
+PORT = get_free_port()
 PYTHON = look_for_python()
 
 SCRIPT = """
@@ -35,26 +35,26 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "SCGI Keepalive"
 
-        self.request = "GET %s/ HTTP/1.1\r\n" %(DIR)      + \
+        self.request = "GET %s/ HTTP/1.1\r\n" % (DIR)      + \
                        "Host: localhost\r\n"              + \
                        "Connection: Keep-Alive\r\n\r\n"
         # Second request
         self.request += self.request
 
-        self.expected_error    = 200
-        self.expected_content  = [MAGIC]
+        self.expected_error = 200
+        self.expected_content = [MAGIC]
         self.forbidden_content = ['close', 'pyscgi', 'SCGIServer', 'write']
 
-    def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_keepalive1.scgi", 0444, SCRIPT)
+    def Prepare(self, www):
+        scgi_file = self.WriteFile(www, "scgi_keepalive1.scgi", 0444, SCRIPT)
 
-        pyscgi = os.path.join (www, 'pyscgi.py')
-        if not os.path.exists (pyscgi):
-            self.CopyFile ('pyscgi.py', pyscgi)
+        pyscgi = os.path.join(www, 'pyscgi.py')
+        if not os.path.exists(pyscgi):
+            self.CopyFile('pyscgi.py', pyscgi)
 
         vars = globals()
         vars['scgi_file'] = scgi_file

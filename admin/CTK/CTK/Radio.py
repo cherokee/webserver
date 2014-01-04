@@ -34,14 +34,14 @@ HTML = """
 """
 
 class Radio (Widget):
-    def __init__ (self, props={}):
+    def __init__(self, props={}):
         # Sanity check
         assert type(props) == dict
 
-        Widget.__init__ (self)
+        Widget.__init__(self)
         self._props = props.copy()
 
-    def Render (self):
+    def Render(self):
         # Deal with a couple of exceptions
         new_props = self._props.copy()
 
@@ -52,29 +52,29 @@ class Radio (Widget):
             new_props['disabled'] = "disabled"
 
         # Render the widget
-        render = Widget.Render (self)
-        render.html += HTML %({'id':    self.id,
-                               'props': props_to_str (new_props)})
+        render = Widget.Render(self)
+        render.html += HTML % ({'id': self.id,
+                               'props': props_to_str(new_props)})
         return render
 
 
 class RadioGroupCfg (Box):
-    def __init__ (self, key, options, _props={}):
-        Box.__init__ (self)
+    def __init__(self, key, options, _props={}):
+        Box.__init__(self)
 
-        self.props    = _props.copy()
+        self.props = _props.copy()
         self._options = options
 
         if not 'id' in self.props:
-            self.id = 'RadioGroup_%s' %(self.uniq_id)
+            self.id = 'RadioGroup_%s' % (self.uniq_id)
 
-        cfg_value = cfg.get_val (key)
+        cfg_value = cfg.get_val(key)
 
         for o in options:
             val, desc = o
 
             new_props = {}
-            new_props['name']  = key
+            new_props['name'] = key
             new_props['value'] = val
 
             # Initial value
@@ -86,16 +86,16 @@ class RadioGroupCfg (Box):
                 if self.props['checked'] == val:
                     new_props['checked'] = 1
 
-            self += RadioText (desc, new_props)
+            self += RadioText(desc, new_props)
 
 
 class RadioText (Box):
-    def __init__ (self, txt, props={}):
-        Box.__init__ (self)
+    def __init__(self, txt, props={}):
+        Box.__init__(self)
 
-        self.radio = Radio (props.copy())
+        self.radio = Radio(props.copy())
         self += self.radio
 
-        self.text = Box ({'class': 'radio-text'}, RawHTML(txt))
+        self.text = Box({'class': 'radio-text'}, RawHTML(txt))
         self += self.text
-        self.text.bind ('click', "$('#%s').attr('checked', true).trigger('change');" %(self.radio.id))
+        self.text.bind('click', "$('#%s').attr('checked', true).trigger('change');" % (self.radio.id))

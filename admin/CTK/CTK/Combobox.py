@@ -39,23 +39,23 @@ class Combobox (Widget):
             combo = CTK.Combobox({'name': 'language'},
                                  [('en', 'English'), ('es', 'Spanish')])
     """
-    def __init__ (self, props, options):
-        Widget.__init__ (self)
+    def __init__(self, props, options):
+        Widget.__init__(self)
 
-        self.props    = props.copy()
+        self.props = props.copy()
         self._options = options
 
         if not 'id' in self.props:
-            self.props['id'] = 'Combobox_%s' %(self.uniq_id)
+            self.props['id'] = 'Combobox_%s' % (self.uniq_id)
         self.id = self.props['id']
 
-    def Render (self):
+    def Render(self):
         selected = self.props.get('selected')
 
-        def render_str (o):
+        def render_str(o):
             if len(o) == 2:
                 name, label = o
-                props       = {}
+                props = {}
             elif len(o) == 3:
                 name, label, props = o
 
@@ -65,17 +65,17 @@ class Combobox (Widget):
             else:
                 return '<option value="%s" %s>%s</option>' % (name, props_str, label)
 
-        def render_list (o):
+        def render_list(o):
             if len(o) == 2:
                 name, options = o
-                props       = {}
+                props = {}
             elif len(o) == 3:
                 name, options, props = o
 
             props_str = props_to_str(props)
-            txt = '<optgroup label="%s" %s>' %(name, props_str)
+            txt = '<optgroup label="%s" %s>' % (name, props_str)
             for o in options:
-                txt += render_str (o)
+                txt += render_str(o)
             txt += '</optgroup>'
             return txt
 
@@ -83,23 +83,23 @@ class Combobox (Widget):
         content = ''
         for o in self._options:
             if type(o[1]) == str:
-                content += render_str (o)
+                content += render_str(o)
             elif type(o[1]) == list:
-                content += render_list (o)
+                content += render_list(o)
             else:
                 raise ValueError
 
         # Render the container
         header = ''
-        for p in filter(lambda x: x!='selected', self.props):
+        for p in filter(lambda x: x != 'selected', self.props):
             if self.props[p]:
-                header += ' %s="%s"' %(p, self.props[p])
+                header += ' %s="%s"' % (p, self.props[p])
             else:
-                header += ' %s' %(p)
+                header += ' %s' % (p)
 
-        html = '<select%s>%s</select>' %(header, content)
+        html = '<select%s>%s</select>' % (header, content)
 
-        render = Widget.Render (self)
+        render = Widget.Render(self)
         render.html += html
 
         return render
@@ -112,7 +112,7 @@ class ComboCfg (Combobox):
     given by key argument if it exists. Everything else is like the
     Combobox widget.
     """
-    def __init__ (self, key, options, _props={}):
+    def __init__(self, key, options, _props={}):
         props = _props.copy()
 
         # Read the key value
@@ -120,7 +120,7 @@ class ComboCfg (Combobox):
         sel = None
 
         # Look for the selected entry
-        for v,k in options:
+        for v, k in options:
             if v == val:
                 sel = val
 
@@ -131,4 +131,4 @@ class ComboCfg (Combobox):
         props['name'] = key
 
         # Init parent
-        Combobox.__init__ (self, props, options)
+        Combobox.__init__(self, props, options)

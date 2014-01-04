@@ -1,9 +1,9 @@
 from base import *
 
-DIR       = "php_checkfile"
-HOST      = "test251"
+DIR = "php_checkfile"
+HOST = "test251"
 
-MAGIC     = 'This test checks the PHP check local file'
+MAGIC = 'This test checks the PHP check local file'
 FORBIDDEN = 'This is a comment'
 
 CONF_PART = """
@@ -27,29 +27,29 @@ PHP_SRC = """<?php
    /* %s */
   phpinfo();
   echo '%s';
-?>""" %(FORBIDDEN, MAGIC)
+?>""" % (FORBIDDEN, MAGIC)
 
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name              = "PHP: Document root + Check local file"
-        self.request           = "GET /%s/internal/test.php HTTP/1.0\r\n" %(DIR) +\
-                                 "Host: %s\r\n" %(HOST)
-        self.expected_error    = 200
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "PHP: Document root + Check local file"
+        self.request           = "GET /%s/internal/test.php HTTP/1.0\r\n" % (DIR) +\
+                                 "Host: %s\r\n" % (HOST)
+        self.expected_error = 200
         self.forbidden_content = FORBIDDEN
 
-    def Prepare (self, www):
+    def Prepare(self, www):
         # Build directories
-        vserver_droot = self.Mkdir (www, "test251_droot")
-        document_root = self.Mkdir (www, "test251_outside")
-        internal_dir  = self.Mkdir (www, "test251_outside/internal")
+        vserver_droot = self.Mkdir(www, "test251_droot")
+        document_root = self.Mkdir(www, "test251_outside")
+        internal_dir = self.Mkdir(www, "test251_outside/internal")
 
-        self.WriteFile (internal_dir, "test.php", 0666, PHP_SRC)
+        self.WriteFile(internal_dir, "test.php", 0666, PHP_SRC)
 
         # Config
         php_plus1 = int(self.php_conf.split('!')[0]) + 1
-        self.conf = CONF_PART %(dict (locals(), **globals()))
+        self.conf = CONF_PART % (dict(locals(), **globals()))
 
         # Config: PHP
         for php in self.php_conf.split("\n"):
@@ -57,5 +57,5 @@ class Test (TestBase):
 
         self.conf += "vserver!251!rule!10000!match!check_local_file = 1\n"
 
-    def Precondition (self):
-        return os.path.exists (look_for_php())
+    def Precondition(self):
+        return os.path.exists(look_for_php())

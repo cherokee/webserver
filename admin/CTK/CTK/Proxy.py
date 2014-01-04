@@ -45,17 +45,17 @@ $.ajax({
 """
 
 class ProxyRequest:
-   def __call__ (self, host, req):
-      conn = HTTPConnection (host)
-      conn.request ("GET", req)
+   def __call__(self, host, req):
+      conn = HTTPConnection(host)
+      conn.request("GET", req)
       r = conn.getresponse()
       return r.read()
 
 
 class Proxy (Box):
-    def __init__ (self, host, req, props=None):
-        Box.__init__ (self)
-        self._url_local = '/proxy_widget_%d' %(self.uniq_id)
+    def __init__(self, host, req, props=None):
+        Box.__init__(self)
+        self._url_local = '/proxy_widget_%d' % (self.uniq_id)
 
         if props:
             self.props = props
@@ -67,24 +67,24 @@ class Proxy (Box):
            host = scgi.env['HTTP_HOST']
 
         self._async = self.props.pop('async', True)
-        self.id     = 'proxy%d'%(self.uniq_id)
+        self.id = 'proxy%d' % (self.uniq_id)
 
         # Register the proxy path
-        publish (self._url_local, ProxyRequest, host=host, req=req)
+        publish(self._url_local, ProxyRequest, host=host, req=req)
 
-    def Render (self):
+    def Render(self):
        render = Box.Render(self)
 
-       props = {'id_widget':  self.id,
-                'proxy_url':  self._url_local,
-                'async_bool': ['false','true'][self._async]}
+       props = {'id_widget': self.id,
+                'proxy_url': self._url_local,
+                'async_bool': ['false', 'true'][self._async]}
 
-       render.js += JAVASCRIPT %(props)
+       render.js += JAVASCRIPT % (props)
        return render
 
-    def JS_to_reload (self):
-       props = {'id_widget':  self.id,
-                'proxy_url':  self._url_local,
-                'async_bool': ['false','true'][self._async]}
+    def JS_to_reload(self):
+       props = {'id_widget': self.id,
+                'proxy_url': self._url_local,
+                'async_bool': ['false', 'true'][self._async]}
 
-       return JAVASCRIPT %(props)
+       return JAVASCRIPT % (props)

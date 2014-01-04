@@ -18,12 +18,12 @@ vserver!1!rule!2620!handler!rewrite!3!substring = /Third_Rule/$1
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name              = "Request Redir evaluation order"
-        self.request           = "GET /%(DIR)s/whatever HTTP/1.0\r\n" % (globals())
-        self.conf              = CONF %(globals())
-        self.expected_error    = 301
-        self.expected_content  = "First_Rule"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Request Redir evaluation order"
+        self.request = "GET /%(DIR)s/whatever HTTP/1.0\r\n" % (globals())
+        self.conf = CONF % (globals())
+        self.expected_error = 301
+        self.expected_content = "First_Rule"
         self.forbidden_content = ['Second_Rule', 'Third_Rule']
 

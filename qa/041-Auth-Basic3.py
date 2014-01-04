@@ -11,15 +11,15 @@ vserver!1!rule!410!auth!passwdfile = %s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name             = "Auth basic III"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Auth basic III"
         self.request          = "GET /auth3/ HTTP/1.0\r\n" + \
                                 "Authorization: Basic WRONG_RpbjpvcGVuIHNlc2FtZQ==\r\n"
-        self.expected_error   = 401
+        self.expected_error = 401
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "auth3")
-        self.WriteFile (d, "passwd", 0444, 'Aladdin:open sesame\n')
+    def Prepare(self, www):
+        d = self.Mkdir(www, "auth3")
+        self.WriteFile(d, "passwd", 0444, 'Aladdin:open sesame\n')
 
-        self.conf = CONF % (d+"/passwd")
+        self.conf = CONF % (d + "/passwd")

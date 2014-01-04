@@ -39,9 +39,9 @@ HEADERS = ['<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />']
 class PropsTableEntry (Box):
     """Property Table Entry"""
 
-    def __init__ (self, title, widget, comment, props_={}):
-        self.title   = title
-        self.widget  = widget
+    def __init__(self, title, widget, comment, props_={}):
+        self.title = title
+        self.widget = widget
         self.comment = comment
 
         # Properties
@@ -56,20 +56,20 @@ class PropsTableEntry (Box):
             props['class'] = 'entry'
 
         # Constructor
-        Box.__init__ (self, props)
+        Box.__init__(self, props)
 
         # Compose
-        self += Box ({'class': 'title'}, RawHTML(self.title))
+        self += Box({'class': 'title'}, RawHTML(self.title))
 
         if self.widget:
-            self += Box ({'class': 'widget'}, widget)
+            self += Box({'class': 'widget'}, widget)
         else:
-            self += Box ({'class': 'widget'}, Container())
+            self += Box({'class': 'widget'}, Container())
 
         if isinstance(comment, Widget):
-            self += Box ({'class': 'comment'}, comment)
+            self += Box({'class': 'comment'}, comment)
         else:
-            self += Box ({'class': 'comment'}, RawHTML(comment))
+            self += Box({'class': 'comment'}, RawHTML(comment))
 
         self += RawHTML('<div class="after"></div>')
 
@@ -85,11 +85,11 @@ class PropsTable (Box):
        table.Add ('My title1', CTK.TextField({'name': 'var1'}), 'First variable')
        table.Add ('My title2', CTK.TextField({'name': 'var2'}), 'Second variable')
     """
-    def __init__ (self, **kwargs):
-        Box.__init__ (self, {'class': "propstable"})
+    def __init__(self, **kwargs):
+        Box.__init__(self, {'class': "propstable"})
 
-    def Add (self, title, widget, comment):
-        self += PropsTableEntry (title, widget, comment)
+    def Add(self, title, widget, comment):
+        self += PropsTableEntry(title, widget, comment)
 
 
 class PropsAuto (PropsTable):
@@ -115,14 +115,14 @@ class PropsAuto (PropsTable):
                   'Second variable. This is never sent.',
                   use_submitter=False)
     """
-    def __init__ (self, url, **kwargs):
-        PropsTable.__init__ (self, **kwargs)
-        self.url       = url
+    def __init__(self, url, **kwargs):
+        PropsTable.__init__(self, **kwargs)
+        self.url = url
         self.constants = {}
 
-    def Add (self, title, widget, comment, use_submitter=True):
+    def Add(self, title, widget, comment, use_submitter=True):
         if use_submitter:
-            submit = Submitter (self.url)
+            submit = Submitter(self.url)
         else:
             submit = Container()
 
@@ -130,7 +130,7 @@ class PropsAuto (PropsTable):
 
         # Add constants
         for key in self.constants:
-            submit += HiddenField ({'name': key, 'value': self.constants[key]})
+            submit += HiddenField({'name': key, 'value': self.constants[key]})
 
         # Append the widget
-        PropsTable.Add (self, title, submit, comment)
+        PropsTable.Add(self, title, submit, comment)

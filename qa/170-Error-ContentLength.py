@@ -1,7 +1,7 @@
 from base import *
 
-DIR       = 'cgi_error_contentlength_1'
-ERROR     = 404
+DIR = 'cgi_error_contentlength_1'
+ERROR = 404
 ERROR_MSG = letters_random(1234)
 
 CONF = """
@@ -22,16 +22,16 @@ EOF
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "CGI error_handler: Content-Length"
 
-        self.request           = "GET /%s/exec.cgi HTTP/1.0\r\n" % (DIR)
-        self.expected_error    = ERROR
+        self.request = "GET /%s/exec.cgi HTTP/1.0\r\n" % (DIR)
+        self.expected_error = ERROR
         self.forbidden_content = "Content-Length: %d" % (len(ERROR_MSG))
-        self.conf              = CONF
+        self.conf = CONF
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, "exec.cgi", 0555,
+    def Prepare(self, www):
+        d = self.Mkdir(www, DIR)
+        f = self.WriteFile(d, "exec.cgi", 0555,
                             CGI_BASE % (len(ERROR_MSG), ERROR, ERROR_MSG))

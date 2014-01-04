@@ -1,8 +1,8 @@
 from base import *
 
-DIR     = "DirXsendfile1"
-FILE    = "test.cgi"
-MAGIC   = str_random (100)
+DIR = "DirXsendfile1"
+FILE = "test.cgi"
+MAGIC = str_random(100)
 DISCART = "This text should be discarted"
 
 CONF = """
@@ -21,22 +21,22 @@ echo "%s"
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "X-Sendfile: CGI"
 
         self.request           = "GET /%s/%s HTTP/1.1\r\n" % (DIR, FILE) + \
                                  "Host: default\r\n"                     + \
                                  "Connection: Close\r\n"
 
-        self.expected_error    = 200
-        self.expected_content  = MAGIC
+        self.expected_error = 200
+        self.expected_content = MAGIC
         self.forbidden_content = ["/bin/sh", "echo", DISCART]
-        self.conf              = CONF % (DIR)
+        self.conf = CONF % (DIR)
 
-    def Prepare (self, www):
-        temp = self.WriteTemp (MAGIC)
-        cgi  = CGI % (temp, DISCART)
+    def Prepare(self, www):
+        temp = self.WriteTemp(MAGIC)
+        cgi = CGI % (temp, DISCART)
 
-        d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILE, 0755, cgi)
+        d = self.Mkdir(www, DIR)
+        f = self.WriteFile(d, FILE, 0755, cgi)

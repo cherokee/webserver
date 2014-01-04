@@ -39,11 +39,11 @@ class RawHTML (Widget):
           html1 = CTK.RawHTML('<h1>Header</h1>')
           html2 = CTK.RawHTML(js='window.location.reload();')
     """
-    def __init__ (self, html='', js=''):
-        Widget.__init__ (self)
+    def __init__(self, html='', js=''):
+        Widget.__init__(self)
 
         html = to_utf8(html)
-        js   = to_utf8(js)
+        js = to_utf8(js)
 
         # Since the information contained in this widget will most
         # probably go through a few variable replacement processes,
@@ -52,18 +52,18 @@ class RawHTML (Widget):
         # contain strings such as 'style: 100%;', which aren't meant
         # to be variable replacement.
         #
-        html = html.replace ('%', '%%')
-        js   =   js.replace ('%', '%%')
+        html = html.replace('%', '%%')
+        js = js.replace('%', '%%')
 
         self.html = html
-        self.js   = js
+        self.js = js
 
-    def __add__ (self, txt):
+    def __add__(self, txt):
         assert type(txt) == str
         self.html += txt
 
-    def Render (self):
+    def Render(self):
         render = Widget.Render(self)
         render.html += self.html
-        render.js   += self.js
+        render.js += self.js
         return render

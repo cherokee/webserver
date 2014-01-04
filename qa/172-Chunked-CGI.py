@@ -1,9 +1,9 @@
 from base import *
 
-DIR            = "chunked_cgi_1"
-MAGIC          = letters_random (300)
+DIR = "chunked_cgi_1"
+MAGIC = letters_random(300)
 
-CHUNKED_BEGIN  = hex(len(MAGIC))[2:] + '\r\n'
+CHUNKED_BEGIN = hex(len(MAGIC))[2:] + '\r\n'
 CHUNKED_FINISH = "0\r\n\r\n"
 
 CONF = """
@@ -23,8 +23,8 @@ echo
 """ % (look_for_python(), MAGIC)
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Chunked encoding: cgi"
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
@@ -33,11 +33,11 @@ class Test (TestBase):
                                  "OPTIONS / HTTP/1.0\r\n"
                                  # Added another one to close the connection
 
-        self.expected_error    = 200
-        self.expected_content  = ["Transfer-Encoding: chunked",
+        self.expected_error = 200
+        self.expected_content = ["Transfer-Encoding: chunked",
                                   CHUNKED_BEGIN, MAGIC, CHUNKED_FINISH]
-        self.conf              = CONF
+        self.conf = CONF
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, DIR, 0777)
-        self.WriteFile (d, "test", 0555, CGI_CODE)
+    def Prepare(self, www):
+        d = self.Mkdir(www, DIR, 0777)
+        self.WriteFile(d, "test", 0555, CGI_CODE)

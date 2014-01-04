@@ -1,6 +1,6 @@
 from base import *
 
-MAGIC  = '<a href="http://www.alobbs.com">Alvaro</a> tests QA #296.'
+MAGIC = '<a href="http://www.alobbs.com">Alvaro</a> tests QA #296.'
 DOMAIN = '296-qa.users.example.com'
 
 CONF = """
@@ -15,19 +15,19 @@ vserver!2960!rule!1!handler = file
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name             = "EVHost: ${root_domain}/${subdomain1}"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "EVHost: ${root_domain}/${subdomain1}"
         self.request          = "GET /file HTTP/1.1\r\n" +\
                                 "Connection: Close\r\n" + \
-                                "Host: %s\r\n" %(DOMAIN)
-        self.expected_error   = 200
+                                "Host: %s\r\n" % (DOMAIN)
+        self.expected_error = 200
         self.expected_content = MAGIC
 
-    def Prepare (self, www):
-        d1 = self.Mkdir (www, "test_296_general")
-        ev = self.Mkdir (www, "test_296_evhost")
-        d2 = self.Mkdir (ev,  "%s/example/users/public"%(ev))
+    def Prepare(self, www):
+        d1 = self.Mkdir(www, "test_296_general")
+        ev = self.Mkdir(www, "test_296_evhost")
+        d2 = self.Mkdir(ev, "%s/example/users/public" % (ev))
 
-        self.WriteFile (d2, "file", 0444, MAGIC)
+        self.WriteFile(d2, "file", 0444, MAGIC)
         self.conf = CONF % (d1, ev)

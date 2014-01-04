@@ -88,32 +88,32 @@ setTimeout (update_meter_memory, 1000);
 
 
 class Meter (CTK.Box):
-    def __init__ (self, name, extra_info_widget=None):
-        CTK.Box.__init__ (self)
+    def __init__(self, name, extra_info_widget=None):
+        CTK.Box.__init__(self)
         self.progress = CTK.ProgressBar()
-        self.details  = CTK.Box ({'class': 'progress-details'})
-        self.extra    = CTK.Box ({'class': 'progress-extra'})
+        self.details = CTK.Box({'class': 'progress-details'})
+        self.extra = CTK.Box({'class': 'progress-extra'})
 
-        box  = CTK.Box()
+        box = CTK.Box()
         if extra_info_widget:
             box += extra_info_widget
         box += self.extra
         self += box
 
-        box  = CTK.Box()
+        box = CTK.Box()
         box += self.progress
         box += self.details
         self += box
 
-    def Render (self, js):
-        render = CTK.Box.Render (self)
-        render.js += Uniq_Block (JS_COMMON)
+    def Render(self, js):
+        render = CTK.Box.Render(self)
+        render.js += Uniq_Block(JS_COMMON)
 
-        props = {'bar_id':     self.progress.id,
+        props = {'bar_id': self.progress.id,
                  'details_id': self.details.id,
-                 'extra_id':   self.extra.id }
+                 'extra_id': self.extra.id}
 
-        render.js += js %(props)
+        render.js += js % (props)
         return render
 
 
@@ -122,39 +122,39 @@ class Meter (CTK.Box):
 #
 
 class CPU_Info (CTK.RawHTML):
-    def __init__ (self):
+    def __init__(self):
         stats = SystemStats.get_system_stats()
 
         parts = []
         if stats.cpu.speed:
-            parts.append (stats.cpu.speed)
+            parts.append(stats.cpu.speed)
 
         if stats.cpu.num:
             if int(stats.cpu.num) > 1:
-                parts.append (_("%s Logical Processors") %(stats.cpu.num))
+                parts.append(_("%s Logical Processors") % (stats.cpu.num))
             elif int(stats.cpu.num) == 1:
-                parts.append (_("%s Logical Processor") %(stats.cpu.num))
+                parts.append(_("%s Logical Processor") % (stats.cpu.num))
 
         if stats.cpu.cores:
             if int(stats.cpu.cores) > 1:
-                parts.append (_("%s Cores") %(stats.cpu.cores))
+                parts.append(_("%s Cores") % (stats.cpu.cores))
             elif int(stats.cpu.cores) == 1:
-                parts.append (_("%s Core") %(stats.cpu.cores))
+                parts.append(_("%s Core") % (stats.cpu.cores))
 
         if parts:
             txt = ', '.join(parts)
         else:
             txt = _('Unknown Processor')
 
-        CTK.RawHTML.__init__ (self, txt)
+        CTK.RawHTML.__init__(self, txt)
 
 
 class CPU_Meter (Meter):
-    def __init__ (self):
-        Meter.__init__ (self, 'cpu')
+    def __init__(self):
+        Meter.__init__(self, 'cpu')
 
-    def Render (self):
-        return Meter.Render (self, JS_CPU)
+    def Render(self):
+        return Meter.Render(self, JS_CPU)
 
 
 #
@@ -162,28 +162,28 @@ class CPU_Meter (Meter):
 #
 
 class Memory_Info (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'class': 'ram-text'})
+    def __init__(self):
+        CTK.Box.__init__(self, {'class': 'ram-text'})
 
         stats = SystemStats.get_system_stats()
 
         if stats.mem.total:
-            if stats.mem.total < (1024**2):
-                total = "%dMB" %(stats.mem.total / 1024)
+            if stats.mem.total < (1024 ** 2):
+                total = "%dMB" % (stats.mem.total / 1024)
             else:
-                total = "%.1fGB" %(stats.mem.total / (1024.0 ** 2))
+                total = "%.1fGB" % (stats.mem.total / (1024.0 ** 2))
         else:
             total = _('Unknown RAM')
 
-        self += CTK.RawHTML (total)
+        self += CTK.RawHTML(total)
 
 
 class Memory_Meter (Meter):
-    def __init__ (self):
-        Meter.__init__ (self, 'memory', Memory_Info())
+    def __init__(self):
+        Meter.__init__(self, 'memory', Memory_Info())
 
-    def Render (self):
-        return Meter.Render (self, JS_MEMORY)
+    def Render(self):
+        return Meter.Render(self, JS_MEMORY)
 
 
 #
@@ -192,9 +192,9 @@ class Memory_Meter (Meter):
 
 def SystemStats_JSON():
     stats = SystemStats.get_system_stats()
-    return {'mem': {'used':  stats.mem.used,
+    return {'mem': {'used': stats.mem.used,
                     'total': stats.mem.total},
             'cpu': {'usage': stats.cpu.usage,
-                    'idle':  stats.cpu.idle}}
+                    'idle': stats.cpu.idle}}
 
-CTK.publish (r'^/system/stats$', SystemStats_JSON)
+CTK.publish(r'^/system/stats$', SystemStats_JSON)

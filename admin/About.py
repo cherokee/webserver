@@ -28,7 +28,7 @@ from configured import *
 URL_ABOUT_CONTENT = "/about-cherokee"
 
 COPYRIGHT_NOTICE = """Copyright © 2001-2014 Alvaro Lopez Ortega. All Rights Reserved."""
-BROUGHT_TO_YOU   = """
+BROUGHT_TO_YOU = """
 <p>The Cherokee Web Server is proudly brought to you by Alvaro Lopez Ortega
 (contact info: <a href="mail:alvaro@alobbs.com">E-Mail</a>,
 <a href="http://www.alobbs.com/" target="_blank">Website</a>,
@@ -52,42 +52,42 @@ CONTRIBUTORS = """
 """
 
 class About_Copyright (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'copyright'})
+    def __init__(self):
+        CTK.Box.__init__(self, {'id': 'copyright'})
 
         left = CTK.Container()
-        left += CTK.RawHTML ('<h2>Author</h2>')
-        left += CTK.RawHTML (BROUGHT_TO_YOU)
+        left += CTK.RawHTML('<h2>Author</h2>')
+        left += CTK.RawHTML(BROUGHT_TO_YOU)
 
         right = CTK.Container()
-        right += CTK.RawHTML ('<h2>Contributors</h2>')
-        right += CTK.RawHTML (CONTRIBUTORS)
+        right += CTK.RawHTML('<h2>Contributors</h2>')
+        right += CTK.RawHTML(CONTRIBUTORS)
 
         table = CTK.Table()
         table += [left, right]
         self += table
 
-        self += CTK.RawHTML ('<p id="copyright-notice">%s</p>' %(COPYRIGHT_NOTICE))
+        self += CTK.RawHTML('<p id="copyright-notice">%s</p>' % (COPYRIGHT_NOTICE))
 
 
 class About_License (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'license'})
-        self += CTK.Box ({'id': 'license-text'}, CTK.RawHTML (GPL2_LICENSE))
+    def __init__(self):
+        CTK.Box.__init__(self, {'id': 'license'})
+        self += CTK.Box({'id': 'license-text'}, CTK.RawHTML(GPL2_LICENSE))
 
 def About_content():
-    content = CTK.Box ({'id': 'about'})
-    content += CTK.Box ({'id': 'version'}, CTK.RawHTML ('<small>Cherokee %s</small>' %(VERSION)))
+    content = CTK.Box({'id': 'about'})
+    content += CTK.Box({'id': 'version'}, CTK.RawHTML('<small>Cherokee %s</small>' % (VERSION)))
 
     tabs = CTK.Tab()
-    tabs.Add (_('Copyright'), About_Copyright())
-    tabs.Add (_('License'),   About_License())
+    tabs.Add(_('Copyright'), About_Copyright())
+    tabs.Add(_('License'), About_License())
 
     content += tabs
     return content.Render().toStr()
 
 
-CTK.publish (r'^%s$'%(URL_ABOUT_CONTENT), About_content)
+CTK.publish(r'^%s$' % (URL_ABOUT_CONTENT), About_content)
 
 
 

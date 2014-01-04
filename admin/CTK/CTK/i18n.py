@@ -48,17 +48,17 @@ except ImportError:
 #
 # Functions
 #
-def underscore_wrapper (x):
+def underscore_wrapper(x):
     # Feed unicode
     if type(x) != types.UnicodeType:
         x = unicode(x, 'UTF-8')
 
     # Translate using the original gettext function
-    re = __builtin__.__dict__['_orig'] (x)
+    re = __builtin__.__dict__['_orig'](x)
 
     # Transform the output to UTF-8
     if type(re) == types.UnicodeType:
-        re = re.encode ('UTF-8')
+        re = re.encode('UTF-8')
 
     return re
 
@@ -70,14 +70,14 @@ def unicode_utf8_workaround():
     # to UTF-8 to be consumed by CTK. [workaround]
     #
     __builtin__.__dict__['_orig'] = __builtin__.__dict__['_']
-    __builtin__.__dict__['_']     = underscore_wrapper
+    __builtin__.__dict__['_'] = underscore_wrapper
 
 
-def install (*args, **kwargs):
+def install(*args, **kwargs):
     if not 'gettext' in sys.modules:
         return
 
-    gettext.install (*args, **kwargs)
+    gettext.install(*args, **kwargs)
 
     # Initialize 'active_lang'
     for envar in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
@@ -91,15 +91,15 @@ def install (*args, **kwargs):
     unicode_utf8_workaround()
 
 
-def install_translation (propg, localedir, languages, *args, **kwargs):
+def install_translation(propg, localedir, languages, *args, **kwargs):
     if not 'gettext' in sys.modules:
         return
 
     # Call gettext (returns a gettext.GNUTranslations obj)
-    re = gettext.translation (propg, localedir, languages, *args, **kwargs)
+    re = gettext.translation(propg, localedir, languages, *args, **kwargs)
 
     # Install the new gettext object
-    re.install (unicode=True)
+    re.install(unicode=True)
 
     # It worked, store the global
     if languages:

@@ -33,34 +33,34 @@ from configured import *
 URL_APPLY = '/plugin/auth/apply'
 
 NOTE_METHODS = N_('Allowed HTTP Authentication methods.')
-NOTE_REALM   = N_('Name associated with the protected resource.')
-NOTE_USERS   = N_('User filter. List of allowed users.')
+NOTE_REALM = N_('Name associated with the protected resource.')
+NOTE_USERS = N_('User filter. List of allowed users.')
 
 
 class PluginAuth (CTK.Plugin):
-    def __init__ (self, key, **kwargs):
-        CTK.Plugin.__init__ (self, key)
+    def __init__(self, key, **kwargs):
+        CTK.Plugin.__init__(self, key)
         self.supported_methos = []
 
-    def AddCommon (self, supported_methods):
+    def AddCommon(self, supported_methods):
         assert type(supported_methods) is tuple
 
         if len(supported_methods) > 1:
-            methods = trans_options (VALIDATOR_METHODS)
+            methods = trans_options(VALIDATOR_METHODS)
         else:
-            methods = trans_options (filter (lambda x: x[0] in supported_methods, VALIDATOR_METHODS))
+            methods = trans_options(filter(lambda x: x[0] in supported_methods, VALIDATOR_METHODS))
 
         table = CTK.PropsTable()
-        table.Add (_("Methods"), CTK.ComboCfg("%s!methods"%(self.key), trans_options(methods), {'id': 'auth_method'}), _(NOTE_METHODS))
-        table.Add (_("Realm"),   CTK.TextCfg("%s!realm" %(self.key), False), _(NOTE_REALM))
-        table.Add (_("Users"),   CTK.TextCfg("%s!users" %(self.key), True),  _(NOTE_USERS))
+        table.Add(_("Methods"), CTK.ComboCfg("%s!methods" % (self.key), trans_options(methods), {'id': 'auth_method'}), _(NOTE_METHODS))
+        table.Add(_("Realm"), CTK.TextCfg("%s!realm" % (self.key), False), _(NOTE_REALM))
+        table.Add(_("Users"), CTK.TextCfg("%s!users" % (self.key), True), _(NOTE_USERS))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Authentication Details')))
+        self += CTK.RawHTML('<h2>%s</h2>' % (_('Authentication Details')))
         self += CTK.Indenter(submit)
 
         # Publish
-        VALS = [("%s!users"%(self.key), validations.is_safe_id_list)]
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        VALS = [("%s!users" % (self.key), validations.is_safe_id_list)]
+        CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")

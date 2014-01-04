@@ -79,55 +79,55 @@ jQuery.tableDnD.serialize_plain = function() {
 };
 """
 
-def changed_handler_func (callback, key_id, **kwargs):
-    return callback (key_id, **kwargs)
+def changed_handler_func(callback, key_id, **kwargs):
+    return callback(key_id, **kwargs)
 
 class SortableList (Table):
-    def __init__ (self, callback, container, *args, **kwargs):
-        Table.__init__ (self, *args, **kwargs)
-        self.id  = "sortablelist_%d" %(self.uniq_id)
-        self.url = "/sortablelist_%d"%(self.uniq_id)
+    def __init__(self, callback, container, *args, **kwargs):
+        Table.__init__(self, *args, **kwargs)
+        self.id = "sortablelist_%d" % (self.uniq_id)
+        self.url = "/sortablelist_%d" % (self.uniq_id)
         self.container = container
 
         # Secure submit
         srv = get_server()
         if srv.use_sec_submit:
-            self.url += '?key=%s' %(srv.sec_submit)
+            self.url += '?key=%s' % (srv.sec_submit)
 
         # Register the public URL
-        publish (r"^/sortablelist_%d"%(self.uniq_id), changed_handler_func,
-                 method='POST', callback=callback, key_id='%s_order'%(self.id), **kwargs)
+        publish(r"^/sortablelist_%d" % (self.uniq_id), changed_handler_func,
+                 method='POST', callback=callback, key_id='%s_order' % (self.id), **kwargs)
 
-    def Render (self):
-        render = Table.Render (self)
+    def Render(self):
+        render = Table.Render(self)
 
         props = {'id': self.id, 'url': self.url, 'container': self.container}
 
-        render.js      += JS_INIT %(props) + Uniq_Block (JS_INIT_FUNC %(props))
+        render.js += JS_INIT % (props) + Uniq_Block(JS_INIT_FUNC % (props))
         render.headers += HEADER
         return render
 
-    def set_header (self, row_num):
+    def set_header(self, row_num):
         # Set the row properties
         self[row_num].props['class'] = "nodrag nodrop"
 
         # Let Table do the rest
-        Table.set_header (self, num=row_num)
+        Table.set_header(self, num=row_num)
 
 
-def SortableList__reorder_generic (post_arg_name, pre, step=10):
+def SortableList__reorder_generic(post_arg_name, pre, step=10):
     # Process new list
-    order = post.pop (post_arg_name)
+    order = post.pop(post_arg_name)
     tmp = order.split(',')
 
     # Build and alternative tree
     num = step
     for v in tmp:
-        cfg.clone ('%s!%s'%(pre, v), 'tmp!reorder!%s!%d'%(pre, num))
+        cfg.clone('%s!%s' % (pre, v), 'tmp!reorder!%s!%d' % (pre, num))
         num += step
 
     # Set the new list in place
     del (cfg[pre])
-    cfg.rename ('tmp!reorder!%s'%(pre), pre)
+    cfg.rename('tmp!reorder!%s' % (pre), pre)
 
     return cfg_reply_ajax_ok()

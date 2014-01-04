@@ -28,7 +28,7 @@ import Handler
 HELPS = [('modules_handlers_ssi', _("Server Side Includes"))]
 
 class Plugin_ssi (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
+    def __init__(self, key, **kwargs):
         kwargs['show_document_root'] = False
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)

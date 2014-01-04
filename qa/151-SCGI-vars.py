@@ -1,8 +1,8 @@
 import os
 from base import *
 
-DIR    = "/SCGI5"
-PORT   = get_free_port()
+DIR = "/SCGI5"
+PORT = get_free_port()
 PYTHON = look_for_python()
 
 SCRIPT = """
@@ -40,21 +40,21 @@ EXPECTED = [
 ]
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "SCGI V: PATH_INFO and SCRIPT_NAME"
 
-        self.request           = "GET %s/ HTTP/1.0\r\n" %(DIR)
-        self.expected_error    = 200
-        self.expected_content  = EXPECTED
+        self.request = "GET %s/ HTTP/1.0\r\n" % (DIR)
+        self.expected_error = 200
+        self.expected_content = EXPECTED
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']
 
-    def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_test5.scgi", 0444, SCRIPT)
+    def Prepare(self, www):
+        scgi_file = self.WriteFile(www, "scgi_test5.scgi", 0444, SCRIPT)
 
-        pyscgi = os.path.join (www, 'pyscgi.py')
-        if not os.path.exists (pyscgi):
-            self.CopyFile ('pyscgi.py', pyscgi)
+        pyscgi = os.path.join(www, 'pyscgi.py')
+        if not os.path.exists(pyscgi):
+            self.CopyFile('pyscgi.py', pyscgi)
 
         vars = globals()
         vars['scgi_file'] = scgi_file

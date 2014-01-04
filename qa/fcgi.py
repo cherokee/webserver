@@ -150,10 +150,10 @@ class InputStream(object):
 
         self._buf = ''
         self._bufList = []
-        self._pos = 0 # Current read position.
-        self._avail = 0 # Number of bytes currently available.
+        self._pos = 0  # Current read position.
+        self._avail = 0  # Number of bytes currently available.
 
-        self._eof = False # True when server has sent EOF notification.
+        self._eof = False  # True when server has sent EOF notification.
 
     def _shrinkBuffer(self):
         """Gets rid of already read data (since we can't rewind)."""
@@ -306,7 +306,7 @@ class OutputStream(object):
         self._req = req
         self._type = type
         self._buffered = buffered
-        self._bufList = [] # Used if buffered is True
+        self._bufList = []  # Used if buffered is True
         self.dataWritten = False
         self.closed = False
 
@@ -407,21 +407,21 @@ def decode_pair(s, pos=0):
     """
     nameLength = ord(s[pos])
     if nameLength & 128:
-        nameLength = struct.unpack('!L', s[pos:pos+4])[0] & 0x7fffffff
+        nameLength = struct.unpack('!L', s[pos:pos + 4])[0] & 0x7fffffff
         pos += 4
     else:
         pos += 1
 
     valueLength = ord(s[pos])
     if valueLength & 128:
-        valueLength = struct.unpack('!L', s[pos:pos+4])[0] & 0x7fffffff
+        valueLength = struct.unpack('!L', s[pos:pos + 4])[0] & 0x7fffffff
         pos += 4
     else:
         pos += 1
 
-    name = s[pos:pos+nameLength]
+    name = s[pos:pos + nameLength]
     pos += nameLength
-    value = s[pos:pos+valueLength]
+    value = s[pos:pos + valueLength]
     pos += valueLength
 
     return (pos, (name, value))
@@ -476,7 +476,7 @@ class Record(object):
                     continue
                 else:
                     raise
-            if not data: # EOF
+            if not data:  # EOF
                 break
             dataList.append(data)
             dataLen = len(data)
@@ -553,7 +553,7 @@ class Record(object):
         if self.contentLength:
             self._sendall(sock, self.contentData)
         if self.paddingLength:
-            self._sendall(sock, '\x00'*self.paddingLength)
+            self._sendall(sock, '\x00' * self.paddingLength)
 
 class Request(object):
     """
@@ -611,7 +611,7 @@ class CGIRequest(Request):
         self.server = server
         self.params = dict(os.environ)
         self.stdin = sys.stdin
-        self.stdout = StdoutWrapper(sys.stdout) # Oh, the humanity!
+        self.stdout = StdoutWrapper(sys.stdout)  # Oh, the humanity!
         self.stderr = sys.stderr
         self.data = StringIO.StringIO()
 
@@ -665,7 +665,7 @@ class Connection(object):
             except EOFError:
                 break
             except (select.error, socket.error), e:
-                if e[0] == errno.EBADF: # Socket was closed by Request.
+                if e[0] == errno.EBADF:  # Socket was closed by Request.
                     break
                 raise
 
@@ -959,11 +959,11 @@ class Server(object):
                 # from the OS.
                 maxConns = resource.getrlimit(resource.RLIMIT_NOFILE)[0]
             except ImportError:
-                maxConns = 100 # Just some made up number.
+                maxConns = 100  # Just some made up number.
             maxReqs = maxConns
             if multiplexed:
                 self._connectionClass = MultiplexedConnection
-                maxReqs *= 5 # Another made up number.
+                maxReqs *= 5  # Another made up number.
             else:
                 self._connectionClass = Connection
             self.capability = {
@@ -983,7 +983,7 @@ class Server(object):
         self._umask = umask
 
     def _setupSocket(self):
-        if self._bindAddress is None: # Run as a normal FastCGI?
+        if self._bindAddress is None:  # Run as a normal FastCGI?
             isFCGI = True
 
             sock = socket.fromfd(FCGI_LISTENSOCK_FILENO, socket.AF_INET,
@@ -1039,14 +1039,14 @@ class Server(object):
         sock.close()
 
     def _installSignalHandlers(self):
-        self._oldSIGs = [(x,signal.getsignal(x)) for x in
+        self._oldSIGs = [(x, signal.getsignal(x)) for x in
                          (signal.SIGHUP, signal.SIGINT, signal.SIGTERM)]
         signal.signal(signal.SIGHUP, self._hupHandler)
         signal.signal(signal.SIGINT, self._intHandler)
         signal.signal(signal.SIGTERM, self._intHandler)
 
     def _restoreSignalHandlers(self):
-        for signum,handler in self._oldSIGs:
+        for signum, handler in self._oldSIGs:
             signal.signal(signum, handler)
 
     def _hupHandler(self, signum, frame):
@@ -1157,7 +1157,7 @@ class WSGIServer(Server):
         Set multithreaded to False if your application is not MT-safe.
         """
         if kw.has_key('handler'):
-            del kw['handler'] # Doesn't make sense to let this through
+            del kw['handler']  # Doesn't make sense to let this through
         super(WSGIServer, self).__init__(**kw)
 
         if environ is None:
@@ -1179,7 +1179,7 @@ class WSGIServer(Server):
         environ = req.params
         environ.update(self.environ)
 
-        environ['wsgi.version'] = (1,0)
+        environ['wsgi.version'] = (1, 0)
         environ['wsgi.input'] = req.stdin
         if self._bindAddress is None:
             stderr = req.stderr
@@ -1215,7 +1215,7 @@ class WSGIServer(Server):
             if not headers_sent:
                 status, responseHeaders = headers_sent[:] = headers_set
                 found = False
-                for header,value in responseHeaders:
+                for header, value in responseHeaders:
                     if header.lower() == 'content-length':
                         found = True
                         break
@@ -1242,7 +1242,7 @@ class WSGIServer(Server):
                         # Re-raise if too late
                         raise exc_info[0], exc_info[1], exc_info[2]
                 finally:
-                    exc_info = None # avoid dangling circular ref
+                    exc_info = None  # avoid dangling circular ref
             else:
                 assert not headers_set, 'Headers already set!'
 
@@ -1252,7 +1252,7 @@ class WSGIServer(Server):
             assert status[3] == ' ', 'Status must have a space after code'
             assert type(response_headers) is list, 'Headers must be a list'
             if __debug__:
-                for name,val in response_headers:
+                for name, val in response_headers:
                     assert type(name) is str, 'Header names must be strings'
                     assert type(val) is str, 'Header values must be strings'
 
@@ -1269,13 +1269,13 @@ class WSGIServer(Server):
                         if data:
                             write(data)
                     if not headers_sent:
-                        write('') # in case body was empty
+                        write('')  # in case body was empty
                 finally:
                     if hasattr(result, 'close'):
                         result.close()
             except socket.error, e:
                 if e[0] != errno.EPIPE:
-                    raise # Don't let EPIPE propagate beyond server
+                    raise  # Don't let EPIPE propagate beyond server
         finally:
             if not self.multithreaded:
                 self._app_lock.release()
@@ -1291,7 +1291,7 @@ class WSGIServer(Server):
 
         # If any of these are missing, it probably signifies a broken
         # server...
-        for name,default in [('REQUEST_METHOD', 'GET'),
+        for name, default in [('REQUEST_METHOD', 'GET'),
                              ('SERVER_NAME', 'localhost'),
                              ('SERVER_PORT', '80'),
                              ('SERVER_PROTOCOL', 'HTTP/1.0')]:

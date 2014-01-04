@@ -1,12 +1,12 @@
 from base import *
 
-HOST        = "test226"
+HOST = "test226"
 
-PATH_INFO   = "/this/is/pathinfo"
+PATH_INFO = "/this/is/pathinfo"
 SCRIPT_NAME = ""
 
-PORT        = get_free_port()
-PYTHON      = look_for_python()
+PORT = get_free_port()
+PYTHON = look_for_python()
 
 SCRIPT = """
 from pyscgi import *
@@ -40,22 +40,22 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name             = "PathInfo: default rule"
-        self.request          = "GET %s HTTP/1.1\r\n"%(PATH_INFO) +\
-                                "Host: %s\r\n"%(HOST) + \
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "PathInfo: default rule"
+        self.request          = "GET %s HTTP/1.1\r\n" % (PATH_INFO) +\
+                                "Host: %s\r\n" % (HOST) + \
                                 "Connection: Close\r\n"
-        self.expected_error   = 200
-        self.expected_content = ["PathInfo is: >%s<"%(PATH_INFO),
-                                 "ScriptName is: >%s<"%(SCRIPT_NAME)]
+        self.expected_error = 200
+        self.expected_content = ["PathInfo is: >%s<" % (PATH_INFO),
+                                 "ScriptName is: >%s<" % (SCRIPT_NAME)]
 
-    def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "test226.scgi", 0444, SCRIPT)
+    def Prepare(self, www):
+        scgi_file = self.WriteFile(www, "test226.scgi", 0444, SCRIPT)
 
-        pyscgi = os.path.join (www, 'pyscgi.py')
-        if not os.path.exists (pyscgi):
-            self.CopyFile ('pyscgi.py', pyscgi)
+        pyscgi = os.path.join(www, 'pyscgi.py')
+        if not os.path.exists(pyscgi):
+            self.CopyFile('pyscgi.py', pyscgi)
 
         vars = globals()
         vars['scgi_file'] = scgi_file

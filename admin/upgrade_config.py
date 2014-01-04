@@ -12,7 +12,7 @@ import os
 import sys
 
 # Import CTK
-sys.path.append (os.path.abspath (os.path.realpath(__file__) + '/../CTK/CTK'))
+sys.path.append(os.path.abspath(os.path.realpath(__file__) + '/../CTK/CTK'))
 from Config import *
 
 from configured import *
@@ -31,13 +31,13 @@ def main():
     cfg = Config(cfg_file)
 
     # Update the configuration file if needed
-    ver_config  = int (cfg.get_val('config!version', '000099028'))
-    ver_release = int (config_version_get_current())
+    ver_config = int(cfg.get_val('config!version', '000099028'))
+    ver_release = int(config_version_get_current())
 
     print "Upgrading '%s' from %d to %d.." % (cfg_file, ver_config, ver_release),
 
     # Convert it
-    updated = config_version_update_cfg (cfg)
+    updated = config_version_update_cfg(cfg)
     print ["Not upgraded.", "Upgraded."][updated]
 
     # Save it

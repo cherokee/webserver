@@ -35,18 +35,18 @@ class Image (Widget):
        Examples:
           img = CTK.Image({'src': '/path/foo/bar', 'title': 'Baz'})
     """
-    def __init__ (self, props={}, **kwargs):
-        Widget.__init__ (self, **kwargs)
+    def __init__(self, props={}, **kwargs):
+        Widget.__init__(self, **kwargs)
         self.props = props.copy()
 
-    def Render (self):
+    def Render(self):
         if not 'id' in self.props:
             self.props['id'] = self.id
 
-        props = " ".join (['%s="%s"'%(k,self.props[k]) for k in self.props])
+        props = " ".join(['%s="%s"' % (k, self.props[k]) for k in self.props])
 
-        render = Widget.Render (self)
-        render.html = '<img %s />' %(props)
+        render = Widget.Render(self)
+        render.html = '<img %s />' % (props)
         return render
 
 class ImageStock (Image):
@@ -64,12 +64,12 @@ class ImageStock (Image):
        Examples:
           img = CTK.ImageStock('loading', {'title': 'foo', 'class': 'bar'})
     """
-    def __init__ (self, name, _props={}):
+    def __init__(self, name, _props={}):
         props = _props.copy()
 
         if name == 'del':
-            props['src']   = '/CTK/images/del.png'
-            props['alt']   = _('Delete')
+            props['src'] = '/CTK/images/del.png'
+            props['alt'] = _('Delete')
             props['title'] = _('Delete')
 
             if 'class' in props:
@@ -77,32 +77,32 @@ class ImageStock (Image):
             else:
                 props['class'] = 'del'
 
-            Image.__init__ (self, props)
+            Image.__init__(self, props)
 
         elif name == 'on':
             props['src'] = '/CTK/images/on.png'
             props['alt'] = _('Active')
-            Image.__init__ (self, props)
+            Image.__init__(self, props)
 
         elif name == 'off':
             props['src'] = '/CTK/images/off.png'
             props['alt'] = _('Inactive')
-            Image.__init__ (self, props)
+            Image.__init__(self, props)
 
         elif name == 'loading':
             props['src'] = '/CTK/images/loader.gif'
             props['alt'] = _('Loading')
-            Image.__init__ (self, props)
+            Image.__init__(self, props)
 
         elif name == 'tick':
             props['src'] = '/CTK/images/tick.png'
             props['alt'] = _('Enabled')
-            Image.__init__ (self, props)
+            Image.__init__(self, props)
 
         elif name == 'forbid':
             props['src'] = '/CTK/images/forbid.png'
             props['alt'] = _('Forbidden')
-            Image.__init__ (self, props)
+            Image.__init__(self, props)
 
         else:
-            assert False, "Unknown stock image: %s" %(name)
+            assert False, "Unknown stock image: %s" % (name)

@@ -88,29 +88,29 @@ $.ajax ({type: 'GET', url: "%(url)s/stop", async: false});
 downloads = {}
 
 class DownloadEntry (threading.Thread):
-    def __init__ (self, url):
-        threading.Thread.__init__ (self)
+    def __init__(self, url):
+        threading.Thread.__init__(self)
 
-        self.url         = url
-        self.size        = 0
-        self.percent     = 0
-        self.downloaded  = 0
-        self.status      = 'init'
-        self.wanna_exit  = False
+        self.url = url
+        self.size = 0
+        self.percent = 0
+        self.downloaded = 0
+        self.status = 'init'
+        self.wanna_exit = False
         self.target_temp = None
         self.target_path = None
 
-    def stop (self):
-        self.status     = 'stopped'
+    def stop(self):
+        self.status = 'stopped'
         self.wanna_exit = True
 
-    def run (self):
-        self.opener  = urllib2.build_opener()
-        self.request = urllib2.Request (self.url)
+    def run(self):
+        self.opener = urllib2.build_opener()
+        self.request = urllib2.Request(self.url)
 
         # HTTP Request
         try:
-            self.response = self.opener.open (self.request)
+            self.response = self.opener.open(self.request)
         except Exception, e:
             print e
             self.status = 'error'
@@ -123,12 +123,12 @@ class DownloadEntry (threading.Thread):
 
         self.downloaded = 0
 
-        self.status      = 'downloading'
-        self.time_start  = time.time()
+        self.status = 'downloading'
+        self.time_start = time.time()
 
         # Temporal storage
         fd, path = tempfile.mkstemp()
-        self.target_temp = os.fdopen (fd, "w+")
+        self.target_temp = os.fdopen(fd, "w+")
         self.target_path = path
 
         # Read response
@@ -142,7 +142,7 @@ class DownloadEntry (threading.Thread):
                     self.target_temp.flush()
                     self.target_temp.close()
                     break
-                self.target_temp.write (chunk)
+                self.target_temp.write(chunk)
             except Exception, e:
                 print e
                 # Error
@@ -158,25 +158,25 @@ class DownloadEntry (threading.Thread):
                 self.percent = 50
 
 
-def DownloadEntry_Factory (url, *args, **kwargs):
+def DownloadEntry_Factory(url, *args, **kwargs):
     global downloads
 
     if not url in downloads:
-        tmp = DownloadEntry (url, *args, **kwargs)
+        tmp = DownloadEntry(url, *args, **kwargs)
         downloads[url] = tmp
     return downloads[url]
 
-def DownloadEntry_Exists (url):
+def DownloadEntry_Exists(url):
     global downloads
-    return downloads.has_key (url)
+    return downloads.has_key(url)
 
 class DownloadReport:
     lock = threading.RLock()
 
-    def __call__ (self, url):
+    def __call__(self, url):
        if request.url.endswith('/info'):
            d = downloads[url]
-           return '{"status": "%s", "percent": %d, "size": %d, "downloaded": %d}' %(
+           return '{"status": "%s", "percent": %d, "size": %d, "downloaded": %d}' % (
                d.status, d.percent, d.size, d.downloaded)
 
        elif request.url.endswith('/stop'):
@@ -201,40 +201,40 @@ class DownloadReport:
 
 
 class Downloader (Box):
-    def __init__ (self, name, url, props={}):
-        Box.__init__ (self)
-        self.url  = url
+    def __init__(self, name, url, props={}):
+        Box.__init__(self)
+        self.url = url
         self.name = name
-        self.id   = "downloader_%s" %(name)
+        self.id = "downloader_%s" % (name)
 
         # Other GUI components
         self.progressbar = ProgressBar()
         self += self.progressbar
 
         # Register the uploader path
-        self._url_local = "/downloader_%s_report" %(name)
-        publish (self._url_local, DownloadReport, url=url)
+        self._url_local = "/downloader_%s_report" % (name)
+        publish(self._url_local, DownloadReport, url=url)
 
-        download = DownloadEntry_Factory (self.url)
+        download = DownloadEntry_Factory(self.url)
 
-    def Render (self):
+    def Render(self):
         render = Box.Render(self)
 
-        props = {'id':             self.id,
-                 'url':            self._url_local,
+        props = {'id': self.id,
+                 'url': self._url_local,
                  'progressbar_id': self.progressbar.id}
 
-        render.js += JS_UPDATING %(props)
+        render.js += JS_UPDATING % (props)
         return render
 
-    def JS_to_start (self):
-        props = {'id':  self.id,
+    def JS_to_start(self):
+        props = {'id': self.id,
                  'url': self._url_local}
 
-        return LAUNCH_DOWNLOAD_JS %(props)
+        return LAUNCH_DOWNLOAD_JS % (props)
 
-    def JS_to_stop (self):
-        props = {'id':  self.id,
+    def JS_to_stop(self):
+        props = {'id': self.id,
                  'url': self._url_local}
 
-        return STOP_DOWNLOAD_JS %(props)
+        return STOP_DOWNLOAD_JS % (props)

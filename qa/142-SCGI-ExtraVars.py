@@ -2,8 +2,8 @@ import os
 from base import *
 from util import *
 
-DIR    = "/SCGI4/"
-PORT   = get_free_port()
+DIR = "/SCGI4/"
+PORT = get_free_port()
 PYTHON = look_for_python()
 
 HDR1 = "X-Whatever"
@@ -42,24 +42,24 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "SCGI IV: Extra variables"
 
-        self.request           = "GET %s HTTP/1.0\r\n" %(DIR) + \
+        self.request           = "GET %s HTTP/1.0\r\n" % (DIR) + \
                                  "%s: %s\r\n" % (HDR1, VAL1)  + \
                                  "%s: %s\r\n" % (HDR2, VAL2)
-        self.expected_error    = 200
-        self.expected_content  = ['%s: %s'%(get_forwarded_http_header(HDR1), VAL1),
-                                  '%s: %s'%(get_forwarded_http_header(HDR2), VAL2)]
+        self.expected_error = 200
+        self.expected_content = ['%s: %s' % (get_forwarded_http_header(HDR1), VAL1),
+                                  '%s: %s' % (get_forwarded_http_header(HDR2), VAL2)]
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']
 
-    def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_test4.scgi", 0444, SCRIPT)
+    def Prepare(self, www):
+        scgi_file = self.WriteFile(www, "scgi_test4.scgi", 0444, SCRIPT)
 
-        pyscgi = os.path.join (www, 'pyscgi.py')
-        if not os.path.exists (pyscgi):
-            self.CopyFile ('pyscgi.py', pyscgi)
+        pyscgi = os.path.join(www, 'pyscgi.py')
+        if not os.path.exists(pyscgi):
+            self.CopyFile('pyscgi.py', pyscgi)
 
         vars = globals()
         vars['scgi_file'] = scgi_file

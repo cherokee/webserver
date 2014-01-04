@@ -17,13 +17,13 @@ vserver!1!rule!2710!match!match = %(NUM)s
 vserver!1!rule!2710!match!complete = 1
 vserver!1!rule!2710!handler = custom_error
 vserver!1!rule!2710!handler!error = 422
-""" %(globals())
+""" % (globals())
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name           = "Full header regex match 1"
-        self.request        = "GET /%(DIR)s/ HTTP/1.0\r\n" %(globals()) + \
-                              "Accept-Language: es, en-gb;q=2.%(NUM)se-308, en;q=0.7\r\n" %(globals())
-        self.conf           = CONF
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Full header regex match 1"
+        self.request        = "GET /%(DIR)s/ HTTP/1.0\r\n" % (globals()) + \
+                              "Accept-Language: es, en-gb;q=2.%(NUM)se-308, en;q=0.7\r\n" % (globals())
+        self.conf = CONF
         self.expected_error = 422

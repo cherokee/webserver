@@ -17,14 +17,14 @@ vserver!0450!user_dir!rule!1!handler = common
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Valid home"
 
-        self.conf             = CONF % (PUBLIC_HTML)
-        self.expected_error   = 200
+        self.conf = CONF % (PUBLIC_HTML)
+        self.expected_error = 200
 
-    def Precondition (self):
+    def Precondition(self):
         # Get the current username
         try:
             self.user = os.getlogin()
@@ -32,10 +32,10 @@ class Test (TestBase):
             # Fixme: Why is happening this?
             return False
 
-        self.request          = "GET /~%s/ HTTP/1.0\r\n" % (self.user)
+        self.request = "GET /~%s/ HTTP/1.0\r\n" % (self.user)
 
         # Read the /etc/passwd file
-        f = open ("/etc/passwd", "r")
+        f = open("/etc/passwd", "r")
         pwuser = filter(lambda x: x.find(self.user) == 0, f.readlines())
         f.close()
 
@@ -44,8 +44,8 @@ class Test (TestBase):
             return False
 
         # Get the home directory
-        home = string.split (pwuser[0], ":")[5]
-        public_html = os.path.join (home, PUBLIC_HTML)
+        home = string.split(pwuser[0], ":")[5]
+        public_html = os.path.join(home, PUBLIC_HTML)
 
         # Look for the public_html directory
         if not os.path.exists(public_html):

@@ -1,9 +1,9 @@
 from base import *
 
-NICK1  = "nick-2720"
+NICK1 = "nick-2720"
 ERROR1 = 503
 
-NICK2  = "nick-2720"
+NICK2 = "nick-2720"
 ERROR2 = 502
 
 CONF = """
@@ -35,10 +35,10 @@ vserver!2720!rule!1!handler!error = %(ERROR1)s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name           = "VServer nick match"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "VServer nick match"
         self.request        = "GET / HTTP/1.0\r\n" + \
-                              "Host: %s\r\n" %(NICK2)
+                              "Host: %s\r\n" % (NICK2)
         self.expected_error = ERROR2
-        self.conf           = CONF %(globals())
+        self.conf = CONF % (globals())

@@ -38,15 +38,15 @@ from util import *
 NOTE_WELCOME_H1 = N_("Welcome to the Django wizard")
 NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://djangoproject.com/">Django</a> is a high-level Python Web framework that encourages rapid development and clean, pragmatic design.')
 NOTE_WELCOME_P2 = N_('It is the Web framework for perfectionists (with deadlines). Django makes it easier to build better Web apps more quickly and with less code.')
-NOTE_LOCAL_H1   = N_("Application Source Code")
-NOTE_LOCAL_DIR  = N_("Local directory where your Django project source code is located.")
-NOTE_HOST_H1    = N_("New Virtual Server Details")
-NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
-NOTE_WEBDIR     = N_("Web directory where you want Django to be accessible. (Example: /blog)")
-NOTE_WEBDIR_H1  = N_("Public Web Directory")
-NOTE_DROOT      = N_("Path to use as document root for the new virtual server.")
-ERROR_NO_SRC    = N_("Does not look like a Django source directory.")
-ERROR_NO_DROOT  = N_("The document root directory does not exist.")
+NOTE_LOCAL_H1 = N_("Application Source Code")
+NOTE_LOCAL_DIR = N_("Local directory where your Django project source code is located.")
+NOTE_HOST_H1 = N_("New Virtual Server Details")
+NOTE_HOST = N_("Host name of the virtual server that is about to be created.")
+NOTE_WEBDIR = N_("Web directory where you want Django to be accessible. (Example: /blog)")
+NOTE_WEBDIR_H1 = N_("Public Web Directory")
+NOTE_DROOT = N_("Path to use as document root for the new virtual server.")
+ERROR_NO_SRC = N_("Does not look like a Django source directory.")
+ERROR_NO_DROOT = N_("The document root directory does not exist.")
 
 PREFIX = 'tmp!wizard!django'
 
@@ -90,78 +90,78 @@ CONFIG_DIR = SOURCE + """
 """
 
 class Commit:
-    def Commit_VServer (self):
+    def Commit_VServer(self):
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
-        CTK.cfg['%s!nick'%(vsrv_pre)] = CTK.cfg.get_val('%s!host'%(PREFIX))
-        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
+        CTK.cfg['%s!nick' % (vsrv_pre)] = CTK.cfg.get_val('%s!host' % (PREFIX))
+        Wizard.CloneLogsCfg_Apply('%s!logs_as_vsrv' % (PREFIX), vsrv_pre)
 
         # Django
-        new_host      = CTK.cfg.get_val('%s!new_host'   %(PREFIX))
-        django_dir    = CTK.cfg.get_val('%s!django_dir' %(PREFIX))
-        document_root = CTK.cfg.get_val('%s!document_root' %(PREFIX))
+        new_host = CTK.cfg.get_val('%s!new_host' % (PREFIX))
+        django_dir = CTK.cfg.get_val('%s!django_dir' % (PREFIX))
+        document_root = CTK.cfg.get_val('%s!document_root' % (PREFIX))
 
         # Locals
-        src_num, pre  = cfg_source_get_next ()
-        src_port      = cfg_source_find_free_port ()
+        src_num, pre = cfg_source_get_next()
+        src_port = cfg_source_find_free_port()
 
         # Analize Django config file
-        media_web_dir = django_figure_media_prefix (django_dir)
+        media_web_dir = django_figure_media_prefix(django_dir)
 
         # Python 2
         # (When Django supports python3, this should be updated. Django 1.5?)
-        python_bin = path_find_binary (['python2', 'python', 'python*'], default="python2")
+        python_bin = path_find_binary(['python2', 'python', 'python*'], default="python2")
 
         # Add the new rules
-        config = CONFIG_VSERVER %(locals())
-        CTK.cfg.apply_chunk (config)
+        config = CONFIG_VSERVER % (locals())
+        CTK.cfg.apply_chunk(config)
 
         # Usual Static Files
-        Wizard.AddUsualStaticFiles ("%s!rule!500" % (vsrv_pre))
+        Wizard.AddUsualStaticFiles("%s!rule!500" % (vsrv_pre))
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
-        CTK.cfg.normalize ('vserver')
+        CTK.cfg.normalize('%s!rule' % (vsrv_pre))
+        CTK.cfg.normalize('vserver')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
 
-    def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
+    def Commit_Rule(self):
+        vsrv_num = CTK.cfg.get_val('%s!vsrv_num' % (PREFIX))
+        vsrv_pre = 'vserver!%s' % (vsrv_num)
 
         # Django
-        webdir = CTK.cfg.get_val('%s!webdir' %(PREFIX))
-        django_dir = CTK.cfg.get_val('%s!django_dir' %(PREFIX))
+        webdir = CTK.cfg.get_val('%s!webdir' % (PREFIX))
+        django_dir = CTK.cfg.get_val('%s!django_dir' % (PREFIX))
 
         # Locals
-        rule_pre = CTK.cfg.get_next_entry_prefix('%s!rule'%(vsrv_pre))
-        src_port = cfg_source_find_free_port ()
-        src_num, src_pre  = cfg_source_get_next ()
+        rule_pre = CTK.cfg.get_next_entry_prefix('%s!rule' % (vsrv_pre))
+        src_port = cfg_source_find_free_port()
+        src_num, src_pre = cfg_source_get_next()
 
         # Python 2
         # (When Django supports python3, this should be updated. Django 1.5?)
-        python_bin = path_find_binary (['python2', 'python', 'python*'], default="python2")
+        python_bin = path_find_binary(['python2', 'python', 'python*'], default="python2")
 
         # Add the new rules
-        config = CONFIG_DIR %(locals())
-        CTK.cfg.apply_chunk (config)
+        config = CONFIG_DIR % (locals())
+        CTK.cfg.apply_chunk(config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize('%s!rule' % (vsrv_pre))
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
 
-    def __call__ (self):
+    def __call__(self):
         if CTK.post.pop('final'):
             # Apply POST
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX)):
+            if CTK.cfg.get_val('%s!vsrv_num' % (PREFIX)):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -169,130 +169,130 @@ class Commit:
 
 
 class WebDirectory:
-    def __call__ (self):
+    def __call__(self):
         table = CTK.PropsTable()
-        table.Add (_('Web Directory'), CTK.TextCfg ('%s!webdir'%(PREFIX), False, {'value': '/project', 'class': 'noauto'}), _(NOTE_WEBDIR))
+        table.Add(_('Web Directory'), CTK.TextCfg('%s!webdir' % (PREFIX), False, {'value': '/project', 'class': 'noauto'}), _(NOTE_WEBDIR))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_WEBDIR_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
 
 
 class Host:
-    def __call__ (self):
+    def __call__(self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
-        table.Add (_('Document Root'),    CTK.TextCfg ('%s!document_root'%(PREFIX), False, {'value': os_get_document_root(), 'class': 'noauto'}), _(NOTE_DROOT))
-        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
+        table.Add(_('New Host Name'), CTK.TextCfg('%s!new_host' % (PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add(_('Document Root'), CTK.TextCfg('%s!document_root' % (PREFIX), False, {'value': os_get_document_root(), 'class': 'noauto'}), _(NOTE_DROOT))
+        table.Add(_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv' % (PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_HOST_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
 
 
 class LocalSource:
-    def __call__ (self):
+    def __call__(self):
         table = CTK.PropsTable()
-        table.Add (_('Django Local Directory'), CTK.TextCfg ('%s!django_dir'%(PREFIX), False), _(NOTE_LOCAL_DIR))
+        table.Add(_('Django Local Directory'), CTK.TextCfg('%s!django_dir' % (PREFIX), False), _(NOTE_LOCAL_DIR))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_LOCAL_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
 
 
 class Welcome:
-    def __call__ (self):
+    def __call__(self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
-        cont += Wizard.Icon ('django', {'class': 'wizard-descr'})
-        box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
-        box += Wizard.CookBookBox ('cookbook_django')
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon('django', {'class': 'wizard-descr'})
+        box = CTK.Box({'class': 'wizard-welcome'})
+        box += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_P2)))
+        box += Wizard.CookBookBox('cookbook_django')
         cont += box
 
         # Send the VServer num if it's a Rule
-        tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
+        tmp = re.findall(r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
-            submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit = CTK.Submitter(URL_APPLY)
+            submit += CTK.Hidden('%s!vsrv_num' % (PREFIX), tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
         return cont.Render().toStr()
 
 
-def django_figure_media_prefix (local_django_dir):
-    prefix   = '/media'
-    fullpath = os.path.join (local_django_dir, "settings.py")
+def django_figure_media_prefix(local_django_dir):
+    prefix = '/media'
+    fullpath = os.path.join(local_django_dir, "settings.py")
 
     # Red the file
-    if os.path.exists (fullpath):
+    if os.path.exists(fullpath):
         content = open(fullpath, "r").read()
-        tmp = re.findall (r"\s*ADMIN_MEDIA_PREFIX\s*=\s*['\"](.*)['\"]", content)
+        tmp = re.findall(r"\s*ADMIN_MEDIA_PREFIX\s*=\s*['\"](.*)['\"]", content)
         if tmp:
             prefix = tmp[0]
             if prefix.startswith("http"):
                 n = prefix.index("://")
-                s = prefix.index("/", n+4)
+                s = prefix.index("/", n + 4)
                 prefix = prefix[s:]
 
     # Remove trailing slash
-    while len(prefix)>1 and prefix[-1] == '/':
+    while len(prefix) > 1 and prefix[-1] == '/':
         prefix = prefix[:-1]
 
     return prefix
 
 
-def is_django_dir (path):
-    path = validations.is_local_dir_exists (path)
-    manage = os.path.join (path, "manage.py")
+def is_django_dir(path):
+    path = validations.is_local_dir_exists(path)
+    manage = os.path.join(path, "manage.py")
 
     try:
-        validations.is_local_file_exists (manage)
+        validations.is_local_file_exists(manage)
     except:
         raise ValueError, _("Directory doesn't look like a Django based project.")
     return path
 
 
 VALS = [
-    ("%s!django_dir"   %(PREFIX), validations.is_not_empty),
-    ("%s!new_host"     %(PREFIX), validations.is_not_empty),
-    ("%s!webdir"       %(PREFIX), validations.is_not_empty),
-    ("%s!document_root"%(PREFIX), validations.is_not_empty),
+    ("%s!django_dir" % (PREFIX), validations.is_not_empty),
+    ("%s!new_host" % (PREFIX), validations.is_not_empty),
+    ("%s!webdir" % (PREFIX), validations.is_not_empty),
+    ("%s!document_root" % (PREFIX), validations.is_not_empty),
 
-    ('%s!django_dir'   %(PREFIX), is_django_dir),
-    ('%s!new_host'     %(PREFIX), validations.is_new_vserver_nick),
-    ('%s!webdir'       %(PREFIX), validations.is_dir_formatted),
-    ("%s!document_root"%(PREFIX), validations.is_local_dir_exists)
+    ('%s!django_dir' % (PREFIX), is_django_dir),
+    ('%s!new_host' % (PREFIX), validations.is_new_vserver_nick),
+    ('%s!webdir' % (PREFIX), validations.is_dir_formatted),
+    ("%s!document_root" % (PREFIX), validations.is_local_dir_exists)
 ]
 
 # VServer
-CTK.publish ('^/wizard/vserver/django$',   Welcome)
-CTK.publish ('^/wizard/vserver/django/2$', LocalSource)
-CTK.publish ('^/wizard/vserver/django/3$', Host)
+CTK.publish('^/wizard/vserver/django$', Welcome)
+CTK.publish('^/wizard/vserver/django/2$', LocalSource)
+CTK.publish('^/wizard/vserver/django/3$', Host)
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/django$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/django/2$', LocalSource)
-CTK.publish ('^/wizard/vserver/(\d+)/django/3$', WebDirectory)
+CTK.publish('^/wizard/vserver/(\d+)/django$', Welcome)
+CTK.publish('^/wizard/vserver/(\d+)/django/2$', LocalSource)
+CTK.publish('^/wizard/vserver/(\d+)/django/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish(r'^%s' % (URL_APPLY), Commit, method="POST", validation=VALS)

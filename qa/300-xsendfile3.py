@@ -1,10 +1,10 @@
 from base import *
 
-DIR     = "DirXsendfile3"
-FILE    = "test.cgi"
-MAGIC   = str_random (100)
-LENGTH  = 100
-OFFSET  = 15
+DIR = "DirXsendfile3"
+FILE = "test.cgi"
+MAGIC = str_random(100)
+LENGTH = 100
+OFFSET = 15
 DISCART = "This text should be discarted"
 
 CONF = """
@@ -23,8 +23,8 @@ echo "%s"
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "X-Sendfile: CGI (Range)"
 
         self.request           = "GET /%s/%s HTTP/1.1\r\n" % (DIR, FILE) + \
@@ -33,14 +33,14 @@ class Test (TestBase):
                                  "Connection: Close\r\n"
 
         length = LENGTH - OFFSET
-        self.expected_error    = 206
-        self.expected_content  = [MAGIC[OFFSET:], "Content-Length: %d" % (length)]
+        self.expected_error = 206
+        self.expected_content = [MAGIC[OFFSET:], "Content-Length: %d" % (length)]
         self.forbidden_content = ["/bin/sh", "echo", DISCART, MAGIC[:OFFSET]]
-        self.conf              = CONF % (DIR)
+        self.conf = CONF % (DIR)
 
-    def Prepare (self, www):
-        temp = self.WriteTemp (MAGIC)
-        cgi  = CGI % (temp, DISCART)
+    def Prepare(self, www):
+        temp = self.WriteTemp(MAGIC)
+        cgi = CGI % (temp, DISCART)
 
-        d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILE, 0755, cgi)
+        d = self.Mkdir(www, DIR)
+        f = self.WriteFile(d, FILE, 0755, cgi)

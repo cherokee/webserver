@@ -60,10 +60,10 @@ class TextField (Widget):
                                   'optional': True, 'optional_string':
                                   'Providing this field is optional}})
     """
-    def __init__ (self, props=None):
-        Widget.__init__ (self)
+    def __init__(self, props=None):
+        Widget.__init__(self)
         self.type = "text"
-        self.id   = 'widget%d'%(self.uniq_id)
+        self.id = 'widget%d' % (self.uniq_id)
 
         if props:
             self._props = props
@@ -73,30 +73,30 @@ class TextField (Widget):
         if not 'id' in self._props:
             self._props['id'] = self.id
 
-    def __get_input_props (self):
+    def __get_input_props(self):
         render = ''
         for prop in self._props:
-            render += " %s" %(prop)
+            render += " %s" % (prop)
             value = self._props[prop]
             if value:
                 val = to_utf8(value)
-                render += '="%s"' %(val)
+                render += '="%s"' % (val)
         return render
 
-    def __get_error_div_props (self):
+    def __get_error_div_props(self):
         render = 'id="error_%s"' % (self.id)
-        name = to_utf8 (self._props.get('name'))
+        name = to_utf8(self._props.get('name'))
         if name:
-            render += ' key="%s"' %(name)
+            render += ' key="%s"' % (name)
         return render
 
-    def Render (self):
+    def Render(self):
         # Watermark
         js = ''
 
         if self._props.get('optional'):
             optional_string = self._props.get('optional_string', _("Optional"))
-            js += "$('#%s').DefaultValue('optional-grey','%s');" %(self.id, optional_string)
+            js += "$('#%s').DefaultValue('optional-grey','%s');" % (self.id, optional_string)
 
             if not self._props.get('class'):
                 self._props['class'] = 'optional'
@@ -104,22 +104,22 @@ class TextField (Widget):
                 self._props['class'] += ' optional'
 
         # Render the text field
-        html = '<input type="%s"%s />' %(self.type, self.__get_input_props())
+        html = '<input type="%s"%s />' % (self.type, self.__get_input_props())
 
         # Render the error reporting field
-        html += '<div class="error" %s></div>' %(self.__get_error_div_props())
+        html += '<div class="error" %s></div>' % (self.__get_error_div_props())
 
-        render = Widget.Render (self)
-        render.html    += html
-        render.js      += js
+        render = Widget.Render(self)
+        render.html += html
+        render.js += js
         render.headers += HEADER
 
         return render
 
-    def JS_to_clean (self):
-        return "$('#%s').attr('value', '');" %(self.id)
-    def JS_to_focus (self):
-        return "$('#%s').blur(); $('#%s').focus();" %(self.id, self.id)
+    def JS_to_clean(self):
+        return "$('#%s').attr('value', '');" % (self.id)
+    def JS_to_focus(self):
+        return "$('#%s').blur(); $('#%s').focus();" % (self.id, self.id)
 
 
 class TextFieldPassword (TextField):
@@ -127,8 +127,8 @@ class TextFieldPassword (TextField):
     Widget for password fields. Behaves exactly like a TextField, but
     renders a <input type="password> element instead.
     """
-    def __init__ (self, *a, **kw):
-        TextField.__init__ (self, *a, **kw)
+    def __init__(self, *a, **kw):
+        TextField.__init__(self, *a, **kw)
         self.type = "password"
 
 
@@ -139,7 +139,7 @@ class TextCfg (TextField):
     argument if it exists. It can be set as optional, and accepts
     properties to pass to the base TextField object.
     """
-    def __init__ (self, key, optional=False, props={}):
+    def __init__(self, key, optional=False, props={}):
         # Sanity checks
         assert type(key) == str
         assert type(optional) == bool
@@ -159,7 +159,7 @@ class TextCfg (TextField):
         props['name'] = key
 
         # Init parent
-        TextField.__init__ (self, props)
+        TextField.__init__(self, props)
 
 
 class TextCfgPassword (TextCfg):
@@ -169,8 +169,8 @@ class TextCfgPassword (TextCfg):
     argument if it exists. It can be set as optional, and accepts
     properties to pass to the base TextPassword object.
     """
-    def __init__ (self, *a, **kw):
-        TextCfg.__init__ (self, *a, **kw)
+    def __init__(self, *a, **kw):
+        TextCfg.__init__(self, *a, **kw)
         self.type = "password"
 
 
@@ -231,22 +231,22 @@ class TextCfgAuto (TextCfg):
     configuration entry given by key, and the configuration entry is
     updated automatically when the input field is submitted.
     """
-    def __init__ (self, key, url, optional=False, props=None):
+    def __init__(self, key, url, optional=False, props=None):
         self.key = key
         self.url = url
-        TextCfg.__init__ (self, key, optional, props)
+        TextCfg.__init__(self, key, optional, props)
 
         # Secure submit
         srv = get_server()
         if srv.use_sec_submit:
-            self.url += '?key=%s' %(srv.sec_submit)
+            self.url += '?key=%s' % (srv.sec_submit)
 
-    def Render (self):
-        value = cfg.get_val (self.key, '')
+    def Render(self):
+        value = cfg.get_val(self.key, '')
 
         render = TextCfg.Render(self)
-        render.js += JS %({'id':    self.id,
-                           'url':   self.url,
-                           'key':   self.key,
+        render.js += JS % ({'id': self.id,
+                           'url': self.url,
+                           'key': self.key,
                            'value': value})
         return render

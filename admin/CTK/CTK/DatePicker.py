@@ -36,14 +36,14 @@ $("#%(id)s").datepicker();
 """
 
 class DatePicker (Widget):
-    def __init__ (self, props={}):
-        Widget.__init__ (self)
+    def __init__(self, props={}):
+        Widget.__init__(self)
 
         self.props = props.copy()
         if 'id' in self.props:
             self.id = self.props.pop('id')
 
-    def __get_props (self):
+    def __get_props(self):
         render = ''
         if not self.props:
             return render
@@ -53,17 +53,17 @@ class DatePicker (Widget):
         else:
             self.props['class'] = 'datepicker'
 
-        for key,val in self.props.items():
+        for key, val in self.props.items():
             if key and val:
-                render += ' %s="%s"' % (key,str(val))
+                render += ' %s="%s"' % (key, str(val))
         return render
 
-    def Render (self):
-        render = Widget.Render (self)
+    def Render(self):
+        render = Widget.Render(self)
 
-        render.html    += HTML %({'id': self.id,
+        render.html += HTML % ({'id': self.id,
                                   'props': self.__get_props()})
-        render.js      += JS   %({'id': self.id})
+        render.js += JS % ({'id': self.id})
         render.headers += HEADERS
 
         return render

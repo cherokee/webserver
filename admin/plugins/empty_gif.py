@@ -29,7 +29,7 @@ from consts import *
 HELPS = [('modules_handlers_empty_gif', _("1x1 Empty GIF"))]
 
 class Plugin_empty_gif (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
+    def __init__(self, key, **kwargs):
         kwargs['show_document_root'] = False
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)

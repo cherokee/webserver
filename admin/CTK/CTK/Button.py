@@ -38,8 +38,8 @@ class Button (Widget):
           button1 = CTK.Button()
           button2 = CTK.Box('Validate', {'class': 'blue_button'})
     """
-    def __init__ (self, caption="Submit", props={}):
-        Widget.__init__ (self)
+    def __init__(self, caption="Submit", props={}):
+        Widget.__init__(self)
         self.props = props.copy()
 
         if 'class' in props:
@@ -47,19 +47,19 @@ class Button (Widget):
         else:
             self.props['class'] = "button"
 
-        self.id      = props.pop('id', "button_%d"%(self.uniq_id))
+        self.id = props.pop('id', "button_%d" % (self.uniq_id))
         self.caption = caption
 
     # Public interface
     #
-    def Render (self):
-        id      = self.id
+    def Render(self):
+        id = self.id
         caption = self.caption
-        props   = props_to_str (self.props)
+        props = props_to_str(self.props)
 
-        html = '<button id="%(id)s" %(props)s>%(caption)s</button>' %(locals())
+        html = '<button id="%(id)s" %(props)s>%(caption)s</button>' % (locals())
 
-        render = Widget.Render (self)
+        render = Widget.Render(self)
         render.html += html
 
         return render

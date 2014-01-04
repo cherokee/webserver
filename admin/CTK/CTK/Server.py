@@ -42,14 +42,14 @@ from cgi import escape as escape_html
 
 
 class PostValidator:
-    def __init__ (self, post, validation_list):
-        self.post            = post
+    def __init__(self, post, validation_list):
+        self.post = post
         self.validation_list = validation_list
 
-    def Validate (self):
-        errors  = {}
+    def Validate(self):
+        errors = {}
         updates = {}
-        ret     = "warning"
+        ret = "warning"
 
         for key in self.post:
             for regex, func in self.validation_list:
@@ -60,7 +60,7 @@ class PostValidator:
                             continue
 
                         try:
-                            tmp = func (val)
+                            tmp = func(val)
                         except UserWarning, e:
                             errors[key] = str(e[0])
                             tmp = str(e[1])
@@ -75,23 +75,23 @@ class PostValidator:
 
         if errors or updates:
             return {'ret': ret,
-                    'errors':  errors,
+                    'errors': errors,
                     'updates': updates}
 
 
 class ServerHandler (pyscgi.SCGIHandler):
-    def __init__ (self, *args):
+    def __init__(self, *args):
         self.response = HTTP_Response()
 
         # SCGIHandler.__init__ invokes ::handle()
-        pyscgi.SCGIHandler.__init__ (self, *args)
+        pyscgi.SCGIHandler.__init__(self, *args)
 
-    def _process_post (self):
+    def _process_post(self):
         pyscgi.SCGIHandler.handle_post(self)
-        post = Post (self.post)
+        post = Post(self.post)
         return post
 
-    def _do_handle (self):
+    def _do_handle(self):
         # Read the URL
         url = self.env['REQUEST_URI']
 
@@ -118,13 +118,13 @@ class ServerHandler (pyscgi.SCGIHandler):
                     sec_error = "Submit"
 
         if sec_error:
-            response = HTTP_Response (error=403, body="%s check failed" %(sec_error))
-            self.send (str(response))
+            response = HTTP_Response(error=403, body="%s check failed" % (sec_error))
+            self.send(str(response))
             return
 
         # Refer SCGI object by thread
         my_thread = threading.currentThread()
-        my_thread.scgi_conn   = self
+        my_thread.scgi_conn = self
         my_thread.request_url = url
 
         base_path = urlparse.urlsplit(url).path
@@ -132,7 +132,7 @@ class ServerHandler (pyscgi.SCGIHandler):
             base_path = base_path[:-1]  # remove trailing '/' if it exists
 
         for published in server._web_paths:
-            if re.match (published._regex, base_path):
+            if re.match(published._regex, base_path):
                 warnings = {}
 
                 # POST
@@ -141,7 +141,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                     my_thread.post = post
 
                     # Validate
-                    validator = PostValidator (post, published._validation)
+                    validator = PostValidator(post, published._validation)
                     errors = validator.Validate()
                     if errors:
                         if errors['ret'] == 'warning':
@@ -152,7 +152,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                             return resp
 
                 # Execute handler
-                ret = published (**published._kwargs)
+                ret = published(**published._kwargs)
 
                 # Deal with the returned info
                 if type(ret) == str:
@@ -173,9 +173,9 @@ class ServerHandler (pyscgi.SCGIHandler):
                     return self.response
 
         # Not found
-        return HTTP_Error (404)
+        return HTTP_Error(404)
 
-    def handle_request (self):
+    def handle_request(self):
         def manage_exception():
             # Print the backtrace
             info = traceback.format_exc()
@@ -184,21 +184,21 @@ class ServerHandler (pyscgi.SCGIHandler):
             # Custom error management
             if error.page:
                 try:
-                    page = error.page (info, desc)
-                    response = HTTP_Response (error=500, body=page.Render())
-                    self.send (str(response))
+                    page = error.page(info, desc)
+                    response = HTTP_Response(error=500, body=page.Render())
+                    self.send(str(response))
                     return
                 except Exception, e:
                     print "!!!!!!", e
                     pass
 
             # No error handling page
-            html = '<pre>%s</pre>' %(escape_html(info))
-            self.send (str(HTTP_Error(desc=html)))
+            html = '<pre>%s</pre>' % (escape_html(info))
+            self.send(str(HTTP_Error(desc=html)))
 
         try:
             content = self._do_handle()
-            self.send (str(content))
+            self.send(str(content))
 
         except OSError, e:
             if e.errno == errno.EPIPE:
@@ -212,19 +212,19 @@ class ServerHandler (pyscgi.SCGIHandler):
 
 
 class Server:
-    def __init__ (self):
-        self._web_paths     = []
-        self._scgi          = None
-        self._is_init       = False
-        self.lock           = threading.RLock()
-        self.plugin_paths   = []
-        self.exiting        = False
+    def __init__(self):
+        self._web_paths = []
+        self._scgi = None
+        self._is_init = False
+        self.lock = threading.RLock()
+        self.plugin_paths = []
+        self.exiting = False
         self.use_sec_cookie = False
-        self.sec_cookie     = None
+        self.sec_cookie = None
         self.use_sec_submit = False
-        self.sec_submit     = None
+        self.sec_submit = None
 
-    def init_server (self, *args, **kwargs):
+    def init_server(self, *args, **kwargs):
         # Is it already init?
         if self._is_init:
             return
@@ -238,17 +238,17 @@ class Server:
             self.use_sec_submit = kwargs.pop('sec_submit')
 
         # Instance SCGI server
-        self._scgi = pyscgi.ServerFactory (*args, **kwargs)
+        self._scgi = pyscgi.ServerFactory(*args, **kwargs)
 
         # Figure plug-in paths
         from Plugin import figure_plugin_paths
         self.plugin_paths = figure_plugin_paths()
 
-    def sort_routes (self):
-        def __cmp(x,y):
+    def sort_routes(self):
+        def __cmp(x, y):
             lx = len(x._regex)
             ly = len(y._regex)
-            return cmp(ly,lx)
+            return cmp(ly, lx)
 
         self.lock.acquire()
         try:
@@ -256,36 +256,36 @@ class Server:
         finally:
             self.lock.release()
 
-    def add_route (self, route_obj):
+    def add_route(self, route_obj):
         self.lock.acquire()
         try:
             # Look for a duplicate
             to_remove = []
             for r in self._web_paths:
                 if r._regex == route_obj._regex:
-                    to_remove.append (r)
+                    to_remove.append(r)
 
-            self._web_paths = filter (lambda x: x not in to_remove, self._web_paths)
+            self._web_paths = filter(lambda x: x not in to_remove, self._web_paths)
 
             # Insert
-            self._web_paths.append (route_obj)
+            self._web_paths.append(route_obj)
             self.sort_routes()
         finally:
             self.lock.release()
 
-    def remove_route (self, path):
+    def remove_route(self, path):
         self.lock.acquire()
         try:
             to_remove = []
             for r in self._web_paths:
                 if r._regex == path:
-                    to_remove.append (r)
+                    to_remove.append(r)
 
-            self._web_paths = filter (lambda x: x not in to_remove, self._web_paths)
+            self._web_paths = filter(lambda x: x not in to_remove, self._web_paths)
         finally:
             self.lock.release()
 
-    def serve_forever (self):
+    def serve_forever(self):
         try:
             while not self.exiting:
                 # Handle request
@@ -304,9 +304,9 @@ class Server:
 #
 def cfg_reply_ajax_ok():
     if cfg.has_changed():
-        return {'ret':'ok', 'modified': '#save-button'}
+        return {'ret': 'ok', 'modified': '#save-button'}
 
-    return {'ret':'ok', 'not-modified': '#save-button'}
+    return {'ret': 'ok', 'not-modified': '#save-button'}
 
 def cfg_apply_post():
     """Apply entries of the HTTP POST request to the Configuration
@@ -321,7 +321,7 @@ __global_server = None
 def get_server():
     global __global_server
     if not __global_server:
-        __global_server = Server ()
+        __global_server = Server()
 
     return __global_server
 
@@ -330,7 +330,7 @@ def get_scgi():
     my_thread = threading.currentThread()
     return my_thread.scgi_conn
 
-def init (*args, **kwargs):
+def init(*args, **kwargs):
     # Init CTK
     import Init
     Init.Init()
@@ -342,18 +342,18 @@ def init (*args, **kwargs):
         kwargs['threading'] = True
 
     kwargs['handler_class'] = ServerHandler
-    srv.init_server (*args, **kwargs)
+    srv.init_server(*args, **kwargs)
 
-def set_synchronous (sync):
+def set_synchronous(sync):
     srv = get_server()
-    srv._scgi.set_synchronous (sync)
+    srv._scgi.set_synchronous(sync)
 
-def add_plugin_dir (path):
+def add_plugin_dir(path):
     srv = get_server()
-    srv.plugin_paths.insert (0, path)
+    srv.plugin_paths.insert(0, path)
 
-def run (*args, **kwargs):
-    init (*args, **kwargs)
+def run(*args, **kwargs):
+    init(*args, **kwargs)
 
     srv = get_server()
     srv.serve_forever()
@@ -362,52 +362,52 @@ def stop():
     srv = get_server()
     srv.exiting = True
 
-def step ():
+def step():
     srv = get_server()
     srv._scgi.handle_request()
 
 
 class Publish_FakeClass:
-    def __init__ (self, func):
+    def __init__(self, func):
         self.__func = func
 
-    def __call__ (self, *args, **kwargs):
-        return self.__func (*args, **kwargs)
+    def __call__(self, *args, **kwargs):
+        return self.__func(*args, **kwargs)
 
 
-def publish (regex_url, klass, **kwargs):
+def publish(regex_url, klass, **kwargs):
     """Publish a path given by the regex_url regular expression, and
     map it to the class of function given by the klass argument"""
     # Instance object
     if type(klass) == types.ClassType:
         obj = klass()
     else:
-        obj = Publish_FakeClass (klass)
+        obj = Publish_FakeClass(klass)
 
     # Set internal properties
-    obj._kwargs     = kwargs
-    obj._regex      = regex_url
+    obj._kwargs = kwargs
+    obj._regex = regex_url
     obj._validation = kwargs.pop('validation', [])
-    obj._method     = kwargs.pop('method', None)
+    obj._method = kwargs.pop('method', None)
 
     # Register
     server = get_server()
-    server.add_route (obj)
+    server.add_route(obj)
 
-def unpublish (regex_url):
+def unpublish(regex_url):
     """Unpublish a path from the global list of published URLs"""
     # Unregister
     server = get_server()
-    server.remove_route (regex_url)
+    server.remove_route(regex_url)
 
 
 class _Cookie:
-    def __setitem__ (self, name, value):
+    def __setitem__(self, name, value):
         my_thread = threading.currentThread()
         response = my_thread.scgi_conn.response
-        response['Set-Cookie'] = "%s=%s" %(name, value)
+        response['Set-Cookie'] = "%s=%s" % (name, value)
 
-    def get_val (self, name, default=None):
+    def get_val(self, name, default=None):
         my_thread = threading.currentThread()
         scgi = my_thread.scgi_conn
         cookie = Cookie.SimpleCookie(scgi.env.get('HTTP_COOKIE', ''))
@@ -416,71 +416,71 @@ class _Cookie:
         else:
             return default
 
-    def __getitem__ (self, name):
-        return self.get_val (name, None)
+    def __getitem__(self, name):
+        return self.get_val(name, None)
 
 
 class _Post:
-    def get_val (self, name, default=None):
+    def get_val(self, name, default=None):
         my_thread = threading.currentThread()
         post = my_thread.post
         return post.get_val(name, default)
 
-    def __getitem__ (self, name):
-        return self.get_val (name, None)
+    def __getitem__(self, name):
+        return self.get_val(name, None)
 
-    def __iter__ (self):
+    def __iter__(self):
         my_thread = threading.currentThread()
         post = my_thread.post
         return post.__iter__()
 
-    def __str__ (self):
+    def __str__(self):
         my_thread = threading.currentThread()
         post = my_thread.post
         return str(post)
 
-    def pop (self, *args):
+    def pop(self, *args):
         my_thread = threading.currentThread()
         post = my_thread.post
         return post.pop(*args)
 
-    def keys (self, *args):
+    def keys(self, *args):
         my_thread = threading.currentThread()
         post = my_thread.post
         return post.keys(*args)
 
-    def get_all (self, *args):
+    def get_all(self, *args):
         my_thread = threading.currentThread()
         post = my_thread.post
         return post.get_all(*args)
 
-    def get_raw (self):
+    def get_raw(self):
         my_thread = threading.currentThread()
         post = my_thread.post
         return post.raw_post
 
 class _Request:
-    def _get_request_url (self):
+    def _get_request_url(self):
         my_thread = threading.currentThread()
         return my_thread.request_url
 
-    def _get_request_headers (self):
+    def _get_request_headers(self):
         return get_scgi().env
 
-    def _get_scgi_conn (self):
+    def _get_scgi_conn(self):
         return get_scgi()
 
-    scgi    = property (_get_scgi_conn)
-    url     = property (_get_request_url)
-    headers = property (_get_request_headers)
+    scgi = property(_get_scgi_conn)
+    url = property(_get_request_url)
+    headers = property(_get_request_headers)
 
 class _Error:
-    def __init__ (self):
+    def __init__(self):
         self.page = None
 
 
-cookie  = _Cookie()
-post    = _Post()
+cookie = _Cookie()
+post = _Post()
 request = _Request()
-error   = _Error()
-cfg     = Config.Config()
+error = _Error()
+cfg = Config.Config()

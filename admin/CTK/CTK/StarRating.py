@@ -67,26 +67,26 @@ class StarRating (Box):
           submit = CTK.Submitter ('/apply')
           submit += CTK.StarRating ({'name': 'rate', 'can_set': True, 'selected': '3'})
     """
-    def __init__ (self, props={}):
-        Box.__init__ (self, {'class': 'star-rating'})
+    def __init__(self, props={}):
+        Box.__init__(self, {'class': 'star-rating'})
 
         assert type(props) == dict
         self.selected = props.get('selected', '5')
-        self.can_set  = props.pop('can_set', False)
+        self.can_set = props.pop('can_set', False)
 
         if 'style' in props:
             props['style'] += ' display:none;'
         else:
             props['style'] = 'display:none;'
 
-        combo = Combobox (props.copy(), RATING_OPTIONS)
+        combo = Combobox(props.copy(), RATING_OPTIONS)
         self += combo
 
-    def Render (self):
+    def Render(self):
         render = Box.Render(self)
 
         render.headers += HEADERS
-        render.js      += JS_INIT %({'id':       self.id,
+        render.js += JS_INIT % ({'id': self.id,
                                      'selected': self.selected,
-                                     'can_set':  ('false','true')[self.can_set]})
+                                     'can_set': ('false', 'true')[self.can_set]})
         return render

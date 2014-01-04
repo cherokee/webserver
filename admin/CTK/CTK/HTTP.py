@@ -78,20 +78,20 @@ class HTTP_Response:
         505: 'HTTP VERSION NOT SUPPORTED',
         }
 
-    def __init__ (self, error=200, headers=None, body=''):
-        self.error   = error
-        self.body    = body
-        self.headers = ([],headers)[bool(headers)][:]
+    def __init__(self, error=200, headers=None, body=''):
+        self.error = error
+        self.body = body
+        self.headers = ([], headers)[bool(headers)][:]
 
-    def __add__ (self, text):
+    def __add__(self, text):
         assert type(text) == str, type(text)
         self.body += text
         return self
 
-    def __setitem__ (self, key, value):
-        self.headers.append ("%s: %s"%(key, str(value)))
+    def __setitem__(self, key, value):
+        self.headers.append("%s: %s" % (key, str(value)))
 
-    def __str__ (self):
+    def __str__(self):
         all_lower = ''.join(self.headers).lower()
 
         # Add default headers
@@ -102,9 +102,9 @@ class HTTP_Response:
             self['Content-Type'] = 'text/html'
 
         # Build the HTTP response
-        hdr  = "Status: %d\r\n" %(self.error)
+        hdr = "Status: %d\r\n" % (self.error)
         hdr += "X-Powered-By: Cherokee and CTK\r\n"
-        hdr += "\r\n".join (self.headers) + '\r\n'
+        hdr += "\r\n".join(self.headers) + '\r\n'
 
         # No body replies: RFC2616 4.3
         if self.error in (100, 101, 204, 304):
@@ -118,13 +118,13 @@ class HTTP_Error (HTTP_Response):
     Base class for HTTP errors. Optionally accepts an error code and a
     description to display with the error.
     """
-    def __init__ (self, error=500, desc=None):
-        HTTP_Response.__init__ (self, error)
-        self.body  = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\r\n'
-        self.body += "<html><head><title>Error %d: %s</title></head>\n" %(error, HTTP_Response.DESC[error])
-        self.body += '<body><h1>Error %d: %s</h1>\n' %(error, HTTP_Response.DESC[error])
+    def __init__(self, error=500, desc=None):
+        HTTP_Response.__init__(self, error)
+        self.body = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\r\n'
+        self.body += "<html><head><title>Error %d: %s</title></head>\n" % (error, HTTP_Response.DESC[error])
+        self.body += '<body><h1>Error %d: %s</h1>\n' % (error, HTTP_Response.DESC[error])
         if desc:
-            self.body += "<p>%s</p>"%(desc)
+            self.body += "<p>%s</p>" % (desc)
         self.body += "</body></html>"
 
 
@@ -133,10 +133,10 @@ class HTTP_Redir (HTTP_Response):
     Base class for HTTP redirections. Typically used to send header
     that will redirect the web browser to another location.
     """
-    def __init__ (self, location, error=307):
-        HTTP_Response.__init__ (self, error)
+    def __init__(self, location, error=307):
+        HTTP_Response.__init__(self, error)
         self['Location'] = location
-        self.body += 'Redirecting to <a href="%s">%s</a>.' %(location, location)
+        self.body += 'Redirecting to <a href="%s">%s</a>.' % (location, location)
 
 
 class HTTP_XSendfile (HTTP_Response):
@@ -144,8 +144,8 @@ class HTTP_XSendfile (HTTP_Response):
     Returns the resource given by specified location using the special
     non-standard X-Sendfile header.
     """
-    def __init__ (self, location, error=200):
-        HTTP_Response.__init__ (self, error)
+    def __init__(self, location, error=200):
+        HTTP_Response.__init__(self, error)
         self['X-Sendfile'] = location
 
 class HTTP_Cacheable (HTTP_Response):
@@ -153,12 +153,12 @@ class HTTP_Cacheable (HTTP_Response):
     Standard response that automatically adds Expires and
     Cache-Control headers.
     """
-    def __init__ (self, secs_num, *args, **kwargs):
-        HTTP_Response.__init__ (self, *args, **kwargs)
+    def __init__(self, secs_num, *args, **kwargs):
+        HTTP_Response.__init__(self, *args, **kwargs)
 
         # Set cache headers
-        t = calendar.timegm (time.gmtime())
+        t = calendar.timegm(time.gmtime())
         t += secs_num
 
-        self["Expires"]       = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(t))
-        self["Cache-Control"] = "max-age=%d"%(secs_num)
+        self["Expires"] = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(t))
+        self["Cache-Control"] = "max-age=%d" % (secs_num)

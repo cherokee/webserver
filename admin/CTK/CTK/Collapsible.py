@@ -43,39 +43,39 @@ class Collapsible (Box):
           container  = CTK.Collapsible (('Show', 'Hide'))
           container += CTK.RawHTML ('<p>This text can be hidden, or not.</p>')
     """
-    def __init__ (self, (titles), collapsed=True):
-        Box.__init__ (self, {'class': 'collapsible'})
+    def __init__(self, (titles), collapsed=True):
+        Box.__init__(self, {'class': 'collapsible'})
 
         self.collapsed = collapsed
         if collapsed:
-            self.content = Box ({'class': 'collapsible-content', 'style': 'display:none;'})
+            self.content = Box({'class': 'collapsible-content', 'style': 'display:none;'})
         else:
-            self.content = Box ({'class': 'collapsible-content'})
+            self.content = Box({'class': 'collapsible-content'})
 
         assert len(titles) == 2
-        self.title_show = Box ({'class': 'collapsible-title'}, titles[0])
-        self.title_hide = Box ({'class': 'collapsible-title'}, titles[1])
+        self.title_show = Box({'class': 'collapsible-title'}, titles[0])
+        self.title_hide = Box({'class': 'collapsible-title'}, titles[1])
 
-        self.title_show.bind ('click', self.__JS_show())
-        self.title_hide.bind ('click', self.__JS_hide())
+        self.title_show.bind('click', self.__JS_show())
+        self.title_hide.bind('click', self.__JS_hide())
 
         # Build up
-        Box.__iadd__ (self, self.title_show)
-        Box.__iadd__ (self, self.title_hide)
-        Box.__iadd__ (self, self.content)
+        Box.__iadd__(self, self.title_show)
+        Box.__iadd__(self, self.title_hide)
+        Box.__iadd__(self, self.content)
 
-    def __iadd__ (self, content):
+    def __iadd__(self, content):
         self.content += content
         return self
 
-    def __JS_show (self):
+    def __JS_show(self):
         return self.content.JS_to_show(100) + self.title_hide.JS_to_show() + self.title_show.JS_to_hide()
 
-    def __JS_hide (self):
+    def __JS_hide(self):
         return self.content.JS_to_hide() + self.title_hide.JS_to_hide() + self.title_show.JS_to_show()
 
-    def Render (self):
-        render = Box.Render (self)
+    def Render(self):
+        render = Box.Render(self)
 
         if self.collapsed:
             render.js += self.__JS_hide()
@@ -102,7 +102,7 @@ class CollapsibleEasy (Collapsible):
           container  = CTK.CollapsibleEasy (('Show', 'Hide'))
           container += CTK.RawHTML ('<p>This text can be hidden, or not.</p>')
     """
-    def __init__ (self, (titles), collapsed=True):
+    def __init__(self, (titles), collapsed=True):
         assert len(titles) == 2
         assert type(titles[0]) == str
         assert type(titles[1]) == str
@@ -116,4 +116,4 @@ class CollapsibleEasy (Collapsible):
 
         show = RawHTML(c0 + titles[0])
         hide = RawHTML(c1 + titles[1])
-        Collapsible.__init__ (self, (show, hide), collapsed)
+        Collapsible.__init__(self, (show, hide), collapsed)

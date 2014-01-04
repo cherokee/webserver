@@ -30,29 +30,29 @@ class Container (Widget):
     HTML associated with the widgets contained within. Thus, if no
     such widget exists, no HTML will be rendered.
     """
-    def __init__ (self):
-        Widget.__init__ (self)
+    def __init__(self):
+        Widget.__init__(self)
         self.child = []
 
-    def __getitem__ (self, n):
+    def __getitem__(self, n):
         return self.child[n]
 
-    def __len__ (self):
+    def __len__(self):
         return len(self.child)
 
-    def __nonzero__ (self):
+    def __nonzero__(self):
         # It's an obj, no matter its child.
         return True
 
-    def __iadd__ (self, widget):
+    def __iadd__(self, widget):
         assert isinstance(widget, Widget)
-        self.child.append (widget)
+        self.child.append(widget)
         return self
 
-    def Empty (self):
+    def Empty(self):
         self.child = []
 
-    def Render (self):
+    def Render(self):
         render = Widget.Render(self)
 
         for c in self.child:

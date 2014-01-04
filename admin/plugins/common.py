@@ -27,27 +27,27 @@ import Handler
 from CTK.Plugin import instance_plugin
 
 URL_APPLY = '/plugin/common/apply'
-HELPS     = [('modules_handlers_common', N_("List & Send"))]
+HELPS = [('modules_handlers_common', N_("List & Send"))]
 
 NOTE_PATHINFO = N_("Allow extra tailing paths")
-NOTE_DIRLIST  = N_("Allow to list directory contents")
+NOTE_DIRLIST = N_("Allow to list directory contents")
 
 
 class Plugin_common (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+    def __init__(self, key, **kwargs):
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)
 
         table = CTK.PropsTable()
-        table.Add (_('Allow PathInfo'),          CTK.CheckCfgText('%s!allow_pathinfo'%(key), False, _('Allow')), _(NOTE_PATHINFO))
-        table.Add (_('Allow Directory Listing'), CTK.CheckCfgText('%s!allow_dirlist'%(key),  True,  _('Allow')), _(NOTE_DIRLIST))
+        table.Add(_('Allow PathInfo'), CTK.CheckCfgText('%s!allow_pathinfo' % (key), False, _('Allow')), _(NOTE_PATHINFO))
+        table.Add(_('Allow Directory Listing'), CTK.CheckCfgText('%s!allow_dirlist' % (key), True, _('Allow')), _(NOTE_DIRLIST))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Parsing')))
-        self += CTK.Indenter (submit)
-        self += instance_plugin('file',    key, show_document_root=False)
+        self += CTK.RawHTML('<h2>%s</h2>' % (_('Parsing')))
+        self += CTK.Indenter(submit)
+        self += instance_plugin('file', key, show_document_root=False)
         self += instance_plugin('dirlist', key, show_document_root=False)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, method="POST")

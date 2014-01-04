@@ -18,19 +18,19 @@ vserver!2440!rule!100!match!final = 1
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name           = "Rule: Directory properties overwrite"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Rule: Directory properties overwrite"
         self.request        = "GET /inside/ HTTP/1.0\r\n" +\
                               "Host: directoryoverwrite\r\n"
         self.expected_error = 200
 
-    def Prepare (self, www):
+    def Prepare(self, www):
         # Generate files and dir
-        self.vsdr = self.Mkdir (www, "directoryoverwrite")
-        self.rldr = self.Mkdir (www, "directoryinside")
+        self.vsdr = self.Mkdir(www, "directoryoverwrite")
+        self.rldr = self.Mkdir(www, "directoryinside")
 
-        self.WriteFile (self.rldr, "index.html", 0666, MAGIC)
+        self.WriteFile(self.rldr, "index.html", 0666, MAGIC)
 
         # Set the configuration
         self.conf = CONF % (self.vsdr, self.rldr)

@@ -45,17 +45,17 @@ class Indenter (Container):
           indent = CTK.Indenter()
           indent += CTK.RawHTML('<p>This goes on an indented block.</p>')
     """
-    def __init__ (self, widget=None, level=1):
-        Container.__init__ (self)
+    def __init__(self, widget=None, level=1):
+        Container.__init__(self)
         self.level = level
 
         if widget:
             self += widget
 
-    def Render (self):
-        render = Container.Render (self)
+    def Render(self):
+        render = Container.Render(self)
 
         for n in range(self.level):
-            render.html = HTML%({'id': self.id, 'content': render.html})
+            render.html = HTML % ({'id': self.id, 'content': render.html})
 
         return render

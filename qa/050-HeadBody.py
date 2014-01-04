@@ -9,16 +9,16 @@ vserver!1!rule!500!handler = common
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Head doesn't include body"
 
-        self.request           = "HEAD /head-body/test HTTP/1.0\r\n"
-        self.conf              = CONF
-        self.expected_error    = 200
+        self.request = "HEAD /head-body/test HTTP/1.0\r\n"
+        self.conf = CONF
+        self.expected_error = 200
         self.forbidden_content = MAGIC
 
-    def Prepare (self, www):
-        self.Mkdir (www, "head-body")
-        self.WriteFile (www, "head-body/test", 0444, MAGIC)
+    def Prepare(self, www):
+        self.Mkdir(www, "head-body")
+        self.WriteFile(www, "head-body/test", 0444, MAGIC)
 

@@ -97,39 +97,39 @@ class Submitter (Container):
       is to use a submitter for each one.
     """
 
-    def __init__ (self, submit_url):
-        Container.__init__ (self)
+    def __init__(self, submit_url):
+        Container.__init__(self)
         self.url = submit_url
-        self.id  = "submitter%d" %(self.uniq_id)
+        self.id = "submitter%d" % (self.uniq_id)
 
         # Secure submit
         srv = get_server()
         if srv.use_sec_submit:
-            self.url += '?key=%s' %(srv.sec_submit)
+            self.url += '?key=%s' % (srv.sec_submit)
 
-    def Render (self):
+    def Render(self):
         # Child render
         render = Container.Render(self)
 
         # Own render
-        props = {'id':       self.id,
-                 'id_uniq':  self.uniq_id,
-                 'url':      self.url,
-                 'content':  render.html,
+        props = {'id': self.id,
+                 'id_uniq': self.uniq_id,
+                 'url': self.url,
+                 'content': render.html,
                  'optional': _('Optional')}
 
-        js = JS_INIT %(props) + Uniq_Block (JS_FOCUS %(props))
+        js = JS_INIT % (props) + Uniq_Block(JS_FOCUS % (props))
 
-        render.html     = HTML %(props)
-        render.js       = js + render.js
+        render.html = HTML % (props)
+        render.js = js + render.js
         render.headers += HEADER
 
         render.clean_up_headers()
         return render
 
-    def JS_to_submit (self):
-        return "$('#%s').data('submitter').submit_form();" %(self.id)
-        #return "submit_%d.submit_form (submit_%d);" % (self.uniq_id, self.uniq_id)
+    def JS_to_submit(self):
+        return "$('#%s').data('submitter').submit_form();" % (self.id)
+        # return "submit_%d.submit_form (submit_%d);" % (self.uniq_id, self.uniq_id)
 
 
 FORCE_SUBMIT_JS = """
@@ -149,10 +149,10 @@ class SubmitterButton (Button):
     caption: text that should appear in the button. By default,
              "Submit".
     """
-    def __init__ (self, caption="Submit"):
-        Button.__init__ (self, caption)
+    def __init__(self, caption="Submit"):
+        Button.__init__(self, caption)
 
-    def Render (self):
+    def Render(self):
         render = Button.Render(self)
-        render.js += FORCE_SUBMIT_JS %({'id': self.id})
+        render.js += FORCE_SUBMIT_JS % ({'id': self.id})
         return render

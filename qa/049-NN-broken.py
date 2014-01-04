@@ -11,8 +11,8 @@ vserver!490!error_handler = error_nn
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Broken NN"
 
         self.request        = "GET /missing HTTP/1.1\r\n" + \
@@ -20,6 +20,6 @@ class Test (TestBase):
                               "Host: %s\r\n" % (HOST)
         self.expected_error = 404
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "nn2_root")
+    def Prepare(self, www):
+        d = self.Mkdir(www, "nn2_root")
         self.conf = CONF % (HOST, d)

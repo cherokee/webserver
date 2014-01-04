@@ -56,24 +56,24 @@ class Notice (Container):
           notice2  = CTK.Notice('warning', CTK.RawHTML('<p>Broken element</p>'))
     """
 
-    def __init__ (self, klass='information', content=None, props={}):
-        Container.__init__ (self)
+    def __init__(self, klass='information', content=None, props={}):
+        Container.__init__(self)
 
         assert klass in NOTICE_TYPES
         self.props = props.copy()
 
         if 'class' in self.props:
-            self.props['class'] = 'dialog-%s %s'%(klass, self.props['class'])
+            self.props['class'] = 'dialog-%s %s' % (klass, self.props['class'])
         else:
-            self.props['class'] = 'dialog-%s' %(klass)
+            self.props['class'] = 'dialog-%s' % (klass)
 
         if content:
             self += content
 
-    def Render (self):
-        render = Container.Render (self)
+    def Render(self):
+        render = Container.Render(self)
 
-        render.html = HTML %({'id':      self.id,
+        render.html = HTML % ({'id': self.id,
                               'content': render.html,
-                              'props':   props_to_str(self.props)})
+                              'props': props_to_str(self.props)})
         return render

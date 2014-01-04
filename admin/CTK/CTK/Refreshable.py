@@ -43,8 +43,8 @@ $.ajax({
 });
 """
 
-def render_plain_html (build_func, **kwargs):
-    render = build_func (**kwargs)
+def render_plain_html(build_func, **kwargs):
+    render = build_func(**kwargs)
     return render.toStr()
 
 
@@ -67,8 +67,8 @@ class Refreshable (Widget):
         refresh = CTK.Refreshable ({'id': 'r1'})
         refresh.register (lambda: Content(refresh).Render())
     """
-    def __init__ (self, _props={}):
-        Widget.__init__ (self)
+    def __init__(self, _props={}):
+        Widget.__init__(self)
 
         assert 'id' in _props, "Property 'id' must be provided"
 
@@ -78,43 +78,43 @@ class Refreshable (Widget):
         else:
             self.props['class'] = 'refreshable'
 
-        self.id         = self.props.pop('id')
-        self.url        = "/refreshable/%s" %(self.id)
+        self.id = self.props.pop('id')
+        self.url = "/refreshable/%s" % (self.id)
         self.build_func = None
 
-    def register (self, build_func=None, **kwargs):
+    def register(self, build_func=None, **kwargs):
         """Register the function used to populate the refreshable
         container"""
 
         self.build_func = build_func
-        self.params     = kwargs
+        self.params = kwargs
 
         # Register the public URL
-        publish (self.url, render_plain_html, build_func=build_func, **kwargs)
+        publish(self.url, render_plain_html, build_func=build_func, **kwargs)
 
-    def Render (self):
-        render = self.build_func (**self.params)
+    def Render(self):
+        render = self.build_func(**self.params)
 
-        props = {'id':      self.id,
-                 'props':   props_to_str(self.props),
+        props = {'id': self.id,
+                 'props': props_to_str(self.props),
                  'content': render.html}
 
-        render.html = HTML %(props)
+        render.html = HTML % (props)
         return render
 
-    def JS_to_refresh (self, on_success='', selector=None, url=None):
+    def JS_to_refresh(self, on_success='', selector=None, url=None):
         """Return Javascript snippet required to update the contents
         of the refreshable element."""
         if not selector:
-            selector = "$('#%s')" %(self.id)
+            selector = "$('#%s')" % (self.id)
 
         if len(on_success) > 0:
              on_success = "$(document).ready(function(){ %s });" % on_success
 
-        props = {'selector':   selector,
-                 'url':        url or self.url,
+        props = {'selector': selector,
+                 'url': url or self.url,
                  'on_success': on_success}
-        return REFRESHABLE_UPDATE_JS %(props)
+        return REFRESHABLE_UPDATE_JS % (props)
 
 
 JS_URL_INIT = """
@@ -146,8 +146,8 @@ class RefreshableURL (Widget):
     Refreshable container that loads the contents of the specified
     URL.
     """
-    def __init__ (self, url='', _props={}):
-        Widget.__init__ (self)
+    def __init__(self, url='', _props={}):
+        Widget.__init__(self)
 
         # Properties
         props = _props.copy()
@@ -160,23 +160,23 @@ class RefreshableURL (Widget):
             self.id = props.pop('id')
 
         self.props = props
-        self.url   = url
+        self.url = url
 
-    def Render (self):
-        props = {'id':      self.id,
-                 'url':     self.url,
-                 'props':   props_to_str(self.props),
+    def Render(self):
+        props = {'id': self.id,
+                 'url': self.url,
+                 'props': props_to_str(self.props),
                  'content': ''}
 
-        render = Widget.Render (self)
-        render.html += HTML %(props)
-        render.js   += JS_URL_LOAD %(props)
-        render.js   += JS_URL_INIT %(props)
+        render = Widget.Render(self)
+        render.html += HTML % (props)
+        render.js += JS_URL_LOAD % (props)
+        render.js += JS_URL_INIT % (props)
         return render
 
-    def JS_to_load (self, url):
+    def JS_to_load(self, url):
         """Return Javascript snippet required to load the given url
         into the RefreshableURL container."""
-        props = {'id':  self.id,
+        props = {'id': self.id,
                  'url': url}
-        return JS_URL_LOAD %(props)
+        return JS_URL_LOAD % (props)

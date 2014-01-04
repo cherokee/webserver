@@ -21,21 +21,21 @@
 #
 
 PAGE_CLEAN_DUP_BEGIN = "\n___MAY_BE_DUPPED_BEGIN___\n"
-PAGE_CLEAN_DUP_END   = "\n___MAY_BE_DUPPED_END___\n"
+PAGE_CLEAN_DUP_END = "\n___MAY_BE_DUPPED_END___\n"
 
 
-def Uniq_Block (txt):
-    ret  = PAGE_CLEAN_DUP_BEGIN
+def Uniq_Block(txt):
+    ret = PAGE_CLEAN_DUP_BEGIN
     ret += txt
     ret += PAGE_CLEAN_DUP_END
     return ret
 
-def Postprocess (txt):
-    return _remove_dupped_code (txt)
+def Postprocess(txt):
+    return _remove_dupped_code(txt)
 
 
 
-def _remove_dupped_code (txt):
+def _remove_dupped_code(txt):
     dups = {}
 
     while True:
@@ -48,9 +48,9 @@ def _remove_dupped_code (txt):
         assert n2 != -1
 
         # Remove tags
-        maybe_dupped = txt[n1+len(PAGE_CLEAN_DUP_BEGIN):n2]
+        maybe_dupped = txt[n1 + len(PAGE_CLEAN_DUP_BEGIN):n2]
         if maybe_dupped in dups:
-            txt = txt[:n1] + txt[n2+len(PAGE_CLEAN_DUP_END):]
+            txt = txt[:n1] + txt[n2 + len(PAGE_CLEAN_DUP_END):]
         else:
-            txt = txt[:n1] + maybe_dupped + txt[n2+len(PAGE_CLEAN_DUP_END):]
+            txt = txt[:n1] + maybe_dupped + txt[n2 + len(PAGE_CLEAN_DUP_END):]
             dups[maybe_dupped] = True

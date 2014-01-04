@@ -23,5 +23,5 @@
 import CTK
 
 class Plugin_error_nn (CTK.Plugin):
-    def __init__ (self, key, vsrv_num):
-        CTK.Plugin.__init__ (self, key)
+    def __init__(self, key, vsrv_num):
+        CTK.Plugin.__init__(self, key)

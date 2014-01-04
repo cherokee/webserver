@@ -1,12 +1,12 @@
 from base import *
 
-NICK    = "nick-260"
-DIR     = "/dir-260"
+NICK = "nick-260"
+DIR = "/dir-260"
 DOMAIN1 = "test-1-260"
 DOMAIN2 = "test-2-260"
-DOMAIN  = "whatever-260"
-ERROR1  = 100
-ERROR2  = 201
+DOMAIN = "whatever-260"
+ERROR1 = 100
+ERROR2 = 201
 
 CONF = """
 vserver!260!nick = %(NICK)s
@@ -30,10 +30,10 @@ vserver!1!rule!2600!handler!error = %(ERROR2)s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name           = "VRule OR: No match"
-        self.request        = "GET %s/ HTTP/1.0\r\n" %(DIR) + \
-                              "Host: %s\r\n" %(DOMAIN)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "VRule OR: No match"
+        self.request        = "GET %s/ HTTP/1.0\r\n" % (DIR) + \
+                              "Host: %s\r\n" % (DOMAIN)
         self.expected_error = ERROR2
-        self.conf           = CONF %(globals())
+        self.conf = CONF % (globals())

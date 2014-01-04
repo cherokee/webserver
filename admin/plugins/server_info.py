@@ -29,11 +29,11 @@ from util import *
 from consts import *
 
 URL_APPLY = '/plugin/server_info/apply'
-HELPS     = [('modules_handlers_server_info', N_("Server Information"))]
+HELPS = [('modules_handlers_server_info', N_("Server Information"))]
 
 OPTIONS = [
-    ('normal',             N_("Server Information")),
-    ('just_about',         N_("Only version information")),
+    ('normal', N_("Server Information")),
+    ('just_about', N_("Only version information")),
     ('connection_details', N_("Server Information + Connections"))
 ]
 
@@ -41,18 +41,18 @@ NOTE_INFORMATION = N_('Which information should be shown.')
 
 
 class Plugin_server_info (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
+    def __init__(self, key, **kwargs):
         kwargs['show_document_root'] = False
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)
 
         table = CTK.PropsTable()
-        table.Add (_("Show Information"), CTK.ComboCfg('%s!type'%(key), trans_options(OPTIONS)), _(NOTE_INFORMATION))
+        table.Add(_("Show Information"), CTK.ComboCfg('%s!type' % (key), trans_options(OPTIONS)), _(NOTE_INFORMATION))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Privacy Settings')))
-        self += CTK.Indenter (submit)
+        self += CTK.RawHTML("<h2>%s</h2>" % (_('Privacy Settings')))
+        self += CTK.Indenter(submit)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, method="POST")

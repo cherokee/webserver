@@ -69,39 +69,39 @@ from Uploader import UploadRequest
 
 
 class AjaxUpload_Generic (Box):
-    def __init__ (self, opener_widget, props={}, params=None, direct=True):
-        Box.__init__ (self)
+    def __init__(self, opener_widget, props={}, params=None, direct=True):
+        Box.__init__(self)
 
-        self.id            = 'ajax_upload_%d'  %(self.uniq_id)
-        self._url_local    = '/ajax_upload_%d' %(self.uniq_id)
-        self.props         = props.copy()
+        self.id = 'ajax_upload_%d' % (self.uniq_id)
+        self._url_local = '/ajax_upload_%d' % (self.uniq_id)
+        self.props = props.copy()
         self.opener_widget = opener_widget
 
-        handler    = self.props.get('handler')
+        handler = self.props.get('handler')
         target_dir = self.props.get('target_dir')
 
         # Widgets
-        msg = Box ({'class': 'msg'}, RawHTML(' '))
+        msg = Box({'class': 'msg'}, RawHTML(' '))
         self += opener_widget
         self += msg
 
         # Register the uploader path
-        publish (self._url_local, UploadRequest,
+        publish(self._url_local, UploadRequest,
                  handler=handler, target_dir=target_dir, params=params, direct=direct)
 
-    def Render (self):
-        props = {'id':               self.id,
-                 'upload_url':       self._url_local,
+    def Render(self):
+        props = {'id': self.id,
+                 'upload_url': self._url_local,
                  'opener_widget_id': self.opener_widget.id}
 
-        render = Box.Render (self)
+        render = Box.Render(self)
         render.headers += HEADERS
-        render.js      += JS %(props)
+        render.js += JS % (props)
 
         return render
 
 
 class AjaxUpload (AjaxUpload_Generic):
-    def __init__ (self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         button = Button(_('Upload'))
-        AjaxUpload_Generic.__init__ (self, button, *args, **kwargs)
+        AjaxUpload_Generic.__init__(self, button, *args, **kwargs)

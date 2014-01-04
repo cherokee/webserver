@@ -3,18 +3,18 @@ import random
 
 LOGINS = {
     'root': "god",
-    'alo' : "cherokee"
+    'alo': "cherokee"
 }
 
-SECRET = ''.join ([random.choice("1234567890") for x in range(30)])
+SECRET = ''.join([random.choice("1234567890") for x in range(30)])
 
 
 def welcome():
     if CTK.cookie['secret'] != SECRET:
         return CTK.HTTP_Redir('/')
 
-    dialog = CTK.Dialog ({'title': "You did it"})
-    dialog += CTK.RawHTML ("<h1>Welcome Sir!</h1>")
+    dialog = CTK.Dialog({'title': "You did it"})
+    dialog += CTK.RawHTML("<h1>Welcome Sir!</h1>")
 
     page = CTK.Page()
     page += dialog
@@ -22,7 +22,7 @@ def welcome():
 
 
 def apply():
-    name  = CTK.post['login!name']
+    name = CTK.post['login!name']
     passw = CTK.post['login!pass']
 
     if not name in LOGINS:
@@ -35,10 +35,10 @@ def apply():
 
 
 class default:
-    def __init__ (self):
+    def __init__(self):
         g = CTK.PropsTable()
-        g.Add ('User',     CTK.TextField({'name': "login!name", 'class': "required"}), 'Type your user name')
-        g.Add ('Password', CTK.TextFieldPassword({'name': "login!pass", 'class': "required"}), 'Type your password')
+        g.Add('User', CTK.TextField({'name': "login!name", 'class': "required"}), 'Type your user name')
+        g.Add('Password', CTK.TextFieldPassword({'name': "login!pass", 'class': "required"}), 'Type your password')
 
         form = CTK.Submitter("/apply")
         form += g
@@ -46,12 +46,12 @@ class default:
         self.page = CTK.Page()
         self.page += form
 
-    def __call__ (self):
+    def __call__(self):
         return self.page.Render()
 
 
-CTK.publish ('/welcome', welcome)
-CTK.publish ('/apply', apply, method="POST")
-CTK.publish ('', default)
+CTK.publish('/welcome', welcome)
+CTK.publish('/apply', apply, method="POST")
+CTK.publish('', default)
 
-CTK.run (port=8000)
+CTK.run(port=8000)

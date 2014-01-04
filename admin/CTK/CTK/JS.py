@@ -28,21 +28,21 @@ The CTK.JS module wraps several utility Javascript functions.
 
 from Server import get_server
 
-def Ajax (url, data='', type='POST', async=True, dataType='json',
+def Ajax(url, data='', type='POST', async=True, dataType='json',
           success=None, error=None, complete=None):
     if not success:
-        success=''
+        success = ''
 
     if type.upper() == 'POST':
         srv = get_server()
         if srv.use_sec_submit:
-            url += '?key=%s' %(srv.sec_submit)
+            url += '?key=%s' % (srv.sec_submit)
 
-    async_s = ['false','true'][async]
-    js = "$.ajax ({type: '%(type)s', url: '%(url)s', async: %(async_s)s" %(locals())
+    async_s = ['false', 'true'][async]
+    js = "$.ajax ({type: '%(type)s', url: '%(url)s', async: %(async_s)s" % (locals())
 
     if data:
-        js += ", data: %(data)s, dataType: '%(dataType)s'" %(locals())
+        js += ", data: %(data)s, dataType: '%(dataType)s'" % (locals())
 
     js += """, success: function (data) {
          %(success)s;
@@ -57,31 +57,31 @@ def Ajax (url, data='', type='POST', async=True, dataType='json',
 	  } else if (not_modified) {
 	    $(not_modified).addClass('saved');
 	  }
-        }""" %(locals())
+        }""" % (locals())
     if error:
-        js += ", error: function() { %(error)s }" %(locals())
+        js += ", error: function() { %(error)s }" % (locals())
     if complete:
-        js += ", complete: function() { %(complete)s }" %(locals())
+        js += ", complete: function() { %(complete)s }" % (locals())
 
     js += "});"
     return js
 
-def Hide (id):
-    return "$('#%s').hide();"%(id)
+def Hide(id):
+    return "$('#%s').hide();" % (id)
 
-def GotoURL (url):
-    return "window.location = '%s';" %(url)
+def GotoURL(url):
+    return "window.location = '%s';" % (url)
 
 def ReloadURL():
     return "window.location.reload();"
 
-def OpenWindow (url):
-    return "window.open ('%s');" %(url)
+def OpenWindow(url):
+    return "window.open ('%s');" % (url)
 
 def get_Hashtag():
     return "window.location.hash"
 
 def set_Hashtag(tag):
     if tag[0] in ('"', "'"):
-        return "window.location.hash = %s;" %(tag)
-    return "window.location.hash = '%s';" %(tag)
+        return "window.location.hash = %s;" % (tag)
+    return "window.location.hash = '%s';" % (tag)

@@ -28,46 +28,46 @@ import validations
 from CTK.Plugin import instance_plugin
 
 URL_APPLY = '/plugin/streaming/apply'
-HELPS     = [('modules_handlers_streaming', N_("Audio/Video Streaming"))]
+HELPS = [('modules_handlers_streaming', N_("Audio/Video Streaming"))]
 
-NOTE_RATE        = N_('Figure the bit rate of the media file, and limit the bandwidth to it.')
+NOTE_RATE = N_('Figure the bit rate of the media file, and limit the bandwidth to it.')
 NOTE_RATE_FACTOR = N_('Factor by which the bandwidth limit will be increased. Default: 0.1')
-NOTE_RATE_BOOST  = N_('Number of seconds to stream before setting the bandwidth limit. Default: 5.')
+NOTE_RATE_BOOST = N_('Number of seconds to stream before setting the bandwidth limit. Default: 5.')
 
 
 class Plugin_streaming (Handler.PluginHandler):
-    def __init__ (self, key, **kwargs):
-        Handler.PluginHandler.__init__ (self, key, **kwargs)
-        Handler.PluginHandler.AddCommon (self)
+    def __init__(self, key, **kwargs):
+        Handler.PluginHandler.__init__(self, key, **kwargs)
+        Handler.PluginHandler.AddCommon(self)
 
-        rate = CTK.CheckCfgText("%s!rate"%(key), True, _('Enabled'))
+        rate = CTK.CheckCfgText("%s!rate" % (key), True, _('Enabled'))
 
         table = CTK.PropsTable()
-        table.Add (_("Auto Rate"), rate, _(NOTE_RATE))
-        table.Add (_("Speedup Factor"), CTK.TextCfg("%s!rate_factor"%(key), True), _(NOTE_RATE_FACTOR))
-        table.Add (_("Initial Boost"),  CTK.TextCfg("%s!rate_boost"%(key), True), _(NOTE_RATE_BOOST))
+        table.Add(_("Auto Rate"), rate, _(NOTE_RATE))
+        table.Add(_("Speedup Factor"), CTK.TextCfg("%s!rate_factor" % (key), True), _(NOTE_RATE_FACTOR))
+        table.Add(_("Initial Boost"), CTK.TextCfg("%s!rate_boost" % (key), True), _(NOTE_RATE_BOOST))
 
-        rate.bind ('change',
+        rate.bind('change',
                   """if ($('#%(rate)s :checkbox')[0].checked) {
                            $('#%(row1)s').show();
                            $('#%(row2)s').show();
                      } else {
                            $('#%(row1)s').hide();
                            $('#%(row2)s').hide();
-                  }""" %({'rate': rate.id, 'row1': table[1].id, 'row2': table[2].id}))
+                  }""" % ({'rate': rate.id, 'row1': table[1].id, 'row2': table[2].id}))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
         # Streaming
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Audio/Video Streaming')))
-        self += CTK.Indenter (submit)
+        self += CTK.RawHTML('<h2>%s</h2>' % (_('Audio/Video Streaming')))
+        self += CTK.Indenter(submit)
 
         # File
-        self += instance_plugin('file',    key, show_document_root=False)
+        self += instance_plugin('file', key, show_document_root=False)
 
         # Publish
-        VALS = [("%s!rate_factor"%(key), validations.is_float),
-                ("%s!rate_boost"%(key),  validations.is_number_gt_0)]
+        VALS = [("%s!rate_factor" % (key), validations.is_float),
+                ("%s!rate_boost" % (key), validations.is_number_gt_0)]
 
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")

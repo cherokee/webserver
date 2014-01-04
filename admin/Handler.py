@@ -32,20 +32,20 @@ NOTE_DOCUMENT_ROOT = N_('Allows to specify an alternative Document Root path.')
 
 
 class PluginHandler (CTK.Plugin):
-    def __init__ (self, key, **kwargs):
-        CTK.Plugin.__init__ (self, key)
+    def __init__(self, key, **kwargs):
+        CTK.Plugin.__init__(self, key)
         self.show_document_root = kwargs.pop('show_document_root', True)
         self.key_rule = '!'.join(self.key.split('!')[:-1])
 
-    def AddCommon (self):
+    def AddCommon(self):
         if self.show_document_root:
             table = CTK.PropsTable()
-            table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(self.key_rule), True), _(NOTE_DOCUMENT_ROOT))
+            table.Add(_('Document Root'), CTK.TextCfg('%s!document_root' % (self.key_rule), True), _(NOTE_DOCUMENT_ROOT))
 
-            submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Indenter (table)
+            submit = CTK.Submitter(URL_APPLY)
+            submit += CTK.Indenter(table)
             self += submit
 
             # Publish
-            VALS = [("%s!document_root"%(self.key_rule), validations.is_dev_null_or_local_dir_exists)]
-            CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+            VALS = [("%s!document_root" % (self.key_rule), validations.is_dev_null_or_local_dir_exists)]
+            CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")

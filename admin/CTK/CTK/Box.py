@@ -47,8 +47,8 @@ class Box (Container):
           box2 = CTK.Box({'class': 'test', 'id': 'test-box'},
                          CTK.RawHTML('This is a test box'))
     """
-    def __init__ (self, props={}, content=None, embed_javascript=False):
-        Container.__init__ (self)
+    def __init__(self, props={}, content=None, embed_javascript=False):
+        Container.__init__(self)
         self.props = props.copy()
         self.embed_javascript = embed_javascript
 
@@ -58,27 +58,27 @@ class Box (Container):
 
         # Initial value
         if content:
-            if isinstance (content, Widget):
+            if isinstance(content, Widget):
                 self += content
             elif type(content) in (list, type):
                 for o in content:
                     self += o
             else:
-                raise TypeError, 'Unknown type: "%s"' %(type(content))
+                raise TypeError, 'Unknown type: "%s"' % (type(content))
 
-    def Render (self):
-        render = Container.Render (self)
+    def Render(self):
+        render = Container.Render(self)
 
         if self.embed_javascript and render.js:
-            js = HTML_JS_BLOCK %(render.js)
+            js = HTML_JS_BLOCK % (render.js)
             render.js = ''
         else:
             js = ''
 
-        props = {'id':          self.id,
-                 'props':       props_to_str (self.props),
-                 'content':     render.html,
+        props = {'id': self.id,
+                 'props': props_to_str(self.props),
+                 'content': render.html,
                  'embedded_js': js}
 
-        render.html = HTML %(props)
+        render.html = HTML % (props)
         return render

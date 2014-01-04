@@ -27,22 +27,22 @@ import validations
 
 URL_APPLY = '/plugin/rrd/apply'
 
-NOTE_DB_DIR  = N_("Directory where the RRDtool databases should be written.")
+NOTE_DB_DIR = N_("Directory where the RRDtool databases should be written.")
 NOTE_RRDTOOL = N_("Path to the rrdtool binary. By default the server will look in the PATH.")
 
 
 class Plugin_rrd (CTK.Plugin):
-    def __init__ (self, key):
-        CTK.Plugin.__init__ (self, key)
+    def __init__(self, key):
+        CTK.Plugin.__init__(self, key)
 
         # GUI
-        table = CTK.PropsAuto (URL_APPLY)
-        table.Add (_('Round Robin Database directory'), CTK.TextCfg('%s!database_dir'%(key), True), _(NOTE_DB_DIR))
-        table.Add (_('Custom rrdtool binary'),  CTK.TextCfg('%s!rrdtool_path'%(key), True), _(NOTE_RRDTOOL))
+        table = CTK.PropsAuto(URL_APPLY)
+        table.Add(_('Round Robin Database directory'), CTK.TextCfg('%s!database_dir' % (key), True), _(NOTE_DB_DIR))
+        table.Add(_('Custom rrdtool binary'), CTK.TextCfg('%s!rrdtool_path' % (key), True), _(NOTE_RRDTOOL))
         self += table
 
         # Input Validation
-        VALS = [('%s!database_dir'%(key), validations.is_local_dir_exists),
-                ('%s!rrdtool_path'%(key), validations.is_exec_file)]
+        VALS = [('%s!database_dir' % (key), validations.is_local_dir_exists),
+                ('%s!rrdtool_path' % (key), validations.is_exec_file)]
 
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish('^%s' % (URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")

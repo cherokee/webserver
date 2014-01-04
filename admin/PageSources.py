@@ -29,7 +29,7 @@ import validations
 
 from util import *
 
-URL_BASE  = r'/source'
+URL_BASE = r'/source'
 URL_APPLY = r'/source/apply'
 
 HELPS = [('config_virtual_servers', N_("Virtual Servers"))]
@@ -40,18 +40,18 @@ def commit():
     return {'ret': 'ok'}
 
 class Panel (CTK.Box):
-    def __init__ (self):
-        CTK.Box.__init__ (self, {'id': 'sources-panel'})
+    def __init__(self):
+        CTK.Box.__init__(self, {'id': 'sources-panel'})
 
 class Render:
-    def __call__ (self):
+    def __call__(self):
         title = _('Information Sources')
 
-        page = Page.Base (title, helps=HELPS)
-        page += CTK.RawHTML ("<h1>%s</h1>" % (title))
+        page = Page.Base(title, helps=HELPS)
+        page += CTK.RawHTML("<h1>%s</h1>" % (title))
         page += Panel()
         return page.Render()
 
 
-CTK.publish (URL_BASE,  Render)
-CTK.publish (URL_APPLY, commit, method="POST")
+CTK.publish(URL_BASE, Render)
+CTK.publish(URL_APPLY, commit, method="POST")

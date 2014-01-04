@@ -12,13 +12,13 @@ vserver!1!rule!820!auth!passwdfile = %s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name             = "Auth header"
-        self.request          = "GET /auth_header/ HTTP/1.0\r\n"
-        self.expected_error   = 401
-        self.expected_content = ["WWW-Authenticate:", "Basic realm=", "Test" ]
-        self.conf             = CONF
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Auth header"
+        self.request = "GET /auth_header/ HTTP/1.0\r\n"
+        self.expected_error = 401
+        self.expected_content = ["WWW-Authenticate:", "Basic realm=", "Test"]
+        self.conf = CONF
 
-    def Prepare (self, www):
-        dir = self.Mkdir (www, "auth_header")
+    def Prepare(self, www):
+        dir = self.Mkdir(www, "auth_header")

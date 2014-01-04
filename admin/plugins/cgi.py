@@ -28,6 +28,6 @@ import CgiBase
 HELPS = CgiBase.HELPS
 
 class Plugin_cgi (CgiBase.PluginHandlerCGI):
-    def __init__ (self, key, **kwargs):
-        CgiBase.PluginHandlerCGI.__init__ (self, key, **kwargs)
-        CgiBase.PluginHandlerCGI.AddCommon (self)
+    def __init__(self, key, **kwargs):
+        CgiBase.PluginHandlerCGI.__init__(self, key, **kwargs)
+        CgiBase.PluginHandlerCGI.AddCommon(self)

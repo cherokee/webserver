@@ -38,18 +38,18 @@ NOTE_WELCOME_H1 = N_("Welcome to the Alfresco Wizard")
 NOTE_WELCOME_P1 = N_('<a target="_blank" href="http://www.alfresco.com/">Alfresco Portal</a> is an enterprise web platform for building business solutions that deliver immediate results and long-term value.')
 NOTE_WELCOME_P2 = N_('Get the benefits of packaged applications and an enterprise application framework in a single solution.')
 
-NOTE_COMMON_H1  = N_("Alfresco Project")
+NOTE_COMMON_H1 = N_("Alfresco Project")
 NOTE_COMMON_SRC = N_('Hostname or IP of the server running Alfresco. You can add more later to have the load balanced.')
 NOTE_COMMON_PRT = N_('Port running the service in said host. (Example: 8080)')
 
-NOTE_HOST       = N_("Host name of the virtual server that is about to be created.")
-NOTE_HOST_H1    = N_("New Virtual Server Details")
+NOTE_HOST = N_("Host name of the virtual server that is about to be created.")
+NOTE_HOST_H1 = N_("New Virtual Server Details")
 
-NOTE_WEBDIR     = N_("Public web directory to access the project.")
-NOTE_WEBDIR_H1  = N_("Public Web Directory")
+NOTE_WEBDIR = N_("Public web directory to access the project.")
+NOTE_WEBDIR_H1 = N_("Public Web Directory")
 
-PREFIX          = 'tmp!wizard!alfresco'
-URL_APPLY       = r'/wizard/vserver/alfresco/apply'
+PREFIX = 'tmp!wizard!alfresco'
+URL_APPLY = r'/wizard/vserver/alfresco/apply'
 
 SOURCE = """
 source!%(src_num)d!env_inherited = 0
@@ -87,63 +87,63 @@ CONFIG_DIR = SOURCE + """
 
 
 class Commit:
-    def Commit_VServer (self):
+    def Commit_VServer(self):
         # Incoming info
-        new_host = CTK.cfg.get_val('%s!new_host'%(PREFIX))
-        src_host = CTK.cfg.get_val('%s!new_src_host'%(PREFIX))
-        src_port = int(CTK.cfg.get_val('%s!new_src_port'%(PREFIX)))
+        new_host = CTK.cfg.get_val('%s!new_host' % (PREFIX))
+        src_host = CTK.cfg.get_val('%s!new_src_host' % (PREFIX))
+        src_port = int(CTK.cfg.get_val('%s!new_src_port' % (PREFIX)))
 
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
-        CTK.cfg['%s!nick'%(vsrv_pre)] = new_host
-        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
+        CTK.cfg['%s!nick' % (vsrv_pre)] = new_host
+        Wizard.CloneLogsCfg_Apply('%s!logs_as_vsrv' % (PREFIX), vsrv_pre)
 
         # Locals
-        src_num, src_pre = cfg_source_get_next ()
+        src_num, src_pre = cfg_source_get_next()
 
         # Add the new rules
-        config = CONFIG_VSERVER %(locals())
-        CTK.cfg.apply_chunk (config)
+        config = CONFIG_VSERVER % (locals())
+        CTK.cfg.apply_chunk(config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
-        CTK.cfg.normalize ('vserver')
+        CTK.cfg.normalize('%s!rule' % (vsrv_pre))
+        CTK.cfg.normalize('vserver')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
 
-    def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
+    def Commit_Rule(self):
+        vsrv_num = CTK.cfg.get_val('%s!vsrv_num' % (PREFIX))
+        vsrv_pre = 'vserver!%s' % (vsrv_num)
 
         # Incoming info
-        webdir   = CTK.cfg.get_val('%s!new_webdir'%(PREFIX))
-        src_host = CTK.cfg.get_val('%s!new_src_host'%(PREFIX))
-        src_port = int(CTK.cfg.get_val('%s!new_src_port'%(PREFIX)))
+        webdir = CTK.cfg.get_val('%s!new_webdir' % (PREFIX))
+        src_host = CTK.cfg.get_val('%s!new_src_host' % (PREFIX))
+        src_port = int(CTK.cfg.get_val('%s!new_src_port' % (PREFIX)))
 
         # Locals
-        rule_pre = CTK.cfg.get_next_entry_prefix('%s!rule'%(vsrv_pre))
-        src_num, src_pre = cfg_source_get_next ()
+        rule_pre = CTK.cfg.get_next_entry_prefix('%s!rule' % (vsrv_pre))
+        src_num, src_pre = cfg_source_get_next()
 
         # Add the new rules
-        config = CONFIG_DIR %(locals())
-        CTK.cfg.apply_chunk (config)
+        config = CONFIG_DIR % (locals())
+        CTK.cfg.apply_chunk(config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize('%s!rule' % (vsrv_pre))
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
 
-    def __call__ (self):
+    def __call__(self):
         if CTK.post.pop('final'):
             # Apply POST
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX)):
+            if CTK.cfg.get_val('%s!vsrv_num' % (PREFIX)):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -151,69 +151,69 @@ class Commit:
 
 
 class WebDirectory:
-    def __call__ (self):
+    def __call__(self):
         table = CTK.PropsTable()
-        table.Add (_('Web Directory'), CTK.TextCfg ('%s!new_webdir'%(PREFIX), False, {'value': "/alfresco", 'class': 'noauto'}), _(NOTE_WEBDIR))
+        table.Add(_('Web Directory'), CTK.TextCfg('%s!new_webdir' % (PREFIX), False, {'value': "/alfresco", 'class': 'noauto'}), _(NOTE_WEBDIR))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_WEBDIR_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
 
 
 class Host:
-    def __call__ (self):
+    def __call__(self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX), False, {'value': 'alfresco.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add(_('New Host Name'), CTK.TextCfg('%s!new_host' % (PREFIX), False, {'value': 'alfresco.example.com', 'class': 'noauto'}), _(NOTE_HOST))
 
-        submit  = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
-        cont  = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont = CTK.Container()
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_HOST_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
 
 
 class Common:
-    def __call__ (self):
+    def __call__(self):
         table = CTK.PropsTable()
-        table.Add (_('Source host'), CTK.TextCfg ('%s!new_src_host'%(PREFIX), False, {'value':'localhost'}), _(NOTE_COMMON_SRC))
-        table.Add (_('Source port'), CTK.TextCfg ('%s!new_src_port'%(PREFIX), False, {'value':8080}),        _(NOTE_COMMON_PRT))
+        table.Add(_('Source host'), CTK.TextCfg('%s!new_src_host' % (PREFIX), False, {'value': 'localhost'}), _(NOTE_COMMON_SRC))
+        table.Add(_('Source port'), CTK.TextCfg('%s!new_src_port' % (PREFIX), False, {'value': 8080}), _(NOTE_COMMON_PRT))
 
-        submit = CTK.Submitter (URL_APPLY)
+        submit = CTK.Submitter(URL_APPLY)
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_COMMON_H1)))
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_COMMON_H1)))
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
 
 
 class Welcome:
-    def __call__ (self):
+    def __call__(self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
-        cont += Wizard.Icon ('alfresco', {'class': 'wizard-descr'})
-        box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
-        box += Wizard.CookBookBox ('cookbook_alfresco')
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon('alfresco', {'class': 'wizard-descr'})
+        box = CTK.Box({'class': 'wizard-welcome'})
+        box += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_P2)))
+        box += Wizard.CookBookBox('cookbook_alfresco')
         cont += box
 
         # Send the VServer num if it is a Rule
-        tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
+        tmp = re.findall(r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
-            submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit = CTK.Submitter(URL_APPLY)
+            submit += CTK.Hidden('%s!vsrv_num' % (PREFIX), tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -221,25 +221,25 @@ class Welcome:
 
 
 VALS = [
-    ("%s!new_host"     %(PREFIX), validations.is_not_empty),
-    ("%s!new_webdir"   %(PREFIX), validations.is_not_empty),
-    ("%s!new_src_port" %(PREFIX), validations.is_not_empty),
-    ("%s!new_src_host" %(PREFIX), validations.is_not_empty),
+    ("%s!new_host" % (PREFIX), validations.is_not_empty),
+    ("%s!new_webdir" % (PREFIX), validations.is_not_empty),
+    ("%s!new_src_port" % (PREFIX), validations.is_not_empty),
+    ("%s!new_src_host" % (PREFIX), validations.is_not_empty),
 
-    ("%s!new_host"     %(PREFIX), validations.is_new_vserver_nick),
-    ("%s!new_webdir"   %(PREFIX), validations.is_dir_formatted),
-    ("%s!new_src_port" %(PREFIX), validations.is_tcp_port),
+    ("%s!new_host" % (PREFIX), validations.is_new_vserver_nick),
+    ("%s!new_webdir" % (PREFIX), validations.is_dir_formatted),
+    ("%s!new_src_port" % (PREFIX), validations.is_tcp_port),
 ]
 
 # VServer
-CTK.publish ('^/wizard/vserver/alfresco$',   Welcome)
-CTK.publish ('^/wizard/vserver/alfresco/2$', Common)
-CTK.publish ('^/wizard/vserver/alfresco/3$', Host)
+CTK.publish('^/wizard/vserver/alfresco$', Welcome)
+CTK.publish('^/wizard/vserver/alfresco/2$', Common)
+CTK.publish('^/wizard/vserver/alfresco/3$', Host)
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/alfresco$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/alfresco/2$', Common)
-CTK.publish ('^/wizard/vserver/(\d+)/alfresco/3$', WebDirectory)
+CTK.publish('^/wizard/vserver/(\d+)/alfresco$', Welcome)
+CTK.publish('^/wizard/vserver/(\d+)/alfresco/2$', Common)
+CTK.publish('^/wizard/vserver/(\d+)/alfresco/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish(r'^%s' % (URL_APPLY), Commit, method="POST", validation=VALS)

@@ -60,19 +60,19 @@ HEADERS = [
     '<script type="text/javascript" src="/CTK/js/Help.js"></script>',
 ]
 
-def uniq (seq):
+def uniq(seq):
     aggregated = ''
-    noDupes    = []
+    noDupes = []
 
     for line in seq:
         if line.startswith('<script'):
-            file = re.findall (r'(src=".+?")', line)[0]
+            file = re.findall(r'(src=".+?")', line)[0]
             if not file in aggregated:
                 noDupes.append(line)
                 aggregated += line
 
         elif line.startswith('<link'):
-            file = re.findall (r'(href=".+?")', line)[0]
+            file = re.findall(r'(href=".+?")', line)[0]
             if not file in aggregated:
                 noDupes.append(line)
                 aggregated += line
@@ -100,8 +100,8 @@ class Page (Container):
         page += CTK.RawHTML ('<p>Nothing to see here.</p>')
         return page.Render()
     """
-    def __init__ (self, template=None, headers=None, helps=None, **kwargs):
-        Container.__init__ (self, **kwargs)
+    def __init__(self, template=None, headers=None, helps=None, **kwargs):
+        Container.__init__(self, **kwargs)
         self.js_header_end = True
 
         if headers:
@@ -112,17 +112,17 @@ class Page (Container):
         if template:
             self._template = template
         else:
-            self._template = Template (content = PAGE_TEMPLATE_DEFAULT)
+            self._template = Template(content=PAGE_TEMPLATE_DEFAULT)
 
         self._helps = []
         for entry in helps or []:
-            self._helps.append (HelpEntry (entry[1], entry[0]))
+            self._helps.append(HelpEntry(entry[1], entry[0]))
 
-    def AddHeaders (self, headers):
+    def AddHeaders(self, headers):
         if type(headers) == list:
             self._headers += headers
         else:
-            self._headers.append (headers)
+            self._headers.append(headers)
 
     def Render(self):
         # Get the content render
@@ -132,12 +132,12 @@ class Page (Container):
         self._headers += render.headers
 
         if self.js_header_end:
-            head = "\n".join (filter (lambda l: not '<script' in l, uniq(self._headers)))
+            head = "\n".join(filter(lambda l: not '<script' in l, uniq(self._headers)))
         else:
-            head = "\n".join (uniq(self._headers))
+            head = "\n".join(uniq(self._headers))
 
         # Helps
-        all_helps  = self._helps
+        all_helps = self._helps
         all_helps += render.helps
 
         render_helps = HelpMenu(all_helps).Render().html
@@ -146,10 +146,10 @@ class Page (Container):
         js = ''
 
         if self.js_header_end:
-            js += "\n".join (filter (lambda l: '<script' in l, uniq(self._headers)))
+            js += "\n".join(filter(lambda l: '<script' in l, uniq(self._headers)))
 
         if render.js:
-            js += formatter (HTML_JS_ON_READY_BLOCK, render.js)
+            js += formatter(HTML_JS_ON_READY_BLOCK, render.js)
 
         # Build the <body>
         body = render.html + render_helps
@@ -157,17 +157,17 @@ class Page (Container):
             body += js
 
         # Set up the template
-        self._template['head']  = head
-        self._template['html']  = render.html
-        self._template['js']    = js
-        self._template['body']  = body
+        self._template['head'] = head
+        self._template['html'] = render.html
+        self._template['js'] = js
+        self._template['body'] = body
         self._template['helps'] = render_helps
 
         if not self._template['body_props']:
             self._template['body_props'] = ''
 
         txt = self._template.Render()
-        return Postprocess (txt)
+        return Postprocess(txt)
 
 class PageEmpty (Container):
     """
@@ -182,11 +182,11 @@ class PageEmpty (Container):
         page += CTK.RawHTML ('<p>Nothing to see here.</p>')
         return page.Render()
     """
-    def __init__ (self, headers=[], **kwargs):
-        Container.__init__ (self, **kwargs)
+    def __init__(self, headers=[], **kwargs):
+        Container.__init__(self, **kwargs)
 
-        self.headers  = headers[:]
-        self.template = Template (content = PAGE_TEMPLATE_MINI)
+        self.headers = headers[:]
+        self.template = Template(content=PAGE_TEMPLATE_MINI)
 
     def Render(self):
         # Get the content render
@@ -194,11 +194,11 @@ class PageEmpty (Container):
 
         # Build the <head> text
         self.headers += render.headers
-        head = "\n".join (uniq(self.headers))
+        head = "\n".join(uniq(self.headers))
 
-        self.template['head']  = head
-        self.template['body']  = render.html
+        self.template['head'] = head
+        self.template['body'] = render.html
 
         # Render
         txt = self.template.Render()
-        return Postprocess (txt)
+        return Postprocess(txt)

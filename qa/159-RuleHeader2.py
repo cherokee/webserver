@@ -1,8 +1,8 @@
 from base import *
 
-DIR       = "header_test2_referer_match"
-REFERER   = "example.159com"
-MAGIC     = "Dealing with rule based headers (bis).."
+DIR = "header_test2_referer_match"
+REFERER = "example.159com"
+MAGIC = "Dealing with rule based headers (bis).."
 
 CONF = """
 vserver!1!rule!1590!match = header
@@ -24,16 +24,16 @@ echo "%s"
 """ % (MAGIC)
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "Rule header: match II"
 
         self.request           = "GET /%s/test HTTP/1.0\r\n" % (DIR) + \
                                  "Referer: %s\r\n" % (REFERER)
-        self.conf              = CONF
-        self.expected_error    = 200
-        self.required_content  = ["/bin/sh", "echo"]
+        self.conf = CONF
+        self.expected_error = 200
+        self.required_content = ["/bin/sh", "echo"]
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, 'test', 0755, CGI)
+    def Prepare(self, www):
+        d = self.Mkdir(www, DIR)
+        f = self.WriteFile(d, 'test', 0755, CGI)

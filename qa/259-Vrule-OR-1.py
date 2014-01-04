@@ -1,9 +1,9 @@
 from base import *
 
-NICK    = "nick-259"
+NICK = "nick-259"
 DOMAIN1 = "test-1-259"
 DOMAIN2 = "test-2-259"
-ERROR   = 403
+ERROR = 403
 
 CONF = """
 vserver!259!nick = %(NICK)s
@@ -21,10 +21,10 @@ vserver!259!rule!1!handler!error = %(ERROR)s
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name           = "VRule OR"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "VRule OR"
         self.request        = "GET / HTTP/1.0\r\n" + \
                               "Host: %s\r\n" % (DOMAIN2)
         self.expected_error = ERROR
-        self.conf           = CONF %(globals())
+        self.conf = CONF % (globals())

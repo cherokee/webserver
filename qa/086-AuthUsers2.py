@@ -12,16 +12,16 @@ vserver!1!rule!860!auth!users = foo,Aladdin
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name             = "Auth basic, with users II"
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Auth basic, with users II"
         self.request          = "GET /auth2users/ HTTP/1.0\r\n" +\
                                 "Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\r\n"
-        self.expected_error   = 200
+        self.expected_error = 200
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "auth2users")
-        self.WriteFile (d, "passwd", 0444, 'user:cherokee\n' + 'foo:bar\n' + 'Aladdin:open sesame\n')
+    def Prepare(self, www):
+        d = self.Mkdir(www, "auth2users")
+        self.WriteFile(d, "passwd", 0444, 'user:cherokee\n' + 'foo:bar\n' + 'Aladdin:open sesame\n')
 
-        self.conf = CONF % (d+"/passwd")
+        self.conf = CONF % (d + "/passwd")
 

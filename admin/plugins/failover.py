@@ -26,6 +26,6 @@ import CTK
 import Balancer
 
 class Plugin_failover (Balancer.PluginBalancer):
-    def __init__ (self, key, **kwargs):
-        Balancer.PluginBalancer.__init__ (self, key, **kwargs)
-        Balancer.PluginBalancer.AddCommon (self)
+    def __init__(self, key, **kwargs):
+        Balancer.PluginBalancer.__init__(self, key, **kwargs)
+        Balancer.PluginBalancer.AddCommon(self)

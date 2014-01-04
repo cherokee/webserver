@@ -27,5 +27,5 @@ import validations
 NOTE_REQUEST = N_("Regular expression against which the request will be executed.")
 
 class Plugin_request (RuleSimple.PluginSimple):
-    def __init__ (self, key, **kwargs):
-        RuleSimple.PluginSimple.__init__ (self, key, _('Regular Expression'), "request", _(NOTE_REQUEST), _('Regular Expression'), validations.is_regex, **kwargs)
+    def __init__(self, key, **kwargs):
+        RuleSimple.PluginSimple.__init__(self, key, _('Regular Expression'), "request", _(NOTE_REQUEST), _('Regular Expression'), validations.is_regex, **kwargs)

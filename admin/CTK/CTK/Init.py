@@ -29,13 +29,13 @@ import __builtin__
 # Built-in functions
 #
 
-def builtin_any (iterable):
+def builtin_any(iterable):
     for element in iterable:
         if element:
             return True
     return False
 
-def builtin_all (iterable):
+def builtin_all(iterable):
     for element in iterable:
         if not element:
             return False
@@ -45,7 +45,7 @@ def builtin_all (iterable):
 def Init():
     # Deals with UTF-8
     if sys.getdefaultencoding() != 'utf-8':
-        reload (sys)
+        reload(sys)
         sys.setdefaultencoding('utf-8')
 
     # Add a few missing functions

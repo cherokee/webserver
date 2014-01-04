@@ -38,8 +38,8 @@ $("#%(id)s").iButton();
 """
 
 class iPhoneToggle (Widget):
-    def __init__ (self, props=None):
-        Widget.__init__ (self)
+    def __init__(self, props=None):
+        Widget.__init__(self)
 
         if props:
             self.props = props
@@ -49,20 +49,20 @@ class iPhoneToggle (Widget):
         if 'id' in self.props:
             self.id = self.props.pop('id')
 
-    def Render (self):
+    def Render(self):
         render = Widget.Render(self)
 
-        props = {'id':    self.id,
+        props = {'id': self.id,
                  'props': props_to_str(self.props)}
 
-        render.html    += HTML %(props)
-        render.js      += JS   %(props)
+        render.html += HTML % (props)
+        render.js += JS % (props)
         render.headers += HEADERS
 
         return render
 
 class iPhoneCfg (iPhoneToggle):
-    def __init__ (self, key, default, props=None):
+    def __init__(self, key, default, props=None):
         if not props:
             props = {}
 
@@ -73,10 +73,10 @@ class iPhoneCfg (iPhoneToggle):
         elif val.isdigit():
             props['checked'] = "01"[bool(int(val))]
         else:
-            assert False, "Could not handle value: %s"%(val)
+            assert False, "Could not handle value: %s" % (val)
 
         # Other properties
         props['name'] = key
 
         # Init parent
-        iPhoneToggle.__init__ (self, props)
+        iPhoneToggle.__init__(self, props)

@@ -58,14 +58,14 @@ class Checkbox (Widget):
        Examples:
           check = CTK.Checkbox({'name': 'chekbox_test', 'class': 'noauto'})
     """
-    def __init__ (self, props={}):
+    def __init__(self, props={}):
         # Sanity check
         assert type(props) == dict
 
-        Widget.__init__ (self)
+        Widget.__init__(self)
         self._props = props.copy()
 
-    def Render (self):
+    def Render(self):
         # Deal with a couple of exceptions
         new_props = self._props.copy()
 
@@ -76,9 +76,9 @@ class Checkbox (Widget):
             new_props['disabled'] = None
 
         # Render the widget
-        render = Widget.Render (self)
-        render.html += HTML % ({'id':    self.id,
-                                'props': props_to_str (new_props)})
+        render = Widget.Render(self)
+        render.html += HTML % ({'id': self.id,
+                                'props': props_to_str(new_props)})
         return render
 
 
@@ -94,7 +94,7 @@ class CheckCfg (Checkbox):
         default: default value to give to the checkbox.
         props: additional properties for base Checkbox.
     """
-    def __init__ (self, key, default, props=None):
+    def __init__(self, key, default, props=None):
         # Sanity checks
         assert type(key) == str
         assert type(default) == bool
@@ -110,13 +110,13 @@ class CheckCfg (Checkbox):
         elif val.isdigit():
             props['checked'] = "01"[bool(int(val))]
         else:
-            assert False, "Could not handle value: %s"%(val)
+            assert False, "Could not handle value: %s" % (val)
 
         # Other properties
         props['name'] = key
 
         # Init parent
-        Checkbox.__init__ (self, props)
+        Checkbox.__init__(self, props)
 
 
 class CheckboxText (Checkbox):
@@ -129,14 +129,14 @@ class CheckboxText (Checkbox):
         props: additional properties for base Checkbox.
         text: text to show beside the checkbox (by default, 'Enabled')
     """
-    def __init__ (self, props=None, text='Enabled'):
-        Checkbox.__init__ (self, props)
+    def __init__(self, props=None, text='Enabled'):
+        Checkbox.__init__(self, props)
         self.text = text
 
-    def Render (self):
-        render = Checkbox.Render (self)
-        render.html  = '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' %(self.id, render.html, self.text)
-        render.js   += CLICK_CHANGE_JS %(self.id)
+    def Render(self):
+        render = Checkbox.Render(self)
+        render.html = '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' % (self.id, render.html, self.text)
+        render.js += CLICK_CHANGE_JS % (self.id)
         return render
 
 
@@ -153,16 +153,16 @@ class CheckCfgText (CheckCfg):
         text: text to show beside the checkbox (by default, 'Enabled')
         props: additional properties for base CheckboxText.
     """
-    def __init__ (self, key, default, text='Enabled', props=None):
+    def __init__(self, key, default, text='Enabled', props=None):
         assert type(default) == bool
         assert type(text) == str
         assert type(props) in (dict, type(None))
 
-        CheckCfg.__init__ (self, key, default, props)
+        CheckCfg.__init__(self, key, default, props)
         self.text = text
 
-    def Render (self):
-        render = CheckCfg.Render (self)
-        render.html =  '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' %(self.id, render.html, self.text)
-        render.js   += CLICK_CHANGE_JS %(self.id)
+    def Render(self):
+        render = CheckCfg.Render(self)
+        render.html = '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' % (self.id, render.html, self.text)
+        render.js += CLICK_CHANGE_JS % (self.id)
         return render

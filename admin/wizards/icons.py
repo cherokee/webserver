@@ -36,9 +36,9 @@ from configured import *
 
 NOTE_WELCOME_H1 = N_("Welcome to the Icons Wizard")
 NOTE_WELCOME_P1 = N_("This wizard adds the /cherokee_icons and /cherokee_themes directories so Cherokee can use icons when listing directories.")
-NOTE_WELCOME_ERR= N_("The /cherokee_icons and /cherokee_themes directories are already configured. There is nothing left to do.")
+NOTE_WELCOME_ERR = N_("The /cherokee_icons and /cherokee_themes directories are already configured. There is nothing left to do.")
 
-PREFIX    = 'tmp!wizard!icons'
+PREFIX = 'tmp!wizard!icons'
 URL_APPLY = r'/wizard/vserver/icons/apply'
 
 CONFIG_ICONS = """
@@ -66,13 +66,13 @@ CONFIG_THEMES = """
 """
 
 class Commit:
-    def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        icons    = bool(int(CTK.cfg.get_val ('%s!icons'%(PREFIX))))
-        themes   = bool(int(CTK.cfg.get_val ('%s!themes'%(PREFIX))))
+    def Commit_Rule(self):
+        vsrv_num = CTK.cfg.get_val('%s!vsrv_num' % (PREFIX))
+        icons = bool(int(CTK.cfg.get_val('%s!icons' % (PREFIX))))
+        themes = bool(int(CTK.cfg.get_val('%s!themes' % (PREFIX))))
 
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
-        rule_n, x = cfg_vsrv_rule_get_next (vsrv_pre)
+        vsrv_pre = 'vserver!%s' % (vsrv_num)
+        rule_n, x = cfg_vsrv_rule_get_next(vsrv_pre)
 
         config_src = ''
         if not icons:
@@ -80,67 +80,67 @@ class Commit:
         if not themes:
             config_src += CONFIG_THEMES
 
-        rule_pre_1   = '%s!rule!%d'%(vsrv_pre, rule_n)
-        rule_pre_2   = '%s!rule!%d'%(vsrv_pre, rule_n+1)
-        droot_icons  = CHEROKEE_ICONSDIR
+        rule_pre_1 = '%s!rule!%d' % (vsrv_pre, rule_n)
+        rule_pre_2 = '%s!rule!%d' % (vsrv_pre, rule_n + 1)
+        droot_icons = CHEROKEE_ICONSDIR
         droot_themes = CHEROKEE_THEMEDIR
 
         config = config_src % (locals())
-        CTK.cfg.apply_chunk (config)
+        CTK.cfg.apply_chunk(config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize('%s!rule' % (vsrv_pre))
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
-    def __call__ (self):
+    def __call__(self):
         CTK.cfg_apply_post()
         return self.Commit_Rule()
 
 
 class Welcome:
-    def _check_config (self):
-        tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
+    def _check_config(self):
+        tmp = re.findall(r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
         vsrv_pre = 'vserver!%s'
-        rules = CTK.cfg.keys('%s!rule'%(vsrv_pre))
+        rules = CTK.cfg.keys('%s!rule' % (vsrv_pre))
         icons, themes = False, False
         for r in rules:
-            if CTK.get_val ('%s!rule!%s!match'%(vsrv_pre, r)) == 'directory' and \
-               CTK.cfg.get_val ('%s!rule!%s!match!directory'%(vsrv_pre, r)) == '/cherokee_icons':
+            if CTK.get_val('%s!rule!%s!match' % (vsrv_pre, r)) == 'directory' and \
+               CTK.cfg.get_val('%s!rule!%s!match!directory' % (vsrv_pre, r)) == '/cherokee_icons':
                 icons = True
-            if CTK.cfg.get_val ('%s!rule!%s!match'%(vsrv_pre, r)) == 'directory' and \
-               CTK.cfg.get_val ('%s!rule!%s!match!directory'%(vsrv_pre, r)) == '/cherokee_themes':
+            if CTK.cfg.get_val('%s!rule!%s!match' % (vsrv_pre, r)) == 'directory' and \
+               CTK.cfg.get_val('%s!rule!%s!match!directory' % (vsrv_pre, r)) == '/cherokee_themes':
                 themes = True
 
         return (icons, themes)
 
-    def __call__ (self):
+    def __call__(self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
-        cont += Wizard.Icon ('icons', {'class': 'wizard-descr'})
-        box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        cont += CTK.RawHTML('<h2>%s</h2>' % (_(NOTE_WELCOME_H1)))
+        cont += Wizard.Icon('icons', {'class': 'wizard-descr'})
+        box = CTK.Box({'class': 'wizard-welcome'})
+        box += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_P1)))
         cont += box
 
         icons, themes = self._check_config()
         if False in [icons, themes]:
             # Send the VServer num
-            tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
-            submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
-            submit += CTK.Hidden('%s!icons'%(PREFIX),  ('0','1')[icons])
-            submit += CTK.Hidden('%s!themes'%(PREFIX), ('0','1')[themes])
+            tmp = re.findall(r'^/wizard/vserver/(\d+)/', CTK.request.url)
+            submit = CTK.Submitter(URL_APPLY)
+            submit += CTK.Hidden('%s!vsrv_num' % (PREFIX), tmp[0])
+            submit += CTK.Hidden('%s!icons' % (PREFIX), ('0', '1')[icons])
+            submit += CTK.Hidden('%s!themes' % (PREFIX), ('0', '1')[themes])
             submit += CTK.Hidden('final', '1')
             cont += submit
             cont += CTK.DruidButtonsPanel_Create()
         else:
-            cont += CTK.RawHTML ('<p>%s</p>'   %(_(NOTE_WELCOME_ERR)))
+            cont += CTK.RawHTML('<p>%s</p>' % (_(NOTE_WELCOME_ERR)))
             cont += CTK.DruidButtonsPanel_Cancel()
 
         return cont.Render().toStr()
 
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/icons$',  Welcome)
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST")
+CTK.publish('^/wizard/vserver/(\d+)/icons$', Welcome)
+CTK.publish(r'^%s' % (URL_APPLY), Commit, method="POST")

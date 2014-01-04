@@ -18,10 +18,10 @@ POST_EXAMPLE = """
 """
 
 class MyHandler(SCGIHandler):
-    def __init__ (self, request, client_address, server):
-        SCGIHandler.__init__ (self, request, client_address, server)
+    def __init__(self, request, client_address, server):
+        SCGIHandler.__init__(self, request, client_address, server)
 
-    def handle_request (self):
+    def handle_request(self):
         self.send('Content-Type: text/html\r\n\r\n')
         self.send('<h1>Post test</h1>')
 
@@ -30,7 +30,7 @@ class MyHandler(SCGIHandler):
         if self.post:
             length = len(self.post)
             if length > 0:
-                self.send('Post len: %d <br/>'     % (length))
+                self.send('Post len: %d <br/>' % (length))
                 self.send('Post content: %s <br/>' % (self.post))
                 return
         self.send(POST_EXAMPLE)

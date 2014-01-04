@@ -20,23 +20,23 @@ vserver!1!rule!1060!handler = file
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
         self.name = "If-Range header, 206 error"
 
-        self.conf              = CONF
+        self.conf = CONF
         self.forbidden_content = DOCUMENTATION
-        self.expected_error    = 206
+        self.expected_error = 206
 
         l = len(DOCUMENTATION)
-        self.expected_content  = ["Content-Length: 1",
-                                  "Content-Range: bytes %d-%d/%d" %(l-1, l-1, l)]
+        self.expected_content = ["Content-Length: 1",
+                                  "Content-Range: bytes %d-%d/%d" % (l - 1, l - 1, l)]
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, "if_range2")
-        f = self.WriteFile (d, "file", 0444, DOCUMENTATION)
+    def Prepare(self, www):
+        d = self.Mkdir(www, "if_range2")
+        f = self.WriteFile(d, "file", 0444, DOCUMENTATION)
 
-        st = os.stat (f)
+        st = os.stat(f)
         mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime = st
         times = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
 
@@ -44,4 +44,4 @@ class Test (TestBase):
                                 "Host: localhost\r\n"               + \
                                 "Connection: Close\r\n"             + \
                                 "If-Range: %s\r\n" % (times)        + \
-                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION)-1)
+                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION) - 1)

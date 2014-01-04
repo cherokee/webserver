@@ -9,5 +9,5 @@ def default():
     page += CTK.RadioText("option 3", {'name': 'test16', 'value': 'c'})
     return page.Render()
 
-CTK.publish ('', default)
-CTK.run (port=8000)
+CTK.publish('', default)
+CTK.run(port=8000)

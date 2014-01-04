@@ -1,8 +1,8 @@
 from base import *
 
-FILE      = 'special_file_for_181'
-DIR       = '181_exists_dir'
-MAGIC     = 'Alvaro__alobbs.com'
+FILE = 'special_file_for_181'
+DIR = '181_exists_dir'
+MAGIC = 'Alvaro__alobbs.com'
 FORBIDDEN = 'This is forbidden string'
 
 CONF = """
@@ -26,17 +26,17 @@ EOF
 """
 
 class Test (TestBase):
-    def __init__ (self):
-        TestBase.__init__ (self, __file__)
-        self.name              = "Rule Exists: mismatch"
-        self.request           = "GET /%s/ HTTP/1.0\r\n" % (DIR)
+    def __init__(self):
+        TestBase.__init__(self, __file__)
+        self.name = "Rule Exists: mismatch"
+        self.request = "GET /%s/ HTTP/1.0\r\n" % (DIR)
         self.forbidden_content = ['/bin/sh', 'echo', FORBIDDEN]
-        self.expected_error    = 200
-        self.expected_content  = MAGIC
-        self.conf              = CONF
+        self.expected_error = 200
+        self.expected_content = MAGIC
+        self.conf = CONF
 
-    def Prepare (self, www):
-        d = self.Mkdir (www, DIR)
-        self.WriteFile (d, MAGIC)
-        self.WriteFile (www, FILE, 0555, CGI_BASE % (FORBIDDEN))
+    def Prepare(self, www):
+        d = self.Mkdir(www, DIR)
+        self.WriteFile(d, MAGIC)
+        self.WriteFile(www, FILE, 0555, CGI_BASE % (FORBIDDEN))
 
