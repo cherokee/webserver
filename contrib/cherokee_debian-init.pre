@@ -19,7 +19,7 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="Cherokee web server"
+DESC="Cherokee web server %version%"
 NAME=cherokee
 DAEMON=%sbindir%/$NAME
 DAEMON_ARGS="-d"
@@ -98,6 +98,14 @@ do_reload() {
 		return 0
 }
 
+#
+# Function that rotates logs.
+#
+do_rotate_logs() {
+		start-stop-daemon --stop --signal USR2 --quiet --pidfile $PIDFILE --name $NAME
+		return 0
+}
+
 case "$1" in
   start)
 		[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
@@ -140,6 +148,11 @@ case "$1" in
 				log_end_msg 1
 				;;
 		esac
+		;;
+  rotate-logs)
+		log_daemon_msg "Rotating logs by $DESC" "$NAME"
+		do_rotate_logs
+		log_end_msg $?
 		;;
   *)
 		echo "Usage: $SCRIPTNAME {start|stop|restart|reload}" >&2
