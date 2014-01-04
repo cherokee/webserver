@@ -123,7 +123,9 @@ parse_contry_list (cherokee_buffer_t *value, cherokee_avl_t *countries)
 {
 	char              *val;
 	char              *tmpp;
-	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	TRACE(ENTRIES, "Adding geoip countries: '%s'\n", value->buf);
 	cherokee_buffer_add_buffer (&tmp, value);

@@ -48,6 +48,8 @@ typedef struct {
 ret_t
 cherokee_logger_writer_new (cherokee_logger_writer_t **writer)
 {
+	ret_t ret;
+
 	CHEROKEE_NEW_STRUCT(n,logger_writer);
 
 	INIT_LIST_HEAD (&n->listed);
@@ -60,7 +62,8 @@ cherokee_logger_writer_new (cherokee_logger_writer_t **writer)
 	cherokee_buffer_init (&n->filename);
 	cherokee_buffer_init (&n->buffer);
 
-	cherokee_buffer_ensure_size (&n->buffer, n->max_bufsize);
+	ret = cherokee_buffer_ensure_size (&n->buffer, n->max_bufsize);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	n->priv = malloc (sizeof(priv_t));
 	if (n->priv == NULL) {

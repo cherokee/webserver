@@ -52,6 +52,7 @@ add_ip_remote (cherokee_template_t       *template,
                cherokee_buffer_t         *output,
                void                      *param)
 {
+	ret_t                  ret;
 	cuint_t                prev_len;
 	cherokee_connection_t *conn      = CONN(param);
 
@@ -69,7 +70,9 @@ add_ip_remote (cherokee_template_t       *template,
 	 */
 	prev_len = output->len;
 
-	cherokee_buffer_ensure_addlen (output, CHE_INET_ADDRSTRLEN);
+	ret = cherokee_buffer_ensure_addlen (output, CHE_INET_ADDRSTRLEN);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_socket_ntop (&conn->socket,
 	                      (output->buf + output->len),
 	                      (output->size - output->len) -1);

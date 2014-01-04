@@ -412,8 +412,8 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 {
 	ret_t              ret;
 	cherokee_boolean_t exist;
-	cherokee_buffer_t  tmp    = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  dbname = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+	cherokee_buffer_t  dbname;
 
 	/* Ensure directories are accessible
 	 */
@@ -432,6 +432,11 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 		return ret_error;
 	}
 
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
+	cherokee_buffer_init (&dbname);
+
 	/* Check the Server database
 	 */
 	cherokee_buffer_add_buffer (&dbname, &rrd_conn->path_databases);
@@ -439,7 +444,8 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 
 	exist = ensure_db_exists (&dbname);
 	if (exist) {
-		return ret_ok;
+		ret = ret_ok;
+		goto out;
 	}
 
 	cherokee_buffer_add_str    (&tmp, "create ");
@@ -477,14 +483,17 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 
 	ret = cherokee_rrd_connection_spawn (rrd_conn);
 	if (unlikely (ret != ret_ok)) {
-		return ret_error;
+		ret = ret_error;
+		goto out;
 	}
 
 	ret = cherokee_rrd_connection_execute (rrd_conn, &tmp);
 	if (unlikely (ret != ret_ok)) {
-		return ret_error;
+		ret = ret_error;
+		goto out;
 	}
 
+out:
 	cherokee_buffer_mrproper (&dbname);
 	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
@@ -497,7 +506,7 @@ cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t *rrd_conn,
 {
 	ret_t              ret;
 	cherokee_boolean_t exist;
-	cherokee_buffer_t  tmp    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
 
 	/* Ensure directories are accessible
 	 */
@@ -522,6 +531,10 @@ cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t *rrd_conn,
 	if (exist) {
 		return ret_ok;
 	}
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init       (&tmp);
 
 	cherokee_buffer_add_str    (&tmp, "create ");
 	cherokee_buffer_add_buffer (&tmp, dbpath);
@@ -555,14 +568,17 @@ cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t *rrd_conn,
 
 	ret = cherokee_rrd_connection_spawn (rrd_conn);
 	if (unlikely (ret != ret_ok)) {
-		return ret_error;
+		ret = ret_error;
+		goto out;
 	}
 
 	ret = cherokee_rrd_connection_execute (rrd_conn, &tmp);
 	if (unlikely (ret != ret_ok)) {
-		return ret_error;
+		ret = ret_error;
+		goto out;
 	}
 
+out:
 	cherokee_buffer_mrproper (&tmp);
-	return ret_ok;
+	return ret;
 }

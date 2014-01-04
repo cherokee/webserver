@@ -43,9 +43,7 @@ props_free (cherokee_validator_htdigest_props_t *props)
 ret_t
 cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
-	cherokee_validator_htdigest_props_t *props;
-
-	UNUSED(srv);
+	UNUSED (srv);
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htdigest_props);
@@ -54,8 +52,6 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 		                                         MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
-
-	props = PROP_HTDIGEST(*_props);
 
 	/* Call the file based validator configure
 	 */
@@ -94,12 +90,11 @@ cherokee_validator_htdigest_free (cherokee_validator_htdigest_t *htdigest)
 }
 
 
-static ret_t
+static ret_t must_check
 build_HA1 (cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
 	cherokee_buffer_add_va (buf, "%s:%s:%s", conn->validator->user.buf, conn->config_entry.auth_realm->buf, conn->validator->passwd.buf);
-	cherokee_buffer_encode_md5_digest (buf);
-	return ret_ok;
+	return cherokee_buffer_encode_md5_digest (buf);
 }
 
 
@@ -156,7 +151,7 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 }
 
 
-static ret_t
+static ret_t must_check
 validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *file)
 {
 	ret_t               ret;
@@ -164,9 +159,13 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 	char               *user   = NULL;
 	char               *realm  = NULL;
 	char               *passwd = NULL;
-	cherokee_buffer_t   ha1 = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   ha1;
 
 	UNUSED(htdigest);
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&ha1);
 
 	/* Extact the right entry information
 	 */
@@ -176,7 +175,8 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 
 	/* Build the hash
 	 */
-	build_HA1 (conn, &ha1);
+	ret = build_HA1 (conn, &ha1);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Compare it with the stored hash, clean, and return
 	 */
@@ -195,7 +195,11 @@ validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t 
 	char              *user   = NULL;
 	char              *realm  = NULL;
 	char              *passwd = NULL;
-	cherokee_buffer_t  buf    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  buf;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&buf);
 
 	/* Sanity check
 	 */
@@ -231,7 +235,11 @@ cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
 {
 	ret_t              ret;
 	cherokee_buffer_t *fpass;
-	cherokee_buffer_t  file = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  file;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&file);
 
 	/* Ensure that we have all what we need
 	 */

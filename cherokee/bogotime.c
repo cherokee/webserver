@@ -89,9 +89,16 @@ init_timezone (void)
 ret_t
 cherokee_bogotime_init (void)
 {
+	ret_t ret;
+
 	if (inited) {
 		return ret_ok;
 	}
+
+	/* Initialise the buffers */
+	cherokee_buffer_init        (&cherokee_bogonow_strgmt);
+	ret = cherokee_buffer_ensure_size (&cherokee_bogonow_strgmt, DTM_SIZE_GMTTM_STR+2);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* RW-lock mutex */
 	CHEROKEE_RWLOCK_INIT (&lock, NULL);
@@ -100,9 +107,6 @@ cherokee_bogotime_init (void)
 	cherokee_bogonow_now = 0;
 
 	INIT_LIST_HEAD (&_callbacks);
-
-	cherokee_buffer_init        (&cherokee_bogonow_strgmt);
-	cherokee_buffer_ensure_size (&cherokee_bogonow_strgmt, DTM_SIZE_GMTTM_STR+2);
 
 	/* Init time zone */
 	init_timezone();

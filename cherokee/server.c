@@ -416,7 +416,11 @@ print_banner (cherokee_server_t *srv)
 	cherokee_list_t   *i;
 	size_t             b   = 0;
 	size_t             len = 0;
-	cherokee_buffer_t  n   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  n;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&n);
 
 	/* First line
 	 */
@@ -532,13 +536,18 @@ print_banner (cherokee_server_t *srv)
 
 	/* Print it to stdout
 	 */
-	cherokee_buffer_split_lines (&n, TERMINAL_WIDTH, NULL);
+	ret = cherokee_buffer_split_lines (&n, TERMINAL_WIDTH, NULL);
+	if (unlikely (ret != ret_ok)) goto out;
+
 	fprintf (stdout, "%s\n", n.buf);
 	fflush (stdout);
 
+	ret = ret_ok;
+
+out:
 	cherokee_buffer_mrproper (&n);
 
-	return ret_ok;
+	return ret;
 }
 
 
@@ -1750,7 +1759,9 @@ ret_t
 cherokee_server_read_config_file (cherokee_server_t *srv, const char *fullpath)
 {
 	ret_t             ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	cherokee_buffer_add (&tmp, fullpath, strlen(fullpath));
 
@@ -1909,13 +1920,15 @@ NORETURN void
 cherokee_server_handle_panic (cherokee_server_t *srv)
 {
 	int               re;
-	cherokee_buffer_t cmd = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t cmd;
 
 	PRINT_MSG_S ("Cherokee feels panic!\n");
 
 	if ((srv == NULL) || (srv->panic_action.len <= 0)) {
 		goto fin;
 	}
+
+	cherokee_buffer_init (&cmd);
 
 	cherokee_buffer_add_va (&cmd, "%s %d", srv->panic_action.buf, getpid());
 
@@ -2102,7 +2115,11 @@ cherokee_server_get_log_writer (cherokee_server_t         *srv,
                                 cherokee_logger_writer_t **writer)
 {
 	ret_t              ret;
-	cherokee_buffer_t  tmp  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* Build the index name
 	 */

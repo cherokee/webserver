@@ -179,13 +179,17 @@ cherokee_encoder_gzip_free (cherokee_encoder_gzip_t *encoder)
 }
 
 
-ret_t
+ret_t must_check
 cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t *encoder,
                                    cherokee_buffer_t       *buf)
 {
+	ret_t ret;
+
 	UNUSED(encoder);
 
-	cherokee_buffer_ensure_addlen (buf, 50);
+	ret = cherokee_buffer_ensure_addlen (buf, 50);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add_str (buf, "Content-Encoding: gzip"CRLF);
 	cherokee_buffer_add_str (buf, "Vary: Accept-Encoding"CRLF);
 

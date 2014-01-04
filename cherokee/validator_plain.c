@@ -48,8 +48,6 @@ cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
                                     cherokee_server_t        *srv,
                                     cherokee_module_props_t **_props)
 {
-	cherokee_validator_plain_props_t *props;
-
 	UNUSED(srv);
 
 	if (*_props == NULL) {
@@ -58,8 +56,6 @@ cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
 		                                         MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
-
-	props = PROP_PLAIN(*_props);
 
 	/* Call the file based validator configure
 	 */
@@ -108,9 +104,14 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 	const char        *p;
 	const char        *end;
 	cherokee_buffer_t *fpass;
-	cherokee_buffer_t  file  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  buser = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  bpass = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  file;
+	cherokee_buffer_t  buser;
+	cherokee_buffer_t  bpass;
+
+	/* Initialise the buffers */
+	cherokee_buffer_init (&file);
+	cherokee_buffer_init (&buser);
+	cherokee_buffer_init (&bpass);
 
 	/* Sanity check */
 	if (unlikely ((conn->validator == NULL) ||

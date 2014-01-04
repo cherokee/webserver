@@ -30,7 +30,7 @@
 void
 cherokee_info_build_print (cherokee_server_t *srv)
 {
-	cherokee_buffer_t builtin = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t builtin;
 
 	/* Basic info
 	 */
@@ -53,6 +53,7 @@ cherokee_info_build_print (cherokee_server_t *srv)
 
 	/* Print plug-ins information
 	 */
+	cherokee_buffer_init (&builtin);
 	printf ("Plug-ins\n");
 	cherokee_plugin_loader_get_mods_info (&srv->loader, &builtin);
 	printf (" Built-in: %s\n", builtin.buf ? builtin.buf : "");

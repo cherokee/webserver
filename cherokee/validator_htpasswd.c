@@ -57,9 +57,7 @@ cherokee_validator_htpasswd_configure (cherokee_config_node_t   *conf,
 				       cherokee_server_t        *srv,
 				       cherokee_module_props_t **_props)
 {
-	cherokee_validator_htpasswd_props_t *props;
-
-	UNUSED(srv);
+	UNUSED (srv);
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htpasswd_props);
@@ -67,8 +65,6 @@ cherokee_validator_htpasswd_configure (cherokee_config_node_t   *conf,
 							 MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
-
-	props = PROP_HTPASSWD(*_props);
 
 	/* Call the file based validator configure
 	 */
@@ -202,9 +198,10 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 }
 
 
-static ret_t
+static ret_t must_check
 validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 {
+	ret_t             ret;
 	cuint_t           c_len      = strlen (crypted);
 	cherokee_thread_t *thread    = CONN_THREAD(conn);
 	cherokee_buffer_t *sha1_buf1 = THREAD_TMP_BUF1(thread);
@@ -221,7 +218,8 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 	cherokee_buffer_clean (sha1_buf1);
 	cherokee_buffer_clean (sha1_buf2);
 	cherokee_buffer_add_buffer (sha1_buf1, &conn->validator->passwd);
-	cherokee_buffer_encode_sha1_base64 (sha1_buf1, sha1_buf2);
+	ret = cherokee_buffer_encode_sha1_base64 (sha1_buf1, sha1_buf2);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	if (strcmp (sha1_buf2->buf, crypted) == 0) {
 		return ret_ok;

@@ -109,7 +109,7 @@ report_error (cherokee_buffer_t *buf)
 }
 
 
-static void
+static ret_t must_check
 render_python_error (cherokee_error_type_t   type,
                      const char             *filename,
                      int                     line,
@@ -118,8 +118,12 @@ render_python_error (cherokee_error_type_t   type,
                      cherokee_buffer_t      *output,
                      va_list                 ap)
 {
+	ret_t             ret;
 	va_list           ap_tmp;
-	cherokee_buffer_t tmp     = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
+
+	/* Initialise buffers */
+	cherokee_buffer_init (&tmp);
 
 	/* Dict: open */
 	cherokee_buffer_add_char (output, '{');
@@ -170,7 +174,8 @@ render_python_error (cherokee_error_type_t   type,
 		cherokee_buffer_clean           (&tmp);
 		cherokee_buffer_add_str         (output, "'description': \"");
 		cherokee_buffer_add_va_list     (&tmp, error->description, ap_tmp);
-		cherokee_buffer_add_escape_html (output, &tmp);
+		ret = cherokee_buffer_add_escape_html (output, &tmp);
+		if (unlikely (ret != ret_ok)) goto out;
 		cherokee_buffer_add_str         (output, "\", ");
 
 		/* ARGS: Skip 'description' */
@@ -194,7 +199,8 @@ render_python_error (cherokee_error_type_t   type,
 		cherokee_buffer_clean           (&tmp);
 		cherokee_buffer_add_str         (output, "'debug': \"");
 		cherokee_buffer_add_va_list     (&tmp, error->debug, ap_tmp);
-		cherokee_buffer_add_escape_html (output, &tmp);
+		ret = cherokee_buffer_add_escape_html (output, &tmp);
+		if (unlikely (ret != ret_ok)) goto out;
 		cherokee_buffer_add_str         (output, "\", ");
 
 		/* ARGS: Skip 'debug' */
@@ -213,7 +219,8 @@ render_python_error (cherokee_error_type_t   type,
 	cherokee_buffer_add_str (output, "'configure_args': \"");
 	cherokee_buffer_clean   (&tmp);
 	cherokee_buffer_add_str (&tmp, CHEROKEE_CONFIG_ARGS);
-	cherokee_buffer_add_escape_html (output, &tmp);
+	ret = cherokee_buffer_add_escape_html (output, &tmp);
+	if (unlikely (ret != ret_ok)) goto out;
 	cherokee_buffer_add_buffer (output, &tmp);
 	cherokee_buffer_add_str (output, "\", ");
 
@@ -223,7 +230,8 @@ render_python_error (cherokee_error_type_t   type,
 #ifdef BACKTRACES_ENABLED
 		cherokee_buffer_clean (&tmp);
 		cherokee_buf_add_backtrace (&tmp, 2, "\\n", "");
-		cherokee_buffer_add_escape_html (output, &tmp);
+		ret = cherokee_buffer_add_escape_html (output, &tmp);
+		if (unlikely (ret != ret_ok)) goto out;
 #endif
 		cherokee_buffer_add_str (output, "\", ");
 	}
@@ -234,8 +242,13 @@ render_python_error (cherokee_error_type_t   type,
 	}
 	cherokee_buffer_add_str (output, "}\n");
 
+	ret = ret_ok;
+
+out:
 	/* Clean up */
 	cherokee_buffer_mrproper (&tmp);
+
+	return ret;
 }
 
 
@@ -316,6 +329,7 @@ render (cherokee_error_type_t  type,
         va_list                ap,
         cherokee_buffer_t     *error_str)
 {
+	ret_t ret;
 	const cherokee_error_t *error;
 	cherokee_boolean_t      readable;
 
@@ -338,10 +352,12 @@ render (cherokee_error_type_t  type,
 	 */
 	if (readable) {
 		render_human_error (type, filename, line, error_num, error, error_str, ap);
-		cherokee_buffer_split_lines (error_str, TERMINAL_WIDTH, "    ");
+		ret = cherokee_buffer_split_lines (error_str, TERMINAL_WIDTH, "    ");
+		if (unlikely (ret != ret_ok)) return ret;
 		render_human_backtrace (error, error_str);
 	} else {
-		render_python_error (type, filename, line, error_num, error, error_str, ap);
+		ret = render_python_error (type, filename, line, error_num, error, error_str, ap);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	return ret_ok;
@@ -355,7 +371,11 @@ cherokee_error_log (cherokee_error_type_t  type,
                     int                    error_num, ...)
 {
 	va_list            ap;
-	cherokee_buffer_t  error_str = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  error_str;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&error_str);
 
 	/* Render the error message
 	 */
@@ -380,10 +400,15 @@ cherokee_error_errno_log (int                    errnumber,
                           int                    line,
                           int                    error_num, ...)
 {
+	ret_t              ret;
 	va_list            ap;
 	const char        *errstr;
 	char               err_tmp[ERROR_MAX_BUFSIZE];
-	cherokee_buffer_t  error_str = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  error_str;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&error_str);
 
 	/* Render the error message
 	 */
@@ -398,8 +423,10 @@ cherokee_error_errno_log (int                    errnumber,
 		errstr = "unknwon error (?)";
 	}
 
-	cherokee_buffer_replace_string (&error_str, (char *)"${errno}", 8,
-	                                (char *) errstr, strlen(errstr));
+	ret = cherokee_buffer_replace_string (&error_str, (char *)"${errno}", 8,
+	                                      (char *) errstr, strlen(errstr));
+
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Report it
 	 */

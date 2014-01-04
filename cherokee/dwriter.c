@@ -132,10 +132,12 @@ escape_string (cherokee_buffer_t *buffer,
                const char        *s,
                cuint_t            len)
 {
+	ret_t   ret;
 	char    c;
 	cuint_t i, j;
 
-	cherokee_buffer_ensure_size (buffer, len*2);
+	ret = cherokee_buffer_ensure_size (buffer, len*2);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	for (i=0,j=0; i<len; i++) {
 		c = s[i];

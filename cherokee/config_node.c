@@ -102,12 +102,17 @@ add_new_child (cherokee_config_node_t *entry, cherokee_buffer_t *key)
 ret_t
 cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *val)
 {
+	ret_t                   ret;
 	char                   *sep;
 	cherokee_config_node_t *child;
 	cherokee_config_node_t *current = conf;
 	const char             *begin   = key;
-	cherokee_buffer_t       tmp     = CHEROKEE_BUF_INIT;
 	cherokee_boolean_t      final   = false;
+	cherokee_buffer_t       tmp;
+
+	/* Initialise buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* 'include' is a special case
 	 */
@@ -133,7 +138,10 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 		child = search_child (current, &tmp);
 		if (child == NULL) {
 			child = add_new_child (current, &tmp);
-			if (child == NULL) return ret_error;
+			if (child == NULL) {
+				cherokee_buffer_mrproper (&tmp);
+				return ret_error;
+			}
 		}
 
 		if (final) {
@@ -169,8 +177,10 @@ cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cheroke
 	cherokee_config_node_t *child;
 	cherokee_config_node_t *current = conf;
 	const char             *begin   = key;
-	cherokee_buffer_t       tmp     = CHEROKEE_BUF_INIT;
 	cherokee_boolean_t      final   = false;
+	cherokee_buffer_t       tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	do {
 		/* Extract current child
@@ -408,7 +418,11 @@ cherokee_config_node_read_list (cherokee_config_node_t           *conf,
 static ret_t
 convert_to_list_step (char *entry, void *data)
 {
-	CHEROKEE_NEW(buf, buffer);
+	ret_t ret;
+	cherokee_buffer_t *buf;
+
+	ret = cherokee_buffer_new (&buf);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	cherokee_buffer_add (buf, entry, strlen(entry));
 	return cherokee_list_add_tail_content (LIST(data), buf);

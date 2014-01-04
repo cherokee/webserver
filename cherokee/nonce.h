@@ -41,9 +41,9 @@ ret_t cherokee_nonce_table_new     (cherokee_nonce_table_t **nonces);
 ret_t cherokee_nonce_table_free    (cherokee_nonce_table_t *nonces);
 ret_t cherokee_nonce_table_cleanup (cherokee_nonce_table_t *nonces);
 
-ret_t cherokee_nonce_table_check    (cherokee_nonce_table_t *nonces, cherokee_buffer_t *nonce);
-ret_t cherokee_nonce_table_remove   (cherokee_nonce_table_t *nonces, cherokee_buffer_t *nonce);
-ret_t cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connection_t *conn, cherokee_buffer_t *nonce);
+ret_t dont_check cherokee_nonce_table_check    (cherokee_nonce_table_t *nonces, cherokee_buffer_t *nonce);
+ret_t dont_check cherokee_nonce_table_remove   (cherokee_nonce_table_t *nonces, cherokee_buffer_t *nonce);
+ret_t must_check cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connection_t *conn, cherokee_buffer_t *nonce);
 
 
 CHEROKEE_END_DECLS

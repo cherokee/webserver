@@ -128,7 +128,7 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 	cuint_t                path_len;
 	time_t                 time_url;
 	char                  *time_s;
-	cherokee_buffer_t      md5      = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      md5;
 	cherokee_connection_t *conn     = CONN(cnt);
 
 	TRACE(ENTRIES, "Analyzing request '%s'\n", conn->request.buf);
@@ -184,18 +184,21 @@ cherokee_handler_secdownload_new (cherokee_handler_t     **hdl,
 	 */
 	path_len = (conn->request.buf + conn->request.len) - p;
 
+	cherokee_buffer_init       (&md5);
 	cherokee_buffer_add_buffer (&md5, &PROP_SECDOWN(props)->secret);
 	cherokee_buffer_add        (&md5, p, path_len);
 	cherokee_buffer_add        (&md5, time_s, 8);
 
-	cherokee_buffer_encode_md5_digest (&md5);
+	ret = cherokee_buffer_encode_md5_digest (&md5);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	re = strncasecmp (md5.buf, &conn->request.buf[1], 32);
 	if (re != 0) {
 #ifdef TRACE_ENABLED
 		if (cherokee_trace_is_tracing()) {
-			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+			cherokee_buffer_t tmp;
 
+			cherokee_buffer_init       (&tmp);
 			cherokee_buffer_add_str    (&tmp, "secret='");
 			cherokee_buffer_add_buffer (&tmp, &PROP_SECDOWN(props)->secret);
 			cherokee_buffer_add_str    (&tmp, "', path='");

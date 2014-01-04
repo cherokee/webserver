@@ -102,10 +102,7 @@ cherokee_handler_post_report_new  (cherokee_handler_t      **hdl,
 
 	/* Init
 	 */
-	ret = cherokee_buffer_init (&n->buffer);
-	if (unlikely(ret != ret_ok)) {
-		return ret;
-	}
+	cherokee_buffer_init (&n->buffer);
 
 	ret = cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
 	if (unlikely(ret != ret_ok)) {

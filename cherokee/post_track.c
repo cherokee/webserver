@@ -162,7 +162,7 @@ _register (cherokee_post_track_t *track,
 {
 	ret_t                        ret;
 	cherokee_post_track_entry_t *entry = NULL;
-	cherokee_buffer_t            tmp   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t            tmp;
 
 	TRACE (ENTRIES, "Register conn ID: %d\n", conn->id);
 
@@ -172,10 +172,15 @@ _register (cherokee_post_track_t *track,
 		return ret_ok;
 	}
 
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
+
 	/* Look for X-Progress-ID
 	 */
 	ret = _figure_x_progress_id (conn, &tmp);
 	if (ret != ret_ok) {
+		cherokee_buffer_mrproper (&tmp);
 		return ret_ok;
 	}
 

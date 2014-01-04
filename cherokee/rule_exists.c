@@ -46,7 +46,9 @@ parse_value (cherokee_buffer_t *value,
 {
 	char              *val;
 	char              *tmpp;
-	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	TRACE(ENTRIES, "Adding exists: '%s'\n", value->buf);
 	cherokee_buffer_add_buffer (&tmp, value);
@@ -58,8 +60,10 @@ parse_value (cherokee_buffer_t *value,
 		TRACE(ENTRIES, "Adding exists: '%s'\n", val);
 
 		entry = (entry_t *)malloc (sizeof(entry_t));
-		if (unlikely (entry == NULL))
+		if (unlikely (entry == NULL)) {
+			cherokee_buffer_mrproper (&tmp);
 			return ret_nomem;
+		}
 
 		cherokee_buffer_init (&entry->file);
 		cherokee_buffer_add (&entry->file, val, strlen(val));

@@ -1186,8 +1186,11 @@ ret_t
 cherokee_header_foreach_unknown (cherokee_header_t *hdr, cherokee_header_foreach_func_t func, void *data)
 {
 	int               i;
-	cherokee_buffer_t tmp_hdr = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t tmp_val = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp_hdr;
+	cherokee_buffer_t tmp_val;
+
+	cherokee_buffer_init (&tmp_hdr);
+	cherokee_buffer_init (&tmp_val);
 
 	HEADER_INTERNAL_CHECK(hdr);
 

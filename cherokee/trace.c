@@ -45,7 +45,7 @@ typedef struct {
 
 
 static cherokee_trace_t trace = {
-	CHEROKEE_BUF_INIT,
+	{NULL, 0, 0}, /* cherokee_buffer_init */
 	false,
 	false,
 	false,
@@ -64,7 +64,7 @@ ret_t
 cherokee_trace_init (void)
 {
 	const char        *env;
-	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
 
 	/* Read the environment variable
 	 */
@@ -87,7 +87,6 @@ cherokee_trace_set_modules (cherokee_buffer_t *modules)
 	ret_t              ret;
 	char              *p;
 	char              *end;
-	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
 
 	/* Store a copy of the modules
 	 */
@@ -120,24 +119,22 @@ cherokee_trace_set_modules (cherokee_buffer_t *modules)
 		}
 
 		if (end > p) {
+			cherokee_buffer_t tmp;
 			ret = cherokee_access_new (&trace.from_filter);
 			if (ret != ret_ok) return ret_error;
 
+			cherokee_buffer_init (&tmp);
 			cherokee_buffer_add (&tmp, p, end-p);
 
 			ret = cherokee_access_add (trace.from_filter, tmp.buf);
+			cherokee_buffer_mrproper (&tmp);
 			if (ret != ret_ok) {
-				ret = ret_error;
-				goto out;
+				return ret_error;
 			}
 		}
 	}
 
-	ret = ret_ok;
-
-out:
-	cherokee_buffer_mrproper (&tmp);
-	return ret;
+	return ret_ok;
 }
 
 
@@ -152,7 +149,7 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	cherokee_connection_t *conn;
 	cherokee_buffer_t     *trace_modules = &trace.modules;
 	cherokee_boolean_t     do_log        = false;
-	cherokee_buffer_t      entries       = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      entries;
 
 	/* Prevents loops
 	 */
@@ -161,6 +158,10 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	}
 
 	disabled = true;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&entries);
 
 	/* Return ASAP if nothing is being traced
 	 */
@@ -238,7 +239,8 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 		longest_len = MAX (longest_len, len);
 
 		cherokee_buffer_add_str    (&entries, "{0x");
-		cherokee_buffer_add_char_n (&entries, '0', longest_len - len);
+		ret = cherokee_buffer_add_char_n (&entries, '0', longest_len - len);
+		if (unlikely (ret != ret_ok)) goto out;
 		cherokee_buffer_add        (&entries, tmp, len);
 		cherokee_buffer_add_str    (&entries, "} ");
 	}

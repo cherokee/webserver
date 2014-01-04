@@ -205,8 +205,8 @@ cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 	int                      re;
 	ret_t                    ret;
 	char                    *tmp;
-	cherokee_buffer_t        post = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t        line = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t        post;
+	cherokee_buffer_t        line;
 	cherokee_connection_t   *conn = HANDLER_CONN(hdl);
 
 	/* Check for the post info
@@ -215,6 +215,11 @@ cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 		conn->error_code = http_bad_request;
 		return ret_error;
 	}
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&post);
+	cherokee_buffer_init (&line);
 
 	/* Process line per line
 	 */
@@ -225,7 +230,7 @@ cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 		break;
 	default:
 		conn->error_code = http_bad_request;
-		return ret_error;
+		goto exit2;
 	}
 
 	/* Parse

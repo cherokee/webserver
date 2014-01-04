@@ -179,7 +179,9 @@ cherokee_template_parse (cherokee_template_t *tem,
 	ret_t              ret          = ret_ok;
 	char              *p            = incoming->buf;
 	char              *end          = incoming->buf + incoming->len;
-	cherokee_buffer_t  token        = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  token;
+
+	cherokee_buffer_init (&token);
 
 	while (p < end) {
 		cherokee_template_replacement_t *repl;
@@ -293,11 +295,13 @@ cherokee_template_parse_file (cherokee_template_t *tem,
                               const char          *file)
 {
 	ret_t             ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
 
 	ret = cherokee_buffer_read_file (&tmp, (char *)file);
 	if (ret != ret_ok)
 		return ret;
+
+	cherokee_buffer_init (&tmp);
 
 	ret = cherokee_template_parse (tem, &tmp);
 	if (ret != ret_ok) {
@@ -339,7 +343,9 @@ cherokee_template_render (cherokee_template_t *tem,
 		if ((repl->slice.begin != CHEROKEE_BUF_SLIDE_NONE) ||
 		    (repl->slice.end   != CHEROKEE_BUF_SLIDE_NONE))
 		{
-			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+			cherokee_buffer_t tmp;
+
+			cherokee_buffer_init (&tmp);
 
 			ret = repl->token->func (tem, repl->token, &tmp, param);
 			if (unlikely (ret != ret_ok)) {

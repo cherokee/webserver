@@ -64,7 +64,7 @@ ret_t cherokee_request_header_clean    (cherokee_request_header_t *request);
 ret_t cherokee_request_header_mrproper (cherokee_request_header_t *request);
 
 ret_t cherokee_request_header_parse_string (cherokee_request_header_t *request, cherokee_buffer_t *url_string);
-ret_t cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2);
+ret_t must_check cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2);
 
 ret_t cherokee_request_header_uses_proxy   (cherokee_request_header_t *request, cherokee_boolean_t proxy);
 ret_t cherokee_request_header_add_header   (cherokee_request_header_t *request, char *ptr, cuint_t len);

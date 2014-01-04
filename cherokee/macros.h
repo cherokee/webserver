@@ -404,7 +404,8 @@ cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
 
 #define CHEROKEE_PRINT_BACKTRACE                                \
 	do {                                                    \
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;      \
+		cherokee_buffer_t tmp;                          \
+		cherokee_buffer_init (&tmp);                    \
 		cherokee_buf_add_backtrace (&tmp, 0, "\n", ""); \
 		PRINT_MSG ("%s", tmp.buf);                      \
 		cherokee_buffer_mrproper (&tmp);                \

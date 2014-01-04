@@ -39,11 +39,8 @@ cherokee_url_init (cherokee_url_t *url)
 
 	/* New buffer objects
 	 */
-	ret = cherokee_buffer_init (&url->host);
-	if (unlikely(ret < ret_ok)) return ret;
-
-	ret = cherokee_buffer_init (&url->request);
-	if (unlikely(ret < ret_ok)) return ret;
+	cherokee_buffer_init (&url->host);
+	cherokee_buffer_init (&url->request);
 
 	/* Set default values
 	 */

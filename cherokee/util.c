@@ -625,7 +625,6 @@ cherokee_estimate_va_length (const char *fmt, va_list ap)
 	cherokee_boolean_t  lflag;
 	cherokee_boolean_t  llflag;
 	cuint_t             width;
-	char                padc;
 	cuint_t             len = 0;
 
 #define LEN_NUM(var,base)    \
@@ -637,7 +636,6 @@ cherokee_estimate_va_length (const char *fmt, va_list ap)
 
 	for (;;) {
 		width = 0;
-		padc  = ' ';
 
 		while ((ch = *fmt++) != '%') {
 			if (ch == '\0')
@@ -675,7 +673,7 @@ reswitch:
 			LEN_NUM(ul,10);
 			break;
 		case '0':
-			padc = '0';
+			len++;
 			goto reswitch;
 		case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
@@ -1074,8 +1072,11 @@ cherokee_path_arg_eval (cherokee_buffer_t *path)
 	if (path->buf[0] != '/') {
 		d = getcwd (tmp, sizeof(tmp));
 
-		cherokee_buffer_prepend (path, (char *)"/", 1);
-		cherokee_buffer_prepend (path, d, strlen(d));
+		ret = cherokee_buffer_prepend (path, (char *)"/", 1);
+		if (unlikely (ret != ret_ok)) return ret;
+
+		ret = cherokee_buffer_prepend (path, d, strlen(d));
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	ret = cherokee_path_short (path);
@@ -1900,7 +1901,7 @@ cherokee_rm_rf (cherokee_buffer_t *path,
 	struct dirent    *entry;
 	char              entry_buf[512];
 	struct stat       info;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
 
 	/* Remove the directory contents
 	 */
@@ -1908,6 +1909,10 @@ cherokee_rm_rf (cherokee_buffer_t *path,
 	if (d == NULL) {
 		return ret_ok;
 	}
+
+	/* Initialise buffer
+	 */
+	cherokee_buffer_init (&tmp);
 
 	while (true) {
 		re = cherokee_readdir (d, (struct dirent *)entry_buf, &entry);

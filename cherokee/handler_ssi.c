@@ -177,10 +177,15 @@ parse (cherokee_handler_ssi_t *hdl,
 	path_type_t        path;
 	struct stat        info;
 	cherokee_boolean_t ignore;
-	cherokee_buffer_t  key     = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  val     = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  pair    = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  fpath   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  key;
+	cherokee_buffer_t  val;
+	cherokee_buffer_t  pair;
+	cherokee_buffer_t  fpath;
+
+	cherokee_buffer_init (&key);
+	cherokee_buffer_init (&val);
+	cherokee_buffer_init (&pair);
+	cherokee_buffer_init (&fpath);
 
 	q = in->buf;
 
@@ -317,7 +322,9 @@ parse (cherokee_handler_ssi_t *hdl,
 			if (! ignore) {
 				switch (op) {
 				case op_include: {
-					cherokee_buffer_t file_content = CHEROKEE_BUF_INIT;
+					cherokee_buffer_t file_content;
+
+					cherokee_buffer_init (&file_content);
 
 					ret = cherokee_buffer_read_file (&file_content, fpath.buf);
 					if (unlikely (ret != ret_ok)) {

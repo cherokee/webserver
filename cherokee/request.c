@@ -106,7 +106,8 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 
 	/* 200 bytes should be enough for a small header
 	 */
-	cherokee_buffer_ensure_size (buf, 200);
+	ret = cherokee_buffer_ensure_size (buf, 200);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Add main request line:
 	 * GET /dir/object HTTP/1.1
@@ -177,7 +178,8 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 		cherokee_buffer_add_char   (tmp1, ':');
 		cherokee_buffer_add_buffer (tmp1, &request->password);
 
-		cherokee_buffer_encode_base64 (tmp1, tmp2);
+		ret = cherokee_buffer_encode_base64 (tmp1, tmp2);
+		if (unlikely (ret != ret_ok)) return ret;
 
 		cherokee_buffer_add_str    (buf, "Authorization: Basic ");
 		cherokee_buffer_add_buffer (buf, tmp2);
@@ -218,7 +220,11 @@ cherokee_request_header_set_auth (cherokee_request_header_t *request,
 ret_t
 cherokee_request_header_add_header (cherokee_request_header_t *request, char *ptr, cuint_t len)
 {
-	cherokee_buffer_ensure_addlen (&request->extra_headers, len + CSZLEN(CRLF));
+	ret_t ret;
+
+	ret = cherokee_buffer_ensure_addlen (&request->extra_headers, len + CSZLEN(CRLF));
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add (&request->extra_headers, ptr, len);
 	cherokee_buffer_add_str (&request->extra_headers, CRLF);
 

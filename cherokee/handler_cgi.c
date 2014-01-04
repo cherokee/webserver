@@ -291,8 +291,6 @@ cherokee_handler_cgi_props_free (cherokee_handler_cgi_props_t *props)
 ret_t
 cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
-	cherokee_handler_cgi_props_t *props;
-
 	/* Instance a new property object
 	 */
 	if (*_props == NULL) {
@@ -303,15 +301,13 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 		*_props = MODULE_PROPS(n);
 	}
 
-	props = PROP_CGI(*_props);
-
 	/* Parse local options
 	 */
 	return cherokee_handler_cgi_base_configure (conf, srv, _props);
 }
 
 
-void
+ret_t
 cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
                                    const char *name,    int name_len,
                                    const char *content, int content_len)
@@ -327,11 +323,11 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	/* Build the new envp entry
 	 */
 	if (name == NULL)
-		return;
+		return ret_error;
 
 	entry = (char *) malloc (name_len + content_len + 2);
 	if (entry == NULL)
-		return;
+		return ret_nomem;
 
 	memcpy (entry, name, name_len);
 	entry[name_len] = '=';
@@ -351,6 +347,7 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 		SHOULDNT_HAPPEN;
 	}
 #endif
+	return ret_ok;
 }
 
 static ret_t
@@ -362,15 +359,15 @@ add_environment (cherokee_handler_cgi_t *cgi,
 	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(CONN_THREAD(conn));
 
 	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* CONTENT_LENGTH
 	 */
 	if (conn->post.has_info) {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add_ullong10 (tmp, conn->post.len);
-		set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);
+		ret = set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	/* SCRIPT_FILENAME
@@ -378,9 +375,11 @@ add_environment (cherokee_handler_cgi_t *cgi,
 	if (cgi_base->executable.len <= 0)
 		return ret_error;
 
-	set_env (cgi_base, "SCRIPT_FILENAME",
+	ret = set_env (cgi_base, "SCRIPT_FILENAME",
 		 cgi_base->executable.buf,
 		 cgi_base->executable.len);
+
+	if (unlikely (ret != ret_ok)) return ret;
 
 	return ret_ok;
 }
@@ -740,8 +739,8 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	PROCESS_INFORMATION    pi;
 	STARTUPINFO            si;
 	char                  *cmd;
-	cherokee_buffer_t      cmd_line = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      exec_dir = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      cmd_line;
+	cherokee_buffer_t      exec_dir;
 	cherokee_connection_t *conn     = HANDLER_CONN(cgi);
 
 	SECURITY_ATTRIBUTES saSecAtr;
@@ -750,6 +749,11 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	HANDLE hChildStdinWr  = INVALID_HANDLE_VALUE;
 	HANDLE hChildStdoutRd = INVALID_HANDLE_VALUE;
 	HANDLE hChildStdoutWr = INVALID_HANDLE_VALUE;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&cmd_line);
+	cherokee_buffer_init (&exec_dir);
 
 	/* Create the environment for the process
 	 */
@@ -786,10 +790,10 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	hProc = GetCurrentProcess();
 
 	re = CreatePipe (&hChildStdoutRd, &hChildStdoutWr, &saSecAtr, 0);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 	re = CreatePipe (&hChildStdinRd, &hChildStdinWr, &saSecAtr, 0);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 	/* Make them inheritable
 	 */
@@ -797,13 +801,13 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	                      hProc, &hChildStdoutRd,
 	                      0, TRUE,
 	                      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 	re = DuplicateHandle (hProc,  hChildStdinWr,
 	                      hProc, &hChildStdinWr,
 	                      0, TRUE,
 	                      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 
 	/* Starting information
@@ -840,7 +844,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 		CloseHandle (pi.hThread);
 
 		conn->error_code = http_internal_error;
-		return ret_error;
+		goto error;
 	}
 
 	cherokee_buffer_mrproper (&cmd_line);
@@ -866,6 +870,12 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	TRACE (ENTRIES, "In fd %d, Out fd %d\n", cgi->pipeInput, cgi->pipeOutput);
 
 	return ret_ok;
+
+error:
+	cherokee_buffer_mrproper (&cmd_line);
+	cherokee_buffer_mrproper (&exec_dir);
+
+	return ret_error;
 }
 
 #endif

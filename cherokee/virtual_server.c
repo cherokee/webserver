@@ -93,17 +93,9 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	cherokee_buffer_init    (&n->ciphers);
 	cherokee_buffer_add_str (&n->ciphers, CHEROKEE_CIPHERS_DEFAULT);
 
-	ret = cherokee_buffer_init (&n->root);
-	if (unlikely(ret < ret_ok))
-		return ret;
-
-	ret = cherokee_buffer_init (&n->name);
-	if (unlikely(ret < ret_ok))
-		return ret;
-
-	ret = cherokee_buffer_init (&n->userdir);
-	if (unlikely(ret < ret_ok))
-		return ret;
+	cherokee_buffer_init (&n->root);
+	cherokee_buffer_init (&n->name);
+	cherokee_buffer_init (&n->userdir);
 
 	/* Return the object
 	 */
@@ -221,12 +213,15 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 static ret_t
 add_directory_index (char *index, void *data)
 {
+	ret_t                      ret;
 	cherokee_buffer_t         *new_buf;
 	cherokee_virtual_server_t *vserver = VSERVER(data);
 
 	TRACE(ENTRIES, "Adding directory index '%s'\n", index);
 
-	cherokee_buffer_new (&new_buf);
+	ret = cherokee_buffer_new (&new_buf);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add (new_buf, index, strlen(index));
 
 	cherokee_list_add_tail_content (&vserver->index_list, new_buf);
@@ -363,10 +358,12 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			return ret_error;
 		}
 
-		if (entry->document_root == NULL)
-			cherokee_buffer_new (&entry->document_root);
-		else
+		if (entry->document_root == NULL) {
+			ret = cherokee_buffer_new (&entry->document_root);
+			if (unlikely (ret != ret_ok)) return ret;
+		} else {
 			cherokee_buffer_clean (entry->document_root);
+		}
 
 		cherokee_buffer_add_buffer (entry->document_root, tmp);
 		cherokee_fix_dirpath (entry->document_root);
@@ -506,13 +503,12 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			subconf2 = NULL;
 			ret = cherokee_config_node_get (subconf, "do_cache", &subconf2);
 			if ((ret == ret_ok) && (subconf2 != NULL)) {
-				cherokee_list_t        *i;
-				cherokee_config_node_t *child;
+				cherokee_list_t *i;
 
 				cherokee_config_node_foreach (i, subconf2) {
-					child = CONFIG_NODE(i);
+					cherokee_config_node_t *child = CONFIG_NODE(i);
 
-					ret = add_flcache_cookies_do_cache (entry, CONFIG_NODE(i), srv);
+					ret = add_flcache_cookies_do_cache (entry, child, srv);
 					if (ret != ret_ok)
 						return ret;
 				}
@@ -604,7 +600,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		if (entry->timeout_header != NULL) {
 			cherokee_buffer_free (entry->timeout_header);
 		}
-		cherokee_buffer_new (&entry->timeout_header);
+		ret = cherokee_buffer_new (&entry->timeout_header);
+		if (unlikely (ret != ret_ok)) return ret;
+
 		cherokee_buffer_add_va (entry->timeout_header, "Keep-Alive: timeout=%d"CRLF, entry->timeout_lapse);
 
 	} else if (equal_buf_str (&conf->key, "match")) {

@@ -87,7 +87,7 @@ reactivate_entry (cherokee_balancer_failover_t *balancer,
 	/* balancer->mutex is LOCKED
 	 */
 	ret_t             ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
 
 	/* Reactivate
 	 */
@@ -95,6 +95,7 @@ reactivate_entry (cherokee_balancer_failover_t *balancer,
 
 	/* Notify
 	 */
+	cherokee_buffer_init (&tmp);
 	cherokee_source_copy_name (entry->source, &tmp);
 	LOG_WARNING (CHEROKEE_ERROR_BALANCER_FAILOVER_REACTIVE, tmp.buf);
 	cherokee_buffer_mrproper (&tmp);
@@ -124,9 +125,11 @@ report_fail (cherokee_balancer_failover_t *balancer,
 	ret_t                      ret;
 	cherokee_list_t           *i;
 	cherokee_balancer_entry_t *entry;
-	cherokee_buffer_t          tmp   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t          tmp;
 
 	UNUSED(conn);
+
+	cherokee_buffer_init (&tmp);
 
 	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
 
@@ -152,9 +155,9 @@ report_fail (cherokee_balancer_failover_t *balancer,
 		 */
 		cherokee_source_copy_name (entry->source, &tmp);
 		LOG_WARNING (CHEROKEE_ERROR_BALANCER_FAILOVER_DISABLE, tmp.buf);
-		cherokee_buffer_mrproper (&tmp);
 
 		CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
+		cherokee_buffer_mrproper (&tmp);
 		return ret_ok;
 	}
 
@@ -163,6 +166,7 @@ report_fail (cherokee_balancer_failover_t *balancer,
 
 out:
 	CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
+	cherokee_buffer_mrproper (&tmp);
 	return ret;
 }
 

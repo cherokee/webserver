@@ -153,9 +153,10 @@ check_interpreter_full (cherokee_buffer_t *fullpath, cherokee_buffer_t *chroot_d
 	char        *p;
 	char         tmp;
 	const char  *end;
-	cherokee_buffer_t completepath = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t completepath;
 
-	cherokee_buffer_clean(&completepath);
+	cherokee_buffer_init (&completepath);
+
 	if (chroot_dir->len > 0) {
 		/* Chroot and relative path, it doesn't make sense */
 		if (fullpath->len == 0 || fullpath->buf[0] != '/')
@@ -210,7 +211,7 @@ check_interpreter_path (cherokee_buffer_t *partial_path, cherokee_buffer_t *chro
 	char              *p;
 	char              *colon;
 	char              *path;
-	cherokee_buffer_t  fullpath = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  fullpath;
 
 	p = getenv("PATH");
 	if (p == NULL)
@@ -219,6 +220,8 @@ check_interpreter_path (cherokee_buffer_t *partial_path, cherokee_buffer_t *chro
 	path = strdup (p);
 	if (path == NULL)
 		return ret_error;
+
+	cherokee_buffer_init (&fullpath);
 
 	p = path;
 	do {
@@ -286,10 +289,13 @@ check_interpreter (cherokee_source_interpreter_t *src)
 static ret_t
 replace_environment_variables (cherokee_buffer_t *buf)
 {
+	ret_t              ret;
 	char              *dollar;
 	char              *p;
 	char              *val;
-	cherokee_buffer_t  tmp     = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	do {
 		/* Find $
@@ -320,16 +326,19 @@ replace_environment_variables (cherokee_buffer_t *buf)
 		/* Replacement
 		 */
 		if (val != NULL) {
-			cherokee_buffer_replace_string (buf, tmp.buf, tmp.len, val, strlen(val));
+			ret = cherokee_buffer_replace_string (buf, tmp.buf, tmp.len, val, strlen(val));
+			if (unlikely (ret != ret_ok)) goto out;
 		} else {
 			cherokee_buffer_remove_string (buf, tmp.buf, tmp.len);
 		}
 
 	} while (true);
 
+	ret = ret_ok;
+
 out:
 	cherokee_buffer_mrproper (&tmp);
-	return ret_ok;
+	return ret;
 }
 
 
@@ -343,13 +352,11 @@ add_env (cherokee_source_interpreter_t *src, cherokee_buffer_t *env, cherokee_bu
 
 	/* Replace $ENVs
 	 */
-	cherokee_buffer_dup (val_orig, &val);
+	ret = cherokee_buffer_dup (val_orig, &val);
+	if (unlikely (ret != ret_ok)) goto error;
 
 	ret = replace_environment_variables (val);
-	if (ret != ret_ok) {
-		ret = ret_error;
-		goto error;
-	}
+	if (unlikely (ret != ret_ok)) goto error;
 
 	/* Build the env entry
 	 */
@@ -561,7 +568,11 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	const char        *argv[]       = {"sh", "-c", NULL, NULL};
 	int                child        = -1;
 	char              *empty_envp[] = {NULL};
-	cherokee_buffer_t  tmp          = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* If there is a previous instance running, kill it
 	 */

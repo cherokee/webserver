@@ -56,14 +56,11 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 	ret = cherokee_request_header_init (&n->request);
 	if (unlikely(ret != ret_ok)) return ret;
 
-	ret = cherokee_buffer_init (&n->request_header);
-	if (unlikely(ret != ret_ok)) return ret;
+	cherokee_buffer_init (&n->request_header);
 
-	ret = cherokee_buffer_init (&n->reply_header);
-	if (unlikely(ret != ret_ok)) return ret;
+	cherokee_buffer_init (&n->reply_header);
 
-	ret = cherokee_buffer_init (&n->body);
-	if (unlikely(ret != ret_ok)) return ret;
+	cherokee_buffer_init (&n->body);
 
 	ret = cherokee_socket_init (&n->socket);
 	if (unlikely(ret != ret_ok)) return ret;
@@ -488,14 +485,14 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 		/* Build the request header
 		 */
 		ret = cherokee_request_header_build_string (req, &downloader->request_header, tmp1, tmp2);
-		if (unlikely(ret < ret_ok))
+		if (unlikely(ret != ret_ok))
 			return ret;
 
 		/* Deal with the connection
 		 */
 		if (! is_connected (downloader)) {
 			ret = cherokee_downloader_connect (downloader);
-			if (ret < ret_ok) return ret;
+			if (ret != ret_ok) return ret;
 		}
 
 		/* Everything is ok, go ahead!
