@@ -644,7 +644,10 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 		LOG_ERROR (CHEROKEE_ERROR_BUFFER_AVAIL_SIZE,
 		           estimation, len, size, format);
 
-		cherokee_buffer_ensure_size (buf, buf->len + len + 2);
+		ret = cherokee_buffer_ensure_size (buf, buf->len + len + 2);
+		if (unlikely (ret != ret_ok))
+			return ret;
+
 		size = buf->size - buf->len;
 		len = vsnprintf (buf->buf + buf->len, size, format, args2);
 
@@ -668,6 +671,9 @@ cherokee_buffer_add_va (cherokee_buffer_t *buf, const char *format, ...)
 
 	va_start (ap, format);
 	ret = cherokee_buffer_add_va_list (buf, format, ap);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
 	va_end (ap);
 
 	return ret;
@@ -1065,7 +1071,8 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 ret_t
 cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_t *ret_size)
 {
-	int  len;
+	ret_t ret;
+	int   len;
 
 	if (fd < 0)
 		return ret_error;
@@ -1074,7 +1081,9 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 	 * NOTE: usually the caller should have already allocated
 	 *       enough space for the buffer, so this is a security measure
 	 */
-	cherokee_buffer_ensure_addlen(buf, size);
+	ret = cherokee_buffer_ensure_addlen(buf, size);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Read data at the end of the buffer
 	 */
@@ -1122,13 +1131,18 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 ret_t
 cherokee_buffer_multiply (cherokee_buffer_t *buf, int num)
 {
+	ret_t ret;
 	int i, initial_size;
 
 	initial_size = buf->len;
-	cherokee_buffer_ensure_size (buf, buf->len * num + 1);
+	ret = cherokee_buffer_ensure_size (buf, buf->len * num + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	for (i = 1; i < num; i++) {
-		cherokee_buffer_add (buf, buf->buf, initial_size);
+		ret = cherokee_buffer_add (buf, buf->buf, initial_size);
+		if (unlikely (ret != ret_ok))
+			return ret;
 	}
 
 	return ret_ok;
@@ -1326,6 +1340,7 @@ escape_with_table (cherokee_buffer_t *buffer,
                    cherokee_buffer_t *src,
                    uint32_t          *is_char_escaped)
 {
+	ret_t ret;
 	char *t;
 	const char *s,*s_next;
 	char *end;
@@ -1359,7 +1374,9 @@ escape_with_table (cherokee_buffer_t *buffer,
 
 	/* Get the memory
 	 */
-	cherokee_buffer_ensure_addlen (buffer, src->len + (n_escape * 3));
+	ret = cherokee_buffer_ensure_addlen (buffer, src->len + (n_escape * 3));
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Convert it
 	 */
@@ -1740,6 +1757,7 @@ cherokee_buffer_encode_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encode
 ret_t
 cherokee_buffer_encode_md5_digest (cherokee_buffer_t *buf)
 {
+	ret_t ret;
 	int i;
 	struct MD5Context context;
 	unsigned char digest[16];
@@ -1748,7 +1766,9 @@ cherokee_buffer_encode_md5_digest (cherokee_buffer_t *buf)
 	MD5Update (&context, (md5byte *)buf->buf, buf->len);
 	MD5Final (digest, &context);
 
-	cherokee_buffer_ensure_size (buf, 34);
+	ret = cherokee_buffer_ensure_size (buf, 34);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	for (i = 0; i < 16; ++i) {
 		int tmp;
@@ -1769,9 +1789,12 @@ cherokee_buffer_encode_md5_digest (cherokee_buffer_t *buf)
 ret_t
 cherokee_buffer_encode_md5 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
+	ret_t ret;
 	struct MD5Context context;
 
-	cherokee_buffer_ensure_size (encoded, 17);
+	ret = cherokee_buffer_ensure_size (encoded, 17);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	MD5Init (&context);
 	MD5Update (&context, (md5byte *)buf->buf, buf->len);
@@ -1791,12 +1814,16 @@ cherokee_buffer_encode_md5 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 ret_t
 cherokee_buffer_encode_sha1 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
+	ret_t ret;
 	SHA_INFO sha1;
 
 	sha_init (&sha1);
 	sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
 
-	cherokee_buffer_ensure_size (encoded, SHA1_DIGEST_SIZE + 1);
+	ret = cherokee_buffer_ensure_size (encoded, SHA1_DIGEST_SIZE + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
 	sha_final (&sha1, (unsigned char *) encoded->buf);
 
 	encoded->len = SHA1_DIGEST_SIZE;
@@ -1809,6 +1836,7 @@ cherokee_buffer_encode_sha1 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 ret_t
 cherokee_buffer_encode_sha1_digest (cherokee_buffer_t *buf)
 {
+	ret_t         ret;
 	int           i;
 	unsigned char digest[SHA1_DIGEST_SIZE];
 	SHA_INFO      sha1;
@@ -1817,7 +1845,9 @@ cherokee_buffer_encode_sha1_digest (cherokee_buffer_t *buf)
 	sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
 	sha_final (&sha1, digest);
 
-	cherokee_buffer_ensure_size (buf, (2 * SHA1_DIGEST_SIZE)+1);
+	ret = cherokee_buffer_ensure_size (buf, (2 * SHA1_DIGEST_SIZE)+1);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	for (i = 0; i < SHA1_DIGEST_SIZE; ++i) {
 		int tmp;
@@ -1842,20 +1872,32 @@ cherokee_buffer_encode_sha1_digest (cherokee_buffer_t *buf)
 ret_t
 cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
+	ret_t ret;
+
 	/* Prepare destination buffer
 	 */
-	cherokee_buffer_ensure_size (encoded, (SHA1_DIGEST_SIZE * 2) + 1);
+	ret = cherokee_buffer_ensure_size (encoded, (SHA1_DIGEST_SIZE * 2) + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
 	cherokee_buffer_clean (encoded);
 
 	/* Encode sha1 + base64
 	 */
-	cherokee_buffer_encode_sha1 (buf, encoded);
-	cherokee_buffer_encode_base64 (encoded, buf);
+	ret = cherokee_buffer_encode_sha1 (buf, encoded);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
+	ret = cherokee_buffer_encode_base64 (encoded, buf);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Copy result to destination buffer
 	 */
 	cherokee_buffer_clean (encoded);
-	cherokee_buffer_add_buffer (encoded, buf);
+	ret = cherokee_buffer_add_buffer (encoded, buf);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	return ret_ok;
 }
@@ -1864,12 +1906,16 @@ cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *e
 ret_t
 cherokee_buffer_encode_sha512 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
+	ret_t ret;
 	SHA512_CTX sha512;
 
 	SHA512_Init (&sha512);
 	SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
 
-	cherokee_buffer_ensure_size (encoded, SHA512_DIGEST_LENGTH + 1);
+	ret = cherokee_buffer_ensure_size (encoded, SHA512_DIGEST_LENGTH + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
 	SHA512_Final (&sha512, (unsigned char *) encoded->buf);
 
 	encoded->len = SHA512_DIGEST_LENGTH;
@@ -1882,6 +1928,7 @@ cherokee_buffer_encode_sha512 (cherokee_buffer_t *buf, cherokee_buffer_t *encode
 ret_t
 cherokee_buffer_encode_sha512_digest (cherokee_buffer_t *buf)
 {
+	ret_t         ret;
 	int           i;
 	unsigned char digest[SHA512_DIGEST_LENGTH];
 	SHA512_CTX    sha512;
@@ -1890,7 +1937,9 @@ cherokee_buffer_encode_sha512_digest (cherokee_buffer_t *buf)
 	SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
 	SHA512_Final  (&sha512, digest);
 
-	cherokee_buffer_ensure_size (buf, (2 * SHA512_DIGEST_LENGTH)+1);
+	ret = cherokee_buffer_ensure_size (buf, (2 * SHA512_DIGEST_LENGTH)+1);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	for (i = 0; i < SHA512_DIGEST_LENGTH; ++i) {
 		int tmp;
@@ -1912,20 +1961,32 @@ cherokee_buffer_encode_sha512_digest (cherokee_buffer_t *buf)
 ret_t
 cherokee_buffer_encode_sha512_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
+	ret_t ret;
+
 	/* Prepare destination buffer
 	 */
-	cherokee_buffer_ensure_size (encoded, (SHA512_DIGEST_LENGTH * 2) + 1);
+	ret = cherokee_buffer_ensure_size (encoded, (SHA512_DIGEST_LENGTH * 2) + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
 	cherokee_buffer_clean (encoded);
 
 	/* Encode sha1 + base64
 	 */
-	cherokee_buffer_encode_sha512 (buf, encoded);
-	cherokee_buffer_encode_base64 (encoded, buf);
+	ret = cherokee_buffer_encode_sha512 (buf, encoded);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
+	ret = cherokee_buffer_encode_base64 (encoded, buf);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Copy result to destination buffer
 	 */
 	cherokee_buffer_clean (encoded);
-	cherokee_buffer_add_buffer (encoded, buf);
+	ret = cherokee_buffer_add_buffer (encoded, buf);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	return ret_ok;
 }
@@ -1938,15 +1999,19 @@ cherokee_buffer_encode_sha512_base64 (cherokee_buffer_t *buf, cherokee_buffer_t 
 ret_t
 cherokee_buffer_encode_hex (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
-	cuchar_t        *in;
-	cuchar_t        *out;
+	ret_t           ret;
+	cuchar_t       *in;
+	cuchar_t       *out;
 	cuint_t         j;
 	cuint_t         i;
 	cuint_t         inlen = buf->len;
 
 	/* Prepare destination buffer
 	 */
-	cherokee_buffer_ensure_size (encoded, (inlen * 2 + 1));
+	ret = cherokee_buffer_ensure_size (encoded, (inlen * 2 + 1));
+	if (unlikely (ret != ret_ok))
+		return ret;
+
 	cherokee_buffer_clean (encoded);
 
 	/* Encode source to destination
@@ -2181,6 +2246,8 @@ cherokee_buffer_substitute_string (cherokee_buffer_t *bufsrc,
 	/* Preset size of destination buffer.
 	 */
 	ret = cherokee_buffer_ensure_size(bufdst, result_length + 2);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Build the new string
 	 */
@@ -2214,6 +2281,7 @@ cherokee_buffer_substitute_string (cherokee_buffer_t *bufsrc,
 ret_t
 cherokee_buffer_add_comma_marks (cherokee_buffer_t *buf)
 {
+	ret_t    ret;
 	cuint_t  off, num, i;
 	char    *p;
 
@@ -2223,7 +2291,9 @@ cherokee_buffer_add_comma_marks (cherokee_buffer_t *buf)
 	num = buf->len / 3;
 	off = buf->len % 3;
 
-	cherokee_buffer_ensure_size (buf, buf->len + num + 2);
+	ret = cherokee_buffer_ensure_size (buf, buf->len + num + 2);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	if (off == 0) {
 		p = buf->buf + 3;
@@ -2302,7 +2372,9 @@ cherokee_buffer_insert (cherokee_buffer_t *buf,
                         size_t             txt_len,
                         size_t             pos)
 {
-	cherokee_buffer_ensure_size (buf, buf->len + txt_len + 1);
+	ret_t ret = cherokee_buffer_ensure_size (buf, buf->len + txt_len + 1);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Make room */
 	memmove (buf->buf + pos + txt_len,
@@ -2373,10 +2445,15 @@ cherokee_buffer_split_lines (cherokee_buffer_t *buf,
 
 			/* Line just split */
 			if (indent) {
+				ret_t ret;
 				int offset = p - buf->buf;
 
-				cherokee_buffer_insert (buf, (char *)indent, indent_len,
-				                        (latest_newline - buf->buf)+1);
+				ret = cherokee_buffer_insert (buf, (char *)indent, indent_len,
+				                              (latest_newline - buf->buf)+1);
+
+				if (unlikely (ret != ret_ok)) {
+					return ret;
+				}
 
 				since_prev += indent_len;
 				p = buf->buf + offset + indent_len;
