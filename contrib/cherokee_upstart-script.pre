@@ -1,0 +1,26 @@
+# Cherokee - Evolved Web Infrastructure Software
+#
+# Cherokee is an innovative, feature rich, lightning fast and
+# easy to configure open source web server designed for the
+# next generation of highly concurrent secured web applications.
+
+author "Daniel Niccoli <daniel.niccoli@gmail.com>"
+description "Cherokee web server"
+version "%version%"
+
+start on (
+    net-device-up
+    and local-filesystems
+)
+stop on runlevel [016]
+
+respawn
+
+pre-start script
+    %sbindir%/cherokee -t
+    if [ $? -ne 0 ]
+        then exit $?
+    fi
+end script
+
+exec %sbindir%/cherokee
