@@ -549,7 +549,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 			char *c = begin + 16;
 			while (*c == ' ') c++;
 
-			XFS &= (strncasecmp (c, "on", 7) == 0);
+			XFS &= (! strncasecmp (c, "on", 7));
 			goto next;
 		}
 		else if (! strncasecmp (begin, "X-Real-IP:", 10))
