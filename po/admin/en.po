@@ -1,29 +1,30 @@
-# English translations for cherokee package.
-# Copyright (C) 2009 ORGANIZATION
-# Automatically generated, 2009.
+# Automatic default english translation.
+# Copyright (C) 2009-2014 Alvaro Lopez Ortega
+# This file is distributed under the same license as the cherokee package.
+# Authors.
+#   - Daniel Niccoli <daniel.niccoli@gmail.com>
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: cherokee '0.99.10'\n"
+"Project-Id-Version: cherokee 1.2.103\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
 "POT-Creation-Date: 2014-01-04 00:54+0100\n"
-"PO-Revision-Date: 2009-04-14 21:27+CEST\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
-"Language: \n"
+"PO-Revision-Date: 2014-01-04 14:08+0100\n"
+"Last-Translator: Daniel Niccoli <daniel.niccoli@gmail.com>\n"
+"Language-Team: \n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: admin/About.py:83
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: admin/About.py:84
 msgid "License"
-msgstr ""
+msgstr "License"
 
 #: admin/Auth.py:35
 msgid "Allowed HTTP Authentication methods."
@@ -55,14 +56,16 @@ msgstr "Authentication Details"
 
 #: admin/Balancer.py:32
 msgid "Specifies the policy used to dispatch the connections."
-msgstr ""
+msgstr "Specifies the policy used to dispatch the connections."
 
 #: admin/Balancer.py:33
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "It is already balancing among all the configured <a href=\"%s\">Information "
 "Sources</a>."
-msgstr "It is already balancing among all the configured "
+msgstr ""
+"It is already balancing among all the configured <a href=\"%s\">Information "
+"Sources</a>."
 
 #: admin/Balancer.py:34
 msgid ""
@@ -89,9 +92,8 @@ msgid "Nick"
 msgstr "Nick"
 
 #: admin/Balancer.py:82
-#, fuzzy
 msgid "Broken Source"
-msgstr "Web Directory"
+msgstr "Broken Source"
 
 #: admin/Balancer.py:127 admin/PageSource.py:65 admin/PageSource.py:455
 #: admin/PageSource.py:475 admin/PageSources.py:48
@@ -114,15 +116,15 @@ msgstr "Application Server"
 
 #: admin/CTK/CTK/AjaxUpload.py:106
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: admin/CTK/CTK/Carousel.py:78
 msgid "left"
-msgstr ""
+msgstr "left"
 
 #: admin/CTK/CTK/Carousel.py:79
 msgid "right"
-msgstr ""
+msgstr "right"
 
 #: admin/CTK/CTK/Config.py:244
 #, python-format
@@ -142,28 +144,24 @@ msgstr "Could not copy configuration to "
 #: admin/PageSource.py:411 admin/PageSource.py:428 admin/PageSource.py:442
 #: admin/PageVServers.py:215 admin/PageVServers.py:252
 #: admin/PageVServers.py:281 admin/plugins/redir.py:120
-#, fuzzy
 msgid "Cancel"
-msgstr "Change"
+msgstr "Cancel"
 
 #: admin/CTK/CTK/Dialog.py:165 admin/CTK/CTK/Dialog.py:272
 #: admin/CTK/CTK/Druid.py:243 admin/PageException.py:89
 #: admin/PageException.py:93 admin/PageGeneral.py:283 admin/PageIndex.py:277
 #: admin/PageSource.py:402 admin/plugins/error_redir.py:110
-#, fuzzy
 msgid "Close"
-msgstr "Clone"
+msgstr "Close"
 
 #: admin/CTK/CTK/Druid.py:210 admin/CTK/CTK/Druid.py:217
 #: admin/CTK/CTK/Paginator.py:84
-#, fuzzy
 msgid "Next"
-msgstr "File Exists"
+msgstr "Next"
 
 #: admin/CTK/CTK/Druid.py:218 admin/CTK/CTK/Druid.py:226
-#, fuzzy
 msgid "Prev"
-msgstr "LDAP server"
+msgstr "Prev"
 
 #: admin/CTK/CTK/Druid.py:225 admin/CTK/CTK/Druid.py:233
 #: admin/PageNewConfig.py:154
@@ -176,17 +174,15 @@ msgstr "Delete"
 
 #: admin/CTK/CTK/Image.py:84 admin/util.py:88
 msgid "Active"
-msgstr ""
+msgstr "Active"
 
 #: admin/CTK/CTK/Image.py:89 admin/util.py:88
-#, fuzzy
 msgid "Inactive"
-msgstr "Deflate"
+msgstr "Inactive"
 
 #: admin/CTK/CTK/Image.py:94
-#, fuzzy
 msgid "Loading"
-msgstr "Logging"
+msgstr "Loading"
 
 #: admin/CTK/CTK/Image.py:99 admin/CgiBase.py:69 admin/CgiBase.py:71
 #: admin/CgiBase.py:124 admin/CgiBase.py:125 admin/CgiBase.py:126
@@ -199,24 +195,21 @@ msgstr "Logging"
 #: admin/plugins/exists.py:115 admin/plugins/exists.py:116
 #: admin/plugins/exists.py:117 admin/plugins/file.py:40
 #: admin/plugins/ldap.py:53 admin/plugins/streaming.py:43
-#, fuzzy
 msgid "Enabled"
-msgstr " Enabled"
+msgstr "Enabled"
 
 #: admin/CTK/CTK/Image.py:104
 msgid "Forbidden"
-msgstr ""
+msgstr "Forbidden"
 
 #: admin/CTK/CTK/Paginator.py:63
-#, fuzzy
 msgid "Previous"
-msgstr "LDAP server"
+msgstr "Previous"
 
 #: admin/CTK/CTK/Submitter.py:119 admin/CTK/CTK/TextArea.py:78
 #: admin/CTK/CTK/TextField.py:98
-#, fuzzy
 msgid "Optional"
-msgstr "Options"
+msgstr "Optional"
 
 #: admin/CTK/CTK/ToggleButton.py:154
 msgid "Disable"
@@ -224,9 +217,8 @@ msgstr "Disable"
 
 #: admin/CTK/CTK/ToggleButton.py:155 admin/PageVServer.py:669
 #: admin/wizards/flcache.py:157
-#, fuzzy
 msgid "Enable"
-msgstr " Enabled"
+msgstr "Enable"
 
 #: admin/CgiBase.py:32
 msgid "Path to an executable that will be run with the CGI as parameter."
@@ -261,45 +253,40 @@ msgstr ""
 "frequently. Enable otherwise."
 
 #: admin/CgiBase.py:39
-#, fuzzy
 msgid ""
 "Whether the handler should read and use the X-Real-IP and X-Forwarded-For "
 "headers and use it in REMOTE_ADDR."
 msgstr ""
-"Whether the logger should read and use the X-Real-IP header (send by reverse "
-"proxy front-ends)."
+"Whether the handler should read and use the X-Real-IP and X-Forwarded-For "
+"headers and use it in REMOTE_ADDR."
 
 #: admin/CgiBase.py:40 admin/PageVServer.py:70
-#, fuzzy
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
 msgstr ""
-"Accept all the X-Real-IP headers. It's dangerous: turn it on only if you are "
-"centain of what you are doing."
+"Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
+"only if you are centain of what you are doing."
 
 #: admin/CgiBase.py:41
-#, fuzzy
 msgid ""
 "List of IP addresses and subnets that are allowed to send the X-Real-IP and "
 "X-Forwarded-For headers."
 msgstr ""
-"List of IP addresses and subnets that are allowed to send X-Real-IP headers "
-"(usually your proxy servers)."
+"List of IP addresses and subnets that are allowed to send the X-Real-IP and "
+"X-Forwarded-For headers."
 
 #: admin/CgiBase.py:69
-#, fuzzy
 msgid "Read X-Real-IP"
-msgstr "Accept X-Real-IP"
+msgstr "Read X-Real-IP"
 
 #: admin/CgiBase.py:71 admin/PageVServer.py:610
 msgid "Don't check origin"
-msgstr ""
+msgstr "Don't check origin"
 
 #: admin/CgiBase.py:73 admin/PageVServer.py:613
-#, fuzzy
 msgid "Accept from Hosts"
-msgstr "Accepted domains"
+msgstr "Accept from Hosts"
 
 #: admin/CgiBase.py:91 admin/CgiBase.py:156
 msgid "Name"
@@ -344,19 +331,16 @@ msgid "Use I/O cache"
 msgstr "Use I/O cache"
 
 #: admin/CgiBase.py:133
-#, fuzzy
 msgid "Common CGI Options"
-msgstr "Common CGI options"
+msgstr "Common CGI Options"
 
 #: admin/CgiBase.py:140 admin/plugins/authlist.py:87
-#, fuzzy
 msgid "Fixed Authentication List"
-msgstr "Fixed authentication list"
+msgstr "Fixed Authentication List"
 
 #: admin/CgiBase.py:147
-#, fuzzy
 msgid "Custom Environment Variables"
-msgstr "Custom environment variables"
+msgstr "Custom Environment Variables"
 
 #: admin/CgiBase.py:152 admin/Icons.py:357 admin/Mime.py:111
 #: admin/PageEntry.py:100 admin/PageEntry.py:264 admin/PageEntry.py:377
@@ -371,9 +355,8 @@ msgid "Add"
 msgstr "Add"
 
 #: admin/CgiBase.py:164
-#, fuzzy
 msgid "Add New Custom Environment Variable"
-msgstr "Add new custom environment variable"
+msgstr "Add New Custom Environment Variable"
 
 #: admin/Cherokee.py:150
 msgid "Could not access file descriptors: "
@@ -384,44 +367,40 @@ msgid "Countries"
 msgstr "Countries"
 
 #: admin/Flags.py:308 admin/Flags.py:334
-#, fuzzy
 msgid "Extras"
-msgstr "External"
+msgstr "Extras"
 
 #: admin/Graph.py:40
-#, fuzzy
 msgid "Server Traffic"
-msgstr "Server Info"
+msgstr "Server Traffic"
 
 #: admin/Graph.py:41
-#, fuzzy
 msgid "Connections / Requests"
-msgstr "Connections"
+msgstr "Connections / Requests"
 
 #: admin/Graph.py:42
-#, fuzzy
 msgid "Connection Timeouts"
-msgstr "Connections"
+msgstr "Connection Timeouts"
 
 #: admin/Graph.py:44
 msgid "1 Hour"
-msgstr ""
+msgstr "1 Hour"
 
 #: admin/Graph.py:45
 msgid "6 Hours"
-msgstr ""
+msgstr "6 Hours"
 
 #: admin/Graph.py:46
 msgid "1 Day"
-msgstr ""
+msgstr "1 Day"
 
 #: admin/Graph.py:47
 msgid "1 Week"
-msgstr ""
+msgstr "1 Week"
 
 #: admin/Graph.py:48
 msgid "1 Month"
-msgstr ""
+msgstr "1 Month"
 
 #: admin/Graph.py:51
 #, python-format
@@ -429,12 +408,16 @@ msgid ""
 "You need to enable the <a href=\"%s\">Information Collector</a> setting in "
 "order to render usage graphics."
 msgstr ""
+"You need to enable the <a href=\"%s\">Information Collector</a> setting in "
+"order to render usage graphics."
 
 #: admin/Graph.py:52
 msgid ""
 "Whether or not it should collect statistics about the traffic of this "
 "virtual server."
 msgstr ""
+"Whether or not it should collect statistics about the traffic of this "
+"virtual server."
 
 #: admin/Graph.py:118 admin/PageEntry.py:538 admin/PageSource.py:257
 #: admin/PageStatus.py:70 admin/PageVServer.py:731 admin/PageVServers.py:210
@@ -442,14 +425,12 @@ msgid "Unknown"
 msgstr "Unknown"
 
 #: admin/Graph.py:125
-#, fuzzy
 msgid "Collect Statistics"
-msgstr "Traffic Statistics"
+msgstr "Collect Statistics"
 
 #: admin/Handler.py:31
-#, fuzzy
 msgid "Allows to specify an alternative Document Root path."
-msgstr "Allows to specify an alternative document root path."
+msgstr "Allows to specify an alternative Document Root path."
 
 #: admin/Handler.py:43 admin/PageEntry.py:523 admin/PageVServer.py:462
 #: admin/PageVServers.py:128 admin/wizards/django.py:191
@@ -459,9 +440,8 @@ msgid "Document Root"
 msgstr "Document Root"
 
 #: admin/Icons.py:118
-#, fuzzy
 msgid "Extension List"
-msgstr "Extension list"
+msgstr "Extension List"
 
 #: admin/Icons.py:129 admin/Icons.py:328 admin/Mime.py:96 admin/Mime.py:131
 #: admin/consts.py:188 admin/plugins/extensions.py:61
@@ -470,9 +450,8 @@ msgid "Extensions"
 msgstr "Extensions"
 
 #: admin/Icons.py:148
-#, fuzzy
 msgid "Add New Extension"
-msgstr "Add new extension"
+msgstr "Add New Extension"
 
 #: admin/Icons.py:157
 msgid "File Matches"
@@ -483,9 +462,8 @@ msgid "Files"
 msgstr "Files"
 
 #: admin/Icons.py:186
-#, fuzzy
 msgid "Add New File"
-msgstr "Add new rule"
+msgstr "Add New File"
 
 #: admin/Icons.py:197 admin/Icons.py:329 admin/Rule.py:174 admin/consts.py:42
 #: admin/consts.py:128 admin/consts.py:262
@@ -502,9 +480,8 @@ msgid "Go to Parent"
 msgstr "Go to Parent"
 
 #: admin/Icons.py:206
-#, fuzzy
 msgid "Modify"
-msgstr "Modified"
+msgstr "Modify"
 
 #: admin/Icons.py:214 admin/PageAdvanced.py:168 admin/PageAdvanced.py:192
 msgid "Special Files"
@@ -535,70 +512,60 @@ msgid "Max Age"
 msgstr "Max Age"
 
 #: admin/Mime.py:109
-#, fuzzy
 msgid "Add New MIME-Type"
-msgstr "Add new MIME"
+msgstr "Add New MIME-Type"
 
 #: admin/Mime.py:114 admin/plugins/error_redir.py:121
-#, fuzzy
 msgid "Add New"
-msgstr "Add a new"
+msgstr "Add New"
 
 #: admin/Mime.py:126 admin/PageGeneral.py:361
-#, fuzzy
 msgid "Mime types"
-msgstr "Mime type"
+msgstr "Mime types"
 
 #: admin/Mime.py:130
-#, fuzzy
 msgid "MIME type"
-msgstr "MIME types"
+msgstr "MIME type"
 
 #: admin/Mime.py:132
-#, fuzzy
 msgid "MaxAge (<em>secs</em>)"
-msgstr "MaxAge<br/>(<i>secs</i>)"
+msgstr "MaxAge (<em>secs</em>)"
 
 #: admin/Page.py:34
-#, fuzzy
 msgid "Save Configuration"
-msgstr "Advanced configuration"
+msgstr "Save Configuration"
 
 #: admin/Page.py:35
-#, fuzzy
 msgid "Would you like to apply the changes to the running server now?"
-msgstr "Commit to disk and apply changes to the running server"
+msgstr "Would you like to apply the changes to the running server now?"
 
 #: admin/Page.py:36
-#, fuzzy
 msgid "The configuration file has been saved successfully."
-msgstr "Configuration saved."
+msgstr "The configuration file has been saved successfully."
 
 #: admin/Page.py:43
-#, fuzzy
 msgid "Sanity checks"
-msgstr "Do not restart"
+msgstr "Sanity checks"
 
 #: admin/Page.py:44
 msgid ""
 "Glitches were found in the current configuration. Please, fix the following "
 "issues:"
 msgstr ""
+"Glitches were found in the current configuration. Please, fix the following "
+"issues:"
 
 #: admin/Page.py:45
-#, fuzzy
 msgid "Note that the configuration file was not saved."
-msgstr "Create a new configuration file"
+msgstr "Note that the configuration file was not saved."
 
 #: admin/Page.py:87
-#, fuzzy
 msgid "Solve"
-msgstr "Save"
+msgstr "Solve"
 
 #: admin/Page.py:106
-#, fuzzy
 msgid "Configuration successfully saved"
-msgstr "Configuration File Not Found"
+msgstr "Configuration successfully saved"
 
 #: admin/Page.py:114
 msgid "Do not restart"
@@ -618,7 +585,7 @@ msgstr "Save"
 
 #: admin/Page.py:154
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: admin/Page.py:155 admin/PageAdvanced.py:150 admin/PageIndex.py:84
 #: admin/PageStatus.py:40 admin/PageStatus.py:112
@@ -630,14 +597,12 @@ msgid "General"
 msgstr "General"
 
 #: admin/Page.py:157
-#, fuzzy
 msgid "vServers"
-msgstr "Server ID"
+msgstr "vServers"
 
 #: admin/Page.py:158
-#, fuzzy
 msgid "Sources"
-msgstr "Source usage"
+msgstr "Sources"
 
 #: admin/Page.py:159 admin/PageAdvanced.py:97 admin/PageAdvanced.py:198
 msgid "Advanced"
@@ -649,18 +614,17 @@ msgstr "Help"
 
 #: admin/Page.py:161
 msgid "Updating..."
-msgstr ""
+msgstr "Updating..."
 
 #: admin/PageAdvanced.py:64
-#, fuzzy
 msgid ""
 "<p><b>WARNING</b>: This section contains advanced\n"
 "configuration parameters. Changing things is not recommended unless\n"
 "you really know what you are doing.</p>"
 msgstr ""
-"<p><b>WARNING</b>: This section contains advanced configuration parameters. "
-"Changing things is not recommended unless you really know what you are doing."
-"</p>"
+"<p><b>WARNING</b>: This section contains advanced\n"
+"configuration parameters. Changing things is not recommended unless\n"
+"you really know what you are doing.</p>"
 
 #: admin/PageAdvanced.py:68
 msgid "Defines which thread policy the OS should apply to the server."
@@ -707,13 +671,12 @@ msgid "Max. length of the incoming connection queue."
 msgstr "Max. length of the incoming connection queue."
 
 #: admin/PageAdvanced.py:77
-#, fuzzy
 msgid ""
 "Set the number of how many internal connections can be held for reuse by "
 "each thread. Default: 20."
 msgstr ""
 "Set the number of how many internal connections can be held for reuse by "
-"each thread. Default 20."
+"each thread. Default: 20."
 
 #: admin/PageAdvanced.py:78
 msgid ""
@@ -758,57 +721,54 @@ msgid "Number of pages that the cache should handle."
 msgstr "Number of pages that the cache should handle."
 
 #: admin/PageAdvanced.py:85
-#, fuzzy
 msgid "Files under this size (in bytes) will not be cached."
-msgstr "Files under this size will not be cached."
+msgstr "Files under this size (in bytes) will not be cached."
 
 #: admin/PageAdvanced.py:86
-#, fuzzy
 msgid "Files over this size (in bytes) will not be cached."
-msgstr "Files over this size will not be cached."
+msgstr "Files over this size (in bytes) will not be cached."
 
 #: admin/PageAdvanced.py:87
-#, fuzzy
 msgid ""
 "How long (in seconds) the file information should last cached without "
 "refreshing it."
 msgstr ""
-"How long the file information should last cached without refreshing it."
+"How long (in seconds) the file information should last cached without "
+"refreshing it."
 
 #: admin/PageAdvanced.py:88
-#, fuzzy
 msgid "How long (in seconds) the file content should last cached."
-msgstr "How long the file content should last cached."
+msgstr "How long (in seconds) the file content should last cached."
 
 #: admin/PageAdvanced.py:89
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 512 bits."
-msgstr ""
+msgstr "Path to a Diffie Hellman (DH) parameters PEM file: 512 bits."
 
 #: admin/PageAdvanced.py:90
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits."
-msgstr ""
+msgstr "Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits."
 
 #: admin/PageAdvanced.py:91
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits."
-msgstr ""
+msgstr "Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits."
 
 #: admin/PageAdvanced.py:92
 msgid "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
-msgstr ""
+msgstr "Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits."
 
 #: admin/PageAdvanced.py:93
 msgid "Timeout for the TLS/SSL handshake. Default: 15 seconds."
-msgstr ""
+msgstr "Timeout for the TLS/SSL handshake. Default: 15 seconds."
 
 #: admin/PageAdvanced.py:94
 msgid ""
 "Allow clients to use SSL version 2 - Beware: it is vulnerable. (Default: No)"
 msgstr ""
+"Allow clients to use SSL version 2 - Beware: it is vulnerable. (Default: No)"
 
 #: admin/PageAdvanced.py:119 admin/PageAdvanced.py:121
-#, fuzzy
 msgid "Allowed"
-msgstr "Allow "
+msgstr "Allowed"
 
 #: admin/PageAdvanced.py:119
 msgid "Keep Alive"
@@ -905,33 +865,32 @@ msgstr "PID file"
 #: admin/PageAdvanced.py:176 admin/PageEntry.py:84 admin/PageVServer.py:476
 #: admin/plugins/common.py:42 admin/plugins/common.py:43
 #: admin/plugins/dirlist.py:55 admin/plugins/proxy.py:240
-#, fuzzy
 msgid "Allow"
-msgstr "Allow "
+msgstr "Allow"
 
 #: admin/PageAdvanced.py:176
 msgid "Allow SSL v2"
-msgstr ""
+msgstr "Allow SSL v2"
 
 #: admin/PageAdvanced.py:177
 msgid "Handshake Timeout"
-msgstr ""
+msgstr "Handshake Timeout"
 
 #: admin/PageAdvanced.py:178
 msgid "DH parameters: 512 bits"
-msgstr ""
+msgstr "DH parameters: 512 bits"
 
 #: admin/PageAdvanced.py:179
 msgid "DH parameters: 1024 bits"
-msgstr ""
+msgstr "DH parameters: 1024 bits"
 
 #: admin/PageAdvanced.py:180
 msgid "DH parameters: 2048 bits"
-msgstr ""
+msgstr "DH parameters: 2048 bits"
 
 #: admin/PageAdvanced.py:181
 msgid "DH parameters: 4096 bits"
-msgstr ""
+msgstr "DH parameters: 4096 bits"
 
 #: admin/PageAdvanced.py:183 admin/PageAdvanced.py:193
 #: admin/PageGeneral.py:239 admin/plugins/bind.py:92
@@ -939,13 +898,12 @@ msgid "TLS"
 msgstr "TLS"
 
 #: admin/PageAdvanced.py:199
-#, fuzzy
 msgid "Advanced Configuration"
-msgstr "Advanced configuration"
+msgstr "Advanced Configuration"
 
 #: admin/PageEntry.py:44
 msgid "Apply a custom timeout to the connections matching this rule."
-msgstr ""
+msgstr "Apply a custom timeout to the connections matching this rule."
 
 #: admin/PageEntry.py:45
 msgid "How the connection will be handled."
@@ -975,19 +933,20 @@ msgstr ""
 
 #: admin/PageEntry.py:51
 msgid "Do not log requests matching this rule."
-msgstr ""
+msgstr "Do not log requests matching this rule."
 
 #: admin/PageEntry.py:52
 msgid "Allow the server to cache the responses from this rule."
-msgstr ""
+msgstr "Allow the server to cache the responses from this rule."
 
 #: admin/PageEntry.py:53
 msgid "How to behave when a response does not explicitly set a caching status."
 msgstr ""
+"How to behave when a response does not explicitly set a caching status."
 
 #: admin/PageEntry.py:54
 msgid "Allow to cache responses setting cookies. (Defualt: No)"
-msgstr ""
+msgstr "Allow to cache responses setting cookies. (Defualt: No)"
 
 #: admin/PageEntry.py:55
 msgid ""
@@ -1001,31 +960,35 @@ msgstr ""
 
 #: admin/PageEntry.py:59
 msgid "How an intermediate cache should treat the content."
-msgstr ""
+msgstr "How an intermediate cache should treat the content."
 
 #: admin/PageEntry.py:60
 msgid ""
 "Prevents the retention of sensitive information. Caches must not store this "
 "content."
 msgstr ""
+"Prevents the retention of sensitive information. Caches must not store this "
+"content."
 
 #: admin/PageEntry.py:61
 msgid "Forbid intermediate caches from transforming the content."
-msgstr ""
+msgstr "Forbid intermediate caches from transforming the content."
 
 #: admin/PageEntry.py:62
 msgid "The client must contact the server to revalidate the object."
-msgstr ""
+msgstr "The client must contact the server to revalidate the object."
 
 #: admin/PageEntry.py:63
 msgid "Proxy servers must contact the server to revalidate the object."
-msgstr ""
+msgstr "Proxy servers must contact the server to revalidate the object."
 
 #: admin/PageEntry.py:64
 msgid ""
 "This caching mechanism should still be considered an experimental "
 "technology. Use it with caution."
 msgstr ""
+"This caching mechanism should still be considered an experimental "
+"technology. Use it with caution."
 
 #: admin/PageEntry.py:75
 msgid "Behavior rules"
@@ -1033,46 +996,43 @@ msgstr "Behavior rules"
 
 #: admin/PageEntry.py:76 admin/plugins/gzip.py:29
 msgid "GZip encoder"
-msgstr ""
+msgstr "GZip encoder"
 
 #: admin/PageEntry.py:77 admin/plugins/deflate.py:29
-#, fuzzy
 msgid "Deflate encoder"
-msgstr "Deflate"
+msgstr "Deflate encoder"
 
 #: admin/PageEntry.py:78 admin/PageEntry.py:173 admin/PageVServer.py:149
 msgid "Authentication"
 msgstr "Authentication"
 
 #: admin/PageEntry.py:79
-#, fuzzy
 msgid "Authentication modules"
-msgstr "Authentication list"
+msgstr "Authentication modules"
 
 #: admin/PageEntry.py:83 admin/PageEntry.py:89
 msgid "Leave unset"
-msgstr ""
+msgstr "Leave unset"
 
 #: admin/PageEntry.py:85
 msgid "Forbid"
-msgstr ""
+msgstr "Forbid"
 
 #: admin/PageEntry.py:90
-#, fuzzy
 msgid "Allow Caching"
-msgstr "Allow PathInfo"
+msgstr "Allow Caching"
 
 #: admin/PageEntry.py:91
 msgid "Forbid Caching"
-msgstr ""
+msgstr "Forbid Caching"
 
 #: admin/PageEntry.py:95
 msgid "Only explicitly cacheable responses"
-msgstr ""
+msgstr "Only explicitly cacheable responses"
 
 #: admin/PageEntry.py:96
 msgid "All except explicitly forbidden responses"
-msgstr ""
+msgstr "All except explicitly forbidden responses"
 
 #: admin/PageEntry.py:101 admin/PageGeneral.py:290 admin/PageRule.py:226
 #: admin/PageSource.py:412 admin/PageVServers.py:216
@@ -1085,9 +1045,8 @@ msgid "Timeout"
 msgstr "Timeout"
 
 #: admin/PageEntry.py:130
-#, fuzzy
 msgid "Connections Timeout"
-msgstr "Connections"
+msgstr "Connections Timeout"
 
 #: admin/PageEntry.py:135
 msgid "Limit traffic to"
@@ -1098,9 +1057,8 @@ msgid "Traffic Shaping"
 msgstr "Traffic Shaping"
 
 #: admin/PageEntry.py:150
-#, fuzzy
 msgid "Skip Logging"
-msgstr "Logging"
+msgstr "Skip Logging"
 
 #: admin/PageEntry.py:154 admin/PageVServer.py:720
 msgid "Logging"
@@ -1123,9 +1081,8 @@ msgid "Validation Mechanism"
 msgstr "Validation Mechanism"
 
 #: admin/PageEntry.py:189 admin/PageEntry.py:192 admin/PageEntry.py:297
-#, fuzzy
 msgid "Can not be empty"
-msgstr "Cannot be empty"
+msgstr "Can not be empty"
 
 #: admin/PageEntry.py:216 admin/PageEntry.py:268 admin/consts.py:190
 #: admin/plugins/header.py:110 admin/plugins/header.py:151
@@ -1140,19 +1097,16 @@ msgid "Type"
 msgstr "Type"
 
 #: admin/PageEntry.py:257
-#, fuzzy
 msgid "Header Operations"
-msgstr "Header Addition"
+msgstr "Header Operations"
 
 #: admin/PageEntry.py:268
-#, fuzzy
 msgid "Action"
-msgstr "Connection"
+msgstr "Action"
 
 #: admin/PageEntry.py:279
-#, fuzzy
 msgid "Add New Header"
-msgstr "Add new pair"
+msgstr "Add New Header"
 
 #: admin/PageEntry.py:326 admin/consts.py:204 admin/plugins/redir.py:39
 #: admin/plugins/rehost.py:53
@@ -1160,17 +1114,16 @@ msgid "Regular Expressions"
 msgstr "Regular Expressions"
 
 #: admin/PageEntry.py:353 admin/wizards/List.py:125
-#, fuzzy
 msgid "Content Caching"
-msgstr "Content Expiration"
+msgstr "Content Caching"
 
 #: admin/PageEntry.py:364
 msgid "Responses to cache"
-msgstr ""
+msgstr "Responses to cache"
 
 #: admin/PageEntry.py:369
 msgid "Caching Policy"
-msgstr ""
+msgstr "Caching Policy"
 
 #: admin/PageEntry.py:381 admin/plugins/rehost.py:68
 #: admin/plugins/rehost.py:92
@@ -1179,7 +1132,7 @@ msgstr "New Regular Expression"
 
 #: admin/PageEntry.py:389
 msgid "Disregarded Cookies"
-msgstr ""
+msgstr "Disregarded Cookies"
 
 #: admin/PageEntry.py:402 admin/PageVServer.py:154
 msgid "Expiration"
@@ -1191,23 +1144,23 @@ msgstr "Time to expire"
 
 #: admin/PageEntry.py:409
 msgid "Management by caches"
-msgstr ""
+msgstr "Management by caches"
 
 #: admin/PageEntry.py:411
 msgid "No Store"
-msgstr ""
+msgstr "No Store"
 
 #: admin/PageEntry.py:412
 msgid "No Transform"
-msgstr ""
+msgstr "No Transform"
 
 #: admin/PageEntry.py:413
 msgid "Must Revalidate"
-msgstr ""
+msgstr "Must Revalidate"
 
 #: admin/PageEntry.py:414
 msgid "Proxies Revalidate"
-msgstr ""
+msgstr "Proxies Revalidate"
 
 #: admin/PageEntry.py:429
 msgid "Content Expiration"
@@ -1215,7 +1168,7 @@ msgstr "Content Expiration"
 
 #: admin/PageEntry.py:433 admin/PageVServer.py:153
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: admin/PageEntry.py:445
 msgid "Information Encoders"
@@ -1227,9 +1180,8 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr "Use the %s encoder whenever the client requests it."
 
 #: admin/PageEntry.py:455
-#, fuzzy
 msgid "support"
-msgstr "Support"
+msgstr "support"
 
 #: admin/PageEntry.py:483
 msgid "Matching Rule"
@@ -1246,21 +1198,19 @@ msgstr "Rule"
 
 #: admin/PageEntry.py:554
 msgid "Transforms"
-msgstr ""
+msgstr "Transforms"
 
 #: admin/PageEntry.py:555
-#, fuzzy
 msgid "Caching"
-msgstr "Matching Rule"
+msgstr "Caching"
 
 #: admin/PageEntry.py:556 admin/PageVServer.py:721
 msgid "Security"
 msgstr "Security"
 
 #: admin/PageEntry.py:557
-#, fuzzy
 msgid "Restrictions"
-msgstr "Access Restrictions"
+msgstr "Restrictions"
 
 #: admin/PageError.py:31
 #, python-format
@@ -1268,76 +1218,79 @@ msgid ""
 "The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
 "problem can be solved in there."
 msgstr ""
+"The server suggests to check <a href=\"%s\">this page</a>. Most probably the "
+"problem can be solved in there."
 
 #: admin/PageError.py:59 admin/PageError.py:85
-#, fuzzy
 msgid "Server Launch Error"
-msgstr "Server Info"
+msgstr "Server Launch Error"
 
 #: admin/PageError.py:86
 msgid "Something unexpected just happened."
-msgstr ""
+msgstr "Something unexpected just happened."
 
 #: admin/PageError.py:91
-#, fuzzy, python-format
+#, python-format
 msgid "The configuration file <code>%s</code> cannot be modified."
-msgstr "Configuration file cannot be modified"
+msgstr "The configuration file <code>%s</code> cannot be modified."
 
 #: admin/PageError.py:92
 msgid ""
 "You have to change its permissions in order to allow cherokee-admin to work "
 "with it. You can try to fix it by changing the file permissions:"
 msgstr ""
+"You have to change its permissions in order to allow cherokee-admin to work "
+"with it. You can try to fix it by changing the file permissions:"
 
 #: admin/PageError.py:93
 msgid "or by launching cherokee-admin as root."
-msgstr ""
+msgstr "or by launching cherokee-admin as root."
 
 #: admin/PageError.py:95
-#, fuzzy, python-format
+#, python-format
 msgid "The specified configuration file <code>%s</code> is a directory."
-msgstr "Configuration file cannot be modified"
+msgstr "The specified configuration file <code>%s</code> is a directory."
 
 #: admin/PageError.py:96
 msgid ""
 "You must change the name in order to allow cherokee-admin to work with it. "
 "You can try to fix it by renaming the directory so the file can be created: "
 msgstr ""
+"You must change the name in order to allow cherokee-admin to work with it. "
+"You can try to fix it by renaming the directory so the file can be created: "
 
 #: admin/PageError.py:97
-#, fuzzy
 msgid ""
 "or by launching cherokee-admin specifying a different configuration file."
-msgstr "Create a new configuration file"
+msgstr ""
+"or by launching cherokee-admin specifying a different configuration file."
 
 #: admin/PageError.py:107 admin/PageError.py:114
-#, fuzzy
 msgid "Configuration file is not writable"
-msgstr "Configuration file cannot be modified"
+msgstr "Configuration file is not writable"
 
 #: admin/PageError.py:120
-#, fuzzy
 msgid "Incorrect configuration file specified"
-msgstr "New Configuration File"
+msgstr "Incorrect configuration file specified"
 
 #: admin/PageError.py:132
 #, python-format
 msgid "Could not find a Cherokee resource: <code>%s</code>"
-msgstr ""
+msgstr "Could not find a Cherokee resource: <code>%s</code>"
 
 #: admin/PageError.py:133
 msgid ""
 "You may need to reinstall the Web Server in order to sort out this issue."
 msgstr ""
+"You may need to reinstall the Web Server in order to sort out this issue."
 
 #: admin/PageError.py:143
 msgid "Cherokee resource is missing"
-msgstr ""
+msgstr "Cherokee resource is missing"
 
 #: admin/PageError.py:158
-#, fuzzy
 msgid "Cherokee-admin has detected a very old configuration file."
-msgstr "Create a new configuration file"
+msgstr "Cherokee-admin has detected a very old configuration file."
 
 #: admin/PageError.py:159
 msgid ""
@@ -1345,20 +1298,21 @@ msgid ""
 "Please, remove it so cherokee-admin can create a new one with the right "
 "format."
 msgstr ""
+"Most probably cherokee-admin is trying to read an old configuration file. "
+"Please, remove it so cherokee-admin can create a new one with the right "
+"format."
 
 #: admin/PageError.py:169
-#, fuzzy
 msgid "Detected an Ancient Configuration File"
-msgstr "Create a new configuration file"
+msgstr "Detected an Ancient Configuration File"
 
 #: admin/PageError.py:175
-#, fuzzy
 msgid "Ancient Configuration File"
-msgstr "New Configuration File"
+msgstr "Ancient Configuration File"
 
 #: admin/PageException.py:38
 msgid "We apologize for any inconveniences that this may have caused."
-msgstr ""
+msgstr "We apologize for any inconveniences that this may have caused."
 
 #: admin/PageException.py:39
 msgid ""
@@ -1366,12 +1320,17 @@ msgid ""
 "<strong>will</strong> be attached upon submission. What were you doing when "
 "the issue showed up?"
 msgstr ""
+"Please, send your comments to the server developers. Your configuration file "
+"<strong>will</strong> be attached upon submission. What were you doing when "
+"the issue showed up?"
 
 #: admin/PageException.py:40
 msgid ""
 "Thank you for reporting the problem. The Cherokee Web Server developers will "
 "try to fix it up as soon as possible."
 msgstr ""
+"Thank you for reporting the problem. The Cherokee Web Server developers will "
+"try to fix it up as soon as possible."
 
 #: admin/PageException.py:41
 #, python-format
@@ -1380,39 +1339,37 @@ msgid ""
 "</p><p>Please, do not hesitate to <a target=\"_blank\" href=\"%s\">report "
 "the issue</a> on our bug tracking system if the problem persists.</p>"
 msgstr ""
+"<p>For some reason, the issue could not be reported to the Cherokee project."
+"</p><p>Please, do not hesitate to <a target=\"_blank\" href=\"%s\">report "
+"the issue</a> on our bug tracking system if the problem persists.</p>"
 
 #: admin/PageException.py:80
-#, fuzzy
 msgid "Internal Error"
-msgstr "Internal"
+msgstr "Internal Error"
 
 #: admin/PageException.py:87
-#, fuzzy
 msgid "Thank you!"
-msgstr "Feedback: Thank you"
+msgstr "Thank you!"
 
 #: admin/PageException.py:91
 msgid "Could not report the issue"
-msgstr ""
+msgstr "Could not report the issue"
 
 #: admin/PageException.py:99
 msgid "Unexpected Exception"
-msgstr ""
+msgstr "Unexpected Exception"
 
 #: admin/PageException.py:112
-#, fuzzy
 msgid "Report this"
-msgstr "Report sent"
+msgstr "Report this"
 
 #: admin/PageGeneral.py:40
-#, fuzzy
 msgid "Defines the TCP port that the server will listen to."
-msgstr "Defines a port that the server will listen to"
+msgstr "Defines the TCP port that the server will listen to."
 
 #: admin/PageGeneral.py:41
-#, fuzzy
 msgid "Optionally defines an interface to bind to. For instance: 127.0.0.1"
-msgstr "Optionally specifies a database to connect to."
+msgstr "Optionally defines an interface to bind to. For instance: 127.0.0.1"
 
 #: admin/PageGeneral.py:42
 msgid ""
@@ -1434,11 +1391,12 @@ msgstr "Which, if any, should be the TLS/SSL backend."
 
 #: admin/PageGeneral.py:46
 msgid "How the usage graphics should be generated."
-msgstr ""
+msgstr "How the usage graphics should be generated."
 
 #: admin/PageGeneral.py:47
 msgid "How to track uploads/posts so its progress can be reported to the user."
 msgstr ""
+"How to track uploads/posts so its progress can be reported to the user."
 
 #: admin/PageGeneral.py:48
 msgid "Changes the effective user. User names and IDs are accepted."
@@ -1461,24 +1419,28 @@ msgid ""
 "No ports to listen have been defined. By default the server will listen to "
 "TCP port 80 on all the network interfaces."
 msgstr ""
+"No ports to listen have been defined. By default the server will listen to "
+"TCP port 80 on all the network interfaces."
 
 #: admin/PageGeneral.py:52
 msgid "Remember: The HTTP standard port is 80. The HTTPS port is 443."
-msgstr ""
+msgstr "Remember: The HTTP standard port is 80. The HTTPS port is 443."
 
 #: admin/PageGeneral.py:53
 msgid ""
 "This is the last bind in use by a rule. Deleting it would break the "
 "configuration."
 msgstr ""
+"This is the last bind in use by a rule. Deleting it would break the "
+"configuration."
 
 #: admin/PageGeneral.py:54 admin/PageSource.py:60
 msgid "First edit the offending rule(s)"
-msgstr ""
+msgstr "First edit the offending rule(s)"
 
 #: admin/PageGeneral.py:55
 msgid "You are about to delete an binding. Are you sure you want to proceed?"
-msgstr ""
+msgstr "You are about to delete an binding. Are you sure you want to proceed?"
 
 #: admin/PageGeneral.py:57
 msgid "General Configuration"
@@ -1490,11 +1452,11 @@ msgstr "Configuration Quickstart"
 
 #: admin/PageGeneral.py:100
 msgid "Port/Interface combination already in use."
-msgstr ""
+msgstr "Port/Interface combination already in use."
 
 #: admin/PageGeneral.py:193
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: admin/PageGeneral.py:194
 msgid "SSL/TLS back-end"
@@ -1513,22 +1475,20 @@ msgid "Server Tokens"
 msgstr "Server Tokens"
 
 #: admin/PageGeneral.py:205
-#, fuzzy
 msgid "Network Behavior"
-msgstr "Network behavior"
+msgstr "Network Behavior"
 
 #: admin/PageGeneral.py:210
 msgid "Graphs Type"
-msgstr ""
+msgstr "Graphs Type"
 
 #: admin/PageGeneral.py:211
-#, fuzzy
 msgid "Information Collector"
-msgstr "Information Encoders"
+msgstr "Information Collector"
 
 #: admin/PageGeneral.py:217 admin/PageGeneral.py:218
 msgid "Upload Tracking"
-msgstr ""
+msgstr "Upload Tracking"
 
 #: admin/PageGeneral.py:239 admin/plugins/bind.py:92
 msgid "Bind to"
@@ -1541,53 +1501,46 @@ msgid "Port"
 msgstr "Port"
 
 #: admin/PageGeneral.py:252
-#, fuzzy
 msgid "TLS/SSL port"
-msgstr "No TLS/SSL"
+msgstr "TLS/SSL port"
 
 #: admin/PageGeneral.py:254
 msgid "TLS/SSL support disabled"
-msgstr ""
+msgstr "TLS/SSL support disabled"
 
 #: admin/PageGeneral.py:279 admin/PageSource.py:398
-#, fuzzy
 msgid "Deletion is forbidden"
-msgstr "Deletion forbidden. Check source usage."
+msgstr "Deletion is forbidden"
 
 #: admin/PageGeneral.py:280 admin/PageSource.py:399
 #, python-format
 msgid "<h2>%s</h2>"
-msgstr ""
+msgstr "<h2>%s</h2>"
 
 #: admin/PageGeneral.py:280 admin/PageSource.py:399
-#, fuzzy
 msgid "Configuration consistency"
-msgstr "Configuration Quickstart"
+msgstr "Configuration consistency"
 
 #: admin/PageGeneral.py:288 admin/PageRule.py:224 admin/PageSource.py:410
 #: admin/PageVServers.py:214
 msgid "Do you really want to remove it?"
-msgstr ""
+msgstr "Do you really want to remove it?"
 
 #: admin/PageGeneral.py:311
-#, fuzzy
 msgid "Interface"
-msgstr "Internal"
+msgstr "Interface"
 
 #: admin/PageGeneral.py:316
-#, fuzzy
 msgid "Add a new listening port"
-msgstr "Add new port"
+msgstr "Add a new listening port"
 
 #: admin/PageGeneral.py:326
-#, fuzzy
 msgid "Add new port"
 msgstr "Add new port"
 
 #: admin/PageGeneral.py:332
-#, fuzzy
 msgid "Listening to Ports"
-msgstr "Listening to ports"
+msgstr "Listening to Ports"
 
 #: admin/PageGeneral.py:343
 msgid "Execution Permissions"
@@ -1615,9 +1568,8 @@ msgid "Ports to listen"
 msgstr "Ports to listen"
 
 #: admin/PageGeneral.py:359
-#, fuzzy
 msgid "Permissions"
-msgstr "Server Permissions"
+msgstr "Permissions"
 
 #: admin/PageGeneral.py:360
 msgid "Icons"
@@ -1629,20 +1581,19 @@ msgstr "General Settings"
 
 #: admin/PageHelp.py:35
 msgid "Table of Contents"
-msgstr ""
+msgstr "Table of Contents"
 
 #: admin/PageHelp.py:172
-#, fuzzy
 msgid "Documentation"
-msgstr "Document Root"
+msgstr "Documentation"
 
 #: admin/PageIndex.py:67
 msgid "You will be sent an email requesting confirmation"
-msgstr ""
+msgstr "You will be sent an email requesting confirmation"
 
 #: admin/PageIndex.py:68
 msgid "Optionally provide your name"
-msgstr ""
+msgstr "Optionally provide your name"
 
 #: admin/PageIndex.py:70
 #, python-format
@@ -1653,45 +1604,43 @@ msgid ""
 "mailing list from this interface. There is where most of the discussions\n"
 "take place."
 msgstr ""
+"There are a number of Community <a href=\"%(link)s\" target=\"_blank"
+"\">Mailing Lists</a>\n"
+"available for you to subscribe. You can subscribe the General Discussion\n"
+"mailing list from this interface. There is where most of the discussions\n"
+"take place."
 
 #: admin/PageIndex.py:77
-#, fuzzy
 msgid "Server is Running"
-msgstr "Server is running."
+msgstr "Server is Running"
 
 #: admin/PageIndex.py:78
-#, fuzzy
 msgid "Server is not Running"
-msgstr "Server is not running."
+msgstr "Server is not Running"
 
 #: admin/PageIndex.py:132
-#, fuzzy
 msgid "Stop Server"
-msgstr "Server"
+msgstr "Stop Server"
 
 #: admin/PageIndex.py:136
-#, fuzzy
 msgid "Start Server"
-msgstr "Virtual Server"
+msgstr "Start Server"
 
 #: admin/PageIndex.py:141
-#, fuzzy
 msgid "Hostname"
-msgstr "Host names"
+msgstr "Hostname"
 
 #: admin/PageIndex.py:143
 msgid "Modified"
 msgstr "Modified"
 
 #: admin/PageIndex.py:145
-#, fuzzy
 msgid "Not found"
-msgstr "Not Found"
+msgstr "Not found"
 
 #: admin/PageIndex.py:146
-#, fuzzy
 msgid "Config File"
-msgstr "Configuration File"
+msgstr "Config File"
 
 #: admin/PageIndex.py:153 admin/plugins/server_info.py:32
 #: admin/plugins/server_info.py:35
@@ -1700,11 +1649,11 @@ msgstr "Server Information"
 
 #: admin/PageIndex.py:165
 msgid "Processors"
-msgstr ""
+msgstr "Processors"
 
 #: admin/PageIndex.py:177
 msgid "Memory"
-msgstr ""
+msgstr "Memory"
 
 #: admin/PageIndex.py:211 admin/plugins/dbslayer.py:51
 msgid "Language"
@@ -1712,101 +1661,95 @@ msgstr "Language"
 
 #: admin/PageIndex.py:231
 msgid "Mailing List Subscription"
-msgstr ""
+msgstr "Mailing List Subscription"
 
 #: admin/PageIndex.py:233
 msgid "Subscribe"
-msgstr ""
+msgstr "Subscribe"
 
 #: admin/PageIndex.py:236
 msgid "Your email address"
-msgstr ""
+msgstr "Your email address"
 
 #: admin/PageIndex.py:237
-#, fuzzy
 msgid "Your name"
-msgstr "Host names"
+msgstr "Your name"
 
 #: admin/PageIndex.py:256
-#, fuzzy
 msgid "Getting started"
-msgstr "Lasting: stat"
+msgstr "Getting started"
 
 #: admin/PageIndex.py:260
 msgid "Subscribe to mailing lists"
-msgstr ""
+msgstr "Subscribe to mailing lists"
 
 #: admin/PageIndex.py:268
-#, fuzzy
 msgid "Report a bug"
-msgstr "Report sent"
+msgstr "Report a bug"
 
 #: admin/PageIndex.py:272
-#, fuzzy
 msgid "Purchase commercial support"
-msgstr "Support"
+msgstr "Purchase commercial support"
 
 #: admin/PageIndex.py:276 admin/PageIndex.py:280
 msgid "About Cherokee"
-msgstr ""
+msgstr "About Cherokee"
 
 #: admin/PageIndex.py:289
 msgid "Join the Cherokee Community:"
-msgstr ""
+msgstr "Join the Cherokee Community:"
 
 #: admin/PageIndex.py:292
 msgid "Visit the Cherokee Project Website"
-msgstr ""
+msgstr "Visit the Cherokee Project Website"
 
 #: admin/PageIndex.py:293
 msgid "Follow us on Twitter"
-msgstr ""
+msgstr "Follow us on Twitter"
 
 #: admin/PageIndex.py:294
 msgid "Join us on Facebook"
-msgstr ""
+msgstr "Join us on Facebook"
 
 #: admin/PageIndex.py:295
 msgid "Join us on Google+"
-msgstr ""
+msgstr "Join us on Google+"
 
 #: admin/PageIndex.py:296
 msgid "Fork us on Github"
-msgstr ""
+msgstr "Fork us on Github"
 
 #: admin/PageIndex.py:297
 msgid "Become a member of Cherokee group on LinkedIn"
-msgstr ""
+msgstr "Become a member of Cherokee group on LinkedIn"
 
 #: admin/PageIndex.py:298
 msgid "Chat with us at irc.freenode.net"
-msgstr ""
+msgstr "Chat with us at irc.freenode.net"
 
 #: admin/PageIndex.py:307
-#, fuzzy
 msgid "Shutdown Cherokee-admin"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Shutdown Cherokee-admin"
 
 #: admin/PageIndex.py:309
 msgid "Shut down"
-msgstr ""
+msgstr "Shut down"
 
 #: admin/PageIndex.py:310
 msgid "You are about to shut down this instance of Cherokee-admin"
-msgstr ""
+msgstr "You are about to shut down this instance of Cherokee-admin"
 
 #: admin/PageIndex.py:311
 msgid "Are you sure you want to proceed?"
-msgstr ""
+msgstr "Are you sure you want to proceed?"
 
 #: admin/PageIndex.py:314
 msgid "Cherokee-admin has been shut down"
-msgstr ""
+msgstr "Cherokee-admin has been shut down"
 
 #: admin/PageIndex.py:316
-#, fuzzy
 msgid "Shut down Cherokee-Admin"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Shut down Cherokee-Admin"
 
 #: admin/PageIndex.py:329 admin/PageIndex.py:350
 msgid "Welcome to Cherokee Admin"
@@ -1814,38 +1757,34 @@ msgstr "Welcome to Cherokee Admin"
 
 #: admin/PageNewConfig.py:38
 msgid "Index"
-msgstr ""
+msgstr "Index"
 
 #: admin/PageNewConfig.py:40
-#, fuzzy
 msgid "Loading new configuration file.."
-msgstr "Create a new configuration file"
+msgstr "Loading new configuration file.."
 
 #: admin/PageNewConfig.py:41
-#, fuzzy, python-format
+#, python-format
 msgid "The configuration file %(conf_file)s was not found."
-msgstr "Configuration file cannot be modified"
+msgstr "The configuration file %(conf_file)s was not found."
 
 #: admin/PageNewConfig.py:42
-#, fuzzy
 msgid ""
 "You can create a new configuration file and proceed to customize the web "
 "server."
 msgstr ""
-"<b>The configuration is not found</b>.<br />You can create a new "
-"configuration file and proceed to customize the web server."
+"You can create a new configuration file and proceed to customize the web "
+"server."
 
 #: admin/PageNewConfig.py:167
-#, fuzzy
 msgid "Create a new configuration file:"
-msgstr "Create a new configuration file"
+msgstr "Create a new configuration file:"
 
 #: admin/PageNewConfig.py:170
 msgid "Regular"
 msgstr "Regular"
 
 #: admin/PageNewConfig.py:171
-#, fuzzy
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "Regular configuration: Apache logs, MIME types, icons, etc."
 
@@ -1879,10 +1818,12 @@ msgid ""
 "<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure "
 "you want to proceed?</p>"
 msgstr ""
+"<p>You are about to delete the <b>%s</b> behavior rule.</p><p>Are you sure "
+"you want to proceed?</p>"
 
 #: admin/PageRule.py:53
 msgid "You are about to clone a Behavior Rule. Would you like to proceed?"
-msgstr ""
+msgstr "You are about to clone a Behavior Rule. Would you like to proceed?"
 
 #: admin/PageRule.py:116 admin/Rule.py:159
 msgid "Rule Type"
@@ -1890,36 +1831,31 @@ msgstr "Rule Type"
 
 #: admin/PageRule.py:136 admin/PageVServers.py:134 admin/PageVServers.py:152
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #: admin/PageRule.py:137 admin/PageVServers.py:153
-#, fuzzy
 msgid "Manual configuration"
-msgstr "Icon configuration"
+msgstr "Manual configuration"
 
 #: admin/PageRule.py:249 admin/PageVServer.py:158
 msgid "Final"
 msgstr "Final"
 
 #: admin/PageRule.py:250
-#, fuzzy
 msgid "Non Final"
-msgstr "Final"
+msgstr "Non Final"
 
 #: admin/PageRule.py:274 admin/PageRule.py:287
-#, fuzzy
 msgid "Add Behavior Rule"
-msgstr "Behavior rules"
+msgstr "Add Behavior Rule"
 
 #: admin/PageRule.py:281
-#, fuzzy
 msgid "Configuration Assistant"
-msgstr "Configuration Quickstart"
+msgstr "Configuration Assistant"
 
 #: admin/PageRule.py:301
-#, fuzzy
 msgid "Clone Behavior Rule"
-msgstr "Behavior rules"
+msgstr "Clone Behavior Rule"
 
 #: admin/PageRule.py:303 admin/PageSource.py:443 admin/PageVServers.py:282
 msgid "Clone"
@@ -1927,16 +1863,15 @@ msgstr "Clone"
 
 #: admin/PageRule.py:306
 msgid "Clone Selected Behavior Rule"
-msgstr ""
+msgstr "Clone Selected Behavior Rule"
 
 #: admin/PageRule.py:314 admin/PageVServer.py:718
 msgid "Behavior"
 msgstr "Behavior"
 
 #: admin/PageRule.py:334
-#, fuzzy
 msgid "Rule Filtering"
-msgstr "Rule list"
+msgstr "Rule Filtering"
 
 #: admin/PageSource.py:45
 msgid ""
@@ -1965,15 +1900,16 @@ msgstr ""
 "Unix socket path."
 
 #: admin/PageSource.py:49
-#, fuzzy
 msgid "Command to spawn a new source in case it were not running."
-msgstr "Command to spawn a new source in case it were not accessible."
+msgstr "Command to spawn a new source in case it were not running."
 
 #: admin/PageSource.py:50
 msgid ""
 "REMEMBER: The interpreter MUST NOT run as a daemon or detach itself from its "
 "parent process."
 msgstr ""
+"REMEMBER: The interpreter MUST NOT run as a daemon or detach itself from its "
+"parent process."
 
 #: admin/PageSource.py:51
 msgid ""
@@ -1992,99 +1928,92 @@ msgstr ""
 "deleted until the rule has been manually edited."
 
 #: admin/PageSource.py:53
-#, fuzzy
 msgid ""
 "Execute the interpreter under a different user. Default: Same UID as the "
 "server."
 msgstr ""
-"Execute the interpreter under a different user. The server needs enough "
-"privileges to switch the user (usually root)."
+"Execute the interpreter under a different user. Default: Same UID as the "
+"server."
 
 #: admin/PageSource.py:54
-#, fuzzy
 msgid ""
 "Execute the interpreter under a different group. Default: Default GID of the "
 "new process UID."
 msgstr ""
-"Execute the interpreter under a different user. The server needs enough "
-"privileges to switch the user (usually root)."
+"Execute the interpreter under a different group. Default: Default GID of the "
+"new process UID."
 
 #: admin/PageSource.py:55
-#, fuzzy
 msgid "Execute the interpreter under a different root. Default: no."
-msgstr ""
-"Execute the interpreter under a different user. The server needs enough "
-"privileges to switch the user (usually root)."
+msgstr "Execute the interpreter under a different root. Default: no."
 
 #: admin/PageSource.py:56
 msgid ""
 "Whether the new child process should inherit the environment variables from "
 "the server process. Default: yes."
 msgstr ""
+"Whether the new child process should inherit the environment variables from "
+"the server process. Default: yes."
 
 #: admin/PageSource.py:57
 msgid ""
 "You are about to delete an Information Source. Are you sure you want to "
 "proceed?"
 msgstr ""
+"You are about to delete an Information Source. Are you sure you want to "
+"proceed?"
 
 #: admin/PageSource.py:58
-#, fuzzy
 msgid "The Information Source list is currently empty."
-msgstr "Information Sources Settings"
+msgstr "The Information Source list is currently empty."
 
 #: admin/PageSource.py:59
 msgid ""
 "This is the last Information Source in use by a rule. Deleting it would "
 "break the configuration."
 msgstr ""
+"This is the last Information Source in use by a rule. Deleting it would "
+"break the configuration."
 
 #: admin/PageSource.py:61
-#, fuzzy
 msgid "Name of the environment variable"
-msgstr "Nickname for the virtual server."
+msgstr "Name of the environment variable"
 
 #: admin/PageSource.py:62
-#, fuzzy
 msgid "Value of the environment variable"
-msgstr "Add new Environment variable"
+msgstr "Value of the environment variable"
 
 #: admin/PageSource.py:63
-#, fuzzy
 msgid "The selected Information Source is about to be cloned."
-msgstr "Information Sources"
+msgstr "The selected Information Source is about to be cloned."
 
 #: admin/PageSource.py:189 admin/PageSource.py:217
 msgid "Variable"
 msgstr "Variable"
 
 #: admin/PageSource.py:191
-#, fuzzy
 msgid "Environment Variables"
-msgstr "Environment variables"
+msgstr "Environment Variables"
 
 #: admin/PageSource.py:224
 msgid "Add new Environment variable"
 msgstr "Add new Environment variable"
 
 #: admin/PageSource.py:233
-#, fuzzy
 msgid "Add new variable"
-msgstr "Add new Environment variable"
+msgstr "Add new variable"
 
 #: admin/PageSource.py:250
-#, fuzzy
 msgid "Source Usage"
-msgstr "Source usage"
+msgstr "Source Usage"
 
 #: admin/PageSource.py:253 admin/PageVServer.py:723
 msgid "Virtual Server"
 msgstr "Virtual Server"
 
 #: admin/PageSource.py:279
-#, fuzzy
 msgid "Source"
-msgstr "Source usage"
+msgstr "Source"
 
 #: admin/PageSource.py:286 admin/PageSource.py:330
 #: admin/wizards/rtorrent.py:100
@@ -2104,38 +2033,32 @@ msgid "Execute as User"
 msgstr "Execute as User"
 
 #: admin/PageSource.py:294
-#, fuzzy
 msgid "Execute as Group"
-msgstr "Execute as User"
+msgstr "Execute as Group"
 
 #: admin/PageSource.py:295
-#, fuzzy
 msgid "Chroot Directory"
-msgstr "Web Directory"
+msgstr "Chroot Directory"
 
 #: admin/PageSource.py:296
 msgid "Inherit Environment"
-msgstr ""
+msgstr "Inherit Environment"
 
 #: admin/PageSource.py:427 admin/PageSource.py:432
-#, fuzzy
 msgid "Add New Information Source"
-msgstr "Assign Information Sources"
+msgstr "Add New Information Source"
 
 #: admin/PageSource.py:441
-#, fuzzy
 msgid "Clone Information Source"
-msgstr "Information Sources"
+msgstr "Clone Information Source"
 
 #: admin/PageSource.py:446
-#, fuzzy
 msgid "Clone Selected Information Source"
-msgstr "Information Sources"
+msgstr "Clone Selected Information Source"
 
 #: admin/PageSource.py:466
-#, fuzzy
 msgid "Sources Filtering"
-msgstr "Web Directory"
+msgstr "Sources Filtering"
 
 #: admin/PageSources.py:35 admin/PageVServer.py:141 admin/PageVServers.py:48
 #: admin/PageVServers.py:294
@@ -2143,24 +2066,20 @@ msgid "Virtual Servers"
 msgstr "Virtual Servers"
 
 #: admin/PageStatus.py:66
-#, fuzzy
 msgid "Server Wide Monitoring"
-msgstr "Server exiting.."
+msgstr "Server Wide Monitoring"
 
 #: admin/PageStatus.py:71
-#, fuzzy
 msgid "Virtual Server Monitoring"
-msgstr "Virtual Servers configuration"
+msgstr "Virtual Server Monitoring"
 
 #: admin/PageStatus.py:102
-#, fuzzy
 msgid "System wide status"
-msgstr "Server status"
+msgstr "System wide status"
 
 #: admin/PageStatus.py:119 admin/PageVServers.py:310
-#, fuzzy
 msgid "Virtual Server Filtering"
-msgstr "Virtual Server"
+msgstr "Virtual Server Filtering"
 
 #: admin/PageVServer.py:44
 msgid "Nickname for the virtual server."
@@ -2179,47 +2098,50 @@ msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr "PEM-encoded Private Key file for the server (Full path to the file)"
 
 #: admin/PageVServer.py:47
-#, fuzzy
 msgid ""
 "File containing the trusted CA certificates, utilized for checking the "
 "client certificates (Full path to the file)"
 msgstr ""
-"Optional: File containing the trusted CA certificates, utilized for checking "
-"the client certificates (Full path to the file)"
+"File containing the trusted CA certificates, utilized for checking the "
+"client certificates (Full path to the file)"
 
 #: admin/PageVServer.py:48
-#, fuzzy
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default enables "
 "Forward Secrecy)."
 msgstr ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
-"www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
-"ciphers supported by the OpenSSL version used)."
+"www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default enables "
+"Forward Secrecy)."
 
 #: admin/PageVServer.py:49
 msgid ""
 "The cipher sequence that is specified by the server should have preference "
 "over the client preference. (Default: True)."
 msgstr ""
+"The cipher sequence that is specified by the server should have preference "
+"over the client preference. (Default: True)."
 
 #: admin/PageVServer.py:50
 msgid ""
 "Explicitly enable or disable serverside compression support. (Default: "
 "Disabled)."
 msgstr ""
+"Explicitly enable or disable serverside compression support. (Default: "
+"Disabled)."
 
 #: admin/PageVServer.py:51
 msgid ""
 "Explicitely sets the Diffie-Hellman parameters length. (Default: Let openssl "
 "choose)."
 msgstr ""
+"Explicitely sets the Diffie-Hellman parameters length. (Default: Let openssl "
+"choose)."
 
 #: admin/PageVServer.py:52
-#, fuzzy
 msgid "Skip, Tolerate, Accept or Require client certificates."
-msgstr "Optional: Skip, Accept or Require client certificates."
+msgstr "Skip, Tolerate, Accept or Require client certificates."
 
 #: admin/PageVServer.py:53
 msgid ""
@@ -2299,22 +2221,20 @@ msgid "Path to the executable that will be invoked on each log entry."
 msgstr "Path to the executable that will be invoked on each log entry."
 
 #: admin/PageVServer.py:69
-#, fuzzy
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
 "headers (send by reverse proxies)."
 msgstr ""
-"Whether the logger should read and use the X-Real-IP header (send by reverse "
-"proxy front-ends)."
+"Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
+"headers (send by reverse proxies)."
 
 #: admin/PageVServer.py:71
-#, fuzzy
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
 "Forwarded-For headers."
 msgstr ""
-"List of IP addresses and subnets that are allowed to send X-Real-IP headers "
-"(usually your proxy servers)."
+"List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
+"Forwarded-For headers."
 
 #: admin/PageVServer.py:72
 msgid ""
@@ -2324,145 +2244,145 @@ msgstr ""
 
 #: admin/PageVServer.py:73
 msgid "The following variables are accepted: "
-msgstr ""
+msgstr "The following variables are accepted: "
 
 #: admin/PageVServer.py:74
-#, fuzzy
 msgid "Allows the selection of domain matching method."
-msgstr "Allows the selection of how to generate the error responses."
+msgstr "Allows the selection of domain matching method."
 
 #: admin/PageVServer.py:75
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
 msgstr ""
+"Whether or not it should collected statistics about the traffic of this "
+"virtual server."
 
 #: admin/PageVServer.py:76
 msgid "Time standard to use in the log file entries."
-msgstr ""
+msgstr "Time standard to use in the log file entries."
 
 #: admin/PageVServer.py:77
 msgid ""
 "Remember that only \"File Exists\" rules and \"List & Send\" handlers use "
 "the Directory Indexes setting."
 msgstr ""
+"Remember that only \"File Exists\" rules and \"List & Send\" handlers use "
+"the Directory Indexes setting."
 
 #: admin/PageVServer.py:78
 msgid ""
 "Use this nickname as an additional host name for this virtual server "
 "(Default: yes)"
 msgstr ""
+"Use this nickname as an additional host name for this virtual server "
+"(Default: yes)"
 
 #: admin/PageVServer.py:79
 msgid "Enforce HTTPS by using the HTTP Strict Transport Security."
-msgstr ""
+msgstr "Enforce HTTPS by using the HTTP Strict Transport Security."
 
 #: admin/PageVServer.py:80
 msgid ""
 "How long the client's browser should remember the forced HTTPS (in seconds)."
 msgstr ""
+"How long the client's browser should remember the forced HTTPS (in seconds)."
 
 #: admin/PageVServer.py:81
 msgid ""
 "Should HSTS be used in all the subdomains of this virtual server (Default: "
 "yes)."
 msgstr ""
+"Should HSTS be used in all the subdomains of this virtual server (Default: "
+"yes)."
 
 #: admin/PageVServer.py:83
-#, fuzzy
 msgid "<p>The 'default' virtual server matches all the domain names.</p>"
-msgstr ""
-"\n"
-"<p>The 'default' virtual server matches all the domain names.</p>\n"
+msgstr "<p>The 'default' virtual server matches all the domain names.</p>"
 
 #: admin/PageVServer.py:86
-#, fuzzy
 msgid "Remote IP address"
-msgstr "LDAP server IP address."
+msgstr "Remote IP address"
 
 #: admin/PageVServer.py:87
-#, fuzzy
 msgid "Local IP address"
-msgstr "LDAP server IP address."
+msgstr "Local IP address"
 
 #: admin/PageVServer.py:88
-#, fuzzy
 msgid "Request Protocol"
-msgstr "Request"
+msgstr "Request Protocol"
 
 #: admin/PageVServer.py:89
 msgid "Transport type: http or https"
-msgstr ""
+msgstr "Transport type: http or https"
 
 #: admin/PageVServer.py:90
 msgid "Port of the server serving the request"
-msgstr ""
+msgstr "Port of the server serving the request"
 
 #: admin/PageVServer.py:91
 msgid "The query string, if exists"
-msgstr ""
+msgstr "The query string, if exists"
 
 #: admin/PageVServer.py:92
 msgid "First line of HTTP request"
-msgstr ""
+msgstr "First line of HTTP request"
 
 #: admin/PageVServer.py:93
 msgid "Response status code"
-msgstr ""
+msgstr "Response status code"
 
 #: admin/PageVServer.py:94
 msgid "Time: in common log format time format"
-msgstr ""
+msgstr "Time: in common log format time format"
 
 #: admin/PageVServer.py:95
 msgid "Time: seconds since Epoch"
-msgstr ""
+msgstr "Time: seconds since Epoch"
 
 #: admin/PageVServer.py:96
 msgid "Time: milliseconds since Epoch"
-msgstr ""
+msgstr "Time: milliseconds since Epoch"
 
 #: admin/PageVServer.py:97
-#, fuzzy
 msgid "Remote user (authentication)"
-msgstr "Base domain for the web server authentications."
+msgstr "Remote user (authentication)"
 
 #: admin/PageVServer.py:98
 msgid "URL path requested"
-msgstr ""
+msgstr "URL path requested"
 
 #: admin/PageVServer.py:99
 msgid "URL path requested before any rewrite"
-msgstr ""
+msgstr "URL path requested before any rewrite"
 
 #: admin/PageVServer.py:100
-#, fuzzy
 msgid "Virtual Server nick name"
-msgstr "Virtual Server nickname"
+msgstr "Virtual Server nick name"
 
 #: admin/PageVServer.py:101
 msgid "Requested host (Host: header)"
-msgstr ""
+msgstr "Requested host (Host: header)"
 
 #: admin/PageVServer.py:102
 msgid "Size of the response in bytes"
-msgstr ""
+msgstr "Size of the response in bytes"
 
 #: admin/PageVServer.py:103
 msgid "'Host:' header of the request"
-msgstr ""
+msgstr "'Host:' header of the request"
 
 #: admin/PageVServer.py:104
 msgid "'Referrer:' header of the request"
-msgstr ""
+msgstr "'Referrer:' header of the request"
 
 #: admin/PageVServer.py:105
 msgid "'User-Agent:' header of the request"
-msgstr ""
+msgstr "'User-Agent:' header of the request"
 
 #: admin/PageVServer.py:106
 msgid "'Cookie:' header of the request"
-msgstr ""
+msgstr "'Cookie:' header of the request"
 
 #: admin/PageVServer.py:142
 msgid "Loggers"
@@ -2477,23 +2397,20 @@ msgid "Match"
 msgstr "Match"
 
 #: admin/PageVServer.py:147
-#, fuzzy
 msgid "Rule Match"
-msgstr "File Matches"
+msgstr "Rule Match"
 
 #: admin/PageVServer.py:148
-#, fuzzy
 msgid "Assigned Handler"
-msgstr "Handler"
+msgstr "Assigned Handler"
 
 #: admin/PageVServer.py:149
 msgid "Auth"
 msgstr "Auth"
 
 #: admin/PageVServer.py:150
-#, fuzzy
 msgid "Custom Document Root"
-msgstr "Document Root"
+msgstr "Custom Document Root"
 
 #: admin/PageVServer.py:150
 msgid "Root"
@@ -2501,65 +2418,55 @@ msgstr "Root"
 
 #: admin/PageVServer.py:151
 msgid "Only HTTPS"
-msgstr ""
+msgstr "Only HTTPS"
 
 #: admin/PageVServer.py:151
-#, fuzzy
 msgid "Secure"
-msgstr "Secret"
+msgstr "Secure"
 
 #: admin/PageVServer.py:152
 msgid "Enc"
 msgstr "Enc"
 
 #: admin/PageVServer.py:152
-#, fuzzy
 msgid "Encoders"
-msgstr "Encoding"
+msgstr "Encoders"
 
 #: admin/PageVServer.py:153
-#, fuzzy
 msgid "Cacheable"
-msgstr "Apache compatible"
+msgstr "Cacheable"
 
 #: admin/PageVServer.py:154
 msgid "Exp"
 msgstr "Exp"
 
 #: admin/PageVServer.py:155
-#, fuzzy
 msgid "Connection Timeout"
-msgstr "Connections"
+msgstr "Connection Timeout"
 
 #: admin/PageVServer.py:156
-#, fuzzy
 msgid "Shaping"
-msgstr "Traffic Shaping"
+msgstr "Shaping"
 
 #: admin/PageVServer.py:157
-#, fuzzy
 msgid "Log"
-msgstr "Logging"
+msgstr "Log"
 
 #: admin/PageVServer.py:157
-#, fuzzy
 msgid "Logging Enabled"
-msgstr " Enabled"
+msgstr "Logging Enabled"
 
 #: admin/PageVServer.py:158
-#, fuzzy
 msgid "Rule is Final"
-msgstr "Rule list"
+msgstr "Rule is Final"
 
 #: admin/PageVServer.py:184
-#, fuzzy
 msgid "Match nickname"
-msgstr "Nickname"
+msgstr "Match nickname"
 
 #: admin/PageVServer.py:188 admin/PageVServer.py:717
-#, fuzzy
 msgid "Host Match"
-msgstr "Closest match"
+msgstr "Host Match"
 
 #: admin/PageVServer.py:218 admin/PageVServer.py:234 admin/PageVServer.py:258
 #: admin/PageVServer.py:485 admin/PageVServer.py:519
@@ -2568,66 +2475,60 @@ msgid "Method"
 msgstr "Method"
 
 #: admin/PageVServer.py:226 admin/PageVServer.py:242
-#, fuzzy
 msgid "Remove criteria"
-msgstr "Remote host"
+msgstr "Remove criteria"
 
 #: admin/PageVServer.py:260
-#, fuzzy
 msgid "How to match this Virtual Server"
-msgstr "Virtual Server"
+msgstr "How to match this Virtual Server"
 
 #: admin/PageVServer.py:267
 msgid "Add an additional matching criteria"
-msgstr ""
+msgstr "Add an additional matching criteria"
 
 #: admin/PageVServer.py:358
-#, fuzzy
 msgid "Behavior Rules"
-msgstr "Behavior rules"
+msgstr "Behavior Rules"
 
 #: admin/PageVServer.py:367
 msgid "Rule Management"
-msgstr ""
+msgstr "Rule Management"
 
 #: admin/PageVServer.py:393
-#, fuzzy
 msgid "Only accept Secure Connections"
-msgstr "Accepted domains"
+msgstr "Only accept Secure Connections"
 
 #: admin/PageVServer.py:398
-#, fuzzy
 msgid "Encoding enabled"
-msgstr "Encoding"
+msgstr "Encoding enabled"
 
 #: admin/PageVServer.py:404
 msgid "no"
-msgstr ""
+msgstr "no"
 
 #: admin/PageVServer.py:415
-#, fuzzy
 msgid " seconds"
-msgstr "Icons"
+msgstr " seconds"
 
 #: admin/PageVServer.py:420
 msgid " bytes per second"
-msgstr ""
+msgstr " bytes per second"
 
 #: admin/PageVServer.py:425
 msgid "Logging enabled for this rule"
-msgstr ""
+msgstr "Logging enabled for this rule"
 
 #: admin/PageVServer.py:430
 msgid "Prevents further rule evaluation"
-msgstr ""
+msgstr "Prevents further rule evaluation"
 
 #: admin/PageVServer.py:435
 msgid "Content can be cached"
-msgstr ""
+msgstr "Content can be cached"
 
 #: admin/PageVServer.py:438
 msgid "Forbids content caching"
-msgstr ""
+msgstr "Forbids content caching"
 
 #: admin/PageVServer.py:455
 msgid "Virtual Server nickname"
@@ -2647,7 +2548,7 @@ msgstr "Paths"
 
 #: admin/PageVServer.py:471
 msgid "Neither are in use at the moment."
-msgstr ""
+msgstr "Neither are in use at the moment."
 
 #: admin/PageVServer.py:476
 msgid "Keep-alive"
@@ -2666,14 +2567,12 @@ msgid "Error Handling hook"
 msgstr "Error Handling hook"
 
 #: admin/PageVServer.py:532 admin/consts.py:233 admin/consts.py:250
-#, fuzzy
 msgid "Disabled"
-msgstr "Disable"
+msgstr "Disabled"
 
 #: admin/PageVServer.py:536
-#, fuzzy
 msgid "Write errors to"
-msgstr "Writers"
+msgstr "Write errors to"
 
 #: admin/PageVServer.py:540 admin/PageVServer.py:579
 msgid "Filename"
@@ -2684,41 +2583,36 @@ msgid "Command"
 msgstr "Command"
 
 #: admin/PageVServer.py:548
-#, fuzzy
 msgid "Error Logging"
-msgstr "Error Handling hook"
+msgstr "Error Logging"
 
 #: admin/PageVServer.py:559
 msgid "Format"
 msgstr "Format"
 
 #: admin/PageVServer.py:566
-#, fuzzy
 msgid "Write accesses to"
-msgstr "Writers"
+msgstr "Write accesses to"
 
 #: admin/PageVServer.py:589
-#, fuzzy
 msgid "Hide"
-msgstr "Header"
+msgstr "Hide"
 
 #: admin/PageVServer.py:589
-#, fuzzy
 msgid "Show macros"
-msgstr "Show Group"
+msgstr "Show macros"
 
 #: admin/PageVServer.py:598
 msgid "Template: "
 msgstr "Template: "
 
 #: admin/PageVServer.py:600
-#, fuzzy
 msgid "Access Logging"
-msgstr "Logging"
+msgstr "Access Logging"
 
 #: admin/PageVServer.py:606
 msgid "Time standard"
-msgstr ""
+msgstr "Time standard"
 
 #: admin/PageVServer.py:607 admin/PageVServer.py:687 admin/consts.py:228
 msgid "Accept"
@@ -2726,17 +2620,15 @@ msgstr "Accept"
 
 #: admin/PageVServer.py:607
 msgid "Accept Forwarded IPs"
-msgstr ""
+msgstr "Accept Forwarded IPs"
 
 #: admin/PageVServer.py:610
-#, fuzzy
 msgid "Do not check"
-msgstr "Do not restart"
+msgstr "Do not check"
 
 #: admin/PageVServer.py:619
-#, fuzzy
 msgid "Logging Options"
-msgstr "Logging"
+msgstr "Logging Options"
 
 #: admin/PageVServer.py:655 admin/wizards/ssl_test.py:136
 msgid "Certificate"
@@ -2747,23 +2639,20 @@ msgid "Certificate key"
 msgstr "Certificate key"
 
 #: admin/PageVServer.py:661
-#, fuzzy
 msgid "Required SSL/TLS Values"
-msgstr "Required SSL/TLS values"
+msgstr "Required SSL/TLS Values"
 
 #: admin/PageVServer.py:666
 msgid "Ciphers"
 msgstr "Ciphers"
 
 #: admin/PageVServer.py:667
-#, fuzzy
 msgid "Prefer"
-msgstr "Prefix"
+msgstr "Prefer"
 
 #: admin/PageVServer.py:667
-#, fuzzy
 msgid "Server Preference"
-msgstr "Server Info"
+msgstr "Server Preference"
 
 #: admin/PageVServer.py:668
 msgid "Client Certs. Request"
@@ -2771,11 +2660,11 @@ msgstr "Client Certs. Request"
 
 #: admin/PageVServer.py:669
 msgid "Compression"
-msgstr ""
+msgstr "Compression"
 
 #: admin/PageVServer.py:670
 msgid "DH length"
-msgstr ""
+msgstr "DH length"
 
 #: admin/PageVServer.py:673
 msgid "CA List"
@@ -2786,35 +2675,32 @@ msgid "Verify Depth"
 msgstr "Verify Depth"
 
 #: admin/PageVServer.py:682
-#, fuzzy
 msgid "Advanced Options"
-msgstr "Advanced options"
+msgstr "Advanced Options"
 
 #: admin/PageVServer.py:687
-#, fuzzy
 msgid "Enable HSTS"
-msgstr " Enabled"
+msgstr "Enable HSTS"
 
 #: admin/PageVServer.py:690
 msgid "HSTS Max-Age"
-msgstr ""
+msgstr "HSTS Max-Age"
 
 #: admin/PageVServer.py:690
 msgid "One year"
-msgstr ""
+msgstr "One year"
 
 #: admin/PageVServer.py:691
-#, fuzzy
 msgid "Include Subdomains"
-msgstr "Accepted domains"
+msgstr "Include Subdomains"
 
 #: admin/PageVServer.py:691
 msgid "Include all"
-msgstr ""
+msgstr "Include all"
 
 #: admin/PageVServer.py:697
 msgid "HTTP Strict Transport Security (HSTS)"
-msgstr ""
+msgstr "HTTP Strict Transport Security (HSTS)"
 
 #: admin/PageVServer.py:716
 msgid "Basics"
@@ -2830,39 +2716,38 @@ msgid ""
 "<p>You are about to delete the <b>%(nick_esc)s</b> Virtual Server.</p><p>Are "
 "you sure you want to proceed?</p>"
 msgstr ""
+"<p>You are about to delete the <b>%(nick_esc)s</b> Virtual Server.</p><p>Are "
+"you sure you want to proceed?</p>"
 
 #: admin/PageVServers.py:51
 msgid "You are about to clone a Virtual Server. Would you like to proceed?"
-msgstr ""
+msgstr "You are about to clone a Virtual Server. Would you like to proceed?"
 
 #: admin/PageVServers.py:52
 msgid ""
 "Name of the Virtual Server you are about to create. A domain name is alright."
 msgstr ""
+"Name of the Virtual Server you are about to create. A domain name is alright."
 
 #: admin/PageVServers.py:53
-#, fuzzy
 msgid "Document Root directory of the new Virtual Server."
-msgstr "Nickname for the virtual server."
+msgstr "Document Root directory of the new Virtual Server."
 
 #: admin/PageVServers.py:250 admin/PageVServers.py:263
-#, fuzzy
 msgid "Add New Virtual Server"
-msgstr "Add new Virtual Server"
+msgstr "Add New Virtual Server"
 
 #: admin/PageVServers.py:257
-#, fuzzy
 msgid "Virtual Server Configuration Assistant"
-msgstr "Virtual Servers configuration"
+msgstr "Virtual Server Configuration Assistant"
 
 #: admin/PageVServers.py:280
 msgid "Clone Virtual Server"
 msgstr "Clone Virtual Server"
 
 #: admin/PageVServers.py:285
-#, fuzzy
 msgid "Clone Selected Virtual Server"
-msgstr "Clone Virtual Server"
+msgstr "Clone Selected Virtual Server"
 
 #: admin/Rule.py:33
 msgid "The default match ought not to be changed."
@@ -2881,177 +2766,161 @@ msgid "Not"
 msgstr "Not"
 
 #: admin/Rule.py:153
-#, fuzzy
 msgid "Select"
-msgstr "Selected Ports"
+msgstr "Select"
 
 #: admin/SavingChecks.py:50
 msgid "Balancer without any source"
-msgstr ""
+msgstr "Balancer without any source"
 
 #: admin/SavingChecks.py:64
-#, fuzzy
 msgid "Source without Interpreter"
-msgstr "Local interpreter"
+msgstr "Source without Interpreter"
 
 #: admin/SavingChecks.py:69
 msgid "Chroot folder is not an absolute path"
-msgstr ""
+msgstr "Chroot folder is not an absolute path"
 
 #: admin/SavingChecks.py:73
-#, fuzzy
 msgid "Chroot folder does not exist"
-msgstr "Path does not exist"
+msgstr "Chroot folder does not exist"
 
 #: admin/SavingChecks.py:77
 msgid "Interpreter does not exist inside chroot"
-msgstr ""
+msgstr "Interpreter does not exist inside chroot"
 
 #: admin/SavingChecks.py:81
-#, fuzzy
 msgid "Interpreter does not exist"
-msgstr "Path does not exist"
+msgstr "Interpreter does not exist"
 
 #: admin/SavingChecks.py:91
-#, fuzzy
 msgid "Authentication rule without Realm"
-msgstr "Authentication"
+msgstr "Authentication rule without Realm"
 
 #: admin/SavingChecks.py:99
-#, fuzzy
 msgid "Virtual Server without document root"
-msgstr "Virtual Server root directory."
+msgstr "Virtual Server without document root"
 
 #: admin/SavingChecks.py:103
-#, fuzzy
 msgid "Virtual Server without nickname"
-msgstr "Virtual Server nickname"
+msgstr "Virtual Server without nickname"
 
 #: admin/SavingChecks.py:109
-#, fuzzy
 msgid "Virtual Server without wildcard string"
-msgstr "Virtual Server nickname"
+msgstr "Virtual Server without wildcard string"
 
 #: admin/SavingChecks.py:121
-#, fuzzy
 msgid "Directory match without a directory"
-msgstr "Path is not a directory"
+msgstr "Directory match without a directory"
 
 #: admin/SavingChecks.py:126
-#, fuzzy
 msgid "Extensions match without any extension"
-msgstr "Path is not a directory"
+msgstr "Extensions match without any extension"
 
 #: admin/SavingChecks.py:131
-#, fuzzy
 msgid "RegEx match without a RegEx entry"
-msgstr "Path is not a directory"
+msgstr "RegEx match without a RegEx entry"
 
 #: admin/SavingChecks.py:136
-#, fuzzy
 msgid "Header match without a defined header"
-msgstr "Path is not a directory"
+msgstr "Header match without a defined header"
 
 #: admin/SavingChecks.py:141
 msgid "Header match without a matching expression"
-msgstr ""
+msgstr "Header match without a matching expression"
 
 #: admin/SavingChecks.py:147
 msgid "File exists rule without a file or 'Any file'"
-msgstr ""
+msgstr "File exists rule without a file or 'Any file'"
 
 #: admin/SavingChecks.py:152
-#, fuzzy
 msgid "Method match without a defined method"
-msgstr "Path is not a directory"
+msgstr "Method match without a defined method"
 
 #: admin/SavingChecks.py:157
-#, fuzzy
 msgid "Empty 'Incoming IP/Port' match"
-msgstr "Incoming Port"
+msgstr "Empty 'Incoming IP/Port' match"
 
 #: admin/SavingChecks.py:162
 msgid "Empty 'Full path' rule match"
-msgstr ""
+msgstr "Empty 'Full path' rule match"
 
 #: admin/SavingChecks.py:167
-#, fuzzy
 msgid "Empty 'Connected from' rule match"
-msgstr "Incoming Port"
+msgstr "Empty 'Connected from' rule match"
 
 #: admin/SavingChecks.py:173
 msgid "Incomplete 'URL Argument' rule match"
-msgstr ""
+msgstr "Incomplete 'URL Argument' rule match"
 
 #: admin/SavingChecks.py:178
 msgid "GeoIP match rule with no countries"
-msgstr ""
+msgstr "GeoIP match rule with no countries"
 
 #: admin/SavingChecks.py:191
 msgid "Request URL Rewriting rule list has a missing Regular Expression"
-msgstr ""
+msgstr "Request URL Rewriting rule list has a missing Regular Expression"
 
 #: admin/SavingChecks.py:195
 msgid "Request URL Rewriting rule list has a missing Substitution"
-msgstr ""
+msgstr "Request URL Rewriting rule list has a missing Substitution"
 
 #: admin/SavingChecks.py:200
 msgid "Reply URL Rewriting rule list has a missing Regular Expression"
-msgstr ""
+msgstr "Reply URL Rewriting rule list has a missing Regular Expression"
 
 #: admin/SavingChecks.py:204
 msgid "Reply URL Rewriting rule list has a missing Substitution"
-msgstr ""
+msgstr "Reply URL Rewriting rule list has a missing Substitution"
 
 #: admin/SavingChecks.py:210
 msgid "Redirection rule list has a missing Regular Expression"
-msgstr ""
+msgstr "Redirection rule list has a missing Regular Expression"
 
 #: admin/SavingChecks.py:214
 msgid "Redirection rule list has a missing Substitution"
-msgstr ""
+msgstr "Redirection rule list has a missing Substitution"
 
 #: admin/SystemStatsWidgets.py:134
 #, python-format
 msgid "%s Logical Processors"
-msgstr ""
+msgstr "%s Logical Processors"
 
 #: admin/SystemStatsWidgets.py:136
-#, fuzzy, python-format
+#, python-format
 msgid "%s Logical Processor"
-msgstr "LDAP server IP address."
+msgstr "%s Logical Processor"
 
 #: admin/SystemStatsWidgets.py:140
 #, python-format
 msgid "%s Cores"
-msgstr ""
+msgstr "%s Cores"
 
 #: admin/SystemStatsWidgets.py:142
 #, python-format
 msgid "%s Core"
-msgstr ""
+msgstr "%s Core"
 
 #: admin/SystemStatsWidgets.py:147
 msgid "Unknown Processor"
-msgstr ""
+msgstr "Unknown Processor"
 
 #: admin/SystemStatsWidgets.py:176
-#, fuzzy
 msgid "Unknown RAM"
-msgstr "Unknown"
+msgstr "Unknown RAM"
 
 #: admin/Wizard.py:43
 msgid "Check the cookbook for more details."
-msgstr ""
+msgstr "Check the cookbook for more details."
 
 #: admin/Wizard.py:208
 msgid "Use the same logging configuration as one of the other virtual servers."
 msgstr ""
+"Use the same logging configuration as one of the other virtual servers."
 
 #: admin/Wizard.py:212
-#, fuzzy
 msgid "Do not configure"
-msgstr "Do not restart"
+msgstr "Do not configure"
 
 #: admin/consts.py:26
 msgid "English"
@@ -3062,51 +2931,48 @@ msgid "Spanish"
 msgstr "Spanish"
 
 #: admin/consts.py:28
-#, fuzzy
 msgid "German"
-msgstr "General"
+msgstr "German"
 
 #: admin/consts.py:29
 msgid "French"
-msgstr ""
+msgstr "French"
 
 #: admin/consts.py:30
 msgid "Italian"
-msgstr ""
+msgstr "Italian"
 
 #: admin/consts.py:31
 msgid "Japanese"
-msgstr ""
+msgstr "Japanese"
 
 #: admin/consts.py:32
-#, fuzzy
 msgid "Dutch"
-msgstr "Auth"
+msgstr "Dutch"
 
 #: admin/consts.py:33
-#, fuzzy
 msgid "Polish"
-msgstr "English"
+msgstr "Polish"
 
 #: admin/consts.py:34
 msgid "Swedish"
-msgstr ""
+msgstr "Swedish"
 
 #: admin/consts.py:35
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brazilian Portuguese"
 
 #: admin/consts.py:36
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Chinese Simplified"
 
 #: admin/consts.py:37
 msgid "Catalan"
-msgstr ""
+msgstr "Catalan"
 
 #: admin/consts.py:38
 msgid "Galician"
-msgstr ""
+msgstr "Galician"
 
 #: admin/consts.py:43
 msgid "Product only"
@@ -3138,9 +3004,8 @@ msgid "List & Send"
 msgstr "List & Send"
 
 #: admin/consts.py:54
-#, fuzzy
 msgid "Only Listing"
-msgstr "Only listing"
+msgstr "Only Listing"
 
 #: admin/consts.py:55 admin/plugins/error_redir.py:104
 #: admin/wizards/hotlinking.py:151
@@ -3156,19 +3021,16 @@ msgid "SCGI"
 msgstr "SCGI"
 
 #: admin/consts.py:58 admin/wizards/List.py:80 admin/wizards/uwsgi.py:55
-#, fuzzy
 msgid "uWSGI"
-msgstr "SCGI"
+msgstr "uWSGI"
 
 #: admin/consts.py:59
-#, fuzzy
 msgid "HTTP Reverse Proxy"
-msgstr "HTTP reverse proxy"
+msgstr "HTTP Reverse Proxy"
 
 #: admin/consts.py:60
-#, fuzzy
 msgid "Upload Reporting"
-msgstr "URL Rewriting"
+msgstr "Upload Reporting"
 
 #: admin/consts.py:61 admin/plugins/streaming.py:31
 #: admin/plugins/streaming.py:63
@@ -3192,9 +3054,8 @@ msgid "Server Info"
 msgstr "Server Info"
 
 #: admin/consts.py:66
-#, fuzzy
 msgid "MySQL Bridge"
-msgstr "MySQL bridge"
+msgstr "MySQL Bridge"
 
 #: admin/consts.py:67 admin/plugins/custom_error.py:46
 msgid "HTTP Error"
@@ -3209,9 +3070,8 @@ msgid "1x1 Transparent GIF"
 msgstr "1x1 Transparent GIF"
 
 #: admin/consts.py:70 admin/plugins/drop.py:29
-#, fuzzy
 msgid "Drop Connection"
-msgstr "LDAP connection"
+msgstr "Drop Connection"
 
 #: admin/consts.py:74
 msgid "Default errors"
@@ -3298,9 +3158,8 @@ msgid "IP Hash"
 msgstr "IP Hash"
 
 #: admin/consts.py:114
-#, fuzzy
 msgid "Failover"
-msgstr "Filter"
+msgstr "Failover"
 
 #: admin/consts.py:118
 msgid "Local interpreter"
@@ -3358,46 +3217,41 @@ msgid "HTTP Method"
 msgstr "HTTP Method"
 
 #: admin/consts.py:193 admin/plugins/bind.py:76 admin/plugins/bind.py:129
-#, fuzzy
 msgid "Incoming IP/Port"
-msgstr "Incoming Port"
+msgstr "Incoming IP/Port"
 
 #: admin/consts.py:194
 msgid "SSL / TLS"
-msgstr ""
+msgstr "SSL / TLS"
 
 #: admin/consts.py:195 admin/plugins/fullpath.py:66
 #: admin/plugins/fullpath.py:101
-#, fuzzy
 msgid "Full Path"
-msgstr "Path"
+msgstr "Full Path"
 
 #: admin/consts.py:196 admin/plugins/from.py:71
-#, fuzzy
 msgid "Connected from"
-msgstr "Connection"
+msgstr "Connected from"
 
 #: admin/consts.py:197
 msgid "URL Argument"
-msgstr ""
+msgstr "URL Argument"
 
 #: admin/consts.py:198
 msgid "GeoIP"
 msgstr "GeoIP"
 
 #: admin/consts.py:202
-#, fuzzy
 msgid "Match Nickname"
-msgstr "Nickname"
+msgstr "Match Nickname"
 
 #: admin/consts.py:203
 msgid "Wildcards"
 msgstr "Wildcards"
 
 #: admin/consts.py:205
-#, fuzzy
 msgid "Server IP"
-msgstr "Server ID"
+msgstr "Server IP"
 
 #: admin/consts.py:209 admin/consts.py:255
 msgid "Not set"
@@ -3437,7 +3291,7 @@ msgstr "Skip"
 
 #: admin/consts.py:227
 msgid "Tolerate"
-msgstr ""
+msgstr "Tolerate"
 
 #: admin/consts.py:229
 msgid "Require"
@@ -3445,117 +3299,111 @@ msgstr "Require"
 
 #: admin/consts.py:234
 msgid "RRDtool graphs"
-msgstr ""
+msgstr "RRDtool graphs"
 
 #: admin/consts.py:238
-#, fuzzy
 msgid "Local time"
-msgstr "New host name"
+msgstr "Local time"
 
 #: admin/consts.py:239
 msgid "UTC: Coordinated Universal Time"
-msgstr ""
+msgstr "UTC: Coordinated Universal Time"
 
 #: admin/consts.py:243
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: admin/consts.py:244
-#, fuzzy
 msgid "Python"
-msgstr "Path"
+msgstr "Python"
 
 #: admin/consts.py:245 admin/wizards/List.py:91
 msgid "PHP"
-msgstr ""
+msgstr "PHP"
 
 #: admin/consts.py:246
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 #: admin/consts.py:251
 msgid "POST tracker"
-msgstr ""
+msgstr "POST tracker"
 
 #: admin/consts.py:256
 msgid "Public"
-msgstr ""
+msgstr "Public"
 
 #: admin/consts.py:257
 msgid "Private"
-msgstr ""
+msgstr "Private"
 
 #: admin/consts.py:258
 msgid "No Cache"
-msgstr ""
+msgstr "No Cache"
 
 #: admin/consts.py:263
 msgid "0 - No compression"
-msgstr ""
+msgstr "0 - No compression"
 
 #: admin/consts.py:264
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: admin/consts.py:265
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: admin/consts.py:266
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: admin/consts.py:267
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: admin/consts.py:268
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: admin/consts.py:269
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: admin/consts.py:270
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: admin/consts.py:271
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: admin/consts.py:272
 msgid "9 - Max compression"
-msgstr ""
+msgstr "9 - Max compression"
 
 #: admin/plugins/authlist.py:32
 msgid "At least one user/password pair should be configured."
-msgstr ""
+msgstr "At least one user/password pair should be configured."
 
 #: admin/plugins/authlist.py:60
-#, fuzzy
 msgid "Authentication list"
-msgstr "Authentication"
+msgstr "Authentication list"
 
 #: admin/plugins/authlist.py:63 admin/plugins/authlist.py:97
 msgid "Password"
 msgstr "Password"
 
 #: admin/plugins/authlist.py:105
-#, fuzzy
 msgid "Add New Pair"
-msgstr "Add new pair"
+msgstr "Add New Pair"
 
 #: admin/plugins/bind.py:64
-#, fuzzy
 msgid "IP (Port):"
-msgstr "Port"
+msgstr "IP (Port):"
 
 #: admin/plugins/bind.py:65
-#, fuzzy
 msgid "Port:"
-msgstr "Port"
+msgstr "Port:"
 
 #: admin/plugins/bind.py:98 admin/util.py:94
 msgid "No"
@@ -3570,14 +3418,12 @@ msgid "Selected Ports"
 msgstr "Selected Ports"
 
 #: admin/plugins/bind.py:131
-#, fuzzy
 msgid "Assign new IP/Port"
-msgstr "Assign new port"
+msgstr "Assign new IP/Port"
 
 #: admin/plugins/bind.py:159
-#, fuzzy
 msgid "Ports"
-msgstr "Port"
+msgstr "Ports"
 
 #: admin/plugins/common.py:32
 msgid "Allow extra tailing paths"
@@ -3608,9 +3454,8 @@ msgid "HTTP Custom Error"
 msgstr "HTTP Custom Error"
 
 #: admin/plugins/custom_error.py:51
-#, fuzzy
 msgid "Custom Error"
-msgstr "HTTP Custom Error"
+msgstr "Custom Error"
 
 #: admin/plugins/dbslayer.py:34
 msgid "MySQL balancing"
@@ -3633,9 +3478,8 @@ msgid "Password for the user accessing the database."
 msgstr "Password for the user accessing the database."
 
 #: admin/plugins/dbslayer.py:40
-#, fuzzy
 msgid "Database to connect to."
-msgstr "Server port to connect to."
+msgstr "Database to connect to."
 
 #: admin/plugins/dbslayer.py:52 admin/plugins/mysql.py:79
 msgid "DB User"
@@ -3660,19 +3504,20 @@ msgid "Balancer"
 msgstr "Balancer"
 
 #: admin/plugins/dbslayer.py:67
-#, fuzzy
 msgid "Data Base Balancing"
-msgstr "Data base balancing"
+msgstr "Data Base Balancing"
 
 #: admin/plugins/deflate.py:31 admin/plugins/gzip.py:31
 msgid ""
 "Compression Level from 0 to 9, where 0 is no compression, 1 best speed, and "
 "9 best compression."
 msgstr ""
+"Compression Level from 0 to 9, where 0 is no compression, 1 best speed, and "
+"9 best compression."
 
 #: admin/plugins/deflate.py:38 admin/plugins/gzip.py:38
 msgid "Compression Level"
-msgstr ""
+msgstr "Compression Level"
 
 #: admin/plugins/directory.py:27
 msgid ""
@@ -3711,7 +3556,6 @@ msgid "List of files that should not be listed."
 msgstr "List of files that should not be listed."
 
 #: admin/plugins/dirlist.py:39
-#, fuzzy
 msgid "Only listing"
 msgstr "Only listing"
 
@@ -3739,23 +3583,20 @@ msgid "Show Group"
 msgstr "Show Group"
 
 #: admin/plugins/dirlist.py:53
-#, fuzzy
 msgid "Show Backup files"
-msgstr "Hidden files"
+msgstr "Show Backup files"
 
 #: admin/plugins/dirlist.py:54
-#, fuzzy
 msgid "Show Hidden files"
-msgstr "Hidden files"
+msgstr "Show Hidden files"
 
 #: admin/plugins/dirlist.py:55
 msgid "Allow symbolic links"
 msgstr "Allow symbolic links"
 
 #: admin/plugins/dirlist.py:56
-#, fuzzy
 msgid "Redirect symbolic links"
-msgstr "Allow symbolic links"
+msgstr "Redirect symbolic links"
 
 #: admin/plugins/dirlist.py:60
 msgid "Listing"
@@ -3786,32 +3627,28 @@ msgid "1x1 Empty GIF"
 msgstr "1x1 Empty GIF"
 
 #: admin/plugins/error_redir.py:42
-#, fuzzy
 msgid "HTTP Error to match."
-msgstr "HTTP Error"
+msgstr "HTTP Error to match."
 
 #: admin/plugins/error_redir.py:43
 msgid "Target to access whenever the HTTP Error occurs."
-msgstr ""
+msgstr "Target to access whenever the HTTP Error occurs."
 
 #: admin/plugins/error_redir.py:44
-#, fuzzy
 msgid "Whether the redirection should be Internal or External."
-msgstr "Defines whether the redirection will be seen by the client."
+msgstr "Whether the redirection should be Internal or External."
 
 #: admin/plugins/error_redir.py:99
-#, fuzzy
 msgid "Default Error"
-msgstr "Default errors"
+msgstr "Default Error"
 
 #: admin/plugins/error_redir.py:103
 msgid "Error"
 msgstr "Error"
 
 #: admin/plugins/error_redir.py:109
-#, fuzzy
 msgid "Add New Custom Error"
-msgstr "HTTP Custom Error"
+msgstr "Add New Custom Error"
 
 #: admin/plugins/evhost.py:29
 msgid ""
@@ -3834,9 +3671,8 @@ msgid "Dynamic Document Root"
 msgstr "Dynamic Document Root"
 
 #: admin/plugins/evhost.py:42 admin/plugins/extensions.py:62
-#, fuzzy
 msgid "Check"
-msgstr "Check file"
+msgstr "Check"
 
 #: admin/plugins/evhost.py:42
 msgid "Check Document Root"
@@ -3853,14 +3689,15 @@ msgstr "Match the request if any file exists."
 #: admin/plugins/exists.py:35
 msgid "Only match regular files. If unset directories will be matched as well."
 msgstr ""
+"Only match regular files. If unset directories will be matched as well."
 
 #: admin/plugins/exists.py:36
 msgid "If a directory is requested, check the index files inside it."
-msgstr ""
+msgstr "If a directory is requested, check the index files inside it."
 
 #: admin/plugins/exists.py:38
 msgid "Match a specific list of files"
-msgstr ""
+msgstr "Match a specific list of files"
 
 #: admin/plugins/exists.py:39 admin/plugins/exists.py:72
 #: admin/plugins/exists.py:113
@@ -3868,54 +3705,50 @@ msgid "Match any file"
 msgstr "Match any file"
 
 #: admin/plugins/exists.py:78 admin/plugins/exists.py:116
-#, fuzzy
 msgid "Only match files"
-msgstr "Match any file"
+msgstr "Only match files"
 
 #: admin/plugins/exists.py:79 admin/plugins/exists.py:117
 msgid "If dir, check index files"
-msgstr ""
+msgstr "If dir, check index files"
 
 #: admin/plugins/exists.py:136
-#, fuzzy
 msgid "File exists"
-msgstr "File Exists"
+msgstr "File exists"
 
 #: admin/plugins/exists.py:140
-#, fuzzy, python-format
+#, python-format
 msgid "File %(fname)s exists"
-msgstr "File Exists"
+msgstr "File %(fname)s exists"
 
 #: admin/plugins/exists.py:142
 msgid "File exists (never matched)"
-msgstr ""
+msgstr "File exists (never matched)"
 
 #: admin/plugins/exists.py:144
-#, fuzzy, python-format
+#, python-format
 msgid "File %(most)s or %(last)s exists"
-msgstr "File Exists"
+msgstr "File %(most)s or %(last)s exists"
 
 #: admin/plugins/extensions.py:31
-#, fuzzy
 msgid ""
 "Comma-separated list of File Extension to which the configuration will be "
 "applied."
 msgstr ""
-"File extension list to which content the configuration will be applied."
+"Comma-separated list of File Extension to which the configuration will be "
+"applied."
 
 #: admin/plugins/extensions.py:32
 msgid "Ensure that the matched extension if part of a local file name."
-msgstr ""
+msgstr "Ensure that the matched extension if part of a local file name."
 
 #: admin/plugins/extensions.py:62
-#, fuzzy
 msgid "Check local file"
-msgstr "Check file"
+msgstr "Check local file"
 
 #: admin/plugins/fcgi.py:51
-#, fuzzy
 msgid "FastCGI Specific"
-msgstr "FastCGI specific"
+msgstr "FastCGI Specific"
 
 #: admin/plugins/file.py:31
 msgid "Enables an internal I/O cache that improves performance."
@@ -3927,48 +3760,43 @@ msgstr "File Sending"
 
 #: admin/plugins/from.py:30
 msgid "IP or Subnet to check the connection origin against."
-msgstr ""
+msgstr "IP or Subnet to check the connection origin against."
 
 #: admin/plugins/from.py:96
 msgid "IPs and Subnets"
-msgstr ""
+msgstr "IPs and Subnets"
 
 #: admin/plugins/from.py:103
 msgid "New IP or Subnet"
-msgstr ""
+msgstr "New IP or Subnet"
 
 #: admin/plugins/from.py:107
-#, fuzzy
 msgid "Add another entry"
-msgstr "Add new pair"
+msgstr "Add another entry"
 
 #: admin/plugins/from.py:117
-#, fuzzy
 msgid "From"
-msgstr "Format"
+msgstr "From"
 
 #: admin/plugins/fullpath.py:30
-#, fuzzy
 msgid ""
 "Full path request to which content the configuration will be applied. (Eg: /"
 "favicon.ico)"
 msgstr ""
-"Public Web Directory to which content the configuration will be applied."
+"Full path request to which content the configuration will be applied. (Eg: /"
+"favicon.ico)"
 
 #: admin/plugins/fullpath.py:94
-#, fuzzy
 msgid "Full Web Paths"
-msgstr "Path"
+msgstr "Full Web Paths"
 
 #: admin/plugins/fullpath.py:106
-#, fuzzy
 msgid "Add another path"
-msgstr "Add new pair"
+msgstr "Add another path"
 
 #: admin/plugins/fullpath.py:117 admin/plugins/fullpath.py:124
-#, fuzzy
 msgid "Path"
-msgstr "Paths"
+msgstr "Path"
 
 #: admin/plugins/geoip.py:32
 msgid "Add the initial country. It's possible to add more later on."
@@ -3989,12 +3817,11 @@ msgstr ""
 
 #: admin/plugins/geoip.py:78
 msgid "Select all"
-msgstr ""
+msgstr "Select all"
 
 #: admin/plugins/geoip.py:79
-#, fuzzy
 msgid "Select none"
-msgstr "Selected Ports"
+msgstr "Select none"
 
 #: admin/plugins/header.py:30
 msgid "Header against which the regular expression will be evaluated."
@@ -4006,37 +3833,36 @@ msgstr "Regular expression."
 
 #: admin/plugins/header.py:32
 msgid "It defines how this match has to be evaluated."
-msgstr ""
+msgstr "It defines how this match has to be evaluated."
 
 #: admin/plugins/header.py:33
 msgid ""
 "Match against the complete header block, rather than against a concrete "
 "header entry."
 msgstr ""
+"Match against the complete header block, rather than against a concrete "
+"header entry."
 
 #: admin/plugins/header.py:65
-#, fuzzy
 msgid "Matches a Regular Expression"
-msgstr "New Regular Expression"
+msgstr "Matches a Regular Expression"
 
 #: admin/plugins/header.py:66
 msgid "Is Provided"
-msgstr ""
+msgstr "Is Provided"
 
 #: admin/plugins/header.py:104
-#, fuzzy
 msgid "Full header"
-msgstr "Filename"
+msgstr "Full header"
 
 #: admin/plugins/header.py:107
-#, fuzzy
 msgid "Complete Header"
-msgstr "Hide Header"
+msgstr "Complete Header"
 
 #: admin/plugins/header.py:154
 #, python-format
 msgid "Header %(header)s is provided"
-msgstr ""
+msgstr "Header %(header)s is provided"
 
 #: admin/plugins/htdigest.py:32
 msgid "Full path to the Htdigest formated password file."
@@ -4048,18 +3874,16 @@ msgid "Password File"
 msgstr "Password File"
 
 #: admin/plugins/htdigest.py:46
-#, fuzzy
 msgid "Htdigest Password File"
-msgstr "Password File"
+msgstr "Htdigest Password File"
 
 #: admin/plugins/htpasswd.py:32
 msgid "Full path to the Htpasswd formated password file."
 msgstr "Full path to the Htpasswd formated password file."
 
 #: admin/plugins/htpasswd.py:45
-#, fuzzy
 msgid "Htpasswd Password File"
-msgstr "Password File"
+msgstr "Htpasswd Password File"
 
 #: admin/plugins/ldap.py:30
 msgid "LDAP"
@@ -4070,9 +3894,8 @@ msgid "LDAP server IP address."
 msgstr "LDAP server IP address."
 
 #: admin/plugins/ldap.py:33
-#, fuzzy
 msgid "LDAP server port to connect to. Default: 389"
-msgstr "LDAP server port to connect to. Defaults to 389"
+msgstr "LDAP server port to connect to. Default: 389"
 
 #: admin/plugins/ldap.py:34
 msgid "Domain sent during the LDAP authentication operation. Optional."
@@ -4099,9 +3922,8 @@ msgid "CA File for the TLS connections."
 msgstr "CA File for the TLS connections."
 
 #: admin/plugins/ldap.py:47
-#, fuzzy
 msgid "Server"
-msgstr "Server ID"
+msgstr "Server"
 
 #: admin/plugins/ldap.py:49
 msgid "Bind Domain"
@@ -4128,9 +3950,8 @@ msgid "CA File"
 msgstr "CA File"
 
 #: admin/plugins/ldap.py:59
-#, fuzzy
 msgid "LDAP Connection"
-msgstr "LDAP connection"
+msgstr "LDAP Connection"
 
 #: admin/plugins/method.py:67
 msgid "The HTTP method that should match this rule."
@@ -4161,29 +3982,32 @@ msgid "Database name containing the user/password pair list."
 msgstr "Database name containing the user/password pair list."
 
 #: admin/plugins/mysql.py:41
-#, fuzzy
 msgid ""
 "SQL command to execute. ${user} is replaced with the user name, and "
 "${passwd} is replaced with the user supplied password."
-msgstr "SQL command to execute. ${user} is replaced with the user name."
+msgstr ""
+"SQL command to execute. ${user} is replaced with the user name, and "
+"${passwd} is replaced with the user supplied password."
 
 #: admin/plugins/mysql.py:42
 msgid ""
 "Choose an encryption type for the password. Only suitable for the \"Basic\" "
 "authentication mechanism."
 msgstr ""
+"Choose an encryption type for the password. Only suitable for the \"Basic\" "
+"authentication mechanism."
 
 #: admin/plugins/mysql.py:46
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
 #: admin/plugins/mysql.py:47
 msgid "SHA1"
-msgstr ""
+msgstr "SHA1"
 
 #: admin/plugins/mysql.py:48
 msgid "SHA512"
-msgstr ""
+msgstr "SHA512"
 
 #: admin/plugins/mysql.py:78
 msgid "Unix Socket"
@@ -4198,14 +4022,12 @@ msgid "SQL Query"
 msgstr "SQL Query"
 
 #: admin/plugins/mysql.py:83
-#, fuzzy
 msgid "Password Hash"
-msgstr "Password"
+msgstr "Password Hash"
 
 #: admin/plugins/mysql.py:88
-#, fuzzy
 msgid "MySQL Connection"
-msgstr "MySQL connection"
+msgstr "MySQL Connection"
 
 #: admin/plugins/plain.py:30
 msgid "Plain text"
@@ -4216,43 +4038,41 @@ msgid "Full path to the plain text password file."
 msgstr "Full path to the plain text password file."
 
 #: admin/plugins/plain.py:45
-#, fuzzy
 msgid "Plain Password File"
-msgstr "Plain password file"
+msgstr "Plain Password File"
 
 #: admin/plugins/post_report.py:32 admin/plugins/post_track.py:25
-#, fuzzy
 msgid "POST Report"
-msgstr "Report"
+msgstr "POST Report"
 
 #: admin/plugins/post_report.py:34
-#, fuzzy
 msgid ""
 "Target language for which the information will be encoded. (Default: JSON)"
-msgstr "Language from which the information will be consumed."
+msgstr ""
+"Target language for which the information will be encoded. (Default: JSON)"
 
 #: admin/plugins/post_report.py:35
 msgid ""
 "The <a href=\"/general\">Upload tracking mechanism</a> must be enabled for "
 "this handler to work."
 msgstr ""
+"The <a href=\"/general\">Upload tracking mechanism</a> must be enabled for "
+"this handler to work."
 
 #: admin/plugins/post_report.py:49
-#, fuzzy
 msgid "Target language"
-msgstr "Available languages"
+msgstr "Target language"
 
 #: admin/plugins/proxy.py:35
 msgid "Reverse Proxy"
 msgstr "Reverse Proxy"
 
 #: admin/plugins/proxy.py:37
-#, fuzzy
 msgid ""
 "Maximum number of connections per server that the proxy can try to keep "
 "opened."
 msgstr ""
-"Maximum number of connection per server that the proxy can try to keep "
+"Maximum number of connections per server that the proxy can try to keep "
 "opened."
 
 #: admin/plugins/proxy.py:38
@@ -4262,26 +4082,24 @@ msgstr ""
 "Allow the server to use Keep-alive connections with the back-end servers."
 
 #: admin/plugins/proxy.py:39
-#, fuzzy
 msgid ""
 "Preserve the original \"Host:\" header sent by the client. (Default: No)"
 msgstr ""
-"Preserve the original \"Host:\" header sent by the client. (Default No)"
+"Preserve the original \"Host:\" header sent by the client. (Default: No)"
 
 #: admin/plugins/proxy.py:40
-#, fuzzy
 msgid ""
 "Preserve the \"Server:\" header sent by the back-end server. (Default: No)"
 msgstr ""
-"Preserve the original \"Host:\" header sent by the client. (Default No)"
+"Preserve the \"Server:\" header sent by the back-end server. (Default: No)"
 
 #: admin/plugins/proxy.py:41
-#, fuzzy
 msgid ""
 "Use the VServer error handler, whenever an error response is received from a "
 "back-end server. (Default: No)"
 msgstr ""
-"Preserve the original \"Host:\" header sent by the client. (Default No)"
+"Use the VServer error handler, whenever an error response is received from a "
+"back-end server. (Default: No)"
 
 #: admin/plugins/proxy.py:94 admin/plugins/proxy.py:124
 #: admin/plugins/proxy.py:144 admin/plugins/redir.py:76
@@ -4294,9 +4112,8 @@ msgid "Add RegEx"
 msgstr "Add RegEx"
 
 #: admin/plugins/proxy.py:173
-#, fuzzy
 msgid "Add Header Entry"
-msgstr "Add new pair"
+msgstr "Add Header Entry"
 
 #: admin/plugins/proxy.py:220
 msgid "Hide Header"
@@ -4307,29 +4124,24 @@ msgid "Allow Keepalive"
 msgstr "Allow Keepalive"
 
 #: admin/plugins/proxy.py:241 admin/plugins/proxy.py:242
-#, fuzzy
 msgid "Preserve"
-msgstr "LDAP server"
+msgstr "Preserve"
 
 #: admin/plugins/proxy.py:241
-#, fuzzy
 msgid "Preserve Host Header"
-msgstr "Preserve Host header"
+msgstr "Preserve Host Header"
 
 #: admin/plugins/proxy.py:242
-#, fuzzy
 msgid "Preserve Server Header"
-msgstr "Preserve Host header"
+msgstr "Preserve Server Header"
 
 #: admin/plugins/proxy.py:243
-#, fuzzy
 msgid "Use VServer error handler"
-msgstr "Preserve Host header"
+msgstr "Use VServer error handler"
 
 #: admin/plugins/proxy.py:243
-#, fuzzy
 msgid "Use it"
-msgstr "Use TLS"
+msgstr "Use it"
 
 #: admin/plugins/proxy.py:248
 msgid "Reverse Proxy Settings"
@@ -4340,7 +4152,6 @@ msgid "Request"
 msgstr "Request"
 
 #: admin/plugins/proxy.py:254 admin/plugins/proxy.py:266
-#, fuzzy
 msgid "URL Rewriting"
 msgstr "URL Rewriting"
 
@@ -4353,9 +4164,8 @@ msgid "Hide Headers"
 msgstr "Hide Headers"
 
 #: admin/plugins/proxy.py:264
-#, fuzzy
 msgid "Reply"
-msgstr "Realm"
+msgstr "Reply"
 
 #: admin/plugins/proxy.py:280
 msgid "Back-end Servers"
@@ -4379,28 +4189,24 @@ msgstr ""
 "Target address. It can use Regular Expression substitution sub-strings."
 
 #: admin/plugins/redir.py:36
-#, fuzzy
 msgid "At least one Regular Expression should be defined."
-msgstr "At least one Regular Expression string must be defined."
+msgstr "At least one Regular Expression should be defined."
 
 #: admin/plugins/redir.py:38
 msgid "Redirections"
 msgstr "Redirections"
 
 #: admin/plugins/redir.py:71
-#, fuzzy
 msgid "Rule list"
 msgstr "Rule list"
 
 #: admin/plugins/redir.py:118
-#, fuzzy
 msgid "Add New Regular Expression"
-msgstr "New Regular Expression"
+msgstr "Add New Regular Expression"
 
 #: admin/plugins/redir.py:123
-#, fuzzy
 msgid "Add New RegEx"
-msgstr "Add new"
+msgstr "Add New RegEx"
 
 #: admin/plugins/rehost.py:29
 msgid ""
@@ -4413,14 +4219,12 @@ msgid "At least one Regular Expression string must be defined."
 msgstr "At least one Regular Expression string must be defined."
 
 #: admin/plugins/rehost.py:71
-#, fuzzy
 msgid "Add New Entry"
-msgstr "Add new pair"
+msgstr "Add New Entry"
 
 #: admin/plugins/rehost.py:80
-#, fuzzy
 msgid "Add new entry…"
-msgstr "Add new pair"
+msgstr "Add new entry…"
 
 #: admin/plugins/request.py:27
 msgid "Regular expression against which the request will be executed."
@@ -4428,27 +4232,25 @@ msgstr "Regular expression against which the request will be executed."
 
 #: admin/plugins/rrd.py:30
 msgid "Directory where the RRDtool databases should be written."
-msgstr ""
+msgstr "Directory where the RRDtool databases should be written."
 
 #: admin/plugins/rrd.py:31
 msgid ""
 "Path to the rrdtool binary. By default the server will look in the PATH."
 msgstr ""
+"Path to the rrdtool binary. By default the server will look in the PATH."
 
 #: admin/plugins/rrd.py:40
-#, fuzzy
 msgid "Round Robin Database directory"
-msgstr "Path is not a directory"
+msgstr "Round Robin Database directory"
 
 #: admin/plugins/rrd.py:41
-#, fuzzy
 msgid "Custom rrdtool binary"
-msgstr "Custom redirections"
+msgstr "Custom rrdtool binary"
 
 #: admin/plugins/scgi.py:51
-#, fuzzy
 msgid "SCGI Specific"
-msgstr "SCGI specific"
+msgstr "SCGI Specific"
 
 #: admin/plugins/secdownload.py:31
 msgid "Hidden Download"
@@ -4463,14 +4265,12 @@ msgid "How long the download will last accessible - in seconds. Default: 60."
 msgstr "How long the download will last accessible - in seconds. Default: 60."
 
 #: admin/plugins/secdownload.py:43
-#, fuzzy
 msgid "Secret"
 msgstr "Secret"
 
 #: admin/plugins/secdownload.py:50
-#, fuzzy
 msgid "Covering Parameters"
-msgstr "Covering parameters"
+msgstr "Covering Parameters"
 
 #: admin/plugins/server_info.py:36
 msgid "Only version information"
@@ -4489,9 +4289,8 @@ msgid "Show Information"
 msgstr "Show Information"
 
 #: admin/plugins/server_info.py:55
-#, fuzzy
 msgid "Privacy Settings"
-msgstr "Privacy settings"
+msgstr "Privacy Settings"
 
 #: admin/plugins/streaming.py:33
 msgid "Figure the bit rate of the media file, and limit the bandwidth to it."
@@ -4524,70 +4323,64 @@ msgid ""
 "IP or Subnet of the NIC that accepted the request. Example: ::1, or "
 "10.0.0.0/8"
 msgstr ""
+"IP or Subnet of the NIC that accepted the request. Example: ::1, or "
+"10.0.0.0/8"
 
 #: admin/plugins/target_ip.py:32
-#, fuzzy
 msgid "At least one IP or Subnet entry must be defined."
-msgstr "At least one wildcard string must be defined."
+msgstr "At least one IP or Subnet entry must be defined."
 
 #: admin/plugins/target_ip.py:61
 msgid "IP or Subnet"
-msgstr ""
+msgstr "IP or Subnet"
 
 #: admin/plugins/target_ip.py:76
 msgid "New IP/Subnet"
-msgstr ""
+msgstr "New IP/Subnet"
 
 #: admin/plugins/target_ip.py:79 admin/plugins/wildcard.py:70
-#, fuzzy
 msgid "Add new entry"
-msgstr "Add new pair"
+msgstr "Add new entry"
 
 #: admin/plugins/target_ip.py:88
-#, fuzzy
 msgid "Add new IP/Subnet…"
-msgstr "Add new pair"
+msgstr "Add new IP/Subnet…"
 
 #: admin/plugins/target_ip.py:100
 msgid "Accepted Server IP Addresses and Subnets"
-msgstr ""
+msgstr "Accepted Server IP Addresses and Subnets"
 
 #: admin/plugins/tls.py:56
 msgid "Is SSL/TLS"
-msgstr ""
+msgstr "Is SSL/TLS"
 
 #: admin/plugins/url_arg.py:31
 msgid "Argument name"
-msgstr ""
+msgstr "Argument name"
 
 #: admin/plugins/url_arg.py:32
-#, fuzzy
 msgid "Regular Expression for the match"
-msgstr "Regular Expression"
+msgstr "Regular Expression for the match"
 
 #: admin/plugins/url_arg.py:34
-#, fuzzy
 msgid "Match a specific argument"
-msgstr "Match any file"
+msgstr "Match a specific argument"
 
 #: admin/plugins/url_arg.py:35
-#, fuzzy
 msgid "Match any argument"
-msgstr "Match any file"
+msgstr "Match any argument"
 
 #: admin/plugins/url_arg.py:74 admin/plugins/url_arg.py:92
-#, fuzzy
 msgid "Match type"
-msgstr "Match any file"
+msgstr "Match type"
 
 #: admin/plugins/url_arg.py:75 admin/plugins/url_arg.py:94
 msgid "Argument"
-msgstr ""
+msgstr "Argument"
 
 #: admin/plugins/uwsgi.py:51
-#, fuzzy
 msgid "UWSGI Specific"
-msgstr "SCGI specific"
+msgstr "UWSGI Specific"
 
 #: admin/plugins/wildcard.py:29
 msgid ""
@@ -4611,22 +4404,21 @@ msgstr "New host name"
 
 #: admin/plugins/wildcard.py:79
 msgid "Add new wildcard…"
-msgstr ""
+msgstr "Add new wildcard…"
 
 #: admin/plugins/wildcard.py:91
-#, fuzzy
 msgid "Accepted Domains"
-msgstr "Base Domain"
+msgstr "Accepted Domains"
 
 #: admin/server.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
-msgstr "Server %s running.. PID=%d Port=%d"
+msgstr "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
 
 #: admin/server.py:70
-#, fuzzy, python-format
+#, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
-msgstr "Server %s running.. PID=%d Port=%d"
+msgstr "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 
 #: admin/server.py:144
 msgid "Incorrect parameters: PORT CONFIG_FILE"
@@ -4634,7 +4426,7 @@ msgstr "Incorrect parameters: PORT CONFIG_FILE"
 
 #: admin/util.py:91
 msgid "On"
-msgstr ""
+msgstr "On"
 
 #: admin/validations.py:20
 msgid "Malformed number"
@@ -4653,22 +4445,20 @@ msgid "Port must be a number"
 msgstr "Port must be a number"
 
 #: admin/validations.py:45
-#, fuzzy
 msgid "Out of range (1 to 65535)"
-msgstr "Out of the range (1 to 65535)"
+msgstr "Out of range (1 to 65535)"
 
 #: admin/validations.py:53
 msgid "Port already in use"
-msgstr ""
+msgstr "Port already in use"
 
 #: admin/validations.py:64 admin/validations.py:78
 msgid "Malformed path"
 msgstr "Malformed path"
 
 #: admin/validations.py:109
-#, fuzzy
 msgid "It is not executable"
-msgstr "Path is not a regular file"
+msgstr "It is not executable"
 
 #: admin/validations.py:115 admin/validations.py:190
 msgid "Path is not a regular file"
@@ -4703,9 +4493,8 @@ msgid "Path is not a directory"
 msgstr "Path is not a directory"
 
 #: admin/validations.py:207
-#, fuzzy
 msgid "Path is a directory"
-msgstr "Path is not a directory"
+msgstr "Path is a directory"
 
 #: admin/validations.py:216
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
@@ -4744,257 +4533,251 @@ msgid "Malformed time"
 msgstr "Malformed time"
 
 #: admin/validations.py:363
-#, fuzzy
 msgid "Virtual Server nick name is already being used."
-msgstr "Virtual Server nickname"
+msgstr "Virtual Server nick name is already being used."
 
 #: admin/validations.py:370 admin/validations.py:380 admin/validations.py:390
 #: admin/validations.py:407
 msgid "Already in use"
-msgstr ""
+msgstr "Already in use"
 
 #: admin/validations.py:434
 msgid "Please insert a valid email"
-msgstr ""
+msgstr "Please insert a valid email"
 
 #: admin/validations.py:440
 msgid "Cannot contain the quote (') character"
-msgstr ""
+msgstr "Cannot contain the quote (') character"
 
 #: admin/validations.py:445
 msgid "Cannot contain the double quote (\") character"
-msgstr ""
+msgstr "Cannot contain the double quote (\") character"
 
 #: admin/validations.py:453
 msgid ""
 "The private key contains a passphrase which has to be entered manually after "
 "launching the webserver."
 msgstr ""
+"The private key contains a passphrase which has to be entered manually after "
+"launching the webserver."
 
 #: admin/wizards/List.py:30
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 #: admin/wizards/List.py:31
 msgid "Content Management Systems"
-msgstr ""
+msgstr "Content Management Systems"
 
 #: admin/wizards/List.py:34
-#, fuzzy
 msgid "Concrete 5"
-msgstr "Create"
+msgstr "Concrete 5"
 
 #: admin/wizards/List.py:35
 msgid "The CMS made for Marketing, but built for Geeks."
-msgstr ""
+msgstr "The CMS made for Marketing, but built for Geeks."
 
 #: admin/wizards/List.py:41
-#, fuzzy
 msgid "Application Servers"
-msgstr "Application Server"
+msgstr "Application Servers"
 
 #: admin/wizards/List.py:42
-#, fuzzy
 msgid "General Purpose Application Servers"
-msgstr "Application Server"
+msgstr "General Purpose Application Servers"
 
 #: admin/wizards/List.py:45
-#, fuzzy
 msgid "Alfresco"
-msgstr "Redirection"
+msgstr "Alfresco"
 
 #: admin/wizards/List.py:46
 msgid "Enterprise web platform for building business solutions."
-msgstr ""
+msgstr "Enterprise web platform for building business solutions."
 
 #: admin/wizards/List.py:49
 msgid "Glassfish"
-msgstr ""
+msgstr "Glassfish"
 
 #: admin/wizards/List.py:50
 msgid ""
 "The first compatible implementation of the Java EE 6 platform specification."
 msgstr ""
+"The first compatible implementation of the Java EE 6 platform specification."
 
 #: admin/wizards/List.py:53
-#, fuzzy
 msgid "Adobe ColdFusion"
-msgstr "Redirection"
+msgstr "Adobe ColdFusion"
 
 #: admin/wizards/List.py:54
 msgid "Rapidly build Internet applications for the enterprise."
-msgstr ""
+msgstr "Rapidly build Internet applications for the enterprise."
 
 #: admin/wizards/List.py:60
 msgid "Platforms"
-msgstr ""
+msgstr "Platforms"
 
 #: admin/wizards/List.py:61
-#, fuzzy
 msgid "Web Development Platforms"
-msgstr "Server Development"
+msgstr "Web Development Platforms"
 
 #: admin/wizards/List.py:64
-#, fuzzy
 msgid "Django"
-msgstr "Wildcards"
+msgstr "Django"
 
 #: admin/wizards/List.py:65
 msgid "The Web framework for perfectionists (with deadlines)."
-msgstr ""
+msgstr "The Web framework for perfectionists (with deadlines)."
 
 #: admin/wizards/List.py:68
 msgid "Ruby on Rails"
-msgstr ""
+msgstr "Ruby on Rails"
 
 #: admin/wizards/List.py:69
 msgid "Open-source web framework optimized for sustainable productivity."
-msgstr ""
+msgstr "Open-source web framework optimized for sustainable productivity."
 
 #: admin/wizards/List.py:72
 msgid "Zend"
-msgstr ""
+msgstr "Zend"
 
 #: admin/wizards/List.py:73
 msgid "Simple, straightforward, open-source software framework for PHP 5."
-msgstr ""
+msgstr "Simple, straightforward, open-source software framework for PHP 5."
 
 #: admin/wizards/List.py:76
 msgid "Symfony"
-msgstr ""
+msgstr "Symfony"
 
 #: admin/wizards/List.py:77
 msgid "Full-stack framework, a library of cohesive classes written in PHP."
-msgstr ""
+msgstr "Full-stack framework, a library of cohesive classes written in PHP."
 
 #: admin/wizards/List.py:81
 msgid ""
 "Fast, self-healing, developer-friendly, language-agnostic, application "
 "container."
 msgstr ""
+"Fast, self-healing, developer-friendly, language-agnostic, application "
+"container."
 
 #: admin/wizards/List.py:87
-#, fuzzy
 msgid "Languages"
-msgstr "Language"
+msgstr "Languages"
 
 #: admin/wizards/List.py:88
 msgid "Development Languages and Platforms"
-msgstr ""
+msgstr "Development Languages and Platforms"
 
 #: admin/wizards/List.py:92
 msgid "Widely-used general-purpose scripting language."
-msgstr ""
+msgstr "Widely-used general-purpose scripting language."
 
 #: admin/wizards/List.py:95
 msgid ".NET with Mono"
-msgstr ""
+msgstr ".NET with Mono"
 
 #: admin/wizards/List.py:96
 msgid "Cross-platform, open-source .NET development framework."
-msgstr ""
+msgstr "Cross-platform, open-source .NET development framework."
 
 #: admin/wizards/List.py:102
-#, fuzzy
 msgid "Web Applications"
-msgstr "Application Server"
+msgstr "Web Applications"
 
 #: admin/wizards/List.py:103
-#, fuzzy
 msgid "General Purpose Applications"
-msgstr "General Configuration"
+msgstr "General Purpose Applications"
 
 #: admin/wizards/List.py:106
 msgid "GNU MailMan"
-msgstr ""
+msgstr "GNU MailMan"
 
 #: admin/wizards/List.py:107
 msgid ""
 "Free software for managing electronic mail discussion and e-newsletter lists."
 msgstr ""
+"Free software for managing electronic mail discussion and e-newsletter lists."
 
 #: admin/wizards/List.py:110
-#, fuzzy
 msgid "rTorrent"
-msgstr "Redirection"
+msgstr "rTorrent"
 
 #: admin/wizards/List.py:111
 msgid ""
 "BitTorrent client written in C++, based on the libTorrent libraries for Unix."
 msgstr ""
+"BitTorrent client written in C++, based on the libTorrent libraries for Unix."
 
 #: admin/wizards/List.py:117
 msgid "Tasks"
-msgstr ""
+msgstr "Tasks"
 
 #: admin/wizards/List.py:118
 msgid "Common Maintenance Tasks"
-msgstr ""
+msgstr "Common Maintenance Tasks"
 
 #: admin/wizards/List.py:121
-#, fuzzy
 msgid "SSL/TLS Testing"
-msgstr "SSL/TLS back-end"
+msgstr "SSL/TLS Testing"
 
 #: admin/wizards/List.py:122
 msgid "Auto-configure SSL/TLS support with a self-signed certificate."
-msgstr ""
+msgstr "Auto-configure SSL/TLS support with a self-signed certificate."
 
 #: admin/wizards/List.py:126
 msgid "Boost your server performance by enabling content caching."
-msgstr ""
+msgstr "Boost your server performance by enabling content caching."
 
 #: admin/wizards/List.py:129
-#, fuzzy
 msgid "Virtual Server Redirection"
-msgstr "Virtual Server root directory."
+msgstr "Virtual Server Redirection"
 
 #: admin/wizards/List.py:130
 msgid ""
 "Create a new virtual server redirecting every request to another domain host."
 msgstr ""
+"Create a new virtual server redirecting every request to another domain host."
 
 #: admin/wizards/List.py:133
 msgid "Anti Hot-Linking"
-msgstr ""
+msgstr "Anti Hot-Linking"
 
 #: admin/wizards/List.py:134
 msgid "Stop other domains from hot-linking your media files."
-msgstr ""
+msgstr "Stop other domains from hot-linking your media files."
 
 #: admin/wizards/List.py:137
-#, fuzzy
 msgid "Directory-listing Icons"
-msgstr "Allow Directory Listing"
+msgstr "Directory-listing Icons"
 
 #: admin/wizards/List.py:138
 msgid ""
 "Add the /cherokee_icons and /cherokee_themes directories used for directory "
 "listing."
 msgstr ""
+"Add the /cherokee_icons and /cherokee_themes directories used for directory "
+"listing."
 
 #: admin/wizards/List.py:141
 msgid "Static-file support"
-msgstr ""
+msgstr "Static-file support"
 
 #: admin/wizards/List.py:142
 msgid "Add a rule to optimally serve the most common static files."
-msgstr ""
+msgstr "Add a rule to optimally serve the most common static files."
 
 #: admin/wizards/List.py:145
-#, fuzzy
 msgid "Media file streaming"
-msgstr "Audio/Video streaming"
+msgstr "Media file streaming"
 
 #: admin/wizards/List.py:146
 msgid ""
 "Add a rule to stream media files through an intelligent streaming handler."
 msgstr ""
+"Add a rule to stream media files through an intelligent streaming handler."
 
 #: admin/wizards/alfresco.py:37
-#, fuzzy
 msgid "Welcome to the Alfresco Wizard"
-msgstr "Redirection"
+msgstr "Welcome to the Alfresco Wizard"
 
 #: admin/wizards/alfresco.py:38
 msgid ""
@@ -5002,27 +4785,33 @@ msgid ""
 "is an enterprise web platform for building business solutions that deliver "
 "immediate results and long-term value."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.alfresco.com/\">Alfresco Portal</a> "
+"is an enterprise web platform for building business solutions that deliver "
+"immediate results and long-term value."
 
 #: admin/wizards/alfresco.py:39
 msgid ""
 "Get the benefits of packaged applications and an enterprise application "
 "framework in a single solution."
 msgstr ""
+"Get the benefits of packaged applications and an enterprise application "
+"framework in a single solution."
 
 #: admin/wizards/alfresco.py:41
-#, fuzzy
 msgid "Alfresco Project"
-msgstr "Redirection"
+msgstr "Alfresco Project"
 
 #: admin/wizards/alfresco.py:42
 msgid ""
 "Hostname or IP of the server running Alfresco. You can add more later to "
 "have the load balanced."
 msgstr ""
+"Hostname or IP of the server running Alfresco. You can add more later to "
+"have the load balanced."
 
 #: admin/wizards/alfresco.py:43 admin/wizards/glassfish.py:43
 msgid "Port running the service in said host. (Example: 8080)"
-msgstr ""
+msgstr "Port running the service in said host. (Example: 8080)"
 
 #: admin/wizards/alfresco.py:45 admin/wizards/coldfusion.py:46
 #: admin/wizards/concrete5.py:47 admin/wizards/django.py:44
@@ -5030,9 +4819,8 @@ msgstr ""
 #: admin/wizards/mono.py:46 admin/wizards/php.py:43
 #: admin/wizards/symfony.py:51 admin/wizards/uwsgi.py:61
 #: admin/wizards/zend.py:47
-#, fuzzy
 msgid "Host name of the virtual server that is about to be created."
-msgstr "Nickname for the virtual server."
+msgstr "Host name of the virtual server that is about to be created."
 
 #: admin/wizards/alfresco.py:46 admin/wizards/coldfusion.py:45
 #: admin/wizards/concrete5.py:46 admin/wizards/django.py:43
@@ -5040,23 +4828,21 @@ msgstr "Nickname for the virtual server."
 #: admin/wizards/mono.py:45 admin/wizards/php.py:42
 #: admin/wizards/symfony.py:50 admin/wizards/uwsgi.py:60
 #: admin/wizards/zend.py:46
-#, fuzzy
 msgid "New Virtual Server Details"
-msgstr "Virtual Server"
+msgstr "New Virtual Server Details"
 
 #: admin/wizards/alfresco.py:48 admin/wizards/coldfusion.py:48
 #: admin/wizards/glassfish.py:48 admin/wizards/uwsgi.py:64
 msgid "Public web directory to access the project."
-msgstr ""
+msgstr "Public web directory to access the project."
 
 #: admin/wizards/alfresco.py:49 admin/wizards/coldfusion.py:49
 #: admin/wizards/concrete5.py:50 admin/wizards/django.py:46
 #: admin/wizards/glassfish.py:49 admin/wizards/mono.py:50
 #: admin/wizards/symfony.py:54 admin/wizards/uwsgi.py:65
 #: admin/wizards/zend.py:50
-#, fuzzy
 msgid "Public Web Directory"
-msgstr "Web Directory"
+msgstr "Public Web Directory"
 
 #: admin/wizards/alfresco.py:172 admin/wizards/coldfusion.py:178
 #: admin/wizards/concrete5.py:228 admin/wizards/django.py:190
@@ -5064,24 +4850,20 @@ msgstr "Web Directory"
 #: admin/wizards/mono.py:198 admin/wizards/php.py:321
 #: admin/wizards/rails.py:324 admin/wizards/symfony.py:231
 #: admin/wizards/uwsgi.py:266 admin/wizards/zend.py:201
-#, fuzzy
 msgid "New Host Name"
-msgstr "New host name"
+msgstr "New Host Name"
 
 #: admin/wizards/alfresco.py:188 admin/wizards/glassfish.py:186
-#, fuzzy
 msgid "Source host"
-msgstr "Source usage"
+msgstr "Source host"
 
 #: admin/wizards/alfresco.py:189 admin/wizards/glassfish.py:187
-#, fuzzy
 msgid "Source port"
-msgstr "Support"
+msgstr "Source port"
 
 #: admin/wizards/coldfusion.py:38
-#, fuzzy
 msgid "Welcome to the ColdFusion Wizard"
-msgstr "Redirection"
+msgstr "Welcome to the ColdFusion Wizard"
 
 #: admin/wizards/coldfusion.py:39
 msgid ""
@@ -5089,65 +4871,75 @@ msgid ""
 "\">Adobe ColdFusion®</a> enable developers to rapidly build, deploy, and "
 "maintain robust Internet applications for the enterprise."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.adobe.com/products/coldfusion/"
+"\">Adobe ColdFusion®</a> enable developers to rapidly build, deploy, and "
+"maintain robust Internet applications for the enterprise."
 
 #: admin/wizards/coldfusion.py:40
 msgid ""
 "It allows developers to condense complex business logic into fewer lines of "
 "code."
 msgstr ""
+"It allows developers to condense complex business logic into fewer lines of "
+"code."
 
 #: admin/wizards/coldfusion.py:42
-#, fuzzy
 msgid "ColdFusion Details"
-msgstr "Redirection"
+msgstr "ColdFusion Details"
 
 #: admin/wizards/coldfusion.py:43
 msgid ""
 "The pair IP:port of the server running ColdFusion. You can add more later to "
 "have the load balanced."
 msgstr ""
+"The pair IP:port of the server running ColdFusion. You can add more later to "
+"have the load balanced."
 
 #: admin/wizards/coldfusion.py:51
 msgid "ColdFusion is not running on the specified host."
-msgstr ""
+msgstr "ColdFusion is not running on the specified host."
 
 #: admin/wizards/concrete5.py:38
-#, fuzzy
 msgid "Welcome to the Concrete5 Wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the Concrete5 Wizard"
 
 #: admin/wizards/concrete5.py:39
 msgid ""
 "<a target=\"_blank\" href=\"http://www.concrete5.org/\">Concrete5</a> is a "
 "content management system that is free and open source."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.concrete5.org/\">Concrete5</a> is a "
+"content management system that is free and open source."
 
 #: admin/wizards/concrete5.py:40
 msgid "It is the CMS made for Marketing, but built for Geeks."
-msgstr ""
+msgstr "It is the CMS made for Marketing, but built for Geeks."
 
 #: admin/wizards/concrete5.py:42 admin/wizards/django.py:41
 #: admin/wizards/rtorrent.py:36 admin/wizards/symfony.py:45
 #: admin/wizards/zend.py:42
-#, fuzzy
 msgid "Application Source Code"
-msgstr "Application Server"
+msgstr "Application Source Code"
 
 #: admin/wizards/concrete5.py:43
 msgid ""
 "Local directory where the Concrete5 source code is located. Example: /usr/"
 "share/concrete5."
 msgstr ""
+"Local directory where the Concrete5 source code is located. Example: /usr/"
+"share/concrete5."
 
 #: admin/wizards/concrete5.py:44
 msgid "Does not look like a Concrete5 source directory."
-msgstr ""
+msgstr "Does not look like a Concrete5 source directory."
 
 #: admin/wizards/concrete5.py:49
 msgid ""
 "Web directory where you want Concrete5 to be accessible. (Example: /"
 "concrete5)"
 msgstr ""
+"Web directory where you want Concrete5 to be accessible. (Example: /"
+"concrete5)"
 
 #: admin/wizards/concrete5.py:229 admin/wizards/django.py:192
 #: admin/wizards/mailman.py:161 admin/wizards/mono.py:200
@@ -5155,17 +4947,15 @@ msgstr ""
 #: admin/wizards/symfony.py:232 admin/wizards/uwsgi.py:268
 #: admin/wizards/zend.py:202
 msgid "Use Same Logs as"
-msgstr ""
+msgstr "Use Same Logs as"
 
 #: admin/wizards/concrete5.py:247 admin/wizards/zend.py:218
-#, fuzzy
 msgid "Source Directory"
-msgstr "Web Directory"
+msgstr "Source Directory"
 
 #: admin/wizards/django.py:38
-#, fuzzy
 msgid "Welcome to the Django wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the Django wizard"
 
 #: admin/wizards/django.py:39
 msgid ""
@@ -5173,126 +4963,129 @@ msgid ""
 "level Python Web framework that encourages rapid development and clean, "
 "pragmatic design."
 msgstr ""
+"<a target=\"_blank\" href=\"http://djangoproject.com/\">Django</a> is a high-"
+"level Python Web framework that encourages rapid development and clean, "
+"pragmatic design."
 
 #: admin/wizards/django.py:40
 msgid ""
 "It is the Web framework for perfectionists (with deadlines). Django makes it "
 "easier to build better Web apps more quickly and with less code."
 msgstr ""
+"It is the Web framework for perfectionists (with deadlines). Django makes it "
+"easier to build better Web apps more quickly and with less code."
 
 #: admin/wizards/django.py:42
 msgid "Local directory where your Django project source code is located."
-msgstr ""
+msgstr "Local directory where your Django project source code is located."
 
 #: admin/wizards/django.py:45
 msgid "Web directory where you want Django to be accessible. (Example: /blog)"
-msgstr ""
+msgstr "Web directory where you want Django to be accessible. (Example: /blog)"
 
 #: admin/wizards/django.py:47 admin/wizards/uwsgi.py:62
-#, fuzzy
 msgid "Path to use as document root for the new virtual server."
-msgstr "Nickname for the virtual server."
+msgstr "Path to use as document root for the new virtual server."
 
 #: admin/wizards/django.py:48
 msgid "Does not look like a Django source directory."
-msgstr ""
+msgstr "Does not look like a Django source directory."
 
 #: admin/wizards/django.py:49 admin/wizards/rails.py:57
-#, fuzzy
 msgid "The document root directory does not exist."
-msgstr "Nickname for the virtual server."
+msgstr "The document root directory does not exist."
 
 #: admin/wizards/django.py:208
-#, fuzzy
 msgid "Django Local Directory"
-msgstr "Web Directory"
+msgstr "Django Local Directory"
 
 #: admin/wizards/django.py:271
 msgid "Directory doesn't look like a Django based project."
-msgstr ""
+msgstr "Directory doesn't look like a Django based project."
 
 #: admin/wizards/flcache.py:31
-#, fuzzy
 msgid "Welcome to the Cache wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the Cache wizard"
 
 #: admin/wizards/flcache.py:32
 msgid ""
 "This wizard adds a rule to configure the cache mechanism shipped with "
 "Cherokee."
 msgstr ""
+"This wizard adds a rule to configure the cache mechanism shipped with "
+"Cherokee."
 
 #: admin/wizards/flcache.py:33
 msgid ""
 "It will boost the performance of your virtual server by caching content, and "
 "thus optimizing subsequent requests of the same Web resource."
 msgstr ""
+"It will boost the performance of your virtual server by caching content, and "
+"thus optimizing subsequent requests of the same Web resource."
 
 #: admin/wizards/flcache.py:35
 msgid "What do you want the server to cache?"
-msgstr ""
+msgstr "What do you want the server to cache?"
 
 #: admin/wizards/flcache.py:36
 msgid "Enable HTTP's PURGE method, so cache object can be purged remotely."
-msgstr ""
+msgstr "Enable HTTP's PURGE method, so cache object can be purged remotely."
 
 #: admin/wizards/flcache.py:37
 msgid "Which extensions you want the Cache to store?"
-msgstr ""
+msgstr "Which extensions you want the Cache to store?"
 
 #: admin/wizards/flcache.py:38
-#, fuzzy
 msgid "Administration user name"
-msgstr "User"
+msgstr "Administration user name"
 
 #: admin/wizards/flcache.py:39
-#, fuzzy
 msgid "Administration user's password"
-msgstr "Bind Password"
+msgstr "Administration user's password"
 
 #: admin/wizards/flcache.py:45
 msgid "Cacheable Dynamic Responses"
-msgstr ""
+msgstr "Cacheable Dynamic Responses"
 
 #: admin/wizards/flcache.py:46
 msgid "Encoded responses of static files"
-msgstr ""
+msgstr "Encoded responses of static files"
 
 #: admin/wizards/flcache.py:138
 msgid "Type of Caching"
-msgstr ""
+msgstr "Type of Caching"
 
 #: admin/wizards/flcache.py:153
 msgid "Basic Functionality"
-msgstr ""
+msgstr "Basic Functionality"
 
 #: admin/wizards/flcache.py:160
 msgid "Enable PURGE requests"
-msgstr ""
+msgstr "Enable PURGE requests"
 
 #: admin/wizards/flcache.py:163
-#, fuzzy
 msgid "Admin Username"
-msgstr "User"
+msgstr "Admin Username"
 
 #: admin/wizards/flcache.py:164
-#, fuzzy
 msgid "Admin Password"
-msgstr "Bind Password"
+msgstr "Admin Password"
 
 #: admin/wizards/flcache.py:176
 msgid "Purge of Cache Objects"
-msgstr ""
+msgstr "Purge of Cache Objects"
 
 #: admin/wizards/glassfish.py:37
 msgid "Welcome to the GlassFish Wizard"
-msgstr ""
+msgstr "Welcome to the GlassFish Wizard"
 
 #: admin/wizards/glassfish.py:38
 msgid ""
 "<a target=\"_blank\" href=\"http://glassfish.org/\">GlassFish</a> is the "
 "first compatible implementation of the Java EE 6 platform specification."
 msgstr ""
+"<a target=\"_blank\" href=\"http://glassfish.org/\">GlassFish</a> is the "
+"first compatible implementation of the Java EE 6 platform specification."
 
 #: admin/wizards/glassfish.py:39
 msgid ""
@@ -5301,82 +5094,86 @@ msgid ""
 "the Java EE 6 specification, but also to add to their existing capabilities "
 "through a faster and more streamlined development and deployment cycle."
 msgstr ""
+"This lightweight, flexible, and open-source application server enables "
+"organizations to not only leverage the new capabilities introduced within "
+"the Java EE 6 specification, but also to add to their existing capabilities "
+"through a faster and more streamlined development and deployment cycle."
 
 #: admin/wizards/glassfish.py:41
 msgid "GlassFish Project"
-msgstr ""
+msgstr "GlassFish Project"
 
 #: admin/wizards/glassfish.py:42
 msgid ""
 "Hostname or IP of the server running GlassFish. You can add more later to "
 "have the load balanced."
 msgstr ""
+"Hostname or IP of the server running GlassFish. You can add more later to "
+"have the load balanced."
 
 #: admin/wizards/hotlinking.py:36
 msgid "Welcome to the Hotlinking Wizard"
-msgstr ""
+msgstr "Welcome to the Hotlinking Wizard"
 
 #: admin/wizards/hotlinking.py:37
 msgid "This wizard stops other domains from hot-linking your media files."
-msgstr ""
+msgstr "This wizard stops other domains from hot-linking your media files."
 
 #: admin/wizards/hotlinking.py:38
-#, fuzzy
 msgid "Anti-HotLinking Information"
-msgstr "Show Information"
+msgstr "Anti-HotLinking Information"
 
 #: admin/wizards/hotlinking.py:39
 msgid "Domain allowed to access the files. Eg: example.com"
-msgstr ""
+msgstr "Domain allowed to access the files. Eg: example.com"
 
 #: admin/wizards/hotlinking.py:40
 msgid "Path to the public resource to use. Eg: /images/forbidden.jpg"
-msgstr ""
+msgstr "Path to the public resource to use. Eg: /images/forbidden.jpg"
 
 #: admin/wizards/hotlinking.py:41
 msgid "How to handle hot-linking requests."
-msgstr ""
+msgstr "How to handle hot-linking requests."
 
 #: admin/wizards/hotlinking.py:86
-#, fuzzy
 msgid "Show error"
-msgstr "Show User"
+msgstr "Show error"
 
 #: admin/wizards/hotlinking.py:87
-#, fuzzy
 msgid "Redirect"
-msgstr "Redirection"
+msgstr "Redirect"
 
 #: admin/wizards/hotlinking.py:174
-#, fuzzy
 msgid "Domain Name"
-msgstr "Domain pattern"
+msgstr "Domain Name"
 
 #: admin/wizards/hotlinking.py:175
-#, fuzzy
 msgid "Reply type"
-msgstr "Realm"
+msgstr "Reply type"
 
 #: admin/wizards/icons.py:37
-#, fuzzy
 msgid "Welcome to the Icons Wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the Icons Wizard"
 
 #: admin/wizards/icons.py:38
 msgid ""
 "This wizard adds the /cherokee_icons and /cherokee_themes directories so "
 "Cherokee can use icons when listing directories."
 msgstr ""
+"This wizard adds the /cherokee_icons and /cherokee_themes directories so "
+"Cherokee can use icons when listing directories."
 
 #: admin/wizards/icons.py:39
 msgid ""
 "The /cherokee_icons and /cherokee_themes directories are already configured. "
 "There is nothing left to do."
 msgstr ""
+"The /cherokee_icons and /cherokee_themes directories are already configured. "
+"There is nothing left to do."
 
 #: admin/wizards/mailman.py:37
 msgid "Welcome to the Mailman Wizard"
-msgstr ""
+msgstr "Welcome to the Mailman Wizard"
 
 #: admin/wizards/mailman.py:38
 msgid ""
@@ -5384,136 +5181,125 @@ msgid ""
 "a> is free software for managing electronic mail discussion and e-newsletter "
 "lists."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.gnu.org/software/mailman/\">Mailman</"
+"a> is free software for managing electronic mail discussion and e-newsletter "
+"lists."
 
 #: admin/wizards/mailman.py:39
 msgid ""
 "Mailman supports built-in archiving, automatic bounce processing, content "
 "filtering, digest delivery, spam filters, and more."
 msgstr ""
+"Mailman supports built-in archiving, automatic bounce processing, content "
+"filtering, digest delivery, spam filters, and more."
 
 #: admin/wizards/mailman.py:41
-#, fuzzy
 msgid "Mailman Details"
-msgstr "Path is not a directory"
+msgstr "Mailman Details"
 
 #: admin/wizards/mailman.py:42
-#, fuzzy
 msgid "Local path to the Mailman CGI directory."
-msgstr "Path is not a directory"
+msgstr "Local path to the Mailman CGI directory."
 
 #: admin/wizards/mailman.py:43
-#, fuzzy
 msgid "Local path to the Mailman data directory."
-msgstr "Path is not a directory"
+msgstr "Local path to the Mailman data directory."
 
 #: admin/wizards/mailman.py:44
 msgid "Local path to the Mailman mail archive directory."
-msgstr ""
+msgstr "Local path to the Mailman mail archive directory."
 
 #: admin/wizards/mailman.py:45
-#, fuzzy
 msgid "Local path to the Mailman mail images directory."
-msgstr "Path is not a directory"
+msgstr "Local path to the Mailman mail images directory."
 
 #: admin/wizards/mailman.py:182
-#, fuzzy
 msgid "Mailman CGI directory"
-msgstr "Path is not a directory"
+msgstr "Mailman CGI directory"
 
 #: admin/wizards/mailman.py:183
-#, fuzzy
 msgid "Mailman Data directory"
-msgstr "Path is not a directory"
+msgstr "Mailman Data directory"
 
 #: admin/wizards/mailman.py:184
-#, fuzzy
 msgid "Mail Archive directory"
-msgstr "Virtual Server root directory."
+msgstr "Mail Archive directory"
 
 #: admin/wizards/mailman.py:185
-#, fuzzy
 msgid "Mail Images directory"
-msgstr "Path is not a directory"
+msgstr "Mail Images directory"
 
 #: admin/wizards/mailman.py:223
-#, fuzzy
 msgid "It does not look like a Mailman data directory."
-msgstr "Create a new configuration file"
+msgstr "It does not look like a Mailman data directory."
 
 #: admin/wizards/mailman.py:230
-#, fuzzy
 msgid "It does not look like a Mailman CGI directory."
-msgstr "Create a new configuration file"
+msgstr "It does not look like a Mailman CGI directory."
 
 #: admin/wizards/mailman.py:239
-#, fuzzy
 msgid "It does not look like a Mailman archive directory."
-msgstr "Create a new configuration file"
+msgstr "It does not look like a Mailman archive directory."
 
 #: admin/wizards/mailman.py:246
-#, fuzzy
 msgid "It does not look like a Mailman images directory."
-msgstr "Create a new configuration file"
+msgstr "It does not look like a Mailman images directory."
 
 #: admin/wizards/mono.py:37
-#, fuzzy
 msgid "Welcome to the mono Wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the mono Wizard"
 
 #: admin/wizards/mono.py:38
 msgid ""
 "<a target=\"_blank\" href=\"http://www.mono-project.com/\">Mono</a> is a "
 "cross-platform, open-source .NET development framework."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.mono-project.com/\">Mono</a> is a "
+"cross-platform, open-source .NET development framework."
 
 #: admin/wizards/mono.py:39
 msgid ""
 "It is an open implementation of C# and the CLR that is binary compatible "
 "with Microsoft.NET."
 msgstr ""
+"It is an open implementation of C# and the CLR that is binary compatible "
+"with Microsoft.NET."
 
 #: admin/wizards/mono.py:41
-#, fuzzy
 msgid "Mono Project"
-msgstr "Path is not a directory"
+msgstr "Mono Project"
 
 #: admin/wizards/mono.py:42
 msgid "Local path to the Mono based project."
-msgstr ""
+msgstr "Local path to the Mono based project."
 
 #: admin/wizards/mono.py:43
-#, fuzzy
 msgid "Local path to the FastCGI Mono server binary."
-msgstr "Could not launch the server"
+msgstr "Local path to the FastCGI Mono server binary."
 
 #: admin/wizards/mono.py:47
 msgid "Document root (for non Mono related files)."
-msgstr ""
+msgstr "Document root (for non Mono related files)."
 
 #: admin/wizards/mono.py:49
-#, fuzzy
 msgid "Web directory under which the Mono application will be published."
-msgstr ""
-"Public Web Directory to which content the configuration will be applied."
+msgstr "Web directory under which the Mono application will be published."
 
 #: admin/wizards/mono.py:52
-#, fuzzy
 msgid "Directory doesn't look like a Mono based project."
-msgstr "Create a new configuration file"
+msgstr "Directory doesn't look like a Mono based project."
 
 #: admin/wizards/mono.py:219 admin/wizards/rails.py:380
-#, fuzzy
 msgid "Project Directory"
-msgstr "Web Directory"
+msgstr "Project Directory"
 
 #: admin/wizards/mono.py:221
 msgid "Mono Server Binary"
-msgstr ""
+msgstr "Mono Server Binary"
 
 #: admin/wizards/php.py:36
-#, fuzzy
 msgid "Welcome to the PHP Wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the PHP Wizard"
 
 #: admin/wizards/php.py:37
 msgid ""
@@ -5521,51 +5307,52 @@ msgid ""
 "general-purpose scripting language that is especially suited for Web "
 "development and can be embedded into HTML."
 msgstr ""
+"<a target=\"_blank\" href=\"http://php.net/\">PHP</a> is a widely-used "
+"general-purpose scripting language that is especially suited for Web "
+"development and can be embedded into HTML."
 
 #: admin/wizards/php.py:40
 msgid "Local directory that will contain the web documents. Example: /var/www."
 msgstr ""
+"Local directory that will contain the web documents. Example: /var/www."
 
 #: admin/wizards/php.py:45
-#, fuzzy
 msgid "PHP Interpreter Not Found"
-msgstr "Interpreter"
+msgstr "PHP Interpreter Not Found"
 
 #: admin/wizards/php.py:46
 msgid "A valid PHP interpreter could not be found in your system."
-msgstr ""
+msgstr "A valid PHP interpreter could not be found in your system."
 
 #: admin/wizards/php.py:47
 msgid ""
 "Please, check out Cherokee's PHP Documentation to learn how to set it up."
 msgstr ""
+"Please, check out Cherokee's PHP Documentation to learn how to set it up."
 
 #: admin/wizards/php.py:119
-#, fuzzy
 msgid "Invalid Virtual Server reference."
-msgstr "Virtual Server nickname"
+msgstr "Invalid Virtual Server reference."
 
 #: admin/wizards/php.py:131
 msgid "Could not find a suitable PHP interpreter."
-msgstr ""
+msgstr "Could not find a suitable PHP interpreter."
 
 #: admin/wizards/php.py:566
-#, fuzzy
 msgid "Could not determine PHP-CGI settings."
-msgstr "Create a new configuration file"
+msgstr "Could not determine PHP-CGI settings."
 
 #: admin/wizards/php.py:569
-#, fuzzy
 msgid "Could not determine PHP-CGI configuration file."
-msgstr "Create a new configuration file"
+msgstr "Could not determine PHP-CGI configuration file."
 
 #: admin/wizards/php.py:629
 msgid "Could not determine PHP-fpm settings."
-msgstr ""
+msgstr "Could not determine PHP-fpm settings."
 
 #: admin/wizards/rails.py:39
 msgid "Welcome to the Ruby on Rails wizard"
-msgstr ""
+msgstr "Welcome to the Ruby on Rails wizard"
 
 #: admin/wizards/rails.py:40
 msgid ""
@@ -5573,56 +5360,65 @@ msgid ""
 "an open-source web framework optimized for programmer happines and "
 "sustainable productivity."
 msgstr ""
+"<a target=\"_blank\" href=\"http://rubyonrails.org/\">Ruby on Rails</a> is "
+"an open-source web framework optimized for programmer happines and "
+"sustainable productivity."
 
 #: admin/wizards/rails.py:41
 msgid ""
 "It lets you write beautiful code by favoring convention over configuration."
 msgstr ""
+"It lets you write beautiful code by favoring convention over configuration."
 
 #: admin/wizards/rails.py:43
 msgid "Ruby on Rails Project"
-msgstr ""
+msgstr "Ruby on Rails Project"
 
 #: admin/wizards/rails.py:44
-#, fuzzy
 msgid "New Virtual Server"
-msgstr "Virtual Server"
+msgstr "New Virtual Server"
 
 #: admin/wizards/rails.py:47
 msgid "Local path to the Ruby on Rails based project."
-msgstr ""
+msgstr "Local path to the Ruby on Rails based project."
 
 #: admin/wizards/rails.py:48
-#, fuzzy
 msgid "Name of the new domain that will be created."
-msgstr "Path of the PID file. If empty, the file will not be created."
+msgstr "Name of the new domain that will be created."
 
 #: admin/wizards/rails.py:49
 msgid ""
 "Directory of the web directory where the Ruby on Rails project will live in."
 msgstr ""
+"Directory of the web directory where the Ruby on Rails project will live in."
 
 #: admin/wizards/rails.py:50
 msgid "Value of the RAILS_ENV variable."
-msgstr ""
+msgstr "Value of the RAILS_ENV variable."
 
 #: admin/wizards/rails.py:51
 msgid ""
 "The proxy setting is recommended, but FastCGI can also be used if spawn-fcgi "
 "is available."
 msgstr ""
+"The proxy setting is recommended, but FastCGI can also be used if spawn-fcgi "
+"is available."
 
 #: admin/wizards/rails.py:53
 msgid ""
 "<p>Even though the directory looks like a Ruby on Rails project, the public/"
 "dispatch.fcgi file wasn't found.</p>"
 msgstr ""
+"<p>Even though the directory looks like a Ruby on Rails project, the public/"
+"dispatch.fcgi file wasn't found.</p>"
 
 #: admin/wizards/rails.py:54
 msgid ""
 "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
 "might want to rename it.</p>"
 msgstr ""
+"<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
+"might want to rename it.</p>"
 
 #: admin/wizards/rails.py:55
 msgid ""
@@ -5630,85 +5426,81 @@ msgid ""
 "command from the project directory in order to add the missing file:</"
 "p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
 msgstr ""
+"<p>If you are using Rails >= 2.3.0, you will have to execute the following "
+"command from the project directory in order to add the missing file:</"
+"p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
 
 #: admin/wizards/rails.py:56
-#, fuzzy
 msgid "It does not look like a Ruby on Rails based project directory."
-msgstr "Create a new configuration file"
+msgstr "It does not look like a Ruby on Rails based project directory."
 
 #: admin/wizards/rails.py:66
-#, fuzzy
 msgid "Production"
-msgstr "Product only"
+msgstr "Production"
 
 #: admin/wizards/rails.py:67
-#, fuzzy
 msgid "Test"
-msgstr "Digest"
+msgstr "Test"
 
 #: admin/wizards/rails.py:68
-#, fuzzy
 msgid "Development"
-msgstr "Server Development"
+msgstr "Development"
 
 #: admin/wizards/rails.py:69
 msgid "Empty"
-msgstr ""
+msgstr "Empty"
 
 #: admin/wizards/rails.py:73
-#, fuzzy
 msgid "HTTP proxy"
-msgstr "HTTP Error"
+msgstr "HTTP proxy"
 
 #: admin/wizards/rails.py:381
 msgid "RAILS_ENV environment"
-msgstr ""
+msgstr "RAILS_ENV environment"
 
 #: admin/wizards/rails.py:382
 msgid "Deployment method"
-msgstr ""
+msgstr "Deployment method"
 
 #: admin/wizards/redirect.py:39
-#, fuzzy
 msgid "Welcome to the Redirection Wizard"
-msgstr "Redirection"
+msgstr "Welcome to the Redirection Wizard"
 
 #: admin/wizards/redirect.py:40
 msgid ""
 "This Wizard creates a new virtual server redirecting every request to "
 "another domain host."
 msgstr ""
+"This Wizard creates a new virtual server redirecting every request to "
+"another domain host."
 
 #: admin/wizards/redirect.py:42
-#, fuzzy
 msgid "Redirection details"
-msgstr "Redirections"
+msgstr "Redirection details"
 
 #: admin/wizards/redirect.py:43
 msgid ""
 "This domain name will be used as nickname for the new virtual server. More "
 "domain names can be added to the virtual server later on."
 msgstr ""
+"This domain name will be used as nickname for the new virtual server. More "
+"domain names can be added to the virtual server later on."
 
 #: admin/wizards/redirect.py:44
-#, fuzzy
 msgid "Domain name to which requests will be redirected."
-msgstr "Regular expression against which the request will be executed."
+msgstr "Domain name to which requests will be redirected."
 
 #: admin/wizards/redirect.py:108
-#, fuzzy
 msgid "Origin Domain"
-msgstr "Bind Domain"
+msgstr "Origin Domain"
 
 #: admin/wizards/redirect.py:109
-#, fuzzy
 msgid "Target Domain"
-msgstr "Base Domain"
+msgstr "Target Domain"
 
 #: admin/wizards/rtorrent.py:33
-#, fuzzy
 msgid "Welcome to the rTorrent Wizard"
-msgstr "Redirection"
+msgstr "Welcome to the rTorrent Wizard"
 
 #: admin/wizards/rtorrent.py:34
 msgid ""
@@ -5717,170 +5509,179 @@ msgid ""
 "libTorrent libraries for Unix (not to be confused with libtorrent by Arvid "
 "Norberg), whose author's goal is “a focus on high performance and good code”"
 msgstr ""
+"<a target=\"_blank\" href=\"http://libtorrent.rakshasa.no/\">rTorrent</a> is "
+"a text-based ncurses BitTorrent client written in C++, based on the "
+"libTorrent libraries for Unix (not to be confused with libtorrent by Arvid "
+"Norberg), whose author's goal is “a focus on high performance and good code”"
 
 #: admin/wizards/rtorrent.py:37
-#, fuzzy
 msgid ""
 "Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket "
 "path."
 msgstr ""
-"Where the information source can be accessed. The host:port pair, or the "
-"Unix socket path."
+"Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket "
+"path."
 
 #: admin/wizards/rtorrent.py:38
 msgid ""
 "Web directory where you want rTorrent XMLRPC to be accessible. (Example: /"
 "RPC2)"
 msgstr ""
+"Web directory where you want rTorrent XMLRPC to be accessible. (Example: /"
+"RPC2)"
 
 #: admin/wizards/rtorrent.py:140
 #, python-format
 msgid "Already configured: %s"
-msgstr ""
+msgstr "Already configured: %s"
 
 #: admin/wizards/ssl_test.py:34
-#, fuzzy
 msgid "Welcome to the SSL/TLS Testing wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the SSL/TLS Testing wizard"
 
 #: admin/wizards/ssl_test.py:35
 msgid ""
 "This wizard adds SSL/TLS support to the virtual server for testing purposes."
 msgstr ""
+"This wizard adds SSL/TLS support to the virtual server for testing purposes."
 
 #: admin/wizards/ssl_test.py:36
 msgid ""
 "It will auto-configure the server to handle https requests by using a self-"
 "signed certificate. (Remember: This shouldn't be used on production!)"
 msgstr ""
+"It will auto-configure the server to handle https requests by using a self-"
+"signed certificate. (Remember: This shouldn't be used on production!)"
 
 #: admin/wizards/ssl_test.py:38
-#, fuzzy
 msgid "Full path to the PEM-encoded Certificate file for the server."
-msgstr ""
-"This directive points to the PEM-encoded Certificate file for the server "
-"(Full path to the file)"
+msgstr "Full path to the PEM-encoded Certificate file for the server."
 
 #: admin/wizards/ssl_test.py:39
-#, fuzzy
 msgid "Full path to the PEM-encoded Private Key file for the server."
-msgstr "PEM-encoded Private Key file for the server (Full path to the file)"
+msgstr "Full path to the PEM-encoded Private Key file for the server."
 
 #: admin/wizards/ssl_test.py:40
 msgid "Generate and use a self-signed certificate."
-msgstr ""
+msgstr "Generate and use a self-signed certificate."
 
 #: admin/wizards/ssl_test.py:126
 msgid "New self-signed cert."
-msgstr ""
+msgstr "New self-signed cert."
 
 #: admin/wizards/ssl_test.py:129
-#, fuzzy
 msgid "Auto-generate Certificate"
-msgstr "Certificate"
+msgstr "Auto-generate Certificate"
 
 #: admin/wizards/ssl_test.py:137
-#, fuzzy
 msgid "Certificate Key"
-msgstr "Certificate key"
+msgstr "Certificate Key"
 
 #: admin/wizards/ssl_test.py:151
-#, fuzzy
 msgid "Certificate file"
-msgstr "Certificate key"
+msgstr "Certificate file"
 
 #: admin/wizards/static.py:38
 msgid "Welcome to the Common Static wizard"
-msgstr ""
+msgstr "Welcome to the Common Static wizard"
 
 #: admin/wizards/static.py:39
 msgid ""
 "This wizard adds a rule to optimally serve the most common static files."
 msgstr ""
+"This wizard adds a rule to optimally serve the most common static files."
 
 #: admin/wizards/static.py:40
 msgid "Current rules have been checked"
-msgstr ""
+msgstr "Current rules have been checked"
 
 #: admin/wizards/static.py:41
 msgid ""
 "The process is very simple. Let the wizard take over and don't worry about a "
 "thing."
 msgstr ""
+"The process is very simple. Let the wizard take over and don't worry about a "
+"thing."
 
 #: admin/wizards/static.py:42
 msgid ""
 "Common files have been already configured, so there is nothing to be done."
 msgstr ""
+"Common files have been already configured, so there is nothing to be done."
 
 #: admin/wizards/streaming.py:39
-#, fuzzy
 msgid "Welcome to the Streaming Wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the Streaming Wizard"
 
 #: admin/wizards/streaming.py:40
 msgid "This Wizard Adds a rule to stream media files."
-msgstr ""
+msgstr "This Wizard Adds a rule to stream media files."
 
 #: admin/wizards/streaming.py:116
 msgid "The media streaming plug-in is not installed."
-msgstr ""
+msgstr "The media streaming plug-in is not installed."
 
 #: admin/wizards/streaming.py:124
 msgid "Media streaming is already configured."
-msgstr ""
+msgstr "Media streaming is already configured."
 
 #: admin/wizards/symfony.py:41
 msgid "Welcome to the Symfony Wizard"
-msgstr ""
+msgstr "Welcome to the Symfony Wizard"
 
 #: admin/wizards/symfony.py:42
 msgid ""
 "<a target=\"_blank\" href=\"http://www.symfony-project.org/\">Symfony</a>  "
 "is a full-stack framework, a library of cohesive classes written in PHP."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.symfony-project.org/\">Symfony</a>  "
+"is a full-stack framework, a library of cohesive classes written in PHP."
 
 #: admin/wizards/symfony.py:43
 msgid ""
 "It provides an architecture, components and tools for developers to build "
 "complex web applications faster."
 msgstr ""
+"It provides an architecture, components and tools for developers to build "
+"complex web applications faster."
 
 #: admin/wizards/symfony.py:46
 msgid ""
 "Local directory where the Symfony source code is located. Example: /usr/"
 "share/php/data/symfony."
 msgstr ""
+"Local directory where the Symfony source code is located. Example: /usr/"
+"share/php/data/symfony."
 
 #: admin/wizards/symfony.py:47
 msgid ""
 "Path to the web folder of the Symfony project. (Example: /home/user/"
 "sf_project/web)"
 msgstr ""
+"Path to the web folder of the Symfony project. (Example: /home/user/"
+"sf_project/web)"
 
 #: admin/wizards/symfony.py:48
-#, fuzzy
 msgid "Does not look like a Symfony source directory."
-msgstr "Create a new configuration file"
+msgstr "Does not look like a Symfony source directory."
 
 #: admin/wizards/symfony.py:53
 msgid ""
 "Web directory where you want Symfony to be accessible. (Example: /symfony)"
 msgstr ""
+"Web directory where you want Symfony to be accessible. (Example: /symfony)"
 
 #: admin/wizards/symfony.py:250
-#, fuzzy
 msgid "Project Source"
-msgstr "Web Directory"
+msgstr "Project Source"
 
 #: admin/wizards/symfony.py:251
 msgid "Symfony Package"
-msgstr ""
+msgstr "Symfony Package"
 
 #: admin/wizards/uwsgi.py:51
-#, fuzzy
 msgid "Welcome to the uWSGI Wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the uWSGI Wizard"
 
 #: admin/wizards/uwsgi.py:52
 msgid ""
@@ -5888,6 +5689,9 @@ msgid ""
 "fast (pure C), self-healing, developer-friendly application container, aimed "
 "for professional webapps deployment and development."
 msgstr ""
+"<a target=\"_blank\" href=\"http://projects.unbit.it/uwsgi/\">uWSGI</a> is a "
+"fast (pure C), self-healing, developer-friendly application container, aimed "
+"for professional webapps deployment and development."
 
 #: admin/wizards/uwsgi.py:53
 msgid ""
@@ -5896,42 +5700,46 @@ msgid ""
 "uwsgi (all lowercase) protocol for all the networking/interprocess "
 "communications."
 msgstr ""
+"It includes a complete stack for networked/clustered applications, "
+"implementing message/object passing and process management. It uses the "
+"uwsgi (all lowercase) protocol for all the networking/interprocess "
+"communications."
 
 #: admin/wizards/uwsgi.py:56
 msgid ""
 "Path to the uWSGI configuration file (XML, INI, YAML or .wsgi, .py, .psgi, ."
 "pl, .lua, .ws, .ru, .rb). Its mountpoint will be used."
 msgstr ""
+"Path to the uWSGI configuration file (XML, INI, YAML or .wsgi, .py, .psgi, ."
+"pl, .lua, .ws, .ru, .rb). Its mountpoint will be used."
 
 #: admin/wizards/uwsgi.py:57
 msgid "Location of the uWSGI binary"
-msgstr ""
+msgstr "Location of the uWSGI binary"
 
 #: admin/wizards/uwsgi.py:58
-#, fuzzy
 msgid "It does not look like a uWSGI configuration file."
-msgstr "Create a new configuration file"
+msgstr "It does not look like a uWSGI configuration file."
 
 #: admin/wizards/uwsgi.py:66
 msgid ""
 "The default value is extracted from the configuration file. Change it at "
 "your own risk."
 msgstr ""
+"The default value is extracted from the configuration file. Change it at "
+"your own risk."
 
 #: admin/wizards/uwsgi.py:287
-#, fuzzy
 msgid "uWSGI binary"
-msgstr "Wildcards"
+msgstr "uWSGI binary"
 
 #: admin/wizards/uwsgi.py:288
-#, fuzzy
 msgid "Configuration File"
-msgstr "Configuration file"
+msgstr "Configuration File"
 
 #: admin/wizards/zend.py:38
-#, fuzzy
 msgid "Welcome to the Zend Wizard"
-msgstr "Welcome to Cherokee Admin"
+msgstr "Welcome to the Zend Wizard"
 
 #: admin/wizards/zend.py:39
 msgid ""
@@ -5940,759 +5748,31 @@ msgid ""
 "to eliminate the tedious details of coding and let you focus on the big "
 "picture."
 msgstr ""
+"<a target=\"_blank\" href=\"http://www.zend.com/\">Zend</a> Framework is a "
+"simple, straightforward, open-source software framework for PHP 5 designed "
+"to eliminate the tedious details of coding and let you focus on the big "
+"picture."
 
 #: admin/wizards/zend.py:40
 msgid ""
 "One of its strengths is the highly modular Model-View-Controller (MVC) "
 "design, making your code more reusable and easier to maintain."
 msgstr ""
+"One of its strengths is the highly modular Model-View-Controller (MVC) "
+"design, making your code more reusable and easier to maintain."
 
 #: admin/wizards/zend.py:43
 msgid ""
 "Local directory where the Zend source code is located. Example: /usr/share/"
 "php/data/zend."
 msgstr ""
+"Local directory where the Zend source code is located. Example: /usr/share/"
+"php/data/zend."
 
 #: admin/wizards/zend.py:44
-#, fuzzy
 msgid "Does not look like a Zend source directory."
-msgstr "Create a new configuration file"
+msgstr "Does not look like a Zend source directory."
 
 #: admin/wizards/zend.py:49
 msgid "Web directory where you want Zend to be accessible. (Example: /zend)"
-msgstr ""
-
-#, fuzzy
-#~ msgid "Domain"
-#~ msgstr "Domains"
-
-#, fuzzy
-#~ msgid "New"
-#~ msgstr "Network"
-
-#, fuzzy
-#~ msgid "Default WWW"
-#~ msgstr "Default"
-
-#~ msgid "Not running"
-#~ msgstr "Not running"
-
-#, fuzzy
-#~ msgid "Information"
-#~ msgstr "Show Information"
-
-#, fuzzy
-#~ msgid ""
-#~ "<h3>Beta testing</h3> <p>Individuals like yourself who download and\n"
-#~ "test the latest developer snapshots of Cherokee Web Server help us to\n"
-#~ "create the highest quality product. For that, we thank you.</p>\n"
-#~ msgstr ""
-#~ "Individuals like yourself who download and test the latest developer "
-#~ "snapshots of Cherokee Web Server help us to create the highest quality "
-#~ "product."
-
-#, fuzzy
-#~ msgid "Host Names"
-#~ msgstr "Host names"
-
-#, fuzzy
-#~ msgid "DB type"
-#~ msgstr "MIME types"
-
-#, fuzzy
-#~ msgid "Could not validate Nagios configuration"
-#~ msgstr "Could not copy configuration to "
-
-#, fuzzy
-#~ msgid "Password configuration"
-#~ msgstr "Icon configuration"
-
-#, fuzzy
-#~ msgid "Application available"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "WebDAV directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "Path to the directory to share."
-#~ msgstr "Path is not a directory"
-
-#, fuzzy
-#~ msgid "Could not parse the PHP-fpm settings file"
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Package Deployment"
-#~ msgstr "Realm"
-
-#, fuzzy
-#~ msgid "Icons Directory is Missing"
-#~ msgstr "Icons directory is missing"
-
-#, fuzzy
-#~ msgid ""
-#~ "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
-#~ "${protocol}, ${transport}, ${port_server}, ${query_string}, "
-#~ "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-#~ "${user_remote}, ${request}, ${request_original}, ${vserver_name}, "
-#~ "${vserver_name_req}, ${response_size}"
-#~ msgstr ""
-#~ "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
-#~ "${protocol}, ${transport}, ${port_server}, ${query_string}, "
-#~ "${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
-#~ "${user_remote}, ${request}, ${request_original}, ${vserver_name}"
-
-#, fuzzy
-#~ msgid "The Configuration has been Saved"
-#~ msgstr "Configuration saved."
-
-#, fuzzy
-#~ msgid "Trac Local Directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "It does not look like a Trac installation."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "It does not look like a Trac based project directory."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Could not determine correct interpreter settings."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Does not look like a Uwsgi source directory."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Liferay Project"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Welcome to the Liferay Wizard"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Does not look like a phpBB source directory."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Welcome to the phpBB Wizard"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "WordPress Local Directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "Welcome to the WordPress wizard"
-#~ msgstr "Welcome to Cherokee Admin"
-
-#, fuzzy
-#~ msgid "Drupal Local Directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "Does not look like a Drupal source directory."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Welcome to the Drupal wizard"
-#~ msgstr "Welcome to Cherokee Admin"
-
-#, fuzzy
-#~ msgid "FastCGI spawner binary"
-#~ msgstr "FastCGI specific"
-
-#, fuzzy
-#~ msgid "MoinMoin Directory"
-#~ msgstr "Path is not a directory"
-
-#, fuzzy
-#~ msgid "It does not look like a MoinMoin Wiki Instance."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Local path to the MoinMoin Wiki Instance."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "MoinMoin Wiki Instance"
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Welcome to the MoinMoin Wizard"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Sugar Local Directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "MediaWiki Local Directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "Internal Web Directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "Does not look like a MediaWiki source directory."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Welcome to the Mediawiki wizard"
-#~ msgstr "Welcome to Cherokee Admin"
-
-#, fuzzy
-#~ msgid "Moodle"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Liferay"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "MoinMoin Wiki"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Joomla"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Drupal"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Joomla Local Directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "Welcome to the Joomla wizard"
-#~ msgstr "Welcome to Cherokee Admin"
-
-#, fuzzy
-#~ msgid "Welcome to the phpMyAdmin Wizard"
-#~ msgstr "Welcome to Cherokee Admin"
-
-#, fuzzy
-#~ msgid "Does not look like a Moodle source directory."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Welcome to the Moodle Wizard"
-#~ msgstr "Welcome to Cherokee Admin"
-
-#, fuzzy
-#~ msgid "Setting up application…"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "Downloading"
-#~ msgstr "Logging"
-
-#, fuzzy
-#~ msgid "Installation"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Unfinished installation"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Database removal"
-#~ msgstr "Database"
-
-#, fuzzy
-#~ msgid "OWS Error"
-#~ msgstr "Error"
-
-#, fuzzy
-#~ msgid "Must accept License"
-#~ msgstr "Base Domain"
-
-#, fuzzy
-#~ msgid "Accept license"
-#~ msgstr "Base Domain"
-
-#, fuzzy
-#~ msgid "Moodle License"
-#~ msgstr "Wildcards"
-
-#, fuzzy
-#~ msgid "Domain name"
-#~ msgstr "Domain pattern"
-
-#, fuzzy
-#~ msgid "Short sitename"
-#~ msgstr "Host names"
-
-#, fuzzy
-#~ msgid "Full sitename"
-#~ msgstr "Filename"
-
-#, fuzzy
-#~ msgid "Username for the administrator account. Only lower case allowed."
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Performing automatic installation"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Communicating DB details."
-#~ msgstr "Authentication Details"
-
-#, fuzzy
-#~ msgid "WsgiDAV configuration"
-#~ msgstr "General Configuration"
-
-#, fuzzy
-#~ msgid "Local directory"
-#~ msgstr "Web Directory"
-
-#, fuzzy
-#~ msgid "Installing WsgiDAV"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Vietnamese"
-#~ msgstr "Filename"
-
-#, fuzzy
-#~ msgid "English (GB)"
-#~ msgstr "English"
-
-#, fuzzy
-#~ msgid "Danish"
-#~ msgstr "Spanish"
-
-#, fuzzy
-#~ msgid "Database Requirements"
-#~ msgstr "Path does not exist"
-
-#, fuzzy
-#~ msgid "Installing Nagios"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "User configuration method"
-#~ msgstr "Configuration file"
-
-#, fuzzy
-#~ msgid "Group does not exist"
-#~ msgstr "Path does not exist"
-
-#, fuzzy
-#~ msgid "Please choose the desired user configuration method."
-#~ msgstr "Could not copy configuration to "
-
-#, fuzzy
-#~ msgid "Password for the administrator user."
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Username for the administrator user."
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Administrator configuration"
-#~ msgstr "General Configuration"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "Port"
-
-#, fuzzy
-#~ msgid "Check Again"
-#~ msgstr "Check file"
-
-#, fuzzy
-#~ msgid "Configuring PHP"
-#~ msgstr "Configuration file"
-
-#, fuzzy
-#~ msgid "Deployment Type"
-#~ msgstr "Server Development"
-
-#, fuzzy
-#~ msgid "Unknown target"
-#~ msgstr "Unknown"
-
-#, fuzzy
-#~ msgid ""
-#~ "Select the target Virtual Host under which the application should be "
-#~ "installed."
-#~ msgstr ""
-#~ "Public Web Directory to which content the configuration will be applied."
-
-#, fuzzy
-#~ msgid ""
-#~ "Specify the web directory under which the application will be accessible."
-#~ msgstr ""
-#~ "Public Web Directory to which content the configuration will be applied."
-
-#, fuzzy
-#~ msgid "Database configuration"
-#~ msgstr "Icon configuration"
-
-#, fuzzy
-#~ msgid "Unknown method"
-#~ msgstr "Unknown"
-
-#, fuzzy
-#~ msgid "Username"
-#~ msgstr "User"
-
-#, fuzzy
-#~ msgid "Database does not exist."
-#~ msgstr "Path does not exist"
-
-#, fuzzy
-#~ msgid "Configuration method"
-#~ msgstr "Configuration file"
-
-#, fuzzy
-#~ msgid "Username does not exist"
-#~ msgstr "Path does not exist"
-
-#, fuzzy
-#~ msgid "Unknown privilege"
-#~ msgstr "Unknown"
-
-#, fuzzy
-#~ msgid "Database not present"
-#~ msgstr "Path does not exist"
-
-#, fuzzy
-#~ msgid "Performing Drupal installation"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Sitename"
-#~ msgstr "Filename"
-
-#, fuzzy
-#~ msgid "Admin email"
-#~ msgstr "User"
-
-#, fuzzy
-#~ msgid "Admin user"
-#~ msgstr "User"
-
-#, fuzzy
-#~ msgid "Site details"
-#~ msgstr "Show User"
-
-#, fuzzy
-#~ msgid "Password for the administrator account."
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Username for the administrator account."
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Wiki details"
-#~ msgstr "Redirections"
-
-#, fuzzy
-#~ msgid "Username of the administrator account"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Current value"
-#~ msgstr "Custom value"
-
-#, fuzzy
-#~ msgid "Expected value"
-#~ msgstr "Execute as User"
-
-#, fuzzy
-#~ msgid "Setting"
-#~ msgstr "Privacy settings"
-
-#, fuzzy
-#~ msgid "Error report"
-#~ msgstr "Error Handler"
-
-#, fuzzy
-#~ msgid "Trac Password"
-#~ msgstr "Password"
-
-#, fuzzy
-#~ msgid "Trac User"
-#~ msgstr "DB User"
-
-#, fuzzy
-#~ msgid "Installing Trac"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Satisfying pysqlite requirements"
-#~ msgstr "Path does not exist"
-
-#, fuzzy
-#~ msgid "User configuration"
-#~ msgstr "General Configuration"
-
-#, fuzzy
-#~ msgid "Access details"
-#~ msgstr "Access Restrictions"
-
-#, fuzzy
-#~ msgid "Performing adjustments"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Checking Requirements"
-#~ msgstr "Connections"
-
-#, fuzzy
-#~ msgid ""
-#~ "List of IP addresses and subnets that are allowed to send the X-Real-IP "
-#~ "header."
-#~ msgstr ""
-#~ "List of IP addresses and subnets that are allowed to send X-Real-IP "
-#~ "headers (usually your proxy servers)."
-
-#, fuzzy
-#~ msgid ""
-#~ "Accept all the X-Real-IP headers. WARNING: Turn it on only if you are "
-#~ "centain of what you are doing."
-#~ msgstr ""
-#~ "Accept all the X-Real-IP headers. It's dangerous: turn it on only if you "
-#~ "are centain of what you are doing."
-
-#, fuzzy
-#~ msgid "Logged as"
-#~ msgstr "Loggers"
-
-#, fuzzy
-#~ msgid "Authentication failed"
-#~ msgstr "Authentication Details"
-
-#, fuzzy
-#~ msgid "Missing Directory"
-#~ msgstr "Path is not a directory"
-
-#, fuzzy
-#~ msgid "Rule is active"
-#~ msgstr "Rule list"
-
-#, fuzzy
-#~ msgid "Rule is Active"
-#~ msgstr "Rule list"
-
-#, fuzzy
-#~ msgid "Annotations"
-#~ msgstr "Authentication"
-
-#, fuzzy
-#~ msgid "Your current Configuration file matches the restored version."
-#~ msgstr "Information Sources"
-
-#, fuzzy
-#~ msgid "Please, click the Save button if you want to commit the changes."
-#~ msgstr "Configuration saved."
-
-#, fuzzy
-#~ msgid "The configuration has been rolled back to a previous version."
-#~ msgstr "Configuration saved."
-
-#, fuzzy
-#~ msgid "The Configuration File was restored successfully"
-#~ msgstr "Configuration saved."
-
-#, fuzzy
-#~ msgid ""
-#~ "An error occurred while trying to restore a remotely-stored configuration "
-#~ "file."
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Could not restore the selected configuration file"
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Could not retrieve the configuration file list"
-#~ msgstr "Create a new configuration file"
-
-#, fuzzy
-#~ msgid "Remote Configuration Restoration"
-#~ msgstr "Configuration Quickstart"
-
-#, fuzzy
-#~ msgid "Configuration File Successfully uploaded"
-#~ msgstr "Configuration File Not Found"
-
-#, fuzzy
-#~ msgid "Could not Upload the Configuration File"
-#~ msgstr "Could not copy configuration to "
-
-#, fuzzy
-#~ msgid "Your current configuration is about to be backed up."
-#~ msgstr "Information Sources"
-
-#, fuzzy
-#~ msgid "Remote Configuration Back Up"
-#~ msgstr "General Configuration"
-
-#, fuzzy
-#~ msgid "Time"
-#~ msgstr "Timeout"
-
-#~ msgid "Encoding"
-#~ msgstr "Encoding"
-
-#, fuzzy
-#~ msgid "Report"
-#~ msgstr "Report"
-
-#, fuzzy
-#~ msgid "Request refund"
-#~ msgstr "Request"
-
-#, fuzzy
-#~ msgid "Report sent successfully"
-#~ msgstr "Report sent"
-
-#, fuzzy
-#~ msgid "Could not send the report"
-#~ msgstr "Could not access file descriptors: "
-
-#, fuzzy
-#~ msgid "your new application"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "Setting it up…"
-#~ msgstr "General Configuration"
-
-#, fuzzy
-#~ msgid "Report Issue"
-#~ msgstr "Report sent"
-
-#, fuzzy
-#~ msgid "Comments"
-#~ msgstr "Country"
-
-#, fuzzy
-#~ msgid "Check Out"
-#~ msgstr "Check file"
-
-#, fuzzy
-#~ msgid "Connecting to Cherokee Market"
-#~ msgstr "Connections"
-
-#, fuzzy
-#~ msgid "Application not found"
-#~ msgstr "Application Server"
-
-#~ msgid "Version"
-#~ msgstr "Version"
-
-#, fuzzy
-#~ msgid "Report issue"
-#~ msgstr "Report sent"
-
-#, fuzzy
-#~ msgid "Report Application"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "to install"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Databases"
-#~ msgstr "Database"
-
-#, fuzzy
-#~ msgid "Unsupported"
-#~ msgstr "Support"
-
-#, fuzzy
-#~ msgid "Supported"
-#~ msgstr "Support"
-
-#, fuzzy
-#~ msgid "Removing Applications"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "Database Credentials"
-#~ msgstr "Path does not exist"
-
-#, fuzzy
-#~ msgid "DB password"
-#~ msgstr "DB Password"
-
-#, fuzzy
-#~ msgid "Unfinished"
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Date"
-#~ msgstr "Show Date"
-
-#, fuzzy
-#~ msgid "Application"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "Detected %(num_orphan)d orphan installations: "
-#~ msgstr "Remote Administration"
-
-#, fuzzy
-#~ msgid "Categories"
-#~ msgstr "Countries"
-
-#, fuzzy
-#~ msgid "Error executing"
-#~ msgstr "Error Handling hook"
-
-#, fuzzy
-#~ msgid "Unknown Error"
-#~ msgstr "Unknown"
-
-#, fuzzy
-#~ msgid "Hide error details"
-#~ msgstr "Writers"
-
-#, fuzzy
-#~ msgid "Show error details"
-#~ msgstr "Show User"
-
-#, fuzzy
-#~ msgid "Top Applications"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "Featured Applications"
-#~ msgstr "Application Server"
-
-#, fuzzy
-#~ msgid "or"
-#~ msgstr "Port"
-
-#, fuzzy
-#~ msgid "View list…"
-#~ msgstr "Fixed list"
-
-#, fuzzy
-#~ msgid "Backup Service"
-#~ msgstr "Back-end Servers"
-
-#, fuzzy
-#~ msgid "Remote Services"
-#~ msgstr "Remote host"
-
-#, fuzzy
-#~ msgid "Market installation"
-#~ msgstr "Remote Administration"
+msgstr "Web directory where you want Zend to be accessible. (Example: /zend)"
