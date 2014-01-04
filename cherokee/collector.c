@@ -105,12 +105,12 @@ base_init (cherokee_collector_base_t *collector,
 	return ret_ok;
 }
 
-static ret_t
+static void
 base_free (cherokee_collector_base_t *collector)
 {
 	priv_free (collector->priv);
 	free (collector);
-	return ret_ok;
+	return;
 }
 
 static ret_t
@@ -157,7 +157,7 @@ cherokee_collector_init_base (cherokee_collector_t  *collector,
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_collector_free (cherokee_collector_t *collector)
 {
 	if (COLLECTOR_BASE(collector)->free) {
@@ -259,7 +259,7 @@ cherokee_collector_vsrv_init_base (cherokee_collector_vsrv_t  *collector_vsrv,
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_collector_vsrv_free (cherokee_collector_vsrv_t *collector_vsrv)
 {
 	if (COLLECTOR_BASE(collector_vsrv)->free) {

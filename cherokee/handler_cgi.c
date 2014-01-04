@@ -197,7 +197,7 @@ do_reap (void)
 }
 
 
-ret_t
+void
 cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 {
 	int i;
@@ -277,11 +277,11 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 	 */
 	do_reap();
 
-	return ret_ok;
+    return;
 }
 
 
-ret_t
+void
 cherokee_handler_cgi_props_free (cherokee_handler_cgi_props_t *props)
 {
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));

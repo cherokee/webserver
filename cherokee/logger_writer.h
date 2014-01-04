@@ -64,7 +64,7 @@ typedef struct {
 
 ret_t cherokee_logger_writer_new         (cherokee_logger_writer_t **writer);
 ret_t cherokee_logger_writer_new_stderr  (cherokee_logger_writer_t **writer);
-ret_t cherokee_logger_writer_free        (cherokee_logger_writer_t  *writer);
+void  cherokee_logger_writer_free        (cherokee_logger_writer_t  *writer);
 
 ret_t cherokee_logger_writer_configure   (cherokee_logger_writer_t *writer, cherokee_config_node_t *conf);
 

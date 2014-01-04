@@ -51,13 +51,13 @@ cherokee_mime_entry_new (cherokee_mime_entry_t **mentry)
 }
 
 
-ret_t
+void
 cherokee_mime_entry_free (cherokee_mime_entry_t *mentry)
 {
 	cherokee_buffer_mrproper (&mentry->mime_name);
 
 	free (mentry);
-	return ret_ok;
+	return;
 }
 
 

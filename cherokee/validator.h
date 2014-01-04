@@ -112,12 +112,12 @@ typedef struct {
 /* Validator methods
  */
 ret_t cherokee_validator_init_base       (cherokee_validator_t *validator, cherokee_validator_props_t *props, cherokee_plugin_info_validator_t *info);
-ret_t cherokee_validator_free_base       (cherokee_validator_t *validator);
+void  cherokee_validator_free_base       (cherokee_validator_t *validator);
 
 /* Validator virtual methods
  */
 ret_t cherokee_validator_configure       (cherokee_config_node_t *conf, void *config_entry);
-ret_t cherokee_validator_free            (cherokee_validator_t *validator);
+void  cherokee_validator_free            (cherokee_validator_t *validator);
 ret_t cherokee_validator_check           (cherokee_validator_t *validator, void *conn);
 ret_t cherokee_validator_add_headers     (cherokee_validator_t *validator, void *conn, cherokee_buffer_t *buf);
 
@@ -131,7 +131,7 @@ ret_t cherokee_validator_digest_check    (cherokee_validator_t *validator, chero
 /* Validator properties methods
  */
 ret_t cherokee_validator_props_init_base  (cherokee_validator_props_t *props, module_func_props_free_t free_func);
-ret_t cherokee_validator_props_free_base  (cherokee_validator_props_t *props);
+void  cherokee_validator_props_free_base  (cherokee_validator_props_t *props);
 
 CHEROKEE_END_DECLS
 

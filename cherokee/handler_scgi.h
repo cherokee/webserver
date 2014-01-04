@@ -61,7 +61,7 @@ void PLUGIN_INIT_NAME(scgi)      (cherokee_plugin_loader_t *loader);
 /* Methods
  */
 ret_t cherokee_handler_scgi_new       (cherokee_handler_t     **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_scgi_free      (cherokee_handler_scgi_t *hdl);
+void  cherokee_handler_scgi_free      (cherokee_handler_scgi_t *hdl);
 ret_t cherokee_handler_scgi_init      (cherokee_handler_scgi_t *hdl);
 ret_t cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl);
 

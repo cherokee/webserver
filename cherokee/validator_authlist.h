@@ -45,7 +45,7 @@ typedef struct {
 void PLUGIN_INIT_NAME(authlist) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_authlist_new         (cherokee_validator_authlist_t **authlist, cherokee_module_props_t *props);
-ret_t cherokee_validator_authlist_free        (cherokee_validator_authlist_t  *authlist);
+void  cherokee_validator_authlist_free        (cherokee_validator_authlist_t  *authlist);
 
 ret_t cherokee_validator_authlist_check       (cherokee_validator_authlist_t  *authlist, cherokee_connection_t *conn);
 ret_t cherokee_validator_authlist_add_headers (cherokee_validator_authlist_t  *authlist, cherokee_connection_t *conn, cherokee_buffer_t *buf);

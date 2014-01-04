@@ -72,25 +72,25 @@ cherokee_module_props_init_base (cherokee_module_props_t *prop, module_func_prop
 }
 
 
-ret_t
+void
 cherokee_module_props_free (cherokee_module_props_t *prop)
 {
 	if (prop == NULL)
-		return ret_error;
+		return;
 
 	if (prop->free == NULL) {
 		SHOULDNT_HAPPEN;
-		return ret_error;
+		return;
 	}
 
 	prop->free (prop);
-	return ret_ok;
+	return;
 }
 
 
-ret_t
+void
 cherokee_module_props_free_base (cherokee_module_props_t *prop)
 {
 	free (prop);
-	return ret_ok;
+	return;
 }

@@ -178,30 +178,23 @@ cherokee_balancer_report_fail (cherokee_balancer_t   *balancer,
 }
 
 
-ret_t
+void
 cherokee_balancer_free (cherokee_balancer_t *bal)
 {
-	ret_t              ret;
 	cherokee_module_t *module = MODULE(bal);
 
-	/* Sanity check
-	 */
-	if (module->free == NULL) {
-		return ret_error;
+	if (module->free != NULL) {
+	    /* Call the virtual method implementation
+	     */
+	    MODULE(bal)->free (bal);
 	}
-
-	/* Call the virtual method implementation
-	 */
-	ret = MODULE(bal)->free (bal);
-	if (unlikely (ret < ret_ok))
-		return ret;
 
 	/* Free the rest
 	 */
 	cherokee_balancer_mrproper(bal);
 
 	free (bal);
-	return ret_ok;
+	return;
 }
 
 

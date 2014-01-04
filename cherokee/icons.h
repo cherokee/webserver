@@ -46,7 +46,7 @@ typedef struct {
 
 
 ret_t cherokee_icons_new   (cherokee_icons_t **icons);
-ret_t cherokee_icons_free  (cherokee_icons_t  *icons);
+void  cherokee_icons_free  (cherokee_icons_t  *icons);
 ret_t cherokee_icons_clean (cherokee_icons_t  *icons);
 
 ret_t cherokee_icons_configure (cherokee_icons_t *icons, cherokee_config_node_t *config);

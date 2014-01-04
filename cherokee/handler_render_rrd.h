@@ -54,7 +54,7 @@ void PLUGIN_INIT_NAME(render_rrd)      (cherokee_plugin_loader_t *loader);
 /* Methods
  */
 ret_t cherokee_handler_render_rrd_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_render_rrd_free (cherokee_handler_render_rrd_t *hdl);
+void  cherokee_handler_render_rrd_free (cherokee_handler_render_rrd_t *hdl);
 ret_t cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl);
 
 #endif /* CHEROKEE_HANDLER_RENDER_RRD_H */

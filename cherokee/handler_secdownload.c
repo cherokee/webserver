@@ -29,7 +29,7 @@
 
 #define ENTRIES "handler,secdownload"
 
-ret_t
+void
 cherokee_handler_secdownload_props_free (cherokee_handler_secdownload_props_t *props)
 {
 	if (props->props_file != NULL) {

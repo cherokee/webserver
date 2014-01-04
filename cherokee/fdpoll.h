@@ -55,7 +55,7 @@ ret_t cherokee_fdpoll_get_fdlimits(cherokee_poll_type_t type, cuint_t *sys_fd_li
 
 ret_t cherokee_fdpoll_new        (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_fd_limit, int fd_limit);
 ret_t cherokee_fdpoll_best_new   (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
-ret_t cherokee_fdpoll_free       (cherokee_fdpoll_t  *fdp);
+void  cherokee_fdpoll_free       (cherokee_fdpoll_t  *fdp);
 
 ret_t cherokee_fdpoll_get_method (cherokee_fdpoll_t *fdp, cherokee_poll_type_t *poll_type);
 ret_t cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, const char **str_method);

@@ -74,7 +74,7 @@ static unsigned char gzip_header[gzip_header_len] = {
  *
  */
 
-static ret_t
+static void
 props_free (cherokee_encoder_gzip_t *props)
 {
 	return cherokee_encoder_props_free_base (ENCODER_PROPS(props));
@@ -167,7 +167,7 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t  **encoder,
 }
 
 
-ret_t
+void
 cherokee_encoder_gzip_free (cherokee_encoder_gzip_t *encoder)
 {
 	if (encoder->workspace != NULL) {
@@ -175,7 +175,7 @@ cherokee_encoder_gzip_free (cherokee_encoder_gzip_t *encoder)
 	}
 
 	free (encoder);
-	return ret_ok;
+    return;
 }
 
 

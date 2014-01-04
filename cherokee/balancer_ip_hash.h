@@ -42,6 +42,6 @@ typedef struct {
 void PLUGIN_INIT_NAME(ip_hash) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_balancer_ip_hash_new  (cherokee_balancer_t **balancer);
-ret_t cherokee_balancer_ip_hash_free (cherokee_balancer_ip_hash_t *balancer);
+void  cherokee_balancer_ip_hash_free (cherokee_balancer_ip_hash_t *balancer);
 
 #endif /* CHEROKEE_BALANCER_IP_HASH_H */

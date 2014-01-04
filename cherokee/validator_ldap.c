@@ -45,7 +45,7 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (ldap, http_auth_basic);
 
 
-static ret_t
+static void
 props_free (cherokee_validator_ldap_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->server);
@@ -249,7 +249,7 @@ cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_module_p
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_validator_ldap_free (cherokee_validator_ldap_t *ldap)
 {
 	cherokee_buffer_mrproper (&ldap->filter);
@@ -257,7 +257,7 @@ cherokee_validator_ldap_free (cherokee_validator_ldap_t *ldap)
 	if (ldap->conn)
 		ldap_unbind (ldap->conn);
 
-	return ret_ok;
+    return;
 }
 
 

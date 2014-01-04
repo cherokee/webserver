@@ -125,7 +125,7 @@ cherokee_handler_cgi_base_props_init_base (cherokee_handler_cgi_base_props_t *pr
 	return cherokee_handler_props_init_base (HANDLER_PROPS(props), free_func);
 }
 
-ret_t
+void
 cherokee_handler_cgi_base_props_free (cherokee_handler_cgi_base_props_t *props)
 {
 	cherokee_list_t *i, *tmp;
@@ -229,7 +229,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 }
 
 
-ret_t
+void
 cherokee_handler_cgi_base_free (cherokee_handler_cgi_base_t *cgi)
 {
 	if (cgi->file_handler) {
@@ -240,7 +240,7 @@ cherokee_handler_cgi_base_free (cherokee_handler_cgi_base_t *cgi)
 	cherokee_buffer_mrproper (&cgi->executable);
 	cherokee_buffer_mrproper (&cgi->xsendfile);
 
-	return ret_ok;
+    return;
 }
 
 

@@ -120,11 +120,11 @@ ret_t cherokee_encoder_configure (cherokee_config_node_t   *config,
 ret_t cherokee_encoder_props_init_base (cherokee_encoder_props_t *props,
                                         module_func_props_free_t  free_func);
 
-ret_t cherokee_encoder_props_free_base (cherokee_encoder_props_t *encoder_props);
+void  cherokee_encoder_props_free_base (cherokee_encoder_props_t *encoder_props);
 
 /* Encoder virtual methods
  */
-ret_t cherokee_encoder_free        (cherokee_encoder_t *enc);
+void  cherokee_encoder_free        (cherokee_encoder_t *enc);
 ret_t cherokee_encoder_add_headers (cherokee_encoder_t *enc, cherokee_buffer_t *buf);
 ret_t cherokee_encoder_init        (cherokee_encoder_t *enc, void *conn);
 ret_t cherokee_encoder_encode      (cherokee_encoder_t *enc, cherokee_buffer_t *in, cherokee_buffer_t *out);

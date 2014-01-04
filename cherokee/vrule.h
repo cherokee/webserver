@@ -76,7 +76,7 @@ typedef struct {
 
 /* Methods
  */
-ret_t cherokee_vrule_free        (cherokee_vrule_t *vrule);
+void  cherokee_vrule_free        (cherokee_vrule_t *vrule);
 
 /* Vrule methods
  */

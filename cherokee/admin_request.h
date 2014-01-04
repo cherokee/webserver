@@ -39,7 +39,7 @@ typedef struct cherokee_admin_request cherokee_admin_request_t;
 
 
 ret_t cherokee_admin_request_new  (cherokee_admin_request_t **req);
-ret_t cherokee_admin_request_free (cherokee_admin_request_t  *req);
+void  cherokee_admin_request_free (cherokee_admin_request_t  *req);
 
 ret_t cherokee_admin_request_add         (cherokee_admin_request_t *req, char *key);
 ret_t cherokee_admin_request_serialize   (cherokee_admin_request_t *req);

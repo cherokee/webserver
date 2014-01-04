@@ -58,7 +58,7 @@ ret_t cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_ser
 /* virtual methods implementation
  */
 ret_t cherokee_logger_ncsa_init         (cherokee_logger_ncsa_t *logger);
-ret_t cherokee_logger_ncsa_free         (cherokee_logger_ncsa_t *logger);
+void  cherokee_logger_ncsa_free         (cherokee_logger_ncsa_t *logger);
 
 ret_t cherokee_logger_ncsa_flush        (cherokee_logger_ncsa_t *logger);
 ret_t cherokee_logger_ncsa_reopen       (cherokee_logger_ncsa_t *logger);

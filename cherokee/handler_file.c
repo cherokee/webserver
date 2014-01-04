@@ -55,7 +55,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (file, http_get | http_head | http_options);
 
 /* Methods implementation
  */
-ret_t
+void
 cherokee_handler_file_props_free (cherokee_handler_file_props_t *props)
 {
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
@@ -136,7 +136,7 @@ cherokee_handler_file_new (cherokee_handler_t     **hdl,
 }
 
 
-ret_t
+void
 cherokee_handler_file_free (cherokee_handler_file_t *fhdl)
 {
 	if (fhdl->fd != -1) {
@@ -144,7 +144,7 @@ cherokee_handler_file_free (cherokee_handler_file_t *fhdl)
 		fhdl->fd = -1;
 	}
 
-	return ret_ok;
+    return;
 }
 
 

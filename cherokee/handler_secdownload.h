@@ -54,6 +54,6 @@ void  PLUGIN_INIT_NAME(secdownload) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_secdownload_configure  (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 ret_t cherokee_handler_secdownload_new        (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_secdownload_props_free (cherokee_handler_secdownload_props_t *props);
+void  cherokee_handler_secdownload_props_free (cherokee_handler_secdownload_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_SECDOWNLOAD_H */

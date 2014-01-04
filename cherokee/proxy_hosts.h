@@ -96,7 +96,7 @@ ret_t cherokee_handler_proxy_hosts_get      (cherokee_handler_proxy_hosts_t  *ho
  */
 ret_t cherokee_handler_proxy_poll_new       (cherokee_handler_proxy_poll_t  **poll,
                                              cuint_t                          reuse_max);
-ret_t cherokee_handler_proxy_poll_free      (cherokee_handler_proxy_poll_t   *poll);
+void  cherokee_handler_proxy_poll_free      (cherokee_handler_proxy_poll_t   *poll);
 ret_t cherokee_handler_proxy_poll_get       (cherokee_handler_proxy_poll_t   *poll,
                                              cherokee_handler_proxy_conn_t  **pconn,
                                              cherokee_source_t               *src);
@@ -105,7 +105,7 @@ ret_t cherokee_handler_proxy_poll_get       (cherokee_handler_proxy_poll_t   *po
 /* Conns
  */
 ret_t cherokee_handler_proxy_conn_new          (cherokee_handler_proxy_conn_t **pconn);
-ret_t cherokee_handler_proxy_conn_free         (cherokee_handler_proxy_conn_t  *pconn);
+void  cherokee_handler_proxy_conn_free         (cherokee_handler_proxy_conn_t  *pconn);
 ret_t cherokee_handler_proxy_conn_release      (cherokee_handler_proxy_conn_t  *pconn);
 ret_t cherokee_handler_proxy_conn_send         (cherokee_handler_proxy_conn_t  *pconn,
                                                 cherokee_buffer_t              *buf);

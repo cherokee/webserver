@@ -58,7 +58,7 @@ typedef struct {
 #define cherokee_buffer_fake_str(b,s)      cherokee_buffer_fake (b, s, sizeof(s)-1)
 
 ret_t cherokee_buffer_new                  (cherokee_buffer_t **buf);
-ret_t cherokee_buffer_free                 (cherokee_buffer_t  *buf);
+void  cherokee_buffer_free                 (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_init                 (cherokee_buffer_t  *buf);
 void  cherokee_buffer_mrproper             (cherokee_buffer_t  *buf);
 void  cherokee_buffer_fake                 (cherokee_buffer_t  *buf, const char *str, cuint_t len);

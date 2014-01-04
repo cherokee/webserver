@@ -79,7 +79,7 @@ struct cherokee_flcache_conn {
 /* Front-line cache
  */
 ret_t cherokee_flcache_new             (cherokee_flcache_t **flcache);
-ret_t cherokee_flcache_free            (cherokee_flcache_t  *flcache);
+void  cherokee_flcache_free            (cherokee_flcache_t  *flcache);
 ret_t cherokee_flcache_configure       (cherokee_flcache_t  *flcache, cherokee_config_node_t *conf, void *vserver);
 
 ret_t cherokee_flcache_cleanup         (cherokee_flcache_t *flcache);

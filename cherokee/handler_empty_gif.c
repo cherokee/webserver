@@ -107,10 +107,10 @@ cherokee_handler_empty_gif_init (cherokee_handler_empty_gif_t *hdl)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_handler_empty_gif_free (cherokee_handler_empty_gif_t *hdl)
 {
 	UNUSED(hdl);
-	return ret_ok;
+    return;
 }
 

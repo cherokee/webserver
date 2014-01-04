@@ -28,7 +28,7 @@
 #include "module.h"
 #include "fdpoll.h"
 
-typedef ret_t (* fdpoll_func_free_t)     (void  *fdpoll);
+typedef void  (* fdpoll_func_free_t)     (void  *fdpoll);
 typedef ret_t (* fdpoll_func_add_t)      (void  *fdpoll, int fd, int rw);
 typedef ret_t (* fdpoll_func_del_t)      (void  *fdpoll, int fd);
 typedef ret_t (* fdpoll_func_reset_t)    (void  *fdpoll, int fd);

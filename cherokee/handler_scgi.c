@@ -43,7 +43,7 @@ CGI_LIB_INIT (scgi, http_all_methods);
 
 /* Methods implementation
  */
-static ret_t
+static void
 props_free (cherokee_handler_scgi_props_t *props)
 {
 	if (props->balancer)
@@ -207,7 +207,7 @@ cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 }
 
 
-ret_t
+void
 cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl)
 {
 	/* Free the rest of the handler CGI memory
@@ -221,7 +221,7 @@ cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl)
 
 	cherokee_buffer_mrproper (&hdl->header);
 
-	return ret_ok;
+    return;
 }
 
 

@@ -41,7 +41,7 @@ CHEROKEE_BEGIN_DECLS
  */
 typedef ret_t (* logger_func_new_t)          (void **logger, void *vsrv, cherokee_config_node_t *config);
 typedef ret_t (* logger_func_init_t)         (void  *logger);
-typedef ret_t (* logger_func_free_t)         (void  *logger);
+typedef void  (* logger_func_free_t)         (void  *logger);
 typedef ret_t (* logger_func_flush_t)        (void  *logger);
 typedef ret_t (* logger_func_reopen_t)       (void  *logger);
 typedef ret_t (* logger_func_write_access_t) (void  *logger, void *conn);
@@ -83,7 +83,7 @@ ret_t cherokee_logger_init_base       (cherokee_logger_t      *logger,
 /* Logger virtual methods
  */
 ret_t cherokee_logger_init            (cherokee_logger_t *logger);
-ret_t cherokee_logger_free            (cherokee_logger_t *logger);
+void  cherokee_logger_free            (cherokee_logger_t *logger);
 
 ret_t cherokee_logger_reopen          (cherokee_logger_t *logger);
 ret_t cherokee_logger_flush           (cherokee_logger_t *logger);

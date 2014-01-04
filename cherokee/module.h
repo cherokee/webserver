@@ -40,8 +40,8 @@ CHEROKEE_BEGIN_DECLS
  */
 typedef void   * module_func_init_t;
 typedef ret_t (* module_func_new_t)        (void *);
-typedef ret_t (* module_func_free_t)       (void *);
-typedef ret_t (* module_func_props_free_t) (void *);
+typedef void  (* module_func_free_t)       (void *);
+typedef void  (* module_func_props_free_t) (void *);
 typedef ret_t (* module_func_configure_t)  (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props);
 
 
@@ -77,8 +77,8 @@ ret_t cherokee_module_get_name  (cherokee_module_t *module, const char **name);
 /* Property methods
  */
 ret_t cherokee_module_props_init_base (cherokee_module_props_t *prop, module_func_props_free_t free_func);
-ret_t cherokee_module_props_free_base (cherokee_module_props_t *prop);
-ret_t cherokee_module_props_free      (cherokee_module_props_t *prop);
+void  cherokee_module_props_free_base (cherokee_module_props_t *prop);
+void  cherokee_module_props_free      (cherokee_module_props_t *prop);
 
 
 CHEROKEE_END_DECLS

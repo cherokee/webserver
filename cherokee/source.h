@@ -56,7 +56,7 @@ typedef struct {
 #define SOURCE(s)  ((cherokee_source_t *)(s))
 
 ret_t cherokee_source_new       (cherokee_source_t **src);
-ret_t cherokee_source_free      (cherokee_source_t  *src);
+void  cherokee_source_free      (cherokee_source_t  *src);
 ret_t cherokee_source_init      (cherokee_source_t  *src);
 void  cherokee_source_mrproper  (cherokee_source_t  *src);
 

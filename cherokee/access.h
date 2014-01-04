@@ -37,7 +37,7 @@ typedef struct {
 ret_t cherokee_access_init       (cherokee_access_t  *entry);
 void  cherokee_access_mrproper   (cherokee_access_t  *entry);
 ret_t cherokee_access_new        (cherokee_access_t **entry);
-ret_t cherokee_access_free       (cherokee_access_t  *entry);
+void  cherokee_access_free       (cherokee_access_t  *entry);
 
 ret_t cherokee_access_add        (cherokee_access_t *entry, char *ip_or_subnet);
 ret_t cherokee_access_ip_match   (cherokee_access_t *entry, cherokee_socket_t *sock);

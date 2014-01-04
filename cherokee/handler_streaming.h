@@ -72,8 +72,8 @@ void PLUGIN_INIT_NAME(streaming) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_streaming_configure  (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 ret_t cherokee_handler_streaming_new        (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_streaming_free       (cherokee_handler_streaming_t *hdl);
-ret_t cherokee_handler_streaming_props_free (cherokee_handler_streaming_props_t *props);
+void  cherokee_handler_streaming_free       (cherokee_handler_streaming_t *hdl);
+void  cherokee_handler_streaming_props_free (cherokee_handler_streaming_props_t *props);
 
 /* Virtual methods
  */

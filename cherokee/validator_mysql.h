@@ -64,7 +64,7 @@ typedef struct {
 ret_t cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
 
 ret_t cherokee_validator_mysql_new         (cherokee_validator_mysql_t **mysql, cherokee_module_props_t *props);
-ret_t cherokee_validator_mysql_free        (cherokee_validator_mysql_t  *mysql);
+void  cherokee_validator_mysql_free        (cherokee_validator_mysql_t  *mysql);
 ret_t cherokee_validator_mysql_check       (cherokee_validator_mysql_t  *mysql, cherokee_connection_t *conn);
 ret_t cherokee_validator_mysql_add_headers (cherokee_validator_mysql_t  *mysql, cherokee_connection_t *conn, cherokee_buffer_t *buf);
 

@@ -177,7 +177,7 @@ cherokee_logger_ncsa_init (cherokee_logger_ncsa_t *logger)
 }
 
 
-ret_t
+void
 cherokee_logger_ncsa_free (cherokee_logger_ncsa_t *logger)
 {
 	cherokee_buffer_mrproper (&now);
@@ -186,7 +186,7 @@ cherokee_logger_ncsa_free (cherokee_logger_ncsa_t *logger)
 	cherokee_buffer_mrproper (&logger->referer);
 	cherokee_buffer_mrproper (&logger->useragent);
 
-	return ret_ok;
+    return;
 }
 
 

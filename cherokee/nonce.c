@@ -83,7 +83,7 @@ cherokee_nonce_table_new (cherokee_nonce_table_t **nonces)
 }
 
 
-ret_t
+void
 cherokee_nonce_table_free (cherokee_nonce_table_t *nonces)
 {
 	cherokee_list_t *i, *j;
@@ -96,7 +96,7 @@ cherokee_nonce_table_free (cherokee_nonce_table_t *nonces)
 	CHEROKEE_MUTEX_DESTROY (&nonces->access);
 
 	free (nonces);
-	return ret_ok;
+	return;
 }
 
 

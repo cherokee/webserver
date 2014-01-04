@@ -259,11 +259,11 @@ _unregister (cherokee_post_track_t *track,
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_generic_post_track_free (cherokee_post_track_t *track)
 {
 	if (! track || ! MODULE(track)->free) {
-		return ret_ok;
+		return;
 	}
 
 	return MODULE(track)->free (track);

@@ -309,12 +309,12 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 }
 
 
-ret_t
+void
 cherokee_handler_redir_free (cherokee_handler_redir_t *rehdl)
 {
 	UNUSED(rehdl);
 
-	return ret_ok;
+    return;
 }
 
 
@@ -364,7 +364,7 @@ cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_bu
 }
 
 
-static ret_t
+static void
 props_free (cherokee_handler_redir_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->url);

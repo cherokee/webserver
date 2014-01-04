@@ -550,7 +550,7 @@ handler_step (cherokee_handler_render_rrd_t *hdl,
 }
 
 
-static ret_t
+static void
 handler_free (cherokee_handler_render_rrd_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->rrd_error);
@@ -559,7 +559,7 @@ handler_free (cherokee_handler_render_rrd_t *hdl)
 		cherokee_handler_free ((void *) hdl->file_hdl);
 	}
 
-	return ret_ok;
+	return;
 }
 
 
@@ -612,7 +612,7 @@ cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
 }
 
 
-static ret_t
+static void
 props_free (cherokee_handler_render_rrd_props_t *props)
 {
 	if (props->file_props != NULL) {

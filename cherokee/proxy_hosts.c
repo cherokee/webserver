@@ -127,7 +127,7 @@ cherokee_handler_proxy_poll_new (cherokee_handler_proxy_poll_t **poll,
 }
 
 
-ret_t
+void
 cherokee_handler_proxy_poll_free (cherokee_handler_proxy_poll_t *poll)
 {
 	cherokee_list_t               *i, *j;
@@ -148,7 +148,7 @@ cherokee_handler_proxy_poll_free (cherokee_handler_proxy_poll_t *poll)
 	}
 
 	CHEROKEE_MUTEX_DESTROY (&poll->mutex);
-	return ret_ok;
+    return;
 }
 
 
@@ -284,7 +284,7 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 }
 
 
-ret_t
+void
 cherokee_handler_proxy_conn_free (cherokee_handler_proxy_conn_t *pconn)
 {
 	cherokee_socket_close    (&pconn->socket);
@@ -294,7 +294,7 @@ cherokee_handler_proxy_conn_free (cherokee_handler_proxy_conn_t *pconn)
 	cherokee_buffer_mrproper (&pconn->header_in_raw);
 
 	free (pconn);
-	return ret_ok;
+    return;
 }
 
 

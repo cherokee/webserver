@@ -48,6 +48,6 @@ void  PLUGIN_INIT_NAME(common)           (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_common_configure  (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 ret_t cherokee_handler_common_new        (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_common_props_free (cherokee_handler_common_props_t *props);
+void  cherokee_handler_common_props_free (cherokee_handler_common_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_COMMON_H */

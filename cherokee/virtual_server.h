@@ -100,7 +100,7 @@ typedef struct {
 #define VSERVER_SRV(v)    (SRV(VSERVER(v)->server_ref))
 
 ret_t cherokee_virtual_server_new       (cherokee_virtual_server_t **vserver, void *server);
-ret_t cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);
+void  cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);
 ret_t cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
 
 ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver,

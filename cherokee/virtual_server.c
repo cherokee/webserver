@@ -112,7 +112,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 }
 
 
-ret_t
+void
 cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 {
 	cherokee_buffer_mrproper (&vserver->server_cert);
@@ -174,7 +174,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	                            (cherokee_list_free_func) cherokee_buffer_free);
 
 	free (vserver);
-	return ret_ok;
+	return;
 }
 
 

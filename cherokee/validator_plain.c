@@ -36,7 +36,7 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (plain, http_auth_basic | http_auth_digest);
 
 
-static ret_t
+static void
 props_free (cherokee_validator_plain_props_t *props)
 {
 	return cherokee_validator_file_props_free_base (PROP_VFILE(props));
@@ -92,7 +92,7 @@ cherokee_validator_plain_new (cherokee_validator_plain_t **plain,
 }
 
 
-ret_t
+void
 cherokee_validator_plain_free (cherokee_validator_plain_t *plain)
 {
 	return cherokee_validator_file_free_base (VFILE(plain));

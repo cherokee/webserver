@@ -46,7 +46,7 @@ static uint16_t uwsgi_swap16(uint16_t x) {
 
 /* Methods implementation
  */
-static ret_t
+static void
 props_free (cherokee_handler_uwsgi_props_t *props)
 {
 	if (props->balancer) {
@@ -235,7 +235,7 @@ cherokee_handler_uwsgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 }
 
 
-ret_t
+void
 cherokee_handler_uwsgi_free (cherokee_handler_uwsgi_t *hdl)
 {
 	/* Free the rest of the handler CGI memory
@@ -249,7 +249,7 @@ cherokee_handler_uwsgi_free (cherokee_handler_uwsgi_t *hdl)
 
 	cherokee_buffer_mrproper (&hdl->header);
 
-	return ret_ok;
+    return;
 }
 
 

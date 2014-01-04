@@ -44,7 +44,7 @@ typedef struct {
 void PLUGIN_INIT_NAME(htdigest) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_htdigest_new         (cherokee_validator_htdigest_t **htdigest, cherokee_module_props_t *props);
-ret_t cherokee_validator_htdigest_free        (cherokee_validator_htdigest_t  *htdigest);
+void  cherokee_validator_htdigest_free        (cherokee_validator_htdigest_t  *htdigest);
 
 ret_t cherokee_validator_htdigest_check       (cherokee_validator_htdigest_t  *htdigest, cherokee_connection_t *conn);
 ret_t cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t  *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *buf);

@@ -30,7 +30,7 @@
 PLUGIN_INFO_HANDLER_EASIEST_INIT (custom_error, http_all_methods);
 
 
-static ret_t
+static void
 props_free (cherokee_handler_custom_error_props_t *props)
 {
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));

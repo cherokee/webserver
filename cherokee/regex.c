@@ -52,7 +52,7 @@ cherokee_regex_table_new  (cherokee_regex_table_t **table)
 }
 
 
-ret_t
+void
 cherokee_regex_table_free (cherokee_regex_table_t *table)
 {
 	CHEROKEE_RWLOCK_DESTROY (&table->rwlock);
@@ -60,7 +60,7 @@ cherokee_regex_table_free (cherokee_regex_table_t *table)
 	cherokee_avl_mrproper (AVL_GENERIC(&table->cache), free);
 
 	free(table);
-	return ret_ok;
+	return;
 }
 
 

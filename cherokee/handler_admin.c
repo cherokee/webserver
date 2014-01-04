@@ -84,13 +84,13 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 }
 
 
-ret_t
+void
 cherokee_handler_admin_free (cherokee_handler_admin_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->reply);
 	cherokee_dwriter_mrproper (&hdl->dwriter);
 
-	return ret_ok;
+    return;
 }
 
 

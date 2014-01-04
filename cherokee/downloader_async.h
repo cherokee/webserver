@@ -38,7 +38,7 @@ typedef struct cherokee_downloader_async cherokee_downloader_async_t;
 #define DOWNLOADER_ASYNC(d) ((cherokee_downloader_async_t *)(d))
 
 ret_t cherokee_downloader_async_new        (cherokee_downloader_async_t **downloader);
-ret_t cherokee_downloader_async_free       (cherokee_downloader_async_t  *downloader);
+void  cherokee_downloader_async_free       (cherokee_downloader_async_t  *downloader);
 ret_t cherokee_downloader_async_init       (cherokee_downloader_async_t  *downloader);
 void  cherokee_downloader_async_mrproper   (cherokee_downloader_async_t  *downloader);
 

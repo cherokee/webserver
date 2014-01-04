@@ -239,9 +239,9 @@ cherokee_balancer_failover_new (cherokee_balancer_t **bal)
 }
 
 
-ret_t
+void
 cherokee_balancer_failover_free (cherokee_balancer_failover_t *balancer)
 {
 	CHEROKEE_MUTEX_DESTROY (&balancer->mutex);
-	return ret_ok;
+	return;
 }

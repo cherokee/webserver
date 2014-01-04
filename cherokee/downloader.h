@@ -51,7 +51,7 @@ typedef enum {
 } cherokee_downloader_status_t;
 
 ret_t cherokee_downloader_new             (cherokee_downloader_t **downloader);
-ret_t cherokee_downloader_free            (cherokee_downloader_t  *downloader);
+void  cherokee_downloader_free            (cherokee_downloader_t  *downloader);
 
 ret_t cherokee_downloader_set_url         (cherokee_downloader_t *downloader, cherokee_buffer_t *url);
 ret_t cherokee_downloader_set_keepalive   (cherokee_downloader_t *downloader, cherokee_boolean_t active);

@@ -39,7 +39,7 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (mysql, http_auth_basic | http_auth_digest);
 
 
-static ret_t
+static void
 props_free (cherokee_validator_mysql_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->host);
@@ -213,14 +213,14 @@ cherokee_validator_mysql_new (cherokee_validator_mysql_t **mysql, cherokee_modul
 }
 
 
-ret_t
+void
 cherokee_validator_mysql_free (cherokee_validator_mysql_t *mysql)
 {
 	if (mysql->conn != NULL) {
 		mysql_close (mysql->conn);
 	}
 
-	return ret_ok;
+    return;
 }
 
 

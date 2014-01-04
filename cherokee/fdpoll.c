@@ -272,7 +272,7 @@ cherokee_fdpoll_is_full (cherokee_fdpoll_t *fdp)
 /* Virtual methods
  */
 
-ret_t
+void
 cherokee_fdpoll_free (cherokee_fdpoll_t *fdp)
 {
 	return fdp->free (fdp);

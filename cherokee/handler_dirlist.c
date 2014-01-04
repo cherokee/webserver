@@ -230,7 +230,7 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 }
 
 
-ret_t
+void
 cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 {
 	cherokee_list_t *i, *tmp;
@@ -654,7 +654,7 @@ cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 }
 
 
-ret_t
+void
 cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 {
 	cherokee_list_t *i, *tmp;
@@ -672,7 +672,7 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 		file_entry_free ((file_entry_t *)i);
 	}
 
-	return ret_ok;
+    return;
 }
 
 

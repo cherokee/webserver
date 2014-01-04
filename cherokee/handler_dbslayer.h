@@ -61,7 +61,7 @@ void PLUGIN_INIT_NAME(dbslayer)      (cherokee_plugin_loader_t *loader);
 /* Methods
  */
 ret_t cherokee_handler_dbslayer_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_dbslayer_free (cherokee_handler_dbslayer_t *hdl);
+void  cherokee_handler_dbslayer_free (cherokee_handler_dbslayer_t *hdl);
 ret_t cherokee_handler_dbslayer_init (cherokee_handler_dbslayer_t *hdl);
 
 #endif /* CHEROKEE_HANDLER_DBSLAYER_H */

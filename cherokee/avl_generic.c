@@ -31,7 +31,7 @@
 static cherokee_avl_generic_node_t *node_first  (cherokee_avl_generic_t *avl);
 static cherokee_avl_generic_node_t *node_prev   (cherokee_avl_generic_node_t *node);
 static cherokee_avl_generic_node_t *node_next   (cherokee_avl_generic_node_t *node);
-static ret_t                        node_free   (cherokee_avl_generic_node_t *node, cherokee_avl_generic_t *avl);
+static void                         node_free   (cherokee_avl_generic_node_t *node, cherokee_avl_generic_t *avl);
 static cint_t                       node_height (cherokee_avl_generic_node_t *node);
 
 
@@ -71,13 +71,13 @@ cherokee_avl_generic_init (cherokee_avl_generic_t *avl)
 /* Util
  */
 
-static ret_t
+static void
 node_free (cherokee_avl_generic_node_t *node,
 	   cherokee_avl_generic_t      *avl)
 {
 	avl->node_mrproper (node);
 	free (node);
-	return ret_ok;
+	return;
 }
 
 
@@ -693,15 +693,14 @@ cherokee_avl_mrproper (cherokee_avl_generic_t *avl,
 	return;
 }
 
-ret_t
+void
 cherokee_avl_free (cherokee_avl_generic_t *avl,
                    cherokee_func_free_t    free_func)
 {
-	ret_t ret;
 	cherokee_avl_mrproper (avl, free_func);
 
 	free (avl);
-	return ret_ok;
+	return;
 }
 
 

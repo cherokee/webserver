@@ -62,7 +62,7 @@ typedef struct {
 
 
 ret_t cherokee_bind_new  (cherokee_bind_t **listener);
-ret_t cherokee_bind_free (cherokee_bind_t  *listener);
+void  cherokee_bind_free (cherokee_bind_t  *listener);
 
 ret_t cherokee_bind_configure   (cherokee_bind_t *listener, cherokee_config_node_t *config);
 ret_t cherokee_bind_set_default (cherokee_bind_t *listener);

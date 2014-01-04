@@ -58,23 +58,23 @@ cherokee_handler_init_base (cherokee_handler_t             *hdl,
 /* Virtual method hiding layer
  */
 
-ret_t
+void
 cherokee_handler_free (cherokee_handler_t *hdl)
 {
 	/* Sanity check
 	 */
-	return_if_fail (hdl != NULL, ret_error);
-
-	if (MODULE(hdl)->free == NULL) {
-		return ret_error;
+	if (hdl == NULL) {
+		return;
 	}
 
-	MODULE(hdl)->free (hdl);
+	if (MODULE(hdl)->free) {
+		MODULE(hdl)->free (hdl);
+	}
 
 	/* Free the handler memory
 	 */
 	free (hdl);
-	return ret_ok;
+	return;
 }
 
 
@@ -154,7 +154,7 @@ cherokee_handler_props_init_base (cherokee_handler_props_t *props,
 }
 
 
-ret_t
+void
 cherokee_handler_props_free_base (cherokee_handler_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));

@@ -277,16 +277,16 @@ cherokee_ ## klass ## _new (cherokee_ ## klass ## _t **obj) { \
     return ret_ok;                                        \
 }
 
-#define CHEROKEE_ADD_FUNC_FREE(klass)  \
-    ret_t                                                         \
+#define CHEROKEE_ADD_FUNC_FREE(klass)                         \
+void                                                          \
 cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
-    if ((obj) == NULL)                                    \
-    return ret_ok;                                \
-    \
-    cherokee_ ## klass ## _mrproper (obj);                \
-    \
-    free (obj);                                           \
-    return ret_ok;                                        \
+	if ((obj) == NULL)                                    \
+		return;                                       \
+	                                                      \
+	cherokee_ ## klass ## _mrproper (obj);                \
+	                                                      \
+	free (obj);                                           \
+	return;                                               \
 }
 
 

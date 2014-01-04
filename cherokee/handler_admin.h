@@ -54,7 +54,7 @@ ret_t cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_
 /* virtual methods implementation
  */
 ret_t cherokee_handler_admin_init        (cherokee_handler_admin_t *hdl);
-ret_t cherokee_handler_admin_free        (cherokee_handler_admin_t *hdl);
+void  cherokee_handler_admin_free        (cherokee_handler_admin_t *hdl);
 ret_t cherokee_handler_admin_read_post   (cherokee_handler_admin_t *hdl);
 ret_t cherokee_handler_admin_step        (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_admin_add_headers (cherokee_handler_admin_t *hdl, cherokee_buffer_t *buffer);

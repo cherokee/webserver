@@ -79,11 +79,11 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 }
 
 
-ret_t
+void
 cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->content);
-	return ret_ok;
+	return;
 }
 
 

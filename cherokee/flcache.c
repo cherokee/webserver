@@ -88,7 +88,7 @@ may_rm_pid_dir (cherokee_buffer_t *path,
 }
 
 
-ret_t
+void
 cherokee_flcache_free (cherokee_flcache_t *flcache)
 {
 	uid_t uid = getuid();
@@ -108,7 +108,7 @@ cherokee_flcache_free (cherokee_flcache_t *flcache)
 	cherokee_avl_flcache_mrproper (&flcache->request_map, NULL);
 
 	free (flcache);
-	return ret_ok;
+	return;
 }
 
 static ret_t

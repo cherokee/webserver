@@ -67,7 +67,7 @@ typedef struct {
 /* Methods
  */
 ret_t cherokee_handler_uwsgi_new       (cherokee_handler_t      **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_uwsgi_free      (cherokee_handler_uwsgi_t *hdl);
+void  cherokee_handler_uwsgi_free      (cherokee_handler_uwsgi_t *hdl);
 ret_t cherokee_handler_uwsgi_init      (cherokee_handler_uwsgi_t *hdl);
 ret_t cherokee_handler_uwsgi_read_post (cherokee_handler_uwsgi_t *hdl);
 

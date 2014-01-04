@@ -250,7 +250,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (server_info, http_get);
 
 /* Methods implementation
  */
-static ret_t
+static void
 props_free (cherokee_handler_server_info_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
@@ -896,12 +896,12 @@ error:
 }
 
 
-ret_t
+void
 cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->buffer);
 	cherokee_dwriter_mrproper (&hdl->writer);
-	return ret_ok;
+    return;
 }
 
 

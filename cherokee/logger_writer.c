@@ -113,7 +113,7 @@ logger_writer_close_file (cherokee_logger_writer_t *writer)
 }
 
 
-ret_t
+void
 cherokee_logger_writer_free (cherokee_logger_writer_t *writer)
 {
 	logger_writer_close_file (writer);
@@ -127,7 +127,7 @@ cherokee_logger_writer_free (cherokee_logger_writer_t *writer)
 	free (writer->priv);
 	free (writer);
 
-	return ret_ok;
+	return;
 }
 
 static ret_t

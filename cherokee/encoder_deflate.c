@@ -33,7 +33,7 @@
 PLUGIN_INFO_ENCODER_EASIEST_INIT (deflate);
 
 
-static ret_t
+static void
 props_free (cherokee_encoder_deflate_t *props)
 {
 	return cherokee_encoder_props_free_base (ENCODER_PROPS(props));
@@ -114,7 +114,7 @@ cherokee_encoder_deflate_new (cherokee_encoder_deflate_t **encoder,
 }
 
 
-ret_t
+void
 cherokee_encoder_deflate_free (cherokee_encoder_deflate_t *encoder)
 {
 	if (encoder->workspace != NULL) {
@@ -122,7 +122,7 @@ cherokee_encoder_deflate_free (cherokee_encoder_deflate_t *encoder)
 	}
 
 	free (encoder);
-	return ret_ok;
+    return;
 }
 
 

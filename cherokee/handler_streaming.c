@@ -42,7 +42,7 @@ static cherokee_avl_t _streaming_cache;
 PLUGIN_INFO_HANDLER_EASY_INIT (streaming, http_all_methods);
 
 
-ret_t
+void
 cherokee_handler_streaming_props_free (cherokee_handler_streaming_props_t *props)
 {
 	if (props->props_file != NULL) {
@@ -103,7 +103,7 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 }
 
 
-ret_t
+void
 cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 {
 	if (hdl->handler_file != NULL) {
@@ -111,7 +111,7 @@ cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 	}
 
 	cherokee_buffer_mrproper (&hdl->local_file);
-	return ret_ok;
+	return;
 }
 
 

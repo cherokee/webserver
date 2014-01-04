@@ -209,9 +209,9 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 }
 
 
-ret_t
+void
 cherokee_balancer_round_robin_free (cherokee_balancer_round_robin_t *balancer)
 {
 	CHEROKEE_MUTEX_DESTROY (&balancer->mutex);
-	return ret_ok;
+	return;
 }

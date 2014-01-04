@@ -312,7 +312,7 @@ del_connection_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 }
 
 
-static ret_t
+static void
 connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
 	/* Disable keepalive in the connection
@@ -330,7 +330,7 @@ connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn
 	cherokee_list_add (LIST(conn), &thread->reuse_list);
 	thread->reuse_list_num++;
 
-	return ret_ok;
+	return;
 }
 
 
@@ -1495,7 +1495,7 @@ process_active_connections (cherokee_thread_t *thd)
 }
 
 
-ret_t
+void
 cherokee_thread_free (cherokee_thread_t *thd)
 {
 	cherokee_list_t *i, *tmp;
@@ -1530,7 +1530,7 @@ cherokee_thread_free (cherokee_thread_t *thd)
 	CHEROKEE_MUTEX_DESTROY (&thd->ownership);
 
 	free (thd);
-	return ret_ok;
+	return;
 }
 
 

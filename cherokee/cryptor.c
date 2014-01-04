@@ -54,19 +54,19 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 }
 
 
-ret_t
+void
 cherokee_cryptor_free_base (cherokee_cryptor_t *cryp)
 {
 	free (cryp);
-	return ret_ok;
+	return;
 }
 
 
-ret_t
+void
 cherokee_cryptor_free (cherokee_cryptor_t *cryp)
 {
 	if (MODULE(cryp)->free == NULL)
-		return ret_error;
+		return;
 
 	return MODULE(cryp)->free (cryp);
 }
@@ -143,11 +143,11 @@ cherokee_cryptor_vserver_init_base (cherokee_cryptor_vserver_t *crypt)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_cryptor_vserver_free (cherokee_cryptor_vserver_t *cryp)
 {
 	if (cryp->free == NULL)
-		return ret_error;
+		return;
 
 	return cryp->free (cryp);
 }
@@ -182,11 +182,11 @@ cherokee_cryptor_socket_clean_base (cherokee_cryptor_socket_t *cryp)
 }
 
 
-ret_t
+void
 cherokee_cryptor_socket_free (cherokee_cryptor_socket_t *cryp)
 {
 	if (unlikely (cryp->free == NULL))
-		return ret_error;
+		return;
 
 	return cryp->free (cryp);
 }

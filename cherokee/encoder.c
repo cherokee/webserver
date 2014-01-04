@@ -40,7 +40,7 @@ cherokee_encoder_props_init_base (cherokee_encoder_props_t *props,
 	return cherokee_module_props_init_base (MODULE_PROPS(props), free_func);
 }
 
-ret_t
+void
 cherokee_encoder_props_free_base (cherokee_encoder_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
@@ -103,16 +103,14 @@ cherokee_encoder_init_base (cherokee_encoder_t       *enc,
 }
 
 
-ret_t
+void
 cherokee_encoder_free (cherokee_encoder_t *enc)
 {
-	ret_t ret;
-
 	if (MODULE(enc)->free == NULL)
-		return ret_error;
+		return;
 
-	ret = MODULE(enc)->free (enc);
-	return ret;
+	MODULE(enc)->free (enc);
+	return;
 }
 
 

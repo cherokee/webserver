@@ -44,7 +44,7 @@ cherokee_vrule_init_base (cherokee_vrule_t       *vrule,
 }
 
 
-ret_t
+void
 cherokee_vrule_free (cherokee_vrule_t *vrule)
 {
 	if (MODULE(vrule)->free) {
@@ -52,7 +52,7 @@ cherokee_vrule_free (cherokee_vrule_t *vrule)
 	}
 
 	free (vrule);
-	return ret_ok;
+	return;
 }
 
 

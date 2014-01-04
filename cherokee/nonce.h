@@ -38,7 +38,7 @@ CHEROKEE_BEGIN_DECLS
 typedef struct cherokee_nonce_table cherokee_nonce_table_t;
 
 ret_t cherokee_nonce_table_new     (cherokee_nonce_table_t **nonces);
-ret_t cherokee_nonce_table_free    (cherokee_nonce_table_t *nonces);
+void  cherokee_nonce_table_free    (cherokee_nonce_table_t *nonces);
 ret_t cherokee_nonce_table_cleanup (cherokee_nonce_table_t *nonces);
 
 ret_t cherokee_nonce_table_check    (cherokee_nonce_table_t *nonces, cherokee_buffer_t *nonce);

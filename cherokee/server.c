@@ -256,7 +256,7 @@ destroy_thread (cherokee_thread_t *thread)
 }
 
 
-ret_t
+void
 cherokee_server_free (cherokee_server_t *srv)
 {
 	cherokee_list_t *i, *j;
@@ -358,7 +358,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	TRACE(ENTRIES, "The server %p has been freed\n", srv);
 	free (srv);
 
-	return ret_ok;
+	return;
 }
 
 

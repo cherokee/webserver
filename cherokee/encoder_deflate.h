@@ -61,7 +61,7 @@ void  PLUGIN_INIT_NAME(deflate)            (cherokee_plugin_loader_t *loader);
 ret_t cherokee_encoder_deflate_new         (cherokee_encoder_deflate_t **encoder,
                                             cherokee_encoder_props_t    *props);
 
-ret_t cherokee_encoder_deflate_free        (cherokee_encoder_deflate_t  *encoder);
+void  cherokee_encoder_deflate_free        (cherokee_encoder_deflate_t  *encoder);
 
 ret_t cherokee_encoder_deflate_add_headers (cherokee_encoder_deflate_t  *encoder, cherokee_buffer_t *buf);
 ret_t cherokee_encoder_deflate_init        (cherokee_encoder_deflate_t  *encoder, cherokee_connection_t *conn);

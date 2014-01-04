@@ -97,24 +97,20 @@ configure (cherokee_vrule_or_t       *vrule,
 }
 
 
-static ret_t
+static void
 _free (void *p)
 {
-	ret_t                ret;
-	cherokee_boolean_t   error = false;
 	cherokee_vrule_or_t *vrule = VRULE_OR(p);
 
 	if (vrule->left) {
-		ret = cherokee_vrule_free (vrule->left);
-		if (ret != ret_ok) error = true;
+		cherokee_vrule_free (vrule->left);
 	}
 
 	if (vrule->right) {
-		ret = cherokee_vrule_free (vrule->right);
-		if (ret != ret_ok) error = true;
+		cherokee_vrule_free (vrule->right);
 	}
 
-	return (error)? ret_error : ret_ok;
+	return;
 }
 
 

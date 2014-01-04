@@ -67,7 +67,7 @@ ret_t cherokee_handler_server_info_new   (cherokee_handler_t **hdl, cherokee_con
 /* virtual methods implementation
  */
 ret_t cherokee_handler_server_info_init        (cherokee_handler_server_info_t *hdl);
-ret_t cherokee_handler_server_info_free        (cherokee_handler_server_info_t *hdl);
+void  cherokee_handler_server_info_free        (cherokee_handler_server_info_t *hdl);
 ret_t cherokee_handler_server_info_step        (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer);
 

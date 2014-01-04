@@ -121,7 +121,7 @@ ret_t cherokee_handler_cgi_base_init            (cherokee_handler_cgi_base_t    
                                                  cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
                                                  cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi);
 
-ret_t cherokee_handler_cgi_base_free            (cherokee_handler_cgi_base_t *hdl);
+void  cherokee_handler_cgi_base_free            (cherokee_handler_cgi_base_t *hdl);
 
 ret_t cherokee_handler_cgi_base_add_headers     (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_cgi_base_step            (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer);
@@ -144,7 +144,7 @@ ret_t cherokee_handler_cgi_base_configure       (cherokee_config_node_t *conf, c
 /* Handler properties
  */
 ret_t cherokee_handler_cgi_base_props_init_base (cherokee_handler_cgi_base_props_t *props, module_func_props_free_t free_func);
-ret_t cherokee_handler_cgi_base_props_free      (cherokee_handler_cgi_base_props_t *props);
+void  cherokee_handler_cgi_base_props_free      (cherokee_handler_cgi_base_props_t *props);
 
 
 #endif /* CHEROKEE_HANDLER_CGI_BASE_H */

@@ -39,7 +39,7 @@ cherokee_validator_file_props_init_base (cherokee_validator_file_props_t *props,
 	return cherokee_validator_props_init_base (VALIDATOR_PROPS(props), free_func);
 }
 
-ret_t
+void
 cherokee_validator_file_props_free_base (cherokee_validator_file_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->password_file);
@@ -102,7 +102,7 @@ cherokee_validator_file_init_base (cherokee_validator_file_t        *validator,
 	                                     VALIDATOR_PROPS(props), info);
 }
 
-ret_t
+void
 cherokee_validator_file_free_base (cherokee_validator_file_t *validator)
 {
 	return cherokee_validator_free_base (VALIDATOR(validator));

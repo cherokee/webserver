@@ -57,7 +57,7 @@ ret_t cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_
 /* virtual methods implementation
  */
 ret_t cherokee_handler_redir_init        (cherokee_handler_redir_t *rehdl);
-ret_t cherokee_handler_redir_free        (cherokee_handler_redir_t *rehdl);
+void  cherokee_handler_redir_free        (cherokee_handler_redir_t *rehdl);
 ret_t cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_buffer_t *buffer);
 
 #endif /* CHEROKEE_HANDLER_REDIR_H */

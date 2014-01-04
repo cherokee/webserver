@@ -264,9 +264,9 @@ cherokee_balancer_ip_hash_new (cherokee_balancer_t **bal)
 }
 
 
-ret_t
+void
 cherokee_balancer_ip_hash_free (cherokee_balancer_ip_hash_t *balancer)
 {
 	CHEROKEE_MUTEX_DESTROY (&balancer->mutex);
-	return ret_ok;
+	return;
 }

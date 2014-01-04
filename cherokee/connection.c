@@ -178,7 +178,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 }
 
 
-ret_t
+void
 cherokee_connection_free (cherokee_connection_t  *conn)
 {
 	cherokee_header_mrproper (&conn->header);
@@ -239,7 +239,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	}
 
 	free (conn);
-	return ret_ok;
+	return;
 }
 
 

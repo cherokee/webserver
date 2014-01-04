@@ -50,7 +50,7 @@ typedef ret_t (* cherokee_cache_get_stats_t) (struct cherokee_cache        *cach
 
 typedef ret_t (* cherokee_cache_entry_clean_t) (struct cherokee_cache_entry *entry);
 typedef ret_t (* cherokee_cache_entry_fetch_t) (struct cherokee_cache_entry *entry);
-typedef ret_t (* cherokee_cache_entry_free_t)  (struct cherokee_cache_entry *entry);
+typedef void  (* cherokee_cache_entry_free_t)  (struct cherokee_cache_entry *entry);
 
 /* Enums */
 typedef enum {

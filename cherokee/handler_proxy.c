@@ -73,7 +73,7 @@ header_add_free (cherokee_header_add_t *header)
 
 
 
-static ret_t
+static void
 props_free (cherokee_handler_proxy_props_t *props)
 {
 	cherokee_list_t *i, *tmp;
@@ -1881,7 +1881,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 {
 	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
@@ -1913,6 +1913,6 @@ cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 		cherokee_handler_proxy_conn_release (hdl->pconn);
 	}
 
-	return ret_ok;
+    return;
 }
 

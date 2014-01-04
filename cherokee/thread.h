@@ -115,7 +115,7 @@ ret_t cherokee_thread_new                        (cherokee_thread_t     **thd,
                                                   cint_t                  conns_max,
                                                   cint_t                  keepalive_max);
 
-ret_t cherokee_thread_free                       (cherokee_thread_t  *thd);
+void  cherokee_thread_free                       (cherokee_thread_t  *thd);
 
 ret_t cherokee_thread_unlock                     (cherokee_thread_t *thd);
 ret_t cherokee_thread_wait_end                   (cherokee_thread_t *thd);

@@ -46,7 +46,7 @@ ret_t cherokee_handler_error_new         (cherokee_handler_t **hdl, cherokee_con
 /* virtual methods implementation
  */
 ret_t cherokee_handler_error_init        (cherokee_handler_error_t *hdl);
-ret_t cherokee_handler_error_free        (cherokee_handler_error_t *hdl);
+void  cherokee_handler_error_free        (cherokee_handler_error_t *hdl);
 ret_t cherokee_handler_error_step        (cherokee_handler_error_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buffer_t *buffer);
 

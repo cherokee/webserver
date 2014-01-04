@@ -441,14 +441,14 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 }
 
 
-static ret_t
+static void
 dbslayer_free (cherokee_handler_dbslayer_t *hdl)
 {
 	if (hdl->conn)
 		mysql_close (hdl->conn);
 
 	cherokee_dwriter_mrproper (&hdl->writer);
-	return ret_ok;
+	return;
 }
 
 ret_t
@@ -492,7 +492,7 @@ cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 }
 
 
-static ret_t
+static void
 props_free  (cherokee_handler_dbslayer_props_t *props)
 {
 	if (props->balancer)
@@ -502,7 +502,7 @@ props_free  (cherokee_handler_dbslayer_props_t *props)
 	cherokee_buffer_mrproper (&props->password);
 	cherokee_buffer_mrproper (&props->db);
 
-	return ret_ok;
+	return;
 }
 
 

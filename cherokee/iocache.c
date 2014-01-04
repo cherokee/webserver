@@ -109,11 +109,11 @@ clean_info_cb (cherokee_cache_entry_t *entry)
 	return ret_ok;
 }
 
-static ret_t
+static void
 free_cb (cherokee_cache_entry_t *entry)
 {
 	CHEROKEE_MUTEX_DESTROY (&PRIV(entry)->parent_lock);
-	return ret_ok;
+	return;
 }
 
 static ret_t

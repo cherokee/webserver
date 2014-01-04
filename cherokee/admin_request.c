@@ -48,14 +48,14 @@ ret_t cherokee_admin_request_new  (cherokee_admin_request_t **req)
 }
 
 
-ret_t
+void
 cherokee_admin_request_free (cherokee_admin_request_t *req)
 {
 	cherokee_list_content_free (&req->list, free);
 	cherokee_buffer_mrproper (&req->req);
 
 	free (req);
-	return ret_ok;
+	return;
 }
 
 

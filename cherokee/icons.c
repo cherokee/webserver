@@ -106,13 +106,13 @@ free_entry (void *param)
 }
 
 
-ret_t
+void
 cherokee_icons_free (cherokee_icons_t *icons)
 {
 	cherokee_list_t *i, *j;
 
 	if (unlikely (icons == NULL))
-		return ret_ok;
+		return;
 
 	/* Free the list and AVL trees
 	 */
@@ -130,7 +130,7 @@ cherokee_icons_free (cherokee_icons_t *icons)
 	cherokee_buffer_mrproper (&icons->parentdir_icon);
 
 	free (icons);
-	return ret_ok;
+	return;
 }
 
 

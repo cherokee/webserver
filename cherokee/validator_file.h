@@ -55,7 +55,7 @@ ret_t cherokee_validator_file_init_base (cherokee_validator_file_t        *valid
 					 cherokee_validator_file_props_t  *props,
 					 cherokee_plugin_info_validator_t *info);
 
-ret_t cherokee_validator_file_free_base (cherokee_validator_file_t        *validator);
+void  cherokee_validator_file_free_base (cherokee_validator_file_t        *validator);
 
 ret_t cherokee_validator_file_configure (cherokee_config_node_t            *conf,
 					 cherokee_server_t                 *srv,
@@ -67,7 +67,7 @@ ret_t cherokee_validator_file_configure (cherokee_config_node_t            *conf
 ret_t cherokee_validator_file_props_init_base  (cherokee_validator_file_props_t *props,
 						module_func_props_free_t         free_func);
 
-ret_t cherokee_validator_file_props_free_base  (cherokee_validator_file_props_t *props);
+void  cherokee_validator_file_props_free_base  (cherokee_validator_file_props_t *props);
 
 
 /* Utilities

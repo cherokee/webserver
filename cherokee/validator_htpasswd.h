@@ -44,7 +44,7 @@ typedef struct {
 void PLUGIN_INIT_NAME(htpasswd) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_htpasswd_new         (cherokee_validator_htpasswd_t **htpasswd, cherokee_module_props_t *props);
-ret_t cherokee_validator_htpasswd_free        (cherokee_validator_htpasswd_t  *htpasswd);
+void  cherokee_validator_htpasswd_free        (cherokee_validator_htpasswd_t  *htpasswd);
 
 ret_t cherokee_validator_htpasswd_check       (cherokee_validator_htpasswd_t  *htpasswd, cherokee_connection_t *conn);
 ret_t cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t  *htpasswd, cherokee_connection_t *conn, cherokee_buffer_t *buf);

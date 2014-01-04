@@ -40,17 +40,17 @@ CHEROKEE_BEGIN_DECLS
 /* Callback function prototipes
  */
 typedef ret_t (* cryptor_func_new_t)         (void **cryp);
-typedef ret_t (* cryptor_func_free_t)        (void  *cryp);
+typedef void  (* cryptor_func_free_t)        (void  *cryp);
 typedef ret_t (* cryptor_func_configure_t)   (void  *cryp, cherokee_config_node_t *, cherokee_server_t *);
 typedef ret_t (* cryptor_func_vserver_new_t) (void  *cryp, void *vsrv, void **vserver_crypt);
 typedef ret_t (* cryptor_func_socket_new_t)  (void  *cryp, void **socket_crypt);
 typedef ret_t (* cryptor_func_client_new_t)  (void  *cryp, void **client_crypt);
 
 /* Cryptor: Virtual server */
-typedef ret_t (* cryptor_vsrv_func_free_t)      (void  *cryp);
+typedef void  (* cryptor_vsrv_func_free_t)      (void  *cryp);
 
 /* Cryptor: Socket */
-typedef ret_t (* cryptor_socket_func_free_t)    (void *cryp);
+typedef void  (* cryptor_socket_func_free_t)    (void *cryp);
 typedef ret_t (* cryptor_socket_func_clean_t)   (void *cryp);
 typedef ret_t (* cryptor_socket_func_init_tls_t)(void *cryp, void *sock, void *vsrv, void *conn, void *blocking);
 typedef ret_t (* cryptor_socket_func_shutdown_t)(void *cryp);
@@ -128,8 +128,8 @@ typedef struct {
  */
 ret_t cherokee_cryptor_init_base   (cherokee_cryptor_t          *cryp,
                                     cherokee_plugin_info_t      *info);
-ret_t cherokee_cryptor_free_base   (cherokee_cryptor_t          *cryp);
-ret_t cherokee_cryptor_free        (cherokee_cryptor_t          *cryp);
+void  cherokee_cryptor_free_base   (cherokee_cryptor_t          *cryp);
+void  cherokee_cryptor_free        (cherokee_cryptor_t          *cryp);
 
 ret_t cherokee_cryptor_configure   (cherokee_cryptor_t          *cryp,
                                     cherokee_config_node_t      *conf,
@@ -148,14 +148,14 @@ ret_t cherokee_cryptor_client_new  (cherokee_cryptor_t         *cryp,
 /* Cryptor: Virtual Server
  */
 ret_t cherokee_cryptor_vserver_init_base (cherokee_cryptor_vserver_t *cryp);
-ret_t cherokee_cryptor_vserver_free      (cherokee_cryptor_vserver_t *cryp);
+void  cherokee_cryptor_vserver_free      (cherokee_cryptor_vserver_t *cryp);
 
 /* Cryptor: Socket
  */
 ret_t cherokee_cryptor_socket_init_base   (cherokee_cryptor_socket_t *cryp);
 ret_t cherokee_cryptor_socket_clean_base  (cherokee_cryptor_socket_t *cryp);
 
-ret_t cherokee_cryptor_socket_free        (cherokee_cryptor_socket_t *cryp);
+void  cherokee_cryptor_socket_free        (cherokee_cryptor_socket_t *cryp);
 ret_t cherokee_cryptor_socket_clean       (cherokee_cryptor_socket_t *cryp);
 ret_t cherokee_cryptor_socket_shutdown    (cherokee_cryptor_socket_t *cryp);
 ret_t cherokee_cryptor_socket_init_tls    (cherokee_cryptor_socket_t *cryp,

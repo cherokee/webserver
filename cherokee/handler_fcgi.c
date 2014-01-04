@@ -201,7 +201,7 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 }
 
 
-static ret_t
+static void
 props_free (cherokee_handler_fcgi_props_t *props)
 {
 	if (props->balancer != NULL)
@@ -299,7 +299,7 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 }
 
 
-ret_t
+void
 cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl)
 {
 	TRACE (ENTRIES, "fcgi handler free: %p\n", hdl);

@@ -81,7 +81,7 @@ typedef struct cherokee_rule cherokee_rule_t;
 
 /* Methods
  */
-ret_t cherokee_rule_free        (cherokee_rule_t *rule);
+void  cherokee_rule_free        (cherokee_rule_t *rule);
 
 /* Rule methods
  */

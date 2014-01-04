@@ -172,7 +172,7 @@ cherokee_list_add_tail_content (cherokee_list_t *head, void *item)
 }
 
 
-ret_t
+void
 cherokee_list_content_free (cherokee_list_t *head, cherokee_list_free_func free_func)
 {
 	cherokee_list_t *i, *tmp;
@@ -183,11 +183,11 @@ cherokee_list_content_free (cherokee_list_t *head, cherokee_list_free_func free_
 
 	INIT_LIST_HEAD(head);
 
-	return ret_ok;
+	return;
 }
 
 
-ret_t
+void
 cherokee_list_content_free_item (cherokee_list_t *head, cherokee_list_free_func free_func)
 {
 	cherokee_list_del (head);
@@ -197,11 +197,11 @@ cherokee_list_content_free_item (cherokee_list_t *head, cherokee_list_free_func 
 	}
 
 	free (head);
-	return ret_ok;
+	return;
 }
 
 
-ret_t
+void
 cherokee_list_content_free_item_simple (cherokee_list_t *head)
 {
 	cherokee_list_del (head);
@@ -211,5 +211,5 @@ cherokee_list_content_free_item_simple (cherokee_list_t *head)
 	}
 
 	free (head);
-	return ret_ok;
+	return;
 }

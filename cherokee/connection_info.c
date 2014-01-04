@@ -54,7 +54,7 @@ cherokee_connection_info_new (cherokee_connection_info_t **info)
 }
 
 
-ret_t
+void
 cherokee_connection_info_free (cherokee_connection_info_t *info)
 {
 	cherokee_buffer_mrproper (&info->id);
@@ -69,7 +69,7 @@ cherokee_connection_info_free (cherokee_connection_info_t *info)
 	cherokee_buffer_mrproper (&info->icon);
 
 	free (info);
-	return ret_ok;
+	return;
 }
 
 

@@ -69,7 +69,7 @@ typedef struct {
 void PLUGIN_INIT_NAME(fcgi) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_fcgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl);
+void  cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl);
 
 ret_t cherokee_handler_fcgi_init      (cherokee_handler_fcgi_t *hdl);
 ret_t cherokee_handler_fcgi_read_post (cherokee_handler_fcgi_t *hdl);

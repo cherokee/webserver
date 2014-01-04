@@ -48,13 +48,13 @@ cherokee_mime_new (cherokee_mime_t **mime)
 }
 
 
-ret_t
+void
 cherokee_mime_free (cherokee_mime_t *mime)
 {
 	cherokee_list_t *i, *tmp;
 
 	if (mime == NULL)
-		return ret_ok;
+		return;
 
 	cherokee_avl_mrproper (AVL_GENERIC(&mime->ext_table), NULL);
 
@@ -64,7 +64,7 @@ cherokee_mime_free (cherokee_mime_t *mime)
 	}
 
 	free (mime);
-	return ret_ok;
+	return;
 }
 
 

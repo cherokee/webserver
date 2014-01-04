@@ -73,7 +73,7 @@ ret_t cherokee_handler_ssi_configure   (cherokee_config_node_t *conf, cherokee_s
 /* Virtual methods
  */
 ret_t cherokee_handler_ssi_init        (cherokee_handler_ssi_t *hdl);
-ret_t cherokee_handler_ssi_free        (cherokee_handler_ssi_t *hdl);
+void  cherokee_handler_ssi_free        (cherokee_handler_ssi_t *hdl);
 ret_t cherokee_handler_ssi_step        (cherokee_handler_ssi_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl, cherokee_buffer_t *buffer);
 

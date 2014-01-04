@@ -73,7 +73,7 @@ entry_free (entry_t *entry)
 }
 
 
-static ret_t
+static void
 props_free (cherokee_validator_authlist_props_t *props)
 {
 	cherokee_list_t *i, *j;

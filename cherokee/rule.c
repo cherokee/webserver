@@ -46,7 +46,7 @@ cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
 }
 
 
-ret_t
+void
 cherokee_rule_free (cherokee_rule_t *rule)
 {
 	/* Free the Config Entry property
@@ -62,7 +62,7 @@ cherokee_rule_free (cherokee_rule_t *rule)
 	/* Free the rule
 	 */
 	free (rule);
-	return ret_ok;
+	return;
 }
 
 

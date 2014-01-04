@@ -74,7 +74,7 @@ void  PLUGIN_INIT_NAME(cgi)            (cherokee_plugin_loader_t *loader);
 /* Methods
  */
 ret_t cherokee_handler_cgi_new         (cherokee_handler_t    **hdl, void *cnt, cherokee_module_props_t *props);
-ret_t cherokee_handler_cgi_free        (cherokee_handler_cgi_t *hdl);
+void  cherokee_handler_cgi_free        (cherokee_handler_cgi_t *hdl);
 ret_t cherokee_handler_cgi_init        (cherokee_handler_cgi_t *hdl);
 
 ret_t cherokee_handler_cgi_read_post   (cherokee_handler_cgi_t *hdl);
@@ -89,6 +89,6 @@ void  cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi,
                                            const char *name,    int name_len,
                                            const char *content, int content_len);
 
-ret_t cherokee_handler_cgi_props_free     (cherokee_handler_cgi_props_t *props);
+void  cherokee_handler_cgi_props_free     (cherokee_handler_cgi_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_CGI_H */

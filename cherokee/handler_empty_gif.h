@@ -56,7 +56,7 @@ ret_t cherokee_handler_empty_gif_new         (cherokee_handler_t **hdl, cherokee
 /* Virtual methods
  */
 ret_t cherokee_handler_empty_gif_init        (cherokee_handler_empty_gif_t *hdl);
-ret_t cherokee_handler_empty_gif_free        (cherokee_handler_empty_gif_t *hdl);
+void  cherokee_handler_empty_gif_free        (cherokee_handler_empty_gif_t *hdl);
 ret_t cherokee_handler_empty_gif_step        (cherokee_handler_empty_gif_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl, cherokee_buffer_t *buffer);
 

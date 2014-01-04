@@ -45,7 +45,7 @@
 PLUGIN_INFO_VALIDATOR_EASIEST_INIT (htpasswd, http_auth_basic);
 
 
-static ret_t
+static void
 props_free (cherokee_validator_htpasswd_props_t *props)
 {
 	return cherokee_validator_file_props_free_base (PROP_VFILE(props));
@@ -99,7 +99,7 @@ cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd,
 }
 
 
-ret_t
+void
 cherokee_validator_htpasswd_free (cherokee_validator_htpasswd_t *htpasswd)
 {
 	return cherokee_validator_file_free_base (VFILE(htpasswd));

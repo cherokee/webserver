@@ -103,24 +103,20 @@ configure (cherokee_rule_and_t       *rule,
 	return ret_ok;
 }
 
-static ret_t
+static void
 _free (void *p)
 {
-	ret_t                ret;
-	cherokee_boolean_t   error = false;
 	cherokee_rule_and_t *rule  = RULE_AND(p);
 
 	if (rule->left) {
-		ret = cherokee_rule_free (rule->left);
-		if (ret != ret_ok) error = true;
+		cherokee_rule_free (rule->left);
 	}
 
 	if (rule->right) {
-		ret = cherokee_rule_free (rule->right);
-		if (ret != ret_ok) error = true;
+		cherokee_rule_free (rule->right);
 	}
 
-	return (error)? ret_error : ret_ok;
+	return;
 }
 
 ret_t

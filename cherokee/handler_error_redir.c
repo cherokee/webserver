@@ -51,7 +51,7 @@ free_error_entry (void *p)
 	free (entry);
 }
 
-static ret_t
+static void
 props_free (cherokee_handler_error_redir_props_t *props)
 {
 	cherokee_list_t *i, *j;

@@ -84,7 +84,7 @@ cherokee_logger_init_base (cherokee_logger_t      *logger,
 
 /* Virtual method hiding layer
  */
-ret_t
+void
 cherokee_logger_free (cherokee_logger_t *logger)
 {
 	CHEROKEE_MUTEX_DESTROY (&PRIV(logger)->mutex);
@@ -99,7 +99,7 @@ cherokee_logger_free (cherokee_logger_t *logger)
 	}
 
 	free (logger);
-	return ret_ok;
+	return;
 }
 
 

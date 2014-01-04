@@ -44,7 +44,7 @@ typedef struct {
 void PLUGIN_INIT_NAME(custom) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_logger_custom_new              (cherokee_logger_t       **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
-ret_t cherokee_logger_custom_free             (cherokee_logger_custom_t *logger);
+void  cherokee_logger_custom_free             (cherokee_logger_custom_t *logger);
 ret_t cherokee_logger_custom_init             (cherokee_logger_custom_t *logger);
 
 ret_t cherokee_logger_custom_flush            (cherokee_logger_custom_t *logger);

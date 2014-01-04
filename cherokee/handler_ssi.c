@@ -87,7 +87,7 @@ cherokee_handler_ssi_new (cherokee_handler_t     **hdl,
 }
 
 
-static ret_t
+static void
 props_free (cherokee_handler_ssi_props_t *props)
 {
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
@@ -458,13 +458,13 @@ cherokee_handler_ssi_init (cherokee_handler_ssi_t *hdl)
 }
 
 
-ret_t
+void
 cherokee_handler_ssi_free (cherokee_handler_ssi_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->dir);
 	cherokee_buffer_mrproper (&hdl->source);
 	cherokee_buffer_mrproper (&hdl->render);
-	return ret_ok;
+    return;
 }
 
 

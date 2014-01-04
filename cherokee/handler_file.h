@@ -71,12 +71,12 @@ void  PLUGIN_INIT_NAME(file)            (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_file_new         (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_file_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
-ret_t cherokee_handler_file_props_free  (cherokee_handler_file_props_t *props);
+void  cherokee_handler_file_props_free  (cherokee_handler_file_props_t *props);
 
 /* Virtual methods
  */
 ret_t cherokee_handler_file_init        (cherokee_handler_file_t *hdl);
-ret_t cherokee_handler_file_free        (cherokee_handler_file_t *hdl);
+void  cherokee_handler_file_free        (cherokee_handler_file_t *hdl);
 void  cherokee_handler_file_get_name    (cherokee_handler_file_t *hdl, const char **name);
 ret_t cherokee_handler_file_step        (cherokee_handler_file_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_file_add_headers (cherokee_handler_file_t *hdl, cherokee_buffer_t *buffer);

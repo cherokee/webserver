@@ -119,12 +119,12 @@ void PLUGIN_INIT_NAME(dirlist)             (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_dirlist_new         (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *properties);
 ret_t cherokee_handler_dirlist_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
-ret_t cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props);
+void  cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props);
 
 /* virtual methods implementation
  */
 ret_t cherokee_handler_dirlist_init        (cherokee_handler_dirlist_t *dhdl);
-ret_t cherokee_handler_dirlist_free        (cherokee_handler_dirlist_t *dhdl);
+void  cherokee_handler_dirlist_free        (cherokee_handler_dirlist_t *dhdl);
 void  cherokee_handler_dirlist_get_name    (cherokee_handler_dirlist_t *dhdl, char **name);
 ret_t cherokee_handler_dirlist_step        (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer);

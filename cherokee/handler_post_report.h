@@ -59,7 +59,7 @@ ret_t cherokee_handler_post_report_new   (cherokee_handler_t **hdl, cherokee_con
 /* virtual methods implementation
  */
 ret_t cherokee_handler_post_report_init        (cherokee_handler_post_report_t *hdl);
-ret_t cherokee_handler_post_report_free        (cherokee_handler_post_report_t *hdl);
+void  cherokee_handler_post_report_free        (cherokee_handler_post_report_t *hdl);
 ret_t cherokee_handler_post_report_step        (cherokee_handler_post_report_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_post_report_add_headers (cherokee_handler_post_report_t *hdl, cherokee_buffer_t *buffer);
 

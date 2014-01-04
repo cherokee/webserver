@@ -59,7 +59,7 @@ cherokee_validator_init_base (cherokee_validator_t             *validator,
 }
 
 
-ret_t
+void
 cherokee_validator_free_base (cherokee_validator_t *validator)
 {
 	cherokee_buffer_mrproper (&validator->user);
@@ -74,21 +74,23 @@ cherokee_validator_free_base (cherokee_validator_t *validator)
 	cherokee_buffer_mrproper (&validator->nc);
 
 	free (validator);
-	return ret_ok;
+	return;
 }
 
 
-ret_t
+void
 cherokee_validator_free (cherokee_validator_t *validator)
 {
 	module_func_free_t func;
 
-	return_if_fail (validator!=NULL, ret_error);
+	if (validator == NULL) {
+		return;
+	}
 
 	func = (module_func_free_t) MODULE(validator)->free;
 
 	if (func == NULL) {
-		return ret_error;
+		return;
 	}
 
 	return func (validator);
@@ -484,7 +486,7 @@ cherokee_validator_props_init_base  (cherokee_validator_props_t *props, module_f
 }
 
 
-ret_t
+void
 cherokee_validator_props_free_base  (cherokee_validator_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));

@@ -40,18 +40,18 @@ cherokee_header_op_new (cherokee_header_op_t **op)
 }
 
 
-ret_t
+void
 cherokee_header_op_free (cherokee_header_op_t *op)
 {
 	if (unlikely (op == NULL)) {
-		return ret_ok;
+		return;
 	}
 
 	cherokee_buffer_mrproper (&op->header);
 	cherokee_buffer_mrproper (&op->value);
 
 	free (op);
-	return ret_ok;
+	return;
 }
 
 

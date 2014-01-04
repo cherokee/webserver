@@ -53,7 +53,7 @@ cherokee_bind_new (cherokee_bind_t **listener)
 }
 
 
-ret_t
+void
 cherokee_bind_free (cherokee_bind_t *listener)
 {
 	cherokee_socket_close (&listener->socket);
@@ -67,7 +67,7 @@ cherokee_bind_free (cherokee_bind_t *listener)
 	cherokee_buffer_mrproper (&listener->server_port);
 
 	free (listener);
-	return ret_ok;
+	return;
 }
 
 

@@ -38,7 +38,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (post_report, http_get);
 
 /* Methods implementation
  */
-static ret_t
+static void
 props_free (cherokee_handler_post_report_props_t *props)
 {
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
@@ -122,12 +122,12 @@ cherokee_handler_post_report_new  (cherokee_handler_t      **hdl,
 }
 
 
-ret_t
+void
 cherokee_handler_post_report_free (cherokee_handler_post_report_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->buffer);
 	cherokee_dwriter_mrproper (&hdl->writer);
-	return ret_ok;
+    return;
 }
 
 static ret_t

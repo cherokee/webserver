@@ -49,7 +49,7 @@
 #define DEFAULT_ALLOW_PATHINFO false
 #define DEFAULT_ALLOW_DIRLIST  true
 
-ret_t
+void
 cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
 {
 	if (props->props_file != NULL) {

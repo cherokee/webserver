@@ -82,7 +82,7 @@ ret_t cherokee_avl_generic_init (cherokee_avl_generic_t *avl);
 typedef ret_t (* cherokee_avl_generic_while_func_t) (cherokee_avl_generic_node_t *key, void *value, void *param);
 
 void  cherokee_avl_mrproper (cherokee_avl_generic_t *avl, cherokee_func_free_t free_func);
-ret_t cherokee_avl_free     (cherokee_avl_generic_t *avl, cherokee_func_free_t free_func);
+void  cherokee_avl_free     (cherokee_avl_generic_t *avl, cherokee_func_free_t free_func);
 ret_t cherokee_avl_check    (cherokee_avl_generic_t *avl);
 ret_t cherokee_avl_len      (cherokee_avl_generic_t *avl, size_t *len);
 int   cherokee_avl_is_empty (cherokee_avl_generic_t *avl);

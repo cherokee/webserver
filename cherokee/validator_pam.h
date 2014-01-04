@@ -38,7 +38,7 @@ typedef struct {
 void PLUGIN_INIT_NAME(pam) (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_validator_pam_new  (cherokee_validator_pam_t **pam, cherokee_module_props_t *props);
-ret_t cherokee_validator_pam_free (cherokee_validator_pam_t  *pam);
+void  cherokee_validator_pam_free (cherokee_validator_pam_t  *pam);
 
 ret_t cherokee_validator_pam_check       (cherokee_validator_pam_t  *pam, cherokee_connection_t *conn);
 ret_t cherokee_validator_pam_add_headers (cherokee_validator_pam_t  *pam, cherokee_connection_t *conn, cherokee_buffer_t *buf);
