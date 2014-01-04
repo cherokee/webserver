@@ -45,7 +45,6 @@ main (int argc, char *argv[])
 	cuint_t                  fds_num;
 	cherokee_fdpoll_t       *fdpoll;
 	cherokee_admin_client_t *client;
-	cherokee_buffer_t        url;
 	cherokee_list_t         *i, *tmp;
 
 	cuint_t                  port;
@@ -69,26 +68,30 @@ main (int argc, char *argv[])
 
 	/* Set the request
 	 */
-	cherokee_buffer_init (&url);
-	cherokee_buffer_add (&url, argv[1], strlen(argv[1]));
+	cherokee_buffer_init (&buf);
+	cherokee_buffer_add (&buf, argv[1], strlen(argv[1]));
 
 	/* Prepare the admin client object
 	 */
-	ret = cherokee_admin_client_prepare (client, fdpoll, &url);
+	ret = cherokee_admin_client_prepare (client, fdpoll, &buf);
 	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Client prepare failed\n");
+
+		cherokee_buffer_mrproper (&buf);
 		return ERROR;
 	}
 
 	ret = cherokee_admin_client_connect (client);
 	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Couldn't connect\n");
+
+		cherokee_buffer_mrproper (&buf);
 		return ERROR;
 	}
 
 	/* Process it
 	 */
-	cherokee_buffer_init (&buf);
+	cherokee_buffer_clean (&buf);
 
 	RUN_CLIENT1 (client, fdpoll, cherokee_admin_client_ask_port, &port);
 	CHECK_ERROR ("port");
