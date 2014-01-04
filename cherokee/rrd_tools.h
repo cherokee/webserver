@@ -67,13 +67,13 @@ extern cherokee_rrd_connection_t         *rrd_connection;
  */
 ret_t cherokee_rrd_connection_get            (cherokee_rrd_connection_t **rrd_conn);
 ret_t cherokee_rrd_connection_configure      (cherokee_rrd_connection_t  *rrd_conn, cherokee_config_node_t *config);
-ret_t cherokee_rrd_connection_mrproper       (cherokee_rrd_connection_t  *rrd_conn);
+void  cherokee_rrd_connection_mrproper       (cherokee_rrd_connection_t  *rrd_conn);
 
 ret_t cherokee_rrd_connection_create_srv_db  (cherokee_rrd_connection_t  *rrd_conn);
 ret_t cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t  *rrd_conn, cherokee_buffer_t *dbpath);
 
 ret_t cherokee_rrd_connection_spawn          (cherokee_rrd_connection_t  *rrd_conn);
-ret_t cherokee_rrd_connection_kill           (cherokee_rrd_connection_t  *rrd_conn, cherokee_boolean_t do_kill);
+void  cherokee_rrd_connection_kill           (cherokee_rrd_connection_t  *rrd_conn, cherokee_boolean_t do_kill);
 ret_t cherokee_rrd_connection_execute        (cherokee_rrd_connection_t  *rrd_conn, cherokee_buffer_t *buf);
 
 #endif /* CHEROKEE_RRD_TOOLS_H */

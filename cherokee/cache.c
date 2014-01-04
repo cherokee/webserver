@@ -317,7 +317,7 @@ cherokee_cache_init (cherokee_cache_t *cache)
 }
 
 
-ret_t
+void
 cherokee_cache_mrproper (cherokee_cache_t *cache)
 {
 	if (cache->priv) {
@@ -327,7 +327,7 @@ cherokee_cache_mrproper (cherokee_cache_t *cache)
 	}
 
 	cherokee_avl_mrproper (AVL_GENERIC(&cache->map), (cherokee_func_free_t)entry_free);
-	return ret_ok;
+	return;
 }
 
 

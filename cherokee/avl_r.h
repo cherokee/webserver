@@ -42,7 +42,7 @@ typedef struct {
 #define AVL_R(a) ((cherokee_avl_t *)(a))
 
 ret_t cherokee_avl_r_init      (cherokee_avl_r_t  *avl_r);
-ret_t cherokee_avl_r_mrproper  (cherokee_avl_r_t  *avl_r, cherokee_func_free_t free_func);
+void  cherokee_avl_r_mrproper  (cherokee_avl_r_t  *avl_r, cherokee_func_free_t free_func);
 
 ret_t cherokee_avl_r_add       (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void  *value);
 ret_t cherokee_avl_r_del       (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void **value);

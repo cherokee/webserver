@@ -50,7 +50,7 @@ cherokee_config_node_init (cherokee_config_node_t *conf)
 }
 
 
-ret_t
+void
 cherokee_config_node_mrproper (cherokee_config_node_t *conf)
 {
 	cherokee_list_t *i, *j;
@@ -62,7 +62,7 @@ cherokee_config_node_mrproper (cherokee_config_node_t *conf)
 		cherokee_config_node_free (CONFIG_NODE(i));
 	}
 
-	return ret_ok;
+	return;
 }
 
 

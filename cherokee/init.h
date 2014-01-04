@@ -38,7 +38,7 @@ CHEROKEE_BEGIN_DECLS
 /* Library wide initialization
  */
 ret_t cherokee_init     (void);
-ret_t cherokee_mrproper (void);
+void  cherokee_mrproper (void);
 
 /* Globals
  */

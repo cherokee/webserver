@@ -201,7 +201,7 @@ cherokee_regex_list_configure (cherokee_list_t        *list,
 }
 
 
-ret_t
+void
 cherokee_regex_list_mrproper (cherokee_list_t *list)
 {
 	cherokee_list_t *i, *tmp;
@@ -213,7 +213,7 @@ cherokee_regex_list_mrproper (cherokee_list_t *list)
 		free (i);
 	}
 
-	return ret_ok;
+	return;
 }
 
 

@@ -79,7 +79,7 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 }
 
 
-ret_t
+void
 cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 {
 	cherokee_list_t *i, *tmp;
@@ -92,7 +92,7 @@ cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 		entry_free (BAL_ENTRY(i));
 	}
 
-	return ret_ok;
+	return;
 }
 
 

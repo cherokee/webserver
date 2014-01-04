@@ -49,7 +49,7 @@ typedef struct {
 
 /* Shared Memory */
 ret_t cherokee_shm_init      (cherokee_shm_t *shm);
-ret_t cherokee_shm_mrproper  (cherokee_shm_t *shm);
+void  cherokee_shm_mrproper  (cherokee_shm_t *shm);
 ret_t cherokee_shm_create    (cherokee_shm_t *shm, char *name, size_t len);
 ret_t cherokee_shm_map       (cherokee_shm_t *shm, cherokee_buffer_t *name);
 

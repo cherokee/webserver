@@ -94,7 +94,7 @@ typedef ret_t (* balancer_free_func_t) (cherokee_balancer_t  *balancer);
  */
 ret_t cherokee_balancer_init_base      (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info);
 ret_t cherokee_balancer_configure_base (cherokee_balancer_t *balancer, cherokee_server_t *srv, cherokee_config_node_t *conf);
-ret_t cherokee_balancer_mrproper       (cherokee_balancer_t *balancer);
+void  cherokee_balancer_mrproper       (cherokee_balancer_t *balancer);
 ret_t cherokee_balancer_free           (cherokee_balancer_t *balancer);
 
 /* Virtual methods

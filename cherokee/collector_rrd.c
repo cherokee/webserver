@@ -157,7 +157,9 @@ srv_free (cherokee_collector_rrd_t *rrd)
 	cherokee_buffer_mrproper (&rrd->path_database);
 	cherokee_buffer_mrproper (&rrd->tmp);
 
-	return cherokee_rrd_connection_mrproper (rrd_connection);
+	cherokee_rrd_connection_mrproper (rrd_connection);
+
+	return ret_ok;
 }
 
 

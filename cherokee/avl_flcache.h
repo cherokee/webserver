@@ -78,7 +78,7 @@ typedef struct {
 
 
 ret_t cherokee_avl_flcache_init     (cherokee_avl_flcache_t *avl);
-ret_t cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl, cherokee_func_free_t free_value);
+void  cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl, cherokee_func_free_t free_value);
 ret_t cherokee_avl_flcache_cleanup  (cherokee_avl_flcache_t *avl);
 
 ret_t cherokee_avl_flcache_add        (cherokee_avl_flcache_t       *avl,

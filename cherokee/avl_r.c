@@ -51,7 +51,7 @@ cherokee_avl_r_init (cherokee_avl_r_t *avl_r)
 }
 
 
-ret_t
+void
 cherokee_avl_r_mrproper (cherokee_avl_r_t *avl_r, cherokee_func_free_t free_func)
 {
 	if (avl_r->priv) {

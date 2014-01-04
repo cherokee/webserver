@@ -128,7 +128,7 @@ ret_t cherokee_cache_entry_unref (cherokee_cache_entry_t **entry);
 /* Cache Objects
  */
 ret_t cherokee_cache_init      (cherokee_cache_t *cache);
-ret_t cherokee_cache_mrproper  (cherokee_cache_t *cache);
+void  cherokee_cache_mrproper  (cherokee_cache_t *cache);
 ret_t cherokee_cache_clean     (cherokee_cache_t *cache);
 
 /* Cache Functionality

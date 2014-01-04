@@ -171,13 +171,13 @@ cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 }
 
 
-ret_t
+void
 cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv)
 {
 	cherokee_avl_mrproper (AVL_GENERIC(&resolv->table), entry_free);
 	CHEROKEE_RWLOCK_DESTROY (&resolv->lock);
 
-	return ret_ok;
+	return;
 }
 
 

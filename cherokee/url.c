@@ -52,12 +52,12 @@ cherokee_url_init (cherokee_url_t *url)
 }
 
 
-ret_t
+void
 cherokee_url_mrproper (cherokee_url_t *url)
 {
 	cherokee_buffer_mrproper (&url->host);
 	cherokee_buffer_mrproper (&url->request);
-	return ret_ok;
+	return;
 }
 
 

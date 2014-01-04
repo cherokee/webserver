@@ -61,7 +61,7 @@ typedef struct {
 
 ret_t cherokee_request_header_init     (cherokee_request_header_t *request);
 ret_t cherokee_request_header_clean    (cherokee_request_header_t *request);
-ret_t cherokee_request_header_mrproper (cherokee_request_header_t *request);
+void  cherokee_request_header_mrproper (cherokee_request_header_t *request);
 
 ret_t cherokee_request_header_parse_string (cherokee_request_header_t *request, cherokee_buffer_t *url_string);
 ret_t cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2);

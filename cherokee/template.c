@@ -105,7 +105,7 @@ cherokee_template_init (cherokee_template_t *tem)
 }
 
 
-ret_t
+void
 cherokee_template_mrproper (cherokee_template_t *tem)
 {
 	cherokee_list_t *i, *tmp;
@@ -119,7 +119,7 @@ cherokee_template_mrproper (cherokee_template_t *tem)
 	}
 
 	cherokee_buffer_mrproper (&tem->text);
-	return ret_ok;
+	return;
 }
 
 

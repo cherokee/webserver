@@ -85,7 +85,7 @@ typedef struct {
 /* Hosts
  */
 ret_t cherokee_handler_proxy_hosts_init     (cherokee_handler_proxy_hosts_t *hosts);
-ret_t cherokee_handler_proxy_hosts_mrproper (cherokee_handler_proxy_hosts_t *hosts);
+void  cherokee_handler_proxy_hosts_mrproper (cherokee_handler_proxy_hosts_t *hosts);
 
 ret_t cherokee_handler_proxy_hosts_get      (cherokee_handler_proxy_hosts_t  *hosts,
                                              cherokee_source_t               *src,

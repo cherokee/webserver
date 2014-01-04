@@ -55,7 +55,7 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 }
 
 
-ret_t
+void
 cherokee_request_header_mrproper (cherokee_request_header_t *request)
 {
 	cherokee_buffer_mrproper (&request->user);
@@ -63,7 +63,7 @@ cherokee_request_header_mrproper (cherokee_request_header_t *request)
 	cherokee_buffer_mrproper (&request->extra_headers);
 
 	cherokee_url_mrproper (&request->url);
-	return ret_ok;
+	return;
 }
 
 

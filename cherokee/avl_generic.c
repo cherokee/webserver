@@ -664,7 +664,7 @@ cherokee_avl_len (cherokee_avl_generic_t *avl, size_t *len)
 }
 
 
-ret_t
+void
 cherokee_avl_mrproper (cherokee_avl_generic_t *avl,
                        cherokee_func_free_t    free_func)
 {
@@ -672,7 +672,7 @@ cherokee_avl_mrproper (cherokee_avl_generic_t *avl,
 	cherokee_avl_generic_node_t *next;
 
 	if (unlikely (avl == NULL))
-		return ret_ok;
+		return;
 
 	node = node_first (avl);
 
@@ -690,7 +690,7 @@ cherokee_avl_mrproper (cherokee_avl_generic_t *avl,
 		node = next;
 	}
 
-	return ret_ok;
+	return;
 }
 
 ret_t
@@ -698,10 +698,10 @@ cherokee_avl_free (cherokee_avl_generic_t *avl,
                    cherokee_func_free_t    free_func)
 {
 	ret_t ret;
-	ret = cherokee_avl_mrproper (avl, free_func);
+	cherokee_avl_mrproper (avl, free_func);
 
 	free (avl);
-	return ret;
+	return ret_ok;
 }
 
 

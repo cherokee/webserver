@@ -84,7 +84,7 @@ node_new (cherokee_avl_flcache_node_t **node,
 	return ret_ok;
 }
 
-static ret_t
+static void
 node_mrproper (cherokee_avl_flcache_node_t *node)
 {
 	CHEROKEE_MUTEX_DESTROY (&node->ref_count_mutex);
@@ -94,7 +94,7 @@ node_mrproper (cherokee_avl_flcache_node_t *node)
 	cherokee_buffer_mrproper (&node->content_encoding);
 	cherokee_buffer_mrproper (&node->file);
 
-	return ret_ok;
+	return;
 }
 
 static ret_t
@@ -342,13 +342,12 @@ cherokee_avl_flcache_init (cherokee_avl_flcache_t *avl)
 }
 
 
-ret_t
+void
 cherokee_avl_flcache_mrproper (cherokee_avl_flcache_t *avl,
                                cherokee_func_free_t    free_value)
 {
 	CHEROKEE_RWLOCK_DESTROY (&avl->base_rwlock);
-	cherokee_avl_mrproper (AVL_GENERIC(avl), free_value);
-	return ret_ok;
+	return cherokee_avl_mrproper (AVL_GENERIC(avl), free_value);
 }
 
 

@@ -53,7 +53,7 @@ typedef struct {
 
 
 ret_t cherokee_plugin_loader_init           (cherokee_plugin_loader_t *loader);
-ret_t cherokee_plugin_loader_mrproper       (cherokee_plugin_loader_t *loader);
+void  cherokee_plugin_loader_mrproper       (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_plugin_loader_set_directory  (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir);
 ret_t cherokee_plugin_loader_set_deps_dir   (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir);

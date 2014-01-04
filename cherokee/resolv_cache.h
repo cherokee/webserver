@@ -41,7 +41,7 @@ typedef struct cherokee_resolv_cache cherokee_resolv_cache_t;
 ret_t cherokee_resolv_cache_get_default (cherokee_resolv_cache_t **resolv);
 
 ret_t cherokee_resolv_cache_init      (cherokee_resolv_cache_t *resolv);
-ret_t cherokee_resolv_cache_mrproper  (cherokee_resolv_cache_t *resolv);
+void  cherokee_resolv_cache_mrproper  (cherokee_resolv_cache_t *resolv);
 ret_t cherokee_resolv_cache_clean     (cherokee_resolv_cache_t *resolv);
 
 ret_t cherokee_resolv_cache_get_ipstr    (cherokee_resolv_cache_t *resolv, cherokee_buffer_t *domain, const char **ip);

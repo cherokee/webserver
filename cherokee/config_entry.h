@@ -129,7 +129,7 @@ typedef struct cherokee_config_entry cherokee_config_entry_ref_t;
 ret_t cherokee_config_entry_new      (cherokee_config_entry_t **entry);
 ret_t cherokee_config_entry_free     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
-ret_t cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
+void  cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
 
 ret_t cherokee_config_entry_set_encoder (cherokee_config_entry_t  *entry,
 					 cherokee_buffer_t        *encoder_name,

@@ -91,7 +91,7 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 }
 
 
-ret_t
+void
 cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 {
 	cherokee_list_t *i, *tmp;
@@ -156,7 +156,7 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 		entry->timeout_header = NULL;
 	}
 
-	return ret_ok;
+	return;
 }
 
 

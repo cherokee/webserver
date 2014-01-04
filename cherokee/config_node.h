@@ -54,7 +54,7 @@ typedef ret_t (* cherokee_config_node_list_func_t)  (char *, void *);
 ret_t cherokee_config_node_new       (cherokee_config_node_t **conf);
 ret_t cherokee_config_node_free      (cherokee_config_node_t  *conf);
 ret_t cherokee_config_node_init      (cherokee_config_node_t  *conf);
-ret_t cherokee_config_node_mrproper  (cherokee_config_node_t  *conf);
+void  cherokee_config_node_mrproper  (cherokee_config_node_t  *conf);
 
 ret_t cherokee_config_node_add       (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *val);
 ret_t cherokee_config_node_add_buf   (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_buffer_t *val);

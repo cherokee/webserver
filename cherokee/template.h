@@ -57,7 +57,7 @@ typedef struct {
 /* Template
  */
 ret_t cherokee_template_init       (cherokee_template_t *tem);
-ret_t cherokee_template_mrproper   (cherokee_template_t *tem);
+void  cherokee_template_mrproper   (cherokee_template_t *tem);
 
 ret_t cherokee_template_new_token  (cherokee_template_t        *tem,
                                     cherokee_template_token_t **token);

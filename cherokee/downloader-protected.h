@@ -81,7 +81,7 @@ struct cherokee_downloader {
 
 
 ret_t cherokee_downloader_init     (cherokee_downloader_t  *downloader);
-ret_t cherokee_downloader_mrproper (cherokee_downloader_t  *downloader);
+void  cherokee_downloader_mrproper (cherokee_downloader_t  *downloader);
 
 CHEROKEE_END_DECLS
 

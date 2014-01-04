@@ -126,11 +126,11 @@ cherokee_header_init (cherokee_header_t *hdr, cherokee_header_type_t type)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_header_mrproper (cherokee_header_t *hdr)
 {
 	clean_unknown_headers (hdr);
-	return ret_ok;
+	return;
 }
 
 ret_t

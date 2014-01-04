@@ -47,7 +47,7 @@ cherokee_shm_init (cherokee_shm_t *shm)
 }
 
 
-ret_t
+void
 cherokee_shm_mrproper (cherokee_shm_t *shm)
 {
 	if (shm->mem) {
@@ -55,7 +55,7 @@ cherokee_shm_mrproper (cherokee_shm_t *shm)
 	}
 
 	cherokee_buffer_mrproper (&shm->name);
-	return ret_ok;
+	return;
 }
 
 

@@ -35,7 +35,7 @@ typedef struct {
 } cherokee_access_t;
 
 ret_t cherokee_access_init       (cherokee_access_t  *entry);
-ret_t cherokee_access_mrproper   (cherokee_access_t  *entry);
+void  cherokee_access_mrproper   (cherokee_access_t  *entry);
 ret_t cherokee_access_new        (cherokee_access_t **entry);
 ret_t cherokee_access_free       (cherokee_access_t  *entry);
 

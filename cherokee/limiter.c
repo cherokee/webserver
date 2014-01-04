@@ -38,7 +38,7 @@ cherokee_limiter_init (cherokee_limiter_t *limiter)
 }
 
 
-ret_t
+void
 cherokee_limiter_mrproper (cherokee_limiter_t *limiter)
 {
 	cherokee_list_t *i, *tmp;
@@ -47,7 +47,7 @@ cherokee_limiter_mrproper (cherokee_limiter_t *limiter)
 		cherokee_connection_free (CONN(i));
 	}
 
-	return ret_ok;
+	return;
 }
 
 

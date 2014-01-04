@@ -99,7 +99,7 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 }
 
 
-ret_t
+void
 cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 {
 	/* Free the memory
@@ -120,7 +120,7 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 
 	cherokee_header_free (downloader->header);
 
-	return ret_ok;
+	return;
 }
 
 

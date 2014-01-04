@@ -37,7 +37,7 @@ cherokee_x_real_ip_init (cherokee_x_real_ip_t *real_ip)
 }
 
 
-ret_t
+void
 cherokee_x_real_ip_mrproper (cherokee_x_real_ip_t *real_ip)
 {
 	if (real_ip->access != NULL) {
@@ -45,7 +45,7 @@ cherokee_x_real_ip_mrproper (cherokee_x_real_ip_t *real_ip)
 		real_ip->access = NULL;
 	}
 
-	return ret_ok;
+	return;
 }
 
 

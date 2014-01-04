@@ -123,7 +123,7 @@ cherokee_access_init (cherokee_access_t *entry)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_access_mrproper (cherokee_access_t *entry)
 {
 	cherokee_list_t *i, *tmp;
@@ -142,7 +142,7 @@ cherokee_access_mrproper (cherokee_access_t *entry)
 		free (i);
 	}
 
-	return ret_ok;
+	return;
 }
 
 CHEROKEE_ADD_FUNC_NEW (access);

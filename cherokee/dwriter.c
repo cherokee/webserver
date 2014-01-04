@@ -112,11 +112,11 @@ cherokee_dwriter_init (cherokee_dwriter_t *writer,
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_dwriter_mrproper (cherokee_dwriter_t *writer)
 {
 	UNUSED (writer);
-	return ret_ok;
+	return;
 }
 
 ret_t

@@ -67,7 +67,7 @@ ret_t cherokee_regex_list_configure (cherokee_list_t        *list,
                                      cherokee_config_node_t *conf,
                                      cherokee_regex_table_t *regexs);
 
-ret_t cherokee_regex_list_mrproper  (cherokee_list_t        *list);
+void  cherokee_regex_list_mrproper  (cherokee_list_t        *list);
 
 /* Utilities
  */

@@ -145,7 +145,7 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 }
 
 
-ret_t
+void
 cherokee_rrd_connection_mrproper (cherokee_rrd_connection_t *rrd_conn)
 {
 	CHEROKEE_MUTEX_DESTROY (&rrd_conn->mutex);
@@ -155,7 +155,9 @@ cherokee_rrd_connection_mrproper (cherokee_rrd_connection_t *rrd_conn)
 	cherokee_buffer_mrproper (&rrd_conn->path_databases);
 	cherokee_buffer_mrproper (&rrd_conn->path_img_cache);
 
-	return cherokee_rrd_connection_kill (rrd_conn, true);
+	cherokee_rrd_connection_kill (rrd_conn, true);
+
+	return;
 }
 
 
@@ -247,7 +249,7 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 }
 
 
-ret_t
+void
 cherokee_rrd_connection_kill (cherokee_rrd_connection_t *rrd_conn,
                               cherokee_boolean_t         do_kill)
 {
@@ -281,7 +283,7 @@ cherokee_rrd_connection_kill (cherokee_rrd_connection_t *rrd_conn,
 		rrd_conn->pid = -1;
 	}
 
-	return ret_ok;
+	return;
 }
 
 

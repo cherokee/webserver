@@ -46,7 +46,7 @@ cherokee_rule_list_init (cherokee_rule_list_t *list)
 }
 
 
-ret_t
+void
 cherokee_rule_list_mrproper (cherokee_rule_list_t *list)
 {
 	cherokee_list_t *i, *tmp;
@@ -57,7 +57,7 @@ cherokee_rule_list_mrproper (cherokee_rule_list_t *list)
 	}
 
 	cherokee_rule_free (list->def_rule);
-	return ret_ok;
+	return;
 }
 
 static void

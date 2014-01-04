@@ -244,7 +244,7 @@ cherokee_iocache_init (cherokee_iocache_t *iocache)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_iocache_mrproper (cherokee_iocache_t *iocache)
 {
 	return cherokee_cache_mrproper (CACHE(iocache));

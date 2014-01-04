@@ -55,7 +55,7 @@ cherokee_source_init (cherokee_source_t *src)
 }
 
 
-ret_t
+void
 cherokee_source_mrproper (cherokee_source_t *src)
 {
 	if (src->free) {
@@ -66,7 +66,7 @@ cherokee_source_mrproper (cherokee_source_t *src)
 	cherokee_buffer_mrproper (&src->unix_socket);
 	cherokee_buffer_mrproper (&src->host);
 
-	return ret_ok;
+	return;
 }
 
 

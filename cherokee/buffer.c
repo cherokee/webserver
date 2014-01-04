@@ -73,7 +73,7 @@ cherokee_buffer_fake (cherokee_buffer_t *buf, const char *str, cuint_t len)
 }
 
 
-ret_t
+void
 cherokee_buffer_mrproper (cherokee_buffer_t *buf)
 {
 	if (buf->buf) {
@@ -84,7 +84,7 @@ cherokee_buffer_mrproper (cherokee_buffer_t *buf)
 	buf->len  = 0;
 	buf->size = 0;
 
-	return ret_ok;
+	return;
 }
 
 void

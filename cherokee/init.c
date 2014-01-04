@@ -119,7 +119,7 @@ cherokee_init (void)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_mrproper (void)
 {
 	cherokee_buffer_mrproper (&cherokee_tmp_dir);
@@ -127,5 +127,5 @@ cherokee_mrproper (void)
 	cherokee_bogotime_free();
 	cherokee_threading_free();
 
-	return ret_ok;
+	return;
 }

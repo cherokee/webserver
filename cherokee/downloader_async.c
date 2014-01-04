@@ -54,14 +54,14 @@ cherokee_downloader_async_init (cherokee_downloader_async_t *adownloader)
 }
 
 
-ret_t
+void
 cherokee_downloader_async_mrproper (cherokee_downloader_async_t *adownloader)
 {
 	if (adownloader->fd_added != -1)
 		cherokee_fdpoll_del (adownloader->fdpoll_ref, adownloader->fd_added);
 
 	cherokee_downloader_mrproper (DOWNLOADER(adownloader));
-	return ret_ok;
+	return;
 }
 
 

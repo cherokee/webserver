@@ -35,7 +35,7 @@ typedef struct {
 } cherokee_limiter_t;
 
 ret_t cherokee_limiter_init     (cherokee_limiter_t *limiter);
-ret_t cherokee_limiter_mrproper (cherokee_limiter_t *limiter);
+void  cherokee_limiter_mrproper (cherokee_limiter_t *limiter);
 
 ret_t cherokee_limiter_add_conn (cherokee_limiter_t *limiter,
 				 void               *conn);

@@ -122,7 +122,7 @@ cherokee_socket_init (cherokee_socket_t *socket)
 }
 
 
-ret_t
+void
 cherokee_socket_mrproper (cherokee_socket_t *socket)
 {
 	if (socket->cryptor != NULL) {
@@ -130,7 +130,7 @@ cherokee_socket_mrproper (cherokee_socket_t *socket)
 		socket->cryptor = NULL;
 	}
 
-	return ret_ok;
+	return;
 }
 
 

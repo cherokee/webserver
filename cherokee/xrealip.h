@@ -47,7 +47,7 @@ typedef struct {
 
 
 ret_t cherokee_x_real_ip_init       (cherokee_x_real_ip_t *real_ip);
-ret_t cherokee_x_real_ip_mrproper   (cherokee_x_real_ip_t *real_ip);
+void  cherokee_x_real_ip_mrproper   (cherokee_x_real_ip_t *real_ip);
 ret_t cherokee_x_real_ip_configure  (cherokee_x_real_ip_t *real_ip, cherokee_config_node_t *conf);
 ret_t cherokee_x_real_ip_is_allowed (cherokee_x_real_ip_t *real_ip, cherokee_socket_t *sock);
 

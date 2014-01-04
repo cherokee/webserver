@@ -50,14 +50,14 @@ cherokee_handler_proxy_hosts_init (cherokee_handler_proxy_hosts_t *hosts)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_handler_proxy_hosts_mrproper (cherokee_handler_proxy_hosts_t *hosts)
 {
 	CHEROKEE_MUTEX_DESTROY (&hosts->hosts_mutex);
 	cherokee_avl_mrproper (AVL_GENERIC(&hosts->hosts), poll_free);
 	cherokee_buffer_mrproper (&hosts->tmp);
 
-	return ret_ok;
+	return;
 }
 
 ret_t

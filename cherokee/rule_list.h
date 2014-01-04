@@ -42,7 +42,7 @@ typedef struct {
 
 
 ret_t cherokee_rule_list_init     (cherokee_rule_list_t *list);
-ret_t cherokee_rule_list_mrproper (cherokee_rule_list_t *list);
+void  cherokee_rule_list_mrproper (cherokee_rule_list_t *list);
 
 ret_t cherokee_rule_list_add      (cherokee_rule_list_t *list, cherokee_rule_t *rule);
 ret_t cherokee_rule_list_sort     (cherokee_rule_list_t *list);
