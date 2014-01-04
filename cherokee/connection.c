@@ -168,7 +168,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->chunked_encoding     = false;
 	n->chunked_sent         = 0;
 	n->chunked_last_package = false;
-	cherokee_buffer_init (&n->chunked_len);
+	cherokee_buffer_fake (&n->chunked_len, &n->chucked_len_buf);
 
 	cherokee_config_entry_ref_init (&n->config_entry);
 	cherokee_flcache_conn_init (&n->flcache);
@@ -216,7 +216,6 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	cherokee_buffer_mrproper (&conn->host);
 	cherokee_buffer_mrproper (&conn->host_port);
 	cherokee_buffer_mrproper (&conn->self_trace);
-	cherokee_buffer_mrproper (&conn->chunked_len);
 
 	cherokee_buffer_mrproper (&conn->error_internal_url);
 	cherokee_buffer_mrproper (&conn->error_internal_qs);
@@ -1682,7 +1681,6 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		 * len(str(hex(4294967295))+"\r\n\0") = 13
 		 */
 		cherokee_buffer_clean       (&conn->chunked_len);
-		cherokee_buffer_ensure_size (&conn->chunked_len, 13);
 		cherokee_buffer_add_ulong16 (&conn->chunked_len, conn->buffer.len);
 		cherokee_buffer_add_str     (&conn->chunked_len, CRLF);
 

@@ -225,6 +225,7 @@ struct cherokee_connection {
 	cherokee_boolean_t            chunked_encoding;
 	cherokee_boolean_t            chunked_last_package;
 	cherokee_buffer_t             chunked_len;
+	char                          chunked_len_buf[13]; /* len(str(hex(4294967295))+"\r\n\0") = 13 */
 	size_t                        chunked_sent;
 	struct iovec                  chunks[3];
 	uint16_t                      chunksn;
