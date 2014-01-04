@@ -134,7 +134,7 @@ cherokee_socket_mrproper (cherokee_socket_t *socket)
 }
 
 
-ret_t
+void
 cherokee_socket_clean (cherokee_socket_t *socket)
 {
 	/* TLS
@@ -156,7 +156,7 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 	socket->client_addr_len = -1;
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
 
-	return ret_ok;
+    return;
 }
 
 

@@ -48,7 +48,7 @@ typedef ret_t (* cherokee_cache_new_func_t)  (struct cherokee_cache        *cach
 typedef ret_t (* cherokee_cache_get_stats_t) (struct cherokee_cache        *cache,
                                               cherokee_buffer_t            *key);
 
-typedef ret_t (* cherokee_cache_entry_clean_t) (struct cherokee_cache_entry *entry);
+typedef void  (* cherokee_cache_entry_clean_t) (struct cherokee_cache_entry *entry);
 typedef ret_t (* cherokee_cache_entry_fetch_t) (struct cherokee_cache_entry *entry);
 typedef void  (* cherokee_cache_entry_free_t)  (struct cherokee_cache_entry *entry);
 
@@ -129,7 +129,7 @@ ret_t cherokee_cache_entry_unref (cherokee_cache_entry_t **entry);
  */
 ret_t cherokee_cache_init      (cherokee_cache_t *cache);
 void  cherokee_cache_mrproper  (cherokee_cache_t *cache);
-ret_t cherokee_cache_clean     (cherokee_cache_t *cache);
+void  cherokee_cache_clean     (cherokee_cache_t *cache);
 
 /* Cache Functionality
  */

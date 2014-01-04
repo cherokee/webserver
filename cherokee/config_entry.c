@@ -327,8 +327,8 @@ cherokee_config_entry_ref_init (cherokee_config_entry_ref_t *entry)
 	return init (entry);
 }
 
-ret_t
+void
 cherokee_config_entry_ref_clean (cherokee_config_entry_ref_t *entry)
 {
-	return init (entry);
+    init (entry);
 }

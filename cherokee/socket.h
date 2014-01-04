@@ -108,7 +108,7 @@ typedef struct {
 
 ret_t cherokee_socket_init              (cherokee_socket_t *socket);
 void  cherokee_socket_mrproper          (cherokee_socket_t *socket);
-ret_t cherokee_socket_clean             (cherokee_socket_t *socket);
+void  cherokee_socket_clean             (cherokee_socket_t *socket);
 
 ret_t cherokee_socket_init_tls          (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver, cherokee_connection_t *conn, cherokee_socket_status_t *blocking);
 ret_t cherokee_socket_init_client_tls   (cherokee_socket_t *socket, cherokee_buffer_t *host);

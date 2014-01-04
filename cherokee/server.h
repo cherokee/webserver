@@ -41,7 +41,7 @@ typedef struct cherokee_server cherokee_server_t;
 
 ret_t cherokee_server_new                (cherokee_server_t **srv);
 void  cherokee_server_free               (cherokee_server_t  *srv);
-ret_t cherokee_server_clean              (cherokee_server_t  *srv);
+void  cherokee_server_clean              (cherokee_server_t  *srv);
 
 ret_t cherokee_server_initialize         (cherokee_server_t *srv);
 ret_t cherokee_server_step               (cherokee_server_t *srv);

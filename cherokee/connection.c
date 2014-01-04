@@ -243,7 +243,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 }
 
 
-ret_t
+void
 cherokee_connection_clean (cherokee_connection_t *conn)
 {
 	size_t             crlf_len;
@@ -394,11 +394,11 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	TRACE (ENTRIES, "conn %p, has headers %d\n", conn,
 	       !cherokee_buffer_is_empty (&conn->incoming_header));
 
-	return ret_ok;
+    return;
 }
 
 
-ret_t
+void
 cherokee_connection_clean_close (cherokee_connection_t *conn)
 {
 	/* Close and clean the socket
@@ -414,7 +414,7 @@ cherokee_connection_clean_close (cherokee_connection_t *conn)
 	/* Clean the connection object
 	 */
 	cherokee_connection_clean (conn);
-	return ret_ok;
+    return;
 }
 
 

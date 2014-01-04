@@ -177,7 +177,7 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
 }
 
 
-ret_t
+void
 cherokee_nonce_table_cleanup (cherokee_nonce_table_t *nonces)
 {
 	cherokee_list_t *i, *j;
@@ -192,5 +192,5 @@ cherokee_nonce_table_cleanup (cherokee_nonce_table_t *nonces)
 	}
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
-	return ret_ok;
+    return;
 }

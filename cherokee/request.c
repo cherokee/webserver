@@ -67,7 +67,7 @@ cherokee_request_header_mrproper (cherokee_request_header_t *request)
 }
 
 
-ret_t
+void
 cherokee_request_header_clean (cherokee_request_header_t *request)
 {
 	request->method    = http_get;
@@ -78,7 +78,7 @@ cherokee_request_header_clean (cherokee_request_header_t *request)
 
 	cherokee_url_clean (&request->url);
 
-	return ret_ok;
+    return;
 }
 
 ret_t

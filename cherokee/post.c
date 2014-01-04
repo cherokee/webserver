@@ -59,7 +59,7 @@ cherokee_post_init (cherokee_post_t *post)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_post_clean (cherokee_post_t *post)
 {
 	post->len                = 0;
@@ -80,7 +80,7 @@ cherokee_post_clean (cherokee_post_t *post)
 	cherokee_buffer_mrproper (&post->header_surplus);
 	cherokee_buffer_mrproper (&post->progress_id);
 
-	return ret_ok;
+    return;
 }
 
 void

@@ -816,19 +816,14 @@ cherokee_flcache_conn_send_body (cherokee_flcache_conn_t *flcache_conn,
 }
 
 
-ret_t
+void
 cherokee_flcache_cleanup (cherokee_flcache_t *flcache)
 {
-	ret_t ret;
-
 	TRACE (ENTRIES, "Cleaning up vserver cache '%s'\n", flcache->local_directory.buf);
 
-	ret = cherokee_avl_flcache_cleanup (&flcache->request_map);
-	if (unlikely (ret != ret_ok)) {
-		return ret_error;
-	}
+    cherokee_avl_flcache_cleanup (&flcache->request_map);
 
-	return ret_ok;
+    return;
 }
 
 
@@ -850,7 +845,7 @@ cherokee_flcache_del_entry (cherokee_flcache_t          *flcache,
 }
 
 
-ret_t
+void
 cherokee_flcache_conn_clean (cherokee_flcache_conn_t *flcache_conn)
 {
 	cherokee_avl_flcache_node_t *entry = flcache_conn->avl_node_ref;
@@ -888,5 +883,5 @@ cherokee_flcache_conn_clean (cherokee_flcache_conn_t *flcache_conn)
 
 	cherokee_buffer_mrproper (&flcache_conn->header);
 
-	return ret_ok;
+    return;
 }

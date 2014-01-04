@@ -79,7 +79,7 @@ CHEROKEE_ADD_FUNC_NEW (iocache);
 CHEROKEE_ADD_FUNC_FREE (iocache);
 
 
-static ret_t
+static void
 clean_info_cb (cherokee_cache_entry_t *entry)
 {
 	cherokee_iocache_entry_t *ioentry = IOCACHE_ENTRY(entry);
@@ -106,7 +106,7 @@ clean_info_cb (cherokee_cache_entry_t *entry)
 	PRIV(entry)->mmap_expiration = 0;
 	PRIV(entry)->stat_expiration = 0;
 
-	return ret_ok;
+	return;
 }
 
 static void

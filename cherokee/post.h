@@ -74,7 +74,7 @@ typedef struct {
 CHEROKEE_BEGIN_DECLS
 
 ret_t cherokee_post_init              (cherokee_post_t *post);
-ret_t cherokee_post_clean             (cherokee_post_t *post);
+void  cherokee_post_clean             (cherokee_post_t *post);
 void  cherokee_post_mrproper          (cherokee_post_t *post);
 
 ret_t cherokee_post_read_header       (cherokee_post_t *post, void *conn);

@@ -47,7 +47,7 @@ typedef struct cherokee_regex_table cherokee_regex_table_t;
  */
 ret_t cherokee_regex_table_new   (cherokee_regex_table_t **table);
 void  cherokee_regex_table_free  (cherokee_regex_table_t  *table);
-ret_t cherokee_regex_table_clean (cherokee_regex_table_t  *table);
+void  cherokee_regex_table_clean (cherokee_regex_table_t  *table);
 
 ret_t cherokee_regex_table_get  (cherokee_regex_table_t *table, char *pattern, void **pcre);
 ret_t cherokee_regex_table_add  (cherokee_regex_table_t *table, char *pattern);

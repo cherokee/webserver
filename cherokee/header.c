@@ -149,7 +149,7 @@ cherokee_header_new (cherokee_header_t **hdr, cherokee_header_type_t type)
 CHEROKEE_ADD_FUNC_FREE (header);
 
 
-ret_t
+void
 cherokee_header_clean (cherokee_header_t *hdr)
 {
 	clean_headers (hdr);
@@ -166,7 +166,7 @@ cherokee_header_clean (cherokee_header_t *hdr)
 	hdr->query_string_off = 0;
 	hdr->query_string_len = 0;
 
-	return ret_ok;
+    return;
 }
 
 

@@ -101,7 +101,7 @@ typedef struct {
 
 ret_t cherokee_virtual_server_new       (cherokee_virtual_server_t **vserver, void *server);
 void  cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);
-ret_t cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
+void  cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
 
 ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver,
                                          cuint_t                     prio,

@@ -61,7 +61,7 @@ cherokee_url_mrproper (cherokee_url_t *url)
 }
 
 
-ret_t
+void
 cherokee_url_clean (cherokee_url_t *url)
 {
 	url->port = 80;
@@ -69,7 +69,7 @@ cherokee_url_clean (cherokee_url_t *url)
 	cherokee_buffer_clean (&url->host);
 	cherokee_buffer_clean (&url->request);
 
-	return ret_ok;
+    return;
 }
 
 

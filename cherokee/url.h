@@ -56,7 +56,7 @@ typedef struct {
 
 
 ret_t cherokee_url_init     (cherokee_url_t *url);
-ret_t cherokee_url_clean    (cherokee_url_t *url);
+void  cherokee_url_clean    (cherokee_url_t *url);
 void  cherokee_url_mrproper (cherokee_url_t *url);
 
 ret_t cherokee_url_parse        (cherokee_url_t *url, cherokee_buffer_t *string, cherokee_buffer_t *user_ret, cherokee_buffer_t *password_ret);

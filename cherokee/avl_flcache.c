@@ -448,7 +448,7 @@ cleanup_while_func (cherokee_avl_generic_node_t *node_generic, void *value, void
 }
 
 
-ret_t
+void
 cherokee_avl_flcache_cleanup (cherokee_avl_flcache_t *avl)
 {
 	cherokee_list_t  to_delete = LIST_HEAD_INIT(to_delete);
@@ -465,7 +465,7 @@ cherokee_avl_flcache_cleanup (cherokee_avl_flcache_t *avl)
 
 	CHEROKEE_RWLOCK_UNLOCK (&avl->base_rwlock);
 
-	return ret_ok;
+    return;
 }
 
 

@@ -117,20 +117,18 @@ entry_free (cherokee_cache_entry_t *entry)
 	free (entry);
 }
 
-static ret_t
+static void
 entry_parent_info_clean (cherokee_cache_entry_t *entry)
 {
 	/* entry->mutex       is LOCKED
 	 */
-	ret_t ret;
-
 	if (entry->ref_count > 0)
-		return ret_ok;
+        return;
 
-	ret = entry->clean_cb (entry);
+    entry->clean_cb (entry);
 
-	TRACE(ENTRIES, "Evincing: '%s' ret=%d\n", entry->key.buf, ret);
-	return ret;
+    TRACE(ENTRIES, "Evincing: '%s'\n", entry->key.buf);
+    return;
 }
 
 static ret_t

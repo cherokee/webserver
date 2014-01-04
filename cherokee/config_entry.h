@@ -147,6 +147,6 @@ ret_t cherokee_config_entry_print       (cherokee_config_entry_t *entry);
 /* Entry Reference
  */
 ret_t cherokee_config_entry_ref_init  (cherokee_config_entry_ref_t *entry);
-ret_t cherokee_config_entry_ref_clean (cherokee_config_entry_ref_t *entry);
+void  cherokee_config_entry_ref_clean (cherokee_config_entry_ref_t *entry);
 
 #endif /* CHEROKEE_CONFIG_ENTRY_H */

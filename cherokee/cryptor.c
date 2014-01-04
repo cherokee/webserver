@@ -172,13 +172,13 @@ cherokee_cryptor_socket_init_base (cherokee_cryptor_socket_t *cryp)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_cryptor_socket_clean_base (cherokee_cryptor_socket_t *cryp)
 {
 	cryp->initialized = false;
 	cryp->vserver_ref = NULL;
 
-	return ret_ok;
+    return;
 }
 
 
@@ -191,11 +191,11 @@ cherokee_cryptor_socket_free (cherokee_cryptor_socket_t *cryp)
 	return cryp->free (cryp);
 }
 
-ret_t
+void
 cherokee_cryptor_socket_clean (cherokee_cryptor_socket_t *cryp)
 {
 	if (unlikely (cryp->clean == NULL))
-		return ret_error;
+        return;
 
 	return cryp->clean (cryp);
 }
