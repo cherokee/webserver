@@ -54,16 +54,6 @@
 CHEROKEE_ADD_FUNC_NEW  (buffer);
 CHEROKEE_ADD_FUNC_FREE (buffer);
 
-ret_t
-cherokee_buffer_init (cherokee_buffer_t *buf)
-{
-	buf->buf  = NULL;
-	buf->len  = 0;
-	buf->size = 0;
-
-	return ret_ok;
-}
-
 void
 cherokee_buffer_fake (cherokee_buffer_t *buf, const char *str, cuint_t len)
 {

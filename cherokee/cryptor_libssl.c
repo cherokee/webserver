@@ -113,8 +113,9 @@ try_read_dh_param(cherokee_config_node_t  *conf,
 	ret_t              ret;
 	cherokee_buffer_t *buf;
 	FILE              *paramfile = NULL;
-	cherokee_buffer_t  confentry = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  confentry;
 
+	cherokee_buffer_init   (&confentry);
 	cherokee_buffer_add_va (&confentry, "dh_param%d", bitsize);
 
 	/* Read the configuration parameter
@@ -632,7 +633,7 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	cherokee_cryptor_vserver_libssl_t *vsrv_crytor = CRYPTOR_VSRV_SSL(vserver->cryptor);
 
 #ifdef OPENSSL_NO_TLSEXT
-	cherokee_buffer_t                  servername = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t                  servername;
 #endif
 
 	/* Set the virtual server object reference
@@ -679,6 +680,7 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 #else
 	/* Attempt to determine the vserver without SNI.
 	 */
+	cherokee_buffer_init (&servername);
 	cherokee_buffer_ensure_size(&servername, 40);
 	cherokee_socket_ntop (&conn->socket, servername.buf, servername.size);
 	cherokee_cryptor_libssl_find_vserver (cryp->session, CONN_SRV(conn), &servername, conn);

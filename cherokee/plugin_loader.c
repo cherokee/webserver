@@ -176,7 +176,9 @@ dylib_open (cherokee_plugin_loader_t  *loader,
 	ret_t             ret;
 	void             *lib;
 	int               flags;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	flags = RTLD_BASE | extra_flags;
 
@@ -215,10 +217,11 @@ execute_init_func (cherokee_plugin_loader_t *loader,
 {
 	ret_t ret;
 	void (*init_func) (cherokee_plugin_loader_t *);
-	cherokee_buffer_t init_name = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t init_name;
 
 	/* Build the init function name
 	 */
+	cherokee_buffer_init (&init_name);
 	ret = cherokee_buffer_add_va (&init_name, "cherokee_plugin_%s_init", module);
 	if (unlikely(ret < ret_ok)) {
 		cherokee_buffer_mrproper (&init_name);
@@ -261,10 +264,11 @@ get_info (cherokee_plugin_loader_t  *loader,
           void                     **dl_handler)
 {
 	ret_t             ret;
-	cherokee_buffer_t info_name = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t info_name;
 
 	/* Build the info struct string
 	 */
+	cherokee_buffer_init (&info_name);
 	cherokee_buffer_add_va (&info_name, "cherokee_%s_info", module);
 
 	/* Open it
@@ -294,8 +298,9 @@ check_deps_file (cherokee_plugin_loader_t *loader,
 {
 	FILE             *file;
 	char              temp[128];
-	cherokee_buffer_t filename = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t filename;
 
+	cherokee_buffer_init (&filename);
 	cherokee_buffer_add_va (&filename, "%s/%s.deps", loader->deps_dir.buf, modname);
 	file = fopen (filename.buf, "r");
 	if (file == NULL)

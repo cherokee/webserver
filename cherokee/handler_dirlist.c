@@ -142,8 +142,9 @@ file_entry_free (file_entry_t *file)
 static ret_t
 load_theme_load_file (cherokee_buffer_t *theme_path, const char *file, cherokee_buffer_t *output)
 {
-	cherokee_buffer_t path = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t path;
 
+	cherokee_buffer_init (&path);
 	cherokee_buffer_add_buffer (&path, theme_path);
 	cherokee_buffer_add (&path, file, strlen(file));
 
@@ -160,8 +161,9 @@ parse_if (cherokee_buffer_t *buf, const char *if_entry, size_t len_entry, cherok
 {
 	char              *begin;
 	char              *end;
-	cherokee_buffer_t  token = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  token;
 
+	cherokee_buffer_init (&token);
 	cherokee_buffer_add_str (&token, "%if ");
 	cherokee_buffer_add (&token, if_entry, len_entry);
 	cherokee_buffer_add_str (&token, "%");
@@ -289,7 +291,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t   *conf,
 	cherokee_list_t                  *i;
 	cherokee_handler_dirlist_props_t *props;
 	const char                       *theme      = NULL;
-	cherokee_buffer_t                 theme_path = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t                 theme_path;
 
 	UNUSED(srv);
 
@@ -387,6 +389,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t   *conf,
 	if (theme == NULL)
 		theme = "default";
 
+	cherokee_buffer_init       (&theme_path);
 	cherokee_buffer_add_buffer (&theme_path, &srv->themes_dir);
 	cherokee_buffer_add_va     (&theme_path, "/%s/", theme);
 
@@ -794,7 +797,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	int                    is_dir;
 	int                    is_link;
 	cherokee_connection_t *conn           = HANDLER_CONN(dhdl);
-	cherokee_buffer_t      local_realpath = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      local_realpath;
 
 	/* Build the local directory path
 	 */
@@ -805,6 +808,10 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 		conn->error_code = http_not_found;
 		return ret_error;
 	}
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&local_realpath);
 
 	/* Read the files
 	 */

@@ -736,8 +736,8 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	PROCESS_INFORMATION    pi;
 	STARTUPINFO            si;
 	char                  *cmd;
-	cherokee_buffer_t      cmd_line = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      exec_dir = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      cmd_line;
+	cherokee_buffer_t      exec_dir;
 	cherokee_connection_t *conn     = HANDLER_CONN(cgi);
 
 	SECURITY_ATTRIBUTES saSecAtr;
@@ -746,6 +746,11 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	HANDLE hChildStdinWr  = INVALID_HANDLE_VALUE;
 	HANDLE hChildStdoutRd = INVALID_HANDLE_VALUE;
 	HANDLE hChildStdoutWr = INVALID_HANDLE_VALUE;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&cmd_line);
+	cherokee_buffer_init (&exec_dir);
 
 	/* Create the environment for the process
 	 */
@@ -782,10 +787,10 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	hProc = GetCurrentProcess();
 
 	re = CreatePipe (&hChildStdoutRd, &hChildStdoutWr, &saSecAtr, 0);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 	re = CreatePipe (&hChildStdinRd, &hChildStdinWr, &saSecAtr, 0);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 	/* Make them inheritable
 	 */
@@ -793,13 +798,13 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	                      hProc, &hChildStdoutRd,
 	                      0, TRUE,
 	                      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 	re = DuplicateHandle (hProc,  hChildStdinWr,
 	                      hProc, &hChildStdinWr,
 	                      0, TRUE,
 	                      DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
-	if (!re) return ret_error;
+	if (!re) goto error;
 
 
 	/* Starting information
@@ -836,7 +841,7 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 		CloseHandle (pi.hThread);
 
 		conn->error_code = http_internal_error;
-		return ret_error;
+		goto error;
 	}
 
 	cherokee_buffer_mrproper (&cmd_line);
@@ -862,6 +867,12 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 	TRACE (ENTRIES, "In fd %d, Out fd %d\n", cgi->pipeInput, cgi->pipeOutput);
 
 	return ret_ok;
+
+error:
+	cherokee_buffer_mrproper (&cmd_line);
+	cherokee_buffer_mrproper (&exec_dir);
+
+	return ret_error;
 }
 
 #endif

@@ -54,7 +54,7 @@ cherokee_spawner_init (void)
 {
 #ifdef HAVE_SYSV_SEMAPHORES
 	ret_t             ret;
-	cherokee_buffer_t name = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t name;
 
 	if (! _active) {
 		return ret_ok;
@@ -62,6 +62,9 @@ cherokee_spawner_init (void)
 
 	/* Monitor mutex */
 	CHEROKEE_MUTEX_INIT (&spawning_mutex, CHEROKEE_MUTEX_FAST);
+
+	/* Initialise the buffers */
+	cherokee_buffer_init (&name);
 
 	/* Shared memory */
 	cherokee_buffer_add_va (&name, TMPDIR "/cherokee-spawner-%d", getppid());
@@ -200,7 +203,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	int                k;
 	int                phase;
 	int                envs     = 0;
-	cherokee_buffer_t  tmp      = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
 
 #define ALIGN4(buf)                                    \
 	while (buf.len & 0x3) {                        \
@@ -223,6 +226,10 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	if (k) {
 		return ret_eagain;
 	}
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* Build the string
 	 * The first character of each block is a mark.

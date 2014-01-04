@@ -571,8 +571,9 @@ cherokee_cache_get (cherokee_cache_t        *cache,
 
 #ifdef TRACE_ENABLED
 	if (cache->count % 100 == 0) {
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t tmp;
 
+		cherokee_buffer_init (&tmp);
 		cherokee_cache_get_stats (cache, &tmp);
 		TRACE(ENTRIES, "Cache stats:\n%s", tmp.buf);
 		cherokee_buffer_mrproper (&tmp);

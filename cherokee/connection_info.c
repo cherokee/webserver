@@ -151,8 +151,9 @@ info_fill_up (cherokee_connection_info_t *info,
 	{
 		char              *tmp;
 		cherokee_buffer_t *icon;
-		cherokee_buffer_t  name = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t  name;
 
+		cherokee_buffer_init (&name);
 		cherokee_buffer_add_buffer (&name, &info->request);
 
 		tmp = strchr (name.buf, '?');

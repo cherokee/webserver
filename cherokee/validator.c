@@ -123,10 +123,11 @@ ret_t
 cherokee_validator_parse_basic (cherokee_validator_t *validator, char *str, cuint_t str_len)
 {
 	char              *colon;
-	cherokee_buffer_t  auth = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  auth;
 
 	/* Decode base64
 	 */
+	cherokee_buffer_init (&auth);
 	cherokee_buffer_add (&auth, str, str_len);
 	cherokee_buffer_decode_base64 (&auth);
 
@@ -163,11 +164,12 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 	char               *entry;
 	char               *comma;
 	char               *equal;
-	cherokee_buffer_t   auth = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   auth;
 	cherokee_buffer_t  *entry_buf;
 
 	/* Copy authentication string
 	 */
+	cherokee_buffer_init (&auth);
 	cherokee_buffer_add (&auth, str, str_len);
 
 	entry = auth.buf;
@@ -298,7 +300,7 @@ cherokee_validator_digest_response (cherokee_validator_t  *validator,
                                     cherokee_connection_t *conn)
 {
 	ret_t             ret;
-	cherokee_buffer_t a2   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t a2;
 
 	/* A1 has to be in string of length 32:
 	 * MD5_digest(user":"realm":"passwd)
@@ -314,6 +316,7 @@ cherokee_validator_digest_response (cherokee_validator_t  *validator,
 
 	/* Build A2
 	 */
+	cherokee_buffer_init (&a2);
 	ret = digest_HA2 (validator, &a2, conn);
 	if (ret != ret_ok)
 		goto error;
@@ -354,9 +357,9 @@ ret_t
 cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_connection_t *conn)
 {
 	ret_t             ret;
+	cherokee_buffer_t a1;
+	cherokee_buffer_t buf;
 	int               re   = -1;
-	cherokee_buffer_t a1   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t buf  = CHEROKEE_BUF_INIT;
 
 	/* Sanity check
 	 */
@@ -366,6 +369,7 @@ cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffe
 
 	/* Build A1
 	 */
+	cherokee_buffer_init (&a1);
 	cherokee_buffer_ensure_size (&a1,
 	                             validator->user.len  + 1 +
 	                             validator->realm.len + 1 +
@@ -381,6 +385,7 @@ cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffe
 
 	/* Build a possible response
 	 */
+	cherokee_buffer_init (&buf);
 	ret = cherokee_validator_digest_response (validator, a1.buf, &buf, conn);
 	if (unlikely(ret != ret_ok))
 		goto go_out;

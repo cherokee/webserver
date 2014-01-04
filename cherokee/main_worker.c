@@ -199,8 +199,8 @@ common_server_initialization (cherokee_server_t *srv)
 #endif
 
 	if (document_root != NULL) {
-		cherokee_buffer_t tmp   = CHEROKEE_BUF_INIT;
-		cherokee_buffer_t droot = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t tmp;
+		cherokee_buffer_t droot;
 
 		/* Sanity check
 		 */
@@ -208,6 +208,11 @@ common_server_initialization (cherokee_server_t *srv)
 			PRINT_ERROR ("Port %d is out of limits\n", port);
 			return ret_error;
 		}
+
+		/* Initialise the buffers
+		 */
+		cherokee_buffer_init (&tmp);
+		cherokee_buffer_init (&droot);
 
 		/* Build the configuration string
 		 */

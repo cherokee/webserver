@@ -45,8 +45,20 @@ typedef struct {
 	cuint_t  len;        /**< Length of the string   */
 } cherokee_buffer_t;
 
+/* Placing the function here allows the compiler to inline
+ * the code without the use of link-time optimisation #1081
+ */
+static inline ret_t
+cherokee_buffer_init (cherokee_buffer_t *buf)
+{
+	buf->buf  = NULL;
+	buf->len  = 0;
+	buf->size = 0;
+
+	return ret_ok;
+}
+
 #define BUF(x) ((cherokee_buffer_t *)(x))
-#define CHEROKEE_BUF_INIT       {NULL, 0, 0}
 #define CHEROKEE_BUF_SLIDE_NONE INT_MIN
 
 #define cherokee_buffer_is_empty(b)        (BUF(b)->len == 0)

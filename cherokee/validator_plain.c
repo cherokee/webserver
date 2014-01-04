@@ -104,9 +104,14 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 	const char        *p;
 	const char        *end;
 	cherokee_buffer_t *fpass;
-	cherokee_buffer_t  file  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  buser = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  bpass = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  file;
+	cherokee_buffer_t  buser;
+	cherokee_buffer_t  bpass;
+
+	/* Initialise the buffers */
+	cherokee_buffer_init (&file);
+	cherokee_buffer_init (&buser);
+	cherokee_buffer_init (&bpass);
 
 	/* Sanity check */
 	if (unlikely ((conn->validator == NULL) ||

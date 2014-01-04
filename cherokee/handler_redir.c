@@ -88,7 +88,8 @@ substitute (cherokee_handler_redir_t *hdl,
 			cherokee_buffer_remove_chunk (target, offset + conn->bind->ip.len, 7);
 
 		} else {
-			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+			cherokee_buffer_t tmp;
+			cherokee_buffer_init (&tmp);
 
 			ret = cherokee_copy_local_address (&conn->socket, &tmp);
 			if (ret == ret_ok) {

@@ -698,8 +698,12 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	cherokee_buffer_t                 *name;
 	cuint_t                            len       = 0;
 	const char                        *p         = "";
-	cherokee_buffer_t                  tmp       = CHEROKEE_BUF_INIT;
 	cherokee_handler_cgi_base_props_t *cgi_props = HANDLER_CGI_BASE_PROPS(cgi);
+	cherokee_buffer_t                  tmp;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* Add user defined variables at the beginning,
 	 * these have precedence..
@@ -722,7 +726,10 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	/* Add the basic enviroment variables
 	 */
 	ret = cherokee_handler_cgi_base_build_basic_env (cgi, cgi->add_env_pair, conn, &tmp);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok)) {
+		cherokee_buffer_mrproper (&tmp);
+		return ret;
+	}
 
 	/* SCRIPT_NAME:
 	 */
@@ -1217,7 +1224,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 	 */
 	if (! cherokee_buffer_is_empty (&cgi->xsendfile))
 	{
-		cherokee_buffer_t cgi_header = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t cgi_header;
 
 		/* Instance the 'file' sub-handler
 		 */
@@ -1233,6 +1240,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 
 		/* Work out the header
 		 */
+		cherokee_buffer_init (&cgi_header);
 		cherokee_buffer_add_buffer (&cgi_header, outbuf);
 		cherokee_buffer_clean (outbuf);
 

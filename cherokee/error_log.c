@@ -119,7 +119,10 @@ render_python_error (cherokee_error_type_t   type,
                      va_list                 ap)
 {
 	va_list           ap_tmp;
-	cherokee_buffer_t tmp     = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
+
+	/* Initialise buffers */
+	cherokee_buffer_init (&tmp);
 
 	/* Dict: open */
 	cherokee_buffer_add_char (output, '{');
@@ -352,7 +355,11 @@ cherokee_error_log (cherokee_error_type_t  type,
                     int                    error_num, ...)
 {
 	va_list            ap;
-	cherokee_buffer_t  error_str = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  error_str;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&error_str);
 
 	/* Render the error message
 	 */
@@ -380,7 +387,11 @@ cherokee_error_errno_log (int                    errnumber,
 	va_list            ap;
 	const char        *errstr;
 	char               err_tmp[ERROR_MAX_BUFSIZE];
-	cherokee_buffer_t  error_str = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  error_str;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&error_str);
 
 	/* Render the error message
 	 */

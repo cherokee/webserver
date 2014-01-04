@@ -153,9 +153,10 @@ check_interpreter_full (cherokee_buffer_t *fullpath, cherokee_buffer_t *chroot_d
 	char        *p;
 	char         tmp;
 	const char  *end;
-	cherokee_buffer_t completepath = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t completepath;
 
-	cherokee_buffer_clean(&completepath);
+	cherokee_buffer_init (&completepath);
+
 	if (chroot_dir->len > 0) {
 		/* Chroot and relative path, it doesn't make sense */
 		if (fullpath->len == 0 || fullpath->buf[0] != '/')
@@ -210,7 +211,7 @@ check_interpreter_path (cherokee_buffer_t *partial_path, cherokee_buffer_t *chro
 	char              *p;
 	char              *colon;
 	char              *path;
-	cherokee_buffer_t  fullpath = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  fullpath;
 
 	p = getenv("PATH");
 	if (p == NULL)
@@ -219,6 +220,8 @@ check_interpreter_path (cherokee_buffer_t *partial_path, cherokee_buffer_t *chro
 	path = strdup (p);
 	if (path == NULL)
 		return ret_error;
+
+	cherokee_buffer_init (&fullpath);
 
 	p = path;
 	do {
@@ -289,7 +292,9 @@ replace_environment_variables (cherokee_buffer_t *buf)
 	char              *dollar;
 	char              *p;
 	char              *val;
-	cherokee_buffer_t  tmp     = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	do {
 		/* Find $
@@ -561,7 +566,11 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	const char        *argv[]       = {"sh", "-c", NULL, NULL};
 	int                child        = -1;
 	char              *empty_envp[] = {NULL};
-	cherokee_buffer_t  tmp          = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  tmp;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* If there is a previous instance running, kill it
 	 */

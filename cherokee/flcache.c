@@ -144,8 +144,9 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 
 	ret = mkdir_flcache_directory (flcache, vserver, CHEROKEE_FLCACHE);
 	if (ret != ret_ok) {
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t tmp;
 
+		cherokee_buffer_init       (&tmp);
 		cherokee_buffer_add_buffer (&tmp, &cherokee_tmp_dir);
 		cherokee_buffer_add_str    (&tmp, "/flcache");
 
@@ -599,8 +600,12 @@ create_flconn_file (cherokee_flcache_t    *flcache,
                     cherokee_connection_t *conn)
 {
 	ret_t                        ret;
-	cherokee_buffer_t            tmp   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t            tmp;
 	cherokee_avl_flcache_node_t *entry = conn->flcache.avl_node_ref;
+
+	/* Initialise buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	conn->flcache.fd = cherokee_open (entry->file.buf, O_WRONLY | O_CREAT | O_TRUNC | O_NOFOLLOW, S_IRUSR|S_IWUSR);
 	if (conn->flcache.fd == -1) {

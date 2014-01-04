@@ -397,9 +397,13 @@ static ret_t
 add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 {
 	cherokee_handler_cgi_base_t       *cgi_base = HDL_CGI_BASE(hdl);
-	cherokee_buffer_t                  buffer   = CHEROKEE_BUF_INIT;
 	cherokee_connection_t             *conn     = HANDLER_CONN(hdl);
 	cherokee_handler_cgi_base_props_t *props    = HANDLER_CGI_BASE_PROPS(hdl);
+	cherokee_buffer_t                  buffer;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&buffer);
 
 	/* POST management
 	 */

@@ -37,7 +37,9 @@ static ret_t
 do_parse_file (cherokee_config_node_t *conf, const char *file)
 {
 	ret_t              ret;
-	cherokee_buffer_t  buf = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  buf;
+
+	cherokee_buffer_init (&buf);
 
 	ret = cherokee_buffer_read_file (&buf, (char *)file);
 	if (ret != ret_ok) goto error;
@@ -79,7 +81,7 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 
 		while ((entry = readdir(dir)) != NULL) {
 			ret_t             ret;
-			cherokee_buffer_t full_new = CHEROKEE_BUF_INIT;
+			cherokee_buffer_t full_new;
 
 			/* Ignore backup files
 			 */
@@ -95,6 +97,7 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 				continue;
 			}
 
+			cherokee_buffer_init (&full_new);
 			ret = cherokee_buffer_add_va (&full_new, "%s/%s", path->buf, entry->d_name);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_buffer_mrproper (&full_new);
@@ -208,8 +211,13 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 	char              *equal;
 	char              *tmp;
 	char              *eof;
-	cherokee_buffer_t  key = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  val = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  key;
+	cherokee_buffer_t  val;
+
+	/* Initialise buffers
+	 */
+	cherokee_buffer_init (&key);
+	cherokee_buffer_init (&val);
 
 	eof = buf->buf + buf->len;
 

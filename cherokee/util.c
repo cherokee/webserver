@@ -1898,7 +1898,7 @@ cherokee_rm_rf (cherokee_buffer_t *path,
 	struct dirent    *entry;
 	char              entry_buf[512];
 	struct stat       info;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
 
 	/* Remove the directory contents
 	 */
@@ -1906,6 +1906,10 @@ cherokee_rm_rf (cherokee_buffer_t *path,
 	if (d == NULL) {
 		return ret_ok;
 	}
+
+	/* Initialise buffer
+	 */
+	cherokee_buffer_init (&tmp);
 
 	while (true) {
 		re = cherokee_readdir (d, (struct dirent *)entry_buf, &entry);

@@ -160,9 +160,13 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 	char               *user   = NULL;
 	char               *realm  = NULL;
 	char               *passwd = NULL;
-	cherokee_buffer_t   ha1 = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   ha1;
 
 	UNUSED(htdigest);
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&ha1);
 
 	/* Extact the right entry information
 	 */
@@ -191,7 +195,11 @@ validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t 
 	char              *user   = NULL;
 	char              *realm  = NULL;
 	char              *passwd = NULL;
-	cherokee_buffer_t  buf    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  buf;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&buf);
 
 	/* Sanity check
 	 */
@@ -227,7 +235,11 @@ cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
 {
 	ret_t              ret;
 	cherokee_buffer_t *fpass;
-	cherokee_buffer_t  file = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  file;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&file);
 
 	/* Ensure that we have all what we need
 	 */

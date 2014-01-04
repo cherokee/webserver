@@ -304,7 +304,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	cherokee_collector_rrd_interval_t *interval;
 	cherokee_boolean_t                 fresh;
 	cherokee_connection_t             *conn       = HANDLER_CONN(hdl);
-	cherokee_buffer_t                  tmp        = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t                  tmp;
 
 	/* The handler might be disabled
 	 */
@@ -337,6 +337,10 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		conn->error_code = http_service_unavailable;
 		return ret_error;
 	}
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* Launch the task
 	 */
@@ -434,7 +438,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	} else if (! strncmp (begin, "/vserver_traffic_", 17)) {
 		const char        *vserver_name;
 		int                vserver_len;
-		cherokee_buffer_t  vserver_buf   = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t  vserver_buf;
 
 		/* Virtual server name
 		 */
@@ -447,6 +451,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 			return ret_error;
 		}
 
+		cherokee_buffer_init (&vserver_buf);
 		cherokee_buffer_add (&vserver_buf, vserver_name, vserver_len);
 		cherokee_buffer_replace_string (&vserver_buf, " ", 1, "_", 1);
 
@@ -462,6 +467,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 			unlocked = CHEROKEE_MUTEX_TRY_LOCK (&rrd_connection->mutex);
 			if (unlocked) {
 				cherokee_connection_sleep (conn, 200);
+				cherokee_buffer_mrproper (&vserver_buf);
 				return ret_eagain;
 			}
 

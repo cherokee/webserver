@@ -361,7 +361,7 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 	char              *slash;
 	char              *mask;
 	subnet_item_t     *n;
-	cherokee_buffer_t  ip = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  ip;
 
 	/* Split the string
 	 */
@@ -369,12 +369,13 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 	if (slash == NULL) return ret_error;
 
 	mask = slash +1;
+	cherokee_buffer_init (&ip);
 	cherokee_buffer_add (&ip, subnet, mask-subnet-1);
 
 	/* Create the new list object
 	 */
 	n = new_subnet();
-	if (n == NULL) return ret_error;
+	if (n == NULL) goto error;
 
 	cherokee_list_add (LIST(n), &entry->list_subnets);
 

@@ -75,7 +75,7 @@ static int                iocache       = 1;
 static int                scgi_port     = 4000;
 static int                thread_num    = -1;
 static cherokee_server_t *srv           = NULL;
-static cherokee_buffer_t  password      = CHEROKEE_BUF_INIT;
+static cherokee_buffer_t  password;
 
 
 static ret_t
@@ -84,8 +84,9 @@ find_empty_port (int starting, int *port)
 	ret_t             ret;
 	cherokee_socket_t s;
 	int               p     = starting;
-	cherokee_buffer_t bind_ = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t bind_;
 
+	cherokee_buffer_init (&bind_);
 	cherokee_buffer_add_str (&bind_, "127.0.0.1");
 	cherokee_socket_init (&s);
 
@@ -187,10 +188,16 @@ config_server (cherokee_server_t *srv)
 	ret_t                  ret;
 	cherokee_config_node_t conf;
 	cuint_t                nthreads;
-	cherokee_buffer_t      buf       = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      rrd_dir   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t      rrd_bin   = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t      fake;
+	cherokee_buffer_t      buf;
+	cherokee_buffer_t      rrd_dir;
+	cherokee_buffer_t      rrd_bin;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&buf);
+	cherokee_buffer_init (&rrd_dir);
+	cherokee_buffer_init (&rrd_bin);
 
 	/* Generate the password
 	 */
@@ -426,16 +433,19 @@ config_server (cherokee_server_t *srv)
 	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Could not initialize the server\n");
-		return ret;
+		goto out;
 	}
 
+	ret = ret_ok;
+
+out:
 	cherokee_config_node_mrproper (&conf);
 
 	cherokee_buffer_mrproper (&rrd_bin);
 	cherokee_buffer_mrproper (&rrd_dir);
 	cherokee_buffer_mrproper (&buf);
 
-	return ret_ok;
+	return ret;
 }
 
 
@@ -619,6 +629,8 @@ main (int argc, char **argv)
 	document_root = strdup (DEFAULT_DOCUMENTROOT);
 	config_file   = strdup (DEFAULT_CONFIG_FILE);
 	bind_to       = strdup (DEFAULT_BIND);
+
+	cherokee_buffer_init (&password);
 
 	if ((!bind_to) || (!config_file) || (!document_root)) {
 		PRINT_MSG ("ERROR: Couldn't allocate memory.\n");

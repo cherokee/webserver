@@ -232,10 +232,15 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	MYSQL_ROW                         row;
 	MYSQL_RES                        *result;
 	unsigned long                    *lengths;
-	cherokee_buffer_t                 db_passwd   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t                 user_passwd = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t                 query       = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t                 db_passwd;
+	cherokee_buffer_t                 user_passwd;
+	cherokee_buffer_t                 query;
 	cherokee_validator_mysql_props_t *props       = VAL_MYSQL_PROP(mysql);
+
+	/* Initialise the buffers */
+	cherokee_buffer_init (&db_passwd);
+	cherokee_buffer_init (&user_passwd);
+	cherokee_buffer_init (&query);
 
 	/* Sanity checks
 	 */

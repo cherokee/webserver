@@ -307,8 +307,11 @@ add_uptime (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	cuint_t           days;
 	cuint_t           hours;
 	cuint_t           mins;
-	cherokee_buffer_t tmp   = CHEROKEE_BUF_INIT;
 	cuint_t           lapse = cherokee_bogonow_now - srv->start_time;
+	cherokee_buffer_t tmp;
+
+	/* Initialise the buffers */
+	cherokee_buffer_init (&tmp);
 
 	cherokee_dwriter_dict_open (writer);
 
@@ -349,7 +352,11 @@ static void
 add_traffic (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	cherokee_list_t  *i;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
+
+	/* Initialise the buffers
+	 */
+	cherokee_buffer_init (&tmp);
 
 	/* Global statistics
 	 */
@@ -611,11 +618,12 @@ server_info_build_logo (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *
 static ret_t
 server_info_build_html (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_t ver = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t ver;
 
 	cherokee_buffer_add_str (buffer, PAGE_HEADER);
 	cherokee_buffer_add_str (buffer, AJAX_JS);
 
+	cherokee_buffer_init (&ver);
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
 	cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);
 	cherokee_buffer_mrproper (&ver);
@@ -653,13 +661,16 @@ add_iocache (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 {
 	float               percent;
 	size_t              mmaped  = 0;
-	cherokee_buffer_t   tmp_buf = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   tmp_buf;
 	cherokee_iocache_t *iocache = srv->iocache;
 
 	if (iocache == NULL) {
 		cherokee_dwriter_null (writer);
 		return;
 	}
+
+	/* Initialise the buffers */
+	cherokee_buffer_init (&tmp_buf);
 
 	cherokee_dwriter_dict_open (writer);
 
@@ -725,7 +736,9 @@ static void
 add_detailed_connections (cherokee_dwriter_t *writer, cherokee_list_t *infos)
 {
 	cherokee_list_t   *i, *j;
-	cherokee_buffer_t tmp    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
+
+	cherokee_buffer_init (&tmp);
 
 	cherokee_dwriter_list_open (writer);
 
@@ -793,12 +806,13 @@ server_info_build_info (cherokee_handler_server_info_t *hdl)
 	ret_t               ret;
 	cherokee_dwriter_t *writer = &hdl->writer;
 	cherokee_server_t  *srv    = HANDLER_SRV(hdl);
-	cherokee_buffer_t   ver    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   ver;
 
 	cherokee_dwriter_dict_open (writer);
 
 	/* Version
 	 */
+	cherokee_buffer_init (&ver);
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
 	cherokee_dwriter_cstring (writer, "version");
 	cherokee_dwriter_bstring (writer, &ver);
