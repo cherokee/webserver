@@ -66,3 +66,7 @@ contrib/cherokee
 performance.conf.sample
 qa/conf.py
 stamp-h1
+Cherokee.config
+Cherokee.creator
+Cherokee.files
+Cherokee.includes
