@@ -72,6 +72,7 @@ ret_t cherokee_dwriter_mrproper   (cherokee_dwriter_t *writer);
 ret_t cherokee_dwriter_set_buffer (cherokee_dwriter_t *writer, cherokee_buffer_t *output);
 
 ret_t cherokee_dwriter_unsigned   (cherokee_dwriter_t *w, unsigned long int l);
+ret_t cherokee_dwriter_integer    (cherokee_dwriter_t *w, long int l);
 ret_t cherokee_dwriter_double     (cherokee_dwriter_t *w, double d);
 ret_t cherokee_dwriter_number     (cherokee_dwriter_t *w, const char *s, int len);
 ret_t cherokee_dwriter_string     (cherokee_dwriter_t *w, const char *s, int len);
