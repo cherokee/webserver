@@ -273,7 +273,7 @@ cherokee_admin_server_reply_set_trace (cherokee_handler_t *hdl,
 
 	/* Process question
 	 */
-	if (cherokee_buffer_cmp_buf (question, &match)) {
+	if (strncasecmp (question->buf, match.buf, match.len)) {
 		return ret_error;
 	}
 	cherokee_buffer_move_to_begin (question, match.len);

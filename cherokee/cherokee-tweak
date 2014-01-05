@@ -48,11 +48,12 @@ USAGE =                                                                     \
     "  cherokee-tweak [options] URL trace       TRACE \n\n"                 \
     " Commands:\n"                                                          \
     "  info                          Prints info about the server status\n" \
-    "  trace                         Manipulates the tracing mechanism\n"   \
-    "  logrotate                     Rotates a local log file\n"            \
+    "  purge                         Purge objects from the cache\n\n"      \
     "  sources                       Prints a list of the info. sources\n"  \
     "  kill-source                   Kill a remote information source\n"    \
-    "  purge                         Purge objects from the cache\n\n"      \
+    "  logrotate                     Rotates a local log file\n"            \
+    "  trace                         Manipulates the tracing mechanism\n"   \
+    "                                (to disable: trace off\n"              \
     " Parameters:\n"                                                        \
     "  -h,  --help                   Print this help\n"                     \
     "  -V,  --version                Print version and exit\n\n"            \
@@ -130,15 +131,16 @@ def parse_args():
         return
     elif command == 'sources':
         return
+    elif command == 'trace':
+        if len(sys.argv) == (argn + 1):
+            trace = sys.argv[argn]
+            argn += 1
+        return
 
     if len(sys.argv) <= argn:
         return usage()
 
-    if command == 'trace':
-        trace = sys.argv[argn]
-        argn += 1
-        return
-    elif command == 'logrotate':
+    if command == 'logrotate':
         log = sys.argv[argn]
         argn += 1
         return
@@ -311,6 +313,9 @@ def print_trace():
     print
 
 def set_trace():
+    global trace
+    if trace == "off":
+        trace = ""
     trace_str = request (['set server.trace %s'%(trace)])
     traces = eval_safe(trace_str)
     print "Trace set: %s" %(('Failed', 'Succeed')[int(traces[0].get('set'))])
