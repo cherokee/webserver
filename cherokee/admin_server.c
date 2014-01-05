@@ -418,6 +418,7 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
                                          cherokee_buffer_t  *question)
 {
 	ret_t              ret;
+	int                re;
 	char              *begin;
 	char              *end;
 	char              *p;
@@ -431,7 +432,7 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 
 	/* Check the command
 	 */
-	if (cherokee_buffer_cmp_buf (question, &match)) {
+	if (strncasecmp (question->buf, match.buf, match.len)) {
 		return ret_error;
 	}
 	begin = question->buf + match.len;
@@ -441,14 +442,14 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 	 */
 	n = 0;
 	p = begin;
-	while (CHEROKEE_CHAR_IS_DIGIT(*p) && (p < end)) {
+	while (CHEROKEE_CHAR_IS_DIGIT(*p) && (p < end) && (n < 10)) {
 		id[n] = *p;
 		p++;
 		n++;
 	}
 	id[n] = '\0';
 
-	if (unlikely ((n <= 0) || (n >= sizeof(n)))) {
+	if (unlikely ((n == 0) || (n == 10))) {
 		cherokee_dwriter_dict_open (dwriter);
 		cherokee_dwriter_cstring (dwriter, "source");
 		cherokee_dwriter_cstring (dwriter, "invalid");
@@ -481,21 +482,38 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 	/* Kill the process
 	 */
 	if (getuid() == 0) {
-		/* Looks like we can actully kill the process
+		/* Looks like we can actually kill the process
 		 */
-		kill (SOURCE_INT(source)->pid, SIGTERM);
-		goto ok;
+		re = kill (SOURCE_INT(source)->pid, SIGTERM);
+
 	} else {
-		/* It should be the 'cherokee' supervisor (running as root)
+		/* TODO: It should be the 'cherokee' supervisor (running as root)
 		 * the one in charge of killing the process.
 		 */
-		// TODO
+		re = kill (SOURCE_INT(source)->pid, SIGTERM);
 	}
 
-ok:
-	cherokee_dwriter_dict_open (dwriter);
-	cherokee_dwriter_cstring (dwriter, "source");
-	cherokee_dwriter_cstring (dwriter, "killed");
-	cherokee_dwriter_dict_close (dwriter);
+	if (re == 0) {
+		cherokee_dwriter_dict_open (dwriter);
+		cherokee_dwriter_cstring (dwriter, "source");
+		cherokee_dwriter_cstring (dwriter, "killed");
+		cherokee_dwriter_dict_close (dwriter);
+		SOURCE_INT(source)->pid = -1;
+
+	} else if (errno == ESRCH) {
+		cherokee_dwriter_dict_open (dwriter);
+		cherokee_dwriter_cstring (dwriter, "source");
+		cherokee_dwriter_cstring (dwriter, "nothing to kill");
+		cherokee_dwriter_dict_close (dwriter);
+		SOURCE_INT(source)->pid = -1;
+
+	} else if (errno == EPERM) {
+		cherokee_dwriter_dict_open (dwriter);
+		cherokee_dwriter_cstring (dwriter, "source");
+		cherokee_dwriter_cstring (dwriter, "no permission");
+		cherokee_dwriter_dict_close (dwriter);
+		// need to keep the pid, its still there
+	}
+
 	return ret_ok;
 }
