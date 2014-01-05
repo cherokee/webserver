@@ -1936,7 +1936,7 @@ fin:
 
 
 ret_t
-cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
+cherokee_server_del_connection (cherokee_server_t *srv, cherokee_thread_t *mythread, char *id_str)
 {
 	culong_t         id;
 	cherokee_list_t *t, *c;
@@ -1946,7 +1946,7 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 	list_for_each (t, &srv->thread_list) {
 		cherokee_thread_t *thread = THREAD(t);
 
-//		CHEROKEE_MUTEX_LOCK (&thread->ownership);
+		if (thread != mythread) CHEROKEE_MUTEX_LOCK (&thread->ownership);
 
 		list_for_each (c, &THREAD(t)->active_list) {
 			cherokee_connection_t *conn = CONN(c);
@@ -1956,12 +1956,14 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 				    (conn->phase != phase_lingering))
 				{
 					conn->phase = phase_shutdown;
-//					CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
+
+					if (thread != mythread) CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
 					return ret_ok;
 				}
 			}
 		}
-//		CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
+
+		if (thread != mythread) CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
 	}
 
 	return ret_not_found;
