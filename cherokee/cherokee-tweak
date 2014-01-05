@@ -212,8 +212,8 @@ def print_sources():
         print "\tType:          %s" %(type_)
         print "\tBind:          %s" %(source.get('bind') or '')
         if type_ == 'interpreter':
-            print "\tPID:           %d" %(source.get('PID') or '')
-            print "\tTimeout:       %d" %(source.get('timeout') or '')
+            print "\tPID:           %d" %(source.get('PID') or -1)
+            print "\tTimeout:       %d" %(source.get('timeout') or -1)
             print "\tDebug:         %s" %(('No','Yes')[int(source.get('debug'))])
             print "\tInterpreter:   %s" %(source.get('interpreter') or '')
 
