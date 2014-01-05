@@ -183,7 +183,7 @@ escape_string (cherokee_buffer_t *buffer,
 }
 
 ret_t
-cherokee_dwriter_integer (cherokee_dwriter_t *w, unsigned long l)
+cherokee_dwriter_unsigned (cherokee_dwriter_t *w, unsigned long int l)
 {
 	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
 	ADD_SEP; ADD_WHITE;
