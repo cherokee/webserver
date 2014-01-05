@@ -379,7 +379,11 @@ sources_while (cherokee_buffer_t *key, void *value, void *param)
 		cherokee_source_interpreter_t *source_int = SOURCE_INT(source);
 
 		cherokee_dwriter_cstring (dwriter, "PID");
-		cherokee_dwriter_integer (dwriter, source_int->pid);
+		if (source_int->pid == -1) {
+			cherokee_dwriter_number  (dwriter, "-1", 2);
+		} else {
+			cherokee_dwriter_integer (dwriter, source_int->pid);
+		}
 
 		cherokee_dwriter_cstring (dwriter, "debug");
 		cherokee_dwriter_bool    (dwriter, source_int->debug);
