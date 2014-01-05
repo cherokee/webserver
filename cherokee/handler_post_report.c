@@ -203,9 +203,9 @@ cherokee_handler_post_report_init (cherokee_handler_post_report_t *hdl)
 	cherokee_dwriter_cstring (&hdl->writer, "state");
 	cherokee_dwriter_string  (&hdl->writer, state, strlen(state));
 	cherokee_dwriter_cstring (&hdl->writer, "size");
-	cherokee_dwriter_integer (&hdl->writer, size);
+	cherokee_dwriter_unsigned (&hdl->writer, size);
 	cherokee_dwriter_cstring (&hdl->writer, "received");
-	cherokee_dwriter_integer (&hdl->writer, received);
+	cherokee_dwriter_unsigned (&hdl->writer, received);
 	cherokee_dwriter_dict_close (&hdl->writer);
 
 	TRACE (ENTRIES, "Post report: %llu of %llu\n", received, size);

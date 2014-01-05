@@ -314,7 +314,7 @@ add_uptime (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 
 	/* Raw seconds number */
 	cherokee_dwriter_cstring (writer, "seconds");
-	cherokee_dwriter_integer (writer, lapse);
+	cherokee_dwriter_unsigned (writer, lapse);
 
 	/* Formatted string */
 	days = lapse / (60*60*24);
@@ -356,14 +356,14 @@ add_traffic (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "tx");
 	if (srv->collector) {
-		cherokee_dwriter_integer (writer, COLLECTOR_TX(srv->collector));
+		cherokee_dwriter_unsigned (writer, COLLECTOR_TX(srv->collector));
 	} else {
 		cherokee_dwriter_number (writer, "-1", 2);
 	}
 
 	cherokee_dwriter_cstring (writer, "rx");
 	if (srv->collector) {
-		cherokee_dwriter_integer (writer, COLLECTOR_RX(srv->collector));
+		cherokee_dwriter_unsigned (writer, COLLECTOR_RX(srv->collector));
 	} else {
 		cherokee_dwriter_number (writer, "-1", 2);
 	}
@@ -389,7 +389,7 @@ add_traffic (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "accepts");
 	if (srv->collector) {
-		cherokee_dwriter_integer (writer, COLLECTOR(srv->collector)->accepts);
+		cherokee_dwriter_unsigned (writer, COLLECTOR(srv->collector)->accepts);
 	} else {
 		cherokee_dwriter_number (writer, "-1", 2);
 	}
@@ -406,7 +406,7 @@ add_traffic (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "timeouts");
 	if (srv->collector) {
-		cherokee_dwriter_integer (writer, COLLECTOR(srv->collector)->timeouts);
+		cherokee_dwriter_unsigned (writer, COLLECTOR(srv->collector)->timeouts);
 	} else {
 		cherokee_dwriter_number (writer, "-1", 2);
 	}
@@ -432,9 +432,9 @@ add_traffic (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 		if (vsrv->collector != NULL) {
 			cherokee_dwriter_dict_open (writer);
 			cherokee_dwriter_cstring (writer, "rx");
-			cherokee_dwriter_integer (writer, COLLECTOR_RX(vsrv->collector));
+			cherokee_dwriter_unsigned (writer, COLLECTOR_RX(vsrv->collector));
 			cherokee_dwriter_cstring (writer, "tx");
-			cherokee_dwriter_integer (writer, COLLECTOR_TX(vsrv->collector));
+			cherokee_dwriter_unsigned (writer, COLLECTOR_TX(vsrv->collector));
 			cherokee_dwriter_dict_close (writer);
 		} else {
 			cherokee_dwriter_null (writer);
@@ -456,7 +456,7 @@ add_config (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	cherokee_dwriter_dict_open (writer);
 
 	cherokee_dwriter_cstring (writer, "threads");
-	cherokee_dwriter_integer (writer, srv->thread_num);
+	cherokee_dwriter_unsigned (writer, srv->thread_num);
 	cherokee_dwriter_cstring (writer, "ipv6");
 	cherokee_dwriter_bool    (writer, srv->ipv6);
 	cherokee_dwriter_cstring (writer, "tls");
@@ -464,9 +464,9 @@ add_config (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	cherokee_dwriter_cstring (writer, "chroot");
 	cherokee_dwriter_bool    (writer, srv->chrooted);
 	cherokee_dwriter_cstring (writer, "UID");
-	cherokee_dwriter_integer (writer, getuid());
+	cherokee_dwriter_unsigned (writer, getuid());
 	cherokee_dwriter_cstring (writer, "GID");
-	cherokee_dwriter_integer (writer, getgid());
+	cherokee_dwriter_unsigned (writer, getgid());
 
 #ifdef HAVE_SYS_UTSNAME
 	{
@@ -498,11 +498,11 @@ add_connections (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "number");
-	cherokee_dwriter_integer (writer, conns_num);
+	cherokee_dwriter_unsigned (writer, conns_num);
 	cherokee_dwriter_cstring (writer, "active");
-	cherokee_dwriter_integer (writer, active);
+	cherokee_dwriter_unsigned (writer, active);
 	cherokee_dwriter_cstring (writer, "reusable");
-	cherokee_dwriter_integer (writer, reusable);
+	cherokee_dwriter_unsigned (writer, reusable);
 	cherokee_dwriter_dict_close (writer);
 }
 
@@ -575,25 +575,25 @@ add_modules (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "loggers");
-	cherokee_dwriter_integer (writer, loggers);
+	cherokee_dwriter_unsigned (writer, loggers);
 	cherokee_dwriter_cstring (writer, "handlers");
-	cherokee_dwriter_integer (writer, handlers);
+	cherokee_dwriter_unsigned (writer, handlers);
 	cherokee_dwriter_cstring (writer, "encoders");
-	cherokee_dwriter_integer (writer, encoders);
+	cherokee_dwriter_unsigned (writer, encoders);
 	cherokee_dwriter_cstring (writer, "validators");
-	cherokee_dwriter_integer (writer, validators);
+	cherokee_dwriter_unsigned (writer, validators);
 	cherokee_dwriter_cstring (writer, "generic");
-	cherokee_dwriter_integer (writer, generic);
+	cherokee_dwriter_unsigned (writer, generic);
 	cherokee_dwriter_cstring (writer, "balancers");
-	cherokee_dwriter_integer (writer, balancers);
+	cherokee_dwriter_unsigned (writer, balancers);
 	cherokee_dwriter_cstring (writer, "rules");
-	cherokee_dwriter_integer (writer, rules);
+	cherokee_dwriter_unsigned (writer, rules);
 	cherokee_dwriter_cstring (writer, "cryptors");
-	cherokee_dwriter_integer (writer, cryptors);
+	cherokee_dwriter_unsigned (writer, cryptors);
 	cherokee_dwriter_cstring (writer, "vrules");
-	cherokee_dwriter_integer (writer, vrules);
+	cherokee_dwriter_unsigned (writer, vrules);
 	cherokee_dwriter_cstring (writer, "collectors");
-	cherokee_dwriter_integer (writer, collectors);
+	cherokee_dwriter_unsigned (writer, collectors);
 	cherokee_dwriter_dict_close (writer);
 }
 
@@ -665,9 +665,9 @@ add_iocache (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 
 	/* General parameters */
 	cherokee_dwriter_cstring (writer, "file_size_max");
-	cherokee_dwriter_integer (writer, iocache->max_file_size);
+	cherokee_dwriter_unsigned (writer, iocache->max_file_size);
 	cherokee_dwriter_cstring (writer, "file_size_min");
-	cherokee_dwriter_integer (writer, iocache->min_file_size);
+	cherokee_dwriter_unsigned (writer, iocache->min_file_size);
 
 	cherokee_buffer_add_fsize (&tmp_buf, iocache->max_file_size);
 	cherokee_dwriter_cstring (writer, "file_size_max_formatted");
@@ -679,16 +679,16 @@ add_iocache (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	cherokee_dwriter_bstring (writer, &tmp_buf);
 
 	cherokee_dwriter_cstring (writer, "lasting_mmap");
-	cherokee_dwriter_integer (writer, iocache->lasting_mmap);
+	cherokee_dwriter_unsigned (writer, iocache->lasting_mmap);
 
 	cherokee_dwriter_cstring (writer, "lasting_stat");
-	cherokee_dwriter_integer (writer, iocache->lasting_stat);
+	cherokee_dwriter_unsigned (writer, iocache->lasting_stat);
 
 	cherokee_dwriter_cstring (writer, "size_max");
-	cherokee_dwriter_integer (writer, CACHE(iocache)->max_size);
+	cherokee_dwriter_unsigned (writer, CACHE(iocache)->max_size);
 
 	cherokee_dwriter_cstring (writer, "fetches");
-	cherokee_dwriter_integer (writer, CACHE(iocache)->count);
+	cherokee_dwriter_unsigned (writer, CACHE(iocache)->count);
 
 	/* Fetches */
 	if (CACHE(iocache)->count == 0)
@@ -709,7 +709,7 @@ add_iocache (cherokee_dwriter_t *writer, cherokee_server_t *srv)
 	/* Total Mmaped */
 	cherokee_iocache_get_mmaped_size (iocache, &mmaped);
 	cherokee_dwriter_cstring (writer, "mmaped");
-	cherokee_dwriter_integer (writer, mmaped);
+	cherokee_dwriter_unsigned (writer, mmaped);
 
 	cherokee_buffer_clean (&tmp_buf);
 	cherokee_buffer_add_fsize (&tmp_buf, mmaped);

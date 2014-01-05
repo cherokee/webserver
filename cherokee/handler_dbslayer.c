@@ -37,7 +37,7 @@
 #define add_cstr_int(w,key,val)                                   \
 	do {                                                      \
 		cherokee_dwriter_string  (w, key, sizeof(key)-1); \
-		cherokee_dwriter_integer (w, val);                \
+		cherokee_dwriter_unsigned (w, val);                \
 	} while (false)
 
 

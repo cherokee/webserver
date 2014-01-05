@@ -183,7 +183,20 @@ escape_string (cherokee_buffer_t *buffer,
 }
 
 ret_t
-cherokee_dwriter_integer (cherokee_dwriter_t *w, unsigned long l)
+cherokee_dwriter_integer (cherokee_dwriter_t *w, long int l)
+{
+	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
+	ADD_SEP; ADD_WHITE;
+
+	cherokee_buffer_add_va (OUT, "%ld", l);
+
+	ADD_END; ADD_NEW_LINE;
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_dwriter_unsigned (cherokee_dwriter_t *w, unsigned long int l)
 {
 	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
 	ADD_SEP; ADD_WHITE;
@@ -193,7 +206,6 @@ cherokee_dwriter_integer (cherokee_dwriter_t *w, unsigned long l)
 	ADD_END; ADD_NEW_LINE;
 	return ret_ok;
 }
-
 
 ret_t
 cherokee_dwriter_double (cherokee_dwriter_t *w, double d)
