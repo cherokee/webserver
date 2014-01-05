@@ -165,7 +165,7 @@ def http_request (url_py, post_info=None, method=None):
 
     # Perform
     try:
-        conn = urllib2.urlopen (url_py, post_info)
+        conn = urllib2.urlopen (request)
     except urllib2.HTTPError, e:
         if e.code == 401:
             print >> sys.stderr, "Error in Authentication"
