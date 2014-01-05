@@ -35,7 +35,7 @@
 
 /* Plug-in initialization
  */
-PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_get | http_post | http_purge);
+PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_post | http_purge);
 
 
 /* Methods implementation
