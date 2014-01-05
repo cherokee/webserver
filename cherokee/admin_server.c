@@ -214,18 +214,22 @@ cherokee_admin_server_reply_close_conn (cherokee_handler_t *hdl,
 	cherokee_server_t *server = HANDLER_SRV(hdl);
 	cherokee_buffer_t  match  = CHEROKEE_BUF_INIT;
 
-	cherokee_buffer_fake_str (&match, "del server.connection ");
+	cherokee_buffer_fake_str (&match, "close server.connection ");
 
-	if (cherokee_buffer_cmp_buf (question, &match)) {
+	if (strncasecmp (question->buf, match.buf, match.len)) {
 		return ret_error;
 	}
 
-	begin = question->buf + 22;
+	begin = question->buf + match.len;
 	ret = cherokee_server_del_connection (server, begin);
 
 	cherokee_dwriter_dict_open (dwriter);
 	cherokee_dwriter_cstring (dwriter, "close");
-	cherokee_dwriter_cstring (dwriter, ret == ret_ok ? "ok" : "failed");
+	if (ret == ret_ok) {
+		cherokee_dwriter_cstring (dwriter, "ok");
+	} else {
+		cherokee_dwriter_cstring (dwriter, "failed");
+	}
 	cherokee_dwriter_dict_close (dwriter);
 
 	return ret_ok;

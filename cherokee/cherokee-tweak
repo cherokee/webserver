@@ -44,16 +44,18 @@ USAGE =                                                                     \
     "  cherokee-tweak [options] URL purge \n"                               \
     "  cherokee-tweak [options] URL sources \n"                             \
     "  cherokee-tweak [options] URL kill-source ID \n"                      \
+    "  cherokee-tweak [options] URL close-connection ID \n"                 \
     "  cherokee-tweak [options] URL logrotate   PATH \n"                    \
     "  cherokee-tweak [options] URL trace       TRACE \n\n"                 \
     " Commands:\n"                                                          \
     "  info                          Prints info about the server status\n" \
-    "  purge                         Purge objects from the cache\n\n"      \
+    "  purge                         Purge objects from the cache\n"        \
     "  sources                       Prints a list of the info. sources\n"  \
     "  kill-source                   Kill a remote information source\n"    \
+    "  close-connection              Removes an active connection\n"        \
     "  logrotate                     Rotates a local log file\n"            \
     "  trace                         Manipulates the tracing mechanism\n"   \
-    "                                (to disable: trace off\n"              \
+    "                                (to disable: trace off)\n\n"           \
     " Parameters:\n"                                                        \
     "  -h,  --help                   Print this help\n"                     \
     "  -V,  --version                Print version and exit\n\n"            \
@@ -63,18 +65,19 @@ USAGE =                                                                     \
     "Report bugs to http://bugs.cherokee-project.com\n"
 
 
-command  = None
-url      = None
-user     = None
+command = None
+url = None
+user = None
 password = None
-log      = None
-trace    = None
-ksource  = None
+log = None
+trace = None
+ksource = None
+cconnection = None
 
 def parse_args():
     global command, url
     global user, password
-    global log, trace, ksource
+    global log, trace, ksource, cconnection
 
     if '-h' in sys.argv or '--help' in sys.argv:
         print USAGE
@@ -146,6 +149,10 @@ def parse_args():
         return
     elif command == 'kill-source':
         ksource = sys.argv[argn]
+        argn += 1
+        return
+    elif command == 'close-connection':
+        cconnection = sys.argv[argn]
         argn += 1
         return
 
@@ -248,6 +255,19 @@ def kill_source():
 
 
 #
+# Close Connection
+#
+
+def close_connection():
+    # Query
+    responses_str = request (['close server.connection %s'%(cconnection)])
+    responses = eval_safe(responses_str)
+
+    # Report
+    print "Close connection %s: %s" %(cconnection, responses[0]['close'])
+    print
+
+#
 # Info
 #
 
@@ -291,12 +311,16 @@ def print_info():
     # Connection details
     print "Connections:"
     for conn in conns:
+        print "\tID:            %s" %(conn.get('id'))
         print "\tRequest:       %s" %(conn.get('request',''))
         print "\tHandler:       %s" %(conn.get('handler'))
         print "\tPhase:         %s" %(conn.get('phase'))
         print "\tIncoming IP:   %s" %(conn.get('ip'))
         print "\tRX:            %s" %(conn.get('rx'))
         print "\tTX:            %s" %(conn.get('tx'))
+        print "\tTotal size:    %s" %(conn.get('total_size') or '')
+        print "\tPercentage:    %s" %(conn.get('percent') or '')
+        print "\tIcon:          %s" %(conn.get('icon'))
         if conns.index(conn) < len(conns)-1:
             print "\t---------------------"
     print
@@ -394,6 +418,13 @@ def main():
             kill_source()
         else:
             print "ERROR: Missing source ID parameter"
+
+    elif command == 'close-connection':
+        if cconnection:
+            close_connection()
+        else:
+            print "ERROR: Missing connection ID parameter"
+
     elif command == 'trace':
         if trace:
             set_trace()
