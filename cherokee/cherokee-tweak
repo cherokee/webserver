@@ -125,23 +125,34 @@ def parse_args():
 
     # Check command
     if command == 'info':
-        None
+        return
     elif command == 'purge':
-        None
-    elif command == 'trace':
+        return
+    elif command == 'sources':
+        return
+
+    if len(sys.argv) <= argn:
+        return usage()
+
+    if command == 'trace':
         trace = sys.argv[argn]
         argn += 1
+        return
     elif command == 'logrotate':
         log = sys.argv[argn]
         argn += 1
-    elif command == 'sources':
-        None
+        return
     elif command == 'kill-source':
         ksource = sys.argv[argn]
         argn += 1
-    else:
-        print USAGE
-        raise SystemExit
+        return
+
+    return usage()
+
+
+def usage ():
+    print USAGE
+    raise SystemExit
 
 
 def http_request (url_py, post_info=None, method=None):
