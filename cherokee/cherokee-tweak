@@ -122,6 +122,9 @@ def parse_args():
                 raise SystemExit
             break
 
+    if len(sys.argv) <= (argn + 1):
+        return usage()
+
     # Mandatory parameter
     url     = sys.argv[argn]
     command = sys.argv[argn + 1]
