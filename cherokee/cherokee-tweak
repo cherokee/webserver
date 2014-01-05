@@ -170,6 +170,9 @@ def http_request (url_py, post_info=None, method=None):
         if e.code == 401:
             print >> sys.stderr, "Error in Authentication"
             raise SystemExit
+        elif e.code == 404:
+            print >> sys.stderr, "Invalid URL"
+            raise SystemExit
         raise
 
     return conn.read()
