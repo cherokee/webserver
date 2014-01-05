@@ -170,9 +170,6 @@ def http_request (url_py, post_info=None, method=None):
         if e.code == 401:
             print >> sys.stderr, "Error in Authentication"
             raise SystemExit
-        elif e.code == 404:
-            print >> sys.stderr, "Invalid URL"
-            raise SystemExit
         raise
 
     return conn.read()
@@ -183,7 +180,13 @@ def request (commands):
     url_py    = tmp[:7] + tmp[7:].replace('//','/')
     post_info = "%s\n" %('\n'.join(commands))
 
-    return http_request (url_py, post_info)
+    try:
+        return http_request (url_py, post_info)
+    except urllib2.HTTPError, e:
+        if e.code == 404:
+            print >> sys.stderr, "Invalid URL"
+            sys.exit(1)
+        raise
 
 
 def eval_safe (txt):
