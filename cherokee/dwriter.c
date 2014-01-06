@@ -128,9 +128,10 @@ cherokee_dwriter_set_buffer (cherokee_dwriter_t *writer,
 }
 
 static ret_t
-escape_string (cherokee_buffer_t *buffer,
-               const char        *s,
-               cuint_t            len)
+escape_string (cherokee_buffer_t      *buffer,
+               const char             *s,
+               cuint_t                 len,
+	       cherokee_dwriter_lang_t lang)
 {
 	char    c;
 	cuint_t i, j;
@@ -165,7 +166,9 @@ escape_string (cherokee_buffer_t *buffer,
 			buffer->buf[j++] = '\\';
 			break;
 		case '/':
-			buffer->buf[j++] = '\\';
+			if (lang == dwriter_json)
+				buffer->buf[j++] = '\\';
+
 			buffer->buf[j++] = '/';
 			break;
 		case '"':
@@ -284,7 +287,7 @@ cherokee_dwriter_string (cherokee_dwriter_t *w, const char *s, int len)
 
 	cherokee_buffer_add_str (OUT, "\"");
 
-	escape_string (w->tmp, s, len);
+	escape_string (w->tmp, s, len, w->lang);
 	cherokee_buffer_add (OUT, w->tmp->buf, w->tmp->len);
 
 	cherokee_buffer_add_str (OUT, "\"");

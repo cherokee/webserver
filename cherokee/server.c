@@ -1934,34 +1934,65 @@ fin:
 	abort();
 }
 
+static ret_t
+list_find_connection (cherokee_list_t *list, culong_t id) {
+	cherokee_list_t *c;
+
+	list_for_each (c, list) {
+		cherokee_connection_t *conn = CONN(c);
+
+		if (conn->id == id) {
+			if ((conn->phase != phase_nothing) &&
+			    (conn->phase != phase_lingering))
+			{
+				conn->phase = phase_shutdown;
+				return ret_ok;
+			}
+		}
+	}
+
+	return ret_not_found;
+}
+
+static ret_t
+thread_find_connection (cherokee_thread_t *thread, culong_t id) {
+	ret_t ret;
+
+	ret = list_find_connection (&thread->active_list, id);
+	if (ret == ret_ok) return ret_ok;
+
+	ret = list_find_connection (&thread->polling_list, id);
+	if (ret == ret_ok) return ret_ok;
+
+	return list_find_connection (&thread->limiter.conns, id);
+}
 
 ret_t
-cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
+cherokee_server_close_connection (cherokee_server_t *srv, cherokee_thread_t *mythread, char *id_str)
 {
+	ret_t ret;
 	culong_t         id;
-	cherokee_list_t *t, *c;
+	cherokee_list_t *t;
 
 	id = strtol (id_str, NULL, 10);
+
+	if (srv->main_thread != mythread) CHEROKEE_MUTEX_LOCK (&srv->main_thread->ownership);
+
+	ret = thread_find_connection (srv->main_thread, id);
+	if (ret == ret_ok) return ret;
+
+	if (srv->main_thread != mythread) CHEROKEE_MUTEX_UNLOCK (&srv->main_thread->ownership);
 
 	list_for_each (t, &srv->thread_list) {
 		cherokee_thread_t *thread = THREAD(t);
 
-		CHEROKEE_MUTEX_LOCK (&thread->ownership);
+		if (thread != mythread) CHEROKEE_MUTEX_LOCK (&thread->ownership);
 
-		list_for_each (c, &THREAD(t)->active_list) {
-			cherokee_connection_t *conn = CONN(c);
+		ret = thread_find_connection (thread, id);
 
-			if (conn->id == id) {
-				if ((conn->phase != phase_nothing) &&
-				    (conn->phase != phase_lingering))
-				{
-					conn->phase = phase_shutdown;
-					CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
-					return ret_ok;
-				}
-			}
-		}
-		CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
+		if (thread != mythread) CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
+
+		if (ret == ret_ok) return ret;
 	}
 
 	return ret_not_found;

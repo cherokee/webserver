@@ -35,7 +35,7 @@
 
 /* Plug-in initialization
  */
-PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_get | http_post | http_purge);
+PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_post | http_purge);
 
 
 /* Methods implementation
@@ -123,7 +123,6 @@ process_request_line (cherokee_handler_admin_t *hdl, cherokee_buffer_t *line)
 		return cherokee_admin_server_reply_get_conns (HANDLER(hdl), &hdl->dwriter);
 	} else if (COMP (line->buf, "close server.connection")) {
 		return cherokee_admin_server_reply_close_conn (HANDLER(hdl), &hdl->dwriter, line);
-
 	}
 
 	SHOULDNT_HAPPEN;
