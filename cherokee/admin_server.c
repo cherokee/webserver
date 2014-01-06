@@ -221,7 +221,7 @@ cherokee_admin_server_reply_close_conn (cherokee_handler_t *hdl,
 	}
 
 	begin = question->buf + match.len;
-	ret = cherokee_server_del_connection (server, CONN_THREAD(HANDLER_CONN(hdl)), begin);
+	ret = cherokee_server_close_connection (server, CONN_THREAD(HANDLER_CONN(hdl)), begin);
 
 	cherokee_dwriter_dict_open (dwriter);
 	cherokee_dwriter_cstring (dwriter, "close");
