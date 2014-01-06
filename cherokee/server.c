@@ -1948,7 +1948,37 @@ cherokee_server_del_connection (cherokee_server_t *srv, cherokee_thread_t *mythr
 
 		if (thread != mythread) CHEROKEE_MUTEX_LOCK (&thread->ownership);
 
-		list_for_each (c, &THREAD(t)->active_list) {
+		list_for_each (c, &thread->active_list) {
+			cherokee_connection_t *conn = CONN(c);
+
+			if (conn->id == id) {
+				if ((conn->phase != phase_nothing) &&
+				    (conn->phase != phase_lingering))
+				{
+					conn->phase = phase_shutdown;
+
+					if (thread != mythread) CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
+					return ret_ok;
+				}
+			}
+		}
+
+		list_for_each (c, &thread->polling_list) {
+			cherokee_connection_t *conn = CONN(c);
+
+			if (conn->id == id) {
+				if ((conn->phase != phase_nothing) &&
+				    (conn->phase != phase_lingering))
+				{
+					conn->phase = phase_shutdown;
+
+					if (thread != mythread) CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
+					return ret_ok;
+				}
+			}
+		}
+
+		list_for_each (c, &thread->limiter.conns) {
 			cherokee_connection_t *conn = CONN(c);
 
 			if (conn->id == id) {
