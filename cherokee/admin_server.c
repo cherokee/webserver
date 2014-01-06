@@ -51,13 +51,13 @@ cherokee_admin_server_reply_get_ports (cherokee_handler_t *hdl,
 		cherokee_dwriter_dict_open (dwriter);
 
 		cherokee_dwriter_cstring (dwriter, "id");
-		cherokee_dwriter_integer (dwriter, bind_entry->id);
+		cherokee_dwriter_unsigned (dwriter, bind_entry->id);
 
 		cherokee_dwriter_cstring (dwriter, "bind");
 		cherokee_dwriter_bstring (dwriter, &bind_entry->ip);
 
 		cherokee_dwriter_cstring (dwriter, "port");
-		cherokee_dwriter_integer (dwriter, bind_entry->port);
+		cherokee_dwriter_unsigned (dwriter, bind_entry->port);
 
 		cherokee_dwriter_cstring (dwriter, "tls");
 		cherokee_dwriter_bool    (dwriter, BIND_IS_TLS(bind_entry));
@@ -80,14 +80,14 @@ cherokee_admin_server_reply_get_traffic (cherokee_handler_t *hdl,
 
 	cherokee_dwriter_cstring (dwriter, "tx");
 	if (srv->collector) {
-		cherokee_dwriter_integer (dwriter, COLLECTOR_TX(srv->collector));
+		cherokee_dwriter_unsigned (dwriter, COLLECTOR_TX(srv->collector));
 	} else {
 		cherokee_dwriter_number (dwriter, "-1", 2);
 	}
 
 	cherokee_dwriter_cstring (dwriter, "rx");
 	if (srv->collector) {
-		cherokee_dwriter_integer (dwriter, COLLECTOR_RX(srv->collector));
+		cherokee_dwriter_unsigned (dwriter, COLLECTOR_RX(srv->collector));
 	} else {
 		cherokee_dwriter_number (dwriter, "-1", 2);
 	}
@@ -344,7 +344,7 @@ cherokee_admin_server_reply_get_thread_num (cherokee_handler_t *hdl,
 
 	cherokee_dwriter_dict_open (dwriter);
 	cherokee_dwriter_cstring (dwriter, "thread_num");
-	cherokee_dwriter_integer (dwriter, srv->thread_num);
+	cherokee_dwriter_unsigned (dwriter, srv->thread_num);
 	cherokee_dwriter_dict_close (dwriter);
 
 	return ret_ok;
@@ -384,16 +384,16 @@ sources_while (cherokee_buffer_t *key, void *value, void *param)
 
 		cherokee_dwriter_cstring (dwriter, "PID");
 		if (source_int->pid == -1) {
-			cherokee_dwriter_number  (dwriter, "-1", 2);
+			cherokee_dwriter_number   (dwriter, "-1", 2);
 		} else {
-			cherokee_dwriter_integer (dwriter, source_int->pid);
+			cherokee_dwriter_unsigned (dwriter, source_int->pid);
 		}
 
 		cherokee_dwriter_cstring (dwriter, "debug");
 		cherokee_dwriter_bool    (dwriter, source_int->debug);
 
 		cherokee_dwriter_cstring (dwriter, "timeout");
-		cherokee_dwriter_integer (dwriter, source_int->timeout);
+		cherokee_dwriter_unsigned (dwriter, source_int->timeout);
 
 		cherokee_dwriter_cstring (dwriter, "interpreter");
 		cherokee_dwriter_bstring (dwriter, &source_int->interpreter);

@@ -234,7 +234,7 @@ common_server_initialization (cherokee_server_t *srv)
 	} else {
 		/* Check parameter inconsistencies */
 		if (port_set) {
-			PRINT_MSG ("The -p parameter can only be used in conjunction with -r.");
+			PRINT_MSG ("The -p parameter can only be used in conjunction with -r.\n");
 			return ret_error;
 		}
 
