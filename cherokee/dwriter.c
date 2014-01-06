@@ -166,7 +166,7 @@ escape_string (cherokee_buffer_t      *buffer,
 			buffer->buf[j++] = '\\';
 			break;
 		case '/':
-			if (lang != dwriter_python)
+			if (lang == dwriter_json)
 				buffer->buf[j++] = '\\';
 
 			buffer->buf[j++] = '/';
