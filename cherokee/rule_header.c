@@ -171,7 +171,9 @@ header_str_to_type (cherokee_buffer_t        *header,
 		}
 		break;
 	case 'C':
-		if (equal_buf_str (header, "Connection")) {
+		if (equal_buf_str (header, "Cache-Control")) {
+			*common_header = header_cache_control;
+		} else if (equal_buf_str (header, "Connection")) {
 			*common_header = header_connection;
 		} else if (equal_buf_str (header, "Content-Encoding")) {
 			*common_header = header_content_encoding;
@@ -181,6 +183,13 @@ header_str_to_type (cherokee_buffer_t        *header,
 			*common_header = header_content_type;
 		} else if (equal_buf_str (header, "Cookie")) {
 			*common_header = header_cookie;
+		} else {
+			goto unknown;
+		}
+		break;
+	case 'D':
+		if (equal_buf_str (header, "DNT")) {
+			*common_header = header_dnt;
 		} else {
 			goto unknown;
 		}

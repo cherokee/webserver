@@ -1070,7 +1070,9 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				goto unknown;
 			break;
 		case 'C':
-			if (header_equals ("Connection", header_connection, begin, header_len)) {
+			if (header_equals ("Cache-Control", header_cache_control, begin, header_len)) {
+				ret = add_known_header (hdr, header_cache_control, val_offs, val_len);
+			} else if (header_equals ("Connection", header_connection, begin, header_len)) {
 				ret = add_known_header (hdr, header_connection, val_offs, val_len);
 			} else if (header_equals ("Content-Encoding", header_content_encoding, begin, header_len)) {
 				ret = add_known_header (hdr, header_content_encoding, val_offs, val_len);
@@ -1080,6 +1082,12 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				ret = add_known_header (hdr, header_content_type, val_offs, val_len);
 			} else if (header_equals ("Cookie", header_cookie, begin, header_len)) {
 				ret = add_known_header (hdr, header_cookie, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		case 'D':
+			if (header_equals ("DNT", header_expect, begin, header_len)) {
+				ret = add_known_header (hdr, header_dnt, val_offs, val_len);
 			} else
 				goto unknown;
 			break;
