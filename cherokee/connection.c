@@ -1306,21 +1306,38 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	{
 		struct iovec tmp[3];
 
-		/* Build the data vector */
-		tmp[0].iov_base = conn->chunked_len.buf;
-		tmp[0].iov_len  = conn->chunked_len.len;
-		tmp[1].iov_base = conn->buffer.buf;
-		tmp[1].iov_len  = conn->buffer.len;
-
 		/* Traffic shaping */
 		if ((conn->limit_bps > 0) &&
 		    (conn->limit_bps < conn->buffer.len))
 		{
+			tmp[1].iov_base = conn->buffer.buf;
 			tmp[1].iov_len = conn->limit_bps;
+
+			conn->chunked_sent = 0;
+			cherokee_buffer_clean       (&conn->chunked_len);
+			cherokee_buffer_ensure_size (&conn->chunked_len, 13);
+			cherokee_buffer_add_ulong16 (&conn->chunked_len, tmp[1].iov_len);
+			cherokee_buffer_add_str     (&conn->chunked_len, CRLF);
+		} else if (conn->chunked_sent > 0) {
+			tmp[1].iov_base = conn->buffer.buf;
+			tmp[1].iov_len  = conn->buffer.len;
+
+			conn->chunked_sent = 0;
+			cherokee_buffer_clean       (&conn->chunked_len);
+			cherokee_buffer_ensure_size (&conn->chunked_len, 13);
+			cherokee_buffer_add_ulong16 (&conn->chunked_len, tmp[1].iov_len);
+			cherokee_buffer_add_str     (&conn->chunked_len, CRLF);
+		} else {
+			tmp[1].iov_base = conn->buffer.buf;
+			tmp[1].iov_len  = conn->buffer.len;
 		}
 
+		/* Build the data vector */
+		tmp[0].iov_base = conn->chunked_len.buf;
+		tmp[0].iov_len  = conn->chunked_len.len;
+
 		/* Trailer */
-		if (conn->chunked_last_package) {
+		if (conn->chunked_last_package && tmp[1].iov_len == conn->buffer.len) {
 			tmp[2].iov_base = CRLF "0" CRLF CRLF;
 			tmp[2].iov_len  = 7;
 		} else {
@@ -1358,8 +1375,14 @@ cherokee_connection_send (cherokee_connection_t *conn)
 		ret = cherokee_iovec_was_sent (tmp, 3, conn->chunked_sent);
 		if (ret == ret_ok) {
 			cherokee_buffer_clean (&conn->chunked_len);
-			cherokee_buffer_clean (&conn->buffer);
-			ret = ret_ok;
+
+			if (tmp[1].iov_len == conn->buffer.len) {
+				cherokee_buffer_clean (&conn->buffer);
+				ret = ret_ok;
+			} else {
+				cherokee_buffer_move_to_begin (&conn->buffer, tmp[1].iov_len);
+				ret = ret_eagain;
+			}
 		} else {
 			ret = ret_eagain;
 		}
