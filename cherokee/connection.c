@@ -1376,13 +1376,8 @@ cherokee_connection_send (cherokee_connection_t *conn)
 		if (ret == ret_ok) {
 			cherokee_buffer_clean (&conn->chunked_len);
 
-			if (tmp[1].iov_len == conn->buffer.len) {
-				cherokee_buffer_clean (&conn->buffer);
-				ret = ret_ok;
-			} else {
-				cherokee_buffer_move_to_begin (&conn->buffer, tmp[1].iov_len);
-				ret = ret_eagain;
-			}
+			cherokee_buffer_move_to_begin (&conn->buffer, tmp[1].iov_len);
+			ret = (tmp[1].iov_len == conn->buffer.len) ? ret_ok : ret_eagain;
 		} else {
 			ret = ret_eagain;
 		}
