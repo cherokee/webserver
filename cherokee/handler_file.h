@@ -43,6 +43,7 @@
 typedef struct {
 	cherokee_handler_props_t base;
 	cherokee_boolean_t       use_cache;
+	cherokee_boolean_t       send_symlinks;
 } cherokee_handler_file_props_t;
 
 

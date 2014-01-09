@@ -80,6 +80,7 @@ cherokee_handler_file_configure (cherokee_config_node_t   *conf,
 						  MODULE_PROPS_FREE(cherokee_handler_file_props_free));
 
 		n->use_cache = true;
+		n->send_symlinks = true;
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -90,6 +91,9 @@ cherokee_handler_file_configure (cherokee_config_node_t   *conf,
 
 		if (equal_buf_str (&subconf->key, "iocache")) {
 			ret = cherokee_atob (subconf->val.buf, &props->use_cache);
+			if (ret != ret_ok) return ret;
+		} else if (equal_buf_str (&subconf->key, "symlinks")) {
+			ret = cherokee_atob (subconf->val.buf, &props->send_symlinks);
 			if (ret != ret_ok) return ret;
 		}
 	}
@@ -451,6 +455,25 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 		conn->error_code = http_access_denied;
 		ret = ret_error;
 		goto out;
+	}
+
+	/* Are we allowed to send symlinks?
+	 */
+	if (!HDL_FILE_PROP(fhdl)->send_symlinks) {
+		struct stat stat;
+		int re;
+
+		re = cherokee_lstat (local_file->buf, &stat);
+		if (re < 0) {
+			ret = ret_error;
+			goto out;
+		}
+
+		if (S_ISLNK(stat.st_mode)) {
+			ret = ret_error;
+			conn->error_code = http_not_found;
+			goto out;
+		}
 	}
 
 	/* Look for the mime type

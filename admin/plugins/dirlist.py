@@ -44,6 +44,8 @@ class Plugin_dirlist (Handler.PluginHandler):
         Handler.PluginHandler.__init__ (self, key, **kwargs)
         Handler.PluginHandler.AddCommon (self)
 
+        symlinks = kwargs.pop('symlinks', True)
+
         # Listing
         table = CTK.PropsTable()
         table.Add (_('Show Size'),               CTK.CheckCfgText("%s!size"%(self.key),           True,  _('Show')),    '')
@@ -52,7 +54,8 @@ class Plugin_dirlist (Handler.PluginHandler):
         table.Add (_('Show Group'),              CTK.CheckCfgText("%s!group"%(self.key),          False, _('Show')),    '')
         table.Add (_('Show Backup files'),       CTK.CheckCfgText("%s!backup"%(self.key),         False, _('Show')),    '')
         table.Add (_('Show Hidden files'),       CTK.CheckCfgText("%s!hidden"%(self.key),         False, _('Show')),    '')
-        table.Add (_('Allow symbolic links'),    CTK.CheckCfgText("%s!symlinks"%(self.key),       True,  _('Allow')),   '')
+        if symlinks:
+            table.Add (_('Allow symbolic links'),    CTK.CheckCfgText("%s!symlinks"%(self.key),       True,  _('Allow')),   '')
         table.Add (_('Redirect symbolic links'), CTK.CheckCfgText("%s!redir_symlinks"%(self.key), False, _('Enabled')), '')
 
         submit = CTK.Submitter (URL_APPLY)
