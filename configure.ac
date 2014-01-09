@@ -266,7 +266,6 @@ AC_CHECK_SIZEOF(unsigned long long)
 AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(off_t)
 AC_CHECK_SIZEOF(size_t)
-AC_CHECK_SIZEOF(sig_atomic_t)
 AC_CHECK_SIZEOF(time_t)
 
 AC_CACHE_CHECK([for long long],samba_cv_have_longlong,[
