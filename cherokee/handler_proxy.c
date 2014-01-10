@@ -1251,7 +1251,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                           *header_end;
 	cherokee_list_t                *i;
 	cherokee_http_version_t         version;
-	cint_t                          xsendfile_len;
+	cint_t                          xsendfile_len  = 0;
 	char                           *xsendfile      = NULL;
 	cherokee_boolean_t              added_server   = false;
 	cherokee_connection_t          *conn           = HANDLER_CONN(hdl);
