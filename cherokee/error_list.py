@@ -752,9 +752,18 @@ e('SRC_INTER_SPAWN',
   title = "Could not spawn '%s'",
   desc  = SYSTEM_ISSUE)
 
+e('SRC_INTER_SETUID',
+  title = "Can't change setuid %d",
+  desc  = SYSTEM_ISSUE)
+
+e('SRC_INTER_SETGID',
+  title = "Can't change setgid %d",
+  desc  = SYSTEM_ISSUE)
+
 e('SRC_INTER_CHROOT',
   title = "Could not chroot() to '%s'",
   desc  = SYSTEM_ISSUE)
+
 
 # cherokee/config_reader.c
 #

@@ -588,11 +588,19 @@ _spawn_local (cherokee_source_interpreter_t *src,
 		}
 
 		if (src->change_group != -1) {
-			setgid (src->change_group);
+			re = setgid (src->change_group);
+			if (re < 0) {
+				LOG_ERROR (CHEROKEE_ERROR_SRC_INTER_SETGID, src->change_group);
+				exit(1);
+			}
 		}
 
 		if (src->change_user != -1) {
-			setuid (src->change_user);
+			re = setuid (src->change_user);
+			if (re < 0) {
+				LOG_ERROR (CHEROKEE_ERROR_SRC_INTER_SETUID, src->change_user);
+				exit(1);
+			}
 		}
 
 		/* Reset signals
