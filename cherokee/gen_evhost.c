@@ -145,6 +145,31 @@ add_domain (cherokee_template_t       *template,
 
 
 static ret_t
+add_domain_md5 (cherokee_template_t       *template,
+                cherokee_template_token_t *token,
+                cherokee_buffer_t         *output,
+                void                      *param)
+{
+	ret_t ret;
+	cherokee_buffer_t *md5;
+	cherokee_connection_t *conn = CONN(param);
+	UNUSED(template);
+	UNUSED(token);
+
+	ret = cherokee_buffer_dup (&conn->host, &md5);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_encode_md5_digest (md5);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_add_buffer (output, md5);
+	cherokee_buffer_mrproper (md5);
+
+	return ret;
+}
+
+
+static ret_t
 add_tld (cherokee_template_t       *template,
          cherokee_template_token_t *token,
          cherokee_buffer_t         *output,
@@ -321,6 +346,8 @@ cherokee_generic_evhost_new (cherokee_generic_evhost_t **evhost)
 
 	cherokee_template_set_token (&n->tpl_document_root, "domain",
 	                             TEMPLATE_FUNC(add_domain), n, NULL);
+	cherokee_template_set_token (&n->tpl_document_root, "domain_md5",
+	                             TEMPLATE_FUNC(add_domain_md5), n, NULL);
 	cherokee_template_set_token (&n->tpl_document_root, "tld",
 	                             TEMPLATE_FUNC(add_tld), n, NULL);
 	cherokee_template_set_token (&n->tpl_document_root, "domain_no_tld",
