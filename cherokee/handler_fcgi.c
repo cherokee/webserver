@@ -63,7 +63,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	cuint_t      len;
 	char        *data;
 	cuint_t      type;
-/*	cuint_t      id; */
+	cuint_t      id;
 	cuint_t      padding;
 
 	/* Is there enough information?
@@ -93,16 +93,18 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	 */
 	type    =  header->type;
 	padding =  header->paddingLength;
-/*	id      = (header->requestIdB0     | (header->requestIdB1 << 8)); */
+	id      = (header->requestIdB0     | (header->requestIdB1 << 8));
 	len     = (header->contentLengthB0 | (header->contentLengthB1 << 8));
 	data    = inbuf->buf +  FCGI_HEADER_LEN;
 
-/*	printf ("have %d, hdr=%d exp_len=%d pad=%d\n", inbuf->len, FCGI_HEADER_LEN, len, padding); */
+	UNUSED (id);
+
+	TRACE (ENTRIES, "have %d, hdr=%d exp_len=%d pad=%d\n", inbuf->len, FCGI_HEADER_LEN, len, padding);
 
 	/* Is the package complete?
 	 */
 	if (len + padding > inbuf->len - FCGI_HEADER_LEN) {
-/*		printf ("Incomplete: %d < %d\n", len + padding, inbuf->len - FCGI_HEADER_LEN); */
+		TRACE (ENTRIES, "Incomplete: %d < %d\n", len + padding, inbuf->len - FCGI_HEADER_LEN);
 		return ret_ok;
 	}
 
@@ -110,7 +112,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	 */
 	switch (type) {
 	case FCGI_STDERR:
-/*		printf ("READ:STDERR (%d): %s", len, data?data:""); */
+		TRACE (ENTRIES, "READ:STDERR (%d): %s", len, data?data:"");
 
 		LOG_ERROR (CHEROKEE_ERROR_HANDLER_FCGI_STDERR, data);
 
@@ -122,12 +124,12 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 		break;
 
 	case FCGI_STDOUT:
-/*		printf ("READ:STDOUT eof=%d: %d", HDL_CGI_BASE(hdl)->got_eof, len); */
+		TRACE (ENTRIES, "READ:STDOUT eof=%d: %d", HDL_CGI_BASE(hdl)->got_eof, len);
 		cherokee_buffer_add (outbuf, data, len);
 		break;
 
 	case FCGI_END_REQUEST:
-/*		printf ("READ:END"); */
+		TRACE (ENTRIES, "READ:END");
 		HDL_CGI_BASE(hdl)->got_eof = true;
 		break;
 
@@ -136,7 +138,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	}
 
 	cherokee_buffer_move_to_begin (inbuf, len + FCGI_HEADER_LEN + padding);
-/*	printf ("- FCGI left %d\n", inbuf->len); */
+	TRACE (ENTRIES, "- FCGI left %d\n", inbuf->len);
 	return ret_eagain;
 }
 
