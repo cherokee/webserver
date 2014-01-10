@@ -470,8 +470,8 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 		}
 
 		if (S_ISLNK(stat.st_mode)) {
-			ret = ret_error;
 			conn->error_code = http_not_found;
+			ret = ret_error;
 			goto out;
 		}
 	}
