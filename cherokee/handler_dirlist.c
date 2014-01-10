@@ -815,7 +815,8 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 		if (ret == ret_eof)
 			break;
 		if ((ret == ret_nomem) ||
-		    (ret == ret_error))
+		    (ret == ret_error) ||
+		    (item == NULL))
 			continue;
 
 		is_link = S_ISLNK(item->stat.st_mode);
