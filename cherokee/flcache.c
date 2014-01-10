@@ -164,7 +164,11 @@ cherokee_flcache_configure (cherokee_flcache_t     *flcache,
 	/* Set the directory permissions
 	 */
 	if (VSERVER_SRV(vserver)->user != VSERVER_SRV(vserver)->user_orig) {
-		chown (flcache->local_directory.buf, VSERVER_SRV(vserver)->user, VSERVER_SRV(vserver)->group);
+		int re;
+		re = chown (flcache->local_directory.buf, VSERVER_SRV(vserver)->user, VSERVER_SRV(vserver)->group);
+		if (re < 0) {
+			LOG_ERROR (CHEROKEE_ERROR_FLCACHE_CHOWN, flcache->local_directory.buf, VSERVER_SRV(vserver)->user, VSERVER_SRV(vserver)->group);
+		}
 	}
 
 	TRACE (ENTRIES, "Created %s\n", flcache->local_directory.buf);

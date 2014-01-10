@@ -782,6 +782,25 @@ e('CONF_READ_PARSE',
   debug = "%s")
 
 
+# cherokee/flcache.c
+#
+e('FLCACHE_CHOWN',
+  title = "Could not chown the FLCache directory '%s' to user '%s' and group '%s'",
+  desc  = SYSTEM_ISSUE)
+
+e('FLCACHE_MKDIR',
+  title = "Could not create the '%s' directory, or it doesn't have %s permissions",
+  desc  = SYSTEM_ISSUE)
+
+e('FLCACHE_MKDIRS',
+  title = "Could not create the FLCache temporal directy neither under %s nor under %s, or it doesn't have %s permissions",
+  desc  = SYSTEM_ISSUE)
+
+e('FLCACHE_CREATE_FILE',
+  title = "Could not create the '%s' cache object file: ${errno}",
+  desc  = SYSTEM_ISSUE)
+
+
 # cherokee/template.c
 #
 e('TEMPLATE_NO_TOKEN',
@@ -1353,18 +1372,3 @@ e('SSL_PKCS11',
 e('SSL_DEFAULTS',
   title = "Could not set all defaults",
   desc  = SYSTEM_ISSUE)
-
-# Front-line cache
-#
-e('FLCACHE_MKDIR',
-  title = "Could not create the '%s' directory, or it doesn't have %s permissions",
-  desc  = SYSTEM_ISSUE)
-
-e('FLCACHE_MKDIRS',
-  title = "Could not create the FLCache temporal directy neither under %s nor under %s, or it doesn't have %s permissions",
-  desc  = SYSTEM_ISSUE)
-
-e('FLCACHE_CREATE_FILE',
-  title = "Could not create the '%s' cache object file: ${errno}",
-  desc  = SYSTEM_ISSUE)
-
