@@ -115,7 +115,7 @@ cherokee_generic_evhost_configure (cherokee_generic_evhost_t *evhost,
 	cherokee_config_node_read_bool (config, "check_document_root",
 	                                &evhost->check_document_root);
 
-        ret = cherokee_config_node_read (config, "tpl_document_root", &tmp);
+	ret = cherokee_config_node_read (config, "tpl_document_root", &tmp);
 	if (ret != ret_ok) {
 		LOG_CRITICAL_S (CHEROKEE_ERROR_GEN_EVHOST_TPL_DROOT);
 		return ret;
@@ -146,9 +146,9 @@ add_domain (cherokee_template_t       *template,
 
 static ret_t
 add_tld (cherokee_template_t       *template,
-	 cherokee_template_token_t *token,
-	 cherokee_buffer_t         *output,
-	 void                      *param)
+         cherokee_template_token_t *token,
+         cherokee_buffer_t         *output,
+         void                      *param)
 {
 	const char            *p;
 	const char            *end;
