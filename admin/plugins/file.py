@@ -36,8 +36,12 @@ class Plugin_file (Handler.PluginHandler):
         Handler.PluginHandler.__init__ (self, key, **kwargs)
         Handler.PluginHandler.AddCommon (self)
 
+        symlinks = kwargs.pop('symlinks', True)
+
         table = CTK.PropsTable()
         table.Add (_("Use I/O cache"), CTK.CheckCfgText("%s!iocache"%(self.key), True, _('Enabled')), _(NOTE_IO_CACHE))
+        if symlinks:
+            table.Add (_('Allow symbolic links'), CTK.CheckCfgText("%s!symlinks"%(self.key), True,  _('Allow')), '')
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
