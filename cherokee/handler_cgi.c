@@ -291,8 +291,6 @@ cherokee_handler_cgi_props_free (cherokee_handler_cgi_props_t *props)
 ret_t
 cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
-	cherokee_handler_cgi_props_t *props;
-
 	/* Instance a new property object
 	 */
 	if (*_props == NULL) {
@@ -302,8 +300,6 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 			MODULE_PROPS_FREE(cherokee_handler_cgi_props_free));
 		*_props = MODULE_PROPS(n);
 	}
-
-	props = PROP_CGI(*_props);
 
 	/* Parse local options
 	 */

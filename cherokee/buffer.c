@@ -2191,6 +2191,7 @@ cherokee_buffer_substitute_string (cherokee_buffer_t *bufsrc,
 	/* Preset size of destination buffer.
 	 */
 	ret = cherokee_buffer_ensure_size(bufdst, result_length + 2);
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Build the new string
 	 */

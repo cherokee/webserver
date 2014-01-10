@@ -48,8 +48,6 @@ cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
                                     cherokee_server_t        *srv,
                                     cherokee_module_props_t **_props)
 {
-	cherokee_validator_plain_props_t *props;
-
 	UNUSED(srv);
 
 	if (*_props == NULL) {
@@ -58,8 +56,6 @@ cherokee_validator_plain_configure (cherokee_config_node_t  *conf,
 		                                         MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
-
-	props = PROP_PLAIN(*_props);
 
 	/* Call the file based validator configure
 	 */

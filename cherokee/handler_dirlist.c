@@ -790,9 +790,6 @@ static ret_t
 build_file_list (cherokee_handler_dirlist_t *dhdl)
 {
 	DIR                   *dir;
-	file_entry_t          *item;
-	int                    is_dir;
-	int                    is_link;
 	cherokee_connection_t *conn           = HANDLER_CONN(dhdl);
 	cherokee_buffer_t      local_realpath = CHEROKEE_BUF_INIT;
 
@@ -810,12 +807,16 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	 */
 	for (;;) {
 		ret_t ret;
+		file_entry_t *item = NULL;
+		int           is_dir;
+		int           is_link;
 
 		ret = generate_file_entry (dhdl, dir, &conn->local_directory, &local_realpath, &item);
 		if (ret == ret_eof)
 			break;
 		if ((ret == ret_nomem) ||
-		    (ret == ret_error))
+		    (ret == ret_error) ||
+		    (item == NULL))
 			continue;
 
 		is_link = S_ISLNK(item->stat.st_mode);

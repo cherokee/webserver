@@ -112,5 +112,5 @@ cherokee_version_add_simple (cherokee_buffer_t *buf, cherokee_server_token_t lev
 		ret = ret_error;
 	}
 
-	return ret_ok;
+	return ret;
 }

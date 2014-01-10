@@ -978,7 +978,7 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 {
 	int     re;
 	int     error;
-	ssize_t len;
+	ssize_t len    = 0;
 
 	CLEAR_LIBSSL_ERRORS;
 
