@@ -959,7 +959,7 @@ img.icon_chooser_selected {
 
 
 #halt-admin-box { text-align: center; padding-top: 64px; }
-#halt-admin-box a { color: #b5c8db; font-size: 90%; }
+#halt-admin-box a { font-size: 90%; }
 #halt-admin-box a:hover { color: #c00; }
 
 #maintenance-removal { overflow: auto; overflow-x: hidden; height: 260px; }
