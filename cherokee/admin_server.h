@@ -42,4 +42,5 @@ ret_t cherokee_admin_server_reply_kill_source     (cherokee_handler_t *hdl, cher
 ret_t cherokee_admin_server_reply_get_conns       (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
 ret_t cherokee_admin_server_reply_close_conn      (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter, cherokee_buffer_t *question);
 
+ret_t cherokee_admin_server_reply_restart         (cherokee_handler_t *hdl, cherokee_dwriter_t *dwriter);
 #endif /* CHEROKEE_ADMIN_SERVER_H */

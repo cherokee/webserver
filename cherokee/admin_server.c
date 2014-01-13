@@ -521,3 +521,26 @@ cherokee_admin_server_reply_kill_source (cherokee_handler_t *hdl,
 
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_admin_server_reply_restart (cherokee_handler_t *hdl,
+                                     cherokee_dwriter_t *dwriter)
+{
+	ret_t ret;
+
+	/* Initialise the restart
+	 */
+	ret = cherokee_server_handle_HUP (HANDLER_SRV (hdl));
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	/* Reply
+	 */
+	cherokee_dwriter_dict_open (dwriter);
+	cherokee_dwriter_cstring (dwriter, "restart");
+	cherokee_dwriter_bool (dwriter, ret == ret_ok);
+	cherokee_dwriter_dict_close (dwriter);
+	return ret_ok;
+}

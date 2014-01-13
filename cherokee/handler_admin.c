@@ -123,6 +123,9 @@ process_request_line (cherokee_handler_admin_t *hdl, cherokee_buffer_t *line)
 		return cherokee_admin_server_reply_get_conns (HANDLER(hdl), &hdl->dwriter);
 	} else if (COMP (line->buf, "close server.connection")) {
 		return cherokee_admin_server_reply_close_conn (HANDLER(hdl), &hdl->dwriter, line);
+
+	} else if (COMP (line->buf, "restart")) {
+		return cherokee_admin_server_reply_restart (HANDLER(hdl), &hdl->dwriter);
 	}
 
 	SHOULDNT_HAPPEN;
