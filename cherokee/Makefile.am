@@ -1,5 +1,7 @@
 ## Cherokee: cherokee/Makefile.am  -*- makefile -*-
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 AM_CPPFLAGS = \
 -I${top_srcdir} \
 $(PTHREAD_CFLAGS)
