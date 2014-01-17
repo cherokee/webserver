@@ -213,7 +213,7 @@ class TestBase:
         None
 
     def CustomTest (self):
-	   return 0
+        return 0
 
     def Run (self, host, port):
         self._do_request(host, port)
