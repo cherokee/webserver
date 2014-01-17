@@ -410,6 +410,7 @@ class TestCollection (TestBase):
         test.nobody         = self.nobody
         test.php_conf       = self.php_conf
         test.proxy_suitable = self.proxy_suitable
+        test.is_ssl         = self.is_ssl
 
         self.tests.append (test)
         return test
