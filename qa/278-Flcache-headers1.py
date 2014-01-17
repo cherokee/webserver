@@ -52,3 +52,6 @@ class Test (TestCollection):
         # Second request
         obj = self.Add (TestEntry())
         obj.expected_content = ['Via: foo, ', 'Age: ', CONTENT]
+
+    def Precondition (self):
+        return not self.is_ssl

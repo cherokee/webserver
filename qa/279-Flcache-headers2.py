@@ -54,3 +54,6 @@ class Test (TestCollection):
         obj = self.Add (TestEntry())
         obj.expected_content = [CONTENT]
         obj.CustomTest = types.MethodType (CustomTest, obj)
+
+    def Precondition (self):
+        return not self.is_ssl

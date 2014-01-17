@@ -67,3 +67,6 @@ class Test (TestCollection):
         fp = os.path.join (self.local_dir, self.filename)
         os.unlink (fp)
         self.filename = None
+
+    def Precondition (self):
+        return not self.is_ssl
