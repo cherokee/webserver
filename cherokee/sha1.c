@@ -71,7 +71,7 @@ typedef unsigned long ULONG;
 
 
 static void
-sha_transform (SHA_INFO *sha_info)
+sha_transform (CHEROKEE_SHA_INFO *sha_info)
 {
 	int i;
 	U8 *dp;
@@ -189,7 +189,7 @@ nether regions of the anatomy...
 
 /* initialize the SHA digest */
 
-void sha_init(SHA_INFO *sha_info)
+void cherokee_sha_init(CHEROKEE_SHA_INFO *sha_info)
 {
 	sha_info->digest[0] = 0x67452301L;
 	sha_info->digest[1] = 0xefcdab89L;
@@ -204,7 +204,7 @@ void sha_init(SHA_INFO *sha_info)
 /* update the SHA digest */
 
 void
-sha_update (SHA_INFO *sha_info, U8 *buffer, int count)
+cherokee_sha_update (CHEROKEE_SHA_INFO *sha_info, U8 *buffer, int count)
 {
 	int i;
 	ULONG clo;
@@ -241,7 +241,7 @@ sha_update (SHA_INFO *sha_info, U8 *buffer, int count)
 }
 
 
-static void sha_transform_and_copy(unsigned char digest[20], SHA_INFO *sha_info)
+static void sha_transform_and_copy(unsigned char digest[20], CHEROKEE_SHA_INFO *sha_info)
 {
 	sha_transform(sha_info);
 	digest[ 0] = (unsigned char) ((sha_info->digest[0] >> 24) & 0xff);
@@ -268,7 +268,7 @@ static void sha_transform_and_copy(unsigned char digest[20], SHA_INFO *sha_info)
 
 /* finish computing the SHA digest */
 void
-sha_final (SHA_INFO *sha_info, unsigned char digest[20])
+cherokee_sha_final (CHEROKEE_SHA_INFO *sha_info, unsigned char digest[20])
 {
 	int count;
 	ULONG lo_bit_count, hi_bit_count;
