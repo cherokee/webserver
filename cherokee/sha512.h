@@ -13,10 +13,10 @@ struct hc_sha512state {
 	unsigned char save[128];
 };
 
-typedef struct hc_sha512state SHA512_CTX;
+typedef struct hc_sha512state CHEROKEE_SHA512_CTX;
 
-void SHA512_Init   (SHA512_CTX *);
-void SHA512_Update (SHA512_CTX *, const void *, size_t);
-void SHA512_Final  (SHA512_CTX *, void *);
+void cherokee_SHA512_Init   (CHEROKEE_SHA512_CTX *);
+void cherokee_SHA512_Update (CHEROKEE_SHA512_CTX *, const void *, size_t);
+void cherokee_SHA512_Final  (CHEROKEE_SHA512_CTX *, void *);
 
 #endif /* CHEROKEE_SHA512 */

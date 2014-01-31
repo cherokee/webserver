@@ -1801,13 +1801,13 @@ cherokee_buffer_encode_md5 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 ret_t
 cherokee_buffer_encode_sha1 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
-	SHA_INFO sha1;
+	CHEROKEE_SHA_INFO sha1;
 
-	sha_init (&sha1);
-	sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
+	cherokee_sha_init (&sha1);
+	cherokee_sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
 
 	cherokee_buffer_ensure_size (encoded, SHA1_DIGEST_SIZE + 1);
-	sha_final (&sha1, (unsigned char *) encoded->buf);
+	cherokee_sha_final (&sha1, (unsigned char *) encoded->buf);
 
 	encoded->len = SHA1_DIGEST_SIZE;
 	encoded->buf[encoded->len] = '\0';
@@ -1821,11 +1821,11 @@ cherokee_buffer_encode_sha1_digest (cherokee_buffer_t *buf)
 {
 	int           i;
 	unsigned char digest[SHA1_DIGEST_SIZE];
-	SHA_INFO      sha1;
+	CHEROKEE_SHA_INFO      sha1;
 
-	sha_init (&sha1);
-	sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
-	sha_final (&sha1, digest);
+	cherokee_sha_init (&sha1);
+	cherokee_sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
+	cherokee_sha_final (&sha1, digest);
 
 	cherokee_buffer_ensure_size (buf, (2 * SHA1_DIGEST_SIZE)+1);
 
@@ -1874,13 +1874,13 @@ cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *e
 ret_t
 cherokee_buffer_encode_sha512 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
-	SHA512_CTX sha512;
+	CHEROKEE_SHA512_CTX sha512;
 
-	SHA512_Init (&sha512);
-	SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
+	cherokee_SHA512_Init (&sha512);
+	cherokee_SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
 
 	cherokee_buffer_ensure_size (encoded, SHA512_DIGEST_LENGTH + 1);
-	SHA512_Final (&sha512, (unsigned char *) encoded->buf);
+	cherokee_SHA512_Final (&sha512, (unsigned char *) encoded->buf);
 
 	encoded->len = SHA512_DIGEST_LENGTH;
 	encoded->buf[encoded->len] = '\0';
@@ -1894,11 +1894,11 @@ cherokee_buffer_encode_sha512_digest (cherokee_buffer_t *buf)
 {
 	int           i;
 	unsigned char digest[SHA512_DIGEST_LENGTH];
-	SHA512_CTX    sha512;
+	CHEROKEE_SHA512_CTX    sha512;
 
-	SHA512_Init   (&sha512);
-	SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
-	SHA512_Final  (&sha512, digest);
+	cherokee_SHA512_Init   (&sha512);
+	cherokee_SHA512_Update (&sha512, (unsigned char*) buf->buf, buf->len);
+	cherokee_SHA512_Final  (&sha512, digest);
 
 	cherokee_buffer_ensure_size (buf, (2 * SHA512_DIGEST_LENGTH)+1);
 
