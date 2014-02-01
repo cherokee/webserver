@@ -28,7 +28,7 @@ URL_APPLY = '/plugin/evhost/apply'
 
 NOTE_CHECK_DROOT = N_("Check the dynamically generated Document Root, and use the general Document Root if it doesn't exist.")
 NOTE_REHOST      = N_("The Document Root directory will be built dynamically. The following variables are accepted:<br/>") +\
-                   "${domain}, ${tld}, ${domain_no_tld}, ${root_domain}, ${subdomain1}, ${subdomain2}."
+                   "${domain}, ${domain_md5}, ${tld}, ${domain_no_tld}, ${root_domain}, ${subdomain1}, ${subdomain2}."
 
 HELPS = [('config_virtual_servers_evhost', _("Advanced Virtual Hosting"))]
 
