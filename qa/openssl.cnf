@@ -1,0 +1,141 @@
+HOME				= .
+RANDFILE			= $ENV::HOME/.rnd
+openssl_conf			= openssl_init
+
+[ openssl_init ]
+oid_section			= new_oids
+engines				= engine_section
+
+[ new_oids ]
+
+[ ca ]
+default_ca			= CA_default		# The default ca section
+
+[ CA_default ]
+
+dir				= .			# Where everything is kept
+certs				= $dir			# Where the issued certs are kept
+crl_dir				= $dir			# Where the issued crl are kept
+database			= $dir/index.txt	# database index file.
+new_certs_dir			= $dir			# default place for new certs.
+
+certificate			= $dir/ca.crt		# The CA certificate
+serial				= $dir/serial		# The current serial number
+crl				= $dir/crl.pem		# The current CRL
+private_key			= $dir/ca.key		# The private key
+RANDFILE			= $dir/.rand		# private random number file
+
+x509_extensions			= usr_cert		# The extentions to add to the cert
+
+default_days			= 3650			# how long to certify for
+default_crl_days		= 30			# how long before next CRL
+default_md			= sha1			# which md to use.
+preserve			= no			# keep passed DN ordering
+
+policy				= policy_anything
+
+[ policy_match ]
+countryName			= match
+stateOrProvinceName		= match
+organizationName		= match
+organizationalUnitName		= optional
+commonName			= supplied
+name				= optional
+emailAddress			= optional
+
+[ policy_anything ]
+countryName			= optional
+stateOrProvinceName		= optional
+localityName			= optional
+organizationName		= optional
+organizationalUnitName		= optional
+commonName			= supplied
+name				= optional
+emailAddress			= optional
+
+[ req ]
+default_bits			= 2048
+default_keyfile			= privkey.pem
+distinguished_name		= req_distinguished_name
+attributes			= req_attributes
+x509_extensions			= v3_ca			# The extentions to add to the self signed cert
+
+string_mask = nombstr
+
+[ req_distinguished_name ]
+countryName			= Country Name (2 letter code)
+countryName_default		= XX
+countryName_min			= 2
+countryName_max			= 2
+
+stateOrProvinceName		= State or Province Name (full name)
+stateOrProvinceName_default	= Snake Oil Land
+
+localityName			= Locality Name (eg, city)
+localityName_default		= Snake Oil Town
+
+0.organizationName		= Organization Name (eg, company)
+0.organizationName_default	= Cherokee Snake Oil Peddlars
+
+organizationalUnitName		= Organizational Unit Name (eg, section)
+organizationalUnitName_default  = Cherokee Snake Oil Smearing Team
+
+commonName			= Common Name (eg, your name or your server\'s hostname)
+commonName_max			= 64
+commonName_default              = localhost
+
+name				= Name
+name_max			= 64
+name_default                    =
+
+emailAddress			= Email Address
+emailAddress_default		= snakeoil@cherokee-webserver.com
+emailAddress_max		= 40
+
+[ req_attributes ]
+challengePassword		= A challenge password
+challengePassword_min		= 4
+challengePassword_max		= 20
+
+unstructuredName		= An optional company name
+
+[ usr_cert ]
+
+basicConstraints=CA:FALSE
+nsComment			= "Cherokee Snake Oil Test Certificate"
+
+subjectKeyIdentifier		= hash
+authorityKeyIdentifier		= keyid,issuer:always
+extendedKeyUsage		= clientAuth
+keyUsage			= digitalSignature
+
+[ server ]
+
+basicConstraints=CA:FALSE
+nsCertType			= server
+nsComment			= "Cherokee Snake Oil Test Server Certificate"
+subjectKeyIdentifier		= hash
+authorityKeyIdentifier		= keyid,issuer:always
+extendedKeyUsage		= serverAuth
+keyUsage			= digitalSignature, keyEncipherment
+
+[ v3_req ]
+
+basicConstraints		= CA:FALSE
+keyUsage			= nonRepudiation, digitalSignature, keyEncipherment
+
+[ v3_ca ]
+
+subjectKeyIdentifier		= hash
+
+authorityKeyIdentifier		= keyid:always,issuer:always
+
+basicConstraints		= CA:true
+
+[ crl_ext ]
+
+authorityKeyIdentifier		= keyid:always,issuer:always
+
+[ engine_section ]
+
+

@@ -1103,6 +1103,8 @@ if test "$WITH_OPENSSL" != "no"; then
 	   AC_SUBST(LIBSSL_CFLAGS)
 
 	   AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
+	   AC_PATH_PROG([OPENSSL_BIN], [openssl])
+	   AC_SUBST(OPENSSL_BIN)
     fi
 fi
 AC_MSG_CHECKING(for libssl)

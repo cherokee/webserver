@@ -216,6 +216,7 @@ CONF_BASE = """
 server!bind!1!port = %(PORT)d
 server!bind!1!interface = %(listen)s
 server!bind!2!port = %(PORT_TLS)d
+server!bind!2!interface = %(listen)s
 server!bind!2!tls = 1
 server!keepalive = 1
 server!panic_action = %(panic)s
@@ -257,8 +258,9 @@ if method:
     CONF_BASE += "server!poll_method = %s" % (method)
 
 if ssl:
-    CONF_BASE += """
+    CONF_BASE = """
 server!tls = libssl
+""" + CONF_BASE + """
 vserver!1!ssl_certificate_file = %(SSL_CERT_FILE)s
 vserver!1!ssl_certificate_key_file = %(SSL_CERT_KEY_FILE)s
 """ % (globals())
