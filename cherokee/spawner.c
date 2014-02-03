@@ -254,6 +254,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	cherokee_buffer_add        (&tmp, (char *)&chroot->len, sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, chroot);
 	cherokee_buffer_add_char   (&tmp, '\0');
+	ALIGN4(tmp);
 
 	/* 4.- Environment */
 	phase = 0xF3;
