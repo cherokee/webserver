@@ -44,7 +44,8 @@ PRODUCT_TOKENS = [
     ('minor',   N_('Product + Minor version')),
     ('minimal', N_('Product + Minimal version')),
     ('os',      N_('Product + Platform')),
-    ('full',    N_('Full Server string'))
+    ('full',    N_('Full Server string')),
+    ('none',    N_('No Server String'))
 ]
 
 HANDLERS = [

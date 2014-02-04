@@ -282,11 +282,14 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Set the basic variables
 	 */
-	set_env (cgi, "SERVER_SOFTWARE",
-	         bind->server_string.buf,
-	         bind->server_string.len);
+	if (CONN_SRV(conn)->server_token > cherokee_version_none) {
+	    set_env (cgi, "SERVER_SOFTWARE",
+		    bind->server_string.buf,
+		    bind->server_string.len);
 
-	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee Web Server</address>", 38);
+	    set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee Web Server</address>", 38);
+	}
+
 	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
 
 	/* $PATH
