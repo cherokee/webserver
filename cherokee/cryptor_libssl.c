@@ -460,6 +460,22 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		options |= SSL_OP_NO_SSLv2;
 	}
 
+	if (! cryp->allow_SSLv3) {
+		options |= SSL_OP_NO_SSLv3;
+	}
+
+	if (! cryp->allow_TLSv1) {
+		options |= SSL_OP_NO_TLSv1;
+	}
+
+	if (! cryp->allow_TLSv1_1) {
+		options |= SSL_OP_NO_TLSv1_1;
+	}
+
+	if (! cryp->allow_TLSv1_2) {
+		options |= SSL_OP_NO_TLSv1_2;
+	}
+
 #ifdef SSL_OP_CIPHER_SERVER_PREFERENCE
 	if (vsrv->cipher_server_preference) {
 		options |= SSL_OP_CIPHER_SERVER_PREFERENCE;

@@ -67,6 +67,10 @@ typedef struct {
 	cherokee_module_t          module;
 	cint_t                     timeout_handshake;
 	cherokee_boolean_t         allow_SSLv2;
+	cherokee_boolean_t         allow_SSLv3;
+	cherokee_boolean_t         allow_TLSv1;
+	cherokee_boolean_t         allow_TLSv1_1;
+	cherokee_boolean_t         allow_TLSv1_2;
 
 	/* Methods */
 	cryptor_func_configure_t   configure;
