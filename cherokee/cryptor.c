@@ -49,6 +49,10 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 	 */
 	cryp->timeout_handshake = TIMEOUT_DEFAULT;
 	cryp->allow_SSLv2       = false;
+	cryp->allow_SSLv3       = true;
+	cryp->allow_TLSv1       = true;
+	cryp->allow_TLSv1_1     = true;
+	cryp->allow_TLSv1_2     = true;
 
 	return ret_ok;
 }
@@ -83,6 +87,10 @@ cherokee_cryptor_configure (cherokee_cryptor_t     *cryp,
 	 */
 	cherokee_config_node_read_int  (conf, "timeout_handshake", &cryp->timeout_handshake);
 	cherokee_config_node_read_bool (conf, "protocol!SSLv2",    &cryp->allow_SSLv2);
+	cherokee_config_node_read_bool (conf, "protocol!SSLv3",    &cryp->allow_SSLv3);
+	cherokee_config_node_read_bool (conf, "protocol!TLSv1",    &cryp->allow_TLSv1);
+	cherokee_config_node_read_bool (conf, "protocol!TLSv1_1",  &cryp->allow_TLSv1_1);
+	cherokee_config_node_read_bool (conf, "protocol!TLSv1_2",  &cryp->allow_TLSv1_2);
 
 	/* Call the its virtual method
 	 */
