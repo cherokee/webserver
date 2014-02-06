@@ -37,6 +37,7 @@ CHEROKEE_BEGIN_DECLS
 
 
 typedef enum {
+	cherokee_version_none = 0,
 	cherokee_version_product,
 	cherokee_version_minor,
 	cherokee_version_minimal,

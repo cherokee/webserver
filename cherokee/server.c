@@ -1484,15 +1484,17 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		}
 
 	} else if (equal_buf_str (&conf->key, "server_tokens")) {
-		if (equal_buf_str (&conf->val, "Product")) {
+		if (equal_buf_str (&conf->val, "product")) {
 			srv->server_token = cherokee_version_product;
-		} else if (equal_buf_str (&conf->val, "Minor")) {
+		} else if (equal_buf_str (&conf->val, "minor")) {
 			srv->server_token = cherokee_version_minor;
-		} else if (equal_buf_str (&conf->val, "Minimal")) {
+		} else if (equal_buf_str (&conf->val, "minimal")) {
 			srv->server_token = cherokee_version_minimal;
-		} else if (equal_buf_str (&conf->val, "OS")) {
+		} else if (equal_buf_str (&conf->val, "os")) {
 			srv->server_token = cherokee_version_os;
-		} else if (equal_buf_str (&conf->val, "Full")) {
+		} else if (equal_buf_str (&conf->val, "none")) {
+			srv->server_token = cherokee_version_none;
+		} else if (equal_buf_str (&conf->val, "full")) {
 			srv->server_token = cherokee_version_full;
 		} else {
 			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_TOKEN, conf->val.buf);
