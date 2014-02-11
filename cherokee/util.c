@@ -2659,6 +2659,18 @@ cherokee_pipe (int fildes[2])
 	return re;
 }
 
+int cherokee_socketpair (int fildes[2], cherokee_boolean_t stream)
+{
+	int re;
+
+	do {
+		re = socketpair (AF_UNIX, stream ? SOCK_STREAM : SOCK_DGRAM,
+				 0, fildes);
+	} while ((re < 0) && (errno == EINTR));
+
+	return re;
+}
+
 
 void
 cherokee_random_seed (void)
