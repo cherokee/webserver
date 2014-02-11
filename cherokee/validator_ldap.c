@@ -335,7 +335,8 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap,
 	/* Sanity checks
 	 */
 	if ((conn->validator == NULL) ||
-	    cherokee_buffer_is_empty (&conn->validator->user))
+	    cherokee_buffer_is_empty (&conn->validator->user) ||
+	    cherokee_buffer_is_empty (&conn->validator->passwd))
 		return ret_error;
 
 	size = cherokee_buffer_cnt_cspn (&conn->validator->user, 0, "*()");
