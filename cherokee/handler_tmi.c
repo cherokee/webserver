@@ -6,7 +6,7 @@
  *	  Alvaro Lopez Ortega <alvaro@alobbs.com>
  *	  Stefan de Konink <stefan@konink.de>
  *
- * Copyright (C) 2001-2013 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2014 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_tmi.h"
@@ -39,10 +39,10 @@ ret_t
 cherokee_handler_tmi_init (cherokee_handler_tmi_t *hdl)
 {
 	ret_t ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-	cherokee_buffer_t	 *tmp  = &HANDLER_THREAD(hdl)->tmp_buf1;
+	cherokee_connection_t        *conn  = HANDLER_CONN(hdl);
+	cherokee_buffer_t            *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
 	cherokee_handler_tmi_props_t *props = HANDLER_TMI_PROPS(hdl);
-		
+
 	/* We are going to look for gzipped encoding */
 	cherokee_buffer_clean (tmp);
 	ret = cherokee_header_copy_known (&conn->header, header_content_encoding, tmp);
@@ -52,7 +52,8 @@ cherokee_handler_tmi_init (cherokee_handler_tmi_t *hdl)
 	} else {
 		cherokee_buffer_clean (tmp);
 		ret = cherokee_header_copy_known (&conn->header, header_content_type, tmp);
-	   	if (ret == ret_ok && (cherokee_buffer_cmp_str(tmp, "application/gzip") == 0 || cherokee_buffer_cmp_str(tmp, "application/zip") == 0)) {
+	   	if (ret == ret_ok && (cherokee_buffer_cmp_str(tmp, "application/gzip") == 0 ||
+		                      cherokee_buffer_cmp_str(tmp, "application/zip") == 0)) {
 			TRACE(ENTRIES, "ZeroMQ: incomming header '%s'\n", tmp->buf);
 			hdl->inflated = true;
 		} else {
@@ -99,13 +100,13 @@ cherokee_handler_tmi_init (cherokee_handler_tmi_t *hdl)
 ret_t
 cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 {
-	zmq_msg_t message;
-	int					  re;
-	ret_t					ret;
-	ret_t					ret_final;
-	cherokee_buffer_t	   *post = &HANDLER_THREAD(hdl)->tmp_buf1;
-	cherokee_buffer_t	   *encoded = &HANDLER_THREAD(hdl)->tmp_buf2;
-	cherokee_connection_t   *conn = HANDLER_CONN(hdl);
+	zmq_msg_t              message;
+	int                    re;
+	ret_t                  ret;
+	ret_t                  ret_final;
+	cherokee_buffer_t     *post    = &HANDLER_THREAD(hdl)->tmp_buf1;
+	cherokee_buffer_t     *encoded = &HANDLER_THREAD(hdl)->tmp_buf2;
+	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 
 	/* Check for the post info
 	 */
@@ -122,9 +123,9 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 		break;
 	case ret_eagain:
 		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-												   HANDLER_CONN(hdl),
-												   conn->socket.socket,
-												   FDPOLL_MODE_READ, false);
+		                                           HANDLER_CONN(hdl),
+		                                           conn->socket.socket,
+		                                           FDPOLL_MODE_READ, false);
 		if (ret != ret_ok) {
 			return ret_error;
 		} else {
@@ -154,15 +155,14 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 	cherokee_buffer_add_buffer(&hdl->output, post);
 
 	if (ret_final == ret_ok) {
-		cherokee_buffer_t	 *tmp  = &HANDLER_THREAD(hdl)->tmp_buf1;
+		cherokee_buffer_t            *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
 		cherokee_handler_tmi_props_t *props = HANDLER_TMI_PROPS(hdl);
 		zmq_msg_t envelope;
 		zmq_msg_t message;
 		cuint_t len;
 
 		if ((cherokee_buffer_is_empty (&conn->web_directory)) ||
-			(cherokee_buffer_is_ending (&conn->web_directory, '/')))
-		{
+		    (cherokee_buffer_is_ending (&conn->web_directory, '/'))) {
 			len = conn->web_directory.len;
 		} else {
 			len = conn->web_directory.len + 1;
@@ -170,14 +170,14 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add   (tmp, conn->request.buf + len,
-									conn->request.len - len);
+		                            conn->request.len - len);
 
 		TRACE(ENTRIES, "ZeroMQ: incomming path '%s'\n", tmp->buf);
 
 		zmq_msg_init_size (&envelope, tmp->len);
 		memcpy (zmq_msg_data (&envelope), tmp->buf, tmp->len);
-		zmq_msg_init_size (&message, hdl->output.len);
-		memcpy (zmq_msg_data (&message), hdl->output.buf, hdl->output.len);
+		zmq_msg_init_size (&message, encoded->len);
+		memcpy (zmq_msg_data (&message), encoded->buf, encoded->len);
 
 		/* Atomic Section */
 		CHEROKEE_MUTEX_LOCK (&props->mutex);
@@ -187,13 +187,13 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 
 		zmq_msg_close (&envelope);
 		zmq_msg_close (&message);
-		
+
 #ifdef LIBXML_PUSH_ENABLED
 		if (hdl->validate_xml) {
 			if (hdl->inflated) {
 				hdl->strm.avail_in = hdl->output.len;
 				hdl->strm.next_in = hdl->output.buf;
-					
+
 				/* run inflate() on input until output buffer not full */
 				do  {
 					#define CHUNK 131072
@@ -236,7 +236,7 @@ cherokee_handler_tmi_step (cherokee_handler_tmi_t *hdl, cherokee_buffer_t *buffe
 {
 	char time_buf[21];
 	size_t len;
-	
+
 	len = strftime(time_buf, 21, "%Y-%m-%dT%H:%S:%MZ", &cherokee_bogonow_tmgmt);
 	cherokee_buffer_add_buffer (buffer, &HANDLER_TMI_PROPS(hdl)->reply);
 	cherokee_buffer_add (buffer, time_buf, len);
@@ -271,9 +271,10 @@ tmi_free (cherokee_handler_tmi_t *hdl)
 {
 	cherokee_handler_tmi_props_t *props = HANDLER_TMI_PROPS(hdl);
 	cherokee_buffer_mrproper (&hdl->output);
-	
-	if (hdl->encoder)
+
+	if (hdl->encoder) {
 		cherokee_encoder_free (hdl->encoder);
+	}
 
 #ifdef LIBXML_PUSH_ENABLED
 	if (props->validate_xml) {
@@ -289,26 +290,24 @@ tmi_free (cherokee_handler_tmi_t *hdl)
 }
 
 ret_t
-cherokee_handler_tmi_new (cherokee_handler_t **hdl, 
-						  void *cnt,
-						  cherokee_module_props_t *props)
+cherokee_handler_tmi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_tmi);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(tmi));
 
-	MODULE(n)->init		 = (handler_func_init_t) cherokee_handler_tmi_init;
-	MODULE(n)->free		 = (module_func_free_t) tmi_free;
+	MODULE(n)->init	        = (handler_func_init_t) cherokee_handler_tmi_init;
+	MODULE(n)->free	        = (module_func_free_t) tmi_free;
 	HANDLER(n)->read_post   = (handler_func_read_post_t) cherokee_handler_tmi_read_post;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_tmi_add_headers;
-	HANDLER(n)->step		= (handler_func_step_t) cherokee_handler_tmi_step;
+	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_tmi_step;
 
 	/* Supported features
 	 */
-	HANDLER(n)->support	 = hsupport_nothing;
-	
+	HANDLER(n)->support     = hsupport_nothing;
+
 	cherokee_buffer_init (&n->output);
 	cherokee_buffer_ensure_size (&n->output, 2097152);
 	n->encoder = NULL;
@@ -318,7 +317,7 @@ cherokee_handler_tmi_new (cherokee_handler_t **hdl,
 	return ret_ok;
 }
 
-static ret_t 
+static ret_t
 props_free  (cherokee_handler_tmi_props_t *props)
 {
 	zmq_close (props->socket);
@@ -331,24 +330,22 @@ props_free  (cherokee_handler_tmi_props_t *props)
 	return ret_ok;
 }
 
-ret_t 
-cherokee_handler_tmi_configure (cherokee_config_node_t  *conf, 
-					 cherokee_server_t	   *srv,
-					 cherokee_module_props_t **_props)
+ret_t
+cherokee_handler_tmi_configure (cherokee_config_node_t  *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
-	ret_t						  ret;
-	cherokee_list_t				 *i;
+	ret_t                         ret;
+	cherokee_list_t              *i;
 	cherokee_handler_tmi_props_t *props;
-	cherokee_plugin_info_t		 *info = NULL;
-	
+	cherokee_plugin_info_t       *info = NULL;
+
 	/* Instance a new property object
 	 */
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_tmi_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  MODULE_PROPS_FREE(props_free));
-		
+		cherokee_handler_props_init_base (HANDLER_PROPS(n),
+		                                  MODULE_PROPS_FREE(props_free));
+
 		cherokee_buffer_init (&n->reply);
 		cherokee_buffer_init (&n->subscriberid);
 		cherokee_buffer_init (&n->version);
@@ -362,7 +359,7 @@ cherokee_handler_tmi_configure (cherokee_config_node_t  *conf,
 	}
 
 	props = PROP_TMI(*_props);
-	
+
 	/* Voodoo to get our own backend gzipper
 	 */
 	ret = cherokee_plugin_loader_get (&srv->loader, "gzip", &info);
@@ -374,7 +371,7 @@ cherokee_handler_tmi_configure (cherokee_config_node_t  *conf,
 	 */
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-		
+
 		if (equal_buf_str (&subconf->key, "subscriberid")) {
 			cherokee_buffer_clean (&props->subscriberid);
 			cherokee_buffer_add_buffer (&props->subscriberid, &subconf->val);
@@ -404,7 +401,7 @@ cherokee_handler_tmi_configure (cherokee_config_node_t  *conf,
 		}
 
 	}
-	
+
 	props->context = zmq_init (props->io_threads);
 
 	props->socket = zmq_socket(props->context, ZMQ_PUSH);
@@ -414,12 +411,12 @@ cherokee_handler_tmi_configure (cherokee_config_node_t  *conf,
 	}
 
 	cherokee_buffer_clean (&props->reply);
-	cherokee_buffer_add_va(&props->reply, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
-										  "<tmi8:VV_TM_RES xmlns:tmi8=\"http://bison.connekt.nl/tmi8/kv6/msg\">" 
-										  "<tmi8:SubscriberID>%s</tmi8:SubscriberID>"
-										  "<tmi8:Version>%s</tmi8:Version>"
-										  "<tmi8:DossierName>%s</tmi8:DossierName>"
-										  "<tmi8:Timestamp>", props->subscriberid.buf, props->version.buf, props->dossiername.buf);
+	cherokee_buffer_add_va(&props->reply, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+	                                      "<tmi8:VV_TM_RES xmlns:tmi8=\"http://bison.connekt.nl/tmi8/kv6/msg\">"
+	                                      "<tmi8:SubscriberID>%s</tmi8:SubscriberID>"
+	                                      "<tmi8:Version>%s</tmi8:Version>"
+	                                      "<tmi8:DossierName>%s</tmi8:DossierName>"
+	                                      "<tmi8:Timestamp>", props->subscriberid.buf, props->version.buf, props->dossiername.buf);
 
 	return ret_ok;
 }
