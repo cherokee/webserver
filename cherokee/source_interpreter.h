@@ -32,7 +32,7 @@ CHEROKEE_BEGIN_DECLS
 
 typedef enum {
 	spawn_unknown,
-	spawn_shm,
+	spawn_services,
 	spawn_local
 } cherokee_source_interpreter_spawn_t;
 
