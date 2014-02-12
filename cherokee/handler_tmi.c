@@ -105,8 +105,8 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 	ret_t                  ret;
 	ret_t                  ret_final;
 	cherokee_buffer_t     *post    = &HANDLER_THREAD(hdl)->tmp_buf1;
-	cherokee_buffer_t     *encoded = &HANDLER_THREAD(hdl)->tmp_buf2;
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
+	cherokee_buffer_t     *tozmq;
 
 	/* Check for the post info
 	 */
@@ -141,15 +141,15 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 	re = cherokee_post_read_finished (&conn->post);
 	ret_final = re ? ret_ok : ret_eagain;
 
-	cherokee_buffer_clean(encoded);
 	if (hdl->encoder != NULL) {
+		tozmq = &hdl->encoded;
 	   	if (ret == ret_ok) {
-			cherokee_encoder_flush(hdl->encoder, post, encoded);
+			cherokee_encoder_flush(hdl->encoder, post, &hdl->encoded);
 		} else {
-			cherokee_encoder_encode(hdl->encoder, post, encoded);
+			cherokee_encoder_encode(hdl->encoder, post, &hdl->encoded);
 		}
 	} else {
-		encoded = post;
+		tozmq = &hdl->output;
 	}
 
 	cherokee_buffer_add_buffer(&hdl->output, post);
@@ -176,8 +176,8 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 
 		zmq_msg_init_size (&envelope, tmp->len);
 		memcpy (zmq_msg_data (&envelope), tmp->buf, tmp->len);
-		zmq_msg_init_size (&message, encoded->len);
-		memcpy (zmq_msg_data (&message), encoded->buf, encoded->len);
+		zmq_msg_init_size (&message, tozmq->len);
+		memcpy (zmq_msg_data (&message), tozmq->buf, tozmq->len);
 
 		/* Atomic Section */
 		CHEROKEE_MUTEX_LOCK (&props->mutex);
@@ -271,6 +271,7 @@ tmi_free (cherokee_handler_tmi_t *hdl)
 {
 	cherokee_handler_tmi_props_t *props = HANDLER_TMI_PROPS(hdl);
 	cherokee_buffer_mrproper (&hdl->output);
+	cherokee_buffer_mrproper (&hdl->encoded);
 
 	if (hdl->encoder) {
 		cherokee_encoder_free (hdl->encoder);
@@ -310,6 +311,8 @@ cherokee_handler_tmi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_p
 
 	cherokee_buffer_init (&n->output);
 	cherokee_buffer_ensure_size (&n->output, 2097152);
+	cherokee_buffer_init (&n->encoded);
+	cherokee_buffer_ensure_size (&n->encoded, 2097152);
 	n->encoder = NULL;
 	n->validate_xml = false;
 
