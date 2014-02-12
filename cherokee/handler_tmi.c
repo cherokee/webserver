@@ -103,7 +103,6 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 	zmq_msg_t              message;
 	int                    re;
 	ret_t                  ret;
-	ret_t                  ret_final;
 	cherokee_buffer_t     *post    = &HANDLER_THREAD(hdl)->tmp_buf1;
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	cherokee_buffer_t     *tozmq;
@@ -137,24 +136,11 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 	}
 
 	TRACE (ENTRIES, "Post contains: '%s'\n", post->buf);
-
-	re = cherokee_post_read_finished (&conn->post);
-	ret_final = re ? ret_ok : ret_eagain;
-
-	if (hdl->encoder != NULL) {
-		tozmq = &hdl->encoded;
-	   	if (ret == ret_ok) {
-			cherokee_encoder_flush(hdl->encoder, post, &hdl->encoded);
-		} else {
-			cherokee_encoder_encode(hdl->encoder, post, &hdl->encoded);
-		}
-	} else {
-		tozmq = &hdl->output;
-	}
-
 	cherokee_buffer_add_buffer(&hdl->output, post);
 
-	if (ret_final == ret_ok) {
+	if (! cherokee_post_read_finished (&conn->post)) {
+		return ret_eagain;
+	} else {
 		cherokee_buffer_t            *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
 		cherokee_handler_tmi_props_t *props = HANDLER_TMI_PROPS(hdl);
 		zmq_msg_t envelope;
@@ -176,8 +162,15 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 
 		zmq_msg_init_size (&envelope, tmp->len);
 		memcpy (zmq_msg_data (&envelope), tmp->buf, tmp->len);
-		zmq_msg_init_size (&message, tozmq->len);
-		memcpy (zmq_msg_data (&message), tozmq->buf, tozmq->len);
+
+		if (hdl->encoder != NULL) {
+			cherokee_encoder_flush(hdl->encoder, &hdl->output, &hdl->encoded);
+			zmq_msg_init_size (&message, hdl->encoded.len);
+			memcpy (zmq_msg_data (&message), hdl->encoded.buf, hdl->encoded.len);
+		} else {
+			zmq_msg_init_size (&message, hdl->output.len);
+			memcpy (zmq_msg_data (&message), hdl->output.buf, hdl->output.len);
+		}
 
 		/* Atomic Section */
 		CHEROKEE_MUTEX_LOCK (&props->mutex);
@@ -221,7 +214,7 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 #endif
 	}
 
-	return ret_final;
+	return ret_ok;
 }
 
 ret_t
