@@ -6,7 +6,7 @@
  *	  Alvaro Lopez Ortega <alvaro@alobbs.com>
  *	  Stefan de Konink <stefan@konink.de>
  *
- * Copyright (C) 2001-2013 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2014 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -77,7 +77,6 @@ cherokee_handler_zeromq_read_post (cherokee_handler_zeromq_t *hdl)
 	int						re;
 	ret_t					ret;
 	cherokee_buffer_t	   *post = &HANDLER_THREAD(hdl)->tmp_buf1;
-	cherokee_buffer_t	   *out  = &HANDLER_THREAD(hdl)->tmp_buf2;
 	cherokee_connection_t  *conn = HANDLER_CONN(hdl);
 
 	/* Check for the post info
@@ -110,23 +109,11 @@ cherokee_handler_zeromq_read_post (cherokee_handler_zeromq_t *hdl)
 
 	TRACE (ENTRIES, "Post contains: '%s'\n", post->buf);
 
-	re = cherokee_post_read_finished (&conn->post);
-	ret = re ? ret_ok : ret_eagain;
-
-	if (hdl->encoder != NULL) {
-		cherokee_buffer_clean(out);
-		if (ret == ret_ok) {
-			cherokee_encoder_flush(hdl->encoder, post, out);
-		} else {
-			cherokee_encoder_encode(hdl->encoder, post, out);
-		}
-
-		post = out;
-	}
-	
 	cherokee_buffer_add_buffer(&hdl->output, post);
-	
-	if (ret == ret_ok) {
+
+	if (! cherokee_post_read_finished (&conn->post)) {
+		return ret_eagain;
+	} else {
 		cherokee_buffer_t	 			*tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
 		cherokee_handler_zeromq_props_t *props = HANDLER_ZEROMQ_PROPS(hdl);
 		zmq_msg_t envelope;
@@ -148,8 +135,15 @@ cherokee_handler_zeromq_read_post (cherokee_handler_zeromq_t *hdl)
 
 		zmq_msg_init_size (&envelope, tmp->len);
 		memcpy (zmq_msg_data (&envelope), tmp->buf, tmp->len);
-		zmq_msg_init_size (&message, hdl->output.len);
-		memcpy (zmq_msg_data (&message), hdl->output.buf, hdl->output.len);
+
+		if (hdl->encoder != NULL) {
+			cherokee_encoder_flush(hdl->encoder, &hdl->output, &hdl->encoded);
+			zmq_msg_init_size (&message, hdl->encoded.len);
+			memcpy (zmq_msg_data (&message), hdl->encoded.buf, hdl->encoded.len);
+		} else {
+			zmq_msg_init_size (&message, hdl->output.len);
+			memcpy (zmq_msg_data (&message), hdl->output.buf, hdl->output.len);
+		}
 
 		/* Atomic Section */
 		CHEROKEE_MUTEX_LOCK (&props->mutex);
@@ -161,7 +155,7 @@ cherokee_handler_zeromq_read_post (cherokee_handler_zeromq_t *hdl)
 		zmq_msg_close (&message);
 	}
 
-	return ret;
+	return ret_ok;
 }
 
 ret_t
@@ -180,6 +174,7 @@ static ret_t
 zeromq_free (cherokee_handler_zeromq_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->output);
+	cherokee_buffer_mrproper (&hdl->encoded);
 	
 	if (hdl->encoder)
 		cherokee_encoder_free (hdl->encoder);
@@ -208,6 +203,8 @@ cherokee_handler_zeromq_new (cherokee_handler_t	 **hdl, void *cnt, cherokee_modu
 	 
 	cherokee_buffer_init (&n->output);
 	cherokee_buffer_ensure_size (&n->output, 2097152);
+	cherokee_buffer_init (&n->encoded);
+	cherokee_buffer_ensure_size (&n->encoded, 2097152);
 	n->encoder = NULL;
 
 	*hdl = HANDLER(n);

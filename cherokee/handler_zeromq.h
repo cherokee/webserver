@@ -49,6 +49,7 @@ typedef struct {
 	cherokee_handler_t        base;
 	cherokee_encoder_t       *encoder;
 	cherokee_buffer_t         output;
+	cherokee_buffer_t         encoded;
 } cherokee_handler_zeromq_t;
 
 #define HDL_ZEROMQ(x)           ((cherokee_handler_zeromq_t *)(x))
