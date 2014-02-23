@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <errno.h>
 
 ret_t
 cherokee_services_send (int fd,
@@ -65,7 +66,13 @@ cherokee_services_send (int fd,
 		sendbuf.msg_controllen = control_msg->cmsg_len;
 	}
 
+send_again:
+
 	if ((ret = sendmsg (fd, &sendbuf, 0)) != buf->len) {
+		if (errno == EINTR ||
+		    errno == EAGAIN) {
+			goto send_again;
+		}
 		return ret_error;
 	}
 
@@ -94,7 +101,14 @@ cherokee_services_receive (int fd,
 	iov[0].iov_base = buf->buf;
 	iov[0].iov_len = buf->size;
 
+receive_again:
+
 	if ((ret = recvmsg (fd, &recvbuf, 0)) < 0) {
+		if (errno == EINTR ||
+		    errno == EAGAIN) {
+			goto receive_again;
+		}
+		return ret_error;
 		return ret_error;
 	}
 
