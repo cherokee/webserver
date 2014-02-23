@@ -723,7 +723,7 @@ main (int argc, char *argv[])
 
 	/* Launch the spawning thread
 	 */
-	if (! single_time) {
+	if (! single_time && ! use_valgrind) {
 		ret = spawn_init();
 		if (ret != ret_ok) {
 			PRINT_MSG_S ("(warning) Couldn't initialize spawn mechanism.\n");
