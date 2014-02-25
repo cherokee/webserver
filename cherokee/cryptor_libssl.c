@@ -468,6 +468,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		options |= SSL_OP_NO_TLSv1;
 	}
 
+#if OPENSSL_VERSION_NUMBER >= 0x10001000L
 	if (! cryp->allow_TLSv1_1) {
 		options |= SSL_OP_NO_TLSv1_1;
 	}
@@ -475,6 +476,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	if (! cryp->allow_TLSv1_2) {
 		options |= SSL_OP_NO_TLSv1_2;
 	}
+#endif
 
 #ifdef SSL_OP_CIPHER_SERVER_PREFERENCE
 	if (vsrv->cipher_server_preference) {
