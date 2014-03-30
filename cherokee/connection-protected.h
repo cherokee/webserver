@@ -196,6 +196,8 @@ struct cherokee_connection {
 	cherokee_socket_status_t      polling_mode;
 	cherokee_boolean_t            polling_multiple;
 
+	time_t                        private_timeout;
+
 	off_t                         range_start;
 	off_t                         range_end;
 

@@ -47,6 +47,7 @@ server_info.py \
 ssi.py \
 streaming.py \
 target_ip.py \
+tile.py \
 url_arg.py \
 uwsgi.py \
 wildcard.py \

@@ -63,6 +63,7 @@ HANDLERS = [
     ('ssi',          N_('Server Side Includes')),
     ('secdownload',  N_('Hidden Downloads')),
     ('server_info',  N_('Server Info')),
+    ('tile',         N_('Metatile')),
     ('dbslayer',     N_('MySQL Bridge')),
     ('custom_error', N_('HTTP Error')),
     ('admin',        N_('Remote Administration')),

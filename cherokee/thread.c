@@ -601,7 +601,7 @@ process_polling_connections (cherokee_thread_t *thd)
 
 		/* Is there information to be sent?
 		 */
-		if (conn->buffer.len > 0) {
+		if (conn->buffer.len > 0 || (conn->private_timeout > -1 && (conn->private_timeout < cherokee_bogonow_now))) {
 			ret = reactive_conn_from_polling (thd, conn);
 			if (unlikely (ret != ret_ok)) {
 				purge_closed_polling_connection (thd, conn);
@@ -2203,6 +2203,19 @@ cherokee_thread_deactive_to_polling (cherokee_thread_t     *thd,
 	conn->polling_multiple = multiple;
 
 	return move_connection_to_polling (thd, conn);
+}
+
+
+ret_t
+cherokee_thread_deactive_to_polling_timeout (cherokee_thread_t     *thd,
+                                             cherokee_connection_t *conn,
+                                             int                    fd,
+                                             int                    rw,
+                                             char                   multiple,
+                                             int                    timeout)
+{
+	conn->private_timeout = cherokee_bogonow_now + timeout;
+	return cherokee_thread_deactive_to_polling (thd, conn, fd, rw, multiple);
 }
 
 

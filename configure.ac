@@ -1413,7 +1413,7 @@ AC_ARG_ENABLE(static-module,
 	   AC_HELP_STRING([--enable-static-module=MODULE][]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
-modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or"
+modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or tile"
 
 # Remove modules that will not be compiles
 #
@@ -1473,6 +1473,7 @@ dnl
 conf_h="cherokee/loader.autoconf.h"
 AM_CONDITIONAL(STATIC_HANDLER_SERVER_INFO,    grep server_info    $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_FILE,           grep file           $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_TILE,           grep tile           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_ADMIN,          grep admin          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_DIRLIST,        grep dirlist        $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_CGI,            grep cgi            $conf_h >/dev/null)
