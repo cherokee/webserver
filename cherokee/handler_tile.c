@@ -122,6 +122,7 @@ cherokee_handler_tile_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 
 	HANDLER(n)->support = hsupport_nothing;
 
+	n->fd          =  -1;
 	n->base        = (void *) -1;
 	n->src_ref     = NULL;
 	n->mystatus    = parsing;
@@ -147,17 +148,21 @@ cherokee_handler_tile_free (cherokee_handler_tile_t *hdl)
 		munmap(hdl->base, hdl->size);
 	}
 
+	if (hdl->fd != -1) {
+		close(hdl->fd);
+	}
+
 	return ret_ok;
 }
 
 ret_t
 check_metatile (cherokee_handler_tile_t *hdl) {
-	int32_t fd = open(hdl->path, O_RDONLY);
-	if (fd >= 0) {
+	hdl->fd = open(hdl->path, O_RDONLY);
+	if (hdl->fd >= 0) {
 		struct stat st;
 		if (stat(hdl->path, &st) >= 0) {
 			hdl->size = st.st_size;
-			hdl->base = mmap(NULL, hdl->size, PROT_READ, MAP_PRIVATE, fd, 0);
+			hdl->base = mmap(NULL, hdl->size, PROT_READ, MAP_PRIVATE, hdl->fd, 0);
 			if (hdl->base != (void*)(-1)) {
 				hdl->header = (void *) hdl->base;
 				if ( strncmp("META", hdl->header->magic, 4) == 0 ) {
@@ -166,6 +171,9 @@ check_metatile (cherokee_handler_tile_t *hdl) {
 			}
 		}
 	}
+
+	close(hdl->fd);
+	hdl->fd = -1;
 
 	return ret_error;
 }

@@ -90,6 +90,7 @@ typedef struct {
 		timeout
 	} mystatus;
 	struct protocol     cmd;
+	int32_t             fd;
 	uint8_t            *base;
 	size_t              size;
 	struct meta_layout *header;
