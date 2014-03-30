@@ -151,11 +151,11 @@ cherokee_handler_tile_free (cherokee_handler_tile_t *hdl)
 }
 
 ret_t
-check_metatile (cherokee_handler_tile_t *hdl, char *path) {
-	int32_t fd = open(path, O_RDONLY);
+check_metatile (cherokee_handler_tile_t *hdl) {
+	int32_t fd = open(hdl->path, O_RDONLY);
 	if (fd >= 0) {
 		struct stat st;
-		if (stat(path, &st) >= 0) {
+		if (stat(hdl->path, &st) >= 0) {
 			hdl->size = st.st_size;
 			hdl->base = mmap(NULL, hdl->size, PROT_READ, MAP_PRIVATE, fd, 0);
 			if (hdl->base != (void*)(-1)) {
@@ -247,38 +247,37 @@ cherokee_handler_tile_init (cherokee_handler_tile_t *hdl)
 		}
 
 		hdl->mystatus = sending;
+
+		unsigned char i, hash[5], mask;
+		int x = hdl->cmd.x;
+		int y = hdl->cmd.y;
+
+		// Each meta tile winds up in its own file, with several in each leaf directory
+		// the .meta tile name is beasd on the sub-tile at (0,0)
+
+		#define METATILE (8)
+		mask = METATILE - 1;
+		hdl->offset = (x & mask) * METATILE + (y & mask);
+		x &= ~mask;
+		y &= ~mask;
+
+		for (i = 0; i < 5; i++) {
+			hash[i] = ((x & 0x0f) << 4) | (y & 0x0f);
+			x >>= 4;
+			y >>= 4;
+		}
+
+		#define DIRECTORY_HASH 1
+		#ifdef DIRECTORY_HASH
+		snprintf(hdl->path, PATH_LEN, "%s/%s/%d/%u/%u/%u/%u/%u.meta", HANDLER_VSRV(hdl)->root.buf, hdl->cmd.xmlname, hdl->cmd.z, hash[4], hash[3], hash[2], hash[1], hash[0]);
+		#else
+		snprintf(hdl->path, PATH_LEN, "%s/%s/%d/%u/%u.meta", HANDLER_VSRV(hdl)->root.buf, hdl->cmd.xmlname, hdl->cmd.z, x, y);
+		#endif
+
+		ret = check_metatile (hdl);
+		if (ret == ret_ok) return ret;
 	}
 
-	#define PATH_LEN 128
-	char path[PATH_LEN];
-	unsigned char i, hash[5], mask;
-	int x = hdl->cmd.x;
-	int y = hdl->cmd.y;
-
-	// Each meta tile winds up in its own file, with several in each leaf directory
-	// the .meta tile name is beasd on the sub-tile at (0,0)
-
-	#define METATILE (8)
-	mask = METATILE - 1;
-	hdl->offset = (x & mask) * METATILE + (y & mask);
-	x &= ~mask;
-	y &= ~mask;
-
-	for (i = 0; i < 5; i++) {
-		hash[i] = ((x & 0x0f) << 4) | (y & 0x0f);
-		x >>= 4;
-		y >>= 4;
-	}
-
-	#define DIRECTORY_HASH 1
-	#ifdef DIRECTORY_HASH
-	snprintf(path, PATH_LEN, "%s/%s/%d/%u/%u/%u/%u/%u.meta", HANDLER_VSRV(hdl)->root.buf, hdl->cmd.xmlname, hdl->cmd.z, hash[4], hash[3], hash[2], hash[1], hash[0]);
-	#else
-	snprintf(path, PATH_LEN, "%s/%s/%d/%u/%u.meta", HANDLER_VSRV(hdl)->root.buf, hdl->cmd.xmlname, hdl->cmd.z, x, y);
-	#endif
-
-	ret = check_metatile (hdl, path);
-	if (ret == ret_ok) return ret;
 
 	/* the file does not exist (yet) */
 	if (hdl->mystatus == sending) {
@@ -313,7 +312,7 @@ cherokee_handler_tile_init (cherokee_handler_tile_t *hdl)
 	TRACE(ENTRIES, "Reading from socket...\n");
 
 	struct protocol resp;
-	bzero(&resp, sizeof(struct protocol));
+	memset(&resp, 0, sizeof(struct protocol));
 
 	ret = cherokee_socket_read(&hdl->socket, (char *) &resp, sizeof(struct protocol), &len);
 
@@ -352,20 +351,31 @@ besteffort:
 	conn->expiration_time = HDL_TILE_PROPS(hdl)->expiration_time;
 
 succesful:
-	return check_metatile(hdl, path);
+	ret = check_metatile(hdl);
+
+	if (ret == ret_error) {
+		conn->error_code = http_moved_temporarily;
+		cherokee_buffer_add_str (&conn->redirect, "/404.png");
+	}
+
+	return ret_ok;
 }
 
 ret_t
 cherokee_handler_tile_add_headers (cherokee_handler_tile_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_add_str (buffer, "Content-Type: image/png" CRLF);
-	cherokee_buffer_add_va  (buffer, "Content-Length: %d" CRLF, hdl->header->index[hdl->offset].size);
+	if (hdl->base != (void *) -1) {
+		cherokee_buffer_add_str (buffer, "Content-Type: image/png" CRLF);
+		cherokee_buffer_add_va  (buffer, "Content-Length: %d" CRLF, hdl->header->index[hdl->offset].size);
+	}
 	return ret_ok;
 }
 
 ret_t
 cherokee_handler_tile_step (cherokee_handler_tile_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_add (buffer, &hdl->base[hdl->header->index[hdl->offset].offset], hdl->header->index[hdl->offset].size);
+	if (hdl->base != (void *) -1) {
+		cherokee_buffer_add (buffer, &hdl->base[hdl->header->index[hdl->offset].offset], hdl->header->index[hdl->offset].size);
+	}
 	return ret_eof_have_data;
 }

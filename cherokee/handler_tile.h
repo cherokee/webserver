@@ -66,6 +66,8 @@ struct meta_layout {
 	// The index offsets are measured from the start of the file
 };
 
+#define PATH_LEN 128
+
 /* Data types
  */
 typedef struct {
@@ -91,7 +93,8 @@ typedef struct {
 	uint8_t            *base;
 	size_t              size;
 	struct meta_layout *header;
-    uint8_t             offset;
+	uint8_t             offset;
+	char                path[PATH_LEN];
 } cherokee_handler_tile_t;
 
 
