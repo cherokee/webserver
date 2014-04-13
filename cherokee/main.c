@@ -870,13 +870,13 @@ clean_up (void)
 }
 
 static ret_t
-process_wait (pid_t pid)
+process_wait (pid_t wpid)
 {
 	pid_t re;
 	int   exitcode = 0;
 
 	while (true) {
-		re = waitpid (pid, &exitcode, 0);
+		re = waitpid (wpid, &exitcode, 0);
 		if (re > 0)
 			break;
 		else if (errno == EINTR)
@@ -894,25 +894,25 @@ process_wait (pid_t pid)
 	if (WIFEXITED(exitcode)) {
 		int re = WEXITSTATUS(exitcode);
 
-		if (re == EXIT_OK_ONCE) {
+		if (wpid == pid && re == EXIT_OK_ONCE) {
 			clean_up();
 			exit (EXIT_OK);
 
-		} else if (re == EXIT_ERROR_FATAL) {
+		} else if (wpid == pid && re == EXIT_ERROR_FATAL) {
 			clean_up();
 			exit (EXIT_ERROR);
 		}
 
 		/* Child terminated normally */
-		PRINT_MSG ("PID %d: exited re=%d\n", pid, re);
-		if (re != 0) {
+		PRINT_MSG ("PID %d: exited re=%d\n", wpid, re);
+		if (re != 0 && wpid == pid) {
 			worker_retcode = re;
 			return ret_error;
 		}
 	}
 	else if (WIFSIGNALED(exitcode)) {
 		/* Child process terminated by a signal */
-		PRINT_MSG ("PID %d: received a signal=%d\n", pid, WTERMSIG(exitcode));
+		PRINT_MSG ("PID %d: received a signal=%d\n", wpid, WTERMSIG(exitcode));
 	}
 
 	worker_retcode = 0;
