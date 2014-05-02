@@ -25,7 +25,7 @@ AC_PREREQ([2.68])
 dnl Version
 m4_define([cherokee_major_version], [1])
 m4_define([cherokee_minor_version], [2])
-m4_define([cherokee_micro_version], [103])
+m4_define([cherokee_micro_version], [104])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
