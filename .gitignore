@@ -17,6 +17,7 @@ Makefile
 Makefile.in
 \.deps
 \.libs
+\.idea/*
 ChangeLog
 aclocal.m4
 admin/configured.py
