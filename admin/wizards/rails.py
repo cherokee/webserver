@@ -90,7 +90,7 @@ source!%(src_num)d!interpreter = %(ror_dir)s/script/server -p %(src_port)d
 """
 
 SOURCE_PROXY3 = """
-source!%(src_num)d!interpreter = %(ror_dir)s/script/rails s -p %(src_port)d -b 127.0.0.1 -P tmp/pids/cherokee_$(src_port)d.pid
+source!%(src_num)d!interpreter = %(ror_dir)s/script/rails s -p %(src_port)d -P tmp/pids/cherokee_$(src_port)d.pid
 """
 
 SOURCE_PROXY4 = """
