@@ -30,7 +30,6 @@
 #include "util.h"
 #include "bogotime.h"
 #include "threading.h"
-#include "spawner.h"
 
 /* Global variables
  */
