@@ -325,7 +325,8 @@ run-tests.py \
 301-XForwardedFor-4.py \
 302-DirIndex3.py \
 304-Dirlist-TransferEncoding.py \
-305-Error-ContentLength.py
+305-Error-ContentLength.py \
+306-NoContent-keepalive.py
 
 if USE_OPENSSL
 ssl-keys/set-1.pem: ssl-keys/set-1.key openssl.cnf
