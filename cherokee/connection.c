@@ -996,7 +996,16 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	 * has to be turned off.
 	 */
 	if (conn->keepalive != 0) {
-		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+		/* A request that contains a body, is required to provide
+		 * a Content-Length header to maintain Keep-Alive.
+		 * Alternatively chucked_encoding may be used.
+		 *
+		 * According to RFC 2616 redirections SHOULD contain
+		 * a body, so they MAY require a Content-Length header.
+		 */
+		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length) &&
+		      http_code_with_body (conn->error_code)
+		) {
 			if (! conn->chunked_encoding) {
 				conn->keepalive = 0;
 			}
