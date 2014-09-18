@@ -198,14 +198,14 @@ cherokee_services_client_spawn (cherokee_buffer_t         *binary,
 	phase = service_magic_environment;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
-	for (n=envp; *n; n++) {
+	for (n = envp; *n; n++) {
 		envs ++;
 	}
 
 	cherokee_buffer_add (&tmp, (char *)&env_inherited, sizeof(int));
 	cherokee_buffer_add (&tmp, (char *)&envs, sizeof(int));
 
-	for (n=envp; *n; n++) {
+	for (n = envp; *n; n++) {
 		int len = strlen(*n);
 		cherokee_buffer_add      (&tmp, (char *)&len, sizeof(int));
 		cherokee_buffer_add      (&tmp, *n, len);
