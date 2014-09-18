@@ -157,14 +157,6 @@ How to build everyhing statically
 
     ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all
 
-
-How to compile it on Windows
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-::
-
-    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --enable-beta --enable-trace
-
 How to build a MacOS X binary package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -181,13 +173,6 @@ Development
 
     ./autogen.sh --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta --enable-trace --enable-backtraces --enable-maintainer-mode
     make V=1 CFLAGS="-ggdb3 -O0" -j8
-
-How to cross compile the Win32 version
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* From Linux: http://alobbs.com/news/1201
-* From MacOS: http://alobbs.com/news/1299
-* From Win32: http://unixwars.com/2008/07/17/c/
 
 How to create a self signed certificate for TLS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
