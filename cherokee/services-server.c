@@ -248,17 +248,8 @@ do_spawn (cherokee_buffer_t *buf, cherokee_services_fdmap_t *fd_map)
 	child = fork();
 	switch (child) {
 	case 0: {
-		int              i;
-		struct sigaction sig_action;
-
 		/* Reset signal handlers */
-		sig_action.sa_handler = SIG_DFL;
-		sig_action.sa_flags   = 0;
-		sigemptyset (&sig_action.sa_mask);
-
-		for (i = 1; i < NSIG; i++) {
-			sigaction (i, &sig_action, NULL);
-		}
+		cherokee_reset_signals();
 
 		/* Logging */
 		if (!use_fdmap && log_file) {
