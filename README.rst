@@ -26,15 +26,9 @@ or, for Pacman-based systems such as ArchLinux::
 
     sudo pacman -Sy autoconf automake libtool
 
-To check out the code from GitHub, including all dependencies that are
-specified as Git submodules, do the following::
-
-    git clone --recursive http://github.com/cherokee/webserver.git
-
-or, if using a version of Git < 1.6.5, run::
+To check out the code from GitHub, do the following::
 
     git clone http://github.com/cherokee/webserver.git
-    git submodule update --init
 
 Once cloned, ``cd`` into the resulting source directory and run 
 ``./autogen.sh`` to set up the environment and generate ``./configure``::
@@ -186,7 +180,7 @@ How to create a release .tar.gz
 
 ::
 
-    git clone --recursive http://github.com/cherokee/webserver.git
+    git clone http://github.com/cherokee/webserver.git
     cd webserver
     ./autogen.sh
     make dist-gzip
