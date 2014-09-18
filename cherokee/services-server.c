@@ -79,7 +79,7 @@ do_spawn (cherokee_buffer_t *buf, cherokee_services_fdmap_t *fd_map)
 	uid_t                uid;
 	gid_t                gid;
 	int                  env_inherit;
-	pid_t                child;
+	pid_t                child        = -1;
 	int                  envs         = 0;
 	int                  log_stderr   = 0;
 	char                *interpreter  = NULL;
