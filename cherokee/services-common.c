@@ -32,8 +32,8 @@
 
 ret_t
 cherokee_services_send (int fd,
-			cherokee_buffer_t *buf,
-			cherokee_services_fdmap_t *fd_map)
+                        cherokee_buffer_t *buf,
+                        cherokee_services_fdmap_t *fd_map)
 {
 	struct msghdr   sendbuf;
 	struct iovec    iov[1];
@@ -81,8 +81,8 @@ send_again:
 
 ret_t
 cherokee_services_receive (int fd,
-			   cherokee_buffer_t *buf,
-			   cherokee_services_fdmap_t *fd_map)
+                           cherokee_buffer_t *buf,
+                           cherokee_services_fdmap_t *fd_map)
 {
 	struct msghdr   recvbuf;
 	struct iovec    iov[1];
