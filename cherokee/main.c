@@ -606,12 +606,12 @@ process_launch (const char *path, char *argv[])
 
 	if (use_valgrind) {
 		new_args = malloc ((len_argv + len_valg + 2 +
-				    ((worker_services_fd == -1) ? 0 : 2)) * 
-				   sizeof(char *));
+		                   ((worker_services_fd == -1) ? 0 : 2)) *
+		                   sizeof(char *));
 	} else {
 		new_args = malloc ((len_argv + 2 +
-				    ((worker_services_fd == -1) ? 0 : 2)) * 
-				   sizeof(char *));
+		                   ((worker_services_fd == -1) ? 0 : 2)) *
+		                   sizeof(char *));
 	}
 	if (new_args == NULL) {
 		PRINT_MSG_S ("(critical) Could not allocate memory for worker args.\n");
@@ -641,10 +641,12 @@ process_launch (const char *path, char *argv[])
 	new_args[total] = NULL;
 	argv = new_args;
 
+	#ifdef DEBUG
 	for (total = 0; argv[total]; ++total) {
-		printf("ARGV[%d] = %s\n", total, argv[total]);
+		PRINT_MSG ("ARGV[%d] = %s\n", total, argv[total]);
 	}
-	
+	#endif
+
 	/* Execute the server
 	 */
 	pid = fork();
@@ -659,7 +661,7 @@ process_launch (const char *path, char *argv[])
 			execvp (path, argv);
 		} while (errno == EINTR);
 
-		printf ("ERROR: Could not execute %s\n", path);
+		PRINT_MSG ("ERROR: Could not execute %s\n", path);
 		exit (1);
 	}
 
