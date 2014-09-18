@@ -256,7 +256,7 @@ do_spawn (cherokee_buffer_t *buf, cherokee_services_fdmap_t *fd_map)
 		sig_action.sa_flags   = 0;
 		sigemptyset (&sig_action.sa_mask);
 
-		for (i = 0; i < NSIG; i++) {
+		for (i = 1; i < NSIG; i++) {
 			sigaction (i, &sig_action, NULL);
 		}
 
