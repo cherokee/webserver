@@ -4,7 +4,9 @@ Cherokee Web Server
 Web site
 --------
 
-Visit our main website for the latest updates: http://www.cherokee-project.com/
+Visit our main website for the latest updates: www.cherokee-project.com_.
+
+.. _www.cherokee-project.com: http://www.cherokee-project.com
 
 Compiling from source
 ---------------------
