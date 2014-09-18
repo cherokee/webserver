@@ -2600,7 +2600,7 @@ cherokee_reset_signals (void)
 	sig_action.sa_flags   = 0;
 	sigemptyset (&sig_action.sa_mask);
 
-	for (i=0 ; i < NSIG ; i++) {
+	for (i = 1; i < NSIG; i++) {
 		sigaction (i, &sig_action, NULL);
 	}
 
@@ -2654,6 +2654,18 @@ cherokee_pipe (int fildes[2])
 
 	do {
 		re = pipe (fildes);
+	} while ((re < 0) && (errno == EINTR));
+
+	return re;
+}
+
+int cherokee_socketpair (int fildes[2], cherokee_boolean_t stream)
+{
+	int re;
+
+	do {
+		re = socketpair (AF_UNIX, stream ? SOCK_STREAM : SOCK_DGRAM,
+				 0, fildes);
 	} while ((re < 0) && (errno == EINTR));
 
 	return re;

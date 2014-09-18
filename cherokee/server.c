@@ -25,8 +25,8 @@
 #include "common-internal.h"
 #include "server-protected.h"
 #include "server.h"
+#include "services.h"
 #include "bind.h"
-#include "spawner.h"
 #include "error_log.h"
 
 #include <fcntl.h>
@@ -272,9 +272,9 @@ cherokee_server_free (cherokee_server_t *srv)
 	 */
 	cherokee_avl_mrproper (AVL_GENERIC(&srv->sources), (cherokee_func_free_t)cherokee_source_free);
 
-	/* Spawn mechanism
+	/* Services mechanism
 	 */
-	cherokee_spawner_free();
+	cherokee_services_client_free();
 
 	/* Threads
 	 */
@@ -1000,12 +1000,6 @@ cherokee_server_initialize (cherokee_server_t *srv)
 			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_UID_GET, srv->user);
 			return ret_error;
 		}
-	}
-
-	/* Spawning mechanism
-	 */
-	if (cherokee_spawn_shared.mem == NULL) {
-		cherokee_spawner_init();
 	}
 
 	/* Initialize loggers

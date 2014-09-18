@@ -30,7 +30,6 @@
 #include "init.h"
 #include "server.h"
 #include "socket.h"
-#include "spawner.h"
 #include "config_reader.h"
 #include "server-protected.h"
 #include "util.h"
@@ -650,7 +649,6 @@ main (int argc, char **argv)
 	 */
 	cherokee_random_seed();
 
-	cherokee_spawner_set_active (false);
 	process_parameters (argc, argv);
 
 	ret = cherokee_server_new (&srv);

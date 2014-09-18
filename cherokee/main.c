@@ -39,7 +39,7 @@
 #endif
 
 #include "server.h"
-#include "spawner.h"
+#include "services.h"
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
@@ -66,10 +66,6 @@ union semun {
 # define NSIG 32
 #endif
 
-#define SEM_LAUNCH_START 0
-#define SEM_LAUNCH_READY 1
-#define SEM_LAUNCH_TOTAL 2
-
 #define DELAY_ERROR       3000 * 1000
 #define DELAY_RESTARTING   500 * 1000
 
@@ -81,13 +77,13 @@ union semun {
 pid_t               pid;
 char               *worker_uid;
 int                 worker_retcode;
+int                 worker_services_fd = -1;
+char                worker_services_fd_str[16];
+char               *worker_services_argv[] = { "-s", worker_services_fd_str };
 cherokee_boolean_t  graceful_restart;
 char               *cherokee_worker;
 char               *pid_file_path         = NULL;
 cherokee_boolean_t  use_valgrind          = false;
-char               *spawn_shared          = NULL;
-char               *spawn_shared_name     = NULL;
-int                 spawn_shared_sems     = -1;
 pthread_t           spawn_thread;
 
 static void
@@ -405,467 +401,46 @@ pid_file_clean (const char *pid_file)
 	free (pid_file_worker);
 }
 
-#ifdef HAVE_SYSV_SEMAPHORES
-
-static void
-do_sem_op (int sem_num, int sem_op)
-{
-	int           re;
-	struct sembuf sops[1];
-
-	/* SEM_UNDO = Automatically undone when the process terminates */
-	sops[0].sem_num = sem_num;
-	sops[0].sem_op  = sem_op;
-	sops[0].sem_flg = SEM_UNDO;
-
-	do {
-		errno = 0;
-		re = semop (spawn_shared_sems, sops, 1);
-	} while ((re < 0) && (errno == EINTR));
-}
-
-static void
-do_spawn (void)
-{
-	int          n;
-	int          size;
-	uid_t        uid;
-	gid_t        gid;
-	int          env_inherit;
-	pid_t        child;
-	int          envs         = 0;
-	int          log_stderr   = 0;
-	char        *interpreter  = NULL;
-	char        *log_file     = NULL;
-	char        *uid_str      = NULL;
-	char        *chroot_dir   = NULL;
-	char       **envp         = NULL;
-	char        *p            = spawn_shared;
-	const char  *argv[]       = {"sh", "-c", NULL, NULL};
-
-#define CHECK_MARK(val)           \
-	if ((*(int *)p) != val) { \
-		goto cleanup;     \
-	} else {                  \
-		p += sizeof(int); \
-	}
-
-#define ALIGN4(buf) while ((long)p & 0x3) p++;
-
-	/* Read the shared memory
-	 */
-
-	/* 1.- Interpreter */
-	CHECK_MARK (0xF0);
-
-	size = *((int *)p);
-	p += sizeof(int);
-	if (size <= 0) {
-		goto cleanup;
-	}
-
-	interpreter = malloc (sizeof("exec ") + size);
-	if (interpreter == NULL) {
-		goto cleanup;
-	}
-	strncpy (interpreter, "exec ", 5);
-	strncpy (interpreter + 5, p, size + 1);
-	p += size + 1;
-	ALIGN4 (p);
-
-	/* 2.- UID & GID */
-	CHECK_MARK (0xF1);
-
-	size = *((int *)p);
-	if (size > 0) {
-		uid_str = strdup (p + sizeof(int));
-	}
-	p += sizeof(int) + size + 1;
-	ALIGN4 (p);
-
-	memcpy (&uid, p, sizeof(uid_t));
-	p += sizeof(uid_t);
-
-	memcpy (&gid, p, sizeof(gid_t));
-	p += sizeof(gid_t);
-
-	/* 3.- Chroot directory */
-	CHECK_MARK (0xF2);
-	size = *((int *) p);
-	p += sizeof(int);
-	if (size > 0) {
-		chroot_dir = malloc(size + 1);
-		memcpy(chroot_dir, p, size + 1);
-	}
-	p += size + 1;
-	ALIGN4 (p);
-
-	/* 4.- Environment */
-	CHECK_MARK (0xF3);
-
-	env_inherit = *((int *)p);
-	p += sizeof(int);
-
-	envs = *((int *)p);
-	p += sizeof(int);
-
-	envp = malloc (sizeof(char *) * (envs + 1));
-	if (envp == NULL) {
-		goto cleanup;
-	}
-	envp[envs] = NULL;
-
-	for (n=0; n<envs; n++) {
-		char *e;
-
-		size = *((int *)p);
-		p += sizeof(int);
-
-		e = malloc (size + 1);
-		if (e == NULL) {
-			goto cleanup;
-		}
-
-		memcpy (e, p, size);
-		e[size] = '\0';
-
-		envp[n] = e;
-		p += size + 1;
-		ALIGN4 (p);
-	}
-
-	/* 5.- Error log */
-	CHECK_MARK (0xF4);
-
-	size = *((int *)p);
-	p += sizeof(int);
-
-	if (size > 0) {
-		if (! strncmp (p, "stderr", 6)) {
-			log_stderr = 1;
-		} else if (! strncmp (p, "file,", 5)) {
-			log_file = p+5;
-		}
-
-		p += (size + 1);
-		ALIGN4 (p);
-	}
-
-	/* 6.- PID: it's -1 now */
-	CHECK_MARK (0xF5);
-
-	n = *((int *)p);
-	if (n > 0) {
-		kill (n, SIGTERM);
-		*p = -1;
-	}
-
-	/* Spawn
-	 */
-	child = fork();
-	switch (child) {
-	case 0: {
-		int              i;
-		struct sigaction sig_action;
-
-		/* Reset signal handlers */
-		sig_action.sa_handler = SIG_DFL;
-		sig_action.sa_flags   = 0;
-		sigemptyset (&sig_action.sa_mask);
-
-		for (i=0 ; i < NSIG ; i++) {
-			sigaction (i, &sig_action, NULL);
-		}
-
-		/* Logging */
-		if (log_file) {
-			int fd;
-			fd = open (log_file, O_WRONLY | O_APPEND | O_CREAT, 0600);
-			if (fd < 0) {
-				PRINT_ERROR ("(warning) Couldn't open '%s' for writing..\n", log_file);
-			}
-			close (STDOUT_FILENO);
-			close (STDERR_FILENO);
-			dup2 (fd, STDOUT_FILENO);
-			dup2 (fd, STDERR_FILENO);
-		} else if (log_stderr) {
-			/* do nothing */
-		} else {
-			int tmp_fd;
-			tmp_fd = open ("/dev/null", O_WRONLY);
-
-			close (STDOUT_FILENO);
-			close (STDERR_FILENO);
-			dup2 (tmp_fd, STDOUT_FILENO);
-			dup2 (tmp_fd, STDERR_FILENO);
-		}
-
-		/* Change root */
-		if (chroot_dir) {
-			int re = chroot(chroot_dir);
-			if (re < 0) {
-				PRINT_ERROR ("(critial) Couldn't chroot to %s\n", chroot_dir);
-				exit (1);
-			}
-		}
-
-		/* Change user & group */
-		if (uid_str != NULL) {
-			n = initgroups (uid_str, gid);
-			if (n == -1) {
-				PRINT_ERROR ("(warning) initgroups failed User=%s, GID=%d\n", uid_str, gid);
-			}
-		}
-
-		if ((int)gid != -1) {
-			n = setgid (gid);
-			if (n != 0) {
-				PRINT_ERROR ("(warning) Couldn't set GID=%d\n", gid);
-			}
-		}
-
-		if ((int)uid != -1) {
-			n = setuid (uid);
-			if (n != 0) {
-				PRINT_ERROR ("(warning) Couldn't set UID=%d\n", uid);
-			}
-		}
-
-		/* Clean the shared memory */
-		size = (p - spawn_shared) - sizeof(int);
-		memset (spawn_shared, 0, size);
-
-		/* Execute the interpreter */
-		argv[2] = interpreter;
-
-		if (env_inherit) {
-			do {
-				execv ("/bin/sh", (char **)argv);
-			} while (errno == EINTR);
-		} else {
-			do {
-				execve ("/bin/sh", (char **)argv, envp);
-			} while (errno == EINTR);
-		}
-
-		PRINT_MSG ("(critical) Couldn't spawn: sh -c %s\n", interpreter);
-		exit (1);
-	}
-
-	case -1:
-		/* Error */
-		PRINT_MSG ("(critical) Couldn't fork(): %s\n", strerror(errno));
-		goto cleanup;
-
-	default:
-		break;
-	}
-
-	/* Return the PID
-	 */
-	memcpy (p, (char *)&child, sizeof(int));
-	printf ("PID %d: launched '/bin/sh -c %s' with uid=%d, gid=%d, chroot=%s, env=%s\n", child, interpreter, uid, gid, chroot_dir, env_inherit ? "inherited":"custom");
-
-cleanup:
-	/* Unlock worker
-	 */
-	do_sem_op (SEM_LAUNCH_READY, 1);
-
-	/* Clean up
-	 */
-	free (uid_str);
-	free (interpreter);
-	free (chroot_dir);
-
-	if (envp != NULL) {
-		for (n=0; n<envs; n++) {
-			free (envp[n]);
-		}
-		free (envp);
-	}
-}
-
 static NORETURN void *
 spawn_thread_func (void *param)
 {
 	UNUSED (param);
 
 	while (true) {
-		do_sem_op (SEM_LAUNCH_START, -1);
-		do_spawn ();
+		if (cherokee_services_server_serve_request () != ret_ok)
+			break;
 	}
+
+	while (true) /* Do nothing, we failed in our service work */;
 }
-
-static int
-sem_new (void)
-{
-	int         i;
-	int         re;
-	int         sem;
-	union semun ctrl;
-
-	/* Create */
-	sem = semget (getpid(), SEM_LAUNCH_TOTAL, IPC_CREAT | SEM_R | SEM_A);
-	if (sem < 0) {
-		PRINT_MSG ("Could not create semaphore: %s\n", strerror(errno));
-		return -1;
-	}
-
-	/* Initialize */
-	for (i=0; i < SEM_LAUNCH_TOTAL; i++) {
-		ctrl.val = 0;
-		re = semctl (sem, i, SETVAL, ctrl);
-		if (re < 0) {
-			goto error;
-		}
-	}
-
-	return sem;
-
-error:
-	PRINT_MSG ("Could not initialize semaphore: %s\n", strerror(errno));
-	return -1;
-}
-
-static int
-sem_chmod (int sem, char *worker_uid)
-{
-	int              i;
-	int              re;
-	struct semid_ds  buf;
-	union  semun     semopts;
-	struct passwd   *passwd;
-	int              uid     = 0;
-
-	/* Read the UID
-	 */
-	uid = (int)strtol (worker_uid, (char **)NULL, 10);
-	if (uid == 0) {
-		passwd = getpwnam (worker_uid);
-		if (passwd != NULL) {
-			uid = passwd->pw_uid;
-		}
-	}
-
-	if (uid == 0) {
-		PRINT_MSG ("(warning) Couldn't get UID for user '%s'\n", worker_uid);
-		return -1;
-	}
-
-	/* Initialize the memory
-	 */
-	memset (&buf,     0, sizeof(struct semid_ds));
-	memset (&semopts, 0, sizeof(union  semun));
-
-	semopts.buf = &buf;
-
-	/* Set the permissions
-	 */
-	for (i=0; i<SEM_LAUNCH_TOTAL; i++) {
-		re = semctl (sem, i, IPC_STAT, semopts);
-		if (re != -0) {
-			PRINT_MSG ("(warning) Couldn't IPC_STAT: errno=%d\n", errno);
-			return -1;
-		}
-
-		buf.sem_perm.uid = uid;
-		re = semctl (spawn_shared_sems, i, IPC_SET, semopts);
-		if (re != 0) {
-			PRINT_MSG ("(warning) Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
-			return -1;
-		}
-	}
-
-	return 0;
-}
-
 
 static ret_t
 spawn_init (void)
 {
+	ret_t ret;
 	int re;
-	int fd;
-	int mem_len;
 
-	/* Names
-	 */
-	mem_len = sizeof(TMPDIR "/cherokee-spawner-<PID_number>");
-	spawn_shared_name = malloc (mem_len);
-	if (spawn_shared_name == NULL) {
-		return ret_nomem;
+	ret = cherokee_services_server_init (&worker_services_fd);
+	if (ret != ret_ok) {
+		return ret;
 	}
 
-	snprintf (spawn_shared_name, mem_len, TMPDIR "/cherokee-spawner-%d", getpid());
+	snprintf(worker_services_fd_str, 16, "%d", worker_services_fd);
 
-	/* Create the shared memory
-	 */
-	fd = open (spawn_shared_name, O_RDWR | O_EXCL | O_CREAT, 0600);
-	if (fd < 0) {
-		return ret_error;
-	}
-
-	re = ftruncate (fd, SPAWN_SHARED_LEN);
-	if (re < 0) {
-		close (fd);
-		return ret_error;
-	}
-
-	spawn_shared = mmap (0, SPAWN_SHARED_LEN, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-	if (spawn_shared == MAP_FAILED) {
-		close (fd);
-		spawn_shared = NULL;
-		return ret_error;
-	}
-
-	memset (spawn_shared, 0, SPAWN_SHARED_LEN);
-
-	close (fd);
-
-	/* Semaphore
-	 */
-	spawn_shared_sems = sem_new();
-	if (spawn_shared_sems < 0) {
-		return ret_error;
-	}
-
-	if (worker_uid != NULL) {
-		sem_chmod (spawn_shared_sems, worker_uid);
-	}
-
-	/* Thread
-	 */
 	re = pthread_create (&spawn_thread, NULL, spawn_thread_func, NULL);
+
 	if (re != 0) {
-		PRINT_MSG_S ("(critical) Couldn't spawning thread..\n");
-		return ret_error;
+               PRINT_MSG_S ("(critical) Couldn't spawning thread..\n");
+               return ret_error;
 	}
 
 	return ret_ok;
 }
 
 static void
-spawn_clean (void)
-{
-	long dummy = 0;
-
-	if (spawn_shared_name != NULL) {
-		unlink (spawn_shared_name);
-	}
-
-	if (spawn_shared_sems != -1) {
-		semctl (spawn_shared_sems, 0, IPC_RMID, dummy);
-	}
-}
-
-#endif /* HAVE_SYSV_SEMAPHORES */
-
-
-static void
 clean_up (void)
 {
-#ifdef HAVE_SYSV_SEMAPHORES
-	spawn_clean();
-#endif
+	cherokee_services_server_free ();
 	pid_file_clean (pid_file_path);
 }
 
@@ -1019,48 +594,64 @@ may_daemonize (int argc, char *argv[])
 static pid_t
 process_launch (const char *path, char *argv[])
 {
-	pid_t   pid;
-	char  **new_args = NULL;
+	pid_t       pid;
+	char      **new_args = NULL;
+	int         total = 0;
+	int         len_argv;
+	int         len_valg = 0;
+	const char *valgrind_args[] = VALGRIND_PREFIX;
+
+	for (len_argv=0; argv[len_argv]; len_argv++);
+	for (len_valg=0; valgrind_args[len_valg]; len_valg++);
 
 	if (use_valgrind) {
-		int         total;
-		int         len_argv;
-		int         len_valg;
-		const char *valgrind_args[] = VALGRIND_PREFIX;
+		new_args = malloc ((len_argv + len_valg + 2 +
+		                   ((worker_services_fd == -1) ? 0 : 2)) *
+		                   sizeof(char *));
+	} else {
+		new_args = malloc ((len_argv + 2 +
+		                   ((worker_services_fd == -1) ? 0 : 2)) *
+		                   sizeof(char *));
+	}
+	if (new_args == NULL) {
+		PRINT_MSG_S ("(critical) Could not allocate memory for worker args.\n");
+		exit(1);
+	}
 
-		/* Alloc
-		 */
-		for (len_argv=0; argv[len_argv];          len_argv++);
-		for (len_valg=0; valgrind_args[len_valg]; len_valg++);
+	/* Copy
+	 */
+	total = 0;
 
-		new_args = malloc ((len_argv + len_valg + 2) * sizeof(char *));
-		if (new_args == NULL) {
-			PRINT_MSG_S ("(critical) Could not allocate memory for valgrind args.\n");
-			exit(1);
-		}
-
-		/* Copy
-		 */
-		total = 0;
-
+	if (use_valgrind) {
 		for (len_valg=0; valgrind_args[len_valg]; len_valg++, total++) {
 			new_args[total] = (char *)valgrind_args[len_valg];
 		}
-
-		for (len_argv=0; argv[len_argv]; len_argv++, total++) {
-			new_args[total] = argv[len_argv];
-		}
-
-		new_args[total+1] = NULL;
-		argv = new_args;
 	}
+
+	for (len_argv=0; argv[len_argv]; len_argv++, total++) {
+		new_args[total] = argv[len_argv];
+	}
+
+	if (worker_services_fd != -1) {
+		new_args[total] = worker_services_argv[0];
+		new_args[total+1] = worker_services_argv[1];
+		total += 2;
+	}
+
+	new_args[total] = NULL;
+	argv = new_args;
+
+	#ifdef DEBUG
+	for (total = 0; argv[total]; ++total) {
+		PRINT_MSG ("ARGV[%d] = %s\n", total, argv[total]);
+	}
+	#endif
 
 	/* Execute the server
 	 */
 	pid = fork();
 	if (pid == 0) {
 		if (use_valgrind) {
-			argv = new_args;
 			path = "valgrind";
 		} else {
 			argv[0] = (char *) path;
@@ -1070,16 +661,13 @@ process_launch (const char *path, char *argv[])
 			execvp (path, argv);
 		} while (errno == EINTR);
 
-		printf ("ERROR: Could not execute %s\n", path);
+		PRINT_MSG ("ERROR: Could not execute %s\n", path);
 		exit (1);
 	}
 
 	/* Clean up
 	 */
-	if ((use_valgrind) && (new_args != NULL))
-	{
-		free (new_args);
-	}
+	free (new_args);
 
 	return pid;
 }
@@ -1137,14 +725,12 @@ main (int argc, char *argv[])
 
 	/* Launch the spawning thread
 	 */
-#ifdef HAVE_SYSV_SEMAPHORES
-	if (! single_time) {
+	if (! single_time && ! use_valgrind) {
 		ret = spawn_init();
 		if (ret != ret_ok) {
 			PRINT_MSG_S ("(warning) Couldn't initialize spawn mechanism.\n");
 		}
 	}
-#endif
 
 	while (true) {
 		graceful_restart = false;
