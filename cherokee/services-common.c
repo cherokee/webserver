@@ -109,7 +109,6 @@ receive_again:
 			goto receive_again;
 		}
 		return ret_error;
-		return ret_error;
 	}
 
 	if (recvbuf.msg_controllen > 0) {
