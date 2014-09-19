@@ -138,9 +138,8 @@ const char *month[13] = {
 char *
 cherokee_strerror_r (int err, char *buf, size_t bufsize)
 {
-#ifdef _WIN32
 	return win_strerror (err, buf, bufsize);
-#else
+
 	char *p;
 	if (buf == NULL)
 		return NULL;
@@ -157,7 +156,6 @@ cherokee_strerror_r (int err, char *buf, size_t bufsize)
 	}
 
 	return p;
-#endif
 }
 
 
@@ -230,7 +228,6 @@ cherokee_sys_fdlimit_get (cuint_t *limit)
 ret_t
 cherokee_sys_fdlimit_set (cuint_t limit)
 {
-#ifndef _WIN32
 	int           re;
 	struct rlimit rl;
 
@@ -241,7 +238,6 @@ cherokee_sys_fdlimit_set (cuint_t limit)
 	if (re != 0) {
 		return ret_error;
 	}
-#endif
 
 	return ret_ok;
 }
@@ -853,11 +849,7 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 	 * poor utilization of the network.
 	 */
 
-#ifdef _WIN32
-	flags = enable;
-	re = ioctlsocket (fd, FIONBIO, (u_long) &flags);
-
-#elif defined(FIONBIO)
+#ifdef FIONBIO
 	/* Even though the right thing to do would be to use POSIX's
 	 * O_NONBLOCK, we are using FIONBIO here. It requires a single
 	 * syscall, while using O_NONBLOCK would require us to call
@@ -896,9 +888,6 @@ cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable)
 	int re;
 	int flags = 0;
 
-#ifdef _WIN32
-	re = ioctlsocket (fd, FIONBIO, (u_long *) &enable);
-#else
 	flags = fcntl (fd, F_GETFL, 0);
 	if (flags < 0) {
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_GETFL, fd);
@@ -911,7 +900,7 @@ cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable)
 		BIT_UNSET (flags, O_NONBLOCK);
 
 	re = fcntl (fd, F_SETFL, flags);
-#endif
+
 	if (re < 0) {
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_SETFL, fd, flags, "O_NONBLOCK");
 		return ret_error;
@@ -927,7 +916,6 @@ cherokee_fd_set_closexec (int fd)
 	int re;
 	int flags = 0;
 
-#ifndef _WIN32
 	flags = fcntl (fd, F_GETFD, 0);
 	if (flags < 0) {
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_GETFD, fd);
@@ -941,7 +929,6 @@ cherokee_fd_set_closexec (int fd)
 		LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_UTIL_F_SETFD, fd, flags, "FD_CLOEXEC");
 		return ret_error;
 	}
-#endif
 
 	return ret_ok;
 }
@@ -1657,11 +1644,7 @@ cherokee_fd_close (int fd)
 		return ret_error;
 	}
 
-#ifdef _WIN32
-	re = closesocket (fd);
-#else
 	re = close (fd);
-#endif
 
 	TRACE (ENTRIES",close_fd", "fd=%d re=%d\n", fd, re);
 	return (re == 0) ? ret_ok : ret_error;
@@ -1675,11 +1658,7 @@ cherokee_get_shell (const char **shell, const char **binary)
 
 	/* Set the shell path
 	 */
-#ifdef _WIN32
-	*shell = getenv("ComSpec");
-#else
 	*shell = "/bin/sh";
-#endif
 
 	/* Find the binary
 	 */
@@ -1756,11 +1735,8 @@ cherokee_mkstemp (cherokee_buffer_t *buffer, int *fd)
 {
 	int re;
 
-#ifdef _WIN32
-	re = cherokee_win32_mkstemp (buffer);
-#else
 	re = mkstemp (buffer->buf);
-#endif
+    
 	if (re < 0) return ret_error;
 
 	*fd = re;
@@ -2296,11 +2272,8 @@ cherokee_tmp_dir_copy (cherokee_buffer_t *buffer)
 
 	/* Read the system variable
 	 */
-#ifdef _WIN32
-	p = getenv("TEMP");
-#else
 	p = getenv("TMPDIR");
-#endif
+
 	if (p != NULL) {
 		cherokee_buffer_add (buffer, p, strlen(p));
 		return ret_ok;

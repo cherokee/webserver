@@ -50,16 +50,9 @@ typedef struct {
 	int               post_data_sent;    /* amount POSTed to the CGI */
 	int               pipeInput;         /* read from the CGI */
 	int               pipeOutput;        /* write to the CGI */
-
-#ifdef _WIN32
-	cherokee_buffer_t envp;
-	HANDLE            process;
-	HANDLE            thread;
-#else
 	char             *envp[ENV_VAR_NUM]; /* Environ variables for execve() */
 	int               envp_last;
 	pid_t             pid;               /* CGI pid */
-#endif
 } cherokee_handler_cgi_t;
 
 #define HDL_CGI(x)           ((cherokee_handler_cgi_t *)(x))

@@ -30,7 +30,7 @@ many concurrent connections, has a low memory footprint, and provides
 load balancing facilities. As such, it is suitable for usage among a
 wide variety of systems, from tiny embedded devices to huge enterprise
 grade infrastructures. It is also multi-platform, offering native
-performance for Unix, Linux and Windows systems.
+performance for Unix and Linux systems.
 
 By simply upgrading your existing web server to Cherokee, you can
 literally multiply your existing hardware's performance, extending its

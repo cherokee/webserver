@@ -42,14 +42,12 @@ ret_t fdpoll_kqueue_get_fdlimits (cuint_t *sys_fd_limit, cuint_t *fd_limit);
 ret_t fdpoll_port_get_fdlimits   (cuint_t *sys_fd_limit, cuint_t *fd_limit);
 ret_t fdpoll_poll_get_fdlimits   (cuint_t *sys_fd_limit, cuint_t *fd_limit);
 ret_t fdpoll_select_get_fdlimits (cuint_t *sys_fd_limit, cuint_t *fd_limit);
-ret_t fdpoll_win32_get_fdlimits  (cuint_t *sys_fd_limit, cuint_t *fd_limit);
 
 ret_t fdpoll_epoll_new  (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);
 ret_t fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);
 ret_t fdpoll_port_new   (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);
 ret_t fdpoll_poll_new   (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);
 ret_t fdpoll_select_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);
-ret_t fdpoll_win32_new  (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);
 
 
 struct cherokee_fdpoll {
