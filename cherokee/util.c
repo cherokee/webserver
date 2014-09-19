@@ -138,8 +138,6 @@ const char *month[13] = {
 char *
 cherokee_strerror_r (int err, char *buf, size_t bufsize)
 {
-	return win_strerror (err, buf, bufsize);
-
 	char *p;
 	if (buf == NULL)
 		return NULL;
