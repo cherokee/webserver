@@ -1,0 +1,114 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: How to cross compile Cherokee
+---------------------------------------
+
+[[linux2win32]]
+Cherokee-Win32 from Linux
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First of all, you will have to install the cross compiler:
+
+----
+# apt-get install mingw32 mingw32-binutils
+----
+
+Then, you'll have to install the pthread library:
+
+----
+$ cd /var/tmp
+$ mkdir pthread-win32
+$ cd pthread-win32
+$ wget ftp://sources.redhat.com/pub/pthreads-win32/pthreads-w32-2-8-0-release.exe
+$ unzip pthreads-w32-2-8-0-release.exe
+# cp ./Pre-built.2/lib/libpthreadGCE2.a /usr/i586-mingw32msvc/lib/libpthread.a
+# cp Pre-built.2/include/* /usr/i586-mingw32msvc/include/
+----
+
+And now, we are ready to compile it. We only have to set a few environment
+variables:
+
+----
+PATH=/usr/i586-mingw32msvc/bin:$PATH
+CC=i586-mingw32msvc-gcc
+LD=i586-mingw32msvc-ld
+AR=i586-mingw32msvc-ar
+RC=i586-mingw32msvc-windres
+----
+
+Check out the last development version of Cherokee:
+
+----
+$ git clone --recursive git://github.com/cherokee/webserver.git cherokee
+$ cd cherokee
+$ git submodule update --init #Not needed on Git >= 1.6.5
+----
+
+and execute a quite long "configure" command:
+
+----
+$ ac_cv_func_malloc_0_nonnull=yes   \
+  ac_cv_func_realloc_0_nonnull=yes  \
+./configure                         \
+  --host=i586-mingw32msvc           \
+  --prefix=/usr/i586-mingw32msvc    \
+  --disable-readdir_r               \
+  --disable-tls                     \
+  --enable-static-module=all        \
+  --enable-trace                    \
+  --enable-static                   \
+  --enable-shared=no                \
+  --enable-beta                     \
+  CC=i586-mingw32msvc-gcc
+----
+
+Once reached this point, we are ready to build it by simply typing:
+
+----
+$ make
+----
+
+
+[[osx2win32]]
+Cherokee-Win32 from OS X
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+First of all, you will have to install MinGW for OS X and to check out the
+latest version of the source code, then fetch, uncompress and install
+pthreads-win32:
+
+----
+unzip pthreads-w32-2-8-0-release.exe
+cp Pre-built.2/lib/libpthreadGCE2.a \
+     /usr/local/i386-mingw32-3.4.5/lib/libpthread.a
+cp Pre-built.2/include/* \
+         /usr/local/i386-mingw32-3.4.5/lib/gcc/*/*/include/
+----
+
+Then you will have to set a few environment variables:
+
+----
+         CC=i386-mingw32-gcc
+         LD=i386-mingw32-ld
+         AR=i386-mingw32-ar
+         RC=i386-mingw32-windres
+----
+
+and run the configuration script::
+
+----
+ac_cv_func_malloc_0_nonnull=yes           \
+ac_cv_func_realloc_0_nonnull=yes          \
+./configure                               \
+  --host=i386-mingw32                     \
+  --prefix=/usr/local/i386-mingw32-3.4.5/ \
+  --enable-static                         \
+  --enable-shared=no                      \
+  --enable-static-module=all              \
+  --disable-readdir_r                     \
+  --disable-tls                           \
+  --enable-beta                           \
+  --enable-trace                          \
+  CC=i386-mingw32-gcc
+----
+
