@@ -306,10 +306,6 @@ e('HANDLER_CGI_EXECUTE',
   title = "Could not execute '%s': %s",
   desc  = SYSTEM_ISSUE)
 
-e('HANDLER_CGI_CREATEPROCESS',
-  title = "CreateProcess error: error=%d",
-  desc  = SYSTEM_ISSUE)
-
 e('HANDLER_CGI_GET_HOSTNAME',
   title = "Error getting host name.",
   desc  = SYSTEM_ISSUE)
