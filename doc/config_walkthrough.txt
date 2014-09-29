@@ -202,8 +202,7 @@ placed in the upper side of the left panel, adjacent to the `Virtual
 Servers` label and the `Add New Virtual Server` button.
 
 While you are at it you should also append the following line to your
-`/etc/hosts` file (in Windows you will find this as
-`%WINDIR%\system32\drivers\etc\hosts`).
+`/etc/hosts` file.
 
 ----
 127.0.0.1       example.com example.net example.org

@@ -2217,14 +2217,6 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		goto error;
 	}
 
-#ifdef _WIN32
-	/* Prevent back-slashes in the request on Windows
-	 */
-	TRACE (ENTRIES, "Win32 req before: %s\n", conn->request.buf);
-	cherokee_buffer_swap_chars (&conn->request, '\\', '/');
-	TRACE (ENTRIES, "Win32 req after: %s\n", conn->request.buf);
-#endif
-
 	/* Short the path. It transforms the request:
 	 * /dir1/dir2/../file in /dir1/file
 	 */

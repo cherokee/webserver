@@ -578,9 +578,8 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	cherokee_buffer_add_va (&tmp, "exec %s", src->interpreter.buf);
 	TRACE (ENTRIES, "Spawn: /bin/sh -c \"exec %s\"\n", src->interpreter.buf);
 
-#ifndef _WIN32
 	child = fork();
-#endif
+
 	switch (child) {
 	case 0:
 		/* Change user if requested

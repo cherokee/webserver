@@ -28,29 +28,22 @@
 #include <config.h>
 #include <constants.h>
 
-#ifdef _WIN32
-# include "unix4win32.h"
-# include "win32_misc.h"
-#endif
-
 #include "common.h"
 #include "threading.h"
 #include "error_log.h"
 
-#ifndef _WIN32
-# if defined HAVE_ENDIAN_H
-#  include <endian.h>
-# elif defined HAVE_MACHINE_ENDIAN_H
-#  include <machine/endian.h>
-# elif defined HAVE_SYS_ENDIAN_H
-#  include <sys/endian.h>
-# elif defined HAVE_SYS_MACHINE_H
-#  include <sys/machine.h>
-# elif defined HAVE_SYS_ISA_DEFS_H
-#  include <sys/isa_defs.h>
-# else
-#  error "Can not include endian.h"
-# endif
+#if defined HAVE_ENDIAN_H
+# include <endian.h>
+#elif defined HAVE_MACHINE_ENDIAN_H
+# include <machine/endian.h>
+#elif defined HAVE_SYS_ENDIAN_H
+# include <sys/endian.h>
+#elif defined HAVE_SYS_MACHINE_H
+# include <sys/machine.h>
+#elif defined HAVE_SYS_ISA_DEFS_H
+# include <sys/isa_defs.h>
+#else
+# error "Can not include endian.h"
 #endif
 
 #include <stdio.h>
@@ -162,11 +155,7 @@
 #endif
 
 
-#ifdef _WIN32
-# define SOCK_ERRNO()      WSAGetLastError()
-#else
 # define SOCK_ERRNO()      errno
-#endif
 
 
 /* IMPORTANT:

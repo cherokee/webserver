@@ -1178,11 +1178,6 @@ cherokee_server_step (cherokee_server_t *srv)
 		srv->flcache_next = cherokee_bogonow_now + srv->flcache_lapse;
 	}
 
-#ifdef _WIN32
-	if (unlikely (cherokee_win32_shutdown_signaled (cherokee_bogonow_now)))
-		srv->wanna_exit = true;
-#endif
-
 	/* Gracefull restart:
 	 */
 	if (unlikely ((ret == ret_eof) &&
@@ -1773,7 +1768,6 @@ error:
 ret_t
 cherokee_server_daemonize (cherokee_server_t *srv)
 {
-#ifndef _WIN32
 	pid_t child_pid;
 
 	TRACE (ENTRIES, "server (%p) about to become evil", srv);
@@ -1795,7 +1789,6 @@ cherokee_server_daemonize (cherokee_server_t *srv)
 	default:
 		exit(0);
 	}
-#endif
 
 	UNUSED(srv);
 	return ret_ok;

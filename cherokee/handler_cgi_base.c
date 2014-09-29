@@ -244,22 +244,6 @@ cherokee_handler_cgi_base_free (cherokee_handler_cgi_base_t *cgi)
 }
 
 
-#ifdef _WIN32
-static void
-add_win32_systemroot_env (cherokee_handler_cgi_base_t              *cgi,
-                          cherokee_handler_cgi_base_add_env_pair_t  set_env_pair)
-{
-	char *root;
-
-	root = getenv("SYSTEMROOT");
-	if (!root)
-		return;
-
-	set_env (cgi, "SYSTEMROOT", root, strlen(root));
-}
-#endif
-
-
 ret_t
 cherokee_handler_cgi_base_build_basic_env (
         cherokee_handler_cgi_base_t              *cgi,
@@ -418,12 +402,6 @@ cherokee_handler_cgi_base_build_basic_env (
 	if (ret == ret_ok) {
 		set_env (cgi, "CONTENT_TYPE", tmp->buf, tmp->len);
 	}
-
-	/* SYSTEMROOT environment for Win32
-	 */
-#ifdef _WIN32
-	add_win32_systemroot_env (cgi, set_env_pair);
-#endif
 
 	/* Query string
 	 */

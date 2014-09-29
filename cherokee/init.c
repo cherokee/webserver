@@ -67,10 +67,6 @@ cherokee_init (void)
 	if (_cherokee_init)
 		return ret_ok;
 
-#ifdef _WIN32
-	init_win32();
-#endif
-
 	/* Init the tracing facility
 	 */
 	cherokee_trace_init();

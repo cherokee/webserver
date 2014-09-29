@@ -204,9 +204,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_SUBST(VERSION)
 
 dnl Initialize Libtool
-m4_ifdef([LT_INIT],
-  [LT_INIT([dlopen shared static win32-dll])],
-  [AC_LIBTOOL_DLOPEN])
+m4_ifdef([LT_INIT], [LT_INIT([dlopen shared static])], [AC_LIBTOOL_DLOPEN])
 
 dnl Paths
 AC_PROG_CC

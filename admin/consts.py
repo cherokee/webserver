@@ -137,8 +137,7 @@ POLL_METHODS = [
     ('kqueue', 'kqueue() - BSD, OS X'),
     ('ports',  'Solaris ports - >= 10'),
     ('poll',   'poll()'),
-    ('select', 'select()'),
-    ('win32',  'Win32')
+    ('select', 'select()')
 ]
 
 REDIR_SHOW = [

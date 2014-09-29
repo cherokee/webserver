@@ -72,14 +72,7 @@ CHEROKEE_BEGIN_DECLS
  */
 #define ERROR_MIN_BUFSIZE  64 /* min. buffer size */
 #define ERROR_MAX_BUFSIZE 512 /* max. buffer size */
-
-#ifdef _WIN32
-# define cherokee_stat(path,buf)   cherokee_win32_stat(path,buf)
-# define cherokee_lstat(path,buf)  cherokee_win32_stat(path,buf)
-# define cherokee_error            GetLastError()
-#else
-# define cherokee_error            errno
-#endif
+#define cherokee_error errno
 
 /* Missing functions
  */

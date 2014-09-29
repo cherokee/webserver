@@ -385,17 +385,9 @@ cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
 #endif
 
 
-#ifdef _WIN32
-# define CHEROKEE_EXPORT __declspec(dllexport)
-#else
 # define CHEROKEE_EXPORT
-#endif
 
-#ifdef _WIN32
-# define SLASH '\\'
-#else
 # define SLASH '/'
-#endif
 
 #define CHEROKEE_CRASH             \
 	do {                       \
