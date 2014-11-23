@@ -75,6 +75,7 @@ typedef struct {
 	cherokee_balancer_t           *balancer;
 	cherokee_handler_file_props_t *file_props;
 	time_t                         expiration_time;
+	time_t                         rerender;
 	int                            timeout;
 } cherokee_handler_tile_props_t;
 

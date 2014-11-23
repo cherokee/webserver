@@ -36,6 +36,7 @@ NOTE_TIMEOUT = N_("A value in seconds after which we don't wait for the renderin
 NOTE_EXPIRATION_TIME = N_("""How long the older tile should be cached.<br />
 The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 10m.
 """)
+NOTE_RERENDER = N_("If the file is older than this modification time, we will send a render request.")
 
 URL_APPLY = '/plugin/tile/apply'
 HELPS     = []
@@ -54,7 +55,8 @@ class Plugin_tile (Handler.PluginHandler):
         # GUI
         table = CTK.PropsAuto (URL_APPLY)
         table.Add (_("Static Tile Expiration"), CTK.TextCfg('%s!expiration'%(key), True), _(NOTE_EXPIRATION_TIME))
-        table.Add (_("Render Timeout"),   CTK.TextCfg('%s!timeout'%(key), True), _(NOTE_TIMEOUT))
+        table.Add (_("Force Rerender"), CTK.TextCfg('%s!rerender'%(key), True), _(NOTE_RERENDER))
+        table.Add (_("Render Timeout"), CTK.TextCfg('%s!timeout'%(key), True), _(NOTE_TIMEOUT))
 	self += CTK.Indenter (table)
 
         # Load Balancing

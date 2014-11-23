@@ -72,6 +72,7 @@ cherokee_handler_tile_configure (cherokee_config_node_t *conf, cherokee_server_t
 
 		n->timeout = 3;
 		n->expiration_time = 0;
+		n->rerender = 0;
 
 		*_props = MODULE_PROPS(n);
 	}
@@ -90,6 +91,8 @@ cherokee_handler_tile_configure (cherokee_config_node_t *conf, cherokee_server_t
 			props->timeout = atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "expiration")) {
 			props->expiration_time = cherokee_eval_formated_time (&subconf->val);
+		} else if (equal_buf_str (&subconf->key, "rerender")) {
+			props->rerender = cherokee_eval_formated_time (&subconf->val);
 		} else {
 			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
 			return ret_error;
@@ -156,11 +159,15 @@ cherokee_handler_tile_free (cherokee_handler_tile_t *hdl)
 }
 
 ret_t
-check_metatile (cherokee_handler_tile_t *hdl) {
+check_metatile (cherokee_handler_tile_t *hdl, time_t rerender) {
 	hdl->fd = open(hdl->path, O_RDONLY);
 	if (hdl->fd >= 0) {
 		struct stat st;
 		if (stat(hdl->path, &st) >= 0) {
+			if (st.st_mtim.tv_sec < rerender) {
+				close(hdl->fd);
+				return ret_eagain; /* trigger rerender if its too old */
+			}
 			hdl->size = st.st_size;
 			hdl->base = mmap(NULL, hdl->size, PROT_READ, MAP_PRIVATE, hdl->fd, 0);
 			if (hdl->base != (void*)(-1)) {
@@ -216,6 +223,7 @@ cherokee_handler_tile_init (cherokee_handler_tile_t *hdl)
 	ret_t ret;
 	size_t  len;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_handler_tile_props_t *props = HDL_TILE_PROPS(hdl);
 
 	if (hdl->mystatus == parsing) {
 		char   *from, *to;
@@ -282,7 +290,7 @@ cherokee_handler_tile_init (cherokee_handler_tile_t *hdl)
 		snprintf(hdl->path, PATH_LEN, "%s/%s/%d/%u/%u.meta", HANDLER_VSRV(hdl)->root.buf, hdl->cmd.xmlname, hdl->cmd.z, x, y);
 		#endif
 
-		ret = check_metatile (hdl);
+		ret = check_metatile (hdl, props->rerender);
 		if (ret == ret_ok) return ret;
 	}
 
@@ -359,7 +367,7 @@ besteffort:
 	conn->expiration_time = HDL_TILE_PROPS(hdl)->expiration_time;
 
 succesful:
-	ret = check_metatile(hdl);
+	ret = check_metatile(hdl, 0); /* lets hope something is out there */
 
 	if (ret == ret_error) {
 		conn->error_code = http_moved_temporarily;
