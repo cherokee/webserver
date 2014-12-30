@@ -63,11 +63,8 @@ cherokee_handler_zeromq_init (cherokee_handler_zeromq_t *hdl)
 	}
 
 	ret = cherokee_encoder_init (hdl->encoder, conn);
-	/* TODO: this is a great idea for KV78turbo, but being able to configure
-	 * the reply (KV6, 15, 17) sounds like a good idea too.
-	 */
-	conn->error_code = http_no_content;
-	return ret_error;
+
+	return ret_ok;
 }
 
 ret_t
@@ -161,6 +158,11 @@ cherokee_handler_zeromq_read_post (cherokee_handler_zeromq_t *hdl)
 ret_t
 cherokee_handler_zeromq_add_headers (cherokee_handler_zeromq_t *hdl, cherokee_buffer_t *buffer)
 {
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+
+	HANDLER(hdl)->support |= hsupport_error;
+	conn->error_code = http_no_content;
+
 	return ret_ok;
 }
 
