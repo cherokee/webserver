@@ -59,6 +59,7 @@ typedef struct {
 typedef struct {
 	cherokee_handler_t	base;
 	cherokee_encoder_t *encoder;
+	cherokee_buffer_t	reply;
 	cherokee_buffer_t	output;
 	cherokee_buffer_t	encoded;
 #ifdef LIBXML_PUSH_ENABLED
