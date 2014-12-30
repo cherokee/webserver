@@ -214,48 +214,59 @@ cherokee_handler_tmi_read_post (cherokee_handler_tmi_t *hdl)
 #endif
 	}
 
+	{
+		char time_buf[21];
+		size_t len;
+
+		len = strftime(time_buf, 21, "%Y-%m-%dT%H:%M:%SZ", &cherokee_bogonow_tmgmt);
+		cherokee_buffer_add_buffer (&hdl->reply, &HANDLER_TMI_PROPS(hdl)->reply);
+		cherokee_buffer_add (&hdl->reply, time_buf, len);
+
+		#ifdef LIBXML_PUSH_ENABLED
+		if (hdl->validate_xml) {
+			cherokee_buffer_add_str (&hdl->reply, "</tmi8:Timestamp><tmi8:ResponseCode>");
+
+			if (hdl->inflated && hdl->z_ret != Z_OK) {
+				cherokee_buffer_add_str(&hdl->reply, "PE");
+			} else {
+				xmlParseChunk(hdl->ctxt, NULL, 0, 1);
+				if (hdl->ctxt->wellFormed) {
+					cherokee_buffer_add_str(&hdl->reply, "OK");
+				} else {
+					cherokee_buffer_add_str(&hdl->reply, "SE");
+				}
+			}
+
+			cherokee_buffer_add_str (&hdl->reply, "</tmi8:ResponseCode></tmi8:VV_TM_RES>");
+
+			return ret_ok;
+		}
+		#endif
+		cherokee_buffer_add_str (&hdl->reply, "</tmi8:Timestamp><tmi8:ResponseCode>OK</tmi8:ResponseCode></tmi8:VV_TM_RES>");
+	}
+
 	return ret_ok;
 }
 
 ret_t
 cherokee_handler_tmi_add_headers (cherokee_handler_tmi_t *hdl, cherokee_buffer_t *buffer)
 {
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	
 	cherokee_buffer_add_str (buffer, "Content-Type: application/xml" CRLF);
+
+        if (cherokee_connection_should_include_length(conn)) {
+                HANDLER(hdl)->support |= hsupport_length;
+                cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->reply.len);
+        }
+
 	return ret_ok;
 }
 
 ret_t
 cherokee_handler_tmi_step (cherokee_handler_tmi_t *hdl, cherokee_buffer_t *buffer)
 {
-	char time_buf[21];
-	size_t len;
-
-	len = strftime(time_buf, 21, "%Y-%m-%dT%H:%S:%MZ", &cherokee_bogonow_tmgmt);
-	cherokee_buffer_add_buffer (buffer, &HANDLER_TMI_PROPS(hdl)->reply);
-	cherokee_buffer_add (buffer, time_buf, len);
-
-#ifdef LIBXML_PUSH_ENABLED
-	if (hdl->validate_xml) {
-		cherokee_buffer_add_str (buffer, "</tmi8:Timestamp><tmi8:ResponseCode>");
-
-		if (hdl->inflated && hdl->z_ret != Z_OK) {
-			cherokee_buffer_add_str(buffer, "PE");
-		} else {
-			xmlParseChunk(hdl->ctxt, NULL, 0, 1);
-			if (hdl->ctxt->wellFormed) {
-				cherokee_buffer_add_str(buffer, "OK");
-			} else {
-				cherokee_buffer_add_str(buffer, "SE");
-			}
-		}
-
-		cherokee_buffer_add_str (buffer, "</tmi8:ResponseCode></tmi8:VV_TM_RES>");
-
-		return ret_eof_have_data;
-	}
-#endif
-	cherokee_buffer_add_str (buffer, "</tmi8:Timestamp><tmi8:ResponseCode>OK</tmi8:ResponseCode></tmi8:VV_TM_RES>");
-
+	cherokee_buffer_add_buffer (buffer, &hdl->reply);
 	return ret_eof_have_data;
 }
 
@@ -263,6 +274,7 @@ static ret_t
 tmi_free (cherokee_handler_tmi_t *hdl)
 {
 	cherokee_handler_tmi_props_t *props = HANDLER_TMI_PROPS(hdl);
+	cherokee_buffer_mrproper (&hdl->reply);
 	cherokee_buffer_mrproper (&hdl->output);
 	cherokee_buffer_mrproper (&hdl->encoded);
 
@@ -302,6 +314,8 @@ cherokee_handler_tmi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_p
 	 */
 	HANDLER(n)->support     = hsupport_nothing;
 
+	cherokee_buffer_init (&n->reply);
+	cherokee_buffer_ensure_size (&n->reply, 512);
 	cherokee_buffer_init (&n->output);
 	cherokee_buffer_ensure_size (&n->output, 2097152);
 	cherokee_buffer_init (&n->encoded);
