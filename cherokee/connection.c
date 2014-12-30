@@ -523,10 +523,11 @@ out:
 		conn->keepalive = 0;
 
 	} else if (! http_type_300 (conn->error_code) &&   /* 3xx */
+		   (conn->error_code != http_no_content) &&  /* 204 */
 		   (conn->error_code != http_gone) &&      /* 410 */
 		   (conn->error_code != http_not_found))   /* 404 */
 	{
-		conn->keepalive = 0;
+		conn->keepalive = 1;
 	}
 
 	ret = ret_ok;
@@ -996,7 +997,9 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	 * has to be turned off.
 	 */
 	if (conn->keepalive != 0) {
-		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length) &&
+		      http_code_with_body (conn->error_code)
+		) {
 			if (! conn->chunked_encoding) {
 				conn->keepalive = 0;
 			}
