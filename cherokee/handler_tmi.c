@@ -333,6 +333,7 @@ cherokee_handler_tmi_configure (cherokee_config_node_t  *conf, cherokee_server_t
 	cherokee_list_t              *i;
 	cherokee_handler_tmi_props_t *props;
 	cherokee_plugin_info_t       *info = NULL;
+	const char *xsd;
 
 	/* Instance a new property object
 	 */
@@ -406,13 +407,28 @@ cherokee_handler_tmi_configure (cherokee_config_node_t  *conf, cherokee_server_t
 		return ret_error;
 	}
 
+	if (cherokee_buffer_cmp_str(&props->dossiername, "KV17cvlinfo") == 0) {
+		xsd = "kv17";
+	} else
+	if (cherokee_buffer_cmp_str(&props->dossiername, "KV15messages") == 0) {
+		xsd = "kv15";
+	} else
+	if (cherokee_buffer_cmp_str(&props->dossiername, "KV6posinfo") == 0) {
+		xsd = "kv6";
+	} else
+	if (cherokee_buffer_cmp_str(&props->dossiername, "KV5allocinfo") == 0) {
+		xsd = "kv5";
+	} else {
+		xsd = "kv6";
+	}
+
 	cherokee_buffer_clean (&props->reply);
 	cherokee_buffer_add_va(&props->reply, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-	                                      "<tmi8:VV_TM_RES xmlns:tmi8=\"http://bison.connekt.nl/tmi8/kv6/msg\">"
+	                                      "<tmi8:VV_TM_RES xmlns:tmi8=\"http://bison.connekt.nl/tmi8/%s/msg\">"
 	                                      "<tmi8:SubscriberID>%s</tmi8:SubscriberID>"
 	                                      "<tmi8:Version>%s</tmi8:Version>"
 	                                      "<tmi8:DossierName>%s</tmi8:DossierName>"
-	                                      "<tmi8:Timestamp>", props->subscriberid.buf, props->version.buf, props->dossiername.buf);
+	                                      "<tmi8:Timestamp>", xsd, props->subscriberid.buf, props->version.buf, props->dossiername.buf);
 
 	return ret_ok;
 }
