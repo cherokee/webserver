@@ -1125,6 +1125,14 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 			} else
 				goto unknown;
 			break;
+		case 'P':
+			if (header_equals ("Proxy", header_range, begin, header_len)) {
+				/* Ignore invalid header causing HTTPOXY vulnerability
+				 */
+				ret = ret_ok;
+			} else
+				goto unknown;
+			break;
 		case 'R':
 			if (header_equals ("Range", header_range, begin, header_len)) {
 				ret = add_known_header (hdr, header_range, val_offs, val_len);
