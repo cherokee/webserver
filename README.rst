@@ -20,7 +20,10 @@ either by default or by running the following on Debian-based systems::
 
     sudo apt-get install autoconf automake libtool
 
-or, for Yum-based systems, such as RedHat, CentOS or Fedora::
+You also may need to install the ``libtool-bin`` package, depending on the
+distribution and architecture.
+
+For Yum-based systems, such as RedHat, CentOS or Fedora::
 
     sudo yum install autoconf automake libtool
 
