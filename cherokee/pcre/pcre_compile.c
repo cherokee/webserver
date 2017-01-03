@@ -3223,13 +3223,12 @@ for (;; ptr++)
     can cause firstbyte to be set. Otherwise, there can be no first char if
     this item is first, whatever repeat count may follow. In the case of
     reqbyte, save the previous value for reinstating. */
-
+    BOOL test_char_class = class_charcount == 1;
 #ifdef SUPPORT_UTF8
-    if (class_charcount == 1 && !class_utf8 &&
+    test_char_class = test_char_class && !class_utf8 &&
       (!utf8 || !negate_class || class_lastchar < 128))
-#else
-    if (class_charcount == 1)
 #endif
+    if (test_char_class)
       {
       zeroreqbyte = reqbyte;
 
