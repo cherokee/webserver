@@ -705,6 +705,7 @@ main (int argc, char *argv[])
 	if (ret != ret_ok)
 		exit (EXIT_ERROR);
 
+	setpgid(0, 0);
 	set_signals();
 	single_time = is_single_execution (argc, argv);
 

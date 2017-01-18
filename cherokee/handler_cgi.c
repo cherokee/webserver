@@ -215,7 +215,7 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 		while (true) {
 			do {
 				pid = waitpid (cgi->pid, NULL, WNOHANG);
-			} while ((pid == 1) && (errno == EINTR));
+			} while ((pid == -1) && (errno == EINTR));
 
 			if (pid > 0) {
 				/* Ok */
