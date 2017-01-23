@@ -35,10 +35,14 @@
 
 CHEROKEE_BEGIN_DECLS
 
+#ifdef __cplusplus
+typedef bool cherokee_boolean_t;
+#else
 typedef enum {
 	false = 0,
 	true  = 1
 } cherokee_boolean_t;
+#endif
 
 typedef enum {
 	ret_no_sys          = -4,

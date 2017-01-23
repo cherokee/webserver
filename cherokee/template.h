@@ -35,7 +35,7 @@
 
 CHEROKEE_BEGIN_DECLS
 
-typedef ret_t (* cherokee_tem_repl_func_t) (void *template, void *token, cherokee_buffer_t *output, void *param);
+typedef ret_t (* cherokee_tem_repl_func_t) (void *template_, void *token, cherokee_buffer_t *output, void *param);
 
 typedef struct {
 	cherokee_buffer_t         text;
