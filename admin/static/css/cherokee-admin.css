@@ -423,6 +423,8 @@ img.icon_chooser_selected {
     background: #235699;
     background: -webkit-gradient(linear, left top, left bottom, from(#5e8bc9), to(#235699));
     background: -moz-linear-gradient(top,  #396aae,  #235699);
+    background: -o-linear-gradient(top,  #396aae,  #235699);
+    background: linear-gradient(top,  #396aae,  #235699);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#396aae', endColorstr='#235699');
     -moz-box-shadow: inset 1px 1px 0 #7798c2;
     -webkit-box-shadow: inset 1px 1px 0 #7798c2;
@@ -435,6 +437,8 @@ img.icon_chooser_selected {
     background: #24589b;
     background: -webkit-gradient(linear, left top, left bottom, from(#24589b), to(#24589b));
     background: -moz-linear-gradient(top,  #24589b,  #24589b);
+    background: -o-linear-gradient(top,  #24589b,  #24589b);
+    background: linear-gradient(top,  #24589b,  #24589b);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#24589b', endColorstr='#24589b');
     -moz-box-shadow: inset 1px 1px 0 #24589b;
     -webkit-box-shadow: inset 1px 1px 0 #24589b;
@@ -584,6 +588,8 @@ img.icon_chooser_selected {
     background: #2fa42c;
     background: -webkit-gradient(linear, left top, left bottom, from(#7ac25a), to(#2fa42c));
     background: -moz-linear-gradient(top,  #7ac25a,  #2fa42c);
+    background: -o-linear-gradient(top,  #7ac25a,  #2fa42c);
+    background: linear-gradient(top,  #7ac25a,  #2fa42c);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ac25a', endColorstr='#2fa42c');
     -moz-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4);
     -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4);
@@ -600,6 +606,8 @@ img.icon_chooser_selected {
     background: #cc0000;
     background: -webkit-gradient(linear, left top, left bottom, from(#ff8888), to(#cc0000));
     background: -moz-linear-gradient(top,  #ff8888,  #cc0000);
+    background: -o-linear-gradient(top,  #ff8888,  #cc0000);
+    background: linear-gradient(top,  #ff8888,  #cc0000);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8888', endColorstr='#cc0000');
     -moz-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4);
     -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4);
