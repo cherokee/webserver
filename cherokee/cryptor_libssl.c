@@ -238,13 +238,13 @@ cherokee_cryptor_libssl_find_vserver (SSL *ssl,
 	/* SSL_set_SSL_CTX() only change certificates. We need to
 	 * changes more options by hand.
 	 */
-	SSL_set_options(ssl, SSL_CTX_get_options(ssl->ctx));
+	SSL_set_options(ssl, SSL_CTX_get_options(ctx));
 
 	if ((SSL_get_verify_mode(ssl) == SSL_VERIFY_NONE) ||
 	    (SSL_num_renegotiations(ssl) == 0)) {
 
-		SSL_set_verify(ssl, SSL_CTX_get_verify_mode(ssl->ctx),
-		               SSL_CTX_get_verify_callback(ssl->ctx));
+		SSL_set_verify(ssl, SSL_CTX_get_verify_mode(ctx),
+		               SSL_CTX_get_verify_callback(ctx));
 	}
 
 	return ret_ok;
@@ -1332,10 +1332,15 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 
 	/* Init OpenSSL
 	 */
-	OPENSSL_config (NULL);
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+	OPENSSL_config(NULL);
 	SSL_library_init();
 	SSL_load_error_strings();
 	OpenSSL_add_all_algorithms();
+#else
+	OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
+	OPENSSL_init_ssl(OPENSSL_INIT_LOAD_SSL_STRINGS, NULL);
+#endif
 
 	/* Ensure PRNG has been seeded with enough data
 	 */
