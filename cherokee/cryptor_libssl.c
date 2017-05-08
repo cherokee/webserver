@@ -790,11 +790,13 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	}
 #endif
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	/* Disable Ciphers renegotiation (CVE-2009-3555)
 	 */
 	if (cryp->session->s3) {
 		cryp->session->s3->flags |= SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS;
 	}
+#endif
 
 	return ret_ok;
 }
