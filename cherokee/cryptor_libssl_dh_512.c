@@ -2,6 +2,9 @@
 #ifndef HEADER_DH_H
 #include <openssl/dh.h>
 #endif
+
+#include "cryptor_libssl_compat.h"
+
 static DH *get_dh512()
 {
 	static unsigned char dhp_512[]={
@@ -21,8 +24,7 @@ static DH *get_dh512()
 	if ((dh=DH_new()) == NULL) return(NULL);
 	dhp_bn = BN_bin2bn(dhp_512, sizeof (dhp_512), NULL);
 	dhg_bn = BN_bin2bn(dhg_512, sizeof (dhg_512), NULL);
-	if (dhp_bn == NULL || dhg_bn == NULL ||
-		!DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
+	if (!DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
 		DH_free(dh);
 		BN_free(dhp_bn);
 		BN_free(dhg_bn);
