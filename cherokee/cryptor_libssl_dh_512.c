@@ -3,8 +3,6 @@
 #include <openssl/dh.h>
 #endif
 
-#include "cryptor_libssl_compat.h"
-
 static DH *get_dh512()
 {
 	static unsigned char dhp_512[]={

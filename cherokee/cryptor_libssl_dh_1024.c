@@ -3,8 +3,6 @@
 #include <openssl/dh.h>
 #endif
 
-#include "cryptor_libssl_compat.h"
-
 static DH *get_dh1024()
 {
 	static unsigned char dhp_1024[]={

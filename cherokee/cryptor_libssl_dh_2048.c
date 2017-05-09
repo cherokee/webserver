@@ -3,8 +3,6 @@
 #include <openssl/dh.h>
 #endif
 
-#include "cryptor_libssl_compat.h"
-
 static DH *get_dh2048()
 {
 	static unsigned char dhp_2048[]={

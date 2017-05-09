@@ -53,6 +53,8 @@ static DH *dh_param_1024 = NULL;
 static DH *dh_param_2048 = NULL;
 static DH *dh_param_4096 = NULL;
 
+#include "cryptor_libssl_compat.h"
+
 #include "cryptor_libssl_dh_512.c"
 #include "cryptor_libssl_dh_1024.c"
 #include "cryptor_libssl_dh_2048.c"
