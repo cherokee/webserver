@@ -356,7 +356,7 @@ verify_trace_cb(int preverify_ok, X509_STORE_CTX *x509_store)
 		char *ptr;
 		X509_print (mem, peer_certificate);
 		BIO_get_mem_data(mem, &ptr);
-		TRACE (ENTRIES, "SSL: %s", ptr);
+		TRACE (ENTRIES, "SSL: %s\n", ptr);
 		BIO_free (mem);
 	}
 
@@ -785,7 +785,7 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 		if (cipher) {
 			SSL_CIPHER_description (cipher, &buf[0], buf_size-1);
 
-			TRACE (ENTRIES, "SSL: %s, %sREUSED, Ciphers: %s",
+			TRACE (ENTRIES, "SSL: %s, %sREUSED, Ciphers: %s\n",
 			       SSL_get_version(cryp->session),
 			       SSL_session_reused(cryp->session)? "" : "Not ", &buf[0]);
 		}

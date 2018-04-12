@@ -378,7 +378,7 @@ process_chunk (cherokee_post_t   *post,
 	/* Very unlikely, but still possible
 	 */
 	if (! cherokee_buffer_is_empty(in)) {
-		TRACE (ENTRIES, "There are %d left-over bytes in the post buffer -> incoming header", in->len);
+		TRACE (ENTRIES, "There are %d left-over bytes in the post buffer -> incoming header\n", in->len);
 #if 0
 		cherokee_buffer_add_buffer (&conn->incoming_header, in);
 		cherokee_buffer_clean (in);
