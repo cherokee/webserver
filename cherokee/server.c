@@ -1770,7 +1770,7 @@ cherokee_server_daemonize (cherokee_server_t *srv)
 {
 	pid_t child_pid;
 
-	TRACE (ENTRIES, "server (%p) about to become evil", srv);
+	TRACE (ENTRIES, "server (%p) about to become evil\n", srv);
 
 	child_pid = fork();
 	switch (child_pid) {
