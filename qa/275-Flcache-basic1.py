@@ -57,3 +57,6 @@ class Test (TestCollection):
     def Prepare (self, www):
         # Create the directory
         self.local_dir = self.Mkdir (www, DIR)
+
+    def Precondition (self):
+        return not self.is_ssl

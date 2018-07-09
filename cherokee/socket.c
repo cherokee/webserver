@@ -198,11 +198,8 @@ cherokee_socket_close (cherokee_socket_t *socket)
 
 	/* Close the socket
 	 */
-#ifdef _WIN32
-	ret = closesocket (socket->socket);
-#else
+
 	ret = cherokee_fd_close (socket->socket);
-#endif
 
 	/* Clean up
 	 */
@@ -921,46 +918,6 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 
 	if (likely (socket->is_tls != TLS))
 	{
-#ifdef _WIN32
-		int i;
-		size_t total;
-
-		for (i = 0, re = 0, total = 0; i < vector_len; i++) {
-			if (vector[i].iov_len == 0)
-				continue;
-			do {
-				re = send (SOCKET_FD(socket), vector[i].iov_base, vector[i].iov_len, 0);
-			} while ((re == -1) && (errno == EINTR));
-
-			if (re < 0)
-				break;
-
-			total += re;
-
-			/* if it is a partial send, then stop sending data
-			 */
-			if (re != vector[i].iov_len)
-				break;
-		}
-		*pcnt_written = total;
-
-		/* if we have sent at least one byte,
-		 * then return OK.
-		 */
-		if (likely (total > 0))
-			return ret_ok;
-
-		if (re == 0) {
-			int err = SOCK_ERRNO();
-			if (i == vector_len)
-				return ret_ok;
-			/* Retry later.
-			 */
-			return ret_eagain;
-		}
-
-#else /* ! WIN32 */
-
 		do {
 			re = writev (SOCKET_FD(socket), vector, vector_len);
 		} while ((re == -1) && (errno == EINTR));
@@ -983,7 +940,7 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 			 */
 			return ret_ok;
 		}
-#endif
+
 		if (re < 0) {
 			int err = SOCK_ERRNO();
 
@@ -1356,7 +1313,6 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 ret_t
 cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hostname)
 {
-#ifndef _WIN32
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv = NULL;
 
@@ -1394,10 +1350,6 @@ cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hos
 	}
 
 	return ret_ok;
-#else
-	SHOULDNT_HAPPEN;
-	return ret_no_sys;
-#endif
 }
 
 

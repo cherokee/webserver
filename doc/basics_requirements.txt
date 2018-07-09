@@ -53,8 +53,8 @@ several tools and libraries.
   targeted by our developers are 2.4, 2.5 and 2.6. Anything other than
   that is not guaranteed to work at the moment.
 
-* If you are building Cherokee in a non-POSIX compliant platform such
-  as Windows, you will need a POSIX threads implementation. Although
+* If you are building Cherokee in a non-POSIX compliant platform,
+  you will need a POSIX threads implementation. Although
   you can disable the usage at compilation time and do without this,
   it will have a dramatic impact in scalability.
 

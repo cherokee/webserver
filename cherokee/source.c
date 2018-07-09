@@ -205,7 +205,7 @@ long_path:
 	 * in addition to at the top of this routine.
 	 */
 	ret = cherokee_socket_connect (sock);
-	if (ret == ret_deny && src->addr_current->ai_next != NULL) {
+	if (ret == ret_deny && src->addr_current && src->addr_current->ai_next != NULL) {
 		src->addr_current = src->addr_current->ai_next;
 		cherokee_socket_close(sock);
 		goto long_path;

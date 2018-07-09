@@ -23,14 +23,10 @@
  */
 
 #include "common-internal.h"
-
-#ifndef _WIN32
-# include <sys/socket.h>
-# include <netinet/in.h>
-# include <arpa/inet.h>
-# include <netdb.h>
-#endif
-
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 #include "resolv_cache.h"
 #include "socket_lowlevel.h"
 #include "util.h"

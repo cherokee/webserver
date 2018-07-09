@@ -325,8 +325,25 @@ run-tests.py \
 301-XForwardedFor-4.py \
 302-DirIndex3.py \
 304-Dirlist-TransferEncoding.py \
-305-Error-ContentLength.py
+305-Error-ContentLength.py \
+306-NoContent-keepalive.py
 
-test:
+if USE_OPENSSL
+ssl-keys/set-1.pem: ssl-keys/set-1.key openssl.cnf
+	@OPENSSL_BIN@ req -batch -config openssl.cnf -new -x509 -key ssl-keys/set-1.key -out ssl-keys/set-1.pem -days 1095
+ssl-keys/set-1.key:
+	mkdir -p ssl-keys
+	@OPENSSL_BIN@ genrsa -out ssl-keys/set-1.key 2048
+test-ssl: ssl-keys/set-1.pem
+	./run-tests.py -s
+test: test-non-ssl test-ssl
+
+DISTCLEANFILES += ssl-keys/set-1.pem ssl-keys/set-1.key
+
+else
+test: test-non-ssl
+endif
+
+test-non-ssl:
 	python -m compileall .
 	./run-tests.py

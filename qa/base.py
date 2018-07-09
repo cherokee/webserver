@@ -213,7 +213,7 @@ class TestBase:
         None
 
     def CustomTest (self):
-	   return 0
+        return 0
 
     def Run (self, host, port):
         self._do_request(host, port)
@@ -410,6 +410,7 @@ class TestCollection (TestBase):
         test.nobody         = self.nobody
         test.php_conf       = self.php_conf
         test.proxy_suitable = self.proxy_suitable
+        test.is_ssl         = self.is_ssl
 
         self.tests.append (test)
         return test

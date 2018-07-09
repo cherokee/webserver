@@ -1615,8 +1615,9 @@ dwriter.h \
 dwriter.c \
 limiter.h \
 limiter.c \
-spawner.h \
-spawner.c \
+services.h \
+services-common.c \
+services-client.c \
 collector.h \
 collector.c \
 header_op.h \
@@ -1761,8 +1762,8 @@ libcherokee-server.la
 #
 # Cherokee
 #
-cherokee_SOURCES = main.c
-cherokee_LDADD   = $(PTHREAD_LIBS) $(RT_LIBS)
+cherokee_SOURCES = main.c services-common.c services-server.c
+cherokee_LDADD   = $(PTHREAD_LIBS) $(RT_LIBS) libcherokee-base.la
 
 #
 # Cherokee admin

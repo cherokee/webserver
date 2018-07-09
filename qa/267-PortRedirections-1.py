@@ -15,7 +15,13 @@ class Test (TestBase):
                                 "Host: %(HOST)s:%(PORT)s\r\n" %(g) +\
                                 "Connection: close\r\n"
         self.expected_error   = 301
-        self.expected_content = ['Location: http://%(HOST)s:%(PORT)s/%(DIR)s/'%(g)]
 
     def Prepare (self, www):
         self.Mkdir (www, DIR)
+
+        # is_ssl is only defined after initialisation
+        g = globals()
+        if self.is_ssl:
+            self.expected_content = ['Location: https://%(HOST)s:%(PORT)s/%(DIR)s/'%(g)]
+        else:
+            self.expected_content = ['Location: http://%(HOST)s:%(PORT)s/%(DIR)s/'%(g)]

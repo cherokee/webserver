@@ -54,10 +54,6 @@ http-cherokee.xml.pre
 XMLS = \
 $(XMLS_PRE:.xml.pre=.xml)
 
-
-WINDOWS_PORT_FILES = \
-config.h.win32
-
 CLEANFILES = \
 $(XMLS) \
 $(CONFS) \
@@ -86,7 +82,6 @@ $(XMLS_PRE)                     \
 $(CONFS_PRE)                    \
 $(CONSTANTS_PRE)                \
 $(man_MANS)                     \
-$(WINDOWS_PORT_FILES)           \
 $(COMPILATION_TESTS)
 
 all-local: $(CONSTANTS) $(CONFS) $(XMLS) add_user_group

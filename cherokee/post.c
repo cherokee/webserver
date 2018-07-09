@@ -325,6 +325,7 @@ process_chunk (cherokee_post_t   *post,
 
 		/* Read the length
 		*/
+		errno = 0;
 		content_size = (size_t) strtoul (begin, NULL, 16);
 		if (unlikely (errno != 0)) {
 			return ret_error;
@@ -378,7 +379,7 @@ process_chunk (cherokee_post_t   *post,
 	/* Very unlikely, but still possible
 	 */
 	if (! cherokee_buffer_is_empty(in)) {
-		TRACE (ENTRIES, "There are %d left-over bytes in the post buffer -> incoming header", in->len);
+		TRACE (ENTRIES, "There are %d left-over bytes in the post buffer -> incoming header\n", in->len);
 #if 0
 		cherokee_buffer_add_buffer (&conn->incoming_header, in);
 		cherokee_buffer_clean (in);

@@ -53,6 +53,8 @@ static DH *dh_param_1024 = NULL;
 static DH *dh_param_2048 = NULL;
 static DH *dh_param_4096 = NULL;
 
+#include "cryptor_libssl_compat.h"
+
 #include "cryptor_libssl_dh_512.c"
 #include "cryptor_libssl_dh_1024.c"
 #include "cryptor_libssl_dh_2048.c"
@@ -238,13 +240,13 @@ cherokee_cryptor_libssl_find_vserver (SSL *ssl,
 	/* SSL_set_SSL_CTX() only change certificates. We need to
 	 * changes more options by hand.
 	 */
-	SSL_set_options(ssl, SSL_CTX_get_options(ssl->ctx));
+	SSL_set_options(ssl, SSL_CTX_get_options(ctx));
 
 	if ((SSL_get_verify_mode(ssl) == SSL_VERIFY_NONE) ||
 	    (SSL_num_renegotiations(ssl) == 0)) {
 
-		SSL_set_verify(ssl, SSL_CTX_get_verify_mode(ssl->ctx),
-		               SSL_CTX_get_verify_callback(ssl->ctx));
+		SSL_set_verify(ssl, SSL_CTX_get_verify_mode(ctx),
+		               SSL_CTX_get_verify_callback(ctx));
 	}
 
 	return ret_ok;
@@ -354,7 +356,7 @@ verify_trace_cb(int preverify_ok, X509_STORE_CTX *x509_store)
 		char *ptr;
 		X509_print (mem, peer_certificate);
 		BIO_get_mem_data(mem, &ptr);
-		TRACE (ENTRIES, "SSL: %s", ptr);
+		TRACE (ENTRIES, "SSL: %s\n", ptr);
 		BIO_free (mem);
 	}
 
@@ -459,6 +461,24 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	if (! cryp->allow_SSLv2) {
 		options |= SSL_OP_NO_SSLv2;
 	}
+
+	if (! cryp->allow_SSLv3) {
+		options |= SSL_OP_NO_SSLv3;
+	}
+
+	if (! cryp->allow_TLSv1) {
+		options |= SSL_OP_NO_TLSv1;
+	}
+
+#if OPENSSL_VERSION_NUMBER >= 0x10001000L
+	if (! cryp->allow_TLSv1_1) {
+		options |= SSL_OP_NO_TLSv1_1;
+	}
+
+	if (! cryp->allow_TLSv1_2) {
+		options |= SSL_OP_NO_TLSv1_2;
+	}
+#endif
 
 #ifdef SSL_OP_CIPHER_SERVER_PREFERENCE
 	if (vsrv->cipher_server_preference) {
@@ -765,18 +785,20 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 		if (cipher) {
 			SSL_CIPHER_description (cipher, &buf[0], buf_size-1);
 
-			TRACE (ENTRIES, "SSL: %s, %sREUSED, Ciphers: %s",
+			TRACE (ENTRIES, "SSL: %s, %sREUSED, Ciphers: %s\n",
 			       SSL_get_version(cryp->session),
 			       SSL_session_reused(cryp->session)? "" : "Not ", &buf[0]);
 		}
 	}
 #endif
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	/* Disable Ciphers renegotiation (CVE-2009-3555)
 	 */
 	if (cryp->session->s3) {
 		cryp->session->s3->flags |= SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS;
 	}
+#endif
 
 	return ret_ok;
 }
@@ -1312,10 +1334,15 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 
 	/* Init OpenSSL
 	 */
-	OPENSSL_config (NULL);
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+	OPENSSL_config(NULL);
 	SSL_library_init();
 	SSL_load_error_strings();
 	OpenSSL_add_all_algorithms();
+#else
+	OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
+	OPENSSL_init_ssl(OPENSSL_INIT_LOAD_SSL_STRINGS, NULL);
+#endif
 
 	/* Ensure PRNG has been seeded with enough data
 	 */

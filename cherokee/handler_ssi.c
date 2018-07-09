@@ -485,7 +485,7 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 	char                  *ext;
 	cherokee_buffer_t     *mime = NULL;
 	cherokee_server_t     *srv  = HANDLER_SRV(hdl);
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);;
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
 	/* MIME type
 	 */

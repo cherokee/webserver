@@ -98,7 +98,7 @@ static const uint64_t constant_512[80] = {
 };
 
 void
-SHA512_Init (SHA512_CTX *m)
+cherokee_SHA512_Init (CHEROKEE_SHA512_CTX *m)
 {
 	m->sz[0] = 0;
 	m->sz[1] = 0;
@@ -113,7 +113,7 @@ SHA512_Init (SHA512_CTX *m)
 }
 
 static void
-calc (SHA512_CTX *m, uint64_t *in)
+calc (CHEROKEE_SHA512_CTX *m, uint64_t *in)
 {
 	uint64_t AA, BB, CC, DD, EE, FF, GG, HH;
 	uint64_t data[80];
@@ -191,7 +191,7 @@ struct x64{
 #endif
 
 void
-SHA512_Update (SHA512_CTX *m, const void *v, size_t len)
+cherokee_SHA512_Update (CHEROKEE_SHA512_CTX *m, const void *v, size_t len)
 {
 	const unsigned char *p = v;
 	size_t old_sz = m->sz[0];
@@ -228,7 +228,7 @@ SHA512_Update (SHA512_CTX *m, const void *v, size_t len)
 }
 
 void
-SHA512_Final (SHA512_CTX *m, void *res)
+cherokee_SHA512_Final (CHEROKEE_SHA512_CTX *m, void *res)
 {
 	unsigned char zeros[128 + 16];
 	unsigned offset = (m->sz[0] / 8) % 128;
@@ -253,7 +253,7 @@ SHA512_Final (SHA512_CTX *m, void *res)
 	zeros[dstart+2] = (m->sz[1] >> 40) & 0xff;
 	zeros[dstart+1] = (m->sz[1] >> 48) & 0xff;
 	zeros[dstart+0] = (m->sz[1] >> 56) & 0xff;
-	SHA512_Update (m, zeros, dstart + 16);
+	cherokee_SHA512_Update (m, zeros, dstart + 16);
 	{
 		int i;
 		unsigned char *r = (unsigned char*)res;

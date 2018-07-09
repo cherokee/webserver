@@ -453,6 +453,25 @@ close_active_connection (cherokee_thread_t     *thread,
 
 
 static void
+close_active_broken_connection (cherokee_thread_t     *thread,
+                                cherokee_connection_t *conn,
+                                cherokee_boolean_t     reset)
+{
+	/* Purge flcache in case of a broken connection.
+	 */
+	cherokee_avl_flcache_node_t *entry = conn->flcache.avl_node_ref;
+	if ((CONN_VSRV(conn)->flcache != NULL) && entry) {
+		cherokee_flcache_conn_clean (&conn->flcache);
+		cherokee_flcache_del_entry (CONN_VSRV(conn)->flcache, entry);
+	}
+
+	/* Close active connection
+	 */
+	close_active_connection(thread, conn, reset);
+}
+
+
+static void
 maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
 	/* CONNECTION CLOSE: If it isn't a keep-alive connection, it
@@ -1336,7 +1355,7 @@ process_active_connections (cherokee_thread_t *thd)
 					continue;
 
 				case ret_error:
-					close_active_connection (thd, conn, true);
+					close_active_broken_connection (thd, conn, true);
 					continue;
 
 				default:
@@ -1365,7 +1384,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_eof:
 				case ret_error:
 				default:
-					close_active_connection (thd, conn, false);
+					close_active_broken_connection (thd, conn, false);
 					continue;
 				}
 				break;
@@ -1381,7 +1400,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_eof:
 				case ret_error:
 				default:
-					close_active_connection (thd, conn, false);
+					close_active_broken_connection (thd, conn, false);
 					continue;
 				}
 				break;
@@ -1394,7 +1413,7 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 
 			case ret_error:
-				close_active_connection (thd, conn, false);
+				close_active_broken_connection (thd, conn, false);
 				continue;
 
 			default:

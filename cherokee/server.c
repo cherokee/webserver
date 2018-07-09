@@ -25,8 +25,8 @@
 #include "common-internal.h"
 #include "server-protected.h"
 #include "server.h"
+#include "services.h"
 #include "bind.h"
-#include "spawner.h"
 #include "error_log.h"
 
 #include <fcntl.h>
@@ -272,9 +272,9 @@ cherokee_server_free (cherokee_server_t *srv)
 	 */
 	cherokee_avl_mrproper (AVL_GENERIC(&srv->sources), (cherokee_func_free_t)cherokee_source_free);
 
-	/* Spawn mechanism
+	/* Services mechanism
 	 */
-	cherokee_spawner_free();
+	cherokee_services_client_free();
 
 	/* Threads
 	 */
@@ -1002,12 +1002,6 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		}
 	}
 
-	/* Spawning mechanism
-	 */
-	if (cherokee_spawn_shared.mem == NULL) {
-		cherokee_spawner_init();
-	}
-
 	/* Initialize loggers
 	 */
 	ret = initialize_loggers (srv);
@@ -1183,11 +1177,6 @@ cherokee_server_step (cherokee_server_t *srv)
 		flcaches_cleanup (srv);
 		srv->flcache_next = cherokee_bogonow_now + srv->flcache_lapse;
 	}
-
-#ifdef _WIN32
-	if (unlikely (cherokee_win32_shutdown_signaled (cherokee_bogonow_now)))
-		srv->wanna_exit = true;
-#endif
 
 	/* Gracefull restart:
 	 */
@@ -1779,10 +1768,9 @@ error:
 ret_t
 cherokee_server_daemonize (cherokee_server_t *srv)
 {
-#ifndef _WIN32
 	pid_t child_pid;
 
-	TRACE (ENTRIES, "server (%p) about to become evil", srv);
+	TRACE (ENTRIES, "server (%p) about to become evil\n", srv);
 
 	child_pid = fork();
 	switch (child_pid) {
@@ -1801,7 +1789,6 @@ cherokee_server_daemonize (cherokee_server_t *srv)
 	default:
 		exit(0);
 	}
-#endif
 
 	UNUSED(srv);
 	return ret_ok;

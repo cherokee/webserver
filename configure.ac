@@ -25,7 +25,7 @@ AC_PREREQ([2.68])
 dnl Version
 m4_define([cherokee_major_version], [1])
 m4_define([cherokee_minor_version], [2])
-m4_define([cherokee_micro_version], [103])
+m4_define([cherokee_micro_version], [104])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
@@ -204,9 +204,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_SUBST(VERSION)
 
 dnl Initialize Libtool
-m4_ifdef([LT_INIT],
-  [LT_INIT([dlopen shared static win32-dll])],
-  [AC_LIBTOOL_DLOPEN])
+m4_ifdef([LT_INIT], [LT_INIT([dlopen shared static])], [AC_LIBTOOL_DLOPEN])
 
 dnl Paths
 AC_PROG_CC
@@ -1103,6 +1101,8 @@ if test "$WITH_OPENSSL" != "no"; then
 	   AC_SUBST(LIBSSL_CFLAGS)
 
 	   AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
+	   AC_PATH_PROG([OPENSSL_BIN], [openssl])
+	   AC_SUBST(OPENSSL_BIN)
     fi
 fi
 AC_MSG_CHECKING(for libssl)

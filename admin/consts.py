@@ -138,8 +138,7 @@ POLL_METHODS = [
     ('kqueue', 'kqueue() - BSD, OS X'),
     ('ports',  'Solaris ports - >= 10'),
     ('poll',   'poll()'),
-    ('select', 'select()'),
-    ('win32',  'Win32')
+    ('select', 'select()')
 ]
 
 REDIR_SHOW = [
@@ -227,7 +226,7 @@ CLIENT_CERTS = [
     ('',         N_('Skip')),
     ('tolerate', N_('Tolerate')),
     ('accept',   N_('Accept')),
-    ('required', N_('Require'))
+    ('require',  N_('Require'))
 ]
 
 COLLECTORS = [
