@@ -43,6 +43,13 @@ def check_images():
             error = True
 
     for img in img_files:
+        if '-CENSORED' in img:
+            uc_img = img.replace("-CENSORED", "")
+            if not uc_img in img_files:
+                print "ERROR: %s: uncensored variant not found" %(uc_img)
+                error = True
+            else:
+                img = uc_img
         if not img in img_refs:
             print "ERROR: %s: No longer used" %(img)
             error = True

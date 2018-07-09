@@ -4,7 +4,9 @@ Cherokee Web Server
 Web site
 --------
 
-Visit our main website for the latest updates: http://www.cherokee-project.com/
+Visit our main website for the latest updates: www.cherokee-project.com_.
+
+.. _www.cherokee-project.com: http://www.cherokee-project.com
 
 Compiling from source
 ---------------------
@@ -18,7 +20,10 @@ either by default or by running the following on Debian-based systems::
 
     sudo apt-get install autoconf automake libtool
 
-or, for Yum-based systems, such as RedHat, CentOS or Fedora::
+You also may need to install the ``libtool-bin`` package, depending on the
+distribution and architecture.
+
+For Yum-based systems, such as RedHat, CentOS or Fedora::
 
     sudo yum install autoconf automake libtool
 
@@ -26,15 +31,9 @@ or, for Pacman-based systems such as ArchLinux::
 
     sudo pacman -Sy autoconf automake libtool
 
-To check out the code from GitHub, including all dependencies that are
-specified as Git submodules, do the following::
-
-    git clone --recursive http://github.com/cherokee/webserver.git
-
-or, if using a version of Git < 1.6.5, run::
+To check out the code from GitHub, do the following::
 
     git clone http://github.com/cherokee/webserver.git
-    git submodule update --init
 
 Once cloned, ``cd`` into the resulting source directory and run 
 ``./autogen.sh`` to set up the environment and generate ``./configure``::
@@ -157,14 +156,6 @@ How to build everyhing statically
 
     ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all
 
-
-How to compile it on Windows
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-::
-
-    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --enable-beta --enable-trace
-
 How to build a MacOS X binary package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -182,13 +173,6 @@ Development
     ./autogen.sh --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta --enable-trace --enable-backtraces --enable-maintainer-mode
     make V=1 CFLAGS="-ggdb3 -O0" -j8
 
-How to cross compile the Win32 version
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* From Linux: http://alobbs.com/news/1201
-* From MacOS: http://alobbs.com/news/1299
-* From Win32: http://unixwars.com/2008/07/17/c/
-
 How to create a self signed certificate for TLS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -201,7 +185,7 @@ How to create a release .tar.gz
 
 ::
 
-    git clone --recursive http://github.com/cherokee/webserver.git
+    git clone http://github.com/cherokee/webserver.git
     cd webserver
     ./autogen.sh
     make dist-gzip

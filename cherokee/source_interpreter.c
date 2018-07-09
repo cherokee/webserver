@@ -28,7 +28,7 @@
 #include "connection-protected.h"
 #include "thread.h"
 #include "bogotime.h"
-#include "spawner.h"
+#include "services.h"
 #include "logger_writer.h"
 
 #include <sys/types.h>
@@ -504,8 +504,8 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src,
 
 
 static ret_t
-_spawn_shm (cherokee_source_interpreter_t *src,
-            cherokee_logger_writer_t *error_writer)
+_spawn_services (cherokee_source_interpreter_t *src,
+		 cherokee_logger_writer_t *error_writer)
 {
 	ret_t   ret;
 	char  **envp;
@@ -529,15 +529,17 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 
 	/* Invoke the spawn mechanism
 	 */
-	ret = cherokee_spawner_spawn (&src->interpreter,
-	                              &src->change_user_name,
-	                              src->change_user,
-	                              src->change_group,
-	                              &src->chroot,
-	                              src->env_inherited,
-	                              envp,
-	                              error_writer,
-	                              &src->pid);
+	ret = cherokee_services_client_spawn (&src->interpreter,
+					      &src->change_user_name,
+					      src->change_user,
+					      src->change_group,
+					      &src->chroot,
+					      &src->chroot,
+					      src->env_inherited,
+					      envp,
+					      error_writer,
+					      &src->pid,
+					      NULL);
 	switch (ret) {
 	case ret_ok:
 		break;
@@ -576,9 +578,8 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	cherokee_buffer_add_va (&tmp, "exec %s", src->interpreter.buf);
 	TRACE (ENTRIES, "Spawn: /bin/sh -c \"exec %s\"\n", src->interpreter.buf);
 
-#ifndef _WIN32
 	child = fork();
-#endif
+
 	switch (child) {
 	case 0:
 		/* Change user if requested
@@ -687,13 +688,13 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 
 	/* Try with SHM first
 	 */
-	if ((src->spawn_type == spawn_shm) ||
+	if ((src->spawn_type == spawn_services) ||
 	    (src->spawn_type == spawn_unknown))
 	{
-		ret = _spawn_shm (src, error_writer);
+		ret = _spawn_services (src, error_writer);
 		if (ret == ret_ok) {
 			if (src->spawn_type == spawn_unknown) {
-				src->spawn_type = spawn_shm;
+				src->spawn_type = spawn_services;
 			}
 
 			return ret_ok;
@@ -701,7 +702,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		} else if (ret == ret_eagain) {
 			return ret_eagain;
 		}
-		if (src->spawn_type == spawn_shm) {
+		if (src->spawn_type == spawn_services) {
 			return ret_error;
 		}
 	}

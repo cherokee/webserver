@@ -306,10 +306,6 @@ e('HANDLER_CGI_EXECUTE',
   title = "Could not execute '%s': %s",
   desc  = SYSTEM_ISSUE)
 
-e('HANDLER_CGI_CREATEPROCESS',
-  title = "CreateProcess error: error=%d",
-  desc  = SYSTEM_ISSUE)
-
 e('HANDLER_CGI_GET_HOSTNAME',
   title = "Error getting host name.",
   desc  = SYSTEM_ISSUE)
@@ -808,17 +804,21 @@ e('TEMPLATE_NO_TOKEN',
   desc  = "It seems that the template uses an undefined token.")
 
 
-# cherokee/spawner.c
+# cherokee/services-client.c
 #
-e('SPAWNER_TMP_INIT',
-  title   = "Could not open temporal file '%s': ${errno}",
-  desc    = "It looks like the cherokee supervisor is not running, or it could not create the required temporal file.",
-  show_bt = False)
+e('CLIENT_ALREADY_INIT',
+  title   = "Could not initialise service client, already initialised.",
+  desc    = CODING_BUG)
 
-e('SPAWNER_UNLOCK_SEMAPHORE',
-  title = "Could not unlock spawning semaphore %d: ${errno}",
-  desc  = SYSTEM_ISSUE)
+# cherokee/services-server.c
+#
+e('SERVER_ALREADY_INIT',
+  title   = "Could not initialise service server, already initialised.",
+  desc    = CODING_BUG)
 
+e('SERVER_CANNOT_SOCKETPAIR',
+  title   = "Could not create socket pair for service server: ${errno}",
+  desc    = SYSTEM_ISSUE)
 
 # cherokee/http.c
 #

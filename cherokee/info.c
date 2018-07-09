@@ -101,9 +101,6 @@ cherokee_info_build_print (cherokee_server_t *srv)
 #ifdef HAVE_PORT
 	printf ("ports ");
 #endif
-#ifdef HAVE_WIN32_SELECT
-	printf ("win32-select ");
-#endif
 #ifdef HAVE_SELECT
 	printf ("select ");
 #endif

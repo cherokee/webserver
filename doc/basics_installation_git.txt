@@ -99,4 +99,3 @@ Once you have done this, you are now ready to proceed with the standard
 compilation process for your platform:
 
 * link:basics_installation_unix.html[Unix installation]
-* link:basics_installation_windows.html[Windows installation]

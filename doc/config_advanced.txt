@@ -38,8 +38,8 @@ Connections
 
 * Polling Method: This affects the internal file descriptor polling
   method among the ones supported by the OS. The full list of options
-  is `epoll()`, `kqueue`, `poll()`, `Solaris ports`, `select()` and
-  `Win32`. Only the alternatives available for your specific
+  is `epoll()`, `kqueue`, `poll()`, `Solaris ports` and `select()`.
+  Only the alternatives available for your specific
   architectures are shown. If you don't know what this is or how this
   affects performance, just choose `Automatic`. This will choose the
   most efficient one among the present at any given time.

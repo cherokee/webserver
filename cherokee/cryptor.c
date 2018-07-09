@@ -49,7 +49,7 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 	 */
 	cryp->timeout_handshake = TIMEOUT_DEFAULT;
 	cryp->allow_SSLv2       = false;
-	cryp->allow_SSLv3       = true;
+	cryp->allow_SSLv3       = false;
 	cryp->allow_TLSv1       = true;
 	cryp->allow_TLSv1_1     = true;
 	cryp->allow_TLSv1_2     = true;

@@ -4,6 +4,7 @@
  *
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *      Daniel Silverstone <dsilvers@digital-scurf.org>
  *
  * Copyright (C) 2001-2014 Alvaro Lopez Ortega
  *
@@ -23,93 +24,55 @@
  */
 
 #include "common-internal.h"
-#include "spawner.h"
+#include "services.h"
 #include "logger_writer.h"
 #include "util.h"
 
 #include <unistd.h>
 #include <signal.h>
-#include <sys/sem.h>
 
-#define SEM_LAUNCH_START 0
-#define SEM_LAUNCH_READY 1
-#define SEM_LAUNCH_TOTAL 2
+#define ENTRIES "services,spawn,spawner"
 
-#define ENTRIES "spawn,spawner"
-
-cherokee_shm_t             cherokee_spawn_shared;
-int                        cherokee_spawn_sem;
-static cherokee_boolean_t _active                 = true;
-CHEROKEE_MUTEX_T          (spawning_mutex);
+static int _fd = -1;
+CHEROKEE_MUTEX_T          (client_mutex);
 
 ret_t
-cherokee_spawner_set_active (cherokee_boolean_t active)
+cherokee_services_client_init (int client_fd)
 {
-	_active = active;
-	return ret_ok;
-}
-
-ret_t
-cherokee_spawner_init (void)
-{
-#ifdef HAVE_SYSV_SEMAPHORES
-	ret_t             ret;
-	cherokee_buffer_t name = CHEROKEE_BUF_INIT;
-
-	if (! _active) {
-		return ret_ok;
+	if (_fd != -1) {
+		LOG_ERRNO (EBUSY, cherokee_err_warning, CHEROKEE_ERROR_CLIENT_ALREADY_INIT);
+		return ret_error;
 	}
 
 	/* Monitor mutex */
-	CHEROKEE_MUTEX_INIT (&spawning_mutex, CHEROKEE_MUTEX_FAST);
+	CHEROKEE_MUTEX_INIT (&client_mutex, CHEROKEE_MUTEX_FAST);
 
-	/* Shared memory */
-	cherokee_buffer_add_va (&name, TMPDIR "/cherokee-spawner-%d", getppid());
+	_fd = client_fd;
 
-	ret = cherokee_shm_init (&cherokee_spawn_shared);
-	if (ret != ret_ok) {
-		goto error;
-	}
+	cherokee_fd_set_closexec(_fd);
 
-	ret = cherokee_shm_map (&cherokee_spawn_shared, &name);
-	if (ret != ret_ok) {
-		goto error;
-	}
-
-	/* Semaphore */
-	cherokee_spawn_sem = semget (getppid(), 0, 0);
-	if (cherokee_spawn_sem < 0) {
-		goto error;
-	}
-
-	TRACE (ENTRIES",sem", "Got semaphore %d\n", cherokee_spawn_sem);
-
-	cherokee_buffer_mrproper (&name);
 	return ret_ok;
-
-error:
-	LOG_ERRNO (errno, cherokee_err_warning, CHEROKEE_ERROR_SPAWNER_TMP_INIT, name.buf);
-	cherokee_buffer_mrproper (&name);
-	return ret_error;
-#else
-	return ret_not_found;
-#endif
 }
 
 
 ret_t
-cherokee_spawner_free (void)
+cherokee_services_client_free (void)
 {
-	CHEROKEE_MUTEX_DESTROY (&spawning_mutex);
+	if (_fd == -1)
+		return ret_ok;
 
-	cherokee_shm_mrproper (&cherokee_spawn_shared);
+	CHEROKEE_MUTEX_DESTROY (&client_mutex);
+
+	cherokee_fd_close (_fd);
+	_fd = -1;
+
 	return ret_ok;
 }
 
 
 static ret_t
 write_logger (cherokee_buffer_t        *buf,
-              cherokee_logger_writer_t *error_writer)
+	      cherokee_logger_writer_t *error_writer)
 {
 	int val;
 
@@ -146,60 +109,25 @@ nothing:
 }
 
 
-static ret_t
-do_sem_op (int sem_ref, int sem_num, int sem_op)
-{
-	int           re;
-	struct sembuf so;
-
-	do {
-		so.sem_num = sem_num;
-		so.sem_op  = sem_op;
-		so.sem_flg = 0;
-
-		errno = 0;
-		re = semop (sem_ref, &so, 1);
-		if (re >= 0) {
-			return ret_ok;
-		}
-	} while ((re < 0) && (errno == EINTR));
-
-	LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SPAWNER_UNLOCK_SEMAPHORE, sem_ref);
-	return ret_error;
-
-}
-
-static ret_t
-sem_unlock (int sem_ref, int sem_num)
-{
-	return do_sem_op (sem_ref, sem_num, 1);
-}
-
-static ret_t
-sem_adquire (int sem_ref, int sem_num)
-{
-	return do_sem_op (sem_ref, sem_num, -1);
-}
-
-
 ret_t
-cherokee_spawner_spawn (cherokee_buffer_t         *binary,
-                        cherokee_buffer_t         *user,
-                        uid_t                      uid,
-                        gid_t                      gid,
-                        cherokee_buffer_t         *chroot,
-                        int                        env_inherited,
-                        char                     **envp,
-                        cherokee_logger_writer_t  *error_writer,
-                        pid_t                     *pid_ret)
+cherokee_services_client_spawn (cherokee_buffer_t         *binary,
+                                cherokee_buffer_t         *user,
+                                uid_t                      uid,
+                                gid_t                      gid,
+                                cherokee_buffer_t         *chroot,
+                                cherokee_buffer_t         *chdir,
+                                int                        env_inherited,
+                                char                     **envp,
+                                cherokee_logger_writer_t  *error_writer,
+                                pid_t                     *pid_ret,
+                                cherokee_services_fdmap_t *fd_map)
 {
-#ifdef HAVE_SYSV_SEMAPHORES
 	char             **n;
-	int               *pid_shm;
-	int                pid_prev;
+	int                pid_new;
 	int                k;
 	int                phase;
 	int                envs     = 0;
+	ret_t              ret;
 	cherokee_buffer_t  tmp      = CHEROKEE_BUF_INIT;
 
 #define ALIGN4(buf)                                    \
@@ -210,8 +138,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 
 	/* Check it's initialized
 	 */
-	if ((! _active) ||
-	    (cherokee_spawn_shared.mem == NULL))
+	if (_fd == -1)
 	{
 		TRACE (ENTRIES, "Spawner is not active. Returning: %s\n", binary->buf);
 		return ret_deny;
@@ -219,7 +146,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 
 	/* Lock the monitor mutex
 	 */
-	k = CHEROKEE_MUTEX_TRY_LOCK (&spawning_mutex);
+	k = CHEROKEE_MUTEX_TRY_LOCK (&client_mutex);
 	if (k) {
 		return ret_eagain;
 	}
@@ -227,10 +154,13 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	/* Build the string
 	 * The first character of each block is a mark.
 	 */
-	cherokee_buffer_ensure_size (&tmp, SPAWN_SHARED_LEN);
+	cherokee_buffer_ensure_size (&tmp, SERVICES_MESSAGE_MAX_SIZE);
+
+	phase = (int)service_id_spawn_request;
+	cherokee_buffer_add        (&tmp, (char *)&phase, sizeof(int));
 
 	/* 1.- Executable */
-	phase = 0xF0;
+	phase = service_magic_executable;
 	cherokee_buffer_add        (&tmp, (char *)&phase, sizeof(int));
 	cherokee_buffer_add        (&tmp, (char *)&binary->len,   sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, binary);
@@ -238,7 +168,7 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	ALIGN4 (tmp);
 
 	/* 2.- UID & GID */
-	phase = 0xF1;
+	phase = service_magic_uid_gid;
 	cherokee_buffer_add        (&tmp, (char *)&phase, sizeof(int));
 	cherokee_buffer_add        (&tmp, (char *)&user->len, sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, user);
@@ -249,25 +179,33 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 	cherokee_buffer_add (&tmp, (char *)&gid, sizeof(gid_t));
 
 	/* 3.- Chroot directory */
-	phase = 0xF2;
+	phase = service_magic_chroot;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 	cherokee_buffer_add        (&tmp, (char *)&chroot->len, sizeof(int));
 	cherokee_buffer_add_buffer (&tmp, chroot);
 	cherokee_buffer_add_char   (&tmp, '\0');
 	ALIGN4(tmp);
 
-	/* 4.- Environment */
-	phase = 0xF3;
+	/* 4.- Chdir directory */
+	phase = service_magic_chdir;
+	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
+	cherokee_buffer_add        (&tmp, (char *)&chdir->len, sizeof(int));
+	cherokee_buffer_add_buffer (&tmp, chdir);
+	cherokee_buffer_add_char   (&tmp, '\0');
+	ALIGN4(tmp);
+
+	/* 5.- Environment */
+	phase = service_magic_environment;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
-	for (n=envp; *n; n++) {
+	for (n = envp; *n; n++) {
 		envs ++;
 	}
 
 	cherokee_buffer_add (&tmp, (char *)&env_inherited, sizeof(int));
 	cherokee_buffer_add (&tmp, (char *)&envs, sizeof(int));
 
-	for (n=envp; *n; n++) {
+	for (n = envp; *n; n++) {
 		int len = strlen(*n);
 		cherokee_buffer_add      (&tmp, (char *)&len, sizeof(int));
 		cherokee_buffer_add      (&tmp, *n, len);
@@ -275,61 +213,85 @@ cherokee_spawner_spawn (cherokee_buffer_t         *binary,
 		ALIGN4(tmp);
 	}
 
-	/* 5.- Error log */
-	phase = 0xF4;
+	/* 6.- Error log */
+	phase = service_magic_error_log;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
 
 	write_logger (&tmp, error_writer);
 	ALIGN4 (tmp);
 
-	/* 6.- PID (will be rewritten by the other side) */
-	phase = 0xF5;
+	/* 7.- PID (will be closed by the other side if not -1) */
+	phase = service_magic_pid;
 	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
+	cherokee_buffer_add (&tmp, (char *)pid_ret, sizeof(int));
 
-	pid_shm = (int *) (((char *)cherokee_spawn_shared.mem) + tmp.len);
-	k        = *pid_ret;
-	pid_prev = *pid_ret;
-	cherokee_buffer_add (&tmp, (char *)&k, sizeof(int));
+	/* 8.- FD Map */
+	phase = service_magic_fdmap;
+	cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
+	if (fd_map != NULL) {
+		int fd = 3;
+		cherokee_buffer_add (&tmp, (char *)&fd,sizeof(int));
+		fd = 0;
+		cherokee_buffer_add (&tmp, (char *)&fd, sizeof(int));
+		fd = 1;
+		cherokee_buffer_add (&tmp, (char *)&fd, sizeof(int));
+		fd = 2;
+		cherokee_buffer_add (&tmp, (char *)&fd, sizeof(int));
+	} else {
+		phase = 0;
+		cherokee_buffer_add (&tmp, (char *)&phase, sizeof(int));
+	}
 
-	/* Copy it to the shared memory
+	/* Send it to the services server in the main cherokee process
 	 */
-	if (unlikely (tmp.len > SPAWN_SHARED_LEN)) {
+	if (unlikely (tmp.len > SERVICES_MESSAGE_MAX_SIZE)) {
 		goto error;
 	}
 
-	memcpy (cherokee_spawn_shared.mem, tmp.buf, tmp.len);
+	ret = cherokee_services_send(_fd, &tmp, fd_map);
 	cherokee_buffer_mrproper (&tmp);
 
-	/* Wake up the spawning thread
-	 */
-	sem_unlock (cherokee_spawn_sem, SEM_LAUNCH_START);
+	if (ret != ret_ok) {
+		goto error;
+	}
+
+	cherokee_buffer_ensure_size (&tmp, SERVICES_MESSAGE_MAX_SIZE);
 
 	/* Wait for the PID
 	 */
-	sem_adquire (cherokee_spawn_sem, SEM_LAUNCH_READY);
+	ret = cherokee_services_receive(_fd, &tmp, NULL);
 
-	if (*pid_shm == -1) {
+	if (ret != ret_ok) {
+		goto error;
+	}
+
+	if (tmp.len != (sizeof(int) * 2)) {
+		goto error;
+	}
+
+	if (*((int *)tmp.buf) != service_id_spawn_reply)
+		goto error;
+
+	pid_new = *(((int *)tmp.buf)+1);
+
+	if (pid_new == -1) {
 		TRACE(ENTRIES, "Could not get the PID of: '%s'\n", binary->buf);
 		goto error;
 	}
 
-	if (*pid_shm == pid_prev) {
-		TRACE(ENTRIES, "Could not the new PID, previously it was %d\n", pid_prev);
+	if (*pid_ret == pid_new) {
+		TRACE(ENTRIES, "Could not the new PID, previously it was %d\n", *pid_ret);
 		goto error;
 	}
 
-	TRACE(ENTRIES, "Successfully launched PID=%d\n", *pid_shm);
-	*pid_ret = *pid_shm;
+	TRACE(ENTRIES, "Successfully launched PID=%d\n", pid_new);
+	*pid_ret = pid_new;
 
-	CHEROKEE_MUTEX_UNLOCK (&spawning_mutex);
+	CHEROKEE_MUTEX_UNLOCK (&client_mutex);
 	return ret_ok;
 
 error:
-	CHEROKEE_MUTEX_UNLOCK (&spawning_mutex);
+	CHEROKEE_MUTEX_UNLOCK (&client_mutex);
 	return ret_error;
-#else
-	return ret_not_found;
-
-#endif /* HAVE_SYSV_SEMAPHORES */
 }
 
