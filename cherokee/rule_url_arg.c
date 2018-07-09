@@ -42,6 +42,11 @@ check_argument (cherokee_rule_url_arg_t *rule,
 {
 	int re;
 
+	if (value == NULL) {
+		TRACE (ENTRIES, "Empty parameter value\n");
+		return ret_not_found;
+	}
+
 	/* Check whether it matches
 	 */
 	re = pcre_exec (rule->pcre, NULL,
