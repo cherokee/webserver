@@ -309,6 +309,7 @@ process_chunk (cherokee_post_t   *post,
 		}
 
 		if (unlikely (p+2 > end)) {
+			cherokee_buffer_clean (in);
 			return ret_ok;
 		}
 
@@ -350,6 +351,7 @@ process_chunk (cherokee_post_t   *post,
 			if (post->chunked.retransmit) {
 				cherokee_buffer_add_str (out, "0" CRLF);
 			}
+			p += 2; /* CRLF */
 			begin = p;
 			break;
 		}
