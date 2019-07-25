@@ -1343,8 +1343,8 @@ escape_with_table (cherokee_buffer_t *buffer,
                    uint32_t          *is_char_escaped)
 {
 	char *t;
-	const char *s,*s_next;
-	char *end;
+	const unsigned char *s,*s_next;
+	unsigned char *end;
 	cuint_t        n_escape    = 0;
 	static char    hex_chars[] = "0123456789abcdef";
 
