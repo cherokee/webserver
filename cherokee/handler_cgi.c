@@ -289,6 +289,12 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 	char *entry;
 
+	/* Make sure we can store the header
+	 */
+	if (cgi->envp_last >= ENV_VAR_NUM) {
+		return;
+	}
+
 	/* Build the new envp entry
 	 */
 	if (name == NULL)
