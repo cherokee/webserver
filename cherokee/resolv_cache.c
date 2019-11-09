@@ -297,7 +297,7 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
 
 	/* Copy it to the socket object
 	 */
-	ret = cherokee_socket_update_from_addrinfo (sock, addr, 0);
+	ret = cherokee_socket_update_from_addrinfo (sock, addr);
 	if (ret != ret_ok) {
 		return ret;
 	}
