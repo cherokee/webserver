@@ -288,10 +288,12 @@ cherokee_services_client_spawn (cherokee_buffer_t         *binary,
 	*pid_ret = pid_new;
 
 	CHEROKEE_MUTEX_UNLOCK (&client_mutex);
+	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 
 error:
 	CHEROKEE_MUTEX_UNLOCK (&client_mutex);
+	cherokee_buffer_mrproper (&tmp);
 	return ret_error;
 }
 
