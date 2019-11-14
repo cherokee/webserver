@@ -1497,6 +1497,14 @@ cherokee_buffer_add_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 	if (src->buf[src->len] != '\0')
 		src->buf[src->len]  = '\0';
 
+	/* Verify there are no embedded '\0'.
+	 */
+	p0 = src->buf;
+	for (p1 = p0; *p1 != '\0'; ++p1);
+
+	if (unlikely ((cuint_t)(p1 - src->buf) != src->len))
+		return ret_error;
+
 	/* Verify if string has to be escaped.
 	 */
 	if ((p0 = strpbrk (src->buf, "<>&\"")) == NULL) {
@@ -1526,11 +1534,6 @@ cherokee_buffer_add_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 				continue;
 		}
 	}
-
-	/* Verify there are no embedded '\0'.
-	 */
-	if (unlikely ((cuint_t)(p1 - src->buf) != src->len))
-		return ret_error;
 
 	/* Ensure there is proper buffer size.
 	 */
