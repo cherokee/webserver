@@ -328,6 +328,7 @@ run-tests.py \
 305-Error-ContentLength.py \
 306-NoContent-keepalive.py \
 307-ServerInfo.py \
+308-HandlerErrorXSS.py \
 \
 
 if USE_OPENSSL
