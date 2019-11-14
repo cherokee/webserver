@@ -52,7 +52,7 @@
 "       text-align: center; background-color: #cfd9e8; }"                                           CRLF\
 "a { color: #2d5e9a; }"                                                                             CRLF\
 "a:hover { color: #164987; }"                                                                       CRLF\
-"#container { background: #fff url({request}/logo.gif) 32px 16px no-repeat; "                       CRLF\
+"#container { background: #fff url(logo.gif) 32px 16px no-repeat; "                                 CRLF\
 "              border: 1px solid #bacce2; width: 640px; min-width: 640px; "                         CRLF\
 "              margin: 32px auto; text-align: left; }"                                              CRLF\
 "#container-inner { padding: 32px 32px 32px 128px; }"                                               CRLF\
@@ -75,10 +75,10 @@
 "<div id=\"information\"></div>"                                                                    CRLF\
 "<div id=\"otherways\">"                                                                            CRLF\
 "<p>The same information can also be fetched properly encoded to be consumed from: "                CRLF\
-"<a href=\"{request}/info/py\">Python</a>, "                                                        CRLF\
-"<a href=\"{request}/info/ruby\">Ruby</a>, "                                                        CRLF\
-"<a href=\"{request}/info/js\">JavaScript</a> and "                                                 CRLF\
-"<a href=\"{request}/info/php\">PHP</a>.</div>"
+"<a href=\"info/py\">Python</a>, "                                                                  CRLF\
+"<a href=\"info/ruby\">Ruby</a>, "                                                                  CRLF\
+"<a href=\"info/js\">JavaScript</a> and "                                                           CRLF\
+"<a href=\"info/php\">PHP</a>.</div>"
 
 #define AJAX_JS                                                                                         \
 "<script type=\"text/javascript\">"                                                                 CRLF\
@@ -178,7 +178,7 @@
 "    }"                                                                                             CRLF\
 "  }"                                                                                               CRLF\
 "}"                                                                                                 CRLF\
-"tmp = new ajaxObject ('{request}/info/js');"                                                       CRLF\
+"tmp = new ajaxObject ('info/js');"                                                                 CRLF\
 "tmp.callback = function(txt) {"                                                                    CRLF\
 "  var data = null;"                                                                                CRLF\
 "  var div = document.getElementById('information');"                                               CRLF\
@@ -619,10 +619,6 @@ server_info_build_html (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
 	cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);
 	cherokee_buffer_mrproper (&ver);
-
-	cherokee_buffer_replace_string (buffer, "{request}", 9,
-	                                HANDLER_CONN(hdl)->request.buf,
-	                                HANDLER_CONN(hdl)->request.len);
 
 	cherokee_buffer_add_str (buffer, PAGE_FOOT);
 	return ret_ok;
