@@ -146,7 +146,7 @@ cherokee_handler_cgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_p
 	n->pid       = -1;
 	n->envp_last =  0;
 
-	for (i=0; i<ENV_VAR_NUM; i++)
+	for (i=0; i<=ENV_VAR_NUM; i++)
 		n->envp[i] = NULL;
 
 	/* Return the object
@@ -289,6 +289,12 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 	char *entry;
 
+	/* Sanity check
+	 */
+	if (cgi->envp_last >= ENV_VAR_NUM) {
+		return;
+	}
+
 	/* Build the new envp entry
 	 */
 	if (name == NULL)
@@ -309,12 +315,6 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	 */
 	cgi->envp[cgi->envp_last] = entry;
 	cgi->envp_last++;
-
-	/* Sanity check
-	 */
-	if (cgi->envp_last >= ENV_VAR_NUM) {
-		SHOULDNT_HAPPEN;
-	}
 }
 
 static ret_t

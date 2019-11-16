@@ -50,7 +50,7 @@ typedef struct {
 	int               post_data_sent;    /* amount POSTed to the CGI */
 	int               pipeInput;         /* read from the CGI */
 	int               pipeOutput;        /* write to the CGI */
-	char             *envp[ENV_VAR_NUM]; /* Environ variables for execve() */
+	char             *envp[ENV_VAR_NUM + 1]; /* Environ variables and terminal for execve() */
 	int               envp_last;
 	pid_t             pid;               /* CGI pid */
 } cherokee_handler_cgi_t;
