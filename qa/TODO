@@ -11,3 +11,6 @@ Bug 1364 defines the following:
     Please, do not hesitate to report it at http://bugs.cherokee-project.com/
     so  the developer team can fix it.
 -----
+
+Issue #1236 defines the use of a DNS entry that results both an IPv4 and an IPv6 address.
+Test if the selection of the proxy is using all addresses, in all protocols.

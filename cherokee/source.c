@@ -185,7 +185,7 @@ long_path:
 			return ret_error;
 		}
 
-		ret = cherokee_socket_update_from_addrinfo (sock, src->addr_current, 0);
+		ret = cherokee_socket_update_from_addrinfo (sock, src->addr_current);
 		if (unlikely (ret != ret_ok)) {
 			return ret_error;
 		}

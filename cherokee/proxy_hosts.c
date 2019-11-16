@@ -449,20 +449,31 @@ cherokee_handler_proxy_conn_init_socket (cherokee_handler_proxy_conn_t *pconn,
 {
 	ret_t              ret;
 	cherokee_socket_t *socket = &pconn->socket;
+	const struct addrinfo *ai = pconn->addr_info_ref;
+	cuint_t ip_num = pconn->addr_current;
 
 	TRACE (ENTRIES, "Initializing proxy %s\n", "socket");
 
 	/* Ensure that no fd leak happens */
 	cherokee_socket_close (socket);
 
+	/* Find the right address */
+	while (ip_num > 0) {
+		ip_num -= 1;
+		ai   = ai->ai_next;
+		if (ai == NULL) {
+			return ret_not_found;
+		}
+	}
+
 	/* Create the socket descriptor */
-	ret = cherokee_socket_create_fd (socket, pconn->addr_info_ref->ai_family);
+	ret = cherokee_socket_create_fd (socket, ai->ai_family);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
 	/* Update the new socket */
-	ret = cherokee_socket_update_from_addrinfo (socket, pconn->addr_info_ref, pconn->addr_current);
+	ret = cherokee_socket_update_from_addrinfo (socket, ai);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -478,17 +489,9 @@ cherokee_handler_proxy_conn_init_socket (cherokee_handler_proxy_conn_t *pconn,
 #ifdef TRACE_ENABLED
 	if (cherokee_trace_is_tracing()) {
 		cuint_t                ip_num;
-		const struct addrinfo *ai;
 		char                   buf[50];
 
-		ai     = pconn->addr_info_ref;
-		ip_num = pconn->addr_current;
-
-		while (ip_num--) {
-			ai = ai->ai_next;
-		}
-
-		ret = cherokee_ntop (pconn->addr_info_ref->ai_family, ai->ai_addr, buf, 50);
+		ret = cherokee_ntop (ai->ai_family, ai->ai_addr, buf, 50);
 		if (ret == ret_ok) {
 			TRACE (ENTRIES, "Proxy socket Initialized: %s, target: %s, IP: %s\n",
 			       SOCKET_AF(socket) == AF_INET6 ? "IPv6": "IPv4", src->host.buf, buf);
