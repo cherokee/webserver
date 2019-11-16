@@ -230,6 +230,13 @@ cherokee_handler_admin_read_post (cherokee_handler_admin_t *hdl)
 		return ret_error;
 	}
 
+	/* Validate against an empty body
+	 */
+	if (post.len == 0) {
+		conn->error_code = http_bad_request;
+		return ret_error;
+	}
+
 	/* Parse
 	 */
 	TRACE (ENTRIES, "Post contains: '%s'\n", post.buf);
