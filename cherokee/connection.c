@@ -2315,6 +2315,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_authorization, &ptr, &len);
 	if (ret != ret_ok) {
+		LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_HEADER_AUTH);
 		goto unauthorized;
 	}
 
@@ -2330,6 +2331,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	 */
 	ret = get_authorization (conn, config_entry->authentication, conn->validator, ptr, len);
 	if (ret != ret_ok) {
+		LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_AUTH_GET_HEADER);
 		goto unauthorized;
 	}
 
@@ -2339,11 +2341,13 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 		void *foo;
 
 		if (cherokee_buffer_is_empty (&conn->validator->user)) {
+			LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_NO_USER);
 			goto unauthorized;
 		}
 
 		ret = cherokee_avl_get (config_entry->users, &conn->validator->user, &foo);
 		if (ret != ret_ok) {
+			LOG_ERROR(CHEROKEE_ERROR_CONNECTION_NO_VALID_USER, conn->validator->user.buf);
 			goto unauthorized;
 		}
 	}
@@ -2359,6 +2363,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	ret = cherokee_validator_check (conn->validator, conn);
 
 	if (ret != ret_ok) {
+		LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_LOGIN_ERROR);
 		goto unauthorized;
 	}
 

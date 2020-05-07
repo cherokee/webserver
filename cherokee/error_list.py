@@ -964,6 +964,27 @@ e('THREAD_CREATE',
 
 # cherokee/connection.c
 #
+
+e('CONNECTION_HEADER_AUTH',
+  title = "Could not get authentication information from the header",
+  desc  = CODING_BUG)
+
+e('CONNECTION_AUTH_GET_HEADER',
+  title = "Could not parse the authentication information in the header",
+  desc  = "The authentication information in the connection header does not match with the configuration type.")
+
+e('CONNECTION_LOGIN_ERROR',
+  title = "Login failed: invalid password",
+  desc  = "The supplied password is invalid.")
+
+e('CONNECTION_NO_USER',
+  title = "The connection does not have users",
+  desc  = BROKEN_CONFIG)
+
+e('CONNECTION_NO_VALID_USER',
+  title = "The connection's user (%s) is not valid, please check the configuration.",
+  desc  = BROKEN_CONFIG)
+
 e('CONNECTION_AUTH',
   title = "Unknown authentication method",
   desc  = BROKEN_CONFIG)
