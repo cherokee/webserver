@@ -1646,6 +1646,9 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 			-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1   /* F0-FF */
 		};
 
+	if (unlikely(buf == NULL || buf->len == 0))
+		return ret_ok;
+
 	for (i=0; i < buf->len; i++) {
 		d = b64_decode_tab[(int) buf->buf[i]];
 		if (d != -1) {
