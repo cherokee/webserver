@@ -125,6 +125,11 @@ cherokee_validator_parse_basic (cherokee_validator_t *validator, char *str, cuin
 	char              *colon;
 	cherokee_buffer_t  auth = CHEROKEE_BUF_INIT;
 
+	/* Guard empty input
+	 */
+	if (unlikely(str == NULL || str_len == 0))
+		goto error;
+
 	/* Decode base64
 	 */
 	cherokee_buffer_add (&auth, str, str_len);
@@ -165,6 +170,11 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 	char               *equal;
 	cherokee_buffer_t   auth = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  *entry_buf;
+
+	/* Guard empty input
+	 */
+	if (unlikely(str == NULL || str_len == 0))
+		goto error;
 
 	/* Copy authentication string
 	 */
@@ -260,6 +270,10 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator,
 	 */
 	cherokee_buffer_mrproper (&auth);
 	return ret_ok;
+
+error:
+	cherokee_buffer_mrproper (&auth);
+	return ret_error;
 }
 
 

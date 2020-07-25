@@ -329,7 +329,9 @@ run-tests.py \
 306-NoContent-keepalive.py \
 307-ServerInfo.py \
 308-HandlerErrorXSS.py \
-309-CGIHeaders.py
+309-CGIHeaders.py \
+310-Authorization-empty.py \
+311-Authorization-empty.py
 
 if USE_OPENSSL
 ssl-keys/set-1.pem: ssl-keys/set-1.key openssl.cnf

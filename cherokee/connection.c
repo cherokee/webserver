@@ -1895,6 +1895,11 @@ get_authorization (cherokee_connection_t *conn,
 	ptr += pre_len;
 	ptr_len -= pre_len;
 
+	/* Guard authentication string
+	 */
+	if (ptr_len == 0)
+		return ret_error;
+
 	/* Parse the request
 	 */
 	switch (conn->req_auth_type) {
