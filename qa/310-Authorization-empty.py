@@ -28,7 +28,7 @@ class Test (TestBase):
                                 "Authorization: Basic \r\n"
 
     def Prepare (self, www):
-        tdir  = self.Mkdir (www, "htpasswd_plain")
+        tdir  = self.Mkdir (www, "htpasswd_plain_empty")
         passf = self.WriteFile (tdir, "passwd", 0444, '%s:%s\n' %(USER, PASSWD))
         self.WriteFile (tdir, "file", 0444, MAGIC)
 
