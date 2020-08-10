@@ -2396,6 +2396,8 @@ cherokee_connection_check_ip_validation (cherokee_connection_t *conn, cherokee_c
 	}
 
 	conn->error_code = http_access_denied;
+	LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_INVALID_IP);
+
 	return ret_error;
 }
 
@@ -2440,6 +2442,7 @@ cherokee_connection_check_http_method (cherokee_connection_t *conn, cherokee_con
 		conn->header.method = http_get;
 	}
 
+	LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_HTTPD_METHOD);
 	return ret_error;
 }
 

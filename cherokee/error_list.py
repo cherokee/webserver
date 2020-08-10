@@ -985,6 +985,14 @@ e('CONNECTION_NO_VALID_USER',
   title = "The connection's user (%s) is not valid, please check the configuration.",
   desc  = BROKEN_CONFIG)
 
+e('CONNECTION_INVALID_IP',
+  title = "The connection's IP is invalid: please check IP or subnet configuration.",
+  desc  = BROKEN_CONFIG)
+
+e('CONNECTION_HTTPD_METHOD',
+  title = "The connection's HTTP method is not allowed.",
+  desc  = BROKEN_CONFIG)
+
 e('CONNECTION_AUTH',
   title = "Unknown authentication method",
   desc  = BROKEN_CONFIG)
