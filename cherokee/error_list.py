@@ -966,23 +966,22 @@ e('THREAD_CREATE',
 #
 
 e('CONNECTION_HEADER_AUTH',
-  title = "Could not get authentication information from the header",
-  desc  = CODING_BUG)
+  title = "Authentication failed: could not get authentication information from the header")
 
 e('CONNECTION_AUTH_GET_HEADER',
-  title = "Could not parse the authentication information in the header",
-  desc  = "The authentication information in the connection header does not match with the configuration type.")
+  title = "Authentication failed: could not parse the authentication information in the header",
+  desc  = "The authentication method in the connection does not match with the configuration.")
 
 e('CONNECTION_LOGIN_ERROR',
   title = "Login failed: invalid password",
   desc  = "The supplied password is invalid.")
 
 e('CONNECTION_NO_USER',
-  title = "The connection does not have users",
-  desc  = BROKEN_CONFIG)
+  title = "The connection does not have a user",
+  desc  = "The connection's user field is empty.")
 
 e('CONNECTION_NO_VALID_USER',
-  title = "The connection's user (%s) is not valid, please check the configuration.",
+  title = "The connection's user (%s) is not in the fixed list, please check the configuration.",
   desc  = BROKEN_CONFIG)
 
 e('CONNECTION_INVALID_IP',
