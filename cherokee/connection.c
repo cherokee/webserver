@@ -2310,6 +2310,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_authorization, &ptr, &len);
 	if (ret != ret_ok) {
+		TRACE(ENTRIES, "conn %p, no authorization header entry\n", conn);
 		goto unauthorized;
 	}
 
@@ -2325,6 +2326,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	 */
 	ret = get_authorization (conn, config_entry->authentication, conn->validator, ptr, len);
 	if (ret != ret_ok) {
+		TRACE(ENTRIES, "conn %p, authentication information does not match with configuration.\n", conn);
 		goto unauthorized;
 	}
 
@@ -2334,11 +2336,13 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 		void *foo;
 
 		if (cherokee_buffer_is_empty (&conn->validator->user)) {
+			TRACE(ENTRIES, "conn %p, user field is empty.\n", conn);
 			goto unauthorized;
 		}
 
 		ret = cherokee_avl_get (config_entry->users, &conn->validator->user, &foo);
 		if (ret != ret_ok) {
+			TRACE(ENTRIES, "conn %p, the connection's user (%s) is not in the fixed list configuration.\n", conn, conn->validator->user.buf);
 			goto unauthorized;
 		}
 	}
@@ -2354,6 +2358,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	ret = cherokee_validator_check (conn->validator, conn);
 
 	if (ret != ret_ok) {
+		TRACE(ENTRIES, "conn %p, login failed: invalid password.\n", conn);
 		goto unauthorized;
 	}
 
@@ -2386,6 +2391,8 @@ cherokee_connection_check_ip_validation (cherokee_connection_t *conn, cherokee_c
 	}
 
 	conn->error_code = http_access_denied;
+	TRACE(ENTRIES, "conn %p, IP did not match IP or subnet configuration.\n", conn);
+
 	return ret_error;
 }
 
@@ -2430,6 +2437,7 @@ cherokee_connection_check_http_method (cherokee_connection_t *conn, cherokee_con
 		conn->header.method = http_get;
 	}
 
+	TRACE(ENTRIES, "conn %p, the connecction's HTTP method is not allowed.\n", conn);
 	return ret_error;
 }
 

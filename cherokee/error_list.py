@@ -58,7 +58,7 @@ e('RRD_DIR_PERMS',
   admin = '/general#tabs_general-0')
 
 e('RRD_MKDIR_WRITE',
-  title = "Cannot create the '%s' directory",
+  title = "Cannot create the '%s' directory or it doesn't have write permission",
   desc  = SYSTEM_ISSUE,
   admin = '/general#tabs_general-0')
 
