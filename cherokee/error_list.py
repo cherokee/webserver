@@ -58,7 +58,7 @@ e('RRD_DIR_PERMS',
   admin = '/general#tabs_general-0')
 
 e('RRD_MKDIR_WRITE',
-  title = "Cannot create the '%s' directory",
+  title = "Could not create the '%s' directory or it doesn't have write permission",
   desc  = SYSTEM_ISSUE,
   admin = '/general#tabs_general-0')
 
@@ -969,6 +969,34 @@ e('THREAD_CREATE',
 
 # cherokee/connection.c
 #
+
+e('CONNECTION_HEADER_AUTH',
+  title = "Authentication failed: could not get authentication information from the header")
+
+e('CONNECTION_AUTH_GET_HEADER',
+  title = "Authentication failed: could not parse the authentication information in the header",
+  desc  = "The authentication method in the connection does not match with the configuration.")
+
+e('CONNECTION_LOGIN_ERROR',
+  title = "Login failed: invalid password",
+  desc  = "The supplied password is invalid.")
+
+e('CONNECTION_NO_USER',
+  title = "The connection does not have a user",
+  desc  = "The connection's user field is empty.")
+
+e('CONNECTION_NO_VALID_USER',
+  title = "The connection's user (%s) is not in the fixed list, please check the configuration.",
+  desc  = BROKEN_CONFIG)
+
+e('CONNECTION_INVALID_IP',
+  title = "The connection's IP is invalid: please check IP or subnet configuration.",
+  desc  = BROKEN_CONFIG)
+
+e('CONNECTION_HTTPD_METHOD',
+  title = "The connection's HTTP method is not allowed.",
+  desc  = BROKEN_CONFIG)
+
 e('CONNECTION_AUTH',
   title = "Unknown authentication method",
   desc  = BROKEN_CONFIG)
