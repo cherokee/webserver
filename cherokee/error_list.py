@@ -765,7 +765,12 @@ e('SRC_INTER_CHROOT',
 #
 e('CONF_READ_ACCESS_FILE',
   title   = "Could not access file",
-  desc    = "The configuration file '%s' could not be accessed. Most probably the server user does not have enough permissions to read it.",
+  desc    = "The configuration file '%s' could not be accessed. Most probably the server user does not have enough permissions to read it, or lacks search permission on the file path.",
+  show_bt = False)
+
+e('CONF_OPEN_DIR',
+  title   = "Could not open directory",
+  desc    = "Could not open directory '%s'. Please check the server user and file permissions.",
   show_bt = False)
 
 e('CONF_READ_CHILDREN_SAME_NODE',

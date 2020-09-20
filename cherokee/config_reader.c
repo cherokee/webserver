@@ -75,7 +75,10 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 		int               entry_len;
 
 		dir = cherokee_opendir (path->buf);
-		if (dir == NULL) return ret_error;
+		if (dir == NULL) {
+			LOG_CRITICAL (CHEROKEE_ERROR_CONF_OPEN_DIR, path->buf);
+			return ret_error;
+		}
 
 		while ((entry = readdir(dir)) != NULL) {
 			ret_t             ret;
