@@ -1090,17 +1090,19 @@ if test "$WITH_OPENSSL" != "no"; then
         LIBSSL_LIBS="-L$WITH_OPENSSL/lib"
     fi
 
-    AC_CHECK_LIB(crypto, BN_init)
-    AC_CHECK_HEADERS([openssl/engine.h])
-    AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes], [have_openssl=no], $LIBSSL_LIBS)
+    AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
+    have_openssl="no"
+    AC_CHECK_LIB(ssl, OPENSSL_init_ssl, [have_openssl="yes"])
+    AC_CHECK_LIB(ssl, SSL_library_init, [have_openssl="yes"])
+    AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes])
 
     if test "$have_openssl" = "yes"; then
         TLS_BACK_END="OpenSSL/libssl"
         OPENSSL_PATH="$OPENSSL_PATH$PATH_SEPARATOR$PATH"
         LIBSSL_LIBS="$LIBSSL_LIBS -lssl -lcrypto"
 
-	AC_SUBST(LIBSSL_LIBS)
-	AC_SUBST(LIBSSL_CFLAGS)
+        AC_SUBST(LIBSSL_LIBS)
+        AC_SUBST(LIBSSL_CFLAGS)
 
 	AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
         AC_CACHE_CHECK([for a suitable test server to verify $TLS_BACK_END TLS protocol support], [ac_cv_path_OPENSSL_BIN],
@@ -1126,10 +1128,10 @@ if test "$WITH_OPENSSL" != "no"; then
         AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],
                                        [#ifdef TLS_MAX_VERSION
                                         int max = TLS_MAX_VERSION;
-                                        #ifdef TLS1_2_VERSION
-                                        if (max > TLS1_2_VERSION) exit(1);
+                                        #ifdef TLS1_3_VERSION
+                                        if (max > TLS1_3_VERSION) exit(1);
                                         #else
-                                        if (max > 0x0303) exit(1);
+                                        if (max > 0x0304) exit(1);
                                         #endif
                                         #endif])],
                       [AC_MSG_RESULT(yes)],
@@ -1137,6 +1139,22 @@ if test "$WITH_OPENSSL" != "no"; then
                        AC_MSG_ERROR([
 *** OpenSSL supports more recent versions of SSL/TLS protocols, which are not recognized by Cherokee.
 *** Please check for the latest Cherokee source or update Cherokee source code.])])
+
+	AC_SUBST(USE_OPENSSL_MIN_MAX_PROTOCOL, [False])
+        AC_MSG_CHECKING([for SSL_CTX_get_min_proto_version() in $TLS_BACK_END])
+	AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],
+                                       [#ifndef SSL_CTRL_GET_MIN_PROTO_VERSION
+                                        exit(1);
+                                        #endif])],
+                      [AC_MSG_RESULT(yes)
+                       AC_DEFINE(HAVE_SSL_CTX_GET_MIN_PROTO_VERSION, [1], [OpenSSL/libssl has SSL_CTX_get_min_proto_version() function])
+                       AC_SUBST(USE_OPENSSL_MIN_MAX_PROTOCOL, [True])],
+                      [AC_MSG_RESULT(no)])
+
+        AC_CHECK_LIB(ssl, SSL_CTX_set_ciphersuites, [have_openssl_ciphersuites=yes], [have_openssl_ciphersuites=no])
+        if test "$have_openssl_ciphersuites" = "yes"; then
+            AC_DEFINE(HAVE_SSL_CTX_SET_CIPHERSUITES, 1, [OpenSSL/libssl has SSL_CTX_set_ciphersuites() function])
+        fi
     fi
 fi
 AC_MSG_CHECKING(for libssl)

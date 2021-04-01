@@ -173,42 +173,48 @@ out:
 static ret_t
 add_hardcoded_ssl_options (cherokee_server_t *srv)
 {
-        unsigned int tls_protocols[] = {
+	unsigned int tls_protocols[] = {
 #ifdef SSL_OP_NO_SSLv2
-                                        SSL_OP_NO_SSLv2,
+	                                SSL_OP_NO_SSLv2,
 #endif
 #ifdef SSL_OP_NO_SSLv3
-                                        SSL_OP_NO_SSLv3,
+	                                SSL_OP_NO_SSLv3,
 #endif
 #ifdef SSL_OP_NO_TLSv1
-                                        SSL_OP_NO_TLSv1,
+	                                SSL_OP_NO_TLSv1,
 #endif
 #ifdef SSL_OP_NO_TLSv1_1
-                                        SSL_OP_NO_TLSv1_1,
+	                                SSL_OP_NO_TLSv1_1,
 #endif
 #ifdef SSL_OP_NO_TLSv1_2
-                                        SSL_OP_NO_TLSv1_2,
+	                                SSL_OP_NO_TLSv1_2,
 #endif
-                                        0,
-                                       };
-        const char *openssl_tls_options[] = {
+#ifdef SSL_OP_NO_TLSv1_3
+	                                SSL_OP_NO_TLSv1_3,
+#endif
+	                                0,
+	                               };
+	const char *openssl_tls_options[] = {
 #ifdef SSL_OP_NO_SSLv2
-                                             "-ssl2",
+	                                     "-ssl2",
 #endif
 #ifdef SSL_OP_NO_SSLv3
-                                             "-ssl3",
+	                                     "-ssl3",
 #endif
 #ifdef SSL_OP_NO_TLSv1
-                                             "-tls1",
+	                                     "-tls1",
 #endif
 #ifdef SSL_OP_NO_TLSv1_1
-                                             "-tls1_1",
+	                                     "-tls1_1",
 #endif
 #ifdef SSL_OP_NO_TLSv1_2
-                                             "-tls1_2",
+	                                     "-tls1_2",
 #endif
-                                             NULL
-                                            };
+#ifdef SSL_OP_NO_TLSv1_3
+	                                     "-tls1_3",
+#endif
+	                                     NULL
+	                                    };
 	const char *pattern = "(-(ssl|tls)[[:digit:]]+_*[[:digit:]]*)";
 	FILE *f;
 	char tmp[256];
