@@ -1095,14 +1095,48 @@ if test "$WITH_OPENSSL" != "no"; then
     AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes], [have_openssl=no], $LIBSSL_LIBS)
 
     if test "$have_openssl" = "yes"; then
-        LIBSSL_LIBS="$LIBSSL_LIBS -lssl"
+        TLS_BACK_END="OpenSSL/libssl"
+        OPENSSL_PATH="$OPENSSL_PATH$PATH_SEPARATOR$PATH"
+        LIBSSL_LIBS="$LIBSSL_LIBS -lssl -lcrypto"
 
-	   AC_SUBST(LIBSSL_LIBS)
-	   AC_SUBST(LIBSSL_CFLAGS)
+	AC_SUBST(LIBSSL_LIBS)
+	AC_SUBST(LIBSSL_CFLAGS)
 
-	   AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
-	   AC_PATH_PROG([OPENSSL_BIN], [openssl])
-	   AC_SUBST(OPENSSL_BIN)
+	AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
+        AC_CACHE_CHECK([for a suitable test server to verify $TLS_BACK_END TLS protocol support], [ac_cv_path_OPENSSL_BIN],
+                [AC_PATH_PROGS_FEATURE_CHECK([OPENSSL_BIN], [openssl],
+                  [v=$($ac_path_OPENSSL_BIN s_server -help 2>&1)
+                   if test $? -eq 0 || [[[ $v == unknown* ]]]; then
+                     TLS_PROTOCOLS=$(echo $v | grep -Eoe '-(ssl|tls)[[0-9]]+[[_]]*[[0-9]]*' | tr '\n' ',' | sed 's/.$//' | sed 's/-//g')
+                     ac_cv_path_OPENSSL_BIN="$ac_path_OPENSSL_BIN" ac_path_OPENSSL_BIN_found=:
+                   fi],,
+                  $OPENSSL_PATH)])
+        AC_SUBST(OPENSSL_BIN, [$ac_cv_path_OPENSSL_BIN])
+
+        AC_SUBST(OPENSSL_TLS_PROTOCOLS, [])
+        if test -n "$ac_cv_path_OPENSSL_BIN"; then
+          AC_DEFINE_UNQUOTED(PATH_OPENSSL_BIN, ["$ac_cv_path_OPENSSL_BIN"], [Define path to OpenSSL command-line tool])
+          AC_MSG_CHECKING([for $TLS_BACK_END supported SSL/TLS protocols])
+          AC_DEFINE_UNQUOTED(TLS_BACK_END_PROTOCOL_VERSIONS, ["$TLS_PROTOCOLS"], [Define TLS protocols supported by OpenSSL/libssl])
+          AC_SUBST(OPENSSL_TLS_PROTOCOLS, ["$TLS_PROTOCOLS"])
+          AC_MSG_RESULT($TLS_PROTOCOLS)
+        fi
+
+        AC_MSG_CHECKING([if Cherokee supports all OpenSSL SSL/TLS protocol versions])
+        AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],
+                                       [#ifdef TLS_MAX_VERSION
+                                        int max = TLS_MAX_VERSION;
+                                        #ifdef TLS1_2_VERSION
+                                        if (max > TLS1_2_VERSION) exit(1);
+                                        #else
+                                        if (max > 0x0303) exit(1);
+                                        #endif
+                                        #endif])],
+                      [AC_MSG_RESULT(yes)],
+                      [AC_MSG_RESULT(no)
+                       AC_MSG_ERROR([
+*** OpenSSL supports more recent versions of SSL/TLS protocols, which are not recognized by Cherokee.
+*** Please check for the latest Cherokee source or update Cherokee source code.])])
     fi
 fi
 AC_MSG_CHECKING(for libssl)
@@ -1274,6 +1308,7 @@ AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root dire
 	   WWW_ROOT="$localstatedir/www"
    fi
 ])
+AC_DEFINE_UNQUOTED(WWW_ROOT, "$WWW_ROOT", [WWW root directory])
 AC_SUBST(WWW_ROOT)
 
 AC_ARG_WITH(cgiroot, AC_HELP_STRING([--with-cgiroot=DIR], [Set the CGI directory]),

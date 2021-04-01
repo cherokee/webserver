@@ -36,6 +36,8 @@ import stat
 import socket
 import signal
 import thread
+import re
+import argparse
 
 # Import CTK
 sys.path.append (os.path.abspath (os.path.realpath(__file__) + '/../CTK'))
@@ -43,13 +45,13 @@ import CTK
 
 # Cherokee imports
 import config_version
-from configured import *
+import configured
 import PageError
 
 
 def init (scgi_port, cfg_file):
     # Translation support
-    CTK.i18n.install ('cherokee', LOCALEDIR, unicode=True)
+    CTK.i18n.install ('cherokee', configured.LOCALEDIR, unicode=True)
 
     # Ensure SIGCHLD is set. It needs to receive the signal in order
     # to detect when its child processes finish.
@@ -61,7 +63,7 @@ def init (scgi_port, cfg_file):
     os.chdir(os.path.abspath(pathname))
 
     # Let the user know what is going on
-    version = VERSION
+    version = configured.VERSION
     pid     = os.getpid()
 
     if scgi_port.isdigit():
@@ -137,16 +139,38 @@ def debug_set_up():
 
 if __name__ == "__main__":
     # Read the arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument("SCGI_SOCKET", help="Cherokee admin server SCGI socket (TCP port or socket path)")
+    parser.add_argument("CONFIG_FILE", help="path to Cherokee webserver configuration file to modify")
+    parser.add_argument("-x", "--debug", help="print server backend errors to the terminal", action="store_true")
+    parser.add_argument("-P", "--tls-protocols",
+                        help="tells server which SSL/TLS protocol versions are supported by the TLS back-end (comma-separated list) "
+                             "TLS_PROTOCOLS have to be specified in OpenSSL options format, e. g. tls1_3,tls1,ssl3")
     try:
-        scgi_port = sys.argv[1]
-        cfg_file  = sys.argv[2]
+        args = parser.parse_args()
     except:
-        print _("Incorrect parameters: PORT CONFIG_FILE")
+        parser.print_help()
         raise SystemExit
+    scgi_port = args.SCGI_SOCKET
+    cfg_file  = args.CONFIG_FILE
 
     # Debugging mode
-    if '-x' in sys.argv:
+    if args.debug == True:
         debug_set_up()
+
+    # SSL/TLS protocol version list from TLS back-end
+    if not args.tls_protocols == None:
+        configured.TLSPROTOCOLS = args.tls_protocols
+
+    # Check and reformat SSL/TSL protocol list for module PageAdvanced
+    p  = re.compile('([0-9]+)[_]([0-9]+)')
+    pp = re.compile('([0-9]+)')
+    tls_option_list = []
+    for protocol in args.tls_protocols.split(','):
+        tls_option_list.append(pp.sub("v\\1", p.sub("\\1.\\2", protocol.strip()).upper(), 1))
+    if len(tls_option_list) > 1:
+        configured.TLSPROTOCOLS = ','
+        configured.TLSPROTOCOLS = configured.TLSPROTOCOLS.join(tls_option_list)
 
     # Init
     init (scgi_port, cfg_file)
@@ -192,9 +216,9 @@ if __name__ == "__main__":
 
         CTK.unpublish (r'')
 
-    for path in (CHEROKEE_WORKER, CHEROKEE_SERVER, CHEROKEE_ICONSDIR):
+    for path in (configured.CHEROKEE_WORKER, configured.CHEROKEE_SERVER, configured.CHEROKEE_ICONSDIR):
         if not os.path.exists (path):
-            CTK.publish (r'', PageError.ResourceMissing, path=CHEROKEE_WORKER)
+            CTK.publish (r'', PageError.ResourceMissing, path=configured.CHEROKEE_WORKER)
 
             while not os.path.exists (path):
                 CTK.step()

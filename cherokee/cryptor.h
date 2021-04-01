@@ -45,6 +45,7 @@ typedef ret_t (* cryptor_func_configure_t)   (void  *cryp, cherokee_config_node_
 typedef ret_t (* cryptor_func_vserver_new_t) (void  *cryp, void *vsrv, void **vserver_crypt);
 typedef ret_t (* cryptor_func_socket_new_t)  (void  *cryp, void **socket_crypt);
 typedef ret_t (* cryptor_func_client_new_t)  (void  *cryp, void **client_crypt);
+typedef ret_t (* cryptor_func_tls_info_t)    (void  *cryp, cherokee_buffer_t *backend_info_buf, cherokee_buffer_t *tls_protocols_buf, cherokee_buffer_t *deactivated_protocols_buf);
 
 /* Cryptor: Virtual server */
 typedef ret_t (* cryptor_vsrv_func_free_t)      (void  *cryp);
@@ -65,6 +66,7 @@ typedef ret_t (* cryptor_client_func_init_t)    (void  *cryp, void *host, void *
  */
 typedef struct {
 	cherokee_module_t          module;
+	long                       hardcoded_ssl_options;
 	cint_t                     timeout_handshake;
 	cherokee_boolean_t         allow_SSLv2;
 	cherokee_boolean_t         allow_SSLv3;
@@ -77,6 +79,7 @@ typedef struct {
 	cryptor_func_vserver_new_t vserver_new;
 	cryptor_func_socket_new_t  socket_new;
 	cryptor_func_client_new_t  client_new;
+	cryptor_func_tls_info_t    tls_info;
 } cherokee_cryptor_t;
 
 typedef struct {
@@ -148,6 +151,10 @@ ret_t cherokee_cryptor_socket_new  (cherokee_cryptor_t          *cryp,
 
 ret_t cherokee_cryptor_client_new  (cherokee_cryptor_t         *cryp,
                                     cherokee_cryptor_client_t **cryp_client);
+ret_t cherokee_cryptor_tls_backend_info (cherokee_cryptor_t   *cryp,
+                                         cherokee_buffer_t    *backend_info_buf,
+                                         cherokee_buffer_t    *tls_protocols_buf,
+                                         cherokee_buffer_t    *deactivated_protocols_buf);
 
 /* Cryptor: Virtual Server
  */

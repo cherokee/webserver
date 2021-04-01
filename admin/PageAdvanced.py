@@ -34,6 +34,29 @@ from configured import *
 URL_BASE  = '/advanced'
 URL_APPLY = '/advanced/apply'
 
+KNOWN_TLS_PROTOCOLS = [
+    ('SSLv2',   'SSL version 2'),
+    ('SSLv3',   'SSL version 3'),
+    ('TLSv1',   'TLS version 1'),
+    ('TLSv1.1', 'TLS version 1.1'),
+    ('TLSv1.2', 'TLS version 1.2')
+]
+
+# Keep aligned with cherokee_cryptor_init_base()
+TLS_PROTOCOL_CHECKBOX_DEFAULT = {
+    'SSLv2':    True,
+    'SSLv3':    True,
+    'TLSv1':   False,
+    'TLSv1.1': False,
+    'TLSv1.2': False
+}
+
+TLS_WARNING = N_("""<p><b>WARNING</b>: The SSL/TLS back-end supports more recent
+versions of TLS protocols, which are not recognized by Cherokee. Please check
+for latest Cherokee updates or report this issue. As a temporary workaround please
+set 'Max. TLS protocol version' to the maximum TLS protocol version supported by
+Cherokee.</p><p>Following unknown TLS protocols have been found:""")
+
 VALIDATIONS = [
     ("server!fdlimit",                validations.is_positive_int),
     ("server!pid_file",               validations.can_create_file),
@@ -94,12 +117,21 @@ NOTE_DH512        = N_('Path to a Diffie Hellman (DH) parameters PEM file: 512 b
 NOTE_DH1024       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits.')
 NOTE_DH2048       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits.')
 NOTE_DH4096       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits.')
+NOTE_TLS_NA       = N_('Your Cherokee Web Server does not support SSL/TLS encryption.')
 NOTE_TLS_TIMEOUT  = N_('Timeout for the TLS/SSL handshake. Default: 15 seconds.')
 NOTE_TLS_SSLv2    = N_('Beware: it is vulnerable. You should disable SSLv2.')
 NOTE_TLS_SSLv3    = N_('Beware: it is vulnerable. You should disable SSLv3.')
 NOTE_TLS_TLSv1    = N_('TLSv1 is deprecated')
 NOTE_TLS_TLSv1_1  = N_('TLSv1.1 is deprecated')
 NOTE_TLS_TLSv1_2  = N_('  ')
+
+TLS_PROTOCOL_NOTES = {
+    'SSLv2':   NOTE_TLS_SSLv2,
+    'SSLv3':   NOTE_TLS_SSLv3,
+    'TLSv1':   NOTE_TLS_TLSv1,
+    'TLSv1.1': NOTE_TLS_TLSv1_1,
+    'TLSv1.2': NOTE_TLS_TLSv1_2
+}
 
 HELPS = [('config_advanced', N_('Advanced'))]
 
@@ -176,25 +208,53 @@ class SpecialFilesWidget (CTK.Container):
         self += CTK.Indenter(table)
 
 class TLSWidget (CTK.Container):
-    def __init__ (self):
-        CTK.Container.__init__ (self)
+    @staticmethod
+    def check_for_tls_protocol_versions (self):
+        available_tls_protocols = {}
+        unknown_tls_protocols = []
+        tls_option_list = TLSPROTOCOLS.split(',')
+        if len(tls_option_list) > 1:
+            for protocol in tls_option_list:
+                for known_protocol in KNOWN_TLS_PROTOCOLS:
+                    if known_protocol[0] == protocol:
+                        available_tls_protocols[protocol] = known_protocol[1]
+                        break
+                else:
+                     unknown_tls_protocols.append(protocol)
+        return available_tls_protocols, unknown_tls_protocols
 
+    @staticmethod
+    def add_tls_version_config (self, table):
         props = {}
         props = {'mode': 'inverse'}
+        props_disable = props.copy()
+        props_disable["disabled"] = 1
+        for protocol in KNOWN_TLS_PROTOCOLS:
+            if self.available_tls_protocols.has_key(protocol[0]):
+                table.Add ('%s%s' % (_('Disable '), self.available_tls_protocols[protocol[0]]), CTK.CheckCfgText('server!tls!protocol!' + protocol[0].replace('.','_'), TLS_PROTOCOL_CHECKBOX_DEFAULT[protocol[0]], _("Disable"), props), TLS_PROTOCOL_NOTES[protocol[0]])
+            else:
+                table.Add ('%s%s' % (_('Disable '), protocol[1]), CTK.CheckCfgText('server!tls!protocol!' + protocol[0].replace('.','_'),  True, _("Protocol deacrivated") if protocol[0].startswith('SSLv') else _("Protocol not supported"), props_disable), TLS_PROTOCOL_NOTES[protocol[0]])
+
+    def __init__ (self):
+        CTK.Container.__init__ (self)
+        self.available_tls_protocols, self.unknown_tls_protocols = TLSWidget.check_for_tls_protocol_versions (self)
+
         table = CTK.PropsAuto(URL_APPLY)
-        table.Add (_('SSL version 2'),            CTK.CheckCfgText('server!tls!protocol!SSLv2',    True, _("Disable"), props), _(NOTE_TLS_SSLv2))
-        table.Add (_('SSL version 3'),            CTK.CheckCfgText('server!tls!protocol!SSLv3',    True, _("Disable"), props), _(NOTE_TLS_SSLv3))
-        table.Add (_('TLS version 1'),            CTK.CheckCfgText('server!tls!protocol!TLSv1',   False, _("Disable"), props), _(NOTE_TLS_TLSv1))
-        table.Add (_('TLS version 1.1'),          CTK.CheckCfgText('server!tls!protocol!TLSv1_1', False, _("Disable"), props), _(NOTE_TLS_TLSv1_1))
-        table.Add (_('TLS version 1.2'),          CTK.CheckCfgText('server!tls!protocol!TLSv1_2', False, _("Disable"), props), _(NOTE_TLS_TLSv1_2))
+        TLSWidget.add_tls_version_config (self, table)
         table.Add (_('Handshake Timeout'),        CTK.TextCfg('server!tls!timeout_handshake', True), _(NOTE_TLS_TIMEOUT))
         table.Add (_('DH parameters: 512 bits'),  CTK.TextCfg('server!tls!dh_param512',  True), _(NOTE_DH512))
         table.Add (_('DH parameters: 1024 bits'), CTK.TextCfg('server!tls!dh_param1024', True), _(NOTE_DH1024))
         table.Add (_('DH parameters: 2048 bits'), CTK.TextCfg('server!tls!dh_param2048', True), _(NOTE_DH2048))
         table.Add (_('DH parameters: 4096 bits'), CTK.TextCfg('server!tls!dh_param4096', True), _(NOTE_DH4096))
-
         self += CTK.RawHTML ("<h2>%s</h2>" %(_('TLS')))
-        self += CTK.Indenter(table)
+        if len(self.unknown_tls_protocols) > 0:
+            tip = '%s %s</p>' % (_(TLS_WARNING), join(self.unknown_tls_protocols))
+            props = {'class': 'dialog-error-slim'}
+            self += CTK.Notice ('error', CTK.RawHTML(tip), props)
+        if len(self.available_tls_protocols) == 0:
+            self += CTK.RawHTML ("<p>%s</p>" %(_(NOTE_TLS_NA)))
+        else:
+            self += CTK.Indenter(table)
 
 class Render:
     def __call__ (self):

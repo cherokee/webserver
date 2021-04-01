@@ -68,6 +68,10 @@ static DH *dh_param_4096 = NULL;
 			      ERR_error_string(openssl_error, NULL));   \
 		}                                                       \
 	} while(0)
+#define CRYPTOR_VSRV_SSL_OPTIONS(v) \
+        VSERVER_SRV(v)->cryptor->hardcoded_ssl_options
+#define PROTOCOL_SWITCHED_OFF(prot, opt, vsrv)     \
+        ((opt & prot) | (CRYPTOR_VSRV_SSL_OPTIONS(vsrv) & prot)) > 0
 
 
 static ret_t
@@ -1258,6 +1262,135 @@ _client_new (cherokee_cryptor_t         *cryp,
 	return ret_ok;
 }
 
+static ret_t
+_tls_backend_info (cherokee_cryptor_t   *cryp,
+                   cherokee_buffer_t    *backend_info_buf,
+                   cherokee_buffer_t    *tls_protocols_buf,
+                   cherokee_buffer_t    *deactivated_protocols_buf)
+{
+	SSL_CTX     *ctx;
+	SSL         *session;
+	long        options;
+	int         version;
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+	cherokee_buffer_add_va (backend_info_buf, "%s",
+	                        SSLeay_version (SSLEAY_VERSION));
+
+	ctx = SSL_CTX_new (SSLv23_server_method());
+#else
+	cherokee_buffer_add_va (backend_info_buf, "%s",
+	                        OpenSSL_version (OPENSSL_VERSION));
+
+	ctx = SSL_CTX_new (TLS_server_method());
+#endif
+	if (ctx == NULL) {
+		goto error;
+	}
+	session = SSL_new (ctx);
+	if (session == NULL) {
+		goto error;
+	}
+
+	SSL_set_accept_state (session);
+
+	options = SSL_CTX_get_options (ctx);
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#  ifdef SSL_TXT_SSLV3
+#    ifdef SSL_OP_NO_SSLv3
+	if ((options & SSL_OP_NO_SSLv3) == 0) {
+		cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_SSLV3);
+	}
+#    else
+	cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_SSLV3);
+#    endif
+#    ifdef SSL_OP_NO_SSLv3
+	if ((cryp->hardcoded_ssl_options & SSL_OP_NO_SSLv3) > 0) {
+		cherokee_buffer_add_str (deactivated_protocols_buf, SSL_TXT_SSLV3);
+	}
+#    endif
+#  endif
+#  ifdef SSL_TXT_TLSV1
+#    ifdef SSL_OP_NO_TLSv1
+	if ((options & SSL_OP_NO_TLSv1) == 0) {
+		if (! cherokee_buffer_is_empty(tls_protocols_buf)) {
+			cherokee_buffer_add_str (tls_protocols_buf, ", ");
+		}
+		cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_TLSV1);
+	}
+#    else
+	if (! cherokee_buffer_is_empty(tls_protocols_buf)) {
+		cherokee_buffer_add_str (tls_protocols_buf, ", ");
+	}
+	cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_TLSV1);
+#    endif
+#    ifdef SSL_OP_NO_TLSv1
+	if ((cryp->hardcoded_ssl_options & SSL_OP_NO_TLSv1) > 0) {
+		if (! cherokee_buffer_is_empty(deactivated_protocols_buf)) {
+			cherokee_buffer_add_str (deactivated_protocols_buf, ", ");
+		}
+		cherokee_buffer_add_str (deactivated_protocols_buf, SSL_TXT_TLSV1);
+	}
+#    endif
+#  endif
+#  ifdef SSL_OP_NO_TLSv1_1
+	if ((options & SSL_OP_NO_TLSv1_1) == 0) {
+		if (! cherokee_buffer_is_empty(tls_protocols_buf)) {
+			cherokee_buffer_add_str (tls_protocols_buf, ", ");
+		}
+		cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_TLSV1_1);
+	}
+#  else
+	if (! cherokee_buffer_is_empty(tls_protocols_buf)) {
+		cherokee_buffer_add_str (tls_protocols_buf, ", ");
+	}
+	cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_TLSV1_1);
+#  endif
+#  ifdef SSL_OP_NO_TLSv1_1
+	if ((cryp->hardcoded_ssl_options & SSL_OP_NO_TLSv1_1) > 0) {
+		if (! cherokee_buffer_is_empty(deactivated_protocols_buf)) {
+			cherokee_buffer_add_str (deactivated_protocols_buf, ", ");
+		}
+		cherokee_buffer_add_str (deactivated_protocols_buf, SSL_TXT_TLSV1_1);
+	}
+#  endif
+#  ifdef SSL_OP_NO_TLSv1_2
+	if ((options & SSL_OP_NO_TLSv1_2) == 0) {
+		if (! cherokee_buffer_is_empty(tls_protocols_buf)) {
+			cherokee_buffer_add_str (tls_protocols_buf, ", ");
+		}
+		cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_TLSV1_2);
+	}
+#  else
+	if (! cherokee_buffer_is_empty(tls_protocols_buf)) {
+		cherokee_buffer_add_str (tls_protocols_buf, ", ");
+	}
+	cherokee_buffer_add_str (tls_protocols_buf, SSL_TXT_TLSV1_2);
+#  endif
+#  ifdef SSL_OP_NO_TLSv1_2
+	if ((cryp->hardcoded_ssl_options & SSL_OP_NO_TLSv1_2) > 0) {
+		if (! cherokee_buffer_is_empty(deactivated_protocols_buf)) {
+			cherokee_buffer_add_str (deactivated_protocols_buf, ", ");
+		}
+		cherokee_buffer_add_str (deactivated_protocols_buf, SSL_TXT_TLSV1_2);
+	}
+#  endif
+#endif
+
+	if (ctx != NULL) {
+		SSL_CTX_free (ctx);
+	}
+	return ret_ok;
+
+error:
+
+        if (ctx != NULL) {
+		SSL_CTX_free (ctx);
+	}
+	return ret_error;
+}
+
 
 PLUGIN_INFO_INIT (libssl,
                   cherokee_cryptor,
@@ -1282,6 +1415,7 @@ cherokee_cryptor_libssl_new (cherokee_cryptor_libssl_t **cryp)
 	CRYPTOR(n)->vserver_new = (cryptor_func_vserver_new_t) _vserver_new;
 	CRYPTOR(n)->socket_new  = (cryptor_func_socket_new_t) _socket_new;
 	CRYPTOR(n)->client_new  = (cryptor_func_client_new_t) _client_new;
+	CRYPTOR(n)->tls_info    = (cryptor_func_tls_info_t) _tls_backend_info;
 
 	*cryp = n;
 	return ret_ok;

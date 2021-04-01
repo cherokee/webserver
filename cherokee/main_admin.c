@@ -34,6 +34,11 @@
 #include "server-protected.h"
 #include "util.h"
 
+#ifdef HAVE_OPENSSL
+# include <openssl/ssl.h>
+# include "pcre/pcre.h"
+#endif
+
 #ifdef HAVE_SYS_WAIT_H
 # include <sys/wait.h>
 #endif
@@ -64,6 +69,8 @@
 #define DEFAULT_BIND         "127.0.0.1"
 #define RULE_PRE             "vserver!1!rule!"
 
+#define ENTRIES "main"
+
 static int                port          = DEFAULT_PORT;
 static char              *document_root = NULL;
 static char              *config_file   = NULL;
@@ -75,6 +82,7 @@ static int                scgi_port     = 4000;
 static int                thread_num    = -1;
 static cherokee_server_t *srv           = NULL;
 static cherokee_buffer_t  password      = CHEROKEE_BUF_INIT;
+static cherokee_buffer_t  tls_protocols = CHEROKEE_BUF_INIT;
 
 
 static ret_t
@@ -233,29 +241,34 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!1!nick = default\n");
 	cherokee_buffer_add_va  (&buf, "vserver!1!document_root = %s\n", document_root);
 
+	if (!cherokee_buffer_is_empty(&tls_protocols)) {
+		cherokee_buffer_prepend_str(&tls_protocols, "-P ");
+	}
+
 	if (scgi_port <= 0) {
 		cherokee_buffer_add_va  (&buf,
 		                         "source!1!nick = app-logic\n"
 		                         "source!1!type = interpreter\n"
 		                         "source!1!timeout = " TIMEOUT "\n"
 		                         "source!1!host = %s\n"
-		                         "source!1!interpreter = %s/server.py %s %s %s\n"
+		                         "source!1!interpreter = %s/server.py %s %s %s %s\n"
 		                         "source!1!env_inherited = 1\n",
 		                         DEFAULT_UNIX_SOCKET, document_root,
 		                         DEFAULT_UNIX_SOCKET, config_file,
-		                         (debug) ? "-x" : "");
-
+		                         (debug) ? "-x" : "",
+		                         tls_protocols.buf);
 	} else {
 		cherokee_buffer_add_va  (&buf,
 		                         "source!1!nick = app-logic\n"
 		                         "source!1!type = interpreter\n"
 		                         "source!1!timeout = " TIMEOUT "\n"
 		                         "source!1!host = localhost:%d\n"
-		                         "source!1!interpreter = %s/server.py %d %s %s\n"
+		                         "source!1!interpreter = %s/server.py %d %s %s %s\n"
 		                         "source!1!env_inherited = 1\n",
 		                         scgi_port, document_root,
 		                         scgi_port, config_file,
-		                         (debug) ? "-x" : "");
+		                         (debug) ? "-x" : "",
+		                         tls_protocols.buf);
 	}
 
 	if (debug) {
@@ -550,6 +563,90 @@ process_parameters (int argc, char **argv)
 	}
 }
 
+#ifdef HAVE_OPENSSL
+static int
+check_for_tls_protocols() {
+	const char *regex = "-((ssl|tls)[[:digit:]]+_*[[:digit:]]*)";
+	pcre *reCompiled;
+	const char *pcreErrorStr;
+	const char *psubStrMatchStr;
+	FILE *f;
+	char tmp[256];
+	char *line;
+	int pcreErrorOffset;
+	int subStrVec[30];
+	int match_count = 0;
+	int start_offset = 0;
+	int ret = 0;
+
+	cherokee_buffer_t  buf = CHEROKEE_BUF_INIT;;
+
+# ifdef PATH_OPENSSL_BIN
+	snprintf(tmp, sizeof (tmp), "%s s_server -help 2>&1",
+	         PATH_OPENSSL_BIN);
+# else
+	snprintf(tmp, sizeof (tmp), "openssl s_server -help 2>&1");
+# endif
+	f = popen(tmp, "r");
+	if (f == NULL) {
+		PRINT_MSG("(critical) Cannot execute '%s'\n", tmp);
+		ret = ret_error;
+		goto out;
+	}
+	while (!feof(f)) {
+		line = fgets(tmp, sizeof (tmp), f);
+		if (line == NULL)
+			continue;
+		cherokee_buffer_add(&buf, line, strlen(line));
+	}
+	pclose(f);
+
+	reCompiled = pcre_compile(regex, 0, &pcreErrorStr,
+	                          &pcreErrorOffset, NULL);
+	if (reCompiled == NULL) {
+		TRACE(ENTRIES, "Regex error compiling '%s': %s\n", regex, pcreErrorStr);
+		ret = PCRE_ERROR_NULL;
+		goto out;
+	}
+	while (1) {
+		ret = pcre_exec(reCompiled, NULL, buf.buf, buf.len,
+			start_offset, 0, subStrVec, 30);
+		if (ret < 0) {
+			switch (ret) {
+				case PCRE_ERROR_NOMATCH:
+					ret = match_count;
+					break;
+				default:
+					TRACE(ENTRIES, "Regex matching failed with error code %d\n", ret);
+			}
+			goto out;
+		}
+		if (ret == 0) {
+			// Too many substrings were found to fit in subStrVec!");
+			// Set rc to the max number of substring matches possible.
+			ret = 30 / 3;
+		}
+		pcre_get_substring(buf.buf, subStrVec, ret, 1,
+		                   &(psubStrMatchStr));
+		if (!cherokee_buffer_is_empty(&tls_protocols)) {
+			cherokee_buffer_add_str(&tls_protocols, ",");
+		}
+		cherokee_buffer_add(&tls_protocols,
+		                    psubStrMatchStr, strlen(psubStrMatchStr));
+		match_count++;
+		pcre_free_substring(psubStrMatchStr);
+		start_offset = subStrVec[1];
+	}
+
+out:
+	if (reCompiled == NULL) {
+		pcre_free(reCompiled);
+	}
+	cherokee_buffer_mrproper(&buf);
+	return ret;
+}
+#endif
+
 static ret_t
 check_for_python (void)
 {
@@ -630,6 +727,14 @@ main (int argc, char **argv)
 		PRINT_MSG ("ERROR: Couldn't find python.\n");
 		exit (EXIT_ERROR);
 	}
+
+#ifdef HAVE_OPENSSL
+	/* OpenSSL supported TLS protocols */
+	if (check_for_tls_protocols() <= 0) {
+		PRINT_MSG("ERROR: No TLS protocol options in 'openssl s_server -help' output. "
+		          "Please issue a bug report.\n");
+	}
+#endif
 
 	/* Signal handling */
 	act.sa_handler = SIG_IGN;

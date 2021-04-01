@@ -612,6 +612,12 @@ e('SERVER_IGNORE_TLS',
   admin   = "/general#Network-1",
   show_bt = False)
 
+e('SERVER_UNKNOWN_TLS_PROTOCOL',
+  title   = "Ignoring unknown SSL/TLS protocol %s",
+  desc    = "OpenSSL/libssl supports an SSL/TLS protocol version that Cherokee is not capable of. This might impact security and accessability of your webserver. Please upgrade Cherokee webserver.",
+  admin   = SYSTEM_ISSUE,
+  show_bt = False)
+
 e('SERVER_TLS_DEFAULT',
   title = "TLS/SSL support required for 'default' Virtual Server.",
   desc  = "TLS/SSL support must be set up in the 'default' Virtual Server. Its certificate will be used by the server in case TLS SNI information is not provided by the client.")
