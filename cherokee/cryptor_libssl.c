@@ -107,9 +107,11 @@ _free (cherokee_cryptor_libssl_t *cryp)
 	 */
 	ERR_free_strings();
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	/* Free all ciphers and digests
 	 */
 	EVP_cleanup();
+#endif
 
 	cherokee_cryptor_free_base (CRYPTOR(cryp));
 	return ret_ok;
@@ -1887,15 +1889,14 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 	PLUGIN_INIT_ONCE_CHECK (libssl);
 
 	/* Init OpenSSL
+	 * In OpenSSL version 1.1.0 and later only needed if non-default
+	 * settings are required.
 	 */
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
 	OPENSSL_config(NULL);
 	SSL_library_init();
 	SSL_load_error_strings();
 	OpenSSL_add_all_algorithms();
-#else
-	OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
-	OPENSSL_init_ssl(OPENSSL_INIT_LOAD_SSL_STRINGS, NULL);
 #endif
 
 	/* Ensure PRNG has been seeded with enough data
@@ -1923,28 +1924,37 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 	}
 
 
-# if HAVE_OPENSSL_ENGINE_H
+#if HAVE_OPENSSL_ENGINE_H
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
 	ENGINE_load_builtin_engines();
+#    if OPENSSL_VERSION_NUMBER < 0x10100000L
 	OpenSSL_add_all_algorithms();
+#    endif
 #  endif
+	TRACE(ENTRIES, "Checking for pkcs11 engine ...\n");
 	e = ENGINE_by_id("pkcs11");
-	while (e != NULL) {
-		if(! ENGINE_init(e)) {
-			ENGINE_free (e);
-			LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_PKCS11);
+	if (!e) {
+		CLEAR_LIBSSL_ERRORS;
+		TRACE(ENTRIES, "pkcs11 engine is not installed\n");
+	} else {
+		while (e != NULL) {
+			TRACE(ENTRIES, "Loading pkcs11 engine ...\n");
+			if(! ENGINE_init(e)) {
+				ENGINE_free (e);
+				LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_PKCS11);
+				break;
+			}
+
+			if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+				ENGINE_free (e);
+				LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_DEFAULTS);
+				break;
+			}
+			ENGINE_finish(e);
+			ENGINE_free(e);
 			break;
 		}
-
-		if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-			ENGINE_free (e);
-			LOG_CRITICAL_S (CHEROKEE_ERROR_SSL_DEFAULTS);
-			break;
-		}
-
-		ENGINE_finish(e);
-		ENGINE_free(e);
-		break;
+		CLEAR_LIBSSL_ERRORS;
 	}
 #endif
 }
