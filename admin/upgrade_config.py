@@ -30,7 +30,7 @@ def main():
     # Parse the configuration file
     cfg = Config(cfg_file)
 
-    # Update the configuration file if needed
+    # Upgrade the configuration file if needed
     ver_config  = int (cfg.get_val('config!version', '000099028'))
     ver_release = int (config_version_get_current())
 
@@ -39,6 +39,15 @@ def main():
     # Convert it
     updated = config_version_update_cfg (cfg)
     print ["Not upgraded.", "Upgraded."][updated]
+
+    # Critical corrections and updates of existing configuration files
+    # if required
+    if updated == False:
+
+        print "Applying security updates to '%s'.." % (cfg_file),
+
+        updated = config_version_cfg_sanity_check (cfg)
+        print ["No update required.", "Updated."][updated]
 
     # Save it
     if updated:
