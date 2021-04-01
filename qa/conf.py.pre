@@ -24,7 +24,7 @@ SSL_CERT_KEY_FILE = "ssl-keys/set-1.key"
 SERVER_DELAY      = 10
 
 # Third party utilities
-PYTHON_PATH       = "auto"
+PYTHON_PATH       = "%pythonpath%"
 PHPCGI_PATH       = "%phpcgi%"
 PHP_FCGI_PORT     = 1980
 
