@@ -1085,16 +1085,34 @@ AC_ARG_WITH(libssl,
 have_openssl=no
 
 if test "$WITH_OPENSSL" != "no"; then
+    dnl backup the pre-ssl variables
+    CLEANLDFLAGS="$LDFLAGS"
+    CLEANCFLAGS="$CFLAGS"
+    CLEANLIBS="$LIBS"
     if test "$WITH_OPENSSL" != "yes"; then
-        LIBSSL_CFLAGS="-I$WITH_OPENSSL/include"
+        LIBSSL_CFLAGS="-I$WITH_OPENSSL/include -I$WITH_OPENSSL/include/openssl"
         LIBSSL_LIBS="-L$WITH_OPENSSL/lib"
+        LIBCRYPTO_LIBS="-L$WITH_OPENSSL/lib"
+        OPENSSL_PATH="$WITH_OPENSSL/bin"
     fi
+
+    CFLAGS="$CFLAGS $LIBSSL_CFLAGS"
+    LDFLAGS="$LDFLAGS $LIBSSL_LIBS"
 
     AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
     have_openssl="no"
     AC_CHECK_LIB(ssl, OPENSSL_init_ssl, [have_openssl="yes"])
     AC_CHECK_LIB(ssl, SSL_library_init, [have_openssl="yes"])
     AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes])
+
+    if test "$have_openssl" = "yes"; then
+        AC_CHECK_HEADERS(openssl/dh.h openssl/rand.h openssl/crypto.h \
+                         openssl/lhash.h openssl/ssl.h openssl/err.h,
+                         AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL/libssl library]),
+                         have_openssl="no"
+                        )
+    fi
+    AS_IF([test "x$have_openssl" = xno], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
 
     if test "$have_openssl" = "yes"; then
         TLS_BACK_END="OpenSSL/libssl"
@@ -1104,7 +1122,6 @@ if test "$WITH_OPENSSL" != "no"; then
         AC_SUBST(LIBSSL_LIBS)
         AC_SUBST(LIBSSL_CFLAGS)
 
-	AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
         AC_CACHE_CHECK([for a suitable test server to verify $TLS_BACK_END TLS protocol support], [ac_cv_path_OPENSSL_BIN],
                 [AC_PATH_PROGS_FEATURE_CHECK([OPENSSL_BIN], [openssl],
                   [v=$($ac_path_OPENSSL_BIN s_server -help 2>&1)
@@ -1155,10 +1172,13 @@ if test "$WITH_OPENSSL" != "no"; then
         if test "$have_openssl_ciphersuites" = "yes"; then
             AC_DEFINE(HAVE_SSL_CTX_SET_CIPHERSUITES, 1, [OpenSSL/libssl has SSL_CTX_set_ciphersuites() function])
         fi
+
+        AC_CHECK_HEADERS([openssl/engine.h])
     fi
+    # restore CFLAGS and LDFLAGS
+    CFLAGS="${CLEANCFLAGS}"
+    LDFLAGS="${CLEANLDFLAGS}"
 fi
-AC_MSG_CHECKING(for libssl)
-AC_MSG_RESULT([$have_openssl])
 
 AM_CONDITIONAL(USE_OPENSSL, test "x$have_openssl" = "xyes")
 
