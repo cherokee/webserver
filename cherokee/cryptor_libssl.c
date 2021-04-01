@@ -391,6 +391,14 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	EC_KEY *ecdh;
 #endif
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+	/* Old OpenSSL back-ends require Mozilla Old cipher configuration
+	 * in order to support SSL/TLS encryption
+	 */
+	cherokee_buffer_clean (&vsrv->ciphers);
+	cherokee_buffer_add_str (&vsrv->ciphers, CHEROKEE_CIPHERS_OLD);
+#endif
+
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
 
 	UNUSED(cryp);
