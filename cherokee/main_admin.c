@@ -653,7 +653,11 @@ check_for_python (void)
 	int         re;
 	pid_t       pid;
 	int         exitcode = -1;
+#ifdef PATH_PYTHON2
+	char const *args[]   = {"env", PATH_PYTHON2, "-c", "raise SystemExit", NULL};
+#else
 	char const *args[]   = {"env", "python2", "-c", "raise SystemExit", NULL};
+#endif
 
 	pid = fork();
 	if (pid == -1) {

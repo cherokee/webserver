@@ -111,4 +111,7 @@ CLEANFILES = \
 $(generated_DATA)
 
 test:
-	python -m compileall .
+	$(PYTHON) -m compileall .
+
+clean-local:
+	find . -type f -name "*.pyc" -exec rm -f {} \;
