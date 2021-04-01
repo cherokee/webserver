@@ -95,11 +95,11 @@ NOTE_DH1024       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 1024 
 NOTE_DH2048       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits.')
 NOTE_DH4096       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits.')
 NOTE_TLS_TIMEOUT  = N_('Timeout for the TLS/SSL handshake. Default: 15 seconds.')
-NOTE_TLS_SSLv2    = N_('Allow clients to use SSL version 2 - Beware: it is vulnerable. (Default: No)')
-NOTE_TLS_SSLv3    = N_('Allow clients to use SSL version 3 - Beware: it is vulnerable. (Default: No)')
-NOTE_TLS_TLSv1    = N_('Allow clients to use TLS version 1 (Default: Yes)')
-NOTE_TLS_TLSv1_1  = N_('Allow clients to use TLS version 1.1 (Default: Yes)')
-NOTE_TLS_TLSv1_2  = N_('Allow clients to use TLS version 1.2 (Default: Yes)')
+NOTE_TLS_SSLv2    = N_('Beware: it is vulnerable. You should disable SSLv2.')
+NOTE_TLS_SSLv3    = N_('Beware: it is vulnerable. You should disable SSLv3.')
+NOTE_TLS_TLSv1    = N_('TLSv1 is deprecated')
+NOTE_TLS_TLSv1_1  = N_('TLSv1.1 is deprecated')
+NOTE_TLS_TLSv1_2  = N_('  ')
 
 HELPS = [('config_advanced', N_('Advanced'))]
 
@@ -179,12 +179,14 @@ class TLSWidget (CTK.Container):
     def __init__ (self):
         CTK.Container.__init__ (self)
 
+        props = {}
+        props = {'mode': 'inverse'}
         table = CTK.PropsAuto(URL_APPLY)
-        table.Add (_('SSL version 2'),            CTK.CheckCfgText('server!tls!protocol!SSLv2',  False, _("Allow")), _(NOTE_TLS_SSLv2))
-        table.Add (_('SSL version 3'),            CTK.CheckCfgText('server!tls!protocol!SSLv3',  False, _("Allow")), _(NOTE_TLS_SSLv3))
-        table.Add (_('TLS version 1'),            CTK.CheckCfgText('server!tls!protocol!TLSv1',   True, _("Allow")), _(NOTE_TLS_TLSv1))
-        table.Add (_('TLS version 1.1'),          CTK.CheckCfgText('server!tls!protocol!TLSv1_1', True, _("Allow")), _(NOTE_TLS_TLSv1_1))
-        table.Add (_('TLS version 1.2'),          CTK.CheckCfgText('server!tls!protocol!TLSv1_2', True, _("Allow")), _(NOTE_TLS_TLSv1_2))
+        table.Add (_('SSL version 2'),            CTK.CheckCfgText('server!tls!protocol!SSLv2',    True, _("Disable"), props), _(NOTE_TLS_SSLv2))
+        table.Add (_('SSL version 3'),            CTK.CheckCfgText('server!tls!protocol!SSLv3',    True, _("Disable"), props), _(NOTE_TLS_SSLv3))
+        table.Add (_('TLS version 1'),            CTK.CheckCfgText('server!tls!protocol!TLSv1',   False, _("Disable"), props), _(NOTE_TLS_TLSv1))
+        table.Add (_('TLS version 1.1'),          CTK.CheckCfgText('server!tls!protocol!TLSv1_1', False, _("Disable"), props), _(NOTE_TLS_TLSv1_1))
+        table.Add (_('TLS version 1.2'),          CTK.CheckCfgText('server!tls!protocol!TLSv1_2', False, _("Disable"), props), _(NOTE_TLS_TLSv1_2))
         table.Add (_('Handshake Timeout'),        CTK.TextCfg('server!tls!timeout_handshake', True), _(NOTE_TLS_TIMEOUT))
         table.Add (_('DH parameters: 512 bits'),  CTK.TextCfg('server!tls!dh_param512',  True), _(NOTE_DH512))
         table.Add (_('DH parameters: 1024 bits'), CTK.TextCfg('server!tls!dh_param1024', True), _(NOTE_DH1024))

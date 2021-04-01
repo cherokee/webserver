@@ -88,6 +88,8 @@ class CheckCfg (Checkbox):
     checkbox with the value of the configuration tree given by key
     argument if it exists. It accepts properties to pass to the base
     Checkbox object.
+    As an option the checkbox setting can be inverted to show checked
+    for False instead of True.
 
     Arguments:
         key: key in the configuration tree.
@@ -103,12 +105,16 @@ class CheckCfg (Checkbox):
         if not props:
             props = {}
 
+        self.invert = False
+        if props.has_key('mode') and props['mode'] == 'inverse':
+            self.invert = True
+
         # Read the key value
         val = cfg.get_val(key)
-        if not val:
-            props['checked'] = "01"[bool(int(default))]
+        if not val or (props.has_key('disabled') and int(props['disabled'])):
+            props['checked'] = '01'[bool(int(default))]
         elif val.isdigit():
-            props['checked'] = "01"[bool(int(val))]
+            props['checked'] = ['01', '10'][self.invert][bool(int(val))]
         else:
             assert False, "Could not handle value: %s"%(val)
 
@@ -159,6 +165,40 @@ class CheckCfgText (CheckCfg):
         assert type(props) in (dict, type(None))
 
         CheckCfg.__init__ (self, key, default, props)
+        if not props:
+            props = {}
+        self.text = text
+        self.disabled = False
+        if props.has_key('disabled') and int(props['disabled']):
+            self.disabled = True
+
+    def Render (self):
+        render = CheckCfg.Render (self)
+        render.html =  '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' %(self.id, render.html, self.text)
+        if not self.disabled:
+            render.js += CLICK_CHANGE_JS %(self.id)
+        return render
+
+
+class CheckCfgTextInv (CheckCfg):
+    """
+    Configuration-Tree based CheckboxText widget. Populates the input
+    checkbox with the inverted value of the configuration tree given by key
+    argument if it exists. It accepts properties to pass to the base
+    CheckboxText object.
+
+    Arguments:
+        key: key in the configuration tree.
+        default: default value to give to the checkbox.
+        text: text to show beside the checkbox (by default, 'Enabled')
+        props: additional properties for base CheckboxText.
+    """
+    def __init__ (self, key, default, text='Enabled', props=None):
+        assert type(default) == bool
+        assert type(text) == str
+        assert type(props) in (dict, type(None))
+
+        CheckCfg.__init__ (self, key, default, props, True)
         self.text = text
 
     def Render (self):
