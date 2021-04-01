@@ -9,13 +9,15 @@ endif
 SUFFIXES = .py.pre .py
 
 if USE_OPENSSL
+minmaxtls = @USE_OPENSSL_MIN_MAX_PROTOCOL@
 tlsprotocols = @OPENSSL_TLS_PROTOCOLS@
 else
+minmaxtls = False
 tlsprotocols =
 endif
 
 .py.pre.py:
-	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%sbindir%|${sbindir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%libdir%|${libdir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%version%|${PACKAGE_VERSION}|g; s|%phpcgi%|${PHPCGI}|g; s|%datadir%|${datadir}|g; s|%localedir%|${localedir}|g; s|%tlsprotocols%|$(tlsprotocols)|g" $< > $@
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%sbindir%|${sbindir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%libdir%|${libdir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%version%|${PACKAGE_VERSION}|g; s|%phpcgi%|${PHPCGI}|g; s|%datadir%|${datadir}|g; s|%localedir%|${localedir}|g; s|%minmaxtls%|$(minmaxtls)|g; s|%tlsprotocols%|$(tlsprotocols)|g" $< > $@
 
 PY_PRE = \
 configured.py.pre
