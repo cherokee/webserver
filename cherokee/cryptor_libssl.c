@@ -480,6 +480,168 @@ verify_tolerate_cb(int preverify_ok, X509_STORE_CTX *x509_store)
 	return 1;
 }
 
+#ifdef TRACE_ENABLED
+static void
+trace_libssl_tls_settings(SSL_CTX *ctx, cherokee_virtual_server_t *vsrv)
+{
+	long        options;
+	int         verify_mode = SSL_VERIFY_NONE;
+	int         libssl_security_level;
+	int         version;
+	const char *trace_str;
+
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+	cherokee_buffer_add_va (&tmp, "libssl security level for vserver %s: ",
+		                vsrv->name.buf);
+	libssl_security_level = SSL_CTX_get_security_level (ctx);
+	switch (libssl_security_level) {
+	    case 0:
+		cherokee_buffer_add_va (&tmp,
+		                        "%d (no SSL/TLS protocol restrictions)",
+		                        libssl_security_level);
+		break;
+	    case 1:
+		cherokee_buffer_add_va (&tmp,
+		                        "%d (SSLv2 not allowed)",
+		                        libssl_security_level);
+		break;
+	    case 2:
+		cherokee_buffer_add_va (&tmp,
+		                        "%d (%s and below not allowed)",
+		                        libssl_security_level, SSL_TXT_SSLV3);
+		break;
+	    case 3:
+		cherokee_buffer_add_va (&tmp,
+		                        "%d (%s and below not allowed)",
+		                        libssl_security_level, SSL_TXT_TLSV1);
+		break;
+	    case 4:
+		cherokee_buffer_add_va (&tmp,
+		                        "%d (%s and below not allowed)",
+		                        libssl_security_level, SSL_TXT_TLSV1_1);
+		break;
+	    case 5:
+		cherokee_buffer_add_va (&tmp,
+		                        "%d (%s and below not allowed)",
+		                        libssl_security_level, SSL_TXT_TLSV1_1);
+		break;
+	    default:
+		cherokee_buffer_add_str (&tmp, "unknown libssl security level");
+		break;
+	}
+	TRACE(ENTRIES, "%s\n", tmp.buf);
+
+	cherokee_buffer_clean(&tmp);
+
+	CLEAR_LIBSSL_ERRORS;
+#endif
+#ifdef HAVE_SSL_CTX_GET_MIN_PROTO_VERSION
+	cherokee_buffer_add_va (&tmp,
+	                        "Minimum supported TLS/SSL protocol version for vserver %s: ",
+	                        vsrv->name.buf);
+	version = SSL_CTX_get_min_proto_version (ctx);
+	if (version > 0) {
+		if (_tls_protocol_version_to_text(version, &tmp) != ret_ok) {
+			cherokee_buffer_add_str (&tmp, "unknown protocol");
+		}
+	}
+	if (CRYPTOR_VSRV_MIN_TLS_PROTOCOL(vsrv) == 0) {
+		if (version > 0) {
+			cherokee_buffer_add_str (&tmp, " (");
+		}
+		cherokee_buffer_add_str (&tmp, "auto-configured by libssl");
+		if (version > 0) {
+			cherokee_buffer_add_char (&tmp, ')');
+		}
+	}
+	TRACE(ENTRIES, "%s\n", tmp.buf);
+
+	cherokee_buffer_clean(&tmp);
+
+	cherokee_buffer_add_va (&tmp,
+	                        "Maximum supported TLS/SSL protocol version for vserver %s: ",
+	                        vsrv->name.buf);
+	version = SSL_CTX_get_max_proto_version (ctx);
+	if (version > 0) {
+		if (_tls_protocol_version_to_text(version, &tmp) != ret_ok) {
+			cherokee_buffer_add_str (&tmp, "unknown protocol");
+		}
+	}
+	if (CRYPTOR_VSRV_MAX_TLS_PROTOCOL(vsrv) == 0) {
+		if (version > 0) {
+			cherokee_buffer_add_str (&tmp, " (");
+		}
+		cherokee_buffer_add_str (&tmp, "auto-configured by libssl");
+		if (version > 0) {
+			cherokee_buffer_add_char (&tmp, ')');
+		}
+	}
+	TRACE(ENTRIES, "%s\n", tmp.buf);
+
+	cherokee_buffer_clean(&tmp);
+
+	CLEAR_LIBSSL_ERRORS;
+#endif
+
+	options = SSL_CTX_get_options (ctx);
+
+#ifdef SSL_OP_NO_SSLv2
+	if (options & SSL_OP_NO_SSLv2) {
+		if (! cherokee_buffer_is_empty(&tmp)) {
+			cherokee_buffer_add_str (&tmp, ", ");
+		}
+		cherokee_buffer_add_str (&tmp, "SSLv2");
+	}
+#endif
+#ifdef SSL_OP_NO_SSLv3
+	if (PROTOCOL_SWITCHED_OFF(SSL_OP_NO_SSLv3, options, vsrv)) {
+		if (! cherokee_buffer_is_empty(&tmp)) {
+			cherokee_buffer_add_str (&tmp, ", ");
+		}
+		cherokee_buffer_add_str (&tmp, SSL_TXT_SSLV3);
+	}
+#endif
+#ifdef SSL_OP_NO_TLSv1
+	if (PROTOCOL_SWITCHED_OFF(SSL_OP_NO_TLSv1, options, vsrv)) {
+		if (! cherokee_buffer_is_empty(&tmp)) {
+			cherokee_buffer_add_str (&tmp, ", ");
+		}
+		cherokee_buffer_add_str (&tmp, SSL_TXT_TLSV1);
+	}
+#endif
+#ifdef SSL_OP_NO_TLSv1_1
+	if (PROTOCOL_SWITCHED_OFF(SSL_OP_NO_TLSv1_1, options, vsrv)) {
+		if (! cherokee_buffer_is_empty(&tmp)) {
+			cherokee_buffer_add_str (&tmp, ", ");
+		}
+		cherokee_buffer_add_str (&tmp, SSL_TXT_TLSV1_1);
+	}
+#endif
+#ifdef SSL_OP_NO_TLSv1_2
+	if (PROTOCOL_SWITCHED_OFF(SSL_OP_NO_TLSv1_2, options, vsrv)) {
+		if (! cherokee_buffer_is_empty(&tmp)) {
+			cherokee_buffer_add_str (&tmp, ", ");
+		}
+		cherokee_buffer_add_str (&tmp, SSL_TXT_TLSV1_2);
+	}
+#endif
+#ifdef SSL_OP_NO_TLSv1_3
+	if (PROTOCOL_SWITCHED_OFF(SSL_OP_NO_TLSv1_3, options, vsrv)) {
+		if (! cherokee_buffer_is_empty(&tmp)) {
+			cherokee_buffer_add_str (&tmp, ", ");
+		}
+		cherokee_buffer_add_str (&tmp, "TLSv1.3");
+	}
+#endif
+	TRACE(ENTRIES, "TLS/SSL protocols switched off for vserver %s: %s\n",
+	      vsrv->name.buf, tmp.buf);
+	cherokee_buffer_mrproper(&tmp);
+
+	CLEAR_LIBSSL_ERRORS;
+}
+#endif
+
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
               cherokee_virtual_server_t   *vsrv,
@@ -490,6 +652,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	const char *error;
 	long        options;
 	int         verify_mode = SSL_VERIFY_NONE;
+	STACK_OF(SSL_CIPHER) *libssl_ciphers = NULL;
 #if !defined(OPENSSL_NO_EC) && OPENSSL_VERSION_NUMBER >= 0x0090800L && OPENSSL_VERSION_NUMBER < 0x10002000L
 	EC_KEY *ecdh;
 #endif
@@ -662,6 +825,17 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	SSL_CTX_set_options (n->context, options);
 
+	CLEAR_LIBSSL_ERRORS;
+
+	/* OpenSSL is significantly changing and improving communication
+	   security and privacy. So do Linux distributions by enabling
+	   or disabling OpenSSL capabilities. This is especially true
+	   for support of TLS/SSL protocols.
+	*/
+#ifdef TRACE_ENABLED
+	trace_libssl_tls_settings(n->context, vsrv);
+#endif
+
 	/* Set cipher list that vserver will accept.
 	 */
 	if (! cherokee_buffer_is_empty (&vsrv->ciphers)) {
@@ -669,7 +843,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		if (rc != 1) {
 			OPENSSL_LAST_ERROR(error);
 			LOG_ERROR(CHEROKEE_ERROR_SSL_CIPHER,
-			          vsrv->ciphers.buf, error);
+				  vsrv->ciphers.buf, error);
 			goto error;
 		}
 	}
@@ -686,6 +860,33 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 			goto error;
 		}
 	}
+#endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+	/* OpenSSL silently discards invalid ciphers within the provided
+	   cipher list. This may lead to fatal handshake errors without
+	   proper indication about the root cause to users.
+	*/
+	libssl_ciphers = SSL_CTX_get_ciphers(n->context);
+	if (libssl_ciphers == NULL) {
+		LOG_WARNING (CHEROKEE_ERROR_SSL_NOCIPHERS);
+#  ifdef TRACE_ENABLED
+	} else {
+		const char *cname;
+		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+		for(int i=0; i<sk_SSL_CIPHER_num(libssl_ciphers); i++) {
+			if (! cherokee_buffer_is_empty(&tmp)) {
+				cherokee_buffer_add_char (&tmp, ':');
+			}
+			cname = SSL_CIPHER_get_name(sk_SSL_CIPHER_value(libssl_ciphers, i));
+			cherokee_buffer_add (&tmp, cname, strlen(cname));
+		}
+		TRACE(ENTRIES, "Ciphers available for vserver %s:\n%s\n",
+		      vsrv->name.buf, tmp.buf);
+
+		cherokee_buffer_mrproper(&tmp);
+#  endif
+        }
 #endif
 
 	CLEAR_LIBSSL_ERRORS;

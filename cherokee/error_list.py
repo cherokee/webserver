@@ -1308,6 +1308,10 @@ e('SSL_MIN_MAX_PROTOCOL',
   title = "OpenSSL: cannot set minimum and maximum supported TLS protocol version '%s': %s",
   desc  = SYSTEM_ISSUE)
 
+e('SSL_NOCIPHERS',
+  title = "OpenSSL: no ciphers available for TLS/SSL encryption",
+  desc  = "TLS/SSL cannot be used. Please check your cypher and cyphersuite configuration.")
+
 e('SSL_CERTIFICATE',
   title = "OpenSSL: cannot use certificate file '%s':  %s",
   desc  = "An error occured while trying to load a certificate into the SSL context structure. Most likely the certificate file is wrong or has been corrupted.")
