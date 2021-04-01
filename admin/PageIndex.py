@@ -42,7 +42,7 @@ from consts import *
 from configured import *
 
 # Links
-LINK_BUGTRACKER = 'http://bugs.cherokee-project.com/'
+LINK_BUGTRACKER = BUGREPORTLINK
 LINK_TWITTER    = 'http://twitter.com/webserver'
 LINK_FACEBOOK   = 'http://www.facebook.com/cherokee.project'
 LINK_GOOGLEPLUS = 'https://plus.google.com/u/1/communities/109478817835447552345'

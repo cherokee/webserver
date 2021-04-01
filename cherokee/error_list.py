@@ -1,12 +1,12 @@
 # Macros
 #
 CODING_BUG = """It looks like you've hit a bug in the server. Please, \
-do not hesitate to report it at http://bugs.cherokee-project.com/ so  \
+do not hesitate to report it at https://github.com/cherokee/webserver/issues so  \
 the developer team can fix it."""
 
 UNKNOWN_CAUSE = """An unexpected error has just occurred in the \
 server. The cause of the issue is unknown. Please, do not hesitate to \
-report it at http://bugs.cherokee-project.com/ so the developer team \
+report it at https://github.com/cherokee/webserver/issues so the developer team \
 can fix it."""
 
 SYSTEM_ISSUE = """The issue seems to be related to your system."""

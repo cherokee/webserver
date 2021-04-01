@@ -22,6 +22,7 @@ SSL_CERT_KEY_FILE = "ssl-keys/set-1.key"
 
 # Misc options
 SERVER_DELAY      = 10
+BUG_REPORT_LINK   = "%bugreportlink%"
 
 # Third party utilities
 PYTHON_PATH       = "%pythonpath%"

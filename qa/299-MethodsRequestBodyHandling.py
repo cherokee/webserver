@@ -2,7 +2,7 @@ import os
 from base import *
 
 DIR = "/299-MethodsRequestBodyHandling/"
-MAGIC = "Report bugs to http://bugs.cherokee-project.com"
+MAGIC = "Report bugs to " + BUG_REPORT_LINK
 PORT   = get_free_port()
 PYTHON = look_for_python()
 SOURCE = get_next_source()

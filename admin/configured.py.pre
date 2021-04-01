@@ -9,6 +9,7 @@ WWWROOT         = "%wwwroot%"
 SYSCONFDIR      = "%sysconfdir%"
 LOCALSTATE      = "%localstatedir%"
 VERSION         = "%version%"
+BUGREPORTLINK   = "%bugreportlink%"
 TLSPROTOCOLS    = "%tlsprotocols%"
 MINMAXTLS       = %minmaxtls%
 
