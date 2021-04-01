@@ -145,9 +145,138 @@ image::media/images/admin_advanced4.png[Cherokee Admin interface]
 [[tls]]
 TLS
 ~~~
-* DH parameters:
-  Here you can specify the paths to your Diffie Hellman parameters PEM
-  files for 512, 1024, 2048 and 4096 bits.
+
+[[tls-protocols]]
+.TLS/SSL Protocols
+* Support of TLS/SSL protocols for traffic encryption largely depends on the
+  capabilities of the underlying link:config_general.html[TLS/SSL engine] and
+  operating system policies. In addition, suited link:cookbook_ssl.html[cipher
+  suites] and link:cookbook_ssl.html[ciphers] are required for encryption.
+  Cherokee TLS/SSL default configuration is aligned to
+  link:https://wiki.mozilla.org/Security/Server_Side_TLS#[Mozilla]
+  recommended Server Side TLS configuration (Intermediate compatibility).
+  It supports encrypted communication with nearly every client released in the
+  last five (or more) years including, e. g. Windows 7 workstations.
+
+* Only TLS v1.2 and newer protocols are enabled and provided with valid
+  cipher suites by the Cherokee default configuration.
+
+* Availability of TLS v1.1 and below depends on the capabilities of your
+  link:config_general.html[SSL/TLS back-end]. You have to be aware of the fact
+  that support of deprecated or obsolete SSL/TLS protocols impose a security
+  risk on your webserver and operating system. Therefore, most distributions
+  have disabled or removed support of TLS v1.1 and below in the TLS back-end.
 
 .TLS
 image::media/images/admin_advanced5.png[Cherokee Admin interface]
+
+Min. TLS protocol version
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* Default option 'auto-configured' (recommended) enables protocol versions down
+  to the lowest version supported by the link:config_general.html[SSL/TLS back-end].
+* Note that a minimum allowed SSL/TLS protocol may have been hardcoded in the
+  link:config_general.html[SSL/TLS back-end] by your distribution. In this case,
+  option 'auto-configured' enables protocol versions down to the hardcoded minimum
+  TLS protocol version.
+* Setting this parameter to a particular listed SSL/TLS protocol enables all
+  protocols down to the chosen protocol version that are supported by
+  link:config_general.html[SSL/TLS back-end].
+
+Max. TLS protocol version
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* Default option 'auto-configured' (recommended) enables protocol versions up
+  to the highest version supported by the link:config_general.html[SSL/TLS back-end].
+* Setting this parameter to a particular listed SSL/TLS protocol enables all
+  protocols up the chosen protocol version that are supported by the
+  link:config_general.html[SSL/TLS back-end].
+
+Handshake timeout
+^^^^^^^^^^^^^^^^^
+* Specify a timeout period for the negotiation of ciphers for traffic
+  encryption between client and server.
+
+DH parameters
+^^^^^^^^^^^^^
+  Here you can specify the paths to your Diffie Hellman parameters PEM
+  files for 512, 1024, 2048 and 4096 bits.
+
+Disable SSL/TLS version (deprecated)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* These options may be used to disable selected SSL/TLS protocols in addition to
+  the min./max. settings above. If the link:config_general.html[SSL/TLS back-end]
+  does not support configuration of min./max. TLS protocols the TLS configuration
+  page starts with this section.
+* This section also outlines SSL/TLS protocol versions that are not supported by
+  the link:config_general.html[SSL/TLS back-end] at all.
+
+[[tls-advanced]]
+.Advanced TLS/SSL Configuration
+*   As outlined above Cherokee's default cipher configuration is following
+    link:https://wiki.mozilla.org/Security/Server_Side_TLS#[Mozilla] Intermediate
+    Server Side TLS configuration recommendations. This configuration does not
+    allow communication using TLS v1.1 or below. Therefore, Cherokee does not
+    provide any (insecure) ciphers for encrypted communication to such outdated
+    clients. If you really require offering web services to old clients, e. g.
+    Windows XP or OpenSSL 0.9.8 clients, you need to enable a suited TLS/SSL
+    protocol. This depends on the capabilities of your SSL/TLS back-end. You
+    have to be aware of the fact that support of deprecated or obsolete SSL/TLS
+    protocols impose a security risk for your webserver and system. Therefore,
+    most distributions have disabled or removed support of TLS v1.1 and below
+    in their TLS back-ends. Cherokee provides a command-line option to inspect
+    the capabilities of your TLS back-end:
+----
+    $ cherokee -i
+
+    Compilation
+     Version: 1.2.104
+     [...]
+     OpenSSL support: libssl (OpenSSL 1.1.1j  16 Feb 2021)
+
+    [...]
+
+    Support
+     [...]
+     SSL/TLS: libssl (OpenSSL 1.1.1j  16 Feb 2021)
+              supported protocols: SSLv3, TLSv1, TLSv1.1, TLSv1.2, TLSv1.3 - default min. protocol: TLSv1.2
+              protocols deactivated by maintainer: SSLv3
+     TLS SNI: yes
+----
+
+*   The command's output first shows name and version of the SSL/TLS back-end,
+    which has been used to build Cherokee (section 'Compilation'). In section
+    'Support' the actually installed back-end is shown. Cherokee also reports
+    SSL/TLS protocols supported by the used back-end. Protocols not listed there
+    have been removed from the back-end. Finally, protocols are listed that
+    cannot be used because your distribution has disabled (deactivated) them.
+    In addition, the command's output indicates if a minimum allowed
+    SSL/TLS protocol has been hardcoded in the back-end. Unsupported or
+    deactivated protocols cannot be used by Cherokee at all. Use of protocol
+    versions below a hardcoded minimum allowed SSL/TLS protocol depends on
+    Cherokee's TLS settings above: In mode 'auto-configured' only the specified
+    minimum protocol version and versions above are available for use. Setting option
+    'Min. TLS protocol version' to one of the listed protocols will configure
+    the back-end to allow use of the selected protocol version and all versions
+    above if they are part of the supported protocols list and not shown in the
+    deactivated protocols list.
+*   After a suited TLS/SSL protocol has been enabled you have to configure an
+    extended set of link:cookbook_ssl.html[ciphers] for the affected virtual servers.
+    The set must include some insecure and outdated link:cookbook_ssl.html[ciphers]
+    that are supported by your old clients.
+*   Cherokee still can be built with previous versions of OpenSSL/libssl back-end, e. g.
+    OpenSSL version 0.9.8. On modern secure servers system administrators
+    are very likely not able to put a suited TLS protocol into operation that is
+    supported by old legacy clients. If this is the case you can build and locally
+    install an additional, insecure previous version of OpenSSL on your server
+    and build Cherokee using this back-end. Cherokee's default cipher configuration
+    is adapted to this legacy OpenSSL back-end and now supports the cipher suites
+    recommended by link:https://wiki.mozilla.org/Security/Server_Side_TLS#[Mozilla] Old
+    compatibility configuration. As previous versions of OpenSSL did not support
+    configuration of minimum or maximum allowed TLS protocols, the advanced TLS
+    configuration screen is also different:
+
+.TLS for back-ends without min./max. TLS protocol configuration
+image::media/images/admin_advanced6.png[Cherokee Admin interface]
+
+* Hint: When starting Cherokee Admin with an empty configuration file (rename
+        the existing file to, e. g. cherokee.conf.sik, Cherokee will report its
+        default SSL/TLS protocol availability settings.
