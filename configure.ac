@@ -29,7 +29,7 @@ m4_define([cherokee_micro_version], [104])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
-AC_INIT([cherokee], [cherokee_version], [http://bugs.cherokee-project.com/], [cherokee])
+AC_INIT([cherokee], [cherokee_version], [https://github.com/cherokee/webserver/issues], [cherokee])
 AC_CONFIG_SRCDIR([cherokee/server.c])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([no-define])
@@ -209,8 +209,12 @@ m4_ifdef([LT_INIT], [LT_INIT([dlopen shared static])], [AC_LIBTOOL_DLOPEN])
 dnl Paths
 AC_PROG_CC
 AC_PROG_CC_STDC
+AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AC_PROG_YACC
+AC_PROG_LEX
+AC_PROG_LN_S
 AM_PROG_LIBTOOL
 
 AC_PATH_PROG(cherokeepath, cherokee)
@@ -240,16 +244,24 @@ AC_CHECK_HEADERS(sys/socket.h sys/un.h netinet/in.h arpa/inet.h netinet/tcp.h sy
 AC_CHECK_HEADERS(sys/resource.h resource.h unistd.h syslog.h stdint.h inttypes.h error.h pwd.h sys/uio.h)
 AC_CHECK_HEADERS(pthread.h netdb.h stdarg.h sys/filio.h sys/varargs.h sys/select.h sys/mman.h sys/uio.h grp.h)
 AC_CHECK_HEADERS(sched.h execinfo.h)
+AC_CHECK_HEADERS(fenv.h float.h libintl.h limits.h locale.h stddef.h stdlib.h string.h strings.h sys/param.h wchar.h wctype.h)
 
 AC_SYS_LARGEFILE
 
-AC_SIZE_T
+AC_CHECK_HEADER_STDBOOL
 AC_TYPE_UID_T
-AC_TYPE_MODE_T
+AC_C_INLINE
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_TYPE_PID_T
-AC_STRUCT_ST_RDEV
+AC_C_RESTRICT
+AC_TYPE_SSIZE_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
+AC_TYPE_UINT8_T
 AC_CHECK_TYPE(ino_t, unsigned)
 AC_CHECK_TYPE(loff_t, off_t)
 AC_CHECK_TYPE(offset_t, loff_t)
@@ -271,14 +283,17 @@ AC_TRY_RUN([#include <stdio.h>
 main() { long long x = 1000000; x *= x; exit(((x/1000000) == 1000000)? 0: 1); }],
 samba_cv_have_longlong=yes,samba_cv_have_longlong=no,samba_cv_have_longlong=cross)])
 if test x"$samba_cv_have_longlong" = x"yes"; then
-    AC_DEFINE(HAVE_LONGLONG,1,[Whether the host supports long long'])
+    AC_DEFINE(HAVE_LONGLONG,1,[Whether the host supports long long])
 fi
 
 AC_FUNC_MEMCMP
 AC_FUNC_MMAP
 AC_FUNC_FORK
+AC_FUNC_CHOWN
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 
-AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir readdir_r flockfile funlockfile strnstr backtrace random srandom srandomdev)
+AC_CHECK_FUNCS(dup2 ftruncate getcwd gettimeofday inet_ntoa gmtime gmtime_r localtime localtime_r getrlimit getdtablesize memset mkdir readdir readdir_r flockfile funlockfile backtrace munmap pathconf pstat_getdynamic realpath rmdir strchr strcspn strdup strncasecmp strpbrk strrchr strspn strnstr strstr strtol strtoul random srandom srandomdev)
 
 FW_CHECK_PWD
 FW_CHECK_GRP
@@ -1197,7 +1212,6 @@ if test "x$USE_NLS" = "xyes"; then
 fi
 
 AM_CONDITIONAL(NLS_ENABLED, test "x$USE_NLS" = "xyes")
-AC_CONFIG_FILES([po/admin/Makefile.in])
 
 dnl
 dnl LDAP
@@ -1613,49 +1627,49 @@ AM_CONDITIONAL(STATIC_RULE_NOT,               grep _not_          $conf_h >/dev/
 AM_CONDITIONAL(STATIC_RULE_AND,               grep _and_          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_OR,                grep _or_           $conf_h >/dev/null)
 
-AC_OUTPUT([
-Makefile
-cget/Makefile
-cherokee-config
-cherokee.pc
-cherokee.spec
-org.cherokee.webserver.plist
-cherokee/Makefile
-contrib/Makefile
-icons/Makefile
-m4/Makefile
-qa/Makefile
-doc/Makefile
-themes/Makefile
-themes/default/Makefile
-themes/firefox3/Makefile
-themes/white/Makefile
-themes/plain/Makefile
-packages/Makefile
-packages/osx/Makefile
-packages/osx/Info.plist
-packages/osx/Description.plist
-www/Makefile
-dbslayer/Makefile
-admin/Makefile
-admin/icons/Makefile
-admin/plugins/Makefile
-admin/wizards/Makefile
-admin/static/Makefile
-admin/static/js/Makefile
-admin/static/css/Makefile
-admin/static/images/Makefile
-admin/static/images/flags/Makefile
-admin/static/images/wizards/Makefile
-admin/static/images/other/Makefile
-admin/CTK/Makefile
-admin/CTK/CTK/Makefile
-admin/CTK/static/css/Makefile
-admin/CTK/static/images/Makefile
-admin/CTK/static/js/Makefile
-admin/CTK/static/Makefile
-po/Makefile
-])
+AC_CONFIG_FILES([Makefile
+                 admin/CTK/CTK/Makefile
+                 admin/CTK/Makefile
+                 admin/CTK/static/Makefile
+                 admin/CTK/static/css/Makefile
+                 admin/CTK/static/images/Makefile
+                 admin/CTK/static/js/Makefile
+                 admin/Makefile
+                 admin/icons/Makefile
+                 admin/plugins/Makefile
+                 admin/static/Makefile
+                 admin/static/css/Makefile
+                 admin/static/images/Makefile
+                 admin/static/images/flags/Makefile
+                 admin/static/images/other/Makefile
+                 admin/static/images/wizards/Makefile
+                 admin/static/js/Makefile
+                 admin/wizards/Makefile
+                 cget/Makefile
+                 cherokee-config
+                 cherokee.pc
+                 cherokee.spec
+                 cherokee/Makefile
+                 contrib/Makefile
+                 dbslayer/Makefile
+                 doc/Makefile
+                 icons/Makefile
+                 m4/Makefile
+                 org.cherokee.webserver.plist
+                 packages/Makefile
+                 packages/osx/Description.plist
+                 packages/osx/Info.plist
+                 packages/osx/Makefile
+                 po/Makefile
+                 po/admin/Makefile.in
+                 qa/Makefile
+                 themes/Makefile
+                 themes/default/Makefile
+                 themes/firefox3/Makefile
+                 themes/plain/Makefile
+                 themes/white/Makefile
+                 www/Makefile])
+AC_OUTPUT
 
 
 methods=""
