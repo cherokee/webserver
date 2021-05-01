@@ -73,8 +73,10 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 	cherokee_boolean_t found    = false;
 
 	dir = cherokee_opendir (directory);
-	if (dir == NULL)
+	if (dir == NULL) {
+		LOG_CRITICAL (CHEROKEE_ERROR_HANDLER_ERROR_OPEN_DIR, directory);
 		goto go_out;
+	}
 
 	for (;;) {
 		re = cherokee_readdir (dir, (struct dirent *)entry_buf, &entry);
