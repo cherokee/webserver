@@ -344,6 +344,7 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_fi
 	 */
 	switch (errno) {
 	case EACCES:
+		LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_OPEN, local_file->buf);
 		conn->error_code = http_access_denied;
 		break;
 	case ENOENT:
