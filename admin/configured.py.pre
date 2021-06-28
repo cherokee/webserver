@@ -9,6 +9,9 @@ WWWROOT         = "%wwwroot%"
 SYSCONFDIR      = "%sysconfdir%"
 LOCALSTATE      = "%localstatedir%"
 VERSION         = "%version%"
+BUGREPORTLINK   = "%bugreportlink%"
+TLSPROTOCOLS    = "%tlsprotocols%"
+MINMAXTLS       = %minmaxtls%
 
 CHEROKEE_SERVER       = join (PREFIX, "sbin/cherokee")
 CHEROKEE_WORKER       = join (PREFIX, "sbin/cherokee-worker")

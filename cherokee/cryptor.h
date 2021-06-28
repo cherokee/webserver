@@ -35,7 +35,9 @@
 
 CHEROKEE_BEGIN_DECLS
 
-#define CHEROKEE_CIPHERS_DEFAULT "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
+#define CHEROKEE_CIPHERSUITES_DEFAULT "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"
+#define CHEROKEE_CIPHERS_DEFAULT "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384"
+#define CHEROKEE_CIPHERS_OLD "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
 
 /* Callback function prototipes
  */
@@ -45,6 +47,7 @@ typedef ret_t (* cryptor_func_configure_t)   (void  *cryp, cherokee_config_node_
 typedef ret_t (* cryptor_func_vserver_new_t) (void  *cryp, void *vsrv, void **vserver_crypt);
 typedef ret_t (* cryptor_func_socket_new_t)  (void  *cryp, void **socket_crypt);
 typedef ret_t (* cryptor_func_client_new_t)  (void  *cryp, void **client_crypt);
+typedef ret_t (* cryptor_func_tls_info_t)    (void  *cryp, cherokee_buffer_t *backend_info_buf, cherokee_buffer_t *tls_protocols_buf, cherokee_buffer_t *deactivated_protocols_buf);
 
 /* Cryptor: Virtual server */
 typedef ret_t (* cryptor_vsrv_func_free_t)      (void  *cryp);
@@ -65,18 +68,23 @@ typedef ret_t (* cryptor_client_func_init_t)    (void  *cryp, void *host, void *
  */
 typedef struct {
 	cherokee_module_t          module;
+	long                       hardcoded_ssl_options;
 	cint_t                     timeout_handshake;
+	int                        min_tls_protocol;
+	int                        max_tls_protocol;
 	cherokee_boolean_t         allow_SSLv2;
 	cherokee_boolean_t         allow_SSLv3;
 	cherokee_boolean_t         allow_TLSv1;
 	cherokee_boolean_t         allow_TLSv1_1;
 	cherokee_boolean_t         allow_TLSv1_2;
+	cherokee_boolean_t         allow_TLSv1_3;
 
 	/* Methods */
 	cryptor_func_configure_t   configure;
 	cryptor_func_vserver_new_t vserver_new;
 	cryptor_func_socket_new_t  socket_new;
 	cryptor_func_client_new_t  client_new;
+	cryptor_func_tls_info_t    tls_info;
 } cherokee_cryptor_t;
 
 typedef struct {
@@ -148,6 +156,10 @@ ret_t cherokee_cryptor_socket_new  (cherokee_cryptor_t          *cryp,
 
 ret_t cherokee_cryptor_client_new  (cherokee_cryptor_t         *cryp,
                                     cherokee_cryptor_client_t **cryp_client);
+ret_t cherokee_cryptor_tls_backend_info (cherokee_cryptor_t   *cryp,
+                                         cherokee_buffer_t    *backend_info_buf,
+                                         cherokee_buffer_t    *tls_protocols_buf,
+                                         cherokee_buffer_t    *deactivated_protocols_buf);
 
 /* Cryptor: Virtual Server
  */

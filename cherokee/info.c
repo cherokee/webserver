@@ -26,11 +26,17 @@
 #include "info.h"
 #include "plugin_loader.h"
 #include "server-protected.h"
+#ifdef HAVE_OPENSSL
+#  include "cryptor_libssl.h"
+#endif
 
 void
 cherokee_info_build_print (cherokee_server_t *srv)
 {
-	cherokee_buffer_t builtin = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp       = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t prot_buf  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t deact_buf = CHEROKEE_BUF_INIT;
+	ret_t ret;
 
 	/* Basic info
 	 */
@@ -38,6 +44,9 @@ cherokee_info_build_print (cherokee_server_t *srv)
 	printf (" Version: " PACKAGE_VERSION "\n");
 	printf (" Compiled on: " __DATE__ " " __TIME__ "\n");
 	printf (" Arguments to configure: " CHEROKEE_CONFIG_ARGS "\n");
+#ifdef HAVE_OPENSSL
+	printf (" OpenSSL support: libssl (" OPENSSL_VERSION_TEXT ")\n");
+#endif
 	printf ("\n");
 
 	/* Paths
@@ -54,10 +63,10 @@ cherokee_info_build_print (cherokee_server_t *srv)
 	/* Print plug-ins information
 	 */
 	printf ("Plug-ins\n");
-	cherokee_plugin_loader_get_mods_info (&srv->loader, &builtin);
-	printf (" Built-in: %s\n", builtin.buf ? builtin.buf : "");
+	cherokee_plugin_loader_get_mods_info (&srv->loader, &tmp);
+	printf (" Built-in: %s\n", tmp.buf ? tmp.buf : "");
 	printf ("\n");
-	cherokee_buffer_mrproper (&builtin);
+        cherokee_buffer_clean(&tmp);
 
 	/* Support
 	 */
@@ -107,7 +116,25 @@ cherokee_info_build_print (cherokee_server_t *srv)
 	printf ("\n");
 
 #ifdef HAVE_OPENSSL
-	printf (" SSL/TLS: libssl\n");
+        cherokee_buffer_clean (&prot_buf);
+        cherokee_buffer_clean (&deact_buf);
+	if (srv->cryptor != NULL && srv->cryptor->tls_info != NULL) {
+                ret = srv->cryptor->tls_info (srv->cryptor,
+                                              &tmp,
+                                              &prot_buf,
+                                              &deact_buf);
+                if (ret == ret_ok) {
+                        printf (" SSL/TLS: libssl (%s)\n", tmp.buf);
+                        if (! cherokee_buffer_is_empty(&prot_buf)) {
+                                printf ("          supported protocols: %s\n",
+                                        prot_buf.buf);
+                        }
+                        if (! cherokee_buffer_is_empty(&deact_buf)) {
+                                printf ("          protocols deactivated by maintainer: %s\n",
+                                        deact_buf.buf);
+                        }
+                }
+        }
 # ifndef OPENSSL_NO_TLSEXT
 	printf (" TLS SNI: yes\n");
 # else
@@ -119,4 +146,8 @@ cherokee_info_build_print (cherokee_server_t *srv)
 #endif
 
 	printf ("\n");
+
+	cherokee_buffer_mrproper (&tmp);
+	cherokee_buffer_mrproper (&prot_buf);
+	cherokee_buffer_mrproper (&deact_buf);
 }

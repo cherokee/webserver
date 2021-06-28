@@ -149,6 +149,7 @@ media/images/admin_advanced2.png \
 media/images/admin_advanced3.png \
 media/images/admin_advanced4.png \
 media/images/admin_advanced5.png \
+media/images/admin_advanced6.png \
 media/images/admin_behavior.png \
 media/images/admin_general.png \
 media/images/admin_general_networking.png \

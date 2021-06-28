@@ -82,6 +82,7 @@ typedef struct {
 	cherokee_buffer_t            certs_ca;
 	cherokee_req_client_cert_t   req_client_certs;
 	cherokee_buffer_t            ciphers;
+	cherokee_buffer_t            ciphersuites;
 	cherokee_boolean_t           cipher_server_preference;
 	cherokee_boolean_t           ssl_compression;
 	cuint_t                      ssl_dh_length;

@@ -44,15 +44,20 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 	cryp->vserver_new = NULL;
 	cryp->socket_new  = NULL;
 	cryp->configure   = NULL;
+        cryp->tls_info    = NULL;
 
 	/* Properties
 	 */
-	cryp->timeout_handshake = TIMEOUT_DEFAULT;
-	cryp->allow_SSLv2       = false;
-	cryp->allow_SSLv3       = false;
-	cryp->allow_TLSv1       = true;
-	cryp->allow_TLSv1_1     = true;
-	cryp->allow_TLSv1_2     = true;
+	cryp->hardcoded_ssl_options = 0;
+	cryp->timeout_handshake     = TIMEOUT_DEFAULT;
+	cryp->min_tls_protocol      = 0;
+	cryp->max_tls_protocol      = 0;
+	cryp->allow_SSLv2           = false;
+	cryp->allow_SSLv3           = false;
+	cryp->allow_TLSv1           = true;
+	cryp->allow_TLSv1_1         = true;
+	cryp->allow_TLSv1_2         = true;
+	cryp->allow_TLSv1_3         = true;
 
 	return ret_ok;
 }
@@ -91,6 +96,7 @@ cherokee_cryptor_configure (cherokee_cryptor_t     *cryp,
 	cherokee_config_node_read_bool (conf, "protocol!TLSv1",    &cryp->allow_TLSv1);
 	cherokee_config_node_read_bool (conf, "protocol!TLSv1_1",  &cryp->allow_TLSv1_1);
 	cherokee_config_node_read_bool (conf, "protocol!TLSv1_2",  &cryp->allow_TLSv1_2);
+	cherokee_config_node_read_bool (conf, "protocol!TLSv1_3",  &cryp->allow_TLSv1_3);
 
 	/* Call the its virtual method
 	 */
@@ -276,4 +282,18 @@ cherokee_cryptor_client_init (cherokee_cryptor_client_t *cryp,
 		return ret_error;
 
 	return CRYPTOR_SOCKET(cryp)->init_tls (cryp, host, socket, NULL, &foo);
+}
+
+ret_t
+cherokee_cryptor_tls_backend_info (cherokee_cryptor_t   *cryp,
+                                   cherokee_buffer_t    *backend_info_buf,
+                                   cherokee_buffer_t    *tls_protocols_buf,
+                                   cherokee_buffer_t    *deactivated_protocols_buf)
+{
+	if (unlikely (cryp->tls_info == NULL))
+		return ret_error;
+
+	return cryp->tls_info (cryp, backend_info_buf,
+	                       tls_protocols_buf,
+	                       deactivated_protocols_buf);
 }

@@ -41,11 +41,15 @@ from CTK.util import find_copy_name
 URL_BASE  = '/vserver/content'
 URL_APPLY = '/vserver/content/apply'
 
+URL_OPENSSL_REFERENCE = '<a target="_blank" href="http://www.openssl.org/docs/apps/openssl-ciphers.html">%s</a>' % (_('Reference'))
+URL_MOZILLA = '<a target="_blank" href="https://wiki.mozilla.org/Security/Server_Side_TLS#">Mozilla</a>'
+
 NOTE_NICKNAME         = N_('Nickname for the virtual server.')
 NOTE_CERT             = N_('This directive points to the PEM-encoded Certificate file for the server (Full path to the file)')
 NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full path to the file)')
 NOTE_CA_LIST          = N_('File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
-NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default enables Forward Secrecy).')
+NOTE_CIPHERS          = N_('Ciphers that TLSv1.2 and below is allowed to use.')
+NOTE_CIPHERSUITES     = N_('Ciphersuites that TLSv1.3 is allowed to use.')
 NOTE_CIPHER_SERVER_PREFERENCE = N_('The cipher sequence that is specified by the server should have preference over the client preference. (Default: True).')
 NOTE_COMPRESSION      = N_('Explicitly enable or disable serverside compression support. (Default: Disabled).')
 NOTE_DH_LENGTH        = N_('Explicitely sets the Diffie-Hellman parameters length. (Default: Let openssl choose).')
@@ -661,9 +665,14 @@ class SecutiryWidgetContent (CTK.Container):
         self += CTK.RawHTML ('<h2>%s</h2>' % (_('Required SSL/TLS Values')))
         self += CTK.Indenter (submit)
 
+        CIPHER_COMP = 'Intermediate Compatibility'
+        if MINMAXTLS == False:
+            CIPHER_COMP = 'Old Compatibility'
+
         # Advanced options
         table = CTK.PropsTable()
-        table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
+        table.Add (_('Ciphersuites'),          CTK.TextCfg ('%s!ssl_ciphersuites' %(pre), True), '%s %s. %s: %s Intermediate Compatibility %s.' % (_(NOTE_CIPHERSUITES), URL_OPENSSL_REFERENCE, _('Default'), URL_MOZILLA, _('Ciphersuites')))
+        table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), '%s %s. %s: %s %s %s' % (_(NOTE_CIPHERS), URL_OPENSSL_REFERENCE, _('Default'), URL_MOZILLA, CIPHER_COMP, _('Ciphers')))
         table.Add (_('Server Preference'),     CTK.CheckCfgText ('%s!ssl_cipher_server_preference' % (pre), True, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
         table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
         table.Add (_('Compression'),           CTK.CheckCfgText ('%s!ssl_compression' % (pre), False, _('Enable')), _(NOTE_COMPRESSION))

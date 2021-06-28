@@ -31,7 +31,7 @@ from CTK.util import formatter
 from urllib import quote, unquote, urlencode
 from httplib import HTTPConnection
 
-URL_BTS         = 'http://bugs.cherokee-project.com/new'
+URL_BTS         = configured.BUGREPORTLINK
 URL_REPORT_HOST = 'www.cherokee-project.com'
 URL_REPORT_URL  = '/CTK_ok.html'
 

@@ -1264,7 +1264,8 @@ $(static_validator_htpasswd_flags) \
 $(static_validator_mysql_flags) \
 $(static_cryptor_libssl_flags) \
 $(static_handler_dbslayer_flags) \
-$(static_handler_streaming_flags)
+$(static_handler_streaming_flags) \
+$(LIBSSL_CFLAGS)
 
 libcherokee_server_la_LIBADD = \
 $(PTHREAD_LIBS) \
@@ -1731,7 +1732,8 @@ cherokee_worker_LDFLAGS = -export-dynamic
 cherokee_worker_LDADD   = \
 $(libcherokee_server_la_LIBADD) \
 libcherokee-base.la \
-libcherokee-server.la
+libcherokee-server.la \
+$(external_pcre_lib)
 
 #
 # Cherokee

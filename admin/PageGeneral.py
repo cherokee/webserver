@@ -55,7 +55,7 @@ NOTE_FORBID_2    = N_('First edit the offending rule(s)')
 NOTE_DELETE_DIALOG = N_('You are about to delete an binding. Are you sure you want to proceed?')
 
 HELPS = [('config_general',    N_("General Configuration")),
-         ('config_quickstart', N_("Configuration Quickstart"))]
+         ('config_walkthrough', N_("Configuration Quickstart"))]
 
 
 VALIDATIONS = [

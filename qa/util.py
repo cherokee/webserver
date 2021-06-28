@@ -139,7 +139,7 @@ def look_for_python():
     if __python_ref != None:
         return __python_ref
 
-    if PYTHON_PATH != "auto":
+    if PYTHON_PATH != "%pythonpath%":
         __python_ref = PYTHON_PATH
         return __python_ref
 

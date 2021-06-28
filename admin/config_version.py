@@ -111,6 +111,37 @@ def upgrade_to_1_2_103 (cfg):
                cfg.get_val('vserver!%s!rule!%s!match!directory'%(v,r)) == "/icons":
                     cfg['vserver!%s!rule!%s!match!directory'%(v,r)] = '/cherokee_icons'
 
+PROHIBITED_TLS_PROTOCOLS = [('SSLv2',   'SSL version 2'),
+                            ('SSLv3',   'SSL version 3')
+                           ]
+def update_tls_protocols (cfg):
+    # Vulnerable and insecure SSL protocols SSLv2 and SSLv3 must not be used
+    # by applications (RFC7568 and RFC6176).
+    # Cherokee now diables both protocols by default. Users can override this by
+    # explicitly enabling the protocols in the configuration file. On the other
+    # hand IETF does not allow to use both SSL protocols anymore due to their
+    # vulnerabilities, which also affects security of more recent TLS protocols.
+    # Search for SSLv2 and SSLv3 settings and remove them in order to apply
+    # Cherokee's safe default TLS protocol settings.
+    retVal = False
+    for protocol in PROHIBITED_TLS_PROTOCOLS:
+        v = cfg.pop('server!tls!protocol!%s' % protocol[0])
+        if v is not None:
+            if v.isdigit() and bool(int(v) == True):
+                print "\n" "    WARNING!! %s was enabled in the onfiguration file. This SSL/TLS protocol is "  % protocol[1]
+                print      "              obsolete and must not be used anymore. Configuration entry removed."
+                print      "    In case of need you can temporarily enable %s again using cherokee-admin." % protocol[0]
+            retVal = True
+    return retVal
+
+# Converts to 1.2.104 or later (if any)
+def upgrade_to_1_2_105 (cfg):
+    # Placeholder for required configuration file updates in a future version
+    # following 1.2.104:
+    # - Remove explicit use of insecure SSL/TLS protocols that are not allowed
+    #   by IETF
+    update_tls_protocols(cfg)
+
 def config_version_get_current():
     ver = configured.VERSION.split ('b')[0]
     v1,v2,v3 = ver.split (".")
@@ -149,6 +180,20 @@ def config_version_cfg_is_up_to_date (cfg):
 
     else:
         return False
+
+
+def config_version_cfg_sanity_check (cfg):
+    # Critical corrections and updates of existing configuration files to be
+    # applied during Cherokee installation independent of a version change
+    # - Remove explicit use of insecure SSL/TLS protocols that are not allowed
+    #   by IETF
+
+    # Do not proceed if it's empty
+    if not cfg.has_tree():
+        return False
+
+    # Perform
+    return update_tls_protocols (cfg)
 
 
 def config_version_update_cfg (cfg):
@@ -191,6 +236,10 @@ def config_version_update_cfg (cfg):
     # Update to.. 1.2.103
     if ver_config_i < 1002103:
         upgrade_to_1_2_103 (cfg)
+
+    # Update to.. post 1.2.104
+    if ver_config_i < 1002105:
+        upgrade_to_1_2_105 (cfg)
 
     cfg["config!version"] = ver_release_s
     return True

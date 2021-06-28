@@ -45,6 +45,11 @@
 # include "getopt/getopt.h"
 #endif
 
+#ifdef HAVE_OPENSSL
+# include <openssl/ssl.h>
+# include "pcre/pcre.h"
+#endif
+
 /* Notices
  */
 #define APP_NAME        \
@@ -93,6 +98,221 @@ static int                 services_fd   = -1;
 
 static ret_t common_server_initialization (cherokee_server_t *srv);
 
+
+#ifdef HAVE_OPENSSL
+static int
+check_for_tls_protocols(cherokee_buffer_t *buf, const char *regex, int options,
+	cherokee_buffer_t *protocol_option_list) {
+	pcre *reCompiled;
+	const char *pcreErrorStr;
+	const char *psubStrMatchStr;
+	int pcreErrorOffset;
+	int subStrVec[30];
+	int match_count = 0;
+	int start_offset = 0;
+	int j;
+	int ret = 0;
+
+	if (!buf)
+		goto out;
+	reCompiled = pcre_compile(regex, options, &pcreErrorStr,
+	                          &pcreErrorOffset, NULL);
+	if (reCompiled == NULL) {
+		TRACE(ENTRIES, "Regex error compiling '%s': %s\n", regex, pcreErrorStr);
+		ret = PCRE_ERROR_NULL;
+		goto out;
+	}
+	while (1) {
+		ret = pcre_exec(reCompiled, NULL, buf->buf, buf->len,
+			start_offset, 0, subStrVec, 30);
+		if (ret < 0) {
+			switch (ret) {
+				case PCRE_ERROR_NOMATCH:
+					ret = match_count;
+					break;
+				default:
+					TRACE(ENTRIES, "Regex matching failed with error code %d\n", ret);
+			}
+			goto out;
+		}
+		if (ret == 0) {
+			// Too many substrings were found to fit in subStrVec!");
+			// Set rc to the max number of substring matches possible.
+			ret = 30 / 3;
+		}
+		pcre_get_substring(buf->buf, subStrVec, ret, 1,
+		                   &(psubStrMatchStr));
+		if (!cherokee_buffer_is_empty(protocol_option_list)) {
+			cherokee_buffer_add_str(protocol_option_list, ",");
+		}
+		cherokee_buffer_add(protocol_option_list,
+		                    psubStrMatchStr, strlen(psubStrMatchStr));
+		match_count++;
+		pcre_free_substring(psubStrMatchStr);
+		start_offset = subStrVec[1];
+	}
+
+out:
+	if (reCompiled == NULL) {
+		pcre_free(reCompiled);
+	}
+	return ret;
+}
+
+/*
+ * More and more Linux distributions deactivate insecure SSL/TLS protocols
+ * at build time using configure options. OpenSSL 1.1.1 silently blocks the
+ * deactivated protocols, but they can still be configured using the libssl
+ * API. Build-time deactivation is documented in opensslconf.h, which in
+ * general requires libssl-dev package installation. Currently, the only
+ * feasible way to identify deactivated SSL/TLS protocols is to try to start
+ * an OpenSSL SSL/TLS server with the protocol that is subject to test.
+ * OpenSSL will terminate with an error if the protocol has been deactivated
+ * at build time,
+ */
+static ret_t
+add_hardcoded_ssl_options (cherokee_server_t *srv)
+{
+	unsigned int tls_protocols[] = {
+#ifdef SSL_OP_NO_SSLv2
+	                                SSL_OP_NO_SSLv2,
+#endif
+#ifdef SSL_OP_NO_SSLv3
+	                                SSL_OP_NO_SSLv3,
+#endif
+#ifdef SSL_OP_NO_TLSv1
+	                                SSL_OP_NO_TLSv1,
+#endif
+#ifdef SSL_OP_NO_TLSv1_1
+	                                SSL_OP_NO_TLSv1_1,
+#endif
+#ifdef SSL_OP_NO_TLSv1_2
+	                                SSL_OP_NO_TLSv1_2,
+#endif
+#ifdef SSL_OP_NO_TLSv1_3
+	                                SSL_OP_NO_TLSv1_3,
+#endif
+	                                0,
+	                               };
+	const char *openssl_tls_options[] = {
+#ifdef SSL_OP_NO_SSLv2
+	                                     "-ssl2",
+#endif
+#ifdef SSL_OP_NO_SSLv3
+	                                     "-ssl3",
+#endif
+#ifdef SSL_OP_NO_TLSv1
+	                                     "-tls1",
+#endif
+#ifdef SSL_OP_NO_TLSv1_1
+	                                     "-tls1_1",
+#endif
+#ifdef SSL_OP_NO_TLSv1_2
+	                                     "-tls1_2",
+#endif
+#ifdef SSL_OP_NO_TLSv1_3
+	                                     "-tls1_3",
+#endif
+	                                     NULL
+	                                    };
+	const char *pattern = "(-(ssl|tls)[[:digit:]]+_*[[:digit:]]*)";
+	FILE *f;
+	char tmp[256];
+	char *line;
+	int retVal, i;
+	long options = 0;
+	cherokee_boolean_t known_protocol;
+	cherokee_buffer_t protocol_option_list = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t buf = CHEROKEE_BUF_INIT;
+	ret_t ret;
+
+	for (i = 0; openssl_tls_options[i]; i++) {
+#ifdef PATH_OPENSSL_BIN
+		snprintf(tmp, sizeof (tmp), "%s s_server %s 2>&1",
+		         PATH_OPENSSL_BIN,
+		         openssl_tls_options[i]);
+#else
+		snprintf(tmp, sizeof (tmp), "openssl s_server -%s 2>&1",
+		         openssl_tls_options[i]);
+#endif
+		f = popen(tmp, "r");
+		if (f == NULL) {
+			PRINT_MSG("(critical) Cannot execute '%s'\n", tmp);
+			ret = ret_error;
+			goto out;
+		}
+		while (!feof(f)) {
+			/* Skip line until it found the version entry
+			 */
+			line = fgets(tmp, sizeof (tmp), f);
+			if (line == NULL)
+				continue;
+			line = strstr(line, openssl_tls_options[i]);
+			if (line == NULL)
+				continue;
+			options |= tls_protocols[i];
+			break;
+		}
+		pclose(f);
+	}
+	if (srv->cryptor != NULL) {
+		srv->cryptor->hardcoded_ssl_options = options;
+	}
+
+#ifdef PATH_OPENSSL_BIN
+	snprintf(tmp, sizeof (tmp), "%s s_server -help 2>&1",
+	         PATH_OPENSSL_BIN);
+#else
+	snprintf(tmp, sizeof (tmp), "openssl s_server -help 2>&1");
+#endif
+	snprintf(tmp, sizeof (tmp), "openssl s_server -help 2>&1");
+	f = popen(tmp, "r");
+	if (f == NULL) {
+		PRINT_MSG("(critical) Cannot execute '%s'\n", tmp);
+		ret = ret_error;
+		goto out;
+	}
+	while (!feof(f)) {
+		line = fgets(tmp, sizeof (tmp), f);
+		if (line == NULL)
+			continue;
+		cherokee_buffer_add(&buf, line, strlen(line));
+	}
+	pclose(f);
+	retVal = check_for_tls_protocols(&buf, pattern, 0, &protocol_option_list);
+	if (retVal > 0) {
+		char *begin;
+		cherokee_buffer_clean(&buf);
+		while ((begin = (char *) strsep(&protocol_option_list.buf, ",")) != NULL) {
+			known_protocol = false;
+			for (i = 0; openssl_tls_options[i]; i++) {
+				if (strstr(openssl_tls_options[i], begin)) {
+					known_protocol = true;
+					break;
+				}
+			}
+			if (known_protocol == false) {
+				if (!cherokee_buffer_is_empty(&buf)) {
+					cherokee_buffer_add_str(&buf, ", ");
+				}
+				cherokee_buffer_add(&buf, (begin + 1), strlen(begin) - 1);
+			}
+		}
+		if (!cherokee_buffer_is_empty(&buf)) {
+			LOG_WARNING(CHEROKEE_ERROR_SERVER_UNKNOWN_TLS_PROTOCOL, buf.buf);
+		}
+	} else {
+		PRINT_MSG("ERROR: No TLS protocol options in 'openssl s_server -help' output. "
+		          "Please issue a bug report.\n");
+	}
+	ret = ret_ok;
+
+out:
+	cherokee_buffer_mrproper(&buf);
+	cherokee_buffer_mrproper(&protocol_option_list);
+	return ret;
+}
+#endif
 
 static void
 wait_process (pid_t pid)
@@ -173,6 +393,55 @@ test_configuration_file (void)
 
 
 static ret_t
+fake_tls_server_initialization (cherokee_server_t *srv)
+{
+	ret_t            ret;
+
+	cherokee_buffer_t tmp   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t droot = CHEROKEE_BUF_INIT;
+
+	/* Sanity checka
+	 */
+	if (port > 0xFFFF) {
+		PRINT_ERROR ("Port %d is out of limits\n", port);
+		return ret_error;
+	}
+	if (document_root == NULL) {
+		PRINT_ERROR ("Document root is not specified\n");
+		return ret_error;
+	}
+
+	/* Build the configuration string
+	 */
+	cherokee_buffer_add (&droot, document_root, strlen(document_root));
+	cherokee_path_arg_eval (&droot);
+
+	cherokee_buffer_add_va (&tmp,
+	                        "server!bind!1!port = %d\n"
+#ifdef HAVE_OPENSSL
+	                        "server!tls = libssl\n"
+#endif
+	                        "vserver!1!document_root = %s\n"
+	                        BASIC_CONFIG, port, droot.buf);
+
+	/* Apply it
+	 */
+	ret = cherokee_server_read_config_string (srv, &tmp);
+
+	cherokee_buffer_mrproper (&tmp);
+	cherokee_buffer_mrproper (&droot);
+
+	if (ret != ret_ok) {
+		PRINT_MSG ("Couldn't initialize HTTPS test server\n");
+		return ret_error;
+	}
+	srv->tls_enabled = true;
+
+	return ret_ok;
+}
+
+
+static ret_t
 common_server_initialization (cherokee_server_t *srv)
 {
 	ret_t            ret;
@@ -249,6 +518,11 @@ common_server_initialization (cherokee_server_t *srv)
 		}
 	}
 
+#ifdef HAVE_OPENSSL
+	if (add_hardcoded_ssl_options (srv) != ret_ok) {
+		PRINT_MSG ("Couldn't identify deactivated SSL/TLS protocols\n");
+	}
+#endif
 	if (daemon_mode)
 		cherokee_server_daemonize (srv);
 
@@ -378,6 +652,21 @@ main (int argc, char **argv)
 	}
 
 	if (print_modules) {
+		if (document_root == NULL) {
+			document_root = WWW_ROOT;
+		}
+		if (!port_set) {
+			port = 443;
+		}
+		ret = fake_tls_server_initialization (srv);
+		if (ret != ret_ok) {
+			exit (EXIT_ERROR);
+		}
+#ifdef HAVE_OPENSSL
+		if (add_hardcoded_ssl_options (srv) != ret_ok) {
+			PRINT_MSG ("Couldn't identify deactivated SSL/TLS protocols\n");
+		}
+#endif
 		cherokee_info_build_print (srv);
 		exit (EXIT_OK_ONCE);
 	}

@@ -1,12 +1,12 @@
 # Macros
 #
 CODING_BUG = """It looks like you've hit a bug in the server. Please, \
-do not hesitate to report it at http://bugs.cherokee-project.com/ so  \
+do not hesitate to report it at https://github.com/cherokee/webserver/issues so  \
 the developer team can fix it."""
 
 UNKNOWN_CAUSE = """An unexpected error has just occurred in the \
 server. The cause of the issue is unknown. Please, do not hesitate to \
-report it at http://bugs.cherokee-project.com/ so the developer team \
+report it at https://github.com/cherokee/webserver/issues so the developer team \
 can fix it."""
 
 SYSTEM_ISSUE = """The issue seems to be related to your system."""
@@ -610,6 +610,12 @@ e('SERVER_IGNORE_TLS',
   title   = "Ignoring TLS port %d",
   desc    = "No TLS backend is specified, but the configuration specifies a secure port and it is being ignored. Either enable a TLS backend or disable the TLS checkbox for the specified port.",
   admin   = "/general#Network-1",
+  show_bt = False)
+
+e('SERVER_UNKNOWN_TLS_PROTOCOL',
+  title   = "Ignoring unknown SSL/TLS protocol %s",
+  desc    = "OpenSSL/libssl supports an SSL/TLS protocol version that Cherokee is not capable of. This might impact security and accessability of your webserver. Please upgrade Cherokee webserver.",
+  admin   = SYSTEM_ISSUE,
   show_bt = False)
 
 e('SERVER_TLS_DEFAULT',
@@ -1293,6 +1299,18 @@ e('SSL_ALLOCATE_CTX',
 e('SSL_CIPHER',
   title = "OpenSSL: cannot set cipher list '%s': %s",
   desc  = SYSTEM_ISSUE)
+
+e('SSL_CIPHERSUITE',
+  title = "OpenSSL: cannot set ciphersuite list '%s': %s",
+  desc  = SYSTEM_ISSUE)
+
+e('SSL_MIN_MAX_PROTOCOL',
+  title = "OpenSSL: cannot set minimum and maximum supported TLS protocol version '%s': %s",
+  desc  = SYSTEM_ISSUE)
+
+e('SSL_NOCIPHERS',
+  title = "OpenSSL: no ciphers available for TLS/SSL encryption",
+  desc  = "TLS/SSL cannot be used. Please check your cypher and cyphersuite configuration.")
 
 e('SSL_CERTIFICATE',
   title = "OpenSSL: cannot use certificate file '%s':  %s",
