@@ -221,6 +221,10 @@ e('HANDLER_SRV_INFO_TYPE',
 e('HANDLER_FILE_TIME_PARSE',
   title = "Unparseable time '%s'")
 
+e('HANDLER_FILE_OPEN',
+  title = "Could not open directory ",
+  desc  = "Could not open directory '%s'. Please check the server user and file permissions.")
+
 
 # cherokee/handler_ssi.c
 #
