@@ -2390,6 +2390,7 @@ cherokee_connection_check_ip_validation (cherokee_connection_t *conn, cherokee_c
 		return ret_ok;
 	}
 
+	LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_CHECK_IP);
 	conn->error_code = http_access_denied;
 	return ret_error;
 }

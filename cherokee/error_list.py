@@ -981,6 +981,10 @@ e('CONNECTION_GET_VSERVER',
   title = "Could not get virtual server: '%s'",
   desc  = CODING_BUG)
 
+e('CONNECTION_CHECK_IP',
+  title = "The connection's IP is not allowed",
+  desc  = "This IP is not allowed, please check IP or subnet configuration.")
+
 
 # cherokee/ncpus.c
 #
