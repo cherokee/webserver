@@ -981,6 +981,10 @@ e('CONNECTION_GET_VSERVER',
   title = "Could not get virtual server: '%s'",
   desc  = CODING_BUG)
 
+e('CONNECTION_HTTP_METHOD',
+  title = "HTTP method not allowed.",
+  desc  = "The connection's method is not allowed by the server.")
+
 
 # cherokee/ncpus.c
 #
