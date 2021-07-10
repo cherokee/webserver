@@ -2330,6 +2330,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	 */
 	ret = get_authorization (conn, config_entry->authentication, conn->validator, ptr, len);
 	if (ret != ret_ok) {
+		LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_AUTH_GET_HEADER);
 		goto unauthorized;
 	}
 
@@ -2359,6 +2360,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	ret = cherokee_validator_check (conn->validator, conn);
 
 	if (ret != ret_ok) {
+		LOG_ERROR_S(CHEROKEE_ERROR_CONNECTION_AUTH_CHECK);
 		goto unauthorized;
 	}
 

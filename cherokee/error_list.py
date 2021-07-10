@@ -981,6 +981,14 @@ e('CONNECTION_GET_VSERVER',
   title = "Could not get virtual server: '%s'",
   desc  = CODING_BUG)
 
+e('CONNECTION_AUTH_CHECK',
+  title = "Login failed in authentication",
+  desc  = "Wrong username or password.")
+
+e('CONNECTION_AUTH_GET_HEADER',
+  title = "Authentication failed: could not parse the authentication config",
+  desc  = BROKEN_CONFIG)
+
 
 # cherokee/ncpus.c
 #
