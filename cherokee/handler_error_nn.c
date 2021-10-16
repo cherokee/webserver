@@ -113,6 +113,10 @@ get_nearest_name (cherokee_connection_t *conn,
 	cherokee_thread_t *thread = CONN_THREAD(conn);
 	cherokee_buffer_t *req    = THREAD_TMP_BUF1(thread);
 
+	if (cherokee_buffer_is_empty (&conn->request)) {
+		return ret_error;
+	}
+
 	/* Build the local request path
 	 */
 	rest = strrchr (request->buf, '/');
