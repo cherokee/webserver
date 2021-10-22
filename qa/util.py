@@ -99,6 +99,8 @@ def str_random (n):
 
 
 def check_php_interpreter (fullpath):
+    if fullpath.strip() == '':
+        return False
     f = os.popen ('%s -v' %(fullpath), 'r')
     all = f.read()
     try: f.close()
