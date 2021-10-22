@@ -487,11 +487,11 @@ image::media/images/admin_vserver_security.png[Certificates]
 If you want HTTPS to work, you must remember this:
 
 . Providing the PEM-encoded files is mandatory for both `Certificate`
-  and `Certificate key` fields. Providing the `CA List` and the
-  `Client Certs` is optional. The trusted CA certificates file should
-  be a single file with all the certificates concatenated. The `Client
-  Certs`, also PEM-encoded, is used to check the client
-  certificates. You can read more about
+  and `Certificate key` fields. Providing `Client Certs` is optional.
+  The trusted server certificates file should be a single file with
+  the server certificate and the issuing CA chain certificates
+  concatenated. The `Client Certs`, also PEM-encoded, is used to
+  check the client certificates. You can read more about
   link:cookbook_ssl.html#ssl-support[enabling SSL support] on the
   SSL/TLS section of the documentation.
 

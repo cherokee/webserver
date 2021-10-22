@@ -26,7 +26,7 @@ Usage: %s [parameters] [tests]
   -v<STRING>    Run under Valgrind, string=['', 'hel', 'cac', 'cal']
   -P<STRING>    Proxy address: host:ip[:public_ip]
 
-Report bugs to http://bugs.cherokee-project.com/
+Report bugs to https://github.com/cherokee/webserver/issues
 """
 
 def help_print_parameters():

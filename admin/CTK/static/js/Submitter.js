@@ -125,7 +125,11 @@ if ((typeof submitter_loaded) == 'undefined') {
 			 }
 		  });
 		  self.find ("input:checkbox").each(function(){
-			 info[this.name] = this.checked ? "1" : "0";
+			 if (this.hasAttribute('mode') && this.getAttribute('mode') == 'inverse') {
+				info[this.name] = this.checked ? "0" : "1";
+			 } else {
+				info[this.name] = this.checked ? "1" : "0";
+			 }
 		  });
 		  self.find ("select").each(function(){
 			 info[this.name] = $(this).val();

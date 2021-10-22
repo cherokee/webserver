@@ -90,7 +90,7 @@ exec 2>&1
 	echo "Below is a backtrace for this process generated with gdb, which shows"
 	echo "the state of the program at the time the error occured.  You are"
 	echo "encouraged to submit this information as a bug report in the Cherokee"
-	echo "bug tracking system:  http://bugs.cherokee-project.com"
+	echo "bug tracking system:  https://github.com/cherokee/webserver/issues"
 	echo
 	echo "Operating System: `uname -a`"
 	echo "Debugger: $debugger"

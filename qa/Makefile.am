@@ -1,7 +1,7 @@
 SUFFIXES = .py.pre .py
 
 .py.pre.py:
-	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%sbindir%|${sbindir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%libdir%|${libdir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%cgiroot%|${CGI_ROOT}|g; s|%version%|${PACKAGE_VERSION}|g; s|%phpcgi%|${PHPCGI}|g; s|%datadir%|${datadir}|g; s|%localedir%|${localedir}|g" $< > $@
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%sbindir%|${sbindir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%libdir%|${libdir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%cgiroot%|${CGI_ROOT}|g; s|%version%|${PACKAGE_VERSION}|g; s|%bugreportlink%|${PACKAGE_BUGREPORT}|g; s|%pythonpath%|${PYTHON}|g; s|%phpcgi%|${PHPCGI}|g; s|%datadir%|${datadir}|g; s|%localedir%|${localedir}|g" $< > $@
 
 PY_PRE = \
 conf.py.pre
@@ -340,7 +340,7 @@ ssl-keys/set-1.key:
 	mkdir -p ssl-keys
 	@OPENSSL_BIN@ genrsa -out ssl-keys/set-1.key 2048
 test-ssl: ssl-keys/set-1.pem
-	./run-tests.py -s
+	$(PYTHON) ./run-tests.py -s
 test: test-non-ssl test-ssl
 
 DISTCLEANFILES += ssl-keys/set-1.pem ssl-keys/set-1.key
@@ -350,5 +350,8 @@ test: test-non-ssl
 endif
 
 test-non-ssl:
-	python -m compileall .
-	./run-tests.py
+	$(PYTHON) -m compileall .
+	$(PYTHON) ./run-tests.py
+
+clean-local:
+	find . -type f -name "*.pyc" -exec rm -f {} \;

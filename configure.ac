@@ -29,7 +29,7 @@ m4_define([cherokee_micro_version], [104])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
-AC_INIT([cherokee], [cherokee_version], [http://bugs.cherokee-project.com/], [cherokee])
+AC_INIT([cherokee], [cherokee_version], [https://github.com/cherokee/webserver/issues], [cherokee])
 AC_CONFIG_SRCDIR([cherokee/server.c])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([no-define])
@@ -209,8 +209,12 @@ m4_ifdef([LT_INIT], [LT_INIT([dlopen shared static])], [AC_LIBTOOL_DLOPEN])
 dnl Paths
 AC_PROG_CC
 AC_PROG_CC_STDC
+AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AC_PROG_YACC
+AC_PROG_LEX
+AC_PROG_LN_S
 AM_PROG_LIBTOOL
 
 AC_PATH_PROG(cherokeepath, cherokee)
@@ -240,16 +244,24 @@ AC_CHECK_HEADERS(sys/socket.h sys/un.h netinet/in.h arpa/inet.h netinet/tcp.h sy
 AC_CHECK_HEADERS(sys/resource.h resource.h unistd.h syslog.h stdint.h inttypes.h error.h pwd.h sys/uio.h)
 AC_CHECK_HEADERS(pthread.h netdb.h stdarg.h sys/filio.h sys/varargs.h sys/select.h sys/mman.h sys/uio.h grp.h)
 AC_CHECK_HEADERS(sched.h execinfo.h)
+AC_CHECK_HEADERS(fenv.h float.h libintl.h limits.h locale.h stddef.h stdlib.h string.h strings.h sys/param.h wchar.h wctype.h)
 
 AC_SYS_LARGEFILE
 
-AC_SIZE_T
+AC_CHECK_HEADER_STDBOOL
 AC_TYPE_UID_T
-AC_TYPE_MODE_T
+AC_C_INLINE
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_TYPE_PID_T
-AC_STRUCT_ST_RDEV
+AC_C_RESTRICT
+AC_TYPE_SSIZE_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
+AC_TYPE_UINT8_T
 AC_CHECK_TYPE(ino_t, unsigned)
 AC_CHECK_TYPE(loff_t, off_t)
 AC_CHECK_TYPE(offset_t, loff_t)
@@ -271,14 +283,17 @@ AC_TRY_RUN([#include <stdio.h>
 main() { long long x = 1000000; x *= x; exit(((x/1000000) == 1000000)? 0: 1); }],
 samba_cv_have_longlong=yes,samba_cv_have_longlong=no,samba_cv_have_longlong=cross)])
 if test x"$samba_cv_have_longlong" = x"yes"; then
-    AC_DEFINE(HAVE_LONGLONG,1,[Whether the host supports long long'])
+    AC_DEFINE(HAVE_LONGLONG,1,[Whether the host supports long long])
 fi
 
 AC_FUNC_MEMCMP
 AC_FUNC_MMAP
 AC_FUNC_FORK
+AC_FUNC_CHOWN
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 
-AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir readdir_r flockfile funlockfile strnstr backtrace random srandom srandomdev)
+AC_CHECK_FUNCS(dup2 ftruncate getcwd gettimeofday inet_ntoa gmtime gmtime_r localtime localtime_r getrlimit getdtablesize memset mkdir readdir readdir_r flockfile funlockfile backtrace munmap pathconf pstat_getdynamic realpath rmdir strchr strcspn strdup strncasecmp strpbrk strrchr strspn strnstr strstr strtol strtoul random srandom srandomdev)
 
 FW_CHECK_PWD
 FW_CHECK_GRP
@@ -1085,28 +1100,100 @@ AC_ARG_WITH(libssl,
 have_openssl=no
 
 if test "$WITH_OPENSSL" != "no"; then
+    dnl backup the pre-ssl variables
+    CLEANLDFLAGS="$LDFLAGS"
+    CLEANCFLAGS="$CFLAGS"
+    CLEANLIBS="$LIBS"
     if test "$WITH_OPENSSL" != "yes"; then
-        LIBSSL_CFLAGS="-I$WITH_OPENSSL/include"
+        LIBSSL_CFLAGS="-I$WITH_OPENSSL/include -I$WITH_OPENSSL/include/openssl"
         LIBSSL_LIBS="-L$WITH_OPENSSL/lib"
+        LIBCRYPTO_LIBS="-L$WITH_OPENSSL/lib"
+        OPENSSL_PATH="$WITH_OPENSSL/bin"
     fi
 
-    AC_CHECK_LIB(crypto, BN_init)
-    AC_CHECK_HEADERS([openssl/engine.h])
-    AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes], [have_openssl=no], $LIBSSL_LIBS)
+    CFLAGS="$CFLAGS $LIBSSL_CFLAGS"
+    LDFLAGS="$LDFLAGS $LIBSSL_LIBS"
+
+    AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
+    have_openssl="no"
+    AC_CHECK_LIB(ssl, OPENSSL_init_ssl, [have_openssl="yes"])
+    AC_CHECK_LIB(ssl, SSL_library_init, [have_openssl="yes"])
+    AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes])
 
     if test "$have_openssl" = "yes"; then
-        LIBSSL_LIBS="$LIBSSL_LIBS -lssl"
-
-	   AC_SUBST(LIBSSL_LIBS)
-	   AC_SUBST(LIBSSL_CFLAGS)
-
-	   AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
-	   AC_PATH_PROG([OPENSSL_BIN], [openssl])
-	   AC_SUBST(OPENSSL_BIN)
+        AC_CHECK_HEADERS(openssl/dh.h openssl/rand.h openssl/crypto.h \
+                         openssl/lhash.h openssl/ssl.h openssl/err.h,
+                         AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL/libssl library]),
+                         have_openssl="no"
+                        )
     fi
+    AS_IF([test "x$have_openssl" = xno], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
+
+    if test "$have_openssl" = "yes"; then
+        TLS_BACK_END="OpenSSL/libssl"
+        OPENSSL_PATH="$OPENSSL_PATH$PATH_SEPARATOR$PATH"
+        LIBSSL_LIBS="$LIBSSL_LIBS -lssl -lcrypto"
+
+        AC_SUBST(LIBSSL_LIBS)
+        AC_SUBST(LIBSSL_CFLAGS)
+
+        AC_CACHE_CHECK([for a suitable test server to verify $TLS_BACK_END TLS protocol support], [ac_cv_path_OPENSSL_BIN],
+                [AC_PATH_PROGS_FEATURE_CHECK([OPENSSL_BIN], [openssl],
+                  [v=$($ac_path_OPENSSL_BIN s_server -help 2>&1)
+                   if test $? -eq 0 || [[[ $v == unknown* ]]]; then
+                     TLS_PROTOCOLS=$(echo $v | grep -Eoe '-(ssl|tls)[[0-9]]+[[_]]*[[0-9]]*' | tr '\n' ',' | sed 's/.$//' | sed 's/-//g')
+                     ac_cv_path_OPENSSL_BIN="$ac_path_OPENSSL_BIN" ac_path_OPENSSL_BIN_found=:
+                   fi],,
+                  $OPENSSL_PATH)])
+        AC_SUBST(OPENSSL_BIN, [$ac_cv_path_OPENSSL_BIN])
+
+        AC_SUBST(OPENSSL_TLS_PROTOCOLS, [])
+        if test -n "$ac_cv_path_OPENSSL_BIN"; then
+          AC_DEFINE_UNQUOTED(PATH_OPENSSL_BIN, ["$ac_cv_path_OPENSSL_BIN"], [Define path to OpenSSL command-line tool])
+          AC_MSG_CHECKING([for $TLS_BACK_END supported SSL/TLS protocols])
+          AC_DEFINE_UNQUOTED(TLS_BACK_END_PROTOCOL_VERSIONS, ["$TLS_PROTOCOLS"], [Define TLS protocols supported by OpenSSL/libssl])
+          AC_SUBST(OPENSSL_TLS_PROTOCOLS, ["$TLS_PROTOCOLS"])
+          AC_MSG_RESULT($TLS_PROTOCOLS)
+        fi
+
+        AC_MSG_CHECKING([if Cherokee supports all OpenSSL SSL/TLS protocol versions])
+        AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],
+                                       [#ifdef TLS_MAX_VERSION
+                                        int max = TLS_MAX_VERSION;
+                                        #ifdef TLS1_3_VERSION
+                                        if (max > TLS1_3_VERSION) exit(1);
+                                        #else
+                                        if (max > 0x0304) exit(1);
+                                        #endif
+                                        #endif])],
+                      [AC_MSG_RESULT(yes)],
+                      [AC_MSG_RESULT(no)
+                       AC_MSG_ERROR([
+*** OpenSSL supports more recent versions of SSL/TLS protocols, which are not recognized by Cherokee.
+*** Please check for the latest Cherokee source or update Cherokee source code.])])
+
+	AC_SUBST(USE_OPENSSL_MIN_MAX_PROTOCOL, [False])
+        AC_MSG_CHECKING([for SSL_CTX_get_min_proto_version() in $TLS_BACK_END])
+	AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],
+                                       [#ifndef SSL_CTRL_GET_MIN_PROTO_VERSION
+                                        exit(1);
+                                        #endif])],
+                      [AC_MSG_RESULT(yes)
+                       AC_DEFINE(HAVE_SSL_CTX_GET_MIN_PROTO_VERSION, [1], [OpenSSL/libssl has SSL_CTX_get_min_proto_version() function])
+                       AC_SUBST(USE_OPENSSL_MIN_MAX_PROTOCOL, [True])],
+                      [AC_MSG_RESULT(no)])
+
+        AC_CHECK_LIB(ssl, SSL_CTX_set_ciphersuites, [have_openssl_ciphersuites=yes], [have_openssl_ciphersuites=no])
+        if test "$have_openssl_ciphersuites" = "yes"; then
+            AC_DEFINE(HAVE_SSL_CTX_SET_CIPHERSUITES, 1, [OpenSSL/libssl has SSL_CTX_set_ciphersuites() function])
+        fi
+
+        AC_CHECK_HEADERS([openssl/engine.h])
+    fi
+    # restore CFLAGS and LDFLAGS
+    CFLAGS="${CLEANCFLAGS}"
+    LDFLAGS="${CLEANLDFLAGS}"
 fi
-AC_MSG_CHECKING(for libssl)
-AC_MSG_RESULT([$have_openssl])
 
 AM_CONDITIONAL(USE_OPENSSL, test "x$have_openssl" = "xyes")
 
@@ -1125,7 +1212,6 @@ if test "x$USE_NLS" = "xyes"; then
 fi
 
 AM_CONDITIONAL(NLS_ENABLED, test "x$USE_NLS" = "xyes")
-AC_CONFIG_FILES([po/admin/Makefile.in])
 
 dnl
 dnl LDAP
@@ -1274,6 +1360,7 @@ AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root dire
 	   WWW_ROOT="$localstatedir/www"
    fi
 ])
+AC_DEFINE_UNQUOTED(WWW_ROOT, "$WWW_ROOT", [WWW root directory])
 AC_SUBST(WWW_ROOT)
 
 AC_ARG_WITH(cgiroot, AC_HELP_STRING([--with-cgiroot=DIR], [Set the CGI directory]),
@@ -1359,30 +1446,38 @@ have_python="yes"
 AC_ARG_WITH([python], AC_HELP_STRING([--with-python=/path/to/python],[Path to Python interpreter]),
 		  PYTHON="$withval",
 [
-   AC_PATH_PROGS(PYTHON, python python2 python2.7 python2.6 python2.5 python2.4)
-])
+   AC_CACHE_VAL([ac_cv_path_PYTHON],
+     [AC_PATH_PROGS_FEATURE_CHECK([PYTHON], [python2.4 python2.5 python2.6 python2.7 python2 python],
+        [v=$($ac_path_PYTHON -c "import sys; print (sys.version_info[[0]])")
+        if test "x$v" == "x2"; then
+          ac_cv_path_PYTHON=$ac_path_PYTHON aac_path_PYTHON_found=:
+        fi])])
+   if test "x$ac_cv_path_PYTHON" != "x"; then
+     AC_SUBST(PYTHON, [$ac_cv_path_PYTHON])
+   fi
+]
+)
 
 if test "x$PYTHON" != "x"; then
-   AC_MSG_CHECKING([Python 2.x interpreter])
+   AC_MSG_CHECKING([for Python 2.x interpreter])
    v=`$PYTHON -c 'import sys; print (sys.version_info[[0]])'`
    if test "x$v" != "x2"; then
      have_python="no"
      wants_admin="no"
 	AC_MSG_RESULT([no])
-	AC_MSG_WARN([
-*** Cherokee-admin requires Python 2.x. Please, use the --with-python
-*** parameter to specify a Python 2.4, 2.5, 2.6 or 2.7 interpreter.
-*** BEWARE: Cherokee-admin support has been disabled.])
+	AC_MSG_ERROR([
+*** Cherokee requires Python 2.x. Please, use the --with-python
+*** parameter to specify a Python 2.4, 2.5, 2.6 or 2.7 interpreter.])
    else
-     AC_MSG_RESULT([yes])
+     AC_MSG_RESULT([$PYTHON])
+     AC_DEFINE_UNQUOTED(PATH_PYTHON2, ["$PYTHON"], [Define path to Python 2.x interpreter])
    fi
 else
     have_python="no"
     wants_admin="no"
-    AC_MSG_WARN([
+    AC_MSG_ERROR([
 *** Python must be installed on your system but python interpreter couldn't
-*** be found in path. Please check that python is in path, or install it.
-*** BEWARE: Cherokee-admin support has been disabled.])
+*** be found in path. Please check that python is in path, or install it.])
 fi
 
 dnl
@@ -1532,49 +1627,49 @@ AM_CONDITIONAL(STATIC_RULE_NOT,               grep _not_          $conf_h >/dev/
 AM_CONDITIONAL(STATIC_RULE_AND,               grep _and_          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_OR,                grep _or_           $conf_h >/dev/null)
 
-AC_OUTPUT([
-Makefile
-cget/Makefile
-cherokee-config
-cherokee.pc
-cherokee.spec
-org.cherokee.webserver.plist
-cherokee/Makefile
-contrib/Makefile
-icons/Makefile
-m4/Makefile
-qa/Makefile
-doc/Makefile
-themes/Makefile
-themes/default/Makefile
-themes/firefox3/Makefile
-themes/white/Makefile
-themes/plain/Makefile
-packages/Makefile
-packages/osx/Makefile
-packages/osx/Info.plist
-packages/osx/Description.plist
-www/Makefile
-dbslayer/Makefile
-admin/Makefile
-admin/icons/Makefile
-admin/plugins/Makefile
-admin/wizards/Makefile
-admin/static/Makefile
-admin/static/js/Makefile
-admin/static/css/Makefile
-admin/static/images/Makefile
-admin/static/images/flags/Makefile
-admin/static/images/wizards/Makefile
-admin/static/images/other/Makefile
-admin/CTK/Makefile
-admin/CTK/CTK/Makefile
-admin/CTK/static/css/Makefile
-admin/CTK/static/images/Makefile
-admin/CTK/static/js/Makefile
-admin/CTK/static/Makefile
-po/Makefile
-])
+AC_CONFIG_FILES([Makefile
+                 admin/CTK/CTK/Makefile
+                 admin/CTK/Makefile
+                 admin/CTK/static/Makefile
+                 admin/CTK/static/css/Makefile
+                 admin/CTK/static/images/Makefile
+                 admin/CTK/static/js/Makefile
+                 admin/Makefile
+                 admin/icons/Makefile
+                 admin/plugins/Makefile
+                 admin/static/Makefile
+                 admin/static/css/Makefile
+                 admin/static/images/Makefile
+                 admin/static/images/flags/Makefile
+                 admin/static/images/other/Makefile
+                 admin/static/images/wizards/Makefile
+                 admin/static/js/Makefile
+                 admin/wizards/Makefile
+                 cget/Makefile
+                 cherokee-config
+                 cherokee.pc
+                 cherokee.spec
+                 cherokee/Makefile
+                 contrib/Makefile
+                 dbslayer/Makefile
+                 doc/Makefile
+                 icons/Makefile
+                 m4/Makefile
+                 org.cherokee.webserver.plist
+                 packages/Makefile
+                 packages/osx/Description.plist
+                 packages/osx/Info.plist
+                 packages/osx/Makefile
+                 po/Makefile
+                 po/admin/Makefile.in
+                 qa/Makefile
+                 themes/Makefile
+                 themes/default/Makefile
+                 themes/firefox3/Makefile
+                 themes/plain/Makefile
+                 themes/white/Makefile
+                 www/Makefile])
+AC_OUTPUT
 
 
 methods=""

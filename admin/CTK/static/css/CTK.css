@@ -202,6 +202,14 @@ button:hover { cursor: pointer; }
  padding: 1em 1em 1em 40px;
  margin: 1em 0;
 }
+.dialog-information-slim {
+ background: #f9fcff url(/CTK/images/dialog-information.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #d4e1f1;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+ width: 50%
+}
 .dialog-important-information {
  background: #e9ffd4 url(/CTK/images/dialog-information.png) 4px 4px no-repeat;
  -moz-border-radius: 4px; -webkit-border-radius: 4px;
@@ -216,12 +224,28 @@ button:hover { cursor: pointer; }
  padding: 1em 1em 1em 40px;
  margin: 1em 0;
 }
+.dialog-warning-slim {
+ background: #fff2b3 url(/CTK/images/dialog-warning.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #b90;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+ width: 50%
+}
 .dialog-error {
  background: #ffe7e7 url(/CTK/images/dialog-error.png) 4px 4px no-repeat;
  -moz-border-radius: 4px; -webkit-border-radius: 4px;
  border: 1px solid #c00;
  padding: 1em 1em 1em 40px;
  margin: 1em 0;
+}
+.dialog-error-slim {
+ background: #ffe7e7 url(/CTK/images/dialog-error.png) 4px 4px no-repeat;
+ -moz-border-radius: 4px; -webkit-border-radius: 4px;
+ border: 1px solid #c00;
+ padding: 1em 1em 1em 40px;
+ margin: 1em 0;
+ width: 50%
 }
 
 .dialog-information h2,

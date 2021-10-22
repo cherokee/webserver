@@ -1,7 +1,7 @@
 from base import *
 
 DIR   = "common_valid_methods1"
-MAGIC = "Report bugs to http://bugs.cherokee-project.com"
+MAGIC = "Report bugs to " + BUG_REPORT_LINK
 
 CONF = """
 vserver!1!rule!1280!match = directory
