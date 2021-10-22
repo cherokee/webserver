@@ -7,7 +7,7 @@ dnl describing the error codes.
 dnl
 AC_DEFUN([APR_CHECK_WORKING_GETADDRINFO],[
   AC_CACHE_CHECK(for working getaddrinfo, ac_cv_working_getaddrinfo,[
-  AC_TRY_RUN( [
+  AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <netdb.h>
 #include <string.h>
 #include <sys/types.h>
@@ -29,7 +29,7 @@ void main(void) {
     }
     exit(0);
 }
-],[
+]])],[
   ac_cv_working_getaddrinfo="yes"
 ],[
   ac_cv_working_getaddrinfo="no"
@@ -51,7 +51,7 @@ dnl check for working getnameinfo()
 dnl
 AC_DEFUN([APR_CHECK_WORKING_GETNAMEINFO],[
   AC_CACHE_CHECK(for working getnameinfo, ac_cv_working_getnameinfo,[
-  AC_TRY_RUN( [
+  AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <netdb.h>
 #include <string.h>
 #include <sys/types.h>
@@ -79,7 +79,7 @@ void main(void) {
         exit(0);
     }
 }
-],[
+]])],[
   ac_cv_working_getnameinfo="yes"
 ],[
   ac_cv_working_getnameinfo="no"
@@ -94,12 +94,12 @@ fi
 
 AC_DEFUN([APR_CHECK_SOCKADDR_IN6],[
 AC_CACHE_CHECK(for sockaddr_in6, ac_cv_define_sockaddr_in6,[
-AC_TRY_COMPILE([
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <sys/types.h>
 #include <netinet/in.h>
-],[
+]], [[
 struct sockaddr_in6 sa;
-],[
+]])],[
     ac_cv_define_sockaddr_in6=yes
 ],[
     ac_cv_define_sockaddr_in6=no
@@ -128,12 +128,9 @@ dnl
 AC_DEFUN([AC_ACME_SOCKADDR_STORAGE],
     [AC_MSG_CHECKING(if struct sockaddr_storage exists)
     AC_CACHE_VAL(ac_cv_acme_sockaddr_storage,
-        AC_TRY_COMPILE([
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <sys/types.h>
-#include <sys/socket.h>],
-        [struct sockaddr_storage sas],
-        ac_cv_acme_sockaddr_storage=yes,
-        ac_cv_acme_sockaddr_storage=no))
+#include <sys/socket.h>]], [[struct sockaddr_storage sas]])],[ac_cv_acme_sockaddr_storage=yes],[ac_cv_acme_sockaddr_storage=no]))
     AC_MSG_RESULT($ac_cv_acme_sockaddr_storage)
     if test $ac_cv_acme_sockaddr_storage = yes ; then
             AC_DEFINE(HAVE_SOCKADDR_STORAGE, 1, [HAVE_SOCKADDR_STORAGE])
@@ -153,13 +150,10 @@ dnl
 AC_DEFUN([AC_ACME_SOCKADDR_IN6],
     [AC_MSG_CHECKING(if struct sockaddr_in6 exists)
     AC_CACHE_VAL(ac_cv_acme_sockaddr_in6,
-        AC_TRY_COMPILE([
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>],
-        [struct sockaddr_in6 sa6],
-        ac_cv_acme_sockaddr_in6=yes,
-        ac_cv_acme_sockaddr_in6=no))
+#include <netinet/in.h>]], [[struct sockaddr_in6 sa6]])],[ac_cv_acme_sockaddr_in6=yes],[ac_cv_acme_sockaddr_in6=no]))
     AC_MSG_RESULT($ac_cv_acme_sockaddr_in6)
     if test $ac_cv_acme_sockaddr_in6 = yes ; then
             AC_DEFINE(HAVE_SOCKADDR_IN6, 1, [HAVE_SOCKADDR_IN6])
@@ -180,13 +174,10 @@ dnl
 AC_DEFUN([AC_ACME_SOCKADDR_UN],
     [AC_MSG_CHECKING(if struct sockaddr_un exists)
     AC_CACHE_VAL(ac_cv_acme_sockaddr_un,
-        AC_TRY_COMPILE([
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/un.h>],
-        [struct sockaddr_un sa6],
-        ac_cv_acme_sockaddr_un=yes,
-        ac_cv_acme_sockaddr_un=no))
+#include <sys/un.h>]], [[struct sockaddr_un sa6]])],[ac_cv_acme_sockaddr_un=yes],[ac_cv_acme_sockaddr_un=no]))
     AC_MSG_RESULT($ac_cv_acme_sockaddr_un)
     if test $ac_cv_acme_sockaddr_un = yes ; then
             AC_DEFINE(HAVE_SOCKADDR_UN, 1, [HAVE_SOCKADDR_UN])
@@ -204,20 +195,12 @@ AC_DEFUN([ECOS_C_PRETTY_FUNCTION],[
 
     AC_CACHE_CHECK("for __PRETTY_FUNCTION__ support",ecos_cv_c_pretty_function,[
         AC_LANG_SAVE
-        AC_LANG_C
-        AC_TRY_LINK(
-            [#include <stdio.h>],
-            [puts(__PRETTY_FUNCTION__);],
-            c_ok="yes",
-            c_ok="no"
-        )
-        AC_LANG_CPLUSPLUS
-        AC_TRY_LINK(
-            [#include <cstdio>],
-            [puts(__PRETTY_FUNCTION__);],
-            cxx_ok="yes",
-            cxx_ok="no"
-        )
+        AC_LANG([C])
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[puts(__PRETTY_FUNCTION__);]])],[c_ok="yes"],[c_ok="no"
+        ])
+        AC_LANG([C++])
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]], [[puts(__PRETTY_FUNCTION__);]])],[cxx_ok="yes"],[cxx_ok="no"
+        ])
         AC_LANG_RESTORE
         if test "${c_ok}" = "yes" -a "${cxx_ok}" = "yes"; then
             ecos_cv_c_pretty_function="yes"

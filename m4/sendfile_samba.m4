@@ -5,7 +5,7 @@ AC_DEFUN([SENDFILE_CHECK],[
 
 AC_MSG_CHECKING(whether to check to support sendfile)
 
-AC_ARG_WITH(sendfile-support, AC_HELP_STRING([--with-sendfile-support], [Check for sendfile support (default=yes)]),
+AC_ARG_WITH(sendfile-support, AS_HELP_STRING([--with-sendfile-support],[Check for sendfile support (default=yes)]),
 		  [check_sendfile="$withval"], [check_sendfile="yes"])
 
 
@@ -21,39 +21,33 @@ case "$check_sendfile" in
 	#
 	*linux*)
 		AC_CACHE_CHECK([for linux sendfile64 support],samba_cv_HAVE_SENDFILE64,[
-		AC_TRY_LINK([#include <sys/sendfile.h>],
-[\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <sys/sendfile.h>]], [[\
 int tofd, fromfd;
 off64_t offset;
 size_t total;
 ssize_t nwritten = sendfile64(tofd, fromfd, &offset, total);
-],
-samba_cv_HAVE_SENDFILE64=yes,samba_cv_HAVE_SENDFILE64=no)])
+]])],[samba_cv_HAVE_SENDFILE64=yes],[samba_cv_HAVE_SENDFILE64=no])])
 
 		AC_CACHE_CHECK([for linux sendfile support],samba_cv_HAVE_SENDFILE,[
-		AC_TRY_LINK([#include <sys/sendfile.h>],
-[\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <sys/sendfile.h>]], [[\
 int tofd, fromfd;
 off_t offset;
 size_t total;
 ssize_t nwritten = sendfile(tofd, fromfd, &offset, total);
-],
-samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
+]])],[samba_cv_HAVE_SENDFILE=yes],[samba_cv_HAVE_SENDFILE=no])])
 
           # Try and cope with broken Linux sendfile....
 		AC_CACHE_CHECK([for broken linux sendfile support],samba_cv_HAVE_BROKEN_LINUX_SENDFILE,[
-		AC_TRY_LINK([\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[\
 #if defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64)
 #undef _FILE_OFFSET_BITS
 #endif
-#include <sys/sendfile.h>],
-[\
+#include <sys/sendfile.h>]], [[\
 int tofd, fromfd;
 off_t offset;
 size_t total;
 ssize_t nwritten = sendfile(tofd, fromfd, &offset, total);
-],
-samba_cv_HAVE_BROKEN_LINUX_SENDFILE=yes,samba_cv_HAVE_BROKEN_LINUX_SENDFILE=no)])
+]])],[samba_cv_HAVE_BROKEN_LINUX_SENDFILE=yes],[samba_cv_HAVE_BROKEN_LINUX_SENDFILE=no])])
 
 	if test x"$samba_cv_HAVE_SENDFILE64" = x"yes"; then
 		found=yes
@@ -80,12 +74,11 @@ samba_cv_HAVE_BROKEN_LINUX_SENDFILE=yes,samba_cv_HAVE_BROKEN_LINUX_SENDFILE=no)]
 	#
 	*freebsd* | *DragonFly* )
 		AC_CACHE_CHECK([for BSD sendfile support],samba_cv_HAVE_SENDFILE,[
-		AC_TRY_LINK([\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[\
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include <sys/uio.h>],
-[\
+#include <sys/uio.h>]], [[\
 	int fromfd, tofd, ret, total=0;
 	off_t offset, nwritten;
 	struct sf_hdtr hdr;
@@ -97,8 +90,7 @@ samba_cv_HAVE_BROKEN_LINUX_SENDFILE=yes,samba_cv_HAVE_BROKEN_LINUX_SENDFILE=no)]
 	hdtrl.iov_base = NULL;
 	hdtrl.iov_len = 0;
 	ret = sendfile(fromfd, tofd, offset, total, &hdr, &nwritten, 0);
-],
-samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
+]])],[samba_cv_HAVE_SENDFILE=yes],[samba_cv_HAVE_SENDFILE=no])])
 
 	if test x"$samba_cv_HAVE_SENDFILE" = x"yes"; then
 		found=yes
@@ -115,12 +107,11 @@ samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
 	#
 	*darwin*)
 		AC_CACHE_CHECK([for MacOS X sendfile support],samba_cv_HAVE_SENDFILE,[
-		AC_TRY_LINK([\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[\
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include <sys/uio.h>],
-[\
+#include <sys/uio.h>]], [[\
 	int fromfd, tofd, ret, total=0;
 	off_t offset;
 	struct sf_hdtr hdr;
@@ -132,8 +123,7 @@ samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
 	hdtrl.iov_base = NULL;
 	hdtrl.iov_len = 0;
 	ret = sendfile(fromfd, tofd, offset, &total, &hdr, 0);
-],
-samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
+]])],[samba_cv_HAVE_SENDFILE=yes],[samba_cv_HAVE_SENDFILE=no])])
 
 	if test x"$samba_cv_HAVE_SENDFILE" = x"yes"; then
 		found=yes
@@ -150,10 +140,9 @@ samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
 	#
 	*hpux*)
 		AC_CACHE_CHECK([for hpux sendfile64 support],samba_cv_HAVE_SENDFILE64,[
-		AC_TRY_LINK([\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[\
 #include <sys/socket.h>
-#include <sys/uio.h>],
-[\
+#include <sys/uio.h>]], [[\
 	int fromfd, tofd;
 	size_t total=0;
 	struct iovec hdtrl[2];
@@ -164,8 +153,7 @@ samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
 	hdtrl[0].iov_len = 0;
 
 	nwritten = sendfile64(tofd, fromfd, offset, total, &hdtrl[0], 0);
-],
-samba_cv_HAVE_SENDFILE64=yes,samba_cv_HAVE_SENDFILE64=no)])
+]])],[samba_cv_HAVE_SENDFILE64=yes],[samba_cv_HAVE_SENDFILE64=no])])
 	if test x"$samba_cv_HAVE_SENDFILE64" = x"yes"; then
 		found=yes
     		AC_DEFINE(HAVE_SENDFILE64,1,[Whether sendfile64() is available])
@@ -176,10 +164,9 @@ samba_cv_HAVE_SENDFILE64=yes,samba_cv_HAVE_SENDFILE64=no)])
 	fi
 
 		AC_CACHE_CHECK([for hpux sendfile support],samba_cv_HAVE_SENDFILE,[
-		AC_TRY_LINK([\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[\
 #include <sys/socket.h>
-#include <sys/uio.h>],
-[\
+#include <sys/uio.h>]], [[\
 	int fromfd, tofd;
 	size_t total=0;
 	struct iovec hdtrl[2];
@@ -190,8 +177,7 @@ samba_cv_HAVE_SENDFILE64=yes,samba_cv_HAVE_SENDFILE64=no)])
 	hdtrl[0].iov_len = 0;
 
 	nwritten = sendfile(tofd, fromfd, offset, total, &hdtrl[0], 0);
-],
-samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
+]])],[samba_cv_HAVE_SENDFILE=yes],[samba_cv_HAVE_SENDFILE=no])])
 	if test x"$samba_cv_HAVE_SENDFILE" = x"yes"; then
 		found=yes
     		AC_DEFINE(HAVE_SENDFILE,1,[Whether sendfile() is available])
@@ -208,9 +194,8 @@ samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
 	*solaris*)
 		AC_CHECK_LIB(sendfile,sendfilev)
 		AC_CACHE_CHECK([for solaris sendfilev64 support],samba_cv_HAVE_SENDFILEV64,[
-		AC_TRY_LINK([\
-#include <sys/sendfile.h>],
-[\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[\
+#include <sys/sendfile.h>]], [[\
         int sfvcnt;
         size_t xferred;
         struct sendfilevec vec[2];
@@ -229,8 +214,7 @@ samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
 	vec[1].sfv_off = 0;
 	vec[1].sfv_len = 0;
 	nwritten = sendfilev64(tofd, vec, sfvcnt, &xferred);
-],
-samba_cv_HAVE_SENDFILEV64=yes,samba_cv_HAVE_SENDFILEV64=no)])
+]])],[samba_cv_HAVE_SENDFILEV64=yes],[samba_cv_HAVE_SENDFILEV64=no])])
 
 	if test x"$samba_cv_HAVE_SENDFILEV64" = x"yes"; then
 		found=yes
@@ -242,9 +226,8 @@ samba_cv_HAVE_SENDFILEV64=yes,samba_cv_HAVE_SENDFILEV64=no)])
 	fi
 
 		AC_CACHE_CHECK([for solaris sendfilev support],samba_cv_HAVE_SENDFILEV,[
-		AC_TRY_LINK([\
-#include <sys/sendfile.h>],
-[\
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[\
+#include <sys/sendfile.h>]], [[\
         int sfvcnt;
         size_t xferred;
         struct sendfilevec vec[2];
@@ -263,8 +246,7 @@ samba_cv_HAVE_SENDFILEV64=yes,samba_cv_HAVE_SENDFILEV64=no)])
 	vec[1].sfv_off = 0;
 	vec[1].sfv_len = 0;
 	nwritten = sendfilev(tofd, vec, sfvcnt, &xferred);
-],
-samba_cv_HAVE_SENDFILEV=yes,samba_cv_HAVE_SENDFILEV=no)])
+]])],[samba_cv_HAVE_SENDFILEV=yes],[samba_cv_HAVE_SENDFILEV=no])])
 
 	if test x"$samba_cv_HAVE_SENDFILEV" = x"yes"; then
 		found=yes

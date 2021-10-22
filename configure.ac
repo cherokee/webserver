@@ -20,7 +20,7 @@ USA
 ])
 
 dnl require autoconf 2.68
-AC_PREREQ([2.68])
+AC_PREREQ([2.71])
 
 dnl Version
 m4_define([cherokee_major_version], [1])
@@ -29,7 +29,7 @@ m4_define([cherokee_micro_version], [104])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
-AC_INIT([cherokee], [cherokee_version], [https://github.com/cherokee/webserver/issues], [cherokee])
+AC_INIT([cherokee],[cherokee_version],[https://github.com/cherokee/webserver/issues],[cherokee])
 AC_CONFIG_SRCDIR([cherokee/server.c])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([no-define])
@@ -57,7 +57,7 @@ AC_SUBST(CHEROKEE_REVISION)
 AC_DEFINE_UNQUOTED(CHEROKEE_CONFIG_ARGS, "$ac_configure_args", [configure arguments])
 
 dnl Check the SVN revision
-AC_ARG_ENABLE(beta, AC_HELP_STRING([--enable-beta], [Enable beta development]),
+AC_ARG_ENABLE(beta, AS_HELP_STRING([--enable-beta],[Enable beta development]),
 		    is_beta="$enableval", is_beta="no")
 
 if test x"$is_beta" = "xyes"; then
@@ -164,13 +164,13 @@ AC_MSG_RESULT($CPU_CACHE_LINE)
 dnl
 dnl OS string
 dnl
-AC_ARG_ENABLE(os_string, AC_HELP_STRING([--enable-os-string=STR], [Set a customized OS type string]), [os_string="$enableval"])
+AC_ARG_ENABLE(os_string, AS_HELP_STRING([--enable-os-string=STR],[Set a customized OS type string]), [os_string="$enableval"])
 AC_DEFINE_UNQUOTED(OS_TYPE, "${os_string}", [OS type])
 
 dnl
 dnl Tracing
 dnl
-AC_ARG_ENABLE(trace, AC_HELP_STRING([--enable-trace], [Enable trace facility]),
+AC_ARG_ENABLE(trace, AS_HELP_STRING([--enable-trace],[Enable trace facility]),
    [enable_trace="$enableval"
     AC_DEFINE(TRACE_ENABLED, 1, [Trace facility])
    ], [enable_trace="no"])
@@ -178,7 +178,7 @@ AC_ARG_ENABLE(trace, AC_HELP_STRING([--enable-trace], [Enable trace facility]),
 dnl
 dnl Backtraces
 dnl
-AC_ARG_ENABLE(backtraces, AC_HELP_STRING([--enable-backtraces], [Enable backtraces on error]),
+AC_ARG_ENABLE(backtraces, AS_HELP_STRING([--enable-backtraces],[Enable backtraces on error]),
    [enable_backtraces="$enableval"
     AC_DEFINE(BACKTRACES_ENABLED, 1, [Backtracing facility])
    ], [enable_backtraces="no"])
@@ -203,18 +203,20 @@ AC_CONFIG_HEADERS(config.h)
 AC_SUBST(VERSION)
 
 dnl Initialize Libtool
-m4_ifdef([LT_INIT], [LT_INIT([dlopen shared static])], [AC_LIBTOOL_DLOPEN])
+m4_ifdef([LT_INIT], [LT_INIT([dlopen shared static])], [_LT_SET_OPTION([LT_INIT],[dlopen])
+m4_warn([obsolete],[AC_LIBTOOL_DLOPEN: Remove this warning and the call to _LT_SET_OPTION when you
+put the 'dlopen' option into LT_INIT's first parameter.])
+])
 
 dnl Paths
 AC_PROG_CC
-AC_PROG_CC_STDC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_YACC
-AC_PROG_LEX
+AC_PROG_LEX(noyywrap)
 AC_PROG_LN_S
-AM_PROG_LIBTOOL
+LT_INIT
 
 AC_PATH_PROG(cherokeepath, cherokee)
 
@@ -233,9 +235,7 @@ fi
 dnl
 dnl Check for headers
 dnl
-AC_HEADER_STDC
 AC_HEADER_DIRENT
-AC_HEADER_TIME
 AC_HEADER_SYS_WAIT
 
 AC_CHECK_HEADERS(endian.h machine/endian.h sys/machine.h sys/endian.h sys/isa_defs.h sys/utsname.h sys/poll.h poll.h )
@@ -278,9 +278,8 @@ AC_CHECK_SIZEOF(size_t)
 AC_CHECK_SIZEOF(time_t)
 
 AC_CACHE_CHECK([for long long],samba_cv_have_longlong,[
-AC_TRY_RUN([#include <stdio.h>
-main() { long long x = 1000000; x *= x; exit(((x/1000000) == 1000000)? 0: 1); }],
-samba_cv_have_longlong=yes,samba_cv_have_longlong=no,samba_cv_have_longlong=cross)])
+AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <stdio.h>
+main() { long long x = 1000000; x *= x; exit(((x/1000000) == 1000000)? 0: 1); }]])],[samba_cv_have_longlong=yes],[samba_cv_have_longlong=no],[samba_cv_have_longlong=cross])])
 if test x"$samba_cv_have_longlong" = x"yes"; then
     AC_DEFINE(HAVE_LONGLONG,1,[Whether the host supports long long])
 fi
@@ -345,7 +344,7 @@ dnl Epoll
 dnl
 AC_CHECK_HEADER(sys/epoll.h, have_epoll_include=yes, have_epoll_include=no)
 
-AC_ARG_ENABLE(epoll, AC_HELP_STRING([--disable-epoll],[Disable epoll() support]),
+AC_ARG_ENABLE(epoll, AS_HELP_STRING([--disable-epoll],[Disable epoll() support]),
 		    wants_epoll="$enableval", wants_epoll="yes")
 
 have_epoll=no
@@ -469,7 +468,7 @@ dnl Pthread
 dnl
 with_pthread="yes"
 have_pthread="no"
-AC_ARG_ENABLE(pthread, AC_HELP_STRING([--disable-pthread],[Disable threading support]),
+AC_ARG_ENABLE(pthread, AS_HELP_STRING([--disable-pthread],[Disable threading support]),
 		    with_pthread="$enableval", with_pthread="yes")
 
 AM_CONDITIONAL(USE_PTHREAD, test "x$with_pthread" = "xyes")
@@ -524,9 +523,7 @@ then
 	AC_MSG_CHECKING([for pthread_rwlock_t support])
 
 	have_pthread_rwlock_t=yes
-	AC_TRY_COMPILE([#include <pthread.h>],
-			[pthread_rwlock_t rwlock; pthread_rwlock_init( &rwlock, NULL);],
-			compiled=yes, compiled=no)
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <pthread.h>]], [[pthread_rwlock_t rwlock; pthread_rwlock_init( &rwlock, NULL);]])],[compiled=yes],[compiled=no])
 
 	if test "$compiled" = "yes"; then
 	   	AC_MSG_RESULT([ok])
@@ -537,9 +534,7 @@ then
 		oldcflags2="$CFLAGS"
 		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
 
-		AC_TRY_COMPILE([#include <pthread.h>],
-			    [pthread_rwlock_t rwlock; pthread_rwlock_init( &rwlock, NULL);],
-			    compiled=yes, compiled=no)
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <pthread.h>]], [[pthread_rwlock_t rwlock; pthread_rwlock_init( &rwlock, NULL);]])],[compiled=yes],[compiled=no])
 
 		if test "$compiled" = "yes"; then
 		    AC_MSG_RESULT([-D_XOPEN_SOURCE=500])
@@ -626,7 +621,7 @@ dnl also just to be sure.
 dnl
 AC_MSG_CHECKING(whether va_list assignments need array notation)
 AC_CACHE_VAL(ac_cv_valistisarray,
-        [AC_TRY_RUN([#include <stdlib.h>
+        [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <stdlib.h>
 		     #include <stdarg.h>
 		     void foo(int i, ...) {
 			va_list ap1, ap2;
@@ -636,10 +631,7 @@ AC_CACHE_VAL(ac_cv_valistisarray,
 			va_end(ap1); va_end(ap2);
 		     }
 		     int main()
-		     { foo(0, 123); return(0); }],
-		    [ac_cv_valistisarray=false],
-		    [ac_cv_valistisarray=true],
-		    [ac_cv_valistisarray=false])])
+		     { foo(0, 123); return(0); }]])],[ac_cv_valistisarray=false],[ac_cv_valistisarray=true],[ac_cv_valistisarray=false])])
 
 if test "$ac_cv_valistisarray" = true ; then
 	AC_DEFINE(HAVE_VA_LIST_AS_ARRAY,,[va_list works copying an array])
@@ -656,11 +648,8 @@ dnl
 AC_STRUCT_TIMEZONE
 
 AC_MSG_CHECKING(for global timezone)
-AC_TRY_LINK([#include <time.h>],
-[int res; res = timezone / 60;],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(HAVE_INT_TIMEZONE,, [Set to 1 if you have the global variable timezone])],
-AC_MSG_RESULT(no))
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]], [[int res; res = timezone / 60;]])],[AC_MSG_RESULT(yes)
+AC_DEFINE(HAVE_INT_TIMEZONE,, [Set to 1 if you have the global variable timezone])],[AC_MSG_RESULT(no)])
 
 
 dnl
@@ -744,14 +733,13 @@ dnl
 dnl Check of off64_t
 dnl
 AC_CACHE_CHECK([for off64_t],samba_cv_HAVE_OFF64_T,[
-AC_TRY_RUN([
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
 #include <stdio.h>
 #include <sys/stat.h>
-main() { struct stat64 st; off64_t s; if (sizeof(off_t) == sizeof(off64_t)) exit(1); exit((lstat64("/dev/null", &st)==0)?0:1); }],
-samba_cv_HAVE_OFF64_T=yes,samba_cv_HAVE_OFF64_T=no,samba_cv_HAVE_OFF64_T=cross)])
+main() { struct stat64 st; off64_t s; if (sizeof(off_t) == sizeof(off64_t)) exit(1); exit((lstat64("/dev/null", &st)==0)?0:1); }]])],[samba_cv_HAVE_OFF64_T=yes],[samba_cv_HAVE_OFF64_T=no],[samba_cv_HAVE_OFF64_T=cross])])
 if test x"$samba_cv_HAVE_OFF64_T" = x"yes"; then
     AC_DEFINE(HAVE_OFF64_T,1,[Whether off64_t is available])
 fi
@@ -777,17 +765,14 @@ dnl union semun
 dnl
 AC_MSG_CHECKING([for union semun])
 AC_CACHE_VAL(ac_cv_struct_semun, [
-   AC_TRY_COMPILE(
-	[
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 	   #include <sys/types.h>
 	   #include <sys/ipc.h>
 	   #include <sys/sem.h>;
-     ],[
+     ]], [[
 	   union semun semdat;
-	],
-	   ac_cv_struct_semun=yes,
-	   ac_cv_struct_semun=no
-     )
+	]])],[ac_cv_struct_semun=yes],[ac_cv_struct_semun=no
+     ])
 ])
 AC_MSG_RESULT($ac_cv_struct_semun)
 if test "$ac_cv_struct_semun" = "yes"; then
@@ -811,7 +796,7 @@ dnl I got this mostly from Apache's tests
 dnl
 
 AC_ARG_ENABLE(ipv6,
-  AC_HELP_STRING([--disable-ipv6], [Disable IPv6 support]),
+  AS_HELP_STRING([--disable-ipv6],[Disable IPv6 support]),
   [ if test "$enableval" = "no"; then
        disabled_ipv6=1
     fi ],
@@ -895,13 +880,9 @@ dnl
 dnl Look for socklen_t
 dnl
 AC_MSG_CHECKING([for socklen_t])
-AC_TRY_COMPILE(
- [#include <sys/types.h>
-  #include <sys/socket.h>],
- [socklen_t len = 42; return 0;],
- ac_cv_type_socklen_t=yes,
- ac_cv_type_socklen_t=no
-)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
+  #include <sys/socket.h>]], [[socklen_t len = 42; return 0;]])],[ac_cv_type_socklen_t=yes],[ac_cv_type_socklen_t=no
+])
 
 if test $ac_cv_type_socklen_t != yes; then
   AC_DEFINE(socklen_t, int, [Substitute for socklen_t])
@@ -914,25 +895,21 @@ dnl
 dnl Check of __func__ and co..
 dnl
 AC_MSG_CHECKING([whether our compiler supports __func__])
-AC_TRY_COMPILE([],
- [const char *cp = __func__;],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[const char *cp = __func__;]],
  AC_MSG_RESULT([yes]),
  AC_MSG_RESULT([no])
  AC_MSG_CHECKING([whether our compiler supports __FUNCTION__])
- AC_TRY_COMPILE([],
-   [const char *cp = __FUNCTION__;],
-   AC_MSG_RESULT([yes])
+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[const char *cp = __FUNCTION__;]])],[AC_MSG_RESULT(yes)
    AC_DEFINE(__func__, __FUNCTION__,
-         [Define to appropriate substitue if compiler doesnt have __func__]),
-   AC_MSG_RESULT([no])
+         Define to appropriate substitue if compiler doesnt have __func__)],[AC_MSG_RESULT(no)
    AC_DEFINE(__func__, __FILE__,
-         [Define to appropriate substitue if compiler doesnt have __func__])))
+         Define to appropriate substitue if compiler doesnt have __func__)]))])
 
 
 dnl
 dnl Temporal directory
 dnl
-AC_ARG_ENABLE(tmpdir, AC_HELP_STRING([--enable-tmpdir=DIR],[default directory for temporary files]))
+AC_ARG_ENABLE(tmpdir, AS_HELP_STRING([--enable-tmpdir=DIR],[default directory for temporary files]))
 
 AC_MSG_CHECKING(directory to use for temporary files)
 if test -n "$enable_tmpdir"; then
@@ -971,7 +948,7 @@ dnl
 have_pcre="built-in"
 
 AC_ARG_ENABLE(internal_pcre,
-		    AC_HELP_STRING([--enable-internal-pcre],[Enable internal PCRE]),
+		    AS_HELP_STRING([--enable-internal-pcre],[Enable internal PCRE]),
 		    use_internal_pcre="$enableval", use_internal_pcre="no")
 
 if test "x$use_internal_pcre" != "xyes"; then
@@ -987,7 +964,7 @@ AM_CONDITIONAL(USE_INTERNAL_PCRE, test "x$have_pcre" = "xbuilt-in")
 dnl
 dnl PAM
 dnl
-AC_ARG_ENABLE(pam, AC_HELP_STRING([--disable-pam],[Disable PAM support]), use_pam="$enableval", use_pam="yes")
+AC_ARG_ENABLE(pam, AS_HELP_STRING([--disable-pam],[Disable PAM support]), use_pam="$enableval", use_pam="yes")
 if test "x$use_pam" = "xyes"; then
      AC_CHECK_LIB(pam, pam_start, have_pam_lib=yes, have_pam_lib=no)
      AC_CHECK_LIB(pam, _pam_dispatch, have_pam_dispatch=yes, have_pam_dispatch=no)
@@ -1051,24 +1028,18 @@ if test "$use_crypt_r" = "yes"; then
    crypt_r_style=none
 
    # pthread.h is needed on AIX
-   AC_TRY_COMPILE([#include <pthread.h>
-                   #include <crypt.h>],
-   			   [CRYPTD buffer;],
-			   crypt_r_style=cryptd)
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <pthread.h>
+                   #include <crypt.h>]], [[CRYPTD buffer;]])],[crypt_r_style=cryptd],[])
 
    if test "$crypt_r_style" = "none"; then
-      AC_TRY_COMPILE([#include <crypt.h>],
-				 [struct crypt_data buffer;],
-				 crypt_r_style=struct_crypt_data)
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <crypt.h>]], [[struct crypt_data buffer;]])],[crypt_r_style=struct_crypt_data],[])
    fi
 
    if test "$crypt_r_style" = "none"; then
-      AC_TRY_COMPILE([#define _GNU_SOURCE
-	 			  #include <crypt.h>],
-				 [struct crypt_data buffer;],
-				 [crypt_r_style=struct_crypt_data
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#define _GNU_SOURCE
+	 			  #include <crypt.h>]], [[struct crypt_data buffer;]])],[crypt_r_style=struct_crypt_data
 			       CRYPT_CFLAGS="-D_GNU_SOURCE"
-				  AC_SUBST(CRYPT_CFLAGS)])
+				  AC_SUBST(CRYPT_CFLAGS)],[])
    fi
 
    AC_MSG_RESULT([$crypt_r_style])
@@ -1093,7 +1064,7 @@ dnl
 dnl OpenSSL
 dnl
 AC_ARG_WITH(libssl,
-    AC_HELP_STRING([--with-libssl@<:@=DIR@:>@],[Include libssl/OpenSSL support (default yes)]),
+    AS_HELP_STRING([--with-libssl@<:@=DIR@:>@],[Include libssl/OpenSSL support (default yes)]),
     [WITH_OPENSSL=$withval],[WITH_OPENSSL=yes])
 
 have_openssl=no
@@ -1144,9 +1115,8 @@ dnl
 dnl LDAP
 dnl
 AC_ARG_WITH([ldap],
-        AC_HELP_STRING([--with-ldap=@<:@ARG@:>@],
-            [use OpenLDAP development library @<:@default=yes@:>@, optionally specify path to dev libs]
-        ),
+        AS_HELP_STRING([--with-ldap=@<:@ARG@:>@],[use OpenLDAP development library @<:@default=yes@:>@, optionally specify path to dev libs
+        ]),
         [
         if test "$withval" = "no"; then
             want_ldap="no"
@@ -1191,9 +1161,8 @@ dnl
 dnl GeoIP library
 dnl
 AC_ARG_WITH([geoip],
-        AC_HELP_STRING([--with-geoip=@<:@ARG@:>@],
-            [use the GeoIP library @<:@default=yes@:>@, optionally specify path to dev libs]
-        ),
+        AS_HELP_STRING([--with-geoip=@<:@ARG@:>@],[use the GeoIP library @<:@default=yes@:>@, optionally specify path to dev libs
+        ]),
         [
         if test "$withval" = "no"; then
             want_geoip="no"
@@ -1225,9 +1194,8 @@ dnl
 dnl FFMpeg library
 dnl
 AC_ARG_WITH([ffmpeg],
-        AC_HELP_STRING([--with-ffmpeg=@<:@ARG@:>@],
-            [use the FFMpeg library @<:@default=yes@:>@, optionally specify path to dev libs]
-        ),
+        AS_HELP_STRING([--with-ffmpeg=@<:@ARG@:>@],[use the FFMpeg library @<:@default=yes@:>@, optionally specify path to dev libs
+        ]),
         [
         if test "$withval" = "no"; then
             want_ffmpeg="no"
@@ -1274,7 +1242,7 @@ AM_CONDITIONAL(HAVE_FFMPEG, test "x$have_ffmpeg" = "xyes")
 dnl
 dnl WWW root directory, and user/group
 dnl
-AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),
+AC_ARG_WITH(wwwroot, AS_HELP_STRING([--with-wwwroot=DIR],[Set the WWW root directory]),
 		  WWW_ROOT="$withval", [
    dnl MacOS X
    if test -d "/Library/WebServer/Documents"; then
@@ -1289,7 +1257,7 @@ AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root dire
 ])
 AC_SUBST(WWW_ROOT)
 
-AC_ARG_WITH(cgiroot, AC_HELP_STRING([--with-cgiroot=DIR], [Set the CGI directory]),
+AC_ARG_WITH(cgiroot, AS_HELP_STRING([--with-cgiroot=DIR],[Set the CGI directory]),
 		  CGI_ROOT="$withval", [
    dnl MacOS X
    if test -d "/Library/WebServer/CGI-Executables"; then
@@ -1304,11 +1272,11 @@ AC_ARG_WITH(cgiroot, AC_HELP_STRING([--with-cgiroot=DIR], [Set the CGI directory
 ])
 AC_SUBST(CGI_ROOT)
 
-AC_ARG_WITH(wwwuser, AC_HELP_STRING([--with-wwwuser=USER], [Set default execution user]),
+AC_ARG_WITH(wwwuser, AS_HELP_STRING([--with-wwwuser=USER],[Set default execution user]),
 		  WWW_USER="$withval", WWW_USER="")
 AC_SUBST(WWW_USER)
 
-AC_ARG_WITH(wwwgroup, AC_HELP_STRING([--with-wwwgroup=GROUP], [Set default execution group]),
+AC_ARG_WITH(wwwgroup, AS_HELP_STRING([--with-wwwgroup=GROUP],[Set default execution group]),
 		  WWW_GROUP="$withval", WWW_GROUP="")
 AC_SUBST(WWW_GROUP)
 
@@ -1316,7 +1284,7 @@ AC_SUBST(WWW_GROUP)
 dnl
 dnl PHP fcgi
 dnl
-AC_ARG_WITH(php, AC_HELP_STRING([--with-php=/path/to/php], [Path to php-fpm or php-cgi]),
+AC_ARG_WITH(php, AS_HELP_STRING([--with-php=/path/to/php],[Path to php-fpm or php-cgi]),
 	       PHPCGI="$withval", PHPCGI="")
 
 dnl If no php, try to find it
@@ -1369,7 +1337,7 @@ dnl
 wants_admin="yes"
 have_python="yes"
 
-AC_ARG_WITH([python], AC_HELP_STRING([--with-python=/path/to/python],[Path to Python interpreter]),
+AC_ARG_WITH([python], AS_HELP_STRING([--with-python=/path/to/python],[Path to Python interpreter]),
 		  PYTHON="$withval",
 [
    AC_PATH_PROGS(PYTHON, python python2 python2.7 python2.6 python2.5 python2.4)
@@ -1403,7 +1371,7 @@ dnl Cherokee admin
 dnl
 if test "x$wants_admin" = "xyes"; then
    AC_ARG_ENABLE(admin,
-	      AC_HELP_STRING([--disable-admin],[Disable Cherokee-admin installation]),
+	      AS_HELP_STRING([--disable-admin],[Disable Cherokee-admin installation]),
 					 wants_admin="$enableval", wants_admin="yes")
 fi
 AM_CONDITIONAL(INSTALL_ADMIN, test "x$wants_admin" != "xno")
@@ -1421,7 +1389,7 @@ dnl Options
 dnl
 use_static_module=""
 AC_ARG_ENABLE(static-module,
-	   AC_HELP_STRING([--enable-static-module=MODULE][]),
+	   AS_HELP_STRING([--enable-static-module=MODULE]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
 modules="error_redir error_nn server_info file dirlist cgi fcgi scgi uwsgi proxy redir common ssi secdownload empty_gif drop admin custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash failover directory extensions request header exists fullpath method from bind tls geoip url_arg v_or wildcard rehost target_ip evhost post_track post_report libssl render_rrd rrd not and or"
