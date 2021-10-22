@@ -1,8 +1,7 @@
 AC_DEFUN([AX_LIB_MYSQL],[
     AC_ARG_WITH([mysql],
-        AC_HELP_STRING([--with-mysql=@<:@ARG@:>@],
-            [use MySQL client library @<:@default=yes@:>@, optionally specify path to mysql_config]
-        ),
+        AS_HELP_STRING([--with-mysql=@<:@ARG@:>@],[use MySQL client library @<:@default=yes@:>@, optionally specify path to mysql_config
+        ]),
         [
         if test "$withval" = "no"; then
             want_mysql="no"
@@ -51,14 +50,12 @@ AC_DEFUN([AX_LIB_MYSQL],[
 
        old_CFLAGS="$CFLAGS"
 	  CFLAGS="$CFLAGS $MYSQL_CFLAGS"
-	  AC_TRY_COMPILE([
+	  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 	      #include <mysql.h>
-	  ],[
+	  ]], [[
 	      int a = 1;
-	  ],
-	      have_mysql_h=yes,
-	      have_mysql_h=no
-	  )
+	  ]])],[have_mysql_h=yes],[have_mysql_h=no
+	  ])
 	  CFLAGS="$old_CFLAGS"
 
 	  if test "x$have_mysql_h" = "xyes" ; then

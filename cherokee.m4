@@ -59,7 +59,7 @@ dnl Now check if the installed CHEROKEE is sufficiently new. (Also sanity
 dnl checks the results of cherokee-config to some extent
 dnl
       rm -f conf.cherokeetest
-      AC_TRY_RUN([
+      AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -118,7 +118,7 @@ int main (int argc, char *argv[])
     }
 }
 
-],, no_cherokee=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
+]])],[],[no_cherokee=yes],[echo $ac_n "cross compiling; assumed OK... $ac_c"])
        CFLAGS="$ac_save_CFLAGS"
        LIBS="$ac_save_LIBS"
      fi
@@ -140,11 +140,10 @@ int main (int argc, char *argv[])
           echo "*** Could not run Cherokee test program, checking why..."
           CFLAGS="$CFLAGS $CHEROKEE_CFLAGS $SDL_CFLAGS"
           LIBS="$LIBS $CHEROKEE_LIBS $SDL_LIBS"
-          AC_TRY_LINK([
+          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <stdio.h>
 #include "cherokee.h"
-],      [ return 0; ],
-        [ echo "*** The test program compiled, but did not run. This usually means"
+]], [[ return 0; ]])],[ echo "*** The test program compiled, but did not run. This usually means"
           echo "*** that the run-time linker is not finding Cherokee or finding the wrong"
           echo "*** version of Cherokee. If it is not finding Cherokee, you'll need to set your"
           echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
@@ -152,8 +151,7 @@ int main (int argc, char *argv[])
           echo "*** is required on your system"
           echo "***"
           echo "*** If you have an old version installed, it is best to remove it, although"
-          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],
-        [ echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],[ echo "*** The test program failed to compile or link. See the file config.log for the"
           echo "*** exact error that occured. This usually means Cherokee was incorrectly installed"
           echo "*** or that you have moved Cherokee since it was installed. In the latter case, you"
           echo "*** may want to edit the cherokee-config script: $CHEROKEE_CONFIG" ])
