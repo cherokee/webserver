@@ -202,12 +202,6 @@ AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS(config.h)
 AC_SUBST(VERSION)
 
-dnl Initialize Libtool
-m4_ifdef([LT_INIT], [LT_INIT([dlopen shared static])], [_LT_SET_OPTION([LT_INIT],[dlopen])
-m4_warn([obsolete],[AC_LIBTOOL_DLOPEN: Remove this warning and the call to _LT_SET_OPTION when you
-put the 'dlopen' option into LT_INIT's first parameter.])
-])
-
 dnl Paths
 AC_PROG_CC
 AC_PROG_CXX
@@ -216,7 +210,7 @@ AC_PROG_MAKE_SET
 AC_PROG_YACC
 AC_PROG_LEX(noyywrap)
 AC_PROG_LN_S
-LT_INIT
+LT_INIT(dlopen)
 
 AC_PATH_PROG(cherokeepath, cherokee)
 
