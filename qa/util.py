@@ -99,6 +99,8 @@ def str_random (n):
 
 
 def check_php_interpreter (fullpath):
+    if fullpath.strip() == '':
+        return False
     f = os.popen ('%s -v' %(fullpath), 'r')
     all = f.read()
     try: f.close()
@@ -139,7 +141,7 @@ def look_for_python():
     if __python_ref != None:
         return __python_ref
 
-    if PYTHON_PATH != "auto":
+    if PYTHON_PATH != "%pythonpath%":
         __python_ref = PYTHON_PATH
         return __python_ref
 

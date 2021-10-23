@@ -1334,30 +1334,38 @@ have_python="yes"
 AC_ARG_WITH([python], AS_HELP_STRING([--with-python=/path/to/python],[Path to Python interpreter]),
 		  PYTHON="$withval",
 [
-   AC_PATH_PROGS(PYTHON, python python2 python2.7 python2.6 python2.5 python2.4)
-])
+   AC_CACHE_VAL([ac_cv_path_PYTHON],
+     [AC_PATH_PROGS_FEATURE_CHECK([PYTHON], [python2.4 python2.5 python2.6 python2.7 python2 python],
+        [v=$($ac_path_PYTHON -c "import sys; print (sys.version_info[[0]])")
+        if test "x$v" == "x2"; then
+          ac_cv_path_PYTHON=$ac_path_PYTHON aac_path_PYTHON_found=:
+        fi])])
+   if test "x$ac_cv_path_PYTHON" != "x"; then
+     AC_SUBST(PYTHON, [$ac_cv_path_PYTHON])
+   fi
+]
+)
 
 if test "x$PYTHON" != "x"; then
-   AC_MSG_CHECKING([Python 2.x interpreter])
+   AC_MSG_CHECKING([for Python 2.x interpreter])
    v=`$PYTHON -c 'import sys; print (sys.version_info[[0]])'`
    if test "x$v" != "x2"; then
      have_python="no"
      wants_admin="no"
 	AC_MSG_RESULT([no])
-	AC_MSG_WARN([
-*** Cherokee-admin requires Python 2.x. Please, use the --with-python
-*** parameter to specify a Python 2.4, 2.5, 2.6 or 2.7 interpreter.
-*** BEWARE: Cherokee-admin support has been disabled.])
+	AC_MSG_ERROR([
+*** Cherokee requires Python 2.x. Please, use the --with-python
+*** parameter to specify a Python 2.4, 2.5, 2.6 or 2.7 interpreter.])
    else
-     AC_MSG_RESULT([yes])
+     AC_MSG_RESULT([$PYTHON])
+     AC_DEFINE_UNQUOTED(PATH_PYTHON2, ["$PYTHON"], [Define path to Python 2.x interpreter])
    fi
 else
     have_python="no"
     wants_admin="no"
-    AC_MSG_WARN([
+    AC_MSG_ERROR([
 *** Python must be installed on your system but python interpreter couldn't
-*** be found in path. Please check that python is in path, or install it.
-*** BEWARE: Cherokee-admin support has been disabled.])
+*** be found in path. Please check that python is in path, or install it.])
 fi
 
 dnl
