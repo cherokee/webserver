@@ -376,13 +376,11 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 		LOG_ERROR (CHEROKEE_ERROR_COLLECTOR_NEW_MUTEX, re);
 		return ret_error;
 	}
-	
 	re = pthread_create (&n->thread, NULL, rrd_thread_worker_func, n);
 	if (re != 0) {
 		LOG_ERROR (CHEROKEE_ERROR_COLLECTOR_NEW_THREAD, re);
 		return ret_error;
 	}
-	
 	/* Return obj
 	 */
 	*rrd = n;
