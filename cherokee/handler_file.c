@@ -234,6 +234,38 @@ check_cached (cherokee_handler_file_t *fhdl)
 		has_etag = true;
 	}
 
+	/* If both If-Modified-Since and ETag have been found then
+	 * both must match in order to return a not_modified response.
+	 */
+	if (has_modified_since && has_etag) {
+		if (not_modified_ms && not_modified_etag) {
+			fhdl->not_modified = true;
+			return ret_ok;
+		}
+	} else  {
+		if (not_modified_ms || not_modified_etag) {
+			fhdl->not_modified = true;
+			return ret_ok;
+		}
+	}
+
+	return ret_ok;
+}
+
+static ret_t
+check_ifrange (cherokee_handler_file_t *fhdl)
+{
+	ret_t                  ret;
+	char                  *header;
+	cuint_t                header_len;
+	cherokee_boolean_t     not_modified_ms    = false;
+	cherokee_boolean_t     not_modified_etag  = false;
+	cherokee_connection_t *conn               = HANDLER_CONN(fhdl);
+	cherokee_thread_t     *thread             = HANDLER_THREAD(fhdl);
+	cherokee_buffer_t     *etag_local         = THREAD_TMP_BUF1(thread);
+
+	cherokee_buffer_clean (etag_local);
+
 	/* If-Range
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_if_range, &header, &header_len);
@@ -266,8 +298,6 @@ check_cached (cherokee_handler_file_t *fhdl)
 			{
 				not_modified_etag = true;
 			}
-
-			has_etag = true;
 		}
 
 		/* "If-Range: Sun, 14 Nov 2010 17:17:13 GMT"
@@ -280,20 +310,8 @@ check_cached (cherokee_handler_file_t *fhdl)
 				LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
 
 			} else if (likely (ret == ret_ok)) {
-				/* If the entity tag given in the If-Range
-				 * header matches the current entity tag for
-				 * the entity, then the server SHOULD provide
-				 * the specified sub-range of the entity using
-				 * a 206 (Partial content) response. If the
-				 * entity tag does not match, then the server
-				 * SHOULD return the entire entity using a 200
-				 * (OK) response.
-				 */
-				if (fhdl->info->st_mtime > req_time) {
-					conn->error_code = http_ok;
-
-					conn->range_start = -1;
-					conn->range_end   = -1;
+				if (fhdl->info->st_mtime <= req_time) {
+					not_modified_ms = true;
 				}
 			}
 		}
@@ -301,24 +319,15 @@ check_cached (cherokee_handler_file_t *fhdl)
 		/* Restore EOL
 		 */
 		*end = tmp;
+
+		if (!(not_modified_ms || not_modified_etag)) {
+			return ret_deny;
+		}
+
+		return ret_ok;
 	}
 
-	/* If both If-Modified-Since and ETag have been found then
-	 * both must match in order to return a not_modified response.
-	 */
-	if (has_modified_since && has_etag) {
-		if (not_modified_ms && not_modified_etag) {
-			fhdl->not_modified = true;
-			return ret_ok;
-		}
-	} else  {
-		if (not_modified_ms || not_modified_etag) {
-			fhdl->not_modified = true;
-			return ret_ok;
-		}
-	}
-
-	return ret_ok;
+	return ret_not_found;
 }
 
 
@@ -564,6 +573,26 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 		conn->error_code = http_access_denied;
 		ret = ret_error;
 		goto out;
+	}
+
+	/* Does the request fullfill a conditional range request?
+	 */
+	ret = check_ifrange (fhdl);
+	if ((ret == ret_deny)) {
+		/* If the entity tag given in the If-Range
+		 * header matches the current entity tag for
+		 * the entity, then the server SHOULD provide
+		 * the specified sub-range of the entity using
+		 * a 206 (Partial content) response. If the
+		 * entity tag does not match, then the server
+		 * SHOULD return the entire entity using a 200
+		 * (OK) response.
+		 */
+
+		conn->error_code = http_ok;
+
+		conn->range_start = -1;
+		conn->range_end   = -1;
 	}
 
 	/* Range 1: Check the range and file size
