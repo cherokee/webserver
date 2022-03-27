@@ -101,6 +101,7 @@ thread_routine (void *data)
 
 	thread->ended = true;
 	pthread_detach (thread->thread);
+	CHEROKEE_MUTEX_UNLOCK (&thread->starting_lock);
 	pthread_exit (NULL);
 }
 #endif
