@@ -1966,7 +1966,11 @@ cherokee_server_close_connection (cherokee_server_t *srv, cherokee_thread_t *myt
 	if (srv->main_thread != mythread) CHEROKEE_MUTEX_LOCK (&srv->main_thread->ownership);
 
 	ret = thread_find_connection (srv->main_thread, id);
-	if (ret == ret_ok) return ret;
+	
+	if (ret == ret_ok){
+		if (srv->main_thread != mythread) CHEROKEE_MUTEX_UNLOCK (&srv->main_thread->ownership);
+		return ret;
+	}
 
 	if (srv->main_thread != mythread) CHEROKEE_MUTEX_UNLOCK (&srv->main_thread->ownership);
 
