@@ -157,7 +157,7 @@ if test -z "$ACLOCAL_FLAGS"; then
 fi
 
 # Libtool
-if grep "^AM_PROG_LIBTOOL" configure.ac >/dev/null; then
+if grep -E "^AM_PROG_LIBTOOL|^LT_INIT" configure.ac >/dev/null; then
   echo "Running: libtoolize --force --copy..."
   $LIBTOOLIZE --force --copy
 fi
