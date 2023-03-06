@@ -32,7 +32,7 @@ dnl Init autoconf and automake
 AC_INIT([cherokee],[cherokee_version],[https://github.com/cherokee/webserver/issues],[cherokee])
 AC_CONFIG_SRCDIR([cherokee/server.c])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE([no-define])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 dnl Define version
 AC_DEFINE(PACKAGE_MAJOR_VERSION, "cherokee_major_version", [Version string])
