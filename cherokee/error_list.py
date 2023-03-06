@@ -981,6 +981,9 @@ e('CONNECTION_GET_VSERVER',
   title = "Could not get virtual server: '%s'",
   desc  = CODING_BUG)
 
+e('CONNECTION_NO_USER',
+  title = "User '%s' not found in the system",
+  desc  = "The server is trying to build the local directory string. However, it seems that the user does not exist in the system.")
 
 # cherokee/ncpus.c
 #

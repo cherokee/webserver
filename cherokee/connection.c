@@ -2032,6 +2032,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t     *co
 	 */
 	ret = cherokee_getpwnam (conn->userdir.buf, &pwd, tmp, sizeof(tmp));
 	if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
+		LOG_ERROR (CHEROKEE_ERROR_CONNECTION_NO_USER, conn->userdir.buf);
 		conn->error_code = http_not_found;
 		return ret_error;
 	}
