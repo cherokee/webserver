@@ -255,6 +255,11 @@ e('HANDLER_ERROR_REDIR_URL',
   title = "HTTP Error %d redirection: An 'url' property is required",
   desc  = BROKEN_CONFIG)
 
+# cherokee/handler_error_nn.c
+#
+e('HANDLER_ERROR_OPEN_DIR',
+  title   = "Could not open directory",
+  desc    = "Could not open directory '%s'. Please check the server user and file permissions.")
 
 # cherokee/handler_dirlist.c
 #
