@@ -2425,6 +2425,7 @@ cherokee_connection_check_http_method (cherokee_connection_t *conn, cherokee_con
 	if (config_entry->handler_methods == http_options)
 		return ret_ok;
 
+	LOG_ERROR_S (CHEROKEE_ERROR_CONNECTION_HTTP_METHOD);
 	/* Set the error
 	 */
 	conn->error_code = http_method_not_allowed;
