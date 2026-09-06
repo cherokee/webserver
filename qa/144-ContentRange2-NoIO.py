@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 LENGTH = 100*1024
 OFFSET = 15
@@ -19,8 +19,8 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Content Range no-iocache 100k, start"
 
-        self.request           = "GET /%s/Range100k HTTP/1.0\r\n" % (DIR) +\
-                                 "Range: bytes=%d-\r\n" % (OFFSET)
+        self.request           = f"GET /{DIR}/Range100k HTTP/1.0\r\n" +\
+                                 f"Range: bytes={int(OFFSET)}-\r\n"
         self.expected_error    = 206
 
     def Prepare (self, www):
@@ -28,9 +28,9 @@ class Test (TestBase):
         self.conf = CONF.replace('<dir>', test_dir)
 
         random  = letters_random (LENGTH)
-        self.WriteFile (test_dir, "Range100k", 0444, random)
+        self.WriteFile (test_dir, "Range100k", 0o444, random)
 
         tmpfile = self.WriteTemp (random[OFFSET:])
 
-        self.expected_content  = ["file:"+tmpfile, "Content-Length: %d" % (LENGTH-OFFSET)]
+        self.expected_content  = ["file:"+tmpfile, f"Content-Length: {int(LENGTH - OFFSET)}"]
         self.forbidden_content = random[:OFFSET]

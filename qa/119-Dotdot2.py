@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "Cherokee accepts dot dot inside the request"
 
@@ -12,4 +12,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "dotdot2/dir")
-        self.WriteFile (d, "file", 0444, MAGIC);
+        self.WriteFile (d, "file", 0o444, MAGIC);

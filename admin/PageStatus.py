@@ -26,6 +26,7 @@
 import re
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Graph
 import Cherokee
 import validations
@@ -67,12 +68,12 @@ class Render_Content (CTK.Container):
             graph = Graph.GraphServer_Instancer()
         else:
             vsrv_num = CTK.request.url.split('/')[-1]
-            vsrv_nam = CTK.cfg.get_val ("vserver!%s!nick" %(vsrv_num), _("Unknown"))
-            title    ='%s: %s' %(_('Virtual Server Monitoring'), vsrv_nam)
+            vsrv_nam = CTK.cfg.get_val (f"vserver!{vsrv_num}!nick", _("Unknown"))
+            title    =f"{_('Virtual Server Monitoring')}: {vsrv_nam}"
             graph    = Graph.GraphVServer_Instancer(vsrv_num)
 
         cont  = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(title))
+        cont += CTK.RawHTML (f'<h2>{title}</h2>')
         cont += graph
 
         render = cont.Render()
@@ -94,18 +95,18 @@ class Render:
 
             # Build the Virtual Server list
             vservers = CTK.cfg.keys('vserver')
-            vservers.sort (lambda x,y: cmp(int(x), int(y)))
+            vservers.sort (key=int)
             vservers.reverse()
 
             # Special Panel entries
             content = [special('nick',  _('General')),
                        special('droot', _('System wide status'))]
-            panel.Add ('general', '%s/content/general'%(URL_BASE), content, draggable=False)
+            panel.Add ('general', f'{URL_BASE}/content/general', content, draggable=False)
 
             # Regular list entries
             for k in vservers:
-                content = [entry('nick', 'vserver!%s!nick'%(k))]
-                panel.Add (k, '%s/content/%s'%(URL_BASE, k), content, draggable=False)
+                content = [entry('nick', f'vserver!{k}!nick')]
+                panel.Add (k, f'{URL_BASE}/content/{k}', content, draggable=False)
 
 
     def __call__ (self):
@@ -113,7 +114,7 @@ class Render:
 
         # Content
         left  = CTK.Box({'class': 'panel'})
-        left += CTK.RawHTML('<h2>%s</h2>'%(title))
+        left += CTK.RawHTML(f'<h2>{title}</h2>')
 
         right = CTK.Box({'class': 'status_content'})
         left += CTK.Box({'class': 'filterbox'}, CTK.TextField({'class':'filter', 'optional_string': _('Virtual Server Filtering'), 'optional': True}))
@@ -127,6 +128,6 @@ class Render:
         return page.Render()
 
 
-CTK.publish (r'^%s$'               %(URL_BASE), Render)
-CTK.publish ('^%s/content/[\d]+$'  %(URL_BASE), Render_Content)
-CTK.publish ('^%s/content/general$'%(URL_BASE), Render_Content)
+CTK.publish (rf'^{URL_BASE}$', Render)
+CTK.publish (f'^{URL_BASE}/content/[\\d]+$', Render_Content)
+CTK.publish (f'^{URL_BASE}/content/general$', Render_Content)

@@ -24,6 +24,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import validations
 
@@ -130,7 +131,7 @@ class ConnectionsWidget (CTK.Container):
         table.Add (_('Sendfile min size'),  CTK.TextCfg('server!sendfile_min', True), _(NOTE_SENDFILE_MIN))
         table.Add (_('Sendfile max size'),  CTK.TextCfg('server!sendfile_max', True), _(NOTE_SENDFILE_MAX))
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Connections')))
+        self += CTK.RawHTML (f"<h2>{_('Connections')}</h2>")
         self += CTK.Indenter(table)
 
 class ResourcesWidget (CTK.Container):
@@ -146,7 +147,7 @@ class ResourcesWidget (CTK.Container):
         table.Add (_('Log flush time'),         CTK.TextCfg('server!log_flush_lapse',      True), _(NOTE_FLUSH_TIME))
         table.Add (_('Nonces clean up time'),   CTK.TextCfg('server!nonces_cleanup_lapse', True), _(NOTE_NONCES_TIME))
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Resources')))
+        self += CTK.RawHTML (f"<h2>{_('Resources')}</h2>")
         self += CTK.Indenter(table)
 
 class IOCacheWidget (CTK.Container):
@@ -161,7 +162,7 @@ class IOCacheWidget (CTK.Container):
         table.Add (_('Lasting: stat'), CTK.TextCfg('server!iocache!lasting_stat',  True), _(NOTE_IO_LAST_STAT))
         table.Add (_('Lasting: mmap'), CTK.TextCfg('server!iocache!lasting_mmap',  True), _(NOTE_IO_LAST_MMAP))
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('I/O cache')))
+        self += CTK.RawHTML (f"<h2>{_('I/O cache')}</h2>")
         self += CTK.Indenter(table)
 
 class SpecialFilesWidget (CTK.Container):
@@ -172,7 +173,7 @@ class SpecialFilesWidget (CTK.Container):
         table.Add (_('Panic action'), CTK.TextCfg('server!panic_action', True), _(NOTE_PANIC_ACTION))
         table.Add (_('PID file'),     CTK.TextCfg('server!pid_file',     True), _(NOTE_PID_FILE))
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Special Files')))
+        self += CTK.RawHTML (f"<h2>{_('Special Files')}</h2>")
         self += CTK.Indenter(table)
 
 class TLSWidget (CTK.Container):
@@ -191,7 +192,7 @@ class TLSWidget (CTK.Container):
         table.Add (_('DH parameters: 2048 bits'), CTK.TextCfg('server!tls!dh_param2048', True), _(NOTE_DH2048))
         table.Add (_('DH parameters: 4096 bits'), CTK.TextCfg('server!tls!dh_param4096', True), _(NOTE_DH4096))
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('TLS')))
+        self += CTK.RawHTML (f"<h2>{_('TLS')}</h2>")
         self += CTK.Indenter(table)
 
 class Render:
@@ -207,7 +208,7 @@ class Render:
         notice += CTK.RawHTML(_(WARNING))
 
         page = Page.Base(_('Advanced'), body_id='advanced', helps=HELPS)
-        page += CTK.RawHTML("<h1>%s</h1>" %(_('Advanced Configuration')))
+        page += CTK.RawHTML(f"<h1>{_('Advanced Configuration')}</h1>")
         page += notice
         page += tabs
         page += CTK.RawHTML (js=JS_SCROLL)
@@ -215,5 +216,5 @@ class Render:
         return page.Render()
 
 
-CTK.publish ('^%s'%(URL_BASE), Render)
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALIDATIONS, method="POST")
+CTK.publish (f'^{URL_BASE}', Render)
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALIDATIONS, method="POST")

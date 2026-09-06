@@ -1,7 +1,7 @@
-from base import *
+from qa_base import *
 
 DIR       = "php_checkfile"
-HOST      = "test251"
+HOST: str = "test251"
 
 MAGIC     = 'This test checks the PHP check local file'
 FORBIDDEN = 'This is a comment'
@@ -23,19 +23,19 @@ vserver!251!rule!1!handler!error = 403
 
 """
 
-PHP_SRC = """<?php
-   /* %s */
+PHP_SRC = f"""<?php
+   /* {FORBIDDEN} */
   phpinfo();
-  echo '%s';
-?>""" %(FORBIDDEN, MAGIC)
+  echo '{MAGIC}';
+?>"""
 
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "PHP: Document root + Check local file"
-        self.request           = "GET /%s/internal/test.php HTTP/1.0\r\n" %(DIR) +\
-                                 "Host: %s\r\n" %(HOST)
+        self.request           = f"GET /{DIR}/internal/test.php HTTP/1.0\r\n" +\
+                                 f"Host: {HOST}\r\n"
         self.expected_error    = 200
         self.forbidden_content = FORBIDDEN
 
@@ -45,15 +45,15 @@ class Test (TestBase):
         document_root = self.Mkdir (www, "test251_outside")
         internal_dir  = self.Mkdir (www, "test251_outside/internal")
 
-        self.WriteFile (internal_dir, "test.php", 0666, PHP_SRC)
+        self.WriteFile (internal_dir, "test.php", 0o666, PHP_SRC)
 
         # Config
-        php_plus1 = int(self.php_conf.split('!')[0]) + 1
+        php_plus1 = int((self.php_conf or "").split('!')[0]) + 1
         self.conf = CONF_PART %(dict (locals(), **globals()))
 
         # Config: PHP
-        for php in self.php_conf.split("\n"):
-            self.conf += "vserver!251!rule!%s\n" % (php)
+        for php in (self.php_conf or "").split("\n"):
+            self.conf += f"vserver!251!rule!{php}\n"
 
         self.conf += "vserver!251!rule!10000!match!check_local_file = 1\n"
 

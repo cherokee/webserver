@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from base import *
+from qa_base import *
 
 DIR      = "utf8-pathinfo1"
 PATHINFO = "/ḈḨeṜṒḲḚḜ/supports/ṷẗḟ8"
 
-CONF = """
+CONF = f"""
 vserver!1!rule!2410!match = directory
-vserver!1!rule!2410!match!directory = /%s
+vserver!1!rule!2410!match!directory = /{DIR}
 vserver!1!rule!2410!handler = cgi
-""" %(DIR)
+"""
 
 CGI_BASE = """#!/bin/sh
 echo "Content-Type: text/plain"
@@ -22,11 +22,11 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "UTF8 pathinfo"
 
-        self.request          = "GET /%s/test%s HTTP/1.0\r\n" %(DIR, PATHINFO)
+        self.request          = f"GET /{DIR}/test{PATHINFO} HTTP/1.0\r\n"
         self.conf             = CONF
         self.expected_error   = 200
-        self.expected_content = "PathInfo is %s" % (PATHINFO)
+        self.expected_content = f"PathInfo is {PATHINFO}"
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        self.WriteFile (d, "test", 0755, CGI_BASE)
+        self.WriteFile (d, "test", 0o755, CGI_BASE)

@@ -1,5 +1,5 @@
 import os.path
-from base import *
+from qa_base import *
 
 DIR       = "alias_and_pathinfo"
 PATH_INFO = "/this_is_the/path_info"
@@ -21,11 +21,11 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "CGI: ScriptAlias with PathInfo"
 
-        self.request          = "GET /%s%s HTTP/1.0\r\n" % (DIR, PATH_INFO)
+        self.request          = f"GET /{DIR}{PATH_INFO} HTTP/1.0\r\n"
         self.expected_error   = 200
-        self.expected_content = "PATH_INFO = -%s-" % (PATH_INFO)
+        self.expected_content = f"PATH_INFO = -{PATH_INFO}-"
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, "exec.cgi", 0755, CGI_BASE)
+        f = self.WriteFile (d, "exec.cgi", 0o755, CGI_BASE)
         self.conf = CONF % (f)

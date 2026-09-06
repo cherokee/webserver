@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 class Test (TestBase):
     def __init__ (self):
@@ -9,4 +9,3 @@ class Test (TestBase):
         self.request        = "GET / HTTP/1.1\r\n" +\
                               "Connection: Close\r\n" + \
                               "Host: www.cherokee-project.com\r\n"
-

@@ -12,7 +12,7 @@ def submit():
 
 def url3():
     cont = CTK.Container()
-    cont += CTK.RawHTML ('Thank you, the value is <b>%s</b>.'%(name))
+    cont += CTK.RawHTML (f'Thank you, the value is <b>{name}</b>.')
     cont += CTK.DruidButtonsPanel_PrevCreate ('/url2')
     return cont.Render().toStr()
 

@@ -22,6 +22,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 # Python
@@ -91,8 +92,8 @@ class PID:
 
         # Try to find the Cherokee process
         for l in ps.split("\n"):
-            if "cherokee " in l and "-C %s"%(CTK.cfg.file) in l:
-                pid = filter (lambda x: x.isdigit(), l.split())[0]
+            if "cherokee " in l and f"-C {CTK.cfg.file}" in l:
+                pid = [x for x in l.split() if x.isdigit()][0]
                 self.pid = int(pid)
 
 
@@ -128,10 +129,14 @@ class Server:
             environ["PATH"] = ':'.join(DEFAULT_PATH)
 
         # Launch the process
+        if CTK.cfg.file is None:
+            raise RuntimeError('CTK configuration file is not set')
         p = Popen ([CHEROKEE_SERVER, '--admin_child', '-C', CTK.cfg.file],
                    stdout=PIPE, stderr=PIPE, env=environ,
                    preexec_fn=daemonize, close_fds=True)
 
+        if p.stdout is None or p.stderr is None:
+            raise RuntimeError('Cherokee child pipes were not created')
         stdout_f,  stderr_f  = (p.stdout, p.stderr)
         stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
 
@@ -151,25 +156,25 @@ class Server:
 
             # stdout
             if stdout_fd in r:
-                data = ''
+                data = b''
                 try:
                     data = os.read (stdout_fd, READ_CHUNK_SIZE)
-                except OSError, e:
-                    if e[0] in (errno.EAGAIN,):
+                except OSError as e:
+                    if e.errno in (errno.EAGAIN,):
                         raise
                 if data:
-                    stdout += data
+                    stdout += data.decode(errors='replace')
 
             # stderr
             if stderr_fd in r:
-                data = ''
+                data = b''
                 try:
                     data = os.read (stderr_fd, READ_CHUNK_SIZE)
-                except OSError, e:
-                    if e[0] in (errno.EAGAIN,):
+                except OSError as e:
+                    if e.errno in (errno.EAGAIN,):
                         raise
                 if data:
-                    stderr += data
+                    stderr += data.decode(errors='replace')
 
 
             nl = stderr.find('\n')
@@ -196,13 +201,13 @@ class Support:
     def __init__ (self):
         # Get server info
         try:
-            ret = popen.popen_sync ("%s -i" %(CHEROKEE_WORKER))
+            ret = popen.popen_sync (f"{CHEROKEE_WORKER} -i")
             self._server_info = ret['stdout']
         except:
             self._server_info = ''
 
     def get_info_section (self, filter):
-        filter_string = " %s: " % (filter)
+        filter_string = f" {filter}: "
 
         for line in self._server_info.split("\n"):
             if line.startswith (filter_string):
@@ -212,7 +217,7 @@ class Support:
 
     def has_plugin (self, name):
         try:
-            mods = filter(lambda x: name in x, os.listdir(CHEROKEE_PLUGINDIR))
+            mods = [x for x in os.listdir(CHEROKEE_PLUGINDIR) if name in x]
             if len(mods) >= 1:
                 return True
         except:
@@ -290,8 +295,8 @@ def _pid_kill (pid):
         try:
             os.waitpid (pid, 0)
             return True
-        except OSError, e:
-            if e[0] == errno.ECHILD:
+        except OSError as e:
+            if e.errno == errno.ECHILD:
                 return True
             time.sleep (0.5)
             retries -= 1

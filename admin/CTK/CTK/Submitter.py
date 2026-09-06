@@ -20,14 +20,15 @@
 # 02110-1301, USA.
 #
 
-from consts import *
-from Button import Button
-from RawHTML import RawHTML
-from Container import Container
-from TextArea import TextArea
-from TextField import TextField
-from PageCleaner import Uniq_Block
-from Server import get_server
+from .consts import *
+from .Button import Button
+from .RawHTML import RawHTML
+from .i18n import _
+from .Container import Container
+from .TextArea import TextArea
+from .TextField import TextField
+from .PageCleaner import Uniq_Block
+from .Server import get_server
 
 HEADER = ['<script type="text/javascript" src="/CTK/js/Submitter.js"></script>']
 
@@ -100,12 +101,12 @@ class Submitter (Container):
     def __init__ (self, submit_url):
         Container.__init__ (self)
         self.url = submit_url
-        self.id  = "submitter%d" %(self.uniq_id)
+        self.id  = f"submitter{int(self.uniq_id)}"
 
         # Secure submit
         srv = get_server()
         if srv.use_sec_submit:
-            self.url += '?key=%s' %(srv.sec_submit)
+            self.url += f'?key={srv.sec_submit}'
 
     def Render (self):
         # Child render
@@ -128,7 +129,7 @@ class Submitter (Container):
         return render
 
     def JS_to_submit (self):
-        return "$('#%s').data('submitter').submit_form();" %(self.id)
+        return f"$('#{self.id}').data('submitter').submit_form();"
         #return "submit_%d.submit_form (submit_%d);" % (self.uniq_id, self.uniq_id)
 
 

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 CONF = """
 vserver!1!rule!3060!match = directory
@@ -30,7 +30,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "cgi_error_204_1")
-        f = self.WriteFile (d, "exec.cgi", 0555, CGI_BASE )
+        f = self.WriteFile (d, "exec.cgi", 0o555, CGI_BASE )
 
     def CustomTest (self):
 
@@ -48,4 +48,3 @@ class Test (TestBase):
             return -1
 
         return 0
-

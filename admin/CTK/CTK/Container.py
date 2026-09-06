@@ -22,7 +22,13 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
+from __future__ import annotations
+
+from typing import TypeVar
+
+from .Widget import RenderResponse, Widget
+
+ContainerT = TypeVar('ContainerT', bound='Container')
 
 class Container (Widget):
     """
@@ -32,27 +38,28 @@ class Container (Widget):
     """
     def __init__ (self):
         Widget.__init__ (self)
-        self.child = []
+        self.child: list[Widget] = []
 
-    def __getitem__ (self, n):
+    def __getitem__ (self, n: int) -> Widget:
         return self.child[n]
 
     def __len__ (self):
         return len(self.child)
 
-    def __nonzero__ (self):
+    def __bool__ (self):
         # It's an obj, no matter its child.
         return True
 
-    def __iadd__ (self, widget):
-        assert isinstance(widget, Widget)
+    def __iadd__ (self: ContainerT, widget: Widget) -> ContainerT:
+        if not isinstance(widget, Widget):
+            raise TypeError('Container children must be Widget instances')
         self.child.append (widget)
         return self
 
     def Empty (self):
         self.child = []
 
-    def Render (self):
+    def Render (self) -> RenderResponse:
         render = Widget.Render(self)
 
         for c in self.child:

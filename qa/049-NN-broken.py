@@ -1,6 +1,6 @@
-from base import *
+from qa_base import *
 
-HOST = "nn2"
+HOST: str = "nn2"
 
 CONF = """
 vserver!490!nick = %s
@@ -17,7 +17,7 @@ class Test (TestBase):
 
         self.request        = "GET /missing HTTP/1.1\r\n" + \
                               "Connection: Close\r\n" + \
-                              "Host: %s\r\n" % (HOST)
+                              f"Host: {HOST}\r\n"
         self.expected_error = 404
 
     def Prepare (self, www):

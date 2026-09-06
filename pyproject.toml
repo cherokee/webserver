@@ -1,0 +1,2 @@
+[tool.ty.environment]
+extra-paths = ["admin/CTK", "admin", "qa"]

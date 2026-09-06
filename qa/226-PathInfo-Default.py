@@ -1,6 +1,6 @@
-from base import *
+from qa_base import *
 
-HOST        = "test226"
+HOST: str = "test226"
 
 PATH_INFO   = "/this/is/pathinfo"
 SCRIPT_NAME = ""
@@ -8,17 +8,21 @@ SCRIPT_NAME = ""
 PORT        = get_free_port()
 PYTHON      = look_for_python()
 
-SCRIPT = """
+SCRIPT = f"""
 from pyscgi import *
 
 class TestHandler (SCGIHandler):
     def handle_request (self):
-        self.send('Content-Type: text/plain\\r\\n\\r\\n')
-        self.send('PathInfo is: >'  + self.env['PATH_INFO']   +'<\\n')
-        self.send('ScriptName is: >'+ self.env['SCRIPT_NAME'] +'<\\n')
+        self.send('Content-Type: text/plain\\r\
+\\r\
+')
+        self.send('PathInfo is: >'  + self.env['PATH_INFO']   +'<\
+')
+        self.send('ScriptName is: >'+ self.env['SCRIPT_NAME'] +'<\
+')
 
-SCGIServerFork(TestHandler, port=%d).serve_forever()
-""" % (PORT)
+SCGIServerFork(TestHandler, port={int(PORT)}).serve_forever()
+"""
 
 source = get_next_source()
 
@@ -43,15 +47,15 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name             = "PathInfo: default rule"
-        self.request          = "GET %s HTTP/1.1\r\n"%(PATH_INFO) +\
-                                "Host: %s\r\n"%(HOST) + \
+        self.request          = f"GET {PATH_INFO} HTTP/1.1\r\n" +\
+                                f"Host: {HOST}\r\n" + \
                                 "Connection: Close\r\n"
         self.expected_error   = 200
-        self.expected_content = ["PathInfo is: >%s<"%(PATH_INFO),
-                                 "ScriptName is: >%s<"%(SCRIPT_NAME)]
+        self.expected_content = [f"PathInfo is: >{PATH_INFO}<",
+                                 f"ScriptName is: >{SCRIPT_NAME}<"]
 
     def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "test226.scgi", 0444, SCRIPT)
+        scgi_file = self.WriteFile (www, "test226.scgi", 0o444, SCRIPT)
 
         pyscgi = os.path.join (www, 'pyscgi.py')
         if not os.path.exists (pyscgi):

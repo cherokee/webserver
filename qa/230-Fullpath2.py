@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC="Alvaro: http://www.alobbs.com/"
 
@@ -12,17 +12,17 @@ vserver!1!rule!2300!match!fullpath!2 = /%s
 vserver!1!rule!2300!handler = cgi
 """
 
-CGI_BASE = """#!/bin/sh
+CGI_BASE = f"""#!/bin/sh
 echo "Content-type: text/html"
 echo ""
-echo "%s"
-""" % (MAGIC)
+echo "{MAGIC}"
+"""
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "FullPath: second path + query string"
-        self.request           = "GET /%s?query=string HTTP/1.0\r\n" % (PAIR2[1])
+        self.request           = f"GET /{PAIR2[1]}?query=string HTTP/1.0\r\n"
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = ["/bin/sh", "echo"]
@@ -36,5 +36,4 @@ class Test (TestBase):
                 d = self.Mkdir (www, pd)
             else:
                 d = www
-            self.WriteFile (d, pf, 0755, CGI_BASE)
-
+            self.WriteFile (d, pf, 0o755, CGI_BASE)

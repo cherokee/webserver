@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR = "QA262"
 
@@ -21,9 +21,8 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Request Redir evaluation order"
-        self.request           = "GET /%(DIR)s/whatever HTTP/1.0\r\n" % (globals())
+        self.request           = f"GET /{globals()['DIR']}/whatever HTTP/1.0\r\n"
         self.conf              = CONF %(globals())
         self.expected_error    = 301
         self.expected_content  = "First_Rule"
         self.forbidden_content = ['Second_Rule', 'Third_Rule']
-

@@ -20,9 +20,9 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from Server import cfg
-from util import props_to_str
+from .Widget import Widget
+from .Server import cfg
+from .util import props_to_str
 
 class Combobox (Widget):
     """
@@ -46,7 +46,7 @@ class Combobox (Widget):
         self._options = options
 
         if not 'id' in self.props:
-            self.props['id'] = 'Combobox_%s' %(self.uniq_id)
+            self.props['id'] = f'Combobox_{self.uniq_id}'
         self.id = self.props['id']
 
     def Render (self):
@@ -61,9 +61,9 @@ class Combobox (Widget):
 
             props_str = props_to_str(props)
             if selected and str(selected) == str(name):
-                return '<option value="%s" selected="true" %s>%s</option>' % (name, props_str, label)
+                return f'<option value="{name}" selected="true" {props_str}>{label}</option>'
             else:
-                return '<option value="%s" %s>%s</option>' % (name, props_str, label)
+                return f'<option value="{name}" {props_str}>{label}</option>'
 
         def render_list (o):
             if len(o) == 2:
@@ -73,7 +73,7 @@ class Combobox (Widget):
                 name, options, props = o
 
             props_str = props_to_str(props)
-            txt = '<optgroup label="%s" %s>' %(name, props_str)
+            txt = f'<optgroup label="{name}" {props_str}>'
             for o in options:
                 txt += render_str (o)
             txt += '</optgroup>'
@@ -91,13 +91,13 @@ class Combobox (Widget):
 
         # Render the container
         header = ''
-        for p in filter(lambda x: x!='selected', self.props):
+        for p in [x for x in self.props if x!='selected']:
             if self.props[p]:
-                header += ' %s="%s"' %(p, self.props[p])
+                header += f' {p}="{self.props[p]}"'
             else:
-                header += ' %s' %(p)
+                header += f' {p}'
 
-        html = '<select%s>%s</select>' %(header, content)
+        html = f'<select{header}>{content}</select>'
 
         render = Widget.Render (self)
         render.html += html

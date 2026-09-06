@@ -48,7 +48,7 @@ link="http://www.cherokee-project.com/screencasts.html#django_flup"]
 
 On Debian based systems this will be enough:
 ----
-# apt-get install python-django python-flup
+# apt-get install python3-django python3-flup
 ----
 
 You will need Flup because it implements the standard interface

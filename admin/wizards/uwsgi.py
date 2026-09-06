@@ -36,9 +36,10 @@ import socket
 import re
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 from xml.dom import minidom
-import ConfigParser
+import configparser
 
 try:
     import yaml
@@ -144,18 +145,18 @@ def figure_CPU_num():
 class Commit:
     def Commit_VServer (self):
         # Incoming info
-        document_root = CTK.cfg.get_val('%s!document_root'%(PREFIX))
-        uwsgi_cfg     = CTK.cfg.get_val('%s!uwsgi_cfg'%(PREFIX))
-        new_host      = CTK.cfg.get_val('%s!new_host'%(PREFIX))
+        document_root = CTK.cfg.get_val(f'{PREFIX}!document_root')
+        uwsgi_cfg     = CTK.cfg.get_val(f'{PREFIX}!uwsgi_cfg')
+        new_host      = CTK.cfg.get_val(f'{PREFIX}!new_host')
 
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
-        CTK.cfg['%s!nick'%(vsrv_pre)] = new_host
-        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
+        CTK.cfg[f'{vsrv_pre}!nick'] = new_host
+        Wizard.CloneLogsCfg_Apply (f'{PREFIX}!logs_as_vsrv', vsrv_pre)
 
         uwsgi_binary = find_uwsgi_binary()
         if not uwsgi_binary:
-            uwsgi_binary = CTK.cfg.get_val('%s!uwsgi_binary' %(PREFIX))
+            uwsgi_binary = CTK.cfg.get_val(f'{PREFIX}!uwsgi_binary')
 
         # Locals
         src_num, pre = cfg_source_get_next ()
@@ -164,10 +165,10 @@ class Commit:
         modifier1 = uwsgi_get_modifier(uwsgi_cfg)
         src_addr = uwsgi_get_socket(uwsgi_cfg)
         if not src_addr:
-            src_addr = "127.0.0.1:%d" % cfg_source_find_free_port ()
-            uwsgi_extra = "-s %s %s" % (src_addr, uwsgi_extra)
+            src_addr = f"127.0.0.1:{int(cfg_source_find_free_port())}"
+            uwsgi_extra = f"-s {src_addr} {uwsgi_extra}"
         elif src_addr.startswith(':'):
-            src_addr = "127.0.0.1%s" % src_addr
+            src_addr = f"127.0.0.1{src_addr}"
 
         # Build the config
         cvs = CONFIG_VSERVER
@@ -185,36 +186,36 @@ class Commit:
         CTK.cfg.apply_chunk (str(config))
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
         CTK.cfg.normalize ('vserver')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
 
     def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val('%s!vsrv_num' %(PREFIX))
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
+        vsrv_num = CTK.cfg.get_val(f'{PREFIX}!vsrv_num')
+        vsrv_pre = f'vserver!{vsrv_num}'
 
         # Incoming info
-        uwsgi_cfg = CTK.cfg.get_val('%s!uwsgi_cfg' %(PREFIX))
+        uwsgi_cfg = CTK.cfg.get_val(f'{PREFIX}!uwsgi_cfg')
 
         uwsgi_binary = find_uwsgi_binary()
         if not uwsgi_binary:
-            uwsgi_binary = CTK.cfg.get_val('%s!uwsgi_binary' %(PREFIX))
+            uwsgi_binary = CTK.cfg.get_val(f'{PREFIX}!uwsgi_binary')
 
         # Locals
-        rule_pre = CTK.cfg.get_next_entry_prefix ('%s!rule' %(vsrv_pre))
+        rule_pre = CTK.cfg.get_next_entry_prefix (f'{vsrv_pre}!rule')
         src_num, src_pre = cfg_source_get_next ()
 
         uwsgi_extra = uwsgi_get_extra(uwsgi_cfg)
         modifier1 = uwsgi_get_modifier(uwsgi_cfg)
         src_addr = uwsgi_get_socket(uwsgi_cfg)
         if not src_addr:
-            src_addr = "127.0.0.1:%d" % cfg_source_find_free_port ()
-            uwsgi_extra = "-s %s %s" % (src_addr, uwsgi_extra)
+            src_addr = f"127.0.0.1:{int(cfg_source_find_free_port())}"
+            uwsgi_extra = f"-s {src_addr} {uwsgi_extra}"
         else:
             if src_addr.startswith(':'):
-                src_addr = "127.0.0.1%s" % src_addr
+                src_addr = f"127.0.0.1{src_addr}"
 
         # Add the new rules
         webdir = uwsgi_find_mountpoint(uwsgi_cfg)[0]
@@ -222,7 +223,7 @@ class Commit:
         CTK.cfg.apply_chunk (str(config))
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -233,7 +234,7 @@ class Commit:
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num' %(PREFIX)):
+            if CTK.cfg.get_val (f'{PREFIX}!vsrv_num'):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -242,18 +243,18 @@ class Commit:
 
 class WebDirectory:
     def __call__ (self):
-        uwsgi_cfg = CTK.cfg.get_val('%s!uwsgi_cfg' %(PREFIX))
+        uwsgi_cfg = CTK.cfg.get_val(f'{PREFIX}!uwsgi_cfg')
         webdir    = uwsgi_find_mountpoint(uwsgi_cfg)[0]
 
         table = CTK.PropsTable()
-        table.Add (_('Web Directory'), CTK.TextCfg ('%s!webdir'%(PREFIX), False, {'value': webdir, 'class': 'noauto'}), _(NOTE_WEBDIR))
+        table.Add (_('Web Directory'), CTK.TextCfg (f'{PREFIX}!webdir', False, {'value': webdir, 'class': 'noauto'}), _(NOTE_WEBDIR))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WEBDIR_H1)}</h2>')
         cont += submit
         cont += CTK.Notice('warning', CTK.RawHTML(_(NOTE_WEBDIR_P1)))
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
@@ -263,16 +264,16 @@ class WebDirectory:
 class Host:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX),      False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
-        table.Add (_('Document Root'),    CTK.TextCfg ('%s!document_root'%(PREFIX), False, {'value': os_get_document_root(), 'class': 'noauto'}), _(NOTE_DROOT))
-        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
+        table.Add (_('New Host Name'),    CTK.TextCfg (f'{PREFIX}!new_host',      False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add (_('Document Root'),    CTK.TextCfg (f'{PREFIX}!document_root', False, {'value': os_get_document_root(), 'class': 'noauto'}), _(NOTE_DROOT))
+        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg(f'{PREFIX}!logs_as_vsrv'), _(Wizard.CloneLogsCfg.NOTE))
 
         submit  = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont  = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_HOST_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -284,14 +285,14 @@ class LocalSource:
 
         table = CTK.PropsTable()
         if not uwsgi_binary:
-            table.Add (_('uWSGI binary'),   CTK.TextCfg ('%s!uwsgi_binary'%(PREFIX), False), _(NOTE_UWSGI_BINARY))
-        table.Add (_('Configuration File'), CTK.TextCfg ('%s!uwsgi_cfg'   %(PREFIX), False), _(NOTE_UWSGI_CONFIG))
+            table.Add (_('uWSGI binary'),   CTK.TextCfg (f'{PREFIX}!uwsgi_binary', False), _(NOTE_UWSGI_BINARY))
+        table.Add (_('Configuration File'), CTK.TextCfg (f'{PREFIX}!uwsgi_cfg', False), _(NOTE_UWSGI_CONFIG))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_LOCAL_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
@@ -300,12 +301,12 @@ class LocalSource:
 class Welcome:
     def __call__ (self):
         box  = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P2)}</p>')
         box += Wizard.CookBookBox ('cookbook_uwsgi')
 
         cont  = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('uwsgi', {'class': 'wizard-descr'})
         cont += box
 
@@ -313,7 +314,7 @@ class Welcome:
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
             submit  = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit += CTK.Hidden(f'{PREFIX}!vsrv_num', tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -338,11 +339,11 @@ def is_uwsgi_cfg (filename):
 
 def uwsgi_get_extra(filename):
     if filename.endswith('.xml'):
-        return "-x %s" % filename
+        return f"-x {filename}"
     elif filename.endswith('.ini'):
-        return "--ini %s" % filename
+        return f"--ini {filename}"
     elif filename.endswith('.yml'):
-        return "--yaml %s" % filename
+        return f"--yaml {filename}"
 
     CPU_num   = figure_CPU_num() * 2
     timeout   = CTK.cfg.get_val('server!timeout', '15')
@@ -366,13 +367,14 @@ def uwsgi_get_socket(filename):
         try:
             udom = minidom.parse(filename)
             uroot = udom.getElementsByTagName('uwsgi')[0]
-            s = uroot.getElementsByTagName('socket')[0].childNodes[0].data
+            node = uroot.getElementsByTagName('socket')[0].childNodes[0]
+            s = getattr(node, 'data', None)
         except:
             pass
 
     elif filename.endswith('.ini'):
         try:
-            c = ConfigParser.ConfigParser()
+            c = configparser.ConfigParser()
             c.read(filename)
             s = c.get('uwsgi', 'socket')
         except:
@@ -381,7 +383,7 @@ def uwsgi_get_socket(filename):
     elif filename.endswith('.yml') and UWSGI_HAS_YAML:
         try:
             fd = open(filename, 'r')
-            y = yaml.load(fd)
+            y = yaml.safe_load(fd)
             s = y['uwsgi']['socket']
             fd.close()
         except:
@@ -421,17 +423,17 @@ def find_uwsgi_binary():
 #
 
 VALS = [
-    ("%s!uwsgi_binary" %(PREFIX), validations.is_not_empty),
-    ("%s!uwsgi_cfg"    %(PREFIX), validations.is_not_empty),
-    ("%s!new_host"     %(PREFIX), validations.is_not_empty),
-    ("%s!document_root"%(PREFIX), validations.is_not_empty),
-    ("%s!new_webdir"   %(PREFIX), validations.is_not_empty),
+    (f"{PREFIX}!uwsgi_binary", validations.is_not_empty),
+    (f"{PREFIX}!uwsgi_cfg", validations.is_not_empty),
+    (f"{PREFIX}!new_host", validations.is_not_empty),
+    (f"{PREFIX}!document_root", validations.is_not_empty),
+    (f"{PREFIX}!new_webdir", validations.is_not_empty),
 
-    ("%s!uwsgi_binary" %(PREFIX), validations.is_local_file_exists),
-    ("%s!uwsgi_cfg"    %(PREFIX), is_uwsgi_cfg),
-    ("%s!new_host"     %(PREFIX), validations.is_new_vserver_nick),
-    ("%s!document_root"%(PREFIX), validations.is_local_dir_exists),
-    ("%s!new_webdir"   %(PREFIX), validations.is_dir_formatted),
+    (f"{PREFIX}!uwsgi_binary", validations.is_local_file_exists),
+    (f"{PREFIX}!uwsgi_cfg", is_uwsgi_cfg),
+    (f"{PREFIX}!new_host", validations.is_new_vserver_nick),
+    (f"{PREFIX}!document_root", validations.is_local_dir_exists),
+    (f"{PREFIX}!new_webdir", validations.is_dir_formatted),
 ]
 
 # VServer
@@ -440,9 +442,9 @@ CTK.publish ('^/wizard/vserver/uwsgi/2$', LocalSource)
 CTK.publish ('^/wizard/vserver/uwsgi/3$', Host)
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/uwsgi$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/uwsgi/2$', LocalSource)
-CTK.publish ('^/wizard/vserver/(\d+)/uwsgi/3$', WebDirectory)
+CTK.publish ('^/wizard/vserver/(\\d+)/uwsgi$',   Welcome)
+CTK.publish ('^/wizard/vserver/(\\d+)/uwsgi/2$', LocalSource)
+CTK.publish ('^/wizard/vserver/(\\d+)/uwsgi/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (rf'^{URL_APPLY}', Commit, method="POST", validation=VALS)

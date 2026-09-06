@@ -1,24 +1,24 @@
-from base import *
+from qa_base import *
 
 DIR       = 'method_rule_1'
 MAGIC     = '<a href="http://www.alobbs.com/">Alvaro</a>'
 FORBIDDEN = 'This is forbidden string'
 METHOD    = 'get'
 
-CONF = """
+CONF = f"""
 vserver!1!rule!1871!match = and
 vserver!1!rule!1871!match!left = method
-vserver!1!rule!1871!match!left!method = %s
+vserver!1!rule!1871!match!left!method = {METHOD}
 vserver!1!rule!1871!match!right = directory
-vserver!1!rule!1871!match!right!directory = /%s
+vserver!1!rule!1871!match!right!directory = /{DIR}
 vserver!1!rule!1871!match!final = 1
 vserver!1!rule!1871!handler = cgi
 
 vserver!1!rule!1870!match = directory
-vserver!1!rule!1870!match!directory = /%s
+vserver!1!rule!1870!match!directory = /{DIR}
 vserver!1!rule!1870!match!final = 1
 vserver!1!rule!1870!handler = file
-""" % (METHOD, DIR, DIR)
+"""
 
 CGI_BASE = """#!/bin/sh
 echo "Content-type: text/html"
@@ -33,7 +33,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Rule Method: match"
-        self.request           = "GET /%s/test HTTP/1.0\r\n" % (DIR)
+        self.request           = f"GET /{DIR}/test HTTP/1.0\r\n"
         self.expected_content  = MAGIC
         self.forbidden_content = ['/bin/sh', 'echo', FORBIDDEN]
         self.expected_error    = 200
@@ -41,4 +41,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        self.WriteFile (d, "test", 0555, CGI_BASE % (FORBIDDEN, MAGIC))
+        self.WriteFile (d, "test", 0o555, CGI_BASE % (FORBIDDEN, MAGIC))

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 class Test (TestBase):
     def __init__ (self):
@@ -8,4 +8,3 @@ class Test (TestBase):
         self.expected_error = 200
         self.request        = "HEAD / HTTP/1.0\r\n" +\
                               "Connection: Keep-alive\r\n"
-

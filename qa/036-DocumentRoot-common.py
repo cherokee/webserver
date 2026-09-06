@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "This_is_the_magic_key"
 
@@ -19,7 +19,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "dr_common_another/dir")
-        self.WriteFile (d, "test_index.html", 0444, MAGIC)
+        self.WriteFile (d, "test_index.html", 0o444, MAGIC)
 
         self.conf = CONF % (d)
-

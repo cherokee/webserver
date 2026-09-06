@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Cherokee QA Tests
@@ -15,34 +15,36 @@ import time
 import copy
 import signal
 import shutil
-import thread
+import _thread
 import string
 import random
 import tempfile
+import subprocess
 
-from base import *
-from help import *
+from qa_base import *
+from qa_help import *
+import importlib
 
 try:
-    # Try to load a local configuration
-    from conf_local import *
-except ImportError:
-    # Use default settings
-    from conf import *
+    # Try to load a local configuration without requiring a generated module.
+    local_conf = importlib.import_module("conf_local")
+    globals().update(vars(local_conf))
+except ModuleNotFoundError:
+    from qa_conf import *
 
 # Deals with UTF-8
 if sys.getdefaultencoding() != 'utf-8':
-    reload (sys)
+    importlib.reload (sys)
     sys.setdefaultencoding('utf-8')
 
 # Configuration parameters
 num       = 1
 thds      = 1
-pause     = 0
+pause: int = 0
 tpause    = 0.0
-bpause    = None
+bpause: str | None = None
 srv_thds  = None
-ssl       = False
+ssl_enabled = False
 clean     = True
 kill      = True
 quiet     = False
@@ -63,10 +65,10 @@ delay     = SERVER_DELAY
 # Make the DocumentRoot directory
 www = tempfile.mkdtemp ("cherokee_www")
 tmp = www + "/_tmp/"
-pid = tmp + "cherokee.pid"
+pid_file = tmp + "cherokee.pid"
 os.makedirs (tmp)
 
-map (lambda x: os.chmod (x, 0777), [www, tmp])
+list(map (lambda x: os.chmod (x, 0o777), [www, tmp]))
 
 # Make the files list
 files   = []
@@ -74,15 +76,15 @@ param   = []
 skipped = []
 if len(sys.argv) > 1:
     argv = sys.argv[1:]
-    files = filter (lambda x: x[0] != '-', argv)
-    param = filter (lambda x: x[0] == '-', argv)
+    files = [x for x in argv if x[0] != '-']
+    param = [x for x in argv if x[0] == '-']
 
 # If not files were specified, use all of them
 if len(files) == 0:
     files = os.listdir('.')
-    files = filter (lambda x: x[-3:] == '.py', files)
-    files = filter (lambda x: x[3] == '-', files)
-    files = filter (lambda x: x[2] in string.digits, files)
+    files = [x for x in files if x[-3:] == '.py']
+    files = [x for x in files if x[3] == '-']
+    files = [x for x in files if x[2] in string.digits]
     files.sort()
 
 # Process the parameters
@@ -90,7 +92,7 @@ for p in param:
     if   p     == '-c': clean     = False
     elif p     == '-k': kill      = False
     elif p     == '-q': quiet     = True
-    elif p     == '-s': ssl       = True
+    elif p     == '-s': ssl_enabled = True
     elif p     == '-x': strace    = True
     elif p     == '-b': nobody    = True
     elif p     == '-l': log       = True
@@ -103,7 +105,7 @@ for p in param:
     elif p[:2] == '-r': delay     = int(p[2:])
     elif p[:2] == '-T': srv_thds  = int(p[2:])
     elif p[:2] == '-j': tpause    = float(p[2:])
-    elif p[:2] == '-d': pause     = p[2:]
+    elif p[:2] == '-d': pause     = int(p[2:]) if p[2:] else sys.maxsize
     elif p[:2] == '-D': bpause    = p[2:]
     elif p[:2] == '-m': method    = p[2:]
     elif p[:2] == '-e': server    = p[2:]
@@ -117,23 +119,16 @@ if help:
     help_print_parameters()
     sys.exit(1)
 
-# Fix up pause
-if type(pause) == types.StringType:
-    if len(pause) > 0:
-        pause = int(pause)
-    else:
-        pause = sys.maxint
-
 # Check threads and pauses
 if thds > 1 and pause > 1:
-    print "ERROR: -d and -t are incompatible with each other."
+    print("ERROR: -d and -t are incompatible with each other.")
     sys.exit(1)
 
 # Check the interpreters
 php_interpreter    = look_for_php()
 python_interpreter = look_for_python()
 
-print "Interpreters"
+print("Interpreters")
 if php_interpreter:
     print_key('PHP', php_interpreter)
 else:
@@ -143,7 +138,7 @@ if python_interpreter:
     print_key('Python', python_interpreter)
 else:
     print_key('Python', "ERROR: Python interpreter not found")
-print
+print()
 
 # Might need to fake PHP
 fake_php = len(php_interpreter) == 0
@@ -158,7 +153,7 @@ if panic[0] != '/':
 
 # Proxy
 if not proxy:
-    if ssl:
+    if ssl_enabled:
         client_port = PORT_TLS
     else:
         client_port = PORT
@@ -176,12 +171,12 @@ else:
 
     listen = ''
 
-    PROXY_CONF = """
+    PROXY_CONF = f"""
 server!chunked_encoding = 1
 server!keepalive_max_requests = 500
 server!log_flush_lapse = 0
 server!panic_action = /usr/bin/cherokee-panic
-server!bind!1!port = %(client_port)s
+server!bind!1!port = {locals()['client_port']}
 
 vserver!10!nick = default
 vserver!10!document_root = /dev/null
@@ -196,12 +191,12 @@ vserver!10!rule!100!handler!balancer = round_robin
 vserver!10!rule!100!handler!balancer!source!1 = 1
 vserver!10!rule!100!handler!in_preserve_host = 1
 
-source!1!host = %(public_ip)s:%(PORT)s
+source!1!host = {locals()['public_ip']}:{locals()['PORT']}
 source!1!nick = QA
 source!1!type = host
-""" % (locals())
+"""
 
-    proxy_cfg_file = tempfile.mktemp("cherokee_proxy_cfg")
+    proxy_cfg_file = tempfile.NamedTemporaryFile(prefix="cherokee_proxy_cfg", delete=False).name
     f = open (proxy_cfg_file, 'w')
     f.write (PROXY_CONF)
     f.close()
@@ -209,77 +204,75 @@ source!1!type = host
 # Configuration file base
 next_source = get_next_source()
 
-CONF_BASE = """
+CONF_BASE = f"""
 #
 # Cherokee QA tests
 #
-server!bind!1!port = %(PORT)d
-server!bind!1!interface = %(listen)s
-server!bind!2!port = %(PORT_TLS)d
-server!bind!2!interface = %(listen)s
+server!bind!1!port = {PORT}
+server!bind!1!interface = {listen}
+server!bind!2!port = {PORT_TLS}
+server!bind!2!interface = {listen}
 server!bind!2!tls = 1
 server!keepalive = 1
-server!panic_action = %(panic)s
-server!pid_file = %(pid)s
-server!module_dir = %(CHEROKEE_MODS)s
-server!module_deps = %(CHEROKEE_DEPS)s
+server!panic_action = {panic}
+server!pid_file = {pid_file}
+server!module_dir = {CHEROKEE_MODS}
+server!module_deps = {CHEROKEE_DEPS}
 server!fdlimit = 8192
-server!themes_dir = %(CHEROKEE_THEMES)s
+server!themes_dir = {CHEROKEE_THEMES}
 
 vserver!1!nick = default
-vserver!1!document_root = %(www)s
+vserver!1!document_root = {www}
 vserver!1!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = common
 
-source!%(next_source)d!type = interpreter
-source!%(next_source)d!host = localhost:%(PHP_FCGI_PORT)d
+source!{next_source}!type = interpreter
+source!{next_source}!host = localhost:{PHP_FCGI_PORT}
 source!%(next_source)d!env!PHP_FCGI_CHILDREN = 5
-""" % (locals())
+"""
 
 if 'fpm' in php_interpreter:
-    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -d listen=%(PHP_FCGI_PORT)d -d daemonize=Off\n"%(locals())
+    CONF_BASE += f"source!{int(locals()['next_source'])}!interpreter = {locals()['php_interpreter']} -d listen={int(locals()['PHP_FCGI_PORT'])} -d daemonize=Off\n"
 else:
-    CONF_BASE += "source!%(next_source)d!interpreter = %(php_interpreter)s -b %(PHP_FCGI_PORT)d\n" %(locals())
+    CONF_BASE += f"source!{int(locals()['next_source'])}!interpreter = {locals()['php_interpreter']} -b {int(locals()['PHP_FCGI_PORT'])}\n"
 
-php_ext = """\
-10000!match = extensions
+php_ext = f"""10000!match = extensions
 10000!match!extensions = php
 10000!match!final = 0
 10000!handler = fcgi
 10000!handler!balancer = round_robin
-10000!handler!balancer!source!1 = %(next_source)d\
-""" % (locals())
+10000!handler!balancer!source!1 = {int(locals()['next_source'])}"""
 
 for php in php_ext.split("\n"):
-    CONF_BASE += "vserver!1!rule!%s\n" % (php)
+    CONF_BASE += f"vserver!1!rule!{php}\n"
 
 if method:
-    CONF_BASE += "server!poll_method = %s" % (method)
+    CONF_BASE += f"server!poll_method = {method}"
 
-if ssl:
+if ssl_enabled:
     CONF_BASE = """
 server!tls = libssl
-""" + CONF_BASE + """
-vserver!1!ssl_certificate_file = %(SSL_CERT_FILE)s
-vserver!1!ssl_certificate_key_file = %(SSL_CERT_KEY_FILE)s
-""" % (globals())
+""" + CONF_BASE + f"""
+vserver!1!ssl_certificate_file = {globals()['SSL_CERT_FILE']}
+vserver!1!ssl_certificate_key_file = {globals()['SSL_CERT_KEY_FILE']}
+"""
 
 if log:
-    CONF_BASE += """
-vserver!1!logger = %s
+    CONF_BASE += f"""
+vserver!1!logger = {LOGGER_TYPE}
 vserver!1!logger!access!type = file
-vserver!1!logger!access!filename = %s
-""" % (LOGGER_TYPE, LOGGER_ACCESS)
+vserver!1!logger!access!filename = {LOGGER_ACCESS}
+"""
 
 CONF_BASE += """
 vserver!1!error_writer!type = stderr
 """
 
 if srv_thds:
-    CONF_BASE += """
-server!thread_number = %d
-""" % (srv_thds)
+    CONF_BASE += f"""
+server!thread_number = {int(srv_thds)}
+"""
 
 # Import modules
 mods = []
@@ -296,7 +289,7 @@ for m in mods:
     obj.tmp      = tmp
     obj.nobody   = nobody
     obj.php_conf = php_ext
-    obj.is_ssl   = ssl
+    obj.is_ssl   = ssl_enabled
     objs.append(obj)
 
 # Prepare www files
@@ -312,13 +305,13 @@ for obj in objs:
 
 # Write down the configuration file
 cfg = CONF_BASE + mod_conf
-cfg_file = tempfile.mktemp("cherokee_tmp_cfg")
+cfg_file = tempfile.NamedTemporaryFile(prefix="cherokee_tmp_cfg", delete=False).name
 cfg_fd = open (cfg_file, 'w')
 cfg_fd.write (cfg)
 cfg_fd.close()
 
 # Launch Cherokee
-pid = -1
+pid: int = -1
 if port is None:
     pid = os.fork()
     if pid == 0:
@@ -352,12 +345,12 @@ if port is None:
             name = server[server.rfind('/') + 1:]
 
             env = os.environ
-            if not env.has_key('CHEROKEE_PANIC_OUTPUT'):
+            if 'CHEROKEE_PANIC_OUTPUT' not in env:
                 env['CHEROKEE_PANIC_OUTPUT'] = 'stdout'
 
             os.execle (server, name, "-C", cfg_file, env)
     else:
-        print "Server"
+        print("Server")
         print_key ('PID', str(pid));
         print_key ('Path',   CHEROKEE_PATH)
         print_key ('Mods',   CHEROKEE_MODS)
@@ -366,18 +359,18 @@ if port is None:
         print_key ('Themes', CHEROKEE_THEMES)
         if proxy_cfg_file:
             print_key ('Proxy conf', proxy_cfg_file)
-        print
+        print()
 
         if memproc:
-            cmd = 'xterm -e "             \
+            cmd = f'xterm -e "             \
             ( while :; do                 \
-               [ -d /proc/%d ] || break;  \
+               [ -d /proc/{pid} ] || break;  \
                date;                      \
-               cat /proc/%d/status 2>/dev/null | egrep \'(VmSize|VmData|SleepAVG)\'; \
+               cat /proc/{pid}/status 2>/dev/null | egrep \'(VmSize|VmData|SleepAVG)\'; \
                echo;                      \
                sleep 1;                   \
-            done; ) | less -b1024 -O/tmp/cherokee_mem.txt" &' % (pid, pid)
-            os.system(cmd)
+            done; ) | less -b1024 -O/tmp/cherokee_mem.txt" &'
+            subprocess.run(cmd, shell=True, check=False)
 
         # Count down
         count_down ("Tests will start in %d secs", delay)
@@ -390,7 +383,7 @@ def clean_up():
     if its_clean: return
     its_clean = True
 
-    print
+    print()
 
     # Clean up
     if clean:
@@ -399,27 +392,27 @@ def clean_up():
     else:
         print_key ("Testdir", www)
         print_key ("Config",  cfg_file)
-        print
+        print()
 
     # Skipped tests
     if not quiet:
-        print "Skipped tests: %d" % (len(skipped))
+        print(f"Skipped tests: {len(skipped)}")
 
     # Kill the server
     if kill and pid > 0:
-        print "Sending SIGTERM.."
+        print("Sending SIGTERM..")
         os.kill (pid, signal.SIGTERM)
         if valgrind != None:
             linger = 8
         else:
             linger = 4
         count_down ("Will kill the server in %d secs", linger)
-        print "Sending SIGKILL.."
+        print("Sending SIGKILL..")
         os.kill (pid, signal.SIGKILL)
 
 def do_pause():
     global pause
-    print "Press <Enter> to continue.."
+    print("Press <Enter> to continue..")
     sys.stdin.readline()
     pause = pause - 1
 
@@ -452,16 +445,16 @@ def mainloop_iterator (objs, main_thread=True):
                     do_pause()
 
             if not quiet:
-                if ssl: print "SSL:",
-                print "%s: " % (obj.name) + " "*(40 - len(obj.name)),
+                if ssl_enabled: print("SSL:", end=' ')
+                print(f"{obj.name}: " + " "*(40 - len(obj.name)), end=' ')
                 sys.stdout.flush()
 
             if not go_ahead:
                 if not quiet:
                     if obj.disabled:
-                        print MESSAGE_DISABLED
+                        print(MESSAGE_DISABLED)
                     else:
-                        print MESSAGE_SKIPPED
+                        print(MESSAGE_SKIPPED)
                     if not obj in skipped:
                         skipped.append(obj)
                 continue
@@ -470,26 +463,26 @@ def mainloop_iterator (objs, main_thread=True):
                 obj.JustBefore(www)
                 ret = obj.Run (client_host, client_port)
                 obj.JustAfter(www)
-            except Exception, e:
+            except Exception as e:
                 if not its_clean:
-                    print e
+                    print(e)
                     print_sec(obj)
                     clean_up()
                 sys.exit(1)
 
-            if ret is not 0:
+            if ret != 0:
                 if not its_clean:
-                    print MESSAGE_FAILED
+                    print(MESSAGE_FAILED)
                     print_sec (obj)
                     clean_up()
                 sys.exit(1)
             elif not quiet:
-                print MESSAGE_SUCCESS
+                print(MESSAGE_SUCCESS)
                 obj.Clean()
 
             if main_thread and tpause > 0.0:
                 if not quiet:
-                    print "Sleeping %2.2f seconds..\r" % (tpause),
+                    print(f"Sleeping {tpause:2.2f} seconds..\r", end=' ')
                     sys.stdout.flush()
                 time.sleep (tpause)
 
@@ -506,7 +499,7 @@ for n in range(thds-1):
 
     # Launch the thread
     objs_copy = copy.deepcopy(objs)
-    thread.start_new_thread (mainloop_iterator, (objs_copy, False))
+    _thread.start_new_thread (mainloop_iterator, (objs_copy, False))
 
 # Execute the tests
 mainloop_iterator(objs)

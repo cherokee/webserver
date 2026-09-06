@@ -25,6 +25,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import PageError
 import SystemStats
@@ -33,8 +34,8 @@ import About
 
 import os
 import time
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import re
 
 from util import *
@@ -118,7 +119,7 @@ class ServerInfo (CTK.Box):
         sys_stats = SystemStats.get_system_stats()
         infotable += entry(_('Hostname'), sys_stats.hostname)
         if CTK.cfg.file:
-            cfg_file = '<span title="%s: %s">%s</span>' % (_('Modified'), self._get_cfg_ctime(), CTK.cfg.file)
+            cfg_file = f"<span title=\"{_('Modified')}: {self._get_cfg_ctime()}\">{CTK.cfg.file}</span>"
         else:
             cfg_file = _('Not found')
         infotable += entry(_("Config File"), cfg_file)
@@ -132,6 +133,8 @@ class ServerInfo (CTK.Box):
         self += table
 
     def _get_cfg_ctime (self):
+        if CTK.cfg.file is None:
+            raise RuntimeError('CTK configuration file is not set')
         info = os.stat(CTK.cfg.file)
         return time.ctime(info.st_ctime)
 
@@ -186,7 +189,7 @@ class LanguageSelector (CTK.Box):
         # TODO: Maybe it's better to show selected lang and ommit 'Language' label.
         submit += CTK.Combobox ({'name': 'lang'}, languages)
 
-        self += CTK.RawHTML('%s: ' %(_('Language')))
+        self += CTK.RawHTML(f"{_('Language')}: ")
         self += submit
 
 
@@ -195,7 +198,7 @@ class SupportBox (CTK.Box):
         CTK.Box.__init__ (self, {'id': 'support-box', 'class': 'sidebar-box'})
 
         qlist = CTK.List ()
-        self += CTK.RawHTML('<h2>%s</h2>' % _('Support'))
+        self += CTK.RawHTML(f"<h2>{_('Support')}</h2>")
         self += qlist
 
         # Help
@@ -224,7 +227,7 @@ class CommunityBar (CTK.Box):
         CTK.Box.__init__ (self, {'id': 'community-bar'})
 
         slist = CTK.List ()
-        self += CTK.RawHTML('<h3>%s</h3>' % _('Join the Cherokee Community:'))
+        self += CTK.RawHTML(f"<h3>{_('Join the Cherokee Community:')}</h3>")
         self += slist
 
         slist += CTK.LinkWindow (LINK_CHEROKEE,   CTK.Image({'src': '/static/images/other/web.png',        'title': _('Visit the Cherokee Project Website')}))
@@ -245,11 +248,11 @@ class HaltAdmin (CTK.Box):
         dialog = CTK.Dialog ({'title': _('Shutdown Cherokee-admin'), 'width': 560})
         dialog.AddButton (_('Cancel'), "close")
         dialog.AddButton (_('Shut down'), dialog.JS_to_trigger('submit'))
-        dialog += CTK.RawHTML ("<h2>%s</h2>" %(_('You are about to shut down this instance of Cherokee-admin')))
-        dialog += CTK.RawHTML ("<p>%s</p>" %(_('Are you sure you want to proceed?')))
+        dialog += CTK.RawHTML (f"<h2>{_('You are about to shut down this instance of Cherokee-admin')}</h2>")
+        dialog += CTK.RawHTML (f"<p>{_('Are you sure you want to proceed?')}</p>")
         dialog += submit
         dialog.bind ('submit', dialog.JS_to_close())
-        dialog.bind ('submit', "$('body').html('<h1>%s</h1>');"%(_('Cherokee-admin has been shut down')))
+        dialog.bind ('submit', f"$('body').html('<h1>{_('Cherokee-admin has been shut down')}</h1>');")
 
         link = CTK.Link (None, CTK.RawHTML (_('Shut down Cherokee-Admin')))
         link.bind ('click', dialog.JS_to_show())
@@ -264,7 +267,7 @@ class Render:
 
         # Top
         top = CTK.Box({'id': 'top-box'})
-        top += CTK.RawHTML ("<h1>%s</h1>"% _('Welcome to Cherokee Admin'))
+        top += CTK.RawHTML (f"<h1>{_('Welcome to Cherokee Admin')}</h1>")
         top += LanguageSelector()
 
         # Content: Left

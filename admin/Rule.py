@@ -22,6 +22,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import re
 import copy
 import CTK
@@ -58,17 +59,17 @@ def RuleButtons_apply():
     # Apply
     if op == 'NOT':
         if CTK.cfg.get_val(key) == 'not':
-            move ("%s!right"%(key), key)
+            move (f"{key}!right", key)
         else:
-            move (key, "%s!right"%(key))
+            move (key, f"{key}!right")
             CTK.cfg[key] = 'not'
 
     elif op == 'AND':
-        move (key, "%s!left"%(key))
+        move (key, f"{key}!left")
         CTK.cfg[key] = 'and'
 
     elif op == 'OR':
-        move (key, "%s!left"%(key))
+        move (key, f"{key}!left")
         CTK.cfg[key] = 'or'
 
     elif op == 'DEL':
@@ -76,12 +77,12 @@ def RuleButtons_apply():
         parent_rule = CTK.cfg.get_val(parent_key)
 
         if parent_rule == 'not':
-            move ("%s!right"%(parent_key), parent_key)
+            move (f"{parent_key}!right", parent_key)
         elif parent_rule in ('and', 'or'):
             if key.endswith ('right'):
-                move ("%s!left"%(parent_key), parent_key)
+                move (f"{parent_key}!left", parent_key)
             else:
-                move ("%s!right"%(parent_key), parent_key)
+                move (f"{parent_key}!right", parent_key)
         else:
             del(CTK.cfg[key])
 
@@ -125,24 +126,24 @@ class Rule (CTK.Box):
         # Special rule types
         elif value == "and":
             self.props['class'] += ' rule-and'
-            self += Rule ('%s!left' %(self.key), self.depth+1)
+            self += Rule (f'{self.key}!left', self.depth+1)
             self += CTK.Box({'class':'rule-label-and'}, CTK.RawHTML(_("And")))
-            self += Rule ('%s!right'%(self.key), self.depth+1)
+            self += Rule (f'{self.key}!right', self.depth+1)
             self += RuleButtons (self.key, self.depth)
             return CTK.Box.Render (self)
 
         elif value == "or":
             self.props['class'] += ' rule-or'
-            self += Rule ('%s!left' %(self.key), self.depth+1)
+            self += Rule (f'{self.key}!left', self.depth+1)
             self += CTK.Box({'class':'rule-label-or'}, CTK.RawHTML(_("Or")))
-            self += Rule ('%s!right'%(self.key), self.depth+1)
+            self += Rule (f'{self.key}!right', self.depth+1)
             self += RuleButtons (self.key, self.depth)
             return CTK.Box.Render (self)
 
         elif value == "not":
             self.props['class'] += ' rule-not'
             self += CTK.Box({'class':'rule-label-not'}, CTK.RawHTML(_("Not")))
-            self += Rule ('%s!right'%(self.key), self.depth+1)
+            self += Rule (f'{self.key}!right', self.depth+1)
             self += RuleButtons (self.key, self.depth)
             return CTK.Box.Render (self)
 
@@ -175,18 +176,18 @@ class Rule (CTK.Box):
 
         # Logic ops
         elif value == "and":
-            rule1 = Rule ('%s!left' %(self.key), self.depth+1)
-            rule2 = Rule ('%s!right'%(self.key), self.depth+1)
-            return '(%s AND %s)' %(rule1.GetName(), rule2.GetName())
+            rule1 = Rule (f'{self.key}!left', self.depth+1)
+            rule2 = Rule (f'{self.key}!right', self.depth+1)
+            return f'({rule1.GetName()} AND {rule2.GetName()})'
 
         elif value == "or":
-            rule1 = Rule ('%s!left' %(self.key), self.depth+1)
-            rule2 = Rule ('%s!right'%(self.key), self.depth+1)
-            return '(%s OR %s)' %(rule1.GetName(), rule2.GetName())
+            rule1 = Rule (f'{self.key}!left', self.depth+1)
+            rule2 = Rule (f'{self.key}!right', self.depth+1)
+            return f'({rule1.GetName()} OR {rule2.GetName()})'
 
         elif value == "not":
-            rule = Rule ('%s!right'%(self.key), self.depth+1)
-            return '(NOT %s)' %(rule.GetName())
+            rule = Rule (f'{self.key}!right', self.depth+1)
+            return f'(NOT {rule.GetName()})'
 
         # No rule (yet)
         if not value:
@@ -206,4 +207,4 @@ class Rule (CTK.Box):
         return tmp.replace ('%', '&#37;')
 
 
-CTK.publish (r"^%s"%(URL_APPLY_LOGIC), RuleButtons_apply, method="POST")
+CTK.publish (rf"^{URL_APPLY_LOGIC}", RuleButtons_apply, method="POST")

@@ -1,4 +1,6 @@
 # CTK: Cherokee Toolkit
+
+from __future__ import annotations
 #
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
@@ -22,12 +24,15 @@
 
 import os
 import tempfile
-from cgi import FieldStorage
+from typing import Optional
+from .multipart import FieldStorage
 
-from Box import Box
-from Button import Button
-from RawHTML import RawHTML
-from Server import publish, get_scgi
+from .Box import Box
+from .Button import Button
+from .i18n import _
+from .RawHTML import RawHTML
+from .Server import publish, get_scgi
+from .Widget import Widget
 
 HEADERS = [
     '<script type="text/javascript" src="/CTK/js/ajaxupload.3.6.js"></script>'
@@ -65,15 +70,18 @@ new AjaxUpload (button, {
 # The internal POST Receiver and Storage classes are imported from
 # CTK.Uploader().
 #
-from Uploader import UploadRequest
+from .Uploader import UploadRequest
 
 
 class AjaxUpload_Generic (Box):
-    def __init__ (self, opener_widget, props={}, params=None, direct=True):
+    _url_local: str
+    opener_widget: Widget
+
+    def __init__ (self: AjaxUpload_Generic, opener_widget: Widget, props={}, params=None, direct=True):
         Box.__init__ (self)
 
-        self.id            = 'ajax_upload_%d'  %(self.uniq_id)
-        self._url_local    = '/ajax_upload_%d' %(self.uniq_id)
+        self.id            = f'ajax_upload_{int(self.uniq_id)}'
+        self._url_local    = f'/ajax_upload_{int(self.uniq_id)}'
         self.props         = props.copy()
         self.opener_widget = opener_widget
 
@@ -89,7 +97,7 @@ class AjaxUpload_Generic (Box):
         publish (self._url_local, UploadRequest,
                  handler=handler, target_dir=target_dir, params=params, direct=direct)
 
-    def Render (self):
+    def Render (self: AjaxUpload_Generic):
         props = {'id':               self.id,
                  'upload_url':       self._url_local,
                  'opener_widget_id': self.opener_widget.id}

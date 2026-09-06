@@ -22,9 +22,9 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from Container import Container
-from util import props_to_str
+from .Widget import Widget
+from .Container import Container
+from .util import props_to_str
 
 ENTRY_HTML = '<%(tag)s id="%(id)s" %(props)s>%(content)s</%(tag)s>'
 

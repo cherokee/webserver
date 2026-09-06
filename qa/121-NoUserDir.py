@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 SERVER    = "server_wo_userdir"
 USERNAME  = "faked"
@@ -22,17 +22,17 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "UserDir request without UserDir"
 
-        self.request           = "GET /~%s/%s HTTP/1.1\r\n" % (USERNAME, FILENAME) +\
-                                 "Host: %s\r\n" % (SERVER)                         +\
+        self.request           = f"GET /~{USERNAME}/{FILENAME} HTTP/1.1\r\n" +\
+                                 f"Host: {SERVER}\r\n"                         +\
                                  "Connection: Close\r\n"
 
         self.expected_error    = 200
         self.expected_content  = MAGIC
 
     def Prepare (self, www):
-        d  = self.Mkdir (www, "%s_dir" % (SERVER))
+        d  = self.Mkdir (www, f"{SERVER}_dir")
 
-        d2 = self.Mkdir (d, "~%s" % (USERNAME))
-        self.WriteFile (d2, FILENAME, 0444, MAGIC);
+        d2 = self.Mkdir (d, f"~{USERNAME}")
+        self.WriteFile (d2, FILENAME, 0o444, MAGIC);
 
         self.conf = CONF % (SERVER, d)

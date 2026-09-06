@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = '" "qa"="xss" "other"="'
 
@@ -23,4 +23,3 @@ class Test (TestBase):
         self.Mkdir (www, "index3/dir1")
         self.Mkdir (www, "index3/"+MAGIC)
         self.Mkdir (www, "index3/dir2")
-

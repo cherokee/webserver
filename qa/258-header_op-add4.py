@@ -1,5 +1,5 @@
 import re
-from base import *
+from qa_base import *
 
 DIR    = "headerop_add4"
 HEADER = "X-header-check"
@@ -20,7 +20,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name           = "Header Ops: Add header, multiple"
-        self.request        = "GET /%s/ HTTP/1.0\r\n" %(DIR)
+        self.request        = f"GET /{DIR}/ HTTP/1.0\r\n"
         self.expected_error = 200
         self.conf           = CONF%(globals())
 

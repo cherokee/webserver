@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Container import Container
+from .Container import Container
 
 HTML = """
 <div id="%(id)s" class="indenter">

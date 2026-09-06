@@ -22,11 +22,11 @@
 
 import os
 import tempfile
-from cgi import FieldStorage
+from .multipart import FieldStorage
 
-from Server import publish, get_scgi
-from Widget import Widget
-from PageCleaner import Uniq_Block
+from .Server import publish, get_scgi
+from .Widget import Widget
+from .PageCleaner import Uniq_Block
 
 
 HEADERS = [
@@ -92,6 +92,8 @@ class FieldStorage_Direct(FieldStorage):
 
     def make_file (self, binary=None):
         target_dir  = self.environ.get('CTK_hack__target_path')
+        if target_dir is None or self.filename is None:
+            raise ValueError('Upload target is not configured')
         target_path = os.path.join (target_dir, self.filename)
         return open (target_path, 'w+b')
 
@@ -105,6 +107,8 @@ class FieldStorage_Temporal (FieldStorage):
 
     def make_file (self, binary=None):
         os_fd_str  = self.environ.get('CTK_hack__os_fd')
+        if os_fd_str is None:
+            raise ValueError('Upload file descriptor is not configured')
         return os.fdopen (int(os_fd_str), 'w+b')
 
 
@@ -148,14 +152,14 @@ class UploadRequest:
 class Uploader (Widget):
     def __init__ (self, props=None, params=None, direct=True):
         Widget.__init__ (self)
-        self._url_local = '/uploader_widget_%d' %(self.uniq_id)
+        self._url_local = f'/uploader_widget_{int(self.uniq_id)}'
 
         if props:
             self.props = props
         else:
             self.props = {}
 
-        self.id = 'uplodaer%d'%(self.uniq_id)
+        self.id = f'uplodaer{int(self.uniq_id)}'
         handler    = self.props.get('handler')
         target_dir = self.props.get('target_dir')
 

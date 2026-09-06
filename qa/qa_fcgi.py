@@ -34,9 +34,9 @@ For more information about the Web Server Gateway Interface, see
 
 Example usage:
 
-  #!/usr/bin/env python2
+  #!/usr/bin/env python3
   from myapplication import app # Assume app is your WSGI application object
-  from fcgi import WSGIServer
+  from qa_fcgi import WSGIServer
   WSGIServer(app).run()
 
 See the documentation for WSGIServer/Server for more information.
@@ -53,19 +53,17 @@ import sys
 import os
 import signal
 import struct
-import cStringIO as StringIO
+import io as StringIO
 import select
 import socket
 import errno
 import traceback
 
 try:
-    import thread
+    import _thread as thread
     import threading
     thread_available = True
 except ImportError:
-    import dummy_thread as thread
-    import dummy_threading as threading
     thread_available = False
 
 # Apparently 2.3 doesn't define SHUT_WR? Assume it is 1 in this case.
@@ -132,7 +130,7 @@ if __debug__:
 
         try:
             f = open(DEBUGLOG, 'a')
-            f.write('%sfcgi: %s\n' % (time.ctime()[4:-4], msg))
+            f.write(f'{time.ctime()[4:-4]}fcgi: {msg}\n')
             f.close()
         except:
             pass
@@ -240,7 +238,7 @@ class InputStream(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         r = self.readline()
         if not r:
             raise StopIteration
@@ -405,14 +403,14 @@ def decode_pair(s, pos=0):
     The number of bytes decoded as well as the name/value pair
     are returned.
     """
-    nameLength = ord(s[pos])
+    nameLength = s[pos]
     if nameLength & 128:
         nameLength = struct.unpack('!L', s[pos:pos+4])[0] & 0x7fffffff
         pos += 4
     else:
         pos += 1
 
-    valueLength = ord(s[pos])
+    valueLength = s[pos]
     if valueLength & 128:
         valueLength = struct.unpack('!L', s[pos:pos+4])[0] & 0x7fffffff
         pos += 4
@@ -434,15 +432,15 @@ def encode_pair(name, value):
     """
     nameLength = len(name)
     if nameLength < 128:
-        s = chr(nameLength)
+        s = bytes((nameLength,))
     else:
-        s = struct.pack('!L', nameLength | 0x80000000L)
+        s = struct.pack('!L', nameLength | 0x80000000)
 
     valueLength = len(value)
     if valueLength < 128:
-        s += chr(valueLength)
+        s += bytes((valueLength,))
     else:
-        s += struct.pack('!L', valueLength | 0x80000000L)
+        s += struct.pack('!L', valueLength | 0x80000000)
 
     return s + name + value
 
@@ -458,9 +456,10 @@ class Record(object):
         self.requestId = requestId
         self.contentLength = 0
         self.paddingLength = 0
-        self.contentData = ''
+        self.contentData = b''
 
-    def _recvall(sock, length):
+    @staticmethod
+    def _recvall(sock: socket.socket, length: int):
         """
         Attempts to receive length bytes from a socket, blocking if necessary.
         (Socket may be blocking or non-blocking.)
@@ -470,8 +469,8 @@ class Record(object):
         while length:
             try:
                 data = sock.recv(length)
-            except socket.error, e:
-                if e[0] == errno.EAGAIN:
+            except socket.error as e:
+                if e.errno == errno.EAGAIN:
                     select.select([sock], [], [])
                     continue
                 else:
@@ -482,8 +481,7 @@ class Record(object):
             dataLen = len(data)
             recvLen += dataLen
             length -= dataLen
-        return ''.join(dataList), recvLen
-    _recvall = staticmethod(_recvall)
+        return b''.join(dataList), recvLen
 
     def read(self, sock):
         """Read and decode a Record from a socket."""
@@ -498,10 +496,9 @@ class Record(object):
         self.version, self.type, self.requestId, self.contentLength, \
                       self.paddingLength = struct.unpack(FCGI_Header, header)
 
-        if __debug__: _debug(9, 'read: fd = %d, type = %d, requestId = %d, '
-                             'contentLength = %d' %
-                             (sock.fileno(), self.type, self.requestId,
-                              self.contentLength))
+        if __debug__: _debug(9, f'read: fd = {sock.fileno()}, type = {self.type}, '
+                             f'requestId = {self.requestId}, contentLength = '
+                             f'{self.contentLength}')
 
         if self.contentLength:
             try:
@@ -519,7 +516,8 @@ class Record(object):
             except:
                 raise EOFError
 
-    def _sendall(sock, data):
+    @staticmethod
+    def _sendall(sock: socket.socket, data: bytes):
         """
         Writes data to a socket and does not return until all the data is sent.
         """
@@ -527,24 +525,22 @@ class Record(object):
         while length:
             try:
                 sent = sock.send(data)
-            except socket.error, e:
-                if e[0] == errno.EAGAIN:
+            except socket.error as e:
+                if e.errno == errno.EAGAIN:
                     select.select([], [sock], [])
                     continue
                 else:
                     raise
             data = data[sent:]
             length -= sent
-    _sendall = staticmethod(_sendall)
 
     def write(self, sock):
         """Encode and write a Record to a socket."""
         self.paddingLength = -self.contentLength & 7
 
-        if __debug__: _debug(9, 'write: fd = %d, type = %d, requestId = %d, '
-                             'contentLength = %d' %
-                             (sock.fileno(), self.type, self.requestId,
-                              self.contentLength))
+        if __debug__: _debug(9, f'write: fd = {sock.fileno()}, type = {self.type}, '
+                             f'requestId = {self.requestId}, contentLength = '
+                             f'{self.contentLength}')
 
         header = struct.pack(FCGI_Header, self.version, self.type,
                              self.requestId, self.contentLength,
@@ -553,7 +549,7 @@ class Record(object):
         if self.contentLength:
             self._sendall(sock, self.contentData)
         if self.paddingLength:
-            self._sendall(sock, '\x00'*self.paddingLength)
+            self._sendall(sock, b'\x00'*self.paddingLength)
 
 class Request(object):
     """
@@ -586,13 +582,13 @@ class Request(object):
 
             protocolStatus, appStatus = FCGI_REQUEST_COMPLETE, 0
 
-        if __debug__: _debug(1, 'protocolStatus = %d, appStatus = %d' %
-                             (protocolStatus, appStatus))
+        if __debug__: _debug(1, f'protocolStatus = {protocolStatus}, '
+                             f'appStatus = {appStatus}')
 
         self._flush()
         self._end(appStatus, protocolStatus)
 
-    def _end(self, appStatus=0L, protocolStatus=FCGI_REQUEST_COMPLETE):
+    def _end(self, appStatus=0, protocolStatus=FCGI_REQUEST_COMPLETE):
         self._conn.end_request(self, appStatus, protocolStatus)
 
     def _flush(self):
@@ -615,7 +611,7 @@ class CGIRequest(Request):
         self.stderr = sys.stderr
         self.data = StringIO.StringIO()
 
-    def _end(self, appStatus=0L, protocolStatus=FCGI_REQUEST_COMPLETE):
+    def _end(self, appStatus=0, protocolStatus=FCGI_REQUEST_COMPLETE):
         sys.exit(appStatus)
 
     def _flush(self):
@@ -664,8 +660,8 @@ class Connection(object):
                 self.process_input()
             except EOFError:
                 break
-            except (select.error, socket.error), e:
-                if e[0] == errno.EBADF: # Socket was closed by Request.
+            except (select.error, socket.error) as e:
+                if e.errno == errno.EBADF: # Socket was closed by Request.
                     break
                 raise
 
@@ -714,7 +710,7 @@ class Connection(object):
         """
         rec.write(self._sock)
 
-    def end_request(self, req, appStatus=0L,
+    def end_request(self, req, appStatus=0,
                     protocolStatus=FCGI_REQUEST_COMPLETE, remove=True):
         """
         End a Request.
@@ -733,7 +729,7 @@ class Connection(object):
         if remove:
             del self._requests[req.requestId]
 
-        if __debug__: _debug(2, 'end_request: flags = %d' % req.flags)
+        if __debug__: _debug(2, f'end_request: flags = {int(req.flags)}')
 
         if not (req.flags & FCGI_KEEP_CONN) and not self._requests:
             self._cleanupSocket()
@@ -748,7 +744,7 @@ class Connection(object):
             pos, (name, value) = decode_pair(inrec.contentData, pos)
             cap = self.server.capability.get(name)
             if cap is not None:
-                outrec.contentData += encode_pair(name, str(cap))
+                outrec.contentData += encode_pair(name, str(cap).encode())
 
         outrec.contentLength = len(outrec.contentData)
         self.writeRecord(outrec)
@@ -763,7 +759,7 @@ class Connection(object):
 
         if not self._multiplexed and self._requests:
             # Can't multiplex requests.
-            self.end_request(req, 0L, FCGI_CANT_MPX_CONN, remove=False)
+            self.end_request(req, 0, FCGI_CANT_MPX_CONN, remove=False)
         else:
             self._requests[inrec.requestId] = req
 
@@ -815,7 +811,7 @@ class Connection(object):
         outrec = Record(FCGI_UNKNOWN_TYPE)
         outrec.contentData = struct.pack(FCGI_UnknownTypeBody, inrec.type)
         outrec.contentLength = FCGI_UnknownTypeBody_LEN
-        self.writeRecord(rec)
+        self.writeRecord(outrec)
 
 class MultiplexedConnection(Connection):
     """
@@ -854,7 +850,7 @@ class MultiplexedConnection(Connection):
         finally:
             self._lock.release()
 
-    def end_request(self, req, appStatus=0L,
+    def end_request(self, req, appStatus=0,
                     protocolStatus=FCGI_REQUEST_COMPLETE, remove=True):
         self._lock.acquire()
         try:
@@ -990,11 +986,11 @@ class Server(object):
                                  socket.SOCK_STREAM)
             try:
                 sock.getpeername()
-            except socket.error, e:
-                if e[0] == errno.ENOTSOCK:
+            except socket.error as e:
+                if e.errno == errno.ENOTSOCK:
                     # Not a socket, assume CGI context.
                     isFCGI = False
-                elif e[0] != errno.ENOTCONN:
+                elif e.errno != errno.ENOTCONN:
                     raise
 
             # FastCGI/CGI discrimination is broken on Mac OS X.
@@ -1063,8 +1059,7 @@ class Server(object):
         """
         web_server_addrs = os.environ.get('FCGI_WEB_SERVER_ADDRS')
         if web_server_addrs is not None:
-            web_server_addrs = map(lambda x: x.strip(),
-                                   web_server_addrs.split(','))
+            web_server_addrs = [x.strip() for x in web_server_addrs.split(',')]
 
         sock = self._setupSocket()
 
@@ -1077,16 +1072,16 @@ class Server(object):
         while self._keepGoing:
             try:
                 r, w, e = select.select([sock], [], [], timeout)
-            except select.error, e:
-                if e[0] == errno.EINTR:
+            except select.error as e:
+                if e.errno == errno.EINTR:
                     continue
                 raise
 
             if r:
                 try:
                     clientSock, addr = sock.accept()
-                except socket.error, e:
-                    if e[0] in (errno.EINTR, errno.EAGAIN):
+                except socket.error as e:
+                    if e.errno in (errno.EINTR, errno.EAGAIN):
                         continue
                     raise
 
@@ -1131,7 +1126,7 @@ class Server(object):
         is passed at initialization time, this must be implemented by
         a subclass.
         """
-        raise NotImplementedError, self.__class__.__name__ + '.handler'
+        raise NotImplementedError(self.__class__.__name__ + '.handler')
 
     def error(self, req):
         """
@@ -1156,7 +1151,7 @@ class WSGIServer(Server):
 
         Set multithreaded to False if your application is not MT-safe.
         """
-        if kw.has_key('handler'):
+        if 'handler' in kw:
             del kw['handler'] # Doesn't make sense to let this through
         super(WSGIServer, self).__init__(**kw)
 
@@ -1226,9 +1221,9 @@ class WSGIServer(Server):
                                                     str(len(data))))
                     except:
                         pass
-                s = 'Status: %s\r\n' % status
+                s = f'Status: {status}\r\n'
                 for header in responseHeaders:
-                    s += '%s: %s\r\n' % header
+                    s += '{}: {}\r\n'.format(*header)
                 s += '\r\n'
                 req.stdout.write(s)
 
@@ -1240,7 +1235,7 @@ class WSGIServer(Server):
                 try:
                     if headers_sent:
                         # Re-raise if too late
-                        raise exc_info[0], exc_info[1], exc_info[2]
+                        raise exc_info[0](exc_info[1]).with_traceback(exc_info[2])
                 finally:
                     exc_info = None # avoid dangling circular ref
             else:
@@ -1273,8 +1268,8 @@ class WSGIServer(Server):
                 finally:
                     if hasattr(result, 'close'):
                         result.close()
-            except socket.error, e:
-                if e[0] != errno.EPIPE:
+            except socket.error as e:
+                if e.errno != errno.EPIPE:
                     raise # Don't let EPIPE propagate beyond server
         finally:
             if not self.multithreaded:
@@ -1284,9 +1279,9 @@ class WSGIServer(Server):
 
     def _sanitizeEnv(self, environ):
         """Ensure certain values are present, if required by WSGI."""
-        if not environ.has_key('SCRIPT_NAME'):
+        if 'SCRIPT_NAME' not in environ:
             environ['SCRIPT_NAME'] = ''
-        if not environ.has_key('PATH_INFO'):
+        if 'PATH_INFO' not in environ:
             environ['PATH_INFO'] = ''
 
         # If any of these are missing, it probably signifies a broken
@@ -1295,35 +1290,33 @@ class WSGIServer(Server):
                              ('SERVER_NAME', 'localhost'),
                              ('SERVER_PORT', '80'),
                              ('SERVER_PROTOCOL', 'HTTP/1.0')]:
-            if not environ.has_key(name):
-                environ['wsgi.errors'].write('%s: missing FastCGI param %s '
-                                             'required by WSGI!\n' %
-                                             (self.__class__.__name__, name))
+            if name not in environ:
+                environ['wsgi.errors'].write('{}: missing FastCGI param {} '
+                                             'required by WSGI!\n'.format(self.__class__.__name__, name))
                 environ[name] = default
 
 if __name__ == '__main__':
     def test_app(environ, start_response):
         """Probably not the most efficient example."""
-        import cgi
+        import html
         start_response('200 OK', [('Content-Type', 'text/html')])
         yield '<html><head><title>Hello World!</title></head>\n' \
               '<body>\n' \
               '<p>Hello World!</p>\n' \
               '<table border="1">'
-        names = environ.keys()
+        names = list(environ.keys())
         names.sort()
         for name in names:
-            yield '<tr><td>%s</td><td>%s</td></tr>\n' % (
-                name, cgi.escape(`environ[name]`))
+            yield '<tr><td>{}</td><td>{}</td></tr>\n'.format(
+                name, html.escape(repr(environ[name])))
 
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ,
-                                keep_blank_values=1)
-        if form.list:
+        from urllib.parse import parse_qs
+        form = parse_qs(environ['wsgi.input'].read().decode(), keep_blank_values=True)
+        if form:
             yield '<tr><th colspan="2">Form data</th></tr>'
 
-        for field in form.list:
-            yield '<tr><td>%s</td><td>%s</td></tr>\n' % (
-                field.name, field.value)
+        for name, values in form.items():
+            yield f'<tr><td>{name}</td><td>{html.escape(repr(values))}</td></tr>\n'
 
         yield '</table>\n' \
               '</body></html>\n'

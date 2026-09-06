@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC      = "This is the content of the HTML index file"
 DIR_LOCAL  = "pipermail169/sub1/sub2"
@@ -17,7 +17,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Directory indexer, DocumentRoot"
 
-        self.request          = "GET /%s/%s/ HTTP/1.0\r\n" % (DIR_WEB, DIR_INSIDE)
+        self.request          = f"GET /{DIR_WEB}/{DIR_INSIDE}/ HTTP/1.0\r\n"
         self.expected_error   = 200
         self.expected_content = MAGIC
 
@@ -26,4 +26,4 @@ class Test (TestBase):
         self.conf = CONF % (DIR_WEB, d)
 
         i = self.Mkdir (d, DIR_INSIDE)
-        self.WriteFile (i, "test_index.html", 0444, MAGIC)
+        self.WriteFile (i, "test_index.html", 0o444, MAGIC)

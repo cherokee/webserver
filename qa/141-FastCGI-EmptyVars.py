@@ -1,24 +1,24 @@
 import os
-from base import *
+from qa_base import *
 
 DIR    = "/FCGI-EmptyVars/"
 MAGIC  = "Cherokee and FastCGI rocks!"
 PORT   = get_free_port()
 PYTHON = look_for_python()
 
-SCRIPT = """
-from fcgi import *
+SCRIPT = f"""
+from qa_fcgi import *
 
 def app (environ, start_response):
     start_response('200 OK', [("Content-Type", "text/plain")])
 
     resp = ""
     for k in environ:
-          resp += '%%s: %%s\\n' %% (k, environ[k])
+          resp += f'{{k}}: {{environ[k]}}\\n'
     return [resp]
 
-WSGIServer(app, bindAddress=("localhost",%d)).run()
-""" % (PORT)
+WSGIServer(app, bindAddress=("localhost",{PORT})).run()
+"""
 
 source = get_next_source()
 
@@ -41,17 +41,17 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "FastCGI: Variables"
 
-        self.request           = "GET %s HTTP/1.0\r\n" % (DIR)
+        self.request           = f"GET {DIR} HTTP/1.0\r\n"
         self.expected_error    = 200
         self.expected_content  = ['PATH_INFO:', 'QUERY_STRING:']
         self.forbidden_content = ['from fcgi', 'start_response']
 
     def Prepare (self, www):
-        fcgi_file = self.WriteFile (www, "fcgi_test_vbles.fcgi", 0444, SCRIPT)
+        fcgi_file = self.WriteFile (www, "fcgi_test_vbles.fcgi", 0o444, SCRIPT)
 
         fcgi = os.path.join (www, 'fcgi.py')
         if not os.path.exists (fcgi):
-            self.CopyFile ('fcgi.py', fcgi)
+            self.CopyFile ('qa_fcgi.py', fcgi)
 
         vars = globals()
         vars['fcgi_file'] = fcgi_file

@@ -1,6 +1,6 @@
-from base import *
+from qa_base import *
 
-HOST      = 'host191'
+HOST: str = 'host191'
 FILE      = 'special_file_for_191'
 VSRV_DIR  = '191_vserver'
 DIR       = 'what/ever'
@@ -39,8 +39,8 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Rule Exists: match any (in dir)"
-        self.request           = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE) +\
-                                 "Host: %s\r\n" %(HOST)
+        self.request           = f"GET /{DIR}/{FILE} HTTP/1.0\r\n" +\
+                                 f"Host: {HOST}\r\n"
         self.forbidden_content = ['/bin/sh', 'echo', FORBIDDEN]
         self.expected_error    = 200
         self.expected_content  = MAGIC
@@ -50,5 +50,4 @@ class Test (TestBase):
         self.conf = CONF % (HOST, d, DIR)
 
         e = self.Mkdir (d, DIR)
-        self.WriteFile (e, FILE, 0555, CGI_BASE%(FORBIDDEN, MAGIC))
-
+        self.WriteFile (e, FILE, 0o555, CGI_BASE%(FORBIDDEN, MAGIC))

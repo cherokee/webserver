@@ -26,9 +26,9 @@
 The CTK.JS module wraps several utility Javascript functions.
 """
 
-from Server import get_server
+from .Server import get_server
 
-def Ajax (url, data='', type='POST', async=True, dataType='json',
+def Ajax (url, data='', type='POST', async_=True, dataType='json',
           success=None, error=None, complete=None):
     if not success:
         success=''
@@ -36,52 +36,52 @@ def Ajax (url, data='', type='POST', async=True, dataType='json',
     if type.upper() == 'POST':
         srv = get_server()
         if srv.use_sec_submit:
-            url += '?key=%s' %(srv.sec_submit)
+            url += f'?key={srv.sec_submit}'
 
-    async_s = ['false','true'][async]
-    js = "$.ajax ({type: '%(type)s', url: '%(url)s', async: %(async_s)s" %(locals())
+    async_s = ['false','true'][async_]
+    js = "$.ajax ({{type: '{type}', url: '{url}', async: {async_s}".format(**locals())
 
     if data:
-        js += ", data: %(data)s, dataType: '%(dataType)s'" %(locals())
+        js += f", data: {locals()['data']}, dataType: '{locals()['dataType']}'"
 
-    js += """, success: function (data) {
-         %(success)s;
+    js += """, success: function (data) {{
+         {success};
 
   	  /* Modified: Save button */
 	  var modified     = data['modified'];
 	  var not_modified = data['not-modified'];
 
-	  if (modified != undefined) {
+	  if (modified != undefined) {{
 	    $(modified).show();
 	    $(modified).removeClass('saved');
-	  } else if (not_modified) {
+	  }} else if (not_modified) {{
 	    $(not_modified).addClass('saved');
-	  }
-        }""" %(locals())
+	  }}
+        }}""".format(**locals())
     if error:
-        js += ", error: function() { %(error)s }" %(locals())
+        js += ", error: function() {{ {error} }}".format(**locals())
     if complete:
-        js += ", complete: function() { %(complete)s }" %(locals())
+        js += ", complete: function() {{ {complete} }}".format(**locals())
 
     js += "});"
     return js
 
 def Hide (id):
-    return "$('#%s').hide();"%(id)
+    return f"$('#{id}').hide();"
 
 def GotoURL (url):
-    return "window.location = '%s';" %(url)
+    return f"window.location = '{url}';"
 
 def ReloadURL():
     return "window.location.reload();"
 
 def OpenWindow (url):
-    return "window.open ('%s');" %(url)
+    return f"window.open ('{url}');"
 
 def get_Hashtag():
     return "window.location.hash"
 
 def set_Hashtag(tag):
     if tag[0] in ('"', "'"):
-        return "window.location.hash = %s;" %(tag)
-    return "window.location.hash = '%s';" %(tag)
+        return f"window.location.hash = {tag};"
+    return f"window.location.hash = '{tag}';"

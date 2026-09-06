@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from base import *
+from qa_base import *
 
 DIR      = "ⓒⓗⓔⓡⓞⓚⓔⓔ"
 FILENAME = "file"
@@ -11,10 +11,10 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "UTF8 directory name"
 
-        self.request           = "GET /%s/%s HTTP/1.0\r\n" %(DIR, FILENAME)
+        self.request           = f"GET /{DIR}/{FILENAME} HTTP/1.0\r\n"
         self.expected_error    = 200
         self.expected_content  = MAGIC
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILENAME, 0644, MAGIC)
+        f = self.WriteFile (d, FILENAME, 0o644, MAGIC)

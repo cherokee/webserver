@@ -24,6 +24,7 @@
 
 import CTK
 import consts
+from CTK.i18n import _, N_
 
 URL_APPLY = '/plugin/deflate/apply'
 HELPS     = [('modules_encoders_deflate', _("Deflate encoder"))]
@@ -35,11 +36,11 @@ class Plugin_deflate (CTK.Plugin):
         CTK.Plugin.__init__ (self, key, **kwargs)
 
         table = CTK.PropsTable()
-        table.Add (_("Compression Level"), CTK.ComboCfg('%s!compression_level'%(key), consts.COMPRESSION_LEVELS), _(NOTE_LEVEL))
+        table.Add (_("Compression Level"), CTK.ComboCfg(f'{key}!compression_level', consts.COMPRESSION_LEVELS), _(NOTE_LEVEL))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
         self += submit
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

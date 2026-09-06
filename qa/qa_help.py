@@ -31,4 +31,4 @@ Report bugs to http://bugs.cherokee-project.com/
 
 def help_print_parameters():
     from sys import argv
-    print HELP_PRINT_PARAMETERS % (argv[0])
+    print(HELP_PRINT_PARAMETERS % (argv[0]))

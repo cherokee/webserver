@@ -1,5 +1,5 @@
 import re
-from base import *
+from qa_base import *
 
 DIR    = "headerop_add3"
 HEADER = "date"
@@ -18,7 +18,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name           = "Header Ops: Add header, overwrite"
-        self.request        = "GET /%s/ HTTP/1.0\r\n" %(DIR)
+        self.request        = f"GET /{DIR}/ HTTP/1.0\r\n"
         self.expected_error = 200
         self.conf           = CONF%(globals())
 
@@ -28,7 +28,7 @@ class Test (TestBase):
         if re.findall (r'^Date: (\w+), \d+ \w+ \d+ \d+:\d+:\d+', header, re.M):
             return -1
 
-        if not "%(HEADER)s: %(VALUE)s\r\n" %(globals()) in header:
+        if not f"{globals()['HEADER']}: {globals()['VALUE']}\r\n" in header:
             return -1
 
         return 0

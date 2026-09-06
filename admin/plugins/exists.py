@@ -22,6 +22,7 @@
 
 import CTK
 import validations
+from CTK.i18n import _, N_
 
 from Rule import RulePlugin
 from util import *
@@ -47,17 +48,17 @@ def commit():
 
     # New
     if int(new_any) or new_exists:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
 
-        CTK.cfg['%s!match'%(next_pre)]                   = 'exists'
-        CTK.cfg['%s!match!match_any'%(next_pre)]         = new_any
-        CTK.cfg['%s!match!iocache'%(next_pre)]           = CTK.post.pop ('tmp!iocache')
-        CTK.cfg['%s!match!match_only_files'%(next_pre)]  = CTK.post.pop ('tmp!match_only_files')
-        CTK.cfg['%s!match!match_index_files'%(next_pre)] = CTK.post.pop ('tmp!match_index_files')
+        CTK.cfg[f'{next_pre}!match']                   = 'exists'
+        CTK.cfg[f'{next_pre}!match!match_any']         = new_any
+        CTK.cfg[f'{next_pre}!match!iocache']           = CTK.post.pop ('tmp!iocache')
+        CTK.cfg[f'{next_pre}!match!match_only_files']  = CTK.post.pop ('tmp!match_only_files')
+        CTK.cfg[f'{next_pre}!match!match_index_files'] = CTK.post.pop ('tmp!match_index_files')
         if new_exists:
-            CTK.cfg['%s!match!exists'%(next_pre)]        = new_exists
+            CTK.cfg[f'{next_pre}!match!exists']        = new_exists
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -69,14 +70,14 @@ class Modify (CTK.Submitter):
 
         # Main table
         table = CTK.PropsTable()
-        table.Add (_('Match any file'), CTK.CheckCfgText('%s!match_any'%(key), False, _('Enabled')), _(NOTE_ANY))
+        table.Add (_('Match any file'), CTK.CheckCfgText(f'{key}!match_any', False, _('Enabled')), _(NOTE_ANY))
 
-        if not int (CTK.cfg.get_val('%s!match_any'%(key), '0')):
-            table.Add (_('Files'),                 CTK.TextCfg ('%s!exists'%(key),           False), _(NOTE_EXISTS))
+        if not int (CTK.cfg.get_val(f'{key}!match_any', '0')):
+            table.Add (_('Files'),                 CTK.TextCfg (f'{key}!exists',           False), _(NOTE_EXISTS))
 
-        table.Add (_('Use I/O cache'),             CTK.CheckCfgText('%s!iocache'%(key),           True, _('Enabled')), _(NOTE_IOCACHE))
-        table.Add (_('Only match files'),          CTK.CheckCfgText('%s!match_only_files'%(key),  True, _('Enabled')), _(NOTE_ONLY_FILES))
-        table.Add (_('If dir, check index files'), CTK.CheckCfgText('%s!match_index_files'%(key), True, _('Enabled')), _(NOTE_INDEX_FILES))
+        table.Add (_('Use I/O cache'),             CTK.CheckCfgText(f'{key}!iocache',           True, _('Enabled')), _(NOTE_IOCACHE))
+        table.Add (_('Only match files'),          CTK.CheckCfgText(f'{key}!match_only_files',  True, _('Enabled')), _(NOTE_ONLY_FILES))
+        table.Add (_('If dir, check index files'), CTK.CheckCfgText(f'{key}!match_index_files', True, _('Enabled')), _(NOTE_INDEX_FILES))
 
         # Submit
         self += table
@@ -101,28 +102,28 @@ class Plugin_exists (RulePlugin):
 
         # Validation, and Public URLs
         VALS = [("tmp!exists",      validations.is_list),
-                ("%s!exists"%(key), validations.is_list)]
+                (f"{key}!exists", validations.is_list)]
 
-        CTK.publish ("^%s"%(URL_APPLY), commit, validation=VALS, method="POST")
+        CTK.publish (f"^{URL_APPLY}", commit, validation=VALS, method="POST")
 
     def _GUI_new (self, key, vsrv_num):
-        any = CTK.CheckCfgText('%s!match_any'%(key), False, _('Enabled'), {'class': 'noauto'})
+        any = CTK.CheckCfgText(f'{key}!match_any', False, _('Enabled'), {'class': 'noauto'})
 
         # Main table
         table = CTK.PropsTable()
         table.Add (_('Match any file'), any, _(NOTE_ANY))
-        table.Add (_('Files'),                     CTK.TextCfg ('%s!exists'%(key), False, {'class': 'noauto'}), _(NOTE_EXISTS))
-        table.Add (_('Use I/O cache'),             CTK.CheckCfgText('%s!iocache'%(key),           True, _('Enabled'), {'class': 'noauto'}), _(NOTE_IOCACHE))
-        table.Add (_('Only match files'),          CTK.CheckCfgText('%s!match_only_files'%(key),  True, _('Enabled'), {'class': 'noauto'}), _(NOTE_ONLY_FILES))
-        table.Add (_('If dir, check index files'), CTK.CheckCfgText('%s!match_index_files'%(key), True, _('Enabled'), {'class': 'noauto'}), _(NOTE_INDEX_FILES))
+        table.Add (_('Files'),                     CTK.TextCfg (f'{key}!exists', False, {'class': 'noauto'}), _(NOTE_EXISTS))
+        table.Add (_('Use I/O cache'),             CTK.CheckCfgText(f'{key}!iocache',           True, _('Enabled'), {'class': 'noauto'}), _(NOTE_IOCACHE))
+        table.Add (_('Only match files'),          CTK.CheckCfgText(f'{key}!match_only_files',  True, _('Enabled'), {'class': 'noauto'}), _(NOTE_ONLY_FILES))
+        table.Add (_('If dir, check index files'), CTK.CheckCfgText(f'{key}!match_index_files', True, _('Enabled'), {'class': 'noauto'}), _(NOTE_INDEX_FILES))
 
         # Special events
         any.bind ('change',
-                  """if (! $('#%(any)s :checkbox')[0].checked) {
-                           $('#%(row)s').show();
-                     } else {
-                           $('#%(row)s').hide();
-                  }""" %({'any': any.id, 'row': table[1].id}))
+                  """if (! $('#{any} :checkbox')[0].checked) {{
+                           $('#{row}').show();
+                     }} else {{
+                           $('#{row}').hide();
+                  }}""".format(any=any.id, row=table[1].id))
 
         # Submit
         submit = CTK.Submitter (URL_APPLY)
@@ -132,14 +133,13 @@ class Plugin_exists (RulePlugin):
         self += submit
 
     def GetName (self):
-        if int (CTK.cfg.get_val ('%s!match_any' %(self.key), '0')):
+        if int (CTK.cfg.get_val (f'{self.key}!match_any', '0')):
             return _("File exists")
 
-        files = CTK.cfg.get_val ('%s!exists' %(self.key), '').split(',')
+        files = CTK.cfg.get_val (f'{self.key}!exists', '').split(',')
         if len(files) == 1:
             return _("File %(fname)s exists") %({'fname':files[0]})
         elif len(files) == 0:
             return _("File exists (never matched)")
 
-        return _('File %(most)s or %(last)s exists' % ({'most': ', '.join (files[:-1]),
-                                                        'last': files[-1]}))
+        return _(f"File {', '.join(files[:-1])} or {files[-1]} exists")

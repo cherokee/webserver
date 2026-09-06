@@ -1,8 +1,8 @@
-from base import *
+from qa_base import *
 
 MAGIC = "Sesamo"
 CONTENT = "This is the content of " + MAGIC
-HOST = "nn1"
+HOST: str = "nn1"
 
 CONF = """
 vserver!480!nick = %s
@@ -19,7 +19,7 @@ class Test (TestBase):
 
         self.request           = "GET /Xesano HTTP/1.1\r\n" + \
                                  "Connection: Close\r\n" + \
-                                 "Host: %s\r\n" %(HOST)
+                                 f"Host: {HOST}\r\n"
         self.expected_error    = 302
         self.forbidden_content = CONTENT
         self.expected_content  = "Location: /"+MAGIC
@@ -28,7 +28,7 @@ class Test (TestBase):
         d = self.Mkdir (www, "nn1_root")
 
         self.WriteFile (d, "name")
-        self.WriteFile (d, MAGIC, 0444, CONTENT)
+        self.WriteFile (d, MAGIC, 0o444, CONTENT)
         self.WriteFile (d, "ABCD")
         self.WriteFile (d, "alobbs")
 

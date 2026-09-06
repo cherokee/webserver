@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 
 HELPS = [('modules_handlers_ssi', _("Server Side Includes"))]
 

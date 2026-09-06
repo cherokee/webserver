@@ -81,7 +81,7 @@ class HTTP_Response:
     def __init__ (self, error=200, headers=None, body=''):
         self.error   = error
         self.body    = body
-        self.headers = ([],headers)[bool(headers)][:]
+        self.headers = list(headers or [])
 
     def __add__ (self, text):
         assert type(text) == str, type(text)
@@ -89,7 +89,7 @@ class HTTP_Response:
         return self
 
     def __setitem__ (self, key, value):
-        self.headers.append ("%s: %s"%(key, str(value)))
+        self.headers.append (f"{key}: {value!s}")
 
     def __str__ (self):
         all_lower = ''.join(self.headers).lower()
@@ -102,7 +102,7 @@ class HTTP_Response:
             self['Content-Type'] = 'text/html'
 
         # Build the HTTP response
-        hdr  = "Status: %d\r\n" %(self.error)
+        hdr  = f"Status: {int(self.error)}\r\n"
         hdr += "X-Powered-By: Cherokee and CTK\r\n"
         hdr += "\r\n".join (self.headers) + '\r\n'
 
@@ -121,10 +121,10 @@ class HTTP_Error (HTTP_Response):
     def __init__ (self, error=500, desc=None):
         HTTP_Response.__init__ (self, error)
         self.body  = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\r\n'
-        self.body += "<html><head><title>Error %d: %s</title></head>\n" %(error, HTTP_Response.DESC[error])
-        self.body += '<body><h1>Error %d: %s</h1>\n' %(error, HTTP_Response.DESC[error])
+        self.body += f"<html><head><title>Error {int(error)}: {HTTP_Response.DESC[error]}</title></head>\n"
+        self.body += f'<body><h1>Error {int(error)}: {HTTP_Response.DESC[error]}</h1>\n'
         if desc:
-            self.body += "<p>%s</p>"%(desc)
+            self.body += f"<p>{desc}</p>"
         self.body += "</body></html>"
 
 
@@ -136,7 +136,7 @@ class HTTP_Redir (HTTP_Response):
     def __init__ (self, location, error=307):
         HTTP_Response.__init__ (self, error)
         self['Location'] = location
-        self.body += 'Redirecting to <a href="%s">%s</a>.' %(location, location)
+        self.body += f'Redirecting to <a href="{location}">{location}</a>.'
 
 
 class HTTP_XSendfile (HTTP_Response):
@@ -161,4 +161,4 @@ class HTTP_Cacheable (HTTP_Response):
         t += secs_num
 
         self["Expires"]       = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(t))
-        self["Cache-Control"] = "max-age=%d"%(secs_num)
+        self["Cache-Control"] = f"max-age={int(secs_num)}"

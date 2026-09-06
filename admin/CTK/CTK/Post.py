@@ -20,19 +20,20 @@
 # 02110-1301, USA.
 #
 
-from cgi import parse_qs
-from urllib import unquote
+from urllib.parse import parse_qs, unquote
 
 
 class Post:
     """
     HTTP POST representation
     """
-    def __init__ (self, raw=''):
+    def __init__ (self, raw: str | bytes = ''):
         self._vars    = {}
+        if isinstance(raw, bytes):
+            raw = raw.decode('utf-8', errors='replace')
         self.raw_post = raw[:]
 
-        tmp = parse_qs (raw, keep_blank_values=1)
+        tmp = parse_qs (raw, keep_blank_values=True)
         for key in tmp:
             self._vars[key] = []
             for n in range(len(tmp[key])):
@@ -43,7 +44,7 @@ class Post:
         if not key in self._vars:
             return None
 
-        vals = filter(lambda x: len(x)>0, self._vars[key])
+        vals = [x for x in self._vars[key] if len(x)>0]
         if not len(vals) > 0:
             return self._vars[key][0]
 
@@ -61,7 +62,7 @@ class Post:
         if not key in self._vars:
             return not_found[:]
 
-        return filter(lambda x: len(x)>0, self._vars[key])
+        return [x for x in self._vars[key] if len(x)>0]
 
     def pop (self, key, not_found=None):
         """Remove specified key and return the corresponding value. If
@@ -75,7 +76,7 @@ class Post:
 
     def keys (self):
         """List of available keys"""
-        return self._vars.keys()
+        return list(self._vars.keys())
 
     # Relay on the internal array methods
     #
@@ -92,9 +93,7 @@ class Post:
         return len(self._vars)
 
     def __iter__ (self):
-        keys = self._vars.keys()
-        keys.sort (lambda x,y: cmp(len(y), len(x)))
-        return iter(keys)
+        return iter(sorted(self._vars, key=len, reverse=True))
 
     def __str__ (self):
         return str(self._vars)

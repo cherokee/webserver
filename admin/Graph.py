@@ -25,6 +25,7 @@
 
 import CTK
 import Cherokee
+from CTK.i18n import _, N_
 import validations
 
 from util import *
@@ -80,6 +81,8 @@ def apply ():
 
 
 class Graph (CTK.Box):
+    template: str
+
     def __init__ (self, refreshable, **kwargs):
         CTK.Box.__init__ (self)
         self.graph = {}
@@ -97,7 +100,7 @@ class Graph (CTK.Box):
         for x in GRAPH_INTERVALS:
             self.graph['interval'] = x[0]
             props = {'src': self.template % self.graph,
-                     'alt': '%s: %s' %(self.graph['type_txt'], x[1])}
+                     'alt': f"{self.graph['type_txt']}: {x[1]}"}
             image = CTK.Image(props)
             tabs.Add (_(x[1]), image)
         self += tabs
@@ -115,14 +118,14 @@ class GraphVServer_Instancer (CTK.Container):
             Graph.__init__ (self, refreshable, **kwargs)
             self.template         = GRAPH_VSERVER
             self.graph['prefix']  = 'vserver'
-            self.graph['vserver'] = CTK.cfg.get_val ("vserver!%s!nick" %(vsrv_num), _("Unknown"))
+            self.graph['vserver'] = CTK.cfg.get_val (f"vserver!{vsrv_num}!nick", _("Unknown"))
             self.graph['num']     = vsrv_num
-            self.collector        = bool(int(CTK.cfg.get_val ('vserver!%s!collector!enabled'%(vsrv_num),'0')))
+            self.collector        = bool(int(CTK.cfg.get_val (f'vserver!{vsrv_num}!collector!enabled','0')))
             self.build()
 
         def build (self):
             table = CTK.PropsTable()
-            table.Add (_('Collect Statistics'),  CTK.CheckCfgText('vserver!%s!collector!enabled'%(self.graph['num']), self.collector, _('Enabled')), _(NOTE_COLLECTOR))
+            table.Add (_('Collect Statistics'),  CTK.CheckCfgText(f"vserver!{self.graph['num']}!collector!enabled", self.collector, _('Enabled')), _(NOTE_COLLECTOR))
 
             submit  = CTK.Submitter (URL_APPLY)
             submit += table
@@ -178,4 +181,4 @@ class GraphServer_Instancer (CTK.Container):
         refresh.register (lambda: self.GraphServer(refresh).Render())
         self += refresh
 
-CTK.publish ('^%s'%(URL_APPLY), apply, method="POST")
+CTK.publish (f'^{URL_APPLY}', apply, method="POST")

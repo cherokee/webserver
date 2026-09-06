@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 PATHINFO    = "this_is_the/path_info"
 VIRTUAL_DIR = "/scriptname_vir"
@@ -16,13 +16,13 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "CGI: ScriptName with PathInfo"
 
-        self.request          = "GET %s/exec.cgi/%s HTTP/1.0\r\n" % (VIRTUAL_DIR, PATHINFO)
+        self.request          = f"GET {VIRTUAL_DIR}/exec.cgi/{PATHINFO} HTTP/1.0\r\n"
         self.expected_error   = 200
-        self.expected_content = "SCRIPT_NAME = %s" % (SCRIPT_NAME)
+        self.expected_content = f"SCRIPT_NAME = {SCRIPT_NAME}"
 
     def Prepare (self, www):
         d = self.Mkdir (www, "script_name_1/sub/dir")
-        self.WriteFile (d, "exec.cgi", 0755,
+        self.WriteFile (d, "exec.cgi", 0o755,
                         """#!/bin/sh
 
                         echo "Content-Type: text/plain"

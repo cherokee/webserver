@@ -25,6 +25,7 @@
 
 import CTK
 import Cherokee
+from CTK.i18n import _, N_
 import validations
 
 URL_APPLY = '/plugin/balancer/apply'
@@ -41,7 +42,7 @@ def commit():
 
     # New
     if new_bal:
-        next = CTK.cfg.get_next_entry_prefix ('%s!source'%(key))
+        next = CTK.cfg.get_next_entry_prefix (f'{key}!source')
         CTK.cfg[next] = new_bal
 
     # Modification
@@ -56,42 +57,42 @@ class PluginBalancer (CTK.Plugin):
         def __init__ (self, refresh, key):
             CTK.Box.__init__ (self)
 
-            CTK.cfg.normalize ('%s!source'%(key))
-            balancer_sources = CTK.cfg.keys ('%s!source'%(key))
-            balancer_sources.sort(lambda x,y: cmp(int(x), int(y)))
+            CTK.cfg.normalize (f'{key}!source')
+            balancer_sources = CTK.cfg.keys (f'{key}!source')
+            balancer_sources.sort(key=int)
 
             if not balancer_sources:
                 self += CTK.Notice ('warning', CTK.RawHTML (_(NO_SOURCE_WARNING)))
             else:
-                table = CTK.SortableList (lambda arg: CTK.SortableList__reorder_generic (arg, '%s!source'%(key)),
+                table = CTK.SortableList (lambda arg: CTK.SortableList__reorder_generic (arg, f'{key}!source'),
                                           self.id,
                                           {'class': 'balancer-sources-sortable'})
                 table += [CTK.RawHTML(x) for x in ('', _('Nick'), _('Host'), '')]
                 table.set_header(1)
 
                 for sb in balancer_sources:
-                    sg = CTK.cfg.get_val ('%s!source!%s'%(key, sb))
+                    sg = CTK.cfg.get_val (f'{key}!source!{sb}')
 
                     # Detect missing sources
-                    if not CTK.cfg['source!%s'%(sg)]:
+                    if not CTK.cfg[f'source!{sg}']:
                         remove = CTK.ImageStock('del')
                         remove.bind('click', CTK.JS.Ajax (URL_APPLY,
-                                                          data     = {'%s!source!%s'%(key, sb): ''},
+                                                          data     = {f'{key}!source!{sb}': ''},
                                                           complete = refresh.JS_to_refresh()))
 
-                        table += [None, None, CTK.RawHTML("%s: %s" %(_("Broken Source"), sg)), remove]
+                        table += [None, None, CTK.RawHTML(f"{_('Broken Source')}: {sg}"), remove]
                         continue
 
                     # Regular table entry
-                    nick = CTK.cfg.get_val ('source!%s!nick'%(sg))
-                    host = CTK.cfg.get_val ('source!%s!host'%(sg))
-                    link = CTK.Link ("/source/%s"%(sg), CTK.RawHTML (nick))
+                    nick = CTK.cfg.get_val (f'source!{sg}!nick')
+                    host = CTK.cfg.get_val (f'source!{sg}!host')
+                    link = CTK.Link (f"/source/{sg}", CTK.RawHTML (nick))
 
                     remove = None
                     if len(balancer_sources) >= 2:
                         remove = CTK.ImageStock('del')
                         remove.bind('click', CTK.JS.Ajax (URL_APPLY,
-                                                          data     = {'%s!source!%s'%(key, sb): ''},
+                                                          data     = {f'{key}!source!{sb}': ''},
                                                           complete = refresh.JS_to_refresh()))
 
                     table += [None, link, CTK.RawHTML(host), remove]
@@ -105,12 +106,12 @@ class PluginBalancer (CTK.Plugin):
 
     def AddCommon (self):
         general_sources  = CTK.cfg.keys('source')
-        balancer_sources = CTK.cfg.keys('%s!source'%(self.key))
+        balancer_sources = CTK.cfg.keys(f'{self.key}!source')
 
         # These are the sources that have not been added yet
         general_left = general_sources[:]
         for sb in balancer_sources:
-            sg = CTK.cfg.get_val('%s!source!%s'%(self.key, sb))
+            sg = CTK.cfg.get_val(f'{self.key}!source!{sb}')
             if sg in general_left:
                 while True:
                     try: general_left.remove(sg)
@@ -124,18 +125,18 @@ class PluginBalancer (CTK.Plugin):
         refresh = CTK.Refreshable ({'id': 'balancer'})
         refresh.register (lambda: self.ContentSources(refresh, self.key).Render())
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Information Sources')))
+        self += CTK.RawHTML (f"<h2>{_('Information Sources')}</h2>")
         self += CTK.Indenter (refresh)
 
         # Assign new sources
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Assign Information Sources')))
+        self += CTK.RawHTML (f"<h2>{_('Assign Information Sources')}</h2>")
 
         if not general_left:
             self += CTK.Indenter (CTK.Notice('information', CTK.RawHTML (_(NOTE_ALL_SOURCES)%("/source"))))
         else:
             options = [('', _('Choose'))]
             for s in general_left:
-                nick = CTK.cfg.get_val('source!%s!nick'%(s))
+                nick = CTK.cfg.get_val(f'source!{s}!nick')
                 options.append((s,nick))
 
             table = CTK.PropsTable()
@@ -149,4 +150,4 @@ class PluginBalancer (CTK.Plugin):
             self += CTK.Indenter (submit)
 
 
-CTK.publish ('^%s'%(URL_APPLY), commit, method="POST")
+CTK.publish (f'^{URL_APPLY}', commit, method="POST")
