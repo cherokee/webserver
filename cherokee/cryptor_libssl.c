@@ -45,15 +45,14 @@
 #include "socket.h"
 #include "util.h"
 #include "server-protected.h"
+#include "cryptor_libssl_compat.h"
 
 #define ENTRIES "crypto,ssl"
 
-static DH *dh_param_512  = NULL;
-static DH *dh_param_1024 = NULL;
-static DH *dh_param_2048 = NULL;
-static DH *dh_param_4096 = NULL;
-
-#include "cryptor_libssl_compat.h"
+static cherokee_dh_param_t *dh_param_512  = NULL;
+static cherokee_dh_param_t *dh_param_1024 = NULL;
+static cherokee_dh_param_t *dh_param_2048 = NULL;
+static cherokee_dh_param_t *dh_param_4096 = NULL;
 
 #include "cryptor_libssl_dh_512.c"
 #include "cryptor_libssl_dh_1024.c"
@@ -76,22 +75,22 @@ _free (cherokee_cryptor_libssl_t *cryp)
 	/* DH Parameters
 	 */
 	if (dh_param_512  != NULL) {
-		DH_free (dh_param_512);
+		cherokee_dh_param_free (dh_param_512);
 		dh_param_512 = NULL;
 	}
 
 	if (dh_param_1024 != NULL) {
-		DH_free (dh_param_1024);
+		cherokee_dh_param_free (dh_param_1024);
 		dh_param_1024 = NULL;
 	}
 
 	if (dh_param_2048 != NULL) {
-		DH_free (dh_param_2048);
+		cherokee_dh_param_free (dh_param_2048);
 		dh_param_2048 = NULL;
 	}
 
 	if (dh_param_4096 != NULL) {
-		DH_free (dh_param_4096);
+		cherokee_dh_param_free (dh_param_4096);
 		dh_param_4096 = NULL;
 	}
 
@@ -109,7 +108,7 @@ _free (cherokee_cryptor_libssl_t *cryp)
 
 static ret_t
 try_read_dh_param(cherokee_config_node_t  *conf,
-                  DH                     **dh,
+                  cherokee_dh_param_t    **dh,
                   int                      bitsize)
 {
 	ret_t              ret;
@@ -136,9 +135,16 @@ try_read_dh_param(cherokee_config_node_t  *conf,
 		goto out;
 	}
 
-	/* Process the content
-	 */
+	/* Process the content. OpenSSL 3 no longer exposes DH objects. */
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+	{
+		BIO *bio = BIO_new_file (buf->buf, "r");
+		*dh = bio == NULL ? NULL : PEM_read_bio_Parameters (bio, NULL);
+		BIO_free (bio);
+	}
+#else
 	*dh = PEM_read_DHparams (paramfile, NULL, NULL, NULL);
+#endif
 	if (*dh == NULL) {
 		TRACE(ENTRIES, "Failed to load PEM %s\n", buf->buf);
 		ret = ret_error;
@@ -312,7 +318,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 }
 #endif
 
-static DH *
+static cherokee_dh_param_t *
 tmp_dh_cb (SSL *ssl, int export, int keylen)
 {
 	UNUSED(ssl);
@@ -345,6 +351,20 @@ tmp_dh_cb (SSL *ssl, int export, int keylen)
 	}
 	return NULL;
 }
+
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+static int
+set_tmp_dh (SSL_CTX *ctx, cherokee_dh_param_t *dh)
+{
+	if (dh == NULL || cherokee_dh_param_up_ref (dh) != 1)
+		return 0;
+	if (SSL_CTX_set0_tmp_dh_pkey (ctx, dh) != 1) {
+		cherokee_dh_param_free (dh);
+		return 0;
+	}
+	return 1;
+}
+#endif
 
 #ifdef TRACE_ENABLED
 static int
@@ -417,11 +437,19 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	case 1024:
 	case 2048:
 	case 4096:
+	#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+		set_tmp_dh (n->context, tmp_dh_cb(NULL, 0, vsrv->ssl_dh_length));
+	#else
 		SSL_CTX_set_tmp_dh (n->context, tmp_dh_cb(NULL, 0, vsrv->ssl_dh_length));
+	#endif
 		break;
 
 	default:
+	#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+		SSL_CTX_set_dh_auto (n->context, 1);
+	#else
 		SSL_CTX_set_tmp_dh_callback (n->context, tmp_dh_cb);
+	#endif
 	}
 
 	/* Set ecliptic curve key parameters
@@ -1369,7 +1397,7 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 	}
 
 
-# if HAVE_OPENSSL_ENGINE_H
+# if HAVE_OPENSSL_ENGINE_H && OPENSSL_VERSION_NUMBER < 0x30000000L
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
 	ENGINE_load_builtin_engines();
 	OpenSSL_add_all_algorithms();

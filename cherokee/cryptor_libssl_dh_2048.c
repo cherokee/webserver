@@ -1,9 +1,5 @@
 /* openssl dhparam -C -2 2048 */
-#ifndef HEADER_DH_H
-#include <openssl/dh.h>
-#endif
-
-static DH *get_dh2048()
+static cherokee_dh_param_t *get_dh2048()
 {
 	static unsigned char dhp_2048[]={
 		0xC8,0xF1,0xD4,0x48,0xB6,0x11,0x5B,0x2B,0x9E,0x3D,0xE4,0x49,
@@ -32,19 +28,8 @@ static DH *get_dh2048()
 	static unsigned char dhg_2048[]={
 		0x02,
 	};
-	DH *dh;
-	BIGNUM *dhp_bn, *dhg_bn;
-
-	if ((dh=DH_new()) == NULL) return(NULL);
-	dhp_bn = BN_bin2bn(dhp_2048, sizeof (dhp_2048), NULL);
-	dhg_bn = BN_bin2bn(dhg_2048, sizeof (dhg_2048), NULL);
-	if (!DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
-		DH_free(dh);
-		BN_free(dhp_bn);
-		BN_free(dhg_bn);
-		return(NULL);
-	}
-	return(dh);
+	return cherokee_dh_param_new (dhp_2048, sizeof (dhp_2048),
+	                              dhg_2048, sizeof (dhg_2048));
 }
 /*
 -----BEGIN DH PARAMETERS-----
