@@ -31,14 +31,12 @@
 #define CHEROKEE_COMMON_H
 
 #include <cherokee/macros.h>
+#include <stdbool.h>
 
 
 CHEROKEE_BEGIN_DECLS
 
-typedef enum {
-	false = 0,
-	true  = 1
-} cherokee_boolean_t;
+typedef bool cherokee_boolean_t;
 
 typedef enum {
 	ret_no_sys          = -4,

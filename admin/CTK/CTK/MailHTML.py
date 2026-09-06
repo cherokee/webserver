@@ -25,7 +25,7 @@
 import smtplib
 
 from email.mime.text import MIMEText
-from email.MIMEImage import MIMEImage
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 
 MAIL_SERVER   = "localhost"
@@ -75,25 +75,25 @@ class MailHTML:
         for entry in self.chunks:
             kind, text, props = entry
 
-            if props.has_key('txt_only'):
+            if 'txt_only' in props:
                 continue
 
             if kind == 'raw':
                 body += text
             elif kind == 'p':
-                body += '<p>%s</p>'%(text)
+                body += f'<p>{text}</p>'
             elif kind == 'p,center':
-                body += '<p><div align="center">%s</div></p>'%(text)
+                body += f'<p><div align="center">{text}</div></p>'
             elif kind == 'h2':
-                body += '<h2>%s</h2>'%(text)
+                body += f'<h2>{text}</h2>'
             elif kind == 'h3':
-                body += '<h3>%s</h3>'%(text)
+                body += f'<h3>{text}</h3>'
             elif kind == 'li':
-                body += '<li>%s</li>'%(text)
+                body += f'<li>{text}</li>'
             elif kind == 'pre':
-                body += '<pre>%s</pre>'%(text)
+                body += f'<pre>{text}</pre>'
             else:
-                assert False, "Unknown type '%s'"%(kind)
+                assert False, f"Unknown type '{kind}'"
 
         html  = self.html_header
         html += body
@@ -105,27 +105,27 @@ class MailHTML:
         for entry in self.chunks:
             kind, text, props = entry
 
-            if props.has_key('html_only'):
+            if 'html_only' in props:
                 continue
 
             if kind == 'raw':
                 body += text
             elif kind == 'p':
-                body += '%s\n\n'%(wrap_text (text))
+                body += f'{wrap_text(text)}\n\n'
             elif kind == 'p,center':
                 margin = max (0, int((TXT_LINE_WRAP - len(text)) / 2))
                 body += ' '*margin
-                body += '%s\n\n'%(text)
+                body += f'{text}\n\n'
             elif kind == 'h2':
-                body += '%s\n%s\n\n'%(text, '-'*len(text))
+                body += f"{text}\n{'-' * len(text)}\n\n"
             elif kind == 'h3':
-                body += '%s\n'%(text)
+                body += f'{text}\n'
             elif kind == 'li':
-                body += ' * %s\n'%(text)
+                body += f' * {text}\n'
             elif kind == 'pre':
-                body += '%s\n'%(text)
+                body += f'{text}\n'
             else:
-                assert False, "Unknown type '%s'"%(kind)
+                assert False, f"Unknown type '{kind}'"
 
         txt  = self.txt_header
         txt += body
@@ -189,7 +189,7 @@ class MailHTML:
             msg_image = MIMEImage(fp.read())
             fp.close()
 
-            msg_image.add_header ('Content-ID', '<%s>'%(image_id))
+            msg_image.add_header ('Content-ID', f'<{image_id}>')
             msg_root.attach (msg_image)
 
         return msg_root
@@ -211,7 +211,7 @@ class MailHTML:
 if __name__ == "__main__":
     # Mail Headers
     mail = MailHTML ("Alvaro Lopez Ortega <alvaro@alobbs.com>",
-                     "Good looking HTML mail")
+                     "you@example.com", "Good looking HTML mail")
 
     # Template
     mail.html_header = "<html><body><h1>Header</h1>"
@@ -227,4 +227,4 @@ if __name__ == "__main__":
     mail.add ("This is the second one")
     mail.add ("And this is the last one")
 
-    print mail
+    print(mail)

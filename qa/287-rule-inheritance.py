@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 # Tests: http://bugs.cherokee-project.com/1207
 #
@@ -25,7 +25,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Complex rules: props inheritance"
 
-        self.request           = "GET /%s/ HTTP/1.0\r\n" % (DIR_WEB)
+        self.request           = f"GET /{DIR_WEB}/ HTTP/1.0\r\n"
         self.expected_error    = 200
         self.expected_content  = FILE
 

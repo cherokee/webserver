@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 NICK    = "nick-259"
 DOMAIN1 = "test-1-259"
@@ -25,6 +25,6 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name           = "VRule OR"
         self.request        = "GET / HTTP/1.0\r\n" + \
-                              "Host: %s\r\n" % (DOMAIN2)
+                              f"Host: {DOMAIN2}\r\n"
         self.expected_error = ERROR
         self.conf           = CONF %(globals())

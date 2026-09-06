@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 LENGTH = 100
 
@@ -11,11 +11,10 @@ class Test (TestBase):
         self.name = "Bad Content Range"
 
         self.request           = "GET /BadRange1 HTTP/1.0\r\n" +\
-                                 "Range: bytes=%d-%d\r\n" % (LENGTH+2 ,LENGTH+3)
+                                 f"Range: bytes={int(LENGTH + 2)}-{int(LENGTH + 3)}\r\n"
         self.expected_error    = 416
-        self.expected_content  = "Content-Range: bytes */%d" % (LENGTH)
+        self.expected_content  = f"Content-Range: bytes */{int(LENGTH)}"
 
     def Prepare (self, www):
         random  = letters_random (LENGTH)
-        self.WriteFile (www, "BadRange1", 0444, random)
-
+        self.WriteFile (www, "BadRange1", 0o444, random)

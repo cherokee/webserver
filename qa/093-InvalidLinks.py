@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 FILES   = ["file1", "file2", "file3", "file4"]
 DFILES  = ["del1", "del2"]
@@ -20,13 +20,13 @@ class Test (TestBase):
         self.request           = "GET /brokenlinks1/ HTTP/1.0\r\n"
         self.conf              = CONF
         self.expected_error    = 200
-        self.expected_content  = FILES + DIRS + LINKS.keys()
+        self.expected_content  = FILES + DIRS + list(LINKS.keys())
 
     def Prepare (self, www):
         base = self.Mkdir (www, "brokenlinks1")
 
         for filename in FILES + DFILES:
-            self.WriteFile (base, filename, 0444, "")
+            self.WriteFile (base, filename, 0o444, "")
 
         for dirname in DIRS:
             self.Mkdir (base, dirname)

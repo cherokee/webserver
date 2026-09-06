@@ -25,6 +25,7 @@
 import re
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 from util import *
 from configured import *
 
@@ -84,17 +85,17 @@ PURGE_METHOD_CONF = """
 
 class Commit:
     def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        tipe     = CTK.cfg.get_val ('%s!policy'  %(PREFIX))
-        purge    = int (CTK.cfg.get_val('%s!purge'%(PREFIX), "0"))
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
+        vsrv_num = CTK.cfg.get_val (f'{PREFIX}!vsrv_num')
+        tipe     = CTK.cfg.get_val (f'{PREFIX}!policy')
+        purge    = int (CTK.cfg.get_val(f'{PREFIX}!purge', "0"))
+        vsrv_pre = f'vserver!{vsrv_num}'
 
         # Next rule
         x, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
 
         if tipe == 'encoded':
             # Encoded content
-            extensions = CTK.cfg.get_val ('%s!encoded_exts'%(PREFIX))
+            extensions = CTK.cfg.get_val (f'{PREFIX}!encoded_exts')
             config = ENCODED_EXTS_CONF % (locals())
         else:
             # General caching
@@ -102,19 +103,19 @@ class Commit:
 
         # Apply the config
         CTK.cfg.apply_chunk (config)
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         # Purge
         if purge:
             x, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
 
-            username = CTK.cfg.get_val ('%s!admin!username'%(PREFIX))
-            password = CTK.cfg.get_val ('%s!admin!password'%(PREFIX))
+            username = CTK.cfg.get_val (f'{PREFIX}!admin!username')
+            password = CTK.cfg.get_val (f'{PREFIX}!admin!password')
             config = PURGE_METHOD_CONF % (locals())
 
             # Apply the config
             CTK.cfg.apply_chunk (config)
-            CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+            CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -132,48 +133,46 @@ class Create:
         cont = CTK.Container()
 
         # Basic Funcionality
-        combo_type = CTK.ComboCfg ('%s!policy'%(PREFIX),    trans_options(POLICIES))
+        combo_type = CTK.ComboCfg (f'{PREFIX}!policy',    trans_options(POLICIES))
 
         table = CTK.PropsTable()
         table.Add (_('Type of Caching'), combo_type, _(NOTE_POLICY))
 
         encoded_table = CTK.PropsTable ()
-        encoded_table.Add (_('Extensions'), CTK.TextCfg ('%s!encoded_exts'%(PREFIX), False, {'value': ENCODED_EXTS_DEFAULT}), _(NOTE_ENC_EXTS))
+        encoded_table.Add (_('Extensions'), CTK.TextCfg (f'{PREFIX}!encoded_exts', False, {'value': ENCODED_EXTS_DEFAULT}), _(NOTE_ENC_EXTS))
         encoded_box  = CTK.Box ({'style':'display:none;'})
         encoded_box += encoded_table
 
         combo_type.bind ('change',
-                         "if ($(this).val() == 'dynamic') {%s} else {%s}"
-                         %(encoded_box.JS_to_hide(), encoded_box.JS_to_show()))
+                         "if ($(this).val() == 'dynamic') {{{}}} else {{{}}}".format(encoded_box.JS_to_hide(), encoded_box.JS_to_show()))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
         submit += encoded_box
 
-        cont += CTK.RawHTML ("<h2>%s</h2>" %(_("Basic Functionality")))
+        cont += CTK.RawHTML (f"<h2>{_('Basic Functionality')}</h2>")
         cont += submit
 
         # PURGE
-        check_auth = CTK.CheckCfgText ('%s!purge'%(PREFIX), False, _("Enable"))
+        check_auth = CTK.CheckCfgText (f'{PREFIX}!purge', False, _("Enable"))
 
         table = CTK.PropsTable()
         table.Add (_('Enable PURGE requests'), check_auth, _(NOTE_AUTH))
 
         admin_table = CTK.PropsTable()
-        admin_table.Add (_('Admin Username'), CTK.TextCfg ('%s!admin!username'%(PREFIX), False, {'class':'noauto'}), _(NOTE_ADMIN_USER))
-        admin_table.Add (_('Admin Password'), CTK.TextCfg ('%s!admin!password'%(PREFIX), False, {'class':'noauto'}), _(NOTE_ADMIN_PASSWORD))
+        admin_table.Add (_('Admin Username'), CTK.TextCfg (f'{PREFIX}!admin!username', False, {'class':'noauto'}), _(NOTE_ADMIN_USER))
+        admin_table.Add (_('Admin Password'), CTK.TextCfg (f'{PREFIX}!admin!password', False, {'class':'noauto'}), _(NOTE_ADMIN_PASSWORD))
         admin_box  = CTK.Box ({'style':'display:none;'})
         admin_box += admin_table
 
         check_auth.bind ('change',
-                         "if ($(this).find(':checked').size() <= 0) {%s} else {%s}"
-                         %(admin_box.JS_to_hide(), admin_box.JS_to_show()))
+                         "if ($(this).find(':checked').size() <= 0) {{{}}} else {{{}}}".format(admin_box.JS_to_hide(), admin_box.JS_to_show()))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
         submit += admin_box
 
-        cont += CTK.RawHTML ("<h2>%s</h2>" %(_("Purge of Cache Objects")))
+        cont += CTK.RawHTML (f"<h2>{_('Purge of Cache Objects')}</h2>")
         cont += submit
 
         # Global Submit
@@ -188,18 +187,18 @@ class Create:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('flcache', {'class': 'wizard-descr'})
 
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P2)}</p>')
         cont += box
 
         # Send the VServer num
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         submit = CTK.Submitter (URL_APPLY)
-        submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+        submit += CTK.Hidden(f'{PREFIX}!vsrv_num', tmp[0])
         cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -207,6 +206,6 @@ class Welcome:
 
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/flcache$',  Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/flcache/2', Create)
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST")
+CTK.publish ('^/wizard/vserver/(\\d+)/flcache$',  Welcome)
+CTK.publish ('^/wizard/vserver/(\\d+)/flcache/2', Create)
+CTK.publish (rf'^{URL_APPLY}', Commit, method="POST")

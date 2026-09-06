@@ -22,13 +22,14 @@
 # 02110-1301, USA.
 #
 
-from cgi import escape
+from html import escape
 
-from RawHTML import RawHTML
-from Widget import Widget
-from Server import cfg
-from util import to_utf8
-from Server import get_server
+from .RawHTML import RawHTML
+from .Widget import Widget
+from .Server import cfg
+from .i18n import _
+from .util import to_utf8
+from .Server import get_server
 
 HEADER = [
     '<script type="text/javascript" src="/CTK/js/jquery.form-defaults.js"></script>'
@@ -63,7 +64,7 @@ class TextField (Widget):
     def __init__ (self, props=None):
         Widget.__init__ (self)
         self.type = "text"
-        self.id   = 'widget%d'%(self.uniq_id)
+        self.id   = f'widget{int(self.uniq_id)}'
 
         if props:
             self._props = props
@@ -76,18 +77,18 @@ class TextField (Widget):
     def __get_input_props (self):
         render = ''
         for prop in self._props:
-            render += " %s" %(prop)
+            render += f" {prop}"
             value = self._props[prop]
             if value:
                 val = to_utf8(value)
-                render += '="%s"' %(val)
+                render += f'="{val}"'
         return render
 
     def __get_error_div_props (self):
-        render = 'id="error_%s"' % (self.id)
+        render = f'id="error_{self.id}"'
         name = to_utf8 (self._props.get('name'))
         if name:
-            render += ' key="%s"' %(name)
+            render += f' key="{name}"'
         return render
 
     def Render (self):
@@ -96,7 +97,7 @@ class TextField (Widget):
 
         if self._props.get('optional'):
             optional_string = self._props.get('optional_string', _("Optional"))
-            js += "$('#%s').DefaultValue('optional-grey','%s');" %(self.id, optional_string)
+            js += f"$('#{self.id}').DefaultValue('optional-grey','{optional_string}');"
 
             if not self._props.get('class'):
                 self._props['class'] = 'optional'
@@ -104,10 +105,10 @@ class TextField (Widget):
                 self._props['class'] += ' optional'
 
         # Render the text field
-        html = '<input type="%s"%s />' %(self.type, self.__get_input_props())
+        html = f'<input type="{self.type}"{self.__get_input_props()} />'
 
         # Render the error reporting field
-        html += '<div class="error" %s></div>' %(self.__get_error_div_props())
+        html += f'<div class="error" {self.__get_error_div_props()}></div>'
 
         render = Widget.Render (self)
         render.html    += html
@@ -117,9 +118,9 @@ class TextField (Widget):
         return render
 
     def JS_to_clean (self):
-        return "$('#%s').attr('value', '');" %(self.id)
+        return f"$('#{self.id}').attr('value', '');"
     def JS_to_focus (self):
-        return "$('#%s').blur(); $('#%s').focus();" %(self.id, self.id)
+        return f"$('#{self.id}').blur(); $('#{self.id}').focus();"
 
 
 class TextFieldPassword (TextField):
@@ -239,7 +240,7 @@ class TextCfgAuto (TextCfg):
         # Secure submit
         srv = get_server()
         if srv.use_sec_submit:
-            self.url += '?key=%s' %(srv.sec_submit)
+            self.url += f'?key={srv.sec_submit}'
 
     def Render (self):
         value = cfg.get_val (self.key, '')

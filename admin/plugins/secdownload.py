@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 import validations
 from CTK.Plugin import instance_plugin
 
@@ -40,21 +41,21 @@ class Plugin_secdownload (Handler.PluginHandler):
         Handler.PluginHandler.AddCommon (self)
 
         table = CTK.PropsTable()
-        table.Add (_('Secret'),  CTK.TextCfg('%s!secret'%(key), False), _(NOTE_SECRET))
-        table.Add (_('Timeout'), CTK.TextCfg('%s!timeout'%(key), True), _(NOTE_TIMEOUT))
+        table.Add (_('Secret'),  CTK.TextCfg(f'{key}!secret', False), _(NOTE_SECRET))
+        table.Add (_('Timeout'), CTK.TextCfg(f'{key}!timeout', True), _(NOTE_TIMEOUT))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
         # Streaming
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Covering Parameters')))
+        self += CTK.RawHTML (f"<h2>{_('Covering Parameters')}</h2>")
         self += CTK.Indenter (submit)
 
         # File
         self += instance_plugin('file', key, show_document_root=False)
 
         # Publish
-        VALS = [("%s!secret"%(key),  validations.is_not_empty),
-                ("%s!timeout"%(key), validations.is_number_gt_0)]
+        VALS = [(f"{key}!secret",  validations.is_not_empty),
+                (f"{key}!timeout", validations.is_number_gt_0)]
 
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")

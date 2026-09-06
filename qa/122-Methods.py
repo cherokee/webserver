@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 
 class TestEntry (TestBase):
@@ -73,5 +73,4 @@ class Test (TestCollection):
                       "Host: www.example.com\r\n" +\
                       "Connection: Close\r\n" + \
                       "Lock-Token: <opaquelocktoken:e71d4fae-5dec-22df-fea5-00a0c93bd5eb1>\r\n"
-
 

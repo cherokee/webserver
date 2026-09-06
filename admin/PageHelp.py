@@ -25,8 +25,9 @@
 
 import re
 import os
+from functools import cmp_to_key
 import CTK
-import Page
+from CTK.i18n import _, N_
 import configured
 
 from CTK.consts import *
@@ -87,14 +88,14 @@ class Parser:
             return len(y) - len(x)
 
         def is_covered (val):
-            for key,vals in self.tree.items():
+            for key,vals in list(self.tree.items()):
                 if val in vals:
                     return True
             return False
 
         def tree_len ():
             tmp = []
-            for vals in self.tree.values():
+            for vals in list(self.tree.values()):
                 tmp.extend(vals)
             return len(tmp)
 
@@ -106,7 +107,7 @@ class Parser:
         while tree_len() < len(self.links):
             mess  = [(f, f.split('.html')[0].split('_')) for f in
                      self.files if not is_covered(f)]
-            mess.sort (branch_sorter)
+            mess.sort (key=cmp_to_key(branch_sorter))
             self._build_helper (mess, delta)
             delta += 1
 
@@ -115,10 +116,10 @@ class Parser:
             x = elem[1]
             name, idx = None, len(x)-delta
             if idx >= 0:
-                name = '%s.html' %('_'.join(x[:idx]))
-            if name in self.files:
+                name = f"{'_'.join(x[:idx])}.html"
+            if name is not None and name in self.files:
                 self.tree[name] = self.tree.get(name, [])
-                childname = '%s.html' %('_'.join(x))
+                childname = f"{'_'.join(x)}.html"
                 self.tree[name].append(childname)
 
 
@@ -194,4 +195,4 @@ class Render:
         return page.Render()
 
 
-CTK.publish ('^%s/.+\.html'%(URL_BASE), Render)
+CTK.publish (f'^{URL_BASE}/.+\\.html', Render)

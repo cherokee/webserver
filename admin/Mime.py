@@ -25,6 +25,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import validations
 import util
@@ -53,9 +54,9 @@ def commit():
 
     if mime:
         if mage:
-            CTK.cfg['mime!%s!max-age'%(mime)] = mage
+            CTK.cfg[f'mime!{mime}!max-age'] = mage
         if exts:
-            CTK.cfg['mime!%s!extensions'%(mime)] = exts
+            CTK.cfg[f'mime!{mime}!extensions'] = exts
 
         return CTK.cfg_reply_ajax_ok()
 
@@ -68,7 +69,7 @@ def commit():
                 val = validations.is_safe_mime_exts (new, CTK.cfg.get_val(k))
                 if util.lists_differ (val, new):
                     updates[k] = val
-            except ValueError, e:
+            except ValueError as e:
                 return { "ret": "error", "errors": { k: str(e) }}
         elif k.endswith('!max-age'):
             new = CTK.post[k]
@@ -77,7 +78,7 @@ def commit():
                     val = validations.is_positive_int (new)
                     if val != new:
                         updates[k] = val
-                except ValueError, e:
+                except ValueError as e:
                     return { "ret": "error", "errors": { k: str(e) }}
         CTK.cfg[k] = CTK.post[k]
 
@@ -123,7 +124,7 @@ class AddNew_Button (CTK.Box):
 class MIME_Table (CTK.Container):
     def __init__ (self, refreshable, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
-        self += CTK.RawHTML ('<h2>%s</h2>' %_('Mime types'))
+        self += CTK.RawHTML (f"<h2>{_('Mime types')}</h2>")
 
         # List
         headerbox = CTK.Box ({'class': "mimeheader"})
@@ -139,16 +140,16 @@ class MIME_Table (CTK.Container):
 
         pag = CTK.Paginator ('mimetable-content')
         for mime in mimes:
-            pre = "mime!%s"%(mime)
+            pre = f"mime!{mime}"
 
             rm = CTK.ImageStock('del')
             rm.bind ('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
                                            complete = refreshable.JS_to_refresh()))
 
             box  = CTK.Box ({'class': 'mimeentry'})
-            box += CTK.Box ({'class': 'md md-type'}, CTK.RawHTML('<span>%s</span>' %(mime)))
-            box += CTK.Box ({'class': 'md md-ext'},  CTK.TextCfg ('%s!extensions'%(pre), False, {'size': 35}))
-            box += CTK.Box ({'class': 'md md-age'},  CTK.TextCfg ('%s!max-age'%(pre),    True,  {'size': 6, 'maxlength': 6}))
+            box += CTK.Box ({'class': 'md md-type'}, CTK.RawHTML(f'<span>{mime}</span>'))
+            box += CTK.Box ({'class': 'md md-ext'},  CTK.TextCfg (f'{pre}!extensions', False, {'size': 35}))
+            box += CTK.Box ({'class': 'md md-age'},  CTK.TextCfg (f'{pre}!max-age',    True,  {'size': 6, 'maxlength': 6}))
             box += CTK.Box ({'class': 'md md-del'},  rm)
 
             #box += CTK.RawHTML ('%s' %(mime))
@@ -184,4 +185,4 @@ class MIME_Widget (CTK.Box):
         self += MIME_Table_Instancer()
 
 
-CTK.publish ('^%s'%(URL_APPLY), commit, validation=VALIDATIONS, method="POST")
+CTK.publish (f'^{URL_APPLY}', commit, validation=VALIDATIONS, method="POST")

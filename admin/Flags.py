@@ -20,6 +20,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 ISO_3166 = {
@@ -289,12 +290,12 @@ class ComboFlags (CTK.ComboCfg):
         props = _props.copy()
 
         # Contries
-        codes = ISO_3166.keys()
+        codes = list(ISO_3166.keys())
         codes.sort()
 
         countries = []
         for k in codes:
-            countries.append ((k, ISO_3166[k], {'style': CSS%('%s.png'%(k))}))
+            countries.append ((k, ISO_3166[k], {'style': CSS%(f'{k}.png')}))
 
         # Extra entries
         extras = []
@@ -316,26 +317,26 @@ class CheckListFlags (CTK.Box):
 
         # Flags
         props = _props.copy()
-        codes = ISO_3166.keys()
+        codes = list(ISO_3166.keys())
         codes.sort()
         props['class'] = 'flag_checkbox'
 
         # Initial values
-        selected = filter (lambda x: x, [x.strip() for x in CTK.cfg.get_val (key,'').split(',')])
+        selected = [x for x in [x.strip() for x in CTK.cfg.get_val (key,'').split(',')] if x]
 
-        self += CTK.RawHTML ('<strong>%s</strong>' %(_("Countries")))
+        self += CTK.RawHTML (f"<strong>{_('Countries')}</strong>")
         for k in codes:
             box = CTK.Box({'class': 'check-list-flags-entry'})
-            box += CTK.CheckCfg ('%s!%s' %(key, k), k in selected, props)
-            box += CTK.Image ({'src': "/static/images/flags/%s.png"%(k.lower())})
+            box += CTK.CheckCfg (f'{key}!{k}', k in selected, props)
+            box += CTK.Image ({'src': f"/static/images/flags/{k.lower()}.png"})
             box += CTK.RawHTML (ISO_3166[k])
             self += box
 
-        self += CTK.RawHTML ('<strong>%s</strong>' %(_("Extras")))
+        self += CTK.RawHTML (f"<strong>{_('Extras')}</strong>")
         for k in EXTRA_OPTIONS:
             box = CTK.Box({'class': 'check-list-flags-entry'})
-            box += CTK.CheckCfg ('%s!%s' %(key, k[0]), k[0] in selected, props)
+            box += CTK.CheckCfg (f'{key}!{k[0]}', k[0] in selected, props)
             if len(k) == 3:
-                box += CTK.Image ({'src': "/static/images/flags/%s"%(k[2])})
+                box += CTK.Image ({'src': f"/static/images/flags/{k[2]}"})
             box += CTK.RawHTML (k[1])
             self += box

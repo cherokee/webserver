@@ -22,6 +22,14 @@
 
 import copy
 import types
+from typing import Optional
+from functools import reduce
+from functools import cmp_to_key
+from .i18n import _
+
+
+def _cmp(left, right):
+    return (left > right) - (left < right)
 
 class ConfigNode (object):
     def __init__ (self):
@@ -103,7 +111,7 @@ class ConfigNode (object):
             if '!' in key:
                 parts = key.split('!')
                 last  = parts[-1]
-                prev  = reduce (lambda x,y: "%s!%s" % (x,y), parts[:-1])
+                prev  = reduce (lambda x,y: f"{x}!{y}", parts[:-1])
                 obj = self[prev]
                 obj._child[last] = val
             else:
@@ -129,11 +137,11 @@ class ConfigNode (object):
     def serialize (self, path=''):
         content = ''
         if self._val is not None:
-            if type(self._val) == types.BooleanType:
+            if type(self._val) == bool:
                 val = str(int(self._val))
             else:
                 val = str(self._val)
-            content += '%s = %s\n' % (path, val)
+            content += f'{path} = {val}\n'
 
         for name in self._child:
             if name == 'tmp':
@@ -141,7 +149,7 @@ class ConfigNode (object):
 
             node = self._child[name]
             if len(path) != 0:
-                new_path = "%s!%s" % (path, name)
+                new_path = f"{path}!{name}"
             else:
                 new_path = name
 
@@ -162,26 +170,26 @@ class ConfigNode (object):
         return len(self._child) > 0
 
     def keys (self):
-        return self._child.keys()
+        return list(self._child.keys())
 
     def __contains__ (self, key):
-        return key in self._child.keys()
+        return key in list(self._child.keys())
 
     def __cmp__ (self, other):
         if self._val != other._val:
-            return cmp (self._val, other._val)
+            return _cmp (self._val, other._val)
 
         for k in self._child:
             if not k in other:
                 return 1
-            re = cmp(self._child[k], other[k])
+            re = _cmp(self._child[k], other[k])
             if re != 0:
                 return re
 
         for k in other._child:
             if not k in self:
                 return -1
-            re = cmp(other[k], self._child[k])
+            re = _cmp(other[k], self._child[k])
             if re != 0:
                 return re
 
@@ -194,7 +202,7 @@ class Config:
     optional configuration file can be passed as argument on
     instantiation to load and parse an initial configuration tree.
     """
-    def __init__ (self, file=None):
+    def __init__ (self, file: Optional[str] = None):
         self.root      = ConfigNode()
         self.root_orig = None
         self.file      = file
@@ -206,6 +214,9 @@ class Config:
     def load (self):
         """Load and Parse the configuration file specified on
         initialization."""
+        if self.file is None:
+            raise ValueError('A configuration file is required')
+
         # Load and Parse
         try:
             f = open (self.file, "r")
@@ -242,7 +253,7 @@ class Config:
                 path, value = line.split (" = ", 1)
             except:
                 msg = _("ERROR: Couldn't unpack '%s'")
-                print msg % (line)
+                print(msg % (line))
                 raise
 
             node = self._create_path (path)
@@ -287,7 +298,7 @@ class Config:
             self._create_path (parent_path)
             parent, parent_path, child_name = self._get_parent_node (path)
 
-        if not parent._child.has_key(child_name):
+        if child_name not in parent._child:
             parent._create_path(child_name)
 
         parent._child[child_name] = config_node
@@ -307,7 +318,7 @@ class Config:
     def _get_parent_node (self, path):
         preg = path.split('!')
         last = preg[-1]
-        pres = reduce (lambda x,y: "%s!%s" % (x,y), preg[:-1])
+        pres = reduce (lambda x,y: f"{x}!{y}", preg[:-1])
         return (self[pres], pres, last)
 
     def get_val (self, path, default=None):
@@ -322,10 +333,10 @@ class Config:
     def __delitem__ (self, path):
         if '!' in path:
             parent, parent_path, child_name = self._get_parent_node (path)
-            if parent and parent._child.has_key(child_name):
+            if parent and child_name in parent._child:
                 del (parent._child[child_name])
         else:
-            if path in self.root.keys():
+            if path in list(self.root.keys()):
                 del (self.root[path])
 
     def keys (self, path):
@@ -333,7 +344,7 @@ class Config:
         tmp = self[path]
         if not tmp:
             return []
-        return tmp.keys()
+        return list(tmp.keys())
 
     def pop (self, key):
         """Pop an element from the configuration tree given by
@@ -354,7 +365,7 @@ class Config:
                 ai = order.index(a[0])
                 bi = order.index(b[0])
             except:
-                return cmp(x,y)
+                return _cmp(x,y)
 
             # Different tags
             if ai > bi:
@@ -367,20 +378,23 @@ class Config:
                 (a[0] == b[0] == 'vserver') and
                 (a[1] == b[1]) and
                 (a[2] == b[2] == 'rule')):
-                re = cmp (int(b[3]), int(a[3]))
+                re = _cmp (int(b[3]), int(a[3]))
                 if re != 0:
                     return re
 
-            return cmp(x,y)
+            return _cmp(x,y)
 
         tmp = self.root.serialize().split('\n')
-        tmp.sort(sorter)
-        return '\n'.join (filter (lambda x: len(x) > 1, tmp))
+        tmp.sort(key=cmp_to_key(sorter))
+        return '\n'.join ([x for x in tmp if len(x) > 1])
 
     def save (self):
         """Save current configuration tree into the file specified on
         initialization. Try to make a copy with the '.backup'
         extension if possible."""
+        if self.file is None:
+            raise ValueError('A configuration file is required')
+
         # Try to make a copy
         try:
             t = open (self.file+'.backup', 'w+')
@@ -389,7 +403,7 @@ class Config:
             t.close()
             s.close()
         except:
-            print _("Could not copy configuration to ") + self.file + '.backup'
+            print(_("Could not copy configuration to ") + self.file + '.backup')
 
         # Write the new one
         cfg = self.serialize()
@@ -406,6 +420,8 @@ class Config:
         """Check if configuration file is writeable."""
         import os
 
+        if self.file is None:
+            return False
         if not os.path.exists (self.file):
             return False
         return os.access (self.file, os.W_OK)
@@ -422,9 +438,9 @@ class Config:
         entries.sort()
 
         if not entries:
-            return '%s!1'%(pre)
+            return f'{pre}!1'
 
-        return '%s!%d'%(pre, entries[-1] + 1)
+        return f'{pre}!{int(entries[-1] + 1)}'
 
     def get_lowest_entry (self, pre):
         """Return first existing element of a configuration node given
@@ -441,25 +457,25 @@ class Config:
         """Reenumerate the branch given by the 'pre' prefix for
         normalization. An optional step can be provided."""
         keys = self.keys(pre)
-        keys.sort (lambda x,y: cmp(int(x),int(y)))
+        keys.sort (key=int)
 
         del (self['tmp!normalize'])
 
         n = step
         for k in keys:
-            self.clone ('%s!%s'%(pre, k), 'tmp!normalize!%s!%s'%(pre,n))
+            self.clone (f'{pre}!{k}', f'tmp!normalize!{pre}!{n}')
             n += step
 
         del (self[pre])
         if self['tmp!normalize']:
-            self.rename ('tmp!normalize!%s'%(pre), pre)
+            self.rename (f'tmp!normalize!{pre}', pre)
 
     def apply_chunk (self, chunk):
         """Insert a configuration chunk into the configuration tree,
         all at once. This is an in-memory operation. Manual steps must
         be taken to update the configuration file if needed."""
         lines = [l.strip() for l in chunk.split('\n')]
-        lines = filter (lambda x: len(x) and x[0] != '#', lines)
+        lines = [x for x in lines if len(x) and x[0] != '#']
 
         for line in lines:
             left, right = line.split (" = ", 2)
@@ -478,7 +494,7 @@ class Config:
 
         if 'tmp' in root:
             del (root['tmp'])
-        if 'tmp' in orig:
+        if orig is not None and 'tmp' in orig:
             del (orig['tmp'])
 
         return not root == orig

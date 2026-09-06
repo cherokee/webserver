@@ -22,6 +22,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 URL_APPLY = '/plugin/rehost/apply'
@@ -53,12 +54,12 @@ class Content (CTK.Container):
             table += [CTK.RawHTML(_('Regular Expressions'))]
 
             for i in entries:
-                e1 = CTK.TextCfg ("%s!%s"%(key,i))
+                e1 = CTK.TextCfg (f"{key}!{i}")
                 rm = None
                 if len(entries) >= 2:
                     rm = CTK.ImageStock('del')
                     rm.bind('click', CTK.JS.Ajax (url_apply,
-                                                  data     = {"%s!%s"%(key,i): ''},
+                                                  data     = {f"{key}!{i}": ''},
                                                   complete = refreshable.JS_to_refresh()))
                 table += [e1, rm]
 
@@ -86,10 +87,10 @@ class Plugin_rehost (CTK.Plugin):
     def __init__ (self, key, vsrv_num):
         CTK.Plugin.__init__ (self, key)
 
-        pre       = '%s!regex' %(key)
-        url_apply = '%s/%s' %(URL_APPLY, vsrv_num)
+        pre       = f'{key}!regex'
+        url_apply = f'{URL_APPLY}/{vsrv_num}'
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('New Regular Expression')))
+        self += CTK.RawHTML (f"<h2>{_('New Regular Expression')}</h2>")
 
         # Content
         refresh = CTK.Refreshable ({'id': 'plugin_rehost'})
@@ -97,4 +98,4 @@ class Plugin_rehost (CTK.Plugin):
         self += refresh
 
         # Validation, and Public URLs
-        CTK.publish ('^%s/[\d]+'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+        CTK.publish (f'^{URL_APPLY}/[\\d]+', CTK.cfg_apply_post, method="POST")

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC="This is the magic string for the DocumentRoot test - common"
 
@@ -20,7 +20,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "documentroot/subdir/subdir")
-        self.WriteFile (d, "file", 0444, MAGIC)
+        self.WriteFile (d, "file", 0o444, MAGIC)
 
         self.conf = CONF % (d)
-

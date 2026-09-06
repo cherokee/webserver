@@ -32,6 +32,7 @@ import os
 import re
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 
 from util import *
@@ -179,14 +180,14 @@ class Commit:
     def Commit_VServer (self):
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
-        CTK.cfg['%s!nick'%(vsrv_pre)] = CTK.cfg.get_val('%s!host'%(PREFIX))
-        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
+        CTK.cfg[f'{vsrv_pre}!nick'] = CTK.cfg.get_val(f'{PREFIX}!host')
+        Wizard.CloneLogsCfg_Apply (f'{PREFIX}!logs_as_vsrv', vsrv_pre)
 
         # Incoming info
-        ror_dir    = CTK.cfg.get_val('%s!ror_dir'%(PREFIX))
-        new_host   = CTK.cfg.get_val('%s!new_host'%(PREFIX))
-        ror_env    = CTK.cfg.get_val('%s!ror_env'%(PREFIX))
-        ror_method = CTK.cfg.get_val('%s!ror_method'%(PREFIX))
+        ror_dir    = CTK.cfg.get_val(f'{PREFIX}!ror_dir')
+        new_host   = CTK.cfg.get_val(f'{PREFIX}!new_host')
+        ror_env    = CTK.cfg.get_val(f'{PREFIX}!ror_env')
+        ror_method = CTK.cfg.get_val(f'{PREFIX}!ror_method')
 
         # Locals
         src_num, src_pre = cfg_source_get_next ()
@@ -224,10 +225,10 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Usual Static Files
-        Wizard.AddUsualStaticFiles ("%s!rule!500" % (vsrv_pre))
+        Wizard.AddUsualStaticFiles (f"{vsrv_pre}!rule!500")
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
         CTK.cfg.normalize ('vserver')
 
         del (CTK.cfg[PREFIX])
@@ -236,19 +237,19 @@ class Commit:
 
     def Commit_Rule (self):
         # Incoming info
-        ror_dir    = CTK.cfg.get_val('%s!ror_dir'%(PREFIX))
-        webdir     = CTK.cfg.get_val('%s!new_webdir'%(PREFIX))
-        ror_env    = CTK.cfg.get_val('%s!ror_env'%(PREFIX))
-        ror_method = CTK.cfg.get_val('%s!ror_method'%(PREFIX))
-        vsrv_num   = CTK.cfg.get_val('%s!vsrv_num'%(PREFIX))
+        ror_dir    = CTK.cfg.get_val(f'{PREFIX}!ror_dir')
+        webdir     = CTK.cfg.get_val(f'{PREFIX}!new_webdir')
+        ror_env    = CTK.cfg.get_val(f'{PREFIX}!ror_env')
+        ror_method = CTK.cfg.get_val(f'{PREFIX}!ror_method')
+        vsrv_num   = CTK.cfg.get_val(f'{PREFIX}!vsrv_num')
 
         # Locals
-        vsrv_pre           = 'vserver!%s'%(vsrv_num)
+        vsrv_pre           = f'vserver!{vsrv_num}'
         rule_num, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
         src_num,  src_pre  = cfg_source_get_next ()
-        new_host           = CTK.cfg.get_val ("%s!nick"%(vsrv_pre))
-        rule_pre_plus2     = "%s!rule!%d" % (vsrv_pre, rule_num + 2)
-        rule_pre_plus1     = "%s!rule!%d" % (vsrv_pre, rule_num + 1)
+        new_host           = CTK.cfg.get_val (f"{vsrv_pre}!nick")
+        rule_pre_plus2     = f"{vsrv_pre}!rule!{int(rule_num + 2)}"
+        rule_pre_plus1     = f"{vsrv_pre}!rule!{int(rule_num + 1)}"
 
         # Deployment method distinction
         CONFIG = CONFIG_RULES
@@ -283,7 +284,7 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -295,7 +296,7 @@ class Commit:
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX)):
+            if CTK.cfg.get_val (f'{PREFIX}!vsrv_num'):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -305,14 +306,14 @@ class Commit:
 class WebDirectory:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('Web Directory'), CTK.TextCfg ('%s!new_webdir'%(PREFIX), False, {'value': '/project', 'class': 'noauto'}), _(NOTE_NEW_DIR))
+        table.Add (_('Web Directory'), CTK.TextCfg (f'{PREFIX}!new_webdir', False, {'value': '/project', 'class': 'noauto'}), _(NOTE_NEW_DIR))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WEBDIR_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -321,15 +322,15 @@ class WebDirectory:
 class Host:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_NEW_HOST))
-        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
+        table.Add (_('New Host Name'),    CTK.TextCfg (f'{PREFIX}!new_host', False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_NEW_HOST))
+        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg(f'{PREFIX}!logs_as_vsrv'), _(Wizard.CloneLogsCfg.NOTE))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_HOST_H1)}</h2>')
         cont += Dispatcher ()
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
@@ -340,15 +341,15 @@ class Dispatcher (CTK.Container):
     def __init__ (self):
         CTK.Container.__init__ (self)
 
-        ror_method = CTK.cfg.get_val('%s!ror_method'%(PREFIX))
+        ror_method = CTK.cfg.get_val(f'{PREFIX}!ror_method')
         if ror_method != 'fcgi':
             return
 
         if self._fcgi_ok():
             return
 
-        if self.errors.has_key('dispatch.fcgi'):
-            if self.errors.has_key('dispatch.fcgi.example'):
+        if 'dispatch.fcgi' in self.errors:
+            if 'dispatch.fcgi.example' in self.errors:
                 message = _(ERROR_DISPATCH) + _(ERROR_EXAMPLE)
             else:
                 message = _(ERROR_DISPATCH) + _(ERROR_RAILS23)
@@ -356,13 +357,13 @@ class Dispatcher (CTK.Container):
         self += CTK.Notice ('important-information', CTK.RawHTML (message))
 
     def _fcgi_ok (self):
-        ror_dir = CTK.cfg.get_val('%s!ror_dir'%(PREFIX))
+        ror_dir = CTK.cfg.get_val(f'{PREFIX}!ror_dir')
 
         # Check whether dispatch.fcgi is present
         if not os.path.exists (os.path.join (ror_dir, "public/dispatch.fcgi")):
             self.errors = {'dispatch.fcgi': 'Not found'}
             if os.path.exists (os.path.join (ror_dir, "public/dispatch.fcgi.example")):
-                self.errors['dispatch.fcgi.example'] = True
+                self.errors['dispatch.fcgi.example'] = 'Present'
             return False
         return True
 
@@ -377,12 +378,12 @@ class LocalSource:
         table   = CTK.PropsTable()
         submit += table
 
-        table.Add (_('Project Directory'), CTK.TextCfg ('%s!ror_dir'%(PREFIX), False), _(NOTE_ROR_DIR))
-        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg ('%s!ror_env'%(PREFIX), trans_options(RAILS_ENV), {'class': 'noauto'}), _(NOTE_ENV))
-        table.Add (_('Deployment method'), CTK.ComboCfg ('%s!ror_method'%(PREFIX), trans_options(RAILS_METHOD), {'class': 'noauto'}), _(NOTE_METHOD))
+        table.Add (_('Project Directory'), CTK.TextCfg (f'{PREFIX}!ror_dir', False), _(NOTE_ROR_DIR))
+        table.Add (_('RAILS_ENV environment'), CTK.ComboCfg (f'{PREFIX}!ror_env', trans_options(RAILS_ENV), {'class': 'noauto'}), _(NOTE_ENV))
+        table.Add (_('Deployment method'), CTK.ComboCfg (f'{PREFIX}!ror_method', trans_options(RAILS_METHOD), {'class': 'noauto'}), _(NOTE_METHOD))
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_LOCAL_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
@@ -391,11 +392,11 @@ class LocalSource:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('rails', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P2)}</p>')
         box += Wizard.CookBookBox ('cookbook_ror')
         cont += box
 
@@ -403,7 +404,7 @@ class Welcome:
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
             submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit += CTK.Hidden(f'{PREFIX}!vsrv_num', tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -424,7 +425,7 @@ def is_ror_dir(path):
     elif os.path.exists(ror4_bin):
         return path
     else:
-        raise ValueError, _(ERROR_NO_ROR)
+        raise ValueError(_(ERROR_NO_ROR))
 
 def get_ror_version(path):
     path = validations.is_local_dir_exists (path)
@@ -451,11 +452,11 @@ def get_proxy_source(ror_dir):
 
 
 VALS = [
-    ('%s!ror_dir' %(PREFIX), validations.is_not_empty),
-    ('%s!new_host'%(PREFIX), validations.is_not_empty),
+    (f'{PREFIX}!ror_dir', validations.is_not_empty),
+    (f'{PREFIX}!new_host', validations.is_not_empty),
 
-    ("%s!ror_dir" %(PREFIX), is_ror_dir),
-    ("%s!new_host"%(PREFIX), validations.is_new_vserver_nick)
+    (f"{PREFIX}!ror_dir", is_ror_dir),
+    (f"{PREFIX}!new_host", validations.is_new_vserver_nick)
 ]
 
 # VServer
@@ -464,10 +465,9 @@ CTK.publish ('^/wizard/vserver/rails/2$', LocalSource)
 CTK.publish ('^/wizard/vserver/rails/3$', Host)
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/rails$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/rails/2$', LocalSource)
-CTK.publish ('^/wizard/vserver/(\d+)/rails/3$', WebDirectory)
+CTK.publish ('^/wizard/vserver/(\\d+)/rails$',   Welcome)
+CTK.publish ('^/wizard/vserver/(\\d+)/rails/2$', LocalSource)
+CTK.publish ('^/wizard/vserver/(\\d+)/rails/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
-
+CTK.publish (rf'^{URL_APPLY}', Commit, method="POST", validation=VALS)

@@ -20,8 +20,8 @@
 # 02110-1301, USA.
 #
 
-from Container import Container
-from util import props_to_str
+from .Container import Container
+from .util import props_to_str
 
 NOTICE_TYPES = ['information', 'important-information',
                 'warning', 'error', 'offline', 'online']
@@ -63,9 +63,9 @@ class Notice (Container):
         self.props = props.copy()
 
         if 'class' in self.props:
-            self.props['class'] = 'dialog-%s %s'%(klass, self.props['class'])
+            self.props['class'] = f"dialog-{klass} {self.props['class']}"
         else:
-            self.props['class'] = 'dialog-%s' %(klass)
+            self.props['class'] = f'dialog-{klass}'
 
         if content:
             self += content

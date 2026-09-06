@@ -1,6 +1,6 @@
 import os
 import string
-from base import *
+from qa_base import *
 
 PUBLIC_HTML = "public_html"
 
@@ -32,11 +32,11 @@ class Test (TestBase):
             # Fixme: Why is happening this?
             return False
 
-        self.request          = "GET /~%s/ HTTP/1.0\r\n" % (self.user)
+        self.request          = f"GET /~{self.user}/ HTTP/1.0\r\n"
 
         # Read the /etc/passwd file
         f = open ("/etc/passwd", "r")
-        pwuser = filter(lambda x: x.find(self.user) == 0, f.readlines())
+        pwuser = [x for x in f.readlines() if x.find(self.user) == 0]
         f.close()
 
         # Sanity check
@@ -44,7 +44,7 @@ class Test (TestBase):
             return False
 
         # Get the home directory
-        home = string.split (pwuser[0], ":")[5]
+        home = pwuser[0].split(":")[5]
         public_html = os.path.join (home, PUBLIC_HTML)
 
         # Look for the public_html directory
@@ -52,4 +52,3 @@ class Test (TestBase):
             return False
 
         return True
-

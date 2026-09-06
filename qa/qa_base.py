@@ -9,16 +9,18 @@
 # This file is distributed under the GPL license.
 
 import os
-import imp
+import importlib.util
 import sys
 import time
 import types
 import socket
 import string
 import tempfile
+import errno
+import ssl
 
-from conf import *
-from util import *
+from qa_conf import *
+from qa_util import *
 
 DEFAULT_READ = 8192
 
@@ -26,9 +28,11 @@ def importfile(path):
     filename = os.path.basename(path)
     name, ext = os.path.splitext(filename)
 
-    file = open(path, 'r')
-    module = imp.load_module(name, file, path, (ext, 'r', imp.PY_SOURCE))
-    file.close()
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
 
     return module
 
@@ -45,6 +49,12 @@ class TestBase:
         self.expected_content        = None
         self.forbidden_content       = None
         self.disabled                = False
+        self.tmp: str = ""
+        self.nobody: bool = False
+        self.php_conf: str | None = None
+        self.digest: TestBase.Digest | None = None
+        self.local_dir: str = ""
+        self.filename: str | None = None
         self._initialize()
 
     def _initialize (self):
@@ -58,10 +68,10 @@ class TestBase:
          while True:
             try:
                 if self.ssl:
-                    return self.ssl.read (DEFAULT_READ)
-                else:
-                    return s.recv (DEFAULT_READ)
-            except socket.error, (err, strerr):
+                    return self.ssl.recv (DEFAULT_READ).decode("latin-1")
+                return s.recv (DEFAULT_READ).decode("latin-1")
+            except socket.error as xxx_todo_changeme:
+                (err, strerr) = xxx_todo_changeme.args
                 if err == errno.EAGAIN or \
                    err == errno.EWOULDBLOCK or \
                    err == errno.EINPROGRESS:
@@ -74,12 +84,12 @@ class TestBase:
 
             try:
                 s = socket.socket(af, socktype, proto)
-            except socket.error, msg:
+            except socket.error as msg:
                 continue
 
             try:
                 s.connect(sa)
-            except socket.error, msg:
+            except socket.error as msg:
                 s.close()
                 s = None
                 continue
@@ -90,8 +100,8 @@ class TestBase:
 
         if self.is_ssl:
             try:
-                self.ssl = socket.ssl (s)
-            except Exception, e:
+                self.ssl = ssl.create_default_context().wrap_socket(s, server_hostname=host)
+            except Exception as e:
                 raise Exception("Couldn't handshake SSL: "+str(e))
 
         request = self.request + "\r\n"
@@ -99,15 +109,15 @@ class TestBase:
             request += self.post
 
         if self.ssl:
-            n = self.ssl.write (request)
+            n = self.ssl.send (request.encode())
         else:
-            n = s.send (request)
-        assert (n == len(request))
+            n = s.send (request.encode())
+        assert n == len(request)
 
         while True:
             try:
                 d = self._safe_read (s)
-            except Exception, e:
+            except Exception as e:
                 d = ''
 
             if not len(d):
@@ -129,14 +139,14 @@ class TestBase:
         elif reply[:8] == "HTTP/1.1":
             self.version = 1
         else:
-            raise Exception("Invalid header, len=%d: '%s'" % (len(reply), reply))
+            raise Exception(f"Invalid header, len={len(reply)}: '{reply}'")
 
         # Error code
         reply = reply[9:]
         try:
             self.reply_err = int (reply[:3])
         except:
-            raise Exception("Invalid header, version=%d len=%d: '%s'" % (self.version, len(reply), reply))
+            raise Exception(f"Invalid header, version={int(self.version)} len={len(reply)}: '{reply}'")
 
     def _check_result_expected_item (self, item):
         if item.startswith("file:"):
@@ -165,11 +175,11 @@ class TestBase:
             return -1
 
         if self.expected_content != None:
-            if type(self.expected_content) in (types.StringType, types.UnicodeType):
+            if type(self.expected_content) in (bytes, str):
                 r = self._check_result_expected_item (self.expected_content)
                 if r == -1:
                     return -1
-            elif type(self.expected_content) == types.ListType:
+            elif type(self.expected_content) == list:
                 for entry in self.expected_content:
                     r = self._check_result_expected_item (entry)
                     if r == -1:
@@ -179,11 +189,11 @@ class TestBase:
 
 
         if self.forbidden_content != None:
-            if type(self.forbidden_content) in (types.StringType, types.UnicodeType):
+            if type(self.forbidden_content) in (bytes, str):
                 r = self._check_result_forbidden_item (self.forbidden_content)
                 if r == -1:
                     return -1
-            elif type(self.forbidden_content) == types.ListType:
+            elif type(self.forbidden_content) == list:
                 for entry in self.forbidden_content:
                     r = self._check_result_forbidden_item (entry)
                     if r == -1:
@@ -229,8 +239,8 @@ class TestBase:
             num = "???"
 
         # Render the string
-        src  = "\tName     = %s\n" % (self.name)
-        src += "\tNumber   = %s\n" % (num)
+        src  = f"\tName     = {self.name}\n"
+        src += f"\tNumber   = {num}\n"
 
         if self.version == 9:
             src += "\tProtocol = HTTP/0.9\n"
@@ -240,48 +250,48 @@ class TestBase:
             src += "\tProtocol = HTTP/1.1\n"
 
         if self.conf is not None:
-            src += "\tConfig   = %s\n" % (self.conf)
+            src += f"\tConfig   = {self.conf}\n"
 
-        header_full = string.split (self.reply,  "\r\n\r\n")[0]
-        headers     = string.split (header_full, "\r\n")
-        requests    = string.split (self.request, "\r\n")
+        header_full = self.reply.split("\r\n\r\n")[0]
+        headers     = header_full.split("\r\n")
+        requests    = self.request.split("\r\n")
 
-        src += "\tRequest  = %s\n" % (requests[0])
+        src += f"\tRequest  = {requests[0]}\n"
         for request in requests[1:]:
             if len(request) > 1:
-                src += "\t\t%s\n" %(request)
+                src += f"\t\t{request}\n"
 
         if self.post is not None and not self.nobody:
-            src += "\tPost     = %s\n" % (self.post)
+            src += f"\tPost     = {self.post}\n"
 
         if self.expected_error is not None:
-            src += "\tExpected = Code: %d\n" % (self.expected_error)
+            src += f"\tExpected = Code: {int(self.expected_error)}\n"
         else:
             src += "\tExpected = Code: UNSET!\n"
 
         if self.expected_content is not None:
-            src += "\tExpected = Content: %s\n" % (self.expected_content)
+            src += f"\tExpected = Content: {self.expected_content}\n"
 
         if self.forbidden_content is not None:
-            src += "\tForbidden= Content: %s\n" % (self.forbidden_content)
+            src += f"\tForbidden= Content: {self.forbidden_content}\n"
 
-        src += "\tReply    = %s\n" % (headers[0])
+        src += f"\tReply    = {headers[0]}\n"
         for header in headers[1:]:
-            src += "\t\t%s\n" %(header)
+            src += f"\t\t{header}\n"
 
         if not self.nobody:
             body = self.reply[len(header_full)+4:]
-            src += "\tBody len = %d\n" % (len(body))
-            src += "\tBody     = %s\n" % (body)
+            src += f"\tBody len = {len(body)}\n"
+            src += f"\tBody     = {body}\n"
 
         return src
 
-    def Mkdir (self, www, dir, mode=0777):
+    def Mkdir (self, www, dir, mode=0o777):
         fulldir = os.path.join (www, dir)
         os.makedirs(fulldir, mode)
         return fulldir
 
-    def WriteFile (self, www, filename, mode=0444, content=''):
+    def WriteFile (self, www, filename, mode=0o444, content=''):
         assert(type(mode) == int)
 
         fullpath = os.path.join (www, filename)
@@ -309,7 +319,7 @@ class TestBase:
 
     def WriteTemp (self, content):
         while True:
-            name = self.tmp + "/%s" % (letters_random(40))
+            name = self.tmp + f"/{letters_random(40)}"
             if not os.path.exists(name): break
 
         f = open (name, "w+")
@@ -346,28 +356,25 @@ class TestBase:
             return ret
 
         def CalculateResponse (self, user, realm, passwd, method, url, nonce, qop, cnonce, nc):
-            try:
-                from hashlib import md5
-            except ImportError:
-                from md5 import md5
+            from hashlib import md5
 
             md5obj = md5()
-            md5obj.update("%s:%s:%s" % (user, realm, passwd))
+            md5obj.update(f"{user}:{realm}:{passwd}".encode())
             a1 = md5obj.hexdigest()
 
             md5obj = md5()
-            md5obj.update("%s:%s" % (method, url))
+            md5obj.update(f"{method}:{url}".encode())
             ha2 = md5obj.hexdigest()
 
             md5obj = md5()
-            md5obj.update("%s:%s:" % (a1, nonce))
+            md5obj.update(f"{a1}:{nonce}:".encode())
 
             if qop != None:
-                md5obj.update("%s:" %(nc))
-                md5obj.update("%s:" %(cnonce))
-                md5obj.update("%s:" %(qop))
+                md5obj.update(f"{nc}:".encode())
+                md5obj.update(f"{cnonce}:".encode())
+                md5obj.update(f"{qop}:".encode())
 
-            md5obj.update(ha2)
+            md5obj.update(ha2.encode())
             final = md5obj.hexdigest()
 
             return final
@@ -404,7 +411,7 @@ class TestCollection (TestBase):
         self.num += 1
 
         if (test.name == None) or len(test.name) == 0:
-            test.name = self.name + ", Part %d" % (self.num)
+            test.name = (self.name or "Test") + f", Part {int(self.num)}"
 
         test.tmp            = self.tmp
         test.nobody         = self.nobody

@@ -1,6 +1,6 @@
 import os
 import string
-from base import *
+from qa_base import *
 
 DOMAIN      = "208domain"
 DIR         = "208/directory"
@@ -32,7 +32,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name             = "Userdir: Pathinfo"
         self.expected_error   = 200
-        self.expected_content = ["PATH_INFO: %s"%(PATH_INFO)]
+        self.expected_content = [f"PATH_INFO: {PATH_INFO}"]
 
     def Precondition (self):
         # ~/tmp/cherokee, alo
@@ -41,13 +41,13 @@ class Test (TestBase):
             return False
 
         self.public_html, self.user = tmp
-        self.request = "GET /~%s/%s/%s%s HTTP/1.0\r\n" % (self.user, DIR, FILE, PATH_INFO) + \
-                       "Host: %s\r\n" % (DOMAIN)
+        self.request = f"GET /~{self.user}/{DIR}/{FILE}{PATH_INFO} HTTP/1.0\r\n" + \
+                       f"Host: {DOMAIN}\r\n"
         return True
 
     def Prepare (self, www):
         self.Remove (self.public_html, '208')
         droot = self.Mkdir (self.public_html, DIR)
 
-        self.WriteFile (droot, FILE, 0555, CGI_BASE)
+        self.WriteFile (droot, FILE, 0o555, CGI_BASE)
         self.conf = CONF % (DOMAIN, droot, PUBLIC_HTML, DIR)

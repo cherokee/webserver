@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # Cherokee Doc: Image checker
 #
@@ -14,22 +14,22 @@ import sys
 def get_img_refs():
     img_refs = {}
 
-    for file in filter(lambda x: x.endswith('.txt'), os.listdir('.')):
-        for img_line in filter (lambda x: 'image:' in x, open (file, 'r').readlines()):
+    for file in [x for x in os.listdir('.') if x.endswith('.txt')]:
+        for img_line in [x for x in open (file, 'r').readlines() if 'image:' in x]:
             filename = img_line.replace('::',':').strip()[6:]
             fin = filename.rfind('[')
             if fin > 0:
                 filename = filename[:fin]
             img_refs[filename] = None
 
-    return img_refs.keys()
+    return list(img_refs.keys())
 
 def get_img_files():
     def is_image(file):
         return file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png')
 
-    tmp = ['media/images/%s'%(x) for x in os.listdir('media/images')]
-    return filter (is_image, tmp)
+    tmp = [f'media/images/{x}' for x in os.listdir('media/images')]
+    return list(filter (is_image, tmp))
 
 def check_images():
     error = False
@@ -39,33 +39,33 @@ def check_images():
 
     for ref in img_refs:
         if not ref in img_files:
-            print "ERROR: %s: File not found" %(ref)
+            print(f"ERROR: {ref}: File not found")
             error = True
 
     for img in img_files:
         if '-CENSORED' in img:
             uc_img = img.replace("-CENSORED", "")
             if not uc_img in img_files:
-                print "ERROR: %s: uncensored variant not found" %(uc_img)
+                print(f"ERROR: {uc_img}: uncensored variant not found")
                 error = True
             else:
                 img = uc_img
         if not img in img_refs:
-            print "ERROR: %s: No longer used" %(img)
+            print(f"ERROR: {img}: No longer used")
             error = True
 
     automake_am = open("Makefile.am", 'r').read()
     for img in img_refs:
         if not img in automake_am:
-            print "ERROR: %s isn't covered in Makefile.am " %(img)
+            print(f"ERROR: {img} isn't covered in Makefile.am ")
             error = True
 
     return error
 
 if __name__ == "__main__":
     # Exit if .txt files are not included
-    if not filter (lambda x: x.endswith('.txt'), os.listdir('.')):
-        print "Nothing to check.."
+    if not [x for x in os.listdir('.') if x.endswith('.txt')]:
+        print("Nothing to check..")
         raise SystemExit
 
     # Test

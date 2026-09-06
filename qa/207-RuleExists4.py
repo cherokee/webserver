@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR    = 'foo/bar'
 FILE   = 'file.cgi'
@@ -30,8 +30,8 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Rule Exists: match in directory"
-        self.request           = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE) + \
-                                 "Host: %s\r\n" % (DOMAIN)
+        self.request           = f"GET /{DIR}/{FILE} HTTP/1.0\r\n" + \
+                                 f"Host: {DOMAIN}\r\n"
         self.forbidden_content = ['/bin/sh', 'echo']
         self.expected_error    = 200
         self.expected_content  = MAGIC
@@ -40,7 +40,7 @@ class Test (TestBase):
         droot = self.Mkdir (www, '207')
         e     = self.Mkdir (droot, DIR)
 
-        self.WriteFile (e, FILE, 0555, CGI_BASE % (MAGIC))
+        self.WriteFile (e, FILE, 0o555, CGI_BASE % (MAGIC))
 
         vars = globals()
         vars['droot'] = droot

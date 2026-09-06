@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
 import os
-from base import *
+from qa_base import *
 
 DIR   = "dup-cache-control-1"
 FILE  = "file"
 EXT   = "test246"
 MAGIC = "Alvaro: http://www.alobbs.com/"
 
-CONF = """
+CONF = f"""
 vserver!1!rule!2460!match = directory
-vserver!1!rule!2460!match!directory = /%s
+vserver!1!rule!2460!match!directory = /{DIR}
 vserver!1!rule!2460!match!final = 0
 vserver!1!rule!2460!expiration = time
 vserver!1!rule!2460!expiration!time = 2m
 
-mime!application/xml!extensions = %s
+mime!application/xml!extensions = {EXT}
 mime!application/xml!max-age = 0
-""" % (DIR, EXT)
+"""
 
 
 class Test (TestBase):
@@ -25,14 +25,14 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Dup Cache-Control: max-age"
 
-        self.request          = "GET /%s/%s.%s HTTP/1.0\r\n" %(DIR, FILE, EXT)
+        self.request          = f"GET /{DIR}/{FILE}.{EXT} HTTP/1.0\r\n"
         self.expected_error   = 200
         self.expected_content = MAGIC
         self.conf             = CONF
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        self.WriteFile (d, "%s.%s"%(FILE,EXT), 0666, MAGIC)
+        self.WriteFile (d, f"{FILE}.{EXT}", 0o666, MAGIC)
 
     def CustomTest (self):
         body_low = self.reply.lower()

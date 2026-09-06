@@ -1,7 +1,7 @@
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
-from cStringIO import StringIO
+from io import StringIO
 import zlib
 
 PRE    = "Random text follows"
@@ -31,7 +31,7 @@ class Test (TestBase):
         body_gz = self.reply[self.reply.find("\r\n\r\n")+4:]
 
         # Decompress it
-        body = zlib.decompress (body_gz, -zlib.MAX_WBITS)
+        body = zlib.decompress (body_gz.encode("latin-1"), -zlib.MAX_WBITS).decode()
 
         if body != MAGIC:
             return -1
@@ -39,5 +39,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "deflate1")
-        self.WriteFile (www, "deflate1/file.txt", 0444, MAGIC)
-
+        self.WriteFile (www, "deflate1/file.txt", 0o444, MAGIC)

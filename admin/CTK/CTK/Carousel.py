@@ -22,10 +22,11 @@
 # 02110-1301, USA.
 #
 
-from Box import Box
-from List import List
-from Link import Link
-from RawHTML import RawHTML
+from .Box import Box
+from .List import List
+from .Link import Link
+from .i18n import _
+from .RawHTML import RawHTML
 
 HEADERS = [
     '<script type="text/javascript" src="/CTK/js/Carousel.js"></script>'
@@ -63,7 +64,7 @@ class Carousel (Box):
         Box.__iadd__ (self, self.images)
 
     def __iadd__ (self, widget):
-        link = Link (None, RawHTML ("%s" %(len(self.images.child) +1)))
+        link = Link (None, RawHTML (f"{len(self.images.child) + 1}"))
 
         self.images += widget
         self.pager  += link
@@ -75,8 +76,8 @@ class Carousel (Box):
         # Add pager and arrows if there is more than 1 item
         if len(self.pager) > 1 and not self.controls:
             arrows = Box({'class':'arrows'})
-            arrows += Link (None, RawHTML("%s"%(_('left'))), {'class': "buttons prev"})
-            arrows += Link (None, RawHTML("%s"%(_('right'))), {'class': "buttons next"})
+            arrows += Link (None, RawHTML(f"{_('left')}"), {'class': "buttons prev"})
+            arrows += Link (None, RawHTML(f"{_('right')}"), {'class': "buttons next"})
 
             self.controls = Box({'class':'controls'})
             self.controls += arrows
@@ -111,7 +112,7 @@ class CarouselThumbnails (Carousel):
 
     def __iadd__ (self, widget):
         box  = Box ({'class': 'carousel-thumbs'})
-        box += RawHTML ("%s" %(len(self.images.child) +1))
+        box += RawHTML (f"{len(self.images.child) + 1}")
         box += Box ({'class': 'carousel_thumbs-image'}, widget)
         link = Link (None, Box ({'class': 'carousel_thumbs-link'}, box))
 

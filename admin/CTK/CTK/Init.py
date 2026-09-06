@@ -23,7 +23,8 @@
 #
 
 import sys
-import __builtin__
+import builtins
+import importlib
 
 #
 # Built-in functions
@@ -45,12 +46,12 @@ def builtin_all (iterable):
 def Init():
     # Deals with UTF-8
     if sys.getdefaultencoding() != 'utf-8':
-        reload (sys)
+        importlib.reload (sys)
         sys.setdefaultencoding('utf-8')
 
     # Add a few missing functions
-    if not __builtin__.__dict__.has_key('any'):
-        __builtin__.__dict__['any'] = builtin_any
+    if 'any' not in builtins.__dict__:
+        builtins.__dict__['any'] = builtin_any
 
-    if not __builtin__.__dict__.has_key('all'):
-        __builtin__.__dict__['all'] = builtin_all
+    if 'all' not in builtins.__dict__:
+        builtins.__dict__['all'] = builtin_all

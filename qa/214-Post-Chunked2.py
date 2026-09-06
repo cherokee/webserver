@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 FILE        = "Chunked_post1.php"
 POST_LENGTH = (100*1024)+35
@@ -23,7 +23,7 @@ class Test (TestBase):
 
         self.name = "POST Chunked: ~100k"
 
-        self.request          = "POST /%s HTTP/1.0\r\n" % (FILE) +\
+        self.request          = f"POST /{FILE} HTTP/1.0\r\n" +\
                                 "Content-type: application/x-www-form-urlencoded\r\n" +\
                                 "Content-length: 0\r\n" +\
                                 "Transfer-Encoding: chunked\r\n"
@@ -31,10 +31,10 @@ class Test (TestBase):
 
     def Prepare (self, www):
         tmpfile = self.WriteTemp (MAGIC)
-        self.WriteFile (www, FILE, 0444, SCRIPT)
+        self.WriteFile (www, FILE, 0o444, SCRIPT)
 
         self.post             = chunk_encode("var=" + MAGIC)
-        self.expected_content = "file:%s" % (tmpfile)
+        self.expected_content = f"file:{tmpfile}"
 
     def Precondition (self):
         return os.path.exists (look_for_php())

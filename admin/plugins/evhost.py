@@ -22,6 +22,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 URL_APPLY = '/plugin/evhost/apply'
@@ -38,9 +39,9 @@ class Plugin_evhost (CTK.Plugin):
 
         # GUI
         table = CTK.PropsAuto (URL_APPLY)
-        table.Add (_("Dynamic Document Root"), CTK.TextCfg('%s!tpl_document_root'%(key)), _(NOTE_REHOST))
-        table.Add (_("Check Document Root"),   CTK.CheckCfgText('%s!check_document_root'%(key), True, _('Check')), _(NOTE_CHECK_DROOT))
+        table.Add (_("Dynamic Document Root"), CTK.TextCfg(f'{key}!tpl_document_root'), _(NOTE_REHOST))
+        table.Add (_("Check Document Root"),   CTK.CheckCfgText(f'{key}!check_document_root', True, _('Check')), _(NOTE_CHECK_DROOT))
         self += table
 
         # URL mapping
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

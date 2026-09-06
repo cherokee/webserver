@@ -24,8 +24,8 @@ SSL_CERT_KEY_FILE = "ssl-keys/set-1.key"
 SERVER_DELAY      = 10
 
 # Third party utilities
-PYTHON_PATH       = "%pythonpath%"
-PHPCGI_PATH       = "%phpcgi%"
+PYTHON_PATH       = "/usr/bin/python3"
+PHPCGI_PATH       = ""
 PHP_FCGI_PORT     = 1980
 
 PHP_DIRS          = ["/usr/lib/cgi-bin/",
@@ -47,10 +47,7 @@ PHP_NAMES         = ["php5-cgi",
                      "php",
                      "php4"]
 
-PYTHON_NAMES      = ["python",
-                     "python2",
-                     "python2.7",
-                     "python2.6",
-                     "python2.5",
-                     "python2.4",
-                     "python2.3"]
+PYTHON_NAMES      = ["python3",
+                     "python3.14",
+                     "python3.13",
+                     "python3.12"]

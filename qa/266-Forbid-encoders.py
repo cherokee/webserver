@@ -1,5 +1,5 @@
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 DIR  = "test_266"
 FILE = "filename.txt"
@@ -18,7 +18,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name = "Encoders: forbid"
-        self.request           = "GET /%(DIR)s/ HTTP/1.0\r\n" %(globals()) + \
+        self.request           = f"GET /{globals()['DIR']}/ HTTP/1.0\r\n" + \
                                  "Accept-Encoding: gzip\r\n"
         self.conf              = CONF
         self.expected_error    = 200

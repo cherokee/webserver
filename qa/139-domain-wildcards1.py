@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DOMAIN   = "wildcard1"
 FILENAME = "test"
@@ -26,8 +26,8 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Domain wildcards 1"
 
-        self.request           = "GET /%s HTTP/1.1\r\n" % (FILENAME) +\
-                                 "Host: whatever.%s\r\n" % (DOMAIN)  +\
+        self.request           = f"GET /{FILENAME} HTTP/1.1\r\n" +\
+                                 f"Host: whatever.{DOMAIN}\r\n"  +\
                                  "Connection: Close\r\n"
 
         self.expected_error    = 200
@@ -35,11 +35,11 @@ class Test (TestBase):
 
 
     def Prepare (self, www):
-        d1 = self.Mkdir (www, "%s_dir1" % (DOMAIN))
-        d2 = self.Mkdir (www, "%s_dir2" % (DOMAIN))
+        d1 = self.Mkdir (www, f"{DOMAIN}_dir1")
+        d2 = self.Mkdir (www, f"{DOMAIN}_dir2")
 
-        self.WriteFile (d1, FILENAME, 0444, MAGIC1);
-        self.WriteFile (d2, FILENAME, 0444, MAGIC2);
+        self.WriteFile (d1, FILENAME, 0o444, MAGIC1);
+        self.WriteFile (d2, FILENAME, 0o444, MAGIC2);
 
 
         self.conf = CONF % (d1, d2)

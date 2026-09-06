@@ -16,7 +16,7 @@ class default:
 
             # Number of entries in it
             for tab_n in range (1,n+1):
-                tab.Add ('%s - %s'%(tab_id, tab_n), CTK.RawHTML ())
+                tab.Add (f'{tab_id} - {tab_n}', CTK.RawHTML ())
 
         return page.Render()
 

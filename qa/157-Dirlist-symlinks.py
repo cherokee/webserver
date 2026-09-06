@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR       = "dirlist_symlinks1"
 LINK_NAME = "symbolic_link_name"
@@ -16,13 +16,13 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Dirlist: symlinks"
 
-        self.request           = "GET /%s/ HTTP/1.0\r\n" % (DIR)
+        self.request           = f"GET /{DIR}/ HTTP/1.0\r\n"
         self.expected_error    = 200
         self.forbidden_content = LINK_NAME
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILE_NAME, 0666, "Test file")
+        f = self.WriteFile (d, FILE_NAME, 0o666, "Test file")
         s = self.SymLink (f, os.path.join(d,LINK_NAME))
 
         self.conf = CONF.replace('<dir>', DIR)

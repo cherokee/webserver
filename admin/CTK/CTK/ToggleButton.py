@@ -20,9 +20,10 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from util import props_to_str
-from Image import ImageStock
+from .Widget import Widget
+from .util import props_to_str
+from .Image import ImageStock
+from .i18n import _
 
 HTML = """
 <div id="%(id)s" %(props)s>
@@ -101,7 +102,7 @@ class ToggleButton (Widget):
         else:
             self.props['class'] = "togglebutton"
 
-        self.id = props.pop('id', "togglebutton_%d"%(self.uniq_id))
+        self.id = props.pop('id', f"togglebutton_{int(self.uniq_id)}")
 
     # Public interface
     #
@@ -154,4 +155,3 @@ class ToggleButtonOnOff (ToggleButton):
                                ImageStock('on',  {'title': _("Disable")}),
                                ImageStock('off', {'title': _("Enable")}),
                                active, props.copy())
-

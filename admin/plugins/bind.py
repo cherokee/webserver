@@ -22,6 +22,7 @@
 
 import CTK
 from Rule import RulePlugin
+from CTK.i18n import _, N_
 from util import *
 
 URL_APPLY = '/plugin/bind/apply'
@@ -34,13 +35,13 @@ def commit():
 
     # New entry
     if new_bind:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
-        next_bind = CTK.cfg.get_next_entry_prefix ('%s!match!bind'%(next_pre))
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
+        next_bind = CTK.cfg.get_next_entry_prefix (f'{next_pre}!match!bind')
 
-        CTK.cfg['%s!match'%(next_pre)] = 'bind'
+        CTK.cfg[f'{next_pre}!match'] = 'bind'
         CTK.cfg[next_bind]             = new_bind
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -57,12 +58,12 @@ class Plugin_bind (RulePlugin):
         return self.GUI_mod()
 
     def _render_port_name (self, num):
-        port = CTK.cfg.get_val ("server!bind!%s!port"%(num))
-        inte = CTK.cfg.get_val ("server!bind!%s!interface"%(num))
+        port = CTK.cfg.get_val (f"server!bind!{num}!port")
+        inte = CTK.cfg.get_val (f"server!bind!{num}!interface")
 
         if inte:
-            return (num, _("IP (Port):") + " %s (%s)"%(inte, port))
-        return (num, _("Port:") + " %s"%(port))
+            return (num, _("IP (Port):") + f" {inte} ({port})")
+        return (num, _("Port:") + f" {port}")
 
     def GUI_new (self):
         # Build the port list
@@ -73,7 +74,7 @@ class Plugin_bind (RulePlugin):
 
         # Table
         table = CTK.PropsTable()
-        table.Add (_('Incoming IP/Port'), CTK.ComboCfg('%s!bind'%(self.key), ports, {'class': 'noauto'}), '')
+        table.Add (_('Incoming IP/Port'), CTK.ComboCfg(f'{self.key}!bind', ports, {'class': 'noauto'}), '')
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', self.key)
@@ -82,38 +83,38 @@ class Plugin_bind (RulePlugin):
         self += submit
 
     def GUI_mod (self):
-        pre = '%s!bind'%(self.key)
+        pre = f'{self.key}!bind'
         tmp = CTK.cfg.keys (pre)
-        tmp.sort(lambda x,y: cmp(int(x), int(y)))
+        tmp.sort(key=int)
 
         if tmp:
             table = CTK.Table({'id': 'rule-table-bind'})
             table.set_header(1)
             table += [CTK.RawHTML(x) for x in (_('Port'), _('Bind to'), _('TLS'), '')]
             for b in tmp:
-                server_bind = CTK.cfg.get_val('%s!%s'%(pre, b))
-                port = CTK.cfg.get_val ("server!bind!%s!port"%(server_bind))
-                bind = CTK.cfg.get_val ("server!bind!%s!interface"%(server_bind), '')
-                tls_ = CTK.cfg.get_val ("server!bind!%s!tls"%(server_bind), False)
+                server_bind = CTK.cfg.get_val(f'{pre}!{b}')
+                port = CTK.cfg.get_val (f"server!bind!{server_bind}!port")
+                bind = CTK.cfg.get_val (f"server!bind!{server_bind}!interface", '')
+                tls_ = CTK.cfg.get_val (f"server!bind!{server_bind}!tls", False)
                 tls  = [_("No"), _("Yes")][int(tls_)]
 
                 delete = None
                 if len(tmp) > 1:
                     delete = CTK.ImageStock('del')
                     delete.bind('click', CTK.JS.Ajax (URL_APPLY,
-                                                      data     = {'%s!%s'%(pre, b): ''},
-                                                      complete = "$('#%s').trigger('submit_success');"%(self.id)))
+                                                      data     = {f'{pre}!{b}': ''},
+                                                      complete = f"$('#{self.id}').trigger('submit_success');"))
 
                 table += [CTK.RawHTML(port), CTK.RawHTML(bind), CTK.RawHTML(tls), delete]
 
-            self += CTK.RawHTML ('<h3>%s</h3>' % (_('Selected Ports')))
+            self += CTK.RawHTML (f"<h3>{_('Selected Ports')}</h3>")
             self += CTK.Indenter(table)
 
         # Don't show port already being listened to
         left = CTK.cfg.keys("server!bind")
         rule_used = []
         for b in CTK.cfg.keys (pre):
-            port_num = CTK.cfg.get_val('%s!%s'%(pre,b))
+            port_num = CTK.cfg.get_val(f'{pre}!{b}')
             if port_num in left:
                 left.remove(port_num)
 
@@ -123,12 +124,12 @@ class Plugin_bind (RulePlugin):
                 tmp = self._render_port_name (b)
                 ports.append (tmp)
 
-            next_bind = CTK.cfg.get_next_entry_prefix ('%s!bind'%(self.key))
+            next_bind = CTK.cfg.get_next_entry_prefix (f'{self.key}!bind')
 
             table = CTK.PropsTable()
             table.Add (_('Incoming IP/Port'), CTK.ComboCfg(next_bind, ports), '')
 
-            self += CTK.RawHTML ('<h3>%s</h3>' % (_('Assign new IP/Port')))
+            self += CTK.RawHTML (f"<h3>{_('Assign new IP/Port')}</h3>")
             submit = CTK.Submitter (URL_APPLY)
             submit += table
             self += CTK.Indenter(submit)
@@ -136,10 +137,10 @@ class Plugin_bind (RulePlugin):
 
     def GetName (self):
         tmp = []
-        for b in CTK.cfg.keys('%s!bind'%(self.key)):
-            real_n = CTK.cfg.get_val('%s!bind!%s'%(self.key, b))
-            port = CTK.cfg.get_val('server!bind!%s!port'%(real_n))
-            tls  = CTK.cfg.get_val('server!bind!%s!tls'%(real_n), False)
+        for b in CTK.cfg.keys(f'{self.key}!bind'):
+            real_n = CTK.cfg.get_val(f'{self.key}!bind!{b}')
+            port = CTK.cfg.get_val(f'server!bind!{real_n}!port')
+            tls  = CTK.cfg.get_val(f'server!bind!{real_n}!tls', False)
             tmp.append((port, bool(int(tls))))
 
         def render_entry (e):
@@ -149,16 +150,16 @@ class Plugin_bind (RulePlugin):
                 txt += ' (TLS)'
             return txt
 
-        tmp.sort (lambda x,y: cmp(int(x[0]),int(y[0])))
+        tmp.sort (key=lambda x: int(x[0]))
 
         if len(tmp) == 0:
             return _("Port")
         if len(tmp) == 1:
-            return "%s %s" %(_("Port"), render_entry(tmp[0]))
+            return f"{_('Port')} {render_entry(tmp[0])}"
 
         txt = _("Ports")
-        txt += " %s" %(", ".join([render_entry(x) for x in tmp[:-1]]))
-        txt += " or %s" %(render_entry(tmp[-1]))
+        txt += f" {', '.join([render_entry(x) for x in tmp[:-1]])}"
+        txt += f" or {render_entry(tmp[-1])}"
         return txt
 
-CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")
+CTK.publish (f"^{URL_APPLY}", commit, method="POST")

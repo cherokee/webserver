@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import os, sys, time, random, fcntl, socket, math
+import os, sys, time, random, fcntl, socket, math, subprocess
+from functools import cmp_to_key
 
-from conf import *
+from qa_conf import *
+
+CHEROKEE_SRV_PATH: str = os.getenv("CHEROKEE_SRV_PATH", "../cherokee/cherokee-worker")
+CHEROKEE_PLUGINDIR: str = os.getenv("CHEROKEE_PLUGINDIR", "../cherokee/.libs")
+
+
+def cmp(left, right):
+    return (left > right) - (left < right)
 
 term = os.getenv("TERM")
 if term and \
@@ -24,7 +32,7 @@ def count_down (msg, nsecs, nl=True):
         sys.stdout.flush()
         time.sleep(1)
     if nl:
-        print
+        print()
 
 def str_random_generate (n):
     c = ""
@@ -32,7 +40,7 @@ def str_random_generate (n):
     y = int (random.random() * 100)
     z = int (random.random() * 100)
 
-    for i in xrange(n):
+    for i in range(n):
         x = (171 * x) % 30269
         y = (172 * y) % 30307
         z = (170 * z) % 30323
@@ -46,7 +54,7 @@ def letters_random_generate (n):
     y = int (random.random() * 100)
     z = int (random.random() * 100)
 
-    for i in xrange(n):
+    for i in range(n):
         x = (171 * x) % 30269
         y = (172 * y) % 30307
         z = (170 * z) % 30323
@@ -101,11 +109,8 @@ def str_random (n):
 def check_php_interpreter (fullpath):
     if fullpath.strip() == '':
         return False
-    f = os.popen ('%s -v' %(fullpath), 'r')
-    all = f.read()
-    try: f.close()
-    except: pass
-    return 'fcgi' in all
+    result = subprocess.run([fullpath, "-v"], capture_output=True, text=True, check=False)
+    return 'fcgi' in result.stdout
 
 __php_ref = None
 def look_for_php():
@@ -119,7 +124,7 @@ def look_for_php():
             __php_ref = PHPCGI_PATH
             return __php_ref
 
-    dirs  = os.getenv("PATH").split(":")
+    dirs: list[str] = [item for item in (os.getenv("PATH") or "").split(":")]
     dirs += PHP_DIRS
 
     for p in dirs:
@@ -145,7 +150,7 @@ def look_for_python():
         __python_ref = PYTHON_PATH
         return __python_ref
 
-    dirs  = os.getenv("PATH").split(":")
+    dirs: list[str] = [item for item in (os.getenv("PATH") or "").split(":")]
     dirs += PYTHON_DIRS
 
     for p in dirs:
@@ -160,14 +165,14 @@ def look_for_python():
 
 
 def look_for_exec_in_path (name):
-    for dir in os.getenv("PATH").split(":"):
+    for dir in (os.getenv("PATH") or "").split(":"):
         fp = os.path.join (dir, name)
         if os.path.exists (fp):
             return fp
 
 
 def print_key (key, val):
-    print "%10s: %s" % (key, val)
+    print(f"{key:>10}: {val}")
 
 
 __free_port = 5000
@@ -188,16 +193,16 @@ def get_next_source():
 # Plug-in checking
 #
 
-_server_info = None
+_server_info: str | None = None
 
 def cherokee_get_server_info ():
     global _server_info
 
     if _server_info == None:
         try:
-            f = os.popen ("%s -i" % (CHEROKEE_SRV_PATH))
-            _server_info = f.read()
-            f.close()
+            result = subprocess.run([CHEROKEE_SRV_PATH, "-i"], capture_output=True,
+                                    text=True, check=False)
+            _server_info = result.stdout
         except:
             pass
 
@@ -217,14 +222,14 @@ def cherokee_build_info_has (filter, module):
         _built_in_list_done = True
 
         try:
-            f = os.popen ("%s -i" % (CHEROKEE_SRV_PATH))
-            cont = f.read()
-            f.close()
+            result = subprocess.run([CHEROKEE_SRV_PATH, "-i"], capture_output=True,
+                                    text=True, check=False)
+            cont = result.stdout
         except:
             pass
 
         try:
-            filter_string = " %s: " % (filter)
+            filter_string = f" {filter}: "
             for l in cont.split("\n"):
                 if l.startswith(filter_string):
                     line = l.replace (filter_string, "")
@@ -238,7 +243,7 @@ def cherokee_build_info_has (filter, module):
 def cherokee_has_plugin (module):
     # Check for the dynamic plug-in
     try:
-        mods = filter(lambda x: module in x, os.listdir(CHEROKEE_PLUGINDIR))
+        mods = [x for x in os.listdir(CHEROKEE_PLUGINDIR) if module in x]
         if len(mods) >= 1:
             return True
     except:
@@ -248,7 +253,7 @@ def cherokee_has_plugin (module):
 
 def print_sec (content):
     fcntl.flock (sys.stdout, fcntl.LOCK_EX)
-    print content
+    print(content)
     fcntl.flock (sys.stdout, fcntl.LOCK_UN)
 
 def ip_is_private(ip):
@@ -274,7 +279,7 @@ def figure_public_ip():
         return cmp(x,y)
 
     ips = socket.gethostbyname_ex (socket.gethostname())[2]
-    ips.sort(ip_cmp)
+    ips.sort(key=cmp_to_key(ip_cmp))
     return ips[0]
 
 
@@ -298,16 +303,3 @@ def chunk_encode (txt, size=None, pieces=None):
 
     out += '0\r\n'
     return out
-
-
-# Workarounds Python's BUG #1515:
-# "deepcopy doesn't copy instance methods"
-#
-# http://bugs.python.org/issue1515
-#
-import copy
-import types
-
-def _deepcopy_method(x, memo):
-    return type(x)(x.im_func, copy.deepcopy(x.im_self, memo), x.im_class)
-copy._deepcopy_dispatch[types.MethodType] = _deepcopy_method

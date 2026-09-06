@@ -22,7 +22,8 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
+from .Widget import Widget
+from .i18n import _
 
 class Image (Widget):
     """
@@ -43,10 +44,10 @@ class Image (Widget):
         if not 'id' in self.props:
             self.props['id'] = self.id
 
-        props = " ".join (['%s="%s"'%(k,self.props[k]) for k in self.props])
+        props = " ".join ([f'{k}="{self.props[k]}"' for k in self.props])
 
         render = Widget.Render (self)
-        render.html = '<img %s />' %(props)
+        render.html = f'<img {props} />'
         return render
 
 class ImageStock (Image):
@@ -105,4 +106,4 @@ class ImageStock (Image):
             Image.__init__ (self, props)
 
         else:
-            assert False, "Unknown stock image: %s" %(name)
+            assert False, f"Unknown stock image: {name}"

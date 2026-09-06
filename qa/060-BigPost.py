@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 POST_LENGTH = (100*1024)+33
 
@@ -13,19 +13,18 @@ class Test (TestBase):
 
         self.request          = "POST /Post100k.php HTTP/1.0\r\n" +\
                                 "Content-type: application/x-www-form-urlencoded\r\n" +\
-                                "Content-length: %d\r\n" % (4+POST_LENGTH)
+                                f"Content-length: {int(4 + POST_LENGTH)}\r\n"
         self.expected_error   = 200
 
     def Prepare (self, www):
         random_str  = letters_random (POST_LENGTH)
         tmpfile = self.WriteTemp (random_str)
 
-        self.WriteFile (www, "Post100k.php", 0444,
+        self.WriteFile (www, "Post100k.php", 0o444,
                         "<?php echo $_POST['var']; ?>")
 
         self.post             = "var="+random_str
-        self.expected_content = "file:%s" % (tmpfile)
+        self.expected_content = f"file:{tmpfile}"
 
     def Precondition (self):
         return os.path.exists (look_for_php())
-

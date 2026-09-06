@@ -27,6 +27,7 @@ import os
 import re
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 from util import *
 
@@ -56,12 +57,12 @@ CONFIG_SOURCE = """
 
 class Commit:
     def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        pre_vsrv = 'vserver!%s' %(vsrv_num)
+        vsrv_num = CTK.cfg.get_val (f'{PREFIX}!vsrv_num')
+        pre_vsrv = f'vserver!{vsrv_num}'
 
         # rtorrent
-        web_dir    = CTK.cfg.get_val('%s!web_dir'    %(PREFIX))
-        connection = CTK.cfg.get_val('%s!connection' %(PREFIX))
+        web_dir    = CTK.cfg.get_val(f'{PREFIX}!web_dir')
+        connection = CTK.cfg.get_val(f'{PREFIX}!connection')
 
         config = CONFIG_DIR
 
@@ -74,13 +75,13 @@ class Commit:
         src_num = int(source.split('!')[-1])
 
         rule_n, x = cfg_vsrv_rule_get_next (pre_vsrv)
-        rule_pre_1 = '%s!rule!%d' % (pre_vsrv, rule_n)
+        rule_pre_1 = f'{pre_vsrv}!rule!{int(rule_n)}'
 
         config = config %(locals())
         CTK.cfg.apply_chunk (config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(pre_vsrv))
+        CTK.cfg.normalize (f'{pre_vsrv}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -96,15 +97,15 @@ class Commit:
 class LocalSource:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('Web Directory'), CTK.TextCfg ('%s!web_dir'%(PREFIX), False, {'value': '/RPC2', 'class': 'noauto'}), _(NOTE_WEB_DIR))
-        table.Add (_('Connection'), CTK.TextCfg ('%s!connection'%(PREFIX), False, {'value': 'localhost:5000', 'class': 'noauto'}), _(NOTE_CONNECTION))
+        table.Add (_('Web Directory'), CTK.TextCfg (f'{PREFIX}!web_dir', False, {'value': '/RPC2', 'class': 'noauto'}), _(NOTE_WEB_DIR))
+        table.Add (_('Connection'), CTK.TextCfg (f'{PREFIX}!connection', False, {'value': 'localhost:5000', 'class': 'noauto'}), _(NOTE_CONNECTION))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_LOCAL_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -113,17 +114,17 @@ class LocalSource:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('rtorrent', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
         cont += box
 
         # Send the VServer num if it's a Rule
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
             submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit += CTK.Hidden(f'{PREFIX}!vsrv_num', tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -132,23 +133,23 @@ class Welcome:
 
 def is_valid_webdir (web_dir):
     web_dir = validations.is_dir_formatted (web_dir)
-    vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-    vsrv_pre = 'vserver!%s' %(vsrv_num)
+    vsrv_num = CTK.cfg.get_val (f'{PREFIX}!vsrv_num')
+    vsrv_pre = f'vserver!{vsrv_num}'
 
     rule = cfg_vsrv_rule_find_regexp (vsrv_pre, '^'+web_dir)
     if rule:
-        raise ValueError, _("Already configured: %s"%(web_dir))
+        raise ValueError(_(f"Already configured: {web_dir}"))
 
     return web_dir
 
 VALS = [
-    ('%s!web_dir' %(PREFIX), validations.is_not_empty),
-    ('%s!web_dir' %(PREFIX), is_valid_webdir),
+    (f'{PREFIX}!web_dir', validations.is_not_empty),
+    (f'{PREFIX}!web_dir', is_valid_webdir),
 ]
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/rtorrent$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/rtorrent/2$', LocalSource)
+CTK.publish ('^/wizard/vserver/(\\d+)/rtorrent$',   Welcome)
+CTK.publish ('^/wizard/vserver/(\\d+)/rtorrent/2$', LocalSource)
 
 # Common
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (rf'^{URL_APPLY}', Commit, method="POST", validation=VALS)

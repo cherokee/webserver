@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR = "269_options_dirlist"
 
@@ -6,7 +6,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "OPTIONS: Dirlist request"
-        self.request           = "OPTIONS /%(DIR)s/ HTTP/1.0\r\n" % (globals())
+        self.request           = f"OPTIONS /{globals()['DIR']}/ HTTP/1.0\r\n"
         self.expected_error    = 200
         self.expected_content  = ["Allow: ", "GET", "OPTIONS", ", ", "Content-Length: 0"]
         self.forbidden_content = ["Index of"]

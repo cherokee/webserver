@@ -1,6 +1,6 @@
 import os
 import time
-from base import *
+from qa_base import *
 
 DOCUMENTATION = """
    The Hypertext Transfer Protocol (HTTP) is an application-level
@@ -33,8 +33,8 @@ class Test (TestBase):
         self.start = 4
         self.end   = 10
         self.MAGIC = DOCUMENTATION[self.start:self.end+1]
-        self.expected_content  = ["Content-Length: %d" % (len(self.MAGIC)),
-                                  "Content-Range: bytes %d-%d/%d" % (self.start, self.end, l),
+        self.expected_content  = [f"Content-Length: {len(self.MAGIC)}",
+                                  f"Content-Range: bytes {int(self.start)}-{int(self.end)}/{int(l)}",
                                   self.MAGIC]
 
 
@@ -56,9 +56,9 @@ class Test (TestBase):
         self.request = "GET /if_range3/file HTTP/1.1\r\n"  + \
                        "Host: localhost\r\n"               + \
                        "Connection: Close\r\n"             + \
-                       "If-Range: \"%s\"\r\n" % (etag)     + \
-                       "Range: bytes=%d-%d\r\n" % (self.start, self.end)
+                       f"If-Range: \"{etag}\"\r\n"     + \
+                       f"Range: bytes={int(self.start)}-{int(self.end)}\r\n"
 
     def Prepare (self, www):
         d = self.Mkdir (www, "if_range3")
-        f = self.WriteFile (d, "file", 0444, DOCUMENTATION)
+        f = self.WriteFile (d, "file", 0o444, DOCUMENTATION)

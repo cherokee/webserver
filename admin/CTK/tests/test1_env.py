@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pyscgi import ServerFactory, SCGIHandler
+from CTK.pyscgi import ServerFactory, SCGIHandler
 
 DEFAULT_PORT = 4000
  
@@ -10,8 +10,8 @@ class MyHandler(SCGIHandler):
 
     def print_env (self):
         self.send('<table border="0">')
-        for k, v in self.env.items():
-            self.send('<tr><td><b>%s</b></td><td>%r</td></tr>' % (k, v))
+        for k, v in list(self.env.items()):
+            self.send(f'<tr><td><b>{k}</b></td><td>{v!r}</td></tr>')
         self.send('</table')
 
     def handle_request (self):

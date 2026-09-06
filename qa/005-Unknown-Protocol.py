@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 class Test (TestBase):
     def __init__ (self):
@@ -7,4 +7,3 @@ class Test (TestBase):
 
         self.expected_error = 400
         self.request        = "GET / CHEROKEE/1.0\r\n"
-

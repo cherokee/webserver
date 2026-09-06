@@ -98,7 +98,7 @@ struct cherokee_handler_cgi_base {
 typedef struct {
 	cherokee_handler_props_t           base;
 	cherokee_list_t                    system_env;
-	cuint_t                            change_user;
+	cherokee_boolean_t                 change_user;
 	cherokee_buffer_t                  script_alias;
 	cherokee_boolean_t                 check_file;
 	cherokee_boolean_t                 allow_xsendfile;
@@ -148,4 +148,3 @@ ret_t cherokee_handler_cgi_base_props_free      (cherokee_handler_cgi_base_props
 
 
 #endif /* CHEROKEE_HANDLER_CGI_BASE_H */
-

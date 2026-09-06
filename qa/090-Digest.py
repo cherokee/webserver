@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC  = "Don't show this"
 
@@ -24,7 +24,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "digest1")
-        self.WriteFile (www, "digest1/file", 0444, MAGIC)
-        passfile = self.WriteFile (www, "digest1/.passwd", 0444, "user:password\n")
+        self.WriteFile (www, "digest1/file", 0o444, MAGIC)
+        passfile = self.WriteFile (www, "digest1/.passwd", 0o444, "user:password\n")
 
         self.conf = CONF % (passfile)

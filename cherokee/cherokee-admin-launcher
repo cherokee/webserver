@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # -*- coding: utf-8; mode: python -*-
 #
@@ -32,7 +32,7 @@ import glob
 import fcntl
 import select
 import signal
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import threading
 import subprocess
 
@@ -66,10 +66,10 @@ def report_error (description, title="ERROR"):
     if osascript_bin:
         dialog  = "display dialog \\\"%(description)s\\\" with title \\\"%(title)s\\\" buttons \\\"Close\\\" with icon stop" %(locals())
         command = "osascript -e 'tell application \"Finder\"' -e \"activate\" -e \"%(dialog)s\" -e 'end tell'" %(locals())
-        os.system (command)
+        subprocess.call (command, shell=True)
 
     # Text mode
-    print '[%(title)s] - %(description)s'%(locals())
+    print('[%(title)s] - %(description)s'%(locals()))
 
 
 def find_sudo_askpass():
@@ -217,6 +217,8 @@ class Admin_Runner (threading.Thread):
                              env=self.environ, close_fds=True)
        self.popen = p
 
+       if p.stdout is None or p.stderr is None:
+           raise RuntimeError("cherokee-admin did not provide output pipes")
        stdout_f,  stderr_f  = (p.stdout, p.stderr)
        stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
        stdout,    stderr    = '', ''
@@ -230,7 +232,7 @@ class Admin_Runner (threading.Thread):
            r,w,e = select.select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
            if e:
-               print "ERROR: select", e
+               print("ERROR: select", e)
                break
 
            # Read output
@@ -240,15 +242,15 @@ class Admin_Runner (threading.Thread):
                data = stdout_f.read(1024)
                if not data: break
                os.write (sys.stdout.fileno(), data)
-               stdout += data
-               new_line = '\n' in data
+               stdout += data.decode(errors='replace')
+               new_line = b'\n' in data
 
            if stderr_fd in r:
                data = stderr_f.read(1024)
                if not data: break
                os.write (sys.stderr.fileno(), data)
-               stderr += data
-               new_line = '\n' in data
+               stderr += data.decode(errors='replace')
+               new_line = b'\n' in data
 
            # Launching status
            if not self.launching:
@@ -284,20 +286,20 @@ class Admin_Runner (threading.Thread):
        exiting = True
        self.event_launched.set()
 
-       print "Cheroke admin exiting..."
+       print("Cheroke admin exiting...")
 
 
 def http_GET_admin (host=ADMIN_HOST, port=ADMIN_PORT, req='/'):
     URI = "http://%s:%s%s" %(host, port, req)
     try:
-        resp = urllib2.urlopen (URI)
-    except urllib2.URLError, e:
+        resp = urllib.request.urlopen (URI)
+    except urllib.error.URLError as e:
         description = str(e)
         for key in ('61,', '111,', 'connection refused'):
             if key in description.lower():
                 return False
         return description
-    except Exception, e:
+    except Exception as e:
         return str(e)
 
     content = resp.read()
@@ -313,7 +315,7 @@ def bin_in_path (bin, extra_paths=[]):
         return _bin_in_path_cache[bin]
 
     # Cache miss: check it out
-    paths_tmp = os.getenv('PATH').split(':') + extra_paths + DEFAULT_PATHS
+    paths_tmp = os.getenv('PATH', '').split(':') + extra_paths + DEFAULT_PATHS
 
     # Solve ? and *
     paths = []
@@ -339,31 +341,31 @@ def launch_browser (url, user, password):
 
    # MacOS X
    if os.access ("/usr/bin/open", os.X_OK):
-       return os.system ("open '%(URI)s'" %(locals()))
+       return subprocess.call (["open", URI])
 
    # Your desktop
    if desktop_preferred == 'gnome' and bin_in_path ('gnome-open'):
-       return os.system ("gnome-open '%(URI)s'" %(locals()))
+       return subprocess.call (["gnome-open", URI])
 
    elif desktop_preferred == 'kde':
        if bin_in_path ('kde-open'):
-           return os.system ("kde-open '%(URI)s'" %(locals()))
+           return subprocess.call (["kde-open", URI])
        elif bin_in_path ('kfmclient'):
-           return os.system ("kfmclient openURL '%(URI)s'" %(locals()))
+           return subprocess.call (["kfmclient", "openURL", URI])
 
    # A few neutral options
    if bin_in_path ('xdg-open'):
-      return os.system ("xdg-open '%(URI)s'" %(locals()))
+      return subprocess.call (["xdg-open", URI])
 
    # Last option: 'the other' desktop
    if desktop_preferred == 'gnome':
        if bin_in_path ('kde-open'):
-           return os.system ("kde-open '%(URI)s'" %(locals()))
+           return subprocess.call (["kde-open", URI])
        elif bin_in_path ('kfmclient'):
-           return os.system ("kfmclient openURL '%(URI)s'" %(locals()))
+           return subprocess.call (["kfmclient", "openURL", URI])
 
    elif desktop_preferred == 'kde' and bin_in_path ('gnome-open'):
-       return os.system ("gnome-open '%(URI)s'" %(locals()))
+       return subprocess.call (["gnome-open", URI])
 
    # Error
    report_error ("Did not find a way to open: %(url)s" %(locals()))
@@ -415,8 +417,8 @@ def figure_cherokee_admin_envs():
 def quit_signal (num, stack):
     global exiting
     exiting = True
-    print
-    print "Cherokee-admin-launcher exiting.."
+    print()
+    print("Cherokee-admin-launcher exiting..")
 
 def browser_signal (num, stack):
     if (not runner) or exiting:
@@ -439,9 +441,9 @@ def do_launching():
         return
 
     # Desktop preferrence
-    ps_lines = [l.lower() for l in os.popen ("ps ax").readlines()]
-    procs_gnome = len (filter (lambda l: "gnome" in l, ps_lines))
-    procs_kde   = len (filter (lambda l: "kde"   in l, ps_lines))
+    ps_lines = [l.lower() for l in subprocess.check_output (["ps", "ax"], text=True).splitlines()]
+    procs_gnome = len ([l for l in ps_lines if "gnome" in l])
+    procs_kde   = len ([l for l in ps_lines if "kde"   in l])
 
     if procs_kde > procs_gnome:
         desktop_preferred = 'kde'
@@ -449,12 +451,12 @@ def do_launching():
         desktop_preferred = 'gnome'
 
     # Ensure port is empty
-    print "Checking TCP port %(ADMIN_PORT)s availability.."%(globals()),
+    print("Checking TCP port %(ADMIN_PORT)s availability.."%(globals()), end=' ')
     response = http_GET_admin()
     if not response:
-        print "OK"
+        print("OK")
     else:
-        print
+        print()
         report_error ("The 9090 port is already in use.")
         raise SystemExit
 
@@ -467,11 +469,11 @@ def do_launching():
 
     runner.start()
 
-    print "Launching: %s" %(' '.join (command))
+    print("Launching: %s" %(' '.join (command)))
     event_launched.wait()
 
     # Wait for it to be available
-    print "Connecting..",
+    print("Connecting..", end=' ')
     wait_timeout = time.time() + ADMIN_LAUNCH_TIMEOUT
 
     while True:
@@ -480,18 +482,18 @@ def do_launching():
 
         response = http_GET_admin()
         if response:
-            print "OK"
+            print("OK")
             break
         if time.time() < wait_timeout:
             time.sleep(0.3)
         else:
-            print "Timeout"
+            print("Timeout")
             return
 
     # Launching browser
-    print "Launching browser..",
+    print("Launching browser..", end=' ')
     launch_browser (runner.url, runner.user, runner.password)
-    print "OK"
+    print("OK")
 
 def clean_up():
    # Exiting
@@ -505,7 +507,8 @@ def clean_up():
 
 if __name__ == '__main__':
    if '--help' in sys.argv:
-      os.system ('%(cherokee_admin_path)s --help' %(globals()))
+      find_cherokee_admin()
+      subprocess.call ([cherokee_admin_path, "--help"])
       raise SystemExit
 
    # Set signal handlers

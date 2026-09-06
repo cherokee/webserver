@@ -450,6 +450,14 @@ cherokee_socket_accept_fd (cherokee_socket_t   *server_socket,
 ret_t
 cherokee_socket_create_fd (cherokee_socket_t *sock, unsigned short int family)
 {
+	/* A resolver may return IPv6 addresses even when IPv6 support was
+	 * disabled at configure time. Let callers try the next address. */
+#ifndef HAVE_IPV6
+	if (family == AF_INET6) {
+		return ret_not_found;
+	}
+#endif
+
 	/* Create the socket
 	 */
 	do {

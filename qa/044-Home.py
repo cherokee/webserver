@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 CONF = """
 vserver!0440!nick = missing.host1
@@ -22,4 +22,3 @@ class Test (TestBase):
                                 "Host: missing.host1\r\n"
         self.conf             = CONF
         self.expected_error   = 404
-

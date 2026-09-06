@@ -22,10 +22,10 @@
 
 __author__ = 'Alvaro Lopez Ortega <alvaro@alobbs.com>'
 
-from Widget import Widget
-from Container import Container
-from Server import cfg
-from util import *
+from .Widget import Widget
+from .Container import Container
+from .Server import cfg
+from .util import *
 
 
 HTML = """
@@ -69,10 +69,10 @@ class Checkbox (Widget):
         # Deal with a couple of exceptions
         new_props = self._props.copy()
 
-        if new_props.has_key('checked') and int(new_props.pop('checked')):
+        if 'checked' in new_props and int(new_props.pop('checked')):
             new_props['checked'] = "checked"
 
-        if new_props.has_key('disabled') and int(new_props.pop('disabled')):
+        if 'disabled' in new_props and int(new_props.pop('disabled')):
             new_props['disabled'] = None
 
         # Render the widget
@@ -110,7 +110,7 @@ class CheckCfg (Checkbox):
         elif val.isdigit():
             props['checked'] = "01"[bool(int(val))]
         else:
-            assert False, "Could not handle value: %s"%(val)
+            assert False, f"Could not handle value: {val}"
 
         # Other properties
         props['name'] = key
@@ -135,7 +135,7 @@ class CheckboxText (Checkbox):
 
     def Render (self):
         render = Checkbox.Render (self)
-        render.html  = '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' %(self.id, render.html, self.text)
+        render.html  = f'<div id="{self.id}" class="checkbox-text">{render.html} <div class="description">{self.text}</div></div>'
         render.js   += CLICK_CHANGE_JS %(self.id)
         return render
 
@@ -163,6 +163,6 @@ class CheckCfgText (CheckCfg):
 
     def Render (self):
         render = CheckCfg.Render (self)
-        render.html =  '<div id="%s" class="checkbox-text">%s <div class="description">%s</div></div>' %(self.id, render.html, self.text)
+        render.html =  f'<div id="{self.id}" class="checkbox-text">{render.html} <div class="description">{self.text}</div></div>'
         render.js   += CLICK_CHANGE_JS %(self.id)
         return render

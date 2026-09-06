@@ -20,12 +20,13 @@
 # 02110-1301, USA.
 #
 
-from cgi import escape
+from html import escape
 
-from Widget import Widget
-from Server import cfg
-from util import props_to_str
-from util import to_utf8
+from .Widget import Widget
+from .Server import cfg
+from .i18n import _
+from .util import props_to_str
+from .util import to_utf8
 
 HEADER = [
     '<script type="text/javascript" src="/CTK/js/jquery.form-defaults.js"></script>'
@@ -46,27 +47,27 @@ class TextArea (Widget):
 
     def __init__ (self, props=None, content=''):
         Widget.__init__ (self)
-        self._props   = props
+        self._props   = (props or {}).copy()
         self._content = content
 
-        if 'id' in props:
-            self.id = self.props.pop('id')
+        if 'id' in self._props:
+            self.id = self._props.pop('id')
 
     def __get_input_props (self):
         render = ''
         for prop in self._props:
-            render += " %s" %(prop)
+            render += f" {prop}"
             value = self._props[prop]
             if value:
                 val = to_utf8(value)
-                render += '="%s"' %(val)
+                render += f'="{val}"'
         return render
 
     def __get_error_div_props (self):
-        render = 'id="error_%s"' % (self.id)
+        render = f'id="error_{self.id}"'
         name = to_utf8 (self._props.get('name'))
         if name:
-            render += ' key="%s"' %(name)
+            render += f' key="{name}"'
         return render
 
 
@@ -76,7 +77,7 @@ class TextArea (Widget):
 
         if self._props.get('optional'):
             optional_string = self._props.get('optional_string', _("Optional"))
-            js += "$('#%s').DefaultValue('optional-grey','%s');" %(self.id, optional_string)
+            js += f"$('#{self.id}').DefaultValue('optional-grey','{optional_string}');"
 
             if not self._props.get('class'):
                 self._props['class'] = 'optional'
@@ -84,10 +85,10 @@ class TextArea (Widget):
                 self._props['class'] += ' optional'
 
         # Render the text field
-        html = '<textarea id="%s"%s>%s</textarea>' %(self.id, self.__get_input_props(), self._content)
+        html = f'<textarea id="{self.id}"{self.__get_input_props()}>{self._content}</textarea>'
 
         # Render the error reporting field
-        html += '<div class="error" %s></div>' %(self.__get_error_div_props())
+        html += f'<div class="error" {self.__get_error_div_props()}></div>'
 
         render = Widget.Render (self)
         render.html    += html
@@ -97,9 +98,9 @@ class TextArea (Widget):
         return render
 
     def JS_to_clean (self):
-        return "$('#%s').val('');" %(self.id)
+        return f"$('#{self.id}').val('');"
     def JS_to_focus (self):
-        return "$('#%s').blur(); $('#%s').focus();" %(self.id, self.id)
+        return f"$('#{self.id}').blur(); $('#{self.id}').focus();"
 
 class TextAreaCfg (TextArea):
     """
@@ -129,4 +130,3 @@ class TextAreaCfg (TextArea):
 
         # Init parent
         TextArea.__init__ (self, props, content)
-

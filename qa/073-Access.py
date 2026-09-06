@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "Allow From test"
 
@@ -21,5 +21,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "allow1")
-        self.WriteFile (www, "allow1/file", 0444, MAGIC)
-
+        self.WriteFile (www, "allow1/file", 0o444, MAGIC)

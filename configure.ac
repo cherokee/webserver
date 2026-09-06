@@ -1335,9 +1335,9 @@ AC_ARG_WITH([python], AS_HELP_STRING([--with-python=/path/to/python],[Path to Py
 		  PYTHON="$withval",
 [
    AC_CACHE_VAL([ac_cv_path_PYTHON],
-     [AC_PATH_PROGS_FEATURE_CHECK([PYTHON], [python2.4 python2.5 python2.6 python2.7 python2 python],
+     [AC_PATH_PROGS_FEATURE_CHECK([PYTHON], [python3.14 python3.13 python3.12 python3 python],
         [v=$($ac_path_PYTHON -c "import sys; print (sys.version_info[[0]])")
-        if test "x$v" == "x2"; then
+        if test "x$v" == "x3"; then
           ac_cv_path_PYTHON=$ac_path_PYTHON aac_path_PYTHON_found=:
         fi])])
    if test "x$ac_cv_path_PYTHON" != "x"; then
@@ -1347,18 +1347,18 @@ AC_ARG_WITH([python], AS_HELP_STRING([--with-python=/path/to/python],[Path to Py
 )
 
 if test "x$PYTHON" != "x"; then
-   AC_MSG_CHECKING([for Python 2.x interpreter])
+   AC_MSG_CHECKING([for Python 3 interpreter])
    v=`$PYTHON -c 'import sys; print (sys.version_info[[0]])'`
-   if test "x$v" != "x2"; then
+   if test "x$v" != "x3"; then
      have_python="no"
      wants_admin="no"
 	AC_MSG_RESULT([no])
 	AC_MSG_ERROR([
-*** Cherokee requires Python 2.x. Please, use the --with-python
-*** parameter to specify a Python 2.4, 2.5, 2.6 or 2.7 interpreter.])
+*** Cherokee requires Python 3. Please, use the --with-python
+*** parameter to specify a Python 3 interpreter.])
    else
      AC_MSG_RESULT([$PYTHON])
-     AC_DEFINE_UNQUOTED(PATH_PYTHON2, ["$PYTHON"], [Define path to Python 2.x interpreter])
+     AC_DEFINE_UNQUOTED(PATH_PYTHON3, ["$PYTHON"], [Define path to Python 3 interpreter])
    fi
 else
     have_python="no"

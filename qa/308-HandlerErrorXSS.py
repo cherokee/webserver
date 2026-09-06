@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = '<H1>xss</H1>'
 
@@ -11,5 +11,5 @@ class Test (TestBase):
         self.request           = "GET / \r\n" +\
                                  "Connection: Keep-alive\r\n" +\
                                  "\r\n" +\
-                                 "few\x00xx%s" % (MAGIC) 
+                                 f"few\x00xx{MAGIC}"
         self.forbidden_content = MAGIC

@@ -27,65 +27,63 @@ import errno
 import base64
 import socket
 import random
-import httplib
-import xmlrpclib
+import http.client
+import xmlrpc.client
 import configured
+from typing import Any
 
-try:
-    # Python >= 2.5
-    from hashlib import md5
-except ImportError:
-    # Python <= 2.4
-    from md5 import md5
+from hashlib import md5
 
-from urllib2 import urlparse
-from urllib import splituser, splitpasswd
+from urllib.parse import unquote, urlsplit
 
 
-class CustomTransport(xmlrpclib.Transport):
+class CustomTransport(xmlrpc.client.Transport):
     proxy_keys = dict (HTTP_PROXY  = 'http',
                        HTTPS_PROXY = 'https')
 
     def __init__(self, proxies={}, local=False):
         # Warning: Check for parent's init. The xmlrpclib.Transport
-        # class does not implement __init__() on Python 2.4
-        if hasattr (xmlrpclib.Transport, '__init__'):
-            xmlrpclib.Transport.__init__(self)
+        # Keep the transport compatible with the supported Python 3 runtime.
+        if hasattr (xmlrpc.client.Transport, '__init__'):
+            xmlrpc.client.Transport.__init__(self)
 
-        self.proxies = dict(((self.proxy_keys[k],v) for k,v in os.environ.items() if k in self.proxy_keys))
+        self.proxies = dict(((self.proxy_keys[k],v) for k,v in list(os.environ.items()) if k in self.proxy_keys))
         self.proxies.update(proxies)
 
         self.local      = local
         self.auth       = ''
         self.nc         = 0
-        self.user_agent = "Cherokee-admin %s" %(configured.VERSION)
+        self.user_agent = f"Cherokee-admin {configured.VERSION}"
 
     def make_connection(self, host):
-        self.user_pass, self.realhost = splituser(host)
-        proto, proxy, p1,p2,p3,p4 = urlparse.urlparse (self.proxies.get('http', ''))
-        if proxy and not self.local:
-            return httplib.HTTP(proxy)
+        parsed_host = urlsplit(f'//{host}')
+        if parsed_host.username is not None:
+            username = unquote(parsed_host.username)
+            password = unquote(parsed_host.password or '')
+            self.user_pass = f'{username}:{password}'
         else:
-            return httplib.HTTP(self.realhost)
+            self.user_pass = ''
+        self.realhost = parsed_host.netloc.rsplit('@', 1)[-1]
 
-    def send_request(self, connection, handler, request_body):
+        parsed_proxy = urlsplit(self.proxies.get('http', ''))
+        proxy = parsed_proxy.netloc
+        return http.client.HTTPConnection(proxy or self.realhost)
+
+    def _send_post_request(self, connection: Any, handler: str,
+                           request_body: bytes) -> None:
         connection.putrequest ("POST", handler)
 
-    def _parse_response(self, file, sock):
-        """Method As in Python 2.5. It is included here because
-        the interface changeg, and it was missing in Python 2.7
+    def _parse_response(self, file, sock=None):
+        """Compatibility method for the current Python 3 HTTP interface.
         and further."""
 
         p, u = self.getparser()
         while 1:
-            if sock:
-                response = sock.recv(1024)
-            else:
-                response = file.read(1024)
+            response = file.read(1024)
             if not response:
                 break
             if self.verbose:
-                print "body:", repr(response)
+                print("body:", repr(response))
             p.feed(response)
 
         file.close()
@@ -98,13 +96,12 @@ class CustomTransport(xmlrpclib.Transport):
 
         # own make_conntection()
         h = self.make_connection (host)
-        if verbose:
-            h.set_debuglevel(1)
+        h.set_debuglevel(int(bool(verbose)))
 
         # xmlrpclib's send_request (POST)
-        self.send_request (h, handler, request_body)
+        self._send_post_request (h, handler, request_body)
         self.send_host (h, host)
-        self.send_user_agent (h)
+        h.putheader('User-Agent', self.user_agent)
 
         # CUSTOM: xmlrpclib's send_content -- The original version
         # closes the connection if a EPIPE error is produced without
@@ -117,46 +114,47 @@ class CustomTransport(xmlrpclib.Transport):
 
         try:
             if request_body:
-                h._conn.sock.sendall (request_body)
-        except socket.error, (code, msg):
-            if not code in (errno.ECONNRESET, errno.ECONNABORTED, errno.EPIPE):
+                h.send(request_body)
+        except OSError as exc:
+            if exc.errno not in (errno.ECONNRESET, errno.ECONNABORTED, errno.EPIPE):
                 raise
 
         # The rest is as in the original Transport::request() method
-        errcode, errmsg, headers = h.getreply()
-        if errcode != 200:
-            raise xmlrpclib.ProtocolError(
+        response = h.getresponse()
+        if response.status != 200:
+            raise xmlrpc.client.ProtocolError(
                 host + handler,
-                errcode, errmsg,
-                headers
+                response.status, response.reason,
+                response.headers
                 )
 
         self.verbose = verbose
-        try:
-            sock = h._conn.sock
-        except AttributeError:
-            sock = None
-
-        return self._parse_response (h.getfile(), sock)
+        return self._parse_response(response)
 
     def request (self, host, handler, request_body, verbose=0):
+        last_error = RuntimeError('XML-RPC request failed')
         for count in range(3):
             try:
                 return self._request_internal (host, handler, request_body, verbose)
-            except xmlrpclib.ProtocolError, ex:
+            except xmlrpc.client.ProtocolError as ex:
+                last_error = ex
                 if ex.errcode == 401:
-                    auth, params = ex.headers['WWW-Authenticate'].split(' ', 1)
+                    challenge = ex.headers.get('WWW-Authenticate', '')
+                    auth, params = challenge.split(' ', 1)
                     self.uri    = handler
                     self.auth   = auth.lower()
                     self.params = dict([[n.strip() for n in i.split('=',1)] for i in params.split(',')])
-        raise ex
+        raise last_error
+
+    def send_user_agent(self, connection):
+        connection.putheader('User-Agent', self.user_agent)
 
     def send_host(self, connection, host):
         connection.putheader('Host', self.realhost)
         if self.auth=='basic':
             if self.user_pass:
-                user_pass = base64.encodestring(self.user_pass).strip()
-                connection.putheader('Authorization', 'Basic %s' % user_pass)
+                user_pass = base64.b64encode(self.user_pass.encode()).decode().strip()
+                connection.putheader('Authorization', f'Basic {user_pass}')
 
         elif self.auth=='digest':
             if self.user_pass:
@@ -168,31 +166,33 @@ class CustomTransport(xmlrpclib.Transport):
                 nonce = self.params['nonce'].strip('"')
                 qop   = self.params['qop'].strip('"')
 
-                a1 = md5('%(username)s:%(realm)s:%(password)s' % locals()).hexdigest()
-                a2 = md5('POST:%(uri)s' % locals()).hexdigest()
+                a1 = md5(f"{locals()['username']}:{locals()['realm']}:{locals()['password']}".encode()).hexdigest()
+                a2 = md5(f"POST:{locals()['uri']}".encode()).hexdigest()
 
-                nc = '%08d' % self.nc
+                nc = f'{int(self.nc):08}'
                 chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
                 cnonce = ''.join([random.choice(chars) for i in range(16)])
-                response = md5('%(a1)s:%(nonce)s:%(nc)s:%(cnonce)s:%(qop)s:%(a2)s' % locals()).hexdigest()
+                response = md5(f"{locals()['a1']}:{locals()['nonce']}:{locals()['nc']}:{locals()['cnonce']}:{locals()['qop']}:{locals()['a2']}".encode()).hexdigest()
 
                 params = []
-                params.append('username=%s' % username)
-                params.append('realm="%s"' % realm)
-                params.append('nonce="%s"' % nonce)
-                params.append('uri=%s' % uri)
-                params.append('algorithm=%s' % self.params['algorithm'])
-                params.append('qop=%s' % qop)
-                params.append('nc=%s' % nc)
-                params.append('cnonce="%s"' % cnonce)
-                params.append('response="%s"' % response)
+                params.append(f'username={username}')
+                params.append(f'realm="{realm}"')
+                params.append(f'nonce="{nonce}"')
+                params.append(f'uri={uri}')
+                params.append(f"algorithm={self.params['algorithm']}")
+                params.append(f'qop={qop}')
+                params.append(f'nc={nc}')
+                params.append(f'cnonce="{cnonce}"')
+                params.append(f'response="{response}"')
 
-                connection.putheader('Authorization', 'Digest %s' % ', '.join(params))
+                connection.putheader('Authorization', f"Digest {', '.join(params)}")
 
 
-class XmlRpcServer (xmlrpclib.ServerProxy):
+class XmlRpcServer (xmlrpc.client.ServerProxy):
     def __init__(self, url, user='', password='', local=False):
-        protocol,domain,path, d1,params,d3 = urlparse.urlparse(url)
+        parsed_url = urlsplit(url)
+        protocol, domain, path = parsed_url.scheme, parsed_url.netloc, parsed_url.path
+        params = parsed_url.query
         if params:
             params = '?'+params
 
@@ -200,8 +200,8 @@ class XmlRpcServer (xmlrpclib.ServerProxy):
         if user:
             user_pass = ':'.join([user,password]) + '@'
 
-        href = '%(protocol)s://%(user_pass)s%(domain)s%(path)s%(params)s' % locals()
-        xmlrpclib.ServerProxy.__init__ (self, href, transport=CustomTransport(local=local), allow_none=True)
+        href = f"{locals()['protocol']}://{locals()['user_pass']}{locals()['domain']}{locals()['path']}{locals()['params']}"
+        xmlrpc.client.ServerProxy.__init__ (self, href, transport=CustomTransport(local=local), allow_none=True)
 
 
 #if __name__=='__main__':
