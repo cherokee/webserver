@@ -225,6 +225,9 @@ class Support:
 
         return name in self.get_info_section("Built-in")
 
+    def has_protocol (self, name):
+        return name in self.get_info_section("HTTP protocols")
+
     def has_polling_method (self, name):
         return name in self.get_info_section("Polling methods")
 

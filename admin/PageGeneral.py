@@ -39,6 +39,8 @@ from configured import *
 URL_BASE  = '/general'
 URL_APPLY = '/general/apply'
 
+NOTE_HTTP2       = N_('Enable HTTP/2 over TLS on this TCP port. Requires the libssl backend and HTTP/2 build support.')
+NOTE_HTTP3       = N_('Enable HTTP/3 over QUIC on the same UDP port. Requires libssl, HTTP/3 build support and UDP access.')
 NOTE_ADD_PORT    = N_('Defines the TCP port that the server will listen to.')
 NOTE_ADD_IF      = N_('Optionally defines an interface to bind to. For instance: 127.0.0.1')
 NOTE_IPV6        = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
@@ -66,6 +68,8 @@ VALIDATIONS = [
     ("server!bind!.*!port",      validations.is_tcp_port),
     ("server!bind!.*!interface", validations.is_ip),
     ("server!bind!.*!tls",       validations.is_boolean),
+    ("server!bind!.*!http2",     validations.is_boolean),
+    ("server!bind!.*!http3",     validations.is_boolean),
     ("server!chroot",            validations.is_chroot_dir_exists),
     ("new_port",                 validations.is_tcp_port),
     ("new_if",                   validations.is_ip)
@@ -103,6 +107,36 @@ def is_new_bind (port, ip=None):
 
 
 def commit():
+    # Validate the complete proposed configuration before mutating CTK.cfg.
+    errors = {}
+    def proposed(key, default=None):
+        if key in CTK.post:
+            return CTK.post.get_val(key) or default
+        return CTK.cfg.get_val(key, default)
+
+    backend = proposed('server!tls')
+    binds = set(CTK.cfg.keys('server!bind'))
+    for key in CTK.post.keys():
+        parts = key.split('!')
+        if len(parts) >= 4 and parts[:2] == ['server', 'bind']:
+            binds.add(parts[2])
+    for binding in binds:
+        pre = f'server!bind!{binding}'
+        if pre in CTK.post and not CTK.post.get_val(pre):
+            continue
+        tls = proposed(f'{pre}!tls', '0')
+        for protocol in ('http2', 'http3'):
+            key = f'{pre}!{protocol}'
+            enabled = proposed(key, '0')
+            if enabled != '1':
+                continue
+            if tls != '1' or backend != 'libssl':
+                errors[key] = _('HTTP/2 and HTTP/3 require TLS and the libssl backend.')
+            elif not Cherokee.support.has_protocol(protocol):
+                errors[key] = _('This Cherokee binary does not support the selected protocol.')
+    if errors:
+        return {'ret': 'error', 'errors': errors}
+
     # Add a new port
     port      = CTK.post.pop('new_port')
     interface = CTK.post.pop('new_if')
@@ -238,7 +272,7 @@ class PortsTable (CTK.Submitter):
             return
 
         # Header
-        table[(1,1)] = [CTK.RawHTML(x) for x in (_('Port'), _('Bind to'), _('TLS'), '')]
+        table[(1,1)] = [CTK.RawHTML(x) for x in (_('Port'), _('Bind to'), _('TLS'), _('HTTP/2'), _('HTTP/3'), '')]
         table.set_header (row=True, num=1)
         self += table
 
@@ -255,6 +289,14 @@ class PortsTable (CTK.Submitter):
             else:
                 tls = CTK.CheckCfgText (f'{pre}!tls', False, _('TLS/SSL support disabled'), {'disabled': not has_tls})
 
+            native_tls = has_tls and CTK.cfg.get_val('server!tls') == 'libssl'
+            http2 = CTK.CheckCfgText(f'{pre}!http2', False, _('Enabled'),
+                                    {'disabled': not (native_tls and Cherokee.support.has_protocol('http2')),
+                                     'title': _(NOTE_HTTP2)})
+            http3 = CTK.CheckCfgText(f'{pre}!http3', False, _('Enabled'),
+                                    {'disabled': not (native_tls and Cherokee.support.has_protocol('http3')),
+                                     'title': _(NOTE_HTTP3)})
+
             delete = None
             if len(binds) >= 2:
                 dialog = self._get_dialog (k, refreshable)
@@ -263,7 +305,7 @@ class PortsTable (CTK.Submitter):
                 delete = CTK.ImageStock('del')
                 delete.bind('click', dialog.JS_to_show() + "return false;")
                 
-            table[(n,1)] = [port, listen, tls, delete]
+            table[(n,1)] = [port, listen, tls, http2, http3, delete]
             n += 1
 
     def _get_dialog (self, k, refresh):
