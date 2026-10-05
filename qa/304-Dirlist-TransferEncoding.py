@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR       = "dirlist_transferencoding1"
 
@@ -13,7 +13,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Dirlist: Transfer Encoding"
 
-        self.request           = "GET /%s/ HTTP/1.1\r\n" % (DIR)  + \
+        self.request           = f"GET /{DIR}/ HTTP/1.1\r\n"  + \
                                  "Host: localhost\r\n"            + \
                                  "Connection: Keep-Alive\r\n\r\n" + \
                                  "OPTIONS / HTTP/1.0\r\n"

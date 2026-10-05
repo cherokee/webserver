@@ -1131,7 +1131,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "ssl_verify_depth")) {
-		ret = cherokee_atob (conf->val.buf, &vserver->verify_depth);
+		ret = cherokee_atou (conf->val.buf, &vserver->verify_depth);
 		if (ret != ret_ok) return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_file")) {

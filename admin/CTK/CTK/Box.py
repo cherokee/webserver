@@ -20,10 +20,10 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from Container import Container
-from consts import HTML_JS_BLOCK
-from util import *
+from .Widget import Widget
+from .Container import Container
+from .consts import HTML_JS_BLOCK
+from .util import *
 
 HTML = '<div id="%(id)s" %(props)s>%(content)s%(embedded_js)s</div>'
 
@@ -64,7 +64,7 @@ class Box (Container):
                 for o in content:
                     self += o
             else:
-                raise TypeError, 'Unknown type: "%s"' %(type(content))
+                raise TypeError(f'Unknown type: "{type(content)}"')
 
     def Render (self):
         render = Container.Render (self)

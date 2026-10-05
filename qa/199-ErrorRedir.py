@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DOMAIN       = "test199"
 DOESNT_EXIST = "This_does_not_exist"
@@ -23,28 +23,28 @@ vserver!199!error_handler!404!show = 0
 vserver!199!error_handler!404!url = /%s
 """
 
-CGI_BASE = """#!/bin/sh
+CGI_BASE = f"""#!/bin/sh
 echo "Status: 404"
 echo "Content-Type: text/plain"
 echo
-# %s
+# {FORBIDDEN}
 echo "This" "is" "the cgi output."
 echo "REDIRECT_URL: $REDIRECT_URL"
-""" % (FORBIDDEN)
+"""
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name = "Internal redir on error"
 
-        self.request           = "GET /%s HTTP/1.0\r\n" % (DOESNT_EXIST) + \
-                                 "Host: %s\r\n" % (DOMAIN)
+        self.request           = f"GET /{DOESNT_EXIST} HTTP/1.0\r\n" + \
+                                 f"Host: {DOMAIN}\r\n"
         self.expected_error    = 404
         self.forbidden_content = FORBIDDEN
-        self.expected_content  = "REDIRECT_URL: /%s" % (DOESNT_EXIST)
+        self.expected_content  = f"REDIRECT_URL: /{DOESNT_EXIST}"
 
     def Prepare (self, www):
         d = self.Mkdir (www, DOMAIN)
-        self.WriteFile (d, CGI_FILE, 0755, CGI_BASE)
+        self.WriteFile (d, CGI_FILE, 0o755, CGI_BASE)
 
         self.conf = CONF % (DOMAIN, d, CGI_FILE)

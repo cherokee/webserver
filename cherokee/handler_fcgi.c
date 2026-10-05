@@ -49,6 +49,8 @@ static void set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
                           const char *key, int key_len,
                           const char *val, int val_len);
 
+static ret_t retry_backend (cherokee_handler_fcgi_t *hdl);
+
 /* Plug-in initialization
  */
 CGI_LIB_INIT (fcgi, http_all_methods);
@@ -68,8 +70,8 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 
 	/* Is there enough information?
 	 */
-	if (inbuf->len < sizeof(FCGI_Header))
-		return ret_ok;
+	if (hdl->completed && inbuf->len) return ret_error;
+	if (inbuf->len < sizeof(FCGI_Header)) return ret_ok;
 
 	/* At least there is a header
 	 */
@@ -97,7 +99,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	len     = (header->contentLengthB0 | (header->contentLengthB1 << 8));
 	data    = inbuf->buf +  FCGI_HEADER_LEN;
 
-	UNUSED (id);
+	if (id != hdl->request_id || hdl->completed) return ret_error;
 
 	TRACE (ENTRIES, "have %d, hdr=%d exp_len=%d pad=%d\n", inbuf->len, FCGI_HEADER_LEN, len, padding);
 
@@ -114,10 +116,18 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	case FCGI_STDERR:
 		TRACE (ENTRIES, "READ:STDERR (%d): %s", len, data?data:"");
 
-		LOG_ERROR (CHEROKEE_ERROR_HANDLER_FCGI_STDERR, data);
+		if (hdl->stderr_closed) return ret_error;
+		if (!len) { hdl->stderr_closed = true; break; }
+		/* Logging expects a terminated string, but record data is binary. */
+		{
+			cherokee_buffer_t message = CHEROKEE_BUF_INIT;
+			if (cherokee_buffer_add(&message, data, len) != ret_ok) return ret_error;
+			LOG_ERROR (CHEROKEE_ERROR_HANDLER_FCGI_STDERR, message.buf);
+			cherokee_buffer_mrproper(&message);
+		}
 
 		/* Debug mode */
-		if (SOURCE_INT(hdl->src_ref)->debug) {
+		if (hdl->src_ref->type == source_interpreter && SOURCE_INT(hdl->src_ref)->debug) {
 			PRINT_MSG ("%.*s\n", len, data);
 		}
 
@@ -125,12 +135,18 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 
 	case FCGI_STDOUT:
 		TRACE (ENTRIES, "READ:STDOUT eof=%d: %d", HDL_CGI_BASE(hdl)->got_eof, len);
-		cherokee_buffer_add (outbuf, data, len);
+		if (hdl->stdout_closed) return ret_error;
+		if (!len) hdl->stdout_closed = true;
+		if (cherokee_buffer_add(outbuf, data, len) != ret_ok) return ret_error;
 		break;
 
 	case FCGI_END_REQUEST:
 		TRACE (ENTRIES, "READ:END");
+		if (len != sizeof(FCGI_EndRequestBody) ||
+		    ((FCGI_EndRequestBody *)data)->protocolStatus != FCGI_REQUEST_COMPLETE) return ret_error;
+		hdl->completed = true;
 		HDL_CGI_BASE(hdl)->got_eof = true;
+		cherokee_handler_backend_timeout(HANDLER(hdl), 0);
 		break;
 
 	default:
@@ -167,6 +183,12 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	size_t                   read = 0;
 	cherokee_handler_fcgi_t *fcgi = HDL_FCGI(cgi);
 
+	if (fcgi->completed) return buffer->len ? ret_eof_have_data : ret_eof;
+	/* A retry initiated while waiting for CGI headers restarts the prelude. */
+	if (!fcgi->prelude_sent) {
+		ret = cherokee_handler_fcgi_init(fcgi);
+		if (ret != ret_ok) return ret;
+	}
 	ret = cherokee_socket_bufread (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
 
 	switch (ret) {
@@ -181,8 +203,15 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		return ret_eagain;
 
 	case ret_ok:
+		fcgi->received += read;
+		if (read) cherokee_handler_backend_progress(HANDLER(fcgi));
 		ret = process_buffer (fcgi, &fcgi->write_buffer, buffer);
 		TRACE (ENTRIES, "%d bytes read, buffer.len %d\n", read, buffer->len);
+		if (ret == ret_error) {
+			fcgi->failed = true;
+			HANDLER_CONN(fcgi)->error_code = http_bad_gateway;
+			return ret_error;
+		}
 
 		if ((ret == ret_ok) && cgi->got_eof && (buffer->len > 0)) {
 			return ret_eof_have_data;
@@ -191,8 +220,10 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 	case ret_eof:
 	case ret_error:
-		cgi->got_eof = true;
-		return ret;
+		if (retry_backend(fcgi) == ret_ok) return ret_eagain;
+		fcgi->failed = true;
+		HANDLER_CONN(fcgi)->error_code = http_bad_gateway;
+		return ret_error;
 
 	default:
 		RET_UNKNOWN(ret);
@@ -279,6 +310,7 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_fcgi_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_fcgi_free;
 	HANDLER(n)->read_post   = (handler_func_read_post_t) cherokee_handler_fcgi_read_post;
+	HANDLER(n)->backend_retry = (handler_func_timeout_t) retry_backend;
 
 	/* Virtual methods: implemented by handler_cgi_base
 	 */
@@ -289,6 +321,9 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	 */
 	n->post_phase = fcgi_post_phase_read;
 	n->src_ref    = NULL;
+	n->born = 0; n->requests = 0; n->retries = 0; n->request_id = 1;
+	n->sent = 0; n->received = 0;
+	n->completed = false; n->stdout_closed = false; n->stderr_closed = false; n->failed = false; n->prelude_sent = false;
 
 	cherokee_socket_init (&n->socket);
 	cherokee_buffer_init (&n->write_buffer);
@@ -305,7 +340,18 @@ ret_t
 cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl)
 {
 	TRACE (ENTRIES, "fcgi handler free: %p\n", hdl);
+	if (hdl->src_ref && (hdl->failed || (!hdl->completed && HANDLER_CONN(hdl)->error_code == http_gateway_timeout) ||
+	    (!hdl->sent && HANDLER_CONN(hdl)->error_code == http_service_unavailable)))
+		cherokee_balancer_report_fail(HANDLER_FCGI_PROPS(hdl)->balancer, HANDLER_CONN(hdl), hdl->src_ref);
 
+	/* Early HEAD/X-Sendfile, cancellation, protocol errors and partial
+	 * records never return a socket. END_REQUEST is the framing boundary. */
+	if (hdl->src_ref && hdl->completed && hdl->stdout_closed && !hdl->failed &&
+	    !hdl->write_buffer.len && !hdl->base.data.len &&
+	    (!HANDLER_CONN(hdl)->post.has_info || cherokee_post_read_finished(&HANDLER_CONN(hdl)->post))) {
+		cherokee_source_reuse_put(hdl->src_ref, source_protocol_fcgi, &hdl->socket,
+		                         hdl->born, hdl->requests + 1, hdl->request_id + 1, hdl->src_ref->keepalive_max);
+	}
 	cherokee_socket_close (&hdl->socket);
 	cherokee_socket_mrproper (&hdl->socket);
 
@@ -367,10 +413,14 @@ set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	len += key_len > 127 ? 4 : 1;
 	len += val_len > 127 ? 4 : 1;
 
-	fcgi_build_header (&request.header, FCGI_PARAMS, 1, len, 0);
+	fcgi_build_header (&request.header, FCGI_PARAMS, HDL_FCGI(cgi_base)->request_id, len, 0);
 
-	cherokee_buffer_ensure_size (buf, buf->len + sizeof(FCGI_Header) + key_len + val_len);
-	cherokee_buffer_add (buf, (void *)&request.header, sizeof(FCGI_Header));
+	if (len > FCGI_MAX_LENGTH ||
+	    cherokee_buffer_ensure_size(buf, buf->len + sizeof(FCGI_Header) + len + 1) != ret_ok ||
+	    cherokee_buffer_add(buf, (void *)&request.header, sizeof(FCGI_Header)) != ret_ok) {
+		hdl->failed = true;
+		return;
+	}
 
 	if (key_len <= 127) {
 		buf->buf[buf->len++] = key_len;
@@ -480,7 +530,7 @@ add_empty_packet (cherokee_handler_fcgi_t *hdl, cuint_t type)
 {
 	FCGI_BeginRequestRecord  request;
 
-	fcgi_build_header (&request.header, type, 1, 0, 0);
+	fcgi_build_header (&request.header, type, hdl->request_id, 0, 0);
 	cherokee_buffer_add (&hdl->write_buffer, (void *)&request.header, sizeof(FCGI_Header));
 
 	TRACE (ENTRIES, "empty packet type=%d, len=%d\n", type, hdl->write_buffer.len);
@@ -498,8 +548,9 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 
 	/* FCGI_BEGIN_REQUEST
 	 */
-	fcgi_build_header (&request.header, FCGI_BEGIN_REQUEST, 1, sizeof(request.body), 0);
+	fcgi_build_header (&request.header, FCGI_BEGIN_REQUEST, hdl->request_id, sizeof(request.body), 0);
 	fcgi_build_request_body (&request);
+	if (hdl->src_ref->keepalive == 1) request.body.flags = FCGI_KEEP_CONN;
 
 	cherokee_buffer_add (buffer, (void *)&request, sizeof(FCGI_BeginRequestRecord));
 	TRACE (ENTRIES, "Added FCGI_BEGIN_REQUEST, len=%d\n", buffer->len);
@@ -542,14 +593,16 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 			return ret;
 	}
 
+	if (hdl->socket.socket < 0) {
+		cherokee_handler_backend_timeout(HANDLER(hdl), hdl->src_ref->connect_timeout);
+		if (cherokee_source_reuse_get(hdl->src_ref, source_protocol_fcgi, &hdl->socket,
+		                             &hdl->born, &hdl->requests, &hdl->request_id) == ret_ok) return ret_ok;
+	}
+
 	/* Try to connect
 	 */
 	if (hdl->src_ref->type == source_host) {
 		ret = cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);
-		if ((ret == ret_deny) || (ret == ret_error))
-		{
-			cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
-		}
 	} else {
 		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
 		                                                   &hdl->socket, conn);
@@ -558,6 +611,25 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 	return ret;
 }
 
+static ret_t
+retry_backend (cherokee_handler_fcgi_t *hdl)
+{
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	if (!hdl->src_ref || hdl->retries >= hdl->src_ref->retries || hdl->received ||
+	    conn->phase > phase_add_headers || conn->header_buffer.len ||
+	    (hdl->sent && ((conn->post.has_info && (conn->post.len != 0 || conn->post.encoding == post_enc_chunked)) ||
+	     (conn->header.method != http_get && conn->header.method != http_head && conn->header.method != http_options)))) return ret_error;
+	hdl->retries++;
+	cherokee_socket_close(&hdl->socket);
+	cherokee_socket_clean(&hdl->socket);
+	cherokee_buffer_clean(&hdl->write_buffer);
+	cherokee_buffer_clean(&hdl->base.data);
+	hdl->base.init_phase = hcgi_phase_connect;
+	hdl->base.got_eof = false; hdl->prelude_sent = false;
+	hdl->sent = 0; hdl->received = 0;
+	cherokee_handler_backend_timeout(HANDLER(hdl), hdl->src_ref->connect_timeout);
+	return ret_ok;
+}
 
 static ret_t
 do_send (cherokee_handler_fcgi_t *hdl,
@@ -568,14 +640,19 @@ do_send (cherokee_handler_fcgi_t *hdl,
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 
 	ret = cherokee_socket_bufwrite (&hdl->socket, buffer, &written);
+	hdl->sent += written;
+	if (written) cherokee_handler_backend_progress(HANDLER(hdl));
 	switch (ret) {
 	case ret_ok:
 		break;
 	case ret_eagain:
 		if (written > 0)
 			break;
+		cherokee_thread_deactive_to_polling(HANDLER_THREAD(hdl), conn, hdl->socket.socket, FDPOLL_MODE_WRITE, false);
 		return ret_eagain;
 	default:
+		if (retry_backend(hdl) == ret_ok) return ret_eagain;
+		hdl->failed = true;
 		conn->error_code = http_bad_gateway;
 		return ret_error;
 	}
@@ -622,7 +699,7 @@ send_post (cherokee_handler_fcgi_t *hdl,
 		/* Complete the header
 		 */
 		if (buf->len > sizeof(FCGI_Header)) {
-			fcgi_build_header ((FCGI_Header *)buf->buf, FCGI_STDIN, 1,
+			fcgi_build_header ((FCGI_Header *)buf->buf, FCGI_STDIN, hdl->request_id,
 			   buf->len - sizeof(FCGI_Header), 0);
 		}
 
@@ -709,11 +786,6 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		ret = cherokee_handler_cgi_base_extract_path (HDL_CGI_BASE(hdl), props->check_file);
 		if (unlikely (ret < ret_ok)) return ret;
 
-		/* Build the headers
-		 */
-		ret = build_header (hdl, &hdl->write_buffer);
-		if (unlikely (ret != ret_ok)) return ret;
-
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_connect;
 
 	case hcgi_phase_connect:
@@ -728,13 +800,19 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		case ret_eagain:
 			return ret_eagain;
 		case ret_deny:
+			if (retry_backend(hdl) == ret_ok) return ret_eagain;
 			conn->error_code = http_gateway_timeout;
 			return ret_error;
 		default:
+			if (retry_backend(hdl) == ret_ok) return ret_eagain;
 			conn->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
+		cherokee_handler_backend_timeout(HANDLER(hdl), hdl->src_ref->io_timeout);
+		ret = build_header(hdl, &hdl->write_buffer);
+		if (ret != ret_ok) return ret;
+		if (hdl->failed) { conn->error_code = http_bad_gateway; return ret_error; }
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_headers;
 
 	case hcgi_phase_send_headers:
@@ -757,6 +835,7 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 	TRACE (ENTRIES, "Init %s\n", "finishes");
 
 	cherokee_buffer_clean (&hdl->write_buffer);
+	hdl->prelude_sent = true;
 	return ret_ok;
 }
 

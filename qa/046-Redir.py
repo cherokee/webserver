@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 CONF = """
 vserver!1!rule!460!match = directory

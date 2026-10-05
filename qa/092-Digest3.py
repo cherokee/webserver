@@ -1,5 +1,5 @@
-from conf import *
-from base import *
+from qa_conf import *
+from qa_base import *
 
 MAGIC   = "Do not show this"
 REALM   = "realm"
@@ -45,16 +45,15 @@ class Test (TestBase):
         # At this point, we got a valid nonce, so let's write the
         # request..
         self.request = "GET /digest3/file HTTP/1.0\r\n" +\
-                       "Authorization: Digest response=\"%s\", username=\"%s\", realm=\"%s\", uri=\"%s\", nonce=\"%s\", qop=\"%s\", algorithm=\"%s\"\r\n" % \
-                       (response, USER, REALM, "/digest2/file", vals["nonce"], vals["qop"], vals["algorithm"])
+                       "Authorization: Digest response=\"{}\", username=\"{}\", realm=\"{}\", uri=\"{}\", nonce=\"{}\", qop=\"{}\", algorithm=\"{}\"\r\n".format(response, USER, REALM, "/digest2/file", vals["nonce"], vals["qop"], vals["algorithm"])
 
 
     def Prepare (self, www):
         # Create the infrastructure
         #
         self.Mkdir (www, "digest3")
-        self.WriteFile (www, "digest3/file", 0444, MAGIC)
-        passfile = self.WriteFile (www, "digest3/.passwd", 0444, "%s:%s\n" % (USER, PASSWD1))
+        self.WriteFile (www, "digest3/file", 0o444, MAGIC)
+        passfile = self.WriteFile (www, "digest3/.passwd", 0o444, f"{USER}:{PASSWD1}\n")
 
         # Set the configuration
         #

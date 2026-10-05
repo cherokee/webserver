@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 from consts import *
 
 URL_APPLY   = '/plugin/custom_error/apply'
@@ -39,16 +40,16 @@ class Plugin_custom_error (Handler.PluginHandler):
         Handler.PluginHandler.AddCommon (self)
 
         error_codes = [('', _('Choose'))] + ERROR_CODES
-        if CTK.cfg.get_val('%s!error'%(key)):
+        if CTK.cfg.get_val(f'{key}!error'):
             error_codes.pop(0)
 
         table = CTK.PropsTable()
-        table.Add (_("HTTP Error"), CTK.ComboCfg('%s!error'%(key), error_codes), _(NOTE_ERRORS))
+        table.Add (_("HTTP Error"), CTK.ComboCfg(f'{key}!error', error_codes), _(NOTE_ERRORS))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Custom Error')))
+        self += CTK.RawHTML (f"<h2>{_('Custom Error')}</h2>")
         self += CTK.Indenter (submit)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

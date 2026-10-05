@@ -2,6 +2,8 @@
 
 # CTK: Cherokee Toolkit
 #
+
+from __future__ import annotations
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
@@ -28,17 +30,45 @@ import types
 import errno
 import threading
 import traceback
-import urlparse
+import urllib.parse
+from contextvars import ContextVar
+from functools import cmp_to_key
+from typing import Any, Callable, Optional
 
-import pyscgi
-import Cookie
-import Config
 
-from util import json_dump
-from Post import Post
-from HTTP import HTTP_Response, HTTP_Error
+def cmp(left, right):
+    return (left > right) - (left < right)
 
-from cgi import escape as escape_html
+from . import pyscgi
+import http.cookies
+from .Config import Config
+
+from .util import json_dump
+from .Post import Post
+from .HTTP import HTTP_Response, HTTP_Error
+
+from html import escape as escape_html
+
+
+class RequestContext:
+    """Typed request-local state exposed through CTK's global helpers."""
+
+    def __init__(self) -> None:
+        self.scgi_conn: Optional[ServerHandler] = None
+        self.request_url = ''
+        self.post: Optional[Post] = None
+
+
+_request_context: ContextVar[Optional[RequestContext]] = ContextVar(
+    'ctk_request_context', default=None)
+
+
+def _get_request_context() -> RequestContext:
+    context = _request_context.get()
+    if context is None:
+        context = RequestContext()
+        _request_context.set(context)
+    return context
 
 
 class PostValidator:
@@ -56,15 +86,15 @@ class PostValidator:
                 if re.match(regex, key):
                     for n in range(len(self.post[key])):
                         val = self.post[key][n]
-                        if not val and 'CHECK_ON_NO_VALUE' not in dir(func):
+                        if not val and not getattr(func, 'CHECK_ON_NO_VALUE', False):
                             continue
 
                         try:
                             tmp = func (val)
-                        except UserWarning, e:
-                            errors[key] = str(e[0])
-                            tmp = str(e[1])
-                        except Exception, e:
+                        except UserWarning as e:
+                            errors[key] = str(e.args[0]) if e.args else str(e)
+                            tmp = str(e.args[1]) if len(e.args) > 1 else val
+                        except Exception as e:
                             errors[key] = str(e)
                             ret = "unsatisfactory"
                             break
@@ -88,7 +118,7 @@ class ServerHandler (pyscgi.SCGIHandler):
 
     def _process_post (self):
         pyscgi.SCGIHandler.handle_post(self)
-        post = Post (self.post)
+        post = Post (self.post or '')
         return post
 
     def _do_handle (self):
@@ -118,16 +148,17 @@ class ServerHandler (pyscgi.SCGIHandler):
                     sec_error = "Submit"
 
         if sec_error:
-            response = HTTP_Response (error=403, body="%s check failed" %(sec_error))
+            response = HTTP_Response (error=403, body=f"{sec_error} check failed")
             self.send (str(response))
             return
 
-        # Refer SCGI object by thread
-        my_thread = threading.currentThread()
-        my_thread.scgi_conn   = self
-        my_thread.request_url = url
+        # Keep request state local to this execution context without adding
+        # untyped attributes to threading.Thread.
+        context = _get_request_context()
+        context.scgi_conn = self
+        context.request_url = url
 
-        base_path = urlparse.urlsplit(url).path
+        base_path = urllib.parse.urlsplit(url).path
         if len(base_path) > 1 and base_path[-1] == '/':
             base_path = base_path[:-1]  # remove trailing '/' if it exists
 
@@ -138,7 +169,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                 # POST
                 if published._method == 'POST':
                     post = self._process_post()
-                    my_thread.post = post
+                    context.post = post
 
                     # Validate
                     validator = PostValidator (post, published._validation)
@@ -160,7 +191,7 @@ class ServerHandler (pyscgi.SCGIHandler):
                     return self.response
 
                 elif type(ret) == dict:
-                    info = json_dump(dict(ret.items() + warnings.items()))
+                    info = json_dump(dict(list(ret.items()) + list(warnings.items())))
                     self.response += info
                     self.response['Content-Type'] = "application/json"
                     return self.response
@@ -179,7 +210,7 @@ class ServerHandler (pyscgi.SCGIHandler):
         def manage_exception():
             # Print the backtrace
             info = traceback.format_exc()
-            print >> sys.stderr, info
+            print(info, file=sys.stderr)
 
             # Custom error management
             if error.page:
@@ -188,25 +219,25 @@ class ServerHandler (pyscgi.SCGIHandler):
                     response = HTTP_Response (error=500, body=page.Render())
                     self.send (str(response))
                     return
-                except Exception, e:
-                    print "!!!!!!", e
+                except Exception as e:
+                    print("!!!!!!", e)
                     pass
 
             # No error handling page
-            html = '<pre>%s</pre>' %(escape_html(info))
+            html = f'<pre>{escape_html(info)}</pre>'
             self.send (str(HTTP_Error(desc=html)))
 
         try:
             content = self._do_handle()
             self.send (str(content))
 
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.EPIPE:
                 # The web server closed the SCGI socket
                 return
             manage_exception()
 
-        except Exception, desc:
+        except Exception as desc:
             manage_exception()
 
 
@@ -241,7 +272,7 @@ class Server:
         self._scgi = pyscgi.ServerFactory (*args, **kwargs)
 
         # Figure plug-in paths
-        from Plugin import figure_plugin_paths
+        from .Plugin import figure_plugin_paths
         self.plugin_paths = figure_plugin_paths()
 
     def sort_routes (self):
@@ -252,7 +283,7 @@ class Server:
 
         self.lock.acquire()
         try:
-            self._web_paths.sort(__cmp)
+            self._web_paths.sort(key=cmp_to_key(__cmp))
         finally:
             self.lock.release()
 
@@ -265,7 +296,7 @@ class Server:
                 if r._regex == route_obj._regex:
                     to_remove.append (r)
 
-            self._web_paths = filter (lambda x: x not in to_remove, self._web_paths)
+            self._web_paths = [x for x in self._web_paths if x not in to_remove]
 
             # Insert
             self._web_paths.append (route_obj)
@@ -281,11 +312,13 @@ class Server:
                 if r._regex == path:
                     to_remove.append (r)
 
-            self._web_paths = filter (lambda x: x not in to_remove, self._web_paths)
+            self._web_paths = [x for x in self._web_paths if x not in to_remove]
         finally:
             self.lock.release()
 
     def serve_forever (self):
+        if self._scgi is None:
+            raise RuntimeError('Server has not been initialized')
         try:
             while not self.exiting:
                 # Handle request
@@ -295,7 +328,7 @@ class Server:
         except KeyboardInterrupt:
             self.exiting = True
 
-        print "\r", "CTK Back-end Server exiting.."
+        print("\r", "CTK Back-end Server exiting..")
         self._scgi.server_close()
 
 
@@ -327,12 +360,14 @@ def get_server():
 
 def get_scgi():
     """Retrieve SCGI object for current connection"""
-    my_thread = threading.currentThread()
-    return my_thread.scgi_conn
+    scgi = _get_request_context().scgi_conn
+    if scgi is None:
+        raise RuntimeError('No active SCGI request')
+    return scgi
 
 def init (*args, **kwargs):
     # Init CTK
-    import Init
+    from . import Init
     Init.Init()
 
     # Server
@@ -367,22 +402,26 @@ def step ():
     srv._scgi.handle_request()
 
 
-class Publish_FakeClass:
-    def __init__ (self, func):
-        self.__func = func
+class PublishedRoute:
+    def __init__(self, func: Callable[..., Any]) -> None:
+        self._func = func
+        self._kwargs: dict[str, Any] = {}
+        self._regex = ''
+        self._validation: list[Any] = []
+        self._method: Optional[str] = None
 
-    def __call__ (self, *args, **kwargs):
-        return self.__func (*args, **kwargs)
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
+        return self._func(*args, **kwargs)
 
 
 def publish (regex_url, klass, **kwargs):
     """Publish a path given by the regex_url regular expression, and
     map it to the class of function given by the klass argument"""
     # Instance object
-    if type(klass) == types.ClassType:
+    if type(klass) == type:
         obj = klass()
     else:
-        obj = Publish_FakeClass (klass)
+        obj = PublishedRoute (klass)
 
     # Set internal properties
     obj._kwargs     = kwargs
@@ -403,14 +442,13 @@ def unpublish (regex_url):
 
 class _Cookie:
     def __setitem__ (self, name, value):
-        my_thread = threading.currentThread()
-        response = my_thread.scgi_conn.response
-        response['Set-Cookie'] = "%s=%s" %(name, value)
+        scgi = get_scgi()
+        response = scgi.response
+        response['Set-Cookie'] = f"{name}={value}"
 
     def get_val (self, name, default=None):
-        my_thread = threading.currentThread()
-        scgi = my_thread.scgi_conn
-        cookie = Cookie.SimpleCookie(scgi.env.get('HTTP_COOKIE', ''))
+        scgi = get_scgi()
+        cookie = http.cookies.SimpleCookie(scgi.env.get('HTTP_COOKIE', ''))
         if name in cookie:
             return cookie[name].value
         else:
@@ -422,47 +460,53 @@ class _Cookie:
 
 class _Post:
     def get_val (self, name, default=None):
-        my_thread = threading.currentThread()
-        post = my_thread.post
+        post = _get_request_context().post
+        if post is None:
+            raise RuntimeError('No active POST request')
         return post.get_val(name, default)
 
     def __getitem__ (self, name):
         return self.get_val (name, None)
 
     def __iter__ (self):
-        my_thread = threading.currentThread()
-        post = my_thread.post
+        post = _get_request_context().post
+        if post is None:
+            raise RuntimeError('No active POST request')
         return post.__iter__()
 
     def __str__ (self):
-        my_thread = threading.currentThread()
-        post = my_thread.post
+        post = _get_request_context().post
+        if post is None:
+            raise RuntimeError('No active POST request')
         return str(post)
 
     def pop (self, *args):
-        my_thread = threading.currentThread()
-        post = my_thread.post
+        post = _get_request_context().post
+        if post is None:
+            raise RuntimeError('No active POST request')
         return post.pop(*args)
 
     def keys (self, *args):
-        my_thread = threading.currentThread()
-        post = my_thread.post
+        post = _get_request_context().post
+        if post is None:
+            raise RuntimeError('No active POST request')
         return post.keys(*args)
 
     def get_all (self, *args):
-        my_thread = threading.currentThread()
-        post = my_thread.post
+        post = _get_request_context().post
+        if post is None:
+            raise RuntimeError('No active POST request')
         return post.get_all(*args)
 
     def get_raw (self):
-        my_thread = threading.currentThread()
-        post = my_thread.post
+        post = _get_request_context().post
+        if post is None:
+            raise RuntimeError('No active POST request')
         return post.raw_post
 
 class _Request:
     def _get_request_url (self):
-        my_thread = threading.currentThread()
-        return my_thread.request_url
+        return _get_request_context().request_url
 
     def _get_request_headers (self):
         return get_scgi().env
@@ -483,4 +527,4 @@ cookie  = _Cookie()
 post    = _Post()
 request = _Request()
 error   = _Error()
-cfg     = Config.Config()
+cfg     = Config()

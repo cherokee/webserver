@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 TEST_FILE = "Cherokee is the fastest one"
 
@@ -20,6 +20,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d  = self.Mkdir (www, "implicit_redir1_DIR")
-        self.WriteFile (d, TEST_FILE, 0444, "");
+        self.WriteFile (d, TEST_FILE, 0o444, "");
 
         self.conf = CONF % (d)

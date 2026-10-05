@@ -20,10 +20,10 @@
 # 02110-1301, USA.
 #
 
-from Table import Table
-from Server import get_server
-from PageCleaner import Uniq_Block
-from Server import publish, post, cfg, cfg_reply_ajax_ok
+from .Table import Table
+from .Server import get_server
+from .PageCleaner import Uniq_Block
+from .Server import publish, post, cfg, cfg_reply_ajax_ok
 
 HEADER = [
     '<script type="text/javascript" src="/CTK/js/jquery.tablednd_0_5.js"></script>'
@@ -85,18 +85,18 @@ def changed_handler_func (callback, key_id, **kwargs):
 class SortableList (Table):
     def __init__ (self, callback, container, *args, **kwargs):
         Table.__init__ (self, *args, **kwargs)
-        self.id  = "sortablelist_%d" %(self.uniq_id)
-        self.url = "/sortablelist_%d"%(self.uniq_id)
+        self.id  = f"sortablelist_{int(self.uniq_id)}"
+        self.url = f"/sortablelist_{int(self.uniq_id)}"
         self.container = container
 
         # Secure submit
         srv = get_server()
         if srv.use_sec_submit:
-            self.url += '?key=%s' %(srv.sec_submit)
+            self.url += f'?key={srv.sec_submit}'
 
         # Register the public URL
-        publish (r"^/sortablelist_%d"%(self.uniq_id), changed_handler_func,
-                 method='POST', callback=callback, key_id='%s_order'%(self.id), **kwargs)
+        publish (rf"^/sortablelist_{int(self.uniq_id)}", changed_handler_func,
+                 method='POST', callback=callback, key_id=f'{self.id}_order', **kwargs)
 
     def Render (self):
         render = Table.Render (self)
@@ -107,12 +107,12 @@ class SortableList (Table):
         render.headers += HEADER
         return render
 
-    def set_header (self, row_num):
+    def set_header (self, row=True, column=False, num=1):
         # Set the row properties
-        self[row_num].props['class'] = "nodrag nodrop"
+        self[num].props['class'] = "nodrag nodrop"
 
         # Let Table do the rest
-        Table.set_header (self, num=row_num)
+        Table.set_header (self, row=row, column=column, num=num)
 
 
 def SortableList__reorder_generic (post_arg_name, pre, step=10):
@@ -123,11 +123,11 @@ def SortableList__reorder_generic (post_arg_name, pre, step=10):
     # Build and alternative tree
     num = step
     for v in tmp:
-        cfg.clone ('%s!%s'%(pre, v), 'tmp!reorder!%s!%d'%(pre, num))
+        cfg.clone (f'{pre}!{v}', f'tmp!reorder!{pre}!{int(num)}')
         num += step
 
     # Set the new list in place
     del (cfg[pre])
-    cfg.rename ('tmp!reorder!%s'%(pre), pre)
+    cfg.rename (f'tmp!reorder!{pre}', pre)
 
     return cfg_reply_ajax_ok()

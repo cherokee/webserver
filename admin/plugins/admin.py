@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 from consts import *
 
 HELPS = [('modules_handlers_admin', _("Remote Administration"))]

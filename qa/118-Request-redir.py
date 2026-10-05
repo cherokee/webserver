@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "I_bet_Cherokee_is_better"
 URL   = "http://www.example.com"
@@ -15,7 +15,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Request Redir compact"
-        self.request           = "GET /req_redir_compact1/%s/ HTTP/1.0\r\n" % (MAGIC)
+        self.request           = f"GET /req_redir_compact1/{MAGIC}/ HTTP/1.0\r\n"
         self.conf              = CONF % (URL)
         self.expected_error    = 301
-        self.expected_content  = "%s/%s" % (URL, MAGIC)
+        self.expected_content  = f"{URL}/{MAGIC}"

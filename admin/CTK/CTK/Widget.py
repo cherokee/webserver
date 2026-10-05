@@ -22,12 +22,16 @@
 # 02110-1301, USA.
 #
 
+from __future__ import annotations
+
 import re
 import string
+from typing import Any, Optional
 
-from consts import *
-from util import json_dump
-from PageCleaner import Postprocess
+from .consts import *
+from .util import json_dump
+from .PageCleaner import Postprocess
+from functools import reduce
 
 SYNC_JS_LOAD_JS = """
 if (typeof (__loaded_%(name)s) == 'undefined') {
@@ -37,19 +41,22 @@ if (typeof (__loaded_%(name)s) == 'undefined') {
 """
 
 class RenderResponse:
-    def __init__ (self, html='', js='', headers=[], helps=[]):
+    def __init__ (self, html: str = '', js: str = '',
+                  headers: Optional[list[str]] = None,
+                  helps: Optional[list[Any]] = None):
         self.html    = html
         self.js      = js
-        self.headers = headers[:]
-        self.helps   = helps[:]
+        self.headers = list(headers or [])
+        self.helps   = list(helps or [])
 
     def clean_up_headers (self):
         noDupes = []
         [noDupes.append(i) for i in self.headers if not noDupes.count(i)]
         self.headers = noDupes
 
-    def __add__ (self, other):
-        assert isinstance(other, RenderResponse)
+    def __add__ (self, other: RenderResponse) -> RenderResponse:
+        if not isinstance(other, RenderResponse):
+            return NotImplemented
 
         # New response obj
         i = RenderResponse()
@@ -66,15 +73,23 @@ class RenderResponse:
 
     def toStr (self):
         txt = self.html
-        alpha = string.letters + string.digits
+        alpha = string.ascii_letters + string.digits
 
         # Synchronous JS loading..
         # Jquery MUST be loaded for this code to work
         sync_js_load = ""
 
-        for js_header in filter(lambda x: x.startswith('<script'), self.headers):
-            url_js  = re.findall (r'src="(.+)"', js_header)[0]
-            name_js = ''.join (map (lambda x: ('_',x)[x in alpha], re.findall (r'src=".+/(.+)\.js"', js_header)[0]))
+        for js_header in [x for x in self.headers if x.startswith('<script')]:
+            url_match = re.search (r'src="([^"]+)"', js_header)
+            if url_match is None:
+                continue
+
+            url_js = url_match.group (1)
+            name_match = re.search (r'src="(?:[^"]*/)?([^"/]+)\.js(?:["?])', js_header)
+            if name_match is None:
+                continue
+
+            name_js = ''.join ('_' if x not in alpha else x for x in name_match.group (1))
             sync_js_load += SYNC_JS_LOAD_JS %({'name':name_js, 'url':url_js})
 
         # Render the Javascript block
@@ -84,7 +99,7 @@ class RenderResponse:
         return Postprocess(txt)
 
     def toJSON (self):
-        tmp = filter (lambda x: x, [x.toJSON() for x in self.helps])
+        tmp = [x for x in [x.toJSON() for x in self.helps] if x]
         if tmp:
             help = []
             for e in reduce(lambda x,y: x+y, tmp):
@@ -103,39 +118,40 @@ class Widget:
     # Class prop
     widget_uniq_id = 1
 
-    def __init__ (self):
+    def __init__ (self) -> None:
         Widget.widget_uniq_id += 1;
         self.uniq_id = Widget.widget_uniq_id;
-        self.id      = "widget_%d" %(Widget.widget_uniq_id)
-        self.binds   = []
+        self.id      = f"widget_{int(Widget.widget_uniq_id)}"
+        self.binds: list[tuple[str, str]] = []
 
-    def Render (self):
+    def Render (self) -> RenderResponse:
         render = RenderResponse()
 
         for event, js in self.binds:
-            render.js += "$('#%s').bind('%s', function(event){ %s });\n" %(self.id, event, js)
+            render.js += "$('#{}').bind('{}', function(event){{ {} }});\n".format(self.id, event, js)
 
         return render
 
     # Javacript events
     #
-    def bind (self, event, js):
+    def bind (self, event: str, js: str) -> None:
         """Bind events to event handlers. The specified Javascript
         code is executed as soon as the event is triggered"""
         self.binds.append ((event, js))
 
-    def JS_to_trigger (self, event, param=None, selector=None):
+    def JS_to_trigger (self, event: str, param: Optional[str] = None,
+                       selector: Optional[str] = None) -> str:
         """Return the Javascript code required to trigger specified
         event. Custom parameters and selector can be provided."""
         if not selector:
-            selector = "$('#%s')" %(self.id)
+            selector = f"$('#{self.id}')"
 
         if param:
-            return "%s.trigger('%s', %s);" %(selector, event, param)
+            return f"{selector}.trigger('{event}', {param});"
         else:
-            return "%s.trigger('%s');" %(selector, event)
+            return f"{selector}.trigger('{event}');"
 
-    def JS_to_show (self, how='', selector=None):
+    def JS_to_show (self, how: str | int = '', selector: Optional[str] = None) -> str:
         """Return the Javascript code required to show the
         widget. Custom duration and selector can be provided.
 
@@ -145,10 +161,10 @@ class Widget:
         milliseconds, respectively.
         """
         if not selector:
-            selector = "$('#%s')" %(self.id)
-        return '%s.show(%s);' %(selector, how)
+            selector = f"$('#{self.id}')"
+        return f'{selector}.show({how});'
 
-    def JS_to_hide (self, how='', selector=None):
+    def JS_to_hide (self, how: str | int = '', selector: Optional[str] = None) -> str:
         """Return the Javascript code required to hide the
         widget. Custom duration and selector can be provided.
 
@@ -158,5 +174,5 @@ class Widget:
         milliseconds, respectively.
         """
         if not selector:
-            selector = "$('#%s')" %(self.id)
-        return '%s.hide(%s);' %(selector, how)
+            selector = f"$('#{self.id}')"
+        return f'{selector}.hide({how});'

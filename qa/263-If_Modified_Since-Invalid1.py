@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR               = "dir_263"
 CONTENT           = "Whatever"
@@ -8,13 +8,12 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name    = "If-Modified-Since: Invalid date"
-        self.request = "GET /%(DIR)s/index.html HTTP/1.0\r\n"         %(globals()) + \
-                       "If-Modified-Since: %(IF_MODIFIED_SINCE)s\r\n" %(globals())
+        self.request = f"GET /{globals()['DIR']}/index.html HTTP/1.0\r\n" + \
+                       f"If-Modified-Since: {globals()['IF_MODIFIED_SINCE']}\r\n"
 
         self.expected_error   = 200
         self.expected_content = CONTENT
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, "index.html", 0444, CONTENT)
-
+        f = self.WriteFile (d, "index.html", 0o444, CONTENT)

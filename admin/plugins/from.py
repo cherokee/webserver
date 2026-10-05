@@ -22,6 +22,7 @@
 
 import CTK
 import validations
+from CTK.i18n import _, N_
 from Rule import RulePlugin
 from util import *
 
@@ -37,13 +38,13 @@ def commit():
 
     # New entry
     if new_from:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
-        next_from = CTK.cfg.get_next_entry_prefix ('%s!match!from'%(next_pre))
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
+        next_from = CTK.cfg.get_next_entry_prefix (f'{next_pre}!match!from')
 
-        CTK.cfg['%s!match'%(next_pre)] = 'from'
+        CTK.cfg[f'{next_pre}!match'] = 'from'
         CTK.cfg[next_from]             = new_from
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -55,10 +56,10 @@ class Plugin_from (RulePlugin):
         self.vsrv_num = kwargs.pop('vsrv_num', '')
 
         # Validation, and Public URLs
-        VAL = [('^%s!from$'%(key),   validations.is_ip_or_netmask),
-               ('^%s!from!.+'%(key), validations.is_ip_or_netmask)]
+        VAL = [(f'^{key}!from$',   validations.is_ip_or_netmask),
+               (f'^{key}!from!.+', validations.is_ip_or_netmask)]
 
-        CTK.publish ("^%s"%(URL_APPLY), commit, validation=VAL, method="POST")
+        CTK.publish (f"^{URL_APPLY}", commit, validation=VAL, method="POST")
 
         if key.startswith('tmp'):
             return self.GUI_new()
@@ -68,7 +69,7 @@ class Plugin_from (RulePlugin):
     def GUI_new (self):
         # Table
         table = CTK.PropsTable()
-        table.Add (_('Connected from'), CTK.TextCfg('%s!from'%(self.key), False, {'class': 'noauto'}), _(NOTE_FROM))
+        table.Add (_('Connected from'), CTK.TextCfg(f'{self.key}!from', False, {'class': 'noauto'}), _(NOTE_FROM))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', self.key)
@@ -77,9 +78,9 @@ class Plugin_from (RulePlugin):
         self += submit
 
     def GUI_mod (self):
-        pre = '%s!from'%(self.key)
+        pre = f'{self.key}!from'
         tmp = CTK.cfg.keys (pre)
-        tmp.sort(lambda x,y: cmp(int(x), int(y)))
+        tmp.sort(key=int)
 
         if tmp:
             table = CTK.Table({'id': 'rule-table-from'})
@@ -88,36 +89,36 @@ class Plugin_from (RulePlugin):
                 if len(tmp) > 1:
                     delete = CTK.ImageStock('del')
                     delete.bind('click', CTK.JS.Ajax (URL_APPLY,
-                                                      data     = {'%s!%s'%(pre, f): ''},
-                                                      complete = "$('#%s').trigger('submit_success');"%(self.id)))
+                                                      data     = {f'{pre}!{f}': ''},
+                                                      complete = f"$('#{self.id}').trigger('submit_success');"))
 
-                table += [CTK.TextCfg('%s!%s'%(pre,f)), delete]
+                table += [CTK.TextCfg(f'{pre}!{f}'), delete]
 
-            self += CTK.RawHTML ('<h3>%s</h3>' % (_("IPs and Subnets")))
+            self += CTK.RawHTML (f"<h3>{_('IPs and Subnets')}</h3>")
             self += CTK.Indenter (table)
 
         # Add new
-        next_from = CTK.cfg.get_next_entry_prefix ('%s!from'%(self.key))
+        next_from = CTK.cfg.get_next_entry_prefix (f'{self.key}!from')
 
         table = CTK.PropsTable()
         table.Add (_('New IP or Subnet'), CTK.TextCfg(next_from, False), _(NOTE_FROM))
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h3>%s</h3>' % (_("Add another entry")))
+        self += CTK.RawHTML (f"<h3>{_('Add another entry')}</h3>")
         self += CTK.Indenter (submit)
 
 
     def GetName (self):
         tmp = []
-        for k in CTK.cfg.keys('%s!from'%(self.key)):
-            d = CTK.cfg.get_val ('%s!from!%s'%(self.key, k))
+        for k in CTK.cfg.keys(f'{self.key}!from'):
+            d = CTK.cfg.get_val (f'{self.key}!from!{k}')
             tmp.append(d)
 
-        txt = '%s ' %(_("From"))
+        txt = f"{_('From')} "
         if len(tmp) > 1:
             txt += ', '.join(tmp[:-1])
-            txt += " or %s" %(tmp[-1])
+            txt += f" or {tmp[-1]}"
         elif len(tmp) == 1:
             txt += tmp[0]
         return txt

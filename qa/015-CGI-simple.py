@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "This is the magic string"
 CONF = """
@@ -7,11 +7,11 @@ vserver!1!rule!150!match!directory = /cgi-bin1
 vserver!1!rule!150!handler = cgi
 """
 
-CGI_BASE = """#!/bin/sh
+CGI_BASE = f"""#!/bin/sh
 echo "Content-Type: text/plain"
 echo
-echo "%s"
-""" % (MAGIC)
+echo "{MAGIC}"
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -25,4 +25,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "cgi-bin1")
-        self.WriteFile (www, "cgi-bin1/test", 0755, CGI_BASE)
+        self.WriteFile (www, "cgi-bin1/test", 0o755, CGI_BASE)

@@ -20,9 +20,9 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from Container import Container
-from util import formatter, props_to_str
+from .Widget import Widget
+from .Container import Container
+from .util import formatter, props_to_str
 
 LINK_HTML      = '<a id="%(id)s" %(href)s %(props)s>%(content)s</a>'
 LINK_ICON_HTML = '<div id="%(id)s"><span class="ui-icon ui-icon-%(icon)s"></span>%(link)s</div>'
@@ -63,7 +63,7 @@ class Link (Container):
         render = Container.Render (self)
 
         if self.href:
-            href = 'href="%s"' %(self.href)
+            href = f'href="{self.href}"'
         else:
             href = ''
 

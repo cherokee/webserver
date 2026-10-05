@@ -24,6 +24,7 @@
 
 import CTK
 import Auth
+from CTK.i18n import _, N_
 import validations
 
 URL_APPLY = '/plugin/authlist/apply'
@@ -40,8 +41,8 @@ def commit():
     # New
     if new_user:
         next = CTK.cfg.get_next_entry_prefix (key)
-        CTK.cfg['%s!user'%(next)]     = new_user
-        CTK.cfg['%s!password'%(next)] = new_pass
+        CTK.cfg[f'{next}!user']     = new_user
+        CTK.cfg[f'{next}!password'] = new_pass
         return CTK.cfg_reply_ajax_ok()
 
     # Modification
@@ -53,18 +54,18 @@ class Plugin_authlist (Auth.PluginAuth):
         def __init__ (self, refresh, key):
             CTK.Container.__init__ (self)
 
-            keys = CTK.cfg.keys ('%s!list'%(key))
-            keys.sort(lambda x,y: cmp(int(x), int(y)))
+            keys = CTK.cfg.keys (f'{key}!list')
+            keys.sort(key=int)
 
             if keys:
-                self += CTK.RawHTML ("<h3>%s</h3>" % (_('Authentication list')))
+                self += CTK.RawHTML (f"<h3>{_('Authentication list')}</h3>")
                 table = CTK.Table({'id': 'authlist-table'})
                 table.set_header (1)
                 table += [CTK.RawHTML(x) for x in (_('User'), _('Password'),'')]
                 for c in keys:
-                    pre    = '%s!list!%s'%(key, c)
-                    user   = CTK.RawHTML (CTK.cfg.get_val('%s!user'     %(pre)))
-                    passwd = CTK.RawHTML (CTK.cfg.get_val('%s!password' %(pre)))
+                    pre    = f'{key}!list!{c}'
+                    user   = CTK.RawHTML (CTK.cfg.get_val(f'{pre}!user'))
+                    passwd = CTK.RawHTML (CTK.cfg.get_val(f'{pre}!password'))
                     remove = None
                     if len(keys) >= 2:
                         remove = CTK.ImageStock('del')
@@ -84,7 +85,7 @@ class Plugin_authlist (Auth.PluginAuth):
         refresh = CTK.Refreshable ({'id': 'authlist'})
         refresh.register (lambda: self.Content(refresh, key).Render())
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Fixed Authentication List')))
+        self += CTK.RawHTML (f"<h2>{_('Fixed Authentication List')}</h2>")
         self += refresh
 
         # New
@@ -98,13 +99,13 @@ class Plugin_authlist (Auth.PluginAuth):
         table += [new_user, new_pass, new_add]
 
         submit = CTK.Submitter (URL_APPLY)
-        submit += CTK.Hidden ('key', '%s!list'%(key))
+        submit += CTK.Hidden ('key', f'{key}!list')
         submit += table
         submit.bind ('submit_success', refresh.JS_to_refresh() + new_user.JS_to_clean() + new_pass.JS_to_clean())
 
-        self += CTK.RawHTML ("<h3>%s</h3>" % (_('Add New Pair')))
+        self += CTK.RawHTML (f"<h3>{_('Add New Pair')}</h3>")
         self += CTK.Indenter (submit)
 
         # Publish
-        VALS = [("%s!passwdfile"%(self.key), validations.is_local_file_exists)]
-        CTK.publish ('^%s'%(URL_APPLY), commit, validation=VALS, method="POST")
+        VALS = [(f"{self.key}!passwdfile", validations.is_local_file_exists)]
+        CTK.publish (f'^{URL_APPLY}', commit, validation=VALS, method="POST")

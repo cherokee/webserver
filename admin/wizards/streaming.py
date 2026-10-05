@@ -32,6 +32,7 @@ import re
 import string
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 from util import *
 from configured import CHEROKEE_PLUGINDIR
@@ -55,8 +56,8 @@ CONFIG = """
 
 class Commit:
     def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        vsrv_pre = 'vserver!%s'%(vsrv_num)
+        vsrv_num = CTK.cfg.get_val (f'{PREFIX}!vsrv_num')
+        vsrv_pre = f'vserver!{vsrv_num}'
         prio, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
         extensions = EXTENSIONS
 
@@ -65,7 +66,7 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -81,16 +82,16 @@ class Commit:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('streaming', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
         box += Wizard.CookBookBox ('cookbook_streaming')
 
         # Send the VServer num
         vsrv_num = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
         submit = CTK.Submitter (APPLY)
-        submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), vsrv_num)
+        submit += CTK.Hidden(f'{PREFIX}!vsrv_num', vsrv_num)
         submit += CTK.Hidden('final', '1')
         cont += submit
 
@@ -103,29 +104,29 @@ class NextStep (CTK.Container):
     def __init__ (self, vsrv_num):
         CTK.Container.__init__ (self)
 
-        self._pre = 'vserver!%s'%(vsrv_num)
+        self._pre = f'vserver!{vsrv_num}'
         if self._can_proceed ():
             self += CTK.DruidButtonsPanel_Create()
         else:
-            self += CTK.RawHTML ('<p>%s</p>' %(self._msg))
+            self += CTK.RawHTML (f'<p>{self._msg}</p>')
             self += CTK.DruidButtonsPanel_Cancel()
 
     def _can_proceed (self):
-        mods = filter(lambda x: 'streaming' in x, os.listdir(CHEROKEE_PLUGINDIR))
+        mods = [x for x in os.listdir(CHEROKEE_PLUGINDIR) if 'streaming' in x]
         if not len(mods):
             self._msg = _("The media streaming plug-in is not installed.")
             return False
 
-        rules = CTK.cfg.keys('%s!rule'%(self._pre))
+        rules = CTK.cfg.keys(f'{self._pre}!rule')
         for r in rules:
-            if CTK.cfg.get_val ('%s!rule!%s!match'%(self._pre, r)) != 'extensions':
+            if CTK.cfg.get_val (f'{self._pre}!rule!{r}!match') != 'extensions':
                 continue
-            if CTK.cfg.get_val ('%s!rule!%s!match!extensions'%(self._pre, r)) == EXTENSIONS:
+            if CTK.cfg.get_val (f'{self._pre}!rule!{r}!match!extensions') == EXTENSIONS:
                 self._msg = _("Media streaming is already configured.")
                 return False
         return True
 
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/streaming$',   Welcome)
-CTK.publish (r'^%s'%(APPLY), Commit, method="POST")
+CTK.publish ('^/wizard/vserver/(\\d+)/streaming$',   Welcome)
+CTK.publish (rf'^{APPLY}', Commit, method="POST")

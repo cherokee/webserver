@@ -286,6 +286,8 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 
 AC_CHECK_FUNCS(dup2 ftruncate getcwd gettimeofday inet_ntoa gmtime gmtime_r localtime localtime_r getrlimit getdtablesize memset mkdir readdir readdir_r flockfile funlockfile backtrace munmap pathconf pstat_getdynamic realpath rmdir strchr strcspn strdup strncasecmp strpbrk strrchr strspn strnstr strstr strtol strtoul random srandom srandomdev)
+AC_SEARCH_LIBS([clock_gettime], [rt])
+AC_CHECK_FUNCS([clock_gettime])
 
 FW_CHECK_PWD
 FW_CHECK_GRP
@@ -1090,6 +1092,44 @@ AC_MSG_RESULT([$have_openssl])
 AM_CONDITIONAL(USE_OPENSSL, test "x$have_openssl" = "xyes")
 
 
+dnl Native HTTP/2 and HTTP/3 adapters.  Explicit enables must fail closed.
+AC_ARG_ENABLE(http2, AS_HELP_STRING([--enable-http2], [Build native HTTP/2 (auto)]), [], [enable_http2=auto])
+AC_ARG_ENABLE(http3, AS_HELP_STRING([--enable-http3], [Build native HTTP/3 (auto)]), [], [enable_http3=auto])
+AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
+HTTP_PROTOCOL_CFLAGS=""
+HTTP_PROTOCOL_LIBS=""
+have_http2=no
+have_http3=no
+if test "$enable_http2" != no && test "$have_openssl" = yes; then
+  if $PKG_CONFIG --exists 'libnghttp2 >= 1.61' 'openssl >= 1.1.1'; then
+    have_http2=yes
+    HTTP_PROTOCOL_CFLAGS="$HTTP_PROTOCOL_CFLAGS `$PKG_CONFIG --cflags libnghttp2 openssl`"
+    HTTP_PROTOCOL_LIBS="$HTTP_PROTOCOL_LIBS `$PKG_CONFIG --libs libnghttp2 openssl`"
+    AC_DEFINE(HAVE_HTTP2, 1, [Build native HTTP/2])
+  fi
+fi
+if test "$enable_http3" != no && test "$have_openssl" = yes; then
+  if $PKG_CONFIG --exists 'libnghttp3 >= 1.12' 'openssl >= 3.5'; then
+    save_LIBS="$LIBS"
+    LIBS="$LIBS `$PKG_CONFIG --libs openssl`"
+    AC_CHECK_LIB(ssl, OSSL_QUIC_server_method, [have_http3=yes], [], [$LIBS])
+    LIBS="$save_LIBS"
+    if test "$have_http3" = yes; then
+      HTTP_PROTOCOL_CFLAGS="$HTTP_PROTOCOL_CFLAGS `$PKG_CONFIG --cflags libnghttp3 openssl`"
+      HTTP_PROTOCOL_LIBS="$HTTP_PROTOCOL_LIBS `$PKG_CONFIG --libs libnghttp3 openssl`"
+      AC_DEFINE(HAVE_HTTP3, 1, [Build native HTTP/3])
+    fi
+  fi
+fi
+if test "$enable_http2" = yes && test "$have_http2" != yes; then
+  AC_MSG_ERROR([HTTP/2 requires OpenSSL >= 1.1.1 and libnghttp2 >= 1.61])
+fi
+if test "$enable_http3" = yes && test "$have_http3" != yes; then
+  AC_MSG_ERROR([HTTP/3 requires QUIC server-enabled OpenSSL >= 3.5 and libnghttp3 >= 1.12])
+fi
+AC_SUBST(HTTP_PROTOCOL_CFLAGS)
+AC_SUBST(HTTP_PROTOCOL_LIBS)
+
 dnl
 dnl Native Language Support
 dnl
@@ -1335,9 +1375,9 @@ AC_ARG_WITH([python], AS_HELP_STRING([--with-python=/path/to/python],[Path to Py
 		  PYTHON="$withval",
 [
    AC_CACHE_VAL([ac_cv_path_PYTHON],
-     [AC_PATH_PROGS_FEATURE_CHECK([PYTHON], [python2.4 python2.5 python2.6 python2.7 python2 python],
+     [AC_PATH_PROGS_FEATURE_CHECK([PYTHON], [python3.14 python3.13 python3.12 python3 python],
         [v=$($ac_path_PYTHON -c "import sys; print (sys.version_info[[0]])")
-        if test "x$v" == "x2"; then
+        if test "x$v" == "x3"; then
           ac_cv_path_PYTHON=$ac_path_PYTHON aac_path_PYTHON_found=:
         fi])])
    if test "x$ac_cv_path_PYTHON" != "x"; then
@@ -1347,18 +1387,18 @@ AC_ARG_WITH([python], AS_HELP_STRING([--with-python=/path/to/python],[Path to Py
 )
 
 if test "x$PYTHON" != "x"; then
-   AC_MSG_CHECKING([for Python 2.x interpreter])
+   AC_MSG_CHECKING([for Python 3 interpreter])
    v=`$PYTHON -c 'import sys; print (sys.version_info[[0]])'`
-   if test "x$v" != "x2"; then
+   if test "x$v" != "x3"; then
      have_python="no"
      wants_admin="no"
 	AC_MSG_RESULT([no])
 	AC_MSG_ERROR([
-*** Cherokee requires Python 2.x. Please, use the --with-python
-*** parameter to specify a Python 2.4, 2.5, 2.6 or 2.7 interpreter.])
+*** Cherokee requires Python 3. Please, use the --with-python
+*** parameter to specify a Python 3 interpreter.])
    else
      AC_MSG_RESULT([$PYTHON])
-     AC_DEFINE_UNQUOTED(PATH_PYTHON2, ["$PYTHON"], [Define path to Python 2.x interpreter])
+     AC_DEFINE_UNQUOTED(PATH_PYTHON3, ["$PYTHON"], [Define path to Python 3 interpreter])
    fi
 else
     have_python="no"
@@ -1590,6 +1630,8 @@ for m in $methods; do
 done
 echo "Threading support     $have_pthread"
 echo "OpenSSL support       $have_openssl"
+echo "HTTP/2 support        $have_http2"
+echo "HTTP/3 support        $have_http3"
 echo "PCRE library          $have_pcre"
 echo "Compatible PAM        $have_pam"
 echo "Python                $have_python"

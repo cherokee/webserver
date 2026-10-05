@@ -72,6 +72,7 @@
 typedef enum {
 	phase_nothing,
 	phase_tls_handshake,
+	phase_http2,
 	phase_reading_header,
 	phase_processing_header,
 	phase_setup_connection,
@@ -84,6 +85,8 @@ typedef enum {
 	phase_lingering
 } cherokee_connection_phase_t;
 
+
+#define CONN_HTTP_VERSION(c) ((c)->native_version != http_version_unknown ? (c)->native_version : (c)->header.version)
 
 #define conn_op_nothing            0
 #define conn_op_root_index        (1 << 1)
@@ -117,6 +120,9 @@ struct cherokee_connection {
 	 */
 	cherokee_socket_t             socket;
 	cherokee_http_upgrade_t       upgrade;
+	void                         *http2_session;
+	cherokee_http_version_t        native_version;
+	void                         *native_tls_vserver;
 	cherokee_connection_options_t options;
 	cherokee_handler_t           *handler;
 

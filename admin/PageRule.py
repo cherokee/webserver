@@ -24,6 +24,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import SelectionPanel
 import validations
@@ -69,8 +70,8 @@ JS_CLONE = """
 """
 
 JS_PARTICULAR = """
-  var vserver = window.location.pathname.match (/^\/vserver\/(\d+)/)[1];
-  var rule    = window.location.pathname.match (/^\/vserver\/\d+\/rule\/(\d+)/)[1];
+  var vserver = window.location.pathname.match (/^\\/vserver\\/(\\d+)/)[1];
+  var rule    = window.location.pathname.match (/^\\/vserver\\/\\d+\\/rule\\/(\\d+)/)[1];
 
   $.cookie ('%(cookie_name)s', rule+'_'+vserver, { path: '/vserver/'+ vserver + '/rule'});
   window.location.replace ('/vserver/'+ vserver + '/rule');
@@ -95,12 +96,12 @@ def reorder (arg):
     # Build and alternative tree
     num = 100
     for r in tmp:
-        CTK.cfg.clone ('vserver!%s!rule!%s'%(vsrv, r), 'tmp!vserver!%s!rule!%d'%(vsrv, num))
+        CTK.cfg.clone (f'vserver!{vsrv}!rule!{r}', f'tmp!vserver!{vsrv}!rule!{int(num)}')
         num += 100
 
     # Set the new list in place
-    del (CTK.cfg['vserver!%s!rule'%(vsrv)])
-    CTK.cfg.rename ('tmp!vserver!%s!rule'%(vsrv), 'vserver!%s!rule'%(vsrv))
+    del (CTK.cfg[f'vserver!{vsrv}!rule'])
+    CTK.cfg.rename (f'tmp!vserver!{vsrv}!rule', f'vserver!{vsrv}!rule')
     return CTK.cfg_reply_ajax_ok()
 
 
@@ -142,17 +143,18 @@ class RuleNew (CTK.Container):
         wizards2_path = os.path.realpath (__file__ + "/../wizards2")
         if os.path.exists (wizards2_path):
             # Wizards 2.0
-            import wizards2
+            import importlib
+            wizards2 = importlib.import_module('wizards2')
 
             categories = wizards2.Categories.get()
             for cat in categories:
-                url_pre = '%s/%s' %(wizards2.Categories.URL_CAT_LIST_RULE, categories.index(cat))
+                url_pre = f'{wizards2.Categories.URL_CAT_LIST_RULE}/{categories.index(cat)}'
                 content = [CTK.Box({'class': 'title'}, CTK.RawHTML(_(cat)))]
                 panel.Add (cat.replace(' ','_'), url_pre, content, draggable=False)
         else:
             # Wizards 1.0
             for cat in Wizard.Categories (Wizard.TYPE_RULE):
-                url_pre = '%s/%s' %(Wizard.URL_CAT_LIST_RULE, cat['name'])
+                url_pre = f"{Wizard.URL_CAT_LIST_RULE}/{cat['name']}"
                 title, descr = cat['title'], cat['descr']
                 content = [CTK.Box({'class': 'title'},       CTK.RawHTML(_(title))),
                            CTK.Box({'class': 'description'}, CTK.RawHTML(_(descr)))]
@@ -163,7 +165,7 @@ class Render:
     class PanelList (CTK.Container):
         def __init__ (self, refresh, right_box, vsrv_num):
             CTK.Container.__init__ (self)
-            url_base  = '/vserver/%s/rule' %(vsrv_num)
+            url_base  = f'/vserver/{vsrv_num}/rule'
             url_apply = URL_APPLY %(vsrv_num)
 
             # Build the panel list
@@ -171,60 +173,60 @@ class Render:
             self += panel
 
             # Build the Rule list
-            rules = CTK.cfg.keys('vserver!%s!rule'%(vsrv_num))
-            rules.sort (lambda x,y: cmp(int(x), int(y)))
+            rules = CTK.cfg.keys(f'vserver!{vsrv_num}!rule')
+            rules.sort (key=int)
             rules.reverse()
 
             for r in rules:
-                rule = Rule ('vserver!%s!rule!%s!match'%(vsrv_num, r))
+                rule = Rule (f'vserver!{vsrv_num}!rule!{r}!match')
                 rule_name = rule.GetName()
                 rule_name_esc = CTK.escape_html (rule_name)
 
                 # Comment
                 comment = []
 
-                handler = CTK.cfg.get_val ('vserver!%s!rule!%s!handler' %(vsrv_num, r))
+                handler = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!handler')
                 if handler:
-                    desc = filter (lambda x: x[0] == handler, HANDLERS)[0][1]
+                    desc = [x for x in HANDLERS if x[0] == handler][0][1]
                     comment.append (_(desc))
 
-                auth = CTK.cfg.get_val ('vserver!%s!rule!%s!auth' %(vsrv_num, r))
+                auth = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!auth')
                 if auth:
-                    desc = filter (lambda x: x[0] == auth, VALIDATORS)[0][1]
+                    desc = [x for x in VALIDATORS if x[0] == auth][0][1]
                     comment.append (_(desc))
 
-                for e in CTK.cfg.keys ('vserver!%s!rule!%s!encoder'%(vsrv_num, r)):
-                    val = CTK.cfg.get_val ('vserver!%s!rule!%s!encoder!%s'%(vsrv_num, r, e))
+                for e in CTK.cfg.keys (f'vserver!{vsrv_num}!rule!{r}!encoder'):
+                    val = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!encoder!{e}')
                     if val == 'allow':
                         comment.append (e)
                     elif val == 'forbid':
-                        comment.append ("no %s"%(e))
+                        comment.append (f"no {e}")
 
-                if CTK.cfg.get_val ('vserver!%s!rule!%s!flcache'%(vsrv_num, r)) == "allow":
+                if CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!flcache') == "allow":
                     comment.append ('Cache')
 
-                if CTK.cfg.get_val ('vserver!%s!rule!%s!timeout' %(vsrv_num, r)):
+                if CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!timeout'):
                     comment.append ('Timeout')
 
-                if CTK.cfg.get_val ('vserver!%s!rule!%s!rate' %(vsrv_num, r)):
+                if CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!rate'):
                     comment.append ('Traffic')
 
-                if int (CTK.cfg.get_val ('vserver!%s!rule!%s!no_log'%(vsrv_num, r), "0")) > 0:
+                if int (CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!no_log', "0")) > 0:
                     comment.append ('No log')
 
                 # List entry
-                row_id = '%s_%s' %(r, vsrv_num)
+                row_id = f'{r}_{vsrv_num}'
 
                 if r == rules[-1]:
                     content = [CTK.Box ({'class': 'name'}, CTK.RawHTML (rule_name_esc)),
                                CTK.Box ({'class': 'comment'}, CTK.RawHTML (', '.join(comment)))]
-                    panel.Add (row_id, '/vserver/%s/rule/content/%s'%(vsrv_num, r), content, draggable=False)
+                    panel.Add (row_id, f'/vserver/{vsrv_num}/rule/content/{r}', content, draggable=False)
                 else:
                     # Remove
                     dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
                     dialog.AddButton (_('Cancel'), "close")
-                    dialog.AddButton (_('Remove'), CTK.JS.Ajax (url_apply, async=False,
-                                                                data    = {'vserver!%s!rule!%s'%(vsrv_num, r):''},
+                    dialog.AddButton (_('Remove'), CTK.JS.Ajax (url_apply, async_=False,
+                                                                data    = {f'vserver!{vsrv_num}!rule!{r}':''},
                                                                 success = dialog.JS_to_close() + \
                                                                           refresh.JS_to_refresh()))
                     dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(rule_name_esc))
@@ -233,25 +235,25 @@ class Render:
                     remove.bind ('click', dialog.JS_to_show() + "return false;")
 
                     # Disable
-                    is_disabled = bool (int (CTK.cfg.get_val('vserver!%s!rule!%s!disabled'%(vsrv_num,r), "0")))
+                    is_disabled = bool (int (CTK.cfg.get_val(f'vserver!{vsrv_num}!rule!{r}!disabled', "0")))
                     disclass = ('','rule-inactive')[is_disabled][:]
 
                     disabled = CTK.ToggleButtonOnOff (not is_disabled)
                     disabled.bind ('changed',
-                                   CTK.JS.Ajax (url_apply, async=True,
-                                                data = '{"vserver!%s!rule!%s!disabled": event.value}'%(vsrv_num,r)))
+                                   CTK.JS.Ajax (url_apply, async_=True,
+                                                data = '{{"vserver!{}!rule!{}!disabled": event.value}}'.format(vsrv_num,r)))
                     disabled.bind ('changed',
                                    "$(this).parents('.row_content').toggleClass('rule-inactive');")
 
                     # Final
-                    is_final = bool (int (CTK.cfg.get_val('vserver!%s!rule!%s!match!final'%(vsrv_num,r), "1")))
+                    is_final = bool (int (CTK.cfg.get_val(f'vserver!{vsrv_num}!rule!{r}!match!final', "1")))
 
                     final = CTK.ToggleButton (CTK.Box({'class': 'final-on'},  CTK.RawHTML(_('Final'))),
                                               CTK.Box({'class': 'final-off'}, CTK.RawHTML(_('Non Final'))),
                                               is_final)
                     final.bind ('changed',
-                                CTK.JS.Ajax (url_apply, async=True,
-                                             data = '{"vserver!%s!rule!%s!match!final": parseInt(event.value)?"0":"1"}'%(vsrv_num,r)))
+                                CTK.JS.Ajax (url_apply, async_=True,
+                                             data = '{{"vserver!{}!rule!{}!match!final": parseInt(event.value)?"0":"1"}}'.format(vsrv_num,r)))
 
                     # Actions
                     group = CTK.Box ({'class': 'sel-actions'}, [disabled, remove])
@@ -263,7 +265,7 @@ class Render:
 
 
                     # Add the list entry
-                    panel.Add (row_id, '/vserver/%s/rule/content/%s'%(vsrv_num, r), content, True, disclass)
+                    panel.Add (row_id, f'/vserver/{vsrv_num}/rule/content/{r}', content, True, disclass)
 
 
     class PanelButtons (CTK.Box):
@@ -290,7 +292,7 @@ class Render:
             dialog.bind ('submit_success', self.JS_to_trigger('submit_success'));
             dialog.bind ('open_wizard',
                          dialog.JS_to_close() +
-                         druid.JS_to_goto("'/wizard/vserver/%s/' + event.wizard" %(vsrv_num)) +
+                         druid.JS_to_goto(f"'/wizard/vserver/{vsrv_num}/' + event.wizard") +
                          wizard.JS_to_show())
 
             self += button
@@ -301,7 +303,7 @@ class Render:
             dialog = CTK.Dialog ({'title': _('Clone Behavior Rule'), 'width': 480})
             dialog.AddButton (_('Cancel'), "close")
             dialog.AddButton (_('Clone'), JS_CLONE + dialog.JS_to_close())
-            dialog += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_CLONE_DIALOG)))
+            dialog += CTK.RawHTML (f'<p>{_(NOTE_CLONE_DIALOG)}</p>')
 
             button = CTK.Button('<img src="/static/images/panel-clone.png" />', {'id': 'rule-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Behavior Rule')})
             button.bind ('click', dialog.JS_to_show())
@@ -315,12 +317,12 @@ class Render:
         vsrv_num = re.findall (URL_BASE_R, CTK.request.url)[0]
 
         # Ensure the VServer exists
-        if not CTK.cfg.keys('vserver!%s'%(vsrv_num)):
+        if not CTK.cfg.keys(f'vserver!{vsrv_num}'):
             return CTK.HTTP_Redir ('/vserver')
 
         # Content
         left  = CTK.Box({'class': 'panel'})
-        left += CTK.RawHTML('<h2>%s</h2>'%(title))
+        left += CTK.RawHTML(f'<h2>{title}</h2>')
 
         # Virtual Server List
         refresh = CTK.Refreshable ({'id': 'rules_panel'})

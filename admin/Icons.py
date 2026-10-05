@@ -25,6 +25,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import os
 import validations
@@ -63,7 +64,7 @@ def modify():
                 val = validator (new, CTK.cfg.get_val(k))
                 if util.lists_differ (val, new):
                     updates[k] = val
-            except ValueError, e:
+            except ValueError as e:
                 return {'ret': "error", 'errors': {k: str(e)}}
 
     if updates:
@@ -78,7 +79,7 @@ def commit():
         if not icon:
             return CTK.cfg_reply_ajax_ok()
 
-        CTK.cfg['icons!suffix!%s'%(icon)] = new_exts
+        CTK.cfg[f'icons!suffix!{icon}'] = new_exts
         return CTK.cfg_reply_ajax_ok()
 
     # New file
@@ -88,7 +89,7 @@ def commit():
         if not icon:
             return CTK.cfg_reply_ajax_ok()
 
-        CTK.cfg['icons!file!%s'%(icon)] = new_file
+        CTK.cfg[f'icons!file!{icon}'] = new_file
         return CTK.cfg_reply_ajax_ok()
 
     # Modifications
@@ -115,7 +116,7 @@ class ExtensionsTable (CTK.Container):
     def __init__ (self, refreshable, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %_('Extension List'))
+        self += CTK.RawHTML (f"<h2>{_('Extension List')}</h2>")
 
         # List
         icons = CTK.cfg.keys('icons!suffix')
@@ -131,7 +132,7 @@ class ExtensionsTable (CTK.Container):
 
             icons.sort()
             for k in icons:
-                pre    = 'icons!suffix!%s'%(k)
+                pre    = f'icons!suffix!{k}'
                 desc   = prettyfier(k)
                 image  = CTK.Image ({'alt'  : desc, 'title': desc, 'src': os.path.join('/icons_local', k)})
                 delete = CTK.ImageStock('del')
@@ -154,7 +155,7 @@ class FilesTable (CTK.Container):
     def __init__ (self, refreshable, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %_('File Matches'))
+        self += CTK.RawHTML (f"<h2>{_('File Matches')}</h2>")
 
         # List
         icons = CTK.cfg.keys('icons!file')
@@ -169,7 +170,7 @@ class FilesTable (CTK.Container):
             table.set_header(1)
 
             for k in icons:
-                pre     = 'icons!file!%s'%(k)
+                pre     = f'icons!file!{k}'
                 desc    = prettyfier(k)
                 image   = CTK.Image ({'alt'  : desc, 'title': desc, 'src': os.path.join('/icons_local', k)})
                 submit  = CTK.Submitter (URL_APPLY)
@@ -198,20 +199,20 @@ class SpecialTable (CTK.Container):
                         ('directory',        _('Directory')),
                         ('parent_directory', _('Go to Parent'))]:
 
-            icon = CTK.cfg.get_val('icons!%s'%(k), 'blank.png')
+            icon = CTK.cfg.get_val(f'icons!{k}', 'blank.png')
             props = {'alt'  : desc,
                      'title': desc,
-                     'src'  : '/icons_local/%s'%(icon)}
+                     'src'  : f'/icons_local/{icon}'}
             image = CTK.Image (props)
             modify = _('Modify')
-            button = AdditionDialogButton (k, "%(modify)s '%(desc)s'"%(locals()), selected = icon, submit_label = modify)
+            button = AdditionDialogButton (k, f"{locals()['modify']} '{locals()['desc']}'", selected = icon, submit_label = modify)
             button.bind ('submit_success', refreshable.JS_to_refresh())
             table += [image, CTK.RawHTML(desc), button]
 
         submit  = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %_('Special Files'))
+        self += CTK.RawHTML (f"<h2>{_('Special Files')}</h2>")
         self += CTK.Indenter (submit)
 
 
@@ -280,7 +281,7 @@ class IconChooser (CTK.Box):
             props = {'alt'  : desc,
                      'title': desc,
                      'file' : filename,
-                     'src'  : '/icons_local/%s'%(filename),
+                     'src'  : f'/icons_local/{filename}',
                      'class': 'icon_chooser_entry icon_chooser_used'}
 
             if filename in unused:
@@ -329,7 +330,7 @@ class AddIcon (CTK.Container):
                  'default':          _('Default'),
                  'directory':        _('Directory'),
                  'parent_directory': _('Go to Parent')}
-        assert key in descs.keys()
+        assert key in list(descs.keys())
         label = descs[key]
 
         table = CTK.Table()
@@ -338,10 +339,10 @@ class AddIcon (CTK.Container):
         if key in ['new_file','new_exts']:
             field = CTK.TextField({'name': key, 'class': 'noauto'})
             row.append(CTK.Box ({'class': 'icon_field'}, field))
-            hidden_name = '%s_icon' %(key)
+            hidden_name = f'{key}_icon'
             prefix = ['icons!suffix', 'icons!file'][key == 'new_file']
         else:
-            hidden_name = 'icons!%s' %(key)
+            hidden_name = f'icons!{key}'
             prefix = None
 
         table  += row
@@ -353,7 +354,7 @@ class AddIcon (CTK.Container):
 
 class AdditionDialogButton (CTK.Box):
     def __init__ (self, key, title, **kwargs):
-        CTK.Box.__init__ (self, {'class': '%s-button' %(kwargs.get('klass', 'icon'))})
+        CTK.Box.__init__ (self, {'class': f"{kwargs.get('klass', 'icon')}-button"})
         submit_label = kwargs.get('submit_label', _('Add'))
         button_label = kwargs.get('button_label', submit_label)
 
@@ -381,4 +382,4 @@ class Icons_Widget (CTK.Box):
         self += FilesWidget_Instancer()
         self += ExtensionsWidget_Instancer()
 
-CTK.publish ('^%s'%(URL_APPLY), commit, validation=VALIDATIONS, method="POST")
+CTK.publish (f'^{URL_APPLY}', commit, validation=VALIDATIONS, method="POST")

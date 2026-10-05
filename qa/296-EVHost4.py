@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC  = '<a href="http://www.alobbs.com">Alvaro</a> tests QA #296.'
 DOMAIN = '296-qa.users.example.com'
@@ -20,14 +20,14 @@ class Test (TestBase):
         self.name             = "EVHost: ${root_domain}/${subdomain1}"
         self.request          = "GET /file HTTP/1.1\r\n" +\
                                 "Connection: Close\r\n" + \
-                                "Host: %s\r\n" %(DOMAIN)
+                                f"Host: {DOMAIN}\r\n"
         self.expected_error   = 200
         self.expected_content = MAGIC
 
     def Prepare (self, www):
         d1 = self.Mkdir (www, "test_296_general")
         ev = self.Mkdir (www, "test_296_evhost")
-        d2 = self.Mkdir (ev,  "%s/example/users/public"%(ev))
+        d2 = self.Mkdir (ev,  f"{ev}/example/users/public")
 
-        self.WriteFile (d2, "file", 0444, MAGIC)
+        self.WriteFile (d2, "file", 0o444, MAGIC)
         self.conf = CONF % (d1, ev)

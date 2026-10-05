@@ -1,5 +1,5 @@
-from conf import *
-from base import *
+from qa_conf import *
+from qa_base import *
 
 MAGIC  = "Cherokee supports htdigest files"
 REALM  = "realm"
@@ -37,7 +37,7 @@ class Test (TestBase):
         # It will read a validad nonce value just before each test
         #
         nested = TestBase(__file__)
-        nested.request = "GET /%s/file HTTP/1.0\r\n" % (DIR)
+        nested.request = f"GET /{DIR}/file HTTP/1.0\r\n"
         nested.Run(HOST, PORT)
 
         # Parse the authentication information line
@@ -47,35 +47,31 @@ class Test (TestBase):
 
         # Calculate the response value
         #
-        response = nested.digest.CalculateResponse (USER, REALM, PASSWD, "GET", "/%s/file" % (DIR),
+        response = nested.digest.CalculateResponse (USER, REALM, PASSWD, "GET", f"/{DIR}/file",
                                                     vals["nonce"], vals["qop"], vals["cnonce"], vals["nc"])
 
         # At this point, we got a valid nonce, so let's write the
         # request..
-        self.request = "GET /%s/file HTTP/1.0\r\n" % (DIR) +\
-                       "Authorization: Digest response=\"%s\", username=\"%s\", realm=\"%s\", uri=\"%s\", nonce=\"%s\", qop=\"%s\", algorithm=\"%s\"\r\n" % \
-                       (response, USER, REALM, "/%s/file" %(DIR), vals["nonce"], vals["qop"], vals["algorithm"])
+        self.request = f"GET /{DIR}/file HTTP/1.0\r\n" +\
+                       "Authorization: Digest response=\"{}\", username=\"{}\", realm=\"{}\", uri=\"{}\", nonce=\"{}\", qop=\"{}\", algorithm=\"{}\"\r\n".format(response, USER, REALM, "/{}/file".format(DIR), vals["nonce"], vals["qop"], vals["algorithm"])
 
 
     def Prepare (self, www):
-        try:
-            from hashlib import md5
-        except ImportError:
-            from md5 import md5
+        from hashlib import md5
 
         # Create the infrastructure
         #
         test_dir = self.Mkdir (www, DIR)
-        self.WriteFile (test_dir, "file", 0444, MAGIC)
+        self.WriteFile (test_dir, "file", 0o444, MAGIC)
 
         # Prepare the password file
         #
-        kd = lambda x: md5(':'.join(x)).hexdigest()
+        kd = lambda x: md5(':'.join(x).encode()).hexdigest()
         authlines = (':'.join( (user,REALM,kd((user,REALM,password))) ) for user,password in ACCOUNTS)
 
 
-        passfile = self.WriteFile (test_dir, ".passwd", 0444, '\n'.join(authlines))
+        passfile = self.WriteFile (test_dir, ".passwd", 0o444, '\n'.join(authlines))
 
         # Set the configuration
         #
-        self.conf = CONF % ('/%s'%(DIR), REALM, passfile)
+        self.conf = CONF % (f'/{DIR}', REALM, passfile)

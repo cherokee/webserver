@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 FILE  = "Chunked_post_tiny.php"
 MAGIC = 'Alvaro_alobbs.com'
@@ -22,7 +22,7 @@ class Test (TestBase):
 
         self.name = "POST Chunked: Tiny"
 
-        self.request          = "POST /%s HTTP/1.0\r\n" % (FILE) +\
+        self.request          = f"POST /{FILE} HTTP/1.0\r\n" +\
                                 "Content-type: application/x-www-form-urlencoded\r\n" +\
                                 "Content-length: 0\r\n" +\
                                 "Transfer-Encoding: chunked\r\n"
@@ -31,7 +31,7 @@ class Test (TestBase):
         self.post             = hex(len(MAGIC)+4)[2:] + "\r\nvar="+MAGIC + "\r\n0\r\n"
 
     def Prepare (self, www):
-        self.WriteFile (www, FILE, 0444, SCRIPT)
+        self.WriteFile (www, FILE, 0o444, SCRIPT)
 
     def Precondition (self):
         return os.path.exists (look_for_php())

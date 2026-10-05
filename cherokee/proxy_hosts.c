@@ -73,9 +73,7 @@ cherokee_handler_proxy_hosts_get (cherokee_handler_proxy_hosts_t  *hosts,
 
 	/* Build the index name */
 	cherokee_buffer_clean       (&hosts->tmp);
-	cherokee_buffer_add_buffer  (&hosts->tmp, &src->host);
-	cherokee_buffer_add_char    (&hosts->tmp, ':');
-	cherokee_buffer_add_ulong10 (&hosts->tmp, src->port);
+	cherokee_buffer_add_ullong10(&hosts->tmp, (cullong_t)(uintptr_t)src);
 
 	/* Check the hosts tree */
 	ret = cherokee_avl_get (&hosts->hosts, &hosts->tmp, (void **)poll);
@@ -115,11 +113,9 @@ cherokee_handler_proxy_poll_new (cherokee_handler_proxy_poll_t **poll,
 {
 	CHEROKEE_NEW_STRUCT (n, handler_proxy_poll);
 
-	n->reuse_len = 0;
 	n->reuse_max = reuse_max;
 
 	INIT_LIST_HEAD (&n->active);
-	INIT_LIST_HEAD (&n->reuse);
 	CHEROKEE_MUTEX_INIT (&n->mutex, CHEROKEE_MUTEX_FAST);
 
 	*poll = n;
@@ -139,13 +135,6 @@ cherokee_handler_proxy_poll_free (cherokee_handler_proxy_poll_t *poll)
 		cherokee_handler_proxy_conn_free (poll_conn);
 	}
 
-	list_for_each_safe (i, j, &poll->reuse) {
-		poll_conn = PROXY_CONN(i);
-
-		poll->reuse_len -= 1;
-		cherokee_list_del (&poll_conn->listed);
-		cherokee_handler_proxy_conn_free (poll_conn);
-	}
 
 	CHEROKEE_MUTEX_DESTROY (&poll->mutex);
 	return ret_ok;
@@ -157,41 +146,23 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
                                  cherokee_handler_proxy_conn_t **pconn,
                                  cherokee_source_t              *src)
 {
-	ret_t            ret;
-	cherokee_list_t *i;
+	ret_t ret;
 
 	CHEROKEE_MUTEX_LOCK (&poll->mutex);
 
-	if (poll->reuse_len > 0) {
-		/* Reuse a prev connection */
-		poll->reuse_len -= 1;
-
-		i = poll->reuse.prev;
-		cherokee_list_del (i);
-		cherokee_list_add (i, &poll->active);
-
-		*pconn = PROXY_CONN(i);
-	} else {
+	{
 		cherokee_handler_proxy_conn_t *n;
-
-		/* Create a new connection */
-		ret = cherokee_handler_proxy_conn_new (&n);
-		if (ret != ret_ok)
-			goto error;
-
-		ret = cherokee_handler_proxy_conn_get_addrinfo (n, src);
+		cushort_t unused_id;
+		ret = cherokee_handler_proxy_conn_new(&n);
+		if (ret != ret_ok) goto error;
+		n->source_ref = src;
+		ret = cherokee_source_reuse_get(src, source_protocol_http, &n->socket, &n->born, &n->requests, &unused_id);
 		if (ret != ret_ok) {
-			cherokee_handler_proxy_conn_free (n);
-			goto error;
+			ret = cherokee_handler_proxy_conn_get_addrinfo(n, src);
+			if (ret == ret_ok) ret = cherokee_handler_proxy_conn_init_socket(n, src);
+			if (ret != ret_ok) { cherokee_handler_proxy_conn_free(n); goto error; }
 		}
-
-		ret = cherokee_handler_proxy_conn_init_socket (n, src);
-		if (ret != ret_ok) {
-			cherokee_handler_proxy_conn_free (n);
-			goto error;
-		}
-
-		cherokee_list_add (&n->listed, &poll->active);
+		cherokee_list_add(&n->listed, &poll->active);
 		n->poll_ref = poll;
 		*pconn = n;
 	}
@@ -207,46 +178,12 @@ static ret_t
 poll_release (cherokee_handler_proxy_poll_t *poll,
               cherokee_handler_proxy_conn_t *pconn)
 {
-	/* Not longer an active connection */
-	cherokee_list_del (&pconn->listed);
-
-	/* Don't reuse connection w/o keep-alive
-	 */
-	if (! pconn->keepalive_in) {
-		cherokee_handler_proxy_conn_free (pconn);
-		return ret_ok;
+	cherokee_list_del(&pconn->listed);
+	if (pconn->keepalive_in) {
+		cherokee_source_reuse_put(pconn->source_ref, source_protocol_http, &pconn->socket,
+		                         pconn->born, pconn->requests + 1, 1, poll->reuse_max);
 	}
-
-	/* If the reuse-list is full, dispose the oldest obj
-	 */
-	if (poll->reuse_len > poll->reuse_max) {
-		cherokee_handler_proxy_conn_t *oldest;
-
-		oldest = PROXY_CONN(poll->reuse.prev);
-		cherokee_list_del (&oldest->listed);
-		poll->reuse_len -= 1;
-
-		cherokee_handler_proxy_conn_free (oldest);
-	}
-
-	/* Clean up
-	 */
-	pconn->keepalive_in = false;
-	pconn->size_in      = 0;
-	pconn->sent_out     = 0;
-	pconn->enc          = pconn_enc_none;
-
-	pconn->post.do_buf_sent = true;
-	pconn->post.sent        = 0;
-
-	cherokee_buffer_clean (&pconn->post.buf_temp);
-	cherokee_buffer_clean (&pconn->header_in_raw);
-
-	/* Store it to be reused
-	 */
-	poll->reuse_len += 1;
-	cherokee_list_add (&pconn->listed, &poll->reuse);
-
+	cherokee_handler_proxy_conn_free(pconn);
 	return ret_ok;
 }
 
@@ -272,12 +209,15 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 
 	n->poll_ref      = NULL;
 	n->keepalive_in  = false;
+	n->response_close = false;
 	n->size_in       = 0;
 	n->sent_out      = 0;
 	n->enc           = pconn_enc_none;
 	n->addr_total    = 0;
 	n->addr_current  = 0;
 	n->addr_info_ref = NULL;
+	n->source_ref = NULL; n->born = 0; n->requests = 0;
+	n->request_sent = 0; n->response_received = 0;
 
 	*pconn = n;
 	return ret_ok;
@@ -320,17 +260,10 @@ cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t *pconn,
 	size_t sent = 0;
 
 	ret = cherokee_socket_bufwrite (&pconn->socket, buf, &sent);
-	if (unlikely(ret != ret_ok)) {
-		return ret;
-	}
-
-	if (sent >= buf->len) {
-		cherokee_buffer_clean (buf);
-		return ret_ok;
-	}
-
-	cherokee_buffer_move_to_begin (buf, sent);
-	return ret_eagain;
+	pconn->request_sent += sent;
+	if (sent) cherokee_buffer_move_to_begin(buf, sent);
+	if (ret != ret_ok) return ret;
+	return buf->len ? ret_eagain : ret_ok;
 }
 
 static ret_t
@@ -376,6 +309,7 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	ret = cherokee_socket_bufread (&pconn->socket,
 	                               &pconn->header_in_raw,
 	                               DEFAULT_RECV_SIZE, &size);
+	pconn->response_received += size;
 	switch (ret) {
 	case ret_ok:
 		break;

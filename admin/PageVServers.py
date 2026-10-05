@@ -24,6 +24,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import SelectionPanel
 import validations
@@ -71,7 +72,7 @@ JS_CLONE = """
 """
 
 JS_PARTICULAR = """
-  var vserver = window.location.pathname.match (/^\/vserver\/(\d+)\/?$/)[1];
+  var vserver = window.location.pathname.match (/^\\/vserver\\/(\\d+)\\/?$/)[1];
   $.cookie ('%(cookie_name)s', vserver, { path: '/vserver' });
   window.location.replace ('%(url_base)s'+window.location.hash);
 """
@@ -83,20 +84,20 @@ def Commit():
 
     if new_nick and new_droot:
         next = CTK.cfg.get_next_entry_prefix ('vserver')
-        CTK.cfg['%s!nick'                   %(next)] = new_nick
-        CTK.cfg['%s!document_root'          %(next)] = new_droot
-        CTK.cfg['%s!rule!1!match'           %(next)] = 'default'
-        CTK.cfg['%s!rule!1!handler'         %(next)] = 'common'
+        CTK.cfg[f'{next}!nick'] = new_nick
+        CTK.cfg[f'{next}!document_root'] = new_droot
+        CTK.cfg[f'{next}!rule!1!match'] = 'default'
+        CTK.cfg[f'{next}!rule!1!handler'] = 'common'
 
-        CTK.cfg['%s!rule!2!match'           %(next)] = 'directory'
-        CTK.cfg['%s!rule!2!match!directory' %(next)] = '/cherokee_icons'
-        CTK.cfg['%s!rule!2!handler'         %(next)] = 'file'
-        CTK.cfg['%s!rule!2!document_root'   %(next)] = CHEROKEE_ICONSDIR
+        CTK.cfg[f'{next}!rule!2!match'] = 'directory'
+        CTK.cfg[f'{next}!rule!2!match!directory'] = '/cherokee_icons'
+        CTK.cfg[f'{next}!rule!2!handler'] = 'file'
+        CTK.cfg[f'{next}!rule!2!document_root'] = CHEROKEE_ICONSDIR
 
-        CTK.cfg['%s!rule!3!match'           %(next)] = 'directory'
-        CTK.cfg['%s!rule!3!match!directory' %(next)] = '/cherokee_themes'
-        CTK.cfg['%s!rule!3!handler'         %(next)] = 'file'
-        CTK.cfg['%s!rule!3!document_root'   %(next)] = CHEROKEE_THEMEDIR
+        CTK.cfg[f'{next}!rule!3!match'] = 'directory'
+        CTK.cfg[f'{next}!rule!3!match!directory'] = '/cherokee_themes'
+        CTK.cfg[f'{next}!rule!3!handler'] = 'file'
+        CTK.cfg[f'{next}!rule!3!document_root'] = CHEROKEE_THEMEDIR
 
         return CTK.cfg_reply_ajax_ok()
 
@@ -113,7 +114,7 @@ def reorder (arg):
     # Build and alternative tree
     num = 10
     for v in tmp:
-        CTK.cfg.clone ('vserver!%s'%(v), 'tmp!vserver!%d'%(num))
+        CTK.cfg.clone (f'vserver!{v}', f'tmp!vserver!{int(num)}')
         num += 10
 
     # Set the new list in place
@@ -131,7 +132,7 @@ def NewManual():
     submit += table
 
     box = CTK.Box({'class': 'vserver-new-box'})
-    box += CTK.RawHTML ('<h2>%s</h2>' %(_('Manual')))
+    box += CTK.RawHTML (f"<h2>{_('Manual')}</h2>")
     box += submit
 
     return box.Render().toJSON()
@@ -157,17 +158,18 @@ class VirtualServerNew (CTK.Container):
         wizards2_path = os.path.realpath (__file__ + "/../wizards2")
         if os.path.exists (wizards2_path):
             # Wizards 2.0
-            import wizards2
+            import importlib
+            wizards2 = importlib.import_module('wizards2')
 
             categories = wizards2.Categories.get()
             for cat in categories:
-                url_pre = '%s/%s' %(wizards2.Categories.URL_CAT_LIST_VSRV, categories.index(cat))
+                url_pre = f'{wizards2.Categories.URL_CAT_LIST_VSRV}/{categories.index(cat)}'
                 content = [CTK.Box({'class': 'title'}, CTK.RawHTML(_(cat)))]
                 panel.Add (cat.replace(' ','_'), url_pre, content, draggable=False)
         else:
             # Wizards 1.0
             for cat in Wizard.Categories (Wizard.TYPE_VSERVER):
-                url_pre = '%s/%s' %(Wizard.URL_CAT_LIST_VSRV, cat['name'])
+                url_pre = f"{Wizard.URL_CAT_LIST_VSRV}/{cat['name']}"
                 title, descr = cat['title'], cat['descr']
                 content = [CTK.Box({'class': 'title'},       CTK.RawHTML(_(title))),
                            CTK.Box({'class': 'description'}, CTK.RawHTML(_(descr)))]
@@ -195,26 +197,26 @@ class Render:
 
             # Build the Virtual Server list
             vservers = CTK.cfg.keys('vserver')
-            vservers.sort (lambda x,y: cmp(int(x), int(y)))
+            vservers.sort (key=int)
             vservers.reverse()
 
             for k in vservers:
                 # Document root widget
-                droot_str = CTK.cfg.get_val ('vserver!%s!document_root'%(k), '')
+                droot_str = CTK.cfg.get_val (f'vserver!{k}!document_root', '')
                 droot_widget = CTK.Box ({'class': 'droot'}, CTK.RawHTML(CTK.escape_html (droot_str)))
 
                 if k == vservers[-1]:
-                    content = [entry('nick', 'vserver!%s!nick'%(k)), droot_widget]
-                    panel.Add (k, '/vserver/content/%s'%(k), content, draggable=False)
+                    content = [entry('nick', f'vserver!{k}!nick'), droot_widget]
+                    panel.Add (k, f'/vserver/content/{k}', content, draggable=False)
                 else:
-                    nick     = CTK.cfg.get_val ('vserver!%s!nick'%(k), _('Unknown'))
+                    nick     = CTK.cfg.get_val (f'vserver!{k}!nick', _('Unknown'))
                     nick_esc = CTK.escape_html (nick)
 
                     # Remove
                     dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
                     dialog.AddButton (_('Cancel'), "close")
-                    dialog.AddButton (_('Remove'), CTK.JS.Ajax (URL_APPLY, async=True,
-                                                                data    = {'vserver!%s'%(k):''},
+                    dialog.AddButton (_('Remove'), CTK.JS.Ajax (URL_APPLY, async_=True,
+                                                                data    = {f'vserver!{k}':''},
                                                                 success = dialog.JS_to_close() + \
                                                                     refresh.JS_to_refresh()))
                     dialog += CTK.RawHTML (_(NOTE_DELETE_DIALOG) %(locals()))
@@ -223,13 +225,13 @@ class Render:
                     remove.bind ('click', dialog.JS_to_show() + "return false;")
 
                     # Disable
-                    is_disabled = bool (int (CTK.cfg.get_val('vserver!%s!disabled'%(k), "0")))
+                    is_disabled = bool (int (CTK.cfg.get_val(f'vserver!{k}!disabled', "0")))
                     disclass = ('','vserver-inactive')[is_disabled][:]
 
                     disabled = CTK.ToggleButtonOnOff (not is_disabled)
                     disabled.bind ('changed',
-                                   CTK.JS.Ajax (URL_APPLY, async=True,
-                                                data = '{"vserver!%s!disabled": event.value}'%(k)))
+                                   CTK.JS.Ajax (URL_APPLY, async_=True,
+                                                data = '{{"vserver!{}!disabled": event.value}}'.format(k)))
                     disabled.bind ('changed',
                                    "$(this).parents('.row_content').toggleClass('vserver-inactive');")
 
@@ -237,10 +239,10 @@ class Render:
                     group = CTK.Box ({'class': 'sel-actions'}, [disabled, remove])
 
                     content = [group]
-                    content += [entry('nick', 'vserver!%s!nick'%(k)), droot_widget]
+                    content += [entry('nick', f'vserver!{k}!nick'), droot_widget]
 
                     # List entry
-                    panel.Add (k, '/vserver/content/%s'%(k), content, True, disclass)
+                    panel.Add (k, f'/vserver/content/{k}', content, True, disclass)
 
     class PanelButtons (CTK.Box):
         def __init__ (self):
@@ -280,7 +282,7 @@ class Render:
             dialog = CTK.Dialog ({'title': _('Clone Virtual Server'), 'width': 480})
             dialog.AddButton (_('Cancel'), "close")
             dialog.AddButton (_('Clone'), JS_CLONE + dialog.JS_to_close())
-            dialog += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_CLONE_DIALOG)))
+            dialog += CTK.RawHTML (f'<p>{_(NOTE_CLONE_DIALOG)}</p>')
 
             button = CTK.Button('<img src="/static/images/panel-clone.png" />', {'id': 'vserver-clone-button', 'class': 'panel-button', 'title': _('Clone Selected Virtual Server')})
             button.bind ('click', dialog.JS_to_show())
@@ -295,7 +297,7 @@ class Render:
 
         # Virtual Server List
         left  = CTK.Box({'class': 'panel'})
-        left += CTK.RawHTML('<h2>%s</h2>'%(title))
+        left += CTK.RawHTML(f'<h2>{title}</h2>')
 
         # Content
         refresh_r = CTK.Refreshable ({'id': 'vservers_panel'})
@@ -353,8 +355,7 @@ class RenderParticular:
         return page.Render()
 
 
-CTK.publish (r'^%s$'    %(URL_BASE),       Render)
-CTK.publish (r'^%s/\d+$'%(URL_BASE),       RenderParticular)
-CTK.publish (r'^%s$'    %(URL_NEW_MANUAL), NewManual, method="POST", validation=VALIDATIONS)
-CTK.publish (r'^%s'     %(URL_APPLY),      Commit,    method="POST", validation=VALIDATIONS)
-
+CTK.publish (rf'^{URL_BASE}$',       Render)
+CTK.publish (rf'^{URL_BASE}/\d+$',       RenderParticular)
+CTK.publish (rf'^{URL_NEW_MANUAL}$', NewManual, method="POST", validation=VALIDATIONS)
+CTK.publish (rf'^{URL_APPLY}',      Commit,    method="POST", validation=VALIDATIONS)

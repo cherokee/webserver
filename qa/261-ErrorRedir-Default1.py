@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DOMAIN         = "test261"
 ERROR_NUM      = 504
@@ -35,7 +35,7 @@ class Test (TestBase):
         self.name = "Error handler: Redir, default error"
 
         self.request           = "GET /doesnt-exist HTTP/1.0\r\n" + \
-                                 "Host: %s\r\n" % (DOMAIN)
+                                 f"Host: {DOMAIN}\r\n"
         self.expected_error    = ERROR_NUM
         self.forbidden_content = ERROR_3xx
         self.expected_content  = ERROR_DEFAULT
@@ -48,5 +48,5 @@ class Test (TestBase):
         rep['droot'] = droot
         self.conf = CONF %(rep)
 
-        self.WriteFile (static, FILE_3xx,     0644, ERROR_3xx)
-        self.WriteFile (static, FILE_DEFAULT, 0644, ERROR_DEFAULT)
+        self.WriteFile (static, FILE_3xx,     0o644, ERROR_3xx)
+        self.WriteFile (static, FILE_DEFAULT, 0o644, ERROR_DEFAULT)

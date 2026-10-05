@@ -142,6 +142,7 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);
 
 	ret = cherokee_socket_bufread (&scgi->socket, buffer, 4096, &read);
+	if (read) cherokee_handler_backend_progress(HANDLER(cgi_base));
 
 	switch (ret) {
 	case ret_eagain:
@@ -158,6 +159,7 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 	case ret_eof:
 	case ret_error:
 		cgi_base->got_eof = true;
+		cherokee_handler_backend_timeout(HANDLER(cgi_base), 0);
 		return ret;
 
 	default:
@@ -281,6 +283,8 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 			return ret;
 	}
 
+	if (hdl->socket.socket < 0) cherokee_handler_backend_timeout(HANDLER(hdl), hdl->src_ref->connect_timeout);
+
 	/* Try to connect
 	 */
 	if (hdl->src_ref->type == source_host) {
@@ -294,6 +298,7 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 		                                                   &hdl->socket, conn);
 	}
 
+	if (ret == ret_ok) cherokee_handler_backend_timeout(HANDLER(hdl), hdl->src_ref->io_timeout);
 	return ret;
 }
 
@@ -306,6 +311,7 @@ send_header (cherokee_handler_scgi_t *hdl)
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 
 	ret = cherokee_socket_bufwrite (&hdl->socket, &hdl->header, &written);
+	if (written) cherokee_handler_backend_progress(HANDLER(hdl));
 	if (ret != ret_ok) {
 		conn->error_code = http_bad_gateway;
 		return ret;
@@ -403,6 +409,7 @@ cherokee_handler_scgi_read_post (cherokee_handler_scgi_t *hdl)
 	ret = cherokee_post_send_to_socket (&conn->post, &conn->socket,
 	                                    &hdl->socket, NULL, &blocking, &did_IO);
 	if (did_IO) {
+		cherokee_handler_backend_progress(HANDLER(hdl));
 		cherokee_connection_update_timeout (conn);
 	}
 

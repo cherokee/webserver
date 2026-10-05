@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "The_index_page_should_contain_this"
 
@@ -23,4 +23,3 @@ class Test (TestBase):
         self.Mkdir (www, "index2/dir1")
         self.Mkdir (www, "index2/"+MAGIC)
         self.Mkdir (www, "index2/dir2")
-

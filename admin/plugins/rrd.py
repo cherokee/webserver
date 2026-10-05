@@ -24,6 +24,7 @@
 
 import CTK
 import validations
+from CTK.i18n import _, N_
 
 URL_APPLY = '/plugin/rrd/apply'
 
@@ -37,12 +38,12 @@ class Plugin_rrd (CTK.Plugin):
 
         # GUI
         table = CTK.PropsAuto (URL_APPLY)
-        table.Add (_('Round Robin Database directory'), CTK.TextCfg('%s!database_dir'%(key), True), _(NOTE_DB_DIR))
-        table.Add (_('Custom rrdtool binary'),  CTK.TextCfg('%s!rrdtool_path'%(key), True), _(NOTE_RRDTOOL))
+        table.Add (_('Round Robin Database directory'), CTK.TextCfg(f'{key}!database_dir', True), _(NOTE_DB_DIR))
+        table.Add (_('Custom rrdtool binary'),  CTK.TextCfg(f'{key}!rrdtool_path', True), _(NOTE_RRDTOOL))
         self += table
 
         # Input Validation
-        VALS = [('%s!database_dir'%(key), validations.is_local_dir_exists),
-                ('%s!rrdtool_path'%(key), validations.is_exec_file)]
+        VALS = [(f'{key}!database_dir', validations.is_local_dir_exists),
+                (f'{key}!rrdtool_path', validations.is_exec_file)]
 
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")

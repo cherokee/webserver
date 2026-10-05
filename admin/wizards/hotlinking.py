@@ -26,6 +26,7 @@
 import re
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 import Cherokee
 
@@ -57,7 +58,7 @@ CONFIG_RULES = """
 %(rule_pre)s!match!right!right = not
 %(rule_pre)s!match!right!right!right = header
 %(rule_pre)s!match!right!right!right!header = Referer
-%(rule_pre)s!match!right!right!right!match = ^https?://(.*?\.)?%(domain)s
+%(rule_pre)s!match!right!right!right!match = ^https?://(.*?\\.)?%(domain)s
 %(rule_pre)s!match!right!right!right!type = regex
 """
 
@@ -91,30 +92,30 @@ TYPES = [
 
 class Commit:
     def Commit_Rule (self):
-        vsrv_num    = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        tipe        = CTK.cfg.get_val ('%s!type'%(PREFIX))
-        redirection = CTK.cfg.get_val ('%s!redirection'%(PREFIX))
-        domain      = CTK.cfg.get_val ('%s!domain'%(PREFIX))
+        vsrv_num    = CTK.cfg.get_val (f'{PREFIX}!vsrv_num')
+        tipe        = CTK.cfg.get_val (f'{PREFIX}!type')
+        redirection = CTK.cfg.get_val (f'{PREFIX}!redirection')
+        domain      = CTK.cfg.get_val (f'{PREFIX}!domain')
         domain      = domain.replace ('.', "\\.")
         extensions  = ','.join(EXTENSIONS)
 
         # Overwrite a previous rule or create a new one
-        tmp = re.findall ("vserver!%s!rule!(\d+)!match!left!extensions = %s" %(vsrv_num, extensions), CTK.cfg.serialize())
+        tmp = re.findall (f"vserver!{vsrv_num}!rule!(\\d+)!match!left!extensions = {extensions}", CTK.cfg.serialize())
         if tmp:
-            vsrv_pre = 'vserver!%s' %(vsrv_num)
-            rule_pre = 'vserver!%s!rule!%s' %(vsrv_num, tmp[0])
+            vsrv_pre = f'vserver!{vsrv_num}'
+            rule_pre = f'vserver!{vsrv_num}!rule!{tmp[0]}'
             prio     = int(tmp[0])
         else:
-            vsrv_pre = 'vserver!%s' %(vsrv_num)
+            vsrv_pre = f'vserver!{vsrv_num}'
             prio, rule_pre = cfg_vsrv_rule_get_next (vsrv_pre)
 
         # Add the new rules
         if tipe == 'redir' and redirection:
             config = (CONFIG_RULES + REPLY_REDIR) % (locals())
             for ext in ['jpg','jpeg','gif','png','flv']:
-                if redirection.endswith('.%s' % ext):
+                if redirection.endswith(f'.{ext}'):
                     tmp = prio + 100
-                    pre_rule_plus1 = '%s!%d' % ('!'.join(rule_pre.split('!')[:-1]), tmp)
+                    pre_rule_plus1 = f"{'!'.join(rule_pre.split('!')[:-1])}!{int(tmp)}"
                     config += CONFIG_EXCEPTION % (locals())
                     break
 
@@ -126,7 +127,7 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -145,10 +146,10 @@ class RuleData:
         def __init__ (self):
             CTK.Container.__init__ (self)
 
-            tipe = CTK.cfg.get_val ('%s!type'%(PREFIX))
+            tipe = CTK.cfg.get_val (f'{PREFIX}!type')
             if tipe == 'redir':
                 table = CTK.PropsTable()
-                table.Add (_('Redirection'), CTK.TextCfg('%s!redirection'%(PREFIX), False, {}), _(NOTE_REDIR))
+                table.Add (_('Redirection'), CTK.TextCfg(f'{PREFIX}!redirection', False, {}), _(NOTE_REDIR))
 
                 submit = CTK.Submitter (URL_APPLY_REFRESH)
                 submit += table
@@ -157,21 +158,21 @@ class RuleData:
 
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_RULE_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_RULE_H1)}</h2>')
 
-        vsrv_num = CTK.cfg.get_val("%s!vsrv_num"%(PREFIX))
-        nick = CTK.cfg.get_val("vserver!%s!nick"%(vsrv_num))
+        vsrv_num = CTK.cfg.get_val(f"{PREFIX}!vsrv_num")
+        nick = CTK.cfg.get_val(f"vserver!{vsrv_num}!nick")
         if not '.' in nick:
             nick = "example.com"
 
         refresh = CTK.Refreshable ({'id':'hotlinking_wizard_refresh'})
         refresh.register (lambda: self.Refresh().Render())
 
-        combo_widget = CTK.ComboCfg ('%s!type'%(PREFIX), trans_options(TYPES))
+        combo_widget = CTK.ComboCfg (f'{PREFIX}!type', trans_options(TYPES))
         combo_widget.bind('change', refresh.JS_to_refresh())
 
         table = CTK.PropsTable()
-        table.Add (_('Domain Name'), CTK.TextCfg ('%s!domain'%(PREFIX), False, {'value': nick}), _(NOTE_DOMAIN))
+        table.Add (_('Domain Name'), CTK.TextCfg (f'{PREFIX}!domain', False, {'value': nick}), _(NOTE_DOMAIN))
         table.Add (_('Reply type'), combo_widget, _(NOTE_TYPE))
 
         submit = CTK.Submitter (URL_APPLY_REFRESH)
@@ -191,17 +192,17 @@ class RuleData:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('hotlinking', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
         cont += box
 
         # Send the VServer num if it's a Rule
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
             submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit += CTK.Hidden(f'{PREFIX}!vsrv_num', tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -215,7 +216,7 @@ VALS = [
 
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/hotlinking$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/hotlinking/2$', RuleData)
-CTK.publish (r'^%s'%(URL_APPLY),         Commit,             method="POST", validation=VALS)
-CTK.publish (r'^%s'%(URL_APPLY_REFRESH), CTK.cfg_apply_post, method="POST", validation=VALS)
+CTK.publish ('^/wizard/vserver/(\\d+)/hotlinking$',   Welcome)
+CTK.publish ('^/wizard/vserver/(\\d+)/hotlinking/2$', RuleData)
+CTK.publish (rf'^{URL_APPLY}',         Commit,             method="POST", validation=VALS)
+CTK.publish (rf'^{URL_APPLY_REFRESH}', CTK.cfg_apply_post, method="POST", validation=VALS)

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 class Test (TestBase):
     def __init__ (self):
@@ -15,5 +15,4 @@ class Test (TestBase):
                                  "Accept-Charset: iso-8859-1,*,utf-8\r\n"
 
         self.expected_error    = 404
-
 

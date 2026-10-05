@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 CONF = """
 vserver!1!rule!850!match = directory
@@ -20,6 +20,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "auth1users")
-        self.WriteFile (d, "passwd", 0444, 'user:cherokee\n' + 'foo:bar\n' + 'sending:sos\n')
+        self.WriteFile (d, "passwd", 0o444, 'user:cherokee\n' + 'foo:bar\n' + 'sending:sos\n')
 
         self.conf = CONF % (d+"/passwd")

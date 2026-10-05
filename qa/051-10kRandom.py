@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 LENGTH = 10*1024
 
@@ -15,8 +15,7 @@ class Test (TestBase):
         self.expected_error   = 200
 
     def Prepare (self, www):
-        f = self.WriteFile (www, "10k", 0444, str_random (LENGTH))
+        f = self.WriteFile (www, "10k", 0o444, str_random (LENGTH))
         self.expected_content = "file:" + f
-
 
 

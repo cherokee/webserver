@@ -22,6 +22,7 @@
 
 import CTK
 import validations
+from CTK.i18n import _, N_
 from Rule import RulePlugin
 from util import *
 
@@ -38,13 +39,13 @@ def commit():
 
     # New entry
     if new_path:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
-        next_path = CTK.cfg.get_next_entry_prefix ('%s!match!fullpath'%(next_pre))
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
+        next_path = CTK.cfg.get_next_entry_prefix (f'{next_pre}!match!fullpath')
 
-        CTK.cfg['%s!match'%(next_pre)] = 'fullpath'
+        CTK.cfg[f'{next_pre}!match'] = 'fullpath'
         CTK.cfg[next_path]             = new_path
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -63,7 +64,7 @@ class Plugin_fullpath (RulePlugin):
     def GUI_new (self):
         # Table
         table = CTK.PropsTable()
-        table.Add (_('Full Path'), CTK.TextCfg('%s!fullpath'%(self.key), False, {'class': 'noauto'}), _(NOTE_FULLPATH))
+        table.Add (_('Full Path'), CTK.TextCfg(f'{self.key}!fullpath', False, {'class': 'noauto'}), _(NOTE_FULLPATH))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', self.key)
@@ -72,9 +73,9 @@ class Plugin_fullpath (RulePlugin):
         self += submit
 
     def GUI_mod (self):
-        pre = '%s!fullpath'%(self.key)
+        pre = f'{self.key}!fullpath'
         tmp = CTK.cfg.keys (pre)
-        tmp.sort(lambda x,y: cmp(int(x), int(y)))
+        tmp.sort(key=int)
 
         if tmp:
             table = CTK.Table({'id': 'rule-table-fullpath'})
@@ -83,19 +84,19 @@ class Plugin_fullpath (RulePlugin):
                 if len(tmp) > 1:
                     delete = CTK.ImageStock('del')
                     delete.bind('click', CTK.JS.Ajax (URL_APPLY,
-                                                      data     = {'%s!%s'%(pre, f): ''},
-                                                      complete = "$('#%s').trigger('submit_success');"%(self.id)))
+                                                      data     = {f'{pre}!{f}': ''},
+                                                      complete = f"$('#{self.id}').trigger('submit_success');"))
 
-                table += [CTK.TextCfg('%s!%s'%(pre,f)), delete]
+                table += [CTK.TextCfg(f'{pre}!{f}'), delete]
 
             submit = CTK.Submitter (URL_APPLY)
             submit += table
 
-            self += CTK.RawHTML ('<h3>%s</h3>' % (_("Full Web Paths")))
+            self += CTK.RawHTML (f"<h3>{_('Full Web Paths')}</h3>")
             self += CTK.Indenter (submit)
 
         # Add new
-        next_bind = CTK.cfg.get_next_entry_prefix ('%s!fullpath'%(self.key))
+        next_bind = CTK.cfg.get_next_entry_prefix (f'{self.key}!fullpath')
 
         table = CTK.PropsTable()
         table.Add (_('Full Path'), CTK.TextCfg (next_bind, False), _(NOTE_FULLPATH))
@@ -103,24 +104,24 @@ class Plugin_fullpath (RulePlugin):
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h3>%s</h3>' % (_("Add another path")))
+        self += CTK.RawHTML (f"<h3>{_('Add another path')}</h3>")
         self += CTK.Indenter (submit)
 
 
     def GetName (self):
         tmp = []
-        for k in CTK.cfg.keys('%s!fullpath'%(self.key)):
-            d = CTK.cfg.get_val ('%s!fullpath!%s'%(self.key, k))
+        for k in CTK.cfg.keys(f'{self.key}!fullpath'):
+            d = CTK.cfg.get_val (f'{self.key}!fullpath!{k}')
             tmp.append(d)
 
         if len(tmp) == 1:
-            return "%s %s" %(_("Path"), tmp[0])
+            return f"{_('Path')} {tmp[0]}"
         elif len(tmp) > 1:
-            txt = "%s "%(_("Paths"))
+            txt = f"{_('Paths')} "
             txt += ', '.join(tmp[:-1])
-            txt += " or %s" %(tmp[-1])
+            txt += f" or {tmp[-1]}"
             return txt
         else:
             return _("Path")
 
-CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")
+CTK.publish (f"^{URL_APPLY}", commit, method="POST")

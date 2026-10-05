@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR     = "DirXsendfile1"
 FILE    = "test.cgi"
@@ -25,7 +25,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "X-Sendfile: CGI"
 
-        self.request           = "GET /%s/%s HTTP/1.1\r\n" % (DIR, FILE) + \
+        self.request           = f"GET /{DIR}/{FILE} HTTP/1.1\r\n" + \
                                  "Host: default\r\n"                     + \
                                  "Connection: Close\r\n"
 
@@ -39,4 +39,4 @@ class Test (TestBase):
         cgi  = CGI % (temp, DISCART)
 
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILE, 0755, cgi)
+        f = self.WriteFile (d, FILE, 0o755, cgi)

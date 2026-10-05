@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 #
+
+from __future__ import annotations
+
+from .Widget import Widget
 # CTK: Cherokee Toolkit
 #
 # Authors:
@@ -22,9 +26,8 @@
 # 02110-1301, USA.
 #
 
-from Box import Box
-from Widget import Widget
-from RawHTML import RawHTML
+from .Box import Box
+from .RawHTML import RawHTML
 
 class Collapsible (Box):
     """
@@ -43,7 +46,8 @@ class Collapsible (Box):
           container  = CTK.Collapsible (('Show', 'Hide'))
           container += CTK.RawHTML ('<p>This text can be hidden, or not.</p>')
     """
-    def __init__ (self, (titles), collapsed=True):
+    def __init__ (self, xxx_todo_changeme, collapsed=True):
+        (titles) = xxx_todo_changeme
         Box.__init__ (self, {'class': 'collapsible'})
 
         self.collapsed = collapsed
@@ -64,8 +68,8 @@ class Collapsible (Box):
         Box.__iadd__ (self, self.title_hide)
         Box.__iadd__ (self, self.content)
 
-    def __iadd__ (self, content):
-        self.content += content
+    def __iadd__ (self, widget: Widget) -> Collapsible:
+        self.content += widget
         return self
 
     def __JS_show (self):
@@ -102,7 +106,8 @@ class CollapsibleEasy (Collapsible):
           container  = CTK.CollapsibleEasy (('Show', 'Hide'))
           container += CTK.RawHTML ('<p>This text can be hidden, or not.</p>')
     """
-    def __init__ (self, (titles), collapsed=True):
+    def __init__ (self, xxx_todo_changeme1, collapsed=True):
+        (titles) = xxx_todo_changeme1
         assert len(titles) == 2
         assert type(titles[0]) == str
         assert type(titles[1]) == str

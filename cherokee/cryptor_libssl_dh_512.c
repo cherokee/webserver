@@ -1,9 +1,5 @@
 /* openssl dhparam -C -2 512 */
-#ifndef HEADER_DH_H
-#include <openssl/dh.h>
-#endif
-
-static DH *get_dh512()
+static cherokee_dh_param_t *get_dh512()
 {
 	static unsigned char dhp_512[]={
 		0xED,0x78,0x7E,0x95,0xB9,0x05,0xD5,0x00,0x38,0xC6,0x6B,0x49,
@@ -16,19 +12,8 @@ static DH *get_dh512()
 	static unsigned char dhg_512[]={
 		0x02,
 	};
-	DH *dh;
-	BIGNUM *dhp_bn, *dhg_bn;
-
-	if ((dh=DH_new()) == NULL) return(NULL);
-	dhp_bn = BN_bin2bn(dhp_512, sizeof (dhp_512), NULL);
-	dhg_bn = BN_bin2bn(dhg_512, sizeof (dhg_512), NULL);
-	if (!DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
-		DH_free(dh);
-		BN_free(dhp_bn);
-		BN_free(dhg_bn);
-		return(NULL);
-	}
-	return(dh);
+	return cherokee_dh_param_new (dhp_512, sizeof (dhp_512),
+	                              dhg_512, sizeof (dhg_512));
 }
 /*
 -----BEGIN DH PARAMETERS-----

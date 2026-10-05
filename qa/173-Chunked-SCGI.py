@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR            = "chunked_scgi_1"
 MAGIC          = letters_random (300)
@@ -10,18 +10,21 @@ PORT           = get_free_port()
 PYTHON         = look_for_python()
 source         = get_next_source()
 
-SCRIPT = """
+SCRIPT = f"""
 from pyscgi import *
 
 class TestHandler (SCGIHandler):
     def handle_request (self):
         self.handle_post()
-        # self.send('Content-Length: %d\\r\\n')
-        self.send('Content-Type: text/plain\\r\\n\\r\\n')
-        self.send('%s')
+        # self.send('Content-Length: {len(MAGIC)}\\r\
+')
+        self.send('Content-Type: text/plain\\r\
+\\r\
+')
+        self.send('{MAGIC}')
 
-SCGIServer(TestHandler, port=%d).serve_forever()
-""" % (len(MAGIC), MAGIC, PORT)
+SCGIServer(TestHandler, port={int(PORT)}).serve_forever()
+"""
 
 CONF = """
 vserver!1!rule!1730!match = directory
@@ -40,7 +43,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Chunked encoding: scgi"
 
-        self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
+        self.request           = f"GET /{DIR}/test HTTP/1.1\r\n" + \
                                  "Host: localhost\r\n"               + \
                                  "Connection: Keep-Alive\r\n\r\n"    + \
                                  "OPTIONS / HTTP/1.0\r\n"
@@ -50,7 +53,7 @@ class Test (TestBase):
                                   CHUNKED_BEGIN, MAGIC, CHUNKED_FINISH]
 
     def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_chunked1.scgi", 0444, SCRIPT)
+        scgi_file = self.WriteFile (www, "scgi_chunked1.scgi", 0o444, SCRIPT)
 
         pyscgi = os.path.join (www, 'pyscgi.py')
         if not os.path.exists (pyscgi):

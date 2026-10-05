@@ -25,13 +25,14 @@
 import re
 import string
 
-from Box import Box
-from Widget import Widget, RenderResponse
-from RawHTML import RawHTML
-from Refreshable import Refreshable
-from Container import Container
-from Link import Link
-from Server import request
+from .Box import Box
+from .Widget import Widget, RenderResponse
+from .RawHTML import RawHTML
+from .i18n import _
+from .Refreshable import Refreshable
+from .Container import Container
+from .Link import Link
+from .Server import request
 
 FOOTER_OPTIONS   = 3
 SHOW_FOOTER_1PAG = False
@@ -54,12 +55,12 @@ class Paginator_Footer (Box):
         if page_num - FOOTER_OPTIONS < 0:
             extra += abs (page_num - (FOOTER_OPTIONS + 1))
 
-        chunk_raw = range(page_num - (FOOTER_OPTIONS + extra), page_num + FOOTER_OPTIONS + extra + 1)
-        chunk     = filter (lambda x: x >= 0 and x < total_pages, chunk_raw)
+        chunk_raw = list(range(page_num - (FOOTER_OPTIONS + extra), page_num + FOOTER_OPTIONS + extra + 1))
+        chunk     = [x for x in chunk_raw if x >= 0 and x < total_pages]
 
         # Render it
         if page_num != 0:
-            url = '%s/%d' %(refreshable.url, page_num-1)
+            url = f'{refreshable.url}/{int(page_num - 1)}'
             link = Link (None, RawHTML (_("Previous")), {'class': 'paginator-footer-prev'})
             link.bind ('click', refreshable.JS_to_refresh(url=url))
             self += link
@@ -67,10 +68,10 @@ class Paginator_Footer (Box):
         indexes = Container()
         for p in chunk:
             if p == page_num:
-                indexes += RawHTML ("%d"%(p+1))
+                indexes += RawHTML (f"{int(p + 1)}")
             else:
-                url = '%s/%d' %(refreshable.url, p)
-                link = Link (None, RawHTML ("%d"%(p+1)), {'class': 'paginator-footer-page'})
+                url = f'{refreshable.url}/{int(p)}'
+                link = Link (None, RawHTML (f"{int(p + 1)}"), {'class': 'paginator-footer-page'})
                 link.bind ('click', refreshable.JS_to_refresh(url=url))
                 indexes += link
 
@@ -80,7 +81,7 @@ class Paginator_Footer (Box):
         self += indexes
 
         if page_num < total_pages-1:
-            url = '%s/%d' %(refreshable.url, page_num+1)
+            url = f'{refreshable.url}/{int(page_num + 1)}'
             link = Link (None, RawHTML (_("Next")), {'class': 'paginator-footer-next'})
             link.bind ('click', refreshable.JS_to_refresh(url=url))
             self += link
@@ -96,11 +97,11 @@ class Paginator_Refresh (Widget):
 
         global paginator_last_refresh
 
-        tmp = re.findall ('^%s/(\d+)$'%(refreshable.url), request.url)
+        tmp = re.findall (rf'^{refreshable.url}/(\d+)$', request.url)
         if tmp:
             self.page_num = int(tmp[0])
             paginator_last_refresh [refreshable.id] = self.page_num
-        elif paginator_last_refresh.has_key (refreshable.id):
+        elif refreshable.id in paginator_last_refresh:
             self.page_num = paginator_last_refresh [refreshable.id]
         else:
             self.page_num = page_num
@@ -117,7 +118,7 @@ class Paginator_Refresh (Widget):
 
 
         if total_pags > 1 or self.show_footer_1pag:
-            title = Box ({'class': 'paginator-counter'}, RawHTML ("Page %d of %d" %(self.page_num+1, total_pags)))
+            title = Box ({'class': 'paginator-counter'}, RawHTML (f"Page {int(self.page_num + 1)} of {int(total_pags)}"))
             render += title.Render()
 
         # Content
@@ -158,7 +159,7 @@ class Paginator (Refreshable):
             pags += CTK.RawHTML('<p>%s.</p>' %(x))
     """
     def __init__ (self, name, page_num=0, items_per_page=20):
-        Refreshable.__init__ (self, {'id': 'refreshable-%s'%(name)})
+        Refreshable.__init__ (self, {'id': f'refreshable-{name}'})
 
         self.items          = []
         self.page_num       = page_num

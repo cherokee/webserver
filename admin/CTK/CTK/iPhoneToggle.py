@@ -20,9 +20,9 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from Server import cfg
-from util import *
+from .Widget import Widget
+from .Server import cfg
+from .util import *
 
 HEADERS = [
     '<script type="text/javascript" src="/CTK/js/jquery.ibutton.js"></script>',
@@ -73,7 +73,7 @@ class iPhoneCfg (iPhoneToggle):
         elif val.isdigit():
             props['checked'] = "01"[bool(int(val))]
         else:
-            assert False, "Could not handle value: %s"%(val)
+            assert False, f"Could not handle value: {val}"
 
         # Other properties
         props['name'] = key

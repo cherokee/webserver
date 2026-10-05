@@ -88,6 +88,15 @@ cherokee_info_build_print (cherokee_server_t *srv)
 	printf (" syslog(): no\n");
 #endif
 
+	printf (" HTTP protocols: http1");
+#ifdef HAVE_HTTP2
+	printf (" http2");
+#endif
+#ifdef HAVE_HTTP3
+	printf (" http3");
+#endif
+	printf ("\n");
+
 	printf (" Polling methods: ");
 #ifdef HAVE_EPOLL
 	printf ("epoll ");

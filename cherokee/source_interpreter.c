@@ -51,7 +51,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 {
 	CHEROKEE_NEW_STRUCT(n, source_interpreter);
 
-	cherokee_source_init (SOURCE(n));
+	if (cherokee_source_init(SOURCE(n)) != ret_ok) { free(n); return ret_nomem; }
 	cherokee_buffer_init (&n->interpreter);
 	cherokee_buffer_init (&n->change_user_name);
 	cherokee_buffer_init (&n->chroot);
@@ -718,10 +718,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		return ret;
 	}
 
-	/* Since we managed to spawn something, clear any current address
-	 * in the source so that it can retry connecting from the top.
-	 */
-	src->source.addr_current = NULL;
 
 	return ret_ok;
 }
@@ -811,6 +807,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		ret = cherokee_source_interpreter_spawn (src, error_writer);
 		switch (ret) {
 		case ret_ok:
+			socket->source_addr_current = NULL;
 			src->spawning_since = cherokee_bogonow_now;
 			ret = ret_eagain;
 			goto out;

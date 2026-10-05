@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 
 from util import *
 from consts import *
@@ -48,11 +49,11 @@ def commit():
     # New
     if new_regex or new_subst:
         next = CTK.cfg.get_next_entry_prefix (key)
-        CTK.cfg['%s!show'%(next)] = new_show
+        CTK.cfg[f'{next}!show'] = new_show
         if new_regex:
-            CTK.cfg['%s!regex'%(next)] = new_regex
+            CTK.cfg[f'{next}!regex'] = new_regex
         if new_subst:
-            CTK.cfg['%s!substring'%(next)] = new_subst
+            CTK.cfg[f'{next}!substring'] = new_subst
         return CTK.cfg_reply_ajax_ok()
 
     # Modification
@@ -66,9 +67,9 @@ class Plugin_redir (Handler.PluginHandler):
 
             CTK.cfg.normalize (key)
             keys = CTK.cfg.keys (key)
-            keys.sort(lambda x,y: cmp(int(x), int(y)))
+            keys.sort(key=int)
 
-            self += CTK.RawHTML ("<h3>%s</h3>" % (_('Rule list')))
+            self += CTK.RawHTML (f"<h3>{_('Rule list')}</h3>")
             if not keys:
                 self += CTK.Indenter (CTK.Notice ('information', CTK.RawHTML(_(NOTE_EMPTY))))
             else:
@@ -77,14 +78,14 @@ class Plugin_redir (Handler.PluginHandler):
                 table.set_header(1)
 
                 for k in keys:
-                    show  = CTK.ComboCfg('%s!%s!show'     %(key, k), trans_options(REDIR_SHOW))
-                    regex = CTK.TextCfg ('%s!%s!regex'    %(key, k))
-                    subst = CTK.TextCfg ('%s!%s!substring'%(key, k))
+                    show  = CTK.ComboCfg(f'{key}!{k}!show', trans_options(REDIR_SHOW))
+                    regex = CTK.TextCfg (f'{key}!{k}!regex')
+                    subst = CTK.TextCfg (f'{key}!{k}!substring')
 
                     remove = None
                     if len(keys) >= 2:
                         remove = CTK.ImageStock('del')
-                        remove.bind('click', CTK.JS.Ajax (URL_APPLY, data={'%s!%s'%(key, k): ''},
+                        remove.bind('click', CTK.JS.Ajax (URL_APPLY, data={f'{key}!{k}': ''},
                                                           complete = refresh.JS_to_refresh()))
 
                     table += [None, show, regex, subst, remove]
@@ -107,7 +108,7 @@ class Plugin_redir (Handler.PluginHandler):
                 table.Add (_('Substitution'),       CTK.TextCfg('tmp!new_subst', False, {'class': 'noauto'}), _(NOTE_SUBSTITUTION))
 
                 submit = CTK.Submitter(URL_APPLY)
-                submit += CTK.Hidden ('key', '%s!rewrite'%(key))
+                submit += CTK.Hidden ('key', f'{key}!rewrite')
                 submit += table
                 self += submit
 
@@ -135,7 +136,7 @@ class Plugin_redir (Handler.PluginHandler):
 
         # List
         refresh = CTK.Refreshable ({'id': 'plugin_redir'})
-        refresh.register (lambda: self.Content(refresh, '%s!rewrite'%(key)).Render())
+        refresh.register (lambda: self.Content(refresh, f'{key}!rewrite').Render())
         self += refresh
 
         # New
@@ -144,4 +145,4 @@ class Plugin_redir (Handler.PluginHandler):
         self += CTK.Indenter (button)
 
 
-CTK.publish ('^%s'%(URL_APPLY), commit, method="POST")
+CTK.publish (f'^{URL_APPLY}', commit, method="POST")

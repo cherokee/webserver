@@ -20,11 +20,11 @@
 # 02110-1301, USA.
 #
 
-from consts import *
-from Box import Box
-from Server import publish, get_scgi
+from .consts import *
+from .Box import Box
+from .Server import publish, get_scgi
 
-from httplib import HTTPConnection
+from http.client import HTTPConnection
 
 
 JAVASCRIPT = """
@@ -55,7 +55,7 @@ class ProxyRequest:
 class Proxy (Box):
     def __init__ (self, host, req, props=None):
         Box.__init__ (self)
-        self._url_local = '/proxy_widget_%d' %(self.uniq_id)
+        self._url_local = f'/proxy_widget_{int(self.uniq_id)}'
 
         if props:
             self.props = props
@@ -67,7 +67,7 @@ class Proxy (Box):
            host = scgi.env['HTTP_HOST']
 
         self._async = self.props.pop('async', True)
-        self.id     = 'proxy%d'%(self.uniq_id)
+        self.id     = f'proxy{int(self.uniq_id)}'
 
         # Register the proxy path
         publish (self._url_local, ProxyRequest, host=host, req=req)

@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 MAGIC   = str_random (100)
 OFFSET1 = 15
@@ -14,10 +14,10 @@ class Test (TestBase):
         self.name = "Content Range 100, both"
 
         self.request           = "GET /Range100Both HTTP/1.0\r\n" +\
-                                 "Range: bytes=%d-%d\r\n" % (OFFSET1, OFFSET2)
+                                 f"Range: bytes={int(OFFSET1)}-{int(OFFSET2)}\r\n"
         self.expected_error    = 206
         self.expected_content  = [MAGIC[OFFSET1:OFFSET2+1],
-                                  "Content-Length: %d" % (OFFSET2-OFFSET1 + 1)]
+                                  f"Content-Length: {int(OFFSET2 - OFFSET1 + 1)}"]
         self.forbidden_content = [MAGIC[:OFFSET1], MAGIC[:OFFSET2]]
 
     def CustomTest (self):
@@ -26,4 +26,4 @@ class Test (TestBase):
             return -1
 
     def Prepare (self, www):
-        self.WriteFile (www, "Range100Both", 0444, MAGIC)
+        self.WriteFile (www, "Range100Both", 0o444, MAGIC)

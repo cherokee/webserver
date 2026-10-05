@@ -24,6 +24,7 @@
 
 import CTK
 import validations
+from CTK.i18n import _, N_
 
 from util import *
 from consts import *
@@ -51,8 +52,8 @@ def commit():
     new_type  = CTK.post.pop('new_type')
 
     if key and new_error and new_redir and new_type:
-        CTK.cfg['%s!%s!url' %(key, new_error)] = new_redir
-        CTK.cfg['%s!%s!show'%(key, new_error)] = new_type
+        CTK.cfg[f'{key}!{new_error}!url'] = new_redir
+        CTK.cfg[f'{key}!{new_error}!show'] = new_type
         return CTK.cfg_reply_ajax_ok()
 
     # Modification
@@ -83,13 +84,13 @@ class Content (CTK.Container):
             table += [CTK.RawHTML(x) for x in ('Error', 'Redirection', 'Type', '')]
 
             for i in entries:
-                show  = CTK.ComboCfg ('%s!%s!show'%(key,i), trans_options(REDIRECTION_TYPE))
-                redir = CTK.TextCfg  ('%s!%s!url'%(key,i), False)
+                show  = CTK.ComboCfg (f'{key}!{i}!show', trans_options(REDIRECTION_TYPE))
+                redir = CTK.TextCfg  (f'{key}!{i}!url', False)
                 rm    = CTK.ImageStock('del')
                 table += [CTK.RawHTML(i), redir, show, rm]
 
                 rm.bind ('click', CTK.JS.Ajax (url_apply,
-                                               data = {"%s!%s"%(key,i): ''},
+                                               data = {f"{key}!{i}": ''},
                                                complete = refreshable.JS_to_refresh()))
             submit = CTK.Submitter (url_apply)
             submit += table
@@ -97,7 +98,7 @@ class Content (CTK.Container):
 
         # Add new
         redir_codes  = [('default', _('Default Error'))]
-        redir_codes += filter (lambda x: not x[0] in entries, ERROR_CODES)
+        redir_codes += [x for x in ERROR_CODES if not x[0] in entries]
 
         table = CTK.PropsTable()
         table.Add (_('Error'),       CTK.ComboCfg('new_error', redir_codes, {'class':'noauto'}), _(NOTE_ERROR))
@@ -127,7 +128,7 @@ class Plugin_error_redir (CTK.Plugin):
     def __init__ (self, key, vsrv_num):
         CTK.Plugin.__init__ (self, key)
 
-        url_apply = '%s/%s' %(URL_APPLY, vsrv_num)
+        url_apply = f'{URL_APPLY}/{vsrv_num}'
 
         # Content
         refresh = CTK.Refreshable ({'id': 'plugin_error'})
@@ -135,4 +136,4 @@ class Plugin_error_redir (CTK.Plugin):
         self += CTK.Indenter (refresh)
 
         # Validation, and Public URLs
-        CTK.publish ('^%s/[\d]+'%(URL_APPLY), commit, method="POST", validation=VALIDATIONS)
+        CTK.publish (f'^{URL_APPLY}/[\\d]+', commit, method="POST", validation=VALIDATIONS)

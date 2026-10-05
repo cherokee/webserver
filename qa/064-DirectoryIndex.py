@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "This is the content of the HTML index file"
 
@@ -20,7 +20,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "directoryindex1")
-        self.WriteFile (d, "test_index.html", 0444, MAGIC)
+        self.WriteFile (d, "test_index.html", 0o444, MAGIC)
 
     def Precondition (self):
         return os.path.exists (look_for_php())

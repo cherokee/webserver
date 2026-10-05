@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 from CTK.Plugin import instance_plugin
 
 URL_APPLY = '/plugin/common/apply'
@@ -39,15 +40,15 @@ class Plugin_common (Handler.PluginHandler):
         Handler.PluginHandler.AddCommon (self)
 
         table = CTK.PropsTable()
-        table.Add (_('Allow PathInfo'),          CTK.CheckCfgText('%s!allow_pathinfo'%(key), False, _('Allow')), _(NOTE_PATHINFO))
-        table.Add (_('Allow Directory Listing'), CTK.CheckCfgText('%s!allow_dirlist'%(key),  True,  _('Allow')), _(NOTE_DIRLIST))
+        table.Add (_('Allow PathInfo'),          CTK.CheckCfgText(f'{key}!allow_pathinfo', False, _('Allow')), _(NOTE_PATHINFO))
+        table.Add (_('Allow Directory Listing'), CTK.CheckCfgText(f'{key}!allow_dirlist',  True,  _('Allow')), _(NOTE_DIRLIST))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Parsing')))
+        self += CTK.RawHTML (f"<h2>{_('Parsing')}</h2>")
         self += CTK.Indenter (submit)
         self += instance_plugin('file',    key, show_document_root=False, symlinks=False)
         self += instance_plugin('dirlist', key, show_document_root=False, symlinks=True)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

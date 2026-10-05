@@ -52,7 +52,7 @@ class SelectionPanel (CTK.Box):
         assert type(content) == list
 
         # Row ID
-        row_id = ''.join([('_',x)[x in string.letters+string.digits] for x in url])
+        row_id = ''.join([('_',x)[x in string.ascii_letters+string.digits] for x in url])
 
         # Row Content
         row_content = CTK.Box({'class': 'row_content ' + extraClass,

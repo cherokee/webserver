@@ -22,6 +22,7 @@
 
 import CTK
 from Rule import RulePlugin
+from CTK.i18n import _, N_
 from util import *
 
 URL_APPLY = '/plugin/tls/apply'
@@ -34,10 +35,10 @@ def commit():
 
     # Add a new entry
     if key.startswith('tmp'):
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
-        CTK.cfg['%s!match'%(next_pre)] = 'tls'
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
+        CTK.cfg[f'{next_pre}!match'] = 'tls'
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     return {'ret': 'ok'}
 
@@ -56,4 +57,4 @@ class Plugin_tls (RulePlugin):
         return _("Is SSL/TLS")
 
 
-CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")
+CTK.publish (f"^{URL_APPLY}", commit, method="POST")

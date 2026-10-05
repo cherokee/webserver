@@ -45,7 +45,7 @@ def get_system_stats():
             _stats = System_stats__Darwin()
         elif sys.platform.startswith ('freebsd'):
             _stats = System_stats__FreeBSD()
-	elif sys.platform.startswith ('openbsd'):
+        elif sys.platform.startswith ('openbsd'):
             _stats = System_stats__OpenBSD()
         elif sys.platform.startswith ('sunos'):
             _stats = System_stats__Solaris()
@@ -58,6 +58,18 @@ def get_system_stats():
 # Base class
 class System_stats:
     class CPU:
+        user: float
+        sys: float
+        idle: float
+        usage: float
+        speed: str
+        num: str
+        cores: str
+        _user_prev: float
+        _sys_prev: float
+        _nice_prev: float
+        _idle_prev: float
+
         def __init__ (self):
             self.user  = 0
             self.sys   = 0
@@ -67,8 +79,16 @@ class System_stats:
             self.speed = ''
             self.num   = ''
             self.cores = ''
+            self._user_prev = 0.0
+            self._sys_prev = 0.0
+            self._nice_prev = 0.0
+            self._idle_prev = 0.0
 
     class Memory:
+        total: float
+        used: float
+        free: float
+
         def __init__ (self):
             self.total = 0
             self.used  = 0
@@ -90,11 +110,13 @@ class System_stats__Darwin (Thread, System_stats):
         self.daemon = True
 
         # vm_stat (and skip the two first lines)
-        self.vm_stat_fd = subprocess.Popen ("/usr/bin/vm_stat %d" %(self.CHECK_INTERVAL),
-                                            shell=True, stdout = subprocess.PIPE)
+        self.vm_stat_fd = subprocess.Popen (f"/usr/bin/vm_stat {int(self.CHECK_INTERVAL)}",
+                                            shell=True, stdout = subprocess.PIPE,
+                                            text=True)
 
+        assert self.vm_stat_fd.stdout is not None
         line = self.vm_stat_fd.stdout.readline()
-        self._page_size = int (re.findall("page size of (\d+) bytes", line)[0])
+        self._page_size = int (re.findall("page size of (\\d+) bytes", line)[0])
 
         first_line = self.vm_stat_fd.stdout.readline()
         if 'comprs' in first_line:
@@ -109,8 +131,9 @@ class System_stats__Darwin (Thread, System_stats):
             self.vm_stat_type = 10
 
         # I/O stat
-        self.iostat_fd = subprocess.Popen ("/usr/sbin/iostat -n 0 -w %d" %(self.CHECK_INTERVAL),
-                                           shell=True, stdout = subprocess.PIPE)
+        self.iostat_fd = subprocess.Popen (f"/usr/sbin/iostat -n 0 -w {int(self.CHECK_INTERVAL)}",
+                                           shell=True, stdout = subprocess.PIPE,
+                                           text=True)
 
         # Read valid values
         self._read_hostname()
@@ -142,18 +165,19 @@ class System_stats__Darwin (Thread, System_stats):
         if tmp:
             self.cpu.cores = tmp[0]
         else:
-            self.cpu.cores = 1
+            self.cpu.cores = '1'
 
     def _read_cpu (self):
         # Read a new line
+        assert self.iostat_fd.stdout is not None
         line = self.iostat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " -.0123456789", line)):
+        if len([x for x in line if x not in " -.0123456789"]):
             return
 
         # Parse
-        parts = filter (lambda x: x, line.split(' '))
+        parts = [x for x in line.split(' ') if x]
         assert len(parts) == 6, parts
 
         self.cpu.user  = int(parts[0])
@@ -164,17 +188,18 @@ class System_stats__Darwin (Thread, System_stats):
     def _read_memory (self):
         def to_int (x):
             if x[-1] == 'K':
-                return long(x[:-1]) * 1024
-            return long(x)
+                return int(x[:-1]) * 1024
+            return int(x)
 
+        assert self.vm_stat_fd.stdout is not None
         line = self.vm_stat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " -.0123456789K", line)):
+        if len([x for x in line if x not in " -.0123456789K"]):
             return
 
         # Parse
-        tmp = filter (lambda x: x, line.split(' '))
+        tmp = [x for x in line.split(' ') if x]
         values = [(to_int(x) * self._page_size) / 1024 for x in tmp]
 
         if self.vm_stat_type == 22:
@@ -263,7 +288,7 @@ class System_stats__Linux (Thread, System_stats):
         else:
             mhzs = re.findall (r'cpu MHz.+?([\d.]+)\n', tmp)
             if mhzs:
-                self.cpu.speed = '%s MHz' %(' + '.join(mhzs))
+                self.cpu.speed = f"{' + '.join(mhzs)} MHz"
 
         if self.cpu.speed:
             return
@@ -271,7 +296,7 @@ class System_stats__Linux (Thread, System_stats):
         # Last option: BogoMIPS
         bogomips = re.findall (r'BogoMIPS[\t ]+:[\t ]+(\d+)', tmp)
         if bogomips:
-            self.cpu.speed = '%s BogoMIPS' %(bogomips[0])
+            self.cpu.speed = f'{bogomips[0]} BogoMIPS'
 
     def _read_cpu (self):
         fd = open("/proc/stat", 'r')
@@ -338,8 +363,9 @@ class System_stats__Solaris (Thread, System_stats):
         self.daemon = True
 
         # vmstat
-        self.vmstat_fd = subprocess.Popen ("/usr/bin/vmstat %d" %(self.CHECK_INTERVAL),
-                                            shell=True, stdout=subprocess.PIPE, close_fds=True)
+        self.vmstat_fd = subprocess.Popen (f"/usr/bin/vmstat {int(self.CHECK_INTERVAL)}",
+                                            shell=True, stdout=subprocess.PIPE,
+                                            close_fds=True, text=True)
 
         # CPUs and Mem
         self._read_mem_info()
@@ -353,7 +379,7 @@ class System_stats__Solaris (Thread, System_stats):
     def _read_mem_info (self):
         ret = popen.popen_sync ("/usr/sbin/prtconf")
 
-        tmp = re.findall ("Memory size.* (\d+) Megabytes", ret['stdout'], re.I)
+        tmp = re.findall ("Memory size.* (\\d+) Megabytes", ret['stdout'], re.I)
         if tmp:
             self.mem.total = int(tmp[0]) * 1024
 
@@ -361,11 +387,11 @@ class System_stats__Solaris (Thread, System_stats):
         ret = popen.popen_sync ("/usr/sbin/psrinfo -v")
 
         tmp = re.findall ("^Status of.+processor", ret['stdout'], re.I)
-        self.cpu.num = len(tmp)
+        self.cpu.num = str(len(tmp))
 
-        tmp = re.findall ("operates at (\d+) MHz", ret['stdout'], re.I)
+        tmp = re.findall ("operates at (\\d+) MHz", ret['stdout'], re.I)
         if tmp:
-            self.cpu.speed = '%s MHz' %(max([int(x) for x in tmp]))
+            self.cpu.speed = f'{max([int(x) for x in tmp])} MHz'
 
     def _read_hostname (self):
         ret = popen.popen_sync ("/bin/hostname")
@@ -374,17 +400,18 @@ class System_stats__Solaris (Thread, System_stats):
     def _read_cpu_and_memory (self):
         for tries in range(3):
             # Read a new line
+            assert self.vmstat_fd.stdout is not None
             line = self.vmstat_fd.stdout.readline().rstrip('\n')
 
             # Skip headers
-            if len(filter (lambda x: x not in " -.0123456789", line)):
+            if len([x for x in line if x not in " -.0123456789"]):
                 if tries == 2:
                     return
                 continue
             break
 
         # Parse
-        fields = filter (lambda x: x, line.split(' '))
+        fields = [x for x in line.split(' ') if x]
 
         # CPU
         user = int(fields[-3])
@@ -416,7 +443,7 @@ class System_stats__FreeBSD (Thread, System_stats):
         System_stats.__init__ (self)
         self.daemon = True
 
-        self.vmstat_fd = subprocess.Popen ("/usr/bin/vmstat -H -w%d" %(self.CHECK_INTERVAL),
+        self.vmstat_fd = subprocess.Popen (f"/usr/bin/vmstat -H -w{int(self.CHECK_INTERVAL)}",
                                             shell=True, stdout=subprocess.PIPE, close_fds=True )
 
         # Single read values
@@ -430,7 +457,7 @@ class System_stats__FreeBSD (Thread, System_stats):
 
     def _read_info_hostname (self):
         # First try: uname()
-	self.hostname = os.uname()[1]
+        self.hostname = os.uname()[1]
         if self.hostname:
             return
 
@@ -444,14 +471,14 @@ class System_stats__FreeBSD (Thread, System_stats):
         self.hostname = "Unknown"
 
     def _read_info_cpu_and_mem (self):
-	# cpu related
+        # cpu related
         ncpus = 0
         vcpus = 0
-	clock = ''
+        clock = ''
 
         # mem related
-	psize  = 0
-	pcount = 0
+        psize  = 0
+        pcount = 0
 
         # Execute sysctl. Depending on the version of FreeBSD some of
         # these keys might not exist. Thus, /sbin/sysctl is executed
@@ -460,8 +487,8 @@ class System_stats__FreeBSD (Thread, System_stats):
         #
         for key in ("hw.ncpu", "hw.clockrate", "hw.pagesize",
                     "kern.threads.virtual_cpu", "vm.stats.vm.v_page_count"):
-            ret = popen.popen_sync ("/sbin/sysctl %s"%(key))
-            lines = filter (lambda x: x, ret['stdout'].split('\n'))
+            ret = popen.popen_sync (f"/sbin/sysctl {key}")
+            lines = [x for x in ret['stdout'].split('\n') if x]
 
             for line in lines:
                 parts = line.split()
@@ -476,38 +503,39 @@ class System_stats__FreeBSD (Thread, System_stats):
                 elif parts[0] == 'hw.pagesize:':
                     psize = int(parts[1])
 
-	# Deal with cores
+        # Deal with cores
         if vcpus:
             self.cpu.num   = str (int(vcpus) / int(ncpus))
             self.cpu.cores = vcpus
         else:
-            self.cpu.num   = int (ncpus)
-            self.cpu.cores = int (ncpus)
+            self.cpu.num   = str(ncpus)
+            self.cpu.cores = str(ncpus)
 
         # Global speed
-	self.cpu.speed = '%s MHz' %(clock)
+        self.cpu.speed = f'{clock} MHz'
 
-	# Physical mem
-	self.mem.total = (psize * pcount) / 1024
+        # Physical mem
+        self.mem.total = (psize * pcount) // 1024
 
     def _read_cpu_and_memory (self):
-	# Read a new line
+        # Read a new line
+        assert self.vmstat_fd.stdout is not None
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-	if len(filter (lambda x: x not in " -.0123456789", line)):
-	    return
+        if len([x for x in line if x not in " -.0123456789"]):
+            return
 
         # Parse
-	parts = filter (lambda x: x, line.split(' '))
+        parts = [x for x in line.split(' ') if x]
 
         # Memory
         self.mem.free = int(parts[4])
         self.mem.used = self.mem.total - self.mem.free
 
         # CPU
-	self.cpu.idle  = int(parts[-1])
-	self.cpu.usage = 100 - self.cpu.idle
+        self.cpu.idle  = int(parts[-1])
+        self.cpu.usage = 100 - self.cpu.idle
 
     def run (self):
         while True:
@@ -524,8 +552,9 @@ class System_stats__OpenBSD (Thread, System_stats):
         System_stats.__init__ (self)
         self.daemon = True
 
-        self.vmstat_fd = subprocess.Popen ("/usr/bin/vmstat -w%d" %(self.CHECK_INTERVAL),
-                                            shell=True, stdout = subprocess.PIPE, close_fds=True )
+        self.vmstat_fd = subprocess.Popen (f"/usr/bin/vmstat -w{int(self.CHECK_INTERVAL)}",
+                                            shell=True, stdout = subprocess.PIPE,
+                                            close_fds=True, text=True)
 
         # Read valid values
         self._read_hostname()
@@ -543,7 +572,7 @@ class System_stats__OpenBSD (Thread, System_stats):
 
         # Second try: sysctl()
         ret = popen.popen_sync ("/sbin/sysctl -n kern.hostname")
-	self.hostname = ret['stdout'].rstrip()
+        self.hostname = ret['stdout'].rstrip()
         if self.hostname:
             return
 
@@ -553,7 +582,7 @@ class System_stats__OpenBSD (Thread, System_stats):
     def _read_cpu_and_mem_info (self):
         # Execute sysctl
         ret = popen.popen_sync ("/sbin/sysctl hw.ncpufound hw.ncpu hw.cpuspeed hw.physmem")
-        lines = filter (lambda x: x, ret['stdout'].split('\n'))
+        lines = [x for x in ret['stdout'].split('\n') if x]
 
         # Parse output
 
@@ -578,28 +607,29 @@ class System_stats__OpenBSD (Thread, System_stats):
 
         # Deal with cores
         if vcpus:
-            self.cpu.num   = ncpus
-            self.cpu.cores = vcpus
-	else:
-            self.cpu.num   = int (ncpus)
-            self.cpu.cores = int (ncpus)
+            self.cpu.num   = str(ncpus)
+            self.cpu.cores = str(vcpus)
+        else:
+            self.cpu.num   = str(ncpus)
+            self.cpu.cores = str(ncpus)
 
         # Global speed
-        self.cpu.speed = '%s MHz' %(clock)
+        self.cpu.speed = f'{clock} MHz'
 
         # Physical mem
-        self.mem.total =  int (pmem) / 1024
+        self.mem.total = int(pmem) // 1024
 
     def _read_cpu (self):
         # Read a new line
+        assert self.vmstat_fd.stdout is not None
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
 
         # Skip headers
-        if len(filter (lambda x: x not in " -.0123456789", line)):
+        if len([x for x in line if x not in " -.0123456789"]):
             return
 
         # Parse
-        parts = filter (lambda x: x, line.split(' '))
+        parts = [x for x in line.split(' ') if x]
 
         # For OpenBSD there are 19 fields output from vmstat
         if not len(parts) == 19:
@@ -610,13 +640,14 @@ class System_stats__OpenBSD (Thread, System_stats):
 
     def _read_memory (self):
         # Read a new line
+        assert self.vmstat_fd.stdout is not None
         line = self.vmstat_fd.stdout.readline().rstrip('\n')
         # Skip headers
-        if len(filter (lambda x: x not in " -.0123456789", line)):
+        if len([x for x in line if x not in " -.0123456789"]):
             return
 
         # Parse
-        values = filter (lambda x: x, line.split(' '))
+        values = [x for x in line.split(' ') if x]
 
         if not len(values) == 19:
                 return
@@ -633,19 +664,19 @@ class System_stats__OpenBSD (Thread, System_stats):
 if __name__ == '__main__':
     sys_stats = get_system_stats()
 
-    print "Hostname:",   sys_stats.hostname
-    print "Speed:",      sys_stats.cpu.speed
-    print "Processors:", sys_stats.cpu.num
-    print "Cores:",      sys_stats.cpu.cores
+    print("Hostname:",   sys_stats.hostname)
+    print("Speed:",      sys_stats.cpu.speed)
+    print("Processors:", sys_stats.cpu.num)
+    print("Cores:",      sys_stats.cpu.cores)
 
     while True:
-        print "CPU:",
-        print 'used', sys_stats.cpu.usage,
-        print 'idle', sys_stats.cpu.idle
+        print("CPU:", end=' ')
+        print('used', sys_stats.cpu.usage, end=' ')
+        print('idle', sys_stats.cpu.idle)
 
-        print "MEMORY:",
-        print 'total', sys_stats.mem.total,
-        print 'used',  sys_stats.mem.used,
-        print 'free',  sys_stats.mem.free
+        print("MEMORY:", end=' ')
+        print('total', sys_stats.mem.total, end=' ')
+        print('used',  sys_stats.mem.used, end=' ')
+        print('free',  sys_stats.mem.free)
 
         time.sleep(1)

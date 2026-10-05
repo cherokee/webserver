@@ -1,6 +1,6 @@
 from os.path import join
 
-PREFIX          = "%prefix%"
+PREFIX: str     = "%prefix%"
 LIBDIR          = "%libdir%"
 DATADIR         = "%datadir%"
 DOCDIR          = "%docdir%"

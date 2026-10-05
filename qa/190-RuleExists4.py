@@ -1,6 +1,6 @@
-from base import *
+from qa_base import *
 
-HOST      = 'host190'
+HOST: str = 'host190'
 FILE      = 'special_file_for_190'
 DIR       = '190_exists'
 MAGIC     = '<a href="http://www.alobbs.com/">Alvaro</a>'
@@ -33,8 +33,8 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Rule Exists: match any"
-        self.request           = "GET /%s HTTP/1.0\r\n" % (FILE) +\
-                                 "Host: %s\r\n" %(HOST)
+        self.request           = f"GET /{FILE} HTTP/1.0\r\n" +\
+                                 f"Host: {HOST}\r\n"
         self.forbidden_content = ['/bin/sh', 'echo', FORBIDDEN]
         self.expected_error    = 200
         self.expected_content  = MAGIC
@@ -43,5 +43,4 @@ class Test (TestBase):
         d = self.Mkdir (www, DIR)
         self.conf = CONF % (HOST, d)
 
-        self.WriteFile (d, FILE, 0555, CGI_BASE%(FORBIDDEN, MAGIC))
-
+        self.WriteFile (d, FILE, 0o555, CGI_BASE%(FORBIDDEN, MAGIC))

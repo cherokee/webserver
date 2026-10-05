@@ -24,6 +24,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import validations
 
@@ -48,7 +49,7 @@ class Render:
         title = _('Information Sources')
 
         page = Page.Base (title, helps=HELPS)
-        page += CTK.RawHTML ("<h1>%s</h1>" % (title))
+        page += CTK.RawHTML (f"<h1>{title}</h1>")
         page += Panel()
         return page.Render()
 

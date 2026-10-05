@@ -293,6 +293,15 @@ media/images/other_graphs_logging.png \
 media/images/other_graphs_traffic.png
 
 EXTRA_DIST = \
+http23-design.md \
+source-reuse-benchmark.md \
+source-reuse-benchmark.json \
+source-reuse-benchmark.csv \
+source-reuse-benchmark.svg \
+source-reuse-unix4-verification.md \
+source-reuse-unix4-verification.json \
+source-reuse-unix4-verification.csv \
+source-reuse-unix4-verification.svg \
 $(doc_DATA) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA) \

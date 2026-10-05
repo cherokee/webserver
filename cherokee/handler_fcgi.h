@@ -48,6 +48,13 @@ typedef struct {
 	cherokee_socket_t             socket;
 	cherokee_handler_fcgi_post_t  post_phase;
 	cherokee_buffer_t             write_buffer;
+	uint64_t                      born;
+	cuint_t                       requests, retries;
+	cushort_t                     request_id;
+	size_t                        sent, received;
+	cherokee_boolean_t            completed, stdout_closed, stderr_closed;
+	cherokee_boolean_t            failed, prelude_sent;
+
 } cherokee_handler_fcgi_t;
 
 #define HDL_FCGI(x)  ((cherokee_handler_fcgi_t *)(x))

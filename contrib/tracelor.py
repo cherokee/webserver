@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 ##
 ## Cherokee trace colorizer
@@ -26,13 +26,13 @@ def build_colors():
         for b in range(30,38):
             if a-10 == b:
                 continue
-            color = '\033[0;%d;%dm' % (a,b)
+            color = f'\x1b[0;{int(a)};{int(b)}m'
             _colors.append(color)
 
 def thread_color (thread):
     global _threads
     global _color_n
-    if not thread in _threads.keys():
+    if not thread in list(_threads.keys()):
         color = _colors[_color_n]
         _threads[thread] = color
         _color_n += 1
@@ -53,14 +53,14 @@ def main():
             if end > 0:
                 thread = line[1:end]
                 color  = thread_color (thread)
-                line = '%s%s%s %s' % (color, thread, RESET_COLOR, line[end+2:])
+                line = f'{color}{thread}{RESET_COLOR} {line[end + 2:]}'
 
         # Words
         for w in sys.argv:
             line = line.replace(w, HIGHLIGHT + w + RESET_COLOR)
 
         # Nothing else to do..
-        print line,
+        print(line, end=' ')
 
 if __name__ == '__main__':
     main()

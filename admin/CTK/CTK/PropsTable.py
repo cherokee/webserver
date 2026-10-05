@@ -1,4 +1,6 @@
 # CTK: Cherokee Toolkit
+
+from __future__ import annotations
 #
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
@@ -20,14 +22,14 @@
 # 02110-1301, USA.
 #
 
-from Box import Box
-from Table import Table
-from Widget import Widget
-from RawHTML import RawHTML
-from Submitter import Submitter
-from Container import Container
-from HiddenField import HiddenField
-from util import *
+from .Box import Box
+from .Table import Table
+from .Widget import Widget
+from .RawHTML import RawHTML
+from .Submitter import Submitter
+from .Container import Container
+from .HiddenField import HiddenField
+from .util import *
 
 HTML_TABLE = """
 <div class="propstable">%s</div>
@@ -37,9 +39,11 @@ HEADERS = ['<link rel="stylesheet" type="text/css" href="/CTK/css/CTK.css" />']
 
 
 class PropsTableEntry (Box):
+    widget: Widget | None
+
     """Property Table Entry"""
 
-    def __init__ (self, title, widget, comment, props_={}):
+    def __init__ (self: PropsTableEntry, title, widget: Widget | None, comment, props_={}):
         self.title   = title
         self.widget  = widget
         self.comment = comment

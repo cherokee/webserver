@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import subprocess
 import CTK
 
 UPLOAD_DIR = "/tmp"
@@ -30,9 +31,12 @@ $('#%s').bind ('upload_finished', function (event) {
 def handler_complete (filename, target_dir, target_file, params):
     """ Server-Side 'complete' event handler """
 
-    print "I'm python, and this is the uploaded file:"
-    print os.popen("ls -l '%s'" %(os.path.join(target_dir, target_file))).read()
-    print "And these the parameters", params
+    print("I'm python, and this is the uploaded file:")
+    listing = subprocess.run(
+        f"ls -l '{os.path.join(target_dir, target_file)}'",
+        shell=True, capture_output=True, text=True, check=False).stdout
+    print(listing)
+    print("And these the parameters", params)
 
     return 'ok'
 

@@ -22,10 +22,12 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import os
+import ast
 import CTK
 
-from urllib import quote
+from urllib.parse import quote
 from configured import *
 
 ERROR_LAUNCH_URL_ADMIN = N_('The server suggests to check <a href="%s">this page</a>. Most probably the problem can be solved in there.')
@@ -43,7 +45,7 @@ class PageErrorLaunch (CTK.Page):
         CTK.Page.__init__ (self, template, **kwargs)
 
         # Error parse
-        self._error     = None
+        self._error: dict[str, str] | None = None
         self._error_raw = error_str
 
         for line in error_str.split("\n"):
@@ -51,9 +53,11 @@ class PageErrorLaunch (CTK.Page):
                 continue
 
             if line.startswith("{'type': "):
-                src = "self._error = " + line
-                exec(src)
-                break
+                parsed = ast.literal_eval(line)
+                if isinstance(parsed, dict):
+                    self._error = {str(key): str(value)
+                                   for key, value in parsed.items()}
+                    break
 
         # Build the page content
         template['title'] = _('Server Launch Error')
@@ -64,25 +68,28 @@ class PageErrorLaunch (CTK.Page):
             self._build_error_raw()
 
     def _build_error_py (self):
-        self += CTK.RawHTML ('<h1>%s</h1>' %(self._error['title']))
-        self += CTK.Box ({'class': 'description'}, CTK.RawHTML(self._error.get('description','')))
+        error = self._error
+        if error is None:
+            return
+        self += CTK.RawHTML (f"<h1>{error['title']}</h1>")
+        self += CTK.Box ({'class': 'description'}, CTK.RawHTML(error.get('description','')))
 
-        admin_url = self._error.get('admin_url')
+        admin_url = error.get('admin_url')
         if admin_url:
             self += CTK.Box ({'class': 'admin-url'}, CTK.RawHTML(_(ERROR_LAUNCH_URL_ADMIN)%(admin_url)))
 
-        debug = self._error.get('debug')
+        debug = error.get('debug')
         if debug:
             self += CTK.Box ({'class': 'debug'}, CTK.RawHTML(debug))
 
-        backtrace = self._error.get('backtrace')
+        backtrace = error.get('backtrace')
         if backtrace:
             self += CTK.Box ({'class': 'backtrace'}, CTK.RawHTML(backtrace))
 
-        self += CTK.Box ({'class': 'time'}, CTK.RawHTML(self._error.get('time','')))
+        self += CTK.Box ({'class': 'time'}, CTK.RawHTML(error.get('time','')))
 
     def _build_error_raw (self):
-        self += CTK.RawHTML ('<h1>%s</h1>' %(_('Server Launch Error')))
+        self += CTK.RawHTML (f"<h1>{_('Server Launch Error')}</h1>")
         self += CTK.Box ({'class': 'description'}, CTK.RawHTML(_('Something unexpected just happened.')))
         self += CTK.Box ({'class': 'backtrace'},   CTK.RawHTML(self._error_raw))
 
@@ -111,17 +118,17 @@ class ConfigNotWritable (CTK.Page):
 
         # Body
         if os.path.isfile (file):
-            self += CTK.RawHTML ('<h1>%s</h1>' %(_('Configuration file is not writable')))
-            self += CTK.RawHTML ('<p><strong>%s</strong></p>' %(NOT_WRITABLE_F_TITLE %(file)))
-            self += CTK.RawHTML ('<p>%s</p>' %(NOT_WRITABLE_F_1))
-            self += CTK.RawHTML ('<div class="shell">chmod u+w %s</div>' %(file))
-            self += CTK.RawHTML ('<p>%s</p>' %(NOT_WRITABLE_F_2))
+            self += CTK.RawHTML (f"<h1>{_('Configuration file is not writable')}</h1>")
+            self += CTK.RawHTML (f'<p><strong>{NOT_WRITABLE_F_TITLE % file}</strong></p>')
+            self += CTK.RawHTML (f'<p>{NOT_WRITABLE_F_1}</p>')
+            self += CTK.RawHTML (f'<div class="shell">chmod u+w {file}</div>')
+            self += CTK.RawHTML (f'<p>{NOT_WRITABLE_F_2}</p>')
         else:
-            self += CTK.RawHTML ('<h1>%s</h1>' %(_('Incorrect configuration file specified')))
-            self += CTK.RawHTML ('<p><strong>%s</strong></p>' %(NOT_WRITABLE_D_TITLE %(file)))
-            self += CTK.RawHTML ('<p>%s</p>' %(NOT_WRITABLE_D_1))
-            self += CTK.RawHTML ('<div class="shell">mv %s %s.dir</div>' %(file, file))
-            self += CTK.RawHTML ('<p>%s</p>' %(NOT_WRITABLE_D_2))
+            self += CTK.RawHTML (f"<h1>{_('Incorrect configuration file specified')}</h1>")
+            self += CTK.RawHTML (f'<p><strong>{NOT_WRITABLE_D_TITLE % file}</strong></p>')
+            self += CTK.RawHTML (f'<p>{NOT_WRITABLE_D_1}</p>')
+            self += CTK.RawHTML (f'<div class="shell">mv {file} {file}.dir</div>')
+            self += CTK.RawHTML (f'<p>{NOT_WRITABLE_D_2}</p>')
 
 
 def NotWritable (file):
@@ -146,9 +153,9 @@ class ResourceMissingError (CTK.Page):
         CTK.Page.__init__ (self, template, **kwargs)
 
         # Body
-        self += CTK.RawHTML ('<h1>%s</h1>'%(template['title']))
-        self += CTK.RawHTML ('<p><strong>%s</strong>'%(_(RESOURCE_MISSING_TITLE)%(path)))
-        self += CTK.RawHTML ('<p>%s</p>' %(RESOURCE_MISSING))
+        self += CTK.RawHTML (f"<h1>{template['title']}</h1>")
+        self += CTK.RawHTML (f'<p><strong>{_(RESOURCE_MISSING_TITLE) % path}</strong>')
+        self += CTK.RawHTML (f'<p>{RESOURCE_MISSING}</p>')
 
 def ResourceMissing (path):
     return ResourceMissingError(path).Render()
@@ -172,10 +179,10 @@ class AncientConfigError (CTK.Page):
         CTK.Page.__init__ (self, template, **kwargs)
 
         # Body
-        self += CTK.RawHTML ('<h1>%s</h1>'%(_('Ancient Configuration File')))
-        self += CTK.RawHTML ('<p><strong>%s</strong>'%(_(ANCIENT_CONFIG_TITLE)))
-        self += CTK.RawHTML ('<p>%s</p>' %(ANCIENT_CONFIG))
-        self += CTK.RawHTML ("<p><pre>rm -f '%s'</pre></p>" %(path))
+        self += CTK.RawHTML (f"<h1>{_('Ancient Configuration File')}</h1>")
+        self += CTK.RawHTML (f'<p><strong>{_(ANCIENT_CONFIG_TITLE)}</strong>')
+        self += CTK.RawHTML (f'<p>{ANCIENT_CONFIG}</p>')
+        self += CTK.RawHTML (f"<p><pre>rm -f '{path}'</pre></p>")
 
 def AncientConfig (file):
     return AncientConfigError(file).Render()

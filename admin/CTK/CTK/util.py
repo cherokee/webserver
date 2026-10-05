@@ -24,12 +24,16 @@ import re
 import sys
 import types
 import traceback
-import compiler
+import ast
+
+
+def cmp(left, right):
+    return (left > right) - (left < right)
 
 try:
     import json
 except ImportError:
-    import json_embedded as json
+    from . import json_embedded as json
 
 #
 # Strings
@@ -61,7 +65,7 @@ def props_to_str (props):
     for p in props:
         val = props[p]
         if val:
-            tmp.append ('%s="%s"'%(p, val))
+            tmp.append (f'{p}="{val}"')
         else:
             tmp.append (p)
 
@@ -77,8 +81,8 @@ def find_copy_name (orig, names):
         orig = orig[:orig.rindex(' Copy')]
 
     # Find higher copy
-    similar = filter (lambda x: x.startswith(orig), names)
-    if '%s Copy'%(orig) in similar:
+    similar = [x for x in names if x.startswith(orig)]
+    if f'{orig} Copy' in similar:
         higher = 1
     else:
         higher = 0
@@ -89,19 +93,19 @@ def find_copy_name (orig, names):
 
     # Copy X
     if higher == 0:
-        return '%s Copy' %(orig)
+        return f'{orig} Copy'
 
-    return '%s Copy %d' %(orig, higher+1)
+    return f'{orig} Copy {int(higher + 1)}'
 
 #
 # JSon
 #
 def json_dump (obj):
-    # Python 2.6, and json_embeded
+    # Legacy JSON embedding compatibility.
     if hasattr (json, 'dumps'):
         return json.dumps (obj)
 
-    # Python 2.5
+    # Legacy fallback retained for old configuration data.
     return json.write(obj)
 
 
@@ -113,21 +117,19 @@ def to_utf8 (s, input_encoding='utf-8'):
     supposes default system encoding to be UTF-8, so basically it
     converts Unicode to UTF-8 only"""
 
-    if type(s) == types.StringType:
-        if input_encoding == 'utf-8':
-            return s
-        return unicode (s, input_encoding).encode('utf-8')
-    elif type(s) == types.UnicodeType:
-        return s.encode('utf-8')
-    elif type(s) == types.ListType:
-        return [to_utf8(x) for x in s]
-    elif type(s) == types.TupleType:
-        return tuple([to_utf8(x) for x in s])
-    elif type(s) == types.NoneType:
+    if type(s) == bytes:
+        return s.decode(input_encoding)
+    elif type(s) == str:
         return s
-    elif type(s) == types.DictType:
-        for k in s.keys():
-            if type(k) in (types.StringType, types.UnicodeType):
+    elif type(s) == list:
+        return [to_utf8(x) for x in s]
+    elif type(s) == tuple:
+        return tuple([to_utf8(x) for x in s])
+    elif type(s) == type(None):
+        return s
+    elif type(s) == dict:
+        for k in list(s.keys()):
+            if type(k) in (bytes, str):
                 k = to_utf8(k)
             s[k] = to_utf8(s[k])
         return s
@@ -139,19 +141,19 @@ def to_unicode (s, input_encoding='utf-8'):
     """Converts all the string entries of an structure to Unicode. It
     supposes default system encoding to be UTF-8."""
 
-    if type(s) == types.UnicodeType:
+    if type(s) == str:
         return s
-    elif type(s) == types.StringType:
-        return unicode (s, input_encoding)
-    elif type(s) == types.ListType:
+    elif type(s) == bytes:
+        return str (s, input_encoding)
+    elif type(s) == list:
         return [to_unicode(x) for x in s]
-    elif type(s) == types.TupleType:
+    elif type(s) == tuple:
         return tuple([to_unicode(x) for x in s])
-    elif type(s) == types.NoneType:
+    elif type(s) == type(None):
         return s
-    elif type(s) == types.DictType:
-        for k in s.keys():
-            if type(k) in (types.StringType, types.UnicodeType):
+    elif type(s) == dict:
+        for k in list(s.keys()):
+            if type(k) in (bytes, str):
                 k = to_unicode(k)
             s[k] = to_unicode(s[k])
         return s
@@ -163,7 +165,7 @@ def to_unicode (s, input_encoding='utf-8'):
 # Debug
 #
 def print_exception (output = sys.stderr):
-    print >> output, traceback.format_exc()
+    print(traceback.format_exc(), file=output)
 
 
 
@@ -173,26 +175,22 @@ def print_exception (output = sys.stderr):
 def data_eval (node_or_string):
     _safe_names = {'None': None, 'True': True, 'False': False}
 
-    if isinstance(node_or_string, basestring):
-        node_or_string = compiler.parse(node_or_string, mode='eval')
-
-    if isinstance(node_or_string, compiler.ast.Expression):
-        node_or_string = node_or_string.node
+    if isinstance(node_or_string, str):
+        node_or_string = ast.parse(node_or_string, mode='eval').body
 
     def _convert(node):
-        if isinstance(node, compiler.ast.Const) and isinstance(node.value, (basestring, int, float, long, complex)):
+        if isinstance(node, ast.Constant) and isinstance(node.value, (str, int, float, complex)):
             return node.value
-        elif isinstance(node, compiler.ast.Tuple):
-            return tuple(map(_convert, node.nodes))
-        elif isinstance(node, compiler.ast.List):
-            return list(map(_convert, node.nodes))
-        elif isinstance(node, compiler.ast.Dict):
-            return dict((_convert(k), _convert(v)) for k, v in node.items)
-        elif isinstance(node, compiler.ast.Name):
-            if node.name in _safe_names:
-                return _safe_names[node.name]
-        elif isinstance(node, compiler.ast.UnarySub):
-            return -_convert(node.expr)
+        elif isinstance(node, ast.Tuple):
+            return tuple(map(_convert, node.elts))
+        elif isinstance(node, ast.List):
+            return list(map(_convert, node.elts))
+        elif isinstance(node, ast.Dict):
+            return dict((_convert(k), _convert(v)) for k, v in zip(node.keys, node.values))
+        elif isinstance(node, ast.Name) and node.id in _safe_names:
+            return _safe_names[node.id]
+        elif isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+            return -_convert(node.operand)
         raise ValueError('malformed string')
 
     return _convert(node_or_string)
@@ -200,9 +198,4 @@ def data_eval (node_or_string):
 #
 # Hash
 #
-try:
-    # Python >= 2.5
-    from hashlib import md5
-except ImportError:
-    # Python <= 2.4
-    from md5 import md5
+from hashlib import md5

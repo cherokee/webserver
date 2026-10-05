@@ -20,8 +20,8 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from util import to_utf8
+from .Widget import RenderResponse, Widget
+from .util import to_utf8
 
 
 class RawHTML (Widget):
@@ -62,7 +62,7 @@ class RawHTML (Widget):
         assert type(txt) == str
         self.html += txt
 
-    def Render (self):
+    def Render (self) -> RenderResponse:
         render = Widget.Render(self)
         render.html += self.html
         render.js   += self.js

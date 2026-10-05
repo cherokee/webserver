@@ -26,6 +26,7 @@
 #include "util.h"
 #include "logger.h"
 #include "bogotime.h"
+#include <time.h>
 #include "socket.h"
 
 #include <signal.h>
@@ -2450,30 +2451,25 @@ ret_t
 cherokee_copy_local_address (void              *sock,
                              cherokee_buffer_t *buf)
 {
-	int                 re;
 	cherokee_sockaddr_t my_address;
-	cuint_t             my_address_len = 0;
 	char                ip_str[CHE_INET_ADDRSTRLEN+1];
 	cherokee_socket_t  *socket = SOCKET(sock);
 
 	/* Get the address
 	 */
-	my_address_len = sizeof(my_address);
-	re = getsockname (SOCKET_FD(socket), (struct sockaddr *)&my_address, &my_address_len);
-	if (re != 0) {
+	if (cherokee_socket_get_local_address(socket, &my_address) != ret_ok) {
 		return ret_error;
 	}
 
 	/* Build the string
 	 */
-	cherokee_ntop (my_address.sa_in.sin_family,
+	if (cherokee_ntop (my_address.sa_in.sin_family,
 		       (struct sockaddr *) &my_address,
-		       ip_str, sizeof(ip_str)-1);
+		       ip_str, sizeof(ip_str)-1) != ret_ok) return ret_error;
 
 	/* Copy it to the buffer
 	 */
-	cherokee_buffer_add (buf, ip_str, strlen(ip_str));
-	return ret_ok;
+	return cherokee_buffer_add (buf, ip_str, strlen(ip_str));
 }
 
 
@@ -2701,4 +2697,20 @@ cherokee_random (void)
 #else
 	return rand();
 #endif
+}
+
+uint64_t
+cherokee_monotonic_msec (void)
+{
+#if defined(HAVE_CLOCK_GETTIME) && defined(CLOCK_MONOTONIC)
+	struct timespec now;
+	if (clock_gettime(CLOCK_MONOTONIC, &now) == 0)
+		return (uint64_t)now.tv_sec * 1000 + now.tv_nsec / 1000000;
+#endif
+	/* Platforms without a monotonic clock retain the legacy clock behavior. */
+	{
+		struct timeval now;
+		gettimeofday(&now, NULL);
+		return (uint64_t)now.tv_sec * 1000 + now.tv_usec / 1000;
+	}
 }

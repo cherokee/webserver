@@ -20,8 +20,8 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from util import props_to_str
+from .Widget import Widget
+from .util import props_to_str
 
 class Button (Widget):
     """
@@ -47,7 +47,7 @@ class Button (Widget):
         else:
             self.props['class'] = "button"
 
-        self.id      = props.pop('id', "button_%d"%(self.uniq_id))
+        self.id      = props.pop('id', f"button_{int(self.uniq_id)}")
         self.caption = caption
 
     # Public interface
@@ -57,7 +57,7 @@ class Button (Widget):
         caption = self.caption
         props   = props_to_str (self.props)
 
-        html = '<button id="%(id)s" %(props)s>%(caption)s</button>' %(locals())
+        html = f"<button id=\"{locals()['id']}\" {locals()['props']}>{locals()['caption']}</button>"
 
         render = Widget.Render (self)
         render.html += html

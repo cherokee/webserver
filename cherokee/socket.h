@@ -70,11 +70,14 @@ typedef union {
  */
 typedef struct {
 	int                        socket;
+	const struct addrinfo     *source_addr_current;
 	cherokee_sockaddr_t        client_addr;
 	socklen_t                  client_addr_len;
 	cherokee_socket_status_t   status;
 	cherokee_socket_type_t     is_tls;
 	cherokee_cryptor_socket_t *cryptor;
+	cherokee_boolean_t         native_stream;
+	cherokee_sockaddr_t        native_local_addr;
 } cherokee_socket_t;
 
 
@@ -147,6 +150,7 @@ ret_t cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vec
 /* Extra
  */
 ret_t cherokee_socket_set_sockaddr         (cherokee_socket_t *socket, int fd, cherokee_sockaddr_t *sa);
+ret_t cherokee_socket_get_local_address    (cherokee_socket_t *, cherokee_sockaddr_t *);
 ret_t cherokee_socket_update_from_addrinfo (cherokee_socket_t *socket, const struct addrinfo *addr_info);
 
 #endif /* CHEROKEE_SOCKET_H */

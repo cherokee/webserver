@@ -1,0 +1,3140 @@
+{
+  "started_at": "2026-10-05T21:37:26.122122+00:00",
+  "cpu": "AMD Ryzen 5 2500U with Radeon Vega Mobile Gfx",
+  "platform": "Linux-7.2.8-gentoo-x86_64-AMD_Ryzen_5_2500U_with_Radeon_Vega_Mobile_Gfx-with-glibc2.43",
+  "compiler": "cc (Gentoo 16.2.1_p20260926 p1) 16.2.1 20260926",
+  "arguments": {
+    "old_tree": "/mnt/storage/home/skinkie/Sources/webserver/.libs/source-validation-baseline",
+    "new_tree": "/tmp/cherokee-http23-disabled-final",
+    "output": ".libs/source-benchmark/unix4-confirmation.json",
+    "requests": 500000,
+    "warmup": 1000,
+    "repeat": 12,
+    "concurrency": [
+      4
+    ],
+    "transport": [
+      "unix"
+    ],
+    "modes": [
+      "old",
+      "new_off",
+      "new_on"
+    ],
+    "order": "balanced",
+    "seed": 20261005,
+    "server_cpus": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "backend_cpus": [
+      4,
+      5
+    ],
+    "client_cpus": [
+      6,
+      7
+    ]
+  },
+  "helper_source_sha256": "cb959e77ee92ec20098d1efd59ef4c821a96d01a1ff9ffe0102164e974396eab",
+  "orders": [
+    [
+      "new_off",
+      "new_on",
+      "old"
+    ],
+    [
+      "old",
+      "new_off",
+      "new_on"
+    ],
+    [
+      "old",
+      "new_on",
+      "new_off"
+    ],
+    [
+      "new_on",
+      "new_off",
+      "old"
+    ],
+    [
+      "new_on",
+      "old",
+      "new_off"
+    ],
+    [
+      "new_off",
+      "old",
+      "new_on"
+    ],
+    [
+      "old",
+      "new_on",
+      "new_off"
+    ],
+    [
+      "new_off",
+      "old",
+      "new_on"
+    ],
+    [
+      "new_off",
+      "new_on",
+      "old"
+    ],
+    [
+      "new_on",
+      "new_off",
+      "old"
+    ],
+    [
+      "new_on",
+      "old",
+      "new_off"
+    ],
+    [
+      "old",
+      "new_off",
+      "new_on"
+    ]
+  ],
+  "old_build": {
+    "config.status_sha256": "2f12bb4fcbfedc296df04e759be8d38f4f480e33617471d8e71f1bac6582f63e",
+    "config.h_sha256": "bf37ef271e5736eebeb02690a4ee26e28d6d9cde247e810bed9ae829724954f2",
+    "ac_cs_config": "'--prefix=/tmp/cherokee-source-baseline-install --disable-http2 --disable-http3 --with-libssl=no'",
+    "CFLAGS": "'-g -O2'",
+    "tree": "/mnt/storage/home/skinkie/Sources/webserver/.libs/source-validation-baseline",
+    "worker_sha256": "17200ec4178753c773958febcbdebf1769d53c26a3f0313a2fbaead6f40ce562",
+    "source_sha256": {
+      "source.c": "70a857b2c4fdc4fd7af5dabcb7639bb69b1b21e6afbc3318da237fd330c99f66",
+      "handler_fcgi.c": "9b4aeaab33ea49a76b315ea3b5ceb64cec8388f3b8d5bc2606ca38a32e35b40f",
+      "thread.c": "b84128178169e691a2267a58f01f1fb6f31aa9549ec15dd6bcb1aedb87f9ebf6",
+      "socket.c": "ff980f43102f9b18e65f33a3906b3e274a83eee84c9fc95cba2894b7d8bbccf0",
+      "util.c": "89cd336d88930fcdd18d84bcd946fbb57c9d388d48907e9098a8894e435bfe5f"
+    },
+    "library_sha256": {
+      "libplugin_evhost.so": "e0965baa47895a2f73ca223d662626be1632c6e7da8dfd4ae2851e9b896ba9fd",
+      "libplugin_server_info.so": "2f029e7bfe47d22c7a330686030bbb0adf439c731d47d06976f29ac1e2cae9c6",
+      "libplugin_custom_error.so": "4ac521d137eae823886d573ff12791bc8e4bd4391ef74ae5c28b6e4c0e2db7d7",
+      "libplugin_dirlist.so": "91f65a175be958ebd11ae9fee4b10efe16229e84fb7db1ec4b18a0d9ef7321d4",
+      "libplugin_dbslayer.so": "f3835f75f0e85447600fe4e332f6597fb1ef402d77a4dd7e39bd19fc3989698b",
+      "libplugin_error_nn.so": "a9b99d88a5133dc8f2e020ede31280c86eb69d865923179d226876b025eb4f21",
+      "libplugin_drop.so": "31abd1d26d290829c8f68cd370b8839da92b0e8172b71f850b032360a96f73b5",
+      "libplugin_method.so": "110f87b6e10901c21334f8193f1d6911c999896d2d8374886c11969be4540134",
+      "libplugin_render_rrd.so": "7321e3380ea259664f0c723dd2d8d5d71cdf6bd0db13ce1f6b57238498d40001",
+      "libplugin_ssi.so": "cfc43c6f0514b8efcd23430a5c3dd14e7686c126ba7d9d59d29523b09eed2f2b",
+      "libplugin_round_robin.so": "45fdefb33f76ede01d73f2970feb50fe8c8e5f2d92bdea778930a822682a1233",
+      "libplugin_cgi.so": "5ec3086ab831e4680e8ba8e33b41000e34ba6f648d2ba296631c3229bea9a67a",
+      "libplugin_gzip.so": "97be9bb6546e706c3e1cb5d934b29b0e8def8001fef02ed30cdd8a6a445b224c",
+      "libplugin_custom.so": "549fbff7f75f763696cc098ce89079695a2bd212302d552cbf72831b5cd86c24",
+      "libplugin_v_or.so": "f2f01d28933aa7e723cc20d94193a58a23561706b073928f965da856c44d87a8",
+      "libplugin_post_report.so": "ada1ba67d840eb2a131e866be1dd65c60e870b5dfdd7a29f6952c2c796dc3123",
+      "libplugin_bind.so": "aed5974b50706cf4f35d2fda83de863151530c92233e5b1a50fb2b48aac463b7",
+      "libplugin_admin.so": "5d7ae0bfb534446eb2cd581855ec978cfd898a35b42c75979afd1bb6b68b80d9",
+      "libplugin_htdigest.so": "228db5dcc2d1b6c83b549c2aafb9f6c045149f4ca197b3a01c437fdba1282aa4",
+      "libplugin_directory.so": "7b5cf203ccd2406d002869b65319877c20ca413351083152975bc4a9e8290c06",
+      "libplugin_extensions.so": "029f9ca9bbe4b3d15e13001bec529ef75910f1a8b7ee35902ec2fcc5f76e300d",
+      "libplugin_proxy.so": "bbcd36e9b89e336370aebcfa43cb35e03dfbf4cd534d276a499a1f81bd35e734",
+      "libplugin_fullpath.so": "31d7d36d33e45ac5dded0eece45644a0643b3f7307bc0df7acfa5f964c525e8e",
+      "libplugin_mysql.so": "4be45df8d0fed801a3c301eb0935d630ffee5f147354fc55ab1bc547b4e12d9e",
+      "libplugin_ip_hash.so": "2d21b6b11d5ef6de0182771bbadd5ab200d5881ededbcf73c35c6177cb6d2366",
+      "libplugin_authlist.so": "6e07b6ef7e0f4c2e7dd951211309cb58f21a86f7e22d09462bb63bea1ab92f8e",
+      "libplugin_streaming.so": "fa8cc09581579222c18a30df568edc98f493f794ea71da187655b3913a0ab7af",
+      "libplugin_file.so": "108bb468b0c427dac0e4bc64f889ee279c04cb9bf4ea8cbd34df9bbeb4771159",
+      "libplugin_target_ip.so": "68d6beae3eadaef40533e61c54f2d429b47b52dfe1f66166f119913604ce5223",
+      "libplugin_and.so": "e8cd729f6ec5c607792765af805da2403a77179b9cd431b209963b339551301a",
+      "libplugin_uwsgi.so": "8c7b1b0eeb99cf20e0b751a9bfd30d281e6514691bde60f2f0b6cfc8b6fc29a2",
+      "libplugin_redir.so": "df3d2d36da054eba4be344f8207be4adf1922aa62279fb9d8319b4fdd1993089",
+      "libplugin_scgi.so": "8fa1c754603d0f6b8dc4af67741e5324addb29a7185b5713abaf3d454d9bcac9",
+      "libplugin_deflate.so": "01e01b5b064068dc26d2367aec9703895b53921dcef556a2cb4d8e0724118f58",
+      "libplugin_rrd.so": "1b2b6bf67ce9fee707a8457e62efb813bb33ac65a2fff6bb8500940f01144592",
+      "libplugin_ncsa.so": "39b98a193b4734cf2c2d661752a0bc00cb4f819028223b9fa4e180a213d570cf",
+      "libplugin_header.so": "fc3028da86cc78ec08cdded0273e637a557685bfaac47f88bc927d6fe3cb55cd",
+      "libplugin_plain.so": "c739fbbc30299d2ff163b2b2fe0b8383c2fa32e711756a4281dcf5f46bcc7efa",
+      "libplugin_from.so": "0e2aac9ec443b40edaff01494d872ca31673477eac4cc7eb49360cda650944af",
+      "libplugin_url_arg.so": "54ef37c98b27dab3eae8e167894a0bfd35e3c18d6ca01e649793f5330a29efe6",
+      "libplugin_fcgi.so": "1d2d0ce6db5236c3e5bbafa6b4251336668e4c451025ea055b71105f4f9eb302",
+      "libplugin_combined.so": "e4c06750cd5bd8578ce8eed499d4cfb1f7ffc46c6f804b38624c0e1f36f0e8e4",
+      "libplugin_or.so": "8bb9456acc9dee4b4133b327032158d49717867307a25fdc989fa11ff75875bd",
+      "libplugin_common.so": "639589d1e20ad854b5eb9b838a34276d3dd5f1d2a7562c36daadd8ffb2478a33",
+      "libplugin_htpasswd.so": "5df080c2575fddb205ee7a9be87a4a8fb557bf7179bceda9f3c374af1a7b8a73",
+      "libcherokee-server.so": "52318375a636a7d83d085d2dbdddd3b61fe643553e9bfe7b533eb6a07a4c7b51",
+      "libplugin_secdownload.so": "61b40fe351cad5c4d7f6459abc62d5ef125b08b5093546287e5e364925e87f4c",
+      "libplugin_request.so": "4630f420a8d03abb5b118f7caae68d6f06d5ec8350a0ae062054a0f407036373",
+      "libplugin_post_track.so": "b130cd9dac0e5da836a33c29f1f057eeaa8e752a1e9be8b2d50bd1cfc07aed6e",
+      "libcherokee-base.so": "eb439df4041e16de750f3a98b30c6813ecb0fdf37c33fe94ec9c1b1ee0c5ad04",
+      "libcherokee-client.so": "95273517992537403649caf38e81f02043ab8b96e35436099994de230d514bf0",
+      "libplugin_error_redir.so": "6cb3b71eb4b53769bd9afe133a637d320fe5d10661d0beabd25a93c605970cc5",
+      "libplugin_exists.so": "ce681b2a58cf2887623468c508a6401982eb6a485447bef2e5ec13bf6ff0afaf",
+      "libplugin_pam.so": "09537fe78c9d8b6e0a1dab51078ee9ed1077733d5b72358cb632c662ecc9dac0",
+      "libplugin_not.so": "39cc05afe130a223828d165e161b691eff3aa85b78293dc1d6d81714a9cfb011",
+      "libplugin_rehost.so": "9012f1b13f0401cf683b06347593c329506cc4d861fdebee7e03236208ffb9b0",
+      "libplugin_wildcard.so": "19cc64e15b98cb3c07c2b6c5e7f2256092bd62d43f07d1b32313387c9ee66f39",
+      "libplugin_failover.so": "527630022acde4265dff1754e255546057bdd3884d4c2b1fbfc7ac93eb8f979d",
+      "libplugin_tls.so": "729cc9dab5de4282a5502df2dbbdd56c923faca6d80ddd6c9585d53713e09677",
+      "libplugin_empty_gif.so": "077bbb3f7cddb217f28b8f63c636c93aa989e695ad01d16ce9818142f04d7c7d"
+    }
+  },
+  "new_build": {
+    "config.status_sha256": "b4cd42bf0d108c50cfdbfd82006a9fd4157a4f543ddad513e4da935c8f878b98",
+    "config.h_sha256": "364ae3e93d065359fcb70e3c02c67a2ead3f4719c84416ea6fc1f73f339e0b11",
+    "ac_cs_config": "'--prefix=/tmp/cherokee-disabled-final-install --disable-http2 --disable-http3 --with-libssl=no'",
+    "CFLAGS": "'-g -O2'",
+    "tree": "/tmp/cherokee-http23-disabled-final",
+    "worker_sha256": "905184277141fe9a3062b36cec27e88235133146808aece18b44c19689f9db66",
+    "source_sha256": {
+      "source.c": "fe4c43ab63a41f9ba790bd65827754448abff9f9a7eb1c1bba7f11b39f9d8f91",
+      "handler_fcgi.c": "fb45d995a59aeea86b526336d1976d11dfe1379ef0f651cde9ef285664053c7d",
+      "thread.c": "28e5cc6622fc3ee8f3213796d2c37376f72ffe155f3837f6dc3522da04f62ca7",
+      "socket.c": "b97e414cbd0d2f89f76b3aa6a51c287b84a9e18b865c22d5cf79e00182a3f83b",
+      "util.c": "2d362369ebb22a5bc0ebf593c405be10ba3f825ced46f3f8f0be0b7e9eb01445"
+    },
+    "library_sha256": {
+      "libplugin_and.so": "5f694126f4003cfb8914b202b830e538adc17edb0f81ffb3bb47e7354acc2007",
+      "libplugin_mysql.so": "abc6bf4e29f3d813060cb8b08c5afc47e2f31af8e25cce45e6c0efd3d2fbea60",
+      "libplugin_proxy.so": "51a3edc590b03168f3a177f81acbc31a52e343182137865c919a7ddb21c2fda9",
+      "libplugin_common.so": "e7f9f81f0fea6019fa87e62eda1bc045fa772c6062d021ac6f8f19ce1f940950",
+      "libplugin_deflate.so": "2d5afcfed10f637d21243c488af345173aa7c40afdcf637dee1203251bcce5b9",
+      "libplugin_dirlist.so": "a31948fbc813051259a50ec5aad107662b1c0ae03b7a9c64562fec51551187c6",
+      "libplugin_drop.so": "770711e5cc6ebbf04ea66bfaeb92cea58cfeeea2ae98ddf9bcd31c38bddc7d88",
+      "libplugin_admin.so": "fc4e174eb26b56617ae0c5adca326dbb64195d8a97d252f01ba9c813a07b39e0",
+      "libplugin_tls.so": "013da2442779d778259d6ee013f3c91fe597b7211c0bee99a7409b877057a837",
+      "libplugin_redir.so": "2a4753d168bfa88b48056dc04d1d087e207e1907ae99899ce074dc6b644b64e3",
+      "libplugin_secdownload.so": "771401001e525722c37cdcbcb63423a1d1d63200f29889e1bd02f95d7a7e892a",
+      "libplugin_authlist.so": "53ff498d17407117daa5d02d03b48ca44687cfbd06a56ef324502234d3836a91",
+      "libplugin_target_ip.so": "9f501f12eda89f97d22249caf6cea76be7a828493ccb013be75b79f18785c710",
+      "libplugin_post_report.so": "1f4cb5e922bfbbf180659731b1fde09c86dda321f1c4ffaddec6cfe4f88b602f",
+      "libplugin_dbslayer.so": "e0d79b1e454c2d0742c77f4d29ec61adeacb286379d9a074e5bfa2e126e82f3a",
+      "libplugin_cgi.so": "2f5a3e9484d962435c4e5cd7ceaaed167e484e310249223976ef3b0e61f9896e",
+      "libplugin_ncsa.so": "c83802116c050522cb7a9dea67b4a6c1cd705bcf34e4edfa50f9790af165f45b",
+      "libplugin_error_nn.so": "11057f85f2f173bf965eb8f7036e53540fc7fbab6fc0e99c9ee1746e3d0e5df1",
+      "libplugin_rrd.so": "be4b924901ec191a1a01c717a7ee339651da06eec36e18086f0c07166a10e0df",
+      "libplugin_url_arg.so": "8514091fd814849f8fd64e9d7447ac4907af03a61f099bbcfe10735e836d2058",
+      "libplugin_header.so": "51ce9fd66c2c73d5b11dcf5461bed71251447794727e0d6927aa838f37fa2f10",
+      "libplugin_render_rrd.so": "d55e77a9738311a9103cbb61b5577e0f14431ebe990979fd9c6379fb0b8d04e0",
+      "libplugin_method.so": "c0cb11476f01fe390e8575842bd31166cea8f72339ceb656d73c1de45027c2a5",
+      "libcherokee-server.so": "fc4f2dea923f1b39c78e9be09464e4f2a3df9d6c56c65399cd72eb7584afba59",
+      "libcherokee-client.so": "10a3e7ba7f8b75c4dbbe472f6bde874d635c0da6514a2e19fb22efe8380c52c2",
+      "libplugin_uwsgi.so": "c90b9c1f903d6c1f2b21bbdb8a21be2270a78ab1868054bf087656417f3b95e1",
+      "libplugin_bind.so": "197fb258978a41c6b938cf7d14acbcc4fa81c88c677312592d81b1d76251e673",
+      "libcherokee-base.so": "7de35225a30967cc55f6ce56fef2fc5acaba7076f919f6cfa83097c718e6f1ab",
+      "libplugin_request.so": "4a9c72bed1ad0ef3539ed26a4120cc3844fbc3944a9a4d3a4270f99ae40124d3",
+      "libplugin_failover.so": "aa34ab5e85eabe39d907109cee1ce281395b7c306d463393191091a2265832b7",
+      "libplugin_server_info.so": "780b8a076a5e9e4e95370efce79d28150d8a7136ab7993cd34dca0a875aaf2a1",
+      "libplugin_exists.so": "13f1a8cff77da4d02385d5038ed6274847abfecb8dafe989eb08626aa644856d",
+      "libplugin_v_or.so": "19b5a6a526d0d4b6cca8ce7291212429f7725035670a30b9edd7fa1994a309e7",
+      "libplugin_evhost.so": "2f9e8b9425cacd42bead4be21ab9adc52c7ad0626df352c95c5e22042796e689",
+      "libplugin_combined.so": "eb84cdc32ee34957e7469a2f98d336e63c7a95cd4a6ab3d741e00385eaad394a",
+      "libplugin_fullpath.so": "dba6b5bfbf51e5f124a965487af3be08f2642f8ef7c62360e41ab5c7c98c24b6",
+      "libplugin_scgi.so": "9bdb630fcef246d2f6fb12dfad36ddcc23f2711ad6eeefef7105f0cdeba83cfe",
+      "libplugin_pam.so": "6e280f2318aefeeedeefcb846cd488f8ffb9039898a31e58e3e88badb49fad26",
+      "libplugin_custom.so": "edc99a76c102a3efc6365e43c7aab9cc16e5f960252f8dca57511edccdaa3a2a",
+      "libplugin_wildcard.so": "c8318b053d8c4879a43b009639fa89a42af48ad0f7100660ed22e234a4068f0a",
+      "libplugin_htpasswd.so": "f711d03984d956b3a4beb43643cc166c4dbc561685d41247af4371fd5555128c",
+      "libplugin_extensions.so": "90e295ac544f6e7c30b12ff9b86dfc76b2abaf8160c6b08d173a89bcef6fb713",
+      "libplugin_ip_hash.so": "7907d26c11b5f30b12bcfafe7ecd531def6ef8a0532fdac20139fd2a0a81a0ea",
+      "libplugin_rehost.so": "aaa45c52da995c66627e8094c5a6288f36d9d0720a0f9dcdf70c3fef4d36eb5f",
+      "libplugin_ssi.so": "1353be6d8642fd79f1117af453eb511aab8356560c402a9d323aee0d7600afb7",
+      "libplugin_round_robin.so": "b69e57ce10095e075f95a4b3b68c28806226727f2d38b90f15addf0c946505ec",
+      "libplugin_streaming.so": "7ce2bed90978b6b6ee78949435e0999fb89b998fa1b977ef7111d3f29051458f",
+      "libplugin_file.so": "c48cedf49f4d99f5176d03e4e0ab32f1a620dc75e38435a47c9949ef9091184f",
+      "libplugin_gzip.so": "ae16562ecd154d784e8f2e64eb30353b2eeb5c3260ee38dd01dbf10af3470b36",
+      "libplugin_from.so": "a3a1d0661445d592f8d4b7f69b3166a9a931c6e40d222bc780b586ad0e03787f",
+      "libplugin_directory.so": "53de8b29dfdef3c684e85bcd3fcc8963d30fb4fad89df975c03de4225730ecc1",
+      "libplugin_not.so": "55dd79784830f301958708d86956e097da2be4fb4d35689898343d6a90ce7a2d",
+      "libplugin_or.so": "e5e555d1e36f01080d86106a2da210e87d021f0a35d8c7371956c30ae7d7ec3c",
+      "libplugin_htdigest.so": "2bd01bd342bb4a74c269db288f56feb675073dd5be62d501d0e363b364d7c78b",
+      "libplugin_plain.so": "8da763a966321bfb6a742a610b34d9a8e26267c4a7511a4187f8373d93630a51",
+      "libplugin_empty_gif.so": "86aa74848f252a759d4bbcd7e738ecdb48f8d700d34e23a48e4b3fac35a698b1",
+      "libplugin_post_track.so": "4bd7b08ceb26717da2521a6cc536815c657a43645c3357d433928f8b08ac2d71",
+      "libplugin_error_redir.so": "d236af005bfdfe3ee59754f3c913feba85674ef0824bed38b96d86b8db506c9a",
+      "libplugin_custom_error.so": "c9e673fe5581b533b698e7238fa0e1bf8252f5797c6591f04f79bf52fcf11289",
+      "libplugin_fcgi.so": "0466684c5e33f1d2f14e17182cf2a923d37fef76a4350c94c425b8bbc02f13b4"
+    }
+  },
+  "settings": {
+    "server_workers": 4,
+    "frontend_http": "HTTP/1.1",
+    "frontend_keepalive": true,
+    "backend": "native event-driven FastCGI fixture",
+    "response_bytes": 128,
+    "php_fpm": false,
+    "latency_clock": "CLOCK_MONOTONIC",
+    "pool_idle_max": 4,
+    "pool_requests": 65535,
+    "pool_age_seconds": 86400,
+    "pool_idle_seconds": 60,
+    "source_deadlines": 0,
+    "retries": 0
+  },
+  "samples": [
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 18.135637326,
+      "requests_per_second": 27570.026,
+      "client_cpu_seconds": 22.189216,
+      "latency_mean_ms": 0.14076,
+      "latency_p50_ms": 0.135492,
+      "latency_p95_ms": 0.18452,
+      "latency_p99_ms": 0.230127,
+      "server_cpu_seconds": 33.72,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 1,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 7.974825,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "0.48 0.49 1.05 1/534 495793",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 60000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 60000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "1.76 0.78 1.14 1/527 495809",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 70000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 80000
+        }
+      },
+      "load_before": "0.48 0.49 1.05 1/534 495793",
+      "load_after": "1.76 0.78 1.14 1/527 495809"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 20.781803087,
+      "requests_per_second": 24059.51,
+      "client_cpu_seconds": 20.503133,
+      "latency_mean_ms": 0.151231,
+      "latency_p50_ms": 0.14066,
+      "latency_p95_ms": 0.233968,
+      "latency_p99_ms": 0.301505,
+      "server_cpu_seconds": 43.43,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 1,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.172198,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "1.76 0.78 1.14 1/527 495819",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 70000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 79000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "2.75 1.07 1.22 1/527 495841",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 75000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 74000
+        }
+      },
+      "load_before": "1.76 0.78 1.14 1/527 495819",
+      "load_after": "2.75 1.07 1.22 2/527 495841"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 19.100129789,
+      "requests_per_second": 26177.833,
+      "client_cpu_seconds": 21.616738,
+      "latency_mean_ms": 0.148132,
+      "latency_p50_ms": 0.14073,
+      "latency_p95_ms": 0.205752,
+      "latency_p99_ms": 0.270146,
+      "server_cpu_seconds": 41.25,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 1,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.085099000000001,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "2.75 1.07 1.22 1/527 495851",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 74000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 74000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "3.25 1.29 1.29 2/531 495871",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 78000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 78000
+        }
+      },
+      "load_before": "2.75 1.07 1.22 1/527 495851",
+      "load_after": "3.25 1.29 1.29 2/531 495871"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 19.060523225,
+      "requests_per_second": 26232.228,
+      "client_cpu_seconds": 21.595387,
+      "latency_mean_ms": 0.147798,
+      "latency_p50_ms": 0.140591,
+      "latency_p95_ms": 0.205264,
+      "latency_p99_ms": 0.267004,
+      "server_cpu_seconds": 41.25,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 2,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.111868000000001,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "3.25 1.29 1.29 3/530 495881",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 78000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 77000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "3.72 1.52 1.37 2/527 495900",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 82000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 81000
+        }
+      },
+      "load_before": "3.25 1.29 1.29 3/530 495881",
+      "load_after": "3.72 1.52 1.37 1/527 495900"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 18.357547267,
+      "requests_per_second": 27236.754,
+      "client_cpu_seconds": 21.942782,
+      "latency_mean_ms": 0.142682,
+      "latency_p50_ms": 0.137028,
+      "latency_p95_ms": 0.188502,
+      "latency_p99_ms": 0.239695,
+      "server_cpu_seconds": 34.55,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 2,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.144147,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "3.72 1.52 1.37 2/527 495910",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 82000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 81000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.00 1.73 1.44 2/516 495947",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 84000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "load_before": "3.72 1.52 1.37 2/527 495910",
+      "load_after": "4.00 1.73 1.44 1/516 495947"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 10,
+      "seconds": 23.842874723,
+      "requests_per_second": 20970.626,
+      "client_cpu_seconds": 21.51665,
+      "latency_mean_ms": 0.17217,
+      "latency_p50_ms": 0.173136,
+      "latency_p95_ms": 0.232082,
+      "latency_p99_ms": 0.274197,
+      "server_cpu_seconds": 34.89,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 2,
+      "backend_connections": 6,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.5043880000000005,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 3,
+      "telemetry_before": {
+        "loadavg": "4.00 1.73 1.44 1/516 495957",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 84000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 83000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "3.89 1.89 1.51 1/512 495984",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 83000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 83000
+        }
+      },
+      "load_before": "4.00 1.73 1.44 2/516 495957",
+      "load_after": "3.89 1.89 1.51 2/512 495984"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 19.653748313,
+      "requests_per_second": 25440.44,
+      "client_cpu_seconds": 22.616987,
+      "latency_mean_ms": 0.152614,
+      "latency_p50_ms": 0.145619,
+      "latency_p95_ms": 0.205054,
+      "latency_p99_ms": 0.256737,
+      "server_cpu_seconds": 36.9,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 3,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 7.656705,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "3.89 1.89 1.51 1/512 495994",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 83000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 82000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "3.95 2.03 1.56 1/510 496012",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "3.89 1.89 1.51 1/512 495994",
+      "load_after": "3.95 2.03 1.56 2/510 496012"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 25.033158834,
+      "requests_per_second": 19973.508,
+      "client_cpu_seconds": 23.772629,
+      "latency_mean_ms": 0.179008,
+      "latency_p50_ms": 0.165733,
+      "latency_p95_ms": 0.276222,
+      "latency_p99_ms": 0.353257,
+      "server_cpu_seconds": 53.07,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 3,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.217188,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "3.95 2.03 1.56 1/510 496022",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.45 2.30 1.66 1/511 496043",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "3.95 2.03 1.56 1/510 496022",
+      "load_after": "4.45 2.30 1.66 1/511 496043"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.684464645,
+      "requests_per_second": 20255.655,
+      "client_cpu_seconds": 27.571879,
+      "latency_mean_ms": 0.184209,
+      "latency_p50_ms": 0.175511,
+      "latency_p95_ms": 0.255758,
+      "latency_p99_ms": 0.330978,
+      "server_cpu_seconds": 55.64,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 3,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.115564,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "4.45 2.30 1.66 1/511 496053",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.46 2.49 1.74 1/512 496080",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "4.45 2.30 1.66 1/511 496053",
+      "load_after": "4.46 2.49 1.74 1/512 496080"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 27.274842878,
+      "requests_per_second": 18331.911,
+      "client_cpu_seconds": 27.858531,
+      "latency_mean_ms": 0.197718,
+      "latency_p50_ms": 0.182565,
+      "latency_p95_ms": 0.300178,
+      "latency_p99_ms": 0.385245,
+      "server_cpu_seconds": 58.419999999999995,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 4,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.328201,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "4.46 2.49 1.74 1/512 496090",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.89 2.79 1.87 1/510 496111",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "4.46 2.49 1.74 1/512 496090",
+      "load_after": "4.89 2.79 1.87 1/510 496111"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 26.093425465,
+      "requests_per_second": 19161.915,
+      "client_cpu_seconds": 27.978556,
+      "latency_mean_ms": 0.193431,
+      "latency_p50_ms": 0.179003,
+      "latency_p95_ms": 0.261974,
+      "latency_p99_ms": 0.338939,
+      "server_cpu_seconds": 56.56,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 4,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.521173000000001,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "4.89 2.79 1.87 2/510 496124",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.72 2.93 1.94 1/510 496149",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "4.89 2.79 1.87 2/510 496124",
+      "load_after": "4.72 2.93 1.94 1/510 496149"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 25.433226793,
+      "requests_per_second": 19659.322,
+      "client_cpu_seconds": 27.876422,
+      "latency_mean_ms": 0.192021,
+      "latency_p50_ms": 0.183403,
+      "latency_p95_ms": 0.267004,
+      "latency_p99_ms": 0.341733,
+      "server_cpu_seconds": 57.44,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 4,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.139594,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "4.72 2.93 1.94 2/508 496159",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.07 3.16 2.04 1/510 496184",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "4.72 2.93 1.94 2/508 496159",
+      "load_after": "5.07 3.16 2.04 1/510 496184"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 28.11540327,
+      "requests_per_second": 17783.846,
+      "client_cpu_seconds": 29.18068,
+      "latency_mean_ms": 0.205326,
+      "latency_p50_ms": 0.192622,
+      "latency_p95_ms": 0.314914,
+      "latency_p99_ms": 0.399632,
+      "server_cpu_seconds": 62.04,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 5,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.588115,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "5.07 3.16 2.04 2/510 496194",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.76 3.27 2.12 2/512 496221",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "5.07 3.16 2.04 2/510 496194",
+      "load_after": "4.76 3.27 2.12 1/512 496221"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 25.13246257,
+      "requests_per_second": 19894.588,
+      "client_cpu_seconds": 28.024835,
+      "latency_mean_ms": 0.188059,
+      "latency_p50_ms": 0.1804,
+      "latency_p95_ms": 0.258552,
+      "latency_p99_ms": 0.329651,
+      "server_cpu_seconds": 56.35,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 5,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 7.938838,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "4.76 3.27 2.12 1/512 496231",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.60 3.38 2.18 1/493 496253",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "4.76 3.27 2.12 1/512 496231",
+      "load_after": "4.60 3.38 2.18 1/493 496253"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.900253347,
+      "requests_per_second": 20080.117,
+      "client_cpu_seconds": 27.913651,
+      "latency_mean_ms": 0.18721,
+      "latency_p50_ms": 0.177606,
+      "latency_p95_ms": 0.261905,
+      "latency_p99_ms": 0.341663,
+      "server_cpu_seconds": 56.74,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 5,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.436622,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "4.60 3.38 2.18 1/493 496263",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.13 3.60 2.29 2/502 496306",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "4.60 3.38 2.18 1/493 496263",
+      "load_after": "5.13 3.60 2.29 3/502 496306"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 25.12546643,
+      "requests_per_second": 19900.128,
+      "client_cpu_seconds": 28.285502,
+      "latency_mean_ms": 0.187962,
+      "latency_p50_ms": 0.178794,
+      "latency_p95_ms": 0.262813,
+      "latency_p99_ms": 0.341593,
+      "server_cpu_seconds": 57.230000000000004,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 6,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.645066,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.13 3.60 2.29 2/502 496316",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.29 3.77 2.38 1/502 496401",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.13 3.60 2.29 2/502 496316",
+      "load_after": "5.29 3.77 2.38 1/502 496401"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.935704356,
+      "requests_per_second": 20051.569,
+      "client_cpu_seconds": 27.405232,
+      "latency_mean_ms": 0.188057,
+      "latency_p50_ms": 0.179562,
+      "latency_p95_ms": 0.261485,
+      "latency_p99_ms": 0.335378,
+      "server_cpu_seconds": 55.96,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 6,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.254411,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.29 3.77 2.38 3/500 496411",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.44 3.93 2.47 1/498 496462",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.29 3.77 2.38 3/500 496411",
+      "load_after": "5.44 3.93 2.47 1/498 496462"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 27.981435497,
+      "requests_per_second": 17868.99,
+      "client_cpu_seconds": 29.123408,
+      "latency_mean_ms": 0.20416,
+      "latency_p50_ms": 0.190876,
+      "latency_p95_ms": 0.312889,
+      "latency_p99_ms": 0.398584,
+      "server_cpu_seconds": 61.699999999999996,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 6,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.652985,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "5.44 3.93 2.47 1/498 496472",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.30 4.05 2.56 2/493 496494",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "5.44 3.93 2.47 1/498 496472",
+      "load_after": "5.30 4.05 2.56 1/493 496494"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.984583325,
+      "requests_per_second": 20012.341,
+      "client_cpu_seconds": 27.856713,
+      "latency_mean_ms": 0.188387,
+      "latency_p50_ms": 0.179981,
+      "latency_p95_ms": 0.262463,
+      "latency_p99_ms": 0.333423,
+      "server_cpu_seconds": 55.77,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 7,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.379794,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.30 4.05 2.56 2/493 496504",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.50 4.19 2.65 1/494 496528",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.30 4.05 2.56 2/493 496504",
+      "load_after": "5.50 4.19 2.65 1/494 496528"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 27.970344635,
+      "requests_per_second": 17876.076,
+      "client_cpu_seconds": 29.350105,
+      "latency_mean_ms": 0.204221,
+      "latency_p50_ms": 0.191295,
+      "latency_p95_ms": 0.313797,
+      "latency_p99_ms": 0.4004,
+      "server_cpu_seconds": 61.629999999999995,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 7,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.576956,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "5.50 4.19 2.65 2/494 496538",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.11 4.23 2.71 1/494 496563",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.50 4.19 2.65 2/494 496538",
+      "load_after": "5.11 4.23 2.71 1/494 496563"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.832285921,
+      "requests_per_second": 20135.077,
+      "client_cpu_seconds": 28.219888,
+      "latency_mean_ms": 0.185942,
+      "latency_p50_ms": 0.176698,
+      "latency_p95_ms": 0.260788,
+      "latency_p99_ms": 0.336774,
+      "server_cpu_seconds": 56.0,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 7,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.808678,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.11 4.23 2.71 2/494 496573",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "4.97 4.28 2.77 2/494 496608",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "5.11 4.23 2.71 2/494 496573",
+      "load_after": "4.97 4.28 2.77 1/494 496608"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 25.040433081,
+      "requests_per_second": 19967.706,
+      "client_cpu_seconds": 29.064495,
+      "latency_mean_ms": 0.18791,
+      "latency_p50_ms": 0.179352,
+      "latency_p95_ms": 0.2596,
+      "latency_p99_ms": 0.333562,
+      "server_cpu_seconds": 57.42,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 8,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.438122,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "4.97 4.28 2.77 1/493 496618",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.22 4.40 2.85 2/479 496645",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "4.97 4.28 2.77 1/493 496618",
+      "load_after": "5.22 4.40 2.85 1/479 496645"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 25.033641857,
+      "requests_per_second": 19973.123,
+      "client_cpu_seconds": 27.82963,
+      "latency_mean_ms": 0.193359,
+      "latency_p50_ms": 0.177117,
+      "latency_p95_ms": 0.258762,
+      "latency_p99_ms": 0.433854,
+      "server_cpu_seconds": 45.28,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 8,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.434052,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.22 4.40 2.85 1/478 496655",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.75 4.58 2.95 3/625 497017",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "5.22 4.40 2.85 1/478 496655",
+      "load_after": "5.75 4.58 2.95 1/625 497017"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 29.792065945,
+      "requests_per_second": 16782.992,
+      "client_cpu_seconds": 27.636782,
+      "latency_mean_ms": 0.233244,
+      "latency_p50_ms": 0.20282,
+      "latency_p95_ms": 0.355771,
+      "latency_p99_ms": 0.849479,
+      "server_cpu_seconds": 51.04,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 8,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 6.777285999999999,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 4,
+      "telemetry_before": {
+        "loadavg": "5.75 4.58 2.95 5/617 497045",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "6.57 4.89 3.11 2/663 497180",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.75 4.58 2.95 5/617 497045",
+      "load_after": "6.57 4.89 3.11 2/663 497180"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.195791306,
+      "requests_per_second": 20664.751,
+      "client_cpu_seconds": 27.151293,
+      "latency_mean_ms": 0.188045,
+      "latency_p50_ms": 0.173766,
+      "latency_p95_ms": 0.252756,
+      "latency_p99_ms": 0.379448,
+      "server_cpu_seconds": 44.88999999999999,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 9,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 9.240542,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "6.57 4.89 3.11 2/663 497190",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "6.38 4.98 3.19 1/663 497315",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "6.57 4.89 3.11 2/663 497190",
+      "load_after": "6.38 4.98 3.19 2/663 497315"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 28.822432606,
+      "requests_per_second": 17347.599,
+      "client_cpu_seconds": 29.364563,
+      "latency_mean_ms": 0.21045,
+      "latency_p50_ms": 0.193949,
+      "latency_p95_ms": 0.322457,
+      "latency_p99_ms": 0.433435,
+      "server_cpu_seconds": 61.69,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 9,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 6.083952,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "6.38 4.98 3.19 2/663 497325",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "6.16 5.06 3.27 1/655 497353",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "6.38 4.98 3.19 2/663 497325",
+      "load_after": "6.16 5.06 3.27 2/655 497353"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 23.843490584,
+      "requests_per_second": 20970.084,
+      "client_cpu_seconds": 27.247148,
+      "latency_mean_ms": 0.18542,
+      "latency_p50_ms": 0.174044,
+      "latency_p95_ms": 0.249752,
+      "latency_p99_ms": 0.33887,
+      "server_cpu_seconds": 44.480000000000004,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 9,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 8.51496,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "6.16 5.06 3.27 1/655 497363",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.66 5.03 3.31 1/660 497389",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "6.16 5.06 3.27 1/655 497363",
+      "load_after": "5.66 5.03 3.31 1/660 497389"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 29.536977089,
+      "requests_per_second": 16927.934,
+      "client_cpu_seconds": 28.341011,
+      "latency_mean_ms": 0.217087,
+      "latency_p50_ms": 0.19367,
+      "latency_p95_ms": 0.33433,
+      "latency_p99_ms": 0.574095,
+      "server_cpu_seconds": 60.16,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 10,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 6.782259,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "5.66 5.03 3.31 2/660 497402",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "6.31 5.26 3.44 1/670 497468",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "5.66 5.03 3.31 2/660 497402",
+      "load_after": "6.31 5.26 3.44 1/670 497468"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.910977108,
+      "requests_per_second": 20071.473,
+      "client_cpu_seconds": 28.287234,
+      "latency_mean_ms": 0.187063,
+      "latency_p50_ms": 0.176069,
+      "latency_p95_ms": 0.263441,
+      "latency_p99_ms": 0.350114,
+      "server_cpu_seconds": 55.74,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 10,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 9.191233,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "6.31 5.26 3.44 1/670 497478",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "6.27 5.34 3.52 2/668 497501",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "6.31 5.26 3.44 1/670 497478",
+      "load_after": "6.27 5.34 3.52 3/668 497501"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 25.330867425,
+      "requests_per_second": 19738.763,
+      "client_cpu_seconds": 27.271159,
+      "latency_mean_ms": 0.193248,
+      "latency_p50_ms": 0.178724,
+      "latency_p95_ms": 0.276152,
+      "latency_p99_ms": 0.40019,
+      "server_cpu_seconds": 54.54,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 10,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 9.557701,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "6.27 5.34 3.52 2/669 497515",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.78 5.29 3.55 4/680 497556",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "6.27 5.34 3.52 2/669 497515",
+      "load_after": "5.78 5.29 3.55 2/680 497556"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 29.068195232,
+      "requests_per_second": 17200.93,
+      "client_cpu_seconds": 29.527479,
+      "latency_mean_ms": 0.211602,
+      "latency_p50_ms": 0.195137,
+      "latency_p95_ms": 0.325809,
+      "latency_p99_ms": 0.43106,
+      "server_cpu_seconds": 62.730000000000004,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 11,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 5.904091,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "5.40 5.22 3.54 1/679 497566",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.31 5.21 3.58 2/672 497596",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "5.40 5.22 3.54 1/679 497566",
+      "load_after": "5.31 5.21 3.58 1/672 497596"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 25.765445758,
+      "requests_per_second": 19405.835,
+      "client_cpu_seconds": 27.543224,
+      "latency_mean_ms": 0.195342,
+      "latency_p50_ms": 0.180749,
+      "latency_p95_ms": 0.277548,
+      "latency_p99_ms": 0.405428,
+      "server_cpu_seconds": 55.06,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 11,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 9.378641,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "4.97 5.14 3.56 1/672 497606",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.46 5.24 3.64 2/670 497629",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "4.97 5.14 3.56 1/672 497606",
+      "load_after": "5.46 5.24 3.64 1/670 497629"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.587324214,
+      "requests_per_second": 20335.682,
+      "client_cpu_seconds": 27.491923,
+      "latency_mean_ms": 0.190616,
+      "latency_p50_ms": 0.178165,
+      "latency_p95_ms": 0.25981,
+      "latency_p99_ms": 0.373301,
+      "server_cpu_seconds": 45.910000000000004,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 11,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 9.160052,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.46 5.24 3.64 3/669 497639",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.40 5.24 3.68 1/679 497684",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 86000
+        }
+      },
+      "load_before": "5.46 5.24 3.64 3/669 497639",
+      "load_after": "5.40 5.24 3.68 1/679 497684"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 24.09106398,
+      "requests_per_second": 20754.584,
+      "client_cpu_seconds": 27.36979,
+      "latency_mean_ms": 0.187501,
+      "latency_p50_ms": 0.176908,
+      "latency_p95_ms": 0.256457,
+      "latency_p99_ms": 0.356748,
+      "server_cpu_seconds": 44.51,
+      "transport": "unix",
+      "mode": "old",
+      "repeat": 12,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 9.631157,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.40 5.24 3.68 1/679 497694",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 86000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.19 5.20 3.71 1/658 497719",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.40 5.24 3.68 1/679 497694",
+      "load_after": "5.19 5.20 3.71 1/658 497719"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 500000,
+      "seconds": 26.593286137,
+      "requests_per_second": 18801.738,
+      "client_cpu_seconds": 27.356769,
+      "latency_mean_ms": 0.201622,
+      "latency_p50_ms": 0.178933,
+      "latency_p95_ms": 0.296127,
+      "latency_p99_ms": 0.548812,
+      "server_cpu_seconds": 55.9,
+      "transport": "unix",
+      "mode": "new_off",
+      "repeat": 12,
+      "backend_connections": 500000,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 10.607352,
+      "backend_connections_after_warmup": 1000,
+      "backend_live_after_measurement": 0,
+      "telemetry_before": {
+        "loadavg": "5.19 5.20 3.71 2/658 497731",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 84000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.77 5.33 3.80 4/678 497818",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.19 5.20 3.71 2/658 497731",
+      "load_after": "5.77 5.33 3.80 2/678 497818"
+    },
+    {
+      "requests": 500000,
+      "concurrency": 4,
+      "errors": 0,
+      "frontend_connections": 4,
+      "backend_connections_used": 8,
+      "seconds": 29.143565512,
+      "requests_per_second": 17156.446,
+      "client_cpu_seconds": 26.621925,
+      "latency_mean_ms": 0.212045,
+      "latency_p50_ms": 0.18452,
+      "latency_p95_ms": 0.317078,
+      "latency_p99_ms": 0.48784,
+      "server_cpu_seconds": 57.809999999999995,
+      "transport": "unix",
+      "mode": "new_on",
+      "repeat": 12,
+      "backend_connections": 4,
+      "backend_requests": 500000,
+      "backend_errors": 0,
+      "backend_cpu_seconds": 6.634707000000001,
+      "backend_connections_after_warmup": 4,
+      "backend_live_after_measurement": 2,
+      "telemetry_before": {
+        "loadavg": "5.77 5.33 3.80 5/680 497830",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "telemetry_after": {
+        "loadavg": "5.96 5.41 3.87 4/682 497871",
+        "cpu": {
+          "0": {},
+          "1": {},
+          "2": {},
+          "3": {},
+          "4": {},
+          "5": {},
+          "6": {},
+          "7": {}
+        },
+        "temperature_millidegrees": {
+          "thinkpad/temp6_input": 0,
+          "thinkpad/temp3_input": 0,
+          "thinkpad/temp7_input": 0,
+          "thinkpad/temp4_input": 0,
+          "thinkpad/temp8_input": 0,
+          "thinkpad/temp1_input": 85000,
+          "thinkpad/temp5_input": 0,
+          "thinkpad/temp2_input": 0,
+          "amdgpu/temp1_input": 85000
+        }
+      },
+      "load_before": "5.77 5.33 3.80 5/680 497830",
+      "load_after": "5.96 5.41 3.87 1/682 497871"
+    }
+  ],
+  "summary": [
+    {
+      "transport": "unix",
+      "concurrency": 4,
+      "mode": "new_off",
+      "samples": 12,
+      "seconds": {
+        "median": 24.866269634,
+        "min": 18.135637326,
+        "max": 26.593286137
+      },
+      "requests_per_second": {
+        "median": 20107.597,
+        "min": 18801.738,
+        "max": 27570.026
+      },
+      "latency_mean_ms": {
+        "median": 0.18756,
+        "min": 0.14076,
+        "max": 0.201622
+      },
+      "latency_p50_ms": {
+        "median": 0.177152,
+        "min": 0.135492,
+        "max": 0.179352
+      },
+      "latency_p95_ms": {
+        "median": 0.260299,
+        "min": 0.18452,
+        "max": 0.296127
+      },
+      "latency_p99_ms": {
+        "median": 0.34026599999999996,
+        "min": 0.230127,
+        "max": 0.548812
+      },
+      "server_cpu_seconds": {
+        "median": 55.82,
+        "min": 33.72,
+        "max": 57.42
+      },
+      "backend_cpu_seconds": {
+        "median": 8.5831195,
+        "min": 7.974825,
+        "max": 10.607352
+      },
+      "client_cpu_seconds": {
+        "median": 27.742765,
+        "min": 21.942782,
+        "max": 29.064495
+      },
+      "backend_connections": {
+        "median": 500000.0,
+        "min": 500000,
+        "max": 500000
+      },
+      "backend_connections_used": {
+        "median": 500000.0,
+        "min": 500000,
+        "max": 500000
+      },
+      "backend_connections_after_warmup": {
+        "median": 1000.0,
+        "min": 1000,
+        "max": 1000
+      }
+    },
+    {
+      "transport": "unix",
+      "concurrency": 4,
+      "mode": "new_on",
+      "samples": 12,
+      "seconds": {
+        "median": 28.0484193835,
+        "min": 20.781803087,
+        "max": 29.792065945
+      },
+      "requests_per_second": {
+        "median": 17826.418,
+        "min": 16782.992,
+        "max": 24059.51
+      },
+      "latency_mean_ms": {
+        "median": 0.2047735,
+        "min": 0.151231,
+        "max": 0.233244
+      },
+      "latency_p50_ms": {
+        "median": 0.1910855,
+        "min": 0.14066,
+        "max": 0.20282
+      },
+      "latency_p95_ms": {
+        "median": 0.3143555,
+        "min": 0.232082,
+        "max": 0.355771
+      },
+      "latency_p99_ms": {
+        "median": 0.400016,
+        "min": 0.274197,
+        "max": 0.849479
+      },
+      "server_cpu_seconds": {
+        "median": 59.28999999999999,
+        "min": 34.89,
+        "max": 62.730000000000004
+      },
+      "backend_cpu_seconds": {
+        "median": 5.62055,
+        "min": 5.172198,
+        "max": 6.782259
+      },
+      "client_cpu_seconds": {
+        "median": 28.099771,
+        "min": 20.503133,
+        "max": 29.527479
+      },
+      "backend_connections": {
+        "median": 4.0,
+        "min": 4,
+        "max": 6
+      },
+      "backend_connections_used": {
+        "median": 8.0,
+        "min": 8,
+        "max": 10
+      },
+      "backend_connections_after_warmup": {
+        "median": 4.0,
+        "min": 4,
+        "max": 4
+      }
+    },
+    {
+      "transport": "unix",
+      "concurrency": 4,
+      "mode": "old",
+      "samples": 12,
+      "seconds": {
+        "median": 24.9601438405,
+        "min": 19.060523225,
+        "max": 25.765445758
+      },
+      "requests_per_second": {
+        "median": 20031.955,
+        "min": 19405.835,
+        "max": 26232.228
+      },
+      "latency_mean_ms": {
+        "median": 0.188058,
+        "min": 0.147798,
+        "max": 0.195342
+      },
+      "latency_p50_ms": {
+        "median": 0.17792049999999998,
+        "min": 0.140591,
+        "max": 0.183403
+      },
+      "latency_p95_ms": {
+        "median": 0.258657,
+        "min": 0.205054,
+        "max": 0.277548
+      },
+      "latency_p99_ms": {
+        "median": 0.337124,
+        "min": 0.256737,
+        "max": 0.433854
+      },
+      "server_cpu_seconds": {
+        "median": 49.91,
+        "min": 36.9,
+        "max": 57.44
+      },
+      "backend_cpu_seconds": {
+        "median": 8.3171025,
+        "min": 7.656705,
+        "max": 9.631157
+      },
+      "client_cpu_seconds": {
+        "median": 27.387511,
+        "min": 21.595387,
+        "max": 28.024835
+      },
+      "backend_connections": {
+        "median": 500000.0,
+        "min": 500000,
+        "max": 500000
+      },
+      "backend_connections_used": {
+        "median": 500000.0,
+        "min": 500000,
+        "max": 500000
+      },
+      "backend_connections_after_warmup": {
+        "median": 1000.0,
+        "min": 1000,
+        "max": 1000
+      }
+    }
+  ],
+  "finished_at": "2026-10-05T21:52:49.436495+00:00"
+}

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR   = "header_arg1_match"
 ARGS  = "first235=1&second235=http://1.1.1.1&third235=3"
@@ -11,19 +11,19 @@ vserver!1!rule!2350!match!match = http://
 vserver!1!rule!2350!handler = cgi
 """
 
-CGI = """#!/bin/sh
+CGI = f"""#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo
-echo "%s"
-""" % (MAGIC)
+echo "{MAGIC}"
+"""
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name = "Rule url_arg: match"
 
-        self.request           = "GET /%s/test?%s HTTP/1.0\r\n" % (DIR, ARGS)
+        self.request           = f"GET /{DIR}/test?{ARGS} HTTP/1.0\r\n"
         self.conf              = CONF
         self.expected_error    = 200
         self.required_content  = MAGIC
@@ -31,4 +31,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, 'test', 0755, CGI)
+        f = self.WriteFile (d, 'test', 0o755, CGI)

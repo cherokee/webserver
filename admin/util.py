@@ -22,22 +22,29 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import os
 import sys
 import glob
 import socket
+
+
+def cmp(left, right):
+    return (left > right) - (left < right)
 import subprocess
+from typing import Any
 
 import CTK
 
 
 #
-# Deal with os.popen and subprocess issues in Python 2.4
+# Deal with subprocess behavior consistently across supported Python 3 versions.
 #
-def run (command, stdout=True, stderr=False, retcode=False):
+def run (command: str | list[str], stdout: bool = True,
+         stderr: bool = False, retcode: bool = False):
     returns = 0
 
-    args = {'shell': True, 'close_fds': True}
+    args: dict[str, Any] = {'shell': True, 'close_fds': True}
     if stdout:
         args['stdout'] = subprocess.PIPE
         returns += 1
@@ -47,16 +54,20 @@ def run (command, stdout=True, stderr=False, retcode=False):
     if retcode:
         returns += 1
 
-    p = subprocess.Popen (command, **args)
+    p = subprocess.Popen (command, text=True, **args)
 
     if stdout:
+        assert p.stdout is not None
         stdout_output = p.stdout.read()
     if stderr:
+        assert p.stderr is not None
         stderr_output = p.stderr.read()
 
     if stdout:
+        assert p.stdout is not None
         p.stdout.close()
     if stderr:
+        assert p.stderr is not None
         p.stderr.close()
 
     ret = p.poll()
@@ -107,32 +118,32 @@ def cfg_vsrv_get_next():
     tmp = [int(x) for x in CTK.cfg.keys("vserver")]
     tmp.sort()
     next = str(tmp[-1] + 10)
-    return "vserver!%s" % (next)
+    return f"vserver!{next}"
 
 def cfg_vsrv_rule_get_next (pre):
     """ Get the prefix of the next rule of a vserver """
-    tmp = [int(x) for x in CTK.cfg.keys("%s!rule"%(pre))]
+    tmp = [int(x) for x in CTK.cfg.keys(f"{pre}!rule")]
     tmp.sort()
     if tmp:
         next = tmp[-1] + 100
     else:
         next = 100
-    return (next, "%s!rule!%d" % (pre, next))
+    return (next, f"{pre}!rule!{int(next)}")
 
 def cfg_vsrv_rule_find_extension (pre, extension):
     """Find an extension rule in a virtual server """
-    for r in CTK.cfg.keys("%s!rule"%(pre)):
-        p = "%s!rule!%s" % (pre, r)
-        if CTK.cfg.get_val ("%s!match"%(p)) == "extensions":
-            if extension in CTK.cfg.get_val ("%s!match!extensions"%(p)):
+    for r in CTK.cfg.keys(f"{pre}!rule"):
+        p = f"{pre}!rule!{r}"
+        if CTK.cfg.get_val (f"{p}!match") == "extensions":
+            if extension in CTK.cfg.get_val (f"{p}!match!extensions"):
                 return p
 
 def cfg_vsrv_rule_find_regexp (pre, regexp):
     """Find a regular expresion rule in a virtual server """
-    for r in CTK.cfg.keys("%s!rule"%(pre)):
-        p = "%s!rule!%s" % (pre, r)
-        if CTK.cfg.get_val ("%s!match"%(p)) == "request":
-            if regexp == CTK.cfg.get_val ("%s!match!request"%(p)):
+    for r in CTK.cfg.keys(f"{pre}!rule"):
+        p = f"{pre}!rule!{r}"
+        if CTK.cfg.get_val (f"{p}!match") == "request":
+            if regexp == CTK.cfg.get_val (f"{p}!match!request"):
                 return p
 
 #
@@ -145,26 +156,26 @@ def cfg_source_get_next ():
         return (1, "source!1")
     tmp.sort()
     next = tmp[-1] + 10
-    return (next, "source!%d" % (next))
+    return (next, f"source!{int(next)}")
 
 def cfg_source_find_interpreter (in_interpreter = None,
                                  in_nick        = None):
     for i in CTK.cfg.keys("source"):
-        if CTK.cfg.get_val("source!%s!type"%(i)) != 'interpreter':
+        if CTK.cfg.get_val(f"source!{i}!type") != 'interpreter':
             continue
 
         if (in_interpreter and
-            in_interpreter in CTK.cfg.get_val("source!%s!interpreter"%(i), '')):
-            return "source!%s" % (i)
+            in_interpreter in CTK.cfg.get_val(f"source!{i}!interpreter", '')):
+            return f"source!{i}"
 
         if (in_nick and
-            in_nick in CTK.cfg.get_val("source!%s!nick"%(i), '')):
-            return "source!%s" % (i)
+            in_nick in CTK.cfg.get_val(f"source!{i}!nick", '')):
+            return f"source!{i}"
 
 def cfg_source_find_empty_port (n_ports=1):
     ports = []
     for i in CTK.cfg.keys("source"):
-        host = CTK.cfg.get_val ("source!%s!host"%(i))
+        host = CTK.cfg.get_val (f"source!{i}!host")
         if not host: continue
 
         colon = host.rfind(':')
@@ -177,7 +188,7 @@ def cfg_source_find_empty_port (n_ports=1):
 
     pport = 1025
     while pport+n_ports < 65535:
-        pports = range(pport, pport + n_ports)
+        pports = list(range(pport, pport + n_ports))
         for x in pports:
             if x in ports:
                 pport += 1
@@ -208,10 +219,10 @@ def cfg_get_surrounding_repls (macro, value, n_minus=9, n_plus=9):
     num = int(tmp[-1])
 
     for n in range(n_minus):
-        replacements['%s_minus%d'%(macro,n+1)] = '%s!%d' %(pre, num-(n+1))
+        replacements[f'{macro}_minus{int(n + 1)}'] = f'{pre}!{int(num - (n + 1))}'
 
     for n in range(n_plus):
-        replacements['%s_plus%d'%(macro,n+1)] = '%s!%d' %(pre, num+(n+1))
+        replacements[f'{macro}_plus{int(n + 1)}'] = f'{pre}!{int(num + (n + 1))}'
 
     return replacements
 
@@ -285,7 +296,7 @@ def path_find_binary (executable, extra_dirs=[], custom_test=None, default=None)
     # $PATH
     env_path = os.getenv("PATH")
     if env_path:
-        dirs += filter (lambda x: x, env_path.split(":"))
+        dirs += [x for x in env_path.split(":") if x]
 
     # Check
     if type(executable) != list:

@@ -24,9 +24,12 @@
 #
 
 import re
+import pwd
+import subprocess
 import os
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 import popen
 import SystemInfo
@@ -138,14 +141,14 @@ def wizard_php_add (key):
                 ret = __source_add_std (php_path)
             else:
                 ret = __source_add_fpm (php_path)
-        except Exception, e:
+        except Exception as e:
             return str(e)
 
         source = __find_source()
 
     # Figure the timeout limit
-    interpreter = CTK.cfg.get_val ('%s!interpreter'%(source))
-    timeout     = CTK.cfg.get_val ('%s!timeout'    %(source))
+    interpreter = CTK.cfg.get_val (f'{source}!interpreter')
+    timeout     = CTK.cfg.get_val (f'{source}!timeout')
 
     if not timeout:
         if not interpreter:
@@ -157,35 +160,35 @@ def wizard_php_add (key):
 
     # Add a new Extension PHP rule
     if not rule:
-        next = CTK.cfg.get_next_entry_prefix('%s!rule'%(key))
+        next = CTK.cfg.get_next_entry_prefix(f'{key}!rule')
         src_num = source.split('!')[-1]
 
-        CTK.cfg['%s!match' %(next)]                     = 'extensions'
-        CTK.cfg['%s!match!extensions' %(next)]          = 'php'
-        CTK.cfg['%s!match!check_local_file' %(next)]    = '1'
-        CTK.cfg['%s!match!final' %(next)]               = '0'
-        CTK.cfg['%s!handler' %(next)]                   = 'fcgi'
-        CTK.cfg['%s!handler!balancer' %(next)]          = 'round_robin'
-        CTK.cfg['%s!handler!balancer!source!1' %(next)] = src_num
-        CTK.cfg['%s!handler!error_handler' %(next)]     = '1'
-        CTK.cfg['%s!encoder!gzip' %(next)]              = '1'
-        CTK.cfg['%s!timeout' %(next)]                   = timeout
+        CTK.cfg[f'{next}!match']                     = 'extensions'
+        CTK.cfg[f'{next}!match!extensions']          = 'php'
+        CTK.cfg[f'{next}!match!check_local_file']    = '1'
+        CTK.cfg[f'{next}!match!final']               = '0'
+        CTK.cfg[f'{next}!handler']                   = 'fcgi'
+        CTK.cfg[f'{next}!handler!balancer']          = 'round_robin'
+        CTK.cfg[f'{next}!handler!balancer!source!1'] = src_num
+        CTK.cfg[f'{next}!handler!error_handler']     = '1'
+        CTK.cfg[f'{next}!encoder!gzip']              = '1'
+        CTK.cfg[f'{next}!timeout']                   = timeout
 
         # Front-Line Cache
-        CTK.cfg['%s!flcache' %(next)]                   = 'allow'
-        CTK.cfg['%s!flcache!policy' %(next)]            = 'explicitly_allowed'
+        CTK.cfg[f'{next}!flcache']                   = 'allow'
+        CTK.cfg[f'{next}!flcache!policy']            = 'explicitly_allowed'
 
         # GZip encoder
-        CTK.cfg['%s!encoder!gzip' %(next)]              = 'allow'
+        CTK.cfg[f'{next}!encoder!gzip']              = 'allow'
 
     # Index files
-    indexes = filter (None, CTK.cfg.get_val ('%s!directory_index' %(key), '').split(','))
+    indexes = [_f for _f in CTK.cfg.get_val (f'{key}!directory_index', '').split(',') if _f]
     if not 'index.php' in indexes:
         indexes.append ('index.php')
-        CTK.cfg['%s!directory_index' %(key)] = ','.join(indexes)
+        CTK.cfg[f'{key}!directory_index'] = ','.join(indexes)
 
     # Normalization
-    CTK.cfg.normalize('%s!rule'%(key))
+    CTK.cfg.normalize(f'{key}!rule')
 
 
 def get_info (key):
@@ -204,7 +207,7 @@ def figure_modules():
                                  extra_dirs  = DEFAULT_PATHS,
                                  custom_test = __test_php_fcgi)
 
-    ret = popen.popen_sync ('%s -m' %(php_path))
+    ret = popen.popen_sync (f'{php_path} -m')
     modules = re.findall('(^[a-zA-Z0-9].*$)', ret['stdout'], re.MULTILINE)
 
     return modules
@@ -216,7 +219,7 @@ def figure_php_information():
                                  extra_dirs  = DEFAULT_PATHS,
                                  custom_test = __test_php_fcgi)
 
-    ret = popen.popen_sync ('%s -i' %(php_path))
+    ret = popen.popen_sync (f'{php_path} -i')
 
     # Output can either be in HTML format or as a PHP array.
     if 'Content-type: text/html' in ret['stdout']:
@@ -242,15 +245,15 @@ def figure_php_user (pre_vsrv):
     server_user  = CTK.cfg.get_val ('server!user',  str(os.getuid()))
     server_group = CTK.cfg.get_val ('server!group', str(os.getgid()))
     php_info     = get_info (pre_vsrv)
-    interpreter  = CTK.cfg.get_val ('%s!interpreter' %(php_info['source']), '')
+    interpreter  = CTK.cfg.get_val (f"{php_info['source']}!interpreter", '')
 
     if 'fpm' in interpreter:
-        fpm_conf  = _figure_fpm_settings()
+        fpm_conf  = __figure_fpm_settings()
         php_user  = fpm_conf.get('user',  server_user)
         php_group = fpm_conf.get('group', server_group)
     else:
-        php_user  = CTK.cfg.get_val ('%s!user'  %(php_info['source']), server_user)
-        php_group = CTK.cfg.get_val ('%s!group' %(php_info['source']), server_group)
+        php_user  = CTK.cfg.get_val (f"{php_info['source']}!user", server_user)
+        php_group = CTK.cfg.get_val (f"{php_info['source']}!group", server_group)
 
     return  {'php_user':  php_user,
              'php_group': php_group}
@@ -270,22 +273,22 @@ class Commit:
         # Create the new Virtual Server
         next = CTK.cfg.get_next_entry_prefix('vserver')
 
-        CTK.cfg['%s!nick'%(next)]            = CTK.cfg.get_val('%s!host'%(CFG_PREFIX))
-        CTK.cfg['%s!document_root'%(next)]   = CTK.cfg.get_val('%s!droot'%(CFG_PREFIX))
-        CTK.cfg['%s!directory_index'%(next)] = 'index.php,index.html'
-        CTK.cfg['%s!rule!1!match'%(next)]    = 'default'
-        CTK.cfg['%s!rule!1!handler'%(next)]  = 'common'
+        CTK.cfg[f'{next}!nick']            = CTK.cfg.get_val(f'{CFG_PREFIX}!host')
+        CTK.cfg[f'{next}!document_root']   = CTK.cfg.get_val(f'{CFG_PREFIX}!droot')
+        CTK.cfg[f'{next}!directory_index'] = 'index.php,index.html'
+        CTK.cfg[f'{next}!rule!1!match']    = 'default'
+        CTK.cfg[f'{next}!rule!1!handler']  = 'common'
 
-        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(CFG_PREFIX), next)
+        Wizard.CloneLogsCfg_Apply (f'{CFG_PREFIX}!logs_as_vsrv', next)
 
         # PHP
         error = wizard_php_add (next)
         if error:
-            del CTK.cfg['vserver!%s'%(next)]
+            del CTK.cfg[f'vserver!{next}']
             return {'ret': 'error', 'errors': {'msg': error}}
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(next))
+        CTK.cfg.normalize (f'{next}!rule')
         CTK.cfg.normalize ('vserver')
 
         del (CTK.cfg[CFG_PREFIX])
@@ -293,9 +296,9 @@ class Commit:
 
 
     def Commit_Rule (self):
-        vserver = CTK.cfg.get_val ('%s!vsrv_num'%(CFG_PREFIX))
+        vserver = CTK.cfg.get_val (f'{CFG_PREFIX}!vsrv_num')
 
-        error = wizard_php_add ('vserver!%s'%(vserver))
+        error = wizard_php_add (f'vserver!{vserver}')
         if error:
             return {'ret': 'error', 'errors': {'msg': error}}
 
@@ -308,7 +311,7 @@ class Commit:
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num'%(CFG_PREFIX)):
+            if CTK.cfg.get_val (f'{CFG_PREFIX}!vsrv_num'):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -318,18 +321,18 @@ class Commit:
 class Host:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!host'%(CFG_PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
-        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(CFG_PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
+        table.Add (_('New Host Name'),    CTK.TextCfg (f'{CFG_PREFIX}!host', False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg(f'{CFG_PREFIX}!logs_as_vsrv'), _(Wizard.CloneLogsCfg.NOTE))
 
         notice = CTK.Notice('error', props={'class': 'no-see'})
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
-        submit.bind ('submit_fail', "$('#%s').show().html(event.ret_data.errors.msg);"%(notice.id))
+        submit.bind ('submit_fail', f"$('#{notice.id}').show().html(event.ret_data.errors.msg);")
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_HOST_H1)}</h2>')
         cont += submit
         cont += notice
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
@@ -339,13 +342,13 @@ class Host:
 class DocumentRoot:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('Document Root'), CTK.TextCfg ('%s!droot'%(CFG_PREFIX), False, {'value': '/var/www'}), _(NOTE_LOCAL_DIR))
+        table.Add (_('Document Root'), CTK.TextCfg (f'{CFG_PREFIX}!droot', False, {'value': '/var/www'}), _(NOTE_LOCAL_DIR))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_LOCAL_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
@@ -354,11 +357,11 @@ class DocumentRoot:
 class WelcomeVserver:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('php', {'class': 'wizard-descr'})
 
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
         box += Wizard.CookBookBox ('cookbook_php')
         cont += box
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -371,13 +374,13 @@ class WelcomeRule:
         vserver = re.findall (URL_WIZARD_RULE_R, CTK.request.url)[0]
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('php', {'class': 'wizard-descr'})
 
         notice = CTK.Notice('error', props={'class': 'no-see'})
 
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
         box += Wizard.CookBookBox ('cookbook_php')
         box += notice
 
@@ -385,10 +388,10 @@ class WelcomeRule:
         submit += CTK.Hidden ('final', '1')
 
         vsrv_num = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)[0]
-        submit += CTK.Hidden('%s!vsrv_num'%(CFG_PREFIX), vsrv_num)
+        submit += CTK.Hidden(f'{CFG_PREFIX}!vsrv_num', vsrv_num)
 
         submit += box
-        submit.bind ('submit_fail', "$('#%s').show().html(event.ret_data.errors.msg);"%(notice.id))
+        submit.bind ('submit_fail', f"$('#{notice.id}').show().html(event.ret_data.errors.msg);")
 
         cont += submit
         cont += CTK.DruidButtonsPanel_Create()
@@ -396,10 +399,10 @@ class WelcomeRule:
         return cont.Render().toStr()
 
 VALS = [
-    ('%s!host'  %(CFG_PREFIX), validations.is_not_empty),
-    ('%s!host'  %(CFG_PREFIX), validations.is_new_vserver_nick),
-    ('%s!droot' %(CFG_PREFIX), validations.is_not_empty),
-    ('%s!droot' %(CFG_PREFIX), validations.is_local_dir_exists),
+    (f'{CFG_PREFIX}!host', validations.is_not_empty),
+    (f'{CFG_PREFIX}!host', validations.is_new_vserver_nick),
+    (f'{CFG_PREFIX}!droot', validations.is_not_empty),
+    (f'{CFG_PREFIX}!droot', validations.is_local_dir_exists),
 ]
 
 # Rule
@@ -410,7 +413,7 @@ CTK.publish (URL_WIZARD_APPLY_R, Commit, method="POST")
 CTK.publish ('^/wizard/vserver/php$',   WelcomeVserver)
 CTK.publish ('^/wizard/vserver/php/2$', DocumentRoot)
 CTK.publish ('^/wizard/vserver/php/3$', Host)
-CTK.publish (r'^%s'%(URL_APPLY),        Commit, method="POST", validation=VALS)
+CTK.publish (rf'^{URL_APPLY}',        Commit, method="POST", validation=VALS)
 
 
 #
@@ -422,9 +425,9 @@ def External_FindPHP():
     have_php = check_php_interpreter()
     if not have_php:
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_NOT_FOUND_H1)))
-        cont += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_NOT_FOUND)))
-        cont += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_NOT_FOUND2)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_NOT_FOUND_H1)}</h2>')
+        cont += CTK.RawHTML (f'<p>{_(NOTE_NOT_FOUND)}</p>')
+        cont += CTK.RawHTML (f'<p>{_(NOTE_NOT_FOUND2)}</p>')
         cont += CTK.DruidButtonsPanel_Cancel()
         return cont.Render().toStr()
 
@@ -450,7 +453,7 @@ def __figure_std_settings():
     paths = []
     for p in STD_ETC_PATHS:
         paths.append (p)
-        paths.append ('%s-*' %(p))
+        paths.append (f'{p}-*')
 
     std_info = {}
 
@@ -489,7 +492,7 @@ def __figure_fpm_settings():
     paths = []
     for p in FPM_ETC_PATHS:
         paths.append (p)
-        paths.append ('%s-*' %(p))
+        paths.append (f'{p}-*')
 
     # For each configuration file
     suitable_confs = path_eval_exist (paths)
@@ -565,7 +568,7 @@ def __source_add_std (php_path):
     if not std_info:
         raise Exception (_('Could not determine PHP-CGI settings.'))
 
-    if not std_info.has_key('conf_file'):
+    if 'conf_file' not in std_info:
         raise Exception (_('Could not determine PHP-CGI configuration file.'))
 
     # IANA: TCP ports 47809-47999 are unassigned
@@ -575,14 +578,14 @@ def __source_add_std (php_path):
     # Add the Source
     next = CTK.cfg.get_next_entry_prefix('source')
 
-    CTK.cfg['%s!nick'          %(next)] = 'PHP Interpreter'
-    CTK.cfg['%s!type'          %(next)] = 'interpreter'
-    CTK.cfg['%s!host'          %(next)] = '%(host)s:%(TCP_PORT)d' %(locals())
-    CTK.cfg['%s!interpreter'   %(next)] = '%(php_path)s -b %(host)s:%(TCP_PORT)d' %(locals())
-    CTK.cfg['%s!env_inherited' %(next)] = '0'
+    CTK.cfg[f'{next}!nick'] = 'PHP Interpreter'
+    CTK.cfg[f'{next}!type'] = 'interpreter'
+    CTK.cfg[f'{next}!host'] = f"{locals()['host']}:{int(locals()['TCP_PORT'])}"
+    CTK.cfg[f'{next}!interpreter'] = f"{locals()['php_path']} -b {locals()['host']}:{int(locals()['TCP_PORT'])}"
+    CTK.cfg[f'{next}!env_inherited'] = '0'
 
-    CTK.cfg['%s!env!PHP_FCGI_MAX_REQUESTS' %(next)] = SAFE_PHP_FCGI_MAX_REQUESTS
-    CTK.cfg['%s!env!PHP_FCGI_CHILDREN'     %(next)] = '5'
+    CTK.cfg[f'{next}!env!PHP_FCGI_MAX_REQUESTS'] = SAFE_PHP_FCGI_MAX_REQUESTS
+    CTK.cfg[f'{next}!env!PHP_FCGI_CHILDREN'] = '5'
 
     return next
 
@@ -601,7 +604,7 @@ def get_installation_GID():
         groups = os.getgroups()
         groups.sort()
         first_group = str(groups[0])
-    except OSError,e:
+    except OSError as e:
         # os.getgroups can fail when run as root (MacOS X 10.6)
         if os.getuid() != 0:
             raise e
@@ -634,10 +637,10 @@ def __source_add_fpm (php_path):
     # Add Source
     next = CTK.cfg.get_next_entry_prefix('source')
 
-    CTK.cfg['%s!nick'        %(next)] = 'PHP Interpreter'
-    CTK.cfg['%s!type'        %(next)] = 'interpreter'
-    CTK.cfg['%s!host'        %(next)] = listen
-    CTK.cfg['%s!interpreter' %(next)] = '%(php_path)s --fpm-config %(conf_file)s' %(locals())
+    CTK.cfg[f'{next}!nick'] = 'PHP Interpreter'
+    CTK.cfg[f'{next}!type'] = 'interpreter'
+    CTK.cfg[f'{next}!host'] = listen
+    CTK.cfg[f'{next}!interpreter'] = f"{locals()['php_path']} --fpm-config {locals()['conf_file']}"
 
     # In case FPM has specific UID/GID and differs from Cherokee's,
     # the interpreter must by spawned by root.
@@ -651,15 +654,13 @@ def __source_add_fpm (php_path):
     php_group    = fpm_info.get('group', server_group)
 
     if php_user != server_user or php_group != server_group:
-        CTK.cfg['%s!user'  %(next)] = root_user
-        CTK.cfg['%s!group' %(next)] = root_group
+        CTK.cfg[f'{next}!user'] = root_user
+        CTK.cfg[f'{next}!group'] = root_group
 
     return next
 
 
 def __test_php_fcgi (path):
-    f = os.popen('%s -v' %(path), 'r')
-    output = f.read()
-    try: f.close()
-    except: pass
+    output = subprocess.run([path, '-v'], capture_output=True,
+                            text=True, check=False).stdout
     return 'fcgi' in output

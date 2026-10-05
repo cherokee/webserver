@@ -22,6 +22,7 @@
 
 import CTK
 import RuleSimple
+from CTK.i18n import _, N_
 import validations
 
 NOTE_REQUEST = N_("Regular expression against which the request will be executed.")

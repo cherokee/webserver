@@ -1,6 +1,6 @@
 import base64
 
-from base import *
+from qa_base import *
 
 MAGIC  = "Don't show this"
 
@@ -27,7 +27,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         tdir = self.Mkdir (www, "digest_empty_1")
-        self.WriteFile (tdir, "file", 0444, MAGIC)
-        passfile = self.WriteFile (tdir, ".passwd", 0444, "user:password\n")
+        self.WriteFile (tdir, "file", 0o444, MAGIC)
+        passfile = self.WriteFile (tdir, ".passwd", 0o444, "user:password\n")
 
         self.conf = CONF % (passfile)

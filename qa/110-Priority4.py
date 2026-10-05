@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 COMMENT = "This is comment inside the CGI"
 TEXT    = "It should be printed by the CGI"
@@ -26,11 +26,11 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "request_entry1/sub")
-        f = self.WriteFile (d, "exec.cgi", 0555,
-                            """#!/bin/sh
+        f = self.WriteFile (d, "exec.cgi", 0o555,
+                            f"""#!/bin/sh
 
                             echo "Content-type: text/html"
                             echo ""
-                            # %s
-                            echo "%s"
-                            """ % (COMMENT, TEXT))
+                            # {COMMENT}
+                            echo "{TEXT}"
+                            """)

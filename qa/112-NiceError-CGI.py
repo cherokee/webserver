@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 ERROR     = 403
 ERROR_MSG = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -61,4 +61,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "cgi_error_403_1")
-        f = self.WriteFile (d, "exec.cgi", 0555, CGI_BASE % (ERROR, ERROR_MSG))
+        f = self.WriteFile (d, "exec.cgi", 0o555, CGI_BASE % (ERROR, ERROR_MSG))

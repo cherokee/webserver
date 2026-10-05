@@ -1,7 +1,7 @@
 import base64
 
-from conf import *
-from base import *
+from qa_conf import *
+from qa_base import *
 
 MAGIC        = "Cherokee supports old crypt password hashes"
 REALM        = "realm"
@@ -29,7 +29,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         tdir  = self.Mkdir (www, "htpasswd_plain_empty")
-        passf = self.WriteFile (tdir, "passwd", 0444, '%s:%s\n' %(USER, PASSWD))
-        self.WriteFile (tdir, "file", 0444, MAGIC)
+        passf = self.WriteFile (tdir, "passwd", 0o444, f'{USER}:{PASSWD}\n')
+        self.WriteFile (tdir, "file", 0o444, MAGIC)
 
         self.conf = CONF % (REALM, passf)
