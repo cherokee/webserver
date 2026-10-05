@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 NICK = "test-293"
 
@@ -26,12 +26,12 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name             = "HSTS over SSL"
         self.request          = "GET / HTTP/1.0\r\n" + \
-                                "Host: %s\r\n" %(NICK)
+                                f"Host: {NICK}\r\n"
         self.expected_error   = 200
         self.expected_content = ["Strict-Transport-Security:", "includeSubdomains"]
 
     def Prepare (self, www):
-        droot = self.Mkdir (www, "%s_droot"%(NICK))
+        droot = self.Mkdir (www, f"{NICK}_droot")
 
         vars = globals()
         vars.update(locals())

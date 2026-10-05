@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pyscgi import SCGIHandler, ServerFactory
+from CTK.pyscgi import SCGIHandler, ServerFactory
 
 DEFAULT_PORT = 4000
 POST_EXAMPLE = """
@@ -30,8 +30,8 @@ class MyHandler(SCGIHandler):
         if self.post:
             length = len(self.post)
             if length > 0:
-                self.send('Post len: %d <br/>'     % (length))
-                self.send('Post content: %s <br/>' % (self.post))
+                self.send(f'Post len: {int(length)} <br/>')
+                self.send(f'Post content: {self.post} <br/>')
                 return
         self.send(POST_EXAMPLE)
 

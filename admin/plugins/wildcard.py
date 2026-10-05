@@ -22,6 +22,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 URL_APPLY = '/plugin/wildcard/apply'
@@ -52,12 +53,12 @@ class Content (CTK.Container):
             table += [CTK.RawHTML(_('Domain pattern'))]
 
             for i in entries:
-                e1 = CTK.TextCfg ("%s!%s"%(key,i))
+                e1 = CTK.TextCfg (f"{key}!{i}")
                 rm = None
                 if len(entries) >= 2:
                     rm = CTK.ImageStock('del')
                     rm.bind('click', CTK.JS.Ajax (url_apply,
-                                                  data     = {"%s!%s"%(key,i): ''},
+                                                  data     = {f"{key}!{i}": ''},
                                                   complete = refreshable.JS_to_refresh()))
                 table += [e1, rm]
 
@@ -85,10 +86,10 @@ class Plugin_wildcard (CTK.Plugin):
     def __init__ (self, key, vsrv_num):
         CTK.Plugin.__init__ (self, key)
 
-        pre       = '%s!domain' %(key)
-        url_apply = '%s/%s' %(URL_APPLY, vsrv_num)
+        pre       = f'{key}!domain'
+        url_apply = f'{URL_APPLY}/{vsrv_num}'
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Accepted Domains')))
+        self += CTK.RawHTML (f"<h2>{_('Accepted Domains')}</h2>")
 
         # Content
         refresh = CTK.Refreshable ({'id': 'plugin_wildcard'})
@@ -96,4 +97,4 @@ class Plugin_wildcard (CTK.Plugin):
         self += refresh
 
         # Validation, and Public URLs
-        CTK.publish ('^%s/[\d]+'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+        CTK.publish (f'^{URL_APPLY}/[\\d]+', CTK.cfg_apply_post, method="POST")

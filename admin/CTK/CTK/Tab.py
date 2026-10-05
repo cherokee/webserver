@@ -21,7 +21,7 @@
 #
 
 import string
-from Widget import Widget
+from .Widget import Widget
 
 # WARNING
 # -------
@@ -149,7 +149,7 @@ class Tab (Widget):
             self._props = {}
 
         if not 'id' in self._props:
-            self._props['id'] = 'widget%d'%(self.uniq_id)
+            self._props['id'] = f'widget{int(self.uniq_id)}'
 
     def Add (self, title, widget):
         """Dynamically add CTK widgets as contents of new tab in the
@@ -178,11 +178,11 @@ class Tab (Widget):
 
             tab_ref = ''
             for c in title:
-                if c in string.letters + string.digits:
+                if c in string.ascii_letters + string.digits:
                     tab_ref += c
                 else:
                     tab_ref += '_'
-            tab_ref += '-%d' %(num)
+            tab_ref += f'-{int(num)}'
 
             # Render <ul>
             props = {'id':      id,

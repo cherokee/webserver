@@ -21,10 +21,10 @@
 #
 
 import types
-import util
-from consts import *
-from Widget import Widget
-from Server import publish, get_scgi
+from . import util
+from .consts import *
+from .Widget import Widget
+from .Server import publish, get_scgi
 
 HTML = """
 <div id="%(id_widget)s" %(extra_props)s></div>
@@ -57,12 +57,12 @@ class XMLRPCProxy (Widget):
         assert type(name) == str
 
         Widget.__init__ (self)
-        self._url_local = '/proxy_widget_%s' %(name)
+        self._url_local = f'/proxy_widget_{name}'
         self.props      = props.copy()
 
         # Sanity checks
-        assert type(xmlrpc_func) in (types.FunctionType, types.MethodType, types.InstanceType)
-        assert type(format_func) in (types.FunctionType, types.MethodType, types.InstanceType)
+        assert callable(xmlrpc_func)
+        assert callable(format_func)
 
         # Register the proxy path
         publish (self._url_local, ProxyRequest,

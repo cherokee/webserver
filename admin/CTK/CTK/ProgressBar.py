@@ -21,8 +21,8 @@
 #
 
 import os
-from Widget import Widget
-from util import props_to_str
+from .Widget import Widget
+from .util import props_to_str
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/CTK.css" rel="stylesheet" />',
@@ -40,7 +40,7 @@ $('#%(id)s').progressbar({ value: %(value)s });
 class ProgressBar (Widget):
     def __init__ (self, props={}):
         Widget.__init__ (self)
-        self.id    = "progressbar_%d" %(self.uniq_id)
+        self.id    = f"progressbar_{int(self.uniq_id)}"
         self.value = props.pop ('value', 0)
 
         self.props = props.copy()
@@ -63,4 +63,4 @@ class ProgressBar (Widget):
         return render
 
     def JS_to_set (self, value):
-        return "$('#%s').progressbar ('option', 'value', %s);" %(self.id, value)
+        return f"$('#{self.id}').progressbar ('option', 'value', {value});"

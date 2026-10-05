@@ -5,7 +5,7 @@ def main():
 		for filename in files:
 			fp = os.path.join (root, filename)
 			if '-CENSORED.' in filename:
-				print "cp %s %s" %(fp, fp.replace('-CENSORED',''))
+				print(f"cp {fp} {fp.replace('-CENSORED', '')}")
 
 if __name__ == "__main__":
 	main()

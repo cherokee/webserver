@@ -20,8 +20,8 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from util import props_to_str
+from .Widget import Widget
+from .util import props_to_str
 
 class HiddenField (Widget):
     def __init__ (self, props={}):
@@ -30,7 +30,7 @@ class HiddenField (Widget):
 
     def Render (self):
         # Render the text field
-        html = '<input type="hidden" id="%s" %s/>' %(self.id, props_to_str(self.props))
+        html = f'<input type="hidden" id="{self.id}" {props_to_str(self.props)}/>'
 
         render = Widget.Render(self)
         render.html += html

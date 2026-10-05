@@ -1,10 +1,9 @@
-from base import *
-from os import system
+from qa_base import *
 from os.path import join
 
 DIR  = "dir_redirect155"
-REQ  = "%s/e/f" % (DIR)
-DIR2 = "%s/g/h" % (REQ)
+REQ  = f"{DIR}/e/f"
+DIR2 = f"{REQ}/g/h"
 
 CONF = """
 vserver!1!rule!1550!match = directory
@@ -17,13 +16,12 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "common-dirlist: redir to add final / 2"
-        self.request           = "GET /%s HTTP/1.0\r\n" % (REQ)
+        self.request           = f"GET /{REQ} HTTP/1.0\r\n"
         self.expected_error    = 301
-        self.expected_content  = ["Location: ", "/%s/\r\n" % (REQ)]
+        self.expected_content  = ["Location: ", f"/{REQ}/\r\n"]
 
     def Prepare (self, www):
         self.Mkdir (www, DIR2)
 
         tmp = CONF % (join (www,DIR))
         self.conf = tmp.replace ('<dir>', DIR)
-

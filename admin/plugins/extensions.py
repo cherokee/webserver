@@ -22,6 +22,7 @@
 
 import CTK
 import validations
+from CTK.i18n import _, N_
 
 from Rule import RulePlugin
 from util import *
@@ -39,14 +40,14 @@ def commit():
 
     # New entry
     if new_ext:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
 
         # Apply
-        CTK.cfg['%s!match'%(next_pre)]                  = 'extensions'
-        CTK.cfg['%s!match!extensions'%(next_pre)]       = new_ext
-        CTK.cfg['%s!match!check_local_file'%(next_pre)] = CTK.post.pop ('tmp!check_local_file')
+        CTK.cfg[f'{next_pre}!match']                  = 'extensions'
+        CTK.cfg[f'{next_pre}!match!extensions']       = new_ext
+        CTK.cfg[f'{next_pre}!match!check_local_file'] = CTK.post.pop ('tmp!check_local_file')
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -58,8 +59,8 @@ class Plugin_extensions (RulePlugin):
         props = ({},{'class': 'noauto'})[key.startswith('tmp')]
 
         table = CTK.PropsTable()
-        table.Add (_('Extensions'),       CTK.TextCfg('%s!extensions'%(key), False, props), _(NOTE_EXTENSIONS))
-        table.Add (_('Check local file'), CTK.CheckCfgText('%s!check_local_file'%(key), False, _('Check'), props), _(NOTE_CHECK_LOCAL))
+        table.Add (_('Extensions'),       CTK.TextCfg(f'{key}!extensions', False, props), _(NOTE_EXTENSIONS))
+        table.Add (_('Check local file'), CTK.CheckCfgText(f'{key}!check_local_file', False, _('Check'), props), _(NOTE_CHECK_LOCAL))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', key)
@@ -69,11 +70,11 @@ class Plugin_extensions (RulePlugin):
 
         # Validation, and Public URLs
         VALS = [("tmp!extensions",       validations.is_extension_list),
-                ("%s!extensions"%(key),  validations.is_extension_list)]
+                (f"{key}!extensions",  validations.is_extension_list)]
 
-        CTK.publish ("^%s"%(URL_APPLY), commit, validation=VALS, method="POST")
+        CTK.publish (f"^{URL_APPLY}", commit, validation=VALS, method="POST")
 
     def GetName (self):
-        tmp = CTK.cfg.get_val ('%s!extensions' %(self.key), '')
+        tmp = CTK.cfg.get_val (f'{self.key}!extensions', '')
         extensions = ', '.join (tmp.split(','))
-        return "Extensions %s" %(extensions)
+        return f"Extensions {extensions}"

@@ -24,6 +24,7 @@
 
 import CTK
 from configured import *
+from CTK.i18n import _, N_
 
 URL_ABOUT_CONTENT = "/about-cherokee"
 
@@ -67,7 +68,7 @@ class About_Copyright (CTK.Box):
         table += [left, right]
         self += table
 
-        self += CTK.RawHTML ('<p id="copyright-notice">%s</p>' %(COPYRIGHT_NOTICE))
+        self += CTK.RawHTML (f'<p id="copyright-notice">{COPYRIGHT_NOTICE}</p>')
 
 
 class About_License (CTK.Box):
@@ -77,7 +78,7 @@ class About_License (CTK.Box):
 
 def About_content():
     content = CTK.Box ({'id': 'about'})
-    content += CTK.Box ({'id': 'version'}, CTK.RawHTML ('<small>Cherokee %s</small>' %(VERSION)))
+    content += CTK.Box ({'id': 'version'}, CTK.RawHTML (f'<small>Cherokee {VERSION}</small>'))
 
     tabs = CTK.Tab()
     tabs.Add (_('Copyright'), About_Copyright())
@@ -87,7 +88,7 @@ def About_content():
     return content.Render().toStr()
 
 
-CTK.publish (r'^%s$'%(URL_ABOUT_CONTENT), About_content)
+CTK.publish (rf'^{URL_ABOUT_CONTENT}$', About_content)
 
 
 

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 NICK1  = "nick-2720"
 ERROR1 = 503
@@ -39,6 +39,6 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name           = "VServer nick match"
         self.request        = "GET / HTTP/1.0\r\n" + \
-                              "Host: %s\r\n" %(NICK2)
+                              f"Host: {NICK2}\r\n"
         self.expected_error = ERROR2
         self.conf           = CONF %(globals())

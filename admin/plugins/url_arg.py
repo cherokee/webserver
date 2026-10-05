@@ -20,6 +20,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 from util import *
@@ -44,16 +45,16 @@ def commit():
 
     # New entry
     if new_match:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
 
-        CTK.cfg['%s!match'%(next_pre)]           = 'url_arg'
-        CTK.cfg['%s!match!match'%(next_pre)]     = new_match
-        CTK.cfg['%s!match!match_any'%(next_pre)] = new_any
+        CTK.cfg[f'{next_pre}!match']           = 'url_arg'
+        CTK.cfg[f'{next_pre}!match!match']     = new_match
+        CTK.cfg[f'{next_pre}!match!match_any'] = new_any
 
         if not int(new_any):
-            CTK.cfg['%s!match!arg'%(next_pre)]   = new_arg
+            CTK.cfg[f'{next_pre}!match!arg']   = new_arg
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -69,17 +70,17 @@ class Plugin_url_arg (RulePlugin):
         return self.GUI_mod()
 
     def GUI_new (self):
-        any   = CTK.ComboCfg('%s!match_any'%(self.key), trans_options(OPTIONS), {'class': 'noauto'})
+        any   = CTK.ComboCfg(f'{self.key}!match_any', trans_options(OPTIONS), {'class': 'noauto'})
         table = CTK.PropsTable()
         table.Add (_('Match type'), any, '')
-        table.Add (_('Argument'),           CTK.TextCfg('%s!arg'%(self.key), False, {'class': 'noauto'}), _(NOTE_ARGUMENT))
-        table.Add (_('Regular Expression'), CTK.TextCfg('%s!match'%(self.key), False, {'class': 'noauto'}), _(NOTE_REGEX))
+        table.Add (_('Argument'),           CTK.TextCfg(f'{self.key}!arg', False, {'class': 'noauto'}), _(NOTE_ARGUMENT))
+        table.Add (_('Regular Expression'), CTK.TextCfg(f'{self.key}!match', False, {'class': 'noauto'}), _(NOTE_REGEX))
 
         # Special events
-        any.bind ('change', """if ($(this).val() == 0) {
-                                 $("#%(row)s").show();
-                               } else {
-                                 $("#%(row)s").hide(); }""" %({'row': table[1].id}))
+        any.bind ('change', """if ($(this).val() == 0) {{
+                                 $("#{row}").show();
+                               }} else {{
+                                 $("#{row}").hide(); }}""".format(row=table[1].id))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', self.key)
@@ -89,10 +90,10 @@ class Plugin_url_arg (RulePlugin):
 
     def GUI_mod (self):
         table = CTK.PropsTable()
-        table.Add (_('Match type'),  CTK.ComboCfg('%s!match_any'%(self.key), trans_options(OPTIONS)), '')
-        if not int(CTK.cfg.get_val('%s!match_any'%(self.key), 0)):
-            table.Add (_('Argument'),       CTK.TextCfg('%s!arg'%(self.key), False), _(NOTE_ARGUMENT))
-        table.Add (_('Regular Expression'), CTK.TextCfg('%s!match'%(self.key), False), _(NOTE_REGEX))
+        table.Add (_('Match type'),  CTK.ComboCfg(f'{self.key}!match_any', trans_options(OPTIONS)), '')
+        if not int(CTK.cfg.get_val(f'{self.key}!match_any', 0)):
+            table.Add (_('Argument'),       CTK.TextCfg(f'{self.key}!arg', False), _(NOTE_ARGUMENT))
+        table.Add (_('Regular Expression'), CTK.TextCfg(f'{self.key}!match', False), _(NOTE_REGEX))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', self.key)
@@ -101,14 +102,14 @@ class Plugin_url_arg (RulePlugin):
         self += submit
 
     def GetName (self):
-        match = CTK.cfg.get_val ('%s!match'%(self.key), '')
+        match = CTK.cfg.get_val (f'{self.key}!match', '')
 
-        if int(CTK.cfg.get_val ('%s!match_any'%(self.key), "0")):
-            return "Any arg. matches ~ %s" %(match)
+        if int(CTK.cfg.get_val (f'{self.key}!match_any', "0")):
+            return f"Any arg. matches ~ {match}"
 
-        arg = CTK.cfg.get_val ('%s!arg'%(self.key), '')
-        return "Arg %s matches %s" %(arg, match)
+        arg = CTK.cfg.get_val (f'{self.key}!arg', '')
+        return f"Arg {arg} matches {match}"
 
 
 # Validation, and Public URLs
-CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")
+CTK.publish (f"^{URL_APPLY}", commit, method="POST")

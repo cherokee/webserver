@@ -3,7 +3,7 @@
 import CTK
 
 def commit():
-    print CTK.post
+    print(CTK.post)
     return {'ret': 'ok'}
 
 def default():

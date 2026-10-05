@@ -1,4 +1,6 @@
 # CTK: Cherokee Toolkit
+
+from __future__ import annotations
 #
 # Authors:
 #      Taher Shihadeh
@@ -21,12 +23,12 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from Box import Box
-from RawHTML import RawHTML
-from Container import Container
-from Server import cfg
-from util import *
+from .Widget import Widget
+from .Box import Box
+from .RawHTML import RawHTML
+from .Container import Container
+from .Server import cfg
+from .util import *
 
 
 HTML = """
@@ -45,10 +47,10 @@ class Radio (Widget):
         # Deal with a couple of exceptions
         new_props = self._props.copy()
 
-        if new_props.has_key('checked') and int(new_props.pop('checked')):
+        if 'checked' in new_props and int(new_props.pop('checked')):
             new_props['checked'] = "checked"
 
-        if new_props.has_key('disabled') and int(new_props.pop('disabled')):
+        if 'disabled' in new_props and int(new_props.pop('disabled')):
             new_props['disabled'] = "disabled"
 
         # Render the widget
@@ -59,14 +61,16 @@ class Radio (Widget):
 
 
 class RadioGroupCfg (Box):
-    def __init__ (self, key, options, _props={}):
+    props: dict
+
+    def __init__ (self: RadioGroupCfg, key, options, _props={}):
         Box.__init__ (self)
 
         self.props    = _props.copy()
         self._options = options
 
         if not 'id' in self.props:
-            self.id = 'RadioGroup_%s' %(self.uniq_id)
+            self.id = f'RadioGroup_{self.uniq_id}'
 
         cfg_value = cfg.get_val (key)
 
@@ -90,7 +94,10 @@ class RadioGroupCfg (Box):
 
 
 class RadioText (Box):
-    def __init__ (self, txt, props={}):
+    radio: Radio
+    text: Box
+
+    def __init__ (self: RadioText, txt, props={}):
         Box.__init__ (self)
 
         self.radio = Radio (props.copy())
@@ -98,4 +105,4 @@ class RadioText (Box):
 
         self.text = Box ({'class': 'radio-text'}, RawHTML(txt))
         self += self.text
-        self.text.bind ('click', "$('#%s').attr('checked', true).trigger('change');" %(self.radio.id))
+        self.text.bind ('click', f"$('#{self.radio.id}').attr('checked', true).trigger('change');")

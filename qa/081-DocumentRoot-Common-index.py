@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC1 = "First part"
 MAGIC2 = "Second part"
@@ -21,12 +21,11 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "dr_common_index/in/si/de")
-        self.WriteFile (d, "test_index.php", 0444,
-                        '<?php echo "%s"."%s"; ?>' % (MAGIC1, MAGIC2))
+        self.WriteFile (d, "test_index.php", 0o444,
+                        f'<?php echo "{MAGIC1}"."{MAGIC2}"; ?>')
 
         self.conf = CONF % (d)
 
     def Precondition (self):
         return os.path.exists (look_for_php())
-
 

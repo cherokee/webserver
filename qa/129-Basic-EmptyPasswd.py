@@ -1,5 +1,5 @@
-from base import *
-from base64 import encodestring
+from qa_base import *
+import base64
 
 LOGIN="Aladdin"
 PASSWD="open sesame"
@@ -19,11 +19,11 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name             = "Auth basic, emtpy passwd"
         self.request          = "GET /auth_empty/ HTTP/1.0\r\n" + \
-                                "Authorization: Basic %s\r\n" % (encodestring ("%s:%s"%(LOGIN,""))[:-1])
+                                "Authorization: Basic {}\r\n".format(base64.b64encode (("{}:{}".format(LOGIN,"")).encode()).decode())
         self.expected_error   = 401
 
     def Prepare (self, www):
         d = self.Mkdir (www, "auth_empty")
-        f = self.WriteFile (d, "passwd", 0444, '%s:%s\n' %(LOGIN,PASSWD))
+        f = self.WriteFile (d, "passwd", 0o444, f'{LOGIN}:{PASSWD}\n')
 
         self.conf = CONF % (f)

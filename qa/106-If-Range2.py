@@ -1,6 +1,6 @@
 import os
 import time
-from base import *
+from qa_base import *
 
 DOCUMENTATION = """
    The Hypertext Transfer Protocol (HTTP) is an application-level
@@ -30,11 +30,11 @@ class Test (TestBase):
 
         l = len(DOCUMENTATION)
         self.expected_content  = ["Content-Length: 1",
-                                  "Content-Range: bytes %d-%d/%d" %(l-1, l-1, l)]
+                                  f"Content-Range: bytes {int(l - 1)}-{int(l - 1)}/{int(l)}"]
 
     def Prepare (self, www):
         d = self.Mkdir (www, "if_range2")
-        f = self.WriteFile (d, "file", 0444, DOCUMENTATION)
+        f = self.WriteFile (d, "file", 0o444, DOCUMENTATION)
 
         st = os.stat (f)
         mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime = st
@@ -43,5 +43,5 @@ class Test (TestBase):
         self.request          = "GET /if_range2/file HTTP/1.1\r\n"  + \
                                 "Host: localhost\r\n"               + \
                                 "Connection: Close\r\n"             + \
-                                "If-Range: %s\r\n" % (times)        + \
-                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION)-1)
+                                f"If-Range: {times}\r\n"        + \
+                                f"Range: bytes={int(len(DOCUMENTATION) - 1)}-\r\n"

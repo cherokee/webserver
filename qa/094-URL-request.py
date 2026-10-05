@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = "Cherokee is pure magic"
 
@@ -26,6 +26,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "urlrequest1/dir")
-        self.WriteFile (d, "file", 0444, MAGIC)
+        self.WriteFile (d, "file", 0o444, MAGIC)
 
         self.conf = CONF % (www)

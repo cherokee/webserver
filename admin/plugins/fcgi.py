@@ -24,6 +24,7 @@
 
 import CTK
 import Cherokee
+from CTK.i18n import _, N_
 import validations
 import CgiBase
 import Balancer
@@ -44,10 +45,10 @@ class Plugin_fcgi (CgiBase.PluginHandlerCGI):
         CgiBase.PluginHandlerCGI.AddCommon (self)
 
         # Balancer
-        modul = CTK.PluginSelector('%s!balancer'%(key), trans_options(Cherokee.support.filter_available (BALANCERS)))
+        modul = CTK.PluginSelector(f'{key}!balancer', trans_options(Cherokee.support.filter_available (BALANCERS)))
         table = CTK.PropsTable()
         table.Add (_("Balancer"), modul.selector_widget, _(Balancer.NOTE_BALANCER))
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('FastCGI Specific')))
+        self += CTK.RawHTML (f"<h2>{_('FastCGI Specific')}</h2>")
         self += CTK.Indenter (table)
         self += modul

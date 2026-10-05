@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR     = "inherit3/dir1/dir2/dir3"
 COMMENT = "This is a PHP comment"
@@ -17,7 +17,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Inherit config: deeper fist"
-        self.request           = "GET /%s/deeper.php HTTP/1.0\r\n" % (DIR)
+        self.request           = f"GET /{DIR}/deeper.php HTTP/1.0\r\n"
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = COMMENT
@@ -25,9 +25,8 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        self.WriteFile (d, "deeper.php", 0444,
-                        '<?php /* %s */ echo "%s"; ?>'%(COMMENT,MAGIC))
+        self.WriteFile (d, "deeper.php", 0o444,
+                        f'<?php /* {COMMENT} */ echo "{MAGIC}"; ?>')
 
     def Precondition (self):
         return os.path.exists (look_for_php())
-

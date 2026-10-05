@@ -22,6 +22,7 @@
 
 import CTK
 import RuleSimple
+from CTK.i18n import _, N_
 import validations
 
 NOTE_DIRECTORY = N_("Public Web Directory to which content the configuration will be applied.")

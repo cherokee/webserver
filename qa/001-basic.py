@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 class Test (TestBase):
     def __init__ (self):
@@ -10,4 +10,3 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "basic_test1")
-

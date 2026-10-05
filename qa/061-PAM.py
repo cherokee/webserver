@@ -1,6 +1,6 @@
 import os
 import base64
-from base import *
+from qa_base import *
 
 USER="cherokeeqa"
 PASS="cherokeeqa"
@@ -21,11 +21,10 @@ class Test (TestBase):
         self.name             = "Auth PAM"
 
         # Build the authentication string
-        auth = base64.encodestring("%s:%s" % (USER,PASS))
-        if auth[-1] == "\n": auth = auth[:-1]
+        auth = base64.b64encode(f"{USER}:{PASS}".encode()).decode()
 
         self.request          = "GET /privpam/ HTTP/1.0\r\n" + \
-                                "Authorization: Basic %s\r\n" % (auth)
+                                f"Authorization: Basic {auth}\r\n"
         self.expected_error   = 200
 
     def Prepare (self, www):
@@ -47,13 +46,13 @@ class Test (TestBase):
         try:
             # Read the /etc/passwd file
             f = open ("/etc/passwd", "r")
-            pwuser = filter(lambda x: x.find(USER) == 0, f.readlines())
+            pwuser = [x for x in f.readlines() if x.find(USER) == 0]
             f.close
         except:
             return False
 
         # Sanity check
-        if len(pwuser) is not 1:
+        if len(pwuser) != 1:
             return False
 
         return True

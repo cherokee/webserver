@@ -1,17 +1,17 @@
-from base import *
+from qa_base import *
 
 DIR      = "219_dots_in_pathinfo"
 PATHINFO = "/foo.bar/this.thing/a.b.c.d"
 
-CONF = """
+CONF = f"""
 vserver!1!rule!2191!match = extensions
 vserver!1!rule!2191!match!extensions = a219b,k219l
 vserver!1!rule!2191!handler = cgi
 
 vserver!1!rule!2190!match = directory
-vserver!1!rule!2190!match!directory = /%s
+vserver!1!rule!2190!match!directory = /{DIR}
 vserver!1!rule!2190!handler = file
-""" % (DIR)
+"""
 
 CGI_BASE = """#!/bin/sh
 echo "Content-type: text/html"
@@ -23,12 +23,11 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Extensions: Dots in Pathinfo"
-        self.request           = "GET /%s/index.a219b%s HTTP/1.0\r\n" %(DIR, PATHINFO)
+        self.request           = f"GET /{DIR}/index.a219b{PATHINFO} HTTP/1.0\r\n"
         self.conf              = CONF
         self.expected_error    = 200
-        self.expected_content  = "PATH_INFO: (%s)" % (PATHINFO)
+        self.expected_content  = f"PATH_INFO: ({PATHINFO})"
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        self.WriteFile (d, "index.a219b", 0755, CGI_BASE)
-
+        self.WriteFile (d, "index.a219b", 0o755, CGI_BASE)

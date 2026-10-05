@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 import Cherokee
 import Balancer
 
@@ -48,24 +49,24 @@ class Plugin_dbslayer (Handler.PluginHandler):
 
         # DB-Slayer
         table = CTK.PropsTable()
-        table.Add (_('Language'),    CTK.ComboCfg('%s!lang'%(key),    trans_options(DWRITER_LANGS)), _(NOTE_LANG))
-        table.Add (_('DB User'),     CTK.TextCfg('%s!user'%(key),     False), _(NOTE_USER))
-        table.Add (_('DB Password'), CTK.TextCfg('%s!password'%(key), False), _(NOTE_PASSWORD))
-        table.Add (_('Data Base'),   CTK.TextCfg('%s!db'%(key),       True),  _(NOTE_DB))
+        table.Add (_('Language'),    CTK.ComboCfg(f'{key}!lang',    trans_options(DWRITER_LANGS)), _(NOTE_LANG))
+        table.Add (_('DB User'),     CTK.TextCfg(f'{key}!user',     False), _(NOTE_USER))
+        table.Add (_('DB Password'), CTK.TextCfg(f'{key}!password', False), _(NOTE_PASSWORD))
+        table.Add (_('Data Base'),   CTK.TextCfg(f'{key}!db',       True),  _(NOTE_DB))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Serialization')))
+        self += CTK.RawHTML (f"<h2>{_('Serialization')}</h2>")
         self += CTK.Indenter (submit)
 
         # Load Balancing
-        modul = CTK.PluginSelector('%s!balancer'%(key), trans_options(Cherokee.support.filter_available (BALANCERS)))
+        modul = CTK.PluginSelector(f'{key}!balancer', trans_options(Cherokee.support.filter_available (BALANCERS)))
         table = CTK.PropsTable()
         table.Add (_("Balancer"), modul.selector_widget, _(Balancer.NOTE_BALANCER))
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Data Base Balancing')))
+        self += CTK.RawHTML (f"<h2>{_('Data Base Balancing')}</h2>")
         self += CTK.Indenter (table)
         self += modul
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

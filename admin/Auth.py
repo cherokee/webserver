@@ -24,6 +24,7 @@
 
 import CTK
 import Cherokee
+from CTK.i18n import _, N_
 import validations
 
 from util import *
@@ -48,19 +49,19 @@ class PluginAuth (CTK.Plugin):
         if len(supported_methods) > 1:
             methods = trans_options (VALIDATOR_METHODS)
         else:
-            methods = trans_options (filter (lambda x: x[0] in supported_methods, VALIDATOR_METHODS))
+            methods = trans_options ([x for x in VALIDATOR_METHODS if x[0] in supported_methods])
 
         table = CTK.PropsTable()
-        table.Add (_("Methods"), CTK.ComboCfg("%s!methods"%(self.key), trans_options(methods), {'id': 'auth_method'}), _(NOTE_METHODS))
-        table.Add (_("Realm"),   CTK.TextCfg("%s!realm" %(self.key), False), _(NOTE_REALM))
-        table.Add (_("Users"),   CTK.TextCfg("%s!users" %(self.key), True),  _(NOTE_USERS))
+        table.Add (_("Methods"), CTK.ComboCfg(f"{self.key}!methods", trans_options(methods), {'id': 'auth_method'}), _(NOTE_METHODS))
+        table.Add (_("Realm"),   CTK.TextCfg(f"{self.key}!realm", False), _(NOTE_REALM))
+        table.Add (_("Users"),   CTK.TextCfg(f"{self.key}!users", True),  _(NOTE_USERS))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Authentication Details')))
+        self += CTK.RawHTML (f"<h2>{_('Authentication Details')}</h2>")
         self += CTK.Indenter(submit)
 
         # Publish
-        VALS = [("%s!users"%(self.key), validations.is_safe_id_list)]
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        VALS = [(f"{self.key}!users", validations.is_safe_id_list)]
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")

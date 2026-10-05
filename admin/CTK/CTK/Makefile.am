@@ -45,6 +45,7 @@ iPhoneToggle.py \
 pyscgi.py \
 util.py \
 json_embedded.py \
+multipart.py \
 ProgressBar.py \
 Downloader.py \
 Radio.py \

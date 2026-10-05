@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR     = "DirXsendfile3"
 FILE    = "test.cgi"
@@ -27,14 +27,14 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "X-Sendfile: CGI (Range)"
 
-        self.request           = "GET /%s/%s HTTP/1.1\r\n" % (DIR, FILE) + \
+        self.request           = f"GET /{DIR}/{FILE} HTTP/1.1\r\n" + \
                                  "Host: default\r\n"                     + \
-                                 "Range: bytes=%d-\r\n" % (OFFSET)       + \
+                                 f"Range: bytes={int(OFFSET)}-\r\n"       + \
                                  "Connection: Close\r\n"
 
         length = LENGTH - OFFSET
         self.expected_error    = 206
-        self.expected_content  = [MAGIC[OFFSET:], "Content-Length: %d" % (length)]
+        self.expected_content  = [MAGIC[OFFSET:], f"Content-Length: {int(length)}"]
         self.forbidden_content = ["/bin/sh", "echo", DISCART, MAGIC[:OFFSET]]
         self.conf              = CONF % (DIR)
 
@@ -43,4 +43,4 @@ class Test (TestBase):
         cgi  = CGI % (temp, DISCART)
 
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILE, 0755, cgi)
+        f = self.WriteFile (d, FILE, 0o755, cgi)

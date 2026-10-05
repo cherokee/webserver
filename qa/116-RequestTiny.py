@@ -1,7 +1,7 @@
-from base import *
+from qa_base import *
 
 MAGIC = "The one and only.. Cherokee! :-)"
-HOST  = "request_mini"
+HOST: str = "request_mini"
 
 CONF = """
 vserver!1160!nick = <host>
@@ -24,7 +24,7 @@ class Test (TestBase):
         self.name = "Request tiny"
 
         self.request           = "GET / HTTP/1.1\r\n"   + \
-                                 "Host: %s\r\n" %(HOST) + \
+                                 f"Host: {HOST}\r\n" + \
                                  "Connection: Close\r\n"
         self.expected_error    = 200
         self.expected_content  = MAGIC
@@ -36,11 +36,10 @@ class Test (TestBase):
         self.conf = CONF % (host_dir)
         self.conf = self.conf.replace ('<host>', HOST)
 
-        for php in self.php_conf.split("\n"):
-            self.conf += "vserver!1160!rule!%s\n" % (php)
+        for php in (self.php_conf or "").split("\n"):
+            self.conf += f"vserver!1160!rule!{php}\n"
 
-        self.WriteFile (host_dir, "index.php", 0444, '<?php echo "%s" ?>' %(MAGIC))
+        self.WriteFile (host_dir, "index.php", 0o444, f'<?php echo "{MAGIC}" ?>')
 
     def Precondition (self):
         return os.path.exists (look_for_php())
-

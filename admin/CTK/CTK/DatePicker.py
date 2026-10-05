@@ -20,7 +20,7 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
+from .Widget import Widget
 
 HEADERS = [
     '<link type="text/css" href="/CTK/css/datepicker.css" rel="stylesheet" />',
@@ -53,9 +53,9 @@ class DatePicker (Widget):
         else:
             self.props['class'] = 'datepicker'
 
-        for key,val in self.props.items():
+        for key,val in list(self.props.items()):
             if key and val:
-                render += ' %s="%s"' % (key,str(val))
+                render += f' {key}="{val!s}"'
         return render
 
     def Render (self):

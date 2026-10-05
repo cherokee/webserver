@@ -17,8 +17,8 @@ class R1:
         box = CTK.Box({'id': self.ID})
 
         for n in range(10):
-            item = CTK.Box (content = CTK.RawHTML ('Box1: %s'%(n)))
-            item.bind ('click', GOTO_JS %(R2.ID, URL_R2+'/%s'%(n)))
+            item = CTK.Box (content = CTK.RawHTML (f'Box1: {n}'))
+            item.bind ('click', GOTO_JS %(R2.ID, URL_R2+f'/{n}'))
             box += item
 
         return box.Render().toStr()
@@ -29,16 +29,16 @@ class R2:
     def __call__ (self):
         box = CTK.Box({'id': self.ID})
 
-        tmp = re.findall('%s/(.*)'%(URL_R2), CTK.request.url)
+        tmp = re.findall(f'{URL_R2}/(.*)', CTK.request.url)
         if tmp:
             b1 = tmp[0]
         else:
             b1 = '0'
 
         for n in "ABCDEFGHIJ":
-            txt  = 'Box1 is %s, this %s'%(b1, n)
+            txt  = f'Box1 is {b1}, this {n}'
             item = CTK.Box (content = CTK.RawHTML (txt))
-            item.bind ('click', GOTO_JS %(R3.ID, URL_R3+'/%s/%s'%(b1, n)))
+            item.bind ('click', GOTO_JS %(R3.ID, URL_R3+f'/{b1}/{n}'))
             box += item
 
         return box.Render().toStr()
@@ -49,13 +49,13 @@ class R3:
     def __call__ (self):
         box = CTK.Box({'id': self.ID})
 
-        tmp = re.findall('%s/(.*)/(.*)'%(URL_R3), CTK.request.url)
+        tmp = re.findall(f'{URL_R3}/(.*)/(.*)', CTK.request.url)
         if tmp:
             b1,b2 = tmp[0]
         else:
             b1,b2 = '0','A'
 
-        box += CTK.RawHTML('<h1>%s %s</h1>' %(b1, b2))
+        box += CTK.RawHTML(f'<h1>{b1} {b2}</h1>')
         return box.Render().toStr()
 
 

@@ -25,6 +25,7 @@
 
 import CTK
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 
 import os
@@ -46,13 +47,13 @@ DEFAULT_PID_LOCATIONS = [
     os.path.join (PREFIX, 'var/run/cherokee.pid')
 ]
 
-CHEROKEE_MIN_DEFAULT_CONFIG = """# Default configuration
-server!pid_file = %s
+CHEROKEE_MIN_DEFAULT_CONFIG = f"""# Default configuration
+server!pid_file = {DEFAULT_PID_LOCATIONS[0]}
 vserver!1!nick = default
 vserver!1!document_root = /tmp
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = common
-""" % (DEFAULT_PID_LOCATIONS[0])
+"""
 
 
 class ConfigCreator:
@@ -75,6 +76,8 @@ class ConfigCreator:
     def _create_config (self, template_file):
         # Configuration file
         filename = CTK.cfg.file
+        if filename is None:
+            raise RuntimeError('CTK configuration file is not set')
         if os.path.exists (filename):
             return True
 
@@ -83,15 +86,15 @@ class ConfigCreator:
             try:
                 os.mkdir (dirname)
             except:
-                print "ERROR: Could not create directory '%s'" %(dirname)
+                print(f"ERROR: Could not create directory '{dirname}'")
                 return False
 
         # Configuration content
-        content = "config!version = %s\n" %(config_version_get_current())
+        content = f"config!version = {config_version_get_current()}\n"
 
         # Add basic content
         conf_sample_sys = os.path.join (CHEROKEE_ADMINDIR, template_file)
-        conf_sample_dev = os.path.join (os.path.realpath (__file__ + '/../../%s'%(template_file)))
+        conf_sample_dev = os.path.join (os.path.realpath (__file__ + f'/../../{template_file}'))
 
         if os.path.exists (conf_sample_sys):
             content += open(conf_sample_sys, 'r').read()
@@ -106,7 +109,7 @@ class ConfigCreator:
             f.write (content)
             f.close()
         except:
-            print "ERROR: Could not open '%s' for writing" %(filename)
+            print(f"ERROR: Could not open '{filename}' for writing")
             return False
 
         CTK.cfg.load()
@@ -144,16 +147,16 @@ class Form (CTK.Container):
     def __init__ (self, key, name, label, **kwargs):
         CTK.Container.__init__ (self, **kwargs)
 
-        box = CTK.Box({'class': 'create-box %s' %(key)})
+        box = CTK.Box({'class': f'create-box {key}'})
 
-        box += CTK.RawHTML('<h3>%s</h3>' %(name))
-        box += CTK.RawHTML('<span>%s</span>' %(label))
+        box += CTK.RawHTML(f'<h3>{name}</h3>')
+        box += CTK.RawHTML(f'<span>{label}</span>')
 
         submit  = CTK.Submitter(URL_APPLY)
         submit += CTK.Hidden('create', key)
         submit += CTK.SubmitterButton (_('Create'))
         submit.bind ('submit_success',
-                     "$('#main').html('<h1>%s</h1>');"%(NOTE_LOADING) + CTK.JS.GotoURL('/'))
+                     f"$('#main').html('<h1>{NOTE_LOADING}</h1>');" + CTK.JS.GotoURL('/'))
 
         box += submit
         box += CTK.RawHTML('<div class="ui-helper-clearfix"></div>')
@@ -164,7 +167,7 @@ class Form (CTK.Container):
 class Render:
     def __call__ (self):
         container  = CTK.Container()
-        container += CTK.RawHTML("<h2>%s</h2>" %(_('Create a new configuration file:')))
+        container += CTK.RawHTML(f"<h2>{_('Create a new configuration file:')}</h2>")
 
         key        = 'regular'
         name       = _('Regular')
@@ -183,15 +186,15 @@ class Render:
 
         conf_file = CTK.cfg.file
         notice = CTK.Notice ('warning')
-        notice += CTK.RawHTML ("<b>%s</b><br/>"%(_(WARNING_NOT_FOUND_1)%(locals())))
+        notice += CTK.RawHTML (f"<b>{_(WARNING_NOT_FOUND_1) % locals()}</b><br/>")
         notice += CTK.RawHTML (WARNING_NOT_FOUND_2)
 
         page = Page.Base(_('New Configuration File'), body_id='new-config', helps=HELPS)
-        page += CTK.RawHTML("<h1>%s</h1>" %(_('Configuration File Not Found')))
+        page += CTK.RawHTML(f"<h1>{_('Configuration File Not Found')}</h1>")
         page += notice
         page += CTK.Indenter (container)
         return page.Render()
 
 
-CTK.publish ('^%s'%(URL_BASE), Render)
-CTK.publish ('^%s'%(URL_APPLY), apply, method="POST")
+CTK.publish (f'^{URL_BASE}', Render)
+CTK.publish (f'^{URL_APPLY}', apply, method="POST")

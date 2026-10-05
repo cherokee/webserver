@@ -1,6 +1,6 @@
-from base import *
+from qa_base import *
 
-CONF = """
+CONF = r"""
 vserver!1!rule!840!match = directory
 vserver!1!rule!840!match!directory = /redirparam2
 vserver!1!rule!840!handler = redir
@@ -20,4 +20,3 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "redirparam2")
-

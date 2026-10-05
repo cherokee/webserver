@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 
 from util import *
 from consts import *
@@ -47,12 +48,12 @@ class Plugin_server_info (Handler.PluginHandler):
         Handler.PluginHandler.AddCommon (self)
 
         table = CTK.PropsTable()
-        table.Add (_("Show Information"), CTK.ComboCfg('%s!type'%(key), trans_options(OPTIONS)), _(NOTE_INFORMATION))
+        table.Add (_("Show Information"), CTK.ComboCfg(f'{key}!type', trans_options(OPTIONS)), _(NOTE_INFORMATION))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Privacy Settings')))
+        self += CTK.RawHTML (f"<h2>{_('Privacy Settings')}</h2>")
         self += CTK.Indenter (submit)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

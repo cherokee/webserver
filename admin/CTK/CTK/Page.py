@@ -24,12 +24,12 @@
 
 import re
 
-from consts import *
-from Container import Container
-from Template import Template
-from PageCleaner import Postprocess
-from Help import HelpEntry, HelpMenu
-from util import formatter
+from .consts import *
+from .Container import Container
+from .Template import Template
+from .PageCleaner import Postprocess
+from .Help import HelpEntry, HelpMenu
+from .util import formatter
 
 PAGE_TEMPLATE_DEFAULT = """\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -132,7 +132,7 @@ class Page (Container):
         self._headers += render.headers
 
         if self.js_header_end:
-            head = "\n".join (filter (lambda l: not '<script' in l, uniq(self._headers)))
+            head = "\n".join ([l for l in uniq(self._headers) if not '<script' in l])
         else:
             head = "\n".join (uniq(self._headers))
 
@@ -146,7 +146,7 @@ class Page (Container):
         js = ''
 
         if self.js_header_end:
-            js += "\n".join (filter (lambda l: '<script' in l, uniq(self._headers)))
+            js += "\n".join ([l for l in uniq(self._headers) if '<script' in l])
 
         if render.js:
             js += formatter (HTML_JS_ON_READY_BLOCK, render.js)

@@ -23,6 +23,7 @@
 #
 
 TYPE_VSERVER = 1
+from CTK.i18n import _, N_
 TYPE_RULE    = 1 << 2
 
 LIST = [

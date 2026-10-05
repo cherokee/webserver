@@ -24,6 +24,7 @@
 
 import CTK
 import consts
+from CTK.i18n import _, N_
 import os
 
 class Error:
@@ -39,178 +40,178 @@ def check_config():
     # Empty balancers
     #
     for v in CTK.cfg['vserver'] or []:
-        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
-            handler_name  = CTK.cfg.get_val ('vserver!%s!rule!%s!handler'%(v,r))
-            balancer_name = CTK.cfg.get_val ('vserver!%s!rule!%s!handler!balancer'%(v,r))
+        for r in CTK.cfg[f'vserver!{v}!rule'] or []:
+            handler_name  = CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler')
+            balancer_name = CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler!balancer')
 
             if handler_name and \
                handler_name in consts.HANDLERS_WITH_BALANCER:
-                srcs = CTK.cfg.keys ('vserver!%s!rule!%s!handler!balancer!source'%(v,r))
+                srcs = CTK.cfg.keys (f'vserver!{v}!rule!{r}!handler!balancer!source')
                 if not srcs:
                     errors.append (Error(_('Balancer without any source'),
-                                         '/vserver/%s/rule/%s#2'%(v,r)))
+                                         f'/vserver/{v}/rule/{r}#2'))
 
     #
     # Sources without interpreter
     #
     for s in CTK.cfg['source'] or []:
-        sourcetype = CTK.cfg.get_val ('source!%s!type'%(s))
-        interpreter = CTK.cfg.get_val ('source!%s!interpreter'%(s))
-        chroot = CTK.cfg.get_val ('source!%s!chroot'%(s))
+        sourcetype = CTK.cfg.get_val (f'source!{s}!type')
+        interpreter = CTK.cfg.get_val (f'source!{s}!interpreter')
+        chroot = CTK.cfg.get_val (f'source!{s}!chroot')
 
         if sourcetype == 'interpreter':
-            if (not CTK.cfg.get_val ('source!%s!interpreter'%(s)) or \
+            if (not CTK.cfg.get_val (f'source!{s}!interpreter') or \
                 interpreter.strip() == ''):
                 errors.append (Error(_('Source without Interpreter'),
-                                       '/source/%s'%(s)))
+                                       f'/source/{s}'))
 
             if chroot:
                 if chroot[0] != '/':
                     errors.append (Error(_('Chroot folder is not an absolute path'),
-                                           '/source/%s'%(s)))
+                                           f'/source/{s}'))
                 else:
                     if not os.path.exists(chroot):
                         errors.append (Error(_('Chroot folder does not exist'),
-                                               '/source/%s'%(s)))
+                                               f'/source/{s}'))
 
                     elif not os.path.exists(chroot+interpreter.split(' ')[0]):
                         errors.append (Error(_('Interpreter does not exist inside chroot'),
-                                               '/source/%s'%(s)))
+                                               f'/source/{s}'))
 
             elif not os.path.exists(interpreter.split(' ')[0]):
                  errors.append (Error(_('Interpreter does not exist'),
-                                        '/source/%s'%(s)))
+                                        f'/source/{s}'))
 
     #
     # Validators without Realm
     #
     for v in CTK.cfg['vserver'] or []:
-        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
-            if CTK.cfg.get_val ('vserver!%s!rule!%s!auth'%(v,r)):
-                if not CTK.cfg.get_val ('vserver!%s!rule!%s!auth!realm'%(v,r)):
+        for r in CTK.cfg[f'vserver!{v}!rule'] or []:
+            if CTK.cfg.get_val (f'vserver!{v}!rule!{r}!auth'):
+                if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!auth!realm'):
                     errors.append (Error(_('Authentication rule without Realm'),
-                                         '/vserver/%s/rule/%s#5'%(v,r)))
+                                         f'/vserver/{v}/rule/{r}#5'))
 
     #
     # Virtual server without document_root, nick or no wildcard match
     #
     for v in CTK.cfg['vserver'] or []:
-        if not CTK.cfg.get_val ('vserver!%s!document_root'%(v)):
+        if not CTK.cfg.get_val (f'vserver!{v}!document_root'):
             errors.append (Error(_('Virtual Server without document root'),
-                                 '/vserver/%s#1'%(v)))
+                                 f'/vserver/{v}#1'))
 
-        if not CTK.cfg.get_val ('vserver!%s!nick'%(v)):
+        if not CTK.cfg.get_val (f'vserver!{v}!nick'):
             errors.append (Error(_('Virtual Server without nickname'),
-                                 '/vserver/%s#2'%(v)))
+                                 f'/vserver/{v}#2'))
 
-        if CTK.cfg.get_val ('vserver!%s!match'%(v)) == 'wildcard':
-            wildcards = CTK.cfg.keys ('vserver!%s!match!domain'%(v))
+        if CTK.cfg.get_val (f'vserver!{v}!match') == 'wildcard':
+            wildcards = CTK.cfg.keys (f'vserver!{v}!match!domain')
             if not wildcards:
                 errors.append (Error(_('Virtual Server without wildcard string'),
-                                     '/vserver/%s#2'%(v)))
+                                     f'/vserver/{v}#2'))
 
     #
     # Broken rule matches
     #
     for v in CTK.cfg['vserver'] or []:
-        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
-            match = CTK.cfg.get_val ('vserver!%s!rule!%s!match'%(v, r))
+        for r in CTK.cfg[f'vserver!{v}!rule'] or []:
+            match = CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match')
 
             if match == 'directory' and \
-               not CTK.cfg.get_val ('vserver!%s!rule!%s!match!directory'%(v,r)):
+               not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!directory'):
                 errors.append (Error(_('Directory match without a directory'),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'extensions' and \
-                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!extensions'%(v,r)):
+                 not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!extensions'):
                 errors.append (Error(_('Extensions match without any extension'),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'request' and \
-                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!request'%(v,r)):
+                 not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!request'):
                 errors.append (Error(_('RegEx match without a RegEx entry'),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'header':
-                if not CTK.cfg.get_val ('vserver!%s!rule!%s!match!header'%(v,r)):
+                if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!header'):
                     errors.append (Error(_('Header match without a defined header'),
-                                         '/vserver/%s/rule/%s#1'%(v,r)))
-                if CTK.cfg.get_val ('vserver!%s!rule!%s!match!type'%(v,r)) == 'regex' and \
-                   (not CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r)) or \
-                        CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r)).strip() == ''):
+                                         f'/vserver/{v}/rule/{r}#1'))
+                if CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!type') == 'regex' and \
+                   (not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!match') or \
+                        CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!match').strip() == ''):
                     errors.append (Error(_('Header match without a matching expression'),
-                                         '/vserver/%s/rule/%s#1'%(v,r)))
+                                         f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'exists':
-                any = int (CTK.cfg.get_val ('vserver!%s!rule!%s!match!match_any'%(v,r), "0"))
-                if not any and not CTK.cfg.get_val ('vserver!%s!rule!%s!match!exists'%(v,r)):
+                any = int (CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!match_any', "0"))
+                if not any and not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!exists'):
                     errors.append (Error(_("File exists rule without a file or 'Any file'"),
-                                         '/vserver/%s/rule/%s#1'%(v,r)))
+                                         f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'method' and \
-                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!method'%(v,r)):
+                 not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!method'):
                 errors.append (Error(_('Method match without a defined method'),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'bind' and \
-                 not CTK.cfg['vserver!%s!rule!%s!match!bind'%(v,r)]:
+                 not CTK.cfg[f'vserver!{v}!rule!{r}!match!bind']:
                 errors.append (Error(_("Empty 'Incoming IP/Port' match"),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'fullpath' and \
-                 not CTK.cfg['vserver!%s!rule!%s!match!fullpath'%(v,r)]:
+                 not CTK.cfg[f'vserver!{v}!rule!{r}!match!fullpath']:
                 errors.append (Error(_("Empty 'Full path' rule match"),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'from' and \
-                 not CTK.cfg['vserver!%s!rule!%s!match!from'%(v,r)]:
+                 not CTK.cfg[f'vserver!{v}!rule!{r}!match!from']:
                 errors.append (Error(_("Empty 'Connected from' rule match"),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'url_arg' and \
-                (not CTK.cfg.get_val ('vserver!%s!rule!%s!match!arg'%(v,r)) or \
-                 not CTK.cfg.get_val ('vserver!%s!rule!%s!match!match'%(v,r))):
+                (not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!arg') or \
+                 not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!match!match')):
                 errors.append (Error(_("Incomplete 'URL Argument' rule match"),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
             elif match == 'geoip' and \
-                 not CTK.cfg['vserver!%s!rule!%s!match!countries'%(v,r)]:
+                 not CTK.cfg[f'vserver!{v}!rule!{r}!match!countries']:
                 errors.append (Error(_("GeoIP match rule with no countries"),
-                                     '/vserver/%s/rule/%s#1'%(v,r)))
+                                     f'/vserver/{v}/rule/{r}#1'))
 
     #
     # Incomplete regular expressions
     #
     for v in CTK.cfg['vserver'] or []:
-        for r in CTK.cfg['vserver!%s!rule'%(v)] or []:
-            handler = CTK.cfg.get_val ('vserver!%s!rule!%s!handler'%(v,r))
+        for r in CTK.cfg[f'vserver!{v}!rule'] or []:
+            handler = CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler')
 
             if handler == 'proxy':
-                for x in CTK.cfg['vserver!%s!rule!%s!handler!in_rewrite_request'%(v,r)] or []:
-                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!in_rewrite_request!%s!regex'%(v,r,x)):
+                for x in CTK.cfg[f'vserver!{v}!rule!{r}!handler!in_rewrite_request'] or []:
+                    if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler!in_rewrite_request!{x}!regex'):
                         errors.append (Error(_("Request URL Rewriting rule list has a missing Regular Expression"),
-                                            '/vserver/%s/rule/%s#2'%(v,r)))
+                                            f'/vserver/{v}/rule/{r}#2'))
 
-                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!in_rewrite_request!%s!substring'%(v,r,x)):
+                    if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler!in_rewrite_request!{x}!substring'):
                         errors.append (Error(_("Request URL Rewriting rule list has a missing Substitution"),
-                                            '/vserver/%s/rule/%s#2'%(v,r)))
+                                            f'/vserver/{v}/rule/{r}#2'))
 
-                for x in CTK.cfg['vserver!%s!rule!%s!handler!out_rewrite_request'%(v,r)] or []:
-                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!out_rewrite_request!%s!regex'%(v,r,x)):
+                for x in CTK.cfg[f'vserver!{v}!rule!{r}!handler!out_rewrite_request'] or []:
+                    if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler!out_rewrite_request!{x}!regex'):
                         errors.append (Error(_("Reply URL Rewriting rule list has a missing Regular Expression"),
-                                            '/vserver/%s/rule/%s#2'%(v,r)))
+                                            f'/vserver/{v}/rule/{r}#2'))
 
-                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!out_rewrite_request!%s!substring'%(v,r,x)):
+                    if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler!out_rewrite_request!{x}!substring'):
                         errors.append (Error(_("Reply URL Rewriting rule list has a missing Substitution"),
-                                            '/vserver/%s/rule/%s#2'%(v,r)))
+                                            f'/vserver/{v}/rule/{r}#2'))
 
             elif handler == 'redir':
-                for x in CTK.cfg['vserver!%s!rule!%s!handler!rewrite'%(v,r)] or []:
-                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!rewrite!%s!regex'%(v,r,x)):
+                for x in CTK.cfg[f'vserver!{v}!rule!{r}!handler!rewrite'] or []:
+                    if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler!rewrite!{x}!regex'):
                         errors.append (Error(_("Redirection rule list has a missing Regular Expression"),
-                                            '/vserver/%s/rule/%s#2'%(v,r)))
+                                            f'/vserver/{v}/rule/{r}#2'))
 
-                    if not CTK.cfg.get_val ('vserver!%s!rule!%s!handler!rewrite!%s!substring'%(v,r,x)):
+                    if not CTK.cfg.get_val (f'vserver!{v}!rule!{r}!handler!rewrite!{x}!substring'):
                         errors.append (Error(_("Redirection rule list has a missing Substitution"),
-                                            '/vserver/%s/rule/%s#2'%(v,r)))
+                                            f'/vserver/{v}/rule/{r}#2'))
     return errors

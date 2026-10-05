@@ -24,6 +24,7 @@
 
 import CTK
 import Auth
+from CTK.i18n import _, N_
 import validations
 
 URL_APPLY = '/plugin/htdigest/apply'
@@ -38,14 +39,14 @@ class Plugin_htdigest (Auth.PluginAuth):
         self.AddCommon (supported_methods=('basic','digest'))
 
         table = CTK.PropsTable()
-        table.Add (_("Password File"), CTK.TextCfg("%s!passwdfile"%(self.key), False), _(NOTE_PASSWD))
+        table.Add (_("Password File"), CTK.TextCfg(f"{self.key}!passwdfile", False), _(NOTE_PASSWD))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Htdigest Password File')))
+        self += CTK.RawHTML (f"<h2>{_('Htdigest Password File')}</h2>")
         self += CTK.Indenter (submit)
 
         # Publish
-        VALS = [("%s!passwdfile"%(self.key), validations.is_local_file_exists)]
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        VALS = [(f"{self.key}!passwdfile", validations.is_local_file_exists)]
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")

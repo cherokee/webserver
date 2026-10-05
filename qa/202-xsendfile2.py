@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR     = "DirXsendfile2"
 FILE    = "test.cgi"
@@ -31,14 +31,14 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "X-Sendfile: File headers"
 
-        self.request           = "GET /%s/%s HTTP/1.1\r\n" % (DIR, FILE) + \
+        self.request           = f"GET /{DIR}/{FILE} HTTP/1.1\r\n" + \
                                  "Host: default\r\n"                     + \
                                  "Connection: Close\r\n"
 
         self.expected_error    = 200
         self.expected_content  = ["Content-Length: ", "ETag: ", "Last-Modified: ", MAGIC,
-                                  "%s: %s\r\n" %(HDR_NAM1, HDR_VAL1),
-                                  "%s: %s\r\n" %(HDR_NAM2, HDR_VAL2)]
+                                  f"{HDR_NAM1}: {HDR_VAL1}\r\n",
+                                  f"{HDR_NAM2}: {HDR_VAL2}\r\n"]
         self.forbidden_content = ["/bin/sh", "echo", DISCART, "chunked"]
         self.conf              = CONF % (DIR)
 
@@ -47,4 +47,4 @@ class Test (TestBase):
         cgi  = CGI % (HDR_NAM1, HDR_VAL1, temp, HDR_NAM2, HDR_VAL2, DISCART)
 
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, FILE, 0755, cgi)
+        f = self.WriteFile (d, FILE, 0o755, cgi)

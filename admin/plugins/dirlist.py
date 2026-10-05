@@ -25,6 +25,7 @@
 import os
 import CTK
 import Handler
+from CTK.i18n import _, N_
 import validations
 from configured import *
 
@@ -48,39 +49,39 @@ class Plugin_dirlist (Handler.PluginHandler):
 
         # Listing
         table = CTK.PropsTable()
-        table.Add (_('Show Size'),               CTK.CheckCfgText("%s!size"%(self.key),           True,  _('Show')),    '')
-        table.Add (_('Show Date'),               CTK.CheckCfgText("%s!date"%(self.key),           True,  _('Show')),    '')
-        table.Add (_('Show User'),               CTK.CheckCfgText("%s!user"%(self.key),           False, _('Show')),    '')
-        table.Add (_('Show Group'),              CTK.CheckCfgText("%s!group"%(self.key),          False, _('Show')),    '')
-        table.Add (_('Show Backup files'),       CTK.CheckCfgText("%s!backup"%(self.key),         False, _('Show')),    '')
-        table.Add (_('Show Hidden files'),       CTK.CheckCfgText("%s!hidden"%(self.key),         False, _('Show')),    '')
+        table.Add (_('Show Size'),               CTK.CheckCfgText(f"{self.key}!size",           True,  _('Show')),    '')
+        table.Add (_('Show Date'),               CTK.CheckCfgText(f"{self.key}!date",           True,  _('Show')),    '')
+        table.Add (_('Show User'),               CTK.CheckCfgText(f"{self.key}!user",           False, _('Show')),    '')
+        table.Add (_('Show Group'),              CTK.CheckCfgText(f"{self.key}!group",          False, _('Show')),    '')
+        table.Add (_('Show Backup files'),       CTK.CheckCfgText(f"{self.key}!backup",         False, _('Show')),    '')
+        table.Add (_('Show Hidden files'),       CTK.CheckCfgText(f"{self.key}!hidden",         False, _('Show')),    '')
         if symlinks:
-            table.Add (_('Allow symbolic links'),    CTK.CheckCfgText("%s!symlinks"%(self.key),       True,  _('Allow')),   '')
-        table.Add (_('Redirect symbolic links'), CTK.CheckCfgText("%s!redir_symlinks"%(self.key), False, _('Enabled')), '')
+            table.Add (_('Allow symbolic links'),    CTK.CheckCfgText(f"{self.key}!symlinks",       True,  _('Allow')),   '')
+        table.Add (_('Redirect symbolic links'), CTK.CheckCfgText(f"{self.key}!redir_symlinks", False, _('Enabled')), '')
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Listing')))
+        self += CTK.RawHTML (f"<h2>{_('Listing')}</h2>")
         self += CTK.Indenter (submit)
 
         # Theming
         table = CTK.PropsTable()
-        table.Add (_('Theme'),        CTK.ComboCfg("%s!theme"%(key), self._get_theme_list()), _(NOTE_THEME))
-        table.Add (_('Icons dir'),    CTK.TextCfg("%s!icon_dir"%(key), True), _(NOTE_ICON_DIR))
-        table.Add (_('Notice files'), CTK.TextCfg("%s!notice_files"%(key), True), _(NOTE_NOTICE_FILES))
-        table.Add (_('Hidden files'), CTK.TextCfg("%s!hidden_files"%(key), True), _(NOTE_HIDDEN_FILES))
+        table.Add (_('Theme'),        CTK.ComboCfg(f"{key}!theme", self._get_theme_list()), _(NOTE_THEME))
+        table.Add (_('Icons dir'),    CTK.TextCfg(f"{key}!icon_dir", True), _(NOTE_ICON_DIR))
+        table.Add (_('Notice files'), CTK.TextCfg(f"{key}!notice_files", True), _(NOTE_NOTICE_FILES))
+        table.Add (_('Hidden files'), CTK.TextCfg(f"{key}!hidden_files", True), _(NOTE_HIDDEN_FILES))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Theming')))
+        self += CTK.RawHTML (f"<h2>{_('Theming')}</h2>")
         self += CTK.Indenter (submit)
 
         # Publish
-        VALS = [("%s!icon_dir"%(key),     validations.is_path),
-                ("%s!notice_files"%(key), validations.is_path_list),
-                ("%s!hidden_files"%(key), validations.is_list)]
+        VALS = [(f"{key}!icon_dir",     validations.is_path),
+                (f"{key}!notice_files", validations.is_path_list),
+                (f"{key}!hidden_files", validations.is_list)]
 
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")
 
     def _get_theme_list (self):
         themes = []

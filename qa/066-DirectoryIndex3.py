@@ -1,5 +1,5 @@
 import os
-from base import *
+from qa_base import *
 
 CONF = """
 vserver!0660!nick = directoryindex3
@@ -22,7 +22,7 @@ class Test (TestBase):
         self.dr = self.Mkdir (www, "directoryindex3")
         self.Mkdir (www, "directoryindex3/inside/foo")
 
-        self.WriteFile (self.dr, "super_test_index.php", 0666, """<?php
+        self.WriteFile (self.dr, "super_test_index.php", 0o666, """<?php
                         echo "DocumentRoot ".$_SERVER['DOCUMENT_ROOT']."\n";
                         echo "ScriptName "  .$_SERVER['SCRIPT_NAME']."\n";
                         echo "RequestUri "  .$_SERVER['REQUEST_URI']."\n";
@@ -30,11 +30,11 @@ class Test (TestBase):
 
         # Set the configuration
         self.conf = CONF % (self.dr)
-        for php in self.php_conf.split("\n"):
-            self.conf += "vserver!0660!rule!%s\n" % (php)
+        for php in (self.php_conf or "").split("\n"):
+            self.conf += f"vserver!0660!rule!{php}\n"
 
         # Expected output
-        self.expected_content = ["DocumentRoot %s" % (self.dr),
+        self.expected_content = [f"DocumentRoot {self.dr}",
                                  "ScriptName /super_test_index.php",
                                  "RequestUri /inside/"]
 

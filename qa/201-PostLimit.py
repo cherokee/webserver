@@ -1,6 +1,6 @@
-from base import *
+from qa_base import *
 
-HOST  = "201_test"
+HOST: str = "201_test"
 POST  = "Alvaro: alobbs.com"
 
 CONF = """
@@ -24,9 +24,9 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name              = "POST upload limit"
         self.request           = "POST /program.cgi HTTP/1.0\r\n" + \
-                                 "Host: %s\r\n" % (HOST) + \
+                                 f"Host: {HOST}\r\n" + \
                                  "Content-type: application/x-www-form-urlencoded\r\n" + \
-                                 "Content-length: %d\r\n" % (len(POST)) + \
+                                 f"Content-length: {len(POST)}\r\n" + \
                                  "Connection: Close\r\n"
         self.post              = POST
         self.expected_error    = 413
@@ -34,6 +34,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, HOST)
-        self.WriteFile (d, "program.cgi", 0555, CGI_BASE)
+        self.WriteFile (d, "program.cgi", 0o555, CGI_BASE)
 
         self.conf = CONF % (HOST, d)

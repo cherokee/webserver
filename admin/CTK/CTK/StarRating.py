@@ -22,8 +22,8 @@
 # 02110-1301, USA.
 #
 
-from Box import Box
-from Combobox import Combobox
+from .Box import Box
+from .Combobox import Combobox
 
 HEADERS = [
     '<script type="text/javascript" src="/CTK/js/jquery-ui-1.7.2.custom.min.js"></script>',

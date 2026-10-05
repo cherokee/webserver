@@ -29,9 +29,10 @@
 #
 
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 from util import *
 
@@ -97,13 +98,13 @@ CONFIG_DIR = SOURCE + """
 class Commit:
     def Commit_VServer (self):
         # Incoming info
-        new_host   = CTK.cfg.get_val('%s!new_host'%(PREFIX))
-        new_source = CTK.cfg.get_val('%s!new_source'%(PREFIX))
+        new_host   = CTK.cfg.get_val(f'{PREFIX}!new_host')
+        new_source = CTK.cfg.get_val(f'{PREFIX}!new_source')
 
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
-        CTK.cfg['%s!nick'%(vsrv_pre)] = new_host
-        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
+        CTK.cfg[f'{vsrv_pre}!nick'] = new_host
+        Wizard.CloneLogsCfg_Apply (f'{PREFIX}!logs_as_vsrv', vsrv_pre)
 
         # Locals
         src_num, src_pre = cfg_source_get_next ()
@@ -113,7 +114,7 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
         CTK.cfg.normalize ('vserver')
 
         del (CTK.cfg[PREFIX])
@@ -121,15 +122,15 @@ class Commit:
 
 
     def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
+        vsrv_num = CTK.cfg.get_val (f'{PREFIX}!vsrv_num')
+        vsrv_pre = f'vserver!{vsrv_num}'
 
         # Incoming info
-        webdir     = CTK.cfg.get_val('%s!new_webdir'%(PREFIX))
-        new_source = CTK.cfg.get_val('%s!new_source'%(PREFIX))
+        webdir     = CTK.cfg.get_val(f'{PREFIX}!new_webdir')
+        new_source = CTK.cfg.get_val(f'{PREFIX}!new_source')
 
         # Locals
-        rule_pre = CTK.cfg.get_next_entry_prefix('%s!rule'%(vsrv_pre))
+        rule_pre = CTK.cfg.get_next_entry_prefix(f'{vsrv_pre}!rule')
         src_num, src_pre = cfg_source_get_next ()
 
         # Add the new rules
@@ -137,7 +138,7 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -149,7 +150,7 @@ class Commit:
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX)):
+            if CTK.cfg.get_val (f'{PREFIX}!vsrv_num'):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -159,14 +160,14 @@ class Commit:
 class WebDirectory:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('Web Directory'), CTK.TextCfg ('%s!new_webdir'%(PREFIX), False, {'value': "/coldfusion", 'class': 'noauto'}), _(NOTE_WEBDIR))
+        table.Add (_('Web Directory'), CTK.TextCfg (f'{PREFIX}!new_webdir', False, {'value': "/coldfusion", 'class': 'noauto'}), _(NOTE_WEBDIR))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WEBDIR_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -175,14 +176,14 @@ class WebDirectory:
 class Host:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX), False, {'value': 'coldfusion.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add (_('New Host Name'),    CTK.TextCfg (f'{PREFIX}!new_host', False, {'value': 'coldfusion.example.com', 'class': 'noauto'}), _(NOTE_HOST))
 
         submit  = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont  = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_HOST_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -191,13 +192,13 @@ class Host:
 class Common:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('Host'), CTK.TextCfg ('%s!new_source'%(PREFIX), False, {'value':"127.0.0.1:8500"}), _(NOTE_SOURCE))
+        table.Add (_('Host'), CTK.TextCfg (f'{PREFIX}!new_source', False, {'value':"127.0.0.1:8500"}), _(NOTE_SOURCE))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_COMMON_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_COMMON_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
@@ -206,11 +207,11 @@ class Common:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('coldfusion', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P2)}</p>')
         box += Wizard.CookBookBox ('cookbook_coldfusion')
         cont += box
 
@@ -218,7 +219,7 @@ class Welcome:
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
             submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit += CTK.Hidden(f'{PREFIX}!vsrv_num', tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -228,22 +229,22 @@ class Welcome:
 def is_coldfusion_host (host):
     host = validations.is_information_source (host)
     try:
-        cf_host = urllib.urlopen("http://%s" % host)
+        cf_host = urllib.request.urlopen(f"http://{host}")
     except:
-        raise ValueError, _(ERROR_NO_SRC)
+        raise ValueError(_(ERROR_NO_SRC))
 
     headers = str(cf_host.headers).lower()
     cf_host.close()
     if not "jrun" in headers:
-        raise ValueError, _(ERROR_NO_SRC)
+        raise ValueError(_(ERROR_NO_SRC))
     return host
 
 VALS = [
-    ("%s!new_host"   %(PREFIX), validations.is_not_empty),
-    ("%s!new_source" %(PREFIX), validations.is_not_empty),
+    (f"{PREFIX}!new_host", validations.is_not_empty),
+    (f"{PREFIX}!new_source", validations.is_not_empty),
 
-    ("%s!new_host"   %(PREFIX), validations.is_new_vserver_nick),
-    ("%s!new_source" %(PREFIX), is_coldfusion_host),
+    (f"{PREFIX}!new_host", validations.is_new_vserver_nick),
+    (f"{PREFIX}!new_source", is_coldfusion_host),
 ]
 
 # VServer
@@ -252,9 +253,9 @@ CTK.publish ('^/wizard/vserver/coldfusion/2$', Common)
 CTK.publish ('^/wizard/vserver/coldfusion/3$', Host)
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/coldfusion$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/coldfusion/2$', Common)
-CTK.publish ('^/wizard/vserver/(\d+)/coldfusion/3$', WebDirectory)
+CTK.publish ('^/wizard/vserver/(\\d+)/coldfusion$',   Welcome)
+CTK.publish ('^/wizard/vserver/(\\d+)/coldfusion/2$', Common)
+CTK.publish ('^/wizard/vserver/(\\d+)/coldfusion/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (rf'^{URL_APPLY}', Commit, method="POST", validation=VALS)

@@ -1,7 +1,7 @@
 import base64
 
-from conf import *
-from base import *
+from qa_conf import *
+from qa_base import *
 
 MAGIC        = "Cherokee supports old crypt password hashes"
 REALM        = "realm"
@@ -23,17 +23,17 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
 
-        auth = base64.encodestring ("%s:%s" % (USER, PASSWD))[:-1]
+        auth = base64.b64encode (f"{USER}:{PASSWD}".encode()).decode()
 
         self.name             = "Basic Auth, htpasswd: Crypt"
         self.expected_error   = 200
         self.expected_content = MAGIC
         self.request          = "GET /htpasswd_crypt/file HTTP/1.0\r\n" + \
-                                "Authorization: Basic %s\r\n" % (auth)
+                                f"Authorization: Basic {auth}\r\n"
 
     def Prepare (self, www):
         tdir  = self.Mkdir (www, "htpasswd_crypt")
-        passf = self.WriteFile (tdir, "passwd", 0444, '%s:%s\n' %(USER, PASSWD_CRYPT))
-        self.WriteFile (tdir, "file", 0444, MAGIC)
+        passf = self.WriteFile (tdir, "passwd", 0o444, f'{USER}:{PASSWD_CRYPT}\n')
+        self.WriteFile (tdir, "file", 0o444, MAGIC)
 
         self.conf = CONF % (REALM, passf)

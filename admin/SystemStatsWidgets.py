@@ -24,6 +24,7 @@
 
 import CTK
 import SystemStats
+from CTK.i18n import _, N_
 from CTK.PageCleaner import Uniq_Block
 
 
@@ -105,7 +106,7 @@ class Meter (CTK.Box):
         box += self.details
         self += box
 
-    def Render (self, js):
+    def _render (self, js: str) -> CTK.RenderResponse:
         render = CTK.Box.Render (self)
         render.js += Uniq_Block (JS_COMMON)
 
@@ -115,6 +116,9 @@ class Meter (CTK.Box):
 
         render.js += js %(props)
         return render
+
+    def Render (self) -> CTK.RenderResponse:
+        return self._render('')
 
 
 #
@@ -153,8 +157,8 @@ class CPU_Meter (Meter):
     def __init__ (self):
         Meter.__init__ (self, 'cpu')
 
-    def Render (self):
-        return Meter.Render (self, JS_CPU)
+    def Render (self) -> CTK.RenderResponse:
+        return self._render(JS_CPU)
 
 
 #
@@ -169,9 +173,9 @@ class Memory_Info (CTK.Box):
 
         if stats.mem.total:
             if stats.mem.total < (1024**2):
-                total = "%dMB" %(stats.mem.total / 1024)
+                total = f"{int(stats.mem.total / 1024)}MB"
             else:
-                total = "%.1fGB" %(stats.mem.total / (1024.0 ** 2))
+                total = f"{stats.mem.total / 1024.0 ** 2:.1f}GB"
         else:
             total = _('Unknown RAM')
 
@@ -182,8 +186,8 @@ class Memory_Meter (Meter):
     def __init__ (self):
         Meter.__init__ (self, 'memory', Memory_Info())
 
-    def Render (self):
-        return Meter.Render (self, JS_MEMORY)
+    def Render (self) -> CTK.RenderResponse:
+        return self._render(JS_MEMORY)
 
 
 #

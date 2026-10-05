@@ -20,10 +20,10 @@
 # 02110-1301, USA.
 #
 
-from consts import *
-from Widget import Widget
-from Server import publish
-from util import props_to_str
+from .consts import *
+from .Widget import Widget
+from .Server import publish
+from .util import props_to_str
 
 HTML = """
 <div id="%(id)s" %(props)s>
@@ -79,7 +79,7 @@ class Refreshable (Widget):
             self.props['class'] = 'refreshable'
 
         self.id         = self.props.pop('id')
-        self.url        = "/refreshable/%s" %(self.id)
+        self.url        = f"/refreshable/{self.id}"
         self.build_func = None
 
     def register (self, build_func=None, **kwargs):
@@ -93,6 +93,8 @@ class Refreshable (Widget):
         publish (self.url, render_plain_html, build_func=build_func, **kwargs)
 
     def Render (self):
+        if self.build_func is None:
+            return Widget.Render(self)
         render = self.build_func (**self.params)
 
         props = {'id':      self.id,
@@ -106,10 +108,10 @@ class Refreshable (Widget):
         """Return Javascript snippet required to update the contents
         of the refreshable element."""
         if not selector:
-            selector = "$('#%s')" %(self.id)
+            selector = f"$('#{self.id}')"
 
         if len(on_success) > 0:
-             on_success = "$(document).ready(function(){ %s });" % on_success
+             on_success = "$(document).ready(function(){{ {} }});".format(on_success)
 
         props = {'selector':   selector,
                  'url':        url or self.url,

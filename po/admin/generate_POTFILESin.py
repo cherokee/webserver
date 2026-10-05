@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # Cherokee POTFILES.in generator
 #
@@ -11,10 +11,10 @@
 import os, re
 
 # Configuration
-DIRS = [('admin', ['.+\.py$']),
-        (os.path.join('admin','wizards'), ['.+\.py$']),
-        (os.path.join('admin','plugins'), ['.+\.py$']),
-        (os.path.join('admin','CTK','CTK'), ['.+\.py$']),]
+DIRS = [('admin', [r'.+\.py$']),
+        (os.path.join('admin','wizards'), [r'.+\.py$']),
+        (os.path.join('admin','plugins'), [r'.+\.py$']),
+        (os.path.join('admin','CTK','CTK'), [r'.+\.py$']),]
 
 def main():
     # Figure a few paths
@@ -48,7 +48,7 @@ def main():
 
     # Print result
     pot_files.sort()
-    print ('\n'.join (pot_files)),
+    print(('\n'.join (pot_files)), end=' ')
 
 if __name__ == "__main__":
     main()

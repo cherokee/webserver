@@ -1,5 +1,9 @@
 # CTK: Cherokee Toolkit
 #
+
+from __future__ import annotations
+
+from typing import Any, Optional
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
@@ -20,14 +24,15 @@
 # 02110-1301, USA.
 #
 
-import JS
-from Container import Container
-from Proxy import Proxy
-from Server import get_scgi
-from Image import ImageStock
-from Box import Box
-from PageCleaner import Uniq_Block
-from util import props_to_str, json_dump
+from . import JS
+from .Container import Container
+from .Proxy import Proxy
+from .i18n import _
+from .Server import get_scgi
+from .Image import ImageStock
+from .Box import Box
+from .PageCleaner import Uniq_Block
+from .util import props_to_str, json_dump
 
 
 HEADERS = [
@@ -61,16 +66,16 @@ def py2js_dic (d):
     for key in d:
         val = d[key]
         if type(val) in (bool, int, float, list):
-             js_pairs.append ("'%s': %s" %(key, json_dump(val)))
+             js_pairs.append (f"'{key}': {json_dump(val)}")
         elif type(val) == str:
             if '/* code */' in val:
-                js_pairs.append ("'%s': %s" %(key, val))
+                js_pairs.append (f"'{key}': {val}")
             else:
-                js_pairs.append ("'%s': '%s'" %(key, val))
+                js_pairs.append (f"'{key}': '{val}'")
         else:
             assert False, "Unknown data type"
 
-    return "{%s}" % (", ".join(js_pairs))
+    return "{{{}}}".format(", ".join(js_pairs))
 
 
 class Dialog (Container):
@@ -113,7 +118,7 @@ class Dialog (Container):
         if 'id' in self.props:
             self.id = self.props.pop('id')
         else:
-            self.id = 'dialog%d'%(self.uniq_id)
+            self.id = f'dialog{int(self.uniq_id)}'
 
         # Defaults
         if 'modal' not in self.js_props:
@@ -190,28 +195,31 @@ class Dialog (Container):
             buttons_js.append (tmp%(locals()))
 
         # Add the property
-        js = '/* code */ { %s }' %(','.join(buttons_js))
+        js = '/* code */ {{ {} }}'.format(','.join(buttons_js))
         return js
 
-    def JS_to_show (self):
+    def JS_to_show (self, how: str | int = '', selector: Optional[str] = None):
         """Return Javascript snippet to open the dialog."""
-        return "$('#%s').show().dialog('open');" % (self.id)
+        return f"$('#{self.id}').show().dialog('open');"
 
     def JS_to_close (self):
         """Return Javascript snippet to close the dialog."""
-        return " $('#%s').dialog('close');" % (self.id)
+        return f" $('#{self.id}').dialog('close');"
 
-    def JS_to_trigger (self, event, _params=[]):
+    def JS_to_trigger (self, event, param: Any = None,
+                       selector: Optional[str] = None):
         """Return Javascript snippet to trigger specified event."""
         props = {'id': self.id, 'event': event}
 
-        tmp = ["type: '%s'"%(event)]
-        for p in _params:
+        tmp = [f"type: '{event}'"]
+        params = param if isinstance(param, list) else []
+        for p in params:
             assert type(p) == tuple and len(p) == 2
-            tmp.append ('%s:%s' %(p[0],p[1]))
+            tmp.append (f'{p[0]}:{p[1]}')
 
         props['details'] = ','.join(tmp)
-        return "$('#%(id)s .submitter').trigger({%(details)s});" %(props)
+        target = selector or f"$('#{self.id} .submitter')"
+        return "{}.trigger({{{}}});".format(target, props['details'])
 
 
 class DialogProxy (Dialog):
@@ -248,9 +256,9 @@ class DialogProxyLazy (Dialog):
         self += box
 
         # Event
-        self.bind ('dialogopen', "$('#%s').show();" %(img.id) + \
+        self.bind ('dialogopen', f"$('#{img.id}').show();" + \
                                  JS.Ajax(url, type = 'GET',
-                                         success = '$("#%s").html(data);'%(box.id)))
+                                         success = f'$("#{box.id}").html(data);'))
 
 
 class Dialog2Buttons (Dialog):

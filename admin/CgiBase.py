@@ -24,6 +24,7 @@
 
 import CTK
 import Cherokee
+from CTK.i18n import _, N_
 import validations
 import Handler
 
@@ -50,7 +51,7 @@ def commit():
 
     # New
     if new_name:
-        CTK.cfg['%s!%s'%(key, new_name)] = new_value
+        CTK.cfg[f'{key}!{new_name}'] = new_value
         return CTK.cfg_reply_ajax_ok()
 
     # Modification
@@ -62,15 +63,15 @@ class PluginHandlerCGI (Handler.PluginHandler):
         def __init__ (self, refresh, key):
             CTK.Container.__init__ (self)
 
-            x_real_ip     = int(CTK.cfg.get_val('%s!x_real_ip_enabled'    %(key), "0"))
-            x_real_ip_all = int(CTK.cfg.get_val('%s!x_real_ip_access_all' %(key), "0"))
+            x_real_ip     = int(CTK.cfg.get_val(f'{key}!x_real_ip_enabled', "0"))
+            x_real_ip_all = int(CTK.cfg.get_val(f'{key}!x_real_ip_access_all', "0"))
 
             table = CTK.PropsTable()
-            table.Add (_('Read X-Real-IP'), CTK.CheckCfgText('%s!x_real_ip_enabled'%(key), False, _('Enabled')), _(NOTE_X_REAL_IP))
+            table.Add (_('Read X-Real-IP'), CTK.CheckCfgText(f'{key}!x_real_ip_enabled', False, _('Enabled')), _(NOTE_X_REAL_IP))
             if x_real_ip:
-                table.Add (_('Don\'t check origin'), CTK.CheckCfgText('%s!x_real_ip_access_all'%(key), False, _('Enabled')), _(NOTE_X_REAL_IP_ALL))
+                table.Add (_('Don\'t check origin'), CTK.CheckCfgText(f'{key}!x_real_ip_access_all', False, _('Enabled')), _(NOTE_X_REAL_IP_ALL))
                 if not x_real_ip_all:
-                    table.Add (_('Accept from Hosts'), CTK.TextCfg ('%s!x_real_ip_access'%(key), False), _(NOTE_X_REAL_IP_ACCESS))
+                    table.Add (_('Accept from Hosts'), CTK.TextCfg (f'{key}!x_real_ip_access', False), _(NOTE_X_REAL_IP_ACCESS))
 
             submit = CTK.Submitter (URL_APPLY)
             submit += table
@@ -81,7 +82,7 @@ class PluginHandlerCGI (Handler.PluginHandler):
         def __init__ (self, refresh, key):
             CTK.Container.__init__ (self)
 
-            envs = CTK.cfg.keys('%s!env' %(key))
+            envs = CTK.cfg.keys(f'{key}!env')
             envs.sort()
             if not envs:
                 return
@@ -91,7 +92,7 @@ class PluginHandlerCGI (Handler.PluginHandler):
             table += [CTK.RawHTML(x) for x in (_('Name'), _('Value'))]
 
             for env in envs:
-                pre   = '%s!env!%s'%(key, env)
+                pre   = f'{key}!env!{env}'
                 value = CTK.TextCfg (pre, False)
                 remove = CTK.ImageStock('del')
                 remove.bind('click', CTK.JS.Ajax (URL_APPLY, data = {pre: ''},
@@ -117,34 +118,34 @@ class PluginHandlerCGI (Handler.PluginHandler):
         table = CTK.PropsTable()
 
         if self.show_script_alias:
-            table.Add (_("Script Alias"), CTK.TextCfg('%s!script_alias'%(self.key), True),        _(NOTE_SCRIPT_ALIAS))
+            table.Add (_("Script Alias"), CTK.TextCfg(f'{self.key}!script_alias', True),        _(NOTE_SCRIPT_ALIAS))
         if self.show_change_uid:
-            table.Add (_("Change UID"),   CTK.CheckCfgText('%s!change_user'%(self.key), False, _('Change')), _(NOTE_CHANGE_USER))
+            table.Add (_("Change UID"),   CTK.CheckCfgText(f'{self.key}!change_user', False, _('Change')), _(NOTE_CHANGE_USER))
 
-        table.Add (_('Error handler'),        CTK.CheckCfgText('%s!error_handler'%(self.key),    True,  _('Enabled')), _(NOTE_ERROR_HANDLER))
-        table.Add (_('Check file'),           CTK.CheckCfgText('%s!check_file'%(self.key),       True,  _('Enabled')), _(NOTE_CHECK_FILE))
-        table.Add (_('Pass Request Headers'), CTK.CheckCfgText('%s!pass_req_headers'%(self.key), True,  _('Enabled')), _(NOTE_PASS_REQ))
-        table.Add (_('Allow X-Sendfile'),     CTK.CheckCfgText('%s!xsendfile'%(self.key),        False, _('Enabled')), _(NOTE_XSENDFILE))
-        table.Add (_('Use I/O cache'),        CTK.CheckCfgText('%s!iocache'%(self.key),          True,  _('Enabled')), _(NOTE_IOCACHE))
+        table.Add (_('Error handler'),        CTK.CheckCfgText(f'{self.key}!error_handler',    True,  _('Enabled')), _(NOTE_ERROR_HANDLER))
+        table.Add (_('Check file'),           CTK.CheckCfgText(f'{self.key}!check_file',       True,  _('Enabled')), _(NOTE_CHECK_FILE))
+        table.Add (_('Pass Request Headers'), CTK.CheckCfgText(f'{self.key}!pass_req_headers', True,  _('Enabled')), _(NOTE_PASS_REQ))
+        table.Add (_('Allow X-Sendfile'),     CTK.CheckCfgText(f'{self.key}!xsendfile',        False, _('Enabled')), _(NOTE_XSENDFILE))
+        table.Add (_('Use I/O cache'),        CTK.CheckCfgText(f'{self.key}!iocache',          True,  _('Enabled')), _(NOTE_IOCACHE))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter (table)
 
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Common CGI Options')))
+        self += CTK.RawHTML (f"<h2>{_('Common CGI Options')}</h2>")
         self += submit
 
         # X-Real-IP
         refresh = CTK.Refreshable ({'id': 'x_real_ip'})
         refresh.register (lambda: self.X_Real_IP(refresh, self.key).Render())
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Fixed Authentication List')))
+        self += CTK.RawHTML (f"<h2>{_('Fixed Authentication List')}</h2>")
         self += CTK.Indenter (refresh)
 
         # Environment
         refresh = CTK.Refreshable ({'id': 'cgi_environ_list'})
         refresh.register (lambda: self.Environ(refresh, self.key).Render())
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Custom Environment Variables')))
+        self += CTK.RawHTML (f"<h2>{_('Custom Environment Variables')}</h2>")
         self += CTK.Indenter (refresh)
 
         new_name  = CTK.TextField ({'name': 'tmp!new_name',  'class': 'noauto'})
@@ -157,13 +158,13 @@ class PluginHandlerCGI (Handler.PluginHandler):
         table += [new_name, new_value, new_add]
 
         submit = CTK.Submitter (URL_APPLY)
-        submit += CTK.Hidden('key', '%s!env'%(self.key))
+        submit += CTK.Hidden('key', f'{self.key}!env')
         submit += table
         submit.bind ('submit_success', refresh.JS_to_refresh() + new_name.JS_to_clean() + new_value.JS_to_clean())
 
-        self += CTK.RawHTML ("<h3>%s</h3>" % (_('Add New Custom Environment Variable')))
+        self += CTK.RawHTML (f"<h3>{_('Add New Custom Environment Variable')}</h3>")
         self += CTK.Indenter(submit)
 
         # Publish
-        VALS = [("%s!script_alias"%(self.key), validations.is_path)]
-        CTK.publish ('^%s'%(URL_APPLY), commit, validation=VALS, method="POST")
+        VALS = [(f"{self.key}!script_alias", validations.is_path)]
+        CTK.publish (f'^{URL_APPLY}', commit, validation=VALS, method="POST")

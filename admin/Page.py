@@ -27,6 +27,7 @@ import copy
 
 import CTK
 import Cherokee
+from CTK.i18n import _, N_
 import SavingChecks
 
 from configured import *
@@ -86,15 +87,15 @@ class Save:
             for error in errors:
                 link = CTK.Link (error.url, CTK.RawHTML(_("Solve")))
                 content  = CTK.Box()
-                content += CTK.RawHTML ('%s: '%(error.title))
+                content += CTK.RawHTML (f'{error.title}: ')
                 content += link
                 ul += content
 
             all = CTK.Box({'id': 'sanity-msg'})
-            all += CTK.RawHTML ("<h2>%s</h2>"%(SAVE_CHECK_H1))
-            all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P1))
+            all += CTK.RawHTML (f"<h2>{SAVE_CHECK_H1}</h2>")
+            all += CTK.RawHTML (f"<p>{SAVE_CHECK_P1}</p>")
             all += CTK.Box ({'id': "sanity-errors"}, ul)
-            all += CTK.RawHTML ("<p>%s</p>"  %(SAVE_CHECK_P2))
+            all += CTK.RawHTML (f"<p>{SAVE_CHECK_P2}</p>")
 
             render = all.Render()
             return render.toStr()
@@ -103,11 +104,11 @@ class Save:
         CTK.cfg.save()
 
         all = CTK.Box ({'id': "buttons"})
-        all += CTK.RawHTML ("<h2>%s</h2>" %(_("Configuration successfully saved")))
+        all += CTK.RawHTML (f"<h2>{_('Configuration successfully saved')}</h2>")
 
         if Cherokee.server.is_alive():
             # Prompt about the reset
-            all += CTK.RawHTML ('<p>%s</p>' %(_(SAVED_RESTART)))
+            all += CTK.RawHTML (f'<p>{_(SAVED_RESTART)}</p>')
 
             submit = CTK.Submitter (URL_SAVE_NONE)
             submit += CTK.Hidden('none', 'foo')
@@ -128,7 +129,7 @@ class Save:
             all += submit
         else:
             # Close the dialog
-            all += CTK.RawHTML ('<p>%s</p>' %(_(SAVED_NO_RUNNING)))
+            all += CTK.RawHTML (f'<p>{_(SAVED_NO_RUNNING)}</p>')
 
             submit = CTK.Submitter (URL_SAVE_NONE)
             submit += CTK.Hidden('none', 'foo')
@@ -159,12 +160,12 @@ class Base (CTK.Page):
         template['advanced']  = _('Advanced')
         template['help']      = _('Help')
         template['updating']  = _('Updating...')
-        template['HELP_HTML'] = kwargs.has_key('helps') and HELP_HTML or ''
-        template['HELP_JS']   = kwargs.has_key('helps') and HELP_JS   or ''
+        template['HELP_HTML'] = 'helps' in kwargs and HELP_HTML or ''
+        template['HELP_JS']   = 'helps' in kwargs and HELP_JS   or ''
 
         # <body> property
         if body_id:
-            template['body_props'] = ' id="body-%s"' %(body_id)
+            template['body_props'] = f' id="body-{body_id}"'
 
         # Save dialog
         dialog = CTK.DialogProxyLazy (URL_SAVE, {'title': _(SAVED_NOTICE), 'autoOpen': False, 'draggable': False, 'width': 500})
@@ -175,7 +176,7 @@ class Base (CTK.Page):
         heads.append ('<link rel="stylesheet" type="text/css" href="/static/css/cherokee-admin.css" />')
 
         # Help translation
-        if kwargs.has_key('helps'):
+        if 'helps' in kwargs:
             helps = [(x[0], _(x[1])) for x in kwargs['helps']]
             kwargs['helps'] = helps
 

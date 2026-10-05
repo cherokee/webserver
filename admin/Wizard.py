@@ -26,6 +26,7 @@ import re
 import os
 import CTK
 import copy
+from CTK.i18n import _, N_
 
 URL_CAT_LIST_VSRV   =   '/wizard/category/vsrv'
 URL_CAT_LIST_VSRV_R = r'^/wizard/category/vsrv/(.*)$'
@@ -46,7 +47,7 @@ class Wizard (CTK.Box):
     def __init__ (self, _props={}):
         props = _props.copy()
 
-        if 'class' in self.props:
+        if 'class' in props:
             props['class'] += ' wizard'
         else:
             props['class'] = 'wizard'
@@ -54,10 +55,10 @@ class Wizard (CTK.Box):
         CTK.Box.__init__ (self, props)
 
     def show (self):
-        raise NotImplementedError, 'Wizard.show must be implemented'
+        raise NotImplementedError('Wizard.show must be implemented')
 
 
-class Wizard_Rule (CTK.Box):
+class Wizard_Rule (Wizard):
     def __init__ (self, key):
         Wizard.__init__ (self)
         self.key = key
@@ -106,8 +107,8 @@ class Categories:
 class Icon (CTK.Image):
     def __init__ (self, name, _props={}):
         props = _props.copy()
-        props['src'] = '/static/images/wizards/%s.png'%(name)
-        props['alt'] = "%s logo" %(name.capitalize())
+        props['src'] = f'/static/images/wizards/{name}.png'
+        props['alt'] = f"{name.capitalize()} logo"
 
         if 'class' in props:
             props['class'] += ' wizard-icon'
@@ -160,7 +161,7 @@ class CategoryList_Widget (CTK.Box):
         wlist = CTK.List({'class': 'wizard-list'})
 
         # Find the right group
-        tmp = filter (lambda g: g['name'] == category, wizard_list)
+        tmp = [g for g in wizard_list if g['name'] == category]
         if tmp:
             for w in tmp[0]['list']:
                 descr, title = w['descr'], w['title']
@@ -212,12 +213,12 @@ class CloneLogsCfg (CTK.ComboCfg):
         options = [('', _('Do not configure'))]
 
         for v in CTK.cfg.keys('vserver'):
-            pre  = 'vserver!%s!logger' %(v)
+            pre  = f'vserver!{v}!logger'
             log  = CTK.cfg.get_val(pre)
-            nick = CTK.cfg.get_val('vserver!%s!nick'%(v))
+            nick = CTK.cfg.get_val(f'vserver!{v}!nick')
             if not log:
                 continue
-            options.append (('vserver!%s'%(v), '%s (%s)'%(nick, log)))
+            options.append ((f'vserver!{v}', f'{nick} ({log})'))
 
         # Init
         CTK.ComboCfg.__init__ (self, cfg, options, {'class': 'noauto'})
@@ -230,22 +231,22 @@ def CloneLogsCfg_Apply (key_tmp, vserver):
         return
 
     # Clone
-    CTK.cfg.clone ('%s!logger'%(logging_as),       '%s!logger'%(vserver))
-    CTK.cfg.clone ('%s!error_writer'%(logging_as), '%s!error_writer'%(vserver))
+    CTK.cfg.clone (f'{logging_as}!logger',       f'{vserver}!logger')
+    CTK.cfg.clone (f'{logging_as}!error_writer', f'{vserver}!error_writer')
 
 
 def AddUsualStaticFiles (rule_pre, files = USUAL_STATIC_FILES):
-    CTK.cfg['%s!match'%(rule_pre)]           = 'fullpath'
-    CTK.cfg['%s!handler'%(rule_pre)]         = 'file'
-    CTK.cfg['%s!handler!iocache'%(rule_pre)] = '1'
-    CTK.cfg['%s!encoder!gzip'%(rule_pre)]    = '0'
-    CTK.cfg['%s!encoder!deflate'%(rule_pre)] = '0'
-    CTK.cfg['%s!expiration'%(rule_pre)]      = 'time'
-    CTK.cfg['%s!expiration!time'%(rule_pre)] = '1h'
+    CTK.cfg[f'{rule_pre}!match']           = 'fullpath'
+    CTK.cfg[f'{rule_pre}!handler']         = 'file'
+    CTK.cfg[f'{rule_pre}!handler!iocache'] = '1'
+    CTK.cfg[f'{rule_pre}!encoder!gzip']    = '0'
+    CTK.cfg[f'{rule_pre}!encoder!deflate'] = '0'
+    CTK.cfg[f'{rule_pre}!expiration']      = 'time'
+    CTK.cfg[f'{rule_pre}!expiration!time'] = '1h'
 
     n = 1
     for file in files:
-        CTK.cfg['%s!match!fullpath!%d'%(rule_pre,n)] = file
+        CTK.cfg[f'{rule_pre}!match!fullpath!{int(n)}'] = file
         n += 1
 
 
@@ -257,7 +258,7 @@ class CookBookBox (CTK.Box):
         if help.startswith('http://'):
             link = help
         else:
-            link = '/help/%s.html'%(help)
+            link = f'/help/{help}.html'
 
         self += CTK.Link (link, CTK.RawHTML(_(text)))
 
@@ -280,4 +281,4 @@ if not _is_init:
 
 CTK.publish (URL_CAT_LIST_VSRV_R,   CategoryList_Vsrv)
 CTK.publish (URL_CAT_LIST_RULE_R,   CategoryList_Rule)
-CTK.publish ('^%s'%(URL_CAT_APPLY), CategoryList_Apply, method="POST")
+CTK.publish (f'^{URL_CAT_APPLY}', CategoryList_Apply, method="POST")

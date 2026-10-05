@@ -61,10 +61,10 @@ def create_selfsigned_cert (dir_path, filename, domain, bits=1024, days=9999):
     f.close()
 
     # Create the self signed cert
-    crt_fp = os.path.join (dir_path, "%s.crt"%(filename))
-    key_fp = os.path.join (dir_path, "%s.key"%(filename))
+    crt_fp = os.path.join (dir_path, f"{filename}.crt")
+    key_fp = os.path.join (dir_path, f"{filename}.key")
 
-    cmd = "openssl req -new -x509 -nodes -out %(crt_fp)s -keyout %(key_fp)s -config %(conf_fp)s" %(locals())
+    cmd = f"openssl req -new -x509 -nodes -out {locals()['crt_fp']} -keyout {locals()['key_fp']} -config {locals()['conf_fp']}"
     re = run (cmd, stdout=False, stderr=True, retcode=True)
 
     os.unlink (conf_fp)
@@ -74,4 +74,4 @@ def create_selfsigned_cert (dir_path, filename, domain, bits=1024, days=9999):
 
 
 if __name__ == "__main__":
-    create_selfsigned_cert ("/tmp", "test")
+    create_selfsigned_cert ("/tmp", "test", "localhost")

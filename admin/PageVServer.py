@@ -24,6 +24,7 @@
 
 import CTK
 import copy
+from CTK.i18n import _, N_
 import Page
 import Cherokee
 import validations
@@ -123,18 +124,18 @@ def validation_ca_list (text):
     return text
 
 VALIDATIONS = [
-    ("vserver![\d]+!user_dir",                   validations.is_safe_id),
-    ("vserver![\d]+!document_root",              validations.is_dev_null_or_local_dir_exists),
-    ("vserver![\d]+!post_max_len",               validations.is_positive_int),
-    ("vserver![\d]+!ssl_certificate_file",       validations.is_local_file_exists),
-    ("vserver![\d]+!ssl_certificate_key_file",   validations.is_valid_certkey),
-    ("vserver![\d]+!ssl_ca_list_file",           validation_ca_list),
-    ("vserver![\d]+!ssl_verify_depth",           validations.is_positive_int),
-    ("vserver![\d]+!error_writer!filename",      validations.can_create_file),
-    ("vserver![\d]+!error_writer!command",       validations.is_local_file_exists),
-    ("vserver![\d]+!logger!.+?!filename",        validations.can_create_file),
-    ("vserver![\d]+!logger!.+?!command",         validations.is_local_file_exists),
-    ("vserver![\d]+!logger!x_real_ip_access$",   validations.is_ip_or_netmask_list),
+    ("vserver![\\d]+!user_dir",                   validations.is_safe_id),
+    ("vserver![\\d]+!document_root",              validations.is_dev_null_or_local_dir_exists),
+    ("vserver![\\d]+!post_max_len",               validations.is_positive_int),
+    ("vserver![\\d]+!ssl_certificate_file",       validations.is_local_file_exists),
+    ("vserver![\\d]+!ssl_certificate_key_file",   validations.is_valid_certkey),
+    ("vserver![\\d]+!ssl_ca_list_file",           validation_ca_list),
+    ("vserver![\\d]+!ssl_verify_depth",           validations.is_positive_int),
+    ("vserver![\\d]+!error_writer!filename",      validations.can_create_file),
+    ("vserver![\\d]+!error_writer!command",       validations.is_local_file_exists),
+    ("vserver![\\d]+!logger!.+?!filename",        validations.can_create_file),
+    ("vserver![\\d]+!logger!.+?!command",         validations.is_local_file_exists),
+    ("vserver![\\d]+!logger!x_real_ip_access$",   validations.is_ip_or_netmask_list),
 ]
 
 HELPS = [
@@ -160,15 +161,15 @@ BEHAVIOR_TAGS = [
 
 
 def commit_clone():
-    num = re.findall(r'^%s/([\d]+)/clone$'%(URL_BASE), CTK.request.url)[0]
+    num = re.findall(rf'^{URL_BASE}/([\d]+)/clone$', CTK.request.url)[0]
     next = CTK.cfg.get_next_entry_prefix ('vserver')
 
-    orig  = CTK.cfg.get_val ('vserver!%s!nick'%(num))
-    names = [CTK.cfg.get_val('vserver!%s!nick'%(x)) for x in CTK.cfg.keys('vserver')]
+    orig  = CTK.cfg.get_val (f'vserver!{num}!nick')
+    names = [CTK.cfg.get_val(f'vserver!{x}!nick') for x in CTK.cfg.keys('vserver')]
     new_nick = find_copy_name (orig, names)
 
-    CTK.cfg.clone ('vserver!%s'%(num), next)
-    CTK.cfg['%s!nick' %(next)] = new_nick
+    CTK.cfg.clone (f'vserver!{num}', next)
+    CTK.cfg[f'{next}!nick'] = new_nick
     return CTK.cfg_reply_ajax_ok()
 
 
@@ -176,16 +177,16 @@ class HostMatchWidget_GeneralProps (CTK.Container):
     def __init__ (self, vsrv_num, refresh):
         CTK.Container.__init__ (self)
 
-        pre       = "vserver!%s" %(vsrv_num)
-        url_apply = "%s/%s" %(URL_APPLY, vsrv_num)
+        pre       = f"vserver!{vsrv_num}"
+        url_apply = f"{URL_APPLY}/{vsrv_num}"
 
-        if CTK.cfg.get_val ('%s!match'%(pre)):
+        if CTK.cfg.get_val (f'{pre}!match'):
             table = CTK.PropsAuto (url_apply)
-            table.Add (_('Match nickname'), CTK.CheckCfgText('%s!match!nick'%(pre), True, _('Match')), _(NOTE_MATCH_NICK))
+            table.Add (_('Match nickname'), CTK.CheckCfgText(f'{pre}!match!nick', True, _('Match')), _(NOTE_MATCH_NICK))
             submit = CTK.Submitter (url_apply)
             submit += CTK.Indenter (table)
 
-            self += CTK.RawHTML ('<h2>%s</h2>' %(_('Host Match')))
+            self += CTK.RawHTML (f"<h2>{_('Host Match')}</h2>")
             self += submit
 
 
@@ -193,10 +194,10 @@ class HostMatchWidget (CTK.Container):
     def __init__ (self, vsrv_num):
         CTK.Container.__init__ (self)
 
-        pre        = "vserver!%s" %(vsrv_num)
-        url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
+        pre        = f"vserver!{vsrv_num}"
+        url_apply  = f"{URL_APPLY}/{vsrv_num}"
         is_default = CTK.cfg.get_lowest_entry("vserver") == int(vsrv_num)
-        is_complex = CTK.cfg.get_val ('%s!match'%(pre)) == 'v_or'
+        is_complex = CTK.cfg.get_val (f'{pre}!match') == 'v_or'
 
         # Default Virtual Server
         if is_default:
@@ -214,12 +215,12 @@ class HostMatchWidget (CTK.Container):
 
             # Left side rule
             table = CTK.PropsAuto (url_apply)
-            modul = CTK.PluginSelector ('%s!match!left'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
-            table.Add ('%s 1'%(_('Method')), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
+            modul = CTK.PluginSelector (f'{pre}!match!left', trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+            table.Add (f"{_('Method')} 1", modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
             self += CTK.Indenter (table)
             self += modul
 
-            submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
+            submit = CTK.Submitter (f'{URL_APPLY}/{vsrv_num}/vmatch')
             submit += CTK.Hidden ('op', 'del_1')
             submit.bind ('submit_success', refresh.JS_to_refresh())
 
@@ -230,12 +231,12 @@ class HostMatchWidget (CTK.Container):
 
             # Right side rule
             table = CTK.PropsAuto (url_apply)
-            modul = CTK.PluginSelector ('%s!match!right'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
-            table.Add ('%s 2'%(_('Method')), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
+            modul = CTK.PluginSelector (f'{pre}!match!right', trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+            table.Add (f"{_('Method')} 2", modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
             self += CTK.Indenter (table)
             self += modul
 
-            submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
+            submit = CTK.Submitter (f'{URL_APPLY}/{vsrv_num}/vmatch')
             submit += CTK.Hidden ('op', 'del_2')
             submit.bind ('submit_success', refresh.JS_to_refresh())
 
@@ -253,15 +254,15 @@ class HostMatchWidget (CTK.Container):
 
             # Match module
             table = CTK.PropsAuto (url_apply)
-            modul = CTK.PluginSelector ('%s!match'%(pre), trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
+            modul = CTK.PluginSelector (f'{pre}!match', trans_options(Cherokee.support.filter_available(VRULES)), vsrv_num=vsrv_num)
             modul.selector_widget.bind ('changed', refresh.JS_to_refresh())
             table.Add (_('Method'), modul.selector_widget, _(NOTE_MATCHING_METHOD), False)
 
-            self += CTK.RawHTML ('<h2>%s</h2>' %(_('How to match this Virtual Server')))
+            self += CTK.RawHTML (f"<h2>{_('How to match this Virtual Server')}</h2>")
             self += CTK.Indenter (table)
             self += modul
 
-            submit = CTK.Submitter ('%s/%s/vmatch'%(URL_APPLY, vsrv_num))
+            submit = CTK.Submitter (f'{URL_APPLY}/{vsrv_num}/vmatch')
             submit += CTK.Hidden ('op', 'or')
 
             link_add = CTK.Link (None, CTK.RawHTML (_('Add an additional matching criteria')))
@@ -280,8 +281,8 @@ def HostMatchWidget_Apply():
         CTK.cfg[new] = val
         CTK.cfg.set_sub_node (new, tmp)
 
-    vsrv_num = re.findall (r'^%s/(\d+)/vmatch'%(URL_APPLY), CTK.request.url)[0]
-    pre      = 'vserver!%s!match' %(vsrv_num)
+    vsrv_num = re.findall (rf'^{URL_APPLY}/(\d+)/vmatch', CTK.request.url)[0]
+    pre      = f'vserver!{vsrv_num}!match'
 
     op = CTK.post.get_val ('op')
     if op == 'or':
@@ -290,26 +291,26 @@ def HostMatchWidget_Apply():
         if not CTK.cfg.get_val (pre):
             return CTK.cfg_reply_ajax_ok()
 
-        move (pre, "%s!left"%(pre))
+        move (pre, f"{pre}!left")
         CTK.cfg[pre] = 'v_or'
         return CTK.cfg_reply_ajax_ok()
 
     elif op == 'del_1':
         # Is the second rule empty?
-        if not CTK.cfg.get_val ('%s!right'%(pre)):
+        if not CTK.cfg.get_val (f'{pre}!right'):
             del (CTK.cfg[pre])
             return CTK.cfg_reply_ajax_ok()
 
-        move ('%s!right'%(pre), pre)
+        move (f'{pre}!right', pre)
         return CTK.cfg_reply_ajax_ok()
 
     elif op == 'del_2':
         # Is the first rule empty?
-        if not CTK.cfg.get_val ('%s!left'%(pre)):
+        if not CTK.cfg.get_val (f'{pre}!left'):
             del (CTK.cfg[pre])
             return CTK.cfg_reply_ajax_ok()
 
-        move ('%s!left'%(pre), pre)
+        move (f'{pre}!left', pre)
         return CTK.cfg_reply_ajax_ok()
 
     return {'ret': 'fail'}
@@ -317,7 +318,7 @@ def HostMatchWidget_Apply():
 
 class RuleLink (CTK.Link):
     def __init__ (self, vsrv_num, rule_num, content):
-        CTK.Link.__init__ (self, '/vserver/%s/rule/%s'%(vsrv_num, rule_num), content)
+        CTK.Link.__init__ (self, f'/vserver/{vsrv_num}/rule/{rule_num}', content)
         self.vsrv_num = vsrv_num
         self.rule_num = rule_num
 
@@ -330,11 +331,11 @@ class RuleLink (CTK.Link):
                  'cookie_name': COOKIE_NAME_DEFAULT}
 
         render = CTK.Link.Render (self)
-        render.js += """$('#%(id)s').click(function(){
-            $.cookie ('%(cookie_name)s', '%(rule_num)s_%(vsrv_num)s', { path: '/vserver/%(vsrv_num)s/rule'});
-            window.location.replace ('/vserver/%(vsrv_num)s/rule');
+        render.js += """$('#{id}').click(function(){{
+            $.cookie ('{cookie_name}', '{rule_num}_{vsrv_num}', {{ path: '/vserver/{vsrv_num}/rule'}});
+            window.location.replace ('/vserver/{vsrv_num}/rule');
             return false;
-        });"""%(props)
+        }});""".format(**props)
 
         return render
 
@@ -346,16 +347,16 @@ class BehaviorWidget (CTK.Container):
         # List
         table = CTK.Table({'id': 'rules-table'})
         table.set_header(1)
-        table += [CTK.RawHTML('<span title="%s">%s</span>'%(_(x[0]),_(x[1]))) for x in BEHAVIOR_TAGS]
+        table += [CTK.RawHTML(f'<span title="{_(x[0])}">{_(x[1])}</span>') for x in BEHAVIOR_TAGS]
 
-        rules = CTK.cfg.keys('vserver!%s!rule'%(vsrv_num))
-        rules.sort (lambda x,y: cmp(int(x), int(y)))
+        rules = CTK.cfg.keys(f'vserver!{vsrv_num}!rule')
+        rules.sort (key=int)
         rules.reverse()
 
         for r in rules:
             table += self._get_row (vsrv_num, r)
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Behavior Rules')))
+        self += CTK.RawHTML (f"<h2>{_('Behavior Rules')}</h2>")
         self += CTK.RawHTML (js=JS_TR_ODD+JS_TR_INACTIVE)
         self += CTK.Indenter (table)
 
@@ -365,72 +366,72 @@ class BehaviorWidget (CTK.Container):
             first_rule = '0'
 
         button = CTK.Button(_('Rule Management'), {'id':'rule-management'})
-        button.bind ('click', "window.location = '/vserver/%s/rule/%s'"%(vsrv_num, first_rule))
+        button.bind ('click', f"window.location = '/vserver/{vsrv_num}/rule/{first_rule}'")
         self += CTK.Indenter (button)
 
 
     def _get_row (self, vsrv_num, r):
-        rule = Rule ('vserver!%s!rule!%s!match'%(vsrv_num, r))
+        rule = Rule (f'vserver!{vsrv_num}!rule!{r}!match')
         rule_name = rule.GetName()
-        link = RuleLink (vsrv_num, r, CTK.RawHTML ('<span title="%s">%s</span>' %(rule_name, rule_name)))
+        link = RuleLink (vsrv_num, r, CTK.RawHTML (f'<span title="{rule_name}">{rule_name}</span>'))
 
         handler, auth, root, secure, enc, exp, flcache, timeout, shaping, log, final, active = [None for x in range(12)]
 
-        tmp = CTK.cfg.get_val ('vserver!%s!rule!%s!handler'%(vsrv_num, r), '')
+        tmp = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!handler', '')
         if tmp:
-            handler = CTK.RawHTML (_(filter (lambda x: x[0] == tmp, HANDLERS)[0][1]))
+            handler = CTK.RawHTML (_([x for x in HANDLERS if x[0] == tmp][0][1]))
 
-        tmp = CTK.cfg.get_val ('vserver!%s!rule!%s!auth'%(vsrv_num, r), '')
+        tmp = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!auth', '')
         if tmp:
-            auth = CTK.RawHTML (_(filter (lambda x: x[0] == tmp, VALIDATORS)[0][1]))
+            auth = CTK.RawHTML (_([x for x in VALIDATORS if x[0] == tmp][0][1]))
 
-        tmp = (CTK.cfg.get_val ('vserver!%s!rule!%s!document_root'%(vsrv_num, r)))
+        tmp = (CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!document_root'))
         if tmp:
             root = CTK.ImageStock('tick', {'alt': tmp, 'title':tmp})
 
-        tmp = bool (int (CTK.cfg.get_val ('vserver!%s!rule!%s!only_secure'%(vsrv_num, r), "0")))
+        tmp = bool (int (CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!only_secure', "0")))
         if tmp:
             tmp = _('Only accept Secure Connections')
             secure = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
 
-        tmp =  CTK.cfg.keys ('vserver!%s!rule!%s!encoder'%(vsrv_num, r))
+        tmp =  CTK.cfg.keys (f'vserver!{vsrv_num}!rule!{r}!encoder')
         if tmp:
             diz = [_('Encoding enabled')]
             for e in tmp:
-                val = CTK.cfg.get_val ('vserver!%s!rule!%s!encoder!%s'%(vsrv_num, r, e))
+                val = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!encoder!{e}')
                 if val == 'allow':
                     diz.append (e)
                 elif val == 'forbid':
-                    diz.append ("%s %s"%(_('no'), e))
+                    diz.append (f"{_('no')} {e}")
             txt = ', '.join(diz)
             enc = CTK.ImageStock('tick', {'alt': txt, 'title':txt})
 
-        tmp = CTK.cfg.get_val ('vserver!%s!rule!%s!expiration' %(vsrv_num, r))
+        tmp = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!expiration')
         if tmp:
             tmp = tmp.capitalize()
             exp = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
 
-        tmp = CTK.cfg.get_val ('vserver!%s!rule!%s!timeout' %(vsrv_num, r))
+        tmp = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!timeout')
         if tmp:
             tmp += _(' seconds')
             timeout = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
 
-        tmp = CTK.cfg.get_val ('vserver!%s!rule!%s!rate' %(vsrv_num, r))
+        tmp = CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!rate')
         if tmp:
             tmp += _(' bytes per second')
             shaping = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
 
-        tmp = not bool (int (CTK.cfg.get_val ('vserver!%s!rule!%s!no_log' %(vsrv_num, r), "0")))
+        tmp = not bool (int (CTK.cfg.get_val (f'vserver!{vsrv_num}!rule!{r}!no_log', "0")))
         if tmp:
             tmp = _('Logging enabled for this rule')
             log = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
 
-        tmp = bool (int (CTK.cfg.get_val('vserver!%s!rule!%s!match!final'%(vsrv_num,r), "1")))
+        tmp = bool (int (CTK.cfg.get_val(f'vserver!{vsrv_num}!rule!{r}!match!final', "1")))
         if tmp:
             tmp   = _('Prevents further rule evaluation')
             final = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
 
-        tmp = CTK.cfg.get_val('vserver!%s!rule!%s!flcache'%(vsrv_num,r))
+        tmp = CTK.cfg.get_val(f'vserver!{vsrv_num}!rule!{r}!flcache')
         if tmp in ('allow', '1'):
             tmp     = _('Content can be cached')
             flcache = CTK.ImageStock('tick', {'alt': tmp, 'title': tmp})
@@ -445,52 +446,52 @@ class BasicsWidget (CTK.Container):
     def __init__ (self, vsrv_num):
         CTK.Container.__init__ (self)
 
-        pre        = "vserver!%s" %(vsrv_num)
-        url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
+        pre        = f"vserver!{vsrv_num}"
+        url_apply  = f"{URL_APPLY}/{vsrv_num}"
         is_default = CTK.cfg.get_lowest_entry("vserver") == int(vsrv_num)
 
         # Server ID
         if not is_default:
             table = CTK.PropsAuto (url_apply)
-            table.Add (_('Virtual Server nickname'), CTK.TextCfg('%s!nick'%(pre)), _(NOTE_NICKNAME))
+            table.Add (_('Virtual Server nickname'), CTK.TextCfg(f'{pre}!nick'), _(NOTE_NICKNAME))
 
-            self += CTK.RawHTML ('<h2>%s</h2>' %(_('Server ID')))
+            self += CTK.RawHTML (f"<h2>{_('Server ID')}</h2>")
             self += CTK.Indenter (table)
 
         # Paths
         table = CTK.PropsAuto (url_apply)
-        table.Add (_('Document Root'), CTK.TextCfg('%s!document_root'%(pre)),   _(NOTE_DOCUMENT_ROOT))
-        table.Add (_('Directory Indexes'), CTK.TextCfg('%s!directory_index'%(pre)), _(NOTE_DIRECTORY_INDEX))
+        table.Add (_('Document Root'), CTK.TextCfg(f'{pre}!document_root'),   _(NOTE_DOCUMENT_ROOT))
+        table.Add (_('Directory Indexes'), CTK.TextCfg(f'{pre}!directory_index'), _(NOTE_DIRECTORY_INDEX))
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Paths')))
+        self += CTK.RawHTML (f"<h2>{_('Paths')}</h2>")
         self += CTK.Indenter (table)
 
         if self.is_index_used (vsrv_num):
             tip = _(NOTE_INDEX_USAGE)
         else:
-            tip = '%s %s' %(_(NOTE_INDEX_USAGE), _('Neither are in use at the moment.'))
+            tip = f"{_(NOTE_INDEX_USAGE)} {_('Neither are in use at the moment.')}"
         self += CTK.Indenter (CTK.Notice ('information', CTK.RawHTML(tip)))
 
         # Network
         table = CTK.PropsAuto (url_apply)
-        table.Add (_('Keep-alive'),      CTK.CheckCfgText('%s!keepalive'%(pre), True, _('Allow')), _(NOTE_KEEPALIVE))
-        table.Add (_('Max Upload Size'), CTK.TextCfg('%s!post_max_len'%(pre), True), _(NOTE_MAX_UPLOAD_SIZE))
+        table.Add (_('Keep-alive'),      CTK.CheckCfgText(f'{pre}!keepalive', True, _('Allow')), _(NOTE_KEEPALIVE))
+        table.Add (_('Max Upload Size'), CTK.TextCfg(f'{pre}!post_max_len', True), _(NOTE_MAX_UPLOAD_SIZE))
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Network')))
+        self += CTK.RawHTML (f"<h2>{_('Network')}</h2>")
         self += CTK.Indenter (table)
 
         # Advanced Virtual Hosting
         table = CTK.PropsAuto (url_apply)
-        modul = CTK.PluginSelector('%s!evhost'%(pre), trans_options(Cherokee.support.filter_available(EVHOSTS)))
+        modul = CTK.PluginSelector(f'{pre}!evhost', trans_options(Cherokee.support.filter_available(EVHOSTS)))
         table.Add (_('Method'), modul.selector_widget, _(NOTE_EVHOST), False)
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Advanced Virtual Hosting')))
+        self += CTK.RawHTML (f"<h2>{_('Advanced Virtual Hosting')}</h2>")
         self += CTK.Indenter (table)
         self += CTK.Indenter (modul)
 
 
     def is_index_used (self, vsrv_num):
-        key     = 'vserver!%s!rule' %(vsrv_num)
+        key     = f'vserver!{vsrv_num}!rule'
         matches = ['common', 'exists']
 
         def recursive_find (key):
@@ -498,7 +499,7 @@ class BasicsWidget (CTK.Container):
                 return True
 
             for k in CTK.cfg.keys(key):
-                if recursive_find ('%s!%s' %(key,k)):
+                if recursive_find (f'{key}!{k}'):
                     return True
             return False
 
@@ -511,14 +512,14 @@ class ErrorHandlerWidget (CTK.Container):
     def __init__ (self, vsrv_num):
         CTK.Container.__init__ (self)
 
-        pre        = "vserver!%s" %(vsrv_num)
-        url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
+        pre        = f"vserver!{vsrv_num}"
+        url_apply  = f"{URL_APPLY}/{vsrv_num}"
 
         table = CTK.PropsAuto (url_apply)
-        modul = CTK.PluginSelector ('%s!error_handler'%(pre), trans_options(Cherokee.support.filter_available(ERROR_HANDLERS)), vsrv_num=vsrv_num)
+        modul = CTK.PluginSelector (f'{pre}!error_handler', trans_options(Cherokee.support.filter_available(ERROR_HANDLERS)), vsrv_num=vsrv_num)
         table.Add (_('Method'), modul.selector_widget, _(NOTE_ERROR_HANDLER), False)
 
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Error Handling hook')))
+        self += CTK.RawHTML (f"<h2>{_('Error Handling hook')}</h2>")
         self += CTK.Indenter (table)
         self += modul
 
@@ -527,29 +528,29 @@ class LogginWidgetContent (CTK.Container):
     def __init__ (self, vsrv_num, refreshable):
         CTK.Container.__init__ (self)
 
-        pre        = "vserver!%s" %(vsrv_num)
-        url_apply  = "%s/%s/log" %(URL_APPLY, vsrv_num)
+        pre        = f"vserver!{vsrv_num}"
+        url_apply  = f"{URL_APPLY}/{vsrv_num}/log"
         writers    = [('', _('Disabled'))] + trans_options(LOGGER_WRITERS)
 
         # Error writer
         table = CTK.PropsTable()
-        table.Add (_('Write errors to'), CTK.ComboCfg('%s!error_writer!type'%(pre), writers), _(NOTE_ERRORS))
+        table.Add (_('Write errors to'), CTK.ComboCfg(f'{pre}!error_writer!type', writers), _(NOTE_ERRORS))
 
-        writer = CTK.cfg.get_val ('%s!error_writer!type'%(pre))
+        writer = CTK.cfg.get_val (f'{pre}!error_writer!type')
         if writer == 'file':
-            table.Add (_('Filename'), CTK.TextCfg('%s!error_writer!filename'%(pre)), _(NOTE_WRT_FILE))
+            table.Add (_('Filename'), CTK.TextCfg(f'{pre}!error_writer!filename'), _(NOTE_WRT_FILE))
         elif writer == 'exec':
-            table.Add (_('Command'), CTK.TextCfg('%s!error_writer!command'%(pre)), _(NOTE_WRT_EXEC))
+            table.Add (_('Command'), CTK.TextCfg(f'{pre}!error_writer!command'), _(NOTE_WRT_EXEC))
 
         submit = CTK.Submitter(url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' % (_('Error Logging')))
+        self += CTK.RawHTML (f"<h2>{_('Error Logging')}</h2>")
         self += CTK.Indenter (submit)
 
         # Access logger
-        pre = 'vserver!%s!logger' %(vsrv_num)
+        pre = f'vserver!{vsrv_num}!logger'
 
         submit = CTK.Submitter(url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())
@@ -562,29 +563,29 @@ class LogginWidgetContent (CTK.Container):
         if format:
             submit = CTK.Submitter(url_apply)
             submit.bind ('submit_success', refreshable.JS_to_refresh())
-            submit += CTK.ComboCfg('%s!access!type'%(pre), trans_options(LOGGER_WRITERS))
+            submit += CTK.ComboCfg(f'{pre}!access!type', trans_options(LOGGER_WRITERS))
             table.Add (_('Write accesses to'), submit, _(NOTE_ACCESSES))
 
             submit = CTK.Submitter(url_apply)
-            writer = CTK.cfg.get_val ('%s!access!type'%(pre))
+            writer = CTK.cfg.get_val (f'{pre}!access!type')
             if not writer:
-                CTK.cfg['%s!access!type'%(pre)] = 'file'
+                CTK.cfg[f'{pre}!access!type'] = 'file'
 
             if writer == 'file' or not writer:
                 # Set a default value
-                if not CTK.cfg.get_val ('%s!access!filename'%(pre)):
-                    CTK.cfg['%s!access!filename'%(pre)] = os.path.join (CHEROKEE_VAR_LOG, 'cherokee.log')
+                if not CTK.cfg.get_val (f'{pre}!access!filename'):
+                    CTK.cfg[f'{pre}!access!filename'] = os.path.join (CHEROKEE_VAR_LOG, 'cherokee.log')
 
-                submit += CTK.TextCfg('%s!access!filename'%(pre), False)
+                submit += CTK.TextCfg(f'{pre}!access!filename', False)
                 table.Add (_('Filename'), submit, _(NOTE_WRT_FILE))
             elif writer == 'exec':
-                submit += CTK.TextCfg('%s!access!command'%(pre))
+                submit += CTK.TextCfg(f'{pre}!access!command')
                 table.Add (_('Command'), submit, _(NOTE_WRT_EXEC))
 
             if format == 'custom':
                 table_macros = CTK.Table ({'class': 'custom-logger-macros'})
                 for macro, desc in CUSTOM_MACROS_LIST:
-                    table_macros += [CTK.RawHTML('${%s}'%(macro)), CTK.RawHTML (_(desc))]
+                    table_macros += [CTK.RawHTML('${{{}}}'.format(macro)), CTK.RawHTML (_(desc))]
 
                 collaps  = CTK.CollapsibleEasy ((_('Show macros'), _('Hide')))
                 collaps += table_macros
@@ -594,29 +595,29 @@ class LogginWidgetContent (CTK.Container):
                 macros += collaps
 
                 submit = CTK.Submitter(url_apply)
-                submit += CTK.TextCfg('%s!access_template'%(pre))
+                submit += CTK.TextCfg(f'{pre}!access_template')
                 table.Add (_('Template: '), submit, macros)
 
-        self += CTK.RawHTML ('<h2>%s</h2>' % (_('Access Logging')))
+        self += CTK.RawHTML (f"<h2>{_('Access Logging')}</h2>")
         self += CTK.Indenter (table)
 
         # Properties
         if CTK.cfg.get_val (pre):
             table = CTK.PropsTable()
-            table.Add (_('Time standard'), CTK.ComboCfg ('%s!utc_time'%(pre), trans_options(UTC_TIME)), _(NOTE_UTC_TIME))
-            table.Add (_('Accept Forwarded IPs'), CTK.CheckCfgText ('%s!x_real_ip_enabled'%(pre), False, _('Accept')), _(NOTE_X_REAL_IP))
+            table.Add (_('Time standard'), CTK.ComboCfg (f'{pre}!utc_time', trans_options(UTC_TIME)), _(NOTE_UTC_TIME))
+            table.Add (_('Accept Forwarded IPs'), CTK.CheckCfgText (f'{pre}!x_real_ip_enabled', False, _('Accept')), _(NOTE_X_REAL_IP))
 
-            if int (CTK.cfg.get_val('%s!x_real_ip_enabled'%(pre), "0")):
-                table.Add (_('Don\'t check origin'), CTK.CheckCfgText ('%s!x_real_ip_access_all'%(pre), False, _('Do not check')), _(NOTE_X_REAL_IP_ALL))
+            if int (CTK.cfg.get_val(f'{pre}!x_real_ip_enabled', "0")):
+                table.Add (_('Don\'t check origin'), CTK.CheckCfgText (f'{pre}!x_real_ip_access_all', False, _('Do not check')), _(NOTE_X_REAL_IP_ALL))
 
-                if not int (CTK.cfg.get_val ('%s!x_real_ip_access_all'%(pre), "0")):
-                    table.Add (_('Accept from Hosts'), CTK.TextCfg ('%s!x_real_ip_access'%(pre)), _(NOTE_X_REAL_IP_ACCESS))
+                if not int (CTK.cfg.get_val (f'{pre}!x_real_ip_access_all', "0")):
+                    table.Add (_('Accept from Hosts'), CTK.TextCfg (f'{pre}!x_real_ip_access'), _(NOTE_X_REAL_IP_ACCESS))
 
             submit = CTK.Submitter(url_apply)
             submit.bind ('submit_success', refreshable.JS_to_refresh())
             submit += table
 
-            self += CTK.RawHTML ('<h3>%s</h3>' % (_('Logging Options')))
+            self += CTK.RawHTML (f"<h3>{_('Logging Options')}</h3>")
             self += CTK.Indenter (submit)
 
 def LogginWidgetContent_Apply():
@@ -624,10 +625,10 @@ def LogginWidgetContent_Apply():
     ret = CTK.cfg_apply_post()
 
     # Check Error Writer stale-entries
-    vsrv_num = re.findall (r'^%s/(\d+)/log'%(URL_APPLY), CTK.request.url)[0]
-    pre      = 'vserver!%s!error_writer' %(vsrv_num)
+    vsrv_num = re.findall (rf'^{URL_APPLY}/(\d+)/log', CTK.request.url)[0]
+    pre      = f'vserver!{vsrv_num}!error_writer'
 
-    if not CTK.cfg.get_val ('%s!type'%(pre)):
+    if not CTK.cfg.get_val (f'{pre}!type'):
         del (CTK.cfg[pre])
 
     return ret
@@ -647,54 +648,54 @@ class SecutiryWidgetContent (CTK.Container):
     def __init__ (self, vsrv_num, refreshable):
         CTK.Container.__init__ (self)
 
-        pre        = "vserver!%s" %(vsrv_num)
-        url_apply  = "%s/%s" %(URL_APPLY, vsrv_num)
+        pre        = f"vserver!{vsrv_num}"
+        url_apply  = f"{URL_APPLY}/{vsrv_num}"
 
         # Required SSL/TLS values
         table = CTK.PropsTable()
-        table.Add (_('Certificate'),     CTK.TextCfg ('%s!ssl_certificate_file'%(pre), True), _(NOTE_CERT))
-        table.Add (_('Certificate key'), CTK.TextCfg ('%s!ssl_certificate_key_file'%(pre), True), _(NOTE_CERT_KEY))
+        table.Add (_('Certificate'),     CTK.TextCfg (f'{pre}!ssl_certificate_file', True), _(NOTE_CERT))
+        table.Add (_('Certificate key'), CTK.TextCfg (f'{pre}!ssl_certificate_key_file', True), _(NOTE_CERT_KEY))
 
         submit = CTK.Submitter (url_apply)
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' % (_('Required SSL/TLS Values')))
+        self += CTK.RawHTML (f"<h2>{_('Required SSL/TLS Values')}</h2>")
         self += CTK.Indenter (submit)
 
         # Advanced options
         table = CTK.PropsTable()
-        table.Add (_('Ciphers'),               CTK.TextCfg ('%s!ssl_ciphers' %(pre), True), _(NOTE_CIPHERS))
-        table.Add (_('Server Preference'),     CTK.CheckCfgText ('%s!ssl_cipher_server_preference' % (pre), True, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
-        table.Add (_('Client Certs. Request'), CTK.ComboCfg('%s!ssl_client_certs' %(pre), trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
-        table.Add (_('Compression'),           CTK.CheckCfgText ('%s!ssl_compression' % (pre), False, _('Enable')), _(NOTE_COMPRESSION))
-        table.Add (_('DH length'),             CTK.ComboCfg('%s!ssl_dh_length' %(pre), [('','Auto'), ('512', '512 bits'), ('1024', '1024 bits'), ('2048', '2048 bits'), ('4096', '4096 bits')]), _(NOTE_DH_LENGTH))
+        table.Add (_('Ciphers'),               CTK.TextCfg (f'{pre}!ssl_ciphers', True), _(NOTE_CIPHERS))
+        table.Add (_('Server Preference'),     CTK.CheckCfgText (f'{pre}!ssl_cipher_server_preference', True, _('Prefer')), _(NOTE_CIPHER_SERVER_PREFERENCE))
+        table.Add (_('Client Certs. Request'), CTK.ComboCfg(f'{pre}!ssl_client_certs', trans_options(CLIENT_CERTS)), _(NOTE_CLIENT_CERTS))
+        table.Add (_('Compression'),           CTK.CheckCfgText (f'{pre}!ssl_compression', False, _('Enable')), _(NOTE_COMPRESSION))
+        table.Add (_('DH length'),             CTK.ComboCfg(f'{pre}!ssl_dh_length', [('','Auto'), ('512', '512 bits'), ('1024', '1024 bits'), ('2048', '2048 bits'), ('4096', '4096 bits')]), _(NOTE_DH_LENGTH))
 
-        if CTK.cfg.get_val('%s!ssl_client_certs' %(pre)):
-            table.Add (_('CA List'), CTK.TextCfg ('%s!ssl_ca_list_file' %(pre), False), _(NOTE_CA_LIST))
+        if CTK.cfg.get_val(f'{pre}!ssl_client_certs'):
+            table.Add (_('CA List'), CTK.TextCfg (f'{pre}!ssl_ca_list_file', False), _(NOTE_CA_LIST))
 
-            if CTK.cfg.get_val('%s!ssl_ca_list_file' %(pre)):
-                table.Add (_('Verify Depth'), CTK.TextCfg ('%s!ssl_verify_depth' %(pre), False, {'size': 4}), _(NOTE_VERIFY_DEPTH))
+            if CTK.cfg.get_val(f'{pre}!ssl_ca_list_file'):
+                table.Add (_('Verify Depth'), CTK.TextCfg (f'{pre}!ssl_verify_depth', False, {'size': 4}), _(NOTE_VERIFY_DEPTH))
 
         submit = CTK.Submitter (url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' % (_('Advanced Options')))
+        self += CTK.RawHTML (f"<h2>{_('Advanced Options')}</h2>")
         self += CTK.Indenter (submit)
 
         # HSTS
         table = CTK.PropsTable()
-        table.Add (_('Enable HSTS'), CTK.CheckCfgText ('%s!hsts'%(pre), False, _('Accept')), _(NOTE_HSTS))
+        table.Add (_('Enable HSTS'), CTK.CheckCfgText (f'{pre}!hsts', False, _('Accept')), _(NOTE_HSTS))
 
-        if int(CTK.cfg.get_val('%s!hsts' %(pre), "0")):
-            table.Add (_('HSTS Max-Age'),       CTK.TextCfg ('%s!hsts!max_age'%(pre), True, {'optional_string':_("One year")}), _(NOTE_HSTS_MAXAGE))
-            table.Add (_('Include Subdomains'), CTK.CheckCfgText ('%s!hsts!subdomains'%(pre), True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
+        if int(CTK.cfg.get_val(f'{pre}!hsts', "0")):
+            table.Add (_('HSTS Max-Age'),       CTK.TextCfg (f'{pre}!hsts!max_age', True, {'optional_string':_("One year")}), _(NOTE_HSTS_MAXAGE))
+            table.Add (_('Include Subdomains'), CTK.CheckCfgText (f'{pre}!hsts!subdomains', True, _('Include all')), _(NOTE_HSTS_SUBDOMAINS))
 
         submit = CTK.Submitter (url_apply)
         submit.bind ('submit_success', refreshable.JS_to_refresh())
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' % (_('HTTP Strict Transport Security (HSTS)')))
+        self += CTK.RawHTML (f"<h2>{_('HTTP Strict Transport Security (HSTS)')}</h2>")
         self += CTK.Indenter (submit)
 
 
@@ -720,18 +721,18 @@ class RenderContent (CTK.Container):
         tabs.Add (_('Logging'),       LogginWidget (vsrv_num))
         tabs.Add (_('Security'),      SecurityWidget (vsrv_num))
 
-        self += CTK.RawHTML ('<h2>%s: %s</h2>' %(_('Virtual Server'), CTK.escape_html (vsrv_nam)))
+        self += CTK.RawHTML (f"<h2>{_('Virtual Server')}: {CTK.escape_html(vsrv_nam)}</h2>")
         self += tabs
 
 
 class Render:
     def __call__ (self):
         # Parse request
-        vsrv_num = re.findall (r'^%s/([\d]+)'%(URL_BASE), CTK.request.url)[0]
-        vsrv_nam = CTK.cfg.get_val ("vserver!%s!nick" %(vsrv_num), _("Unknown"))
+        vsrv_num = re.findall (rf'^{URL_BASE}/([\d]+)', CTK.request.url)[0]
+        vsrv_nam = CTK.cfg.get_val (f"vserver!{vsrv_num}!nick", _("Unknown"))
 
         # Ensure the vserver exists
-        if not CTK.cfg.keys ("vserver!%s"%(vsrv_num)):
+        if not CTK.cfg.keys (f"vserver!{vsrv_num}"):
             return CTK.HTTP_Redir("/vserver")
 
         # Content
@@ -739,9 +740,8 @@ class Render:
         return cont.Render().toJSON()
 
 
-CTK.publish (r'^%s/[\d]+$'        %(URL_BASE),  Render)
-CTK.publish (r'^%s/[\d]+'         %(URL_APPLY), CTK.cfg_apply_post,        method="POST", validation=VALIDATIONS)
-CTK.publish (r'^%s/[\d]+/log'     %(URL_APPLY), LogginWidgetContent_Apply, method="POST", validation=VALIDATIONS)
-CTK.publish (r'^%s/[\d]+/vmatch'  %(URL_APPLY), HostMatchWidget_Apply,     method="POST")
-CTK.publish (r'^%s/[\d]+/clone$'  %(URL_BASE),  commit_clone)
-
+CTK.publish (rf'^{URL_BASE}/[\d]+$',  Render)
+CTK.publish (rf'^{URL_APPLY}/[\d]+', CTK.cfg_apply_post,        method="POST", validation=VALIDATIONS)
+CTK.publish (rf'^{URL_APPLY}/[\d]+/log', LogginWidgetContent_Apply, method="POST", validation=VALIDATIONS)
+CTK.publish (rf'^{URL_APPLY}/[\d]+/vmatch', HostMatchWidget_Apply,     method="POST")
+CTK.publish (rf'^{URL_BASE}/[\d]+/clone$',  commit_clone)

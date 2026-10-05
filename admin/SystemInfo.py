@@ -64,7 +64,7 @@ def build_info():
     info['machine'] = tmp[4]
 
     # Python version
-    tmp = re.findall('([\w.+]+)\s*\((.+),\s*([\w ]+),\s*([\w :]+)\)\s*\[([^\]]+)\]?', sys.version)[0]
+    tmp = re.findall('([\\w.+]+)\\s*\\((.+),\\s*([\\w ]+),\\s*([\\w :]+)\\)\\s*\\[([^\\]]+)\\]?', sys.version)[0]
 
     #  2.4.6 (#1, Oct 15 2009, 11:10:21) \n[GCC 4.2.1 (Apple Inc. build 5646)]
     #  2.6.5 (r265:79063, Apr 16 2010, 13:57:41) \n[GCC 4.4.3]
@@ -124,17 +124,17 @@ def _figure_linux_info (info):
             elif dp[1] == 'debian':
                 release = open (os.path.join ('/etc', dp[0])).read().replace('\n','')
                 info['linux_distro_release'] = release
-                info['linux_distro_description'] = 'Debian %s' %(release)
+                info['linux_distro_description'] = f'Debian {release}'
 
     # Check the LSB release file (do this last so LSB prevails in case of conflict)
     if os.path.exists('/etc/lsb-release'):
         release = open('/etc/lsb-release','r').read()
 
         for key in ('id', 'release', 'description'):
-            regex = 'DISTRIB_%s\=(.*)' %(key.upper())
+            regex = f'DISTRIB_{key.upper()}\\=(.*)'
             tmp = re.findall(regex, release)
             if tmp:
-                info['linux_distro_%s'%(key)] = tmp[0]
+                info[f'linux_distro_{key}'] = tmp[0]
 
 
 def _figure_macos_info (info):

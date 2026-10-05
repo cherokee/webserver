@@ -22,17 +22,17 @@
 
 import os
 import sys
-import imp
+import importlib.util
 import string
 import traceback
 
-from consts import *
-from Widget import Widget
-from Container import Container
-from Combobox import ComboCfg
-from Server import cfg, publish, post, get_server
-from PageCleaner import Postprocess
-from Help import HelpEntry, HelpGroup
+from .consts import *
+from .Widget import Widget
+from .Container import Container
+from .Combobox import ComboCfg
+from .Server import cfg, publish, post, get_server
+from .PageCleaner import Postprocess
+from .Help import HelpEntry, HelpGroup
 
 
 SELECTOR_CHANGED_JS = """
@@ -74,13 +74,13 @@ class Plugin (Container):
         Container.__init__ (self)
 
         self.key = key
-        self.id  = "Plugin_%s" %(self.uniq_id)
+        self.id  = f"Plugin_{self.uniq_id}"
 
 
 class PluginInstanceProxy:
     def __call__ (self, key, modules, **kwargs):
         # Update the configuration
-        if not key in post.keys():
+        if not key in list(post.keys()):
             return ''
 
         new_val = post.get_val (key)
@@ -97,7 +97,7 @@ class PluginInstanceProxy:
         # Render it
         render = plugin.Render()
 
-        output  = '<div id="%s">%s</div>' %(plugin.id, render.html)
+        output  = f'<div id="{plugin.id}">{render.html}</div>'
         if render.js:
             output += HTML_JS_ON_READY_BLOCK %(render.js)
 
@@ -107,7 +107,7 @@ class PluginInstanceProxy:
 class PluginSelector (Widget):
     def __init__ (self, key, modules, **kwargs):
         def key_to_url (key):
-            return ''.join ([('_',c)[c in string.letters + string.digits] for c in key])
+            return ''.join ([('_',c)[c in string.ascii_letters + string.digits] for c in key])
 
         Widget.__init__ (self)
 
@@ -117,18 +117,18 @@ class PluginSelector (Widget):
         active_name = cfg.get_val (self._key)
 
         # URL
-        self._url = '/plugin_content_%s' %(key_to_url(key))
+        self._url = f'/plugin_content_{key_to_url(key)}'
 
         srv = get_server()
         if srv.use_sec_submit:
-            self._url += '?key=%s' %(srv.sec_submit)
+            self._url += f'?key={srv.sec_submit}'
 
         # Widgets
         self.selector_widget = ComboCfg (key, modules)
         self.plugin          = instance_plugin (active_name, key, **kwargs)
 
         # Register hidden URL for the plugin content
-        publish (r'^/plugin_content_%s' %(key_to_url(key)), PluginInstanceProxy,
+        publish (rf'^/plugin_content_{key_to_url(key)}', PluginInstanceProxy,
                  key=key, modules=modules, method='POST', **kwargs)
 
     def _get_helps (self):
@@ -152,7 +152,7 @@ class PluginSelector (Widget):
         render = self.plugin.Render()
 
         # Warp the content
-        render.html = '<div id="%s">%s</div>' %(self.plugin.id, render.html)
+        render.html = f'<div id="{self.plugin.id}">{render.html}</div>'
 
         # Add the initialization Javascript
         render.js += SELECTOR_CHANGED_JS %({
@@ -181,15 +181,20 @@ def load_module_pyc (fullpath_pyc, namespace, use_cache=True, load_src=True):
     for fullpath in files:
         # Cache
         if use_cache:
-            if sys.modules.has_key (namespace):
+            if namespace in sys.modules:
                 if sys.modules[namespace].__file__ == fullpath:
                     return sys.modules[namespace]
 
         # Load
         if os.path.exists (fullpath):
             if fullpath.endswith ('.py'):
-                return imp.load_source (namespace, fullpath)
-            return imp.load_compiled (namespace, fullpath)
+                spec = importlib.util.spec_from_file_location(namespace, fullpath)
+                if spec is None or spec.loader is None:
+                    raise ImportError(f"Could not load {fullpath}")
+                module = importlib.util.module_from_spec(spec)
+                sys.modules[namespace] = module
+                spec.loader.exec_module(module)
+                return module
 
 
 def unload_module (name):
@@ -207,14 +212,18 @@ def load_module (name, dirname):
 
     for path in srv.plugin_paths:
         mod_path = os.path.abspath (os.path.join (path, dirname))
-        fullpath = os.path.join (mod_path, "%s.py"%(name))
+        fullpath = os.path.join (mod_path, f"{name}.py")
 
         if os.access (fullpath, os.R_OK):
             break
+    else:
+        return None
 
     # Shortcut: it might be loaded
-    if sys.modules.has_key (name):
+    if name in sys.modules:
         loaded_mod_file = sys.modules[name].__file__
+        if loaded_mod_file is None:
+            loaded_mod_file = ''
         if loaded_mod_file.endswith('.pyc'):
             loaded_mod_file = loaded_mod_file[:-1]
 
@@ -222,12 +231,18 @@ def load_module (name, dirname):
             return sys.modules[name]
 
     # Load the plug-in
-    fullpath = os.path.join (mod_path, "%s.py"%(name))
+    fullpath = os.path.join (mod_path, f"{name}.py")
 
     try:
-        return imp.load_source (name, fullpath)
+            spec = importlib.util.spec_from_file_location(name, fullpath)
+            if spec is None or spec.loader is None:
+                raise ImportError(f"Could not load {fullpath}")
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[name] = module
+            spec.loader.exec_module(module)
+            return module
     except IOError:
-        print "Could not load '%s'." %(fullpath)
+        print(f"Could not load '{fullpath}'.")
         raise
 
 
@@ -240,7 +255,7 @@ def instance_plugin (name, key, **kwargs):
         return plugin
 
     # Instance an object
-    class_name = 'Plugin_%s' %(name)
+    class_name = f'Plugin_{name}'
     obj = module.__dict__[class_name](key, **kwargs)
     return obj
 

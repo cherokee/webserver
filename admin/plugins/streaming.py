@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 import validations
 from CTK.Plugin import instance_plugin
 
@@ -40,34 +41,34 @@ class Plugin_streaming (Handler.PluginHandler):
         Handler.PluginHandler.__init__ (self, key, **kwargs)
         Handler.PluginHandler.AddCommon (self)
 
-        rate = CTK.CheckCfgText("%s!rate"%(key), True, _('Enabled'))
+        rate = CTK.CheckCfgText(f"{key}!rate", True, _('Enabled'))
 
         table = CTK.PropsTable()
         table.Add (_("Auto Rate"), rate, _(NOTE_RATE))
-        table.Add (_("Speedup Factor"), CTK.TextCfg("%s!rate_factor"%(key), True), _(NOTE_RATE_FACTOR))
-        table.Add (_("Initial Boost"),  CTK.TextCfg("%s!rate_boost"%(key), True), _(NOTE_RATE_BOOST))
+        table.Add (_("Speedup Factor"), CTK.TextCfg(f"{key}!rate_factor", True), _(NOTE_RATE_FACTOR))
+        table.Add (_("Initial Boost"),  CTK.TextCfg(f"{key}!rate_boost", True), _(NOTE_RATE_BOOST))
 
         rate.bind ('change',
-                  """if ($('#%(rate)s :checkbox')[0].checked) {
-                           $('#%(row1)s').show();
-                           $('#%(row2)s').show();
-                     } else {
-                           $('#%(row1)s').hide();
-                           $('#%(row2)s').hide();
-                  }""" %({'rate': rate.id, 'row1': table[1].id, 'row2': table[2].id}))
+                  """if ($('#{rate} :checkbox')[0].checked) {{
+                           $('#{row1}').show();
+                           $('#{row2}').show();
+                     }} else {{
+                           $('#{row1}').hide();
+                           $('#{row2}').hide();
+                  }}""".format(rate=rate.id, row1=table[1].id, row2=table[2].id))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
         # Streaming
-        self += CTK.RawHTML ('<h2>%s</h2>' %(_('Audio/Video Streaming')))
+        self += CTK.RawHTML (f"<h2>{_('Audio/Video Streaming')}</h2>")
         self += CTK.Indenter (submit)
 
         # File
         self += instance_plugin('file',    key, show_document_root=False)
 
         # Publish
-        VALS = [("%s!rate_factor"%(key), validations.is_float),
-                ("%s!rate_boost"%(key),  validations.is_number_gt_0)]
+        VALS = [(f"{key}!rate_factor", validations.is_float),
+                (f"{key}!rate_boost",  validations.is_number_gt_0)]
 
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")

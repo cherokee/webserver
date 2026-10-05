@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DOMAIN = "server_domain_to_dir2"
 URL    = "http://www.example.com/dir/subdir"
@@ -25,16 +25,15 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Domain to subdir II"
 
-        self.request           = "GET %s/%s HTTP/1.1\r\n" %(DIR, PATH) +\
-                                 "Host: %s\r\n" %(DOMAIN)              +\
+        self.request           = f"GET {DIR}/{PATH} HTTP/1.1\r\n" +\
+                                 f"Host: {DOMAIN}\r\n"              +\
                                  "Connection: Close\r\n"
 
         self.expected_error    = 301
         self.expected_content  = URL+PATH
 
     def Prepare (self, www):
-        srvr = self.Mkdir (www, "domain_%s" % (DOMAIN))
+        srvr = self.Mkdir (www, f"domain_{DOMAIN}")
 
         self.conf = CONF % (DOMAIN, srvr, URL)
         self.conf = self.conf.replace ('<dir>', DIR)
-

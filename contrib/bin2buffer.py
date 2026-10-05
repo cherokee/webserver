@@ -1,12 +1,12 @@
 import os, sys, string
 
 def print_block(info, len):
-    print 'ret = cherokee_buffer_add (buffer, \\\n' + info + ', ' + str(len) + ');'
-    print 'if (ret < ret_ok) return ret;\n'
+    print('ret = cherokee_buffer_add (buffer, \\\n' + info + ', ' + str(len) + ');')
+    print('if (ret < ret_ok) return ret;\n')
 
 
-print 'ret = cherokee_buffer_ensure_size (buffer, %d);' % (os.path.getsize(sys.argv[1]))
-print 'if (ret < ret_ok) return ret;\n'
+print(f'ret = cherokee_buffer_ensure_size (buffer, {int(os.path.getsize(sys.argv[1]))});')
+print('if (ret < ret_ok) return ret;\n')
 
 file = open (sys.argv[1], "r")
 cont = file.read()
@@ -23,7 +23,7 @@ for c in cont:
     siz += 1
 
     if (len(lin) > 75):
-        s += '"%s"\n' % (lin)
+        s += f'"{lin}"\n'
         lin = ""
 
         if (siz > 127):
@@ -31,5 +31,5 @@ for c in cont:
             s   = ""
             siz = 0
 
-s += '"%s"\n' % (lin)
+s += f'"{lin}"\n'
 print_block (s, siz)

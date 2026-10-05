@@ -1,15 +1,15 @@
-from base import *
+from qa_base import *
 
 DIR = "x_real_ip_cgi_3"
 
-CONF = """
+CONF = f"""
 vserver!1!rule!2340!match = directory
-vserver!1!rule!2340!match!directory = /%s
+vserver!1!rule!2340!match!directory = /{DIR}
 vserver!1!rule!2340!handler = cgi
 vserver!1!rule!2340!handler!x_real_ip_enabled = 1
 vserver!1!rule!2340!handler!x_real_ip_access_all = 0
 vserver!1!rule!2340!handler!x_real_ip_access = 9.9.9.9
-""" % (DIR)
+"""
 
 CGI_CODE = """#!/bin/sh
 
@@ -25,7 +25,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "X-Real-IP denied: CGI"
 
-        self.request           = "GET /%s/test HTTP/1.0\r\n" % (DIR)  + \
+        self.request           = f"GET /{DIR}/test HTTP/1.0\r\n"  + \
                                  "X-Real-IP: 1.1.1.1\r\n"
         self.expected_error    = 200
         self.conf              = CONF
@@ -43,5 +43,5 @@ class Test (TestBase):
         return -1
 
     def Prepare (self, www):
-        d = self.Mkdir (www, DIR, 0777)
-        self.WriteFile (d, "test", 0555, CGI_CODE)
+        d = self.Mkdir (www, DIR, 0o777)
+        self.WriteFile (d, "test", 0o555, CGI_CODE)

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 NICK    = "nick-260"
 DIR     = "/dir-260"
@@ -33,7 +33,7 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name           = "VRule OR: No match"
-        self.request        = "GET %s/ HTTP/1.0\r\n" %(DIR) + \
-                              "Host: %s\r\n" %(DOMAIN)
+        self.request        = f"GET {DIR}/ HTTP/1.0\r\n" + \
+                              f"Host: {DOMAIN}\r\n"
         self.expected_error = ERROR2
         self.conf           = CONF %(globals())
