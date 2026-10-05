@@ -173,6 +173,8 @@ cherokee_http_version_to_string (cherokee_http_version_t version, const char **s
 {
 	switch (version) {
 		entry (http_version_11, "HTTP/1.1");
+		entry (http_version_20, "HTTP/2");
+		entry (http_version_30, "HTTP/3");
 		entry (http_version_10, "HTTP/1.0");
 		entry (http_version_09, "HTTP/0.9");
 	default:

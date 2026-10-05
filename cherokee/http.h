@@ -39,7 +39,9 @@ typedef enum {
 	http_version_09,
 	http_version_10,
 	http_version_11,
-	http_version_unknown
+	http_version_unknown,
+	http_version_20,
+	http_version_30
 } cherokee_http_version_t;
 
 typedef enum {

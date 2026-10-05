@@ -51,6 +51,11 @@ typedef struct {
 	cherokee_buffer_t  server_address;
 	cherokee_buffer_t  server_port;
 
+	/* Native multiplexed protocols (opt-in per TLS listener). */
+	cherokee_boolean_t http2;
+	cherokee_boolean_t http3;
+	void              *http3_listener;
+
 	/* Accepting */
 	cuint_t            accept_continuous;
 	cuint_t            accept_continuous_max;

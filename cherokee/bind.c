@@ -35,6 +35,9 @@ cherokee_bind_new (cherokee_bind_t **listener)
 
 	cherokee_buffer_init (&n->ip);
 	cherokee_socket_init (&n->socket);
+	n->http2 = false;
+	n->http3 = false;
+	n->http3_listener = NULL;
 	n->port   = 0;
 	n->id     = 0;
 	n->family = 0;
@@ -137,6 +140,26 @@ cherokee_bind_configure (cherokee_bind_t        *listener,
 		listener->socket.is_tls = (tls) ? TLS : non_TLS;
 	}
 
+	ret = cherokee_config_node_read_bool (conf, "http2", &listener->http2);
+	if (ret != ret_ok && ret != ret_not_found) return ret_error;
+	ret = cherokee_config_node_read_bool (conf, "http3", &listener->http3);
+	if (ret != ret_ok && ret != ret_not_found) return ret_error;
+	if ((listener->http2 || listener->http3) && ! BIND_IS_TLS(listener)) {
+		fprintf (stderr, "HTTP/2 and HTTP/3 require a TLS listener\n");
+		return ret_error;
+	}
+#ifndef HAVE_HTTP2
+	if (listener->http2) {
+		fprintf (stderr, "HTTP/2 support was not compiled in\n");
+		return ret_error;
+	}
+#endif
+#ifndef HAVE_HTTP3
+	if (listener->http3) {
+		fprintf (stderr, "HTTP/3 support was not compiled in\n");
+		return ret_error;
+	}
+#endif
 	return ret_ok;
 }
 

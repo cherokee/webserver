@@ -1090,6 +1090,44 @@ AC_MSG_RESULT([$have_openssl])
 AM_CONDITIONAL(USE_OPENSSL, test "x$have_openssl" = "xyes")
 
 
+dnl Native HTTP/2 and HTTP/3 adapters.  Explicit enables must fail closed.
+AC_ARG_ENABLE(http2, AS_HELP_STRING([--enable-http2], [Build native HTTP/2 (auto)]), [], [enable_http2=auto])
+AC_ARG_ENABLE(http3, AS_HELP_STRING([--enable-http3], [Build native HTTP/3 (auto)]), [], [enable_http3=auto])
+AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
+HTTP_PROTOCOL_CFLAGS=""
+HTTP_PROTOCOL_LIBS=""
+have_http2=no
+have_http3=no
+if test "$enable_http2" != no && test "$have_openssl" = yes; then
+  if $PKG_CONFIG --exists 'libnghttp2 >= 1.61'; then
+    have_http2=yes
+    HTTP_PROTOCOL_CFLAGS="$HTTP_PROTOCOL_CFLAGS `$PKG_CONFIG --cflags libnghttp2`"
+    HTTP_PROTOCOL_LIBS="$HTTP_PROTOCOL_LIBS `$PKG_CONFIG --libs libnghttp2`"
+    AC_DEFINE(HAVE_HTTP2, 1, [Build native HTTP/2])
+  fi
+fi
+if test "$enable_http3" != no && test "$have_openssl" = yes; then
+  if $PKG_CONFIG --exists 'libnghttp3 >= 1.12' 'openssl >= 3.5'; then
+    save_LIBS="$LIBS"
+    LIBS="$LIBS `$PKG_CONFIG --libs openssl`"
+    AC_CHECK_LIB(ssl, OSSL_QUIC_server_method, [have_http3=yes], [], [$LIBS])
+    LIBS="$save_LIBS"
+    if test "$have_http3" = yes; then
+      HTTP_PROTOCOL_CFLAGS="$HTTP_PROTOCOL_CFLAGS `$PKG_CONFIG --cflags libnghttp3 openssl`"
+      HTTP_PROTOCOL_LIBS="$HTTP_PROTOCOL_LIBS `$PKG_CONFIG --libs libnghttp3 openssl`"
+      AC_DEFINE(HAVE_HTTP3, 1, [Build native HTTP/3])
+    fi
+  fi
+fi
+if test "$enable_http2" = yes && test "$have_http2" != yes; then
+  AC_MSG_ERROR([HTTP/2 requires OpenSSL and libnghttp2 >= 1.61])
+fi
+if test "$enable_http3" = yes && test "$have_http3" != yes; then
+  AC_MSG_ERROR([HTTP/3 requires QUIC server-enabled OpenSSL >= 3.5 and libnghttp3 >= 1.12])
+fi
+AC_SUBST(HTTP_PROTOCOL_CFLAGS)
+AC_SUBST(HTTP_PROTOCOL_LIBS)
+
 dnl
 dnl Native Language Support
 dnl
@@ -1590,6 +1628,8 @@ for m in $methods; do
 done
 echo "Threading support     $have_pthread"
 echo "OpenSSL support       $have_openssl"
+echo "HTTP/2 support        $have_http2"
+echo "HTTP/3 support        $have_http3"
 echo "PCRE library          $have_pcre"
 echo "Compatible PAM        $have_pam"
 echo "Python                $have_python"
