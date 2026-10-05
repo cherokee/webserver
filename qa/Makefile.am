@@ -19,6 +19,8 @@ test_http23.py \
 test_http23_admin.py \
 test_source_reuse.py \
 test_source_reuse_admin.py \
+benchmark_source_reuse.py \
+source_reuse_bench.c \
 requirements-http23.txt \
 $(PY_PRE) \
 qa_base.py \
