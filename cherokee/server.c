@@ -977,6 +977,15 @@ cherokee_server_initialize (cherokee_server_t *srv)
 			fprintf(stderr, "Native HTTP/2 and HTTP/3 require the libssl TLS backend\n");
 			return ret_error;
 		}
+		if (BIND(i)->http2 || BIND(i)->http3) {
+			cherokee_list_t *v;
+			list_for_each(v, &srv->vservers) {
+				if (VSERVER(v)->req_client_certs == req_client_cert_require && !VSERVER(v)->certs_ca.len) {
+					fprintf(stderr, "Native client-certificate authentication requires ssl_ca_list_file\n");
+					return ret_error;
+				}
+			}
+		}
 		if (cherokee_http3_init(BIND(i), srv) != ret_ok) return ret_error;
 		/* Service QUIC retransmission timers promptly, even with no TCP work. */
 		if (BIND(i)->http3 && srv->fdwatch_msecs > 10) srv->fdwatch_msecs = 10;

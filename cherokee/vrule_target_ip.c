@@ -39,7 +39,6 @@ match (cherokee_vrule_target_ip_t *vrule,
        cherokee_buffer_t          *host,
        cherokee_connection_t      *conn)
 {
-	int               re;
 	ret_t             ret;
 	cherokee_socket_t sock;
 
@@ -58,12 +57,8 @@ match (cherokee_vrule_target_ip_t *vrule,
 
 	/* Copy the server IP
 	 */
-	sock.client_addr_len = conn->socket.client_addr_len;
-
-	re = getsockname (SOCKET_FD(&conn->socket),
-	                  (struct sockaddr *) &(sock.client_addr),
-	                  &sock.client_addr_len);
-	if (re != 0) {
+	sock.client_addr_len = sizeof(sock.client_addr);
+	if (cherokee_socket_get_local_address(&conn->socket, &sock.client_addr) != ret_ok) {
 		TRACE(ENTRIES, "VRule target_ip could %s get the server IP\n", "not");
 		goto deny;
 	}

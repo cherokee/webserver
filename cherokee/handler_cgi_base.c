@@ -497,20 +497,14 @@ cherokee_handler_cgi_base_build_basic_env (
 	 */
 	if (cherokee_buffer_is_empty (&bind->ip)) {
 		cherokee_sockaddr_t my_address;
-		cuint_t             my_address_len = 0;
 		char                ip_str[CHE_INET_ADDRSTRLEN+1];
 
-		my_address_len = sizeof(my_address);
-		re = getsockname (SOCKET_FD(&conn->socket),
-				  (struct sockaddr *)&my_address,
-				  &my_address_len);
-		if (re == 0) {
-			cherokee_ntop (my_address.sa_in.sin_family,
+		if (cherokee_socket_get_local_address(&conn->socket, &my_address) == ret_ok) {
+			ret = cherokee_ntop (my_address.sa_in.sin_family,
 				       (struct sockaddr *) &my_address,
 				       ip_str, sizeof(ip_str)-1);
 
-			set_env (cgi, "SERVER_ADDR",
-				 ip_str, strlen(ip_str));
+			if (ret == ret_ok) set_env (cgi, "SERVER_ADDR", ip_str, strlen(ip_str));
 		}
 	} else {
 		set_env (cgi, "SERVER_ADDR",

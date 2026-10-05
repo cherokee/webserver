@@ -11,6 +11,7 @@ typedef struct {
 	cherokee_list_t streams;
 	cherokee_buffer_t output;
 	size_t stream_count;
+	cherokee_sockaddr_t local;
 } cherokee_http2_t;
 
 static cherokee_http_stream_t *
@@ -89,7 +90,7 @@ recv_frame (nghttp2_session *session, const nghttp2_frame *frame, void *data)
 	s = find_stream(h, frame->hd.stream_id);
 	if (!s || s->dispatched) return 0;
 	if (cherokee_http_stream_dispatch(s, h->connection->bind,
-	    &h->connection->socket.client_addr, http_version_20)) {
+	    &h->connection->socket.client_addr, &h->local, http_version_20, h->connection->socket.cryptor->vserver_ref)) {
 		nghttp2_submit_rst_stream(session, NGHTTP2_FLAG_NONE, frame->hd.stream_id, NGHTTP2_PROTOCOL_ERROR);
 	}
 	return 0;
@@ -152,6 +153,7 @@ cherokee_http2_init (cherokee_connection_t *conn)
 	};
 	if (!h) return ret_nomem;
 	h->connection = conn;
+	if (cherokee_socket_get_local_address(&conn->socket, &h->local) != ret_ok) { free(h); return ret_error; }
 	INIT_LIST_HEAD (&h->streams);
 	if (nghttp2_session_callbacks_new(&callbacks) || nghttp2_option_new(&option)) goto error;
 	nghttp2_session_callbacks_set_on_begin_headers_callback(callbacks, begin_headers);

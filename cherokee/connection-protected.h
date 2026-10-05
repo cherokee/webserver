@@ -122,6 +122,7 @@ struct cherokee_connection {
 	cherokee_http_upgrade_t       upgrade;
 	void                         *http2_session;
 	cherokee_http_version_t        native_version;
+	void                         *native_tls_vserver;
 	cherokee_connection_options_t options;
 	cherokee_handler_t           *handler;
 

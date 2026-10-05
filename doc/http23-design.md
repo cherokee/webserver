@@ -21,6 +21,11 @@ HTTP/1.0 only as an internal handler representation, preventing chunked transfer
 encoding from escaping into binary DATA frames. The original protocol and peer
 address are preserved for CGI, TLS rules and logging. Stream cancellation closes
 the adapter end, propagating EOF to the handler engine.
+The stream socket preserves its network destination for CGI SERVER_ADDR,
+IP-based virtual server rules and redirects. On platforms with IP_PKTINFO and
+IPV6_PKTINFO, HTTP/3 records packet destinations and sends replies from that
+address, including wildcard binds. On other platforms, use an explicit bind
+interface when destination address selection matters.
 
 Protocol support is optional at build time and disabled by default at runtime.
 `server!bind!N!http2 = 1` and `server!bind!N!http3 = 1` enable the adapters on a
@@ -32,7 +37,7 @@ part of this implementation.
 Build and administration
 ------------------------
 
-HTTP/2 requires libnghttp2 >= 1.61 and the OpenSSL cryptor. HTTP/3 requires
+HTTP/2 requires libnghttp2 >= 1.61 and OpenSSL >= 1.1.1. HTTP/3 requires
 libnghttp3 >= 1.12 and OpenSSL >= 3.5 built with server QUIC support.
 `pkg-config` must find these libraries. `--enable-http2` and `--enable-http3`
 make missing dependencies a configure error; `--disable-http2` and
@@ -89,11 +94,18 @@ violations reset the request stream. Closed connections retain QUIC state
 briefly to allow the close packet to be transmitted while handler state is
 released immediately.
 
-HTTP/2 uses TLS >= 1.2 with authenticated ephemeral key exchange and AEAD.
+HTTP/2 uses TLS >= 1.2 with authenticated ephemeral key exchange and AEAD,
+intersected with the virtual server's configured cipher policy.
 HTTP/3 uses QUIC's TLS 1.3 and OpenSSL address validation. Early data is disabled
 so replay-sensitive handlers cannot execute before authentication completes.
 Virtual server certificate selection and client verification policies are
 copied from the existing libssl contexts.
+Required client-certificate authentication needs a configured CA file. Requests
+cannot switch authority into a client-certificate protected virtual server
+authenticated under a different TLS virtual server; those requests receive
+403, including HTTP/1 fallback on the enabled listener. This prevents
+certificates verified under one CA policy from being
+reused under a different virtual server's CA policy.
 
 HTTP/3 uses the main thread's poller and caps its polling interval at 10 ms to
 service QUIC timers. It currently has 128 source endpoints and accepted QUIC
@@ -122,8 +134,26 @@ exercise ALPN and HTTP/1 fallback, multiplexed transfers beyond flow-control
 windows, CGI POST and protocol/peer metadata, HEAD and ranges, cookies,
 cancellation, malformed fields and lengths, repeated HTTP/3 stream cleanup,
 QUIC loss/retransmission, critical stream errors and invalid startup settings.
+They also check SNI certificate selection, required client certificates,
+authority changes into a protected virtual server and TLS 1.2 cipher policy.
 `CHEROKEE_TEST_THREADS=1` selects the single-thread server path; the default is
 two threads. `make -C qa test-http23 PYTHON=/path/to/python` runs both suites.
+`CHEROKEE_TEST_HOST=::1` tests IPv6. Setting `CHEROKEE_TEST_INTERFACE=` and
+`CHEROKEE_TEST_HOST=127.0.0.2` tests wildcard destination selection on Linux.
+
+Validation of this implementation on 2026-10-05 passed all 12 wire tests and
+six administration tests with OpenSSL 3.6.2 and nghttp3 1.12.0. The wire suite
+also passed under AddressSanitizer, UndefinedBehaviorSanitizer and
+LeakSanitizer for IPv4, IPv6, and a single worker on a wildcard IPv4 listener.
+Sanitizer runs used `ASAN_OPTIONS=detect_odr_violation=0` because existing
+handler plugins duplicate exported globals; memory and leak checks remained
+enabled. A separate build with both adapters and libssl disabled passed
+HTTP/1 serving and rejected native protocol configuration.
+
+Seventeen focused existing HTTP/1 regressions passed using a temporary runner
+copy that corrected an unrelated literal source-ID placeholder in its generated
+configuration. The unmodified full legacy QA runner did not complete because
+of existing Python formatting errors; this is not a full legacy-suite result.
 
 References:
 * https://www.rfc-editor.org/rfc/rfc9113

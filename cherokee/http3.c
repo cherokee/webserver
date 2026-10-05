@@ -22,7 +22,7 @@ typedef struct {
 	cherokee_http_stream_t *request;
 	uint64_t id;
 	size_t offered, acknowledged;
-	int read_fin, write_fin, closed;
+	int read_fin, write_fin, closed, write_blocked;
 	uint64_t reset_error;
 	nghttp3_qpack_stream_context *fields_context;
 	cherokee_buffer_t encoded_fields;
@@ -40,9 +40,11 @@ typedef struct {
 	cherokee_bind_t *bind;
 	cherokee_thread_t *thread;
 	cherokee_sockaddr_t peer;
+	cherokee_sockaddr_t local;
 	time_t activity;
 	time_t closing_until;
 	uint64_t close_error;
+	void *tls_vserver;
 	void *owner;
 } cherokee_http3_connection_t;
 
@@ -51,6 +53,8 @@ typedef struct {
 	SSL *listener;
 	BIO *network;
 	cherokee_sockaddr_t peer;
+	cherokee_sockaddr_t local;
+	unsigned int interface_index;
 	socklen_t peer_len;
 	cherokee_list_t connections;
 	time_t activity;
@@ -73,6 +77,7 @@ typedef struct {
 	SSL_CTX *default_context;
 	cherokee_http3_endpoint_t *current_endpoint;
 	size_t connection_count;
+	cherokee_sockaddr_t local;
 } cherokee_http3_listener_t;
 
 static cherokee_http3_stream_t *
@@ -118,9 +123,13 @@ sni_select (SSL *ssl, int *alert, void *arg)
 	conn.server = h->server;
 	conn.bind = h->bind;
 	conn.socket.is_tls = TLS;
+	conn.socket.native_stream = true;
 	/* Callbacks run synchronously while the main thread services this
 	 * endpoint, including callbacks on OpenSSL's inner TLS object. */
-	if (h->current_endpoint) conn.socket.client_addr = h->current_endpoint->peer;
+	if (h->current_endpoint) {
+		conn.socket.client_addr = h->current_endpoint->peer;
+		conn.socket.native_local_addr = h->current_endpoint->local;
+	}
 	if (cherokee_buffer_add(&host, name, strlen(name)) != ret_ok) return SSL_TLSEXT_ERR_ALERT_FATAL;
 	if (cherokee_server_get_vserver(h->server, &host, &conn, &vsrv) == ret_ok) {
 		list_for_each (i, &h->contexts) {
@@ -135,11 +144,16 @@ sni_select (SSL *ssl, int *alert, void *arg)
 	 * verification policy on that object instead. */
 	{
 		STACK_OF(X509) *chain = NULL;
+		STACK_OF(X509_NAME) *authorities = SSL_CTX_get_client_CA_list(ctx);
+		STACK_OF(X509_NAME) *copy = authorities ? SSL_dup_CA_list(authorities) : NULL;
+		if (authorities && !copy) return SSL_TLSEXT_ERR_ALERT_FATAL;
+		SSL_set_client_CA_list(ssl, copy);
 		if (!SSL_use_certificate(ssl, SSL_CTX_get0_certificate(ctx)) ||
 		    !SSL_use_PrivateKey(ssl, SSL_CTX_get0_privatekey(ctx))) return SSL_TLSEXT_ERR_ALERT_FATAL;
 		SSL_CTX_get0_chain_certs(ctx, &chain);
-		if (chain && !SSL_set1_chain(ssl, chain)) return SSL_TLSEXT_ERR_ALERT_FATAL;
+		if (!SSL_set1_chain(ssl, chain)) return SSL_TLSEXT_ERR_ALERT_FATAL;
 		if (!SSL_set1_verify_cert_store(ssl, SSL_CTX_get_cert_store(ctx))) return SSL_TLSEXT_ERR_ALERT_FATAL;
+		if (!SSL_set1_param(ssl, SSL_CTX_get0_param(ctx))) return SSL_TLSEXT_ERR_ALERT_FATAL;
 	}
 	SSL_set_verify(ssl, SSL_CTX_get_verify_mode(ctx), SSL_CTX_get_verify_callback(ctx));
 	SSL_set_verify_depth(ssl, SSL_CTX_get_verify_depth(ctx));
@@ -196,7 +210,7 @@ end_stream (nghttp3_conn *http, int64_t id, void *user, void *stream_user)
 	cherokee_http3_stream_t *s = find_stream(c, id);
 	UNUSED(http); UNUSED(stream_user);
 	if (!s || !s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
-	if (s->request->invalid || cherokee_http_stream_dispatch(s->request, c->bind, &c->peer, http_version_30)) s->request->invalid = 1;
+	if (s->request->invalid || cherokee_http_stream_dispatch(s->request, c->bind, &c->peer, &c->local, http_version_30, c->tls_vserver)) s->request->invalid = 1;
 	return 0;
 }
 
@@ -303,6 +317,7 @@ add_stream (cherokee_http3_connection_t *c, SSL *ssl)
 	INIT_LIST_HEAD(&s->list);
 	s->id = SSL_get_stream_id(ssl);
 	s->ssl = ssl;
+	SSL_set_mode(ssl, SSL_MODE_ENABLE_PARTIAL_WRITE | SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER);
 	if (!SSL_set_blocking_mode(ssl, 0)) { free_stream(s); return NULL; }
 	cherokee_list_add_tail(&s->list, &c->streams);
 	return s;
@@ -315,6 +330,7 @@ new_connection (SSL *ssl, cherokee_http3_listener_t *h, cherokee_http3_endpoint_
 	if (!c) { SSL_free(ssl); return NULL; }
 	INIT_LIST_HEAD(&c->list); INIT_LIST_HEAD(&c->streams);
 	c->ssl = ssl; c->bind = h->bind; c->thread = thread; c->peer = e->peer;
+	c->local = e->local;
 	c->activity = cherokee_bogonow_now;
 	c->close_error = NGHTTP3_H3_INTERNAL_ERROR;
 	if (!SSL_set_blocking_mode(ssl, 0) ||
@@ -486,6 +502,24 @@ step_connection (cherokee_http3_connection_t *c)
 		ERR_clear_error();
 		result = SSL_do_handshake(c->ssl);
 		if (result <= 0) return want_io(c->ssl, result) ? 0 : -1;
+		{
+			cherokee_connection_t conn;
+			cherokee_buffer_t host = CHEROKEE_BUF_INIT;
+			cherokee_virtual_server_t *vsrv;
+			const char *name = SSL_get_servername(c->ssl, TLSEXT_NAMETYPE_host_name);
+			memset(&conn, 0, sizeof(conn));
+			conn.server = THREAD_SRV(c->thread); conn.bind = c->bind;
+			conn.socket.is_tls = TLS; conn.socket.client_addr = c->peer;
+			conn.socket.native_stream = true; conn.socket.native_local_addr = c->local;
+			c->tls_vserver = VSERVER(THREAD_SRV(c->thread)->vservers.prev);
+			if (name) {
+				int failed = cherokee_buffer_add(&host, name, strlen(name)) != ret_ok ||
+				    cherokee_server_get_vserver(THREAD_SRV(c->thread), &host, &conn, &vsrv) != ret_ok;
+				cherokee_buffer_mrproper(&host);
+				if (failed) return -1;
+				c->tls_vserver = vsrv;
+			}
+		}
 		if (init_http(c)) return -1;
 	}
 	for (k=0; k<16; k++) {
@@ -510,6 +544,19 @@ step_connection (cherokee_http3_connection_t *c)
 			if (error < 0 && error != NGHTTP3_ERR_STREAM_NOT_FOUND) return protocol_error(c, error);
 			s->closed = 1;
 			continue;
+		}
+		if (s->write_blocked) {
+			SSL_POLL_ITEM item;
+			struct timeval timeout = {0, 0};
+			memset(&item, 0, sizeof(item));
+			item.desc = SSL_as_poll_descriptor(s->ssl);
+			item.events = SSL_POLL_EVENT_WE;
+			if (!SSL_poll(&item, 1, sizeof(item), &timeout, SSL_POLL_FLAG_NO_HANDLE_EVENTS, NULL)) return -1;
+			if (item.revents & SSL_POLL_EVENT_W) {
+				int error = nghttp3_conn_unblock_stream(c->http, s->id);
+				if (error < 0) return protocol_error(c, error);
+				s->write_blocked = 0;
+			}
 		}
 		if (!s->read_fin && !SSL_is_stream_local(s->ssl)) {
 			for (k=0; k<4; k++) {
@@ -572,13 +619,20 @@ step_connection (cherokee_http3_connection_t *c)
 			written += n;
 			if (!result) {
 				if (!want_io(s->ssl, result)) return -1;
+				s->write_blocked = 1;
+				nghttp3_conn_block_stream(c->http, id);
+				break;
+			}
+			if (n < vec[j].len) {
+				s->write_blocked = 1;
+				nghttp3_conn_block_stream(c->http, id);
 				break;
 			}
 		}
 		if (nghttp3_conn_add_write_offset(c->http, id, written) ||
 		    nghttp3_conn_add_ack_offset(c->http, id, written)) return -1;
 		if (written) c->activity = cherokee_bogonow_now;
-		if (j < count) break;
+		if (j < count) continue;
 		if (fin && !s->write_fin) {
 			if (!SSL_stream_conclude(s->ssl, 0)) return -1;
 			s->write_fin = 1;
@@ -620,7 +674,8 @@ same_peer (cherokee_sockaddr_t *a, cherokee_sockaddr_t *b)
 }
 
 static cherokee_http3_endpoint_t *
-new_endpoint (cherokee_http3_listener_t *h, cherokee_sockaddr_t *peer, socklen_t peer_len)
+new_endpoint (cherokee_http3_listener_t *h, cherokee_sockaddr_t *peer, socklen_t peer_len,
+              cherokee_sockaddr_t *local, unsigned int interface_index)
 {
 	cherokee_http3_endpoint_t *e = calloc(1, sizeof(*e));
 	BIO *internal = NULL;
@@ -628,6 +683,7 @@ new_endpoint (cherokee_http3_listener_t *h, cherokee_sockaddr_t *peer, socklen_t
 	if (!e || !addr) { free(e); BIO_ADDR_free(addr); return NULL; }
 	INIT_LIST_HEAD(&e->list); INIT_LIST_HEAD(&e->connections);
 	e->peer = *peer; e->peer_len = peer_len; e->activity = cherokee_bogonow_now;
+	e->local = *local; e->interface_index = interface_index;
 	/* OpenSSL 3.x has no QUIC peer-address getter. A bounded datagram BIO
 	 * endpoint per source address preserves the authenticated peer identity.
 	 * The TLS context is shared, including Retry token/address validation.
@@ -692,6 +748,13 @@ cherokee_http3_init (cherokee_bind_t *listener, cherokee_server_t *server)
 		SSL_CTX_get0_chain_certs(original, &chain);
 		if (chain && !SSL_CTX_set1_chain(v->context, chain)) goto error;
 		SSL_CTX_set1_cert_store(v->context, SSL_CTX_get_cert_store(original));
+		if (!SSL_CTX_set1_param(v->context, SSL_CTX_get0_param(original))) goto error;
+		{
+			STACK_OF(X509_NAME) *authorities = SSL_CTX_get_client_CA_list(original);
+			STACK_OF(X509_NAME) *copy = authorities ? SSL_dup_CA_list(authorities) : NULL;
+			if (authorities && !copy) goto error;
+			SSL_CTX_set_client_CA_list(v->context, copy);
+		}
 		SSL_CTX_set_verify(v->context, SSL_CTX_get_verify_mode(original), SSL_CTX_get_verify_callback(original));
 		SSL_CTX_set_verify_depth(v->context, SSL_CTX_get_verify_depth(original));
 		SSL_CTX_set_alpn_select_cb(v->context, alpn_select, NULL);
@@ -703,6 +766,7 @@ cherokee_http3_init (cherokee_bind_t *listener, cherokee_server_t *server)
 		if (i == server->vservers.prev) h->default_context = v->context;
 	}
 	if (!h->default_context || getsockname(listener->socket.socket, &local.sa, &local_len)) goto error;
+	h->local = local;
 	h->fd = socket(local.sa.sa_family, SOCK_DGRAM, 0);
 #if defined(HAVE_IPV6) && defined(IPV6_V6ONLY)
 	if (h->fd >= 0 && local.sa.sa_family == AF_INET6) {
@@ -714,12 +778,101 @@ cherokee_http3_init (cherokee_bind_t *listener, cherokee_server_t *server)
 #endif
 	if (h->fd < 0 || fcntl(h->fd, F_SETFL, O_NONBLOCK) < 0 || fcntl(h->fd, F_SETFD, FD_CLOEXEC) < 0 ||
 	    bind(h->fd, &local.sa, local_len)) goto error;
+	{
+		int enabled = 1;
+#ifdef IP_PKTINFO
+		if (local.sa.sa_family == AF_INET && setsockopt(h->fd, IPPROTO_IP, IP_PKTINFO, &enabled, sizeof(enabled))) goto error;
+#endif
+#if defined(HAVE_IPV6) && defined(IPV6_RECVPKTINFO)
+		if (local.sa.sa_family == AF_INET6 && setsockopt(h->fd, IPPROTO_IPV6, IPV6_RECVPKTINFO, &enabled, sizeof(enabled))) goto error;
+#endif
+		UNUSED(enabled);
+	}
 	return ret_ok;
 error:
 	fprintf(stderr, "Cannot initialize native HTTP/3 listener\n");
 	ERR_print_errors_fp(stderr);
 	cherokee_http3_free(listener);
 	return ret_error;
+}
+
+static ssize_t
+receive_packet (cherokee_http3_listener_t *h, unsigned char *packet, size_t size,
+                cherokee_sockaddr_t *peer, socklen_t *peer_len,
+                cherokee_sockaddr_t *local, unsigned int *interface_index)
+{
+	union { struct cmsghdr alignment; unsigned char bytes[256]; } control;
+	struct msghdr message;
+	struct iovec vector = {packet, size};
+	struct cmsghdr *field;
+	ssize_t n;
+	memset(&message, 0, sizeof(message));
+	message.msg_name = &peer->sa; message.msg_namelen = *peer_len;
+	message.msg_iov = &vector; message.msg_iovlen = 1;
+	message.msg_control = control.bytes; message.msg_controllen = sizeof(control.bytes);
+	n = recvmsg(h->fd, &message, 0);
+	if (n < 0) return n;
+	if (message.msg_flags & (MSG_TRUNC | MSG_CTRUNC)) return 0;
+	*peer_len = message.msg_namelen; *local = h->local; *interface_index = 0;
+	for (field = CMSG_FIRSTHDR(&message); field; field = CMSG_NXTHDR(&message, field)) {
+#ifdef IP_PKTINFO
+		if (field->cmsg_level == IPPROTO_IP && field->cmsg_type == IP_PKTINFO &&
+		    field->cmsg_len >= CMSG_LEN(sizeof(struct in_pktinfo)) && local->sa.sa_family == AF_INET) {
+			struct in_pktinfo info;
+			memcpy(&info, CMSG_DATA(field), sizeof(info));
+			local->sa_in.sin_addr = info.ipi_addr;
+			*interface_index = info.ipi_ifindex;
+		}
+#endif
+#if defined(HAVE_IPV6) && defined(IPV6_PKTINFO)
+		if (field->cmsg_level == IPPROTO_IPV6 && field->cmsg_type == IPV6_PKTINFO &&
+		    field->cmsg_len >= CMSG_LEN(sizeof(struct in6_pktinfo)) && local->sa.sa_family == AF_INET6) {
+			struct in6_pktinfo info;
+			memcpy(&info, CMSG_DATA(field), sizeof(info));
+			local->sa_in6.sin6_addr = info.ipi6_addr;
+			local->sa_in6.sin6_scope_id = IN6_IS_ADDR_LINKLOCAL(&info.ipi6_addr) ? info.ipi6_ifindex : 0;
+			*interface_index = info.ipi6_ifindex;
+		}
+#endif
+	}
+	return n;
+}
+
+static ssize_t
+send_packet (cherokee_http3_listener_t *h, cherokee_http3_endpoint_t *e)
+{
+	union { struct cmsghdr alignment; unsigned char bytes[256]; } control;
+	struct msghdr message;
+	struct iovec vector = {e->pending, e->pending_len};
+	memset(&message, 0, sizeof(message));
+	memset(&control, 0, sizeof(control));
+	message.msg_name = &e->peer.sa; message.msg_namelen = e->peer_len;
+	message.msg_iov = &vector; message.msg_iovlen = 1;
+#ifdef IP_PKTINFO
+	if (e->local.sa.sa_family == AF_INET) {
+		struct in_pktinfo info;
+		struct cmsghdr *field;
+		memset(&info, 0, sizeof(info));
+		info.ipi_spec_dst = e->local.sa_in.sin_addr; info.ipi_ifindex = e->interface_index;
+		message.msg_control = control.bytes; message.msg_controllen = CMSG_SPACE(sizeof(info));
+		field = CMSG_FIRSTHDR(&message);
+		field->cmsg_level = IPPROTO_IP; field->cmsg_type = IP_PKTINFO; field->cmsg_len = CMSG_LEN(sizeof(info));
+		memcpy(CMSG_DATA(field), &info, sizeof(info));
+	}
+#endif
+#if defined(HAVE_IPV6) && defined(IPV6_PKTINFO)
+	if (e->local.sa.sa_family == AF_INET6) {
+		struct in6_pktinfo info;
+		struct cmsghdr *field;
+		memset(&info, 0, sizeof(info));
+		info.ipi6_addr = e->local.sa_in6.sin6_addr; info.ipi6_ifindex = e->interface_index;
+		message.msg_control = control.bytes; message.msg_controllen = CMSG_SPACE(sizeof(info));
+		field = CMSG_FIRSTHDR(&message);
+		field->cmsg_level = IPPROTO_IPV6; field->cmsg_type = IPV6_PKTINFO; field->cmsg_len = CMSG_LEN(sizeof(info));
+		memcpy(CMSG_DATA(field), &info, sizeof(info));
+	}
+#endif
+	return sendmsg(h->fd, &message, 0);
 }
 
 void
@@ -736,19 +889,22 @@ cherokee_http3_step (cherokee_bind_t *bind, cherokee_thread_t *thread)
 	}
 	for (k=0; k<64; k++) {
 		cherokee_sockaddr_t peer;
+		cherokee_sockaddr_t local;
+		unsigned int interface_index;
 		socklen_t len = sizeof(peer);
-		ssize_t n = recvfrom(h->fd, packet, sizeof(packet), 0, &peer.sa, &len);
+		ssize_t n = receive_packet(h, packet, sizeof(packet), &peer, &len, &local, &interface_index);
 		cherokee_http3_endpoint_t *e = NULL;
 		if (n < 0) break;
+		if (!n) continue;
 		list_for_each(i, &h->endpoints) {
 			cherokee_http3_endpoint_t *candidate = (cherokee_http3_endpoint_t *)i;
-			if (same_peer(&candidate->peer, &peer)) { e = candidate; break; }
+			if (same_peer(&candidate->peer, &peer) && same_peer(&candidate->local, &local)) { e = candidate; break; }
 		}
 		if (!e) {
 			/* Do not allocate state for short, undersized or non-Initial traffic. */
 			if (n < 1200 || (packet[0] & 0xf0) != 0xc0 || packet[1] || packet[2] || packet[3] || packet[4] != 1 ||
 			    h->endpoint_count >= HTTP3_ENDPOINT_MAX) continue;
-			e = new_endpoint(h, &peer, len);
+			e = new_endpoint(h, &peer, len, &local, interface_index);
 			if (!e) continue;
 		}
 		if (BIO_write(e->network, packet, n) > 0) e->activity = cherokee_bogonow_now;
@@ -803,7 +959,7 @@ cherokee_http3_step (cherokee_bind_t *bind, cherokee_thread_t *thread)
 				if (n <= 0) break;
 				e->pending_len = n;
 			}
-			sent = sendto(h->fd, e->pending, e->pending_len, 0, &e->peer.sa, e->peer_len);
+			sent = send_packet(h, e);
 			if (sent < 0 && (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)) break;
 			e->pending_len = 0;
 		}

@@ -36,7 +36,7 @@ cherokee_http_stream_t *cherokee_http_stream_new (cherokee_thread_t *, int64_t);
 void cherokee_http_stream_free (cherokee_http_stream_t *);
 int cherokee_http_stream_header (cherokee_http_stream_t *, const uint8_t *, size_t, const uint8_t *, size_t);
 int cherokee_http_stream_data (cherokee_http_stream_t *, const uint8_t *, size_t);
-int cherokee_http_stream_dispatch (cherokee_http_stream_t *, cherokee_bind_t *, cherokee_sockaddr_t *, cherokee_http_version_t);
+int cherokee_http_stream_dispatch (cherokee_http_stream_t *, cherokee_bind_t *, cherokee_sockaddr_t *, cherokee_sockaddr_t *, cherokee_http_version_t, void *);
 /* Suspend handler reads when output is full or borrowed by the transport. */
 int cherokee_http_stream_update_poll (cherokee_http_stream_t *, int);
 /* Returns 1 when response headers are ready, 0 while waiting, -1 on error. */

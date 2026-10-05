@@ -50,6 +50,40 @@ static int select_alpn (SSL *, const unsigned char **, unsigned char *, const un
 
 #define ENTRIES "crypto,ssl"
 
+#ifdef HAVE_HTTP2
+static ret_t
+set_http2_security (SSL *ssl, SSL_CTX *context)
+{
+	STACK_OF(SSL_CIPHER) *configured = SSL_CTX_get_ciphers(context);
+	cherokee_buffer_t allowed = CHEROKEE_BUF_INIT;
+	ret_t ret = ret_error;
+	int i;
+	/* Intersect the virtual server's policy with HTTP/2's TLS requirements.
+	 * A fixed replacement list would re-enable ciphers an operator excluded. */
+	for (i=0; i<sk_SSL_CIPHER_num(configured); i++) {
+		const SSL_CIPHER *cipher = sk_SSL_CIPHER_value(configured, i);
+		int auth = SSL_CIPHER_get_auth_nid(cipher);
+		if (SSL_CIPHER_get_kx_nid(cipher) != NID_kx_ecdhe ||
+		    (auth != NID_auth_rsa && auth != NID_auth_ecdsa) || !SSL_CIPHER_is_aead(cipher)) continue;
+		if ((allowed.len && cherokee_buffer_add_str(&allowed, ":") != ret_ok) ||
+		    cherokee_buffer_add(&allowed, SSL_CIPHER_get_name(cipher), strlen(SSL_CIPHER_get_name(cipher))) != ret_ok)
+			goto out;
+	}
+	if (allowed.len) {
+		if (!SSL_set_min_proto_version(ssl, TLS1_2_VERSION) || !SSL_set_cipher_list(ssl, allowed.buf)) goto out;
+	} else {
+		/* A policy with no suitable TLS 1.2 ciphers may still use TLS 1.3. */
+		SSL_set_cipher_list(ssl, "");
+		if (!SSL_set_min_proto_version(ssl, TLS1_3_VERSION)) goto out;
+	}
+	SSL_set_options(ssl, SSL_OP_NO_COMPRESSION | SSL_OP_NO_RENEGOTIATION);
+	ret = ret_ok;
+out:
+	cherokee_buffer_mrproper(&allowed);
+	return ret;
+}
+#endif
+
 static cherokee_dh_param_t *dh_param_512  = NULL;
 static cherokee_dh_param_t *dh_param_1024 = NULL;
 static cherokee_dh_param_t *dh_param_2048 = NULL;
@@ -248,6 +282,9 @@ cherokee_cryptor_libssl_find_vserver (SSL *ssl,
 	 * changes more options by hand.
 	 */
 	SSL_set_options(ssl, SSL_CTX_get_options(ctx));
+#ifdef HAVE_HTTP2
+	if (conn->bind->http2 && set_http2_security(ssl, ctx) != ret_ok) return ret_error;
+#endif
 
 	if ((SSL_get_verify_mode(ssl) == SSL_VERIFY_NONE) ||
 	    (SSL_num_renegotiations(ssl) == 0)) {
@@ -255,6 +292,7 @@ cherokee_cryptor_libssl_find_vserver (SSL *ssl,
 		SSL_set_verify(ssl, SSL_CTX_get_verify_mode(ctx),
 		               SSL_CTX_get_verify_callback(ctx));
 	}
+	conn->socket.cryptor->vserver_ref = vsrv;
 
 	return ret_ok;
 }
@@ -736,9 +774,7 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	SSL_set_accept_state (cryp->session);
 #ifdef HAVE_HTTP2
 	if (conn->bind->http2) {
-		if (!SSL_set_min_proto_version(cryp->session, TLS1_2_VERSION) ||
-		    !SSL_set_cipher_list(cryp->session, "ECDHE+AESGCM:ECDHE+CHACHA20")) return ret_error;
-		SSL_set_options(cryp->session, SSL_OP_NO_COMPRESSION | SSL_OP_NO_RENEGOTIATION);
+		if (set_http2_security(cryp->session, vsrv_crytor->context) != ret_ok) return ret_error;
 	}
 #endif
 
@@ -1360,6 +1396,7 @@ cherokee_cryptor_libssl_new (cherokee_cryptor_libssl_t **cryp)
 
 /* Private low-level functions for OpenSSL
  */
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 static pthread_mutex_t *locks;
 static size_t           locks_num;
 
@@ -1382,6 +1419,7 @@ __lock_thread (int mode, int n, const char *file, int line)
 		CHEROKEE_MUTEX_UNLOCK (&locks[n]);
 	}
 }
+#endif
 
 
 /* Plug-in initialization
@@ -1419,6 +1457,9 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 		LOG_WARNING_S (CHEROKEE_ERROR_SSL_NO_ENTROPY);
 	}
 
+	/* OpenSSL >= 1.1 manages its own locks. Allocating legacy locks there
+	 * leaks memory because the compatibility callbacks are no-ops. */
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	/* Init concurrency related stuff
 	 */
 	if ((CRYPTO_get_id_callback()      == NULL) &&
@@ -1436,6 +1477,7 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 			CHEROKEE_MUTEX_INIT (&locks[n], NULL);
 		}
 	}
+#endif
 
 
 # if HAVE_OPENSSL_ENGINE_H && OPENSSL_VERSION_NUMBER < 0x30000000L

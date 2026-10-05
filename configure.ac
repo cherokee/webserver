@@ -1099,10 +1099,10 @@ HTTP_PROTOCOL_LIBS=""
 have_http2=no
 have_http3=no
 if test "$enable_http2" != no && test "$have_openssl" = yes; then
-  if $PKG_CONFIG --exists 'libnghttp2 >= 1.61'; then
+  if $PKG_CONFIG --exists 'libnghttp2 >= 1.61' 'openssl >= 1.1.1'; then
     have_http2=yes
-    HTTP_PROTOCOL_CFLAGS="$HTTP_PROTOCOL_CFLAGS `$PKG_CONFIG --cflags libnghttp2`"
-    HTTP_PROTOCOL_LIBS="$HTTP_PROTOCOL_LIBS `$PKG_CONFIG --libs libnghttp2`"
+    HTTP_PROTOCOL_CFLAGS="$HTTP_PROTOCOL_CFLAGS `$PKG_CONFIG --cflags libnghttp2 openssl`"
+    HTTP_PROTOCOL_LIBS="$HTTP_PROTOCOL_LIBS `$PKG_CONFIG --libs libnghttp2 openssl`"
     AC_DEFINE(HAVE_HTTP2, 1, [Build native HTTP/2])
   fi
 fi
@@ -1120,7 +1120,7 @@ if test "$enable_http3" != no && test "$have_openssl" = yes; then
   fi
 fi
 if test "$enable_http2" = yes && test "$have_http2" != yes; then
-  AC_MSG_ERROR([HTTP/2 requires OpenSSL and libnghttp2 >= 1.61])
+  AC_MSG_ERROR([HTTP/2 requires OpenSSL >= 1.1.1 and libnghttp2 >= 1.61])
 fi
 if test "$enable_http3" = yes && test "$have_http3" != yes; then
   AC_MSG_ERROR([HTTP/3 requires QUIC server-enabled OpenSSL >= 3.5 and libnghttp3 >= 1.12])

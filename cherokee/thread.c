@@ -1690,8 +1690,8 @@ thread_add_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 
 ret_t
 cherokee_thread_add_stream (cherokee_thread_t *thd, cherokee_bind_t *bind,
-                           int fd, cherokee_sockaddr_t *peer,
-                           cherokee_http_version_t version)
+                           int fd, cherokee_sockaddr_t *peer, cherokee_sockaddr_t *local,
+                           cherokee_http_version_t version, void *tls_vserver)
 {
 	cherokee_connection_t *conn;
 	if (thd->conns_num >= thd->conns_max) return ret_deny;
@@ -1699,7 +1699,9 @@ cherokee_thread_add_stream (cherokee_thread_t *thd, cherokee_bind_t *bind,
 	if (cherokee_socket_set_sockaddr(&conn->socket, fd, peer) != ret_ok) goto error;
 	conn->bind = bind;
 	conn->native_version = version;
+	conn->native_tls_vserver = tls_vserver;
 	conn->socket.native_stream = true;
+	conn->socket.native_local_addr = *local;
 	conn->socket.is_tls = TLS;
 	if (thread_add_connection(thd, conn) != ret_ok) goto error;
 	thd->conns_num++;

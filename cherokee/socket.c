@@ -111,6 +111,7 @@ ret_t
 cherokee_socket_init (cherokee_socket_t *socket)
 {
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
+	memset (&socket->native_local_addr, 0, sizeof(cherokee_sockaddr_t));
 	socket->client_addr_len = -1;
 
 	socket->socket  = -1;
@@ -120,6 +121,17 @@ cherokee_socket_init (cherokee_socket_t *socket)
 	socket->cryptor = NULL;
 
 	return ret_ok;
+}
+
+ret_t
+cherokee_socket_get_local_address (cherokee_socket_t *socket, cherokee_sockaddr_t *address)
+{
+	socklen_t length = sizeof(*address);
+	if (socket->native_stream) {
+		*address = socket->native_local_addr;
+		return ret_ok;
+	}
+	return getsockname(socket->socket, &address->sa, &length) ? ret_error : ret_ok;
 }
 
 

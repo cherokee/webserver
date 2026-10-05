@@ -94,6 +94,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	n->http2_session = NULL;
 	n->native_version = http_version_unknown;
+	n->native_tls_vserver = NULL;
 	n->error_code                = http_ok;
 	n->phase                     = phase_reading_header;
 	n->auth_type                 = http_auth_nothing;
@@ -305,6 +306,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 	cherokee_http2_free (conn);
 	conn->native_version = http_version_unknown;
+	conn->native_tls_vserver = NULL;
 	conn->phase                = phase_reading_header;
 	conn->auth_type            = http_auth_nothing;
 	conn->req_auth_type        = http_auth_nothing;
@@ -2272,6 +2274,18 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	default:
 		RET_UNKNOWN(ret);
 		return ret_error;
+	}
+
+	/* A multiplexed authority must not enter a client-certificate protected
+	 * virtual server authenticated under a different TLS virtual server. */
+	if ((conn->native_version != http_version_unknown || conn->bind->http2 || conn->bind->http3) &&
+	    CONN_VSRV(conn)->req_client_certs == req_client_cert_require) {
+		void *tls_vserver = conn->native_version != http_version_unknown ? conn->native_tls_vserver :
+		    (conn->socket.cryptor ? conn->socket.cryptor->vserver_ref : NULL);
+		if (tls_vserver != conn->vserver || !CONN_VSRV(conn)->certs_ca.len) {
+			conn->error_code = http_access_denied;
+			return ret_error;
+		}
 	}
 
 	/* Userdir requests

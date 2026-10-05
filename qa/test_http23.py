@@ -26,6 +26,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class NativeHTTPTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.host = os.getenv('CHEROKEE_TEST_HOST', '127.0.0.1')
+        cls.interface = os.getenv('CHEROKEE_TEST_INTERFACE', cls.host)
+        cls.ipv6 = ':' in cls.host
         cls.temp = tempfile.TemporaryDirectory(prefix="cherokee-http23-")
         cls.directory = Path(cls.temp.name)
         cls.content = b"native Cherokee protocols\n" * 10000
@@ -35,19 +38,23 @@ class NativeHTTPTests(unittest.TestCase):
                           "body=sys.stdin.buffer.read(int(os.environ.get('CONTENT_LENGTH','0')))\n"
                           "sys.stdout.buffer.write(b'Content-Type: text/plain\\r\\nX-Remote-Addr: ' + "
                           "os.environ.get('REMOTE_ADDR','').encode() + b'\\r\\nX-Cookie: ' + "
-                          "os.environ.get('HTTP_COOKIE','').encode() + b'\\r\\nConnection: X-Private\\r\\nX-Private: secret\\r\\n\\r\\n' + "
+                          "os.environ.get('HTTP_COOKIE','').encode() + b'\\r\\nX-Server-Addr: ' + os.environ.get('SERVER_ADDR','').encode() + b'\\r\\nConnection: X-Private\\r\\nX-Private: secret\\r\\n\\r\\n' + "
                           "os.environ['SERVER_PROTOCOL'].encode() + b' ' + "
                           "os.environ.get('HTTPS','').encode() + b' ' + body)\n")
         script.chmod(0o755)
         subprocess.run(["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
                         "-keyout", str(cls.directory / "key.pem"), "-out", str(cls.directory / "cert.pem"),
                         "-subj", "/CN=localhost", "-days", "1"], check=True, capture_output=True)
-        with socket.socket() as sock:
-            sock.bind(("127.0.0.1", 0))
+        subprocess.run(['openssl', 'req', '-x509', '-newkey', 'rsa:2048', '-nodes',
+                        '-keyout', str(cls.directory / 'secure-key.pem'), '-out', str(cls.directory / 'secure-cert.pem'),
+                        '-subj', '/CN=secure.local', '-days', '1'], check=True, capture_output=True)
+        with socket.socket(socket.AF_INET6 if cls.ipv6 else socket.AF_INET) as sock:
+            sock.bind((cls.host, 0))
             cls.port = sock.getsockname()[1]
         cls.config = cls.directory / "cherokee.conf"
         cls.config.write_text(f"""server!bind!1!port = {cls.port}
-server!bind!1!interface = 127.0.0.1
+server!bind!1!interface = {cls.interface}
+server!ipv6 = {int(cls.ipv6)}
 server!bind!1!tls = 1
 server!bind!1!http2 = 1
 server!bind!1!http3 = {os.getenv('CHEROKEE_TEST_HTTP3', '0')}
@@ -61,11 +68,20 @@ vserver!1!nick = default
 vserver!1!document_root = {cls.directory}
 vserver!1!ssl_certificate_file = {cls.directory}/cert.pem
 vserver!1!ssl_certificate_key_file = {cls.directory}/key.pem
+vserver!1!ssl_ciphers = ECDHE-RSA-AES128-GCM-SHA256
 vserver!1!rule!10!match = extensions
 vserver!1!rule!10!match!extensions = cgi
 vserver!1!rule!10!handler = cgi
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = file
+vserver!2!nick = secure.local
+vserver!2!document_root = {cls.directory}
+vserver!2!ssl_certificate_file = {cls.directory}/secure-cert.pem
+vserver!2!ssl_certificate_key_file = {cls.directory}/secure-key.pem
+vserver!2!ssl_client_certs = require
+vserver!2!ssl_ca_list_file = {cls.directory}/cert.pem
+vserver!2!rule!1!match = default
+vserver!2!rule!1!handler = file
 """)
         cls.log = open(cls.directory / "server.log", "w+")
         cls.process = subprocess.Popen([str(ROOT / "cherokee/cherokee-worker"), "-C", str(cls.config)],
@@ -75,7 +91,7 @@ vserver!1!rule!1!handler = file
                 cls.log.seek(0)
                 raise RuntimeError(cls.log.read())
             try:
-                with socket.create_connection(("127.0.0.1", cls.port), timeout=0.1):
+                with socket.create_connection((cls.host, cls.port), timeout=0.1):
                     return
             except OSError:
                 time.sleep(0.05)
@@ -94,15 +110,19 @@ vserver!1!rule!1!handler = file
         log = cls.log.read()
         cls.log.close()
         cls.temp.cleanup()
-        if crashed or 'ERROR: AddressSanitizer' in log or 'runtime error:' in log:
+        if crashed or 'ERROR: AddressSanitizer' in log or 'ERROR: LeakSanitizer' in log or 'runtime error:' in log:
             raise AssertionError(f"Cherokee crashed or sanitizer reported an error:\n{log}")
 
     @contextlib.contextmanager
-    def h2_connection(self, validate=True):
+    def h2_connection(self, validate=True, server_name='localhost', client_certificate=False, tls12=False):
         ctx = ssl._create_unverified_context()
         ctx.set_alpn_protocols(["h2", "http/1.1"])
-        with ctx.wrap_socket(socket.create_connection(("127.0.0.1", self.port), timeout=5),
-                             server_hostname="localhost") as sock:
+        if tls12:
+            ctx.maximum_version = ssl.TLSVersion.TLSv1_2
+        if client_certificate:
+            ctx.load_cert_chain(self.directory / 'cert.pem', self.directory / 'key.pem')
+        with ctx.wrap_socket(socket.create_connection((self.host, self.port), timeout=5),
+                             server_hostname=server_name) as sock:
             self.assertEqual(sock.selected_alpn_protocol(), "h2")
             client = H2Connection(config=H2Configuration(client_side=True, header_encoding="utf-8",
                                                             validate_outbound_headers=validate,
@@ -111,9 +131,9 @@ vserver!1!rule!1!handler = file
             sock.sendall(client.data_to_send())
             yield sock, client
 
-    def send_request(self, client, stream, path, method="GET", body=b"", extra=()):
+    def send_request(self, client, stream, path, method="GET", body=b"", extra=(), authority='localhost'):
         headers = [(":method", method), (":scheme", "https"),
-                   (":authority", f"localhost:{self.port}"), (":path", path)] + list(extra)
+                   (":authority", f"{authority}:{self.port}"), (":path", path)] + list(extra)
         if body:
             if not any(name == "content-length" for name, _ in extra):
                 headers.append(("content-length", str(len(body))))
@@ -175,7 +195,8 @@ vserver!1!rule!1!handler = file
             result = self.read_responses(sock, client, [1])[1]
             self.assertEqual(result["headers"][":status"], "200")
             self.assertEqual(result["body"], b"HTTP/2 on request body")
-            self.assertEqual(result["headers"]["x-remote-addr"], "127.0.0.1")
+            self.assertEqual(result["headers"]["x-remote-addr"], "::1" if self.ipv6 else "127.0.0.1")
+            self.assertEqual(result["headers"]["x-server-addr"], self.host)
             self.assertNotIn('x-private', result['headers'])
 
     def test_h2_cookie_joining(self):
@@ -184,6 +205,32 @@ vserver!1!rule!1!handler = file
             sock.sendall(client.data_to_send())
             result = self.read_responses(sock, client, [1])[1]
             self.assertEqual(result["headers"]["x-cookie"], "a=1; b=2")
+
+    def test_h2_sni_and_client_certificate(self):
+        with self.h2_connection() as (sock, client):
+            self.send_request(client, 1, '/data', authority='secure.local')
+            sock.sendall(client.data_to_send())
+            result = self.read_responses(sock, client, [1])[1]
+            self.assertEqual(result['headers'][':status'], '403')
+            self.assertNotEqual(result['body'], self.content)
+        with self.assertRaises(OSError):
+            with self.h2_connection(server_name='secure.local') as (sock, client):
+                self.send_request(client, 1, '/data', authority='secure.local')
+                sock.sendall(client.data_to_send())
+                sock.recv(65536)
+        with self.h2_connection(server_name='secure.local', client_certificate=True) as (sock, client):
+            expected = ssl.PEM_cert_to_DER_cert((self.directory / 'secure-cert.pem').read_text())
+            self.assertEqual(sock.getpeercert(binary_form=True), expected)
+            self.send_request(client, 1, '/data', authority='secure.local')
+            sock.sendall(client.data_to_send())
+            self.assertEqual(self.read_responses(sock, client, [1])[1]['body'], self.content)
+
+    def test_h2_tls12_cipher_policy(self):
+        with self.h2_connection(tls12=True) as (sock, client):
+            self.assertEqual(sock.cipher()[0], 'ECDHE-RSA-AES128-GCM-SHA256')
+            self.send_request(client, 1, '/echo.cgi')
+            sock.sendall(client.data_to_send())
+            self.assertEqual(self.read_responses(sock, client, [1])[1]['body'], b'HTTP/2 on ')
 
     def test_h2_cancellation_and_connection_reuse(self):
         with self.h2_connection() as (sock, client):
@@ -236,9 +283,10 @@ vserver!1!rule!1!handler = file
                     self.assertEqual(valid, b"HTTP/2 on ")
 
     def test_startup_rejects_insecure_protocols(self):
-        original = self.config.read_text()
+        original = self.config.read_text().replace(f'port = {self.port}', 'port = 0')
         configs = [original.replace("server!bind!1!tls = 1", "server!bind!1!tls = 0"),
-                   original.replace("server!tls = libssl\n", "")]
+                   original.replace("server!tls = libssl\n", ""),
+                   '\n'.join(line for line in original.splitlines() if '!ssl_ca_list_file' not in line)]
         for config in configs:
             with self.subTest(configuration=config.splitlines()[:5]):
                 path = self.directory / "invalid.conf"
@@ -251,7 +299,7 @@ vserver!1!rule!1!handler = file
     def test_http1_fallback(self):
         ctx = ssl._create_unverified_context()
         ctx.set_alpn_protocols(["http/1.1"])
-        with ctx.wrap_socket(socket.create_connection(("127.0.0.1", self.port), timeout=5),
+        with ctx.wrap_socket(socket.create_connection((self.host, self.port), timeout=5),
                              server_hostname="localhost") as sock:
             self.assertEqual(sock.selected_alpn_protocol(), "http/1.1")
             sock.sendall(b"GET /data HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n")
@@ -260,6 +308,18 @@ vserver!1!rule!1!handler = file
                 response.extend(data)
             self.assertTrue(response.startswith(b"HTTP/1.1 200"))
             self.assertEqual(response.split(b"\r\n\r\n", 1)[1], self.content)
+
+    def test_http1_fallback_certificate_authority(self):
+        ctx = ssl._create_unverified_context()
+        ctx.set_alpn_protocols(['http/1.1'])
+        with ctx.wrap_socket(socket.create_connection((self.host, self.port), timeout=5),
+                             server_hostname='localhost') as sock:
+            sock.sendall(b'GET /data HTTP/1.1\r\nHost: secure.local\r\nConnection: close\r\n\r\n')
+            response = bytearray()
+            while data := sock.recv(65536):
+                response.extend(data)
+            self.assertTrue(response.startswith(b'HTTP/1.1 403'))
+            self.assertNotEqual(response.split(b'\r\n\r\n', 1)[1], self.content)
 
 
     @unittest.skipUnless(os.getenv("CHEROKEE_TEST_HTTP3") == "1", "enable with CHEROKEE_TEST_HTTP3=1")
@@ -290,6 +350,7 @@ vserver!1!rule!1!handler = file
                 self.http = RequestAwareH3(self._quic)
                 self.response_packets = 0
                 self.dropped_packets = 0
+                self.drop_packets = True
                 self.responses = {}
                 self.waiters = {}
                 self.closed = asyncio.get_running_loop().create_future()
@@ -297,7 +358,7 @@ vserver!1!rule!1!handler = file
             def datagram_received(self, data, addr):
                 # Drop a few application packets to verify server retransmission
                 # after nghttp3 has released the copied response buffers.
-                if self.waiters:
+                if self.drop_packets and self.waiters:
                     self.response_packets += 1
                     if self.response_packets % 17 == 0 and self.dropped_packets < 3:
                         self.dropped_packets += 1
@@ -327,14 +388,14 @@ vserver!1!rule!1!handler = file
                         if waiter and not waiter.done():
                             waiter.set_result(response)
 
-            def request(self, port, path, method=b"GET", body=b"", extra=()):
+            def request(self, port, path, method=b"GET", body=b"", extra=(), authority=None):
                 stream = self._quic.get_next_available_stream_id()
                 future = asyncio.get_running_loop().create_future()
                 self.waiters[stream] = future
                 if method == b"HEAD":
                     self.http.head_streams.add(stream)
                 headers = [(b":method", method), (b":scheme", b"https"),
-                           (b":authority", f"localhost:{port}".encode()), (b":path", path)] + list(extra)
+                           (b":authority", f"{authority or self._quic.configuration.server_name}:{port}".encode()), (b":path", path)] + list(extra)
                 if body:
                     headers.append((b"content-length", str(len(body)).encode()))
                 if sum(len(name) + len(value) for name, value in headers) > 65000:
@@ -358,8 +419,9 @@ vserver!1!rule!1!handler = file
 
         async def run():
             config = QuicConfiguration(is_client=True, alpn_protocols=H3_ALPN,
-                                       verify_mode=ssl.CERT_NONE, server_name="localhost")
-            async with connect("127.0.0.1", self.port, configuration=config, create_protocol=Client) as client:
+                                       verify_mode=ssl.CERT_NONE, server_name="localhost",
+                                       max_data=65536, max_stream_data=32768)
+            async with connect(self.host, self.port, configuration=config, create_protocol=Client) as client:
                 futures = [client.request(self.port, b"/data"),
                            client.request(self.port, b"/absent"),
                            client.request(self.port, b"/echo.cgi", b"POST", b"quic request"),
@@ -369,7 +431,8 @@ vserver!1!rule!1!handler = file
                 self.assertEqual(results[0]["body"], self.content)
                 self.assertEqual(results[1]["headers"][b":status"], b"404")
                 self.assertEqual(results[2]["body"], b"HTTP/3 on quic request")
-                self.assertEqual(results[2]["headers"][b"x-remote-addr"], b"127.0.0.1")
+                self.assertEqual(results[2]["headers"][b"x-remote-addr"], b"::1" if self.ipv6 else b"127.0.0.1")
+                self.assertEqual(results[2]["headers"][b"x-server-addr"], self.host.encode())
                 self.assertNotIn(b'x-private', results[2]['headers'])
                 self.assertEqual(results[3]["body"], b"")
                 self.assertEqual(results[4]["body"], self.content[7:25])
@@ -384,6 +447,9 @@ vserver!1!rule!1!handler = file
                 body = b'upload' * 10000
                 result = await asyncio.wait_for(client.request(self.port, b'/echo.cgi', b'POST', body), timeout=5)
                 self.assertEqual(result['body'], b'HTTP/3 on ' + body)
+                result = await asyncio.wait_for(client.request(self.port, b'/data', authority='secure.local'), timeout=5)
+                self.assertEqual(result['headers'][b':status'], b'403')
+                self.assertNotEqual(result['body'], self.content)
                 # Reset before headers reach nghttp3, then reuse the session.
                 stream = client._quic.get_next_available_stream_id()
                 client._quic.send_stream_data(stream, b'', end_stream=False)
@@ -403,7 +469,8 @@ vserver!1!rule!1!handler = file
             for extra in ([(b'connection', b'close')], [(b'x-bad', b'one\r\ntwo')],
                           [(b'content-length', b'10')],
                           [(f'x-large-{i}'.encode(), b'a' * 1000) for i in range(80)]):
-                async with connect('127.0.0.1', self.port, configuration=config, create_protocol=Client) as client:
+                async with connect(self.host, self.port, configuration=config, create_protocol=Client) as client:
+                    client.drop_packets = False
                     bad = client.request(self.port, b'/echo.cgi', extra=extra)
                     good = client.request(self.port, b'/echo.cgi')
                     results = await asyncio.wait_for(asyncio.gather(bad, good, return_exceptions=True), timeout=5)
@@ -414,6 +481,16 @@ vserver!1!rule!1!handler = file
                         self.assertIsInstance(results[0], (RuntimeError, RequestReset))
                         closed = await asyncio.wait_for(client.closed, timeout=5)
                         self.assertEqual(closed.error_code, 0x10e)
+
+            config.server_name = 'secure.local'
+            with self.assertRaises((ConnectionError, RuntimeError)):
+                async with connect(self.host, self.port, configuration=config, create_protocol=Client) as client:
+                    await asyncio.wait_for(client.request(self.port, b'/data'), timeout=5)
+            config.load_cert_chain(self.directory / 'cert.pem', self.directory / 'key.pem')
+            async with connect(self.host, self.port, configuration=config, create_protocol=Client) as client:
+                result = await asyncio.wait_for(client.request(self.port, b'/data'), timeout=5)
+                self.assertEqual(result['body'], self.content)
+                self.assertEqual(client._quic.tls._peer_certificate.subject.rfc4514_string(), 'CN=secure.local')
 
         try:
             asyncio.run(asyncio.wait_for(run(), timeout=20))

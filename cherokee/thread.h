@@ -109,7 +109,7 @@ ret_t cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd);
 
 /* Called only by the owning thread; takes fd ownership on success. */
 ret_t cherokee_thread_add_stream (cherokee_thread_t *, cherokee_bind_t *, int,
-                                  cherokee_sockaddr_t *, cherokee_http_version_t);
+                                  cherokee_sockaddr_t *, cherokee_sockaddr_t *, cherokee_http_version_t, void *);
 
 ret_t cherokee_thread_new                        (cherokee_thread_t     **thd,
                                                   void                   *server,

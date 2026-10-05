@@ -150,7 +150,8 @@ cherokee_http_stream_data (cherokee_http_stream_t *s, const uint8_t *data, size_
 
 int
 cherokee_http_stream_dispatch (cherokee_http_stream_t *s, cherokee_bind_t *bind,
-                              cherokee_sockaddr_t *peer, cherokee_http_version_t version)
+                              cherokee_sockaddr_t *peer, cherokee_sockaddr_t *local,
+                              cherokee_http_version_t version, void *tls_vserver)
 {
 	int fds[2];
 	size_t i;
@@ -176,7 +177,7 @@ cherokee_http_stream_dispatch (cherokee_http_stream_t *s, cherokee_bind_t *bind,
 			close(fds[0]); close(fds[1]); return -1;
 		}
 	}
-	if (cherokee_thread_add_stream (s->thread, bind, fds[1], peer, version) != ret_ok) {
+	if (cherokee_thread_add_stream (s->thread, bind, fds[1], peer, local, version, tls_vserver) != ret_ok) {
 		close(fds[0]); close(fds[1]); return -1;
 	}
 	s->fd = fds[0];
