@@ -1264,7 +1264,8 @@ $(static_validator_htpasswd_flags) \
 $(static_validator_mysql_flags) \
 $(static_cryptor_libssl_flags) \
 $(static_handler_dbslayer_flags) \
-$(static_handler_streaming_flags)
+$(static_handler_streaming_flags) \
+$(HTTP_PROTOCOL_CFLAGS)
 
 libcherokee_server_la_LIBADD = \
 $(PTHREAD_LIBS) \
@@ -1278,6 +1279,7 @@ $(static_handler_proxy_lib) \
 $(static_handler_dbslayer_lib) \
 $(static_handler_streaming_lib) \
 $(static_cryptor_libssl_lib) \
+$(HTTP_PROTOCOL_LIBS) \
 libcherokee-base.la
 
 
@@ -1558,6 +1560,12 @@ server-protected.h \
 server.h \
 server.c \
 bind.h \
+http-stream.c \
+http-stream.h \
+http2.c \
+http2.h \
+http3.c \
+http3.h \
 bind.c \
 virtual_server.h \
 virtual_server.c \

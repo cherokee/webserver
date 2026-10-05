@@ -168,6 +168,7 @@ ret_t
 cherokee_cryptor_socket_init_base (cherokee_cryptor_socket_t *cryp)
 {
 	cryp->initialized = false;
+	cryp->negotiated_http2 = false;
 	cryp->vserver_ref = NULL;
 	cryp->free        = NULL;
 	cryp->clean       = NULL;
@@ -184,6 +185,7 @@ ret_t
 cherokee_cryptor_socket_clean_base (cherokee_cryptor_socket_t *cryp)
 {
 	cryp->initialized = false;
+	cryp->negotiated_http2 = false;
 	cryp->vserver_ref = NULL;
 
 	return ret_ok;

@@ -149,7 +149,13 @@ add_protocol (cherokee_template_t       *template,
 	UNUSED (template);
 	UNUSED (token);
 
-	switch (conn->header.version) {
+	switch (CONN_HTTP_VERSION(conn)) {
+	case http_version_20:
+		cherokee_buffer_add_str (output, "HTTP/2");
+		break;
+	case http_version_30:
+		cherokee_buffer_add_str (output, "HTTP/3");
+		break;
 	case http_version_11:
 		cherokee_buffer_add_str (output, "HTTP/1.1");
 		break;

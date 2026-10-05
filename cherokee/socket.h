@@ -75,6 +75,7 @@ typedef struct {
 	cherokee_socket_status_t   status;
 	cherokee_socket_type_t     is_tls;
 	cherokee_cryptor_socket_t *cryptor;
+	cherokee_boolean_t         native_stream;
 } cherokee_socket_t;
 
 

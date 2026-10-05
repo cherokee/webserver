@@ -412,7 +412,7 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* HTTP protocol version
 	 */
-	ret = cherokee_http_version_to_string (conn->header.version, (const char **) &p, &p_len);
+	ret = cherokee_http_version_to_string (CONN_HTTP_VERSION(conn), (const char **) &p, &p_len);
 	if (ret >= ret_ok)
 		set_env (cgi, "SERVER_PROTOCOL", p, p_len);
 

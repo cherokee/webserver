@@ -115,6 +115,7 @@ cherokee_socket_init (cherokee_socket_t *socket)
 
 	socket->socket  = -1;
 	socket->status  = socket_closed;
+	socket->native_stream = false;
 	socket->is_tls  = non_TLS;
 	socket->cryptor = NULL;
 
@@ -144,6 +145,7 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 		socket->cryptor = NULL;
 	}
 
+	socket->native_stream = false;
 	socket->is_tls = non_TLS;
 
 	/* Properties
@@ -208,6 +210,7 @@ cherokee_socket_close (cherokee_socket_t *socket)
 
 	socket->socket = -1;
 	socket->status = socket_closed;
+	socket->native_stream = false;
 	socket->is_tls = non_TLS;
 
 	return ret;
@@ -656,7 +659,7 @@ cherokee_socket_write (cherokee_socket_t *socket,
 	 */
 	return_if_fail (buf != NULL && buf_len > 0, ret_error);
 
-	if (likely (socket->is_tls != TLS)) {
+	if (likely (socket->is_tls != TLS || socket->native_stream)) {
 		do {
 			len = send (SOCKET_FD(socket), buf, buf_len, 0);
 		} while ((len < 0) && (errno == EINTR));
@@ -748,7 +751,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 		return ret_eof;
 	}
 
-	if (likely (socket->is_tls != TLS)) {
+	if (likely (socket->is_tls != TLS || socket->native_stream)) {
 		/* Plain read
 		 */
 		do {
@@ -818,7 +821,7 @@ cherokee_socket_read (cherokee_socket_t *socket,
 int
 cherokee_socket_pending_read (cherokee_socket_t *socket)
 {
-	if (socket->is_tls != TLS)
+	if (socket->is_tls != TLS || socket->native_stream)
 		return 0;
 
 	if (unlikely ((socket->status != socket_reading) &&
@@ -912,7 +915,7 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 	 */
 	return_if_fail (vector != NULL && vector_len > 0, ret_error);
 
-	if (likely (socket->is_tls != TLS))
+	if (likely (socket->is_tls != TLS || socket->native_stream))
 	{
 		do {
 			re = writev (SOCKET_FD(socket), vector, vector_len);

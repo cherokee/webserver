@@ -65,6 +65,7 @@
 #include "util.h"
 #include "list.h"
 #include "http.h"
+#include "http2.h"
 #include "handler.h"
 #include "thread.h"
 #include "handler_error.h"
@@ -91,6 +92,8 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	INIT_LIST_HEAD (&n->list_node);
 
+	n->http2_session = NULL;
+	n->native_version = http_version_unknown;
 	n->error_code                = http_ok;
 	n->phase                     = phase_reading_header;
 	n->auth_type                 = http_auth_nothing;
@@ -181,6 +184,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 ret_t
 cherokee_connection_free (cherokee_connection_t  *conn)
 {
+	cherokee_http2_free (conn);
 	cherokee_header_mrproper (&conn->header);
 	cherokee_socket_mrproper (&conn->socket);
 
@@ -299,6 +303,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		conn->validator = NULL;
 	}
 
+	cherokee_http2_free (conn);
+	conn->native_version = http_version_unknown;
 	conn->phase                = phase_reading_header;
 	conn->auth_type            = http_auth_nothing;
 	conn->req_auth_type        = http_auth_nothing;
@@ -2903,6 +2909,7 @@ cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 	switch (conn->phase) {
 	case phase_nothing:           return "Nothing";
 	case phase_tls_handshake:     return "TLS handshake";
+	case phase_http2:             return "HTTP/2 session";
 	case phase_reading_header:    return "Reading header";
 	case phase_processing_header: return "Processing header";
 	case phase_reading_post:      return "Reading POST";

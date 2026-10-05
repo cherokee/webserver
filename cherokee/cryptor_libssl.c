@@ -41,6 +41,7 @@
 
 #include "common-internal.h"
 #include "cryptor_libssl.h"
+static int select_alpn (SSL *, const unsigned char **, unsigned char *, const unsigned char *, unsigned int, void *);
 #include "virtual_server.h"
 #include "socket.h"
 #include "util.h"
@@ -622,6 +623,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
+	SSL_CTX_set_alpn_select_cb (n->context, select_alpn, NULL);
 	SSL_CTX_set_read_ahead (n->context, 1);
 	SSL_CTX_set_mode (n->context,
 	                  SSL_CTX_get_mode(n->context) | SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER);
@@ -669,6 +671,29 @@ error:
 }
 
 
+static int
+select_alpn (SSL *ssl, const unsigned char **out, unsigned char *outlen,
+             const unsigned char *in, unsigned int inlen, void *arg)
+{
+	cherokee_connection_t *conn = SSL_get_app_data(ssl);
+	unsigned int off = 0;
+	const unsigned char *http1 = NULL;
+	UNUSED(arg);
+	while (off < inlen) {
+		unsigned int len = in[off++];
+		if (!len || len > inlen-off) return SSL_TLSEXT_ERR_ALERT_FATAL;
+#ifdef HAVE_HTTP2
+		if (conn && conn->bind && conn->bind->http2 && len == 2 && !memcmp(in+off, "h2", 2)) {
+			*out = in+off; *outlen = 2; return SSL_TLSEXT_ERR_OK;
+		}
+#endif
+		if (len == 8 && !memcmp(in+off, "http/1.1", 8)) http1 = in+off;
+		off += len;
+	}
+	if (http1) { *out = http1; *outlen = 8; return SSL_TLSEXT_ERR_OK; }
+	return SSL_TLSEXT_ERR_NOACK;
+}
+
 static ret_t
 socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
                    cherokee_socket_t                *socket,
@@ -709,6 +734,13 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	/* Sets ssl to work in server mode
 	 */
 	SSL_set_accept_state (cryp->session);
+#ifdef HAVE_HTTP2
+	if (conn->bind->http2) {
+		if (!SSL_set_min_proto_version(cryp->session, TLS1_2_VERSION) ||
+		    !SSL_set_cipher_list(cryp->session, "ECDHE+AESGCM:ECDHE+CHACHA20")) return ret_error;
+		SSL_set_options(cryp->session, SSL_OP_NO_COMPRESSION | SSL_OP_NO_RENEGOTIATION);
+	}
+#endif
 
 	/* Set the socket file descriptor
 	 */
@@ -802,6 +834,15 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 			return ret_error;
 		}
 	}
+
+#ifdef HAVE_HTTP2
+	{
+		const unsigned char *alpn;
+		unsigned int len;
+		SSL_get0_alpn_selected(cryp->session, &alpn, &len);
+		CRYPTOR_SOCKET(cryp)->negotiated_http2 = len == 2 && !memcmp(alpn, "h2", 2);
+	}
+#endif
 
 	/* Report the connection details
 	 */
