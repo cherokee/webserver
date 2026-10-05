@@ -47,8 +47,6 @@ typedef struct {
 typedef struct {
 	CHEROKEE_MUTEX_T (mutex);
 	cherokee_list_t   active;
-	cherokee_list_t   reuse;
-	cuint_t           reuse_len;
 	cuint_t           reuse_max;
 } cherokee_handler_proxy_poll_t;
 
@@ -56,6 +54,11 @@ typedef struct {
 	cherokee_list_t                listed;
 	cherokee_socket_t              socket;
 	cherokee_handler_proxy_poll_t *poll_ref;
+
+	cherokee_source_t             *source_ref;
+	uint64_t                      born;
+	cuint_t                       requests;
+	size_t                        request_sent, response_received;
 
 	/* Name resolution */
 	const struct addrinfo         *addr_info_ref;
@@ -66,6 +69,7 @@ typedef struct {
 	cherokee_handler_proxy_enc_t   enc;
 	cherokee_buffer_t              header_in_raw;
 	cherokee_boolean_t             keepalive_in;
+	cherokee_boolean_t             response_close;
 	size_t                         size_in;
 
 	/* Out */

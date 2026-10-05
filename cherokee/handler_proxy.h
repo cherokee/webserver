@@ -79,6 +79,9 @@ typedef struct {
 	cherokee_handler_proxy_conn_t   *pconn;
 	cherokee_buffer_t               tmp;
 	cherokee_boolean_t              respinned;
+	cuint_t                         retries;
+	cuint_t                         chunk_phase;
+	size_t                          chunk_remaining, trailer_bytes;
 	cherokee_boolean_t              got_all;
 	cherokee_boolean_t              resending_post;
 
