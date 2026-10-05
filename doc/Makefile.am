@@ -293,6 +293,7 @@ media/images/other_graphs_logging.png \
 media/images/other_graphs_traffic.png
 
 EXTRA_DIST = \
+http23-design.md \
 $(doc_DATA) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA) \

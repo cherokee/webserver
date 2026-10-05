@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 class Test (TestBase):
     def __init__ (self):
@@ -8,4 +8,3 @@ class Test (TestBase):
         self.expected_error = 405 # Method Not Allowed
         self.request        = "XYZ / HTTP/1.0\r\n" +\
                               "Connection: Keep-alive\r\n"
-

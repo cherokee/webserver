@@ -1,8 +1,8 @@
-from base import *
+from qa_base import *
 
 DIR  = "test_267"
-HOST = "it_doesnt_exist"
-PORT = 65056
+HOST: str = "it_doesnt_exist"
+PORT: int = 65056
 
 class Test (TestBase):
     def __init__ (self):
@@ -11,8 +11,8 @@ class Test (TestBase):
 
         g = globals()
 
-        self.request          = "GET /%(DIR)s HTTP/1.1\r\n"   %(g) +\
-                                "Host: %(HOST)s:%(PORT)s\r\n" %(g) +\
+        self.request          = f"GET /{g['DIR']} HTTP/1.1\r\n" +\
+                                f"Host: {g['HOST']}:{g['PORT']}\r\n" +\
                                 "Connection: close\r\n"
         self.expected_error   = 301
 
@@ -22,6 +22,6 @@ class Test (TestBase):
         # is_ssl is only defined after initialisation
         g = globals()
         if self.is_ssl:
-            self.expected_content = ['Location: https://%(HOST)s:%(PORT)s/%(DIR)s/'%(g)]
+            self.expected_content = [f"Location: https://{g['HOST']}:{g['PORT']}/{g['DIR']}/"]
         else:
-            self.expected_content = ['Location: http://%(HOST)s:%(PORT)s/%(DIR)s/'%(g)]
+            self.expected_content = [f"Location: http://{g['HOST']}:{g['PORT']}/{g['DIR']}/"]

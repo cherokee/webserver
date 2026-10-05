@@ -25,11 +25,11 @@
 import os
 import CTK
 import Cherokee
+from CTK.i18n import _, N_
 import configured
 from CTK.util import formatter
-
-from urllib import quote, unquote, urlencode
-from httplib import HTTPConnection
+from urllib.parse import quote, unquote, urlencode
+from http.client import HTTPConnection
 
 URL_BTS         = 'http://bugs.cherokee-project.com/new'
 URL_REPORT_HOST = 'www.cherokee-project.com'
@@ -61,7 +61,7 @@ def submit():
     # Check the output
     if response.status != 200:
         return {'ret': 'error'}
-    if not "{'ret':'ok'}" in data:
+    if b"{'ret':'ok'}" not in data:
         return {'ret': 'error'}
 
     return {'ret':'ok'}
@@ -85,7 +85,7 @@ class Page (CTK.Page):
 
         # Thank you: submitted
         dialog_ok = CTK.Dialog ({'title': _("Thank you!"), 'autoOpen': False, 'draggable': False, 'width': 480})
-        dialog_ok += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_EXCEPT_THANKS)))
+        dialog_ok += CTK.RawHTML (f'<p>{_(NOTE_EXCEPT_THANKS)}</p>')
         dialog_ok.AddButton (_('Close'), "close")
 
         dialog_fail = CTK.Dialog ({'title': _("Could not report the issue"), 'autoOpen': False, 'draggable': False, 'width': 480})
@@ -96,8 +96,8 @@ class Page (CTK.Page):
         self += dialog_fail
 
         # Build the page content
-        self += CTK.RawHTML ('<h1>%s</h1>' %(_("Unexpected Exception")))
-        self += CTK.RawHTML ('<h2>%s</h2>' %(desc))
+        self += CTK.RawHTML (f"<h1>{_('Unexpected Exception')}</h1>")
+        self += CTK.RawHTML (f'<h2>{desc}</h2>')
         self += CTK.RawHTML (_(NOTE_EXCEPT_SORRY))
         self += CTK.RawHTML (formatter ('<pre class="backtrace">%s</pre>', traceback))
         self += CTK.RawHTML (_(NOTE_EXCEPT_COMMENT))

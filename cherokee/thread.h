@@ -70,6 +70,7 @@ typedef struct {
 	cherokee_boolean_t      exit;
 	cherokee_boolean_t      ended;
 
+	size_t                  native_request_bytes; /* bounded stream input */
 	cuint_t                 conns_num;           /* open connections */
 	cuint_t                 conns_max;           /* max opened conns */
 	cuint_t                 conns_keepalive_max; /* max opened conns */
@@ -105,6 +106,10 @@ ret_t cherokee_thread_step_MULTI_THREAD  (cherokee_thread_t *thd, cherokee_boole
 #endif
 ret_t cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd);
 
+
+/* Called only by the owning thread; takes fd ownership on success. */
+ret_t cherokee_thread_add_stream (cherokee_thread_t *, cherokee_bind_t *, int,
+                                  cherokee_sockaddr_t *, cherokee_sockaddr_t *, cherokee_http_version_t, void *);
 
 ret_t cherokee_thread_new                        (cherokee_thread_t     **thd,
                                                   void                   *server,

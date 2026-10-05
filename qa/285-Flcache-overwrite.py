@@ -1,34 +1,34 @@
 import itertools
-from base import *
+from qa_base import *
 
 DIR     = "flcache-replace1"
 CONTENT = "Front-line cache boosts Cherokee performance"
 
-CONF = """
+CONF = f"""
 vserver!1!rule!2850!match = directory
-vserver!1!rule!2850!match!directory = /%(DIR)s
+vserver!1!rule!2850!match!directory = /{globals()['DIR']}
 vserver!1!rule!2850!flcache = allow
 vserver!1!rule!2850!flcache!policy = all_but_forbidden
 vserver!1!rule!2850!expiration = time
 vserver!1!rule!2850!expiration!caching = public
 vserver!1!rule!2850!expiration!time = 300
 vserver!1!rule!2850!handler = cgi
-""" %(globals())
+"""
 
-CGI_CODE = """#!/bin/sh
+CGI_CODE = f"""#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo "Cache-Control: no-store, no-cache"
 echo
 
-echo "%(CONTENT)s"
-""" %(globals())
+echo "{globals()['CONTENT']}"
+"""
 
 
 class TestEntry (TestBase):
     def __init__ (self, filename):
         TestBase.__init__ (self, __file__)
-        self.request        = "GET /%s/%s HTTP/1.0\r\n" %(DIR, filename) +\
+        self.request        = f"GET /{DIR}/{filename} HTTP/1.0\r\n" +\
                               "Connection: close\r\n"
         self.expected_error = 200
 
@@ -45,11 +45,11 @@ class Test (TestCollection):
         self.delay          = 1
 
     def JustBefore (self, www):
-        test_num = Test.counter.next()
-        self.filename = "test275-id%s-test%s" %(id(self), test_num)
+        test_num = next(Test.counter)
+        self.filename = f"test275-id{id(self)}-test{test_num}"
 
         # Write the new file
-        self.WriteFile (self.local_dir, self.filename, 0755, CGI_CODE)
+        self.WriteFile (self.local_dir, self.filename, 0o755, CGI_CODE)
 
         # Create sub-request objects
         self.Empty()
@@ -66,6 +66,7 @@ class Test (TestCollection):
 
     def JustAfter (self, www):
         # Clean up the local file
+        assert self.filename is not None
         fp = os.path.join (self.local_dir, self.filename)
         os.unlink (fp)
         self.filename = None

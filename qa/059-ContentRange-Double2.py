@@ -1,7 +1,7 @@
 import random
 import string
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
 LENGTH  = 100*1024
 OFFSET1 = 15*1024
@@ -14,16 +14,16 @@ class Test (TestBase):
         self.name = "Content Range 100k, both"
 
         self.request           = "GET /Range100kBoth HTTP/1.0\r\n" +\
-                                 "Range: bytes=%d-%d\r\n" % (OFFSET1, OFFSET2)
+                                 f"Range: bytes={int(OFFSET1)}-{int(OFFSET2)}\r\n"
         self.expected_error    = 206
 
     def Prepare (self, www):
         srandom = str_random (LENGTH)
-        self.WriteFile (www, "Range100kBoth", 0444, srandom)
+        self.WriteFile (www, "Range100kBoth", 0o444, srandom)
 
         expected   = self.WriteTemp (srandom[OFFSET1:OFFSET2])
         forbidden1 = self.WriteTemp (srandom[OFFSET1:])
         forbidden2 = self.WriteTemp (srandom[:OFFSET2])
 
-        self.expected_content  = ["file:"+expected, "Content-Length: %d" % (OFFSET2-OFFSET1 + 1)]
+        self.expected_content  = ["file:"+expected, f"Content-Length: {int(OFFSET2 - OFFSET1 + 1)}"]
         self.forbidden_content = ["file:"+forbidden1, "file:"+forbidden2]

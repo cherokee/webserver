@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 POST_LENGTH = (50*1024)
 random_str  = letters_random (POST_LENGTH)
@@ -25,10 +25,10 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "header_file1")
-        f = self.WriteFile (d, "file", 0444, random_str)
-        f = self.WriteFile (d, "header", 0444, HEADER_CONTENT)
+        f = self.WriteFile (d, "file", 0o444, random_str)
+        f = self.WriteFile (d, "header", 0o444, HEADER_CONTENT)
 
         tmpfile = self.WriteTemp (random_str)
 
-        self.expected_content  = "file:%s" % (tmpfile)
-        self.forbidden_content = "file:%s" % (f)
+        self.expected_content  = f"file:{tmpfile}"
+        self.forbidden_content = f"file:{f}"

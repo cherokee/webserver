@@ -250,7 +250,7 @@ config_server (cherokee_server_t *srv)
 		                         "source!1!nick = app-logic\n"
 		                         "source!1!type = interpreter\n"
 		                         "source!1!timeout = " TIMEOUT "\n"
-		                         "source!1!host = localhost:%d\n"
+			"source!1!host = 127.0.0.1:%d\n"
 		                         "source!1!interpreter = %s/server.py %d %s %s\n"
 		                         "source!1!env_inherited = 1\n",
 		                         scgi_port, document_root,
@@ -556,10 +556,10 @@ check_for_python (void)
 	int         re;
 	pid_t       pid;
 	int         exitcode = -1;
-#ifdef PATH_PYTHON2
-	char const *args[]   = {"env", PATH_PYTHON2, "-c", "raise SystemExit", NULL};
+#ifdef PATH_PYTHON3
+	char const *args[]   = {"env", PATH_PYTHON3, "-c", "raise SystemExit", NULL};
 #else
-	char const *args[]   = {"env", "python2", "-c", "raise SystemExit", NULL};
+	char const *args[]   = {"env", "python3", "-c", "raise SystemExit", NULL};
 #endif
 
 	pid = fork();

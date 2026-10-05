@@ -20,35 +20,43 @@
 # 02110-1301, USA.
 #
 
+from __future__ import annotations
+
 import os
 import stat
 import inspect
+from typing import Any, Optional
 
-from Widget import Widget
-from util import formatter
+from .Widget import Widget
+from .util import formatter
 
 class Template (Widget):
     cache = {}
 
     def __init__ (self, **kwargs):
         Widget.__init__ (self)
-        self.filename = None
-        self.content  = None
-        self.vars     = {}
+        self.filename: Optional[str] = None
+        self.content: Optional[str] = None
+        self.vars: dict[str, Any] = {}
 
-        if kwargs.has_key('filename'):
+        if 'filename' in kwargs:
             self.filename = kwargs['filename']
-        elif kwargs.has_key('content'):
+        elif 'content' in kwargs:
             self.content  = kwargs['content']
 
     def _content_update (self):
-        content = open(self.filename, 'r').read()
+        if self.filename is None:
+            raise ValueError('Template filename is not set')
+        with open(self.filename, 'r') as template_file:
+            content = template_file.read()
         mtime   = os.stat (self.filename)[stat.ST_MTIME]
         Template.cache[self.filename] = {'mtime':   mtime,
                                          'content': content}
 
     def _content_get (self):
         try:
+            if self.filename is None:
+                raise KeyError('Template filename is not set')
             cached = Template.cache[self.filename]
             s = os.stat (self.filename)
             mtime = s[stat.ST_MTIME]
@@ -64,7 +72,7 @@ class Template (Widget):
             self._content_update()
             return Template.cache[self.filename]['content']
         else:
-            return self.content
+            return self.content or ''
 
     def __setitem__ (self, key, val):
         self.vars[key] = val
@@ -85,7 +93,8 @@ class Template (Widget):
         return content %({})
 
     def _figure_vars (self):
-        vars = globals()
-        vars.update (inspect.currentframe(1).f_locals)
+        vars = globals().copy()
+        frame = inspect.currentframe()
+        if frame is not None and frame.f_back is not None:
+            vars.update(frame.f_back.f_locals)
         return vars
-

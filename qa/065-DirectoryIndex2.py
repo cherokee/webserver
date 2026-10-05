@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC1 = "This is the content of.."
 MAGIC2 = " ..the PHP index file"
@@ -15,8 +15,8 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "directoryindex2")
-        self.WriteFile (d, "test_index.php", 0444,
-                        '<?php echo "%s"."%s"; ?>'%(MAGIC1, MAGIC2))
+        self.WriteFile (d, "test_index.php", 0o444,
+                        f'<?php echo "{MAGIC1}"."{MAGIC2}"; ?>')
 
     def Precondition (self):
         return os.path.exists (look_for_php())

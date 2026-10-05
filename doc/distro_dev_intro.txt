@@ -295,7 +295,7 @@ It is recommended that these patches are generated using `diff -rcu` to maintain
 Some functionality is provided directly  ith Cherokee Admin, which is what will be described in the following lines. Also, there are a series of common elements that can be reused by different installer (target selection, database management, handling PHP and PHP modules, etc.). As was mentioned before, such elements are encapsulated as independent modules distributed under the `common` directory, and are usually well comment, so don’t forget to review them before you begin working on your custom installers.
 
 ==== popen
-popen.popen_sync is a function that provides a subset of the functionality of the subprocess.Popen class, but it does so consistently along all Python 2.x versions. Installers frequently need to execute command-line tasks, and this is the function that should be used. It accepts the following arguments.
+popen.popen_sync is a function that provides a subset of the functionality of the subprocess.Popen class. Installers frequently need to execute command-line tasks, and this is the function that should be used. It accepts the following arguments.
 
 .popen_sync arguments
 [cols="10%,10%,30%,50%",options="header"]

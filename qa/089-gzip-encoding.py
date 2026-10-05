@@ -1,7 +1,7 @@
-from base import *
-from util import *
+from qa_base import *
+from qa_util import *
 
-from cStringIO import StringIO
+from io import BytesIO
 from gzip import GzipFile
 
 
@@ -28,7 +28,7 @@ class Test (TestBase):
 
     def CustomTest (self):
         body_gz = self.reply[self.reply.find("\r\n\r\n")+4:]
-        body = GzipFile('','r',0,StringIO(body_gz)).read()
+        body = GzipFile(fileobj=BytesIO(body_gz.encode("latin-1")), mode='r').read().decode()
 
         if body != MAGIC:
             return -1
@@ -36,5 +36,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "gzip1")
-        self.WriteFile (www, "gzip1/file.txt", 0444, MAGIC)
-
+        self.WriteFile (www, "gzip1/file.txt", 0o444, MAGIC)

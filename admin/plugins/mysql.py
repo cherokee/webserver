@@ -24,6 +24,7 @@
 
 import CTK
 import Auth
+from CTK.i18n import _, N_
 import validations
 
 from util import *
@@ -73,22 +74,22 @@ class Plugin_mysql (Auth.PluginAuth):
         self.AddCommon (supported_methods=('basic','digest'))
 
         table = CTK.PropsTable()
-        table.Add (_('Host'),          CTK.TextCfg("%s!host"%(self.key), True),        _(NOTE_HOST))
-        table.Add (_('Port'),          CTK.TextCfg("%s!port"%(self.key), True),        _(NOTE_PORT))
-        table.Add (_('Unix Socket'),   CTK.TextCfg("%s!unix_socket"%(self.key), True), _(NOTE_UNIX))
-        table.Add (_('DB User'),       CTK.TextCfg("%s!user"%(self.key), False),       _(NOTE_USER))
-        table.Add (_('DB Password'),   CTK.TextCfg("%s!passwd"%(self.key), True),      _(NOTE_PASSWD))
-        table.Add (_('Database'),      CTK.TextCfg("%s!database"%(self.key), False),   _(NOTE_DB))
-        table.Add (_('SQL Query'),     CTK.TextCfg("%s!query"%(self.key), False),      _(NOTE_SQL))
-        table.Add (_('Password Hash'), CTK.ComboCfg("%s!hash"%(self.key), trans_options(HASHES), {'id': 'mysql_hash'}), _(NOTE_HASH))
+        table.Add (_('Host'),          CTK.TextCfg(f"{self.key}!host", True),        _(NOTE_HOST))
+        table.Add (_('Port'),          CTK.TextCfg(f"{self.key}!port", True),        _(NOTE_PORT))
+        table.Add (_('Unix Socket'),   CTK.TextCfg(f"{self.key}!unix_socket", True), _(NOTE_UNIX))
+        table.Add (_('DB User'),       CTK.TextCfg(f"{self.key}!user", False),       _(NOTE_USER))
+        table.Add (_('DB Password'),   CTK.TextCfg(f"{self.key}!passwd", True),      _(NOTE_PASSWD))
+        table.Add (_('Database'),      CTK.TextCfg(f"{self.key}!database", False),   _(NOTE_DB))
+        table.Add (_('SQL Query'),     CTK.TextCfg(f"{self.key}!query", False),      _(NOTE_SQL))
+        table.Add (_('Password Hash'), CTK.ComboCfg(f"{self.key}!hash", trans_options(HASHES), {'id': 'mysql_hash'}), _(NOTE_HASH))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('MySQL Connection')))
+        self += CTK.RawHTML (f"<h2>{_('MySQL Connection')}</h2>")
         self += CTK.Indenter (submit)
         self += CTK.RawHTML (js=BASIC_HASH_HACK)
 
         # Publish
-        VALS = [("%s!passwdfile"%(self.key), validations.is_local_file_exists)]
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        VALS = [(f"{self.key}!passwdfile", validations.is_local_file_exists)]
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")

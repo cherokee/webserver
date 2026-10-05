@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR       = "error_contentlength1"
 
@@ -14,7 +14,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Error: Content-Length"
 
-        self.request           = "GET /%s/ HTTP/1.0\r\n" % (DIR)
+        self.request           = f"GET /{DIR}/ HTTP/1.0\r\n"
         self.expected_content  = ["Content-Length: "]
         self.expected_error    = 400
 

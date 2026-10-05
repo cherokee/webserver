@@ -1,7 +1,7 @@
 import base64
 
-from conf import *
-from base import *
+from qa_conf import *
+from qa_base import *
 
 MAGIC         = "Cherokee supports Apache MD5 implementation"
 REALM         = "realm"
@@ -23,16 +23,16 @@ class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
 
-        auth = base64.encodestring ("%s:%s" % (USER, PASSWD))[:-1]
+        auth = base64.b64encode (f"{USER}:{PASSWD}".encode()).decode()
 
         self.name             = "Basic Auth, htpasswd: Apache MD5"
         self.expected_error   = 200
         self.expected_content = MAGIC
         self.request          = "GET /apachemd5_1/file HTTP/1.0\r\n" + \
-                                "Authorization: Basic %s\r\n" % (auth)
+                                f"Authorization: Basic {auth}\r\n"
 
     def Prepare (self, www):
         tdir  = self.Mkdir (www, "apachemd5_1")
-        passf = self.WriteFile (tdir, "passwd", 0444, '%s:%s\n' %(USER, PASSWD_APACHE))
-        self.WriteFile (tdir, "file", 0444, MAGIC)
+        passf = self.WriteFile (tdir, "passwd", 0o444, f'{USER}:{PASSWD_APACHE}\n')
+        self.WriteFile (tdir, "file", 0o444, MAGIC)
         self.conf = CONF % (REALM, passf)

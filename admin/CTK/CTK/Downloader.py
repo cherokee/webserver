@@ -1,4 +1,6 @@
 # CTK: Cherokee Toolkit
+
+from __future__ import annotations
 #
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
@@ -22,14 +24,14 @@
 
 import os
 import time
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import tempfile
 import threading
 
-import JS
-from Box import Box
-from ProgressBar import ProgressBar
-from Server import publish, request
+from . import JS
+from .Box import Box
+from .ProgressBar import ProgressBar
+from .Server import publish, request
 
 JS_UPDATING = """
 function update_progress_%(id)s() {
@@ -105,14 +107,14 @@ class DownloadEntry (threading.Thread):
         self.wanna_exit = True
 
     def run (self):
-        self.opener  = urllib2.build_opener()
-        self.request = urllib2.Request (self.url)
+        self.opener  = urllib.request.build_opener()
+        self.request = urllib.request.Request (self.url)
 
         # HTTP Request
         try:
             self.response = self.opener.open (self.request)
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             self.status = 'error'
 
         length = self.response.headers.getheaders("Content-Length")
@@ -143,8 +145,8 @@ class DownloadEntry (threading.Thread):
                     self.target_temp.close()
                     break
                 self.target_temp.write (chunk)
-            except Exception, e:
-                print e
+            except Exception as e:
+                print(e)
                 # Error
                 self.status = 'error'
                 break
@@ -168,7 +170,7 @@ def DownloadEntry_Factory (url, *args, **kwargs):
 
 def DownloadEntry_Exists (url):
     global downloads
-    return downloads.has_key (url)
+    return url in downloads
 
 class DownloadReport:
     lock = threading.RLock()
@@ -176,8 +178,8 @@ class DownloadReport:
     def __call__ (self, url):
        if request.url.endswith('/info'):
            d = downloads[url]
-           return '{"status": "%s", "percent": %d, "size": %d, "downloaded": %d}' %(
-               d.status, d.percent, d.size, d.downloaded)
+           return (f'{{"status": "{d.status}", "percent": {d.percent}, '
+                   f'"size": {d.size}, "downloaded": {d.downloaded}}}')
 
        elif request.url.endswith('/stop'):
            d = downloads[url]
@@ -201,23 +203,26 @@ class DownloadReport:
 
 
 class Downloader (Box):
-    def __init__ (self, name, url, props={}):
+    url: str
+    _url_local: str
+
+    def __init__ (self: Downloader, name, url, props={}):
         Box.__init__ (self)
         self.url  = url
         self.name = name
-        self.id   = "downloader_%s" %(name)
+        self.id   = f"downloader_{name}"
 
         # Other GUI components
         self.progressbar = ProgressBar()
         self += self.progressbar
 
         # Register the uploader path
-        self._url_local = "/downloader_%s_report" %(name)
+        self._url_local = f"/downloader_{name}_report"
         publish (self._url_local, DownloadReport, url=url)
 
         download = DownloadEntry_Factory (self.url)
 
-    def Render (self):
+    def Render (self: Downloader):
         render = Box.Render(self)
 
         props = {'id':             self.id,

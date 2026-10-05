@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DIR = "redir-keepalive-1"
 
@@ -8,7 +8,7 @@ class Test (TestBase):
         self.name = "Keep-alive after 301 response"
         self.expected_error = 301
 
-        request_base = "GET /%s HTTP/1.1\r\n" % (DIR) + \
+        request_base = f"GET /{DIR} HTTP/1.1\r\n" + \
                        "Host: example.com\r\n"
 
         self.request = request_base + \

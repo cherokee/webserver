@@ -23,7 +23,9 @@
 #
 
 import CTK
+from CTK.consts import LINK_HREF
 import Page
+from CTK.i18n import _, N_
 import Cherokee
 import Icons
 import Mime
@@ -37,6 +39,8 @@ from configured import *
 URL_BASE  = '/general'
 URL_APPLY = '/general/apply'
 
+NOTE_HTTP2       = N_('Enable HTTP/2 over TLS on this TCP port. Requires the libssl backend and HTTP/2 build support.')
+NOTE_HTTP3       = N_('Enable HTTP/3 over QUIC on the same UDP port. Requires libssl, HTTP/3 build support and UDP access.')
 NOTE_ADD_PORT    = N_('Defines the TCP port that the server will listen to.')
 NOTE_ADD_IF      = N_('Optionally defines an interface to bind to. For instance: 127.0.0.1')
 NOTE_IPV6        = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
@@ -64,6 +68,8 @@ VALIDATIONS = [
     ("server!bind!.*!port",      validations.is_tcp_port),
     ("server!bind!.*!interface", validations.is_ip),
     ("server!bind!.*!tls",       validations.is_boolean),
+    ("server!bind!.*!http2",     validations.is_boolean),
+    ("server!bind!.*!http3",     validations.is_boolean),
     ("server!chroot",            validations.is_chroot_dir_exists),
     ("new_port",                 validations.is_tcp_port),
     ("new_if",                   validations.is_ip)
@@ -92,15 +98,45 @@ def is_new_bind (port, ip=None):
     else:
         port = validations.is_new_tcp_port (port)
 
-    binds = [(CTK.cfg.get_val('server!bind!%s!port'%(x)),
-              CTK.cfg.get_val('server!bind!%s!interface'%(x)))
+    binds = [(CTK.cfg.get_val(f'server!bind!{x}!port'),
+              CTK.cfg.get_val(f'server!bind!{x}!interface'))
              for x in CTK.cfg.keys ('server!bind')]
 
     if (port, ip) in binds:
-        raise ValueError, _("Port/Interface combination already in use.")
+        raise ValueError(_("Port/Interface combination already in use."))
 
 
 def commit():
+    # Validate the complete proposed configuration before mutating CTK.cfg.
+    errors = {}
+    def proposed(key, default=None):
+        if key in CTK.post:
+            return CTK.post.get_val(key) or default
+        return CTK.cfg.get_val(key, default)
+
+    backend = proposed('server!tls')
+    binds = set(CTK.cfg.keys('server!bind'))
+    for key in CTK.post.keys():
+        parts = key.split('!')
+        if len(parts) >= 4 and parts[:2] == ['server', 'bind']:
+            binds.add(parts[2])
+    for binding in binds:
+        pre = f'server!bind!{binding}'
+        if pre in CTK.post and not CTK.post.get_val(pre):
+            continue
+        tls = proposed(f'{pre}!tls', '0')
+        for protocol in ('http2', 'http3'):
+            key = f'{pre}!{protocol}'
+            enabled = proposed(key, '0')
+            if enabled != '1':
+                continue
+            if tls != '1' or backend != 'libssl':
+                errors[key] = _('HTTP/2 and HTTP/3 require TLS and the libssl backend.')
+            elif not Cherokee.support.has_protocol(protocol):
+                errors[key] = _('This Cherokee binary does not support the selected protocol.')
+    if errors:
+        return {'ret': 'error', 'errors': errors}
+
     # Add a new port
     port      = CTK.post.pop('new_port')
     interface = CTK.post.pop('new_if')
@@ -108,7 +144,7 @@ def commit():
     if port:
         try:
             is_new_bind (port, interface)
-        except ValueError, e:
+        except ValueError as e:
             return { "ret": "error", "errors": { 'new_port': str(e),
                                                  'new_if':   str(e) }}
 
@@ -116,13 +152,13 @@ def commit():
         pre = CTK.cfg.get_next_entry_prefix ('server!bind')
 
         # Add new port
-        CTK.cfg['%s!port'%(pre)] = port
+        CTK.cfg[f'{pre}!port'] = port
         if interface:
-            CTK.cfg['%s!interface'%(pre)] = interface
+            CTK.cfg[f'{pre}!interface'] = interface
 
         # Auto-set TLS/SSL flag
         if int(port) == 443:
-            CTK.cfg['%s!tls'%(pre)] = "1"
+            CTK.cfg[f'{pre}!tls'] = "1"
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -134,9 +170,9 @@ def _all_bindings_per_rule ():
     vservers = CTK.cfg.keys('vserver')
 
     for vsrv in vservers:
-        rules = CTK.cfg.keys('vserver!%s!rule'%(vsrv))
+        rules = CTK.cfg.keys(f'vserver!{vsrv}!rule')
         for rule_num in rules:
-            rule    = 'vserver!%s!rule!%s'%(vsrv,rule_num)
+            rule    = f'vserver!{vsrv}!rule!{rule_num}'
             bindings = _bindings_per_rule (rule)
             if bindings:
                 result.append({rule: bindings})
@@ -147,10 +183,10 @@ def _all_bindings_per_rule ():
 def _bindings_per_rule (rule):
     """Return list of bindings used by a given rule"""
     bindings = []
-    pre      = '%s!match!bind'%(rule)
+    pre      = f'{rule}!match!bind'
     src_keys = CTK.cfg.keys(pre)
     for src_key in src_keys:
-        bindings.append (CTK.cfg.get_val('%s!%s'%(pre,src_key)))
+        bindings.append (CTK.cfg.get_val(f'{pre}!{src_key}'))
 
     return list(set(bindings))
 
@@ -161,12 +197,12 @@ def _rules_per_bind (bind):
     bind_usage = _all_bindings_per_rule ()
 
     for rule_dict in bind_usage:
-        rule_pre, bindings = rule_dict.items()[0]
+        rule_pre, bindings = list(rule_dict.items())[0]
         if bind in bindings:
-            pre = '%s!match!bind'%(rule_pre)
+            pre = f'{rule_pre}!match!bind'
             balanced = CTK.cfg.keys (pre)
             for src in balanced:
-                rule = '%s!%s'%(pre,src)
+                rule = f'{pre}!{src}'
                 if CTK.cfg.get_val(rule) == bind:
                     rules.append (rule)
 
@@ -178,7 +214,7 @@ def _protected_bindings ():
     protect = []
     rules   = _all_bindings_per_rule()
     for rule in rules:
-        bindings = rule.values()[0]
+        bindings = list(rule.values())[0]
         if len(bindings) == 1:
             protect.append(bindings[0])
     return protect
@@ -194,7 +230,7 @@ class NetworkWidget (CTK.Box):
         table.Add (_('SSL/TLS back-end'), CTK.ComboCfg('server!tls', trans_options(Cherokee.support.filter_available(CRYPTORS))), _(NOTE_TLS))
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter(table)
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Support')))
+        self += CTK.RawHTML (f"<h2>{_('Support')}</h2>")
         self += submit
 
         table = CTK.PropsTable()
@@ -202,20 +238,20 @@ class NetworkWidget (CTK.Box):
         table.Add (_('Server Tokens'),         CTK.ComboCfg('server!server_tokens', trans_options(PRODUCT_TOKENS)), _(NOTE_TOKENS))
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter(table)
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Network Behavior')))
+        self += CTK.RawHTML (f"<h2>{_('Network Behavior')}</h2>")
         self += submit
 
         table = CTK.PropsTable()
         modul = CTK.PluginSelector('server!collector', trans_options(Cherokee.support.filter_available(COLLECTORS)))
         table.Add (_('Graphs Type'), modul.selector_widget, _(NOTE_COLLECTORS))
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Information Collector')))
+        self += CTK.RawHTML (f"<h2>{_('Information Collector')}</h2>")
         self += CTK.Indenter(table)
         self += CTK.Indenter(modul)
 
         table = CTK.PropsTable()
         modul = CTK.PluginSelector('server!post_track', trans_options(Cherokee.support.filter_available(POST_TRACKERS)))
         table.Add (_('Upload Tracking'), modul.selector_widget, _(NOTE_POST_TRACKS))
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Upload Tracking')))
+        self += CTK.RawHTML (f"<h2>{_('Upload Tracking')}</h2>")
         self += CTK.Indenter(table)
         self += CTK.Indenter(modul)
 
@@ -236,22 +272,30 @@ class PortsTable (CTK.Submitter):
             return
 
         # Header
-        table[(1,1)] = [CTK.RawHTML(x) for x in (_('Port'), _('Bind to'), _('TLS'), '')]
+        table[(1,1)] = [CTK.RawHTML(x) for x in (_('Port'), _('Bind to'), _('TLS'), _('HTTP/2'), _('HTTP/3'), '')]
         table.set_header (row=True, num=1)
         self += table
 
         # Entries
         n = 2
         for k in binds:
-            pre = 'server!bind!%s'%(k)
+            pre = f'server!bind!{k}'
 
-            port   = CTK.TextCfg ('%s!port'%(pre),      False, {'size': 8})
-            listen = CTK.TextCfg ('%s!interface'%(pre), True,  {'size': 45})
+            port   = CTK.TextCfg (f'{pre}!port',      False, {'size': 8})
+            listen = CTK.TextCfg (f'{pre}!interface', True,  {'size': 45})
 
             if has_tls:
-                tls = CTK.CheckCfgText ('%s!tls'%(pre), False, _('TLS/SSL port'))
+                tls = CTK.CheckCfgText (f'{pre}!tls', False, _('TLS/SSL port'))
             else:
-                tls = CTK.CheckCfgText ('%s!tls'%(pre), False, _('TLS/SSL support disabled'), {'disabled': not has_tls})
+                tls = CTK.CheckCfgText (f'{pre}!tls', False, _('TLS/SSL support disabled'), {'disabled': not has_tls})
+
+            native_tls = has_tls and CTK.cfg.get_val('server!tls') == 'libssl'
+            http2 = CTK.CheckCfgText(f'{pre}!http2', False, _('Enabled'),
+                                    {'disabled': not (native_tls and Cherokee.support.has_protocol('http2')),
+                                     'title': _(NOTE_HTTP2)})
+            http3 = CTK.CheckCfgText(f'{pre}!http3', False, _('Enabled'),
+                                    {'disabled': not (native_tls and Cherokee.support.has_protocol('http3')),
+                                     'title': _(NOTE_HTTP3)})
 
             delete = None
             if len(binds) >= 2:
@@ -261,7 +305,7 @@ class PortsTable (CTK.Submitter):
                 delete = CTK.ImageStock('del')
                 delete.bind('click', dialog.JS_to_show() + "return false;")
                 
-            table[(n,1)] = [port, listen, tls, delete]
+            table[(n,1)] = [port, listen, tls, http2, http3, delete]
             n += 1
 
     def _get_dialog (self, k, refresh):
@@ -271,23 +315,23 @@ class PortsTable (CTK.Submitter):
             links = []
             for rule in rules:
                 rule_pre = rule.split('!match')[0]
-                r = Rule.Rule('%s!match' %(rule_pre))
+                r = Rule.Rule(f'{rule_pre}!match')
                 rule_name = r.GetName()
                 rule_link = rule_pre.replace('!','/')
-                links.append (CTK.consts.LINK_HREF %(rule_link, rule_name))
+                links.append (LINK_HREF %(rule_link, rule_name))
 
             dialog  = CTK.Dialog ({'title': _('Deletion is forbidden'), 'width': 480})
-            dialog += CTK.RawHTML (_('<h2>%s</h2>' %(_("Configuration consistency"))))
+            dialog += CTK.RawHTML (_(f"<h2>{_('Configuration consistency')}</h2>"))
             dialog += CTK.RawHTML (_(NOTE_FORBID_1))
-            dialog += CTK.RawHTML ('<p>%s: %s</p>'%(_(NOTE_FORBID_2), ', '.join(links)))
+            dialog += CTK.RawHTML (f"<p>{_(NOTE_FORBID_2)}: {', '.join(links)}</p>")
             dialog.AddButton (_('Close'), "close")
 
         else:
-            pre = 'server!bind!%s'%(k)
+            pre = f'server!bind!{k}'
             
             dialog = CTK.Dialog ({'title': _('Do you really want to remove it?'), 'width': 480})
             dialog.AddButton (_('Cancel'), "close")
-            dialog.AddButton (_('Remove'), CTK.JS.Ajax (URL_APPLY, async=False,
+            dialog.AddButton (_('Remove'), CTK.JS.Ajax (URL_APPLY, async_=False,
                                                         data    = {pre: ''},
                                                         success = dialog.JS_to_close() + \
                                                         refresh.JS_to_refresh()))
@@ -317,19 +361,19 @@ class PortsWidget (CTK.Container):
         dialog.AddButton (_("Cancel"), "close")
         dialog.AddButton (_("Add"),    submit.JS_to_submit())
         dialog += submit
-        dialog += CTK.Notice (content = CTK.RawHTML('<p>%s</p>'%(_(NOTE_PORTS_INFO))))
+        dialog += CTK.Notice (content = CTK.RawHTML(f'<p>{_(NOTE_PORTS_INFO)}</p>'))
 
         submit.bind ('submit_success', self.refresh.JS_to_refresh())
         submit.bind ('submit_success', dialog.JS_to_close())
 
         # Add new
-        button = CTK.SubmitterButton ("%s…" %(_('Add new port')))
+        button = CTK.SubmitterButton (f"{_('Add new port')}…")
         button.bind ('click', dialog.JS_to_show())
         button_s = CTK.Submitter (URL_APPLY)
         button_s += button
 
         # Integration
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Listening to Ports')))
+        self += CTK.RawHTML (f"<h2>{_('Listening to Ports')}</h2>")
         self += CTK.Indenter (self.refresh)
         self += button_s
         self += dialog
@@ -340,7 +384,7 @@ class PermsWidget (CTK.Box):
         CTK.Box.__init__ (self, {'class':'permissions'})
 
         table = CTK.PropsAuto (URL_APPLY)
-        self += CTK.RawHTML ("<h2>%s</h2>" %(_('Execution Permissions')))
+        self += CTK.RawHTML (f"<h2>{_('Execution Permissions')}</h2>")
         table.Add (_('User'),   CTK.TextCfg('server!user',   True),  _(NOTE_USER))
         table.Add (_('Group'),  CTK.TextCfg('server!group',  True), _(NOTE_GROUP))
         table.Add (_('Chroot'), CTK.TextCfg('server!chroot', True), _(NOTE_CHROOT))
@@ -361,11 +405,11 @@ class Render:
         tabs.Add (_('Mime types'),      Mime.MIME_Widget())
 
         page = Page.Base (_("General"), body_id='general', helps=HELPS)
-        page += CTK.RawHTML("<h1>%s</h1>" %(_('General Settings')))
+        page += CTK.RawHTML(f"<h1>{_('General Settings')}</h1>")
         page += tabs
         page += CTK.RawHTML (js=JS_SCROLL)
 
         return page.Render()
 
-CTK.publish ('^%s'%(URL_BASE), Render)
-CTK.publish ('^%s'%(URL_APPLY), commit, validation=VALIDATIONS, method="POST")
+CTK.publish (f'^{URL_BASE}', Render)
+CTK.publish (f'^{URL_APPLY}', commit, validation=VALIDATIONS, method="POST")

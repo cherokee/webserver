@@ -86,6 +86,7 @@ typedef struct {
 
 typedef struct {
 	cherokee_boolean_t             initialized;
+	cherokee_boolean_t             negotiated_http2;
 	void                          *vserver_ref;
 
 	/* Methods */

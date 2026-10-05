@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 NICK    = "test-2920"
 MAX_AGE = 123456
@@ -28,12 +28,12 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name             = "HSTS: Error code and Header"
         self.request          = "HTTP / HTTP/1.0\r\n" + \
-                                "Host: %s\r\n" %(NICK)
+                                f"Host: {NICK}\r\n"
         self.expected_error   = 301
         self.expected_content = ["https://"]
 
     def Prepare (self, www):
-        droot = self.Mkdir (www, "%s_droot"%(NICK))
+        droot = self.Mkdir (www, f"{NICK}_droot")
 
         vars = globals()
         vars.update(locals())

@@ -1,23 +1,23 @@
 import types
-from base import *
+from qa_base import *
 
 DIR     = "flcache-headers2"
 FILE    = "test.cgi"
 CONTENT = "Front-line tries to be a compliance proxy"
 
-CONF = """
+CONF = f"""
 vserver!1!rule!2790!match = directory
-vserver!1!rule!2790!match!directory = /%(DIR)s
+vserver!1!rule!2790!match!directory = /{globals()['DIR']}
 vserver!1!rule!2790!handler = file
 vserver!1!rule!2790!flcache = 1
 vserver!1!rule!2790!flcache!policy = all_but_forbidden
-""" %(globals())
+"""
 
 
 class TestEntry (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
-        self.request        = "GET /%s/%s HTTP/1.0\r\n" %(DIR, FILE) +\
+        self.request        = f"GET /{DIR}/{FILE} HTTP/1.0\r\n" +\
                               "Connection: close\r\n"
         self.expected_error = 200
 
@@ -33,7 +33,7 @@ class Test (TestCollection):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        self.WriteFile (d, FILE, 0444, CONTENT)
+        self.WriteFile (d, FILE, 0o444, CONTENT)
 
         def CustomTest (self):
             header = self.reply[:self.reply.find("\r\n\r\n")+2]

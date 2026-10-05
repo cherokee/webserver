@@ -1,6 +1,6 @@
 import os
 import string
-from base import *
+from qa_base import *
 
 DOMAIN      = "210domain"
 DIR         = "210/directory"
@@ -39,10 +39,10 @@ class Test (TestBase):
             return False
         self.public_html, self.user = tmp
 
-        self.request           = "GET /~%s/%s/%s HTTP/1.0\r\n" % (self.user, DIR, FILE) + \
-                                 "Host: %s\r\n" % (DOMAIN)
+        self.request           = f"GET /~{self.user}/{DIR}/{FILE} HTTP/1.0\r\n" + \
+                                 f"Host: {DOMAIN}\r\n"
         self.forbidden_content = ["/bin/sh", "echo"]
-        self.expected_content  = ["SCRIPT_NAME: -/~%s/%s/%s-"%(self.user, DIR, FILE)]
+        self.expected_content  = [f"SCRIPT_NAME: -/~{self.user}/{DIR}/{FILE}-"]
 
         return True
 
@@ -50,5 +50,5 @@ class Test (TestBase):
         self.Remove (self.public_html, '210')
         droot = self.Mkdir (self.public_html, DIR)
 
-        self.WriteFile (droot, FILE, 0555, CGI_BASE)
+        self.WriteFile (droot, FILE, 0o555, CGI_BASE)
         self.conf = CONF % (DOMAIN, droot, PUBLIC_HTML, DIR)

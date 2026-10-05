@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Cherokee PO stats
@@ -15,7 +15,7 @@ import sys
 
 # Check parameters
 if len(sys.argv) < 2:
-    print "ERROR: %s admin/*.po" %(sys.argv[0])
+    print(f"ERROR: {sys.argv[0]} admin/*.po")
     raise SystemExit
 
 files = sys.argv[1:]
@@ -41,8 +41,8 @@ for file in files:
                      'total':       total})
 
 # Print the results
-po_list.sort (lambda x,y: cmp(x['percent_fin'], y['percent_fin']))
+po_list.sort (key=lambda item: item['percent_fin'])
 po_list.reverse()
 
 for e in po_list:
-    print "%(file)s\t%(percent_fin) 3d%%\t%(finished)d/%(total)d" %(e)
+    print(f"{e['file']}\t{e['percent_fin']:3.0f}%\t{int(e['finished'])}/{int(e['total'])}")

@@ -25,6 +25,7 @@
 import re
 import CTK
 import validations
+from CTK.i18n import _, N_
 
 URL_APPLY = '/plugin/target_ip/apply'
 
@@ -61,12 +62,12 @@ class AddressesTable (CTK.Container):
             table += [CTK.RawHTML(_('IP or Subnet'))]
 
             for i in entries:
-                e1 = CTK.TextCfg ("%s!%s"%(key,i))
+                e1 = CTK.TextCfg (f"{key}!{i}")
                 rm = None
                 if len(entries) >= 2:
                     rm = CTK.ImageStock('del')
-                    rm.bind('click', CTK.JS.Ajax ('%s/del'%(url_apply),
-                                                  data     = {"%s!%s"%(key,i): ''},
+                    rm.bind('click', CTK.JS.Ajax (f'{url_apply}/del',
+                                                  data     = {f"{key}!{i}": ''},
                                                   complete = refreshable.JS_to_refresh()))
                 table += [e1, rm]
 
@@ -94,10 +95,10 @@ class Plugin_target_ip (CTK.Plugin):
     def __init__ (self, key, vsrv_num):
         CTK.Plugin.__init__ (self, key)
 
-        pre       = '%s!to' %(key)
-        url_apply = '%s/%s' %(URL_APPLY, vsrv_num)
+        pre       = f'{key}!to'
+        url_apply = f'{URL_APPLY}/{vsrv_num}'
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('Accepted Server IP Addresses and Subnets')))
+        self += CTK.RawHTML (f"<h2>{_('Accepted Server IP Addresses and Subnets')}</h2>")
 
         # Content
         refresh = CTK.Refreshable ({'id': 'plugin_target_ip'})
@@ -105,6 +106,6 @@ class Plugin_target_ip (CTK.Plugin):
         self += refresh
 
         # Validation, and Public URLs
-        VALS = [('%s!.+'%(pre), validations.is_ip_or_netmask)]
-        CTK.publish ('^%s/[\d]+'    %(URL_APPLY), CTK.cfg_apply_post, method="POST", validation=VALS)
-        CTK.publish ('^%s/[\d]+/del'%(URL_APPLY), apply_del,          method="POST")
+        VALS = [(f'{pre}!.+', validations.is_ip_or_netmask)]
+        CTK.publish (f'^{URL_APPLY}/[\\d]+', CTK.cfg_apply_post, method="POST", validation=VALS)
+        CTK.publish (f'^{URL_APPLY}/[\\d]+/del', apply_del,          method="POST")

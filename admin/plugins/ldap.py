@@ -24,6 +24,7 @@
 
 import CTK
 import Auth
+from CTK.i18n import _, N_
 import validations
 
 URL_APPLY = '/plugin/ldap/apply'
@@ -44,23 +45,23 @@ class Plugin_ldap (Auth.PluginAuth):
         self.AddCommon (supported_methods=('basic',))
 
         table = CTK.PropsTable()
-        table.Add (_("Server"),        CTK.TextCfg("%s!server"  %(self.key), False), _(NOTE_SERVER))
-        table.Add (_("Port"),          CTK.TextCfg("%s!port"    %(self.key), True),  _(NOTE_PORT))
-        table.Add (_("Bind Domain"),   CTK.TextCfg("%s!bind_dn" %(self.key), True),  _(NOTE_BIND_DOMAIN))
-        table.Add (_("Bind Password"), CTK.TextCfg("%s!bind_pw" %(self.key), True),  _(NOTE_BIND_PASSWD))
-        table.Add (_("Base Domain"),   CTK.TextCfg("%s!base_dn" %(self.key), False), _(NOTE_BIND_DOMAIN))
-        table.Add (_("Filter"),        CTK.TextCfg("%s!filter"  %(self.key), True),  _(NOTE_FILTER))
-        table.Add (_("Use TLS"),       CTK.CheckCfgText("%s!tls"%(self.key), False, _('Enabled')), _(NOTE_USE_TLS))
-        table.Add (_("CA File"),       CTK.TextCfg("%s!ca_file" %(self.key), True),  _(NOTE_CA_FILE))
+        table.Add (_("Server"),        CTK.TextCfg(f"{self.key}!server", False), _(NOTE_SERVER))
+        table.Add (_("Port"),          CTK.TextCfg(f"{self.key}!port", True),  _(NOTE_PORT))
+        table.Add (_("Bind Domain"),   CTK.TextCfg(f"{self.key}!bind_dn", True),  _(NOTE_BIND_DOMAIN))
+        table.Add (_("Bind Password"), CTK.TextCfg(f"{self.key}!bind_pw", True),  _(NOTE_BIND_PASSWD))
+        table.Add (_("Base Domain"),   CTK.TextCfg(f"{self.key}!base_dn", False), _(NOTE_BIND_DOMAIN))
+        table.Add (_("Filter"),        CTK.TextCfg(f"{self.key}!filter", True),  _(NOTE_FILTER))
+        table.Add (_("Use TLS"),       CTK.CheckCfgText(f"{self.key}!tls", False, _('Enabled')), _(NOTE_USE_TLS))
+        table.Add (_("CA File"),       CTK.TextCfg(f"{self.key}!ca_file", True),  _(NOTE_CA_FILE))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ("<h2>%s</h2>" % (_('LDAP Connection')))
+        self += CTK.RawHTML (f"<h2>{_('LDAP Connection')}</h2>")
         self += CTK.Indenter (submit)
 
         # Publish
-        VALS = [("%s!ca_file"%(self.key), validations.is_local_file_exists),
-                ("%s!port"%(self.key),    validations.is_tcp_port)]
+        VALS = [(f"{self.key}!ca_file", validations.is_local_file_exists),
+                (f"{self.key}!port",    validations.is_tcp_port)]
 
-        CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, validation=VALS, method="POST")
+        CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, validation=VALS, method="POST")

@@ -225,7 +225,7 @@ seek_mp3 (cherokee_handler_streaming_t *hdl)
 	int      re;
 	ret_t    ret;
 	long     timestamp;
-	AVPacket pkt;
+	AVPacket pkt = {0};
 
 	/* Calculate timestamp
 	*/
@@ -248,10 +248,9 @@ seek_mp3 (cherokee_handler_streaming_t *hdl)
 
 	/* Read Frame
 	*/
-	av_init_packet (&pkt);
 	av_read_frame (hdl->avformat, &pkt);
 	hdl->start = pkt.pos;
-	av_free_packet (&pkt);
+	av_packet_unref (&pkt);
 
 	/* Seek at the beginning of the frame
 	*/
@@ -539,36 +538,6 @@ cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 }
 
 
-/* Lock manager
- */
-
-#ifdef HAVE_PTHREAD
-static int ff_lockmgr(void **mutex, enum AVLockOp op)
-{
-	CHEROKEE_MUTEX_T(**pmutex) = (void*)mutex;
-
-	switch (op) {
-	case AV_LOCK_CREATE:
-		*pmutex = malloc(sizeof(**pmutex));
-		CHEROKEE_MUTEX_INIT(*pmutex, NULL);
-		break;
-	case AV_LOCK_OBTAIN:
-		CHEROKEE_MUTEX_LOCK(*pmutex);
-		break;
-	case AV_LOCK_RELEASE:
-		CHEROKEE_MUTEX_UNLOCK(*pmutex);
-		break;
-	case AV_LOCK_DESTROY:
-		CHEROKEE_MUTEX_DESTROY(*pmutex);
-		free(*pmutex);
-		break;
-	}
-
-	return 0;
-}
-#endif
-
-
 /* Library init function
  */
 static cherokee_boolean_t _streaming_is_init = false;
@@ -587,10 +556,4 @@ PLUGIN_INIT_NAME(streaming) (cherokee_plugin_loader_t *loader)
 	 */
 	cherokee_avl_init (&_streaming_cache);
 
-	/* Initialize FFMpeg
-	 */
-	av_register_all();
-#ifdef HAVE_PTHREAD
-	av_lockmgr_register(ff_lockmgr);
-#endif
 }

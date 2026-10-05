@@ -31,6 +31,7 @@
 import re
 import CTK
 import Wizard
+from CTK.i18n import _, N_
 import validations
 from util import *
 
@@ -95,23 +96,23 @@ DEFAULT_PATHS = ['/usr/bin',
 class Commit:
     def Commit_VServer (self):
         # Incoming info
-        new_host      = CTK.cfg.get_val('%s!new_host'%(PREFIX))
-        document_root = CTK.cfg.get_val('%s!document_root'%(PREFIX))
-        mono_dir      = CTK.cfg.get_val('%s!mono_dir'%(PREFIX))
+        new_host      = CTK.cfg.get_val(f'{PREFIX}!new_host')
+        document_root = CTK.cfg.get_val(f'{PREFIX}!document_root')
+        mono_dir      = CTK.cfg.get_val(f'{PREFIX}!mono_dir')
         webdir        = '/'
-        mono_bin      = CTK.cfg.get_val('%s!mono_bin'%(PREFIX))
+        mono_bin      = CTK.cfg.get_val(f'{PREFIX}!mono_bin')
 
         # Index
         listdir = os.listdir (get_real_path (document_root))
         files = {'index.aspx': 'index.aspx', 'default.aspx':'default.aspx'}
         for x in listdir:
             files[x.lower()] = x
-        index = '%s,%s' % (files['index.aspx'], files['default.aspx'])
+        index = f"{files['index.aspx']},{files['default.aspx']}"
 
         # Create the new Virtual Server
         vsrv_pre = CTK.cfg.get_next_entry_prefix('vserver')
-        CTK.cfg['%s!nick'%(vsrv_pre)] = new_host
-        Wizard.CloneLogsCfg_Apply ('%s!logs_as_vsrv'%(PREFIX), vsrv_pre)
+        CTK.cfg[f'{vsrv_pre}!nick'] = new_host
+        Wizard.CloneLogsCfg_Apply (f'{PREFIX}!logs_as_vsrv', vsrv_pre)
 
         # Locals
         src_num, src_pre  = cfg_source_get_next ()
@@ -125,10 +126,10 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Usual Static Files
-        Wizard.AddUsualStaticFiles ("%s!rule!500" % (vsrv_pre))
+        Wizard.AddUsualStaticFiles (f"{vsrv_pre}!rule!500")
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
         CTK.cfg.normalize ('vserver')
 
         del (CTK.cfg[PREFIX])
@@ -136,16 +137,16 @@ class Commit:
 
 
     def Commit_Rule (self):
-        vsrv_num = CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX))
-        vsrv_pre = 'vserver!%s' %(vsrv_num)
+        vsrv_num = CTK.cfg.get_val (f'{PREFIX}!vsrv_num')
+        vsrv_pre = f'vserver!{vsrv_num}'
 
         # Incoming info
-        mono_dir = CTK.cfg.get_val('%s!mono_dir'%(PREFIX))
-        webdir   = CTK.cfg.get_val('%s!new_webdir'%(PREFIX))
-        mono_bin = CTK.cfg.get_val('%s!mono_bin'%(PREFIX))
+        mono_dir = CTK.cfg.get_val(f'{PREFIX}!mono_dir')
+        webdir   = CTK.cfg.get_val(f'{PREFIX}!new_webdir')
+        mono_bin = CTK.cfg.get_val(f'{PREFIX}!mono_bin')
 
         # Locals
-        rule_pre = CTK.cfg.get_next_entry_prefix('%s!rule'%(vsrv_pre))
+        rule_pre = CTK.cfg.get_next_entry_prefix(f'{vsrv_pre}!rule')
         src_port = cfg_source_find_free_port ()
         src_num, src_pre  = cfg_source_get_next ()
         if not mono_bin:
@@ -157,7 +158,7 @@ class Commit:
         CTK.cfg.apply_chunk (config)
 
         # Clean up
-        CTK.cfg.normalize ('%s!rule'%(vsrv_pre))
+        CTK.cfg.normalize (f'{vsrv_pre}!rule')
 
         del (CTK.cfg[PREFIX])
         return CTK.cfg_reply_ajax_ok()
@@ -169,7 +170,7 @@ class Commit:
             CTK.cfg_apply_post()
 
             # VServer or Rule?
-            if CTK.cfg.get_val ('%s!vsrv_num'%(PREFIX)):
+            if CTK.cfg.get_val (f'{PREFIX}!vsrv_num'):
                 return self.Commit_Rule()
             return self.Commit_VServer()
 
@@ -179,14 +180,14 @@ class Commit:
 class WebDirectory:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('Web Directory'), CTK.TextCfg ('%s!new_webdir'%(PREFIX), False, {'value': '/project', 'class': 'noauto'}), _(NOTE_WEBDIR))
+        table.Add (_('Web Directory'), CTK.TextCfg (f'{PREFIX}!new_webdir', False, {'value': '/project', 'class': 'noauto'}), _(NOTE_WEBDIR))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WEBDIR_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WEBDIR_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -195,16 +196,16 @@ class WebDirectory:
 class Host:
     def __call__ (self):
         table = CTK.PropsTable()
-        table.Add (_('New Host Name'),    CTK.TextCfg ('%s!new_host'%(PREFIX), False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
-        table.Add (_('Document Root'),    CTK.TextCfg ('%s!document_root'%(PREFIX), False, {'value': os_get_document_root(), 'class': 'noauto'}), _(NOTE_DROOT))
-        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg('%s!logs_as_vsrv'%(PREFIX)), _(Wizard.CloneLogsCfg.NOTE))
+        table.Add (_('New Host Name'),    CTK.TextCfg (f'{PREFIX}!new_host', False, {'value': 'www.example.com', 'class': 'noauto'}), _(NOTE_HOST))
+        table.Add (_('Document Root'),    CTK.TextCfg (f'{PREFIX}!document_root', False, {'value': os_get_document_root(), 'class': 'noauto'}), _(NOTE_DROOT))
+        table.Add (_('Use Same Logs as'), Wizard.CloneLogsCfg(f'{PREFIX}!logs_as_vsrv'), _(Wizard.CloneLogsCfg.NOTE))
 
         submit  = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden('final', '1')
         submit += table
 
         cont  = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_HOST_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_HOST_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevCreate_Auto()
         return cont.Render().toStr()
@@ -216,15 +217,15 @@ class LocalSource:
                                      extra_dirs  = DEFAULT_PATHS)
 
         table = CTK.PropsTable()
-        table.Add (_('Project Directory'), CTK.TextCfg ('%s!mono_dir'%(PREFIX), False), _(NOTE_MONO_DIR))
+        table.Add (_('Project Directory'), CTK.TextCfg (f'{PREFIX}!mono_dir', False), _(NOTE_MONO_DIR))
         if not mono_bin:
-            table.Add (_('Mono Server Binary'), CTK.TextCfg ('%s!mono_bin'%(PREFIX), False), _(NOTE_MONO_BIN))
+            table.Add (_('Mono Server Binary'), CTK.TextCfg (f'{PREFIX}!mono_bin', False), _(NOTE_MONO_BIN))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_LOCAL_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_LOCAL_H1)}</h2>')
         cont += submit
         cont += CTK.DruidButtonsPanel_PrevNext_Auto()
         return cont.Render().toStr()
@@ -233,11 +234,11 @@ class LocalSource:
 class Welcome:
     def __call__ (self):
         cont = CTK.Container()
-        cont += CTK.RawHTML ('<h2>%s</h2>' %(_(NOTE_WELCOME_H1)))
+        cont += CTK.RawHTML (f'<h2>{_(NOTE_WELCOME_H1)}</h2>')
         cont += Wizard.Icon ('mono', {'class': 'wizard-descr'})
         box = CTK.Box ({'class': 'wizard-welcome'})
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P1)))
-        box += CTK.RawHTML ('<p>%s</p>' %(_(NOTE_WELCOME_P2)))
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P1)}</p>')
+        box += CTK.RawHTML (f'<p>{_(NOTE_WELCOME_P2)}</p>')
         box += Wizard.CookBookBox ('cookbook_mono')
         cont += box
 
@@ -245,7 +246,7 @@ class Welcome:
         tmp = re.findall (r'^/wizard/vserver/(\d+)/', CTK.request.url)
         if tmp:
             submit = CTK.Submitter (URL_APPLY)
-            submit += CTK.Hidden('%s!vsrv_num'%(PREFIX), tmp[0])
+            submit += CTK.Hidden(f'{PREFIX}!vsrv_num', tmp[0])
             cont += submit
 
         cont += CTK.DruidButtonsPanel_Next_Auto()
@@ -260,20 +261,20 @@ def is_mono_dir (path):
     if 'index.aspx' in files or 'default.aspx' in files:
         return path
 
-    raise ValueError, _(ERROR_NO_MONO)
+    raise ValueError(_(ERROR_NO_MONO))
 
 VALS = [
-    ('%s!mono_dir'     %(PREFIX), validations.is_not_empty),
-    ('%s!mono_bin'     %(PREFIX), validations.is_not_empty),
-    ('%s!new_host'     %(PREFIX), validations.is_not_empty),
-    ('%s!new_webdir'   %(PREFIX), validations.is_not_empty),
-    ('%s!document_root'%(PREFIX), validations.is_not_empty),
+    (f'{PREFIX}!mono_dir', validations.is_not_empty),
+    (f'{PREFIX}!mono_bin', validations.is_not_empty),
+    (f'{PREFIX}!new_host', validations.is_not_empty),
+    (f'{PREFIX}!new_webdir', validations.is_not_empty),
+    (f'{PREFIX}!document_root', validations.is_not_empty),
 
-    ("%s!mono_dir"     %(PREFIX), is_mono_dir),
-    ("%s!mono_bin"     %(PREFIX), validations.is_local_file_exists),
-    ("%s!new_host"     %(PREFIX), validations.is_new_vserver_nick),
-    ("%s!new_webdir"   %(PREFIX), validations.is_dir_formatted),
-    ("%s!document_root"%(PREFIX), validations.is_local_dir_exists),
+    (f"{PREFIX}!mono_dir", is_mono_dir),
+    (f"{PREFIX}!mono_bin", validations.is_local_file_exists),
+    (f"{PREFIX}!new_host", validations.is_new_vserver_nick),
+    (f"{PREFIX}!new_webdir", validations.is_dir_formatted),
+    (f"{PREFIX}!document_root", validations.is_local_dir_exists),
 ]
 
 # VServer
@@ -282,9 +283,9 @@ CTK.publish ('^/wizard/vserver/mono/2$', LocalSource)
 CTK.publish ('^/wizard/vserver/mono/3$', Host)
 
 # Rule
-CTK.publish ('^/wizard/vserver/(\d+)/mono$',   Welcome)
-CTK.publish ('^/wizard/vserver/(\d+)/mono/2$', LocalSource)
-CTK.publish ('^/wizard/vserver/(\d+)/mono/3$', WebDirectory)
+CTK.publish ('^/wizard/vserver/(\\d+)/mono$',   Welcome)
+CTK.publish ('^/wizard/vserver/(\\d+)/mono/2$', LocalSource)
+CTK.publish ('^/wizard/vserver/(\\d+)/mono/3$', WebDirectory)
 
 # Common
-CTK.publish (r'^%s'%(URL_APPLY), Commit, method="POST", validation=VALS)
+CTK.publish (rf'^{URL_APPLY}', Commit, method="POST", validation=VALS)

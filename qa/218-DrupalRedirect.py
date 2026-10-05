@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 DOMAIN  = "218_drupal_clean_urls"
 REQUEST = "/users/1/edit"
@@ -29,15 +29,15 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Drupal: clean URLs"
 
-        self.request           = "GET %s HTTP/1.1\r\n" %(REQUEST) +\
-                                 "Host: %s\r\n" %(DOMAIN)         +\
+        self.request           = f"GET {REQUEST} HTTP/1.1\r\n" +\
+                                 f"Host: {DOMAIN}\r\n"         +\
                                  "Connection: Close\r\n"
 
         self.expected_error    = 200
-        self.expected_content  = "REQUEST_URI: (%s)" % (REQUEST)
+        self.expected_content  = f"REQUEST_URI: ({REQUEST})"
 
     def Prepare (self, www):
-        srvr = self.Mkdir (www, "domain_%s" % (DOMAIN))
+        srvr = self.Mkdir (www, f"domain_{DOMAIN}")
         self.conf = CONF % (DOMAIN, srvr)
 
-        self.WriteFile (srvr, "index.cgi", 0755, CGI_BASE)
+        self.WriteFile (srvr, "index.cgi", 0o755, CGI_BASE)

@@ -45,7 +45,7 @@ def set_non_blocking (fd):
 
 def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=None, su=None):
     """This function implements a subset of the functionality provided
-    by the subprocess.Popen class. The subprocess module in Python 2.4
+    by the subprocess.Popen class.
     and 2.5 have some problems dealing with processes termination on
     multi-thread environments (593800, 1731717)."""
 
@@ -66,7 +66,7 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=No
         os.dup2 (stderr_w, 2)
 
         # Close fds
-        for i in xrange(3, MAXFD):
+        for i in range(3, MAXFD):
             try:
                 os.close (i)
             except:
@@ -76,17 +76,17 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=No
         if cd:
             try:
                 os.chdir (cd)
-            except Except, e:
-                print >> sys.stderr, "Could not change directory to: %s" %(cd)
-                print >> sys.stderr, traceback.format_exc()
+            except Exception as e:
+                print(f"Could not change directory to: {cd}", file=sys.stderr)
+                print(traceback.format_exc(), file=sys.stderr)
 
         # Change user
         if su:
             try:
                 os.setuid (su)
-            except Except, e:
-                print >> sys.stderr, "Could not set user: %s" %(su)
-                print >> sys.stderr, traceback.format_exc()
+            except Exception as e:
+                print(f"Could not set user: {su}", file=sys.stderr)
+                print(traceback.format_exc(), file=sys.stderr)
 
         # Pass control to the executable
         if not env:
@@ -95,8 +95,8 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=No
             os.execve('/bin/sh', ['sh', '-c', command], env)
 
     # Poll on child's process outputs
-    buf_stderr = ''
-    buf_stdout = ''
+    buf_stderr = b''
+    buf_stdout = b''
 
     set_non_blocking (stdout_r)
     set_non_blocking (stderr_r)
@@ -106,21 +106,21 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=No
         rlist, wlist, xlist = select.select ([stdout_r, stderr_r], [], [stdout_r, stderr_r], POLLING_LAPSE)
 
         if stderr_r in rlist:
-            data = ''
+            data = b''
             try:
                 data = os.read (stderr_r, READ_CHUNK_SIZE)
-            except OSError, e:
-                if e[0] in (errno.EAGAIN,):
+            except OSError as e:
+                if e.errno in (errno.EAGAIN,):
                     raise
             if data:
                 buf_stderr += data
 
         if stdout_r in rlist:
-            data = ''
+            data = b''
             try:
                 data = os.read (stdout_r, READ_CHUNK_SIZE)
-            except OSError, e:
-                if e[0] in (errno.EAGAIN,):
+            except OSError as e:
+                if e.errno in (errno.EAGAIN,):
                     raise
             if data:
                 buf_stdout += data
@@ -134,7 +134,7 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=No
                 elif os.WIFEXITED(sts):
                     returncode = os.WEXITSTATUS(sts)
                 break
-        except OSError, e:
+        except OSError as e:
             returncode = None
             break
 
@@ -149,13 +149,13 @@ def popen_sync (command, env=None, stdout=True, stderr=True, retcode=True, cd=No
 
     # Return information
     ret = {'command': command,
-           'stdout':  buf_stdout,
-           'stderr':  buf_stderr,
+           'stdout':  buf_stdout.decode('utf-8', errors='replace'),
+           'stderr':  buf_stderr.decode('utf-8', errors='replace'),
            'retcode': returncode}
 
     return ret
 
 if __name__ == "__main__":
-    print popen_sync ("ls")
-    print popen_sync ("lsg")
-    print popen_sync ("""cat <<EOF\nThis\nis\na\ntest\nEOF\n""")
+    print(popen_sync ("ls"))
+    print(popen_sync ("lsg"))
+    print(popen_sync ("""cat <<EOF\nThis\nis\na\ntest\nEOF\n"""))

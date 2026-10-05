@@ -35,7 +35,7 @@ This module has been written as part of the Cherokee project:
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import SocketServer
+import socketserver
 import traceback
 import socket
 import errno
@@ -49,14 +49,14 @@ __copyright__ = 'Copyright (C) 2011-2014 Alvaro Lopez Ortega'
 __license__   = 'BSD'
 
 
-class SCGIHandler (SocketServer.StreamRequestHandler):
+class SCGIHandler (socketserver.StreamRequestHandler):
     def __init__ (self, request, client_address, server):
         self.env    = {}
         self.post   = None
-        SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
+        socketserver.StreamRequestHandler.__init__ (self, request, client_address, server)
 
     def __safe_read (self, length):
-        info = ''
+        info = b''
         while True:
             if len(info) >= length:
                 return info
@@ -68,7 +68,7 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
                 if not len(chunk):
                     return info
                 info += chunk
-            except OSError, e:
+            except OSError as e:
                 if e.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
                     if chunk:
                         info += chunk
@@ -78,6 +78,8 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
                 raise
 
     def send(self, buf):
+        if isinstance(buf, str):
+            buf = buf.encode('utf-8')
         pending = len(buf)
         offset  = 0
 
@@ -89,50 +91,50 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
                 sent = os.write (self.wfile.fileno(), buf[offset:])
                 pending -= sent
                 offset  += sent
-            except OSError, e:
+            except OSError as e:
                 if e.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.EINPROGRESS):
                     time.sleep(0.001)
                     continue
                 raise
 
     def __read_netstring_size (self):
-        size = ""
+        size = b""
         while True:
             c = self.__safe_read(1)
-            if c == ':':
+            if c == b':':
                 break
             elif not c:
-                raise IOError, 'Malformed netstring'
+                raise IOError('Malformed netstring')
             size += c
-        return long(size)
+        return int(size)
 
     def __read_netstring (self):
-        data = ""
+        data = b""
         size = self.__read_netstring_size()
         while size > 0:
             s = self.__safe_read(size)
             if not s:
-                raise IOError, 'Malformed netstring'
+                raise IOError('Malformed netstring')
             data += s
             size -= len(s)
-            if self.__safe_read(1) != ',':
-                raise IOError, 'Missing netstring terminator'
+            if self.__safe_read(1) != b',':
+                raise IOError('Missing netstring terminator')
         return data
 
     def __read_env (self):
         headers = self.__read_netstring()
-        items   = headers.split('\0')[:-1]
+        items   = headers.split(b'\0')[:-1]
         itemsn  = len(items)
         if itemsn % 2 != 0:
-            raise Exception, 'Malformed headers'
+            raise Exception('Malformed headers')
         for i in range(0, itemsn, 2):
-            self.env[items[i]] = items[i+1]
+            self.env[items[i].decode('utf-8')] = items[i+1].decode('utf-8')
 
     def handle_post (self):
         if self.post:
             return
 
-        if not self.env.has_key('CONTENT_LENGTH'):
+        if 'CONTENT_LENGTH' not in self.env:
             return
 
         length = int(self.env['CONTENT_LENGTH'])
@@ -144,7 +146,7 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         try:
             self.handle_request()
         except:
-            if sys.exc_type != SystemExit:
+            if sys.exc_info()[0] != SystemExit:
                 traceback.print_exc()  # Print the error
 
         try: # Closes wfile and rfile
@@ -172,7 +174,7 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         self.send("handle_request() should be overridden")
 
 
-class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
+class ThreadingMixIn_Custom (socketserver.ThreadingMixIn):
     def set_synchronous (self, sync):
         assert type(sync) == bool
         self.syncronous = sync
@@ -181,27 +183,29 @@ class ThreadingMixIn_Custom (SocketServer.ThreadingMixIn):
         if hasattr(self, 'syncronous') and self.syncronous:
             return self.process_request_thread (request, client_address)
 
-        return SocketServer.ThreadingMixIn.process_request (self, request, client_address)
+        return socketserver.ThreadingMixIn.process_request (self, request, client_address)
 
 
-class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, SocketServer.UnixStreamServer):
+class ThreadingUnixStreamServer_Custom (ThreadingMixIn_Custom, socketserver.UnixStreamServer):
     pass
 
-class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer):
+class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, socketserver.TCPServer):
     def server_bind (self):
-        host, port = self.server_address
+        host = self.server_address[0]
+        port = self.server_address[1]
 
         # Binding to a IP/host
         if host:
             return self.server_bind_multifamily()
 
         # Binding all interfaces
-        return SocketServer.TCPServer.server_bind (self)
+        return socketserver.TCPServer.server_bind (self)
 
     def server_bind_multifamily (self):
         # Loop over the different addresses of 'host'
-        host, port = self.server_address
-        addresses = socket.getaddrinfo (host, port, socket.AF_UNSPEC,
+        host = self.server_address[0]
+        port = self.server_address[1]
+        addresses = socket.getaddrinfo (str(host), int(port), socket.AF_UNSPEC,
                                         socket.SOCK_STREAM, 0, socket.AI_PASSIVE)
 
         # Find a suitable address
@@ -230,7 +234,7 @@ class ThreadingTCPServer_Custom (ThreadingMixIn_Custom, SocketServer.TCPServer):
 
         # If none successfully bind report error
         if not s:
-            raise socket.error, "Could not create server socket"
+            raise socket.error("Could not create server socket")
 
         self.socket = s
 
@@ -245,10 +249,10 @@ class SCGIServer (ThreadingTCPServer_Custom):
         self.allow_reuse_address = True
         ThreadingTCPServer_Custom.__init__ (self, (host, port), handler_class)
 
-class SCGIServerFork (SocketServer.ForkingTCPServer):
+class SCGIServerFork (socketserver.ForkingTCPServer):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
         self.allow_reuse_address = True
-        SocketServer.ForkingTCPServer.__init__ (self, (host, port), handler_class)
+        socketserver.ForkingTCPServer.__init__ (self, (host, port), handler_class)
 
 # Unix socket
 #
@@ -257,10 +261,10 @@ class SCGIUnixServer (ThreadingUnixStreamServer_Custom):
         self.allow_reuse_address = True
         ThreadingUnixStreamServer_Custom.__init__ (self, unix_socket, handler_class)
 
-class SCGIUnixServerFork (SocketServer.UnixStreamServer):
+class SCGIUnixServerFork (socketserver.UnixStreamServer):
     def __init__(self, unix_socket, handler_class=SCGIHandler):
         self.allow_reuse_address = True
-        SocketServer.UnixStreamServer.__init__ (self, unix_socket, handler_class)
+        socketserver.UnixStreamServer.__init__ (self, unix_socket, handler_class)
 
 
 def ServerFactory (threading=False, *args, **kargs):

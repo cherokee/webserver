@@ -1,5 +1,5 @@
 import os
-from base import *
+from qa_base import *
 
 DIR = "/299-MethodsRequestBodyHandling/"
 MAGIC = "Report bugs to http://bugs.cherokee-project.com"
@@ -51,8 +51,8 @@ source!%(SOURCE)d!host = localhost:%(PORT)d
 source!%(SOURCE)d!interpreter = %(PYTHON)s %(fcgi_file)s
 """
 
-SCRIPT = """
-from fcgi import *
+SCRIPT = f"""
+from qa_fcgi import *
 
 def app (environ, start_response):
     start_response('200 OK', [("Content-Type", "text/plain")])
@@ -65,8 +65,8 @@ def app (environ, start_response):
 
     return [response]
 
-WSGIServer(app, bindAddress=("localhost",%d)).run()
-""" % (PORT)
+WSGIServer(app, bindAddress=("localhost",{PORT})).run()
+"""
 
 
 class TestEntry (TestBase):
@@ -76,7 +76,7 @@ class TestEntry (TestBase):
 
     def __init__ (self, method, send_input, input_required):
         TestBase.__init__ (self, __file__)
-        self.request = "%s %s HTTP/1.0\r\n" % (method, DIR) +\
+        self.request = f"{method} {DIR} HTTP/1.0\r\n" +\
                        "Content-type: text/xml\r\n"
         self.expected_content = []
         
@@ -84,12 +84,12 @@ class TestEntry (TestBase):
             self.expected_error = 411
         else:
             self.expected_error = 200
-            self.expected_content.append("Method: %s" % method)
+            self.expected_content.append(f"Method: {method}")
 
         if send_input:
-            self.request += "Content-length: %d\r\n" % (len(MAGIC))
+            self.request += f"Content-length: {len(MAGIC)}\r\n"
             self.post = MAGIC
-            self.expected_content.append("Body: %s" % MAGIC)
+            self.expected_content.append(f"Body: {MAGIC}")
         else:
             self.forbidden_content = 'Body:'
 
@@ -101,11 +101,11 @@ class Test (TestCollection):
         self.name = "Method Request Body Handling"
 
     def Prepare (self, www):
-        fcgi_file = self.WriteFile (www, "fcgi_test_methods.cgi", 0444, SCRIPT)
+        fcgi_file = self.WriteFile (www, "fcgi_test_methods.cgi", 0o444, SCRIPT)
         
         fcgi = os.path.join (www, 'fcgi.py')
         if not os.path.exists (fcgi):
-            self.CopyFile ('fcgi.py', fcgi)
+            self.CopyFile ('qa_fcgi.py', fcgi)
 
         vars = globals()
         vars['fcgi_file'] = fcgi_file

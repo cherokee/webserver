@@ -20,6 +20,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 from Rule import RulePlugin
@@ -74,12 +75,12 @@ def commit():
 
     # New entry
     if new_method:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
 
-        CTK.cfg['%s!match'%(next_pre)]        = 'method'
-        CTK.cfg['%s!match!method'%(next_pre)] = new_method
+        CTK.cfg[f'{next_pre}!match']        = 'method'
+        CTK.cfg[f'{next_pre}!match!method'] = new_method
 
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     return CTK.cfg_apply_post()
@@ -92,11 +93,11 @@ class Plugin_method (RulePlugin):
         idx    = (1,0)[is_new]
 
         # Set the first method is empty
-        if not CTK.cfg.get_val ('%s!method'%(key)):
-            CTK.cfg ['%s!method'%(key)] = METHODS[idx:][0][0]
+        if not CTK.cfg.get_val (f'{key}!method'):
+            CTK.cfg [f'{key}!method'] = METHODS[idx:][0][0]
 
         table = CTK.PropsTable()
-        table.Add (_('Method'), CTK.ComboCfg('%s!method'%(key), METHODS[idx:], ({}, {'class': 'noauto'})[is_new]), _(NOTE_METHOD))
+        table.Add (_('Method'), CTK.ComboCfg(f'{key}!method', METHODS[idx:], ({}, {'class': 'noauto'})[is_new]), _(NOTE_METHOD))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Hidden ('key', key)
@@ -105,8 +106,8 @@ class Plugin_method (RulePlugin):
         self += submit
 
     def GetName (self):
-        method = CTK.cfg.get_val ('%s!method' %(self.key), '')
-        return "%s %s" % (_('Method'), method.upper())
+        method = CTK.cfg.get_val (f'{self.key}!method', '')
+        return f"{_('Method')} {method.upper()}"
 
 
-CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")
+CTK.publish (f"^{URL_APPLY}", commit, method="POST")

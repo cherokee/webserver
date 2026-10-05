@@ -22,11 +22,12 @@
 # 02110-1301, USA.
 #
 
-from Box import Box
-from Button import Button
-from Refreshable import RefreshableURL
-from Server import request
-from RawHTML import RawHTML
+from .Box import Box
+from .Button import Button
+from .Refreshable import RefreshableURL
+from .i18n import _
+from .Server import request
+from .RawHTML import RawHTML
 
 
 # Forces all the submitters inside a Druid. If all the submittion of
@@ -103,7 +104,7 @@ class Druid (Box):
     def JS_to_goto (self, url):
         props = {'refresh': self.refreshable.id,
                  'url':     url}
-        return "$('#%(refresh)s').trigger({'type':'refresh_goto', 'goto': %(url)s});" %(props)
+        return "$('#{refresh}').trigger({{'type':'refresh_goto', 'goto': {url}}});".format(**props)
 
 
 #
@@ -252,9 +253,9 @@ def druid_url_next (url):
     try:
         num = int(parts[-1])
     except ValueError:
-        return '%s/2' %(url)
+        return f'{url}/2'
 
-    return '%s/%d' %('/'.join(parts[:-1]), num+1)
+    return f"{'/'.join(parts[:-1])}/{int(num + 1)}"
 
 def druid_url_prev (url):
     parts = url.split('/')
@@ -262,7 +263,7 @@ def druid_url_prev (url):
 
     if num == 2:
         return '/'.join(parts[:-1])
-    return '%s/%d' %('/'.join(parts[:-1]), num-1)
+    return f"{'/'.join(parts[:-1])}/{int(num - 1)}"
 
 
 class DruidButtonsPanel_Next_Auto (DruidButtonsPanel_Next):
@@ -283,24 +284,24 @@ class DruidButtonsPanel_PrevCreate_Auto (DruidButtonsPanel_PrevCreate):
 
 
 def DruidContent__JS_to_goto (internal_id, url):
-    return """$("#%s").parents('.refreshable-url').eq(0).trigger({
+    return """$("#{}").parents('.refreshable-url').eq(0).trigger({{
                        'type': 'refresh_goto',
-                       'goto': '%s'
-               });""" %(internal_id, url)
+                       'goto': '{}'
+               }});""".format(internal_id, url)
 
 def DruidContent__JS_to_goto_next (internal_id):
     return DruidContent__JS_to_goto (internal_id, druid_url_next(request.url))
 
 def DruidContent__JS_to_close (internal_id):
-    return '$("#%s").each(function() {%s});' %(internal_id, JS_BUTTON_CLOSE)
+    return '$("#{}").each(function() {{{}}});'.format(internal_id, JS_BUTTON_CLOSE)
 
 def DruidContent__JS_if_external_submit (code):
     return "if ((typeof (CTK_druid_external_submit) != 'undefined') && " +\
-           "    (CTK_druid_external_submit)) {%s}" %(code)
+           "    (CTK_druid_external_submit)) {{{}}}".format(code)
 
 def DruidContent__JS_if_internal_submit (code):
     return "if ((typeof (CTK_druid_external_submit) == 'undefined') || " +\
-           "    (! CTK_druid_external_submit)) {%s}" %(code)
+           "    (! CTK_druid_external_submit)) {{{}}}".format(code)
 
 
 class DruidContent_TriggerNext (Box):

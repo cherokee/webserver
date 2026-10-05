@@ -1,6 +1,6 @@
 import os
 import time
-from base import *
+from qa_base import *
 
 DOCUMENTATION = """
 14.27 If-Range
@@ -52,7 +52,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "if_range1")
-        f = self.WriteFile (d, "file", 0444, DOCUMENTATION)
+        f = self.WriteFile (d, "file", 0o444, DOCUMENTATION)
 
         st = os.stat (f)
         mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime = st
@@ -61,5 +61,5 @@ class Test (TestBase):
         self.request          = "GET /if_range1/file HTTP/1.1\r\n"  + \
                                 "Host: localhost\r\n"               + \
                                 "Connection: Close\r\n"             + \
-                                "If-Range: %s\r\n" % (times)        + \
-                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION))
+                                f"If-Range: {times}\r\n"        + \
+                                f"Range: bytes={len(DOCUMENTATION)}-\r\n"

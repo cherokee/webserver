@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 
 URL_APPLY = '/plugin/file/apply'
 HELPS     = [('modules_handlers_file', _("Static Content"))]
@@ -39,14 +40,14 @@ class Plugin_file (Handler.PluginHandler):
         symlinks = kwargs.pop('symlinks', True)
 
         table = CTK.PropsTable()
-        table.Add (_("Use I/O cache"), CTK.CheckCfgText("%s!iocache"%(self.key), True, _('Enabled')), _(NOTE_IO_CACHE))
+        table.Add (_("Use I/O cache"), CTK.CheckCfgText(f"{self.key}!iocache", True, _('Enabled')), _(NOTE_IO_CACHE))
         if symlinks:
-            table.Add (_('Allow symbolic links'), CTK.CheckCfgText("%s!symlinks"%(self.key), True,  _('Allow')), '')
+            table.Add (_('Allow symbolic links'), CTK.CheckCfgText(f"{self.key}!symlinks", True,  _('Allow')), '')
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table
 
-        self += CTK.RawHTML ('<h2>%s</h2>' % (_('File Sending')))
+        self += CTK.RawHTML (f"<h2>{_('File Sending')}</h2>")
         self += CTK.Indenter (submit)
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

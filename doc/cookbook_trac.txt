@@ -22,7 +22,7 @@ configuration would be needed on that end.
 
 Trac
 ~~~~
-The software requirements are Python-2.5, easy_install and
+The software requirements are Python 3, pip and
 SQLite-3.3.4 or above. Flup is also required unless you want to use
 the HTTP-proxy method, and SQLite can be replaced by PostreSQL or
 MySQL if you wish to do so.
@@ -32,8 +32,8 @@ as `root` would suffice to provide the requirements and install Trac.
 
 .Quick install
 ----
-apt-get install python-genshi python-setuptools python-pysqlite2 python-flup
-easy_install Trac
+apt-get install python3-genshi python3-setuptools python3-pip python3-flup
+pip install Trac
 ----
 
 The package names could slightly vary on different distributions.

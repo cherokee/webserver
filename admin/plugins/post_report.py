@@ -24,6 +24,7 @@
 
 import CTK
 import Handler
+from CTK.i18n import _, N_
 
 from util import *
 from consts import *
@@ -46,11 +47,11 @@ class Plugin_post_report (Handler.PluginHandler):
 
         # Properties
         table = CTK.PropsTable()
-        table.Add (_('Target language'), CTK.ComboCfg('%s!lang'%(key), trans_options(DWRITER_LANGS)), _(NOTE_LANGUAGES))
+        table.Add (_('Target language'), CTK.ComboCfg(f'{key}!lang', trans_options(DWRITER_LANGS)), _(NOTE_LANGUAGES))
 
         submit = CTK.Submitter (URL_APPLY)
         submit += CTK.Indenter (table)
 
         self += submit
 
-CTK.publish ('^%s'%(URL_APPLY), CTK.cfg_apply_post, method="POST")
+CTK.publish (f'^{URL_APPLY}', CTK.cfg_apply_post, method="POST")

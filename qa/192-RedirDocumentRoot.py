@@ -1,6 +1,6 @@
-from base import *
+from qa_base import *
 
-HOST  = "192_test"
+HOST: str = "192_test"
 DIR   = "192_dir"
 FILE  = "test_file"
 MAGIC = "something"
@@ -27,18 +27,18 @@ vserver!192!rule!100!match!final = 1
 vserver!192!rule!100!handler = file
 """
 
-CGI_BASE = """#!/bin/sh
+CGI_BASE = f"""#!/bin/sh
 echo "Content-type: text/html"
 echo
-echo "%s"
-""" % (MAGIC)
+echo "{MAGIC}"
+"""
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name              = "Hiden Redir: DocumentRoot change"
-        self.request           = "GET /%s/%s HTTP/1.0\r\n" % (DIR, FILE) + \
-                                 "Host: %s\r\n" % (HOST)
+        self.request           = f"GET /{DIR}/{FILE} HTTP/1.0\r\n" + \
+                                 f"Host: {HOST}\r\n"
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = "/bin/sh"
@@ -46,8 +46,6 @@ class Test (TestBase):
     def Prepare (self, www):
         d = self.Mkdir (www, HOST)
         c = self.Mkdir (d, "cgi-bin_root")
-        self.WriteFile (c, "program.cgi", 0555, CGI_BASE)
+        self.WriteFile (c, "program.cgi", 0o555, CGI_BASE)
 
-	self.conf = CONF % (HOST, d, DIR, c)
-
-
+        self.conf = CONF % (HOST, d, DIR, c)

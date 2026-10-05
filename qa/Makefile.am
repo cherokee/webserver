@@ -4,7 +4,7 @@ SUFFIXES = .py.pre .py
 	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%sbindir%|${sbindir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%libdir%|${libdir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%cgiroot%|${CGI_ROOT}|g; s|%version%|${PACKAGE_VERSION}|g; s|%pythonpath%|${PYTHON}|g; s|%phpcgi%|${PHPCGI}|g; s|%datadir%|${datadir}|g; s|%localedir%|${localedir}|g" $< > $@
 
 PY_PRE = \
-conf.py.pre
+qa_conf.py.pre
 
 PYS = \
 $(PY_PRE:.py.pre=.py)
@@ -15,12 +15,15 @@ $(PYS)
 all-local: $(PYS)
 
 EXTRA_DIST = \
+test_http23.py \
+test_http23_admin.py \
+requirements-http23.txt \
 $(PY_PRE) \
-base.py \
-util.py \
-help.py \
+qa_base.py \
+qa_util.py \
+qa_help.py \
 pyscgi.py \
-fcgi.py \
+qa_fcgi.py \
 run-tests.py \
 001-basic.py \
 002-MissingProtocol.py \
@@ -355,6 +358,11 @@ endif
 test-non-ssl:
 	$(PYTHON) -m compileall .
 	$(PYTHON) ./run-tests.py
+
+# Independent wire QA; requires the libraries in requirements-http23.txt.
+test-http23:
+	CHEROKEE_TEST_HTTP3=1 $(PYTHON) ./test_http23.py
+	$(PYTHON) ./test_http23_admin.py
 
 clean-local:
 	find . -type f -name "*.pyc" -exec rm -f {} \;

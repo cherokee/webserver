@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC  = "This is the file number %s."
 MAGIC2 = "Magic dirname"
@@ -23,7 +23,6 @@ class Test (TestBase):
     def Prepare (self, www):
         self.Mkdir (www, "pipe2")
         self.Mkdir (www, "pipe2/"+MAGIC2)
-        self.WriteFile (www, "pipe2/file1", 0444, MAGIC %("one"))
-        self.WriteFile (www, "pipe2/file2", 0444, MAGIC %("two"))
-
+        self.WriteFile (www, "pipe2/file1", 0o444, MAGIC %("one"))
+        self.WriteFile (www, "pipe2/file2", 0o444, MAGIC %("two"))
 

@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "thread.h"
+#include "http2.h"
 
 #include <signal.h>
 #include <errno.h>
@@ -158,6 +159,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->server              = server;
 	n->thread_type         = type;
 
+	n->native_request_bytes = 0;
 	n->conns_num           = 0;
 	n->conns_max           = conns_max;
 	n->conns_keepalive_max = keepalive_max;
@@ -738,6 +740,12 @@ process_active_connections (cherokee_thread_t *thd)
 			goto shutdown;
 		}
 
+		if (conn->phase == phase_http2) {
+			ret = cherokee_http2_step (conn);
+			if (ret != ret_ok) close_active_connection (thd, conn, false);
+			continue;
+		}
+
 		/* Update the connection timeout
 		 */
 		if ((conn->phase != phase_tls_handshake) &&
@@ -838,6 +846,9 @@ process_active_connections (cherokee_thread_t *thd)
 				cherokee_connection_update_timeout (conn);
 
 				conn->phase = phase_reading_header;
+				if (conn->socket.cryptor->negotiated_http2) {
+					if (cherokee_http2_init(conn) != ret_ok) goto shutdown;
+				}
 				break;
 
 			case ret_eof:
@@ -1429,7 +1440,7 @@ process_active_connections (cherokee_thread_t *thd)
 		case phase_shutdown:
 			/* Perform a proper SSL/TLS shutdown
 			 */
-			if (conn->socket.is_tls == TLS) {
+			if (conn->socket.is_tls == TLS && !conn->socket.native_stream) {
 				ret = conn->socket.cryptor->shutdown (conn->socket.cryptor);
 				switch (ret) {
 				case ret_ok:
@@ -1676,6 +1687,30 @@ thread_add_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 	return ret_ok;
 }
 
+
+ret_t
+cherokee_thread_add_stream (cherokee_thread_t *thd, cherokee_bind_t *bind,
+                           int fd, cherokee_sockaddr_t *peer, cherokee_sockaddr_t *local,
+                           cherokee_http_version_t version, void *tls_vserver)
+{
+	cherokee_connection_t *conn;
+	if (thd->conns_num >= thd->conns_max) return ret_deny;
+	if (get_new_connection(thd, &conn) != ret_ok) return ret_error;
+	if (cherokee_socket_set_sockaddr(&conn->socket, fd, peer) != ret_ok) goto error;
+	conn->bind = bind;
+	conn->native_version = version;
+	conn->native_tls_vserver = tls_vserver;
+	conn->socket.native_stream = true;
+	conn->socket.native_local_addr = *local;
+	conn->socket.is_tls = TLS;
+	if (thread_add_connection(thd, conn) != ret_ok) goto error;
+	thd->conns_num++;
+	return ret_ok;
+error:
+	conn->socket.socket = -1;
+	connection_reuse_or_free(thd, conn);
+	return ret_error;
+}
 
 static ret_t
 accept_new_connection (cherokee_thread_t *thd, cherokee_bind_t *bind)

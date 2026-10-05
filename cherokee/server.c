@@ -27,6 +27,7 @@
 #include "server.h"
 #include "services.h"
 #include "bind.h"
+#include "http3.h"
 #include "error_log.h"
 
 #include <fcntl.h>
@@ -282,6 +283,9 @@ cherokee_server_free (cherokee_server_t *srv)
 		TRACE(ENTRIES, "Destroying thread %p\n", i);
 		destroy_thread (THREAD(i));
 	}
+
+	/* QUIC adapters reference main_thread's poller and input budget. */
+	list_for_each (i, &srv->listeners) cherokee_http3_free(BIND(i));
 
 	TRACE(ENTRIES, "Destroying main_thread %p\n", srv->main_thread);
 	cherokee_thread_free (srv->main_thread);
@@ -938,6 +942,10 @@ cherokee_server_initialize (cherokee_server_t *srv)
 			if (! BIND_IS_TLS(i))
 				continue;
 
+			if (BIND(i)->http2 || BIND(i)->http3) {
+				fprintf(stderr, "Native HTTP protocols require server!tls = libssl\n");
+				return ret_error;
+			}
 			LOG_WARNING (CHEROKEE_ERROR_SERVER_IGNORE_TLS, BIND(i)->port);
 			cherokee_list_del (i);
 			cherokee_bind_free (BIND(i));
@@ -960,6 +968,27 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		                               srv->server_token);
 		if (ret != ret_ok)
 			return ret;
+	}
+
+	list_for_each (i, &srv->listeners) {
+		const char *backend;
+		if ((BIND(i)->http2 || BIND(i)->http3) &&
+		    (!srv->cryptor || cherokee_module_get_name(MODULE(srv->cryptor), &backend) != ret_ok || strcmp(backend, "libssl"))) {
+			fprintf(stderr, "Native HTTP/2 and HTTP/3 require the libssl TLS backend\n");
+			return ret_error;
+		}
+		if (BIND(i)->http2 || BIND(i)->http3) {
+			cherokee_list_t *v;
+			list_for_each(v, &srv->vservers) {
+				if (VSERVER(v)->req_client_certs == req_client_cert_require && !VSERVER(v)->certs_ca.len) {
+					fprintf(stderr, "Native client-certificate authentication requires ssl_ca_list_file\n");
+					return ret_error;
+				}
+			}
+		}
+		if (cherokee_http3_init(BIND(i), srv) != ret_ok) return ret_error;
+		/* Service QUIC retransmission timers promptly, even with no TCP work. */
+		if (BIND(i)->http3 && srv->fdwatch_msecs > 10) srv->fdwatch_msecs = 10;
 	}
 
 	/* Verify the thread number and force it within sane limits.
@@ -1149,6 +1178,13 @@ cherokee_server_step (cherokee_server_t *srv)
 	/* Get the server time.
 	 */
 	cherokee_bogotime_update();
+
+	{
+		cherokee_list_t *i;
+		CHEROKEE_MUTEX_LOCK (&srv->main_thread->ownership);
+		list_for_each (i, &srv->listeners) cherokee_http3_step(BIND(i), srv->main_thread);
+		CHEROKEE_MUTEX_UNLOCK (&srv->main_thread->ownership);
+	}
 
 	/* Execute thread step.
 	 */

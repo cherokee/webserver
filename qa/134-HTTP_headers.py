@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 USER_AGENT        = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.1) Gecko/20060313 Debian/1.5.dfsg+1.5.0.1-4 Firefox/1.5.0.1"
 ACCEPT            = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
@@ -21,18 +21,18 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name             = "PHP: HTTP headers"
         self.request          = "GET /http_headers1/test.php HTTP/1.0\r\n" + \
-                                "User-Agent: %s\r\n"        % (USER_AGENT) + \
-                                "Accept: %s\r\n"            % (ACCEPT) + \
-                                "Accept-Language: %s\r\n"   % (ACCEPT_LANGUAGE) + \
-                                "Accept-Encoding: %s\r\n"   % (ACCEPT_ENCODING) + \
-                                "Accept-Charset: %s\r\n"    % (ACCEPT_CHARSET) + \
-                                "Connection: %s\r\n"        % (CONNECTION) + \
-                                "Keep-Alive: %s\r\n"        % (KEEP_ALIVE) + \
-                                "Referer: %s\r\n"           % (REFERER) + \
-                                "Cookie: %s\r\n"            % (COOKIE) + \
-                                "If-None-Match: %s\r\n"     % (IF_NONE_MATCH) + \
-                                "If-Range: %s\r\n"          % (IF_RANGE) + \
-                                "If-Modified-Since: %s\r\n" % (IF_MODIFIED_SINCE)
+                                f"User-Agent: {USER_AGENT}\r\n" + \
+                                f"Accept: {ACCEPT}\r\n" + \
+                                f"Accept-Language: {ACCEPT_LANGUAGE}\r\n" + \
+                                f"Accept-Encoding: {ACCEPT_ENCODING}\r\n" + \
+                                f"Accept-Charset: {ACCEPT_CHARSET}\r\n" + \
+                                f"Connection: {CONNECTION}\r\n" + \
+                                f"Keep-Alive: {KEEP_ALIVE}\r\n" + \
+                                f"Referer: {REFERER}\r\n" + \
+                                f"Cookie: {COOKIE}\r\n" + \
+                                f"If-None-Match: {IF_NONE_MATCH}\r\n" + \
+                                f"If-Range: {IF_RANGE}\r\n" + \
+                                f"If-Modified-Since: {IF_MODIFIED_SINCE}\r\n"
 
         self.expected_error   = 200
         self.expected_content = ["User-Agent - "        + USER_AGENT,
@@ -49,7 +49,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "http_headers1")
-        self.WriteFile (d, "test.php", 0444, """<?php
+        self.WriteFile (d, "test.php", 0o444, """<?php
            echo 'User-Agent - '        . $_SERVER['HTTP_USER_AGENT']        .'\n';
            echo 'Accept - '            . $_SERVER['HTTP_ACCEPT']            .'\n';
            echo 'Accept-Language - '   . $_SERVER['HTTP_ACCEPT_LANGUAGE']   .'\n';

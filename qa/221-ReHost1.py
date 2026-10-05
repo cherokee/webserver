@@ -1,8 +1,8 @@
-from base import *
+from qa_base import *
 
 MAGIC = "Testing regex Host: mathing."
 
-CONF = """
+CONF = r"""
 vserver!2210!nick = test0221
 vserver!2210!document_root = %s
 vserver!2210!match = rehost
@@ -25,6 +25,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "test_221_dir")
-        self.WriteFile (d, "file", 0444, MAGIC)
+        self.WriteFile (d, "file", 0o444, MAGIC)
 
         self.conf = CONF % (d)

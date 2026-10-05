@@ -1,5 +1,5 @@
 import os
-from base import *
+from qa_base import *
 
 DIR      = "/Dir153"
 PATHINFO = "/dir1/dir2/file.ext"
@@ -8,7 +8,7 @@ REQUEST  = DIR + PATHINFO
 PORT     = get_free_port()
 PYTHON   = look_for_python()
 
-SCRIPT = """
+SCRIPT = f"""
 from pyscgi import *
 
 class TestHandler (SCGIHandler):
@@ -17,10 +17,10 @@ class TestHandler (SCGIHandler):
         self.send('Content-Type: text/plain\\r\\n\\r\\n')
 
         for v in self.env:
-            self.send('%%s: "%%s"\\n' %% (v, self.env[v]))
+            self.send(f'{{v}}: "{{self.env[v]}}"\\n')
 
-SCGIServer(TestHandler, port=%d).serve_forever()
-""" % (PORT)
+SCGIServer(TestHandler, port={PORT}).serve_forever()
+"""
 
 source = get_next_source()
 
@@ -40,7 +40,7 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 EXPECTED = [
-    'PATH_INFO: "%s"' % (DIR + PATHINFO),
+    f'PATH_INFO: "{DIR + PATHINFO}"',
     'SCRIPT_NAME: ""'
 ]
 
@@ -49,7 +49,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "SCGI VII: root: PATH_INFO & SCRIPT_NAME"
 
-        self.request           = "GET %s HTTP/1.1\r\n" %(REQUEST) +\
+        self.request           = f"GET {REQUEST} HTTP/1.1\r\n" +\
                                  "Host: scgi6\r\n"                +\
                                  "Connection: Close\r\n"
 
@@ -58,7 +58,7 @@ class Test (TestBase):
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']
 
     def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_test7.scgi", 0444, SCRIPT)
+        scgi_file = self.WriteFile (www, "scgi_test7.scgi", 0o444, SCRIPT)
 
         pyscgi = os.path.join (www, 'pyscgi.py')
         if not os.path.exists (pyscgi):

@@ -4,12 +4,12 @@ URL = "http://ftp.gnome.org/pub/mozilla.org/addons/14455/tunisia-sat_smilies-2.0
 
 class default:
     def __call__ (self):
-        down    = CTK.Downloader (URL)
+        down    = CTK.Downloader ('download', URL)
         message = CTK.Box(content = CTK.RawHTML(' '))
         button  = CTK.Button('Download')
 
-        down.bind ('error',    '$("#%s").html("Error: Could not download");' %(message.id))
-        down.bind ('finished', '$("#%s").html("OK: Download Finished");' %(message.id))
+        down.bind ('error',    f'$("#{message.id}").html("Error: Could not download");')
+        down.bind ('finished', f'$("#{message.id}").html("OK: Download Finished");')
         button.bind ('click', down.JS_to_start())
 
         page  = CTK.Page()

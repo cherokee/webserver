@@ -20,8 +20,8 @@
 # 02110-1301, USA.
 #
 
-from Widget import Widget
-from Container import Container
+from .Widget import Widget
+from .Container import Container
 
 
 class HelpEntry (Widget):
@@ -34,14 +34,14 @@ class HelpEntry (Widget):
         if '://' in self.ref:
             url = self.ref
         else:
-            url = "/help/%s.html" %(self.ref)
+            url = f"/help/{self.ref}.html"
 
         render = Widget.Render(self)
-        render.html = '<div class="help_entry"><a href="%s" target="cherokee_help">%s</a></div>' %(url, self.title)
+        render.html = f'<div class="help_entry"><a href="{url}" target="cherokee_help">{self.title}</a></div>'
         return render
 
     def __repr__ (self):
-         return "<CTK.Help.HelpEntry: '%s', '%s', id=%d>"%(self.title, self.ref, id(self))
+         return f"<CTK.Help.HelpEntry: '{self.title}', '{self.ref}', id={int(id(self))}>"
 
 
 class HelpGroup (Widget):
@@ -66,12 +66,12 @@ class HelpGroup (Widget):
         for entry in self.entries:
             render += entry.Render()
 
-        render.html = '<div class="help_group" id="help_group_%s">%s</div>' %(self.name, render.html)
+        render.html = f'<div class="help_group" id="help_group_{self.name}">{render.html}</div>'
         return render
 
     def __repr__ (self):
         txt = ', '.join([e.__repr__() for e in self.entries])
-        return "<CTK.Help.HelpGroup: id=%d, %s>"%(id(self), txt)
+        return f"<CTK.Help.HelpGroup: id={int(id(self))}, {txt}>"
 
     def toJSON (self):
         all = []
@@ -97,7 +97,7 @@ class HelpMenu (Widget):
             for entry in helps:
                 self._add_single (entry)
         else:
-            self._add_single (entry)
+            self._add_single (helps)
         return self
 
     def _add_single (self, entry):
@@ -114,6 +114,5 @@ class HelpMenu (Widget):
             render.html += entry.Render().html
 
         # Wrap the list of entries
-        render.html = '<div class="help">%s</div>' %(render.html)
+        render.html = f'<div class="help">{render.html}</div>'
         return render
-

@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 HEADER_CONTENT = """
 ============================================
@@ -27,8 +27,8 @@ class Test (TestBase):
     def Prepare (self, www):
         d = self.Mkdir (www, "header_file2")
 
-        self.WriteFile (d, "file1", 0444, "")
-        self.WriteFile (d, "file2", 0444, "")
-        self.WriteFile (d, "file3", 0444, "")
+        self.WriteFile (d, "file1", 0o444, "")
+        self.WriteFile (d, "file2", 0o444, "")
+        self.WriteFile (d, "file3", 0o444, "")
 
-        self.WriteFile (d, "header.txt", 0444, HEADER_CONTENT)
+        self.WriteFile (d, "header.txt", 0o444, HEADER_CONTENT)

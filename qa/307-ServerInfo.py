@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 MAGIC = '"><script>alert(1)</script>'
 
@@ -13,8 +13,7 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "Server Info, prevent XSS via URL"
 
-        self.request           = "GET /server_info/%s HTTP/1.0\r\n" % (MAGIC)
+        self.request           = f"GET /server_info/{MAGIC} HTTP/1.0\r\n"
         self.conf              = CONF
         self.expected_error    = 200
         self.forbidden_content = MAGIC
-

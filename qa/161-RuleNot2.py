@@ -1,4 +1,4 @@
-from base import *
+from qa_base import *
 
 VSERVER = "rulenot2"
 MAGIC   = "Just a not rule test"
@@ -17,20 +17,20 @@ vserver!1610!rule!20!match!right!directory = /this_is_not
 vserver!1610!rule!20!handler = cgi
 """
 
-CGI = """#!/bin/sh
+CGI = f"""#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo
-echo "%s"
-""" % (MAGIC)
+echo "{MAGIC}"
+"""
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
         self.name = "Rule not: match"
 
-        self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
-                                 "Host: %s\r\n" % (VSERVER)          + \
+        self.request           = f"GET /{DIR}/test HTTP/1.1\r\n" + \
+                                 f"Host: {VSERVER}\r\n"          + \
                                  "Connection: Close\r\n"
 
         self.expected_error    = 200
@@ -43,4 +43,4 @@ class Test (TestBase):
 
         self.conf = CONF % (VSERVER, d)
 
-        f = self.WriteFile (d2, 'test', 0755, CGI)
+        f = self.WriteFile (d2, 'test', 0o755, CGI)

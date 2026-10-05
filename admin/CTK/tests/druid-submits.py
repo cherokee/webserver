@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from CTK.i18n import _, N_
 import CTK
 
 

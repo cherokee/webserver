@@ -20,9 +20,9 @@
 # 02110-1301, USA.
 #
 
-from util import *
-from Widget import Widget
-from Container import Container
+from .util import *
+from .Widget import Widget
+from .Container import Container
 
 
 class TableField (Container):
@@ -41,9 +41,9 @@ class TableField (Container):
         # Output
         props = props_to_str (self.props)
 
-        html  = '<%s %s>' % (self._tag, props)
+        html  = f'<{self._tag} {props}>'
         html += render.html
-        html += '</%s>' % (self._tag)
+        html += f'</{self._tag}>'
 
         render.html = html
         return render
@@ -70,7 +70,7 @@ class TableRow (Widget):
 
     def __getitem__ (self, num):
         if num > self.length:
-            raise IndexError, "Column number out of bounds (get)"
+            raise IndexError("Column number out of bounds (get)")
 
         return self.entries[num-1]
 
@@ -81,7 +81,7 @@ class TableRow (Widget):
 
     def grow_to (self, col):
         if col < 1:
-            raise IndexError, "Column number out of bounds"
+            raise IndexError("Column number out of bounds")
 
         if col > self.length:
             self.entries += [None] * (col - self.length)
@@ -98,12 +98,12 @@ class TableRow (Widget):
                 render.html += "<td></td>"
 
         # Wrap the table row
-        props = " ".join (['%s="%s"'%(k,self.props[k]) for k in self.props])
+        props = " ".join ([f'{k}="{self.props[k]}"' for k in self.props])
 
         if props:
-            render.html = '<%s %s>%s</%s>' %(self.tag, props, render.html, self.tag)
+            render.html = f'<{self.tag} {props}>{render.html}</{self.tag}>'
         else:
-            render.html = '<%s>%s</%s>' %(self.tag, render.html, self.tag)
+            render.html = f'<{self.tag}>{render.html}</{self.tag}>'
 
         return render
 
@@ -128,7 +128,7 @@ class Table (Widget):
         self.kwargs      = kwargs
         self.last_row    = 0
         self.rows        = []
-        self.props       = [{},props][bool(props)]
+        self.props       = props.copy() if props else {}
         self.header_rows = []
         self.header_cols = []
 
@@ -143,7 +143,7 @@ class Table (Widget):
 
     def __grow_if_needed (self, row, col):
         if row < 1:
-            raise IndexError, "Row number out of bounds"
+            raise IndexError("Row number out of bounds")
 
         while row > self.last_row:
             self.__add_row()
@@ -192,7 +192,7 @@ class Table (Widget):
         row,col = pos
 
         if row > self.last_row:
-            raise IndexError, "Row number out of bounds (get)"
+            raise IndexError("Row number out of bounds (get)")
 
         return self.rows[row-1][col]
 
@@ -230,11 +230,11 @@ class Table (Widget):
                 render += row.Render()
 
         # Wrap the table
-        props = " ".join (['%s="%s"'%(k,self.props[k]) for k in self.props])
+        props = " ".join ([f'{k}="{self.props[k]}"' for k in self.props])
         if props:
-            render.html = '<table id="%s" %s>%s</table>' %(self.id, props, render.html)
+            render.html = f'<table id="{self.id}" {props}>{render.html}</table>'
         else:
-            render.html = '<table id="%s">%s</table>' %(self.id, render.html)
+            render.html = f'<table id="{self.id}">{render.html}</table>'
 
         return render
 
@@ -270,9 +270,9 @@ class TableFixed (Table):
         row,col = pos
 
         if row > self._fixed_rows:
-            raise IndexError, "Row number out of bounds"
+            raise IndexError("Row number out of bounds")
 
         if col > self._fixed_cols:
-            raise IndexError, "Column number out of bounds"
+            raise IndexError("Column number out of bounds")
 
         return Table.__setitem__ (self, pos, item)

@@ -22,6 +22,8 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
+
 AVAILABLE_LANGUAGES = [
     ('en',           N_('English')),
     ('es',           N_('Spanish')),

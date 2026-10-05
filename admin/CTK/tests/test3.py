@@ -10,11 +10,11 @@ TABLE = [
 ]
 
 def table_reordered (post_key):
-    print "New Order", CTK.post[post_key].split(',')
+    print("New Order", CTK.post[post_key].split(','))
     return "{'ret': 'ok'}"
 
 def default():
-    table = CTK.SortableList (table_reordered)
+    table = CTK.SortableList (table_reordered, 'sortable-table')
 
     # Header
     table += [CTK.RawHTML("Spanish"), CTK.RawHTML("English")]

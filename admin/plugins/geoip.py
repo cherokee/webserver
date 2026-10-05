@@ -20,6 +20,7 @@
 # 02110-1301, USA.
 #
 
+from CTK.i18n import _, N_
 import CTK
 
 from Rule import RulePlugin
@@ -40,7 +41,7 @@ def commit():
     vsrv_num  = CTK.post.pop ('vsrv_num', None)
 
     # New
-    post_keys = CTK.post.keys()
+    post_keys = list(CTK.post.keys())
     selected  = []
     for p in post_keys:
         if p.startswith('tmp!countries!'):
@@ -48,10 +49,10 @@ def commit():
                 selected.append (p[-2:])
 
     if selected:
-        next_rule, next_pre = cfg_vsrv_rule_get_next ('vserver!%s'%(vsrv_num))
-        CTK.cfg['%s!match'%(next_pre)]           = 'geoip'
-        CTK.cfg['%s!match!countries'%(next_pre)] = ','.join(selected)
-        return {'ret': 'ok', 'redirect': '/vserver/%s/rule/%s' %(vsrv_num, next_rule)}
+        next_rule, next_pre = cfg_vsrv_rule_get_next (f'vserver!{vsrv_num}')
+        CTK.cfg[f'{next_pre}!match']           = 'geoip'
+        CTK.cfg[f'{next_pre}!match!countries'] = ','.join(selected)
+        return {'ret': 'ok', 'redirect': f'/vserver/{vsrv_num}/rule/{next_rule}'}
 
     # Modifications
     for p in post_keys:
@@ -61,7 +62,7 @@ def commit():
                 selected.append (p[-2:])
 
     CTK.cfg[key]                  = 'geoip'
-    CTK.cfg["%s!countries"%(key)] = ','.join(selected)
+    CTK.cfg[f"{key}!countries"] = ','.join(selected)
     return CTK.cfg_reply_ajax_ok()
 
 
@@ -85,15 +86,15 @@ class Plugin_geoip (RulePlugin):
         box += select_all
         box += select_none
         submit += box
-        submit += CheckListFlags ('%s!countries'%(self.key), props)
+        submit += CheckListFlags (f'{self.key}!countries', props)
         submit += CTK.Hidden ('key', self.key)
         submit += CTK.Hidden ('vsrv_num', self.vsrv_num)
 
         self += submit
 
     def GetName (self):
-        match = CTK.cfg.get_val ('%s!countries'%(self.key), '')
-        return "From countries %s" %(match)
+        match = CTK.cfg.get_val (f'{self.key}!countries', '')
+        return f"From countries {match}"
 
 # Validation, and Public URLs
-CTK.publish ("^%s"%(URL_APPLY), commit, method="POST")
+CTK.publish (f"^{URL_APPLY}", commit, method="POST")

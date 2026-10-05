@@ -1,5 +1,12 @@
 # Macros
 #
+from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    def e(error_id: str, title: str, **kwargs: Any) -> None:
+        """Declared by errors.py when this definition file is executed."""
+        ...
+
 CODING_BUG = """It looks like you've hit a bug in the server. Please, \
 do not hesitate to report it at http://bugs.cherokee-project.com/ so  \
 the developer team can fix it."""
