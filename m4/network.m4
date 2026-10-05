@@ -10,10 +10,11 @@ AC_DEFUN([APR_CHECK_WORKING_GETADDRINFO],[
   AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <netdb.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 
-void main(void) {
+int main(void) {
     struct addrinfo hints, *ai;
     int error;
 
@@ -27,7 +28,8 @@ void main(void) {
     if (ai->ai_addr->sa_family != AF_INET) {
         exit(1);
     }
-    exit(0);
+    freeaddrinfo(ai);
+    return 0;
 }
 ]])],[
   ac_cv_working_getaddrinfo="yes"
@@ -54,15 +56,18 @@ AC_DEFUN([APR_CHECK_WORKING_GETNAMEINFO],[
   AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <netdb.h>
 #include <string.h>
+#include <stdlib.h>
+#include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-void main(void) {
+int main(void) {
     struct sockaddr_in sa;
     char hbuf[256];
     int error;
 
+    memset(&sa, 0, sizeof(sa));
     sa.sin_family = AF_INET;
     sa.sin_port = 0;
     sa.sin_addr.s_addr = inet_addr("127.0.0.1");
