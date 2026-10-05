@@ -183,6 +183,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	INIT_LIST_HEAD (&n->logger_writers);
 
 	n->log_flush_next       = 0;
+	n->source_cleanup_next  = 0;
 	n->log_flush_lapse      = LOGGER_FLUSH_LAPSE;
 
 	/* Programmed tasks
@@ -269,10 +270,6 @@ cherokee_server_free (cherokee_server_t *srv)
 		CHEROKEE_MUTEX_UNLOCK (&srv->listeners_mutex);
 	}
 
-	/* Kill the child processes
-	 */
-	cherokee_avl_mrproper (AVL_GENERIC(&srv->sources), (cherokee_func_free_t)cherokee_source_free);
-
 	/* Services mechanism
 	 */
 	cherokee_services_client_free();
@@ -289,6 +286,9 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	TRACE(ENTRIES, "Destroying main_thread %p\n", srv->main_thread);
 	cherokee_thread_free (srv->main_thread);
+
+	/* Sources outlive handlers and workers borrowing their pooled sockets. */
+	cherokee_avl_mrproper (AVL_GENERIC(&srv->sources), (cherokee_func_free_t)cherokee_source_free);
 
 	/* File descriptors
 	 */
@@ -1199,6 +1199,10 @@ cherokee_server_step (cherokee_server_t *srv)
 
 	/* Programmed tasks
 	 */
+	if (srv->source_cleanup_next <= cherokee_monotonic_msec()) {
+		cherokee_avl_while(AVL_GENERIC(&srv->sources), cherokee_source_reuse_cleanup, NULL, NULL, NULL);
+		srv->source_cleanup_next = cherokee_monotonic_msec() + 1000;
+	}
 	if (srv->log_flush_next < cherokee_bogonow_now) {
 		flush_logs (srv);
 		srv->log_flush_next = cherokee_bogonow_now + srv->log_flush_lapse;

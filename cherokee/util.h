@@ -68,6 +68,8 @@
 
 CHEROKEE_BEGIN_DECLS
 
+uint64_t cherokee_monotonic_msec (void);
+
 /* Error buffer size for cherokee_strerror_r().
  */
 #define ERROR_MIN_BUFSIZE  64 /* min. buffer size */

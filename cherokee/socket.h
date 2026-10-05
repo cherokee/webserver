@@ -70,6 +70,7 @@ typedef union {
  */
 typedef struct {
 	int                        socket;
+	const struct addrinfo     *source_addr_current;
 	cherokee_sockaddr_t        client_addr;
 	socklen_t                  client_addr_len;
 	cherokee_socket_status_t   status;

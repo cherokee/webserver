@@ -48,7 +48,17 @@ typedef struct {
 	cherokee_buffer_t      unix_socket;
 	cherokee_buffer_t      host;
 	cint_t                 port;
-	const struct addrinfo *addr_current;
+
+	/* -1 preserves each protocol's legacy default. */
+	cint_t                keepalive;
+	cuint_t               keepalive_max;
+	cuint_t               keepalive_timeout;
+	cuint_t               keepalive_requests;
+	cuint_t               keepalive_age;
+	cuint_t               connect_timeout;
+	cuint_t               io_timeout;
+	cuint_t               retries;
+	void                 *reuse_pool;
 
 	cherokee_func_free_t   free;
 } cherokee_source_t;
@@ -69,6 +79,19 @@ ret_t cherokee_source_connect_polling (cherokee_source_t     *src,
 
 ret_t cherokee_source_copy_name       (cherokee_source_t     *src,
                                        cherokee_buffer_t     *buf);
+
+typedef enum {
+	source_protocol_fcgi,
+	source_protocol_http
+} cherokee_source_protocol_t;
+
+/* Sockets are transferred exclusively; protocol parsers decide eligibility. */
+ret_t cherokee_source_reuse_get (cherokee_source_t *, cherokee_source_protocol_t,
+                                 cherokee_socket_t *, uint64_t *, cuint_t *, cushort_t *);
+ret_t cherokee_source_reuse_put (cherokee_source_t *, cherokee_source_protocol_t,
+                                 cherokee_socket_t *, uint64_t, cuint_t, cushort_t, cuint_t);
+ret_t cherokee_source_reuse_cleanup (cherokee_buffer_t *, void *, void *);
+cherokee_boolean_t cherokee_source_socket_clean (cherokee_socket_t *);
 
 CHEROKEE_END_DECLS
 

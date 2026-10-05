@@ -110,6 +110,7 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
 ret_t
 cherokee_socket_init (cherokee_socket_t *socket)
 {
+	socket->source_addr_current = NULL;
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
 	memset (&socket->native_local_addr, 0, sizeof(cherokee_sockaddr_t));
 	socket->client_addr_len = -1;
@@ -150,6 +151,7 @@ cherokee_socket_mrproper (cherokee_socket_t *socket)
 ret_t
 cherokee_socket_clean (cherokee_socket_t *socket)
 {
+	socket->source_addr_current = NULL;
 	/* TLS
 	 */
 	if (socket->cryptor != NULL) {

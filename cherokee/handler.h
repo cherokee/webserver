@@ -48,6 +48,7 @@ typedef enum {
 
 /* Callback function definitions
  */
+typedef ret_t (* handler_func_timeout_t)     (void *handler);
 typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cherokee_module_props_t *properties);
 typedef ret_t (* handler_func_init_t)        (void  *handler);
 typedef ret_t (* handler_func_read_post_t)   (void  *handler);
@@ -66,6 +67,9 @@ typedef struct {
 	handler_func_read_post_t    read_post;
 	handler_func_add_headers_t  add_headers;
 	handler_func_step_t         step;
+	handler_func_timeout_t      backend_retry;
+	uint64_t                   backend_deadline;
+	cuint_t                    backend_timeout;
 
 	/* Properties
 	 */
@@ -124,6 +128,11 @@ ret_t cherokee_handler_free        (cherokee_handler_t *hdl);
 ret_t cherokee_handler_read_post   (cherokee_handler_t *hdl);
 ret_t cherokee_handler_add_headers (cherokee_handler_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_step        (cherokee_handler_t *hdl, cherokee_buffer_t *buffer);
+
+/* Backend deadlines advance on actual transport progress, never on polling. */
+void cherokee_handler_backend_timeout (cherokee_handler_t *, cuint_t);
+void cherokee_handler_backend_progress (cherokee_handler_t *);
+cherokee_boolean_t cherokee_handler_backend_expired (cherokee_handler_t *);
 
 /* Handler properties methods
  */

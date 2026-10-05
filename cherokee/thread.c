@@ -549,6 +549,28 @@ send_hardcoded_error (cherokee_socket_t *sock,
 }
 
 
+/* Called only after removing a backend fd from the poller, so a retry can
+ * close it without leaving a descriptor belonging to another request behind. */
+static void
+backend_timed_out (cherokee_thread_t *thd, cherokee_connection_t *conn)
+{
+	cherokee_handler_t *handler = conn->handler;
+	if (handler->backend_retry && handler->backend_retry(handler) == ret_ok) {
+		cherokee_connection_update_timeout(conn);
+		return;
+	}
+	conn->error_code = http_gateway_timeout;
+	if (THREAD_SRV(thd)->collector) cherokee_collector_log_timeout(THREAD_SRV(thd)->collector);
+	if (conn->phase <= phase_add_headers) {
+		conn->keepalive = 0;
+		cherokee_connection_setup_error_handler(conn);
+		cherokee_connection_update_timeout(conn);
+	} else {
+		/* Once headers are sent the only safe response is a truncated stream. */
+		close_active_broken_connection(thd, conn, true);
+	}
+}
+
 static ret_t
 process_polling_connections (cherokee_thread_t *thd)
 {
@@ -575,9 +597,16 @@ process_polling_connections (cherokee_thread_t *thd)
 			}
 		}
 
+		if (cherokee_handler_backend_expired(conn->handler)) {
+			if (reactive_conn_from_polling(thd, conn) != ret_ok) {
+				purge_closed_polling_connection(thd, conn);
+			} else backend_timed_out(thd, conn);
+			continue;
+		}
+
 		/* Has it been too much without any work?
 		 */
-		if (conn->timeout < cherokee_bogonow_now) {
+		if (conn->timeout < cherokee_bogonow_now && (!conn->handler || !conn->handler->backend_deadline)) {
 			TRACE (ENTRIES",polling,timeout",
 			       "thread (%p) processing polling conn (%p, %s): Time out\n",
 			       thd, conn, cherokee_connection_get_phase_str (conn));
@@ -714,9 +743,15 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 		}
 
+		if (cherokee_handler_backend_expired(conn->handler)) {
+			backend_timed_out(thd, conn);
+			continue;
+		}
+
 		/* Has the connection been too much time w/o any work
 		 */
-		if (conn->timeout < cherokee_bogonow_now) {
+		if (conn->timeout < cherokee_bogonow_now &&
+		    !(conn->handler && conn->handler->backend_deadline && (conn->options & conn_op_was_polling))) {
 			TRACE (ENTRIES",polling,timeout",
 			       "thread (%p) processing active conn (%p, %s): Time out\n",
 			       thd, conn, cherokee_connection_get_phase_str (conn));
@@ -1259,7 +1294,7 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			case ret_eof:
 			case ret_error:
-				conn->error_code = http_internal_error;
+				if (!http_type_500(conn->error_code)) conn->error_code = http_internal_error;
 				cherokee_connection_setup_error_handler (conn);
 				continue;
 			default:
@@ -1284,7 +1319,7 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			case ret_eof:
 			case ret_error:
-				conn->error_code = http_internal_error;
+				if (!http_type_500(conn->error_code)) conn->error_code = http_internal_error;
 				cherokee_connection_setup_error_handler (conn);
 				continue;
 			default:

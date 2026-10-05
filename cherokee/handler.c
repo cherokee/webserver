@@ -28,7 +28,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "connection.h"
+#include "connection-protected.h"
+#include "util.h"
 
 
 ret_t
@@ -46,6 +47,9 @@ cherokee_handler_init_base (cherokee_handler_t             *hdl,
 	hdl->read_post     = NULL;
 	hdl->add_headers   = NULL;
 	hdl->step          = NULL;
+	hdl->backend_retry = NULL;
+	hdl->backend_deadline = 0;
+	hdl->backend_timeout = 0;
 
 	/* Parent reference
 	 */
@@ -209,4 +213,23 @@ cherokee_handler_add_header_options (cherokee_handler_t *hdl,
 	cherokee_buffer_add_str (buffer, CRLF);
 	return ret_ok;
 
+}
+
+void
+cherokee_handler_backend_timeout (cherokee_handler_t *hdl, cuint_t seconds)
+{
+	hdl->backend_timeout = seconds;
+	cherokee_handler_backend_progress(hdl);
+}
+
+void
+cherokee_handler_backend_progress (cherokee_handler_t *hdl)
+{
+	hdl->backend_deadline = hdl->backend_timeout ? cherokee_monotonic_msec() + (uint64_t)hdl->backend_timeout * 1000 : 0;
+}
+
+cherokee_boolean_t
+cherokee_handler_backend_expired (cherokee_handler_t *hdl)
+{
+	return hdl && hdl->backend_deadline && cherokee_monotonic_msec() >= hdl->backend_deadline;
 }

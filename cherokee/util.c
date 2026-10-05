@@ -26,6 +26,7 @@
 #include "util.h"
 #include "logger.h"
 #include "bogotime.h"
+#include <time.h>
 #include "socket.h"
 
 #include <signal.h>
@@ -2696,4 +2697,20 @@ cherokee_random (void)
 #else
 	return rand();
 #endif
+}
+
+uint64_t
+cherokee_monotonic_msec (void)
+{
+#if defined(HAVE_CLOCK_GETTIME) && defined(CLOCK_MONOTONIC)
+	struct timespec now;
+	if (clock_gettime(CLOCK_MONOTONIC, &now) == 0)
+		return (uint64_t)now.tv_sec * 1000 + now.tv_nsec / 1000000;
+#endif
+	/* Platforms without a monotonic clock retain the legacy clock behavior. */
+	{
+		struct timeval now;
+		gettimeofday(&now, NULL);
+		return (uint64_t)now.tv_sec * 1000 + now.tv_usec / 1000;
+	}
 }

@@ -108,6 +108,7 @@ struct cherokee_server {
 
 	int                        log_flush_lapse;
 	time_t                     log_flush_next;
+	uint64_t                   source_cleanup_next;
 
 	/* Extensions
 	 */

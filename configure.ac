@@ -286,6 +286,8 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 
 AC_CHECK_FUNCS(dup2 ftruncate getcwd gettimeofday inet_ntoa gmtime gmtime_r localtime localtime_r getrlimit getdtablesize memset mkdir readdir readdir_r flockfile funlockfile backtrace munmap pathconf pstat_getdynamic realpath rmdir strchr strcspn strdup strncasecmp strpbrk strrchr strspn strnstr strstr strtol strtoul random srandom srandomdev)
+AC_SEARCH_LIBS([clock_gettime], [rt])
+AC_CHECK_FUNCS([clock_gettime])
 
 FW_CHECK_PWD
 FW_CHECK_GRP
