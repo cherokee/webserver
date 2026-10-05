@@ -176,5 +176,100 @@ vserver!1!rule!1!handler = file
             self.assertEqual(response.split(b"\r\n\r\n", 1)[1], self.content)
 
 
+    @unittest.skipUnless(os.getenv("CHEROKEE_TEST_HTTP3") == "1", "enable with CHEROKEE_TEST_HTTP3=1")
+    def test_h3_multiplex_cgi_and_flow_control(self):
+        from aioquic.asyncio import connect, QuicConnectionProtocol
+        from aioquic.h3.connection import H3Connection, H3_ALPN
+        from aioquic.h3.events import HeadersReceived, DataReceived as H3DataReceived
+        from aioquic.quic.configuration import QuicConfiguration
+        from aioquic.quic.events import ConnectionTerminated
+        from aioquic.quic.logger import QuicLogger
+        self.quic_log = QuicLogger()
+
+        class RequestAwareH3(H3Connection):
+            # aioquic 1.3's generic H3 layer does not track request methods.
+            # RFC 9110 allows HEAD's Content-Length to describe the GET body.
+            def __init__(self, quic):
+                super().__init__(quic)
+                self.head_streams = set()
+
+            def _check_content_length(self, stream):
+                if stream.stream_id not in self.head_streams:
+                    super()._check_content_length(stream)
+
+        class Client(QuicConnectionProtocol):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.http = RequestAwareH3(self._quic)
+                self.responses = {}
+                self.waiters = {}
+
+            def quic_event_received(self, event):
+                if isinstance(event, ConnectionTerminated):
+                    for waiter in self.waiters.values():
+                        if not waiter.done():
+                            waiter.set_exception(RuntimeError(f"QUIC closed: {event}"))
+                for received in self.http.handle_event(event):
+                    stream = received.stream_id
+                    response = self.responses.setdefault(stream, {"headers": {}, "body": bytearray()})
+                    if isinstance(received, HeadersReceived):
+                        response["headers"].update(dict(received.headers))
+                    elif isinstance(received, H3DataReceived):
+                        response["body"].extend(received.data)
+                    if received.stream_ended:
+                        waiter = self.waiters.get(stream)
+                        if waiter and not waiter.done():
+                            waiter.set_result(response)
+
+            def request(self, port, path, method=b"GET", body=b"", extra=()):
+                stream = self._quic.get_next_available_stream_id()
+                future = asyncio.get_running_loop().create_future()
+                self.waiters[stream] = future
+                if method == b"HEAD":
+                    self.http.head_streams.add(stream)
+                headers = [(b":method", method), (b":scheme", b"https"),
+                           (b":authority", f"localhost:{port}".encode()), (b":path", path)] + list(extra)
+                if body:
+                    headers.append((b"content-length", str(len(body)).encode()))
+                self.http.send_headers(stream, headers, end_stream=not body)
+                if body:
+                    self.http.send_data(stream, body, end_stream=True)
+                self.transmit()
+                return future
+
+        async def run():
+            config = QuicConfiguration(is_client=True, alpn_protocols=H3_ALPN,
+                                       verify_mode=ssl.CERT_NONE, server_name="localhost", quic_logger=self.quic_log)
+            async with connect("127.0.0.1", self.port, configuration=config, create_protocol=Client) as client:
+                futures = [client.request(self.port, b"/data"),
+                           client.request(self.port, b"/absent"),
+                           client.request(self.port, b"/echo.cgi", b"POST", b"quic request"),
+                           client.request(self.port, b"/data", b"HEAD"),
+                           client.request(self.port, b"/data", extra=[(b"range", b"bytes=7-24")])]
+                results = await asyncio.wait_for(asyncio.gather(*futures), timeout=10)
+                self.assertEqual(results[0]["body"], self.content)
+                self.assertEqual(results[1]["headers"][b":status"], b"404")
+                self.assertEqual(results[2]["body"], b"HTTP/3 on quic request")
+                self.assertEqual(results[3]["body"], b"")
+                self.assertEqual(results[4]["body"], self.content[7:25])
+                for result in results:
+                    self.assertNotIn(b"connection", result["headers"])
+                    self.assertNotIn(b"transfer-encoding", result["headers"])
+                # Exercise lifetime cleanup by reusing the connection after FIN.
+                for _ in range(3):
+                    result = await asyncio.wait_for(client.request(self.port, b"/data"), timeout=10)
+                    self.assertEqual(result["body"], self.content)
+
+        try:
+            asyncio.run(asyncio.wait_for(run(), timeout=20))
+        except Exception:
+            import json
+            Path("/tmp/cherokee-last-qlog.json").write_text(json.dumps(self.quic_log.to_dict()))
+            self.log.flush()
+            log = (self.directory / "server.log").read_text()
+            print(log[:3000] + "\n...\n" + log[-3000:])
+            raise
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -825,6 +825,10 @@ build_response_header (cherokee_connection_t *conn,
 
 	cherokee_buffer_add_str (buffer, CRLF);
 
+	if (conn->bind && conn->bind->http3 && conn->socket.is_tls == TLS) {
+		cherokee_buffer_add_va (buffer, "Alt-Svc: h3=\":%u\"; ma=86400" CRLF, conn->bind->port);
+	}
+
 	/* Add the "Connection:" header
 	 */
 	if (conn->upgrade != http_upgrade_nothing) {

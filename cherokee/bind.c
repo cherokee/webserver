@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "bind.h"
+#include "http3.h"
 #include "util.h"
 
 ret_t
@@ -59,6 +60,7 @@ cherokee_bind_new (cherokee_bind_t **listener)
 ret_t
 cherokee_bind_free (cherokee_bind_t *listener)
 {
+	cherokee_http3_free (listener);
 	cherokee_socket_close (&listener->socket);
 	cherokee_socket_mrproper (&listener->socket);
 
@@ -280,6 +282,7 @@ init_socket (cherokee_bind_t *listener)
 error:
 	/* The socket was already opened by _set_client
 	 */
+	cherokee_http3_free (listener);
 	cherokee_socket_close (&listener->socket);
 	return ret;
 }
@@ -334,6 +337,7 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 	return ret_ok;
 
 error:
+	cherokee_http3_free (listener);
 	cherokee_socket_close (&listener->socket);
 	return ret_error;
 }
