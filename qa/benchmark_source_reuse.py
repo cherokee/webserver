@@ -8,10 +8,12 @@ Old, new/reuse-off and new/reuse-on orders rotate between repeats.
 import argparse
 from datetime import datetime, timezone
 import hashlib
+import itertools
 import json
 import os
 from pathlib import Path
 import platform
+import random
 import select
 import socket
 import statistics
@@ -37,6 +39,27 @@ def cpu_time(process):
     # Linux proc stat fields 14/15: aggregate process user/system ticks.
     fields = Path(f'/proc/{process.pid}/stat').read_text().rsplit(')', 1)[1].split()
     return (int(fields[11]) + int(fields[12])) / os.sysconf('SC_CLK_TCK')
+
+
+def host_telemetry():
+    result = {'loadavg': Path('/proc/loadavg').read_text().strip(), 'cpu': {}, 'temperature_millidegrees': {}}
+    for cpu in sorted(os.sched_getaffinity(0)):
+        values = {}
+        directory = Path(f'/sys/devices/system/cpu/cpu{cpu}/cpufreq')
+        for name in ('scaling_governor', 'scaling_cur_freq'):
+            try:
+                values[name] = (directory / name).read_text().strip()
+            except OSError:
+                pass
+        result['cpu'][str(cpu)] = values
+    for name in Path('/sys/class/hwmon').glob('hwmon*/name'):
+        try:
+            sensor = name.read_text().strip()
+            for value in name.parent.glob('temp*_input'):
+                result['temperature_millidegrees'][f'{sensor}/{value.name}'] = int(value.read_text())
+        except (OSError, ValueError):
+            pass
+    return result
 
 
 def read_json(process, timeout=15):
@@ -146,6 +169,7 @@ source!1!retries = 0
                 before = backend_stats(backend)
                 server_cpu = cpu_time(server)
                 load_before = Path('/proc/loadavg').read_text().strip()
+                telemetry_before = host_telemetry()
                 result = measured_load(helper, port, args.requests, concurrency, args.client_cpus)
                 result['server_cpu_seconds'] = cpu_time(server) - server_cpu
                 after = backend_stats(backend)
@@ -156,6 +180,7 @@ source!1!retries = 0
                               backend_cpu_seconds=after['cpu_seconds'] - before['cpu_seconds'],
                               backend_connections_after_warmup=before['accepted'],
                               backend_live_after_measurement=after['live'],
+                              telemetry_before=telemetry_before, telemetry_after=host_telemetry(),
                               load_before=load_before, load_after=Path('/proc/loadavg').read_text().strip())
                 if result['backend_requests'] != args.requests or result['backend_errors']:
                     raise RuntimeError(f'Invalid backend counts: {result}')
@@ -232,6 +257,8 @@ def main():
     parser.add_argument('--concurrency', type=int, nargs='+', default=[1, 4])
     parser.add_argument('--transport', choices=('tcp', 'unix'), nargs='+', default=['tcp', 'unix'])
     parser.add_argument('--modes', choices=MODES, nargs='+', default=list(MODES))
+    parser.add_argument('--order', choices=('rotate', 'balanced'), default='rotate')
+    parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--server-cpus', type=parse_cpus, default=[])
     parser.add_argument('--backend-cpus', type=parse_cpus, default=[])
     parser.add_argument('--client-cpus', type=parse_cpus, default=[])
@@ -240,6 +267,18 @@ def main():
     if args.repeat < 1 or args.requests < 1 or args.warmup < 1 or any(c < 1 or c > 64 or args.requests % c or args.warmup % c for c in args.concurrency):
         parser.error('Positive counts divisible by concurrency (1-64) are required')
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    modes = tuple(args.modes)
+    orders = []
+    if args.order == 'balanced':
+        rng = random.Random(args.seed)
+        permutations = list(itertools.permutations(modes))
+        while len(orders) < args.repeat:
+            cycle = permutations.copy()
+            rng.shuffle(cycle)
+            orders.extend(cycle)
+        orders = orders[:args.repeat]
+    else:
+        orders = [modes[repeat % len(modes):] + modes[:repeat % len(modes)] for repeat in range(args.repeat)]
     allowed = os.sched_getaffinity(0)
     if any(cpu not in allowed for group in (args.server_cpus, args.backend_cpus, args.client_cpus) for cpu in group):
         parser.error('CPU affinity must use CPUs available to this process')
@@ -249,6 +288,7 @@ def main():
                     platform=platform.platform(), compiler=subprocess.check_output(['cc', '--version'], text=True).splitlines()[0],
                     arguments={name: str(value) if isinstance(value, Path) else value for name, value in vars(args).items()},
                     helper_source_sha256=digest(ROOT / 'qa/source_reuse_bench.c'),
+                    orders=orders,
                     old_build=build_metadata(args.old_tree), new_build=build_metadata(args.new_tree),
                     settings=dict(server_workers=4, frontend_http='HTTP/1.1', frontend_keepalive=True,
                                   backend='native event-driven FastCGI fixture', response_bytes=128,
@@ -259,9 +299,7 @@ def main():
         helper = Path(directory) / 'helper'
         subprocess.run(['cc', '-O2', '-Wall', '-Wextra', '-Werror', '-std=c99',
                         '-o', str(helper), str(ROOT / 'qa/source_reuse_bench.c')], check=True)
-        for repeat in range(args.repeat):
-            modes = tuple(args.modes)
-            order = modes[repeat % len(modes):] + modes[:repeat % len(modes)]
+        for repeat, order in enumerate(orders):
             for transport in args.transport:
                 for concurrency in args.concurrency:
                     for mode in order:
