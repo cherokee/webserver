@@ -284,6 +284,9 @@ cherokee_server_free (cherokee_server_t *srv)
 		destroy_thread (THREAD(i));
 	}
 
+	/* QUIC adapters reference main_thread's poller and input budget. */
+	list_for_each (i, &srv->listeners) cherokee_http3_free(BIND(i));
+
 	TRACE(ENTRIES, "Destroying main_thread %p\n", srv->main_thread);
 	cherokee_thread_free (srv->main_thread);
 
@@ -939,6 +942,10 @@ cherokee_server_initialize (cherokee_server_t *srv)
 			if (! BIND_IS_TLS(i))
 				continue;
 
+			if (BIND(i)->http2 || BIND(i)->http3) {
+				fprintf(stderr, "Native HTTP protocols require server!tls = libssl\n");
+				return ret_error;
+			}
 			LOG_WARNING (CHEROKEE_ERROR_SERVER_IGNORE_TLS, BIND(i)->port);
 			cherokee_list_del (i);
 			cherokee_bind_free (BIND(i));

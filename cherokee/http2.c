@@ -42,13 +42,23 @@ recv_header (nghttp2_session *session, const nghttp2_frame *frame,
 	cherokee_http2_t *h = data;
 	cherokee_http_stream_t *s = find_stream(h, frame->hd.stream_id);
 	UNUSED(session); UNUSED(flags);
-	/* Trailers are validated by nghttp2 and have no handler representation. */
-	if (frame->headers.cat != NGHTTP2_HCAT_REQUEST) return 0;
+	if (frame->headers.cat != NGHTTP2_HCAT_REQUEST && frame->headers.cat != NGHTTP2_HCAT_HEADERS) return 0;
 	if (cherokee_http_stream_header(s, name, nlen, value, vlen)) {
 		if (s) s->invalid = 1;
 		return NGHTTP2_ERR_TEMPORAL_CALLBACK_FAILURE;
 	}
 	return 0;
+}
+
+static int
+invalid_header (nghttp2_session *session, const nghttp2_frame *frame,
+                const uint8_t *name, size_t nlen, const uint8_t *value,
+                size_t vlen, uint8_t flags, void *data)
+{
+	cherokee_http_stream_t *s = find_stream(data, frame->hd.stream_id);
+	UNUSED(session); UNUSED(name); UNUSED(nlen); UNUSED(value); UNUSED(vlen); UNUSED(flags);
+	if (s) s->invalid = 1;
+	return NGHTTP2_ERR_TEMPORAL_CALLBACK_FAILURE;
 }
 
 static int
@@ -70,6 +80,10 @@ recv_frame (nghttp2_session *session, const nghttp2_frame *frame, void *data)
 {
 	cherokee_http2_t *h = data;
 	cherokee_http_stream_t *s;
+	if (frame->hd.type == NGHTTP2_HEADERS && frame->headers.cat == NGHTTP2_HCAT_REQUEST) {
+		s = find_stream(h, frame->hd.stream_id);
+		if (s) s->headers_complete = 1;
+	}
 	if ((frame->hd.type != NGHTTP2_HEADERS && frame->hd.type != NGHTTP2_DATA) ||
 	    !(frame->hd.flags & NGHTTP2_FLAG_END_STREAM)) return 0;
 	s = find_stream(h, frame->hd.stream_id);
@@ -142,6 +156,7 @@ cherokee_http2_init (cherokee_connection_t *conn)
 	if (nghttp2_session_callbacks_new(&callbacks) || nghttp2_option_new(&option)) goto error;
 	nghttp2_session_callbacks_set_on_begin_headers_callback(callbacks, begin_headers);
 	nghttp2_session_callbacks_set_on_header_callback(callbacks, recv_header);
+	nghttp2_session_callbacks_set_on_invalid_header_callback(callbacks, invalid_header);
 	nghttp2_session_callbacks_set_on_data_chunk_recv_callback(callbacks, recv_data);
 	nghttp2_session_callbacks_set_on_frame_recv_callback(callbacks, recv_frame);
 	nghttp2_session_callbacks_set_on_stream_close_callback(callbacks, stream_close);
@@ -207,6 +222,9 @@ cherokee_http2_step (cherokee_connection_t *conn)
 			cherokee_connection_update_timeout(conn);
 		}
 		if (ret == ret_eagain || !n) break;
+	}
+	list_for_each (i, &h->streams) {
+		if (cherokee_http_stream_update_poll((cherokee_http_stream_t *)i, 1)) return ret_error;
 	}
 	conn->socket.status = h->output.len || nghttp2_session_want_write(h->session) ? socket_writing : socket_reading;
 	cherokee_fdpoll_set_mode(thread->fdpoll, SOCKET_FD(&conn->socket), conn->socket.status);

@@ -15,6 +15,9 @@ $(PYS)
 all-local: $(PYS)
 
 EXTRA_DIST = \
+test_http23.py \
+test_http23_admin.py \
+requirements-http23.txt \
 $(PY_PRE) \
 qa_base.py \
 qa_util.py \
@@ -355,6 +358,11 @@ endif
 test-non-ssl:
 	$(PYTHON) -m compileall .
 	$(PYTHON) ./run-tests.py
+
+# Independent wire QA; requires the libraries in requirements-http23.txt.
+test-http23:
+	CHEROKEE_TEST_HTTP3=1 $(PYTHON) ./test_http23.py
+	$(PYTHON) ./test_http23_admin.py
 
 clean-local:
 	find . -type f -name "*.pyc" -exec rm -f {} \;

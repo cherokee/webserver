@@ -159,6 +159,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->server              = server;
 	n->thread_type         = type;
 
+	n->native_request_bytes = 0;
 	n->conns_num           = 0;
 	n->conns_max           = conns_max;
 	n->conns_keepalive_max = keepalive_max;

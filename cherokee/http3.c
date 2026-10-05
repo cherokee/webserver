@@ -11,6 +11,7 @@
 #include <openssl/quic.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <time.h>
 
 #define HTTP3_ENDPOINT_MAX 128
 #define HTTP3_QUIC_STREAM_MAX (CHEROKEE_HTTP_STREAM_MAX + 6)
@@ -22,18 +23,27 @@ typedef struct {
 	uint64_t id;
 	size_t offered, acknowledged;
 	int read_fin, write_fin, closed;
+	uint64_t reset_error;
+	nghttp3_qpack_stream_context *fields_context;
+	cherokee_buffer_t encoded_fields;
+	size_t encoded_charge;
+	uint64_t frame_type, frame_left, varint;
+	unsigned int varint_left, frame_phase;
 } cherokee_http3_stream_t;
 
 typedef struct {
 	cherokee_list_t list;
 	SSL *ssl;
 	nghttp3_conn *http;
+	nghttp3_qpack_decoder *field_decoder;
 	cherokee_list_t streams;
 	cherokee_bind_t *bind;
 	cherokee_thread_t *thread;
 	cherokee_sockaddr_t peer;
 	time_t activity;
-	int dead;
+	time_t closing_until;
+	uint64_t close_error;
+	void *owner;
 } cherokee_http3_connection_t;
 
 typedef struct {
@@ -61,6 +71,8 @@ typedef struct {
 	cherokee_list_t endpoints, contexts;
 	size_t endpoint_count;
 	SSL_CTX *default_context;
+	cherokee_http3_endpoint_t *current_endpoint;
+	size_t connection_count;
 } cherokee_http3_listener_t;
 
 static cherokee_http3_stream_t *
@@ -106,13 +118,9 @@ sni_select (SSL *ssl, int *alert, void *arg)
 	conn.server = h->server;
 	conn.bind = h->bind;
 	conn.socket.is_tls = TLS;
-	list_for_each (i, &h->endpoints) {
-		cherokee_http3_endpoint_t *e = (cherokee_http3_endpoint_t *)i;
-		if (SSL_get0_domain(ssl) == SSL_get0_domain(e->listener)) {
-			conn.socket.client_addr = e->peer;
-			break;
-		}
-	}
+	/* Callbacks run synchronously while the main thread services this
+	 * endpoint, including callbacks on OpenSSL's inner TLS object. */
+	if (h->current_endpoint) conn.socket.client_addr = h->current_endpoint->peer;
 	if (cherokee_buffer_add(&host, name, strlen(name)) != ret_ok) return SSL_TLSEXT_ERR_ALERT_FATAL;
 	if (cherokee_server_get_vserver(h->server, &host, &conn, &vsrv) == ret_ok) {
 		list_for_each (i, &h->contexts) {
@@ -144,9 +152,7 @@ begin_headers (nghttp3_conn *http, int64_t id, void *user, void *stream_user)
 	cherokee_http3_connection_t *c = user;
 	cherokee_http3_stream_t *s = find_stream(c, id);
 	UNUSED(stream_user);
-	if (!s || s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
-	s->request = cherokee_http_stream_new(c->thread, id);
-	if (!s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
+	if (!s || !s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
 	nghttp3_conn_set_stream_user_data(http, id, s);
 	return 0;
 }
@@ -156,9 +162,19 @@ recv_header (nghttp3_conn *http, int64_t id, int32_t token, nghttp3_rcbuf *name,
              nghttp3_rcbuf *value, uint8_t flags, void *user, void *stream_user)
 {
 	cherokee_http3_stream_t *s = find_stream(user, id);
-	nghttp3_vec n = nghttp3_rcbuf_get_buf(name), v = nghttp3_rcbuf_get_buf(value);
-	UNUSED(http); UNUSED(token); UNUSED(flags); UNUSED(stream_user);
-	if (!s || cherokee_http_stream_header(s->request, n.base, n.len, v.base, v.len)) return NGHTTP3_ERR_CALLBACK_FAILURE;
+	UNUSED(http); UNUSED(token); UNUSED(name); UNUSED(value); UNUSED(flags); UNUSED(stream_user);
+	if (!s || !s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
+	/* All decoded fields, including ones nghttp3 might discard, have
+	 * already passed the strict field-section validator below. */
+	return 0;
+}
+
+static int
+end_headers (nghttp3_conn *http, int64_t id, int fin, void *user, void *stream_user)
+{
+	cherokee_http3_stream_t *s = find_stream(user, id);
+	UNUSED(http); UNUSED(fin); UNUSED(stream_user);
+	if (!s || !s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
 	return 0;
 }
 
@@ -168,7 +184,8 @@ recv_data (nghttp3_conn *http, int64_t id, const uint8_t *data, size_t len,
 {
 	cherokee_http3_stream_t *s = find_stream(user, id);
 	UNUSED(http); UNUSED(stream_user);
-	if (!s || cherokee_http_stream_data(s->request, data, len)) return NGHTTP3_ERR_CALLBACK_FAILURE;
+	if (!s || !s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
+	if (s->request->invalid || cherokee_http_stream_data(s->request, data, len)) s->request->invalid = 1;
 	return 0;
 }
 
@@ -178,7 +195,8 @@ end_stream (nghttp3_conn *http, int64_t id, void *user, void *stream_user)
 	cherokee_http3_connection_t *c = user;
 	cherokee_http3_stream_t *s = find_stream(c, id);
 	UNUSED(http); UNUSED(stream_user);
-	if (!s || cherokee_http_stream_dispatch(s->request, c->bind, &c->peer, http_version_30)) return NGHTTP3_ERR_CALLBACK_FAILURE;
+	if (!s || !s->request) return NGHTTP3_ERR_CALLBACK_FAILURE;
+	if (s->request->invalid || cherokee_http_stream_dispatch(s->request, c->bind, &c->peer, http_version_30)) s->request->invalid = 1;
 	return 0;
 }
 
@@ -199,7 +217,7 @@ reset_stream (nghttp3_conn *http, int64_t id, uint64_t error, void *user, void *
 	UNUSED(http); UNUSED(stream_user);
 	if (s) {
 		if (!SSL_stream_reset(s->ssl, &args, sizeof(args))) return NGHTTP3_ERR_CALLBACK_FAILURE;
-		s->closed = 1;
+		s->reset_error = error;
 	}
 	return 0;
 }
@@ -258,6 +276,8 @@ free_stream (cherokee_http3_stream_t *s)
 {
 	cherokee_list_del(&s->list);
 	SSL_free(s->ssl);
+	nghttp3_qpack_stream_context_del(s->fields_context);
+	cherokee_buffer_mrproper(&s->encoded_fields);
 	cherokee_http_stream_free(s->request);
 	free(s);
 }
@@ -267,7 +287,9 @@ free_connection (cherokee_http3_connection_t *c)
 {
 	cherokee_list_t *i, *tmp;
 	cherokee_list_del(&c->list);
+	if (c->owner) ((cherokee_http3_listener_t *)c->owner)->connection_count--;
 	nghttp3_conn_del(c->http);
+	nghttp3_qpack_decoder_del(c->field_decoder);
 	list_for_each_safe (i, tmp, &c->streams) free_stream((cherokee_http3_stream_t *)i);
 	SSL_free(c->ssl);
 	free(c);
@@ -294,11 +316,14 @@ new_connection (SSL *ssl, cherokee_http3_listener_t *h, cherokee_http3_endpoint_
 	INIT_LIST_HEAD(&c->list); INIT_LIST_HEAD(&c->streams);
 	c->ssl = ssl; c->bind = h->bind; c->thread = thread; c->peer = e->peer;
 	c->activity = cherokee_bogonow_now;
+	c->close_error = NGHTTP3_H3_INTERNAL_ERROR;
 	if (!SSL_set_blocking_mode(ssl, 0) ||
 	    !SSL_set_default_stream_mode(ssl, SSL_DEFAULT_STREAM_MODE_NONE) ||
 	    !SSL_set_incoming_stream_policy(ssl, SSL_INCOMING_STREAM_POLICY_ACCEPT, 0)) {
 		free_connection(c); return NULL;
 	}
+	c->owner = h;
+	h->connection_count++;
 	cherokee_list_add_tail(&c->list, &e->connections);
 	return c;
 }
@@ -313,6 +338,8 @@ init_http (cherokee_http3_connection_t *c)
 	memset(&callbacks, 0, sizeof(callbacks));
 	callbacks.begin_headers = begin_headers;
 	callbacks.recv_header = recv_header;
+	callbacks.end_headers = end_headers;
+	callbacks.recv_trailer = recv_header;
 	callbacks.recv_data = recv_data;
 	callbacks.end_stream = end_stream;
 	callbacks.stream_close = stream_close;
@@ -321,12 +348,17 @@ init_http (cherokee_http3_connection_t *c)
 	callbacks.acked_stream_data = acked_data;
 	nghttp3_settings_default(&settings);
 	settings.max_field_section_size = CHEROKEE_HTTP_STREAM_HEADERS;
-	settings.qpack_max_dtable_capacity = 4096;
-	settings.qpack_blocked_streams = 16;
+	/* No dynamic request table: it lets the strict validator inspect each
+	 * complete field section before nghttp3's HTTP messaging filter can
+	 * silently discard invalid optional fields. Static QPACK and Huffman
+	 * coding remain supported. Response compression uses nghttp3 normally. */
+	settings.qpack_max_dtable_capacity = 0;
+	settings.qpack_blocked_streams = 0;
 	if (!SSL_set_blocking_mode(ssl, 0) ||
 	    !SSL_set_default_stream_mode(ssl, SSL_DEFAULT_STREAM_MODE_NONE) ||
 	    !SSL_set_incoming_stream_policy(ssl, SSL_INCOMING_STREAM_POLICY_ACCEPT, 0) ||
-	    nghttp3_conn_server_new(&c->http, &callbacks, &settings, NULL, c)) goto error;
+	    nghttp3_conn_server_new(&c->http, &callbacks, &settings, NULL, c) ||
+	    nghttp3_qpack_decoder_new(&c->field_decoder, 0, 0, nghttp3_mem_default())) goto error;
 	nghttp3_conn_set_max_client_streams_bidi(c->http, CHEROKEE_HTTP_STREAM_MAX);
 	control = add_stream(c, SSL_new_stream(ssl, SSL_STREAM_FLAG_UNI | SSL_STREAM_FLAG_NO_BLOCK));
 	encoder = add_stream(c, SSL_new_stream(ssl, SSL_STREAM_FLAG_UNI | SSL_STREAM_FLAG_NO_BLOCK));
@@ -347,6 +379,96 @@ want_io (SSL *ssl, int result)
 }
 
 static int
+protocol_error (cherokee_http3_connection_t *c, int error)
+{
+	c->close_error = nghttp3_err_infer_quic_app_error_code(error);
+	return -1;
+}
+
+static int
+validate_fields (cherokee_http3_connection_t *c, cherokee_http3_stream_t *s)
+{
+	size_t offset = 0;
+	const uint8_t *bytes = (const uint8_t *)(s->encoded_fields.buf ? s->encoded_fields.buf : "");
+	s->request->charged -= s->encoded_charge;
+	c->thread->native_request_bytes -= s->encoded_charge;
+	s->encoded_charge = 0;
+	for (;;) {
+		nghttp3_qpack_nv field;
+		uint8_t flags;
+		nghttp3_ssize n = nghttp3_qpack_decoder_read_request(c->field_decoder,
+		    s->fields_context, &field, &flags, bytes+offset, s->encoded_fields.len-offset, 1);
+		if (n < 0) return protocol_error(c, n);
+		offset += n;
+		if (flags & NGHTTP3_QPACK_DECODE_FLAG_EMIT) {
+			nghttp3_vec name = nghttp3_rcbuf_get_buf(field.name);
+			nghttp3_vec value = nghttp3_rcbuf_get_buf(field.value);
+			int invalid = cherokee_http_stream_header(s->request, name.base, name.len, value.base, value.len);
+			nghttp3_rcbuf_decref(field.name); nghttp3_rcbuf_decref(field.value);
+			if (invalid) { s->request->invalid = 1; return 1; }
+		}
+		if (flags & NGHTTP3_QPACK_DECODE_FLAG_FINAL) break;
+		if ((flags & NGHTTP3_QPACK_DECODE_FLAG_BLOCKED) || (!n && !flags))
+			return protocol_error(c, NGHTTP3_ERR_QPACK_DECOMPRESSION_FAILED);
+	}
+	s->request->headers_complete = 1;
+	nghttp3_qpack_stream_context_reset(s->fields_context);
+	cherokee_buffer_mrproper(&s->encoded_fields);
+	return 0;
+}
+
+/* Scan only the frame envelope on remote request streams. nghttp3 retains
+ * responsibility for HTTP/3 frame sequencing and all control streams. */
+static int
+validate_request_bytes (cherokee_http3_connection_t *c, cherokee_http3_stream_t *s,
+                        const uint8_t *bytes, size_t length)
+{
+	if ((s->id & 3) != 0) return 0;
+	while (length) {
+		if (s->frame_phase < 2) {
+			if (!s->varint_left) {
+				s->varint_left = (1U << (bytes[0] >> 6)) - 1;
+				s->varint = bytes[0] & 63;
+				bytes++; length--;
+				if (s->varint_left) continue;
+			} else {
+				s->varint = (s->varint << 8) | *bytes++;
+				length--;
+				if (--s->varint_left) continue;
+			}
+			if (s->frame_phase == 0) { s->frame_type = s->varint; s->frame_phase = 1; }
+			else {
+				s->frame_left = s->varint; s->frame_phase = 2;
+				if (s->frame_type == 1) {
+					if (!s->request) s->request = cherokee_http_stream_new(c->thread, s->id);
+					if (!s->request) return -1;
+					if (!s->fields_context && nghttp3_qpack_stream_context_new(&s->fields_context, s->id, nghttp3_mem_default())) return -1;
+					if (s->frame_left > CHEROKEE_HTTP_STREAM_HEADERS) { s->request->invalid = 1; return 1; }
+				}
+				if (!s->frame_left) {
+					if (s->frame_type == 1) { int ret = validate_fields(c, s); if (ret) return ret; }
+					s->frame_phase = 0;
+				}
+			}
+		} else {
+			size_t n = length < s->frame_left ? length : (size_t)s->frame_left;
+			if (s->frame_type == 1) {
+				if (n > CHEROKEE_HTTP_STREAM_BUDGET - c->thread->native_request_bytes) { s->request->invalid = 1; return 1; }
+				s->encoded_charge += n; s->request->charged += n;
+				c->thread->native_request_bytes += n;
+				if (cherokee_buffer_add(&s->encoded_fields, (const char *)bytes, n) != ret_ok) return -1;
+			}
+			bytes += n; length -= n; s->frame_left -= n;
+			if (!s->frame_left) {
+				if (s->frame_type == 1) { int ret = validate_fields(c, s); if (ret) return ret; }
+				s->frame_phase = 0;
+			}
+		}
+	}
+	return 0;
+}
+
+static int
 step_connection (cherokee_http3_connection_t *c)
 {
 	cherokee_list_t *i, *tmp;
@@ -354,9 +476,15 @@ step_connection (cherokee_http3_connection_t *c)
 	SSL *ssl;
 	SSL_CONN_CLOSE_INFO info;
 	int k;
+	struct timespec now;
+	nghttp3_tstamp timestamp;
+	if (clock_gettime(CLOCK_MONOTONIC, &now)) return -1;
+	timestamp = (nghttp3_tstamp)now.tv_sec * 1000000000ULL + now.tv_nsec;
 	if (SSL_get_conn_close_info(c->ssl, &info, sizeof(info))) return -1;
 	if (!c->http) {
-		int result = SSL_do_handshake(c->ssl);
+		int result;
+		ERR_clear_error();
+		result = SSL_do_handshake(c->ssl);
 		if (result <= 0) return want_io(c->ssl, result) ? 0 : -1;
 		if (init_http(c)) return -1;
 	}
@@ -372,27 +500,47 @@ step_connection (cherokee_http3_connection_t *c)
 	}
 	list_for_each_safe (i, tmp, &c->streams) {
 		cherokee_http3_stream_t *s = (cherokee_http3_stream_t *)i;
-		int state;
+		int state, write_state;
 		if (s->closed) continue;
 		state = SSL_get_stream_read_state(s->ssl);
-		if (state == SSL_STREAM_STATE_RESET_REMOTE || state == SSL_STREAM_STATE_RESET_LOCAL) {
-			nghttp3_conn_close_stream(c->http, s->id, NGHTTP3_H3_REQUEST_CANCELLED);
+		write_state = SSL_get_stream_write_state(s->ssl);
+		if (state == SSL_STREAM_STATE_RESET_REMOTE || state == SSL_STREAM_STATE_RESET_LOCAL ||
+		    write_state == SSL_STREAM_STATE_RESET_REMOTE || write_state == SSL_STREAM_STATE_RESET_LOCAL) {
+			int error = nghttp3_conn_close_stream(c->http, s->id, NGHTTP3_H3_REQUEST_CANCELLED);
+			if (error < 0 && error != NGHTTP3_ERR_STREAM_NOT_FOUND) return protocol_error(c, error);
 			s->closed = 1;
 			continue;
 		}
 		if (!s->read_fin && !SSL_is_stream_local(s->ssl)) {
 			for (k=0; k<4; k++) {
 				size_t n = 0;
-				int result = SSL_read_ex(s->ssl, buf, sizeof(buf), &n);
+				int result;
+				ERR_clear_error();
+				result = SSL_read_ex(s->ssl, buf, sizeof(buf), &n);
 				int fin = !result && SSL_get_error(s->ssl, result) == SSL_ERROR_ZERO_RETURN;
 				if (!result && !fin) {
 					if (!want_io(s->ssl, result)) return -1;
 					break;
 				}
-				if (nghttp3_conn_read_stream(c->http, s->id, buf, n, fin) < 0) return -1;
+				{
+					int validation = validate_request_bytes(c, s, buf, n);
+					if (validation < 0) return -1;
+					if (validation > 0) break;
+					nghttp3_ssize consumed = nghttp3_conn_read_stream2(c->http, s->id, buf, n, fin, timestamp);
+					if (consumed < 0) return protocol_error(c, consumed);
+				}
+				if (s->closed || s->reset_error || (s->request && s->request->invalid)) break;
 				c->activity = cherokee_bogonow_now;
 				if (fin) { s->read_fin = 1; break; }
 			}
+		}
+		if (!s->closed && (s->reset_error || (s->request && s->request->invalid))) {
+			SSL_STREAM_RESET_ARGS args = {s->reset_error ? s->reset_error : NGHTTP3_H3_MESSAGE_ERROR};
+			int error;
+			if (!SSL_stream_reset(s->ssl, &args, sizeof(args))) return -1;
+			error = nghttp3_conn_close_stream(c->http, s->id, args.quic_error_code);
+			if (error < 0 && error != NGHTTP3_ERR_STREAM_NOT_FOUND) return protocol_error(c, error);
+			s->closed = 1;
 		}
 		if (s->request && !s->offered && !s->closed) {
 			int ready = cherokee_http_stream_step(s->request);
@@ -412,13 +560,15 @@ step_connection (cherokee_http3_connection_t *c)
 		size_t written = 0;
 		nghttp3_ssize count = nghttp3_conn_writev_stream(c->http, &id, &fin, vec, 16);
 		cherokee_http3_stream_t *s;
-		if (count < 0) return -1;
+		if (count < 0) return protocol_error(c, count);
 		if (id < 0) break;
 		s = find_stream(c, id);
 		if (!s) return -1;
 		for (j=0; j<count; j++) {
 			size_t n = 0;
-			int result = SSL_write_ex(s->ssl, vec[j].base, vec[j].len, &n);
+			int result;
+			ERR_clear_error();
+			result = SSL_write_ex(s->ssl, vec[j].base, vec[j].len, &n);
 			written += n;
 			if (!result) {
 				if (!want_io(s->ssl, result)) return -1;
@@ -441,6 +591,7 @@ step_connection (cherokee_http3_connection_t *c)
 	list_for_each_safe (i, tmp, &c->streams) {
 		cherokee_http3_stream_t *s = (cherokee_http3_stream_t *)i;
 		if (s->closed) free_stream(s);
+		else if (s->request && cherokee_http_stream_update_poll(s->request, !s->offered)) return -1;
 	}
 	return 0;
 }
@@ -553,6 +704,14 @@ cherokee_http3_init (cherokee_bind_t *listener, cherokee_server_t *server)
 	}
 	if (!h->default_context || getsockname(listener->socket.socket, &local.sa, &local_len)) goto error;
 	h->fd = socket(local.sa.sa_family, SOCK_DGRAM, 0);
+#if defined(HAVE_IPV6) && defined(IPV6_V6ONLY)
+	if (h->fd >= 0 && local.sa.sa_family == AF_INET6) {
+		int only;
+		socklen_t option_len = sizeof(only);
+		if (getsockopt(listener->socket.socket, IPPROTO_IPV6, IPV6_V6ONLY, &only, &option_len) ||
+		    setsockopt(h->fd, IPPROTO_IPV6, IPV6_V6ONLY, &only, sizeof(only))) goto error;
+	}
+#endif
 	if (h->fd < 0 || fcntl(h->fd, F_SETFL, O_NONBLOCK) < 0 || fcntl(h->fd, F_SETFD, FD_CLOEXEC) < 0 ||
 	    bind(h->fd, &local.sa, local_len)) goto error;
 	return ret_ok;
@@ -598,20 +757,42 @@ cherokee_http3_step (cherokee_bind_t *bind, cherokee_thread_t *thread)
 		cherokee_http3_endpoint_t *e = (cherokee_http3_endpoint_t *)i;
 		cherokee_list_t *j, *next;
 		SSL *ssl;
+		h->current_endpoint = e;
+		ERR_clear_error();
 		SSL_handle_events(e->listener);
 		for (k=0; k<8; k++) {
 			size_t count;
 			ssl = SSL_accept_connection(e->listener, SSL_ACCEPT_CONNECTION_NO_BLOCK);
 			if (!ssl) break;
 			cherokee_list_get_len(&e->connections, &count);
-			if (count >= 8 || !new_connection(ssl, h, e, thread)) { if (count >= 8) SSL_free(ssl); break; }
+			if (count >= 8 || h->connection_count >= HTTP3_ENDPOINT_MAX) {
+				SSL_free(ssl); break;
+			}
+			if (!new_connection(ssl, h, e, thread)) break;
 		}
 		list_for_each_safe(j, next, &e->connections) {
 			cherokee_http3_connection_t *c = (cherokee_http3_connection_t *)j;
+			if (c->closing_until) {
+				SSL_handle_events(c->ssl);
+				if (cherokee_bogonow_now >= c->closing_until) free_connection(c);
+				continue;
+			}
 			if (step_connection(c) || c->activity + h->server->timeout < cherokee_bogonow_now) {
-				SSL_SHUTDOWN_EX_ARGS args = {NGHTTP3_H3_INTERNAL_ERROR, "HTTP/3 session closed"};
+				cherokee_list_t *stream, *stream_next;
+				SSL_SHUTDOWN_EX_ARGS args = {c->close_error, "HTTP/3 session closed"};
 				SSL_shutdown_ex(c->ssl, SSL_SHUTDOWN_FLAG_NO_BLOCK | SSL_SHUTDOWN_FLAG_RAPID, &args, sizeof(args));
-				free_connection(c);
+				/* Retain QUIC state briefly so OpenSSL can transmit the close
+				 * packet. Immediate SSL_free can discard that queued packet.
+				 * Release application state and handlers immediately. */
+				nghttp3_conn_del(c->http); c->http = NULL;
+				list_for_each_safe(stream, stream_next, &c->streams) {
+					cherokee_http3_stream_t *s = (cherokee_http3_stream_t *)stream;
+					SSL_STREAM_RESET_ARGS reset = {c->close_error};
+					if (!s->write_fin && SSL_get_stream_write_state(s->ssl) == SSL_STREAM_STATE_OK)
+						SSL_stream_reset(s->ssl, &reset, sizeof(reset));
+					free_stream(s);
+				}
+				c->closing_until = cherokee_bogonow_now + 3;
 			}
 		}
 		SSL_handle_events(e->listener);
@@ -626,6 +807,7 @@ cherokee_http3_step (cherokee_bind_t *bind, cherokee_thread_t *thread)
 			if (sent < 0 && (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)) break;
 			e->pending_len = 0;
 		}
+		h->current_endpoint = NULL;
 		if (cherokee_list_empty(&e->connections) && e->activity + 5 < cherokee_bogonow_now) {
 			free_endpoint(e); h->endpoint_count--;
 		}

@@ -70,6 +70,7 @@ typedef struct {
 	cherokee_boolean_t      exit;
 	cherokee_boolean_t      ended;
 
+	size_t                  native_request_bytes; /* bounded stream input */
 	cuint_t                 conns_num;           /* open connections */
 	cuint_t                 conns_max;           /* max opened conns */
 	cuint_t                 conns_keepalive_max; /* max opened conns */
