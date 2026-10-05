@@ -92,6 +92,112 @@ For instance an entry such as `/var/tmp/socket-tmp.1` should get
 everything to simply work if that was a correct path.
 
 
+[[persistent_connections]]
+Persistent backend connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The source editor in Cherokee Admin provides connection reuse and lifecycle
+settings. FastCGI reuse is opt-in; HTTP proxying retains its existing default
+of allowing backend persistence. Setting `source!N!keepalive = 0` disables
+reuse for that source. To enable PHP-FPM connection reuse, for example:
+
+----
+source!1!type = host
+source!1!host = /run/php/php-fpm.sock
+source!1!keepalive = 1
+source!1!keepalive_max = 4
+source!1!keepalive_timeout = 15
+source!1!keepalive_requests = 1000
+source!1!keepalive_age = 300
+source!1!connect_timeout = 3
+source!1!io_timeout = 30
+source!1!retries = 1
+----
+
+The same options apply to interpreter sources. `timeout` retains its existing
+meaning as the interpreter spawning timeout.
+
+[options="header"]
+|====
+|Source option |Default |Meaning
+|`keepalive` |Protocol default |Enable or disable HTTP/FastCGI persistence.
+|`keepalive_max` |8 |Maximum idle sockets shared across this source's workers and rules (1-1024).
+|`keepalive_timeout` |15 |Idle seconds before closing a cached socket (1-86400).
+|`keepalive_requests` |1000 |Completed requests before retiring a connection (1-65535).
+|`keepalive_age` |300 |Maximum age in seconds; active requests finish before retirement (1-86400).
+|`connect_timeout` |0 |Seconds per connection attempt; zero inherits the existing request timeout (0-86400).
+|`io_timeout` |0 |Seconds without backend transport progress; zero inherits the existing request timeout (0-86400).
+|`retries` |1 |Additional HTTP/FastCGI attempts, bounded to 0-3.
+|====
+
+One request exclusively owns each leased connection. HTTP and FastCGI sockets
+are distinguished by protocol within the source pool. Round-robin, IP-hash and
+failover balancing select the source before its pool is consulted. A retry
+reconnects to that same source, retaining IP-hash affinity; final failures are
+reported through the existing balancer interfaces. Later requests can then
+select an alternative healthy source according to their configured balancer.
+
+The pool retains only the socket and lifecycle metadata. Every request has
+fresh handler/parser buffers, headers, credentials and body state. FastCGI
+requests use successive request IDs, set `FCGI_KEEP_CONN`, and require a valid
+`FCGI_END_REQUEST` with `FCGI_REQUEST_COMPLETE` and a closed STDOUT before
+returning the socket. Incomplete records, wrong IDs, early HEAD/X-Sendfile
+completion, cancellations and malformed responses close the connection.
+HTTP reuse requires complete, unambiguous response framing, including chunked
+trailers. Unknown-length responses and upgraded connections are closed.
+HTTP NTLM/Negotiate authentication exchanges are excluded from the shared
+pool because their credentials can be connection-bound. Backends using other
+connection-bound authentication must have reuse disabled.
+Idle sockets with queued bytes, EOF or socket errors are discarded rather
+than drained. Idle cleanup runs periodically even when a source has no traffic.
+
+On platforms providing CLOCK_MONOTONIC, deadlines and connection ages use a
+monotonic millisecond clock. Other platforms retain a wall-clock fallback.
+Deadlines advance only on actual backend reads/writes, so an unrelated client
+connection cannot keep a hanging backend alive. Explicit source deadlines
+govern backend waits even when longer than the frontend request timeout. A timed-out attempt before
+response headers retries if permitted, then uses the existing HTTP 504 gateway
+error handler. Connection/protocol failures keep the existing 502/503 paths.
+After response headers have been sent, a failure truncates/closes the response;
+Cherokee cannot replace an already transmitted status with HTTP 504.
+Retries after request bytes were transmitted are limited to GET, HEAD and
+OPTIONS without a request body or any received response bytes. Sent POST,
+PATCH and other potentially side-effecting requests are never automatically
+replayed. A request that has sent no bytes may retry regardless of method.
+
+Persistent FastCGI connections can occupy PHP-FPM children while idle. Keep
+`keepalive_max` comfortably below available `pm.max_children`, allowing room
+for active requests and other clients; it limits idle connections, not active
+backend concurrency. Worker restarts and `pm.max_requests` closures are handled
+as stale connections. Run your application's own compatibility/load tests
+before enabling reuse on an existing PHP deployment.
+
+SCGI and Cherokee's uWSGI adapter delimit responses by connection closure, so
+they use the source connection/inactivity timeouts but do not reuse transport
+connections or replay sent requests. The DBSlayer handler owns MySQL API
+sessions rather than these sockets and is outside this transport pool.
+
+Run `python3 qa/test_source_reuse.py` and
+`python3 qa/test_source_reuse_admin.py` after building, or
+`make -C qa test-source-reuse PYTHON=python3`. The wire suite uses independent
+Python HTTP, FastCGI, SCGI and uWSGI backends and checks socket counts,
+request isolation, balancing, expiry, malformed framing, cancellation and
+retry/timeout behavior. `CHEROKEE_TEST_THREADS=1` selects the single-worker path.
+
+The 24 wire tests and four Admin tests passed during implementation. The
+wire suite also passed with address, undefined-behavior and leak sanitizers;
+`ASAN_OPTIONS=detect_odr_violation=0` was necessary for Cherokee's existing
+duplicate plugin globals. The isolation fixture serves 21 successive requests
+over one backend connection while checking bodies, cookies and authorization
+headers. These are protocol fixtures: PHP-FPM was unavailable in the test
+environment, so application compatibility and PHP throughput were not measured.
+
+Protocol references:
+https://fastcgi-archives.github.io/FastCGI_Specification.html[FastCGI specification],
+https://www.rfc-editor.org/rfc/rfc9112.html[HTTP/1.1 framing],
+https://www.php.net/manual/en/install.fpm.configuration.php[PHP-FPM configuration].
+
+
 [[further_insight]]
 Further insight
 ~~~~~~~~~~~~~~~

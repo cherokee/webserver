@@ -99,7 +99,41 @@ def commit_clone():
     return CTK.cfg_reply_ajax_ok()
 
 
+SOURCE_CONNECTION_OPTIONS = {
+    'keepalive_max': (1, 1024),
+    'keepalive_timeout': (1, 86400),
+    'keepalive_requests': (1, 65535),
+    'keepalive_age': (1, 86400),
+    'connect_timeout': (0, 86400),
+    'io_timeout': (0, 86400),
+    'retries': (0, 3),
+}
+
+
+def validate_connection_options():
+    errors = {}
+    for key in CTK.post.keys():
+        match = re.fullmatch(r'source!\d+!(keepalive|' + '|'.join(SOURCE_CONNECTION_OPTIONS) + ')', key)
+        if not match:
+            continue
+        name, value = match.group(1), CTK.post.get_val(key)
+        # An empty optional value removes the override and restores its default.
+        if not value:
+            continue
+        if name == 'keepalive':
+            valid = value in ('0', '1')
+        else:
+            low, high = SOURCE_CONNECTION_OPTIONS[name]
+            valid = len(value) <= 5 and value.isascii() and value.isdecimal() and low <= int(value) <= high
+        if not valid:
+            errors[key] = _('Invalid backend connection setting')
+    return errors
+
+
 def commit():
+    errors = validate_connection_options()
+    if errors:
+        return {'ret': 'error', 'errors': errors}
     new_nick = CTK.post.pop('tmp!new_nick')
     new_host = CTK.post.pop('tmp!new_host')
 
@@ -296,6 +330,20 @@ class Render_Source:
             table.Add (_('Execute as Group'),    CTK.TextCfg (f'source!{num}!group',         True),  _(NOTE_GROUP))
             table.Add (_('Chroot Directory'),    CTK.TextCfg (f'source!{num}!chroot',        True),  _(NOTE_CHROOT))
             table.Add (_('Inherit Environment'), CTK.CheckCfgText (f'source!{num}!env_inherited', True, _('Enabled')), _(NOTE_ENV_INHERIT))
+
+        table.Add (_('Persistent connections'), CTK.ComboCfg(f'source!{num}!keepalive',
+                   [('', _('Protocol default')), ('0', _('Disabled')), ('1', _('Enabled'))]),
+                   _('Reuse completed HTTP and FastCGI connections. FastCGI defaults to disabled. SCGI and uWSGI close each response.'))
+        for name, label, note in (
+            ('keepalive_max', _('Maximum idle connections'), _('Shared across workers and rules for this source. Default: 8. Keep below PHP-FPM pool capacity.')),
+            ('keepalive_timeout', _('Idle timeout'), _('Close idle backend connections after this many seconds. Default: 15.')),
+            ('keepalive_requests', _('Requests per connection'), _('Retire a backend connection after this many completed requests. Default: 1000.')),
+            ('keepalive_age', _('Connection lifetime'), _('Maximum connection age in seconds. Retire after the current request. Default: 300.')),
+            ('connect_timeout', _('Connection timeout'), _('Backend connection attempt timeout in seconds. Zero or unset uses the existing request timeout.')),
+            ('io_timeout', _('Backend inactivity timeout'), _('Timeout between backend read/write progress in seconds. Zero or unset uses the existing request timeout.')),
+            ('retries', _('Backend retries'), _('Additional attempts, from 0 to 3. Default: 1. Sent requests are retried only for GET, HEAD or OPTIONS without a body or any response.')),
+        ):
+            table.Add(label, CTK.TextCfg(f'source!{num}!{name}', True), note)
 
         submit = CTK.Submitter (URL_APPLY)
         submit += table

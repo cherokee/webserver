@@ -17,6 +17,8 @@ all-local: $(PYS)
 EXTRA_DIST = \
 test_http23.py \
 test_http23_admin.py \
+test_source_reuse.py \
+test_source_reuse_admin.py \
 requirements-http23.txt \
 $(PY_PRE) \
 qa_base.py \
@@ -366,3 +368,8 @@ test-http23:
 
 clean-local:
 	find . -type f -name "*.pyc" -exec rm -f {} \;
+
+.PHONY: test-source-reuse
+test-source-reuse:
+	$(PYTHON) $(srcdir)/test_source_reuse.py
+	$(PYTHON) $(srcdir)/test_source_reuse_admin.py
