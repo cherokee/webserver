@@ -132,6 +132,7 @@ cherokee_handler_file_new (cherokee_handler_t     **hdl,
 	n->info           = NULL;
 	n->using_sendfile = false;
 	n->not_modified   = false;
+	n->precondition_failed = false;
 
 	/* Return the object
 	 */
@@ -152,100 +153,165 @@ cherokee_handler_file_free (cherokee_handler_file_t *fhdl)
 }
 
 
+typedef struct {
+	const char *opaque;
+	cuint_t     opaque_len;
+	cherokee_boolean_t weak;
+} cherokee_etag_t;
+
+/* RFC 9110, section 8.8.3.1.  An entity-tag is not a quoted-string:
+ * backslash is opaque data and is not an escape character here. */
+static ret_t
+parse_entity_tag (const char *buf, cuint_t len, cuint_t *pos, cherokee_etag_t *tag)
+{
+	cuint_t start;
+
+	if (*pos + 2 > len)
+		return ret_error;
+
+	tag->weak = false;
+	if ((buf[*pos] == 'W') && (buf[*pos + 1] == '/')) {
+		tag->weak = true;
+		*pos += 2;
+	}
+
+	if ((*pos >= len) || (buf[*pos] != '"'))
+		return ret_error;
+
+	start = ++(*pos);
+	while (*pos < len) {
+		unsigned char c = (unsigned char)buf[*pos];
+		if (c == '"') {
+			tag->opaque = buf + start;
+			tag->opaque_len = *pos - start;
+			(*pos)++;
+			return ret_ok;
+		}
+		if (!((c == 0x21) || ((c >= 0x23) && (c <= 0x7e)) || (c >= 0x80)))
+			return ret_error;
+		(*pos)++;
+	}
+
+	return ret_error;
+}
+
+static ret_t
+etag_list_matches (const char *buf, cuint_t len, const cherokee_etag_t *current,
+			   cherokee_boolean_t strong, cherokee_boolean_t *matches)
+{
+	cuint_t pos = 0;
+
+	*matches = false;
+	while (pos < len && (buf[pos] == ' ' || buf[pos] == '\t')) pos++;
+	if (pos == len)
+		return ret_error;
+	if (buf[pos] == '*') {
+		pos++;
+		while (pos < len && (buf[pos] == ' ' || buf[pos] == '\t')) pos++;
+		if (pos != len)
+			return ret_error;
+		*matches = true;
+		return ret_ok;
+	}
+
+	while (pos < len) {
+		cherokee_etag_t candidate;
+		while (pos < len && (buf[pos] == ' ' || buf[pos] == '\t')) pos++;
+		if (parse_entity_tag (buf, len, &pos, &candidate) != ret_ok)
+			return ret_error;
+		if ((!strong || (!candidate.weak && !current->weak)) &&
+		    (candidate.opaque_len == current->opaque_len) &&
+		    (memcmp (candidate.opaque, current->opaque, current->opaque_len) == 0))
+			*matches = true;
+		while (pos < len && (buf[pos] == ' ' || buf[pos] == '\t')) pos++;
+		if (pos == len)
+			return ret_ok;
+		if (buf[pos++] != ',')
+			return ret_error;
+		while (pos < len && (buf[pos] == ' ' || buf[pos] == '\t')) pos++;
+		if (pos == len)
+			return ret_error;
+	}
+
+	return ret_error;
+}
+
+static void
+build_file_etag (cherokee_handler_file_t *fhdl, cherokee_buffer_t *etag)
+{
+	cherokee_buffer_clean (etag);
+	cherokee_buffer_add_char     (etag, '"');
+	cherokee_buffer_add_ullong16(etag, (cullong_t) fhdl->info->st_mtime);
+	cherokee_buffer_add_str      (etag, "=");
+	cherokee_buffer_add_ullong16(etag, (cullong_t) fhdl->info->st_size);
+	cherokee_buffer_add_char     (etag, '"');
+}
+
 static ret_t
 check_cached (cherokee_handler_file_t *fhdl)
 {
 	ret_t                  ret;
 	char                  *header;
 	cuint_t                header_len;
-	cherokee_boolean_t     has_modified_since = false;
-	cherokee_boolean_t     has_etag           = false;
-	cherokee_boolean_t     not_modified_ms    = false;
-	cherokee_boolean_t     not_modified_etag  = false;
 	cherokee_connection_t *conn               = HANDLER_CONN(fhdl);
 	cherokee_thread_t     *thread             = HANDLER_THREAD(fhdl);
 	cherokee_buffer_t     *etag_local         = THREAD_TMP_BUF1(thread);
+	cherokee_etag_t        current;
+	cherokee_boolean_t     matches;
+	time_t                 req_time;
 
-	cherokee_buffer_clean (etag_local);
+	/* RFC 9110 section 13.2.1: a known unconditional error takes
+	 * precedence over request preconditions. */
+	if ((conn->error_code != http_ok) ||
+	    (conn->range_start >= fhdl->info->st_size))
+		return ret_ok;
 
-	/* Based in time
-	 */
-	ret = cherokee_header_get_known (&conn->header, header_if_modified_since, &header, &header_len);
-	if (ret == ret_ok)  {
-		char   tmp;
-		time_t req_time = 0;
-		char  *end      = header + header_len;
+	build_file_etag (fhdl, etag_local);
+	current.opaque = etag_local->buf + 1;
+	current.opaque_len = etag_local->len - 2;
+	current.weak = false;
 
-		has_modified_since = true;
-
-		/* Set EOL
-		 */
-		tmp = *end;
-		*end = '\0';
-
-		/* Parse the Date string
-		 */
-		ret = cherokee_dtm_str2time (header, header_len, &req_time);
-		if (unlikely (ret == ret_error)) {
-			LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
-
-		} else if (likely (ret == ret_ok)) {
-			/* The file is cached in the client
-			 */
-			if (fhdl->info->st_mtime <= req_time) {
-				not_modified_ms = true;
+	/* RFC 9110 section 13.2.2: If-Match, then If-Unmodified-Since. */
+	ret = cherokee_header_get_known (&conn->header, header_if_match, &header, &header_len);
+	if (ret == ret_ok) {
+		ret = etag_list_matches (header, header_len, &current, true, &matches);
+		if (ret != ret_ok) { conn->error_code = http_bad_request; return ret_error; }
+		if (!matches) { fhdl->precondition_failed = true; conn->error_code = http_precondition_failed; return ret_ok; }
+	} else {
+		ret = cherokee_header_get_known (&conn->header, header_if_unmodified_since, &header, &header_len);
+		if (ret == ret_ok) {
+			req_time = 0;
+			if (cherokee_dtm_str2time (header, header_len, &req_time) == ret_ok && fhdl->info->st_mtime > req_time) {
+				fhdl->precondition_failed = true;
+				conn->error_code = http_precondition_failed;
+				return ret_ok;
 			}
 		}
-
-		/* Restore EOL
-		 */
-		*end = tmp;
 	}
 
-	/* HTTP/1.1 only headers from now on
-	 */
-	if (conn->header.version < http_version_11) {
-		fhdl->not_modified = not_modified_ms;
+	/* If-None-Match uses weak comparison and takes precedence over dates. */
+	ret = cherokee_header_get_known (&conn->header, header_if_none_match, &header, &header_len);
+	if (ret == ret_ok) {
+		ret = etag_list_matches (header, header_len, &current, false, &matches);
+		if (ret != ret_ok) { conn->error_code = http_bad_request; return ret_error; }
+		if (matches) {
+			if ((conn->header.method == http_get) || (conn->header.method == http_head))
+				fhdl->not_modified = true;
+			else {
+				fhdl->precondition_failed = true;
+				conn->error_code = http_precondition_failed;
+			}
+		}
 		return ret_ok;
 	}
 
-	/* Based in ETag
-	 */
-	ret = cherokee_header_get_known (&conn->header, header_if_none_match, &header, &header_len);
-	if (ret == ret_ok)  {
-		/* Build local ETag
-		 */
-		if (cherokee_buffer_is_empty (etag_local)) {
-			cherokee_buffer_add_char     (etag_local, '"');
-			cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_mtime);
-			cherokee_buffer_add_str      (etag_local, "=");
-			cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_size);
-			cherokee_buffer_add_char     (etag_local, '"');
-		}
-
-		/* Compare ETag(s)
-		 */
-		if ((header_len == etag_local->len) &&
-		    (strncmp (header, etag_local->buf, etag_local->len) == 0))
-		{
-			not_modified_etag = true;
-		}
-
-		has_etag = true;
-	}
-
-	/* If both If-Modified-Since and ETag have been found then
-	 * both must match in order to return a not_modified response.
-	 */
-	if (has_modified_since && has_etag) {
-		if (not_modified_ms && not_modified_etag) {
-			fhdl->not_modified = true;
-			return ret_ok;
-		}
-	} else  {
-		if (not_modified_ms || not_modified_etag) {
-			fhdl->not_modified = true;
-			return ret_ok;
+	/* If-Modified-Since applies only to GET and HEAD when If-None-Match is absent. */
+	if ((conn->header.method == http_get) || (conn->header.method == http_head)) {
+		ret = cherokee_header_get_known (&conn->header, header_if_modified_since, &header, &header_len);
+		if (ret == ret_ok) {
+			req_time = 0;
+			if (cherokee_dtm_str2time (header, header_len, &req_time) == ret_ok && fhdl->info->st_mtime <= req_time)
+				fhdl->not_modified = true;
 		}
 	}
 
@@ -278,23 +344,23 @@ check_ifrange (cherokee_handler_file_t *fhdl)
 		tmp = *end;
 		*end = '\0';
 
-		/* If-Range: "<Etag>"
-		 */
-		if (strchr (header, '=')) {
+		/* If-Range entity-tags use strong comparison.  A weak tag never
+		 * validates a range, even if its opaque value matches. */
+		if ((header_len > 0) && (header[0] == '"' ||
+		                         (header_len > 2 && header[0] == 'W' && header[1] == '/'))) {
+			cherokee_etag_t candidate;
+			cuint_t pos = 0;
+
 			/* Build local ETag if needed
 			 */
 			if (cherokee_buffer_is_empty (etag_local)) {
-				cherokee_buffer_add_char     (etag_local, '"');
-				cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_mtime);
-				cherokee_buffer_add_str      (etag_local, "=");
-				cherokee_buffer_add_ullong16 (etag_local, (cullong_t) fhdl->info->st_size);
-				cherokee_buffer_add_char     (etag_local, '"');
+				build_file_etag (fhdl, etag_local);
 			}
 
-			/* Compare ETags
-			 */
-			if ((header_len == etag_local->len) &&
-			    (strncmp (header, etag_local->buf, etag_local->len) == 0))
+			if ((parse_entity_tag (header, header_len, &pos, &candidate) == ret_ok) &&
+			    (pos == header_len) && !candidate.weak &&
+			    (candidate.opaque_len == etag_local->len - 2) &&
+			    (memcmp (candidate.opaque, etag_local->buf + 1, candidate.opaque_len) == 0))
 			{
 				not_modified_etag = true;
 			}
@@ -502,7 +568,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 	/* Is it cached on the client?
 	 */
 	ret = check_cached (fhdl);
-	if ((ret != ret_ok) || (fhdl->not_modified)) {
+	if ((ret != ret_ok) || (fhdl->not_modified) || (fhdl->precondition_failed)) {
 		/* Set both ranges to zero to avoid file size errors in loggers
 		 */
 		conn->range_start  = 0;
@@ -793,6 +859,11 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 	/* If it's replying "304 Not Modified", we're done here
 	 */
+	if (fhdl->precondition_failed) {
+		HANDLER(fhdl)->support |= hsupport_error;
+		return ret_ok;
+	}
+
 	if (fhdl->not_modified) {
 		/* The handler will manage this special reply
 		 */

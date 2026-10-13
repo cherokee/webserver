@@ -58,6 +58,7 @@ typedef struct {
 
 	cherokee_boolean_t     using_sendfile;
 	cherokee_boolean_t     not_modified;
+	cherokee_boolean_t     precondition_failed;
 } cherokee_handler_file_t;
 
 
