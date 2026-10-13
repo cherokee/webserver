@@ -1104,12 +1104,16 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				goto unknown;
 			break;
 		case 'I':
-			if (header_equals ("If-Modified-Since", header_if_modified_since, begin, header_len)) {
+			if (header_equals ("If-Match", header_if_match, begin, header_len)) {
+				ret = add_known_header (hdr, header_if_match, val_offs, val_len);
+			} else if (header_equals ("If-Modified-Since", header_if_modified_since, begin, header_len)) {
 				ret = add_known_header (hdr, header_if_modified_since, val_offs, val_len);
 			} else if (header_equals ("If-None-Match", header_if_none_match, begin, header_len)) {
 				ret = add_known_header (hdr, header_if_none_match, val_offs, val_len);
 			} else if (header_equals ("If-Range", header_if_range, begin, header_len)) {
 				ret = add_known_header (hdr, header_if_range, val_offs, val_len);
+			} else if (header_equals ("If-Unmodified-Since", header_if_unmodified_since, begin, header_len)) {
+				ret = add_known_header (hdr, header_if_unmodified_since, val_offs, val_len);
 			} else
 				goto unknown;
 			break;

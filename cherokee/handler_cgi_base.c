@@ -576,6 +576,11 @@ cherokee_handler_cgi_base_build_basic_env (
 		set_env (cgi, "HTTP_CONNECTION", p, p_len);
 	}
 
+	ret = cherokee_header_get_known (&conn->header, header_if_match, &p, &p_len);
+	if (ret == ret_ok) {
+		set_env (cgi, "HTTP_IF_MATCH", p, p_len);
+	}
+
 	ret = cherokee_header_get_known (&conn->header, header_cookie, &p, &p_len);
 	if (ret == ret_ok) {
 		set_env (cgi, "HTTP_COOKIE", p, p_len);
@@ -594,6 +599,11 @@ cherokee_handler_cgi_base_build_basic_env (
 	ret = cherokee_header_get_known (&conn->header, header_if_range, &p, &p_len);
 	if (ret == ret_ok) {
 		set_env (cgi, "HTTP_IF_RANGE", p, p_len);
+	}
+
+	ret = cherokee_header_get_known (&conn->header, header_if_unmodified_since, &p, &p_len);
+	if (ret == ret_ok) {
+		set_env (cgi, "HTTP_IF_UNMODIFIED_SINCE", p, p_len);
 	}
 
 	ret = cherokee_header_get_known (&conn->header, header_keepalive, &p, &p_len);

@@ -209,12 +209,16 @@ header_str_to_type (cherokee_buffer_t        *header,
 		}
 		break;
 	case 'I':
-		if (equal_buf_str (header, "If-Modified-Since")) {
+		if (equal_buf_str (header, "If-Match")) {
+			*common_header = header_if_match;
+		} else if (equal_buf_str (header, "If-Modified-Since")) {
 			*common_header = header_if_modified_since;
 		} else if (equal_buf_str (header, "If-None-Match")) {
 			*common_header = header_if_none_match;
 		} else if (equal_buf_str (header, "If-Range")) {
 			*common_header = header_if_range;
+		} else if (equal_buf_str (header, "If-Unmodified-Since")) {
+			*common_header = header_if_unmodified_since;
 		} else {
 			goto unknown;
 		}

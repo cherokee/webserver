@@ -334,7 +334,13 @@ run-tests.py \
 311-Authorization-empty.py \
 312-If-Range3.py \
 313-If-Range4.py \
-314-If-Range5.py
+314-If-Range5.py \
+315-Conditional-Requests.py \
+316-Conditional-Requests.py \
+317-Conditional-Requests.py \
+318-Conditional-Requests.py \
+319-Conditional-Requests.py \
+320-Conditional-Requests.py
 
 if USE_OPENSSL
 ssl-keys/set-1.pem: ssl-keys/set-1.key openssl.cnf
